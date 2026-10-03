@@ -30,6 +30,12 @@ const overviewLinks = [
       "Explore usage, API, accessibility, and framework-specific examples.",
   },
   {
+    routeId: "executable-examples",
+    label: "Run framework examples",
+    description:
+      "Inspect verified consumer examples for the selected framework surface.",
+  },
+  {
     routeId: "theming",
     label: "Customize the system",
     description:
@@ -159,10 +165,10 @@ function OverviewGuide({
         aria-labelledby="vf-guide-overview-framework"
         className="vf-docs-guide__section vf-docs-guide__section--surface"
       >
-        <Stack gap="sm">
+        <div className="vf-docs-guide__surface-layout">
           <div className="vf-docs-guide__section-heading">
             <Text className="vf-docs-guide__kicker" size="sm">
-              Current context
+              Current surface
             </Text>
             <Heading id="vf-guide-overview-framework" level={3} size="md">
               {framework.label}
@@ -171,12 +177,16 @@ function OverviewGuide({
               {framework.language} · {framework.renderer} ·{" "}
               {framework.supportLevel}
             </Text>
+            <Text tone="muted">
+              The selected framework changes examples and integration guidance,
+              not the VyrnForge design system or behavior model.
+            </Text>
           </div>
           <FrameworkSwitcher
             frameworkId={frameworkId}
             onFrameworkChange={onFrameworkChange}
           />
-        </Stack>
+        </div>
       </section>
     </>
   );
@@ -306,52 +316,76 @@ export function GuidePage({
         aria-labelledby="vf-docs-guide-title"
         className="vf-docs-guide__hero"
       >
-        <div className="vf-docs-guide__hero-copy">
-          <div className="vf-docs-guide__meta">
-            <span className="vf-docs-guide__eyebrow">VyrnForge guide</span>
-            <span
-              aria-label={`Documentation status: ${status}`}
-              className="vf-docs-guide__status"
-            >
-              {status}
-            </span>
-          </div>
-          <Heading id="vf-docs-guide-title" level={2} size="lg">
-            {isOverview
-              ? "One UI foundation for every framework surface."
-              : route.title}
-          </Heading>
-          <Text className="vf-docs-guide__lede" size="lg" tone="muted">
-            {isOverview
-              ? "Build consistent web applications with shared VyrnForge " +
-                "components, tokens, behavior contracts, accessibility, and " +
-                "developer concepts across Native HTML, React, Angular, and " +
-                "Vue."
-              : route.description}
-          </Text>
-          {isOverview ? (
-            <Inline className="vf-docs-guide__hero-actions" gap="sm">
-              <Button onClick={() => onRouteChange("getting-started")}>
-                Get started
-              </Button>
-              <Button
-                onClick={() => onRouteChange("component-reference")}
-                variant="subtle"
+        <div className="vf-docs-guide__hero-layout">
+          <div className="vf-docs-guide__hero-copy">
+            <div className="vf-docs-guide__meta">
+              <span className="vf-docs-guide__eyebrow">VyrnForge guide</span>
+              <span
+                aria-label={`Documentation status: ${status}`}
+                className="vf-docs-guide__status"
               >
-                Explore components
-              </Button>
-            </Inline>
-          ) : (
-            <div className="vf-docs-guide__context-line">
+                {status}
+              </span>
+            </div>
+            <Heading id="vf-docs-guide-title" level={2} size="lg">
+              {isOverview
+                ? "Build once. Stay native to every framework."
+                : route.title}
+            </Heading>
+            <Text className="vf-docs-guide__lede" size="lg" tone="muted">
+              {isOverview
+                ? "One VyrnForge system for components, tokens, behavior, " +
+                  "accessibility, and developer concepts — delivered through " +
+                  "first-class Native HTML, React, Angular, and Vue surfaces."
+                : route.description}
+            </Text>
+            {isOverview ? (
+              <Inline className="vf-docs-guide__hero-actions" gap="sm">
+                <Button onClick={() => onRouteChange("getting-started")}>
+                  Start building
+                </Button>
+                <Button
+                  onClick={() => onRouteChange("component-reference")}
+                  variant="subtle"
+                >
+                  Browse components
+                </Button>
+              </Inline>
+            ) : (
+              <div className="vf-docs-guide__context-line">
+                <Text size="sm" tone="muted">
+                  Reading for {framework.label}
+                </Text>
+                <FrameworkSwitcher
+                  frameworkId={frameworkId}
+                  onFrameworkChange={onFrameworkChange}
+                />
+              </div>
+            )}
+          </div>
+          {isOverview ? (
+            <aside
+              aria-label="Selected framework surface"
+              className="vf-docs-guide__hero-context"
+            >
+              <Text className="vf-docs-guide__kicker" size="sm">
+                Selected surface
+              </Text>
+              <Heading level={3} size="md">
+                {framework.label}
+              </Heading>
+              <Text tone="muted">
+                {framework.language} · {framework.renderer}
+              </Text>
               <Text size="sm" tone="muted">
-                Reading for {framework.label}
+                {framework.supportLevel}
               </Text>
               <FrameworkSwitcher
                 frameworkId={frameworkId}
                 onFrameworkChange={onFrameworkChange}
               />
-            </div>
-          )}
+            </aside>
+          ) : null}
         </div>
       </section>
 
