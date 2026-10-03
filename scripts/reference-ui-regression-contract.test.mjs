@@ -47,7 +47,10 @@ test("Reference verification covers representative templates and adaptive states
 });
 
 test("browser verification has a dedicated Reference server and evidence output", () => {
-  assert.equal(existsSync(path.join(root, "playwright.reference.config.ts")), true);
+  assert.equal(
+    existsSync(path.join(root, "playwright.reference.config.ts")),
+    true,
+  );
   const config = read("playwright.reference.config.ts");
   const browser = read("tests/reference-ui/reference-product.spec.ts");
   assert.match(config, /tests\/reference-ui/u);
