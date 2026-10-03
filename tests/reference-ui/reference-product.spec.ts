@@ -11,14 +11,36 @@ async function openReference(page: Page, route: string, framework = "react") {
 }
 
 async function expectNoPageOverflow(page: Page) {
-  const overflow = await page.evaluate(() => ({
-    body: document.body.scrollWidth - document.body.clientWidth,
-    root:
-      document.documentElement.scrollWidth -
-      document.documentElement.clientWidth,
-  }));
-  expect(overflow.body).toBeLessThanOrEqual(1);
-  expect(overflow.root).toBeLessThanOrEqual(1);
+  const overflow = await page.evaluate(() => {
+    const viewportWidth = document.documentElement.clientWidth;
+    const offenders = [...document.querySelectorAll<HTMLElement>("body *")]
+      .map((element) => {
+        const bounds = element.getBoundingClientRect();
+        return {
+          className: element.className,
+          left: Math.round(bounds.left),
+          right: Math.round(bounds.right),
+          tagName: element.tagName,
+          width: Math.round(bounds.width),
+        };
+      })
+      .filter(
+        (entry) => entry.right > viewportWidth + 1 || entry.left < -1,
+      )
+      .slice(0, 12);
+
+    return {
+      body: document.body.scrollWidth - document.body.clientWidth,
+      offenders,
+      root:
+        document.documentElement.scrollWidth -
+        document.documentElement.clientWidth,
+      viewportWidth,
+    };
+  });
+  const message = JSON.stringify(overflow.offenders, null, 2);
+  expect(overflow.body, message).toBeLessThanOrEqual(1);
+  expect(overflow.root, message).toBeLessThanOrEqual(1);
 }
 
 async function capture(page: Page, testInfo: TestInfo, name: string) {
