@@ -1,10 +1,18 @@
 # VyrnForge Reference UI presentation contract
 
-Status: frozen implementation contract for #763 / parent #762.
+Status: frozen implementation contract for #763 / parent #762, with #774 migration completion recorded below.
+
+## Migration status
+
+The replacement implementation now follows one reader-facing path: `App -> ReferenceShell -> DocsPage`. `ReferenceNavigation` owns the generated-data navigation/search presentation, while guide, prose, component, package, token, pattern, example, advanced-module, release, and state templates render inside the same shell and controlled layout modes.
+
+As part of #774, the superseded `DocsShell`, `GuideShell`, and `DocsNav` presentation files are retired rather than retained as hidden alternatives. Their shell/navigation CSS is removed with them. Canonical route, registry, resolver, metadata, and framework/version adapters remain unchanged and continue to own public facts.
+
+The five layout modes defined below—reading, reference, catalog, example, and wide—are the active presentation contract. Browser verification from #773 covers representative templates, theme/focus/state behavior, mobile navigation, page-overflow constraints, and the Reference asset budget. Final production acceptance remains bound to exact-current-`main` CI and the commit-bound Pages artifact/deployment workflow.
 
 This contract governs the reader-facing presentation layer in `apps/docs`. It does not replace the generated Documentation Registry, Reference model, framework/version resolver, canonical component contracts, package/token/pattern metadata, executable-example metadata, release metadata, or availability/readiness evidence.
 
-## Current-state inventory
+## Pre-migration inventory (frozen at #763)
 
 | Public page type                             | Current host/render path                                                                    | Current presentation                                                                                          | Retain                                                                                                | Replace                                                                                      |
 | -------------------------------------------- | ------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------- |
@@ -20,9 +28,9 @@ This contract governs the reader-facing presentation layer in `apps/docs`. It do
 
 ### Shell/chrome split to remove
 
-`DocsShell.tsx` currently branches on `activeRoute.template === "guide"`. Guide routes render through `GuideShell`; all other routes render through `AppShell + TopNav + DocsNav`. This split is the primary presentation seam to eliminate.
+At the #763 freeze, `DocsShell.tsx` branched on `activeRoute.template === "guide"`. Guide routes render through `GuideShell`; all other routes render through `AppShell + TopNav + DocsNav`. This split is the primary presentation seam to eliminate.
 
-`DocsNav.tsx` already derives sections and search/member results from `publicDocsSections`, `docsRoutes`, and `documentationSearchRecords`. That generated-data dependency is canonical and must be preserved while its visual/interaction treatment moves into the unified shell.
+At the #763 freeze, `DocsNav.tsx` already derived sections and search/member results from `publicDocsSections`, `docsRoutes`, and `documentationSearchRecords`. That generated-data dependency is canonical and must be preserved while its visual/interaction treatment moves into the unified shell.
 
 ### Existing VyrnForge primitives already suitable for reuse
 

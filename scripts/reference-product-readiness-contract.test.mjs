@@ -81,16 +81,18 @@ test("G18 discovery, context, deep links, and examples stay canonical", () => {
   assert.match(docsPage, /ExecutableExamplesPage/u);
 });
 
-test("G18 Docs shell retains responsive and accessible navigation foundations", () => {
-  const docsShell = read("apps/docs/src/DocsShell.tsx");
-  const docsNav = read("apps/docs/src/DocsNav.tsx");
+test("G18 Reference shell retains responsive and accessible navigation foundations", () => {
+  const referenceShell = read("apps/docs/src/ReferenceShell.tsx");
+  const referenceNavigation = read("apps/docs/src/ReferenceNavigation.tsx");
   const responsiveStyles = read("apps/docs/src/styles/reference-shell.css");
   const portal = json("docs/metadata/reference-portal.json");
 
-  assert.match(docsShell, /AppShell/u);
-  assert.match(docsShell, /TopNav/u);
-  assert.match(docsNav, /SearchInput/u);
-  assert.match(docsNav, /SideNav/u);
+  assert.match(referenceShell, /<header/u);
+  assert.match(referenceShell, /<main/u);
+  assert.match(referenceShell, /<Drawer/u);
+  assert.match(referenceShell, /ReferencePrimaryNavigation/u);
+  assert.match(referenceNavigation, /SearchInput/u);
+  assert.match(referenceNavigation, /SideNav/u);
   assert.match(responsiveStyles, /@media \(max-width: 920px\)/u);
   assert.match(responsiveStyles, /grid-template-columns: 1fr/u);
   assert.equal(

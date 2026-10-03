@@ -97,7 +97,7 @@ test("authoring guide covers commands and forbidden shortcuts", () => {
     guide,
     [
       "apps/docs/src/referenceRoutes.ts",
-      "apps/docs/src/DocsNav.tsx",
+      "apps/docs/src/ReferenceNavigation.tsx",
       "docs/generated/documentation-registry.json",
       "docs/generated/reference-model.json",
     ],

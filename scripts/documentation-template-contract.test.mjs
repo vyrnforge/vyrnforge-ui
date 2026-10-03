@@ -66,7 +66,7 @@ test("Docs rendering selects the page template from generated registry metadata"
   assert.doesNotMatch(docsPage, /route\.type\s*===\s*["']component["']/u);
 });
 
-test("guide template owns the public guide experience", () => {
+test("guide template owns content inside the unified Reference shell", () => {
   const docsPage = readFileSync(
     path.join(root, "apps/docs/src/DocsPage.tsx"),
     "utf8",
@@ -75,12 +75,8 @@ test("guide template owns the public guide experience", () => {
     path.join(root, "apps/docs/src/GuidePage.tsx"),
     "utf8",
   );
-  const guideShell = readFileSync(
-    path.join(root, "apps/docs/src/GuideShell.tsx"),
-    "utf8",
-  );
-  const docsShell = readFileSync(
-    path.join(root, "apps/docs/src/DocsShell.tsx"),
+  const referenceShell = readFileSync(
+    path.join(root, "apps/docs/src/ReferenceShell.tsx"),
     "utf8",
   );
   const main = readFileSync(path.join(root, "apps/docs/src/main.tsx"), "utf8");
@@ -96,11 +92,10 @@ test("guide template owns the public guide experience", () => {
   assert.match(guidePage, /splitGuideSections/u);
   assert.match(guidePage, /vf-docs-guide__hero-context/u);
   assert.match(guidePage, /vf-docs-guide__prose/u);
-  assert.match(docsShell, /activeRoute\.template === "guide"/u);
-  assert.match(docsShell, /<GuideShell/u);
-  assert.match(guideShell, /className="vf-docs-guide-shell"/u);
-  assert.doesNotMatch(guideShell, /<AppShell/u);
-  assert.doesNotMatch(guideShell, /<DocsNav/u);
+  assert.match(referenceShell, /className="vf-reference-shell"/u);
+  assert.match(referenceShell, /<ReferenceNavigation/u);
+  assert.match(referenceShell, /<DocsPage/u);
+  assert.doesNotMatch(referenceShell, /GuideShell|DocsShell|DocsNav/u);
   assert.equal(main.includes("styles/guide.css"), true);
   assert.equal(main.includes("styles/docs-overview.css"), false);
   assert.doesNotMatch(docsPage, /OverviewPage/u);

@@ -174,7 +174,7 @@ For a normal authored public page:
    ```
 
 A valid new documentation record must become routable and discoverable without
-editing `referenceRoutes.ts`, `DocsNav.tsx`, search indexes, or sitemap files.
+editing `referenceRoutes.ts`, `ReferenceNavigation.tsx`, search indexes, or sitemap files.
 
 ## Add a framework-specific exception
 
@@ -233,7 +233,7 @@ Do not manually maintain:
 - `docs/generated/reference-model.json`;
 - generated framework API/reference files;
 - public route or section arrays in `apps/docs/src/referenceRoutes.ts`;
-- manual sidebar membership in `apps/docs/src/DocsNav.tsx`;
+- manual sidebar membership in `apps/docs/src/ReferenceNavigation.tsx`;
 - hand-built search/index/sitemap outputs;
 - framework/version availability inside React page components;
 - duplicated API tables that restate generated facts.

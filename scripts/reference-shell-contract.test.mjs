@@ -41,15 +41,15 @@ test("Docs preserves shared framework and document context through one route aut
 });
 
 test("public Docs navigation owns the complete reader-facing information architecture", () => {
-  const docsNav = read("apps/docs/src/DocsNav.tsx");
+  const navigation = read("apps/docs/src/ReferenceNavigation.tsx");
   const docsRoutes = read("apps/docs/src/referenceRoutes.ts");
   const registry = json("docs/generated/documentation-registry.json");
 
-  assert.match(docsNav, /publicDocsSections/u);
-  assert.match(docsNav, /SearchInput/u);
-  assert.match(docsNav, /SideNav/u);
-  assert.match(docsNav, /VyrnForge documentation/u);
-  assert.doesNotMatch(docsNav, /getReferenceNavigation/u);
+  assert.match(navigation, /publicDocsSections/u);
+  assert.match(navigation, /SearchInput/u);
+  assert.match(navigation, /SideNav/u);
+  assert.match(navigation, /VyrnForge Reference sections/u);
+  assert.doesNotMatch(navigation, /getReferenceNavigation/u);
 
   for (const section of [
     "Getting Started",
@@ -163,22 +163,22 @@ test("component pages bind generated API to the selected framework and version",
 
 test("Docs filter discovers selected-framework API members without restoring a standalone search page", () => {
   const app = read("apps/docs/src/App.tsx");
-  const docsNav = read("apps/docs/src/DocsNav.tsx");
+  const navigation = read("apps/docs/src/ReferenceNavigation.tsx");
   const referenceShell = read("apps/docs/src/ReferenceShell.tsx");
   const memberTarget = read("apps/docs/src/componentApiMember.ts");
 
-  assert.match(docsNav, /documentationSearchRecords/u);
-  assert.match(docsNav, /routeIsAvailable/u);
-  assert.match(docsNav, /section\.id === "components"/u);
-  assert.match(docsNav, /\.slice\(0, 30\)/u);
-  assert.match(docsNav, /getReferenceLocationHref/u);
-  assert.match(docsNav, /frameworkId/u);
-  assert.match(docsNav, /version/u);
+  assert.match(navigation, /documentationSearchRecords/u);
+  assert.match(navigation, /routeIsAvailable/u);
+  assert.match(navigation, /section\.id === "components"/u);
+  assert.match(navigation, /\.slice\(0, 30\)/u);
+  assert.match(navigation, /getReferenceLocationHref/u);
+  assert.match(navigation, /frameworkId/u);
+  assert.match(navigation, /version/u);
   assert.doesNotMatch(
-    docsNav,
+    navigation,
     /generated\/framework-api-reference\.json\?raw/u,
   );
-  assert.doesNotMatch(docsNav, /componentReferenceRecords/u);
+  assert.doesNotMatch(navigation, /componentReferenceRecords/u);
   assert.match(referenceShell, /frameworkId=\{framework\.id\}/u);
 
   assert.match(memberTarget, /componentApiMemberAnchor/u);
@@ -193,7 +193,7 @@ test("Docs filter discovers selected-framework API members without restoring a s
   assert(
     retiredReferencePaths.includes("apps/docs/src/ReferenceSearchPage.tsx"),
   );
-  assert.doesNotMatch(docsNav, /ReferenceSearchPage/u);
+  assert.doesNotMatch(navigation, /ReferenceSearchPage/u);
 });
 
 test("all public routes use one unified Reference shell with controlled layouts", () => {
