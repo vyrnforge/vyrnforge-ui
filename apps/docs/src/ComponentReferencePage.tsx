@@ -1,4 +1,4 @@
-import { Badge, Card, Heading, Text } from "@vyrnforge/ui-components";
+import { Badge, Heading, Text } from "@vyrnforge/ui-components";
 
 import frameworkApiReferenceRaw from "../../../docs/generated/framework-api-reference.json?raw";
 import { getReferenceRecordRoute } from "../../../docs/reference/referenceRuntime";
@@ -447,7 +447,7 @@ function ComponentIndexCard({
 }) {
   const maturity = getComponentMaturityPresentation(component);
   return (
-    <Card className="vf-docs-reference-card" padding="md">
+    <article className="vf-docs-component-row">
       <div className="vf-docs-reference-card__header">
         <div>
           <Heading level={4} size="sm">
@@ -465,7 +465,7 @@ function ComponentIndexCard({
       <Text size="sm" tone="muted">
         {component.package}
       </Text>
-    </Card>
+    </article>
   );
 }
 
@@ -580,11 +580,7 @@ function ComponentDetail({
   return (
     <div className="vf-docs-reference-layout">
       <div className="vf-docs-reference">
-        <Card
-          className="vf-docs-reference__section"
-          id="component-overview"
-          padding="lg"
-        >
+        <section className="vf-docs-reference__section" id="component-overview">
           <Text size="sm">
             <a href="#/component-reference">← Component reference</a>
           </Text>
@@ -608,13 +604,9 @@ function ComponentDetail({
             </Badge>
           </div>
           <Text>{component.purpose}</Text>
-        </Card>
+        </section>
 
-        <Card
-          className="vf-docs-reference__section"
-          id="component-usage"
-          padding="lg"
-        >
+        <section className="vf-docs-reference__section" id="component-usage">
           <Heading level={3} size="md">
             Usage
           </Heading>
@@ -627,13 +619,9 @@ function ComponentDetail({
             label="Related components"
             values={component.guidance.relatedComponents}
           />
-        </Card>
+        </section>
 
-        <Card
-          className="vf-docs-reference__section"
-          id="component-framework-api"
-          padding="lg"
-        >
+        <section className="vf-docs-reference__section" id="component-framework-api">
           <Heading level={3} size="md">
             API
           </Heading>
@@ -652,13 +640,9 @@ function ComponentDetail({
               framework and documentation version.
             </Text>
           )}
-        </Card>
+        </section>
 
-        <Card
-          className="vf-docs-reference__section"
-          id="component-accessibility-styling"
-          padding="lg"
-        >
+        <section className="vf-docs-reference__section" id="component-accessibility-styling">
           <Heading level={3} size="md">
             Accessibility & styling
           </Heading>
@@ -677,14 +661,10 @@ function ComponentDetail({
             label="CSS variables"
             values={component.styling.variables}
           />
-        </Card>
+        </section>
 
         {showLimitations && (
-          <Card
-            className="vf-docs-reference__section"
-            id="component-limitations"
-            padding="lg"
-          >
+          <section className="vf-docs-reference__section" id="component-limitations">
             <Heading level={3} size="md">
               Limitations and related patterns
             </Heading>
@@ -696,7 +676,7 @@ function ComponentDetail({
               label="Patterns using this component"
               values={relatedPatterns.map((pattern) => pattern.displayName)}
             />
-          </Card>
+          </section>
         )}
       </div>
       <ComponentOutline
@@ -727,7 +707,7 @@ export function ComponentReferencePage({
     const component = getComponentReferenceRecord(componentId);
     if (!component) {
       return (
-        <Card className="vf-docs-reference__section" padding="lg">
+        <section className="vf-docs-reference__section">
           <Heading level={3} size="md">
             Component not found
           </Heading>
@@ -737,7 +717,7 @@ export function ComponentReferencePage({
           <Text>
             <a href="#/component-reference">Return to component reference</a>
           </Text>
-        </Card>
+        </section>
       );
     }
     return (
@@ -751,7 +731,7 @@ export function ComponentReferencePage({
 
   return (
     <div className="vf-docs-reference">
-      <Card className="vf-docs-reference__section" padding="lg">
+      <section className="vf-docs-reference__section">
         <Heading level={3} size="md">
           Components
         </Heading>
@@ -759,14 +739,14 @@ export function ComponentReferencePage({
           Choose a component to see usage, framework examples, API,
           accessibility, styling, and known limitations.
         </Text>
-      </Card>
+      </section>
 
       {componentAreas.map(([area, components]) => (
-        <Card className="vf-docs-reference__section" key={area} padding="lg">
+        <section className="vf-docs-reference__section" key={area}>
           <Heading level={3} size="md">
             {area}
           </Heading>
-          <div className="vf-docs-reference__grid">
+          <div className="vf-docs-component-index">
             {[...components]
               .sort((left, right) =>
                 left.displayName.localeCompare(right.displayName),
@@ -775,7 +755,7 @@ export function ComponentReferencePage({
                 <ComponentIndexCard component={component} key={component.id} />
               ))}
           </div>
-        </Card>
+        </section>
       ))}
     </div>
   );
