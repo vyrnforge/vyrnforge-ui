@@ -74,7 +74,7 @@ function TokenReference({ id }: { id?: string | null }) {
       </section>
       <div className="vf-docs-discovery-grid">
         {designTokenCategories.map((category) => (
-          <article className="vf-docs-discovery-row-card" key={category.id}>
+          <article className="vf-docs-discovery-catalog-row" key={category.id}>
             <Heading level={3} size="md">
               <a href={recordHref("tokens", category.id)}>{category.id}</a>
             </Heading>
@@ -154,7 +154,7 @@ function PatternReference({ id }: { id?: string | null }) {
       </section>
       <div className="vf-docs-discovery-grid">
         {patternReferenceRecords.map((pattern) => (
-          <article className="vf-docs-discovery-row-card" key={pattern.id}>
+          <article className="vf-docs-discovery-catalog-row" key={pattern.id}>
             <Heading level={3} size="md">
               <a href={recordHref("patterns", pattern.id)}>
                 {pattern.displayName}
