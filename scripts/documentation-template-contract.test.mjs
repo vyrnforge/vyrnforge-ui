@@ -63,3 +63,29 @@ test("Docs rendering selects the page template from generated registry metadata"
   assert.match(routes, /template: page\.template/u);
   assert.doesNotMatch(docsPage, /route\.type\s*===\s*["']component["']/u);
 });
+
+test("guide templates use the dedicated product guide renderer", () => {
+  const docsPage = readFileSync(
+    path.join(root, "apps/docs/src/DocsPage.tsx"),
+    "utf8",
+  );
+  const guidePage = readFileSync(
+    path.join(root, "apps/docs/src/GuidePage.tsx"),
+    "utf8",
+  );
+  const guideStyles = readFileSync(
+    path.join(root, "apps/docs/src/styles/guide-page.css"),
+    "utf8",
+  );
+
+  assert.match(
+    docsPage,
+    /route\.template === "guide" && route\.kind === "markdown"/u,
+  );
+  assert.match(docsPage, /<GuidePage/u);
+  assert.match(guidePage, /data-document-template="guide"/u);
+  assert.match(guidePage, /data-guide-framework=\{frameworkId\}/u);
+  assert.match(guidePage, /className="vf-docs-guide__outline"/u);
+  assert.match(guideStyles, /\.vf-docs-guide__layout/u);
+  assert.doesNotMatch(guidePage, /DocumentationPageTemplate/u);
+});
