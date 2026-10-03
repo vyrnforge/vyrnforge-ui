@@ -24,9 +24,7 @@ async function expectNoPageOverflow(page: Page) {
           width: Math.round(bounds.width),
         };
       })
-      .filter(
-        (entry) => entry.right > viewportWidth + 1 || entry.left < -1,
-      )
+      .filter((entry) => entry.right > viewportWidth + 1 || entry.left < -1)
       .slice(0, 12);
 
     return {
