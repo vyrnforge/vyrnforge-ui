@@ -219,6 +219,7 @@ export function ReferenceShell({
       </div>
 
       <Drawer
+        className="vf-reference-shell__mobile-drawer"
         description="Navigate generated VyrnForge documentation and API records."
         onOpenChange={setMobileNavigationOpen}
         open={mobileNavigationOpen}

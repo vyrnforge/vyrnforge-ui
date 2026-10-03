@@ -324,6 +324,7 @@
 }
 
 .vf-reference-shell__main {
+  box-sizing: border-box;
   min-width: 0;
   padding: clamp(var(--vf-space-5, 20px), 3vw, var(--vf-space-10, 40px));
   outline: none;
@@ -407,9 +408,14 @@
 
 @media (max-width: 720px) {
   .vf-reference-shell__header-inner {
-    grid-template-columns: 1fr;
+    grid-template-columns: minmax(0, 1fr);
     gap: var(--vf-space-2, 8px);
     padding-block: var(--vf-space-3, 12px);
+  }
+
+  .vf-reference-shell__brand,
+  .vf-reference-shell__controls {
+    min-width: 0;
   }
 
   .vf-reference-shell__controls {
@@ -669,4 +675,16 @@
   display: flex;
   flex-wrap: wrap;
   gap: var(--vf-space-2, 8px);
+}
+
+/* Keep the portal-mounted mobile navigation within the visual viewport. */
+.vf-reference-shell__mobile-drawer {
+  box-sizing: border-box;
+  max-inline-size: 100vw;
+  overflow-x: hidden;
+}
+
+.vf-reference-shell__mobile-drawer .vf-drawer__body {
+  min-width: 0;
+  overflow-x: hidden;
 }
