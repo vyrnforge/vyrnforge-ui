@@ -17,7 +17,9 @@ async function openReference(
 async function expectNoPageOverflow(page: Page) {
   const overflow = await page.evaluate(() => ({
     body: document.body.scrollWidth - document.body.clientWidth,
-    root: document.documentElement.scrollWidth - document.documentElement.clientWidth,
+    root:
+      document.documentElement.scrollWidth -
+      document.documentElement.clientWidth,
   }));
   expect(overflow.body).toBeLessThanOrEqual(1);
   expect(overflow.root).toBeLessThanOrEqual(1);
@@ -57,12 +59,12 @@ test.describe("VyrnForge Reference product", () => {
         "data-layout-mode",
         layout,
       );
-      await expect(page.locator("header .vf-reference-shell__identity")).toContainText(
-        "VyrnForge",
-      );
-      await expect(page.locator("header .vf-reference-shell__identity")).toContainText(
-        "Reference",
-      );
+      await expect(
+        page.locator("header .vf-reference-shell__identity"),
+      ).toContainText("VyrnForge");
+      await expect(
+        page.locator("header .vf-reference-shell__identity"),
+      ).toContainText("Reference");
       await expectNoPageOverflow(page);
       await capture(page, testInfo, `reference-${route}`);
     }
@@ -73,20 +75,30 @@ test.describe("VyrnForge Reference product", () => {
   }, testInfo) => {
     await openReference(page, "overview");
 
-    const themeToggle = page.getByRole("button", { name: "Toggle dark theme" });
+    const themeToggle = page.getByRole("button", {
+      name: "Toggle dark theme",
+    });
     await expect(themeToggle).toHaveAttribute("aria-pressed", "false");
     await themeToggle.click();
     await expect(themeToggle).toHaveAttribute("aria-pressed", "true");
-    await expect(page.locator(".vf-docs-app")).toHaveAttribute("data-theme", "dark");
+    await expect(page.locator(".vf-docs-app")).toHaveAttribute(
+      "data-theme",
+      "dark",
+    );
 
-    await page.getByRole("button", { name: "Components", exact: true }).first().click();
+    await page
+      .getByRole("button", { name: "Components", exact: true })
+      .first()
+      .click();
     await expect(page.locator("#vf-reference-main")).toBeFocused();
 
     const search = page.getByRole("searchbox", {
       name: "Search VyrnForge Reference",
     });
     await search.fill("definitely-no-reference-result");
-    await expect(page.getByRole("status")).toContainText("No Reference results");
+    await expect(page.getByRole("status")).toContainText(
+      "No Reference results",
+    );
 
     await capture(page, testInfo, "reference-dark-search-zero");
   });
@@ -102,7 +114,9 @@ test.describe("VyrnForge Reference product", () => {
     await capture(page, testInfo, "reference-unavailable-grid-angular");
 
     await openReference(page, "not-a-real-reference-route");
-    await expect(page.getByText("Page not found", { exact: true })).toBeVisible();
+    await expect(
+      page.getByText("Page not found", { exact: true }),
+    ).toBeVisible();
     await expect(page.locator(".vf-docs-state")).toBeVisible();
     await capture(page, testInfo, "reference-invalid-route");
   });
