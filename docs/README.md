@@ -56,3 +56,8 @@ application state in the consuming application.
 Architecture decisions, governance, testing, CI/CD, release controls, metadata,
 and generated evidence remain in the repository for maintainers. They are
 intentionally not part of the normal public documentation navigation.
+
+Contributors adding or changing public documentation should follow the
+[Documentation Authoring](engineering/documentation-authoring.md) guide rather
+than editing Docs application route, sidebar, search, or generated registry
+files.

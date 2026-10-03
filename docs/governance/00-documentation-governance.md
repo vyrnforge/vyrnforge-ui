@@ -14,6 +14,8 @@ The documentation system itself is described in
 - Documentation entrypoint: `docs/README.md`.
 - Documentation organization and docs-app ownership:
   `docs/engineering/documentation-system.md`.
+- Public documentation contributor workflow:
+  `docs/engineering/documentation-authoring.md`.
 - Project identity and durable scope:
   `docs/governance/01-project-source-of-truth.md`.
 - Package boundaries: `docs/architecture/01-package-boundaries.md`.
@@ -79,9 +81,11 @@ When code already owns a current inventory or mapping, documentation explains th
 durable contract and links to the implementation rather than copying the
 inventory into Markdown. Generated Reference domain facts and stable identities
 come from canonical metadata and `docs/generated/reference-model.json`.
-`apps/docs/src/referenceRoutes.ts` may curate reader-facing page membership and
-bind authored examples, but it must not become an API, package, token,
-framework, version, component, or release source of truth.
+Public page membership, navigation, search, indexes, sitemap records, example
+identity, and framework/version availability derive from canonical metadata and
+the generated Documentation Registry. `apps/docs/src/referenceRoutes.ts` is a
+runtime adapter over those generated facts and must not become a manual public
+registration authority.
 
 ### Human and machine-readable sources must agree
 

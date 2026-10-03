@@ -125,6 +125,7 @@ The primary human-readable sources are:
 - `docs/architecture/10-custom-elements-and-form-association.md`
 - `docs/testing/multi-framework-consumer-fixtures.md`
 - `docs/engineering/documentation-system.md`
+- `docs/engineering/documentation-authoring.md`
 
 ## Maintenance
 
