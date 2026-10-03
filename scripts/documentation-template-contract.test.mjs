@@ -75,15 +75,9 @@ test("guide template owns the public guide experience", () => {
     path.join(root, "apps/docs/src/GuidePage.tsx"),
     "utf8",
   );
-  const main = readFileSync(
-    path.join(root, "apps/docs/src/main.tsx"),
-    "utf8",
-  );
+  const main = readFileSync(path.join(root, "apps/docs/src/main.tsx"), "utf8");
 
-  assert.equal(
-    docsPage.includes('route.template === "guide"'),
-    true,
-  );
+  assert.equal(docsPage.includes('route.template === "guide"'), true);
   assert.match(docsPage, /<GuidePage/u);
   assert.match(guidePage, /data-document-template="guide"/u);
   assert.match(guidePage, /Framework surface/u);
@@ -92,3 +86,4 @@ test("guide template owns the public guide experience", () => {
   assert.equal(main.includes("styles/docs-overview.css"), false);
   assert.doesNotMatch(docsPage, /OverviewPage/u);
 });
+
