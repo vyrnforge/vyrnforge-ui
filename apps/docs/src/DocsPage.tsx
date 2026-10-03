@@ -1,3 +1,4 @@
+import { Button, EmptyState } from "@vyrnforge/ui-components";
 import type { ReferenceRecordSelection } from "./App";
 import { ComponentReferencePage } from "./ComponentReferencePage";
 import type { DocsFrameworkId } from "./docsContext";
@@ -17,6 +18,7 @@ import {
 type DocsPageProps = {
   route: DocsRoute;
   frameworkId: DocsFrameworkId;
+  invalidPath?: string | null;
   onFrameworkChange: (frameworkId: DocsFrameworkId) => void;
   onRouteChange: (routeId: string) => void;
   referenceRecord: ReferenceRecordSelection | null;
@@ -27,6 +29,7 @@ type DocsPageProps = {
 export function DocsPage({
   route,
   frameworkId,
+  invalidPath,
   onFrameworkChange,
   onRouteChange,
   referenceRecord,
@@ -34,6 +37,21 @@ export function DocsPage({
   version,
 }: DocsPageProps) {
   const template = getDocumentationTemplate(route.template);
+
+  if (invalidPath) {
+    return (
+      <EmptyState
+        className="vf-docs-state"
+        title="Page not found"
+        description={`No VyrnForge Reference document matches ${invalidPath}.`}
+        action={
+          <Button onClick={() => onRouteChange("overview")} variant="subtle">
+            Reference overview
+          </Button>
+        }
+      />
+    );
+  }
 
   if (!routeResolution.available) {
     const alternatives = routeResolution.alternatives
@@ -50,11 +68,20 @@ export function DocsPage({
         template={template}
         title={route.title}
       >
-        {alternatives ? (
-          <p>Available alternatives: {alternatives}.</p>
-        ) : (
-          <p>No published documentation alternative is currently available.</p>
-        )}
+        <EmptyState
+          className="vf-docs-state"
+          title="Unavailable in this context"
+          description={
+            alternatives
+              ? `Available alternatives: ${alternatives}.`
+              : "No published documentation alternative is currently available."
+          }
+          action={
+            <Button onClick={() => onRouteChange("overview")} variant="subtle">
+              Reference overview
+            </Button>
+          }
+        />
       </DocumentationPageTemplate>
     );
   }
