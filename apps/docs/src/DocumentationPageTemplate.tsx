@@ -19,7 +19,7 @@ export function DocumentationPageTemplate({
   title,
 }: DocumentationPageTemplateProps) {
   return (
-    <main
+    <article
       className={`vf-docs-page vf-docs-page--template-${template.id}`}
       data-document-template={template.id}
       data-template-sections={template.sections.join(" ")}
@@ -31,6 +31,6 @@ export function DocumentationPageTemplate({
         </Text>
       </div>
       {children}
-    </main>
+    </article>
   );
 }
