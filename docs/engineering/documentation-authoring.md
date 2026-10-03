@@ -14,19 +14,19 @@ For product architecture and ownership rationale, see
 
 Choose the canonical owner before editing content.
 
-| Concern | Canonical owner |
-| --- | --- |
-| Public document identity, type, section, order, renderer, source path, record-domain binding, and content layers | `docs/metadata/documentation-pages.json` |
-| Framework documentation readiness by release line | `docs/metadata/release-groups.json` |
-| Framework identities and support topology | `docs/metadata/multi-framework.json` and `docs/metadata/reference-portal.json` |
-| Component contracts and API semantics | `docs/metadata/component-contracts.json` plus generated framework API/reference facts |
-| Component catalog/maturity | `docs/metadata/components.json` |
-| Packages and public entry points | `docs/metadata/packages.json`, package manifests, and release metadata |
-| Tokens | `docs/metadata/design-tokens.json` and shared runtime token CSS |
-| Patterns | `docs/metadata/patterns.json` |
-| Packed cross-framework example evidence | `docs/metadata/executable-examples.json` and `tests/consumers/manifest.json` |
-| Framework-specific exceptions | `docs/metadata/framework-exceptions.json` |
-| Generated routes/navigation/search/indexes/sitemap/templates/availability | `docs/generated/documentation-registry.json` |
+| Concern                                                                                                          | Canonical owner                                                                       |
+| ---------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------- |
+| Public document identity, type, section, order, renderer, source path, record-domain binding, and content layers | `docs/metadata/documentation-pages.json`                                              |
+| Framework documentation readiness by release line                                                                | `docs/metadata/release-groups.json`                                                   |
+| Framework identities and support topology                                                                        | `docs/metadata/multi-framework.json` and `docs/metadata/reference-portal.json`        |
+| Component contracts and API semantics                                                                            | `docs/metadata/component-contracts.json` plus generated framework API/reference facts |
+| Component catalog/maturity                                                                                       | `docs/metadata/components.json`                                                       |
+| Packages and public entry points                                                                                 | `docs/metadata/packages.json`, package manifests, and release metadata                |
+| Tokens                                                                                                           | `docs/metadata/design-tokens.json` and shared runtime token CSS                       |
+| Patterns                                                                                                         | `docs/metadata/patterns.json`                                                         |
+| Packed cross-framework example evidence                                                                          | `docs/metadata/executable-examples.json` and `tests/consumers/manifest.json`          |
+| Framework-specific exceptions                                                                                    | `docs/metadata/framework-exceptions.json`                                             |
+| Generated routes/navigation/search/indexes/sitemap/templates/availability                                        | `docs/generated/documentation-registry.json`                                          |
 
 Generated files are projections, not authoring surfaces.
 
