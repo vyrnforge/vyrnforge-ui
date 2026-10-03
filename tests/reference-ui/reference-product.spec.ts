@@ -72,13 +72,18 @@ test.describe("VyrnForge Reference product", () => {
     await openReference(page, "overview");
 
     const themeToggle = page.getByRole("button", { name: "Toggle dark theme" });
-    await expect(themeToggle).toHaveAttribute("aria-pressed", "false");
+    await expect(page.locator(".vf-docs-app")).toHaveAttribute(
+      "data-theme",
+      "light",
+    );
     await themeToggle.click();
-    await expect(themeToggle).toHaveAttribute("aria-pressed", "true");
     await expect(page.locator(".vf-docs-app")).toHaveAttribute(
       "data-theme",
       "dark",
     );
+    await expect(
+      page.getByRole("button", { name: "Toggle light theme" }),
+    ).toBeVisible();
 
     await page
       .getByRole("button", { name: "Components", exact: true })
@@ -122,7 +127,7 @@ test.describe("VyrnForge Reference product", () => {
     await openReference(page, "overview");
     await expect(page.locator(".vf-reference-shell__sidebar")).toBeHidden();
 
-    const browse = page.getByRole("button", { name: "Browse" });
+    const browse = page.getByRole("button", { name: "Browse", exact: true });
     await expect(browse).toBeVisible();
     await browse.click();
     await expect(browse).toHaveAttribute("aria-expanded", "true");
