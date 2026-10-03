@@ -721,7 +721,8 @@ export function ComponentReferencePage({
           title="Component not found"
           description={
             <>
-              No generated component record exists for <code>{componentId}</code>.
+              No generated component record exists for{" "}
+              <code>{componentId}</code>.
             </>
           }
           action={
