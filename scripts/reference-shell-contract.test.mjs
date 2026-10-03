@@ -286,3 +286,28 @@ test("package, token, and pattern discovery avoid dashboard Card stacks", () => 
   assert.match(packageReference, /getReferenceRecordRoute/u);
   assert.match(discovery, /getReferenceRecordRoute/u);
 });
+
+test("Reference non-happy paths use explicit VyrnForge state patterns", () => {
+  const app = read("apps/docs/src/App.tsx");
+  const docsPage = read("apps/docs/src/DocsPage.tsx");
+  const components = read("apps/docs/src/ComponentReferencePage.tsx");
+  const packages = read("apps/docs/src/PackageReferencePage.tsx");
+  const discovery = read("apps/docs/src/DiscoveryReferencePage.tsx");
+  const routes = read("apps/docs/src/referenceRoutes.ts");
+
+  assert.match(routes, /findRouteById/u);
+  assert.match(app, /invalidPath/u);
+  assert.match(docsPage, /title="Page not found"/u);
+  assert.match(docsPage, /title="Unavailable in this context"/u);
+  for (const source of [docsPage, components, packages, discovery]) {
+    assert.match(source, /EmptyState/u);
+  }
+  assert.doesNotMatch(
+    components,
+    /<Heading[^>]*>\s*Component not found\s*<\/Heading>/su,
+  );
+  assert.doesNotMatch(
+    packages,
+    /<Heading[^>]*>\s*Package not found\s*<\/Heading>/su,
+  );
+});

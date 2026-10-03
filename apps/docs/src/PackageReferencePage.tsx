@@ -1,4 +1,10 @@
-import { Badge, CodeText, Heading, Text } from "@vyrnforge/ui-components";
+import {
+  Badge,
+  CodeText,
+  EmptyState,
+  Heading,
+  Text,
+} from "@vyrnforge/ui-components";
 
 import { getReferenceRecordRoute } from "../../../docs/reference/referenceRuntime";
 import { referenceModel } from "./docsContext";
@@ -156,17 +162,16 @@ export function PackageReferencePage({ packageId }: PackageReferencePageProps) {
     const packageInfo = getPackageReferenceRecord(packageId);
     if (!packageInfo) {
       return (
-        <section className="vf-docs-reference__section">
-          <Heading level={3} size="md">
-            Package not found
-          </Heading>
-          <Text tone="muted">
-            No generated package record exists for <code>{packageId}</code>.
-          </Text>
-          <Text>
-            <a href="#/package-reference">Return to package reference</a>
-          </Text>
-        </section>
+        <EmptyState
+          className="vf-docs-state"
+          title="Package not found"
+          description={
+            <>
+              No generated package record exists for <code>{packageId}</code>.
+            </>
+          }
+          action={<a href="#/package-reference">Return to package reference</a>}
+        />
       );
     }
     return <PackageDetail packageInfo={packageInfo} />;

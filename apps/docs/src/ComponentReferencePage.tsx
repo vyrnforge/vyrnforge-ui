@@ -1,4 +1,4 @@
-import { Badge, Heading, Text } from "@vyrnforge/ui-components";
+import { Badge, EmptyState, Heading, Text } from "@vyrnforge/ui-components";
 
 import frameworkApiReferenceRaw from "../../../docs/generated/framework-api-reference.json?raw";
 import { getReferenceRecordRoute } from "../../../docs/reference/referenceRuntime";
@@ -716,17 +716,19 @@ export function ComponentReferencePage({
     const component = getComponentReferenceRecord(componentId);
     if (!component) {
       return (
-        <section className="vf-docs-reference__section">
-          <Heading level={3} size="md">
-            Component not found
-          </Heading>
-          <Text tone="muted">
-            No component exists for <code>{componentId}</code>.
-          </Text>
-          <Text>
+        <EmptyState
+          className="vf-docs-state"
+          title="Component not found"
+          description={
+            <>
+              No generated component record exists for{" "}
+              <code>{componentId}</code>.
+            </>
+          }
+          action={
             <a href="#/component-reference">Return to component reference</a>
-          </Text>
-        </section>
+          }
+        />
       );
     }
     return (

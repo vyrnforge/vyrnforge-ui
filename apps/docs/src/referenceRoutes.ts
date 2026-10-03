@@ -314,9 +314,13 @@ export const publicDocsSections: PublicDocsSection[] = registry.sections.map(
   }),
 );
 
+export function findRouteById(id: string) {
+  return docsRoutes.find((route) => route.id === id);
+}
+
 export function getRouteById(id: string) {
   return (
-    docsRoutes.find((route) => route.id === id) ??
+    findRouteById(id) ??
     docsRoutes.find((route) => route.id === "overview") ??
     docsRoutes[0]
   );

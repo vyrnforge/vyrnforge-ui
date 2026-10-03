@@ -19,6 +19,7 @@ import {
 import { ReferenceShell } from "./ReferenceShell";
 import {
   documentationRecordRoutes,
+  findRouteById,
   getRouteById,
   resolveDocsRoute,
 } from "./referenceRoutes";
@@ -30,6 +31,7 @@ export type ReferenceRecordSelection = {
 };
 
 type DocsLocation = {
+  invalidPath: string | null;
   pathname: string;
   routeId: string;
   referenceRecord: ReferenceRecordSelection | null;
@@ -51,6 +53,7 @@ function getDocsLocation(context: ReferenceLocationContext): DocsLocation {
     );
     if (id) {
       return {
+        invalidPath: null,
         pathname,
         routeId: recordRoute.routeId,
         referenceRecord: {
@@ -62,9 +65,11 @@ function getDocsLocation(context: ReferenceLocationContext): DocsLocation {
     }
   }
 
+  const routeId = pathname.replace(/^\//, "") || "overview";
   return {
+    invalidPath: findRouteById(routeId) ? null : pathname,
     pathname,
-    routeId: pathname.replace(/^\//, "") || "overview",
+    routeId,
     referenceRecord: null,
   };
 }
@@ -163,8 +168,10 @@ export default function App() {
   const activeRoute = routeResolution.route;
 
   useEffect(() => {
-    document.title = `${activeRoute.title} · VyrnForge Reference`;
-  }, [activeRoute.title]);
+    document.title = docsLocation.invalidPath
+      ? "Page not found · VyrnForge Reference"
+      : `${activeRoute.title} · VyrnForge Reference`;
+  }, [activeRoute.title, docsLocation.invalidPath]);
 
   const navigate = (context: ReferenceLocationContext) => {
     const nextDocsLocation = getDocsLocation(context);
@@ -220,6 +227,7 @@ export default function App() {
             {theme === "light" ? "Dark" : "Light"}
           </Button>
         }
+        invalidPath={docsLocation.invalidPath}
         onFrameworkChange={handleFrameworkChange}
         onRouteChange={handleRouteChange}
         referenceRecord={docsLocation.referenceRecord}
