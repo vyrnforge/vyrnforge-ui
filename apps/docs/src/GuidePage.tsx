@@ -312,7 +312,7 @@ export function GuidePage({
   const framework = getFramework(frameworkId);
 
   return (
-    <main
+    <article
       className="vf-docs-guide"
       data-document-template="guide"
       data-guide-kind={route.kind}
@@ -403,6 +403,6 @@ export function GuidePage({
       ) : (
         <GuideDocument markdown={markdown} />
       )}
-    </main>
+    </article>
   );
 }
