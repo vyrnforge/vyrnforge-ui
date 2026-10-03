@@ -615,7 +615,6 @@
   }
 }
 
-
 /* Cross-cutting Reference resilience (#771). */
 .vf-reference-shell__sidebar {
   scrollbar-gutter: stable;
