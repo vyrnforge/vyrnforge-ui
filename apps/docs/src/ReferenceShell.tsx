@@ -3,7 +3,6 @@ import {
   Button,
   Drawer,
   Select,
-  Text,
 } from "@vyrnforge/ui-components";
 import type { ReferenceRecordSelection } from "./App";
 import {
@@ -18,7 +17,10 @@ import {
 } from "./docsContext";
 import { DocsPage } from "./DocsPage";
 import { docsLinks } from "./deploymentLinks";
-import {\n  ReferenceNavigation,\n  ReferencePrimaryNavigation,\n} from "./ReferenceNavigation";
+import {
+  ReferenceNavigation,
+  ReferencePrimaryNavigation,
+} from "./ReferenceNavigation";
 import type { DocsRoute, DocsRouteResolution } from "./referenceRoutes";
 
 export type ReferenceLayoutMode =
@@ -42,7 +44,10 @@ type ReferenceShellProps = {
   routePath: string;
 };
 
-function getLayoutMode(\n  route: DocsRoute,\n  referenceRecord: ReferenceRecordSelection | null,\n): ReferenceLayoutMode {
+function getLayoutMode(
+  route: DocsRoute,
+  referenceRecord: ReferenceRecordSelection | null,
+): ReferenceLayoutMode {
   if (route.kind === "example" || route.kind === "executable-examples") {
     return "example";
   }
