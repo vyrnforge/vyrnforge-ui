@@ -324,6 +324,7 @@
 }
 
 .vf-reference-shell__main {
+  box-sizing: border-box;
   min-width: 0;
   padding: clamp(var(--vf-space-5, 20px), 3vw, var(--vf-space-10, 40px));
   outline: none;
