@@ -235,7 +235,10 @@ test("Reference navigation stays registry-driven and route changes restore readi
   assert.match(navigation, /aria-live="polite"/u);
   assert.match(shell, /ReferencePrimaryNavigation/u);
   assert.match(shell, /Drawer/u);
-  assert.match(app, /getElementById\("vf-reference-main"\)\?\.focus/u);
+  assert.match(
+    app,
+    /getElementById\(\s*"vf-reference-main"\s*\)\s*\?\.\s*focus/u,
+  );
   assert.match(app, /VyrnForge Reference/u);
 });
 
