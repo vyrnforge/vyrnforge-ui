@@ -223,3 +223,17 @@ test("all public routes use one unified Reference shell with controlled layouts"
   assert.match(navigation, /publicDocsSections/u);
   assert.match(navigation, /getReferenceLocationHref/u);
 });
+
+
+test("component reference is scan-first without generic Card section wrappers", () => {
+  const componentReference = read("apps/docs/src/ComponentReferencePage.tsx");
+  const styles = read("apps/docs/src/styles/reference-shell.css");
+
+  assert.doesNotMatch(componentReference, /\bCard\b/u);
+  assert.match(componentReference, /vf-docs-component-index/u);
+  assert.match(componentReference, /vf-docs-component-row/u);
+  assert.match(componentReference, /vf-docs-api-table/u);
+  assert.match(componentReference, /componentApiMemberAnchor/u);
+  assert.match(styles, /\.vf-docs-component-row/u);
+  assert.match(styles, /\.vf-docs-api-table thead th/u);
+});
