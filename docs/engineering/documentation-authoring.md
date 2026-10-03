@@ -99,12 +99,12 @@ must show an explicit unavailable state and valid alternatives.
 Use the frozen authoring conventions unless the capability materially requires
 something else:
 
-| Framework | Canonical authored form |
-| --- | --- |
-| Native HTML / Custom Elements | HTML + TypeScript |
-| React | TSX |
-| Angular | TypeScript + Angular templates |
-| Vue | Vue SFC + TypeScript |
+| Framework                     | Canonical authored form        |
+| ----------------------------- | ------------------------------ |
+| Native HTML / Custom Elements | HTML + TypeScript              |
+| React                         | TSX                            |
+| Angular                       | TypeScript + Angular templates |
+| Vue                           | Vue SFC + TypeScript           |
 
 Do not add parallel JavaScript/TypeScript variants when they express the same
 behavior.
