@@ -86,4 +86,3 @@ test("guide template owns the public guide experience", () => {
   assert.equal(main.includes("styles/docs-overview.css"), false);
   assert.doesNotMatch(docsPage, /OverviewPage/u);
 });
-
