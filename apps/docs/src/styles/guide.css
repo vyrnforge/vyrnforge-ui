@@ -29,7 +29,6 @@
   content: "";
 }
 
-
 .vf-docs-guide__hero-layout {
   display: grid;
   grid-template-columns: minmax(0, 1.7fr) minmax(260px, 0.8fr);
@@ -127,7 +126,6 @@
   border-radius: var(--vf-radius-lg, 8px);
   background: var(--vf-surface-subtle, #f8fafc);
 }
-
 
 .vf-docs-guide__surface-layout {
   display: grid;
