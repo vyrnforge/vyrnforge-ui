@@ -614,3 +614,16 @@
     border-block-start: 1px solid var(--vf-border-subtle, #e2e8f0);
   }
 }
+
+.vf-docs-state {
+  display: grid;
+  align-items: start;
+  min-height: 14rem;
+  padding-block: var(--vf-space-6, 24px);
+}
+
+.vf-docs-state .vf-empty-state,
+.vf-docs-state .vf-error-state {
+  max-width: 44rem;
+  margin: 0;
+}

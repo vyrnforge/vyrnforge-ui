@@ -1,3 +1,4 @@
+import { Button, EmptyState, ErrorState } from "@vyrnforge/ui-components";
 import type { ReferenceRecordSelection } from "./App";
 import { ComponentReferencePage } from "./ComponentReferencePage";
 import type { DocsFrameworkId } from "./docsContext";
@@ -17,6 +18,7 @@ import {
 type DocsPageProps = {
   route: DocsRoute;
   frameworkId: DocsFrameworkId;
+  invalidRouteId?: string | null;
   onFrameworkChange: (frameworkId: DocsFrameworkId) => void;
   onRouteChange: (routeId: string) => void;
   referenceRecord: ReferenceRecordSelection | null;
@@ -27,6 +29,7 @@ type DocsPageProps = {
 export function DocsPage({
   route,
   frameworkId,
+  invalidRouteId = null,
   onFrameworkChange,
   onRouteChange,
   referenceRecord,
@@ -34,6 +37,22 @@ export function DocsPage({
   version,
 }: DocsPageProps) {
   const template = getDocumentationTemplate(route.template);
+
+  if (invalidRouteId) {
+    return (
+      <div className="vf-docs-state">
+        <ErrorState
+          actions={
+            <Button onClick={() => onRouteChange("overview")} size="sm">
+              Go to Reference overview
+            </Button>
+          }
+          description={`No public Reference route exists for “${invalidRouteId}”.`}
+          title="Reference page not found"
+        />
+      </div>
+    );
+  }
 
   if (!routeResolution.available) {
     const alternatives = routeResolution.alternatives
@@ -50,11 +69,16 @@ export function DocsPage({
         template={template}
         title={route.title}
       >
-        {alternatives ? (
-          <p>Available alternatives: {alternatives}.</p>
-        ) : (
-          <p>No published documentation alternative is currently available.</p>
-        )}
+        <div className="vf-docs-state">
+          <EmptyState
+            description={
+              alternatives
+                ? `Available alternatives: ${alternatives}.`
+                : "No published documentation alternative is currently available."
+            }
+            title="Unavailable in this framework/version"
+          />
+        </div>
       </DocumentationPageTemplate>
     );
   }
@@ -96,6 +120,7 @@ export function DocsPage({
       <ComponentReferencePage
         componentId={componentId}
         frameworkId={frameworkId}
+        member={referenceRecord?.member ?? null}
         version={version}
       />
     ) : route.kind === "package-reference" ? (

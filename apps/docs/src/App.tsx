@@ -19,6 +19,7 @@ import {
 import { ReferenceShell } from "./ReferenceShell";
 import {
   documentationRecordRoutes,
+  findRouteById,
   getRouteById,
   resolveDocsRoute,
 } from "./referenceRoutes";
@@ -125,8 +126,11 @@ export default function App() {
     const member = docsLocation.referenceRecord?.member;
     const frame = window.requestAnimationFrame(() => {
       if (member) {
-        document.getElementById(member)?.scrollIntoView({ block: "start" });
-        return;
+        const memberTarget = document.getElementById(member);
+        if (memberTarget) {
+          memberTarget.scrollIntoView({ block: "start" });
+          return;
+        }
       }
 
       document
@@ -147,10 +151,12 @@ export default function App() {
     };
   }, []);
 
-  const baseRoute = useMemo(
-    () => getRouteById(docsLocation.routeId),
+  const requestedRoute = useMemo(
+    () => findRouteById(docsLocation.routeId),
     [docsLocation.routeId],
   );
+  const invalidRouteId = requestedRoute ? null : docsLocation.routeId;
+  const baseRoute = requestedRoute ?? getRouteById("overview");
   const framework = useMemo(() => getFramework(frameworkId), [frameworkId]);
   const docsVersion = useMemo(
     () => getDocsVersion(getCurrentDocsVersionId(), docsVersions),
@@ -220,6 +226,7 @@ export default function App() {
             {theme === "light" ? "Dark" : "Light"}
           </Button>
         }
+        invalidRouteId={invalidRouteId}
         onFrameworkChange={handleFrameworkChange}
         onRouteChange={handleRouteChange}
         referenceRecord={docsLocation.referenceRecord}
