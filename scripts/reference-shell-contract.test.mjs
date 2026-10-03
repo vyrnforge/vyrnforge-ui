@@ -287,7 +287,6 @@ test("package, token, and pattern discovery avoid dashboard Card stacks", () => 
   assert.match(discovery, /getReferenceRecordRoute/u);
 });
 
-
 test("Reference non-happy paths use explicit VyrnForge state patterns", () => {
   const app = read("apps/docs/src/App.tsx");
   const docsPage = read("apps/docs/src/DocsPage.tsx");
