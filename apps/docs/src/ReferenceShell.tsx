@@ -101,7 +101,9 @@ export function ReferenceShell({
   };
 
   const handleVersionChange = (versionId: string) => {
-    const version = versionOptions.find((candidate) => candidate.id === versionId);
+    const version = versionOptions.find(
+      (candidate) => candidate.id === versionId,
+    );
     if (
       !version ||
       version.id === docsVersion.id ||
