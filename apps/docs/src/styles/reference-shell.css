@@ -408,9 +408,14 @@
 
 @media (max-width: 720px) {
   .vf-reference-shell__header-inner {
-    grid-template-columns: 1fr;
+    grid-template-columns: minmax(0, 1fr);
     gap: var(--vf-space-2, 8px);
     padding-block: var(--vf-space-3, 12px);
+  }
+
+  .vf-reference-shell__brand,
+  .vf-reference-shell__controls {
+    min-width: 0;
   }
 
   .vf-reference-shell__controls {
