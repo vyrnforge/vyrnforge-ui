@@ -59,7 +59,34 @@ test("Docs rendering selects the page template from generated registry metadata"
   );
 
   assert.match(docsPage, /getDocumentationTemplate\(route\.template\)/u);
+  assert.match(docsPage, /route\.template === "guide"/u);
+  assert.match(docsPage, /<GuidePage/u);
   assert.match(docsPage, /<DocumentationPageTemplate/u);
   assert.match(routes, /template: page\.template/u);
   assert.doesNotMatch(docsPage, /route\.type\s*===\s*["']component["']/u);
+});
+
+
+test("guide template owns the public guide experience", () => {
+  const docsPage = readFileSync(
+    path.join(root, "apps/docs/src/DocsPage.tsx"),
+    "utf8",
+  );
+  const guidePage = readFileSync(
+    path.join(root, "apps/docs/src/GuidePage.tsx"),
+    "utf8",
+  );
+  const main = readFileSync(
+    path.join(root, "apps/docs/src/main.tsx"),
+    "utf8",
+  );
+
+  assert.match(docsPage, /route\\.template === "guide"/u);
+  assert.match(docsPage, /<GuidePage/u);
+  assert.match(guidePage, /data-document-template="guide"/u);
+  assert.match(guidePage, /Framework surface/u);
+  assert.match(guidePage, /One UI foundation for every framework surface/u);
+  assert.match(main, /styles\\/guide\\.css/u);
+  assert.doesNotMatch(main, /styles\\/docs-overview\\.css/u);
+  assert.doesNotMatch(docsPage, /OverviewPage/u);
 });
