@@ -1,9 +1,6 @@
 import { Button, Heading, Text } from "@vyrnforge/ui-components";
 import type { DocumentationReadinessStatus } from "../../../docs/reference/documentationAvailability";
-import {
-  getFramework,
-  type DocsFrameworkId,
-} from "./docsContext";
+import { getFramework, type DocsFrameworkId } from "./docsContext";
 import { MarkdownView } from "./MarkdownView";
 
 type GuidePageProps = {
@@ -212,10 +209,7 @@ export function GuidePage({
               <Button onClick={() => onRouteChange("component-reference")}>
                 Open component reference
               </Button>
-              <Button
-                variant="subtle"
-                onClick={() => onRouteChange("theming")}
-              >
+              <Button variant="subtle" onClick={() => onRouteChange("theming")}>
                 Theming & styling
               </Button>
             </div>
