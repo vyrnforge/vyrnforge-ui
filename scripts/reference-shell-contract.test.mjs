@@ -264,6 +264,9 @@ test("reading templates use the unified main landmark and source-driven deep lin
 
   assert.doesNotMatch(template, /<main/u);
   assert.doesNotMatch(guide, /<main/u);
+  assert.doesNotMatch(template, /vf-docs-page(?:__intro)?/u);
+  assert.match(template, /vf-reference-page__header/u);
+  assert.doesNotMatch(styles, /\.vf-docs-page__intro/u);
   assert.match(markdown, /vf-docs-markdown__heading-link/u);
   assert.match(markdown, /headingId/u);
   assert.match(styles, /max-width: 78ch/u);
@@ -277,7 +280,8 @@ test("component reference is scan-first without generic Card section wrappers", 
   const componentReference = read("apps/docs/src/ComponentReferencePage.tsx");
   const styles = read("apps/docs/src/styles/reference-shell.css");
 
-  assert.doesNotMatch(componentReference, /\bCard\b/u);
+  assert.doesNotMatch(componentReference, /\bCard\b|ComponentIndexCard|vf-docs-reference-card/u);
+  assert.match(componentReference, /ComponentIndexRow/u);
   assert.match(componentReference, /vf-docs-component-index/u);
   assert.match(componentReference, /vf-docs-component-row/u);
   assert.match(componentReference, /vf-docs-api-table/u);
@@ -291,12 +295,18 @@ test("package, token, and pattern discovery avoid dashboard Card stacks", () => 
   const discovery = read("apps/docs/src/DiscoveryReferencePage.tsx");
   const styles = read("apps/docs/src/styles/reference-shell.css");
 
-  assert.doesNotMatch(packageReference, /\bCard\b/u);
-  assert.doesNotMatch(discovery, /\bCard\b/u);
+  assert.doesNotMatch(packageReference, /\bCard\b|PackageIndexCard|vf-docs-package-card/u);
+  assert.doesNotMatch(discovery, /\bCard\b|vf-docs-discovery-row-card/u);
+  assert.match(packageReference, /PackageIndexRow/u);
   assert.match(packageReference, /vf-docs-package-row/u);
-  assert.match(discovery, /vf-docs-discovery-row-card/u);
+  assert.match(discovery, /vf-docs-discovery-catalog-row/u);
   assert.match(styles, /\.vf-docs-package-row/u);
-  assert.match(styles, /\.vf-docs-discovery-row-card/u);
+  assert.match(styles, /\.vf-docs-discovery-catalog-row/u);
+  assert.match(
+    styles,
+    /\.vf-docs-package-index,\s*\.vf-docs-discovery-grid\s*\{[^}]*grid-template-columns:\s*minmax\(0,\s*1fr\)/su,
+  );
+  assert.doesNotMatch(styles, /\.vf-docs-preview(?:__|\s*\{)/u);
   assert.match(packageReference, /getReferenceRecordRoute/u);
   assert.match(discovery, /getReferenceRecordRoute/u);
 });
