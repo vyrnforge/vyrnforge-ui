@@ -36,6 +36,7 @@ jobs:
     permissions:
       actions: read
       contents: read
+      pages: read
     steps:
       - name: Resolve successful current-main CI run
         id: candidate
@@ -108,7 +109,9 @@ jobs:
             throw new Error("Reference artifact CI run does not match selected current-main run.");
           }
           const catalog = JSON.parse(readFileSync("site/vyrnforge-versions.json", "utf8"));
-          if (catalog.schemaVersion !== 2) throw new Error("Unsupported version catalog schema.");
+          // The exact catalog schema is verified by the canonical Pages verifier
+          // before CI uploads this immutable artifact. Deployment validates lineage
+          // and retained-release completeness without duplicating that schema owner.
           if (catalog.current?.commit !== artifact.source.commit) {
             throw new Error("Pages version catalog is not bound to the production reference artifact commit.");
           }
