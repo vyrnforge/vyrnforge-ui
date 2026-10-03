@@ -92,7 +92,6 @@ test("Docs executable examples stay bound to verified consumer fixtures", () => 
   assert.match(docsPage, /route\.kind === "executable-examples"/u);
 });
 
-
 test("Reference examples integrate preview, source, and generated evidence without Playground chrome", () => {
   const migrated = read("apps/docs/src/examples/MigratedExamplePage.tsx");
   const executable = read("apps/docs/src/examples/ExecutableExamplesPage.tsx");
