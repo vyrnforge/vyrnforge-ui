@@ -42,24 +42,19 @@ type ReferenceShellProps = {
   routePath: string;
 };
 
-function getLayoutMode(route: DocsRoute): ReferenceLayoutMode {
+function getLayoutMode(\n  route: DocsRoute,\n  referenceRecord: ReferenceRecordSelection | null,\n): ReferenceLayoutMode {
   if (route.kind === "example" || route.kind === "executable-examples") {
     return "example";
   }
   if (route.template === "advanced-module") return "wide";
   if (
     route.kind === "discovery-reference" ||
-    (route.kind === "component-reference" && !route.recordDomain)
-  ) {
-    return "catalog";
-  }
-  if (
     route.kind === "component-reference" ||
-    route.kind === "package-reference" ||
-    route.template === "package"
+    route.kind === "package-reference"
   ) {
-    return "reference";
+    return referenceRecord ? "reference" : "catalog";
   }
+  if (route.template === "package") return "reference";
   return "reading";
 }
 
@@ -77,7 +72,7 @@ export function ReferenceShell({
   routePath,
 }: ReferenceShellProps) {
   const [mobileNavigationOpen, setMobileNavigationOpen] = useState(false);
-  const layoutMode = getLayoutMode(activeRoute);
+  const layoutMode = getLayoutMode(activeRoute, referenceRecord);
   const frameworkVersions = getDocsVersionsForFramework(
     framework.id,
     docsVersions,
