@@ -89,14 +89,14 @@ test("Reference discovery stays derived from canonical VyrnForge sources", () =>
   assert.doesNotMatch(app, /routeId: "component-reference"/u);
   assert.doesNotMatch(app, /routeId: "token-reference"/u);
 
-  const nav = read("apps/docs/src/DocsNav.tsx");
+  const nav = read("apps/docs/src/ReferenceNavigation.tsx");
   assert.match(nav, /docsRoutes/);
   assert.match(nav, /publicDocsSections/);
   assert.match(nav, /documentationSearchRecords/);
   assert.match(nav, /routeIsAvailable/);
   assert.match(nav, /version/);
-  assert.match(nav, /VyrnForge documentation/);
-  assert.match(nav, /Filter docs/u);
+  assert.match(nav, /VyrnForge Reference/);
+  assert.match(nav, /Search VyrnForge Reference/u);
   assert.doesNotMatch(nav, /framework-api-reference\.json\?raw/u);
   assert.doesNotMatch(nav, /componentReferenceRecords/u);
 });
