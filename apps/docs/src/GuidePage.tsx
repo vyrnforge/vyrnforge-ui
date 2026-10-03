@@ -272,7 +272,9 @@ function GuideDocument({ markdown }: { markdown: string }) {
       ) : null}
 
       <div className="vf-docs-guide__content">
-        {intro ? <MarkdownView markdown={intro} /> : null}
+        {intro ? (
+          <MarkdownView className="vf-docs-guide__prose" markdown={intro} />
+        ) : null}
         {sections.map((section, index) => (
           <section
             className="vf-docs-guide__document-section"
@@ -287,7 +289,10 @@ function GuideDocument({ markdown }: { markdown: string }) {
                 {section.title}
               </Heading>
             </div>
-            <MarkdownView markdown={section.body} />
+            <MarkdownView
+              className="vf-docs-guide__prose"
+              markdown={section.body}
+            />
           </section>
         ))}
       </div>
