@@ -287,9 +287,7 @@ test("package, token, and pattern discovery avoid dashboard Card stacks", () => 
   assert.match(discovery, /getReferenceRecordRoute/u);
 });
 
-test(
-  "advanced modules use the shared Reference renderer and generated related routes",
-  () => {
+test("advanced modules use the shared Reference renderer and generated related routes", () => {
     const docsPage = read("apps/docs/src/DocsPage.tsx");
     const advancedModule = read("apps/docs/src/AdvancedModulePage.tsx");
     const styles = read("apps/docs/src/styles/reference-shell.css");
@@ -303,6 +301,5 @@ test(
       advancedModule,
       /grid-basic|grid-columns|grid-filtering/u,
     );
-    assert.match(styles, /\.vf-docs-advanced-module/u);
-  },
-);
+  assert.match(styles, /\.vf-docs-advanced-module/u);
+});
