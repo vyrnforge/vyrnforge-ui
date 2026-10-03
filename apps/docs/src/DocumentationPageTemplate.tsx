@@ -20,11 +20,11 @@ export function DocumentationPageTemplate({
 }: DocumentationPageTemplateProps) {
   return (
     <article
-      className={`vf-docs-page vf-docs-page--template-${template.id}`}
+      className={`vf-reference-page vf-reference-page--template-${template.id}`}
       data-document-template={template.id}
       data-template-sections={template.sections.join(" ")}
     >
-      <div className="vf-docs-page__intro">
+      <div className="vf-reference-page__header">
         <PageHeader description={description} title={title} />
         <Text size="sm" tone="muted">
           Documentation status: {status}
