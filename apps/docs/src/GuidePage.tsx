@@ -182,6 +182,14 @@ function OverviewGuide({
   );
 }
 
+function withoutDuplicateTitle(markdown: string, title: string) {
+  const lines = markdown.split(/\r?\n/u);
+  if (lines[0]?.trim() === `# ${title}`) {
+    return lines.slice(1).join("\n").replace(/^\s+/u, "");
+  }
+  return markdown;
+}
+
 export function GuidePage({
   frameworkId,
   onFrameworkChange,
@@ -190,7 +198,7 @@ export function GuidePage({
   status,
 }: GuidePageProps) {
   const isOverview = route.kind === "overview";
-  const markdown = route.content ?? "";
+  const markdown = withoutDuplicateTitle(route.content ?? "", route.title);
   const framework = getFramework(frameworkId);
 
   return (
