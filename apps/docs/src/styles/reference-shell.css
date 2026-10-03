@@ -614,3 +614,27 @@
     border-block-start: 1px solid var(--vf-border-subtle, #e2e8f0);
   }
 }
+
+/* Cross-cutting Reference resilience (#771). */
+.vf-reference-shell__sidebar {
+  scrollbar-gutter: stable;
+}
+
+.vf-reference-shell__main,
+.vf-reference-navigation {
+  overflow-wrap: anywhere;
+}
+
+.vf-docs-api-table-scroll,
+.vf-docs-code-block__pre,
+.vf-docs-preview__code {
+  overscroll-behavior-inline: contain;
+}
+
+@media (forced-colors: active) {
+  .vf-reference-shell__brand:focus-visible,
+  .vf-reference-shell__link:focus-visible,
+  .vf-reference-shell__skip:focus-visible {
+    outline: 2px solid CanvasText;
+  }
+}
