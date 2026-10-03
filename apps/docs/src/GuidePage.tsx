@@ -182,12 +182,107 @@ function OverviewGuide({
   );
 }
 
+type GuideSection = {
+  body: string;
+  id: string;
+  title: string;
+};
+
+function slugify(value: string) {
+  return value
+    .toLowerCase()
+    .replace(/[^a-z0-9]+/gu, "-")
+    .replace(/^-+|-+$/gu, "");
+}
+
 function withoutDuplicateTitle(markdown: string, title: string) {
   const lines = markdown.split(/\r?\n/u);
   if (lines[0]?.trim() === `# ${title}`) {
     return lines.slice(1).join("\n").replace(/^\s+/u, "");
   }
   return markdown;
+}
+
+function splitGuideSections(markdown: string) {
+  const intro: string[] = [];
+  const sections: GuideSection[] = [];
+  let current: GuideSection | null = null;
+
+  for (const line of markdown.split(/\r?\n/u)) {
+    const heading = /^##\s+(.*)$/u.exec(line);
+    if (heading) {
+      if (current) {
+        current.body = current.body.trim();
+        sections.push(current);
+      }
+      current = {
+        body: "",
+        id: slugify(heading[1]),
+        title: heading[1],
+      };
+      continue;
+    }
+
+    if (current) {
+      current.body += `${line}\n`;
+    } else {
+      intro.push(line);
+    }
+  }
+
+  if (current) {
+    current.body = current.body.trim();
+    sections.push(current);
+  }
+
+  return { intro: intro.join("\n").trim(), sections };
+}
+
+function GuideDocument({ markdown }: { markdown: string }) {
+  const { intro, sections } = splitGuideSections(markdown);
+
+  return (
+    <div className="vf-docs-guide__document">
+      {sections.length > 0 ? (
+        <nav aria-label="On this page" className="vf-docs-guide__outline">
+          <Text className="vf-docs-guide__kicker" size="sm">
+            On this page
+          </Text>
+          <ol>
+            {sections.map((section, index) => (
+              <li key={section.id}>
+                <a href={`#${section.id}`}>
+                  <span>{String(index + 1).padStart(2, "0")}</span>
+                  {section.title}
+                </a>
+              </li>
+            ))}
+          </ol>
+        </nav>
+      ) : null}
+
+      <div className="vf-docs-guide__content">
+        {intro ? <MarkdownView markdown={intro} /> : null}
+        {sections.map((section, index) => (
+          <section
+            className="vf-docs-guide__document-section"
+            id={section.id}
+            key={section.id}
+          >
+            <div className="vf-docs-guide__document-heading">
+              <span className="vf-docs-guide__document-step">
+                {String(index + 1).padStart(2, "0")}
+              </span>
+              <Heading level={3} size="md">
+                {section.title}
+              </Heading>
+            </div>
+            <MarkdownView markdown={section.body} />
+          </section>
+        ))}
+      </div>
+    </div>
+  );
 }
 
 export function GuidePage({
@@ -267,9 +362,7 @@ export function GuidePage({
           onRouteChange={onRouteChange}
         />
       ) : (
-        <div className="vf-docs-guide__content">
-          <MarkdownView markdown={markdown} />
-        </div>
+        <GuideDocument markdown={markdown} />
       )}
     </main>
   );
