@@ -4,7 +4,7 @@ import "@vyrnforge/ui-core/styles/index.css";
 import "@vyrnforge/ui-components/styles/index.css";
 import App from "./App";
 import "./styles/docs.css";
-import "./styles/docs-overview.css";
+import "./styles/guide.css";
 import "./styles/examples.css";
 import "./styles/reference-shell.css";
 
