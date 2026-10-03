@@ -58,11 +58,7 @@ export function AdvancedModulePage({
           className="vf-docs-advanced-module__examples"
         >
           <div className="vf-docs-advanced-module__examples-heading">
-            <Heading
-              id="vf-docs-advanced-module-examples"
-              level={3}
-              size="md"
-            >
+            <Heading id="vf-docs-advanced-module-examples" level={3} size="md">
               Module examples
             </Heading>
             <Text tone="muted">Available in the selected context.</Text>
