@@ -123,10 +123,14 @@ export default function App() {
 
   useEffect(() => {
     const member = docsLocation.referenceRecord?.member;
-    if (!member) return;
-
     const frame = window.requestAnimationFrame(() => {
-      document.getElementById(member)?.scrollIntoView({ block: "start" });
+      if (member) {
+        document.getElementById(member)?.scrollIntoView({ block: "start" });
+        return;
+      }
+
+      document.getElementById("vf-reference-main")?.focus({ preventScroll: true });
+      window.scrollTo({ top: 0, behavior: "auto" });
     });
     return () => window.cancelAnimationFrame(frame);
   }, [docsLocation]);
@@ -155,6 +159,10 @@ export default function App() {
     [baseRoute, docsVersion.version, frameworkId],
   );
   const activeRoute = routeResolution.route;
+
+  useEffect(() => {
+    document.title = `${activeRoute.title} · VyrnForge Reference`;
+  }, [activeRoute.title]);
 
   const navigate = (context: ReferenceLocationContext) => {
     const nextDocsLocation = getDocsLocation(context);
