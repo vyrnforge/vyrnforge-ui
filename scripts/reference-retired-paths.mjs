@@ -1,4 +1,7 @@
 export const retiredReferencePaths = [
+  "apps/docs/src/DocsShell.tsx",
+  "apps/docs/src/GuideShell.tsx",
+  "apps/docs/src/DocsNav.tsx",
   "apps/docs/src/docsRegistry.ts",
   "apps/docs/src/discoveryRoutes.ts",
   "apps/docs/src/MetadataPage.tsx",
