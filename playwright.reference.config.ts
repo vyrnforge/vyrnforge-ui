@@ -14,8 +14,14 @@ export default defineConfig({
   timeout: 30_000,
   expect: { timeout: 5_000 },
   reporter: process.env.CI
-    ? [["line"], ["html", { open: "never", outputFolder: "reference-ui-report" }]]
-    : [["list"], ["html", { open: "never", outputFolder: "reference-ui-report" }]],
+    ? [
+        ["line"],
+        ["html", { open: "never", outputFolder: "reference-ui-report" }],
+      ]
+    : [
+        ["list"],
+        ["html", { open: "never", outputFolder: "reference-ui-report" }],
+      ],
   use: {
     baseURL,
     trace: "on-first-retry",
