@@ -129,8 +129,9 @@ export default function App() {
   useEffect(() => {
     const member = docsLocation.referenceRecord?.member;
     const frame = window.requestAnimationFrame(() => {
-      if (member) {
-        document.getElementById(member)?.scrollIntoView({ block: "start" });
+      const memberTarget = member ? document.getElementById(member) : null;
+      if (memberTarget) {
+        memberTarget.scrollIntoView({ block: "start" });
         return;
       }
 
@@ -216,6 +217,8 @@ export default function App() {
         framework={framework}
         headerAction={
           <Button
+            aria-label="Toggle dark theme"
+            aria-pressed={theme === "dark"}
             size="sm"
             variant="subtle"
             onClick={() =>
