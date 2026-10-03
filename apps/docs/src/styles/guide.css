@@ -199,9 +199,14 @@
   gap: var(--vf-space-3, 12px);
   align-content: start;
   padding: var(--vf-space-5, 20px);
-  border: 1px solid color-mix(in srgb, var(--vf-border, #e2e8f0) 80%, transparent);
+  border: 1px solid
+    color-mix(in srgb, var(--vf-border, #e2e8f0) 80%, transparent);
   border-radius: var(--vf-radius-xl, 12px);
-  background: color-mix(in srgb, var(--vf-surface, #ffffff) 78%, transparent);
+  background: color-mix(
+    in srgb,
+    var(--vf-surface, #ffffff) 78%,
+    transparent
+  );
   backdrop-filter: blur(16px);
 }
 
