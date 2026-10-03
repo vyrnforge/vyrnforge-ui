@@ -124,8 +124,9 @@ export default function App() {
   useEffect(() => {
     const member = docsLocation.referenceRecord?.member;
     const frame = window.requestAnimationFrame(() => {
-      if (member) {
-        document.getElementById(member)?.scrollIntoView({ block: "start" });
+      const memberTarget = member ? document.getElementById(member) : null;
+      if (memberTarget) {
+        memberTarget.scrollIntoView({ block: "start" });
         return;
       }
 
