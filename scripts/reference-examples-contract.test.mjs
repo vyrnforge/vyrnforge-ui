@@ -91,3 +91,18 @@ test("Docs executable examples stay bound to verified consumer fixtures", () => 
   assert.match(docsPage, /ExecutableExamplesPage/u);
   assert.match(docsPage, /route\.kind === "executable-examples"/u);
 });
+
+
+test("Reference examples integrate preview, source, and generated evidence without Playground chrome", () => {
+  const migrated = read("apps/docs/src/examples/MigratedExamplePage.tsx");
+  const executable = read("apps/docs/src/examples/ExecutableExamplesPage.tsx");
+  const code = read("apps/docs/src/examples/components/CodeBlock.tsx");
+
+  assert.doesNotMatch(migrated, /\bCard\b/u);
+  assert.doesNotMatch(executable, /\bCard\b/u);
+  assert.match(migrated, /vf-docs-example-workbench/u);
+  assert.match(migrated, /implementation\.sourcePath/u);
+  assert.match(executable, /resolveDocumentationExample/u);
+  assert.match(code, /vf-docs-code-block/u);
+  assert.doesNotMatch(code, /vf-playground-code-block/u);
+});
