@@ -217,7 +217,9 @@ export default function App() {
         framework={framework}
         headerAction={
           <Button
-            aria-label={theme === "light" ? "Toggle dark theme" : "Toggle light theme"}
+            aria-label={
+              theme === "light" ? "Toggle dark theme" : "Toggle light theme"
+            }
             aria-pressed={theme === "dark"}
             size="sm"
             variant="subtle"
