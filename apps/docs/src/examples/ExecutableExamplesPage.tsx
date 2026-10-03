@@ -1,4 +1,4 @@
-import { Badge, Card, Heading, Text } from "@vyrnforge/ui-components";
+import { Badge, Heading, Text } from "@vyrnforge/ui-components";
 import type { DocsFrameworkId } from "../docsContext";
 import { resolveDocumentationExample } from "../referenceRoutes";
 import { CodeBlock } from "./components/CodeBlock";
@@ -35,7 +35,7 @@ export function ExecutableExamplesPage({
   return (
     <div className="vf-docs-reference-layout">
       <div className="vf-docs-reference">
-        <Card className="vf-docs-reference__section" padding="lg">
+        <section className="vf-docs-reference__section">
           <Heading level={3} size="md">
             {example.frameworkLabel} executable consumer
           </Heading>
@@ -46,8 +46,8 @@ export function ExecutableExamplesPage({
           <Badge tone="subtle" variant="success">
             {example.supportClaim}
           </Badge>
-        </Card>
-        <Card className="vf-docs-reference__section" padding="lg">
+        </section>
+        <section className="vf-docs-reference__section">
           <Heading level={3} size="md">
             Executable source
           </Heading>
@@ -55,7 +55,7 @@ export function ExecutableExamplesPage({
             <code>{resolution.implementation.sourcePath}</code>
           </Text>
           <CodeBlock code={example.source} />
-        </Card>
+        </section>
       </div>
     </div>
   );
