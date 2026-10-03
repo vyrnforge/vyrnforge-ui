@@ -17,13 +17,16 @@ function assertIncludesAll(content, values, kind) {
 }
 
 function assertMarkdownTableRow(content, firstCell, secondCell) {
-  const rows = content.split("\n").map((line) =>
-    line.split("|").map((cell) => cell.trim()),
-  );
-  assert.ok(
-    rows.some((cells) => cells[1] === firstCell && cells[2] === secondCell),
-    `missing table row: ${firstCell} | ${secondCell}`,
-  );
+  for (const line of content.split("\n")) {
+    const cells = line.split("|");
+    if (cells.length < 4) {
+      continue;
+    }
+    if (cells[1].trim() === firstCell && cells[2].trim() === secondCell) {
+      return;
+    }
+  }
+  assert.fail(`missing table row: ${firstCell} | ${secondCell}`);
 }
 
 test("documentation authoring guide is the source of truth", () => {
