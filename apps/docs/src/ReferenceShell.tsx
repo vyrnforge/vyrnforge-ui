@@ -42,7 +42,10 @@ type ReferenceShellProps = {
   routePath: string;
 };
 
-function getLayoutMode(\n  route: DocsRoute,\n  referenceRecord: ReferenceRecordSelection | null,\n): ReferenceLayoutMode {
+function getLayoutMode(
+  route: DocsRoute,
+  referenceRecord: ReferenceRecordSelection | null,
+): ReferenceLayoutMode {
   if (route.kind === "example" || route.kind === "executable-examples") {
     return "example";
   }
@@ -96,7 +99,9 @@ export function ReferenceShell({
   };
 
   const handleVersionChange = (versionId: string) => {
-    const version = versionOptions.find((candidate) => candidate.id === versionId);
+    const version = versionOptions.find(
+      (candidate) => candidate.id === versionId,
+    );
     if (
       !version ||
       version.id === docsVersion.id ||
