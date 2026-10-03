@@ -207,6 +207,12 @@ test("all public routes use one unified Reference shell with controlled layouts"
   assert.doesNotMatch(app, /DocsShell/u);
 
   assert.doesNotMatch(shell, /GuideShell/u);
+
+  const advancedModulePage = read("apps/docs/src/AdvancedModulePage.tsx");
+  assert.match(docsPage, /AdvancedModulePage/u);
+  assert.match(advancedModulePage, /docsRoutes/u);
+  assert.match(advancedModulePage, /isDocumentationReady/u);
+  assert.doesNotMatch(advancedModulePage, /DataGridShell|GridDocsShell/u);
   assert.doesNotMatch(shell, /DocsNav/u);
   assert.match(shell, /ReferenceNavigation/u);
   assert.match(shell, /Drawer/u);
