@@ -10,89 +10,88 @@ function read(relativePath) {
   return readFileSync(path.join(root, relativePath), "utf8");
 }
 
-test("documentation authoring guide is the contributor source of truth", () => {
+function assertIncludesAll(content, values, kind) {
+  for (const value of values) {
+    assert.ok(content.includes(value), `missing ${kind}: ${value}`);
+  }
+}
+
+test("documentation authoring guide is the source of truth", () => {
   const guide = read("docs/engineering/documentation-authoring.md");
   const system = read("docs/engineering/documentation-system.md");
   const governance = read("docs/governance/00-documentation-governance.md");
   const readme = read("docs/README.md");
 
-  assert.match(guide, /contributor source of truth/u);
-  assert.match(
-    system,
-    /\[Documentation authoring\]\(documentation-authoring\.md\)/u,
-  );
-  assert.match(governance, /docs\/engineering\/documentation-authoring\.md/u);
-  assert.match(
-    readme,
-    /\[Documentation Authoring\]\(engineering\/documentation-authoring\.md\)/u,
-  );
+  const systemLink = "[Documentation authoring](documentation-authoring.md)";
+  const readmeLink =
+    "[Documentation Authoring](engineering/documentation-authoring.md)";
+
+  assert.ok(guide.includes("contributor source of truth"));
+  assert.ok(system.includes(systemLink));
+  assert.ok(governance.includes("docs/engineering/documentation-authoring.md"));
+  assert.ok(readme.includes(readmeLink));
 });
 
-test("authoring guide documents framework version content and examples", () => {
+test("authoring guide covers context, availability, and examples", () => {
   const guide = read("docs/engineering/documentation-authoring.md");
 
-  for (const marker of [
-    "docs/metadata/documentation-pages.json",
-    "docs/metadata/release-groups.json",
-    "contentLayers",
-    'frameworkVersions["frameworkId@version"]',
-    "stable",
-    "preview",
-    "maintenance",
-    "deprecated",
-    "unavailable",
-    "internal-not-ready",
-    "docs/metadata/executable-examples.json",
-    "tests/consumers/manifest.json",
-  ]) {
-    assert.equal(
-      guide.includes(marker),
-      true,
-      `missing authoring marker: ${marker}`,
-    );
-  }
+  assertIncludesAll(
+    guide,
+    [
+      "docs/metadata/documentation-pages.json",
+      "docs/metadata/release-groups.json",
+      "contentLayers",
+      'frameworkVersions["frameworkId@version"]',
+      "stable",
+      "preview",
+      "maintenance",
+      "deprecated",
+      "unavailable",
+      "internal-not-ready",
+      "docs/metadata/executable-examples.json",
+      "tests/consumers/manifest.json",
+    ],
+    "authoring marker",
+  );
 
-  assert.match(guide, /Native HTML \/ Custom Elements \| HTML \+ TypeScript/u);
-  assert.match(guide, /React \| TSX/u);
-  assert.match(guide, /Angular \| TypeScript \+ Angular templates/u);
-  assert.match(guide, /Vue \| Vue SFC \+ TypeScript/u);
+  assert.ok(
+    guide.includes("Native HTML / Custom Elements | HTML + TypeScript"),
+  );
+  assert.ok(guide.includes("React | TSX"));
+  assert.ok(guide.includes("Angular | TypeScript + Angular templates"));
+  assert.ok(guide.includes("Vue | Vue SFC + TypeScript"));
 });
 
-test(
-  "authoring guide documents canonical contributor commands and forbidden shortcuts",
-  () => {
-    const guide = read("docs/engineering/documentation-authoring.md");
+test("authoring guide covers commands and forbidden shortcuts", () => {
+  const guide = read("docs/engineering/documentation-authoring.md");
 
-    for (const command of [
+  assertIncludesAll(
+    guide,
+    [
       "npm run scaffold:documentation",
       "npm run generate:reference",
       "npm run verify:reference",
       "npm run verify:docs-quality",
       "npm run test:contracts",
       "npm run build:docs",
-    ]) {
-      assert.equal(
-        guide.includes(command),
-        true,
-        `missing authoring command: ${command}`,
-      );
-    }
+    ],
+    "authoring command",
+  );
 
-    for (const marker of [
+  assertIncludesAll(
+    guide,
+    [
       "apps/docs/src/referenceRoutes.ts",
       "apps/docs/src/DocsNav.tsx",
       "docs/generated/documentation-registry.json",
       "docs/generated/reference-model.json",
-    ]) {
-      assert.equal(
-        guide.includes(marker),
-        true,
-        `missing forbidden shortcut: ${marker}`,
-      );
-    }
+    ],
+    "forbidden shortcut",
+  );
 
-    const governance = read("docs/governance/00-documentation-governance.md");
-    assert.doesNotMatch(governance, /referenceRoutes\.ts` may curate/u);
-    assert.match(governance, /runtime adapter over those generated facts/u);
-  },
-);
+  const governance = read("docs/governance/00-documentation-governance.md");
+  const staleRouteRule = "referenceRoutes.ts` may curate";
+
+  assert.equal(governance.includes(staleRouteRule), false);
+  assert.ok(governance.includes("runtime adapter over those generated facts"));
+});
