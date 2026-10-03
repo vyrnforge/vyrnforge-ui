@@ -67,7 +67,9 @@ export function GuideShell({
       ];
 
   const handleVersionChange = (versionId: string) => {
-    const version = versionOptions.find((candidate) => candidate.id === versionId);
+    const version = versionOptions.find(
+      (candidate) => candidate.id === versionId,
+    );
     if (
       !version ||
       version.id === docsVersion.id ||
@@ -77,12 +79,7 @@ export function GuideShell({
     }
 
     window.location.assign(
-      getVersionHref(
-        version,
-        framework.id,
-        routePath,
-        routeMember,
-      ),
+      getVersionHref(version, framework.id, routePath, routeMember),
     );
   };
 
@@ -143,7 +140,9 @@ export function GuideShell({
             />
             <Select
               aria-label="Documentation version"
-              onChange={(event) => handleVersionChange(event.currentTarget.value)}
+              onChange={(event) =>
+                handleVersionChange(event.currentTarget.value)
+              }
               options={versionOptions.map((version) => ({
                 label: version.label,
                 value: version.id,
