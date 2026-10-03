@@ -54,12 +54,16 @@ test("authoring guide covers context, availability, and examples", () => {
     "authoring marker",
   );
 
-  assert.ok(
-    guide.includes("Native HTML / Custom Elements | HTML + TypeScript"),
+  assert.match(
+    guide,
+    /\| Native HTML \/ Custom Elements\s+\| HTML \+ TypeScript\s+\|/u,
   );
-  assert.ok(guide.includes("React | TSX"));
-  assert.ok(guide.includes("Angular | TypeScript + Angular templates"));
-  assert.ok(guide.includes("Vue | Vue SFC + TypeScript"));
+  assert.match(guide, /\| React\s+\| TSX\s+\|/u);
+  assert.match(
+    guide,
+    /\| Angular\s+\| TypeScript \+ Angular templates\s+\|/u,
+  );
+  assert.match(guide, /\| Vue\s+\| Vue SFC \+ TypeScript\s+\|/u);
 });
 
 test("authoring guide covers commands and forbidden shortcuts", () => {
