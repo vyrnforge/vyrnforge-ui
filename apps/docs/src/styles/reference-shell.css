@@ -34,7 +34,6 @@
 }
 
 @media (max-width: 920px) {
-
   .vf-docs-discovery-row {
     grid-template-columns: 1fr;
   }
