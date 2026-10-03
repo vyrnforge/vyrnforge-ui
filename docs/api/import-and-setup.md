@@ -1,6 +1,6 @@
 # Getting Started
 
-Start with the framework surface your application already uses. Native HTML / Custom Elements, React, Angular, and Vue are equal first-class VyrnForge surfaces over the same design tokens, accessibility model, behavior contracts, and component terminology.
+Start with the framework surface your application already uses, then keep the same VyrnForge concepts as the application grows. Native HTML / Custom Elements, React, Angular, and Vue are equal first-class VyrnForge surfaces over the same design tokens, accessibility model, behavior contracts, and component terminology.
 
 Use public package entrypoints only. Shared implementation packages may be installed transitively, but consuming applications should depend on the framework-facing package that matches their runtime.
 
