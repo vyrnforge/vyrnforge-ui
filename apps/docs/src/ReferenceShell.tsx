@@ -18,7 +18,7 @@ import {
 } from "./docsContext";
 import { DocsPage } from "./DocsPage";
 import { docsLinks } from "./deploymentLinks";
-import { ReferenceNavigation } from "./ReferenceNavigation";
+import {\n  ReferenceNavigation,\n  ReferencePrimaryNavigation,\n} from "./ReferenceNavigation";
 import type { DocsRoute, DocsRouteResolution } from "./referenceRoutes";
 
 export type ReferenceLayoutMode =
@@ -140,11 +140,12 @@ export function ReferenceShell({
             </span>
           </button>
 
-          <div className="vf-reference-shell__section-context">
-            <Text size="sm" tone="muted">
-              {activeRoute.group}
-            </Text>
-          </div>
+          <ReferencePrimaryNavigation
+            activeRouteId={activeRoute.id}
+            frameworkId={framework.id}
+            onRouteChange={navigate}
+            version={docsVersion.version}
+          />
 
           <div className="vf-reference-shell__controls">
             <Select
