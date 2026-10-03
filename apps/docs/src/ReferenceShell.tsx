@@ -28,6 +28,7 @@ type ReferenceShellProps = {
   docsVersions: DocsVersion[];
   framework: DocsFramework;
   headerAction?: ReactNode;
+  invalidPath?: string | null;
   onFrameworkChange: (frameworkId: DocsFrameworkId) => void;
   onRouteChange: (routeId: string) => void;
   referenceRecord: ReferenceRecordSelection | null;
@@ -61,6 +62,7 @@ export function ReferenceShell({
   docsVersions,
   framework,
   headerAction,
+  invalidPath,
   onFrameworkChange,
   onRouteChange,
   referenceRecord,
@@ -203,6 +205,7 @@ export function ReferenceShell({
         >
           <DocsPage
             frameworkId={framework.id}
+            invalidPath={invalidPath}
             onFrameworkChange={onFrameworkChange}
             onRouteChange={navigate}
             referenceRecord={referenceRecord}
