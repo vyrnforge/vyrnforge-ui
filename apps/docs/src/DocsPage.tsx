@@ -1,3 +1,4 @@
+import { AdvancedModulePage } from "./AdvancedModulePage";
 import type { ReferenceRecordSelection } from "./App";
 import { ComponentReferencePage } from "./ComponentReferencePage";
 import type { DocsFrameworkId } from "./docsContext";
@@ -103,6 +104,14 @@ export function DocsPage({
         packageId={
           referenceRecord?.domain === "packages" ? referenceRecord.id : null
         }
+      />
+    ) : route.template === "advanced-module" ? (
+      <AdvancedModulePage
+        frameworkId={frameworkId}
+        onRouteChange={onRouteChange}
+        route={route}
+        status={routeResolution.status}
+        version={routeResolution.context.version}
       />
     ) : (
       <MarkdownView markdown={route.content ?? ""} />
