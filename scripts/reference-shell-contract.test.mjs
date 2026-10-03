@@ -223,3 +223,20 @@ test("all public routes use one unified Reference shell with controlled layouts"
   assert.match(navigation, /publicDocsSections/u);
   assert.match(navigation, /getReferenceLocationHref/u);
 });
+
+
+test("Reference navigation stays registry-driven and route changes restore reading focus", () => {
+  const app = read("apps/docs/src/App.tsx");
+  const navigation = read("apps/docs/src/ReferenceNavigation.tsx");
+  const shell = read("apps/docs/src/ReferenceShell.tsx");
+
+  assert.match(navigation, /ReferencePrimaryNavigation/u);
+  assert.match(navigation, /publicDocsSections/u);
+  assert.match(navigation, /documentationSearchRecords/u);
+  assert.match(navigation, /Search VyrnForge Reference/u);
+  assert.match(navigation, /aria-live="polite"/u);
+  assert.match(shell, /ReferencePrimaryNavigation/u);
+  assert.match(shell, /Drawer/u);
+  assert.match(app, /getElementById\("vf-reference-main"\)\?\.focus/u);
+  assert.match(app, /VyrnForge Reference/u);
+});
