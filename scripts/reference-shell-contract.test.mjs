@@ -73,7 +73,7 @@ test("public Docs navigation owns the complete reader-facing information archite
 
 test("Docs is the single reader-facing product and renders examples in-process", () => {
   const referenceShell = read("apps/docs/src/ReferenceShell.tsx");
-  const docsPage = read("apps/docs/src/DocsPage.tsx");
+    const docsPage = read("apps/docs/src/DocsPage.tsx");
   const migratedExamples = read(
     "apps/docs/src/examples/MigratedExamplePage.tsx",
   );
@@ -200,7 +200,7 @@ test("all public routes use one unified Reference shell with controlled layouts"
   const app = read("apps/docs/src/App.tsx");
   const shell = read("apps/docs/src/ReferenceShell.tsx");
   const navigation = read("apps/docs/src/ReferenceNavigation.tsx");
-  const styles = read("apps/docs/src/styles/reference-shell.css");
+    const styles = read("apps/docs/src/styles/reference-shell.css");
 
   assert.match(app, /import \{ ReferenceShell \} from "\.\/ReferenceShell"/u);
   assert.match(app, /<ReferenceShell/u);
@@ -287,17 +287,19 @@ test("package, token, and pattern discovery avoid dashboard Card stacks", () => 
   assert.match(discovery, /getReferenceRecordRoute/u);
 });
 
-
-test("advanced modules use the shared Reference renderer and generated related routes", () => {
+test(
+  "advanced modules use the shared Reference renderer and generated related routes",
+  () => {
   const docsPage = read("apps/docs/src/DocsPage.tsx");
-  const advancedModule = read("apps/docs/src/AdvancedModulePage.tsx");
+    const advancedModule = read("apps/docs/src/AdvancedModulePage.tsx");
   const styles = read("apps/docs/src/styles/reference-shell.css");
 
-  assert.match(docsPage, /AdvancedModulePage/u);
-  assert.match(docsPage, /route\.template === "advanced-module"/u);
-  assert.match(advancedModule, /docsRoutes/u);
-  assert.match(advancedModule, /candidate\.section === route\.section/u);
-  assert.match(advancedModule, /isDocumentationReady/u);
-  assert.doesNotMatch(advancedModule, /grid-basic|grid-columns|grid-filtering/u);
-  assert.match(styles, /\.vf-docs-advanced-module/u);
-});
+    assert.match(docsPage, /AdvancedModulePage/u);
+    assert.match(docsPage, /route\.template === "advanced-module"/u);
+    assert.match(advancedModule, /docsRoutes/u);
+    assert.match(advancedModule, /candidate\.section === route\.section/u);
+    assert.match(advancedModule, /isDocumentationReady/u);
+    assert.doesNotMatch(advancedModule, /grid-basic|grid-columns|grid-filtering/u);
+    assert.match(styles, /\.vf-docs-advanced-module/u);
+  },
+);
