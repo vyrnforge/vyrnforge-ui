@@ -215,6 +215,8 @@ export default function App() {
         framework={framework}
         headerAction={
           <Button
+            aria-label="Dark theme"
+            aria-pressed={theme === "dark"}
             size="sm"
             variant="subtle"
             onClick={() =>
