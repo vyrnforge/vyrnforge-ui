@@ -44,11 +44,7 @@
   padding: var(--vf-space-5, 20px);
   border: 1px solid var(--vf-border, #e2e8f0);
   border-radius: var(--vf-radius-lg, 8px);
-  background: color-mix(
-    in srgb,
-    var(--vf-surface, #ffffff) 88%,
-    transparent
-  );
+  background: color-mix(in srgb, var(--vf-surface, #ffffff) 88%, transparent);
   backdrop-filter: blur(10px);
 }
 
