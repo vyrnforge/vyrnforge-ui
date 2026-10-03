@@ -18,7 +18,7 @@ import {
 type DocsPageProps = {
   route: DocsRoute;
   frameworkId: DocsFrameworkId;
-  invalidRouteId: string | null;
+  invalidRouteId?: string | null;
   onFrameworkChange: (frameworkId: DocsFrameworkId) => void;
   onRouteChange: (routeId: string) => void;
   referenceRecord: ReferenceRecordSelection | null;
@@ -29,7 +29,7 @@ type DocsPageProps = {
 export function DocsPage({
   route,
   frameworkId,
-  invalidRouteId,
+  invalidRouteId = null,
   onFrameworkChange,
   onRouteChange,
   referenceRecord,
