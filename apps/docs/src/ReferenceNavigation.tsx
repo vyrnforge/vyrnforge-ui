@@ -203,7 +203,11 @@ export function ReferenceNavigation({
         items={items}
       />
       {items.length === 0 ? (
-        <p aria-live="polite" className="vf-reference-navigation__empty" role="status">
+        <p
+          aria-live="polite"
+          className="vf-reference-navigation__empty"
+          role="status"
+        >
           No Reference results match “{query}”.
         </p>
       ) : null}
