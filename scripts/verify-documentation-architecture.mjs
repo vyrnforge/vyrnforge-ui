@@ -276,7 +276,7 @@ export function validateDocumentationArchitecture({
   ]) {
     if (!navSource.includes(required)) {
       failures.push(
-        `DocsNav.tsx is missing registry-driven navigation marker ${required}`,
+        `ReferenceNavigation.tsx is missing registry-driven navigation marker ${required}`,
       );
     }
   }
@@ -333,7 +333,7 @@ export function verifyDocumentationArchitecture({
     ...validateDocumentationArchitecture({
       registry,
       routeSource: read(root, "apps/docs/src/referenceRoutes.ts"),
-      navSource: read(root, "apps/docs/src/DocsNav.tsx"),
+      navSource: read(root, "apps/docs/src/ReferenceNavigation.tsx"),
       fileExists: (relativePath) => existsSync(path.join(root, relativePath)),
     }),
   );
