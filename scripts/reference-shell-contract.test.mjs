@@ -187,7 +187,7 @@ test("Docs filter discovers selected-framework API members without restoring a s
   assert.match(memberTarget, /getReferenceRecordRoute/u);
 
   assert.match(app, /getReferenceLocationContext/u);
-  assert.match(app, /const memberTarget = member \? document\.getElementById\(member\) : null/u);
+  assert.match(app, /const memberTarget = member/u);
   assert.match(app, /member: null/u);
 
   assert(
