@@ -190,7 +190,7 @@ jobs:
           VYRNFORGE_PACKAGES_PREPARED: "true"
         run: npm run verify:consumer
       - name: Install Chromium once
-        if: env.RUN_BROWSER == 'true' || env.RUN_CONSUMER == 'true'
+        if: env.RUN_BROWSER == 'true' || env.RUN_CONSUMER == 'true' || env.RUN_REFERENCE_PREVIEW == 'true'
         run: npx playwright install --with-deps chromium
       - name: Run affected browser contracts
         if: env.RUN_BROWSER == 'true'
@@ -214,6 +214,14 @@ jobs:
         run: npm run build --workspace @vyrnforge/ui-docs
         env:
           VITE_BASE_PATH: /
+      - name: Verify Reference performance budget
+        if: env.RUN_REFERENCE_PREVIEW == 'true'
+        run: npm run verify:reference-performance
+      - name: Run Reference UI browser verification
+        if: env.RUN_REFERENCE_PREVIEW == 'true'
+        env:
+          VYRNFORGE_PACKAGES_PREPARED: "true"
+        run: npm run test:reference-ui
       - name: Assemble immutable reference preview
         if: env.RUN_REFERENCE_PREVIEW == 'true'
         run: node scripts/reference-artifact.mjs assemble-preview --source-commit "$GITHUB_SHA" --ci-run-id "$GITHUB_RUN_ID"
@@ -226,6 +234,14 @@ jobs:
           include-hidden-files: true
           if-no-files-found: error
           retention-days: 7
+      - name: Upload Reference visual evidence
+        if: success() && env.RUN_REFERENCE_PREVIEW == 'true'
+        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
+        with:
+          name: reference-visual-evidence-${{ github.run_id }}-${{ github.run_attempt }}
+          path: test-results/reference-visual-evidence/
+          if-no-files-found: error
+          retention-days: 14
       - name: Verify generated Reference inputs for Pages
         if: env.RUN_PAGES_ARTIFACT == 'true'
         run: npm run verify:reference
