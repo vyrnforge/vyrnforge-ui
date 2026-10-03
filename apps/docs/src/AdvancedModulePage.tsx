@@ -66,7 +66,8 @@ export function AdvancedModulePage({
               Module examples
             </Heading>
             <Text tone="muted">
-              Generated routes available for the selected framework and version.
+              Generated routes available for the selected framework and
+              version.
             </Text>
           </div>
           <div className="vf-docs-advanced-module__example-list">
