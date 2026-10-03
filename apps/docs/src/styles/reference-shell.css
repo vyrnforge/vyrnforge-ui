@@ -670,3 +670,16 @@
   flex-wrap: wrap;
   gap: var(--vf-space-2, 8px);
 }
+
+
+/* Keep the portal-mounted mobile navigation within the visual viewport. */
+.vf-reference-shell__mobile-drawer {
+  box-sizing: border-box;
+  max-inline-size: 100vw;
+  overflow-x: hidden;
+}
+
+.vf-reference-shell__mobile-drawer .vf-drawer__body {
+  min-width: 0;
+  overflow-x: hidden;
+}
