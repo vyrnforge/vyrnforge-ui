@@ -621,7 +621,10 @@ function ComponentDetail({
           />
         </section>
 
-        <section className="vf-docs-reference__section" id="component-framework-api">
+        <section
+          className="vf-docs-reference__section"
+          id="component-framework-api"
+        >
           <Heading level={3} size="md">
             API
           </Heading>
@@ -642,7 +645,10 @@ function ComponentDetail({
           )}
         </section>
 
-        <section className="vf-docs-reference__section" id="component-accessibility-styling">
+        <section
+          className="vf-docs-reference__section"
+          id="component-accessibility-styling"
+        >
           <Heading level={3} size="md">
             Accessibility & styling
           </Heading>
@@ -664,7 +670,10 @@ function ComponentDetail({
         </section>
 
         {showLimitations && (
-          <section className="vf-docs-reference__section" id="component-limitations">
+          <section
+            className="vf-docs-reference__section"
+            id="component-limitations"
+          >
             <Heading level={3} size="md">
               Limitations and related patterns
             </Heading>

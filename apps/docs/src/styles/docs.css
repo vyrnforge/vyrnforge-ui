@@ -215,7 +215,8 @@ body {
 }
 
 .vf-docs-markdown__heading-link:hover .vf-docs-markdown__heading-anchor,
-.vf-docs-markdown__heading-link:focus-visible .vf-docs-markdown__heading-anchor {
+.vf-docs-markdown__heading-link:focus-visible
+  .vf-docs-markdown__heading-anchor {
   opacity: 1;
 }
 

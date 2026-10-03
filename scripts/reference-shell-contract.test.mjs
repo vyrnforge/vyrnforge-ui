@@ -196,7 +196,6 @@ test("Docs filter discovers selected-framework API members without restoring a s
   assert.doesNotMatch(docsNav, /ReferenceSearchPage/u);
 });
 
-
 test("all public routes use one unified Reference shell with controlled layouts", () => {
   const app = read("apps/docs/src/App.tsx");
   const shell = read("apps/docs/src/ReferenceShell.tsx");
@@ -224,7 +223,6 @@ test("all public routes use one unified Reference shell with controlled layouts"
   assert.match(navigation, /getReferenceLocationHref/u);
 });
 
-
 test("Reference navigation stays registry-driven and route changes restore reading focus", () => {
   const app = read("apps/docs/src/App.tsx");
   const navigation = read("apps/docs/src/ReferenceNavigation.tsx");
@@ -237,10 +235,12 @@ test("Reference navigation stays registry-driven and route changes restore readi
   assert.match(navigation, /aria-live="polite"/u);
   assert.match(shell, /ReferencePrimaryNavigation/u);
   assert.match(shell, /Drawer/u);
-  assert.match(app, /getElementById\("vf-reference-main"\)\?\.focus/u);
+  assert.match(
+    app,
+    /getElementById\(\s*"vf-reference-main"\s*\)\s*\?\.\s*focus/u,
+  );
   assert.match(app, /VyrnForge Reference/u);
 });
-
 
 test("reading templates use the unified main landmark and source-driven deep links", () => {
   const template = read("apps/docs/src/DocumentationPageTemplate.tsx");
@@ -259,7 +259,6 @@ test("reading templates use the unified main landmark and source-driven deep lin
   );
 });
 
-
 test("component reference is scan-first without generic Card section wrappers", () => {
   const componentReference = read("apps/docs/src/ComponentReferencePage.tsx");
   const styles = read("apps/docs/src/styles/reference-shell.css");
@@ -272,7 +271,6 @@ test("component reference is scan-first without generic Card section wrappers", 
   assert.match(styles, /\.vf-docs-component-row/u);
   assert.match(styles, /\.vf-docs-api-table thead th/u);
 });
-
 
 test("package, token, and pattern discovery avoid dashboard Card stacks", () => {
   const packageReference = read("apps/docs/src/PackageReferencePage.tsx");

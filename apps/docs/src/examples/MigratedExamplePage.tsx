@@ -1,5 +1,5 @@
 import type { ComponentType } from "react";
-import { Card, Heading, Text } from "@vyrnforge/ui-components";
+import { Heading, Text } from "@vyrnforge/ui-components";
 import type { DocsFrameworkId } from "../docsContext";
 import { resolveDocumentationExample } from "../referenceRoutes";
 import { CodeBlock } from "./components/CodeBlock";
@@ -90,10 +90,9 @@ export function MigratedExamplePage({
   return (
     <div className="vf-docs-reference-layout">
       <div className="vf-docs-reference">
-        <Card
-          className="vf-docs-reference__section"
+        <section
+          className="vf-docs-reference__section vf-docs-example-workbench"
           id="interactive-example"
-          padding="lg"
         >
           <Heading level={3} size="md">
             Interactive example
@@ -102,24 +101,24 @@ export function MigratedExamplePage({
             This example is resolved from the generated Documentation Registry
             for the selected framework and documentation version.
           </Text>
-          <div className="vf-docs-example-stage">
-            <Example />
+          <div className="vf-docs-example-workbench__body">
+            <div className="vf-docs-example-stage">
+              <Example />
+            </div>
+            <div
+              className="vf-docs-example-workbench__source"
+              id="example-source"
+            >
+              <Heading level={3} size="md">
+                Source
+              </Heading>
+              <Text size="sm" tone="muted">
+                <code>{implementation.sourcePath}</code>
+              </Text>
+              <CodeBlock code={source} />
+            </div>
           </div>
-        </Card>
-
-        <Card
-          className="vf-docs-reference__section"
-          id="example-source"
-          padding="lg"
-        >
-          <Heading level={3} size="md">
-            Source
-          </Heading>
-          <Text size="sm" tone="muted">
-            <code>{implementation.sourcePath}</code>
-          </Text>
-          <CodeBlock code={source} />
-        </Card>
+        </section>
       </div>
 
       <aside

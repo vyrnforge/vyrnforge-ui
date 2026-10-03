@@ -1,9 +1,5 @@
 import { useState, type ReactNode } from "react";
-import {
-  Button,
-  Drawer,
-  Select,
-} from "@vyrnforge/ui-components";
+import { Button, Drawer, Select } from "@vyrnforge/ui-components";
 import type { ReferenceRecordSelection } from "./App";
 import {
   docsFrameworks,
@@ -24,11 +20,7 @@ import {
 import type { DocsRoute, DocsRouteResolution } from "./referenceRoutes";
 
 export type ReferenceLayoutMode =
-  | "reading"
-  | "reference"
-  | "catalog"
-  | "example"
-  | "wide";
+  "reading" | "reference" | "catalog" | "example" | "wide";
 
 type ReferenceShellProps = {
   activeRoute: DocsRoute;
@@ -169,7 +161,9 @@ export function ReferenceShell({
             />
             <Select
               aria-label="Documentation version"
-              onChange={(event) => handleVersionChange(event.currentTarget.value)}
+              onChange={(event) =>
+                handleVersionChange(event.currentTarget.value)
+              }
               options={versionOptions.map((version) => ({
                 label: version.label,
                 value: version.id,

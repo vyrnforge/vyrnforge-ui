@@ -25,8 +25,8 @@ export function CodeBlock({
   };
 
   return (
-    <div className="vf-playground-code-block">
-      <div className="vf-playground-code-block__toolbar">
+    <div className="vf-docs-code-block">
+      <div className="vf-docs-code-block__toolbar">
         <Text size="sm" tone="muted">
           {language}
         </Text>
@@ -36,7 +36,7 @@ export function CodeBlock({
           </Button>
         )}
       </div>
-      <pre className="vf-playground-code-block__pre">
+      <pre className="vf-docs-code-block__pre">
         <code>{code}</code>
       </pre>
     </div>
