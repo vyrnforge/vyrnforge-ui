@@ -1,5 +1,7 @@
 import { Badge, Button, Heading, Text } from "@vyrnforge/ui-components";
-import type { DocumentationReadinessStatus } from "../../../docs/reference/documentationAvailability";
+import type {
+  DocumentationReadinessStatus,
+} from "../../../docs/reference/documentationAvailability";
 import {
   isDocumentationReady,
   type DocsFrameworkId,
