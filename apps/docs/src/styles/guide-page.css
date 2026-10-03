@@ -178,8 +178,7 @@
   font-variant-numeric: tabular-nums;
 }
 
-.vf-docs-guide__section[data-selected-framework="true"]
-  .vf-docs-guide__step {
+.vf-docs-guide__section[data-selected-framework="true"] .vf-docs-guide__step {
   background: var(--vf-primary-soft, #dbeafe);
   color: var(--vf-primary, #2563eb);
 }
