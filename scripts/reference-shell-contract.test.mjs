@@ -240,3 +240,19 @@ test("Reference navigation stays registry-driven and route changes restore readi
   assert.match(app, /getElementById\("vf-reference-main"\)\?\.focus/u);
   assert.match(app, /VyrnForge Reference/u);
 });
+
+
+test("package, token, and pattern discovery avoid dashboard Card stacks", () => {
+  const packageReference = read("apps/docs/src/PackageReferencePage.tsx");
+  const discovery = read("apps/docs/src/DiscoveryReferencePage.tsx");
+  const styles = read("apps/docs/src/styles/reference-shell.css");
+
+  assert.doesNotMatch(packageReference, /\bCard\b/u);
+  assert.doesNotMatch(discovery, /\bCard\b/u);
+  assert.match(packageReference, /vf-docs-package-row/u);
+  assert.match(discovery, /vf-docs-discovery-row-card/u);
+  assert.match(styles, /\.vf-docs-package-row/u);
+  assert.match(styles, /\.vf-docs-discovery-row-card/u);
+  assert.match(packageReference, /getReferenceRecordRoute/u);
+  assert.match(discovery, /getReferenceRecordRoute/u);
+});
