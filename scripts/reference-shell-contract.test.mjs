@@ -280,7 +280,10 @@ test("component reference is scan-first without generic Card section wrappers", 
   const componentReference = read("apps/docs/src/ComponentReferencePage.tsx");
   const styles = read("apps/docs/src/styles/reference-shell.css");
 
-  assert.doesNotMatch(componentReference, /\bCard\b|ComponentIndexCard|vf-docs-reference-card/u);
+  assert.doesNotMatch(
+    componentReference,
+    /\bCard\b|ComponentIndexCard|vf-docs-reference-card/u,
+  );
   assert.match(componentReference, /ComponentIndexRow/u);
   assert.match(componentReference, /vf-docs-component-index/u);
   assert.match(componentReference, /vf-docs-component-row/u);
@@ -295,7 +298,10 @@ test("package, token, and pattern discovery avoid dashboard Card stacks", () => 
   const discovery = read("apps/docs/src/DiscoveryReferencePage.tsx");
   const styles = read("apps/docs/src/styles/reference-shell.css");
 
-  assert.doesNotMatch(packageReference, /\bCard\b|PackageIndexCard|vf-docs-package-card/u);
+  assert.doesNotMatch(
+    packageReference,
+    /\bCard\b|PackageIndexCard|vf-docs-package-card/u,
+  );
   assert.doesNotMatch(discovery, /\bCard\b|vf-docs-discovery-row-card/u);
   assert.match(packageReference, /PackageIndexRow/u);
   assert.match(packageReference, /vf-docs-package-row/u);
