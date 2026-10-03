@@ -129,7 +129,9 @@ export default function App() {
         return;
       }
 
-      document.getElementById("vf-reference-main")?.focus({ preventScroll: true });
+      document
+        .getElementById("vf-reference-main")
+        ?.focus({ preventScroll: true });
       window.scrollTo({ top: 0, behavior: "auto" });
     });
     return () => window.cancelAnimationFrame(frame);
