@@ -240,3 +240,17 @@ test("Reference navigation stays registry-driven and route changes restore readi
   assert.match(app, /getElementById\("vf-reference-main"\)\?\.focus/u);
   assert.match(app, /VyrnForge Reference/u);
 });
+
+
+test("component reference is scan-first without generic Card section wrappers", () => {
+  const componentReference = read("apps/docs/src/ComponentReferencePage.tsx");
+  const styles = read("apps/docs/src/styles/reference-shell.css");
+
+  assert.doesNotMatch(componentReference, /\bCard\b/u);
+  assert.match(componentReference, /vf-docs-component-index/u);
+  assert.match(componentReference, /vf-docs-component-row/u);
+  assert.match(componentReference, /vf-docs-api-table/u);
+  assert.match(componentReference, /componentApiMemberAnchor/u);
+  assert.match(styles, /\.vf-docs-component-row/u);
+  assert.match(styles, /\.vf-docs-api-table thead th/u);
+});
