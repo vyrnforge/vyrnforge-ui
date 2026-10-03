@@ -286,3 +286,31 @@ test("package, token, and pattern discovery avoid dashboard Card stacks", () => 
   assert.match(packageReference, /getReferenceRecordRoute/u);
   assert.match(discovery, /getReferenceRecordRoute/u);
 });
+
+test("Reference failures use deliberate shared states without silent fallback", () => {
+  const app = read("apps/docs/src/App.tsx");
+  const page = read("apps/docs/src/DocsPage.tsx");
+  const routes = read("apps/docs/src/referenceRoutes.ts");
+  const component = read("apps/docs/src/ComponentReferencePage.tsx");
+  const packages = read("apps/docs/src/PackageReferencePage.tsx");
+  const discovery = read("apps/docs/src/DiscoveryReferencePage.tsx");
+  const migratedExample = read("apps/docs/src/examples/MigratedExamplePage.tsx");
+  const executableExample = read(
+    "apps/docs/src/examples/ExecutableExamplesPage.tsx",
+  );
+
+  assert.match(routes, /findRouteById/u);
+  assert.match(app, /invalidRouteId/u);
+  assert.match(app, /memberTarget/u);
+  assert.match(page, /ErrorState/u);
+  assert.match(page, /EmptyState/u);
+  assert.match(page, /Reference page not found/u);
+  assert.match(page, /Unavailable in this framework\/version/u);
+  assert.match(component, /API member not found/u);
+  assert.match(component, /Component not found/u);
+  assert.match(packages, /Package not found/u);
+  assert.match(discovery, /MissingRecord/u);
+  assert.match(discovery, /ErrorState/u);
+  assert.match(migratedExample, /EmptyState/u);
+  assert.match(executableExample, /EmptyState/u);
+});

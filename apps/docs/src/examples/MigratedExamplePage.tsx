@@ -1,5 +1,5 @@
 import type { ComponentType } from "react";
-import { Heading, Text } from "@vyrnforge/ui-components";
+import { EmptyState, Heading, Text } from "@vyrnforge/ui-components";
 import type { DocsFrameworkId } from "../docsContext";
 import { resolveDocumentationExample } from "../referenceRoutes";
 import { CodeBlock } from "./components/CodeBlock";
@@ -70,10 +70,16 @@ export function MigratedExamplePage({
       .join(", ");
 
     return (
-      <Text tone="muted">
-        This example is unavailable for {frameworkId} {version}.
-        {alternatives ? ` Available implementations: ${alternatives}.` : ""}
-      </Text>
+      <div className="vf-docs-state">
+        <EmptyState
+          description={
+            alternatives
+              ? `Available implementations: ${alternatives}.`
+              : "No published implementation is available for this example."
+          }
+          title={`Example unavailable for ${frameworkId} ${version}`}
+        />
+      </div>
     );
   }
 

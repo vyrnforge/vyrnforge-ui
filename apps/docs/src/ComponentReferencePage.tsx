@@ -1,4 +1,9 @@
-import { Badge, Heading, Text } from "@vyrnforge/ui-components";
+import {
+  Badge,
+  ErrorState,
+  Heading,
+  Text,
+} from "@vyrnforge/ui-components";
 
 import frameworkApiReferenceRaw from "../../../docs/generated/framework-api-reference.json?raw";
 import { getReferenceRecordRoute } from "../../../docs/reference/referenceRuntime";
@@ -89,6 +94,7 @@ type FrameworkApiReference = {
 type ComponentReferencePageProps = {
   componentId?: string | null;
   frameworkId: DocsFrameworkId;
+  member?: string | null;
   version: string;
 };
 
@@ -561,10 +567,12 @@ function ComponentOutline({
 function ComponentDetail({
   component,
   frameworkId,
+  member,
   version,
 }: {
   component: ComponentReferenceRecord;
   frameworkId: DocsFrameworkId;
+  member?: string | null;
   version: string;
 }) {
   const maturity = getComponentMaturityPresentation(component);
@@ -576,10 +584,44 @@ function ComponentDetail({
   );
   const apiId = framework?.apiSurface as FrameworkApiId | undefined;
   const contextualApi = apiId ? apiComponent(component.id, apiId) : undefined;
+  const memberAnchors = new Set([
+    "component-overview",
+    "component-usage",
+    "component-framework-api",
+    "component-accessibility-styling",
+    ...(showLimitations ? ["component-limitations"] : []),
+    "api-setup",
+    "api-properties",
+    "api-events",
+    "api-slots",
+    "api-methods",
+    "api-accessibility",
+    ...(contextualApi?.properties.map((property) =>
+      componentApiMemberAnchor("property", property.public),
+    ) ?? []),
+    ...(contextualApi?.events.map((event) =>
+      componentApiMemberAnchor("event", event.public),
+    ) ?? []),
+    ...(contextualApi?.slots.map((slot) =>
+      componentApiMemberAnchor("slot", slot.public),
+    ) ?? []),
+    ...(contextualApi?.methods.map((method) =>
+      componentApiMemberAnchor("method", method.name),
+    ) ?? []),
+  ]);
+  const missingMember = member && !memberAnchors.has(member) ? member : null;
 
   return (
     <div className="vf-docs-reference-layout">
       <div className="vf-docs-reference">
+        {missingMember ? (
+          <div className="vf-docs-state">
+            <ErrorState
+              description={`No API member or section named “${missingMember}” exists for ${component.displayName} on ${framework?.label ?? frameworkId}.`}
+              title="API member not found"
+            />
+          </div>
+        ) : null}
         <section className="vf-docs-reference__section" id="component-overview">
           <Text size="sm">
             <a href="#/component-reference">← Component reference</a>
@@ -710,29 +752,26 @@ const componentAreas = Object.entries(
 export function ComponentReferencePage({
   componentId,
   frameworkId,
+  member,
   version,
 }: ComponentReferencePageProps) {
   if (componentId) {
     const component = getComponentReferenceRecord(componentId);
     if (!component) {
       return (
-        <section className="vf-docs-reference__section">
-          <Heading level={3} size="md">
-            Component not found
-          </Heading>
-          <Text tone="muted">
-            No component exists for <code>{componentId}</code>.
-          </Text>
-          <Text>
-            <a href="#/component-reference">Return to component reference</a>
-          </Text>
-        </section>
+        <div className="vf-docs-state">
+          <ErrorState
+            description={`No generated component record exists for “${componentId}”.`}
+            title="Component not found"
+          />
+        </div>
       );
     }
     return (
       <ComponentDetail
         component={component}
         frameworkId={frameworkId}
+        member={member}
         version={version}
       />
     );
