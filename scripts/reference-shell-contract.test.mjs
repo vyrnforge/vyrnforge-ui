@@ -316,3 +316,14 @@ test("Reference failures use deliberate shared states without silent fallback", 
   assert.match(migratedExample, /EmptyState/u);
   assert.match(executableExample, /EmptyState/u);
 });
+
+test("advanced modules use the shared wide Reference layout without a grid shell", () => {
+  const shell = read("apps/docs/src/ReferenceShell.tsx");
+  const docsPage = read("apps/docs/src/DocsPage.tsx");
+
+  const advancedIndex = shell.indexOf('route.template === "advanced-module"');
+  const exampleIndex = shell.indexOf('route.kind === "example"');
+  assert.ok(advancedIndex >= 0 && advancedIndex < exampleIndex);
+  assert.match(shell, /return "wide"/u);
+  assert.doesNotMatch(docsPage, /GridShell|DataGridShell/u);
+});

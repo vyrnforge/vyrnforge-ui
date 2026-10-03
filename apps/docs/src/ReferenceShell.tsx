@@ -41,10 +41,10 @@ function getLayoutMode(
   route: DocsRoute,
   referenceRecord: ReferenceRecordSelection | null,
 ): ReferenceLayoutMode {
+  if (route.template === "advanced-module") return "wide";
   if (route.kind === "example" || route.kind === "executable-examples") {
     return "example";
   }
-  if (route.template === "advanced-module") return "wide";
   if (
     route.kind === "discovery-reference" ||
     route.kind === "component-reference" ||

@@ -627,3 +627,20 @@
   max-width: 44rem;
   margin: 0;
 }
+
+.vf-reference-shell__main[data-reference-layout="wide"] .vf-docs-reference,
+.vf-reference-shell__main[data-reference-layout="wide"] .vf-docs-page,
+.vf-reference-shell__main[data-reference-layout="wide"] .vf-docs-markdown {
+  max-width: none;
+}
+
+.vf-reference-shell__main[data-reference-layout="wide"] .udg,
+.vf-reference-shell__main[data-reference-layout="wide"] .vf-docs-example-stage {
+  min-width: 0;
+}
+
+.vf-reference-shell__main[data-reference-layout="wide"] .udg-table,
+.vf-reference-shell__main[data-reference-layout="wide"] .vf-docs-api-table-scroll {
+  max-width: 100%;
+  overflow-x: auto;
+}
