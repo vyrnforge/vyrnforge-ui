@@ -258,3 +258,19 @@ test("reading templates use the unified main landmark and source-driven deep lin
     /\.vf-docs-markdown,\s*\.vf-docs-reference\s*\{[^}]*border:/su,
   );
 });
+
+
+test("package, token, and pattern discovery avoid dashboard Card stacks", () => {
+  const packageReference = read("apps/docs/src/PackageReferencePage.tsx");
+  const discovery = read("apps/docs/src/DiscoveryReferencePage.tsx");
+  const styles = read("apps/docs/src/styles/reference-shell.css");
+
+  assert.doesNotMatch(packageReference, /\bCard\b/u);
+  assert.doesNotMatch(discovery, /\bCard\b/u);
+  assert.match(packageReference, /vf-docs-package-row/u);
+  assert.match(discovery, /vf-docs-discovery-row-card/u);
+  assert.match(styles, /\.vf-docs-package-row/u);
+  assert.match(styles, /\.vf-docs-discovery-row-card/u);
+  assert.match(packageReference, /getReferenceRecordRoute/u);
+  assert.match(discovery, /getReferenceRecordRoute/u);
+});
