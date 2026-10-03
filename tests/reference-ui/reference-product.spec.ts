@@ -41,6 +41,24 @@ async function expectNoPageOverflow(page: Page) {
   expect(overflow.root, message).toBeLessThanOrEqual(1);
 }
 
+async function expectDiscoveryCatalogReadable(page: Page) {
+  const row = page.locator(".vf-docs-discovery-catalog-row").first();
+  await expect(row).toBeVisible();
+
+  const metrics = await row.evaluate((element) => {
+    const description = element.querySelector<HTMLElement>(".vf-text");
+    const rowBounds = element.getBoundingClientRect();
+    const descriptionBounds = description?.getBoundingClientRect();
+    return {
+      descriptionWidth: Math.round(descriptionBounds?.width ?? 0),
+      rowWidth: Math.round(rowBounds.width),
+    };
+  });
+
+  expect(metrics.rowWidth).toBeGreaterThan(600);
+  expect(metrics.descriptionWidth).toBeGreaterThan(260);
+}
+
 async function capture(page: Page, testInfo: TestInfo, name: string) {
   await mkdir(evidenceDirectory, { recursive: true });
   const filename = `${name}.png`;
@@ -82,6 +100,9 @@ test.describe("VyrnForge Reference product", () => {
         page.locator("header .vf-reference-shell__identity"),
       ).toContainText("Reference");
       await expectNoPageOverflow(page);
+      if (route === "token-reference" || route === "pattern-reference") {
+        await expectDiscoveryCatalogReadable(page);
+      }
       await capture(page, testInfo, `reference-${route}`);
     }
   });

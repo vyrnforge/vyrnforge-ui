@@ -71,14 +71,14 @@ function StringList({ label, values }: { label: string; values: string[] }) {
   );
 }
 
-function PackageIndexCard({
+function PackageIndexRow({
   packageInfo,
 }: {
   packageInfo: PackageReferenceRecord;
 }) {
   return (
     <article className="vf-docs-package-row">
-      <div className="vf-docs-package-card__header">
+      <div className="vf-docs-catalog-row__header">
         <Heading level={3} size="md">
           <a href={packageHref(packageInfo.name)}>{packageInfo.name}</a>
         </Heading>
@@ -106,7 +106,7 @@ function PackageDetail({
         <Text size="sm">
           <a href="#/package-reference">← Package reference</a>
         </Text>
-        <div className="vf-docs-package-card__header">
+        <div className="vf-docs-catalog-row__header">
           <Heading level={3} size="md">
             {packageInfo.name}
           </Heading>
@@ -193,7 +193,7 @@ export function PackageReferencePage({ packageId }: PackageReferencePageProps) {
 
       <div className="vf-docs-package-index">
         {packageReferenceRecords.map((packageInfo) => (
-          <PackageIndexCard key={packageInfo.name} packageInfo={packageInfo} />
+          <PackageIndexRow key={packageInfo.name} packageInfo={packageInfo} />
         ))}
       </div>
 

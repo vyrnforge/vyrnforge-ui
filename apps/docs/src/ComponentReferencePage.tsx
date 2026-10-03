@@ -440,7 +440,7 @@ function componentHref(componentId: string) {
   return `#${getReferenceRecordRoute(referenceModel, "components", componentId)}`;
 }
 
-function ComponentIndexCard({
+function ComponentIndexRow({
   component,
 }: {
   component: ComponentReferenceRecord;
@@ -448,7 +448,7 @@ function ComponentIndexCard({
   const maturity = getComponentMaturityPresentation(component);
   return (
     <article className="vf-docs-component-row">
-      <div className="vf-docs-reference-card__header">
+      <div className="vf-docs-catalog-row__header">
         <div>
           <Heading level={4} size="sm">
             <a href={componentHref(component.id)}>{component.displayName}</a>
@@ -584,7 +584,7 @@ function ComponentDetail({
           <Text size="sm">
             <a href="#/component-reference">← Component reference</a>
           </Text>
-          <div className="vf-docs-reference-card__header">
+          <div className="vf-docs-catalog-row__header">
             <div>
               <Heading level={3} size="md">
                 {component.displayName}
@@ -763,7 +763,7 @@ export function ComponentReferencePage({
                 left.displayName.localeCompare(right.displayName),
               )
               .map((component) => (
-                <ComponentIndexCard component={component} key={component.id} />
+                <ComponentIndexRow component={component} key={component.id} />
               ))}
           </div>
         </section>

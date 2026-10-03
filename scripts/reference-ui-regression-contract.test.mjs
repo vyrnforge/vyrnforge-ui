@@ -44,6 +44,9 @@ test("Reference verification covers representative templates and adaptive states
   assert.match(browser, /Toggle dark theme/u);
   assert.match(browser, /toBeFocused/u);
   assert.match(browser, /expectNoPageOverflow/u);
+  assert.match(browser, /expectDiscoveryCatalogReadable/u);
+  assert.match(browser, /vf-docs-discovery-catalog-row/u);
+  assert.match(browser, /descriptionWidth/u);
 });
 
 test("browser verification has a dedicated Reference server and evidence output", () => {
