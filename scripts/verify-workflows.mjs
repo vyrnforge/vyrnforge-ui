@@ -295,6 +295,7 @@ for (const marker of [
 for (const forbidden of [
   "site/playground/index.html",
   "release.playgroundPath",
+  "catalog.schemaVersion",
   "actions/checkout@",
   "actions/setup-node@",
   "actions/download-artifact@",
