@@ -1,13 +1,5 @@
-import {
-  Button,
-  Heading,
-  Inline,
-  Stack,
-  Text,
-} from "@vyrnforge/ui-components";
-import type {
-  DocumentationReadinessStatus,
-} from "../../../docs/reference/documentationAvailability";
+import { Button, Heading, Inline, Stack, Text } from "@vyrnforge/ui-components";
+import type { DocumentationReadinessStatus } from "../../../docs/reference/documentationAvailability";
 import {
   docsFrameworks,
   getFramework,
@@ -153,10 +145,7 @@ function OverviewGuide({
         </div>
         <div className="vf-docs-guide__principle-grid">
           {principles.map((principle) => (
-            <article
-              className="vf-docs-guide__principle"
-              key={principle.title}
-            >
+            <article className="vf-docs-guide__principle" key={principle.title}>
               <Heading level={4} size="sm">
                 {principle.title}
               </Heading>
@@ -285,3 +274,4 @@ export function GuidePage({
     </main>
   );
 }
+
