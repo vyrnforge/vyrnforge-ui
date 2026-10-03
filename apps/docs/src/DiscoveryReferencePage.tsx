@@ -1,4 +1,4 @@
-import { Badge, CodeText, Heading, Text } from "@vyrnforge/ui-components";
+import { Badge, CodeText, EmptyState, Heading, Text } from "@vyrnforge/ui-components";
 import { getReferenceRecordRoute } from "../../../docs/reference/referenceRuntime";
 import type { ReferenceRecordSelection } from "./App";
 import { referenceModel } from "./docsContext";
@@ -177,12 +177,15 @@ function ReferenceBack({ href, label }: { href: string; label: string }) {
 
 function MissingRecord({ label, id }: { label: string; id: string }) {
   return (
-    <section className="vf-docs-reference__section">
-      <Heading level={3} size="md">
-        {label} not found
-      </Heading>
-      <Text tone="muted">No generated reader record exists for {id}.</Text>
-    </section>
+    <EmptyState
+      className="vf-docs-state"
+      title={`${label} not found`}
+      description={
+        <>
+          No generated reader record exists for <code>{id}</code>.
+        </>
+      }
+    />
   );
 }
 
