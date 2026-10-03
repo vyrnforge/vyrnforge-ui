@@ -1,4 +1,4 @@
-import { Badge, Card, CodeText, Heading, Text } from "@vyrnforge/ui-components";
+import { Badge, CodeText, Heading, Text } from "@vyrnforge/ui-components";
 
 import { getReferenceRecordRoute } from "../../../docs/reference/referenceRuntime";
 import { referenceModel } from "./docsContext";
@@ -71,7 +71,7 @@ function PackageIndexCard({
   packageInfo: PackageReferenceRecord;
 }) {
   return (
-    <Card className="vf-docs-package-card" padding="lg">
+    <article className="vf-docs-package-row">
       <div className="vf-docs-package-card__header">
         <Heading level={3} size="md">
           <a href={packageHref(packageInfo.name)}>{packageInfo.name}</a>
@@ -85,7 +85,7 @@ function PackageIndexCard({
       </div>
       <Text>{packageInfo.purpose}</Text>
       <PackageFacts packageInfo={packageInfo} />
-    </Card>
+    </article>
   );
 }
 
@@ -96,7 +96,7 @@ function PackageDetail({
 }) {
   return (
     <div className="vf-docs-reference">
-      <Card className="vf-docs-reference__section" padding="lg">
+      <section className="vf-docs-reference__section">
         <Text size="sm">
           <a href="#/package-reference">← Package reference</a>
         </Text>
@@ -114,17 +114,17 @@ function PackageDetail({
         <Text>{packageInfo.purpose}</Text>
         <Text tone="muted">{packageInfo.notes}</Text>
         <PackageFacts packageInfo={packageInfo} />
-      </Card>
+      </section>
 
-      <Card className="vf-docs-reference__section" padding="lg">
+      <section className="vf-docs-reference__section">
         <Heading level={3} size="md">
           Ownership boundaries
         </Heading>
         <StringList label="Owns" values={packageInfo.owns} />
         <StringList label="Does not own" values={packageInfo.doesNotOwn} />
-      </Card>
+      </section>
 
-      <Card className="vf-docs-reference__section" padding="lg">
+      <section className="vf-docs-reference__section">
         <Heading level={3} size="md">
           Dependencies
         </Heading>
@@ -133,9 +133,9 @@ function PackageDetail({
           label="Must not depend on"
           values={packageInfo.mustNotDependOn}
         />
-      </Card>
+      </section>
 
-      <Card className="vf-docs-reference__section" padding="lg">
+      <section className="vf-docs-reference__section">
         <Heading level={3} size="md">
           Public entry points
         </Heading>
@@ -146,7 +146,7 @@ function PackageDetail({
             </CodeText>
           ))}
         </div>
-      </Card>
+      </section>
     </div>
   );
 }
@@ -156,7 +156,7 @@ export function PackageReferencePage({ packageId }: PackageReferencePageProps) {
     const packageInfo = getPackageReferenceRecord(packageId);
     if (!packageInfo) {
       return (
-        <Card className="vf-docs-reference__section" padding="lg">
+        <section className="vf-docs-reference__section">
           <Heading level={3} size="md">
             Package not found
           </Heading>
@@ -166,7 +166,7 @@ export function PackageReferencePage({ packageId }: PackageReferencePageProps) {
           <Text>
             <a href="#/package-reference">Return to package reference</a>
           </Text>
-        </Card>
+        </section>
       );
     }
     return <PackageDetail packageInfo={packageInfo} />;
@@ -174,7 +174,7 @@ export function PackageReferencePage({ packageId }: PackageReferencePageProps) {
 
   return (
     <div className="vf-docs-reference">
-      <Card className="vf-docs-reference__section" padding="lg">
+      <section className="vf-docs-reference__section">
         <Heading level={3} size="md">
           Generated package reference
         </Heading>
@@ -184,15 +184,15 @@ export function PackageReferencePage({ packageId }: PackageReferencePageProps) {
           remain canonical in package metadata and are joined here without a
           second hand-maintained package catalog.
         </Text>
-      </Card>
+      </section>
 
-      <div className="vf-docs-package-grid">
+      <div className="vf-docs-package-index">
         {packageReferenceRecords.map((packageInfo) => (
           <PackageIndexCard key={packageInfo.name} packageInfo={packageInfo} />
         ))}
       </div>
 
-      <Card className="vf-docs-reference__section" padding="lg">
+      <section className="vf-docs-reference__section">
         <Heading level={3} size="md">
           Dependency direction
         </Heading>
@@ -203,7 +203,7 @@ export function PackageReferencePage({ packageId }: PackageReferencePageProps) {
             </CodeText>
           ))}
         </div>
-      </Card>
+      </section>
     </div>
   );
 }
