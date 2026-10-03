@@ -2,11 +2,11 @@ import type { ReferenceRecordSelection } from "./App";
 import { ComponentReferencePage } from "./ComponentReferencePage";
 import type { DocsFrameworkId } from "./docsContext";
 import { DocumentationPageTemplate } from "./DocumentationPageTemplate";
+import { GuidePage } from "./GuidePage";
 import { DiscoveryReferencePage } from "./DiscoveryReferencePage";
 import { ExecutableExamplesPage } from "./examples/ExecutableExamplesPage";
 import { MigratedExamplePage } from "./examples/MigratedExamplePage";
 import { MarkdownView } from "./MarkdownView";
-import { OverviewPage } from "./OverviewPage";
 import { PackageReferencePage } from "./PackageReferencePage";
 import {
   getDocumentationTemplate,
@@ -59,17 +59,23 @@ export function DocsPage({
     );
   }
 
+  if (route.template === "guide") {
+    return (
+      <GuidePage
+        frameworkId={frameworkId}
+        onFrameworkChange={onFrameworkChange}
+        onRouteChange={onRouteChange}
+        route={route}
+        status={routeResolution.status}
+      />
+    );
+  }
+
   const componentId =
     referenceRecord?.domain === "components" ? referenceRecord.id : null;
 
   const pageContent =
-    route.kind === "overview" ? (
-      <OverviewPage
-        frameworkId={frameworkId}
-        onFrameworkChange={onFrameworkChange}
-        onRouteChange={onRouteChange}
-      />
-    ) : route.kind === "example" && route.exampleId ? (
+    route.kind === "example" && route.exampleId ? (
       <MigratedExamplePage
         exampleId={route.exampleId}
         frameworkId={frameworkId}
