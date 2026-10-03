@@ -614,3 +614,35 @@
     border-block-start: 1px solid var(--vf-border-subtle, #e2e8f0);
   }
 }
+
+.vf-docs-advanced-module {
+  display: grid;
+  gap: var(--vf-space-5, 20px);
+  min-width: 0;
+}
+
+.vf-docs-advanced-module__context {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--vf-space-2, 8px);
+}
+
+.vf-docs-advanced-module__examples {
+  display: grid;
+  gap: var(--vf-space-4, 16px);
+  padding-block-start: var(--vf-space-5, 20px);
+  border-block-start: 1px solid
+    var(--vf-divider, var(--vf-border-subtle, #e2e8f0));
+}
+
+.vf-docs-advanced-module__examples-heading {
+  display: grid;
+  gap: var(--vf-space-1, 4px);
+}
+
+.vf-docs-advanced-module__example-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--vf-space-2, 8px);
+}
