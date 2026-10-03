@@ -169,7 +169,6 @@
   }
 }
 
-
 /* Unified Reference product shell (#764). The generated registry remains the
    navigation/search authority; this file owns presentation only. */
 .vf-reference-shell {
@@ -435,7 +434,6 @@
   }
 }
 
-
 .vf-reference-primary-navigation {
   display: flex;
   align-items: center;
@@ -463,7 +461,6 @@
     display: none;
   }
 }
-
 
 .vf-docs-component-index {
   display: grid;
@@ -517,7 +514,6 @@
   }
 }
 
-
 .vf-docs-package-index,
 .vf-docs-discovery-grid {
   display: grid;
@@ -555,7 +551,6 @@
     grid-template-columns: minmax(0, 1fr);
   }
 }
-
 
 .vf-docs-example-workbench {
   display: grid;
