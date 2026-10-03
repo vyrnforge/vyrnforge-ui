@@ -316,3 +316,27 @@ test("Reference failures use deliberate shared states without silent fallback", 
   assert.match(migratedExample, /EmptyState/u);
   assert.match(executableExample, /EmptyState/u);
 });
+
+test("Reference accessibility and adaptive behavior stay token-driven", () => {
+  const app = read("apps/docs/src/App.tsx");
+  const main = read("apps/docs/src/main.tsx");
+  const shell = read("apps/docs/src/ReferenceShell.tsx");
+  const docsStyles = read("apps/docs/src/styles/docs.css");
+  const shellStyles = read("apps/docs/src/styles/reference-shell.css");
+
+  assert.match(main, /@vyrnforge\/ui-core\/styles\/index\.css/u);
+  assert.doesNotMatch(docsStyles, /\.vf-docs-app\[data-theme="dark"\]\s*\{/u);
+  assert.match(app, /aria-label="Dark theme"/u);
+  assert.match(app, /aria-pressed=\{theme === "dark"\}/u);
+  assert.match(shell, /aria-expanded=\{mobileNavigationOpen\}/u);
+  assert.match(shell, /aria-haspopup="dialog"/u);
+  assert.match(shell, /href="#vf-reference-main"/u);
+  assert.match(shell, /id="vf-reference-main"/u);
+  assert.match(shellStyles, /@media \(max-width: 720px\)/u);
+  assert.match(shellStyles, /@media \(max-width: 520px\)/u);
+  assert.match(shellStyles, /min-block-size: 44px/u);
+  assert.match(shellStyles, /overflow-wrap: anywhere/u);
+  assert.match(shellStyles, /overscroll-behavior: contain/u);
+  assert.match(shellStyles, /@media \(prefers-reduced-motion: reduce\)/u);
+  assert.match(shellStyles, /@media \(forced-colors: active\)/u);
+});
