@@ -2,10 +2,7 @@ import { Badge, Button, Heading, Text } from "@vyrnforge/ui-components";
 import type {
   DocumentationReadinessStatus,
 } from "../../../docs/reference/documentationAvailability";
-import {
-  isDocumentationReady,
-  type DocsFrameworkId,
-} from "./docsContext";
+import { isDocumentationReady, type DocsFrameworkId } from "./docsContext";
 import { MarkdownView } from "./MarkdownView";
 import { docsRoutes, type DocsRoute } from "./referenceRoutes";
 
@@ -60,11 +57,7 @@ export function AdvancedModulePage({
           className="vf-docs-advanced-module__examples"
         >
           <div className="vf-docs-advanced-module__examples-heading">
-            <Heading
-              id="vf-docs-advanced-module-examples"
-              level={3}
-              size="md"
-            >
+            <Heading id="vf-docs-advanced-module-examples" level={3} size="md">
               Module examples
             </Heading>
             <Text tone="muted">
