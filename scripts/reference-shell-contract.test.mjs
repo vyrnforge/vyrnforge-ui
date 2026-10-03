@@ -223,3 +223,21 @@ test("all public routes use one unified Reference shell with controlled layouts"
   assert.match(navigation, /publicDocsSections/u);
   assert.match(navigation, /getReferenceLocationHref/u);
 });
+
+
+test("reading templates use the unified main landmark and source-driven deep links", () => {
+  const template = read("apps/docs/src/DocumentationPageTemplate.tsx");
+  const guide = read("apps/docs/src/GuidePage.tsx");
+  const markdown = read("apps/docs/src/MarkdownView.tsx");
+  const styles = read("apps/docs/src/styles/docs.css");
+
+  assert.doesNotMatch(template, /<main/u);
+  assert.doesNotMatch(guide, /<main/u);
+  assert.match(markdown, /vf-docs-markdown__heading-link/u);
+  assert.match(markdown, /headingId/u);
+  assert.match(styles, /max-width: 78ch/u);
+  assert.doesNotMatch(
+    styles,
+    /\.vf-docs-markdown,\s*\.vf-docs-reference\s*\{[^}]*border:/su,
+  );
+});
