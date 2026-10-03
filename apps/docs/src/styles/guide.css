@@ -322,7 +322,6 @@
 }
 
 @media (max-width: 1100px) {
-
   .vf-docs-guide__hero-layout,
   .vf-docs-guide__surface-layout {
     grid-template-columns: 1fr;
@@ -334,7 +333,6 @@
 }
 
 @media (max-width: 900px) {
-
   .vf-docs-guide__document {
     grid-template-columns: 1fr;
   }
@@ -355,7 +353,6 @@
 }
 
 @media (max-width: 680px) {
-
   .vf-docs-guide__hero {
     padding: var(--vf-space-5, 20px);
     border-radius: var(--vf-radius-xl, 12px);
