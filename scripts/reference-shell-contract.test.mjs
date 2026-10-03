@@ -41,14 +41,14 @@ test("Docs preserves shared framework and document context through one route aut
 });
 
 test("public Docs navigation owns the complete reader-facing information architecture", () => {
-  const docsNav = read("apps/docs/src/DocsNav.tsx");
+  const docsNav = read("apps/docs/src/ReferenceNavigation.tsx");
   const docsRoutes = read("apps/docs/src/referenceRoutes.ts");
   const registry = json("docs/generated/documentation-registry.json");
 
   assert.match(docsNav, /publicDocsSections/u);
   assert.match(docsNav, /SearchInput/u);
   assert.match(docsNav, /SideNav/u);
-  assert.match(docsNav, /VyrnForge documentation/u);
+  assert.match(docsNav, /VyrnForge Reference/u);
   assert.doesNotMatch(docsNav, /getReferenceNavigation/u);
 
   for (const section of [
@@ -163,7 +163,7 @@ test("component pages bind generated API to the selected framework and version",
 
 test("Docs filter discovers selected-framework API members without restoring a standalone search page", () => {
   const app = read("apps/docs/src/App.tsx");
-  const docsNav = read("apps/docs/src/DocsNav.tsx");
+  const docsNav = read("apps/docs/src/ReferenceNavigation.tsx");
   const referenceShell = read("apps/docs/src/ReferenceShell.tsx");
   const memberTarget = read("apps/docs/src/componentApiMember.ts");
 
@@ -205,9 +205,16 @@ test("all public routes use one unified Reference shell with controlled layouts"
 
   assert.match(app, /import \{ ReferenceShell \} from "\.\/ReferenceShell"/u);
   assert.match(app, /<ReferenceShell/u);
-  assert.doesNotMatch(app, /DocsShell/u);
+  assert.doesNotMatch(app, /DocsShell|GuideShell/u);
+  assert.doesNotMatch(shell, /DocsShell|GuideShell|DocsNav/u);
 
-  assert.doesNotMatch(shell, /GuideShell/u);
+  for (const retiredPath of [
+    "apps/docs/src/DocsShell.tsx",
+    "apps/docs/src/GuideShell.tsx",
+    "apps/docs/src/DocsNav.tsx",
+  ]) {
+    assert(retiredReferencePaths.includes(retiredPath));
+  }
 
   const advancedModulePage = read("apps/docs/src/AdvancedModulePage.tsx");
   assert.match(docsPage, /AdvancedModulePage/u);
