@@ -75,6 +75,15 @@ function parseInlineCode(text: string) {
   });
 }
 
+function headingId(text: string, index: number) {
+  const slug = text
+    .replace(/`/gu, "")
+    .toLowerCase()
+    .replace(/[^a-z0-9]+/gu, "-")
+    .replace(/^-+|-+$/gu, "");
+  return slug || `section-${index + 1}`;
+}
+
 function renderTextLine(line: string, index: number) {
   const trimmed = line.trim();
 
@@ -89,12 +98,19 @@ function renderTextLine(line: string, index: number) {
     const level = headingMatch[1].length;
     const HeadingTag = `h${Math.min(level + 1, 5)}` as
       "h2" | "h3" | "h4" | "h5";
+    const id = headingId(headingMatch[2], index);
     return (
       <HeadingTag
         className={`vf-docs-markdown__heading vf-docs-markdown__heading--${level}`}
+        id={id}
         key={index}
       >
-        {parseInlineCode(headingMatch[2])}
+        <a className="vf-docs-markdown__heading-link" href={`#${id}`}>
+          {parseInlineCode(headingMatch[2])}
+          <span aria-hidden="true" className="vf-docs-markdown__heading-anchor">
+            #
+          </span>
+        </a>
       </HeadingTag>
     );
   }
