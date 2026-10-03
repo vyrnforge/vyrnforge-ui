@@ -287,9 +287,7 @@ test("package, token, and pattern discovery avoid dashboard Card stacks", () => 
   assert.match(discovery, /getReferenceRecordRoute/u);
 });
 
-test(
-  "Reference accessibility and theme hardening stays on shared VyrnForge contracts",
-  () => {
+test("Reference accessibility and theme hardening stays on shared VyrnForge contracts", () => {
     const app = read("apps/docs/src/App.tsx");
     const docsStyles = read("apps/docs/src/styles/docs.css");
     const referenceStyles = read("apps/docs/src/styles/reference-shell.css");
@@ -312,6 +310,5 @@ test(
     assert.match(themes, /\[data-theme="dark"\]/u);
     assert.match(referenceStyles, /scrollbar-gutter: stable/u);
     assert.match(referenceStyles, /overflow-wrap: anywhere/u);
-    assert.match(referenceStyles, /@media \(forced-colors: active\)/u);
-  },
-);
+  assert.match(referenceStyles, /@media \(forced-colors: active\)/u);
+});
