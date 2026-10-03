@@ -4,11 +4,7 @@ import { expect, test, type Page, type TestInfo } from "@playwright/test";
 
 const evidenceDirectory = path.resolve("test-results/reference-ui-evidence");
 
-async function openReference(
-  page: Page,
-  route: string,
-  framework = "react",
-) {
+async function openReference(page: Page, route: string, framework = "react") {
   await page.goto(`/?framework=${framework}#/${route}`);
   await expect(page.locator(".vf-reference-shell")).toBeVisible();
   await expect(page.locator("#vf-reference-main")).toBeVisible();
@@ -75,9 +71,7 @@ test.describe("VyrnForge Reference product", () => {
   }, testInfo) => {
     await openReference(page, "overview");
 
-    const themeToggle = page.getByRole("button", {
-      name: "Toggle dark theme",
-    });
+    const themeToggle = page.getByRole("button", { name: "Toggle dark theme" });
     await expect(themeToggle).toHaveAttribute("aria-pressed", "false");
     await themeToggle.click();
     await expect(themeToggle).toHaveAttribute("aria-pressed", "true");
