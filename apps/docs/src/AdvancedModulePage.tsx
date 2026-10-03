@@ -1,16 +1,17 @@
 import { Badge, Button, Heading, Text } from "@vyrnforge/ui-components";
-import type {
-  DocumentationReadinessStatus,
-} from "../../../docs/reference/documentationAvailability";
 import { isDocumentationReady, type DocsFrameworkId } from "./docsContext";
 import { MarkdownView } from "./MarkdownView";
-import { docsRoutes, type DocsRoute } from "./referenceRoutes";
+import {
+  docsRoutes,
+  type DocsRoute,
+  type DocsRouteResolution,
+} from "./referenceRoutes";
 
 type AdvancedModulePageProps = {
   frameworkId: DocsFrameworkId;
   onRouteChange: (routeId: string) => void;
   route: DocsRoute;
-  status: DocumentationReadinessStatus;
+  status: DocsRouteResolution["status"];
   version: string;
 };
 
@@ -57,13 +58,14 @@ export function AdvancedModulePage({
           className="vf-docs-advanced-module__examples"
         >
           <div className="vf-docs-advanced-module__examples-heading">
-            <Heading id="vf-docs-advanced-module-examples" level={3} size="md">
+            <Heading
+              id="vf-docs-advanced-module-examples"
+              level={3}
+              size="md"
+            >
               Module examples
             </Heading>
-            <Text tone="muted">
-              Generated routes available for the selected framework and
-              version.
-            </Text>
+            <Text tone="muted">Available in the selected context.</Text>
           </div>
           <div className="vf-docs-advanced-module__example-list">
             {relatedRoutes.map((candidate) => (
