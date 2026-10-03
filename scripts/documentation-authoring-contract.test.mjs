@@ -16,6 +16,18 @@ function assertIncludesAll(content, values, kind) {
   }
 }
 
+function assertMarkdownTableRow(content, firstCell, secondCell) {
+  const rows = content
+    .split("\n")
+    .map((line) => line.split("|").map((cell) => cell.trim()));
+  assert.ok(
+    rows.some(
+      (cells) => cells[1] === firstCell && cells[2] === secondCell,
+    ),
+    `missing table row: ${firstCell} | ${secondCell}`,
+  );
+}
+
 test("documentation authoring guide is the source of truth", () => {
   const guide = read("docs/engineering/documentation-authoring.md");
   const system = read("docs/engineering/documentation-system.md");
@@ -54,16 +66,14 @@ test("authoring guide covers context, availability, and examples", () => {
     "authoring marker",
   );
 
-  assert.match(
+  assertMarkdownTableRow(
     guide,
-    /\| Native HTML \/ Custom Elements\s+\| HTML \+ TypeScript\s+\|/u,
+    "Native HTML / Custom Elements",
+    "HTML + TypeScript",
   );
-  assert.match(guide, /\| React\s+\| TSX\s+\|/u);
-  assert.match(
-    guide,
-    /\| Angular\s+\| TypeScript \+ Angular templates\s+\|/u,
-  );
-  assert.match(guide, /\| Vue\s+\| Vue SFC \+ TypeScript\s+\|/u);
+  assertMarkdownTableRow(guide, "React", "TSX");
+  assertMarkdownTableRow(guide, "Angular", "TypeScript + Angular templates");
+  assertMarkdownTableRow(guide, "Vue", "Vue SFC + TypeScript");
 });
 
 test("authoring guide covers commands and forbidden shortcuts", () => {
