@@ -5,6 +5,7 @@ import { DocumentationPageTemplate } from "./DocumentationPageTemplate";
 import { DiscoveryReferencePage } from "./DiscoveryReferencePage";
 import { ExecutableExamplesPage } from "./examples/ExecutableExamplesPage";
 import { MigratedExamplePage } from "./examples/MigratedExamplePage";
+import { GuidePage } from "./GuidePage";
 import { MarkdownView } from "./MarkdownView";
 import { OverviewPage } from "./OverviewPage";
 import { PackageReferencePage } from "./PackageReferencePage";
@@ -56,6 +57,19 @@ export function DocsPage({
           <p>No published documentation alternative is currently available.</p>
         )}
       </DocumentationPageTemplate>
+    );
+  }
+
+  if (route.template === "guide" && route.kind === "markdown") {
+    return (
+      <GuidePage
+        description={route.description}
+        frameworkId={frameworkId}
+        markdown={route.content ?? ""}
+        onRouteChange={onRouteChange}
+        status={routeResolution.status}
+        title={route.title}
+      />
     );
   }
 
