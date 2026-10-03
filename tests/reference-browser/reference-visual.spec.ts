@@ -7,8 +7,11 @@ const artifactDirectory = path.resolve("test-results/reference-visual-evidence")
 type ReferenceCase = {
   id: string;
   route: string;
+  framework?: "native-html" | "react" | "angular" | "vue";
+  member?: string;
   theme?: "light" | "dark";
   viewport?: { width: number; height: number };
+  expectedText?: string;
   openMobileNavigation?: boolean;
 };
 
@@ -19,10 +22,34 @@ const cases: ReferenceCase[] = [
   { id: "component-detail", route: "/components/button" },
   { id: "package-reference", route: "/package-reference" },
   { id: "token-reference", route: "/token-reference" },
-  { id: "pattern-reference", route: "/pattern-reference" },
+  {
+    id: "pattern-reference-tablet",
+    route: "/pattern-reference",
+    viewport: { width: 820, height: 1180 },
+  },
   { id: "examples", route: "/executable-examples" },
-  { id: "data-grid", route: "/data-grid" },
-  { id: "invalid-route", route: "/reference-route-that-does-not-exist" },
+  { id: "data-grid-react", route: "/data-grid" },
+  {
+    id: "data-grid-angular-unavailable",
+    route: "/data-grid",
+    framework: "angular",
+    expectedText: "Unavailable in this context",
+  },
+  {
+    id: "missing-component",
+    route: "/components/reference-component-that-does-not-exist",
+    expectedText: "Component not found",
+  },
+  {
+    id: "invalid-route",
+    route: "/reference-route-that-does-not-exist",
+    expectedText: "Page not found",
+  },
+  {
+    id: "missing-member-deep-link",
+    route: "/components/button",
+    member: "api-property-that-does-not-exist",
+  },
   {
     id: "mobile-navigation",
     route: "/overview",
@@ -31,15 +58,20 @@ const cases: ReferenceCase[] = [
   },
 ];
 
+function referenceUrl(referenceCase: ReferenceCase) {
+  const query = new URLSearchParams({
+    framework: referenceCase.framework ?? "react",
+  });
+  if (referenceCase.member) query.set("member", referenceCase.member);
+  return `/?${query.toString()}#${referenceCase.route}`;
+}
+
 async function openReference(page: Page, referenceCase: ReferenceCase) {
   if (referenceCase.viewport) {
     await page.setViewportSize(referenceCase.viewport);
   }
 
-  await page.goto(
-    `/?framework=react#${referenceCase.route}`,
-    { waitUntil: "networkidle" },
-  );
+  await page.goto(referenceUrl(referenceCase), { waitUntil: "networkidle" });
   await expect(page.locator(".vf-reference-shell")).toBeVisible();
 
   if (referenceCase.theme === "dark") {
@@ -48,6 +80,10 @@ async function openReference(page: Page, referenceCase: ReferenceCase) {
       "data-theme",
       "dark",
     );
+  }
+
+  if (referenceCase.expectedText) {
+    await expect(page.getByText(referenceCase.expectedText)).toBeVisible();
   }
 
   if (referenceCase.openMobileNavigation) {
@@ -73,6 +109,10 @@ test.describe("P0 Reference visual matrix", () => {
       );
       expect(pageOverflow, "page must not overflow horizontally").toBe(false);
 
+      if (referenceCase.member) {
+        await expect(page.locator("#vf-reference-main")).toBeFocused();
+      }
+
       await mkdir(artifactDirectory, { recursive: true });
       const screenshot = await page.screenshot({
         animations: "disabled",
@@ -86,5 +126,26 @@ test.describe("P0 Reference visual matrix", () => {
         contentType: "image/png",
       });
     });
+  }
+});
+
+test("representative templates expose keyboard-reachable Reference controls", async ({
+  page,
+}) => {
+  for (const route of [
+    "/overview",
+    "/getting-started",
+    "/component-reference",
+    "/package-reference",
+    "/token-reference",
+    "/pattern-reference",
+    "/executable-examples",
+    "/data-grid",
+  ]) {
+    await openReference(page, { id: route, route });
+    await page.keyboard.press("Tab");
+    const focused = page.locator(":focus");
+    await expect(focused).toBeVisible();
+    await expect(focused).not.toHaveAttribute("tabindex", "-1");
   }
 });
