@@ -17,13 +17,11 @@ function assertIncludesAll(content, values, kind) {
 }
 
 function assertMarkdownTableRow(content, firstCell, secondCell) {
-  const rows = content
-    .split("\n")
-    .map((line) => line.split("|").map((cell) => cell.trim()));
+  const rows = content.split("\n").map((line) =>
+    line.split("|").map((cell) => cell.trim()),
+  );
   assert.ok(
-    rows.some(
-      (cells) => cells[1] === firstCell && cells[2] === secondCell,
-    ),
+    rows.some((cells) => cells[1] === firstCell && cells[2] === secondCell),
     `missing table row: ${firstCell} | ${secondCell}`,
   );
 }
