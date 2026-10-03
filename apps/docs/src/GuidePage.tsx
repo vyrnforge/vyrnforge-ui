@@ -11,7 +11,7 @@ import {
   getFramework,
   type DocsFrameworkId,
 } from "./docsContext";
-import { getMarkdownHeadings, MarkdownView } from "./MarkdownView";
+import { MarkdownView } from "./MarkdownView";
 import type { DocsRoute } from "./referenceRoutes";
 
 type GuidePageProps = {
@@ -191,7 +191,6 @@ export function GuidePage({
 }: GuidePageProps) {
   const isOverview = route.kind === "overview";
   const markdown = route.content ?? "";
-  const headings = isOverview ? [] : getMarkdownHeadings(markdown);
   const framework = getFramework(frameworkId);
 
   return (
@@ -254,30 +253,7 @@ export function GuidePage({
           onRouteChange={onRouteChange}
         />
       ) : (
-        <div className="vf-docs-guide__content-layout">
-          <div className="vf-docs-guide__content">
-            <MarkdownView markdown={markdown} />
-          </div>
-          {headings.length > 0 ? (
-            <aside aria-label="On this page" className="vf-docs-guide__outline">
-              <Text className="vf-docs-guide__outline-title" size="sm">
-                On this page
-              </Text>
-              <nav>
-                <ul>
-                  {headings.map((heading) => (
-                    <li
-                      className={`vf-docs-guide__outline-item vf-docs-guide__outline-item--level-${heading.level}`}
-                      key={heading.id}
-                    >
-                      <a href={`#${heading.id}`}>{heading.label}</a>
-                    </li>
-                  ))}
-                </ul>
-              </nav>
-            </aside>
-          ) : null}
-        </div>
+        <div className="vf-docs-guide__content">\n          <MarkdownView markdown={markdown} />\n        </div>
       )}
     </main>
   );
