@@ -1,5 +1,6 @@
 import { useMemo, useState } from "react";
 import {
+  Button,
   SearchInput,
   SideNav,
   type SideNavItem,
@@ -58,6 +59,51 @@ function memberKindLabel(kind: "property" | "event" | "slot" | "method") {
       : kind === "slot"
         ? "Slot"
         : "Method";
+}
+
+
+export function ReferencePrimaryNavigation({
+  activeRouteId,
+  frameworkId,
+  version,
+  onRouteChange,
+}: ReferenceNavigationProps) {
+  const items = publicDocsSections.flatMap((section) => {
+    const routes = section.routeIds
+      .map((routeId) => docsRoutes.find((route) => route.id === routeId))
+      .filter((route): route is DocsRoute => Boolean(route))
+      .filter((route) => routeIsAvailable(route, frameworkId, version));
+    const target = routes[0];
+    if (!target) return [];
+
+    return [
+      {
+        id: section.id,
+        label: section.label,
+        routeId: target.id,
+        active: routes.some((route) => route.id === activeRouteId),
+      },
+    ];
+  });
+
+  return (
+    <nav
+      aria-label="Reference sections"
+      className="vf-reference-primary-navigation"
+    >
+      {items.map((item) => (
+        <Button
+          aria-pressed={item.active}
+          key={item.id}
+          onClick={() => onRouteChange(item.routeId)}
+          size="sm"
+          variant={item.active ? "subtle" : "ghost"}
+        >
+          {item.label}
+        </Button>
+      ))}
+    </nav>
+  );
 }
 
 export function ReferenceNavigation({
@@ -143,7 +189,7 @@ export function ReferenceNavigation({
 
   return (
     <div className="vf-reference-navigation">
-      <div className="vf-reference-navigation__search">
+      <div className="vf-reference-navigation__search" role="search">
         <SearchInput
           aria-label="Search VyrnForge Reference"
           onChange={(event) => setQuery(event.currentTarget.value)}
@@ -158,7 +204,7 @@ export function ReferenceNavigation({
         items={items}
       />
       {items.length === 0 ? (
-        <p className="vf-reference-navigation__empty">
+        <p aria-live="polite" className="vf-reference-navigation__empty" role="status">
           No Reference results match “{query}”.
         </p>
       ) : null}
