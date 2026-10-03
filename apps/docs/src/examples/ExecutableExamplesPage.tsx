@@ -1,4 +1,4 @@
-import { Badge, Heading, Text } from "@vyrnforge/ui-components";
+import { Badge, EmptyState, Heading, Text } from "@vyrnforge/ui-components";
 import type { DocsFrameworkId } from "../docsContext";
 import { resolveDocumentationExample } from "../referenceRoutes";
 import { CodeBlock } from "./components/CodeBlock";
@@ -19,9 +19,12 @@ export function ExecutableExamplesPage({
 
   if (!resolution.available) {
     return (
-      <Text tone="muted">
-        The packed consumer example is unavailable for {frameworkId} {version}.
-      </Text>
+      <div className="vf-docs-state">
+        <EmptyState
+          description="No verified packed-consumer implementation is available in this context."
+          title={`Executable example unavailable for ${frameworkId} ${version}`}
+        />
+      </div>
     );
   }
 

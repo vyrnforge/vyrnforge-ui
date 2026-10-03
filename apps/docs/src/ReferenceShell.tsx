@@ -28,6 +28,7 @@ type ReferenceShellProps = {
   docsVersions: DocsVersion[];
   framework: DocsFramework;
   headerAction?: ReactNode;
+  invalidRouteId: string | null;
   onFrameworkChange: (frameworkId: DocsFrameworkId) => void;
   onRouteChange: (routeId: string) => void;
   referenceRecord: ReferenceRecordSelection | null;
@@ -40,10 +41,10 @@ function getLayoutMode(
   route: DocsRoute,
   referenceRecord: ReferenceRecordSelection | null,
 ): ReferenceLayoutMode {
+  if (route.template === "advanced-module") return "wide";
   if (route.kind === "example" || route.kind === "executable-examples") {
     return "example";
   }
-  if (route.template === "advanced-module") return "wide";
   if (
     route.kind === "discovery-reference" ||
     route.kind === "component-reference" ||
@@ -61,6 +62,7 @@ export function ReferenceShell({
   docsVersions,
   framework,
   headerAction,
+  invalidRouteId,
   onFrameworkChange,
   onRouteChange,
   referenceRecord,
@@ -203,6 +205,7 @@ export function ReferenceShell({
         >
           <DocsPage
             frameworkId={framework.id}
+            invalidRouteId={invalidRouteId}
             onFrameworkChange={onFrameworkChange}
             onRouteChange={navigate}
             referenceRecord={referenceRecord}
