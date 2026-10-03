@@ -294,7 +294,9 @@ test("Reference failures use deliberate shared states without silent fallback", 
   const component = read("apps/docs/src/ComponentReferencePage.tsx");
   const packages = read("apps/docs/src/PackageReferencePage.tsx");
   const discovery = read("apps/docs/src/DiscoveryReferencePage.tsx");
-  const migratedExample = read("apps/docs/src/examples/MigratedExamplePage.tsx");
+  const migratedExample = read(
+    "apps/docs/src/examples/MigratedExamplePage.tsx",
+  );
   const executableExample = read(
     "apps/docs/src/examples/ExecutableExamplesPage.tsx",
   );

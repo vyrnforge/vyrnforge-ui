@@ -1,9 +1,4 @@
-import {
-  Badge,
-  ErrorState,
-  Heading,
-  Text,
-} from "@vyrnforge/ui-components";
+import { Badge, ErrorState, Heading, Text } from "@vyrnforge/ui-components";
 
 import frameworkApiReferenceRaw from "../../../docs/generated/framework-api-reference.json?raw";
 import { getReferenceRecordRoute } from "../../../docs/reference/referenceRuntime";

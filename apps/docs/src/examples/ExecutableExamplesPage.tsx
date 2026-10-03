@@ -1,9 +1,4 @@
-import {
-  Badge,
-  EmptyState,
-  Heading,
-  Text,
-} from "@vyrnforge/ui-components";
+import { Badge, EmptyState, Heading, Text } from "@vyrnforge/ui-components";
 import type { DocsFrameworkId } from "../docsContext";
 import { resolveDocumentationExample } from "../referenceRoutes";
 import { CodeBlock } from "./components/CodeBlock";
