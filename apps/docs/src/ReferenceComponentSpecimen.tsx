@@ -93,9 +93,15 @@ export function ReferenceComponentSpecimen({
     case "icon-button":
       specimen = (
         <div className="vf-docs-specimen-row">
-          <IconButton aria-label="Settings"><Icon name="Settings" /></IconButton>
-          <IconButton aria-label="Refresh"><Icon name="Refresh" /></IconButton>
-          <IconButton aria-label="More actions"><Icon name="MoreHorizontal" /></IconButton>
+          <IconButton aria-label="Settings">
+            <Icon name="Settings" />
+          </IconButton>
+          <IconButton aria-label="Refresh">
+            <Icon name="Refresh" />
+          </IconButton>
+          <IconButton aria-label="More actions">
+            <Icon name="MoreHorizontal" />
+          </IconButton>
         </div>
       );
       break;
@@ -112,10 +118,14 @@ export function ReferenceComponentSpecimen({
       );
       break;
     case "text-input":
-      specimen = <TextInput aria-label="Project name" defaultValue="VyrnForge" />;
+      specimen = (
+        <TextInput aria-label="Project name" defaultValue="VyrnForge" />
+      );
       break;
     case "search-input":
-      specimen = <SearchInput aria-label="Search" placeholder="Search components" />;
+      specimen = (
+        <SearchInput aria-label="Search" placeholder="Search components" />
+      );
       break;
     case "select":
       specimen = (
@@ -142,16 +152,14 @@ export function ReferenceComponentSpecimen({
       specimen = (
         <Switch
           checked={checked}
-          label="Enable notifications"
           description="Notify owners when workflow state changes."
+          label="Enable notifications"
           onCheckedChange={setChecked}
         />
       );
       break;
     case "checkbox":
-      specimen = (
-        <Checkbox defaultChecked label="Include archived records" />
-      );
+      specimen = <Checkbox defaultChecked label="Include archived records" />;
       break;
     case "radio-group":
       specimen = (
@@ -170,10 +178,7 @@ export function ReferenceComponentSpecimen({
       break;
     case "toggle-button":
       specimen = (
-        <ToggleButton
-          pressed={checked}
-          onPressedChange={setChecked}
-        >
+        <ToggleButton pressed={checked} onPressedChange={setChecked}>
           Pin
         </ToggleButton>
       );
@@ -182,11 +187,11 @@ export function ReferenceComponentSpecimen({
     case "segmented-control":
       specimen = (
         <ToggleButtonGroup
+          type="single"
           value={toggle}
           onValueChange={(value) => {
             if (typeof value === "string") setToggle(value);
           }}
-          type="single"
         >
           <ToggleButton value="list">List</ToggleButton>
           <ToggleButton value="grid">Grid</ToggleButton>
@@ -197,9 +202,21 @@ export function ReferenceComponentSpecimen({
       specimen = (
         <Tabs
           items={[
-            { id: "overview", label: "Overview", content: "Overview content" },
-            { id: "activity", label: "Activity", content: "Activity content" },
-            { id: "settings", label: "Settings", content: "Settings content" },
+            {
+              id: "overview",
+              label: "Overview",
+              content: "Overview content",
+            },
+            {
+              id: "activity",
+              label: "Activity",
+              content: "Activity content",
+            },
+            {
+              id: "settings",
+              label: "Settings",
+              content: "Settings content",
+            },
           ]}
           onValueChange={setTab}
           value={tab}
@@ -234,18 +251,18 @@ export function ReferenceComponentSpecimen({
     case "empty-state":
       specimen = (
         <EmptyState
-          title="No resources yet"
-          description="Create the first resource to start this workspace."
           action={<Button variant="primary">Create resource</Button>}
+          description="Create the first resource to start this workspace."
+          title="No resources yet"
         />
       );
       break;
     case "error-state":
       specimen = (
         <ErrorState
-          title="Could not load resources"
-          description="Try again or check the service status."
           action={<Button>Retry</Button>}
+          description="Try again or check the service status."
+          title="Could not load resources"
         />
       );
       break;
@@ -255,7 +272,7 @@ export function ReferenceComponentSpecimen({
     case "panel":
     case "card":
       specimen = (
-        <Panel title="Queue health" description="Current operational status">
+        <Panel description="Current operational status" title="Queue health">
           <Text>4 critical · 8 standard · 2 awaiting review</Text>
         </Panel>
       );
