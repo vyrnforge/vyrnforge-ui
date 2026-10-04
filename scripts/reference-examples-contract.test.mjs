@@ -80,9 +80,10 @@ test("Docs executable examples stay bound to verified consumer fixtures", () => 
   const page = read("apps/docs/src/examples/ExecutableExamplesPage.tsx");
   for (const marker of [
     "getExecutableExampleRecord",
-    "executable consumer",
-    "Executable source",
+    "Framework quick start",
+    "Minimal consumer entry point",
     "packed VyrnForge packages",
+    "Supported integration behaviors",
   ]) {
     assert.match(page, new RegExp(marker));
   }
