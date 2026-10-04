@@ -182,7 +182,10 @@ test.describe("VyrnForge Reference product", () => {
     page,
   }, testInfo) => {
     await openReference(page, "component-reference");
-    await page.getByRole("link", { name: "Button", exact: true }).first().click();
+    await page
+      .getByRole("link", { name: "Button", exact: true })
+      .first()
+      .click();
     await expect(page.locator(".vf-docs-component-example")).toBeVisible();
     await expect(page.locator("#component-guidance")).toBeVisible();
     await expect(page.locator("#component-framework-api")).toBeVisible();
@@ -200,7 +203,9 @@ test.describe("VyrnForge Reference product", () => {
     await openReference(page, "token-reference");
     await page.locator(".vf-docs-discovery-tile a").first().click();
     await expect(page.locator(".vf-docs-token-specimen").first()).toBeVisible();
-    await expect(page.locator(".vf-docs-token-specimen__visual").first()).toBeVisible();
+    await expect(
+      page.locator(".vf-docs-token-specimen__visual").first(),
+    ).toBeVisible();
     await capture(page, testInfo, "reference-token-detail");
 
     await openReference(page, "pattern-reference");
