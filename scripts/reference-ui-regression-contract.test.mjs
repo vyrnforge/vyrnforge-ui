@@ -56,7 +56,7 @@ test("Reference verification covers representative templates and adaptive states
   assert.match(browser, /vf-docs-live-example/u);
   assert.match(browser, /expectFrameworkExampleIsDeveloperFirst/u);
   assert.match(browser, /vf-docs-framework-example__concepts/u);
-  assert.match(browser, /component-reference\/button/u);
+  assert.match(browser, /components\/button/u);
   assert.match(browser, /vf-docs-component-specimen/u);
   assert.match(browser, /expectCodeBlockUsesBlockStyling/u);
   assert.match(browser, /backgroundColor/u);
