@@ -170,7 +170,9 @@ export function verifyExecutableExampleContract({
     pagePath,
     [
       "getExecutableExampleRecord",
-      "Executable source",
+      "Framework quick start",
+      "Minimal consumer entry point",
+      "Supported integration behaviors",
       "Verified against packed VyrnForge packages",
     ],
     failures,
