@@ -51,27 +51,6 @@ function PackageFacts({
   );
 }
 
-function StringList({ label, values }: { label: string; values: string[] }) {
-  return (
-    <div>
-      <Heading level={4} size="sm">
-        {label}
-      </Heading>
-      {values.length > 0 ? (
-        <ul>
-          {values.map((value) => (
-            <li key={value}>{value}</li>
-          ))}
-        </ul>
-      ) : (
-        <Text size="sm" tone="muted">
-          None
-        </Text>
-      )}
-    </div>
-  );
-}
-
 function PackageIndexRow({
   packageInfo,
 }: {
@@ -156,7 +135,16 @@ function PackageDetail({
             Internal source paths are not part of the supported API.
           </Text>
         </div>
-        <CodeBlock code={`import "${primaryEntryPoint}";`} language="ts" />
+        <div className="vf-docs-component-doc__facts-grid">
+          <div>
+            <strong>Primary entry point</strong>
+            <CodeText>{primaryEntryPoint}</CodeText>
+          </div>
+          <div>
+            <strong>Runtime</strong>
+            <span>{packageInfo.runtime ?? "framework-neutral"}</span>
+          </div>
+        </div>
         {cssImport ? (
           <div>
             <Heading level={4} size="sm">
