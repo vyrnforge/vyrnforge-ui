@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, type ReactNode } from "react";
 import {
   Badge,
   Button,
@@ -7,6 +7,7 @@ import {
   EmptyState,
   ErrorState,
   Heading,
+  Icon,
   IconButton,
   InlineMessage,
   LoadingState,
@@ -67,7 +68,7 @@ export function ReferenceComponentSpecimen({
   const [tab, setTab] = useState("overview");
   const [toggle, setToggle] = useState("list");
 
-  let specimen: React.ReactNode;
+  let specimen: ReactNode;
 
   switch (componentId) {
     case "button":
@@ -92,9 +93,9 @@ export function ReferenceComponentSpecimen({
     case "icon-button":
       specimen = (
         <div className="vf-docs-specimen-row">
-          <IconButton icon="Settings" label="Settings" />
-          <IconButton icon="Refresh" label="Refresh" />
-          <IconButton icon="More" label="More actions" />
+          <IconButton aria-label="Settings"><Icon name="Settings" /></IconButton>
+          <IconButton aria-label="Refresh"><Icon name="Refresh" /></IconButton>
+          <IconButton aria-label="More actions"><Icon name="More" /></IconButton>
         </div>
       );
       break;
@@ -149,11 +150,7 @@ export function ReferenceComponentSpecimen({
       break;
     case "checkbox":
       specimen = (
-        <Checkbox
-          checked={checked}
-          label="Include archived records"
-          onCheckedChange={setChecked}
-        />
+        <Checkbox defaultChecked label="Include archived records" />
       );
       break;
     case "radio-group":
@@ -186,7 +183,9 @@ export function ReferenceComponentSpecimen({
       specimen = (
         <ToggleButtonGroup
           value={toggle}
-          onValueChange={setToggle}
+          onValueChange={(value) => {
+            if (typeof value === "string") setToggle(value);
+          }}
           type="single"
         >
           <ToggleButton value="list">List</ToggleButton>
