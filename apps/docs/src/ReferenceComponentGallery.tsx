@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, type ReactNode } from "react";
 import {
   Badge,
   Button,
@@ -24,7 +24,7 @@ function ShowcaseSection({
   links,
   title,
 }: {
-  children: React.ReactNode;
+  children: ReactNode;
   description: string;
   links: Array<{ id: string; label: string }>;
   title: string;
