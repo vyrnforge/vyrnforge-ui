@@ -27,11 +27,16 @@ export function CodeBlock({
   return (
     <div className="vf-docs-code-block">
       <div className="vf-docs-code-block__toolbar">
-        <Text size="sm" tone="muted">
+        <Text className="vf-docs-code-block__language" size="sm" tone="muted">
           {language}
         </Text>
         {copyable && (
-          <Button onClick={copy} size="sm" variant="ghost">
+          <Button
+            className="vf-docs-code-block__copy"
+            onClick={copy}
+            size="sm"
+            variant="ghost"
+          >
             {copied ? "Copied" : "Copy"}
           </Button>
         )}
