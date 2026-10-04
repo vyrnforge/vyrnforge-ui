@@ -442,6 +442,17 @@ function componentHref(componentId: string) {
   return `#${getReferenceRecordRoute(referenceModel, "components", componentId)}`;
 }
 
+function relatedComponentHref(label: string) {
+  const related = componentReferenceRecords.find(
+    (candidate) => candidate.displayName === label || candidate.id === label,
+  );
+  return related ? componentHref(related.id) : null;
+}
+
+function patternHref(patternId: string) {
+  return `#${getReferenceRecordRoute(referenceModel, "patterns", patternId)}`;
+}
+
 function ComponentIndexRow({
   component,
 }: {
@@ -895,9 +906,16 @@ function ComponentDetail({
             </div>
             {relatedComponents.length > 0 ? (
               <div className="vf-docs-component-doc__related-links">
-                {relatedComponents.map((label) => (
-                  <span key={label}>{label}</span>
-                ))}
+                {relatedComponents.map((label) => {
+                  const href = relatedComponentHref(label);
+                  return href ? (
+                    <a href={href} key={label}>
+                      {label}
+                    </a>
+                  ) : (
+                    <span key={label}>{label}</span>
+                  );
+                })}
               </div>
             ) : null}
             {relatedPatterns.length > 0 ? (
@@ -907,7 +925,9 @@ function ComponentDetail({
                 </Heading>
                 <div className="vf-docs-component-doc__related-links">
                   {relatedPatterns.map((pattern) => (
-                    <span key={pattern.id}>{pattern.displayName}</span>
+                    <a href={patternHref(pattern.id)} key={pattern.id}>
+                      {pattern.displayName}
+                    </a>
                   ))}
                 </div>
               </div>
