@@ -1,5 +1,5 @@
 import type { ReactNode } from "react";
-import { PageHeader, Text } from "@vyrnforge/ui-components";
+import { Badge, PageHeader, Text } from "@vyrnforge/ui-components";
 import type { DocumentationReadinessStatus } from "../../../docs/reference/documentationAvailability";
 import type { DocsTemplateDefinition } from "./referenceRoutes";
 
@@ -24,13 +24,23 @@ export function DocumentationPageTemplate({
       data-document-template={template.id}
       data-template-sections={template.sections.join(" ")}
     >
-      <div className="vf-reference-page__header">
-        <PageHeader description={description} title={title} />
-        <Text size="sm" tone="muted">
-          Documentation status: {status}
-        </Text>
-      </div>
-      {children}
+      <section
+        aria-label="Reference page introduction"
+        className="vf-reference-page__hero"
+      >
+        <div className="vf-reference-page__hero-copy">
+          <div className="vf-reference-page__meta">
+            <Text className="vf-reference-page__eyebrow" size="sm">
+              {template.label}
+            </Text>
+            <Badge size="sm" tone="subtle" variant="success">
+              {status}
+            </Badge>
+          </div>
+          <PageHeader description={description} title={title} />
+        </div>
+      </section>
+      <div className="vf-reference-page__body">{children}</div>
     </article>
   );
 }

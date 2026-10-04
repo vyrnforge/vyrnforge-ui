@@ -447,24 +447,24 @@ function ComponentIndexRow({
 }) {
   const maturity = getComponentMaturityPresentation(component);
   return (
-    <article className="vf-docs-component-row">
-      <div className="vf-docs-catalog-row__header">
-        <div>
-          <Heading level={4} size="sm">
-            <a href={componentHref(component.id)}>{component.displayName}</a>
-          </Heading>
-          {component.nativeDeclaration?.tagName && (
-            <code>{component.nativeDeclaration.tagName}</code>
-          )}
-        </div>
+    <article className="vf-docs-component-entry">
+      <div className="vf-docs-component-entry__title">
+        <Heading level={4} size="sm">
+          <a href={componentHref(component.id)}>{component.displayName}</a>
+        </Heading>
         <Badge size="sm" tone="subtle" variant={maturity.variant}>
           {maturity.label}
         </Badge>
       </div>
-      <Text>{component.purpose}</Text>
-      <Text size="sm" tone="muted">
-        {component.package}
+      <Text className="vf-docs-component-entry__purpose" tone="muted">
+        {component.purpose}
       </Text>
+      <div className="vf-docs-component-entry__meta">
+        <code>{component.package}</code>
+        {component.nativeDeclaration?.tagName ? (
+          <code>{component.nativeDeclaration.tagName}</code>
+        ) : null}
+      </div>
     </article>
   );
 }
@@ -697,6 +697,10 @@ function ComponentDetail({
   );
 }
 
+function componentAreaAnchor(area: string) {
+  return `component-area-${area.toLowerCase().replace(/[^a-z0-9]+/gu, "-")}`;
+}
+
 const componentAreas = Object.entries(
   componentReferenceRecords.reduce<Record<string, ComponentReferenceRecord[]>>(
     (areas, component) => {
@@ -741,33 +745,75 @@ export function ComponentReferencePage({
   }
 
   return (
-    <div className="vf-docs-reference">
-      <section className="vf-docs-reference__section">
-        <Heading level={3} size="md">
-          Components
-        </Heading>
-        <Text tone="muted">
-          Choose a component to see usage, framework examples, API,
-          accessibility, styling, and known limitations.
-        </Text>
+    <div className="vf-docs-catalog">
+      <section className="vf-docs-catalog__intro">
+        <div>
+          <Text className="vf-docs-catalog__kicker" size="sm">
+            Component directory
+          </Text>
+          <Heading level={3} size="md">
+            Find the primitive or composition that matches the job.
+          </Heading>
+          <Text tone="muted">
+            Browse by functional area, then open a component for framework
+            usage, generated API, accessibility, styling, and limitations.
+          </Text>
+        </div>
+        <dl className="vf-docs-catalog__stats">
+          <div>
+            <dt>Components</dt>
+            <dd>{componentReferenceRecords.length}</dd>
+          </div>
+          <div>
+            <dt>Areas</dt>
+            <dd>{componentAreas.length}</dd>
+          </div>
+          <div>
+            <dt>Framework</dt>
+            <dd>{frameworkId}</dd>
+          </div>
+        </dl>
       </section>
 
-      {componentAreas.map(([area, components]) => (
-        <section className="vf-docs-reference__section" key={area}>
-          <Heading level={3} size="md">
-            {area}
-          </Heading>
-          <div className="vf-docs-component-index">
-            {[...components]
-              .sort((left, right) =>
-                left.displayName.localeCompare(right.displayName),
-              )
-              .map((component) => (
-                <ComponentIndexRow component={component} key={component.id} />
-              ))}
-          </div>
-        </section>
-      ))}
+      <nav aria-label="Component areas" className="vf-docs-catalog__jump-nav">
+        {componentAreas.map(([area, components]) => (
+          <a href={`#${componentAreaAnchor(area)}`} key={area}>
+            <span>{area}</span>
+            <small>{components.length}</small>
+          </a>
+        ))}
+      </nav>
+
+      <div className="vf-docs-component-groups">
+        {componentAreas.map(([area, components]) => (
+          <section
+            className="vf-docs-component-group"
+            id={componentAreaAnchor(area)}
+            key={area}
+          >
+            <div className="vf-docs-component-group__heading">
+              <div>
+                <Text className="vf-docs-catalog__kicker" size="sm">
+                  {String(components.length).padStart(2, "0")} components
+                </Text>
+                <Heading level={3} size="md">
+                  {area}
+                </Heading>
+              </div>
+              <a href="#vf-reference-main">Back to top</a>
+            </div>
+            <div className="vf-docs-component-index">
+              {[...components]
+                .sort((left, right) =>
+                  left.displayName.localeCompare(right.displayName),
+                )
+                .map((component) => (
+                  <ComponentIndexRow component={component} key={component.id} />
+                ))}
+            </div>
+          </section>
+        ))}
+      </div>
     </div>
   );
 }

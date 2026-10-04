@@ -59,29 +59,63 @@ function TokenReference({ id }: { id?: string | null }) {
     );
   }
 
+  const tokenCount = designTokenCategories.reduce(
+    (total, category) => total + category.tokens.length,
+    0,
+  );
+
   return (
-    <div className="vf-docs-reference">
-      <section className="vf-docs-reference__section">
-        <Heading level={3} size="md">
-          Canonical design-token explorer
-        </Heading>
-        <Text tone="muted">
-          Token names and category facts are read directly from canonical
-          design-token metadata. Runtime implementation remains{" "}
-          {designTokenSource.implementation}; typed ownership remains{" "}
-          {designTokenSource.typedExport}.
-        </Text>
+    <div className="vf-docs-catalog">
+      <section className="vf-docs-catalog__intro">
+        <div>
+          <Text className="vf-docs-catalog__kicker" size="sm">
+            Token system
+          </Text>
+          <Heading level={3} size="md">
+            Start with semantic categories, then inspect the exact variables.
+          </Heading>
+          <Text tone="muted">
+            Token names and category facts come directly from canonical
+            design-token metadata. The runtime implementation remains{" "}
+            {designTokenSource.implementation}.
+          </Text>
+        </div>
+        <dl className="vf-docs-catalog__stats">
+          <div>
+            <dt>Categories</dt>
+            <dd>{designTokenCategories.length}</dd>
+          </div>
+          <div>
+            <dt>Tokens</dt>
+            <dd>{tokenCount}</dd>
+          </div>
+          <div>
+            <dt>Typed source</dt>
+            <dd>Yes</dd>
+          </div>
+        </dl>
       </section>
-      <div className="vf-docs-discovery-grid">
+
+      <div className="vf-docs-discovery-tiles">
         {designTokenCategories.map((category) => (
-          <article className="vf-docs-discovery-catalog-row" key={category.id}>
-            <Heading level={3} size="md">
-              <a href={recordHref("tokens", category.id)}>{category.id}</a>
-            </Heading>
-            <Text>{category.purpose}</Text>
-            <Badge tone="subtle" variant="neutral">
-              {category.tokens.length} tokens
-            </Badge>
+          <article className="vf-docs-discovery-tile" key={category.id}>
+            <div className="vf-docs-discovery-tile__heading">
+              <div>
+                <Text className="vf-docs-catalog__kicker" size="sm">
+                  {category.tokens.length} tokens
+                </Text>
+                <Heading level={3} size="md">
+                  <a href={recordHref("tokens", category.id)}>{category.id}</a>
+                </Heading>
+              </div>
+              <span aria-hidden="true">→</span>
+            </div>
+            <Text tone="muted">{category.purpose}</Text>
+            <div className="vf-docs-discovery-tile__samples">
+              {category.tokens.slice(0, 3).map((token) => (
+                <CodeText key={token.name}>{token.name}</CodeText>
+              ))}
+            </div>
           </article>
         ))}
       </div>
@@ -141,29 +175,73 @@ function PatternReference({ id }: { id?: string | null }) {
     );
   }
 
+  const categories = new Set(
+    patternReferenceRecords.map((pattern) => pattern.category),
+  );
+
   return (
-    <div className="vf-docs-reference">
-      <section className="vf-docs-reference__section">
-        <Heading level={3} size="md">
-          Reusable application patterns
-        </Heading>
-        <Text tone="muted">
-          Pattern guidance comes from canonical pattern metadata. The curated
-          example documentation remains {patternDocumentation}.
-        </Text>
+    <div className="vf-docs-catalog">
+      <section className="vf-docs-catalog__intro">
+        <div>
+          <Text className="vf-docs-catalog__kicker" size="sm">
+            Application patterns
+          </Text>
+          <Heading level={3} size="md">
+            Reuse proven compositions before inventing application-specific UI.
+          </Heading>
+          <Text tone="muted">
+            Pattern guidance comes from canonical metadata and points back to
+            reusable VyrnForge building blocks. Curated examples remain sourced
+            from {patternDocumentation}.
+          </Text>
+        </div>
+        <dl className="vf-docs-catalog__stats">
+          <div>
+            <dt>Patterns</dt>
+            <dd>{patternReferenceRecords.length}</dd>
+          </div>
+          <div>
+            <dt>Categories</dt>
+            <dd>{categories.size}</dd>
+          </div>
+          <div>
+            <dt>Framework neutral</dt>
+            <dd>
+              {
+                patternReferenceRecords.filter(
+                  (pattern) => pattern.frameworkNeutral,
+                ).length
+              }
+            </dd>
+          </div>
+        </dl>
       </section>
-      <div className="vf-docs-discovery-grid">
+
+      <div className="vf-docs-pattern-grid">
         {patternReferenceRecords.map((pattern) => (
-          <article className="vf-docs-discovery-catalog-row" key={pattern.id}>
+          <article className="vf-docs-pattern-tile" key={pattern.id}>
+            <div className="vf-docs-pattern-tile__meta">
+              <Badge size="sm" tone="subtle" variant="neutral">
+                {pattern.category}
+              </Badge>
+              <span>{pattern.components.length} building blocks</span>
+            </div>
             <Heading level={3} size="md">
               <a href={recordHref("patterns", pattern.id)}>
                 {pattern.displayName}
               </a>
             </Heading>
-            <Text>{pattern.purpose}</Text>
-            <Badge tone="subtle" variant="neutral">
-              {pattern.category}
-            </Badge>
+            <Text tone="muted">{pattern.purpose}</Text>
+            <div className="vf-docs-pattern-tile__use">
+              <strong>Use when</strong>
+              <span>{pattern.useWhen}</span>
+            </div>
+            <a
+              className="vf-docs-pattern-tile__action"
+              href={recordHref("patterns", pattern.id)}
+            >
+              Open pattern <span aria-hidden="true">→</span>
+            </a>
           </article>
         ))}
       </div>

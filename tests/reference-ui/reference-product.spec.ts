@@ -41,42 +41,47 @@ async function expectNoPageOverflow(page: Page) {
   expect(overflow.root, message).toBeLessThanOrEqual(1);
 }
 
-async function expectDiscoveryCatalogReadable(page: Page) {
-  const row = page.locator(".vf-docs-discovery-catalog-row").first();
-  await expect(row).toBeVisible();
-
-  const metrics = await row.evaluate((element) => {
-    const description = element.querySelector<HTMLElement>(".vf-text");
-    const rowBounds = element.getBoundingClientRect();
-    const descriptionBounds = description?.getBoundingClientRect();
-    return {
-      descriptionWidth: Math.round(descriptionBounds?.width ?? 0),
-      rowWidth: Math.round(rowBounds.width),
-    };
+async function expectReferenceHero(page: Page) {
+  const hero = page.locator(".vf-reference-page__hero");
+  await expect(hero).toBeVisible();
+  const bounds = await hero.evaluate((element) => {
+    const rect = element.getBoundingClientRect();
+    return { height: Math.round(rect.height), width: Math.round(rect.width) };
   });
-
-  expect(metrics.rowWidth).toBeGreaterThan(600);
-  expect(metrics.descriptionWidth).toBeGreaterThan(260);
+  expect(bounds.width).toBeGreaterThan(700);
+  expect(bounds.height).toBeGreaterThan(180);
 }
 
-async function expectPackageFactsReadable(page: Page) {
-  const facts = page.locator(".vf-docs-package-row__facts").first();
-  await expect(facts).toBeVisible();
+async function expectComponentDirectoryReadable(page: Page) {
+  const entry = page.locator(".vf-docs-component-entry").first();
+  await expect(page.locator(".vf-docs-catalog__jump-nav")).toBeVisible();
+  await expect(entry).toBeVisible();
+  const width = await entry.evaluate((element) =>
+    Math.round(element.getBoundingClientRect().width),
+  );
+  expect(width).toBeGreaterThan(320);
+}
 
-  const metrics = await facts.evaluate((element) => {
-    const labels = [...element.querySelectorAll<HTMLElement>("strong")];
-    const apiLabel = labels.find(
-      (label) => label.textContent?.trim() === "API documentation",
-    );
-    const bounds = apiLabel?.getBoundingClientRect();
-    return {
-      height: Math.round(bounds?.height ?? 0),
-      width: Math.round(bounds?.width ?? 0),
-    };
-  });
+async function expectPackageCatalogReadable(page: Page) {
+  const entry = page.locator(".vf-docs-package-entry").first();
+  await expect(page.locator(".vf-docs-architecture-rules")).toBeVisible();
+  await expect(entry).toBeVisible();
+  const width = await entry.evaluate((element) =>
+    Math.round(element.getBoundingClientRect().width),
+  );
+  expect(width).toBeGreaterThan(320);
+}
 
-  expect(metrics.width).toBeGreaterThan(120);
-  expect(metrics.height).toBeLessThan(40);
+async function expectDiscoveryTilesReadable(
+  page: Page,
+  selector: ".vf-docs-discovery-tile" | ".vf-docs-pattern-tile",
+) {
+  const tile = page.locator(selector).first();
+  await expect(tile).toBeVisible();
+  const width = await tile.evaluate((element) =>
+    Math.round(element.getBoundingClientRect().width),
+  );
+  expect(width).toBeGreaterThan(250);
 }
 
 async function expectCodeBlockUsesBlockStyling(page: Page) {
@@ -148,14 +153,26 @@ test.describe("VyrnForge Reference product", () => {
         page.locator("header .vf-reference-shell__identity"),
       ).toContainText("Reference");
       await expectNoPageOverflow(page);
-      if (route === "token-reference" || route === "pattern-reference") {
-        await expectDiscoveryCatalogReadable(page);
+      if (route !== "overview" && route !== "getting-started") {
+        await expectReferenceHero(page);
+      }
+      if (route === "component-reference") {
+        await expectComponentDirectoryReadable(page);
       }
       if (route === "package-reference") {
-        await expectPackageFactsReadable(page);
+        await expectPackageCatalogReadable(page);
+      }
+      if (route === "token-reference") {
+        await expectDiscoveryTilesReadable(page, ".vf-docs-discovery-tile");
+      }
+      if (route === "pattern-reference") {
+        await expectDiscoveryTilesReadable(page, ".vf-docs-pattern-tile");
       }
       if (route === "executable-examples") {
         await expectCodeBlockUsesBlockStyling(page);
+        await expect(
+          page.locator(".vf-docs-example-reference__evidence"),
+        ).toBeVisible();
       }
       await capture(page, testInfo, `reference-${route}`);
     }
