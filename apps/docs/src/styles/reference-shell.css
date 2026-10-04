@@ -1084,8 +1084,7 @@
   padding: clamp(20px, 4vw, 36px);
   border-radius: var(--vf-radius-lg, 10px);
   background: var(--vf-surface-muted, var(--vf-surface-subtle, #f8fafc));
-  box-shadow: inset 0 0 0 1px
-    var(--vf-border-subtle, var(--vf-border, #e2e8f0));
+  box-shadow: inset 0 0 0 1px var(--vf-border-subtle, var(--vf-border, #e2e8f0));
 }
 
 .vf-docs-specimen-row {
@@ -1178,8 +1177,7 @@
   gap: var(--vf-space-4, 16px);
   align-items: center;
   padding-block: var(--vf-space-4, 16px);
-  border-block-end: 1px solid
-    var(--vf-border-subtle, var(--vf-border, #e2e8f0));
+  border-block-end: 1px solid var(--vf-border-subtle, var(--vf-border, #e2e8f0));
 }
 
 .vf-docs-token-type-specimen > div {
