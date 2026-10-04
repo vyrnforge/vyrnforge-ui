@@ -286,7 +286,11 @@ function PatternReference({ id }: { id?: string | null }) {
               Library and application boundary
             </Heading>
           </div>
-          <Text>{pattern.avoidWhen}</Text>
+          <Text>
+            VyrnForge owns the reusable composition and each building block's
+            interaction contract. The consuming application owns resource data,
+            routing, persistence, permissions, side effects, and workflow state.
+          </Text>
           <Text size="sm" tone="muted">
             Component-level keyboard, focus, form, and assistive-technology
             requirements still apply to every building block in the composition.
