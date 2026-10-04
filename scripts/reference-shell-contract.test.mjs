@@ -90,7 +90,10 @@ test("Docs is the single reader-facing product and renders examples in-process",
   assert.match(executableExamples, /getExecutableExampleRecord/u);
   assert.match(executableExamples, /frameworkGuidance/u);
   assert.match(executableExamples, /vf-docs-framework-example__concepts/u);
-  assert.match(executableExamples, /Consume VyrnForge the way this framework expects/u);
+  assert.match(
+    executableExamples,
+    /Consume VyrnForge the way this framework expects/u,
+  );
 });
 
 test("shared runtime requires four framework surfaces and four Reference sections", () => {
