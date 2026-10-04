@@ -107,9 +107,12 @@ test("component Reference exposes structured, linkable member API navigation", (
 
   for (const sectionId of [
     "component-overview",
-    "component-usage",
-    "component-framework-api",
+    "component-example",
+    "component-guidance",
+    "component-options",
     "component-accessibility-styling",
+    "component-related",
+    "component-framework-api",
     "api-properties",
     "api-events",
     "api-slots",
@@ -127,6 +130,20 @@ test("component Reference exposes structured, linkable member API navigation", (
   assert.match(componentReference, /componentApiMemberAnchor\(\s*"slot"/u);
   assert.match(componentReference, /componentApiMemberAnchor\(\s*"method"/u);
   assert.match(componentReference, /componentReferenceTargetHref/u);
+  assert.match(componentReference, /ComponentUsageExample/u);
+  assert.match(componentReference, /ComponentOptions/u);
+  assert.match(componentReference, /vf-docs-component-example/u);
+  assert.match(componentReference, /vf-docs-component-guidance/u);
+  assert(
+    componentReference.indexOf('id="component-example"') <
+      componentReference.indexOf('id="component-framework-api"'),
+    "component example must appear before exact API reference",
+  );
+  assert(
+    componentReference.indexOf('id="component-guidance"') <
+      componentReference.indexOf('id="component-framework-api"'),
+    "usage guidance must appear before exact API reference",
+  );
   assert.match(componentReference, /<table className="vf-docs-api-table">/u);
   assert.match(componentReference, /aria-label="On this component page"/u);
   assert.match(docsStyles, /\.vf-docs-reference-outline/u);
@@ -311,6 +328,10 @@ test("package, token, and pattern discovery avoid dashboard Card stacks", () => 
   assert.match(packageReference, /vf-docs-architecture-rules/u);
   assert.match(discovery, /vf-docs-discovery-tile/u);
   assert.match(discovery, /vf-docs-pattern-tile/u);
+  assert.match(discovery, /TokenSpecimen/u);
+  assert.match(discovery, /vf-docs-token-specimen/u);
+  assert.match(discovery, /MigratedExamplePage/u);
+  assert.match(discovery, /patternExampleId/u);
   assert.match(styles, /\.vf-docs-package-entry/u);
   assert.match(styles, /\.vf-docs-discovery-tile/u);
   assert.match(styles, /\.vf-docs-pattern-tile/u);
