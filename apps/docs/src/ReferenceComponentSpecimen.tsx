@@ -95,7 +95,7 @@ export function ReferenceComponentSpecimen({
         <div className="vf-docs-specimen-row">
           <IconButton aria-label="Settings"><Icon name="Settings" /></IconButton>
           <IconButton aria-label="Refresh"><Icon name="Refresh" /></IconButton>
-          <IconButton aria-label="More actions"><Icon name="More" /></IconButton>
+          <IconButton aria-label="More actions"><Icon name="MoreHorizontal" /></IconButton>
         </div>
       );
       break;
