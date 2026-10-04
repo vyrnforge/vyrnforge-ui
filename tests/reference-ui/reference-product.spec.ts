@@ -239,9 +239,9 @@ test.describe("VyrnForge Reference product", () => {
       name: "Search VyrnForge Reference",
     });
     await search.fill("definitely-no-reference-result");
-    await expect(
-      page.locator(".vf-reference-navigation__empty"),
-    ).toContainText("No Reference results");
+    await expect(page.locator(".vf-reference-navigation__empty")).toContainText(
+      "No Reference results",
+    );
 
     await capture(page, testInfo, "reference-dark-search-zero");
   });
