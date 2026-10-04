@@ -1,4 +1,5 @@
 import consumerKnowledgeRaw from "../../../docs/generated/consumer-knowledge.json?raw";
+import componentMetadataRaw from "../../../docs/metadata/components.json?raw";
 import packageMetadataRaw from "../../../docs/metadata/packages.json?raw";
 
 export type ReferenceGuidance = {
@@ -55,6 +56,35 @@ export type ComponentReferenceRecord = {
   frameworks: Record<ReferenceFrameworkId, ReferenceFrameworkUsage>;
 };
 
+export type CanonicalComponentDocumentation = {
+  id: string;
+  displayName: string;
+  owner: string;
+  sourcePath: string;
+  publicExport: boolean;
+  since: string;
+  docsPath: string;
+  playgroundPath: string;
+  accessibility: {
+    documentationPath: string;
+    keyboardDocumentation: string;
+  };
+  purpose: string;
+  useWhen: string;
+  avoidWhen: string;
+  relatedComponents: string[];
+  cssClasses: string[];
+  cssVariables: string[];
+  importExample: string;
+  basicUsageExample: string;
+  accessibilityNotes: string;
+  aiUsageNotes: string;
+};
+
+type ComponentMetadata = {
+  components: CanonicalComponentDocumentation[];
+};
+
 type GeneratedPackageRecord = {
   name: string;
   purpose: string;
@@ -108,6 +138,7 @@ export type PackageReferenceRecord = GeneratedPackageRecord &
   >;
 
 const knowledge = JSON.parse(consumerKnowledgeRaw) as ConsumerKnowledge;
+const componentMetadata = JSON.parse(componentMetadataRaw) as ComponentMetadata;
 const packageMetadata = JSON.parse(packageMetadataRaw) as PackageMetadata;
 const canonicalPackageByName = new Map(
   packageMetadata.packages.map((entry) => [entry.name, entry]),
@@ -156,6 +187,12 @@ export const packageDependencyRules = packageMetadata.dependencyRules;
 
 export function getComponentReferenceRecord(componentId: string) {
   return componentReferenceRecords.find(
+    (component) => component.id === componentId,
+  );
+}
+
+export function getComponentDocumentationRecord(componentId: string) {
+  return componentMetadata.components.find(
     (component) => component.id === componentId,
   );
 }
