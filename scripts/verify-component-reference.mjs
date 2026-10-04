@@ -213,11 +213,15 @@ export function verifyComponentReference({ root = repositoryRoot } = {}) {
   for (const marker of [
     "framework-api-reference.json",
     "componentReferenceRecords",
+    "getComponentDocumentationRecord",
     "getReferenceRecordRoute",
     "component-usage",
+    "component-configuration",
+    "component-behavior",
+    "component-accessibility",
     "component-framework-api",
-    "component-accessibility-styling",
-    "Accessibility guidance",
+    "component-styling",
+    "Semantics and keyboard expectations",
   ]) {
     if (!docsPage.includes(marker))
       failures.push(`consumer knowledge viewer is missing ${marker}`);
@@ -278,7 +282,7 @@ export function verifyComponentReference({ root = repositoryRoot } = {}) {
     "packageReferenceRecords",
     "packageDependencyRules",
     "getReferenceRecordRoute",
-    "Public entry points",
+    "Supported entry points",
   ]) {
     if (!packagePage.includes(marker)) {
       failures.push(`package reference viewer is missing ${marker}`);
