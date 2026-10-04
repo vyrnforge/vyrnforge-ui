@@ -45,7 +45,11 @@ export function ReferenceLiveExample({
   title: string;
   version: string;
 }) {
-  const resolution = resolveDocumentationExample(exampleId, frameworkId, version);
+  const resolution = resolveDocumentationExample(
+    exampleId,
+    frameworkId,
+    version,
+  );
 
   if (!resolution.available) {
     return (
