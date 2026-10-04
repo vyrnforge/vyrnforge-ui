@@ -7,7 +7,9 @@ import {
 } from "@vyrnforge/ui-components";
 import { getReferenceRecordRoute } from "../../../docs/reference/referenceRuntime";
 import type { ReferenceRecordSelection } from "./App";
-import { referenceModel } from "./docsContext";
+import { referenceModel, type DocsFrameworkId } from "./docsContext";
+import { ReferenceLiveExample } from "./ReferenceLiveExample";
+import { ReferenceTokenGallery } from "./ReferenceTokenGallery";
 import {
   designTokenCategories,
   designTokenSource,
@@ -96,41 +98,49 @@ function TokenReference({ id }: { id?: string | null }) {
         </dl>
       </section>
 
-      <div className="vf-docs-discovery-tiles">
-        {designTokenCategories.map((category) => (
-          <article className="vf-docs-discovery-tile" key={category.id}>
-            <div className="vf-docs-discovery-tile__heading">
-              <div>
-                <Text className="vf-docs-catalog__kicker" size="sm">
-                  {category.tokens.length} tokens
-                </Text>
-                <Heading level={3} size="md">
-                  <a href={recordHref("tokens", category.id)}>{category.id}</a>
-                </Heading>
-              </div>
-              <span aria-hidden="true">→</span>
-            </div>
-            <Text tone="muted">{category.purpose}</Text>
-            <div className="vf-docs-discovery-tile__samples">
-              {category.tokens.slice(0, 3).map((token) => (
-                <CodeText key={token.name}>{token.name}</CodeText>
-              ))}
-            </div>
-          </article>
-        ))}
-      </div>
+      <ReferenceTokenGallery categories={designTokenCategories} />
     </div>
   );
 }
 
-function PatternReference({ id }: { id?: string | null }) {
+const patternExampleIds: Partial<Record<string, string>> = {
+  "resource-list": "pattern-resource-list",
+  detail: "pattern-detail",
+  settings: "pattern-settings",
+  form: "pattern-form",
+  "filter-form": "pattern-filter-form",
+  "assignment-patterns": "pattern-assignments",
+  "empty-error-loading": "pattern-feedback-states",
+  "admin-shell": "pattern-admin-shell",
+  "customer-portal-shell": "pattern-customer-portal",
+};
+
+function PatternReference({
+  frameworkId,
+  id,
+  version,
+}: {
+  frameworkId: DocsFrameworkId;
+  id?: string | null;
+  version: string;
+}) {
   if (id) {
     const pattern = getPatternReferenceRecord(id);
     if (!pattern) return <MissingRecord label="Pattern" id={id} />;
 
+    const exampleId = patternExampleIds[pattern.id];
+
     return (
-      <div className="vf-docs-reference">
+      <div className="vf-docs-reference vf-docs-pattern-detail">
         <ReferenceBack href="#/pattern-reference" label="Patterns" />
+        {exampleId ? (
+          <ReferenceLiveExample
+            exampleId={exampleId}
+            frameworkId={frameworkId}
+            title={pattern.displayName}
+            version={version}
+          />
+        ) : null}
         <section className="vf-docs-reference__section">
           <Heading level={3} size="md">
             {pattern.displayName}
@@ -217,6 +227,37 @@ function PatternReference({ id }: { id?: string | null }) {
         </dl>
       </section>
 
+      <section className="vf-docs-pattern-featured">
+        <div className="vf-docs-catalog__section-heading">
+          <div>
+            <Text className="vf-docs-catalog__kicker" size="sm">
+              Interactive patterns
+            </Text>
+            <Heading level={3} size="md">
+              See the composition before reading the contract.
+            </Heading>
+            <Text tone="muted">
+              These previews render the existing VyrnForge examples directly.
+              Open a pattern for use/avoid guidance and its reusable building
+              blocks.
+            </Text>
+          </div>
+        </div>
+        {["admin-shell", "settings", "resource-list"].map((patternId) => {
+          const pattern = getPatternReferenceRecord(patternId);
+          const exampleId = patternExampleIds[patternId];
+          return pattern && exampleId ? (
+            <ReferenceLiveExample
+              exampleId={exampleId}
+              frameworkId={frameworkId}
+              key={patternId}
+              title={pattern.displayName}
+              version={version}
+            />
+          ) : null;
+        })}
+      </section>
+
       <div className="vf-docs-pattern-grid">
         {patternReferenceRecords.map((pattern) => (
           <article className="vf-docs-pattern-tile" key={pattern.id}>
@@ -274,11 +315,15 @@ function MissingRecord({ label, id }: { label: string; id: string }) {
 }
 
 export function DiscoveryReferencePage({
+  frameworkId,
   recordDomain,
   referenceRecord,
+  version,
 }: {
+  frameworkId: DocsFrameworkId;
   recordDomain: "tokens" | "patterns";
   referenceRecord: ReferenceRecordSelection | null;
+  version: string;
 }) {
   if (recordDomain === "tokens") {
     return (
@@ -290,7 +335,9 @@ export function DiscoveryReferencePage({
 
   return (
     <PatternReference
+      frameworkId={frameworkId}
       id={referenceRecord?.domain === "patterns" ? referenceRecord.id : null}
+      version={version}
     />
   );
 }

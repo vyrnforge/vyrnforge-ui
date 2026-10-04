@@ -102,6 +102,122 @@ function PackageIndexRow({
   );
 }
 
+function PackageArchitecture() {
+  const byName = new Map(
+    packageReferenceRecords.map((packageInfo) => [
+      packageInfo.name,
+      packageInfo,
+    ]),
+  );
+  const layers = [
+    {
+      label: "Foundation",
+      description: "Tokens, themes, density, typography, motion, and layers.",
+      packages: ["@vyrnforge/ui-core"],
+    },
+    {
+      label: "Shared behavior",
+      description: "Framework-neutral state and interaction contracts.",
+      packages: ["@vyrnforge/ui-behaviors"],
+    },
+    {
+      label: "Canonical browser surface",
+      description: "Native HTML / Custom Elements implementation.",
+      packages: ["@vyrnforge/ui-elements"],
+    },
+    {
+      label: "Framework surfaces",
+      description: "Idiomatic adapters over shared VyrnForge foundations.",
+      packages: [
+        "@vyrnforge/ui-components",
+        "@vyrnforge/ui-angular",
+        "@vyrnforge/ui-vue",
+      ],
+    },
+    {
+      label: "Specialized modules",
+      description:
+        "Focused advanced capabilities that build on the foundation.",
+      packages: ["@vyrnforge/ui-data-grid"],
+    },
+  ];
+
+  const entryPoints = [
+    ["Native HTML", "@vyrnforge/ui-elements"],
+    ["React", "@vyrnforge/ui-components"],
+    ["Angular", "@vyrnforge/ui-angular"],
+    ["Vue", "@vyrnforge/ui-vue"],
+    ["Design foundation", "@vyrnforge/ui-core"],
+    ["Enterprise grid", "@vyrnforge/ui-data-grid"],
+  ] as const;
+
+  return (
+    <section className="vf-docs-package-architecture">
+      <div className="vf-docs-catalog__section-heading">
+        <div>
+          <Text className="vf-docs-catalog__kicker" size="sm">
+            System architecture
+          </Text>
+          <Heading level={3} size="md">
+            One foundation, multiple first-class surfaces.
+          </Heading>
+          <Text tone="muted">
+            Framework packages are adapters over shared tokens, behaviors, and
+            canonical browser contracts. Choose the consumer surface you need
+            without creating a second component system.
+          </Text>
+        </div>
+      </div>
+
+      <div className="vf-docs-package-architecture__diagram">
+        {layers.map((layer, layerIndex) => (
+          <div className="vf-docs-package-layer" key={layer.label}>
+            <div className="vf-docs-package-layer__label">
+              <span>{String(layerIndex + 1).padStart(2, "0")}</span>
+              <div>
+                <strong>{layer.label}</strong>
+                <Text size="sm" tone="muted">
+                  {layer.description}
+                </Text>
+              </div>
+            </div>
+            <div className="vf-docs-package-layer__packages">
+              {layer.packages.map((name) => {
+                const packageInfo = byName.get(name);
+                return packageInfo ? (
+                  <a href={packageHref(name)} key={name}>
+                    <code>{name}</code>
+                    <span>{packageInfo.purpose}</span>
+                  </a>
+                ) : null;
+              })}
+            </div>
+          </div>
+        ))}
+      </div>
+
+      <div className="vf-docs-package-entry-points">
+        <div>
+          <Text className="vf-docs-catalog__kicker" size="sm">
+            Consumer entry points
+          </Text>
+          <Heading level={3} size="sm">
+            Start here
+          </Heading>
+        </div>
+        <div className="vf-docs-package-entry-points__grid">
+          {entryPoints.map(([label, name]) => (
+            <a href={packageHref(name)} key={name}>
+              <span>{label}</span>
+              <code>{name}</code>
+            </a>
+          ))}
+        </div>
+      </div>
+    </section>
+  );
+}
+
 function PackageDetail({
   packageInfo,
 }: {
@@ -126,6 +242,20 @@ function PackageDetail({
         </div>
         <Text>{packageInfo.purpose}</Text>
         <Text tone="muted">{packageInfo.notes}</Text>
+        <div className="vf-docs-package-detail__position">
+          <div>
+            <strong>Depends on</strong>
+            <span>
+              {packageInfo.dependsOn.length > 0
+                ? packageInfo.dependsOn.join(" → ")
+                : "Foundation package"}
+            </span>
+          </div>
+          <div>
+            <strong>Consumer role</strong>
+            <span>{packageInfo.owns.slice(0, 2).join(" · ")}</span>
+          </div>
+        </div>
         <PackageFacts packageInfo={packageInfo} />
       </section>
 
@@ -219,6 +349,8 @@ export function PackageReferencePage({ packageId }: PackageReferencePageProps) {
           </div>
         </dl>
       </section>
+
+      <PackageArchitecture />
 
       <section className="vf-docs-package-map">
         <div className="vf-docs-catalog__section-heading">

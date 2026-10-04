@@ -88,6 +88,12 @@ test("Docs is the single reader-facing product and renders examples in-process",
   assert.doesNotMatch(docsPage, /ReferencePreview/u);
   assert.match(migratedExamples, /vf-docs-example-stage/u);
   assert.match(executableExamples, /getExecutableExampleRecord/u);
+  assert.match(executableExamples, /frameworkGuidance/u);
+  assert.match(executableExamples, /vf-docs-framework-example__concepts/u);
+  assert.match(
+    executableExamples,
+    /Consume VyrnForge the way this framework expects/u,
+  );
 });
 
 test("shared runtime requires four framework surfaces and four Reference sections", () => {
@@ -277,14 +283,21 @@ test("reading templates use the unified main landmark and source-driven deep lin
   );
 });
 
-test("component reference is scan-first without generic Card section wrappers", () => {
+test("component reference leads with real VyrnForge specimens before generated contracts", () => {
   const componentReference = read("apps/docs/src/ComponentReferencePage.tsx");
+  const gallery = read("apps/docs/src/ReferenceComponentGallery.tsx");
+  const specimen = read("apps/docs/src/ReferenceComponentSpecimen.tsx");
   const styles = read("apps/docs/src/styles/reference-shell.css");
 
   assert.doesNotMatch(
     componentReference,
     /\bCard\b|ComponentIndexCard|vf-docs-reference-card/u,
   );
+  assert.match(componentReference, /ReferenceComponentGallery/u);
+  assert.match(componentReference, /ReferenceComponentSpecimen/u);
+  assert.match(gallery, /@vyrnforge\/ui-components/u);
+  assert.match(gallery, /vf-docs-component-showcase__stage/u);
+  assert.match(specimen, /vf-docs-component-specimen__stage/u);
   assert.match(componentReference, /ComponentIndexRow/u);
   assert.match(componentReference, /vf-docs-catalog__jump-nav/u);
   assert.match(componentReference, /vf-docs-component-group/u);
@@ -296,9 +309,11 @@ test("component reference is scan-first without generic Card section wrappers", 
   assert.match(styles, /\.vf-docs-api-table thead th/u);
 });
 
-test("package, token, and pattern discovery avoid dashboard Card stacks", () => {
+test("package, token, and pattern discovery lead with architecture and live visual evidence", () => {
   const packageReference = read("apps/docs/src/PackageReferencePage.tsx");
   const discovery = read("apps/docs/src/DiscoveryReferencePage.tsx");
+  const tokenGallery = read("apps/docs/src/ReferenceTokenGallery.tsx");
+  const liveExample = read("apps/docs/src/ReferenceLiveExample.tsx");
   const styles = read("apps/docs/src/styles/reference-shell.css");
 
   assert.doesNotMatch(
@@ -306,14 +321,18 @@ test("package, token, and pattern discovery avoid dashboard Card stacks", () => 
     /\bCard\b|PackageIndexCard|vf-docs-package-card/u,
   );
   assert.doesNotMatch(discovery, /\bCard\b|vf-docs-discovery-row-card/u);
+  assert.match(packageReference, /PackageArchitecture/u);
+  assert.match(packageReference, /vf-docs-package-architecture/u);
   assert.match(packageReference, /PackageIndexRow/u);
-  assert.match(packageReference, /vf-docs-package-entry/u);
-  assert.match(packageReference, /vf-docs-architecture-rules/u);
-  assert.match(discovery, /vf-docs-discovery-tile/u);
-  assert.match(discovery, /vf-docs-pattern-tile/u);
-  assert.match(styles, /\.vf-docs-package-entry/u);
-  assert.match(styles, /\.vf-docs-discovery-tile/u);
-  assert.match(styles, /\.vf-docs-pattern-tile/u);
+  assert.match(discovery, /ReferenceTokenGallery/u);
+  assert.match(discovery, /ReferenceLiveExample/u);
+  assert.match(tokenGallery, /vf-docs-token-swatch/u);
+  assert.match(tokenGallery, /vf-docs-token-type-specimen/u);
+  assert.match(tokenGallery, /vf-docs-token-density-specimen/u);
+  assert.match(liveExample, /vf-docs-live-example__stage/u);
+  assert.match(styles, /\.vf-docs-package-architecture/u);
+  assert.match(styles, /\.vf-docs-token-gallery/u);
+  assert.match(styles, /\.vf-docs-live-example/u);
   assert.match(styles, /\.vf-docs-catalog__intro/u);
   assert.doesNotMatch(styles, /\.vf-docs-preview(?:__|\s*\{)/u);
   assert.match(packageReference, /getReferenceRecordRoute/u);

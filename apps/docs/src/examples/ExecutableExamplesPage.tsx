@@ -10,6 +10,48 @@ function stringList(value: unknown) {
     : [];
 }
 
+const frameworkGuidance = {
+  "native-html": {
+    title: "Native HTML / Custom Elements",
+    packageName: "@vyrnforge/ui-elements",
+    concepts: [
+      "Typed vf-* Custom Elements and generated binding helpers",
+      "Canonical DOM events for actions and value changes",
+      "ElementInternals-backed form participation",
+    ],
+  },
+  react: {
+    title: "React",
+    packageName: "@vyrnforge/ui-components",
+    concepts: [
+      "First-class React components from the public package",
+      "Controlled state and idiomatic React callbacks",
+      "Refs and composition without application state coupling",
+    ],
+  },
+  angular: {
+    title: "Angular",
+    packageName: "@vyrnforge/ui-angular",
+    concepts: [
+      "Generated Angular facades over canonical Custom Elements",
+      "Reactive and template-driven Forms integration",
+      "Typed outputs, slots, and imperative references",
+    ],
+  },
+  vue: {
+    title: "Vue",
+    packageName: "@vyrnforge/ui-vue",
+    concepts: [
+      "Generated Vue component facades over canonical elements",
+      "Vue-native props, emits, slots, and v-model mappings",
+      "Canonical DOM events remain available when needed",
+    ],
+  },
+} satisfies Record<
+  DocsFrameworkId,
+  { title: string; packageName: string; concepts: string[] }
+>;
+
 export function ExecutableExamplesPage({
   frameworkId,
   version,
@@ -49,20 +91,23 @@ export function ExecutableExamplesPage({
     ...example.verification,
     ...stringList(example.fixtureContract.completedEvidence),
   ].filter((item, index, values) => values.indexOf(item) === index);
+  const surfaceGuidance = frameworkGuidance[frameworkId];
 
   return (
-    <div className="vf-docs-example-reference">
-      <section className="vf-docs-example-reference__summary">
+    <div className="vf-docs-framework-example">
+      <section className="vf-docs-framework-example__intro">
         <div>
           <Text className="vf-docs-catalog__kicker" size="sm">
-            Packed consumer evidence
+            {surfaceGuidance.title}
           </Text>
           <Heading level={3} size="md">
-            {example.frameworkLabel} executable consumer
+            Consume VyrnForge the way this framework expects.
           </Heading>
           <Text tone="muted">
-            Verified against packed VyrnForge packages rather than a docs-only
-            or Playground implementation.
+            This is the real executable consumer used to verify the public
+            package. Verified against packed VyrnForge packages, it demonstrates
+            the framework idioms VyrnForge supports rather than a docs-only
+            approximation.
           </Text>
         </div>
         <Badge tone="subtle" variant="success">
@@ -70,63 +115,58 @@ export function ExecutableExamplesPage({
         </Badge>
       </section>
 
-      <dl className="vf-docs-example-reference__facts">
-        <div>
-          <dt>Framework</dt>
-          <dd>{example.frameworkLabel}</dd>
-        </div>
-        <div>
-          <dt>Runtime</dt>
-          <dd>{runtime}</dd>
-        </div>
-        <div>
-          <dt>Fixture</dt>
-          <dd>
-            <CodeText>{example.fixtureId}</CodeText>
-          </dd>
-        </div>
-        <div>
-          <dt>Source</dt>
-          <dd>
-            <CodeText>{resolution.implementation.sourcePath}</CodeText>
-          </dd>
-        </div>
-      </dl>
-
-      <div className="vf-docs-example-reference__workbench">
-        <section className="vf-docs-example-reference__source">
+      <div className="vf-docs-framework-example__surface">
+        <section className="vf-docs-framework-example__source">
           <div className="vf-docs-catalog__section-heading">
             <div>
               <Text className="vf-docs-catalog__kicker" size="sm">
                 Executable source
               </Text>
               <Heading level={3} size="md">
-                Consumer entry point
+                {surfaceGuidance.packageName}
               </Heading>
+              <Text size="sm" tone="muted">
+                <code>{resolution.implementation.sourcePath}</code>
+              </Text>
             </div>
           </div>
           <CodeBlock code={example.source} />
         </section>
 
-        <aside className="vf-docs-example-reference__evidence">
+        <aside className="vf-docs-framework-example__concepts">
           <div>
             <Text className="vf-docs-catalog__kicker" size="sm">
-              Verification
+              Framework contract
             </Text>
             <Heading level={3} size="sm">
-              What this example proves
+              What to learn from this example
             </Heading>
           </div>
-          <ol>
-            {verification.map((item, index) => (
-              <li key={item}>
-                <span>{String(index + 1).padStart(2, "0")}</span>
-                <Text size="sm">{item}</Text>
-              </li>
+          <ul>
+            {surfaceGuidance.concepts.map((concept) => (
+              <li key={concept}>{concept}</li>
             ))}
-          </ol>
+          </ul>
+          <dl>
+            <div>
+              <dt>Runtime</dt>
+              <dd>{runtime}</dd>
+            </div>
+            <div>
+              <dt>Public package</dt>
+              <dd>
+                <code>{surfaceGuidance.packageName}</code>
+              </dd>
+            </div>
+            <div>
+              <dt>Fixture</dt>
+              <dd>
+                <code>{example.fixtureId}</code>
+              </dd>
+            </div>
+          </dl>
           {rendererPackages.length > 0 ? (
-            <div className="vf-docs-example-reference__packages">
+            <div className="vf-docs-framework-example__packages">
               <Text size="sm" tone="muted">
                 Renderer packages
               </Text>
@@ -135,11 +175,27 @@ export function ExecutableExamplesPage({
               ))}
             </div>
           ) : null}
-          <Text size="sm" tone="muted">
-            Additional fixture files: {example.exampleFiles.length}
-          </Text>
         </aside>
       </div>
+
+      <section className="vf-docs-framework-example__verification">
+        <div>
+          <Text className="vf-docs-catalog__kicker" size="sm">
+            Packed verification
+          </Text>
+          <Heading level={3} size="sm">
+            What CI proves about this consumer
+          </Heading>
+        </div>
+        <ol>
+          {verification.map((item, index) => (
+            <li key={item}>
+              <span>{String(index + 1).padStart(2, "0")}</span>
+              <Text size="sm">{item}</Text>
+            </li>
+          ))}
+        </ol>
+      </section>
     </div>
   );
 }

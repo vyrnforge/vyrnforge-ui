@@ -52,7 +52,13 @@ async function expectReferenceHero(page: Page) {
   expect(bounds.height).toBeGreaterThan(180);
 }
 
-async function expectComponentDirectoryReadable(page: Page) {
+async function expectComponentReferenceIsVisual(page: Page) {
+  await expect(page.locator(".vf-docs-component-showcase")).toBeVisible();
+  await expect(
+    page.locator(".vf-docs-component-showcase__stage").first(),
+  ).toBeVisible();
+  await expect(page.getByRole("button", { name: "Create" })).toBeVisible();
+
   const entry = page.locator(".vf-docs-component-entry").first();
   await expect(page.locator(".vf-docs-catalog__jump-nav")).toBeVisible();
   await expect(entry).toBeVisible();
@@ -62,26 +68,43 @@ async function expectComponentDirectoryReadable(page: Page) {
   expect(width).toBeGreaterThan(320);
 }
 
-async function expectPackageCatalogReadable(page: Page) {
-  const entry = page.locator(".vf-docs-package-entry").first();
+async function expectPackageReferenceExplainsArchitecture(page: Page) {
+  await expect(page.locator(".vf-docs-package-architecture")).toBeVisible();
+  await expect(
+    page.locator(".vf-docs-package-layer__packages a").first(),
+  ).toBeVisible();
+  await expect(
+    page.getByText("One foundation, multiple first-class surfaces."),
+  ).toBeVisible();
   await expect(page.locator(".vf-docs-architecture-rules")).toBeVisible();
-  await expect(entry).toBeVisible();
-  const width = await entry.evaluate((element) =>
-    Math.round(element.getBoundingClientRect().width),
-  );
-  expect(width).toBeGreaterThan(320);
 }
 
-async function expectDiscoveryTilesReadable(
-  page: Page,
-  selector: ".vf-docs-discovery-tile" | ".vf-docs-pattern-tile",
-) {
-  const tile = page.locator(selector).first();
-  await expect(tile).toBeVisible();
-  const width = await tile.evaluate((element) =>
-    Math.round(element.getBoundingClientRect().width),
-  );
-  expect(width).toBeGreaterThan(250);
+async function expectTokenReferenceIsVisual(page: Page) {
+  await expect(page.locator(".vf-docs-token-gallery")).toBeVisible();
+  await expect(page.locator(".vf-docs-token-swatch").first()).toBeVisible();
+  await expect(
+    page.locator(".vf-docs-token-type-specimen").first(),
+  ).toBeVisible();
+  await expect(
+    page.locator(".vf-docs-token-density-specimen").first(),
+  ).toBeVisible();
+}
+
+async function expectPatternReferenceIsLive(page: Page) {
+  await expect(page.locator(".vf-docs-pattern-featured")).toBeVisible();
+  await expect(page.locator(".vf-docs-live-example").first()).toBeVisible();
+  await expect(
+    page.locator(".vf-docs-live-example__stage").first(),
+  ).toBeVisible();
+  await expect(page.locator(".vf-docs-pattern-tile").first()).toBeVisible();
+}
+
+async function expectFrameworkExampleIsDeveloperFirst(page: Page) {
+  await expect(page.locator(".vf-docs-framework-example")).toBeVisible();
+  await expect(
+    page.locator(".vf-docs-framework-example__concepts"),
+  ).toBeVisible();
+  await expect(page.getByText("What to learn from this example")).toBeVisible();
 }
 
 async function expectCodeBlockUsesBlockStyling(page: Page) {
@@ -157,25 +180,34 @@ test.describe("VyrnForge Reference product", () => {
         await expectReferenceHero(page);
       }
       if (route === "component-reference") {
-        await expectComponentDirectoryReadable(page);
+        await expectComponentReferenceIsVisual(page);
       }
       if (route === "package-reference") {
-        await expectPackageCatalogReadable(page);
+        await expectPackageReferenceExplainsArchitecture(page);
       }
       if (route === "token-reference") {
-        await expectDiscoveryTilesReadable(page, ".vf-docs-discovery-tile");
+        await expectTokenReferenceIsVisual(page);
       }
       if (route === "pattern-reference") {
-        await expectDiscoveryTilesReadable(page, ".vf-docs-pattern-tile");
+        await expectPatternReferenceIsLive(page);
       }
       if (route === "executable-examples") {
         await expectCodeBlockUsesBlockStyling(page);
-        await expect(
-          page.locator(".vf-docs-example-reference__evidence"),
-        ).toBeVisible();
+        await expectFrameworkExampleIsDeveloperFirst(page);
       }
       await capture(page, testInfo, `reference-${route}`);
     }
+  });
+
+  test("component detail shows a live specimen before API reference", async ({
+    page,
+  }, testInfo) => {
+    await openReference(page, "components/button");
+    await expect(page.locator(".vf-docs-component-specimen")).toBeVisible();
+    await expect(page.getByRole("button", { name: "Primary" })).toBeVisible();
+    await expect(page.locator(".vf-docs-api-table").first()).toBeVisible();
+    await expectNoPageOverflow(page);
+    await capture(page, testInfo, "reference-component-button");
   });
 
   test("theme, route focus, and search states are accessible", async ({
@@ -207,7 +239,7 @@ test.describe("VyrnForge Reference product", () => {
       name: "Search VyrnForge Reference",
     });
     await search.fill("definitely-no-reference-result");
-    await expect(page.getByRole("status")).toContainText(
+    await expect(page.locator(".vf-reference-navigation__empty")).toContainText(
       "No Reference results",
     );
 

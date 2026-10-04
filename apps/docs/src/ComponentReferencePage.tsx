@@ -8,6 +8,8 @@ import {
 } from "./componentApiMember";
 import { getComponentMaturityPresentation } from "./componentMaturityPresentation";
 import { referenceModel, type DocsFrameworkId } from "./docsContext";
+import { ReferenceComponentGallery } from "./ReferenceComponentGallery";
+import { ReferenceComponentSpecimen } from "./ReferenceComponentSpecimen";
 import {
   componentReferenceRecords,
   getComponentReferenceRecord,
@@ -480,6 +482,7 @@ function ComponentOutline({
 }) {
   const sections = [
     ["component-overview", "Overview"],
+    ["component-specimen", "Live specimen"],
     ["component-usage", "Usage"],
     ["component-framework-api", "API"],
     ["component-accessibility-styling", "Accessibility & styling"],
@@ -605,6 +608,13 @@ function ComponentDetail({
           </div>
           <Text>{component.purpose}</Text>
         </section>
+
+        <div id="component-specimen">
+          <ReferenceComponentSpecimen
+            componentId={component.id}
+            relatedPatterns={relatedPatterns.map((pattern) => pattern.id)}
+          />
+        </div>
 
         <section className="vf-docs-reference__section" id="component-usage">
           <Heading level={3} size="md">
@@ -745,74 +755,80 @@ export function ComponentReferencePage({
   }
 
   return (
-    <div className="vf-docs-catalog">
-      <section className="vf-docs-catalog__intro">
-        <div>
-          <Text className="vf-docs-catalog__kicker" size="sm">
-            Component directory
-          </Text>
-          <Heading level={3} size="md">
-            Find the primitive or composition that matches the job.
-          </Heading>
-          <Text tone="muted">
-            Browse by functional area, then open a component for framework
-            usage, generated API, accessibility, styling, and limitations.
-          </Text>
-        </div>
-        <dl className="vf-docs-catalog__stats">
+    <div className="vf-docs-component-reference">
+      <ReferenceComponentGallery />
+      <div className="vf-docs-catalog">
+        <section className="vf-docs-catalog__intro">
           <div>
-            <dt>Components</dt>
-            <dd>{componentReferenceRecords.length}</dd>
+            <Text className="vf-docs-catalog__kicker" size="sm">
+              Component directory
+            </Text>
+            <Heading level={3} size="md">
+              Find the primitive or composition that matches the job.
+            </Heading>
+            <Text tone="muted">
+              Browse by functional area, then open a component for framework
+              usage, generated API, accessibility, styling, and limitations.
+            </Text>
           </div>
-          <div>
-            <dt>Areas</dt>
-            <dd>{componentAreas.length}</dd>
-          </div>
-          <div>
-            <dt>Framework</dt>
-            <dd>{frameworkId}</dd>
-          </div>
-        </dl>
-      </section>
+          <dl className="vf-docs-catalog__stats">
+            <div>
+              <dt>Components</dt>
+              <dd>{componentReferenceRecords.length}</dd>
+            </div>
+            <div>
+              <dt>Areas</dt>
+              <dd>{componentAreas.length}</dd>
+            </div>
+            <div>
+              <dt>Framework</dt>
+              <dd>{frameworkId}</dd>
+            </div>
+          </dl>
+        </section>
 
-      <nav aria-label="Component areas" className="vf-docs-catalog__jump-nav">
-        {componentAreas.map(([area, components]) => (
-          <a href={`#${componentAreaAnchor(area)}`} key={area}>
-            <span>{area}</span>
-            <small>{components.length}</small>
-          </a>
-        ))}
-      </nav>
+        <nav aria-label="Component areas" className="vf-docs-catalog__jump-nav">
+          {componentAreas.map(([area, components]) => (
+            <a href={`#${componentAreaAnchor(area)}`} key={area}>
+              <span>{area}</span>
+              <small>{components.length}</small>
+            </a>
+          ))}
+        </nav>
 
-      <div className="vf-docs-component-groups">
-        {componentAreas.map(([area, components]) => (
-          <section
-            className="vf-docs-component-group"
-            id={componentAreaAnchor(area)}
-            key={area}
-          >
-            <div className="vf-docs-component-group__heading">
-              <div>
-                <Text className="vf-docs-catalog__kicker" size="sm">
-                  {String(components.length).padStart(2, "0")} components
-                </Text>
-                <Heading level={3} size="md">
-                  {area}
-                </Heading>
+        <div className="vf-docs-component-groups">
+          {componentAreas.map(([area, components]) => (
+            <section
+              className="vf-docs-component-group"
+              id={componentAreaAnchor(area)}
+              key={area}
+            >
+              <div className="vf-docs-component-group__heading">
+                <div>
+                  <Text className="vf-docs-catalog__kicker" size="sm">
+                    {String(components.length).padStart(2, "0")} components
+                  </Text>
+                  <Heading level={3} size="md">
+                    {area}
+                  </Heading>
+                </div>
+                <a href="#vf-reference-main">Back to top</a>
               </div>
-              <a href="#vf-reference-main">Back to top</a>
-            </div>
-            <div className="vf-docs-component-index">
-              {[...components]
-                .sort((left, right) =>
-                  left.displayName.localeCompare(right.displayName),
-                )
-                .map((component) => (
-                  <ComponentIndexRow component={component} key={component.id} />
-                ))}
-            </div>
-          </section>
-        ))}
+              <div className="vf-docs-component-index">
+                {[...components]
+                  .sort((left, right) =>
+                    left.displayName.localeCompare(right.displayName),
+                  )
+                  .map((component) => (
+                    <ComponentIndexRow
+                      component={component}
+                      key={component.id}
+                    />
+                  ))}
+              </div>
+            </section>
+          ))}
+        </div>
       </div>
     </div>
   );
