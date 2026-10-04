@@ -108,8 +108,12 @@ test("component Reference exposes structured, linkable member API navigation", (
   for (const sectionId of [
     "component-overview",
     "component-usage",
+    "component-configuration",
+    "component-behavior",
+    "component-accessibility",
     "component-framework-api",
-    "component-accessibility-styling",
+    "component-styling",
+    "component-related",
     "api-properties",
     "api-events",
     "api-slots",
@@ -151,6 +155,10 @@ test("component pages bind generated API to the selected framework and version",
   assert.match(docsPage, /version=\{version\}/u);
   assert.match(referenceShell, /version=\{docsVersion\.version\}/u);
   assert.match(componentReference, /FrameworkApiPanel/u);
+  assert.match(componentReference, /getComponentDocumentationRecord/u);
+  assert.match(componentReference, /CodeBlock/u);
+  assert.match(componentReference, /Start with the supported path/u);
+  assert.match(componentReference, /State and interaction contract/u);
   assert.match(docsPage, /MigratedExamplePage/u);
   assert(registry.pages.some((page) => page.renderer === "example"));
   assert(
@@ -309,8 +317,12 @@ test("package, token, and pattern discovery avoid dashboard Card stacks", () => 
   assert.match(packageReference, /PackageIndexRow/u);
   assert.match(packageReference, /vf-docs-package-entry/u);
   assert.match(packageReference, /vf-docs-architecture-rules/u);
+  assert.match(packageReference, /vf-docs-package-doc__boundaries/u);
+  assert.match(packageReference, /Public package surface/u);
   assert.match(discovery, /vf-docs-discovery-tile/u);
   assert.match(discovery, /vf-docs-pattern-tile/u);
+  assert.match(discovery, /vf-docs-token-table/u);
+  assert.match(discovery, /vf-docs-pattern-doc__components/u);
   assert.match(styles, /\.vf-docs-package-entry/u);
   assert.match(styles, /\.vf-docs-discovery-tile/u);
   assert.match(styles, /\.vf-docs-pattern-tile/u);
