@@ -849,7 +849,7 @@
       "order": 2,
       "type": "example",
       "renderer": "executable-examples",
-      "description": "Inspect the verified packed-consumer example for the selected framework.",
+      "description": "Start from a minimal supported VyrnForge consumer example for the selected framework.",
       "releaseLine": "non-grid-beta",
       "sourcePath": "tests/consumers/manifest.json",
       "exampleId": "framework-consumer",
@@ -2401,7 +2401,7 @@
       "type": "example",
       "keywords": [
         "framework examples",
-        "inspect the verified packed-consumer example for the selected framework.",
+        "start from a minimal supported vyrnforge consumer example for the selected framework.",
         "getting started",
         "examples",
         "native",
