@@ -136,7 +136,8 @@ function PackageArchitecture() {
     },
     {
       label: "Specialized modules",
-      description: "Focused advanced capabilities that build on the foundation.",
+      description:
+        "Focused advanced capabilities that build on the foundation.",
       packages: ["@vyrnforge/ui-data-grid"],
     },
   ];
