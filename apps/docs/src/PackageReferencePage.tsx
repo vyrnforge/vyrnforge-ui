@@ -5,6 +5,7 @@ import {
   Heading,
   Text,
 } from "@vyrnforge/ui-components";
+import { CodeBlock } from "./examples/components/CodeBlock";
 
 import { getReferenceRecordRoute } from "../../../docs/reference/referenceRuntime";
 import { referenceModel } from "./docsContext";
@@ -107,16 +108,30 @@ function PackageDetail({
 }: {
   packageInfo: PackageReferenceRecord;
 }) {
+  const cssImport =
+    packageInfo.cssImport && packageInfo.cssImport !== "not-applicable"
+      ? packageInfo.cssImport
+      : null;
+  const primaryEntryPoint = packageInfo.publicEntryPoints[0] ?? packageInfo.name;
+
   return (
-    <div className="vf-docs-reference">
-      <section className="vf-docs-reference__section">
+    <div className="vf-docs-package-doc">
+      <section className="vf-docs-package-doc__overview">
         <Text size="sm">
-          <a href="#/package-reference">← Package reference</a>
+          <a href="#/package-reference">← Packages</a>
         </Text>
-        <div className="vf-docs-catalog-row__header">
-          <Heading level={3} size="md">
-            {packageInfo.name}
-          </Heading>
+        <div className="vf-docs-package-doc__title">
+          <div>
+            <Text className="vf-docs-catalog__kicker" size="sm">
+              {packageInfo.runtime ?? "framework-neutral"}
+            </Text>
+            <Heading level={2} size="lg">
+              {packageInfo.name}
+            </Heading>
+            <Text className="vf-docs-package-doc__lede">
+              {packageInfo.purpose}
+            </Text>
+          </div>
           <Badge
             tone="subtle"
             variant={packageInfo.status === "current" ? "success" : "info"}
@@ -124,40 +139,167 @@ function PackageDetail({
             {packageInfo.status}
           </Badge>
         </div>
-        <Text>{packageInfo.purpose}</Text>
         <Text tone="muted">{packageInfo.notes}</Text>
         <PackageFacts packageInfo={packageInfo} />
       </section>
 
-      <section className="vf-docs-reference__section">
-        <Heading level={3} size="md">
-          Ownership boundaries
-        </Heading>
-        <StringList label="Owns" values={packageInfo.owns} />
-        <StringList label="Does not own" values={packageInfo.doesNotOwn} />
+      <section className="vf-docs-package-doc__section" id="package-installation">
+        <div className="vf-docs-component-doc__section-heading">
+          <Text className="vf-docs-catalog__kicker" size="sm">
+            Setup
+          </Text>
+          <Heading level={3} size="md">
+            Public package surface
+          </Heading>
+          <Text tone="muted">
+            Consume the package through its documented public entry points.
+            Internal source paths are not part of the supported API.
+          </Text>
+        </div>
+        <CodeBlock code={`import "${primaryEntryPoint}";`} language="ts" />
+        {cssImport ? (
+          <div>
+            <Heading level={4} size="sm">
+              Styles
+            </Heading>
+            <CodeBlock code={`import "${cssImport}";`} language="ts" />
+          </div>
+        ) : (
+          <Text size="sm" tone="muted">
+            This package does not require a package-owned CSS import.
+          </Text>
+        )}
       </section>
 
-      <section className="vf-docs-reference__section">
-        <Heading level={3} size="md">
-          Dependencies
-        </Heading>
-        <StringList label="Depends on" values={packageInfo.dependsOn} />
-        <StringList
-          label="Must not depend on"
-          values={packageInfo.mustNotDependOn}
-        />
-      </section>
-
-      <section className="vf-docs-reference__section">
-        <Heading level={3} size="md">
-          Public entry points
-        </Heading>
-        <div className="vf-docs-dependency-list">
+      <section className="vf-docs-package-doc__section" id="package-exports">
+        <div className="vf-docs-component-doc__section-heading">
+          <Text className="vf-docs-catalog__kicker" size="sm">
+            Exports
+          </Text>
+          <Heading level={3} size="md">
+            Supported entry points
+          </Heading>
+        </div>
+        <div className="vf-docs-package-doc__entrypoints">
           {packageInfo.publicEntryPoints.map((entryPoint) => (
-            <CodeText className="vf-docs-dependency-item" key={entryPoint}>
-              {entryPoint}
-            </CodeText>
+            <CodeText key={entryPoint}>{entryPoint}</CodeText>
           ))}
+        </div>
+      </section>
+
+      <section className="vf-docs-package-doc__section" id="package-api">
+        <div className="vf-docs-component-doc__section-heading">
+          <Text className="vf-docs-catalog__kicker" size="sm">
+            Responsibility
+          </Text>
+          <Heading level={3} size="md">
+            What this package owns
+          </Heading>
+          <Text tone="muted">
+            These boundaries are part of the VyrnForge architecture contract,
+            not optional application conventions.
+          </Text>
+        </div>
+        <div className="vf-docs-package-doc__boundaries">
+          <div>
+            <Heading level={4} size="sm">
+              Owns
+            </Heading>
+            <ul>
+              {packageInfo.owns.map((value) => (
+                <li key={value}>{value}</li>
+              ))}
+            </ul>
+          </div>
+          <div>
+            <Heading level={4} size="sm">
+              Does not own
+            </Heading>
+            <ul>
+              {packageInfo.doesNotOwn.map((value) => (
+                <li key={value}>{value}</li>
+              ))}
+            </ul>
+          </div>
+        </div>
+      </section>
+
+      <section
+        className="vf-docs-package-doc__section"
+        id="package-compatibility"
+      >
+        <div className="vf-docs-component-doc__section-heading">
+          <Text className="vf-docs-catalog__kicker" size="sm">
+            Compatibility
+          </Text>
+          <Heading level={3} size="md">
+            Dependency direction
+          </Heading>
+          <Text tone="muted">
+            Package dependencies preserve the shared-foundation → renderer →
+            framework-adapter direction.
+          </Text>
+        </div>
+        <div className="vf-docs-package-doc__boundaries">
+          <div>
+            <Heading level={4} size="sm">
+              May depend on
+            </Heading>
+            {packageInfo.dependsOn.length > 0 ? (
+              <ul>
+                {packageInfo.dependsOn.map((value) => (
+                  <li key={value}>
+                    <code>{value}</code>
+                  </li>
+                ))}
+              </ul>
+            ) : (
+              <Text size="sm" tone="muted">
+                No VyrnForge package dependencies.
+              </Text>
+            )}
+          </div>
+          <div>
+            <Heading level={4} size="sm">
+              Must not depend on
+            </Heading>
+            <ul>
+              {packageInfo.mustNotDependOn.map((value) => (
+                <li key={value}>
+                  <code>{value}</code>
+                </li>
+              ))}
+            </ul>
+          </div>
+        </div>
+      </section>
+
+      <section className="vf-docs-package-doc__section" id="package-related">
+        <div className="vf-docs-component-doc__section-heading">
+          <Text className="vf-docs-catalog__kicker" size="sm">
+            Reference
+          </Text>
+          <Heading level={3} size="md">
+            API and release context
+          </Heading>
+        </div>
+        <div className="vf-docs-component-doc__facts-grid">
+          <div>
+            <strong>API documentation</strong>
+            <span>{packageInfo.apiDoc}</span>
+          </div>
+          <div>
+            <strong>Release track</strong>
+            <span>{packageInfo.releaseTrack ?? "Not specified"}</span>
+          </div>
+          <div>
+            <strong>Runtime</strong>
+            <span>{packageInfo.runtime ?? "framework-neutral"}</span>
+          </div>
+          <div>
+            <strong>Status</strong>
+            <span>{packageInfo.status}</span>
+          </div>
         </div>
       </section>
     </div>
