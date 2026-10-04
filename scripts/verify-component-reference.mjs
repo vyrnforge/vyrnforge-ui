@@ -214,10 +214,11 @@ export function verifyComponentReference({ root = repositoryRoot } = {}) {
     "framework-api-reference.json",
     "componentReferenceRecords",
     "getReferenceRecordRoute",
-    "component-usage",
+    "component-example",
+    "component-guidance",
     "component-framework-api",
     "component-accessibility-styling",
-    "Accessibility guidance",
+    "Accessibility & styling",
   ]) {
     if (!docsPage.includes(marker))
       failures.push(`consumer knowledge viewer is missing ${marker}`);
