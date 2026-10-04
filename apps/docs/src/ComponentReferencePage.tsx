@@ -1,4 +1,11 @@
+import * as VyrnForgeComponents from "@vyrnforge/ui-components";
 import { Badge, EmptyState, Heading, Text } from "@vyrnforge/ui-components";
+import {
+  Component as ReactComponent,
+  createElement,
+  type ElementType,
+  type ReactNode,
+} from "react";
 import { CodeBlock } from "./examples/components/CodeBlock";
 
 import frameworkApiReferenceRaw from "../../../docs/generated/framework-api-reference.json?raw";
@@ -467,6 +474,81 @@ function ComponentIndexRow({
   );
 }
 
+class ComponentSpecimenBoundary extends ReactComponent<
+  { children: ReactNode },
+  { failed: boolean }
+> {
+  state = { failed: false };
+
+  static getDerivedStateFromError() {
+    return { failed: true };
+  }
+
+  render() {
+    if (this.state.failed) {
+      return (
+        <Text size="sm" tone="muted">
+          This component needs additional context for an isolated live specimen.
+          Use the verified framework example below.
+        </Text>
+      );
+    }
+    return this.props.children;
+  }
+}
+
+function ComponentLiveSpecimen({
+  component,
+}: {
+  component: ComponentReferenceRecord;
+}) {
+  const reactApi = apiComponent(component.id, "react");
+  const exportName = reactApi?.export;
+  const candidate = exportName
+    ? VyrnForgeComponents[
+        exportName as keyof typeof VyrnForgeComponents
+      ]
+    : undefined;
+  const hasRequiredInputs =
+    reactApi?.properties.some(
+      (property) => property.required && property.default === undefined,
+    ) ?? true;
+  const canRender =
+    !hasRequiredInputs &&
+    candidate !== undefined &&
+    (typeof candidate === "function" || typeof candidate === "object");
+
+  if (!canRender || !reactApi) return null;
+
+  const props: Record<string, unknown> = {};
+  if (reactApi.slots.some((slot) => slot.public === "children")) {
+    props.children = component.displayName;
+  }
+
+  return (
+    <div className="vf-docs-component-live-specimen">
+      <div className="vf-docs-component-live-specimen__heading">
+        <div>
+          <Text className="vf-docs-catalog__kicker" size="sm">
+            Live specimen
+          </Text>
+          <Heading level={3} size="md">
+            See the component before reading its contract.
+          </Heading>
+        </div>
+        <Text size="sm" tone="muted">
+          Rendered by the Reference host from the real VyrnForge component.
+        </Text>
+      </div>
+      <div className="vf-docs-component-live-specimen__stage">
+        <ComponentSpecimenBoundary>
+          {createElement(candidate as ElementType, props)}
+        </ComponentSpecimenBoundary>
+      </div>
+    </div>
+  );
+}
+
 function ComponentUsageExample({
   component,
   frameworkId,
@@ -716,6 +798,7 @@ function ComponentDetail({
         </section>
 
         <section className="vf-docs-reference__section" id="component-example">
+          <ComponentLiveSpecimen component={component} />
           <ComponentUsageExample
             component={component}
             frameworkId={frameworkId}
