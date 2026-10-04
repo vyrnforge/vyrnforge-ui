@@ -84,6 +84,44 @@ async function expectDiscoveryTilesReadable(
   expect(width).toBeGreaterThan(250);
 }
 
+async function expectComponentDetailUseful(page: Page) {
+  await page.locator(".vf-docs-component-entry a").first().click();
+  await expect(page.locator(".vf-docs-component-doc")).toBeVisible();
+  for (const section of [
+    "#component-usage",
+    "#component-configuration",
+    "#component-behavior",
+    "#component-accessibility",
+    "#component-framework-api",
+    "#component-styling",
+  ]) {
+    await expect(page.locator(section)).toBeVisible();
+  }
+  await expect(page.locator(".vf-docs-component-doc__example")).toBeVisible();
+}
+
+async function expectPackageDetailUseful(page: Page) {
+  await page.locator(".vf-docs-package-entry a").first().click();
+  await expect(page.locator(".vf-docs-package-doc")).toBeVisible();
+  await expect(page.getByText("Public package surface", { exact: true })).toBeVisible();
+  await expect(page.getByText("What this package owns", { exact: true })).toBeVisible();
+  await expect(page.locator(".vf-docs-package-doc__boundaries").first()).toBeVisible();
+}
+
+async function expectTokenDetailUseful(page: Page) {
+  await page.locator(".vf-docs-discovery-tile a").first().click();
+  await expect(page.locator(".vf-docs-token-doc")).toBeVisible();
+  await expect(page.locator(".vf-docs-token-table")).toBeVisible();
+  await expect(page.getByText("Open interactive token catalog", { exact: true })).toBeVisible();
+}
+
+async function expectPatternDetailUseful(page: Page) {
+  await page.locator(".vf-docs-pattern-tile a").first().click();
+  await expect(page.locator(".vf-docs-pattern-doc")).toBeVisible();
+  await expect(page.locator(".vf-docs-pattern-doc__components")).toBeVisible();
+  await expect(page.getByText("Library and application boundary", { exact: true })).toBeVisible();
+}
+
 async function expectCodeBlockUsesBlockStyling(page: Page) {
   const code = page.locator(".vf-docs-code-block__pre code").first();
   await expect(code).toBeVisible();
@@ -158,15 +196,35 @@ test.describe("VyrnForge Reference product", () => {
       }
       if (route === "component-reference") {
         await expectComponentDirectoryReadable(page);
+        await capture(page, testInfo, "reference-component-reference");
+        await expectComponentDetailUseful(page);
+        await expectNoPageOverflow(page);
+        await capture(page, testInfo, "reference-component-detail");
+        continue;
       }
       if (route === "package-reference") {
         await expectPackageCatalogReadable(page);
+        await capture(page, testInfo, "reference-package-reference");
+        await expectPackageDetailUseful(page);
+        await expectNoPageOverflow(page);
+        await capture(page, testInfo, "reference-package-detail");
+        continue;
       }
       if (route === "token-reference") {
         await expectDiscoveryTilesReadable(page, ".vf-docs-discovery-tile");
+        await capture(page, testInfo, "reference-token-reference");
+        await expectTokenDetailUseful(page);
+        await expectNoPageOverflow(page);
+        await capture(page, testInfo, "reference-token-detail");
+        continue;
       }
       if (route === "pattern-reference") {
         await expectDiscoveryTilesReadable(page, ".vf-docs-pattern-tile");
+        await capture(page, testInfo, "reference-pattern-reference");
+        await expectPatternDetailUseful(page);
+        await expectNoPageOverflow(page);
+        await capture(page, testInfo, "reference-pattern-detail");
+        continue;
       }
       if (route === "executable-examples") {
         await expectCodeBlockUsesBlockStyling(page);
