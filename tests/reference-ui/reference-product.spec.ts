@@ -73,14 +73,18 @@ async function expectPackageReferenceExplainsArchitecture(page: Page) {
   await expect(
     page.locator(".vf-docs-package-layer__packages a").first(),
   ).toBeVisible();
-  await expect(page.getByText("One foundation, multiple first-class surfaces.")).toBeVisible();
+  await expect(
+    page.getByText("One foundation, multiple first-class surfaces."),
+  ).toBeVisible();
   await expect(page.locator(".vf-docs-architecture-rules")).toBeVisible();
 }
 
 async function expectTokenReferenceIsVisual(page: Page) {
   await expect(page.locator(".vf-docs-token-gallery")).toBeVisible();
   await expect(page.locator(".vf-docs-token-swatch").first()).toBeVisible();
-  await expect(page.locator(".vf-docs-token-type-specimen").first()).toBeVisible();
+  await expect(
+    page.locator(".vf-docs-token-type-specimen").first(),
+  ).toBeVisible();
   await expect(
     page.locator(".vf-docs-token-density-specimen").first(),
   ).toBeVisible();
@@ -89,13 +93,17 @@ async function expectTokenReferenceIsVisual(page: Page) {
 async function expectPatternReferenceIsLive(page: Page) {
   await expect(page.locator(".vf-docs-pattern-featured")).toBeVisible();
   await expect(page.locator(".vf-docs-live-example").first()).toBeVisible();
-  await expect(page.locator(".vf-docs-live-example__stage").first()).toBeVisible();
+  await expect(
+    page.locator(".vf-docs-live-example__stage").first(),
+  ).toBeVisible();
   await expect(page.locator(".vf-docs-pattern-tile").first()).toBeVisible();
 }
 
 async function expectFrameworkExampleIsDeveloperFirst(page: Page) {
   await expect(page.locator(".vf-docs-framework-example")).toBeVisible();
-  await expect(page.locator(".vf-docs-framework-example__concepts")).toBeVisible();
+  await expect(
+    page.locator(".vf-docs-framework-example__concepts"),
+  ).toBeVisible();
   await expect(page.getByText("What to learn from this example")).toBeVisible();
 }
 
