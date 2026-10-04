@@ -46,7 +46,7 @@ function UnsupportedSpecimen({
         <div>
           {relatedPatterns.map((pattern) => (
             <a href={`#/pattern-reference/${pattern}`} key={pattern}>
-              Open {pattern.replaceAll("-", " ")}
+              Open {pattern.replace(/-/gu, " ")}
             </a>
           ))}
         </div>
