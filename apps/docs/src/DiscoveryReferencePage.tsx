@@ -341,8 +341,8 @@ function PatternReference({
           </Heading>
           <Text tone="muted">
             Patterns combine VyrnForge components into reusable application
-            structures while keeping routing, permissions, and business state
-            in the consuming app.
+            structures while keeping routing, permissions, and business state in
+            the consuming app.
           </Text>
         </div>
         <dl className="vf-docs-catalog__stats">
