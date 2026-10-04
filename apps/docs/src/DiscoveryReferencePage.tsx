@@ -287,8 +287,8 @@ function PatternReference({ id }: { id?: string | null }) {
             </Heading>
           </div>
           <Text>
-            VyrnForge owns the reusable composition and each building block's
-            interaction contract. The consuming application owns resource data,
+            VyrnForge owns the reusable composition and the interaction
+            contracts of its building blocks. The consuming application owns resource data,
             routing, persistence, permissions, side effects, and workflow state.
           </Text>
           <Text size="sm" tone="muted">
