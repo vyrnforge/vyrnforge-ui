@@ -117,8 +117,10 @@ export function DocsPage({
     ) : route.kind === "discovery-reference" &&
       (route.recordDomain === "tokens" || route.recordDomain === "patterns") ? (
       <DiscoveryReferencePage
+        frameworkId={frameworkId}
         recordDomain={route.recordDomain}
         referenceRecord={referenceRecord}
+        version={routeResolution.context.version}
       />
     ) : route.kind === "component-reference" ? (
       <ComponentReferencePage
