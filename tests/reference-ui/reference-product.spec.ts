@@ -186,6 +186,10 @@ test.describe("VyrnForge Reference product", () => {
       .getByRole("link", { name: "Button", exact: true })
       .first()
       .click();
+    await expect(page.locator(".vf-docs-component-live-specimen")).toBeVisible();
+    await expect(
+      page.getByRole("button", { name: "Button", exact: true }),
+    ).toBeVisible();
     await expect(page.locator(".vf-docs-component-example")).toBeVisible();
     await expect(page.locator("#component-guidance")).toBeVisible();
     await expect(page.locator("#component-framework-api")).toBeVisible();
