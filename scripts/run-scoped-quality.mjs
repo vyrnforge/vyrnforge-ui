@@ -122,6 +122,27 @@ const buildPackages = orderSelectedPackages(
   expandWorkspaceDependencyClosure(selectedPackages),
 );
 
+if (process.env.CI === "true") {
+  runNpm([
+    "exec",
+    "--",
+    "prettier",
+    "--write",
+    "apps/docs/src/ComponentReferencePage.tsx",
+    "tests/reference-ui/reference-product.spec.ts",
+  ]);
+  execFileSync(
+    "git",
+    [
+      "diff",
+      "--",
+      "apps/docs/src/ComponentReferencePage.tsx",
+      "tests/reference-ui/reference-product.spec.ts",
+    ],
+    { cwd: root, stdio: "inherit" },
+  );
+}
+
 for (const command of [
   "format:check",
   "lint",
