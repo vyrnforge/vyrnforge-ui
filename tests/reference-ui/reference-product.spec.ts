@@ -186,16 +186,15 @@ test.describe("VyrnForge Reference product", () => {
     await expect(page.locator(".vf-docs-component-example")).toBeVisible();
     await expect(page.locator("#component-guidance")).toBeVisible();
     await expect(page.locator("#component-framework-api")).toBeVisible();
-    const componentOrder = await page.evaluate(() => {
+    const examplePrecedesApi = await page.evaluate(() => {
       const example = document.querySelector("#component-example");
       const api = document.querySelector("#component-framework-api");
-      if (!example || !api) return null;
-      return example.compareDocumentPosition(api);
+      if (!example || !api) return false;
+      return Boolean(
+        example.compareDocumentPosition(api) & Node.DOCUMENT_POSITION_FOLLOWING,
+      );
     });
-    expect(componentOrder).not.toBeNull();
-    expect(
-      (componentOrder ?? 0) & Node.DOCUMENT_POSITION_FOLLOWING,
-    ).toBeTruthy();
+    expect(examplePrecedesApi).toBe(true);
     await capture(page, testInfo, "reference-component-button-detail");
 
     await openReference(page, "token-reference");
