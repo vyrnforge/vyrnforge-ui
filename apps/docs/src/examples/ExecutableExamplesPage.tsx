@@ -10,6 +10,48 @@ function stringList(value: unknown) {
     : [];
 }
 
+const frameworkGuidance = {
+  "native-html": {
+    title: "Native HTML / Custom Elements",
+    packageName: "@vyrnforge/ui-elements",
+    concepts: [
+      "Typed vf-* Custom Elements and generated binding helpers",
+      "Canonical DOM events for actions and value changes",
+      "ElementInternals-backed form participation",
+    ],
+  },
+  react: {
+    title: "React",
+    packageName: "@vyrnforge/ui-components",
+    concepts: [
+      "First-class React components from the public package",
+      "Controlled state and idiomatic React callbacks",
+      "Refs and composition without application state coupling",
+    ],
+  },
+  angular: {
+    title: "Angular",
+    packageName: "@vyrnforge/ui-angular",
+    concepts: [
+      "Generated Angular facades over canonical Custom Elements",
+      "Reactive and template-driven Forms integration",
+      "Typed outputs, slots, and imperative references",
+    ],
+  },
+  vue: {
+    title: "Vue",
+    packageName: "@vyrnforge/ui-vue",
+    concepts: [
+      "Generated Vue component facades over canonical elements",
+      "Vue-native props, emits, slots, and v-model mappings",
+      "Canonical DOM events remain available when needed",
+    ],
+  },
+} satisfies Record<
+  DocsFrameworkId,
+  { title: string; packageName: string; concepts: string[] }
+>;
+
 export function ExecutableExamplesPage({
   frameworkId,
   version,
@@ -24,44 +66,32 @@ export function ExecutableExamplesPage({
   );
 
   if (!resolution.available) {
-    const surfaceGuidance = {
-    "native-html": {
-      title: "Native HTML / Custom Elements",
-      packageName: "@vyrnforge/ui-elements",
-      concepts: [
-        "Typed vf-* Custom Elements and generated binding helpers",
-        "Canonical DOM events for actions and value changes",
-        "ElementInternals-backed form participation",
-      ],
-    },
-    react: {
-      title: "React",
-      packageName: "@vyrnforge/ui-components",
-      concepts: [
-        "First-class React components from the public package",
-        "Controlled state and idiomatic React callbacks",
-        "Refs and composition without application state coupling",
-      ],
-    },
-    angular: {
-      title: "Angular",
-      packageName: "@vyrnforge/ui-angular",
-      concepts: [
-        "Generated Angular facades over canonical Custom Elements",
-        "Reactive and template-driven Forms integration",
-        "Typed outputs, slots, and imperative references",
-      ],
-    },
-    vue: {
-      title: "Vue",
-      packageName: "@vyrnforge/ui-vue",
-      concepts: [
-        "Generated Vue component facades over canonical elements",
-        "Vue-native props, emits, slots, and v-model mappings",
-        "Canonical DOM events remain available when needed",
-      ],
-    },
-  }[frameworkId];
+    return (
+      <Text tone="muted">
+        The packed consumer example is unavailable for {frameworkId} {version}.
+      </Text>
+    );
+  }
+
+  const example = getExecutableExampleRecord(frameworkId);
+  if (example.sourcePath !== resolution.implementation.sourcePath) {
+    throw new Error(
+      `Generated example registry source for ${frameworkId} has drifted from packed consumer evidence.`,
+    );
+  }
+
+  const runtime =
+    typeof example.fixtureContract.runtime === "string"
+      ? example.fixtureContract.runtime
+      : typeof example.fixtureContract.frameworkRuntime === "string"
+        ? example.fixtureContract.frameworkRuntime
+        : "Runtime verified by consumer fixture";
+  const rendererPackages = stringList(example.fixtureContract.rendererPackages);
+  const verification = [
+    ...example.verification,
+    ...stringList(example.fixtureContract.completedEvidence),
+  ].filter((item, index, values) => values.indexOf(item) === index);
+  const surfaceGuidance = frameworkGuidance[frameworkId];
 
   return (
     <div className="vf-docs-framework-example">
