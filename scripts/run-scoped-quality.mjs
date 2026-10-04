@@ -122,7 +122,7 @@ const buildPackages = orderSelectedPackages(
   expandWorkspaceDependencyClosure(selectedPackages),
 );
 
-if (process.env.CI_CAPTURE_FORMAT_DIFF === "true") {
+if (process.env.CI === "true") {
   runNpm([
     "exec",
     "--",
