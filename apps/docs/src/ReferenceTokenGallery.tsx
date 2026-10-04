@@ -36,11 +36,19 @@ function ColorCategory({ category }: { category: DesignTokenCategory }) {
 
 function TypographyCategory({ category }: { category: DesignTokenCategory }) {
   const roles = [
-    ["display", "Display", "Build complex products from one shared UI foundation."],
+    [
+      "display",
+      "Display",
+      "Build complex products from one shared UI foundation.",
+    ],
     ["page-title", "Page title", "Workspace settings"],
     ["section-title", "Section title", "Permissions and access"],
     ["label", "Label", "Workspace name"],
-    ["body", "Body", "Use shared semantics instead of application-specific styling."],
+    [
+      "body",
+      "Body",
+      "Use shared semantics instead of application-specific styling.",
+    ],
     ["caption", "Caption", "Updated 2 minutes ago"],
     ["code", "Code", "@vyrnforge/ui-components"],
   ] as const;
@@ -68,7 +76,9 @@ function TypographyCategory({ category }: { category: DesignTokenCategory }) {
                   fontFamily: family ? tokenValue(family.name) : undefined,
                   fontSize: size ? tokenValue(size.name) : undefined,
                   fontWeight: weight ? tokenValue(weight.name) : undefined,
-                  lineHeight: lineHeight ? tokenValue(lineHeight.name) : undefined,
+                  lineHeight: lineHeight
+                    ? tokenValue(lineHeight.name)
+                    : undefined,
                   letterSpacing: letterSpacing
                     ? tokenValue(letterSpacing.name)
                     : undefined,
@@ -173,7 +183,9 @@ function GenericCategory({ category }: { category: DesignTokenCategory }) {
 }
 
 function CategorySpecimen({ category }: { category: DesignTokenCategory }) {
-  if (["surface", "text", "border", "interactive", "status"].includes(category.id)) {
+  if (
+    ["surface", "text", "border", "interactive", "status"].includes(category.id)
+  ) {
     return <ColorCategory category={category} />;
   }
   if (category.id === "typography") {
