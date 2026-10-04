@@ -214,7 +214,6 @@ function PackageArchitecture() {
   );
 }
 
-
 function PackageDetail({
   packageInfo,
 }: {
