@@ -130,8 +130,11 @@ test("component Reference exposes structured, linkable member API navigation", (
   assert.match(componentReference, /componentApiMemberAnchor\(\s*"slot"/u);
   assert.match(componentReference, /componentApiMemberAnchor\(\s*"method"/u);
   assert.match(componentReference, /componentReferenceTargetHref/u);
+  assert.match(componentReference, /ComponentLiveSpecimen/u);
+  assert.match(componentReference, /ComponentSpecimenBoundary/u);
   assert.match(componentReference, /ComponentUsageExample/u);
   assert.match(componentReference, /ComponentOptions/u);
+  assert.match(componentReference, /vf-docs-component-live-specimen/u);
   assert.match(componentReference, /vf-docs-component-example/u);
   assert.match(componentReference, /vf-docs-component-guidance/u);
   assert(
