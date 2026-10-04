@@ -1000,3 +1000,275 @@
     flex-direction: column;
   }
 }
+
+
+/* UI-library documentation content model */
+.vf-docs-component-detail {
+  gap: clamp(32px, 5vw, 56px);
+}
+
+.vf-docs-component-detail__intro {
+  padding-block-start: 0;
+}
+
+.vf-docs-component-detail__identity {
+  display: flex;
+  justify-content: space-between;
+  gap: var(--vf-space-5, 20px);
+  align-items: flex-start;
+}
+
+.vf-docs-component-detail__identity > div {
+  display: grid;
+  gap: var(--vf-space-2, 8px);
+  max-width: 760px;
+}
+
+.vf-docs-section-heading {
+  display: grid;
+  gap: var(--vf-space-2, 8px);
+  max-width: 760px;
+  margin-block-end: var(--vf-space-5, 20px);
+}
+
+.vf-docs-component-example {
+  display: grid;
+  gap: var(--vf-space-5, 20px);
+  padding: clamp(24px, 4vw, 40px);
+  border-radius: var(--vf-radius-xl, 12px);
+  background: var(--vf-surface-subtle, #f8fafc);
+  box-shadow: inset 0 0 0 1px var(--vf-border, #e2e8f0);
+}
+
+.vf-docs-component-example__intro {
+  display: flex;
+  justify-content: space-between;
+  gap: var(--vf-space-4, 16px);
+  align-items: flex-start;
+}
+
+.vf-docs-component-example__intro > div {
+  display: grid;
+  gap: var(--vf-space-2, 8px);
+  max-width: 720px;
+}
+
+.vf-docs-component-example__code {
+  display: grid;
+  grid-template-columns: minmax(0, 0.8fr) minmax(0, 1.2fr);
+  gap: var(--vf-space-4, 16px);
+  min-width: 0;
+}
+
+.vf-docs-component-example__code > div {
+  display: grid;
+  gap: var(--vf-space-2, 8px);
+  min-width: 0;
+}
+
+.vf-docs-component-guidance {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: var(--vf-space-5, 20px);
+}
+
+.vf-docs-component-guidance > article {
+  display: grid;
+  gap: var(--vf-space-2, 8px);
+  align-content: start;
+  padding-block-start: var(--vf-space-4, 16px);
+  border-block-start: 2px solid var(--vf-border-strong, #cbd5e1);
+}
+
+.vf-docs-component-guidance > article > strong {
+  color: var(--vf-text-strong, #0f172a);
+  font-size: var(--vf-font-size-sm, 13px);
+}
+
+.vf-docs-component-options {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0 var(--vf-space-6, 24px);
+  border-block-start: 1px solid var(--vf-border, #e2e8f0);
+}
+
+.vf-docs-component-options > article {
+  display: flex;
+  justify-content: space-between;
+  gap: var(--vf-space-4, 16px);
+  min-width: 0;
+  padding-block: var(--vf-space-4, 16px);
+  border-block-end: 1px solid var(--vf-border, #e2e8f0);
+}
+
+.vf-docs-component-options > article > div {
+  display: grid;
+  gap: var(--vf-space-1, 4px);
+}
+
+.vf-docs-component-options > article > code {
+  max-width: 56%;
+  color: var(--vf-text-muted, #64748b);
+  font-size: var(--vf-font-size-xs, 12px);
+  text-align: end;
+  overflow-wrap: anywhere;
+}
+
+.vf-docs-component-code-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--vf-space-2, 8px);
+  margin-block: var(--vf-space-1, 4px) var(--vf-space-3, 12px);
+}
+
+.vf-docs-component-related {
+  display: grid;
+  gap: var(--vf-space-5, 20px);
+}
+
+.vf-docs-component-related > div {
+  display: grid;
+  gap: var(--vf-space-3, 12px);
+}
+
+.vf-docs-component-related ul {
+  display: grid;
+  gap: var(--vf-space-2, 8px);
+  margin: 0;
+  padding-inline-start: var(--vf-space-5, 20px);
+}
+
+.vf-docs-component-api-reference {
+  margin-block-start: var(--vf-space-4, 16px);
+  padding-block-start: clamp(32px, 5vw, 56px);
+  border-block-start: 1px solid var(--vf-border, #e2e8f0);
+}
+
+.vf-docs-token-reference,
+.vf-docs-pattern-reference {
+  gap: clamp(32px, 5vw, 56px);
+}
+
+.vf-docs-token-specimen-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: var(--vf-space-4, 16px);
+}
+
+.vf-docs-token-specimen {
+  display: grid;
+  grid-template-columns: 112px minmax(0, 1fr);
+  gap: var(--vf-space-4, 16px);
+  align-items: center;
+  min-width: 0;
+  padding: var(--vf-space-4, 16px);
+  border: 1px solid var(--vf-border, #e2e8f0);
+  border-radius: var(--vf-radius-lg, 10px);
+  background: var(--vf-surface, #ffffff);
+}
+
+.vf-docs-token-specimen__visual {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 72px;
+  overflow: hidden;
+  border-radius: var(--vf-radius-md, 8px);
+  background:
+    linear-gradient(45deg, var(--vf-surface-muted, #f1f5f9) 25%, transparent 25%),
+    linear-gradient(-45deg, var(--vf-surface-muted, #f1f5f9) 25%, transparent 25%),
+    linear-gradient(45deg, transparent 75%, var(--vf-surface-muted, #f1f5f9) 75%),
+    linear-gradient(-45deg, transparent 75%, var(--vf-surface-muted, #f1f5f9) 75%);
+  background-position: 0 0, 0 6px, 6px -6px, -6px 0;
+  background-size: 12px 12px;
+}
+
+.vf-docs-token-specimen__swatch,
+.vf-docs-token-specimen__border {
+  display: block;
+  width: 64px;
+  height: 44px;
+  border-radius: var(--vf-radius-md, 8px);
+}
+
+.vf-docs-token-specimen__border {
+  border: 4px solid;
+  background: var(--vf-surface, #ffffff);
+}
+
+.vf-docs-token-specimen__visual > span:not(.vf-docs-token-specimen__swatch):not(.vf-docs-token-specimen__border):not(.vf-docs-token-specimen__measure) {
+  font-size: 28px;
+  font-weight: 700;
+}
+
+.vf-docs-token-specimen__measure {
+  display: block;
+  min-width: 4px;
+  max-width: 88px;
+  height: 12px;
+  border-radius: var(--vf-radius-full, 999px);
+  background: var(--vf-interactive-primary, #2563eb);
+}
+
+.vf-docs-token-specimen__copy {
+  display: grid;
+  gap: var(--vf-space-1, 4px);
+  min-width: 0;
+}
+
+.vf-docs-token-category-preview {
+  display: flex;
+  gap: var(--vf-space-2, 8px);
+  min-height: 34px;
+  margin-block-start: auto;
+}
+
+.vf-docs-token-category-preview > span {
+  flex: 1 1 0;
+  min-width: 20px;
+  min-height: 34px;
+  border: 1px solid var(--vf-border, #e2e8f0);
+  border-radius: var(--vf-radius-md, 8px);
+  background: var(--vf-surface-muted, #f1f5f9);
+}
+
+.vf-docs-token-reference__source {
+  padding-block-start: var(--vf-space-5, 20px);
+  border-block-start: 1px solid var(--vf-border, #e2e8f0);
+}
+
+.vf-docs-pattern-reference .vf-docs-example-workbench {
+  margin-block-start: var(--vf-space-4, 16px);
+}
+
+.vf-docs-pattern-reference .vf-docs-reference-layout {
+  grid-template-columns: minmax(0, 1fr);
+}
+
+.vf-docs-pattern-reference .vf-docs-reference-outline {
+  display: none;
+}
+
+@media (max-width: 980px) {
+  .vf-docs-component-example__code,
+  .vf-docs-component-guidance,
+  .vf-docs-component-options,
+  .vf-docs-token-specimen-grid {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+
+@media (max-width: 760px) {
+  .vf-docs-component-detail__identity,
+  .vf-docs-component-example__intro {
+    flex-direction: column;
+  }
+
+  .vf-docs-token-specimen {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .vf-docs-token-specimen__visual {
+    min-height: 88px;
+  }
+}
