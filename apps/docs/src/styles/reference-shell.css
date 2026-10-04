@@ -1211,8 +1211,7 @@
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  border: 1px dashed
-    var(--vf-border-emphasis, var(--vf-border-strong, #cbd5e1));
+  border: 1px dashed var(--vf-border-emphasis, var(--vf-border-strong, #cbd5e1));
   border-radius: var(--vf-radius-md, 8px);
   color: var(--vf-text-secondary, var(--vf-text-muted, #64748b));
   font-size: var(--vf-font-size-xs, 12px);
