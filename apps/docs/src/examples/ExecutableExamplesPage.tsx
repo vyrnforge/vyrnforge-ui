@@ -55,14 +55,15 @@ export function ExecutableExamplesPage({
       <section className="vf-docs-example-reference__summary">
         <div>
           <Text className="vf-docs-catalog__kicker" size="sm">
-            Packed consumer evidence
+            Framework quick start
           </Text>
           <Heading level={3} size="md">
-            {example.frameworkLabel} executable consumer
+            {example.frameworkLabel} setup
           </Heading>
           <Text tone="muted">
-            Verified against packed VyrnForge packages rather than a docs-only
-            or Playground implementation.
+            Use this as the minimal supported consumer shape for the selected
+            framework. Verified against packed VyrnForge packages rather than a
+            docs-only or Playground implementation.
           </Text>
         </div>
         <Badge tone="subtle" variant="success">
@@ -80,7 +81,7 @@ export function ExecutableExamplesPage({
           <dd>{runtime}</dd>
         </div>
         <div>
-          <dt>Fixture</dt>
+          <dt>Consumer</dt>
           <dd>
             <CodeText>{example.fixtureId}</CodeText>
           </dd>
@@ -98,10 +99,10 @@ export function ExecutableExamplesPage({
           <div className="vf-docs-catalog__section-heading">
             <div>
               <Text className="vf-docs-catalog__kicker" size="sm">
-                Executable source
+                Example
               </Text>
               <Heading level={3} size="md">
-                Consumer entry point
+                Minimal consumer entry point
               </Heading>
             </div>
           </div>
@@ -111,10 +112,10 @@ export function ExecutableExamplesPage({
         <aside className="vf-docs-example-reference__evidence">
           <div>
             <Text className="vf-docs-catalog__kicker" size="sm">
-              Verification
+              What it demonstrates
             </Text>
             <Heading level={3} size="sm">
-              What this example proves
+              Supported integration behaviors
             </Heading>
           </div>
           <ol>
@@ -128,7 +129,7 @@ export function ExecutableExamplesPage({
           {rendererPackages.length > 0 ? (
             <div className="vf-docs-example-reference__packages">
               <Text size="sm" tone="muted">
-                Renderer packages
+                VyrnForge packages
               </Text>
               {rendererPackages.map((packageName) => (
                 <CodeText key={packageName}>{packageName}</CodeText>
@@ -136,7 +137,7 @@ export function ExecutableExamplesPage({
             </div>
           ) : null}
           <Text size="sm" tone="muted">
-            Additional fixture files: {example.exampleFiles.length}
+            Additional consumer files: {example.exampleFiles.length}
           </Text>
         </aside>
       </div>
