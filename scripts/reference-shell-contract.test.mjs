@@ -265,7 +265,8 @@ test("reading templates use the unified main landmark and source-driven deep lin
   assert.doesNotMatch(template, /<main/u);
   assert.doesNotMatch(guide, /<main/u);
   assert.doesNotMatch(template, /vf-docs-page(?:__intro)?/u);
-  assert.match(template, /vf-reference-page__header/u);
+  assert.match(template, /vf-reference-page__hero/u);
+  assert.match(template, /vf-reference-page__eyebrow/u);
   assert.doesNotMatch(styles, /\.vf-docs-page__intro/u);
   assert.match(markdown, /vf-docs-markdown__heading-link/u);
   assert.match(markdown, /headingId/u);
@@ -285,11 +286,13 @@ test("component reference is scan-first without generic Card section wrappers", 
     /\bCard\b|ComponentIndexCard|vf-docs-reference-card/u,
   );
   assert.match(componentReference, /ComponentIndexRow/u);
-  assert.match(componentReference, /vf-docs-component-index/u);
-  assert.match(componentReference, /vf-docs-component-row/u);
+  assert.match(componentReference, /vf-docs-catalog__jump-nav/u);
+  assert.match(componentReference, /vf-docs-component-group/u);
+  assert.match(componentReference, /vf-docs-component-entry/u);
   assert.match(componentReference, /vf-docs-api-table/u);
   assert.match(componentReference, /componentApiMemberAnchor/u);
-  assert.match(styles, /\.vf-docs-component-row/u);
+  assert.match(styles, /\.vf-docs-component-entry/u);
+  assert.match(styles, /\.vf-docs-component-index/u);
   assert.match(styles, /\.vf-docs-api-table thead th/u);
 });
 
@@ -304,14 +307,14 @@ test("package, token, and pattern discovery avoid dashboard Card stacks", () => 
   );
   assert.doesNotMatch(discovery, /\bCard\b|vf-docs-discovery-row-card/u);
   assert.match(packageReference, /PackageIndexRow/u);
-  assert.match(packageReference, /vf-docs-package-row/u);
-  assert.match(discovery, /vf-docs-discovery-catalog-row/u);
-  assert.match(styles, /\.vf-docs-package-row/u);
-  assert.match(styles, /\.vf-docs-discovery-catalog-row/u);
-  assert.match(
-    styles,
-    /\.vf-docs-package-index,\s*\.vf-docs-discovery-grid\s*\{[^}]*grid-template-columns:\s*minmax\(0,\s*1fr\)/su,
-  );
+  assert.match(packageReference, /vf-docs-package-entry/u);
+  assert.match(packageReference, /vf-docs-architecture-rules/u);
+  assert.match(discovery, /vf-docs-discovery-tile/u);
+  assert.match(discovery, /vf-docs-pattern-tile/u);
+  assert.match(styles, /\.vf-docs-package-entry/u);
+  assert.match(styles, /\.vf-docs-discovery-tile/u);
+  assert.match(styles, /\.vf-docs-pattern-tile/u);
+  assert.match(styles, /\.vf-docs-catalog__intro/u);
   assert.doesNotMatch(styles, /\.vf-docs-preview(?:__|\s*\{)/u);
   assert.match(packageReference, /getReferenceRecordRoute/u);
   assert.match(discovery, /getReferenceRecordRoute/u);
