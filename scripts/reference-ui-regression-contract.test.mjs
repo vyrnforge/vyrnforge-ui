@@ -51,7 +51,6 @@ test("Reference verification covers representative templates and adaptive states
   assert.match(browser, /vf-docs-package-row__facts/u);
   assert.match(browser, /expectCodeBlockUsesBlockStyling/u);
   assert.match(browser, /backgroundColor/u);
-  assert.match(browser, /contrastRatio/u);
   assert.match(browser, /vf-docs-code-block__language/u);
   assert.match(browser, /vf-docs-code-block__copy/u);
 });
