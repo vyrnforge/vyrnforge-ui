@@ -820,7 +820,10 @@ export function ComponentReferencePage({
                     left.displayName.localeCompare(right.displayName),
                   )
                   .map((component) => (
-                    <ComponentIndexRow component={component} key={component.id} />
+                    <ComponentIndexRow
+                      component={component}
+                      key={component.id}
+                    />
                   ))}
               </div>
             </section>
