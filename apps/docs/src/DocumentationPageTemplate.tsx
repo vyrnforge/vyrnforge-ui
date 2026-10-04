@@ -25,7 +25,7 @@ export function DocumentationPageTemplate({
       data-template-sections={template.sections.join(" ")}
     >
       <section
-        aria-labelledby="vf-reference-page-title"
+        aria-label="Reference page introduction"
         className="vf-reference-page__hero"
       >
         <div className="vf-reference-page__hero-copy">
@@ -37,11 +37,7 @@ export function DocumentationPageTemplate({
               {status}
             </Badge>
           </div>
-          <PageHeader
-            description={description}
-            title={title}
-            titleProps={{ id: "vf-reference-page-title" }}
-          />
+          <PageHeader description={description} title={title} />
         </div>
       </section>
       <div className="vf-reference-page__body">{children}</div>
