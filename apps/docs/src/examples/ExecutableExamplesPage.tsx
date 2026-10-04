@@ -104,9 +104,10 @@ export function ExecutableExamplesPage({
             Consume VyrnForge the way this framework expects.
           </Heading>
           <Text tone="muted">
-            This is the real packed-consumer source used to verify the public
-            package. It demonstrates the framework idioms VyrnForge supports,
-            not a docs-only approximation.
+            This is the real executable consumer used to verify the public
+            package. Verified against packed VyrnForge packages, it demonstrates
+            the framework idioms VyrnForge supports rather than a docs-only
+            approximation.
           </Text>
         </div>
         <Badge tone="subtle" variant="success">
@@ -119,7 +120,7 @@ export function ExecutableExamplesPage({
           <div className="vf-docs-catalog__section-heading">
             <div>
               <Text className="vf-docs-catalog__kicker" size="sm">
-                Working consumer
+                Executable source
               </Text>
               <Heading level={3} size="md">
                 {surfaceGuidance.packageName}
