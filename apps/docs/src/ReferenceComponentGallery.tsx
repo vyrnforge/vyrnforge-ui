@@ -103,10 +103,7 @@ export function ReferenceComponentGallery() {
           title="Inputs"
         >
           <div className="vf-docs-specimen-form">
-            <TextInput
-              aria-label="Workspace name"
-              defaultValue="Revenue Ops"
-            />
+            <TextInput aria-label="Workspace name" defaultValue="Revenue Ops" />
             <Select
               aria-label="Region"
               defaultValue="apac"
@@ -116,10 +113,7 @@ export function ReferenceComponentGallery() {
                 { label: "AMER", value: "amer" },
               ]}
             />
-            <SearchInput
-              aria-label="Search resources"
-              placeholder="Search"
-            />
+            <SearchInput aria-label="Search resources" placeholder="Search" />
             <Switch
               checked={enabled}
               description="Applies to new workspaces."
