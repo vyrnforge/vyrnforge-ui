@@ -61,8 +61,8 @@ export function ExecutableExamplesPage({
             {example.frameworkLabel} executable consumer
           </Heading>
           <Text tone="muted">
-            This example is verified against packed VyrnForge packages rather
-            than a docs-only or Playground implementation.
+            Verified against packed VyrnForge packages rather than a docs-only
+            or Playground implementation.
           </Text>
         </div>
         <Badge tone="subtle" variant="success">
