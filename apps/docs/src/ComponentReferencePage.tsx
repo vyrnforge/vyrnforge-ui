@@ -505,9 +505,7 @@ function ComponentLiveSpecimen({
   const reactApi = apiComponent(component.id, "react");
   const exportName = reactApi?.export;
   const candidate = exportName
-    ? VyrnForgeComponents[
-        exportName as keyof typeof VyrnForgeComponents
-      ]
+    ? VyrnForgeComponents[exportName as keyof typeof VyrnForgeComponents]
     : undefined;
   const hasRequiredInputs =
     reactApi?.properties.some(
