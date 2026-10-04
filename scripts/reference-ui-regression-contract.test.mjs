@@ -47,6 +47,12 @@ test("Reference verification covers representative templates and adaptive states
   assert.match(browser, /expectDiscoveryCatalogReadable/u);
   assert.match(browser, /vf-docs-discovery-catalog-row/u);
   assert.match(browser, /descriptionWidth/u);
+  assert.match(browser, /expectPackageFactsReadable/u);
+  assert.match(browser, /vf-docs-package-row__facts/u);
+  assert.match(browser, /expectCodeBlockUsesBlockStyling/u);
+  assert.match(browser, /backgroundColor/u);
+  assert.match(browser, /vf-docs-code-block__language/u);
+  assert.match(browser, /vf-docs-code-block__copy/u);
 });
 
 test("browser verification has a dedicated Reference server and evidence output", () => {

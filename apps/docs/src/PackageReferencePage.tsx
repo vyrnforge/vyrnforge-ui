@@ -90,7 +90,9 @@ function PackageIndexRow({
         </Badge>
       </div>
       <Text>{packageInfo.purpose}</Text>
-      <PackageFacts packageInfo={packageInfo} />
+      <div className="vf-docs-package-row__facts">
+        <PackageFacts packageInfo={packageInfo} />
+      </div>
     </article>
   );
 }
