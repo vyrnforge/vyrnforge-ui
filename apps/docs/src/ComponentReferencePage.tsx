@@ -10,10 +10,12 @@ import { getComponentMaturityPresentation } from "./componentMaturityPresentatio
 import { referenceModel, type DocsFrameworkId } from "./docsContext";
 import {
   componentReferenceRecords,
+  getComponentDocumentationRecord,
   getComponentReferenceRecord,
   getRelatedPatterns,
   type ComponentReferenceRecord,
 } from "./referenceData";
+import { CodeBlock } from "./examples/components/CodeBlock";
 
 type ApiProperty = {
   public: string;
@@ -472,20 +474,21 @@ function ComponentIndexRow({
 function ComponentOutline({
   componentId,
   frameworkId,
-  showLimitations,
+  showRelated,
 }: {
   componentId: string;
   frameworkId: DocsFrameworkId;
-  showLimitations: boolean;
+  showRelated: boolean;
 }) {
   const sections = [
     ["component-overview", "Overview"],
     ["component-usage", "Usage"],
+    ["component-configuration", "Configuration"],
+    ["component-behavior", "Behavior"],
+    ["component-accessibility", "Accessibility"],
     ["component-framework-api", "API"],
-    ["component-accessibility-styling", "Accessibility & styling"],
-    ...(showLimitations
-      ? [["component-limitations", "Limitations and related patterns"]]
-      : []),
+    ["component-styling", "Styling"],
+    ...(showRelated ? [["component-related", "Related"]] : []),
   ];
 
   return (
@@ -515,7 +518,7 @@ function ComponentOutline({
       </nav>
       <div className="vf-docs-reference-outline__api">
         <Text size="sm" tone="muted">
-          API
+          API members
         </Text>
         <a
           href={componentReferenceTargetHref(
@@ -568,70 +571,258 @@ function ComponentDetail({
   version: string;
 }) {
   const maturity = getComponentMaturityPresentation(component);
+  const documentation = getComponentDocumentationRecord(component.id);
   const relatedPatterns = getRelatedPatterns(component.id);
-  const showLimitations =
-    component.knownLimitations.length > 0 || relatedPatterns.length > 0;
+  const relatedComponents = component.guidance.relatedComponents;
+  const showRelated =
+    component.knownLimitations.length > 0 ||
+    relatedPatterns.length > 0 ||
+    relatedComponents.length > 0;
   const framework = referenceModel.frameworks.find(
     (candidate) => candidate.id === frameworkId,
   );
+  const frameworkUsage = component.frameworks[frameworkId];
   const apiId = framework?.apiSurface as FrameworkApiId | undefined;
   const contextualApi = apiId ? apiComponent(component.id, apiId) : undefined;
+  const controlledProperties =
+    contextualApi?.properties
+      .filter((property) => property.controlled)
+      .map((property) => property.public) ?? [];
+  const interactionEvents =
+    contextualApi?.events.map((event) => event.public) ?? [];
+  const slots = contextualApi?.slots.map((slot) => slot.public) ?? [];
+  const methods = contextualApi?.methods.map((method) => method.name) ?? [];
 
   return (
     <div className="vf-docs-reference-layout">
-      <div className="vf-docs-reference">
-        <section className="vf-docs-reference__section" id="component-overview">
+      <div className="vf-docs-component-doc">
+        <section
+          className="vf-docs-component-doc__overview"
+          id="component-overview"
+        >
           <Text size="sm">
-            <a href="#/component-reference">← Component reference</a>
+            <a href="#/component-reference">← Components</a>
           </Text>
-          <div className="vf-docs-catalog-row__header">
+          <div className="vf-docs-component-doc__title">
             <div>
-              <Heading level={3} size="md">
+              <Text className="vf-docs-catalog__kicker" size="sm">
+                {component.category}
+              </Text>
+              <Heading level={2} size="lg">
                 {component.displayName}
               </Heading>
-              <Text size="sm" tone="muted">
-                <code>{component.package}</code>
-                {component.nativeDeclaration?.tagName && (
-                  <>
-                    {" "}
-                    · <code>{component.nativeDeclaration.tagName}</code>
-                  </>
-                )}
+              <Text className="vf-docs-component-doc__lede">
+                {component.purpose}
               </Text>
             </div>
             <Badge size="sm" tone="subtle" variant={maturity.variant}>
               {maturity.label}
             </Badge>
           </div>
-          <Text>{component.purpose}</Text>
+          <dl className="vf-docs-component-doc__identity">
+            <div>
+              <dt>Package</dt>
+              <dd>
+                <code>{component.package}</code>
+              </dd>
+            </div>
+            {component.nativeDeclaration?.tagName ? (
+              <div>
+                <dt>Custom Element</dt>
+                <dd>
+                  <code>{component.nativeDeclaration.tagName}</code>
+                </dd>
+              </div>
+            ) : null}
+            <div>
+              <dt>Since</dt>
+              <dd>{documentation?.since ?? "Requires verification"}</dd>
+            </div>
+            <div>
+              <dt>Framework</dt>
+              <dd>{framework?.label ?? frameworkId}</dd>
+            </div>
+          </dl>
         </section>
 
-        <section className="vf-docs-reference__section" id="component-usage">
-          <Heading level={3} size="md">
-            Usage
-          </Heading>
-          <MemberList label="Use when" values={[component.guidance.useWhen]} />
-          <MemberList
-            label="Avoid when"
-            values={[component.guidance.avoidWhen]}
-          />
-          <MemberList
-            label="Related components"
-            values={component.guidance.relatedComponents}
-          />
+        <section className="vf-docs-component-doc__section" id="component-usage">
+          <div className="vf-docs-component-doc__section-heading">
+            <Text className="vf-docs-catalog__kicker" size="sm">
+              Usage
+            </Text>
+            <Heading level={3} size="md">
+              Start with the supported path
+            </Heading>
+            <Text tone="muted">
+              Use the selected framework surface without reimplementing the
+              component behavior in application code.
+            </Text>
+          </div>
+
+          <div className="vf-docs-component-doc__guidance">
+            <div>
+              <strong>Use when</strong>
+              <Text>{component.guidance.useWhen}</Text>
+            </div>
+            <div>
+              <strong>Avoid when</strong>
+              <Text>{component.guidance.avoidWhen}</Text>
+            </div>
+          </div>
+
+          {frameworkUsage ? (
+            <div className="vf-docs-component-doc__example">
+              <div className="vf-docs-component-doc__example-heading">
+                <div>
+                  <Heading level={4} size="sm">
+                    {frameworkUsage.label} example
+                  </Heading>
+                  <Text size="sm" tone="muted">
+                    {frameworkUsage.package ?? component.package}
+                  </Text>
+                </div>
+                <Badge
+                  size="sm"
+                  tone="subtle"
+                  variant={
+                    frameworkUsage.status === "current" ? "success" : "info"
+                  }
+                >
+                  {frameworkUsage.status}
+                </Badge>
+              </div>
+              <div className="vf-docs-component-doc__code-stack">
+                <CodeBlock
+                  code={frameworkUsage.setup}
+                  language={framework?.language ?? "text"}
+                />
+                <CodeBlock
+                  code={frameworkUsage.example}
+                  language={framework?.language ?? "text"}
+                />
+              </div>
+              <Text size="sm" tone="muted">
+                {frameworkUsage.note}
+              </Text>
+            </div>
+          ) : null}
         </section>
 
         <section
-          className="vf-docs-reference__section"
+          className="vf-docs-component-doc__section"
+          id="component-configuration"
+        >
+          <div className="vf-docs-component-doc__section-heading">
+            <Text className="vf-docs-catalog__kicker" size="sm">
+              Configuration
+            </Text>
+            <Heading level={3} size="md">
+              Composition surface
+            </Heading>
+          </div>
+          <div className="vf-docs-component-doc__facts-grid">
+            <div>
+              <strong>Controlled state</strong>
+              <span>
+                {controlledProperties.length > 0
+                  ? controlledProperties.join(", ")
+                  : "No controlled state contract"}
+              </span>
+            </div>
+            <div>
+              <strong>Slots / templates</strong>
+              <span>{slots.length > 0 ? slots.join(", ") : "None"}</span>
+            </div>
+            <div>
+              <strong>Imperative methods</strong>
+              <span>{methods.length > 0 ? methods.join(", ") : "None"}</span>
+            </div>
+            <div>
+              <strong>Form association</strong>
+              <span>{component.contract?.formAssociation ?? "None"}</span>
+            </div>
+          </div>
+        </section>
+
+        <section
+          className="vf-docs-component-doc__section"
+          id="component-behavior"
+        >
+          <div className="vf-docs-component-doc__section-heading">
+            <Text className="vf-docs-catalog__kicker" size="sm">
+              Behavior
+            </Text>
+            <Heading level={3} size="md">
+              State and interaction contract
+            </Heading>
+            <Text tone="muted">
+              These facts describe the reusable behavior VyrnForge owns. Keep
+              business state, persistence, permissions, and workflow effects in
+              the consuming application.
+            </Text>
+          </div>
+          <div className="vf-docs-component-doc__behavior">
+            <div>
+              <strong>Public interaction events</strong>
+              <span>
+                {interactionEvents.length > 0
+                  ? interactionEvents.join(", ")
+                  : "No component-specific events"}
+              </span>
+            </div>
+            <div>
+              <strong>Library guidance</strong>
+              <span>{component.guidance.aiUsageNotes}</span>
+            </div>
+          </div>
+        </section>
+
+        <section
+          className="vf-docs-component-doc__section"
+          id="component-accessibility"
+        >
+          <div className="vf-docs-component-doc__section-heading">
+            <Text className="vf-docs-catalog__kicker" size="sm">
+              Accessibility
+            </Text>
+            <Heading level={3} size="md">
+              Semantics and keyboard expectations
+            </Heading>
+          </div>
+          <div className="vf-docs-component-doc__accessibility">
+            <Text>{component.accessibilityNotes}</Text>
+            {component.contract?.accessibility?.length ? (
+              <ul>
+                {component.contract.accessibility.map((item) => (
+                  <li key={item}>{item}</li>
+                ))}
+              </ul>
+            ) : null}
+            {documentation ? (
+              <Text size="sm" tone="muted">
+                Keyboard documentation:{" "}
+                {documentation.accessibility.keyboardDocumentation}
+              </Text>
+            ) : null}
+          </div>
+        </section>
+
+        <section
+          className="vf-docs-component-doc__section"
           id="component-framework-api"
         >
-          <Heading level={3} size="md">
-            API
-          </Heading>
-          <Text tone="muted">
-            Generated API facts for {framework?.label ?? frameworkId}{" "}
-            documentation version {version}.
-          </Text>
+          <div className="vf-docs-component-doc__section-heading">
+            <Text className="vf-docs-catalog__kicker" size="sm">
+              API reference
+            </Text>
+            <Heading level={3} size="md">
+              {framework?.label ?? frameworkId} surface
+            </Heading>
+            <Text tone="muted">
+              Generated public API for documentation version {version}. Use
+              this after the usage and behavior guidance above.
+            </Text>
+          </div>
           {contextualApi ? (
             <FrameworkApiPanel
               component={contextualApi}
@@ -646,52 +837,101 @@ function ComponentDetail({
         </section>
 
         <section
-          className="vf-docs-reference__section"
-          id="component-accessibility-styling"
+          className="vf-docs-component-doc__section"
+          id="component-styling"
         >
-          <Heading level={3} size="md">
-            Accessibility & styling
-          </Heading>
-          <MemberList
-            label="Accessibility guidance"
-            values={[
-              component.accessibilityNotes,
-              ...(component.contract?.accessibility ?? []),
-            ].filter(Boolean)}
-          />
-          <MemberList
-            label="Public classes"
-            values={component.styling.classes}
-          />
-          <MemberList
-            label="CSS variables"
-            values={component.styling.variables}
-          />
+          <div className="vf-docs-component-doc__section-heading">
+            <Text className="vf-docs-catalog__kicker" size="sm">
+              Styling
+            </Text>
+            <Heading level={3} size="md">
+              Theme and extension hooks
+            </Heading>
+            <Text tone="muted">
+              Prefer shared VyrnForge tokens and the documented public hooks
+              instead of application-specific forks.
+            </Text>
+          </div>
+          <div className="vf-docs-component-doc__facts-grid">
+            <div>
+              <strong>Public classes</strong>
+              <span>
+                {component.styling.classes.length > 0
+                  ? component.styling.classes.join(", ")
+                  : "None"}
+              </span>
+            </div>
+            <div>
+              <strong>Component variables</strong>
+              <span>
+                {component.styling.variables.length > 0
+                  ? component.styling.variables.join(", ")
+                  : "Uses shared semantic tokens"}
+              </span>
+            </div>
+            <div>
+              <strong>Source</strong>
+              <span>{documentation?.sourcePath ?? component.docsPath ?? "—"}</span>
+            </div>
+            <div>
+              <strong>Canonical docs</strong>
+              <span>{documentation?.docsPath ?? component.docsPath ?? "—"}</span>
+            </div>
+          </div>
         </section>
 
-        {showLimitations && (
+        {showRelated ? (
           <section
-            className="vf-docs-reference__section"
-            id="component-limitations"
+            className="vf-docs-component-doc__section"
+            id="component-related"
           >
-            <Heading level={3} size="md">
-              Limitations and related patterns
-            </Heading>
-            <MemberList
-              label="Known limitations"
-              values={component.knownLimitations}
-            />
-            <MemberList
-              label="Patterns using this component"
-              values={relatedPatterns.map((pattern) => pattern.displayName)}
-            />
+            <div className="vf-docs-component-doc__section-heading">
+              <Text className="vf-docs-catalog__kicker" size="sm">
+                Related
+              </Text>
+              <Heading level={3} size="md">
+                Alternatives, patterns, and limits
+              </Heading>
+            </div>
+            {relatedComponents.length > 0 ? (
+              <div className="vf-docs-component-doc__related-links">
+                {relatedComponents.map((label) => (
+                  <span key={label}>{label}</span>
+                ))}
+              </div>
+            ) : null}
+            {relatedPatterns.length > 0 ? (
+              <div>
+                <Heading level={4} size="sm">
+                  Patterns using this component
+                </Heading>
+                <div className="vf-docs-component-doc__related-links">
+                  {relatedPatterns.map((pattern) => (
+                    <span key={pattern.id}>{pattern.displayName}</span>
+                  ))}
+                </div>
+              </div>
+            ) : null}
+            {component.knownLimitations.length > 0 ? (
+              <div>
+                <Heading level={4} size="sm">
+                  Known limitations
+                </Heading>
+                <ul>
+                  {component.knownLimitations.map((limitation) => (
+                    <li key={limitation}>{limitation}</li>
+                  ))}
+                </ul>
+              </div>
+            ) : null}
           </section>
-        )}
+        ) : null}
       </div>
+
       <ComponentOutline
         componentId={component.id}
         frameworkId={frameworkId}
-        showLimitations={showLimitations}
+        showRelated={showRelated}
       />
     </div>
   );
