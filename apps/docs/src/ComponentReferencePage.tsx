@@ -787,10 +787,7 @@ export function ComponentReferencePage({
           </dl>
         </section>
 
-        <nav
-          aria-label="Component areas"
-          className="vf-docs-catalog__jump-nav"
-        >
+        <nav aria-label="Component areas" className="vf-docs-catalog__jump-nav">
           {componentAreas.map(([area, components]) => (
             <a href={`#${componentAreaAnchor(area)}`} key={area}>
               <span>{area}</span>
@@ -823,10 +820,7 @@ export function ComponentReferencePage({
                     left.displayName.localeCompare(right.displayName),
                   )
                   .map((component) => (
-                    <ComponentIndexRow
-                      component={component}
-                      key={component.id}
-                    />
+                    <ComponentIndexRow component={component} key={component.id} />
                   ))}
               </div>
             </section>
