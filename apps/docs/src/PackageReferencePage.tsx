@@ -104,7 +104,10 @@ function PackageIndexRow({
 
 function PackageArchitecture() {
   const byName = new Map(
-    packageReferenceRecords.map((packageInfo) => [packageInfo.name, packageInfo]),
+    packageReferenceRecords.map((packageInfo) => [
+      packageInfo.name,
+      packageInfo,
+    ]),
   );
   const layers = [
     {
