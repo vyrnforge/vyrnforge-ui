@@ -1,4 +1,5 @@
 import { Badge, EmptyState, Heading, Text } from "@vyrnforge/ui-components";
+import { CodeBlock } from "./examples/components/CodeBlock";
 
 import frameworkApiReferenceRaw from "../../../docs/generated/framework-api-reference.json?raw";
 import { getReferenceRecordRoute } from "../../../docs/reference/referenceRuntime";
@@ -469,23 +470,131 @@ function ComponentIndexRow({
   );
 }
 
+function ComponentUsageExample({
+  component,
+  frameworkId,
+}: {
+  component: ComponentReferenceRecord;
+  frameworkId: DocsFrameworkId;
+}) {
+  const usage = component.frameworks[frameworkId];
+  return (
+    <div className="vf-docs-component-example">
+      <div className="vf-docs-component-example__intro">
+        <div>
+          <Text className="vf-docs-catalog__kicker" size="sm">
+            {usage.label} example
+          </Text>
+          <Heading level={3} size="md">
+            Start from the public surface.
+          </Heading>
+          <Text tone="muted">{usage.note}</Text>
+        </div>
+        <Badge size="sm" tone="subtle" variant="success">
+          {usage.status}
+        </Badge>
+      </div>
+      <div className="vf-docs-component-example__code">
+        {usage.setup ? (
+          <div>
+            <Text size="sm" tone="muted">
+              Setup
+            </Text>
+            <CodeBlock code={usage.setup} />
+          </div>
+        ) : null}
+        <div>
+          <Text size="sm" tone="muted">
+            Usage
+          </Text>
+          <CodeBlock code={usage.example} />
+        </div>
+      </div>
+    </div>
+  );
+}
+
+const presentationProperties = new Set([
+  "variant",
+  "size",
+  "tone",
+  "density",
+  "orientation",
+  "placement",
+  "align",
+  "justify",
+  "loading",
+  "disabled",
+  "selected",
+  "checked",
+  "multiple",
+  "fullWidth",
+]);
+
+function ComponentOptions({
+  component,
+}: {
+  component: FrameworkApiComponent | undefined;
+}) {
+  const options =
+    component?.properties.filter((property) =>
+      presentationProperties.has(property.public),
+    ) ?? [];
+
+  if (options.length === 0) return null;
+
+  return (
+    <section className="vf-docs-reference__section" id="component-options">
+      <div className="vf-docs-section-heading">
+        <Text className="vf-docs-catalog__kicker" size="sm">
+          Variants & states
+        </Text>
+        <Heading level={3} size="md">
+          The public options you will reach for most.
+        </Heading>
+      </div>
+      <div className="vf-docs-component-options">
+        {options.map((property) => (
+          <article key={property.public}>
+            <div>
+              <Heading level={4} size="sm">
+                <code>{property.public}</code>
+              </Heading>
+              {property.default !== undefined ? (
+                <Text size="sm" tone="muted">
+                  Default: <code>{formatDefault(property.default)}</code>
+                </Text>
+              ) : null}
+            </div>
+            <code>{property.type}</code>
+          </article>
+        ))}
+      </div>
+    </section>
+  );
+}
+
 function ComponentOutline({
   componentId,
   frameworkId,
   showLimitations,
+  showOptions,
 }: {
   componentId: string;
   frameworkId: DocsFrameworkId;
   showLimitations: boolean;
+  showOptions: boolean;
 }) {
   const sections = [
     ["component-overview", "Overview"],
-    ["component-usage", "Usage"],
-    ["component-framework-api", "API"],
+    ["component-example", "Example"],
+    ["component-guidance", "When to use"],
+    ...(showOptions ? [["component-options", "Variants & states"]] : []),
     ["component-accessibility-styling", "Accessibility & styling"],
     ...(showLimitations
-      ? [["component-limitations", "Limitations and related patterns"]]
+      ? [["component-related", "Related & limitations"]]
       : []),
+    ["component-framework-api", "API reference"],
   ];
 
   return (
@@ -515,7 +624,7 @@ function ComponentOutline({
       </nav>
       <div className="vf-docs-reference-outline__api">
         <Text size="sm" tone="muted">
-          API
+          API deep links
         </Text>
         <a
           href={componentReferenceTargetHref(
@@ -576,62 +685,200 @@ function ComponentDetail({
   );
   const apiId = framework?.apiSurface as FrameworkApiId | undefined;
   const contextualApi = apiId ? apiComponent(component.id, apiId) : undefined;
+  const showOptions =
+    contextualApi?.properties.some((property) =>
+      presentationProperties.has(property.public),
+    ) ?? false;
 
   return (
     <div className="vf-docs-reference-layout">
-      <div className="vf-docs-reference">
-        <section className="vf-docs-reference__section" id="component-overview">
+      <div className="vf-docs-reference vf-docs-component-detail">
+        <section
+          className="vf-docs-reference__section vf-docs-component-detail__intro"
+          id="component-overview"
+        >
           <Text size="sm">
-            <a href="#/component-reference">← Component reference</a>
+            <a href="#/component-reference">← Components</a>
           </Text>
-          <div className="vf-docs-catalog-row__header">
+          <div className="vf-docs-component-detail__identity">
             <div>
-              <Heading level={3} size="md">
+              <Text className="vf-docs-catalog__kicker" size="sm">
+                {component.category.replace(/-/gu, " ")}
+              </Text>
+              <Heading level={3} size="lg">
                 {component.displayName}
               </Heading>
-              <Text size="sm" tone="muted">
-                <code>{component.package}</code>
-                {component.nativeDeclaration?.tagName && (
-                  <>
-                    {" "}
-                    · <code>{component.nativeDeclaration.tagName}</code>
-                  </>
-                )}
+              <Text size="lg" tone="muted">
+                {component.purpose}
               </Text>
             </div>
             <Badge size="sm" tone="subtle" variant={maturity.variant}>
               {maturity.label}
             </Badge>
           </div>
-          <Text>{component.purpose}</Text>
         </section>
 
-        <section className="vf-docs-reference__section" id="component-usage">
-          <Heading level={3} size="md">
-            Usage
-          </Heading>
-          <MemberList label="Use when" values={[component.guidance.useWhen]} />
-          <MemberList
-            label="Avoid when"
-            values={[component.guidance.avoidWhen]}
-          />
-          <MemberList
-            label="Related components"
-            values={component.guidance.relatedComponents}
-          />
+        <section className="vf-docs-reference__section" id="component-example">
+          <ComponentUsageExample component={component} frameworkId={frameworkId} />
         </section>
+
+        <section className="vf-docs-reference__section" id="component-guidance">
+          <div className="vf-docs-section-heading">
+            <Text className="vf-docs-catalog__kicker" size="sm">
+              Guidance
+            </Text>
+            <Heading level={3} size="md">
+              When this component belongs in the interface.
+            </Heading>
+          </div>
+          <div className="vf-docs-component-guidance">
+            <article>
+              <strong>Use when</strong>
+              <Text>{component.guidance.useWhen}</Text>
+            </article>
+            <article>
+              <strong>Avoid when</strong>
+              <Text>{component.guidance.avoidWhen}</Text>
+            </article>
+          </div>
+        </section>
+
+        <ComponentOptions component={contextualApi} />
 
         <section
           className="vf-docs-reference__section"
+          id="component-accessibility-styling"
+        >
+          <div className="vf-docs-section-heading">
+            <Text className="vf-docs-catalog__kicker" size="sm">
+              Accessibility & styling
+            </Text>
+            <Heading level={3} size="md">
+              Behavior and visual extension points.
+            </Heading>
+          </div>
+          <div className="vf-docs-component-guidance">
+            <article>
+              <strong>Accessibility</strong>
+              <Text>
+                {[
+                  component.accessibilityNotes,
+                  ...(component.contract?.accessibility ?? []),
+                ]
+                  .filter(Boolean)
+                  .join(" ")}
+              </Text>
+            </article>
+            <article>
+              <strong>Styling surface</strong>
+              <Text size="sm" tone="muted">
+                Public classes
+              </Text>
+              <div className="vf-docs-component-code-list">
+                {component.styling.classes.length > 0 ? (
+                  component.styling.classes.map((value) => (
+                    <code key={value}>{value}</code>
+                  ))
+                ) : (
+                  <span>Use shared VyrnForge tokens and component props.</span>
+                )}
+              </div>
+              {component.styling.variables.length > 0 ? (
+                <>
+                  <Text size="sm" tone="muted">
+                    CSS variables
+                  </Text>
+                  <div className="vf-docs-component-code-list">
+                    {component.styling.variables.map((value) => (
+                      <code key={value}>{value}</code>
+                    ))}
+                  </div>
+                </>
+              ) : null}
+            </article>
+          </div>
+        </section>
+
+        {showLimitations ? (
+          <section className="vf-docs-reference__section" id="component-related">
+            <div className="vf-docs-section-heading">
+              <Text className="vf-docs-catalog__kicker" size="sm">
+                Continue building
+              </Text>
+              <Heading level={3} size="md">
+                Related components and patterns.
+              </Heading>
+            </div>
+            <div className="vf-docs-component-related">
+              {component.guidance.relatedComponents.length > 0 ? (
+                <div>
+                  <strong>Related components</strong>
+                  <div className="vf-docs-discovery-links">
+                    {component.guidance.relatedComponents.map((name) => {
+                      const related = componentReferenceRecords.find(
+                        (candidate) =>
+                          candidate.displayName === name || candidate.id === name,
+                      );
+                      return related ? (
+                        <a href={componentHref(related.id)} key={name}>
+                          {name}
+                        </a>
+                      ) : (
+                        <span key={name}>{name}</span>
+                      );
+                    })}
+                  </div>
+                </div>
+              ) : null}
+              {relatedPatterns.length > 0 ? (
+                <div>
+                  <strong>Patterns</strong>
+                  <div className="vf-docs-discovery-links">
+                    {relatedPatterns.map((pattern) => (
+                      <a
+                        href={`#${getReferenceRecordRoute(
+                          referenceModel,
+                          "patterns",
+                          pattern.id,
+                        )}`}
+                        key={pattern.id}
+                      >
+                        {pattern.displayName}
+                      </a>
+                    ))}
+                  </div>
+                </div>
+              ) : null}
+              {component.knownLimitations.length > 0 ? (
+                <div>
+                  <strong>Known limitations</strong>
+                  <ul>
+                    {component.knownLimitations.map((limitation) => (
+                      <li key={limitation}>{limitation}</li>
+                    ))}
+                  </ul>
+                </div>
+              ) : null}
+            </div>
+          </section>
+        ) : null}
+
+        <section
+          className="vf-docs-reference__section vf-docs-component-api-reference"
           id="component-framework-api"
         >
-          <Heading level={3} size="md">
-            API
-          </Heading>
-          <Text tone="muted">
-            Generated API facts for {framework?.label ?? frameworkId}{" "}
-            documentation version {version}.
-          </Text>
+          <div className="vf-docs-section-heading">
+            <Text className="vf-docs-catalog__kicker" size="sm">
+              API reference
+            </Text>
+            <Heading level={3} size="md">
+              Generated {framework?.label ?? frameworkId} contract.
+            </Heading>
+            <Text tone="muted">
+              Detailed API facts for documentation version {version}. Use this
+              section when you need exact inputs, events, slots, or methods.
+            </Text>
+          </div>
           {contextualApi ? (
             <FrameworkApiPanel
               component={contextualApi}
@@ -644,54 +891,12 @@ function ComponentDetail({
             </Text>
           )}
         </section>
-
-        <section
-          className="vf-docs-reference__section"
-          id="component-accessibility-styling"
-        >
-          <Heading level={3} size="md">
-            Accessibility & styling
-          </Heading>
-          <MemberList
-            label="Accessibility guidance"
-            values={[
-              component.accessibilityNotes,
-              ...(component.contract?.accessibility ?? []),
-            ].filter(Boolean)}
-          />
-          <MemberList
-            label="Public classes"
-            values={component.styling.classes}
-          />
-          <MemberList
-            label="CSS variables"
-            values={component.styling.variables}
-          />
-        </section>
-
-        {showLimitations && (
-          <section
-            className="vf-docs-reference__section"
-            id="component-limitations"
-          >
-            <Heading level={3} size="md">
-              Limitations and related patterns
-            </Heading>
-            <MemberList
-              label="Known limitations"
-              values={component.knownLimitations}
-            />
-            <MemberList
-              label="Patterns using this component"
-              values={relatedPatterns.map((pattern) => pattern.displayName)}
-            />
-          </section>
-        )}
       </div>
       <ComponentOutline
         componentId={component.id}
         frameworkId={frameworkId}
         showLimitations={showLimitations}
+        showOptions={showOptions}
       />
     </div>
   );
