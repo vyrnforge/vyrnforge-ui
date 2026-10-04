@@ -202,7 +202,7 @@ test.describe("VyrnForge Reference product", () => {
   test("component detail shows a live specimen before API reference", async ({
     page,
   }, testInfo) => {
-    await openReference(page, "component-reference/button");
+    await openReference(page, "components/button");
     await expect(page.locator(".vf-docs-component-specimen")).toBeVisible();
     await expect(page.getByRole("button", { name: "Primary" })).toBeVisible();
     await expect(page.locator(".vf-docs-api-table").first()).toBeVisible();
@@ -239,9 +239,9 @@ test.describe("VyrnForge Reference product", () => {
       name: "Search VyrnForge Reference",
     });
     await search.fill("definitely-no-reference-result");
-    await expect(page.getByRole("status")).toContainText(
-      "No Reference results",
-    );
+    await expect(
+      page.locator(".vf-reference-navigation__empty"),
+    ).toContainText("No Reference results");
 
     await capture(page, testInfo, "reference-dark-search-zero");
   });
