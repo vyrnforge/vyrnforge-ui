@@ -8,6 +8,7 @@ import {
 } from "./componentApiMember";
 import { getComponentMaturityPresentation } from "./componentMaturityPresentation";
 import { referenceModel, type DocsFrameworkId } from "./docsContext";
+import { ReferenceComponentGallery } from "./ReferenceComponentGallery";
 import {
   componentReferenceRecords,
   getComponentReferenceRecord,
@@ -745,7 +746,9 @@ export function ComponentReferencePage({
   }
 
   return (
-    <div className="vf-docs-catalog">
+    <div className="vf-docs-component-reference">
+      <ReferenceComponentGallery />
+      <div className="vf-docs-catalog">
       <section className="vf-docs-catalog__intro">
         <div>
           <Text className="vf-docs-catalog__kicker" size="sm">
@@ -813,6 +816,7 @@ export function ComponentReferencePage({
             </div>
           </section>
         ))}
+      </div>
       </div>
     </div>
   );
