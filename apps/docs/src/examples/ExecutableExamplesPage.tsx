@@ -1,8 +1,14 @@
-import { Badge, Heading, Text } from "@vyrnforge/ui-components";
+import { Badge, CodeText, Heading, Text } from "@vyrnforge/ui-components";
 import type { DocsFrameworkId } from "../docsContext";
 import { resolveDocumentationExample } from "../referenceRoutes";
 import { CodeBlock } from "./components/CodeBlock";
 import { getExecutableExampleRecord } from "./data/executableExampleContract";
+
+function stringList(value: unknown) {
+  return Array.isArray(value)
+    ? value.filter((entry): entry is string => typeof entry === "string")
+    : [];
+}
 
 export function ExecutableExamplesPage({
   frameworkId,
@@ -32,30 +38,107 @@ export function ExecutableExamplesPage({
     );
   }
 
+  const runtime =
+    typeof example.fixtureContract.runtime === "string"
+      ? example.fixtureContract.runtime
+      : typeof example.fixtureContract.frameworkRuntime === "string"
+        ? example.fixtureContract.frameworkRuntime
+        : "Runtime verified by consumer fixture";
+  const rendererPackages = stringList(example.fixtureContract.rendererPackages);
+  const verification = [
+    ...example.verification,
+    ...stringList(example.fixtureContract.completedEvidence),
+  ].filter((item, index, values) => values.indexOf(item) === index);
+
   return (
-    <div className="vf-docs-reference-layout">
-      <div className="vf-docs-reference">
-        <section className="vf-docs-reference__section">
+    <div className="vf-docs-example-reference">
+      <section className="vf-docs-example-reference__summary">
+        <div>
+          <Text className="vf-docs-catalog__kicker" size="sm">
+            Packed consumer evidence
+          </Text>
           <Heading level={3} size="md">
             {example.frameworkLabel} executable consumer
           </Heading>
           <Text tone="muted">
-            Verified against packed VyrnForge packages rather than a
-            Playground-only implementation.
+            This example is verified against packed VyrnForge packages rather
+            than a docs-only or Playground implementation.
           </Text>
-          <Badge tone="subtle" variant="success">
-            {example.supportClaim}
-          </Badge>
-        </section>
-        <section className="vf-docs-reference__section">
-          <Heading level={3} size="md">
-            Executable source
-          </Heading>
-          <Text size="sm" tone="muted">
-            <code>{resolution.implementation.sourcePath}</code>
-          </Text>
+        </div>
+        <Badge tone="subtle" variant="success">
+          {example.supportClaim}
+        </Badge>
+      </section>
+
+      <dl className="vf-docs-example-reference__facts">
+        <div>
+          <dt>Framework</dt>
+          <dd>{example.frameworkLabel}</dd>
+        </div>
+        <div>
+          <dt>Runtime</dt>
+          <dd>{runtime}</dd>
+        </div>
+        <div>
+          <dt>Fixture</dt>
+          <dd>
+            <CodeText>{example.fixtureId}</CodeText>
+          </dd>
+        </div>
+        <div>
+          <dt>Source</dt>
+          <dd>
+            <CodeText>{resolution.implementation.sourcePath}</CodeText>
+          </dd>
+        </div>
+      </dl>
+
+      <div className="vf-docs-example-reference__workbench">
+        <section className="vf-docs-example-reference__source">
+          <div className="vf-docs-catalog__section-heading">
+            <div>
+              <Text className="vf-docs-catalog__kicker" size="sm">
+                Executable source
+              </Text>
+              <Heading level={3} size="md">
+                Consumer entry point
+              </Heading>
+            </div>
+          </div>
           <CodeBlock code={example.source} />
         </section>
+
+        <aside className="vf-docs-example-reference__evidence">
+          <div>
+            <Text className="vf-docs-catalog__kicker" size="sm">
+              Verification
+            </Text>
+            <Heading level={3} size="sm">
+              What this example proves
+            </Heading>
+          </div>
+          <ol>
+            {verification.map((item, index) => (
+              <li key={item}>
+                <span>{String(index + 1).padStart(2, "0")}</span>
+                <Text size="sm">{item}</Text>
+              </li>
+            ))}
+          </ol>
+          {rendererPackages.length > 0 ? (
+            <div className="vf-docs-example-reference__packages">
+              <Text size="sm" tone="muted">
+                Renderer packages
+              </Text>
+              {rendererPackages.map((packageName) => (
+                <CodeText key={packageName}>{packageName}</CodeText>
+              ))}
+            </div>
+          ) : null}
+          <Text size="sm" tone="muted">
+            Additional fixture files: {example.exampleFiles.length}
+          </Text>
+        </aside>
       </div>
     </div>
   );
