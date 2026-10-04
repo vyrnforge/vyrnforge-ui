@@ -129,18 +129,25 @@ async function expectCodeBlockUsesBlockStyling(page: Page) {
   const languageColor = await language.evaluate(
     (element) => getComputedStyle(element).color,
   );
-  const copyColor = await copy.evaluate((element) => getComputedStyle(element).color);
+  const copyColor = await copy.evaluate(
+    (element) => getComputedStyle(element).color,
+  );
   const blockBackground = await page
     .locator(".vf-docs-code-block")
     .first()
     .evaluate((element) => getComputedStyle(element).backgroundColor);
 
-  expect(
-    contrastRatio(languageColor, contrast.background === "rgba(0, 0, 0, 0)" ? blockBackground : contrast.background),
-  ).toBeGreaterThanOrEqual(4.5);
-  expect(
-    contrastRatio(copyColor, contrast.background === "rgba(0, 0, 0, 0)" ? blockBackground : contrast.background),
-  ).toBeGreaterThanOrEqual(4.5);
+  const toolbarBackground =
+    contrast.background === "rgba(0, 0, 0, 0)"
+      ? blockBackground
+      : contrast.background;
+
+  expect(contrastRatio(languageColor, toolbarBackground)).toBeGreaterThanOrEqual(
+    4.5,
+  );
+  expect(contrastRatio(copyColor, toolbarBackground)).toBeGreaterThanOrEqual(
+    4.5,
+  );
 }
 
 async function capture(page: Page, testInfo: TestInfo, name: string) {
