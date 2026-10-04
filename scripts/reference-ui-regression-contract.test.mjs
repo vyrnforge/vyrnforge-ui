@@ -53,6 +53,14 @@ test("Reference verification covers representative templates and adaptive states
   assert.match(browser, /expectDiscoveryTilesReadable/u);
   assert.match(browser, /vf-docs-discovery-tile/u);
   assert.match(browser, /vf-docs-pattern-tile/u);
+  assert.match(browser, /expectComponentDetailUseful/u);
+  assert.match(browser, /expectPackageDetailUseful/u);
+  assert.match(browser, /expectTokenDetailUseful/u);
+  assert.match(browser, /expectPatternDetailUseful/u);
+  assert.match(browser, /reference-component-detail/u);
+  assert.match(browser, /reference-package-detail/u);
+  assert.match(browser, /reference-token-detail/u);
+  assert.match(browser, /reference-pattern-detail/u);
   assert.match(browser, /expectCodeBlockUsesBlockStyling/u);
   assert.match(browser, /backgroundColor/u);
   assert.match(browser, /vf-docs-code-block__language/u);
