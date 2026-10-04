@@ -716,7 +716,10 @@ function ComponentDetail({
         </section>
 
         <section className="vf-docs-reference__section" id="component-example">
-          <ComponentUsageExample component={component} frameworkId={frameworkId} />
+          <ComponentUsageExample
+            component={component}
+            frameworkId={frameworkId}
+          />
         </section>
 
         <section className="vf-docs-reference__section" id="component-guidance">
@@ -797,7 +800,10 @@ function ComponentDetail({
         </section>
 
         {showLimitations ? (
-          <section className="vf-docs-reference__section" id="component-related">
+          <section
+            className="vf-docs-reference__section"
+            id="component-related"
+          >
             <div className="vf-docs-section-heading">
               <Text className="vf-docs-catalog__kicker" size="sm">
                 Continue building
@@ -814,7 +820,8 @@ function ComponentDetail({
                     {component.guidance.relatedComponents.map((name) => {
                       const related = componentReferenceRecords.find(
                         (candidate) =>
-                          candidate.displayName === name || candidate.id === name,
+                          candidate.displayName === name ||
+                          candidate.id === name,
                       );
                       return related ? (
                         <a href={componentHref(related.id)} key={name}>
@@ -986,9 +993,9 @@ export function ComponentReferencePage({
             Find the primitive or composition that matches the job.
           </Heading>
           <Text tone="muted">
-            Browse by the UI problem you are solving. Each component page
-            starts with usage, variants, accessibility, and framework examples;
-            exact API details come last.
+            Browse by the UI problem you are solving. Each component page starts
+            with usage, variants, accessibility, and framework examples; exact
+            API details come last.
           </Text>
         </div>
         <dl className="vf-docs-catalog__stats">
