@@ -141,6 +141,7 @@ if (process.env.CI === "true") {
     ],
     { cwd: root, stdio: "inherit" },
   );
+  process.exit(1);
 }
 
 for (const command of [
