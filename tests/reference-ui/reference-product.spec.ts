@@ -79,6 +79,31 @@ async function expectPackageFactsReadable(page: Page) {
   expect(metrics.height).toBeLessThan(40);
 }
 
+function parseRgb(color: string) {
+  const values = color.match(/[\d.]+/gu)?.map(Number) ?? [];
+  return values.slice(0, 3);
+}
+
+function relativeLuminance([red, green, blue]: number[]) {
+  const channels = [red, green, blue].map((value) => {
+    const normalized = value / 255;
+    return normalized <= 0.03928
+      ? normalized / 12.92
+      : ((normalized + 0.055) / 1.055) ** 2.4;
+  });
+  return (
+    0.2126 * channels[0] + 0.7152 * channels[1] + 0.0722 * channels[2]
+  );
+}
+
+function contrastRatio(foreground: string, background: string) {
+  const foregroundLuminance = relativeLuminance(parseRgb(foreground));
+  const backgroundLuminance = relativeLuminance(parseRgb(background));
+  const lighter = Math.max(foregroundLuminance, backgroundLuminance);
+  const darker = Math.min(foregroundLuminance, backgroundLuminance);
+  return (lighter + 0.05) / (darker + 0.05);
+}
+
 async function expectCodeBlockUsesBlockStyling(page: Page) {
   const code = page.locator(".vf-docs-code-block__pre code").first();
   await expect(code).toBeVisible();
@@ -93,6 +118,29 @@ async function expectCodeBlockUsesBlockStyling(page: Page) {
 
   expect(style.backgroundColor).toBe("rgba(0, 0, 0, 0)");
   expect(style.paddingInlineStart).toBe("0px");
+
+  const toolbar = page.locator(".vf-docs-code-block__toolbar").first();
+  const language = page.locator(".vf-docs-code-block__language").first();
+  const copy = page.locator(".vf-docs-code-block__copy").first();
+  const contrast = await toolbar.evaluate((element) => {
+    const background = getComputedStyle(element).backgroundColor;
+    return { background };
+  });
+  const languageColor = await language.evaluate(
+    (element) => getComputedStyle(element).color,
+  );
+  const copyColor = await copy.evaluate((element) => getComputedStyle(element).color);
+  const blockBackground = await page
+    .locator(".vf-docs-code-block")
+    .first()
+    .evaluate((element) => getComputedStyle(element).backgroundColor);
+
+  expect(
+    contrastRatio(languageColor, contrast.background === "rgba(0, 0, 0, 0)" ? blockBackground : contrast.background),
+  ).toBeGreaterThanOrEqual(4.5);
+  expect(
+    contrastRatio(copyColor, contrast.background === "rgba(0, 0, 0, 0)" ? blockBackground : contrast.background),
+  ).toBeGreaterThanOrEqual(4.5);
 }
 
 async function capture(page: Page, testInfo: TestInfo, name: string) {
