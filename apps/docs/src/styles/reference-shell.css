@@ -484,6 +484,17 @@
   border-block-end: 1px solid var(--vf-color-slate-800, #1e293b);
 }
 
+.vf-docs-code-block__language,
+.vf-docs-code-block__copy {
+  color: var(--vf-color-slate-300, #cbd5e1);
+}
+
+.vf-docs-code-block__copy:hover,
+.vf-docs-code-block__copy:focus-visible {
+  color: var(--vf-color-white, #ffffff);
+  background: var(--vf-color-slate-800, #1e293b);
+}
+
 .vf-docs-code-block__pre {
   overflow: auto;
   max-height: 32rem;
