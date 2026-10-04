@@ -77,21 +77,26 @@ function PackageIndexRow({
   packageInfo: PackageReferenceRecord;
 }) {
   return (
-    <article className="vf-docs-package-row">
-      <div className="vf-docs-catalog-row__header">
-        <Heading level={3} size="md">
+    <article className="vf-docs-package-entry">
+      <div className="vf-docs-package-entry__title">
+        <Heading level={3} size="sm">
           <a href={packageHref(packageInfo.name)}>{packageInfo.name}</a>
         </Heading>
         <Badge
+          size="sm"
           tone="subtle"
           variant={packageInfo.status === "current" ? "success" : "info"}
         >
           {packageInfo.status}
         </Badge>
       </div>
-      <Text>{packageInfo.purpose}</Text>
-      <div className="vf-docs-package-row__facts">
-        <PackageFacts packageInfo={packageInfo} />
+      <Text className="vf-docs-package-entry__purpose" tone="muted">
+        {packageInfo.purpose}
+      </Text>
+      <div className="vf-docs-package-entry__meta">
+        <span>{packageInfo.runtime ?? "Runtime neutral"}</span>
+        <span>{packageInfo.releaseTrack ?? "No release track"}</span>
+        {packageInfo.cssImport ? <code>{packageInfo.cssImport}</code> : null}
       </div>
     </article>
   );
@@ -179,37 +184,83 @@ export function PackageReferencePage({ packageId }: PackageReferencePageProps) {
     return <PackageDetail packageInfo={packageInfo} />;
   }
 
+  const currentPackages = packageReferenceRecords.filter(
+    (packageInfo) => packageInfo.status === "current",
+  ).length;
+
   return (
-    <div className="vf-docs-reference">
-      <section className="vf-docs-reference__section">
-        <Heading level={3} size="md">
-          Generated package reference
-        </Heading>
-        <Text tone="muted">
-          Package identity and summary records come from generated consumer
-          knowledge. Ownership, dependency, entry-point, and limitation facts
-          remain canonical in package metadata and are joined here without a
-          second hand-maintained package catalog.
-        </Text>
+    <div className="vf-docs-catalog">
+      <section className="vf-docs-catalog__intro">
+        <div>
+          <Text className="vf-docs-catalog__kicker" size="sm">
+            Package map
+          </Text>
+          <Heading level={3} size="md">
+            Understand what each package owns before choosing an entry point.
+          </Heading>
+          <Text tone="muted">
+            Package identity and summaries come from generated consumer
+            knowledge. Open a package for canonical ownership boundaries,
+            dependencies, public entry points, and API documentation.
+          </Text>
+        </div>
+        <dl className="vf-docs-catalog__stats">
+          <div>
+            <dt>Packages</dt>
+            <dd>{packageReferenceRecords.length}</dd>
+          </div>
+          <div>
+            <dt>Current</dt>
+            <dd>{currentPackages}</dd>
+          </div>
+          <div>
+            <dt>Rules</dt>
+            <dd>{packageDependencyRules.length}</dd>
+          </div>
+        </dl>
       </section>
 
-      <div className="vf-docs-package-index">
-        {packageReferenceRecords.map((packageInfo) => (
-          <PackageIndexRow key={packageInfo.name} packageInfo={packageInfo} />
-        ))}
-      </div>
-
-      <section className="vf-docs-reference__section">
-        <Heading level={3} size="md">
-          Dependency direction
-        </Heading>
-        <div className="vf-docs-dependency-list">
-          {packageDependencyRules.map((rule) => (
-            <CodeText className="vf-docs-dependency-item" key={rule}>
-              {rule}
-            </CodeText>
+      <section className="vf-docs-package-map">
+        <div className="vf-docs-catalog__section-heading">
+          <div>
+            <Text className="vf-docs-catalog__kicker" size="sm">
+              Public packages
+            </Text>
+            <Heading level={3} size="md">
+              Choose by responsibility, not framework habit.
+            </Heading>
+          </div>
+        </div>
+        <div className="vf-docs-package-index">
+          {packageReferenceRecords.map((packageInfo) => (
+            <PackageIndexRow key={packageInfo.name} packageInfo={packageInfo} />
           ))}
         </div>
+      </section>
+
+      <section className="vf-docs-architecture-rules">
+        <div className="vf-docs-catalog__section-heading">
+          <div>
+            <Text className="vf-docs-catalog__kicker" size="sm">
+              Architecture
+            </Text>
+            <Heading level={3} size="md">
+              Dependency direction
+            </Heading>
+            <Text tone="muted">
+              These canonical rules keep framework adapters thin and shared
+              foundations reusable.
+            </Text>
+          </div>
+        </div>
+        <ol>
+          {packageDependencyRules.map((rule, index) => (
+            <li key={rule}>
+              <span>{String(index + 1).padStart(2, "0")}</span>
+              <CodeText>{rule}</CodeText>
+            </li>
+          ))}
+        </ol>
       </section>
     </div>
   );
