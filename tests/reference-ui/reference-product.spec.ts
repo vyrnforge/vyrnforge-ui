@@ -59,6 +59,42 @@ async function expectDiscoveryCatalogReadable(page: Page) {
   expect(metrics.descriptionWidth).toBeGreaterThan(260);
 }
 
+async function expectPackageFactsReadable(page: Page) {
+  const facts = page.locator(".vf-docs-package-row__facts").first();
+  await expect(facts).toBeVisible();
+
+  const metrics = await facts.evaluate((element) => {
+    const labels = [...element.querySelectorAll<HTMLElement>("strong")];
+    const apiLabel = labels.find(
+      (label) => label.textContent?.trim() === "API documentation",
+    );
+    const bounds = apiLabel?.getBoundingClientRect();
+    return {
+      height: Math.round(bounds?.height ?? 0),
+      width: Math.round(bounds?.width ?? 0),
+    };
+  });
+
+  expect(metrics.width).toBeGreaterThan(120);
+  expect(metrics.height).toBeLessThan(40);
+}
+
+async function expectCodeBlockUsesBlockStyling(page: Page) {
+  const code = page.locator(".vf-docs-code-block__pre code").first();
+  await expect(code).toBeVisible();
+
+  const style = await code.evaluate((element) => {
+    const computed = getComputedStyle(element);
+    return {
+      backgroundColor: computed.backgroundColor,
+      paddingInlineStart: computed.paddingInlineStart,
+    };
+  });
+
+  expect(style.backgroundColor).toBe("rgba(0, 0, 0, 0)");
+  expect(style.paddingInlineStart).toBe("0px");
+}
+
 async function capture(page: Page, testInfo: TestInfo, name: string) {
   await mkdir(evidenceDirectory, { recursive: true });
   const filename = `${name}.png`;
@@ -102,6 +138,12 @@ test.describe("VyrnForge Reference product", () => {
       await expectNoPageOverflow(page);
       if (route === "token-reference" || route === "pattern-reference") {
         await expectDiscoveryCatalogReadable(page);
+      }
+      if (route === "package-reference") {
+        await expectPackageFactsReadable(page);
+      }
+      if (route === "executable-examples") {
+        await expectCodeBlockUsesBlockStyling(page);
       }
       await capture(page, testInfo, `reference-${route}`);
     }
