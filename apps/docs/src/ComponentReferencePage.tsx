@@ -461,10 +461,7 @@ function ComponentIndexRow({
         {component.purpose}
       </Text>
       <div className="vf-docs-component-entry__meta">
-        <code>{component.package}</code>
-        {component.nativeDeclaration?.tagName ? (
-          <code>{component.nativeDeclaration.tagName}</code>
-        ) : null}
+        <span>Available across VyrnForge surfaces</span>
       </div>
     </article>
   );
@@ -902,6 +899,28 @@ function ComponentDetail({
   );
 }
 
+const componentCategoryPresentation: Record<
+  string,
+  { label: string; order: number }
+> = {
+  primitive: { label: "Primitives", order: 0 },
+  "form-control": { label: "Form controls", order: 1 },
+  navigation: { label: "Navigation", order: 2 },
+  feedback: { label: "Feedback", order: 3 },
+  overlay: { label: "Overlays", order: 4 },
+  "data-display": { label: "Data display", order: 5 },
+  composite: { label: "Layout & composition", order: 6 },
+  "data-grid": { label: "Data grid", order: 7 },
+  "grid-feature": { label: "Grid features", order: 8 },
+};
+
+function componentAreaLabel(area: string) {
+  return (
+    componentCategoryPresentation[area]?.label ??
+    area.replace(/-/gu, " ").replace(/^./u, (value) => value.toUpperCase())
+  );
+}
+
 function componentAreaAnchor(area: string) {
   return `component-area-${area.toLowerCase().replace(/[^a-z0-9]+/gu, "-")}`;
 }
@@ -909,12 +928,19 @@ function componentAreaAnchor(area: string) {
 const componentAreas = Object.entries(
   componentReferenceRecords.reduce<Record<string, ComponentReferenceRecord[]>>(
     (areas, component) => {
-      (areas[component.category] ??= []).push(component);
+      if (component.category !== "internal") {
+        (areas[component.category] ??= []).push(component);
+      }
       return areas;
     },
     {},
   ),
-).sort(([left], [right]) => left.localeCompare(right));
+).sort(
+  ([left], [right]) =>
+    (componentCategoryPresentation[left]?.order ?? 99) -
+      (componentCategoryPresentation[right]?.order ?? 99) ||
+    left.localeCompare(right),
+);
 
 export function ComponentReferencePage({
   componentId,
@@ -960,8 +986,9 @@ export function ComponentReferencePage({
             Find the primitive or composition that matches the job.
           </Heading>
           <Text tone="muted">
-            Browse by functional area, then open a component for framework
-            usage, generated API, accessibility, styling, and limitations.
+            Browse by the UI problem you are solving. Each component page
+            starts with usage, variants, accessibility, and framework examples;
+            exact API details come last.
           </Text>
         </div>
         <dl className="vf-docs-catalog__stats">
@@ -983,7 +1010,7 @@ export function ComponentReferencePage({
       <nav aria-label="Component areas" className="vf-docs-catalog__jump-nav">
         {componentAreas.map(([area, components]) => (
           <a href={`#${componentAreaAnchor(area)}`} key={area}>
-            <span>{area}</span>
+            <span>{componentAreaLabel(area)}</span>
             <small>{components.length}</small>
           </a>
         ))}
@@ -1002,7 +1029,7 @@ export function ComponentReferencePage({
                   {String(components.length).padStart(2, "0")} components
                 </Text>
                 <Heading level={3} size="md">
-                  {area}
+                  {componentAreaLabel(area)}
                 </Heading>
               </div>
               <a href="#vf-reference-main">Back to top</a>
