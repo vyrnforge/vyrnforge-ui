@@ -178,6 +178,39 @@ test.describe("VyrnForge Reference product", () => {
     }
   });
 
+  test("component and discovery details are specimen-first", async ({
+    page,
+  }, testInfo) => {
+    await openReference(page, "component-reference");
+    await page.getByRole("link", { name: "Button", exact: true }).first().click();
+    await expect(page.locator(".vf-docs-component-example")).toBeVisible();
+    await expect(page.locator("#component-guidance")).toBeVisible();
+    await expect(page.locator("#component-framework-api")).toBeVisible();
+    const componentOrder = await page.evaluate(() => {
+      const example = document.querySelector("#component-example");
+      const api = document.querySelector("#component-framework-api");
+      if (!example || !api) return null;
+      return example.compareDocumentPosition(api);
+    });
+    expect(componentOrder).not.toBeNull();
+    expect(
+      (componentOrder ?? 0) & Node.DOCUMENT_POSITION_FOLLOWING,
+    ).toBeTruthy();
+    await capture(page, testInfo, "reference-component-button-detail");
+
+    await openReference(page, "token-reference");
+    await page.locator(".vf-docs-discovery-tile a").first().click();
+    await expect(page.locator(".vf-docs-token-specimen").first()).toBeVisible();
+    await expect(page.locator(".vf-docs-token-specimen__visual").first()).toBeVisible();
+    await capture(page, testInfo, "reference-token-detail");
+
+    await openReference(page, "pattern-reference");
+    await page.locator(".vf-docs-pattern-tile a").first().click();
+    await expect(page.locator(".vf-docs-pattern-reference")).toBeVisible();
+    await expect(page.locator(".vf-docs-example-stage")).toBeVisible();
+    await capture(page, testInfo, "reference-pattern-detail");
+  });
+
   test("theme, route focus, and search states are accessible", async ({
     page,
   }, testInfo) => {
