@@ -9,6 +9,7 @@ import {
 import { getComponentMaturityPresentation } from "./componentMaturityPresentation";
 import { referenceModel, type DocsFrameworkId } from "./docsContext";
 import { ReferenceComponentGallery } from "./ReferenceComponentGallery";
+import { ReferenceComponentSpecimen } from "./ReferenceComponentSpecimen";
 import {
   componentReferenceRecords,
   getComponentReferenceRecord,
@@ -481,6 +482,7 @@ function ComponentOutline({
 }) {
   const sections = [
     ["component-overview", "Overview"],
+    ["component-specimen", "Live specimen"],
     ["component-usage", "Usage"],
     ["component-framework-api", "API"],
     ["component-accessibility-styling", "Accessibility & styling"],
@@ -606,6 +608,13 @@ function ComponentDetail({
           </div>
           <Text>{component.purpose}</Text>
         </section>
+
+        <div id="component-specimen">
+          <ReferenceComponentSpecimen
+            componentId={component.id}
+            relatedPatterns={relatedPatterns.map((pattern) => pattern.id)}
+          />
+        </div>
 
         <section className="vf-docs-reference__section" id="component-usage">
           <Heading level={3} size="md">
