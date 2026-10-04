@@ -1175,11 +1175,31 @@
   overflow: hidden;
   border-radius: var(--vf-radius-md, 8px);
   background:
-    linear-gradient(45deg, var(--vf-surface-muted, #f1f5f9) 25%, transparent 25%),
-    linear-gradient(-45deg, var(--vf-surface-muted, #f1f5f9) 25%, transparent 25%),
-    linear-gradient(45deg, transparent 75%, var(--vf-surface-muted, #f1f5f9) 75%),
-    linear-gradient(-45deg, transparent 75%, var(--vf-surface-muted, #f1f5f9) 75%);
-  background-position: 0 0, 0 6px, 6px -6px, -6px 0;
+    linear-gradient(
+      45deg,
+      var(--vf-surface-muted, #f1f5f9) 25%,
+      transparent 25%
+    ),
+    linear-gradient(
+      -45deg,
+      var(--vf-surface-muted, #f1f5f9) 25%,
+      transparent 25%
+    ),
+    linear-gradient(
+      45deg,
+      transparent 75%,
+      var(--vf-surface-muted, #f1f5f9) 75%
+    ),
+    linear-gradient(
+      -45deg,
+      transparent 75%,
+      var(--vf-surface-muted, #f1f5f9) 75%
+    );
+  background-position:
+    0 0,
+    0 6px,
+    6px -6px,
+    -6px 0;
   background-size: 12px 12px;
 }
 
@@ -1196,7 +1216,10 @@
   background: var(--vf-surface, #ffffff);
 }
 
-.vf-docs-token-specimen__visual > span:not(.vf-docs-token-specimen__swatch):not(.vf-docs-token-specimen__border):not(.vf-docs-token-specimen__measure) {
+.vf-docs-token-specimen__visual
+  > span:not(.vf-docs-token-specimen__swatch):not(
+    .vf-docs-token-specimen__border
+  ):not(.vf-docs-token-specimen__measure) {
   font-size: 28px;
   font-weight: 700;
 }
