@@ -103,23 +103,33 @@ async function expectComponentDetailUseful(page: Page) {
 async function expectPackageDetailUseful(page: Page) {
   await page.locator(".vf-docs-package-entry a").first().click();
   await expect(page.locator(".vf-docs-package-doc")).toBeVisible();
-  await expect(page.getByText("Public package surface", { exact: true })).toBeVisible();
-  await expect(page.getByText("What this package owns", { exact: true })).toBeVisible();
-  await expect(page.locator(".vf-docs-package-doc__boundaries").first()).toBeVisible();
+  await expect(
+    page.getByText("Public package surface", { exact: true }),
+  ).toBeVisible();
+  await expect(
+    page.getByText("What this package owns", { exact: true }),
+  ).toBeVisible();
+  await expect(
+    page.locator(".vf-docs-package-doc__boundaries").first(),
+  ).toBeVisible();
 }
 
 async function expectTokenDetailUseful(page: Page) {
   await page.locator(".vf-docs-discovery-tile a").first().click();
   await expect(page.locator(".vf-docs-token-doc")).toBeVisible();
   await expect(page.locator(".vf-docs-token-table")).toBeVisible();
-  await expect(page.getByText("Open interactive token catalog", { exact: true })).toBeVisible();
+  await expect(
+    page.getByText("Open interactive token catalog", { exact: true }),
+  ).toBeVisible();
 }
 
 async function expectPatternDetailUseful(page: Page) {
   await page.locator(".vf-docs-pattern-tile a").first().click();
   await expect(page.locator(".vf-docs-pattern-doc")).toBeVisible();
   await expect(page.locator(".vf-docs-pattern-doc__components")).toBeVisible();
-  await expect(page.getByText("Library and application boundary", { exact: true })).toBeVisible();
+  await expect(
+    page.getByText("Library and application boundary", { exact: true }),
+  ).toBeVisible();
 }
 
 async function expectCodeBlockUsesBlockStyling(page: Page) {

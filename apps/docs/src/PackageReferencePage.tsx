@@ -91,7 +91,8 @@ function PackageDetail({
     packageInfo.cssImport && packageInfo.cssImport !== "not-applicable"
       ? packageInfo.cssImport
       : null;
-  const primaryEntryPoint = packageInfo.publicEntryPoints[0] ?? packageInfo.name;
+  const primaryEntryPoint =
+    packageInfo.publicEntryPoints[0] ?? packageInfo.name;
 
   return (
     <div className="vf-docs-package-doc">
@@ -122,7 +123,10 @@ function PackageDetail({
         <PackageFacts packageInfo={packageInfo} />
       </section>
 
-      <section className="vf-docs-package-doc__section" id="package-installation">
+      <section
+        className="vf-docs-package-doc__section"
+        id="package-installation"
+      >
         <div className="vf-docs-component-doc__section-heading">
           <Text className="vf-docs-catalog__kicker" size="sm">
             Setup

@@ -656,7 +656,10 @@ function ComponentDetail({
           </dl>
         </section>
 
-        <section className="vf-docs-component-doc__section" id="component-usage">
+        <section
+          className="vf-docs-component-doc__section"
+          id="component-usage"
+        >
           <div className="vf-docs-component-doc__section-heading">
             <Text className="vf-docs-catalog__kicker" size="sm">
               Usage
@@ -830,8 +833,8 @@ function ComponentDetail({
               {framework?.label ?? frameworkId} surface
             </Heading>
             <Text tone="muted">
-              Generated public API for documentation version {version}. Use
-              this after the usage and behavior guidance above.
+              Generated public API for documentation version {version}. Use this
+              after the usage and behavior guidance above.
             </Text>
           </div>
           {contextualApi ? (
@@ -882,11 +885,15 @@ function ComponentDetail({
             </div>
             <div>
               <strong>Source</strong>
-              <span>{documentation?.sourcePath ?? component.docsPath ?? "—"}</span>
+              <span>
+                {documentation?.sourcePath ?? component.docsPath ?? "—"}
+              </span>
             </div>
             <div>
               <strong>Canonical docs</strong>
-              <span>{documentation?.docsPath ?? component.docsPath ?? "—"}</span>
+              <span>
+                {documentation?.docsPath ?? component.docsPath ?? "—"}
+              </span>
             </div>
           </div>
         </section>

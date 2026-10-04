@@ -262,9 +262,9 @@ function PatternReference({ id }: { id?: string | null }) {
               Reusable VyrnForge building blocks
             </Heading>
             <Text tone="muted">
-              The pattern composes existing VyrnForge primitives and
-              components. Application routing, persistence, authorization, and
-              business rules remain outside the library.
+              The pattern composes existing VyrnForge primitives and components.
+              Application routing, persistence, authorization, and business
+              rules remain outside the library.
             </Text>
           </div>
           <div className="vf-docs-pattern-doc__components">
@@ -289,8 +289,7 @@ function PatternReference({ id }: { id?: string | null }) {
           <Text>{pattern.avoidWhen}</Text>
           <Text size="sm" tone="muted">
             Component-level keyboard, focus, form, and assistive-technology
-            requirements still apply to every building block in the
-            composition.
+            requirements still apply to every building block in the composition.
           </Text>
         </section>
 
