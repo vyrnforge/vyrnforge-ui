@@ -1,9 +1,10 @@
-import { useState, type ReactNode } from "react";
+import { useMemo, useState, type ComponentProps, type ReactNode } from "react";
 import {
   Badge,
   Button,
   ButtonGroup,
   Checkbox,
+  Dialog,
   EmptyState,
   ErrorState,
   Heading,
@@ -27,6 +28,13 @@ import {
   ToggleButton,
   ToggleButtonGroup,
 } from "@vyrnforge/ui-components";
+import {
+  getComponentDocumentation,
+  getComponentReferenceRecord,
+  getContractEnumValues,
+  type ComponentDocumentationControl,
+  type ComponentReferenceRecord,
+} from "./referenceData";
 
 function UnsupportedSpecimen({
   componentId,
@@ -40,7 +48,7 @@ function UnsupportedSpecimen({
       <Text tone="muted">
         {relatedPatterns.length > 0
           ? "This component is best understood inside a real application composition."
-          : "This component does not yet have a standalone specimen."}
+          : "No canonical standalone specimen is declared for this component yet."}
       </Text>
       {relatedPatterns.length > 0 ? (
         <div>
@@ -57,6 +65,73 @@ function UnsupportedSpecimen({
   );
 }
 
+function initialControlValue(
+  component: ComponentReferenceRecord,
+  control: ComponentDocumentationControl,
+) {
+  const property = component.contract?.properties.find(
+    (entry) => entry.name === control.property,
+  );
+  if (control.kind === "boolean") {
+    return typeof property?.default === "boolean" ? property.default : false;
+  }
+  const values = getContractEnumValues(component, control.property);
+  if (typeof property?.default === "string" && values.includes(property.default)) {
+    return property.default;
+  }
+  return values[0] ?? "";
+}
+
+function SpecimenControls({
+  component,
+  controls,
+  values,
+  onChange,
+}: {
+  component: ComponentReferenceRecord;
+  controls: ComponentDocumentationControl[];
+  values: Record<string, boolean | string>;
+  onChange: (property: string, value: boolean | string) => void;
+}) {
+  if (controls.length === 0) return null;
+
+  return (
+    <div className="vf-docs-component-specimen__controls" aria-label="Specimen controls">
+      <Text size="sm" tone="muted">
+        Controls are declared by documentation metadata; selectable values come
+        from the canonical public component contract.
+      </Text>
+      <div className="vf-docs-specimen-form">
+        {controls.map((control) => {
+          if (control.kind === "boolean") {
+            return (
+              <Switch
+                checked={Boolean(values[control.property])}
+                key={control.property}
+                label={control.label}
+                onCheckedChange={(checked) => onChange(control.property, checked)}
+              />
+            );
+          }
+          const enumValues = getContractEnumValues(component, control.property);
+          if (enumValues.length === 0) return null;
+          return (
+            <Select
+              aria-label={control.label}
+              key={control.property}
+              onChange={(event) =>
+                onChange(control.property, event.currentTarget.value)
+              }
+              options={enumValues.map((value) => ({ label: value, value }))}
+              value={String(values[control.property] ?? enumValues[0])}
+            />
+          );
+        })}
+      </div>
+    </div>
+  );
+}
+
 export function ReferenceComponentSpecimen({
   componentId,
   relatedPatterns,
@@ -64,24 +139,57 @@ export function ReferenceComponentSpecimen({
   componentId: string;
   relatedPatterns: string[];
 }) {
+  const component = getComponentReferenceRecord(componentId);
+  const documentation = getComponentDocumentation(componentId);
   const [checked, setChecked] = useState(true);
+  const [dialogOpen, setDialogOpen] = useState(false);
   const [tab, setTab] = useState("overview");
   const [toggle, setToggle] = useState("list");
+  const [controlOverrides, setControlOverrides] = useState<
+    Record<string, boolean | string>
+  >({});
 
+  const controlValues = useMemo(() => {
+    if (!component || !documentation) return {};
+    return Object.fromEntries(
+      documentation.controls.map((control) => [
+        control.property,
+        controlOverrides[control.property] ??
+          initialControlValue(component, control),
+      ]),
+    );
+  }, [component, documentation, controlOverrides]);
+
+  const renderer = documentation?.specimen.renderer;
   let specimen: ReactNode;
 
-  switch (componentId) {
-    case "button":
+  switch (renderer) {
+    case "button": {
+      const variant = controlValues.variant as ComponentProps<
+        typeof Button
+      >["variant"];
+      const size = controlValues.size as ComponentProps<typeof Button>["size"];
       specimen = (
-        <div className="vf-docs-specimen-row">
-          <Button variant="primary">Primary</Button>
-          <Button>Default</Button>
-          <Button variant="subtle">Subtle</Button>
-          <Button variant="ghost">Ghost</Button>
-          <Button variant="danger">Danger</Button>
+        <div className="vf-docs-specimen-stack">
+          <Button
+            disabled={Boolean(controlValues.disabled)}
+            loading={Boolean(controlValues.loading)}
+            size={size}
+            variant={variant}
+          >
+            Interactive button
+          </Button>
+          <div className="vf-docs-specimen-row" aria-label="Button variants">
+            <Button variant="primary">Primary</Button>
+            <Button>Default</Button>
+            <Button variant="subtle">Subtle</Button>
+            <Button variant="ghost">Ghost</Button>
+            <Button variant="danger">Danger</Button>
+          </div>
         </div>
       );
       break;
+    }
     case "button-group":
       specimen = (
         <ButtonGroup>
@@ -119,7 +227,15 @@ export function ReferenceComponentSpecimen({
       break;
     case "text-input":
       specimen = (
-        <TextInput aria-label="Project name" defaultValue="VyrnForge" />
+        <TextInput
+          aria-label="Project name"
+          defaultValue="VyrnForge"
+          disabled={Boolean(controlValues.disabled)}
+          invalid={Boolean(controlValues.invalid)}
+          readOnly={Boolean(controlValues.readOnly)}
+          required={Boolean(controlValues.required)}
+          size={controlValues.size as ComponentProps<typeof TextInput>["size"]}
+        />
       );
       break;
     case "search-input":
@@ -132,11 +248,15 @@ export function ReferenceComponentSpecimen({
         <Select
           aria-label="Framework"
           defaultValue="react"
+          disabled={Boolean(controlValues.disabled)}
+          invalid={Boolean(controlValues.invalid)}
           options={[
             { label: "React", value: "react" },
             { label: "Angular", value: "angular" },
             { label: "Vue", value: "vue" },
           ]}
+          required={Boolean(controlValues.required)}
+          size={controlValues.size as ComponentProps<typeof Select>["size"]}
         />
       );
       break;
@@ -219,7 +339,9 @@ export function ReferenceComponentSpecimen({
             },
           ]}
           onValueChange={setTab}
+          size={controlValues.size as ComponentProps<typeof Tabs>["size"]}
           value={tab}
+          variant={controlValues.variant as ComponentProps<typeof Tabs>["variant"]}
         />
       );
       break;
@@ -277,6 +399,25 @@ export function ReferenceComponentSpecimen({
         </Panel>
       );
       break;
+    case "dialog":
+      specimen = (
+        <div>
+          <Button onClick={() => setDialogOpen(true)}>Open dialog specimen</Button>
+          <Dialog
+            closeOnEscape={Boolean(controlValues.closeOnEscape)}
+            closeOnOverlayClick={Boolean(controlValues.closeOnOverlayClick)}
+            description="This specimen uses the public Dialog contract."
+            footer={<Button onClick={() => setDialogOpen(false)}>Done</Button>}
+            onOpenChange={setDialogOpen}
+            open={dialogOpen}
+            size={controlValues.size as ComponentProps<typeof Dialog>["size"]}
+            title="Review changes"
+          >
+            Confirm that the configuration is ready to publish.
+          </Dialog>
+        </div>
+      );
+      break;
     default:
       specimen = (
         <UnsupportedSpecimen
@@ -299,6 +440,16 @@ export function ReferenceComponentSpecimen({
         </div>
       </div>
       <div className="vf-docs-component-specimen__stage">{specimen}</div>
+      {component && documentation ? (
+        <SpecimenControls
+          component={component}
+          controls={documentation.controls}
+          onChange={(property, value) =>
+            setControlOverrides((current) => ({ ...current, [property]: value }))
+          }
+          values={controlValues}
+        />
+      ) : null}
     </section>
   );
 }
