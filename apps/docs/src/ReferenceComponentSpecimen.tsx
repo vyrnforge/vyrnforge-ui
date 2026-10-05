@@ -3,6 +3,7 @@ import {
   Badge,
   Button,
   ButtonGroup,
+  Card,
   Checkbox,
   Dialog,
   EmptyState,
@@ -10,12 +11,14 @@ import {
   Heading,
   Icon,
   IconButton,
+  Inline,
   InlineMessage,
   LoadingState,
   Panel,
   Progress,
   RadioGroup,
   SearchInput,
+  Section,
   Select,
   Skeleton,
   Slider,
@@ -119,6 +122,46 @@ const renderPanel: SpecimenRenderer = () => (
   <Panel description="Current operational status" title="Queue health">
     <Text>4 critical · 8 standard · 2 awaiting review</Text>
   </Panel>
+);
+
+const renderCard: SpecimenRenderer = () => (
+  <Inline gap="sm" wrap>
+    <Card padding="md" variant="plain">
+      <Text>Plain</Text>
+    </Card>
+    <Card padding="md" variant="bordered">
+      <Text>Bordered</Text>
+    </Card>
+    <Card padding="md" variant="elevated">
+      <Text>Elevated</Text>
+    </Card>
+  </Inline>
+);
+
+const renderStack: SpecimenRenderer = () => (
+  <Stack gap="sm">
+    <Badge variant="neutral">First</Badge>
+    <Badge variant="info">Second</Badge>
+    <Badge variant="success">Third</Badge>
+  </Stack>
+);
+
+const renderInline: SpecimenRenderer = () => (
+  <Inline gap="sm" wrap>
+    <Badge variant="neutral">Alpha</Badge>
+    <Badge variant="info">Beta</Badge>
+    <Badge variant="success">Gamma</Badge>
+  </Inline>
+);
+
+const renderSection: SpecimenRenderer = () => (
+  <Section
+    actions={<Button size="sm">Manage</Button>}
+    description="Reusable layout for titled application regions."
+    title="Operational summary"
+  >
+    <Text>Section content remains semantically grouped and composable.</Text>
+  </Section>
 );
 
 // Renderer dispatch stays in the React documentation host. Which controls,
@@ -262,7 +305,10 @@ const specimenRenderers: Record<string, SpecimenRenderer> = {
   ),
   "loading-state": () => <LoadingState label="Loading resources" />,
   panel: renderPanel,
-  card: renderPanel,
+  card: renderCard,
+  stack: renderStack,
+  inline: renderInline,
+  section: renderSection,
 };
 
 export function ReferenceComponentSpecimen({
