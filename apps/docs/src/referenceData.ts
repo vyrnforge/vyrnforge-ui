@@ -1,4 +1,5 @@
 import consumerKnowledgeRaw from "../../../docs/generated/consumer-knowledge.json?raw";
+import componentDocumentationRaw from "../../../docs/metadata/component-documentation.json?raw";
 import packageMetadataRaw from "../../../docs/metadata/packages.json?raw";
 
 export type ReferenceGuidance = {
@@ -8,12 +9,25 @@ export type ReferenceGuidance = {
   relatedComponents: string[];
 };
 
+export type ReferenceContractType = {
+  kind?: string;
+  values?: string[];
+  typeName?: string;
+};
+
+export type ReferenceContractProperty = {
+  name: string;
+  type?: ReferenceContractType | string;
+  required?: boolean;
+  default?: unknown;
+};
+
 export type ReferenceContract = {
-  properties: string[];
-  attributes: string[];
-  events: string[];
-  slots: string[];
-  methods: string[];
+  properties: ReferenceContractProperty[];
+  attributes: unknown[];
+  events: unknown[];
+  slots: unknown[];
+  methods: unknown[];
   accessibility: string[];
   formAssociation: string;
 };
@@ -53,6 +67,27 @@ export type ComponentReferenceRecord = {
   } | null;
   contract: ReferenceContract | null;
   frameworks: Record<ReferenceFrameworkId, ReferenceFrameworkUsage>;
+};
+
+export type ComponentDocumentationControl = {
+  property: string;
+  label: string;
+  kind: "select" | "boolean";
+};
+
+export type ComponentDocumentationRecord = {
+  id: string;
+  specimen: {
+    kind: "standalone" | "pattern" | "none";
+    renderer?: string;
+  };
+  controls: ComponentDocumentationControl[];
+  anatomy: string[];
+};
+
+type ComponentDocumentationMetadata = {
+  schemaVersion: number;
+  components: ComponentDocumentationRecord[];
 };
 
 type GeneratedPackageRecord = {
@@ -108,12 +143,39 @@ export type PackageReferenceRecord = GeneratedPackageRecord &
   >;
 
 const knowledge = JSON.parse(consumerKnowledgeRaw) as ConsumerKnowledge;
+const componentDocumentation = JSON.parse(
+  componentDocumentationRaw,
+) as ComponentDocumentationMetadata;
 const packageMetadata = JSON.parse(packageMetadataRaw) as PackageMetadata;
 const canonicalPackageByName = new Map(
   packageMetadata.packages.map((entry) => [entry.name, entry]),
 );
+const documentationByComponentId = new Map(
+  componentDocumentation.components.map((entry) => [entry.id, entry]),
+);
 
 export const componentReferenceRecords = knowledge.components;
+
+for (const documentation of componentDocumentation.components) {
+  const component = componentReferenceRecords.find(
+    (entry) => entry.id === documentation.id,
+  );
+  if (!component) {
+    throw new Error(
+      `Component documentation metadata references unknown public component ${documentation.id}.`,
+    );
+  }
+  const publicProperties = new Set(
+    (component.contract?.properties ?? []).map((property) => property.name),
+  );
+  for (const control of documentation.controls) {
+    if (!publicProperties.has(control.property)) {
+      throw new Error(
+        `${documentation.id}: documentation control ${control.property} is not present in the canonical public contract.`,
+      );
+    }
+  }
+}
 
 export const packageReferenceRecords: PackageReferenceRecord[] =
   knowledge.packages.map((generated) => {
@@ -158,6 +220,28 @@ export function getComponentReferenceRecord(componentId: string) {
   return componentReferenceRecords.find(
     (component) => component.id === componentId,
   );
+}
+
+export function getComponentDocumentation(componentId: string) {
+  return documentationByComponentId.get(componentId) ?? null;
+}
+
+export function getContractProperty(
+  component: ComponentReferenceRecord,
+  propertyName: string,
+) {
+  return component.contract?.properties.find(
+    (property) => property.name === propertyName,
+  );
+}
+
+export function getContractEnumValues(
+  component: ComponentReferenceRecord,
+  propertyName: string,
+) {
+  const property = getContractProperty(component, propertyName);
+  if (!property || typeof property.type === "string") return [];
+  return property.type?.kind === "enum" ? (property.type.values ?? []) : [];
 }
 
 export function getPackageReferenceRecord(packageName: string) {
