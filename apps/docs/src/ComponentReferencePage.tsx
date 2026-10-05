@@ -786,8 +786,8 @@ function ComponentDetail({
             Generated API reference
           </Heading>
           <Text tone="muted">
-            Authoritative generated API facts for {framework?.label ?? frameworkId}{" "}
-            documentation version {version}.
+            Authoritative generated API facts for{" "}
+            {framework?.label ?? frameworkId} documentation version {version}.
           </Text>
           {contextualApi ? (
             <FrameworkApiPanel
