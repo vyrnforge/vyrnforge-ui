@@ -7,6 +7,7 @@ import "./styles/docs.css";
 import "./styles/guide.css";
 import "./styles/examples.css";
 import "./styles/reference-shell.css";
+import "./styles/reference-responsive.css";
 
 createRoot(document.getElementById("root") as HTMLElement).render(
   <StrictMode>

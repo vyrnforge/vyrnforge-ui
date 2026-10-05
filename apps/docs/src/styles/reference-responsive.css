@@ -1,0 +1,113 @@
+.vf-docs-reference-layout,
+.vf-docs-reference,
+.vf-docs-reference > *,
+.vf-docs-framework-usage,
+.vf-docs-api-section,
+.vf-docs-component-specimen,
+.vf-docs-component-specimen__stage {
+  min-width: 0;
+  max-width: 100%;
+}
+
+.vf-docs-framework-usage pre {
+  box-sizing: border-box;
+  width: 100%;
+  max-width: 100%;
+  min-width: 0;
+  overflow-x: auto;
+  overscroll-behavior-inline: contain;
+  white-space: pre;
+}
+
+.vf-docs-framework-usage pre code {
+  white-space: inherit;
+  overflow-wrap: normal;
+}
+
+.vf-docs-api-table-scroll {
+  box-sizing: border-box;
+  width: 100%;
+  max-width: 100%;
+  min-width: 0;
+  overflow-x: auto;
+  overscroll-behavior-inline: contain;
+}
+
+.vf-docs-api-table {
+  min-width: max-content;
+}
+
+.vf-docs-contract-field,
+.vf-docs-contract-field span,
+.vf-docs-reference code:not(pre code) {
+  min-width: 0;
+  overflow-wrap: anywhere;
+}
+
+.vf-docs-component-specimen__stage,
+.vf-docs-specimen-row {
+  max-width: 100%;
+}
+
+.vf-docs-specimen-row {
+  flex-wrap: wrap;
+}
+
+.vf-docs-evidence-note {
+  margin-block-start: var(--vf-space-2, 8px);
+}
+
+@media (max-width: 980px) {
+  .vf-docs-reference-layout {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .vf-docs-reference-outline {
+    position: static;
+    inset: auto;
+    order: -1;
+    max-height: none;
+    overflow: visible;
+    border: 1px solid var(--vf-border-subtle, #e2e8f0);
+    border-radius: var(--vf-radius-lg, 8px);
+    padding: var(--vf-space-3, 12px);
+  }
+
+  .vf-docs-reference-outline nav ul {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--vf-space-2, 8px) var(--vf-space-3, 12px);
+    margin-block: var(--vf-space-2, 8px);
+    padding: 0;
+    list-style: none;
+  }
+
+  .vf-docs-reference-outline__api {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--vf-space-2, 8px) var(--vf-space-3, 12px);
+  }
+}
+
+@media (max-width: 560px) {
+  .vf-docs-framework-usage__meta {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+
+  .vf-docs-reference-outline nav ul,
+  .vf-docs-reference-outline__api {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .vf-reference-shell *,
+  .vf-docs-reference * {
+    scroll-behavior: auto !important;
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}

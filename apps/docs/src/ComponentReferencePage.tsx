@@ -12,9 +12,12 @@ import { ReferenceComponentGallery } from "./ReferenceComponentGallery";
 import { ReferenceComponentSpecimen } from "./ReferenceComponentSpecimen";
 import {
   componentReferenceRecords,
+  getComponentAccessibilityEvidence,
+  getComponentDocumentationCapabilities,
   getComponentReferenceRecord,
   getRelatedPatterns,
   type ComponentReferenceRecord,
+  type ReferenceFrameworkUsage,
 } from "./referenceData";
 
 type ApiProperty = {
@@ -153,6 +156,42 @@ function EmptyApiMembers() {
     <Text size="sm" tone="muted">
       None on this framework surface.
     </Text>
+  );
+}
+
+function FrameworkUsagePanel({
+  framework,
+  usage,
+}: {
+  framework: string;
+  usage: ReferenceFrameworkUsage;
+}) {
+  return (
+    <div className="vf-docs-framework-usage">
+      <div className="vf-docs-framework-usage__meta">
+        <Badge size="sm" tone="subtle">
+          {usage.status}
+        </Badge>
+        {usage.package ? <code>{usage.package}</code> : null}
+      </div>
+      <Text tone="muted">{usage.note}</Text>
+      <div className="vf-docs-api-section">
+        <Heading level={4} size="sm">
+          Setup
+        </Heading>
+        <pre>
+          <code>{usage.setup}</code>
+        </pre>
+      </div>
+      <div className="vf-docs-api-section">
+        <Heading level={4} size="sm">
+          {framework} example
+        </Heading>
+        <pre>
+          <code>{usage.example}</code>
+        </pre>
+      </div>
+    </div>
   );
 }
 
@@ -461,12 +500,7 @@ function ComponentIndexRow({
       <Text className="vf-docs-component-entry__purpose" tone="muted">
         {component.purpose}
       </Text>
-      <div className="vf-docs-component-entry__meta">
-        <code>{component.package}</code>
-        {component.nativeDeclaration?.tagName ? (
-          <code>{component.nativeDeclaration.tagName}</code>
-        ) : null}
-      </div>
+      <Text size="sm">{component.guidance.useWhen}</Text>
     </article>
   );
 }
@@ -474,21 +508,27 @@ function ComponentIndexRow({
 function ComponentOutline({
   componentId,
   frameworkId,
+  showCapabilities,
   showLimitations,
 }: {
   componentId: string;
   frameworkId: DocsFrameworkId;
+  showCapabilities: boolean;
   showLimitations: boolean;
 }) {
   const sections = [
     ["component-overview", "Overview"],
     ["component-specimen", "Live specimen"],
     ["component-usage", "Usage"],
-    ["component-framework-api", "API"],
-    ["component-accessibility-styling", "Accessibility & styling"],
+    ...(showCapabilities
+      ? [["component-capabilities", "Variants, sizes & states"]]
+      : []),
+    ["component-accessibility-styling", "Accessibility, keyboard & styling"],
+    ["component-framework-usage", "Framework usage"],
     ...(showLimitations
       ? [["component-limitations", "Limitations and related patterns"]]
       : []),
+    ["component-generated-api", "Generated API reference"],
   ];
 
   return (
@@ -572,11 +612,15 @@ function ComponentDetail({
 }) {
   const maturity = getComponentMaturityPresentation(component);
   const relatedPatterns = getRelatedPatterns(component.id);
+  const capabilities = getComponentDocumentationCapabilities(component);
+  const accessibilityEvidence = getComponentAccessibilityEvidence(component.id);
+  const showCapabilities = capabilities.controls.length > 0;
   const showLimitations =
     component.knownLimitations.length > 0 || relatedPatterns.length > 0;
   const framework = referenceModel.frameworks.find(
     (candidate) => candidate.id === frameworkId,
   );
+  const frameworkUsage = component.frameworks[frameworkId];
   const apiId = framework?.apiSurface as FrameworkApiId | undefined;
   const contextualApi = apiId ? apiComponent(component.id, apiId) : undefined;
 
@@ -618,11 +662,11 @@ function ComponentDetail({
 
         <section className="vf-docs-reference__section" id="component-usage">
           <Heading level={3} size="md">
-            Usage
+            When to use
           </Heading>
           <MemberList label="Use when" values={[component.guidance.useWhen]} />
           <MemberList
-            label="Avoid when"
+            label="When not to use"
             values={[component.guidance.avoidWhen]}
           />
           <MemberList
@@ -631,36 +675,56 @@ function ComponentDetail({
           />
         </section>
 
-        <section
-          className="vf-docs-reference__section"
-          id="component-framework-api"
-        >
-          <Heading level={3} size="md">
-            API
-          </Heading>
-          <Text tone="muted">
-            Generated API facts for {framework?.label ?? frameworkId}{" "}
-            documentation version {version}.
-          </Text>
-          {contextualApi ? (
-            <FrameworkApiPanel
-              component={contextualApi}
-              frameworkId={frameworkId}
-            />
-          ) : (
-            <Text size="sm" tone="muted">
-              This component has no generated API surface for the selected
-              framework and documentation version.
+        {showCapabilities ? (
+          <section
+            className="vf-docs-reference__section"
+            id="component-capabilities"
+          >
+            <Heading level={3} size="md">
+              Variants, sizes & states
+            </Heading>
+            <Text tone="muted">
+              These documentation surfaces are derived from the canonical public
+              component contract. Exact values remain authoritative in the
+              generated API below.
             </Text>
-          )}
-        </section>
+            {capabilities.variants ? (
+              <MemberList label="Variants" values={["variant"]} />
+            ) : null}
+            {capabilities.sizes ? (
+              <MemberList label="Sizes" values={["size"]} />
+            ) : null}
+            {capabilities.density ? (
+              <MemberList label="Density" values={["density"]} />
+            ) : null}
+            {capabilities.states.length > 0 ? (
+              <MemberList
+                label="States & controls"
+                values={capabilities.states.map((property) => property.name)}
+              />
+            ) : null}
+            {capabilities.interactive ? (
+              <MemberList
+                label="Interaction contract"
+                values={[
+                  ...(component.contract?.events ?? []).map(
+                    (event) => event.name,
+                  ),
+                  ...(component.contract?.methods ?? []).map(
+                    (method) => method.name,
+                  ),
+                ]}
+              />
+            ) : null}
+          </section>
+        ) : null}
 
         <section
           className="vf-docs-reference__section"
           id="component-accessibility-styling"
         >
           <Heading level={3} size="md">
-            Accessibility & styling
+            Accessibility, keyboard & styling
           </Heading>
           <MemberList
             label="Accessibility guidance"
@@ -669,6 +733,29 @@ function ComponentDetail({
               ...(component.contract?.accessibility ?? []),
             ].filter(Boolean)}
           />
+          {accessibilityEvidence ? (
+            <>
+              <MemberList
+                label="Keyboard documentation"
+                values={[accessibilityEvidence.keyboardDocumentation]}
+              />
+              <MemberList
+                label="Canonical evidence status"
+                values={[accessibilityEvidence.evidenceStatus]}
+              />
+              <MemberList
+                label="Accessibility source"
+                values={[accessibilityEvidence.documentationPath]}
+              />
+              {accessibilityEvidence.keyboardDocumentation ===
+              "requires-verification" ? (
+                <Text className="vf-docs-evidence-note" size="sm" tone="muted">
+                  Keyboard and assistive-technology behavior remains explicitly
+                  unverified until the canonical manual evidence is complete.
+                </Text>
+              ) : null}
+            </>
+          ) : null}
           <MemberList
             label="Public classes"
             values={component.styling.classes}
@@ -676,6 +763,24 @@ function ComponentDetail({
           <MemberList
             label="CSS variables"
             values={component.styling.variables}
+          />
+        </section>
+
+        <section
+          className="vf-docs-reference__section"
+          id="component-framework-usage"
+        >
+          <Heading level={3} size="md">
+            Framework usage
+          </Heading>
+          <Text tone="muted">
+            {framework?.label ?? frameworkId} usage is generated from the same
+            shared VyrnForge metadata as the other first-class framework
+            surfaces.
+          </Text>
+          <FrameworkUsagePanel
+            framework={framework?.label ?? frameworkId}
+            usage={frameworkUsage}
           />
         </section>
 
@@ -697,10 +802,35 @@ function ComponentDetail({
             />
           </section>
         )}
+
+        <section
+          className="vf-docs-reference__section"
+          id="component-generated-api"
+        >
+          <Heading level={3} size="md">
+            Generated API reference
+          </Heading>
+          <Text tone="muted">
+            Authoritative generated API facts for{" "}
+            {framework?.label ?? frameworkId} documentation version {version}.
+          </Text>
+          {contextualApi ? (
+            <FrameworkApiPanel
+              component={contextualApi}
+              frameworkId={frameworkId}
+            />
+          ) : (
+            <Text size="sm" tone="muted">
+              This component has no generated API surface for the selected
+              framework and documentation version.
+            </Text>
+          )}
+        </section>
       </div>
       <ComponentOutline
         componentId={component.id}
         frameworkId={frameworkId}
+        showCapabilities={showCapabilities}
         showLimitations={showLimitations}
       />
     </div>
@@ -767,8 +897,9 @@ export function ComponentReferencePage({
               Find the primitive or composition that matches the job.
             </Heading>
             <Text tone="muted">
-              Browse by functional area, then open a component for framework
-              usage, generated API, accessibility, styling, and limitations.
+              Browse by functional area, then open a component for live UI,
+              usage guidance, framework examples, accessibility, and generated
+              API details.
             </Text>
           </div>
           <dl className="vf-docs-catalog__stats">
