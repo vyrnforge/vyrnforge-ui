@@ -6,11 +6,13 @@
     "derivesFrom": [
       "docs/metadata/components.json",
       "docs/metadata/component-contracts.json",
-      "docs/metadata/patterns.json"
+      "docs/metadata/patterns.json",
+      "public package type declarations"
     ]
   },
   "policy": {
     "publicContractValuesWin": true,
+    "selectValuesRequirePublicTypeEvidence": true,
     "inventMissingCapabilities": false,
     "specimenRenderersUsePublicEntrypoints": true,
     "compositionOnlyComponentsUseCanonicalPatterns": true,
@@ -21,8 +23,26 @@
       "id": "button",
       "specimen": { "kind": "standalone", "renderer": "button" },
       "controls": [
-        { "property": "variant", "label": "Variant", "kind": "select" },
-        { "property": "size", "label": "Size", "kind": "select" },
+        {
+          "property": "variant",
+          "label": "Variant",
+          "kind": "select",
+          "values": ["default", "primary", "danger", "ghost", "subtle"],
+          "publicType": {
+            "name": "ButtonVariant",
+            "path": "packages/ui-components/src/components/Button/Button.types.ts"
+          }
+        },
+        {
+          "property": "size",
+          "label": "Size",
+          "kind": "select",
+          "values": ["sm", "md", "lg"],
+          "publicType": {
+            "name": "ButtonSize",
+            "path": "packages/ui-components/src/components/Button/Button.types.ts"
+          }
+        },
         { "property": "disabled", "label": "Disabled", "kind": "boolean" },
         { "property": "loading", "label": "Loading", "kind": "boolean" }
       ],
@@ -56,7 +76,16 @@
       "id": "text-input",
       "specimen": { "kind": "standalone", "renderer": "text-input" },
       "controls": [
-        { "property": "size", "label": "Size", "kind": "select" },
+        {
+          "property": "size",
+          "label": "Size",
+          "kind": "select",
+          "values": ["sm", "md", "lg"],
+          "publicType": {
+            "name": "TextInputSize",
+            "path": "packages/ui-components/src/components/TextInput/TextInput.types.ts"
+          }
+        },
         { "property": "disabled", "label": "Disabled", "kind": "boolean" },
         { "property": "readOnly", "label": "Read only", "kind": "boolean" },
         { "property": "invalid", "label": "Invalid", "kind": "boolean" },
@@ -74,7 +103,16 @@
       "id": "select",
       "specimen": { "kind": "standalone", "renderer": "select" },
       "controls": [
-        { "property": "size", "label": "Size", "kind": "select" },
+        {
+          "property": "size",
+          "label": "Size",
+          "kind": "select",
+          "values": ["sm", "md", "lg"],
+          "publicType": {
+            "name": "TextInputSize",
+            "path": "packages/ui-components/src/components/TextInput/TextInput.types.ts"
+          }
+        },
         { "property": "disabled", "label": "Disabled", "kind": "boolean" },
         { "property": "invalid", "label": "Invalid", "kind": "boolean" },
         { "property": "required", "label": "Required", "kind": "boolean" }
@@ -133,8 +171,26 @@
       "id": "tabs",
       "specimen": { "kind": "standalone", "renderer": "tabs" },
       "controls": [
-        { "property": "variant", "label": "Variant", "kind": "select" },
-        { "property": "size", "label": "Size", "kind": "select" }
+        {
+          "property": "variant",
+          "label": "Variant",
+          "kind": "select",
+          "values": ["line", "contained", "pills"],
+          "publicType": {
+            "name": "TabsVariant",
+            "path": "packages/ui-components/src/components/Tabs/Tabs.types.ts"
+          }
+        },
+        {
+          "property": "size",
+          "label": "Size",
+          "kind": "select",
+          "values": ["sm", "md"],
+          "publicType": {
+            "name": "TabsSize",
+            "path": "packages/ui-components/src/components/Tabs/Tabs.types.ts"
+          }
+        }
       ],
       "anatomy": ["tab list", "tab", "tab panel"]
     },
@@ -196,7 +252,16 @@
       "id": "dialog",
       "specimen": { "kind": "standalone", "renderer": "dialog" },
       "controls": [
-        { "property": "size", "label": "Size", "kind": "select" },
+        {
+          "property": "size",
+          "label": "Size",
+          "kind": "select",
+          "values": ["sm", "md", "lg", "xl"],
+          "publicType": {
+            "name": "DialogSize",
+            "path": "packages/ui-components/src/components/Dialog/Dialog.types.ts"
+          }
+        },
         { "property": "closeOnEscape", "label": "Close on Escape", "kind": "boolean" },
         { "property": "closeOnOverlayClick", "label": "Close on overlay click", "kind": "boolean" }
       ],
