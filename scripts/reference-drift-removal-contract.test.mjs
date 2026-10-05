@@ -61,7 +61,7 @@ test("Docs owns generated component facts after Playground retirement", () => {
     ),
   );
   assert.match(reader, /frameworkApiReferenceRaw/u);
-  assert.match(reader, /componentReferenceRecords/u);
+  assert.match(reader, /getAvailableComponentReferenceRecords/u);
   assert.match(reader, /FrameworkApiPanel/u);
 });
 
