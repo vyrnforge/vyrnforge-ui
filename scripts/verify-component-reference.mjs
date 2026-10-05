@@ -17,6 +17,7 @@ const generatedPath = "docs/generated/component-reference.json";
 const knowledgePath = "docs/generated/consumer-knowledge.json";
 const aiRoot = "docs/generated/ai-context";
 const configMetadataPath = "docs/metadata/component-reference-config.json";
+const componentDocumentationPath = "docs/metadata/component-documentation.json";
 
 function read(root, relativePath) {
   return readFileSync(path.join(root, relativePath), "utf8");
@@ -44,6 +45,90 @@ function filesRecursively(root, relativeDir) {
     const relative = path.join(relativeDir, entry.name);
     return entry.isDirectory() ? filesRecursively(root, relative) : [relative];
   });
+}
+
+function verifyDocumentationCapabilities(
+  root,
+  expectedReference,
+  failures,
+) {
+  if (!existsSync(path.join(root, componentDocumentationPath))) {
+    failures.push(
+      `component documentation capabilities are missing: ${componentDocumentationPath}`,
+    );
+    return;
+  }
+  const metadata = json(root, componentDocumentationPath);
+  if (metadata.schemaVersion !== 1) {
+    failures.push("component documentation schemaVersion must be 1");
+  }
+  if (metadata.sourceOfTruth?.canonical !== true) {
+    failures.push("component documentation capabilities must declare canonical ownership");
+  }
+  if (metadata.policy?.publicContractValuesWin !== true) {
+    failures.push("component documentation controls must defer to public contract values");
+  }
+
+  const components = new Map(
+    (expectedReference.components ?? []).map((component) => [
+      component.id,
+      component,
+    ]),
+  );
+  const seen = new Set();
+  for (const documentation of metadata.components ?? []) {
+    if (seen.has(documentation.id)) {
+      failures.push(`${documentation.id}: duplicate component documentation record`);
+      continue;
+    }
+    seen.add(documentation.id);
+    const component = components.get(documentation.id);
+    if (!component) {
+      failures.push(
+        `${documentation.id}: documentation metadata references a component outside the public Reference scope`,
+      );
+      continue;
+    }
+    if (
+      documentation.specimen?.kind === "standalone" &&
+      !documentation.specimen?.renderer
+    ) {
+      failures.push(
+        `${documentation.id}: standalone specimen requires a renderer identifier`,
+      );
+    }
+    const publicProperties = new Set(
+      (component.contract?.properties ?? []).map((property) => property.name),
+    );
+    for (const control of documentation.controls ?? []) {
+      if (!publicProperties.has(control.property)) {
+        failures.push(
+          `${documentation.id}: documentation control ${control.property} is not present in the canonical public contract`,
+        );
+      }
+      if (!["select", "boolean"].includes(control.kind)) {
+        failures.push(
+          `${documentation.id}: unsupported documentation control kind ${control.kind}`,
+        );
+      }
+    }
+  }
+
+  for (const representative of [
+    "button",
+    "text-input",
+    "select",
+    "tabs",
+    "dialog",
+    "inline-message",
+    "panel",
+  ]) {
+    if (!seen.has(representative)) {
+      failures.push(
+        `representative documentation capability coverage is missing ${representative}`,
+      );
+    }
+  }
 }
 
 export function verifyComponentReference({ root = repositoryRoot } = {}) {
@@ -85,6 +170,7 @@ export function verifyComponentReference({ root = repositoryRoot } = {}) {
   for (const requiredSource of [
     "docs/metadata/components.json",
     "docs/metadata/component-contracts.json",
+    "docs/metadata/component-documentation.json",
     "docs/metadata/patterns.json",
     "docs/metadata/packages.json",
     "docs/metadata/multi-framework.json",
@@ -99,6 +185,7 @@ export function verifyComponentReference({ root = repositoryRoot } = {}) {
   const expectedKnowledge = buildConsumerKnowledge({ root });
   const expectedReference = buildComponentReference({ root });
   const expectedAi = buildAiContextArtifacts({ root });
+  verifyDocumentationCapabilities(root, expectedReference, failures);
   compareJson(
     root,
     knowledgePath,
@@ -215,12 +302,37 @@ export function verifyComponentReference({ root = repositoryRoot } = {}) {
     "componentReferenceRecords",
     "getReferenceRecordRoute",
     "component-usage",
+    "component-capabilities",
+    "component-framework-usage",
     "component-framework-api",
     "component-accessibility-styling",
+    "component-theming",
+    "component-related",
     "Accessibility guidance",
+    "Generated API reference",
   ]) {
     if (!docsPage.includes(marker))
       failures.push(`consumer knowledge viewer is missing ${marker}`);
+  }
+  const orderedSections = [
+    'id="component-specimen"',
+    'id="component-usage"',
+    'id="component-accessibility-styling"',
+    'id="component-framework-usage"',
+    'id="component-theming"',
+    'id="component-related"',
+    'id="component-framework-api"',
+  ];
+  let previousIndex = -1;
+  for (const marker of orderedSections) {
+    const index = docsPage.indexOf(marker);
+    if (index < 0 || index <= previousIndex) {
+      failures.push(
+        `component documentation section order is invalid at ${marker}`,
+      );
+      break;
+    }
+    previousIndex = index;
   }
   for (const retiredReaderMarker of [
     "AI context slice",
@@ -264,12 +376,27 @@ export function verifyComponentReference({ root = repositoryRoot } = {}) {
   const referenceData = read(root, "apps/docs/src/referenceData.ts");
   for (const marker of [
     "consumer-knowledge.json?raw",
+    "component-documentation.json?raw",
     "metadata/packages.json?raw",
+    "getComponentDocumentation",
+    "getContractEnumValues",
     "packageReferenceRecords",
     "packageMetadata.packages.length",
   ]) {
     if (!referenceData.includes(marker)) {
       failures.push(`reference data adapter is missing ${marker}`);
+    }
+  }
+
+  const specimen = read(root, "apps/docs/src/ReferenceComponentSpecimen.tsx");
+  for (const marker of [
+    "getComponentDocumentation",
+    "getContractEnumValues",
+    'case "dialog"',
+    "SpecimenControls",
+  ]) {
+    if (!specimen.includes(marker)) {
+      failures.push(`component specimen is missing ${marker}`);
     }
   }
 
