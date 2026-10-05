@@ -5,6 +5,7 @@
   "sourceOfTruth": [
     "docs/metadata/components.json",
     "docs/metadata/component-contracts.json",
+    "docs/metadata/component-documentation.json",
     "docs/metadata/patterns.json",
     "docs/metadata/packages.json",
     "docs/metadata/multi-framework.json",
@@ -29,7 +30,9 @@
     "humanExamplesMayRemainHandAuthoredWhenVerifiedAgainstPublicApis": true,
     "readerFacingApiFactsUseGeneratedFrameworkReference": true,
     "componentDeepLinksAreStable": true,
-    "referencePresentationConsumesGeneratedFacts": true
+    "referencePresentationConsumesGeneratedFacts": true,
+    "documentationControlsResolvePublicContractValues": true,
+    "accessibilityEvidenceRemainsCanonical": true
   },
   "requiredCommands": [
     "npm run generate:reference",
@@ -44,9 +47,11 @@
     "docs/generated/framework-api-reference.json",
     "docs/generated/reference-model.json",
     "docs/generated/ai-context/index.json",
+    "docs/metadata/component-documentation.json",
     "apps/docs/src/referenceData.ts",
     "apps/docs/src/docsContext.ts",
     "apps/docs/src/ComponentReferencePage.tsx",
+    "apps/docs/src/ReferenceComponentSpecimen.tsx",
     "scripts/generate-component-reference.mjs",
     "scripts/generate-reference-model.mjs",
     "scripts/verify-component-reference.mjs"
