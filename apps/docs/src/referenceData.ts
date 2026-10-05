@@ -8,14 +8,59 @@ export type ReferenceGuidance = {
   relatedComponents: string[];
 };
 
+export type ReferenceContractProperty = {
+  name: string;
+  type: {
+    kind: string;
+    typeName?: string;
+  };
+  required: boolean;
+  mutable: boolean;
+  default?: unknown;
+};
+
+export type ReferenceContractMember = {
+  name: string;
+  [key: string]: unknown;
+};
+
 export type ReferenceContract = {
-  properties: string[];
-  attributes: string[];
-  events: string[];
-  slots: string[];
-  methods: string[];
+  properties: ReferenceContractProperty[];
+  attributes: ReferenceContractMember[];
+  events: ReferenceContractMember[];
+  slots: ReferenceContractMember[];
+  methods: ReferenceContractMember[];
   accessibility: string[];
   formAssociation: string;
+};
+
+export const documentationControlNames = [
+  "variant",
+  "size",
+  "density",
+  "disabled",
+  "readOnly",
+  "loading",
+  "selected",
+  "checked",
+  "invalid",
+  "required",
+  "open",
+  "orientation",
+  "multiple",
+  "value",
+] as const;
+
+export type DocumentationControlName =
+  (typeof documentationControlNames)[number];
+
+export type ComponentDocumentationCapabilities = {
+  controls: ReferenceContractProperty[];
+  variants: boolean;
+  sizes: boolean;
+  density: boolean;
+  interactive: boolean;
+  states: ReferenceContractProperty[];
 };
 
 export type ReferenceFrameworkId = "native-html" | "react" | "angular" | "vue";
@@ -168,4 +213,30 @@ export function getRelatedPatterns(componentId: string) {
   return knowledge.patterns.filter((pattern) =>
     pattern.components.includes(componentId),
   );
+}
+
+export function getComponentDocumentationCapabilities(
+  component: ComponentReferenceRecord,
+): ComponentDocumentationCapabilities {
+  const properties = component.contract?.properties ?? [];
+  const controlNames = new Set<string>(documentationControlNames);
+  const controls = properties.filter((property) => controlNames.has(property.name));
+  const states = controls.filter(
+    (property) =>
+      property.name !== "variant" &&
+      property.name !== "size" &&
+      property.name !== "density",
+  );
+
+  return {
+    controls,
+    variants: controls.some((property) => property.name === "variant"),
+    sizes: controls.some((property) => property.name === "size"),
+    density: controls.some((property) => property.name === "density"),
+    interactive:
+      states.length > 0 ||
+      (component.contract?.events.length ?? 0) > 0 ||
+      (component.contract?.methods.length ?? 0) > 0,
+    states,
+  };
 }
