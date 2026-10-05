@@ -113,7 +113,9 @@ test.describe("component documentation completeness", () => {
     await openComponent(page, "button", "react");
 
     const navigation = page.locator(".vf-reference-navigation__sections");
-    const buttonLink = navigation.locator('a[href*="#/components/button"]').first();
+    const buttonLink = navigation
+      .locator('a[href*="#/components/button"]')
+      .first();
     const textInputLink = navigation
       .locator('a[href*="#/components/text-input"]')
       .first();
@@ -131,7 +133,9 @@ test.describe("component documentation completeness", () => {
     await expectNoPageOverflow(page);
   });
 
-  test("VyrnForge Tabs specimen exposes keyboard focus behavior", async ({ page }) => {
+  test("VyrnForge Tabs specimen exposes keyboard focus behavior", async ({
+    page,
+  }) => {
     await openComponent(page, "tabs");
 
     const tabs = page.getByRole("tab");
@@ -142,7 +146,9 @@ test.describe("component documentation completeness", () => {
     await expect(tabs.nth(1)).toBeFocused();
   });
 
-  test("VyrnForge Dialog specimen opens and closes with Escape", async ({ page }) => {
+  test("VyrnForge Dialog specimen opens and closes with Escape", async ({
+    page,
+  }) => {
     await openComponent(page, "dialog");
 
     await page.getByRole("button", { name: "Open dialog" }).click();
@@ -158,7 +164,9 @@ test.describe("component documentation completeness", () => {
     await page.setViewportSize({ width: 390, height: 844 });
     await openComponent(page, "text-input");
 
-    const themeToggle = page.getByRole("button", { name: "Toggle dark theme" });
+    const themeToggle = page.getByRole("button", {
+      name: "Toggle dark theme",
+    });
     await themeToggle.click();
     await expect(page.locator(".vf-docs-app")).toHaveAttribute(
       "data-theme",
@@ -180,7 +188,11 @@ test.describe("component documentation completeness", () => {
     }
 
     await expectNoPageOverflow(page);
-    await capture(page, testInfo, "reference-component-text-input-mobile-dark");
+    await capture(
+      page,
+      testInfo,
+      "reference-component-text-input-mobile-dark",
+    );
   });
 
   test("tablet and reduced-motion component detail remains contained", async ({
