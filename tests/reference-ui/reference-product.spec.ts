@@ -135,6 +135,36 @@ async function expectCodeBlockUsesBlockStyling(page: Page) {
   expect(copyColor).toBe("rgb(203, 213, 225)");
 }
 
+async function expectComponentDocumentationStructure(page: Page) {
+  const specimen = page.locator("#component-specimen");
+  const usage = page.locator("#component-usage");
+  const accessibility = page.locator("#component-accessibility-styling");
+  const frameworkUsage = page.locator("#component-framework-usage");
+  const theming = page.locator("#component-theming");
+  const related = page.locator("#component-related");
+  const api = page.locator("#component-framework-api");
+
+  for (const section of [
+    specimen,
+    usage,
+    accessibility,
+    frameworkUsage,
+    theming,
+    related,
+    api,
+  ]) {
+    await expect(section).toBeVisible();
+  }
+
+  const tops = await Promise.all(
+    [specimen, usage, accessibility, frameworkUsage, theming, related, api].map(
+      (locator) =>
+        locator.evaluate((element) => element.getBoundingClientRect().top + scrollY),
+    ),
+  );
+  expect(tops).toEqual([...tops].sort((left, right) => left - right));
+}
+
 async function capture(page: Page, testInfo: TestInfo, name: string) {
   await mkdir(evidenceDirectory, { recursive: true });
   const filename = `${name}.png`;
@@ -199,15 +229,90 @@ test.describe("VyrnForge Reference product", () => {
     }
   });
 
-  test("component detail shows a live specimen before API reference", async ({
+  test("component detail shows interactive guidance before generated API", async ({
     page,
   }, testInfo) => {
     await openReference(page, "components/button");
     await expect(page.locator(".vf-docs-component-specimen")).toBeVisible();
     await expect(page.getByRole("button", { name: "Primary" })).toBeVisible();
+    await expectComponentDocumentationStructure(page);
+
+    const variant = page.getByRole("combobox", { name: "Variant" });
+    const size = page.getByRole("combobox", { name: "Size" });
+    await expect(variant).toBeVisible();
+    await expect(size).toBeVisible();
+    await variant.selectOption("danger");
+    await size.selectOption("lg");
+    await expect(
+      page.getByRole("button", { name: "Interactive button" }),
+    ).toHaveClass(/vf-button--danger/);
+    await expect(
+      page.getByRole("button", { name: "Interactive button" }),
+    ).toHaveClass(/vf-button--lg/);
+
     await expect(page.locator(".vf-docs-api-table").first()).toBeVisible();
     await expectNoPageOverflow(page);
     await capture(page, testInfo, "reference-component-button");
+  });
+
+  test("representative component classes expose meaningful specimens", async ({
+    page,
+  }, testInfo) => {
+    const representativeRoutes = [
+      "components/text-input",
+      "components/select",
+      "components/tabs",
+      "components/dialog",
+      "components/inline-message",
+      "components/panel",
+    ];
+
+    for (const route of representativeRoutes) {
+      await openReference(page, route);
+      await expect(page.locator(".vf-docs-component-specimen")).toBeVisible();
+      await expectComponentDocumentationStructure(page);
+      await expectNoPageOverflow(page);
+    }
+
+    await openReference(page, "components/dialog");
+    await page.getByRole("button", { name: "Open dialog specimen" }).click();
+    await expect(page.getByRole("dialog")).toBeVisible();
+    await expect(page.getByText("Review changes", { exact: true })).toBeVisible();
+    await page.getByRole("button", { name: "Done" }).click();
+    await capture(page, testInfo, "reference-component-dialog");
+  });
+
+  test("component framework usage follows the selected Reference context", async ({
+    page,
+  }) => {
+    for (const framework of ["native-html", "react", "angular", "vue"]) {
+      await openReference(page, "components/button", framework);
+      await expect(page.locator("#component-framework-usage")).toBeVisible();
+      await expect(
+        page.locator("#component-framework-usage .vf-docs-code-block").first(),
+      ).toBeVisible();
+      await expect(page.locator("#component-framework-api")).toBeVisible();
+      await expectNoPageOverflow(page);
+    }
+  });
+
+  test("component detail remains usable in dark, mobile, and reduced-motion contexts", async ({
+    page,
+  }, testInfo) => {
+    await page.setViewportSize({ width: 390, height: 844 });
+    await page.emulateMedia({ reducedMotion: "reduce" });
+    await openReference(page, "components/text-input");
+
+    const themeToggle = page.getByRole("button", { name: "Toggle dark theme" });
+    await themeToggle.click();
+    await expect(page.locator(".vf-docs-app")).toHaveAttribute(
+      "data-theme",
+      "dark",
+    );
+    await expect(page.getByRole("combobox", { name: "Size" })).toBeVisible();
+    await expect(page.getByRole("switch", { name: "Invalid" })).toBeVisible();
+    await expectNoPageOverflow(page);
+    await capture(page, testInfo, "reference-component-text-input-mobile-dark");
   });
 
   test("theme, route focus, and search states are accessible", async ({
