@@ -258,6 +258,13 @@ export function getDocumentationControlValues(
   );
 }
 
+export function getContractEnumValues(
+  component: ComponentReferenceRecord,
+  propertyName: string,
+) {
+  return getDocumentationControlValues(component.id, propertyName);
+}
+
 export function getPackageReferenceRecord(packageName: string) {
   return packageReferenceRecords.find((entry) => entry.name === packageName);
 }
