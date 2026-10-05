@@ -213,9 +213,12 @@ export function verifyComponentReference({ root = repositoryRoot } = {}) {
   for (const marker of [
     "framework-api-reference.json",
     "componentReferenceRecords",
+    "getComponentDocumentationCapabilities",
     "getReferenceRecordRoute",
     "component-usage",
-    "component-framework-api",
+    "component-capabilities",
+    "component-framework-usage",
+    "component-generated-api",
     "component-accessibility-styling",
     "Accessibility guidance",
   ]) {
