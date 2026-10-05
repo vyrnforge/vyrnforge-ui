@@ -44,9 +44,7 @@ async function expectSectionOrder(page: Page) {
       locator.evaluate((element) => element.offsetTop),
     ),
   );
-  expect(positions).toEqual(
-    [...positions].sort((left, right) => left - right),
-  );
+  expect(positions).toEqual([...positions].sort((left, right) => left - right));
 }
 
 async function capture(page: Page, testInfo: TestInfo, name: string) {
@@ -181,8 +179,8 @@ test.describe("component documentation completeness", () => {
     await openComponent(page, "tabs");
 
     expect(
-      await page.evaluate(() =>
-        window.matchMedia("(prefers-reduced-motion: reduce)").matches,
+      await page.evaluate(
+        () => window.matchMedia("(prefers-reduced-motion: reduce)").matches,
       ),
     ).toBe(true);
     await expect(page.locator(".vf-docs-reference-outline")).toBeVisible();
