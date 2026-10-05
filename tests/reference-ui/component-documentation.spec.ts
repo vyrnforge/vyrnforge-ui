@@ -164,9 +164,7 @@ test.describe("component documentation completeness", () => {
     await page.setViewportSize({ width: 390, height: 844 });
     await openComponent(page, "text-input");
 
-    const themeToggle = page.getByRole("button", {
-      name: "Toggle dark theme",
-    });
+    const themeToggle = page.getByRole("button", { name: "Toggle dark theme" });
     await themeToggle.click();
     await expect(page.locator(".vf-docs-app")).toHaveAttribute(
       "data-theme",
@@ -188,11 +186,7 @@ test.describe("component documentation completeness", () => {
     }
 
     await expectNoPageOverflow(page);
-    await capture(
-      page,
-      testInfo,
-      "reference-component-text-input-mobile-dark",
-    );
+    await capture(page, testInfo, "reference-component-text-input-mobile-dark");
   });
 
   test("tablet and reduced-motion component detail remains contained", async ({
