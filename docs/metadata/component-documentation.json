@@ -1,0 +1,206 @@
+{
+  "schemaVersion": 1,
+  "sourceOfTruth": {
+    "canonical": true,
+    "scope": "component documentation presentation capabilities that are not already owned by component or contract metadata",
+    "derivesFrom": [
+      "docs/metadata/components.json",
+      "docs/metadata/component-contracts.json",
+      "docs/metadata/patterns.json"
+    ]
+  },
+  "policy": {
+    "publicContractValuesWin": true,
+    "inventMissingCapabilities": false,
+    "specimenRenderersUsePublicEntrypoints": true,
+    "compositionOnlyComponentsUseCanonicalPatterns": true,
+    "accessibilityEvidenceRemainsCanonical": true
+  },
+  "components": [
+    {
+      "id": "button",
+      "specimen": { "kind": "standalone", "renderer": "button" },
+      "controls": [
+        { "property": "variant", "label": "Variant", "kind": "select" },
+        { "property": "size", "label": "Size", "kind": "select" },
+        { "property": "disabled", "label": "Disabled", "kind": "boolean" },
+        { "property": "loading", "label": "Loading", "kind": "boolean" }
+      ],
+      "anatomy": ["content", "optional leading/trailing content", "loading indicator"]
+    },
+    {
+      "id": "button-group",
+      "specimen": { "kind": "standalone", "renderer": "button-group" },
+      "controls": [],
+      "anatomy": []
+    },
+    {
+      "id": "icon-button",
+      "specimen": { "kind": "standalone", "renderer": "icon-button" },
+      "controls": [],
+      "anatomy": []
+    },
+    {
+      "id": "badge",
+      "specimen": { "kind": "standalone", "renderer": "badge" },
+      "controls": [],
+      "anatomy": []
+    },
+    {
+      "id": "status-badge",
+      "specimen": { "kind": "standalone", "renderer": "status-badge" },
+      "controls": [],
+      "anatomy": []
+    },
+    {
+      "id": "text-input",
+      "specimen": { "kind": "standalone", "renderer": "text-input" },
+      "controls": [
+        { "property": "size", "label": "Size", "kind": "select" },
+        { "property": "disabled", "label": "Disabled", "kind": "boolean" },
+        { "property": "readOnly", "label": "Read only", "kind": "boolean" },
+        { "property": "invalid", "label": "Invalid", "kind": "boolean" },
+        { "property": "required", "label": "Required", "kind": "boolean" }
+      ],
+      "anatomy": ["text control"]
+    },
+    {
+      "id": "search-input",
+      "specimen": { "kind": "standalone", "renderer": "search-input" },
+      "controls": [],
+      "anatomy": []
+    },
+    {
+      "id": "select",
+      "specimen": { "kind": "standalone", "renderer": "select" },
+      "controls": [
+        { "property": "size", "label": "Size", "kind": "select" },
+        { "property": "disabled", "label": "Disabled", "kind": "boolean" },
+        { "property": "invalid", "label": "Invalid", "kind": "boolean" },
+        { "property": "required", "label": "Required", "kind": "boolean" }
+      ],
+      "anatomy": ["native select control", "options"]
+    },
+    {
+      "id": "textarea",
+      "specimen": { "kind": "standalone", "renderer": "textarea" },
+      "controls": [],
+      "anatomy": []
+    },
+    {
+      "id": "switch",
+      "specimen": { "kind": "standalone", "renderer": "switch" },
+      "controls": [],
+      "anatomy": []
+    },
+    {
+      "id": "checkbox",
+      "specimen": { "kind": "standalone", "renderer": "checkbox" },
+      "controls": [],
+      "anatomy": []
+    },
+    {
+      "id": "radio-group",
+      "specimen": { "kind": "standalone", "renderer": "radio-group" },
+      "controls": [],
+      "anatomy": []
+    },
+    {
+      "id": "slider",
+      "specimen": { "kind": "standalone", "renderer": "slider" },
+      "controls": [],
+      "anatomy": []
+    },
+    {
+      "id": "toggle-button",
+      "specimen": { "kind": "standalone", "renderer": "toggle-button" },
+      "controls": [],
+      "anatomy": []
+    },
+    {
+      "id": "toggle-button-group",
+      "specimen": { "kind": "standalone", "renderer": "toggle-button-group" },
+      "controls": [],
+      "anatomy": []
+    },
+    {
+      "id": "segmented-control",
+      "specimen": { "kind": "standalone", "renderer": "segmented-control" },
+      "controls": [],
+      "anatomy": []
+    },
+    {
+      "id": "tabs",
+      "specimen": { "kind": "standalone", "renderer": "tabs" },
+      "controls": [
+        { "property": "variant", "label": "Variant", "kind": "select" },
+        { "property": "size", "label": "Size", "kind": "select" }
+      ],
+      "anatomy": ["tab list", "tab", "tab panel"]
+    },
+    {
+      "id": "inline-message",
+      "specimen": { "kind": "standalone", "renderer": "inline-message" },
+      "controls": [],
+      "anatomy": []
+    },
+    {
+      "id": "alert",
+      "specimen": { "kind": "standalone", "renderer": "alert" },
+      "controls": [],
+      "anatomy": []
+    },
+    {
+      "id": "progress",
+      "specimen": { "kind": "standalone", "renderer": "progress" },
+      "controls": [],
+      "anatomy": []
+    },
+    {
+      "id": "skeleton",
+      "specimen": { "kind": "standalone", "renderer": "skeleton" },
+      "controls": [],
+      "anatomy": []
+    },
+    {
+      "id": "empty-state",
+      "specimen": { "kind": "standalone", "renderer": "empty-state" },
+      "controls": [],
+      "anatomy": []
+    },
+    {
+      "id": "error-state",
+      "specimen": { "kind": "standalone", "renderer": "error-state" },
+      "controls": [],
+      "anatomy": []
+    },
+    {
+      "id": "loading-state",
+      "specimen": { "kind": "standalone", "renderer": "loading-state" },
+      "controls": [],
+      "anatomy": []
+    },
+    {
+      "id": "panel",
+      "specimen": { "kind": "standalone", "renderer": "panel" },
+      "controls": [],
+      "anatomy": ["heading", "description", "content"]
+    },
+    {
+      "id": "card",
+      "specimen": { "kind": "standalone", "renderer": "card" },
+      "controls": [],
+      "anatomy": ["content"]
+    },
+    {
+      "id": "dialog",
+      "specimen": { "kind": "standalone", "renderer": "dialog" },
+      "controls": [
+        { "property": "size", "label": "Size", "kind": "select" },
+        { "property": "closeOnEscape", "label": "Close on Escape", "kind": "boolean" },
+        { "property": "closeOnOverlayClick", "label": "Close on overlay click", "kind": "boolean" }
+      ],
+      "anatomy": ["overlay", "dialog container", "title", "description", "content", "footer/actions"]
+    }
+  ]
+}
