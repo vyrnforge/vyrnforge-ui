@@ -63,7 +63,11 @@ export type ComponentDocumentationCapabilities = {
   states: ReferenceContractProperty[];
 };
 
-export type ReferenceFrameworkId = "native-html" | "react" | "angular" | "vue";
+export type ReferenceFrameworkId =
+  | "native-html"
+  | "react"
+  | "angular"
+  | "vue";
 
 export type ReferenceFrameworkUsage = {
   label: string;
@@ -220,7 +224,9 @@ export function getComponentDocumentationCapabilities(
 ): ComponentDocumentationCapabilities {
   const properties = component.contract?.properties ?? [];
   const controlNames = new Set<string>(documentationControlNames);
-  const controls = properties.filter((property) => controlNames.has(property.name));
+  const controls = properties.filter((property) =>
+    controlNames.has(property.name),
+  );
   const states = controls.filter(
     (property) =>
       property.name !== "variant" &&
