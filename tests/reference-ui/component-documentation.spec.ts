@@ -79,9 +79,9 @@ test.describe("component documentation completeness", () => {
       await expect(
         page.locator("#component-specimen .vf-docs-component-specimen"),
       ).toBeVisible();
-      await expect(page.locator("#component-accessibility-styling")).toContainText(
-        "Keyboard documentation",
-      );
+      await expect(
+        page.locator("#component-accessibility-styling"),
+      ).toContainText("Keyboard documentation");
       await expectSectionOrder(page);
       await expectNoPageOverflow(page);
       await capture(page, testInfo, `reference-component-${componentId}`);
@@ -165,7 +165,9 @@ test.describe("component documentation completeness", () => {
       "dark",
     );
     await expect(page.locator("#component-specimen")).toBeVisible();
-    await expect(page.locator("#component-framework-usage pre").first()).toBeVisible();
+    await expect(
+      page.locator("#component-framework-usage pre").first(),
+    ).toBeVisible();
     await expect(page.locator("#component-generated-api")).toBeVisible();
 
     const apiScroller = page.locator(".vf-docs-api-table-scroll").first();
@@ -196,6 +198,10 @@ test.describe("component documentation completeness", () => {
     await expect(page.locator(".vf-docs-reference-outline")).toBeVisible();
     await expectSectionOrder(page);
     await expectNoPageOverflow(page);
-    await capture(page, testInfo, "reference-component-tabs-tablet-reduced-motion");
+    await capture(
+      page,
+      testInfo,
+      "reference-component-tabs-tablet-reduced-motion",
+    );
   });
 });
