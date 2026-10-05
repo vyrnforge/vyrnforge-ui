@@ -113,9 +113,13 @@ test.describe("component documentation completeness", () => {
     }
 
     const positions = await Promise.all(
-      visible.map((locator) => locator.evaluate((element) => element.offsetTop)),
+      visible.map((locator) =>
+        locator.evaluate((element) => element.offsetTop),
+      ),
     );
-    expect(positions).toEqual([...positions].sort((left, right) => left - right));
+    expect(positions).toEqual(
+      [...positions].sort((left, right) => left - right),
+    );
     await expect(page.locator("#component-capabilities")).toContainText(
       "variant",
     );
