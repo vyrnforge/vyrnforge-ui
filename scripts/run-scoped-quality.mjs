@@ -114,6 +114,20 @@ function runWorkspaceScript(packageName, script) {
   runNpm(["--ignore-scripts", "run", script, "--workspace", packageName]);
 }
 
+runNpm([
+  "exec",
+  "--",
+  "prettier",
+  "--write",
+  "tests/reference-ui/component-documentation.spec.ts",
+]);
+execFileSync(
+  "git",
+  ["diff", "--", "tests/reference-ui/component-documentation.spec.ts"],
+  { cwd: root, stdio: "inherit" },
+);
+throw new Error("prettier diagnostic complete");
+
 const full = readBoolean("CI_SCOPE_FULL");
 const metadata = full || readBoolean("CI_SCOPE_METADATA");
 const fixtures = full || readBoolean("CI_SCOPE_FIXTURES");
