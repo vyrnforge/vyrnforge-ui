@@ -883,8 +883,9 @@ function ComponentDetail({
               Theming & design tokens
             </Heading>
             <Text tone="muted">
-              Prefer the public styling surface over application-local overrides.
-              These names come from generated component styling facts.
+              Prefer the public styling surface over application-local
+              overrides. These names come from generated component styling
+              facts.
             </Text>
             {capabilities.themingClasses.length > 0 ? (
               <MemberList
