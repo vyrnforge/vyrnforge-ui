@@ -199,43 +199,48 @@ test.describe("VyrnForge Reference product", () => {
     }
   });
 
-  test("component detail puts guidance and framework usage before generated API", async ({
-    page,
-  }, testInfo) => {
-    await openReference(page, "components/button");
+  test(
+    "component detail puts guidance and framework usage before generated API",
+    async ({ page }, testInfo) => {
+      await openReference(page, "components/button");
 
-    const specimen = page.locator("#component-specimen");
-    const capabilities = page.locator("#component-capabilities");
-    const accessibility = page.locator("#component-accessibility-styling");
-    const frameworkUsage = page.locator("#component-framework-usage");
-    const generatedApi = page.locator("#component-generated-api");
+      const specimen = page.locator("#component-specimen");
+      const capabilities = page.locator("#component-capabilities");
+      const accessibility = page.locator("#component-accessibility-styling");
+      const frameworkUsage = page.locator("#component-framework-usage");
+      const generatedApi = page.locator("#component-generated-api");
 
-    await expect(page.locator(".vf-docs-component-specimen")).toBeVisible();
-    await expect(page.getByRole("button", { name: "Primary" })).toBeVisible();
-    await expect(capabilities).toContainText("Variants, sizes & states");
-    await expect(capabilities).toContainText("variant");
-    await expect(capabilities).toContainText("size");
-    await expect(frameworkUsage).toContainText("Framework usage");
-    await expect(generatedApi.locator(".vf-docs-api-table").first()).toBeVisible();
+      await expect(page.locator(".vf-docs-component-specimen")).toBeVisible();
+      await expect(page.getByRole("button", { name: "Primary" })).toBeVisible();
+      await expect(capabilities).toContainText("Variants, sizes & states");
+      await expect(capabilities).toContainText("variant");
+      await expect(capabilities).toContainText("size");
+      await expect(frameworkUsage).toContainText("Framework usage");
+      await expect(
+        generatedApi.locator(".vf-docs-api-table").first(),
+      ).toBeVisible();
 
-    const positions = await Promise.all(
-      [specimen, capabilities, accessibility, frameworkUsage, generatedApi].map(
-        (locator) => locator.evaluate((element) => element.offsetTop),
-      ),
-    );
-    expect(positions).toEqual([...positions].sort((left, right) => left - right));
+      const positions = await Promise.all(
+        [specimen, capabilities, accessibility, frameworkUsage, generatedApi].map(
+          (locator) => locator.evaluate((element) => element.offsetTop),
+        ),
+      );
+      expect(positions).toEqual(
+        [...positions].sort((left, right) => left - right),
+      );
 
-    await expectNoPageOverflow(page);
-    await capture(page, testInfo, "reference-component-button");
+      await expectNoPageOverflow(page);
+      await capture(page, testInfo, "reference-component-button");
 
-    await openReference(page, "components/button", "angular");
-    await expect(page.locator("#component-framework-usage")).toContainText(
-      "Angular",
-    );
-    await expect(page.locator("#component-generated-api")).toContainText(
-      "Angular",
-    );
-  });
+      await openReference(page, "components/button", "angular");
+      await expect(page.locator("#component-framework-usage")).toContainText(
+        "Angular",
+      );
+      await expect(page.locator("#component-generated-api")).toContainText(
+        "Angular",
+      );
+    },
+  );
 
   test("theme, route focus, and search states are accessible", async ({
     page,
