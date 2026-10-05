@@ -10,6 +10,7 @@ import { getComponentMaturityPresentation } from "./componentMaturityPresentatio
 import { referenceModel, type DocsFrameworkId } from "./docsContext";
 import { ReferenceComponentGallery } from "./ReferenceComponentGallery";
 import { ReferenceComponentSpecimen } from "./ReferenceComponentSpecimen";
+import { ReferenceFrameworkUsage } from "./ReferenceFrameworkUsage";
 import {
   componentReferenceRecords,
   getComponentReferenceRecord,
@@ -424,7 +425,7 @@ function FrameworkApiPanel({
         id="api-accessibility"
       >
         <Heading level={4} size="sm" id="api-accessibility-heading">
-          Accessibility
+          Accessibility contract
         </Heading>
         <MemberList label="Guidance" values={component.accessibility} />
       </section>
@@ -474,21 +475,24 @@ function ComponentIndexRow({
 function ComponentOutline({
   componentId,
   frameworkId,
+  showRelated,
   showLimitations,
 }: {
   componentId: string;
   frameworkId: DocsFrameworkId;
+  showRelated: boolean;
   showLimitations: boolean;
 }) {
   const sections = [
     ["component-overview", "Overview"],
     ["component-specimen", "Live specimen"],
-    ["component-usage", "Usage"],
-    ["component-framework-api", "API"],
-    ["component-accessibility-styling", "Accessibility & styling"],
-    ...(showLimitations
-      ? [["component-limitations", "Limitations and related patterns"]]
-      : []),
+    ["component-usage", "When to use"],
+    ["component-accessibility", "Accessibility"],
+    ["component-framework-usage", "Framework usage"],
+    ["component-theming", "Theming"],
+    ...(showRelated ? [["component-related", "Related"]] : []),
+    ...(showLimitations ? [["component-limitations", "Limitations"]] : []),
+    ["component-framework-api", "Generated API"],
   ];
 
   return (
@@ -518,7 +522,7 @@ function ComponentOutline({
       </nav>
       <div className="vf-docs-reference-outline__api">
         <Text size="sm" tone="muted">
-          API
+          Generated API
         </Text>
         <a
           href={componentReferenceTargetHref(
@@ -572,13 +576,19 @@ function ComponentDetail({
 }) {
   const maturity = getComponentMaturityPresentation(component);
   const relatedPatterns = getRelatedPatterns(component.id);
-  const showLimitations =
-    component.knownLimitations.length > 0 || relatedPatterns.length > 0;
+  const relatedComponents = component.guidance.relatedComponents ?? [];
+  const showRelated = relatedComponents.length > 0 || relatedPatterns.length > 0;
+  const showLimitations = component.knownLimitations.length > 0;
   const framework = referenceModel.frameworks.find(
     (candidate) => candidate.id === frameworkId,
   );
   const apiId = framework?.apiSurface as FrameworkApiId | undefined;
   const contextualApi = apiId ? apiComponent(component.id, apiId) : undefined;
+  const frameworkUsage = component.frameworks[frameworkId];
+  const accessibilityGuidance = [
+    component.accessibilityNotes,
+    ...(component.contract?.accessibility ?? []),
+  ].filter(Boolean) as string[];
 
   return (
     <div className="vf-docs-reference-layout">
@@ -618,29 +628,112 @@ function ComponentDetail({
 
         <section className="vf-docs-reference__section" id="component-usage">
           <Heading level={3} size="md">
-            Usage
+            When to use
           </Heading>
-          <MemberList label="Use when" values={[component.guidance.useWhen]} />
           <MemberList
-            label="Avoid when"
-            values={[component.guidance.avoidWhen]}
+            label="Use when"
+            values={[component.guidance.useWhen].filter(Boolean) as string[]}
           />
           <MemberList
-            label="Related components"
-            values={component.guidance.relatedComponents}
+            label="When not to use"
+            values={[component.guidance.avoidWhen].filter(Boolean) as string[]}
           />
         </section>
+
+        {accessibilityGuidance.length > 0 && (
+          <section
+            className="vf-docs-reference__section"
+            id="component-accessibility"
+          >
+            <Heading level={3} size="md">
+              Accessibility
+            </Heading>
+            <Text tone="muted">
+              Only canonical component guidance and contract evidence are shown
+              here; pending manual assistive-technology verification is not
+              promoted to a stronger claim.
+            </Text>
+            <MemberList
+              label="Accessibility guidance"
+              values={accessibilityGuidance}
+            />
+          </section>
+        )}
+
+        {frameworkUsage && (
+          <ReferenceFrameworkUsage
+            frameworkId={frameworkId}
+            usage={frameworkUsage}
+          />
+        )}
+
+        <section className="vf-docs-reference__section" id="component-theming">
+          <Heading level={3} size="md">
+            Theming and design tokens
+          </Heading>
+          <Text tone="muted">
+            Customize through the public styling surfaces already declared by
+            VyrnForge rather than docs-only overrides.
+          </Text>
+          <MemberList
+            label="Public classes"
+            values={component.styling.classes}
+          />
+          <MemberList
+            label="CSS variables"
+            values={component.styling.variables}
+          />
+        </section>
+
+        {showRelated && (
+          <section className="vf-docs-reference__section" id="component-related">
+            <Heading level={3} size="md">
+              Related components and patterns
+            </Heading>
+            <MemberList label="Related components" values={relatedComponents} />
+            <MemberList
+              label="Patterns using this component"
+              values={relatedPatterns.map((pattern) => pattern.displayName)}
+            />
+            {relatedPatterns.length > 0 && (
+              <div className="vf-docs-component-entry__meta">
+                {relatedPatterns.map((pattern) => (
+                  <a href={`#/pattern-reference/${pattern.id}`} key={pattern.id}>
+                    Open {pattern.displayName}
+                  </a>
+                ))}
+              </div>
+            )}
+          </section>
+        )}
+
+        {showLimitations && (
+          <section
+            className="vf-docs-reference__section"
+            id="component-limitations"
+          >
+            <Heading level={3} size="md">
+              Known limitations and maturity
+            </Heading>
+            <MemberList
+              label="Known limitations"
+              values={component.knownLimitations}
+            />
+            <MemberList label="Maturity" values={[component.maturity]} />
+          </section>
+        )}
 
         <section
           className="vf-docs-reference__section"
           id="component-framework-api"
         >
           <Heading level={3} size="md">
-            API
+            Generated API reference
           </Heading>
           <Text tone="muted">
-            Generated API facts for {framework?.label ?? frameworkId}{" "}
-            documentation version {version}.
+            Authoritative generated API facts for {framework?.label ?? frameworkId}{" "}
+            documentation version {version}. This reference stays available
+            after the usage, accessibility, framework, and theming guidance.
           </Text>
           {contextualApi ? (
             <FrameworkApiPanel
@@ -654,53 +747,11 @@ function ComponentDetail({
             </Text>
           )}
         </section>
-
-        <section
-          className="vf-docs-reference__section"
-          id="component-accessibility-styling"
-        >
-          <Heading level={3} size="md">
-            Accessibility & styling
-          </Heading>
-          <MemberList
-            label="Accessibility guidance"
-            values={[
-              component.accessibilityNotes,
-              ...(component.contract?.accessibility ?? []),
-            ].filter(Boolean)}
-          />
-          <MemberList
-            label="Public classes"
-            values={component.styling.classes}
-          />
-          <MemberList
-            label="CSS variables"
-            values={component.styling.variables}
-          />
-        </section>
-
-        {showLimitations && (
-          <section
-            className="vf-docs-reference__section"
-            id="component-limitations"
-          >
-            <Heading level={3} size="md">
-              Limitations and related patterns
-            </Heading>
-            <MemberList
-              label="Known limitations"
-              values={component.knownLimitations}
-            />
-            <MemberList
-              label="Patterns using this component"
-              values={relatedPatterns.map((pattern) => pattern.displayName)}
-            />
-          </section>
-        )}
       </div>
       <ComponentOutline
         componentId={component.id}
         frameworkId={frameworkId}
+        showRelated={showRelated}
         showLimitations={showLimitations}
       />
     </div>
@@ -767,8 +818,9 @@ export function ComponentReferencePage({
               Find the primitive or composition that matches the job.
             </Heading>
             <Text tone="muted">
-              Browse by functional area, then open a component for framework
-              usage, generated API, accessibility, styling, and limitations.
+              Browse by functional area, then open a component to see live UI,
+              usage guidance, accessibility, framework examples, theming, and
+              the generated API reference.
             </Text>
           </div>
           <dl className="vf-docs-catalog__stats">
