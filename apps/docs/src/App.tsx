@@ -16,6 +16,10 @@ import {
   type DocsFrameworkId,
   type DocsVersion,
 } from "./docsContext";
+import {
+  getComponentReferenceRecord,
+  isComponentAvailableForFramework,
+} from "./referenceData";
 import { ReferenceShell } from "./ReferenceShell";
 import {
   documentationRecordRoutes,
@@ -88,6 +92,12 @@ function canonicalContext(state: DocsLocationState): ReferenceLocationContext {
     pathname: state.docsLocation.pathname,
     member: state.docsLocation.referenceRecord?.member ?? null,
   };
+}
+
+function recordFallbackRoute(record: ReferenceRecordSelection | null) {
+  if (record?.domain === "components") return "component-reference";
+  if (record?.domain === "packages") return "package-reference";
+  return "overview";
 }
 
 export default function App() {
@@ -201,10 +211,37 @@ export default function App() {
   };
 
   const handleFrameworkChange = (nextFrameworkId: DocsFrameworkId) => {
+    const nextRoute = resolveDocsRoute(
+      baseRoute,
+      nextFrameworkId,
+      docsVersion.version,
+    );
+    const record = docsLocation.referenceRecord;
+    const component =
+      record?.domain === "components"
+        ? getComponentReferenceRecord(record.id)
+        : undefined;
+    const recordAvailable =
+      !component ||
+      isComponentAvailableForFramework(
+        component,
+        nextFrameworkId,
+        docsVersion.version,
+      );
+
+    if (nextRoute.available && recordAvailable) {
+      navigate({
+        frameworkId: nextFrameworkId,
+        pathname: docsLocation.pathname,
+        member: record?.member ?? null,
+      });
+      return;
+    }
+
     navigate({
       frameworkId: nextFrameworkId,
-      pathname: docsLocation.pathname,
-      member: docsLocation.referenceRecord?.member ?? null,
+      pathname: `/${recordFallbackRoute(record)}`,
+      member: null,
     });
   };
 

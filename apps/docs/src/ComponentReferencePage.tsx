@@ -12,6 +12,7 @@ import { ReferenceComponentGallery } from "./ReferenceComponentGallery";
 import { ReferenceComponentSpecimen } from "./ReferenceComponentSpecimen";
 import {
   componentReferenceRecords,
+  getComponentAccessibilityEvidence,
   getComponentDocumentationCapabilities,
   getComponentReferenceRecord,
   getRelatedPatterns,
@@ -522,7 +523,7 @@ function ComponentOutline({
     ...(showCapabilities
       ? [["component-capabilities", "Variants, sizes & states"]]
       : []),
-    ["component-accessibility-styling", "Accessibility & styling"],
+    ["component-accessibility-styling", "Accessibility, keyboard & styling"],
     ["component-framework-usage", "Framework usage"],
     ...(showLimitations
       ? [["component-limitations", "Limitations and related patterns"]]
@@ -612,6 +613,7 @@ function ComponentDetail({
   const maturity = getComponentMaturityPresentation(component);
   const relatedPatterns = getRelatedPatterns(component.id);
   const capabilities = getComponentDocumentationCapabilities(component);
+  const accessibilityEvidence = getComponentAccessibilityEvidence(component.id);
   const showCapabilities = capabilities.controls.length > 0;
   const showLimitations =
     component.knownLimitations.length > 0 || relatedPatterns.length > 0;
@@ -722,7 +724,7 @@ function ComponentDetail({
           id="component-accessibility-styling"
         >
           <Heading level={3} size="md">
-            Accessibility & styling
+            Accessibility, keyboard & styling
           </Heading>
           <MemberList
             label="Accessibility guidance"
@@ -731,6 +733,29 @@ function ComponentDetail({
               ...(component.contract?.accessibility ?? []),
             ].filter(Boolean)}
           />
+          {accessibilityEvidence ? (
+            <>
+              <MemberList
+                label="Keyboard documentation"
+                values={[accessibilityEvidence.keyboardDocumentation]}
+              />
+              <MemberList
+                label="Canonical evidence status"
+                values={[accessibilityEvidence.evidenceStatus]}
+              />
+              <MemberList
+                label="Accessibility source"
+                values={[accessibilityEvidence.documentationPath]}
+              />
+              {accessibilityEvidence.keyboardDocumentation ===
+              "requires-verification" ? (
+                <Text className="vf-docs-evidence-note" size="sm" tone="muted">
+                  Keyboard and assistive-technology behavior remains explicitly
+                  unverified until the canonical manual evidence is complete.
+                </Text>
+              ) : null}
+            </>
+          ) : null}
           <MemberList
             label="Public classes"
             values={component.styling.classes}

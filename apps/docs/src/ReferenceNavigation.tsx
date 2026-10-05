@@ -5,12 +5,16 @@ import {
   SideNav,
   type SideNavItem,
 } from "@vyrnforge/ui-components";
-import { getReferenceLocationHref } from "../../../docs/reference/referenceRuntime";
+import {
+  getReferenceLocationHref,
+  getReferenceRecordRoute,
+} from "../../../docs/reference/referenceRuntime";
 import {
   isDocumentationReady,
   referenceModel,
   type DocsFrameworkId,
 } from "./docsContext";
+import { getAvailableComponentReferenceRecords } from "./referenceData";
 import {
   docsRoutes,
   documentationSearchRecords,
@@ -20,6 +24,7 @@ import {
 
 type ReferenceNavigationProps = {
   activeRouteId: string;
+  activeRecordId?: string | null;
   frameworkId: DocsFrameworkId;
   version: string;
   onRouteChange: (routeId: string) => void;
@@ -59,6 +64,21 @@ function memberKindLabel(kind: "property" | "event" | "slot" | "method") {
       : kind === "slot"
         ? "Slot"
         : "Method";
+}
+
+function componentMatchesQuery(
+  component: ReturnType<typeof getAvailableComponentReferenceRecords>[number],
+  query: string,
+) {
+  return [
+    component.displayName,
+    component.id,
+    component.category,
+    component.purpose,
+    component.guidance.useWhen,
+    component.guidance.avoidWhen,
+    ...component.guidance.relatedComponents,
+  ].some((value) => value.toLowerCase().includes(query));
 }
 
 export function ReferencePrimaryNavigation({
@@ -107,6 +127,7 @@ export function ReferencePrimaryNavigation({
 
 export function ReferenceNavigation({
   activeRouteId,
+  activeRecordId,
   frameworkId,
   version,
   onRouteChange,
@@ -126,22 +147,57 @@ export function ReferenceNavigation({
     [frameworkId, version],
   );
 
+  const components = useMemo(
+    () => getAvailableComponentReferenceRecords(frameworkId, version),
+    [frameworkId, version],
+  );
+
   const items = useMemo(
     () =>
       publicDocsSections.flatMap<SideNavItem>((section) => {
-        const routes = section.routeIds
+        const availableRoutes = section.routeIds
           .map((routeId) => docsRoutes.find((route) => route.id === routeId))
           .filter((route): route is DocsRoute => Boolean(route))
-          .filter((route) => routeIsAvailable(route, frameworkId, version))
+          .filter((route) => routeIsAvailable(route, frameworkId, version));
+
+        const routeItems = availableRoutes
           .filter(
             (route) => !normalizedQuery || matchesQuery(route, normalizedQuery),
           )
           .map<SideNavItem>((route) => ({
             id: route.id,
             label: route.title,
-            active: route.id === activeRouteId,
+            active: route.id === activeRouteId && !activeRecordId,
             onSelect: () => onRouteChange(route.id),
           }));
+
+        const componentReferenceAvailable = availableRoutes.some(
+          (route) => route.id === "component-reference",
+        );
+        const componentItems =
+          section.id === "components" && componentReferenceAvailable
+            ? components
+                .filter(
+                  (component) =>
+                    !normalizedQuery ||
+                    componentMatchesQuery(component, normalizedQuery),
+                )
+                .map<SideNavItem>((component) => ({
+                  id: `component-${component.id}`,
+                  label: component.displayName,
+                  badge: component.category,
+                  active: activeRecordId === component.id,
+                  href: getReferenceLocationHref(referenceModel, {
+                    frameworkId,
+                    pathname: getReferenceRecordRoute(
+                      referenceModel,
+                      "components",
+                      component.id,
+                    ),
+                    member: null,
+                  }),
+                }))
+            : [];
 
         const memberResults =
           section.id === "components" && normalizedQuery
@@ -164,7 +220,7 @@ export function ReferenceNavigation({
                 }))
             : [];
 
-        const children = [...routes, ...memberResults];
+        const children = [...routeItems, ...componentItems, ...memberResults];
         return children.length === 0
           ? []
           : [
@@ -177,8 +233,10 @@ export function ReferenceNavigation({
             ];
       }),
     [
+      activeRecordId,
       activeRouteId,
       apiMembers,
+      components,
       frameworkId,
       normalizedQuery,
       onRouteChange,
@@ -192,7 +250,7 @@ export function ReferenceNavigation({
         <SearchInput
           aria-label="Search VyrnForge Reference"
           onChange={(event) => setQuery(event.currentTarget.value)}
-          placeholder="Search docs and API…"
+          placeholder="Search docs, components, and API…"
           size="sm"
           value={query}
         />

@@ -1,4 +1,5 @@
 import consumerKnowledgeRaw from "../../../docs/generated/consumer-knowledge.json?raw";
+import componentMetadataRaw from "../../../docs/metadata/components.json?raw";
 import packageMetadataRaw from "../../../docs/metadata/packages.json?raw";
 
 export type ReferenceGuidance = {
@@ -100,6 +101,12 @@ export type ComponentReferenceRecord = {
   frameworks: Record<ReferenceFrameworkId, ReferenceFrameworkUsage>;
 };
 
+export type ComponentAccessibilityEvidence = {
+  documentationPath: string;
+  keyboardDocumentation: string;
+  evidenceStatus: string;
+};
+
 type GeneratedPackageRecord = {
   name: string;
   purpose: string;
@@ -118,6 +125,22 @@ type ConsumerKnowledge = {
     playgroundRoute?: string | null;
   }>;
   components: ComponentReferenceRecord[];
+};
+
+type CanonicalComponentRecord = {
+  id: string;
+  since: string;
+  evidence: {
+    status: string;
+  };
+  accessibility: {
+    documentationPath: string;
+    keyboardDocumentation: string;
+  };
+};
+
+type ComponentMetadata = {
+  components: CanonicalComponentRecord[];
 };
 
 type CanonicalPackageRecord = {
@@ -152,10 +175,68 @@ export type PackageReferenceRecord = GeneratedPackageRecord &
     | "notes"
   >;
 
+type ParsedVersion = {
+  core: [number, number, number];
+  prerelease: string[];
+};
+
+function parseVersion(version: string): ParsedVersion | null {
+  const match = version.match(
+    /^(\d+)\.(\d+)\.(\d+)(?:-([0-9A-Za-z.-]+))?(?:\+[0-9A-Za-z.-]+)?$/u,
+  );
+  if (!match) return null;
+  return {
+    core: [Number(match[1]), Number(match[2]), Number(match[3])],
+    prerelease: match[4]?.split(".") ?? [],
+  };
+}
+
+function comparePrerelease(left: string[], right: string[]) {
+  if (left.length === 0 && right.length === 0) return 0;
+  if (left.length === 0) return 1;
+  if (right.length === 0) return -1;
+
+  const length = Math.max(left.length, right.length);
+  for (let index = 0; index < length; index += 1) {
+    const leftPart = left[index];
+    const rightPart = right[index];
+    if (leftPart === undefined) return -1;
+    if (rightPart === undefined) return 1;
+    if (leftPart === rightPart) continue;
+
+    const leftNumber = /^\d+$/u.test(leftPart) ? Number(leftPart) : null;
+    const rightNumber = /^\d+$/u.test(rightPart) ? Number(rightPart) : null;
+    if (leftNumber !== null && rightNumber !== null) {
+      return leftNumber - rightNumber;
+    }
+    if (leftNumber !== null) return -1;
+    if (rightNumber !== null) return 1;
+    return leftPart.localeCompare(rightPart);
+  }
+  return 0;
+}
+
+function versionIsAtLeast(version: string, minimum: string) {
+  const current = parseVersion(version);
+  const required = parseVersion(minimum);
+  if (!current || !required) return true;
+
+  for (let index = 0; index < current.core.length; index += 1) {
+    if (current.core[index] !== required.core[index]) {
+      return current.core[index] > required.core[index];
+    }
+  }
+  return comparePrerelease(current.prerelease, required.prerelease) >= 0;
+}
+
 const knowledge = JSON.parse(consumerKnowledgeRaw) as ConsumerKnowledge;
+const componentMetadata = JSON.parse(componentMetadataRaw) as ComponentMetadata;
 const packageMetadata = JSON.parse(packageMetadataRaw) as PackageMetadata;
 const canonicalPackageByName = new Map(
   packageMetadata.packages.map((entry) => [entry.name, entry]),
+);
+const canonicalComponentById = new Map(
+  componentMetadata.components.map((entry) => [entry.id, entry]),
 );
 
 export const componentReferenceRecords = knowledge.components;
@@ -213,6 +294,49 @@ export function getRelatedPatterns(componentId: string) {
   return knowledge.patterns.filter((pattern) =>
     pattern.components.includes(componentId),
   );
+}
+
+export function getComponentAccessibilityEvidence(
+  componentId: string,
+): ComponentAccessibilityEvidence | null {
+  const metadata = canonicalComponentById.get(componentId);
+  if (!metadata) return null;
+
+  return {
+    documentationPath: metadata.accessibility.documentationPath,
+    keyboardDocumentation: metadata.accessibility.keyboardDocumentation,
+    evidenceStatus: metadata.evidence.status,
+  };
+}
+
+export function isComponentAvailableForFramework(
+  component: ComponentReferenceRecord,
+  frameworkId: ReferenceFrameworkId,
+  version?: string,
+) {
+  const usage = component.frameworks[frameworkId];
+  if (!usage?.package) return false;
+  if (
+    ["unavailable", "internal-not-ready", "not-applicable", "planned"].includes(
+      usage.status,
+    )
+  ) {
+    return false;
+  }
+
+  const canonical = canonicalComponentById.get(component.id);
+  return !version || !canonical || versionIsAtLeast(version, canonical.since);
+}
+
+export function getAvailableComponentReferenceRecords(
+  frameworkId: ReferenceFrameworkId,
+  version?: string,
+) {
+  return componentReferenceRecords
+    .filter((component) =>
+      isComponentAvailableForFramework(component, frameworkId, version),
+    )
+    .sort((left, right) => left.displayName.localeCompare(right.displayName));
 }
 
 export function getComponentDocumentationCapabilities(

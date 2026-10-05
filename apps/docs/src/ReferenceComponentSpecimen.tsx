@@ -4,6 +4,7 @@ import {
   Button,
   ButtonGroup,
   Checkbox,
+  Dialog,
   EmptyState,
   ErrorState,
   Heading,
@@ -27,6 +28,19 @@ import {
   ToggleButton,
   ToggleButtonGroup,
 } from "@vyrnforge/ui-components";
+
+type SpecimenState = {
+  checked: boolean;
+  dialogOpen: boolean;
+  setChecked: (checked: boolean) => void;
+  setDialogOpen: (open: boolean) => void;
+  setTab: (tab: string) => void;
+  setToggle: (toggle: string) => void;
+  tab: string;
+  toggle: string;
+};
+
+type SpecimenRenderer = (state: SpecimenState) => ReactNode;
 
 function UnsupportedSpecimen({
   componentId,
@@ -57,6 +71,200 @@ function UnsupportedSpecimen({
   );
 }
 
+const renderButton: SpecimenRenderer = () => (
+  <div className="vf-docs-specimen-row">
+    <Button variant="primary">Primary</Button>
+    <Button>Default</Button>
+    <Button variant="subtle">Subtle</Button>
+    <Button variant="ghost">Ghost</Button>
+    <Button variant="danger">Danger</Button>
+  </div>
+);
+
+const renderBadge: SpecimenRenderer = () => (
+  <div className="vf-docs-specimen-row">
+    <Badge variant="success">Healthy</Badge>
+    <Badge variant="warning">Review</Badge>
+    <Badge variant="danger">Blocked</Badge>
+    <Badge variant="info">In progress</Badge>
+    <Badge variant="neutral">Neutral</Badge>
+  </div>
+);
+
+const renderToggleGroup: SpecimenRenderer = ({ setToggle, toggle }) => (
+  <ToggleButtonGroup
+    type="single"
+    value={toggle}
+    onValueChange={(value) => {
+      if (typeof value === "string") setToggle(value);
+    }}
+  >
+    <ToggleButton value="list">List</ToggleButton>
+    <ToggleButton value="grid">Grid</ToggleButton>
+  </ToggleButtonGroup>
+);
+
+const renderMessage: SpecimenRenderer = () => (
+  <Stack gap="sm">
+    <InlineMessage title="Deployment ready" variant="success">
+      The new configuration can be promoted.
+    </InlineMessage>
+    <InlineMessage title="Review required" variant="warning">
+      Two fields still need an owner.
+    </InlineMessage>
+  </Stack>
+);
+
+const renderPanel: SpecimenRenderer = () => (
+  <Panel description="Current operational status" title="Queue health">
+    <Text>4 critical · 8 standard · 2 awaiting review</Text>
+  </Panel>
+);
+
+// Renderer dispatch stays in the React documentation host. Which controls,
+// states, variants, and evidence are documentable is derived from canonical
+// VyrnForge metadata rather than this implementation registry.
+const specimenRenderers: Record<string, SpecimenRenderer> = {
+  button: renderButton,
+  "button-group": () => (
+    <ButtonGroup>
+      <Button>Previous</Button>
+      <Button variant="primary">Next</Button>
+    </ButtonGroup>
+  ),
+  "icon-button": () => (
+    <div className="vf-docs-specimen-row">
+      <IconButton aria-label="Settings">
+        <Icon name="Settings" />
+      </IconButton>
+      <IconButton aria-label="Refresh">
+        <Icon name="Refresh" />
+      </IconButton>
+      <IconButton aria-label="More actions">
+        <Icon name="MoreHorizontal" />
+      </IconButton>
+    </div>
+  ),
+  badge: renderBadge,
+  "status-badge": renderBadge,
+  "text-input": () => (
+    <TextInput aria-label="Project name" defaultValue="VyrnForge" />
+  ),
+  "search-input": () => (
+    <SearchInput aria-label="Search" placeholder="Search components" />
+  ),
+  select: () => (
+    <Select
+      aria-label="Framework"
+      defaultValue="react"
+      options={[
+        { label: "React", value: "react" },
+        { label: "Angular", value: "angular" },
+        { label: "Vue", value: "vue" },
+      ]}
+    />
+  ),
+  textarea: () => (
+    <Textarea
+      aria-label="Description"
+      defaultValue="Reusable UI foundation for enterprise applications."
+    />
+  ),
+  switch: ({ checked, setChecked }) => (
+    <Switch
+      checked={checked}
+      description="Notify owners when workflow state changes."
+      label="Enable notifications"
+      onCheckedChange={setChecked}
+    />
+  ),
+  checkbox: () => <Checkbox defaultChecked label="Include archived records" />,
+  "radio-group": () => (
+    <RadioGroup
+      defaultValue="comfortable"
+      label="Density"
+      options={[
+        { label: "Comfortable", value: "comfortable" },
+        { label: "Compact", value: "compact" },
+      ]}
+    />
+  ),
+  slider: () => <Slider aria-label="Volume" defaultValue={60} />,
+  "toggle-button": ({ checked, setChecked }) => (
+    <ToggleButton pressed={checked} onPressedChange={setChecked}>
+      Pin
+    </ToggleButton>
+  ),
+  "toggle-button-group": renderToggleGroup,
+  "segmented-control": renderToggleGroup,
+  tabs: ({ setTab, tab }) => (
+    <Tabs
+      items={[
+        {
+          id: "overview",
+          label: "Overview",
+          content: "Overview content",
+        },
+        {
+          id: "activity",
+          label: "Activity",
+          content: "Activity content",
+        },
+        {
+          id: "settings",
+          label: "Settings",
+          content: "Settings content",
+        },
+      ]}
+      onValueChange={setTab}
+      value={tab}
+    />
+  ),
+  dialog: ({ dialogOpen, setDialogOpen }) => (
+    <div className="vf-docs-specimen-row">
+      <Button onClick={() => setDialogOpen(true)} variant="primary">
+        Open dialog
+      </Button>
+      <Dialog
+        description="Review the pending configuration before continuing."
+        footer={<Button onClick={() => setDialogOpen(false)}>Close</Button>}
+        onOpenChange={setDialogOpen}
+        open={dialogOpen}
+        title="Review deployment"
+      >
+        <Text>The dialog uses the public VyrnForge overlay contract.</Text>
+      </Dialog>
+    </div>
+  ),
+  "inline-message": renderMessage,
+  alert: renderMessage,
+  progress: () => <Progress aria-label="Upload progress" value={68} />,
+  skeleton: () => (
+    <Stack gap="sm">
+      <Skeleton height={18} width="45%" />
+      <Skeleton height={14} width="80%" />
+      <Skeleton height={14} width="65%" />
+    </Stack>
+  ),
+  "empty-state": () => (
+    <EmptyState
+      action={<Button variant="primary">Create resource</Button>}
+      description="Create the first resource to start this workspace."
+      title="No resources yet"
+    />
+  ),
+  "error-state": () => (
+    <ErrorState
+      action={<Button>Retry</Button>}
+      description="Try again or check the service status."
+      title="Could not load resources"
+    />
+  ),
+  "loading-state": () => <LoadingState label="Loading resources" />,
+  panel: renderPanel,
+  card: renderPanel,
+};
+
 export function ReferenceComponentSpecimen({
   componentId,
   relatedPatterns,
@@ -65,226 +273,27 @@ export function ReferenceComponentSpecimen({
   relatedPatterns: string[];
 }) {
   const [checked, setChecked] = useState(true);
+  const [dialogOpen, setDialogOpen] = useState(false);
   const [tab, setTab] = useState("overview");
   const [toggle, setToggle] = useState("list");
-
-  let specimen: ReactNode;
-
-  switch (componentId) {
-    case "button":
-      specimen = (
-        <div className="vf-docs-specimen-row">
-          <Button variant="primary">Primary</Button>
-          <Button>Default</Button>
-          <Button variant="subtle">Subtle</Button>
-          <Button variant="ghost">Ghost</Button>
-          <Button variant="danger">Danger</Button>
-        </div>
-      );
-      break;
-    case "button-group":
-      specimen = (
-        <ButtonGroup>
-          <Button>Previous</Button>
-          <Button variant="primary">Next</Button>
-        </ButtonGroup>
-      );
-      break;
-    case "icon-button":
-      specimen = (
-        <div className="vf-docs-specimen-row">
-          <IconButton aria-label="Settings">
-            <Icon name="Settings" />
-          </IconButton>
-          <IconButton aria-label="Refresh">
-            <Icon name="Refresh" />
-          </IconButton>
-          <IconButton aria-label="More actions">
-            <Icon name="MoreHorizontal" />
-          </IconButton>
-        </div>
-      );
-      break;
-    case "badge":
-    case "status-badge":
-      specimen = (
-        <div className="vf-docs-specimen-row">
-          <Badge variant="success">Healthy</Badge>
-          <Badge variant="warning">Review</Badge>
-          <Badge variant="danger">Blocked</Badge>
-          <Badge variant="info">In progress</Badge>
-          <Badge variant="neutral">Neutral</Badge>
-        </div>
-      );
-      break;
-    case "text-input":
-      specimen = (
-        <TextInput aria-label="Project name" defaultValue="VyrnForge" />
-      );
-      break;
-    case "search-input":
-      specimen = (
-        <SearchInput aria-label="Search" placeholder="Search components" />
-      );
-      break;
-    case "select":
-      specimen = (
-        <Select
-          aria-label="Framework"
-          defaultValue="react"
-          options={[
-            { label: "React", value: "react" },
-            { label: "Angular", value: "angular" },
-            { label: "Vue", value: "vue" },
-          ]}
-        />
-      );
-      break;
-    case "textarea":
-      specimen = (
-        <Textarea
-          aria-label="Description"
-          defaultValue="Reusable UI foundation for enterprise applications."
-        />
-      );
-      break;
-    case "switch":
-      specimen = (
-        <Switch
-          checked={checked}
-          description="Notify owners when workflow state changes."
-          label="Enable notifications"
-          onCheckedChange={setChecked}
-        />
-      );
-      break;
-    case "checkbox":
-      specimen = <Checkbox defaultChecked label="Include archived records" />;
-      break;
-    case "radio-group":
-      specimen = (
-        <RadioGroup
-          defaultValue="comfortable"
-          label="Density"
-          options={[
-            { label: "Comfortable", value: "comfortable" },
-            { label: "Compact", value: "compact" },
-          ]}
-        />
-      );
-      break;
-    case "slider":
-      specimen = <Slider aria-label="Volume" defaultValue={60} />;
-      break;
-    case "toggle-button":
-      specimen = (
-        <ToggleButton pressed={checked} onPressedChange={setChecked}>
-          Pin
-        </ToggleButton>
-      );
-      break;
-    case "toggle-button-group":
-    case "segmented-control":
-      specimen = (
-        <ToggleButtonGroup
-          type="single"
-          value={toggle}
-          onValueChange={(value) => {
-            if (typeof value === "string") setToggle(value);
-          }}
-        >
-          <ToggleButton value="list">List</ToggleButton>
-          <ToggleButton value="grid">Grid</ToggleButton>
-        </ToggleButtonGroup>
-      );
-      break;
-    case "tabs":
-      specimen = (
-        <Tabs
-          items={[
-            {
-              id: "overview",
-              label: "Overview",
-              content: "Overview content",
-            },
-            {
-              id: "activity",
-              label: "Activity",
-              content: "Activity content",
-            },
-            {
-              id: "settings",
-              label: "Settings",
-              content: "Settings content",
-            },
-          ]}
-          onValueChange={setTab}
-          value={tab}
-        />
-      );
-      break;
-    case "inline-message":
-    case "alert":
-      specimen = (
-        <Stack gap="sm">
-          <InlineMessage title="Deployment ready" variant="success">
-            The new configuration can be promoted.
-          </InlineMessage>
-          <InlineMessage title="Review required" variant="warning">
-            Two fields still need an owner.
-          </InlineMessage>
-        </Stack>
-      );
-      break;
-    case "progress":
-      specimen = <Progress aria-label="Upload progress" value={68} />;
-      break;
-    case "skeleton":
-      specimen = (
-        <Stack gap="sm">
-          <Skeleton height={18} width="45%" />
-          <Skeleton height={14} width="80%" />
-          <Skeleton height={14} width="65%" />
-        </Stack>
-      );
-      break;
-    case "empty-state":
-      specimen = (
-        <EmptyState
-          action={<Button variant="primary">Create resource</Button>}
-          description="Create the first resource to start this workspace."
-          title="No resources yet"
-        />
-      );
-      break;
-    case "error-state":
-      specimen = (
-        <ErrorState
-          action={<Button>Retry</Button>}
-          description="Try again or check the service status."
-          title="Could not load resources"
-        />
-      );
-      break;
-    case "loading-state":
-      specimen = <LoadingState label="Loading resources" />;
-      break;
-    case "panel":
-    case "card":
-      specimen = (
-        <Panel description="Current operational status" title="Queue health">
-          <Text>4 critical · 8 standard · 2 awaiting review</Text>
-        </Panel>
-      );
-      break;
-    default:
-      specimen = (
-        <UnsupportedSpecimen
-          componentId={componentId}
-          relatedPatterns={relatedPatterns}
-        />
-      );
-  }
+  const renderer = specimenRenderers[componentId];
+  const specimen = renderer ? (
+    renderer({
+      checked,
+      dialogOpen,
+      setChecked,
+      setDialogOpen,
+      setTab,
+      setToggle,
+      tab,
+      toggle,
+    })
+  ) : (
+    <UnsupportedSpecimen
+      componentId={componentId}
+      relatedPatterns={relatedPatterns}
+    />
+  );
 
   return (
     <section className="vf-docs-component-specimen">

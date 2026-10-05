@@ -14,10 +14,18 @@ import {
 import { DocsPage } from "./DocsPage";
 import { docsLinks } from "./deploymentLinks";
 import {
+  getComponentReferenceRecord,
+  isComponentAvailableForFramework,
+} from "./referenceData";
+import {
   ReferenceNavigation,
   ReferencePrimaryNavigation,
 } from "./ReferenceNavigation";
-import type { DocsRoute, DocsRouteResolution } from "./referenceRoutes";
+import {
+  resolveDocsRoute,
+  type DocsRoute,
+  type DocsRouteResolution,
+} from "./referenceRoutes";
 
 export type ReferenceLayoutMode =
   "reading" | "reference" | "catalog" | "example" | "wide";
@@ -54,6 +62,12 @@ function getLayoutMode(
   }
   if (route.template === "package") return "reference";
   return "reading";
+}
+
+function recordFallbackRoute(record: ReferenceRecordSelection | null) {
+  if (record?.domain === "components") return "component-reference";
+  if (record?.domain === "packages") return "package-reference";
+  return "overview";
 }
 
 export function ReferenceShell({
@@ -105,13 +119,40 @@ export function ReferenceShell({
     ) {
       return;
     }
+
+    const targetRoute = resolveDocsRoute(
+      activeRoute,
+      framework.id,
+      version.version,
+    );
+    const component =
+      referenceRecord?.domain === "components"
+        ? getComponentReferenceRecord(referenceRecord.id)
+        : undefined;
+    const recordAvailable =
+      !component ||
+      isComponentAvailableForFramework(
+        component,
+        framework.id,
+        version.version,
+      );
+    const targetPath =
+      targetRoute.available && recordAvailable
+        ? routePath
+        : `/${recordFallbackRoute(referenceRecord)}`;
+    const targetMember =
+      targetRoute.available && recordAvailable ? routeMember : null;
+
     window.location.assign(
-      getVersionHref(version, framework.id, routePath, routeMember),
+      getVersionHref(version, framework.id, targetPath, targetMember),
     );
   };
 
   const navigation = (
     <ReferenceNavigation
+      activeRecordId={
+        referenceRecord?.domain === "components" ? referenceRecord.id : null
+      }
       activeRouteId={activeRoute.id}
       frameworkId={framework.id}
       onRouteChange={navigate}
