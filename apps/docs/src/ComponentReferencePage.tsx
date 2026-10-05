@@ -625,7 +625,8 @@ function ComponentDetail({
   const maturity = getComponentMaturityPresentation(component);
   const relatedPatterns = getRelatedPatterns(component.id);
   const relatedComponents = component.guidance.relatedComponents ?? [];
-  const showRelated = relatedComponents.length > 0 || relatedPatterns.length > 0;
+  const showRelated =
+    relatedComponents.length > 0 || relatedPatterns.length > 0;
   const showLimitations = component.knownLimitations.length > 0;
   const framework = referenceModel.frameworks.find(
     (candidate) => candidate.id === frameworkId,
@@ -737,7 +738,10 @@ function ComponentDetail({
             <Heading level={3} size="md">
               Related components and patterns
             </Heading>
-            <MemberList label="Related components" values={relatedComponents} />
+            <MemberList
+              label="Related components"
+              values={relatedComponents}
+            />
             <MemberList
               label="Patterns using this component"
               values={relatedPatterns.map((pattern) => pattern.displayName)}
@@ -778,9 +782,10 @@ function ComponentDetail({
             Generated API reference
           </Heading>
           <Text tone="muted">
-            Authoritative generated API facts for {framework?.label ?? frameworkId}{" "}
-            documentation version {version}. This reference stays available
-            after the usage, accessibility, framework, and theming guidance.
+            Authoritative generated API facts for{" "}
+            {framework?.label ?? frameworkId} documentation version {version}.
+            This reference stays available after the usage, accessibility,
+            framework, and theming guidance.
           </Text>
           {contextualApi ? (
             <FrameworkApiPanel
