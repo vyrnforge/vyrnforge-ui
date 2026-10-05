@@ -22,6 +22,10 @@ export type ReferenceContractProperty = {
 
 export type ReferenceContractMember = {
   name: string;
+  required?: boolean;
+  multiple?: boolean;
+  content?: string;
+  description?: string;
   [key: string]: unknown;
 };
 
@@ -57,11 +61,19 @@ export type DocumentationControlName =
 
 export type ComponentDocumentationCapabilities = {
   controls: ReferenceContractProperty[];
+  variantControl: ReferenceContractProperty | null;
+  sizeControl: ReferenceContractProperty | null;
+  densityControl: ReferenceContractProperty | null;
   variants: boolean;
   sizes: boolean;
   density: boolean;
   interactive: boolean;
   states: ReferenceContractProperty[];
+  compositionSlots: ReferenceContractMember[];
+  interactionEvents: ReferenceContractMember[];
+  interactionMethods: ReferenceContractMember[];
+  themingClasses: string[];
+  themingVariables: string[];
 };
 
 export type ReferenceFrameworkId = "native-html" | "react" | "angular" | "vue";
@@ -347,22 +359,38 @@ export function getComponentDocumentationCapabilities(
   const controls = properties.filter((property) =>
     controlNames.has(property.name),
   );
+  const variantControl =
+    controls.find((property) => property.name === "variant") ?? null;
+  const sizeControl =
+    controls.find((property) => property.name === "size") ?? null;
+  const densityControl =
+    controls.find((property) => property.name === "density") ?? null;
   const states = controls.filter(
     (property) =>
       property.name !== "variant" &&
       property.name !== "size" &&
       property.name !== "density",
   );
+  const interactionEvents = component.contract?.events ?? [];
+  const interactionMethods = component.contract?.methods ?? [];
 
   return {
     controls,
-    variants: controls.some((property) => property.name === "variant"),
-    sizes: controls.some((property) => property.name === "size"),
-    density: controls.some((property) => property.name === "density"),
+    variantControl,
+    sizeControl,
+    densityControl,
+    variants: variantControl !== null,
+    sizes: sizeControl !== null,
+    density: densityControl !== null,
     interactive:
       states.length > 0 ||
-      (component.contract?.events.length ?? 0) > 0 ||
-      (component.contract?.methods.length ?? 0) > 0,
+      interactionEvents.length > 0 ||
+      interactionMethods.length > 0,
     states,
+    compositionSlots: component.contract?.slots ?? [],
+    interactionEvents,
+    interactionMethods,
+    themingClasses: component.styling.classes,
+    themingVariables: component.styling.variables,
   };
 }
