@@ -47,11 +47,41 @@ function filesRecursively(root, relativeDir) {
   });
 }
 
-function verifyDocumentationCapabilities(
-  root,
-  expectedReference,
-  failures,
-) {
+function escapeRegExp(value) {
+  return value.replace(/[.*+?^${}()|[\]\\]/gu, "\\$&");
+}
+
+function publicStringUnionValues(root, publicType, failures, owner) {
+  if (!publicType?.name || !publicType?.path) {
+    failures.push(`${owner}: select control is missing public type evidence`);
+    return [];
+  }
+  if (!existsSync(path.join(root, publicType.path))) {
+    failures.push(
+      `${owner}: public type evidence path does not exist: ${publicType.path}`,
+    );
+    return [];
+  }
+
+  const source = read(root, publicType.path);
+  const typePattern = new RegExp(
+    `export\\s+type\\s+${escapeRegExp(publicType.name)}\\s*=([\\s\\S]*?);`,
+    "u",
+  );
+  const match = source.match(typePattern);
+  if (!match) {
+    failures.push(
+      `${owner}: exported public type ${publicType.name} was not found in ${publicType.path}`,
+    );
+    return [];
+  }
+
+  return [...match[1].matchAll(/["']([^"']+)["']/gu)].map(
+    (valueMatch) => valueMatch[1],
+  );
+}
+
+function verifyDocumentationCapabilities(root, expectedReference, failures) {
   if (!existsSync(path.join(root, componentDocumentationPath))) {
     failures.push(
       `component documentation capabilities are missing: ${componentDocumentationPath}`,
@@ -63,10 +93,19 @@ function verifyDocumentationCapabilities(
     failures.push("component documentation schemaVersion must be 1");
   }
   if (metadata.sourceOfTruth?.canonical !== true) {
-    failures.push("component documentation capabilities must declare canonical ownership");
+    failures.push(
+      "component documentation capabilities must declare canonical ownership",
+    );
   }
   if (metadata.policy?.publicContractValuesWin !== true) {
-    failures.push("component documentation controls must defer to public contract values");
+    failures.push(
+      "component documentation controls must defer to public contract values",
+    );
+  }
+  if (metadata.policy?.selectValuesRequirePublicTypeEvidence !== true) {
+    failures.push(
+      "component documentation select values must require public type evidence",
+    );
   }
 
   const components = new Map(
@@ -78,7 +117,9 @@ function verifyDocumentationCapabilities(
   const seen = new Set();
   for (const documentation of metadata.components ?? []) {
     if (seen.has(documentation.id)) {
-      failures.push(`${documentation.id}: duplicate component documentation record`);
+      failures.push(
+        `${documentation.id}: duplicate component documentation record`,
+      );
       continue;
     }
     seen.add(documentation.id);
@@ -97,11 +138,16 @@ function verifyDocumentationCapabilities(
         `${documentation.id}: standalone specimen requires a renderer identifier`,
       );
     }
-    const publicProperties = new Set(
-      (component.contract?.properties ?? []).map((property) => property.name),
+    const publicProperties = new Map(
+      (component.contract?.properties ?? []).map((property) => [
+        property.name,
+        property,
+      ]),
     );
     for (const control of documentation.controls ?? []) {
-      if (!publicProperties.has(control.property)) {
+      const owner = `${documentation.id}.${control.property}`;
+      const property = publicProperties.get(control.property);
+      if (!property) {
         failures.push(
           `${documentation.id}: documentation control ${control.property} is not present in the canonical public contract`,
         );
@@ -110,6 +156,41 @@ function verifyDocumentationCapabilities(
         failures.push(
           `${documentation.id}: unsupported documentation control kind ${control.kind}`,
         );
+      }
+      if (control.kind === "select") {
+        if (!Array.isArray(control.values) || control.values.length === 0) {
+          failures.push(`${owner}: select control must declare values`);
+          continue;
+        }
+        if (new Set(control.values).size !== control.values.length) {
+          failures.push(`${owner}: select control values must be unique`);
+        }
+        const publicValues = publicStringUnionValues(
+          root,
+          control.publicType,
+          failures,
+          owner,
+        );
+        if (
+          publicValues.length > 0 &&
+          JSON.stringify(publicValues) !== JSON.stringify(control.values)
+        ) {
+          failures.push(
+            `${owner}: documentation values ${JSON.stringify(control.values)} do not exactly match ${control.publicType.name} ${JSON.stringify(publicValues)}`,
+          );
+        }
+        const canonicalTypeName =
+          property && typeof property.type === "object"
+            ? property.type?.typeName
+            : null;
+        if (
+          canonicalTypeName &&
+          canonicalTypeName !== control.publicType?.name
+        ) {
+          failures.push(
+            `${owner}: public type evidence ${control.publicType?.name ?? "missing"} does not match canonical typeName ${canonicalTypeName}`,
+          );
+        }
       }
     }
   }
