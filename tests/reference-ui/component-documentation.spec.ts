@@ -62,9 +62,7 @@ async function capture(page: Page, testInfo: TestInfo, name: string) {
 }
 
 test.describe("component documentation completeness", () => {
-  test("representative component classes keep live UI ahead of generated API", async ({
-    page,
-  }, testInfo) => {
+  test("representative details precede API", async ({ page }, testInfo) => {
     const componentIds = [
       "text-input",
       "select",
@@ -88,9 +86,7 @@ test.describe("component documentation completeness", () => {
     }
   });
 
-  test("Button documentation stays available in every first-class framework context", async ({
-    page,
-  }) => {
+  test("Button is documented for every framework", async ({ page }) => {
     const frameworks: FrameworkId[] = [
       "native-html",
       "react",
@@ -107,18 +103,14 @@ test.describe("component documentation completeness", () => {
     }
   });
 
-  test("sidebar exposes generated component records for the selected framework and keeps the active record visible", async ({
-    page,
-  }) => {
+  test("sidebar exposes active component records", async ({ page }) => {
     await openComponent(page, "button", "react");
 
     const navigation = page.locator(".vf-reference-navigation__sections");
-    const buttonLink = navigation
-      .locator('a[href*="#/components/button"]')
-      .first();
-    const textInputLink = navigation
-      .locator('a[href*="#/components/text-input"]')
-      .first();
+    const buttonSelector = 'a[href*="#/components/button"]';
+    const textInputSelector = 'a[href*="#/components/text-input"]';
+    const buttonLink = navigation.locator(buttonSelector).first();
+    const textInputLink = navigation.locator(textInputSelector).first();
 
     await expect(buttonLink).toBeVisible();
     await expect(buttonLink).toHaveClass(/vf-side-nav__item--active/u);
@@ -133,9 +125,7 @@ test.describe("component documentation completeness", () => {
     await expectNoPageOverflow(page);
   });
 
-  test("VyrnForge Tabs specimen exposes keyboard focus behavior", async ({
-    page,
-  }) => {
+  test("Tabs specimen supports keyboard focus", async ({ page }) => {
     await openComponent(page, "tabs");
 
     const tabs = page.getByRole("tab");
@@ -146,9 +136,7 @@ test.describe("component documentation completeness", () => {
     await expect(tabs.nth(1)).toBeFocused();
   });
 
-  test("VyrnForge Dialog specimen opens and closes with Escape", async ({
-    page,
-  }) => {
+  test("Dialog specimen closes with Escape", async ({ page }) => {
     await openComponent(page, "dialog");
 
     await page.getByRole("button", { name: "Open dialog" }).click();
@@ -158,9 +146,7 @@ test.describe("component documentation completeness", () => {
     await expect(dialog).toBeHidden();
   });
 
-  test("mobile and dark component detail contain long framework and API content", async ({
-    page,
-  }, testInfo) => {
+  test("mobile dark detail stays contained", async ({ page }, testInfo) => {
     await page.setViewportSize({ width: 390, height: 844 });
     await openComponent(page, "text-input");
 
@@ -189,9 +175,7 @@ test.describe("component documentation completeness", () => {
     await capture(page, testInfo, "reference-component-text-input-mobile-dark");
   });
 
-  test("tablet and reduced-motion component detail remains contained", async ({
-    page,
-  }, testInfo) => {
+  test("tablet detail supports reduced motion", async ({ page }, testInfo) => {
     await page.emulateMedia({ reducedMotion: "reduce" });
     await page.setViewportSize({ width: 768, height: 1024 });
     await openComponent(page, "tabs");
