@@ -1,4 +1,5 @@
 import consumerKnowledgeRaw from "../../../docs/generated/consumer-knowledge.json?raw";
+import assistiveTechnologyReviewsRaw from "../../../docs/metadata/assistive-technology-reviews.json?raw";
 import componentDocumentationRaw from "../../../docs/metadata/component-documentation.json?raw";
 import packageMetadataRaw from "../../../docs/metadata/packages.json?raw";
 
@@ -94,6 +95,27 @@ type ComponentDocumentationMetadata = {
   components: ComponentDocumentationRecord[];
 };
 
+type AssistiveTechnologyResult = {
+  environmentId: string;
+  outcome: "passed" | "failed" | "conditional";
+  testedAt?: string;
+  reference?: string;
+};
+
+export type AssistiveTechnologyScenario = {
+  id: string;
+  title: string;
+  componentIds: string[];
+  contracts: string[];
+  environmentIds: string[];
+  status: "pending" | "complete" | "blocked";
+  results: AssistiveTechnologyResult[];
+};
+
+type AssistiveTechnologyReviews = {
+  scenarios: AssistiveTechnologyScenario[];
+};
+
 type GeneratedPackageRecord = {
   name: string;
   purpose: string;
@@ -147,6 +169,9 @@ export type PackageReferenceRecord = GeneratedPackageRecord &
   >;
 
 const knowledge = JSON.parse(consumerKnowledgeRaw) as ConsumerKnowledge;
+const assistiveTechnologyReviews = JSON.parse(
+  assistiveTechnologyReviewsRaw,
+) as AssistiveTechnologyReviews;
 const componentDocumentation = JSON.parse(
   componentDocumentationRaw,
 ) as ComponentDocumentationMetadata;
@@ -263,6 +288,12 @@ export function getContractEnumValues(
   propertyName: string,
 ) {
   return getDocumentationControlValues(component.id, propertyName);
+}
+
+export function getAssistiveTechnologyEvidence(componentId: string) {
+  return assistiveTechnologyReviews.scenarios.filter((scenario) =>
+    scenario.componentIds.includes(componentId),
+  );
 }
 
 export function getPackageReferenceRecord(packageName: string) {
