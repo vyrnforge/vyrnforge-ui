@@ -84,6 +84,27 @@ test.describe("component documentation completeness", () => {
     }
   });
 
+  test("layout and composition records render real VyrnForge specimens", async ({
+    page,
+  }) => {
+    const componentIds = ["card", "stack", "inline", "section"] as const;
+
+    for (const componentId of componentIds) {
+      await openComponent(page, componentId);
+      const specimen = page.locator(
+        "#component-specimen .vf-docs-component-specimen__stage",
+      );
+      await expect(specimen).toBeVisible();
+      await expect(specimen).not.toContainText(
+        "does not yet have a standalone specimen",
+      );
+      await expect(specimen).not.toContainText(
+        "best understood inside a real application composition",
+      );
+      await expectNoPageOverflow(page);
+    }
+  });
+
   test("Button is documented for every framework", async ({ page }) => {
     const frameworks: FrameworkId[] = [
       "native-html",
