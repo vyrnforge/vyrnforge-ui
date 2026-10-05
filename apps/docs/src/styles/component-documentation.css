@@ -1,0 +1,50 @@
+.vf-docs-component-specimen__controls {
+  display: grid;
+  gap: var(--vf-space-3, 12px);
+  min-width: 0;
+  margin-block-start: var(--vf-space-4, 16px);
+  padding-block-start: var(--vf-space-4, 16px);
+  border-block-start: 1px solid
+    var(--vf-divider, var(--vf-border-subtle, var(--vf-border, #e2e8f0)));
+}
+
+.vf-docs-specimen-form {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 180px), 1fr));
+  gap: var(--vf-space-3, 12px);
+  align-items: start;
+  min-width: 0;
+}
+
+.vf-docs-specimen-form > *,
+.vf-docs-specimen-form .vf-select,
+.vf-docs-specimen-form .vf-input {
+  min-width: 0;
+  max-width: 100%;
+}
+
+.vf-docs-specimen-stack {
+  display: grid;
+  gap: var(--vf-space-4, 16px);
+  min-width: 0;
+}
+
+.vf-docs-component-specimen__stage,
+.vf-docs-component-specimen__stage > * {
+  min-width: 0;
+}
+
+.vf-docs-reference__section {
+  scroll-margin-block-start: calc(64px + var(--vf-space-4, 16px));
+}
+
+@media (max-width: 640px) {
+  .vf-docs-specimen-form {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .vf-docs-reference .vf-docs-contract-field {
+    grid-template-columns: minmax(0, 1fr);
+    gap: var(--vf-space-1, 4px);
+  }
+}
