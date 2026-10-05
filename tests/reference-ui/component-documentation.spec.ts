@@ -185,9 +185,7 @@ test.describe("component documentation completeness", () => {
         links.map((link) => (link as HTMLAnchorElement).getAttribute("href")),
       );
     const sidebarHrefs = await page
-      .locator(
-        '.vf-reference-navigation__sections a[href*="#/components/"]',
-      )
+      .locator('.vf-reference-navigation__sections a[href*="#/components/"]')
       .evaluateAll((links) =>
         links.map((link) => (link as HTMLAnchorElement).getAttribute("href")),
       );
