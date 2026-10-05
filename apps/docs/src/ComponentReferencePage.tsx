@@ -10,12 +10,12 @@ import { getComponentMaturityPresentation } from "./componentMaturityPresentatio
 import { referenceModel, type DocsFrameworkId } from "./docsContext";
 import { ReferenceComponentGallery } from "./ReferenceComponentGallery";
 import { ReferenceComponentSpecimen } from "./ReferenceComponentSpecimen";
-import { ReferenceFrameworkUsage } from "./ReferenceFrameworkUsage";
 import {
   componentReferenceRecords,
   getComponentReferenceRecord,
   getRelatedPatterns,
   type ComponentReferenceRecord,
+  type ReferenceFrameworkUsage,
 } from "./referenceData";
 
 type ApiProperty = {
@@ -472,6 +472,54 @@ function ComponentIndexRow({
   );
 }
 
+function CodeExample({ label, value }: { label: string; value: string }) {
+  if (!value) return null;
+
+  return (
+    <div className="vf-docs-contract-field">
+      <strong>{label}</strong>
+      <pre>
+        <code>{value}</code>
+      </pre>
+    </div>
+  );
+}
+
+function FrameworkUsagePanel({
+  frameworkId,
+  usage,
+}: {
+  frameworkId: DocsFrameworkId;
+  usage: ReferenceFrameworkUsage;
+}) {
+  return (
+    <section
+      className="vf-docs-reference__section"
+      id="component-framework-usage"
+    >
+      <Heading level={3} size="md">
+        Framework usage
+      </Heading>
+      <div className="vf-docs-framework-usage__meta">
+        <Badge size="sm" tone="subtle">
+          {usage.status}
+        </Badge>
+        <strong>{usage.label}</strong>
+        {usage.package ? <code>{usage.package}</code> : null}
+      </div>
+      <Text tone="muted">
+        Usage is generated from canonical VyrnForge framework and component
+        metadata for the selected {frameworkId} surface.
+      </Text>
+      <CodeExample label="Setup" value={usage.setup} />
+      <CodeExample label="Basic usage" value={usage.example} />
+      <Text size="sm" tone="muted">
+        {usage.note}
+      </Text>
+    </section>
+  );
+}
+
 function ComponentOutline({
   componentId,
   frameworkId,
@@ -588,7 +636,7 @@ function ComponentDetail({
   const accessibilityGuidance = [
     component.accessibilityNotes,
     ...(component.contract?.accessibility ?? []),
-  ].filter(Boolean) as string[];
+  ].filter(Boolean);
 
   return (
     <div className="vf-docs-reference-layout">
@@ -630,38 +678,34 @@ function ComponentDetail({
           <Heading level={3} size="md">
             When to use
           </Heading>
-          <MemberList
-            label="Use when"
-            values={[component.guidance.useWhen].filter(Boolean) as string[]}
-          />
+          <MemberList label="Use when" values={[component.guidance.useWhen]} />
           <MemberList
             label="When not to use"
-            values={[component.guidance.avoidWhen].filter(Boolean) as string[]}
+            values={[component.guidance.avoidWhen]}
           />
         </section>
 
-        {accessibilityGuidance.length > 0 && (
-          <section
-            className="vf-docs-reference__section"
-            id="component-accessibility"
-          >
-            <Heading level={3} size="md">
-              Accessibility
-            </Heading>
-            <Text tone="muted">
-              Only canonical component guidance and contract evidence are shown
-              here; pending manual assistive-technology verification is not
-              promoted to a stronger claim.
-            </Text>
-            <MemberList
-              label="Accessibility guidance"
-              values={accessibilityGuidance}
-            />
-          </section>
-        )}
+        <section
+          className="vf-docs-reference__section"
+          id="component-accessibility"
+        >
+          <span id="component-accessibility-styling" />
+          <Heading level={3} size="md">
+            Accessibility
+          </Heading>
+          <Text tone="muted">
+            Only canonical component guidance and contract evidence are shown
+            here; pending manual assistive-technology verification is not
+            promoted to a stronger claim.
+          </Text>
+          <MemberList
+            label="Accessibility guidance"
+            values={accessibilityGuidance}
+          />
+        </section>
 
         {frameworkUsage && (
-          <ReferenceFrameworkUsage
+          <FrameworkUsagePanel
             frameworkId={frameworkId}
             usage={frameworkUsage}
           />
@@ -686,7 +730,10 @@ function ComponentDetail({
         </section>
 
         {showRelated && (
-          <section className="vf-docs-reference__section" id="component-related">
+          <section
+            className="vf-docs-reference__section"
+            id="component-related"
+          >
             <Heading level={3} size="md">
               Related components and patterns
             </Heading>
