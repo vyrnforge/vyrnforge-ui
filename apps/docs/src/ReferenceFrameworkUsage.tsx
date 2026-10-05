@@ -8,7 +8,7 @@ function CodeExample({ label, value }: { label: string; value: string }) {
   return (
     <div className="vf-docs-contract-field">
       <strong>{label}</strong>
-      <pre className="vf-docs-code-block">
+      <pre>
         <code>{value}</code>
       </pre>
     </div>
