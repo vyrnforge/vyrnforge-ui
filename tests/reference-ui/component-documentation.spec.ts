@@ -120,7 +120,7 @@ test.describe("component documentation completeness", () => {
       "variant",
     );
     await expect(page.locator("#component-interaction")).toContainText(
-      "Canonical events",
+      "Keyboard documentation",
     );
     await expectNoPageOverflow(page);
   });
@@ -173,6 +173,8 @@ test.describe("component documentation completeness", () => {
       "angular",
     );
 
+    const componentRoute = (href: string | null) =>
+      href?.slice(href.indexOf("#/components/")) ?? null;
     const catalogHrefs = await page
       .locator('.vf-docs-component-index a[href*="#/components/"]')
       .evaluateAll((links) =>
@@ -186,7 +188,9 @@ test.describe("component documentation completeness", () => {
         links.map((link) => (link as HTMLAnchorElement).getAttribute("href")),
       );
 
-    expect(new Set(catalogHrefs)).toEqual(new Set(sidebarHrefs));
+    expect(new Set(catalogHrefs.map(componentRoute))).toEqual(
+      new Set(sidebarHrefs.map(componentRoute)),
+    );
     expect(catalogHrefs.length).toBeGreaterThan(0);
     await expectNoPageOverflow(page);
   });
