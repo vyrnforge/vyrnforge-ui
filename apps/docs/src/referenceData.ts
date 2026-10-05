@@ -11,7 +11,6 @@ export type ReferenceGuidance = {
 
 export type ReferenceContractType = {
   kind?: string;
-  values?: string[];
   typeName?: string;
 };
 
@@ -73,6 +72,11 @@ export type ComponentDocumentationControl = {
   property: string;
   label: string;
   kind: "select" | "boolean";
+  values?: string[];
+  publicType?: {
+    name: string;
+    path: string;
+  };
 };
 
 export type ComponentDocumentationRecord = {
@@ -174,6 +178,14 @@ for (const documentation of componentDocumentation.components) {
         `${documentation.id}: documentation control ${control.property} is not present in the canonical public contract.`,
       );
     }
+    if (
+      control.kind === "select" &&
+      ((control.values?.length ?? 0) === 0 || !control.publicType)
+    ) {
+      throw new Error(
+        `${documentation.id}: select control ${control.property} requires verified public type values.`,
+      );
+    }
   }
 }
 
@@ -235,13 +247,15 @@ export function getContractProperty(
   );
 }
 
-export function getContractEnumValues(
-  component: ComponentReferenceRecord,
+export function getDocumentationControlValues(
+  componentId: string,
   propertyName: string,
 ) {
-  const property = getContractProperty(component, propertyName);
-  if (!property || typeof property.type === "string") return [];
-  return property.type?.kind === "enum" ? (property.type.values ?? []) : [];
+  return (
+    getComponentDocumentation(componentId)?.controls.find(
+      (control) => control.property === propertyName,
+    )?.values ?? []
+  );
 }
 
 export function getPackageReferenceRecord(packageName: string) {
