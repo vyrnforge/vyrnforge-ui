@@ -659,7 +659,8 @@ function ComponentDetail({
   const showCapabilities = capabilities.controls.length > 0;
   const showComposition = capabilities.compositionSlots.length > 0;
   const showInteraction =
-    capabilities.interactive || Boolean(accessibilityEvidence?.keyboardDocumentation);
+    capabilities.interactive ||
+    Boolean(accessibilityEvidence?.keyboardDocumentation);
   const showTheming =
     capabilities.themingClasses.length > 0 ||
     capabilities.themingVariables.length > 0;
@@ -730,25 +731,31 @@ function ComponentDetail({
               Variants, sizes & states
             </Heading>
             <Text tone="muted">
-              Controls are derived from the canonical public component contract;
-              selected-framework types are read from the generated API surface.
+              Controls come from the canonical public component contract.
+              Framework types come from the selected generated API surface.
             </Text>
             {capabilities.variantControl ? (
               <MemberList
                 label="Variant control"
-                values={[controlSummary(capabilities.variantControl, contextualApi)]}
+                values={[
+                  controlSummary(capabilities.variantControl, contextualApi),
+                ]}
               />
             ) : null}
             {capabilities.sizeControl ? (
               <MemberList
                 label="Size control"
-                values={[controlSummary(capabilities.sizeControl, contextualApi)]}
+                values={[
+                  controlSummary(capabilities.sizeControl, contextualApi),
+                ]}
               />
             ) : null}
             {capabilities.densityControl ? (
               <MemberList
                 label="Density control"
-                values={[controlSummary(capabilities.densityControl, contextualApi)]}
+                values={[
+                  controlSummary(capabilities.densityControl, contextualApi),
+                ]}
               />
             ) : null}
             {capabilities.states.length > 0 ? (
@@ -792,13 +799,17 @@ function ComponentDetail({
             {capabilities.interactionEvents.length > 0 ? (
               <MemberList
                 label="Canonical events"
-                values={capabilities.interactionEvents.map((event) => event.name)}
+                values={capabilities.interactionEvents.map(
+                  (event) => event.name,
+                )}
               />
             ) : null}
             {capabilities.interactionMethods.length > 0 ? (
               <MemberList
                 label="Public methods"
-                values={capabilities.interactionMethods.map((method) => method.name)}
+                values={capabilities.interactionMethods.map(
+                  (method) => method.name,
+                )}
               />
             ) : null}
             {accessibilityEvidence ? (
@@ -864,13 +875,16 @@ function ComponentDetail({
         </section>
 
         {showTheming ? (
-          <section className="vf-docs-reference__section" id="component-theming">
+          <section
+            className="vf-docs-reference__section"
+            id="component-theming"
+          >
             <Heading level={3} size="md">
               Theming & design tokens
             </Heading>
             <Text tone="muted">
-              Use the public styling surface before introducing application-local
-              overrides. These names come from generated component styling facts.
+              Prefer the public styling surface over application-local overrides.
+              These names come from generated component styling facts.
             </Text>
             {capabilities.themingClasses.length > 0 ? (
               <MemberList
