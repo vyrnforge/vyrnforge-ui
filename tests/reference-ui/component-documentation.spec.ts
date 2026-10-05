@@ -30,7 +30,7 @@ async function expectNoPageOverflow(page: Page) {
 
 async function expectSectionOrder(page: Page) {
   const specimen = page.locator("#component-specimen");
-  const accessibility = page.locator("#component-accessibility-styling");
+  const accessibility = page.locator("#component-accessibility");
   const frameworkUsage = page.locator("#component-framework-usage");
   const generatedApi = page.locator("#component-generated-api");
 
@@ -75,13 +75,54 @@ test.describe("component documentation completeness", () => {
       await expect(
         page.locator("#component-specimen .vf-docs-component-specimen"),
       ).toBeVisible();
-      await expect(
-        page.locator("#component-accessibility-styling"),
-      ).toContainText("Keyboard documentation");
+      await expect(page.locator("#component-interaction")).toContainText(
+        "Keyboard documentation",
+      );
+      await expect(page.locator("#component-accessibility")).toContainText(
+        "Canonical evidence status",
+      );
       await expectSectionOrder(page);
       await expectNoPageOverflow(page);
       await capture(page, testInfo, `reference-component-${componentId}`);
     }
+  });
+
+  test("capability sections follow the canonical information hierarchy", async ({
+    page,
+  }) => {
+    await openComponent(page, "button");
+
+    const orderedIds = [
+      "component-specimen",
+      "component-usage",
+      "component-capabilities",
+      "component-composition",
+      "component-interaction",
+      "component-accessibility",
+      "component-framework-usage",
+      "component-theming",
+      "component-related-maturity",
+      "component-generated-api",
+    ];
+    const visible = [];
+    for (const id of orderedIds) {
+      const locator = page.locator(`#${id}`);
+      if ((await locator.count()) > 0) {
+        visible.push(locator);
+      }
+    }
+
+    const positions = await Promise.all(
+      visible.map((locator) => locator.evaluate((element) => element.offsetTop)),
+    );
+    expect(positions).toEqual([...positions].sort((left, right) => left - right));
+    await expect(page.locator("#component-capabilities")).toContainText(
+      "variant",
+    );
+    await expect(page.locator("#component-interaction")).toContainText(
+      "Canonical events",
+    );
+    await expectNoPageOverflow(page);
   });
 
   test("layout and composition records render real VyrnForge specimens", async ({
@@ -101,6 +142,7 @@ test.describe("component documentation completeness", () => {
       await expect(specimen).not.toContainText(
         "best understood inside a real application composition",
       );
+      await expect(page.locator("#component-composition")).toBeVisible();
       await expectNoPageOverflow(page);
     }
   });
@@ -120,6 +162,33 @@ test.describe("component documentation completeness", () => {
       await expect(page.locator("#component-generated-api")).toBeVisible();
       await expectNoPageOverflow(page);
     }
+  });
+
+  test("catalog and sidebar share the selected framework component set", async ({
+    page,
+  }) => {
+    await page.goto("/?framework=angular#/component-reference");
+    await expect(page.locator(".vf-docs-catalog")).toBeVisible();
+    await expect(page.locator(".vf-docs-catalog__intro")).toContainText(
+      "angular",
+    );
+
+    const catalogHrefs = await page
+      .locator('.vf-docs-component-index a[href*="#/components/"]')
+      .evaluateAll((links) =>
+        links.map((link) => (link as HTMLAnchorElement).getAttribute("href")),
+      );
+    const sidebarHrefs = await page
+      .locator(
+        '.vf-reference-navigation__sections a[href*="#/components/"]',
+      )
+      .evaluateAll((links) =>
+        links.map((link) => (link as HTMLAnchorElement).getAttribute("href")),
+      );
+
+    expect(new Set(catalogHrefs)).toEqual(new Set(sidebarHrefs));
+    expect(catalogHrefs.length).toBeGreaterThan(0);
+    await expectNoPageOverflow(page);
   });
 
   test("sidebar exposes active component records", async ({ page }) => {
