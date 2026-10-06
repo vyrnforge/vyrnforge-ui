@@ -81,9 +81,7 @@ test("Docs keeps verified examples without duplicate Playground wiring", () => {
 
 test("Docs specimen registry cannot expand", () => {
   const ownershipPolicy = read("docs/engineering/documentation-ownership.md");
-  const specimenSource = read(
-    "apps/docs/src/ReferenceComponentSpecimen.tsx",
-  );
+  const specimenSource = read("apps/docs/src/ReferenceComponentSpecimen.tsx");
 
   assert.match(ownershipPolicy, /authored with the capability that owns it/u);
   assert.match(
