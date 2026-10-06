@@ -118,7 +118,9 @@ export function scaffoldOwnedComponentDocumentation({
     sourcePath,
   })) {
     if (!value) {
-      throw new Error(`Owned component documentation scaffold requires ${name}.`);
+      throw new Error(
+        `Owned component documentation scaffold requires ${name}.`,
+      );
     }
   }
 
