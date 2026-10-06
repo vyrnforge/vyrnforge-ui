@@ -8,6 +8,7 @@ import {
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 import { loadCanonicalComponentContracts } from "./canonical-component-contracts.mjs";
+import { loadOwnedComponentDocumentation } from "./component-documentation-sources.mjs";
 import { getPublicNonGridBetaComponentIds } from "./non-grid-component-scope.mjs";
 
 const repositoryRoot = path.resolve(
@@ -151,6 +152,7 @@ function loadContext(root) {
     ? readJson(root, "docs/metadata/patterns.json")
     : { patterns: [] };
   const contracts = loadCanonicalComponentContracts({ root });
+  const componentDocumentation = loadOwnedComponentDocumentation({ root });
   const manifest = readJson(root, "packages/ui-elements/custom-elements.json");
   const packageByName = new Map(
     (packageCatalog.packages ?? []).map((entry) => [entry.name, entry]),
@@ -172,6 +174,7 @@ function loadContext(root) {
     multiFrameworkPackageByName,
     patterns,
     contracts,
+    componentDocumentation,
     nativeByTag,
   };
 }
@@ -183,6 +186,8 @@ function componentRecord(component, context) {
     ? context.nativeByTag.get(nativeTag)
     : null;
   const contract = context.contracts.componentById.get(component.id) ?? null;
+  const documentation =
+    context.componentDocumentation.documentByComponentId[component.id] ?? null;
   return {
     id: component.id,
     displayName: component.displayName,
@@ -194,23 +199,36 @@ function componentRecord(component, context) {
       : component.maturity === "planned"
         ? "planned"
         : "not-public",
-    purpose: cleanText(component.purpose) ?? "",
+    purpose: cleanText(documentation?.purpose ?? component.purpose) ?? "",
     guidance: {
-      useWhen: cleanText(component.useWhen),
-      avoidWhen: cleanText(component.avoidWhen),
-      aiUsageNotes: cleanText(component.aiUsageNotes),
-      relatedComponents: component.relatedComponents ?? [],
+      useWhen: cleanText(documentation?.guidance?.useWhen ?? component.useWhen),
+      avoidWhen: cleanText(
+        documentation?.guidance?.avoidWhen ?? component.avoidWhen,
+      ),
+      aiUsageNotes: cleanText(
+        documentation?.guidance?.aiUsageNotes ?? component.aiUsageNotes,
+      ),
+      relatedComponents:
+        documentation?.relatedComponents ?? component.relatedComponents ?? [],
     },
-    accessibilityNotes: cleanText(component.accessibilityNotes),
-    knownLimitations: cleanList(component.knownLimitations),
+    accessibilityNotes: cleanText(
+      documentation?.accessibility?.notes ?? component.accessibilityNotes,
+    ),
+    knownLimitations: cleanList(
+      documentation?.limitations ?? component.knownLimitations,
+    ),
     styling: {
-      classes: component.cssClasses ?? [],
-      variables: component.cssVariables ?? [],
+      classes: documentation?.theming?.classes ?? component.cssClasses ?? [],
+      variables:
+        documentation?.theming?.variables ?? component.cssVariables ?? [],
     },
-    docsPath: cleanText(component.docsPath),
+    examples: documentation?.examples ?? [],
+    releaseNotes: documentation?.releaseNotes ?? [],
+    docsPath: documentation?.sourcePath ?? cleanText(component.docsPath),
     playgroundPath: cleanText(component.playgroundPath),
     source: {
       componentMetadata: "docs/metadata/components.json",
+      componentDocumentation: documentation?.sourcePath ?? null,
       contractMetadata: contract
         ? "docs/metadata/component-contracts.json"
         : null,
@@ -279,10 +297,12 @@ export function buildConsumerKnowledge({ root = repositoryRoot } = {}) {
   return {
     schemaVersion: 1,
     purpose:
-      "Generated consumer knowledge for AI context retrieval and human playground/reference surfaces. Canonical metadata remains the source of truth.",
+      "Generated consumer knowledge for AI context retrieval and human Reference surfaces. Shared contracts and package/component-owned documentation remain authoritative.",
     generatedFrom: [
       "docs/metadata/components.json",
       "docs/metadata/component-contracts.json",
+      context.componentDocumentation.schemaPath,
+      ...context.componentDocumentation.sourcePaths,
       "docs/metadata/patterns.json",
       "docs/metadata/packages.json",
       "docs/metadata/multi-framework.json",
@@ -363,6 +383,8 @@ function componentContextSlice(component) {
     ],
     knownLimitations: component.knownLimitations,
     styling: component.styling,
+    examples: component.examples,
+    releaseNotes: component.releaseNotes,
     frameworks: Object.fromEntries(
       Object.entries(component.frameworks).map(([id, usage]) => [
         id,
