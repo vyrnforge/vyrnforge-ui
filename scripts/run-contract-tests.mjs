@@ -6,6 +6,7 @@ const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 
 export const contractTestFiles = [
   "scripts/canonical-component-contracts.test.mjs",
+  "scripts/component-documentation-sources.test.mjs",
   "scripts/component-presets.test.mjs",
   "scripts/framework-generation.test.mjs",
   "scripts/detect-ci-scope.test.mjs",
