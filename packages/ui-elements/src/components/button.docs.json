@@ -1,0 +1,29 @@
+{
+  "$schema": "../../../../docs/metadata/component-documentation.schema.json",
+  "schemaVersion": 1,
+  "componentId": "button",
+  "owner": {
+    "package": "@vyrnforge/ui-elements",
+    "source": "packages/ui-elements/src/components/actions.ts"
+  },
+  "purpose": "Text action control for primary, secondary, subtle, danger, and ghost actions.",
+  "guidance": {
+    "useWhen": "Use for primary business actions such as Save, Submit, Create, or Cancel.",
+    "avoidWhen": "Avoid for repeated icon-only utilities; use IconButton or ToolbarButton instead.",
+    "aiUsageNotes": "Use visible text for important actions."
+  },
+  "limitations": [
+    "Avoid for repeated icon-only utilities; use IconButton or ToolbarButton instead."
+  ],
+  "relatedComponents": ["IconButton", "ToolbarButton", "ButtonGroup"],
+  "accessibility": {
+    "notes": "Button renders a native button and supports disabled/loading states.",
+    "evidenceRefs": []
+  },
+  "theming": {
+    "classes": ["vf-button"],
+    "variables": []
+  },
+  "examples": [],
+  "releaseNotes": []
+}
