@@ -132,9 +132,16 @@ test("Docs-local component specimen dispatch can shrink but cannot expand", () =
   const dispatchMatch = specimenSource.match(
     /const specimenRenderers:[\s\S]*?= \{([\s\S]*?)\n\};/u,
   );
-  assert(dispatchMatch, "Reference component specimen dispatch must remain detectable");
+  assert(
+    dispatchMatch,
+    "Reference component specimen dispatch must remain detectable",
+  );
 
-  const ids = [...dispatchMatch[1].matchAll(/^\s{2}(?:"([^"]+)"|([a-z][a-z0-9-]*)):/gmu)]
+  const ids = [
+    ...dispatchMatch[1].matchAll(
+      /^\s{2}(?:"([^"]+)"|([a-z][a-z0-9-]*)):/gmu,
+    ),
+  ]
     .map((match) => match[1] ?? match[2])
     .filter(Boolean);
 
