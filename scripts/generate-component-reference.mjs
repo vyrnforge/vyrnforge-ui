@@ -8,6 +8,7 @@ import {
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 import { loadCanonicalComponentContracts } from "./canonical-component-contracts.mjs";
+import { loadOwnedComponentDocumentation } from "./component-documentation-sources.mjs";
 import { getPublicNonGridBetaComponentIds } from "./non-grid-component-scope.mjs";
 
 const repositoryRoot = path.resolve(
@@ -151,6 +152,7 @@ function loadContext(root) {
     ? readJson(root, "docs/metadata/patterns.json")
     : { patterns: [] };
   const contracts = loadCanonicalComponentContracts({ root });
+  const componentDocumentation = loadOwnedComponentDocumentation({ root });
   const manifest = readJson(root, "packages/ui-elements/custom-elements.json");
   const packageByName = new Map(
     (packageCatalog.packages ?? []).map((entry) => [entry.name, entry]),
@@ -172,6 +174,7 @@ function loadContext(root) {
     multiFrameworkPackageByName,
     patterns,
     contracts,
+    componentDocumentation,
     nativeByTag,
   };
 }
@@ -183,6 +186,8 @@ function componentRecord(component, context) {
     ? context.nativeByTag.get(nativeTag)
     : null;
   const contract = context.contracts.componentById.get(component.id) ?? null;
+  const documentation =
+    context.componentDocumentation.documentByComponentId[component.id] ?? null;
   return {
     id: component.id,
     displayName: component.displayName,
@@ -194,18 +199,28 @@ function componentRecord(component, context) {
       : component.maturity === "planned"
         ? "planned"
         : "not-public",
-    purpose: cleanText(component.purpose) ?? "",
+    purpose: cleanText(documentation?.purpose ?? component.purpose) ?? "",
     guidance: {
-      useWhen: cleanText(component.useWhen),
-      avoidWhen: cleanText(component.avoidWhen),
-      aiUsageNotes: cleanText(component.aiUsageNotes),
-      relatedComponents: component.relatedComponents ?? [],
+      useWhen: cleanText(documentation?.guidance?.useWhen ?? component.useWhen),
+      avoidWhen: cleanText(
+        documentation?.guidance?.avoidWhen ?? component.avoidWhen,
+      ),
+      aiUsageNotes: cleanText(
+        documentation?.guidance?.aiUsageNotes ?? component.aiUsageNotes,
+      ),
+      relatedComponents:
+        documentation?.relatedComponents ?? component.relatedComponents ?? [],
     },
-    accessibilityNotes: cleanText(component.accessibilityNotes),
-    knownLimitations: cleanList(component.knownLimitations),
+    accessibilityNotes: cleanText(
+      documentation?.accessibility?.notes ?? component.accessibilityNotes,
+    ),
+    knownLimitations: cleanList(
+      documentation?.limitations ?? component.knownLimitations,
+    ),
     styling: {
-      classes: component.cssClasses ?? [],
-      variables: component.cssVariables ?? [],
+      classes: documentation?.theming?.classes ?? component.cssClasses ?? [],
+      variables:
+        documentation?.theming?.variables ?? component.cssVariables ?? [],
     },
     docsPath: cleanText(component.docsPath),
     playgroundPath: cleanText(component.playgroundPath),

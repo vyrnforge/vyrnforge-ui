@@ -18,6 +18,18 @@ Shared renderer-neutral API semantics remain in canonical shared component contr
 
 Do not move shared cross-framework contracts into a React-only component folder simply to achieve locality.
 
+## Owned component source convention
+
+Package README files remain the natural package-level authoring surface for package setup, entry points, integration guidance, and package-scoped limitations.
+
+Component human guidance uses schema-validated `*.docs.json` sources inside the package that owns the canonical implementation. The source stays beside the relevant package implementation instead of under `apps/docs` or a second centralized component tree. `docs/metadata/component-documentation.schema.json` defines the shared contract and `scripts/component-documentation-sources.mjs` discovers package-owned sources recursively.
+
+The physical location follows the package's real implementation layout. Packages with one folder per component may colocate the source in that folder. Packages such as `@vyrnforge/ui-elements`, whose canonical Native HTML components are grouped by domain, may colocate a component source in the same domain directory without inventing a React-shaped folder hierarchy.
+
+The first migration proof is Button: shared human guidance lives at `packages/ui-elements/src/components/button.docs.json` beside the canonical action implementation in `actions.ts`. Generated Reference data reads that owned source preferentially while centralized metadata remains a compatibility fallback for components that have not migrated yet.
+
+Owned component sources may express purpose, use/avoid and AI guidance, limitations, related components, accessibility notes/evidence references, theming relationships, verified example intent, and component-scoped release/migration notes. They must not duplicate generated API facts such as framework bindings, properties, events, slots, methods, or token values.
+
 ## Generation boundary
 
 The target flow is:

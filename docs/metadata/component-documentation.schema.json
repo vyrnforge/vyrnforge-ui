@@ -1,0 +1,190 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://vyrnforge.dev/schemas/component-documentation.schema.json",
+  "title": "VyrnForge owned component documentation",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "$schema",
+    "schemaVersion",
+    "componentId",
+    "owner",
+    "purpose",
+    "guidance",
+    "limitations",
+    "relatedComponents",
+    "accessibility",
+    "theming",
+    "examples",
+    "releaseNotes"
+  ],
+  "properties": {
+    "$schema": {
+      "type": "string",
+      "minLength": 1
+    },
+    "schemaVersion": {
+      "const": 1
+    },
+    "componentId": {
+      "type": "string",
+      "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*$"
+    },
+    "owner": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["package", "source"],
+      "properties": {
+        "package": {
+          "type": "string",
+          "pattern": "^@vyrnforge/[a-z0-9-]+$"
+        },
+        "source": {
+          "type": "string",
+          "pattern": "^packages/"
+        }
+      }
+    },
+    "purpose": {
+      "type": "string",
+      "minLength": 1
+    },
+    "guidance": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["useWhen", "avoidWhen", "aiUsageNotes"],
+      "properties": {
+        "useWhen": {
+          "type": "string",
+          "minLength": 1
+        },
+        "avoidWhen": {
+          "type": "string",
+          "minLength": 1
+        },
+        "aiUsageNotes": {
+          "type": "string",
+          "minLength": 1
+        }
+      }
+    },
+    "limitations": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "minLength": 1
+      },
+      "uniqueItems": true
+    },
+    "relatedComponents": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "minLength": 1
+      },
+      "uniqueItems": true
+    },
+    "accessibility": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["notes", "evidenceRefs"],
+      "properties": {
+        "notes": {
+          "type": "string",
+          "minLength": 1
+        },
+        "evidenceRefs": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1
+          },
+          "uniqueItems": true
+        }
+      }
+    },
+    "theming": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["classes", "variables"],
+      "properties": {
+        "classes": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1
+          },
+          "uniqueItems": true
+        },
+        "variables": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1
+          },
+          "uniqueItems": true
+        }
+      }
+    },
+    "examples": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/example"
+      }
+    },
+    "releaseNotes": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/releaseNote"
+      }
+    }
+  },
+  "$defs": {
+    "example": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "title", "intent", "frameworks"],
+      "properties": {
+        "id": {
+          "type": "string",
+          "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*$"
+        },
+        "title": {
+          "type": "string",
+          "minLength": 1
+        },
+        "intent": {
+          "type": "string",
+          "minLength": 1
+        },
+        "frameworks": {
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": {
+            "enum": ["native-html", "react", "angular", "vue"]
+          }
+        }
+      }
+    },
+    "releaseNote": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["version", "summary"],
+      "properties": {
+        "version": {
+          "type": "string",
+          "minLength": 1
+        },
+        "summary": {
+          "type": "string",
+          "minLength": 1
+        },
+        "migration": {
+          "type": "string",
+          "minLength": 1
+        }
+      }
+    }
+  }
+}
