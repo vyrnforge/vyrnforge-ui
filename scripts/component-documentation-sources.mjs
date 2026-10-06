@@ -12,12 +12,7 @@ export const COMPONENT_DOCUMENTATION_SCHEMA_PATH =
   "docs/metadata/component-documentation.schema.json";
 export const COMPONENT_DOCUMENTATION_SUFFIX = ".docs.json";
 
-const supportedFrameworks = new Set([
-  "native-html",
-  "react",
-  "angular",
-  "vue",
-]);
+const supportedFrameworks = new Set(["native-html", "react", "angular", "vue"]);
 
 export class ComponentDocumentationSourceError extends Error {
   constructor(failures) {
