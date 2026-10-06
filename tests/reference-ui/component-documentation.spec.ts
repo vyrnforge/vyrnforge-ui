@@ -87,6 +87,57 @@ test.describe("component documentation completeness", () => {
     }
   });
 
+  test("representative specimens expose supported variants, sizes, and states", async ({
+    page,
+  }) => {
+    await openComponent(page, "button");
+    const buttonSpecimen = page.locator(
+      "#component-specimen .vf-docs-component-specimen__stage",
+    );
+    await expect(buttonSpecimen).toContainText("Variants");
+    await expect(buttonSpecimen).toContainText("Sizes");
+    await expect(buttonSpecimen).toContainText("States");
+    await expect(buttonSpecimen.getByRole("button", { name: "Primary" })).toBeVisible();
+    await expect(buttonSpecimen.getByRole("button", { name: "Small" })).toBeVisible();
+    await expect(buttonSpecimen.getByRole("button", { name: "Disabled" })).toBeDisabled();
+    await expect(buttonSpecimen.getByRole("button", { name: /Loading/u })).toBeDisabled();
+
+    await openComponent(page, "text-input");
+    const textInputSpecimen = page.locator(
+      "#component-specimen .vf-docs-component-specimen__stage",
+    );
+    await expect(textInputSpecimen).toContainText("Sizes");
+    await expect(textInputSpecimen).toContainText("States");
+    await expect(page.getByLabel("Invalid project name")).toHaveAttribute(
+      "aria-invalid",
+      "true",
+    );
+    await expect(page.getByLabel("Disabled project name")).toBeDisabled();
+
+    await openComponent(page, "select");
+    await expect(page.getByLabel("Invalid framework")).toHaveAttribute(
+      "aria-invalid",
+      "true",
+    );
+    await expect(page.getByLabel("Disabled framework")).toBeDisabled();
+
+    await openComponent(page, "inline-message");
+    const feedbackSpecimen = page.locator(
+      "#component-specimen .vf-docs-component-specimen__stage",
+    );
+    for (const title of [
+      "Deployment ready",
+      "Review required",
+      "Deployment blocked",
+      "Deployment queued",
+      "Workspace note",
+    ]) {
+      await expect(feedbackSpecimen).toContainText(title);
+    }
+
+    await expectNoPageOverflow(page);
+  });
+
   test("capability sections follow the canonical information hierarchy", async ({
     page,
   }) => {
@@ -219,15 +270,22 @@ test.describe("component documentation completeness", () => {
     await expectNoPageOverflow(page);
   });
 
-  test("Tabs specimen supports keyboard focus", async ({ page }) => {
+  test("Tabs specimen shows variants and supports keyboard focus", async ({ page }) => {
     await openComponent(page, "tabs");
 
-    const tabs = page.getByRole("tab");
-    await expect(tabs).toHaveCount(3);
-    await tabs.first().focus();
-    await expect(tabs.first()).toBeFocused();
+    const stage = page.locator(
+      "#component-specimen .vf-docs-component-specimen__stage",
+    );
+    await expect(stage).toContainText("Line · medium");
+    await expect(stage).toContainText("Contained · small");
+    await expect(stage).toContainText("Pills · medium");
+
+    const interactiveTabs = page.getByTestId("tabs-interactive").getByRole("tab");
+    await expect(interactiveTabs).toHaveCount(3);
+    await interactiveTabs.first().focus();
+    await expect(interactiveTabs.first()).toBeFocused();
     await page.keyboard.press("ArrowRight");
-    await expect(tabs.nth(1)).toBeFocused();
+    await expect(interactiveTabs.nth(1)).toBeFocused();
   });
 
   test("Dialog specimen closes with Escape", async ({ page }) => {
