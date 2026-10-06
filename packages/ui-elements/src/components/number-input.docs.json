@@ -1,0 +1,27 @@
+{
+  "$schema": "../../../../docs/metadata/component-documentation.schema.json",
+  "schemaVersion": 1,
+  "componentId": "number-input",
+  "owner": {
+    "package": "@vyrnforge/ui-elements",
+    "source": "packages/ui-elements/src/components/inputs.ts"
+  },
+  "purpose": "Native input type='number' control aligned with VyrnForge input styling, with integer and decimal typing modes.",
+  "guidance": {
+    "useWhen": "Use for numeric settings, quantities, limits, and scores.",
+    "avoidWhen": "Avoid for formatted currency or masked values.",
+    "aiUsageNotes": "Use mode='integer' for whole numbers and mode='decimal' with step for decimal values; do not build custom spinner UI."
+  },
+  "limitations": ["Avoid for formatted currency or masked values."],
+  "relatedComponents": ["TextInput", "Field"],
+  "accessibility": {
+    "notes": "Numeric constraints need clear labels and validation.",
+    "evidenceRefs": []
+  },
+  "theming": {
+    "classes": ["vf-number-input", "vf-input"],
+    "variables": []
+  },
+  "examples": [],
+  "releaseNotes": []
+}
