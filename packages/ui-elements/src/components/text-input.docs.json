@@ -1,0 +1,29 @@
+{
+  "$schema": "../../../../docs/metadata/component-documentation.schema.json",
+  "schemaVersion": 1,
+  "componentId": "text-input",
+  "owner": {
+    "package": "@vyrnforge/ui-elements",
+    "source": "packages/ui-elements/src/components/inputs.ts"
+  },
+  "purpose": "Native text input with VyrnForge styling.",
+  "guidance": {
+    "useWhen": "Use for short text values.",
+    "avoidWhen": "Avoid for long multi-line input; use Textarea.",
+    "aiUsageNotes": "Keep validation in Field/ValidationMessage."
+  },
+  "limitations": [
+    "Avoid for long multi-line input; use Textarea."
+  ],
+  "relatedComponents": ["Field", "SearchInput", "Textarea"],
+  "accessibility": {
+    "notes": "Provide an associated label.",
+    "evidenceRefs": []
+  },
+  "theming": {
+    "classes": ["vf-input"],
+    "variables": []
+  },
+  "examples": [],
+  "releaseNotes": []
+}
