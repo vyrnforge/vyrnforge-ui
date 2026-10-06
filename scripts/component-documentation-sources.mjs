@@ -74,7 +74,9 @@ function nonEmptyString(value) {
 
 function validateStringArray(failures, sourcePath, field, value) {
   if (!Array.isArray(value) || value.some((entry) => !nonEmptyString(entry))) {
-    failures.push(`${sourcePath}: ${field} must be an array of non-empty strings`);
+    failures.push(
+      `${sourcePath}: ${field} must be an array of non-empty strings`,
+    );
     return;
   }
   if (new Set(value).size !== value.length) {
@@ -261,7 +263,9 @@ function deepFreeze(value) {
   return value;
 }
 
-export function loadOwnedComponentDocumentation({ root = repositoryRoot } = {}) {
+export function loadOwnedComponentDocumentation({
+  root = repositoryRoot,
+} = {}) {
   const catalog = readJson(root, "docs/metadata/components.json");
   const componentIds = new Set(
     (catalog.components ?? []).map((component) => component.id),
