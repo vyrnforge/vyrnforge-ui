@@ -1,8 +1,4 @@
-import {
-  existsSync,
-  readFileSync,
-  readdirSync,
-} from "node:fs";
+import { existsSync, readFileSync, readdirSync } from "node:fs";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 
@@ -270,9 +266,7 @@ function deepFreeze(value) {
   return value;
 }
 
-export function loadOwnedComponentDocumentation({
-  root = repositoryRoot,
-} = {}) {
+export function loadOwnedComponentDocumentation({ root = repositoryRoot } = {}) {
   const catalog = readJson(root, "docs/metadata/components.json");
   const componentIds = new Set(
     (catalog.components ?? []).map((component) => component.id),
