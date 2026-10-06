@@ -103,10 +103,12 @@ function ownedFixture() {
         purpose: "Search and execute application commands.",
         useWhen: "Use when many commands need fast keyboard discovery.",
         avoidWhen: "Avoid when a small visible action group is clearer.",
-        aiUsageNotes: "Prefer the shared command behavior and visible fallback actions.",
+        aiUsageNotes:
+          "Prefer the shared command behavior and visible fallback actions.",
         knownLimitations: ["Requires application-owned command definitions."],
         relatedComponents: [],
-        accessibilityNotes: "Expose a labelled dialog and preserve predictable keyboard focus.",
+        accessibilityNotes:
+          "Expose a labelled dialog and preserve predictable keyboard focus.",
         cssClasses: ["vf-command-palette"],
         cssVariables: ["--vf-command-palette-max-height"],
       },
@@ -177,59 +179,62 @@ test("documentation scaffolder registers a new capability in canonical metadata"
   }
 });
 
-test("owned component scaffolder seeds package-owned human guidance without registering another page", () => {
-  const root = ownedFixture();
-  try {
-    const metadataBefore = readFileSync(
-      path.join(root, "docs/metadata/documentation-pages.json"),
-      "utf8",
-    );
-    const result = scaffoldOwnedComponentDocumentation({
-      root,
-      componentId: "command-palette",
-      ownerSource: "packages/ui-elements/src/components/commands.ts",
-      sourcePath:
-        "packages/ui-elements/src/components/command-palette.docs.json",
-    });
+test(
+  "owned component scaffolder seeds package-owned human guidance without registering another page",
+  () => {
+    const root = ownedFixture();
+    try {
+      const metadataBefore = readFileSync(
+        path.join(root, "docs/metadata/documentation-pages.json"),
+        "utf8",
+      );
+      const result = scaffoldOwnedComponentDocumentation({
+        root,
+        componentId: "command-palette",
+        ownerSource: "packages/ui-elements/src/components/commands.ts",
+        sourcePath:
+          "packages/ui-elements/src/components/command-palette.docs.json",
+      });
 
-    assert.equal(result.componentId, "command-palette");
-    assert.equal(result.ownerPackage, "@vyrnforge/ui-elements");
-    assert.equal(
-      result.ownerSource,
-      "packages/ui-elements/src/components/commands.ts",
-    );
+      assert.equal(result.componentId, "command-palette");
+      assert.equal(result.ownerPackage, "@vyrnforge/ui-elements");
+      assert.equal(
+        result.ownerSource,
+        "packages/ui-elements/src/components/commands.ts",
+      );
 
-    const document = JSON.parse(
-      readFileSync(path.join(root, result.sourcePath), "utf8"),
-    );
-    assert.equal(document.schemaVersion, 1);
-    assert.equal(document.componentId, "command-palette");
-    assert.equal(document.owner.package, "@vyrnforge/ui-elements");
-    assert.equal(document.purpose, "Search and execute application commands.");
-    assert.equal(
-      document.guidance.useWhen,
-      "Use when many commands need fast keyboard discovery.",
-    );
-    assert.deepEqual(document.limitations, [
-      "Requires application-owned command definitions.",
-    ]);
-    assert.deepEqual(document.theming.classes, ["vf-command-palette"]);
-    assert.deepEqual(document.examples, []);
-    assert.deepEqual(document.releaseNotes, []);
-    assert.match(
-      document.$schema,
-      /docs\/metadata\/component-documentation\.schema\.json$/u,
-    );
+      const document = JSON.parse(
+        readFileSync(path.join(root, result.sourcePath), "utf8"),
+      );
+      assert.equal(document.schemaVersion, 1);
+      assert.equal(document.componentId, "command-palette");
+      assert.equal(document.owner.package, "@vyrnforge/ui-elements");
+      assert.equal(document.purpose, "Search and execute application commands.");
+      assert.equal(
+        document.guidance.useWhen,
+        "Use when many commands need fast keyboard discovery.",
+      );
+      assert.deepEqual(document.limitations, [
+        "Requires application-owned command definitions.",
+      ]);
+      assert.deepEqual(document.theming.classes, ["vf-command-palette"]);
+      assert.deepEqual(document.examples, []);
+      assert.deepEqual(document.releaseNotes, []);
+      assert.match(
+        document.$schema,
+        /docs\/metadata\/component-documentation\.schema\.json$/u,
+      );
 
-    const metadataAfter = readFileSync(
-      path.join(root, "docs/metadata/documentation-pages.json"),
-      "utf8",
-    );
-    assert.equal(metadataAfter, metadataBefore);
-  } finally {
-    rmSync(root, { recursive: true, force: true });
-  }
-});
+      const metadataAfter = readFileSync(
+        path.join(root, "docs/metadata/documentation-pages.json"),
+        "utf8",
+      );
+      assert.equal(metadataAfter, metadataBefore);
+    } finally {
+      rmSync(root, { recursive: true, force: true });
+    }
+  },
+);
 
 test("owned component scaffolder enforces physical package ownership", () => {
   const root = ownedFixture();
@@ -264,60 +269,70 @@ test("owned component scaffolder enforces physical package ownership", () => {
   }
 });
 
-test("owned component scaffolder rolls back duplicate owned component truth", () => {
-  const root = ownedFixture();
-  try {
-    scaffoldOwnedComponentDocumentation({
-      root,
-      componentId: "command-palette",
-      ownerSource: "packages/ui-elements/src/components/commands.ts",
-      sourcePath:
-        "packages/ui-elements/src/components/command-palette.docs.json",
-    });
+test(
+  "owned component scaffolder rolls back duplicate owned component truth",
+  () => {
+    const root = ownedFixture();
+    try {
+      scaffoldOwnedComponentDocumentation({
+        root,
+        componentId: "command-palette",
+        ownerSource: "packages/ui-elements/src/components/commands.ts",
+        sourcePath:
+          "packages/ui-elements/src/components/command-palette.docs.json",
+      });
 
-    const duplicatePath =
-      "packages/ui-elements/src/components/command-palette-copy.docs.json";
-    assert.throws(
-      () =>
-        scaffoldOwnedComponentDocumentation({
-          root,
-          componentId: "command-palette",
-          ownerSource: "packages/ui-elements/src/components/commands.ts",
-          sourcePath: duplicatePath,
-        }),
-      /already has an owned documentation source/u,
-    );
-    assert.equal(existsSync(path.join(root, duplicatePath)), false);
-  } finally {
-    rmSync(root, { recursive: true, force: true });
-  }
-});
+      const duplicatePath =
+        "packages/ui-elements/src/components/command-palette-copy.docs.json";
+      assert.throws(
+        () =>
+          scaffoldOwnedComponentDocumentation({
+            root,
+            componentId: "command-palette",
+            ownerSource: "packages/ui-elements/src/components/commands.ts",
+            sourcePath: duplicatePath,
+          }),
+        /already has an owned documentation source/u,
+      );
+      assert.equal(existsSync(path.join(root, duplicatePath)), false);
+    } finally {
+      rmSync(root, { recursive: true, force: true });
+    }
+  },
+);
 
-test("owned component scaffolder refuses to invent missing migration guidance", () => {
-  const root = ownedFixture();
-  try {
-    const catalogPath = path.join(root, "docs/metadata/components.json");
-    const catalog = JSON.parse(readFileSync(catalogPath, "utf8"));
-    delete catalog.components[0].purpose;
-    writeFileSync(catalogPath, `${JSON.stringify(catalog, null, 2)}\n`, "utf8");
+test(
+  "owned component scaffolder refuses to invent missing migration guidance",
+  () => {
+    const root = ownedFixture();
+    try {
+      const catalogPath = path.join(root, "docs/metadata/components.json");
+      const catalog = JSON.parse(readFileSync(catalogPath, "utf8"));
+      delete catalog.components[0].purpose;
+      writeFileSync(
+        catalogPath,
+        `${JSON.stringify(catalog, null, 2)}\n`,
+        "utf8",
+      );
 
-    const sourcePath =
-      "packages/ui-elements/src/components/command-palette.docs.json";
-    assert.throws(
-      () =>
-        scaffoldOwnedComponentDocumentation({
-          root,
-          componentId: "command-palette",
-          ownerSource: "packages/ui-elements/src/components/commands.ts",
-          sourcePath,
-        }),
-      /requires purpose in docs\/metadata\/components\.json/u,
-    );
-    assert.equal(existsSync(path.join(root, sourcePath)), false);
-  } finally {
-    rmSync(root, { recursive: true, force: true });
-  }
-});
+      const sourcePath =
+        "packages/ui-elements/src/components/command-palette.docs.json";
+      assert.throws(
+        () =>
+          scaffoldOwnedComponentDocumentation({
+            root,
+            componentId: "command-palette",
+            ownerSource: "packages/ui-elements/src/components/commands.ts",
+            sourcePath,
+          }),
+        /requires purpose in docs\/metadata\/components\.json/u,
+      );
+      assert.equal(existsSync(path.join(root, sourcePath)), false);
+    } finally {
+      rmSync(root, { recursive: true, force: true });
+    }
+  },
+);
 
 test("documentation scaffolder rejects missing canonical ownership", () => {
   const root = fixture();
