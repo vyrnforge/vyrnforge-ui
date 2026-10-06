@@ -12,9 +12,7 @@
     "avoidWhen": "Avoid for long multi-line input; use Textarea.",
     "aiUsageNotes": "Keep validation in Field/ValidationMessage."
   },
-  "limitations": [
-    "Avoid for long multi-line input; use Textarea."
-  ],
+  "limitations": ["Avoid for long multi-line input; use Textarea."],
   "relatedComponents": ["Field", "SearchInput", "Textarea"],
   "accessibility": {
     "notes": "Provide an associated label.",
