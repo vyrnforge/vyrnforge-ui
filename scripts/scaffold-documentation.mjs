@@ -126,12 +126,8 @@ export function scaffoldOwnedComponentDocumentation({
 
   const normalizedSourcePath = repositoryPath(sourcePath);
   const normalizedOwnerSource = repositoryPath(ownerSource);
-  const sourcePackageDirectory = packageDirectoryForSource(
-    normalizedSourcePath,
-  );
-  const ownerPackageDirectory = packageDirectoryForSource(
-    normalizedOwnerSource,
-  );
+  const sourcePackageDirectory = packageDirectoryForSource(normalizedSourcePath);
+  const ownerPackageDirectory = packageDirectoryForSource(normalizedOwnerSource);
 
   if (
     path.isAbsolute(sourcePath) ||
