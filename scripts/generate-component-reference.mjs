@@ -222,13 +222,10 @@ function componentRecord(component, context) {
       variables:
         documentation?.theming?.variables ?? component.cssVariables ?? [],
     },
-    examples: documentation?.examples ?? [],
-    releaseNotes: documentation?.releaseNotes ?? [],
-    docsPath: documentation?.sourcePath ?? cleanText(component.docsPath),
+    docsPath: cleanText(component.docsPath),
     playgroundPath: cleanText(component.playgroundPath),
     source: {
       componentMetadata: "docs/metadata/components.json",
-      componentDocumentation: documentation?.sourcePath ?? null,
       contractMetadata: contract
         ? "docs/metadata/component-contracts.json"
         : null,
@@ -297,12 +294,10 @@ export function buildConsumerKnowledge({ root = repositoryRoot } = {}) {
   return {
     schemaVersion: 1,
     purpose:
-      "Generated consumer knowledge for AI context retrieval and human Reference surfaces. Shared contracts and package/component-owned documentation remain authoritative.",
+      "Generated consumer knowledge for AI context retrieval and human playground/reference surfaces. Canonical metadata remains the source of truth.",
     generatedFrom: [
       "docs/metadata/components.json",
       "docs/metadata/component-contracts.json",
-      context.componentDocumentation.schemaPath,
-      ...context.componentDocumentation.sourcePaths,
       "docs/metadata/patterns.json",
       "docs/metadata/packages.json",
       "docs/metadata/multi-framework.json",
@@ -383,8 +378,6 @@ function componentContextSlice(component) {
     ],
     knownLimitations: component.knownLimitations,
     styling: component.styling,
-    examples: component.examples,
-    releaseNotes: component.releaseNotes,
     frameworks: Object.fromEntries(
       Object.entries(component.frameworks).map(([id, usage]) => [
         id,
