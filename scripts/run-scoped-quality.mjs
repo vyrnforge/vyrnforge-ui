@@ -122,19 +122,6 @@ const buildPackages = orderSelectedPackages(
   expandWorkspaceDependencyClosure(selectedPackages),
 );
 
-runNpm([
-  "exec",
-  "--",
-  "prettier",
-  "--write",
-  "scripts/scaffold-documentation.mjs",
-]);
-execFileSync(
-  "git",
-  ["diff", "--", "scripts/scaffold-documentation.mjs"],
-  { cwd: root, stdio: "inherit" },
-);
-
 for (const command of [
   "format:check",
   "lint",
@@ -173,7 +160,16 @@ if (fixtures) {
 }
 
 for (const packageName of selectedPackages) {
-  runWorkspaceScript(packageName, "lint");
   runWorkspaceScript(packageName, "typecheck");
-  runWorkspaceScript(packageName, "test");
+  const manifest = workspaceManifest(packageName);
+  if (manifest.scripts?.["test:coverage"]) {
+    runWorkspaceScript(packageName, "test:coverage");
+  } else {
+    runWorkspaceScript(packageName, "test");
+  }
+}
+
+if (fixtures) {
+  runNpm(["run", "fixtures:test:prepared"]);
+  runNpm(["run", "fixtures:build:prepared"]);
 }
