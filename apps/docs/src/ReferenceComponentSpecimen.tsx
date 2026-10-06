@@ -45,6 +45,47 @@ type SpecimenState = {
 
 type SpecimenRenderer = (state: SpecimenState) => ReactNode;
 
+const frameworkOptions = [
+  { label: "React", value: "react" },
+  { label: "Angular", value: "angular" },
+  { label: "Vue", value: "vue" },
+];
+
+const tabItems = [
+  {
+    id: "overview",
+    label: "Overview",
+    content: "Overview content",
+  },
+  {
+    id: "activity",
+    label: "Activity",
+    content: "Activity content",
+  },
+  {
+    id: "settings",
+    label: "Settings",
+    content: "Settings content",
+  },
+];
+
+function SpecimenGroup({
+  children,
+  label,
+}: {
+  children: ReactNode;
+  label: string;
+}) {
+  return (
+    <Stack gap="sm">
+      <Text size="sm" tone="muted">
+        {label}
+      </Text>
+      <div className="vf-docs-specimen-row">{children}</div>
+    </Stack>
+  );
+}
+
 function UnsupportedSpecimen({
   componentId,
   relatedPatterns,
@@ -75,13 +116,103 @@ function UnsupportedSpecimen({
 }
 
 const renderButton: SpecimenRenderer = () => (
-  <div className="vf-docs-specimen-row">
-    <Button variant="primary">Primary</Button>
-    <Button>Default</Button>
-    <Button variant="subtle">Subtle</Button>
-    <Button variant="ghost">Ghost</Button>
-    <Button variant="danger">Danger</Button>
-  </div>
+  <Stack gap="sm">
+    <SpecimenGroup label="Variants">
+      <Button variant="primary">Primary</Button>
+      <Button>Default</Button>
+      <Button variant="subtle">Subtle</Button>
+      <Button variant="ghost">Ghost</Button>
+      <Button variant="danger">Danger</Button>
+    </SpecimenGroup>
+    <SpecimenGroup label="Sizes">
+      <Button size="sm">Small</Button>
+      <Button size="md">Medium</Button>
+      <Button size="lg">Large</Button>
+    </SpecimenGroup>
+    <SpecimenGroup label="States">
+      <Button disabled>Disabled</Button>
+      <Button loading>Loading</Button>
+    </SpecimenGroup>
+  </Stack>
+);
+
+const renderTextInput: SpecimenRenderer = () => (
+  <Stack gap="sm">
+    <SpecimenGroup label="Sizes">
+      <TextInput
+        aria-label="Small project name"
+        defaultValue="Small"
+        size="sm"
+      />
+      <TextInput
+        aria-label="Medium project name"
+        defaultValue="Medium"
+        size="md"
+      />
+      <TextInput
+        aria-label="Large project name"
+        defaultValue="Large"
+        size="lg"
+      />
+    </SpecimenGroup>
+    <SpecimenGroup label="States">
+      <TextInput aria-label="Project name" defaultValue="VyrnForge" />
+      <TextInput
+        aria-label="Invalid project name"
+        defaultValue="Needs review"
+        invalid
+      />
+      <TextInput
+        aria-label="Disabled project name"
+        defaultValue="Unavailable"
+        disabled
+      />
+    </SpecimenGroup>
+  </Stack>
+);
+
+const renderSelect: SpecimenRenderer = () => (
+  <Stack gap="sm">
+    <SpecimenGroup label="Sizes">
+      <Select
+        aria-label="Small framework"
+        defaultValue="react"
+        options={frameworkOptions}
+        size="sm"
+      />
+      <Select
+        aria-label="Medium framework"
+        defaultValue="react"
+        options={frameworkOptions}
+        size="md"
+      />
+      <Select
+        aria-label="Large framework"
+        defaultValue="react"
+        options={frameworkOptions}
+        size="lg"
+      />
+    </SpecimenGroup>
+    <SpecimenGroup label="States">
+      <Select
+        aria-label="Framework"
+        defaultValue="react"
+        options={frameworkOptions}
+      />
+      <Select
+        aria-label="Invalid framework"
+        defaultValue="react"
+        invalid
+        options={frameworkOptions}
+      />
+      <Select
+        aria-label="Disabled framework"
+        defaultValue="react"
+        disabled
+        options={frameworkOptions}
+      />
+    </SpecimenGroup>
+  </Stack>
 );
 
 const renderBadge: SpecimenRenderer = () => (
@@ -115,6 +246,36 @@ const renderMessage: SpecimenRenderer = () => (
     <InlineMessage title="Review required" variant="warning">
       Two fields still need an owner.
     </InlineMessage>
+    <InlineMessage title="Deployment blocked" variant="danger">
+      Resolve the failed checks before promoting.
+    </InlineMessage>
+    <InlineMessage title="Deployment queued" variant="info">
+      The deployment will start when capacity is available.
+    </InlineMessage>
+    <InlineMessage title="Workspace note" variant="neutral">
+      This message carries supporting context without status emphasis.
+    </InlineMessage>
+  </Stack>
+);
+
+const renderTabs: SpecimenRenderer = ({ setTab, tab }) => (
+  <Stack gap="sm">
+    <SpecimenGroup label="Line · medium">
+      <div data-testid="tabs-interactive">
+        <Tabs items={tabItems} onValueChange={setTab} value={tab} />
+      </div>
+    </SpecimenGroup>
+    <SpecimenGroup label="Contained · small">
+      <Tabs
+        defaultValue="overview"
+        items={tabItems}
+        size="sm"
+        variant="contained"
+      />
+    </SpecimenGroup>
+    <SpecimenGroup label="Pills · medium">
+      <Tabs defaultValue="overview" items={tabItems} variant="pills" />
+    </SpecimenGroup>
   </Stack>
 );
 
@@ -190,23 +351,11 @@ const specimenRenderers: Record<string, SpecimenRenderer> = {
   ),
   badge: renderBadge,
   "status-badge": renderBadge,
-  "text-input": () => (
-    <TextInput aria-label="Project name" defaultValue="VyrnForge" />
-  ),
+  "text-input": renderTextInput,
   "search-input": () => (
     <SearchInput aria-label="Search" placeholder="Search components" />
   ),
-  select: () => (
-    <Select
-      aria-label="Framework"
-      defaultValue="react"
-      options={[
-        { label: "React", value: "react" },
-        { label: "Angular", value: "angular" },
-        { label: "Vue", value: "vue" },
-      ]}
-    />
-  ),
+  select: renderSelect,
   textarea: () => (
     <Textarea
       aria-label="Description"
@@ -240,29 +389,7 @@ const specimenRenderers: Record<string, SpecimenRenderer> = {
   ),
   "toggle-button-group": renderToggleGroup,
   "segmented-control": renderToggleGroup,
-  tabs: ({ setTab, tab }) => (
-    <Tabs
-      items={[
-        {
-          id: "overview",
-          label: "Overview",
-          content: "Overview content",
-        },
-        {
-          id: "activity",
-          label: "Activity",
-          content: "Activity content",
-        },
-        {
-          id: "settings",
-          label: "Settings",
-          content: "Settings content",
-        },
-      ]}
-      onValueChange={setTab}
-      value={tab}
-    />
-  ),
+  tabs: renderTabs,
   dialog: ({ dialogOpen, setDialogOpen }) => (
     <div className="vf-docs-specimen-row">
       <Button onClick={() => setDialogOpen(true)} variant="primary">
