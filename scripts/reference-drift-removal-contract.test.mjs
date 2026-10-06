@@ -78,3 +78,64 @@ test("Docs keeps verified examples without duplicate Playground wiring", () => {
   assert.match(examples, /getExecutableExampleRecord/u);
   assert.equal(existsSync(path.join(root, "examples/basic-playground")), false);
 });
+
+test("Docs specimen registry cannot expand", () => {
+  const ownershipPolicy = read("docs/engineering/documentation-ownership.md");
+  const specimenSource = read("apps/docs/src/ReferenceComponentSpecimen.tsx");
+
+  assert.match(ownershipPolicy, /authored with the capability that owns it/u);
+  assert.match(
+    ownershipPolicy,
+    /new component-specific entries must not be added/u,
+  );
+
+  const legacySpecimenIds = new Set([
+    "alert",
+    "badge",
+    "button",
+    "button-group",
+    "card",
+    "checkbox",
+    "dialog",
+    "empty-state",
+    "error-state",
+    "icon-button",
+    "inline",
+    "inline-message",
+    "loading-state",
+    "panel",
+    "progress",
+    "radio-group",
+    "search-input",
+    "section",
+    "segmented-control",
+    "select",
+    "skeleton",
+    "slider",
+    "stack",
+    "status-badge",
+    "switch",
+    "tabs",
+    "text-input",
+    "textarea",
+    "toggle-button",
+    "toggle-button-group",
+  ]);
+
+  const dispatchPattern =
+    /const specimenRenderers:[\s\S]*?= \{([\s\S]*?)\n\};/u;
+  const dispatchMatch = specimenSource.match(dispatchPattern);
+  assert(dispatchMatch, "Reference specimen dispatch must remain detectable");
+
+  const entryPattern = /^\s{2}(?:"([^"]+)"|([a-z][a-z0-9-]*)):/gmu;
+  const ids = [...dispatchMatch[1].matchAll(entryPattern)]
+    .map((match) => match[1] ?? match[2])
+    .filter(Boolean);
+
+  for (const id of ids) {
+    assert(
+      legacySpecimenIds.has(id),
+      `Docs-local component specimen ${id} is new component-specific truth.`,
+    );
+  }
+});
