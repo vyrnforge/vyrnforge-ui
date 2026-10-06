@@ -79,76 +79,79 @@ test("Docs keeps verified examples without duplicate Playground wiring", () => {
   assert.equal(existsSync(path.join(root, "examples/basic-playground")), false);
 });
 
-test("Docs-local component specimen dispatch can shrink but cannot expand", () => {
-  const ownershipPolicy = read(
-    "docs/engineering/documentation-ownership.md",
-  );
-  const specimenSource = read(
-    "apps/docs/src/ReferenceComponentSpecimen.tsx",
-  );
-
-  assert.match(
-    ownershipPolicy,
-    /Package and component documentation is authored with the capability that owns it/u,
-  );
-  assert.match(
-    ownershipPolicy,
-    /new component-specific entries must not be added/u,
-  );
-
-  const legacySpecimenIds = new Set([
-    "alert",
-    "badge",
-    "button",
-    "button-group",
-    "card",
-    "checkbox",
-    "dialog",
-    "empty-state",
-    "error-state",
-    "icon-button",
-    "inline",
-    "inline-message",
-    "loading-state",
-    "panel",
-    "progress",
-    "radio-group",
-    "search-input",
-    "section",
-    "segmented-control",
-    "select",
-    "skeleton",
-    "slider",
-    "stack",
-    "status-badge",
-    "switch",
-    "tabs",
-    "text-input",
-    "textarea",
-    "toggle-button",
-    "toggle-button-group",
-  ]);
-
-  const dispatchMatch = specimenSource.match(
-    /const specimenRenderers:[\s\S]*?= \{([\s\S]*?)\n\};/u,
-  );
-  assert(
-    dispatchMatch,
-    "Reference component specimen dispatch must remain detectable",
-  );
-
-  const ids = [
-    ...dispatchMatch[1].matchAll(
-      /^\s{2}(?:"([^"]+)"|([a-z][a-z0-9-]*)):/gmu,
-    ),
-  ]
-    .map((match) => match[1] ?? match[2])
-    .filter(Boolean);
-
-  for (const id of ids) {
-    assert(
-      legacySpecimenIds.has(id),
-      `Docs-local component specimen ${id} is new component-specific truth; author it with the owning package/component and generate it instead.`,
+test(
+  "Docs-local component specimen dispatch can shrink but cannot expand",
+  () => {
+    const ownershipPolicy = read(
+      "docs/engineering/documentation-ownership.md",
     );
-  }
-});
+    const specimenSource = read(
+      "apps/docs/src/ReferenceComponentSpecimen.tsx",
+    );
+
+    assert.match(
+      ownershipPolicy,
+      /Package and component documentation is authored with the capability that owns it/u,
+    );
+    assert.match(
+      ownershipPolicy,
+      /new component-specific entries must not be added/u,
+    );
+
+    const legacySpecimenIds = new Set([
+      "alert",
+      "badge",
+      "button",
+      "button-group",
+      "card",
+      "checkbox",
+      "dialog",
+      "empty-state",
+      "error-state",
+      "icon-button",
+      "inline",
+      "inline-message",
+      "loading-state",
+      "panel",
+      "progress",
+      "radio-group",
+      "search-input",
+      "section",
+      "segmented-control",
+      "select",
+      "skeleton",
+      "slider",
+      "stack",
+      "status-badge",
+      "switch",
+      "tabs",
+      "text-input",
+      "textarea",
+      "toggle-button",
+      "toggle-button-group",
+    ]);
+
+    const dispatchMatch = specimenSource.match(
+      /const specimenRenderers:[\s\S]*?= \{([\s\S]*?)\n\};/u,
+    );
+    assert(
+      dispatchMatch,
+      "Reference component specimen dispatch must remain detectable",
+    );
+
+    const ids = [
+      ...dispatchMatch[1].matchAll(
+        /^\s{2}(?:"([^"]+)"|([a-z][a-z0-9-]*)):/gmu,
+      ),
+    ]
+      .map((match) => match[1] ?? match[2])
+      .filter(Boolean);
+
+    for (const id of ids) {
+      assert(
+        legacySpecimenIds.has(id),
+        `Docs-local component specimen ${id} is new component-specific truth; author it with the owning package/component and generate it instead.`,
+      );
+    }
+  },
+);
