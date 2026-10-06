@@ -72,10 +72,13 @@ test("reference detail routes and package facts stay generated and canonical", (
   assert.match(referenceData, /consumer-knowledge\.json\?raw/);
   assert.match(referenceData, /metadata\/packages\.json\?raw/);
   assert.match(referenceData, /packageMetadata\.packages\.length/);
+  assert.match(referenceData, /getAvailableComponentReferenceRecords/);
+  assert.match(referenceData, /isComponentAvailableForFramework/);
 
   const componentPage = read("apps/docs/src/ComponentReferencePage.tsx");
   assert.match(componentPage, /getReferenceRecordRoute/);
-  assert.match(componentPage, /componentReferenceRecords/);
+  assert.match(componentPage, /getAvailableComponentReferenceRecords/);
+  assert.match(componentPage, /isComponentAvailableForFramework/);
   assert.doesNotMatch(componentPage, /component: componentId/);
 
   const packagePage = read("apps/docs/src/PackageReferencePage.tsx");
