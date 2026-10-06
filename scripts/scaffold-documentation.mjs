@@ -134,7 +134,7 @@ export function scaffoldOwnedComponentDocumentation({
     !sourcePackageDirectory
   ) {
     throw new Error(
-      `Owned component documentation source must be a repository-relative packages/**${COMPONENT_DOCUMENTATION_SUFFIX} path.`,
+      `Owned component documentation source must be a repository-relative packages/**/*${COMPONENT_DOCUMENTATION_SUFFIX} path.`,
     );
   }
   if (
