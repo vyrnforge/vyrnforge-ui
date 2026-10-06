@@ -212,14 +212,18 @@ export function verifyComponentReference({ root = repositoryRoot } = {}) {
   const docsPage = read(root, "apps/docs/src/ComponentReferencePage.tsx");
   for (const marker of [
     "framework-api-reference.json",
-    "componentReferenceRecords",
+    "getAvailableComponentReferenceRecords",
     "getComponentDocumentationCapabilities",
     "getReferenceRecordRoute",
     "component-usage",
     "component-capabilities",
+    "component-composition",
+    "component-interaction",
+    "component-accessibility",
     "component-framework-usage",
+    "component-theming",
+    "component-related-maturity",
     "component-generated-api",
-    "component-accessibility-styling",
     "Accessibility guidance",
   ]) {
     if (!docsPage.includes(marker))

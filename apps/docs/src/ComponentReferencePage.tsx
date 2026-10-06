@@ -11,12 +11,14 @@ import { referenceModel, type DocsFrameworkId } from "./docsContext";
 import { ReferenceComponentGallery } from "./ReferenceComponentGallery";
 import { ReferenceComponentSpecimen } from "./ReferenceComponentSpecimen";
 import {
-  componentReferenceRecords,
+  getAvailableComponentReferenceRecords,
   getComponentAccessibilityEvidence,
   getComponentDocumentationCapabilities,
   getComponentReferenceRecord,
   getRelatedPatterns,
+  isComponentAvailableForFramework,
   type ComponentReferenceRecord,
+  type ReferenceContractProperty,
   type ReferenceFrameworkUsage,
 } from "./referenceData";
 
@@ -481,6 +483,33 @@ function componentHref(componentId: string) {
   return `#${getReferenceRecordRoute(referenceModel, "components", componentId)}`;
 }
 
+function controlSummary(
+  control: ReferenceContractProperty,
+  contextualApi: FrameworkApiComponent | undefined,
+) {
+  const apiProperty = contextualApi?.properties.find(
+    (property) => property.public === control.name,
+  );
+  const type = apiProperty?.type ?? control.type.typeName ?? control.type.kind;
+  return `${control.name}: ${type} · default ${formatDefault(control.default)}`;
+}
+
+function slotSummary(slot: {
+  name: string;
+  required?: boolean;
+  multiple?: boolean;
+  content?: string;
+}) {
+  return [
+    slot.name,
+    slot.content,
+    slot.required ? "required" : "optional",
+    slot.multiple ? "multiple" : null,
+  ]
+    .filter(Boolean)
+    .join(" · ");
+}
+
 function ComponentIndexRow({
   component,
 }: {
@@ -509,12 +538,18 @@ function ComponentOutline({
   componentId,
   frameworkId,
   showCapabilities,
-  showLimitations,
+  showComposition,
+  showInteraction,
+  showTheming,
+  showRelated,
 }: {
   componentId: string;
   frameworkId: DocsFrameworkId;
   showCapabilities: boolean;
-  showLimitations: boolean;
+  showComposition: boolean;
+  showInteraction: boolean;
+  showTheming: boolean;
+  showRelated: boolean;
 }) {
   const sections = [
     ["component-overview", "Overview"],
@@ -523,10 +558,17 @@ function ComponentOutline({
     ...(showCapabilities
       ? [["component-capabilities", "Variants, sizes & states"]]
       : []),
-    ["component-accessibility-styling", "Accessibility, keyboard & styling"],
+    ...(showComposition
+      ? [["component-composition", "Anatomy & composition"]]
+      : []),
+    ...(showInteraction
+      ? [["component-interaction", "Interaction & keyboard"]]
+      : []),
+    ["component-accessibility", "Accessibility & evidence"],
     ["component-framework-usage", "Framework usage"],
-    ...(showLimitations
-      ? [["component-limitations", "Limitations and related patterns"]]
+    ...(showTheming ? [["component-theming", "Theming & tokens"]] : []),
+    ...(showRelated
+      ? [["component-related-maturity", "Related & maturity"]]
       : []),
     ["component-generated-api", "Generated API reference"],
   ];
@@ -615,8 +657,17 @@ function ComponentDetail({
   const capabilities = getComponentDocumentationCapabilities(component);
   const accessibilityEvidence = getComponentAccessibilityEvidence(component.id);
   const showCapabilities = capabilities.controls.length > 0;
-  const showLimitations =
-    component.knownLimitations.length > 0 || relatedPatterns.length > 0;
+  const showComposition = capabilities.compositionSlots.length > 0;
+  const showInteraction =
+    capabilities.interactive ||
+    Boolean(accessibilityEvidence?.keyboardDocumentation);
+  const showTheming =
+    capabilities.themingClasses.length > 0 ||
+    capabilities.themingVariables.length > 0;
+  const showRelated =
+    component.guidance.relatedComponents.length > 0 ||
+    component.knownLimitations.length > 0 ||
+    relatedPatterns.length > 0;
   const framework = referenceModel.frameworks.find(
     (candidate) => candidate.id === frameworkId,
   );
@@ -669,10 +720,6 @@ function ComponentDetail({
             label="When not to use"
             values={[component.guidance.avoidWhen]}
           />
-          <MemberList
-            label="Related components"
-            values={component.guidance.relatedComponents}
-          />
         </section>
 
         {showCapabilities ? (
@@ -684,47 +731,109 @@ function ComponentDetail({
               Variants, sizes & states
             </Heading>
             <Text tone="muted">
-              These documentation surfaces are derived from the canonical public
-              component contract. Exact values remain authoritative in the
-              generated API below.
+              Controls come from the canonical public component contract.
+              Framework types come from the selected generated API surface.
             </Text>
-            {capabilities.variants ? (
-              <MemberList label="Variants" values={["variant"]} />
+            {capabilities.variantControl ? (
+              <MemberList
+                label="Variant control"
+                values={[
+                  controlSummary(capabilities.variantControl, contextualApi),
+                ]}
+              />
             ) : null}
-            {capabilities.sizes ? (
-              <MemberList label="Sizes" values={["size"]} />
+            {capabilities.sizeControl ? (
+              <MemberList
+                label="Size control"
+                values={[
+                  controlSummary(capabilities.sizeControl, contextualApi),
+                ]}
+              />
             ) : null}
-            {capabilities.density ? (
-              <MemberList label="Density" values={["density"]} />
+            {capabilities.densityControl ? (
+              <MemberList
+                label="Density control"
+                values={[
+                  controlSummary(capabilities.densityControl, contextualApi),
+                ]}
+              />
             ) : null}
             {capabilities.states.length > 0 ? (
               <MemberList
                 label="States & controls"
-                values={capabilities.states.map((property) => property.name)}
+                values={capabilities.states.map((control) =>
+                  controlSummary(control, contextualApi),
+                )}
               />
             ) : null}
-            {capabilities.interactive ? (
+          </section>
+        ) : null}
+
+        {showComposition ? (
+          <section
+            className="vf-docs-reference__section"
+            id="component-composition"
+          >
+            <Heading level={3} size="md">
+              Anatomy & composition
+            </Heading>
+            <Text tone="muted">
+              Composition regions come directly from the shared slot/template
+              contract and keep the same meaning across framework adapters.
+            </Text>
+            <MemberList
+              label="Content regions"
+              values={capabilities.compositionSlots.map(slotSummary)}
+            />
+          </section>
+        ) : null}
+
+        {showInteraction ? (
+          <section
+            className="vf-docs-reference__section"
+            id="component-interaction"
+          >
+            <Heading level={3} size="md">
+              Interaction & keyboard
+            </Heading>
+            {capabilities.interactionEvents.length > 0 ? (
               <MemberList
-                label="Interaction contract"
-                values={[
-                  ...(component.contract?.events ?? []).map(
-                    (event) => event.name,
-                  ),
-                  ...(component.contract?.methods ?? []).map(
-                    (method) => method.name,
-                  ),
-                ]}
+                label="Canonical events"
+                values={capabilities.interactionEvents.map(
+                  (event) => event.name,
+                )}
               />
+            ) : null}
+            {capabilities.interactionMethods.length > 0 ? (
+              <MemberList
+                label="Public methods"
+                values={capabilities.interactionMethods.map(
+                  (method) => method.name,
+                )}
+              />
+            ) : null}
+            {accessibilityEvidence ? (
+              <MemberList
+                label="Keyboard documentation"
+                values={[accessibilityEvidence.keyboardDocumentation]}
+              />
+            ) : null}
+            {accessibilityEvidence?.keyboardDocumentation ===
+            "requires-verification" ? (
+              <Text className="vf-docs-evidence-note" size="sm" tone="muted">
+                Keyboard behavior remains explicitly unverified until canonical
+                manual evidence is complete.
+              </Text>
             ) : null}
           </section>
         ) : null}
 
         <section
           className="vf-docs-reference__section"
-          id="component-accessibility-styling"
+          id="component-accessibility"
         >
           <Heading level={3} size="md">
-            Accessibility, keyboard & styling
+            Accessibility & evidence
           </Heading>
           <MemberList
             label="Accessibility guidance"
@@ -736,10 +845,6 @@ function ComponentDetail({
           {accessibilityEvidence ? (
             <>
               <MemberList
-                label="Keyboard documentation"
-                values={[accessibilityEvidence.keyboardDocumentation]}
-              />
-              <MemberList
                 label="Canonical evidence status"
                 values={[accessibilityEvidence.evidenceStatus]}
               />
@@ -747,23 +852,8 @@ function ComponentDetail({
                 label="Accessibility source"
                 values={[accessibilityEvidence.documentationPath]}
               />
-              {accessibilityEvidence.keyboardDocumentation ===
-              "requires-verification" ? (
-                <Text className="vf-docs-evidence-note" size="sm" tone="muted">
-                  Keyboard and assistive-technology behavior remains explicitly
-                  unverified until the canonical manual evidence is complete.
-                </Text>
-              ) : null}
             </>
           ) : null}
-          <MemberList
-            label="Public classes"
-            values={component.styling.classes}
-          />
-          <MemberList
-            label="CSS variables"
-            values={component.styling.variables}
-          />
         </section>
 
         <section
@@ -784,24 +874,60 @@ function ComponentDetail({
           />
         </section>
 
-        {showLimitations && (
+        {showTheming ? (
           <section
             className="vf-docs-reference__section"
-            id="component-limitations"
+            id="component-theming"
           >
             <Heading level={3} size="md">
-              Limitations and related patterns
+              Theming & design tokens
+            </Heading>
+            <Text tone="muted">
+              Prefer the public styling surface over application-local
+              overrides. These names come from generated component styling
+              facts.
+            </Text>
+            {capabilities.themingClasses.length > 0 ? (
+              <MemberList
+                label="Public classes"
+                values={capabilities.themingClasses}
+              />
+            ) : null}
+            {capabilities.themingVariables.length > 0 ? (
+              <MemberList
+                label="CSS variables"
+                values={capabilities.themingVariables}
+              />
+            ) : null}
+          </section>
+        ) : null}
+
+        {showRelated ? (
+          <section
+            className="vf-docs-reference__section"
+            id="component-related-maturity"
+          >
+            <Heading level={3} size="md">
+              Related patterns & maturity
             </Heading>
             <MemberList
-              label="Known limitations"
-              values={component.knownLimitations}
+              label="Related components"
+              values={component.guidance.relatedComponents}
             />
             <MemberList
               label="Patterns using this component"
               values={relatedPatterns.map((pattern) => pattern.displayName)}
             />
+            <MemberList
+              label="Known limitations"
+              values={component.knownLimitations}
+            />
+            <MemberList
+              label="Maturity"
+              values={[maturity.label, component.availability]}
+            />
           </section>
-        )}
+        ) : null}
 
         <section
           className="vf-docs-reference__section"
@@ -831,7 +957,10 @@ function ComponentDetail({
         componentId={component.id}
         frameworkId={frameworkId}
         showCapabilities={showCapabilities}
-        showLimitations={showLimitations}
+        showComposition={showComposition}
+        showInteraction={showInteraction}
+        showRelated={showRelated}
+        showTheming={showTheming}
       />
     </div>
   );
@@ -841,15 +970,17 @@ function componentAreaAnchor(area: string) {
   return `component-area-${area.toLowerCase().replace(/[^a-z0-9]+/gu, "-")}`;
 }
 
-const componentAreas = Object.entries(
-  componentReferenceRecords.reduce<Record<string, ComponentReferenceRecord[]>>(
-    (areas, component) => {
-      (areas[component.category] ??= []).push(component);
-      return areas;
-    },
-    {},
-  ),
-).sort(([left], [right]) => left.localeCompare(right));
+function groupComponents(components: ComponentReferenceRecord[]) {
+  return Object.entries(
+    components.reduce<Record<string, ComponentReferenceRecord[]>>(
+      (areas, component) => {
+        (areas[component.category] ??= []).push(component);
+        return areas;
+      },
+      {},
+    ),
+  ).sort(([left], [right]) => left.localeCompare(right));
+}
 
 export function ComponentReferencePage({
   componentId,
@@ -875,6 +1006,24 @@ export function ComponentReferencePage({
         />
       );
     }
+    if (!isComponentAvailableForFramework(component, frameworkId, version)) {
+      return (
+        <EmptyState
+          className="vf-docs-state"
+          title="Component unavailable in this context"
+          description={
+            <>
+              <code>{component.displayName}</code> is not available for{" "}
+              <code>{frameworkId}</code> in documentation version{" "}
+              <code>{version}</code>.
+            </>
+          }
+          action={
+            <a href="#/component-reference">Browse available components</a>
+          }
+        />
+      );
+    }
     return (
       <ComponentDetail
         component={component}
@@ -883,6 +1032,12 @@ export function ComponentReferencePage({
       />
     );
   }
+
+  const availableComponents = getAvailableComponentReferenceRecords(
+    frameworkId,
+    version,
+  );
+  const componentAreas = groupComponents(availableComponents);
 
   return (
     <div className="vf-docs-component-reference">
@@ -897,15 +1052,15 @@ export function ComponentReferencePage({
               Find the primitive or composition that matches the job.
             </Heading>
             <Text tone="muted">
-              Browse by functional area, then open a component for live UI,
-              usage guidance, framework examples, accessibility, and generated
-              API details.
+              Browse components available to {frameworkId} in documentation
+              version {version}, then open a record for live UI, usage guidance,
+              framework examples, accessibility, and generated API details.
             </Text>
           </div>
           <dl className="vf-docs-catalog__stats">
             <div>
               <dt>Components</dt>
-              <dd>{componentReferenceRecords.length}</dd>
+              <dd>{availableComponents.length}</dd>
             </div>
             <div>
               <dt>Areas</dt>
@@ -946,16 +1101,9 @@ export function ComponentReferencePage({
                 <a href="#vf-reference-main">Back to top</a>
               </div>
               <div className="vf-docs-component-index">
-                {[...components]
-                  .sort((left, right) =>
-                    left.displayName.localeCompare(right.displayName),
-                  )
-                  .map((component) => (
-                    <ComponentIndexRow
-                      component={component}
-                      key={component.id}
-                    />
-                  ))}
+                {components.map((component) => (
+                  <ComponentIndexRow component={component} key={component.id} />
+                ))}
               </div>
             </section>
           ))}

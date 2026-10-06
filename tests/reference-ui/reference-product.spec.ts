@@ -204,9 +204,21 @@ test.describe("VyrnForge Reference product", () => {
   }, testInfo) => {
     await openReference(page, "components/button");
 
-    const specimen = page.locator("#component-specimen");
+    const sectionIds = [
+      "component-specimen",
+      "component-capabilities",
+      "component-composition",
+      "component-interaction",
+      "component-accessibility",
+      "component-framework-usage",
+      "component-theming",
+      "component-related-maturity",
+      "component-generated-api",
+    ];
+    const sections = sectionIds
+      .map((id) => page.locator(`#${id}`))
+      .filter(Boolean);
     const capabilities = page.locator("#component-capabilities");
-    const accessibility = page.locator("#component-accessibility-styling");
     const frameworkUsage = page.locator("#component-framework-usage");
     const generatedApi = page.locator("#component-generated-api");
 
@@ -215,14 +227,21 @@ test.describe("VyrnForge Reference product", () => {
     await expect(capabilities).toContainText("Variants, sizes & states");
     await expect(capabilities).toContainText("variant");
     await expect(capabilities).toContainText("size");
+    await expect(page.locator("#component-accessibility")).toContainText(
+      "Accessibility & evidence",
+    );
     await expect(frameworkUsage).toContainText("Framework usage");
     await expect(
       generatedApi.locator(".vf-docs-api-table").first(),
     ).toBeVisible();
 
+    const visibleSections = [];
+    for (const section of sections) {
+      if ((await section.count()) > 0) visibleSections.push(section);
+    }
     const positions = await Promise.all(
-      [specimen, capabilities, accessibility, frameworkUsage, generatedApi].map(
-        (locator) => locator.evaluate((element) => element.offsetTop),
+      visibleSections.map((locator) =>
+        locator.evaluate((element) => element.offsetTop),
       ),
     );
     expect(positions).toEqual(

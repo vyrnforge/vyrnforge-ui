@@ -116,7 +116,7 @@ test("component Reference exposes structured, linkable member API navigation", (
     "component-usage",
     "component-framework-usage",
     "component-generated-api",
-    "component-accessibility-styling",
+    "component-accessibility",
     "api-properties",
     "api-events",
     "api-slots",
