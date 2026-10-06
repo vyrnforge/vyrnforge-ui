@@ -124,8 +124,10 @@ export function scaffoldOwnedComponentDocumentation({
 
   const normalizedSourcePath = repositoryPath(sourcePath);
   const normalizedOwnerSource = repositoryPath(ownerSource);
-  const sourcePackageDirectory = packageDirectoryForSource(normalizedSourcePath);
-  const ownerPackageDirectory = packageDirectoryForSource(normalizedOwnerSource);
+  const sourcePackageDirectory =
+    packageDirectoryForSource(normalizedSourcePath);
+  const ownerPackageDirectory =
+    packageDirectoryForSource(normalizedOwnerSource);
 
   if (
     path.isAbsolute(sourcePath) ||
@@ -189,7 +191,11 @@ export function scaffoldOwnedComponentDocumentation({
     purpose: requiredMigrationText(component, "purpose", component.purpose),
     guidance: {
       useWhen: requiredMigrationText(component, "useWhen", component.useWhen),
-      avoidWhen: requiredMigrationText(component, "avoidWhen", component.avoidWhen),
+      avoidWhen: requiredMigrationText(
+        component,
+        "avoidWhen",
+        component.avoidWhen,
+      ),
       aiUsageNotes: requiredMigrationText(
         component,
         "aiUsageNotes",
