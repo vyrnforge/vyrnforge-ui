@@ -85,7 +85,18 @@ The repository currently contains significant component/package authoring conten
 
 Until #810 migrates a concern to its final owner, update the existing canonical record when required, do not create an additional copy in `apps/docs`, and prefer changes that reduce duplication.
 
-The existing `scaffold:documentation` command is also transitional because it currently requires source paths under `docs/`. It must evolve under #810 so package/component-owned sources can feed the existing Documentation Registry rather than creating a second registry.
+For component migrations, `scaffold:documentation` can seed a package-owned source from the current centralized human guidance without registering another public page:
+
+```bash
+npm run scaffold:documentation -- \
+  --component-id <component-id> \
+  --owner-source packages/<package>/<implementation-source> \
+  --source packages/<package>/<component>.docs.json
+```
+
+The owner source and documentation source must live in the same VyrnForge package. The command derives the package identity from that package's `package.json`, validates the new source through the owned documentation loader, and rolls the file back if ownership or schema validation fails. It deliberately refuses to invent missing purpose, use/avoid guidance, AI guidance, or accessibility context; those migration facts must already be explicit in canonical metadata before they can be moved.
+
+Owned component mode does not add another entry to `documentation-pages.json`. Components continue to use the existing generated Reference route and model. After scaffolding, run the existing `npm run generate:reference` flow.
 
 ## Contributor workflow target
 
