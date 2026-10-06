@@ -1,0 +1,27 @@
+{
+  "$schema": "../../../../docs/metadata/component-documentation.schema.json",
+  "schemaVersion": 1,
+  "componentId": "textarea",
+  "owner": {
+    "package": "@vyrnforge/ui-elements",
+    "source": "packages/ui-elements/src/components/inputs.ts"
+  },
+  "purpose": "Native multi-line text control.",
+  "guidance": {
+    "useWhen": "Use for longer text values and comments.",
+    "avoidWhen": "Avoid for short single-line values.",
+    "aiUsageNotes": "Prefer Textarea over contenteditable."
+  },
+  "limitations": ["Avoid for short single-line values."],
+  "relatedComponents": ["Field", "TextInput"],
+  "accessibility": {
+    "notes": "Use Field for label and error text.",
+    "evidenceRefs": []
+  },
+  "theming": {
+    "classes": ["vf-textarea"],
+    "variables": []
+  },
+  "examples": [],
+  "releaseNotes": []
+}
