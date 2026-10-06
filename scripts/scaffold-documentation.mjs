@@ -92,7 +92,10 @@ function packageDirectoryForSource(sourcePath) {
 
 function ownedSchemaReference(sourcePath) {
   const relative = repositoryPath(
-    path.relative(path.dirname(sourcePath), COMPONENT_DOCUMENTATION_SCHEMA_PATH),
+    path.relative(
+      path.dirname(sourcePath),
+      COMPONENT_DOCUMENTATION_SCHEMA_PATH,
+    ),
   );
   return relative.startsWith(".") ? relative : `./${relative}`;
 }
@@ -126,8 +129,11 @@ export function scaffoldOwnedComponentDocumentation({
 
   const normalizedSourcePath = repositoryPath(sourcePath);
   const normalizedOwnerSource = repositoryPath(ownerSource);
-  const sourcePackageDirectory = packageDirectoryForSource(normalizedSourcePath);
-  const ownerPackageDirectory = packageDirectoryForSource(normalizedOwnerSource);
+  const sourcePackageDirectory =
+    packageDirectoryForSource(normalizedSourcePath);
+  const ownerPackageDirectory = packageDirectoryForSource(
+    normalizedOwnerSource,
+  );
 
   if (
     path.isAbsolute(sourcePath) ||
