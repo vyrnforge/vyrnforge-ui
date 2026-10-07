@@ -85,12 +85,11 @@
   padding: var(--vf-space-8, 32px);
   border: 1px solid var(--vf-border-subtle, #e2e8f0);
   border-radius: var(--vf-radius-xl, 12px);
-  background:
-    linear-gradient(
-      135deg,
-      color-mix(in srgb, var(--vf-surface-muted, #f8fafc) 88%, transparent),
-      var(--vf-surface-default, #ffffff)
-    );
+  background: linear-gradient(
+    135deg,
+    color-mix(in srgb, var(--vf-surface-muted, #f8fafc) 88%, transparent),
+    var(--vf-surface-default, #ffffff)
+  );
   box-shadow: inset 0 0 0 1px
     color-mix(in srgb, var(--vf-border-subtle, #e2e8f0) 55%, transparent);
 }
