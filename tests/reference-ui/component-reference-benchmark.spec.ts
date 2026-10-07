@@ -40,7 +40,9 @@ test.describe("component reference presentation benchmark", () => {
 
     await expect(page.locator("#component-capabilities")).toBeVisible();
     await expect(page.locator("#component-accessibility")).toBeVisible();
-    await expect(page.locator("#component-framework-usage pre")).toBeVisible();
+    await expect(
+      page.locator("#component-framework-usage pre").first(),
+    ).toBeVisible();
     await expect(page.locator("#component-generated-api")).toBeVisible();
     await expect(page.locator(".vf-docs-reference-outline")).toBeVisible();
 
@@ -49,13 +51,15 @@ test.describe("component reference presentation benchmark", () => {
     );
     expect(await cards.count()).toBeGreaterThan(5);
 
-    const presentation = await page.locator("#component-overview").evaluate((node) => {
-      const style = getComputedStyle(node);
-      return {
-        background: style.backgroundImage,
-        borderRadius: style.borderRadius,
-      };
-    });
+    const presentation = await page
+      .locator("#component-overview")
+      .evaluate((node) => {
+        const style = getComputedStyle(node);
+        return {
+          background: style.backgroundImage,
+          borderRadius: style.borderRadius,
+        };
+      });
     expect(presentation.background).not.toBe("none");
     expect(presentation.borderRadius).not.toBe("0px");
 
