@@ -1,0 +1,27 @@
+{
+  "$schema": "../../../../docs/metadata/component-documentation.schema.json",
+  "schemaVersion": 1,
+  "componentId": "date-input",
+  "owner": {
+    "package": "@vyrnforge/ui-elements",
+    "source": "packages/ui-elements/src/components/inputs.ts"
+  },
+  "purpose": "Native input type='date' control aligned with VyrnForge input styling.",
+  "guidance": {
+    "useWhen": "Use for simple date values where the browser native picker is acceptable.",
+    "avoidWhen": "Avoid when complex calendar range picking is required.",
+    "aiUsageNotes": "Do not add a date picker or date library for basic date input."
+  },
+  "limitations": ["Avoid when complex calendar range picking is required."],
+  "relatedComponents": ["TextInput", "Field"],
+  "accessibility": {
+    "notes": "Date formats need clear guidance.",
+    "evidenceRefs": []
+  },
+  "theming": {
+    "classes": ["vf-date-input", "vf-input"],
+    "variables": []
+  },
+  "examples": [],
+  "releaseNotes": []
+}
