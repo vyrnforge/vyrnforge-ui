@@ -12,9 +12,7 @@
     "avoidWhen": "Avoid when complex calendar range picking is required.",
     "aiUsageNotes": "Do not add a date picker or date library for basic date input."
   },
-  "limitations": [
-    "Avoid when complex calendar range picking is required."
-  ],
+  "limitations": ["Avoid when complex calendar range picking is required."],
   "relatedComponents": ["TextInput", "Field"],
   "accessibility": {
     "notes": "Date formats need clear guidance.",
