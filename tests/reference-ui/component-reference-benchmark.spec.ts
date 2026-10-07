@@ -34,6 +34,49 @@ test.describe("component reference presentation benchmark", () => {
       page.locator("#component-specimen .vf-button", { hasText: "Danger" }),
     ).toBeVisible();
 
+    const buttonExamples = page.locator(
+      "#component-specimen .vf-docs-button-example-group",
+    );
+    await expect(buttonExamples).toHaveCount(6);
+    await expect(buttonExamples.nth(0)).toContainText("Variants");
+    await expect(buttonExamples.nth(1)).toContainText("Sizes");
+    await expect(buttonExamples.nth(2)).toContainText("Disabled and loading");
+    await expect(buttonExamples.nth(3)).toContainText("Full width");
+    await expect(buttonExamples.nth(4)).toContainText("Icons and labels");
+    await expect(buttonExamples.nth(5)).toContainText("Form actions");
+
+    await expect(
+      page.locator("#component-specimen .vf-button--xs", {
+        hasText: "Extra small",
+      }),
+    ).toBeVisible();
+    await expect(
+      page.locator("#component-specimen .vf-button--lg", { hasText: "Large" }),
+    ).toBeVisible();
+    await expect(
+      page.locator("#component-specimen .vf-button", { hasText: "Disabled" }),
+    ).toBeDisabled();
+    await expect(
+      page.locator("#component-specimen .vf-button[aria-busy='true']", {
+        hasText: "Saving",
+      }),
+    ).toBeVisible();
+    await expect(
+      page.locator("#component-specimen .vf-button--full-width", {
+        hasText: "Continue",
+      }),
+    ).toBeVisible();
+    await expect(
+      page.locator("#component-specimen .vf-button[type='submit']", {
+        hasText: "Save changes",
+      }),
+    ).toBeVisible();
+    await expect(
+      page.locator("#component-specimen .vf-button[type='reset']", {
+        hasText: "Reset",
+      }),
+    ).toBeVisible();
+
     const usageCards = page.locator("#component-usage .vf-docs-guidance-card");
     await expect(usageCards).toHaveCount(2);
     await expect(usageCards.first()).toContainText("Use it when");
