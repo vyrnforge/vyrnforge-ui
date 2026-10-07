@@ -1,10 +1,10 @@
 import { mkdir } from "node:fs/promises";
 import path from "node:path";
-import { expect, test } from "@playwright/test";
+import { expect, test, type Page } from "@playwright/test";
 
 const evidenceDirectory = path.resolve("test-results/reference-ui-evidence");
 
-async function captureBenchmark(page: import("@playwright/test").Page) {
+async function captureBenchmark(page: Page) {
   await mkdir(evidenceDirectory, { recursive: true });
   await page.screenshot({
     path: path.join(evidenceDirectory, "reference-component-button-benchmark.png"),
@@ -72,9 +72,7 @@ test.describe("component reference presentation benchmark", () => {
     await page.goto("/?framework=react#/components/text-input");
 
     await expect(page.locator("#component-overview")).toContainText("TextInput");
-    await expect(
-      page.locator("#component-specimen .vf-input"),
-    ).toBeVisible();
+    await expect(page.locator("#component-specimen .vf-input")).toBeVisible();
     await expect(
       page.locator("#component-usage > .vf-docs-contract-field"),
     ).toHaveCount(2);
