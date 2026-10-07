@@ -3,6 +3,7 @@ import { existsSync, readFileSync } from "node:fs";
 import path from "node:path";
 import test from "node:test";
 import { fileURLToPath } from "node:url";
+import { format, resolveConfig } from "prettier";
 
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 const read = (relativePath) =>
@@ -74,4 +75,21 @@ test("browser verification has a dedicated Reference server and evidence output"
   assert.match(config, /tests\/reference-ui/u);
   assert.match(config, /@vyrnforge\/ui-docs/u);
   assert.match(browser, /test-results\/reference-ui-evidence/u);
+});
+
+test("emit temporary benchmark Prettier output", async () => {
+  const config = (await resolveConfig(root)) ?? {};
+  const files = [
+    "apps/docs/src/styles/component-reference.css",
+    "tests/reference-ui/component-reference-benchmark.spec.ts",
+  ];
+
+  for (const relativePath of files) {
+    const formatted = await format(read(relativePath), {
+      ...config,
+      filepath: path.join(root, relativePath),
+    });
+    const encoded = Buffer.from(formatted).toString("base64");
+    console.log(`BENCHMARK_PRETTIER:${relativePath}:${encoded}`);
+  }
 });
