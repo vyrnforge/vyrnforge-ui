@@ -74,14 +74,102 @@ function UnsupportedSpecimen({
   );
 }
 
+function ButtonExampleGroup({
+  children,
+  description,
+  title,
+}: {
+  children: ReactNode;
+  description: string;
+  title: string;
+}) {
+  return (
+    <section className="vf-docs-button-example-group">
+      <div className="vf-docs-button-example-group__heading">
+        <Heading level={4} size="sm">
+          {title}
+        </Heading>
+        <Text size="sm" tone="muted">
+          {description}
+        </Text>
+      </div>
+      {children}
+    </section>
+  );
+}
+
 const renderButton: SpecimenRenderer = () => (
-  <div className="vf-docs-specimen-row">
-    <Button variant="primary">Primary</Button>
-    <Button>Default</Button>
-    <Button variant="subtle">Subtle</Button>
-    <Button variant="ghost">Ghost</Button>
-    <Button variant="danger">Danger</Button>
-  </div>
+  <Stack gap="lg">
+    <ButtonExampleGroup
+      description="Choose emphasis based on the importance and risk of the action."
+      title="Variants"
+    >
+      <Inline gap="sm" wrap>
+        <Button variant="primary">Primary</Button>
+        <Button>Default</Button>
+        <Button variant="subtle">Subtle</Button>
+        <Button variant="ghost">Ghost</Button>
+        <Button variant="danger">Danger</Button>
+      </Inline>
+    </ButtonExampleGroup>
+
+    <ButtonExampleGroup
+      description="Use the supported scale to match the density of the surrounding controls."
+      title="Sizes"
+    >
+      <Inline align="center" gap="sm" wrap>
+        <Button size="xs">Extra small</Button>
+        <Button size="sm">Small</Button>
+        <Button size="md">Medium</Button>
+        <Button size="lg">Large</Button>
+      </Inline>
+    </ButtonExampleGroup>
+
+    <ButtonExampleGroup
+      description="Disabled blocks interaction. Loading also exposes the shared busy state while work is in progress."
+      title="Disabled and loading"
+    >
+      <Inline gap="sm" wrap>
+        <Button disabled>Disabled</Button>
+        <Button loading variant="primary">
+          Saving
+        </Button>
+      </Inline>
+    </ButtonExampleGroup>
+
+    <ButtonExampleGroup
+      description="Expand a prominent action to the available inline space when the layout calls for it."
+      title="Full width"
+    >
+      <Button fullWidth variant="primary">
+        Continue
+      </Button>
+    </ButtonExampleGroup>
+
+    <ButtonExampleGroup
+      description="Keep visible labels for important actions while composing leading or trailing icon content."
+      title="Icons and labels"
+    >
+      <Inline gap="sm" wrap>
+        <Button leadingIcon={<Icon name="Settings" />}>Settings</Button>
+        <Button trailingIcon={<Icon name="Refresh" />} variant="subtle">
+          Refresh
+        </Button>
+      </Inline>
+    </ButtonExampleGroup>
+
+    <ButtonExampleGroup
+      description="Use explicit button types when the action participates in a form workflow."
+      title="Form actions"
+    >
+      <Inline gap="sm" wrap>
+        <Button type="submit" value="save" variant="primary">
+          Save changes
+        </Button>
+        <Button type="reset">Reset</Button>
+      </Inline>
+    </ButtonExampleGroup>
+  </Stack>
 );
 
 const renderBadge: SpecimenRenderer = () => (
