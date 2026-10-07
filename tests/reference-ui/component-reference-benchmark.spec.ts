@@ -18,7 +18,7 @@ async function captureBenchmark(page: Page) {
 }
 
 test.describe("component reference presentation benchmark", () => {
-  test("Button establishes the reusable component-documentation benchmark", async ({
+  test("Button establishes the human-first component-documentation benchmark", async ({
     page,
   }) => {
     await page.goto("/?framework=react#/components/button");
@@ -34,42 +34,54 @@ test.describe("component reference presentation benchmark", () => {
       page.locator("#component-specimen .vf-button", { hasText: "Danger" }),
     ).toBeVisible();
 
-    const usageCards = page.locator(
-      "#component-usage > .vf-docs-contract-field",
-    );
+    const usageCards = page.locator("#component-usage .vf-docs-guidance-card");
     await expect(usageCards).toHaveCount(2);
-    await expect(usageCards.first()).toContainText("Use when");
-    await expect(usageCards.nth(1)).toContainText("When not to use");
+    await expect(usageCards.first()).toContainText("Use it when");
+    await expect(usageCards.nth(1)).toContainText(
+      "Choose another approach when",
+    );
 
-    await expect(page.locator("#component-capabilities")).toBeVisible();
+    await expect(page.locator("#component-capabilities")).toContainText(
+      "Customization",
+    );
     await expect(page.locator("#component-accessibility")).toBeVisible();
-    await expect(
-      page.locator("#component-framework-usage pre").first(),
-    ).toBeVisible();
+    await expect(page.locator("#component-example-code")).toContainText(
+      "React example",
+    );
+    await expect(page.locator("#component-framework-usage")).toHaveCount(0);
     await expect(page.locator("#component-generated-api")).toBeVisible();
     await expect(page.locator(".vf-docs-reference-outline")).toBeVisible();
 
-    const cards = page.locator(
-      ".vf-docs-reference > .vf-docs-reference__section, .vf-docs-component-specimen",
+    const specimenPresentation = await page
+      .locator("#component-specimen .vf-docs-component-specimen__stage")
+      .evaluate((node) => {
+        const style = getComputedStyle(node);
+        return {
+          borderRadius: style.borderRadius,
+          minHeight: style.minHeight,
+        };
+      });
+    expect(specimenPresentation.borderRadius).not.toBe("0px");
+    expect(Number.parseFloat(specimenPresentation.minHeight)).toBeGreaterThan(
+      0,
     );
-    expect(await cards.count()).toBeGreaterThan(5);
 
-    const presentation = await page
+    const overviewPresentation = await page
       .locator("#component-overview")
       .evaluate((node) => {
         const style = getComputedStyle(node);
         return {
-          background: style.backgroundImage,
-          borderRadius: style.borderRadius,
+          backgroundImage: style.backgroundImage,
+          boxShadow: style.boxShadow,
         };
       });
-    expect(presentation.background).not.toBe("none");
-    expect(presentation.borderRadius).not.toBe("0px");
+    expect(overviewPresentation.backgroundImage).toBe("none");
+    expect(overviewPresentation.boxShadow).toBe("none");
 
     await captureBenchmark(page);
   });
 
-  test("the same presentation applies to another generated component record", async ({
+  test("the same human-first presentation applies to another generated record", async ({
     page,
   }) => {
     await page.goto("/?framework=react#/components/text-input");
@@ -79,8 +91,11 @@ test.describe("component reference presentation benchmark", () => {
     );
     await expect(page.locator("#component-specimen .vf-input")).toBeVisible();
     await expect(
-      page.locator("#component-usage > .vf-docs-contract-field"),
+      page.locator("#component-usage .vf-docs-guidance-card"),
     ).toHaveCount(2);
+    await expect(page.locator("#component-example-code")).toContainText(
+      "React example",
+    );
     await expect(page.locator("#component-accessibility")).toBeVisible();
     await expect(page.locator("#component-generated-api")).toBeVisible();
   });

@@ -138,7 +138,7 @@ function methodParameters(method: ApiMethod) {
     .join(", ");
 }
 
-function MemberList({
+function DetailList({
   label,
   values,
 }: {
@@ -146,9 +146,15 @@ function MemberList({
   values: readonly string[];
 }) {
   return (
-    <div className="vf-docs-contract-field">
+    <div className="vf-docs-detail-list">
       <strong>{label}</strong>
-      <span>{values.length > 0 ? values.join(", ") : "None"}</span>
+      <div className="vf-docs-detail-list__values">
+        {values.length > 0 ? (
+          values.map((value) => <span key={value}>{value}</span>)
+        ) : (
+          <span>None</span>
+        )}
+      </div>
     </div>
   );
 }
@@ -161,42 +167,6 @@ function EmptyApiMembers() {
   );
 }
 
-function FrameworkUsagePanel({
-  framework,
-  usage,
-}: {
-  framework: string;
-  usage: ReferenceFrameworkUsage;
-}) {
-  return (
-    <div className="vf-docs-framework-usage">
-      <div className="vf-docs-framework-usage__meta">
-        <Badge size="sm" tone="subtle">
-          {usage.status}
-        </Badge>
-        {usage.package ? <code>{usage.package}</code> : null}
-      </div>
-      <Text tone="muted">{usage.note}</Text>
-      <div className="vf-docs-api-section">
-        <Heading level={4} size="sm">
-          Setup
-        </Heading>
-        <pre>
-          <code>{usage.setup}</code>
-        </pre>
-      </div>
-      <div className="vf-docs-api-section">
-        <Heading level={4} size="sm">
-          {framework} example
-        </Heading>
-        <pre>
-          <code>{usage.example}</code>
-        </pre>
-      </div>
-    </div>
-  );
-}
-
 function FrameworkApiPanel({
   component,
   frameworkId,
@@ -205,14 +175,11 @@ function FrameworkApiPanel({
   frameworkId: DocsFrameworkId;
 }) {
   return (
-    <div className="vf-docs-framework-usage">
-      <div className="vf-docs-framework-usage__meta">
-        <Badge size="sm" tone="subtle">
-          {component.status}
-        </Badge>
+    <div className="vf-docs-framework-api">
+      <div className="vf-docs-framework-api__meta">
         <code>{component.package}</code>
-        {component.export && <code>export {component.export}</code>}
-        {component.tag && <code>{component.tag}</code>}
+        {component.export ? <code>export {component.export}</code> : null}
+        {component.tag ? <code>{component.tag}</code> : null}
       </div>
 
       <section
@@ -223,7 +190,7 @@ function FrameworkApiPanel({
         <Heading level={4} size="sm" id="api-setup-heading">
           Setup
         </Heading>
-        <MemberList label="Imports / registration" values={component.setup} />
+        <DetailList label="Imports / registration" values={component.setup} />
       </section>
 
       <section
@@ -467,9 +434,47 @@ function FrameworkApiPanel({
         <Heading level={4} size="sm" id="api-accessibility-heading">
           Accessibility
         </Heading>
-        <MemberList label="Guidance" values={component.accessibility} />
+        <DetailList label="Guidance" values={component.accessibility} />
       </section>
     </div>
+  );
+}
+
+function SelectedFrameworkExample({
+  framework,
+  usage,
+}: {
+  framework: string;
+  usage: ReferenceFrameworkUsage;
+}) {
+  return (
+    <section
+      className="vf-docs-reference__section vf-docs-selected-example"
+      id="component-example-code"
+    >
+      <div className="vf-docs-selected-example__heading">
+        <div>
+          <Text className="vf-docs-catalog__kicker" size="sm">
+            Code
+          </Text>
+          <Heading level={3} size="md">
+            {framework} example
+          </Heading>
+        </div>
+        {usage.package ? <code>{usage.package}</code> : null}
+      </div>
+      <pre>
+        <code>{usage.example}</code>
+      </pre>
+      {usage.setup.trim() ? (
+        <details className="vf-docs-selected-example__setup">
+          <summary>Setup for {framework}</summary>
+          <pre>
+            <code>{usage.setup}</code>
+          </pre>
+        </details>
+      ) : null}
+    </section>
   );
 }
 
@@ -483,31 +488,58 @@ function componentHref(componentId: string) {
   return `#${getReferenceRecordRoute(referenceModel, "components", componentId)}`;
 }
 
-function controlSummary(
+function controlType(
   control: ReferenceContractProperty,
   contextualApi: FrameworkApiComponent | undefined,
 ) {
-  const apiProperty = contextualApi?.properties.find(
-    (property) => property.public === control.name,
+  return (
+    contextualApi?.properties.find(
+      (property) => property.public === control.name,
+    )?.type ??
+    control.type.typeName ??
+    control.type.kind
   );
-  const type = apiProperty?.type ?? control.type.typeName ?? control.type.kind;
-  return `${control.name}: ${type} · default ${formatDefault(control.default)}`;
 }
 
-function slotSummary(slot: {
-  name: string;
-  required?: boolean;
-  multiple?: boolean;
-  content?: string;
+function CustomizationCard({
+  control,
+  contextualApi,
+  description,
+  title,
+}: {
+  control: ReferenceContractProperty;
+  contextualApi: FrameworkApiComponent | undefined;
+  description: string;
+  title: string;
 }) {
-  return [
-    slot.name,
-    slot.content,
-    slot.required ? "required" : "optional",
-    slot.multiple ? "multiple" : null,
-  ]
-    .filter(Boolean)
-    .join(" · ");
+  return (
+    <article className="vf-docs-customization-card">
+      <Heading level={4} size="sm">
+        {title}
+      </Heading>
+      <Text tone="muted">{description}</Text>
+      <dl>
+        <div>
+          <dt>Property</dt>
+          <dd>
+            <code>{control.name}</code>
+          </dd>
+        </div>
+        <div>
+          <dt>Values</dt>
+          <dd>
+            <code>{controlType(control, contextualApi)}</code>
+          </dd>
+        </div>
+        <div>
+          <dt>Default</dt>
+          <dd>
+            <code>{formatDefault(control.default)}</code>
+          </dd>
+        </div>
+      </dl>
+    </article>
+  );
 }
 
 function ComponentIndexRow({
@@ -553,24 +585,16 @@ function ComponentOutline({
 }) {
   const sections = [
     ["component-overview", "Overview"],
-    ["component-specimen", "Live specimen"],
+    ["component-specimen", "Example"],
+    ["component-example-code", "Code"],
     ["component-usage", "Usage"],
-    ...(showCapabilities
-      ? [["component-capabilities", "Variants, sizes & states"]]
-      : []),
-    ...(showComposition
-      ? [["component-composition", "Anatomy & composition"]]
-      : []),
-    ...(showInteraction
-      ? [["component-interaction", "Interaction & keyboard"]]
-      : []),
-    ["component-accessibility", "Accessibility & evidence"],
-    ["component-framework-usage", "Framework usage"],
-    ...(showTheming ? [["component-theming", "Theming & tokens"]] : []),
-    ...(showRelated
-      ? [["component-related-maturity", "Related & maturity"]]
-      : []),
-    ["component-generated-api", "Generated API reference"],
+    ...(showCapabilities ? [["component-capabilities", "Customization"]] : []),
+    ...(showComposition ? [["component-composition", "Composition"]] : []),
+    ...(showInteraction ? [["component-interaction", "Behavior"]] : []),
+    ["component-accessibility", "Accessibility"],
+    ...(showTheming ? [["component-theming", "Styling"]] : []),
+    ...(showRelated ? [["component-related-maturity", "Related"]] : []),
+    ["component-generated-api", "API"],
   ];
 
   return (
@@ -674,6 +698,7 @@ function ComponentDetail({
   const frameworkUsage = component.frameworks[frameworkId];
   const apiId = framework?.apiSurface as FrameworkApiId | undefined;
   const contextualApi = apiId ? apiComponent(component.id, apiId) : undefined;
+  const frameworkLabel = framework?.label ?? frameworkId;
 
   return (
     <div className="vf-docs-reference-layout">
@@ -682,44 +707,70 @@ function ComponentDetail({
           <Text size="sm">
             <a href="#/component-reference">← Component reference</a>
           </Text>
-          <div className="vf-docs-catalog-row__header">
+          <div className="vf-docs-component-heading">
             <div>
-              <Heading level={3} size="md">
+              <Heading level={2} size="lg">
                 {component.displayName}
               </Heading>
-              <Text size="sm" tone="muted">
+              <Text
+                className="vf-docs-component-heading__meta"
+                size="sm"
+                tone="muted"
+              >
                 <code>{component.package}</code>
-                {component.nativeDeclaration?.tagName && (
+                {component.nativeDeclaration?.tagName ? (
                   <>
                     {" "}
                     · <code>{component.nativeDeclaration.tagName}</code>
                   </>
-                )}
+                ) : null}
               </Text>
             </div>
             <Badge size="sm" tone="subtle" variant={maturity.variant}>
               {maturity.label}
             </Badge>
           </div>
-          <Text>{component.purpose}</Text>
+          <Text className="vf-docs-component-lede">{component.purpose}</Text>
         </section>
 
         <div id="component-specimen">
+          <div className="vf-docs-human-example-heading">
+            <Text className="vf-docs-catalog__kicker" size="sm">
+              Example
+            </Text>
+            <Heading level={3} size="md">
+              Live preview
+            </Heading>
+          </div>
           <ReferenceComponentSpecimen
             componentId={component.id}
             relatedPatterns={relatedPatterns.map((pattern) => pattern.id)}
           />
         </div>
 
+        <SelectedFrameworkExample
+          framework={frameworkLabel}
+          usage={frameworkUsage}
+        />
+
         <section className="vf-docs-reference__section" id="component-usage">
           <Heading level={3} size="md">
-            When to use
+            Usage
           </Heading>
-          <MemberList label="Use when" values={[component.guidance.useWhen]} />
-          <MemberList
-            label="When not to use"
-            values={[component.guidance.avoidWhen]}
-          />
+          <div className="vf-docs-guidance-grid">
+            <article className="vf-docs-guidance-card">
+              <Text className="vf-docs-catalog__kicker" size="sm">
+                Use it when
+              </Text>
+              <Text>{component.guidance.useWhen}</Text>
+            </article>
+            <article className="vf-docs-guidance-card">
+              <Text className="vf-docs-catalog__kicker" size="sm">
+                Choose another approach when
+              </Text>
+              <Text>{component.guidance.avoidWhen}</Text>
+            </article>
+          </div>
         </section>
 
         {showCapabilities ? (
@@ -728,44 +779,55 @@ function ComponentDetail({
             id="component-capabilities"
           >
             <Heading level={3} size="md">
-              Variants, sizes & states
+              Customization
             </Heading>
             <Text tone="muted">
-              Controls come from the canonical public component contract.
-              Framework types come from the selected generated API surface.
+              Explore the public options this component exposes. The values
+              shown here follow the selected framework while the behavior stays
+              shared across VyrnForge surfaces.
             </Text>
-            {capabilities.variantControl ? (
-              <MemberList
-                label="Variant control"
-                values={[
-                  controlSummary(capabilities.variantControl, contextualApi),
-                ]}
-              />
-            ) : null}
-            {capabilities.sizeControl ? (
-              <MemberList
-                label="Size control"
-                values={[
-                  controlSummary(capabilities.sizeControl, contextualApi),
-                ]}
-              />
-            ) : null}
-            {capabilities.densityControl ? (
-              <MemberList
-                label="Density control"
-                values={[
-                  controlSummary(capabilities.densityControl, contextualApi),
-                ]}
-              />
-            ) : null}
-            {capabilities.states.length > 0 ? (
-              <MemberList
-                label="States & controls"
-                values={capabilities.states.map((control) =>
-                  controlSummary(control, contextualApi),
-                )}
-              />
-            ) : null}
+            <div className="vf-docs-customization-grid">
+              {capabilities.variantControl ? (
+                <CustomizationCard
+                  control={capabilities.variantControl}
+                  contextualApi={contextualApi}
+                  description="Choose the visual intent that fits the action or context."
+                  title="Variants"
+                />
+              ) : null}
+              {capabilities.sizeControl ? (
+                <CustomizationCard
+                  control={capabilities.sizeControl}
+                  contextualApi={contextualApi}
+                  description="Adjust the component scale without changing its behavior."
+                  title="Sizing"
+                />
+              ) : null}
+              {capabilities.densityControl ? (
+                <CustomizationCard
+                  control={capabilities.densityControl}
+                  contextualApi={contextualApi}
+                  description="Tune spacing and information density for the surrounding UI."
+                  title="Density"
+                />
+              ) : null}
+              {capabilities.states.length > 0 ? (
+                <article className="vf-docs-customization-card">
+                  <Heading level={4} size="sm">
+                    States
+                  </Heading>
+                  <Text tone="muted">
+                    State properties change how the component behaves or
+                    presents its current condition.
+                  </Text>
+                  <div className="vf-docs-customization-card__states">
+                    {capabilities.states.map((control) => (
+                      <code key={control.name}>{control.name}</code>
+                    ))}
+                  </div>
+                </article>
+              ) : null}
+            </div>
           </section>
         ) : null}
 
@@ -775,15 +837,24 @@ function ComponentDetail({
             id="component-composition"
           >
             <Heading level={3} size="md">
-              Anatomy & composition
+              Composition
             </Heading>
             <Text tone="muted">
-              Composition regions come directly from the shared slot/template
-              contract and keep the same meaning across framework adapters.
+              Content regions remain conceptually consistent across framework
+              adapters.
             </Text>
-            <MemberList
+            <DetailList
               label="Content regions"
-              values={capabilities.compositionSlots.map(slotSummary)}
+              values={capabilities.compositionSlots.map((slot) =>
+                [
+                  slot.name,
+                  slot.content,
+                  slot.required ? "required" : "optional",
+                  slot.multiple ? "multiple" : null,
+                ]
+                  .filter(Boolean)
+                  .join(" · "),
+              )}
             />
           </section>
         ) : null}
@@ -794,36 +865,34 @@ function ComponentDetail({
             id="component-interaction"
           >
             <Heading level={3} size="md">
-              Interaction & keyboard
+              Behavior
             </Heading>
             {capabilities.interactionEvents.length > 0 ? (
-              <MemberList
-                label="Canonical events"
+              <DetailList
+                label="Events"
                 values={capabilities.interactionEvents.map(
                   (event) => event.name,
                 )}
               />
             ) : null}
             {capabilities.interactionMethods.length > 0 ? (
-              <MemberList
-                label="Public methods"
+              <DetailList
+                label="Methods"
                 values={capabilities.interactionMethods.map(
                   (method) => method.name,
                 )}
               />
             ) : null}
             {accessibilityEvidence ? (
-              <MemberList
-                label="Keyboard documentation"
-                values={[accessibilityEvidence.keyboardDocumentation]}
+              <DetailList
+                label="Keyboard guidance"
+                values={[
+                  accessibilityEvidence.keyboardDocumentation ===
+                  "requires-verification"
+                    ? "Verification in progress"
+                    : accessibilityEvidence.keyboardDocumentation,
+                ]}
               />
-            ) : null}
-            {accessibilityEvidence?.keyboardDocumentation ===
-            "requires-verification" ? (
-              <Text className="vf-docs-evidence-note" size="sm" tone="muted">
-                Keyboard behavior remains explicitly unverified until canonical
-                manual evidence is complete.
-              </Text>
             ) : null}
           </section>
         ) : null}
@@ -833,45 +902,31 @@ function ComponentDetail({
           id="component-accessibility"
         >
           <Heading level={3} size="md">
-            Accessibility & evidence
+            Accessibility
           </Heading>
-          <MemberList
-            label="Accessibility guidance"
-            values={[
+          <div className="vf-docs-accessibility-guidance">
+            {[
               component.accessibilityNotes,
               ...(component.contract?.accessibility ?? []),
-            ].filter(Boolean)}
-          />
+            ]
+              .filter(Boolean)
+              .map((note) => (
+                <Text key={note}>{note}</Text>
+              ))}
+          </div>
           {accessibilityEvidence ? (
-            <>
-              <MemberList
-                label="Canonical evidence status"
+            <details className="vf-docs-evidence-details">
+              <summary>Verification details</summary>
+              <DetailList
+                label="Evidence status"
                 values={[accessibilityEvidence.evidenceStatus]}
               />
-              <MemberList
-                label="Accessibility source"
+              <DetailList
+                label="Source"
                 values={[accessibilityEvidence.documentationPath]}
               />
-            </>
+            </details>
           ) : null}
-        </section>
-
-        <section
-          className="vf-docs-reference__section"
-          id="component-framework-usage"
-        >
-          <Heading level={3} size="md">
-            Framework usage
-          </Heading>
-          <Text tone="muted">
-            {framework?.label ?? frameworkId} usage is generated from the same
-            shared VyrnForge metadata as the other first-class framework
-            surfaces.
-          </Text>
-          <FrameworkUsagePanel
-            framework={framework?.label ?? frameworkId}
-            usage={frameworkUsage}
-          />
         </section>
 
         {showTheming ? (
@@ -880,21 +935,20 @@ function ComponentDetail({
             id="component-theming"
           >
             <Heading level={3} size="md">
-              Theming & design tokens
+              Styling & customization
             </Heading>
             <Text tone="muted">
-              Prefer the public styling surface over application-local
-              overrides. These names come from generated component styling
-              facts.
+              Prefer the VyrnForge styling surface and shared design tokens over
+              application-local forks.
             </Text>
             {capabilities.themingClasses.length > 0 ? (
-              <MemberList
+              <DetailList
                 label="Public classes"
                 values={capabilities.themingClasses}
               />
             ) : null}
             {capabilities.themingVariables.length > 0 ? (
-              <MemberList
+              <DetailList
                 label="CSS variables"
                 values={capabilities.themingVariables}
               />
@@ -908,24 +962,26 @@ function ComponentDetail({
             id="component-related-maturity"
           >
             <Heading level={3} size="md">
-              Related patterns & maturity
+              Related components
             </Heading>
-            <MemberList
-              label="Related components"
-              values={component.guidance.relatedComponents}
-            />
-            <MemberList
-              label="Patterns using this component"
-              values={relatedPatterns.map((pattern) => pattern.displayName)}
-            />
-            <MemberList
-              label="Known limitations"
-              values={component.knownLimitations}
-            />
-            <MemberList
-              label="Maturity"
-              values={[maturity.label, component.availability]}
-            />
+            {component.guidance.relatedComponents.length > 0 ? (
+              <DetailList
+                label="Explore next"
+                values={component.guidance.relatedComponents}
+              />
+            ) : null}
+            {relatedPatterns.length > 0 ? (
+              <DetailList
+                label="Patterns"
+                values={relatedPatterns.map((pattern) => pattern.displayName)}
+              />
+            ) : null}
+            {component.knownLimitations.length > 0 ? (
+              <DetailList
+                label="Limitations"
+                values={component.knownLimitations}
+              />
+            ) : null}
           </section>
         ) : null}
 
@@ -934,11 +990,10 @@ function ComponentDetail({
           id="component-generated-api"
         >
           <Heading level={3} size="md">
-            Generated API reference
+            API
           </Heading>
           <Text tone="muted">
-            Authoritative generated API facts for{" "}
-            {framework?.label ?? frameworkId} documentation version {version}.
+            {frameworkLabel} API for documentation version {version}.
           </Text>
           {contextualApi ? (
             <FrameworkApiPanel
@@ -1054,7 +1109,7 @@ export function ComponentReferencePage({
             <Text tone="muted">
               Browse components available to {frameworkId} in documentation
               version {version}, then open a record for live UI, usage guidance,
-              framework examples, accessibility, and generated API details.
+              customization, accessibility, and API details.
             </Text>
           </div>
           <dl className="vf-docs-catalog__stats">

@@ -220,11 +220,11 @@ export function verifyComponentReference({ root = repositoryRoot } = {}) {
     "component-composition",
     "component-interaction",
     "component-accessibility",
-    "component-framework-usage",
+    "component-example-code",
     "component-theming",
     "component-related-maturity",
     "component-generated-api",
-    "Accessibility guidance",
+    "vf-docs-accessibility-guidance",
   ]) {
     if (!docsPage.includes(marker))
       failures.push(`consumer knowledge viewer is missing ${marker}`);

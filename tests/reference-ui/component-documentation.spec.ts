@@ -30,17 +30,17 @@ async function expectNoPageOverflow(page: Page) {
 
 async function expectSectionOrder(page: Page) {
   const specimen = page.locator("#component-specimen");
+  const exampleCode = page.locator("#component-example-code");
   const accessibility = page.locator("#component-accessibility");
-  const frameworkUsage = page.locator("#component-framework-usage");
   const generatedApi = page.locator("#component-generated-api");
 
   await expect(specimen).toBeVisible();
+  await expect(exampleCode).toBeVisible();
   await expect(accessibility).toBeVisible();
-  await expect(frameworkUsage).toBeVisible();
   await expect(generatedApi).toBeVisible();
 
   const positions = await Promise.all(
-    [specimen, accessibility, frameworkUsage, generatedApi].map((locator) =>
+    [specimen, exampleCode, accessibility, generatedApi].map((locator) =>
       locator.evaluate((element) => element.offsetTop),
     ),
   );
@@ -76,10 +76,10 @@ test.describe("component documentation completeness", () => {
         page.locator("#component-specimen .vf-docs-component-specimen"),
       ).toBeVisible();
       await expect(page.locator("#component-interaction")).toContainText(
-        "Keyboard documentation",
+        "Keyboard guidance",
       );
       await expect(page.locator("#component-accessibility")).toContainText(
-        "Canonical evidence status",
+        "Verification details",
       );
       await expectSectionOrder(page);
       await expectNoPageOverflow(page);
@@ -87,19 +87,19 @@ test.describe("component documentation completeness", () => {
     }
   });
 
-  test("capability sections follow the canonical information hierarchy", async ({
+  test("capability sections follow the human information hierarchy", async ({
     page,
   }) => {
     await openComponent(page, "button");
 
     const orderedIds = [
       "component-specimen",
+      "component-example-code",
       "component-usage",
       "component-capabilities",
       "component-composition",
       "component-interaction",
       "component-accessibility",
-      "component-framework-usage",
       "component-theming",
       "component-related-maturity",
       "component-generated-api",
@@ -121,11 +121,15 @@ test.describe("component documentation completeness", () => {
       [...positions].sort((left, right) => left - right),
     );
     await expect(page.locator("#component-capabilities")).toContainText(
+      "Customization",
+    );
+    await expect(page.locator("#component-capabilities")).toContainText(
       "variant",
     );
     await expect(page.locator("#component-interaction")).toContainText(
-      "Keyboard documentation",
+      "Keyboard guidance",
     );
+    await expect(page.locator("#component-framework-usage")).toHaveCount(0);
     await expectNoPageOverflow(page);
   });
 
@@ -151,7 +155,7 @@ test.describe("component documentation completeness", () => {
     }
   });
 
-  test("Button is documented for every framework", async ({ page }) => {
+  test("Button follows the global framework context", async ({ page }) => {
     const frameworks: FrameworkId[] = [
       "native-html",
       "react",
@@ -162,7 +166,8 @@ test.describe("component documentation completeness", () => {
     for (const framework of frameworks) {
       await openComponent(page, "button", framework);
       await expect(page.locator("#component-specimen")).toBeVisible();
-      await expect(page.locator("#component-framework-usage")).toBeVisible();
+      await expect(page.locator("#component-example-code")).toBeVisible();
+      await expect(page.locator("#component-framework-usage")).toHaveCount(0);
       await expect(page.locator("#component-generated-api")).toBeVisible();
       await expectNoPageOverflow(page);
     }
@@ -252,7 +257,7 @@ test.describe("component documentation completeness", () => {
     );
     await expect(page.locator("#component-specimen")).toBeVisible();
     await expect(
-      page.locator("#component-framework-usage pre").first(),
+      page.locator("#component-example-code pre").first(),
     ).toBeVisible();
     await expect(page.locator("#component-generated-api")).toBeVisible();
 
