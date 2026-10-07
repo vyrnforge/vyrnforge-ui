@@ -114,7 +114,7 @@ test("component Reference exposes structured, linkable member API navigation", (
   for (const sectionId of [
     "component-overview",
     "component-usage",
-    "component-framework-usage",
+    "component-example-code",
     "component-generated-api",
     "component-accessibility",
     "api-properties",

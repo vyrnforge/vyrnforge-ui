@@ -199,38 +199,37 @@ test.describe("VyrnForge Reference product", () => {
     }
   });
 
-  test("component detail puts guidance and framework usage before generated API", async ({
+  test("component detail keeps global framework context and human guidance before API", async ({
     page,
   }, testInfo) => {
     await openReference(page, "components/button");
 
     const sectionIds = [
       "component-specimen",
+      "component-example-code",
       "component-capabilities",
       "component-composition",
       "component-interaction",
       "component-accessibility",
-      "component-framework-usage",
       "component-theming",
       "component-related-maturity",
       "component-generated-api",
     ];
-    const sections = sectionIds
-      .map((id) => page.locator(`#${id}`))
-      .filter(Boolean);
+    const sections = sectionIds.map((id) => page.locator(`#${id}`));
     const capabilities = page.locator("#component-capabilities");
-    const frameworkUsage = page.locator("#component-framework-usage");
+    const exampleCode = page.locator("#component-example-code");
     const generatedApi = page.locator("#component-generated-api");
 
     await expect(page.locator(".vf-docs-component-specimen")).toBeVisible();
     await expect(page.getByRole("button", { name: "Primary" })).toBeVisible();
-    await expect(capabilities).toContainText("Variants, sizes & states");
+    await expect(capabilities).toContainText("Customization");
     await expect(capabilities).toContainText("variant");
     await expect(capabilities).toContainText("size");
     await expect(page.locator("#component-accessibility")).toContainText(
-      "Accessibility & evidence",
+      "Accessibility",
     );
-    await expect(frameworkUsage).toContainText("Framework usage");
+    await expect(exampleCode).toContainText("React example");
+    await expect(page.locator("#component-framework-usage")).toHaveCount(0);
     await expect(
       generatedApi.locator(".vf-docs-api-table").first(),
     ).toBeVisible();
@@ -252,8 +251,8 @@ test.describe("VyrnForge Reference product", () => {
     await capture(page, testInfo, "reference-component-button");
 
     await openReference(page, "components/button", "angular");
-    await expect(page.locator("#component-framework-usage")).toContainText(
-      "Angular",
+    await expect(page.locator("#component-example-code")).toContainText(
+      "Angular example",
     );
     await expect(page.locator("#component-generated-api")).toContainText(
       "Angular",
