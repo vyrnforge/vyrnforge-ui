@@ -7,7 +7,10 @@ const evidenceDirectory = path.resolve("test-results/reference-ui-evidence");
 async function captureBenchmark(page: Page) {
   await mkdir(evidenceDirectory, { recursive: true });
   await page.screenshot({
-    path: path.join(evidenceDirectory, "reference-component-button-benchmark.png"),
+    path: path.join(
+      evidenceDirectory,
+      "reference-component-button-benchmark.png",
+    ),
     fullPage: true,
     animations: "disabled",
     caret: "hide",
@@ -71,7 +74,9 @@ test.describe("component reference presentation benchmark", () => {
   }) => {
     await page.goto("/?framework=react#/components/text-input");
 
-    await expect(page.locator("#component-overview")).toContainText("TextInput");
+    await expect(page.locator("#component-overview")).toContainText(
+      "TextInput",
+    );
     await expect(page.locator("#component-specimen .vf-input")).toBeVisible();
     await expect(
       page.locator("#component-usage > .vf-docs-contract-field"),
