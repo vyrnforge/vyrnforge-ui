@@ -6,6 +6,7 @@ import App from "./App";
 import "./styles/docs.css";
 import "./styles/guide.css";
 import "./styles/examples.css";
+import "./styles/icon-reference.css";
 import "./styles/reference-shell.css";
 import "./styles/component-reference.css";
 import "./styles/reference-responsive.css";
