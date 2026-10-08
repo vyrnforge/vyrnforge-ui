@@ -118,7 +118,6 @@ const renderButton: SpecimenRenderer = () => (
       title="Sizes"
     >
       <Inline align="center" gap="sm" wrap>
-        <Button size="xs">Extra small</Button>
         <Button size="sm">Small</Button>
         <Button size="md">Medium</Button>
         <Button size="lg">Large</Button>
