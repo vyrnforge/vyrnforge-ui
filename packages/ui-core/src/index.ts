@@ -3,6 +3,24 @@ import "./styles/index.css";
 export const vyrnForgeUiCoreVersion = "0.2.0-beta.2";
 
 export {
+  getVyrnForgeIconDefinition,
+  getVyrnForgeIconMarkup,
+  getVyrnForgeIconSvg,
+  resolveVyrnForgeIconSize,
+  vyrnForgeIconDefinitions,
+  vyrnForgeIconNames,
+  vyrnForgeIconSizePixels,
+} from "./icons";
+export type {
+  VyrnForgeIconAttributeValue,
+  VyrnForgeIconDefinition,
+  VyrnForgeIconElementName,
+  VyrnForgeIconName,
+  VyrnForgeIconNode,
+  VyrnForgeIconSize,
+  VyrnForgeIconSizeName,
+} from "./icons";
+export {
   createVyrnForgeTheme,
   mergeVyrnForgeTheme,
   toVyrnForgeThemeStyle,
