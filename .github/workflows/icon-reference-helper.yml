@@ -1,0 +1,139 @@
+name: Icon reference implementation helper
+
+on:
+  push:
+    branches:
+      - feat/icon-reference-catalog
+
+permissions:
+  contents: write
+
+jobs:
+  implement:
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    steps:
+      - name: Checkout
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
+        with:
+          ref: feat/icon-reference-catalog
+      - name: Setup Node
+        uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7
+        with:
+          node-version: "24.18.0"
+          cache: npm
+      - name: Use repository package manager
+        run: npm install --global "npm@$(node -p 'require(\"./package.json\").packageManager.split(\"@\").pop()')"
+      - name: Apply icon Reference page
+        shell: bash
+        run: |
+          node <<'NODE'
+          const fs = require("node:fs");
+
+          const read = (file) => fs.readFileSync(file, "utf8");
+          const write = (file, content) => fs.writeFileSync(file, content);
+          const replaceOnce = (file, from, to) => {
+            const source = read(file);
+            if (!source.includes(from)) throw new Error(`Missing patch marker in ${file}: ${from.slice(0, 90)}`);
+            write(file, source.replace(from, to));
+          };
+
+          // Register Icons as a canonical Foundation page. The page source remains the
+          // framework-neutral ui-core icon catalog rather than a Docs-local registry.
+          {
+            const file = "docs/metadata/documentation-pages.json";
+            const metadata = JSON.parse(read(file));
+            const foundations = metadata.pages.filter((page) => page.section === "foundations");
+            for (const page of foundations) {
+              if (page.order >= 2) page.order += 1;
+            }
+            const tokenIndex = metadata.pages.findIndex((page) => page.id === "token-reference");
+            if (tokenIndex < 0) throw new Error("token-reference page is missing");
+            metadata.pages.splice(tokenIndex + 1, 0, {
+              id: "icons",
+              title: "Icons",
+              section: "foundations",
+              group: "Foundations",
+              order: 2,
+              type: "foundation",
+              renderer: "icon-reference",
+              description: "Browse, search, preview, and copy usage for the shared VyrnForge SVG icon catalog.",
+              releaseLine: "non-grid-beta",
+              sourcePath: "packages/ui-core/src/icons.ts",
+              tags: ["icons", "svg", "design-system", "accessibility"],
+            });
+            write(file, `${JSON.stringify(metadata, null, 2)}\n`);
+          }
+
+          replaceOnce(
+            "scripts/generate-documentation-registry.mjs",
+            '  "discovery-reference",\n  "example",',
+            '  "discovery-reference",\n  "icon-reference",\n  "example",',
+          );
+
+          replaceOnce(
+            "apps/docs/src/referenceRoutes.ts",
+            '  | "discovery-reference"\n  | "example"',
+            '  | "discovery-reference"\n  | "icon-reference"\n  | "example"',
+          );
+
+          replaceOnce(
+            "apps/docs/src/DocsPage.tsx",
+            'import { GuidePage } from "./GuidePage";\n',
+            'import { GuidePage } from "./GuidePage";\nimport { IconReferencePage } from "./IconReferencePage";\n',
+          );
+          replaceOnce(
+            "apps/docs/src/DocsPage.tsx",
+            '    ) : route.kind === "component-reference" ? (\n      <ComponentReferencePage',
+            '    ) : route.kind === "icon-reference" ? (\n      <IconReferencePage frameworkId={frameworkId} />\n    ) : route.kind === "component-reference" ? (\n      <ComponentReferencePage',
+          );
+
+          replaceOnce(
+            "apps/docs/src/main.tsx",
+            'import "./styles/examples.css";\n',
+            'import "./styles/examples.css";\nimport "./styles/icon-reference.css";\n',
+          );
+
+          write(
+            "apps/docs/src/IconReferencePage.tsx",
+            `import {\n  vyrnForgeIconNames,\n  vyrnForgeIconSizePixels,\n  type VyrnForgeIconName,\n} from "@vyrnforge/ui-core";\nimport { Button, Heading, Icon, SearchInput, Text } from "@vyrnforge/ui-components";\nimport { useMemo, useState } from "react";\n\nimport type { DocsFrameworkId } from "./docsContext";\n\ntype IconReferencePageProps = {\n  frameworkId: DocsFrameworkId;\n};\n\nconst frameworkLabels: Record<DocsFrameworkId, string> = {\n  "native-html": "Native HTML",\n  react: "React",\n  angular: "Angular",\n  vue: "Vue",\n};\n\nfunction iconUsage(frameworkId: DocsFrameworkId, name: VyrnForgeIconName) {\n  if (frameworkId === "react") {\n    return \`import { Icon } from "@vyrnforge/ui-components";\\n\\n<Icon name="${'${name}'}" />\`;\n  }\n  if (frameworkId === "angular") {\n    return \`import { VfIcon } from "@vyrnforge/ui-angular";\\n\\n// Add VfIcon to the component imports.\\n<vf-icon vfGeneratedIcon name="${'${name}'}"></vf-icon>\`;\n  }\n  if (frameworkId === "vue") {\n    return \`<script setup lang="ts">\\nimport { VfIcon } from "@vyrnforge/ui-vue";\\n</script>\\n\\n<template>\\n  <VfIcon name="${'${name}'}" />\\n</template>\`;\n  }\n  return \`<vf-icon name="${'${name}'}"></vf-icon>\`;\n}\n\nexport function IconReferencePage({ frameworkId }: IconReferencePageProps) {\n  const [query, setQuery] = useState("");\n  const [selectedIcon, setSelectedIcon] = useState<VyrnForgeIconName>("Search");\n  const [copyState, setCopyState] = useState<"idle" | "copied" | "failed">("idle");\n\n  const filteredIcons = useMemo(() => {\n    const normalizedQuery = query.trim().toLocaleLowerCase();\n    if (!normalizedQuery) return [...vyrnForgeIconNames];\n    return vyrnForgeIconNames.filter((name) =>\n      name.toLocaleLowerCase().includes(normalizedQuery),\n    );\n  }, [query]);\n\n  const usage = iconUsage(frameworkId, selectedIcon);\n\n  async function copyUsage() {\n    try {\n      if (!navigator.clipboard) throw new Error("Clipboard API unavailable");\n      await navigator.clipboard.writeText(usage);\n      setCopyState("copied");\n    } catch {\n      setCopyState("failed");\n    }\n  }\n\n  return (\n    <div className="vf-docs-icon-reference">\n      <section className="vf-docs-icon-browser" aria-labelledby="icon-browser-title">\n        <div className="vf-docs-icon-browser__heading">\n          <div>\n            <Heading id="icon-browser-title" level={2} size="md">\n              Icon catalog\n            </Heading>\n            <Text tone="muted">\n              One SVG catalog shared by Native HTML, React, Angular, and Vue.\n            </Text>\n          </div>\n          <Text className="vf-docs-icon-browser__count" size="sm" tone="muted">\n            {vyrnForgeIconNames.length} icons\n          </Text>\n        </div>\n\n        <SearchInput\n          aria-label="Search icons"\n          onChange={(event) => setQuery(event.currentTarget.value)}\n          placeholder="Search icons…"\n          value={query}\n          wrapperClassName="vf-docs-icon-browser__search"\n        />\n\n        <Text aria-live="polite" className="vf-docs-icon-browser__results" size="sm" tone="muted">\n          {query.trim()\n            ? \`${'${filteredIcons.length}'} of ${'${vyrnForgeIconNames.length}'} icons\`\n            : "Select an icon to inspect usage and supported sizes."}\n        </Text>\n\n        {filteredIcons.length > 0 ? (\n          <div className="vf-docs-icon-grid" role="list" aria-label="VyrnForge icons">\n            {filteredIcons.map((name) => (\n              <div role="listitem" key={name}>\n                <Button\n                  aria-pressed={selectedIcon === name}\n                  className="vf-docs-icon-tile"\n                  onClick={() => {\n                    setSelectedIcon(name);\n                    setCopyState("idle");\n                  }}\n                  type="button"\n                  variant="ghost"\n                >\n                  <Icon name={name} size={24} />\n                  <span>{name}</span>\n                </Button>\n              </div>\n            ))}\n          </div>\n        ) : (\n          <div className="vf-docs-icon-browser__empty">\n            <Heading level={3} size="sm">No matching icons</Heading>\n            <Text tone="muted">Try another name or clear the search.</Text>\n          </div>\n        )}\n      </section>\n\n      <section className="vf-docs-icon-detail" aria-labelledby="selected-icon-title">\n        <div className="vf-docs-icon-detail__heading">\n          <div>\n            <Text className="vf-docs-catalog__kicker" size="sm">Selected icon</Text>\n            <Heading id="selected-icon-title" level={2} size="md">\n              {selectedIcon}\n            </Heading>\n          </div>\n          <Text size="sm" tone="muted">@vyrnforge/ui-core</Text>\n        </div>\n\n        <div className="vf-docs-icon-detail__preview" aria-label={`${'${selectedIcon}'} icon preview`}>\n          <Icon name={selectedIcon} size={64} />\n        </div>\n\n        <div className="vf-docs-icon-detail__section">\n          <div>\n            <Heading level={3} size="sm">Sizes</Heading>\n            <Text tone="muted">Named sizes resolve from the shared icon foundation.</Text>\n          </div>\n          <div className="vf-docs-icon-sizes">\n            {Object.entries(vyrnForgeIconSizePixels).map(([size, pixels]) => (\n              <figure className="vf-docs-icon-size" key={size}>\n                <div className="vf-docs-icon-size__preview">\n                  <Icon name={selectedIcon} size={size as keyof typeof vyrnForgeIconSizePixels} />\n                </div>\n                <figcaption>\n                  <strong>{size}</strong>\n                  <span>{pixels}px</span>\n                </figcaption>\n              </figure>\n            ))}\n          </div>\n        </div>\n\n        <div className="vf-docs-icon-detail__section">\n          <div className="vf-docs-icon-code__heading">\n            <div>\n              <Heading level={3} size="sm">{frameworkLabels[frameworkId]} usage</Heading>\n              <Text tone="muted">Code follows the framework selected in the Reference navigation.</Text>\n            </div>\n            <Button onClick={() => void copyUsage()} size="sm" type="button" variant="subtle">\n              {copyState === "copied" ? "Copied" : copyState === "failed" ? "Copy failed" : "Copy code"}\n            </Button>\n          </div>\n          <pre className="vf-docs-icon-code"><code>{usage}</code></pre>\n        </div>\n\n        <div className="vf-docs-icon-detail__section vf-docs-icon-a11y">\n          <div>\n            <Heading level={3} size="sm">Accessibility</Heading>\n            <Text tone="muted">\n              Keep decorative icons hidden from assistive technology. When an icon carries meaning, pair it with visible text or an accessible name on the interactive control.\n            </Text>\n          </div>\n          <div className="vf-docs-icon-a11y__examples">\n            <div>\n              <strong>Decorative</strong>\n              <code>{frameworkId === "react" ? `<Icon name="${'${selectedIcon}'}" />` : `<vf-icon name="${'${selectedIcon}'}"></vf-icon>`}</code>\n            </div>\n            <div>\n              <strong>Icon-only action</strong>\n              <code>aria-label="${'${selectedIcon}'}"</code>\n            </div>\n          </div>\n        </div>\n      </section>\n    </div>\n  );\n}\n`,
+          );
+
+          write(
+            "apps/docs/src/styles/icon-reference.css",
+            `.vf-docs-icon-reference {\n  display: grid;\n  gap: var(--vf-space-10, 40px);\n}\n\n.vf-docs-icon-browser,\n.vf-docs-icon-detail {\n  display: grid;\n  gap: var(--vf-space-6, 24px);\n}\n\n.vf-docs-icon-browser__heading,\n.vf-docs-icon-detail__heading,\n.vf-docs-icon-code__heading {\n  display: flex;\n  align-items: flex-start;\n  justify-content: space-between;\n  gap: var(--vf-space-4, 16px);\n}\n\n.vf-docs-icon-browser__heading > div,\n.vf-docs-icon-detail__heading > div,\n.vf-docs-icon-code__heading > div,\n.vf-docs-icon-detail__section > div:first-child {\n  display: grid;\n  gap: var(--vf-space-2, 8px);\n}\n\n.vf-docs-icon-browser__heading .vf-heading,\n.vf-docs-icon-browser__heading .vf-text,\n.vf-docs-icon-detail__heading .vf-heading,\n.vf-docs-icon-detail__heading .vf-text,\n.vf-docs-icon-detail__section .vf-heading,\n.vf-docs-icon-detail__section .vf-text {\n  margin: 0;\n}\n\n.vf-docs-icon-browser__search {\n  width: min(100%, 560px);\n}\n\n.vf-docs-icon-browser__results {\n  margin: calc(var(--vf-space-3, 12px) * -1) 0 0;\n}\n\n.vf-docs-icon-grid {\n  display: grid;\n  grid-template-columns: repeat(auto-fill, minmax(132px, 1fr));\n  gap: var(--vf-space-3, 12px);\n}\n\n.vf-docs-icon-grid > div {\n  min-width: 0;\n}\n\n.vf-docs-icon-tile.vf-button {\n  display: grid;\n  width: 100%;\n  min-height: 112px;\n  grid-template-rows: 1fr auto;\n  justify-items: center;\n  gap: var(--vf-space-4, 16px);\n  padding: var(--vf-space-5, 20px) var(--vf-space-3, 12px);\n  border: 1px solid var(--vf-border-subtle, #e2e8f0);\n  border-radius: var(--vf-radius-lg, 10px);\n  background: var(--vf-surface-default, #ffffff);\n  color: var(--vf-text-primary, #0f172a);\n  box-shadow: none;\n}\n\n.vf-docs-icon-tile.vf-button:hover {\n  border-color: var(--vf-border-strong, #94a3b8);\n  background: var(--vf-surface-muted, #f8fafc);\n}\n\n.vf-docs-icon-tile.vf-button[aria-pressed="true"] {\n  border-color: var(--vf-color-primary-500, #3b82f6);\n  box-shadow: inset 0 0 0 1px var(--vf-color-primary-500, #3b82f6);\n}\n\n.vf-docs-icon-tile .vf-icon {\n  width: 24px;\n  height: 24px;\n}\n\n.vf-docs-icon-tile span {\n  max-width: 100%;\n  overflow: hidden;\n  font-size: var(--vf-font-size-sm, 13px);\n  text-overflow: ellipsis;\n  white-space: nowrap;\n}\n\n.vf-docs-icon-browser__empty {\n  display: grid;\n  min-height: 180px;\n  place-content: center;\n  gap: var(--vf-space-2, 8px);\n  padding: var(--vf-space-6, 24px);\n  border: 1px dashed var(--vf-border-subtle, #e2e8f0);\n  border-radius: var(--vf-radius-lg, 10px);\n  text-align: center;\n}\n\n.vf-docs-icon-detail {\n  padding-block-start: var(--vf-space-8, 32px);\n  border-block-start: 1px solid var(--vf-border-subtle, #e2e8f0);\n}\n\n.vf-docs-icon-detail__preview {\n  display: grid;\n  min-height: 220px;\n  place-items: center;\n  border: 1px solid var(--vf-border-subtle, #e2e8f0);\n  border-radius: var(--vf-radius-xl, 12px);\n  background: var(--vf-surface-muted, #f8fafc);\n}\n\n.vf-docs-icon-detail__section {\n  display: grid;\n  gap: var(--vf-space-4, 16px);\n}\n\n.vf-docs-icon-sizes {\n  display: grid;\n  grid-template-columns: repeat(4, minmax(0, 1fr));\n  gap: var(--vf-space-3, 12px);\n}\n\n.vf-docs-icon-size {\n  display: grid;\n  gap: var(--vf-space-3, 12px);\n  margin: 0;\n  padding: var(--vf-space-4, 16px);\n  border: 1px solid var(--vf-border-subtle, #e2e8f0);\n  border-radius: var(--vf-radius-lg, 10px);\n}\n\n.vf-docs-icon-size__preview {\n  display: grid;\n  min-height: 64px;\n  place-items: center;\n}\n\n.vf-docs-icon-size figcaption {\n  display: flex;\n  justify-content: space-between;\n  gap: var(--vf-space-2, 8px);\n  color: var(--vf-text-secondary, #64748b);\n  font-size: var(--vf-font-size-sm, 13px);\n}\n\n.vf-docs-icon-size figcaption strong {\n  color: var(--vf-text-primary, #0f172a);\n}\n\n.vf-docs-icon-code {\n  overflow: auto;\n  margin: 0;\n  padding: var(--vf-space-5, 20px);\n  border: 1px solid var(--vf-color-slate-800, #1e293b);\n  border-radius: var(--vf-radius-lg, 10px);\n  background: var(--vf-color-slate-950, #020617);\n  color: var(--vf-color-slate-200, #e2e8f0);\n  font-family: var(--vf-font-family-mono, monospace);\n  font-size: var(--vf-font-size-sm, 13px);\n  line-height: var(--vf-line-height-relaxed, 1.65);\n}\n\n.vf-docs-icon-a11y__examples {\n  display: grid;\n  grid-template-columns: repeat(2, minmax(0, 1fr));\n  gap: var(--vf-space-3, 12px);\n}\n\n.vf-docs-icon-a11y__examples > div {\n  display: grid;\n  gap: var(--vf-space-2, 8px);\n  padding: var(--vf-space-4, 16px);\n  border: 1px solid var(--vf-border-subtle, #e2e8f0);\n  border-radius: var(--vf-radius-lg, 10px);\n}\n\n.vf-docs-icon-a11y__examples code {\n  overflow-wrap: anywhere;\n}\n\n@media (max-width: 720px) {\n  .vf-docs-icon-browser__heading,\n  .vf-docs-icon-detail__heading,\n  .vf-docs-icon-code__heading {\n    align-items: stretch;\n    flex-direction: column;\n  }\n\n  .vf-docs-icon-grid {\n    grid-template-columns: repeat(2, minmax(0, 1fr));\n  }\n\n  .vf-docs-icon-sizes,\n  .vf-docs-icon-a11y__examples {\n    grid-template-columns: repeat(2, minmax(0, 1fr));\n  }\n}\n\n@media (forced-colors: active) {\n  .vf-docs-icon-tile.vf-button[aria-pressed="true"] {\n    outline: 2px solid currentColor;\n    outline-offset: -3px;\n  }\n}\n`,
+          );
+
+          // Registry contract: Icons is a generated public page whose source is ui-core.
+          replaceOnce(
+            "scripts/documentation-registry.test.mjs",
+            '  assert(registry.pages.some((page) => page.id === "component-reference"));\n  assert(registry.pages.some((page) => page.id === "releases"));',
+            '  assert(registry.pages.some((page) => page.id === "component-reference"));\n  const iconsPage = registry.pages.find((page) => page.id === "icons");\n  assert(iconsPage);\n  assert.equal(iconsPage.renderer, "icon-reference");\n  assert.equal(iconsPage.sourcePath, "packages/ui-core/src/icons.ts");\n  assert.equal(iconsPage.section, "foundations");\n  assert(registry.pages.some((page) => page.id === "releases"));',
+          );
+
+          write(
+            "tests/reference-ui/icon-reference.spec.ts",
+            `import { expect, test } from "@playwright/test";\n\ntest.describe("Icon Reference catalog", () => {\n  test("lists the canonical icon catalog and supports search and selection", async ({ page }) => {\n    await page.goto("/?framework=react#/icons");\n    await expect(page.getByRole("heading", { name: "Icons", exact: true })).toBeVisible();\n    await expect(page.getByText("33 icons", { exact: true })).toBeVisible();\n    await expect(page.locator(".vf-docs-icon-grid [role=listitem]")).toHaveCount(33);\n\n    await page.getByRole("searchbox", { name: "Search icons" }).fill("eye");\n    await expect(page.locator(".vf-docs-icon-grid [role=listitem]")).toHaveCount(2);\n    await expect(page.getByText("2 of 33 icons", { exact: true })).toBeVisible();\n\n    await page.getByRole("button", { name: "EyeOff" }).click();\n    await expect(page.getByRole("heading", { name: "EyeOff", exact: true })).toBeVisible();\n    await expect(page.locator(".vf-docs-icon-code")).toContainText('<Icon name="EyeOff" />');\n  });\n\n  test("shows shared sizes and active-framework usage without a local framework chooser", async ({ page }) => {\n    await page.goto("/?framework=vue#/icons");\n    await expect(page.locator(".vf-docs-icon-size")).toHaveCount(4);\n    await expect(page.locator(".vf-docs-icon-sizes")).toContainText("12px");\n    await expect(page.locator(".vf-docs-icon-sizes")).toContainText("20px");\n    await expect(page.locator(".vf-docs-icon-code")).toContainText('<VfIcon name="Search" />');\n    await expect(page.getByRole("heading", { name: "Vue usage" })).toBeVisible();\n    await expect(page.locator("#component-framework-usage")).toHaveCount(0);\n  });\n\n  test("renders native usage in Native HTML context", async ({ page }) => {\n    await page.goto("/?framework=native-html#/icons");\n    await expect(page.locator(".vf-docs-icon-code")).toContainText('<vf-icon name="Search"></vf-icon>');\n    await expect(page.getByRole("heading", { name: "Native HTML usage" })).toBeVisible();\n  });\n});\n`,
+          );
+          NODE
+      - name: Install dependencies
+        run: npm ci
+      - name: Regenerate Reference registry
+        run: npm run generate:reference
+      - name: Format implementation
+        run: npx prettier --write docs/metadata/documentation-pages.json docs/generated/documentation-registry.json scripts/generate-documentation-registry.mjs scripts/documentation-registry.test.mjs apps/docs/src/referenceRoutes.ts apps/docs/src/DocsPage.tsx apps/docs/src/main.tsx apps/docs/src/IconReferencePage.tsx apps/docs/src/styles/icon-reference.css tests/reference-ui/icon-reference.spec.ts
+      - name: Verify focused contracts
+        run: |
+          npm run verify:reference
+          node --test scripts/documentation-registry.test.mjs
+          npm run typecheck --workspace @vyrnforge/ui-docs
+          npm run lint --workspace @vyrnforge/ui-docs
+          npm run lint:css -- --fix
+      - name: Commit implementation
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add docs/metadata/documentation-pages.json docs/generated scripts/generate-documentation-registry.mjs scripts/documentation-registry.test.mjs apps/docs/src/referenceRoutes.ts apps/docs/src/DocsPage.tsx apps/docs/src/main.tsx apps/docs/src/IconReferencePage.tsx apps/docs/src/styles/icon-reference.css tests/reference-ui/icon-reference.spec.ts
+          git diff --cached --check
+          git commit -m "docs: add canonical icon Reference catalog"
+          git push origin HEAD:feat/icon-reference-catalog
