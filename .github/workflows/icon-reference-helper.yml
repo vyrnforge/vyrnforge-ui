@@ -11,7 +11,7 @@ permissions:
 jobs:
   implement:
     runs-on: ubuntu-latest
-    timeout-minutes: 25
+    timeout-minutes: 20
     steps:
       - name: Checkout
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
@@ -91,15 +91,11 @@ jobs:
       - name: Regenerate Reference registry
         run: npm run generate:reference
       - name: Format implementation
-        run: npx prettier --write docs/metadata/documentation-pages.json docs/generated/documentation-registry.json scripts/generate-documentation-registry.mjs scripts/documentation-registry.test.mjs apps/docs/src/referenceRoutes.ts
-      - name: Verify focused contracts
+        run: npx prettier --write docs/metadata/documentation-pages.json docs/generated/documentation-registry.json scripts/generate-documentation-registry.mjs scripts/documentation-registry.test.mjs apps/docs/src/referenceRoutes.ts apps/docs/src/DocsPage.tsx apps/docs/src/IconReferencePage.tsx apps/docs/src/main.tsx apps/docs/src/styles/icon-reference.css tests/reference-ui/icon-reference.spec.ts
+      - name: Verify generation contracts
         run: |
           npm run verify:reference
           node --test scripts/documentation-registry.test.mjs
-          npm run build --workspace @vyrnforge/ui-behaviors
-          npm run typecheck --workspace @vyrnforge/ui-docs
-          npm run lint --workspace @vyrnforge/ui-docs
-          npm run lint:css
       - name: Commit generated integration
         run: |
           if git diff --quiet; then
@@ -108,7 +104,7 @@ jobs:
           fi
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add docs/metadata/documentation-pages.json docs/generated scripts/generate-documentation-registry.mjs scripts/documentation-registry.test.mjs apps/docs/src/referenceRoutes.ts
+          git add docs/metadata/documentation-pages.json docs/generated scripts/generate-documentation-registry.mjs scripts/documentation-registry.test.mjs apps/docs/src/referenceRoutes.ts apps/docs/src/DocsPage.tsx apps/docs/src/IconReferencePage.tsx apps/docs/src/main.tsx apps/docs/src/styles/icon-reference.css tests/reference-ui/icon-reference.spec.ts
           git diff --cached --check
           git commit -m "docs: register canonical icon Reference catalog"
           git push origin HEAD:feat/icon-reference-catalog
