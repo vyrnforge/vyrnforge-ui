@@ -46,8 +46,11 @@ test.describe("component reference presentation benchmark", () => {
     await expect(buttonExamples.nth(5)).toContainText("Form actions");
 
     await expect(
-      page.locator("#component-specimen .vf-button--xs", {
-        hasText: "Extra small",
+      page.locator("#component-specimen .vf-button--sm", { hasText: "Small" }),
+    ).toBeVisible();
+    await expect(
+      page.locator("#component-specimen .vf-button--md", {
+        hasText: "Medium",
       }),
     ).toBeVisible();
     await expect(
