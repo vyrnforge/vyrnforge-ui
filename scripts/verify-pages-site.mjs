@@ -32,7 +32,10 @@ function verifyCurrentReferenceBundle() {
   const scriptMatch = index.match(
     /<script[^>]+src=["']([^"']*\/assets\/index-[^"']+\.js)["']/u,
   );
-  assert(scriptMatch, "Pages root index must reference the built Reference bundle.");
+  assert(
+    scriptMatch,
+    "Pages root index must reference the built Reference bundle.",
+  );
 
   const scriptUrl = scriptMatch[1];
   assert(
