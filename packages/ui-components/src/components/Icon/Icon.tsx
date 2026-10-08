@@ -1,18 +1,8 @@
+import { resolveVyrnForgeIconSize } from "@vyrnforge/ui-core";
 import { useId } from "react";
 import { joinClassNames } from "../../utils/classNames";
 import { iconPaths } from "./icons";
-import type { IconProps, IconSize } from "./Icon.types";
-
-const iconSizeMap: Record<Exclude<IconSize, number>, number> = {
-  xs: 12,
-  sm: 14,
-  md: 16,
-  lg: 20,
-};
-
-function resolveIconSize(size: IconSize) {
-  return typeof size === "number" ? size : iconSizeMap[size];
-}
+import type { IconProps } from "./Icon.types";
 
 export function Icon({
   className,
@@ -23,7 +13,7 @@ export function Icon({
   ...props
 }: IconProps) {
   const titleId = useId();
-  const resolvedSize = resolveIconSize(size);
+  const resolvedSize = resolveVyrnForgeIconSize(size);
   const isDecorative = decorative && !title;
 
   return (
