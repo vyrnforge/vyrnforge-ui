@@ -24,6 +24,43 @@
     "classes": ["vf-button"],
     "variables": []
   },
-  "examples": [],
+  "examples": [
+    {
+      "id": "variants",
+      "title": "Variants",
+      "intent": "Compare the supported visual intents before choosing emphasis for an action.",
+      "frameworks": ["native-html", "react", "angular", "vue"]
+    },
+    {
+      "id": "sizes",
+      "title": "Sizes",
+      "intent": "Compare the supported size scale against the surrounding control density.",
+      "frameworks": ["native-html", "react", "angular", "vue"]
+    },
+    {
+      "id": "states",
+      "title": "Disabled and loading",
+      "intent": "Show unavailable and in-progress actions using the shared disabled and loading behavior contract.",
+      "frameworks": ["native-html", "react", "angular", "vue"]
+    },
+    {
+      "id": "width",
+      "title": "Full width",
+      "intent": "Show a prominent action expanding to the available inline space.",
+      "frameworks": ["native-html", "react", "angular", "vue"]
+    },
+    {
+      "id": "content",
+      "title": "Icons and labels",
+      "intent": "Compose visible labels with leading or trailing icon content without replacing important text.",
+      "frameworks": ["native-html", "react", "angular", "vue"]
+    },
+    {
+      "id": "form-actions",
+      "title": "Form actions",
+      "intent": "Use explicit submit and reset button types when Button participates in a form workflow.",
+      "frameworks": ["native-html", "react", "angular", "vue"]
+    }
+  ],
   "releaseNotes": []
 }
