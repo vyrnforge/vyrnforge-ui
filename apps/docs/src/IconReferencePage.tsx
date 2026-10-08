@@ -249,7 +249,7 @@ export function IconReferencePage({ frameworkId }: IconReferencePageProps) {
             </div>
             <div>
               <strong>Icon-only action</strong>
-              <code>aria-label="{selectedIcon}"</code>
+              <code>{`aria-label="${selectedIcon}"`}</code>
             </div>
           </div>
         </div>
