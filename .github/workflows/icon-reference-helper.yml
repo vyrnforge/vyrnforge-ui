@@ -96,6 +96,7 @@ jobs:
         run: |
           npm run verify:reference
           node --test scripts/documentation-registry.test.mjs
+          npm run build --workspace @vyrnforge/ui-behaviors
           npm run typecheck --workspace @vyrnforge/ui-docs
           npm run lint --workspace @vyrnforge/ui-docs
           npm run lint:css
