@@ -34,7 +34,7 @@
     {
       "id": "sizes",
       "title": "Sizes",
-      "intent": "Compare xs, sm, md, and lg sizing against the surrounding control density.",
+      "intent": "Compare the supported size scale against the surrounding control density.",
       "frameworks": ["native-html", "react", "angular", "vue"]
     },
     {
