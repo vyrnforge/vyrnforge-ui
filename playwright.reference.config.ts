@@ -1,7 +1,9 @@
 import { defineConfig, devices } from "@playwright/test";
 
 const port = 4174;
+const pagesPort = 4175;
 const baseURL = `http://127.0.0.1:${port}`;
+const pagesBaseURL = `http://127.0.0.1:${pagesPort}/vyrnforge-ui/`;
 const chromiumExecutablePath = process.env.PLAYWRIGHT_CHROMIUM_EXECUTABLE_PATH;
 
 export default defineConfig({
@@ -40,13 +42,24 @@ export default defineConfig({
       },
     },
   ],
-  webServer: {
-    command:
-      "npm run dev --workspace @vyrnforge/ui-docs -- --host 127.0.0.1 --port 4174 --strictPort",
-    url: baseURL,
-    reuseExistingServer: !process.env.CI,
-    timeout: 120_000,
-    stdout: "pipe",
-    stderr: "pipe",
-  },
+  webServer: [
+    {
+      command:
+        "npm run dev --workspace @vyrnforge/ui-docs -- --host 127.0.0.1 --port 4174 --strictPort",
+      url: baseURL,
+      reuseExistingServer: !process.env.CI,
+      timeout: 120_000,
+      stdout: "pipe",
+      stderr: "pipe",
+    },
+    {
+      command:
+        "npm run dev --workspace @vyrnforge/ui-docs -- --host 127.0.0.1 --port 4175 --strictPort --base /vyrnforge-ui/",
+      url: pagesBaseURL,
+      reuseExistingServer: !process.env.CI,
+      timeout: 120_000,
+      stdout: "pipe",
+      stderr: "pipe",
+    },
+  ],
 });
