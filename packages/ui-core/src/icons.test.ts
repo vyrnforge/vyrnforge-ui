@@ -28,7 +28,7 @@ describe("shared icon foundation", () => {
     expect(resolveVyrnForgeIconSize(0)).toBe(1);
   });
 
-  it("serializes a portable SVG using currentColor and the shared viewBox", () => {
+  it("serializes framework-neutral SVG with the shared visual contract", () => {
     const svg = getVyrnForgeIconSvg("Settings", "lg");
     expect(svg).toContain('height="20"');
     expect(svg).toContain('width="20"');
