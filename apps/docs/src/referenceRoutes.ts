@@ -72,6 +72,7 @@ export type DocsRouteKind =
 
 export type DocsRoute = {
   id: string;
+  route: string;
   title: string;
   section: string;
   group: string;
@@ -211,6 +212,7 @@ function markdownContent(sourcePath: string, renderer: DocsRouteKind) {
 function routeFromRegistryPage(page: RegistryPage): DocsRoute {
   return {
     id: page.id,
+    route: page.route,
     title: page.title,
     section: page.section,
     group: page.group,
