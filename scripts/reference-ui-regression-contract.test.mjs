@@ -22,6 +22,44 @@ test("all public docs render through the unified Reference shell", () => {
   assert.match(page, /PackageReferencePage/u);
   assert.match(page, /DiscoveryReferencePage/u);
   assert.match(page, /ExecutableExamplesPage/u);
+  assert.match(page, /IconReferencePage/u);
+});
+
+test("Icons has one canonical generated route and renderer", () => {
+  const registry = JSON.parse(
+    read("docs/generated/documentation-registry.json"),
+  );
+  const iconsRoutes = registry.pages.filter(
+    (page) => page.id === "icons" || page.route === "/icons",
+  );
+
+  assert.equal(iconsRoutes.length, 1);
+  assert.equal(iconsRoutes[0].id, "icons");
+  assert.equal(iconsRoutes[0].route, "/icons");
+  assert.equal(iconsRoutes[0].renderer, "icon-reference");
+  assert.equal(iconsRoutes[0].sourcePath, "packages/ui-core/src/icons.ts");
+});
+
+test("Reference page navigation exposes canonical hash hrefs", () => {
+  const navigation = read("apps/docs/src/ReferenceNavigation.tsx");
+  const iconBrowser = read("tests/reference-ui/icon-reference.spec.ts");
+  const browserConfig = read("playwright.reference.config.ts");
+
+  assert.match(
+    navigation,
+    /href: getReferenceLocationHref\(referenceModel, \{\s*frameworkId,\s*pathname: route\.route,\s*member: null,/u,
+  );
+  assert.match(iconBrowser, /getByRole\("link", \{ name: "Icons"/u);
+  assert.match(
+    iconBrowser,
+    /toHaveAttribute\("href", "\?framework=react#\/icons"\)/u,
+  );
+  assert.match(iconBrowser, /\/vyrnforge-ui\//u);
+  assert.match(
+    iconBrowser,
+    /getByRole\("combobox", \{ name: "Framework" \}\)/u,
+  );
+  assert.match(browserConfig, /--base \/vyrnforge-ui\//u);
 });
 
 test("Reference verification covers representative templates and adaptive states", () => {

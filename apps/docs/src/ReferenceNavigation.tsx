@@ -168,6 +168,11 @@ export function ReferenceNavigation({
             id: route.id,
             label: route.title,
             active: route.id === activeRouteId && !activeRecordId,
+            href: getReferenceLocationHref(referenceModel, {
+              frameworkId,
+              pathname: route.route,
+              member: null,
+            }),
             onSelect: () => onRouteChange(route.id),
           }));
 

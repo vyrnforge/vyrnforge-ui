@@ -27,6 +27,37 @@ function relativeSitePath(urlPath) {
   return urlPath.replace(/^\/+|\/+$/gu, "");
 }
 
+function verifyCurrentReferenceBundle() {
+  const index = readFileSync(requireFile("index.html"), "utf8");
+  const scriptMatch = index.match(
+    /<script[^>]+src=["']([^"']*\/assets\/index-[^"']+\.js)["']/u,
+  );
+  assert(
+    scriptMatch,
+    "Pages root index must reference the built Reference bundle.",
+  );
+
+  const scriptUrl = scriptMatch[1];
+  assert(
+    scriptUrl.startsWith("/vyrnforge-ui/"),
+    "Pages root bundle must use the production /vyrnforge-ui/ base path.",
+  );
+  const bundlePath = scriptUrl.replace(/^\/vyrnforge-ui\//u, "");
+  const bundle = readFileSync(requireFile(bundlePath), "utf8");
+
+  for (const marker of [
+    "Icon catalog",
+    "Search icons",
+    "icon-reference",
+    "packages/ui-core/src/icons.ts",
+  ]) {
+    assert(
+      bundle.includes(marker),
+      `Pages current Reference bundle is missing Icons catalog marker: ${marker}`,
+    );
+  }
+}
+
 requireFile("index.html");
 requireFile(".nojekyll");
 
@@ -96,6 +127,8 @@ for (const release of catalog.releases) {
   );
 }
 
+verifyCurrentReferenceBundle();
+
 console.log(
-  `Verified Pages reference artifact: current ${catalog.current.commit.slice(0, 12)}, ${catalog.releaseLines.length} release line(s), ${catalog.releases.length} retained release(s).`,
+  `Verified Pages reference artifact: current ${catalog.current.commit.slice(0, 12)}, ${catalog.releaseLines.length} release line(s), ${catalog.releases.length} retained release(s), current Icons catalog bundle present.`,
 );
