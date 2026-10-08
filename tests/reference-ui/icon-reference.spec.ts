@@ -17,7 +17,9 @@ test.describe("Icon Reference catalog", () => {
     await expect(
       page.locator('.vf-docs-icon-grid [role="listitem"]'),
     ).toHaveCount(2);
-    await expect(page.getByText("2 of 33 icons", { exact: true })).toBeVisible();
+    await expect(
+      page.getByText("2 of 33 icons", { exact: true }),
+    ).toBeVisible();
 
     await page.getByRole("button", { name: "EyeOff" }).click();
     await expect(
@@ -38,7 +40,9 @@ test.describe("Icon Reference catalog", () => {
     await expect(page.locator(".vf-docs-icon-code")).toContainText(
       '<VfIcon name="Search" />',
     );
-    await expect(page.getByRole("heading", { name: "Vue usage" })).toBeVisible();
+    await expect(
+      page.getByRole("heading", { name: "Vue usage" }),
+    ).toBeVisible();
     await expect(page.locator("#component-framework-usage")).toHaveCount(0);
   });
 

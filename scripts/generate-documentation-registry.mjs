@@ -49,6 +49,7 @@ const allowedRenderers = new Set([
   "component-reference",
   "package-reference",
   "discovery-reference",
+  "icon-reference",
   "example",
   "executable-examples",
 ]);

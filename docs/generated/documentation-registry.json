@@ -293,7 +293,7 @@
       "documentId": "theme-tokens",
       "title": "Theme Tokens",
       "category": "appearance",
-      "order": 2,
+      "order": 3,
       "implementations": [
         {
           "framework": "react",
@@ -314,7 +314,7 @@
       "documentId": "theme-modes",
       "title": "Theme Modes",
       "category": "appearance",
-      "order": 3,
+      "order": 4,
       "implementations": [
         {
           "framework": "react",
@@ -335,7 +335,7 @@
       "documentId": "density",
       "title": "Density",
       "category": "appearance",
-      "order": 4,
+      "order": 5,
       "implementations": [
         {
           "framework": "react",
@@ -356,7 +356,7 @@
       "documentId": "css-overrides",
       "title": "CSS Overrides",
       "category": "appearance",
-      "order": 5,
+      "order": 6,
       "implementations": [
         {
           "framework": "react",
@@ -1026,11 +1026,57 @@
       ]
     },
     {
+      "id": "icons",
+      "title": "Icons",
+      "section": "foundations",
+      "group": "Foundations",
+      "order": 2,
+      "type": "foundation",
+      "renderer": "icon-reference",
+      "description": "Browse, search, preview, and copy usage for the shared VyrnForge SVG icon catalog.",
+      "releaseLine": "non-grid-beta",
+      "sourcePath": "packages/ui-core/src/icons.ts",
+      "tags": [
+        "icons",
+        "svg",
+        "design-system",
+        "accessibility"
+      ],
+      "template": "foundation",
+      "route": "/icons",
+      "availability": [
+        {
+          "framework": "react",
+          "releaseLine": "non-grid-beta",
+          "version": "0.2.0-beta.2",
+          "status": "preview"
+        },
+        {
+          "framework": "native-html",
+          "releaseLine": "non-grid-beta",
+          "version": "0.2.0-beta.2",
+          "status": "preview"
+        },
+        {
+          "framework": "angular",
+          "releaseLine": "non-grid-beta",
+          "version": "0.2.0-beta.2",
+          "status": "preview"
+        },
+        {
+          "framework": "vue",
+          "releaseLine": "non-grid-beta",
+          "version": "0.2.0-beta.2",
+          "status": "preview"
+        }
+      ]
+    },
+    {
       "id": "theme-tokens",
       "title": "Theme Tokens",
       "section": "foundations",
       "group": "Foundations",
-      "order": 2,
+      "order": 3,
       "type": "foundation",
       "renderer": "example",
       "description": "Interactive token catalog with canonical categories, values, and theme-scoped swatches.",
@@ -1072,7 +1118,7 @@
       "title": "Theme Modes",
       "section": "foundations",
       "group": "Foundations",
-      "order": 3,
+      "order": 4,
       "type": "foundation",
       "renderer": "example",
       "description": "Interactive light, dark, enterprise, and system theme behavior.",
@@ -1114,7 +1160,7 @@
       "title": "Density",
       "section": "foundations",
       "group": "Foundations",
-      "order": 4,
+      "order": 5,
       "type": "foundation",
       "renderer": "example",
       "description": "Interactive compact, standard, and comfortable density examples.",
@@ -1156,7 +1202,7 @@
       "title": "CSS Overrides",
       "section": "foundations",
       "group": "Foundations",
-      "order": 5,
+      "order": 6,
       "type": "foundation",
       "renderer": "example",
       "description": "Global VyrnForge overrides, local scopes, and grid-specific overrides.",
@@ -1198,7 +1244,7 @@
       "title": "Accessibility",
       "section": "foundations",
       "group": "Foundations",
-      "order": 6,
+      "order": 7,
       "type": "foundation",
       "renderer": "markdown",
       "description": "Understand the shared accessibility, keyboard, focus, and assistive-technology baseline.",
@@ -2535,6 +2581,50 @@
         "foundations",
         "tokens",
         "design-system"
+      ],
+      "availability": [
+        {
+          "framework": "react",
+          "releaseLine": "non-grid-beta",
+          "version": "0.2.0-beta.2",
+          "status": "preview"
+        },
+        {
+          "framework": "native-html",
+          "releaseLine": "non-grid-beta",
+          "version": "0.2.0-beta.2",
+          "status": "preview"
+        },
+        {
+          "framework": "angular",
+          "releaseLine": "non-grid-beta",
+          "version": "0.2.0-beta.2",
+          "status": "preview"
+        },
+        {
+          "framework": "vue",
+          "releaseLine": "non-grid-beta",
+          "version": "0.2.0-beta.2",
+          "status": "preview"
+        }
+      ]
+    },
+    {
+      "id": "page:icons",
+      "kind": "page",
+      "documentId": "icons",
+      "label": "Icons",
+      "route": "/icons",
+      "section": "foundations",
+      "type": "foundation",
+      "keywords": [
+        "icons",
+        "browse, search, preview, and copy usage for the shared vyrnforge svg icon catalog.",
+        "foundations",
+        "icons",
+        "svg",
+        "design-system",
+        "accessibility"
       ],
       "availability": [
         {
@@ -54413,6 +54503,7 @@
         "documentIds": [
           "theming",
           "token-reference",
+          "icons",
           "theme-tokens",
           "theme-modes",
           "density",
@@ -54500,6 +54591,7 @@
         "documentIds": [
           "theming",
           "token-reference",
+          "icons",
           "theme-tokens",
           "theme-modes",
           "density",
@@ -54732,6 +54824,38 @@
       "id": "page:vue:0.2.0-beta.2:token-reference",
       "documentId": "token-reference",
       "route": "/token-reference",
+      "framework": "vue",
+      "version": "0.2.0-beta.2",
+      "status": "preview"
+    },
+    {
+      "id": "page:react:0.2.0-beta.2:icons",
+      "documentId": "icons",
+      "route": "/icons",
+      "framework": "react",
+      "version": "0.2.0-beta.2",
+      "status": "preview"
+    },
+    {
+      "id": "page:native-html:0.2.0-beta.2:icons",
+      "documentId": "icons",
+      "route": "/icons",
+      "framework": "native-html",
+      "version": "0.2.0-beta.2",
+      "status": "preview"
+    },
+    {
+      "id": "page:angular:0.2.0-beta.2:icons",
+      "documentId": "icons",
+      "route": "/icons",
+      "framework": "angular",
+      "version": "0.2.0-beta.2",
+      "status": "preview"
+    },
+    {
+      "id": "page:vue:0.2.0-beta.2:icons",
+      "documentId": "icons",
+      "route": "/icons",
       "framework": "vue",
       "version": "0.2.0-beta.2",
       "status": "preview"
@@ -76503,6 +76627,17 @@
       "tags": [
         "tokens",
         "design-system"
+      ]
+    },
+    {
+      "documentId": "icons",
+      "type": "foundation",
+      "section": "foundations",
+      "tags": [
+        "icons",
+        "svg",
+        "design-system",
+        "accessibility"
       ]
     },
     {

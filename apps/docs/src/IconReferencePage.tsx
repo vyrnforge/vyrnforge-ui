@@ -53,11 +53,10 @@ function decorativeUsage(
 
 export function IconReferencePage({ frameworkId }: IconReferencePageProps) {
   const [query, setQuery] = useState("");
-  const [selectedIcon, setSelectedIcon] =
-    useState<VyrnForgeIconName>("Search");
-  const [copyState, setCopyState] = useState<
-    "idle" | "copied" | "failed"
-  >("idle");
+  const [selectedIcon, setSelectedIcon] = useState<VyrnForgeIconName>("Search");
+  const [copyState, setCopyState] = useState<"idle" | "copied" | "failed">(
+    "idle",
+  );
 
   const filteredIcons = useMemo(() => {
     const normalizedQuery = query.trim().toLocaleLowerCase();
@@ -94,11 +93,7 @@ export function IconReferencePage({ frameworkId }: IconReferencePageProps) {
               One SVG catalog shared by Native HTML, React, Angular, and Vue.
             </Text>
           </div>
-          <Text
-            className="vf-docs-icon-browser__count"
-            size="sm"
-            tone="muted"
-          >
+          <Text className="vf-docs-icon-browser__count" size="sm" tone="muted">
             {vyrnForgeIconNames.length} icons
           </Text>
         </div>
