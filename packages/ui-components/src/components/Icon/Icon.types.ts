@@ -1,7 +1,4 @@
-import type {
-  VyrnForgeIconName,
-  VyrnForgeIconSize,
-} from "@vyrnforge/ui-core";
+import type { VyrnForgeIconName, VyrnForgeIconSize } from "@vyrnforge/ui-core";
 import type { CSSProperties, SVGProps } from "react";
 
 export type IconName = VyrnForgeIconName;
