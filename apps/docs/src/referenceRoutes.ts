@@ -66,6 +66,7 @@ export type DocsRouteKind =
   | "component-reference"
   | "package-reference"
   | "discovery-reference"
+  | "icon-reference"
   | "example"
   | "executable-examples";
 

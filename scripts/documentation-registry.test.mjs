@@ -32,6 +32,11 @@ test("Documentation Registry is generated from canonical page and Reference meta
   const ids = registry.pages.map((page) => page.id);
   assert.equal(new Set(ids).size, ids.length);
   assert(registry.pages.some((page) => page.id === "component-reference"));
+  const iconsPage = registry.pages.find((page) => page.id === "icons");
+  assert(iconsPage);
+  assert.equal(iconsPage.renderer, "icon-reference");
+  assert.equal(iconsPage.sourcePath, "packages/ui-core/src/icons.ts");
+  assert.equal(iconsPage.section, "foundations");
   assert(registry.pages.some((page) => page.id === "releases"));
 });
 
