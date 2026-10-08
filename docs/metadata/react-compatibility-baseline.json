@@ -42,7 +42,7 @@
     {
       "path": "packages/ui-components/src/components",
       "kind": "tree",
-      "sha1": "019b50f626fd4f0a8e59e6a77a5227ad258e52a3",
+      "sha1": "3892c3b375bec6e827124da30aaef48039c3e2a4",
       "covers": [
         "component props and types",
         "callbacks",
@@ -234,6 +234,11 @@
       "changeId": "dependency-refresh-react-19.3-redent-4",
       "reason": "Development and compatibility evidence moves the current React 19 line from 19.2.7/19.2.8 to 19.3.0 while retaining the public >=18 <20 peer contract, and updates the development-only redent helper to 4.0.0. Public exports, props, callbacks, refs, CSS entrypoints, runtime dependencies, and first-class framework boundaries are unchanged; the package-manifest and compatibility-matrix fingerprints are intentionally recaptured with protected CI and packed-consumer evidence.",
       "evidence": "tests/consumers/react/package.json; docs/metadata/compatibility-release-matrix.json; packages/ui-components/src/__tests__/react-compatibility-baseline.test.ts"
+    },
+    {
+      "changeId": "#832",
+      "reason": "React Icon now renders the same existing 33-icon public catalog from the shared framework-neutral @vyrnforge/ui-core SVG definition source instead of a React-owned geometry registry. Public Icon names, sizes, props, accessibility behavior, currentColor stroke model, viewBox, rendered geometry, package exports, and CSS hooks remain unchanged; the React component-tree fingerprint is intentionally recaptured after parity, build, typecheck, and packed-consumer verification.",
+      "evidence": "packages/ui-core/src/icons.test.ts; packages/ui-components/src/components/Icon/Icon.tsx; packages/ui-elements/src/components/parity.ts"
     }
   ],
   "changePolicy": "A fingerprint change requires intentional baseline review together with the relevant API, package, runtime, accessibility, or compatibility evidence. A changed implementation must not silently redefine the captured React contract."
