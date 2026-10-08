@@ -26,7 +26,9 @@ test("all public docs render through the unified Reference shell", () => {
 });
 
 test("Icons has one canonical generated route and renderer", () => {
-  const registry = JSON.parse(read("docs/generated/documentation-registry.json"));
+  const registry = JSON.parse(
+    read("docs/generated/documentation-registry.json"),
+  );
   const iconsRoutes = registry.pages.filter(
     (page) => page.id === "icons" || page.route === "/icons",
   );
@@ -48,9 +50,15 @@ test("Reference page navigation exposes canonical hash hrefs", () => {
     /href: getReferenceLocationHref\(referenceModel, \{\s*frameworkId,\s*pathname: route\.route,\s*member: null,/u,
   );
   assert.match(iconBrowser, /getByRole\("link", \{ name: "Icons"/u);
-  assert.match(iconBrowser, /toHaveAttribute\("href", "\?framework=react#\/icons"\)/u);
+  assert.match(
+    iconBrowser,
+    /toHaveAttribute\("href", "\?framework=react#\/icons"\)/u,
+  );
   assert.match(iconBrowser, /\/vyrnforge-ui\//u);
-  assert.match(iconBrowser, /getByRole\("combobox", \{ name: "Framework" \}\)/u);
+  assert.match(
+    iconBrowser,
+    /getByRole\("combobox", \{ name: "Framework" \}\)/u,
+  );
   assert.match(browserConfig, /--base \/vyrnforge-ui\//u);
 });
 
