@@ -114,20 +114,18 @@ export function DocsPage({
         version: routeResolution.context.version,
       })
     : route.kind === "example" && route.exampleId ? (
-        <MigratedExamplePage
-          exampleId={route.exampleId}
-          frameworkId={frameworkId}
-          version={routeResolution.context.version}
-        />
-      )
-    : route.kind === "executable-examples" ? (
-        <ExecutableExamplesPage
-          frameworkId={frameworkId}
-          version={routeResolution.context.version}
-        />
-      )
-    : route.kind === "discovery-reference" &&
-        (route.recordDomain === "tokens" || route.recordDomain === "patterns") ? (
+      <MigratedExamplePage
+        exampleId={route.exampleId}
+        frameworkId={frameworkId}
+        version={routeResolution.context.version}
+      />
+    ) : route.kind === "executable-examples" ? (
+      <ExecutableExamplesPage
+        frameworkId={frameworkId}
+        version={routeResolution.context.version}
+      />
+    ) : route.kind === "discovery-reference" &&
+      (route.recordDomain === "tokens" || route.recordDomain === "patterns") ? (
       <DiscoveryReferencePage
         frameworkId={frameworkId}
         recordDomain={route.recordDomain}
