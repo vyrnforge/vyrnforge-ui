@@ -2,10 +2,13 @@ import { AdvancedModulePage } from "./AdvancedModulePage";
 import { Button, EmptyState } from "@vyrnforge/ui-components";
 import type { ReferenceRecordSelection } from "./App";
 import { ComponentReferencePage } from "./ComponentReferencePage";
+import {
+  getDedicatedReferencePage,
+  renderDedicatedReferencePage,
+} from "./DedicatedReferencePages";
 import type { DocsFrameworkId } from "./docsContext";
 import { DocumentationPageTemplate } from "./DocumentationPageTemplate";
 import { GuidePage } from "./GuidePage";
-import { IconReferencePage } from "./IconReferencePage";
 import { DiscoveryReferencePage } from "./DiscoveryReferencePage";
 import { ExecutableExamplesPage } from "./examples/ExecutableExamplesPage";
 import { MigratedExamplePage } from "./examples/MigratedExamplePage";
@@ -102,29 +105,35 @@ export function DocsPage({
 
   const componentId =
     referenceRecord?.domain === "components" ? referenceRecord.id : null;
+  const dedicatedPage = getDedicatedReferencePage(route);
 
-  const pageContent =
-    route.kind === "example" && route.exampleId ? (
-      <MigratedExamplePage
-        exampleId={route.exampleId}
-        frameworkId={frameworkId}
-        version={routeResolution.context.version}
-      />
-    ) : route.kind === "executable-examples" ? (
-      <ExecutableExamplesPage
-        frameworkId={frameworkId}
-        version={routeResolution.context.version}
-      />
-    ) : route.kind === "discovery-reference" &&
-      (route.recordDomain === "tokens" || route.recordDomain === "patterns") ? (
+  const pageContent = dedicatedPage
+    ? renderDedicatedReferencePage(dedicatedPage, {
+        frameworkId,
+        route,
+        version: routeResolution.context.version,
+      })
+    : route.kind === "example" && route.exampleId ? (
+        <MigratedExamplePage
+          exampleId={route.exampleId}
+          frameworkId={frameworkId}
+          version={routeResolution.context.version}
+        />
+      )
+    : route.kind === "executable-examples" ? (
+        <ExecutableExamplesPage
+          frameworkId={frameworkId}
+          version={routeResolution.context.version}
+        />
+      )
+    : route.kind === "discovery-reference" &&
+        (route.recordDomain === "tokens" || route.recordDomain === "patterns") ? (
       <DiscoveryReferencePage
         frameworkId={frameworkId}
         recordDomain={route.recordDomain}
         referenceRecord={referenceRecord}
         version={routeResolution.context.version}
       />
-    ) : route.kind === "icon-reference" ? (
-      <IconReferencePage frameworkId={frameworkId} />
     ) : route.kind === "component-reference" ? (
       <ComponentReferencePage
         componentId={componentId}
@@ -148,6 +157,8 @@ export function DocsPage({
     ) : (
       <MarkdownView markdown={route.content ?? ""} />
     );
+
+  if (dedicatedPage?.frame === "standalone") return pageContent;
 
   return (
     <DocumentationPageTemplate
