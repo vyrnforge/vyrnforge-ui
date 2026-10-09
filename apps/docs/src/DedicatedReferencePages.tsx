@@ -1,22 +1,13 @@
 import type { ReactNode } from "react";
 
+import {
+  dedicatedReferencePagePolicies,
+  getDedicatedReferencePagePolicy,
+  type DedicatedReferencePagePolicy,
+} from "./dedicatedReferencePagePolicy";
 import type { DocsFrameworkId } from "./docsContext";
 import { IconReferencePage } from "./IconReferencePage";
-import type { DocsRoute, DocsRouteKind } from "./referenceRoutes";
-
-export type DedicatedReferenceLayoutMode =
-  | "reading"
-  | "reference"
-  | "catalog"
-  | "example"
-  | "wide";
-
-export type DedicatedReferencePageFrame = "standard" | "standalone";
-
-export type DedicatedReferenceRecord = {
-  domain: string;
-  id: string;
-};
+import type { DocsRoute } from "./referenceRoutes";
 
 type DedicatedReferencePageContext = {
   frameworkId: DocsFrameworkId;
@@ -24,70 +15,53 @@ type DedicatedReferencePageContext = {
   version: string;
 };
 
-export type DedicatedReferencePageDefinition = {
-  routeId: string;
-  renderer: DocsRouteKind;
-  frame: DedicatedReferencePageFrame;
-  layoutMode: DedicatedReferenceLayoutMode;
-  replacesRecords: readonly DedicatedReferenceRecord[];
+type DedicatedReferencePageRenderer = {
+  routeId: DedicatedReferencePagePolicy["routeId"];
   render: (context: DedicatedReferencePageContext) => ReactNode;
 };
 
-export const dedicatedReferencePages = [
+const dedicatedReferencePageRenderers = [
   {
     routeId: "icons",
-    renderer: "icon-reference",
-    frame: "standard",
-    layoutMode: "catalog",
-    replacesRecords: [{ domain: "components", id: "icon" }],
     render: ({ frameworkId }) => (
       <IconReferencePage frameworkId={frameworkId} />
     ),
   },
-] as const satisfies readonly DedicatedReferencePageDefinition[];
+] as const satisfies readonly DedicatedReferencePageRenderer[];
 
 export function getDedicatedReferencePage(route: DocsRoute) {
-  return (
-    dedicatedReferencePages.find(
-      (definition) =>
-        definition.routeId === route.id && definition.renderer === route.kind,
-    ) ?? null
+  const policy = getDedicatedReferencePagePolicy(route);
+  if (!policy) return null;
+
+  const renderer = dedicatedReferencePageRenderers.find(
+    (candidate) => candidate.routeId === policy.routeId,
   );
+  if (!renderer) {
+    throw new Error(
+      `Dedicated Reference page ${policy.routeId} has no renderer binding.`,
+    );
+  }
+
+  return { policy, renderer };
 }
 
-export function getDedicatedReferencePageForRecord(
-  domain: string,
-  id: string,
-) {
-  return (
-    dedicatedReferencePages.find((definition) =>
-      definition.replacesRecords.some(
-        (record) => record.domain === domain && record.id === id,
-      ),
-    ) ?? null
-  );
-}
-
-export function isReferenceRecordReplacedByDedicatedPage(
-  domain: string,
-  id: string,
-) {
-  return Boolean(getDedicatedReferencePageForRecord(domain, id));
-}
-
-export function excludeDedicatedReferenceRecords<T extends { id: string }>(
-  domain: string,
-  records: readonly T[],
-) {
-  return records.filter(
-    (record) =>
-      !isReferenceRecordReplacedByDedicatedPage(domain, record.id),
-  );
+export function verifyDedicatedReferencePageBindings() {
+  for (const policy of dedicatedReferencePagePolicies) {
+    if (
+      !dedicatedReferencePageRenderers.some(
+        (renderer) => renderer.routeId === policy.routeId,
+      )
+    ) {
+      throw new Error(
+        `Dedicated Reference page ${policy.routeId} has no renderer binding.`,
+      );
+    }
+  }
 }
 
 export function renderDedicatedReferencePage(
-  definition: DedicatedReferencePageDefinition,
+  definition: NonNullable<ReturnType<typeof getDedicatedReferencePage>>,
   context: DedicatedReferencePageContext,
 ) {
-  return definition.render(context);
+  return definition.renderer.render(context);
 }
