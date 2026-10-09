@@ -58,6 +58,29 @@ test.describe("Icon Reference catalog", () => {
     ).toBeVisible();
   });
 
+  test("replaces the general Icon component presentation with the dedicated catalog", async ({
+    page,
+  }) => {
+    await page.goto("/?framework=react#/component-reference");
+
+    const sidebar = page.locator(".vf-reference-shell__sidebar");
+    await expect(
+      sidebar.getByRole("link", { name: "Icon", exact: true }),
+    ).toHaveCount(0);
+    await expect(
+      page.locator('.vf-docs-component-entry a[href="#/components/icon"]'),
+    ).toHaveCount(0);
+    await expect(
+      sidebar.getByRole("link", { name: "Icons", exact: true }),
+    ).toBeVisible();
+
+    await page.goto("/?framework=react#/components/icon");
+    await expect(page).toHaveURL(/\?framework=react#\/icons$/u);
+    await expect(
+      page.getByRole("heading", { name: "Icon catalog", exact: true }),
+    ).toBeVisible();
+  });
+
   test("navigates through the real Pages base path and keeps the framework selector active", async ({
     page,
   }) => {
@@ -69,6 +92,10 @@ test.describe("Icon Reference catalog", () => {
     await iconsLink.click();
 
     await expect(page).toHaveURL(/\/vyrnforge-ui\/\?framework=react#\/icons$/u);
+    await expect(page.locator(".vf-reference-shell")).toHaveAttribute(
+      "data-layout-mode",
+      "catalog",
+    );
     await expect(
       page.getByRole("heading", { name: "Icon catalog", exact: true }),
     ).toBeVisible();
