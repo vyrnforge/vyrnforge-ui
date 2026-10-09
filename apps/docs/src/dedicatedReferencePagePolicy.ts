@@ -1,11 +1,7 @@
 import type { DocsRoute, DocsRouteKind } from "./referenceRoutes";
 
 export type DedicatedReferenceLayoutMode =
-  | "reading"
-  | "reference"
-  | "catalog"
-  | "example"
-  | "wide";
+  "reading" | "reference" | "catalog" | "example" | "wide";
 
 export type DedicatedReferencePageFrame = "standard" | "standalone";
 
