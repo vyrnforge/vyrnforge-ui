@@ -122,6 +122,14 @@ const buildPackages = orderSelectedPackages(
   expandWorkspaceDependencyClosure(selectedPackages),
 );
 
+const formattingTarget = "apps/docs/src/dedicatedReferencePagePolicy.ts";
+runNpm(["exec", "prettier", "--", "--write", formattingTarget]);
+execFileSync("git", ["diff", "--", formattingTarget], {
+  cwd: root,
+  stdio: "inherit",
+});
+throw new Error("Formatting diagnostic complete");
+
 for (const command of [
   "format:check",
   "lint",
