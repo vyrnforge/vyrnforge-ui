@@ -2,10 +2,10 @@ import { AdvancedModulePage } from "./AdvancedModulePage";
 import { Button, EmptyState } from "@vyrnforge/ui-components";
 import type { ReferenceRecordSelection } from "./App";
 import { ComponentReferencePage } from "./ComponentReferencePage";
+import { getCustomReferenceRenderer } from "./customReferenceRenderers";
 import type { DocsFrameworkId } from "./docsContext";
 import { DocumentationPageTemplate } from "./DocumentationPageTemplate";
 import { GuidePage } from "./GuidePage";
-import { IconReferencePage } from "./IconReferencePage";
 import { DiscoveryReferencePage } from "./DiscoveryReferencePage";
 import { ExecutableExamplesPage } from "./examples/ExecutableExamplesPage";
 import { MigratedExamplePage } from "./examples/MigratedExamplePage";
@@ -102,52 +102,52 @@ export function DocsPage({
 
   const componentId =
     referenceRecord?.domain === "components" ? referenceRecord.id : null;
+  const customRenderer = getCustomReferenceRenderer(route.kind);
 
-  const pageContent =
-    route.kind === "example" && route.exampleId ? (
-      <MigratedExamplePage
-        exampleId={route.exampleId}
-        frameworkId={frameworkId}
-        version={routeResolution.context.version}
-      />
-    ) : route.kind === "executable-examples" ? (
-      <ExecutableExamplesPage
-        frameworkId={frameworkId}
-        version={routeResolution.context.version}
-      />
-    ) : route.kind === "discovery-reference" &&
-      (route.recordDomain === "tokens" || route.recordDomain === "patterns") ? (
-      <DiscoveryReferencePage
-        frameworkId={frameworkId}
-        recordDomain={route.recordDomain}
-        referenceRecord={referenceRecord}
-        version={routeResolution.context.version}
-      />
-    ) : route.kind === "icon-reference" ? (
-      <IconReferencePage frameworkId={frameworkId} />
-    ) : route.kind === "component-reference" ? (
-      <ComponentReferencePage
-        componentId={componentId}
-        frameworkId={frameworkId}
-        version={version}
-      />
-    ) : route.kind === "package-reference" ? (
-      <PackageReferencePage
-        packageId={
-          referenceRecord?.domain === "packages" ? referenceRecord.id : null
-        }
-      />
-    ) : route.template === "advanced-module" ? (
-      <AdvancedModulePage
-        frameworkId={frameworkId}
-        onRouteChange={onRouteChange}
-        route={route}
-        status={routeResolution.status}
-        version={routeResolution.context.version}
-      />
-    ) : (
-      <MarkdownView markdown={route.content ?? ""} />
-    );
+  const pageContent = customRenderer ? (
+    customRenderer({ frameworkId })
+  ) : route.kind === "example" && route.exampleId ? (
+    <MigratedExamplePage
+      exampleId={route.exampleId}
+      frameworkId={frameworkId}
+      version={routeResolution.context.version}
+    />
+  ) : route.kind === "executable-examples" ? (
+    <ExecutableExamplesPage
+      frameworkId={frameworkId}
+      version={routeResolution.context.version}
+    />
+  ) : route.kind === "discovery-reference" &&
+    (route.recordDomain === "tokens" || route.recordDomain === "patterns") ? (
+    <DiscoveryReferencePage
+      frameworkId={frameworkId}
+      recordDomain={route.recordDomain}
+      referenceRecord={referenceRecord}
+      version={routeResolution.context.version}
+    />
+  ) : route.kind === "component-reference" ? (
+    <ComponentReferencePage
+      componentId={componentId}
+      frameworkId={frameworkId}
+      version={version}
+    />
+  ) : route.kind === "package-reference" ? (
+    <PackageReferencePage
+      packageId={
+        referenceRecord?.domain === "packages" ? referenceRecord.id : null
+      }
+    />
+  ) : route.template === "advanced-module" ? (
+    <AdvancedModulePage
+      frameworkId={frameworkId}
+      onRouteChange={onRouteChange}
+      route={route}
+      status={routeResolution.status}
+      version={routeResolution.context.version}
+    />
+  ) : (
+    <MarkdownView markdown={route.content ?? ""} />
+  );
 
   return (
     <DocumentationPageTemplate
