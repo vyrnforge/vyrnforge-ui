@@ -65,6 +65,16 @@ One generated Reference model does not require one giant authoring file. Existin
 
 `apps/docs/src/ReferenceComponentSpecimen.tsx` currently contains legacy component-specific specimen dispatch. Those entries are migration debt. They may be removed or replaced by owned/generated scenarios, but new component-specific entries must not be added.
 
+## Dedicated Reference page presentation overrides
+
+A capability may have a dedicated Reference catalog or tool when the generic component/package record presentation cannot provide the required browsing experience. This is a presentation override, not a second semantic owner.
+
+The canonical component, package, token, contract, framework, accessibility, and API records remain intact and continue to feed generators, search, AI context, and verification. A dedicated page may suppress a replaced record from the general reader-facing catalog and canonicalize its old record URL to the dedicated route, but it must not delete or fork that canonical record simply to avoid duplicate navigation.
+
+Dedicated pages use the shared Reference shell, global framework/version context, canonical route model, and design-system components. Their presentation policy is declared centrally in `apps/docs/src/dedicatedReferencePagePolicy.ts`: route identity, renderer identity, shell layout mode, frame behavior, and any general records whose reader-facing presentation is replaced. React renderer bindings live separately in `apps/docs/src/DedicatedReferencePages.tsx` so data discovery and routing policy do not depend on a page implementation.
+
+The Icons catalog is the first application of this contract: `/icons` replaces the generic reader presentation for the canonical `components/icon` record while preserving that component record as real `@vyrnforge/ui-components` API truth. Future dedicated pages must use this contract rather than adding page-specific exclusions to component discovery, navigation, routing, or shell layout code.
+
 ## Human guidance versus generated facts
 
 Generated API/reference facts remain authoritative for normal props, attributes, inputs, outputs, events, slots/templates, methods, framework mappings, package facts, and token values.

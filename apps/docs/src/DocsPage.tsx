@@ -2,10 +2,13 @@ import { AdvancedModulePage } from "./AdvancedModulePage";
 import { Button, EmptyState } from "@vyrnforge/ui-components";
 import type { ReferenceRecordSelection } from "./App";
 import { ComponentReferencePage } from "./ComponentReferencePage";
+import {
+  getDedicatedReferencePage,
+  renderDedicatedReferencePage,
+} from "./DedicatedReferencePages";
 import type { DocsFrameworkId } from "./docsContext";
 import { DocumentationPageTemplate } from "./DocumentationPageTemplate";
 import { GuidePage } from "./GuidePage";
-import { IconReferencePage } from "./IconReferencePage";
 import { DiscoveryReferencePage } from "./DiscoveryReferencePage";
 import { ExecutableExamplesPage } from "./examples/ExecutableExamplesPage";
 import { MigratedExamplePage } from "./examples/MigratedExamplePage";
@@ -100,6 +103,28 @@ export function DocsPage({
     );
   }
 
+  const dedicatedPage = getDedicatedReferencePage(route);
+  if (dedicatedPage) {
+    const dedicatedContent = renderDedicatedReferencePage(dedicatedPage, {
+      frameworkId,
+      route,
+      version: routeResolution.context.version,
+    });
+
+    if (dedicatedPage.policy.frame === "standalone") return dedicatedContent;
+
+    return (
+      <DocumentationPageTemplate
+        description={route.description}
+        status={routeResolution.status}
+        template={template}
+        title={route.title}
+      >
+        {dedicatedContent}
+      </DocumentationPageTemplate>
+    );
+  }
+
   const componentId =
     referenceRecord?.domain === "components" ? referenceRecord.id : null;
 
@@ -123,8 +148,6 @@ export function DocsPage({
         referenceRecord={referenceRecord}
         version={routeResolution.context.version}
       />
-    ) : route.kind === "icon-reference" ? (
-      <IconReferencePage frameworkId={frameworkId} />
     ) : route.kind === "component-reference" ? (
       <ComponentReferencePage
         componentId={componentId}

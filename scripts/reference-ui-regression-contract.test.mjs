@@ -12,6 +12,7 @@ test("all public docs render through the unified Reference shell", () => {
   const app = read("apps/docs/src/App.tsx");
   const shell = read("apps/docs/src/ReferenceShell.tsx");
   const page = read("apps/docs/src/DocsPage.tsx");
+  const dedicatedPages = read("apps/docs/src/DedicatedReferencePages.tsx");
 
   assert.match(app, /import \{ ReferenceShell \} from "\.\/ReferenceShell"/u);
   assert.doesNotMatch(app, /DocsShell|GuideShell/u);
@@ -22,7 +23,9 @@ test("all public docs render through the unified Reference shell", () => {
   assert.match(page, /PackageReferencePage/u);
   assert.match(page, /DiscoveryReferencePage/u);
   assert.match(page, /ExecutableExamplesPage/u);
-  assert.match(page, /IconReferencePage/u);
+  assert.match(page, /getDedicatedReferencePage/u);
+  assert.doesNotMatch(page, /IconReferencePage/u);
+  assert.match(dedicatedPages, /IconReferencePage/u);
 });
 
 test("Icons has one canonical generated route and renderer", () => {
@@ -38,6 +41,39 @@ test("Icons has one canonical generated route and renderer", () => {
   assert.equal(iconsRoutes[0].route, "/icons");
   assert.equal(iconsRoutes[0].renderer, "icon-reference");
   assert.equal(iconsRoutes[0].sourcePath, "packages/ui-core/src/icons.ts");
+});
+
+test("dedicated Reference pages override general presentation", () => {
+  const policy = read("apps/docs/src/dedicatedReferencePagePolicy.ts");
+  const bindings = read("apps/docs/src/DedicatedReferencePages.tsx");
+  const referenceData = read("apps/docs/src/referenceData.ts");
+  const app = read("apps/docs/src/App.tsx");
+  const shell = read("apps/docs/src/ReferenceShell.tsx");
+  const browser = read("tests/reference-ui/icon-reference.spec.ts");
+  const components = JSON.parse(read("docs/metadata/components.json"));
+
+  assert(
+    components.components.some(
+      (component) => component.id === "icon" && component.publicExport === true,
+    ),
+    "Icon must remain canonical component/API truth.",
+  );
+  assert.match(policy, /routeId: "icons"/u);
+  assert.match(policy, /renderer: "icon-reference"/u);
+  assert.match(policy, /layoutMode: "catalog"/u);
+  assert.match(
+    policy,
+    /replacesRecords: \[\{ domain: "components", id: "icon" \}\]/u,
+  );
+  assert.match(bindings, /routeId: "icons"/u);
+  assert.match(bindings, /IconReferencePage/u);
+  assert.match(referenceData, /excludeDedicatedReferenceRecords/u);
+  assert.match(app, /getDedicatedReferencePagePolicyForRecord/u);
+  assert.match(shell, /getDedicatedReferencePagePolicy/u);
+  assert.match(browser, /components\/icon/u);
+  assert.match(browser, /toHaveCount\(0\)/u);
+  assert.match(browser, /toHaveURL/u);
+  assert.match(browser, /framework=react/u);
 });
 
 test("Reference page navigation exposes canonical hash hrefs", () => {

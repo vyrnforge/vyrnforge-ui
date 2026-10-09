@@ -6,6 +6,7 @@ import {
   matchReferenceRecordRoute,
   type ReferenceLocationContext,
 } from "../../../docs/reference/referenceRuntime";
+import { getDedicatedReferencePagePolicyForRecord } from "./dedicatedReferencePagePolicy";
 import {
   docsVersions as initialDocsVersions,
   getCurrentDocsVersionId,
@@ -56,6 +57,19 @@ function getDocsLocation(context: ReferenceLocationContext): DocsLocation {
       pathname,
     );
     if (id) {
+      const dedicatedPage = getDedicatedReferencePagePolicyForRecord(
+        recordRoute.domain,
+        id,
+      );
+      if (dedicatedPage) {
+        return {
+          invalidPath: null,
+          pathname: `/${dedicatedPage.routeId}`,
+          routeId: dedicatedPage.routeId,
+          referenceRecord: null,
+        };
+      }
+
       return {
         invalidPath: null,
         pathname,
@@ -94,6 +108,21 @@ function canonicalContext(state: DocsLocationState): ReferenceLocationContext {
   };
 }
 
+function syncBrowserLocation(state: DocsLocationState) {
+  const canonicalHref = getReferenceLocationHref(
+    referenceModel,
+    canonicalContext(state),
+  );
+  const currentHref = `${window.location.search}${window.location.hash}`;
+  if (currentHref !== canonicalHref) {
+    window.history.replaceState(
+      null,
+      "",
+      `${window.location.pathname}${canonicalHref}`,
+    );
+  }
+}
+
 function recordFallbackRoute(record: ReferenceRecordSelection | null) {
   if (record?.domain === "components") return "component-reference";
   if (record?.domain === "packages") return "package-reference";
@@ -112,22 +141,13 @@ export default function App() {
   const frameworkId = locationState.context.frameworkId;
 
   useEffect(() => {
-    const syncFromBrowser = () => setLocationState(readDocsLocationState());
+    const syncFromBrowser = () => {
+      const nextState = readDocsLocationState();
+      syncBrowserLocation(nextState);
+      setLocationState(nextState);
+    };
 
-    const initialState = readDocsLocationState();
-    const canonicalHref = getReferenceLocationHref(
-      referenceModel,
-      canonicalContext(initialState),
-    );
-    const currentHref = `${window.location.search}${window.location.hash}`;
-    if (currentHref !== canonicalHref) {
-      window.history.replaceState(
-        null,
-        "",
-        `${window.location.pathname}${canonicalHref}`,
-      );
-    }
-
+    syncFromBrowser();
     window.addEventListener("popstate", syncFromBrowser);
     window.addEventListener("hashchange", syncFromBrowser);
     return () => {

@@ -1,6 +1,7 @@
 import consumerKnowledgeRaw from "../../../docs/generated/consumer-knowledge.json?raw";
 import componentMetadataRaw from "../../../docs/metadata/components.json?raw";
 import packageMetadataRaw from "../../../docs/metadata/packages.json?raw";
+import { excludeDedicatedReferenceRecords } from "./dedicatedReferencePagePolicy";
 
 export type ReferenceGuidance = {
   useWhen: string;
@@ -344,11 +345,12 @@ export function getAvailableComponentReferenceRecords(
   frameworkId: ReferenceFrameworkId,
   version?: string,
 ) {
-  return componentReferenceRecords
-    .filter((component) =>
+  return excludeDedicatedReferenceRecords(
+    "components",
+    componentReferenceRecords.filter((component) =>
       isComponentAvailableForFramework(component, frameworkId, version),
-    )
-    .sort((left, right) => left.displayName.localeCompare(right.displayName));
+    ),
+  ).sort((left, right) => left.displayName.localeCompare(right.displayName));
 }
 
 export function getComponentDocumentationCapabilities(
