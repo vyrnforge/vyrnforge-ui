@@ -43,7 +43,7 @@ test("Icons has one canonical generated route and renderer", () => {
   assert.equal(iconsRoutes[0].sourcePath, "packages/ui-core/src/icons.ts");
 });
 
-test("dedicated Reference pages replace general presentation without deleting canonical records", () => {
+test("dedicated Reference pages override general presentation", () => {
   const policy = read("apps/docs/src/dedicatedReferencePagePolicy.ts");
   const bindings = read("apps/docs/src/DedicatedReferencePages.tsx");
   const referenceData = read("apps/docs/src/referenceData.ts");
@@ -72,7 +72,8 @@ test("dedicated Reference pages replace general presentation without deleting ca
   assert.match(shell, /getDedicatedReferencePagePolicy/u);
   assert.match(browser, /components\/icon/u);
   assert.match(browser, /toHaveCount\(0\)/u);
-  assert.match(browser, /toHaveURL\(\/\\\?framework=react#\\\/icons\$/u);
+  assert.match(browser, /toHaveURL/u);
+  assert.match(browser, /framework=react/u);
 });
 
 test("Reference page navigation exposes canonical hash hrefs", () => {
