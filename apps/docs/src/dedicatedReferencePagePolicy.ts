@@ -35,8 +35,7 @@ export const dedicatedReferencePagePolicies = [
 export function getDedicatedReferencePagePolicy(route: DocsRoute) {
   return (
     dedicatedReferencePagePolicies.find(
-      (policy) =>
-        policy.routeId === route.id && policy.renderer === route.kind,
+      (policy) => policy.routeId === route.id && policy.renderer === route.kind,
     ) ?? null
   );
 }
@@ -66,7 +65,6 @@ export function excludeDedicatedReferenceRecords<T extends { id: string }>(
   records: readonly T[],
 ) {
   return records.filter(
-    (record) =>
-      !isReferenceRecordReplacedByDedicatedPage(domain, record.id),
+    (record) => !isReferenceRecordReplacedByDedicatedPage(domain, record.id),
   );
 }
