@@ -1,7 +1,7 @@
 import consumerKnowledgeRaw from "../../../docs/generated/consumer-knowledge.json?raw";
 import componentMetadataRaw from "../../../docs/metadata/components.json?raw";
 import packageMetadataRaw from "../../../docs/metadata/packages.json?raw";
-import { excludeDedicatedReferenceRecords } from "./DedicatedReferencePages";
+import { excludeDedicatedReferenceRecords } from "./dedicatedReferencePagePolicy";
 
 export type ReferenceGuidance = {
   useWhen: string;
