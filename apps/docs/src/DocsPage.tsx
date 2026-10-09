@@ -158,7 +158,7 @@ export function DocsPage({
       <MarkdownView markdown={route.content ?? ""} />
     );
 
-  if (dedicatedPage?.frame === "standalone") return pageContent;
+  if (dedicatedPage?.policy.frame === "standalone") return pageContent;
 
   return (
     <DocumentationPageTemplate
