@@ -22,35 +22,37 @@ export type DedicatedReferencePagePolicy = {
   replacesRecords: readonly DedicatedReferenceRecord[];
 };
 
-export const dedicatedReferencePagePolicies = [
-  {
-    routeId: "icons",
-    renderer: "icon-reference",
-    frame: "standard",
-    layoutMode: "catalog",
-    replacesRecords: [{ domain: "components", id: "icon" }],
-  },
-] as const satisfies readonly DedicatedReferencePagePolicy[];
+const iconsPolicy: DedicatedReferencePagePolicy = {
+  routeId: "icons",
+  renderer: "icon-reference",
+  frame: "standard",
+  layoutMode: "catalog",
+  replacesRecords: [{ domain: "components", id: "icon" }],
+};
+
+export const dedicatedReferencePagePolicies = [iconsPolicy] as const;
 
 export function getDedicatedReferencePagePolicy(route: DocsRoute) {
-  return (
-    dedicatedReferencePagePolicies.find(
-      (policy) => policy.routeId === route.id && policy.renderer === route.kind,
-    ) ?? null
-  );
+  for (const policy of dedicatedReferencePagePolicies) {
+    if (policy.routeId === route.id && policy.renderer === route.kind) {
+      return policy;
+    }
+  }
+  return null;
 }
 
 export function getDedicatedReferencePagePolicyForRecord(
   domain: string,
   id: string,
 ) {
-  return (
-    dedicatedReferencePagePolicies.find((policy) =>
-      policy.replacesRecords.some(
-        (record) => record.domain === domain && record.id === id,
-      ),
-    ) ?? null
-  );
+  for (const policy of dedicatedReferencePagePolicies) {
+    for (const record of policy.replacesRecords) {
+      if (record.domain === domain && record.id === id) {
+        return policy;
+      }
+    }
+  }
+  return null;
 }
 
 export function isReferenceRecordReplacedByDedicatedPage(
@@ -64,7 +66,11 @@ export function excludeDedicatedReferenceRecords<T extends { id: string }>(
   domain: string,
   records: readonly T[],
 ) {
-  return records.filter(
-    (record) => !isReferenceRecordReplacedByDedicatedPage(domain, record.id),
-  );
+  const visibleRecords: T[] = [];
+  for (const record of records) {
+    if (!isReferenceRecordReplacedByDedicatedPage(domain, record.id)) {
+      visibleRecords.push(record);
+    }
+  }
+  return visibleRecords;
 }
