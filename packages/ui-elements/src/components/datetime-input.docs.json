@@ -1,0 +1,27 @@
+{
+  "$schema": "../../../../docs/metadata/component-documentation.schema.json",
+  "schemaVersion": 1,
+  "componentId": "datetime-input",
+  "owner": {
+    "package": "@vyrnforge/ui-elements",
+    "source": "packages/ui-elements/src/components/inputs.ts"
+  },
+  "purpose": "Native input type='datetime-local' control aligned with VyrnForge input styling.",
+  "guidance": {
+    "useWhen": "Use for simple local date/time scheduling values.",
+    "avoidWhen": "Avoid for timezone-heavy scheduling workflows.",
+    "aiUsageNotes": "Use native datetime-local behavior; do not add date libraries."
+  },
+  "limitations": ["Avoid for timezone-heavy scheduling workflows."],
+  "relatedComponents": ["DateInput", "Field"],
+  "accessibility": {
+    "notes": "Label the control and explain expected timezone context where needed.",
+    "evidenceRefs": []
+  },
+  "theming": {
+    "classes": ["vf-datetime-input", "vf-input"],
+    "variables": []
+  },
+  "examples": [],
+  "releaseNotes": []
+}
