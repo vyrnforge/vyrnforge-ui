@@ -6,6 +6,7 @@ import {
   matchReferenceRecordRoute,
   type ReferenceLocationContext,
 } from "../../../docs/reference/referenceRuntime";
+import { getDedicatedReferencePageForRecord } from "./DedicatedReferencePages";
 import {
   docsVersions as initialDocsVersions,
   getCurrentDocsVersionId,
@@ -56,6 +57,19 @@ function getDocsLocation(context: ReferenceLocationContext): DocsLocation {
       pathname,
     );
     if (id) {
+      const dedicatedPage = getDedicatedReferencePageForRecord(
+        recordRoute.domain,
+        id,
+      );
+      if (dedicatedPage) {
+        return {
+          invalidPath: null,
+          pathname: `/${dedicatedPage.routeId}`,
+          routeId: dedicatedPage.routeId,
+          referenceRecord: null,
+        };
+      }
+
       return {
         invalidPath: null,
         pathname,
