@@ -1,7 +1,7 @@
 import { useState, type ReactNode } from "react";
 import { Button, Drawer, Select } from "@vyrnforge/ui-components";
 import type { ReferenceRecordSelection } from "./App";
-import { getDedicatedReferencePage } from "./DedicatedReferencePages";
+import { getDedicatedReferencePagePolicy } from "./dedicatedReferencePagePolicy";
 import {
   docsFrameworks,
   getDocumentationReadiness,
@@ -50,7 +50,7 @@ function getLayoutMode(
   route: DocsRoute,
   referenceRecord: ReferenceRecordSelection | null,
 ): ReferenceLayoutMode {
-  const dedicatedPage = getDedicatedReferencePage(route);
+  const dedicatedPage = getDedicatedReferencePagePolicy(route);
   if (dedicatedPage) return dedicatedPage.layoutMode;
   if (route.kind === "example" || route.kind === "executable-examples") {
     return "example";
