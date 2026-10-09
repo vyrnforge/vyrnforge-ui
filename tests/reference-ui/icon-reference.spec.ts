@@ -58,9 +58,7 @@ test.describe("Icon Reference catalog", () => {
     ).toBeVisible();
   });
 
-  test("replaces the general Icon component presentation with the dedicated catalog", async ({
-    page,
-  }) => {
+  test("replaces the general Icon record", async ({ page }) => {
     await page.goto("/?framework=react#/component-reference");
 
     const sidebar = page.locator(".vf-reference-shell__sidebar");
