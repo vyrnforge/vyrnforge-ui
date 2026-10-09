@@ -6,7 +6,7 @@ import {
   matchReferenceRecordRoute,
   type ReferenceLocationContext,
 } from "../../../docs/reference/referenceRuntime";
-import { getDedicatedReferencePageForRecord } from "./DedicatedReferencePages";
+import { getDedicatedReferencePagePolicyForRecord } from "./dedicatedReferencePagePolicy";
 import {
   docsVersions as initialDocsVersions,
   getCurrentDocsVersionId,
@@ -57,7 +57,7 @@ function getDocsLocation(context: ReferenceLocationContext): DocsLocation {
       pathname,
     );
     if (id) {
-      const dedicatedPage = getDedicatedReferencePageForRecord(
+      const dedicatedPage = getDedicatedReferencePagePolicyForRecord(
         recordRoute.domain,
         id,
       );
