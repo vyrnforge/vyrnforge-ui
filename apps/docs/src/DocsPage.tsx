@@ -103,17 +103,33 @@ export function DocsPage({
     );
   }
 
+  const dedicatedPage = getDedicatedReferencePage(route);
+  if (dedicatedPage) {
+    const dedicatedContent = renderDedicatedReferencePage(dedicatedPage, {
+      frameworkId,
+      route,
+      version: routeResolution.context.version,
+    });
+
+    if (dedicatedPage.policy.frame === "standalone") return dedicatedContent;
+
+    return (
+      <DocumentationPageTemplate
+        description={route.description}
+        status={routeResolution.status}
+        template={template}
+        title={route.title}
+      >
+        {dedicatedContent}
+      </DocumentationPageTemplate>
+    );
+  }
+
   const componentId =
     referenceRecord?.domain === "components" ? referenceRecord.id : null;
-  const dedicatedPage = getDedicatedReferencePage(route);
 
-  const pageContent = dedicatedPage
-    ? renderDedicatedReferencePage(dedicatedPage, {
-        frameworkId,
-        route,
-        version: routeResolution.context.version,
-      })
-    : route.kind === "example" && route.exampleId ? (
+  const pageContent =
+    route.kind === "example" && route.exampleId ? (
       <MigratedExamplePage
         exampleId={route.exampleId}
         frameworkId={frameworkId}
@@ -155,8 +171,6 @@ export function DocsPage({
     ) : (
       <MarkdownView markdown={route.content ?? ""} />
     );
-
-  if (dedicatedPage?.policy.frame === "standalone") return pageContent;
 
   return (
     <DocumentationPageTemplate
