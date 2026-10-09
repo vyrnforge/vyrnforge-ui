@@ -22,7 +22,26 @@ test("all public docs render through the unified Reference shell", () => {
   assert.match(page, /PackageReferencePage/u);
   assert.match(page, /DiscoveryReferencePage/u);
   assert.match(page, /ExecutableExamplesPage/u);
-  assert.match(page, /IconReferencePage/u);
+});
+
+test("custom Reference pages use an explicit renderer registry outside general component dispatch", () => {
+  const metadata = JSON.parse(read("docs/metadata/documentation-pages.json"));
+  const page = read("apps/docs/src/DocsPage.tsx");
+  const customRenderers = read("apps/docs/src/customReferenceRenderers.tsx");
+  const icons = metadata.pages.find((candidate) => candidate.id === "icons");
+
+  assert.ok(icons);
+  assert.equal(icons.type, "foundation");
+  assert.equal(icons.renderer, "icon-reference");
+  assert.notEqual(icons.recordDomain, "components");
+  assert.match(page, /getCustomReferenceRenderer\(route\.kind\)/u);
+  assert.doesNotMatch(page, /IconReferencePage/u);
+  assert.match(customRenderers, /"icon-reference"/u);
+  assert.match(customRenderers, /<IconReferencePage/u);
+  assert.match(
+    customRenderers,
+    /satisfies Record<CustomReferenceRendererKind, CustomReferenceRenderer>/u,
+  );
 });
 
 test("Icons has one canonical generated route and renderer", () => {
@@ -36,7 +55,9 @@ test("Icons has one canonical generated route and renderer", () => {
   assert.equal(iconsRoutes.length, 1);
   assert.equal(iconsRoutes[0].id, "icons");
   assert.equal(iconsRoutes[0].route, "/icons");
+  assert.equal(iconsRoutes[0].type, "foundation");
   assert.equal(iconsRoutes[0].renderer, "icon-reference");
+  assert.notEqual(iconsRoutes[0].recordDomain, "components");
   assert.equal(iconsRoutes[0].sourcePath, "packages/ui-core/src/icons.ts");
 });
 
