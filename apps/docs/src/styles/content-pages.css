@@ -37,7 +37,11 @@
   overflow: hidden;
   padding: clamp(var(--vf-space-8, 32px), 6vw, var(--vf-space-16, 64px));
   border: 1px solid var(--vf-border, #e2e8f0);
-  border-radius: clamp(var(--vf-radius-xl, 12px), 3vw, var(--vf-radius-2xl, 24px));
+  border-radius: clamp(
+    var(--vf-radius-xl, 12px),
+    3vw,
+    var(--vf-radius-2xl, 24px)
+  );
   background:
     linear-gradient(
       145deg,
