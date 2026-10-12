@@ -1,6 +1,8 @@
 .vf-reference-shell__header-inner {
-  grid-template-columns:
-    minmax(0, var(--vf-reference-shell-sidebar-width)) minmax(0, 1fr) auto;
+  grid-template-columns: minmax(
+      0,
+      var(--vf-reference-shell-sidebar-width)
+    ) minmax(0, 1fr) auto;
   width: 100%;
   margin-inline: 0;
 }
