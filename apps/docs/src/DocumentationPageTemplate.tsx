@@ -3,9 +3,18 @@ import { Badge, PageHeader, Text } from "@vyrnforge/ui-components";
 import type { DocumentationReadinessStatus } from "../../../docs/reference/documentationAvailability";
 import type { DocsTemplateDefinition } from "./referenceRoutes";
 
+export type DocumentationPageFamily =
+  | "landing"
+  | "reading"
+  | "catalog"
+  | "reference"
+  | "showcase"
+  | "dedicated";
+
 type DocumentationPageTemplateProps = {
   children: ReactNode;
   description?: string;
+  family?: DocumentationPageFamily;
   status: DocumentationReadinessStatus;
   template: DocsTemplateDefinition;
   title: string;
@@ -14,20 +23,19 @@ type DocumentationPageTemplateProps = {
 export function DocumentationPageTemplate({
   children,
   description,
+  family = "reading",
   status,
   template,
   title,
 }: DocumentationPageTemplateProps) {
   return (
     <article
-      className={`vf-reference-page vf-reference-page--template-${template.id}`}
+      className={`vf-reference-page vf-reference-page--family-${family} vf-reference-page--template-${template.id}`}
       data-document-template={template.id}
+      data-page-family={family}
       data-template-sections={template.sections.join(" ")}
     >
-      <section
-        aria-label="Reference page introduction"
-        className="vf-reference-page__hero"
-      >
+      <header className="vf-reference-page__hero">
         <div className="vf-reference-page__hero-copy">
           <div className="vf-reference-page__meta">
             <Text className="vf-reference-page__eyebrow" size="sm">
@@ -39,7 +47,7 @@ export function DocumentationPageTemplate({
           </div>
           <PageHeader description={description} title={title} />
         </div>
-      </section>
+      </header>
       <div className="vf-reference-page__body">{children}</div>
     </article>
   );
