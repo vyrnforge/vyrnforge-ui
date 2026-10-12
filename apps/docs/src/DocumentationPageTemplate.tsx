@@ -4,12 +4,21 @@ import type { DocumentationReadinessStatus } from "../../../docs/reference/docum
 import type { DocsTemplateDefinition } from "./referenceRoutes";
 
 export type DocumentationPageFamily =
-  "landing" | "reading" | "catalog" | "reference" | "showcase" | "dedicated";
+  | "landing"
+  | "reading"
+  | "catalog"
+  | "reference"
+  | "showcase"
+  | "dedicated";
 
 type DocumentationPageTemplateProps = {
   children: ReactNode;
   description?: string;
   family?: DocumentationPageFamily;
+  heroActions?: ReactNode;
+  heroAside?: ReactNode;
+  heroDescription?: string;
+  heroTitle?: string;
   status: DocumentationReadinessStatus;
   template: DocsTemplateDefinition;
   title: string;
@@ -19,6 +28,10 @@ export function DocumentationPageTemplate({
   children,
   description,
   family = "reading",
+  heroActions,
+  heroAside,
+  heroDescription,
+  heroTitle,
   status,
   template,
   title,
@@ -40,16 +53,27 @@ export function DocumentationPageTemplate({
         aria-label="Reference page introduction"
         className="vf-reference-page__hero"
       >
-        <div className="vf-reference-page__hero-copy">
-          <div className="vf-reference-page__meta">
-            <Text className="vf-reference-page__eyebrow" size="sm">
-              {template.label}
-            </Text>
-            <Badge size="sm" tone="subtle" variant="success">
-              {status}
-            </Badge>
+        <div className="vf-reference-page__hero-layout">
+          <div className="vf-reference-page__hero-copy">
+            <div className="vf-reference-page__meta">
+              <Text className="vf-reference-page__eyebrow" size="sm">
+                {template.label}
+              </Text>
+              <Badge size="sm" tone="subtle" variant="success">
+                {status}
+              </Badge>
+            </div>
+            <PageHeader
+              description={heroDescription ?? description}
+              title={heroTitle ?? title}
+            />
+            {heroActions ? (
+              <div className="vf-reference-page__hero-actions">{heroActions}</div>
+            ) : null}
           </div>
-          <PageHeader description={description} title={title} />
+          {heroAside ? (
+            <aside className="vf-reference-page__hero-aside">{heroAside}</aside>
+          ) : null}
         </div>
       </header>
       <div className="vf-reference-page__body">{children}</div>
