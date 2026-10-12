@@ -1,7 +1,6 @@
 import { type ReactNode } from "react";
 import { Select } from "@vyrnforge/ui-components";
 import type { ReferenceRecordSelection } from "./App";
-import { getDedicatedReferencePagePolicy } from "./dedicatedReferencePagePolicy";
 import { DocumentationAppShell } from "./DocumentationAppShell";
 import {
   docsFrameworks,
@@ -29,9 +28,6 @@ import {
   type DocsRouteResolution,
 } from "./referenceRoutes";
 
-export type ReferenceLayoutMode =
-  "reading" | "reference" | "catalog" | "example" | "wide";
-
 type ReferenceShellProps = {
   activeRoute: DocsRoute;
   docsVersion: DocsVersion;
@@ -46,27 +42,6 @@ type ReferenceShellProps = {
   routeMember: string | null;
   routePath: string;
 };
-
-function getLayoutMode(
-  route: DocsRoute,
-  referenceRecord: ReferenceRecordSelection | null,
-): ReferenceLayoutMode {
-  const dedicatedPage = getDedicatedReferencePagePolicy(route);
-  if (dedicatedPage) return dedicatedPage.layoutMode;
-  if (route.kind === "example" || route.kind === "executable-examples") {
-    return "example";
-  }
-  if (route.template === "advanced-module") return "wide";
-  if (
-    route.kind === "discovery-reference" ||
-    route.kind === "component-reference" ||
-    route.kind === "package-reference"
-  ) {
-    return referenceRecord ? "reference" : "catalog";
-  }
-  if (route.template === "package") return "reference";
-  return "reading";
-}
 
 function recordFallbackRoute(record: ReferenceRecordSelection | null) {
   if (record?.domain === "components") return "component-reference";
@@ -88,7 +63,6 @@ export function ReferenceShell({
   routeMember,
   routePath,
 }: ReferenceShellProps) {
-  const layoutMode = getLayoutMode(activeRoute, referenceRecord);
   const frameworkVersions = getDocsVersionsForFramework(
     framework.id,
     docsVersions,
@@ -215,21 +189,16 @@ export function ReferenceShell({
       primaryNavigation={primaryNavigation}
       utilityControls={utilityControls}
     >
-      <div
-        className="vf-reference-page-viewport"
-        data-reference-layout={layoutMode}
-      >
-        <DocsPage
-          frameworkId={framework.id}
-          invalidPath={invalidPath}
-          onFrameworkChange={onFrameworkChange}
-          onRouteChange={navigate}
-          referenceRecord={referenceRecord}
-          route={activeRoute}
-          routeResolution={routeResolution}
-          version={docsVersion.version}
-        />
-      </div>
+      <DocsPage
+        frameworkId={framework.id}
+        invalidPath={invalidPath}
+        onFrameworkChange={onFrameworkChange}
+        onRouteChange={navigate}
+        referenceRecord={referenceRecord}
+        route={activeRoute}
+        routeResolution={routeResolution}
+        version={docsVersion.version}
+      />
     </DocumentationAppShell>
   );
 }
