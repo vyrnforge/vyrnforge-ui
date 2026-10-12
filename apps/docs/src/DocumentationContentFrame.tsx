@@ -49,11 +49,7 @@ export function DocumentationContentFrame({
     .join(" ");
 
   return (
-    <article
-      className={frameClassName}
-      data-content-layout={layout}
-      {...props}
-    >
+    <article className={frameClassName} data-content-layout={layout} {...props}>
       <div className="vf-docs-content-frame__header vf-reference-page__hero">
         <div className="vf-docs-content-frame__header-layout vf-reference-page__hero-layout">
           <div className="vf-docs-content-frame__header-copy vf-reference-page__hero-copy">
