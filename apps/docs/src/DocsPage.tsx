@@ -6,6 +6,7 @@ import {
   getDedicatedReferencePage,
   renderDedicatedReferencePage,
 } from "./DedicatedReferencePages";
+import { getDocumentationPageFamily } from "./documentationPageFamily";
 import type { DocsFrameworkId } from "./docsContext";
 import { DocumentationPageTemplate } from "./DocumentationPageTemplate";
 import { GuidePage } from "./GuidePage";
@@ -35,13 +36,13 @@ export function DocsPage({
   route,
   frameworkId,
   invalidPath,
-  onFrameworkChange,
   onRouteChange,
   referenceRecord,
   routeResolution,
   version,
 }: DocsPageProps) {
   const template = getDocumentationTemplate(route.template);
+  const family = getDocumentationPageFamily(route, referenceRecord);
 
   if (invalidPath) {
     return (
@@ -69,6 +70,7 @@ export function DocsPage({
     return (
       <DocumentationPageTemplate
         description="This document is not available for the selected framework and documentation version."
+        family={family}
         status={routeResolution.status}
         template={template}
         title={route.title}
@@ -91,18 +93,6 @@ export function DocsPage({
     );
   }
 
-  if (route.template === "guide") {
-    return (
-      <GuidePage
-        frameworkId={frameworkId}
-        onFrameworkChange={onFrameworkChange}
-        onRouteChange={onRouteChange}
-        route={route}
-        status={routeResolution.status}
-      />
-    );
-  }
-
   const dedicatedPage = getDedicatedReferencePage(route);
   if (dedicatedPage) {
     const dedicatedContent = renderDedicatedReferencePage(dedicatedPage, {
@@ -116,6 +106,7 @@ export function DocsPage({
     return (
       <DocumentationPageTemplate
         description={route.description}
+        family="dedicated"
         status={routeResolution.status}
         template={template}
         title={route.title}
@@ -129,7 +120,9 @@ export function DocsPage({
     referenceRecord?.domain === "components" ? referenceRecord.id : null;
 
   const pageContent =
-    route.kind === "example" && route.exampleId ? (
+    route.template === "guide" ? (
+      <GuidePage onRouteChange={onRouteChange} route={route} />
+    ) : route.kind === "example" && route.exampleId ? (
       <MigratedExamplePage
         exampleId={route.exampleId}
         frameworkId={frameworkId}
@@ -175,6 +168,7 @@ export function DocsPage({
   return (
     <DocumentationPageTemplate
       description={route.description}
+      family={family}
       status={routeResolution.status}
       template={template}
       title={route.title}
