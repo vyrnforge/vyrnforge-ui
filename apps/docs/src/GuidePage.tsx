@@ -52,7 +52,9 @@ const principles = [
   },
 ] as const;
 
-function OverviewGuide({ onRouteChange }: Pick<GuidePageProps, "onRouteChange">) {
+function OverviewGuide({
+  onRouteChange,
+}: Pick<GuidePageProps, "onRouteChange">) {
   return (
     <div className="vf-docs-landing">
       <section
