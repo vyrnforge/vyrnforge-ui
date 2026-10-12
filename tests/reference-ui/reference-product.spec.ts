@@ -42,13 +42,10 @@ async function expectNoPageOverflow(page: Page) {
 }
 
 async function expectReferenceHero(page: Page) {
-  const hero = page.locator(".vf-reference-page__hero");
+  const hero = page.locator(".vf-docs-content-frame__header");
   await expect(hero).toBeVisible();
-  await expect(hero).toHaveAttribute(
-    "aria-label",
-    "Reference page introduction",
-  );
-  await expect(hero.locator(".vf-reference-page__meta")).toBeVisible();
+  await expect(hero.locator(".vf-page-header")).toBeVisible();
+  await expect(hero.locator(".vf-reference-page__eyebrow")).toBeVisible();
   await expect(hero.getByRole("heading").first()).toBeVisible();
   const bounds = await hero.evaluate((element) => {
     const rect = element.getBoundingClientRect();
@@ -171,8 +168,8 @@ test.describe("VyrnForge Reference product", () => {
 
     for (const [route, layout] of routes) {
       await openReference(page, route);
-      await expect(page.locator(".vf-reference-page-viewport")).toHaveAttribute(
-        "data-reference-layout",
+      await expect(page.locator(".vf-docs-content-frame")).toHaveAttribute(
+        "data-content-layout",
         layout,
       );
       await expect(
@@ -203,6 +200,21 @@ test.describe("VyrnForge Reference product", () => {
       }
       await capture(page, testInfo, `reference-${route}`);
     }
+  });
+
+  test("reading pages use the content frame outline and footer navigation", async ({
+    page,
+  }) => {
+    await openReference(page, "getting-started");
+
+    await expect(
+      page.locator(".vf-docs-content-frame__local-navigation"),
+    ).toBeVisible();
+    await expect(page.getByRole("navigation", { name: "On this page" })).toBeVisible();
+    await expect(page.locator(".vf-docs-content-frame__footer")).toBeVisible();
+    await expect(
+      page.getByRole("button", { name: /^Next:/u }),
+    ).toBeVisible();
   });
 
   test("component detail keeps global framework context and human guidance before API", async ({
