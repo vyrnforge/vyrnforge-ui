@@ -204,68 +204,77 @@ test("Docs filter discovers selected-framework API members without restoring a s
   assert.doesNotMatch(docsNav, /ReferenceSearchPage/u);
 });
 
-test("public routes separate app chrome from documentation content framing", () => {
-  const app = read("apps/docs/src/App.tsx");
-  const appShell = read("apps/docs/src/DocumentationAppShell.tsx");
-  const shell = read("apps/docs/src/ReferenceShell.tsx");
-  const contentFrame = read("apps/docs/src/DocumentationContentFrame.tsx");
-  const contentLayout = read("apps/docs/src/documentationContentLayout.ts");
-  const docsPage = read("apps/docs/src/DocsPage.tsx");
-  const navigation = read("apps/docs/src/ReferenceNavigation.tsx");
-  const shellStyles = read("apps/docs/src/styles/documentation-app-shell.css");
-  const frameStyles = read(
-    "apps/docs/src/styles/documentation-content-frame.css",
-  );
-  assert.match(app, /import \{ ReferenceShell \} from "\.\/ReferenceShell"/u);
-  assert.match(app, /<ReferenceShell/u);
-  assert.doesNotMatch(app, /DocsShell|GuideShell/u);
-  assert.doesNotMatch(shell, /DocsShell|GuideShell|DocsNav/u);
-
-  for (const retiredPath of [
-    "apps/docs/src/DocsShell.tsx",
-    "apps/docs/src/GuideShell.tsx",
-    "apps/docs/src/DocsNav.tsx",
-  ]) {
-    assert(retiredReferencePaths.includes(retiredPath));
-  }
-
-  const advancedModulePage = read("apps/docs/src/AdvancedModulePage.tsx");
-  assert.match(docsPage, /AdvancedModulePage/u);
-  assert.match(advancedModulePage, /docsRoutes/u);
-  assert.match(advancedModulePage, /isDocumentationReady/u);
-  assert.doesNotMatch(advancedModulePage, /DataGridShell|GridDocsShell/u);
-  assert.doesNotMatch(shell, /DocsNav/u);
-  assert.match(shell, /ReferenceNavigation/u);
-  assert.match(shell, /DocumentationAppShell/u);
-  assert.doesNotMatch(shell, /\bDrawer\b|Skip to content/u);
-  assert.doesNotMatch(shell, /data-reference-layout|ReferenceLayoutMode/u);
-  assert.match(appShell, /\bAppShell\b/u);
-  assert.match(appShell, /\bDrawer\b/u);
-  assert.match(appShell, /Skip to content/u);
-  assert.match(docsPage, /getDocumentationContentLayout/u);
-  assert.match(docsPage, /<DocumentationPageTemplate/u);
-  assert.match(contentFrame, /\bBreadcrumbs\b/u);
-  assert.match(contentFrame, /\bPageHeader\b/u);
-  assert.match(contentFrame, /data-content-layout=\{layout\}/u);
-  assert.match(contentFrame, /vf-docs-content-frame__local-navigation/u);
-  assert.match(contentFrame, /vf-docs-content-frame__footer/u);
-
-  for (const mode of ["reading", "reference", "catalog", "example", "wide"]) {
-    assert.match(contentLayout, new RegExp(`"${mode}"`, "u"));
-    assert.match(
-      frameStyles,
-      new RegExp(`data-content-layout="${mode}"`, "u"),
+test(
+  "public routes separate app chrome from documentation content framing",
+  () => {
+    const app = read("apps/docs/src/App.tsx");
+    const appShell = read("apps/docs/src/DocumentationAppShell.tsx");
+    const shell = read("apps/docs/src/ReferenceShell.tsx");
+    const contentFrame = read("apps/docs/src/DocumentationContentFrame.tsx");
+    const contentLayout = read("apps/docs/src/documentationContentLayout.ts");
+    const docsPage = read("apps/docs/src/DocsPage.tsx");
+    const navigation = read("apps/docs/src/ReferenceNavigation.tsx");
+    const shellStyles = read("apps/docs/src/styles/documentation-app-shell.css");
+    const frameStyles = read(
+      "apps/docs/src/styles/documentation-content-frame.css",
     );
-  }
+    assert.match(app, /import \{ ReferenceShell \} from "\.\/ReferenceShell"/u);
+    assert.match(app, /<ReferenceShell/u);
+    assert.doesNotMatch(app, /DocsShell|GuideShell/u);
+    assert.doesNotMatch(shell, /DocsShell|GuideShell|DocsNav/u);
 
-  assert.doesNotMatch(
-    shellStyles,
-    /vf-docs-(?:component|package|token|live-example|api-table)/u,
-  );
-  assert.match(navigation, /documentationSearchRecords/u);
-  assert.match(navigation, /publicDocsSections/u);
-  assert.match(navigation, /getReferenceLocationHref/u);
-});
+    for (const retiredPath of [
+      "apps/docs/src/DocsShell.tsx",
+      "apps/docs/src/GuideShell.tsx",
+      "apps/docs/src/DocsNav.tsx",
+    ]) {
+      assert(retiredReferencePaths.includes(retiredPath));
+    }
+
+    const advancedModulePage = read("apps/docs/src/AdvancedModulePage.tsx");
+    assert.match(docsPage, /AdvancedModulePage/u);
+    assert.match(advancedModulePage, /docsRoutes/u);
+    assert.match(advancedModulePage, /isDocumentationReady/u);
+    assert.doesNotMatch(advancedModulePage, /DataGridShell|GridDocsShell/u);
+    assert.doesNotMatch(shell, /DocsNav/u);
+    assert.match(shell, /ReferenceNavigation/u);
+    assert.match(shell, /DocumentationAppShell/u);
+    assert.doesNotMatch(shell, /\bDrawer\b|Skip to content/u);
+    assert.doesNotMatch(shell, /data-reference-layout|ReferenceLayoutMode/u);
+    assert.match(appShell, /\bAppShell\b/u);
+    assert.match(appShell, /\bDrawer\b/u);
+    assert.match(appShell, /Skip to content/u);
+    assert.match(docsPage, /getDocumentationContentLayout/u);
+    assert.match(docsPage, /<DocumentationPageTemplate/u);
+    assert.match(contentFrame, /\bBreadcrumbs\b/u);
+    assert.match(contentFrame, /\bPageHeader\b/u);
+    assert.match(contentFrame, /data-content-layout=\{layout\}/u);
+    assert.match(contentFrame, /vf-docs-content-frame__local-navigation/u);
+    assert.match(contentFrame, /vf-docs-content-frame__footer/u);
+
+    for (const mode of [
+      "reading",
+      "reference",
+      "catalog",
+      "example",
+      "wide",
+    ]) {
+      assert.match(contentLayout, new RegExp(`"${mode}"`, "u"));
+      assert.match(
+        frameStyles,
+        new RegExp(`data-content-layout="${mode}"`, "u"),
+      );
+    }
+
+    assert.doesNotMatch(
+      shellStyles,
+      /vf-docs-(?:component|package|token|live-example|api-table)/u,
+    );
+    assert.match(navigation, /documentationSearchRecords/u);
+    assert.match(navigation, /publicDocsSections/u);
+    assert.match(navigation, /getReferenceLocationHref/u);
+  },
+);
 
 test("Reference navigation stays registry-driven and route changes restore reading focus", () => {
   const app = read("apps/docs/src/App.tsx");
