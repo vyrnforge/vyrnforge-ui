@@ -1,11 +1,13 @@
 import type { ReactNode } from "react";
 import { Badge, PageHeader, Text } from "@vyrnforge/ui-components";
 import type { DocumentationReadinessStatus } from "../../../docs/reference/documentationAvailability";
+import type { DocumentationPageFamily } from "./documentationPageFamily";
 import type { DocsTemplateDefinition } from "./referenceRoutes";
 
 type DocumentationPageTemplateProps = {
   children: ReactNode;
   description?: string;
+  family: DocumentationPageFamily;
   status: DocumentationReadinessStatus;
   template: DocsTemplateDefinition;
   title: string;
@@ -14,6 +16,7 @@ type DocumentationPageTemplateProps = {
 export function DocumentationPageTemplate({
   children,
   description,
+  family,
   status,
   template,
   title,
@@ -21,6 +24,7 @@ export function DocumentationPageTemplate({
   return (
     <article
       className={`vf-reference-page vf-reference-page--template-${template.id}`}
+      data-document-family={family}
       data-document-template={template.id}
       data-template-sections={template.sections.join(" ")}
     >
