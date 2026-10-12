@@ -37,12 +37,7 @@ export function DocumentationAppShell({
       </button>
 
       {primaryNavigation ? (
-        <nav
-          aria-label="Primary documentation"
-          className="vf-docs-app-shell__primary"
-        >
-          {primaryNavigation}
-        </nav>
+        <div className="vf-docs-app-shell__primary">{primaryNavigation}</div>
       ) : null}
 
       <div className="vf-docs-app-shell__utilities">
