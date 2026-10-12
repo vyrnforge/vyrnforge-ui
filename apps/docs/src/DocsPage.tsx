@@ -76,7 +76,7 @@ function getReadingPageNavigation(
   if (!previous && !next) return null;
 
   return (
-    <Inline gap="sm" justify="space-between">
+    <Inline gap="sm" justify="between">
       {previous ? (
         <Button onClick={() => onRouteChange(previous.id)} variant="ghost">
           Previous: {previous.title}
