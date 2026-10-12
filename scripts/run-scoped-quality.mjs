@@ -122,8 +122,25 @@ const buildPackages = orderSelectedPackages(
   expandWorkspaceDependencyClosure(selectedPackages),
 );
 
+try {
+  runNpm(["run", "format:check"]);
+} catch (error) {
+  runNpm([
+    "exec",
+    "--",
+    "prettier",
+    "--write",
+    "scripts/documentation-template-contract.test.mjs",
+  ]);
+  execFileSync(
+    "git",
+    ["diff", "--", "scripts/documentation-template-contract.test.mjs"],
+    { cwd: root, stdio: "inherit" },
+  );
+  throw error;
+}
+
 for (const command of [
-  "format:check",
   "lint",
   "lint:css",
   "verify:documentation-current",
