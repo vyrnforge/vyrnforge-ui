@@ -239,7 +239,10 @@ test("public routes separate app chrome from documentation content framing", () 
   assert.match(shell, /ReferenceNavigation/u);
   assert.match(shell, /DocumentationAppShell/u);
   assert.doesNotMatch(shell, /\bDrawer\b|Skip to content/u);
-  assert.doesNotMatch(shell, /data-reference-layout|ReferenceLayoutMode/u);
+  assert.doesNotMatch(
+    shell,
+    /data-reference-layout|ReferenceLayoutMode/u,
+  );
   assert.match(appShell, /\bAppShell\b/u);
   assert.match(appShell, /\bDrawer\b/u);
   assert.match(appShell, /Skip to content/u);
@@ -251,7 +254,13 @@ test("public routes separate app chrome from documentation content framing", () 
   assert.match(contentFrame, /vf-docs-content-frame__local-navigation/u);
   assert.match(contentFrame, /vf-docs-content-frame__footer/u);
 
-  for (const mode of ["reading", "reference", "catalog", "example", "wide"]) {
+  for (const mode of [
+    "reading",
+    "reference",
+    "catalog",
+    "example",
+    "wide",
+  ]) {
     assert.match(contentLayout, new RegExp(`"${mode}"`, "u"));
     assert.match(
       frameStyles,
