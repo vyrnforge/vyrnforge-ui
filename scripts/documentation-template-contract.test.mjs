@@ -66,13 +66,21 @@ test("Docs rendering selects the page template from generated registry metadata"
   assert.doesNotMatch(docsPage, /route\.type\s*===\s*["']component["']/u);
 });
 
-test("guide template owns the public guide experience", () => {
+test("guide content uses the shared public page shell", () => {
   const docsPage = readFileSync(
     path.join(root, "apps/docs/src/DocsPage.tsx"),
     "utf8",
   );
   const guidePage = readFileSync(
     path.join(root, "apps/docs/src/GuidePage.tsx"),
+    "utf8",
+  );
+  const pageTemplate = readFileSync(
+    path.join(root, "apps/docs/src/DocumentationPageTemplate.tsx"),
+    "utf8",
+  );
+  const pageFamily = readFileSync(
+    path.join(root, "apps/docs/src/documentationPageFamily.ts"),
     "utf8",
   );
   const referenceShell = readFileSync(
@@ -82,19 +90,26 @@ test("guide template owns the public guide experience", () => {
   const main = readFileSync(path.join(root, "apps/docs/src/main.tsx"), "utf8");
 
   assert.equal(docsPage.includes('route.template === "guide"'), true);
+  assert.match(docsPage, /getDocumentationPageFamily\(route, referenceRecord\)/u);
   assert.match(docsPage, /<GuidePage/u);
-  assert.match(guidePage, /data-document-template="guide"/u);
+  assert.match(docsPage, /<DocumentationPageTemplate/u);
+  assert.match(docsPage, /family=\{family\}/u);
+  assert.match(pageTemplate, /data-document-template=\{template\.id\}/u);
+  assert.match(pageTemplate, /data-document-family=\{family\}/u);
+  assert.match(pageTemplate, /vf-reference-page--\$\{family\}/u);
+  assert.doesNotMatch(guidePage, /data-document-template="guide"/u);
+  assert.doesNotMatch(guidePage, /vf-docs-guide__hero/u);
   assert.match(guidePage, /Framework surface/u);
-  assert.match(guidePage, /Build once\. Stay native to every framework\./u);
-  assert.match(guidePage, /Selected framework surface/u);
   assert.match(guidePage, /Run framework examples/u);
   assert.match(guidePage, /className="vf-docs-guide__outline"/u);
   assert.match(guidePage, /splitGuideSections/u);
-  assert.match(guidePage, /vf-docs-guide__hero-context/u);
   assert.match(guidePage, /vf-docs-guide__prose/u);
+  assert.match(pageFamily, /route\.section === "data-grid"/u);
+  assert.match(pageFamily, /return "legacy"/u);
   assert.match(referenceShell, /className="vf-reference-shell"/u);
   assert.match(referenceShell, /<DocsPage/u);
   assert.doesNotMatch(referenceShell, /GuideShell|DocsShell|DocsNav/u);
+  assert.equal(main.includes("styles/content-page.css"), true);
   assert.equal(main.includes("styles/guide.css"), true);
   assert.equal(main.includes("styles/docs-overview.css"), false);
   assert.doesNotMatch(docsPage, /OverviewPage/u);
