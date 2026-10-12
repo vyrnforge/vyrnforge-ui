@@ -30,11 +30,7 @@ import {
 } from "./referenceRoutes";
 
 export type ReferenceLayoutMode =
-  | "reading"
-  | "reference"
-  | "catalog"
-  | "example"
-  | "wide";
+  "reading" | "reference" | "catalog" | "example" | "wide";
 
 type ReferenceShellProps = {
   activeRoute: DocsRoute;
@@ -202,7 +198,10 @@ export function ReferenceShell({
         size="sm"
         value={docsVersion.id}
       />
-      <a className="vf-docs-app-shell__utility-link" href={docsLinks.repository}>
+      <a
+        className="vf-docs-app-shell__utility-link"
+        href={docsLinks.repository}
+      >
         GitHub
       </a>
       {headerAction}
