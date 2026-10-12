@@ -47,7 +47,7 @@ export function DocumentationContentFrame({
 
   return (
     <article className={frameClassName} data-content-layout={layout} {...props}>
-      <header className="vf-docs-content-frame__header vf-reference-page__hero">
+      <div className="vf-docs-content-frame__header vf-reference-page__hero">
         <div className="vf-docs-content-frame__header-layout vf-reference-page__hero-layout">
           <div className="vf-docs-content-frame__header-copy vf-reference-page__hero-copy">
             <PageHeader
@@ -69,7 +69,7 @@ export function DocumentationContentFrame({
             </aside>
           ) : null}
         </div>
-      </header>
+      </div>
       <div
         className="vf-docs-content-frame__columns"
         data-local-navigation={localNavigation ? "true" : "false"}
