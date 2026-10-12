@@ -90,8 +90,8 @@ test.describe("Icon Reference catalog", () => {
     await iconsLink.click();
 
     await expect(page).toHaveURL(/\/vyrnforge-ui\/\?framework=react#\/icons$/u);
-    await expect(page.locator(".vf-reference-page-viewport")).toHaveAttribute(
-      "data-reference-layout",
+    await expect(page.locator(".vf-docs-content-frame")).toHaveAttribute(
+      "data-content-layout",
       "catalog",
     );
     await expect(
