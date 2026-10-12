@@ -10,11 +10,7 @@
     var(--vf-border-default) 78%,
     transparent
   );
-  background: color-mix(
-    in srgb,
-    var(--vf-surface-default) 94%,
-    transparent
-  );
+  background: color-mix(in srgb, var(--vf-surface-default) 94%, transparent);
   backdrop-filter: blur(18px);
 }
 
