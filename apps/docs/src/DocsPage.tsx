@@ -21,7 +21,11 @@ import {
   type DocsFrameworkId,
 } from "./docsContext";
 import { DocumentationPageTemplate } from "./DocumentationPageTemplate";
-import { GuidePage } from "./GuidePage";
+import {
+  GuidePage,
+  GuidePageOutline,
+  hasGuideOutline,
+} from "./GuidePage";
 import { DiscoveryReferencePage } from "./DiscoveryReferencePage";
 import { ExecutableExamplesPage } from "./examples/ExecutableExamplesPage";
 import { MigratedExamplePage } from "./examples/MigratedExamplePage";
@@ -282,6 +286,10 @@ export function DocsPage({
       </div>
     ) : null;
 
+  const localNavigation =
+    family === "reading" && hasGuideOutline(route) ? (
+      <GuidePageOutline route={route} />
+    ) : undefined;
   const footer =
     family === "reading"
       ? getReadingPageNavigation(route, onRouteChange)
@@ -306,6 +314,7 @@ export function DocsPage({
           : undefined
       }
       layout={layout}
+      localNavigation={localNavigation}
       status={routeResolution.status}
       template={template}
       title={route.title}
