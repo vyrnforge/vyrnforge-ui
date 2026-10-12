@@ -1,5 +1,4 @@
-import { Button, Heading, Inline, Stack, Text } from "@vyrnforge/ui-components";
-import type { DocumentationReadinessStatus } from "../../../docs/reference/documentationAvailability";
+import { Button, Heading, Inline, Text } from "@vyrnforge/ui-components";
 import {
   docsFrameworks,
   getFramework,
@@ -13,7 +12,6 @@ type GuidePageProps = {
   onFrameworkChange: (frameworkId: DocsFrameworkId) => void;
   onRouteChange: (routeId: string) => void;
   route: DocsRoute;
-  status: DocumentationReadinessStatus;
 };
 
 const overviewLinks = [
@@ -104,7 +102,7 @@ function OverviewGuide({
   const framework = getFramework(frameworkId);
 
   return (
-    <>
+    <div className="vf-docs-guide vf-docs-guide--landing">
       <section
         aria-labelledby="vf-guide-overview-start"
         className="vf-docs-guide__section"
@@ -188,7 +186,7 @@ function OverviewGuide({
           />
         </div>
       </section>
-    </>
+    </div>
   );
 }
 
@@ -305,104 +303,33 @@ export function GuidePage({
   onFrameworkChange,
   onRouteChange,
   route,
-  status,
 }: GuidePageProps) {
   const isOverview = route.kind === "overview";
   const markdown = withoutDuplicateTitle(route.content ?? "", route.title);
   const framework = getFramework(frameworkId);
 
-  return (
-    <article
-      className="vf-docs-guide"
-      data-document-template="guide"
-      data-guide-kind={route.kind}
-    >
-      <section
-        aria-labelledby="vf-docs-guide-title"
-        className="vf-docs-guide__hero"
-      >
-        <div className="vf-docs-guide__hero-layout">
-          <div className="vf-docs-guide__hero-copy">
-            <div className="vf-docs-guide__meta">
-              <span className="vf-docs-guide__eyebrow">VyrnForge guide</span>
-              <span
-                aria-label={`Documentation status: ${status}`}
-                className="vf-docs-guide__status"
-              >
-                {status}
-              </span>
-            </div>
-            <Heading id="vf-docs-guide-title" level={2} size="lg">
-              {isOverview
-                ? "Build once. Stay native to every framework."
-                : route.title}
-            </Heading>
-            <Text className="vf-docs-guide__lede" size="lg" tone="muted">
-              {isOverview
-                ? "One VyrnForge system for components, tokens, behavior, " +
-                  "accessibility, and developer concepts — delivered through " +
-                  "first-class Native HTML, React, Angular, and Vue surfaces."
-                : route.description}
-            </Text>
-            {isOverview ? (
-              <Inline className="vf-docs-guide__hero-actions" gap="sm">
-                <Button onClick={() => onRouteChange("getting-started")}>
-                  Start building
-                </Button>
-                <Button
-                  onClick={() => onRouteChange("component-reference")}
-                  variant="subtle"
-                >
-                  Browse components
-                </Button>
-              </Inline>
-            ) : (
-              <div className="vf-docs-guide__context-line">
-                <Text size="sm" tone="muted">
-                  Reading for {framework.label}
-                </Text>
-                <FrameworkSwitcher
-                  frameworkId={frameworkId}
-                  onFrameworkChange={onFrameworkChange}
-                />
-              </div>
-            )}
-          </div>
-          {isOverview ? (
-            <aside
-              aria-label="Selected framework surface"
-              className="vf-docs-guide__hero-context"
-            >
-              <Text className="vf-docs-guide__kicker" size="sm">
-                Selected surface
-              </Text>
-              <Heading level={3} size="md">
-                {framework.label}
-              </Heading>
-              <Text tone="muted">
-                {framework.language} · {framework.renderer}
-              </Text>
-              <Text size="sm" tone="muted">
-                {framework.supportLevel}
-              </Text>
-              <FrameworkSwitcher
-                frameworkId={frameworkId}
-                onFrameworkChange={onFrameworkChange}
-              />
-            </aside>
-          ) : null}
-        </div>
-      </section>
+  if (isOverview) {
+    return (
+      <OverviewGuide
+        frameworkId={frameworkId}
+        onFrameworkChange={onFrameworkChange}
+        onRouteChange={onRouteChange}
+      />
+    );
+  }
 
-      {isOverview ? (
-        <OverviewGuide
+  return (
+    <div className="vf-docs-guide vf-docs-guide--reading">
+      <div className="vf-docs-guide__context-line">
+        <Text size="sm" tone="muted">
+          Reading for {framework.label}
+        </Text>
+        <FrameworkSwitcher
           frameworkId={frameworkId}
           onFrameworkChange={onFrameworkChange}
-          onRouteChange={onRouteChange}
         />
-      ) : (
-        <GuideDocument markdown={markdown} />
-      )}
-    </article>
+      </div>
+      <GuideDocument markdown={markdown} />
+    </div>
   );
 }
