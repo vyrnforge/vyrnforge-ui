@@ -13,14 +13,21 @@
   gap: clamp(28px, 4vw, 44px);
 }
 
-.vf-reference-page:not(.vf-reference-page--landing) .vf-reference-page__hero {
+.vf-reference-page--reading .vf-reference-page__hero,
+.vf-reference-page--catalog .vf-reference-page__hero,
+.vf-reference-page--reference .vf-reference-page__hero,
+.vf-reference-page--showcase .vf-reference-page__hero,
+.vf-reference-page--dedicated .vf-reference-page__hero {
   padding: clamp(24px, 4vw, 40px);
-  box-shadow: inset 0 0 0 1px
-    color-mix(in srgb, var(--vf-border, #e2e8f0) 82%, transparent);
+  border: 1px solid var(--vf-border, #e2e8f0);
+  box-shadow: none;
 }
 
-.vf-reference-page:not(.vf-reference-page--landing)
-  .vf-reference-page__hero::after {
+.vf-reference-page--reading .vf-reference-page__hero::after,
+.vf-reference-page--catalog .vf-reference-page__hero::after,
+.vf-reference-page--reference .vf-reference-page__hero::after,
+.vf-reference-page--showcase .vf-reference-page__hero::after,
+.vf-reference-page--dedicated .vf-reference-page__hero::after {
   display: none;
 }
 
@@ -60,8 +67,11 @@
 }
 
 @media (max-width: 680px) {
-  .vf-reference-page:not(.vf-reference-page--landing)
-    .vf-reference-page__hero {
+  .vf-reference-page--reading .vf-reference-page__hero,
+  .vf-reference-page--catalog .vf-reference-page__hero,
+  .vf-reference-page--reference .vf-reference-page__hero,
+  .vf-reference-page--showcase .vf-reference-page__hero,
+  .vf-reference-page--dedicated .vf-reference-page__hero {
     padding: var(--vf-space-5, 20px);
   }
 
