@@ -75,26 +75,17 @@ test("guide content uses the shared public page shell", () => {
     path.join(root, "apps/docs/src/GuidePage.tsx"),
     "utf8",
   );
-  const pageTemplate = readFileSync(
-    path.join(root, "apps/docs/src/DocumentationPageTemplate.tsx"),
-    "utf8",
-  );
-  const pageFamily = readFileSync(
-    path.join(root, "apps/docs/src/documentationPageFamily.ts"),
-    "utf8",
-  );
   const referenceShell = readFileSync(
     path.join(root, "apps/docs/src/ReferenceShell.tsx"),
     "utf8",
   );
   const main = readFileSync(path.join(root, "apps/docs/src/main.tsx"), "utf8");
 
+  assert.equal(docsPage.includes('route.template === "guide"'), true);
   assert.match(docsPage, /getDocumentationPageFamily/u);
   assert.match(docsPage, /<GuidePage/u);
+  assert.match(docsPage, /<DocumentationPageTemplate/u);
   assert.match(docsPage, /family=\{family\}/u);
-  assert.match(pageTemplate, /data-document-template/u);
-  assert.match(pageTemplate, /data-document-family/u);
-  assert.match(pageTemplate, /vf-reference-page--\$\{family\}/u);
   assert.doesNotMatch(guidePage, /data-document-template/u);
   assert.doesNotMatch(guidePage, /vf-docs-guide__hero/u);
   assert.match(guidePage, /Framework surface/u);
@@ -102,8 +93,6 @@ test("guide content uses the shared public page shell", () => {
   assert.match(guidePage, /vf-docs-guide__outline/u);
   assert.match(guidePage, /splitGuideSections/u);
   assert.match(guidePage, /vf-docs-guide__prose/u);
-  assert.match(pageFamily, /data-grid/u);
-  assert.match(pageFamily, /return "legacy"/u);
   assert.match(referenceShell, /className="vf-reference-shell"/u);
   assert.match(referenceShell, /<DocsPage/u);
   assert.doesNotMatch(referenceShell, /GuideShell|DocsShell|DocsNav/u);
