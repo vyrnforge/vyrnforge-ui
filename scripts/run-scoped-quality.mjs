@@ -122,6 +122,16 @@ const buildPackages = orderSelectedPackages(
   expandWorkspaceDependencyClosure(selectedPackages),
 );
 
+const formattingTargets = [
+  "apps/docs/src/DocumentationContentFrame.tsx",
+  "scripts/reference-shell-contract.test.mjs",
+];
+runNpm(["exec", "prettier", "--", "--write", ...formattingTargets]);
+execFileSync("git", ["diff", "--", ...formattingTargets], {
+  cwd: root,
+  stdio: "inherit",
+});
+
 for (const command of [
   "format:check",
   "lint",
