@@ -211,7 +211,9 @@ test("public routes separate app chrome from reference layout adaptation", () =>
   const docsPage = read("apps/docs/src/DocsPage.tsx");
   const navigation = read("apps/docs/src/ReferenceNavigation.tsx");
   const shellStyles = read("apps/docs/src/styles/documentation-app-shell.css");
-  const viewportStyles = read("apps/docs/src/styles/reference-page-viewport.css");
+  const viewportStyles = read(
+    "apps/docs/src/styles/reference-page-viewport.css",
+  );
 
   assert.match(app, /import \{ ReferenceShell \} from "\.\/ReferenceShell"/u);
   assert.match(app, /<ReferenceShell/u);
