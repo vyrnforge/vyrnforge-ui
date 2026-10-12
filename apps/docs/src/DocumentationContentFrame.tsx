@@ -14,7 +14,7 @@ export type DocumentationContentLayout =
 
 type DocumentationContentFrameProps = Omit<
   HTMLAttributes<HTMLElement>,
-  "title"
+  "title",
 > & {
   actions?: ReactNode;
   aside?: ReactNode;
