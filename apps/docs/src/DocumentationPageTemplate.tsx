@@ -35,7 +35,10 @@ export function DocumentationPageTemplate({
       data-page-family={family}
       data-template-sections={template.sections.join(" ")}
     >
-      <header className="vf-reference-page__hero">
+      <header
+        aria-label="Reference page introduction"
+        className="vf-reference-page__hero"
+      >
         <div className="vf-reference-page__hero-copy">
           <div className="vf-reference-page__meta">
             <Text className="vf-reference-page__eyebrow" size="sm">
