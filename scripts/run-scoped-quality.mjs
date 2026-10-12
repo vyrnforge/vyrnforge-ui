@@ -122,17 +122,6 @@ const buildPackages = orderSelectedPackages(
   expandWorkspaceDependencyClosure(selectedPackages),
 );
 
-const formattingDiagnosticFiles = [
-  "apps/docs/src/DocumentationPageTemplate.tsx",
-  "apps/docs/src/styles/content-pages.css",
-];
-runNpm(["exec", "--", "prettier", "--write", ...formattingDiagnosticFiles]);
-execFileSync("git", ["diff", "--", ...formattingDiagnosticFiles], {
-  cwd: root,
-  stdio: "inherit",
-});
-throw new Error("Temporary formatting diagnostic complete");
-
 for (const command of [
   "format:check",
   "lint",
