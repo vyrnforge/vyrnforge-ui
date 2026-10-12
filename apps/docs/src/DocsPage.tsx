@@ -21,11 +21,7 @@ import {
   type DocsFrameworkId,
 } from "./docsContext";
 import { DocumentationPageTemplate } from "./DocumentationPageTemplate";
-import {
-  GuidePage,
-  GuidePageOutline,
-  hasGuideOutline,
-} from "./GuidePage";
+import { GuidePage, GuidePageOutline, hasGuideOutline } from "./GuidePage";
 import { DiscoveryReferencePage } from "./DiscoveryReferencePage";
 import { ExecutableExamplesPage } from "./examples/ExecutableExamplesPage";
 import { MigratedExamplePage } from "./examples/MigratedExamplePage";
