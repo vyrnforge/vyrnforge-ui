@@ -28,7 +28,9 @@ test.describe("default documentation content quality", () => {
       landing.getByRole("button", { name: "Browse components" }),
     ).toBeVisible();
     await expect(
-      landing.locator(".vf-docs-framework-context").getByText("Selected surface"),
+      landing
+        .locator(".vf-docs-framework-context")
+        .getByText("Selected surface"),
     ).toBeVisible();
     await expect(landing.locator(".vf-docs-link-card")).toHaveCount(4);
     await expect(landing.locator(".vf-docs-principle")).toHaveCount(3);
@@ -44,7 +46,9 @@ test.describe("default documentation content quality", () => {
     );
     await expect(reading).toBeVisible();
     await expect(
-      reading.locator(".vf-docs-framework-context").getByText("Reading for"),
+      reading
+        .locator(".vf-docs-framework-context")
+        .getByText("Reading for"),
     ).toBeVisible();
     await expect(reading.locator(".vf-docs-reading-outline")).toBeVisible();
     await expect(
