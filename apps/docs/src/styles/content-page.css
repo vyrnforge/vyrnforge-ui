@@ -1,0 +1,77 @@
+.vf-reference-page[data-document-family="landing"] {
+  gap: clamp(44px, 7vw, 80px);
+}
+
+.vf-reference-page[data-document-family="reading"] {
+  gap: clamp(32px, 5vw, 52px);
+}
+
+.vf-reference-page[data-document-family="catalog"],
+.vf-reference-page[data-document-family="reference"],
+.vf-reference-page[data-document-family="showcase"],
+.vf-reference-page[data-document-family="dedicated"] {
+  gap: clamp(28px, 4vw, 44px);
+}
+
+.vf-reference-page:not([data-document-family="landing"])
+  .vf-reference-page__hero {
+  padding: clamp(24px, 4vw, 40px);
+  box-shadow: inset 0 0 0 1px
+    color-mix(in srgb, var(--vf-border, #e2e8f0) 82%, transparent);
+}
+
+.vf-reference-page:not([data-document-family="landing"])
+  .vf-reference-page__hero::after {
+  display: none;
+}
+
+.vf-reference-page[data-document-family="reading"]
+  .vf-reference-page__hero-copy {
+  max-width: 760px;
+}
+
+.vf-reference-page[data-document-family="reading"]
+  .vf-reference-page__body {
+  width: 100%;
+  max-width: 1120px;
+}
+
+.vf-reference-page[data-document-family="catalog"]
+  .vf-reference-page__hero-copy,
+.vf-reference-page[data-document-family="reference"]
+  .vf-reference-page__hero-copy,
+.vf-reference-page[data-document-family="showcase"]
+  .vf-reference-page__hero-copy {
+  max-width: 900px;
+}
+
+.vf-docs-guide--reading {
+  gap: var(--vf-space-6, 24px);
+}
+
+.vf-docs-guide--reading .vf-docs-guide__context-line {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--vf-space-4, 16px);
+  padding: var(--vf-space-4, 16px) var(--vf-space-5, 20px);
+  border: 1px solid var(--vf-border, #e2e8f0);
+  border-radius: var(--vf-radius-lg, 8px);
+  background: var(--vf-surface-subtle, #f8fafc);
+}
+
+.vf-docs-guide--landing {
+  gap: clamp(40px, 6vw, 72px);
+}
+
+@media (max-width: 680px) {
+  .vf-reference-page:not([data-document-family="landing"])
+    .vf-reference-page__hero {
+    padding: var(--vf-space-5, 20px);
+  }
+
+  .vf-docs-guide--reading .vf-docs-guide__context-line {
+    align-items: stretch;
+  }
+}
