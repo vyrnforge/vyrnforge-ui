@@ -183,9 +183,14 @@ function GuideDocument({ markdown }: { markdown: string }) {
             On this page
           </Text>
           <ol>
-            {sections.map((section) => (
+            {sections.map((section, index) => (
               <li key={section.id}>
-                <a href={`#${section.id}`}>{section.title}</a>
+                <a href={`#${section.id}`}>
+                  <span className="vf-docs-reading-outline__step">
+                    {String(index + 1).padStart(2, "0")}
+                  </span>
+                  <span>{section.title}</span>
+                </a>
               </li>
             ))}
           </ol>
@@ -196,15 +201,20 @@ function GuideDocument({ markdown }: { markdown: string }) {
         {intro ? (
           <MarkdownView className="vf-docs-reading-prose" markdown={intro} />
         ) : null}
-        {sections.map((section) => (
+        {sections.map((section, index) => (
           <section
             className="vf-docs-reading-section"
             id={section.id}
             key={section.id}
           >
-            <Heading level={3} size="md">
-              {section.title}
-            </Heading>
+            <div className="vf-docs-reading-section__heading">
+              <span className="vf-docs-reading-section__step">
+                {String(index + 1).padStart(2, "0")}
+              </span>
+              <Heading level={3} size="md">
+                {section.title}
+              </Heading>
+            </div>
             <MarkdownView
               className="vf-docs-reading-prose"
               markdown={section.body}
