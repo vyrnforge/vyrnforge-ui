@@ -46,9 +46,7 @@ test.describe("default documentation content quality", () => {
     );
     await expect(reading).toBeVisible();
     await expect(
-      reading
-        .locator(".vf-docs-framework-context")
-        .getByText("Reading for"),
+      reading.locator(".vf-docs-framework-context").getByText("Reading for"),
     ).toBeVisible();
     await expect(reading.locator(".vf-docs-reading-outline")).toBeVisible();
     await expect(
