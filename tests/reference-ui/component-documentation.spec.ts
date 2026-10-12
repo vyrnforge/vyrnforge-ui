@@ -12,7 +12,7 @@ async function openComponent(
   framework: FrameworkId = "react",
 ) {
   await page.goto(`/?framework=${framework}#/components/${componentId}`);
-  await expect(page.locator(".vf-reference-shell")).toBeVisible();
+  await expect(page.locator(".vf-docs-app-shell")).toBeVisible();
   await expect(page.locator("#vf-reference-main")).toBeVisible();
 }
 
