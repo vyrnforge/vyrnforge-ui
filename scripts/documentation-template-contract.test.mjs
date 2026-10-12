@@ -90,7 +90,10 @@ test("guide content uses the shared public page shell", () => {
   const main = readFileSync(path.join(root, "apps/docs/src/main.tsx"), "utf8");
 
   assert.equal(docsPage.includes('route.template === "guide"'), true);
-  assert.match(docsPage, /getDocumentationPageFamily\(route, referenceRecord\)/u);
+  assert.match(
+    docsPage,
+    /getDocumentationPageFamily\(route, referenceRecord\)/u,
+  );
   assert.match(docsPage, /<GuidePage/u);
   assert.match(docsPage, /<DocumentationPageTemplate/u);
   assert.match(docsPage, /family=\{family\}/u);
