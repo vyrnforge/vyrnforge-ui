@@ -12,14 +12,18 @@ test.describe("default documentation content quality", () => {
   }) => {
     await openReference(page, "overview");
 
-    const landing = page.locator('.vf-reference-page[data-page-family="landing"]');
+    const landing = page.locator(
+      '.vf-reference-page[data-page-family="landing"]',
+    );
     await expect(landing).toBeVisible();
     await expect(
       landing.getByRole("heading", {
         name: "Build once. Stay native to every framework.",
       }),
     ).toBeVisible();
-    await expect(landing.getByRole("button", { name: "Start building" })).toBeVisible();
+    await expect(
+      landing.getByRole("button", { name: "Start building" }),
+    ).toBeVisible();
     await expect(
       landing.getByRole("button", { name: "Browse components" }),
     ).toBeVisible();
@@ -35,7 +39,9 @@ test.describe("default documentation content quality", () => {
   }) => {
     await openReference(page, "getting-started");
 
-    const reading = page.locator('.vf-reference-page[data-page-family="reading"]');
+    const reading = page.locator(
+      '.vf-reference-page[data-page-family="reading"]',
+    );
     await expect(reading).toBeVisible();
     await expect(
       reading.locator(".vf-docs-framework-context").getByText("Reading for"),
