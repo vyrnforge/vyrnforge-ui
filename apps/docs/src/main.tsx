@@ -11,6 +11,7 @@ import "./styles/reference-shell.css";
 import "./styles/component-reference.css";
 import "./styles/reference-responsive.css";
 import "./styles/content-pages.css";
+import "./styles/reference-redesign.css";
 
 createRoot(document.getElementById("root") as HTMLElement).render(
   <StrictMode>
