@@ -63,11 +63,15 @@ export function DocumentationPageTemplate({
               title={heroTitle ?? title}
             />
             {heroActions ? (
-              <div className="vf-reference-page__hero-actions">{heroActions}</div>
+              <div className="vf-reference-page__hero-actions">
+                {heroActions}
+              </div>
             ) : null}
           </div>
           {heroAside ? (
-            <aside className="vf-reference-page__hero-aside">{heroAside}</aside>
+            <aside className="vf-reference-page__hero-aside">
+              {heroAside}
+            </aside>
           ) : null}
         </div>
       </header>
