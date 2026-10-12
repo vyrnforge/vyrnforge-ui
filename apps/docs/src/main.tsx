@@ -12,7 +12,7 @@ import "./styles/component-reference.css";
 import "./styles/reference-responsive.css";
 import "./styles/content-pages.css";
 import "./styles/reference-redesign.css";
-import "./styles/reference-redesign-compat.css";
+import "./styles/reference-shell-layout.css";
 
 createRoot(document.getElementById("root") as HTMLElement).render(
   <StrictMode>
