@@ -1,0 +1,38 @@
+.vf-reference-primary-navigation {
+  display: flex;
+  align-items: center;
+  gap: var(--vf-space-1, 4px);
+  min-width: 0;
+  overflow-x: auto;
+  scrollbar-width: thin;
+}
+
+.vf-reference-primary-navigation .vf-button {
+  flex: none;
+  white-space: nowrap;
+}
+
+.vf-reference-navigation {
+  display: grid;
+  gap: var(--vf-space-3, 12px);
+  min-width: 0;
+}
+
+.vf-reference-navigation__search,
+.vf-reference-navigation__search .vf-input {
+  width: 100%;
+  min-width: 0;
+}
+
+.vf-reference-navigation__sections {
+  min-width: 0;
+  padding: 0;
+  background: transparent;
+}
+
+.vf-reference-navigation__empty {
+  margin: 0;
+  padding: var(--vf-space-2, 8px);
+  color: var(--vf-text-secondary, var(--vf-text-muted, #64748b));
+  font-size: var(--vf-font-size-sm, 13px);
+}
