@@ -69,9 +69,7 @@ export function DocumentationPageTemplate({
             ) : null}
           </div>
           {heroAside ? (
-            <aside className="vf-reference-page__hero-aside">
-              {heroAside}
-            </aside>
+            <aside className="vf-reference-page__hero-aside">{heroAside}</aside>
           ) : null}
         </div>
       </header>
