@@ -24,7 +24,7 @@ test("generated documentation templates cover every registered public page type"
     );
     assert(
       template.documentTypes.includes(page.type),
-      `Template ${page.template} does not own document type ${page.type}`,
+      `Template ${template.id} does not own document type ${page.type}`,
     );
   }
 });
@@ -79,7 +79,10 @@ test("guide content uses the shared public page shell", () => {
     path.join(root, "apps/docs/src/ReferenceShell.tsx"),
     "utf8",
   );
-  const main = readFileSync(path.join(root, "apps/docs/src/main.tsx"), "utf8");
+  const main = readFileSync(
+    path.join(root, "apps/docs/src/main.tsx"),
+    "utf8",
+  );
 
   assert.equal(docsPage.includes('route.template === "guide"'), true);
   assert.match(docsPage, /getDocumentationPageFamily/u);
