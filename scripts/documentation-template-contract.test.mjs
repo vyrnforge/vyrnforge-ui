@@ -24,7 +24,7 @@ test("generated documentation templates cover every registered public page type"
     );
     assert(
       template.documentTypes.includes(page.type),
-      `Template ${template.id} does not own document type ${page.type}`,
+      `Template ${page.template} does not own document type ${page.type}`,
     );
   }
 });
