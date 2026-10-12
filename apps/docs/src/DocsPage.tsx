@@ -5,6 +5,7 @@ import {
   Heading,
   Inline,
   Text,
+  type BreadcrumbItem,
 } from "@vyrnforge/ui-components";
 import type { ReferenceRecordSelection } from "./App";
 import { ComponentReferencePage } from "./ComponentReferencePage";
@@ -12,6 +13,7 @@ import {
   getDedicatedReferencePage,
   renderDedicatedReferencePage,
 } from "./DedicatedReferencePages";
+import { getDocumentationContentLayout } from "./documentationContentLayout";
 import { getDocumentationPageFamily } from "./documentationPageFamily";
 import {
   docsFrameworks,
@@ -26,7 +28,9 @@ import { MigratedExamplePage } from "./examples/MigratedExamplePage";
 import { MarkdownView } from "./MarkdownView";
 import { PackageReferencePage } from "./PackageReferencePage";
 import {
+  docsRoutes,
   getDocumentationTemplate,
+  publicDocsSections,
   type DocsRoute,
   type DocsRouteResolution,
 } from "./referenceRoutes";
@@ -42,6 +46,53 @@ type DocsPageProps = {
   version: string;
 };
 
+function getBreadcrumbs(route: DocsRoute): BreadcrumbItem[] {
+  const section = publicDocsSections.find(
+    (candidate) => candidate.id === route.section,
+  );
+
+  return [
+    {
+      id: `section-${route.section}`,
+      label: section?.label ?? route.section,
+    },
+    {
+      id: route.id,
+      label: route.title,
+      current: true,
+    },
+  ];
+}
+
+function getReadingPageNavigation(
+  route: DocsRoute,
+  onRouteChange: (routeId: string) => void,
+) {
+  const index = docsRoutes.findIndex((candidate) => candidate.id === route.id);
+  if (index < 0) return null;
+
+  const previous = index > 0 ? docsRoutes[index - 1] : null;
+  const next = index < docsRoutes.length - 1 ? docsRoutes[index + 1] : null;
+  if (!previous && !next) return null;
+
+  return (
+    <Inline gap="sm" justify="space-between">
+      {previous ? (
+        <Button onClick={() => onRouteChange(previous.id)} variant="ghost">
+          Previous: {previous.title}
+        </Button>
+      ) : (
+        <span />
+      )}
+      {next ? (
+        <Button onClick={() => onRouteChange(next.id)} variant="ghost">
+          Next: {next.title}
+        </Button>
+      ) : null}
+    </Inline>
+  );
+}
+
 export function DocsPage({
   route,
   frameworkId,
@@ -54,7 +105,9 @@ export function DocsPage({
 }: DocsPageProps) {
   const template = getDocumentationTemplate(route.template);
   const family = getDocumentationPageFamily(route, referenceRecord);
+  const layout = getDocumentationContentLayout(route, referenceRecord);
   const framework = getFramework(frameworkId);
+  const breadcrumbs = getBreadcrumbs(route);
 
   if (invalidPath) {
     return (
@@ -81,8 +134,10 @@ export function DocsPage({
 
     return (
       <DocumentationPageTemplate
+        breadcrumbs={breadcrumbs}
         description="This document is not available for the selected framework and documentation version."
         family={family}
+        layout={layout}
         status={routeResolution.status}
         template={template}
         title={route.title}
@@ -117,8 +172,10 @@ export function DocsPage({
 
     return (
       <DocumentationPageTemplate
+        breadcrumbs={breadcrumbs}
         description={route.description}
         family="dedicated"
+        layout={layout}
         status={routeResolution.status}
         template={template}
         title={route.title}
@@ -225,10 +282,17 @@ export function DocsPage({
       </div>
     ) : null;
 
+  const footer =
+    family === "reading"
+      ? getReadingPageNavigation(route, onRouteChange)
+      : undefined;
+
   return (
     <DocumentationPageTemplate
+      breadcrumbs={breadcrumbs}
       description={route.description}
       family={family}
+      footer={footer}
       heroActions={heroActions}
       heroAside={heroAside}
       heroDescription={
@@ -241,6 +305,7 @@ export function DocsPage({
           ? "Build once. Stay native to every framework."
           : undefined
       }
+      layout={layout}
       status={routeResolution.status}
       template={template}
       title={route.title}
