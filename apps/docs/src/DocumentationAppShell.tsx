@@ -4,7 +4,6 @@ import { AppShell, Button, Drawer } from "@vyrnforge/ui-components";
 type DocumentationAppShellProps = {
   children: ReactNode;
   navigation: (closeMobileNavigation: () => void) => ReactNode;
-  navigationLabel?: string;
   onHome: () => void;
   primaryNavigation?: ReactNode;
   utilityControls?: ReactNode;
@@ -13,7 +12,6 @@ type DocumentationAppShellProps = {
 export function DocumentationAppShell({
   children,
   navigation,
-  navigationLabel = "Documentation navigation",
   onHome,
   primaryNavigation,
   utilityControls,
@@ -64,9 +62,9 @@ export function DocumentationAppShell({
   );
 
   const sidebar = (
-    <nav aria-label={navigationLabel} className="vf-docs-app-shell__navigation">
+    <div className="vf-docs-app-shell__navigation">
       {navigation(() => undefined)}
-    </nav>
+    </div>
   );
 
   return (
