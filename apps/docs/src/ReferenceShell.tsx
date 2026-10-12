@@ -1,5 +1,5 @@
 import { useState, type ReactNode } from "react";
-import { Button, Drawer, Select } from "@vyrnforge/ui-components";
+import { AppShell, Button, Drawer, Select } from "@vyrnforge/ui-components";
 import type { ReferenceRecordSelection } from "./App";
 import { getDedicatedReferencePagePolicy } from "./dedicatedReferencePagePolicy";
 import {
@@ -29,7 +29,11 @@ import {
 } from "./referenceRoutes";
 
 export type ReferenceLayoutMode =
-  "reading" | "reference" | "catalog" | "example" | "wide";
+  | "reading"
+  | "reference"
+  | "catalog"
+  | "example"
+  | "wide";
 
 type ReferenceShellProps = {
   activeRoute: DocsRoute;
@@ -163,86 +167,105 @@ export function ReferenceShell({
     />
   );
 
+  const header = (
+    <div className="vf-reference-shell__header-inner">
+      <div className="vf-reference-shell__brand-context">
+        <button
+          className="vf-reference-shell__brand"
+          onClick={() => navigate("overview")}
+          type="button"
+        >
+          <span aria-hidden="true" className="vf-reference-shell__mark">
+            V
+          </span>
+          <span className="vf-reference-shell__identity">
+            <strong>VyrnForge</strong>
+            <small>Reference</small>
+          </span>
+        </button>
+
+        <div className="vf-reference-shell__current-page">
+          <span>{activeRoute.group ?? "Reference"}</span>
+          <strong>{activeRoute.title}</strong>
+        </div>
+      </div>
+
+      <ReferencePrimaryNavigation
+        activeRouteId={activeRoute.id}
+        frameworkId={framework.id}
+        onRouteChange={navigate}
+        version={docsVersion.version}
+      />
+
+      <div className="vf-reference-shell__controls">
+        <Select
+          aria-label="Framework"
+          onChange={(event) =>
+            onFrameworkChange(event.currentTarget.value as DocsFrameworkId)
+          }
+          options={docsFrameworks.map((candidate) => ({
+            label: candidate.label,
+            value: candidate.id,
+          }))}
+          size="sm"
+          value={framework.id}
+        />
+        <Select
+          aria-label="Documentation version"
+          onChange={(event) => handleVersionChange(event.currentTarget.value)}
+          options={versionOptions.map((version) => ({
+            label: version.label,
+            value: version.id,
+          }))}
+          size="sm"
+          value={docsVersion.id}
+        />
+        <a className="vf-reference-shell__link" href={docsLinks.repository}>
+          GitHub
+        </a>
+        {headerAction}
+        <Button
+          aria-expanded={mobileNavigationOpen}
+          aria-haspopup="dialog"
+          className="vf-reference-shell__menu-button"
+          onClick={() => setMobileNavigationOpen(true)}
+          size="sm"
+          variant="subtle"
+        >
+          Browse
+        </Button>
+      </div>
+    </div>
+  );
+
+  const sidebar = (
+    <div className="vf-reference-shell__sidebar">
+      <div className="vf-reference-shell__sidebar-intro">
+        <span>Explore Reference</span>
+        <strong>{framework.label}</strong>
+        <small>{docsVersion.label}</small>
+      </div>
+      {navigation}
+    </div>
+  );
+
   return (
-    <div className="vf-reference-shell" data-layout-mode={layoutMode}>
+    <>
       <a className="vf-reference-shell__skip" href="#vf-reference-main">
         Skip to content
       </a>
 
-      <header className="vf-reference-shell__header">
-        <div className="vf-reference-shell__header-inner">
-          <button
-            className="vf-reference-shell__brand"
-            onClick={() => navigate("overview")}
-            type="button"
-          >
-            <span aria-hidden="true" className="vf-reference-shell__mark">
-              V
-            </span>
-            <span className="vf-reference-shell__identity">
-              <strong>VyrnForge</strong>
-              <small>Reference</small>
-            </span>
-          </button>
-
-          <ReferencePrimaryNavigation
-            activeRouteId={activeRoute.id}
-            frameworkId={framework.id}
-            onRouteChange={navigate}
-            version={docsVersion.version}
-          />
-
-          <div className="vf-reference-shell__controls">
-            <Select
-              aria-label="Framework"
-              onChange={(event) =>
-                onFrameworkChange(event.currentTarget.value as DocsFrameworkId)
-              }
-              options={docsFrameworks.map((candidate) => ({
-                label: candidate.label,
-                value: candidate.id,
-              }))}
-              size="sm"
-              value={framework.id}
-            />
-            <Select
-              aria-label="Documentation version"
-              onChange={(event) =>
-                handleVersionChange(event.currentTarget.value)
-              }
-              options={versionOptions.map((version) => ({
-                label: version.label,
-                value: version.id,
-              }))}
-              size="sm"
-              value={docsVersion.id}
-            />
-            <a className="vf-reference-shell__link" href={docsLinks.repository}>
-              GitHub
-            </a>
-            {headerAction}
-            <Button
-              aria-expanded={mobileNavigationOpen}
-              aria-haspopup="dialog"
-              className="vf-reference-shell__menu-button"
-              onClick={() => setMobileNavigationOpen(true)}
-              size="sm"
-              variant="subtle"
-            >
-              Browse
-            </Button>
-          </div>
-        </div>
-      </header>
-
-      <div className="vf-reference-shell__body">
-        <aside
-          aria-label="Reference navigation"
-          className="vf-reference-shell__sidebar"
-        >
-          {navigation}
-        </aside>
-
+      <AppShell
+        className="vf-reference-shell"
+        data-layout-mode={layoutMode}
+        header={header}
+        headerHeight="var(--vf-reference-shell-header-height, 64px)"
+        headerPosition="sticky"
+        scrollMode="page"
+        sidebar={sidebar}
+        sidebarPosition="sticky"
+        sidebarWidth="var(--vf-reference-shell-sidebar-width, 292px)"
+      >
         <main
           className="vf-reference-shell__main"
           data-reference-layout={layoutMode}
@@ -260,7 +283,7 @@ export function ReferenceShell({
             version={docsVersion.version}
           />
         </main>
-      </div>
+      </AppShell>
 
       <Drawer
         className="vf-reference-shell__mobile-drawer"
@@ -271,8 +294,13 @@ export function ReferenceShell({
         size="md"
         title="VyrnForge Reference"
       >
+        <div className="vf-reference-shell__drawer-context">
+          <span>Current surface</span>
+          <strong>{framework.label}</strong>
+          <small>{docsVersion.label}</small>
+        </div>
         {navigation}
       </Drawer>
-    </div>
+    </>
   );
 }
