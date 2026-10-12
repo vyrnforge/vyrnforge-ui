@@ -6,7 +6,8 @@
   overflow: visible;
   padding: 0 0 var(--vf-space-6, 24px);
   border-radius: 0;
-  border-block-end: 1px solid var(--vf-divider, var(--vf-border, #e2e8f0));
+  border-block-end: 1px solid
+    var(--vf-divider, var(--vf-border, #e2e8f0));
   background: transparent;
   box-shadow: none;
 }
@@ -176,7 +177,11 @@
 }
 
 .vf-docs-reading-section + .vf-docs-reading-section {
-  margin-block-start: clamp(var(--vf-space-8, 32px), 5vw, var(--vf-space-12, 48px));
+  margin-block-start: clamp(
+    var(--vf-space-8, 32px),
+    5vw,
+    var(--vf-space-12, 48px)
+  );
 }
 
 .vf-docs-reading-prose.vf-docs-markdown {
