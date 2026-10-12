@@ -25,7 +25,7 @@ test.describe("default documentation content quality", () => {
       landing.getByRole("button", { name: "Start building" }),
     ).toBeVisible();
     await expect(
-      landing.getByRole("button", { name: "Browse components" }),
+      landing.getByRole("button", { name: "Browse components", exact: true }),
     ).toBeVisible();
     await expect(
       landing
