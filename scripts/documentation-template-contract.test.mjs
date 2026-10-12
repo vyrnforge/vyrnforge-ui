@@ -147,7 +147,10 @@ test("shared families preserve rich landing and reading presentation", () => {
   assert.match(appShell, /className="vf-docs-app-shell"/u);
   assert.match(referenceShell, /<DocumentationAppShell/u);
   assert.match(referenceShell, /<DocsPage/u);
-  assert.doesNotMatch(referenceShell, /data-reference-layout|ReferenceLayoutMode/u);
+  assert.doesNotMatch(
+    referenceShell,
+    /data-reference-layout|ReferenceLayoutMode/u,
+  );
   assert.doesNotMatch(referenceShell, /GuideShell|DocsShell|DocsNav/u);
   assert.equal(main.includes("styles/content-pages.css"), true);
   assert.equal(main.includes("styles/documentation-content-frame.css"), true);
