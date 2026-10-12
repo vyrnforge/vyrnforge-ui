@@ -6,15 +6,11 @@ import {
 } from "@vyrnforge/ui-components";
 
 export type DocumentationContentLayout =
-  | "reading"
-  | "reference"
-  | "catalog"
-  | "example"
-  | "wide";
+  "reading" | "reference" | "catalog" | "example" | "wide";
 
 type DocumentationContentFrameProps = Omit<
   HTMLAttributes<HTMLElement>,
-  "title",
+  "title"
 > & {
   actions?: ReactNode;
   aside?: ReactNode;
