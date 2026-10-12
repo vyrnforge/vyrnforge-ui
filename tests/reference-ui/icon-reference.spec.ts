@@ -61,7 +61,7 @@ test.describe("Icon Reference catalog", () => {
   test("replaces the general Icon record", async ({ page }) => {
     await page.goto("/?framework=react#/component-reference");
 
-    const sidebar = page.locator(".vf-reference-shell__sidebar");
+    const sidebar = page.locator(".vf-docs-app-shell .vf-app-shell__sidebar");
     await expect(
       sidebar.getByRole("link", { name: "Icon", exact: true }),
     ).toHaveCount(0);
@@ -84,14 +84,14 @@ test.describe("Icon Reference catalog", () => {
   }) => {
     await page.goto(`${pagesBaseURL}?framework=react#/overview`);
 
-    const sidebar = page.locator(".vf-reference-shell__sidebar");
+    const sidebar = page.locator(".vf-docs-app-shell .vf-app-shell__sidebar");
     const iconsLink = sidebar.getByRole("link", { name: "Icons", exact: true });
     await expect(iconsLink).toHaveAttribute("href", "?framework=react#/icons");
     await iconsLink.click();
 
     await expect(page).toHaveURL(/\/vyrnforge-ui\/\?framework=react#\/icons$/u);
-    await expect(page.locator(".vf-reference-shell")).toHaveAttribute(
-      "data-layout-mode",
+    await expect(page.locator(".vf-reference-page-viewport")).toHaveAttribute(
+      "data-reference-layout",
       "catalog",
     );
     await expect(
