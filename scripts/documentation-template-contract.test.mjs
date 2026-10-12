@@ -24,7 +24,7 @@ test("generated documentation templates cover every registered public page type"
     );
     assert(
       template.documentTypes.includes(page.type),
-      `Template ${page.template} does not own document type ${page.type}`,
+      `Template ${template.id} does not own document type ${page.type}`,
     );
   }
 });
@@ -99,6 +99,10 @@ test("shared families preserve rich landing and reading presentation", () => {
     path.join(root, "apps/docs/src/styles/content-pages.css"),
     "utf8",
   );
+  const appShell = readFileSync(
+    path.join(root, "apps/docs/src/DocumentationAppShell.tsx"),
+    "utf8",
+  );
   const referenceShell = readFileSync(
     path.join(root, "apps/docs/src/ReferenceShell.tsx"),
     "utf8",
@@ -123,7 +127,8 @@ test("shared families preserve rich landing and reading presentation", () => {
   assert.match(contentStyles, /vf-docs-framework-context/u);
   assert.match(contentStyles, /grid-template-columns: repeat\(4,/u);
   assert.match(contentStyles, /vf-docs-reading-section__heading/u);
-  assert.match(referenceShell, /className="vf-reference-shell"/u);
+  assert.match(appShell, /className="vf-docs-app-shell"/u);
+  assert.match(referenceShell, /<DocumentationAppShell/u);
   assert.match(referenceShell, /<DocsPage/u);
   assert.doesNotMatch(referenceShell, /GuideShell|DocsShell|DocsNav/u);
   assert.equal(main.includes("styles/content-pages.css"), true);
