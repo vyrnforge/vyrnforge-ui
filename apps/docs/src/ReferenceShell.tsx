@@ -1,7 +1,7 @@
-import { useState, type ReactNode } from "react";
-import { Button, Drawer, Select } from "@vyrnforge/ui-components";
+import { type ReactNode } from "react";
+import { Select } from "@vyrnforge/ui-components";
 import type { ReferenceRecordSelection } from "./App";
-import { getDedicatedReferencePagePolicy } from "./dedicatedReferencePagePolicy";
+import { DocumentationAppShell } from "./DocumentationAppShell";
 import {
   docsFrameworks,
   getDocumentationReadiness,
@@ -28,9 +28,6 @@ import {
   type DocsRouteResolution,
 } from "./referenceRoutes";
 
-export type ReferenceLayoutMode =
-  "reading" | "reference" | "catalog" | "example" | "wide";
-
 type ReferenceShellProps = {
   activeRoute: DocsRoute;
   docsVersion: DocsVersion;
@@ -45,27 +42,6 @@ type ReferenceShellProps = {
   routeMember: string | null;
   routePath: string;
 };
-
-function getLayoutMode(
-  route: DocsRoute,
-  referenceRecord: ReferenceRecordSelection | null,
-): ReferenceLayoutMode {
-  const dedicatedPage = getDedicatedReferencePagePolicy(route);
-  if (dedicatedPage) return dedicatedPage.layoutMode;
-  if (route.kind === "example" || route.kind === "executable-examples") {
-    return "example";
-  }
-  if (route.template === "advanced-module") return "wide";
-  if (
-    route.kind === "discovery-reference" ||
-    route.kind === "component-reference" ||
-    route.kind === "package-reference"
-  ) {
-    return referenceRecord ? "reference" : "catalog";
-  }
-  if (route.template === "package") return "reference";
-  return "reading";
-}
 
 function recordFallbackRoute(record: ReferenceRecordSelection | null) {
   if (record?.domain === "components") return "component-reference";
@@ -87,8 +63,6 @@ export function ReferenceShell({
   routeMember,
   routePath,
 }: ReferenceShellProps) {
-  const [mobileNavigationOpen, setMobileNavigationOpen] = useState(false);
-  const layoutMode = getLayoutMode(activeRoute, referenceRecord);
   const frameworkVersions = getDocsVersionsForFramework(
     framework.id,
     docsVersions,
@@ -107,7 +81,6 @@ export function ReferenceShell({
       ];
 
   const navigate = (routeId: string) => {
-    setMobileNavigationOpen(false);
     onRouteChange(routeId);
   };
 
@@ -151,11 +124,23 @@ export function ReferenceShell({
     );
   };
 
-  const navigation = (
+  const renderNavigation = (closeMobileNavigation: () => void) => (
     <ReferenceNavigation
       activeRecordId={
         referenceRecord?.domain === "components" ? referenceRecord.id : null
       }
+      activeRouteId={activeRoute.id}
+      frameworkId={framework.id}
+      onRouteChange={(routeId) => {
+        closeMobileNavigation();
+        navigate(routeId);
+      }}
+      version={docsVersion.version}
+    />
+  );
+
+  const primaryNavigation = (
+    <ReferencePrimaryNavigation
       activeRouteId={activeRoute.id}
       frameworkId={framework.id}
       onRouteChange={navigate}
@@ -163,116 +148,57 @@ export function ReferenceShell({
     />
   );
 
-  return (
-    <div className="vf-reference-shell" data-layout-mode={layoutMode}>
-      <a className="vf-reference-shell__skip" href="#vf-reference-main">
-        Skip to content
-      </a>
-
-      <header className="vf-reference-shell__header">
-        <div className="vf-reference-shell__header-inner">
-          <button
-            className="vf-reference-shell__brand"
-            onClick={() => navigate("overview")}
-            type="button"
-          >
-            <span aria-hidden="true" className="vf-reference-shell__mark">
-              V
-            </span>
-            <span className="vf-reference-shell__identity">
-              <strong>VyrnForge</strong>
-              <small>Reference</small>
-            </span>
-          </button>
-
-          <ReferencePrimaryNavigation
-            activeRouteId={activeRoute.id}
-            frameworkId={framework.id}
-            onRouteChange={navigate}
-            version={docsVersion.version}
-          />
-
-          <div className="vf-reference-shell__controls">
-            <Select
-              aria-label="Framework"
-              onChange={(event) =>
-                onFrameworkChange(event.currentTarget.value as DocsFrameworkId)
-              }
-              options={docsFrameworks.map((candidate) => ({
-                label: candidate.label,
-                value: candidate.id,
-              }))}
-              size="sm"
-              value={framework.id}
-            />
-            <Select
-              aria-label="Documentation version"
-              onChange={(event) =>
-                handleVersionChange(event.currentTarget.value)
-              }
-              options={versionOptions.map((version) => ({
-                label: version.label,
-                value: version.id,
-              }))}
-              size="sm"
-              value={docsVersion.id}
-            />
-            <a className="vf-reference-shell__link" href={docsLinks.repository}>
-              GitHub
-            </a>
-            {headerAction}
-            <Button
-              aria-expanded={mobileNavigationOpen}
-              aria-haspopup="dialog"
-              className="vf-reference-shell__menu-button"
-              onClick={() => setMobileNavigationOpen(true)}
-              size="sm"
-              variant="subtle"
-            >
-              Browse
-            </Button>
-          </div>
-        </div>
-      </header>
-
-      <div className="vf-reference-shell__body">
-        <aside
-          aria-label="Reference navigation"
-          className="vf-reference-shell__sidebar"
-        >
-          {navigation}
-        </aside>
-
-        <main
-          className="vf-reference-shell__main"
-          data-reference-layout={layoutMode}
-          id="vf-reference-main"
-          tabIndex={-1}
-        >
-          <DocsPage
-            frameworkId={framework.id}
-            invalidPath={invalidPath}
-            onFrameworkChange={onFrameworkChange}
-            onRouteChange={navigate}
-            referenceRecord={referenceRecord}
-            route={activeRoute}
-            routeResolution={routeResolution}
-            version={docsVersion.version}
-          />
-        </main>
-      </div>
-
-      <Drawer
-        className="vf-reference-shell__mobile-drawer"
-        description="Navigate generated VyrnForge documentation and API records."
-        onOpenChange={setMobileNavigationOpen}
-        open={mobileNavigationOpen}
-        side="left"
-        size="md"
-        title="VyrnForge Reference"
+  const utilityControls = (
+    <>
+      <Select
+        aria-label="Framework"
+        onChange={(event) =>
+          onFrameworkChange(event.currentTarget.value as DocsFrameworkId)
+        }
+        options={docsFrameworks.map((candidate) => ({
+          label: candidate.label,
+          value: candidate.id,
+        }))}
+        size="sm"
+        value={framework.id}
+      />
+      <Select
+        aria-label="Documentation version"
+        onChange={(event) => handleVersionChange(event.currentTarget.value)}
+        options={versionOptions.map((version) => ({
+          label: version.label,
+          value: version.id,
+        }))}
+        size="sm"
+        value={docsVersion.id}
+      />
+      <a
+        className="vf-docs-app-shell__utility-link"
+        href={docsLinks.repository}
       >
-        {navigation}
-      </Drawer>
-    </div>
+        GitHub
+      </a>
+      {headerAction}
+    </>
+  );
+
+  return (
+    <DocumentationAppShell
+      navigation={renderNavigation}
+      onHome={() => navigate("overview")}
+      primaryNavigation={primaryNavigation}
+      utilityControls={utilityControls}
+    >
+      <DocsPage
+        frameworkId={framework.id}
+        invalidPath={invalidPath}
+        onFrameworkChange={onFrameworkChange}
+        onRouteChange={navigate}
+        referenceRecord={referenceRecord}
+        route={activeRoute}
+        routeResolution={routeResolution}
+        version={docsVersion.version}
+      />
+    </DocumentationAppShell>
   );
 }

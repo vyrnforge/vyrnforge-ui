@@ -6,7 +6,7 @@ const evidenceDirectory = path.resolve("test-results/reference-ui-evidence");
 
 async function openReference(page: Page, route: string, framework = "react") {
   await page.goto(`/?framework=${framework}#/${route}`);
-  await expect(page.locator(".vf-reference-shell")).toBeVisible();
+  await expect(page.locator(".vf-docs-app-shell")).toBeVisible();
   await expect(page.locator("#vf-reference-main")).toBeVisible();
 }
 
@@ -42,13 +42,10 @@ async function expectNoPageOverflow(page: Page) {
 }
 
 async function expectReferenceHero(page: Page) {
-  const hero = page.locator(".vf-reference-page__hero");
+  const hero = page.locator(".vf-docs-content-frame__header");
   await expect(hero).toBeVisible();
-  await expect(hero).toHaveAttribute(
-    "aria-label",
-    "Reference page introduction",
-  );
-  await expect(hero.locator(".vf-reference-page__meta")).toBeVisible();
+  await expect(hero.locator(".vf-page-header")).toBeVisible();
+  await expect(hero.locator(".vf-reference-page__eyebrow")).toBeVisible();
   await expect(hero.getByRole("heading").first()).toBeVisible();
   const bounds = await hero.evaluate((element) => {
     const rect = element.getBoundingClientRect();
@@ -171,16 +168,16 @@ test.describe("VyrnForge Reference product", () => {
 
     for (const [route, layout] of routes) {
       await openReference(page, route);
-      await expect(page.locator(".vf-reference-shell")).toHaveAttribute(
-        "data-layout-mode",
+      await expect(page.locator(".vf-docs-content-frame")).toHaveAttribute(
+        "data-content-layout",
         layout,
       );
       await expect(
-        page.locator("header .vf-reference-shell__identity"),
+        page.locator("header .vf-docs-app-shell__identity"),
       ).toContainText("VyrnForge");
       await expect(
-        page.locator("header .vf-reference-shell__identity"),
-      ).toContainText("Reference");
+        page.locator("header .vf-docs-app-shell__identity"),
+      ).toContainText("Docs");
       await expectNoPageOverflow(page);
       if (route !== "overview" && route !== "getting-started") {
         await expectReferenceHero(page);
@@ -203,6 +200,21 @@ test.describe("VyrnForge Reference product", () => {
       }
       await capture(page, testInfo, `reference-${route}`);
     }
+  });
+
+  test("reading pages use the content frame outline and footer navigation", async ({
+    page,
+  }) => {
+    await openReference(page, "getting-started");
+
+    await expect(
+      page.locator(".vf-docs-content-frame__local-navigation"),
+    ).toBeVisible();
+    await expect(
+      page.getByRole("navigation", { name: "On this page" }),
+    ).toBeVisible();
+    await expect(page.locator(".vf-docs-content-frame__footer")).toBeVisible();
+    await expect(page.getByRole("button", { name: /^Next:/u })).toBeVisible();
   });
 
   test("component detail keeps global framework context and human guidance before API", async ({
@@ -324,7 +336,9 @@ test.describe("VyrnForge Reference product", () => {
   }, testInfo) => {
     await page.setViewportSize({ width: 390, height: 844 });
     await openReference(page, "overview");
-    await expect(page.locator(".vf-reference-shell__sidebar")).toBeHidden();
+    await expect(
+      page.locator(".vf-docs-app-shell .vf-app-shell__sidebar"),
+    ).toBeHidden();
     await expectNoPageOverflow(page);
 
     const browse = page.getByRole("button", { name: "Browse", exact: true });
@@ -332,7 +346,7 @@ test.describe("VyrnForge Reference product", () => {
     await browse.click();
     await expect(browse).toHaveAttribute("aria-expanded", "true");
     await expect(
-      page.getByRole("dialog", { name: "VyrnForge Reference" }),
+      page.getByRole("dialog", { name: "VyrnForge Docs" }),
     ).toBeVisible();
 
     await expectNoPageOverflow(page);

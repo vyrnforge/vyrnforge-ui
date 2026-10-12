@@ -82,18 +82,23 @@ test("G18 discovery, context, deep links, and examples stay canonical", () => {
 });
 
 test("G18 Reference shell retains responsive and accessible navigation foundations", () => {
+  const appShell = read("apps/docs/src/DocumentationAppShell.tsx");
   const referenceShell = read("apps/docs/src/ReferenceShell.tsx");
   const referenceNavigation = read("apps/docs/src/ReferenceNavigation.tsx");
-  const responsiveStyles = read("apps/docs/src/styles/reference-shell.css");
+  const responsiveStyles = read(
+    "apps/docs/src/styles/documentation-app-shell.css",
+  );
   const portal = json("docs/metadata/reference-portal.json");
 
-  assert.match(referenceShell, /Skip to content/u);
-  assert.match(referenceShell, /<Drawer/u);
+  assert.match(appShell, /Skip to content/u);
+  assert.match(appShell, /<AppShell/u);
+  assert.match(appShell, /<Drawer/u);
+  assert.match(referenceShell, /<DocumentationAppShell/u);
   assert.match(referenceShell, /<ReferencePrimaryNavigation/u);
   assert.match(referenceNavigation, /SearchInput/u);
   assert.match(referenceNavigation, /SideNav/u);
-  assert.match(responsiveStyles, /@media \(max-width: 920px\)/u);
-  assert.match(responsiveStyles, /grid-template-columns: 1fr/u);
+  assert.match(responsiveStyles, /@media \(max-width: 960px\)/u);
+  assert.match(responsiveStyles, /grid-template-columns: minmax\(0, 1fr\)/u);
   assert.equal(
     portal.contentOwnership.accessibility.mode,
     "contract-plus-evidence-plus-curated-guidance",

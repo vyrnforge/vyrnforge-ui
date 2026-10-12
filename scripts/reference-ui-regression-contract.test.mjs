@@ -8,16 +8,20 @@ const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 const read = (relativePath) =>
   readFileSync(path.join(root, relativePath), "utf8");
 
-test("all public docs render through the unified Reference shell", () => {
+test("all public docs render through the unified Reference shell and content frame", () => {
   const app = read("apps/docs/src/App.tsx");
   const shell = read("apps/docs/src/ReferenceShell.tsx");
   const page = read("apps/docs/src/DocsPage.tsx");
+  const frame = read("apps/docs/src/DocumentationContentFrame.tsx");
   const dedicatedPages = read("apps/docs/src/DedicatedReferencePages.tsx");
 
   assert.match(app, /import \{ ReferenceShell \} from "\.\/ReferenceShell"/u);
   assert.doesNotMatch(app, /DocsShell|GuideShell/u);
   assert.match(shell, /<DocsPage/u);
-  assert.match(shell, /data-reference-layout/u);
+  assert.doesNotMatch(shell, /data-reference-layout/u);
+  assert.match(page, /getDocumentationContentLayout/u);
+  assert.match(page, /<DocumentationPageTemplate/u);
+  assert.match(frame, /data-content-layout=\{layout\}/u);
   assert.match(page, /AdvancedModulePage/u);
   assert.match(page, /ComponentReferencePage/u);
   assert.match(page, /PackageReferencePage/u);
@@ -47,8 +51,8 @@ test("dedicated Reference pages override general presentation", () => {
   const policy = read("apps/docs/src/dedicatedReferencePagePolicy.ts");
   const bindings = read("apps/docs/src/DedicatedReferencePages.tsx");
   const referenceData = read("apps/docs/src/referenceData.ts");
+  const contentLayout = read("apps/docs/src/documentationContentLayout.ts");
   const app = read("apps/docs/src/App.tsx");
-  const shell = read("apps/docs/src/ReferenceShell.tsx");
   const browser = read("tests/reference-ui/icon-reference.spec.ts");
   const components = JSON.parse(read("docs/metadata/components.json"));
 
@@ -69,7 +73,7 @@ test("dedicated Reference pages override general presentation", () => {
   assert.match(bindings, /IconReferencePage/u);
   assert.match(referenceData, /excludeDedicatedReferenceRecords/u);
   assert.match(app, /getDedicatedReferencePagePolicyForRecord/u);
-  assert.match(shell, /getDedicatedReferencePagePolicy/u);
+  assert.match(contentLayout, /getDedicatedReferencePagePolicy/u);
   assert.match(browser, /components\/icon/u);
   assert.match(browser, /toHaveCount\(0\)/u);
   assert.match(browser, /toHaveURL/u);
@@ -119,7 +123,10 @@ test("Reference verification covers representative templates and adaptive states
   assert.match(browser, /toBeFocused/u);
   assert.match(browser, /expectNoPageOverflow/u);
   assert.match(browser, /expectReferenceHero/u);
-  assert.match(browser, /vf-reference-page__hero/u);
+  assert.match(browser, /vf-docs-content-frame__header/u);
+  assert.match(browser, /data-content-layout/u);
+  assert.match(browser, /vf-docs-content-frame__local-navigation/u);
+  assert.match(browser, /vf-docs-content-frame__footer/u);
   assert.match(browser, /expectComponentReferenceIsVisual/u);
   assert.match(browser, /vf-docs-component-showcase/u);
   assert.match(browser, /expectPackageReferenceExplainsArchitecture/u);

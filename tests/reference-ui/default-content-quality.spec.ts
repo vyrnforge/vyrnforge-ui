@@ -2,7 +2,7 @@ import { expect, test, type Page } from "@playwright/test";
 
 async function openReference(page: Page, route: string) {
   await page.goto(`/?framework=react#/${route}`);
-  await expect(page.locator(".vf-reference-shell")).toBeVisible();
+  await expect(page.locator(".vf-docs-app-shell")).toBeVisible();
   await expect(page.locator("#vf-reference-main")).toBeVisible();
 }
 
