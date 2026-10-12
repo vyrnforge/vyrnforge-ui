@@ -204,15 +204,17 @@ test("Docs filter discovers selected-framework API members without restoring a s
   assert.doesNotMatch(docsNav, /ReferenceSearchPage/u);
 });
 
-test("public routes separate app chrome from reference layout adaptation", () => {
+test("public routes separate app chrome from documentation content framing", () => {
   const app = read("apps/docs/src/App.tsx");
   const appShell = read("apps/docs/src/DocumentationAppShell.tsx");
   const shell = read("apps/docs/src/ReferenceShell.tsx");
+  const contentFrame = read("apps/docs/src/DocumentationContentFrame.tsx");
+  const contentLayout = read("apps/docs/src/documentationContentLayout.ts");
   const docsPage = read("apps/docs/src/DocsPage.tsx");
   const navigation = read("apps/docs/src/ReferenceNavigation.tsx");
   const shellStyles = read("apps/docs/src/styles/documentation-app-shell.css");
-  const viewportStyles = read(
-    "apps/docs/src/styles/reference-page-viewport.css",
+  const frameStyles = read(
+    "apps/docs/src/styles/documentation-content-frame.css",
   );
 
   assert.match(app, /import \{ ReferenceShell \} from "\.\/ReferenceShell"/u);
@@ -237,16 +239,23 @@ test("public routes separate app chrome from reference layout adaptation", () =>
   assert.match(shell, /ReferenceNavigation/u);
   assert.match(shell, /DocumentationAppShell/u);
   assert.doesNotMatch(shell, /\bDrawer\b|Skip to content/u);
+  assert.doesNotMatch(shell, /data-reference-layout|ReferenceLayoutMode/u);
   assert.match(appShell, /\bAppShell\b/u);
   assert.match(appShell, /\bDrawer\b/u);
   assert.match(appShell, /Skip to content/u);
-  assert.match(shell, /data-reference-layout=\{layoutMode\}/u);
+  assert.match(docsPage, /getDocumentationContentLayout/u);
+  assert.match(docsPage, /<DocumentationPageTemplate/u);
+  assert.match(contentFrame, /\bBreadcrumbs\b/u);
+  assert.match(contentFrame, /\bPageHeader\b/u);
+  assert.match(contentFrame, /data-content-layout=\{layout\}/u);
+  assert.match(contentFrame, /vf-docs-content-frame__local-navigation/u);
+  assert.match(contentFrame, /vf-docs-content-frame__footer/u);
 
   for (const mode of ["reading", "reference", "catalog", "example", "wide"]) {
-    assert.match(shell, new RegExp(`"${mode}"`, "u"));
+    assert.match(contentLayout, new RegExp(`"${mode}"`, "u"));
     assert.match(
-      viewportStyles,
-      new RegExp(`data-reference-layout="${mode}"`, "u"),
+      frameStyles,
+      new RegExp(`data-content-layout="${mode}"`, "u"),
     );
   }
 
@@ -281,16 +290,19 @@ test("Reference navigation stays registry-driven and route changes restore readi
 });
 
 test("reading templates use the unified main landmark and source-driven deep links", () => {
+  const frame = read("apps/docs/src/DocumentationContentFrame.tsx");
   const template = read("apps/docs/src/DocumentationPageTemplate.tsx");
   const guide = read("apps/docs/src/GuidePage.tsx");
   const markdown = read("apps/docs/src/MarkdownView.tsx");
   const styles = read("apps/docs/src/styles/docs.css");
 
+  assert.doesNotMatch(frame, /<main/u);
   assert.doesNotMatch(template, /<main/u);
   assert.doesNotMatch(guide, /<main/u);
   assert.doesNotMatch(template, /vf-docs-page(?:__intro)?/u);
-  assert.match(template, /vf-reference-page__hero/u);
+  assert.match(frame, /vf-reference-page__hero/u);
   assert.match(template, /vf-reference-page__eyebrow/u);
+  assert.match(template, /<DocumentationContentFrame/u);
   assert.doesNotMatch(styles, /\.vf-docs-page__intro/u);
   assert.match(markdown, /vf-docs-markdown__heading-link/u);
   assert.match(markdown, /headingId/u);
