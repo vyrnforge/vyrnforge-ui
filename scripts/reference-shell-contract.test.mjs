@@ -72,6 +72,7 @@ test("public Docs navigation owns the complete reader-facing information archite
 });
 
 test("Docs is the single reader-facing product and renders examples in-process", () => {
+  const appShell = read("apps/docs/src/DocumentationAppShell.tsx");
   const referenceShell = read("apps/docs/src/ReferenceShell.tsx");
   const docsPage = read("apps/docs/src/DocsPage.tsx");
   const migratedExamples = read(
@@ -81,7 +82,7 @@ test("Docs is the single reader-facing product and renders examples in-process",
     "apps/docs/src/examples/ExecutableExamplesPage.tsx",
   );
 
-  assert.match(referenceShell, />\s*VyrnForge\s*</u);
+  assert.match(appShell, />\s*VyrnForge\s*</u);
   assert.doesNotMatch(referenceShell, /referenceModel\.product\.label/u);
   assert.match(docsPage, /MigratedExamplePage/u);
   assert.match(docsPage, /ExecutableExamplesPage/u);
@@ -203,12 +204,14 @@ test("Docs filter discovers selected-framework API members without restoring a s
   assert.doesNotMatch(docsNav, /ReferenceSearchPage/u);
 });
 
-test("all public routes use one unified Reference shell with controlled layouts", () => {
+test("public routes separate app chrome from reference layout adaptation", () => {
   const app = read("apps/docs/src/App.tsx");
+  const appShell = read("apps/docs/src/DocumentationAppShell.tsx");
   const shell = read("apps/docs/src/ReferenceShell.tsx");
   const docsPage = read("apps/docs/src/DocsPage.tsx");
   const navigation = read("apps/docs/src/ReferenceNavigation.tsx");
-  const styles = read("apps/docs/src/styles/reference-shell.css");
+  const shellStyles = read("apps/docs/src/styles/documentation-app-shell.css");
+  const viewportStyles = read("apps/docs/src/styles/reference-page-viewport.css");
 
   assert.match(app, /import \{ ReferenceShell \} from "\.\/ReferenceShell"/u);
   assert.match(app, /<ReferenceShell/u);
@@ -230,15 +233,25 @@ test("all public routes use one unified Reference shell with controlled layouts"
   assert.doesNotMatch(advancedModulePage, /DataGridShell|GridDocsShell/u);
   assert.doesNotMatch(shell, /DocsNav/u);
   assert.match(shell, /ReferenceNavigation/u);
-  assert.match(shell, /Drawer/u);
-  assert.match(shell, /Skip to content/u);
+  assert.match(shell, /DocumentationAppShell/u);
+  assert.doesNotMatch(shell, /\bDrawer\b|Skip to content/u);
+  assert.match(appShell, /\bAppShell\b/u);
+  assert.match(appShell, /\bDrawer\b/u);
+  assert.match(appShell, /Skip to content/u);
   assert.match(shell, /data-reference-layout=\{layoutMode\}/u);
 
   for (const mode of ["reading", "reference", "catalog", "example", "wide"]) {
     assert.match(shell, new RegExp(`"${mode}"`, "u"));
-    assert.match(styles, new RegExp(`data-reference-layout="${mode}"`, "u"));
+    assert.match(
+      viewportStyles,
+      new RegExp(`data-reference-layout="${mode}"`, "u"),
+    );
   }
 
+  assert.doesNotMatch(
+    shellStyles,
+    /vf-docs-(?:component|package|token|live-example|api-table)/u,
+  );
   assert.match(navigation, /documentationSearchRecords/u);
   assert.match(navigation, /publicDocsSections/u);
   assert.match(navigation, /getReferenceLocationHref/u);
@@ -246,6 +259,7 @@ test("all public routes use one unified Reference shell with controlled layouts"
 
 test("Reference navigation stays registry-driven and route changes restore reading focus", () => {
   const app = read("apps/docs/src/App.tsx");
+  const appShell = read("apps/docs/src/DocumentationAppShell.tsx");
   const navigation = read("apps/docs/src/ReferenceNavigation.tsx");
   const shell = read("apps/docs/src/ReferenceShell.tsx");
 
@@ -255,7 +269,8 @@ test("Reference navigation stays registry-driven and route changes restore readi
   assert.match(navigation, /Search VyrnForge Reference/u);
   assert.match(navigation, /aria-live="polite"/u);
   assert.match(shell, /ReferencePrimaryNavigation/u);
-  assert.match(shell, /Drawer/u);
+  assert.match(appShell, /\bDrawer\b/u);
+  assert.match(appShell, /restore|mobileNavigationOpen/u);
   assert.match(
     app,
     /getElementById\(\s*"vf-reference-main"\s*\)\s*\?\.\s*focus/u,
