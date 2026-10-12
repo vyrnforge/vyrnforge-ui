@@ -214,7 +214,9 @@ test(
     const contentLayout = read("apps/docs/src/documentationContentLayout.ts");
     const docsPage = read("apps/docs/src/DocsPage.tsx");
     const navigation = read("apps/docs/src/ReferenceNavigation.tsx");
-    const shellStyles = read("apps/docs/src/styles/documentation-app-shell.css");
+    const shellStyles = read(
+      "apps/docs/src/styles/documentation-app-shell.css",
+    );
     const frameStyles = read(
       "apps/docs/src/styles/documentation-content-frame.css",
     );
