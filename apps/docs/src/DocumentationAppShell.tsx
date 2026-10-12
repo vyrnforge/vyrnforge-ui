@@ -71,7 +71,7 @@ export function DocumentationAppShell({
 
   return (
     <>
-      <a className="vf-docs-app-shell__skip" href="#vf-docs-main">
+      <a className="vf-docs-app-shell__skip" href="#vf-reference-main">
         Skip to content
       </a>
 
@@ -86,7 +86,7 @@ export function DocumentationAppShell({
       >
         <main
           className="vf-docs-app-shell__main"
-          id="vf-docs-main"
+          id="vf-reference-main"
           tabIndex={-1}
         >
           {children}
