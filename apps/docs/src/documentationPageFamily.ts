@@ -26,7 +26,9 @@ export function getDocumentationPageFamily(
   }
 
   if (route.kind === "discovery-reference") {
-    return referenceRecord?.domain === route.recordDomain ? "reference" : "catalog";
+    return referenceRecord?.domain === route.recordDomain
+      ? "reference"
+      : "catalog";
   }
 
   return "reading";
