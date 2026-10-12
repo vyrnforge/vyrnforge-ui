@@ -23,7 +23,7 @@ export function DocumentationPageTemplate({
 }: DocumentationPageTemplateProps) {
   return (
     <article
-      className={`vf-reference-page vf-reference-page--template-${template.id}`}
+      className={`vf-reference-page vf-reference-page--${family} vf-reference-page--template-${template.id}`}
       data-document-family={family}
       data-document-template={template.id}
       data-template-sections={template.sections.join(" ")}
