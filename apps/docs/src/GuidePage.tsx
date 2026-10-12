@@ -172,56 +172,69 @@ function splitGuideSections(markdown: string) {
   return { intro: intro.join("\n").trim(), sections };
 }
 
-function GuideDocument({ markdown }: { markdown: string }) {
-  const { intro, sections } = splitGuideSections(markdown);
+function guideContent(route: DocsRoute) {
+  return splitGuideSections(
+    withoutDuplicateTitle(route.content ?? "", route.title),
+  );
+}
+
+export function hasGuideOutline(route: DocsRoute) {
+  return route.kind === "markdown" && guideContent(route).sections.length > 0;
+}
+
+export function GuidePageOutline({ route }: Pick<GuidePageProps, "route">) {
+  const { sections } = guideContent(route);
+  if (sections.length === 0) return null;
 
   return (
-    <div className="vf-docs-reading-layout">
-      {sections.length > 0 ? (
-        <nav aria-label="On this page" className="vf-docs-reading-outline">
-          <Text className="vf-docs-content-kicker" size="sm">
-            On this page
-          </Text>
-          <ol>
-            {sections.map((section, index) => (
-              <li key={section.id}>
-                <a href={`#${section.id}`}>
-                  <span className="vf-docs-reading-outline__step">
-                    {String(index + 1).padStart(2, "0")}
-                  </span>
-                  <span>{section.title}</span>
-                </a>
-              </li>
-            ))}
-          </ol>
-        </nav>
-      ) : null}
-
-      <div className="vf-docs-reading-content">
-        {intro ? (
-          <MarkdownView className="vf-docs-reading-prose" markdown={intro} />
-        ) : null}
+    <nav aria-label="On this page" className="vf-docs-reading-outline">
+      <Text className="vf-docs-content-kicker" size="sm">
+        On this page
+      </Text>
+      <ol>
         {sections.map((section, index) => (
-          <section
-            className="vf-docs-reading-section"
-            id={section.id}
-            key={section.id}
-          >
-            <div className="vf-docs-reading-section__heading">
-              <span className="vf-docs-reading-section__step">
+          <li key={section.id}>
+            <a href={`#${section.id}`}>
+              <span className="vf-docs-reading-outline__step">
                 {String(index + 1).padStart(2, "0")}
               </span>
-              <Heading level={3} size="md">
-                {section.title}
-              </Heading>
-            </div>
-            <MarkdownView
-              className="vf-docs-reading-prose"
-              markdown={section.body}
-            />
-          </section>
+              <span>{section.title}</span>
+            </a>
+          </li>
         ))}
-      </div>
+      </ol>
+    </nav>
+  );
+}
+
+function GuideDocument({ route }: Pick<GuidePageProps, "route">) {
+  const { intro, sections } = guideContent(route);
+
+  return (
+    <div className="vf-docs-reading-content">
+      {intro ? (
+        <MarkdownView className="vf-docs-reading-prose" markdown={intro} />
+      ) : null}
+      {sections.map((section, index) => (
+        <section
+          className="vf-docs-reading-section"
+          id={section.id}
+          key={section.id}
+        >
+          <div className="vf-docs-reading-section__heading">
+            <span className="vf-docs-reading-section__step">
+              {String(index + 1).padStart(2, "0")}
+            </span>
+            <Heading level={3} size="md">
+              {section.title}
+            </Heading>
+          </div>
+          <MarkdownView
+            className="vf-docs-reading-prose"
+            markdown={section.body}
+          />
+        </section>
+      ))}
     </div>
   );
 }
@@ -231,9 +244,5 @@ export function GuidePage({ onRouteChange, route }: GuidePageProps) {
     return <OverviewGuide onRouteChange={onRouteChange} />;
   }
 
-  return (
-    <GuideDocument
-      markdown={withoutDuplicateTitle(route.content ?? "", route.title)}
-    />
-  );
+  return <GuideDocument route={route} />;
 }
