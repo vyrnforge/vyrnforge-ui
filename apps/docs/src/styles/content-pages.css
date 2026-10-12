@@ -3,7 +3,7 @@
 }
 
 .vf-reference-page__hero {
-  overflow: visible;
+  overflow: hidden;
   padding: 0 0 var(--vf-space-6, 24px);
   border-radius: 0;
   border-block-end: 1px solid var(--vf-divider, var(--vf-border, #e2e8f0));
