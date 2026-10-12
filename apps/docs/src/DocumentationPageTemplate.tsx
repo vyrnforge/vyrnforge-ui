@@ -1,9 +1,5 @@
 import type { ReactNode } from "react";
-import {
-  Badge,
-  Text,
-  type BreadcrumbItem,
-} from "@vyrnforge/ui-components";
+import { Badge, Text, type BreadcrumbItem } from "@vyrnforge/ui-components";
 import type { DocumentationReadinessStatus } from "../../../docs/reference/documentationAvailability";
 import {
   DocumentationContentFrame,
@@ -12,12 +8,7 @@ import {
 import type { DocsTemplateDefinition } from "./referenceRoutes";
 
 export type DocumentationPageFamily =
-  | "landing"
-  | "reading"
-  | "catalog"
-  | "reference"
-  | "showcase"
-  | "dedicated";
+  "landing" | "reading" | "catalog" | "reference" | "showcase" | "dedicated";
 
 type DocumentationPageTemplateProps = {
   breadcrumbs?: BreadcrumbItem[];
