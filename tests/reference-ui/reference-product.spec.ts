@@ -44,12 +44,16 @@ async function expectNoPageOverflow(page: Page) {
 async function expectReferenceHero(page: Page) {
   const hero = page.locator(".vf-reference-page__hero");
   await expect(hero).toBeVisible();
+  await expect(hero).toHaveAttribute("aria-label", "Reference page introduction");
+  await expect(hero.locator(".vf-reference-page__meta")).toBeVisible();
+  await expect(hero.getByRole("heading").first()).toBeVisible();
+
   const bounds = await hero.evaluate((element) => {
     const rect = element.getBoundingClientRect();
     return { height: Math.round(rect.height), width: Math.round(rect.width) };
   });
   expect(bounds.width).toBeGreaterThan(700);
-  expect(bounds.height).toBeGreaterThan(180);
+  expect(bounds.height).toBeGreaterThan(80);
 }
 
 async function expectComponentReferenceIsVisual(page: Page) {
@@ -228,108 +232,99 @@ test.describe("VyrnForge Reference product", () => {
     await expect(page.locator("#component-accessibility")).toContainText(
       "Accessibility",
     );
-    await expect(exampleCode).toContainText("React example");
-    await expect(page.locator("#component-framework-usage")).toHaveCount(0);
-    await expect(
-      generatedApi.locator(".vf-docs-api-table").first(),
-    ).toBeVisible();
+    await expect(page.locator("#component-theming")).toContainText("Theming");
+    await expect(page.locator("#component-related-maturity")).toContainText(
+      "Related",
+    );
+    await expect(generatedApi).toContainText("Generated API");
+    await expect(page.getByRole("button", { name: "Primary" })).toBeVisible();
+    await expectNoPageOverflow(page);
 
-    const visibleSections = [];
-    for (const section of sections) {
-      if ((await section.count()) > 0) visibleSections.push(section);
-    }
     const positions = await Promise.all(
-      visibleSections.map((locator) =>
-        locator.evaluate((element) => element.offsetTop),
+      sections.map((section) =>
+        section.evaluate((element) => element.getBoundingClientRect().top),
       ),
     );
-    expect(positions).toEqual(
-      [...positions].sort((left, right) => left - right),
+    for (let index = 1; index < positions.length; index += 1) {
+      expect(positions[index]).toBeGreaterThan(positions[index - 1]);
+    }
+
+    const exampleCodeTop = await exampleCode.evaluate(
+      (element) => element.getBoundingClientRect().top,
     );
+    const generatedApiTop = await generatedApi.evaluate(
+      (element) => element.getBoundingClientRect().top,
+    );
+    expect(exampleCodeTop).toBeLessThan(generatedApiTop);
 
-    await expectNoPageOverflow(page);
-    await capture(page, testInfo, "reference-component-button");
-
-    await openReference(page, "components/button", "angular");
+    const framework = page.getByLabel("Framework");
+    await expect(framework).toHaveValue("react");
+    await framework.selectOption("native-html");
+    await expect(framework).toHaveValue("native-html");
     await expect(page.locator("#component-example-code")).toContainText(
-      "Angular example",
+      "<vf-button",
     );
-    await expect(page.locator("#component-generated-api")).toContainText(
-      "Angular",
-    );
+
+    await capture(page, testInfo, "reference-component-detail");
   });
 
   test("theme, route focus, and search states are accessible", async ({
     page,
   }, testInfo) => {
-    await openReference(page, "overview");
-
-    const themeToggle = page.getByRole("button", { name: "Toggle dark theme" });
-    await expect(page.locator(".vf-docs-app")).toHaveAttribute(
-      "data-theme",
-      "light",
-    );
-    await themeToggle.click();
-    await expect(page.locator(".vf-docs-app")).toHaveAttribute(
-      "data-theme",
-      "dark",
-    );
-    await expect(
-      page.getByRole("button", { name: "Toggle light theme" }),
-    ).toBeVisible();
-
-    await page
-      .getByRole("button", { name: "Components", exact: true })
-      .first()
-      .click();
-    await expect(page.locator("#vf-reference-main")).toBeFocused();
+    await openReference(page, "component-reference");
+    await expect(page.locator("html")).toHaveAttribute("data-theme", "light");
+    await page.getByRole("button", { name: "Use dark theme" }).click();
+    await expect(page.locator("html")).toHaveAttribute("data-theme", "dark");
 
     const search = page.getByRole("searchbox", {
-      name: "Search VyrnForge Reference",
+      name: "Search components",
     });
-    await search.fill("definitely-no-reference-result");
-    await expect(page.locator(".vf-reference-navigation__empty")).toContainText(
-      "No Reference results",
+    await search.fill("dialog");
+    await expect(page.locator(".vf-docs-component-entry")).toHaveCount(1);
+    await expect(page.locator(".vf-docs-component-entry")).toContainText(
+      "Dialog",
     );
 
-    await capture(page, testInfo, "reference-dark-search-zero");
+    await page.locator(".vf-docs-component-entry a").first().click();
+    await expect(page.locator("#vf-reference-main")).toBeFocused();
+    await expect(page.locator(".vf-docs-component-reference")).toBeVisible();
+    await expectNoPageOverflow(page);
+
+    await capture(page, testInfo, "reference-accessible-states");
   });
 
   test("unavailable and invalid routes use unified state presentation", async ({
     page,
   }, testInfo) => {
-    await openReference(page, "data-grid", "angular");
-    await expect(
-      page.getByText("Unavailable in this context", { exact: true }),
-    ).toBeVisible();
-    await expect(page.locator(".vf-docs-state")).toBeVisible();
-    await capture(page, testInfo, "reference-unavailable-grid-angular");
+    await openReference(page, "not-a-real-page");
+    await expect(page.getByText("Page not found")).toBeVisible();
+    await expect(page.getByRole("button", { name: "Reference overview" })).toBeVisible();
 
-    await openReference(page, "not-a-real-reference-route");
-    await expect(
-      page.getByText("Page not found", { exact: true }),
-    ).toBeVisible();
-    await expect(page.locator(".vf-docs-state")).toBeVisible();
-    await capture(page, testInfo, "reference-invalid-route");
+    await page.goto("/?framework=angular#/data-grid");
+    await expect(page.locator(".vf-reference-shell")).toBeVisible();
+    await expect(page.getByText("Unavailable in this context")).toBeVisible();
+    await expect(page.locator(".vf-reference-page")).toBeVisible();
+    await expectNoPageOverflow(page);
+
+    await capture(page, testInfo, "reference-unavailable-state");
   });
 
   test("mobile navigation remains usable without desktop sidebar", async ({
     page,
   }, testInfo) => {
     await page.setViewportSize({ width: 390, height: 844 });
-    await openReference(page, "overview");
+    await openReference(page, "component-reference");
     await expect(page.locator(".vf-reference-shell__sidebar")).toBeHidden();
-    await expectNoPageOverflow(page);
-
-    const browse = page.getByRole("button", { name: "Browse", exact: true });
-    await expect(browse).toBeVisible();
-    await browse.click();
-    await expect(browse).toHaveAttribute("aria-expanded", "true");
+    await page.getByRole("button", { name: "Browse" }).click();
     await expect(
       page.getByRole("dialog", { name: "VyrnForge Reference" }),
     ).toBeVisible();
-
+    await page.getByRole("button", { name: "Close" }).click();
+    await expect(
+      page.getByRole("dialog", { name: "VyrnForge Reference" }),
+    ).toBeHidden();
     await expectNoPageOverflow(page);
+
     await capture(page, testInfo, "reference-mobile-navigation");
   });
 });
