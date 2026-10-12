@@ -210,7 +210,9 @@ test.describe("VyrnForge Reference product", () => {
     await expect(
       page.locator(".vf-docs-content-frame__local-navigation"),
     ).toBeVisible();
-    await expect(page.getByRole("navigation", { name: "On this page" })).toBeVisible();
+    await expect(
+      page.getByRole("navigation", { name: "On this page" }),
+    ).toBeVisible();
     await expect(page.locator(".vf-docs-content-frame__footer")).toBeVisible();
     await expect(
       page.getByRole("button", { name: /^Next:/u }),
