@@ -30,7 +30,11 @@ import {
 } from "./referenceRoutes";
 
 export type ReferenceLayoutMode =
-  "reading" | "reference" | "catalog" | "example" | "wide";
+  | "reading"
+  | "reference"
+  | "catalog"
+  | "example"
+  | "wide";
 
 type ReferenceShellProps = {
   activeRoute: DocsRoute;
