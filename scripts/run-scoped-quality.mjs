@@ -122,19 +122,6 @@ const buildPackages = orderSelectedPackages(
   expandWorkspaceDependencyClosure(selectedPackages),
 );
 
-runNpm(["run", "format"]);
-execFileSync(
-  "git",
-  [
-    "diff",
-    "--",
-    "apps/docs/src/ReferenceShell.tsx",
-    "apps/docs/src/styles/reference-redesign.css",
-  ],
-  { cwd: root, stdio: "inherit" },
-);
-throw new Error("Formatter diagnostic complete");
-
 for (const command of [
   "format:check",
   "lint",
