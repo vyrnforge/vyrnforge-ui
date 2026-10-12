@@ -168,3 +168,8 @@ for (const packageName of selectedPackages) {
     runWorkspaceScript(packageName, "test");
   }
 }
+
+if (fixtures) {
+  runNpm(["run", "fixtures:test:prepared"]);
+  runNpm(["run", "fixtures:build:prepared"]);
+}
