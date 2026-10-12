@@ -6,7 +6,7 @@ const evidenceDirectory = path.resolve("test-results/reference-ui-evidence");
 
 async function openReference(page: Page, route: string, framework = "react") {
   await page.goto(`/?framework=${framework}#/${route}`);
-  await expect(page.locator(".vf-reference-shell")).toBeVisible();
+  await expect(page.locator(".vf-docs-app-shell")).toBeVisible();
   await expect(page.locator("#vf-reference-main")).toBeVisible();
 }
 
@@ -171,16 +171,16 @@ test.describe("VyrnForge Reference product", () => {
 
     for (const [route, layout] of routes) {
       await openReference(page, route);
-      await expect(page.locator(".vf-reference-shell")).toHaveAttribute(
-        "data-layout-mode",
+      await expect(page.locator(".vf-reference-page-viewport")).toHaveAttribute(
+        "data-reference-layout",
         layout,
       );
       await expect(
-        page.locator("header .vf-reference-shell__identity"),
+        page.locator("header .vf-docs-app-shell__identity"),
       ).toContainText("VyrnForge");
       await expect(
-        page.locator("header .vf-reference-shell__identity"),
-      ).toContainText("Reference");
+        page.locator("header .vf-docs-app-shell__identity"),
+      ).toContainText("Docs");
       await expectNoPageOverflow(page);
       if (route !== "overview" && route !== "getting-started") {
         await expectReferenceHero(page);
@@ -324,7 +324,9 @@ test.describe("VyrnForge Reference product", () => {
   }, testInfo) => {
     await page.setViewportSize({ width: 390, height: 844 });
     await openReference(page, "overview");
-    await expect(page.locator(".vf-reference-shell__sidebar")).toBeHidden();
+    await expect(
+      page.locator(".vf-docs-app-shell .vf-app-shell__sidebar"),
+    ).toBeHidden();
     await expectNoPageOverflow(page);
 
     const browse = page.getByRole("button", { name: "Browse", exact: true });
@@ -332,7 +334,7 @@ test.describe("VyrnForge Reference product", () => {
     await browse.click();
     await expect(browse).toHaveAttribute("aria-expanded", "true");
     await expect(
-      page.getByRole("dialog", { name: "VyrnForge Reference" }),
+      page.getByRole("dialog", { name: "VyrnForge Docs" }),
     ).toBeVisible();
 
     await expectNoPageOverflow(page);
