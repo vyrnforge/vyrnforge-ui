@@ -1,47 +1,41 @@
-.vf-reference-page[data-document-family="landing"] {
+.vf-reference-page--landing {
   gap: clamp(44px, 7vw, 80px);
 }
 
-.vf-reference-page[data-document-family="reading"] {
+.vf-reference-page--reading {
   gap: clamp(32px, 5vw, 52px);
 }
 
-.vf-reference-page[data-document-family="catalog"],
-.vf-reference-page[data-document-family="reference"],
-.vf-reference-page[data-document-family="showcase"],
-.vf-reference-page[data-document-family="dedicated"] {
+.vf-reference-page--catalog,
+.vf-reference-page--reference,
+.vf-reference-page--showcase,
+.vf-reference-page--dedicated {
   gap: clamp(28px, 4vw, 44px);
 }
 
-.vf-reference-page:not([data-document-family="landing"])
-  .vf-reference-page__hero {
+.vf-reference-page:not(.vf-reference-page--landing) .vf-reference-page__hero {
   padding: clamp(24px, 4vw, 40px);
   box-shadow: inset 0 0 0 1px
     color-mix(in srgb, var(--vf-border, #e2e8f0) 82%, transparent);
 }
 
-.vf-reference-page:not([data-document-family="landing"])
+.vf-reference-page:not(.vf-reference-page--landing)
   .vf-reference-page__hero::after {
   display: none;
 }
 
-.vf-reference-page[data-document-family="reading"]
-  .vf-reference-page__hero-copy {
+.vf-reference-page--reading .vf-reference-page__hero-copy {
   max-width: 760px;
 }
 
-.vf-reference-page[data-document-family="reading"]
-  .vf-reference-page__body {
+.vf-reference-page--reading .vf-reference-page__body {
   width: 100%;
   max-width: 1120px;
 }
 
-.vf-reference-page[data-document-family="catalog"]
-  .vf-reference-page__hero-copy,
-.vf-reference-page[data-document-family="reference"]
-  .vf-reference-page__hero-copy,
-.vf-reference-page[data-document-family="showcase"]
-  .vf-reference-page__hero-copy {
+.vf-reference-page--catalog .vf-reference-page__hero-copy,
+.vf-reference-page--reference .vf-reference-page__hero-copy,
+.vf-reference-page--showcase .vf-reference-page__hero-copy {
   max-width: 900px;
 }
 
@@ -66,7 +60,7 @@
 }
 
 @media (max-width: 680px) {
-  .vf-reference-page:not([data-document-family="landing"])
+  .vf-reference-page:not(.vf-reference-page--landing)
     .vf-reference-page__hero {
     padding: var(--vf-space-5, 20px);
   }
