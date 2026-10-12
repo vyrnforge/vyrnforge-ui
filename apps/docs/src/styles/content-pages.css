@@ -1,5 +1,9 @@
 .vf-reference-page {
-  gap: clamp(var(--vf-space-6, 24px), 5vw, var(--vf-space-10, 40px));
+  gap: clamp(
+    var(--vf-space-6, 24px),
+    5vw,
+    var(--vf-space-10, 40px)
+  );
 }
 
 .vf-reference-page__hero {
@@ -22,7 +26,11 @@
 
 .vf-reference-page--family-landing .vf-reference-page__hero {
   overflow: hidden;
-  padding: clamp(var(--vf-space-6, 24px), 5vw, var(--vf-space-10, 40px));
+  padding: clamp(
+    var(--vf-space-6, 24px),
+    5vw,
+    var(--vf-space-10, 40px)
+  );
   border: 1px solid var(--vf-border, #e2e8f0);
   border-radius: var(--vf-radius-xl, 12px);
   background: var(--vf-surface, #ffffff);
@@ -46,7 +54,11 @@
 
 .vf-docs-landing {
   display: grid;
-  gap: clamp(var(--vf-space-8, 32px), 6vw, var(--vf-space-12, 48px));
+  gap: clamp(
+    var(--vf-space-8, 32px),
+    6vw,
+    var(--vf-space-12, 48px)
+  );
 }
 
 .vf-docs-content-section {
@@ -131,7 +143,11 @@
 .vf-docs-reading-layout {
   display: grid;
   grid-template-columns: minmax(170px, 220px) minmax(0, 1fr);
-  gap: clamp(var(--vf-space-6, 24px), 5vw, var(--vf-space-10, 40px));
+  gap: clamp(
+    var(--vf-space-6, 24px),
+    5vw,
+    var(--vf-space-10, 40px)
+  );
   align-items: start;
 }
 
