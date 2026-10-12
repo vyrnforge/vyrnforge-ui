@@ -28,9 +28,15 @@ export function DocumentationPageTemplate({
   template,
   title,
 }: DocumentationPageTemplateProps) {
+  const pageClassName = [
+    "vf-reference-page",
+    `vf-reference-page--family-${family}`,
+    `vf-reference-page--template-${template.id}`,
+  ].join(" ");
+
   return (
     <article
-      className={`vf-reference-page vf-reference-page--family-${family} vf-reference-page--template-${template.id}`}
+      className={pageClassName}
       data-document-template={template.id}
       data-page-family={family}
       data-template-sections={template.sections.join(" ")}
