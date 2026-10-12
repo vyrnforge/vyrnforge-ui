@@ -44,7 +44,10 @@ async function expectNoPageOverflow(page: Page) {
 async function expectReferenceHero(page: Page) {
   const hero = page.locator(".vf-reference-page__hero");
   await expect(hero).toBeVisible();
-  await expect(hero).toHaveAttribute("aria-label", "Reference page introduction");
+  await expect(hero).toHaveAttribute(
+    "aria-label",
+    "Reference page introduction",
+  );
   await expect(hero.locator(".vf-reference-page__meta")).toBeVisible();
   await expect(hero.getByRole("heading").first()).toBeVisible();
   const bounds = await hero.evaluate((element) => {
