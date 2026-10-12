@@ -214,9 +214,7 @@ test.describe("VyrnForge Reference product", () => {
       page.getByRole("navigation", { name: "On this page" }),
     ).toBeVisible();
     await expect(page.locator(".vf-docs-content-frame__footer")).toBeVisible();
-    await expect(
-      page.getByRole("button", { name: /^Next:/u }),
-    ).toBeVisible();
+    await expect(page.getByRole("button", { name: /^Next:/u })).toBeVisible();
   });
 
   test("component detail keeps global framework context and human guidance before API", async ({
