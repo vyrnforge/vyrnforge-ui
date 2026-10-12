@@ -1,6 +1,8 @@
 import type { ReactNode } from "react";
 import { Badge, PageHeader, Text } from "@vyrnforge/ui-components";
-import type { DocumentationReadinessStatus } from "../../../docs/reference/documentationAvailability";
+import type {
+  DocumentationReadinessStatus,
+} from "../../../docs/reference/documentationAvailability";
 import type { DocsTemplateDefinition } from "./referenceRoutes";
 
 export type DocumentationPageFamily =
