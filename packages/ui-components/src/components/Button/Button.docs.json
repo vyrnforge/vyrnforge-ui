@@ -1,0 +1,48 @@
+{
+  "$schema": "../../../../../docs/metadata/component-documentation.schema.json",
+  "schemaVersion": 1,
+  "componentId": "button",
+  "owner": {
+    "package": "@vyrnforge/ui-components",
+    "source": "packages/ui-components/src/components/Button/Button.tsx"
+  },
+  "purpose": "Text action control for primary, secondary, subtle, danger, and ghost actions.",
+  "guidance": {
+    "useWhen": "Use for primary business actions such as Save, Submit, Create, or Cancel.",
+    "avoidWhen": "Avoid for repeated icon-only utilities; use IconButton or ToolbarButton instead.",
+    "aiUsageNotes": "Use visible text for important actions."
+  },
+  "limitations": [
+    "Avoid for repeated icon-only utilities; use IconButton or ToolbarButton instead."
+  ],
+  "relatedComponents": ["IconButton", "ToolbarButton", "ButtonGroup"],
+  "accessibility": {
+    "notes": "Button renders a native button and supports disabled/loading states.",
+    "evidenceRefs": ["docs/api/ui-components-api.md"]
+  },
+  "theming": {
+    "classes": ["vf-button"],
+    "variables": []
+  },
+  "examples": [
+    {
+      "id": "primary-action",
+      "title": "Primary action",
+      "intent": "Show a visible-text primary action using the shared Button contract.",
+      "frameworks": ["native-html", "react", "angular", "vue"]
+    },
+    {
+      "id": "action-emphasis",
+      "title": "Action emphasis",
+      "intent": "Compare the supported default, primary, subtle, ghost, and danger action emphasis without inventing application-specific variants.",
+      "frameworks": ["native-html", "react", "angular", "vue"]
+    },
+    {
+      "id": "busy-and-disabled",
+      "title": "Busy and disabled states",
+      "intent": "Demonstrate the shared disabled and loading action states while keeping workflow state application-owned.",
+      "frameworks": ["native-html", "react", "angular", "vue"]
+    }
+  ],
+  "releaseNotes": []
+}
