@@ -1,5 +1,11 @@
 import { AdvancedModulePage } from "./AdvancedModulePage";
-import { Button, EmptyState } from "@vyrnforge/ui-components";
+import {
+  Button,
+  EmptyState,
+  Heading,
+  Inline,
+  Text,
+} from "@vyrnforge/ui-components";
 import type { ReferenceRecordSelection } from "./App";
 import { ComponentReferencePage } from "./ComponentReferencePage";
 import {
@@ -7,7 +13,11 @@ import {
   renderDedicatedReferencePage,
 } from "./DedicatedReferencePages";
 import { getDocumentationPageFamily } from "./documentationPageFamily";
-import type { DocsFrameworkId } from "./docsContext";
+import {
+  docsFrameworks,
+  getFramework,
+  type DocsFrameworkId,
+} from "./docsContext";
 import { DocumentationPageTemplate } from "./DocumentationPageTemplate";
 import { GuidePage } from "./GuidePage";
 import { DiscoveryReferencePage } from "./DiscoveryReferencePage";
@@ -36,6 +46,7 @@ export function DocsPage({
   route,
   frameworkId,
   invalidPath,
+  onFrameworkChange,
   onRouteChange,
   referenceRecord,
   routeResolution,
@@ -43,6 +54,7 @@ export function DocsPage({
 }: DocsPageProps) {
   const template = getDocumentationTemplate(route.template);
   const family = getDocumentationPageFamily(route, referenceRecord);
+  const framework = getFramework(frameworkId);
 
   if (invalidPath) {
     return (
@@ -167,10 +179,68 @@ export function DocsPage({
     <MarkdownView markdown={route.content ?? ""} />
   );
 
+  const heroActions =
+    family === "landing" ? (
+      <Inline gap="sm">
+        <Button onClick={() => onRouteChange("getting-started")}>
+          Start building
+        </Button>
+        <Button
+          onClick={() => onRouteChange("component-reference")}
+          variant="subtle"
+        >
+          Browse components
+        </Button>
+      </Inline>
+    ) : null;
+
+  const heroAside =
+    family === "landing" || family === "reading" ? (
+      <div className="vf-docs-framework-context">
+        <Text className="vf-docs-content-kicker" size="sm">
+          {family === "landing" ? "Selected surface" : "Reading for"}
+        </Text>
+        <Heading level={3} size="md">
+          {framework.label}
+        </Heading>
+        <Text tone="muted">
+          {framework.language} · {framework.renderer}
+        </Text>
+        <Text size="sm" tone="muted">
+          {framework.supportLevel}
+        </Text>
+        <Inline className="vf-docs-framework-context__switcher" gap="sm">
+          {docsFrameworks.map((candidate) => (
+            <Button
+              aria-pressed={candidate.id === frameworkId}
+              key={candidate.id}
+              onClick={() => onFrameworkChange(candidate.id)}
+              size="sm"
+              variant={candidate.id === frameworkId ? "primary" : "ghost"}
+            >
+              {candidate.label}
+            </Button>
+          ))}
+        </Inline>
+      </div>
+    ) : null;
+
   return (
     <DocumentationPageTemplate
       description={route.description}
       family={family}
+      heroActions={heroActions}
+      heroAside={heroAside}
+      heroDescription={
+        family === "landing"
+          ? "One VyrnForge system for components, tokens, behavior, accessibility, and developer concepts — delivered through first-class Native HTML, React, Angular, and Vue surfaces."
+          : undefined
+      }
+      heroTitle={
+        family === "landing"
+          ? "Build once. Stay native to every framework."
+          : undefined
+      }
       status={routeResolution.status}
       template={template}
       title={route.title}

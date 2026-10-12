@@ -82,7 +82,7 @@ test("Docs rendering selects generated templates and default page families", () 
   assert.doesNotMatch(docsPage, /route\.type\s*===\s*["']component["']/u);
 });
 
-test("shared page shell owns chrome while reading content owns document navigation", () => {
+test("shared families preserve rich landing and reading presentation", () => {
   const docsPage = readFileSync(
     path.join(root, "apps/docs/src/DocsPage.tsx"),
     "utf8",
@@ -95,28 +95,39 @@ test("shared page shell owns chrome while reading content owns document navigati
     path.join(root, "apps/docs/src/GuidePage.tsx"),
     "utf8",
   );
+  const contentStyles = readFileSync(
+    path.join(root, "apps/docs/src/styles/content-pages.css"),
+    "utf8",
+  );
   const referenceShell = readFileSync(
     path.join(root, "apps/docs/src/ReferenceShell.tsx"),
     "utf8",
   );
   const main = readFileSync(path.join(root, "apps/docs/src/main.tsx"), "utf8");
 
-  assert.match(docsPage, /const usesStandardReadingPage =/u);
-  assert.match(docsPage, /<GuidePage/u);
+  assert.match(docsPage, /Build once\. Stay native to every framework\./u);
+  assert.match(docsPage, /Start building/u);
+  assert.match(docsPage, /Browse components/u);
+  assert.match(docsPage, /Selected surface/u);
+  assert.match(docsPage, /Reading for/u);
+  assert.match(docsPage, /onFrameworkChange\(candidate\.id\)/u);
+  assert.match(template, /heroActions\?: ReactNode/u);
+  assert.match(template, /heroAside\?: ReactNode/u);
+  assert.match(template, /vf-reference-page__hero-layout/u);
   assert.match(template, /data-page-family=\{family\}/u);
-  assert.match(template, /aria-label="Reference page introduction"/u);
-  assert.match(template, /<PageHeader/u);
   assert.match(guidePage, /splitGuideSections/u);
   assert.match(guidePage, /aria-label="On this page"/u);
-  assert.match(guidePage, /className="vf-docs-reading-layout"/u);
-  assert.match(guidePage, /className="vf-docs-reading-prose"/u);
-  assert.match(guidePage, /Run framework examples/u);
-  assert.doesNotMatch(guidePage, /data-document-template=/u);
-  assert.doesNotMatch(guidePage, /Framework surface/u);
+  assert.match(guidePage, /vf-docs-reading-outline__step/u);
+  assert.match(guidePage, /vf-docs-reading-section__step/u);
+  assert.match(guidePage, /String\(index \+ 1\)\.padStart\(2, "0"\)/u);
+  assert.match(contentStyles, /vf-docs-framework-context/u);
+  assert.match(contentStyles, /grid-template-columns: repeat\(4,/u);
+  assert.match(contentStyles, /vf-docs-reading-section__heading/u);
   assert.match(referenceShell, /className="vf-reference-shell"/u);
   assert.match(referenceShell, /<DocsPage/u);
   assert.doesNotMatch(referenceShell, /GuideShell|DocsShell|DocsNav/u);
   assert.equal(main.includes("styles/content-pages.css"), true);
   assert.equal(main.includes("styles/docs-overview.css"), false);
   assert.doesNotMatch(docsPage, /OverviewPage/u);
+  assert.doesNotMatch(guidePage, /data-document-template=/u);
 });
