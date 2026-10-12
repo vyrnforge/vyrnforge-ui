@@ -6,6 +6,7 @@ import {
   getDedicatedReferencePage,
   renderDedicatedReferencePage,
 } from "./DedicatedReferencePages";
+import { getDocumentationPageFamily } from "./documentationPageFamily";
 import type { DocsFrameworkId } from "./docsContext";
 import { DocumentationPageTemplate } from "./DocumentationPageTemplate";
 import { GuidePage } from "./GuidePage";
@@ -35,13 +36,13 @@ export function DocsPage({
   route,
   frameworkId,
   invalidPath,
-  onFrameworkChange,
   onRouteChange,
   referenceRecord,
   routeResolution,
   version,
 }: DocsPageProps) {
   const template = getDocumentationTemplate(route.template);
+  const family = getDocumentationPageFamily(route, referenceRecord);
 
   if (invalidPath) {
     return (
@@ -69,6 +70,7 @@ export function DocsPage({
     return (
       <DocumentationPageTemplate
         description="This document is not available for the selected framework and documentation version."
+        family={family}
         status={routeResolution.status}
         template={template}
         title={route.title}
@@ -91,18 +93,6 @@ export function DocsPage({
     );
   }
 
-  if (route.template === "guide") {
-    return (
-      <GuidePage
-        frameworkId={frameworkId}
-        onFrameworkChange={onFrameworkChange}
-        onRouteChange={onRouteChange}
-        route={route}
-        status={routeResolution.status}
-      />
-    );
-  }
-
   const dedicatedPage = getDedicatedReferencePage(route);
   if (dedicatedPage) {
     const dedicatedContent = renderDedicatedReferencePage(dedicatedPage, {
@@ -116,6 +106,7 @@ export function DocsPage({
     return (
       <DocumentationPageTemplate
         description={route.description}
+        family="dedicated"
         status={routeResolution.status}
         template={template}
         title={route.title}
@@ -127,54 +118,59 @@ export function DocsPage({
 
   const componentId =
     referenceRecord?.domain === "components" ? referenceRecord.id : null;
+  const usesStandardReadingPage =
+    route.kind === "overview" ||
+    (route.kind === "markdown" && route.template !== "advanced-module");
 
-  const pageContent =
-    route.kind === "example" && route.exampleId ? (
-      <MigratedExamplePage
-        exampleId={route.exampleId}
-        frameworkId={frameworkId}
-        version={routeResolution.context.version}
-      />
-    ) : route.kind === "executable-examples" ? (
-      <ExecutableExamplesPage
-        frameworkId={frameworkId}
-        version={routeResolution.context.version}
-      />
-    ) : route.kind === "discovery-reference" &&
-      (route.recordDomain === "tokens" || route.recordDomain === "patterns") ? (
-      <DiscoveryReferencePage
-        frameworkId={frameworkId}
-        recordDomain={route.recordDomain}
-        referenceRecord={referenceRecord}
-        version={routeResolution.context.version}
-      />
-    ) : route.kind === "component-reference" ? (
-      <ComponentReferencePage
-        componentId={componentId}
-        frameworkId={frameworkId}
-        version={version}
-      />
-    ) : route.kind === "package-reference" ? (
-      <PackageReferencePage
-        packageId={
-          referenceRecord?.domain === "packages" ? referenceRecord.id : null
-        }
-      />
-    ) : route.template === "advanced-module" ? (
-      <AdvancedModulePage
-        frameworkId={frameworkId}
-        onRouteChange={onRouteChange}
-        route={route}
-        status={routeResolution.status}
-        version={routeResolution.context.version}
-      />
-    ) : (
-      <MarkdownView markdown={route.content ?? ""} />
-    );
+  const pageContent = usesStandardReadingPage ? (
+    <GuidePage onRouteChange={onRouteChange} route={route} />
+  ) : route.kind === "example" && route.exampleId ? (
+    <MigratedExamplePage
+      exampleId={route.exampleId}
+      frameworkId={frameworkId}
+      version={routeResolution.context.version}
+    />
+  ) : route.kind === "executable-examples" ? (
+    <ExecutableExamplesPage
+      frameworkId={frameworkId}
+      version={routeResolution.context.version}
+    />
+  ) : route.kind === "discovery-reference" &&
+    (route.recordDomain === "tokens" || route.recordDomain === "patterns") ? (
+    <DiscoveryReferencePage
+      frameworkId={frameworkId}
+      recordDomain={route.recordDomain}
+      referenceRecord={referenceRecord}
+      version={routeResolution.context.version}
+    />
+  ) : route.kind === "component-reference" ? (
+    <ComponentReferencePage
+      componentId={componentId}
+      frameworkId={frameworkId}
+      version={version}
+    />
+  ) : route.kind === "package-reference" ? (
+    <PackageReferencePage
+      packageId={
+        referenceRecord?.domain === "packages" ? referenceRecord.id : null
+      }
+    />
+  ) : route.template === "advanced-module" ? (
+    <AdvancedModulePage
+      frameworkId={frameworkId}
+      onRouteChange={onRouteChange}
+      route={route}
+      status={routeResolution.status}
+      version={routeResolution.context.version}
+    />
+  ) : (
+    <MarkdownView markdown={route.content ?? ""} />
+  );
 
   return (
     <DocumentationPageTemplate
       description={route.description}
+      family={family}
       status={routeResolution.status}
       template={template}
       title={route.title}

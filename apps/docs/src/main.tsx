@@ -10,6 +10,7 @@ import "./styles/icon-reference.css";
 import "./styles/reference-shell.css";
 import "./styles/component-reference.css";
 import "./styles/reference-responsive.css";
+import "./styles/content-pages.css";
 
 createRoot(document.getElementById("root") as HTMLElement).render(
   <StrictMode>
