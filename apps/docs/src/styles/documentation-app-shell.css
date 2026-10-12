@@ -118,6 +118,7 @@
   min-height: 100%;
   padding: var(--vf-space-4, 16px) var(--vf-space-3, 12px)
     var(--vf-space-8, 32px);
+  overflow-wrap: anywhere;
 }
 
 .vf-docs-app-shell__menu-button {
@@ -130,6 +131,18 @@
   min-height: 100%;
   padding: clamp(var(--vf-space-5, 20px), 3vw, var(--vf-space-10, 40px));
   outline: none;
+  overflow-wrap: anywhere;
+}
+
+.vf-docs-app-shell__mobile-drawer {
+  box-sizing: border-box;
+  max-inline-size: 100vw;
+  overflow-x: hidden;
+}
+
+.vf-docs-app-shell__mobile-drawer .vf-drawer__body {
+  min-width: 0;
+  overflow-x: hidden;
 }
 
 @media (max-width: 1120px) {
@@ -189,6 +202,14 @@
 
   .vf-docs-app-shell__main {
     padding: var(--vf-space-4, 16px);
+  }
+}
+
+@media (forced-colors: active) {
+  .vf-docs-app-shell__brand:focus-visible,
+  .vf-docs-app-shell__utility-link:focus-visible,
+  .vf-docs-app-shell__skip:focus-visible {
+    outline: 2px solid CanvasText;
   }
 }
 
