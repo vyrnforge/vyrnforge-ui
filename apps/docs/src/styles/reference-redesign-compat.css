@@ -1,6 +1,14 @@
 .vf-reference-shell__header-inner {
+  grid-template-columns:
+    minmax(0, var(--vf-reference-shell-sidebar-width)) minmax(0, 1fr) auto;
   width: 100%;
   margin-inline: 0;
+}
+
+.vf-reference-shell__brand-context,
+.vf-reference-shell__current-page {
+  min-width: 0;
+  overflow: hidden;
 }
 
 .vf-reference-shell__sidebar {
@@ -16,6 +24,12 @@
   box-sizing: border-box;
 }
 
+@media (max-width: 1180px) {
+  .vf-reference-shell__header-inner {
+    grid-template-columns: auto minmax(0, 1fr) auto;
+  }
+}
+
 @media (max-width: 980px) {
   .vf-reference-shell__sidebar {
     display: grid;
@@ -23,5 +37,9 @@
 
   .vf-reference-shell > .vf-app-shell__body > .vf-app-shell__sidebar {
     display: none;
+  }
+
+  .vf-reference-shell__header-inner {
+    grid-template-columns: minmax(0, 1fr) auto;
   }
 }
