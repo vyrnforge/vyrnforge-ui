@@ -122,31 +122,8 @@ const buildPackages = orderSelectedPackages(
   expandWorkspaceDependencyClosure(selectedPackages),
 );
 
-try {
-  runNpm(["run", "format:check"]);
-} catch (error) {
-  runNpm([
-    "exec",
-    "--",
-    "prettier",
-    "--write",
-    "apps/docs/src/DocumentationPageTemplate.tsx",
-    "tests/reference-ui/default-content-quality.spec.ts",
-  ]);
-  execFileSync(
-    "git",
-    [
-      "diff",
-      "--",
-      "apps/docs/src/DocumentationPageTemplate.tsx",
-      "tests/reference-ui/default-content-quality.spec.ts",
-    ],
-    { cwd: root, stdio: "inherit" },
-  );
-  throw error;
-}
-
 for (const command of [
+  "format:check",
   "lint",
   "lint:css",
   "verify:documentation-current",
