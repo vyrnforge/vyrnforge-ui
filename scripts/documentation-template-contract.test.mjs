@@ -87,6 +87,10 @@ test("shared families preserve rich landing and reading presentation", () => {
     path.join(root, "apps/docs/src/DocsPage.tsx"),
     "utf8",
   );
+  const frame = readFileSync(
+    path.join(root, "apps/docs/src/DocumentationContentFrame.tsx"),
+    "utf8",
+  );
   const template = readFileSync(
     path.join(root, "apps/docs/src/DocumentationPageTemplate.tsx"),
     "utf8",
@@ -97,6 +101,10 @@ test("shared families preserve rich landing and reading presentation", () => {
   );
   const contentStyles = readFileSync(
     path.join(root, "apps/docs/src/styles/content-pages.css"),
+    "utf8",
+  );
+  const frameStyles = readFileSync(
+    path.join(root, "apps/docs/src/styles/documentation-content-frame.css"),
     "utf8",
   );
   const appShell = readFileSync(
@@ -115,10 +123,19 @@ test("shared families preserve rich landing and reading presentation", () => {
   assert.match(docsPage, /Selected surface/u);
   assert.match(docsPage, /Reading for/u);
   assert.match(docsPage, /onFrameworkChange\(candidate\.id\)/u);
+  assert.match(docsPage, /getDocumentationContentLayout/u);
+  assert.match(docsPage, /getBreadcrumbs\(route\)/u);
   assert.match(template, /heroActions\?: ReactNode/u);
   assert.match(template, /heroAside\?: ReactNode/u);
-  assert.match(template, /vf-reference-page__hero-layout/u);
+  assert.match(template, /<DocumentationContentFrame/u);
   assert.match(template, /data-page-family=\{family\}/u);
+  assert.match(frame, /\bBreadcrumbs\b/u);
+  assert.match(frame, /\bPageHeader\b/u);
+  assert.match(frame, /data-content-layout=\{layout\}/u);
+  assert.match(frame, /vf-docs-content-frame__local-navigation/u);
+  assert.match(frame, /vf-docs-content-frame__footer/u);
+  assert.match(frameStyles, /data-content-layout="reading"/u);
+  assert.match(frameStyles, /data-content-layout="wide"/u);
   assert.match(guidePage, /splitGuideSections/u);
   assert.match(guidePage, /aria-label="On this page"/u);
   assert.match(guidePage, /vf-docs-reading-outline__step/u);
@@ -130,8 +147,11 @@ test("shared families preserve rich landing and reading presentation", () => {
   assert.match(appShell, /className="vf-docs-app-shell"/u);
   assert.match(referenceShell, /<DocumentationAppShell/u);
   assert.match(referenceShell, /<DocsPage/u);
+  assert.doesNotMatch(referenceShell, /data-reference-layout|ReferenceLayoutMode/u);
   assert.doesNotMatch(referenceShell, /GuideShell|DocsShell|DocsNav/u);
   assert.equal(main.includes("styles/content-pages.css"), true);
+  assert.equal(main.includes("styles/documentation-content-frame.css"), true);
+  assert.equal(main.includes("styles/reference-page-viewport.css"), false);
   assert.equal(main.includes("styles/docs-overview.css"), false);
   assert.doesNotMatch(docsPage, /OverviewPage/u);
   assert.doesNotMatch(guidePage, /data-document-template=/u);
