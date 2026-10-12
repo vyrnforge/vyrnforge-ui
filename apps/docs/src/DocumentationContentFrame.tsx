@@ -1,4 +1,4 @@
-import type { ReactNode } from "react";
+import type { HTMLAttributes, ReactNode } from "react";
 import {
   Breadcrumbs,
   PageHeader,
@@ -12,12 +12,14 @@ export type DocumentationContentLayout =
   | "example"
   | "wide";
 
-type DocumentationContentFrameProps = {
+type DocumentationContentFrameProps = Omit<
+  HTMLAttributes<HTMLElement>,
+  "title"
+> & {
   actions?: ReactNode;
   aside?: ReactNode;
   breadcrumbs?: BreadcrumbItem[];
   children: ReactNode;
-  className?: string;
   description?: string;
   eyebrow?: ReactNode;
   footer?: ReactNode;
@@ -40,33 +42,48 @@ export function DocumentationContentFrame({
   localNavigation,
   status,
   title,
+  ...props
 }: DocumentationContentFrameProps) {
   const frameClassName = ["vf-docs-content-frame", className]
     .filter(Boolean)
     .join(" ");
 
   return (
-    <article className={frameClassName} data-content-layout={layout}>
-      <div className="vf-docs-content-frame__header-layout">
-        <PageHeader
-          actions={actions}
-          breadcrumbs={
-            breadcrumbs?.length ? <Breadcrumbs items={breadcrumbs} /> : undefined
-          }
-          description={description}
-          eyebrow={eyebrow}
-          status={status}
-          title={title}
-        />
-        {aside ? (
-          <aside className="vf-docs-content-frame__header-aside">{aside}</aside>
-        ) : null}
-      </div>
+    <article
+      className={frameClassName}
+      data-content-layout={layout}
+      {...props}
+    >
+      <header className="vf-docs-content-frame__header vf-reference-page__hero">
+        <div className="vf-docs-content-frame__header-layout vf-reference-page__hero-layout">
+          <div className="vf-docs-content-frame__header-copy vf-reference-page__hero-copy">
+            <PageHeader
+              actions={actions}
+              breadcrumbs={
+                breadcrumbs?.length ? (
+                  <Breadcrumbs items={breadcrumbs} />
+                ) : undefined
+              }
+              description={description}
+              eyebrow={eyebrow}
+              status={status}
+              title={title}
+            />
+          </div>
+          {aside ? (
+            <aside className="vf-docs-content-frame__header-aside vf-reference-page__hero-aside">
+              {aside}
+            </aside>
+          ) : null}
+        </div>
+      </header>
       <div
         className="vf-docs-content-frame__columns"
         data-local-navigation={localNavigation ? "true" : "false"}
       >
-        <div className="vf-docs-content-frame__body">{children}</div>
+        <div className="vf-docs-content-frame__body vf-reference-page__body">
+          {children}
+        </div>
         {localNavigation ? (
           <aside
             aria-label="On this page"
