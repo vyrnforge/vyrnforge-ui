@@ -9,7 +9,7 @@ Use the smallest authoritative source needed for the task:
 
 1. `docs/governance/01-project-source-of-truth.md` for product identity and scope;
 2. `docs/README.md` for documentation navigation;
-3. `docs/governance/05-trunk-delivery.md` for protected-main branching, CI, merge, and delivery flow;
+3. `docs/governance/05-trunk-delivery.md` for branching, PR topology, CI, merge, and delivery flow;
 4. `docs/architecture/01-package-boundaries.md` and package manifests for dependency boundaries;
 5. `docs/metadata/components.json` for component catalog and maturity;
 6. `docs/metadata/packages.json` plus release metadata for package/framework status;
@@ -22,32 +22,29 @@ Do not recreate those facts in this file or another hand-maintained mirror.
 
 ## Agent branch and delivery contract
 
-`main` is the protected integration and release branch. Persistent
-`integration/*` lanes are retired and must not be recreated without a new
-architectural decision.
+`main` is the canonical releasable branch. Normal work uses short-lived branches.
+A PR may target `main` directly or, when a real prerequisite exists, another
+short-lived prerequisite branch. Temporary `integration/<initiative>` branches
+are allowed only for bounded initiative integration and must not become a
+permanent promotion lane or alternate `develop` branch.
 
 For normal implementation work:
 
-1. update remote references and start a short-lived task branch from current
-   `main`;
-2. keep the branch scoped to one task or one coherent task group;
-3. open the pull request directly to protected `main`;
-4. require full repository validation and a green `ci-gate` before merge;
-5. merge only through the protected pull-request path, then remove the completed
-   short-lived branch or worktree as appropriate.
+1. start from current `main` unless the task explicitly depends on an unmerged prerequisite;
+2. keep the branch scoped to one coherent change or dependency layer;
+3. use a mainline PR when the change is independently valid;
+4. use a stacked PR only when the dependency is real and record the dependency and retarget plan;
+5. run enough validation for non-mainline review, then require the full protected mainline gate before the change reaches `main`;
+6. remove completed short-lived or integration branches after their purpose ends.
 
 Do not push normal work directly to `main`, force-push protected history, or use
-direct ref moves to bypass the pull-request boundary. Repository-side agent
-behavior must follow this contract even when a host-level protection setting is
-temporarily missing. Never use a missing protection rule as permission to bypass
-the documented protected-main flow.
+direct ref moves to bypass the pull-request boundary. Never use a missing host
+protection rule as permission to bypass the documented protected-main flow.
 
 Native HTML / Custom Elements, React, Angular, and Vue are equal first-class
-framework tracks. Independent work may proceed in parallel after shared
+framework tracks. Independent framework work may proceed in parallel after shared
 prerequisites are satisfied. Serialize only for a real technical or tracker
-dependency. When work depends on another unmerged branch, record that dependency
-explicitly and update the dependent short-lived branch from current `main` once
-the prerequisite lands.
+dependency.
 
 ## Implementation rules
 
@@ -79,7 +76,7 @@ when appropriate:
 
 ```bash
 npm run check
-npm run test
+npm test
 npm run build
 npm run ci
 ```
