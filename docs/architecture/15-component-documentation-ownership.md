@@ -46,6 +46,21 @@ related components, accessibility notes, theming surface, verified scenario
 intent, and release notes can live with the canonical component owner while
 shared API contracts remain framework-neutral.
 
+## Current migration coverage
+
+The required ownership scope is derived from
+`scripts/non-grid-component-scope.mjs`: public exports included in the shared
+non-grid beta scope. The current baseline contains 71 required components. Seven
+already have package-owned documentation sources and 64 remain on centralized
+fallback guidance while they are migrated.
+
+The baseline is deliberately a coverage floor and fallback ceiling rather than
+a second component registry. Component identities continue to come from
+canonical component metadata and package-local documentation discovery.
+Coverage may only improve: adding a new public component without owned
+documentation, removing an existing owned source, or increasing fallback debt
+fails verification.
+
 ## Remaining ownership gaps
 
 The Reference projection includes owned `examples` and `releaseNotes` in the
@@ -72,9 +87,9 @@ centralized where they describe genuinely framework-neutral runtime semantics.
    supported-scenario truth there.
 5. Migrate additional components in independent cohorts by owning package once
    the projection contract is stable.
-6. Add drift checks so a public component/package cannot silently lose required
-   owned documentation when its public API or documentation-relevant behavior
-   changes.
+6. Enforce monotonic coverage and require package-owned documentation whenever a
+   fallback component's canonical public metadata, canonical contract, or
+   recorded implementation source changes.
 7. Retire duplicated guidance from centralized component metadata only after
    generated parity and packed/public Reference verification pass.
 
@@ -93,6 +108,10 @@ centralized where they describe genuinely framework-neutral runtime semantics.
   context.
 - Framework-specific rendering adapters may exist only as presentation
   adapters; they must not become alternate semantic owners.
+- `scripts/component-documentation-coverage.mjs` derives current coverage from
+  canonical public-scope metadata and discovered package-owned sources. During
+  CI it compares the current tree with the supplied base commit and blocks
+  ownership regression or documentation-relevant edits to fallback components.
 
 This document records the ownership boundary; generated artifacts and CI remain
 the executable evidence.
