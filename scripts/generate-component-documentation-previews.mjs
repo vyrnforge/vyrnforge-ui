@@ -16,11 +16,15 @@ function fail(message) {
 function validateProps(props, sourcePath, exampleId, itemIndex) {
   if (props === undefined) return;
   if (!props || Array.isArray(props) || typeof props !== "object") {
-    fail(`${sourcePath} example ${exampleId} item ${itemIndex} props must be an object`);
+    fail(
+      `${sourcePath} example ${exampleId} item ${itemIndex} props must be an object`,
+    );
   }
   for (const [name, value] of Object.entries(props)) {
     if (!name.trim()) {
-      fail(`${sourcePath} example ${exampleId} item ${itemIndex} has an empty prop name`);
+      fail(
+        `${sourcePath} example ${exampleId} item ${itemIndex} has an empty prop name`,
+      );
     }
     if (!["string", "number", "boolean"].includes(typeof value)) {
       fail(
@@ -37,17 +41,23 @@ function normalizePreview(example, sourcePath) {
     fail(`${sourcePath} example ${example.id} preview must be an object`);
   }
   if (!["inline", "stack"].includes(preview.layout)) {
-    fail(`${sourcePath} example ${example.id} preview.layout must be inline or stack`);
+    fail(
+      `${sourcePath} example ${example.id} preview.layout must be inline or stack`,
+    );
   }
   if (!Array.isArray(preview.items) || preview.items.length === 0) {
-    fail(`${sourcePath} example ${example.id} preview.items must not be empty`);
+    fail(
+      `${sourcePath} example ${example.id} preview.items must not be empty`,
+    );
   }
 
   return {
     layout: preview.layout,
     items: preview.items.map((item, itemIndex) => {
       if (!item || Array.isArray(item) || typeof item !== "object") {
-        fail(`${sourcePath} example ${example.id} item ${itemIndex} must be an object`);
+        fail(
+          `${sourcePath} example ${example.id} item ${itemIndex} must be an object`,
+        );
       }
       if (typeof item.text !== "string" || item.text.trim().length === 0) {
         fail(
@@ -108,7 +118,9 @@ if (process.argv[1] === fileURLToPath(import.meta.url)) {
       );
       process.exitCode = 1;
     } else {
-      console.log("Owned component documentation preview projection is current.");
+      console.log(
+        "Owned component documentation preview projection is current.",
+      );
     }
   } else {
     writeFileSync(absoluteOutputPath, expected);
