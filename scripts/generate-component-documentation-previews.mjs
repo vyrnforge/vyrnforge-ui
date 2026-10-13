@@ -88,7 +88,7 @@ export function buildComponentDocumentationPreviewProjection({
 
   return {
     schemaVersion: 1,
-    generatedFrom: documentation.sourcePaths,
+    generatedFrom: components.map((component) => component.sourcePath),
     components,
   };
 }
