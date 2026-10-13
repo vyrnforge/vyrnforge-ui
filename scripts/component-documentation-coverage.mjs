@@ -82,7 +82,10 @@ function componentMap(catalog) {
 
 function contractMap(contracts) {
   return new Map(
-    (contracts.componentContracts ?? []).map((contract) => [contract.id, contract]),
+    (contracts.componentContracts ?? []).map((contract) => [
+      contract.id,
+      contract,
+    ]),
   );
 }
 
@@ -205,11 +208,16 @@ export function verifyComponentDocumentationCoverage({
   const failures = [];
   const catalog = readJson(root, "docs/metadata/components.json");
   const contracts = readJson(root, "docs/metadata/component-contracts.json");
-  const config = readJson(root, "docs/metadata/component-reference-config.json");
+  const config = readJson(
+    root,
+    "docs/metadata/component-reference-config.json",
+  );
   const ownership = config.documentationOwnership;
   const documentation = loadOwnedComponentDocumentation({ root });
   const requiredComponents = getPublicNonGridBetaComponents(catalog);
-  const requiredIds = new Set(requiredComponents.map((component) => component.id));
+  const requiredIds = new Set(
+    requiredComponents.map((component) => component.id),
+  );
   const ownedIds = new Set(
     documentation.documents
       .map((document) => document.componentId)
