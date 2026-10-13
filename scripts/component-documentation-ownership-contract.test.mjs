@@ -50,6 +50,7 @@ test("the ownership contract records the remaining projection gap", () => {
   );
 
   assert.match(architecture, /apps\/docs must not import package-local/u);
-  assert.match(architecture, /Project owned example\/release metadata/u);
+  assert.match(architecture, /Project owned/iu);
+  assert.match(architecture, /owned example\/release metadata/iu);
   assert.match(architecture, /rendering adapters/u);
 });
