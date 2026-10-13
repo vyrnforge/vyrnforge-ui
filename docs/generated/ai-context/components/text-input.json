@@ -27,6 +27,8 @@
   "knownLimitations": [
     "Avoid for long multi-line input; use Textarea."
   ],
+  "examples": [],
+  "releaseNotes": [],
   "styling": {
     "classes": [
       "vf-input"
@@ -158,6 +160,7 @@
   "source": {
     "componentMetadata": "docs/metadata/components.json",
     "contractMetadata": "docs/metadata/component-contracts.json",
+    "componentDocumentation": "packages/ui-elements/src/components/text-input.docs.json",
     "customElementsManifest": "packages/ui-elements/custom-elements.json"
   }
 }

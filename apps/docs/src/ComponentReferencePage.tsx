@@ -574,6 +574,7 @@ function ComponentOutline({
   showInteraction,
   showTheming,
   showRelated,
+  showReleaseNotes,
 }: {
   componentId: string;
   frameworkId: DocsFrameworkId;
@@ -582,6 +583,7 @@ function ComponentOutline({
   showInteraction: boolean;
   showTheming: boolean;
   showRelated: boolean;
+  showReleaseNotes: boolean;
 }) {
   const sections = [
     ["component-overview", "Overview"],
@@ -594,6 +596,7 @@ function ComponentOutline({
     ["component-accessibility", "Accessibility"],
     ...(showTheming ? [["component-theming", "Styling"]] : []),
     ...(showRelated ? [["component-related-maturity", "Related"]] : []),
+    ...(showReleaseNotes ? [["component-release-notes", "Release notes"]] : []),
     ["component-generated-api", "API"],
   ];
 
@@ -692,6 +695,8 @@ function ComponentDetail({
     component.guidance.relatedComponents.length > 0 ||
     component.knownLimitations.length > 0 ||
     relatedPatterns.length > 0;
+  const releaseNotes = component.releaseNotes ?? [];
+  const showReleaseNotes = releaseNotes.length > 0;
   const framework = referenceModel.frameworks.find(
     (candidate) => candidate.id === frameworkId,
   );
@@ -744,6 +749,8 @@ function ComponentDetail({
           </div>
           <ReferenceComponentSpecimen
             componentId={component.id}
+            examples={component.examples ?? []}
+            frameworkId={frameworkId}
             relatedPatterns={relatedPatterns.map((pattern) => pattern.id)}
           />
         </div>
@@ -985,6 +992,32 @@ function ComponentDetail({
           </section>
         ) : null}
 
+        {showReleaseNotes ? (
+          <section
+            className="vf-docs-reference__section"
+            id="component-release-notes"
+          >
+            <Heading level={3} size="md">
+              Release notes
+            </Heading>
+            <div className="vf-docs-release-notes">
+              {releaseNotes.map((note) => (
+                <article key={`${note.version}-${note.summary}`}>
+                  <Heading level={4} size="sm">
+                    {note.version}
+                  </Heading>
+                  <Text>{note.summary}</Text>
+                  {note.migration ? (
+                    <Text size="sm" tone="muted">
+                      Migration: {note.migration}
+                    </Text>
+                  ) : null}
+                </article>
+              ))}
+            </div>
+          </section>
+        ) : null}
+
         <section
           className="vf-docs-reference__section"
           id="component-generated-api"
@@ -1015,6 +1048,7 @@ function ComponentDetail({
         showComposition={showComposition}
         showInteraction={showInteraction}
         showRelated={showRelated}
+        showReleaseNotes={showReleaseNotes}
         showTheming={showTheming}
       />
     </div>

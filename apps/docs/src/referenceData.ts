@@ -88,6 +88,19 @@ export type ReferenceFrameworkUsage = {
   note: string;
 };
 
+export type ReferenceComponentExample = {
+  id: string;
+  title: string;
+  intent: string;
+  frameworks: ReferenceFrameworkId[];
+};
+
+export type ReferenceReleaseNote = {
+  version: string;
+  summary: string;
+  migration?: string;
+};
+
 export type ComponentReferenceRecord = {
   id: string;
   displayName: string;
@@ -99,6 +112,8 @@ export type ComponentReferenceRecord = {
   guidance: ReferenceGuidance;
   accessibilityNotes: string;
   knownLimitations: string[];
+  examples?: ReferenceComponentExample[];
+  releaseNotes?: ReferenceReleaseNote[];
   styling: {
     classes: string[];
     variables: string[];

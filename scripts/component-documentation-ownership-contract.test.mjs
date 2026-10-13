@@ -12,12 +12,20 @@ function read(relativePath) {
   return readFileSync(path.join(root, relativePath), "utf8");
 }
 
+function json(relativePath) {
+  return JSON.parse(read(relativePath));
+}
+
 test("owned component documentation stays package-local and generator-owned", () => {
   const documentation = loadOwnedComponentDocumentation({ root });
   const button = documentation.documentByComponentId.button;
   const generator = read("scripts/generate-component-reference.mjs");
   const referenceData = read("apps/docs/src/referenceData.ts");
   const specimenHost = read("apps/docs/src/ReferenceComponentSpecimen.tsx");
+  const knowledge = json("docs/generated/consumer-knowledge.json");
+  const generatedButton = knowledge.components.find(
+    (component) => component.id === "button",
+  );
 
   assert(
     button,
@@ -34,6 +42,12 @@ test("owned component documentation stays package-local and generator-owned", ()
     generator,
     /loadOwnedComponentDocumentation/u,
     "the existing component-reference generator must ingest package-owned documentation",
+  );
+  assert.deepEqual(generatedButton.examples, button.examples);
+  assert.deepEqual(generatedButton.releaseNotes, button.releaseNotes);
+  assert.equal(
+    generatedButton.source.componentDocumentation,
+    button.sourcePath,
   );
   assert.doesNotMatch(
     referenceData,
@@ -53,6 +67,6 @@ test("the ownership contract records the remaining projection gap", () => {
   );
 
   assert.match(architecture, /apps\/docs.*must not import package-local/iu);
-  assert.match(architecture, /owned `examples` and `releaseNotes`/u);
-  assert.match(architecture, /rendering adapters/u);
+  assert.match(architecture, /includes owned `examples` and `releaseNotes`/u);
+  assert.match(architecture, /rendering adapter/u);
 });

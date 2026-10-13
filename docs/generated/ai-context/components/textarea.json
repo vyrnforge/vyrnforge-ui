@@ -26,6 +26,8 @@
   "knownLimitations": [
     "Avoid for short single-line values."
   ],
+  "examples": [],
+  "releaseNotes": [],
   "styling": {
     "classes": [
       "vf-textarea"
@@ -157,6 +159,7 @@
   "source": {
     "componentMetadata": "docs/metadata/components.json",
     "contractMetadata": "docs/metadata/component-contracts.json",
+    "componentDocumentation": "packages/ui-elements/src/components/textarea.docs.json",
     "customElementsManifest": "packages/ui-elements/custom-elements.json"
   }
 }

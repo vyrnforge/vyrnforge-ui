@@ -7,7 +7,14 @@
     "docs/metadata/patterns.json",
     "docs/metadata/packages.json",
     "docs/metadata/multi-framework.json",
-    "packages/ui-elements/custom-elements.json"
+    "packages/ui-elements/custom-elements.json",
+    "packages/ui-elements/src/components/button.docs.json",
+    "packages/ui-elements/src/components/date-input.docs.json",
+    "packages/ui-elements/src/components/datetime-input.docs.json",
+    "packages/ui-elements/src/components/number-input.docs.json",
+    "packages/ui-elements/src/components/search-input.docs.json",
+    "packages/ui-elements/src/components/text-input.docs.json",
+    "packages/ui-elements/src/components/textarea.docs.json"
   ],
   "packages": [
     {
@@ -4163,11 +4170,14 @@
         ],
         "variables": []
       },
+      "examples": [],
+      "releaseNotes": [],
       "docsPath": "docs/api/ui-components-api.md",
       "playgroundPath": "/components/forms/date-input",
       "source": {
         "componentMetadata": "docs/metadata/components.json",
         "contractMetadata": "docs/metadata/component-contracts.json",
+        "componentDocumentation": "packages/ui-elements/src/components/date-input.docs.json",
         "customElementsManifest": "packages/ui-elements/custom-elements.json"
       },
       "nativeDeclaration": {
@@ -4491,11 +4501,14 @@
         ],
         "variables": []
       },
+      "examples": [],
+      "releaseNotes": [],
       "docsPath": "docs/api/ui-components-api.md",
       "playgroundPath": "/components/forms/datetime-input",
       "source": {
         "componentMetadata": "docs/metadata/components.json",
         "contractMetadata": "docs/metadata/component-contracts.json",
+        "componentDocumentation": "packages/ui-elements/src/components/datetime-input.docs.json",
         "customElementsManifest": "packages/ui-elements/custom-elements.json"
       },
       "nativeDeclaration": {
@@ -5370,11 +5383,14 @@
         ],
         "variables": []
       },
+      "examples": [],
+      "releaseNotes": [],
       "docsPath": "docs/api/ui-components-api.md",
       "playgroundPath": "/components/forms/number-input",
       "source": {
         "componentMetadata": "docs/metadata/components.json",
         "contractMetadata": "docs/metadata/component-contracts.json",
+        "componentDocumentation": "packages/ui-elements/src/components/number-input.docs.json",
         "customElementsManifest": "packages/ui-elements/custom-elements.json"
       },
       "nativeDeclaration": {
@@ -6542,11 +6558,14 @@
         ],
         "variables": []
       },
+      "examples": [],
+      "releaseNotes": [],
       "docsPath": "docs/api/ui-components-api.md",
       "playgroundPath": null,
       "source": {
         "componentMetadata": "docs/metadata/components.json",
         "contractMetadata": "docs/metadata/component-contracts.json",
+        "componentDocumentation": "packages/ui-elements/src/components/search-input.docs.json",
         "customElementsManifest": "packages/ui-elements/custom-elements.json"
       },
       "nativeDeclaration": {
@@ -7757,11 +7776,14 @@
         ],
         "variables": []
       },
+      "examples": [],
+      "releaseNotes": [],
       "docsPath": "docs/api/ui-components-api.md",
       "playgroundPath": "/components/forms/textarea",
       "source": {
         "componentMetadata": "docs/metadata/components.json",
         "contractMetadata": "docs/metadata/component-contracts.json",
+        "componentDocumentation": "packages/ui-elements/src/components/textarea.docs.json",
         "customElementsManifest": "packages/ui-elements/custom-elements.json"
       },
       "nativeDeclaration": {
@@ -8085,11 +8107,14 @@
         ],
         "variables": []
       },
+      "examples": [],
+      "releaseNotes": [],
       "docsPath": "docs/api/ui-components-api.md",
       "playgroundPath": "/components/forms/text-input",
       "source": {
         "componentMetadata": "docs/metadata/components.json",
         "contractMetadata": "docs/metadata/component-contracts.json",
+        "componentDocumentation": "packages/ui-elements/src/components/text-input.docs.json",
         "customElementsManifest": "packages/ui-elements/custom-elements.json"
       },
       "nativeDeclaration": {
@@ -12014,11 +12039,81 @@
         ],
         "variables": []
       },
+      "examples": [
+        {
+          "id": "variants",
+          "title": "Variants",
+          "intent": "Compare the supported visual intents before choosing emphasis for an action.",
+          "frameworks": [
+            "native-html",
+            "react",
+            "angular",
+            "vue"
+          ]
+        },
+        {
+          "id": "sizes",
+          "title": "Sizes",
+          "intent": "Compare the supported size scale against the surrounding control density.",
+          "frameworks": [
+            "native-html",
+            "react",
+            "angular",
+            "vue"
+          ]
+        },
+        {
+          "id": "states",
+          "title": "Disabled and loading",
+          "intent": "Show unavailable and in-progress actions using the shared disabled and loading behavior contract.",
+          "frameworks": [
+            "native-html",
+            "react",
+            "angular",
+            "vue"
+          ]
+        },
+        {
+          "id": "width",
+          "title": "Full width",
+          "intent": "Show a prominent action expanding to the available inline space.",
+          "frameworks": [
+            "native-html",
+            "react",
+            "angular",
+            "vue"
+          ]
+        },
+        {
+          "id": "content",
+          "title": "Icons and labels",
+          "intent": "Compose visible labels with leading or trailing icon content without replacing important text.",
+          "frameworks": [
+            "native-html",
+            "react",
+            "angular",
+            "vue"
+          ]
+        },
+        {
+          "id": "form-actions",
+          "title": "Form actions",
+          "intent": "Use explicit submit and reset button types when Button participates in a form workflow.",
+          "frameworks": [
+            "native-html",
+            "react",
+            "angular",
+            "vue"
+          ]
+        }
+      ],
+      "releaseNotes": [],
       "docsPath": "docs/api/ui-components-api.md",
       "playgroundPath": "/components/actions/button",
       "source": {
         "componentMetadata": "docs/metadata/components.json",
         "contractMetadata": "docs/metadata/component-contracts.json",
+        "componentDocumentation": "packages/ui-elements/src/components/button.docs.json",
         "customElementsManifest": "packages/ui-elements/custom-elements.json"
       },
       "nativeDeclaration": {
