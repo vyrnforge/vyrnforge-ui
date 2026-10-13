@@ -9,7 +9,8 @@ import {
 } from "./generate-component-documentation-previews.mjs";
 
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
-const read = (relativePath) => readFileSync(path.join(root, relativePath), "utf8");
+const read = (relativePath) =>
+  readFileSync(path.join(root, relativePath), "utf8");
 
 test("owned component preview projection is current", () => {
   assert.equal(
@@ -38,7 +39,9 @@ test("button specimen is projected from its canonical package-owned documentatio
 
 test("migrated preview components cannot regain docs-local specimen renderers", () => {
   const projection = buildComponentDocumentationPreviewProjection({ root });
-  const legacySource = read("apps/docs/src/LegacyReferenceComponentSpecimen.tsx");
+  const legacySource = read(
+    "apps/docs/src/LegacyReferenceComponentSpecimen.tsx",
+  );
   const rendererSource = read("apps/docs/src/ReferenceComponentSpecimen.tsx");
 
   for (const component of projection.components) {
