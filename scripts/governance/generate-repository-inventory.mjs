@@ -28,7 +28,6 @@ function walk(directory, match = () => true) {
   return readdirSync(absolute, { withFileTypes: true })
     .flatMap((entry) => {
       if ([".git", "dist", "node_modules"].includes(entry.name)) return [];
-
       const relativePath = path.posix.join(directory, entry.name);
       return entry.isDirectory()
         ? walk(relativePath, match)
@@ -42,7 +41,6 @@ function walk(directory, match = () => true) {
 function childDirectories(directory) {
   const absolute = path.join(root, directory);
   if (!existsSync(absolute)) return [];
-
   return readdirSync(absolute, { withFileTypes: true })
     .filter((entry) => entry.isDirectory())
     .map((entry) => entry.name)
@@ -65,9 +63,7 @@ function codeList(values, fallback = "None") {
 
 const rootPackage = json("package.json");
 const packageRecords = childDirectories("packages")
-  .filter((directory) =>
-    existsSync(path.join(root, "packages", directory, "package.json")),
-  )
+  .filter((directory) => existsSync(path.join(root, "packages", directory, "package.json")))
   .map((directory) => ({
     directory,
     manifest: json(`packages/${directory}/package.json`),
@@ -100,17 +96,11 @@ const outputLines = [
     ["Area", "Current inventory"],
     [
       ["Workspace globs", codeList(rootPackage.workspaces ?? [])],
-      [
-        "Packages",
-        codeList(packageRecords.map(({ manifest }) => manifest.name)),
-      ],
+      ["Packages", codeList(packageRecords.map(({ manifest }) => manifest.name))],
       ["Applications and examples", codeList(applications)],
       ["Active Markdown docs", String(activeDocs.length)],
       ["Archived Markdown docs", String(archivedDocs.length)],
-      [
-        "Root npm scripts",
-        String(Object.keys(rootPackage.scripts ?? {}).length),
-      ],
+      ["Root npm scripts", String(Object.keys(rootPackage.scripts ?? {}).length)],
       ["GitHub workflow files", String(workflows.length)],
     ],
   ),
@@ -133,21 +123,17 @@ const outputLines = [
     [
       ["Documentation entrypoint", "`docs/README.md`"],
       ["Project identity", "`docs/governance/01-project-source-of-truth.md`"],
+      ["Repository standardization revision", "`docs/governance/repository-standardization-revision.md`"],
+      ["Branching and PR topology", "`docs/governance/05-trunk-delivery.md`"],
       ["Package boundaries", "`docs/architecture/01-package-boundaries.md`"],
       ["Public API", "`docs/api/README.md` and package API documents"],
       ["Component catalog and maturity", "`docs/metadata/components.json`"],
       ["Package metadata", "`docs/metadata/packages.json`"],
       ["Release groups", "`docs/metadata/release-groups.json`"],
-      [
-        "Execution tracker",
-        "Google Drive spreadsheet `VyrnForge Progress Tracker — Live Status`",
-      ],
+      ["Execution tracker", "Google Drive spreadsheet `VyrnForge Progress Tracker — Live Status`"],
       ["CI/CD architecture", "`docs/engineering/ci-cd-architecture.md`"],
       ["Documentation system", "`docs/engineering/documentation-system.md`"],
-      [
-        "Public documentation page/route registration",
-        "`docs/metadata/documentation-pages.json` → `docs/generated/documentation-registry.json`",
-      ],
+      ["Public documentation page/route registration", "`docs/metadata/documentation-pages.json` → `docs/generated/documentation-registry.json`"],
       ["AI operational rules", "`AGENTS.md`"],
       ["Generated AI consumer context", "`docs/generated/ai-context/`"],
     ],
