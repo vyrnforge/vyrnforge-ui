@@ -46,9 +46,7 @@ function normalizePreview(example, sourcePath) {
     );
   }
   if (!Array.isArray(preview.items) || preview.items.length === 0) {
-    fail(
-      `${sourcePath} example ${example.id} preview.items must not be empty`,
-    );
+    fail(`${sourcePath} example ${example.id} preview.items must not be empty`);
   }
 
   return {
