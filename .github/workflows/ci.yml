@@ -49,7 +49,7 @@ jobs:
         with:
           fetch-depth: 0
       - name: Setup Node
-        uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7
+        uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7
         with:
           node-version-file: .nvmrc
           package-manager-cache: false
@@ -99,7 +99,7 @@ jobs:
       - name: Checkout
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
       - name: Setup Node
-        uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7
+        uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7
         with:
           node-version: "24.18.0"
           cache: npm
@@ -120,7 +120,7 @@ jobs:
       - name: Checkout
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
       - name: Setup Node
-        uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7
+        uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7
         with:
           node-version: "24.18.0"
           cache: npm
@@ -151,7 +151,7 @@ jobs:
           fetch-depth: ${{ env.RUN_PAGES_ARTIFACT == 'true' && 0 || 1 }}
           fetch-tags: ${{ env.RUN_PAGES_ARTIFACT == 'true' }}
       - name: Setup Node
-        uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7
+        uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7
         with:
           node-version: "24.18.0"
           cache: npm
@@ -225,7 +225,7 @@ jobs:
         run: node scripts/reference-artifact.mjs assemble-preview --source-commit "$GITHUB_SHA" --ci-run-id "$GITHUB_RUN_ID"
       - name: Upload non-deployable reference preview
         if: env.RUN_REFERENCE_PREVIEW == 'true'
-        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
+        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
         with:
           name: reference-preview-pr-${{ github.event.pull_request.number }}-${{ github.sha }}
           path: reference-preview/
@@ -234,7 +234,7 @@ jobs:
           retention-days: 7
       - name: Upload Reference UI verification evidence
         if: success() && env.RUN_REFERENCE_PREVIEW == 'true'
-        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
+        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
         with:
           name: reference-ui-evidence-${{ github.event.pull_request.number }}-${{ github.sha }}
           path: test-results/reference-ui-evidence/
@@ -242,7 +242,7 @@ jobs:
           retention-days: 14
       - name: Upload Reference UI browser failures
         if: failure() && env.RUN_REFERENCE_PREVIEW == 'true'
-        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
+        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
         with:
           name: reference-ui-failure-${{ github.event.pull_request.number }}-${{ github.sha }}
           path: |
@@ -272,7 +272,7 @@ jobs:
           node scripts/reference-artifact.mjs verify --kind production --source-commit "$GITHUB_SHA" --ci-run-id "$GITHUB_RUN_ID"
       - name: Upload commit-bound Pages site
         if: env.RUN_PAGES_ARTIFACT == 'true'
-        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
+        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
         with:
           name: pages-site-${{ github.sha }}
           path: site/
@@ -281,14 +281,14 @@ jobs:
           retention-days: 7
       - name: Upload generic release artifact reports
         if: always() && env.RUN_PACKAGES == 'true'
-        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
+        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
         with:
           name: release-artifact-ci
           path: test-results/release-artifact/
           if-no-files-found: error
       - name: Upload visual regression evidence
         if: success() && env.RUN_BROWSER == 'true'
-        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
+        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
         with:
           name: visual-regression-evidence-${{ github.run_id }}-${{ github.run_attempt }}
           path: test-results/visual-evidence/
@@ -296,7 +296,7 @@ jobs:
           retention-days: 14
       - name: Upload browser failure artifacts
         if: failure() && env.RUN_BROWSER == 'true'
-        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
+        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
         with:
           name: playwright-browser-failure-${{ github.run_id }}-${{ github.run_attempt }}
           path: |
@@ -307,7 +307,7 @@ jobs:
           retention-days: 7
       - name: Upload cross-framework browser matrix
         if: always() && env.RUN_CONSUMER == 'true'
-        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
+        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
         with:
           name: cross-framework-browser-matrix
           path: |
@@ -336,7 +336,7 @@ jobs:
       - name: Checkout
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
       - name: Setup Node
-        uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7
+        uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7
         with:
           node-version: "24.18.0"
           cache: npm
@@ -385,7 +385,7 @@ jobs:
         with:
           fetch-depth: 0
       - name: Setup Node
-        uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7
+        uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7
         with:
           node-version-file: .nvmrc
           package-manager-cache: false
