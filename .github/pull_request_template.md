@@ -2,19 +2,21 @@
 
 What changed, why is it needed, and why does it belong in VyrnForge?
 
-## PR topology
+## Branch / dependency
 
 **Class:** Independent / Contract-Foundation / Framework Adapter / Stacked / Integration / Mechanical Migration / Generated / Dependency / Release Fix / Backport / Hotfix
 
 **Tracker or bounded objective:**
 
-**Base:** `main` / prerequisite branch / `integration/<initiative>` / `release/<version>`
+**Base:** `main`
 
-**Depends on:** None / PR # / branch (describe)
+For stacked/integration/release work, replace the base above with the prerequisite branch, `integration/<initiative>`, or `release/<version>` and explain why.
+
+**Dependency:** None / PR # / branch (describe)
 
 **Retarget plan for stacked PRs:** None / describe when prerequisite merges
 
-## Impact matrix
+## Impact
 
 - Shared/Core: None / affected
 - Native HTML / Custom Elements: None / affected
@@ -28,7 +30,10 @@ What changed, why is it needed, and why does it belong in VyrnForge?
 - Public API: None / additive / deprecated / breaking
 - Generated output: None / affected
 - Documentation: None / affected
-- Package/release lifecycle: None / affected
+
+**Playground or executable example:** None / updated / existing coverage is sufficient (describe)
+
+**Package/release lifecycle:** None / affected (describe)
 
 ## Compatibility / migration
 
@@ -49,11 +54,16 @@ What changed, why is it needed, and why does it belong in VyrnForge?
 - [ ] If this is non-mainline, the dependency/base is explicit and the final path to protected `main` remains defined.
 
 <!--
-main is the canonical releasable branch.
-Short-lived stacked PRs and bounded integration branches are allowed when a real
-dependency requires them; they are not permanent promotion lanes or framework
-branches. Full protected validation is still required before the change reaches
-main. See docs/governance/05-trunk-delivery.md.
+Pull requests to main use full protected CI and the required ci-gate.
+scripts/detect-ci-scope.mjs remains the source of truth for technical
+classification from changed paths and the VyrnForge dependency graph.
+
+For a normal independent mainline change: The PR targets protected `main` from a short-lived branch.
+Stacked PRs may temporarily target a real prerequisite branch, and bounded
+integration branches are allowed when necessary. They are not permanent
+promotion lanes or framework branches. Full protected validation is still
+required before the change reaches main.
+See docs/governance/05-trunk-delivery.md.
 -->
 
 ## Notes
