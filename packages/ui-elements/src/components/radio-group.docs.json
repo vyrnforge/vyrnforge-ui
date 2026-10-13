@@ -12,22 +12,14 @@
     "avoidWhen": "Avoid for long option lists; use Select instead.",
     "aiUsageNotes": "Prefer RadioGroup over hand-built radio collections."
   },
-  "limitations": [
-    "Avoid for long option lists; use Select instead."
-  ],
-  "relatedComponents": [
-    "Radio",
-    "Field",
-    "ValidationMessage"
-  ],
+  "limitations": ["Avoid for long option lists; use Select instead."],
+  "relatedComponents": ["Radio", "Field", "ValidationMessage"],
   "accessibility": {
     "notes": "Uses fieldset/legend and native radio keyboard behavior.",
     "evidenceRefs": []
   },
   "theming": {
-    "classes": [
-      "vf-radio-group"
-    ],
+    "classes": ["vf-radio-group"],
     "variables": []
   },
   "examples": [],
