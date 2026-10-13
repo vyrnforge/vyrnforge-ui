@@ -14,7 +14,10 @@ import { fileURLToPath } from "node:url";
 
 import { verifyRepositoryTemplates } from "./verify-repository-templates.mjs";
 
-const repositoryRoot = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
+const repositoryRoot = path.resolve(
+  path.dirname(fileURLToPath(import.meta.url)),
+  "..",
+);
 const fixtureFiles = [
   "AGENTS.md",
   "CONTRIBUTING.md",
@@ -42,7 +45,11 @@ function mutate(root, relativePath, transform) {
 }
 
 function expectFailure(root, fragment) {
-  assert(verifyRepositoryTemplates({ root }).some((failure) => failure.includes(fragment)));
+  assert(
+    verifyRepositoryTemplates({ root }).some((failure) =>
+      failure.includes(fragment),
+    ),
+  );
 }
 
 test("accepts mainline and bounded stacked contributor contracts", () => {
@@ -53,7 +60,10 @@ test("rejects agent guidance that drops stacked dependency discipline", () => {
   const root = createFixture();
   try {
     mutate(root, "AGENTS.md", (content) =>
-      content.replace("use a stacked PR only when the dependency is real", "stack work freely"),
+      content.replace(
+        "use a stacked PR only when the dependency is real",
+        "stack work freely",
+      ),
     );
     expectFailure(root, "use a stacked PR only when the dependency is real");
   } finally {
@@ -76,7 +86,9 @@ test("rejects agent guidance that drops the final protected-main gate", () => {
 test("rejects repository setup that drops npm ci", () => {
   const root = createFixture();
   try {
-    mutate(root, "CONTRIBUTING.md", (content) => content.replace("npm ci", "npm install"));
+    mutate(root, "CONTRIBUTING.md", (content) =>
+      content.replace("npm ci", "npm install"),
+    );
     expectFailure(root, "repository setup must use npm ci");
   } finally {
     rmSync(root, { recursive: true, force: true });
@@ -99,9 +111,15 @@ test("rejects contributor guidance that drops bounded integration semantics", ()
   const root = createFixture();
   try {
     mutate(root, "CONTRIBUTING.md", (content) =>
-      content.replace("Temporary `integration/<initiative>` branches are allowed", "Integration branches are permanent"),
+      content.replace(
+        "Temporary `integration/<initiative>` branches are allowed",
+        "Integration branches are permanent",
+      ),
     );
-    expectFailure(root, "Temporary `integration/<initiative>` branches are allowed");
+    expectFailure(
+      root,
+      "Temporary `integration/<initiative>` branches are allowed",
+    );
   } finally {
     rmSync(root, { recursive: true, force: true });
   }
@@ -161,7 +179,11 @@ test("rejects publishable-workspace lifecycle omission", () => {
 test("rejects internal planning terminology in the normal PR template", () => {
   const root = createFixture();
   try {
-    mutate(root, ".github/pull_request_template.md", (content) => `${content}\nTask ID: RS-9007\n`);
+    mutate(
+      root,
+      ".github/pull_request_template.md",
+      (content) => `${content}\nTask ID: RS-9007\n`,
+    );
     expectFailure(root, "internal task identity");
   } finally {
     rmSync(root, { recursive: true, force: true });
@@ -171,7 +193,10 @@ test("rejects internal planning terminology in the normal PR template", () => {
 test("rejects reintroducing a retired focused template", () => {
   const root = createFixture();
   try {
-    const file = path.join(root, ".github/PULL_REQUEST_TEMPLATE/component-or-package.md");
+    const file = path.join(
+      root,
+      ".github/PULL_REQUEST_TEMPLATE/component-or-package.md",
+    );
     mkdirSync(path.dirname(file), { recursive: true });
     writeFileSync(file, "## Summary\n", "utf8");
     expectFailure(root, "retired focused template must stay removed");
