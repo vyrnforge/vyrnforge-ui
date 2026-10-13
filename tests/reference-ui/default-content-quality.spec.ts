@@ -32,8 +32,16 @@ test.describe("default documentation content quality", () => {
         .locator(".vf-docs-framework-context")
         .getByText("Selected surface"),
     ).toBeVisible();
-    await expect(landing.locator(".vf-docs-link-card")).toHaveCount(4);
-    await expect(landing.locator(".vf-docs-principle")).toHaveCount(3);
+
+    await expect(landing.locator(".vf-docs-link-grid > .vf-card")).toHaveCount(
+      4,
+    );
+    await expect(
+      landing.locator(".vf-docs-principle-grid > .vf-card"),
+    ).toHaveCount(3);
+    await expect(landing.getByRole("button", { name: "Open" })).toHaveCount(4);
+    await expect(landing.locator(".vf-docs-link-card")).toHaveCount(0);
+    await expect(landing.locator(".vf-docs-principle")).toHaveCount(0);
   });
 
   test("reading family keeps contextual framework controls and numbered hierarchy", async ({
