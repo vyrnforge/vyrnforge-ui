@@ -2,256 +2,132 @@
 
 ## Purpose
 
-This document defines how VyrnForge documentation is organized and how the
-reader-facing Reference product consumes it. It does not replace topic-specific
-architecture, API, package, release, or governance documents.
+This document defines the architecture of the reader-facing **VyrnForge Reference** product and how repository-owned documentation is projected into it.
 
-The goal is to keep documentation discoverable without creating parallel sources
-of truth.
-
-## Source layers
-
-VyrnForge documentation has four distinct layers:
-
-1. **Canonical human guidance** — current Markdown under `docs/`, rooted at
-   `docs/README.md`.
-2. **Structured metadata** — machine-readable contracts under `docs/metadata/`
-   and generated views under `docs/generated/`.
-3. **Agent context** — concise repository-navigation and implementation guidance
-   in `AGENTS.md` and `.ai/`.
-4. **Historical evidence** — retained material under `docs/archive/`,
-   `docs/quality/`, `docs/testing/`, or release evidence only when it has
-   continuing audit, migration, regression, or architectural value.
-
-These layers may link to each other, but they must not independently maintain
-the same architecture, component catalog, route list, package map, release
-state, or public API facts.
+Documentation authority, lifecycle, archival, cleanup, AI-context, and authoring-governance rules are owned by [`../governance/documentation.md`](../governance/documentation.md). This document does not duplicate those policies.
 
 ## VyrnForge Reference product
 
-`apps/docs` is the single presentation surface of the reader-facing **VyrnForge Reference** product.
+`apps/docs` is the presentation surface of VyrnForge Reference. It is a renderer and navigation application over canonical VyrnForge documentation, metadata, generated facts, and verified examples; it is not a semantic source of truth for components, packages, frameworks, tokens, accessibility, release state, or public APIs.
 
-`docs/metadata/reference-portal.json` owns the shared Reference product
-identity, framework and surface vocabulary, content-domain navigation taxonomy,
-content-domain ownership, framework/version context, deep-link rules, and
-deployment semantics.
-It does not replace the canonical component, package, token, pattern,
-accessibility, release, or executable-example contracts that supply the
-underlying facts.
+`docs/metadata/reference-portal.json` owns the shared Reference product identity, framework and surface vocabulary, content-domain navigation taxonomy, content-domain ownership, framework/version context, deep-link rules, and deployment semantics.
 
-The Docs application may use React internally. React is an implementation host,
-not the semantic owner of the Reference product.
-Semantic ownership remains framework-neutral. Native HTML / Custom Elements,
-React, Angular, and Vue remain equal first-class reader contexts and must share
-the same VyrnForge terminology, behavior contracts, accessibility model, styling
-foundation, and API facts.
+The Docs application may use React internally. React is an implementation host, not the semantic owner of Reference. Semantic ownership is framework-neutral. Native HTML / Custom Elements, React, Angular, and Vue remain equal first-class reader contexts.
 
-### Information model and ownership
+## Information model
 
 Reference content follows these ownership rules:
 
-| Domain        | Canonical ownership                                                                                             | Reference behavior                                                                                                |
-| ------------- | --------------------------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------- |
-| Guides        | Current Markdown under `docs/`                                                                                  | Curated explanation and recommendations; link to structured facts rather than copying them.                       |
-| Components    | `docs/metadata/components.json`, `docs/metadata/component-contracts.json`, and multi-framework metadata         | Generated catalog/API facts with curated usage guidance layered on top.                                           |
-| Packages      | `docs/metadata/packages.json`, release metadata, package manifests, and verified public entrypoints             | Generated package/setup facts; no application-owned package map.                                                  |
-| Tokens        | `docs/metadata/design-tokens.json` and shared `ui-core` token/theme/density styles                              | Generated token facts and examples; reference surfaces do not own token values.                                   |
-| Patterns      | `docs/metadata/patterns.json` plus curated workflow guidance                                                    | Canonical pattern identity with authored explanation where useful.                                                |
-| Examples      | `docs/metadata/executable-examples.json`, `tests/consumers/manifest.json`, and authored example implementations | Shared semantic example identities with framework-specific executable implementations and verification.           |
-| Accessibility | Shared component contracts, accessibility evidence metadata, and curated guidance                               | Shared keyboard/accessibility behavior with evidence and explanation; no framework-specific fork of the contract. |
-| Search        | Derived from generated reference records and curated text                                                       | Search owns no API, package, token, framework, version, or release facts.                                         |
+<!-- prettier-ignore -->
+| Domain | Canonical ownership | Reference behavior |
+| --- | --- | --- |
+| Guides | current authored Markdown under `docs/` | curated explanation and recommendations; links to structured facts rather than copying them |
+| Components | `docs/metadata/components.json`, `docs/metadata/component-contracts.json`, package-owned guidance, and framework mappings | generated catalog/API facts with curated usage guidance layered on top |
+| Packages | `docs/metadata/packages.json`, release metadata, package manifests, and verified public entrypoints | generated package/setup facts; no application-owned package map |
+| Tokens | `docs/metadata/design-tokens.json` and shared runtime token CSS | generated token facts and examples; Reference does not own token values |
+| Patterns | `docs/metadata/patterns.json` plus curated workflow guidance | canonical pattern identity with authored explanation where useful |
+| Examples | `docs/metadata/executable-examples.json`, `tests/consumers/manifest.json`, and authored implementations | shared semantic example identities with framework-specific executable implementations and verification |
+| Accessibility | shared component contracts, accessibility evidence metadata, and curated guidance | shared keyboard/accessibility behavior with evidence and explanation |
+| Search | generated Reference records plus curated text | search owns no API, package, token, framework, version, or release facts |
 
-Generated component facts exist in
-`docs/generated/consumer-knowledge.json` and
-`docs/generated/framework-api-reference.json`. Reference generation composes
-canonical sources into a shared reference model rather than introducing a new
-hand-maintained API authority.
+Generated component facts include `docs/generated/consumer-knowledge.json` and `docs/generated/framework-api-reference.json`. The shared reader model is generated at `docs/generated/reference-model.json`. Reference generation composes canonical sources into that model rather than introducing a hand-maintained API authority.
 
-### Reference generation pipeline
+## Generation pipeline
 
-The repository exposes one ordered regeneration path:
+The ordered regeneration path is:
 
 ```bash
 npm run generate:reference
 ```
 
-It regenerates framework/native artifacts first, then preset and consumer
-knowledge projections, then the shared `reference-model.json`. Use
-`npm run verify:reference` to prove all checked-in generated Reference inputs
-are current without modifying them.
+It regenerates framework/native artifacts, preset and consumer-knowledge projections, and the shared `reference-model.json`. Use:
 
-`npm run build:docs` verifies that generated chain before building the direct
-VyrnForge runtime dependencies used by Docs and then the Docs application.
-Exact-main CI repeats the verification before creating the production Pages
-artifact. Pages itself only deploys the verified commit-bound artifact and never
-regenerates or rebuilds source.
+```bash
+npm run verify:reference
+```
 
-### Framework and version context
+to prove checked-in generated Reference inputs are current without modifying them.
 
-Framework context uses the shared framework IDs declared by
-`reference-portal.json` and the `framework` query parameter. Version context
-uses the canonical `vyrnforge-versions.json` catalog and versioned paths.
-Navigation inside Docs preserves the selected framework and version context across
-reader-facing routes.
+`npm run build:docs` verifies the generated chain, builds the direct VyrnForge runtime dependencies used by Docs, and builds the Docs application. Exact-main delivery repeats currentness verification before creating the production Pages artifact. Pages deploys the verified commit-bound artifact and does not regenerate source.
 
-The default framework may be React for convenience, but default selection does
-not give React stronger product semantics than Native HTML, Angular, or Vue.
+## Framework and version context
 
-### Route and deep-link ownership
+Framework context uses the shared framework IDs declared by `reference-portal.json` and the `framework` query parameter. Version context uses the canonical `vyrnforge-versions.json` catalog and versioned paths.
 
-Stable route IDs are semantic identities. The applications transport those
-identities through hash routes so GitHub Pages does not require server-side
-rewrite rules. Framework context is query-based and version context is
-path-based.
+Navigation must preserve the selected framework and version across reader-facing routes. A convenience default such as React does not grant that framework stronger product semantics.
 
-The transitional runtime registries have been retired. Docs discovers authored
-Markdown, metadata, and generated sources directly, composes generated reader
-entries from `docs/generated/reference-model.json`, and binds curated executable
-pages to canonical component and example identities. Canonical public page
-registration and record-domain bindings live in
-`docs/metadata/documentation-pages.json` and are compiled into
-`docs/generated/documentation-registry.json`. The Docs application consumes
-those generated bindings; `apps/docs/src/referenceRoutes.ts` is an adapter, not
-a page or record-route authority.
+## Route and deep-link ownership
 
-Derivable navigation and catalog facts therefore come from the generated
-Reference model, canonical metadata, or repository source discovery. Curated
-prose and executable demonstrations remain authored only where they add
-presentation or behavioral value that is not already a generated fact.
+Stable route IDs are semantic identities. The application transports those identities through hash routes so GitHub Pages does not require server-side rewrite rules. Framework context is query-based and version context is path-based.
 
-### Executable preview contract
+The transitional runtime registries have been retired. Canonical public page registration and record-domain bindings live in `docs/metadata/documentation-pages.json` and compile into `docs/generated/documentation-registry.json`. The Docs application consumes those generated bindings; `apps/docs/src/referenceRoutes.ts` is an adapter, not a page or record-route authority.
 
-The primary reader experience presents guidance, generated API facts, and
-interactive UI behavior in one Docs application. Readers should not choose
-between a Docs mode and a separate Playground product.
+Derivable navigation, catalog, search, index, and sitemap facts come from `docs/generated/reference-model.json`, canonical metadata, or repository source discovery. Curated prose and executable demonstrations remain authored only where they add value that cannot be derived safely.
 
-Foundations, patterns, Data & Grid demonstrations, and framework examples use
-curated Docs routes backed by canonical metadata and verified consumer fixtures.
-Component/API facts remain generated from shared VyrnForge contracts. Interactive
-examples may use authored presentation code, but they must not become a second
-API registry or overstate framework runtime evidence.
+## Executable preview contract
 
-Native HTML, React, Angular, and Vue remain equal semantic contexts. Claims that
-a framework runtime executed must come from executable-example or packed-consumer
-evidence.
+The primary reader experience presents guidance, generated API facts, and interactive UI behavior in one Docs application. VyrnForge does not maintain a separate semantic Playground product.
 
-### Deployment ownership
+Foundations, patterns, advanced-module demonstrations, and framework examples use curated Docs routes backed by canonical metadata and verified consumer fixtures. Interactive examples may use authored presentation code, but they must not become a second API registry or overstate framework runtime evidence.
 
-`scripts/reference-artifact.mjs` owns the shared immutable Reference artifact
-contract. Preview and production artifacts contain the single Docs product, preserve
-commit/CI lineage, and use `main` as the production source.
-Presentation changes must preserve this delivery contract unless the deployment
-architecture itself is intentionally revised and re-verified.
+Claims that a framework runtime executed must come from executable-example or packed-consumer evidence.
 
-## Documentation application
+## Docs application boundary
 
-`apps/docs` is a presentation and navigation application. It is not a source of
-truth for VyrnForge behavior or architecture.
+`apps/docs` may own:
 
-The application renders canonical Markdown and structured/generated metadata
-from the repository. When the application needs a new page, prefer discovering
-or generating from an existing canonical source rather than creating a
-docs-app-only copy of the same information.
+- generic page and layout renderers;
+- framework/version context UI;
+- navigation and search presentation derived from generated registries;
+- generic code and example presentation;
+- host adapters required to render verified examples;
+- documentation-specific layout and content styling.
 
-### Dogfooding
+It must not own package/component semantic truth, framework-support truth, accessibility claims, token contracts, release state, maturity, public APIs, or duplicated component-specific registries.
 
-The documentation application should consume VyrnForge components for reusable
-UI primitives where practical.
+The Docs application should dogfood VyrnForge components for reusable UI primitives where practical. If Docs reveals a reusable UI need, evaluate the existing VyrnForge foundation before adding an application-only replacement.
 
-Docs-app CSS should focus on documentation-specific layout and presentation such
-as navigation, Markdown, code blocks, responsive structure, and metadata views.
-Do not create a parallel generic component system inside `apps/docs`.
+## Dedicated Reference pages
 
-If the docs application exposes a reusable UI need that belongs in VyrnForge,
-evaluate whether the existing component foundation can be reused or extended
-before adding an application-only replacement.
+A capability may have a dedicated catalog or tool when the generic record presentation cannot provide the required browsing experience. This is a presentation override, not a second semantic owner.
+
+The canonical component, package, token, contract, framework, accessibility, and API records remain intact and continue feeding generators, search, AI context, and verification. Dedicated pages use the shared Reference shell, framework/version context, route model, and design system.
+
+## Deployment ownership
+
+`scripts/reference-artifact.mjs` owns the immutable Reference artifact assembly contract. Preview artifacts are non-deployable review evidence; production artifacts remain bound to verified current `main` commits. Pages deploys the verified artifact and does not rebuild source.
+
+Presentation changes must preserve this boundary unless the deployment architecture is intentionally revised and re-verified.
 
 ## Example standards
 
-Examples should be short, accurate, and reusable. A public-facing example should
-include the information needed to consume the API correctly, as applicable:
+Public examples should remain focused, accurate, reusable, and attributable to canonical capability identities. Where applicable they should include package/CSS imports, a focused use case, minimal code, accessibility requirements, relevant theming notes, controlled/uncontrolled behavior, and important limitations.
 
-- package and CSS imports;
-- a focused use case;
-- minimal code;
-- accessibility requirements;
-- relevant theming or token notes;
-- controlled or uncontrolled behavior when relevant;
-- when to use the component or pattern and important limitations.
+Large fixture datasets, business-specific authentication, application routing, persistence, and unrelated product logic stay outside reusable examples.
 
-Large fixture datasets, business-specific authentication, application routing,
-and unrelated product logic should stay outside reusable examples.
+The same conceptual capability across frameworks uses one shared example identity with framework-specific implementations rather than four unrelated catalog entries.
 
-When an example represents the same VyrnForge capability across frameworks, use
-a shared semantic example identity and keep framework-specific code as
-implementations of that identity rather than four unrelated catalog entries.
+## Change verification
 
-## AI-facing documentation
+When changing Reference content, generation, or presentation:
 
-`AGENTS.md` and `.ai/` provide concise agent entrypoints. They should point to
-canonical human documentation and structured metadata rather than restating
-whole architecture documents.
-
-Do not create speculative machine-readable files merely because an older plan
-named them. A machine-readable artifact should exist only when a current
-generator, verifier, consumer, or documented workflow owns it.
-
-Component and framework facts should come from canonical metadata and generated
-references where those sources exist. Do not hand-maintain duplicate component
-catalogs for AI consumption.
-
-## Retention and cleanup
-
-Git history already preserves deleted repository content. Active documentation
-should therefore keep historical material only when it has continuing value.
-
-Archive a replaced document when it is useful for audit evidence, migration
-history, regression investigation, or understanding an accepted architectural
-decision.
-
-Delete instead of archive when a file is only:
-
-- a completed one-time implementation prompt;
-- an obsolete task instruction with no continuing policy value;
-- an exact or near-exact duplicate of a canonical document;
-- a generated/copy artifact that can be reproduced from its owner;
-- a pointer-only archive that contains no historical evidence beyond Git
-  history.
-
-Never delete required legal text, accepted ADR history, release evidence
-required by policy, or verification evidence solely to reduce file count.
-
-## Change checklist
-
-When changing Reference content or presentation:
-
-1. Identify the canonical owner for the topic.
-2. Update that owner rather than creating a parallel document or
-   application-owned fact table.
-3. Update or regenerate structured metadata when the canonical contract requires
-   it.
-4. Keep framework/version context and stable route identities aligned across
-   all reader-facing Docs routes.
-5. Derive route and catalog facts from the shared Reference model, canonical
-   metadata, or repository source discovery rather than application registries.
-6. Preserve executable-example registry identities and cross-framework
-   verification when example behavior changes.
-7. Keep curated prose and executable demos authored only where they add value
-   beyond generated facts.
-8. Run `npm run verify:reference` and `npm run verify:docs-quality` so generated
-   Reference inputs, documentation currentness, Markdown structure, local links,
-   and Reference-product drift checks all pass.
-9. Run `npm run build:docs` for the complete local Docs dependency/build path.
+1. identify and update the canonical owner;
+2. regenerate structured projections when required;
+3. preserve framework/version context and stable route identities;
+4. preserve executable-example identities and cross-framework evidence;
+5. keep curated prose and executable demos only where they add value beyond generated facts;
+6. run `npm run verify:reference` and `npm run verify:docs-quality`;
+7. run `npm run build:docs` for the complete Docs dependency/build path;
+8. run additional browser/accessibility/consumer gates when behavior changed.
 
 ## Related sources
 
 - [Documentation index](../README.md)
+- [Documentation governance](../governance/documentation.md)
 - [Documentation authoring](documentation-authoring.md)
+- [Package/component documentation ownership](documentation-ownership.md)
 - [Metadata ownership](../metadata/README.md)
 - [`reference-portal.json`](../metadata/reference-portal.json)
-- [Documentation governance](../governance/00-documentation-governance.md)
-- [Document lifecycle](../governance/02-document-lifecycle.md)
 - [Project source of truth](../governance/01-project-source-of-truth.md)
 - [CI/CD architecture](ci-cd-architecture.md)
 - [`AGENTS.md`](../../AGENTS.md)
-- [AI bootstrap](../../.ai/AI_CONTEXT.md)
