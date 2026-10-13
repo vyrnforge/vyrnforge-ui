@@ -25,6 +25,7 @@ target product hierarchy.
 
 ## Maturity and release channels
 
+<!-- prettier-ignore -->
 | Track | Packages | npm tag |
 | --- | --- | --- |
 | Non-grid beta | `@vyrnforge/ui-core`, `@vyrnforge/ui-behaviors`, `@vyrnforge/ui-components`, `@vyrnforge/ui-elements`, `@vyrnforge/ui-angular`, `@vyrnforge/ui-vue` | `beta` |
@@ -43,6 +44,7 @@ Choose the first-class surface package for the framework your application uses.
 Shared foundation packages are dependencies of those surfaces and are also
 available when consuming framework-neutral VyrnForge APIs directly.
 
+<!-- prettier-ignore -->
 | Package | Responsibility |
 | --- | --- |
 | `@vyrnforge/ui-core` | Framework-neutral design tokens, themes, density, typography, motion, layers, utilities, and shared styling foundations. |
