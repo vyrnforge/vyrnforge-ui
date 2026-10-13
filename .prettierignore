@@ -39,3 +39,7 @@ tests/package-consumer/.tmp-registry/
 
 # Deterministic generated governance artifacts
 docs/governance/repository-inventory.md
+
+# Temporary ownership formatting diagnostic
+scripts/component-documentation-coverage.mjs
+scripts/component-documentation-coverage.test.mjs
