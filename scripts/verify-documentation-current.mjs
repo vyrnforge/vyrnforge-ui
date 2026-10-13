@@ -21,7 +21,7 @@ export const documentationCurrentPaths = [
   "docs/api/ui-data-grid-api.md",
   "docs/api/ui-elements-api.md",
   "docs/packages/README.md",
-  "docs/governance/00-documentation-governance.md",
+  "docs/governance/documentation.md",
   "docs/governance/01-project-source-of-truth.md",
   "docs/engineering/documentation-system.md",
   "docs/governance/04-metadata-maintenance.md",
