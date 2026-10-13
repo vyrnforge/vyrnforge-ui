@@ -80,7 +80,9 @@ test.describe("component reference presentation benchmark", () => {
       }),
     ).toBeVisible();
 
-    const usageCards = page.locator("#component-usage .vf-docs-guidance-grid > .vf-card");
+    const usageCards = page.locator(
+      "#component-usage .vf-docs-guidance-grid > .vf-card",
+    );
     await expect(usageCards).toHaveCount(2);
     await expect(usageCards.first()).toContainText("Use it when");
     await expect(usageCards.nth(1)).toContainText(
