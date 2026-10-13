@@ -37,6 +37,25 @@ function gitOutput(root, args) {
   return execFileSync("git", args, { cwd: root, encoding: "utf8" });
 }
 
+function ensureGitRef(root, ref) {
+  try {
+    gitOutput(root, ["rev-parse", "--verify", ref]);
+    return;
+  } catch {
+    if (!ref.startsWith("origin/")) throw new Error(`missing git ref ${ref}`);
+  }
+
+  const branch = ref.slice("origin/".length);
+  gitOutput(root, [
+    "fetch",
+    "--no-tags",
+    "--depth=1",
+    "origin",
+    `${branch}:refs/remotes/origin/${branch}`,
+  ]);
+  gitOutput(root, ["rev-parse", "--verify", ref]);
+}
+
 function readGitJson(root, ref, relativePath) {
   return JSON.parse(gitOutput(root, ["show", `${ref}:${relativePath}`]));
 }
@@ -101,6 +120,7 @@ function compareAgainstBase({
   let baseReference;
   let files;
   try {
+    ensureGitRef(root, base);
     baseCatalog = readGitJson(root, base, "docs/metadata/components.json");
     baseContracts = readGitJson(
       root,
@@ -171,10 +191,16 @@ function compareAgainstBase({
   return [...new Set(failures)].sort();
 }
 
+function defaultBaseRef() {
+  if (process.env.CI_BASE_SHA) return process.env.CI_BASE_SHA;
+  const githubBaseRef = process.env.GITHUB_BASE_REF?.trim();
+  return githubBaseRef ? `origin/${githubBaseRef}` : undefined;
+}
+
 export function verifyComponentDocumentationCoverage({
   root = repositoryRoot,
-  base = process.env.CI_BASE_SHA,
-  head = process.env.CI_HEAD_SHA,
+  base = defaultBaseRef(),
+  head = process.env.CI_HEAD_SHA ?? (base ? "HEAD" : undefined),
 } = {}) {
   const failures = [];
   const catalog = readJson(root, "docs/metadata/components.json");
