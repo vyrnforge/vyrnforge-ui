@@ -1,4 +1,11 @@
-import { Badge, EmptyState, Heading, Text } from "@vyrnforge/ui-components";
+import {
+  Badge,
+  Card,
+  EmptyState,
+  Heading,
+  Stack,
+  Text,
+} from "@vyrnforge/ui-components";
 
 import frameworkApiReferenceRaw from "../../../docs/generated/framework-api-reference.json?raw";
 import { getReferenceRecordRoute } from "../../../docs/reference/referenceRuntime";
@@ -513,32 +520,34 @@ function CustomizationCard({
   title: string;
 }) {
   return (
-    <article className="vf-docs-customization-card">
-      <Heading level={4} size="sm">
-        {title}
-      </Heading>
-      <Text tone="muted">{description}</Text>
-      <dl>
-        <div>
-          <dt>Property</dt>
-          <dd>
-            <code>{control.name}</code>
-          </dd>
-        </div>
-        <div>
-          <dt>Values</dt>
-          <dd>
-            <code>{controlType(control, contextualApi)}</code>
-          </dd>
-        </div>
-        <div>
-          <dt>Default</dt>
-          <dd>
-            <code>{formatDefault(control.default)}</code>
-          </dd>
-        </div>
-      </dl>
-    </article>
+    <Card className="vf-docs-customization-card" padding="md" variant="bordered">
+      <Stack gap="sm">
+        <Heading level={4} size="sm">
+          {title}
+        </Heading>
+        <Text tone="muted">{description}</Text>
+        <dl>
+          <div>
+            <dt>Property</dt>
+            <dd>
+              <code>{control.name}</code>
+            </dd>
+          </div>
+          <div>
+            <dt>Values</dt>
+            <dd>
+              <code>{controlType(control, contextualApi)}</code>
+            </dd>
+          </div>
+          <div>
+            <dt>Default</dt>
+            <dd>
+              <code>{formatDefault(control.default)}</code>
+            </dd>
+          </div>
+        </dl>
+      </Stack>
+    </Card>
   );
 }
 
@@ -765,18 +774,22 @@ function ComponentDetail({
             Usage
           </Heading>
           <div className="vf-docs-guidance-grid">
-            <article className="vf-docs-guidance-card">
-              <Text className="vf-docs-catalog__kicker" size="sm">
-                Use it when
-              </Text>
-              <Text>{component.guidance.useWhen}</Text>
-            </article>
-            <article className="vf-docs-guidance-card">
-              <Text className="vf-docs-catalog__kicker" size="sm">
-                Choose another approach when
-              </Text>
-              <Text>{component.guidance.avoidWhen}</Text>
-            </article>
+            <Card padding="md" variant="bordered">
+              <Stack gap="sm">
+                <Text className="vf-docs-catalog__kicker" size="sm">
+                  Use it when
+                </Text>
+                <Text>{component.guidance.useWhen}</Text>
+              </Stack>
+            </Card>
+            <Card padding="md" variant="bordered">
+              <Stack gap="sm">
+                <Text className="vf-docs-catalog__kicker" size="sm">
+                  Choose another approach when
+                </Text>
+                <Text>{component.guidance.avoidWhen}</Text>
+              </Stack>
+            </Card>
           </div>
         </section>
 
@@ -819,20 +832,26 @@ function ComponentDetail({
                 />
               ) : null}
               {capabilities.states.length > 0 ? (
-                <article className="vf-docs-customization-card">
-                  <Heading level={4} size="sm">
-                    States
-                  </Heading>
-                  <Text tone="muted">
-                    State properties change how the component behaves or
-                    presents its current condition.
-                  </Text>
-                  <div className="vf-docs-customization-card__states">
-                    {capabilities.states.map((control) => (
-                      <code key={control.name}>{control.name}</code>
-                    ))}
-                  </div>
-                </article>
+                <Card
+                  className="vf-docs-customization-card"
+                  padding="md"
+                  variant="bordered"
+                >
+                  <Stack gap="sm">
+                    <Heading level={4} size="sm">
+                      States
+                    </Heading>
+                    <Text tone="muted">
+                      State properties change how the component behaves or
+                      presents its current condition.
+                    </Text>
+                    <div className="vf-docs-customization-card__states">
+                      {capabilities.states.map((control) => (
+                        <code key={control.name}>{control.name}</code>
+                      ))}
+                    </div>
+                  </Stack>
+                </Card>
               ) : null}
             </div>
           </section>
