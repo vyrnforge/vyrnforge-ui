@@ -6,7 +6,7 @@
   "category": "primitive",
   "maturity": "experimental",
   "availability": "available",
-  "purpose": "Dense toolbar action that can show icon and label.",
+  "purpose": "Dense toolbar action that can show an icon and label.",
   "guidance": {
     "useWhen": "Use inside repeated toolbars or compact command rows.",
     "avoidWhen": "Avoid for standalone page-level primary actions.",
@@ -18,14 +18,16 @@
     ]
   },
   "accessibility": [
-    "Keep label meaningful even when visual space is compact.",
+    "Keep the label meaningful even when visual space is compact.",
     "native button semantics",
     "aria-pressed for active tool state",
     "accessible name"
   ],
   "knownLimitations": [
-    "Avoid for standalone page-level primary actions."
+    "Keep the action label meaningful even when the visual presentation is compact."
   ],
+  "examples": [],
+  "releaseNotes": [],
   "styling": {
     "classes": [
       "vf-toolbar-button"
@@ -145,6 +147,7 @@
   "source": {
     "componentMetadata": "docs/metadata/components.json",
     "contractMetadata": "docs/metadata/component-contracts.json",
+    "componentDocumentation": "packages/ui-elements/src/components/toolbar-button.docs.json",
     "customElementsManifest": "packages/ui-elements/custom-elements.json"
   }
 }

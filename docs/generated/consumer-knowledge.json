@@ -8,13 +8,16 @@
     "docs/metadata/packages.json",
     "docs/metadata/multi-framework.json",
     "packages/ui-elements/custom-elements.json",
+    "packages/ui-elements/src/components/button-group.docs.json",
     "packages/ui-elements/src/components/button.docs.json",
     "packages/ui-elements/src/components/date-input.docs.json",
     "packages/ui-elements/src/components/datetime-input.docs.json",
+    "packages/ui-elements/src/components/icon-button.docs.json",
     "packages/ui-elements/src/components/number-input.docs.json",
     "packages/ui-elements/src/components/search-input.docs.json",
     "packages/ui-elements/src/components/text-input.docs.json",
-    "packages/ui-elements/src/components/textarea.docs.json"
+    "packages/ui-elements/src/components/textarea.docs.json",
+    "packages/ui-elements/src/components/toolbar-button.docs.json"
   ],
   "packages": [
     {
@@ -12372,8 +12375,8 @@
       "purpose": "Groups related buttons together.",
       "guidance": {
         "useWhen": "Use for adjacent related actions or attached toolbar controls.",
-        "avoidWhen": "Avoid for unrelated actions.",
-        "aiUsageNotes": "Use only when grouping clarifies action relationship.",
+        "avoidWhen": "Avoid grouping unrelated actions.",
+        "aiUsageNotes": "Use ButtonGroup only when grouping clarifies the relationship between actions.",
         "relatedComponents": [
           "Button",
           "ToolbarButton",
@@ -12382,7 +12385,7 @@
       },
       "accessibilityNotes": "Keep grouped controls individually labelled.",
       "knownLimitations": [
-        "Avoid for unrelated actions."
+        "Each grouped control still needs its own understandable label and action semantics."
       ],
       "styling": {
         "classes": [
@@ -12390,11 +12393,14 @@
         ],
         "variables": []
       },
+      "examples": [],
+      "releaseNotes": [],
       "docsPath": "docs/api/ui-components-api.md",
       "playgroundPath": "/components/actions/button-group",
       "source": {
         "componentMetadata": "docs/metadata/components.json",
         "contractMetadata": "docs/metadata/component-contracts.json",
+        "componentDocumentation": "packages/ui-elements/src/components/button-group.docs.json",
         "customElementsManifest": "packages/ui-elements/custom-elements.json"
       },
       "nativeDeclaration": {
@@ -13177,7 +13183,7 @@
       "availability": "available",
       "purpose": "Compact icon-only action control.",
       "guidance": {
-        "useWhen": "Use for repeated utility actions like refresh, close, clear, and more.",
+        "useWhen": "Use for repeated utility actions such as refresh, close, clear, and similar compact commands.",
         "avoidWhen": "Avoid for destructive or primary business actions without visible text.",
         "aiUsageNotes": "Do not create unlabeled icon-only controls.",
         "relatedComponents": [
@@ -13186,9 +13192,9 @@
           "Button"
         ]
       },
-      "accessibilityNotes": "Every icon-only button must have an aria-label.",
+      "accessibilityNotes": "Every icon-only button must have an accessible label.",
       "knownLimitations": [
-        "Avoid for destructive or primary business actions without visible text."
+        "Icon-only actions require an accessible label that communicates the action."
       ],
       "styling": {
         "classes": [
@@ -13196,11 +13202,14 @@
         ],
         "variables": []
       },
+      "examples": [],
+      "releaseNotes": [],
       "docsPath": "docs/api/ui-components-api.md",
       "playgroundPath": "/components/actions/icon-button",
       "source": {
         "componentMetadata": "docs/metadata/components.json",
         "contractMetadata": "docs/metadata/component-contracts.json",
+        "componentDocumentation": "packages/ui-elements/src/components/icon-button.docs.json",
         "customElementsManifest": "packages/ui-elements/custom-elements.json"
       },
       "nativeDeclaration": {
@@ -14551,7 +14560,7 @@
       "category": "primitive",
       "maturity": "experimental",
       "availability": "available",
-      "purpose": "Dense toolbar action that can show icon and label.",
+      "purpose": "Dense toolbar action that can show an icon and label.",
       "guidance": {
         "useWhen": "Use inside repeated toolbars or compact command rows.",
         "avoidWhen": "Avoid for standalone page-level primary actions.",
@@ -14562,9 +14571,9 @@
           "ButtonGroup"
         ]
       },
-      "accessibilityNotes": "Keep label meaningful even when visual space is compact.",
+      "accessibilityNotes": "Keep the label meaningful even when visual space is compact.",
       "knownLimitations": [
-        "Avoid for standalone page-level primary actions."
+        "Keep the action label meaningful even when the visual presentation is compact."
       ],
       "styling": {
         "classes": [
@@ -14572,11 +14581,14 @@
         ],
         "variables": []
       },
+      "examples": [],
+      "releaseNotes": [],
       "docsPath": "docs/api/ui-components-api.md",
       "playgroundPath": "/components/actions/toolbar-button",
       "source": {
         "componentMetadata": "docs/metadata/components.json",
         "contractMetadata": "docs/metadata/component-contracts.json",
+        "componentDocumentation": "packages/ui-elements/src/components/toolbar-button.docs.json",
         "customElementsManifest": "packages/ui-elements/custom-elements.json"
       },
       "nativeDeclaration": {
