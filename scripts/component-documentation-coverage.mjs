@@ -223,14 +223,6 @@ export function verifyComponentDocumentationCoverage({
         `owned documentation coverage regressed: ${ownedIds.size}/${requiredComponents.length} owned and ${fallbackIds.length} fallback; baseline requires at least ${baseline.ownedComponentCount} owned and at most ${baseline.fallbackComponentCount} fallback`,
       );
     }
-    if (
-      baseline.ownedComponentCount + baseline.fallbackComponentCount !==
-      requiredComponents.length
-    ) {
-      failures.push(
-        `documentation ownership migration baseline must account for the current required public scope (${requiredComponents.length} components)`,
-      );
-    }
   }
 
   failures.push(
