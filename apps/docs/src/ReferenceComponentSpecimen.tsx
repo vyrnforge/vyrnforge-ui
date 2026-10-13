@@ -46,6 +46,16 @@ const previewByComponentId = new Map(
   ]),
 );
 
+function applyPreviewProperties(
+  element: HTMLElement | null,
+  props: Record<string, PreviewPrimitive> | undefined,
+) {
+  if (!element || !props) return;
+  for (const [name, value] of Object.entries(props)) {
+    Reflect.set(element, name, value);
+  }
+}
+
 function PreviewItems({
   componentTagName,
   preview,
@@ -58,7 +68,8 @@ function PreviewItems({
       componentTagName,
       {
         key: `${item.text}-${index}`,
-        ...(item.props ?? {}),
+        ref: (element: HTMLElement | null) =>
+          applyPreviewProperties(element, item.props),
       },
       item.text,
     ),
