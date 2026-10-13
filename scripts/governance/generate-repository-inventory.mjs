@@ -133,6 +133,11 @@ const outputLines = [
     [
       ["Documentation entrypoint", "`docs/README.md`"],
       ["Project identity", "`docs/governance/01-project-source-of-truth.md`"],
+      [
+        "Repository standardization revision",
+        "`docs/governance/repository-standardization-revision.md`",
+      ],
+      ["Branching and PR topology", "`docs/governance/05-trunk-delivery.md`"],
       ["Package boundaries", "`docs/architecture/01-package-boundaries.md`"],
       ["Public API", "`docs/api/README.md` and package API documents"],
       ["Component catalog and maturity", "`docs/metadata/components.json`"],

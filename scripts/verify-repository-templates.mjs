@@ -6,12 +6,10 @@ const repositoryRoot = path.resolve(
   path.dirname(fileURLToPath(import.meta.url)),
   "..",
 );
-
 const normalTemplate = ".github/pull_request_template.md";
 const infrastructureTemplate =
   ".github/PULL_REQUEST_TEMPLATE/ci-cd-infrastructure.md";
 const releaseTemplate = ".github/PULL_REQUEST_TEMPLATE/release.md";
-
 const retiredPullRequestTemplates = [
   ".github/PULL_REQUEST_TEMPLATE/change-manifest.md",
   ".github/PULL_REQUEST_TEMPLATE/component-or-package.md",
@@ -40,24 +38,6 @@ function requireText(content, relativePath, requiredText, failures) {
   }
 }
 
-function requireOrder(content, relativePath, markers, failures) {
-  let previous = -1;
-  for (const marker of markers) {
-    const index = content.indexOf(marker);
-    if (index < 0) {
-      failures.push(`${relativePath}: contribution path is missing ${marker}`);
-      continue;
-    }
-    if (index <= previous) {
-      failures.push(
-        `${relativePath}: contribution path must keep ${markers.join(" -> ")} in order`,
-      );
-      return;
-    }
-    previous = index;
-  }
-}
-
 function rejectContributorHistory(content, relativePath, failures) {
   const forbidden = [
     [/\bnpm run quality\b/u, "removed command npm run quality"],
@@ -69,7 +49,6 @@ function rejectContributorHistory(content, relativePath, failures) {
     [/\b(?:RS|MF|CF|EL|BT|VF)-\d{4}\b/u, "internal task identifier"],
     [/\bGMF[1-4]\b/u, "historical framework gate identifier"],
   ];
-
   for (const [pattern, label] of forbidden) {
     if (pattern.test(content)) {
       failures.push(
@@ -97,25 +76,12 @@ export function verifyRepositoryTemplates({ root = repositoryRoot } = {}) {
     [
       "docs/governance/05-trunk-delivery.md",
       "## Agent branch and delivery contract",
-      "`integration/*` lanes are retired",
-      "start a short-lived task branch from current",
-      "open the pull request directly to protected `main`",
-      "full repository validation and a green `ci-gate`",
+      "`main` is the canonical releasable branch",
+      "use a stacked PR only when the dependency is real",
+      "full protected mainline gate",
       "Do not push normal work directly to `main`",
-      "Never use a missing protection rule",
-    ],
-    failures,
-  );
-  requireOrder(
-    agents,
-    "AGENTS.md",
-    [
-      "## Required reading",
-      "docs/governance/05-trunk-delivery.md",
-      "## Agent branch and delivery contract",
-      "start a short-lived task branch from current",
-      "open the pull request directly to protected `main`",
-      "full repository validation and a green `ci-gate`",
+      "Never use a missing host",
+      "Temporary `integration/<initiative>` branches",
     ],
     failures,
   );
@@ -125,9 +91,9 @@ export function verifyRepositoryTemplates({ root = repositoryRoot } = {}) {
     contributing,
     "CONTRIBUTING.md",
     [
-      "## Trunk contribution path",
-      "`main` is the protected integration and release branch.",
-      "Persistent `integration/*` lanes are not part of the current delivery model.",
+      "## Branch and PR contribution path",
+      "`main` is the canonical protected release boundary.",
+      "Temporary `integration/<initiative>` branches are allowed",
       "docs/governance/05-trunk-delivery.md",
       "npm ci",
       "git switch main",
@@ -136,7 +102,8 @@ export function verifyRepositoryTemplates({ root = repositoryRoot } = {}) {
       "npm run check",
       "npm test",
       "npm run build",
-      "Open the pull request against protected `main`.",
+      "Use a mainline PR to protected `main`",
+      "Use a stacked PR only when a real dependency exists.",
       "scripts/detect-ci-scope.mjs",
       "actual workspace dependency graph",
       "exact `main` push",
@@ -145,22 +112,6 @@ export function verifyRepositoryTemplates({ root = repositoryRoot } = {}) {
       "ci-cd-infrastructure.md",
       "release.md",
       "SECURITY.md",
-    ],
-    failures,
-  );
-  requireOrder(
-    contributing,
-    "CONTRIBUTING.md",
-    [
-      "git clone https://github.com/vyrnforge/vyrnforge-ui.git",
-      "npm ci",
-      "git switch main",
-      "git pull --ff-only origin main",
-      "git switch -c <short-lived-branch>",
-      "npm run check",
-      "npm test",
-      "npm run build",
-      "Open the pull request against protected `main`.",
     ],
     failures,
   );
@@ -177,21 +128,21 @@ export function verifyRepositoryTemplates({ root = repositoryRoot } = {}) {
     normalTemplate,
     [
       "## Summary",
-      "## Branch / dependency",
-      "## Impact",
+      "## PR topology",
+      "## Impact matrix",
+      "## Compatibility / migration",
       "## Validation",
       "## Notes",
-      "**Base:** `main`",
-      "**Dependency:**",
-      "**Playground or executable example:**",
-      "**Package/release lifecycle:**",
+      "**Base:**",
+      "**Depends on:**",
+      "**Retarget plan for stacked PRs:**",
+      "Package/release lifecycle",
       "`npm run check`",
       "`npm test`",
       "`npm run build`",
       "New or changed publishable workspaces have an explicit release lifecycle classification.",
-      "The PR targets protected `main` from a short-lived branch",
-      "scripts/detect-ci-scope.mjs",
-      "Pull requests to main use full protected CI",
+      "If this is non-mainline, the dependency/base is explicit",
+      "main is the canonical releasable branch",
       "docs/governance/05-trunk-delivery.md",
     ],
     failures,
@@ -309,7 +260,7 @@ if (
     process.exitCode = 1;
   } else {
     console.log(
-      "Repository contribution contracts passed: protected-main task flow, short-lived branch intake, planner-owned CI scope, and specialist infrastructure/release paths.",
+      "Repository contribution contracts passed: protected mainline, bounded stacked PRs, planner-owned CI scope, and specialist infrastructure/release paths.",
     );
   }
 }

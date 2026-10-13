@@ -2,88 +2,145 @@
 
 ## Purpose
 
-`main` is the protected integration and release branch for VyrnForge. Work is
-developed on short-lived task branches and merged through reviewed pull
-requests after protected CI passes.
+`main` is VyrnForge's canonical releasable branch. It must remain buildable, tested, publishable, and suitable to cut a release from at any time.
 
-Persistent `integration/*` lanes are not part of the current delivery model.
-Do not recreate lane synchronization, lane-drift checks, or promotion chains
-without a new architectural decision.
+Normal implementation work happens on short-lived branches. Direct human commits to `main` are not part of the delivery model.
 
-## Pull requests to main
+VyrnForge supports both mainline pull requests and bounded non-mainline pull requests when a real dependency exists. Non-mainline PRs are a development topology, not a second permanent development branch.
 
-Every normal change targets `main`.
+## Long-lived branches
 
-- `ci-gate` is the required merge-facing status.
-- Pull requests to `main` run full repository validation.
-- Public changes must update their canonical metadata, reference, docs, tests,
-  and consumer evidence as applicable.
-- Framework work must preserve Native HTML / Custom Elements, React, Angular,
-  and Vue as equal first-class surfaces.
-- No merge may bypass required compatibility, accessibility, form, package, or
-  generated-artifact evidence merely to reduce framework-specific code.
+Only `main` is permanently required.
 
-Emergency fixes still use a pull request to `main` unless repository access is
-being repaired. They receive the same protected validation.
+Temporary `release/<major>.<minor>` branches may exist for release stabilization or supported maintenance lines. Permanent `develop`, `next`, framework-owned, or generic staging branches are not part of the default model.
 
-## CI execution model
+Temporary `integration/<initiative>` branches are allowed only when several reviewed changes must be combined before the initiative can safely target `main`. They must have a named initiative, a bounded lifetime, explicit owners, and an exit condition.
 
-The repository validates each lifecycle boundary once.
+## Branch classes
 
-1. **PR to main** — full protected validation: quality, integration, docs,
-   security, packed consumers, browser/accessibility evidence, and generated
-   artifacts according to the repository workflow.
-2. **Push to main** — exact-main delivery only. It rebuilds the deployable
-   documentation/reference artifact bound to the commit that actually landed;
-   it does not repeat the already-passed merge suite.
-3. **Weekly Assurance** — expensive compatibility, dependency/security drift,
-   CodeQL, and full assurance checks.
-4. **Controlled release** — manual release from current `main`, using verified
-   immutable package artifacts and successful current-main CI evidence.
-5. **Pages deployment** — consumes a verified current-main Pages artifact and
-   never rebuilds source.
+Use purpose-first branch names:
 
-The current workflow source of truth is
-[`docs/engineering/ci-cd-architecture.md`](../engineering/ci-cd-architecture.md).
+- `feat/<scope>` — new capability;
+- `fix/<scope>` — defect correction;
+- `refactor/<scope>` — structural change without intentional behavior change;
+- `arch/<scope>` — architecture, package, contract, or repository model change;
+- `a11y/<scope>` — accessibility-focused work;
+- `perf/<scope>` — performance work;
+- `docs/<scope>` — documentation-only work;
+- `test/<scope>` — test infrastructure or coverage;
+- `build/<scope>` — build, packaging, or bundling;
+- `ci/<scope>` — CI/CD;
+- `migration/<scope>` — deliberate migration or deprecation work;
+- `deps/<scope>` — dependency updates;
+- `release/<version>` — release stabilization;
+- `backport/<version>/<scope>` — supported-line backport;
+- `hotfix/<version>-<scope>` — urgent correction for a released version;
+- `integration/<initiative>` — temporary initiative integration only.
+
+Do not create permanent `react`, `angular`, `vue`, `components`, `dev`, or similar framework/silo branches. Framework surfaces are peers.
+
+## Pull-request topology
+
+### Mainline PR
+
+A mainline PR targets `main`. Use it when the change is independently valid, has no unmerged prerequisite, passes the required gates, and leaves `main` releasable.
+
+### Stacked PR
+
+A stacked PR targets another short-lived work branch because it has a real prerequisite. The PR description must identify its dependency explicitly.
+
+Example:
+
+```text
+main
+  |
+  +-- arch/tree-contract          PR A -> main
+        |
+        +-- feat/tree-core        PR B -> arch/tree-contract
+              |
+              +-- feat/tree-react   PR C -> feat/tree-core
+              +-- feat/tree-angular PR D -> feat/tree-core
+              +-- feat/tree-vue     PR E -> feat/tree-core
+```
+
+Once a prerequisite merges, dependent PRs should be retargeted or rebased toward the nearest valid base, normally `main`.
+
+### Integration PR
+
+An integration PR uses a temporary `integration/<initiative>` base when multiple independently reviewed changes must be exercised together before they can be merged to `main` safely.
+
+Integration branches must not become persistent promotion lanes or an alternate `develop` branch.
+
+### Release, backport, and hotfix PRs
+
+Release stabilization targets the relevant `release/<version>` branch. Backports contain only the already-reviewed fix plus unavoidable compatibility adjustments. Hotfixes must also be reconciled with `main` so fixes do not live only on a maintenance line.
+
+## Dependency rules
+
+Branch and PR ordering must represent technical dependencies, not framework preference.
+
+When several frameworks need the same capability, establish the reusable foundation once, then allow Native/Custom Elements, React, Angular, and Vue work to proceed in parallel after their actual prerequisites are available.
+
+Do not serialize React -> Angular -> Vue, or any other framework order, unless a concrete implementation dependency requires it.
+
+## PR classes
+
+Every PR should identify its class when useful for review:
+
+- independent;
+- contract/foundation;
+- framework adapter;
+- stacked;
+- integration;
+- mechanical migration;
+- generated-artifact;
+- dependency;
+- release fix;
+- backport;
+- hotfix.
+
+One coherent architectural change may touch several packages and frameworks. "One package = one PR" is not a rule.
 
 ## Change impact
 
-Changing code does not require touching every documentation or example surface,
-but public impact must be explicit and testable.
+Each PR must state the affected surfaces and whether the change touches:
 
-- Shared behavior or accessibility changes require downstream adapter and
-  browser/accessibility evidence.
-- Public properties, events, methods, slots, models, or exports require
-  canonical metadata/reference and affected framework verification.
-- New reusable components require framework-neutral contracts plus supported
-  Native, React, Angular, and Vue surfaces.
-- Token/theme/visual changes require token, style, and visual evidence.
-- Package/public-entrypoint changes require packed package and external consumer
-  verification.
-- Workflow, toolchain, root-manifest, or shared CI-script changes require full
-  repository validation.
-- Generated metadata/reference must be reproducible and fail on drift.
+- shared/core foundations;
+- Native HTML / Custom Elements;
+- React;
+- Angular;
+- Vue;
+- tokens/styles;
+- accessibility;
+- SSR/server safety;
+- internationalization;
+- public API;
+- generated output;
+- documentation;
+- release lifecycle.
 
-## Release and deployment boundary
+Framework-only PRs are allowed when the issue is genuinely framework-specific. Shared concepts must not be hidden inside one adapter package merely to keep the PR local.
 
-Production Pages and npm publication originate only from current `main`.
+## CI execution model
 
-The release workflow is separately authorized and manual. A green prerelease
-package channel or green CI does not itself authorize maturity promotion,
-package renaming, publication, or feature-scope expansion.
+`main` remains the protected merge and release boundary.
 
-## Adding packages or framework surfaces
+- PRs targeting `main` run the protected merge suite and must satisfy the required merge-facing status.
+- Non-mainline PRs must run enough validation to review the change safely. Their final merge path to `main` must still pass the full protected mainline gate.
+- Pushes to `main` perform delivery work tied to the exact landed commit rather than silently substituting another branch.
+- Expensive periodic assurance and controlled release checks remain separate lifecycle boundaries.
+- Generated metadata/reference output must be reproducible and fail on drift.
 
-A new package or surface is not complete when it compiles. It must have:
+The workflow implementation source of truth remains [`../engineering/ci-cd-architecture.md`](../engineering/ci-cd-architecture.md). That document and CI configuration must be updated when the branch-aware execution model is implemented.
 
-1. workspace/dependency classification;
-2. package-boundary verification;
-3. build, typecheck, lint, and tests;
-4. public entrypoint and packed-consumer evidence;
-5. canonical metadata and docs;
-6. browser/SSR/accessibility evidence where applicable;
-7. explicit release lifecycle classification;
-8. CI impact behavior for source, tests, manifests, and published payload.
+## Merge policy
 
-This contract applies equally to Native HTML / Custom Elements, React, Angular,
-Vue, and optional advanced VyrnForge modules.
+Squash merge is the default for normal PRs so `main` records coherent changes rather than development noise. Exceptions should be deliberate, for example when preserving a reviewed multi-commit history materially improves traceability.
+
+No PR is merge-ready merely because its direct branch checks are green. Required dependency, compatibility, accessibility, package, generated-artifact, and migration evidence still applies.
+
+## Release boundary
+
+Production documentation and package publication originate from a verified `main` commit or an explicitly supported release line derived from it.
+
+A green stacked, integration, prerelease, or framework-only branch does not authorize publication, maturity promotion, package renaming, or expansion of supported public scope.
