@@ -132,6 +132,7 @@ const outputLines = [
     ["Concern", "Canonical source"],
     [
       ["Documentation entrypoint", "`docs/README.md`"],
+      ["Documentation governance", "`docs/governance/documentation.md`"],
       ["Project identity", "`docs/governance/01-project-source-of-truth.md`"],
       [
         "Repository standardization revision",
