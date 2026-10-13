@@ -197,18 +197,11 @@
   gap: var(--vf-space-4, 16px);
 }
 
-.vf-docs-guidance-card {
-  display: grid;
-  align-content: start;
-  gap: var(--vf-space-3, 12px);
+.vf-docs-guidance-grid > .vf-card {
   min-block-size: 130px;
-  padding: var(--vf-space-5, 20px);
-  border: 1px solid var(--vf-border-subtle, #e2e8f0);
-  border-radius: var(--vf-radius-lg, 10px);
-  background: var(--vf-surface-default, #ffffff);
 }
 
-.vf-docs-guidance-card .vf-text:last-child {
+.vf-docs-guidance-grid > .vf-card .vf-text:last-child {
   margin: 0;
   line-height: var(--vf-line-height-relaxed, 1.65);
 }
@@ -219,17 +212,7 @@
   gap: var(--vf-space-4, 16px);
 }
 
-.vf-docs-customization-card {
-  display: grid;
-  align-content: start;
-  gap: var(--vf-space-3, 12px);
-  padding: var(--vf-space-5, 20px);
-  border: 1px solid var(--vf-border-subtle, #e2e8f0);
-  border-radius: var(--vf-radius-lg, 10px);
-  background: var(--vf-surface-default, #ffffff);
-}
-
-.vf-docs-customization-card > .vf-text {
+.vf-docs-customization-card .vf-text {
   margin: 0;
 }
 
@@ -445,8 +428,6 @@
 
 @media (forced-colors: active) {
   .vf-docs-component-specimen__stage,
-  .vf-docs-guidance-card,
-  .vf-docs-customization-card,
   .vf-docs-api-table-scroll,
   .vf-docs-reference-outline {
     border-color: CanvasText;
