@@ -120,7 +120,8 @@ export function ReferenceComponentSpecimen({
 }) {
   const ownedPreview = previewByComponentId.get(componentId);
   const componentTagName =
-    getComponentReferenceRecord(componentId)?.nativeDeclaration?.tagName ?? null;
+    getComponentReferenceRecord(componentId)?.nativeDeclaration?.tagName ??
+    null;
 
   const specimen =
     ownedPreview && componentTagName ? (
