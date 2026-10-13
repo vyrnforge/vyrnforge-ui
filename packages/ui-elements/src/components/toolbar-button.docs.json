@@ -1,0 +1,29 @@
+{
+  "$schema": "../../../../docs/metadata/component-documentation.schema.json",
+  "schemaVersion": 1,
+  "componentId": "toolbar-button",
+  "owner": {
+    "package": "@vyrnforge/ui-elements",
+    "source": "packages/ui-elements/src/components/actions.ts"
+  },
+  "purpose": "Dense toolbar action that can show an icon and label.",
+  "guidance": {
+    "useWhen": "Use inside repeated toolbars or compact command rows.",
+    "avoidWhen": "Avoid for standalone page-level primary actions.",
+    "aiUsageNotes": "Prefer ToolbarButton for dense repeated utility commands."
+  },
+  "limitations": [
+    "Keep the action label meaningful even when the visual presentation is compact."
+  ],
+  "relatedComponents": ["Button", "IconButton", "ButtonGroup"],
+  "accessibility": {
+    "notes": "Keep the label meaningful even when visual space is compact.",
+    "evidenceRefs": []
+  },
+  "theming": {
+    "classes": ["vf-toolbar-button"],
+    "variables": []
+  },
+  "examples": [],
+  "releaseNotes": []
+}

@@ -170,7 +170,7 @@
       "package": "@vyrnforge/ui-components",
       "maturity": "experimental",
       "availability": "available",
-      "purpose": "Dense toolbar action that can show icon and label.",
+      "purpose": "Dense toolbar action that can show an icon and label.",
       "context": "ai-context/components/toolbar-button.json"
     },
     {

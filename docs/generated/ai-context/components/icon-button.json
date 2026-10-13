@@ -8,7 +8,7 @@
   "availability": "available",
   "purpose": "Compact icon-only action control.",
   "guidance": {
-    "useWhen": "Use for repeated utility actions like refresh, close, clear, and more.",
+    "useWhen": "Use for repeated utility actions such as refresh, close, clear, and similar compact commands.",
     "avoidWhen": "Avoid for destructive or primary business actions without visible text.",
     "aiUsageNotes": "Do not create unlabeled icon-only controls.",
     "relatedComponents": [
@@ -18,13 +18,15 @@
     ]
   },
   "accessibility": [
-    "Every icon-only button must have an aria-label.",
+    "Every icon-only button must have an accessible label.",
     "native button semantics",
     "icon-only control requires accessible name"
   ],
   "knownLimitations": [
-    "Avoid for destructive or primary business actions without visible text."
+    "Icon-only actions require an accessible label that communicates the action."
   ],
+  "examples": [],
+  "releaseNotes": [],
   "styling": {
     "classes": [
       "vf-icon-button"
@@ -122,6 +124,7 @@
   "source": {
     "componentMetadata": "docs/metadata/components.json",
     "contractMetadata": "docs/metadata/component-contracts.json",
+    "componentDocumentation": "packages/ui-elements/src/components/icon-button.docs.json",
     "customElementsManifest": "packages/ui-elements/custom-elements.json"
   }
 }

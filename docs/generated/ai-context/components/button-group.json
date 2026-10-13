@@ -9,8 +9,8 @@
   "purpose": "Groups related buttons together.",
   "guidance": {
     "useWhen": "Use for adjacent related actions or attached toolbar controls.",
-    "avoidWhen": "Avoid for unrelated actions.",
-    "aiUsageNotes": "Use only when grouping clarifies action relationship.",
+    "avoidWhen": "Avoid grouping unrelated actions.",
+    "aiUsageNotes": "Use ButtonGroup only when grouping clarifies the relationship between actions.",
     "relatedComponents": [
       "Button",
       "ToolbarButton",
@@ -23,8 +23,10 @@
     "aria-orientation"
   ],
   "knownLimitations": [
-    "Avoid for unrelated actions."
+    "Each grouped control still needs its own understandable label and action semantics."
   ],
+  "examples": [],
+  "releaseNotes": [],
   "styling": {
     "classes": [
       "vf-button-group"
@@ -92,6 +94,7 @@
   "source": {
     "componentMetadata": "docs/metadata/components.json",
     "contractMetadata": "docs/metadata/component-contracts.json",
+    "componentDocumentation": "packages/ui-elements/src/components/button-group.docs.json",
     "customElementsManifest": "packages/ui-elements/custom-elements.json"
   }
 }

@@ -38,20 +38,20 @@ The repository already provides:
 - `scripts/component-documentation-sources.test.mjs` for ownership
   verification;
 - generator ingestion in `scripts/generate-component-reference.mjs`;
-- `packages/ui-elements/src/components/button.docs.json` as the first owned
-  component documentation source.
+- package-local component documentation sources in the owning implementation
+  package.
 
-Button proves that package-owned purpose, use/avoid guidance, limitations,
-related components, accessibility notes, theming surface, verified scenario
-intent, and release notes can live with the canonical component owner while
-shared API contracts remain framework-neutral.
+Button and the migrated action-control cohort prove that package-owned purpose,
+use/avoid guidance, limitations, related components, accessibility notes,
+theming surface, verified scenario intent, and release notes can live with the
+canonical component owner while shared API contracts remain framework-neutral.
 
 ## Current migration coverage
 
 The required ownership scope is derived from
 `scripts/non-grid-component-scope.mjs`: public exports included in the shared
-non-grid beta scope. The current baseline contains 71 required components. Seven
-already have package-owned documentation sources and 64 remain on centralized
+non-grid beta scope. The current baseline contains 71 required components. Ten
+already have package-owned documentation sources and 61 remain on centralized
 fallback guidance while they are migrated.
 
 The baseline is deliberately a coverage floor and fallback ceiling rather than
