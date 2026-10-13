@@ -18,6 +18,7 @@ The Docs application may use React internally. React is an implementation host, 
 
 Reference content follows these ownership rules:
 
+<!-- prettier-ignore -->
 | Domain | Canonical ownership | Reference behavior |
 | --- | --- | --- |
 | Guides | current authored Markdown under `docs/` | curated explanation and recommendations; links to structured facts rather than copying them |
