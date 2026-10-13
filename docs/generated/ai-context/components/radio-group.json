@@ -27,6 +27,8 @@
   "knownLimitations": [
     "Avoid for long option lists; use Select instead."
   ],
+  "examples": [],
+  "releaseNotes": [],
   "styling": {
     "classes": [
       "vf-radio-group"
@@ -112,6 +114,7 @@
   "source": {
     "componentMetadata": "docs/metadata/components.json",
     "contractMetadata": "docs/metadata/component-contracts.json",
+    "componentDocumentation": "packages/ui-elements/src/components/radio-group.docs.json",
     "customElementsManifest": "packages/ui-elements/custom-elements.json"
   }
 }
