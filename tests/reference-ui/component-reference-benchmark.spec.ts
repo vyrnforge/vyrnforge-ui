@@ -80,7 +80,7 @@ test.describe("component reference presentation benchmark", () => {
       }),
     ).toBeVisible();
 
-    const usageCards = page.locator("#component-usage .vf-docs-guidance-card");
+    const usageCards = page.locator("#component-usage .vf-docs-guidance-grid > .vf-card");
     await expect(usageCards).toHaveCount(2);
     await expect(usageCards.first()).toContainText("Use it when");
     await expect(usageCards.nth(1)).toContainText(
@@ -137,7 +137,7 @@ test.describe("component reference presentation benchmark", () => {
     );
     await expect(page.locator("#component-specimen .vf-input")).toBeVisible();
     await expect(
-      page.locator("#component-usage .vf-docs-guidance-card"),
+      page.locator("#component-usage .vf-docs-guidance-grid > .vf-card"),
     ).toHaveCount(2);
     await expect(page.locator("#component-example-code")).toContainText(
       "React example",
