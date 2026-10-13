@@ -12,21 +12,14 @@
     "avoidWhen": "Avoid for multi-select until MultiSelect exists.",
     "aiUsageNotes": "Use native select before inventing custom dropdowns."
   },
-  "limitations": [
-    "Avoid for multi-select until MultiSelect exists."
-  ],
-  "relatedComponents": [
-    "Field",
-    "SegmentedControl"
-  ],
+  "limitations": ["Avoid for multi-select until MultiSelect exists."],
+  "relatedComponents": ["Field", "SegmentedControl"],
   "accessibility": {
     "notes": "Provide label and meaningful option text.",
     "evidenceRefs": []
   },
   "theming": {
-    "classes": [
-      "vf-select"
-    ],
+    "classes": ["vf-select"],
     "variables": []
   },
   "examples": [],
