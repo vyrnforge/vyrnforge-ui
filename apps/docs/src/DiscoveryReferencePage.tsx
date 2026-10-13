@@ -1,8 +1,10 @@
 import {
   Badge,
+  Card,
   CodeText,
   EmptyState,
   Heading,
+  Stack,
   Text,
 } from "@vyrnforge/ui-components";
 import { getReferenceRecordRoute } from "../../../docs/reference/referenceRuntime";
@@ -260,30 +262,32 @@ function PatternReference({
 
       <div className="vf-docs-pattern-grid">
         {patternReferenceRecords.map((pattern) => (
-          <article className="vf-docs-pattern-tile" key={pattern.id}>
-            <div className="vf-docs-pattern-tile__meta">
-              <Badge size="sm" tone="subtle" variant="neutral">
-                {pattern.category}
-              </Badge>
-              <span>{pattern.components.length} building blocks</span>
-            </div>
-            <Heading level={3} size="md">
-              <a href={recordHref("patterns", pattern.id)}>
-                {pattern.displayName}
+          <Card key={pattern.id} padding="md" variant="bordered">
+            <Stack gap="md">
+              <div className="vf-docs-pattern-tile__meta">
+                <Badge size="sm" tone="subtle" variant="neutral">
+                  {pattern.category}
+                </Badge>
+                <span>{pattern.components.length} building blocks</span>
+              </div>
+              <Heading level={3} size="md">
+                <a href={recordHref("patterns", pattern.id)}>
+                  {pattern.displayName}
+                </a>
+              </Heading>
+              <Text tone="muted">{pattern.purpose}</Text>
+              <div className="vf-docs-pattern-tile__use">
+                <strong>Use when</strong>
+                <span>{pattern.useWhen}</span>
+              </div>
+              <a
+                className="vf-docs-pattern-tile__action"
+                href={recordHref("patterns", pattern.id)}
+              >
+                Open pattern <span aria-hidden="true">→</span>
               </a>
-            </Heading>
-            <Text tone="muted">{pattern.purpose}</Text>
-            <div className="vf-docs-pattern-tile__use">
-              <strong>Use when</strong>
-              <span>{pattern.useWhen}</span>
-            </div>
-            <a
-              className="vf-docs-pattern-tile__action"
-              href={recordHref("patterns", pattern.id)}
-            >
-              Open pattern <span aria-hidden="true">→</span>
-            </a>
-          </article>
+            </Stack>
+          </Card>
         ))}
       </div>
     </div>
