@@ -83,7 +83,11 @@ function OwnedComponentPreview({
   return (
     <Stack gap="lg">
       {component.examples.map((example) => (
-        <section key={example.id}>
+        <section
+          className="vf-docs-component-example"
+          data-component-example={example.id}
+          key={example.id}
+        >
           <Stack gap="sm">
             <div>
               <Heading level={4} size="sm">
