@@ -8,15 +8,24 @@ test("owned component documentation coverage is monotonic across the required pu
 
   assert.deepEqual(result.failures, []);
   assert(result.coverage.requiredComponentCount >= 71);
-  assert(result.coverage.ownedComponentCount >= 10);
-  assert(result.coverage.fallbackComponentCount <= 61);
+  assert(result.coverage.ownedComponentCount >= 15);
+  assert(result.coverage.fallbackComponentCount <= 56);
   assert.equal(
     result.coverage.requiredComponentCount,
     result.coverage.ownedComponentCount +
       result.coverage.fallbackComponentCount,
   );
-  assert(!result.coverage.fallbackComponentIds.includes("button"));
-  assert(!result.coverage.fallbackComponentIds.includes("icon-button"));
-  assert(!result.coverage.fallbackComponentIds.includes("toolbar-button"));
-  assert(!result.coverage.fallbackComponentIds.includes("button-group"));
+  for (const componentId of [
+    "button",
+    "icon-button",
+    "toolbar-button",
+    "button-group",
+    "checkbox",
+    "radio",
+    "switch",
+    "select",
+    "radio-group",
+  ]) {
+    assert(!result.coverage.fallbackComponentIds.includes(componentId));
+  }
 });
