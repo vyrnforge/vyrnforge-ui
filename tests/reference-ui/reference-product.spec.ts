@@ -99,7 +99,9 @@ async function expectPatternReferenceIsLive(page: Page) {
   await expect(
     page.locator(".vf-docs-live-example__stage").first(),
   ).toBeVisible();
-  await expect(page.locator(".vf-docs-pattern-tile").first()).toBeVisible();
+  await expect(
+    page.locator(".vf-docs-pattern-grid > .vf-card").first(),
+  ).toBeVisible();
 }
 
 async function expectFrameworkExampleIsDeveloperFirst(page: Page) {
