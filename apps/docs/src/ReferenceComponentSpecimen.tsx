@@ -32,6 +32,11 @@ import {
   ToggleButtonGroup,
 } from "@vyrnforge/ui-components";
 
+import type {
+  ReferenceComponentExample,
+  ReferenceFrameworkId,
+} from "./referenceData";
+
 type SpecimenState = {
   checked: boolean;
   dialogOpen: boolean;
@@ -43,7 +48,12 @@ type SpecimenState = {
   toggle: string;
 };
 
-type SpecimenRenderer = (state: SpecimenState) => ReactNode;
+type SpecimenContext = SpecimenState & {
+  examples: ReferenceComponentExample[];
+  frameworkId: ReferenceFrameworkId;
+};
+
+type SpecimenRenderer = (context: SpecimenContext) => ReactNode;
 
 function UnsupportedSpecimen({
   componentId,
@@ -98,78 +108,83 @@ function ButtonExampleGroup({
   );
 }
 
-const renderButton: SpecimenRenderer = () => (
-  <Stack gap="lg">
-    <ButtonExampleGroup
-      description="Choose emphasis based on the importance and risk of the action."
-      title="Variants"
-    >
-      <Inline gap="sm" wrap>
-        <Button variant="primary">Primary</Button>
-        <Button>Default</Button>
-        <Button variant="subtle">Subtle</Button>
-        <Button variant="ghost">Ghost</Button>
-        <Button variant="danger">Danger</Button>
-      </Inline>
-    </ButtonExampleGroup>
-
-    <ButtonExampleGroup
-      description="Use the supported scale to match the density of the surrounding controls."
-      title="Sizes"
-    >
-      <Inline align="center" gap="sm" wrap>
-        <Button size="sm">Small</Button>
-        <Button size="md">Medium</Button>
-        <Button size="lg">Large</Button>
-      </Inline>
-    </ButtonExampleGroup>
-
-    <ButtonExampleGroup
-      description="Disabled blocks interaction. Loading also exposes the shared busy state while work is in progress."
-      title="Disabled and loading"
-    >
-      <Inline gap="sm" wrap>
-        <Button disabled>Disabled</Button>
-        <Button loading variant="primary">
-          Saving
-        </Button>
-      </Inline>
-    </ButtonExampleGroup>
-
-    <ButtonExampleGroup
-      description="Expand a prominent action to the available inline space when the layout calls for it."
-      title="Full width"
-    >
-      <Button fullWidth variant="primary">
-        Continue
+const buttonExampleContent: Record<string, ReactNode> = {
+  variants: (
+    <Inline gap="sm" wrap>
+      <Button variant="primary">Primary</Button>
+      <Button>Default</Button>
+      <Button variant="subtle">Subtle</Button>
+      <Button variant="ghost">Ghost</Button>
+      <Button variant="danger">Danger</Button>
+    </Inline>
+  ),
+  sizes: (
+    <Inline align="center" gap="sm" wrap>
+      <Button size="sm">Small</Button>
+      <Button size="md">Medium</Button>
+      <Button size="lg">Large</Button>
+    </Inline>
+  ),
+  states: (
+    <Inline gap="sm" wrap>
+      <Button disabled>Disabled</Button>
+      <Button loading variant="primary">
+        Saving
       </Button>
-    </ButtonExampleGroup>
+    </Inline>
+  ),
+  width: (
+    <Button fullWidth variant="primary">
+      Continue
+    </Button>
+  ),
+  content: (
+    <Inline gap="sm" wrap>
+      <Button leadingIcon={<Icon name="Settings" />}>Settings</Button>
+      <Button trailingIcon={<Icon name="Refresh" />} variant="subtle">
+        Refresh
+      </Button>
+    </Inline>
+  ),
+  "form-actions": (
+    <Inline gap="sm" wrap>
+      <Button type="submit" value="save" variant="primary">
+        Save changes
+      </Button>
+      <Button type="reset">Reset</Button>
+    </Inline>
+  ),
+};
 
-    <ButtonExampleGroup
-      description="Keep visible labels for important actions while composing leading or trailing icon content."
-      title="Icons and labels"
-    >
-      <Inline gap="sm" wrap>
-        <Button leadingIcon={<Icon name="Settings" />}>Settings</Button>
-        <Button trailingIcon={<Icon name="Refresh" />} variant="subtle">
-          Refresh
-        </Button>
-      </Inline>
-    </ButtonExampleGroup>
+const renderButton: SpecimenRenderer = ({ examples, frameworkId }) => {
+  const visibleExamples = examples.filter(
+    (example) =>
+      example.frameworks.includes(frameworkId) &&
+      Boolean(buttonExampleContent[example.id]),
+  );
 
-    <ButtonExampleGroup
-      description="Use explicit button types when the action participates in a form workflow."
-      title="Form actions"
-    >
-      <Inline gap="sm" wrap>
-        <Button type="submit" value="save" variant="primary">
-          Save changes
-        </Button>
-        <Button type="reset">Reset</Button>
-      </Inline>
-    </ButtonExampleGroup>
-  </Stack>
-);
+  if (visibleExamples.length === 0) {
+    return (
+      <Text size="sm" tone="muted">
+        No owned example is declared for this framework surface.
+      </Text>
+    );
+  }
+
+  return (
+    <Stack gap="lg">
+      {visibleExamples.map((example) => (
+        <ButtonExampleGroup
+          description={example.intent}
+          key={example.id}
+          title={example.title}
+        >
+          {buttonExampleContent[example.id]}
+        </ButtonExampleGroup>
+      ))}
+    </Stack>
+  );
+};
 
 const renderBadge: SpecimenRenderer = () => (
   <div className="vf-docs-specimen-row">
@@ -400,9 +415,13 @@ const specimenRenderers: Record<string, SpecimenRenderer> = {
 
 export function ReferenceComponentSpecimen({
   componentId,
+  examples,
+  frameworkId,
   relatedPatterns,
 }: {
   componentId: string;
+  examples: ReferenceComponentExample[];
+  frameworkId: ReferenceFrameworkId;
   relatedPatterns: string[];
 }) {
   const [checked, setChecked] = useState(true);
@@ -414,6 +433,8 @@ export function ReferenceComponentSpecimen({
     renderer({
       checked,
       dialogOpen,
+      examples,
+      frameworkId,
       setChecked,
       setDialogOpen,
       setTab,

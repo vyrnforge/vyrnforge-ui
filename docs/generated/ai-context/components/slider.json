@@ -26,6 +26,8 @@
   "knownLimitations": [
     "Avoid for formatted or direct numeric entry; use NumberInput."
   ],
+  "examples": [],
+  "releaseNotes": [],
   "styling": {
     "classes": [
       "vf-slider",
@@ -152,6 +154,7 @@
   "source": {
     "componentMetadata": "docs/metadata/components.json",
     "contractMetadata": "docs/metadata/component-contracts.json",
+    "componentDocumentation": null,
     "customElementsManifest": "packages/ui-elements/custom-elements.json"
   }
 }

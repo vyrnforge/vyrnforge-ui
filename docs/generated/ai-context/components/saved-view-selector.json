@@ -21,6 +21,8 @@
   "knownLimitations": [
     "Do not import until implemented."
   ],
+  "examples": [],
+  "releaseNotes": [],
   "styling": {
     "classes": [],
     "variables": []
@@ -47,6 +49,7 @@
   "source": {
     "componentMetadata": "docs/metadata/components.json",
     "contractMetadata": null,
+    "componentDocumentation": null,
     "customElementsManifest": null
   }
 }

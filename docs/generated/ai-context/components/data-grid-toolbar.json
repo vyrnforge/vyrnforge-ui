@@ -22,6 +22,8 @@
   "knownLimitations": [
     "Avoid for generic page toolbars; use ui-components primitives."
   ],
+  "examples": [],
+  "releaseNotes": [],
   "styling": {
     "classes": [
       "udg-toolbar"
@@ -52,6 +54,7 @@
   "source": {
     "componentMetadata": "docs/metadata/components.json",
     "contractMetadata": null,
+    "componentDocumentation": null,
     "customElementsManifest": null
   }
 }

@@ -19,6 +19,8 @@
   "knownLimitations": [
     "Use for grid load errors; it renders nothing when no error is present and is not an empty/loading state."
   ],
+  "examples": [],
+  "releaseNotes": [],
   "styling": {
     "classes": [],
     "variables": []
@@ -47,6 +49,7 @@
   "source": {
     "componentMetadata": "docs/metadata/components.json",
     "contractMetadata": null,
+    "componentDocumentation": null,
     "customElementsManifest": null
   }
 }

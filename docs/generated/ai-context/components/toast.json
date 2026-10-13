@@ -28,6 +28,8 @@
   "knownLimitations": [
     "Avoid for required form validation, persistent critical information, legal acknowledgements, destructive confirmation, and application notification history."
   ],
+  "examples": [],
+  "releaseNotes": [],
   "styling": {
     "classes": [
       "vf-toast",
@@ -122,6 +124,7 @@
   "source": {
     "componentMetadata": "docs/metadata/components.json",
     "contractMetadata": "docs/metadata/component-contracts.json",
+    "componentDocumentation": null,
     "customElementsManifest": "packages/ui-elements/custom-elements.json"
   }
 }

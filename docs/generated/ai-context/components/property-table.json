@@ -26,6 +26,8 @@
   "knownLimitations": [
     "Avoid for interactive data-grid behavior such as sorting, filtering, resizing, selection, grouping, or persisted grid state; use UniversalDataGrid instead."
   ],
+  "examples": [],
+  "releaseNotes": [],
   "styling": {
     "classes": [
       "vf-property-table"
@@ -76,6 +78,7 @@
   "source": {
     "componentMetadata": "docs/metadata/components.json",
     "contractMetadata": "docs/metadata/component-contracts.json",
+    "componentDocumentation": null,
     "customElementsManifest": "packages/ui-elements/custom-elements.json"
   }
 }

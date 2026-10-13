@@ -48,12 +48,11 @@ shared API contracts remain framework-neutral.
 
 ## Remaining ownership gaps
 
-The current Reference projection consumes owned Button guidance but does not yet
-project the owned `examples` and `releaseNotes` collections into the normalized
-component record. `apps/docs/src/ReferenceComponentSpecimen.tsx` therefore still
-contains component-specific specimen rendering and some scenario prose. The
-rendering adapter may remain host-specific, but scenario meaning must come from
-generated owned documentation rather than a Docs-local registry.
+The Reference projection includes owned `examples` and `releaseNotes` in the
+normalized component record and AI component slice. Docs consumes scenario
+titles, intent, framework applicability, and release notes from that generated
+projection. `apps/docs/src/ReferenceComponentSpecimen.tsx` retains only the
+executable React-host rendering adapter required to draw live specimens.
 
 Centralized metadata also still contains guidance fields used as fallback input.
 Those fields must only be removed after equivalent package-owned sources exist

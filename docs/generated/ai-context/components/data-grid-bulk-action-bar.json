@@ -22,6 +22,8 @@
   "knownLimitations": [
     "Presentation and action-dispatch surface only; selection state, permissions, mutations, and backend workflows remain controlled by UniversalDataGrid or the consuming application."
   ],
+  "examples": [],
+  "releaseNotes": [],
   "styling": {
     "classes": [
       "udg-bulk-action-bar",
@@ -53,6 +55,7 @@
   "source": {
     "componentMetadata": "docs/metadata/components.json",
     "contractMetadata": null,
+    "componentDocumentation": null,
     "customElementsManifest": null
   }
 }

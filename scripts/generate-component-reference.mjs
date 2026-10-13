@@ -222,6 +222,8 @@ function componentRecord(component, context) {
       variables:
         documentation?.theming?.variables ?? component.cssVariables ?? [],
     },
+    examples: documentation?.examples ?? [],
+    releaseNotes: documentation?.releaseNotes ?? [],
     docsPath: cleanText(component.docsPath),
     playgroundPath: cleanText(component.playgroundPath),
     source: {
@@ -229,6 +231,7 @@ function componentRecord(component, context) {
       contractMetadata: contract
         ? "docs/metadata/component-contracts.json"
         : null,
+      componentDocumentation: documentation?.sourcePath ?? null,
       customElementsManifest: nativeDeclaration
         ? "packages/ui-elements/custom-elements.json"
         : null,
@@ -302,6 +305,7 @@ export function buildConsumerKnowledge({ root = repositoryRoot } = {}) {
       "docs/metadata/packages.json",
       "docs/metadata/multi-framework.json",
       "packages/ui-elements/custom-elements.json",
+      ...context.componentDocumentation.sourcePaths,
     ],
     packages,
     frameworks,
@@ -377,6 +381,8 @@ function componentContextSlice(component) {
       ...(component.contract?.accessibility ?? []),
     ],
     knownLimitations: component.knownLimitations,
+    examples: component.examples,
+    releaseNotes: component.releaseNotes,
     styling: component.styling,
     frameworks: Object.fromEntries(
       Object.entries(component.frameworks).map(([id, usage]) => [

@@ -19,6 +19,8 @@
   "knownLimitations": [
     "Display-row pagination only in this phase; generated group headers count as rows on the current page."
   ],
+  "examples": [],
+  "releaseNotes": [],
   "styling": {
     "classes": [],
     "variables": []
@@ -47,6 +49,7 @@
   "source": {
     "componentMetadata": "docs/metadata/components.json",
     "contractMetadata": null,
+    "componentDocumentation": null,
     "customElementsManifest": null
   }
 }
