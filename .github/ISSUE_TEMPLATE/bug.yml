@@ -5,20 +5,33 @@ body:
   - type: markdown
     attributes:
       value: |
-        Thanks for helping improve VyrnForge UI. Do not report security vulnerabilities here; use SECURITY.md and private reporting instead.
+        Thanks for helping improve VyrnForge UI. Do not report security vulnerabilities here; use SECURITY.md and private reporting instead. Report the observed VyrnForge behavior rather than assuming one framework package owns the underlying defect.
   - type: input
     id: affected-area
     attributes:
-      label: Affected package or component
-      description: Name the package, component, or area involved.
-      placeholder: "@vyrnforge/ui-components Button"
+      label: Affected capability or area
+      description: Name the component, behavior, token, package, advanced module, tooling area, or documentation surface involved.
+      placeholder: "Dialog focus restoration or @vyrnforge/ui-angular Dialog"
     validations:
       required: true
+  - type: checkboxes
+    id: affected-surfaces
+    attributes:
+      label: Observed surfaces
+      description: Select every surface where you reproduced the defect. Leave unchecked surfaces as unknown rather than assuming parity.
+      options:
+        - label: Shared/Core foundation
+        - label: Native HTML / Custom Elements
+        - label: React
+        - label: Angular
+        - label: Vue
+        - label: Optional advanced module
+        - label: Reference / docs / tooling
   - type: input
     id: version
     attributes:
       label: Package version or commit
-      placeholder: "0.1.0 or commit SHA"
+      placeholder: "0.2.0-beta.2 or commit SHA"
     validations:
       required: true
   - type: textarea
@@ -44,8 +57,8 @@ body:
   - type: input
     id: environment
     attributes:
-      label: Browser and environment
-      placeholder: "Chrome 126, Windows 11, React 19"
+      label: Browser, framework, and environment
+      placeholder: "Chrome, Windows 11, Angular 21"
     validations:
       required: true
   - type: textarea
@@ -57,4 +70,4 @@ body:
     id: accessibility-impact
     attributes:
       label: Accessibility impact
-      description: Describe keyboard, focus, screen-reader, contrast, or motion impact if relevant.
+      description: Describe keyboard, focus, screen-reader, semantics, contrast, or motion impact if relevant.
