@@ -164,6 +164,43 @@
           "items": {
             "enum": ["native-html", "react", "angular", "vue"]
           }
+        },
+        "preview": {
+          "$ref": "#/$defs/preview"
+        }
+      }
+    },
+    "preview": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["layout", "items"],
+      "properties": {
+        "layout": {
+          "enum": ["inline", "stack"]
+        },
+        "items": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "$ref": "#/$defs/previewItem"
+          }
+        }
+      }
+    },
+    "previewItem": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["text"],
+      "properties": {
+        "text": {
+          "type": "string",
+          "minLength": 1
+        },
+        "props": {
+          "type": "object",
+          "additionalProperties": {
+            "type": ["string", "number", "boolean"]
+          }
         }
       }
     },
