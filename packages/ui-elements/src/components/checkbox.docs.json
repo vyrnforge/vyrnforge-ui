@@ -15,18 +15,13 @@
   "limitations": [
     "Avoid for mutually exclusive sets; use Radio when available."
   ],
-  "relatedComponents": [
-    "Field",
-    "UniversalDataGrid"
-  ],
+  "relatedComponents": ["Field", "UniversalDataGrid"],
   "accessibility": {
     "notes": "Ensure label text describes the checked state.",
     "evidenceRefs": []
   },
   "theming": {
-    "classes": [
-      "vf-checkbox"
-    ],
+    "classes": ["vf-checkbox"],
     "variables": []
   },
   "examples": [],
