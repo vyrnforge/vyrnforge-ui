@@ -1,0 +1,106 @@
+name: Docs owned examples normalize
+
+on:
+  push:
+    branches:
+      - codex/docs-owned-examples-projection
+
+permissions:
+  contents: write
+
+jobs:
+  normalize:
+    if: github.actor != 'github-actions[bot]'
+    runs-on: ubuntu-24.04
+    steps:
+      - name: Checkout branch
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
+        with:
+          ref: codex/docs-owned-examples-projection
+          fetch-depth: 0
+
+      - name: Setup Node
+        uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020
+        with:
+          node-version: 24.18.0
+          cache: npm
+
+      - name: Use repository package manager
+        run: npm install --global "npm@$(node -p 'require(\"./package.json\").packageManager.split(\"@\").pop()')"
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Normalize owned-only projection fields
+        run: |
+          python <<'PY'
+          from pathlib import Path
+
+          def replace_once(path, old, new):
+              file = Path(path)
+              text = file.read_text()
+              if text.count(old) != 1:
+                  raise SystemExit(f"Expected one match in {path}, found {text.count(old)}")
+              file.write_text(text.replace(old, new, 1))
+
+          generator = "scripts/generate-component-reference.mjs"
+          replace_once(
+              generator,
+              '''    examples: documentation?.examples ?? [],\n    releaseNotes: documentation?.releaseNotes ?? [],''',
+              '''    ...(documentation\n      ? {\n          examples: documentation.examples ?? [],\n          releaseNotes: documentation.releaseNotes ?? [],\n        }\n      : {}),''',
+          )
+          replace_once(
+              generator,
+              '''      componentDocumentation: documentation?.sourcePath ?? null,\n      customElementsManifest:''',
+              '''      ...(documentation\n        ? { componentDocumentation: documentation.sourcePath }\n        : {}),\n      customElementsManifest:''',
+          )
+          replace_once(
+              generator,
+              '''    examples: component.examples,\n    releaseNotes: component.releaseNotes,\n    styling:''',
+              '''    ...(component.examples ? { examples: component.examples } : {}),\n    ...(component.releaseNotes\n      ? { releaseNotes: component.releaseNotes }\n      : {}),\n    styling:''',
+          )
+
+          reference_data = "apps/docs/src/referenceData.ts"
+          replace_once(
+              reference_data,
+              '''  examples: ReferenceComponentExample[];\n  releaseNotes: ReferenceReleaseNote[];''',
+              '''  examples?: ReferenceComponentExample[];\n  releaseNotes?: ReferenceReleaseNote[];''',
+          )
+
+          page = "apps/docs/src/ComponentReferencePage.tsx"
+          replace_once(
+              page,
+              '''  const showReleaseNotes = component.releaseNotes.length > 0;\n  const framework =''',
+              '''  const releaseNotes = component.releaseNotes ?? [];\n  const showReleaseNotes = releaseNotes.length > 0;\n  const framework =''',
+          )
+          replace_once(
+              page,
+              '''            examples={component.examples}\n            frameworkId={frameworkId}''',
+              '''            examples={component.examples ?? []}\n            frameworkId={frameworkId}''',
+          )
+          replace_once(
+              page,
+              '''              {component.releaseNotes.map((note) => (''',
+              '''              {releaseNotes.map((note) => (''',
+          )
+          PY
+
+      - name: Format normalized sources
+        run: npx prettier --write scripts/generate-component-reference.mjs apps/docs/src/referenceData.ts apps/docs/src/ComponentReferencePage.tsx
+
+      - name: Regenerate Reference projection
+        run: npm run generate:reference
+
+      - name: Verify focused ownership contract
+        run: node --test scripts/component-documentation-ownership-contract.test.mjs
+
+      - name: Verify patch cleanliness
+        run: git diff --check
+
+      - name: Commit normalized projection
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add apps/docs/src scripts/generate-component-reference.mjs docs/generated
+          git commit -m "refactor(docs): limit owned projection to documented components"
+          git push origin HEAD:codex/docs-owned-examples-projection
