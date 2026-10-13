@@ -137,10 +137,7 @@ const outputLines = [
         "Repository standardization revision",
         "`docs/governance/repository-standardization-revision.md`",
       ],
-      [
-        "Branching and PR topology",
-        "`docs/governance/05-trunk-delivery.md`",
-      ],
+      ["Branching and PR topology", "`docs/governance/05-trunk-delivery.md`"],
       ["Package boundaries", "`docs/architecture/01-package-boundaries.md`"],
       ["Public API", "`docs/api/README.md` and package API documents"],
       ["Component catalog and maturity", "`docs/metadata/components.json`"],
