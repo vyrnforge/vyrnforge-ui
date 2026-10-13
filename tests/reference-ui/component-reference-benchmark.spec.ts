@@ -35,7 +35,7 @@ test.describe("component reference presentation benchmark", () => {
     ).toBeVisible();
 
     const buttonExamples = page.locator(
-      "#component-specimen .vf-docs-button-example-group",
+      "#component-specimen .vf-docs-component-example",
     );
     await expect(buttonExamples).toHaveCount(6);
     await expect(buttonExamples.nth(0)).toContainText("Variants");
@@ -44,6 +44,11 @@ test.describe("component reference presentation benchmark", () => {
     await expect(buttonExamples.nth(3)).toContainText("Full width");
     await expect(buttonExamples.nth(4)).toContainText("Icons and labels");
     await expect(buttonExamples.nth(5)).toContainText("Form actions");
+    await expect(
+      page.locator(
+        "#component-specimen [data-component-example='form-actions']",
+      ),
+    ).toContainText("Form actions");
 
     await expect(
       page.locator("#component-specimen .vf-button--sm", { hasText: "Small" }),
