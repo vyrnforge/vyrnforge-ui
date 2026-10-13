@@ -45,9 +45,7 @@ test.describe("component reference presentation benchmark", () => {
     await expect(buttonExamples.nth(4)).toContainText("Icons and labels");
     await expect(buttonExamples.nth(5)).toContainText("Form actions");
     await expect(
-      page.locator(
-        "#component-specimen [data-component-example='form-actions']",
-      ),
+      page.locator("#component-specimen [data-component-example='form-actions']"),
     ).toContainText("Form actions");
 
     await expect(
