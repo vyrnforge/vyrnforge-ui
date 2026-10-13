@@ -31,6 +31,15 @@
     "componentDeepLinksAreStable": true,
     "referencePresentationConsumesGeneratedFacts": true
   },
+  "documentationOwnership": {
+    "requiredScope": "public-non-grid-beta",
+    "migrationBaseline": {
+      "ownedComponentCount": 7,
+      "fallbackComponentCount": 64
+    },
+    "ownershipMustNotRegress": true,
+    "changedPublicComponentRequiresOwnedDocumentation": true
+  },
   "requiredCommands": [
     "npm run generate:reference",
     "npm run verify:reference",
