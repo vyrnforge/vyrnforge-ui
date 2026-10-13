@@ -32,6 +32,25 @@ test("all public docs render through the unified Reference shell and content fra
   assert.match(dedicatedPages, /IconReferencePage/u);
 });
 
+test("Overview composes shared VyrnForge primitives instead of docs-local cards", () => {
+  const guide = read("apps/docs/src/GuidePage.tsx");
+  const browser = read("tests/reference-ui/default-content-quality.spec.ts");
+
+  for (const primitive of ["Button", "Card", "Section", "Stack"]) {
+    assert.match(guide, new RegExp(`\\b${primitive}\\b`, "u"));
+  }
+  assert.match(guide, /<Card/u);
+  assert.match(guide, /<Section/u);
+  assert.match(guide, /className="vf-docs-link-grid"/u);
+  assert.match(guide, /className="vf-docs-principle-grid"/u);
+  assert.doesNotMatch(guide, /className="vf-docs-link-card"/u);
+  assert.doesNotMatch(guide, /className="vf-docs-principle"/u);
+  assert.match(browser, /vf-docs-link-grid > \.vf-card/u);
+  assert.match(browser, /vf-docs-principle-grid > \.vf-card/u);
+  assert.match(browser, /vf-docs-link-card/u);
+  assert.match(browser, /vf-docs-principle/u);
+});
+
 test("Icons has one canonical generated route and renderer", () => {
   const registry = JSON.parse(
     read("docs/generated/documentation-registry.json"),
