@@ -520,7 +520,11 @@ function CustomizationCard({
   title: string;
 }) {
   return (
-    <Card className="vf-docs-customization-card" padding="md" variant="bordered">
+    <Card
+      className="vf-docs-customization-card"
+      padding="md"
+      variant="bordered"
+    >
       <Stack gap="sm">
         <Heading level={4} size="sm">
           {title}
