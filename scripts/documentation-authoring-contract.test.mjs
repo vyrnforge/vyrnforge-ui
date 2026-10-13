@@ -29,19 +29,21 @@ function assertMarkdownTableRow(content, firstCell, secondCell) {
   assert.fail(`missing table row: ${firstCell} | ${secondCell}`);
 }
 
-test("documentation authoring guide is the source of truth", () => {
+test("documentation governance and authoring workflow have distinct owners", () => {
   const guide = read("docs/engineering/documentation-authoring.md");
   const system = read("docs/engineering/documentation-system.md");
-  const governance = read("docs/governance/00-documentation-governance.md");
+  const governance = read("docs/governance/documentation.md");
   const readme = read("docs/README.md");
 
   const systemLink = "[Documentation authoring](documentation-authoring.md)";
   const readmeLink =
     "[Documentation Authoring](engineering/documentation-authoring.md)";
 
-  assert.ok(guide.includes("contributor source of truth"));
-  assert.ok(system.includes(systemLink));
+  assert.ok(guide.includes("contributor workflow"));
+  assert.ok(guide.includes("../governance/documentation.md"));
+  assert.ok(governance.includes("canonical source"));
   assert.ok(governance.includes("docs/engineering/documentation-authoring.md"));
+  assert.ok(system.includes(systemLink));
   assert.ok(readme.includes(readmeLink));
 });
 
@@ -89,24 +91,11 @@ test("authoring guide covers commands and forbidden shortcuts", () => {
       "npm run verify:docs-quality",
       "npm run test:contracts",
       "npm run build:docs",
-    ],
-    "authoring command",
-  );
-
-  assertIncludesAll(
-    guide,
-    [
-      "apps/docs/src/referenceRoutes.ts",
-      "apps/docs/src/DocsNav.tsx",
       "docs/generated/documentation-registry.json",
       "docs/generated/reference-model.json",
+      "apps/docs/src/referenceRoutes.ts",
+      "apps/docs/src/DocsNav.tsx",
     ],
-    "forbidden shortcut",
+    "authoring command or shortcut marker",
   );
-
-  const governance = read("docs/governance/00-documentation-governance.md");
-  const staleRouteRule = "referenceRoutes.ts` may curate";
-
-  assert.equal(governance.includes(staleRouteRule), false);
-  assert.ok(governance.includes("runtime adapter over those generated facts"));
 });
