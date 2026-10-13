@@ -12,7 +12,7 @@ Documentation authority, lifecycle, archival, cleanup, AI-context, and authoring
 
 `docs/metadata/reference-portal.json` owns the shared Reference product identity, framework and surface vocabulary, content-domain navigation taxonomy, content-domain ownership, framework/version context, deep-link rules, and deployment semantics.
 
-The Docs application may use React internally. React is an implementation host, not the semantic owner of Reference. Native HTML / Custom Elements, React, Angular, and Vue remain equal first-class reader contexts.
+The Docs application may use React internally. React is an implementation host, not the semantic owner of Reference. Semantic ownership is framework-neutral. Native HTML / Custom Elements, React, Angular, and Vue remain equal first-class reader contexts.
 
 ## Information model
 
@@ -30,7 +30,7 @@ Reference content follows these ownership rules:
 | Accessibility | shared component contracts, accessibility evidence metadata, and curated guidance | shared keyboard/accessibility behavior with evidence and explanation |
 | Search | generated Reference records plus curated text | search owns no API, package, token, framework, version, or release facts |
 
-Generated component facts include `docs/generated/consumer-knowledge.json` and `docs/generated/framework-api-reference.json`. Reference generation composes canonical sources into a shared model rather than introducing a hand-maintained API authority.
+Generated component facts include `docs/generated/consumer-knowledge.json` and `docs/generated/framework-api-reference.json`. The shared reader model is generated at `docs/generated/reference-model.json`. Reference generation composes canonical sources into that model rather than introducing a hand-maintained API authority.
 
 ## Generation pipeline
 
@@ -60,9 +60,9 @@ Navigation must preserve the selected framework and version across reader-facing
 
 Stable route IDs are semantic identities. The application transports those identities through hash routes so GitHub Pages does not require server-side rewrite rules. Framework context is query-based and version context is path-based.
 
-Canonical public page registration and record-domain bindings live in `docs/metadata/documentation-pages.json` and compile into `docs/generated/documentation-registry.json`. The Docs application consumes those generated bindings; `apps/docs/src/referenceRoutes.ts` is an adapter, not a page or record-route authority.
+The transitional runtime registries have been retired. Canonical public page registration and record-domain bindings live in `docs/metadata/documentation-pages.json` and compile into `docs/generated/documentation-registry.json`. The Docs application consumes those generated bindings; `apps/docs/src/referenceRoutes.ts` is an adapter, not a page or record-route authority.
 
-Derivable navigation, catalog, search, index, and sitemap facts come from the generated Reference model, canonical metadata, or repository source discovery. Curated prose and executable demonstrations remain authored only where they add value that cannot be derived safely.
+Derivable navigation, catalog, search, index, and sitemap facts come from `docs/generated/reference-model.json`, canonical metadata, or repository source discovery. Curated prose and executable demonstrations remain authored only where they add value that cannot be derived safely.
 
 ## Executable preview contract
 
@@ -92,6 +92,12 @@ The Docs application should dogfood VyrnForge components for reusable UI primiti
 A capability may have a dedicated catalog or tool when the generic record presentation cannot provide the required browsing experience. This is a presentation override, not a second semantic owner.
 
 The canonical component, package, token, contract, framework, accessibility, and API records remain intact and continue feeding generators, search, AI context, and verification. Dedicated pages use the shared Reference shell, framework/version context, route model, and design system.
+
+## Deployment ownership
+
+`scripts/reference-artifact.mjs` owns the immutable Reference artifact assembly contract. Preview artifacts are non-deployable review evidence; production artifacts remain bound to verified current `main` commits. Pages deploys the verified artifact and does not rebuild source.
+
+Presentation changes must preserve this boundary unless the deployment architecture is intentionally revised and re-verified.
 
 ## Example standards
 
