@@ -2,7 +2,7 @@
 title: VyrnForge UI Change Records and Dependency Policy
 status: Stable
 owner: Architecture
-last_reviewed: 2026-08-11
+last_reviewed: 2026-10-13
 canonical: true
 ---
 
@@ -121,10 +121,8 @@ particular:
 - component status and maturity come from `docs/metadata/components.json`;
 - package/release identity comes from canonical release metadata;
 - CI scope comes from `scripts/detect-ci-scope.mjs`;
-- validation ownership comes from
-  `docs/metadata/validation-layers.json`;
-- package boundaries come from
-  `docs/architecture/01-package-boundaries.md`.
+- validation ownership comes from `docs/metadata/validation-layers.json`;
+- package boundaries come from `docs/architecture/01-package-boundaries.md`.
 
 When the coordinated work is complete, keep only the evidence that has lasting
 planning or historical value. Do not turn normal contribution guidance into an
@@ -133,7 +131,7 @@ implementation-history log.
 ## Related documents
 
 - [Contributing](../../CONTRIBUTING.md)
-- [Documentation Governance](00-documentation-governance.md)
+- [Documentation Governance](documentation.md)
 - [Ownership and Review Model](ownership-and-review-model.md)
 - [Component Maturity Model](component-maturity-model.md)
 - [Package Boundaries](../architecture/01-package-boundaries.md)
