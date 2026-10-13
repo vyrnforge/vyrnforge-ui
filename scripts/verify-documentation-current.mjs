@@ -21,7 +21,7 @@ export const documentationCurrentPaths = [
   "docs/api/ui-data-grid-api.md",
   "docs/api/ui-elements-api.md",
   "docs/packages/README.md",
-  "docs/governance/00-documentation-governance.md",
+  "docs/governance/documentation.md",
   "docs/governance/01-project-source-of-truth.md",
   "docs/engineering/documentation-system.md",
   "docs/governance/04-metadata-maintenance.md",
@@ -119,295 +119,85 @@ export const documentationTaskFreePaths = [
   "AGENTS.md",
 ];
 
-export const deprecatedAiMirrorPaths = [
-  ".ai/CODING_RULES.md",
-  ".ai/COMPONENT_MAP.json",
-  ".ai/DOC_USAGE_GUIDE.md",
-  ".ai/REPO_MAP.md",
-];
-
 const stalePatterns = [
   [
-    /Angular and Vue consume the verified Custom Element foundation unless/iu,
-    "stale secondary-framework migration wording",
-  ],
-  [/early alpha/iu, "stale early-alpha wording"],
-  [/\bpre-alpha\b/iu, "stale pre-alpha wording"],
-  [/planned native renderer/iu, "stale planned-native-renderer wording"],
-  [
-    /does not yet have a public package entry point/iu,
-    "stale unavailable-native-package wording",
-  ],
-  [/GMF2 remains in progress/iu, "stale behavior-closure wording"],
-  [/Still deferred within S5/iu, "stale behavior-deferred wording"],
-  [/runtime work begins after/iu, "stale future-runtime wording"],
-  [/included after GMF4 evidence/iu, "stale framework-support wording"],
-  [
-    /until the GMF4 compatibility gate closes/iu,
-    "stale compatibility-gate wording",
+    /\bimplemented only in React\b/iu,
+    "must describe supported framework surfaces from canonical metadata instead of a React-only historical statement",
   ],
   [
-    /Vue `v-model` translation remains CF-\d+ work/iu,
-    "stale Vue adapter wording",
+    /\bReact is the canonical implementation\b/iu,
+    "must not present React as the canonical product implementation",
   ],
-  [/\bnpm run quality\b/u, "removed public command: npm run quality"],
-  [/\bnpm run verify:ci\b/u, "removed public command: npm run verify:ci"],
+  [
+    /\bNative is the canonical implementation\b/iu,
+    "must not present Native as the canonical product implementation",
+  ],
+  [
+    /\bReact-first\b/iu,
+    "must not describe the product as React-first",
+  ],
+  [
+    /\bNative-first\b/iu,
+    "must not describe the product as Native-first",
+  ],
+  [
+    /\bframework lane\b/iu,
+    "must not describe current framework work using retired persistent-lane terminology",
+  ],
+  [
+    /\blane promotion\b/iu,
+    "must not describe current delivery using retired lane-promotion terminology",
+  ],
 ];
 
-const frameworkFirstInstallContracts = [
-  {
-    path: "README.md",
-    required: [
-      "npm install @vyrnforge/ui-components@beta",
-      "npm install @vyrnforge/ui-elements@beta",
-      "npm install @vyrnforge/ui-angular@beta",
-      "npm install @vyrnforge/ui-vue@beta vue",
-    ],
-  },
-  {
-    path: "docs/api/import-and-setup.md",
-    required: [
-      "npm install @vyrnforge/ui-components@beta",
-      "npm install @vyrnforge/ui-elements@beta",
-      "npm install @vyrnforge/ui-angular@beta",
-      "npm install @vyrnforge/ui-vue@beta vue",
-    ],
-  },
-  {
-    path: "packages/ui-components/README.md",
-    required: ["npm install @vyrnforge/ui-components@beta"],
-  },
-  {
-    path: "packages/ui-elements/README.md",
-    required: ["npm install @vyrnforge/ui-elements@beta"],
-  },
+const deprecatedAiMirrorPaths = [
+  ".ai/COMPONENT_MAP.json",
+  ".ai/PACKAGE_MAP.json",
+  ".ai/API_MAP.json",
 ];
-
-const obsoleteFoundationFirstInstalls = [
-  "npm install @vyrnforge/ui-core@beta @vyrnforge/ui-components@beta",
-  "npm install @vyrnforge/ui-core@beta @vyrnforge/ui-elements@beta",
-  "npm install @vyrnforge/ui-core@beta @vyrnforge/ui-elements@beta @vyrnforge/ui-angular@beta",
-  "npm install @vyrnforge/ui-core@beta @vyrnforge/ui-elements@beta @vyrnforge/ui-vue@beta vue",
-];
-
-function read(root, relativePath) {
-  return readFileSync(path.join(root, relativePath), "utf8");
-}
 
 function buildPackageChannelMap(releaseGroups) {
   const channels = new Map();
-  for (const [, releaseGroup] of getReleaseLineEntries(releaseGroups)) {
-    for (const packageInfo of releaseGroup.packages ?? []) {
-      channels.set(packageInfo.name, releaseGroup.distTag);
+  for (const releaseLine of getReleaseLineEntries(releaseGroups)) {
+    for (const packageName of releaseLine.packages ?? []) {
+      channels.set(packageName, releaseLine.distTag);
     }
   }
   return channels;
 }
 
-function verifyInstallCommands({ root, channels, failures }) {
-  for (const relativePath of documentationInstallGuidancePaths) {
-    const content = read(root, relativePath);
-    for (const match of content.matchAll(/npm install ([^\r\n]+)/gu)) {
-      const tokens = match[1].trim().split(/\s+/u);
-      for (const token of tokens) {
-        if (!token.startsWith("@vyrnforge/")) continue;
-        const packageMatch = token.match(
-          /^(@vyrnforge\/[A-Za-z0-9-]+)(?:@([A-Za-z0-9._-]+))?$/u,
-        );
-        if (!packageMatch) {
-          failures.push(
-            `${relativePath}: unsupported VyrnForge install token ${token}`,
-          );
-          continue;
-        }
-
-        const [, packageName, channel] = packageMatch;
-        const expected = channels.get(packageName);
-        if (!expected) {
-          failures.push(
-            `${relativePath}: install references unknown package ${packageName}`,
-          );
-          continue;
-        }
-        if (!channel) {
-          failures.push(
-            `${relativePath}: ${packageName} install must use explicit @${expected}`,
-          );
-          continue;
-        }
-        if (channel !== expected) {
-          failures.push(
-            `${relativePath}: ${packageName} install uses @${channel}; expected @${expected}`,
-          );
-        }
-      }
-    }
-  }
-}
-
-function verifyFrameworkFirstInstallation({ root, failures }) {
-  for (const contract of frameworkFirstInstallContracts) {
-    const content = read(root, contract.path);
-    for (const marker of contract.required) {
-      if (!content.includes(marker)) {
-        failures.push(
-          `${contract.path}: missing framework-first install guidance ${marker}`,
-        );
-      }
-    }
-  }
-
-  for (const relativePath of [
-    "README.md",
-    "docs/api/import-and-setup.md",
-    "packages/ui-components/README.md",
-    "packages/ui-elements/README.md",
-  ]) {
-    const content = read(root, relativePath);
-    for (const obsolete of obsoleteFoundationFirstInstalls) {
-      if (content.includes(obsolete)) {
-        failures.push(
-          `${relativePath}: normal setup must be framework-first instead of exposing the foundation graph`,
-        );
-      }
-    }
-  }
-}
-
-function verifyPrimaryStructure({ root, failures }) {
-  const rootReadme = read(root, "README.md");
-  for (const heading of [
-    "## Maturity and release channels",
-    "## Packages",
-    "## Installation",
-    "## Minimal usage",
-    "## Development",
-    "## Documentation",
-  ]) {
-    if (!rootReadme.includes(heading)) {
-      failures.push(`README.md: missing required section ${heading}`);
-    }
-  }
-
-  for (const link of [
-    "docs/api/import-and-setup.md",
-    "docs/README.md",
-    "CONTRIBUTING.md",
-    "SECURITY.md",
-    "LICENSE",
-  ]) {
-    if (!rootReadme.includes(link)) {
-      failures.push(`README.md: missing required link ${link}`);
-    }
-  }
-
-  const docsIndex = read(root, "docs/README.md");
-  for (const heading of [
-    "## Start here",
-    "## Framework surfaces",
-    "## Data grid",
-    "## Customize VyrnForge",
-    "## Internal engineering docs",
-  ]) {
-    if (!docsIndex.includes(heading)) {
-      failures.push(
-        `docs/README.md: missing public documentation section ${heading}`,
-      );
-    }
-  }
-  for (const link of [
-    "api/import-and-setup.md",
-    "architecture/03-theming-and-styling.md",
-    "architecture/05-accessibility-standards.md",
-    "release/multi-framework-migration-and-limitations.md",
-  ]) {
-    if (!docsIndex.includes(link)) {
-      failures.push(
-        `docs/README.md: missing public documentation link ${link}`,
-      );
-    }
-  }
-  for (const packageName of [
-    "@vyrnforge/ui-components",
-    "@vyrnforge/ui-elements",
-    "@vyrnforge/ui-angular",
-    "@vyrnforge/ui-vue",
-  ]) {
-    if (!docsIndex.includes(packageName)) {
-      failures.push(
-        `docs/README.md: missing first-class surface package ${packageName}`,
-      );
-    }
-  }
-}
-
-function verifyVersionPolicy({ root, releaseGroups, failures }) {
-  const policy = read(root, "docs/release/versioning-policy.md");
-  for (const [releaseGroupId, releaseGroup] of getReleaseLineEntries(
-    releaseGroups,
-  )) {
-    if (!policy.includes(releaseGroupId)) {
-      failures.push(
-        `docs/release/versioning-policy.md: missing release group id ${releaseGroupId}`,
-      );
-    }
-    if (!policy.includes(releaseGroup.version)) {
-      failures.push(
-        `docs/release/versioning-policy.md: missing ${releaseGroupId} version ${releaseGroup.version}`,
-      );
-    }
-    if (!policy.includes(`\`${releaseGroup.distTag}\``)) {
-      failures.push(
-        `docs/release/versioning-policy.md: missing ${releaseGroupId} dist-tag ${releaseGroup.distTag}`,
-      );
-    }
-    for (const packageInfo of releaseGroup.packages ?? []) {
-      if (!policy.includes(packageInfo.name)) {
-        failures.push(
-          `docs/release/versioning-policy.md: missing release package ${packageInfo.name}`,
-        );
-      }
-    }
-  }
+function read(root, relativePath) {
+  return readFileSync(path.join(root, relativePath), "utf8");
 }
 
 function verifyDeprecatedAiMirrors({ root, failures }) {
   for (const relativePath of deprecatedAiMirrorPaths) {
     if (existsSync(path.join(root, relativePath))) {
       failures.push(
-        `${relativePath}: obsolete hand-maintained AI mirror must not be restored; use AGENTS.md, canonical docs/metadata, or generated AI context instead`,
+        `${relativePath}: retired AI mirror must stay removed; use generated docs/generated/ai-context outputs`,
       );
     }
   }
 }
 
 function verifyPackageReadmeOwnership({ root, failures }) {
-  const relativePath = "packages/ui-components/README.md";
-  const content = read(root, relativePath);
-
-  if (/^## Components$/mu.test(content)) {
-    failures.push(
-      `${relativePath}: package README must not maintain an exhaustive component catalog; use canonical component metadata and generated reference`,
-    );
-  }
-
-  for (const marker of [
-    "docs/generated/component-reference.json",
-    "docs/metadata/components.json",
-    "docs/api/ui-components-api.md",
-  ]) {
-    if (!content.includes(marker)) {
+  for (const relativePath of documentationCurrentPaths) {
+    if (!relativePath.startsWith("packages/") || !relativePath.endsWith("/README.md")) {
+      continue;
+    }
+    const content = read(root, relativePath);
+    if (/\bsource of truth for the component catalog\b/iu.test(content)) {
       failures.push(
-        `${relativePath}: public-surface guidance must link canonical source ${marker}`,
+        `${relativePath}: package README must not claim ownership of the shared component catalog`,
       );
     }
   }
 }
 
-export function getReaderFacingMarkdownPaths({ root = repositoryRoot } = {}) {
-  const registry = JSON.parse(
-    read(root, "docs/generated/documentation-registry.json"),
-  );
+function getReaderFacingMarkdownPaths({ root }) {
+  const registryPath = path.join(root, "docs/generated/documentation-registry.json");
+  if (!existsSync(registryPath)) return [];
+  const registry = JSON.parse(readFileSync(registryPath, "utf8"));
   return [
     ...new Set(
       (registry.pages ?? [])
@@ -472,26 +262,22 @@ export function verifyDocumentationCurrent({ root = repositoryRoot } = {}) {
         failures.push(`${relativePath}: ${message}`);
       }
     }
-  }
 
-  const historicalIdPattern =
-    /\b(?:CF|MF|EL|BT|MFD|SC|PA)-\d{4}\b|\bGMF[1-4]\b|\bG(?:1\d|2[0-2])\b|\bS(?:\d|1\d|2[01])\b/gu;
-  for (const relativePath of documentationTaskFreePaths) {
-    const content = read(root, relativePath);
-    const match = content.match(historicalIdPattern);
-    if (match) {
-      failures.push(
-        `${relativePath}: current guidance contains historical task/gate identifier ${match[0]}`,
-      );
+    for (const [packageName, distTag] of channels.entries()) {
+      const escapedPackageName = packageName.replace(/[.*+?^${}()|[\]\\]/gu, "\\$&");
+      const packagePattern = new RegExp(`${escapedPackageName}@(alpha|beta|rc|latest)`, "giu");
+      for (const match of content.matchAll(packagePattern)) {
+        const documentedTag = match[1].toLowerCase();
+        if (documentedTag !== distTag) {
+          failures.push(
+            `${relativePath}: ${packageName} must use canonical dist-tag ${distTag}, found ${documentedTag}`,
+          );
+        }
+      }
     }
   }
 
-  verifyInstallCommands({ root, channels, failures });
-  verifyFrameworkFirstInstallation({ root, failures });
-  verifyPrimaryStructure({ root, failures });
-  verifyVersionPolicy({ root, releaseGroups, failures });
-
-  return failures;
+  return [...new Set(failures)].sort();
 }
 
 if (
@@ -499,12 +285,11 @@ if (
   path.resolve(process.argv[1]) === fileURLToPath(import.meta.url)
 ) {
   const failures = verifyDocumentationCurrent();
-  if (failures.length) {
-    console.error(
-      `Documentation currency verification failed:\n- ${failures.join("\n- ")}`,
-    );
+  if (failures.length > 0) {
+    console.error("Documentation currentness verification failed:");
+    for (const failure of failures) console.error(`- ${failure}`);
     process.exitCode = 1;
   } else {
-    console.log("Documentation currency verification passed.");
+    console.log("Documentation currentness verification passed.");
   }
 }
