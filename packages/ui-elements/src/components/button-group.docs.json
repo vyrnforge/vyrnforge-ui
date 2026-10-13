@@ -1,0 +1,29 @@
+{
+  "$schema": "../../../../docs/metadata/component-documentation.schema.json",
+  "schemaVersion": 1,
+  "componentId": "button-group",
+  "owner": {
+    "package": "@vyrnforge/ui-elements",
+    "source": "packages/ui-elements/src/components/actions.ts"
+  },
+  "purpose": "Groups related buttons together.",
+  "guidance": {
+    "useWhen": "Use for adjacent related actions or attached toolbar controls.",
+    "avoidWhen": "Avoid grouping unrelated actions.",
+    "aiUsageNotes": "Use ButtonGroup only when grouping clarifies the relationship between actions."
+  },
+  "limitations": [
+    "Each grouped control still needs its own understandable label and action semantics."
+  ],
+  "relatedComponents": ["Button", "ToolbarButton", "SegmentedControl"],
+  "accessibility": {
+    "notes": "Keep grouped controls individually labelled.",
+    "evidenceRefs": []
+  },
+  "theming": {
+    "classes": ["vf-button-group"],
+    "variables": []
+  },
+  "examples": [],
+  "releaseNotes": []
+}
