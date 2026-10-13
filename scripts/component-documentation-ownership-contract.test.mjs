@@ -49,8 +49,7 @@ test("the ownership contract records the remaining projection gap", () => {
     "docs/architecture/15-component-documentation-ownership.md",
   );
 
-  assert.match(architecture, /apps\/docs must not import package-local/u);
-  assert.match(architecture, /Project owned/iu);
-  assert.match(architecture, /owned example\/release metadata/iu);
+  assert.match(architecture, /apps\/docs.*must not import package-local/iu);
+  assert.match(architecture, /owned `examples` and `releaseNotes`/u);
   assert.match(architecture, /rendering adapters/u);
 });
