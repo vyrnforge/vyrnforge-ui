@@ -31,6 +31,21 @@
     "componentDeepLinksAreStable": true,
     "referencePresentationConsumesGeneratedFacts": true
   },
+  "documentationOwnership": {
+    "requiredScope": "public-non-grid-beta",
+    "requiredComponentCount": 71,
+    "minimumOwnedComponentCount": 7,
+    "maximumFallbackComponentCount": 64,
+    "migratedComponentIds": [
+      "button",
+      "date-input",
+      "datetime-input",
+      "number-input",
+      "search-input",
+      "text-input",
+      "textarea"
+    ]
+  },
   "requiredCommands": [
     "npm run generate:reference",
     "npm run verify:reference",
