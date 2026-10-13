@@ -19,8 +19,8 @@ Local queries are available through `npm run query:ai-context`.
 ## Repository changes
 
 Before modifying the repository, read `AGENTS.md` and follow
-`docs/governance/05-trunk-delivery.md` for lane ownership, task PRs, promotion,
-validation, and synchronization.
+`docs/governance/05-trunk-delivery.md` for branch classes, PR topology,
+dependencies, validation, merge, release, and backport rules.
 
 Escalate only when the generated context is insufficient:
 
@@ -33,6 +33,6 @@ Escalate only when the generated context is insufficient:
 - release process: `docs/release/README.md`
 - active execution and gates: the live VyrnForge progress tracker
 
-Do not infer support, maturity, APIs, package topology, or release status from
-this bootstrap. Canonical metadata, manifests, public entrypoints, current docs,
-and required evidence own those facts.
+Do not infer support, maturity, APIs, package topology, release status, or branch
+sequencing from this bootstrap. Canonical metadata, manifests, public entrypoints,
+current docs, and required evidence own those facts.
