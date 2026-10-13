@@ -14,11 +14,7 @@ import { fileURLToPath } from "node:url";
 
 import { verifyRepositoryTemplates } from "./verify-repository-templates.mjs";
 
-const repositoryRoot = path.resolve(
-  path.dirname(fileURLToPath(import.meta.url)),
-  "..",
-);
-
+const repositoryRoot = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 const fixtureFiles = [
   "AGENTS.md",
   "CONTRIBUTING.md",
@@ -42,66 +38,36 @@ function createFixture() {
 
 function mutate(root, relativePath, transform) {
   const file = path.join(root, relativePath);
-  const content = transform(readFileSync(file, "utf8"));
-  writeFileSync(file, content, "utf8");
+  writeFileSync(file, transform(readFileSync(file, "utf8")), "utf8");
 }
 
-test("accepts the protected-main contributor and agent contracts", () => {
+function expectFailure(root, fragment) {
+  assert(verifyRepositoryTemplates({ root }).some((failure) => failure.includes(fragment)));
+}
+
+test("accepts mainline and bounded stacked contributor contracts", () => {
   assert.deepEqual(verifyRepositoryTemplates(), []);
 });
 
-test("rejects agent guidance that drops the short-lived main-based branch rule", () => {
+test("rejects agent guidance that drops stacked dependency discipline", () => {
   const root = createFixture();
   try {
     mutate(root, "AGENTS.md", (content) =>
-      content.replace(
-        "start a short-lived task branch from current",
-        "start a task branch from anywhere",
-      ),
+      content.replace("use a stacked PR only when the dependency is real", "stack work freely"),
     );
-    assert(
-      verifyRepositoryTemplates({ root }).some((failure) =>
-        failure.includes("start a short-lived task branch from current"),
-      ),
-    );
+    expectFailure(root, "use a stacked PR only when the dependency is real");
   } finally {
     rmSync(root, { recursive: true, force: true });
   }
 });
 
-test("rejects agent guidance that drops the protected-main PR target", () => {
+test("rejects agent guidance that drops the final protected-main gate", () => {
   const root = createFixture();
   try {
     mutate(root, "AGENTS.md", (content) =>
-      content.replace(
-        "open the pull request directly to protected `main`",
-        "open the pull request to any branch",
-      ),
+      content.replace("full protected mainline gate", "branch checks"),
     );
-    assert(
-      verifyRepositoryTemplates({ root }).some((failure) =>
-        failure.includes("open the pull request directly to protected `main`"),
-      ),
-    );
-  } finally {
-    rmSync(root, { recursive: true, force: true });
-  }
-});
-
-test("rejects agent guidance that treats missing branch protection as permission", () => {
-  const root = createFixture();
-  try {
-    mutate(root, "AGENTS.md", (content) =>
-      content.replace(
-        "Never use a missing protection rule",
-        "A missing protection rule may be bypassed",
-      ),
-    );
-    assert(
-      verifyRepositoryTemplates({ root }).some((failure) =>
-        failure.includes("Never use a missing protection rule"),
-      ),
-    );
+    expectFailure(root, "full protected mainline gate");
   } finally {
     rmSync(root, { recursive: true, force: true });
   }
@@ -110,33 +76,32 @@ test("rejects agent guidance that treats missing branch protection as permission
 test("rejects repository setup that drops npm ci", () => {
   const root = createFixture();
   try {
-    mutate(root, "CONTRIBUTING.md", (content) =>
-      content.replace("npm ci", "npm install"),
-    );
-    assert(
-      verifyRepositoryTemplates({ root }).some((failure) =>
-        failure.includes("repository setup must use npm ci"),
-      ),
-    );
+    mutate(root, "CONTRIBUTING.md", (content) => content.replace("npm ci", "npm install"));
+    expectFailure(root, "repository setup must use npm ci");
   } finally {
     rmSync(root, { recursive: true, force: true });
   }
 });
 
-test("rejects contributor guidance that drops the protected-main target", () => {
+test("rejects contributor guidance that drops the mainline path", () => {
   const root = createFixture();
   try {
     mutate(root, "CONTRIBUTING.md", (content) =>
-      content.replace(
-        "Open the pull request against protected `main`.",
-        "Open the pull request against any branch.",
-      ),
+      content.replace("Use a mainline PR to protected `main`", "Open any PR"),
     );
-    assert(
-      verifyRepositoryTemplates({ root }).some((failure) =>
-        failure.includes("Open the pull request against protected `main`."),
-      ),
+    expectFailure(root, "Use a mainline PR to protected `main`");
+  } finally {
+    rmSync(root, { recursive: true, force: true });
+  }
+});
+
+test("rejects contributor guidance that drops bounded integration semantics", () => {
+  const root = createFixture();
+  try {
+    mutate(root, "CONTRIBUTING.md", (content) =>
+      content.replace("Temporary `integration/<initiative>` branches are allowed", "Integration branches are permanent"),
     );
+    expectFailure(root, "Temporary `integration/<initiative>` branches are allowed");
   } finally {
     rmSync(root, { recursive: true, force: true });
   }
@@ -148,18 +113,37 @@ test("rejects removed aggregate commands in normal PR guidance", () => {
     mutate(root, ".github/pull_request_template.md", (content) =>
       content.replace("`npm run check`", "`npm run quality`"),
     );
-    const failures = verifyRepositoryTemplates({ root });
-    assert(
-      failures.some((failure) =>
-        failure.includes("removed command npm run quality"),
-      ),
-    );
+    expectFailure(root, "removed command npm run quality");
   } finally {
     rmSync(root, { recursive: true, force: true });
   }
 });
 
-test("rejects a PR template that drops publishable-workspace lifecycle impact", () => {
+test("rejects a PR template that drops dependency declaration", () => {
+  const root = createFixture();
+  try {
+    mutate(root, ".github/pull_request_template.md", (content) =>
+      content.replace("**Depends on:**", "**Related:**"),
+    );
+    expectFailure(root, "**Depends on:**");
+  } finally {
+    rmSync(root, { recursive: true, force: true });
+  }
+});
+
+test("rejects a PR template that drops stacked retarget planning", () => {
+  const root = createFixture();
+  try {
+    mutate(root, ".github/pull_request_template.md", (content) =>
+      content.replace("**Retarget plan for stacked PRs:**", "**Notes:**"),
+    );
+    expectFailure(root, "**Retarget plan for stacked PRs:**");
+  } finally {
+    rmSync(root, { recursive: true, force: true });
+  }
+});
+
+test("rejects publishable-workspace lifecycle omission", () => {
   const root = createFixture();
   try {
     mutate(root, ".github/pull_request_template.md", (content) =>
@@ -168,27 +152,7 @@ test("rejects a PR template that drops publishable-workspace lifecycle impact", 
         "Package lifecycle reviewed.",
       ),
     );
-    assert(
-      verifyRepositoryTemplates({ root }).some((failure) =>
-        failure.includes("explicit release lifecycle classification"),
-      ),
-    );
-  } finally {
-    rmSync(root, { recursive: true, force: true });
-  }
-});
-
-test("rejects a PR template that stops targeting main", () => {
-  const root = createFixture();
-  try {
-    mutate(root, ".github/pull_request_template.md", (content) =>
-      content.replace("**Base:** `main`", "**Base:** feature"),
-    );
-    assert(
-      verifyRepositoryTemplates({ root }).some((failure) =>
-        failure.includes("**Base:** `main`"),
-      ),
-    );
+    expectFailure(root, "explicit release lifecycle classification");
   } finally {
     rmSync(root, { recursive: true, force: true });
   }
@@ -197,16 +161,8 @@ test("rejects a PR template that stops targeting main", () => {
 test("rejects internal planning terminology in the normal PR template", () => {
   const root = createFixture();
   try {
-    mutate(
-      root,
-      ".github/pull_request_template.md",
-      (content) => `${content}\nTask ID: RS-9007\n`,
-    );
-    assert(
-      verifyRepositoryTemplates({ root }).some((failure) =>
-        failure.includes("internal task identity"),
-      ),
-    );
+    mutate(root, ".github/pull_request_template.md", (content) => `${content}\nTask ID: RS-9007\n`);
+    expectFailure(root, "internal task identity");
   } finally {
     rmSync(root, { recursive: true, force: true });
   }
@@ -215,17 +171,10 @@ test("rejects internal planning terminology in the normal PR template", () => {
 test("rejects reintroducing a retired focused template", () => {
   const root = createFixture();
   try {
-    const file = path.join(
-      root,
-      ".github/PULL_REQUEST_TEMPLATE/component-or-package.md",
-    );
+    const file = path.join(root, ".github/PULL_REQUEST_TEMPLATE/component-or-package.md");
     mkdirSync(path.dirname(file), { recursive: true });
     writeFileSync(file, "## Summary\n", "utf8");
-    assert(
-      verifyRepositoryTemplates({ root }).some((failure) =>
-        failure.includes("retired focused template must stay removed"),
-      ),
-    );
+    expectFailure(root, "retired focused template must stay removed");
   } finally {
     rmSync(root, { recursive: true, force: true });
   }
@@ -237,11 +186,7 @@ test("rejects contributor guidance that stops delegating scope to the planner", 
     mutate(root, "CONTRIBUTING.md", (content) =>
       content.replaceAll("scripts/detect-ci-scope.mjs", "the CI system"),
     );
-    assert(
-      verifyRepositoryTemplates({ root }).some((failure) =>
-        failure.includes("scripts/detect-ci-scope.mjs"),
-      ),
-    );
+    expectFailure(root, "scripts/detect-ci-scope.mjs");
   } finally {
     rmSync(root, { recursive: true, force: true });
   }
