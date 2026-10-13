@@ -33,18 +33,12 @@
   },
   "documentationOwnership": {
     "requiredScope": "public-non-grid-beta",
-    "requiredComponentCount": 71,
-    "minimumOwnedComponentCount": 7,
-    "maximumFallbackComponentCount": 64,
-    "migratedComponentIds": [
-      "button",
-      "date-input",
-      "datetime-input",
-      "number-input",
-      "search-input",
-      "text-input",
-      "textarea"
-    ]
+    "migrationBaseline": {
+      "ownedComponentCount": 7,
+      "fallbackComponentCount": 64
+    },
+    "ownershipMustNotRegress": true,
+    "changedPublicComponentRequiresOwnedDocumentation": true
   },
   "requiredCommands": [
     "npm run generate:reference",
