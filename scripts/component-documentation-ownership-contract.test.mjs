@@ -4,7 +4,9 @@ import path from "node:path";
 import test from "node:test";
 import { fileURLToPath } from "node:url";
 
-import { loadOwnedComponentDocumentation } from "./component-documentation-sources.mjs";
+import {
+  loadOwnedComponentDocumentation,
+} from "./component-documentation-sources.mjs";
 
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 
@@ -19,7 +21,10 @@ test("owned component documentation stays package-local and generator-owned", ()
   const referenceData = read("apps/docs/src/referenceData.ts");
   const specimenHost = read("apps/docs/src/ReferenceComponentSpecimen.tsx");
 
-  assert(button, "Button must remain the first owned documentation vertical slice");
+  assert(
+    button,
+    "Button must remain the first owned documentation vertical slice",
+  );
   assert.equal(button.owner.package, "@vyrnforge/ui-elements");
   assert.match(button.sourcePath, /^packages\/ui-elements\//u);
   assert.deepEqual(
