@@ -1,4 +1,10 @@
-import { Heading, Text } from "@vyrnforge/ui-components";
+import {
+  Button,
+  Card,
+  Heading,
+  Section,
+  Text,
+} from "@vyrnforge/ui-components";
 import { MarkdownView } from "./MarkdownView";
 import type { DocsRoute } from "./referenceRoutes";
 
@@ -57,61 +63,52 @@ function OverviewGuide({
 }: Pick<GuidePageProps, "onRouteChange">) {
   return (
     <div className="vf-docs-landing">
-      <section
-        aria-labelledby="vf-guide-overview-start"
-        className="vf-docs-content-section"
+      <Section
+        className="vf-docs-overview-section"
+        description="Choose the next task without learning a docs-only interaction pattern."
+        title="Move from installation to production UI without changing concepts."
       >
-        <div className="vf-docs-content-section__heading">
-          <Text className="vf-docs-content-kicker" size="sm">
-            Start with the system
-          </Text>
-          <Heading id="vf-guide-overview-start" level={3} size="md">
-            Move from installation to production UI without changing concepts.
-          </Heading>
-        </div>
         <div className="vf-docs-link-grid">
           {overviewLinks.map((item) => (
-            <button
-              className="vf-docs-link-card"
+            <Button
+              className="vf-docs-overview-action"
+              fullWidth
               key={item.routeId}
               onClick={() => onRouteChange(item.routeId)}
-              type="button"
+              rightSlot={<span aria-hidden="true">→</span>}
+              size="lg"
+              variant="subtle"
             >
-              <span>
+              <span className="vf-docs-overview-action__copy">
                 <strong>{item.label}</strong>
                 <small>{item.description}</small>
               </span>
-              <span aria-hidden="true" className="vf-docs-link-card__arrow">
-                →
-              </span>
-            </button>
+            </Button>
           ))}
         </div>
-      </section>
+      </Section>
 
-      <section
-        aria-labelledby="vf-guide-overview-principles"
-        className="vf-docs-content-section"
+      <Section
+        className="vf-docs-overview-section"
+        description="The same contracts, tokens, accessibility model, and terminology carry across each supported surface."
+        title="Shared foundation, first-class framework surfaces."
       >
-        <div className="vf-docs-content-section__heading">
-          <Text className="vf-docs-content-kicker" size="sm">
-            VyrnForge model
-          </Text>
-          <Heading id="vf-guide-overview-principles" level={3} size="md">
-            Shared foundation, first-class framework surfaces.
-          </Heading>
-        </div>
         <div className="vf-docs-principle-grid">
           {principles.map((principle) => (
-            <article className="vf-docs-principle" key={principle.title}>
-              <Heading level={4} size="sm">
+            <Card
+              className="vf-docs-principle"
+              key={principle.title}
+              padding="md"
+              variant="bordered"
+            >
+              <Heading level={3} size="sm">
                 {principle.title}
               </Heading>
               <Text tone="muted">{principle.description}</Text>
-            </article>
+            </Card>
           ))}
         </div>
-      </section>
+      </Section>
     </div>
   );
 }
