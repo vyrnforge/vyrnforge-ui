@@ -68,7 +68,7 @@ function OverviewGuide({
         description="Choose the next task using the same components and interaction patterns available to consuming applications."
         title="Move from installation to production UI without changing concepts."
       >
-        <Stack gap="md">
+        <div className="vf-docs-link-grid">
           {overviewLinks.map((item) => (
             <Card key={item.routeId} padding="md" variant="bordered">
               <Stack gap="sm">
@@ -89,14 +89,14 @@ function OverviewGuide({
               </Stack>
             </Card>
           ))}
-        </Stack>
+        </div>
       </Section>
 
       <Section
         description="The same contracts, tokens, accessibility model, and terminology carry across each supported surface."
         title="Shared foundation, first-class framework surfaces."
       >
-        <Stack gap="md">
+        <div className="vf-docs-principle-grid">
           {principles.map((principle) => (
             <Card key={principle.title} padding="md" variant="bordered">
               <Stack gap="sm">
@@ -107,7 +107,7 @@ function OverviewGuide({
               </Stack>
             </Card>
           ))}
-        </Stack>
+        </div>
       </Section>
     </Stack>
   );
