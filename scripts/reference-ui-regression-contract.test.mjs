@@ -51,6 +51,27 @@ test("Overview composes shared VyrnForge primitives instead of docs-local cards"
   assert.match(browser, /vf-docs-principle/u);
 });
 
+test("component detail composes shared VyrnForge cards instead of docs-local card shells", () => {
+  const componentPage = read("apps/docs/src/ComponentReferencePage.tsx");
+  const styles = read("apps/docs/src/styles/component-reference.css");
+
+  for (const primitive of ["Card", "Stack"]) {
+    assert.match(componentPage, new RegExp(`\\b${primitive}\\b`, "u"));
+  }
+  assert.match(componentPage, /<Card padding="md" variant="bordered">/u);
+  assert.match(
+    componentPage,
+    /className="vf-docs-customization-card"\s+padding="md"\s+variant="bordered"/u,
+  );
+  assert.doesNotMatch(componentPage, /className="vf-docs-guidance-card"/u);
+  assert.doesNotMatch(styles, /\.vf-docs-guidance-card\s*\{/u);
+  assert.doesNotMatch(
+    styles,
+    /\.vf-docs-customization-card\s*\{[^}]*\b(?:padding|border|background):/su,
+  );
+  assert.match(styles, /\.vf-docs-guidance-grid > \.vf-card/u);
+});
+
 test("Icons has one canonical generated route and renderer", () => {
   const registry = JSON.parse(
     read("docs/generated/documentation-registry.json"),

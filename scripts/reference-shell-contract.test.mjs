@@ -317,7 +317,7 @@ test("component reference leads with real VyrnForge specimens before generated c
 
   assert.doesNotMatch(
     componentReference,
-    /\bCard\b|ComponentIndexCard|vf-docs-reference-card/u,
+    /ComponentIndexCard|vf-docs-reference-card/u,
   );
   assert.match(componentReference, /ReferenceComponentGallery/u);
   assert.match(componentReference, /ReferenceComponentSpecimen/u);
