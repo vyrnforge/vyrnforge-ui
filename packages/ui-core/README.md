@@ -1,10 +1,12 @@
 # @vyrnforge/ui-core
 
-Shared VyrnForge UI foundation for native-first semantic tokens, CSS variables,
-themes, density, typography, motion, layering, and small utility classes.
+Shared VyrnForge UI foundation for framework-neutral semantic tokens, CSS
+variables, themes, density, typography, motion, layering, and small utility
+classes.
 
-`@vyrnforge/ui-core` owns design foundations only. It does not own React
-components, data-grid behavior, application state, adapters, or a global store.
+`@vyrnforge/ui-core` owns design foundations only. It does not own framework
+components, renderer behavior, data-grid behavior, application state, adapters,
+or a global store.
 
 ## Package status
 
@@ -122,14 +124,14 @@ Shared named-role utilities include:
 - `vf-type-code`
 - `vf-type-numeric`
 
-Use these for small shared presentation needs. Reusable React typography
-components remain owned by `@vyrnforge/ui-components`.
+Use these for small shared presentation needs. Framework-facing typography
+components remain owned by their applicable surface packages.
 
 ## Motion and accessibility
 
 Automatic `prefers-reduced-motion: reduce` support and explicit
-`data-motion="reduced"` / `vf-motion-reduced` modes preserve state changes
-while shortening non-essential animation.
+`data-motion="reduced"` / `vf-motion-reduced` modes preserve state changes while
+shortening non-essential animation.
 
 Focus utilities consume the canonical focus color, width, offset, and shadow
 roles.
@@ -137,12 +139,14 @@ roles.
 ## Styling architecture
 
 - `ui-core` owns shared `--vf-*` tokens and utility classes.
-- `ui-components` owns reusable `vf-*` component classes.
-- `ui-data-grid` owns grid-specific `udg-*` and `--udg-*`.
-- TSX owns structure, behavior, accessibility, state classes, and measured
-  values.
+- Framework surface packages own their public component styling adapters and
+  integration-specific styles where required.
+- `ui-data-grid` owns grid-specific `udg-*` and `--udg-*` styling for the
+  currently shipped advanced module.
+- Component/runtime code owns structure, behavior, accessibility, state classes,
+  and measured values.
 - CSS owns static visual decisions.
-- Shared semantic values must not be reinvented in component or grid CSS.
+- Shared semantic values must not be reinvented in framework or grid CSS.
 
 ## Verification
 
