@@ -12,23 +12,14 @@
     "avoidWhen": "Avoid for binary settings; use Checkbox or Switch.",
     "aiUsageNotes": "Use native Radio for simple choices and keep app state controlled when needed."
   },
-  "limitations": [
-    "Avoid for binary settings; use Checkbox or Switch."
-  ],
-  "relatedComponents": [
-    "RadioGroup",
-    "Checkbox",
-    "SegmentedControl"
-  ],
+  "limitations": ["Avoid for binary settings; use Checkbox or Switch."],
+  "relatedComponents": ["RadioGroup", "Checkbox", "SegmentedControl"],
   "accessibility": {
     "notes": "Provide label or aria-label; group related radios with RadioGroup where practical.",
     "evidenceRefs": []
   },
   "theming": {
-    "classes": [
-      "vf-radio",
-      "vf-radio-field"
-    ],
+    "classes": ["vf-radio", "vf-radio-field"],
     "variables": []
   },
   "examples": [],
