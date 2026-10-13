@@ -3,6 +3,7 @@ import {
   Card,
   Heading,
   Section,
+  Stack,
   Text,
 } from "@vyrnforge/ui-components";
 import { MarkdownView } from "./MarkdownView";
@@ -62,54 +63,53 @@ function OverviewGuide({
   onRouteChange,
 }: Pick<GuidePageProps, "onRouteChange">) {
   return (
-    <div className="vf-docs-landing">
+    <Stack className="vf-docs-landing" gap="xl">
       <Section
-        className="vf-docs-overview-section"
-        description="Choose the next task without learning a docs-only interaction pattern."
+        description="Choose the next task using the same components and interaction patterns available to consuming applications."
         title="Move from installation to production UI without changing concepts."
       >
-        <div className="vf-docs-link-grid">
+        <Stack gap="md">
           {overviewLinks.map((item) => (
-            <Button
-              className="vf-docs-overview-action"
-              fullWidth
-              key={item.routeId}
-              onClick={() => onRouteChange(item.routeId)}
-              rightSlot={<span aria-hidden="true">→</span>}
-              size="lg"
-              variant="subtle"
-            >
-              <span className="vf-docs-overview-action__copy">
-                <strong>{item.label}</strong>
-                <small>{item.description}</small>
-              </span>
-            </Button>
+            <Card key={item.routeId} padding="md" variant="bordered">
+              <Stack gap="sm">
+                <Heading level={3} size="sm">
+                  {item.label}
+                </Heading>
+                <Text tone="muted">{item.description}</Text>
+                <div>
+                  <Button
+                    onClick={() => onRouteChange(item.routeId)}
+                    rightSlot={<span aria-hidden="true">→</span>}
+                    size="sm"
+                    variant="subtle"
+                  >
+                    Open
+                  </Button>
+                </div>
+              </Stack>
+            </Card>
           ))}
-        </div>
+        </Stack>
       </Section>
 
       <Section
-        className="vf-docs-overview-section"
         description="The same contracts, tokens, accessibility model, and terminology carry across each supported surface."
         title="Shared foundation, first-class framework surfaces."
       >
-        <div className="vf-docs-principle-grid">
+        <Stack gap="md">
           {principles.map((principle) => (
-            <Card
-              className="vf-docs-principle"
-              key={principle.title}
-              padding="md"
-              variant="bordered"
-            >
-              <Heading level={3} size="sm">
-                {principle.title}
-              </Heading>
-              <Text tone="muted">{principle.description}</Text>
+            <Card key={principle.title} padding="md" variant="bordered">
+              <Stack gap="sm">
+                <Heading level={3} size="sm">
+                  {principle.title}
+                </Heading>
+                <Text tone="muted">{principle.description}</Text>
+              </Stack>
             </Card>
           ))}
-        </div>
+        </Stack>
       </Section>
-    </div>
+    </Stack>
   );
 }
 
