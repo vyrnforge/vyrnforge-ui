@@ -2,7 +2,7 @@
 title: VyrnForge UI Ownership and Review Model
 status: Stable
 owner: Architecture
-last_reviewed: 2026-07-20
+last_reviewed: 2026-10-13
 canonical: true
 ---
 
@@ -11,155 +11,189 @@ canonical: true
 ## Purpose
 
 This document defines accountable ownership and review expectations for
-VyrnForge UI. It applies to the shared UI foundation, components, data grid,
-quality evidence, accessibility, documentation, and delivery infrastructure.
+VyrnForge. Ownership follows product capabilities and architectural boundaries,
+not historical package names or framework rank.
 
-It does not create a CODEOWNERS configuration, change GitHub approval rules, or
-replace the release-specific responsibilities in
-`docs/release/release-responsibility-matrix.md`.
+Native HTML / Custom Elements, React, Angular, and Vue are equal first-class
+surfaces. A framework package owns its idiomatic integration contract; no
+framework package owns VyrnForge's shared component semantics merely because it
+contains a current implementation.
 
-## Operating Principles
+This document does not create CODEOWNERS rules, name individual maintainers,
+change GitHub approval counts, or replace release-specific responsibilities.
 
-- An **accountable owner** owns the decision quality, documentation, and
-  follow-up for a workstream. The accountable owner is not necessarily the
-  implementation author.
-- An **implementation author** may work in any area, but must obtain the
-  required review before merging a change that crosses an ownership boundary.
-- One person may temporarily hold multiple roles. In that case, the review
-  record must identify the roles considered and seek an independent reviewer
-  whenever one is available for public API, accessibility, release, or
-  architecture decisions.
-- Ownership is role-based, not person-based. Named maintainers, CODEOWNERS,
-  approval counts, and environment reviewers remain external configuration and
-  require a separate governance task.
-- Package boundaries remain authoritative: `ui-core` is independent;
-  `ui-components` may depend on `ui-core`; `ui-data-grid` may depend on both.
+## Operating principles
 
-## Responsibility Matrix
+- Ownership is role-based rather than person-based. One person may temporarily
+  hold several roles.
+- Shared semantic decisions belong to shared VyrnForge owners before framework
+  adapters.
+- Framework integration owners review idiomatic framework behavior without
+  creating independent component semantics.
+- Review requirements follow the kind of change and its impact, not the number
+  of packages touched.
+- Cross-framework work may proceed in parallel after real shared prerequisites
+  are satisfied.
+- Public API, accessibility, package boundary, release, and breaking-change
+  decisions require review from the role that owns that contract.
+- Current package topology is owned by package manifests and
+  `docs/architecture/01-package-boundaries.md`, not duplicated here.
 
-| Workstream          | Accountable owner   | Owns                                                                                                         | Required review partner                                                      | Escalation owner                                                                |
-| ------------------- | ------------------- | ------------------------------------------------------------------------------------------------------------ | ---------------------------------------------------------------------------- | ------------------------------------------------------------------------------- |
-| UI Platform         | UI Platform         | `@vyrnforge/ui-core`, tokens, themes, density, shared CSS utilities                                          | Architecture for public token or boundary changes                            | Architecture                                                                    |
-| Components          | Component Team      | `@vyrnforge/ui-components`, reusable primitives, forms, overlays, navigation, feedback                       | Accessibility for interaction changes; Architecture for public API changes   | Architecture                                                                    |
-| Data Grid           | Data Grid Team      | `@vyrnforge/ui-data-grid`, grid architecture, row/column models, selection, filtering, grouping, performance | Quality Engineering for test strategy; Accessibility for interaction changes | Architecture                                                                    |
-| Quality Engineering | Quality Engineering | Unit, DOM, browser, coverage, regression, and consumer-test strategy                                         | Owning package team                                                          | Architecture for quality-gate policy                                            |
-| Accessibility       | Accessibility       | Keyboard contracts, screen-reader behavior, focus management, interaction accessibility review               | Owning package team                                                          | Architecture for unresolved contract decisions                                  |
-| Documentation       | Documentation       | Component docs, API references, playground, AI context, and source-of-truth governance                       | Owning package team for technical accuracy                                   | Architecture for canonical-document conflicts                                   |
-| DevOps / Release    | DevOps / Release    | GitHub Actions, npm publishing, trusted publishing, release environments, package verification               | Package owner and Documentation for release-facing changes                   | Architecture for release policy; repository administrator for external settings |
-| Architecture        | Architecture        | Package boundaries, public API decisions, ADR approval, maturity promotion, breaking-change approval         | Accountable workstream owner                                                 | Repository maintainers when a decision exceeds documented policy                |
+## Responsibility model
 
-## Required Review by Change Type
+| Workstream | Accountable role | Owns | Required review partners |
+| --- | --- | --- | --- |
+| Product architecture | Architecture | package boundaries, canonical component model, cross-framework contracts, ADRs, compatibility and breaking-change decisions | directly affected capability and framework owners |
+| Design foundation | Design Foundation | semantic tokens, themes, density, typography, motion, layers, shared styling contracts | Architecture for public token/boundary changes; Accessibility for accessibility-sensitive visuals |
+| Shared behavior | Behavior Foundation | reusable state transitions, collections, overlays, forms, interaction reasons, keyboard/focus foundations | Accessibility and affected surface owners |
+| Common component system | Component System | framework-neutral component semantics, composition, public capability contracts, maturity evidence | Design Foundation, Behavior Foundation, Accessibility, affected surface owners |
+| Native HTML / Custom Elements | Native Integration | native/custom-element registration, DOM-facing attributes/events/methods/slots, browser integration | Component System and Architecture when shared semantics change |
+| React | React Integration | idiomatic React props, refs, composition, React compatibility, React-specific exceptions | Component System and Architecture when shared semantics change |
+| Angular | Angular Integration | Angular inputs/outputs, templates, Forms integration, Angular compatibility and exceptions | Component System and Architecture when shared semantics change |
+| Vue | Vue Integration | Vue props/emits, `v-model`, slots, refs, Vue compatibility and exceptions | Component System and Architecture when shared semantics change |
+| Advanced modules | Module owner | module-specific contracts, algorithms, performance, state, styling and supported surface integrations | Architecture, Accessibility, Quality, and affected framework owners |
+| Quality engineering | Quality Engineering | unit, contract, DOM, browser, coverage, regression, packed-consumer and evidence strategy | owner of the changed capability |
+| Accessibility | Accessibility | keyboard, focus, semantics, assistive-technology expectations and accessibility evidence policy | capability owner and Quality Engineering |
+| Documentation / Reference | Documentation | documentation placement, editorial quality, Reference presentation, generated documentation projections and source-of-truth consistency | canonical technical owner of the described capability |
+| DevOps / Release | DevOps / Release | CI/CD, repository automation, package verification, publication, release environments and deployment mechanics | affected package/capability owner and Architecture for release-policy changes |
 
-| Change type                                                                                     | Required accountable review | Additional review trigger                                                                                          |
-| ----------------------------------------------------------------------------------------------- | --------------------------- | ------------------------------------------------------------------------------------------------------------------ |
-| `@vyrnforge/ui-core` tokens, themes, density, or shared utilities                               | UI Platform                 | Architecture when public token names, CSS utilities, package boundaries, or compatibility change                   |
-| `@vyrnforge/ui-components` component behavior or public props                                   | Component Team              | Accessibility for interactive behavior; Architecture for public API or maturity changes                            |
-| `@vyrnforge/ui-data-grid` rendering, state, algorithms, adapters, or performance                | Data Grid Team              | Quality Engineering for test strategy; Accessibility for interactive behavior; Architecture for public API changes |
-| Tests, coverage, browser tooling, or regression infrastructure                                  | Quality Engineering         | Owning package team; Accessibility when tests encode accessibility contracts                                       |
-| Keyboard, ARIA, focus, dialogs, menus, popovers, drawers, composites, or form semantics         | Accessibility               | Owning package team and Quality Engineering when automated coverage changes                                        |
-| Markdown docs, metadata, playground examples, or AI context                                     | Documentation               | Owning package team when public usage or behavior is described                                                     |
-| Package manifests, exports, packed artifacts, consumer fixture, publication, or release records | DevOps / Release            | Owning package team; Architecture for public API/versioning decisions                                              |
-| Cross-package dependency, state ownership, adapter boundary, maturity, or ADR decision          | Architecture                | All directly affected accountable owners                                                                           |
+The roles above are conceptual ownership domains. They do not require separate
+teams or one maintainer per row.
 
-## Public API Approval Rules
+## Review triggers
 
-The public API is the package root and documented CSS subpath exports, together
-with the public contracts described in `docs/api/` and structured metadata.
+### Shared semantics
 
-1. A new, changed, deprecated, or removed public export requires approval from
-   the owning package team and Architecture.
-2. The change must update the relevant package README, API reference,
-   `docs/metadata/`, `.ai/COMPONENT_MAP.json` when applicable, and playground
-   or consumer evidence when the public usage changes.
-3. Quality Engineering must confirm focused automated coverage is appropriate;
-   `verify:packages` and `verify:consumer` remain release-boundary evidence.
-4. During alpha, an API may remain experimental, but it must not be presented as
-   stable without Architecture approval and documented evidence.
-5. Breaking changes require Architecture approval, migration guidance, and
-   release-policy review even before stable release. No compatibility alias is
-   assumed by default.
+Changes to canonical component behavior, state, events, accessibility semantics,
+shared tokens, or cross-framework terminology require review from the relevant
+shared foundation owner and every integration surface whose public contract is
+affected.
 
-## Token and CSS Approval Rules
+A framework-only fix does not require unrelated framework code changes when the
+problem is genuinely local. If the fix introduces a reusable concept, move that
+concept to the shared owner first.
 
-- UI Platform approves shared `--vf-*` tokens and `vf-*` utility classes.
-- Data Grid Team approves grid-specific `--udg-*` variables and `udg-*`
-  classes.
-- Component Team reviews component CSS that consumes shared tokens or changes
-  reusable component styling.
-- Architecture review is required when ownership moves between packages,
-  compatibility changes, or a shared/grid-specific distinction becomes unclear.
-- CSS-only changes still require documentation review when they change public
-  customization guidance, token meaning, supported class usage, or import
-  order.
+### Public API and compatibility
 
-## Accessibility Review Triggers
+A new, changed, deprecated, or removed public export requires:
 
-Accessibility review is required when a change affects any of the following:
+1. review from the owner of the public surface;
+2. Architecture review when compatibility, package boundaries, or shared
+   semantics change;
+3. migration or deprecation guidance when applicable;
+4. canonical metadata and generated reference updates where required;
+5. packed-package or real-consumer verification for consumer-facing changes.
 
-- keyboard navigation, roving focus, focus restoration, focus trapping, or
-  Escape/outside-dismiss behavior;
-- roles, labels, descriptions, live regions, form semantics, validation, or
-  screen-reader announcements;
-- overlays, portals, dialogs, menus, popovers, drawers, tooltips,
-  autocomplete, transfer lists, tabs, or data-grid interaction;
-- pointer-only behavior, drag/resize/reorder behavior, disabled states, error
-  states, contrast, reduced motion, or responsive overflow that affects focus.
+Breaking changes require an explicit migration path and release-policy review.
+No compatibility alias or deprecation period is assumed automatically.
 
-The Accessibility owner records whether unit/static evidence is sufficient or a
-manual browser/assistive-technology review is required. Quality Engineering
-owns the related automation strategy; the component or grid team owns the
-product correction.
+### Framework integrations
 
-## Release Approval Rules
+Native, React, Angular, and Vue integration owners review changes specific to
+their framework surface. Framework-specific exceptions must remain narrow,
+explicit, traceable, and represented by the canonical exception mechanism.
 
-- DevOps / Release owns workflow execution, package verification, npm trusted
-  publishing, release environments, registry verification, and release-record
-  process.
-- The accountable package owner confirms package behavior, public surface, and
-  release notes for its package.
-- Architecture approves coordinated versioning, public API maturity promotion,
-  deprecations, and breaking changes.
-- Documentation confirms published usage, installation, migration, and
-  maturity statements are accurate.
-- Release approval does not replace the protected `npm-release` environment or
-  external npm trusted-publisher configuration. Those controls are verified by
-  the release process, not this document.
+Do not use an implementation dependency on another VyrnForge package as proof
+that the reused package owns the consuming framework's product semantics.
 
-## Documentation Ownership
+### Accessibility
 
-Documentation owns the quality and source-of-truth placement of Markdown,
-metadata, playground content, and AI context. It does not unilaterally decide
-runtime behavior or public API maturity.
+Accessibility review is required when a change affects keyboard navigation,
+focus movement/restoration/trapping, ARIA or native semantics, labeling,
+announcements, form validation, overlays, composite widgets, drag/resize/reorder
+behavior, disabled/error states, contrast, reduced motion, or responsive behavior
+that changes interaction.
 
-- Package teams own technical correctness of their package documentation.
-- Architecture resolves duplicate or conflicting canonical guidance.
-- Documentation updates `docs/README.md` when a new canonical document is
-  introduced and archives superseded documents rather than leaving competing
-  direction.
-- Playground examples must use public APIs and remain evidence of intended
-  usage, not an alternate implementation surface.
+Accessibility decides whether automated evidence is sufficient or manual
+browser/assistive-technology review remains required. Quality Engineering owns
+the automation strategy; the capability owner owns the product correction.
 
-## Escalation Path
+### Tokens and styling
 
-1. The implementation author raises a cross-workstream concern with the
-   accountable owner for the changed area.
-2. The accountable owner involves the listed review partner when a trigger
-   applies.
-3. Architecture resolves package-boundary, public API, maturity, or conflicting
-   source-of-truth decisions.
-4. DevOps / Release and the repository administrator resolve external GitHub,
-   npm, environment, registry, or permission configuration issues.
-5. Unresolved high-risk accessibility concerns remain blocked from maturity
-   promotion until Accessibility and Architecture record a disposition.
+Design Foundation owns shared `--vf-*` tokens and shared styling contracts.
+Component or module owners may define scoped extension tokens when the semantic
+foundation does not already provide the needed role.
 
-## Unresolved Ownership Questions
+Architecture review is required when token ownership moves between packages,
+compatibility changes, or a supposedly local token represents a reusable shared
+semantic role.
 
-- Which named maintainers currently fill each role?
-- Which roles require independent approval when one maintainer holds multiple
-  roles?
-- What approval counts and branch-protection rules should GitHub enforce?
-- Who administers the `npm-release` environment, npm organization, trusted
-  publisher bindings, and Pages settings?
+### Documentation and Reference
 
-These questions require repository and npm administration decisions. They are
-not resolved by this documentation-only model.
+Documentation owns placement, editorial quality, generated projection rules, and
+Reference presentation. Technical owners remain accountable for the accuracy of
+behavior, APIs, package integration, accessibility claims, and limitations.
+
+The Docs application is a presentation layer and must not become a second owner
+of component semantics, package facts, framework support, or API inventories.
+Executable examples use canonical capability identities and verified framework
+implementations rather than a separate Playground authority.
+
+### Release and repository automation
+
+DevOps / Release owns workflow execution, artifact verification, publication,
+deployment, and external release controls. Package and capability owners confirm
+the behavior and public surface being released.
+
+Architecture reviews coordinated versioning, maturity promotion, deprecations,
+and breaking changes. Documentation reviews release-facing installation,
+migration, and support claims.
+
+## Review evidence
+
+Required evidence is proportional to the changed contract. Depending on impact,
+it may include:
+
+- unit or contract tests;
+- browser and accessibility tests;
+- packed package or external-consumer verification;
+- generated-artifact currentness;
+- framework-specific runtime evidence;
+- visual/performance evidence;
+- migration guidance;
+- manual assistive-technology evidence;
+- release or registry evidence.
+
+A green check that does not exercise the changed contract is not sufficient
+evidence merely because it exists.
+
+## Branch and dependency ownership
+
+Branch topology and PR dependency rules are owned by
+[`05-trunk-delivery.md`](05-trunk-delivery.md). Reviewers should reject
+framework-preference sequencing when independent tracks could run in parallel.
+
+Stacked PRs must expose their real prerequisite and retarget path. Temporary
+integration branches must remain bounded to one initiative and must not become
+permanent ownership lanes.
+
+## Escalation
+
+1. Raise a concern with the accountable owner of the changed contract.
+2. Involve required review partners for cross-boundary impact.
+3. Architecture resolves package-boundary, shared-semantics, compatibility,
+   maturity, and source-of-truth conflicts.
+4. DevOps / Release and repository administrators resolve GitHub, npm,
+   environment, registry, and permission configuration that cannot be committed
+   in source control.
+5. Unresolved high-risk accessibility or compatibility concerns remain blocked
+   until the accountable roles record a disposition.
+
+## External configuration
+
+Named maintainers, CODEOWNERS patterns, approval counts, branch protections,
+release-environment reviewers, npm organization administrators, trusted publisher
+bindings, and Pages settings are external configuration. They should be aligned
+with this model but must not be invented in repository documentation when the
+actual configuration is unknown.
+
+## Related canonical sources
+
+- [Project Source of Truth](01-project-source-of-truth.md)
+- [Trunk Delivery](05-trunk-delivery.md)
+- [Documentation Governance](documentation.md)
+- [Component Maturity Model](component-maturity-model.md)
+- [Package Boundaries](../architecture/01-package-boundaries.md)
+- [State and Adapter Ownership](../architecture/02-state-and-adapter-ownership.md)
+- [CI/CD Architecture](../engineering/ci-cd-architecture.md)
+- [Release Responsibility Matrix](../release/release-responsibility-matrix.md)
