@@ -19,8 +19,6 @@
   "knownLimitations": [
     "Global search scans searchable columns in the current grid; server fetching remains application-owned through query contracts."
   ],
-  "examples": [],
-  "releaseNotes": [],
   "styling": {
     "classes": [],
     "variables": []
@@ -49,7 +47,6 @@
   "source": {
     "componentMetadata": "docs/metadata/components.json",
     "contractMetadata": null,
-    "componentDocumentation": null,
     "customElementsManifest": null
   }
 }

@@ -23,8 +23,6 @@
   "knownLimitations": [
     "Avoid for skeleton row placeholders; use Skeleton or grid skeleton rows."
   ],
-  "examples": [],
-  "releaseNotes": [],
   "styling": {
     "classes": [
       "vf-loading-state"
@@ -72,7 +70,6 @@
   "source": {
     "componentMetadata": "docs/metadata/components.json",
     "contractMetadata": "docs/metadata/component-contracts.json",
-    "componentDocumentation": null,
     "customElementsManifest": "packages/ui-elements/custom-elements.json"
   }
 }

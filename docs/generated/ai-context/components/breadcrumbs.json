@@ -24,8 +24,6 @@
   "knownLimitations": [
     "Avoid for linear step progress or unrelated tabs."
   ],
-  "examples": [],
-  "releaseNotes": [],
   "styling": {
     "classes": [
       "vf-breadcrumbs"
@@ -96,7 +94,6 @@
   "source": {
     "componentMetadata": "docs/metadata/components.json",
     "contractMetadata": "docs/metadata/component-contracts.json",
-    "componentDocumentation": null,
     "customElementsManifest": "packages/ui-elements/custom-elements.json"
   }
 }

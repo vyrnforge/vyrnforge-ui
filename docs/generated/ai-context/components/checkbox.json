@@ -26,8 +26,6 @@
   "knownLimitations": [
     "Avoid for mutually exclusive sets; use Radio when available."
   ],
-  "examples": [],
-  "releaseNotes": [],
   "styling": {
     "classes": [
       "vf-checkbox"
@@ -161,7 +159,6 @@
   "source": {
     "componentMetadata": "docs/metadata/components.json",
     "contractMetadata": "docs/metadata/component-contracts.json",
-    "componentDocumentation": null,
     "customElementsManifest": "packages/ui-elements/custom-elements.json"
   }
 }

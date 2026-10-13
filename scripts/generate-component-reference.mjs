@@ -222,8 +222,12 @@ function componentRecord(component, context) {
       variables:
         documentation?.theming?.variables ?? component.cssVariables ?? [],
     },
-    examples: documentation?.examples ?? [],
-    releaseNotes: documentation?.releaseNotes ?? [],
+    ...(documentation
+      ? {
+          examples: documentation.examples ?? [],
+          releaseNotes: documentation.releaseNotes ?? [],
+        }
+      : {}),
     docsPath: cleanText(component.docsPath),
     playgroundPath: cleanText(component.playgroundPath),
     source: {
@@ -231,7 +235,9 @@ function componentRecord(component, context) {
       contractMetadata: contract
         ? "docs/metadata/component-contracts.json"
         : null,
-      componentDocumentation: documentation?.sourcePath ?? null,
+      ...(documentation
+        ? { componentDocumentation: documentation.sourcePath }
+        : {}),
       customElementsManifest: nativeDeclaration
         ? "packages/ui-elements/custom-elements.json"
         : null,
@@ -381,8 +387,8 @@ function componentContextSlice(component) {
       ...(component.contract?.accessibility ?? []),
     ],
     knownLimitations: component.knownLimitations,
-    examples: component.examples,
-    releaseNotes: component.releaseNotes,
+    ...(component.examples ? { examples: component.examples } : {}),
+    ...(component.releaseNotes ? { releaseNotes: component.releaseNotes } : {}),
     styling: component.styling,
     frameworks: Object.fromEntries(
       Object.entries(component.frameworks).map(([id, usage]) => [

@@ -21,8 +21,6 @@
   "knownLimitations": [
     "Avoid when the content is not a status."
   ],
-  "examples": [],
-  "releaseNotes": [],
   "styling": {
     "classes": [
       "vf-badge"
@@ -59,7 +57,6 @@
   "source": {
     "componentMetadata": "docs/metadata/components.json",
     "contractMetadata": null,
-    "componentDocumentation": null,
     "customElementsManifest": "packages/ui-elements/custom-elements.json"
   }
 }

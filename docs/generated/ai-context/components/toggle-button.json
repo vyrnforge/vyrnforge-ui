@@ -28,8 +28,6 @@
   "knownLimitations": [
     "Avoid for persistent settings; use Switch. Avoid navigation links."
   ],
-  "examples": [],
-  "releaseNotes": [],
   "styling": {
     "classes": [
       "vf-toggle-button",
@@ -144,7 +142,6 @@
   "source": {
     "componentMetadata": "docs/metadata/components.json",
     "contractMetadata": "docs/metadata/component-contracts.json",
-    "componentDocumentation": null,
     "customElementsManifest": "packages/ui-elements/custom-elements.json"
   }
 }

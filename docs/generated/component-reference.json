@@ -53,14 +53,11 @@
         ],
         "variables": []
       },
-      "examples": [],
-      "releaseNotes": [],
       "docsPath": "docs/api/ui-components-api.md",
       "playgroundPath": null,
       "source": {
         "componentMetadata": "docs/metadata/components.json",
         "contractMetadata": "docs/metadata/component-contracts.json",
-        "componentDocumentation": null,
         "customElementsManifest": "packages/ui-elements/custom-elements.json"
       },
       "nativeDeclaration": {
@@ -183,14 +180,11 @@
         ],
         "variables": []
       },
-      "examples": [],
-      "releaseNotes": [],
       "docsPath": "docs/api/ui-components-api.md",
       "playgroundPath": null,
       "source": {
         "componentMetadata": "docs/metadata/components.json",
         "contractMetadata": "docs/metadata/component-contracts.json",
-        "componentDocumentation": null,
         "customElementsManifest": "packages/ui-elements/custom-elements.json"
       },
       "nativeDeclaration": {
@@ -348,14 +342,11 @@
         ],
         "variables": []
       },
-      "examples": [],
-      "releaseNotes": [],
       "docsPath": "docs/api/ui-components-api.md",
       "playgroundPath": null,
       "source": {
         "componentMetadata": "docs/metadata/components.json",
         "contractMetadata": "docs/metadata/component-contracts.json",
-        "componentDocumentation": null,
         "customElementsManifest": "packages/ui-elements/custom-elements.json"
       },
       "nativeDeclaration": {
@@ -481,14 +472,11 @@
         ],
         "variables": []
       },
-      "examples": [],
-      "releaseNotes": [],
       "docsPath": "docs/api/ui-components-api.md",
       "playgroundPath": null,
       "source": {
         "componentMetadata": "docs/metadata/components.json",
         "contractMetadata": "docs/metadata/component-contracts.json",
-        "componentDocumentation": null,
         "customElementsManifest": "packages/ui-elements/custom-elements.json"
       },
       "nativeDeclaration": {
@@ -646,14 +634,11 @@
         ],
         "variables": []
       },
-      "examples": [],
-      "releaseNotes": [],
       "docsPath": "docs/api/ui-components-api.md",
       "playgroundPath": null,
       "source": {
         "componentMetadata": "docs/metadata/components.json",
         "contractMetadata": "docs/metadata/component-contracts.json",
-        "componentDocumentation": null,
         "customElementsManifest": "packages/ui-elements/custom-elements.json"
       },
       "nativeDeclaration": {
@@ -799,14 +784,11 @@
         ],
         "variables": []
       },
-      "examples": [],
-      "releaseNotes": [],
       "docsPath": "docs/api/ui-components-api.md",
       "playgroundPath": null,
       "source": {
         "componentMetadata": "docs/metadata/components.json",
         "contractMetadata": "docs/metadata/component-contracts.json",
-        "componentDocumentation": null,
         "customElementsManifest": "packages/ui-elements/custom-elements.json"
       },
       "nativeDeclaration": {
@@ -894,14 +876,11 @@
         ],
         "variables": []
       },
-      "examples": [],
-      "releaseNotes": [],
       "docsPath": "docs/api/ui-components-api.md",
       "playgroundPath": null,
       "source": {
         "componentMetadata": "docs/metadata/components.json",
         "contractMetadata": "docs/metadata/component-contracts.json",
-        "componentDocumentation": null,
         "customElementsManifest": "packages/ui-elements/custom-elements.json"
       },
       "nativeDeclaration": {
@@ -988,14 +967,11 @@
         ],
         "variables": []
       },
-      "examples": [],
-      "releaseNotes": [],
       "docsPath": "docs/api/ui-components-api.md",
       "playgroundPath": null,
       "source": {
         "componentMetadata": "docs/metadata/components.json",
         "contractMetadata": "docs/metadata/component-contracts.json",
-        "componentDocumentation": null,
         "customElementsManifest": "packages/ui-elements/custom-elements.json"
       },
       "nativeDeclaration": {
@@ -1135,14 +1111,11 @@
         ],
         "variables": []
       },
-      "examples": [],
-      "releaseNotes": [],
       "docsPath": "docs/api/ui-components-api.md",
       "playgroundPath": null,
       "source": {
         "componentMetadata": "docs/metadata/components.json",
         "contractMetadata": "docs/metadata/component-contracts.json",
-        "componentDocumentation": null,
         "customElementsManifest": "packages/ui-elements/custom-elements.json"
       },
       "nativeDeclaration": {
@@ -1231,14 +1204,11 @@
         ],
         "variables": []
       },
-      "examples": [],
-      "releaseNotes": [],
       "docsPath": "docs/api/ui-components-api.md",
       "playgroundPath": null,
       "source": {
         "componentMetadata": "docs/metadata/components.json",
         "contractMetadata": "docs/metadata/component-contracts.json",
-        "componentDocumentation": null,
         "customElementsManifest": "packages/ui-elements/custom-elements.json"
       },
       "nativeDeclaration": {
@@ -1328,14 +1298,11 @@
         ],
         "variables": []
       },
-      "examples": [],
-      "releaseNotes": [],
       "docsPath": "docs/api/ui-components-api.md",
       "playgroundPath": null,
       "source": {
         "componentMetadata": "docs/metadata/components.json",
         "contractMetadata": "docs/metadata/component-contracts.json",
-        "componentDocumentation": null,
         "customElementsManifest": "packages/ui-elements/custom-elements.json"
       },
       "nativeDeclaration": {
@@ -1433,14 +1400,11 @@
         ],
         "variables": []
       },
-      "examples": [],
-      "releaseNotes": [],
       "docsPath": "docs/api/ui-components-api.md",
       "playgroundPath": "/components/data-management/transfer-list",
       "source": {
         "componentMetadata": "docs/metadata/components.json",
         "contractMetadata": "docs/metadata/component-contracts.json",
-        "componentDocumentation": null,
         "customElementsManifest": "packages/ui-elements/custom-elements.json"
       },
       "nativeDeclaration": {
@@ -1754,14 +1718,11 @@
         ],
         "variables": []
       },
-      "examples": [],
-      "releaseNotes": [],
       "docsPath": "docs/api/ui-components-api.md",
       "playgroundPath": null,
       "source": {
         "componentMetadata": "docs/metadata/components.json",
         "contractMetadata": "docs/metadata/component-contracts.json",
-        "componentDocumentation": null,
         "customElementsManifest": "packages/ui-elements/custom-elements.json"
       },
       "nativeDeclaration": {
@@ -1884,14 +1845,11 @@
         ],
         "variables": []
       },
-      "examples": [],
-      "releaseNotes": [],
       "docsPath": "docs/api/ui-components-api.md",
       "playgroundPath": "/components/feedback/badge",
       "source": {
         "componentMetadata": "docs/metadata/components.json",
         "contractMetadata": "docs/metadata/component-contracts.json",
-        "componentDocumentation": null,
         "customElementsManifest": "packages/ui-elements/custom-elements.json"
       },
       "nativeDeclaration": {
@@ -2032,14 +1990,11 @@
         ],
         "variables": []
       },
-      "examples": [],
-      "releaseNotes": [],
       "docsPath": "docs/api/ui-components-api.md",
       "playgroundPath": null,
       "source": {
         "componentMetadata": "docs/metadata/components.json",
         "contractMetadata": "docs/metadata/component-contracts.json",
-        "componentDocumentation": null,
         "customElementsManifest": "packages/ui-elements/custom-elements.json"
       },
       "nativeDeclaration": {
@@ -2127,14 +2082,11 @@
         ],
         "variables": []
       },
-      "examples": [],
-      "releaseNotes": [],
       "docsPath": "docs/api/ui-components-api.md",
       "playgroundPath": null,
       "source": {
         "componentMetadata": "docs/metadata/components.json",
         "contractMetadata": "docs/metadata/component-contracts.json",
-        "componentDocumentation": null,
         "customElementsManifest": "packages/ui-elements/custom-elements.json"
       },
       "nativeDeclaration": {
@@ -2241,14 +2193,11 @@
         ],
         "variables": []
       },
-      "examples": [],
-      "releaseNotes": [],
       "docsPath": "docs/api/ui-components-api.md",
       "playgroundPath": null,
       "source": {
         "componentMetadata": "docs/metadata/components.json",
         "contractMetadata": "docs/metadata/component-contracts.json",
-        "componentDocumentation": null,
         "customElementsManifest": "packages/ui-elements/custom-elements.json"
       },
       "nativeDeclaration": {
@@ -2371,14 +2320,11 @@
         ],
         "variables": []
       },
-      "examples": [],
-      "releaseNotes": [],
       "docsPath": "docs/api/ui-components-api.md",
       "playgroundPath": null,
       "source": {
         "componentMetadata": "docs/metadata/components.json",
         "contractMetadata": "docs/metadata/component-contracts.json",
-        "componentDocumentation": null,
         "customElementsManifest": "packages/ui-elements/custom-elements.json"
       },
       "nativeDeclaration": {
@@ -2466,14 +2412,11 @@
         ],
         "variables": []
       },
-      "examples": [],
-      "releaseNotes": [],
       "docsPath": "docs/api/ui-components-api.md",
       "playgroundPath": null,
       "source": {
         "componentMetadata": "docs/metadata/components.json",
         "contractMetadata": "docs/metadata/component-contracts.json",
-        "componentDocumentation": null,
         "customElementsManifest": "packages/ui-elements/custom-elements.json"
       },
       "nativeDeclaration": {
@@ -2592,14 +2535,11 @@
         ],
         "variables": []
       },
-      "examples": [],
-      "releaseNotes": [],
       "docsPath": "docs/api/ui-components-api.md",
       "playgroundPath": null,
       "source": {
         "componentMetadata": "docs/metadata/components.json",
         "contractMetadata": "docs/metadata/component-contracts.json",
-        "componentDocumentation": null,
         "customElementsManifest": "packages/ui-elements/custom-elements.json"
       },
       "nativeDeclaration": {
@@ -2745,14 +2685,11 @@
         ],
         "variables": []
       },
-      "examples": [],
-      "releaseNotes": [],
       "docsPath": "docs/api/ui-components-api.md",
       "playgroundPath": null,
       "source": {
         "componentMetadata": "docs/metadata/components.json",
         "contractMetadata": null,
-        "componentDocumentation": null,
         "customElementsManifest": "packages/ui-elements/custom-elements.json"
       },
       "nativeDeclaration": {
@@ -2831,14 +2768,11 @@
         ],
         "variables": []
       },
-      "examples": [],
-      "releaseNotes": [],
       "docsPath": "docs/api/ui-components-api.md",
       "playgroundPath": "/components/feedback/toast",
       "source": {
         "componentMetadata": "docs/metadata/components.json",
         "contractMetadata": "docs/metadata/component-contracts.json",
-        "componentDocumentation": null,
         "customElementsManifest": "packages/ui-elements/custom-elements.json"
       },
       "nativeDeclaration": {
@@ -3035,14 +2969,11 @@
         ],
         "variables": []
       },
-      "examples": [],
-      "releaseNotes": [],
       "docsPath": "docs/api/ui-components-api.md",
       "playgroundPath": "/components/forms/autocomplete",
       "source": {
         "componentMetadata": "docs/metadata/components.json",
         "contractMetadata": "docs/metadata/component-contracts.json",
-        "componentDocumentation": null,
         "customElementsManifest": "packages/ui-elements/custom-elements.json"
       },
       "nativeDeclaration": {
@@ -3492,14 +3423,11 @@
         ],
         "variables": []
       },
-      "examples": [],
-      "releaseNotes": [],
       "docsPath": "docs/api/ui-components-api.md",
       "playgroundPath": "/components/forms/checkbox",
       "source": {
         "componentMetadata": "docs/metadata/components.json",
         "contractMetadata": "docs/metadata/component-contracts.json",
-        "componentDocumentation": null,
         "customElementsManifest": "packages/ui-elements/custom-elements.json"
       },
       "nativeDeclaration": {
@@ -4481,14 +4409,11 @@
         ],
         "variables": []
       },
-      "examples": [],
-      "releaseNotes": [],
       "docsPath": "docs/api/ui-components-api.md",
       "playgroundPath": "/components/forms/field",
       "source": {
         "componentMetadata": "docs/metadata/components.json",
         "contractMetadata": "docs/metadata/component-contracts.json",
-        "componentDocumentation": null,
         "customElementsManifest": "packages/ui-elements/custom-elements.json"
       },
       "nativeDeclaration": {
@@ -4726,14 +4651,11 @@
         ],
         "variables": []
       },
-      "examples": [],
-      "releaseNotes": [],
       "docsPath": "docs/api/ui-components-api.md",
       "playgroundPath": null,
       "source": {
         "componentMetadata": "docs/metadata/components.json",
         "contractMetadata": "docs/metadata/component-contracts.json",
-        "componentDocumentation": null,
         "customElementsManifest": "packages/ui-elements/custom-elements.json"
       },
       "nativeDeclaration": {
@@ -5448,14 +5370,11 @@
         ],
         "variables": []
       },
-      "examples": [],
-      "releaseNotes": [],
       "docsPath": "docs/api/ui-components-api.md",
       "playgroundPath": "/components/forms/radio",
       "source": {
         "componentMetadata": "docs/metadata/components.json",
         "contractMetadata": "docs/metadata/component-contracts.json",
-        "componentDocumentation": null,
         "customElementsManifest": "packages/ui-elements/custom-elements.json"
       },
       "nativeDeclaration": {
@@ -5758,14 +5677,11 @@
         ],
         "variables": []
       },
-      "examples": [],
-      "releaseNotes": [],
       "docsPath": "docs/api/ui-components-api.md",
       "playgroundPath": "/components/forms/radio-group",
       "source": {
         "componentMetadata": "docs/metadata/components.json",
         "contractMetadata": "docs/metadata/component-contracts.json",
-        "componentDocumentation": null,
         "customElementsManifest": "packages/ui-elements/custom-elements.json"
       },
       "nativeDeclaration": {
@@ -5941,14 +5857,11 @@
         ],
         "variables": []
       },
-      "examples": [],
-      "releaseNotes": [],
       "docsPath": "docs/api/ui-components-api.md",
       "playgroundPath": "/components/forms/rating",
       "source": {
         "componentMetadata": "docs/metadata/components.json",
         "contractMetadata": "docs/metadata/component-contracts.json",
-        "componentDocumentation": null,
         "customElementsManifest": "packages/ui-elements/custom-elements.json"
       },
       "nativeDeclaration": {
@@ -6551,14 +6464,11 @@
         ],
         "variables": []
       },
-      "examples": [],
-      "releaseNotes": [],
       "docsPath": "docs/api/ui-components-api.md",
       "playgroundPath": "/components/forms/select",
       "source": {
         "componentMetadata": "docs/metadata/components.json",
         "contractMetadata": "docs/metadata/component-contracts.json",
-        "componentDocumentation": null,
         "customElementsManifest": "packages/ui-elements/custom-elements.json"
       },
       "nativeDeclaration": {
@@ -6836,14 +6746,11 @@
         ],
         "variables": []
       },
-      "examples": [],
-      "releaseNotes": [],
       "docsPath": "docs/api/ui-components-api.md",
       "playgroundPath": "/components/forms/slider",
       "source": {
         "componentMetadata": "docs/metadata/components.json",
         "contractMetadata": "docs/metadata/component-contracts.json",
-        "componentDocumentation": null,
         "customElementsManifest": "packages/ui-elements/custom-elements.json"
       },
       "nativeDeclaration": {
@@ -7139,14 +7046,11 @@
         ],
         "variables": []
       },
-      "examples": [],
-      "releaseNotes": [],
       "docsPath": "docs/api/ui-components-api.md",
       "playgroundPath": "/components/forms/switch",
       "source": {
         "componentMetadata": "docs/metadata/components.json",
         "contractMetadata": "docs/metadata/component-contracts.json",
-        "componentDocumentation": null,
         "customElementsManifest": "packages/ui-elements/custom-elements.json"
       },
       "nativeDeclaration": {
@@ -8109,14 +8013,11 @@
         ],
         "variables": []
       },
-      "examples": [],
-      "releaseNotes": [],
       "docsPath": "docs/api/ui-components-api.md",
       "playgroundPath": "/components/forms/validation-message",
       "source": {
         "componentMetadata": "docs/metadata/components.json",
         "contractMetadata": "docs/metadata/component-contracts.json",
-        "componentDocumentation": null,
         "customElementsManifest": "packages/ui-elements/custom-elements.json"
       },
       "nativeDeclaration": {
@@ -8240,14 +8141,11 @@
           "--vf-app-shell-min-height"
         ]
       },
-      "examples": [],
-      "releaseNotes": [],
       "docsPath": "docs/api/ui-components-api.md",
       "playgroundPath": "/components/layout/app-shell",
       "source": {
         "componentMetadata": "docs/metadata/components.json",
         "contractMetadata": "docs/metadata/component-contracts.json",
-        "componentDocumentation": null,
         "customElementsManifest": "packages/ui-elements/custom-elements.json"
       },
       "nativeDeclaration": {
@@ -8502,14 +8400,11 @@
         ],
         "variables": []
       },
-      "examples": [],
-      "releaseNotes": [],
       "docsPath": "docs/api/ui-components-api.md",
       "playgroundPath": null,
       "source": {
         "componentMetadata": "docs/metadata/components.json",
         "contractMetadata": "docs/metadata/component-contracts.json",
-        "componentDocumentation": null,
         "customElementsManifest": "packages/ui-elements/custom-elements.json"
       },
       "nativeDeclaration": {
@@ -8643,14 +8538,11 @@
         ],
         "variables": []
       },
-      "examples": [],
-      "releaseNotes": [],
       "docsPath": "docs/api/ui-components-api.md",
       "playgroundPath": null,
       "source": {
         "componentMetadata": "docs/metadata/components.json",
         "contractMetadata": "docs/metadata/component-contracts.json",
-        "componentDocumentation": null,
         "customElementsManifest": "packages/ui-elements/custom-elements.json"
       },
       "nativeDeclaration": {
@@ -8811,14 +8703,11 @@
         ],
         "variables": []
       },
-      "examples": [],
-      "releaseNotes": [],
       "docsPath": "docs/api/ui-components-api.md",
       "playgroundPath": "/components/navigation/tabs",
       "source": {
         "componentMetadata": "docs/metadata/components.json",
         "contractMetadata": "docs/metadata/component-contracts.json",
-        "componentDocumentation": null,
         "customElementsManifest": "packages/ui-elements/custom-elements.json"
       },
       "nativeDeclaration": {
@@ -9032,14 +8921,11 @@
         ],
         "variables": []
       },
-      "examples": [],
-      "releaseNotes": [],
       "docsPath": "docs/api/ui-components-api.md",
       "playgroundPath": null,
       "source": {
         "componentMetadata": "docs/metadata/components.json",
         "contractMetadata": "docs/metadata/component-contracts.json",
-        "componentDocumentation": null,
         "customElementsManifest": "packages/ui-elements/custom-elements.json"
       },
       "nativeDeclaration": {
@@ -9146,14 +9032,11 @@
         ],
         "variables": []
       },
-      "examples": [],
-      "releaseNotes": [],
       "docsPath": "docs/api/ui-components-api.md",
       "playgroundPath": "/components/overlays/confirm-dialog",
       "source": {
         "componentMetadata": "docs/metadata/components.json",
         "contractMetadata": "docs/metadata/component-contracts.json",
-        "componentDocumentation": null,
         "customElementsManifest": "packages/ui-elements/custom-elements.json"
       },
       "nativeDeclaration": {
@@ -9410,14 +9293,11 @@
         ],
         "variables": []
       },
-      "examples": [],
-      "releaseNotes": [],
       "docsPath": "docs/api/ui-components-api.md",
       "playgroundPath": "/components/overlays/dialog",
       "source": {
         "componentMetadata": "docs/metadata/components.json",
         "contractMetadata": "docs/metadata/component-contracts.json",
-        "componentDocumentation": null,
         "customElementsManifest": "packages/ui-elements/custom-elements.json"
       },
       "nativeDeclaration": {
@@ -9712,14 +9592,11 @@
         ],
         "variables": []
       },
-      "examples": [],
-      "releaseNotes": [],
       "docsPath": "docs/api/ui-components-api.md",
       "playgroundPath": "/components/overlays/drawer",
       "source": {
         "componentMetadata": "docs/metadata/components.json",
         "contractMetadata": "docs/metadata/component-contracts.json",
-        "componentDocumentation": null,
         "customElementsManifest": "packages/ui-elements/custom-elements.json"
       },
       "nativeDeclaration": {
@@ -10031,14 +9908,11 @@
         ],
         "variables": []
       },
-      "examples": [],
-      "releaseNotes": [],
       "docsPath": "docs/api/ui-components-api.md",
       "playgroundPath": "/components/overlays/dropdown",
       "source": {
         "componentMetadata": "docs/metadata/components.json",
         "contractMetadata": "docs/metadata/component-contracts.json",
-        "componentDocumentation": null,
         "customElementsManifest": "packages/ui-elements/custom-elements.json"
       },
       "nativeDeclaration": {
@@ -10185,14 +10059,11 @@
         ],
         "variables": []
       },
-      "examples": [],
-      "releaseNotes": [],
       "docsPath": "docs/api/ui-components-api.md",
       "playgroundPath": "/components/overlays/menu",
       "source": {
         "componentMetadata": "docs/metadata/components.json",
         "contractMetadata": "docs/metadata/component-contracts.json",
-        "componentDocumentation": null,
         "customElementsManifest": "packages/ui-elements/custom-elements.json"
       },
       "nativeDeclaration": {
@@ -10366,14 +10237,11 @@
         ],
         "variables": []
       },
-      "examples": [],
-      "releaseNotes": [],
       "docsPath": "docs/api/ui-components-api.md",
       "playgroundPath": "/components/overlays/popover",
       "source": {
         "componentMetadata": "docs/metadata/components.json",
         "contractMetadata": "docs/metadata/component-contracts.json",
-        "componentDocumentation": null,
         "customElementsManifest": "packages/ui-elements/custom-elements.json"
       },
       "nativeDeclaration": {
@@ -10661,14 +10529,11 @@
         ],
         "variables": []
       },
-      "examples": [],
-      "releaseNotes": [],
       "docsPath": "docs/api/ui-components-api.md",
       "playgroundPath": "/components/overlays/tooltip",
       "source": {
         "componentMetadata": "docs/metadata/components.json",
         "contractMetadata": "docs/metadata/component-contracts.json",
-        "componentDocumentation": null,
         "customElementsManifest": "packages/ui-elements/custom-elements.json"
       },
       "nativeDeclaration": {
@@ -11215,14 +11080,11 @@
         ],
         "variables": []
       },
-      "examples": [],
-      "releaseNotes": [],
       "docsPath": "docs/api/ui-components-api.md",
       "playgroundPath": "/components/actions/button-group",
       "source": {
         "componentMetadata": "docs/metadata/components.json",
         "contractMetadata": "docs/metadata/component-contracts.json",
-        "componentDocumentation": null,
         "customElementsManifest": "packages/ui-elements/custom-elements.json"
       },
       "nativeDeclaration": {
@@ -11363,14 +11225,11 @@
         ],
         "variables": []
       },
-      "examples": [],
-      "releaseNotes": [],
       "docsPath": "docs/api/ui-components-api.md",
       "playgroundPath": null,
       "source": {
         "componentMetadata": "docs/metadata/components.json",
         "contractMetadata": "docs/metadata/component-contracts.json",
-        "componentDocumentation": null,
         "customElementsManifest": "packages/ui-elements/custom-elements.json"
       },
       "nativeDeclaration": {
@@ -11472,14 +11331,11 @@
         "classes": [],
         "variables": []
       },
-      "examples": [],
-      "releaseNotes": [],
       "docsPath": "docs/api/ui-components-api.md",
       "playgroundPath": null,
       "source": {
         "componentMetadata": "docs/metadata/components.json",
         "contractMetadata": null,
-        "componentDocumentation": null,
         "customElementsManifest": "packages/ui-elements/custom-elements.json"
       },
       "nativeDeclaration": {
@@ -11545,14 +11401,11 @@
         "classes": [],
         "variables": []
       },
-      "examples": [],
-      "releaseNotes": [],
       "docsPath": "docs/api/ui-components-api.md",
       "playgroundPath": null,
       "source": {
         "componentMetadata": "docs/metadata/components.json",
         "contractMetadata": null,
-        "componentDocumentation": null,
         "customElementsManifest": "packages/ui-elements/custom-elements.json"
       },
       "nativeDeclaration": {
@@ -11622,14 +11475,11 @@
         ],
         "variables": []
       },
-      "examples": [],
-      "releaseNotes": [],
       "docsPath": "docs/api/ui-components-api.md",
       "playgroundPath": null,
       "source": {
         "componentMetadata": "docs/metadata/components.json",
         "contractMetadata": "docs/metadata/component-contracts.json",
-        "componentDocumentation": null,
         "customElementsManifest": "packages/ui-elements/custom-elements.json"
       },
       "nativeDeclaration": {
@@ -11736,14 +11586,11 @@
         ],
         "variables": []
       },
-      "examples": [],
-      "releaseNotes": [],
       "docsPath": "docs/api/ui-components-api.md",
       "playgroundPath": null,
       "source": {
         "componentMetadata": "docs/metadata/components.json",
         "contractMetadata": "docs/metadata/component-contracts.json",
-        "componentDocumentation": null,
         "customElementsManifest": "packages/ui-elements/custom-elements.json"
       },
       "nativeDeclaration": {
@@ -11884,14 +11731,11 @@
         ],
         "variables": []
       },
-      "examples": [],
-      "releaseNotes": [],
       "docsPath": "docs/api/ui-components-api.md",
       "playgroundPath": null,
       "source": {
         "componentMetadata": "docs/metadata/components.json",
         "contractMetadata": "docs/metadata/component-contracts.json",
-        "componentDocumentation": null,
         "customElementsManifest": "packages/ui-elements/custom-elements.json"
       },
       "nativeDeclaration": {
@@ -12042,14 +11886,11 @@
         ],
         "variables": []
       },
-      "examples": [],
-      "releaseNotes": [],
       "docsPath": "docs/api/ui-components-api.md",
       "playgroundPath": "/components/actions/icon-button",
       "source": {
         "componentMetadata": "docs/metadata/components.json",
         "contractMetadata": "docs/metadata/component-contracts.json",
-        "componentDocumentation": null,
         "customElementsManifest": "packages/ui-elements/custom-elements.json"
       },
       "nativeDeclaration": {
@@ -12269,14 +12110,11 @@
         ],
         "variables": []
       },
-      "examples": [],
-      "releaseNotes": [],
       "docsPath": "docs/api/ui-components-api.md",
       "playgroundPath": null,
       "source": {
         "componentMetadata": "docs/metadata/components.json",
         "contractMetadata": "docs/metadata/component-contracts.json",
-        "componentDocumentation": null,
         "customElementsManifest": "packages/ui-elements/custom-elements.json"
       },
       "nativeDeclaration": {
@@ -12412,14 +12250,11 @@
         "classes": [],
         "variables": []
       },
-      "examples": [],
-      "releaseNotes": [],
       "docsPath": "docs/api/ui-components-api.md",
       "playgroundPath": null,
       "source": {
         "componentMetadata": "docs/metadata/components.json",
         "contractMetadata": null,
-        "componentDocumentation": null,
         "customElementsManifest": "packages/ui-elements/custom-elements.json"
       },
       "nativeDeclaration": {
@@ -12485,14 +12320,11 @@
         "classes": [],
         "variables": []
       },
-      "examples": [],
-      "releaseNotes": [],
       "docsPath": "docs/api/ui-components-api.md",
       "playgroundPath": null,
       "source": {
         "componentMetadata": "docs/metadata/components.json",
         "contractMetadata": null,
-        "componentDocumentation": null,
         "customElementsManifest": "packages/ui-elements/custom-elements.json"
       },
       "nativeDeclaration": {
@@ -12563,14 +12395,11 @@
         ],
         "variables": []
       },
-      "examples": [],
-      "releaseNotes": [],
       "docsPath": "docs/api/ui-components-api.md",
       "playgroundPath": "/components/actions/segmented-control",
       "source": {
         "componentMetadata": "docs/metadata/components.json",
         "contractMetadata": "docs/metadata/component-contracts.json",
-        "componentDocumentation": null,
         "customElementsManifest": "packages/ui-elements/custom-elements.json"
       },
       "nativeDeclaration": {
@@ -12731,14 +12560,11 @@
         ],
         "variables": []
       },
-      "examples": [],
-      "releaseNotes": [],
       "docsPath": "docs/api/ui-components-api.md",
       "playgroundPath": null,
       "source": {
         "componentMetadata": "docs/metadata/components.json",
         "contractMetadata": "docs/metadata/component-contracts.json",
-        "componentDocumentation": null,
         "customElementsManifest": "packages/ui-elements/custom-elements.json"
       },
       "nativeDeclaration": {
@@ -12857,14 +12683,11 @@
         "classes": [],
         "variables": []
       },
-      "examples": [],
-      "releaseNotes": [],
       "docsPath": "docs/api/ui-components-api.md",
       "playgroundPath": null,
       "source": {
         "componentMetadata": "docs/metadata/components.json",
         "contractMetadata": null,
-        "componentDocumentation": null,
         "customElementsManifest": null
       },
       "nativeDeclaration": null,
@@ -12926,14 +12749,11 @@
         "classes": [],
         "variables": []
       },
-      "examples": [],
-      "releaseNotes": [],
       "docsPath": "docs/api/ui-components-api.md",
       "playgroundPath": null,
       "source": {
         "componentMetadata": "docs/metadata/components.json",
         "contractMetadata": null,
-        "componentDocumentation": null,
         "customElementsManifest": "packages/ui-elements/custom-elements.json"
       },
       "nativeDeclaration": {
@@ -13008,14 +12828,11 @@
         ],
         "variables": []
       },
-      "examples": [],
-      "releaseNotes": [],
       "docsPath": "docs/api/ui-components-api.md",
       "playgroundPath": "/components/actions/toggle-button",
       "source": {
         "componentMetadata": "docs/metadata/components.json",
         "contractMetadata": "docs/metadata/component-contracts.json",
-        "componentDocumentation": null,
         "customElementsManifest": "packages/ui-elements/custom-elements.json"
       },
       "nativeDeclaration": {
@@ -13271,14 +13088,11 @@
         ],
         "variables": []
       },
-      "examples": [],
-      "releaseNotes": [],
       "docsPath": "docs/api/ui-components-api.md",
       "playgroundPath": "/components/actions/toggle-button-group",
       "source": {
         "componentMetadata": "docs/metadata/components.json",
         "contractMetadata": "docs/metadata/component-contracts.json",
-        "componentDocumentation": null,
         "customElementsManifest": "packages/ui-elements/custom-elements.json"
       },
       "nativeDeclaration": {
@@ -13448,14 +13262,11 @@
         ],
         "variables": []
       },
-      "examples": [],
-      "releaseNotes": [],
       "docsPath": "docs/api/ui-components-api.md",
       "playgroundPath": "/components/actions/toolbar-button",
       "source": {
         "componentMetadata": "docs/metadata/components.json",
         "contractMetadata": "docs/metadata/component-contracts.json",
-        "componentDocumentation": null,
         "customElementsManifest": "packages/ui-elements/custom-elements.json"
       },
       "nativeDeclaration": {
@@ -13718,14 +13529,11 @@
         "classes": [],
         "variables": []
       },
-      "examples": [],
-      "releaseNotes": [],
       "docsPath": "docs/api/ui-components-api.md",
       "playgroundPath": null,
       "source": {
         "componentMetadata": "docs/metadata/components.json",
         "contractMetadata": null,
-        "componentDocumentation": null,
         "customElementsManifest": null
       },
       "nativeDeclaration": null,

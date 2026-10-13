@@ -24,8 +24,6 @@
   "knownLimitations": [
     "Avoid inside tiny cards, dialogs, or embedded widgets where a full page landmark would be excessive."
   ],
-  "examples": [],
-  "releaseNotes": [],
   "styling": {
     "classes": [
       "vf-page"
@@ -86,7 +84,6 @@
   "source": {
     "componentMetadata": "docs/metadata/components.json",
     "contractMetadata": "docs/metadata/component-contracts.json",
-    "componentDocumentation": null,
     "customElementsManifest": "packages/ui-elements/custom-elements.json"
   }
 }

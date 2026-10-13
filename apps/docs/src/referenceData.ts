@@ -112,8 +112,8 @@ export type ComponentReferenceRecord = {
   guidance: ReferenceGuidance;
   accessibilityNotes: string;
   knownLimitations: string[];
-  examples: ReferenceComponentExample[];
-  releaseNotes: ReferenceReleaseNote[];
+  examples?: ReferenceComponentExample[];
+  releaseNotes?: ReferenceReleaseNote[];
   styling: {
     classes: string[];
     variables: string[];

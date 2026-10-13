@@ -30,8 +30,6 @@
   "knownLimitations": [
     "Avoid for small stable sets (Select), unconstrained text (TextInput), page filtering (SearchInput), or multiple values."
   ],
-  "examples": [],
-  "releaseNotes": [],
   "styling": {
     "classes": [
       "vf-autocomplete",
@@ -212,7 +210,6 @@
   "source": {
     "componentMetadata": "docs/metadata/components.json",
     "contractMetadata": "docs/metadata/component-contracts.json",
-    "componentDocumentation": null,
     "customElementsManifest": "packages/ui-elements/custom-elements.json"
   }
 }

@@ -23,8 +23,6 @@
   "knownLimitations": [
     "Avoid for required error text; use ValidationMessage or InlineMessage."
   ],
-  "examples": [],
-  "releaseNotes": [],
   "styling": {
     "classes": [
       "vf-caption"
@@ -79,7 +77,6 @@
   "source": {
     "componentMetadata": "docs/metadata/components.json",
     "contractMetadata": "docs/metadata/component-contracts.json",
-    "componentDocumentation": null,
     "customElementsManifest": "packages/ui-elements/custom-elements.json"
   }
 }

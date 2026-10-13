@@ -695,7 +695,8 @@ function ComponentDetail({
     component.guidance.relatedComponents.length > 0 ||
     component.knownLimitations.length > 0 ||
     relatedPatterns.length > 0;
-  const showReleaseNotes = component.releaseNotes.length > 0;
+  const releaseNotes = component.releaseNotes ?? [];
+  const showReleaseNotes = releaseNotes.length > 0;
   const framework = referenceModel.frameworks.find(
     (candidate) => candidate.id === frameworkId,
   );
@@ -748,7 +749,7 @@ function ComponentDetail({
           </div>
           <ReferenceComponentSpecimen
             componentId={component.id}
-            examples={component.examples}
+            examples={component.examples ?? []}
             frameworkId={frameworkId}
             relatedPatterns={relatedPatterns.map((pattern) => pattern.id)}
           />
@@ -1000,7 +1001,7 @@ function ComponentDetail({
               Release notes
             </Heading>
             <div className="vf-docs-release-notes">
-              {component.releaseNotes.map((note) => (
+              {releaseNotes.map((note) => (
                 <article key={`${note.version}-${note.summary}`}>
                   <Heading level={4} size="sm">
                     {note.version}

@@ -23,8 +23,6 @@
   "knownLimitations": [
     "Avoid as a generic layout table or simple key-value display."
   ],
-  "examples": [],
-  "releaseNotes": [],
   "styling": {
     "classes": [
       "udg"
@@ -60,7 +58,6 @@
   "source": {
     "componentMetadata": "docs/metadata/components.json",
     "contractMetadata": null,
-    "componentDocumentation": null,
     "customElementsManifest": null
   }
 }
