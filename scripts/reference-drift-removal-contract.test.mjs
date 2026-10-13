@@ -81,18 +81,24 @@ test("Docs keeps verified examples without duplicate Playground wiring", () => {
 
 test("Docs specimen registry cannot expand", () => {
   const ownershipPolicy = read("docs/engineering/documentation-ownership.md");
-  const specimenSource = read("apps/docs/src/ReferenceComponentSpecimen.tsx");
+  const specimenSource = read(
+    "apps/docs/src/LegacyReferenceComponentSpecimen.tsx",
+  );
+  const rendererSource = read("apps/docs/src/ReferenceComponentSpecimen.tsx");
+  const previewProjection = json(
+    "docs/generated/component-documentation-previews.json",
+  );
 
   assert.match(ownershipPolicy, /authored with the capability that owns it/u);
   assert.match(
     ownershipPolicy,
     /new component-specific entries must not be added/u,
   );
+  assert.match(rendererSource, /component-documentation-previews\.json\?raw/u);
 
   const legacySpecimenIds = new Set([
     "alert",
     "badge",
-    "button",
     "button-group",
     "card",
     "checkbox",
@@ -125,7 +131,7 @@ test("Docs specimen registry cannot expand", () => {
   const dispatchPattern =
     /const specimenRenderers:[\s\S]*?= \{([\s\S]*?)\n\};/u;
   const dispatchMatch = specimenSource.match(dispatchPattern);
-  assert(dispatchMatch, "Reference specimen dispatch must remain detectable");
+  assert(dispatchMatch, "Legacy specimen dispatch must remain detectable");
 
   const entryPattern = /^\s{2}(?:"([^"]+)"|([a-z][a-z0-9-]*)):/gmu;
   const ids = [...dispatchMatch[1].matchAll(entryPattern)]
@@ -136,6 +142,14 @@ test("Docs specimen registry cannot expand", () => {
     assert(
       legacySpecimenIds.has(id),
       `Docs-local component specimen ${id} is new component-specific truth.`,
+    );
+  }
+
+  for (const component of previewProjection.components) {
+    assert.equal(
+      ids.includes(component.componentId),
+      false,
+      `${component.componentId} must stay out of the legacy specimen registry once its owned preview is generated.`,
     );
   }
 });
