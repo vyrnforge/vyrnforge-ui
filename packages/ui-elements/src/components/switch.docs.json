@@ -15,17 +15,13 @@
   "limitations": [
     "Avoid for multi-step confirmation or non-immediate choices."
   ],
-  "relatedComponents": [
-    "Checkbox"
-  ],
+  "relatedComponents": ["Checkbox"],
   "accessibility": {
     "notes": "Uses role='switch' and aria-checked for controlled checked state.",
     "evidenceRefs": []
   },
   "theming": {
-    "classes": [
-      "vf-switch"
-    ],
+    "classes": ["vf-switch"],
     "variables": []
   },
   "examples": [],
