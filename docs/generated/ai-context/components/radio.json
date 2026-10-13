@@ -27,6 +27,8 @@
   "knownLimitations": [
     "Avoid for binary settings; use Checkbox or Switch."
   ],
+  "examples": [],
+  "releaseNotes": [],
   "styling": {
     "classes": [
       "vf-radio",
@@ -155,6 +157,7 @@
   "source": {
     "componentMetadata": "docs/metadata/components.json",
     "contractMetadata": "docs/metadata/component-contracts.json",
+    "componentDocumentation": "packages/ui-elements/src/components/radio.docs.json",
     "customElementsManifest": "packages/ui-elements/custom-elements.json"
   }
 }

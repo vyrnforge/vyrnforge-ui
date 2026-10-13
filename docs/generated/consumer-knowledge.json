@@ -10,11 +10,16 @@
     "packages/ui-elements/custom-elements.json",
     "packages/ui-elements/src/components/button-group.docs.json",
     "packages/ui-elements/src/components/button.docs.json",
+    "packages/ui-elements/src/components/checkbox.docs.json",
     "packages/ui-elements/src/components/date-input.docs.json",
     "packages/ui-elements/src/components/datetime-input.docs.json",
     "packages/ui-elements/src/components/icon-button.docs.json",
     "packages/ui-elements/src/components/number-input.docs.json",
+    "packages/ui-elements/src/components/radio-group.docs.json",
+    "packages/ui-elements/src/components/radio.docs.json",
     "packages/ui-elements/src/components/search-input.docs.json",
+    "packages/ui-elements/src/components/select.docs.json",
+    "packages/ui-elements/src/components/switch.docs.json",
     "packages/ui-elements/src/components/text-input.docs.json",
     "packages/ui-elements/src/components/textarea.docs.json",
     "packages/ui-elements/src/components/toolbar-button.docs.json"
@@ -3850,11 +3855,14 @@
         ],
         "variables": []
       },
+      "examples": [],
+      "releaseNotes": [],
       "docsPath": "docs/api/ui-components-api.md",
       "playgroundPath": "/components/forms/checkbox",
       "source": {
         "componentMetadata": "docs/metadata/components.json",
         "contractMetadata": "docs/metadata/component-contracts.json",
+        "componentDocumentation": "packages/ui-elements/src/components/checkbox.docs.json",
         "customElementsManifest": "packages/ui-elements/custom-elements.json"
       },
       "nativeDeclaration": {
@@ -5797,11 +5805,14 @@
         ],
         "variables": []
       },
+      "examples": [],
+      "releaseNotes": [],
       "docsPath": "docs/api/ui-components-api.md",
       "playgroundPath": "/components/forms/radio",
       "source": {
         "componentMetadata": "docs/metadata/components.json",
         "contractMetadata": "docs/metadata/component-contracts.json",
+        "componentDocumentation": "packages/ui-elements/src/components/radio.docs.json",
         "customElementsManifest": "packages/ui-elements/custom-elements.json"
       },
       "nativeDeclaration": {
@@ -6104,11 +6115,14 @@
         ],
         "variables": []
       },
+      "examples": [],
+      "releaseNotes": [],
       "docsPath": "docs/api/ui-components-api.md",
       "playgroundPath": "/components/forms/radio-group",
       "source": {
         "componentMetadata": "docs/metadata/components.json",
         "contractMetadata": "docs/metadata/component-contracts.json",
+        "componentDocumentation": "packages/ui-elements/src/components/radio-group.docs.json",
         "customElementsManifest": "packages/ui-elements/custom-elements.json"
       },
       "nativeDeclaration": {
@@ -6891,11 +6905,14 @@
         ],
         "variables": []
       },
+      "examples": [],
+      "releaseNotes": [],
       "docsPath": "docs/api/ui-components-api.md",
       "playgroundPath": "/components/forms/select",
       "source": {
         "componentMetadata": "docs/metadata/components.json",
         "contractMetadata": "docs/metadata/component-contracts.json",
+        "componentDocumentation": "packages/ui-elements/src/components/select.docs.json",
         "customElementsManifest": "packages/ui-elements/custom-elements.json"
       },
       "nativeDeclaration": {
@@ -7473,11 +7490,14 @@
         ],
         "variables": []
       },
+      "examples": [],
+      "releaseNotes": [],
       "docsPath": "docs/api/ui-components-api.md",
       "playgroundPath": "/components/forms/switch",
       "source": {
         "componentMetadata": "docs/metadata/components.json",
         "contractMetadata": "docs/metadata/component-contracts.json",
+        "componentDocumentation": "packages/ui-elements/src/components/switch.docs.json",
         "customElementsManifest": "packages/ui-elements/custom-elements.json"
       },
       "nativeDeclaration": {
