@@ -1,7 +1,7 @@
 {
   "name": "@vyrnforge/ui-data-grid",
   "version": "0.1.0-alpha.2",
-  "description": "React enterprise data-management grid for VyrnForge UI.",
+  "description": "Current React-alpha implementation of VyrnForge's optional enterprise Data Grid module.",
   "license": "SEE LICENSE IN LICENSE",
   "type": "module",
   "main": "./dist/index.cjs",
