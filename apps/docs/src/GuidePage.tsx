@@ -1,4 +1,11 @@
-import { Heading, Text } from "@vyrnforge/ui-components";
+import {
+  Button,
+  Card,
+  Heading,
+  Section,
+  Stack,
+  Text,
+} from "@vyrnforge/ui-components";
 import { MarkdownView } from "./MarkdownView";
 import type { DocsRoute } from "./referenceRoutes";
 
@@ -56,63 +63,53 @@ function OverviewGuide({
   onRouteChange,
 }: Pick<GuidePageProps, "onRouteChange">) {
   return (
-    <div className="vf-docs-landing">
-      <section
-        aria-labelledby="vf-guide-overview-start"
-        className="vf-docs-content-section"
+    <Stack className="vf-docs-landing" gap="xl">
+      <Section
+        description="Choose the next task using the same components and interaction patterns available to consuming applications."
+        title="Move from installation to production UI without changing concepts."
       >
-        <div className="vf-docs-content-section__heading">
-          <Text className="vf-docs-content-kicker" size="sm">
-            Start with the system
-          </Text>
-          <Heading id="vf-guide-overview-start" level={3} size="md">
-            Move from installation to production UI without changing concepts.
-          </Heading>
-        </div>
         <div className="vf-docs-link-grid">
           {overviewLinks.map((item) => (
-            <button
-              className="vf-docs-link-card"
-              key={item.routeId}
-              onClick={() => onRouteChange(item.routeId)}
-              type="button"
-            >
-              <span>
-                <strong>{item.label}</strong>
-                <small>{item.description}</small>
-              </span>
-              <span aria-hidden="true" className="vf-docs-link-card__arrow">
-                →
-              </span>
-            </button>
+            <Card key={item.routeId} padding="md" variant="bordered">
+              <Stack gap="sm">
+                <Heading level={3} size="sm">
+                  {item.label}
+                </Heading>
+                <Text tone="muted">{item.description}</Text>
+                <div>
+                  <Button
+                    onClick={() => onRouteChange(item.routeId)}
+                    rightSlot={<span aria-hidden="true">→</span>}
+                    size="sm"
+                    variant="subtle"
+                  >
+                    Open
+                  </Button>
+                </div>
+              </Stack>
+            </Card>
           ))}
         </div>
-      </section>
+      </Section>
 
-      <section
-        aria-labelledby="vf-guide-overview-principles"
-        className="vf-docs-content-section"
+      <Section
+        description="The same contracts, tokens, accessibility model, and terminology carry across each supported surface."
+        title="Shared foundation, first-class framework surfaces."
       >
-        <div className="vf-docs-content-section__heading">
-          <Text className="vf-docs-content-kicker" size="sm">
-            VyrnForge model
-          </Text>
-          <Heading id="vf-guide-overview-principles" level={3} size="md">
-            Shared foundation, first-class framework surfaces.
-          </Heading>
-        </div>
         <div className="vf-docs-principle-grid">
           {principles.map((principle) => (
-            <article className="vf-docs-principle" key={principle.title}>
-              <Heading level={4} size="sm">
-                {principle.title}
-              </Heading>
-              <Text tone="muted">{principle.description}</Text>
-            </article>
+            <Card key={principle.title} padding="md" variant="bordered">
+              <Stack gap="sm">
+                <Heading level={3} size="sm">
+                  {principle.title}
+                </Heading>
+                <Text tone="muted">{principle.description}</Text>
+              </Stack>
+            </Card>
           ))}
         </div>
-      </section>
-    </div>
+      </Section>
+    </Stack>
   );
 }
 
