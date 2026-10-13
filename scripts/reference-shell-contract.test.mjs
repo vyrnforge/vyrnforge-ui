@@ -346,12 +346,18 @@ test("package, token, and pattern discovery lead with architecture and live visu
     packageReference,
     /\bCard\b|PackageIndexCard|vf-docs-package-card/u,
   );
-  assert.doesNotMatch(discovery, /\bCard\b|vf-docs-discovery-row-card/u);
+  assert.match(discovery, /\bCard\b/u);
+  assert.match(discovery, /\bStack\b/u);
+  assert.doesNotMatch(
+    discovery,
+    /vf-docs-discovery-row-card|className="vf-docs-pattern-tile"/u,
+  );
   assert.match(packageReference, /PackageArchitecture/u);
   assert.match(packageReference, /vf-docs-package-architecture/u);
   assert.match(packageReference, /PackageIndexRow/u);
   assert.match(discovery, /ReferenceTokenGallery/u);
   assert.match(discovery, /ReferenceLiveExample/u);
+  assert.match(discovery, /vf-docs-pattern-grid/u);
   assert.match(tokenGallery, /vf-docs-token-swatch/u);
   assert.match(tokenGallery, /vf-docs-token-type-specimen/u);
   assert.match(tokenGallery, /vf-docs-token-density-specimen/u);
