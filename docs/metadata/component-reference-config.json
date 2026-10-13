@@ -34,8 +34,8 @@
   "documentationOwnership": {
     "requiredScope": "public-non-grid-beta",
     "migrationBaseline": {
-      "ownedComponentCount": 10,
-      "fallbackComponentCount": 61
+      "ownedComponentCount": 15,
+      "fallbackComponentCount": 56
     },
     "ownershipMustNotRegress": true,
     "changedPublicComponentRequiresOwnedDocumentation": true
