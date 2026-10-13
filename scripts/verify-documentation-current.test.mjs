@@ -252,7 +252,7 @@ test("rejects restoration of deprecated hand-maintained AI mirrors", () =>
 test("rejects retired Reference authorities in current guidance", () =>
   fixture(
     (root) => {
-      const relativePath = "docs/governance/00-documentation-governance.md";
+      const relativePath = "docs/governance/documentation.md";
       write(
         root,
         relativePath,
