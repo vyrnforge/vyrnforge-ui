@@ -114,17 +114,6 @@ function runWorkspaceScript(packageName, script) {
   runNpm(["--ignore-scripts", "run", script, "--workspace", packageName]);
 }
 
-const formattingTargets = [
-  "apps/docs/src/ReferenceComponentSpecimen.tsx",
-  "scripts/generate-component-documentation-previews.mjs",
-];
-runNpm(["exec", "prettier", "--", "--write", ...formattingTargets]);
-execFileSync("git", ["diff", "--", ...formattingTargets], {
-  cwd: root,
-  stdio: "inherit",
-});
-throw new Error("Temporary formatting diagnostic");
-
 const full = readBoolean("CI_SCOPE_FULL");
 const metadata = full || readBoolean("CI_SCOPE_METADATA");
 const fixtures = full || readBoolean("CI_SCOPE_FIXTURES");
