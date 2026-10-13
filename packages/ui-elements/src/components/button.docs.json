@@ -29,25 +29,62 @@
       "id": "variants",
       "title": "Variants",
       "intent": "Compare the supported visual intents before choosing emphasis for an action.",
-      "frameworks": ["native-html", "react", "angular", "vue"]
+      "frameworks": ["native-html", "react", "angular", "vue"],
+      "preview": {
+        "layout": "inline",
+        "items": [
+          { "text": "Primary", "props": { "variant": "primary" } },
+          { "text": "Default" },
+          { "text": "Subtle", "props": { "variant": "subtle" } },
+          { "text": "Ghost", "props": { "variant": "ghost" } },
+          { "text": "Danger", "props": { "variant": "danger" } }
+        ]
+      }
     },
     {
       "id": "sizes",
       "title": "Sizes",
       "intent": "Compare the supported size scale against the surrounding control density.",
-      "frameworks": ["native-html", "react", "angular", "vue"]
+      "frameworks": ["native-html", "react", "angular", "vue"],
+      "preview": {
+        "layout": "inline",
+        "items": [
+          { "text": "Small", "props": { "size": "sm" } },
+          { "text": "Medium", "props": { "size": "md" } },
+          { "text": "Large", "props": { "size": "lg" } }
+        ]
+      }
     },
     {
       "id": "states",
       "title": "Disabled and loading",
       "intent": "Show unavailable and in-progress actions using the shared disabled and loading behavior contract.",
-      "frameworks": ["native-html", "react", "angular", "vue"]
+      "frameworks": ["native-html", "react", "angular", "vue"],
+      "preview": {
+        "layout": "inline",
+        "items": [
+          { "text": "Disabled", "props": { "disabled": true } },
+          {
+            "text": "Saving",
+            "props": { "loading": true, "variant": "primary" }
+          }
+        ]
+      }
     },
     {
       "id": "width",
       "title": "Full width",
       "intent": "Show a prominent action expanding to the available inline space.",
-      "frameworks": ["native-html", "react", "angular", "vue"]
+      "frameworks": ["native-html", "react", "angular", "vue"],
+      "preview": {
+        "layout": "stack",
+        "items": [
+          {
+            "text": "Continue",
+            "props": { "fullWidth": true, "variant": "primary" }
+          }
+        ]
+      }
     },
     {
       "id": "content",
@@ -59,7 +96,17 @@
       "id": "form-actions",
       "title": "Form actions",
       "intent": "Use explicit submit and reset button types when Button participates in a form workflow.",
-      "frameworks": ["native-html", "react", "angular", "vue"]
+      "frameworks": ["native-html", "react", "angular", "vue"],
+      "preview": {
+        "layout": "inline",
+        "items": [
+          {
+            "text": "Save changes",
+            "props": { "type": "submit", "value": "save", "variant": "primary" }
+          },
+          { "text": "Reset", "props": { "type": "reset" } }
+        ]
+      }
     }
   ],
   "releaseNotes": []
