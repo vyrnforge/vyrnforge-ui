@@ -145,7 +145,7 @@
   overflow-x: hidden;
 }
 
-@media (max-width: 1120px) {
+@media (max-width: 1280px) {
   .vf-docs-app-shell__header-inner {
     grid-template-columns: auto minmax(0, 1fr);
   }
