@@ -1,8 +1,11 @@
 import {
   Badge,
   CodeText,
+  DescriptionList,
   EmptyState,
   Heading,
+  Inline,
+  Stack,
   Text,
 } from "@vyrnforge/ui-components";
 
@@ -29,30 +32,30 @@ function PackageFacts({
   packageInfo: PackageReferenceRecord;
 }) {
   return (
-    <div className="vf-docs-contract-details">
-      <div className="vf-docs-contract-field">
-        <strong>Runtime</strong>
-        <span>{packageInfo.runtime ?? "Not specified"}</span>
-      </div>
-      <div className="vf-docs-contract-field">
-        <strong>Release track</strong>
-        <span>{packageInfo.releaseTrack ?? "Not specified"}</span>
-      </div>
-      <div className="vf-docs-contract-field">
-        <strong>CSS import</strong>
-        <span>{packageInfo.cssImport ?? "Not applicable"}</span>
-      </div>
-      <div className="vf-docs-contract-field">
-        <strong>API documentation</strong>
-        <span>{packageInfo.apiDoc}</span>
-      </div>
-    </div>
+    <DescriptionList>
+      <dt>Depends on</dt>
+      <dd>
+        {packageInfo.dependsOn.length > 0
+          ? packageInfo.dependsOn.join(" → ")
+          : "Foundation package"}
+      </dd>
+      <dt>Consumer role</dt>
+      <dd>{packageInfo.owns.slice(0, 2).join(" · ")}</dd>
+      <dt>Runtime</dt>
+      <dd>{packageInfo.runtime ?? "Not specified"}</dd>
+      <dt>Release track</dt>
+      <dd>{packageInfo.releaseTrack ?? "Not specified"}</dd>
+      <dt>CSS import</dt>
+      <dd>{packageInfo.cssImport ?? "Not applicable"}</dd>
+      <dt>API documentation</dt>
+      <dd>{packageInfo.apiDoc}</dd>
+    </DescriptionList>
   );
 }
 
 function StringList({ label, values }: { label: string; values: string[] }) {
   return (
-    <div>
+    <Stack gap="sm">
       <Heading level={4} size="sm">
         {label}
       </Heading>
@@ -67,7 +70,7 @@ function StringList({ label, values }: { label: string; values: string[] }) {
           None
         </Text>
       )}
-    </div>
+    </Stack>
   );
 }
 
@@ -78,26 +81,32 @@ function PackageIndexRow({
 }) {
   return (
     <article className="vf-docs-package-entry">
-      <div className="vf-docs-package-entry__title">
-        <Heading level={3} size="sm">
-          <a href={packageHref(packageInfo.name)}>{packageInfo.name}</a>
-        </Heading>
-        <Badge
-          size="sm"
-          tone="subtle"
-          variant={packageInfo.status === "current" ? "success" : "info"}
-        >
-          {packageInfo.status}
-        </Badge>
-      </div>
-      <Text className="vf-docs-package-entry__purpose" tone="muted">
-        {packageInfo.purpose}
-      </Text>
-      <div className="vf-docs-package-entry__meta">
-        <span>{packageInfo.runtime ?? "Runtime neutral"}</span>
-        <span>{packageInfo.releaseTrack ?? "No release track"}</span>
-        {packageInfo.cssImport ? <code>{packageInfo.cssImport}</code> : null}
-      </div>
+      <Stack gap="sm">
+        <Inline align="start" justify="between" wrap>
+          <Heading level={3} size="sm">
+            <a href={packageHref(packageInfo.name)}>{packageInfo.name}</a>
+          </Heading>
+          <Badge
+            size="sm"
+            tone="subtle"
+            variant={packageInfo.status === "current" ? "success" : "info"}
+          >
+            {packageInfo.status}
+          </Badge>
+        </Inline>
+        <Text tone="muted">{packageInfo.purpose}</Text>
+        <Inline align="center" gap="sm" wrap>
+          <Text as="span" size="sm" tone="muted">
+            {packageInfo.runtime ?? "Runtime neutral"}
+          </Text>
+          <Text as="span" size="sm" tone="muted">
+            {packageInfo.releaseTrack ?? "No release track"}
+          </Text>
+          {packageInfo.cssImport ? (
+            <CodeText>{packageInfo.cssImport}</CodeText>
+          ) : null}
+        </Inline>
+      </Stack>
     </article>
   );
 }
@@ -226,69 +235,61 @@ function PackageDetail({
   return (
     <div className="vf-docs-reference">
       <section className="vf-docs-reference__section">
-        <Text size="sm">
-          <a href="#/package-reference">← Package reference</a>
-        </Text>
-        <div className="vf-docs-catalog-row__header">
+        <Stack gap="md">
+          <Text size="sm">
+            <a href="#/package-reference">← Package reference</a>
+          </Text>
+          <Inline align="start" justify="between" wrap>
+            <Heading level={3} size="md">
+              {packageInfo.name}
+            </Heading>
+            <Badge
+              tone="subtle"
+              variant={packageInfo.status === "current" ? "success" : "info"}
+            >
+              {packageInfo.status}
+            </Badge>
+          </Inline>
+          <Text>{packageInfo.purpose}</Text>
+          <Text tone="muted">{packageInfo.notes}</Text>
+          <PackageFacts packageInfo={packageInfo} />
+        </Stack>
+      </section>
+
+      <section className="vf-docs-reference__section">
+        <Stack gap="md">
           <Heading level={3} size="md">
-            {packageInfo.name}
+            Ownership boundaries
           </Heading>
-          <Badge
-            tone="subtle"
-            variant={packageInfo.status === "current" ? "success" : "info"}
-          >
-            {packageInfo.status}
-          </Badge>
-        </div>
-        <Text>{packageInfo.purpose}</Text>
-        <Text tone="muted">{packageInfo.notes}</Text>
-        <div className="vf-docs-package-detail__position">
-          <div>
-            <strong>Depends on</strong>
-            <span>
-              {packageInfo.dependsOn.length > 0
-                ? packageInfo.dependsOn.join(" → ")
-                : "Foundation package"}
-            </span>
-          </div>
-          <div>
-            <strong>Consumer role</strong>
-            <span>{packageInfo.owns.slice(0, 2).join(" · ")}</span>
-          </div>
-        </div>
-        <PackageFacts packageInfo={packageInfo} />
+          <StringList label="Owns" values={packageInfo.owns} />
+          <StringList label="Does not own" values={packageInfo.doesNotOwn} />
+        </Stack>
       </section>
 
       <section className="vf-docs-reference__section">
-        <Heading level={3} size="md">
-          Ownership boundaries
-        </Heading>
-        <StringList label="Owns" values={packageInfo.owns} />
-        <StringList label="Does not own" values={packageInfo.doesNotOwn} />
+        <Stack gap="md">
+          <Heading level={3} size="md">
+            Dependencies
+          </Heading>
+          <StringList label="Depends on" values={packageInfo.dependsOn} />
+          <StringList
+            label="Must not depend on"
+            values={packageInfo.mustNotDependOn}
+          />
+        </Stack>
       </section>
 
       <section className="vf-docs-reference__section">
-        <Heading level={3} size="md">
-          Dependencies
-        </Heading>
-        <StringList label="Depends on" values={packageInfo.dependsOn} />
-        <StringList
-          label="Must not depend on"
-          values={packageInfo.mustNotDependOn}
-        />
-      </section>
-
-      <section className="vf-docs-reference__section">
-        <Heading level={3} size="md">
-          Public entry points
-        </Heading>
-        <div className="vf-docs-dependency-list">
-          {packageInfo.publicEntryPoints.map((entryPoint) => (
-            <CodeText className="vf-docs-dependency-item" key={entryPoint}>
-              {entryPoint}
-            </CodeText>
-          ))}
-        </div>
+        <Stack gap="md">
+          <Heading level={3} size="md">
+            Public entry points
+          </Heading>
+          <Inline align="center" gap="sm" wrap>
+            {packageInfo.publicEntryPoints.map((entryPoint) => (
+              <CodeText key={entryPoint}>{entryPoint}</CodeText>
+            ))}
+          </Inline>
+        </Stack>
       </section>
     </div>
   );
