@@ -1,6 +1,5 @@
 import {
   Badge,
-  Card,
   CodeText,
   DescriptionList,
   EmptyState,
@@ -81,35 +80,33 @@ function PackageIndexRow({
   packageInfo: PackageReferenceRecord;
 }) {
   return (
-    <article>
-      <Card padding="md" variant="bordered">
-        <Stack gap="sm">
-          <Inline align="start" justify="between" wrap>
-            <Heading level={3} size="sm">
-              <a href={packageHref(packageInfo.name)}>{packageInfo.name}</a>
-            </Heading>
-            <Badge
-              size="sm"
-              tone="subtle"
-              variant={packageInfo.status === "current" ? "success" : "info"}
-            >
-              {packageInfo.status}
-            </Badge>
-          </Inline>
-          <Text tone="muted">{packageInfo.purpose}</Text>
-          <Inline align="center" gap="sm" wrap>
-            <Text as="span" size="sm" tone="muted">
-              {packageInfo.runtime ?? "Runtime neutral"}
-            </Text>
-            <Text as="span" size="sm" tone="muted">
-              {packageInfo.releaseTrack ?? "No release track"}
-            </Text>
-            {packageInfo.cssImport ? (
-              <CodeText>{packageInfo.cssImport}</CodeText>
-            ) : null}
-          </Inline>
-        </Stack>
-      </Card>
+    <article className="vf-docs-package-entry">
+      <Stack gap="sm">
+        <Inline align="start" justify="between" wrap>
+          <Heading level={3} size="sm">
+            <a href={packageHref(packageInfo.name)}>{packageInfo.name}</a>
+          </Heading>
+          <Badge
+            size="sm"
+            tone="subtle"
+            variant={packageInfo.status === "current" ? "success" : "info"}
+          >
+            {packageInfo.status}
+          </Badge>
+        </Inline>
+        <Text tone="muted">{packageInfo.purpose}</Text>
+        <Inline align="center" gap="sm" wrap>
+          <Text as="span" size="sm" tone="muted">
+            {packageInfo.runtime ?? "Runtime neutral"}
+          </Text>
+          <Text as="span" size="sm" tone="muted">
+            {packageInfo.releaseTrack ?? "No release track"}
+          </Text>
+          {packageInfo.cssImport ? (
+            <CodeText>{packageInfo.cssImport}</CodeText>
+          ) : null}
+        </Inline>
+      </Stack>
     </article>
   );
 }
