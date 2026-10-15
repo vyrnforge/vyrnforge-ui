@@ -21,15 +21,18 @@ jobs:
           node-version: '24.18.0'
           cache: npm
       - run: npm ci --ignore-scripts
+      - name: Move token page source ownership to ui-core
+        run: |
+          node --input-type=module -e "import { readFileSync, writeFileSync } from 'node:fs'; const path='docs/metadata/documentation-pages.json'; const source=readFileSync(path,'utf8'); const next=source.replace('\\\"sourcePath\\\": \\\"docs/metadata/design-tokens.json\\\"','\\\"sourcePath\\\": \\\"packages/ui-core/src/theme/tokenContract.ts\\\"'); if(next===source) throw new Error('token-reference sourcePath replacement did not apply'); writeFileSync(path,next);"
       - run: node scripts/generate-reference-model.mjs
       - run: node scripts/generate-documentation-registry.mjs
-      - name: Commit generated Reference artifacts
+      - name: Commit token authority artifacts
         run: |
-          if git diff --quiet -- docs/generated/reference-model.json docs/generated/documentation-registry.json; then
+          if git diff --quiet -- docs/metadata/documentation-pages.json docs/generated/reference-model.json docs/generated/documentation-registry.json; then
             exit 0
           fi
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add docs/generated/reference-model.json docs/generated/documentation-registry.json
+          git add docs/metadata/documentation-pages.json docs/generated/reference-model.json docs/generated/documentation-registry.json
           git commit -m "chore(reference): regenerate token authority artifacts"
           git push origin HEAD:fix/token-contract-standardization
