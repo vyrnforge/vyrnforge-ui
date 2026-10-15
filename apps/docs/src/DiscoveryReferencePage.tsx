@@ -47,23 +47,21 @@ function TokenReference({ id }: { id?: string | null }) {
             Canonical source: {category.sourceFile}
           </Text>
           <DescriptionList>
-            {category.tokens.map((token) => (
-              <div key={token.name}>
-                <dt>
-                  <CodeText>{token.name}</CodeText>
-                </dt>
-                <dd>
-                  <Stack gap="xs">
-                    <Text size="sm">{token.purpose}</Text>
-                    {token.themeScoped ? (
-                      <Badge size="sm" tone="subtle" variant="info">
-                        Theme scoped
-                      </Badge>
-                    ) : null}
-                  </Stack>
-                </dd>
-              </div>
-            ))}
+            {category.tokens.flatMap((token) => [
+              <dt key={`${token.name}-term`}>
+                <CodeText>{token.name}</CodeText>
+              </dt>,
+              <dd key={`${token.name}-description`}>
+                <Stack gap="xs">
+                  <Text size="sm">{token.purpose}</Text>
+                  {token.themeScoped ? (
+                    <Badge size="sm" tone="subtle" variant="info">
+                      Theme scoped
+                    </Badge>
+                  ) : null}
+                </Stack>
+              </dd>,
+            ])}
           </DescriptionList>
         </section>
       </div>
