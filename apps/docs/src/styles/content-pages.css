@@ -11,6 +11,10 @@
   box-shadow: none;
 }
 
+.vf-reference-page__hero::after {
+  display: none;
+}
+
 .vf-reference-page__hero-layout {
   display: grid;
   grid-template-columns: minmax(0, 1fr);
@@ -53,6 +57,7 @@
 }
 
 .vf-reference-page--family-landing .vf-reference-page__hero::after {
+  display: block;
   position: absolute;
   width: min(46vw, 520px);
   aspect-ratio: 1;
@@ -143,6 +148,29 @@
   font-weight: var(--vf-font-weight-bold, 700);
   letter-spacing: 0.08em;
   text-transform: uppercase;
+}
+
+.vf-docs-component-showcase__heading > div {
+  min-width: 0;
+}
+
+.vf-docs-component-showcase__links {
+  flex: 0 0 auto;
+  min-width: 7rem;
+  max-width: 10rem;
+  justify-content: flex-start;
+}
+
+.vf-docs-component-showcase__links a {
+  white-space: nowrap;
+  overflow-wrap: normal;
+  word-break: normal;
+}
+
+.vf-docs-catalog__stats dt,
+.vf-docs-example-reference__facts dt {
+  overflow-wrap: normal;
+  word-break: normal;
 }
 
 .vf-docs-link-grid {
@@ -334,6 +362,13 @@
 
   .vf-docs-link-grid {
     grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 980px) {
+  .vf-docs-component-showcase__links {
+    min-width: 0;
+    max-width: none;
   }
 }
 

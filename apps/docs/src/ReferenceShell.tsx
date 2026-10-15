@@ -80,6 +80,18 @@ export function ReferenceShell({
         ),
       ];
 
+  const versionControlLabel = (version: DocsVersion) => {
+    const readiness = getDocumentationReadiness(version, framework.id);
+    const baseLabel =
+      version.id === "next"
+        ? `Next · ${version.version}`
+        : `${version.releaseLine} · ${version.version}`;
+
+    return isDocumentationReady(readiness)
+      ? baseLabel
+      : `${baseLabel} · ${readiness}`;
+  };
+
   const navigate = (routeId: string) => {
     onRouteChange(routeId);
   };
@@ -166,7 +178,7 @@ export function ReferenceShell({
         aria-label="Documentation version"
         onChange={(event) => handleVersionChange(event.currentTarget.value)}
         options={versionOptions.map((version) => ({
-          label: version.label,
+          label: versionControlLabel(version),
           value: version.id,
         }))}
         size="sm"
