@@ -16,11 +16,6 @@ jobs:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
         with:
           ref: fix/token-contract-standardization
-      - uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1
-        with:
-          node-version: '24.18.0'
-          cache: npm
-      - run: npm ci --ignore-scripts
       - name: Migrate remaining token Reference import
         run: |
           node --input-type=module <<'NODE'
@@ -32,8 +27,6 @@ jobs:
           if (!source.includes(oldValue)) throw new Error("stale token import was not found");
           writeFileSync(path, source.replace(oldValue, nextValue));
           NODE
-          npx prettier --write apps/docs/src/examples/data/referenceMetadata.ts
-          npm run build --workspace @vyrnforge/ui-docs
       - name: Commit migrated import
         run: |
           git config user.name "github-actions[bot]"
