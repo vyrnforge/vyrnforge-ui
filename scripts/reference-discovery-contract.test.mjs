@@ -45,15 +45,16 @@ test("Reference discovery stays derived from canonical VyrnForge sources", () =>
   const tokenDomain = model.domains.find((domain) => domain.id === "tokens");
   assert.equal(
     tokenDomain.recordSource.path,
-    "packages/ui-core/src/theme/tokenContract.ts",
+    "docs/generated/design-token-reference.json",
   );
-  assert.equal(
-    tokenDomain.recordSource.collection,
-    "vyrnForgeDesignTokenCategories",
-  );
+  assert.equal(tokenDomain.recordSource.collection, "categories");
   assert.equal(
     model.tokenData.authority,
     "packages/ui-core/src/theme/tokenContract.ts",
+  );
+  assert.equal(
+    model.tokenData.projection,
+    "docs/generated/design-token-reference.json",
   );
 
   assert(registry.pages.some((page) => page.id === "component-reference"));
@@ -80,9 +81,9 @@ test("Reference discovery stays derived from canonical VyrnForge sources", () =>
   assert(registry.relatedContentInputs.length === registry.pages.length);
 
   const adapter = read("apps/docs/src/discoveryData.ts");
-  assert.match(adapter, /@vyrnforge\/ui-core/u);
-  assert.match(adapter, /vyrnForgeDesignTokenCategories/u);
-  assert.doesNotMatch(adapter, /design-tokens\.json\?raw/u);
+  assert.match(adapter, /generated\/design-token-reference\.json\?raw/u);
+  assert.doesNotMatch(adapter, /metadata\/design-tokens\.json\?raw/u);
+  assert(!adapter.includes(`from "@vyrnforge/ui-core"`));
   assert.match(adapter, /patterns\.json\?raw/u);
 
   const routes = read("apps/docs/src/referenceRoutes.ts");

@@ -12,6 +12,7 @@
     "docs/generated/framework-api-reference.json",
     "docs/metadata/packages.json",
     "packages/ui-core/src/theme/tokenContract.ts",
+    "docs/generated/design-token-reference.json",
     "docs/metadata/patterns.json",
     "docs/metadata/executable-examples.json",
     "tests/consumers/manifest.json"
@@ -117,8 +118,8 @@
       "ownsFacts": true,
       "routeTemplate": "/tokens/{id}",
       "recordSource": {
-        "path": "packages/ui-core/src/theme/tokenContract.ts",
-        "collection": "vyrnForgeDesignTokenCategories",
+        "path": "docs/generated/design-token-reference.json",
+        "collection": "categories",
         "identityField": "id",
         "labelField": "id"
       }
@@ -256,6 +257,7 @@
   },
   "tokenData": {
     "authority": "packages/ui-core/src/theme/tokenContract.ts",
+    "projection": "docs/generated/design-token-reference.json",
     "runtimeStyles": [
       "packages/ui-core/src/styles/tokens.css",
       "packages/ui-core/src/styles/themes.css",
@@ -336,8 +338,8 @@
         "label": "Foundations",
         "routeTemplate": "/tokens/{id}",
         "recordSource": {
-          "path": "packages/ui-core/src/theme/tokenContract.ts",
-          "collection": "vyrnForgeDesignTokenCategories",
+          "path": "docs/generated/design-token-reference.json",
+          "collection": "categories",
           "identityField": "id",
           "labelField": "id"
         }

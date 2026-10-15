@@ -2273,8 +2273,8 @@
       "documentId": "token-reference",
       "routeTemplate": "/tokens/{id}",
       "recordSource": {
-        "path": "packages/ui-core/src/theme/tokenContract.ts",
-        "collection": "vyrnForgeDesignTokenCategories",
+        "path": "docs/generated/design-token-reference.json",
+        "collection": "categories",
         "identityField": "id",
         "labelField": "id"
       },

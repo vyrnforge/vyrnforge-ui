@@ -13,12 +13,18 @@ const repositoryRoot = path.resolve(
 );
 
 function read(root, relativePath) {
-  return readFileSync(path.join(root, relativePath), "utf8").replace(/\r\n?/gu, "\n");
+  return readFileSync(path.join(root, relativePath), "utf8").replace(
+    /\r\n?/gu,
+    "\n",
+  );
 }
 
 function customPropertyValue(source, token) {
   const escaped = token.replace(/[.*+?^${}()|[\]\\]/gu, "\\$&");
-  return new RegExp(`${escaped}\\s*:\\s*([^;]+);`, "u").exec(source)?.[1]?.trim() ?? null;
+  return (
+    new RegExp(`${escaped}\\s*:\\s*([^;]+);`, "u").exec(source)?.[1]?.trim() ??
+    null
+  );
 }
 
 function customPropertyNames(source) {
@@ -45,7 +51,10 @@ export async function loadDesignTokenInputs(root = repositoryRoot) {
     tokensCss: read(root, "packages/ui-core/src/styles/tokens.css"),
     themesCss: read(root, "packages/ui-core/src/styles/themes.css"),
     densityCss: read(root, "packages/ui-core/src/styles/density.css"),
-    accessibilityCss: read(root, "packages/ui-core/src/styles/accessibility.css"),
+    accessibilityCss: read(
+      root,
+      "packages/ui-core/src/styles/accessibility.css",
+    ),
   };
 }
 
@@ -68,7 +77,9 @@ export function verifyDesignTokenContract({
   }
   for (const name of semanticSet) {
     if (!declarations.has(name)) {
-      failures.push(`${name} is registered by ui-core but missing from tokens.css`);
+      failures.push(
+        `${name} is registered by ui-core but missing from tokens.css`,
+      );
     }
   }
   for (const name of declarations) {
@@ -90,7 +101,9 @@ export function verifyDesignTokenContract({
     reference.sourceOfTruth.canonical !== false ||
     reference.sourceOfTruth.generated !== true
   ) {
-    failures.push("Reference token data must be a generated projection of ui-core authority");
+    failures.push(
+      "Reference token data must be a generated projection of ui-core authority",
+    );
   }
 
   for (const theme of ["dark", "enterprise", "system"]) {
@@ -98,7 +111,13 @@ export function verifyDesignTokenContract({
       failures.push(`themes.css is missing [data-theme="${theme}"]`);
     }
   }
-  for (const density of ["compact", "balanced", "spacious", "standard", "comfortable"]) {
+  for (const density of [
+    "compact",
+    "balanced",
+    "spacious",
+    "standard",
+    "comfortable",
+  ]) {
     if (!densityCss.includes(`[data-density="${density}"]`)) {
       failures.push(`density.css is missing density '${density}'`);
     }

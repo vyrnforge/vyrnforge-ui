@@ -29,7 +29,8 @@ const requiredFixturePaths = [
   "docs/generated/consumer-knowledge.json",
   "docs/generated/framework-api-reference.json",
   "docs/metadata/packages.json",
-  "docs/metadata/design-tokens.json",
+  "docs/generated/design-token-reference.json",
+  "packages/ui-core/src/theme/tokenContract.ts",
   "docs/metadata/patterns.json",
   "docs/metadata/executable-examples.json",
   "tests/consumers/manifest.json",
@@ -118,7 +119,14 @@ test("binds framework examples to executable consumer identities", () => {
 
 test("keeps token data and deep-link semantics source-owned", () => {
   const model = buildReferenceModel();
-  assert.equal(model.tokenData.authority, "docs/metadata/design-tokens.json");
+  assert.equal(
+    model.tokenData.authority,
+    "packages/ui-core/src/theme/tokenContract.ts",
+  );
+  assert.equal(
+    model.tokenData.projection,
+    "docs/generated/design-token-reference.json",
+  );
   assert.equal(model.deepLinks.identity, "stable-id");
   assert.equal(model.deepLinks.stable, true);
   assert.deepEqual(model.deepLinks.preserveContext, ["framework", "version"]);

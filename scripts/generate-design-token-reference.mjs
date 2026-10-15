@@ -31,7 +31,8 @@ const categoryDefinitions = {
   },
   status: {
     task: "VF-3004",
-    purpose: "Success, warning, error, info, pending, and neutral feedback roles.",
+    purpose:
+      "Success, warning, error, info, pending, and neutral feedback roles.",
   },
   density: {
     task: "VF-3005",
@@ -40,7 +41,8 @@ const categoryDefinitions = {
   },
   typography: {
     task: "VF-3006",
-    purpose: "Display, title, label, body, caption, code, and numeric hierarchy.",
+    purpose:
+      "Display, title, label, body, caption, code, and numeric hierarchy.",
   },
   motion: {
     task: "VF-3007",
@@ -66,7 +68,8 @@ function quotedValues(source) {
 
 function extractStringArray(source, exportName) {
   const start = source.indexOf(`export const ${exportName}`);
-  if (start < 0) throw new Error(`Missing token contract export: ${exportName}`);
+  if (start < 0)
+    throw new Error(`Missing token contract export: ${exportName}`);
   const open = source.indexOf("[", start);
   const close = source.indexOf("] as const", open);
   if (open < 0 || close < 0) {
@@ -77,7 +80,8 @@ function extractStringArray(source, exportName) {
 
 function extractSemanticGroups(source) {
   const start = source.indexOf("export const vyrnForgeSemanticTokenGroups");
-  if (start < 0) throw new Error("Missing vyrnForgeSemanticTokenGroups export.");
+  if (start < 0)
+    throw new Error("Missing vyrnForgeSemanticTokenGroups export.");
   const open = source.indexOf("{", start);
   const close = source.indexOf("} as const satisfies", open);
   if (open < 0 || close < 0) {
@@ -86,7 +90,9 @@ function extractSemanticGroups(source) {
 
   const body = source.slice(open + 1, close);
   const groups = {};
-  for (const match of body.matchAll(/([a-z][a-z0-9-]*)\s*:\s*\[([\s\S]*?)\]\s*as const/gu)) {
+  for (const match of body.matchAll(
+    /([a-z][a-z0-9-]*)\s*:\s*\[([\s\S]*?)\]\s*as const/gu,
+  )) {
     groups[match[1]] = quotedValues(match[2]);
   }
   if (Object.keys(groups).length === 0) {
@@ -119,7 +125,9 @@ function primitiveGroups(tokensCss) {
   );
 }
 
-export async function buildDesignTokenReference({ root = repositoryRoot } = {}) {
+export async function buildDesignTokenReference({
+  root = repositoryRoot,
+} = {}) {
   const contractSource = read(root, TOKEN_CONTRACT_PATH);
   const semanticGroups = extractSemanticGroups(contractSource);
   const tokensCss = read(root, TOKEN_CSS_PATH);
@@ -128,7 +136,8 @@ export async function buildDesignTokenReference({ root = repositoryRoot } = {}) 
   );
   const categories = Object.entries(semanticGroups).map(([id, names]) => {
     const definition = categoryDefinitions[id];
-    if (!definition) throw new Error(`Missing token category definition: ${id}`);
+    if (!definition)
+      throw new Error(`Missing token category definition: ${id}`);
     return {
       id,
       task: definition.task,
@@ -161,7 +170,9 @@ export function serializeDesignTokenReference(reference) {
   return `${JSON.stringify(reference, null, 2)}\n`;
 }
 
-export async function writeDesignTokenReference({ root = repositoryRoot } = {}) {
+export async function writeDesignTokenReference({
+  root = repositoryRoot,
+} = {}) {
   const reference = await buildDesignTokenReference({ root });
   writeFileSync(
     path.join(root, DESIGN_TOKEN_REFERENCE_PATH),
@@ -171,7 +182,9 @@ export async function writeDesignTokenReference({ root = repositoryRoot } = {}) 
   return reference;
 }
 
-export async function verifyDesignTokenReference({ root = repositoryRoot } = {}) {
+export async function verifyDesignTokenReference({
+  root = repositoryRoot,
+} = {}) {
   const outputPath = path.join(root, DESIGN_TOKEN_REFERENCE_PATH);
   if (!existsSync(outputPath)) {
     throw new Error(

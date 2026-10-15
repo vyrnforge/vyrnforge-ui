@@ -37,7 +37,9 @@ test("missing semantic CSS declarations are rejected", async () => {
 
   assert(
     verifyDesignTokenContract(inputs).some((failure) =>
-      failure.includes("--vf-surface-page is registered by ui-core but missing"),
+      failure.includes(
+        "--vf-surface-page is registered by ui-core but missing",
+      ),
     ),
   );
 });
