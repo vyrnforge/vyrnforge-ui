@@ -1,6 +1,7 @@
 import { AdvancedModulePage } from "./AdvancedModulePage";
 import {
   Button,
+  Card,
   EmptyState,
   Heading,
   Inline,
@@ -253,7 +254,11 @@ export function DocsPage({
 
   const heroAside =
     family === "landing" || family === "reading" ? (
-      <div className="vf-docs-framework-context">
+      <Card
+        className="vf-docs-framework-context"
+        padding="md"
+        variant="bordered"
+      >
         <Text className="vf-docs-content-kicker" size="sm">
           {family === "landing" ? "Selected surface" : "Reading for"}
         </Text>
@@ -279,7 +284,7 @@ export function DocsPage({
             </Button>
           ))}
         </Inline>
-      </div>
+      </Card>
     ) : null;
 
   const localNavigation =
