@@ -215,7 +215,7 @@
       "renderer": "discovery-reference",
       "description": "Browse shared VyrnForge token categories and styling roles.",
       "releaseLine": "non-grid-beta",
-      "sourcePath": "docs/metadata/design-tokens.json",
+      "sourcePath": "packages/ui-core/src/theme/tokenContract.ts",
       "recordDomain": "tokens",
       "tags": ["tokens", "design-system"]
     },

@@ -6,34 +6,30 @@ import {
   verifyDesignTokenContract,
 } from "./verify-design-token-contract.mjs";
 
-function cloneInputs() {
-  const inputs = loadDesignTokenInputs();
-
-  return {
-    ...inputs,
-    contract: structuredClone(inputs.contract),
-  };
+async function cloneInputs() {
+  return structuredClone(await loadDesignTokenInputs());
 }
 
-test("the repository design token contract passes", () => {
-  assert.deepEqual(verifyDesignTokenContract(cloneInputs()), []);
+test("the repository design token contract passes", async () => {
+  assert.deepEqual(verifyDesignTokenContract(await cloneInputs()), []);
 });
 
-test("duplicate canonical token names are rejected", () => {
-  const inputs = cloneInputs();
-  inputs.contract.categories[1].tokens.push(
-    structuredClone(inputs.contract.categories[0].tokens[0]),
+test("unclassified CSS tokens are rejected", async () => {
+  const inputs = await cloneInputs();
+  inputs.tokensCss = inputs.tokensCss.replace(
+    ":root {",
+    ":root {\n  --vf-unregistered-test-token: 1px;",
   );
 
   assert(
     verifyDesignTokenContract(inputs).some((failure) =>
-      failure.includes("duplicate canonical token"),
+      failure.includes("--vf-unregistered-test-token is not classified"),
     ),
   );
 });
 
-test("missing CSS declarations are rejected", () => {
-  const inputs = cloneInputs();
+test("missing semantic CSS declarations are rejected", async () => {
+  const inputs = await cloneInputs();
   inputs.tokensCss = inputs.tokensCss.replace(
     /--vf-surface-page\s*:[^;]+;/u,
     "",
@@ -41,27 +37,39 @@ test("missing CSS declarations are rejected", () => {
 
   assert(
     verifyDesignTokenContract(inputs).some((failure) =>
-      failure.includes("--vf-surface-page is missing"),
+      failure.includes(
+        "--vf-surface-page is registered by ui-core but missing",
+      ),
     ),
   );
 });
 
-test("incomplete theme presets are rejected", () => {
-  const inputs = cloneInputs();
-  inputs.themePresetSource = inputs.themePresetSource.replace(
-    /"--vf-text-primary"\s*:[^,]+,\n/u,
-    "",
+test("duplicate semantic token names are rejected", async () => {
+  const inputs = await cloneInputs();
+  inputs.reference.categories[1].tokens.push(
+    structuredClone(inputs.reference.categories[0].tokens[0]),
   );
 
   assert(
     verifyDesignTokenContract(inputs).some((failure) =>
-      failure.includes("is missing theme-scoped token --vf-text-primary"),
+      failure.includes("semantic token registry contains duplicate"),
     ),
   );
 });
 
-test("density aliases must remain represented in CSS", () => {
-  const inputs = cloneInputs();
+test("generated Reference token ownership cannot drift", async () => {
+  const inputs = await cloneInputs();
+  inputs.reference.sourceOfTruth.authority = "docs/metadata/design-tokens.json";
+
+  assert(
+    verifyDesignTokenContract(inputs).some((failure) =>
+      failure.includes("generated projection of ui-core authority"),
+    ),
+  );
+});
+
+test("density aliases must remain represented in CSS", async () => {
+  const inputs = await cloneInputs();
   inputs.densityCss = inputs.densityCss.replaceAll(
     '[data-density="standard"]',
     '[data-density="removed-standard"]',
@@ -69,38 +77,27 @@ test("density aliases must remain represented in CSS", () => {
 
   assert(
     verifyDesignTokenContract(inputs).some((failure) =>
-      failure.includes("density alias 'standard'"),
+      failure.includes("density.css is missing density 'standard'"),
     ),
   );
 });
 
-test("compatibility bridges cannot silently break", () => {
-  const inputs = cloneInputs();
+test("compatibility aliases cannot silently break", async () => {
+  const inputs = await cloneInputs();
   inputs.tokensCss = inputs.tokensCss.replace(
-    "--vf-surface-page: var(--vf-bg);",
-    "--vf-surface-page: #ffffff;",
+    "--vf-z-dialog: var(--vf-layer-modal);",
+    "--vf-z-dialog: 80;",
   );
 
   assert(
     verifyDesignTokenContract(inputs).some((failure) =>
-      failure.includes("must preserve compatibility through --vf-bg"),
+      failure.includes("--vf-z-dialog must alias --vf-layer-modal"),
     ),
   );
 });
 
-test("layer levels must remain unique and increasing", () => {
-  const inputs = cloneInputs();
-  inputs.contract.layers[2].level = inputs.contract.layers[1].level;
-
-  assert(
-    verifyDesignTokenContract(inputs).some((failure) =>
-      failure.includes("layer levels must be unique"),
-    ),
-  );
-});
-
-test("reduced-motion fallbacks are mandatory", () => {
-  const inputs = cloneInputs();
+test("reduced-motion fallbacks are mandatory", async () => {
+  const inputs = await cloneInputs();
   inputs.accessibilityCss = inputs.accessibilityCss.replace(
     "@media (prefers-reduced-motion: reduce)",
     "@media (prefers-reduced-motion: no-preference)",
@@ -108,7 +105,7 @@ test("reduced-motion fallbacks are mandatory", () => {
 
   assert(
     verifyDesignTokenContract(inputs).some((failure) =>
-      failure.includes("automatic reduced-motion media query is missing"),
+      failure.includes("reduced-motion CSS is missing"),
     ),
   );
 });

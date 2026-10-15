@@ -34,7 +34,7 @@ export function loadVisualRegressionInputs(root = repositoryRoot) {
   return {
     root,
     matrix: readJson(root, "docs/metadata/visual-regression-matrix.json"),
-    designTokens: readJson(root, "docs/metadata/design-tokens.json"),
+    designTokens: readJson(root, "docs/generated/design-token-reference.json"),
     tokensCss: read(root, "packages/ui-core/src/styles/tokens.css"),
     fixtureRegistry: read(
       root,
