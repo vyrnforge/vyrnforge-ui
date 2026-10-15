@@ -63,7 +63,11 @@ export function AdvancedModulePage({
         >
           <Stack gap="lg">
             <Stack gap="xs">
-              <Heading id="vf-docs-advanced-module-examples" level={3} size="md">
+              <Heading
+                id="vf-docs-advanced-module-examples"
+                level={3}
+                size="md"
+              >
                 Module examples
               </Heading>
               <Text tone="muted">Available in the selected context.</Text>
