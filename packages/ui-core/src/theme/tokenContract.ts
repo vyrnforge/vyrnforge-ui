@@ -517,7 +517,7 @@ const semanticCategoryDefinitions = [
 const themeScopedTokenNames = new Set<string>(vyrnForgeThemeColorTokens);
 
 function tokenPurpose(name: string) {
-  const words = name.replace(/^--vf-/u, "").replaceAll("-", " ");
+  const words = name.replace(/^--vf-/u, "").replace(/-/gu, " ");
   return `${words.charAt(0).toUpperCase()}${words.slice(1)}.`;
 }
 
