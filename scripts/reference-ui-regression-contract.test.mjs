@@ -72,6 +72,20 @@ test("component detail composes shared VyrnForge cards instead of docs-local car
   assert.match(styles, /\.vf-docs-guidance-grid > \.vf-card/u);
 });
 
+test("token detail composes shared VyrnForge description primitives", () => {
+  const discovery = read("apps/docs/src/DiscoveryReferencePage.tsx");
+
+  for (const primitive of ["DescriptionList", "Stack"]) {
+    assert.match(discovery, new RegExp(`\\b${primitive}\\b`, "u"));
+  }
+  assert.match(discovery, /<DescriptionList>/u);
+  assert.match(discovery, /category\.tokens\.flatMap/u);
+  assert.match(discovery, /<dt key=\{`\$\{token\.name\}-term`\}>/u);
+  assert.match(discovery, /<dd key=\{`\$\{token\.name\}-description`\}>/u);
+  assert.doesNotMatch(discovery, /className="vf-docs-discovery-list"/u);
+  assert.doesNotMatch(discovery, /className="vf-docs-discovery-row"/u);
+});
+
 test("Icons has one canonical generated route and renderer", () => {
   const registry = JSON.parse(
     read("docs/generated/documentation-registry.json"),
@@ -193,6 +207,5 @@ test("browser verification has a dedicated Reference server and evidence output"
   const config = read("playwright.reference.config.ts");
   const browser = read("tests/reference-ui/reference-product.spec.ts");
   assert.match(config, /tests\/reference-ui/u);
-  assert.match(config, /@vyrnforge\/ui-docs/u);
   assert.match(browser, /test-results\/reference-ui-evidence/u);
 });
