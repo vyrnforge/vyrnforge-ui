@@ -1,5 +1,5 @@
 import { useState, type ReactNode } from "react";
-import { AppShell, Button, Drawer, Inline } from "@vyrnforge/ui-components";
+import { AppShell, Button, Drawer, TopNav } from "@vyrnforge/ui-components";
 
 type DocumentationAppShellProps = {
   children: ReactNode;
@@ -19,54 +19,53 @@ export function DocumentationAppShell({
   const [mobileNavigationOpen, setMobileNavigationOpen] = useState(false);
   const closeMobileNavigation = () => setMobileNavigationOpen(false);
 
-  const header = (
-    <Inline
-      align="center"
-      className="vf-docs-app-shell__header-inner"
-      gap="md"
-      wrap={false}
-    >
-      <Button
-        aria-label="VyrnForge documentation home"
-        className="vf-docs-app-shell__brand"
-        leftSlot={
-          <span aria-hidden="true" className="vf-docs-app-shell__mark">
-            V
-          </span>
-        }
-        onClick={onHome}
-        size="sm"
-        variant="ghost"
-      >
-        <span className="vf-docs-app-shell__identity">
-          <strong>VyrnForge</strong>
-          <small>Docs</small>
+  const brand = (
+    <Button
+      aria-label="VyrnForge documentation home"
+      className="vf-docs-app-shell__brand"
+      leftSlot={
+        <span aria-hidden="true" className="vf-docs-app-shell__mark">
+          V
         </span>
-      </Button>
+      }
+      onClick={onHome}
+      size="sm"
+      variant="ghost"
+    >
+      <span className="vf-docs-app-shell__identity">
+        <strong>VyrnForge</strong>
+        <small>Docs</small>
+      </span>
+    </Button>
+  );
 
-      {primaryNavigation ? (
-        <div className="vf-docs-app-shell__primary">{primaryNavigation}</div>
-      ) : null}
-
-      <Inline
-        align="center"
-        className="vf-docs-app-shell__utilities"
-        gap="sm"
-        wrap
+  const actions = (
+    <div className="vf-docs-app-shell__utilities">
+      {utilityControls}
+      <Button
+        aria-expanded={mobileNavigationOpen}
+        aria-haspopup="dialog"
+        className="vf-docs-app-shell__menu-button"
+        onClick={() => setMobileNavigationOpen(true)}
+        size="sm"
+        variant="subtle"
       >
-        {utilityControls}
-        <Button
-          aria-expanded={mobileNavigationOpen}
-          aria-haspopup="dialog"
-          className="vf-docs-app-shell__menu-button"
-          onClick={() => setMobileNavigationOpen(true)}
-          size="sm"
-          variant="subtle"
-        >
-          Browse
-        </Button>
-      </Inline>
-    </Inline>
+        Browse
+      </Button>
+    </div>
+  );
+
+  const header = (
+    <TopNav
+      actions={actions}
+      brand={brand}
+      className="vf-docs-app-shell__header-inner"
+      navigation={
+        primaryNavigation ? (
+          <div className="vf-docs-app-shell__primary">{primaryNavigation}</div>
+        ) : undefined
+      }
+    />
   );
 
   const sidebar = (
