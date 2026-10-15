@@ -1,0 +1,34 @@
+name: Token standardization formatting
+
+on:
+  push:
+    branches:
+      - fix/token-contract-standardization
+
+permissions:
+  contents: write
+
+jobs:
+  format:
+    if: github.actor != 'github-actions[bot]'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: fix/token-contract-standardization
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '24.18.0'
+          cache: npm
+      - run: npm ci --ignore-scripts
+      - run: npx prettier --write packages/ui-core/src/theme/tokenContract.ts scripts/verify-design-token-contract.mjs scripts/verify-design-token-contract.test.mjs
+      - name: Commit formatted files
+        run: |
+          if git diff --quiet -- packages/ui-core/src/theme/tokenContract.ts scripts/verify-design-token-contract.mjs scripts/verify-design-token-contract.test.mjs; then
+            exit 0
+          fi
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add packages/ui-core/src/theme/tokenContract.ts scripts/verify-design-token-contract.mjs scripts/verify-design-token-contract.test.mjs
+          git commit -m "style(tokens): apply repository formatting"
+          git push origin HEAD:fix/token-contract-standardization
