@@ -1,23 +1,13 @@
 import { readFileSync } from "node:fs";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
+import ts from "typescript";
 
 const repositoryRoot = path.resolve(
   path.dirname(fileURLToPath(import.meta.url)),
   "..",
 );
-
-const requiredCategoryIds = [
-  "surface",
-  "text",
-  "border",
-  "interactive",
-  "status",
-  "density",
-  "typography",
-  "motion",
-  "layer",
-];
+const TOKEN_CONTRACT_PATH = "packages/ui-core/src/theme/tokenContract.ts";
 
 function read(root, relativePath) {
   return readFileSync(path.join(root, relativePath), "utf8").replaceAll(
@@ -26,14 +16,16 @@ function read(root, relativePath) {
   );
 }
 
-function readJson(root, relativePath) {
-  return JSON.parse(read(root, relativePath));
-}
-
 function customPropertyValue(source, token) {
   const escaped = token.replace(/[.*+?^${}()|[\]\\]/gu, "\\$&");
   const match = new RegExp(`${escaped}\\s*:\\s*([^;]+);`, "u").exec(source);
   return match?.[1]?.trim() ?? null;
+}
+
+function customPropertyNames(source) {
+  return new Set(
+    [...source.matchAll(/(--vf-[a-z0-9-]+)\s*:/gu)].map((match) => match[1]),
+  );
 }
 
 function extractObjectKeys(source, exportName) {
@@ -51,16 +43,24 @@ function extractObjectKeys(source, exportName) {
   );
 }
 
-function isTokenName(value) {
-  return (
-    typeof value === "string" && /^--vf-[a-z0-9]+(?:-[a-z0-9]+)*$/u.test(value)
-  );
+async function loadTokenContract(root) {
+  const sourcePath = path.join(root, TOKEN_CONTRACT_PATH);
+  const source = read(root, TOKEN_CONTRACT_PATH);
+  const output = ts.transpileModule(source, {
+    compilerOptions: {
+      module: ts.ModuleKind.ESNext,
+      target: ts.ScriptTarget.ES2022,
+    },
+    fileName: sourcePath,
+  }).outputText;
+  const dataUrl = `data:text/javascript;base64,${Buffer.from(output).toString("base64")}`;
+  return import(dataUrl);
 }
 
-export function loadDesignTokenInputs(root = repositoryRoot) {
+export async function loadDesignTokenInputs(root = repositoryRoot) {
   return {
     root,
-    contract: readJson(root, "docs/metadata/design-tokens.json"),
+    registry: await loadTokenContract(root),
     tokensCss: read(root, "packages/ui-core/src/styles/tokens.css"),
     themesCss: read(root, "packages/ui-core/src/styles/themes.css"),
     densityCss: read(root, "packages/ui-core/src/styles/density.css"),
@@ -68,94 +68,94 @@ export function loadDesignTokenInputs(root = repositoryRoot) {
       root,
       "packages/ui-core/src/styles/accessibility.css",
     ),
-    tokenContractSource: read(
-      root,
-      "packages/ui-core/src/theme/tokenContract.ts",
-    ),
     themePresetSource: read(root, "packages/ui-core/src/theme/themePresets.ts"),
   };
 }
 
 export function verifyDesignTokenContract({
-  contract,
+  registry,
   tokensCss,
   themesCss,
   densityCss,
   accessibilityCss,
-  tokenContractSource,
   themePresetSource,
 }) {
   const failures = [];
+  const {
+    vyrnForgeCanonicalDensities,
+    vyrnForgeCompatibilityAliases,
+    vyrnForgeCompatibilityBridges,
+    vyrnForgeCompatibilitySourceTokens,
+    vyrnForgeDensityAliases,
+    vyrnForgeDesignTokenCategories,
+    vyrnForgeDesignTokenSource,
+    vyrnForgeLayerOrder,
+    vyrnForgeMotionContract,
+    vyrnForgePrimitiveTokenGroups,
+    vyrnForgeSemanticTokenGroups,
+    vyrnForgeThemeColorTokens,
+    vyrnForgeThemeContract,
+  } = registry;
 
   if (
-    contract?.schemaVersion !== 1 ||
-    contract?.sourceOfTruth?.canonical !== true ||
-    contract?.sourceOfTruth?.owner !== "@vyrnforge/ui-core"
+    vyrnForgeDesignTokenSource?.canonical !== true ||
+    vyrnForgeDesignTokenSource?.owner !== "@vyrnforge/ui-core" ||
+    vyrnForgeDesignTokenSource?.typedExport !== TOKEN_CONTRACT_PATH
   ) {
-    return [
-      "design-tokens.json must use canonical schema version 1 owned by @vyrnforge/ui-core",
-    ];
+    failures.push("ui-core tokenContract.ts must remain the canonical token authority");
   }
 
-  if (!Array.isArray(contract.categories)) {
-    return ["design-tokens.json categories are required"];
-  }
+  const semanticEntries = Object.entries(vyrnForgeSemanticTokenGroups ?? {});
+  const semanticNames = semanticEntries.flatMap(([, tokens]) => tokens);
+  const primitiveNames = Object.values(vyrnForgePrimitiveTokenGroups ?? {}).flat();
+  const aliasNames = (vyrnForgeCompatibilityAliases ?? []).map(({ name }) => name);
+  const registeredNames = [
+    ...primitiveNames,
+    ...(vyrnForgeCompatibilitySourceTokens ?? []),
+    ...semanticNames,
+    ...aliasNames,
+  ];
 
-  const categoryIds = new Set(
-    contract.categories.map((category) => category.id),
+  const duplicateNames = registeredNames.filter(
+    (name, index) => registeredNames.indexOf(name) !== index,
   );
-  for (const categoryId of requiredCategoryIds) {
-    if (!categoryIds.has(categoryId)) {
-      failures.push(`missing required token category '${categoryId}'`);
+  for (const name of new Set(duplicateNames)) {
+    failures.push(`token registry contains duplicate '${name}'`);
+  }
+
+  const cssNames = customPropertyNames(tokensCss);
+  const registeredSet = new Set(registeredNames);
+  for (const name of registeredSet) {
+    if (!cssNames.has(name)) {
+      failures.push(`${name} is registered but missing from ui-core tokens.css`);
+    }
+  }
+  for (const name of cssNames) {
+    if (!registeredSet.has(name)) {
+      failures.push(`${name} exists in ui-core tokens.css but is not registered`);
     }
   }
 
-  const names = new Set();
-  const themeScoped = new Set();
-
-  for (const category of contract.categories) {
-    if (
-      !Array.isArray(category.tokens) ||
-      category.tokens.length === 0 ||
-      typeof category.task !== "string" ||
-      !/^VF-300[1-8]$/u.test(category.task)
-    ) {
-      failures.push(
-        `category '${category.id}' needs a VF-3001 through VF-3008 task and tokens`,
-      );
-      continue;
-    }
-
-    for (const token of category.tokens) {
-      if (!isTokenName(token?.name)) {
-        failures.push(
-          `category '${category.id}' contains an invalid token name`,
-        );
-        continue;
-      }
-      if (names.has(token.name)) {
-        failures.push(`duplicate canonical token '${token.name}'`);
-      }
-      names.add(token.name);
-
-      if (!customPropertyValue(tokensCss, token.name)) {
-        failures.push(`${token.name} is missing from ui-core tokens.css`);
-      }
-      if (!tokenContractSource.includes(`"${token.name}"`)) {
-        failures.push(`${token.name} is missing from the typed token contract`);
-      }
-      if (token.themeScoped === true) {
-        themeScoped.add(token.name);
-      }
+  const categoryIds = (vyrnForgeDesignTokenCategories ?? []).map(
+    (category) => category.id,
+  );
+  if (categoryIds.join(",") !== semanticEntries.map(([id]) => id).join(",")) {
+    failures.push("reader token categories must match semantic token groups in order");
+  }
+  for (const category of vyrnForgeDesignTokenCategories ?? []) {
+    const expected = vyrnForgeSemanticTokenGroups?.[category.id] ?? [];
+    const actual = category.tokens?.map(({ name }) => name) ?? [];
+    if (actual.join(",") !== expected.join(",")) {
+      failures.push(`reader token category '${category.id}' drifted from its semantic group`);
     }
   }
 
+  const themeScoped = new Set(vyrnForgeThemeColorTokens ?? []);
   const themeExports = {
     light: "vyrnForgeLightTheme",
     dark: "vyrnForgeDarkTheme",
     enterprise: "vyrnForgeEnterpriseTheme",
   };
-
   for (const [theme, exportName] of Object.entries(themeExports)) {
     const keys = extractObjectKeys(themePresetSource, exportName);
     for (const token of themeScoped) {
@@ -163,31 +163,24 @@ export function verifyDesignTokenContract({
         failures.push(`${exportName} is missing theme-scoped token ${token}`);
       }
     }
-    if (keys.size === 0) {
-      failures.push(`${theme} theme preset is missing`);
+    if (keys.size === 0) failures.push(`${theme} theme preset is missing`);
+  }
+
+  for (const theme of vyrnForgeThemeContract?.required ?? []) {
+    if (theme === "light") continue;
+    const selector = `[data-theme="${theme}"]`;
+    if (!themesCss.includes(selector)) {
+      failures.push(`themes.css is missing ${selector}`);
     }
   }
 
-  for (const themeSelector of [
-    '[data-theme="dark"]',
-    '[data-theme="enterprise"]',
-    '[data-theme="system"]',
-  ]) {
-    if (!themesCss.includes(themeSelector)) {
-      failures.push(`themes.css is missing ${themeSelector}`);
-    }
-  }
-
-  const canonicalDensities = contract?.densities?.canonical;
   if (
-    !Array.isArray(canonicalDensities) ||
-    canonicalDensities.join(",") !== "compact,balanced,spacious"
+    (vyrnForgeCanonicalDensities ?? []).join(",") !==
+    "compact,balanced,spacious"
   ) {
-    failures.push(
-      "canonical densities must be compact, balanced, and spacious in that order",
-    );
+    failures.push("canonical densities must be compact, balanced, and spacious in that order");
   } else {
-    for (const density of canonicalDensities) {
+    for (const density of vyrnForgeCanonicalDensities) {
       if (
         !densityCss.includes(`[data-density="${density}"]`) ||
         !densityCss.includes(`.vf-density-${density}`)
@@ -197,11 +190,9 @@ export function verifyDesignTokenContract({
     }
   }
 
-  for (const [alias, canonical] of Object.entries(
-    contract?.densities?.compatibilityAliases ?? {},
-  )) {
+  for (const [alias, canonical] of Object.entries(vyrnForgeDensityAliases ?? {})) {
     if (
-      !canonicalDensities?.includes(canonical) ||
+      !vyrnForgeCanonicalDensities?.includes(canonical) ||
       !densityCss.includes(`[data-density="${alias}"]`) ||
       !densityCss.includes(`.vf-density-${alias}`)
     ) {
@@ -211,12 +202,11 @@ export function verifyDesignTokenContract({
     }
   }
 
-  for (const bridge of contract.compatibilityBridges ?? []) {
-    if (!isTokenName(bridge.legacy) || !names.has(bridge.canonical)) {
+  for (const bridge of vyrnForgeCompatibilityBridges ?? []) {
+    if (!registeredSet.has(bridge.legacy) || !registeredSet.has(bridge.canonical)) {
       failures.push("compatibility bridge references an unknown token");
       continue;
     }
-
     const canonicalValue = customPropertyValue(tokensCss, bridge.canonical);
     if (!canonicalValue?.includes(`var(${bridge.legacy})`)) {
       failures.push(
@@ -225,14 +215,14 @@ export function verifyDesignTokenContract({
     }
   }
 
-  for (const alias of contract.compatibilityAliases ?? []) {
+  for (const alias of vyrnForgeCompatibilityAliases ?? []) {
     const value = customPropertyValue(tokensCss, alias.name);
     if (!value?.includes(`var(${alias.target})`)) {
       failures.push(`${alias.name} must alias ${alias.target}`);
     }
   }
 
-  const layerLevels = contract.layers?.map((layer) => layer.level) ?? [];
+  const layerLevels = (vyrnForgeLayerOrder ?? []).map(({ level }) => level);
   if (
     layerLevels.length === 0 ||
     new Set(layerLevels).size !== layerLevels.length ||
@@ -242,26 +232,24 @@ export function verifyDesignTokenContract({
   ) {
     failures.push("layer levels must be unique and strictly increasing");
   }
-
-  for (const layer of contract.layers ?? []) {
-    if (!names.has(layer.name)) {
+  for (const layer of vyrnForgeLayerOrder ?? []) {
+    if (!registeredSet.has(layer.name)) {
       failures.push(`layer contract references unknown token ${layer.name}`);
       continue;
     }
-
     if (customPropertyValue(tokensCss, layer.name) !== String(layer.level)) {
       failures.push(`${layer.name} must equal documented level ${layer.level}`);
     }
   }
 
-  for (const selector of contract?.motion?.explicitReducedSelectors ?? []) {
+  for (const selector of vyrnForgeMotionContract?.explicitReducedSelectors ?? []) {
     if (!accessibilityCss.includes(selector)) {
       failures.push(`reduced-motion CSS is missing selector ${selector}`);
     }
   }
   if (
     !accessibilityCss.includes(
-      `@media ${contract?.motion?.automaticMediaQuery}`,
+      `@media ${vyrnForgeMotionContract?.automaticMediaQuery}`,
     )
   ) {
     failures.push("automatic reduced-motion media query is missing");
@@ -280,22 +268,20 @@ export function verifyDesignTokenContract({
   return failures;
 }
 
-function run() {
-  const failures = verifyDesignTokenContract(loadDesignTokenInputs());
+async function run() {
+  const failures = verifyDesignTokenContract(await loadDesignTokenInputs());
 
   if (failures.length > 0) {
     console.error("Design token contract verification failed:");
-    for (const failure of failures) {
-      console.error(`  - ${failure}`);
-    }
+    for (const failure of failures) console.error(`  - ${failure}`);
     process.exit(1);
   }
 
   console.log(
-    "Design token contract passed: 9 categories, complete theme presets, canonical density aliases, reduced motion, and deterministic layers.",
+    "Design token contract passed: ui-core owns the complete primitive, compatibility, semantic, theme, density, motion, and layer registry.",
   );
 }
 
 if (process.argv[1] === fileURLToPath(import.meta.url)) {
-  run();
+  await run();
 }
