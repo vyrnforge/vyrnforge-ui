@@ -91,17 +91,6 @@
   white-space: nowrap;
 }
 
-.vf-docs-icon-browser__empty {
-  display: grid;
-  min-height: 180px;
-  place-content: center;
-  gap: var(--vf-space-2, 8px);
-  padding: var(--vf-space-6, 24px);
-  border: 1px dashed var(--vf-border-subtle, #e2e8f0);
-  border-radius: var(--vf-radius-lg, 10px);
-  text-align: center;
-}
-
 .vf-docs-icon-detail {
   padding-block-start: var(--vf-space-8, 32px);
   border-block-start: 1px solid var(--vf-border-subtle, #e2e8f0);
