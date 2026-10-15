@@ -86,6 +86,20 @@ test("token detail composes shared VyrnForge description primitives", () => {
   assert.doesNotMatch(discovery, /className="vf-docs-discovery-row"/u);
 });
 
+test("framework examples compose shared VyrnForge description primitives", () => {
+  const examples = read("apps/docs/src/examples/ExecutableExamplesPage.tsx");
+
+  assert.match(examples, /\bDescriptionList\b/u);
+  assert.match(examples, /<DescriptionList>/u);
+  for (const term of ["Runtime", "Public package", "Fixture"]) {
+    assert.match(examples, new RegExp(`<dt>${term}<\\/dt>`, "u"));
+  }
+  assert.doesNotMatch(
+    examples,
+    /<dl>\s*<div>\s*<dt>Runtime<\/dt>/su,
+  );
+});
+
 test("Icons has one canonical generated route and renderer", () => {
   const registry = JSON.parse(
     read("docs/generated/documentation-registry.json"),
