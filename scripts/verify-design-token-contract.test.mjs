@@ -11,7 +11,7 @@ async function cloneInputs() {
 
   return {
     ...inputs,
-    registry: structuredClone(inputs.registry),
+    registry: structuredClone({ ...inputs.registry }),
   };
 }
 
