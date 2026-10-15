@@ -6,6 +6,7 @@ import {
 } from "@vyrnforge/ui-core";
 import {
   Button,
+  EmptyState,
   Heading,
   Icon,
   SearchInput,
@@ -142,12 +143,11 @@ export function IconReferencePage({ frameworkId }: IconReferencePageProps) {
             ))}
           </div>
         ) : (
-          <div className="vf-docs-icon-browser__empty">
-            <Heading level={3} size="sm">
-              No matching icons
-            </Heading>
-            <Text tone="muted">Try another name or clear the search.</Text>
-          </div>
+          <EmptyState
+            className="vf-docs-icon-browser__empty"
+            title="No matching icons"
+            description="Try another name or clear the search."
+          />
         )}
       </section>
 

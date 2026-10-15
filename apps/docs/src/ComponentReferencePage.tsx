@@ -1,8 +1,10 @@
 import {
   Badge,
   Card,
+  DescriptionList,
   EmptyState,
   Heading,
+  PropertyTable,
   Stack,
   Text,
 } from "@vyrnforge/ui-components";
@@ -153,16 +155,18 @@ function DetailList({
   values: readonly string[];
 }) {
   return (
-    <div className="vf-docs-detail-list">
-      <strong>{label}</strong>
-      <div className="vf-docs-detail-list__values">
-        {values.length > 0 ? (
-          values.map((value) => <span key={value}>{value}</span>)
-        ) : (
-          <span>None</span>
-        )}
-      </div>
-    </div>
+    <DescriptionList>
+      <dt>{label}</dt>
+      <dd>
+        <Stack gap="sm">
+          {values.length > 0 ? (
+            values.map((value) => <span key={value}>{value}</span>)
+          ) : (
+            <span>None</span>
+          )}
+        </Stack>
+      </dd>
+    </DescriptionList>
   );
 }
 
@@ -209,7 +213,7 @@ function FrameworkApiPanel({
           Properties / inputs
         </Heading>
         {component.properties.length > 0 ? (
-          <div className="vf-docs-api-table-scroll">
+          <PropertyTable>
             <table className="vf-docs-api-table">
               <thead>
                 <tr>
@@ -255,7 +259,7 @@ function FrameworkApiPanel({
                 })}
               </tbody>
             </table>
-          </div>
+          </PropertyTable>
         ) : (
           <EmptyApiMembers />
         )}
@@ -270,7 +274,7 @@ function FrameworkApiPanel({
           Events / outputs / emits
         </Heading>
         {component.events.length > 0 ? (
-          <div className="vf-docs-api-table-scroll">
+          <PropertyTable>
             <table className="vf-docs-api-table">
               <thead>
                 <tr>
@@ -319,7 +323,7 @@ function FrameworkApiPanel({
                 })}
               </tbody>
             </table>
-          </div>
+          </PropertyTable>
         ) : (
           <EmptyApiMembers />
         )}
@@ -334,7 +338,7 @@ function FrameworkApiPanel({
           Slots / templates
         </Heading>
         {component.slots.length > 0 ? (
-          <div className="vf-docs-api-table-scroll">
+          <PropertyTable>
             <table className="vf-docs-api-table">
               <thead>
                 <tr>
@@ -369,7 +373,7 @@ function FrameworkApiPanel({
                 })}
               </tbody>
             </table>
-          </div>
+          </PropertyTable>
         ) : (
           <EmptyApiMembers />
         )}
@@ -384,7 +388,7 @@ function FrameworkApiPanel({
           Methods
         </Heading>
         {component.methods.length > 0 ? (
-          <div className="vf-docs-api-table-scroll">
+          <PropertyTable>
             <table className="vf-docs-api-table">
               <thead>
                 <tr>
@@ -427,7 +431,7 @@ function FrameworkApiPanel({
                 })}
               </tbody>
             </table>
-          </div>
+          </PropertyTable>
         ) : (
           <EmptyApiMembers />
         )}
@@ -530,26 +534,20 @@ function CustomizationCard({
           {title}
         </Heading>
         <Text tone="muted">{description}</Text>
-        <dl>
-          <div>
-            <dt>Property</dt>
-            <dd>
-              <code>{control.name}</code>
-            </dd>
-          </div>
-          <div>
-            <dt>Values</dt>
-            <dd>
-              <code>{controlType(control, contextualApi)}</code>
-            </dd>
-          </div>
-          <div>
-            <dt>Default</dt>
-            <dd>
-              <code>{formatDefault(control.default)}</code>
-            </dd>
-          </div>
-        </dl>
+        <DescriptionList>
+          <dt>Property</dt>
+          <dd>
+            <code>{control.name}</code>
+          </dd>
+          <dt>Values</dt>
+          <dd>
+            <code>{controlType(control, contextualApi)}</code>
+          </dd>
+          <dt>Default</dt>
+          <dd>
+            <code>{formatDefault(control.default)}</code>
+          </dd>
+        </DescriptionList>
       </Stack>
     </Card>
   );
@@ -1169,20 +1167,14 @@ export function ComponentReferencePage({
               customization, accessibility, and API details.
             </Text>
           </div>
-          <dl className="vf-docs-catalog__stats">
-            <div>
-              <dt>Components</dt>
-              <dd>{availableComponents.length}</dd>
-            </div>
-            <div>
-              <dt>Areas</dt>
-              <dd>{componentAreas.length}</dd>
-            </div>
-            <div>
-              <dt>Framework</dt>
-              <dd>{frameworkId}</dd>
-            </div>
-          </dl>
+          <DescriptionList>
+            <dt>Components</dt>
+            <dd>{availableComponents.length}</dd>
+            <dt>Areas</dt>
+            <dd>{componentAreas.length}</dd>
+            <dt>Framework</dt>
+            <dd>{frameworkId}</dd>
+          </DescriptionList>
         </section>
 
         <nav aria-label="Component areas" className="vf-docs-catalog__jump-nav">

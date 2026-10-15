@@ -381,12 +381,6 @@ body {
   border-top: 1px solid var(--vf-border, #e2e8f0);
 }
 
-.vf-docs-api-table-scroll {
-  overflow-x: auto;
-  border: 1px solid var(--vf-border, #e2e8f0);
-  border-radius: var(--vf-radius-md, 6px);
-}
-
 .vf-docs-api-table {
   width: 100%;
   min-width: 680px;
@@ -464,28 +458,6 @@ body {
   margin-top: 14px;
   padding-top: 14px;
   border-top: 1px solid var(--vf-border, #e2e8f0);
-}
-
-.vf-docs-contract-details {
-  display: grid;
-  gap: 6px;
-}
-
-.vf-docs-contract-field {
-  display: grid;
-  grid-template-columns: minmax(110px, 0.35fr) minmax(0, 1fr);
-  gap: 10px;
-  font-size: 13px;
-}
-
-.vf-docs-contract-field strong {
-  color: var(--vf-text-strong, #0f172a);
-}
-
-.vf-docs-contract-field span {
-  min-width: 0;
-  color: var(--vf-text-muted, #64748b);
-  overflow-wrap: anywhere;
 }
 
 .vf-docs-example-stage {
