@@ -15,8 +15,8 @@ export const assuranceWorkflowPath = ".github/workflows/assurance.yml";
 
 function read(root, relativePath) {
   return readFileSync(path.join(root, relativePath), "utf8").replaceAll(
-    "\\r\\n",
-    "\\n",
+    "\r\n",
+    "\n",
   );
 }
 
@@ -102,8 +102,8 @@ export function verifySecurityWorkflowContract({ root = repositoryRoot } = {}) {
   const assurance = read(root, assuranceWorkflowPath);
   for (const marker of [
     "npm audit --omit=dev --audit-level=high",
-    "github/codeql-action/init@2892aa5e19bbd11bc0cff5427e3b750a04d9e3c2 # v4.38.2",
-    "github/codeql-action/analyze@2892aa5e19bbd11bc0cff5427e3b750a04d9e3c2 # v4.38.2",
+    "github/codeql-action/init@24c54180a607b1449ed407dd24f251e4e9147c8d # v4.38.3",
+    "github/codeql-action/analyze@24c54180a607b1449ed407dd24f251e4e9147c8d # v4.38.3",
     "ACTIONLINT_VERSION: 1.7.12",
     "shellcheck --version",
     "name: assurance-gate",
