@@ -230,8 +230,8 @@ for (const marker of [
   "npm run verify:compatibility-release-case",
   "npm audit --omit=dev --audit-level=high",
   "name: codeql-analysis",
-  "github/codeql-action/init@2892aa5e19bbd11bc0cff5427e3b750a04d9e3c2 # v4.38.2",
-  "github/codeql-action/analyze@2892aa5e19bbd11bc0cff5427e3b750a04d9e3c2 # v4.38.2",
+  "github/codeql-action/init@24c54180a607b1449ed407dd24f251e4e9147c8d # v4.38.3",
+  "github/codeql-action/analyze@24c54180a607b1449ed407dd24f251e4e9147c8d # v4.38.3",
   "name: assurance-gate",
 ]) {
   assert(assurance.includes(marker), `assurance.yml must include ${marker}`);
