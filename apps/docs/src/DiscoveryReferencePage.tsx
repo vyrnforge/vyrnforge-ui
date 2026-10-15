@@ -89,20 +89,14 @@ function TokenReference({ id }: { id?: string | null }) {
             {designTokenSource.implementation}.
           </Text>
         </div>
-        <dl className="vf-docs-catalog__stats">
-          <div>
-            <dt>Categories</dt>
-            <dd>{designTokenCategories.length}</dd>
-          </div>
-          <div>
-            <dt>Tokens</dt>
-            <dd>{tokenCount}</dd>
-          </div>
-          <div>
-            <dt>Typed source</dt>
-            <dd>Yes</dd>
-          </div>
-        </dl>
+        <DescriptionList>
+          <dt>Categories</dt>
+          <dd>{designTokenCategories.length}</dd>
+          <dt>Tokens</dt>
+          <dd>{tokenCount}</dd>
+          <dt>Typed source</dt>
+          <dd>Yes</dd>
+        </DescriptionList>
       </section>
 
       <ReferenceTokenGallery categories={designTokenCategories} />
@@ -153,24 +147,16 @@ function PatternReference({
             {pattern.displayName}
           </Heading>
           <Text>{pattern.purpose}</Text>
-          <div className="vf-docs-contract-details">
-            <div className="vf-docs-contract-field">
-              <strong>Use when</strong>
-              <span>{pattern.useWhen}</span>
-            </div>
-            <div className="vf-docs-contract-field">
-              <strong>Avoid when</strong>
-              <span>{pattern.avoidWhen}</span>
-            </div>
-            <div className="vf-docs-contract-field">
-              <strong>Category</strong>
-              <span>{pattern.category}</span>
-            </div>
-            <div className="vf-docs-contract-field">
-              <strong>Framework neutral</strong>
-              <span>{pattern.frameworkNeutral ? "Yes" : "No"}</span>
-            </div>
-          </div>
+          <DescriptionList>
+            <dt>Use when</dt>
+            <dd>{pattern.useWhen}</dd>
+            <dt>Avoid when</dt>
+            <dd>{pattern.avoidWhen}</dd>
+            <dt>Category</dt>
+            <dd>{pattern.category}</dd>
+            <dt>Framework neutral</dt>
+            <dd>{pattern.frameworkNeutral ? "Yes" : "No"}</dd>
+          </DescriptionList>
         </section>
         <section className="vf-docs-reference__section">
           <Heading level={3} size="md">
@@ -212,26 +198,20 @@ function PatternReference({
             from {patternDocumentation}.
           </Text>
         </div>
-        <dl className="vf-docs-catalog__stats">
-          <div>
-            <dt>Patterns</dt>
-            <dd>{patternReferenceRecords.length}</dd>
-          </div>
-          <div>
-            <dt>Categories</dt>
-            <dd>{categories.size}</dd>
-          </div>
-          <div>
-            <dt>Framework neutral</dt>
-            <dd>
-              {
-                patternReferenceRecords.filter(
-                  (pattern) => pattern.frameworkNeutral,
-                ).length
-              }
-            </dd>
-          </div>
-        </dl>
+        <DescriptionList>
+          <dt>Patterns</dt>
+          <dd>{patternReferenceRecords.length}</dd>
+          <dt>Categories</dt>
+          <dd>{categories.size}</dd>
+          <dt>Framework neutral</dt>
+          <dd>
+            {
+              patternReferenceRecords.filter(
+                (pattern) => pattern.frameworkNeutral,
+              ).length
+            }
+          </dd>
+        </DescriptionList>
       </section>
 
       <section className="vf-docs-pattern-featured">
