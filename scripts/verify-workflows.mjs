@@ -71,7 +71,6 @@ function assertPinnedExternalActions(text, file) {
 const expectedWorkflowFiles = [
   "assurance.yml",
   "ci.yml",
-  "cleanup-actions.yml",
   "deploy-pages.yml",
   "release.yml",
 ];
