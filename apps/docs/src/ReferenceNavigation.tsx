@@ -190,7 +190,6 @@ export function ReferenceNavigation({
                 .map<SideNavItem>((component) => ({
                   id: `component-${component.id}`,
                   label: component.displayName,
-                  badge: component.category,
                   active: activeRecordId === component.id,
                   href: getReferenceLocationHref(referenceModel, {
                     frameworkId,
@@ -255,7 +254,7 @@ export function ReferenceNavigation({
         <SearchInput
           aria-label="Search VyrnForge Reference"
           onChange={(event) => setQuery(event.currentTarget.value)}
-          placeholder="Search docs, components, and API…"
+          placeholder="Search Reference…"
           size="sm"
           value={query}
         />
