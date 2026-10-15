@@ -2,6 +2,7 @@ import {
   Badge,
   CodeText,
   DescriptionList,
+  EmptyState,
   Heading,
   Text,
 } from "@vyrnforge/ui-components";
@@ -73,9 +74,10 @@ export function ExecutableExamplesPage({
 
   if (!resolution.available) {
     return (
-      <Text tone="muted">
-        The packed consumer example is unavailable for {frameworkId} {version}.
-      </Text>
+      <EmptyState
+        title="Executable example unavailable"
+        description={`The packed consumer example is unavailable for ${frameworkId} ${version}.`}
+      />
     );
   }
 
