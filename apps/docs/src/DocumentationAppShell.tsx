@@ -21,20 +21,23 @@ export function DocumentationAppShell({
 
   const header = (
     <div className="vf-docs-app-shell__header-inner">
-      <button
+      <Button
         aria-label="VyrnForge documentation home"
         className="vf-docs-app-shell__brand"
+        leftSlot={
+          <span aria-hidden="true" className="vf-docs-app-shell__mark">
+            V
+          </span>
+        }
         onClick={onHome}
-        type="button"
+        size="sm"
+        variant="ghost"
       >
-        <span aria-hidden="true" className="vf-docs-app-shell__mark">
-          V
-        </span>
         <span className="vf-docs-app-shell__identity">
           <strong>VyrnForge</strong>
           <small>Docs</small>
         </span>
-      </button>
+      </Button>
 
       {primaryNavigation ? (
         <div className="vf-docs-app-shell__primary">{primaryNavigation}</div>
