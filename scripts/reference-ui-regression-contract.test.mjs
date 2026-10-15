@@ -94,10 +94,7 @@ test("framework examples compose shared VyrnForge description primitives", () =>
   for (const term of ["Runtime", "Public package", "Fixture"]) {
     assert.match(examples, new RegExp(`<dt>${term}<\\/dt>`, "u"));
   }
-  assert.doesNotMatch(
-    examples,
-    /<dl>\s*<div>\s*<dt>Runtime<\/dt>/su,
-  );
+  assert.doesNotMatch(examples, /<dl>\s*<div>\s*<dt>Runtime<\/dt>/su);
 });
 
 test("Icons has one canonical generated route and renderer", () => {
