@@ -4,7 +4,11 @@ import { describe, expect, it } from "vitest";
 
 import {
   vyrnForgeCanonicalDensities,
+  vyrnForgeCompatibilityAliases,
+  vyrnForgeCompatibilitySourceTokens,
+  vyrnForgeDesignTokenCategories,
   vyrnForgeLayerOrder,
+  vyrnForgePrimitiveTokenGroups,
   vyrnForgeSemanticTokenGroups,
 } from "../index";
 
@@ -18,25 +22,39 @@ function extractCustomProperties(source: string) {
   );
 }
 
-describe("VyrnForge semantic token contract", () => {
-  it("declares every exported semantic token in ui-core CSS", () => {
-    const source = [
-      readStyle("../styles/tokens.css"),
-      readStyle("../styles/themes.css"),
-      readStyle("../styles/density.css"),
-      readStyle("../styles/accessibility.css"),
-    ].join("\n");
-    const declarations = extractCustomProperties(source);
+describe("VyrnForge token contract", () => {
+  it("accounts for every ui-core token declaration in the canonical registry", () => {
+    const tokenCss = readStyle("../styles/tokens.css");
+    const declarations = extractCustomProperties(tokenCss);
+    const registered = new Set([
+      ...Object.values(vyrnForgePrimitiveTokenGroups).flat(),
+      ...vyrnForgeCompatibilitySourceTokens,
+      ...Object.values(vyrnForgeSemanticTokenGroups).flat(),
+      ...vyrnForgeCompatibilityAliases.map(({ name }) => name),
+    ]);
 
-    for (const tokens of Object.values(vyrnForgeSemanticTokenGroups)) {
-      for (const token of tokens) {
-        expect(declarations.has(token), `${token} must be declared`).toBe(true);
-      }
+    expect([...declarations].sort()).toEqual([...registered].sort());
+  });
+
+  it("derives reader categories from the semantic token groups", () => {
+    expect(vyrnForgeDesignTokenCategories.map(({ id }) => id)).toEqual(
+      Object.keys(vyrnForgeSemanticTokenGroups),
+    );
+    for (const category of vyrnForgeDesignTokenCategories) {
+      expect(category.tokens.map(({ name }) => name)).toEqual([
+        ...vyrnForgeSemanticTokenGroups[category.id],
+      ]);
     }
   });
 
   it("keeps semantic token names unique across groups", () => {
     const tokens = Object.values(vyrnForgeSemanticTokenGroups).flat();
+
+    expect(new Set(tokens).size).toBe(tokens.length);
+  });
+
+  it("keeps primitive token names unique across groups", () => {
+    const tokens = Object.values(vyrnForgePrimitiveTokenGroups).flat();
 
     expect(new Set(tokens).size).toBe(tokens.length);
   });
