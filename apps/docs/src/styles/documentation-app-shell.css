@@ -147,6 +147,26 @@
 
 @media (max-width: 1280px) {
   .vf-docs-app-shell__header-inner {
+    gap: var(--vf-space-2, 8px);
+    padding-inline: var(--vf-space-4, 16px);
+  }
+
+  .vf-docs-app-shell__utilities {
+    gap: var(--vf-space-1, 4px);
+  }
+
+  .vf-docs-app-shell__utilities .vf-select {
+    min-width: 112px;
+    max-width: 128px;
+  }
+
+  .vf-docs-app-shell__utility-link {
+    display: none;
+  }
+}
+
+@media (max-width: 1120px) {
+  .vf-docs-app-shell__header-inner {
     grid-template-columns: auto minmax(0, 1fr);
   }
 
@@ -193,6 +213,7 @@
 
   .vf-docs-app-shell__utilities .vf-select {
     min-width: 0;
+    max-width: none;
     flex: 1 1 132px;
   }
 
