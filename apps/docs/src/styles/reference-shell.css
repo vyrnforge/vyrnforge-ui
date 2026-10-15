@@ -79,6 +79,12 @@
     var(--vf-divider, var(--vf-border-subtle, #e2e8f0));
 }
 
+.vf-docs-api-table thead th {
+  position: sticky;
+  z-index: 1;
+  inset-block-start: 0;
+}
+
 .vf-docs-catalog {
   display: grid;
   gap: clamp(32px, 5vw, 56px);
