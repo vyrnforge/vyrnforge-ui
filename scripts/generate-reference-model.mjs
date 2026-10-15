@@ -14,7 +14,8 @@ const sourcePaths = {
   consumerKnowledge: "docs/generated/consumer-knowledge.json",
   frameworkApi: "docs/generated/framework-api-reference.json",
   packages: "docs/metadata/packages.json",
-  tokens: "packages/ui-core/src/theme/tokenContract.ts",
+  tokenAuthority: "packages/ui-core/src/theme/tokenContract.ts",
+  tokens: "docs/generated/design-token-reference.json",
   patterns: "docs/metadata/patterns.json",
   examples: "docs/metadata/executable-examples.json",
   consumerFixtures: "tests/consumers/manifest.json",
@@ -76,7 +77,7 @@ function generatedRecordSource(domainId) {
     },
     tokens: {
       path: sourcePaths.tokens,
-      collection: "vyrnForgeDesignTokenCategories",
+      collection: "categories",
       identityField: "id",
       labelField: "id",
     },
@@ -169,6 +170,7 @@ export function buildReferenceModel({ root = repositoryRoot } = {}) {
       sourcePaths.consumerKnowledge,
       sourcePaths.frameworkApi,
       sourcePaths.packages,
+      sourcePaths.tokenAuthority,
       sourcePaths.tokens,
       sourcePaths.patterns,
       sourcePaths.examples,
@@ -188,7 +190,8 @@ export function buildReferenceModel({ root = repositoryRoot } = {}) {
       surfaces: frameworks.map(({ id, apiSurface }) => ({ id, apiSurface })),
     },
     tokenData: {
-      authority: sourcePaths.tokens,
+      authority: sourcePaths.tokenAuthority,
+      projection: sourcePaths.tokens,
       runtimeStyles: portal.contentOwnership.tokens.canonicalSources.filter(
         (entry) => entry.startsWith("packages/ui-core/src/styles/"),
       ),
