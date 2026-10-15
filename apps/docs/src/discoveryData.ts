@@ -1,28 +1,13 @@
-import designTokensRaw from "../../../docs/metadata/design-tokens.json?raw";
+import {
+  vyrnForgeDesignTokenCategories,
+  vyrnForgeDesignTokenSource,
+  type VyrnForgeDesignTokenCategory,
+  type VyrnForgeDesignTokenRecord,
+} from "@vyrnforge/ui-core";
 import patternsRaw from "../../../docs/metadata/patterns.json?raw";
 
-export type DesignTokenRecord = {
-  name: string;
-  purpose: string;
-  themeScoped?: boolean;
-};
-
-export type DesignTokenCategory = {
-  id: string;
-  purpose: string;
-  sourceFile: string;
-  tokens: DesignTokenRecord[];
-};
-
-type DesignTokenMetadata = {
-  schemaVersion: number;
-  sourceOfTruth: {
-    canonical: boolean;
-    implementation: string;
-    typedExport: string;
-  };
-  categories: DesignTokenCategory[];
-};
+export type DesignTokenRecord = VyrnForgeDesignTokenRecord;
+export type DesignTokenCategory = VyrnForgeDesignTokenCategory;
 
 export type PatternReferenceRecord = {
   id: string;
@@ -47,18 +32,14 @@ type PatternMetadata = {
   patterns: PatternReferenceRecord[];
 };
 
-const designTokens = JSON.parse(designTokensRaw) as DesignTokenMetadata;
 const patterns = JSON.parse(patternsRaw) as PatternMetadata;
 
-if (designTokens.schemaVersion !== 1 || !designTokens.sourceOfTruth.canonical) {
-  throw new Error("Unsupported VyrnForge design-token discovery contract.");
-}
 if (patterns.schemaVersion !== 1 || !patterns.sourceOfTruth.canonical) {
   throw new Error("Unsupported VyrnForge pattern discovery contract.");
 }
 
-export const designTokenCategories = designTokens.categories;
-export const designTokenSource = designTokens.sourceOfTruth;
+export const designTokenCategories = vyrnForgeDesignTokenCategories;
+export const designTokenSource = vyrnForgeDesignTokenSource;
 export const patternReferenceRecords = patterns.patterns;
 export const patternDocumentation = patterns.sourceOfTruth.documentation;
 
