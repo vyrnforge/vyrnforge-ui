@@ -335,20 +335,14 @@ export function PackageReferencePage({ packageId }: PackageReferencePageProps) {
             dependencies, public entry points, and API documentation.
           </Text>
         </div>
-        <dl className="vf-docs-catalog__stats">
-          <div>
-            <dt>Packages</dt>
-            <dd>{packageReferenceRecords.length}</dd>
-          </div>
-          <div>
-            <dt>Current</dt>
-            <dd>{currentPackages}</dd>
-          </div>
-          <div>
-            <dt>Rules</dt>
-            <dd>{packageDependencyRules.length}</dd>
-          </div>
-        </dl>
+        <DescriptionList>
+          <dt>Packages</dt>
+          <dd>{packageReferenceRecords.length}</dd>
+          <dt>Current</dt>
+          <dd>{currentPackages}</dd>
+          <dt>Rules</dt>
+          <dd>{packageDependencyRules.length}</dd>
+        </DescriptionList>
       </section>
 
       <PackageArchitecture />
