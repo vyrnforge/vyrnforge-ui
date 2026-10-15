@@ -92,14 +92,14 @@
       "policy": "Package identity, relationships, release lines, and public entrypoint facts come from package metadata, manifests, and verified public entrypoints rather than application registries."
     },
     "tokens": {
-      "mode": "canonical-metadata-plus-runtime-styles",
+      "mode": "shared-contract-plus-runtime-styles",
       "canonicalSources": [
-        "docs/metadata/design-tokens.json",
+        "packages/ui-core/src/theme/tokenContract.ts",
         "packages/ui-core/src/styles/tokens.css",
         "packages/ui-core/src/styles/themes.css",
         "packages/ui-core/src/styles/density.css"
       ],
-      "policy": "Token reference data is derived from shared VyrnForge token contracts and runtime CSS custom properties; reference surfaces do not own theme or token values."
+      "policy": "Token identity, categories, primitive inventories, compatibility contracts, and reader metadata are owned by @vyrnforge/ui-core. Reference consumes the public ui-core contract and does not own a duplicate token registry."
     },
     "patterns": {
       "mode": "canonical-metadata-plus-curated-guidance",
