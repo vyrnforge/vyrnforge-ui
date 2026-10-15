@@ -1,7 +1,6 @@
 import { existsSync, readFileSync, writeFileSync } from "node:fs";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
-import * as ts from "typescript";
 
 const repositoryRoot = path.resolve(
   path.dirname(fileURLToPath(import.meta.url)),
@@ -55,20 +54,45 @@ const categoryDefinitions = {
 };
 
 function read(root, relativePath) {
-  return readFileSync(path.join(root, relativePath), "utf8").replace(/\r\n?/gu, "\n");
+  return readFileSync(path.join(root, relativePath), "utf8").replace(
+    /\r\n?/gu,
+    "\n",
+  );
 }
 
-async function loadTokenContract(root) {
-  const sourcePath = path.join(root, TOKEN_CONTRACT_PATH);
-  const output = ts.transpileModule(read(root, TOKEN_CONTRACT_PATH), {
-    compilerOptions: {
-      module: ts.ModuleKind.ESNext,
-      target: ts.ScriptTarget.ES2020,
-    },
-    fileName: sourcePath,
-  }).outputText;
-  const dataUrl = `data:text/javascript;base64,${Buffer.from(output).toString("base64")}`;
-  return import(dataUrl);
+function quotedValues(source) {
+  return [...source.matchAll(/"([^"\n]+)"/gu)].map((match) => match[1]);
+}
+
+function extractStringArray(source, exportName) {
+  const start = source.indexOf(`export const ${exportName}`);
+  if (start < 0) throw new Error(`Missing token contract export: ${exportName}`);
+  const open = source.indexOf("[", start);
+  const close = source.indexOf("] as const", open);
+  if (open < 0 || close < 0) {
+    throw new Error(`Unable to parse token contract export: ${exportName}`);
+  }
+  return quotedValues(source.slice(open + 1, close));
+}
+
+function extractSemanticGroups(source) {
+  const start = source.indexOf("export const vyrnForgeSemanticTokenGroups");
+  if (start < 0) throw new Error("Missing vyrnForgeSemanticTokenGroups export.");
+  const open = source.indexOf("{", start);
+  const close = source.indexOf("} as const satisfies", open);
+  if (open < 0 || close < 0) {
+    throw new Error("Unable to parse vyrnForgeSemanticTokenGroups export.");
+  }
+
+  const body = source.slice(open + 1, close);
+  const groups = {};
+  for (const match of body.matchAll(/([a-z][a-z0-9-]*)\s*:\s*\[([\s\S]*?)\]\s*as const/gu)) {
+    groups[match[1]] = quotedValues(match[2]);
+  }
+  if (Object.keys(groups).length === 0) {
+    throw new Error("No semantic token groups were parsed from ui-core.");
+  }
+  return groups;
 }
 
 function tokenPurpose(name) {
@@ -96,26 +120,27 @@ function primitiveGroups(tokensCss) {
 }
 
 export async function buildDesignTokenReference({ root = repositoryRoot } = {}) {
-  const contract = await loadTokenContract(root);
+  const contractSource = read(root, TOKEN_CONTRACT_PATH);
+  const semanticGroups = extractSemanticGroups(contractSource);
   const tokensCss = read(root, TOKEN_CSS_PATH);
-  const themeScoped = new Set(contract.vyrnForgeThemeColorTokens);
-  const categories = Object.entries(contract.vyrnForgeSemanticTokenGroups).map(
-    ([id, names]) => {
-      const definition = categoryDefinitions[id];
-      if (!definition) throw new Error(`Missing token category definition: ${id}`);
-      return {
-        id,
-        task: definition.task,
-        sourceFile: TOKEN_CSS_PATH,
-        purpose: definition.purpose,
-        tokens: names.map((name) => ({
-          name,
-          purpose: tokenPurpose(name),
-          themeScoped: themeScoped.has(name),
-        })),
-      };
-    },
+  const themeScoped = new Set(
+    extractStringArray(contractSource, "vyrnForgeThemeColorTokens"),
   );
+  const categories = Object.entries(semanticGroups).map(([id, names]) => {
+    const definition = categoryDefinitions[id];
+    if (!definition) throw new Error(`Missing token category definition: ${id}`);
+    return {
+      id,
+      task: definition.task,
+      sourceFile: TOKEN_CSS_PATH,
+      purpose: definition.purpose,
+      tokens: names.map((name) => ({
+        name,
+        purpose: tokenPurpose(name),
+        themeScoped: themeScoped.has(name),
+      })),
+    };
+  });
 
   return {
     schemaVersion: 1,
