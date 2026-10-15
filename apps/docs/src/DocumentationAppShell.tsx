@@ -1,5 +1,5 @@
 import { useState, type ReactNode } from "react";
-import { AppShell, Button, Drawer } from "@vyrnforge/ui-components";
+import { AppShell, Button, Drawer, Inline } from "@vyrnforge/ui-components";
 
 type DocumentationAppShellProps = {
   children: ReactNode;
@@ -20,27 +20,40 @@ export function DocumentationAppShell({
   const closeMobileNavigation = () => setMobileNavigationOpen(false);
 
   const header = (
-    <div className="vf-docs-app-shell__header-inner">
-      <button
+    <Inline
+      align="center"
+      className="vf-docs-app-shell__header-inner"
+      gap="md"
+      wrap={false}
+    >
+      <Button
         aria-label="VyrnForge documentation home"
         className="vf-docs-app-shell__brand"
+        leftSlot={
+          <span aria-hidden="true" className="vf-docs-app-shell__mark">
+            V
+          </span>
+        }
         onClick={onHome}
-        type="button"
+        size="sm"
+        variant="ghost"
       >
-        <span aria-hidden="true" className="vf-docs-app-shell__mark">
-          V
-        </span>
         <span className="vf-docs-app-shell__identity">
           <strong>VyrnForge</strong>
           <small>Docs</small>
         </span>
-      </button>
+      </Button>
 
       {primaryNavigation ? (
         <div className="vf-docs-app-shell__primary">{primaryNavigation}</div>
       ) : null}
 
-      <div className="vf-docs-app-shell__utilities">
+      <Inline
+        align="center"
+        className="vf-docs-app-shell__utilities"
+        gap="sm"
+        wrap
+      >
         {utilityControls}
         <Button
           aria-expanded={mobileNavigationOpen}
@@ -52,8 +65,8 @@ export function DocumentationAppShell({
         >
           Browse
         </Button>
-      </div>
-    </div>
+      </Inline>
+    </Inline>
   );
 
   const sidebar = (
