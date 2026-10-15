@@ -35,10 +35,7 @@ test("unregistered CSS tokens are rejected", async () => {
 
 test("missing primitive CSS declarations are rejected", async () => {
   const inputs = await cloneInputs();
-  inputs.tokensCss = inputs.tokensCss.replace(
-    /--vf-space-1\s*:[^;]+;/u,
-    "",
-  );
+  inputs.tokensCss = inputs.tokensCss.replace(/--vf-space-1\s*:[^;]+;/u, "");
 
   assert(
     verifyDesignTokenContract(inputs).some((failure) =>

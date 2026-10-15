@@ -482,7 +482,8 @@ const semanticCategoryDefinitions = [
   {
     id: "status",
     task: "VF-3004",
-    purpose: "Success, warning, error, info, pending, and neutral feedback roles.",
+    purpose:
+      "Success, warning, error, info, pending, and neutral feedback roles.",
   },
   {
     id: "density",
@@ -493,7 +494,8 @@ const semanticCategoryDefinitions = [
   {
     id: "typography",
     task: "VF-3006",
-    purpose: "Display, title, label, body, caption, code, and numeric hierarchy.",
+    purpose:
+      "Display, title, label, body, caption, code, and numeric hierarchy.",
   },
   {
     id: "motion",

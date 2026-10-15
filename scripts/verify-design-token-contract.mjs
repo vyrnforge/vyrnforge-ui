@@ -102,13 +102,19 @@ export function verifyDesignTokenContract({
     vyrnForgeDesignTokenSource?.owner !== "@vyrnforge/ui-core" ||
     vyrnForgeDesignTokenSource?.typedExport !== TOKEN_CONTRACT_PATH
   ) {
-    failures.push("ui-core tokenContract.ts must remain the canonical token authority");
+    failures.push(
+      "ui-core tokenContract.ts must remain the canonical token authority",
+    );
   }
 
   const semanticEntries = Object.entries(vyrnForgeSemanticTokenGroups ?? {});
   const semanticNames = semanticEntries.flatMap(([, tokens]) => tokens);
-  const primitiveNames = Object.values(vyrnForgePrimitiveTokenGroups ?? {}).flat();
-  const aliasNames = (vyrnForgeCompatibilityAliases ?? []).map(({ name }) => name);
+  const primitiveNames = Object.values(
+    vyrnForgePrimitiveTokenGroups ?? {},
+  ).flat();
+  const aliasNames = (vyrnForgeCompatibilityAliases ?? []).map(
+    ({ name }) => name,
+  );
   const registeredNames = [
     ...primitiveNames,
     ...(vyrnForgeCompatibilitySourceTokens ?? []),
@@ -127,12 +133,16 @@ export function verifyDesignTokenContract({
   const registeredSet = new Set(registeredNames);
   for (const name of registeredSet) {
     if (!cssNames.has(name)) {
-      failures.push(`${name} is registered but missing from ui-core tokens.css`);
+      failures.push(
+        `${name} is registered but missing from ui-core tokens.css`,
+      );
     }
   }
   for (const name of cssNames) {
     if (!registeredSet.has(name)) {
-      failures.push(`${name} exists in ui-core tokens.css but is not registered`);
+      failures.push(
+        `${name} exists in ui-core tokens.css but is not registered`,
+      );
     }
   }
 
@@ -140,13 +150,17 @@ export function verifyDesignTokenContract({
     (category) => category.id,
   );
   if (categoryIds.join(",") !== semanticEntries.map(([id]) => id).join(",")) {
-    failures.push("reader token categories must match semantic token groups in order");
+    failures.push(
+      "reader token categories must match semantic token groups in order",
+    );
   }
   for (const category of vyrnForgeDesignTokenCategories ?? []) {
     const expected = vyrnForgeSemanticTokenGroups?.[category.id] ?? [];
     const actual = category.tokens?.map(({ name }) => name) ?? [];
     if (actual.join(",") !== expected.join(",")) {
-      failures.push(`reader token category '${category.id}' drifted from its semantic group`);
+      failures.push(
+        `reader token category '${category.id}' drifted from its semantic group`,
+      );
     }
   }
 
@@ -178,7 +192,9 @@ export function verifyDesignTokenContract({
     (vyrnForgeCanonicalDensities ?? []).join(",") !==
     "compact,balanced,spacious"
   ) {
-    failures.push("canonical densities must be compact, balanced, and spacious in that order");
+    failures.push(
+      "canonical densities must be compact, balanced, and spacious in that order",
+    );
   } else {
     for (const density of vyrnForgeCanonicalDensities) {
       if (
@@ -190,7 +206,9 @@ export function verifyDesignTokenContract({
     }
   }
 
-  for (const [alias, canonical] of Object.entries(vyrnForgeDensityAliases ?? {})) {
+  for (const [alias, canonical] of Object.entries(
+    vyrnForgeDensityAliases ?? {},
+  )) {
     if (
       !vyrnForgeCanonicalDensities?.includes(canonical) ||
       !densityCss.includes(`[data-density="${alias}"]`) ||
@@ -203,7 +221,10 @@ export function verifyDesignTokenContract({
   }
 
   for (const bridge of vyrnForgeCompatibilityBridges ?? []) {
-    if (!registeredSet.has(bridge.legacy) || !registeredSet.has(bridge.canonical)) {
+    if (
+      !registeredSet.has(bridge.legacy) ||
+      !registeredSet.has(bridge.canonical)
+    ) {
       failures.push("compatibility bridge references an unknown token");
       continue;
     }
@@ -242,7 +263,8 @@ export function verifyDesignTokenContract({
     }
   }
 
-  for (const selector of vyrnForgeMotionContract?.explicitReducedSelectors ?? []) {
+  for (const selector of vyrnForgeMotionContract?.explicitReducedSelectors ??
+    []) {
     if (!accessibilityCss.includes(selector)) {
       failures.push(`reduced-motion CSS is missing selector ${selector}`);
     }
