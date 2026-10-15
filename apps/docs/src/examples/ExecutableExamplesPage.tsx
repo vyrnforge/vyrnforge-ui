@@ -1,4 +1,10 @@
-import { Badge, CodeText, Heading, Text } from "@vyrnforge/ui-components";
+import {
+  Badge,
+  CodeText,
+  DescriptionList,
+  Heading,
+  Text,
+} from "@vyrnforge/ui-components";
 import type { DocsFrameworkId } from "../docsContext";
 import { resolveDocumentationExample } from "../referenceRoutes";
 import { CodeBlock } from "./components/CodeBlock";
@@ -147,24 +153,18 @@ export function ExecutableExamplesPage({
               <li key={concept}>{concept}</li>
             ))}
           </ul>
-          <dl>
-            <div>
-              <dt>Runtime</dt>
-              <dd>{runtime}</dd>
-            </div>
-            <div>
-              <dt>Public package</dt>
-              <dd>
-                <code>{surfaceGuidance.packageName}</code>
-              </dd>
-            </div>
-            <div>
-              <dt>Fixture</dt>
-              <dd>
-                <code>{example.fixtureId}</code>
-              </dd>
-            </div>
-          </dl>
+          <DescriptionList>
+            <dt>Runtime</dt>
+            <dd>{runtime}</dd>
+            <dt>Public package</dt>
+            <dd>
+              <code>{surfaceGuidance.packageName}</code>
+            </dd>
+            <dt>Fixture</dt>
+            <dd>
+              <code>{example.fixtureId}</code>
+            </dd>
+          </DescriptionList>
           {rendererPackages.length > 0 ? (
             <div className="vf-docs-framework-example__packages">
               <Text size="sm" tone="muted">
