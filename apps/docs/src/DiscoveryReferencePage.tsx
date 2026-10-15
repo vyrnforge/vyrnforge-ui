@@ -2,6 +2,7 @@ import {
   Badge,
   Card,
   CodeText,
+  DescriptionList,
   EmptyState,
   Heading,
   Stack,
@@ -45,19 +46,25 @@ function TokenReference({ id }: { id?: string | null }) {
           <Text size="sm" tone="muted">
             Canonical source: {category.sourceFile}
           </Text>
-          <div className="vf-docs-discovery-list">
+          <DescriptionList>
             {category.tokens.map((token) => (
-              <div className="vf-docs-discovery-row" key={token.name}>
-                <CodeText>{token.name}</CodeText>
-                <Text size="sm">{token.purpose}</Text>
-                {token.themeScoped ? (
-                  <Badge size="sm" tone="subtle" variant="info">
-                    Theme scoped
-                  </Badge>
-                ) : null}
+              <div key={token.name}>
+                <dt>
+                  <CodeText>{token.name}</CodeText>
+                </dt>
+                <dd>
+                  <Stack gap="xs">
+                    <Text size="sm">{token.purpose}</Text>
+                    {token.themeScoped ? (
+                      <Badge size="sm" tone="subtle" variant="info">
+                        Theme scoped
+                      </Badge>
+                    ) : null}
+                  </Stack>
+                </dd>
               </div>
             ))}
-          </div>
+          </DescriptionList>
         </section>
       </div>
     );
