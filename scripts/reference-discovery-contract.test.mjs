@@ -17,7 +17,6 @@ function json(relativePath) {
 test("Reference discovery stays derived from canonical VyrnForge sources", () => {
   const model = json("docs/generated/reference-model.json");
   const registry = json("docs/generated/documentation-registry.json");
-  const tokens = json("docs/metadata/design-tokens.json");
   const patterns = json("docs/metadata/patterns.json");
   const knowledge = json("docs/generated/consumer-knowledge.json");
 
@@ -38,12 +37,24 @@ test("Reference discovery stays derived from canonical VyrnForge sources", () =>
   assert.equal(searchDomain.mode, "derived-index");
   assert.equal(searchDomain.ownsFacts, false);
 
-  assert.equal(tokens.sourceOfTruth.canonical, true);
   assert.equal(patterns.sourceOfTruth.canonical, true);
-  assert(tokens.categories.length > 0);
   assert(patterns.patterns.length > 0);
   assert(knowledge.components.length > 0);
   assert.equal(model.examples.length, 4);
+
+  const tokenDomain = model.domains.find((domain) => domain.id === "tokens");
+  assert.equal(
+    tokenDomain.recordSource.path,
+    "packages/ui-core/src/theme/tokenContract.ts",
+  );
+  assert.equal(
+    tokenDomain.recordSource.collection,
+    "vyrnForgeDesignTokenCategories",
+  );
+  assert.equal(
+    model.tokenData.authority,
+    "packages/ui-core/src/theme/tokenContract.ts",
+  );
 
   assert(registry.pages.some((page) => page.id === "component-reference"));
   assert(registry.pages.some((page) => page.id === "token-reference"));
@@ -69,9 +80,10 @@ test("Reference discovery stays derived from canonical VyrnForge sources", () =>
   assert(registry.relatedContentInputs.length === registry.pages.length);
 
   const adapter = read("apps/docs/src/discoveryData.ts");
-  for (const marker of ["design-tokens.json?raw", "patterns.json?raw"]) {
-    assert(adapter.includes(marker));
-  }
+  assert.match(adapter, /@vyrnforge\/ui-core/u);
+  assert.match(adapter, /vyrnForgeDesignTokenCategories/u);
+  assert.doesNotMatch(adapter, /design-tokens\.json\?raw/u);
+  assert.match(adapter, /patterns\.json\?raw/u);
 
   const routes = read("apps/docs/src/referenceRoutes.ts");
   assert.match(routes, /generated\/documentation-registry\.json\?raw/u);
