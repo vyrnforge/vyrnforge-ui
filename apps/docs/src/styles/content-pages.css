@@ -169,7 +169,6 @@
 
 .vf-docs-catalog__stats dt,
 .vf-docs-example-reference__facts dt {
-  white-space: nowrap;
   overflow-wrap: normal;
   word-break: normal;
 }
