@@ -36,14 +36,26 @@ export {
 } from "./theme/themeUtils";
 export {
   vyrnForgeCanonicalDensities,
+  vyrnForgeCompatibilityAliases,
+  vyrnForgeCompatibilityBridges,
+  vyrnForgeCompatibilitySourceTokens,
   vyrnForgeDensityAliases,
+  vyrnForgeDesignTokenCategories,
+  vyrnForgeDesignTokenSource,
   vyrnForgeLayerOrder,
+  vyrnForgeMotionContract,
+  vyrnForgePrimitiveTokenGroups,
   vyrnForgeSemanticTokenGroups,
   vyrnForgeThemeColorTokens,
+  vyrnForgeThemeContract,
 } from "./theme/tokenContract";
 export type {
   VyrnForgeCanonicalDensity,
+  VyrnForgeDesignTokenCategory,
+  VyrnForgeDesignTokenRecord,
   VyrnForgeLayerToken,
+  VyrnForgePrimitiveToken,
+  VyrnForgePrimitiveTokenGroup,
   VyrnForgeSemanticToken,
   VyrnForgeSemanticTokenGroup,
 } from "./theme/tokenContract";
