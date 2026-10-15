@@ -7,19 +7,14 @@ import {
 } from "./verify-design-token-contract.mjs";
 
 async function cloneInputs() {
-  const inputs = await loadDesignTokenInputs();
-
-  return {
-    ...inputs,
-    registry: structuredClone({ ...inputs.registry }),
-  };
+  return structuredClone(await loadDesignTokenInputs());
 }
 
 test("the repository design token contract passes", async () => {
   assert.deepEqual(verifyDesignTokenContract(await cloneInputs()), []);
 });
 
-test("unregistered CSS tokens are rejected", async () => {
+test("unclassified CSS tokens are rejected", async () => {
   const inputs = await cloneInputs();
   inputs.tokensCss = inputs.tokensCss.replace(
     ":root {",
@@ -28,54 +23,45 @@ test("unregistered CSS tokens are rejected", async () => {
 
   assert(
     verifyDesignTokenContract(inputs).some((failure) =>
-      failure.includes("--vf-unregistered-test-token exists"),
+      failure.includes("--vf-unregistered-test-token is not classified"),
     ),
   );
 });
 
-test("missing primitive CSS declarations are rejected", async () => {
+test("missing semantic CSS declarations are rejected", async () => {
   const inputs = await cloneInputs();
-  inputs.tokensCss = inputs.tokensCss.replace(/--vf-space-1\s*:[^;]+;/u, "");
-
-  assert(
-    verifyDesignTokenContract(inputs).some((failure) =>
-      failure.includes("--vf-space-1 is registered but missing"),
-    ),
-  );
-});
-
-test("reader categories cannot drift from semantic groups", async () => {
-  const inputs = await cloneInputs();
-  inputs.registry.vyrnForgeDesignTokenCategories[0].tokens.pop();
-
-  assert(
-    verifyDesignTokenContract(inputs).some((failure) =>
-      failure.includes("reader token category 'surface' drifted"),
-    ),
-  );
-});
-
-test("duplicate registered token names are rejected", async () => {
-  const inputs = await cloneInputs();
-  inputs.registry.vyrnForgePrimitiveTokenGroups.shadow.push("--vf-space-1");
-
-  assert(
-    verifyDesignTokenContract(inputs).some((failure) =>
-      failure.includes("token registry contains duplicate '--vf-space-1'"),
-    ),
-  );
-});
-
-test("incomplete theme presets are rejected", async () => {
-  const inputs = await cloneInputs();
-  inputs.themePresetSource = inputs.themePresetSource.replace(
-    /"--vf-text-primary"\s*:[^,]+,\n/u,
+  inputs.tokensCss = inputs.tokensCss.replace(
+    /--vf-surface-page\s*:[^;]+;/u,
     "",
   );
 
   assert(
     verifyDesignTokenContract(inputs).some((failure) =>
-      failure.includes("is missing theme-scoped token --vf-text-primary"),
+      failure.includes("--vf-surface-page is registered by ui-core but missing"),
+    ),
+  );
+});
+
+test("duplicate semantic token names are rejected", async () => {
+  const inputs = await cloneInputs();
+  inputs.reference.categories[1].tokens.push(
+    structuredClone(inputs.reference.categories[0].tokens[0]),
+  );
+
+  assert(
+    verifyDesignTokenContract(inputs).some((failure) =>
+      failure.includes("semantic token registry contains duplicate"),
+    ),
+  );
+});
+
+test("generated Reference token ownership cannot drift", async () => {
+  const inputs = await cloneInputs();
+  inputs.reference.sourceOfTruth.authority = "docs/metadata/design-tokens.json";
+
+  assert(
+    verifyDesignTokenContract(inputs).some((failure) =>
+      failure.includes("generated projection of ui-core authority"),
     ),
   );
 });
@@ -89,33 +75,21 @@ test("density aliases must remain represented in CSS", async () => {
 
   assert(
     verifyDesignTokenContract(inputs).some((failure) =>
-      failure.includes("density alias 'standard'"),
+      failure.includes("density.css is missing density 'standard'"),
     ),
   );
 });
 
-test("compatibility bridges cannot silently break", async () => {
+test("compatibility aliases cannot silently break", async () => {
   const inputs = await cloneInputs();
   inputs.tokensCss = inputs.tokensCss.replace(
-    "--vf-surface-page: var(--vf-bg);",
-    "--vf-surface-page: #ffffff;",
+    "--vf-z-dialog: var(--vf-layer-modal);",
+    "--vf-z-dialog: 80;",
   );
 
   assert(
     verifyDesignTokenContract(inputs).some((failure) =>
-      failure.includes("must preserve compatibility through --vf-bg"),
-    ),
-  );
-});
-
-test("layer levels must remain unique and increasing", async () => {
-  const inputs = await cloneInputs();
-  inputs.registry.vyrnForgeLayerOrder[2].level =
-    inputs.registry.vyrnForgeLayerOrder[1].level;
-
-  assert(
-    verifyDesignTokenContract(inputs).some((failure) =>
-      failure.includes("layer levels must be unique"),
+      failure.includes("--vf-z-dialog must alias --vf-layer-modal"),
     ),
   );
 });
@@ -129,7 +103,7 @@ test("reduced-motion fallbacks are mandatory", async () => {
 
   assert(
     verifyDesignTokenContract(inputs).some((failure) =>
-      failure.includes("automatic reduced-motion media query is missing"),
+      failure.includes("reduced-motion CSS is missing"),
     ),
   );
 });
