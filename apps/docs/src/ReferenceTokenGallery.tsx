@@ -1,4 +1,12 @@
-import { Button, Heading, Text } from "@vyrnforge/ui-components";
+import {
+  Button,
+  Card,
+  CodeText,
+  DescriptionList,
+  Heading,
+  Stack,
+  Text,
+} from "@vyrnforge/ui-components";
 import type { DesignTokenCategory, DesignTokenRecord } from "./discoveryData";
 
 function token(category: DesignTokenCategory, name: string) {
@@ -11,16 +19,16 @@ function tokenValue(name: string) {
 
 function ColorSwatch({ item }: { item: DesignTokenRecord }) {
   return (
-    <div className="vf-docs-token-swatch">
+    <Card className="vf-docs-token-swatch" padding="sm" variant="bordered">
       <span
         className="vf-docs-token-swatch__sample"
         style={{ background: tokenValue(item.name) }}
       />
-      <code>{item.name}</code>
+      <CodeText>{item.name}</CodeText>
       <Text size="sm" tone="muted">
         {item.purpose}
       </Text>
-    </div>
+    </Card>
   );
 }
 
@@ -54,7 +62,7 @@ function TypographyCategory({ category }: { category: DesignTokenCategory }) {
   ] as const;
 
   return (
-    <div className="vf-docs-token-type-specimens">
+    <Stack className="vf-docs-token-type-specimens" gap="sm">
       {roles.map(([role, label, sample]) => {
         const family = token(category, `--vf-type-${role}-font-family`);
         const size = token(category, `--vf-type-${role}-font-size`);
@@ -65,8 +73,13 @@ function TypographyCategory({ category }: { category: DesignTokenCategory }) {
           `--vf-type-${role}-letter-spacing`,
         );
         return (
-          <div className="vf-docs-token-type-specimen" key={role}>
-            <div>
+          <Card
+            className="vf-docs-token-type-specimen"
+            key={role}
+            padding="sm"
+            variant="bordered"
+          >
+            <Stack gap="xs">
               <Text className="vf-docs-catalog__kicker" size="sm">
                 {label}
               </Text>
@@ -86,12 +99,12 @@ function TypographyCategory({ category }: { category: DesignTokenCategory }) {
               >
                 {sample}
               </div>
-            </div>
-            <code>{size?.name ?? role}</code>
-          </div>
+            </Stack>
+            <CodeText>{size?.name ?? role}</CodeText>
+          </Card>
         );
       })}
-    </div>
+    </Stack>
   );
 }
 
@@ -99,15 +112,24 @@ function DensityCategory({ category }: { category: DesignTokenCategory }) {
   return (
     <div className="vf-docs-token-density-specimens">
       {(["sm", "md", "lg"] as const).map((size) => (
-        <div className="vf-docs-token-density-specimen" key={size}>
+        <Card
+          className="vf-docs-token-density-specimen"
+          key={size}
+          padding="sm"
+          variant="bordered"
+        >
           <Text className="vf-docs-catalog__kicker" size="sm">
             {size}
           </Text>
           <Button size={size}>Action</Button>
-          <code>{`--vf-control-height-${size}`}</code>
-        </div>
+          <CodeText>{`--vf-control-height-${size}`}</CodeText>
+        </Card>
       ))}
-      <div className="vf-docs-token-density-specimen">
+      <Card
+        className="vf-docs-token-density-specimen"
+        padding="sm"
+        variant="bordered"
+      >
         <Text className="vf-docs-catalog__kicker" size="sm">
           minimum target
         </Text>
@@ -120,8 +142,8 @@ function DensityCategory({ category }: { category: DesignTokenCategory }) {
         >
           AA
         </span>
-        <code>--vf-hit-target-min</code>
-      </div>
+        <CodeText>--vf-hit-target-min</CodeText>
+      </Card>
     </div>
   );
 }
@@ -131,19 +153,24 @@ function MotionCategory({ category }: { category: DesignTokenCategory }) {
     item.name.includes("duration"),
   );
   return (
-    <div className="vf-docs-token-motion-specimens">
+    <Stack className="vf-docs-token-motion-specimens" gap="sm">
       {durations.map((item) => (
-        <div className="vf-docs-token-motion-specimen" key={item.name}>
+        <Card
+          className="vf-docs-token-motion-specimen"
+          key={item.name}
+          padding="sm"
+          variant="bordered"
+        >
           <div
             className="vf-docs-token-motion-specimen__track"
             style={{ animationDuration: tokenValue(item.name) }}
           >
             <span />
           </div>
-          <code>{item.name}</code>
-        </div>
+          <CodeText>{item.name}</CodeText>
+        </Card>
       ))}
-    </div>
+    </Stack>
   );
 }
 
@@ -151,17 +178,19 @@ function LayerCategory({ category }: { category: DesignTokenCategory }) {
   return (
     <div className="vf-docs-token-layer-specimen">
       {category.tokens.slice(0, 8).map((item, index) => (
-        <div
+        <Card
           className="vf-docs-token-layer-specimen__item"
           key={item.name}
+          padding="sm"
+          variant="bordered"
           style={{
             transform: `translate(${index * 16}px, ${index * -8}px)`,
             zIndex: tokenValue(item.name),
           }}
         >
           <span>{item.name.replace("--vf-layer-", "")}</span>
-          <code>{item.name}</code>
-        </div>
+          <CodeText>{item.name}</CodeText>
+        </Card>
       ))}
     </div>
   );
@@ -169,16 +198,18 @@ function LayerCategory({ category }: { category: DesignTokenCategory }) {
 
 function GenericCategory({ category }: { category: DesignTokenCategory }) {
   return (
-    <div className="vf-docs-token-role-list">
-      {category.tokens.map((item) => (
-        <div key={item.name}>
-          <code>{item.name}</code>
+    <DescriptionList className="vf-docs-token-role-list">
+      {category.tokens.flatMap((item) => [
+        <dt key={`${item.name}-term`}>
+          <CodeText>{item.name}</CodeText>
+        </dt>,
+        <dd key={`${item.name}-description`}>
           <Text size="sm" tone="muted">
             {item.purpose}
           </Text>
-        </div>
-      ))}
-    </div>
+        </dd>,
+      ])}
+    </DescriptionList>
   );
 }
 
@@ -206,14 +237,19 @@ function CategorySpecimen({ category }: { category: DesignTokenCategory }) {
 export function ReferenceTokenGallery({
   categories,
 }: {
-  categories: DesignTokenCategory[];
+  categories: readonly DesignTokenCategory[];
 }) {
   return (
-    <div className="vf-docs-token-gallery">
+    <Stack className="vf-docs-token-gallery" gap="lg">
       {categories.map((category) => (
-        <section className="vf-docs-token-category" key={category.id}>
+        <Card
+          className="vf-docs-token-category"
+          key={category.id}
+          padding="lg"
+          variant="bordered"
+        >
           <div className="vf-docs-token-category__heading">
-            <div>
+            <Stack gap="xs">
               <Text className="vf-docs-catalog__kicker" size="sm">
                 {category.tokens.length} canonical tokens
               </Text>
@@ -221,14 +257,14 @@ export function ReferenceTokenGallery({
                 {category.id}
               </Heading>
               <Text tone="muted">{category.purpose}</Text>
-            </div>
+            </Stack>
             <a href={`#/token-reference/${category.id}`}>
               Inspect variables <span aria-hidden="true">→</span>
             </a>
           </div>
           <CategorySpecimen category={category} />
-        </section>
+        </Card>
       ))}
-    </div>
+    </Stack>
   );
 }

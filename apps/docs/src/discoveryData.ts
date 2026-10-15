@@ -1,23 +1,27 @@
-import designTokensRaw from "../../../docs/metadata/design-tokens.json?raw";
+import designTokensRaw from "../../../docs/generated/design-token-reference.json?raw";
 import patternsRaw from "../../../docs/metadata/patterns.json?raw";
 
 export type DesignTokenRecord = {
   name: string;
   purpose: string;
-  themeScoped?: boolean;
+  themeScoped: boolean;
 };
 
 export type DesignTokenCategory = {
   id: string;
-  purpose: string;
+  task: string;
   sourceFile: string;
+  purpose: string;
   tokens: DesignTokenRecord[];
 };
 
-type DesignTokenMetadata = {
+type DesignTokenReference = {
   schemaVersion: number;
   sourceOfTruth: {
-    canonical: boolean;
+    canonical: false;
+    generated: true;
+    owner: "@vyrnforge/ui-core";
+    authority: string;
     implementation: string;
     typedExport: string;
   };
@@ -47,11 +51,16 @@ type PatternMetadata = {
   patterns: PatternReferenceRecord[];
 };
 
-const designTokens = JSON.parse(designTokensRaw) as DesignTokenMetadata;
+const designTokens = JSON.parse(designTokensRaw) as DesignTokenReference;
 const patterns = JSON.parse(patternsRaw) as PatternMetadata;
 
-if (designTokens.schemaVersion !== 1 || !designTokens.sourceOfTruth.canonical) {
-  throw new Error("Unsupported VyrnForge design-token discovery contract.");
+if (
+  designTokens.schemaVersion !== 1 ||
+  designTokens.sourceOfTruth.canonical ||
+  !designTokens.sourceOfTruth.generated ||
+  designTokens.sourceOfTruth.owner !== "@vyrnforge/ui-core"
+) {
+  throw new Error("Unsupported VyrnForge generated design-token reference.");
 }
 if (patterns.schemaVersion !== 1 || !patterns.sourceOfTruth.canonical) {
   throw new Error("Unsupported VyrnForge pattern discovery contract.");
