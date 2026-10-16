@@ -1,4 +1,4 @@
-import { useMemo, useState } from "react";
+import { useMemo } from "react";
 import {
   Button,
   SearchInput,
@@ -28,6 +28,8 @@ type ReferenceNavigationProps = {
   frameworkId: DocsFrameworkId;
   version: string;
   onRouteChange: (routeId: string) => void;
+  query?: string;
+  onQueryChange?: (query: string) => void;
 };
 
 type ApiMemberSearchRecord = Extract<
@@ -131,8 +133,9 @@ export function ReferenceNavigation({
   frameworkId,
   version,
   onRouteChange,
+  query = "",
+  onQueryChange,
 }: ReferenceNavigationProps) {
-  const [query, setQuery] = useState("");
   const normalizedQuery = query.trim().toLowerCase();
 
   const apiMembers = useMemo(
@@ -253,7 +256,7 @@ export function ReferenceNavigation({
       <div className="vf-reference-navigation__search" role="search">
         <SearchInput
           aria-label="Search VyrnForge Reference"
-          onChange={(event) => setQuery(event.currentTarget.value)}
+          onChange={(event) => onQueryChange?.(event.currentTarget.value)}
           placeholder="Search Reference…"
           size="sm"
           value={query}
