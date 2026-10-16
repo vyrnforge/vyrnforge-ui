@@ -41,23 +41,15 @@
 
 .vf-reference-navigation__group-label {
   margin: 0;
-  padding-inline: var(--vf-space-2);
+  padding-inline: var(--vf-space-3);
   color: var(--vf-text-primary);
   font-weight: var(--vf-font-weight-bold);
 }
 
 .vf-reference-navigation__section-nav {
-  --vf-side-nav-gap: 0;
-  --vf-side-nav-padding: 0;
-  --vf-side-nav-background: transparent;
-  --vf-side-nav-list-gap: 1px;
-  --vf-side-nav-children-indent: 0;
-  --vf-side-nav-item-min-height: var(--vf-control-height-sm);
-  --vf-side-nav-item-padding-block: var(--vf-space-2);
-  --vf-side-nav-item-padding-inline: var(--vf-space-3);
-  --vf-side-nav-item-border: transparent;
-  --vf-side-nav-item-font-size: var(--vf-font-size-sm);
-  --vf-side-nav-item-active-border: transparent;
+  min-height: auto;
+  padding: 0;
+  background: transparent;
 }
 
 .vf-reference-navigation__empty {
