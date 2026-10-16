@@ -122,28 +122,6 @@ const buildPackages = orderSelectedPackages(
   expandWorkspaceDependencyClosure(selectedPackages),
 );
 
-const formPath = path.join(
-  root,
-  "apps",
-  "docs",
-  "src",
-  "examples",
-  "pages",
-  "patterns",
-  "FormPage.tsx",
-);
-runNpm([
-  "exec",
-  "--",
-  "prettier",
-  "--write",
-  "apps/docs/src/examples/pages/patterns/FormPage.tsx",
-]);
-console.log("FORMPAGE_PRETTIER_OUTPUT_START");
-console.log(readFileSync(formPath, "utf8"));
-console.log("FORMPAGE_PRETTIER_OUTPUT_END");
-throw new Error("Diagnostic Prettier output captured");
-
 for (const command of [
   "format:check",
   "lint",
