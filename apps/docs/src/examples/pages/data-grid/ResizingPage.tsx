@@ -1,21 +1,16 @@
+import { Section } from "@vyrnforge/ui-components";
 import { UniversalDataGrid } from "@vyrnforge/ui-data-grid";
 import { users } from "../../data/users";
-import { GridNote, resizableUserColumns } from "./gridShared";
+import { resizableUserColumns } from "./gridShared";
 
 export function ResizingPage() {
   return (
-    <section className="vf-playground-panel">
-      <div className="vf-playground-section-heading">
-        <div>
-          <h2>Resizable columns</h2>
-          <GridNote>
-            Columns define min widths and opt into the package’s resize
-            handling.
-          </GridNote>
-        </div>
-      </div>
+    <Section
+      description="Columns define min widths and opt into the package’s resize handling."
+      title="Resizable columns"
+    >
       <UniversalDataGrid
-        tableId="vf-playground-resizing"
+        tableId="vf-docs-resizing"
         rows={users}
         columns={resizableUserColumns}
         getRowId={(row) => row.id}
@@ -25,6 +20,6 @@ export function ResizingPage() {
         maxHeight={560}
         variant="bordered"
       />
-    </section>
+    </Section>
   );
 }
