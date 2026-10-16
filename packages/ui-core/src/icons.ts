@@ -32,6 +32,19 @@ export const vyrnForgeIconNames = [
   "Resize",
   "Eye",
   "EyeOff",
+  "Home",
+  "Box",
+  "Palette",
+  "Layers",
+  "Play",
+  "BookOpen",
+  "Package",
+  "Code",
+  "GitHub",
+  "Sun",
+  "Moon",
+  "Menu",
+  "VyrnForgeMark",
 ] as const;
 
 export type VyrnForgeIconName = (typeof vyrnForgeIconNames)[number];
@@ -141,6 +154,19 @@ export const vyrnForgeIconDefinitions: Readonly<
     path("M21 12s-3 6-9 6c-2 0-3.7-.7-5.1-1.6"),
     path("m4 4 16 16"),
   ],
+  Home: [path("m3 11 9-7 9 7"), path("M5 10v10h14V10M9 20v-6h6v6")],
+  Box: [path("m4 7 8-4 8 4-8 4z"), path("m4 7 8 4 8-4v10l-8 4-8-4z"), path("M12 11v10")],
+  Palette: [path("M12 3a9 9 0 0 0 0 18h1.5a1.5 1.5 0 0 0 0-3H12a2 2 0 0 1 0-4h3a6 6 0 0 0 0-12z"), circle(7.5, 10, 0.75), circle(10, 7, 0.75), circle(14, 7, 0.75), circle(16.5, 10, 0.75)],
+  Layers: [path("m12 3 9 5-9 5-9-5z"), path("m3 12 9 5 9-5"), path("m3 16 9 5 9-5")],
+  Play: [circle(12, 12, 9), path("m10 8 6 4-6 4z")],
+  BookOpen: [path("M4 5.5A3.5 3.5 0 0 1 7.5 2H11v17H7.5A3.5 3.5 0 0 0 4 22z"), path("M20 5.5A3.5 3.5 0 0 0 16.5 2H13v17h3.5A3.5 3.5 0 0 1 20 22z")],
+  Package: [path("m4 7 8-4 8 4-8 4z"), path("M4 7v10l8 4 8-4V7"), path("M12 11v10"), path("m8 5 8 4")],
+  Code: [path("m9 7-5 5 5 5"), path("m15 7 5 5-5 5"), path("m14 4-4 16")],
+  GitHub: [path("M15 22v-4a4.8 4.8 0 0 0-1-3.5c3.3-.4 6.8-1.6 6.8-7.4A5.8 5.8 0 0 0 19.3 3a5.4 5.4 0 0 0-.1-4S18-1.4 15 1.5a13.4 13.4 0 0 0-7 0C5-1.4 3.8-1 3.8-1a5.4 5.4 0 0 0-.1 4A5.8 5.8 0 0 0 2.2 7.1c0 5.8 3.5 7 6.8 7.4A4.8 4.8 0 0 0 8 18v4"), path("M8 19c-3 .9-3-1.5-4-2")],
+  Sun: [circle(12, 12, 4), path("M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4")],
+  Moon: [path("M20.5 14.2A8.5 8.5 0 0 1 9.8 3.5 8.5 8.5 0 1 0 20.5 14.2z")],
+  Menu: [path("M4 7h16M4 12h16M4 17h16")],
+  VyrnForgeMark: [path("M4 5l8 14L20 5"), path("M8 5l4 7 4-7")],
 });
 
 export function resolveVyrnForgeIconSize(size: VyrnForgeIconSize): number {
