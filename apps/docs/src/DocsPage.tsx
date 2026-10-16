@@ -188,6 +188,19 @@ export function DocsPage({
 
   const componentId =
     referenceRecord?.domain === "components" ? referenceRecord.id : null;
+
+  if (route.kind === "component-reference" && componentId) {
+    return (
+      <div className="vf-docs-component-detail-page">
+        <ComponentReferencePage
+          componentId={componentId}
+          frameworkId={frameworkId}
+          version={version}
+        />
+      </div>
+    );
+  }
+
   const usesStandardReadingPage =
     route.kind === "overview" ||
     (route.kind === "markdown" && route.template !== "advanced-module");
