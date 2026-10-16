@@ -46,10 +46,7 @@
   gap: var(--vf-side-nav-item-gap, var(--vf-component-gap));
   width: 100%;
   min-width: 0;
-  min-height: var(
-    --vf-side-nav-item-min-height,
-    var(--vf-control-height-md)
-  );
+  min-height: var(--vf-side-nav-item-min-height, var(--vf-control-height-md));
   border: 1px solid transparent;
   border-radius: var(--vf-side-nav-item-radius, var(--vf-radius-md));
   padding-block: var(
@@ -66,10 +63,7 @@
     --vf-side-nav-item-font-family,
     var(--vf-type-label-font-family)
   );
-  font-size: var(
-    --vf-side-nav-item-font-size,
-    var(--vf-type-label-font-size)
-  );
+  font-size: var(--vf-side-nav-item-font-size, var(--vf-type-label-font-size));
   font-weight: var(
     --vf-side-nav-item-font-weight,
     var(--vf-type-label-font-weight)
@@ -109,10 +103,7 @@
   );
 }
 .vf-side-nav__item--level-2 {
-  min-height: var(
-    --vf-side-nav-child-min-height,
-    var(--vf-control-height-sm)
-  );
+  min-height: var(--vf-side-nav-child-min-height, var(--vf-control-height-sm));
   padding-inline: var(
     --vf-side-nav-child-padding-inline,
     var(--vf-control-padding-x-sm)
