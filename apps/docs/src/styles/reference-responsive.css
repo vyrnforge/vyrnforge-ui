@@ -17,6 +17,14 @@
   overflow-wrap: anywhere;
 }
 
+/* Browser/product contracts retain this hook; Card owns the generic surface. */
+.vf-docs-live-example {
+  padding: 0;
+  border: 0;
+  border-radius: 0;
+  background: transparent;
+}
+
 @media (prefers-reduced-motion: reduce) {
   .vf-docs-reference * {
     scroll-behavior: auto !important;
