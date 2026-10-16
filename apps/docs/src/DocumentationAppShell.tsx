@@ -47,7 +47,7 @@ export function DocumentationAppShell({
   );
 
   const actions = (
-    <>
+    <div className="vf-docs-app-shell__header-actions">
       <div className="vf-docs-app-shell__header-search" role="search">
         <SearchInput
           aria-label="Search VyrnForge Reference"
@@ -74,7 +74,7 @@ export function DocumentationAppShell({
           Browse
         </Button>
       </div>
-    </>
+    </div>
   );
 
   const header = (
