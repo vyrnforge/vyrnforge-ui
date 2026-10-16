@@ -122,6 +122,12 @@ const buildPackages = orderSelectedPackages(
   expandWorkspaceDependencyClosure(selectedPackages),
 );
 
+runNpm(["exec", "--", "prettier", "--write", "packages/ui-core/src/icons.ts"]);
+console.log("---BEGIN FORMATTED ICONS---");
+console.log(readFileSync(path.join(root, "packages/ui-core/src/icons.ts"), "utf8"));
+console.log("---END FORMATTED ICONS---");
+throw new Error("Captured formatted icons for branch repair");
+
 for (const command of [
   "format:check",
   "lint",
