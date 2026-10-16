@@ -1,22 +1,16 @@
-import { Badge } from "@vyrnforge/ui-components";
+import { Badge, Inline, Section } from "@vyrnforge/ui-components";
 import { UniversalDataGrid } from "@vyrnforge/ui-data-grid";
 import { users } from "../../data/users";
-import { GridNote, userColumns } from "./gridShared";
+import { userColumns } from "./gridShared";
 
 export function GroupingPage() {
   return (
-    <section className="vf-playground-panel">
-      <div className="vf-playground-section-heading">
-        <div>
-          <h2>Grouping</h2>
-          <GridNote>
-            Grouping starts by team and status using the grid’s current grouping
-            behavior.
-          </GridNote>
-        </div>
-      </div>
+    <Section
+      description="Grouping starts by team and status using the grid’s current grouping behavior."
+      title="Grouping"
+    >
       <UniversalDataGrid
-        tableId="vf-playground-grouping"
+        tableId="vf-docs-grouping"
         rows={users}
         columns={userColumns}
         getRowId={(row) => row.id}
@@ -24,13 +18,13 @@ export function GroupingPage() {
         defaultGrouping={["team", "status"]}
         defaultExpandedGroups="all"
         renderGroupHeader={({ group }) => (
-          <span className="vf-playground-group-header">
+          <Inline align="center" gap="sm">
             <strong>{group.label}</strong>
             <Badge variant="neutral">{group.rowCount} rows</Badge>
-          </span>
+          </Inline>
         )}
         variant="card"
       />
-    </section>
+    </Section>
   );
 }
