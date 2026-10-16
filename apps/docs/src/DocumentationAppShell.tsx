@@ -44,6 +44,7 @@ export function DocumentationAppShell({
       >
         <span className="vf-docs-app-shell__identity">
           <strong>VyrnForge</strong>
+          <small>Docs</small>
         </span>
       </Button>
 
@@ -53,7 +54,7 @@ export function DocumentationAppShell({
 
       <div className="vf-docs-app-shell__header-search" role="search">
         <SearchInput
-          aria-label="Search VyrnForge documentation"
+          aria-label="Search VyrnForge Reference"
           onChange={(event) => onSearchQueryChange?.(event.currentTarget.value)}
           placeholder="Search documentation…"
           size="sm"
