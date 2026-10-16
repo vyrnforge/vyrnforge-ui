@@ -262,7 +262,7 @@ export function ReferenceNavigation({
           value={query}
         />
       </div>
-      <div className="vf-reference-navigation__groups">
+      <div className="vf-reference-navigation__groups vf-reference-navigation__sections">
         {groups.map((group) => (
           <section
             aria-labelledby={`vf-reference-nav-${group.id}`}
