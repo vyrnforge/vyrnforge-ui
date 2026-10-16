@@ -3,7 +3,9 @@ import {
   AppShell,
   Button,
   Drawer,
+  Icon,
   SearchInput,
+  TopNav,
 } from "@vyrnforge/ui-components";
 
 type DocumentationAppShellProps = {
@@ -28,30 +30,24 @@ export function DocumentationAppShell({
   const [mobileNavigationOpen, setMobileNavigationOpen] = useState(false);
   const closeMobileNavigation = () => setMobileNavigationOpen(false);
 
-  const header = (
-    <div className="vf-docs-app-shell__header-inner">
-      <Button
-        aria-label="VyrnForge documentation home"
-        className="vf-docs-app-shell__brand"
-        leftSlot={
-          <span aria-hidden="true" className="vf-docs-app-shell__mark">
-            V
-          </span>
-        }
-        onClick={onHome}
-        size="sm"
-        variant="ghost"
-      >
-        <span className="vf-docs-app-shell__identity">
-          <strong>VyrnForge</strong>
-          <small>Docs</small>
-        </span>
-      </Button>
+  const brand = (
+    <Button
+      aria-label="VyrnForge documentation home"
+      className="vf-docs-app-shell__brand"
+      leftSlot={<Icon name="VyrnForgeMark" size="lg" />}
+      onClick={onHome}
+      size="sm"
+      variant="ghost"
+    >
+      <span className="vf-docs-app-shell__identity">
+        <strong>VyrnForge</strong>
+        <small>Docs</small>
+      </span>
+    </Button>
+  );
 
-      {primaryNavigation ? (
-        <div className="vf-docs-app-shell__primary">{primaryNavigation}</div>
-      ) : null}
-
+  const actions = (
+    <div className="vf-docs-app-shell__header-actions">
       <div className="vf-docs-app-shell__header-search" role="search">
         <SearchInput
           aria-label="Search VyrnForge Reference"
@@ -64,13 +60,13 @@ export function DocumentationAppShell({
           Ctrl K
         </span>
       </div>
-
       <div className="vf-docs-app-shell__utilities">
         {utilityControls}
         <Button
           aria-expanded={mobileNavigationOpen}
           aria-haspopup="dialog"
           className="vf-docs-app-shell__menu-button"
+          leftSlot={<Icon name="Menu" size="sm" />}
           onClick={() => setMobileNavigationOpen(true)}
           size="sm"
           variant="subtle"
@@ -79,6 +75,15 @@ export function DocumentationAppShell({
         </Button>
       </div>
     </div>
+  );
+
+  const header = (
+    <TopNav
+      actions={actions}
+      brand={brand}
+      className="vf-docs-app-shell__top-nav"
+      navigation={primaryNavigation}
+    />
   );
 
   const sidebar = (

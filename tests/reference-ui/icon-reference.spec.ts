@@ -10,17 +10,17 @@ test.describe("Icon Reference catalog", () => {
     await expect(
       page.getByRole("heading", { name: "Icons", exact: true }),
     ).toBeVisible();
-    await expect(page.getByText("33 icons", { exact: true })).toBeVisible();
+    await expect(page.getByText("38 icons", { exact: true })).toBeVisible();
     await expect(
       page.locator('.vf-docs-icon-grid [role="listitem"]'),
-    ).toHaveCount(33);
+    ).toHaveCount(38);
 
     await page.getByRole("searchbox", { name: "Search icons" }).fill("eye");
     await expect(
       page.locator('.vf-docs-icon-grid [role="listitem"]'),
     ).toHaveCount(2);
     await expect(
-      page.getByText("2 of 33 icons", { exact: true }),
+      page.getByText("2 of 38 icons", { exact: true }),
     ).toBeVisible();
 
     await page.getByRole("button", { name: "EyeOff" }).click();
@@ -97,7 +97,7 @@ test.describe("Icon Reference catalog", () => {
     await expect(
       page.getByRole("heading", { name: "Icon catalog", exact: true }),
     ).toBeVisible();
-    await expect(page.getByText("33 icons", { exact: true })).toBeVisible();
+    await expect(page.getByText("38 icons", { exact: true })).toBeVisible();
     await expect(
       page.getByRole("searchbox", { name: "Search icons" }),
     ).toBeVisible();

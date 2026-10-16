@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useState } from "react";
-import { Button } from "@vyrnforge/ui-components";
+import { Icon, IconButton } from "@vyrnforge/ui-components";
 import {
   getReferenceLocationContext,
   getReferenceLocationHref,
@@ -273,21 +273,22 @@ export default function App() {
         docsVersions={docsVersions}
         framework={framework}
         headerAction={
-          <Button
+          <IconButton
             aria-label={
               theme === "light" ? "Toggle dark theme" : "Toggle light theme"
             }
             aria-pressed={theme === "dark"}
-            size="sm"
-            variant="subtle"
             onClick={() =>
               setTheme((currentTheme) =>
                 currentTheme === "light" ? "dark" : "light",
               )
             }
+            size="sm"
+            tooltip={theme === "light" ? "Dark theme" : "Light theme"}
+            variant="ghost"
           >
-            {theme === "light" ? "Dark" : "Light"}
-          </Button>
+            <Icon name={theme === "light" ? "Moon" : "Sun"} size="sm" />
+          </IconButton>
         }
         invalidPath={docsLocation.invalidPath}
         onFrameworkChange={handleFrameworkChange}
