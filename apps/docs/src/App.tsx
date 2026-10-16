@@ -266,6 +266,7 @@ export default function App() {
   };
 
   const nextTheme = theme === "light" ? "dark" : "light";
+  const themeToggleLabel = `Toggle ${nextTheme} theme`;
 
   return (
     <div className="vf-docs-app" data-theme={theme}>
@@ -276,11 +277,11 @@ export default function App() {
         framework={framework}
         headerAction={
           <IconButton
-            aria-label={`Use ${nextTheme} theme`}
+            aria-label={themeToggleLabel}
             aria-pressed={theme === "dark"}
             onClick={() => setTheme(nextTheme)}
             size="sm"
-            tooltip={`Use ${nextTheme} theme`}
+            tooltip={themeToggleLabel}
             variant="ghost"
           >
             <Icon name={theme === "light" ? "Moon" : "Sun"} />
