@@ -56,8 +56,7 @@
 
 .vf-reference-navigation__sections .vf-side-nav__item:disabled {
   min-height: 28px;
-  padding: var(--vf-space-3, 12px) var(--vf-space-2, 8px)
-    var(--vf-space-1, 4px);
+  padding: var(--vf-space-3, 12px) var(--vf-space-2, 8px) var(--vf-space-1, 4px);
   color: var(--vf-text-primary);
   background: transparent;
   font-size: var(--vf-font-size-xs, 12px);
