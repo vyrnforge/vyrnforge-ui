@@ -165,19 +165,10 @@ export const vyrnForgeIconDefinitions: Readonly<
     path("M8.8 17.5c-2 .6-2.4-1-3.2-1.5"),
   ],
   Component: [rect(4, 4, 16, 16, 3), rect(8, 8, 8, 8, 2)],
-  Package: [
-    path("m4 7 8-4 8 4-8 4z"),
-    path("M4 7v10l8 4 8-4V7M12 11v10"),
-  ],
-  Book: [
-    path("M5 4h10a3 3 0 0 1 3 3v13H8a3 3 0 0 1-3-3z"),
-    path("M8 4v16"),
-  ],
+  Package: [path("m4 7 8-4 8 4-8 4z"), path("M4 7v10l8 4 8-4V7M12 11v10")],
+  Book: [path("M5 4h10a3 3 0 0 1 3 3v13H8a3 3 0 0 1-3-3z"), path("M8 4v16")],
   Code: [path("m9 7-5 5 5 5M15 7l5 5-5 5")],
-  VyrnForgeMark: [
-    path("M4 5 9.5 19 12 12l2.5 7L20 5"),
-    path("M8 5l4 10 4-10"),
-  ],
+  VyrnForgeMark: [path("M4 5 9.5 19 12 12l2.5 7L20 5"), path("M8 5l4 10 4-10")],
 });
 
 export function resolveVyrnForgeIconSize(size: VyrnForgeIconSize): number {
