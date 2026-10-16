@@ -2,6 +2,7 @@ import { useState, type ReactNode } from "react";
 import {
   Badge,
   Button,
+  Card,
   Heading,
   InlineMessage,
   SearchInput,
@@ -31,22 +32,24 @@ function ShowcaseSection({
 }) {
   return (
     <section className="vf-docs-component-showcase__section">
-      <div className="vf-docs-component-showcase__heading">
-        <div>
-          <Heading level={3} size="md">
-            {title}
-          </Heading>
-          <Text tone="muted">{description}</Text>
+      <Card padding="md" variant="bordered">
+        <div className="vf-docs-component-showcase__heading">
+          <div>
+            <Heading level={3} size="md">
+              {title}
+            </Heading>
+            <Text tone="muted">{description}</Text>
+          </div>
+          <div className="vf-docs-component-showcase__links">
+            {links.map((link) => (
+              <a href={componentHref(link.id)} key={link.id}>
+                {link.label}
+              </a>
+            ))}
+          </div>
         </div>
-        <div className="vf-docs-component-showcase__links">
-          {links.map((link) => (
-            <a href={componentHref(link.id)} key={link.id}>
-              {link.label}
-            </a>
-          ))}
-        </div>
-      </div>
-      <div className="vf-docs-component-showcase__stage">{children}</div>
+        <div className="vf-docs-component-showcase__stage">{children}</div>
+      </Card>
     </section>
   );
 }
