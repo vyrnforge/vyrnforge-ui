@@ -299,7 +299,7 @@ test.describe("VyrnForge Reference product", () => {
     ).toBeVisible();
 
     await page
-      .getByRole("button", { name: "Components", exact: true })
+      .getByRole("link", { name: "Components", exact: true })
       .first()
       .click();
     await expect(page.locator("#vf-reference-main")).toBeFocused();
