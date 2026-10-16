@@ -1,5 +1,5 @@
 import type { ComponentType } from "react";
-import { Heading, Text } from "@vyrnforge/ui-components";
+import { EmptyState, Heading, Text } from "@vyrnforge/ui-components";
 import type { DocsFrameworkId } from "./docsContext";
 import { resolveDocumentationExample } from "./referenceRoutes";
 
@@ -53,14 +53,11 @@ export function ReferenceLiveExample({
 
   if (!resolution.available) {
     return (
-      <div className="vf-docs-live-example__unavailable">
-        <Heading level={4} size="sm">
-          {title}
-        </Heading>
-        <Text tone="muted">
-          This interactive example is not published for {frameworkId} {version}.
-        </Text>
-      </div>
+      <EmptyState
+        className="vf-docs-state"
+        description={`This interactive example is not published for ${frameworkId} ${version}.`}
+        title={`${title} unavailable`}
+      />
     );
   }
 
