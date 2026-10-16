@@ -3,6 +3,11 @@ export const vyrnForgeIconNames = [
   "Filter",
   "Columns",
   "Settings",
+  "Sun",
+  "Moon",
+  "Menu",
+  "GitHub",
+  "VyrnForgeMark",
   "Refresh",
   "Export",
   "Import",
@@ -62,6 +67,11 @@ const path = (d: string): VyrnForgeIconNode => ({
   attributes: { d },
 });
 
+const filledPath = (d: string): VyrnForgeIconNode => ({
+  element: "path",
+  attributes: { d, fill: "currentColor", stroke: "none" },
+});
+
 const circle = (cx: number, cy: number, r: number): VyrnForgeIconNode => ({
   element: "circle",
   attributes: { cx, cy, r },
@@ -96,13 +106,30 @@ export const vyrnForgeIconDefinitions: Readonly<
       "M12 3v3M12 18v3M3 12h3M18 12h3M5 5l2 2M17 17l2 2M19 5l-2 2M7 17l-2 2",
     ),
   ],
+  Sun: [
+    circle(12, 12, 4),
+    path(
+      "M12 2v2M12 20v2M4.93 4.93l1.42 1.42M17.65 17.65l1.42 1.42M2 12h2M20 12h2M4.93 19.07l1.42-1.42M17.65 6.35l1.42-1.42",
+    ),
+  ],
+  Moon: [path("M20 15.5A8.5 8.5 0 1 1 8.5 4 7 7 0 0 0 20 15.5z")],
+  Menu: [path("M4 7h16M4 12h16M4 17h16")],
+  GitHub: [
+    filledPath(
+      "M12 2.75a9.25 9.25 0 0 0-2.92 18.03c.46.08.63-.2.63-.44v-1.72c-2.57.56-3.11-1.09-3.11-1.09-.42-1.07-1.03-1.35-1.03-1.35-.84-.57.06-.56.06-.56.93.07 1.42.96 1.42.96.83 1.42 2.17 1.01 2.7.77.08-.6.32-1.01.59-1.24-2.05-.23-4.21-1.03-4.21-4.57 0-1.01.36-1.84.96-2.49-.1-.23-.42-1.18.09-2.46 0 0 .78-.25 2.54.95A8.84 8.84 0 0 1 12 7.23a8.8 8.8 0 0 1 2.31.31c1.76-1.2 2.54-.95 2.54-.95.51 1.28.19 2.23.09 2.46.6.65.96 1.48.96 2.49 0 3.55-2.16 4.33-4.22 4.56.33.29.63.85.63 1.72v2.52c0 .24.17.52.64.44A9.25 9.25 0 0 0 12 2.75Z",
+    ),
+  ],
+  VyrnForgeMark: [
+    filledPath("M2.5 4h5.1L12 13.6 16.4 4h5.1L12 21 2.5 4Z"),
+    filledPath("M8.15 4h3.35L12 5.1 12.5 4h3.35L12 12.25 8.15 4Z"),
+  ],
   Refresh: [path("M18 8a7 7 0 1 0 1 6M18 4v4h-4")],
   Export: [path("M12 4v10"), path("m8 8 4-4 4 4"), path("M5 14v4h14v-4")],
   Import: [path("M12 4v10"), path("m8 10 4 4 4-4"), path("M5 18h14")],
   Download: [path("M12 4v10"), path("m8 10 4 4 4-4"), path("M5 19h14")],
   Upload: [path("M12 20V10"), path("m8 14 4-4 4 4"), path("M5 5h14")],
   MoreHorizontal: [circle(6, 12, 1), circle(12, 12, 1), circle(18, 12, 1)],
-  MoreVertical: [circle(12, 6, 1), circle(12, 12, 1), circle(12, 18, 1)],
+  MoreVertical: [circle(12, 6, 1), circle(12, 12, 1), circle(18, 12, 1)],
   ChevronDown: [path("m6 9 6 6 6-6")],
   ChevronUp: [path("m6 15 6-6 6 6")],
   ChevronLeft: [path("m15 6-6 6 6 6")],
