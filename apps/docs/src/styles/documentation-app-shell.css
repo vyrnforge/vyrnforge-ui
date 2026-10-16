@@ -1,33 +1,28 @@
 .vf-docs-app-shell {
-  --vf-app-shell-header-height: 56px;
-  --vf-app-shell-sidebar-width: 224px;
   min-height: 100dvh;
 }
 
 .vf-docs-app-shell__skip {
   position: fixed;
   z-index: calc(var(--vf-layer-sticky) + 10);
-  inset-block-start: var(--vf-space-2, 8px);
-  inset-inline-start: var(--vf-space-2, 8px);
+  inset-block-start: var(--vf-space-2);
+  inset-inline-start: var(--vf-space-2);
   transform: translateY(-160%);
-  border-radius: var(--vf-radius-md, 6px);
-  padding: var(--vf-space-2, 8px) var(--vf-space-3, 12px);
+  border-radius: var(--vf-radius-md);
+  padding: var(--vf-space-2) var(--vf-space-3);
   background: var(--vf-surface-default);
-  color: var(--vf-text-link, var(--vf-text-primary));
-  box-shadow: var(--vf-shadow-md, 0 4px 12px rgb(15 23 42 / 12%));
+  color: var(--vf-text-link);
+  box-shadow: var(--vf-shadow-md);
 }
 
 .vf-docs-app-shell__skip:focus {
   transform: translateY(0);
 }
 
-.vf-docs-app-shell__header-inner {
-  display: grid;
-  grid-template-columns: auto minmax(0, auto) minmax(220px, 1fr) auto;
-  align-items: center;
-  gap: var(--vf-space-3, 12px);
-  min-height: var(--vf-app-shell-header-height);
-  padding-inline: clamp(var(--vf-space-4, 16px), 2vw, var(--vf-space-6, 24px));
+.vf-docs-app-shell__top-nav {
+  --vf-top-nav-padding-inline: clamp(var(--vf-space-4), 2vw, var(--vf-space-6));
+  --vf-top-nav-gap: var(--vf-space-3);
+  --vf-top-nav-actions-gap: var(--vf-space-2);
 }
 
 .vf-docs-app-shell__brand {
@@ -35,82 +30,65 @@
   text-align: start;
 }
 
-.vf-docs-app-shell__mark {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  inline-size: 28px;
-  block-size: 28px;
-  color: var(--vf-interactive-primary, #2563eb);
-  font-size: 20px;
-  font-style: italic;
-  font-weight: var(--vf-font-weight-bold, 700);
-  line-height: 1;
-  transform: skewX(-8deg);
+.vf-docs-app-shell__brand-mark {
+  color: var(--vf-interactive-primary);
 }
 
 .vf-docs-app-shell__identity {
   display: inline-flex;
   align-items: baseline;
-  gap: var(--vf-space-1, 4px);
-  line-height: var(--vf-line-height-tight, 1.2);
+  gap: var(--vf-space-1);
+  line-height: var(--vf-line-height-tight);
   text-align: start;
 }
 
 .vf-docs-app-shell__identity strong {
   color: var(--vf-text-primary);
-  font-size: var(--vf-font-size-lg, 18px);
-  letter-spacing: -0.02em;
+  font-size: var(--vf-type-section-title-font-size);
 }
 
 .vf-docs-app-shell__identity small {
-  color: var(--vf-text-muted, #64748b);
-  font-size: 11px;
-  font-weight: var(--vf-font-weight-semibold, 600);
+  color: var(--vf-text-muted);
+  font-size: var(--vf-font-size-2xs);
+  font-weight: var(--vf-font-weight-semibold);
 }
 
-.vf-docs-app-shell__primary {
-  min-width: 0;
-}
-
-.vf-docs-app-shell__header-search {
+.vf-docs-app-shell__search {
   position: relative;
-  justify-self: end;
-  width: min(100%, 300px);
-  min-width: 0;
+  width: min(32vw, 320px);
+  min-width: 220px;
 }
 
-.vf-docs-app-shell__header-search .vf-search-input,
-.vf-docs-app-shell__header-search .vf-input {
+.vf-docs-app-shell__search .vf-search-input,
+.vf-docs-app-shell__search .vf-input {
   width: 100%;
   min-width: 0;
 }
 
-.vf-docs-app-shell__header-search .vf-input {
-  padding-inline-end: 58px;
-  background: var(--vf-surface-page, #f8fafc);
+.vf-docs-app-shell__search .vf-input {
+  padding-inline-end: var(--vf-space-12);
 }
 
 .vf-docs-app-shell__search-shortcut {
   position: absolute;
   top: 50%;
-  right: var(--vf-space-2, 8px);
+  right: var(--vf-space-2);
   transform: translateY(-50%);
-  border: 1px solid var(--vf-border-subtle, #e2e8f0);
-  border-radius: var(--vf-radius-sm, 4px);
-  padding: 1px var(--vf-space-2, 8px);
-  background: var(--vf-surface-default, #fff);
-  color: var(--vf-text-muted, #64748b);
-  font-size: 11px;
-  line-height: 1.5;
+  border: 1px solid var(--vf-border-subtle);
+  border-radius: var(--vf-radius-sm);
+  padding-inline: var(--vf-space-2);
+  background: var(--vf-surface-muted);
+  color: var(--vf-text-muted);
+  font-family: var(--vf-type-code-font-family);
+  font-size: var(--vf-font-size-2xs);
+  line-height: var(--vf-line-height-md);
   pointer-events: none;
 }
 
 .vf-docs-app-shell__utilities {
-  display: flex;
+  display: inline-flex;
   align-items: center;
-  justify-content: flex-end;
-  gap: var(--vf-space-2, 8px);
+  gap: var(--vf-space-2);
   min-width: 0;
 }
 
@@ -119,35 +97,34 @@
   min-width: 108px;
 }
 
-.vf-docs-app-shell__utility-link {
+.vf-docs-app-shell__repository-link {
   display: inline-flex;
   align-items: center;
-  min-height: var(--vf-space-8, 32px);
-  border-radius: var(--vf-radius-md, 6px);
-  padding-inline: var(--vf-space-2, 8px);
-  color: var(--vf-text-secondary, var(--vf-text-primary));
-  font-size: var(--vf-font-size-sm, 13px);
-  font-weight: var(--vf-font-weight-semibold, 600);
+  gap: var(--vf-space-1);
+  min-height: var(--vf-control-height-sm);
+  border-radius: var(--vf-radius-md);
+  padding-inline: var(--vf-control-padding-x-sm);
+  color: var(--vf-text-secondary);
+  font-size: var(--vf-font-size-sm);
+  font-weight: var(--vf-font-weight-semibold);
   text-decoration: none;
 }
 
-.vf-docs-app-shell__utility-link:hover {
-  background: var(--vf-surface-muted, var(--vf-surface-page));
+.vf-docs-app-shell__repository-link:hover {
   color: var(--vf-text-primary);
+  background: var(--vf-interactive-neutral-hover);
 }
 
-.vf-docs-app-shell__utility-link:focus-visible {
-  outline: var(--vf-focus-width, 2px) solid
-    var(--vf-focus-color, var(--vf-focus-ring, currentColor));
-  outline-offset: var(--vf-focus-offset, 2px);
+.vf-docs-app-shell__repository-link:focus-visible {
+  outline: var(--vf-focus-width) solid var(--vf-focus-color);
+  outline-offset: var(--vf-focus-offset);
 }
 
 .vf-docs-app-shell__navigation {
   box-sizing: border-box;
   min-width: 0;
   min-height: 100%;
-  padding: var(--vf-space-3, 12px) var(--vf-space-2, 8px)
-    var(--vf-space-8, 32px);
+  padding: var(--vf-space-3) var(--vf-space-2) var(--vf-space-8);
   overflow-wrap: anywhere;
 }
 
@@ -159,8 +136,8 @@
   box-sizing: border-box;
   min-width: 0;
   min-height: 100%;
-  padding: var(--vf-space-5, 20px) clamp(var(--vf-space-5, 20px), 2.4vw, 36px)
-    var(--vf-space-10, 40px);
+  padding: var(--vf-space-5) clamp(var(--vf-space-5), 2.4vw, 36px)
+    var(--vf-space-10);
   outline: none;
   overflow-wrap: anywhere;
 }
@@ -176,43 +153,13 @@
   overflow-x: hidden;
 }
 
-@media (max-width: 1360px) {
-  .vf-docs-app-shell__header-inner {
-    grid-template-columns: auto minmax(0, auto) minmax(200px, 1fr) auto;
-    padding-inline: var(--vf-space-4, 16px);
-  }
-
-  .vf-docs-app-shell__header-search {
-    width: min(100%, 260px);
-  }
-
-  .vf-docs-app-shell__utilities {
-    gap: var(--vf-space-1, 4px);
-  }
-
-  .vf-docs-app-shell__utilities .vf-select {
-    min-width: 96px;
-    max-width: 120px;
-  }
-}
-
 @media (max-width: 1180px) {
-  .vf-docs-app-shell__header-inner {
-    grid-template-columns: auto minmax(180px, 1fr) auto;
-  }
-
-  .vf-docs-app-shell__primary {
+  .vf-docs-app-shell__top-nav .vf-top-nav__navigation {
     display: none;
   }
 
-  .vf-docs-app-shell__header-search {
-    grid-column: 2;
-    justify-self: stretch;
-    width: min(100%, 360px);
-  }
-
-  .vf-docs-app-shell__utilities {
-    grid-column: 3;
+  .vf-docs-app-shell__search {
+    width: min(34vw, 300px);
   }
 }
 
@@ -231,34 +178,26 @@
 }
 
 @media (max-width: 760px) {
-  .vf-docs-app-shell__header-inner {
-    grid-template-columns: minmax(0, 1fr) auto;
-    gap: var(--vf-space-2, 8px);
+  .vf-docs-app-shell__top-nav {
+    --vf-top-nav-padding-inline: var(--vf-space-3);
   }
 
-  .vf-docs-app-shell__header-search {
+  .vf-docs-app-shell__search {
     display: none;
   }
 
-  .vf-docs-app-shell__utilities {
-    grid-column: 2;
-  }
-
-  .vf-docs-app-shell__utilities .vf-select {
-    display: none;
-  }
-
-  .vf-docs-app-shell__utility-link {
+  .vf-docs-app-shell__utilities .vf-select,
+  .vf-docs-app-shell__repository-link span {
     display: none;
   }
 
   .vf-docs-app-shell__main {
-    padding: var(--vf-space-4, 16px);
+    padding: var(--vf-space-4);
   }
 }
 
 @media (forced-colors: active) {
-  .vf-docs-app-shell__utility-link:focus-visible,
+  .vf-docs-app-shell__repository-link:focus-visible,
   .vf-docs-app-shell__skip:focus-visible {
     outline: 2px solid CanvasText;
   }

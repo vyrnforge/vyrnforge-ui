@@ -3,7 +3,9 @@ import {
   AppShell,
   Button,
   Drawer,
+  Icon,
   SearchInput,
+  TopNav,
 } from "@vyrnforge/ui-components";
 
 type DocumentationAppShellProps = {
@@ -28,31 +30,31 @@ export function DocumentationAppShell({
   const [mobileNavigationOpen, setMobileNavigationOpen] = useState(false);
   const closeMobileNavigation = () => setMobileNavigationOpen(false);
 
-  const header = (
-    <div className="vf-docs-app-shell__header-inner">
-      <Button
-        aria-label="VyrnForge documentation home"
-        className="vf-docs-app-shell__brand"
-        leftSlot={
-          <span aria-hidden="true" className="vf-docs-app-shell__mark">
-            V
-          </span>
-        }
-        onClick={onHome}
-        size="sm"
-        variant="ghost"
-      >
-        <span className="vf-docs-app-shell__identity">
-          <strong>VyrnForge</strong>
-          <small>Docs</small>
-        </span>
-      </Button>
+  const brand = (
+    <Button
+      aria-label="VyrnForge documentation home"
+      className="vf-docs-app-shell__brand"
+      leftSlot={
+        <Icon
+          className="vf-docs-app-shell__brand-mark"
+          name="VyrnForgeMark"
+          size="lg"
+        />
+      }
+      onClick={onHome}
+      size="sm"
+      variant="ghost"
+    >
+      <span className="vf-docs-app-shell__identity">
+        <strong>VyrnForge</strong>
+        <small>Docs</small>
+      </span>
+    </Button>
+  );
 
-      {primaryNavigation ? (
-        <div className="vf-docs-app-shell__primary">{primaryNavigation}</div>
-      ) : null}
-
-      <div className="vf-docs-app-shell__header-search" role="search">
+  const actions = (
+    <>
+      <div className="vf-docs-app-shell__search" role="search">
         <SearchInput
           aria-label="Search VyrnForge Reference"
           onChange={(event) => onSearchQueryChange?.(event.currentTarget.value)}
@@ -60,17 +62,15 @@ export function DocumentationAppShell({
           size="sm"
           value={searchQuery}
         />
-        <span aria-hidden="true" className="vf-docs-app-shell__search-shortcut">
-          Ctrl K
-        </span>
+        <kbd className="vf-docs-app-shell__search-shortcut">Ctrl K</kbd>
       </div>
-
       <div className="vf-docs-app-shell__utilities">
         {utilityControls}
         <Button
           aria-expanded={mobileNavigationOpen}
           aria-haspopup="dialog"
           className="vf-docs-app-shell__menu-button"
+          leftSlot={<Icon name="Menu" size="sm" />}
           onClick={() => setMobileNavigationOpen(true)}
           size="sm"
           variant="subtle"
@@ -78,7 +78,16 @@ export function DocumentationAppShell({
           Browse
         </Button>
       </div>
-    </div>
+    </>
+  );
+
+  const header = (
+    <TopNav
+      actions={actions}
+      brand={brand}
+      className="vf-docs-app-shell__top-nav"
+      navigation={primaryNavigation}
+    />
   );
 
   const sidebar = (
@@ -97,10 +106,12 @@ export function DocumentationAppShell({
         className="vf-docs-app-shell"
         fullHeight={false}
         header={header}
+        headerHeight={56}
         headerPosition="sticky"
         scrollMode="page"
         sidebar={sidebar}
         sidebarPosition="sticky"
+        sidebarWidth={232}
       >
         <main
           className="vf-docs-app-shell__main"

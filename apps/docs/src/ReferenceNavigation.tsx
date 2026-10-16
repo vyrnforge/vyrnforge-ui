@@ -1,6 +1,7 @@
 import { useMemo } from "react";
 import {
   Button,
+  Icon,
   SearchInput,
   SideNav,
   type SideNavItem,
@@ -56,6 +57,19 @@ function routeIsAvailable(
         isDocumentationReady(entry.status),
     ),
   );
+}
+
+function routeIcon(route: DocsRoute) {
+  if (route.kind === "component-reference") {
+    return <Icon name="Component" size="sm" />;
+  }
+  if (route.kind === "package-reference") {
+    return <Icon name="Package" size="sm" />;
+  }
+  if (route.kind === "example" || route.kind === "executable-examples") {
+    return <Icon name="Code" size="sm" />;
+  }
+  return <Icon name="Book" size="sm" />;
 }
 
 function memberKindLabel(kind: "property" | "event" | "slot" | "method") {
@@ -170,6 +184,7 @@ export function ReferenceNavigation({
           .map<SideNavItem>((route) => ({
             id: route.id,
             label: route.title,
+            icon: routeIcon(route),
             active: route.id === activeRouteId && !activeRecordId,
             href: getReferenceLocationHref(referenceModel, {
               frameworkId,
@@ -193,6 +208,7 @@ export function ReferenceNavigation({
                 .map<SideNavItem>((component) => ({
                   id: `component-${component.id}`,
                   label: component.displayName,
+                  icon: <Icon name="Component" size="sm" />,
                   active: activeRecordId === component.id,
                   href: getReferenceLocationHref(referenceModel, {
                     frameworkId,
@@ -218,6 +234,7 @@ export function ReferenceNavigation({
                 .map<SideNavItem>((entry) => ({
                   id: entry.id,
                   label: entry.label,
+                  icon: <Icon name="Code" size="sm" />,
                   badge: memberKindLabel(entry.memberKind),
                   href: getReferenceLocationHref(referenceModel, {
                     frameworkId,
