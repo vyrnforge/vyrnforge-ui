@@ -24,7 +24,9 @@ export function ThemeModesPage() {
           <Stack gap="md">
             <Inline align="start" gap="sm" justify="between" wrap>
               <Heading size="sm">{mode}</Heading>
-              <Badge variant={mode === "dark" ? "info" : "neutral"}>{mode}</Badge>
+              <Badge variant={mode === "dark" ? "info" : "neutral"}>
+                {mode}
+              </Badge>
             </Inline>
             <Text tone="muted">
               The same primitives render inside a scoped theme container.
