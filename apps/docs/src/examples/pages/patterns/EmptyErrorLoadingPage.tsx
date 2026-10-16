@@ -20,7 +20,11 @@ export function EmptyErrorLoadingPage() {
             title="No orders found"
             description="Try a different filter or create the first order."
             action={
-              <Button leftSlot={<Icon name="Plus" />} size="sm" variant="primary">
+              <Button
+                leftSlot={<Icon name="Plus" />}
+                size="sm"
+                variant="primary"
+              >
                 Create order
               </Button>
             }
