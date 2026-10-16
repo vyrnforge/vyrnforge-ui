@@ -3,6 +3,7 @@ import {
   Button,
   SearchInput,
   SideNav,
+  Text,
   type SideNavItem,
 } from "@vyrnforge/ui-components";
 import {
@@ -36,6 +37,12 @@ type ApiMemberSearchRecord = Extract<
   (typeof documentationSearchRecords)[number],
   { kind: "api-member" }
 >;
+
+type ReferenceNavigationGroup = {
+  id: string;
+  label: string;
+  items: SideNavItem[];
+};
 
 function matchesQuery(route: DocsRoute, query: string) {
   return [route.title, route.description, route.group, ...(route.tags ?? [])]
@@ -155,9 +162,9 @@ export function ReferenceNavigation({
     [frameworkId, version],
   );
 
-  const items = useMemo(
+  const groups = useMemo<ReferenceNavigationGroup[]>(
     () =>
-      publicDocsSections.flatMap<SideNavItem>((section) => {
+      publicDocsSections.flatMap((section) => {
         const availableRoutes = section.routeIds
           .map((routeId) => docsRoutes.find((route) => route.id === routeId))
           .filter((route): route is DocsRoute => Boolean(route))
@@ -227,17 +234,10 @@ export function ReferenceNavigation({
                 }))
             : [];
 
-        const children = [...routeItems, ...componentItems, ...memberResults];
-        return children.length === 0
+        const items = [...routeItems, ...componentItems, ...memberResults];
+        return items.length === 0
           ? []
-          : [
-              {
-                id: `section-${section.id}`,
-                label: section.label,
-                disabled: true,
-                children,
-              },
-            ];
+          : [{ id: section.id, label: section.label, items }];
       }),
     [
       activeRecordId,
@@ -262,12 +262,29 @@ export function ReferenceNavigation({
           value={query}
         />
       </div>
-      <SideNav
-        aria-label="VyrnForge Reference sections"
-        className="vf-reference-navigation__sections"
-        items={items}
-      />
-      {items.length === 0 ? (
+      <div className="vf-reference-navigation__groups">
+        {groups.map((group) => (
+          <section
+            aria-labelledby={`vf-reference-nav-${group.id}`}
+            className="vf-reference-navigation__group"
+            key={group.id}
+          >
+            <Text
+              className="vf-reference-navigation__group-label"
+              id={`vf-reference-nav-${group.id}`}
+              size="sm"
+            >
+              {group.label}
+            </Text>
+            <SideNav
+              aria-label={`${group.label} Reference navigation`}
+              className="vf-reference-navigation__section-nav"
+              items={group.items}
+            />
+          </section>
+        ))}
+      </div>
+      {groups.length === 0 ? (
         <p
           aria-live="polite"
           className="vf-reference-navigation__empty"
