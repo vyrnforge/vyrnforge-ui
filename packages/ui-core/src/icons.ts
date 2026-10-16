@@ -129,7 +129,7 @@ export const vyrnForgeIconDefinitions: Readonly<
   Download: [path("M12 4v10"), path("m8 10 4 4 4-4"), path("M5 19h14")],
   Upload: [path("M12 20V10"), path("m8 14 4-4 4 4"), path("M5 5h14")],
   MoreHorizontal: [circle(6, 12, 1), circle(12, 12, 1), circle(18, 12, 1)],
-  MoreVertical: [circle(12, 6, 1), circle(12, 12, 1), circle(18, 12, 1)],
+  MoreVertical: [circle(12, 6, 1), circle(12, 12, 1), circle(12, 18, 1)],
   ChevronDown: [path("m6 9 6 6 6-6")],
   ChevronUp: [path("m6 15 6-6 6 6")],
   ChevronLeft: [path("m15 6-6 6 6 6")],
