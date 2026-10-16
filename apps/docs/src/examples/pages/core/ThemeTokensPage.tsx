@@ -30,7 +30,10 @@ export function ThemeTokensPage() {
       >
         <div className="vf-docs-example-token-grid">
           {[
-            [referenceSnapshot.components.length, "Canonical components in this snapshot"],
+            [
+              referenceSnapshot.components.length,
+              "Canonical components in this snapshot",
+            ],
             [referenceSnapshot.elements.length, "Registered native elements"],
             [referenceTokenCategories.length, "Token categories"],
             [referenceSnapshot.releaseLines.length, "Release lines"],
