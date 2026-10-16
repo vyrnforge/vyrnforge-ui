@@ -275,7 +275,9 @@ export default function App() {
         headerAction={
           <IconButton
             aria-label={
-              theme === "light" ? "Switch to dark theme" : "Switch to light theme"
+              theme === "light"
+                ? "Switch to dark theme"
+                : "Switch to light theme"
             }
             aria-pressed={theme === "dark"}
             onClick={() =>
