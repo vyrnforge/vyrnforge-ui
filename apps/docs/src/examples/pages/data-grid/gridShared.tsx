@@ -79,7 +79,9 @@ export const userColumns: DataGridColumnDef<UserRecord>[] = [
     dataType: "number",
     align: "right",
     width: 110,
-    cell: (value) => <span className="vf-docs-example-score">{String(value)}</span>,
+    cell: (value) => (
+      <span className="vf-docs-example-score">{String(value)}</span>
+    ),
   },
   {
     id: "enabled",
