@@ -1,5 +1,10 @@
 import { useState, type ReactNode } from "react";
-import { AppShell, Button, Drawer, SearchInput } from "@vyrnforge/ui-components";
+import {
+  AppShell,
+  Button,
+  Drawer,
+  SearchInput,
+} from "@vyrnforge/ui-components";
 
 type DocumentationAppShellProps = {
   children: ReactNode;
