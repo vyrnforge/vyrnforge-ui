@@ -198,21 +198,18 @@
     display: none;
   }
 
+  .vf-docs-app-shell__header-search,
+  .vf-docs-app-shell__utilities .vf-select,
+  .vf-docs-app-shell__utility-link {
+    display: none;
+  }
+
   .vf-docs-app-shell__menu-button {
     display: inline-flex;
   }
 }
 
 @media (max-width: 760px) {
-  .vf-docs-app-shell__header-search {
-    display: none;
-  }
-
-  .vf-docs-app-shell__utilities .vf-select,
-  .vf-docs-app-shell__utility-link {
-    display: none;
-  }
-
   .vf-docs-app-shell__identity small {
     display: none;
   }
