@@ -1,5 +1,5 @@
 import { useState, type ReactNode } from "react";
-import { Select } from "@vyrnforge/ui-components";
+import { Icon, Select } from "@vyrnforge/ui-components";
 import type { ReferenceRecordSelection } from "./App";
 import { DocumentationAppShell } from "./DocumentationAppShell";
 import {
@@ -188,10 +188,14 @@ export function ReferenceShell({
         value={docsVersion.id}
       />
       <a
+        aria-label="VyrnForge on GitHub"
         className="vf-docs-app-shell__utility-link"
         href={docsLinks.repository}
+        rel="noreferrer"
+        target="_blank"
+        title="VyrnForge on GitHub"
       >
-        GitHub
+        <Icon name="GitHub" size="md" />
       </a>
       {headerAction}
     </>
