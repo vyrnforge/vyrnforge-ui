@@ -1,21 +1,16 @@
+import { Section } from "@vyrnforge/ui-components";
 import { UniversalDataGrid } from "@vyrnforge/ui-data-grid";
 import { users } from "../../data/users";
-import { GridNote, userColumns } from "./gridShared";
+import { userColumns } from "./gridShared";
 
 export function FilteringPage() {
   return (
-    <section className="vf-playground-panel">
-      <div className="vf-playground-section-heading">
-        <div>
-          <h2>Search and filters</h2>
-          <GridNote>
-            This view starts with APAC active users and leaves the toolbar
-            editable.
-          </GridNote>
-        </div>
-      </div>
+    <Section
+      description="This view starts with APAC active users and leaves the toolbar editable."
+      title="Search and filters"
+    >
       <UniversalDataGrid
-        tableId="vf-playground-filtering"
+        tableId="vf-docs-filtering"
         rows={users}
         columns={userColumns}
         getRowId={(row) => row.id}
@@ -33,6 +28,6 @@ export function FilteringPage() {
         }}
         variant="card"
       />
-    </section>
+    </Section>
   );
 }
