@@ -154,10 +154,7 @@ export const vyrnForgeIconDefinitions: Readonly<
     path("M21 12s-3 6-9 6c-2 0-3.7-.7-5.1-1.6"),
     path("m4 4 16 16"),
   ],
-  Home: [
-    path("m3 11 9-7 9 7"),
-    path("M5 10v10h14V10M9 20v-6h6v6"),
-  ],
+  Home: [path("m3 11 9-7 9 7"), path("M5 10v10h14V10M9 20v-6h6v6")],
   Box: [
     path("m4 7 8-4 8 4-8 4z"),
     path("m4 7 8 4 8-4v10l-8 4-8-4z"),
@@ -188,11 +185,7 @@ export const vyrnForgeIconDefinitions: Readonly<
     path("M12 11v10"),
     path("m8 5 8 4"),
   ],
-  Code: [
-    path("m9 7-5 5 5 5"),
-    path("m15 7 5 5-5 5"),
-    path("m14 4-4 16"),
-  ],
+  Code: [path("m9 7-5 5 5 5"), path("m15 7 5 5-5 5"), path("m14 4-4 16")],
   GitHub: [
     path(
       "M15 22v-4a4.8 4.8 0 0 0-1-3.5c3.3-.4 6.8-1.6 6.8-7.4A5.8 5.8 0 0 0 19.3 3a5.4 5.4 0 0 0-.1-4S18-1.4 15 1.5a13.4 13.4 0 0 0-7 0C5-1.4 3.8-1 3.8-1a5.4 5.4 0 0 0-.1 4A5.8 5.8 0 0 0 2.2 7.1c0 5.8 3.5 7 6.8 7.4A4.8 4.8 0 0 0 8 18v4",
@@ -205,9 +198,7 @@ export const vyrnForgeIconDefinitions: Readonly<
       "M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4",
     ),
   ],
-  Moon: [
-    path("M20.5 14.2A8.5 8.5 0 0 1 9.8 3.5 8.5 8.5 0 1 0 20.5 14.2z"),
-  ],
+  Moon: [path("M20.5 14.2A8.5 8.5 0 0 1 9.8 3.5 8.5 8.5 0 1 0 20.5 14.2z")],
   Menu: [path("M4 7h16M4 12h16M4 17h16")],
   VyrnForgeMark: [path("M4 5l8 14L20 5"), path("M8 5l4 7 4-7")],
 });
