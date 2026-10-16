@@ -98,10 +98,10 @@
 }
 
 .vf-docs-component-detail-page .vf-docs-component-specimen__stage {
-  min-block-size: 0;
+  min-block-size: 8rem;
   padding: 0;
   border: 0;
-  border-radius: 0;
+  border-radius: var(--vf-radius-lg, 10px);
   background: var(--vf-surface-muted, #f8fafc);
   box-shadow: none;
 }
