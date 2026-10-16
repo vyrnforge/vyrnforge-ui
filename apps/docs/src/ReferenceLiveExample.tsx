@@ -1,5 +1,11 @@
 import type { ComponentType } from "react";
-import { EmptyState, Heading, Text } from "@vyrnforge/ui-components";
+import {
+  Card,
+  EmptyState,
+  Heading,
+  Stack,
+  Text,
+} from "@vyrnforge/ui-components";
 import type { DocsFrameworkId } from "./docsContext";
 import { resolveDocumentationExample } from "./referenceRoutes";
 
@@ -64,23 +70,27 @@ export function ReferenceLiveExample({
   const Example = exampleComponent(resolution.implementation.sourcePath);
 
   return (
-    <section className="vf-docs-live-example" aria-label={title}>
-      <div className="vf-docs-live-example__header">
-        <div>
-          <Text className="vf-docs-catalog__kicker" size="sm">
-            Live VyrnForge example
-          </Text>
-          <Heading level={3} size="md">
-            {title}
-          </Heading>
-        </div>
-        <Text size="sm" tone="muted">
-          Rendered from <code>{resolution.implementation.sourcePath}</code>
-        </Text>
-      </div>
-      <div className="vf-docs-live-example__stage">
-        <Example />
-      </div>
+    <section aria-label={title}>
+      <Card padding="md" variant="bordered">
+        <Stack gap="md">
+          <div className="vf-docs-live-example__header">
+            <div>
+              <Text className="vf-docs-catalog__kicker" size="sm">
+                Live VyrnForge example
+              </Text>
+              <Heading level={3} size="md">
+                {title}
+              </Heading>
+            </div>
+            <Text size="sm" tone="muted">
+              Rendered from <code>{resolution.implementation.sourcePath}</code>
+            </Text>
+          </div>
+          <div className="vf-docs-live-example__stage">
+            <Example />
+          </div>
+        </Stack>
+      </Card>
     </section>
   );
 }
