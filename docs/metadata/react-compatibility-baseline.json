@@ -54,7 +54,7 @@
     {
       "path": "packages/ui-components/src/styles",
       "kind": "tree",
-      "sha1": "4a052e9b0350944b813bd0d27806d5fb7f458544",
+      "sha1": "584f7233faf45fc0f114c8e81541e3ca70aa7235",
       "covers": ["React renderer CSS implementation"]
     },
     {
@@ -239,6 +239,11 @@
       "changeId": "#832",
       "reason": "React Icon now renders the same existing 33-icon public catalog from the shared framework-neutral @vyrnforge/ui-core SVG definition source instead of a React-owned geometry registry. Public Icon names, sizes, props, accessibility behavior, currentColor stroke model, viewBox, rendered geometry, package exports, and CSS hooks remain unchanged; the React component-tree fingerprint is intentionally recaptured after parity, build, typecheck, and packed-consumer verification.",
       "evidence": "packages/ui-core/src/icons.test.ts; packages/ui-components/src/components/Icon/Icon.tsx; packages/ui-elements/src/components/parity.ts"
+    },
+    {
+      "changeId": "#882",
+      "reason": "Shared TopNav styling gains reusable shell layout variables and responsive navigation behavior so Docs can consume the VyrnForge navigation foundation instead of owning a parallel header grid. TopNav's public React API, class names, component semantics, actions, and user-area contract remain unchanged; the style-tree fingerprint is intentionally recaptured after formatting, lint, design-token, contract, packed-consumer, and browser parity verification.",
+      "evidence": "packages/ui-components/src/components/TopNav/TopNav.tsx; packages/ui-components/src/components/__tests__/primitives.test.tsx"
     }
   ],
   "changePolicy": "A fingerprint change requires intentional baseline review together with the relevant API, package, runtime, accessibility, or compatibility evidence. A changed implementation must not silently redefine the captured React contract."
