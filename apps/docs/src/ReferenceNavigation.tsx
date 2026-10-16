@@ -1,8 +1,10 @@
 import { useMemo } from "react";
 import {
   Button,
+  Icon,
   SearchInput,
   SideNav,
+  type IconName,
   type SideNavItem,
 } from "@vyrnforge/ui-components";
 import {
@@ -20,6 +22,7 @@ import {
   documentationSearchRecords,
   publicDocsSections,
   type DocsRoute,
+  type DocsTemplateId,
 } from "./referenceRoutes";
 
 type ReferenceNavigationProps = {
@@ -81,6 +84,35 @@ function componentMatchesQuery(
     component.guidance.avoidWhen,
     ...component.guidance.relatedComponents,
   ].some((value) => value.toLowerCase().includes(query));
+}
+
+function templateIcon(template: DocsTemplateId): IconName {
+  if (template === "component") return "Box";
+  if (template === "foundation") return "Palette";
+  if (template === "pattern") return "Layers";
+  if (template === "package") return "Package";
+  if (template === "advanced-module") return "Code";
+  if (template === "release") return "Refresh";
+  if (template === "example") return "Play";
+  return "BookOpen";
+}
+
+function sectionIcon(label: string): IconName {
+  const normalized = label.toLowerCase();
+  if (normalized.includes("getting")) return "Home";
+  if (normalized.includes("component")) return "Box";
+  if (normalized.includes("foundation") || normalized.includes("token")) {
+    return "Palette";
+  }
+  if (normalized.includes("pattern")) return "Layers";
+  if (normalized.includes("package") || normalized.includes("api")) {
+    return "Package";
+  }
+  if (normalized.includes("release") || normalized.includes("migration")) {
+    return "Refresh";
+  }
+  if (normalized.includes("example")) return "Play";
+  return "BookOpen";
 }
 
 export function ReferencePrimaryNavigation({
@@ -171,6 +203,7 @@ export function ReferenceNavigation({
             id: route.id,
             label: route.title,
             active: route.id === activeRouteId && !activeRecordId,
+            icon: <Icon name={templateIcon(route.template)} size="sm" />,
             href: getReferenceLocationHref(referenceModel, {
               frameworkId,
               pathname: route.route,
@@ -194,6 +227,7 @@ export function ReferenceNavigation({
                   id: `component-${component.id}`,
                   label: component.displayName,
                   active: activeRecordId === component.id,
+                  icon: <Icon name="Box" size="sm" />,
                   href: getReferenceLocationHref(referenceModel, {
                     frameworkId,
                     pathname: getReferenceRecordRoute(
@@ -219,6 +253,7 @@ export function ReferenceNavigation({
                   id: entry.id,
                   label: entry.label,
                   badge: memberKindLabel(entry.memberKind),
+                  icon: <Icon name="Code" size="sm" />,
                   href: getReferenceLocationHref(referenceModel, {
                     frameworkId,
                     pathname: entry.route,
@@ -234,6 +269,7 @@ export function ReferenceNavigation({
               {
                 id: `section-${section.id}`,
                 label: section.label,
+                icon: <Icon name={sectionIcon(section.label)} size="sm" />,
                 disabled: true,
                 children,
               },
