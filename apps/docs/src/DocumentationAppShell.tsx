@@ -1,11 +1,18 @@
 import { useState, type ReactNode } from "react";
-import { AppShell, Button, Drawer } from "@vyrnforge/ui-components";
+import {
+  AppShell,
+  Button,
+  Drawer,
+  SearchInput,
+} from "@vyrnforge/ui-components";
 
 type DocumentationAppShellProps = {
   children: ReactNode;
   navigation: (closeMobileNavigation: () => void) => ReactNode;
   onHome: () => void;
+  onSearchQueryChange?: (query: string) => void;
   primaryNavigation?: ReactNode;
+  searchQuery?: string;
   utilityControls?: ReactNode;
 };
 
@@ -13,7 +20,9 @@ export function DocumentationAppShell({
   children,
   navigation,
   onHome,
+  onSearchQueryChange,
   primaryNavigation,
+  searchQuery = "",
   utilityControls,
 }: DocumentationAppShellProps) {
   const [mobileNavigationOpen, setMobileNavigationOpen] = useState(false);
@@ -35,13 +44,27 @@ export function DocumentationAppShell({
       >
         <span className="vf-docs-app-shell__identity">
           <strong>VyrnForge</strong>
-          <small>Docs</small>
         </span>
       </Button>
 
       {primaryNavigation ? (
         <div className="vf-docs-app-shell__primary">{primaryNavigation}</div>
       ) : null}
+
+      <div className="vf-docs-app-shell__header-search" role="search">
+        <SearchInput
+          aria-label="Search VyrnForge documentation"
+          onChange={(event) =>
+            onSearchQueryChange?.(event.currentTarget.value)
+          }
+          placeholder="Search documentation…"
+          size="sm"
+          value={searchQuery}
+        />
+        <span aria-hidden="true" className="vf-docs-app-shell__search-shortcut">
+          Ctrl K
+        </span>
+      </div>
 
       <div className="vf-docs-app-shell__utilities">
         {utilityControls}
