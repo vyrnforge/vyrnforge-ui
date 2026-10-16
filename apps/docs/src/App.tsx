@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useState } from "react";
-import { Button } from "@vyrnforge/ui-components";
+import { Icon, IconButton } from "@vyrnforge/ui-components";
 import {
   getReferenceLocationContext,
   getReferenceLocationHref,
@@ -265,6 +265,9 @@ export default function App() {
     });
   };
 
+  const nextTheme = theme === "light" ? "dark" : "light";
+  const themeToggleLabel = `Toggle ${nextTheme} theme`;
+
   return (
     <div className="vf-docs-app" data-theme={theme}>
       <ReferenceShell
@@ -273,21 +276,16 @@ export default function App() {
         docsVersions={docsVersions}
         framework={framework}
         headerAction={
-          <Button
-            aria-label={
-              theme === "light" ? "Toggle dark theme" : "Toggle light theme"
-            }
+          <IconButton
+            aria-label={themeToggleLabel}
             aria-pressed={theme === "dark"}
+            onClick={() => setTheme(nextTheme)}
             size="sm"
-            variant="subtle"
-            onClick={() =>
-              setTheme((currentTheme) =>
-                currentTheme === "light" ? "dark" : "light",
-              )
-            }
+            tooltip={themeToggleLabel}
+            variant="ghost"
           >
-            {theme === "light" ? "Dark" : "Light"}
-          </Button>
+            <Icon name={theme === "light" ? "Moon" : "Sun"} />
+          </IconButton>
         }
         invalidPath={docsLocation.invalidPath}
         onFrameworkChange={handleFrameworkChange}
