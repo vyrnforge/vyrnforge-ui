@@ -1,7 +1,12 @@
-import { ToastAction, ToastProvider, useToast } from "@vyrnforge/ui-components";
+import {
+  Section,
+  ToastAction,
+  ToastProvider,
+  useToast,
+} from "@vyrnforge/ui-components";
 import { UniversalDataGrid } from "@vyrnforge/ui-data-grid";
 import { users } from "../../data/users";
-import { GridNote, userColumns } from "./gridShared";
+import { userColumns } from "./gridShared";
 
 export function SelectionPage() {
   return (
@@ -47,17 +52,12 @@ function SelectionPageContent() {
   ];
 
   return (
-    <section className="vf-playground-panel">
-      <div className="vf-playground-section-heading">
-        <div>
-          <h2>Selection and bulk actions</h2>
-          <GridNote>
-            Suspended rows are visible but not selectable in this example.
-          </GridNote>
-        </div>
-      </div>
+    <Section
+      description="Suspended rows are visible but not selectable in this example."
+      title="Selection and bulk actions"
+    >
       <UniversalDataGrid
-        tableId="vf-playground-selection"
+        tableId="vf-docs-selection"
         rows={users.slice(0, 32)}
         columns={userColumns}
         getRowId={(row) => row.id}
@@ -67,6 +67,6 @@ function SelectionPageContent() {
         bulkActions={bulkActions}
         variant="bordered"
       />
-    </section>
+    </Section>
   );
 }
