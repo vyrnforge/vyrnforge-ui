@@ -1,28 +1,5 @@
 /* Human-first component-reference presentation.
-   Content remains generated from owned documentation and shared contracts. */
-
-.vf-docs-reference-layout {
-  grid-template-columns: minmax(0, 1fr) minmax(170px, 200px);
-  gap: var(--vf-space-6, 24px);
-}
-
-.vf-docs-reference {
-  gap: 0;
-}
-
-.vf-docs-reference > .vf-docs-reference__section {
-  padding: var(--vf-space-8, 32px) 0;
-  border: 0;
-  border-block-start: 1px solid var(--vf-border-subtle, #e2e8f0);
-  border-radius: 0;
-  background: transparent;
-  box-shadow: none;
-}
-
-.vf-docs-reference > .vf-docs-reference__section:first-child {
-  padding-block-start: 0;
-  border-block-start: 0;
-}
+   Shared Reference layout and API table contracts live in docs.css. */
 
 #component-overview {
   display: grid;
@@ -265,94 +242,7 @@
   overflow-wrap: anywhere;
 }
 
-.vf-docs-api-section {
-  display: grid;
-  gap: var(--vf-space-3, 12px);
-}
-
-.vf-docs-api-table thead th {
-  background: var(--vf-surface-muted, #f8fafc);
-}
-
-.vf-docs-reference-outline {
-  top: calc(65px + var(--vf-space-4, 16px));
-  gap: var(--vf-space-3, 12px);
-  padding: var(--vf-space-3, 12px) 0;
-  border: 0;
-  border-inline-start: 1px solid var(--vf-border-subtle, #e2e8f0);
-  border-radius: 0;
-  background: transparent;
-  box-shadow: none;
-}
-
-.vf-docs-reference-outline > .vf-text,
-.vf-docs-reference-outline nav,
-.vf-docs-reference-outline__api {
-  padding-inline-start: var(--vf-space-4, 16px);
-}
-
-.vf-docs-reference-outline nav ul {
-  gap: 0;
-}
-
-.vf-docs-reference-outline nav a,
-.vf-docs-reference-outline__api > a {
-  display: block;
-  padding: var(--vf-space-2, 8px) var(--vf-space-3, 12px);
-  border-radius: var(--vf-radius-md, 6px);
-  overflow-wrap: normal;
-  word-break: normal;
-}
-
-.vf-docs-reference-outline nav a:hover,
-.vf-docs-reference-outline nav a:focus-visible,
-.vf-docs-reference-outline__api > a:hover,
-.vf-docs-reference-outline__api > a:focus-visible {
-  background: var(--vf-surface-muted, #f8fafc);
-  color: var(--vf-text-link, #2563eb);
-  text-decoration: none;
-}
-
-@media (max-width: 1080px) {
-  .vf-docs-reference-layout {
-    grid-template-columns: minmax(0, 1fr);
-  }
-
-  .vf-docs-reference-outline {
-    position: static;
-    order: -1;
-    grid-template-columns: minmax(0, 1fr);
-    padding: var(--vf-space-3, 12px);
-    border: 1px solid var(--vf-border-subtle, #e2e8f0);
-    border-radius: var(--vf-radius-lg, 10px);
-  }
-
-  .vf-docs-reference-outline > .vf-text,
-  .vf-docs-reference-outline nav,
-  .vf-docs-reference-outline__api {
-    padding-inline-start: 0;
-  }
-
-  .vf-docs-reference-outline nav ul {
-    display: flex;
-    flex-wrap: wrap;
-    gap: var(--vf-space-1, 4px);
-  }
-
-  .vf-docs-reference-outline__api {
-    display: none;
-  }
-}
-
 @media (max-width: 720px) {
-  .vf-docs-reference-layout {
-    gap: var(--vf-space-6, 24px);
-  }
-
-  .vf-docs-reference > .vf-docs-reference__section {
-    padding-block: var(--vf-space-6, 24px);
-  }
-
   .vf-docs-component-heading,
   .vf-docs-selected-example__heading {
     align-items: flex-start;
@@ -375,8 +265,7 @@
 }
 
 @media (forced-colors: active) {
-  .vf-docs-component-specimen__stage,
-  .vf-docs-reference-outline {
+  .vf-docs-component-specimen__stage {
     border-color: CanvasText;
   }
 }

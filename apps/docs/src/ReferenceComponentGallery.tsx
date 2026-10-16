@@ -2,10 +2,12 @@ import { useState, type ReactNode } from "react";
 import {
   Badge,
   Button,
+  Card,
   Heading,
   InlineMessage,
   SearchInput,
   Select,
+  Stack,
   Switch,
   Tabs,
   Text,
@@ -30,23 +32,27 @@ function ShowcaseSection({
   title: string;
 }) {
   return (
-    <section className="vf-docs-component-showcase__section">
-      <div className="vf-docs-component-showcase__heading">
-        <div>
-          <Heading level={3} size="md">
-            {title}
-          </Heading>
-          <Text tone="muted">{description}</Text>
-        </div>
-        <div className="vf-docs-component-showcase__links">
-          {links.map((link) => (
-            <a href={componentHref(link.id)} key={link.id}>
-              {link.label}
-            </a>
-          ))}
-        </div>
-      </div>
-      <div className="vf-docs-component-showcase__stage">{children}</div>
+    <section>
+      <Card padding="md" variant="bordered">
+        <Stack gap="md">
+          <div className="vf-docs-component-showcase__heading">
+            <div>
+              <Heading level={3} size="md">
+                {title}
+              </Heading>
+              <Text tone="muted">{description}</Text>
+            </div>
+            <div className="vf-docs-component-showcase__links">
+              {links.map((link) => (
+                <a href={componentHref(link.id)} key={link.id}>
+                  {link.label}
+                </a>
+              ))}
+            </div>
+          </div>
+          <div className="vf-docs-component-showcase__stage">{children}</div>
+        </Stack>
+      </Card>
     </section>
   );
 }

@@ -5,18 +5,16 @@ import { persistenceAdapter, userColumns } from "./gridShared";
 
 export function BasicGridPage() {
   return (
-    <section className="vf-playground-panel">
-      <Panel title="Users">
-        <UniversalDataGrid
-          tableId="vf-docs-basic-users"
-          rows={users}
-          columns={userColumns}
-          getRowId={(row) => row.id}
-          persistenceAdapter={persistenceAdapter}
-          persistState
-          variant="card"
-        />
-      </Panel>
-    </section>
+    <Panel title="Users">
+      <UniversalDataGrid
+        tableId="vf-docs-basic-users"
+        rows={users}
+        columns={userColumns}
+        getRowId={(row) => row.id}
+        persistenceAdapter={persistenceAdapter}
+        persistState
+        variant="card"
+      />
+    </Panel>
   );
 }

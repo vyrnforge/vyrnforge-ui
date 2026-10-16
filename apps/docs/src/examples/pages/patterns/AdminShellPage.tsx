@@ -8,6 +8,7 @@ import {
   Panel,
   SearchInput,
   SideNav,
+  Stack,
   Text,
   ToolbarButton,
   TopNav,
@@ -15,20 +16,20 @@ import {
 
 export function AdminShellPage() {
   return (
-    <section className="vf-playground-panel">
+    <Stack gap="lg">
       <PageHeader
         description="A dense internal-operations shell with a persistent top bar, sidebar navigation, page header, toolbar, and work panels."
         status={<Badge variant="info">admin pattern</Badge>}
         title="Admin shell pattern"
       />
       <AppShell
-        className="vf-playground-shell-preview"
+        className="vf-docs-example-shell-preview"
         fullHeight={false}
         header={
           <TopNav
             brand={
-              <span className="vf-playground-top-brand">
-                <span className="vf-playground-brand__mark">V</span>
+              <span className="vf-docs-example-top-brand">
+                <span className="vf-docs-example-brand-mark">V</span>
                 Operations Console
               </span>
             }
@@ -74,7 +75,7 @@ export function AdminShellPage() {
         sidebarPosition="sticky"
         sidebarWidth={260}
       >
-        <div className="vf-playground-shell-preview__content">
+        <Stack className="vf-docs-example-shell-content" gap="lg">
           <PageHeader
             actions={<Button variant="primary">Create ticket</Button>}
             description="Prioritize incidents, review ownership, and hand off work without the shell owning app state."
@@ -100,7 +101,7 @@ export function AdminShellPage() {
               </>
             }
           />
-          <div className="vf-playground-grid vf-playground-grid--two">
+          <div className="vf-docs-example-grid vf-docs-example-grid--two">
             <Panel title="Queue health" description="Live operational summary.">
               <Text>
                 4 critical tickets, 8 standard tickets, 2 pending review.
@@ -115,8 +116,8 @@ export function AdminShellPage() {
               </Text>
             </Panel>
           </div>
-        </div>
+        </Stack>
       </AppShell>
-    </section>
+    </Stack>
   );
 }

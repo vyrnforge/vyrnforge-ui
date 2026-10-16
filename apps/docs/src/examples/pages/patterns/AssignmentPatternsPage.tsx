@@ -4,6 +4,8 @@ import {
   Button,
   Heading,
   Icon,
+  Inline,
+  Section,
   Stack,
   Text,
   TransferList,
@@ -84,21 +86,16 @@ export function AssignmentPatternsPage() {
   const [channels, setChannels] = useState(["email", "webhook"]);
 
   return (
-    <section className="vf-playground-panel">
-      <Stack gap="lg">
-        <div className="vf-playground-section-heading">
-          <div>
-            <Heading size="md">Assignment patterns</Heading>
-            <Text tone="muted">
-              Bounded local assignment flows that should not require a full data
-              grid.
-            </Text>
-          </div>
-          <Button leftSlot={<Icon name="Check" />} variant="primary">
-            Save assignments
-          </Button>
-        </div>
-
+    <Section
+      actions={
+        <Button leftSlot={<Icon name="Check" />} variant="primary">
+          Save assignments
+        </Button>
+      }
+      description="Bounded local assignment flows that should not require a full data grid."
+      title="Assignment patterns"
+    >
+      <Stack gap="xl">
         <Stack gap="sm">
           <Heading level={3} size="sm">
             Application assignment
@@ -139,7 +136,7 @@ export function AssignmentPatternsPage() {
         </Stack>
 
         <Stack gap="sm">
-          <div className="vf-playground-section-heading">
+          <Inline align="start" gap="sm" justify="between" wrap>
             <div>
               <Heading level={3} size="sm">
                 Notification channel assignment
@@ -149,7 +146,7 @@ export function AssignmentPatternsPage() {
               </Text>
             </div>
             <Badge variant="warning">Policy managed</Badge>
-          </div>
+          </Inline>
           <TransferList
             onValueChange={setChannels}
             options={notificationOptions}
@@ -159,6 +156,6 @@ export function AssignmentPatternsPage() {
           />
         </Stack>
       </Stack>
-    </section>
+    </Section>
   );
 }

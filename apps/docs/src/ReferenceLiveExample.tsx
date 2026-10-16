@@ -1,5 +1,11 @@
 import type { ComponentType } from "react";
-import { Heading, Text } from "@vyrnforge/ui-components";
+import {
+  Card,
+  EmptyState,
+  Heading,
+  Stack,
+  Text,
+} from "@vyrnforge/ui-components";
 import type { DocsFrameworkId } from "./docsContext";
 import { resolveDocumentationExample } from "./referenceRoutes";
 
@@ -53,37 +59,38 @@ export function ReferenceLiveExample({
 
   if (!resolution.available) {
     return (
-      <div className="vf-docs-live-example__unavailable">
-        <Heading level={4} size="sm">
-          {title}
-        </Heading>
-        <Text tone="muted">
-          This interactive example is not published for {frameworkId} {version}.
-        </Text>
-      </div>
+      <EmptyState
+        className="vf-docs-state"
+        description={`This interactive example is not published for ${frameworkId} ${version}.`}
+        title={`${title} unavailable`}
+      />
     );
   }
 
   const Example = exampleComponent(resolution.implementation.sourcePath);
 
   return (
-    <section className="vf-docs-live-example" aria-label={title}>
-      <div className="vf-docs-live-example__header">
-        <div>
-          <Text className="vf-docs-catalog__kicker" size="sm">
-            Live VyrnForge example
-          </Text>
-          <Heading level={3} size="md">
-            {title}
-          </Heading>
-        </div>
-        <Text size="sm" tone="muted">
-          Rendered from <code>{resolution.implementation.sourcePath}</code>
-        </Text>
-      </div>
-      <div className="vf-docs-live-example__stage">
-        <Example />
-      </div>
+    <section aria-label={title} className="vf-docs-live-example">
+      <Card padding="md" variant="bordered">
+        <Stack gap="md">
+          <div className="vf-docs-live-example__header">
+            <div>
+              <Text className="vf-docs-catalog__kicker" size="sm">
+                Live VyrnForge example
+              </Text>
+              <Heading level={3} size="md">
+                {title}
+              </Heading>
+            </div>
+            <Text size="sm" tone="muted">
+              Rendered from <code>{resolution.implementation.sourcePath}</code>
+            </Text>
+          </div>
+          <div className="vf-docs-live-example__stage">
+            <Example />
+          </div>
+        </Stack>
+      </Card>
     </section>
   );
 }

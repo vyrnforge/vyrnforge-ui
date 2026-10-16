@@ -1,9 +1,14 @@
 import {
   Badge,
   Button,
+  Card,
+  DescriptionList,
   Heading,
   Icon,
+  Inline,
   MoreButton,
+  PageHeader,
+  Stack,
   Text,
 } from "@vyrnforge/ui-components";
 import { assets } from "../../data/assets";
@@ -13,65 +18,61 @@ const asset = assets[0];
 
 export function DetailPage() {
   return (
-    <div className="vf-playground-page-stack">
-      <section className="vf-playground-panel vf-playground-detail-header">
-        <div>
-          <div className="vf-playground-inline-actions">
+    <Stack gap="lg">
+      <PageHeader
+        actions={
+          <Inline gap="sm" wrap>
+            <Button leftSlot={<Icon name="Check" />} variant="primary">
+              Review
+            </Button>
+            <Button leftSlot={<Icon name="Eye" />} variant="subtle">
+              Open audit
+            </Button>
+            <MoreButton />
+          </Inline>
+        }
+        description={`${asset.id} / ${asset.type} / ${asset.environment}`}
+        status={
+          <Inline gap="sm" wrap>
             <Badge variant="success">{asset.status}</Badge>
             <Badge variant="info">{asset.criticality} criticality</Badge>
-          </div>
-          <Heading size="lg">{asset.name}</Heading>
-          <Text tone="muted">
-            {asset.id} / {asset.type} / {asset.environment}
-          </Text>
-        </div>
-        <div className="vf-playground-inline-actions">
-          <Button leftSlot={<Icon name="Check" />} variant="primary">
-            Review
-          </Button>
-          <Button leftSlot={<Icon name="Eye" />} variant="subtle">
-            Open audit
-          </Button>
-          <MoreButton />
-        </div>
-      </section>
+          </Inline>
+        }
+        title={asset.name}
+      />
 
-      <section className="vf-playground-grid vf-playground-grid--two">
-        <article className="vf-playground-card">
-          <Heading size="sm">Metadata</Heading>
-          <dl className="vf-playground-key-value-grid">
-            <div>
+      <div className="vf-docs-example-grid vf-docs-example-grid--two">
+        <Card padding="md" variant="bordered">
+          <Stack gap="md">
+            <Heading size="sm">Metadata</Heading>
+            <DescriptionList>
               <dt>Owner</dt>
               <dd>{asset.owner}</dd>
-            </div>
-            <div>
               <dt>Region</dt>
               <dd>{asset.region}</dd>
-            </div>
-            <div>
               <dt>Last seen</dt>
               <dd>{asset.lastSeen}</dd>
-            </div>
-            <div>
               <dt>Environment</dt>
               <dd>{asset.environment}</dd>
-            </div>
-          </dl>
-        </article>
-        <article className="vf-playground-card">
-          <Heading size="sm">Related tickets</Heading>
-          <div className="vf-playground-mini-list">
-            {tickets.slice(0, 3).map((ticket) => (
-              <div key={ticket.id}>
-                <strong>{ticket.title}</strong>
-                <span>
-                  {ticket.id} / {ticket.priority} / {ticket.status}
-                </span>
-              </div>
-            ))}
-          </div>
-        </article>
-      </section>
-    </div>
+            </DescriptionList>
+          </Stack>
+        </Card>
+        <Card padding="md" variant="bordered">
+          <Stack gap="md">
+            <Heading size="sm">Related tickets</Heading>
+            <Stack gap="sm">
+              {tickets.slice(0, 3).map((ticket) => (
+                <div key={ticket.id}>
+                  <strong>{ticket.title}</strong>
+                  <Text size="sm" tone="muted">
+                    {ticket.id} / {ticket.priority} / {ticket.status}
+                  </Text>
+                </div>
+              ))}
+            </Stack>
+          </Stack>
+        </Card>
+      </div>
+    </Stack>
   );
 }

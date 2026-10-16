@@ -1,4 +1,11 @@
-import { Badge, Button, Icon, ToolbarButton } from "@vyrnforge/ui-components";
+import {
+  Badge,
+  Button,
+  Icon,
+  Inline,
+  Text,
+  ToolbarButton,
+} from "@vyrnforge/ui-components";
 import {
   createLocalStorageGridPersistence,
   type DataGridBulkAction,
@@ -17,7 +24,7 @@ export const userColumns: DataGridColumnDef<UserRecord>[] = [
     groupable: true,
     width: 220,
     cell: (_value, row) => (
-      <span className="vf-playground-demo-user-cell">
+      <span className="vf-docs-example-user-cell">
         <strong>{row.name}</strong>
         <small>{row.email}</small>
       </span>
@@ -73,7 +80,7 @@ export const userColumns: DataGridColumnDef<UserRecord>[] = [
     align: "right",
     width: 110,
     cell: (value) => (
-      <span className="vf-playground-demo-score">{String(value)}</span>
+      <span className="vf-docs-example-score">{String(value)}</span>
     ),
   },
   {
@@ -85,15 +92,9 @@ export const userColumns: DataGridColumnDef<UserRecord>[] = [
     align: "center",
     width: 120,
     cell: (value) => (
-      <span
-        className={
-          value
-            ? "vf-playground-demo-boolean vf-playground-demo-boolean-on"
-            : "vf-playground-demo-boolean vf-playground-demo-boolean-off"
-        }
-      >
+      <Badge variant={value ? "success" : "neutral"}>
         {value ? "Enabled" : "Paused"}
-      </span>
+      </Badge>
     ),
   },
   {
@@ -137,7 +138,7 @@ export const stressColumns: DataGridColumnDef<UserRecord>[] = [
 ];
 
 export const persistenceAdapter = createLocalStorageGridPersistence({
-  namespace: "vyrnforge-playground",
+  namespace: "vyrnforge-reference",
 });
 
 export const userBulkActions: DataGridBulkAction<UserRecord>[] = [
@@ -166,12 +167,16 @@ export const userBulkActions: DataGridBulkAction<UserRecord>[] = [
 ];
 
 export function GridNote({ children }: { children: string }) {
-  return <p className="vf-playground-note">{children}</p>;
+  return (
+    <Text size="sm" tone="muted">
+      {children}
+    </Text>
+  );
 }
 
 export function SectionActions() {
   return (
-    <div className="vf-playground-inline-actions">
+    <Inline gap="sm" wrap>
       <Button leftSlot={<Icon name="Check" />} size="sm" variant="primary">
         Save view
       </Button>
@@ -180,7 +185,7 @@ export function SectionActions() {
         label="Reset"
         tooltip="Reset view"
       />
-    </div>
+    </Inline>
   );
 }
 
