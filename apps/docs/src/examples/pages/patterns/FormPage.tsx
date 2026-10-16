@@ -162,18 +162,13 @@ function FormPageContent() {
           required
         >
           {(controlProps) => (
-            <TextInput
-              {...controlProps}
-              placeholder="Add business reason"
-            />
+            <TextInput {...controlProps} placeholder="Add business reason" />
           )}
         </Field>
         <Checkbox
           checked={acknowledged}
           label="I reviewed the access policy"
-          onChange={(event) =>
-            setAcknowledged(event.currentTarget.checked)
-          }
+          onChange={(event) => setAcknowledged(event.currentTarget.checked)}
         />
         <ValidationMessage tone={acknowledged ? "success" : "info"}>
           Submit is enabled after policy acknowledgement.
@@ -192,7 +187,8 @@ function FormPageContent() {
               setApiError(false);
               toast.success({
                 title: "Request created",
-                description: "The access request was added to the review queue.",
+                description:
+                  "The access request was added to the review queue.",
               });
             }}
             variant="primary"
@@ -212,10 +208,7 @@ function FormPageContent() {
           >
             Simulate failure
           </Button>
-          <Button
-            leftSlot={<Icon name="Edit" />}
-            variant="subtle"
-          >
+          <Button leftSlot={<Icon name="Edit" />} variant="subtle">
             Save draft
           </Button>
         </Inline>
