@@ -32,6 +32,15 @@ export const vyrnForgeIconNames = [
   "Resize",
   "Eye",
   "EyeOff",
+  "Sun",
+  "Moon",
+  "Menu",
+  "GitHub",
+  "Component",
+  "Package",
+  "Book",
+  "Code",
+  "VyrnForgeMark",
 ] as const;
 
 export type VyrnForgeIconName = (typeof vyrnForgeIconNames)[number];
@@ -141,6 +150,21 @@ export const vyrnForgeIconDefinitions: Readonly<
     path("M21 12s-3 6-9 6c-2 0-3.7-.7-5.1-1.6"),
     path("m4 4 16 16"),
   ],
+  Sun: [
+    circle(12, 12, 4),
+    path("M12 2v2M12 20v2M4.93 4.93l1.42 1.42M17.66 17.66l1.41 1.41M2 12h2M20 12h2M4.93 19.07l1.42-1.42M17.66 6.34l1.41-1.41"),
+  ],
+  Moon: [path("M20 15.2A8 8 0 0 1 8.8 4 8.1 8.1 0 1 0 20 15.2z")],
+  Menu: [path("M4 7h16M4 12h16M4 17h16")],
+  GitHub: [
+    path("M15 20v-3.2c.1-1-.3-1.8-.8-2.3 2.6-.3 5.3-1.3 5.3-5.8 0-1.3-.4-2.3-1.2-3.2.1-.3.5-1.5-.1-3.1 0 0-1-.3-3.3 1.2a11.4 11.4 0 0 0-6 0C6.6 2.1 5.6 2.4 5.6 2.4 5 4 5.4 5.2 5.5 5.5a4.5 4.5 0 0 0-1.2 3.2c0 4.5 2.7 5.5 5.3 5.8-.4.4-.7.9-.8 1.7V20"),
+    path("M8.8 17.5c-2 .6-2.4-1-3.2-1.5"),
+  ],
+  Component: [rect(4, 4, 16, 16, 3), rect(8, 8, 8, 8, 2)],
+  Package: [path("m4 7 8-4 8 4-8 4z"), path("M4 7v10l8 4 8-4V7M12 11v10")],
+  Book: [path("M5 4h10a3 3 0 0 1 3 3v13H8a3 3 0 0 1-3-3z"), path("M8 4v16")],
+  Code: [path("m9 7-5 5 5 5M15 7l5 5-5 5")],
+  VyrnForgeMark: [path("M4 5 9.5 19 12 12l2.5 7L20 5"), path("M8 5l4 10 4-10")],
 });
 
 export function resolveVyrnForgeIconSize(size: VyrnForgeIconSize): number {
