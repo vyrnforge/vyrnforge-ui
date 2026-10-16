@@ -25,8 +25,8 @@ export function CssOverridePage() {
             <Badge variant="info">components + grid</Badge>
           </Inline>
           <Text tone="muted">
-            The scoped container changes shared tokens used by primitives and grid
-            fallbacks.
+            The scoped container changes shared tokens used by primitives and
+            grid fallbacks.
           </Text>
           <Inline gap="sm" wrap>
             <Button variant="primary">Token primary</Button>
