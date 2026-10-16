@@ -128,10 +128,7 @@ function FormPageContent() {
             <DateInput id="needed-by" defaultValue="2026-07-17" />
           </Field>
           <Field label="Review meeting" htmlFor="review-meeting">
-            <DateTimeInput
-              id="review-meeting"
-              defaultValue="2026-07-11T10:00"
-            />
+            <DateTimeInput id="review-meeting" defaultValue="2026-07-11T10:00" />
           </Field>
         </div>
         <Field
@@ -168,17 +165,15 @@ function FormPageContent() {
         <Checkbox
           checked={acknowledged}
           label="I reviewed the access policy"
-          onChange={(event) =>
-            setAcknowledged(event.currentTarget.checked)
-          }
+          onChange={(event) => setAcknowledged(event.currentTarget.checked)}
         />
         <ValidationMessage tone={acknowledged ? "success" : "info"}>
           Submit is enabled after policy acknowledgement.
         </ValidationMessage>
         {apiError && (
           <InlineMessage variant="danger" title="Could not create request">
-            Resolve the highlighted fields and try again. This persistent
-            message stays in context while the toast is transient.
+            Resolve the highlighted fields and try again. This persistent message
+            stays in context while the toast is transient.
           </InlineMessage>
         )}
         <Inline gap="sm" wrap>
