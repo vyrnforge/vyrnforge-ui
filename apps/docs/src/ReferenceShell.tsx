@@ -1,4 +1,4 @@
-import { type ReactNode } from "react";
+import { useState, type ReactNode } from "react";
 import { Select } from "@vyrnforge/ui-components";
 import type { ReferenceRecordSelection } from "./App";
 import { DocumentationAppShell } from "./DocumentationAppShell";
@@ -63,6 +63,7 @@ export function ReferenceShell({
   routeMember,
   routePath,
 }: ReferenceShellProps) {
+  const [searchQuery, setSearchQuery] = useState("");
   const frameworkVersions = getDocsVersionsForFramework(
     framework.id,
     docsVersions,
@@ -143,10 +144,12 @@ export function ReferenceShell({
       }
       activeRouteId={activeRoute.id}
       frameworkId={framework.id}
+      onQueryChange={setSearchQuery}
       onRouteChange={(routeId) => {
         closeMobileNavigation();
         navigate(routeId);
       }}
+      query={searchQuery}
       version={docsVersion.version}
     />
   );
@@ -198,7 +201,9 @@ export function ReferenceShell({
     <DocumentationAppShell
       navigation={renderNavigation}
       onHome={() => navigate("overview")}
+      onSearchQueryChange={setSearchQuery}
       primaryNavigation={primaryNavigation}
+      searchQuery={searchQuery}
       utilityControls={utilityControls}
     >
       <DocsPage
