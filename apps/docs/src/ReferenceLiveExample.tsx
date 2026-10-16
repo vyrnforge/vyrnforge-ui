@@ -70,7 +70,7 @@ export function ReferenceLiveExample({
   const Example = exampleComponent(resolution.implementation.sourcePath);
 
   return (
-    <section aria-label={title}>
+    <section aria-label={title} className="vf-docs-live-example">
       <Card padding="md" variant="bordered">
         <Stack gap="md">
           <div className="vf-docs-live-example__header">
