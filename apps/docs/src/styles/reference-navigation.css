@@ -63,6 +63,12 @@
   display: block;
 }
 
+@media (max-width: 1440px) {
+  .vf-docs-app-shell .vf-reference-primary-navigation {
+    display: none;
+  }
+}
+
 @media (max-width: 960px) {
   .vf-reference-navigation__search {
     display: block;
