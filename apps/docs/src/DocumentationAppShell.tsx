@@ -1,10 +1,5 @@
 import { useState, type ReactNode } from "react";
-import {
-  AppShell,
-  Button,
-  Drawer,
-  SearchInput,
-} from "@vyrnforge/ui-components";
+import { AppShell, Button, Drawer, SearchInput } from "@vyrnforge/ui-components";
 
 type DocumentationAppShellProps = {
   children: ReactNode;
@@ -54,9 +49,7 @@ export function DocumentationAppShell({
       <div className="vf-docs-app-shell__header-search" role="search">
         <SearchInput
           aria-label="Search VyrnForge documentation"
-          onChange={(event) =>
-            onSearchQueryChange?.(event.currentTarget.value)
-          }
+          onChange={(event) => onSearchQueryChange?.(event.currentTarget.value)}
           placeholder="Search documentation…"
           size="sm"
           value={searchQuery}
