@@ -97,6 +97,29 @@
   min-width: 108px;
 }
 
+.vf-docs-app-shell__repository-link {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--vf-space-1);
+  min-height: var(--vf-control-height-sm);
+  border-radius: var(--vf-radius-md);
+  padding-inline: var(--vf-control-padding-x-sm);
+  color: var(--vf-text-secondary);
+  font-size: var(--vf-font-size-sm);
+  font-weight: var(--vf-font-weight-semibold);
+  text-decoration: none;
+}
+
+.vf-docs-app-shell__repository-link:hover {
+  color: var(--vf-text-primary);
+  background: var(--vf-interactive-neutral-hover);
+}
+
+.vf-docs-app-shell__repository-link:focus-visible {
+  outline: var(--vf-focus-width) solid var(--vf-focus-color);
+  outline-offset: var(--vf-focus-offset);
+}
+
 .vf-docs-app-shell__navigation {
   box-sizing: border-box;
   min-width: 0;
@@ -163,7 +186,8 @@
     display: none;
   }
 
-  .vf-docs-app-shell__utilities .vf-select {
+  .vf-docs-app-shell__utilities .vf-select,
+  .vf-docs-app-shell__repository-link span {
     display: none;
   }
 
@@ -173,6 +197,7 @@
 }
 
 @media (forced-colors: active) {
+  .vf-docs-app-shell__repository-link:focus-visible,
   .vf-docs-app-shell__skip:focus-visible {
     outline: 2px solid CanvasText;
   }
