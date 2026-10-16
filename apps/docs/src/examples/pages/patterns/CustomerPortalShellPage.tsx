@@ -7,6 +7,7 @@ import {
   PageHeader,
   Panel,
   SideNav,
+  Stack,
   Tabs,
   Text,
   TopNav,
@@ -14,20 +15,20 @@ import {
 
 export function CustomerPortalShellPage() {
   return (
-    <section className="vf-playground-panel" data-theme="enterprise">
+    <Stack data-theme="enterprise" gap="lg">
       <PageHeader
         description="A customer-facing portal shell that keeps navigation predictable while letting the application own account, auth, and workflow state."
         status={<Badge variant="info">portal pattern</Badge>}
         title="Customer portal shell pattern"
       />
       <AppShell
-        className="vf-playground-shell-preview"
+        className="vf-docs-example-shell-preview"
         fullHeight={false}
         header={
           <TopNav
             brand={
-              <span className="vf-playground-top-brand">
-                <span className="vf-playground-brand__mark">V</span>
+              <span className="vf-docs-example-top-brand">
+                <span className="vf-docs-example-brand-mark">V</span>
                 Customer Portal
               </span>
             }
@@ -69,7 +70,7 @@ export function CustomerPortalShellPage() {
         sidebarPosition="sticky"
         sidebarWidth={250}
       >
-        <div className="vf-playground-shell-preview__content">
+        <Stack className="vf-docs-example-shell-content" gap="lg">
           <PageHeader
             breadcrumbs={
               <Breadcrumbs
@@ -124,8 +125,8 @@ export function CustomerPortalShellPage() {
               },
             ]}
           />
-        </div>
+        </Stack>
       </AppShell>
-    </section>
+    </Stack>
   );
 }
