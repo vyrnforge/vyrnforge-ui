@@ -1,0 +1,6 @@
+{
+  "name": "@vyrnforge/legacy",
+  "version": "0.0.0-legacy",
+  "private": true,
+  "description": "Temporary quarantine for the pre-rebuild VyrnForge repository. Delete this package when historical reference is no longer required."
+}

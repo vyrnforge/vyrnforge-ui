@@ -1,0 +1,13 @@
+{
+  "nodes": {
+    "core": { "dependsOn": [] },
+    "web": { "dependsOn": ["core"] },
+    "react": { "dependsOn": ["core", "web"] },
+    "angular": { "dependsOn": ["core", "web"] },
+    "vue": { "dependsOn": ["core", "web"] },
+    "elements": { "dependsOn": ["core", "web"] },
+    "documentation": { "dependsOn": [] },
+    "tooling": { "dependsOn": [] },
+    "legacy": { "dependsOn": [] }
+  }
+}

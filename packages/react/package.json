@@ -1,0 +1,8 @@
+{
+  "name": "@vyrnforge/react",
+  "version": "0.0.0-rebuild",
+  "private": true,
+  "type": "module",
+  "sideEffects": false,
+  "description": "Idiomatic React integration for VyrnForge."
+}

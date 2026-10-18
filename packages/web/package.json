@@ -1,0 +1,10 @@
+{
+  "name": "@vyrnforge/web",
+  "version": "0.0.0-rebuild",
+  "private": true,
+  "type": "module",
+  "sideEffects": [
+    "./styles/*.css"
+  ],
+  "description": "Canonical VyrnForge web styling foundation and narrowly shared browser capabilities."
+}

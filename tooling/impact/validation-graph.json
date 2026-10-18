@@ -1,0 +1,14 @@
+{
+  "evidence": {
+    "core": ["structure", "boundaries", "core"],
+    "web": ["structure", "boundaries", "web"],
+    "react": ["structure", "boundaries", "react"],
+    "angular": ["structure", "boundaries", "angular"],
+    "vue": ["structure", "boundaries", "vue"],
+    "elements": ["structure", "boundaries", "elements"],
+    "documentation": ["documentation"],
+    "tooling": ["structure", "boundaries", "impact-engine"],
+    "legacy": ["legacy-isolation"]
+  },
+  "globalSentinels": ["structure", "boundaries", "legacy-isolation", "impact-engine"]
+}
