@@ -1,6 +1,6 @@
 import { execFileSync } from 'node:child_process';
 import { fileURLToPath } from 'node:url';
-import { createPlan, pathsFromArgs } from './plan.mjs';
+import { createPlan, createTierPlan, parseArg, pathsFromArgs } from './plan.mjs';
 import { expandScopes } from './scopes.mjs';
 
 export function createExecutionPlan(validationPlan) {
@@ -21,6 +21,7 @@ export function executeValidationPlan(validationPlan, { dryRun = false } = {}) {
 }
 
 if (fileURLToPath(import.meta.url) === process.argv[1]) {
-  const validationPlan = createPlan(pathsFromArgs(process.argv));
+  const mode = parseArg('--mode') || 'pr';
+  const validationPlan = mode === 'pr' ? createPlan(pathsFromArgs(process.argv)) : createTierPlan(mode);
   executeValidationPlan(validationPlan, { dryRun: process.argv.includes('--dry-run') });
 }

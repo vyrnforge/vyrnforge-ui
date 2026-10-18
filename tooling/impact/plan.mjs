@@ -14,6 +14,7 @@ const scopedPrefixes = [
   ['packages/elements/', 'elements'],
   ['packages/legacy/', 'legacy'],
   ['documentation/', 'documentation'],
+  ['apps/docs/', 'documentation'],
   ['examples/', 'documentation']
 ];
 
@@ -84,6 +85,7 @@ export function createPlan(paths) {
   const skippedValidationScopes = validationGraph.scopeOrder.filter((scope) => !selectedScopes.has(scope));
 
   return {
+    mode: 'pr',
     changedPaths: [...paths].sort(),
     directNodes: [...directNodes].sort(),
     affectedNodes: [...affectedNodes].sort(),
@@ -93,7 +95,24 @@ export function createPlan(paths) {
   };
 }
 
+export function createTierPlan(mode) {
+  const scopes = validationGraph.tiers?.[mode];
+  if (!scopes) throw new Error(`Unknown validation tier: ${mode}`);
+  const selected = new Set(scopes);
+  return {
+    mode,
+    changedPaths: [],
+    directNodes: [],
+    affectedNodes: Object.keys(productGraph.nodes).filter((node) => node !== 'legacy').sort(),
+    validationScopes: orderedScopes(scopes),
+    skippedValidationScopes: validationGraph.scopeOrder.filter((scope) => !selected.has(scope)),
+    broadened: true
+  };
+}
+
 export function parseArg(name, argv = process.argv) {
+  const direct = argv.find((value) => value.startsWith(`${name}=`));
+  if (direct) return direct.slice(name.length + 1);
   const index = argv.indexOf(name);
   return index >= 0 ? argv[index + 1] : undefined;
 }
@@ -113,6 +132,7 @@ export function pathsFromArgs(argv = process.argv) {
 }
 
 if (fileURLToPath(import.meta.url) === process.argv[1]) {
-  const plan = createPlan(pathsFromArgs(process.argv));
+  const mode = parseArg('--mode') || 'pr';
+  const plan = mode === 'pr' ? createPlan(pathsFromArgs(process.argv)) : createTierPlan(mode);
   process.stdout.write(`${JSON.stringify(plan, null, 2)}\n`);
 }

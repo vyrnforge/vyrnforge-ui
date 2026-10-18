@@ -6,19 +6,25 @@
     "angular": ["package-contracts", "build-angular", "pack-angular"],
     "vue": ["package-contracts", "build-vue", "pack-vue"],
     "elements": ["package-contracts", "build-elements", "pack-elements"],
-    "documentation": ["docs-structure"],
-    "tooling": ["compatibility", "package-contracts"],
+    "documentation": ["docs-source", "docs-build", "docs-site"],
+    "tooling": ["compatibility", "package-contracts", "architecture-rules"],
     "legacy": ["legacy-isolation"]
   },
-  "globalSentinels": ["structure", "boundaries", "legacy-isolation", "impact-engine"],
+  "globalSentinels": ["structure", "boundaries", "architecture-rules", "legacy-isolation", "impact-engine"],
+  "tiers": {
+    "main": ["structure", "boundaries", "architecture-rules", "legacy-isolation", "impact-engine", "compatibility", "package-contracts", "docs-source", "build-core", "build-web", "build-react", "build-angular", "build-vue", "build-elements", "pack-core", "pack-web", "pack-react", "pack-angular", "pack-vue", "pack-elements", "docs-build", "docs-site", "consumer-packages"],
+    "scheduled": ["structure", "boundaries", "architecture-rules", "legacy-isolation", "impact-engine", "compatibility", "package-contracts", "docs-source", "build-core", "build-web", "build-react", "build-angular", "build-vue", "build-elements", "pack-core", "pack-web", "pack-react", "pack-angular", "pack-vue", "pack-elements", "docs-build", "docs-site", "consumer-packages"],
+    "release": ["structure", "boundaries", "architecture-rules", "legacy-isolation", "impact-engine", "compatibility", "package-contracts", "docs-source", "build-core", "build-web", "build-react", "build-angular", "build-vue", "build-elements", "pack-core", "pack-web", "pack-react", "pack-angular", "pack-vue", "pack-elements", "docs-build", "docs-site", "consumer-packages", "release-readiness"]
+  },
   "scopeOrder": [
     "structure",
     "boundaries",
+    "architecture-rules",
     "legacy-isolation",
     "impact-engine",
     "compatibility",
     "package-contracts",
-    "docs-structure",
+    "docs-source",
     "build-core",
     "build-web",
     "build-react",
@@ -30,6 +36,10 @@
     "pack-react",
     "pack-angular",
     "pack-vue",
-    "pack-elements"
+    "pack-elements",
+    "docs-build",
+    "docs-site",
+    "consumer-packages",
+    "release-readiness"
   ]
 }

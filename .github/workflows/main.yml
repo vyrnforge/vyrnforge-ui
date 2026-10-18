@@ -1,0 +1,29 @@
+name: Main Validation
+
+on:
+  push:
+    branches: [main]
+
+permissions:
+  contents: read
+
+jobs:
+  main-gate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version-file: .node-version
+          cache: npm
+      - run: npm ci --ignore-scripts --no-audit --no-fund
+      - name: Execute broader main validation graph
+        run: node tooling/impact/execute.mjs --mode main
+      - name: Upload documentation build
+        uses: actions/upload-artifact@v4
+        with:
+          name: vyrnforge-docs-next
+          path: dist/docs
+          if-no-files-found: error
+          retention-days: 7

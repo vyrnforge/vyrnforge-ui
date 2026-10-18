@@ -25,17 +25,24 @@
     "build:angular": "npm run build --workspace @vyrnforge/angular",
     "build:vue": "npm run build --workspace @vyrnforge/vue",
     "build:elements": "npm run build --workspace @vyrnforge/elements",
-    "check": "node tooling/impact/execute.mjs --files package.json",
+    "build:docs": "node tooling/docs/build.mjs",
+    "check": "node tooling/impact/execute.mjs --mode main",
     "verify:structure": "node tooling/verify/workspace-structure.mjs",
     "verify:boundaries": "node tooling/verify/package-boundaries.mjs",
+    "verify:architecture": "node tooling/verify/architecture-rules.mjs",
     "verify:legacy": "node tooling/verify/legacy-isolation.mjs",
     "verify:packages": "node tooling/verify/package-contracts.mjs",
     "verify:compatibility": "node tooling/verify/compatibility.mjs",
     "verify:documentation": "node tooling/verify/documentation-structure.mjs",
+    "verify:docs-site": "node tooling/verify/docs-site.mjs",
     "verify:package-smoke": "node tooling/verify/package-smoke.mjs",
-    "test:impact": "node --test tooling/tests/impact-plan.test.mjs tooling/tests/impact-executor.test.mjs",
+    "verify:consumer": "node tooling/verify/consumer-packages.mjs",
+    "test:impact": "node --test tooling/tests/impact-plan.test.mjs tooling/tests/impact-executor.test.mjs tooling/tests/impact-tiers.test.mjs",
     "ci:plan": "node tooling/impact/plan.mjs",
-    "ci:execute": "node tooling/impact/execute.mjs"
+    "ci:pr": "node tooling/impact/execute.mjs --mode pr",
+    "ci:main": "node tooling/impact/execute.mjs --mode main",
+    "ci:scheduled": "node tooling/impact/execute.mjs --mode scheduled",
+    "ci:release": "node tooling/impact/execute.mjs --mode release"
   },
   "devDependencies": {
     "typescript": "5.9.3"
