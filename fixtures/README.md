@@ -1,3 +1,3 @@
-# Fixtures
+# Consumer fixtures
 
-Repository-only consumer, browser, SSR/CSR, framework, accessibility, and package fixtures live here as the rebuilt validation system grows.
+Small clean consumers will validate packed VyrnForge packages through public entrypoints. Fixtures are repository-only validation infrastructure and are not published packages.

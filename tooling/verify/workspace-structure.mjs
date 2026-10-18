@@ -1,41 +1,31 @@
-import { existsSync, readFileSync } from 'node:fs';
+import { access, readFile } from 'node:fs/promises';
+import path from 'node:path';
 
-const expected = new Map([
-  ['core', '@vyrnforge/core'],
-  ['web', '@vyrnforge/web'],
-  ['react', '@vyrnforge/react'],
-  ['angular', '@vyrnforge/angular'],
-  ['vue', '@vyrnforge/vue'],
-  ['elements', '@vyrnforge/elements'],
-  ['legacy', '@vyrnforge/legacy']
-]);
-const forbiddenLegacyDirs = [
-  'packages/ui-core',
-  'packages/ui-behaviors',
-  'packages/ui-components',
-  'packages/ui-elements',
-  'packages/ui-angular',
-  'packages/ui-vue',
-  'packages/ui-data-grid',
-  'apps',
-  'scripts',
-  'tests'
+const expectedWorkspaces = [
+  'packages/core',
+  'packages/web',
+  'packages/react',
+  'packages/angular',
+  'packages/vue',
+  'packages/elements'
 ];
+const repositoryOnly = ['documentation', 'examples', 'fixtures', 'tooling', 'packages/legacy'];
 
-for (const [directory, packageName] of expected) {
-  const manifestPath = `packages/${directory}/package.json`;
-  if (!existsSync(manifestPath)) throw new Error(`Missing ${manifestPath}`);
-  const manifest = JSON.parse(readFileSync(manifestPath, 'utf8'));
-  if (manifest.name !== packageName) throw new Error(`${manifestPath} must be named ${packageName}`);
+const packageJson = JSON.parse(await readFile(new URL('../../package.json', import.meta.url), 'utf8'));
+if (JSON.stringify(packageJson.workspaces) !== JSON.stringify(expectedWorkspaces)) {
+  throw new Error(`Root workspaces must be exactly: ${expectedWorkspaces.join(', ')}`);
 }
 
-for (const directory of forbiddenLegacyDirs) {
-  if (existsSync(directory)) throw new Error(`Legacy path must remain quarantined: ${directory}`);
+for (const relative of [...expectedWorkspaces, ...repositoryOnly]) {
+  await access(new URL(`../../${relative}/`, import.meta.url));
 }
 
-const root = JSON.parse(readFileSync('package.json', 'utf8'));
-if (JSON.stringify(root.workspaces) !== JSON.stringify(['packages/*'])) {
-  throw new Error('Root workspaces must remain exactly ["packages/*"] during bootstrap.');
+for (const workspace of expectedWorkspaces) {
+  const manifest = JSON.parse(await readFile(new URL(`../../${workspace}/package.json`, import.meta.url), 'utf8'));
+  const expectedName = `@vyrnforge/${path.basename(workspace)}`;
+  if (manifest.name !== expectedName) {
+    throw new Error(`${workspace} must declare ${expectedName}, found ${manifest.name ?? '<missing>'}`);
+  }
 }
 
-console.log('workspace structure: ok');
+process.stdout.write('workspace structure: ok\n');

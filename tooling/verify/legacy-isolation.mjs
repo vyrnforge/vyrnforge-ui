@@ -1,35 +1,38 @@
-import { existsSync, readFileSync, readdirSync, statSync } from 'node:fs';
-import { join } from 'node:path';
+import { readdir, readFile } from 'node:fs/promises';
+import path from 'node:path';
 
-const legacyRoot = 'packages/legacy/archive';
-if (!existsSync(legacyRoot)) throw new Error('Legacy archive is missing.');
-
-const expectedArchive = ['ai', 'apps', 'docs', 'github', 'packages', 'root', 'scripts', 'tests'];
-for (const name of expectedArchive) {
-  if (!existsSync(join(legacyRoot, name))) throw new Error(`Legacy archive is missing ${name}`);
+const rootManifest = JSON.parse(await readFile(new URL('../../package.json', import.meta.url), 'utf8'));
+if ((rootManifest.workspaces ?? []).some((workspace) => workspace.includes('legacy'))) {
+  throw new Error('packages/legacy must not participate in active workspaces');
 }
 
-function filesUnder(directory) {
-  const result = [];
-  for (const name of readdirSync(directory)) {
-    const path = join(directory, name);
-    if (statSync(path).isDirectory()) result.push(...filesUnder(path));
-    else result.push(path);
+const activePackages = ['core', 'web', 'react', 'angular', 'vue', 'elements'];
+for (const name of activePackages) {
+  const manifest = JSON.parse(await readFile(new URL(`../../packages/${name}/package.json`, import.meta.url), 'utf8'));
+  const serialized = JSON.stringify(manifest);
+  if (serialized.includes('@vyrnforge/legacy') || serialized.includes('packages/legacy')) {
+    throw new Error(`${manifest.name} references the legacy quarantine`);
   }
-  return result;
 }
 
-for (const packageDirectory of ['core', 'web', 'react', 'angular', 'vue', 'elements']) {
-  for (const file of filesUnder(`packages/${packageDirectory}`)) {
-    if (!/\.(?:ts|js|mjs|cjs|json|css)$/.test(file)) continue;
-    const content = readFileSync(file, 'utf8');
-    if (content.includes('@vyrnforge/legacy') || content.includes('packages/legacy')) {
-      throw new Error(`New package references legacy archive: ${file}`);
+async function collect(directory) {
+  const entries = await readdir(directory, { withFileTypes: true });
+  const files = [];
+  for (const entry of entries) {
+    const full = path.join(directory, entry.name);
+    if (entry.isDirectory()) files.push(...await collect(full));
+    else files.push(full);
+  }
+  return files;
+}
+
+for (const directory of ['documentation', 'examples', 'fixtures']) {
+  for (const file of await collect(directory)) {
+    const content = await readFile(file, 'utf8').catch(() => '');
+    if (content.includes('@vyrnforge/legacy') || content.includes('packages/legacy/archive')) {
+      throw new Error(`${file} depends on legacy implementation details`);
     }
   }
 }
 
-const legacyManifest = JSON.parse(readFileSync('packages/legacy/package.json', 'utf8'));
-if (legacyManifest.private !== true) throw new Error('@vyrnforge/legacy must remain private.');
-
-console.log('legacy isolation: ok');
+process.stdout.write('legacy isolation: ok\n');

@@ -1,3 +1,3 @@
 # Shared documentation
 
-Framework-neutral styling, accessibility, state, behavior, component semantics, and testing guidance belongs here once and is composed into framework experiences.
+Framework-neutral public guidance lives here and is reused across framework experiences. Styling, accessibility, state, behavior, testing guidance, and component semantics must not be independently re-authored per framework.

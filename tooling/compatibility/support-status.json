@@ -1,4 +1,5 @@
 {
+  "schemaVersion": 1,
   "status": "bootstrap",
   "runtime": {
     "node": ">=24.18 <25",

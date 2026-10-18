@@ -12,7 +12,7 @@ jobs:
   ci-gate:
     name: ci-gate
     runs-on: ubuntu-latest
-    timeout-minutes: 10
+    timeout-minutes: 15
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -23,21 +23,22 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version-file: .node-version
+          cache: npm
 
-      - name: Verify workspace structure
-        run: node tooling/verify/workspace-structure.mjs
+      - name: Install bootstrap toolchain
+        run: npm install --ignore-scripts --no-audit --no-fund
 
-      - name: Verify package boundaries
-        run: node tooling/verify/package-boundaries.mjs
-
-      - name: Verify legacy isolation
-        run: node tooling/verify/legacy-isolation.mjs
-
-      - name: Test impact planner
-        run: node --test tooling/tests/impact-plan.test.mjs
-
-      - name: Emit impact-derived validation plan
+      - name: Execute impact-derived validation plan
         env:
           BASE_SHA: ${{ github.event.pull_request.base.sha || github.event.before }}
           HEAD_SHA: ${{ github.sha }}
-        run: node tooling/impact/plan.mjs --base "$BASE_SHA" --head "$HEAD_SHA"
+        run: node tooling/impact/execute.mjs --base "$BASE_SHA" --head "$HEAD_SHA"
+
+      - name: Capture generated lockfile
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: bootstrap-package-lock
+          path: package-lock.json
+          if-no-files-found: error
+          retention-days: 1

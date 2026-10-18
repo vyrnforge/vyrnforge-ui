@@ -1,3 +1,3 @@
-# Framework documentation
+# Framework adaptations
 
-Framework documentation owns installation, imports, idiomatic API mapping, framework forms/lifecycle details, and runnable examples. It must not redefine shared VyrnForge semantics.
+Framework-specific documentation owns idiomatic installation, API syntax, forms integration, lifecycle/SSR details, and executable examples. It adapts shared VyrnForge semantics rather than redefining them.
