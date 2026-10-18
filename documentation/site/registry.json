@@ -1,0 +1,16 @@
+{
+  "pages": [
+    { "slug": "", "title": "Getting Started", "group": "Getting Started", "kind": "shared", "source": "documentation/shared/getting-started.html" },
+    { "slug": "foundations/styling", "title": "Styling", "group": "Foundations", "kind": "shared", "source": "documentation/shared/styling.html" },
+    { "slug": "foundations/accessibility", "title": "Accessibility", "group": "Foundations", "kind": "shared", "source": "documentation/shared/accessibility.html" },
+    { "slug": "foundations/state-and-behavior", "title": "State & Behavior", "group": "Foundations", "kind": "shared", "source": "documentation/shared/state-behavior.html" },
+    { "slug": "guides/testing", "title": "Testing Applications", "group": "Guides", "kind": "shared", "source": "documentation/shared/testing.html" },
+    { "slug": "frameworks/react", "title": "React", "group": "Frameworks", "kind": "framework", "framework": "react", "source": "documentation/frameworks/react.html" },
+    { "slug": "frameworks/angular", "title": "Angular", "group": "Frameworks", "kind": "framework", "framework": "angular", "source": "documentation/frameworks/angular.html" },
+    { "slug": "frameworks/vue", "title": "Vue", "group": "Frameworks", "kind": "framework", "framework": "vue", "source": "documentation/frameworks/vue.html" },
+    { "slug": "frameworks/elements", "title": "Elements", "group": "Frameworks", "kind": "framework", "framework": "elements", "source": "documentation/frameworks/elements.html" },
+    { "slug": "frameworks/native-web", "title": "Native Web", "group": "Frameworks", "kind": "framework", "framework": "native-web", "source": "documentation/frameworks/native-web.html" },
+    { "slug": "reference/packages", "title": "Packages", "group": "Reference", "kind": "generated", "generator": "packages" },
+    { "slug": "reference/compatibility", "title": "Compatibility", "group": "Reference", "kind": "generated", "generator": "compatibility" }
+  ]
+}

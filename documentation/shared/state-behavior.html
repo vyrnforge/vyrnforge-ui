@@ -1,0 +1,13 @@
+<p class="vf-docs-lede">VyrnForge standardizes semantic state, behavior policy, and interaction intent without forcing every framework through one shared state runtime.</p>
+<section>
+  <h2>Intent is not committed state</h2>
+  <p>An interaction may request a state change without guaranteeing that externally controlled state changes. Framework ports deliver intent idiomatically; the consumer owns committed state when a component is controlled.</p>
+</section>
+<section>
+  <h2>Browser truth</h2>
+  <p>Native browser state should not be mirrored into a generic VyrnForge store without a demonstrated need. Browser effects follow committed state and must be safe to reconcile during activation or hydration.</p>
+</section>
+<section>
+  <h2>Meaningful distinctions</h2>
+  <p>Public documentation preserves distinctions such as loading versus disabled, selected versus focused, invalid versus an error message, and open state versus a dismissal request.</p>
+</section>
