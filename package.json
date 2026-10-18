@@ -37,6 +37,8 @@
     "verify:docs-site": "node tooling/verify/docs-site.mjs",
     "verify:package-smoke": "node tooling/verify/package-smoke.mjs",
     "verify:consumer": "node tooling/verify/consumer-packages.mjs",
+    "test:browser:docs": "node tooling/browser/run.mjs chromium",
+    "test:browser:docs:cross": "node tooling/browser/run.mjs all",
     "test:impact": "node --test tooling/tests/impact-plan.test.mjs tooling/tests/impact-executor.test.mjs tooling/tests/impact-tiers.test.mjs",
     "ci:plan": "node tooling/impact/plan.mjs",
     "ci:pr": "node tooling/impact/execute.mjs --mode pr",
@@ -45,6 +47,7 @@
     "ci:release": "node tooling/impact/execute.mjs --mode release"
   },
   "devDependencies": {
+    "@playwright/test": "1.64.1",
     "typescript": "5.9.3"
   }
 }

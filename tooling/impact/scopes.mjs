@@ -30,8 +30,10 @@ export const scopeDefinitions = {
   'consumer-elements': { command: ['node', 'tooling/verify/consumer-packages.mjs', 'elements'], requires: ['build-elements'] },
   'docs-build': { command: [npm, 'run', 'build:docs'], requires: ['docs-source', 'compatibility', 'package-contracts'] },
   'docs-site': { command: ['node', 'tooling/verify/docs-site.mjs'], requires: ['docs-build'] },
+  'browser-docs-chromium': { command: [npm, 'run', 'test:browser:docs'], requires: ['docs-site'] },
+  'browser-docs-cross': { command: [npm, 'run', 'test:browser:docs:cross'], requires: ['docs-site'] },
   'consumer-all': { command: ['node', 'tooling/verify/consumer-packages.mjs', 'all'], requires: ['build-core', 'build-web', 'build-react', 'build-angular', 'build-vue', 'build-elements'] },
-  'release-readiness': { command: ['node', 'tooling/verify/release-readiness.mjs'], requires: ['consumer-all', 'docs-site'] }
+  'release-readiness': { command: ['node', 'tooling/verify/release-readiness.mjs'], requires: ['consumer-all', 'docs-site', 'browser-docs-cross'] }
 };
 
 export function expandScopes(selectedScopes) {
