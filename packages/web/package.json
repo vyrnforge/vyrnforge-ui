@@ -3,8 +3,23 @@
   "version": "0.0.0-rebuild",
   "private": true,
   "type": "module",
-  "sideEffects": [
-    "./styles/*.css"
-  ],
-  "description": "Canonical VyrnForge web styling foundation and narrowly shared browser capabilities."
+  "description": "Canonical VyrnForge web styling and narrow shared web-platform foundations.",
+  "sideEffects": ["./dist/styles.css"],
+  "files": ["dist"],
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js",
+      "default": "./dist/index.js"
+    },
+    "./styles.css": "./dist/styles.css"
+  },
+  "dependencies": {
+    "@vyrnforge/core": "0.0.0-rebuild"
+  },
+  "scripts": {
+    "build": "tsc -p tsconfig.json && node ../../tooling/build/copy-web-assets.mjs"
+  }
 }

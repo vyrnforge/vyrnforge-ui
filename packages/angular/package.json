@@ -3,6 +3,23 @@
   "version": "0.0.0-rebuild",
   "private": true,
   "type": "module",
+  "description": "Angular integration for VyrnForge shared component contracts.",
   "sideEffects": false,
-  "description": "Idiomatic Angular integration for VyrnForge."
+  "files": ["dist"],
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js",
+      "default": "./dist/index.js"
+    }
+  },
+  "dependencies": {
+    "@vyrnforge/core": "0.0.0-rebuild",
+    "@vyrnforge/web": "0.0.0-rebuild"
+  },
+  "scripts": {
+    "build": "tsc -p tsconfig.json"
+  }
 }
