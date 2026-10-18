@@ -10,24 +10,29 @@ jobs:
   ci-gate:
     name: ci-gate
     runs-on: ubuntu-latest
-    timeout-minutes: 20
+    timeout-minutes: 25
     steps:
       - name: Checkout
         uses: actions/checkout@v4
         with:
           fetch-depth: 0
-
       - name: Setup Node
         uses: actions/setup-node@v4
         with:
           node-version-file: .node-version
           cache: npm
-
       - name: Install toolchain
         run: npm ci --ignore-scripts --no-audit --no-fund
-
       - name: Execute targeted validation plan
         env:
           BASE_SHA: ${{ github.event.pull_request.base.sha }}
           HEAD_SHA: ${{ github.sha }}
-        run: node tooling/impact/execute.mjs --mode pr --base "$BASE_SHA" --head "$HEAD_SHA"
+        run: node tooling/impact/execute.mjs --mode pr --base "$BASE_SHA" --head "$HEAD_SHA" --output test-results/validation-plan.json
+      - name: Upload inspectable validation plan
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: validation-plan-pr
+          path: test-results/validation-plan.json
+          if-no-files-found: error
+          retention-days: 7

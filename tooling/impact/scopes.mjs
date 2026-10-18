@@ -4,6 +4,7 @@ export const scopeDefinitions = {
   structure: { command: ['node', 'tooling/verify/workspace-structure.mjs'], requires: [] },
   boundaries: { command: ['node', 'tooling/verify/package-boundaries.mjs'], requires: [] },
   'architecture-rules': { command: ['node', 'tooling/verify/architecture-rules.mjs'], requires: [] },
+  'workflow-contracts': { command: ['node', 'tooling/verify/workflows.mjs'], requires: [] },
   'legacy-isolation': { command: ['node', 'tooling/verify/legacy-isolation.mjs'], requires: [] },
   'impact-engine': { command: ['node', '--test', 'tooling/tests/impact-plan.test.mjs', 'tooling/tests/impact-executor.test.mjs', 'tooling/tests/impact-tiers.test.mjs'], requires: [] },
   compatibility: { command: ['node', 'tooling/verify/compatibility.mjs'], requires: [] },
@@ -21,10 +22,16 @@ export const scopeDefinitions = {
   'pack-angular': { command: ['node', 'tooling/verify/package-smoke.mjs', 'angular'], requires: ['build-angular'] },
   'pack-vue': { command: ['node', 'tooling/verify/package-smoke.mjs', 'vue'], requires: ['build-vue'] },
   'pack-elements': { command: ['node', 'tooling/verify/package-smoke.mjs', 'elements'], requires: ['build-elements'] },
+  'consumer-core': { command: ['node', 'tooling/verify/consumer-packages.mjs', 'core'], requires: ['build-core'] },
+  'consumer-web': { command: ['node', 'tooling/verify/consumer-packages.mjs', 'web'], requires: ['build-web'] },
+  'consumer-react': { command: ['node', 'tooling/verify/consumer-packages.mjs', 'react'], requires: ['build-react'] },
+  'consumer-angular': { command: ['node', 'tooling/verify/consumer-packages.mjs', 'angular'], requires: ['build-angular'] },
+  'consumer-vue': { command: ['node', 'tooling/verify/consumer-packages.mjs', 'vue'], requires: ['build-vue'] },
+  'consumer-elements': { command: ['node', 'tooling/verify/consumer-packages.mjs', 'elements'], requires: ['build-elements'] },
   'docs-build': { command: [npm, 'run', 'build:docs'], requires: ['docs-source', 'compatibility', 'package-contracts'] },
   'docs-site': { command: ['node', 'tooling/verify/docs-site.mjs'], requires: ['docs-build'] },
-  'consumer-packages': { command: ['node', 'tooling/verify/consumer-packages.mjs'], requires: ['build-core', 'build-web', 'build-react', 'build-angular', 'build-vue', 'build-elements'] },
-  'release-readiness': { command: ['node', 'tooling/verify/release-readiness.mjs'], requires: ['consumer-packages', 'docs-site'] }
+  'consumer-all': { command: ['node', 'tooling/verify/consumer-packages.mjs', 'all'], requires: ['build-core', 'build-web', 'build-react', 'build-angular', 'build-vue', 'build-elements'] },
+  'release-readiness': { command: ['node', 'tooling/verify/release-readiness.mjs'], requires: ['consumer-all', 'docs-site'] }
 };
 
 export function expandScopes(selectedScopes) {
@@ -32,7 +39,6 @@ export function expandScopes(selectedScopes) {
   const ordered = [];
   const visiting = new Set();
   const visited = new Set();
-
   function visit(scope) {
     if (visited.has(scope)) return;
     if (visiting.has(scope)) throw new Error(`Validation scope prerequisite cycle at ${scope}`);
@@ -44,7 +50,6 @@ export function expandScopes(selectedScopes) {
     visited.add(scope);
     ordered.push({ scope, selected: selected.has(scope), command: definition.command });
   }
-
   for (const scope of selectedScopes) visit(scope);
   return ordered;
 }

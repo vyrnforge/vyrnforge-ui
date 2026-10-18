@@ -1,45 +1,20 @@
 {
   "evidence": {
-    "core": ["package-contracts", "build-core", "pack-core"],
-    "web": ["package-contracts", "build-web", "pack-web"],
-    "react": ["package-contracts", "build-react", "pack-react"],
-    "angular": ["package-contracts", "build-angular", "pack-angular"],
-    "vue": ["package-contracts", "build-vue", "pack-vue"],
-    "elements": ["package-contracts", "build-elements", "pack-elements"],
+    "core": ["package-contracts", "build-core", "pack-core", "consumer-core"],
+    "web": ["package-contracts", "build-web", "pack-web", "consumer-web"],
+    "react": ["package-contracts", "build-react", "pack-react", "consumer-react"],
+    "angular": ["package-contracts", "build-angular", "pack-angular", "consumer-angular"],
+    "vue": ["package-contracts", "build-vue", "pack-vue", "consumer-vue"],
+    "elements": ["package-contracts", "build-elements", "pack-elements", "consumer-elements"],
     "documentation": ["docs-source", "docs-build", "docs-site"],
-    "tooling": ["compatibility", "package-contracts", "architecture-rules"],
+    "tooling": ["compatibility", "package-contracts", "architecture-rules", "workflow-contracts"],
     "legacy": ["legacy-isolation"]
   },
-  "globalSentinels": ["structure", "boundaries", "architecture-rules", "legacy-isolation", "impact-engine"],
+  "globalSentinels": ["structure", "boundaries", "architecture-rules", "workflow-contracts", "legacy-isolation", "impact-engine"],
   "tiers": {
-    "main": ["structure", "boundaries", "architecture-rules", "legacy-isolation", "impact-engine", "compatibility", "package-contracts", "docs-source", "build-core", "build-web", "build-react", "build-angular", "build-vue", "build-elements", "pack-core", "pack-web", "pack-react", "pack-angular", "pack-vue", "pack-elements", "docs-build", "docs-site", "consumer-packages"],
-    "scheduled": ["structure", "boundaries", "architecture-rules", "legacy-isolation", "impact-engine", "compatibility", "package-contracts", "docs-source", "build-core", "build-web", "build-react", "build-angular", "build-vue", "build-elements", "pack-core", "pack-web", "pack-react", "pack-angular", "pack-vue", "pack-elements", "docs-build", "docs-site", "consumer-packages"],
-    "release": ["structure", "boundaries", "architecture-rules", "legacy-isolation", "impact-engine", "compatibility", "package-contracts", "docs-source", "build-core", "build-web", "build-react", "build-angular", "build-vue", "build-elements", "pack-core", "pack-web", "pack-react", "pack-angular", "pack-vue", "pack-elements", "docs-build", "docs-site", "consumer-packages", "release-readiness"]
+    "main": ["structure", "boundaries", "architecture-rules", "workflow-contracts", "legacy-isolation", "impact-engine", "compatibility", "package-contracts", "docs-source", "build-core", "build-web", "build-react", "build-angular", "build-vue", "build-elements", "pack-core", "pack-web", "pack-react", "pack-angular", "pack-vue", "pack-elements", "docs-build", "docs-site", "consumer-all"],
+    "scheduled": ["structure", "boundaries", "architecture-rules", "workflow-contracts", "legacy-isolation", "impact-engine", "compatibility", "package-contracts", "docs-source", "build-core", "build-web", "build-react", "build-angular", "build-vue", "build-elements", "pack-core", "pack-web", "pack-react", "pack-angular", "pack-vue", "pack-elements", "docs-build", "docs-site", "consumer-all"],
+    "release": ["structure", "boundaries", "architecture-rules", "workflow-contracts", "legacy-isolation", "impact-engine", "compatibility", "package-contracts", "docs-source", "build-core", "build-web", "build-react", "build-angular", "build-vue", "build-elements", "pack-core", "pack-web", "pack-react", "pack-angular", "pack-vue", "pack-elements", "docs-build", "docs-site", "consumer-all", "release-readiness"]
   },
-  "scopeOrder": [
-    "structure",
-    "boundaries",
-    "architecture-rules",
-    "legacy-isolation",
-    "impact-engine",
-    "compatibility",
-    "package-contracts",
-    "docs-source",
-    "build-core",
-    "build-web",
-    "build-react",
-    "build-angular",
-    "build-vue",
-    "build-elements",
-    "pack-core",
-    "pack-web",
-    "pack-react",
-    "pack-angular",
-    "pack-vue",
-    "pack-elements",
-    "docs-build",
-    "docs-site",
-    "consumer-packages",
-    "release-readiness"
-  ]
+  "scopeOrder": ["structure", "boundaries", "architecture-rules", "workflow-contracts", "legacy-isolation", "impact-engine", "compatibility", "package-contracts", "docs-source", "build-core", "build-web", "build-react", "build-angular", "build-vue", "build-elements", "pack-core", "pack-web", "pack-react", "pack-angular", "pack-vue", "pack-elements", "consumer-core", "consumer-web", "consumer-react", "consumer-angular", "consumer-vue", "consumer-elements", "docs-build", "docs-site", "consumer-all", "release-readiness"]
 }

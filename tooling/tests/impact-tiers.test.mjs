@@ -2,30 +2,31 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import { createPlan, createTierPlan } from '../impact/plan.mjs';
 
-const frameworkBuildScopes = ['build-react', 'build-angular', 'build-vue', 'build-elements'];
-
-test('PR framework-local changes do not select sibling framework package evidence', () => {
+test('PR framework-local changes keep sibling framework and consumer evidence skipped', () => {
   const plan = createPlan(['packages/react/src/index.ts']);
-  assert.ok(plan.validationScopes.includes('build-react'));
-  assert.ok(plan.validationScopes.includes('docs-build'));
-  for (const scope of ['build-angular', 'build-vue', 'build-elements']) {
-    assert.equal(plan.validationScopes.includes(scope), false, `${scope} should remain skipped`);
-    assert.ok(plan.skippedValidationScopes.includes(scope));
+  for (const selected of ['build-react', 'pack-react', 'consumer-react', 'docs-build']) assert.ok(plan.validationScopes.includes(selected));
+  for (const skipped of ['build-angular', 'build-vue', 'build-elements', 'consumer-angular', 'consumer-vue', 'consumer-elements']) {
+    assert.equal(plan.validationScopes.includes(skipped), false);
+    assert.ok(plan.skippedValidationScopes.includes(skipped));
   }
 });
 
-test('documentation-local changes select docs evidence without package pack scopes', () => {
+test('documentation-local changes select docs evidence without package consumers', () => {
   const plan = createPlan(['documentation/shared/styling.html']);
   assert.ok(plan.validationScopes.includes('docs-build'));
   assert.ok(plan.validationScopes.includes('docs-site'));
-  assert.equal(plan.validationScopes.includes('pack-react'), false);
+  assert.equal(plan.validationScopes.includes('consumer-react'), false);
 });
 
-test('main validation deliberately covers all package builds and consumer verification', () => {
+test('core changes fan out to all dependent ports and consumers', () => {
+  const plan = createPlan(['packages/core/src/index.ts']);
+  for (const scope of ['consumer-core', 'consumer-web', 'consumer-react', 'consumer-angular', 'consumer-vue', 'consumer-elements']) assert.ok(plan.validationScopes.includes(scope));
+});
+
+test('main validation deliberately uses one aggregate consumer verification', () => {
   const plan = createTierPlan('main');
-  for (const scope of [...frameworkBuildScopes, 'build-core', 'build-web', 'docs-site', 'consumer-packages']) {
-    assert.ok(plan.validationScopes.includes(scope));
-  }
+  assert.ok(plan.validationScopes.includes('consumer-all'));
+  assert.equal(plan.validationScopes.includes('consumer-react'), false);
 });
 
 test('release validation is strictly broader than main validation', () => {
