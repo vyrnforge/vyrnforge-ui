@@ -30,12 +30,20 @@
     "lint:tooling": "eslint tooling playwright.config.mjs eslint.config.mjs stylelint.config.mjs",
     "lint:docs": "eslint apps/docs && stylelint \"apps/docs/**/*.css\"",
     "lint:web-css": "stylelint \"packages/web/src/**/*.css\"",
+    "lint:packages": "eslint \"packages/{core,web,react,angular,vue,elements}/src/**/*.{ts,tsx,mts,cts}\"",
+    "lint:core": "eslint \"packages/core/src/**/*.{ts,tsx,mts,cts}\"",
+    "lint:web": "eslint \"packages/web/src/**/*.{ts,tsx,mts,cts}\"",
+    "lint:react": "eslint \"packages/react/src/**/*.{ts,tsx,mts,cts}\"",
+    "lint:angular": "eslint \"packages/angular/src/**/*.{ts,tsx,mts,cts}\"",
+    "lint:vue": "eslint \"packages/vue/src/**/*.{ts,tsx,mts,cts}\"",
+    "lint:elements": "eslint \"packages/elements/src/**/*.{ts,tsx,mts,cts}\"",
     "verify:structure": "node tooling/verify/workspace-structure.mjs",
     "verify:boundaries": "node tooling/verify/package-boundaries.mjs",
     "verify:architecture": "node tooling/verify/architecture-rules.mjs",
     "verify:legacy": "node tooling/verify/legacy-isolation.mjs",
     "verify:packages": "node tooling/verify/package-contracts.mjs",
     "verify:compatibility": "node tooling/verify/compatibility.mjs",
+    "verify:foundation-readiness": "node tooling/verify/foundation-readiness.mjs",
     "verify:documentation": "node tooling/verify/documentation-structure.mjs",
     "verify:docs-site": "node tooling/verify/docs-site.mjs",
     "verify:testing-structure": "node tooling/verify/testing-structure.mjs",
@@ -55,6 +63,7 @@
     "axe-core": "4.14.0",
     "eslint": "10.13.0",
     "stylelint": "17.16.0",
-    "typescript": "5.9.3"
+    "typescript": "6.0.3",
+    "typescript-eslint": "8.71.2"
   }
 }
