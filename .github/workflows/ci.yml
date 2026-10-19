@@ -20,8 +20,9 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version-file: .node-version
-      - name: Install toolchain and refresh bootstrap lockfile
-        run: npm install --ignore-scripts --no-audit --no-fund
+          cache: npm
+      - name: Install toolchain
+        run: npm ci --ignore-scripts --no-audit --no-fund
       - name: Execute targeted validation plan
         env:
           BASE_SHA: ${{ github.event.pull_request.base.sha }}
@@ -35,11 +36,13 @@ jobs:
           path: test-results/validation-plan.json
           if-no-files-found: error
           retention-days: 7
-      - name: Capture refreshed package lock
+      - name: Upload browser evidence when selected
         if: always()
         uses: actions/upload-artifact@v4
         with:
-          name: bootstrap-package-lock-browser
-          path: package-lock.json
-          if-no-files-found: error
-          retention-days: 1
+          name: browser-evidence-pr
+          path: |
+            test-results/playwright-report
+            test-results/playwright-results
+          if-no-files-found: ignore
+          retention-days: 7
