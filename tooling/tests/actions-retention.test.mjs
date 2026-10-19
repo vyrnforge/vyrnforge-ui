@@ -138,7 +138,7 @@ test('merged PR cleanup preserves only the newest successful validation evidence
       branch: pr.head.ref,
       workflow: 7,
       path: '.github/workflows/button-bootstrap-lock.yml',
-      event: 'pull_request',
+      event: 'push',
       conclusion: 'success'
     }),
     run(6, { days: 5, pr: 891, branch: 'feature/other', conclusion: 'failure' })
