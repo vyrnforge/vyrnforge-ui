@@ -596,25 +596,25 @@ workflow contracts: ok
 legacy isolation: ok
 
 [validation:impact-engine] node --test tooling/tests/impact-plan.test.mjs tooling/tests/impact-executor.test.mjs tooling/tests/impact-tiers.test.mjs
-✔ framework build execution includes lint and foundation prerequisites without marking them as selected evidence (1.146997ms)
-✔ duplicate prerequisites execute once (0.286794ms)
-✔ validation plans become inspectable execution plans (0.160678ms)
-✔ unknown validation scopes fail closed (0.339372ms)
-✔ React Button changes select React Button evidence without unrelated framework Button evidence (1.577554ms)
-✔ shared Button CSS fans out through every implemented Button port (0.198854ms)
-✔ port-local changes remain scoped to the port plus dependent documentation (0.122301ms)
-✔ web changes fan out to every framework port and documentation (0.161469ms)
-✔ core changes fan out through the full product dependency closure (0.212474ms)
-✔ documentation changes stay documentation-scoped (0.476905ms)
-✔ impact-engine and repository foundation changes fail closed (0.262228ms)
-✔ unknown repository changes fail closed (0.146317ms)
-✔ legacy-only changes do not select product ports (0.20273ms)
-✔ classification exposes component scopes and broad infrastructure (0.243801ms)
-✔ PR framework-local changes keep sibling framework and consumer evidence skipped (2.176199ms)
-✔ documentation-local changes select docs and chromium browser evidence without package consumers (0.196711ms)
-✔ core changes fan out to all dependent ports and consumers (0.210831ms)
-✔ main uses chromium browser evidence while scheduled uses cross-browser evidence (0.209731ms)
-✔ release validation is strictly broader than main validation (0.205324ms)
+✔ framework build execution includes lint and foundation prerequisites without marking them as selected evidence (2.320488ms)
+✔ duplicate prerequisites execute once (0.355468ms)
+✔ validation plans become inspectable execution plans (0.310193ms)
+✔ unknown validation scopes fail closed (0.578927ms)
+✔ React Button changes select React Button evidence without unrelated framework Button evidence (6.213098ms)
+✔ shared Button CSS fans out through every implemented Button port (0.430078ms)
+✔ port-local changes remain scoped to the port plus dependent documentation (0.339487ms)
+✔ web changes fan out to every framework port and documentation (0.628831ms)
+✔ core changes fan out through the full product dependency closure (3.225116ms)
+✔ documentation changes stay documentation-scoped (1.259125ms)
+✔ impact-engine and repository foundation changes fail closed (0.654188ms)
+✔ unknown repository changes fail closed (1.74651ms)
+✔ legacy-only changes do not select product ports (1.641011ms)
+✔ classification exposes component scopes and broad infrastructure (2.911037ms)
+✔ PR framework-local changes keep sibling framework and consumer evidence skipped (2.652652ms)
+✔ documentation-local changes select docs and chromium browser evidence without package consumers (0.288452ms)
+✔ core changes fan out to all dependent ports and consumers (0.352943ms)
+✔ main uses chromium browser evidence while scheduled uses cross-browser evidence (0.403618ms)
+✔ release validation is strictly broader than main validation (0.363192ms)
 ℹ tests 19
 ℹ suites 0
 ℹ pass 19
@@ -622,7 +622,7 @@ legacy isolation: ok
 ℹ cancelled 0
 ℹ skipped 0
 ℹ todo 0
-ℹ duration_ms 58.192628
+ℹ duration_ms 113.189214
 
 [validation:foundation-readiness] node tooling/verify/foundation-readiness.mjs
 foundation readiness: ok
@@ -770,42 +770,42 @@ package smoke: elements ok
 
 [validation:consumer-core] node tooling/verify/consumer-packages.mjs core
 
-added 1 package in 145ms
+added 1 package in 254ms
 consumer imports: ok
 packed consumer verification: core ok
 
 [validation:consumer-web] node tooling/verify/consumer-packages.mjs web
 
-added 2 packages in 165ms
+added 2 packages in 283ms
 consumer imports: ok
 packed consumer verification: web ok
 
 [validation:consumer-react] node tooling/verify/consumer-packages.mjs react
 
-added 4 packages in 561ms
+added 4 packages in 587ms
 consumer imports: ok
 packed consumer verification: react ok
 
 [validation:consumer-angular] node tooling/verify/consumer-packages.mjs angular
 
-added 6 packages in 1s
+added 6 packages in 2s
 consumer imports: ok
 packed consumer verification: angular ok
 
 [validation:consumer-vue] node tooling/verify/consumer-packages.mjs vue
 
-added 26 packages in 1s
+added 26 packages in 2s
 consumer imports: ok
 packed consumer verification: vue ok
 
 [validation:consumer-elements] node tooling/verify/consumer-packages.mjs elements
 
-added 3 packages in 235ms
+added 3 packages in 346ms
 consumer imports: ok
 packed consumer verification: elements ok
 
 [validation:button-react-ssr] node --test tooling/tests/button-react.test.mjs
-✔ React Button server output is native-complete and loading remains enabled (3.69839ms)
+✔ React Button server output is native-complete and loading remains enabled (6.630884ms)
 ℹ tests 1
 ℹ suites 0
 ℹ pass 1
@@ -813,10 +813,22 @@ packed consumer verification: elements ok
 ℹ cancelled 0
 ℹ skipped 0
 ℹ todo 0
-ℹ duration_ms 58.526532
+ℹ duration_ms 87.266964
 
 [validation:button-angular-ssr] node --test tooling/tests/button-angular.test.mjs
-✖ Angular Button server output keeps a native form-participating button (6.158639ms)
+Angular is running in development mode.
+✔ Angular Button server output keeps a native form-participating button (47.279041ms)
+ℹ tests 1
+ℹ suites 0
+ℹ pass 1
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 356.427908
+
+[validation:button-vue-ssr] node --test tooling/tests/button-vue.test.mjs
+✖ Vue Button server output is native-complete and preserves native attributes (6.803377ms)
 ℹ tests 1
 ℹ suites 0
 ℹ pass 0
@@ -824,26 +836,31 @@ packed consumer verification: elements ok
 ℹ cancelled 0
 ℹ skipped 0
 ℹ todo 0
-ℹ duration_ms 198.837498
+ℹ duration_ms 110.340322
 
 ✖ failing tests:
 
-test at tooling/tests/button-angular.test.mjs:17:1
-✖ Angular Button server output keeps a native form-participating button (6.158639ms)
-  Error: NG0401: Missing Platform: This may be due to using `bootstrapApplication` on the server without passing a `BootstrapContext`. Please make sure that `bootstrapApplication` is called with a `context` argument. Find more at https://v22.angular.dev/errors/NG0401
-      at internalCreateApplication (file:///home/runner/work/vyrnforge-ui/vyrnforge-ui/node_modules/@angular/core/fesm2022/core.mjs:2427:11)
-      at bootstrapApplication (file:///home/runner/work/vyrnforge-ui/vyrnforge-ui/node_modules/@angular/platform-browser/fesm2022/_browser-chunk.mjs:268:10)
-      at async renderApplication (file:///home/runner/work/vyrnforge-ui/vyrnforge-ui/node_modules/@angular/platform-server/fesm2022/platform-server.mjs:184:28)
-      at async TestContext.<anonymous> (file:///home/runner/work/vyrnforge-ui/vyrnforge-ui/tooling/tests/button-angular.test.mjs:18:16)
+test at tooling/tests/button-vue.test.mjs:7:1
+✖ Vue Button server output is native-complete and preserves native attributes (6.803377ms)
+  AssertionError [ERR_ASSERTION]: The input did not match the regular expression /data-vf-button=""/. Input:
+  
+  '<button name="save" value="yes" data-vf-button data-vf-variant="primary" data-vf-size="md" data-vf-loading aria-busy="true">Save</button>'
+  
+      at TestContext.<anonymous> (file:///home/runner/work/vyrnforge-ui/vyrnforge-ui/tooling/tests/button-vue.test.mjs:11:10)
       at async Test.run (node:internal/test_runner/test:1332:7)
       at async startSubtestAfterBootstrap (node:internal/test_runner/harness:385:3) {
-    code: -401
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: '<button name="save" value="yes" data-vf-button data-vf-variant="primary" data-vf-size="md" data-vf-loading aria-busy="true">Save</button>',
+    expected: /data-vf-button=""/,
+    operator: 'match',
+    diff: 'simple'
   }
 node:internal/errors:985
   const err = new Error(message);
               ^
 
-Error: Command failed: node --test tooling/tests/button-angular.test.mjs
+Error: Command failed: node --test tooling/tests/button-vue.test.mjs
     at genericNodeError (node:internal/errors:985:15)
     at wrappedFn (node:internal/errors:539:14)
     at checkExecSyncError (node:child_process:925:11)
@@ -856,7 +873,7 @@ Error: Command failed: node --test tooling/tests/button-angular.test.mjs
   status: 1,
   signal: null,
   output: [ null, null, null ],
-  pid: 3367,
+  pid: 3512,
   stdout: null,
   stderr: null
 }
