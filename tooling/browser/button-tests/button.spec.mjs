@@ -6,7 +6,7 @@ const port = process.env.VF_BUTTON_PORT || 'web';
 test.describe('Button real-browser contract', () => {
   test.skip(port !== 'web', 'Native Web contract evidence');
 
-  test('native activation, disabled, loading, forms, focus, accessibility, direction, and visual states', async ({ page, browserName }) => {
+  test('native activation, disabled, loading, forms, focus, accessibility, theme, direction, and media states', async ({ page, browserName }) => {
     await page.goto('/next/button-fixtures/web.html');
     const activation = page.locator('#activation');
     await activation.click();
@@ -36,16 +36,24 @@ test.describe('Button real-browser contract', () => {
     await expect(focused).toBeVisible();
     expect(await focused.evaluate((element) => getComputedStyle(element).outlineStyle)).not.toBe('none');
 
-    await page.evaluate(() => { document.documentElement.dir = 'rtl'; });
-    await expect(page.locator('[data-visual-matrix]')).toHaveAttribute('aria-label', 'Button visual states');
-    await page.emulateMedia({ reducedMotion: 'reduce' });
-    expect(await busy.evaluate((element) => getComputedStyle(element).transitionDuration)).toBe('0s');
-
     await page.addScriptTag({ content: axeCore.source });
     const results = await page.evaluate(async () => globalThis.axe.run(document));
     expect(results.violations).toEqual([]);
 
     if (browserName === 'chromium') await expect(page.locator('[data-visual-matrix]')).toHaveScreenshot('button-visual-matrix.png');
+
+    await page.evaluate(() => { document.documentElement.dataset.vfTheme = 'dark'; });
+    expect(await busy.evaluate((element) => getComputedStyle(element).colorScheme)).toContain('dark');
+
+    await page.evaluate(() => { document.documentElement.dir = 'rtl'; });
+    expect(await busy.evaluate((element) => getComputedStyle(element).direction)).toBe('rtl');
+
+    await page.emulateMedia({ reducedMotion: 'reduce' });
+    expect(await busy.evaluate((element) => getComputedStyle(element).transitionDuration)).toBe('0s');
+
+    await page.emulateMedia({ reducedMotion: 'reduce', forcedColors: 'active' });
+    expect(await page.evaluate(() => matchMedia('(forced-colors: active)').matches)).toBe(true);
+    await expect(busy).toBeVisible();
   });
 });
 
@@ -63,6 +71,10 @@ test.describe('Button framework hydration', () => {
       await button.click();
       await expect(page.locator('body')).toHaveAttribute('data-activated', 'true');
       expect(errors.filter((error) => /hydration|mismatch/i.test(error))).toEqual([]);
+
+      await page.addScriptTag({ content: axeCore.source });
+      const results = await page.evaluate(async (selector) => globalThis.axe.run(document.querySelector(selector)), `#${framework}-button`);
+      expect(results.violations).toEqual([]);
     });
   }
 });
