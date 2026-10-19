@@ -32,7 +32,7 @@
       "evidence": ["package-contracts", "lint-elements", "build-elements", "pack-elements", "consumer-elements"]
     },
     "documentation": {
-      "paths": ["documentation/", "apps/docs/", "examples/", "docs/", "README.md"],
+      "paths": ["documentation/", "apps/docs/", "examples/", "docs/", "README.md", "tooling/docs/", "tooling/browser/tests/"],
       "dependsOn": ["core", "web", "react", "angular", "vue", "elements"],
       "evidence": ["lint-docs", "docs-source", "docs-build", "docs-site", "browser-docs-chromium"]
     },
