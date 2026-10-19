@@ -1,7 +1,7 @@
-import { readFileSync } from 'node:fs';
+import { discoverComponents } from '../testing/discover-components.mjs';
 
 const npm = process.platform === 'win32' ? 'npm.cmd' : 'npm';
-const registry = JSON.parse(readFileSync(new URL('../../testing/components/registry.json', import.meta.url), 'utf8'));
+const components = discoverComponents().components;
 
 const baseScopeDefinitions = {
   structure: { command: ['node', 'tooling/verify/workspace-structure.mjs'], requires: [] },
@@ -11,7 +11,7 @@ const baseScopeDefinitions = {
   'architecture-rules': { command: ['node', 'tooling/verify/architecture-rules.mjs'], requires: [] },
   'workflow-contracts': { command: ['node', 'tooling/verify/workflows.mjs'], requires: [] },
   'legacy-isolation': { command: ['node', 'tooling/verify/legacy-isolation.mjs'], requires: [] },
-  'impact-engine': { command: ['node', '--test', 'tooling/tests/impact-plan.test.mjs', 'tooling/tests/impact-executor.test.mjs', 'tooling/tests/impact-tiers.test.mjs', 'tooling/tests/actions-retention.test.mjs'], requires: [] },
+  'impact-engine': { command: ['node', '--test', 'tooling/tests/impact-plan.test.mjs', 'tooling/tests/impact-executor.test.mjs', 'tooling/tests/impact-tiers.test.mjs', 'tooling/tests/component-discovery.test.mjs', 'tooling/tests/actions-retention.test.mjs'], requires: [] },
   'foundation-readiness': { command: ['node', 'tooling/verify/foundation-readiness.mjs'], requires: [] },
   'lint-tooling': { command: [npm, 'run', 'lint:tooling'], requires: [] },
   'lint-web-css': { command: [npm, 'run', 'lint:web-css'], requires: [] },
@@ -52,7 +52,7 @@ const baseScopeDefinitions = {
 };
 
 function componentEntry(componentId) {
-  return registry.components.find((entry) => entry.component === componentId);
+  return components.find((entry) => entry.component === componentId);
 }
 
 function componentPrerequisite(port) {
