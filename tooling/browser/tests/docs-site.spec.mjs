@@ -26,13 +26,17 @@ test('docs home exposes versioned accessible navigation and search', async ({ pa
   verifyNoErrors();
 });
 
-test('framework selection navigates to explicit implementation status', async ({ page }) => {
+test('framework selection exposes component-level implementation status', async ({ page }) => {
   const verifyNoErrors = await expectNoRuntimeErrors(page);
   await page.goto('/next/');
   await page.getByLabel('Framework').selectOption('react');
   await expect(page).toHaveURL(/\/next\/frameworks\/react\/$/);
-  await expect(page.locator('[data-vf-support-status="not-implemented"]')).toContainText('not implemented');
-  await expect(page.getByRole('heading', { name: 'Shared VyrnForge foundations' })).toBeVisible();
+  await expect(page.locator('[data-vf-support-status="partial"]')).toContainText('Button baseline implemented');
+  await expect(page.getByRole('heading', { level: 2, name: 'Button' })).toBeVisible();
+
+  await page.getByLabel('Framework').selectOption('elements');
+  await expect(page).toHaveURL(/\/next\/frameworks\/elements\/$/);
+  await expect(page.locator('[data-vf-support-status="not-implemented"]')).toContainText('deliberately unavailable');
   verifyNoErrors();
 });
 
