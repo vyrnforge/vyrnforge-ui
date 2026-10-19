@@ -33,6 +33,20 @@ function resolveLocalLink(pageDirectory, href) {
   return path.join(resolved, 'index.html');
 }
 
+function escapeHtml(value) {
+  return String(value)
+    .replaceAll('&', '&amp;')
+    .replaceAll('<', '&lt;')
+    .replaceAll('>', '&gt;')
+    .replaceAll('"', '&quot;');
+}
+
+function leafValues(value) {
+  if (Array.isArray(value)) return value.flatMap(leafValues);
+  if (value && typeof value === 'object') return Object.values(value).flatMap(leafValues);
+  return value === null || value === undefined ? [] : [value];
+}
+
 for (const page of registry.pages) {
   const pageDirectory = path.join(channelRoot, page.slug);
   const file = path.join(pageDirectory, 'index.html');
@@ -58,9 +72,9 @@ for (const item of searchIndex) {
 }
 
 const compatibilityHtml = await readFile(path.join(channelRoot, 'reference/compatibility/index.html'), 'utf8');
-for (const value of [compatibility.runtime?.node, compatibility.runtime?.npm, compatibility.browsers, compatibility.ssrBundlers].filter(Boolean)) {
-  if (!compatibilityHtml.includes(String(value).replaceAll('&', '&amp;').replaceAll('<', '&lt;').replaceAll('>', '&gt;'))) {
-    throw new Error(`Compatibility page drifted from support source: ${value}`);
+for (const value of leafValues(compatibility)) {
+  if (!compatibilityHtml.includes(escapeHtml(value))) {
+    throw new Error(`Compatibility page drifted from support source leaf value: ${value}`);
   }
 }
 
