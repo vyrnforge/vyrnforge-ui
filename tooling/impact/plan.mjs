@@ -21,6 +21,7 @@ function compileTargets() {
   for (const component of registry.components) {
     const portNodes = [];
     const webNode = component.ports.web ? `component:${component.component}:web` : null;
+    const sharedBrowserPaths = component.browser?.paths ?? [];
 
     for (const [port, config] of Object.entries(component.ports)) {
       const node = `component:${component.component}:${port}`;
@@ -29,7 +30,12 @@ function compileTargets() {
       if (config.ssr) evidence.push(componentScope(component.component, `${port}:ssr`));
       if (config.browser) evidence.push(componentScope(component.component, `${port}:browser`));
       targets[node] = {
-        paths: config.paths,
+        paths: [...new Set([
+          ...config.paths,
+          ...(component.types && port !== 'web' ? [component.types] : []),
+          ...(config.ssr ? [config.ssr] : []),
+          ...(config.browser ? sharedBrowserPaths : [])
+        ])],
         dependsOn: [...new Set([port, ...(port !== 'web' && webNode ? [webNode] : [])])],
         evidence
       };
@@ -53,15 +59,16 @@ const targets = compileTargets();
 
 export function classifyPath(path) {
   const matchedNodes = [];
-  let broad = false;
+  const matchedConfigs = [];
   for (const [node, config] of Object.entries(targets)) {
     if ((config.paths ?? []).some((pattern) => matchesPath(path, pattern))) {
       matchedNodes.push(node);
-      broad ||= Boolean(config.broad);
+      matchedConfigs.push(config);
     }
   }
-  if (impact.broadPaths.some((pattern) => matchesPath(path, pattern))) broad = true;
-  if (matchedNodes.length === 0) broad = true;
+  const explicitlyBroad = impact.broadPaths.some((pattern) => matchesPath(path, pattern));
+  const hasSpecificOwner = matchedConfigs.some((config) => !config.broad);
+  const broad = explicitlyBroad || matchedNodes.length === 0 || (matchedConfigs.some((config) => config.broad) && !hasSpecificOwner);
   return { nodes: matchedNodes.sort(), broad };
 }
 
