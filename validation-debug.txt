@@ -26,6 +26,7 @@
       "packages/web/src/styles.css",
       "packages/web/src/styles/button.css",
       "packages/web/src/styles/tokens.css",
+      "testing/components/registry.json",
       "tooling/browser/build-button-fixtures.mjs",
       "tooling/browser/button-tests/button.spec.mjs",
       "tooling/browser/button.config.mjs",
@@ -576,7 +577,7 @@
 workspace structure: ok
 
 [validation:testing-structure] node tooling/verify/testing-structure.mjs
-testing structure: 0 registered rebuilt components
+testing structure: 1 registered rebuilt components
 
 [validation:repository-guidance] node tooling/verify/repository-guidance.mjs
 repository guidance: no active legacy architecture references
@@ -585,19 +586,114 @@ repository guidance: no active legacy architecture references
 package boundaries: ok
 
 [validation:architecture-rules] node tooling/verify/architecture-rules.mjs
-file:///home/runner/work/vyrnforge-ui/vyrnforge-ui/tooling/verify/architecture-rules.mjs:16
-if (!webCss.startsWith(expectedLayerOrder)) throw new Error('@vyrnforge/web must own the canonical documented cascade-layer order');
-                                                  ^
+architecture rules: ok
 
-Error: @vyrnforge/web must own the canonical documented cascade-layer order
-    at file:///home/runner/work/vyrnforge-ui/vyrnforge-ui/tooling/verify/architecture-rules.mjs:16:51
+[validation:workflow-contracts] node tooling/verify/workflows.mjs
+workflow contracts: ok
+
+[validation:legacy-isolation] node tooling/verify/legacy-isolation.mjs
+legacy isolation: ok
+
+[validation:impact-engine] node --test tooling/tests/impact-plan.test.mjs tooling/tests/impact-executor.test.mjs tooling/tests/impact-tiers.test.mjs
+✔ framework build execution includes lint and foundation prerequisites without marking them as selected evidence (1.490166ms)
+✔ duplicate prerequisites execute once (0.272275ms)
+✔ validation plans become inspectable execution plans (0.216489ms)
+✔ unknown validation scopes fail closed (0.427335ms)
+✔ React Button changes select React Button evidence without unrelated framework Button evidence (1.786282ms)
+✔ shared Button CSS fans out through every implemented Button port (0.250692ms)
+✔ port-local changes remain scoped to the port plus dependent documentation (0.168001ms)
+✔ web changes fan out to every framework port and documentation (0.160682ms)
+✔ core changes fan out through the full product dependency closure (0.309907ms)
+✔ documentation changes stay documentation-scoped (0.681172ms)
+✔ impact-engine and repository foundation changes fail closed (0.367341ms)
+✔ unknown repository changes fail closed (0.256825ms)
+✔ legacy-only changes do not select product ports (0.263872ms)
+✔ classification exposes component scopes and broad infrastructure (0.3246ms)
+✔ PR framework-local changes keep sibling framework and consumer evidence skipped (2.425114ms)
+✔ documentation-local changes select docs and chromium browser evidence without package consumers (0.292019ms)
+✔ core changes fan out to all dependent ports and consumers (0.280717ms)
+✔ main uses chromium browser evidence while scheduled uses cross-browser evidence (0.32429ms)
+✔ release validation is strictly broader than main validation (0.337006ms)
+ℹ tests 19
+ℹ suites 0
+ℹ pass 19
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 67.317534
+
+[validation:foundation-readiness] node tooling/verify/foundation-readiness.mjs
+foundation readiness: ok
+
+[validation:lint-tooling] npm run lint:tooling
+
+> vyrnforge@0.0.0-rebuild lint:tooling
+> eslint tooling playwright.config.mjs eslint.config.mjs stylelint.config.mjs
+
+
+[validation:lint-web-css] npm run lint:web-css
+
+> vyrnforge@0.0.0-rebuild lint:web-css
+> stylelint "packages/web/src/**/*.css"
+
+
+[validation:lint-docs] npm run lint:docs
+
+> vyrnforge@0.0.0-rebuild lint:docs
+> eslint apps/docs && stylelint "apps/docs/**/*.css"
+
+
+[validation:lint-core] npm run lint:core
+
+> vyrnforge@0.0.0-rebuild lint:core
+> eslint "packages/core/src/**/*.{ts,tsx,mts,cts}"
+
+
+[validation:lint-web] npm run lint:web
+
+> vyrnforge@0.0.0-rebuild lint:web
+> eslint "packages/web/src/**/*.{ts,tsx,mts,cts}"
+
+
+[validation:lint-react] npm run lint:react
+
+> vyrnforge@0.0.0-rebuild lint:react
+> eslint "packages/react/src/**/*.{ts,tsx,mts,cts}"
+
+
+[validation:lint-angular] npm run lint:angular
+
+> vyrnforge@0.0.0-rebuild lint:angular
+> eslint "packages/angular/src/**/*.{ts,tsx,mts,cts}"
+
+
+[validation:lint-vue] npm run lint:vue
+
+> vyrnforge@0.0.0-rebuild lint:vue
+> eslint "packages/vue/src/**/*.{ts,tsx,mts,cts}"
+
+
+[validation:lint-elements] npm run lint:elements
+
+> vyrnforge@0.0.0-rebuild lint:elements
+> eslint "packages/elements/src/**/*.{ts,tsx,mts,cts}"
+
+
+[validation:compatibility] node tooling/verify/compatibility.mjs
+file:///home/runner/work/vyrnforge-ui/vyrnforge-ui/tooling/verify/compatibility.mjs:20
+    throw new Error(`${framework} must have a selected implementation baseline without being represented as shipped`);
+          ^
+
+Error: react must have a selected implementation baseline without being represented as shipped
+    at file:///home/runner/work/vyrnforge-ui/vyrnforge-ui/tooling/verify/compatibility.mjs:20:11
 
 Node.js v24.18.0
 node:internal/errors:985
   const err = new Error(message);
               ^
 
-Error: Command failed: node tooling/verify/architecture-rules.mjs
+Error: Command failed: node tooling/verify/compatibility.mjs
     at genericNodeError (node:internal/errors:985:15)
     at wrappedFn (node:internal/errors:539:14)
     at checkExecSyncError (node:child_process:925:11)
@@ -610,7 +706,7 @@ Error: Command failed: node tooling/verify/architecture-rules.mjs
   status: 1,
   signal: null,
   output: [ null, null, null ],
-  pid: 2204,
+  pid: 2582,
   stdout: null,
   stderr: null
 }
