@@ -3,6 +3,7 @@ import { readFile } from 'node:fs/promises';
 const root = JSON.parse(await readFile('package.json', 'utf8'));
 const support = JSON.parse(await readFile('tooling/compatibility/support-status.json', 'utf8'));
 const validation = JSON.parse(await readFile('tooling/impact/validation-graph.json', 'utf8'));
+const browserQualification = JSON.parse(await readFile('tooling/compatibility/foundation-browser-qualification.json', 'utf8'));
 
 const packages = ['core', 'web', 'react', 'angular', 'vue', 'elements'];
 for (const name of packages) {
@@ -30,6 +31,22 @@ for (const framework of ['react', 'angular', 'vue']) {
 
 if (support.browsers?.playwright !== root.devDependencies?.['@playwright/test']) {
   throw new Error('Browser validation baseline must match the pinned Playwright toolchain');
+}
+
+if (browserQualification.schemaVersion !== 1 || browserQualification.qualificationType !== 'pre-component-foundation') {
+  throw new Error('Foundation browser qualification evidence is missing or has the wrong evidence type');
+}
+if (browserQualification.result !== 'passed' || browserQualification.releaseQualification !== false) {
+  throw new Error('Foundation browser evidence must be a passing non-release qualification');
+}
+if (!Number.isInteger(browserQualification.workflowRunId) || !Number.isInteger(browserQualification.jobId)) {
+  throw new Error('Foundation browser qualification must reference the successful workflow run and job');
+}
+for (const engine of ['chromium', 'firefox', 'webkit']) {
+  if (!browserQualification.engines?.includes(engine)) throw new Error(`Foundation browser qualification is missing ${engine}`);
+}
+if (browserQualification.playwright !== support.browsers?.playwright) {
+  throw new Error('Foundation browser qualification must match the selected Playwright baseline');
 }
 
 process.stdout.write('foundation readiness: ok\n');
