@@ -1,8 +1,8 @@
 import { execFileSync } from 'node:child_process';
-import { discoverProductUnits } from '../testing/discover-product-units.mjs';
+import { discoverProductUnits } from './discover-product-units.mjs';
 
 const [componentId, port, mode = 'chromium'] = process.argv.slice(2);
-if (!componentId || !port) throw new Error('Usage: node tooling/browser/run-component.mjs <component> <port> [chromium|firefox|webkit|all]');
+if (!componentId || !port) throw new Error('Usage: node tooling/testing/run-component-browser.mjs <component> <port> [chromium|firefox|webkit|all]');
 if (!['chromium', 'firefox', 'webkit', 'all'].includes(mode)) throw new Error(`Unknown browser mode: ${mode}`);
 
 const component = discoverProductUnits().components.find((entry) => entry.component === componentId);

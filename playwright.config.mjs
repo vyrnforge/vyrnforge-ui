@@ -1,7 +1,8 @@
 import { defineConfig, devices } from '@playwright/test';
 
 export default defineConfig({
-  testDir: './tooling/browser/tests',
+  testDir: './tooling/docs',
+  testMatch: '*.spec.mjs',
   outputDir: 'test-results/playwright-results',
   timeout: 30_000,
   expect: { timeout: 5_000 },

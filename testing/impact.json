@@ -7,7 +7,7 @@
     "angular": { "paths": ["packages/angular/"], "dependsOn": ["core", "web"], "evidence": ["package-contracts", "lint-angular", "build-angular", "pack-angular", "consumer-angular"] },
     "vue": { "paths": ["packages/vue/"], "dependsOn": ["core", "web"], "evidence": ["package-contracts", "lint-vue", "build-vue", "pack-vue", "consumer-vue"] },
     "elements": { "paths": ["packages/elements/"], "dependsOn": ["core", "web"], "evidence": ["package-contracts", "lint-elements", "build-elements", "pack-elements", "consumer-elements"] },
-    "documentation": { "paths": ["documentation/", "apps/docs/", "docs/", "README.md", "tooling/docs/", "tooling/browser/tests/"], "dependsOn": ["core", "web", "react", "angular", "vue", "elements"], "evidence": ["lint-docs", "docs-source", "docs-build", "docs-site", "browser-docs-chromium"] },
+    "documentation": { "paths": ["documentation/", "apps/docs/", "docs/", "README.md", "tooling/docs/"], "dependsOn": ["core", "web", "react", "angular", "vue", "elements"], "evidence": ["lint-docs", "docs-source", "docs-build", "docs-site", "browser-docs-chromium"] },
     "tooling": { "paths": ["tooling/"], "dependsOn": [], "evidence": ["lint-tooling", "compatibility", "foundation-readiness", "package-contracts", "architecture-rules", "workflow-contracts", "repository-guidance"], "broad": true },
     "legacy": { "paths": ["packages/legacy/"], "dependsOn": [], "evidence": ["legacy-isolation"], "legacy": true }
   },
