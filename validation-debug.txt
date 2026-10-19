@@ -596,25 +596,25 @@ workflow contracts: ok
 legacy isolation: ok
 
 [validation:impact-engine] node --test tooling/tests/impact-plan.test.mjs tooling/tests/impact-executor.test.mjs tooling/tests/impact-tiers.test.mjs
-✔ framework build execution includes lint and foundation prerequisites without marking them as selected evidence (2.3105ms)
-✔ duplicate prerequisites execute once (0.583393ms)
-✔ validation plans become inspectable execution plans (0.361377ms)
-✔ unknown validation scopes fail closed (0.631924ms)
-✔ React Button changes select React Button evidence without unrelated framework Button evidence (3.261723ms)
-✔ shared Button CSS fans out through every implemented Button port (0.347782ms)
-✔ port-local changes remain scoped to the port plus dependent documentation (0.318648ms)
-✔ web changes fan out to every framework port and documentation (0.301775ms)
-✔ core changes fan out through the full product dependency closure (0.771005ms)
-✔ documentation changes stay documentation-scoped (1.125239ms)
-✔ impact-engine and repository foundation changes fail closed (0.538609ms)
-✔ unknown repository changes fail closed (0.537838ms)
-✔ legacy-only changes do not select product ports (0.649457ms)
-✔ classification exposes component scopes and broad infrastructure (0.380513ms)
-✔ PR framework-local changes keep sibling framework and consumer evidence skipped (5.350206ms)
-✔ documentation-local changes select docs and chromium browser evidence without package consumers (0.365475ms)
-✔ core changes fan out to all dependent ports and consumers (0.547095ms)
-✔ main uses chromium browser evidence while scheduled uses cross-browser evidence (0.451226ms)
-✔ release validation is strictly broader than main validation (0.518821ms)
+✔ framework build execution includes lint and foundation prerequisites without marking them as selected evidence (1.146997ms)
+✔ duplicate prerequisites execute once (0.286794ms)
+✔ validation plans become inspectable execution plans (0.160678ms)
+✔ unknown validation scopes fail closed (0.339372ms)
+✔ React Button changes select React Button evidence without unrelated framework Button evidence (1.577554ms)
+✔ shared Button CSS fans out through every implemented Button port (0.198854ms)
+✔ port-local changes remain scoped to the port plus dependent documentation (0.122301ms)
+✔ web changes fan out to every framework port and documentation (0.161469ms)
+✔ core changes fan out through the full product dependency closure (0.212474ms)
+✔ documentation changes stay documentation-scoped (0.476905ms)
+✔ impact-engine and repository foundation changes fail closed (0.262228ms)
+✔ unknown repository changes fail closed (0.146317ms)
+✔ legacy-only changes do not select product ports (0.20273ms)
+✔ classification exposes component scopes and broad infrastructure (0.243801ms)
+✔ PR framework-local changes keep sibling framework and consumer evidence skipped (2.176199ms)
+✔ documentation-local changes select docs and chromium browser evidence without package consumers (0.196711ms)
+✔ core changes fan out to all dependent ports and consumers (0.210831ms)
+✔ main uses chromium browser evidence while scheduled uses cross-browser evidence (0.209731ms)
+✔ release validation is strictly broader than main validation (0.205324ms)
 ℹ tests 19
 ℹ suites 0
 ℹ pass 19
@@ -622,7 +622,7 @@ legacy isolation: ok
 ℹ cancelled 0
 ℹ skipped 0
 ℹ todo 0
-ℹ duration_ms 108.075972
+ℹ duration_ms 58.192628
 
 [validation:foundation-readiness] node tooling/verify/foundation-readiness.mjs
 foundation readiness: ok
@@ -760,33 +760,90 @@ package smoke: web ok
 package smoke: react ok
 
 [validation:pack-angular] node tooling/verify/package-smoke.mjs angular
-JIT compilation failed for directive [class VfButtonDirective]
-file:///home/runner/work/vyrnforge-ui/vyrnforge-ui/node_modules/@angular/core/fesm2022/_debug_node-chunk.mjs:1017
-    throw new Error(message);
-          ^
+package smoke: angular ok
 
-Error: The directive 'VfButtonDirective' needs to be compiled using the JIT compiler, but '@angular/compiler' is not available.
+[validation:pack-vue] node tooling/verify/package-smoke.mjs vue
+package smoke: vue ok
 
-The directive is part of a library that has been partially compiled.
-However, the Angular Linker has not processed the library such that JIT compilation is used as fallback.
+[validation:pack-elements] node tooling/verify/package-smoke.mjs elements
+package smoke: elements ok
 
-Ideally, the library is processed using the Angular Linker to become fully AOT compiled.
-Alternatively, the JIT compiler should be loaded by bootstrapping using '@angular/platform-browser-dynamic' or '@angular/platform-server',
-or manually provide the compiler with 'import "@angular/compiler";' before bootstrapping.
-    at getCompilerFacade (file:///home/runner/work/vyrnforge-ui/vyrnforge-ui/node_modules/@angular/core/fesm2022/_debug_node-chunk.mjs:1017:11)
-    at Module.ɵɵngDeclareFactory (file:///home/runner/work/vyrnforge-ui/vyrnforge-ui/node_modules/@angular/core/fesm2022/core.mjs:3093:20)
-    at <static_initializer> (file:///home/runner/work/vyrnforge-ui/vyrnforge-ui/packages/angular/dist/button.js:10:22)
-    at file:///home/runner/work/vyrnforge-ui/vyrnforge-ui/packages/angular/dist/button.js:1:1
-    at ModuleJob.run (node:internal/modules/esm/module_job:439:25)
-    at async node:internal/modules/esm/loader:643:26
-    at async file:///home/runner/work/vyrnforge-ui/vyrnforge-ui/tooling/verify/package-smoke.mjs:15:3
+[validation:consumer-core] node tooling/verify/consumer-packages.mjs core
 
-Node.js v24.18.0
+added 1 package in 145ms
+consumer imports: ok
+packed consumer verification: core ok
+
+[validation:consumer-web] node tooling/verify/consumer-packages.mjs web
+
+added 2 packages in 165ms
+consumer imports: ok
+packed consumer verification: web ok
+
+[validation:consumer-react] node tooling/verify/consumer-packages.mjs react
+
+added 4 packages in 561ms
+consumer imports: ok
+packed consumer verification: react ok
+
+[validation:consumer-angular] node tooling/verify/consumer-packages.mjs angular
+
+added 6 packages in 1s
+consumer imports: ok
+packed consumer verification: angular ok
+
+[validation:consumer-vue] node tooling/verify/consumer-packages.mjs vue
+
+added 26 packages in 1s
+consumer imports: ok
+packed consumer verification: vue ok
+
+[validation:consumer-elements] node tooling/verify/consumer-packages.mjs elements
+
+added 3 packages in 235ms
+consumer imports: ok
+packed consumer verification: elements ok
+
+[validation:button-react-ssr] node --test tooling/tests/button-react.test.mjs
+✔ React Button server output is native-complete and loading remains enabled (3.69839ms)
+ℹ tests 1
+ℹ suites 0
+ℹ pass 1
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 58.526532
+
+[validation:button-angular-ssr] node --test tooling/tests/button-angular.test.mjs
+✖ Angular Button server output keeps a native form-participating button (6.158639ms)
+ℹ tests 1
+ℹ suites 0
+ℹ pass 0
+ℹ fail 1
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 198.837498
+
+✖ failing tests:
+
+test at tooling/tests/button-angular.test.mjs:17:1
+✖ Angular Button server output keeps a native form-participating button (6.158639ms)
+  Error: NG0401: Missing Platform: This may be due to using `bootstrapApplication` on the server without passing a `BootstrapContext`. Please make sure that `bootstrapApplication` is called with a `context` argument. Find more at https://v22.angular.dev/errors/NG0401
+      at internalCreateApplication (file:///home/runner/work/vyrnforge-ui/vyrnforge-ui/node_modules/@angular/core/fesm2022/core.mjs:2427:11)
+      at bootstrapApplication (file:///home/runner/work/vyrnforge-ui/vyrnforge-ui/node_modules/@angular/platform-browser/fesm2022/_browser-chunk.mjs:268:10)
+      at async renderApplication (file:///home/runner/work/vyrnforge-ui/vyrnforge-ui/node_modules/@angular/platform-server/fesm2022/platform-server.mjs:184:28)
+      at async TestContext.<anonymous> (file:///home/runner/work/vyrnforge-ui/vyrnforge-ui/tooling/tests/button-angular.test.mjs:18:16)
+      at async Test.run (node:internal/test_runner/test:1332:7)
+      at async startSubtestAfterBootstrap (node:internal/test_runner/harness:385:3) {
+    code: -401
+  }
 node:internal/errors:985
   const err = new Error(message);
               ^
 
-Error: Command failed: node tooling/verify/package-smoke.mjs angular
+Error: Command failed: node --test tooling/tests/button-angular.test.mjs
     at genericNodeError (node:internal/errors:985:15)
     at wrappedFn (node:internal/errors:539:14)
     at checkExecSyncError (node:child_process:925:11)
@@ -799,7 +856,7 @@ Error: Command failed: node tooling/verify/package-smoke.mjs angular
   status: 1,
   signal: null,
   output: [ null, null, null ],
-  pid: 3025,
+  pid: 3367,
   stdout: null,
   stderr: null
 }
