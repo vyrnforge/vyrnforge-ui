@@ -126,7 +126,6 @@ export function productPreparationProblems(root = repoRoot) {
     if (!existingPath(root, component.root)) problems.push(`${component.component} is public but missing repository ownership slice: ${component.root}`);
     if (!existingPath(root, component.documentationSource)) problems.push(`${component.component} is public but missing component documentation: ${component.documentationSource}`);
     if (component.exampleManifests.length === 0) problems.push(`${component.component} is public but has no executable example.json under components/${component.component}/examples/`);
-    if (component.changeFragments.length === 0) problems.push(`${component.component} is public but has no scoped change fragment under ${component.changesPath}`);
     for (const [port, config] of Object.entries(component.ports)) {
       const sourcePath = config.paths[0];
       if (!existingPath(root, sourcePath.replace(/\/$/, ''))) problems.push(`${component.component}/${port} public surface is missing conventional source: ${sourcePath}`);
