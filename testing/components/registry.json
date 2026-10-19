@@ -1,9 +1,38 @@
 {
+  "schemaVersion": 1,
   "components": [
     {
       "component": "button",
       "status": "implemented",
-      "ports": ["web", "react", "angular", "vue"]
+      "ports": {
+        "web": {
+          "paths": ["packages/web/src/styles/button.css"],
+          "browser": true
+        },
+        "react": {
+          "paths": ["packages/react/src/button.ts"],
+          "ssr": "tooling/tests/button-react.test.mjs",
+          "browser": true
+        },
+        "angular": {
+          "paths": ["packages/angular/src/button.ts"],
+          "ssr": "tooling/tests/button-angular.test.mjs",
+          "browser": true
+        },
+        "vue": {
+          "paths": ["packages/vue/src/button.ts"],
+          "ssr": "tooling/tests/button-vue.test.mjs",
+          "browser": true
+        }
+      },
+      "documentationPaths": [
+        "documentation/components/button.html",
+        "examples/button/"
+      ],
+      "types": "tooling/types/button-api.ts",
+      "browser": {
+        "runner": "tooling/browser/run-button.mjs"
+      }
     }
   ]
 }
