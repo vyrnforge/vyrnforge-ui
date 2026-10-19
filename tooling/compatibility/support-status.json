@@ -1,17 +1,48 @@
 {
-  "schemaVersion": 1,
-  "status": "bootstrap",
+  "schemaVersion": 2,
+  "status": "implementation-baseline",
   "runtime": {
     "node": ">=24.18 <25",
     "npm": ">=11.16 <12"
   },
-  "frameworks": {
-    "react": "not-yet-selected",
-    "angular": "not-yet-selected",
-    "vue": "not-yet-selected",
-    "elements": "platform-surface-not-yet-versioned",
-    "native-web": "platform-surface-not-yet-versioned"
+  "authoring": {
+    "typescript": "6.0.x",
+    "typescriptPinned": "6.0.3",
+    "eslint": "10.13.0",
+    "typescriptEslint": "8.71.2"
   },
-  "browsers": "not-yet-selected",
-  "ssrBundlers": "not-yet-selected"
+  "frameworks": {
+    "react": {
+      "baseline": "19.3.x",
+      "status": "selected-not-implemented"
+    },
+    "angular": {
+      "baseline": "22.x",
+      "typescript": ">=6.0.0 <6.1.0",
+      "status": "selected-not-implemented"
+    },
+    "vue": {
+      "baseline": "3.5.x",
+      "status": "selected-not-implemented"
+    },
+    "elements": {
+      "baseline": "standards-based Custom Elements on the selected browser baseline",
+      "status": "selected-not-implemented"
+    },
+    "native-web": {
+      "baseline": "selected browser platform baseline",
+      "status": "selected-foundation"
+    }
+  },
+  "browsers": {
+    "playwright": "1.64.1",
+    "chromium": "156.0.8078.4",
+    "firefox": "157.0",
+    "webkit": "27.2",
+    "status": "selected-validation-baseline"
+  },
+  "ssrBundlers": {
+    "status": "deferred-until-framework-ports",
+    "policy": "Select and validate framework-specific SSR and bundler ranges when each framework port is implemented; do not infer one universal SSR stack."
+  }
 }
