@@ -40,6 +40,7 @@ export const scopeDefinitions = {
   'consumer-angular': { command: ['node', 'tooling/verify/consumer-packages.mjs', 'angular'], requires: ['build-angular'] },
   'consumer-vue': { command: ['node', 'tooling/verify/consumer-packages.mjs', 'vue'], requires: ['build-vue'] },
   'consumer-elements': { command: ['node', 'tooling/verify/consumer-packages.mjs', 'elements'], requires: ['build-elements'] },
+  'button-types': { command: ['node', 'node_modules/typescript/bin/tsc', '-p', 'tooling/types/tsconfig.json'], requires: ['build-react', 'build-angular', 'build-vue'] },
   'button-react-ssr': { command: ['node', '--test', 'tooling/tests/button-react.test.mjs'], requires: ['build-react'] },
   'button-angular-ssr': { command: ['node', '--test', 'tooling/tests/button-angular.test.mjs'], requires: ['build-angular'] },
   'button-vue-ssr': { command: ['node', '--test', 'tooling/tests/button-vue.test.mjs'], requires: ['build-vue'] },
