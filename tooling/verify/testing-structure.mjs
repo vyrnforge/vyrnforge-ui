@@ -40,10 +40,13 @@ for (const entry of registry.components) {
     if (!config || typeof config !== 'object' || !Array.isArray(config.paths) || config.paths.length === 0) throw new Error(`testing registry paths missing for ${entry.component}/${port}`);
     if (config.ssr) await access(config.ssr);
   }
+
   if (entry.types) await access(entry.types);
   if (Object.values(entry.ports).some((port) => port.browser)) {
     if (!entry.browser?.runner) throw new Error(`browser evidence requires a runner for ${entry.component}`);
+    if (!Array.isArray(entry.browser.paths) || entry.browser.paths.length === 0) throw new Error(`browser evidence requires owned paths for ${entry.component}`);
     await access(entry.browser.runner);
+    for (const browserPath of entry.browser.paths) await access(browserPath.replace(/\/$/, ''));
   }
 }
 
