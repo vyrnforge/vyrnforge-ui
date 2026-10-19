@@ -22,14 +22,14 @@ test('documentation-local changes select docs and chromium browser evidence with
   assert.equal(plan.validationScopes.includes('browser-docs-cross'), false);
 });
 
-test('core changes fan out to all dependent ports and registered component evidence', () => {
+test('core changes fan out to all dependent ports and discovered component evidence', () => {
   const plan = createPlan(['packages/core/src/index.ts']);
   for (const scope of ['consumer-core', 'consumer-web', 'consumer-react', 'consumer-angular', 'consumer-vue', 'consumer-elements', 'component:button:types', 'component:button:react:ssr']) {
     assert.ok(plan.validationScopes.includes(scope), scope);
   }
 });
 
-test('main includes all registered component evidence while scheduled adds cross-browser evidence', () => {
+test('main includes all discovered component evidence while scheduled adds cross-browser evidence', () => {
   const main = createTierPlan('main');
   const scheduled = createTierPlan('scheduled');
   for (const scope of ['component:button:types', 'component:button:web:browser', 'component:button:react:ssr', 'component:button:react:browser', 'component:button:angular:ssr', 'component:button:vue:ssr']) {
