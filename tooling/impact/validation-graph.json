@@ -10,7 +10,7 @@
     "button-react": ["package-contracts", "lint-react", "build-react", "pack-react", "consumer-react", "button-types", "button-react-ssr", "button-browser-react"],
     "button-angular": ["package-contracts", "lint-angular", "build-angular", "pack-angular", "consumer-angular", "button-types", "button-angular-ssr", "button-browser-angular"],
     "button-vue": ["package-contracts", "lint-vue", "build-vue", "pack-vue", "consumer-vue", "button-types", "button-vue-ssr", "button-browser-vue"],
-    "button-documentation": ["lint-docs", "docs-source", "docs-build", "docs-site", "button-browser-web"],
+    "button-documentation": ["lint-docs", "docs-source", "docs-build", "docs-site", "browser-docs-chromium", "button-browser-web"],
     "documentation": ["lint-docs", "docs-source", "docs-build", "docs-site", "browser-docs-chromium"],
     "tooling": ["lint-tooling", "compatibility", "foundation-readiness", "package-contracts", "architecture-rules", "workflow-contracts", "repository-guidance"],
     "legacy": ["legacy-isolation"]
