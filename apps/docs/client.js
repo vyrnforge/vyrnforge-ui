@@ -19,10 +19,7 @@ if (frameworkSelect && frameworkRoutesNode) {
     const framework = frameworkSelect.value;
     if (!framework) return;
     window.localStorage.setItem(storageKey, framework);
-    if (exampleSupportsFramework(framework)) {
-      document.dispatchEvent(new CustomEvent('vfdocsframeworkchange', { detail: { framework } }));
-      return;
-    }
+    if (exampleSupportsFramework(framework)) return document.dispatchEvent(new CustomEvent('vfdocsframeworkchange', { detail: { framework } }));
     const target = routes[framework];
     if (target) window.location.assign(new URL(target, siteRoot));
   });
@@ -31,7 +28,6 @@ if (frameworkSelect && frameworkRoutesNode) {
 const searchInput = document.querySelector('[data-vf-docs-search]');
 const searchResults = document.querySelector('[data-vf-docs-search-results]');
 let searchIndexPromise;
-
 function loadSearchIndex() {
   searchIndexPromise ||= fetch(new URL('search-index.json', siteRoot)).then((response) => {
     if (!response.ok) throw new Error(`Unable to load docs search index: ${response.status}`);
@@ -39,14 +35,9 @@ function loadSearchIndex() {
   });
   return searchIndexPromise;
 }
-
 function renderSearchResults(items) {
   if (!searchResults) return;
   searchResults.replaceChildren();
-  if (items.length === 0) {
-    searchResults.hidden = true;
-    return;
-  }
   for (const item of items.slice(0, 8)) {
     const li = document.createElement('li');
     const anchor = document.createElement('a');
@@ -55,9 +46,8 @@ function renderSearchResults(items) {
     li.append(anchor);
     searchResults.append(li);
   }
-  searchResults.hidden = false;
+  searchResults.hidden = items.length === 0;
 }
-
 if (searchInput && searchResults) {
   searchInput.addEventListener('input', async () => {
     const query = searchInput.value.trim().toLowerCase();
@@ -65,21 +55,13 @@ if (searchInput && searchResults) {
     const index = await loadSearchIndex();
     renderSearchResults(index.filter((item) => `${item.title} ${item.text}`.toLowerCase().includes(query)));
   });
-  searchInput.addEventListener('keydown', (event) => {
-    if (event.key === 'Escape') {
-      searchInput.value = '';
-      renderSearchResults([]);
-    }
-  });
+  searchInput.addEventListener('keydown', (event) => { if (event.key === 'Escape') { searchInput.value = ''; renderSearchResults([]); } });
 }
 
 let compilerPromise;
 function loadCompiler(url) {
   compilerPromise ||= new Promise((resolve, reject) => {
-    if (globalThis.__vfDocsTypeScript) {
-      resolve(globalThis.__vfDocsTypeScript);
-      return;
-    }
+    if (globalThis.__vfDocsTypeScript) return resolve(globalThis.__vfDocsTypeScript);
     const script = document.createElement('script');
     script.src = url;
     script.addEventListener('load', () => resolve(globalThis.__vfDocsTypeScript));
@@ -89,23 +71,11 @@ function loadCompiler(url) {
   return compilerPromise;
 }
 
-const allowedImports = {
-  react: new Set(['react', 'react-dom/client', '@vyrnforge/react/button']),
-  angular: new Set(['@angular/compiler', '@angular/core', '@angular/platform-browser', '@vyrnforge/angular/button']),
-  vue: new Set(['vue', '@vyrnforge/vue/button'])
-};
-
-const runtimePreambles = {
-  react: 'const { React, createRoot, Button } = globalThis.__vfRuntime;',
-  angular: 'const { Component, provideZonelessChangeDetection, bootstrapApplication, VfButtonDirective } = globalThis.__vfRuntime;',
-  vue: 'const { createApp, h, Button } = globalThis.__vfRuntime;'
-};
-
-function stripSupportedImports(source, framework) {
-  const imports = allowedImports[framework];
+function stripSupportedImports(source, allowedImports) {
+  const allowed = new Set(allowedImports || []);
   const pattern = /^\s*import\s+(?:[^'"\n]+?\s+from\s+)?['"]([^'"]+)['"];\s*$/gm;
   const stripped = source.replace(pattern, (_statement, specifier) => {
-    if (!imports?.has(specifier)) throw new Error(`Live examples do not load arbitrary imports: ${specifier}`);
+    if (!allowed.has(specifier)) throw new Error(`Live examples do not load arbitrary imports: ${specifier}`);
     return '';
   });
   if (/^\s*import\b/m.test(stripped)) throw new Error('Live examples currently support one-line import declarations only.');
@@ -113,44 +83,32 @@ function stripSupportedImports(source, framework) {
   return stripped;
 }
 
-function transpile(source, framework, ts) {
-  const prepared = `${runtimePreambles[framework]}\n${stripSupportedImports(source, framework)}`;
-  const result = ts.transpileModule(prepared, {
-    compilerOptions: {
-      target: ts.ScriptTarget.ES2022,
-      module: ts.ModuleKind.ESNext,
-      jsx: ts.JsxEmit.React,
-      experimentalDecorators: true,
-      useDefineForClassFields: false
-    },
+function transpile(source, framework, config, ts) {
+  const bindings = config.bindings || [];
+  const preamble = bindings.length ? `const { ${bindings.join(', ')} } = globalThis.__vfRuntime;` : '';
+  const result = ts.transpileModule(`${preamble}\n${stripSupportedImports(source, config.imports)}`, {
+    compilerOptions: { target: ts.ScriptTarget.ES2022, module: ts.ModuleKind.ESNext, jsx: ts.JsxEmit.React, experimentalDecorators: true, useDefineForClassFields: false },
     reportDiagnostics: true
   });
   const errors = (result.diagnostics || []).filter((diagnostic) => diagnostic.category === ts.DiagnosticCategory.Error);
-  if (errors.length) {
-    const message = errors.map((diagnostic) => ts.flattenDiagnosticMessageText(diagnostic.messageText, '\n')).join('\n');
-    throw new Error(message);
-  }
+  if (errors.length) throw new Error(errors.map((diagnostic) => ts.flattenDiagnosticMessageText(diagnostic.messageText, '\n')).join('\n'));
   return result.outputText;
 }
+function scriptSafe(value) { return value.replace(/<\/script/gi, '<\\/script'); }
 
-function scriptSafe(value) {
-  return value.replace(/<\/script/gi, '<\\/script');
-}
-
-function liveDocument({ id, code, runtimeUrl, buttonCssUrl, frameCssUrl }) {
+function liveDocument({ id, framework, code, runtimeUrl, stylesUrl, frameCssUrl }) {
+  const rootMarkup = framework === 'angular' ? '<vf-example-root id="root" class="vf-example-root"></vf-example-root>' : '<main id="root" class="vf-example-root"></main>';
   const report = `parent.postMessage({type:'vf-example-result',id:${JSON.stringify(id)},status:'ready'},'*')`;
   const reportError = `parent.postMessage({type:'vf-example-result',id:${JSON.stringify(id)},status:'error',message:String(error?.message || error)},'*')`;
-  const rootMarkup = runtimeUrl.includes('runtime-angular') ? '<vf-example-root id="root" class="vf-example-root"></vf-example-root>' : '<main id="root" class="vf-example-root"></main>';
-  return `<!doctype html><html lang="en" data-vf-theme="light"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width"><link rel="stylesheet" href="${buttonCssUrl}"><link rel="stylesheet" href="${frameCssUrl}"></head><body>${rootMarkup}<script>window.addEventListener('error',(event)=>parent.postMessage({type:'vf-example-result',id:${JSON.stringify(id)},status:'error',message:event.message || 'Runtime error'},'*'));window.addEventListener('unhandledrejection',(event)=>parent.postMessage({type:'vf-example-result',id:${JSON.stringify(id)},status:'error',message:String(event.reason?.message || event.reason || 'Unhandled rejection')},'*'));</script>${runtimeUrl ? `<script src="${runtimeUrl}"></script>` : ''}<script>try{${scriptSafe(code)}\nsetTimeout(()=>${report},0)}catch(error){${reportError}}</script></body></html>`;
+  return `<!doctype html><html lang="en" data-vf-theme="light"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width"><link rel="stylesheet" href="${stylesUrl}"><link rel="stylesheet" href="${frameCssUrl}"></head><body>${rootMarkup}<script>window.addEventListener('error',(event)=>parent.postMessage({type:'vf-example-result',id:${JSON.stringify(id)},status:'error',message:event.message || 'Runtime error'},'*'));window.addEventListener('unhandledrejection',(event)=>parent.postMessage({type:'vf-example-result',id:${JSON.stringify(id)},status:'error',message:String(event.reason?.message || event.reason || 'Unhandled rejection')},'*'));</script>${runtimeUrl ? `<script src="${runtimeUrl}"></script>` : ''}<script>try{${scriptSafe(code)}\nsetTimeout(()=>${report},0)}catch(error){${reportError}}</script></body></html>`;
 }
-
-function nativeDocument({ id, source, buttonCssUrl, frameCssUrl }) {
-  return `<!doctype html><html lang="en" data-vf-theme="light"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width"><link rel="stylesheet" href="${buttonCssUrl}"><link rel="stylesheet" href="${frameCssUrl}"></head><body><main class="vf-example-root">${source}</main><script>parent.postMessage({type:'vf-example-result',id:${JSON.stringify(id)},status:'ready'},'*')</script></body></html>`;
+function nativeDocument({ id, source, stylesUrl, frameCssUrl }) {
+  return `<!doctype html><html lang="en" data-vf-theme="light"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width"><link rel="stylesheet" href="${stylesUrl}"><link rel="stylesheet" href="${frameCssUrl}"></head><body><main class="vf-example-root">${source}</main><script>parent.postMessage({type:'vf-example-result',id:${JSON.stringify(id)},status:'ready'},'*')</script></body></html>`;
 }
 
 const exampleStates = new Map();
 for (const node of exampleNodes) {
-  const dataNode = node.querySelector('[data-vf-example-data]');
+  const data = JSON.parse(node.querySelector('[data-vf-example-data]').textContent || '{}');
   const frame = node.querySelector('[data-vf-example-frame]');
   const editor = node.querySelector('[data-vf-example-source]');
   const language = node.querySelector('[data-vf-example-language]');
@@ -158,18 +116,15 @@ for (const node of exampleNodes) {
   const runButton = node.querySelector('[data-vf-example-run]');
   const resetButton = node.querySelector('[data-vf-example-reset]');
   const tabs = [...node.querySelectorAll('[data-vf-example-framework]')];
-  const data = JSON.parse(dataNode.textContent || '{}');
   let framework = window.localStorage.getItem(storageKey);
   if (!data.frameworks[framework]) framework = data.defaultFramework;
-
-  const state = { node, data, frame, editor, language, status, tabs, framework };
+  const state = { data, frame, status };
   exampleStates.set(data.id, state);
 
   function setFramework(nextFramework) {
     const config = data.frameworks[nextFramework];
     if (!config) return;
     framework = nextFramework;
-    state.framework = framework;
     window.localStorage.setItem(storageKey, framework);
     if (frameworkSelect && [...frameworkSelect.options].some((option) => option.value === framework)) frameworkSelect.value = framework;
     for (const tab of tabs) {
@@ -188,32 +143,25 @@ for (const node of exampleNodes) {
 
   for (const tab of tabs) tab.addEventListener('click', () => setFramework(tab.dataset.vfExampleFramework));
   document.addEventListener('vfdocsframeworkchange', (event) => setFramework(event.detail.framework));
-
   resetButton.addEventListener('click', () => setFramework(framework));
   runButton.addEventListener('click', async () => {
     const config = data.frameworks[framework];
     runButton.disabled = true;
     status.textContent = 'Compiling example…';
     try {
-      const buttonCssUrl = new URL(data.buttonCss, siteRoot).href;
+      const stylesUrl = new URL(data.styles, siteRoot).href;
       const frameCssUrl = new URL(data.frameCss, siteRoot).href;
-      if (framework === 'native-web') {
-        frame.removeAttribute('src');
-        frame.srcdoc = nativeDocument({ id: data.id, source: editor.value, buttonCssUrl, frameCssUrl });
-      } else {
+      frame.removeAttribute('src');
+      if (framework === 'native-web') frame.srcdoc = nativeDocument({ id: data.id, source: editor.value, stylesUrl, frameCssUrl });
+      else {
         const ts = await loadCompiler(new URL(data.compiler, siteRoot).href);
-        const code = transpile(editor.value, framework, ts);
-        frame.removeAttribute('src');
-        frame.srcdoc = liveDocument({ id: data.id, code, runtimeUrl: new URL(config.runtime, siteRoot).href, buttonCssUrl, frameCssUrl });
+        const code = transpile(editor.value, framework, config, ts);
+        frame.srcdoc = liveDocument({ id: data.id, framework, code, runtimeUrl: new URL(config.runtime, siteRoot).href, stylesUrl, frameCssUrl });
       }
       status.textContent = 'Running example…';
-    } catch (error) {
-      status.textContent = `Unable to run: ${error.message}`;
-    } finally {
-      runButton.disabled = false;
-    }
+    } catch (error) { status.textContent = `Unable to run: ${error.message}`; }
+    finally { runButton.disabled = false; }
   });
-
   setFramework(framework);
 }
 
@@ -224,5 +172,4 @@ window.addEventListener('message', (event) => {
   if (!state || event.source !== state.frame.contentWindow) return;
   state.status.textContent = data.status === 'ready' ? 'Live preview updated.' : `Runtime error: ${data.message || 'Unknown error'}`;
 });
-
 root.dataset.vfDocsReady = 'true';

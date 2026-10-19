@@ -1,7 +1,6 @@
 {
   "pages": [
     { "slug": "", "title": "Getting Started", "group": "Getting Started", "kind": "shared", "source": "documentation/shared/getting-started.html" },
-    { "slug": "components/button", "title": "Button", "group": "Components", "kind": "shared", "source": "documentation/components/button.html" },
     { "slug": "foundations/styling", "title": "Styling", "group": "Foundations", "kind": "shared", "source": "documentation/shared/styling.html" },
     { "slug": "foundations/accessibility", "title": "Accessibility", "group": "Foundations", "kind": "shared", "source": "documentation/shared/accessibility.html" },
     { "slug": "foundations/state-and-behavior", "title": "State & Behavior", "group": "Foundations", "kind": "shared", "source": "documentation/shared/state-behavior.html" },
