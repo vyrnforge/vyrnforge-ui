@@ -10,7 +10,7 @@ permissions:
   contents: write
 
 jobs:
-  lockfile:
+  diagnostics:
     if: github.head_ref == 'feat/button-vertical-slice' && github.actor != 'github-actions[bot]'
     runs-on: ubuntu-latest
     steps:
@@ -29,14 +29,14 @@ jobs:
           HEAD_SHA: ${{ github.event.pull_request.head.sha }}
         run: |
           set +e
-          node tooling/impact/execute.mjs --mode pr --base "$BASE_SHA" --head "$HEAD_SHA" > validation-debug.log 2>&1
+          node tooling/impact/execute.mjs --mode pr --base "$BASE_SHA" --head "$HEAD_SHA" > validation-debug.txt 2>&1
           status=$?
-          echo "exit_status=$status" >> validation-debug.log
+          echo "exit_status=$status" >> validation-debug.txt
           exit 0
-      - name: Commit diagnostic log
+      - name: Commit diagnostic output
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add validation-debug.log
+          git add validation-debug.txt
           git commit -m "chore(button): capture validation diagnostics" || exit 0
           git push origin HEAD:feat/button-vertical-slice
