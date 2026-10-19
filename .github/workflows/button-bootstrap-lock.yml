@@ -1,4 +1,4 @@
-name: Button branch bootstrap diagnostics
+name: Button visual baseline bootstrap
 
 on:
   pull_request:
@@ -10,7 +10,7 @@ permissions:
   contents: write
 
 jobs:
-  diagnostics:
+  baseline:
     if: github.head_ref == 'feat/button-vertical-slice' && github.actor != 'github-actions[bot]'
     runs-on: ubuntu-latest
     steps:
@@ -24,20 +24,20 @@ jobs:
           cache: npm
       - name: Install locked toolchain
         run: npm ci --ignore-scripts --no-audit --no-fund
-      - name: Capture targeted validation output
-        env:
-          BASE_SHA: ${{ github.event.pull_request.base.sha }}
-          HEAD_SHA: ${{ github.event.pull_request.head.sha }}
+      - name: Build Button fixture inputs
         run: |
-          set +e
-          node tooling/impact/execute.mjs --mode pr --base "$BASE_SHA" --head "$HEAD_SHA" > validation-debug.txt 2>&1
-          status=$?
-          echo "exit_status=$status" >> validation-debug.txt
-          exit 0
-      - name: Commit diagnostic output
+          npm run build:core
+          npm run build:web
+          npm run build:docs
+          node tooling/browser/build-button-fixtures.mjs web
+      - name: Generate Chromium visual baseline
+        run: |
+          npx playwright install --with-deps chromium
+          VF_BUTTON_PORT=web npx playwright test --config tooling/browser/button.config.mjs --project chromium --update-snapshots
+      - name: Commit visual baseline
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add validation-debug.txt
-          git commit -m "chore(button): capture validation diagnostics" || exit 0
+          git add -f tooling/browser/button-tests/__screenshots__
+          git commit -m "test(button): add Chromium visual baseline" || exit 0
           git push origin HEAD:feat/button-vertical-slice
