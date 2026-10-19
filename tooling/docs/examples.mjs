@@ -45,7 +45,7 @@ async function discoverExampleManifests(root) {
 }
 
 function importAnalysis(source) {
-  const statements = source.match(/^\s*import(?:\s+[\s\S]*?\s+from\s+)?\s*['"][^'"\n]+['"];?\s*$/gm) ?? [];
+  const statements = source.match(/^\s*import\s+(?:[^'"\n]+?\s+from\s+)?['"][^'"\n]+['"];?\s*$/gm) ?? [];
   const imports = [];
   const bindings = [];
   for (const statement of statements) {
