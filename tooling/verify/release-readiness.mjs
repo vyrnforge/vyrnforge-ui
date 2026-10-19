@@ -7,16 +7,23 @@ const docsManifest = JSON.parse(await readFile('dist/docs/next/site-manifest.jso
 if (root.version.endsWith('-rebuild')) {
   throw new Error('Release validation cannot pass while the repository version is a rebuild bootstrap version');
 }
-if (support.status === 'bootstrap') {
-  throw new Error('Release validation requires a non-bootstrap compatibility status');
+if (support.status !== 'release-support') {
+  throw new Error('Release validation requires compatibility metadata promoted to release-support');
 }
 if (docsManifest.version !== root.version) {
   throw new Error('Versioned documentation does not match the release package version');
 }
-for (const [framework, range] of Object.entries(support.frameworks ?? {})) {
-  if (String(range).includes('not-yet') || String(range).includes('not-implemented')) {
-    throw new Error(`Release compatibility is unresolved for ${framework}: ${range}`);
+for (const framework of ['react', 'angular', 'vue', 'elements']) {
+  const entry = support.frameworks?.[framework];
+  if (!entry || entry.status !== 'implemented') {
+    throw new Error(`Release compatibility is not implemented for ${framework}`);
   }
+}
+if (support.browsers?.status !== 'release-qualified') {
+  throw new Error('Release browser baseline has not been promoted to release-qualified');
+}
+if (support.ssrBundlers?.status !== 'release-qualified') {
+  throw new Error('Release SSR/bundler compatibility remains unresolved');
 }
 
 process.stdout.write('release readiness: ok\n');
