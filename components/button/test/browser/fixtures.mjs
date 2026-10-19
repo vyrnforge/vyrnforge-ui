@@ -7,9 +7,9 @@ const root = process.cwd();
 const outDir = path.join(root, 'dist/docs/next/button-fixtures');
 await mkdir(outDir, { recursive: true });
 
-const buttonCss = await readFile(path.join(root, 'packages/web/dist/styles/button.css'), 'utf8');
+const buttonCss = await readFile(path.join(root, 'packages/web/dist/components/button/button.css'), 'utf8');
 const tokenCss = await readFile(path.join(root, 'packages/web/dist/styles/tokens.css'), 'utf8');
-await writeFile(path.join(outDir, 'button.css'), `${tokenCss}\n${buttonCss.replace('@import "./tokens.css";', '')}`);
+await writeFile(path.join(outDir, 'button.css'), `${tokenCss}\n${buttonCss.replace('@import "../../styles/tokens.css";', '')}`);
 const page = (body, script = '') => `<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width"><link rel="stylesheet" href="./button.css"><title>Button fixture</title></head><body>${body}${script}</body></html>`;
 
 if (port === 'web') {
@@ -33,20 +33,20 @@ if (port === 'web') {
 if (port === 'react') {
   const { createElement } = await import('react');
   const { renderToString } = await import('react-dom/server');
-  const { Button } = await import(new URL('../../packages/react/dist/button.js', import.meta.url));
+  const { Button } = await import('@vyrnforge/react/button');
   const markup = renderToString(createElement(Button, { loading: true, id: 'react-button' }, 'React action'));
   await writeFile(path.join(outDir, 'react.html'), page(`<div id="react-root">${markup}</div>`, '<script type="module" src="./react.js"></script>'));
-  await build({ stdin: { resolveDir: root, sourcefile: 'react-button-client.ts', contents: `import {createElement} from 'react';import {hydrateRoot} from 'react-dom/client';import {Button} from './packages/react/dist/button.js';hydrateRoot(document.querySelector('#react-root'),createElement(Button,{loading:true,id:'react-button',onClick:()=>document.body.dataset.activated='true'},'React action'));` }, bundle: true, format: 'esm', platform: 'browser', outfile: path.join(outDir, 'react.js') });
+  await build({ stdin: { resolveDir: root, sourcefile: 'react-button-client.ts', contents: `import {createElement} from 'react';import {hydrateRoot} from 'react-dom/client';import {Button} from '@vyrnforge/react/button';hydrateRoot(document.querySelector('#react-root'),createElement(Button,{loading:true,id:'react-button',onClick:()=>document.body.dataset.activated='true'},'React action'));` }, bundle: true, format: 'esm', platform: 'browser', outfile: path.join(outDir, 'react.js') });
 }
 
 if (port === 'vue') {
   const { createSSRApp, h } = await import('vue');
   const { renderToString } = await import('@vue/server-renderer');
-  const { Button } = await import(new URL('../../packages/vue/dist/button.js', import.meta.url));
+  const { Button } = await import('@vyrnforge/vue/button');
   const app = createSSRApp({ render: () => h(Button, { loading: true, id: 'vue-button', onClick: () => undefined }, () => 'Vue action') });
   const markup = await renderToString(app);
   await writeFile(path.join(outDir, 'vue.html'), page(`<div id="vue-root">${markup}</div>`, '<script type="module" src="./vue.js"></script>'));
-  await build({ stdin: { resolveDir: root, sourcefile: 'vue-button-client.ts', contents: `import {createSSRApp,h} from 'vue';import {Button} from './packages/vue/dist/button.js';const app=createSSRApp({render:()=>h(Button,{loading:true,id:'vue-button',onClick:()=>document.body.dataset.activated='true'},()=> 'Vue action')});app.mount('#vue-root');` }, bundle: true, format: 'esm', platform: 'browser', outfile: path.join(outDir, 'vue.js') });
+  await build({ stdin: { resolveDir: root, sourcefile: 'vue-button-client.ts', contents: `import {createSSRApp,h} from 'vue';import {Button} from '@vyrnforge/vue/button';const app=createSSRApp({render:()=>h(Button,{loading:true,id:'vue-button',onClick:()=>document.body.dataset.activated='true'},()=> 'Vue action')});app.mount('#vue-root');` }, bundle: true, format: 'esm', platform: 'browser', outfile: path.join(outDir, 'vue.js') });
 }
 
 if (port === 'angular') {
@@ -54,10 +54,10 @@ if (port === 'angular') {
   const { Component, provideZonelessChangeDetection } = await import('@angular/core');
   const { bootstrapApplication, provideClientHydration } = await import('@angular/platform-browser');
   const { renderApplication } = await import('@angular/platform-server');
-  const { VfButtonDirective } = await import(new URL('../../packages/angular/dist/button.js', import.meta.url));
+  const { VfButtonDirective } = await import('@vyrnforge/angular/button');
   class ButtonTestApp { activated() { return undefined; } }
   Component({ selector: 'vf-button-test', standalone: true, imports: [VfButtonDirective], template: '<button vfButton loading id="angular-button" (click)="activated()">Angular action</button>' })(ButtonTestApp);
   const html = await renderApplication((context) => bootstrapApplication(ButtonTestApp, { providers: [provideZonelessChangeDetection(), provideClientHydration()] }, context), { document: '<!doctype html><html lang="en"><head><meta charset="utf-8"><link rel="stylesheet" href="./button.css"></head><body><vf-button-test></vf-button-test></body></html>' });
   await writeFile(path.join(outDir, 'angular.html'), html.replace('</body>', '<script type="module" src="./angular.js"></script></body>'));
-  await build({ stdin: { resolveDir: root, sourcefile: 'angular-button-client.ts', contents: `import '@angular/compiler';import {Component,provideZonelessChangeDetection} from '@angular/core';import {bootstrapApplication,provideClientHydration} from '@angular/platform-browser';import {VfButtonDirective} from './packages/angular/dist/button.js';class ButtonTestApp{activated(){document.body.dataset.activated='true'}}Component({selector:'vf-button-test',standalone:true,imports:[VfButtonDirective],template:'<button vfButton loading id="angular-button" (click)="activated()">Angular action</button>'})(ButtonTestApp);bootstrapApplication(ButtonTestApp,{providers:[provideZonelessChangeDetection(),provideClientHydration()]});` }, bundle: true, format: 'esm', platform: 'browser', outfile: path.join(outDir, 'angular.js') });
+  await build({ stdin: { resolveDir: root, sourcefile: 'angular-button-client.ts', contents: `import '@angular/compiler';import {Component,provideZonelessChangeDetection} from '@angular/core';import {bootstrapApplication,provideClientHydration} from '@angular/platform-browser';import {VfButtonDirective} from '@vyrnforge/angular/button';class ButtonTestApp{activated(){document.body.dataset.activated='true'}}Component({selector:'vf-button-test',standalone:true,imports:[VfButtonDirective],template:'<button vfButton loading id="angular-button" (click)="activated()">Angular action</button>'})(ButtonTestApp);bootstrapApplication(ButtonTestApp,{providers:[provideZonelessChangeDetection(),provideClientHydration()]});` }, bundle: true, format: 'esm', platform: 'browser', outfile: path.join(outDir, 'angular.js') });
 }

@@ -1,11 +1,12 @@
-import { discoverComponents } from '../testing/discover-components.mjs';
+import { discoverProductUnits } from '../testing/discover-product-units.mjs';
 
 const npm = process.platform === 'win32' ? 'npm.cmd' : 'npm';
-const components = discoverComponents().components;
+const discovery = discoverProductUnits();
 
 const baseScopeDefinitions = {
   structure: { command: ['node', 'tooling/verify/workspace-structure.mjs'], requires: [] },
   'testing-structure': { command: ['node', 'tooling/verify/testing-structure.mjs'], requires: [] },
+  'change-fragments': { command: ['node', 'tooling/verify/change-fragments.mjs'], requires: [] },
   'repository-guidance': { command: ['node', 'tooling/verify/repository-guidance.mjs'], requires: [] },
   boundaries: { command: ['node', 'tooling/verify/package-boundaries.mjs'], requires: [] },
   'architecture-rules': { command: ['node', 'tooling/verify/architecture-rules.mjs'], requires: [] },
@@ -48,19 +49,22 @@ const baseScopeDefinitions = {
   'browser-docs-chromium': { command: [npm, 'run', 'test:browser:docs'], requires: ['docs-site'] },
   'browser-docs-cross': { command: [npm, 'run', 'test:browser:docs:cross'], requires: ['docs-site'] },
   'consumer-all': { command: ['node', 'tooling/verify/consumer-packages.mjs', 'all'], requires: ['build-core', 'build-web', 'build-react', 'build-angular', 'build-vue', 'build-elements'] },
-  'release-readiness': { command: ['node', 'tooling/verify/release-readiness.mjs'], requires: ['consumer-all', 'docs-site', 'browser-docs-cross'] }
+  'release-readiness': { command: ['node', 'tooling/verify/release-readiness.mjs'], requires: ['consumer-all', 'docs-site', 'browser-docs-cross', 'change-fragments'] }
 };
 
-function componentEntry(componentId) {
-  return components.find((entry) => entry.component === componentId);
-}
-
-function componentPrerequisite(port) {
-  return port === 'web' ? 'build-web' : `build-${port}`;
-}
+function componentEntry(componentId) { return discovery.components.find((entry) => entry.component === componentId); }
+function componentPrerequisite(port) { return port === 'web' ? 'build-web' : `build-${port}`; }
 
 export function resolveScopeDefinition(scope) {
   if (baseScopeDefinitions[scope]) return baseScopeDefinitions[scope];
+
+  const unitMatch = /^unit:([^:]+):([^:]+):([^:]+):test$/.exec(scope);
+  if (unitMatch) {
+    const [, packageName, kind, id] = unitMatch;
+    const unit = discovery.ownedUnits.find((entry) => entry.package === packageName && entry.kind === kind && entry.id === id);
+    if (!unit) return null;
+    return { command: ['node', 'tooling/testing/run-owned-unit.mjs', packageName, kind, id], requires: [`build-${packageName}`] };
+  }
 
   const match = /^component:([^:]+):(.+)$/.exec(scope);
   if (!match) return null;
@@ -68,34 +72,24 @@ export function resolveScopeDefinition(scope) {
   const component = componentEntry(componentId);
   if (!component) return null;
 
-  if (suffix === 'types' && component.types) {
-    const buildPrerequisites = Object.keys(component.ports).filter((port) => port !== 'web').map(componentPrerequisite);
-    return {
-      command: ['node', 'tooling/types/check-component.mjs', componentId],
-      requires: [...new Set(buildPrerequisites)]
-    };
+  if (suffix === 'conformance:types' && component.conformanceTypes) {
+    const requires = Object.keys(component.ports).filter((port) => port !== 'web').map(componentPrerequisite);
+    return { command: ['node', 'tooling/types/check-component.mjs', componentId, 'conformance'], requires: [...new Set(requires)] };
   }
+
+  const typed = /^([^:]+):types$/.exec(suffix);
+  if (typed && component.ports?.[typed[1]]?.types) return { command: ['node', 'tooling/types/check-component.mjs', componentId, typed[1]], requires: [componentPrerequisite(typed[1])] };
 
   const evidenceMatch = /^([^:]+):(ssr|browser|browser-cross)$/.exec(suffix);
   if (!evidenceMatch) return null;
   const [, port, evidence] = evidenceMatch;
   const portConfig = component.ports?.[port];
   if (!portConfig) return null;
-
-  if (evidence === 'ssr' && portConfig.ssr) {
-    return {
-      command: ['node', 'tooling/tests/run-component-ssr.mjs', componentId, port],
-      requires: [componentPrerequisite(port)]
-    };
-  }
-
-  if ((evidence === 'browser' || evidence === 'browser-cross') && portConfig.browser) {
-    return {
-      command: ['node', 'tooling/browser/run-component.mjs', componentId, port, evidence === 'browser-cross' ? 'all' : 'chromium'],
-      requires: ['docs-site', componentPrerequisite(port)]
-    };
-  }
-
+  if (evidence === 'ssr' && portConfig.ssr) return { command: ['node', 'tooling/tests/run-component-ssr.mjs', componentId, port], requires: [componentPrerequisite(port)] };
+  if ((evidence === 'browser' || evidence === 'browser-cross') && portConfig.browser) return {
+    command: ['node', 'tooling/browser/run-component.mjs', componentId, port, evidence === 'browser-cross' ? 'all' : 'chromium'],
+    requires: [componentPrerequisite(port)]
+  };
   return null;
 }
 
@@ -104,7 +98,6 @@ export function expandScopes(selectedScopes) {
   const ordered = [];
   const visiting = new Set();
   const visited = new Set();
-
   function visit(scope) {
     if (visited.has(scope)) return;
     if (visiting.has(scope)) throw new Error(`Validation scope prerequisite cycle at ${scope}`);
@@ -116,7 +109,6 @@ export function expandScopes(selectedScopes) {
     visited.add(scope);
     ordered.push({ scope, selected: selected.has(scope), command: definition.command });
   }
-
   for (const scope of selectedScopes) visit(scope);
   return ordered;
 }

@@ -1,14 +1,14 @@
 import { execFileSync } from 'node:child_process';
 import { readFileSync } from 'node:fs';
 import { fileURLToPath } from 'node:url';
-import { discoverComponents } from '../testing/discover-components.mjs';
+import { discoverProductUnits } from '../testing/discover-product-units.mjs';
 
 const impact = JSON.parse(readFileSync(new URL('../../testing/impact.json', import.meta.url), 'utf8'));
-const registry = { components: discoverComponents().components };
+const discovery = discoverProductUnits();
 
-function matchesPath(path, pattern) {
-  if (pattern.endsWith('/')) return path.startsWith(pattern);
-  return path === pattern;
+function matchesPath(filePath, pattern) {
+  if (pattern.endsWith('/')) return filePath.startsWith(pattern);
+  return filePath === pattern;
 }
 
 function componentScope(component, suffix) {
@@ -17,39 +17,57 @@ function componentScope(component, suffix) {
 
 function compileTargets() {
   const targets = structuredClone(impact.targets);
+  for (const { name } of discovery.packages) if (targets[name]) targets[name].aggregate = true;
   const componentDocumentationTargets = [];
 
-  for (const component of registry.components) {
+  for (const unit of discovery.ownedUnits) {
+    targets[unit.node] = {
+      paths: [unit.sourcePath, unit.testPath, unit.metadataPath],
+      dependsOn: [unit.package, ...unit.dependencies],
+      evidence: [`${unit.node}:test`]
+    };
+  }
+
+  for (const component of discovery.components) {
     const portNodes = [];
     const webNode = component.ports.web ? `component:${component.component}:web` : null;
-    const sharedBrowserPaths = component.browser?.paths ?? [];
-
     for (const [port, config] of Object.entries(component.ports)) {
       const node = `component:${component.component}:${port}`;
       const evidence = [];
-      if (component.types && port !== 'web') evidence.push(componentScope(component.component, 'types'));
+      if (config.types) evidence.push(componentScope(component.component, `${port}:types`));
       if (config.ssr) evidence.push(componentScope(component.component, `${port}:ssr`));
       if (config.browser) evidence.push(componentScope(component.component, `${port}:browser`));
       targets[node] = {
-        paths: [...new Set([
-          ...config.paths,
-          ...(component.types && port !== 'web' ? [component.types] : []),
-          ...(config.ssr ? [config.ssr] : []),
-          ...(config.browser ? sharedBrowserPaths : [])
-        ])],
-        dependsOn: [...new Set([port, ...(port !== 'web' && webNode ? [webNode] : [])])],
+        paths: config.paths,
+        dependsOn: [...new Set([port, ...config.dependencies, ...(port !== 'web' && webNode ? [webNode] : [])])],
         evidence
       };
       portNodes.push(node);
     }
 
+    const conformanceNode = `component:${component.component}:conformance`;
+    const conformanceEvidence = [];
+    if (component.conformanceTypes) conformanceEvidence.push(componentScope(component.component, 'conformance:types'));
+    for (const [port, config] of Object.entries(component.ports)) if (config.browser) conformanceEvidence.push(componentScope(component.component, `${port}:browser`));
+    targets[conformanceNode] = {
+      paths: [...(component.conformanceTypes ? [component.conformanceTypes] : []), ...component.browser.paths],
+      dependsOn: portNodes,
+      evidence: conformanceEvidence
+    };
+
     const documentationNode = `component:${component.component}:documentation`;
     targets[documentationNode] = {
-      paths: component.documentationPaths ?? [],
-      dependsOn: portNodes,
+      paths: component.documentationPaths,
+      dependsOn: [conformanceNode],
       evidence: ['lint-docs', 'docs-source', 'docs-build', 'docs-site', 'browser-docs-chromium']
     };
     componentDocumentationTargets.push(documentationNode);
+
+    targets[`component:${component.component}:changes`] = {
+      paths: [component.changesPath],
+      dependsOn: [],
+      evidence: ['change-fragments']
+    };
   }
 
   targets.documentation.dependsOn = [...new Set([...targets.documentation.dependsOn, ...componentDocumentationTargets])];
@@ -58,19 +76,14 @@ function compileTargets() {
 
 const targets = compileTargets();
 
-export function classifyPath(path) {
-  const matchedNodes = [];
-  const matchedConfigs = [];
-  for (const [node, config] of Object.entries(targets)) {
-    if ((config.paths ?? []).some((pattern) => matchesPath(path, pattern))) {
-      matchedNodes.push(node);
-      matchedConfigs.push(config);
-    }
-  }
-  const explicitlyBroad = impact.broadPaths.some((pattern) => matchesPath(path, pattern));
-  const hasSpecificOwner = matchedConfigs.some((config) => !config.broad);
-  const broad = explicitlyBroad || matchedNodes.length === 0 || (matchedConfigs.some((config) => config.broad) && !hasSpecificOwner);
-  return { nodes: matchedNodes.sort(), broad };
+export function classifyPath(filePath) {
+  const matches = Object.entries(targets).filter(([, config]) => (config.paths ?? []).some((pattern) => matchesPath(filePath, pattern)));
+  const specific = matches.filter(([, config]) => !config.aggregate && !config.broad);
+  const selectedMatches = specific.length ? specific : matches;
+  const matchedNodes = selectedMatches.map(([node]) => node).sort();
+  const explicitlyBroad = impact.broadPaths.some((pattern) => matchesPath(filePath, pattern));
+  const broad = explicitlyBroad || matchedNodes.length === 0 || (selectedMatches.some(([, config]) => config.broad) && !selectedMatches.some(([, config]) => !config.broad));
+  return { nodes: matchedNodes, broad };
 }
 
 function reverseClosure(initialNodes) {
@@ -90,16 +103,15 @@ function reverseClosure(initialNodes) {
 }
 
 function dynamicTierScopes(mode) {
-  const scopes = [];
-  for (const component of registry.components) {
-    if (component.types) scopes.push(componentScope(component.component, 'types'));
+  const scopes = discovery.ownedUnits.map((unit) => `${unit.node}:test`);
+  for (const component of discovery.components) {
+    if (component.conformanceTypes) scopes.push(componentScope(component.component, 'conformance:types'));
     for (const [port, config] of Object.entries(component.ports)) {
+      if (config.types) scopes.push(componentScope(component.component, `${port}:types`));
       if (config.ssr) scopes.push(componentScope(component.component, `${port}:ssr`));
       if (config.browser) scopes.push(componentScope(component.component, `${port}:browser`));
     }
-    if ((mode === 'scheduled' || mode === 'release') && component.ports.web?.browser) {
-      scopes.push(componentScope(component.component, 'web:browser-cross'));
-    }
+    if ((mode === 'scheduled' || mode === 'release') && component.ports.web?.browser) scopes.push(componentScope(component.component, 'web:browser-cross'));
   }
   return scopes;
 }
@@ -116,30 +128,19 @@ function orderedScopes(scopes) {
 export function createPlan(paths) {
   const directNodes = new Set();
   let broad = false;
-  for (const path of paths) {
-    const classification = classifyPath(path);
+  for (const filePath of paths) {
+    const classification = classifyPath(filePath);
     for (const node of classification.nodes) directNodes.add(node);
     broad ||= classification.broad;
   }
-
   const nonLegacyTargets = Object.entries(targets).filter(([, config]) => !config.legacy).map(([node]) => node);
   const affectedNodes = broad ? new Set(nonLegacyTargets) : reverseClosure(directNodes);
   if (directNodes.has('legacy')) affectedNodes.add('legacy');
-
   const selectedScopes = new Set(impact.globalSentinels);
-  for (const node of affectedNodes) {
-    for (const scope of targets[node]?.evidence ?? []) selectedScopes.add(scope);
-  }
-
-  const validationScopes = orderedScopes(selectedScopes);
+  for (const node of affectedNodes) for (const scope of targets[node]?.evidence ?? []) selectedScopes.add(scope);
   return {
-    mode: 'pr',
-    changedPaths: [...paths].sort(),
-    directNodes: [...directNodes].sort(),
-    affectedNodes: [...affectedNodes].sort(),
-    validationScopes,
-    skippedValidationScopes: allKnownScopes().filter((scope) => !selectedScopes.has(scope)),
-    broadened: broad
+    mode: 'pr', changedPaths: [...paths].sort(), directNodes: [...directNodes].sort(), affectedNodes: [...affectedNodes].sort(),
+    validationScopes: orderedScopes(selectedScopes), skippedValidationScopes: allKnownScopes().filter((scope) => !selectedScopes.has(scope)), broadened: broad
   };
 }
 
@@ -149,13 +150,8 @@ export function createTierPlan(mode) {
   const scopes = [...new Set([...tierScopes, ...dynamicTierScopes(mode)])];
   const selected = new Set(scopes);
   return {
-    mode,
-    changedPaths: [],
-    directNodes: [],
-    affectedNodes: Object.entries(targets).filter(([, config]) => !config.legacy).map(([node]) => node).sort(),
-    validationScopes: orderedScopes(scopes),
-    skippedValidationScopes: allKnownScopes().filter((scope) => !selected.has(scope)),
-    broadened: true
+    mode, changedPaths: [], directNodes: [], affectedNodes: Object.entries(targets).filter(([, config]) => !config.legacy).map(([node]) => node).sort(),
+    validationScopes: orderedScopes(scopes), skippedValidationScopes: allKnownScopes().filter((scope) => !selected.has(scope)), broadened: true
   };
 }
 
