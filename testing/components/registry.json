@@ -1,3 +1,9 @@
 {
-  "components": []
+  "components": [
+    {
+      "component": "button",
+      "status": "implemented",
+      "ports": ["web", "react", "angular", "vue"]
+    }
+  ]
 }
