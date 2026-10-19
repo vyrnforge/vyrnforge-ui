@@ -31,7 +31,13 @@
       ],
       "types": "tooling/types/button-api.ts",
       "browser": {
-        "runner": "tooling/browser/run-button.mjs"
+        "runner": "tooling/browser/run-button.mjs",
+        "paths": [
+          "tooling/browser/run-button.mjs",
+          "tooling/browser/build-button-fixtures.mjs",
+          "tooling/browser/button.config.mjs",
+          "tooling/browser/button-tests/"
+        ]
       }
     }
   ]
