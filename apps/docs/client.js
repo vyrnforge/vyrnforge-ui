@@ -76,7 +76,10 @@ if (searchInput && searchResults) {
 let compilerPromise;
 function loadCompiler(url) {
   compilerPromise ||= new Promise((resolve, reject) => {
-    if (globalThis.__vfDocsTypeScript) return resolve(globalThis.__vfDocsTypeScript);
+    if (globalThis.__vfDocsTypeScript) {
+      resolve(globalThis.__vfDocsTypeScript);
+      return;
+    }
     const script = document.createElement('script');
     script.src = url;
     script.addEventListener('load', () => resolve(globalThis.__vfDocsTypeScript));
