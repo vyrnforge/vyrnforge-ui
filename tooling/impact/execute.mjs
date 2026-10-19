@@ -16,10 +16,15 @@ export function executeValidationPlan(validationPlan, { dryRun = false, output }
     writeFileSync(output, `${JSON.stringify(report, null, 2)}\n`);
   }
   if (dryRun) return execution;
+  const env = {
+    ...process.env,
+    VF_VALIDATION_MODE: validationPlan.mode,
+    VF_CHANGED_PATHS: JSON.stringify(validationPlan.changedPaths ?? [])
+  };
   for (const item of execution) {
     const [command, ...args] = item.command;
     process.stdout.write(`\n[validation:${item.scope}] ${command} ${args.join(' ')}\n`);
-    execFileSync(command, args, { stdio: 'inherit', env: process.env });
+    execFileSync(command, args, { stdio: 'inherit', env });
   }
   return execution;
 }

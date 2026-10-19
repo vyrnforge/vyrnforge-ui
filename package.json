@@ -4,18 +4,8 @@
   "private": true,
   "license": "SEE LICENSE IN LICENSE",
   "packageManager": "npm@11.16.0",
-  "engines": {
-    "node": ">=24.18 <25",
-    "npm": ">=11.16 <12"
-  },
-  "workspaces": [
-    "packages/core",
-    "packages/web",
-    "packages/react",
-    "packages/angular",
-    "packages/vue",
-    "packages/elements"
-  ],
+  "engines": { "node": ">=24.18 <25", "npm": ">=11.16 <12" },
+  "workspaces": ["packages/core", "packages/web", "packages/react", "packages/angular", "packages/vue", "packages/elements"],
   "scripts": {
     "clean": "node tooling/build/clean.mjs",
     "build": "npm run build:core && npm run build:web && npm run build:react && npm run build:angular && npm run build:vue && npm run build:elements",
@@ -47,6 +37,8 @@
     "verify:documentation": "node tooling/verify/documentation-structure.mjs",
     "verify:docs-site": "node tooling/verify/docs-site.mjs",
     "verify:testing-structure": "node tooling/verify/testing-structure.mjs",
+    "verify:changes": "node tooling/verify/change-fragments.mjs",
+    "changes:preview": "node tooling/changes/render.mjs",
     "verify:package-smoke": "node tooling/verify/package-smoke.mjs",
     "verify:consumer": "node tooling/verify/consumer-packages.mjs",
     "test:component:types": "node tooling/types/check-component.mjs",
@@ -63,25 +55,7 @@
     "ci:release": "node tooling/impact/execute.mjs --mode release"
   },
   "devDependencies": {
-    "@angular/common": "22.2.3",
-    "@angular/compiler": "22.2.3",
-    "@angular/compiler-cli": "22.2.3",
-    "@angular/core": "22.2.3",
-    "@angular/platform-browser": "22.2.3",
-    "@angular/platform-server": "22.2.3",
-    "@playwright/test": "1.64.1",
-    "@types/react": "19.3.0",
-    "@types/react-dom": "19.3.0",
-    "@vue/server-renderer": "3.5.44",
-    "axe-core": "4.14.0",
-    "esbuild": "0.28.2",
-    "eslint": "10.13.0",
-    "react": "19.3.0",
-    "react-dom": "19.3.0",
-    "rxjs": "7.8.2",
-    "stylelint": "17.16.0",
-    "typescript": "6.0.3",
-    "typescript-eslint": "8.71.2",
-    "vue": "3.5.44"
+    "@angular/common": "22.2.3", "@angular/compiler": "22.2.3", "@angular/compiler-cli": "22.2.3", "@angular/core": "22.2.3", "@angular/platform-browser": "22.2.3", "@angular/platform-server": "22.2.3",
+    "@playwright/test": "1.64.1", "@types/react": "19.3.0", "@types/react-dom": "19.3.0", "@vue/server-renderer": "3.5.44", "axe-core": "4.14.0", "esbuild": "0.28.2", "eslint": "10.13.0", "react": "19.3.0", "react-dom": "19.3.0", "rxjs": "7.8.2", "stylelint": "17.16.0", "typescript": "6.0.3", "typescript-eslint": "8.71.2", "vue": "3.5.44"
   }
 }

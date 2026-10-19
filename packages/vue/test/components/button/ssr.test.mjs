@@ -2,7 +2,7 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import { createSSRApp, h } from 'vue';
 import { renderToString } from '@vue/server-renderer';
-import { Button } from '../../packages/vue/dist/button.js';
+import { Button } from '@vyrnforge/vue/button';
 
 test('Vue Button server output is native-complete and preserves native attributes', async () => {
   const app = createSSRApp({ render: () => h(Button, { loading: true, name: 'save', value: 'yes' }, () => 'Save') });

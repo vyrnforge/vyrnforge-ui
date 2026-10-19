@@ -15,9 +15,9 @@
       "default": "./dist/index.js"
     },
     "./button": {
-      "types": "./dist/button.d.ts",
-      "import": "./dist/button.js",
-      "default": "./dist/button.js"
+      "types": "./dist/components/button/index.d.ts",
+      "import": "./dist/components/button/index.js",
+      "default": "./dist/components/button/index.js"
     }
   },
   "dependencies": {

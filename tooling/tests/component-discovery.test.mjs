@@ -3,52 +3,57 @@ import assert from 'node:assert/strict';
 import { mkdtempSync, mkdirSync, writeFileSync } from 'node:fs';
 import os from 'node:os';
 import path from 'node:path';
-import { discoverComponents, componentPreparationProblems } from '../testing/discover-components.mjs';
+import { discoverProductUnits, productPreparationProblems } from '../testing/discover-product-units.mjs';
 
-test('current public component surfaces are discovered without a testing registry', () => {
-  const { components } = discoverComponents();
+function writer(root) { return (relativePath, content = '') => { const target = path.join(root, relativePath); mkdirSync(path.dirname(target), { recursive: true }); writeFileSync(target, content); }; }
+
+test('current Button is discovered from package subpaths and component ownership', () => {
+  const { components } = discoverProductUnits();
   const button = components.find((entry) => entry.component === 'button');
   assert.ok(button);
   assert.deepEqual(Object.keys(button.ports).sort(), ['angular', 'react', 'vue', 'web']);
-  assert.equal(button.documentationSource, 'documentation/components/button.html');
-  assert.equal(button.types, 'tooling/types/button-api.ts');
-  assert.match(button.exampleManifest, /^examples\/button\//);
-  assert.deepEqual(componentPreparationProblems(), []);
+  assert.equal(button.ports.react.paths[0], 'packages/react/src/components/button/');
+  assert.equal(button.ports.react.types, 'packages/react/test/components/button/api.types.ts');
+  assert.equal(button.ports.react.ssr, 'packages/react/test/components/button/ssr.test.mjs');
+  assert.equal(button.documentationSource, 'components/button/docs/index.html');
+  assert.match(button.exampleManifests[0], /^components\/button\/examples\//);
+  assert.equal(button.browser.fixture, 'components/button/test/browser/fixtures.mjs');
+  assert.deepEqual(productPreparationProblems(), []);
 });
 
-test('a newly exposed component automatically becomes required testing work', () => {
-  const root = mkdtempSync(path.join(os.tmpdir(), 'vf-component-discovery-'));
-  const write = (relativePath, content) => {
-    const target = path.join(root, relativePath);
-    mkdirSync(path.dirname(target), { recursive: true });
-    writeFileSync(target, content);
-  };
-
-  for (const port of ['react', 'angular', 'vue', 'elements']) {
-    write(`packages/${port}/package.json`, JSON.stringify({
-      name: `@vyrnforge/${port}`,
-      exports: port === 'react' ? { '.': './dist/index.js', './tabs': './dist/tabs.js' } : { '.': './dist/index.js' }
-    }));
-  }
-  write('packages/web/package.json', JSON.stringify({
-    name: '@vyrnforge/web',
-    exports: { '.': './dist/index.js', './styles/tabs.css': './dist/styles/tabs.css' }
-  }));
-  write('documentation/site/registry.json', JSON.stringify({
-    pages: [{ slug: 'components/tabs', source: 'documentation/components/tabs.html' }]
-  }));
-  write('documentation/components/tabs.html', '<h1>Tabs</h1>');
-  write('examples/tabs/basic/example.json', JSON.stringify({ id: 'tabs/basic' }));
-  write('packages/react/src/tabs.ts', 'export const Tabs = null;\n');
-  write('packages/web/src/styles/tabs.css', '[data-vf-tabs] {}\n');
-
-  const { components } = discoverComponents(root);
-  const tabs = components.find((entry) => entry.component === 'tabs');
-  assert.ok(tabs, 'Tabs should be discovered from public product surfaces');
+test('a newly exposed component automatically requires its owned evidence', () => {
+  const root = mkdtempSync(path.join(os.tmpdir(), 'vf-product-discovery-'));
+  const write = writer(root);
+  write('package.json', JSON.stringify({ workspaces: ['packages/core', 'packages/web', 'packages/react'] }));
+  write('packages/core/package.json', JSON.stringify({ name: '@vyrnforge/core', exports: { '.': './dist/index.js' } }));
+  write('packages/web/package.json', JSON.stringify({ name: '@vyrnforge/web', exports: { '.': './dist/index.js', './styles/tabs.css': './dist/components/tabs/tabs.css' } }));
+  write('packages/react/package.json', JSON.stringify({ name: '@vyrnforge/react', exports: { '.': './dist/index.js', './tabs': './dist/components/tabs/index.js' } }));
+  write('packages/react/src/components/tabs/index.ts', 'export const Tabs = null;\n');
+  write('packages/web/src/components/tabs/tabs.css', '[data-vf-tabs] {}\n');
+  write('components/tabs/docs/index.html', '<h2>Overview</h2>');
+  write('components/tabs/examples/basic/example.json', JSON.stringify({ id: 'tabs/basic' }));
+  write('components/tabs/changes/add-tabs.md', '---\ntype: minor\n---\n\nAdd Tabs.\n');
+  const tabs = discoverProductUnits(root).components.find((entry) => entry.component === 'tabs');
+  assert.ok(tabs);
   assert.deepEqual(Object.keys(tabs.ports).sort(), ['react', 'web']);
+  const problems = productPreparationProblems(root);
+  assert.ok(problems.some((problem) => problem.includes('packages/react/test/components/tabs/api.types.ts')));
+  assert.ok(problems.some((problem) => problem.includes('packages/react/test/components/tabs/ssr.test.mjs')));
+  assert.ok(problems.some((problem) => problem.includes('components/tabs/test/browser/fixtures.mjs')));
+});
 
-  const problems = componentPreparationProblems(root);
-  assert.ok(problems.some((problem) => problem.includes('tooling/types/tabs-api.ts')));
-  assert.ok(problems.some((problem) => problem.includes('tooling/tests/tabs-react.test.mjs')));
-  assert.ok(problems.some((problem) => problem.includes('tooling/browser/run-tabs.mjs')));
+test('package-owned capabilities are auto-discovered with inferred dependency edges', () => {
+  const root = mkdtempSync(path.join(os.tmpdir(), 'vf-unit-discovery-'));
+  const write = writer(root);
+  write('package.json', JSON.stringify({ workspaces: ['packages/core'] }));
+  write('packages/core/package.json', JSON.stringify({ name: '@vyrnforge/core', exports: { '.': './dist/index.js' } }));
+  write('packages/core/src/capabilities/eligibility/index.ts', 'export const eligible = () => true;\n');
+  write('packages/core/test/capabilities/eligibility/eligibility.test.mjs', 'export {};\n');
+  write('packages/core/src/capabilities/navigation/index.ts', "import { eligible } from '../eligibility/index.js';\nexport const next = eligible;\n");
+  write('packages/core/test/capabilities/navigation/navigation.test.mjs', 'export {};\n');
+  const units = discoverProductUnits(root).ownedUnits;
+  const navigation = units.find((unit) => unit.id === 'navigation');
+  assert.ok(navigation);
+  assert.deepEqual(navigation.dependencies, ['unit:core:capabilities:eligibility']);
+  assert.deepEqual(productPreparationProblems(root), []);
 });

@@ -1,35 +1,27 @@
 import { execFileSync } from 'node:child_process';
-import { access } from 'node:fs/promises';
+import { access, readFile } from 'node:fs/promises';
 import { pathToFileURL } from 'node:url';
 import path from 'node:path';
 
 const allPackages = ['core', 'web', 'react', 'angular', 'vue', 'elements'];
 const requested = process.argv.slice(2);
 const packages = requested.length ? requested : allPackages;
-
+function flattenExportTargets(value, targets = []) { if (typeof value === 'string') targets.push(value); else if (value && typeof value === 'object') for (const nested of Object.values(value)) flattenExportTargets(nested, targets); return targets; }
 for (const name of packages) {
   if (!allPackages.includes(name)) throw new Error(`Unknown package smoke scope: ${name}`);
   const packageDir = path.resolve('packages', name);
+  const manifest = JSON.parse(await readFile(path.join(packageDir, 'package.json'), 'utf8'));
   await access(path.join(packageDir, 'dist', 'index.js'));
   await access(path.join(packageDir, 'dist', 'index.d.ts'));
-
-  // Angular library output is intentionally partial-Ivy compiled and must be linked
-  // by Angular tooling before execution. Runtime behavior is covered by dedicated
-  // Angular SSR/browser evidence; package smoke verifies emitted/public artifacts.
   if (name !== 'angular') await import(pathToFileURL(path.join(packageDir, 'dist', 'index.js')).href);
-
   const raw = execFileSync('npm', ['pack', '--json', '--dry-run', packageDir], { encoding: 'utf8', stdio: ['ignore', 'pipe', 'inherit'] });
   const result = JSON.parse(raw)[0];
   if (!result || result.name !== `@vyrnforge/${name}`) throw new Error(`Unexpected npm pack result for ${name}`);
-  const files = (result.files ?? []).map((file) => file.path);
-  if (files.some((file) => file.startsWith('src/') || file.includes('legacy') || file.startsWith('tooling/'))) throw new Error(`${name} tarball exposes source, legacy, or repository tooling`);
-  if (!files.includes('dist/index.js') || !files.includes('dist/index.d.ts')) throw new Error(`${name} tarball is missing built public entrypoints`);
-  if (name === 'web') {
-    for (const file of ['dist/styles.css', 'dist/styles/button.css', 'dist/styles/tokens.css']) if (!files.includes(file)) throw new Error(`@vyrnforge/web tarball is missing ${file}`);
-  }
-  if (['react', 'angular', 'vue'].includes(name)) {
-    for (const file of ['dist/button.js', 'dist/button.d.ts']) if (!files.includes(file)) throw new Error(`@vyrnforge/${name} tarball is missing ${file}`);
+  const files = new Set((result.files ?? []).map((file) => file.path));
+  if ([...files].some((file) => file.startsWith('src/') || file.includes('legacy') || file.startsWith('tooling/') || file.startsWith('test/'))) throw new Error(`${name} tarball exposes source, tests, legacy, or repository tooling`);
+  for (const target of new Set(flattenExportTargets(manifest.exports))) {
+    const relative = target.replace(/^\.\//, '');
+    if (!files.has(relative)) throw new Error(`${manifest.name} tarball is missing exported artifact ${relative}`);
   }
 }
-
-process.stdout.write(`package smoke: ${packages.join(', ')} ok\n`);
+process.stdout.write(`package smoke: ${packages.join(', ')} public exports ok\n`);

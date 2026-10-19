@@ -1,2 +1,2 @@
-export { Button } from './button.js';
-export type { ButtonSize, ButtonVariant } from './button.js';
+export { Button } from './components/button/index.js';
+export type { ButtonSize, ButtonVariant } from './components/button/index.js';

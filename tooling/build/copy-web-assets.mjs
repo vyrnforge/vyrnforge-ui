@@ -11,3 +11,8 @@ await cp(
   new URL('../../packages/web/dist/styles/', import.meta.url),
   { recursive: true }
 );
+await cp(
+  new URL('../../packages/web/src/components/', import.meta.url),
+  new URL('../../packages/web/dist/components/', import.meta.url),
+  { recursive: true }
+);

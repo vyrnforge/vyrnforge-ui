@@ -1,2 +1,2 @@
-export { VfButtonDirective } from './button.js';
-export type { ButtonSize, ButtonVariant } from './button.js';
+export { VfButtonDirective } from './components/button/index.js';
+export type { ButtonSize, ButtonVariant } from './components/button/index.js';
