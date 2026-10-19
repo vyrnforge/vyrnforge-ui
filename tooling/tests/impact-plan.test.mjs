@@ -2,7 +2,7 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import { classifyPath, createPlan } from '../impact/plan.mjs';
 
-test('component port changes select package and component evidence without sibling component evidence', () => {
+test('component port changes select package and discovered component evidence without sibling component evidence', () => {
   const plan = createPlan(['packages/react/src/button.ts']);
   assert.ok(plan.directNodes.includes('react'));
   assert.ok(plan.directNodes.includes('component:button:react'));
@@ -24,7 +24,7 @@ test('component-owned test files remain scoped even when they live under tooling
   assert.ok(!plan.validationScopes.includes('component:button:vue:ssr'));
 });
 
-test('shared component web changes fan out through every registered port', () => {
+test('shared component web changes fan out through every discovered port', () => {
   const plan = createPlan(['packages/web/src/styles/button.css']);
   for (const node of ['component:button:web', 'component:button:react', 'component:button:angular', 'component:button:vue', 'component:button:documentation']) {
     assert.ok(plan.affectedNodes.includes(node), node);
@@ -52,7 +52,7 @@ test('port-local package changes remain scoped to that port plus dependent docum
   assert.ok(!plan.validationScopes.includes('build-angular'));
 });
 
-test('web changes fan out to framework ports, registered component ports, and documentation', () => {
+test('web changes fan out to framework ports, discovered component ports, and documentation', () => {
   const plan = createPlan(['packages/web/src/styles.css']);
   for (const node of ['angular', 'documentation', 'elements', 'react', 'vue', 'web', 'component:button:web', 'component:button:react', 'component:button:angular', 'component:button:vue']) {
     assert.ok(plan.affectedNodes.includes(node), node);
@@ -72,8 +72,8 @@ test('documentation changes stay documentation-scoped', () => {
   assert.equal(plan.broadened, false);
 });
 
-test('testing metadata and repository foundation changes fail closed', () => {
-  for (const path of ['testing/components/registry.json', 'tooling/impact/plan.mjs', '.github/workflows/ci.yml', 'package.json']) {
+test('testing discovery and repository foundation changes fail closed', () => {
+  for (const path of ['tooling/testing/discover-components.mjs', 'testing/impact.json', 'tooling/impact/plan.mjs', '.github/workflows/ci.yml', 'package.json']) {
     const plan = createPlan([path]);
     assert.equal(plan.broadened, true, path);
     for (const node of ['core', 'web', 'react', 'angular', 'vue', 'elements', 'documentation', 'tooling', 'component:button:web', 'component:button:react', 'component:button:angular', 'component:button:vue']) {
@@ -93,7 +93,7 @@ test('legacy-only changes do not select product ports', () => {
   assert.ok(!plan.validationScopes.includes('build-react'));
 });
 
-test('classification exposes every matching metadata target', () => {
+test('classification exposes every matching discovered target', () => {
   assert.deepEqual(classifyPath('packages/vue/src/button.ts'), {
     nodes: ['component:button:vue', 'vue'],
     broad: false

@@ -54,7 +54,7 @@
     "test:component:browser": "node tooling/browser/run-component.mjs",
     "test:browser:docs": "node tooling/browser/run.mjs chromium",
     "test:browser:docs:cross": "node tooling/browser/run.mjs all",
-    "test:impact": "node --test tooling/tests/impact-plan.test.mjs tooling/tests/impact-executor.test.mjs tooling/tests/impact-tiers.test.mjs tooling/tests/actions-retention.test.mjs",
+    "test:impact": "node --test tooling/tests/impact-plan.test.mjs tooling/tests/impact-executor.test.mjs tooling/tests/impact-tiers.test.mjs tooling/tests/component-discovery.test.mjs tooling/tests/actions-retention.test.mjs",
     "test:actions-retention": "node --test tooling/tests/actions-retention.test.mjs",
     "ci:plan": "node tooling/impact/plan.mjs",
     "ci:pr": "node tooling/impact/execute.mjs --mode pr",
