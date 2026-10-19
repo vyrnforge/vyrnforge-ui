@@ -18,21 +18,25 @@ The active public package graph is:
 - `@vyrnforge/web` — canonical CSS, tokens/themes at runtime, and narrow shared browser foundations.
 - `@vyrnforge/react`, `@vyrnforge/angular`, `@vyrnforge/vue`, `@vyrnforge/elements` — sibling idiomatic ports depending only on Core and Web.
 
-Do not introduce sibling-port dependencies, cycles, a universal component controller/runtime, framework-specific shared contracts, port-local visual systems, or application business architecture.
+Do not introduce sibling-port dependencies, cycles, a universal component controller/runtime, framework-specific shared contracts, port-local visual systems, or application business architecture. Repository component folders are ownership and validation boundaries; they do not create additional public npm packages.
 
-## Testing layout
+## Product ownership and testing
 
-Canonical component contracts own behavioral scenarios. Repository evidence lives under `testing/` by layer: renderer-neutral contract evidence, framework-port integration, real-browser behavior, visual evidence, and SSR/hydration evidence when those layers genuinely apply. The component registry is an ownership/status index, not a behavioral DSL.
+Architectural policy is explicit; normal product instances are discovered. Framework component implementations live under `packages/<port>/src/components/<component>/`, with package-local evidence under `packages/<port>/test/components/<component>/`. Shared component docs, examples, cross-port/browser evidence, and unreleased changes live under `components/<component>/`.
 
-Use real browsers for browser-owned behavior. Automated accessibility scanning complements rather than replaces keyboard/focus/browser behavior and assistive-technology evidence. Do not create meaningless visual baselines or fake SSR fixtures for unsupported framework/runtime combinations.
+Reusable package-owned units may live under `packages/<package>/src/capabilities/`, `src/accessibility/`, or `src/foundations/` when that package is the correct architectural owner, with mirrored evidence under `packages/<package>/test/<kind>/`. Do not add per-instance CI mappings or a central component testing registry. Public exports, conventional ownership, and source dependencies drive discovery.
 
-## Documentation
+Canonical component contracts own behavioral scenarios. Use real browsers for browser-owned behavior. Automated accessibility scanning complements rather than replaces keyboard/focus/browser behavior and assistive-technology evidence. Put evidence at the lowest owner that actually proves the behavior rather than centralizing unrelated tests in generic tooling folders.
 
-Framework-neutral content is authored once under shared documentation sources and composed into framework experiences. Framework guides own only framework-specific installation/API/integration/examples. Public examples must eventually compile/run against the supported package version. An unimplemented framework must be shown as unavailable rather than implied to work.
+## Documentation and changes
+
+Framework-neutral foundation content is authored once under shared documentation sources and composed into framework experiences. Framework guides own only framework-specific installation/API/integration guidance. Component documentation and executable examples are component-owned and discovered from `components/<component>/`. An unimplemented framework must be shown as unavailable rather than implied to work.
+
+Implementation changes to a component or reusable scoped unit require a matching unreleased change fragment beside that owner. Use `major`, `minor`, or `patch` for consumer-visible release significance and `internal` for repository-only changes. The fragment records change meaning; it must not contain a hand-maintained list of CI jobs. Release tooling composes the centralized changelog from scoped fragments.
 
 ## CI and validation
 
-Pull requests use dependency-derived validation. The product graph identifies affected areas; the validation graph selects required evidence; prerequisites are expanded and deduplicated by the executor. Review the uploaded validation-plan artifact instead of assuming every test should run.
+Pull requests use dependency-derived validation. Changed paths resolve to the most specific discovered owner, then reverse dependency closure selects applicable evidence. Package builds, packing, and consumer checks may execute as prerequisites without making unrelated sibling product units selected evidence. Review the validation-plan artifact instead of assuming every test should run.
 
 - PR: targeted affected evidence plus small global architecture sentinels.
 - `main`: broader package, consumer, documentation, and integration assurance.
