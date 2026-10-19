@@ -31,6 +31,7 @@
       "tooling/browser/button-tests/button.spec.mjs",
       "tooling/browser/button.config.mjs",
       "tooling/browser/run-button.mjs",
+      "tooling/browser/tests/docs-site.spec.mjs",
       "tooling/build/copy-web-assets.mjs",
       "tooling/compatibility/support-status.json",
       "tooling/impact/plan.mjs",
@@ -596,25 +597,25 @@ workflow contracts: ok
 legacy isolation: ok
 
 [validation:impact-engine] node --test tooling/tests/impact-plan.test.mjs tooling/tests/impact-executor.test.mjs tooling/tests/impact-tiers.test.mjs
-✔ framework build execution includes lint and foundation prerequisites without marking them as selected evidence (2.176233ms)
-✔ duplicate prerequisites execute once (0.376372ms)
-✔ validation plans become inspectable execution plans (0.308456ms)
-✔ unknown validation scopes fail closed (0.85186ms)
-✔ React Button changes select React Button evidence without unrelated framework Button evidence (2.678921ms)
-✔ shared Button CSS fans out through every implemented Button port (0.308435ms)
-✔ port-local changes remain scoped to the port plus dependent documentation (0.233977ms)
-✔ web changes fan out to every framework port and documentation (0.26765ms)
-✔ core changes fan out through the full product dependency closure (0.481209ms)
-✔ documentation changes stay documentation-scoped (0.88407ms)
-✔ impact-engine and repository foundation changes fail closed (0.4766ms)
-✔ unknown repository changes fail closed (0.324075ms)
-✔ legacy-only changes do not select product ports (0.400498ms)
-✔ classification exposes component scopes and broad infrastructure (1.287133ms)
-✔ PR framework-local changes keep sibling framework and consumer evidence skipped (4.027839ms)
-✔ documentation-local changes select docs and chromium browser evidence without package consumers (0.895221ms)
-✔ core changes fan out to all dependent ports and consumers (0.41241ms)
-✔ main uses chromium browser evidence while scheduled uses cross-browser evidence (0.43942ms)
-✔ release validation is strictly broader than main validation (0.601703ms)
+✔ framework build execution includes lint and foundation prerequisites without marking them as selected evidence (1.215865ms)
+✔ duplicate prerequisites execute once (0.226692ms)
+✔ validation plans become inspectable execution plans (0.155936ms)
+✔ unknown validation scopes fail closed (0.538393ms)
+✔ React Button changes select React Button evidence without unrelated framework Button evidence (2.107751ms)
+✔ shared Button CSS fans out through every implemented Button port (0.264439ms)
+✔ port-local changes remain scoped to the port plus dependent documentation (0.204479ms)
+✔ web changes fan out to every framework port and documentation (0.234464ms)
+✔ core changes fan out through the full product dependency closure (0.39086ms)
+✔ documentation changes stay documentation-scoped (0.71543ms)
+✔ impact-engine and repository foundation changes fail closed (0.44367ms)
+✔ unknown repository changes fail closed (0.195275ms)
+✔ legacy-only changes do not select product ports (0.319181ms)
+✔ classification exposes component scopes and broad infrastructure (0.249696ms)
+✔ PR framework-local changes keep sibling framework and consumer evidence skipped (1.340593ms)
+✔ documentation-local changes select docs and chromium browser evidence without package consumers (0.172169ms)
+✔ core changes fan out to all dependent ports and consumers (0.190758ms)
+✔ main uses chromium browser evidence while scheduled uses cross-browser evidence (0.219942ms)
+✔ release validation is strictly broader than main validation (0.194994ms)
 ℹ tests 19
 ℹ suites 0
 ℹ pass 19
@@ -622,7 +623,7 @@ legacy isolation: ok
 ℹ cancelled 0
 ℹ skipped 0
 ℹ todo 0
-ℹ duration_ms 93.32909
+ℹ duration_ms 63.120668
 
 [validation:foundation-readiness] node tooling/verify/foundation-readiness.mjs
 foundation readiness: ok
@@ -770,42 +771,42 @@ package smoke: elements ok
 
 [validation:consumer-core] node tooling/verify/consumer-packages.mjs core
 
-added 1 package in 243ms
+added 1 package in 143ms
 consumer imports: ok
 packed consumer verification: core ok
 
 [validation:consumer-web] node tooling/verify/consumer-packages.mjs web
 
-added 2 packages in 268ms
+added 2 packages in 155ms
 consumer imports: ok
 packed consumer verification: web ok
 
 [validation:consumer-react] node tooling/verify/consumer-packages.mjs react
 
-added 4 packages in 569ms
+added 4 packages in 495ms
 consumer imports: ok
 packed consumer verification: react ok
 
 [validation:consumer-angular] node tooling/verify/consumer-packages.mjs angular
 
-added 6 packages in 2s
+added 6 packages in 1s
 consumer imports: ok
 packed consumer verification: angular ok
 
 [validation:consumer-vue] node tooling/verify/consumer-packages.mjs vue
 
-added 26 packages in 2s
+added 26 packages in 1s
 consumer imports: ok
 packed consumer verification: vue ok
 
 [validation:consumer-elements] node tooling/verify/consumer-packages.mjs elements
 
-added 3 packages in 436ms
+added 3 packages in 251ms
 consumer imports: ok
 packed consumer verification: elements ok
 
 [validation:button-react-ssr] node --test tooling/tests/button-react.test.mjs
-✔ React Button server output is native-complete and loading remains enabled (6.387727ms)
+✔ React Button server output is native-complete and loading remains enabled (3.744492ms)
 ℹ tests 1
 ℹ suites 0
 ℹ pass 1
@@ -813,11 +814,11 @@ packed consumer verification: elements ok
 ℹ cancelled 0
 ℹ skipped 0
 ℹ todo 0
-ℹ duration_ms 85.000298
+ℹ duration_ms 54.866872
 
 [validation:button-angular-ssr] node --test tooling/tests/button-angular.test.mjs
 Angular is running in development mode.
-✔ Angular Button server output keeps a native form-participating button (45.856267ms)
+✔ Angular Button server output keeps a native form-participating button (29.476149ms)
 ℹ tests 1
 ℹ suites 0
 ℹ pass 1
@@ -825,10 +826,10 @@ Angular is running in development mode.
 ℹ cancelled 0
 ℹ skipped 0
 ℹ todo 0
-ℹ duration_ms 369.696358
+ℹ duration_ms 223.139027
 
 [validation:button-vue-ssr] node --test tooling/tests/button-vue.test.mjs
-✔ Vue Button server output is native-complete and preserves native attributes (6.637774ms)
+✔ Vue Button server output is native-complete and preserves native attributes (3.68357ms)
 ℹ tests 1
 ℹ suites 0
 ℹ pass 1
@@ -836,7 +837,7 @@ Angular is running in development mode.
 ℹ cancelled 0
 ℹ skipped 0
 ℹ todo 0
-ℹ duration_ms 111.341708
+ℹ duration_ms 74.012318
 
 [validation:docs-build] npm run build:docs
 
@@ -856,14 +857,14 @@ documentation site verification: 13 pages ok
 Installing dependencies...
 Switching to root user to install dependencies...
 Get:1 file:/etc/apt/apt-mirrors.txt Mirrorlist [144 B]
-Get:3 https://packages.microsoft.com/ubuntu/24.04/prod noble InRelease [3600 B]
+Get:6 https://packages.microsoft.com/ubuntu/24.04/prod noble InRelease [3600 B]
 Hit:2 http://azure.archive.ubuntu.com/ubuntu noble InRelease
-Get:4 http://azure.archive.ubuntu.com/ubuntu noble-updates InRelease [126 kB]
-Get:5 http://azure.archive.ubuntu.com/ubuntu noble-backports InRelease [126 kB]
-Get:6 http://azure.archive.ubuntu.com/ubuntu noble-security InRelease [126 kB]
+Get:3 http://azure.archive.ubuntu.com/ubuntu noble-updates InRelease [126 kB]
+Get:4 http://azure.archive.ubuntu.com/ubuntu noble-backports InRelease [126 kB]
+Get:5 http://azure.archive.ubuntu.com/ubuntu noble-security InRelease [126 kB]
 Get:7 https://packages.microsoft.com/ubuntu/24.04/prod noble/main armhf Packages [12.4 kB]
-Get:8 https://packages.microsoft.com/ubuntu/24.04/prod noble/main amd64 Packages [618 kB]
-Get:9 https://packages.microsoft.com/ubuntu/24.04/prod noble/main arm64 Packages [557 kB]
+Get:8 https://packages.microsoft.com/ubuntu/24.04/prod noble/main arm64 Packages [557 kB]
+Get:9 https://packages.microsoft.com/ubuntu/24.04/prod noble/main amd64 Packages [618 kB]
 Get:10 http://azure.archive.ubuntu.com/ubuntu noble-updates/main amd64 Packages [1397 kB]
 Get:11 http://azure.archive.ubuntu.com/ubuntu noble-updates/main Translation-en [308 kB]
 Get:12 http://azure.archive.ubuntu.com/ubuntu noble-updates/universe amd64 Packages [1704 kB]
@@ -876,7 +877,7 @@ Get:18 http://azure.archive.ubuntu.com/ubuntu noble-security/universe amd64 Pack
 Get:19 http://azure.archive.ubuntu.com/ubuntu noble-security/universe Translation-en [246 kB]
 Get:20 http://azure.archive.ubuntu.com/ubuntu noble-security/restricted amd64 Packages [1713 kB]
 Get:21 http://azure.archive.ubuntu.com/ubuntu noble-security/restricted Translation-en [392 kB]
-Fetched 12.5 MB in 1s (9520 kB/s)
+Fetched 12.5 MB in 1s (11.9 MB/s)
 Reading package lists...
 Reading package lists...
 Building dependency tree...
@@ -952,7 +953,7 @@ Get:7 http://azure.archive.ubuntu.com/ubuntu noble/main amd64 xfonts-encodings a
 Get:8 http://azure.archive.ubuntu.com/ubuntu noble/main amd64 xfonts-utils amd64 1:7.7+6build3 [94.4 kB]
 Get:9 http://azure.archive.ubuntu.com/ubuntu noble/universe amd64 xfonts-cyrillic all 1:1.0.5+nmu1 [384 kB]
 Get:10 http://azure.archive.ubuntu.com/ubuntu noble/main amd64 xfonts-scalable all 1:1.0.3-1.3 [304 kB]
-Fetched 21.1 MB in 2s (12.9 MB/s)
+Fetched 21.1 MB in 1s (14.3 MB/s)
 Selecting previously unselected package fonts-ipafont-gothic.
 (Reading database ... (Reading database ... 5%(Reading database ... 10%(Reading database ... 15%(Reading database ... 20%(Reading database ... 25%(Reading database ... 30%(Reading database ... 35%(Reading database ... 40%(Reading database ... 45%(Reading database ... 50%(Reading database ... 55%(Reading database ... 60%(Reading database ... 65%(Reading database ... 70%(Reading database ... 75%(Reading database ... 80%(Reading database ... 85%(Reading database ... 90%(Reading database ... 95%(Reading database ... 100%(Reading database ... 203540 files and directories currently installed.)
 Preparing to unpack .../0-fonts-ipafont-gothic_00303-21ubuntu1_all.deb ...
@@ -1060,66 +1061,95 @@ Running 16 tests using 2 workers
 [12/16] [chromium] › tooling/browser/tests/docs-accessibility.spec.mjs:9:3 › docs accessibility: Packages
 [13/16] [chromium] › tooling/browser/tests/docs-accessibility.spec.mjs:9:3 › docs accessibility: Compatibility
 [14/16] [chromium] › tooling/browser/tests/docs-site.spec.mjs:12:1 › docs home exposes versioned accessible navigation and search
-[15/16] [chromium] › tooling/browser/tests/docs-site.spec.mjs:29:1 › framework selection navigates to explicit implementation status
-[16/16] [chromium] › tooling/browser/tests/docs-site.spec.mjs:39:1 › docs remain navigable at a mobile viewport
-  1) [chromium] › tooling/browser/tests/docs-site.spec.mjs:29:1 › framework selection navigates to explicit implementation status 
+[15/16] [chromium] › tooling/browser/tests/docs-site.spec.mjs:29:1 › framework selection exposes component-level implementation status
+[16/16] [chromium] › tooling/browser/tests/docs-site.spec.mjs:43:1 › docs remain navigable at a mobile viewport
+  16 passed (5.0s)
 
-    Error: expect(locator).toContainText(expected) failed
+[validation:button-browser-web] node tooling/browser/run-button.mjs web chromium
+Installing dependencies...
+Switching to root user to install dependencies...
+Get:1 file:/etc/apt/apt-mirrors.txt Mirrorlist [144 B]
+Hit:2 http://azure.archive.ubuntu.com/ubuntu noble InRelease
+Hit:6 https://packages.microsoft.com/ubuntu/24.04/prod noble InRelease
+Hit:3 http://azure.archive.ubuntu.com/ubuntu noble-updates InRelease
+Hit:4 http://azure.archive.ubuntu.com/ubuntu noble-backports InRelease
+Hit:5 http://azure.archive.ubuntu.com/ubuntu noble-security InRelease
+Reading package lists...
+Reading package lists...
+Building dependency tree...
+Reading state information...
+libasound2t64 is already the newest version (1.2.11-1ubuntu0.3).
+libatk-bridge2.0-0t64 is already the newest version (2.52.0-1build1).
+libatk1.0-0t64 is already the newest version (2.52.0-1build1).
+libatspi2.0-0t64 is already the newest version (2.52.0-1build1).
+libcairo2 is already the newest version (1.18.0-3build1).
+libcups2t64 is already the newest version (2.4.7-1.2ubuntu7.14).
+libdbus-1-3 is already the newest version (1.14.10-4ubuntu4.1).
+libdrm2 is already the newest version (2.4.125-1ubuntu0.1~24.04.2).
+libgbm1 is already the newest version (25.2.8-0ubuntu0.24.04.4).
+libglib2.0-0t64 is already the newest version (2.80.0-6ubuntu3.9).
+libnspr4 is already the newest version (2:4.35-1.1build1).
+libnss3 is already the newest version (2:3.98-1ubuntu0.2).
+libpango-1.0-0 is already the newest version (1.52.1+ds-1build1).
+libx11-6 is already the newest version (2:1.8.7-1ubuntu0.1).
+libxcb1 is already the newest version (1.15-1ubuntu2).
+libxcomposite1 is already the newest version (1:0.4.5-1build3).
+libxdamage1 is already the newest version (1:1.1.6-1build1).
+libxext6 is already the newest version (2:1.3.4-1build2).
+libxfixes3 is already the newest version (1:6.0.0-2build1).
+libxkbcommon0 is already the newest version (1.6.0-1build1).
+libxrandr2 is already the newest version (2:1.5.2-2build1).
+xvfb is already the newest version (2:21.1.12-1ubuntu1.8).
+fonts-noto-color-emoji is already the newest version (2.047-0ubuntu0.24.04.1).
+fonts-unifont is already the newest version (1:15.1.01-1build1).
+libfontconfig1 is already the newest version (2.15.0-1.1ubuntu2).
+libfreetype6 is already the newest version (2.13.2+dfsg-1ubuntu0.2).
+xfonts-cyrillic is already the newest version (1:1.0.5+nmu1).
+xfonts-scalable is already the newest version (1:1.0.3-1.3).
+fonts-liberation is already the newest version (1:2.1.5-3).
+fonts-ipafont-gothic is already the newest version (00303-21ubuntu1).
+fonts-wqy-zenhei is already the newest version (0.9.45-8).
+fonts-tlwg-loma-otf is already the newest version (1:0.7.3-1).
+fonts-freefont-ttf is already the newest version (20211204+svn4273-2).
+0 upgraded, 0 newly installed, 0 to remove and 44 not upgraded.
+[WebServer] node:internal/modules/cjs/loader:1520
+[WebServer]   throw err;
+[WebServer]   ^
+[WebServer] 
+[WebServer] Error: Cannot find module '/home/runner/work/vyrnforge-ui/vyrnforge-ui/tooling/browser/tooling/docs/serve.mjs'
+[WebServer]     at Module._resolveFilename (node:internal/modules/cjs/loader:1517:15)
+[WebServer]     at wrapResolveFilename (node:internal/modules/cjs/loader:1071:27)
+[WebServer]     at defaultResolveImplForCJSLoading (node:internal/modules/cjs/loader:1095:10)
+[WebServer]     at resolveForCJSWithHooks (node:internal/modules/cjs/loader:1122:12)
+[WebServer]     at Module._load (node:internal/modules/cjs/loader:1294:5)
+[WebServer]     at wrapModuleLoad (node:internal/modules/cjs/loader:255:19)
+[WebServer]     at Module.executeUserEntryPoint [as runMain] (node:internal/modules/run_main:154:5)
+[WebServer]     at node:internal/main/run_main_module:33:47 {
+[WebServer]   code: 'MODULE_NOT_FOUND',
+[WebServer]   requireStack: []
+[WebServer] }
+[WebServer] 
+[WebServer] Node.js v24.18.0
 
-    Locator: locator('[data-vf-support-status="not-implemented"]')
-    Expected substring: "not implemented"
-    Timeout: 5000ms
-    Error: element(s) not found
+Error: Process from config.webServer was not able to start. Exit code: 1
 
-    Call log:
-      - Expect "toContainText" locator('[data-vf-support-status="not-implemented"]') with timeout 5000ms
-      - waiting for locator('[data-vf-support-status="not-implemented"]')
-
-
-      32 |   await page.getByLabel('Framework').selectOption('react');
-      33 |   await expect(page).toHaveURL(/\/next\/frameworks\/react\/$/);
-    > 34 |   await expect(page.locator('[data-vf-support-status="not-implemented"]')).toContainText('not implemented');
-         |                                                                            ^
-      35 |   await expect(page.getByRole('heading', { name: 'Shared VyrnForge foundations' })).toBeVisible();
-      36 |   verifyNoErrors();
-      37 | });
-        at /home/runner/work/vyrnforge-ui/vyrnforge-ui/tooling/browser/tests/docs-site.spec.mjs:34:76
-
-    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
-    test-results/playwright-results/docs-site-framework-select-45f77-licit-implementation-status-chromium/test-failed-1.png
-    ────────────────────────────────────────────────────────────────────────────────────────────────
-
-    Error Context: test-results/playwright-results/docs-site-framework-select-45f77-licit-implementation-status-chromium/error-context.md
-
-    attachment #3: trace (application/zip) ─────────────────────────────────────────────────────────
-    test-results/playwright-results/docs-site-framework-select-45f77-licit-implementation-status-chromium/trace.zip
-    Usage:
-
-        npx playwright show-trace test-results/playwright-results/docs-site-framework-select-45f77-licit-implementation-status-chromium/trace.zip
-
-    ────────────────────────────────────────────────────────────────────────────────────────────────
-
-
-  1 failed
-    [chromium] › tooling/browser/tests/docs-site.spec.mjs:29:1 › framework selection navigates to explicit implementation status 
-  15 passed (11.0s)
 node:internal/errors:985
   const err = new Error(message);
               ^
 
-Error: Command failed: npx playwright test --project chromium
+Error: Command failed: npx playwright test --config tooling/browser/button.config.mjs --project chromium
     at genericNodeError (node:internal/errors:985:15)
     at wrappedFn (node:internal/errors:539:14)
     at checkExecSyncError (node:child_process:925:11)
     at execFileSync (node:child_process:961:15)
-    at file:///home/runner/work/vyrnforge-ui/vyrnforge-ui/tooling/browser/run.mjs:12:1
+    at file:///home/runner/work/vyrnforge-ui/vyrnforge-ui/tooling/browser/run-button.mjs:13:1
     at ModuleJob.run (node:internal/modules/esm/module_job:439:25)
     at async node:internal/modules/esm/loader:643:26
     at async asyncRunEntryPointWithESMLoader (node:internal/modules/run_main:101:5) {
   status: 1,
   signal: null,
   output: [ null, null, null ],
-  pid: 4197,
+  pid: 4724,
   stdout: null,
   stderr: null
 }
@@ -1129,7 +1159,7 @@ node:internal/errors:985
   const err = new Error(message);
               ^
 
-Error: Command failed: npm run test:browser:docs
+Error: Command failed: node tooling/browser/run-button.mjs web chromium
     at genericNodeError (node:internal/errors:985:15)
     at wrappedFn (node:internal/errors:539:14)
     at checkExecSyncError (node:child_process:925:11)
@@ -1142,7 +1172,7 @@ Error: Command failed: npm run test:browser:docs
   status: 1,
   signal: null,
   output: [ null, null, null ],
-  pid: 3550,
+  pid: 4374,
   stdout: null,
   stderr: null
 }
