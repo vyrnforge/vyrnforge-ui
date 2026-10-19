@@ -41,6 +41,7 @@
       "tooling/tests/button-react.test.mjs",
       "tooling/tests/button-vue.test.mjs",
       "tooling/tests/impact-plan.test.mjs",
+      "tooling/verify/compatibility.mjs",
       "tooling/verify/consumer-packages.mjs",
       "tooling/verify/documentation-structure.mjs",
       "tooling/verify/package-contracts.mjs",
@@ -595,25 +596,25 @@ workflow contracts: ok
 legacy isolation: ok
 
 [validation:impact-engine] node --test tooling/tests/impact-plan.test.mjs tooling/tests/impact-executor.test.mjs tooling/tests/impact-tiers.test.mjs
-✔ framework build execution includes lint and foundation prerequisites without marking them as selected evidence (1.490166ms)
-✔ duplicate prerequisites execute once (0.272275ms)
-✔ validation plans become inspectable execution plans (0.216489ms)
-✔ unknown validation scopes fail closed (0.427335ms)
-✔ React Button changes select React Button evidence without unrelated framework Button evidence (1.786282ms)
-✔ shared Button CSS fans out through every implemented Button port (0.250692ms)
-✔ port-local changes remain scoped to the port plus dependent documentation (0.168001ms)
-✔ web changes fan out to every framework port and documentation (0.160682ms)
-✔ core changes fan out through the full product dependency closure (0.309907ms)
-✔ documentation changes stay documentation-scoped (0.681172ms)
-✔ impact-engine and repository foundation changes fail closed (0.367341ms)
-✔ unknown repository changes fail closed (0.256825ms)
-✔ legacy-only changes do not select product ports (0.263872ms)
-✔ classification exposes component scopes and broad infrastructure (0.3246ms)
-✔ PR framework-local changes keep sibling framework and consumer evidence skipped (2.425114ms)
-✔ documentation-local changes select docs and chromium browser evidence without package consumers (0.292019ms)
-✔ core changes fan out to all dependent ports and consumers (0.280717ms)
-✔ main uses chromium browser evidence while scheduled uses cross-browser evidence (0.32429ms)
-✔ release validation is strictly broader than main validation (0.337006ms)
+✔ framework build execution includes lint and foundation prerequisites without marking them as selected evidence (2.3105ms)
+✔ duplicate prerequisites execute once (0.583393ms)
+✔ validation plans become inspectable execution plans (0.361377ms)
+✔ unknown validation scopes fail closed (0.631924ms)
+✔ React Button changes select React Button evidence without unrelated framework Button evidence (3.261723ms)
+✔ shared Button CSS fans out through every implemented Button port (0.347782ms)
+✔ port-local changes remain scoped to the port plus dependent documentation (0.318648ms)
+✔ web changes fan out to every framework port and documentation (0.301775ms)
+✔ core changes fan out through the full product dependency closure (0.771005ms)
+✔ documentation changes stay documentation-scoped (1.125239ms)
+✔ impact-engine and repository foundation changes fail closed (0.538609ms)
+✔ unknown repository changes fail closed (0.537838ms)
+✔ legacy-only changes do not select product ports (0.649457ms)
+✔ classification exposes component scopes and broad infrastructure (0.380513ms)
+✔ PR framework-local changes keep sibling framework and consumer evidence skipped (5.350206ms)
+✔ documentation-local changes select docs and chromium browser evidence without package consumers (0.365475ms)
+✔ core changes fan out to all dependent ports and consumers (0.547095ms)
+✔ main uses chromium browser evidence while scheduled uses cross-browser evidence (0.451226ms)
+✔ release validation is strictly broader than main validation (0.518821ms)
 ℹ tests 19
 ℹ suites 0
 ℹ pass 19
@@ -621,7 +622,7 @@ legacy isolation: ok
 ℹ cancelled 0
 ℹ skipped 0
 ℹ todo 0
-ℹ duration_ms 67.317534
+ℹ duration_ms 108.075972
 
 [validation:foundation-readiness] node tooling/verify/foundation-readiness.mjs
 foundation readiness: ok
@@ -681,19 +682,111 @@ foundation readiness: ok
 
 
 [validation:compatibility] node tooling/verify/compatibility.mjs
-file:///home/runner/work/vyrnforge-ui/vyrnforge-ui/tooling/verify/compatibility.mjs:20
-    throw new Error(`${framework} must have a selected implementation baseline without being represented as shipped`);
+compatibility metadata: ok
+
+[validation:package-contracts] node tooling/verify/package-contracts.mjs
+package contracts: ok
+
+[validation:docs-source] node tooling/verify/documentation-structure.mjs
+documentation source structure: ok
+
+[validation:build-core] npm run build:core
+
+> vyrnforge@0.0.0-rebuild build:core
+> npm run build --workspace @vyrnforge/core
+
+
+> @vyrnforge/core@0.0.0-rebuild build
+> tsc -p tsconfig.json
+
+
+[validation:build-web] npm run build:web
+
+> vyrnforge@0.0.0-rebuild build:web
+> npm run build --workspace @vyrnforge/web
+
+
+> @vyrnforge/web@0.0.0-rebuild build
+> tsc -p tsconfig.json && node ../../tooling/build/copy-web-assets.mjs
+
+
+[validation:build-react] npm run build:react
+
+> vyrnforge@0.0.0-rebuild build:react
+> npm run build --workspace @vyrnforge/react
+
+
+> @vyrnforge/react@0.0.0-rebuild build
+> tsc -p tsconfig.json
+
+
+[validation:build-angular] npm run build:angular
+
+> vyrnforge@0.0.0-rebuild build:angular
+> npm run build --workspace @vyrnforge/angular
+
+
+> @vyrnforge/angular@0.0.0-rebuild build
+> ngc -p tsconfig.json
+
+
+[validation:build-vue] npm run build:vue
+
+> vyrnforge@0.0.0-rebuild build:vue
+> npm run build --workspace @vyrnforge/vue
+
+
+> @vyrnforge/vue@0.0.0-rebuild build
+> tsc -p tsconfig.json
+
+
+[validation:build-elements] npm run build:elements
+
+> vyrnforge@0.0.0-rebuild build:elements
+> npm run build --workspace @vyrnforge/elements
+
+
+> @vyrnforge/elements@0.0.0-rebuild build
+> tsc -p tsconfig.json
+
+
+[validation:pack-core] node tooling/verify/package-smoke.mjs core
+package smoke: core ok
+
+[validation:pack-web] node tooling/verify/package-smoke.mjs web
+package smoke: web ok
+
+[validation:pack-react] node tooling/verify/package-smoke.mjs react
+package smoke: react ok
+
+[validation:pack-angular] node tooling/verify/package-smoke.mjs angular
+JIT compilation failed for directive [class VfButtonDirective]
+file:///home/runner/work/vyrnforge-ui/vyrnforge-ui/node_modules/@angular/core/fesm2022/_debug_node-chunk.mjs:1017
+    throw new Error(message);
           ^
 
-Error: react must have a selected implementation baseline without being represented as shipped
-    at file:///home/runner/work/vyrnforge-ui/vyrnforge-ui/tooling/verify/compatibility.mjs:20:11
+Error: The directive 'VfButtonDirective' needs to be compiled using the JIT compiler, but '@angular/compiler' is not available.
+
+The directive is part of a library that has been partially compiled.
+However, the Angular Linker has not processed the library such that JIT compilation is used as fallback.
+
+Ideally, the library is processed using the Angular Linker to become fully AOT compiled.
+Alternatively, the JIT compiler should be loaded by bootstrapping using '@angular/platform-browser-dynamic' or '@angular/platform-server',
+or manually provide the compiler with 'import "@angular/compiler";' before bootstrapping.
+    at getCompilerFacade (file:///home/runner/work/vyrnforge-ui/vyrnforge-ui/node_modules/@angular/core/fesm2022/_debug_node-chunk.mjs:1017:11)
+    at Module.ɵɵngDeclareFactory (file:///home/runner/work/vyrnforge-ui/vyrnforge-ui/node_modules/@angular/core/fesm2022/core.mjs:3093:20)
+    at <static_initializer> (file:///home/runner/work/vyrnforge-ui/vyrnforge-ui/packages/angular/dist/button.js:10:22)
+    at file:///home/runner/work/vyrnforge-ui/vyrnforge-ui/packages/angular/dist/button.js:1:1
+    at ModuleJob.run (node:internal/modules/esm/module_job:439:25)
+    at async node:internal/modules/esm/loader:643:26
+    at async file:///home/runner/work/vyrnforge-ui/vyrnforge-ui/tooling/verify/package-smoke.mjs:15:3
 
 Node.js v24.18.0
 node:internal/errors:985
   const err = new Error(message);
               ^
 
-Error: Command failed: node tooling/verify/compatibility.mjs
+Error: Command failed: node tooling/verify/package-smoke.mjs angular
     at genericNodeError (node:internal/errors:985:15)
     at wrappedFn (node:internal/errors:539:14)
     at checkExecSyncError (node:child_process:925:11)
@@ -706,7 +799,7 @@ Error: Command failed: node tooling/verify/compatibility.mjs
   status: 1,
   signal: null,
   output: [ null, null, null ],
-  pid: 2582,
+  pid: 3025,
   stdout: null,
   stderr: null
 }
