@@ -6,7 +6,7 @@ test('component subpath changes suppress the aggregate package owner', () => {
   const plan = createPlan(['packages/react/src/components/button/index.ts']);
   assert.deepEqual(plan.directNodes, ['component:button:react']);
   assert.equal(plan.broadened, false);
-  for (const scope of ['build-react', 'pack-react', 'consumer-react', 'component:button:react:types', 'component:button:react:ssr', 'component:button:react:browser']) assert.ok(plan.validationScopes.includes(scope), scope);
+  for (const scope of ['pack-react', 'consumer-react', 'component:button:react:types', 'component:button:react:ssr', 'component:button:react:browser']) assert.ok(plan.validationScopes.includes(scope), scope);
   assert.ok(plan.affectedNodes.includes('component:button:documentation'));
   assert.ok(!plan.validationScopes.includes('component:button:angular:ssr'));
 });
@@ -31,7 +31,7 @@ test('component docs and examples are owned by component documentation, not glob
   assert.deepEqual(plan.directNodes, ['component:button:documentation']);
   assert.equal(plan.broadened, false);
   assert.ok(plan.validationScopes.includes('docs-build'));
-  assert.ok(!plan.validationScopes.includes('build-angular'));
+  assert.ok(!plan.validationScopes.includes('pack-angular'));
 });
 
 test('package-root changes fan out to every dependent surface in that package', () => {
@@ -53,7 +53,7 @@ test('change fragments stay owner scoped while syntax validation remains global'
   const plan = createPlan(['components/button/changes/2026-10-19-scoped-product-units.md']);
   assert.deepEqual(plan.directNodes, ['component:button:changes']);
   assert.ok(plan.validationScopes.includes('change-fragments'));
-  assert.ok(!plan.validationScopes.includes('build-react'));
+  assert.ok(!plan.validationScopes.includes('pack-react'));
 });
 
 test('documentation and unknown paths keep safe behavior', () => {
@@ -68,7 +68,7 @@ test('testing discovery and repository foundation changes fail closed', () => {
 test('legacy-only changes remain isolated', () => {
   const plan = createPlan(['packages/legacy/archive/root/README.md']);
   assert.deepEqual(plan.affectedNodes, ['legacy']);
-  assert.ok(!plan.validationScopes.includes('build-react'));
+  assert.ok(!plan.validationScopes.includes('pack-react'));
 });
 
 test('classification returns the most specific owner', () => {

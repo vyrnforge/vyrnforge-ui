@@ -1,11 +1,15 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import { createPlan, createTierPlan } from '../impact/plan.mjs';
+import { createExecutionPlan } from '../impact/execute.mjs';
 
 test('PR component-local changes keep sibling framework evidence skipped', () => {
   const plan = createPlan(['packages/react/src/components/button/index.ts']);
-  for (const selected of ['build-react', 'pack-react', 'consumer-react', 'component:button:react:types', 'component:button:react:ssr', 'component:button:react:browser']) assert.ok(plan.validationScopes.includes(selected), selected);
-  for (const skipped of ['build-angular', 'consumer-angular', 'component:button:angular:ssr', 'browser-docs-cross']) assert.equal(plan.validationScopes.includes(skipped), false, skipped);
+  for (const selected of ['pack-react', 'consumer-react', 'component:button:react:types', 'component:button:react:ssr', 'component:button:react:browser']) assert.ok(plan.validationScopes.includes(selected), selected);
+  for (const skipped of ['pack-angular', 'consumer-angular', 'component:button:angular:ssr', 'browser-docs-cross']) assert.equal(plan.validationScopes.includes(skipped), false, skipped);
+  const execution = createExecutionPlan(plan);
+  assert.ok(execution.some((entry) => entry.scope === 'build-react'));
+  assert.equal(execution.some((entry) => entry.scope === 'build-angular'), false);
 });
 
 test('documentation-local changes select docs without package consumers', () => {
