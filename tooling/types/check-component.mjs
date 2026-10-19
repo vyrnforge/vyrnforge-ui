@@ -1,14 +1,14 @@
 import { execFileSync } from 'node:child_process';
-import { mkdirSync, readFileSync, writeFileSync } from 'node:fs';
+import { mkdirSync, writeFileSync } from 'node:fs';
 import path from 'node:path';
+import { discoverComponents } from '../testing/discover-components.mjs';
 
 const [componentId] = process.argv.slice(2);
 if (!componentId) throw new Error('Usage: node tooling/types/check-component.mjs <component>');
 
-const registry = JSON.parse(readFileSync(new URL('../../testing/components/registry.json', import.meta.url), 'utf8'));
-const component = registry.components.find((entry) => entry.component === componentId);
-if (!component) throw new Error(`Unknown component: ${componentId}`);
-if (!component.types) throw new Error(`No type contract registered for ${componentId}`);
+const component = discoverComponents().components.find((entry) => entry.component === componentId);
+if (!component) throw new Error(`Unknown discovered component: ${componentId}`);
+if (!component.types) throw new Error(`No conventional type contract expected for ${componentId}`);
 
 const outputDir = path.resolve('test-results/types');
 mkdirSync(outputDir, { recursive: true });
