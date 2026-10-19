@@ -15,7 +15,7 @@
       "default": "./dist/index.js"
     },
     "./styles.css": "./dist/styles.css",
-    "./styles/button.css": "./dist/styles/button.css"
+    "./styles/button.css": "./dist/components/button/button.css"
   },
   "dependencies": {
     "@vyrnforge/core": "0.0.0-rebuild"

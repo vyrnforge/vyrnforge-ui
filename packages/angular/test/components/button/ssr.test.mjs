@@ -4,7 +4,7 @@ import '@angular/compiler';
 import { Component, provideZonelessChangeDetection } from '@angular/core';
 import { bootstrapApplication } from '@angular/platform-browser';
 import { renderApplication } from '@angular/platform-server';
-import { VfButtonDirective } from '../../packages/angular/dist/button.js';
+import { VfButtonDirective } from '@vyrnforge/angular/button';
 
 class AppComponent {}
 Component({
