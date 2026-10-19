@@ -1,11 +1,9 @@
 import { mkdir, readFile, writeFile } from 'node:fs/promises';
 import path from 'node:path';
 import {
-  categoryForRun,
   planMergedPullRequestHistoryDeletions,
   planMergedPullRequestRunDeletions,
-  planRunDeletions,
-  pullRequestNumbersForRun
+  planRunDeletions
 } from './retention.mjs';
 
 const policy = JSON.parse(await readFile('tooling/actions/retention-policy.json', 'utf8'));
@@ -58,23 +56,19 @@ async function requestedMergedPullRequest() {
   return pullRequest;
 }
 
-async function mergedPullRequestsForRuns(runs) {
+async function listMergedPullRequests() {
   const merged = new Map();
   const payload = await readEventPayload();
   if ((eventName === 'pull_request' || eventName === 'pull_request_target') && payload.pull_request?.merged) {
     merged.set(Number(payload.pull_request.number), payload.pull_request);
   }
 
-  const candidateNumbers = new Set();
-  for (const run of runs) {
-    if (categoryForRun(run) !== 'pr') continue;
-    for (const number of pullRequestNumbersForRun(run)) candidateNumbers.add(number);
-  }
-
-  for (const number of candidateNumbers) {
-    if (merged.has(number)) continue;
-    const pullRequest = await githubJson(`/pulls/${number}`);
-    if (pullRequest.merged_at) merged.set(number, pullRequest);
+  for (let page = 1; page <= 20; page += 1) {
+    const pullRequests = await githubJson(`/pulls?state=closed&sort=updated&direction=desc&per_page=100&page=${page}`);
+    for (const pullRequest of pullRequests) {
+      if (pullRequest.merged_at) merged.set(Number(pullRequest.number), pullRequest);
+    }
+    if (pullRequests.length < 100) break;
   }
 
   return [...merged.values()];
@@ -143,7 +137,7 @@ try {
     };
     report.plan = planMergedPullRequestRunDeletions(runs, policy, requested, { currentRunId });
   } else {
-    const mergedPullRequests = await mergedPullRequestsForRuns(runs);
+    const mergedPullRequests = await listMergedPullRequests();
     const mergedPlan = planMergedPullRequestHistoryDeletions(runs, policy, mergedPullRequests, { currentRunId });
 
     if (eventName === 'schedule' || eventName === 'workflow_dispatch') {
