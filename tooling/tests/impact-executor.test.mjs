@@ -17,7 +17,7 @@ test('duplicate prerequisites execute once', () => {
   assert.equal(execution.filter((item) => item.scope === 'build-web').length, 1);
 });
 
-test('component scopes resolve from registry metadata instead of hard-coded CI definitions', () => {
+test('component scopes resolve from discovered product surfaces instead of hard-coded CI definitions', () => {
   const execution = expandScopes(['component:button:react:ssr', 'component:button:react:browser']);
   const ssr = execution.find((item) => item.scope === 'component:button:react:ssr');
   const browser = execution.find((item) => item.scope === 'component:button:react:browser');
