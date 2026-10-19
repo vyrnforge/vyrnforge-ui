@@ -597,25 +597,25 @@ workflow contracts: ok
 legacy isolation: ok
 
 [validation:impact-engine] node --test tooling/tests/impact-plan.test.mjs tooling/tests/impact-executor.test.mjs tooling/tests/impact-tiers.test.mjs
-✔ framework build execution includes lint and foundation prerequisites without marking them as selected evidence (2.316946ms)
-✔ duplicate prerequisites execute once (0.397743ms)
-✔ validation plans become inspectable execution plans (0.291124ms)
-✔ unknown validation scopes fail closed (0.488122ms)
-✔ React Button changes select React Button evidence without unrelated framework Button evidence (2.232629ms)
-✔ shared Button CSS fans out through every implemented Button port (0.306583ms)
-✔ port-local changes remain scoped to the port plus dependent documentation (0.26233ms)
-✔ web changes fan out to every framework port and documentation (0.227174ms)
-✔ core changes fan out through the full product dependency closure (0.459778ms)
-✔ documentation changes stay documentation-scoped (0.761923ms)
-✔ impact-engine and repository foundation changes fail closed (0.488512ms)
-✔ unknown repository changes fail closed (0.292847ms)
-✔ legacy-only changes do not select product ports (0.336809ms)
-✔ classification exposes component scopes and broad infrastructure (0.535249ms)
-✔ PR framework-local changes keep sibling framework and consumer evidence skipped (5.496802ms)
-✔ documentation-local changes select docs and chromium browser evidence without package consumers (0.23588ms)
-✔ core changes fan out to all dependent ports and consumers (0.33739ms)
-✔ main uses chromium browser evidence while scheduled uses cross-browser evidence (0.345215ms)
-✔ release validation is strictly broader than main validation (0.263983ms)
+✔ framework build execution includes lint and foundation prerequisites without marking them as selected evidence (2.5862ms)
+✔ duplicate prerequisites execute once (0.413865ms)
+✔ validation plans become inspectable execution plans (0.530633ms)
+✔ unknown validation scopes fail closed (0.587369ms)
+✔ React Button changes select React Button evidence without unrelated framework Button evidence (3.845927ms)
+✔ shared Button CSS fans out through every implemented Button port (0.392434ms)
+✔ port-local changes remain scoped to the port plus dependent documentation (0.323516ms)
+✔ web changes fan out to every framework port and documentation (0.402503ms)
+✔ core changes fan out through the full product dependency closure (0.590756ms)
+✔ documentation changes stay documentation-scoped (1.231053ms)
+✔ impact-engine and repository foundation changes fail closed (0.702866ms)
+✔ unknown repository changes fail closed (0.584343ms)
+✔ legacy-only changes do not select product ports (0.837597ms)
+✔ classification exposes component scopes and broad infrastructure (0.402974ms)
+✔ PR framework-local changes keep sibling framework and consumer evidence skipped (3.458813ms)
+✔ documentation-local changes select docs and chromium browser evidence without package consumers (0.336681ms)
+✔ core changes fan out to all dependent ports and consumers (0.407743ms)
+✔ main uses chromium browser evidence while scheduled uses cross-browser evidence (0.411761ms)
+✔ release validation is strictly broader than main validation (0.455442ms)
 ℹ tests 19
 ℹ suites 0
 ℹ pass 19
@@ -623,7 +623,7 @@ legacy isolation: ok
 ℹ cancelled 0
 ℹ skipped 0
 ℹ todo 0
-ℹ duration_ms 92.970368
+ℹ duration_ms 121.681359
 
 [validation:foundation-readiness] node tooling/verify/foundation-readiness.mjs
 foundation readiness: ok
@@ -771,19 +771,19 @@ package smoke: elements ok
 
 [validation:consumer-core] node tooling/verify/consumer-packages.mjs core
 
-added 1 package in 236ms
+added 1 package in 238ms
 consumer imports: ok
 packed consumer verification: core ok
 
 [validation:consumer-web] node tooling/verify/consumer-packages.mjs web
 
-added 2 packages in 262ms
+added 2 packages in 272ms
 consumer imports: ok
 packed consumer verification: web ok
 
 [validation:consumer-react] node tooling/verify/consumer-packages.mjs react
 
-added 4 packages in 647ms
+added 4 packages in 821ms
 consumer imports: ok
 packed consumer verification: react ok
 
@@ -801,12 +801,12 @@ packed consumer verification: vue ok
 
 [validation:consumer-elements] node tooling/verify/consumer-packages.mjs elements
 
-added 3 packages in 366ms
+added 3 packages in 452ms
 consumer imports: ok
 packed consumer verification: elements ok
 
 [validation:button-react-ssr] node --test tooling/tests/button-react.test.mjs
-✔ React Button server output is native-complete and loading remains enabled (6.433208ms)
+✔ React Button server output is native-complete and loading remains enabled (6.372857ms)
 ℹ tests 1
 ℹ suites 0
 ℹ pass 1
@@ -814,11 +814,11 @@ packed consumer verification: elements ok
 ℹ cancelled 0
 ℹ skipped 0
 ℹ todo 0
-ℹ duration_ms 84.237222
+ℹ duration_ms 85.054714
 
 [validation:button-angular-ssr] node --test tooling/tests/button-angular.test.mjs
 Angular is running in development mode.
-✔ Angular Button server output keeps a native form-participating button (47.926363ms)
+✔ Angular Button server output keeps a native form-participating button (50.158217ms)
 ℹ tests 1
 ℹ suites 0
 ℹ pass 1
@@ -826,10 +826,10 @@ Angular is running in development mode.
 ℹ cancelled 0
 ℹ skipped 0
 ℹ todo 0
-ℹ duration_ms 370.556052
+ℹ duration_ms 369.068811
 
 [validation:button-vue-ssr] node --test tooling/tests/button-vue.test.mjs
-✔ Vue Button server output is native-complete and preserves native attributes (6.318217ms)
+✔ Vue Button server output is native-complete and preserves native attributes (6.447129ms)
 ℹ tests 1
 ℹ suites 0
 ℹ pass 1
@@ -837,7 +837,7 @@ Angular is running in development mode.
 ℹ cancelled 0
 ℹ skipped 0
 ℹ todo 0
-ℹ duration_ms 115.510915
+ℹ duration_ms 115.564503
 
 [validation:docs-build] npm run build:docs
 
@@ -862,9 +862,9 @@ Get:6 https://packages.microsoft.com/ubuntu/24.04/prod noble InRelease [3600 B]
 Get:3 http://azure.archive.ubuntu.com/ubuntu noble-updates InRelease [126 kB]
 Get:4 http://azure.archive.ubuntu.com/ubuntu noble-backports InRelease [126 kB]
 Get:5 http://azure.archive.ubuntu.com/ubuntu noble-security InRelease [126 kB]
-Get:7 https://packages.microsoft.com/ubuntu/24.04/prod noble/main armhf Packages [12.4 kB]
-Get:8 https://packages.microsoft.com/ubuntu/24.04/prod noble/main amd64 Packages [618 kB]
-Get:9 https://packages.microsoft.com/ubuntu/24.04/prod noble/main arm64 Packages [557 kB]
+Get:7 https://packages.microsoft.com/ubuntu/24.04/prod noble/main amd64 Packages [618 kB]
+Get:8 https://packages.microsoft.com/ubuntu/24.04/prod noble/main arm64 Packages [557 kB]
+Get:9 https://packages.microsoft.com/ubuntu/24.04/prod noble/main armhf Packages [12.4 kB]
 Get:10 http://azure.archive.ubuntu.com/ubuntu noble-updates/main amd64 Packages [1397 kB]
 Get:11 http://azure.archive.ubuntu.com/ubuntu noble-updates/main Translation-en [308 kB]
 Get:12 http://azure.archive.ubuntu.com/ubuntu noble-updates/universe amd64 Packages [1704 kB]
@@ -877,7 +877,7 @@ Get:18 http://azure.archive.ubuntu.com/ubuntu noble-security/universe amd64 Pack
 Get:19 http://azure.archive.ubuntu.com/ubuntu noble-security/universe Translation-en [246 kB]
 Get:20 http://azure.archive.ubuntu.com/ubuntu noble-security/restricted amd64 Packages [1713 kB]
 Get:21 http://azure.archive.ubuntu.com/ubuntu noble-security/restricted Translation-en [392 kB]
-Fetched 12.5 MB in 1s (10.1 MB/s)
+Fetched 12.5 MB in 1s (10.0 MB/s)
 Reading package lists...
 Reading package lists...
 Building dependency tree...
@@ -953,7 +953,7 @@ Get:7 http://azure.archive.ubuntu.com/ubuntu noble/main amd64 xfonts-encodings a
 Get:8 http://azure.archive.ubuntu.com/ubuntu noble/main amd64 xfonts-utils amd64 1:7.7+6build3 [94.4 kB]
 Get:9 http://azure.archive.ubuntu.com/ubuntu noble/universe amd64 xfonts-cyrillic all 1:1.0.5+nmu1 [384 kB]
 Get:10 http://azure.archive.ubuntu.com/ubuntu noble/main amd64 xfonts-scalable all 1:1.0.3-1.3 [304 kB]
-Fetched 21.1 MB in 1s (39.6 MB/s)
+Fetched 21.1 MB in 1s (42.0 MB/s)
 Selecting previously unselected package fonts-ipafont-gothic.
 (Reading database ... (Reading database ... 5%(Reading database ... 10%(Reading database ... 15%(Reading database ... 20%(Reading database ... 25%(Reading database ... 30%(Reading database ... 35%(Reading database ... 40%(Reading database ... 45%(Reading database ... 50%(Reading database ... 55%(Reading database ... 60%(Reading database ... 65%(Reading database ... 70%(Reading database ... 75%(Reading database ... 80%(Reading database ... 85%(Reading database ... 90%(Reading database ... 95%(Reading database ... 100%(Reading database ... 203540 files and directories currently installed.)
 Preparing to unpack .../0-fonts-ipafont-gothic_00303-21ubuntu1_all.deb ...
@@ -1047,8 +1047,8 @@ Chrome Headless Shell 156.0.8078.4 (playwright chromium-headless-shell v1248) do
 
 Running 16 tests using 2 workers
 
-[1/16] [chromium] › tooling/browser/tests/docs-accessibility.spec.mjs:9:3 › docs accessibility: Button
-[2/16] [chromium] › tooling/browser/tests/docs-accessibility.spec.mjs:9:3 › docs accessibility: Getting Started
+[1/16] [chromium] › tooling/browser/tests/docs-accessibility.spec.mjs:9:3 › docs accessibility: Getting Started
+[2/16] [chromium] › tooling/browser/tests/docs-accessibility.spec.mjs:9:3 › docs accessibility: Button
 [3/16] [chromium] › tooling/browser/tests/docs-accessibility.spec.mjs:9:3 › docs accessibility: Styling
 [4/16] [chromium] › tooling/browser/tests/docs-accessibility.spec.mjs:9:3 › docs accessibility: Accessibility
 [5/16] [chromium] › tooling/browser/tests/docs-accessibility.spec.mjs:9:3 › docs accessibility: State & Behavior
@@ -1063,7 +1063,7 @@ Running 16 tests using 2 workers
 [14/16] [chromium] › tooling/browser/tests/docs-site.spec.mjs:12:1 › docs home exposes versioned accessible navigation and search
 [15/16] [chromium] › tooling/browser/tests/docs-site.spec.mjs:29:1 › framework selection exposes component-level implementation status
 [16/16] [chromium] › tooling/browser/tests/docs-site.spec.mjs:43:1 › docs remain navigable at a mobile viewport
-  16 passed (5.9s)
+  16 passed (6.8s)
 
 [validation:button-browser-web] node tooling/browser/run-button.mjs web chromium
 Installing dependencies...
@@ -1112,8 +1112,179 @@ fonts-wqy-zenhei is already the newest version (0.9.45-8).
 fonts-tlwg-loma-otf is already the newest version (1:0.7.3-1).
 fonts-freefont-ttf is already the newest version (20211204+svn4273-2).
 0 upgraded, 0 newly installed, 0 to remove and 44 not upgraded.
-Error: Timed out waiting 15000ms from config.webServer.
 
+Running 4 tests using 1 worker
+
+[1/4] [chromium] › tooling/browser/button-tests/button.spec.mjs:9:3 › Button real-browser contract › native activation, disabled, loading, forms, focus, accessibility, direction, and visual states
+  1) [chromium] › tooling/browser/button-tests/button.spec.mjs:9:3 › Button real-browser contract › native activation, disabled, loading, forms, focus, accessibility, direction, and visual states 
+
+    Error: expect(received).toEqual(expected) // deep equality
+
+    - Expected  -   1
+    + Received  + 130
+
+    - Array []
+    + Array [
+    +   Object {
+    +     "description": "Ensure every form element has a label",
+    +     "help": "Form elements must have labels",
+    +     "helpUrl": "https://dequeuniversity.com/rules/axe/4.14/label?application=axeAPI",
+    +     "id": "label",
+    +     "impact": "critical",
+    +     "nodes": Array [
+    +       Object {
+    +         "all": Array [],
+    +         "any": Array [
+    +           Object {
+    +             "data": null,
+    +             "id": "implicit-label",
+    +             "impact": "critical",
+    +             "message": "Element does not have an implicit (wrapped) <label>",
+    +             "relatedNodes": Array [],
+    +           },
+    +           Object {
+    +             "data": null,
+    +             "id": "explicit-label",
+    +             "impact": "critical",
+    +             "message": "Element does not have an explicit <label>",
+    +             "relatedNodes": Array [],
+    +           },
+    +           Object {
+    +             "data": null,
+    +             "id": "aria-label",
+    +             "impact": "critical",
+    +             "message": "aria-label attribute does not exist or is empty",
+    +             "relatedNodes": Array [],
+    +           },
+    +           Object {
+    +             "data": null,
+    +             "id": "aria-labelledby",
+    +             "impact": "critical",
+    +             "message": "aria-labelledby attribute does not exist, references elements that do not exist or references elements that are empty",
+    +             "relatedNodes": Array [],
+    +           },
+    +           Object {
+    +             "data": Object {
+    +               "messageKey": "noAttr",
+    +             },
+    +             "id": "non-empty-title",
+    +             "impact": "critical",
+    +             "message": "Element has no title attribute",
+    +             "relatedNodes": Array [],
+    +           },
+    +           Object {
+    +             "data": Object {
+    +               "messageKey": "noAttr",
+    +             },
+    +             "id": "non-empty-placeholder",
+    +             "impact": "critical",
+    +             "message": "Element has no placeholder attribute",
+    +             "relatedNodes": Array [],
+    +           },
+    +           Object {
+    +             "data": null,
+    +             "id": "presentational-role",
+    +             "impact": "critical",
+    +             "message": "Element's default semantics were not overridden with role=\"none\" or role=\"presentation\"",
+    +             "relatedNodes": Array [],
+    +           },
+    +         ],
+    +         "failureSummary": "Fix any of the following:
+    +   Element does not have an implicit (wrapped) <label>
+    +   Element does not have an explicit <label>
+    +   aria-label attribute does not exist or is empty
+    +   aria-labelledby attribute does not exist, references elements that do not exist or references elements that are empty
+    +   Element has no title attribute
+    +   Element has no placeholder attribute
+    +   Element's default semantics were not overridden with role=\"none\" or role=\"presentation\"",
+    +         "html": "<input name=\"field\" value=\"changed\">",
+    +         "impact": "critical",
+    +         "none": Array [],
+    +         "target": Array [
+    +           "input",
+    +         ],
+    +       },
+    +     ],
+    +     "tags": Array [
+    +       "cat.forms",
+    +       "wcag2a",
+    +       "wcag412",
+    +       "section508",
+    +       "section508.22.n",
+    +       "TTv5",
+    +       "TT5.c",
+    +       "EN-301-549",
+    +       "EN-9.4.1.2",
+    +       "ACT",
+    +       "RGAAv4",
+    +       "RGAA-11.1.1",
+    +     ],
+    +   },
+    +   Object {
+    +     "description": "Ensure that the page, or at least one of its frames contains a level-one heading",
+    +     "help": "Page should contain a level-one heading",
+    +     "helpUrl": "https://dequeuniversity.com/rules/axe/4.14/page-has-heading-one?application=axeAPI",
+    +     "id": "page-has-heading-one",
+    +     "impact": "moderate",
+    +     "nodes": Array [
+    +       Object {
+    +         "all": Array [
+    +           Object {
+    +             "data": null,
+    +             "id": "page-has-heading-one",
+    +             "impact": "moderate",
+    +             "message": "Page must have a level-one heading",
+    +             "relatedNodes": Array [],
+    +           },
+    +         ],
+    +         "any": Array [],
+    +         "failureSummary": "Fix all of the following:
+    +   Page must have a level-one heading",
+    +         "html": "<html lang=\"en\" dir=\"rtl\">",
+    +         "impact": "moderate",
+    +         "none": Array [],
+    +         "target": Array [
+    +           "html",
+    +         ],
+    +       },
+    +     ],
+    +     "tags": Array [
+    +       "cat.semantics",
+    +       "best-practice",
+    +     ],
+    +   },
+    + ]
+
+      44 |     await page.addScriptTag({ content: axeCore.source });
+      45 |     const results = await page.evaluate(async () => globalThis.axe.run(document));
+    > 46 |     expect(results.violations).toEqual([]);
+         |                                ^
+      47 |
+      48 |     if (browserName === 'chromium') await expect(page.locator('[data-visual-matrix]')).toHaveScreenshot('button-visual-matrix.png');
+      49 |   });
+        at /home/runner/work/vyrnforge-ui/vyrnforge-ui/tooling/browser/button-tests/button.spec.mjs:46:32
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    test-results/button-playwright-results/button-Button-real-browser-7501e-direction-and-visual-states-chromium/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: test-results/button-playwright-results/button-Button-real-browser-7501e-direction-and-visual-states-chromium/error-context.md
+
+    attachment #3: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results/button-playwright-results/button-Button-real-browser-7501e-direction-and-visual-states-chromium/trace.zip
+    Usage:
+
+        npx playwright show-trace test-results/button-playwright-results/button-Button-real-browser-7501e-direction-and-visual-states-chromium/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+
+[2/4] [chromium] › tooling/browser/button-tests/button.spec.mjs:54:5 › Button framework hydration › react hydrates native-complete Button markup and retains activation
+[3/4] [chromium] › tooling/browser/button-tests/button.spec.mjs:54:5 › Button framework hydration › angular hydrates native-complete Button markup and retains activation
+[4/4] [chromium] › tooling/browser/button-tests/button.spec.mjs:54:5 › Button framework hydration › vue hydrates native-complete Button markup and retains activation
+  1 failed
+    [chromium] › tooling/browser/button-tests/button.spec.mjs:9:3 › Button real-browser contract › native activation, disabled, loading, forms, focus, accessibility, direction, and visual states 
+  3 skipped
 node:internal/errors:985
   const err = new Error(message);
               ^
@@ -1130,7 +1301,7 @@ Error: Command failed: npx playwright test --config tooling/browser/button.confi
   status: 1,
   signal: null,
   output: [ null, null, null ],
-  pid: 4918,
+  pid: 4909,
   stdout: null,
   stderr: null
 }
@@ -1153,7 +1324,7 @@ Error: Command failed: node tooling/browser/run-button.mjs web chromium
   status: 1,
   signal: null,
   output: [ null, null, null ],
-  pid: 4567,
+  pid: 4556,
   stdout: null,
   stderr: null
 }
