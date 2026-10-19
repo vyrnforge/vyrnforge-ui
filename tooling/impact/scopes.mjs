@@ -3,6 +3,7 @@ const npm = process.platform === 'win32' ? 'npm.cmd' : 'npm';
 export const scopeDefinitions = {
   structure: { command: ['node', 'tooling/verify/workspace-structure.mjs'], requires: [] },
   'testing-structure': { command: ['node', 'tooling/verify/testing-structure.mjs'], requires: [] },
+  'repository-guidance': { command: ['node', 'tooling/verify/repository-guidance.mjs'], requires: [] },
   boundaries: { command: ['node', 'tooling/verify/package-boundaries.mjs'], requires: [] },
   'architecture-rules': { command: ['node', 'tooling/verify/architecture-rules.mjs'], requires: [] },
   'workflow-contracts': { command: ['node', 'tooling/verify/workflows.mjs'], requires: [] },

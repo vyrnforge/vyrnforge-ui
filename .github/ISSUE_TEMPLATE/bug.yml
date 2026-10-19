@@ -1,73 +1,60 @@
 name: Bug report
-description: Report a reproducible VyrnForge UI defect.
+description: Report a reproducible defect in the rebuilt VyrnForge foundation, packages, documentation, or tooling.
 title: "[Bug]: "
 body:
   - type: markdown
     attributes:
       value: |
-        Thanks for helping improve VyrnForge UI. Do not report security vulnerabilities here; use SECURITY.md and private reporting instead. Report the observed VyrnForge behavior rather than assuming one framework package owns the underlying defect.
-  - type: input
-    id: affected-area
+        VyrnForge is in a clean-slate rebuild. Report observed behavior without assuming a framework owns a shared defect. Do not report security vulnerabilities here; follow SECURITY.md instead.
+  - type: dropdown
+    id: area
     attributes:
-      label: Affected capability or area
-      description: Name the component, behavior, token, package, advanced module, tooling area, or documentation surface involved.
-      placeholder: "Dialog focus restoration or @vyrnforge/ui-angular Dialog"
+      label: Affected area
+      options:
+        - Core
+        - Web / styling
+        - React
+        - Angular
+        - Vue
+        - Elements
+        - Documentation
+        - Testing / CI / tooling
+        - Legacy quarantine
     validations:
       required: true
-  - type: checkboxes
-    id: affected-surfaces
-    attributes:
-      label: Observed surfaces
-      description: Select every surface where you reproduced the defect. Leave unchecked surfaces as unknown rather than assuming parity.
-      options:
-        - label: Shared/Core foundation
-        - label: Native HTML / Custom Elements
-        - label: React
-        - label: Angular
-        - label: Vue
-        - label: Optional advanced module
-        - label: Reference / docs / tooling
   - type: input
-    id: version
+    id: commit
     attributes:
-      label: Package version or commit
-      placeholder: "0.2.0-beta.2 or commit SHA"
+      label: Version or commit
+      description: During bootstrap, prefer the commit SHA or branch where you reproduced the issue.
     validations:
       required: true
   - type: textarea
     id: reproduction
     attributes:
-      label: Reproduction steps
-      description: Provide the smallest steps or example that reproduces the issue.
-      placeholder: "1. Render...\n2. Click...\n3. Observe..."
+      label: Reproduction
+      description: Provide the smallest reliable reproduction steps or repository path.
     validations:
       required: true
   - type: textarea
     id: expected
     attributes:
-      label: Expected behavior
+      label: Expected observable behavior
     validations:
       required: true
   - type: textarea
     id: actual
     attributes:
-      label: Actual behavior
+      label: Actual observable behavior
     validations:
       required: true
-  - type: input
+  - type: textarea
     id: environment
     attributes:
-      label: Browser, framework, and environment
-      placeholder: "Chrome, Windows 11, Angular 21"
-    validations:
-      required: true
+      label: Relevant environment
+      description: Include browser, runtime, framework, server, operating system, or assistive technology only when relevant.
   - type: textarea
-    id: evidence
+    id: accessibility
     attributes:
-      label: Screenshots or reproduction links
-      description: Add screenshots, repository links, or a minimal reproduction when useful. Do not include secrets or customer data.
-  - type: textarea
-    id: accessibility-impact
-    attributes:
-      label: Accessibility impact
-      description: Describe keyboard, focus, screen-reader, semantics, contrast, or motion impact if relevant.
+      label: Accessibility or interaction impact
+      description: Include keyboard, focus, semantics, assistive technology, forced-colors, reduced-motion, directionality, or form impact when applicable.

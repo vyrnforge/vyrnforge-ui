@@ -1,0 +1,51 @@
+name: Component or foundation capability
+description: Propose a reusable VyrnForge component, primitive, behavior, styling capability, token, or tooling foundation.
+title: "[Capability]: "
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Proposals are evaluated against canonical VyrnForge architecture first. Existing abstractions are not preserved merely for compatibility with the quarantined implementation.
+  - type: input
+    id: capability
+    attributes:
+      label: Capability
+      placeholder: "Button, Tabs, focus navigation algorithm, semantic token, docs generator..."
+    validations:
+      required: true
+  - type: textarea
+    id: problem
+    attributes:
+      label: Reusable problem
+      description: Describe the reusable product/library problem rather than an application-specific feature.
+    validations:
+      required: true
+  - type: textarea
+    id: reuse
+    attributes:
+      label: Reuse assessment
+      description: What approved shared foundation already exists, and why is extension or a new capability appropriate?
+    validations:
+      required: true
+  - type: checkboxes
+    id: layers
+    attributes:
+      label: Potentially affected layers
+      options:
+        - label: Semantic/component contract
+        - label: Core renderer-neutral logic
+        - label: Web CSS/tokens/browser foundation
+        - label: React port
+        - label: Angular port
+        - label: Vue port
+        - label: Elements port
+        - label: Accessibility/interaction
+        - label: Forms
+        - label: SSR/hydration/activation
+        - label: Documentation
+        - label: Testing/consumer/package validation
+  - type: textarea
+    id: evidence
+    attributes:
+      label: Acceptance evidence
+      description: Describe observable outcomes and the validation layers likely required. Do not prescribe a universal runtime merely to share implementation.
