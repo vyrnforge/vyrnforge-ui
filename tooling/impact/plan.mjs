@@ -1,9 +1,10 @@
 import { execFileSync } from 'node:child_process';
 import { readFileSync } from 'node:fs';
 import { fileURLToPath } from 'node:url';
+import { discoverComponents } from '../testing/discover-components.mjs';
 
 const impact = JSON.parse(readFileSync(new URL('../../testing/impact.json', import.meta.url), 'utf8'));
-const registry = JSON.parse(readFileSync(new URL('../../testing/components/registry.json', import.meta.url), 'utf8'));
+const registry = { components: discoverComponents().components };
 
 function matchesPath(path, pattern) {
   if (pattern.endsWith('/')) return path.startsWith(pattern);
@@ -91,7 +92,6 @@ function reverseClosure(initialNodes) {
 function dynamicTierScopes(mode) {
   const scopes = [];
   for (const component of registry.components) {
-    if (component.status !== 'implemented') continue;
     if (component.types) scopes.push(componentScope(component.component, 'types'));
     for (const [port, config] of Object.entries(component.ports)) {
       if (config.ssr) scopes.push(componentScope(component.component, `${port}:ssr`));
