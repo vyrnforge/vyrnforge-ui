@@ -7,8 +7,10 @@ test('component subpath changes suppress the aggregate package owner', () => {
   assert.deepEqual(plan.directNodes, ['component:button:react']);
   assert.equal(plan.broadened, false);
   for (const scope of ['pack-react', 'consumer-react', 'component:button:react:types', 'component:button:react:ssr', 'component:button:react:browser']) assert.ok(plan.validationScopes.includes(scope), scope);
-  assert.ok(plan.affectedNodes.includes('component:button:documentation'));
+  assert.ok(!plan.affectedNodes.includes('component:button:conformance'));
+  assert.ok(!plan.affectedNodes.includes('component:button:documentation'));
   assert.ok(!plan.validationScopes.includes('component:button:angular:ssr'));
+  assert.ok(!plan.validationScopes.includes('docs-build'));
 });
 
 test('package-local evidence remains scoped to its component port', () => {
@@ -23,7 +25,7 @@ test('shared Web component changes fan out through every discovered port', () =>
   const plan = createPlan(['packages/web/src/components/button/button.css']);
   assert.deepEqual(plan.directNodes, ['component:button:web']);
   for (const node of ['component:button:web', 'component:button:react', 'component:button:angular', 'component:button:vue', 'component:button:conformance', 'component:button:documentation']) assert.ok(plan.affectedNodes.includes(node), node);
-  for (const scope of ['component:button:web:browser', 'component:button:react:ssr', 'component:button:angular:ssr', 'component:button:vue:ssr']) assert.ok(plan.validationScopes.includes(scope), scope);
+  for (const scope of ['component:button:web:browser', 'component:button:react:ssr', 'component:button:angular:ssr', 'component:button:vue:ssr', 'docs-build']) assert.ok(plan.validationScopes.includes(scope), scope);
 });
 
 test('component docs and examples are owned by component documentation, not global package aggregates', () => {
@@ -38,8 +40,9 @@ test('package-root changes fan out to every dependent surface in that package', 
   const plan = createPlan(['packages/react/src/index.ts']);
   assert.deepEqual(plan.directNodes, ['react']);
   assert.ok(plan.affectedNodes.includes('component:button:react'));
-  assert.ok(plan.affectedNodes.includes('component:button:documentation'));
+  assert.ok(plan.affectedNodes.includes('documentation'));
   assert.ok(plan.validationScopes.includes('consumer-react'));
+  assert.ok(plan.validationScopes.includes('docs-build'));
 });
 
 test('web and core aggregate changes retain broad dependency closure', () => {

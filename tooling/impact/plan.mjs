@@ -11,12 +11,12 @@ function compileTargets() {
   const targets = structuredClone(impact.targets); for (const { name } of discovery.packages) if (targets[name]) targets[name].aggregate = true; const componentDocumentationTargets = [];
   for (const unit of discovery.ownedUnits) targets[unit.node] = { paths: [unit.sourcePath, unit.testPath, unit.metadataPath], dependsOn: [unit.package, ...unit.dependencies], evidence: [`${unit.node}:test`, ...packageEvidence(unit.package)] };
   for (const component of discovery.components) {
-    const portNodes = []; const webNode = component.ports.web ? `component:${component.component}:web` : null;
+    const webNode = component.ports.web ? `component:${component.component}:web` : null;
     for (const [port, config] of Object.entries(component.ports)) {
       const node = `component:${component.component}:${port}`; const evidence = [...packageEvidence(port)]; if (config.types) evidence.push(componentScope(component.component, `${port}:types`)); if (config.ssr) evidence.push(componentScope(component.component, `${port}:ssr`)); if (config.browser) evidence.push(componentScope(component.component, `${port}:browser`));
-      targets[node] = { paths: config.paths, dependsOn: [...new Set([port, ...config.dependencies, ...(port !== 'web' && webNode ? [webNode] : [])])], evidence }; portNodes.push(node);
+      targets[node] = { paths: config.paths, dependsOn: [...new Set([port, ...config.dependencies, ...(port !== 'web' && webNode ? [webNode] : [])])], evidence };
     }
-    const conformanceNode = `component:${component.component}:conformance`; const conformanceEvidence = []; if (component.conformanceTypes) conformanceEvidence.push(componentScope(component.component, 'conformance:types')); for (const [port, config] of Object.entries(component.ports)) if (config.browser) conformanceEvidence.push(componentScope(component.component, `${port}:browser`)); targets[conformanceNode] = { paths: [...(component.conformanceTypes ? [component.conformanceTypes] : []), ...component.browser.paths], dependsOn: portNodes, evidence: conformanceEvidence };
+    const conformanceNode = `component:${component.component}:conformance`; const conformanceEvidence = []; if (component.conformanceTypes) conformanceEvidence.push(componentScope(component.component, 'conformance:types')); for (const [port, config] of Object.entries(component.ports)) if (config.browser) conformanceEvidence.push(componentScope(component.component, `${port}:browser`)); targets[conformanceNode] = { paths: [...(component.conformanceTypes ? [component.conformanceTypes] : []), ...component.browser.paths], dependsOn: webNode ? [webNode] : [], evidence: conformanceEvidence };
     const documentationNode = `component:${component.component}:documentation`; targets[documentationNode] = { paths: component.documentationPaths, dependsOn: [conformanceNode], evidence: ['lint-docs', 'docs-source', 'docs-build', 'docs-site', 'browser-docs-chromium'] }; componentDocumentationTargets.push(documentationNode);
     targets[`component:${component.component}:changes`] = { paths: [component.changesPath], dependsOn: [], evidence: ['change-fragments'] };
   }
