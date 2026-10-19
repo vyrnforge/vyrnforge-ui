@@ -1,4 +1,4 @@
-name: Button branch lockfile bootstrap
+name: Button branch bootstrap diagnostics
 
 on:
   pull_request:
@@ -21,13 +21,22 @@ jobs:
         with:
           node-version-file: .node-version
           cache: npm
-      - name: Refresh lockfile for selected framework baselines
-        run: npm install --package-lock-only --ignore-scripts --no-audit --no-fund
-      - name: Commit lockfile when changed
+      - name: Install locked toolchain
+        run: npm ci --ignore-scripts --no-audit --no-fund
+      - name: Capture targeted validation output
+        env:
+          BASE_SHA: ${{ github.event.pull_request.base.sha }}
+          HEAD_SHA: ${{ github.event.pull_request.head.sha }}
         run: |
-          if git diff --quiet -- package-lock.json; then exit 0; fi
+          set +e
+          node tooling/impact/execute.mjs --mode pr --base "$BASE_SHA" --head "$HEAD_SHA" > validation-debug.log 2>&1
+          status=$?
+          echo "exit_status=$status" >> validation-debug.log
+          exit 0
+      - name: Commit diagnostic log
+        run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add package-lock.json
-          git commit -m "build(button): refresh framework lockfile"
+          git add validation-debug.log
+          git commit -m "chore(button): capture validation diagnostics" || exit 0
           git push origin HEAD:feat/button-vertical-slice
