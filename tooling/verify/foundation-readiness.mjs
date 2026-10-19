@@ -2,7 +2,7 @@ import { readFile } from 'node:fs/promises';
 
 const root = JSON.parse(await readFile('package.json', 'utf8'));
 const support = JSON.parse(await readFile('tooling/compatibility/support-status.json', 'utf8'));
-const validation = JSON.parse(await readFile('tooling/impact/validation-graph.json', 'utf8'));
+const impact = JSON.parse(await readFile('testing/impact.json', 'utf8'));
 const browserQualification = JSON.parse(await readFile('tooling/compatibility/foundation-browser-qualification.json', 'utf8'));
 
 const packages = ['core', 'web', 'react', 'angular', 'vue', 'elements'];
@@ -10,7 +10,7 @@ for (const name of packages) {
   const script = `lint:${name}`;
   if (!root.scripts?.[script]) throw new Error(`Missing scoped TypeScript lint script: ${script}`);
   const scope = `lint-${name}`;
-  if (!validation.scopeOrder?.includes(scope)) throw new Error(`Validation graph is missing scoped lint evidence: ${scope}`);
+  if (!impact.scopeOrder?.includes(scope)) throw new Error(`Testing impact metadata is missing scoped lint evidence: ${scope}`);
 }
 
 if (root.devDependencies?.typescript !== '6.0.3') throw new Error('Foundation authoring compiler must remain pinned to TypeScript 6.0.3 until compatibility is deliberately revised');
