@@ -2,11 +2,15 @@ const npm = process.platform === 'win32' ? 'npm.cmd' : 'npm';
 
 export const scopeDefinitions = {
   structure: { command: ['node', 'tooling/verify/workspace-structure.mjs'], requires: [] },
+  'testing-structure': { command: ['node', 'tooling/verify/testing-structure.mjs'], requires: [] },
   boundaries: { command: ['node', 'tooling/verify/package-boundaries.mjs'], requires: [] },
   'architecture-rules': { command: ['node', 'tooling/verify/architecture-rules.mjs'], requires: [] },
   'workflow-contracts': { command: ['node', 'tooling/verify/workflows.mjs'], requires: [] },
   'legacy-isolation': { command: ['node', 'tooling/verify/legacy-isolation.mjs'], requires: [] },
   'impact-engine': { command: ['node', '--test', 'tooling/tests/impact-plan.test.mjs', 'tooling/tests/impact-executor.test.mjs', 'tooling/tests/impact-tiers.test.mjs'], requires: [] },
+  'lint-tooling': { command: [npm, 'run', 'lint:tooling'], requires: [] },
+  'lint-web-css': { command: [npm, 'run', 'lint:web-css'], requires: [] },
+  'lint-docs': { command: [npm, 'run', 'lint:docs'], requires: [] },
   compatibility: { command: ['node', 'tooling/verify/compatibility.mjs'], requires: [] },
   'package-contracts': { command: ['node', 'tooling/verify/package-contracts.mjs'], requires: [] },
   'docs-source': { command: ['node', 'tooling/verify/documentation-structure.mjs'], requires: [] },

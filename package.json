@@ -27,6 +27,9 @@
     "build:elements": "npm run build --workspace @vyrnforge/elements",
     "build:docs": "node tooling/docs/build.mjs",
     "check": "node tooling/impact/execute.mjs --mode main",
+    "lint:tooling": "eslint tooling playwright.config.mjs eslint.config.mjs stylelint.config.mjs",
+    "lint:docs": "eslint apps/docs && stylelint \"apps/docs/**/*.css\"",
+    "lint:web-css": "stylelint \"packages/web/src/**/*.css\"",
     "verify:structure": "node tooling/verify/workspace-structure.mjs",
     "verify:boundaries": "node tooling/verify/package-boundaries.mjs",
     "verify:architecture": "node tooling/verify/architecture-rules.mjs",
@@ -35,6 +38,7 @@
     "verify:compatibility": "node tooling/verify/compatibility.mjs",
     "verify:documentation": "node tooling/verify/documentation-structure.mjs",
     "verify:docs-site": "node tooling/verify/docs-site.mjs",
+    "verify:testing-structure": "node tooling/verify/testing-structure.mjs",
     "verify:package-smoke": "node tooling/verify/package-smoke.mjs",
     "verify:consumer": "node tooling/verify/consumer-packages.mjs",
     "test:browser:docs": "node tooling/browser/run.mjs chromium",
@@ -48,6 +52,9 @@
   },
   "devDependencies": {
     "@playwright/test": "1.64.1",
+    "axe-core": "4.14.0",
+    "eslint": "10.13.0",
+    "stylelint": "17.16.0",
     "typescript": "5.9.3"
   }
 }
