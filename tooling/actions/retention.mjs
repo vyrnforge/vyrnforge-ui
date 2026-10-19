@@ -98,15 +98,17 @@ export function planRunDeletions(runs, policy, { now = new Date(), currentRunId 
   };
 }
 
-function pullRequestNumbers(run) {
+export function pullRequestNumbersForRun(run) {
   return (run.pull_requests || [])
     .map((pullRequest) => Number(pullRequest.number))
     .filter(Number.isFinite);
 }
 
 function belongsToPullRequest(run, pullRequest) {
+  if (categoryForRun(run) !== 'pr') return false;
+
   const pullRequestNumber = Number(pullRequest?.number);
-  if (Number.isFinite(pullRequestNumber) && pullRequestNumbers(run).includes(pullRequestNumber)) return true;
+  if (Number.isFinite(pullRequestNumber) && pullRequestNumbersForRun(run).includes(pullRequestNumber)) return true;
 
   const headBranch = pullRequest?.head?.ref;
   if (!headBranch || run.head_branch !== headBranch) return false;
@@ -115,16 +117,15 @@ function belongsToPullRequest(run, pullRequest) {
   const actualRepository = run.head_repository?.full_name;
   if (expectedRepository && actualRepository && expectedRepository !== actualRepository) return false;
 
-  return run.event === 'pull_request' || run.event === 'pull_request_target' || run.event === 'workflow_dispatch';
+  return run.event === 'pull_request' || run.event === 'pull_request_target';
 }
 
-export function planMergedPullRequestRunDeletions(runs, policy, pullRequest, { currentRunId } = {}) {
+export function planMergedPullRequestRunDeletions(runs, policy, pullRequest, { currentRunId, deletionCap = policy.maxDeletionsPerRun } = {}) {
   if (!pullRequest?.number) throw new Error('A pull request number is required for merged-PR cleanup');
 
   const mergedPolicy = policy.mergedPullRequest || {};
   const preservePaths = new Set((mergedPolicy.preserveWorkflowPaths || []).map(String));
   const preserveSuccessCount = Math.max(0, Number(mergedPolicy.preserveSuccessfulRunsPerWorkflow || 0));
-  const deletionCap = Number(policy.maxDeletionsPerRun || 0);
 
   const matched = runs
     .filter((run) => completedStatuses.has(run.status))
@@ -144,6 +145,7 @@ export function planMergedPullRequestRunDeletions(runs, policy, pullRequest, { c
     .filter((run) => !protectedIds.has(run.id))
     .map((run) => runSummary(run, {
       category: categoryForRun(run),
+      pullRequestNumber: Number(pullRequest.number),
       reason: `superseded run for merged pull request #${pullRequest.number}`
     }));
 
@@ -153,6 +155,39 @@ export function planMergedPullRequestRunDeletions(runs, policy, pullRequest, { c
     totalRuns: runs.length,
     matchedRuns: matched.length,
     protectedRuns: protectedIds.size,
+    candidateCount: candidates.length,
+    deletionCap,
+    deletions: candidates.slice(0, deletionCap),
+    deferredByCap: Math.max(0, candidates.length - deletionCap)
+  };
+}
+
+export function planMergedPullRequestHistoryDeletions(runs, policy, pullRequests, { currentRunId } = {}) {
+  const deletionCap = Number(policy.maxDeletionsPerRun || 0);
+  const deletionsById = new Map();
+  let matchedRuns = 0;
+  let protectedRuns = 0;
+  let candidateCount = 0;
+
+  for (const pullRequest of pullRequests) {
+    const plan = planMergedPullRequestRunDeletions(runs, policy, pullRequest, {
+      currentRunId,
+      deletionCap: Number.MAX_SAFE_INTEGER
+    });
+    matchedRuns += plan.matchedRuns;
+    protectedRuns += plan.protectedRuns;
+    candidateCount += plan.candidateCount;
+    for (const deletion of plan.deletions) deletionsById.set(deletion.id, deletion);
+  }
+
+  const candidates = [...deletionsById.values()]
+    .sort((a, b) => Date.parse(a.updatedAt || a.createdAt) - Date.parse(b.updatedAt || b.createdAt) || Number(a.id) - Number(b.id));
+
+  return {
+    mergedPullRequests: pullRequests.length,
+    totalRuns: runs.length,
+    matchedRuns,
+    protectedRuns,
     candidateCount: candidates.length,
     deletionCap,
     deletions: candidates.slice(0, deletionCap),

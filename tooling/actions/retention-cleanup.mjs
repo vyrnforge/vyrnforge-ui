@@ -1,6 +1,12 @@
 import { mkdir, readFile, writeFile } from 'node:fs/promises';
 import path from 'node:path';
-import { planMergedPullRequestRunDeletions, planRunDeletions } from './retention.mjs';
+import {
+  categoryForRun,
+  planMergedPullRequestHistoryDeletions,
+  planMergedPullRequestRunDeletions,
+  planRunDeletions,
+  pullRequestNumbersForRun
+} from './retention.mjs';
 
 const policy = JSON.parse(await readFile('tooling/actions/retention-policy.json', 'utf8'));
 const repository = process.env.GITHUB_REPOSITORY;
@@ -43,19 +49,35 @@ async function readEventPayload() {
   return JSON.parse(await readFile(eventPath, 'utf8'));
 }
 
-async function resolveMergedPullRequest() {
-  if (eventName === 'pull_request' || eventName === 'pull_request_target') {
-    const payload = await readEventPayload();
-    if (!payload.pull_request?.merged) return null;
-    return payload.pull_request;
-  }
-
+async function requestedMergedPullRequest() {
   if (!requestedPullRequest) return null;
   const number = Number(requestedPullRequest);
   if (!Number.isInteger(number) || number < 1) throw new Error(`Invalid RETENTION_PR_NUMBER: ${requestedPullRequest}`);
   const pullRequest = await githubJson(`/pulls/${number}`);
   if (!pullRequest.merged_at) throw new Error(`Pull request #${number} is not merged; refusing merged-PR cleanup`);
   return pullRequest;
+}
+
+async function mergedPullRequestsForRuns(runs) {
+  const merged = new Map();
+  const payload = await readEventPayload();
+  if ((eventName === 'pull_request' || eventName === 'pull_request_target') && payload.pull_request?.merged) {
+    merged.set(Number(payload.pull_request.number), payload.pull_request);
+  }
+
+  const candidateNumbers = new Set();
+  for (const run of runs) {
+    if (categoryForRun(run) !== 'pr') continue;
+    for (const number of pullRequestNumbersForRun(run)) candidateNumbers.add(number);
+  }
+
+  for (const number of candidateNumbers) {
+    if (merged.has(number)) continue;
+    const pullRequest = await githubJson(`/pulls/${number}`);
+    if (pullRequest.merged_at) merged.set(number, pullRequest);
+  }
+
+  return [...merged.values()];
 }
 
 async function deleteWorkflowRun(runId) {
@@ -71,6 +93,24 @@ async function deleteWorkflowRun(runId) {
     status: 'failed',
     httpStatus: response.status,
     error: await response.text()
+  };
+}
+
+function combinedPlan(mergedPlan, agePlan) {
+  const deletionCap = Number(policy.maxDeletionsPerRun || 0);
+  const deletionsById = new Map();
+  for (const deletion of mergedPlan.deletions) deletionsById.set(deletion.id, deletion);
+  for (const deletion of agePlan.deletions) {
+    if (!deletionsById.has(deletion.id)) deletionsById.set(deletion.id, deletion);
+  }
+  const candidates = [...deletionsById.values()];
+  return {
+    mergedHistory: mergedPlan,
+    ageBased: agePlan,
+    candidateCount: candidates.length,
+    deletionCap,
+    deletions: candidates.slice(0, deletionCap),
+    deferredByCap: Math.max(0, candidates.length - deletionCap)
   };
 }
 
@@ -92,19 +132,28 @@ const report = {
 
 try {
   const runs = await listWorkflowRuns();
-  const pullRequest = await resolveMergedPullRequest();
+  const requested = await requestedMergedPullRequest();
 
-  if (pullRequest) {
+  if (requested) {
     report.mode = 'merged-pull-request';
     report.pullRequest = {
-      number: pullRequest.number,
-      headBranch: pullRequest.head?.ref || null,
-      mergedAt: pullRequest.merged_at || null
+      number: requested.number,
+      headBranch: requested.head?.ref || null,
+      mergedAt: requested.merged_at || null
     };
-    report.plan = planMergedPullRequestRunDeletions(runs, policy, pullRequest, { currentRunId });
+    report.plan = planMergedPullRequestRunDeletions(runs, policy, requested, { currentRunId });
   } else {
-    report.mode = 'age-based';
-    report.plan = planRunDeletions(runs, policy, { currentRunId });
+    const mergedPullRequests = await mergedPullRequestsForRuns(runs);
+    const mergedPlan = planMergedPullRequestHistoryDeletions(runs, policy, mergedPullRequests, { currentRunId });
+
+    if (eventName === 'schedule' || eventName === 'workflow_dispatch') {
+      report.mode = 'merged-history-and-age-based';
+      const agePlan = planRunDeletions(runs, policy, { currentRunId });
+      report.plan = combinedPlan(mergedPlan, agePlan);
+    } else {
+      report.mode = 'merged-pull-request-history';
+      report.plan = mergedPlan;
+    }
   }
 
   for (const deletion of report.plan.deletions) {
@@ -117,9 +166,7 @@ try {
   report.failedRuns = report.results.filter((result) => result.status === 'failed').length;
   await writeReport(report);
 
-  if (report.failedRuns > 0) {
-    throw new Error(`${report.failedRuns} workflow-run deletion(s) failed`);
-  }
+  if (report.failedRuns > 0) throw new Error(`${report.failedRuns} workflow-run deletion(s) failed`);
 } catch (error) {
   report.completedAt = new Date().toISOString();
   report.error = error instanceof Error ? error.message : String(error);
