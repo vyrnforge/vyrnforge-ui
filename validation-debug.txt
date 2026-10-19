@@ -1,0 +1,32 @@
+fatal: Invalid symmetric difference expression 60635b299bb2d4bd019d8b983e7e1651544986de...85c514e2209712d14baf925cd94f8b0d4e6e3e65
+node:internal/errors:985
+  const err = new Error(message);
+              ^
+
+Error: Command failed: git diff --name-only 60635b299bb2d4bd019d8b983e7e1651544986de...85c514e2209712d14baf925cd94f8b0d4e6e3e65
+fatal: Invalid symmetric difference expression 60635b299bb2d4bd019d8b983e7e1651544986de...85c514e2209712d14baf925cd94f8b0d4e6e3e65
+
+    at genericNodeError (node:internal/errors:985:15)
+    at wrappedFn (node:internal/errors:539:14)
+    at checkExecSyncError (node:child_process:925:11)
+    at execFileSync (node:child_process:961:15)
+    at changedPathsFromGit (file:///home/runner/work/vyrnforge-ui/vyrnforge-ui/tooling/impact/plan.mjs:54:163)
+    at pathsFromArgs (file:///home/runner/work/vyrnforge-ui/vyrnforge-ui/tooling/impact/plan.mjs:55:206)
+    at file:///home/runner/work/vyrnforge-ui/vyrnforge-ui/tooling/impact/execute.mjs:29:53
+    at ModuleJob.run (node:internal/modules/esm/module_job:439:25)
+    at async node:internal/modules/esm/loader:643:26
+    at async asyncRunEntryPointWithESMLoader (node:internal/modules/run_main:101:5) {
+  status: 128,
+  signal: null,
+  output: [
+    null,
+    '',
+    'fatal: Invalid symmetric difference expression 60635b299bb2d4bd019d8b983e7e1651544986de...85c514e2209712d14baf925cd94f8b0d4e6e3e65\n'
+  ],
+  pid: 2165,
+  stdout: '',
+  stderr: 'fatal: Invalid symmetric difference expression 60635b299bb2d4bd019d8b983e7e1651544986de...85c514e2209712d14baf925cd94f8b0d4e6e3e65\n'
+}
+
+Node.js v24.18.0
+exit_status=1
