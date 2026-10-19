@@ -1,10 +1,10 @@
 import { execFileSync } from 'node:child_process';
 import { mkdirSync, writeFileSync } from 'node:fs';
 import path from 'node:path';
-import { discoverProductUnits } from '../testing/discover-product-units.mjs';
+import { discoverProductUnits } from './discover-product-units.mjs';
 
 const [componentId, owner = 'conformance'] = process.argv.slice(2);
-if (!componentId) throw new Error('Usage: node tooling/types/check-component.mjs <component> [port|conformance]');
+if (!componentId) throw new Error('Usage: node tooling/testing/check-component-types.mjs <component> [port|conformance]');
 
 const component = discoverProductUnits().components.find((entry) => entry.component === componentId);
 if (!component) throw new Error(`Unknown discovered component: ${componentId}`);
