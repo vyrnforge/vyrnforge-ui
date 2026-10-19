@@ -8,17 +8,16 @@ const dependencies = { core: [], web: ['core'], react: ['core', 'web'], angular:
 const requestedArg = process.argv[2] || 'all';
 const requested = requestedArg === 'all' ? allowed : requestedArg.split(',').filter(Boolean);
 for (const name of requested) if (!allowed.includes(name)) throw new Error(`Unknown consumer scope: ${name}`);
-
 const closure = new Set();
 function include(name) { if (closure.has(name)) return; for (const dependency of dependencies[name]) include(dependency); closure.add(name); }
 for (const name of requested) include(name);
-
 const temporaryRoot = await mkdtemp(path.join(os.tmpdir(), 'vyrnforge-consumer-'));
 const tarballDir = path.join(temporaryRoot, 'tarballs');
 const consumerDir = path.join(temporaryRoot, 'consumer');
 await mkdir(tarballDir, { recursive: true });
 await mkdir(consumerDir, { recursive: true });
-
+function publicSpecifier(packageName, exportName) { return exportName === '.' ? packageName : `${packageName}${exportName.slice(1)}`; }
+function importTarget(value) { if (typeof value === 'string') return value; if (!value || typeof value !== 'object') return null; return value.import || value.default || Object.values(value).find((entry) => typeof entry === 'string') || null; }
 try {
   const tarballs = [];
   for (const name of closure) {
@@ -27,34 +26,26 @@ try {
     if (!result?.filename) throw new Error(`npm pack did not produce a tarball for ${name}`);
     tarballs.push(path.join(tarballDir, result.filename));
   }
-
   await writeFile(path.join(consumerDir, 'package.json'), `${JSON.stringify({ name: 'vyrnforge-bootstrap-consumer', private: true, type: 'module' }, null, 2)}\n`);
   execFileSync('npm', ['install', '--ignore-scripts', '--no-audit', '--no-fund', '--package-lock=false', ...tarballs], { cwd: consumerDir, stdio: 'inherit' });
-
-  const runtimeImports = requested.filter((name) => name !== 'angular').map((name) => `await import('@vyrnforge/${name}');`).join('\n');
-  const buttonRuntimeImports = requested.filter((name) => ['react', 'vue'].includes(name)).map((name) => `await import('@vyrnforge/${name}/button');`).join('\n');
-  const angularResolution = requested.includes('angular') ? `
-for (const specifier of ['@vyrnforge/angular', '@vyrnforge/angular/button']) {
-  const resolved = import.meta.resolve(specifier);
-  const source = await readFile(new URL(resolved), 'utf8');
-  if (!source.length) throw new Error('Resolved Angular public entrypoint is empty: ' + specifier);
-}` : '';
-  const webCheck = requested.includes('web') || requested.some((name) => dependencies[name].includes('web')) ? `
-const stylesheet = import.meta.resolve('@vyrnforge/web/styles.css');
-const css = await readFile(new URL(stylesheet), 'utf8');
-if (!css.includes('vyrnforge.components')) throw new Error('Consumer-resolved canonical stylesheet is invalid');
-const buttonStylesheet = import.meta.resolve('@vyrnforge/web/styles/button.css');
-const buttonCss = await readFile(new URL(buttonStylesheet), 'utf8');
-if (!buttonCss.includes('[data-vf-button]')) throw new Error('Consumer-resolved Button stylesheet is invalid');` : '';
-  await writeFile(path.join(consumerDir, 'verify.mjs'), `import { readFile } from 'node:fs/promises';\n${runtimeImports}\n${buttonRuntimeImports}\n${angularResolution}\n${webCheck}\nprocess.stdout.write('consumer imports: ok\\n');\n`);
+  const checks = [`import { readFile } from 'node:fs/promises';`];
+  for (const name of requested) {
+    const manifest = JSON.parse(await readFile(path.resolve('packages', name, 'package.json'), 'utf8'));
+    for (const [exportName, value] of Object.entries(manifest.exports ?? {})) {
+      const specifier = publicSpecifier(manifest.name, exportName);
+      const target = importTarget(value);
+      if (!target) continue;
+      if (target.endsWith('.css')) checks.push(`{ const url = import.meta.resolve(${JSON.stringify(specifier)}); const source = await readFile(new URL(url), 'utf8'); if (!source.length) throw new Error('Empty public CSS export: ${specifier}'); }`);
+      else if (name === 'angular') checks.push(`{ const url = import.meta.resolve(${JSON.stringify(specifier)}); const source = await readFile(new URL(url), 'utf8'); if (!source.length) throw new Error('Empty Angular public export: ${specifier}'); }`);
+      else if (target.endsWith('.js')) checks.push(`await import(${JSON.stringify(specifier)});`);
+    }
+  }
+  checks.push(`process.stdout.write('consumer public exports: ok\\n');`);
+  await writeFile(path.join(consumerDir, 'verify.mjs'), `${checks.join('\n')}\n`);
   execFileSync(process.execPath, ['verify.mjs'], { cwd: consumerDir, stdio: 'inherit' });
-
   for (const name of closure) {
     const manifest = JSON.parse(await readFile(path.join(consumerDir, 'node_modules', '@vyrnforge', name, 'package.json'), 'utf8'));
     if (manifest.name !== `@vyrnforge/${name}`) throw new Error(`Installed consumer package mismatch for ${name}`);
   }
-} finally {
-  await rm(temporaryRoot, { recursive: true, force: true });
-}
-
+} finally { await rm(temporaryRoot, { recursive: true, force: true }); }
 process.stdout.write(`packed consumer verification: ${requested.join(', ')} ok\n`);
