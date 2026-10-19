@@ -11,7 +11,7 @@ export default defineConfig({
   retries: 0,
   reporter: process.env.CI ? [['line'], ['html', { outputFolder: '../../test-results/button-playwright-report', open: 'never' }]] : 'line',
   use: { baseURL: 'http://127.0.0.1:4173', trace: 'retain-on-failure', screenshot: 'only-on-failure' },
-  webServer: { command: 'node ../docs/serve.mjs', url: 'http://127.0.0.1:4173/next/', reuseExistingServer: !process.env.CI, timeout: 15_000 },
+  webServer: { command: 'cd ../.. && node tooling/docs/serve.mjs', url: 'http://127.0.0.1:4173/next/', reuseExistingServer: !process.env.CI, timeout: 15_000 },
   projects: [
     { name: 'chromium', use: { ...devices['Desktop Chrome'] } },
     { name: 'firefox', use: { ...devices['Desktop Firefox'] } },
