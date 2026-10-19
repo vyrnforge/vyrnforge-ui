@@ -8,8 +8,8 @@ test('Vue Button server output is native-complete and preserves native attribute
   const app = createSSRApp({ render: () => h(Button, { loading: true, name: 'save', value: 'yes' }, () => 'Save') });
   const html = await renderToString(app);
   assert.match(html, /^<button/);
-  assert.match(html, /data-vf-button=""/);
-  assert.match(html, /data-vf-loading=""/);
+  assert.match(html, /\sdata-vf-button(?:\s|>)/);
+  assert.match(html, /\sdata-vf-loading(?:\s|>)/);
   assert.match(html, /aria-busy="true"/);
   assert.match(html, /name="save"/);
   assert.doesNotMatch(html, /disabled/);
