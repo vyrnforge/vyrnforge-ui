@@ -8,7 +8,7 @@ export const scopeDefinitions = {
   'architecture-rules': { command: ['node', 'tooling/verify/architecture-rules.mjs'], requires: [] },
   'workflow-contracts': { command: ['node', 'tooling/verify/workflows.mjs'], requires: [] },
   'legacy-isolation': { command: ['node', 'tooling/verify/legacy-isolation.mjs'], requires: [] },
-  'impact-engine': { command: ['node', '--test', 'tooling/tests/impact-plan.test.mjs', 'tooling/tests/impact-executor.test.mjs', 'tooling/tests/impact-tiers.test.mjs'], requires: [] },
+  'impact-engine': { command: ['node', '--test', 'tooling/tests/impact-plan.test.mjs', 'tooling/tests/impact-executor.test.mjs', 'tooling/tests/impact-tiers.test.mjs', 'tooling/tests/actions-retention.test.mjs'], requires: [] },
   'foundation-readiness': { command: ['node', 'tooling/verify/foundation-readiness.mjs'], requires: [] },
   'lint-tooling': { command: [npm, 'run', 'lint:tooling'], requires: [] },
   'lint-web-css': { command: [npm, 'run', 'lint:web-css'], requires: [] },
