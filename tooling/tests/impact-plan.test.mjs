@@ -19,6 +19,15 @@ test('shared Button CSS fans out through every implemented Button port', () => {
   for (const scope of ['button-browser-web', 'button-react-ssr', 'button-angular-ssr', 'button-vue-ssr']) assert.ok(plan.validationScopes.includes(scope), scope);
 });
 
+test('Button executable examples select Button documentation and browser docs validation', () => {
+  const plan = createPlan(['examples/button/basic/react.tsx']);
+  assert.deepEqual(plan.directNodes, ['button-documentation']);
+  assert.equal(plan.broadened, false);
+  assert.ok(plan.validationScopes.includes('docs-build'));
+  assert.ok(plan.validationScopes.includes('browser-docs-chromium'));
+  assert.ok(!plan.validationScopes.includes('build-angular'));
+});
+
 test('port-local changes remain scoped to the port plus dependent documentation', () => {
   const plan = createPlan(['packages/react/src/index.ts']);
   assert.ok(plan.affectedNodes.includes('react'));
@@ -52,4 +61,4 @@ test('impact-engine and repository foundation changes fail closed', () => {
 
 test('unknown repository changes fail closed', () => { assert.equal(createPlan(['some-unclassified-root-file.txt']).broadened, true); });
 test('legacy-only changes do not select product ports', () => { const plan = createPlan(['packages/legacy/archive/root/README.md']); assert.deepEqual(plan.affectedNodes, ['legacy']); assert.ok(plan.validationScopes.includes('legacy-isolation')); assert.ok(!plan.validationScopes.includes('build-react')); });
-test('classification exposes component scopes and broad infrastructure', () => { assert.deepEqual(classifyPath('packages/vue/src/button.ts'), { node: 'button-vue', broad: false }); assert.deepEqual(classifyPath('tooling/verify/package-contracts.mjs'), { node: 'tooling', broad: true }); });
+test('classification exposes component scopes and broad infrastructure', () => { assert.deepEqual(classifyPath('packages/vue/src/button.ts'), { node: 'button-vue', broad: false }); assert.deepEqual(classifyPath('examples/button/basic/vue.ts'), { node: 'button-documentation', broad: false }); assert.deepEqual(classifyPath('tooling/verify/package-contracts.mjs'), { node: 'tooling', broad: true }); });
