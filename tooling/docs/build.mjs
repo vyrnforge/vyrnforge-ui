@@ -1,6 +1,7 @@
 import { cp, mkdir, readFile, rm, writeFile } from 'node:fs/promises';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
+import { buildDocumentationExamples, renderDocumentationExample } from './examples.mjs';
 
 const root = path.resolve(fileURLToPath(new URL('../../', import.meta.url)));
 const outRoot = path.join(root, 'dist/docs');
@@ -10,7 +11,7 @@ const registry = JSON.parse(await readFile(path.join(root, 'documentation/site/r
 const rootManifest = JSON.parse(await readFile(path.join(root, 'package.json'), 'utf8'));
 const compatibility = JSON.parse(await readFile(path.join(root, 'tooling/compatibility/support-status.json'), 'utf8'));
 const packageNames = ['core', 'web', 'react', 'angular', 'vue', 'elements'];
-const packageManifests = Object.fromEntries(await Promise.all(packageNames.map(async (name) => [name, JSON.parse(await readFile(path.join(root, `packages/${name}/package.json`), 'utf8'))])));
+const packageManifests = Object.fromEntries(await Promise.all(packageNames.map(async (name) => [name, JSON.parse(await readFile(path.join(root, `packages/${name}/package.json`), 'utf8')]))));
 
 function escapeHtml(value) {
   return String(value)
@@ -67,13 +68,21 @@ function renderCompatibility() {
   return `<p class="vf-docs-lede">This page is generated from the repository compatibility source used by CI and future release checks. Unselected support ranges remain visibly unselected instead of being guessed.</p>${renderCompatibilityValue(compatibility)}`;
 }
 
-async function pageBody(page) {
+function composeExamples(bodyHtml, examples) {
+  return bodyHtml.replace(/<div\s+data-vf-example="([^"]+)"\s*><\/div>/g, (_match, id) => {
+    const example = examples.get(id);
+    if (!example) throw new Error(`Documentation references unknown executable example: ${id}`);
+    return renderDocumentationExample(example);
+  });
+}
+
+async function pageBody(page, examples) {
   if (page.kind === 'generated') {
     if (page.generator === 'packages') return renderPackages();
     if (page.generator === 'compatibility') return renderCompatibility();
     throw new Error(`Unknown documentation generator: ${page.generator}`);
   }
-  return readFile(path.join(root, page.source), 'utf8');
+  return composeExamples(await readFile(path.join(root, page.source), 'utf8'), examples);
 }
 
 function navGroups() {
@@ -97,12 +106,13 @@ function renderLayout(page, bodyHtml) {
   const sharedLinks = page.kind === 'framework' ? `<section class="vf-docs-shared-links"><h2>Shared VyrnForge foundations</h2><p>These concepts are shared across framework ports and are intentionally not copied into this framework guide.</p><ul>${sharedFoundationPages.map((item) => `<li><a href="${relativeRoute(page.slug, item.slug)}">${escapeHtml(item.title)}</a></li>`).join('')}</ul></section>` : '';
   const siteRoot = relativeRoute(page.slug, '');
   return `<!doctype html>
-<html lang="en" data-vf-docs-channel="${escapeHtml(channel)}">
+<html lang="en" data-vf-docs-channel="${escapeHtml(channel)}" data-vf-theme="system">
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="description" content="VyrnForge ${escapeHtml(page.title)} documentation">
   <title>${escapeHtml(page.title)} · VyrnForge</title>
+  <link rel="stylesheet" href="${relativeAsset(page.slug, 'vyrnforge/button.css')}">
   <link rel="stylesheet" href="${relativeAsset(page.slug, 'styles.css')}">
 </head>
 <body data-vf-site-root="${siteRoot}" data-vf-framework="${escapeHtml(page.framework || '')}" data-vf-version="${escapeHtml(rootManifest.version)}">
@@ -130,11 +140,13 @@ await rm(outRoot, { recursive: true, force: true });
 await mkdir(path.join(channelRoot, 'assets'), { recursive: true });
 await cp(path.join(root, 'apps/docs/styles.css'), path.join(channelRoot, 'assets/styles.css'));
 await cp(path.join(root, 'apps/docs/client.js'), path.join(channelRoot, 'assets/client.js'));
+await cp(path.join(root, 'packages/web/src/styles'), path.join(channelRoot, 'assets/vyrnforge'), { recursive: true });
+const examples = await buildDocumentationExamples({ root, channelRoot });
 await writeFile(path.join(outRoot, 'index.html'), `<!doctype html><html lang="en"><head><meta charset="utf-8"><meta http-equiv="refresh" content="0;url=./${channel}/"><title>VyrnForge documentation</title></head><body><a href="./${channel}/">Open VyrnForge ${channel} documentation</a></body></html>`);
 
 const searchIndex = [];
 for (const page of registry.pages) {
-  const bodyHtml = makeScrollableRegionsKeyboardReachable(await pageBody(page));
+  const bodyHtml = makeScrollableRegionsKeyboardReachable(await pageBody(page, examples));
   const outputDirectory = path.join(channelRoot, page.slug);
   await mkdir(outputDirectory, { recursive: true });
   await writeFile(path.join(outputDirectory, 'index.html'), renderLayout(page, bodyHtml));
@@ -142,5 +154,5 @@ for (const page of registry.pages) {
 }
 
 await writeFile(path.join(channelRoot, 'search-index.json'), `${JSON.stringify(searchIndex, null, 2)}\n`);
-await writeFile(path.join(channelRoot, 'site-manifest.json'), `${JSON.stringify({ channel, version: rootManifest.version, pages: registry.pages.map(({ slug, title, kind, framework }) => ({ slug, title, kind, framework: framework || null })) }, null, 2)}\n`);
-process.stdout.write(`documentation build: ${registry.pages.length} pages -> ${path.relative(root, channelRoot)}\n`);
+await writeFile(path.join(channelRoot, 'site-manifest.json'), `${JSON.stringify({ channel, version: rootManifest.version, pages: registry.pages.map(({ slug, title, kind, framework }) => ({ slug, title, kind, framework: framework || null })), examples: [...examples.keys()] }, null, 2)}\n`);
+process.stdout.write(`documentation build: ${registry.pages.length} pages, ${examples.size} executable examples -> ${path.relative(root, channelRoot)}\n`);
