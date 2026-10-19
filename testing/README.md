@@ -16,7 +16,7 @@ Every selected component/package unit still receives the applicable package buil
 
 ## Evidence and omission detection
 
-`tooling/testing/discover-product-units.mjs` derives ownership from public package exports plus conventional directories. `verify:testing-structure` fails when a public component is missing its component slice, docs, executable examples, package-local type/SSR evidence, shared conformance/browser preparation, or scoped change fragment. A newly exposed component therefore becomes required validation work automatically.
+`tooling/testing/discover-product-units.mjs` derives ownership from public package exports plus conventional directories. `verify:testing-structure` fails when a public component is missing its component slice, docs, executable examples, package-local type/SSR evidence, or shared conformance/browser preparation. A newly exposed component therefore becomes required validation work automatically.
 
 The same rule applies to reusable capabilities/accessibility/foundation units: once a conventional source unit exists, its mirrored evidence is required and its dependency edges participate in impact planning. New normal units do not require names in the CI planner, scope executor, workflow paths, or a central registry.
 
@@ -24,7 +24,9 @@ Tests execute at the lowest reliable layer. Package-local evidence proves framew
 
 ## Change fragments
 
-Unreleased changes are scoped beside their owner. Components use `components/<id>/changes/*.md`; package or reusable-unit changes use `packages/<package>/changes/**`. Fragment types are `major`, `minor`, `patch`, or `internal`. Release tooling derives changelog output from these fragments; fragments do not contain CI instructions or repeated package/component identity metadata.
+Unreleased changes are scoped beside their owner. Components use `components/<id>/changes/*.md`; reusable-unit changes use `packages/<package>/changes/<kind>/<id>/*.md`. Fragment types are `major`, `minor`, `patch`, or `internal`. Release tooling derives changelog output from these fragments; fragments do not contain CI instructions or repeated package/component identity metadata.
+
+Fragments are unreleased evidence, not permanent component structure. Targeted PR validation requires a matching changed fragment when a component implementation or reusable product-unit implementation changes. After release tooling consumes those fragments, the component or unit remains valid without retaining historical unreleased fragments in its ownership folder.
 
 ## Safety model
 
