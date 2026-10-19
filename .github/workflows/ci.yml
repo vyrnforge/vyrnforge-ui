@@ -4,7 +4,7 @@ on:
   pull_request:
 
 permissions:
-  contents: write
+  contents: read
 
 jobs:
   ci-gate:
@@ -13,16 +13,16 @@ jobs:
     timeout-minutes: 40
     steps:
       - name: Checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@v7
         with:
           fetch-depth: 0
       - name: Setup Node
-        uses: actions/setup-node@v4
+        uses: actions/setup-node@v7
         with:
           node-version-file: .node-version
-      # bootstrap-lock-commit: one controlled run to commit the generated lockfile, then this workflow returns to read-only npm ci.
-      - name: Install toolchain and refresh lockfile
-        run: npm install --ignore-scripts --no-audit --no-fund
+          cache: npm
+      - name: Install locked toolchain
+        run: npm ci --ignore-scripts --no-audit --no-fund
       - name: Execute targeted validation plan
         env:
           BASE_SHA: ${{ github.event.pull_request.base.sha }}
@@ -30,7 +30,7 @@ jobs:
         run: node tooling/impact/execute.mjs --mode pr --base "$BASE_SHA" --head "$HEAD_SHA" --output test-results/validation-plan.json
       - name: Upload inspectable validation plan
         if: always()
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
           name: validation-plan-pr
           path: test-results/validation-plan.json
@@ -38,7 +38,7 @@ jobs:
           retention-days: 7
       - name: Upload browser evidence when selected
         if: always()
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
           name: browser-evidence-pr
           path: |
@@ -46,20 +46,3 @@ jobs:
             test-results/playwright-results
           if-no-files-found: ignore
           retention-days: 7
-      - name: Commit generated lockfile
-        if: success() && github.event.pull_request.head.repo.full_name == github.repository
-        env:
-          HEAD_REF: ${{ github.event.pull_request.head.ref }}
-        run: |
-          cp package-lock.json /tmp/package-lock.json
-          git fetch origin "$HEAD_REF"
-          git checkout -B "$HEAD_REF" "origin/$HEAD_REF"
-          cp /tmp/package-lock.json package-lock.json
-          if git diff --quiet -- package-lock.json; then
-            exit 0
-          fi
-          git config user.name "github-actions[bot]"
-          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add package-lock.json
-          git commit -m "chore(tooling): lock TypeScript 6 validation toolchain"
-          git push origin "HEAD:$HEAD_REF"

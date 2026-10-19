@@ -10,10 +10,10 @@ permissions:
 jobs:
   main-gate:
     runs-on: ubuntu-latest
-    timeout-minutes: 30
+    timeout-minutes: 45
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-node@v4
+      - uses: actions/checkout@v7
+      - uses: actions/setup-node@v7
         with:
           node-version-file: .node-version
           cache: npm
@@ -22,14 +22,24 @@ jobs:
         run: node tooling/impact/execute.mjs --mode main --output test-results/validation-plan.json
       - name: Upload validation plan
         if: always()
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
           name: validation-plan-main
           path: test-results/validation-plan.json
           if-no-files-found: error
           retention-days: 14
+      - name: Upload browser evidence
+        if: always()
+        uses: actions/upload-artifact@v7
+        with:
+          name: browser-evidence-main
+          path: |
+            test-results/playwright-report
+            test-results/playwright-results
+          if-no-files-found: ignore
+          retention-days: 14
       - name: Upload documentation build
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
           name: vyrnforge-docs-next
           path: dist/docs
