@@ -1,0 +1,120 @@
+@import "./tokens.css";
+
+@layer vyrnforge.components {
+  :where([data-vf-button]) {
+    --_vf-button-block-size: 2.5rem;
+    --_vf-button-padding-inline: 1rem;
+    --_vf-button-gap: 0.5rem;
+    --_vf-button-font-size: 0.9375rem;
+    --_vf-button-background: var(--vf-color-accent-background);
+    --_vf-button-background-hover: var(--vf-color-accent-background-hover);
+    --_vf-button-foreground: var(--vf-color-accent-foreground);
+    --_vf-button-border: transparent;
+
+    appearance: none;
+    align-items: center;
+    background: var(--_vf-button-background);
+    border: 1px solid var(--_vf-button-border);
+    border-radius: var(--vf-control-radius);
+    color: var(--_vf-button-foreground);
+    cursor: pointer;
+    display: inline-flex;
+    font-family: var(--vf-control-font-family);
+    font-size: var(--_vf-button-font-size);
+    font-weight: var(--vf-control-font-weight);
+    gap: var(--_vf-button-gap);
+    justify-content: center;
+    line-height: 1;
+    min-block-size: var(--_vf-button-block-size);
+    padding-block: 0.5rem;
+    padding-inline: var(--_vf-button-padding-inline);
+    text-align: center;
+    text-decoration: none;
+    transition: background-color var(--vf-control-motion-duration) ease, border-color var(--vf-control-motion-duration) ease;
+    user-select: none;
+  }
+
+  :where([data-vf-button][data-vf-variant="secondary"]) {
+    --_vf-button-background: var(--vf-color-surface);
+    --_vf-button-background-hover: var(--vf-color-surface-hover);
+    --_vf-button-foreground: var(--vf-color-text);
+    --_vf-button-border: var(--vf-color-border);
+  }
+
+  :where([data-vf-button][data-vf-variant="ghost"]) {
+    --_vf-button-background: transparent;
+    --_vf-button-background-hover: var(--vf-color-surface-hover);
+    --_vf-button-foreground: var(--vf-color-text);
+    --_vf-button-border: transparent;
+  }
+
+  :where([data-vf-button][data-vf-size="sm"]) {
+    --_vf-button-block-size: 2rem;
+    --_vf-button-padding-inline: 0.75rem;
+    --_vf-button-gap: 0.375rem;
+    --_vf-button-font-size: 0.875rem;
+  }
+
+  :where([data-vf-button][data-vf-size="lg"]) {
+    --_vf-button-block-size: 3rem;
+    --_vf-button-padding-inline: 1.25rem;
+    --_vf-button-gap: 0.625rem;
+    --_vf-button-font-size: 1rem;
+  }
+
+  :where([data-vf-button]:hover:not(:disabled)) {
+    background: var(--_vf-button-background-hover);
+  }
+
+  :where([data-vf-button]:active:not(:disabled)) {
+    filter: brightness(0.94);
+  }
+
+  :where([data-vf-button]:focus-visible) {
+    outline: 3px solid var(--vf-color-focus-ring);
+    outline-offset: 2px;
+  }
+
+  :where([data-vf-button]:disabled) {
+    --_vf-button-background: var(--vf-color-disabled-background);
+    --_vf-button-background-hover: var(--vf-color-disabled-background);
+    --_vf-button-foreground: var(--vf-color-disabled-foreground);
+    --_vf-button-border: var(--vf-color-disabled-border);
+
+    cursor: not-allowed;
+    filter: none;
+  }
+
+  :where([data-vf-button][data-vf-loading])::before {
+    animation: vf-button-spin 700ms linear infinite;
+    block-size: 0.9em;
+    border: 0.15em solid currentColor;
+    border-inline-end-color: transparent;
+    border-radius: 50%;
+    box-sizing: border-box;
+    content: "";
+    flex: 0 0 auto;
+    inline-size: 0.9em;
+  }
+
+  @keyframes vf-button-spin {
+    to { transform: rotate(1turn); }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    :where([data-vf-button]) { transition: none; }
+    :where([data-vf-button][data-vf-loading])::before { animation: none; }
+  }
+
+  @media (forced-colors: active) {
+    :where([data-vf-button]) {
+      background: ButtonFace;
+      border-color: ButtonText;
+      color: ButtonText;
+      forced-color-adjust: auto;
+    }
+
+    :where([data-vf-button]:focus-visible) { outline-color: Highlight; }
+    :where([data-vf-button]:disabled) { border-color: GrayText; color: GrayText; }
+  }
+}

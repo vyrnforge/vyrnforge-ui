@@ -1,0 +1,59 @@
+@layer vyrnforge.tokens {
+  :root,
+  [data-vf-theme="light"] {
+    color-scheme: light;
+    --vf-color-accent-background: #2457d6;
+    --vf-color-accent-background-hover: #1b46b1;
+    --vf-color-accent-foreground: #ffffff;
+    --vf-color-surface: #ffffff;
+    --vf-color-surface-hover: #f2f5fb;
+    --vf-color-text: #172033;
+    --vf-color-border: #8b96aa;
+    --vf-color-focus-ring: #0b63ce;
+    --vf-color-disabled-background: #e6e9ef;
+    --vf-color-disabled-foreground: #6c7484;
+    --vf-color-disabled-border: #c8ced8;
+    --vf-control-radius: 0.5rem;
+    --vf-control-font-family: system-ui, sans-serif;
+    --vf-control-font-weight: 600;
+    --vf-control-motion-duration: 120ms;
+  }
+}
+
+@layer vyrnforge.themes {
+  [data-vf-theme="dark"] {
+    color-scheme: dark;
+    --vf-color-accent-background: #7ca4ff;
+    --vf-color-accent-background-hover: #9bb9ff;
+    --vf-color-accent-foreground: #0d1730;
+    --vf-color-surface: #171b24;
+    --vf-color-surface-hover: #232a36;
+    --vf-color-text: #f2f5fb;
+    --vf-color-border: #7b8597;
+    --vf-color-focus-ring: #9dc1ff;
+    --vf-color-disabled-background: #2c323d;
+    --vf-color-disabled-foreground: #9aa3b2;
+    --vf-color-disabled-border: #515a69;
+  }
+
+  [data-vf-theme="system"] {
+    color-scheme: light;
+  }
+
+  @media (prefers-color-scheme: dark) {
+    [data-vf-theme="system"] {
+      color-scheme: dark;
+      --vf-color-accent-background: #7ca4ff;
+      --vf-color-accent-background-hover: #9bb9ff;
+      --vf-color-accent-foreground: #0d1730;
+      --vf-color-surface: #171b24;
+      --vf-color-surface-hover: #232a36;
+      --vf-color-text: #f2f5fb;
+      --vf-color-border: #7b8597;
+      --vf-color-focus-ring: #9dc1ff;
+      --vf-color-disabled-background: #2c323d;
+      --vf-color-disabled-foreground: #9aa3b2;
+      --vf-color-disabled-border: #515a69;
+    }
+  }
+}

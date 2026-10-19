@@ -1,2 +1,2 @@
-// Vue APIs will be introduced from approved component contracts.
-export {};
+export { Button } from './button.js';
+export type { ButtonSize, ButtonVariant } from './button.js';

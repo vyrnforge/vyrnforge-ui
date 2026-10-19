@@ -40,29 +40,30 @@ export const scopeDefinitions = {
   'consumer-angular': { command: ['node', 'tooling/verify/consumer-packages.mjs', 'angular'], requires: ['build-angular'] },
   'consumer-vue': { command: ['node', 'tooling/verify/consumer-packages.mjs', 'vue'], requires: ['build-vue'] },
   'consumer-elements': { command: ['node', 'tooling/verify/consumer-packages.mjs', 'elements'], requires: ['build-elements'] },
+  'button-types': { command: ['node', 'node_modules/typescript/bin/tsc', '-p', 'tooling/types/tsconfig.json'], requires: ['build-react', 'build-angular', 'build-vue'] },
+  'button-react-ssr': { command: ['node', '--test', 'tooling/tests/button-react.test.mjs'], requires: ['build-react'] },
+  'button-angular-ssr': { command: ['node', '--test', 'tooling/tests/button-angular.test.mjs'], requires: ['build-angular'] },
+  'button-vue-ssr': { command: ['node', '--test', 'tooling/tests/button-vue.test.mjs'], requires: ['build-vue'] },
   'docs-build': { command: [npm, 'run', 'build:docs'], requires: ['docs-source', 'compatibility', 'package-contracts'] },
   'docs-site': { command: ['node', 'tooling/verify/docs-site.mjs'], requires: ['docs-build'] },
   'browser-docs-chromium': { command: [npm, 'run', 'test:browser:docs'], requires: ['docs-site'] },
   'browser-docs-cross': { command: [npm, 'run', 'test:browser:docs:cross'], requires: ['docs-site'] },
+  'button-browser-web': { command: ['node', 'tooling/browser/run-button.mjs', 'web', 'chromium'], requires: ['docs-site', 'build-web'] },
+  'button-browser-react': { command: ['node', 'tooling/browser/run-button.mjs', 'react', 'chromium'], requires: ['docs-site', 'build-react'] },
+  'button-browser-angular': { command: ['node', 'tooling/browser/run-button.mjs', 'angular', 'chromium'], requires: ['docs-site', 'build-angular'] },
+  'button-browser-vue': { command: ['node', 'tooling/browser/run-button.mjs', 'vue', 'chromium'], requires: ['docs-site', 'build-vue'] },
+  'button-browser-cross': { command: ['node', 'tooling/browser/run-button.mjs', 'web', 'all'], requires: ['docs-site', 'build-web'] },
   'consumer-all': { command: ['node', 'tooling/verify/consumer-packages.mjs', 'all'], requires: ['build-core', 'build-web', 'build-react', 'build-angular', 'build-vue', 'build-elements'] },
   'release-readiness': { command: ['node', 'tooling/verify/release-readiness.mjs'], requires: ['consumer-all', 'docs-site', 'browser-docs-cross'] }
 };
 
 export function expandScopes(selectedScopes) {
-  const selected = new Set(selectedScopes);
-  const ordered = [];
-  const visiting = new Set();
-  const visited = new Set();
+  const selected = new Set(selectedScopes); const ordered = []; const visiting = new Set(); const visited = new Set();
   function visit(scope) {
     if (visited.has(scope)) return;
     if (visiting.has(scope)) throw new Error(`Validation scope prerequisite cycle at ${scope}`);
-    const definition = scopeDefinitions[scope];
-    if (!definition) throw new Error(`No executor registered for validation scope ${scope}`);
-    visiting.add(scope);
-    for (const prerequisite of definition.requires) visit(prerequisite);
-    visiting.delete(scope);
-    visited.add(scope);
-    ordered.push({ scope, selected: selected.has(scope), command: definition.command });
+    const definition = scopeDefinitions[scope]; if (!definition) throw new Error(`No executor registered for validation scope ${scope}`);
+    visiting.add(scope); for (const prerequisite of definition.requires) visit(prerequisite); visiting.delete(scope); visited.add(scope); ordered.push({ scope, selected: selected.has(scope), command: definition.command });
   }
   for (const scope of selectedScopes) visit(scope);
   return ordered;

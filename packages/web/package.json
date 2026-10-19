@@ -3,8 +3,8 @@
   "version": "0.0.0-rebuild",
   "private": true,
   "type": "module",
-  "description": "Canonical VyrnForge web styling and narrow shared web-platform foundations.",
-  "sideEffects": ["./dist/styles.css"],
+  "description": "Browser-facing VyrnForge foundations, canonical CSS, and DOM helpers.",
+  "sideEffects": ["./dist/**/*.css"],
   "files": ["dist"],
   "main": "./dist/index.js",
   "types": "./dist/index.d.ts",
@@ -14,7 +14,8 @@
       "import": "./dist/index.js",
       "default": "./dist/index.js"
     },
-    "./styles.css": "./dist/styles.css"
+    "./styles.css": "./dist/styles.css",
+    "./styles/button.css": "./dist/styles/button.css"
   },
   "dependencies": {
     "@vyrnforge/core": "0.0.0-rebuild"
