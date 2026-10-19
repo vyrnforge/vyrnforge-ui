@@ -6,7 +6,7 @@ const contracts = {
   '.github/workflows/scheduled.yml': ['schedule:', 'workflow_dispatch:', 'contents: read', 'actions/checkout@v7', 'actions/setup-node@v7', 'actions/upload-artifact@v7', '--mode scheduled', 'validation-plan-scheduled', 'browser-evidence-scheduled'],
   '.github/workflows/release.yml': ["- 'v*'", 'contents: read', 'actions/checkout@v7', 'actions/setup-node@v7', 'actions/upload-artifact@v7', '--mode release', 'validation-plan-release', 'browser-evidence-release'],
   '.github/workflows/docs-pages.yml': ['pages: write', 'id-token: write', 'actions/checkout@v7', 'actions/setup-node@v7', 'actions/configure-pages@v6', 'actions/upload-pages-artifact@v5', 'actions/deploy-pages@v5', 'npm run build:docs', 'npm run verify:docs-site'],
-  '.github/workflows/actions-retention.yml': ['schedule:', 'workflow_dispatch:', 'contents: read', 'actions: read', 'concurrency:', 'cancel-in-progress: true', 'actions/checkout@v7', 'actions/setup-node@v7', 'node tooling/actions/retention-report.mjs', 'actions-retention-plan', 'retention-days: 14']
+  '.github/workflows/actions-retention.yml': ['schedule:', 'pull_request_target:', 'types: [closed]', 'workflow_dispatch:', 'contents: read', 'pull-requests: read', 'actions: write', 'concurrency:', 'cancel-in-progress: false', 'github.event.pull_request.merged == true', 'github.event.repository.default_branch', 'actions/checkout@v7', 'actions/setup-node@v7', 'node tooling/actions/retention-cleanup.mjs', 'actions-retention-report', 'retention-days: 14']
 };
 
 for (const [file, required] of Object.entries(contracts)) {
@@ -26,8 +26,10 @@ if (pr.includes('npm install --')) throw new Error('PR validation must not regen
 if (/git\s+push/.test(pr)) throw new Error('PR validation must not mutate its source branch');
 
 const retention = await readFile('.github/workflows/actions-retention.yml', 'utf8');
-if (retention.includes('actions: write')) throw new Error('Retention audit must remain non-destructive until cleanup apply is explicitly approved');
-if (/npm\s+(ci|install)/.test(retention)) throw new Error('Retention audit must not install the product toolchain');
+if (!retention.includes('actions: write')) throw new Error('Retention cleanup requires narrowly scoped Actions write permission');
+if (retention.includes('contents: write')) throw new Error('Retention cleanup must not receive repository contents write permission');
+if (!retention.includes('ref: ${{ github.event.repository.default_branch }}')) throw new Error('Retention cleanup must execute trusted default-branch code when using pull_request_target');
+if (/npm\s+(ci|install)/.test(retention)) throw new Error('Retention cleanup must not install the product toolchain');
 
 for (const file of Object.keys(contracts)) {
   const source = await readFile(file, 'utf8');

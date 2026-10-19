@@ -1,8 +1,14 @@
 {
-  "schemaVersion": 1,
+  "schemaVersion": 2,
   "minimumRunsPerWorkflow": 5,
   "minimumSuccessfulRunsPerWorkflow": 2,
   "maxDeletionsPerRun": 100,
+  "mergedPullRequest": {
+    "preserveSuccessfulRunsPerWorkflow": 1,
+    "preserveWorkflowPaths": [
+      ".github/workflows/ci.yml"
+    ]
+  },
   "categories": {
     "pr": {
       "successDays": 30,

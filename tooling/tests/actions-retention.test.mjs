@@ -1,12 +1,16 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import { categoryForRun, planRunDeletions } from '../actions/retention.mjs';
+import { categoryForRun, planMergedPullRequestRunDeletions, planRunDeletions } from '../actions/retention.mjs';
 
 const now = new Date('2026-10-19T03:00:00Z');
 const policy = {
   minimumRunsPerWorkflow: 2,
   minimumSuccessfulRunsPerWorkflow: 1,
   maxDeletionsPerRun: 2,
+  mergedPullRequest: {
+    preserveSuccessfulRunsPerWorkflow: 1,
+    preserveWorkflowPaths: ['.github/workflows/ci.yml']
+  },
   categories: {
     pr: { successDays: 30, nonSuccessDays: 7 },
     release: { successDays: 365, nonSuccessDays: 90 },
@@ -14,16 +18,29 @@ const policy = {
   }
 };
 
-function run(id, { days = 40, conclusion = 'success', workflow = 1, path = '.github/workflows/ci.yml', status = 'completed' } = {}) {
+function run(id, {
+  days = 40,
+  conclusion = 'success',
+  workflow = 1,
+  path = '.github/workflows/ci.yml',
+  event = path.endsWith('/ci.yml') ? 'pull_request' : 'push',
+  status = 'completed',
+  pr = null,
+  branch = 'feature/example',
+  repository = 'vyrnforge/vyrnforge-ui'
+} = {}) {
   const updated = new Date(now.getTime() - days * 86_400_000).toISOString();
   return {
     id,
     workflow_id: workflow,
     name: `run-${id}`,
     path,
-    event: path.endsWith('/ci.yml') ? 'pull_request' : 'push',
+    event,
     status,
     conclusion,
+    head_branch: branch,
+    head_repository: { full_name: repository },
+    pull_requests: pr ? [{ number: pr }] : [],
     created_at: updated,
     updated_at: updated,
     html_url: `https://example.invalid/${id}`
@@ -33,6 +50,13 @@ function run(id, { days = 40, conclusion = 'success', workflow = 1, path = '.git
 test('classifies release workflow separately from PR history', () => {
   assert.equal(categoryForRun(run(1)), 'pr');
   assert.equal(categoryForRun(run(2, { path: '.github/workflows/release.yml' })), 'release');
+});
+
+test('normalizes workflow refs and classifies pull_request_target as PR history', () => {
+  assert.equal(categoryForRun(run(1, {
+    path: '.github/workflows/ci.yml@refs/pull/890/merge',
+    event: 'pull_request_target'
+  })), 'pr');
 });
 
 test('preserves newest workflow runs and at least one successful run', () => {
@@ -81,4 +105,89 @@ test('hard caps proposed deletions per cleanup execution', () => {
   const result = planRunDeletions(runs, policy, { now });
   assert.equal(result.deletions.length, 2);
   assert.equal(result.deferredByCap, 1);
+});
+
+test('merged PR cleanup preserves only the newest successful validation evidence', () => {
+  const mergedPolicy = { ...policy, maxDeletionsPerRun: 100 };
+  const pullRequest = {
+    number: 890,
+    head: {
+      ref: 'feat/button-vertical-slice',
+      repo: { full_name: 'vyrnforge/vyrnforge-ui' }
+    }
+  };
+  const runs = [
+    run(10, { days: 1, pr: 890, branch: 'feat/button-vertical-slice', conclusion: 'success' }),
+    run(9, { days: 2, pr: 890, branch: 'feat/button-vertical-slice', conclusion: 'success' }),
+    run(8, { days: 3, pr: 890, branch: 'feat/button-vertical-slice', conclusion: 'failure' }),
+    run(7, {
+      days: 4,
+      pr: 890,
+      branch: 'feat/button-vertical-slice',
+      workflow: 7,
+      path: '.github/workflows/button-bootstrap-lock.yml',
+      conclusion: 'success'
+    }),
+    run(6, { days: 5, pr: 891, branch: 'feature/other', conclusion: 'failure' }),
+    run(5, {
+      days: 6,
+      branch: 'main',
+      event: 'push',
+      workflow: 3,
+      path: '.github/workflows/main.yml',
+      conclusion: 'success'
+    })
+  ];
+
+  const result = planMergedPullRequestRunDeletions(runs, mergedPolicy, pullRequest);
+  assert.equal(result.matchedRuns, 4);
+  assert.equal(result.protectedRuns, 1);
+  assert.deepEqual(result.deletions.map((item) => item.id), [9, 8, 7]);
+  assert.ok(result.deletions.every((item) => item.reason.includes('#890')));
+});
+
+test('merged PR cleanup can fall back to head branch and repository when PR links are absent', () => {
+  const mergedPolicy = { ...policy, maxDeletionsPerRun: 100 };
+  const pullRequest = {
+    number: 890,
+    head: {
+      ref: 'feat/button-vertical-slice',
+      repo: { full_name: 'vyrnforge/vyrnforge-ui' }
+    }
+  };
+  const runs = [
+    run(3, { days: 1, branch: 'feat/button-vertical-slice', conclusion: 'success' }),
+    run(2, { days: 2, branch: 'feat/button-vertical-slice', conclusion: 'failure' }),
+    run(1, {
+      days: 3,
+      branch: 'feat/button-vertical-slice',
+      repository: 'someone/fork',
+      conclusion: 'failure'
+    })
+  ];
+
+  const result = planMergedPullRequestRunDeletions(runs, mergedPolicy, pullRequest);
+  assert.equal(result.matchedRuns, 2);
+  assert.deepEqual(result.deletions.map((item) => item.id), [2]);
+});
+
+test('merged PR cleanup excludes the currently executing run and respects deletion cap', () => {
+  const pullRequest = {
+    number: 890,
+    head: {
+      ref: 'feat/button-vertical-slice',
+      repo: { full_name: 'vyrnforge/vyrnforge-ui' }
+    }
+  };
+  const runs = [
+    run(5, { days: 1, pr: 890, branch: 'feat/button-vertical-slice', conclusion: 'success' }),
+    run(4, { days: 2, pr: 890, branch: 'feat/button-vertical-slice', conclusion: 'failure' }),
+    run(3, { days: 3, pr: 890, branch: 'feat/button-vertical-slice', conclusion: 'failure' }),
+    run(2, { days: 4, pr: 890, branch: 'feat/button-vertical-slice', conclusion: 'failure' })
+  ];
+
+  const result = planMergedPullRequestRunDeletions(runs, policy, pullRequest, { currentRunId: 4 });
+  assert.equal(result.matchedRuns, 3);
+  assert.deepEqual(result.deletions.map((item) => item.id), [3, 2]);
+  assert.equal(result.deferredByCap, 0);
 });
