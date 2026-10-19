@@ -1,2 +1,2 @@
-// Angular APIs will be introduced from approved component contracts.
-export {};
+export { VfButtonDirective } from './button.js';
+export type { ButtonSize, ButtonVariant } from './button.js';

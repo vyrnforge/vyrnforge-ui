@@ -13,11 +13,19 @@
       "types": "./dist/index.d.ts",
       "import": "./dist/index.js",
       "default": "./dist/index.js"
+    },
+    "./button": {
+      "types": "./dist/button.d.ts",
+      "import": "./dist/button.js",
+      "default": "./dist/button.js"
     }
   },
   "dependencies": {
     "@vyrnforge/core": "0.0.0-rebuild",
     "@vyrnforge/web": "0.0.0-rebuild"
+  },
+  "peerDependencies": {
+    "vue": ">=3.5.0 <3.6.0"
   },
   "scripts": {
     "build": "tsc -p tsconfig.json"
