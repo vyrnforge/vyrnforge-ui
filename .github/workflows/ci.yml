@@ -20,9 +20,9 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version-file: .node-version
-          cache: npm
-      - name: Install toolchain
-        run: npm ci --ignore-scripts --no-audit --no-fund
+      # bootstrap-lock-refresh: one read-only run to generate the committed lock for the selected toolchain.
+      - name: Install toolchain and refresh lock artifact
+        run: npm install --ignore-scripts --no-audit --no-fund
       - name: Execute targeted validation plan
         env:
           BASE_SHA: ${{ github.event.pull_request.base.sha }}
@@ -46,3 +46,11 @@ jobs:
             test-results/playwright-results
           if-no-files-found: ignore
           retention-days: 7
+      - name: Upload refreshed lockfile
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: bootstrap-package-lock-final
+          path: package-lock.json
+          if-no-files-found: error
+          retention-days: 1
