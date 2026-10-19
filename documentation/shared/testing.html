@@ -1,0 +1,22 @@
+<p class="vf-docs-lede">Application tests should verify the observable VyrnForge contract rather than private framework or DOM implementation details.</p>
+<section>
+  <h2>What to test</h2>
+  <ul>
+    <li>Query by accessible role, name, or other public semantics where practical.</li>
+    <li>Exercise keyboard and focus behavior when it is part of the component contract.</li>
+    <li>Test semantic intent separately from committed state for controlled components.</li>
+    <li>Use documented public CSS hooks only when a styling assertion is actually required.</li>
+  </ul>
+</section>
+<section>
+  <h2>What not to test</h2>
+  <ul>
+    <li>Undocumented DOM nesting or framework-internal lifecycle details.</li>
+    <li>Private <code>--_vf-*</code> custom properties or internal state markers.</li>
+    <li>Implementation helpers that are not part of the public package surface.</li>
+  </ul>
+</section>
+<section>
+  <h2>Framework examples</h2>
+  <p>Framework-specific test syntax belongs to the corresponding framework guide once that port has real implemented components. The testing philosophy on this page remains shared.</p>
+</section>

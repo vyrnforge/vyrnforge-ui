@@ -1,129 +1,46 @@
-# Contributing to VyrnForge UI
+# Contributing to VyrnForge
 
-Thanks for helping improve VyrnForge UI. VyrnForge is a dependency-minimal,
-multi-framework enterprise UI foundation, not only a React component package or
-data-grid library.
+VyrnForge is a clean-slate rebuild inside an existing repository. Canonical architecture and standards live in the connected VyrnForge Google Drive documentation; repository code is implementation evidence, and `packages/legacy` is historical reference only.
 
-The repository is source-available under the
-[VyrnForge Source License 1.0](LICENSE). Do not describe it as open source or
-broaden the rights granted by the license.
+## Before implementation
 
-## Branch and PR contribution path
+1. Read the smallest relevant canonical architecture, standard, and component documents.
+2. Inspect the current active repository surface before making implementation claims.
+3. Identify the reusable capability and whether it belongs in a shared contract, Core, Web, a framework port, documentation, or repository-only tooling.
+4. Reuse an approved foundation when it is correct. Do not preserve a legacy abstraction merely because it already exists.
+5. Define observable acceptance evidence before considering the change complete.
 
-`main` is the canonical protected release boundary. Normal work uses short-lived
-branches created from current `main`. When a real prerequisite is still unmerged,
-a dependent branch may instead stack on that prerequisite and must record its
-base, dependency, and retarget plan in the pull request.
+## Package boundaries
 
-Temporary `integration/<initiative>` branches are allowed only when several
-reviewed changes must be exercised together before the initiative can safely
-reach `main`. They are bounded coordination branches, not permanent promotion
-lanes or an alternate `develop` branch.
+The active public package graph is:
 
-The complete branch, change-impact, CI, merge, release, and delivery contract is
-[`docs/governance/05-trunk-delivery.md`](docs/governance/05-trunk-delivery.md).
+- `@vyrnforge/core` — DOM-free renderer-neutral semantic types and genuinely portable logic.
+- `@vyrnforge/web` — canonical CSS, tokens/themes at runtime, and narrow shared browser foundations.
+- `@vyrnforge/react`, `@vyrnforge/angular`, `@vyrnforge/vue`, `@vyrnforge/elements` — sibling idiomatic ports depending only on Core and Web.
 
-Repository development uses the Node.js and npm versions pinned by `.nvmrc`,
-`.node-version`, and the root `packageManager`.
+Do not introduce sibling-port dependencies, cycles, a universal component controller/runtime, framework-specific shared contracts, port-local visual systems, or application business architecture.
 
-```bash
-git clone https://github.com/vyrnforge/vyrnforge-ui.git
-cd vyrnforge-ui
-npm ci
+## Testing layout
 
-git switch main
-git pull --ff-only origin main
-git switch -c <short-lived-branch>
+Canonical component contracts own behavioral scenarios. Repository evidence lives under `testing/` by layer: renderer-neutral contract evidence, framework-port integration, real-browser behavior, visual evidence, and SSR/hydration evidence when those layers genuinely apply. The component registry is an ownership/status index, not a behavioral DSL.
 
-npm run check
-npm test
-npm run build
-```
+Use real browsers for browser-owned behavior. Automated accessibility scanning complements rather than replaces keyboard/focus/browser behavior and assistive-technology evidence. Do not create meaningless visual baselines or fake SSR fixtures for unsupported framework/runtime combinations.
 
-Use a mainline PR to protected `main` when the change is independently valid.
-Use a stacked PR only when a real dependency exists. Non-mainline review checks
-do not replace the full protected mainline gate required before the change
-reaches `main`.
+## Documentation
 
-`scripts/detect-ci-scope.mjs` remains authoritative for technical classification
-from changed paths and the actual workspace dependency graph; contributors do
-not maintain a duplicated package matrix in the pull request.
+Framework-neutral content is authored once under shared documentation sources and composed into framework experiences. Framework guides own only framework-specific installation/API/integration/examples. Public examples must eventually compile/run against the supported package version. An unimplemented framework must be shown as unavailable rather than implied to work.
 
-After a successful protected-main merge, the exact `main` push performs the
-commit-bound delivery work owned by the repository workflow rather than silently
-substituting another branch.
+## CI and validation
 
-`npm run ci` is available for complete local repository validation when a
-maintainer, infrastructure change, or unusually broad change needs it.
+Pull requests use dependency-derived validation. The product graph identifies affected areas; the validation graph selects required evidence; prerequisites are expanded and deduplicated by the executor. Review the uploaded validation-plan artifact instead of assuming every test should run.
 
-## Before changing UI
+- PR: targeted affected evidence plus small global architecture sentinels.
+- `main`: broader package, consumer, documentation, and integration assurance.
+- scheduled: expensive cross-browser/compatibility/visual/accessibility evidence as those scopes exist.
+- release: complete required release graph, not merely the PR selection.
 
-Start from the existing VyrnForge foundations:
+Unknown or unclassified changes intentionally fail closed and broaden validation. Do not encode large path-condition matrices in workflow YAML.
 
-- reuse or extend an existing component, primitive, behavior, utility, token, or
-  pattern before adding parallel UI;
-- keep framework-neutral behavior and contracts outside renderer-specific
-  packages when practical;
-- keep application state, backend calls, auth, permissions, routing, and
-  business workflows in consuming applications;
-- use existing VyrnForge token and CSS contracts instead of inventing competing
-  styling systems;
-- do not add large UI frameworks, state-management libraries, or styling systems
-  without explicit approval.
+## Completion
 
-Package boundaries are documented in
-[`docs/architecture/01-package-boundaries.md`](docs/architecture/01-package-boundaries.md).
-The documentation entrypoint is [`docs/README.md`](docs/README.md).
-
-## Quality and change-impact expectations
-
-Changes should preserve accessibility, keyboard behavior, focus management,
-theme and density behavior, internationalization readiness, package boundaries,
-and public API compatibility where applicable.
-
-Add or update tests for changed public behavior. Update canonical docs and
-metadata when public APIs, components, tokens, package exports, release behavior,
-installation, migration, or supported usage changes. Update executable examples
-when a new or materially changed public capability benefits from one; do not
-churn them for unrelated internal refactors.
-
-A new publishable workspace must be introduced together with repository
-inventory, dependency/CI impact, consumer evidence, documentation impact, and an
-explicit release lifecycle classification. Publication may be deferred, but an
-unclassified publishable workspace is not an acceptable intermediate state.
-
-Prefer links to canonical documentation over duplicated procedures or component
-lists. Do not commit credentials, `.env` files, `node_modules`, logs, archives,
-package tarballs, or generated build output that the repository does not
-explicitly track.
-
-## Pull requests
-
-The default pull-request template is the normal path. Describe the PR class,
-base, dependency, retarget plan when stacked, impact matrix, compatibility or
-migration impact, validation, limitations, and follow-up work.
-
-Framework sequencing must reflect real technical dependencies rather than a
-React/Angular/Vue preference order. The CI planner is authoritative for executed
-checks; do not copy internal workflow topology into the PR.
-
-Two specialist templates remain for changes that need extra operational context:
-
-- `.github/PULL_REQUEST_TEMPLATE/ci-cd-infrastructure.md` for CI/CD, Pages,
-  permissions, branch protection, or repository automation;
-- `.github/PULL_REQUEST_TEMPLATE/release.md` for an actual prerelease publication
-  candidate.
-
-Repository issue forms remain available for defects, reusable feature proposals,
-accessibility issues, infrastructure issues, and release-readiness problems.
-
-## Security
-
-Do not report security vulnerabilities in a public issue. Follow
-[SECURITY.md](SECURITY.md) for private reporting.
-
-## Licensing
-
-Contributions remain subject to the repository license and project licensing
-policy. Do not add alternative license identifiers, CLA requirements, or
-distribution claims unless that change is explicitly approved.
+Code alone is not completion. A change is complete only when the applicable contract, accessibility/interaction behavior, tests, package/public entrypoints, docs/examples, styling/token behavior, consumer verification, SSR/browser evidence, and migration/release implications are resolved or explicitly documented as non-applicable/deferred.

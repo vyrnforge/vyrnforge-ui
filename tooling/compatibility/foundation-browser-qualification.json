@@ -1,0 +1,16 @@
+{
+  "schemaVersion": 1,
+  "qualificationType": "pre-component-foundation",
+  "date": "2026-10-19",
+  "repository": "vyrnforge/vyrnforge-ui",
+  "branch": "rebuild/bootstrap-foundation",
+  "commit": "0914b69852cc6bbc16d33e80931d97cf15043802",
+  "workflowRunId": 39181962945,
+  "jobId": 117836421002,
+  "playwright": "1.64.1",
+  "engines": ["chromium", "firefox", "webkit"],
+  "result": "passed",
+  "scope": "documentation and foundation browser harness",
+  "releaseQualification": false,
+  "notes": "One-time pre-component cross-browser qualification. Normal PR validation remains impact-scoped and uses Chromium only when browser evidence is selected. Scheduled and release tiers own recurring cross-browser assurance."
+}

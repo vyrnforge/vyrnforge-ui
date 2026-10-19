@@ -1,91 +1,92 @@
-import js from "@eslint/js";
-import babelParser from "@babel/eslint-parser";
-import globals from "globals";
-import react from "eslint-plugin-react";
-import reactHooks from "eslint-plugin-react-hooks";
+import { defineConfig } from 'eslint/config';
+import tseslint from 'typescript-eslint';
 
-const sourceFiles = ["**/*.{js,mjs,cjs,ts,mts,cts,jsx,tsx}"];
-const reactFiles = ["**/*.{jsx,tsx}"];
+const correctnessRules = {
+  'constructor-super': 'error',
+  'for-direction': 'error',
+  'getter-return': 'error',
+  'no-async-promise-executor': 'error',
+  'no-class-assign': 'error',
+  'no-compare-neg-zero': 'error',
+  'no-const-assign': 'error',
+  'no-constant-binary-expression': 'error',
+  'no-control-regex': 'error',
+  'no-debugger': 'error',
+  'no-dupe-args': 'error',
+  'no-dupe-class-members': 'error',
+  'no-dupe-else-if': 'error',
+  'no-dupe-keys': 'error',
+  'no-duplicate-case': 'error',
+  'no-duplicate-imports': 'error',
+  'no-empty-character-class': 'error',
+  'no-ex-assign': 'error',
+  'no-fallthrough': 'error',
+  'no-func-assign': 'error',
+  'no-import-assign': 'error',
+  'no-irregular-whitespace': 'error',
+  'no-loss-of-precision': 'error',
+  'no-new-native-nonconstructor': 'error',
+  'no-obj-calls': 'error',
+  'no-promise-executor-return': 'error',
+  'no-prototype-builtins': 'error',
+  'no-self-assign': 'error',
+  'no-setter-return': 'error',
+  'no-shadow-restricted-names': 'error',
+  'no-sparse-arrays': 'error',
+  'no-this-before-super': 'error',
+  'no-unexpected-multiline': 'error',
+  'no-unreachable': 'error',
+  'no-unreachable-loop': 'error',
+  'no-unsafe-finally': 'error',
+  'no-unsafe-negation': 'error',
+  'no-unsafe-optional-chaining': 'error',
+  'no-useless-backreference': 'error',
+  'no-useless-catch': 'error',
+  'no-useless-escape': 'error',
+  'no-with': 'error',
+  'prefer-const': 'error',
+  'require-yield': 'error',
+  'use-isnan': 'error',
+  'valid-typeof': 'error'
+};
 
-export default [
+export default defineConfig(
   {
     ignores: [
-      "**/node_modules/**",
-      "**/{dist,build,lib,coverage,test-results,playwright-report,blob-report}/**",
-      "**/{generated,docs-generated}/**",
-      "**/{.cache,.vite,.vitest,.turbo,.parcel-cache}/**",
-      "**/{.tmp,.temp,tmp,temp}/**",
-      "**/.eslintcache",
-      "**/*.tsbuildinfo",
-      "**/*.{tmp,temp,bak,orig}",
-      "tests/package-consumer/.tmp-*/**",
-    ],
+      'dist/**',
+      'node_modules/**',
+      'packages/legacy/**',
+      'test-results/**'
+    ]
   },
-  js.configs.recommended,
   {
-    files: sourceFiles,
+    files: ['**/*.js', '**/*.mjs'],
     languageOptions: {
-      parser: babelParser,
+      ecmaVersion: 'latest',
+      sourceType: 'module'
+    },
+    linterOptions: {
+      reportUnusedDisableDirectives: 'error'
+    },
+    rules: correctnessRules
+  },
+  {
+    files: ['packages/{core,web,react,angular,vue,elements}/src/**/*.{ts,tsx,mts,cts}'],
+    extends: [tseslint.configs.recommended],
+    languageOptions: {
       parserOptions: {
-        requireConfigFile: false,
-        babelOptions: {
-          babelrc: false,
-          configFile: false,
-          parserOpts: {
-            plugins: ["typescript", "jsx", "decorators-legacy"],
-          },
-        },
-      },
-      globals: {
-        ...globals.browser,
-        ...globals.es2021,
-        ...globals.node,
-      },
-      sourceType: "module",
+        projectService: true,
+        tsconfigRootDir: import.meta.dirname,
+        onUnsupportedTypeScriptVersion: 'error'
+      }
     },
-  },
-  {
-    files: ["**/*.{ts,mts,cts,tsx}"],
-    rules: {
-      // TypeScript resolves these names and imports; the base JS rules cannot.
-      "no-undef": "off",
-      "no-unused-vars": "off",
-    },
-  },
-  {
-    ...react.configs.flat.recommended,
-    files: reactFiles,
-    settings: {
-      react: {
-        version: "detect",
-      },
+    linterOptions: {
+      reportUnusedDisableDirectives: 'error'
     },
     rules: {
-      ...react.configs.flat.recommended.rules,
-      "react/prop-types": "off",
-    },
-  },
-  {
-    ...react.configs.flat["jsx-runtime"],
-    files: reactFiles,
-  },
-  {
-    files: reactFiles,
-    plugins: {
-      "react-hooks": reactHooks,
-    },
-    rules: {
-      "react-hooks/rules-of-hooks": "error",
-      "react-hooks/exhaustive-deps": "warn",
-    },
-  },
-  {
-    files: [
-      "**/*.{test,spec}.{js,mjs,cjs,ts,mts,cts,jsx,tsx}",
-      "**/__tests__/**/*.{js,mjs,cjs,ts,mts,cts,jsx,tsx}",
-    ],
-    languageOptions: {
-      globals: globals.vitest,
-    },
-  },
-];
+      '@typescript-eslint/consistent-type-imports': ['error', { prefer: 'type-imports' }],
+      '@typescript-eslint/no-explicit-any': 'error',
+      '@typescript-eslint/no-non-null-assertion': 'error'
+    }
+  }
+);

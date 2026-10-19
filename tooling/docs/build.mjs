@@ -1,0 +1,146 @@
+import { cp, mkdir, readFile, rm, writeFile } from 'node:fs/promises';
+import path from 'node:path';
+import { fileURLToPath } from 'node:url';
+
+const root = path.resolve(fileURLToPath(new URL('../../', import.meta.url)));
+const outRoot = path.join(root, 'dist/docs');
+const channel = process.env.VYRNFORGE_DOCS_CHANNEL || 'next';
+const channelRoot = path.join(outRoot, channel);
+const registry = JSON.parse(await readFile(path.join(root, 'documentation/site/registry.json'), 'utf8'));
+const rootManifest = JSON.parse(await readFile(path.join(root, 'package.json'), 'utf8'));
+const compatibility = JSON.parse(await readFile(path.join(root, 'tooling/compatibility/support-status.json'), 'utf8'));
+const packageNames = ['core', 'web', 'react', 'angular', 'vue', 'elements'];
+const packageManifests = Object.fromEntries(await Promise.all(packageNames.map(async (name) => [name, JSON.parse(await readFile(path.join(root, `packages/${name}/package.json`), 'utf8'))])));
+
+function escapeHtml(value) {
+  return String(value)
+    .replaceAll('&', '&amp;')
+    .replaceAll('<', '&lt;')
+    .replaceAll('>', '&gt;')
+    .replaceAll('"', '&quot;');
+}
+
+function stripHtml(value) {
+  return value.replace(/<script[\s\S]*?<\/script>/gi, ' ').replace(/<style[\s\S]*?<\/style>/gi, ' ').replace(/<[^>]+>/g, ' ').replace(/\s+/g, ' ').trim();
+}
+
+function makeScrollableRegionsKeyboardReachable(value) {
+  return value.replace(/<pre(?![^>]*\btabindex=)([^>]*)>/gi, '<pre tabindex="0"$1>');
+}
+
+function pageDir(slug) {
+  return path.posix.join('/', channel, slug || '');
+}
+
+function relativeRoute(fromSlug, toSlug) {
+  const from = pageDir(fromSlug);
+  const to = pageDir(toSlug);
+  let value = path.posix.relative(from, to) || '.';
+  if (!value.startsWith('.')) value = `./${value}`;
+  return value === '.' ? './' : `${value.replace(/\/$/, '')}/`;
+}
+
+function relativeAsset(fromSlug, asset) {
+  let value = path.posix.relative(pageDir(fromSlug), path.posix.join('/', channel, 'assets', asset));
+  if (!value.startsWith('.')) value = `./${value}`;
+  return value;
+}
+
+function renderPackages() {
+  const rows = packageNames.map((name) => {
+    const manifest = packageManifests[name];
+    const exports = Object.keys(manifest.exports || {}).map((entry) => entry === '.' ? manifest.name : `${manifest.name}${entry.slice(1)}`).join('<br>');
+    return `<tr><th scope="row"><code>${escapeHtml(manifest.name)}</code></th><td>${escapeHtml(manifest.description || '')}</td><td>${exports || 'No public entrypoints'}</td><td>${manifest.private ? 'Bootstrap private' : 'Publishable'}</td></tr>`;
+  }).join('');
+  return `<p class="vf-docs-lede">Package reference is generated from the active package manifests so documentation cannot silently invent public package names or entrypoints.</p><div class="vf-docs-table-wrap" tabindex="0" role="region" aria-label="Package reference"><table><thead><tr><th>Package</th><th>Role</th><th>Public entrypoints</th><th>Status</th></tr></thead><tbody>${rows}</tbody></table></div>`;
+}
+
+function renderCompatibilityValue(value) {
+  if (value && typeof value === 'object' && !Array.isArray(value)) {
+    return `<dl>${Object.entries(value).map(([key, nested]) => `<dt><code>${escapeHtml(key)}</code></dt><dd>${renderCompatibilityValue(nested)}</dd>`).join('')}</dl>`;
+  }
+  if (Array.isArray(value)) return `<ul>${value.map((item) => `<li>${escapeHtml(item)}</li>`).join('')}</ul>`;
+  return `<code>${escapeHtml(value)}</code>`;
+}
+
+function renderCompatibility() {
+  return `<p class="vf-docs-lede">This page is generated from the repository compatibility source used by CI and future release checks. Unselected support ranges remain visibly unselected instead of being guessed.</p>${renderCompatibilityValue(compatibility)}`;
+}
+
+async function pageBody(page) {
+  if (page.kind === 'generated') {
+    if (page.generator === 'packages') return renderPackages();
+    if (page.generator === 'compatibility') return renderCompatibility();
+    throw new Error(`Unknown documentation generator: ${page.generator}`);
+  }
+  return readFile(path.join(root, page.source), 'utf8');
+}
+
+function navGroups() {
+  const groups = new Map();
+  for (const page of registry.pages) {
+    const pages = groups.get(page.group) || [];
+    pages.push(page);
+    groups.set(page.group, pages);
+  }
+  return groups;
+}
+
+const groups = navGroups();
+const sharedFoundationPages = registry.pages.filter((page) => page.kind === 'shared' && page.slug !== '');
+const frameworkPages = registry.pages.filter((page) => page.kind === 'framework');
+
+function renderLayout(page, bodyHtml) {
+  const nav = [...groups.entries()].map(([group, pages]) => `<section><h2>${escapeHtml(group)}</h2><ul>${pages.map((item) => `<li><a href="${relativeRoute(page.slug, item.slug)}"${item.slug === page.slug ? ' aria-current="page"' : ''}>${escapeHtml(item.title)}</a></li>`).join('')}</ul></section>`).join('');
+  const frameworkRoutes = Object.fromEntries(frameworkPages.map((item) => [item.framework, item.slug ? `${item.slug}/` : './']));
+  const selectorOptions = ['<option value="">Framework</option>', ...frameworkPages.map((item) => `<option value="${escapeHtml(item.framework)}">${escapeHtml(item.title)}</option>`)].join('');
+  const sharedLinks = page.kind === 'framework' ? `<section class="vf-docs-shared-links"><h2>Shared VyrnForge foundations</h2><p>These concepts are shared across framework ports and are intentionally not copied into this framework guide.</p><ul>${sharedFoundationPages.map((item) => `<li><a href="${relativeRoute(page.slug, item.slug)}">${escapeHtml(item.title)}</a></li>`).join('')}</ul></section>` : '';
+  const siteRoot = relativeRoute(page.slug, '');
+  return `<!doctype html>
+<html lang="en" data-vf-docs-channel="${escapeHtml(channel)}">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="VyrnForge ${escapeHtml(page.title)} documentation">
+  <title>${escapeHtml(page.title)} · VyrnForge</title>
+  <link rel="stylesheet" href="${relativeAsset(page.slug, 'styles.css')}">
+</head>
+<body data-vf-site-root="${siteRoot}" data-vf-framework="${escapeHtml(page.framework || '')}" data-vf-version="${escapeHtml(rootManifest.version)}">
+  <a class="vf-skip-link" href="#main">Skip to content</a>
+  <header class="vf-docs-header"><div class="vf-docs-header__inner">
+    <a class="vf-docs-brand" href="${relativeRoute(page.slug, '')}">VyrnForge</a>
+    <span class="vf-docs-version" data-vf-docs-version>${escapeHtml(channel)} · ${escapeHtml(rootManifest.version)}</span>
+    <div class="vf-docs-tools">
+      <label>Framework <select data-vf-framework-select>${selectorOptions}</select></label>
+      <div class="vf-docs-search-wrap"><label for="vf-docs-search">Search</label> <input id="vf-docs-search" data-vf-docs-search type="search" autocomplete="off"><ul class="vf-docs-search-results" data-vf-docs-search-results hidden></ul></div>
+    </div>
+  </div></header>
+  <div class="vf-docs-shell">
+    <nav class="vf-docs-nav" aria-label="Documentation">${nav}</nav>
+    <main id="main"><h1>${escapeHtml(page.title)}</h1>${bodyHtml}${sharedLinks}</main>
+  </div>
+  <footer>VyrnForge documentation · ${escapeHtml(channel)} channel</footer>
+  <script id="vf-framework-routes" type="application/json">${JSON.stringify(frameworkRoutes).replaceAll('<', '\\u003c')}</script>
+  <script src="${relativeAsset(page.slug, 'client.js')}" defer></script>
+</body>
+</html>`;
+}
+
+await rm(outRoot, { recursive: true, force: true });
+await mkdir(path.join(channelRoot, 'assets'), { recursive: true });
+await cp(path.join(root, 'apps/docs/styles.css'), path.join(channelRoot, 'assets/styles.css'));
+await cp(path.join(root, 'apps/docs/client.js'), path.join(channelRoot, 'assets/client.js'));
+await writeFile(path.join(outRoot, 'index.html'), `<!doctype html><html lang="en"><head><meta charset="utf-8"><meta http-equiv="refresh" content="0;url=./${channel}/"><title>VyrnForge documentation</title></head><body><a href="./${channel}/">Open VyrnForge ${channel} documentation</a></body></html>`);
+
+const searchIndex = [];
+for (const page of registry.pages) {
+  const bodyHtml = makeScrollableRegionsKeyboardReachable(await pageBody(page));
+  const outputDirectory = path.join(channelRoot, page.slug);
+  await mkdir(outputDirectory, { recursive: true });
+  await writeFile(path.join(outputDirectory, 'index.html'), renderLayout(page, bodyHtml));
+  searchIndex.push({ title: page.title, path: page.slug ? `${page.slug}/` : './', text: stripHtml(bodyHtml), framework: page.framework || null });
+}
+
+await writeFile(path.join(channelRoot, 'search-index.json'), `${JSON.stringify(searchIndex, null, 2)}\n`);
+await writeFile(path.join(channelRoot, 'site-manifest.json'), `${JSON.stringify({ channel, version: rootManifest.version, pages: registry.pages.map(({ slug, title, kind, framework }) => ({ slug, title, kind, framework: framework || null })) }, null, 2)}\n`);
+process.stdout.write(`documentation build: ${registry.pages.length} pages -> ${path.relative(root, channelRoot)}\n`);

@@ -1,0 +1,14 @@
+<p class="vf-docs-lede">All framework ports consume one canonical web styling system from <code>@vyrnforge/web</code>. Framework guides may explain where styles are loaded, but they do not define separate styling architectures.</p>
+<section>
+  <h2>Cascade contract</h2>
+  <pre><code>@layer vyrnforge.reset, vyrnforge.tokens, vyrnforge.themes, vyrnforge.foundation, vyrnforge.components;</code></pre>
+  <p>The reset is optional. Tokens, themes, foundations, and component styles remain ordered and intentionally overridable.</p>
+</section>
+<section>
+  <h2>Customization hierarchy</h2>
+  <p>Prefer semantic tokens, then public component tokens, then stable styling hooks, then ordinary application CSS. Public custom properties use <code>--vf-*</code>; <code>--_vf-*</code> is private implementation state.</p>
+</section>
+<section>
+  <h2>Framework reuse</h2>
+  <p>This page is the shared styling explanation for React, Angular, Vue, Elements, and Native Web. Framework documentation references this source instead of maintaining copied styling rules.</p>
+</section>

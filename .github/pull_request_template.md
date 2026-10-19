@@ -1,61 +1,42 @@
-## Summary
+## Purpose
 
-What changed, why is it needed, and why does it belong in VyrnForge?
+What reusable VyrnForge problem does this change solve, and which canonical contract/architecture governs it?
 
-## PR topology
+## Affected product nodes
 
-**Class:** Independent / Contract-Foundation / Framework Adapter / Stacked / Integration / Mechanical Migration / Generated / Dependency / Release Fix / Backport / Hotfix
+- [ ] Core
+- [ ] Web / CSS / tokens
+- [ ] React
+- [ ] Angular
+- [ ] Vue
+- [ ] Elements
+- [ ] Documentation
+- [ ] Testing / CI / tooling
+- [ ] Legacy quarantine only
 
-**Tracker or bounded objective:**
+## Contract and architecture
 
-**Base:** `main` / prerequisite branch / `integration/<initiative>` / `release/<version>`
-
-**Depends on:** None / PR # / branch (describe)
-
-**Retarget plan for stacked PRs:** None / describe when prerequisite merges
-
-## Impact matrix
-
-- Shared/Core: None / affected
-- Native HTML / Custom Elements: None / affected
-- React: None / affected
-- Angular: None / affected
-- Vue: None / affected
-- Tokens/Styles: None / affected
-- Accessibility: None / affected
-- SSR/Server safety: None / affected
-- Internationalization: None / affected
-- Public API: None / additive / deprecated / breaking
-- Generated output: None / affected
-- Documentation: None / affected
-- Package/release lifecycle: None / affected
-
-## Compatibility / migration
-
-**Breaking or migration impact:** None / describe
-
-**Deprecation or compatibility path:** None / describe
+- [ ] I reviewed the smallest relevant canonical VyrnForge documentation.
+- [ ] Shared semantics remain framework-neutral where practical.
+- [ ] I reused an approved foundation or documented why a new abstraction is required.
+- [ ] I did not introduce a sibling-port dependency, universal component runtime, framework-local visual system, or application business architecture.
+- [ ] Public API/styling/DOM/accessibility changes are intentional and documented where applicable.
 
 ## Validation
 
-- [ ] `npm run check`
-- [ ] `npm test`
-- [ ] `npm run build`
-- [ ] Tests and contract evidence were updated where relevant.
-- [ ] Docs/metadata impact was handled where relevant.
-- [ ] Playground/example impact was handled where relevant.
-- [ ] New or changed publishable workspaces have an explicit release lifecycle classification.
-- [ ] Framework sequencing reflects real technical dependencies, not framework preference.
-- [ ] If this is non-mainline, the dependency/base is explicit and the final path to protected `main` remains defined.
+CI derives required evidence from the product and validation dependency graphs. Do not replace scoped evidence with an arbitrary full-suite run.
 
-<!--
-main is the canonical releasable branch.
-Short-lived stacked PRs and bounded integration branches are allowed when a real
-dependency requires them; they are not permanent promotion lanes or framework
-branches. Full protected validation is still required before the change reaches
-main. See docs/governance/05-trunk-delivery.md.
--->
+- [ ] The PR validation-plan artifact matches the intended impact.
+- [ ] Relevant contract, port, browser, accessibility, forms, package/consumer, SSR, visual, and documentation evidence was added or updated where applicable.
+- [ ] Expensive evidence that does not apply remains skipped rather than being added as a blanket requirement.
+- [ ] Unknown or foundational impact is allowed to fail closed and broaden validation.
+
+## Documentation
+
+- [ ] Shared framework-neutral documentation was reused instead of copied into framework guides.
+- [ ] Framework-specific documentation contains only framework-specific integration/API/examples.
+- [ ] Unimplemented framework surfaces are not presented as supported.
 
 ## Notes
 
-List known limitations, screenshots, dependency sequencing, follow-up work, reviewer context, or why a large/mechanical PR should remain unsplit.
+List intentional deferrals, compatibility decisions, reviewer context, or follow-up work. `packages/legacy` is historical evidence only and must not become a dependency or source of truth.

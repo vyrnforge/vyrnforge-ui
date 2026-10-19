@@ -1,0 +1,11 @@
+{
+  "packages": {
+    "@vyrnforge/core": [],
+    "@vyrnforge/web": ["@vyrnforge/core"],
+    "@vyrnforge/react": ["@vyrnforge/core", "@vyrnforge/web"],
+    "@vyrnforge/angular": ["@vyrnforge/core", "@vyrnforge/web"],
+    "@vyrnforge/vue": ["@vyrnforge/core", "@vyrnforge/web"],
+    "@vyrnforge/elements": ["@vyrnforge/core", "@vyrnforge/web"],
+    "@vyrnforge/legacy": []
+  }
+}

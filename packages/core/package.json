@@ -1,0 +1,21 @@
+{
+  "name": "@vyrnforge/core",
+  "version": "0.0.0-rebuild",
+  "private": true,
+  "type": "module",
+  "description": "Pure renderer-neutral VyrnForge logic and semantic types.",
+  "sideEffects": false,
+  "files": ["dist"],
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js",
+      "default": "./dist/index.js"
+    }
+  },
+  "scripts": {
+    "build": "tsc -p tsconfig.json"
+  }
+}
