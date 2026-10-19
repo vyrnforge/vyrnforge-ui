@@ -118,7 +118,7 @@ function transpile(source, framework, ts) {
   const result = ts.transpileModule(prepared, {
     compilerOptions: {
       target: ts.ScriptTarget.ES2022,
-      module: ts.ModuleKind.None,
+      module: ts.ModuleKind.ESNext,
       jsx: ts.JsxEmit.React,
       experimentalDecorators: true,
       useDefineForClassFields: false
