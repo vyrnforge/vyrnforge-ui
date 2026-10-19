@@ -16,7 +16,7 @@ Component({
 
 test('Angular Button server output keeps a native form-participating button', async () => {
   const html = await renderApplication(
-    () => bootstrapApplication(AppComponent, { providers: [provideZonelessChangeDetection()] }),
+    (context) => bootstrapApplication(AppComponent, { providers: [provideZonelessChangeDetection()] }, context),
     { document: '<!doctype html><html><body><vf-button-ssr-test></vf-button-ssr-test></body></html>' }
   );
   assert.match(html, /<button[^>]*data-vf-button/);
