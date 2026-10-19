@@ -31,8 +31,14 @@ try {
   await writeFile(path.join(consumerDir, 'package.json'), `${JSON.stringify({ name: 'vyrnforge-bootstrap-consumer', private: true, type: 'module' }, null, 2)}\n`);
   execFileSync('npm', ['install', '--ignore-scripts', '--no-audit', '--no-fund', '--package-lock=false', ...tarballs], { cwd: consumerDir, stdio: 'inherit' });
 
-  const imports = requested.map((name) => `await import('@vyrnforge/${name}');`).join('\n');
-  const buttonImports = requested.filter((name) => ['react', 'angular', 'vue'].includes(name)).map((name) => `await import('@vyrnforge/${name}/button');`).join('\n');
+  const runtimeImports = requested.filter((name) => name !== 'angular').map((name) => `await import('@vyrnforge/${name}');`).join('\n');
+  const buttonRuntimeImports = requested.filter((name) => ['react', 'vue'].includes(name)).map((name) => `await import('@vyrnforge/${name}/button');`).join('\n');
+  const angularResolution = requested.includes('angular') ? `
+for (const specifier of ['@vyrnforge/angular', '@vyrnforge/angular/button']) {
+  const resolved = import.meta.resolve(specifier);
+  const source = await readFile(new URL(resolved), 'utf8');
+  if (!source.length) throw new Error('Resolved Angular public entrypoint is empty: ' + specifier);
+}` : '';
   const webCheck = requested.includes('web') || requested.some((name) => dependencies[name].includes('web')) ? `
 const stylesheet = import.meta.resolve('@vyrnforge/web/styles.css');
 const css = await readFile(new URL(stylesheet), 'utf8');
@@ -40,7 +46,7 @@ if (!css.includes('vyrnforge.components')) throw new Error('Consumer-resolved ca
 const buttonStylesheet = import.meta.resolve('@vyrnforge/web/styles/button.css');
 const buttonCss = await readFile(new URL(buttonStylesheet), 'utf8');
 if (!buttonCss.includes('[data-vf-button]')) throw new Error('Consumer-resolved Button stylesheet is invalid');` : '';
-  await writeFile(path.join(consumerDir, 'verify.mjs'), `import { readFile } from 'node:fs/promises';\n${imports}\n${buttonImports}\n${webCheck}\nprocess.stdout.write('consumer imports: ok\\n');\n`);
+  await writeFile(path.join(consumerDir, 'verify.mjs'), `import { readFile } from 'node:fs/promises';\n${runtimeImports}\n${buttonRuntimeImports}\n${angularResolution}\n${webCheck}\nprocess.stdout.write('consumer imports: ok\\n');\n`);
   execFileSync(process.execPath, ['verify.mjs'], { cwd: consumerDir, stdio: 'inherit' });
 
   for (const name of closure) {

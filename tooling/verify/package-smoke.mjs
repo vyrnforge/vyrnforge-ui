@@ -12,7 +12,11 @@ for (const name of packages) {
   const packageDir = path.resolve('packages', name);
   await access(path.join(packageDir, 'dist', 'index.js'));
   await access(path.join(packageDir, 'dist', 'index.d.ts'));
-  await import(pathToFileURL(path.join(packageDir, 'dist', 'index.js')).href);
+
+  // Angular library output is intentionally partial-Ivy compiled and must be linked
+  // by Angular tooling before execution. Runtime behavior is covered by dedicated
+  // Angular SSR/browser evidence; package smoke verifies emitted/public artifacts.
+  if (name !== 'angular') await import(pathToFileURL(path.join(packageDir, 'dist', 'index.js')).href);
 
   const raw = execFileSync('npm', ['pack', '--json', '--dry-run', packageDir], { encoding: 'utf8', stdio: ['ignore', 'pipe', 'inherit'] });
   const result = JSON.parse(raw)[0];
