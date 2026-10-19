@@ -24,6 +24,10 @@ function stripHtml(value) {
   return value.replace(/<script[\s\S]*?<\/script>/gi, ' ').replace(/<style[\s\S]*?<\/style>/gi, ' ').replace(/<[^>]+>/g, ' ').replace(/\s+/g, ' ').trim();
 }
 
+function makeScrollableRegionsKeyboardReachable(value) {
+  return value.replace(/<pre(?![^>]*\btabindex=)([^>]*)>/gi, '<pre tabindex="0"$1>');
+}
+
 function pageDir(slug) {
   return path.posix.join('/', channel, slug || '');
 }
@@ -48,7 +52,7 @@ function renderPackages() {
     const exports = Object.keys(manifest.exports || {}).map((entry) => entry === '.' ? manifest.name : `${manifest.name}${entry.slice(1)}`).join('<br>');
     return `<tr><th scope="row"><code>${escapeHtml(manifest.name)}</code></th><td>${escapeHtml(manifest.description || '')}</td><td>${exports || 'No public entrypoints'}</td><td>${manifest.private ? 'Bootstrap private' : 'Publishable'}</td></tr>`;
   }).join('');
-  return `<p class="vf-docs-lede">Package reference is generated from the active package manifests so documentation cannot silently invent public package names or entrypoints.</p><div class="vf-docs-table-wrap"><table><thead><tr><th>Package</th><th>Role</th><th>Public entrypoints</th><th>Status</th></tr></thead><tbody>${rows}</tbody></table></div>`;
+  return `<p class="vf-docs-lede">Package reference is generated from the active package manifests so documentation cannot silently invent public package names or entrypoints.</p><div class="vf-docs-table-wrap" tabindex="0" role="region" aria-label="Package reference"><table><thead><tr><th>Package</th><th>Role</th><th>Public entrypoints</th><th>Status</th></tr></thead><tbody>${rows}</tbody></table></div>`;
 }
 
 function renderCompatibilityValue(value) {
@@ -130,7 +134,7 @@ await writeFile(path.join(outRoot, 'index.html'), `<!doctype html><html lang="en
 
 const searchIndex = [];
 for (const page of registry.pages) {
-  const bodyHtml = await pageBody(page);
+  const bodyHtml = makeScrollableRegionsKeyboardReachable(await pageBody(page));
   const outputDirectory = path.join(channelRoot, page.slug);
   await mkdir(outputDirectory, { recursive: true });
   await writeFile(path.join(outputDirectory, 'index.html'), renderLayout(page, bodyHtml));
