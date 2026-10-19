@@ -1,0 +1,40 @@
+{
+  "schemaVersion": 1,
+  "minimumRunsPerWorkflow": 5,
+  "minimumSuccessfulRunsPerWorkflow": 2,
+  "maxDeletionsPerRun": 100,
+  "categories": {
+    "pr": {
+      "successDays": 30,
+      "nonSuccessDays": 7
+    },
+    "main": {
+      "successDays": 60,
+      "nonSuccessDays": 14
+    },
+    "scheduled": {
+      "successDays": 45,
+      "nonSuccessDays": 14
+    },
+    "docs": {
+      "successDays": 30,
+      "nonSuccessDays": 14
+    },
+    "retention": {
+      "successDays": 30,
+      "nonSuccessDays": 14
+    },
+    "release": {
+      "successDays": 365,
+      "nonSuccessDays": 90
+    },
+    "dynamic": {
+      "successDays": 14,
+      "nonSuccessDays": 7
+    },
+    "unknown": {
+      "successDays": 30,
+      "nonSuccessDays": 7
+    }
+  }
+}

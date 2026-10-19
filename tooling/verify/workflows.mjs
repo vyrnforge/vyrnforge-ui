@@ -1,11 +1,12 @@
 import { readFile } from 'node:fs/promises';
 
 const contracts = {
-  '.github/workflows/ci.yml': ['pull_request:', 'name: ci-gate', 'contents: read', 'actions/checkout@v7', 'actions/setup-node@v7', 'actions/upload-artifact@v7', 'cache: npm', 'npm ci --ignore-scripts --no-audit --no-fund', '--mode pr', 'validation-plan-pr', 'browser-evidence-pr'],
-  '.github/workflows/main.yml': ['branches: [main]', 'contents: read', 'actions/checkout@v7', 'actions/setup-node@v7', 'actions/upload-artifact@v7', '--mode main', 'validation-plan-main', 'browser-evidence-main', 'vyrnforge-docs-next'],
+  '.github/workflows/ci.yml': ['pull_request:', 'name: ci-gate', 'contents: read', 'concurrency:', 'cancel-in-progress: true', 'actions/checkout@v7', 'actions/setup-node@v7', 'actions/upload-artifact@v7', 'cache: npm', 'npm ci --ignore-scripts --no-audit --no-fund', '--mode pr', 'validation-plan-pr', 'browser-evidence-pr'],
+  '.github/workflows/main.yml': ['branches: [main]', 'contents: read', 'concurrency:', 'cancel-in-progress: true', 'actions/checkout@v7', 'actions/setup-node@v7', 'actions/upload-artifact@v7', '--mode main', 'validation-plan-main', 'browser-evidence-main', 'vyrnforge-docs-next'],
   '.github/workflows/scheduled.yml': ['schedule:', 'workflow_dispatch:', 'contents: read', 'actions/checkout@v7', 'actions/setup-node@v7', 'actions/upload-artifact@v7', '--mode scheduled', 'validation-plan-scheduled', 'browser-evidence-scheduled'],
   '.github/workflows/release.yml': ["- 'v*'", 'contents: read', 'actions/checkout@v7', 'actions/setup-node@v7', 'actions/upload-artifact@v7', '--mode release', 'validation-plan-release', 'browser-evidence-release'],
-  '.github/workflows/docs-pages.yml': ['pages: write', 'id-token: write', 'actions/checkout@v7', 'actions/setup-node@v7', 'actions/configure-pages@v6', 'actions/upload-pages-artifact@v5', 'actions/deploy-pages@v5', 'npm run build:docs', 'npm run verify:docs-site']
+  '.github/workflows/docs-pages.yml': ['pages: write', 'id-token: write', 'actions/checkout@v7', 'actions/setup-node@v7', 'actions/configure-pages@v6', 'actions/upload-pages-artifact@v5', 'actions/deploy-pages@v5', 'npm run build:docs', 'npm run verify:docs-site'],
+  '.github/workflows/actions-retention.yml': ['schedule:', 'workflow_dispatch:', 'contents: read', 'actions: read', 'concurrency:', 'cancel-in-progress: true', 'actions/checkout@v7', 'actions/setup-node@v7', 'node tooling/actions/retention-report.mjs', 'actions-retention-plan', 'retention-days: 14']
 };
 
 for (const [file, required] of Object.entries(contracts)) {
@@ -23,6 +24,10 @@ if (!pr.includes('cache: npm')) throw new Error('PR validation must cache npm fr
 if (!pr.includes('npm ci --ignore-scripts --no-audit --no-fund')) throw new Error('PR validation must use npm ci');
 if (pr.includes('npm install --')) throw new Error('PR validation must not regenerate its dependency graph');
 if (/git\s+push/.test(pr)) throw new Error('PR validation must not mutate its source branch');
+
+const retention = await readFile('.github/workflows/actions-retention.yml', 'utf8');
+if (retention.includes('actions: write')) throw new Error('Retention audit must remain non-destructive until cleanup apply is explicitly approved');
+if (/npm\s+(ci|install)/.test(retention)) throw new Error('Retention audit must not install the product toolchain');
 
 for (const file of Object.keys(contracts)) {
   const source = await readFile(file, 'utf8');
