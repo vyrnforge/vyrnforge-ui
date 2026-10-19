@@ -13,6 +13,17 @@ test('component port changes select package and component evidence without sibli
   assert.ok(!plan.validationScopes.includes('component:button:vue:ssr'));
 });
 
+test('component-owned test files remain scoped even when they live under tooling', () => {
+  const plan = createPlan(['tooling/tests/button-react.test.mjs']);
+  assert.equal(plan.broadened, false);
+  assert.ok(plan.directNodes.includes('tooling'));
+  assert.ok(plan.directNodes.includes('component:button:react'));
+  assert.ok(plan.validationScopes.includes('component:button:react:ssr'));
+  assert.ok(plan.validationScopes.includes('component:button:react:browser'));
+  assert.ok(!plan.validationScopes.includes('component:button:angular:ssr'));
+  assert.ok(!plan.validationScopes.includes('component:button:vue:ssr'));
+});
+
 test('shared component web changes fan out through every registered port', () => {
   const plan = createPlan(['packages/web/src/styles/button.css']);
   for (const node of ['component:button:web', 'component:button:react', 'component:button:angular', 'component:button:vue', 'component:button:documentation']) {
