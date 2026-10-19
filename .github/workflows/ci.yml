@@ -10,7 +10,7 @@ jobs:
   ci-gate:
     name: ci-gate
     runs-on: ubuntu-latest
-    timeout-minutes: 40
+    timeout-minutes: 60
     steps:
       - name: Checkout
         uses: actions/checkout@v7
@@ -28,6 +28,8 @@ jobs:
           BASE_SHA: ${{ github.event.pull_request.base.sha }}
           HEAD_SHA: ${{ github.sha }}
         run: node tooling/impact/execute.mjs --mode pr --base "$BASE_SHA" --head "$HEAD_SHA" --output test-results/validation-plan.json
+      - name: Qualify foundation across Chromium Firefox and WebKit
+        run: npm run test:browser:docs:cross
       - name: Upload inspectable validation plan
         if: always()
         uses: actions/upload-artifact@v7
@@ -44,5 +46,5 @@ jobs:
           path: |
             test-results/playwright-report
             test-results/playwright-results
-          if-no-files-found: ignore
-          retention-days: 7
+          if-no-files-found: error
+          retention-days: 14
