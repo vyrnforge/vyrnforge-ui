@@ -1,4 +1,5 @@
 import { access, readFile } from 'node:fs/promises';
+import { assertComponentPreparation } from '../testing/discover-components.mjs';
 
 const required = [
   'testing/README.md',
@@ -7,8 +8,7 @@ const required = [
   'testing/ports/README.md',
   'testing/browser/README.md',
   'testing/visual/README.md',
-  'testing/ssr/README.md',
-  'testing/components/registry.json'
+  'testing/ssr/README.md'
 ];
 for (const file of required) await access(file);
 
@@ -20,34 +20,5 @@ for (const [target, config] of Object.entries(impact.targets)) {
   if (!Array.isArray(config.paths) || !Array.isArray(config.dependsOn) || !Array.isArray(config.evidence)) throw new Error(`invalid impact target metadata: ${target}`);
 }
 
-const registry = JSON.parse(await readFile('testing/components/registry.json', 'utf8'));
-if (registry.schemaVersion !== 1) throw new Error('testing component registry must use schemaVersion 1');
-if (!Array.isArray(registry.components)) throw new Error('testing component registry must expose a components array');
-
-const ids = new Set();
-const allowedPorts = new Set(['web', 'react', 'angular', 'vue', 'elements']);
-for (const entry of registry.components) {
-  if (!entry || typeof entry !== 'object') throw new Error('testing component registry entries must be objects');
-  if (typeof entry.component !== 'string' || !entry.component) throw new Error('testing component registry entry missing component');
-  if (ids.has(entry.component)) throw new Error(`duplicate testing component registry entry: ${entry.component}`);
-  ids.add(entry.component);
-  if (!['contract-approved', 'implementing', 'implemented'].includes(entry.status)) throw new Error(`invalid testing status for ${entry.component}`);
-  if (!entry.ports || typeof entry.ports !== 'object' || Array.isArray(entry.ports)) throw new Error(`testing registry ports must be an object for ${entry.component}`);
-  if (!Array.isArray(entry.documentationPaths)) throw new Error(`testing registry documentationPaths must be an array for ${entry.component}`);
-
-  for (const [port, config] of Object.entries(entry.ports)) {
-    if (!allowedPorts.has(port)) throw new Error(`unsupported testing port ${port} for ${entry.component}`);
-    if (!config || typeof config !== 'object' || !Array.isArray(config.paths) || config.paths.length === 0) throw new Error(`testing registry paths missing for ${entry.component}/${port}`);
-    if (config.ssr) await access(config.ssr);
-  }
-
-  if (entry.types) await access(entry.types);
-  if (Object.values(entry.ports).some((port) => port.browser)) {
-    if (!entry.browser?.runner) throw new Error(`browser evidence requires a runner for ${entry.component}`);
-    if (!Array.isArray(entry.browser.paths) || entry.browser.paths.length === 0) throw new Error(`browser evidence requires owned paths for ${entry.component}`);
-    await access(entry.browser.runner);
-    for (const browserPath of entry.browser.paths) await access(browserPath.replace(/\/$/, ''));
-  }
-}
-
-process.stdout.write(`testing structure: ${registry.components.length} metadata-driven components\n`);
+const components = assertComponentPreparation();
+process.stdout.write(`testing structure: ${components.length} auto-discovered prepared components\n`);
