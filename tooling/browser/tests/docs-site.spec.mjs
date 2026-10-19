@@ -40,6 +40,55 @@ test('framework selection exposes component-level implementation status', async 
   verifyNoErrors();
 });
 
+test('Button documentation uses executable multi-framework examples and a sandboxed live editor', async ({ page }) => {
+  const verifyNoErrors = await expectNoRuntimeErrors(page);
+  await page.goto('/next/components/button/');
+
+  const playground = page.locator('[data-vf-example-id="button/basic"]');
+  const editor = playground.getByRole('textbox', { name: 'Basic button code editor' });
+  const frame = page.frameLocator('[data-vf-example-id="button/basic"] iframe');
+  await expect(playground).toBeVisible();
+  await expect(playground.locator('iframe')).toHaveAttribute('sandbox', 'allow-scripts');
+
+  const expectations = [
+    ['React', '@vyrnforge/react/button'],
+    ['Angular', '@vyrnforge/angular/button'],
+    ['Vue', '@vyrnforge/vue/button'],
+    ['Native Web', 'data-vf-button']
+  ];
+  for (const [label, sourceNeedle] of expectations) {
+    await playground.getByRole('tab', { name: label }).click();
+    await expect(editor).toHaveValue(new RegExp(sourceNeedle.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')));
+    await expect(frame.getByRole('button', { name: 'Save changes' })).toBeVisible();
+  }
+
+  await playground.getByRole('tab', { name: 'React' }).click();
+  const reactSource = await editor.inputValue();
+  await editor.fill(reactSource.replace('Save changes', 'Ship release'));
+  await playground.getByRole('button', { name: 'Run' }).click();
+  await expect(playground.locator('[data-vf-example-status]')).toHaveText('Live preview updated.');
+  await expect(frame.getByRole('button', { name: 'Ship release' })).toBeVisible();
+
+  await playground.getByRole('tab', { name: 'Angular' }).click();
+  await playground.getByRole('button', { name: 'Run' }).click();
+  await expect(playground.locator('[data-vf-example-status]')).toHaveText('Live preview updated.');
+  await expect(frame.getByRole('button', { name: 'Save changes' })).toBeVisible();
+
+  await playground.getByRole('tab', { name: 'Vue' }).click();
+  await playground.getByRole('button', { name: 'Run' }).click();
+  await expect(playground.locator('[data-vf-example-status]')).toHaveText('Live preview updated.');
+  await expect(frame.getByRole('button', { name: 'Save changes' })).toBeVisible();
+
+  await playground.getByRole('tab', { name: 'Native Web' }).click();
+  const nativeSource = await editor.inputValue();
+  await editor.fill(nativeSource.replace('Save changes', 'Publish changes'));
+  await playground.getByRole('button', { name: 'Run' }).click();
+  await expect(playground.locator('[data-vf-example-status]')).toHaveText('Live preview updated.');
+  await expect(frame.getByRole('button', { name: 'Publish changes' })).toBeVisible();
+
+  verifyNoErrors();
+});
+
 test('docs remain navigable at a mobile viewport', async ({ page }) => {
   await page.setViewportSize({ width: 390, height: 844 });
   await page.goto('/next/foundations/accessibility/');

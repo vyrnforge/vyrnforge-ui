@@ -10,7 +10,8 @@ const componentPrefixes = [
   ['packages/react/src/button.ts', 'button-react'],
   ['packages/angular/src/button.ts', 'button-angular'],
   ['packages/vue/src/button.ts', 'button-vue'],
-  ['documentation/components/button.html', 'button-documentation']
+  ['documentation/components/button.html', 'button-documentation'],
+  ['examples/button', 'button-documentation']
 ];
 const scopedPrefixes = [
   ['packages/core/', 'core'], ['packages/web/', 'web'], ['packages/react/', 'react'], ['packages/angular/', 'angular'], ['packages/vue/', 'vue'], ['packages/elements/', 'elements'], ['packages/legacy/', 'legacy'], ['documentation/', 'documentation'], ['apps/docs/', 'documentation'], ['examples/', 'documentation']
