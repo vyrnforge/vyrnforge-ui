@@ -12,26 +12,19 @@ for (const name of packages) {
   const packageDir = path.resolve('packages', name);
   await access(path.join(packageDir, 'dist', 'index.js'));
   await access(path.join(packageDir, 'dist', 'index.d.ts'));
-
   await import(pathToFileURL(path.join(packageDir, 'dist', 'index.js')).href);
 
-  const raw = execFileSync('npm', ['pack', '--json', '--dry-run', packageDir], {
-    encoding: 'utf8',
-    stdio: ['ignore', 'pipe', 'inherit']
-  });
+  const raw = execFileSync('npm', ['pack', '--json', '--dry-run', packageDir], { encoding: 'utf8', stdio: ['ignore', 'pipe', 'inherit'] });
   const result = JSON.parse(raw)[0];
-  if (!result || result.name !== `@vyrnforge/${name}`) {
-    throw new Error(`Unexpected npm pack result for ${name}`);
-  }
+  if (!result || result.name !== `@vyrnforge/${name}`) throw new Error(`Unexpected npm pack result for ${name}`);
   const files = (result.files ?? []).map((file) => file.path);
-  if (files.some((file) => file.startsWith('src/') || file.includes('legacy') || file.startsWith('tooling/'))) {
-    throw new Error(`${name} tarball exposes source, legacy, or repository tooling`);
+  if (files.some((file) => file.startsWith('src/') || file.includes('legacy') || file.startsWith('tooling/'))) throw new Error(`${name} tarball exposes source, legacy, or repository tooling`);
+  if (!files.includes('dist/index.js') || !files.includes('dist/index.d.ts')) throw new Error(`${name} tarball is missing built public entrypoints`);
+  if (name === 'web') {
+    for (const file of ['dist/styles.css', 'dist/styles/button.css', 'dist/styles/tokens.css']) if (!files.includes(file)) throw new Error(`@vyrnforge/web tarball is missing ${file}`);
   }
-  if (!files.includes('dist/index.js') || !files.includes('dist/index.d.ts')) {
-    throw new Error(`${name} tarball is missing built public entrypoints`);
-  }
-  if (name === 'web' && !files.includes('dist/styles.css')) {
-    throw new Error('@vyrnforge/web tarball is missing dist/styles.css');
+  if (['react', 'angular', 'vue'].includes(name)) {
+    for (const file of ['dist/button.js', 'dist/button.d.ts']) if (!files.includes(file)) throw new Error(`@vyrnforge/${name} tarball is missing ${file}`);
   }
 }
 

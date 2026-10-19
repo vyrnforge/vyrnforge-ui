@@ -6,7 +6,12 @@
     "angular": { "dependsOn": ["core", "web"] },
     "vue": { "dependsOn": ["core", "web"] },
     "elements": { "dependsOn": ["core", "web"] },
-    "documentation": { "dependsOn": ["core", "web", "react", "angular", "vue", "elements"] },
+    "button-web": { "dependsOn": ["web"] },
+    "button-react": { "dependsOn": ["react", "button-web"] },
+    "button-angular": { "dependsOn": ["angular", "button-web"] },
+    "button-vue": { "dependsOn": ["vue", "button-web"] },
+    "button-documentation": { "dependsOn": ["button-web", "button-react", "button-angular", "button-vue"] },
+    "documentation": { "dependsOn": ["core", "web", "react", "angular", "vue", "elements", "button-documentation"] },
     "tooling": { "dependsOn": [] },
     "legacy": { "dependsOn": [] }
   }

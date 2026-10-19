@@ -1,3 +1,9 @@
-<p class="vf-docs-status" data-vf-support-status="not-implemented"><strong>Status:</strong> not implemented.</p>
-<p>The <code>@vyrnforge/angular</code> package exists as rebuild scaffolding, but no Angular component is considered shipped or supported yet.</p>
-<section><h2>Planned integration ownership</h2><p>Angular will own idiomatic components, bindings, outputs, content projection, Angular Forms integration, lifecycle, and Angular SSR/hydration while reusing shared VyrnForge semantics and canonical web styling.</p></section>
+<p class="vf-docs-status" data-vf-support-status="partial"><strong>Status:</strong> Button baseline implemented at Angular 22.x.</p>
+<p>Shared Button semantics, accessibility, forms, state, and styling are documented once on the <a href="../components/button/">Button page</a>.</p>
+<section><h2>Button</h2><pre><code>import { VfButtonDirective } from '@vyrnforge/angular/button';
+
+@Component({ imports: [VfButtonDirective] })
+class Example {}
+
+&lt;button vfButton variant="primary" size="md" [loading]="saving" (click)="save()"&gt;Save&lt;/button&gt;</code></pre><p>The standalone directive decorates an actual native <code>&lt;button&gt;</code>; native Angular event syntax and form attributes remain available.</p></section>
+<section><h2>SSR and hydration</h2><p>Server rendering preserves the native button and directive-owned stable attributes. Hydration restores Angular event wiring without replacing the control.</p></section>

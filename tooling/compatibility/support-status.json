@@ -14,24 +14,25 @@
   "frameworks": {
     "react": {
       "baseline": "19.3.x",
-      "status": "selected-not-implemented"
+      "status": "button-baseline-implemented"
     },
     "angular": {
       "baseline": "22.x",
       "typescript": ">=6.0.0 <6.1.0",
-      "status": "selected-not-implemented"
+      "status": "button-baseline-implemented"
     },
     "vue": {
       "baseline": "3.5.x",
-      "status": "selected-not-implemented"
+      "status": "button-baseline-implemented"
     },
     "elements": {
       "baseline": "standards-based Custom Elements on the selected browser baseline",
-      "status": "selected-not-implemented"
+      "status": "selected-not-implemented",
+      "button": "deferred-native-semantics"
     },
     "native-web": {
       "baseline": "selected browser platform baseline",
-      "status": "selected-foundation"
+      "status": "button-baseline-implemented"
     }
   },
   "browsers": {
@@ -42,7 +43,7 @@
     "status": "selected-validation-baseline"
   },
   "ssrBundlers": {
-    "status": "deferred-until-framework-ports",
-    "policy": "Select and validate framework-specific SSR and bundler ranges when each framework port is implemented; do not infer one universal SSR stack."
+    "status": "button-port-validation-active",
+    "policy": "Button validates SSR/server-safe rendering and hydration per implemented framework port at the selected framework baselines; broader framework integration support remains component-by-component."
   }
 }

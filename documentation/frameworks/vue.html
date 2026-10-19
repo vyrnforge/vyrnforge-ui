@@ -1,3 +1,6 @@
-<p class="vf-docs-status" data-vf-support-status="not-implemented"><strong>Status:</strong> not implemented.</p>
-<p>The <code>@vyrnforge/vue</code> package exists as rebuild scaffolding, but no Vue component is considered shipped or supported yet.</p>
-<section><h2>Planned integration ownership</h2><p>Vue will own idiomatic components, props/emits/model mapping, slots, refs, lifecycle, and Vue SSR/hydration while reusing shared VyrnForge semantics and canonical web styling.</p></section>
+<p class="vf-docs-status" data-vf-support-status="partial"><strong>Status:</strong> Button baseline implemented at Vue 3.5.x.</p>
+<p>Shared Button semantics, accessibility, forms, state, and styling are documented once on the <a href="../components/button/">Button page</a>.</p>
+<section><h2>Button</h2><pre><code>import { Button } from '@vyrnforge/vue/button';
+
+&lt;Button variant="primary" size="md" :loading="saving" @click="save"&gt;Save&lt;/Button&gt;</code></pre><p>The component renders a native button, forwards fallthrough native attributes, and uses the default slot for ordinary content.</p></section>
+<section><h2>SSR and hydration</h2><p>Vue SSR output is native-complete. Hydration restores Vue event wiring without changing the Button semantic state.</p></section>

@@ -1,0 +1,16 @@
+import test from 'node:test';
+import assert from 'node:assert/strict';
+import { createSSRApp, h } from 'vue';
+import { renderToString } from '@vue/server-renderer';
+import { Button } from '../../packages/vue/dist/button.js';
+
+test('Vue Button server output is native-complete and preserves native attributes', async () => {
+  const app = createSSRApp({ render: () => h(Button, { loading: true, name: 'save', value: 'yes' }, () => 'Save') });
+  const html = await renderToString(app);
+  assert.match(html, /^<button/);
+  assert.match(html, /data-vf-button=""/);
+  assert.match(html, /data-vf-loading=""/);
+  assert.match(html, /aria-busy="true"/);
+  assert.match(html, /name="save"/);
+  assert.doesNotMatch(html, /disabled/);
+});
