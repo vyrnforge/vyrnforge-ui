@@ -597,25 +597,25 @@ workflow contracts: ok
 legacy isolation: ok
 
 [validation:impact-engine] node --test tooling/tests/impact-plan.test.mjs tooling/tests/impact-executor.test.mjs tooling/tests/impact-tiers.test.mjs
-✔ framework build execution includes lint and foundation prerequisites without marking them as selected evidence (1.215865ms)
-✔ duplicate prerequisites execute once (0.226692ms)
-✔ validation plans become inspectable execution plans (0.155936ms)
-✔ unknown validation scopes fail closed (0.538393ms)
-✔ React Button changes select React Button evidence without unrelated framework Button evidence (2.107751ms)
-✔ shared Button CSS fans out through every implemented Button port (0.264439ms)
-✔ port-local changes remain scoped to the port plus dependent documentation (0.204479ms)
-✔ web changes fan out to every framework port and documentation (0.234464ms)
-✔ core changes fan out through the full product dependency closure (0.39086ms)
-✔ documentation changes stay documentation-scoped (0.71543ms)
-✔ impact-engine and repository foundation changes fail closed (0.44367ms)
-✔ unknown repository changes fail closed (0.195275ms)
-✔ legacy-only changes do not select product ports (0.319181ms)
-✔ classification exposes component scopes and broad infrastructure (0.249696ms)
-✔ PR framework-local changes keep sibling framework and consumer evidence skipped (1.340593ms)
-✔ documentation-local changes select docs and chromium browser evidence without package consumers (0.172169ms)
-✔ core changes fan out to all dependent ports and consumers (0.190758ms)
-✔ main uses chromium browser evidence while scheduled uses cross-browser evidence (0.219942ms)
-✔ release validation is strictly broader than main validation (0.194994ms)
+✔ framework build execution includes lint and foundation prerequisites without marking them as selected evidence (2.316946ms)
+✔ duplicate prerequisites execute once (0.397743ms)
+✔ validation plans become inspectable execution plans (0.291124ms)
+✔ unknown validation scopes fail closed (0.488122ms)
+✔ React Button changes select React Button evidence without unrelated framework Button evidence (2.232629ms)
+✔ shared Button CSS fans out through every implemented Button port (0.306583ms)
+✔ port-local changes remain scoped to the port plus dependent documentation (0.26233ms)
+✔ web changes fan out to every framework port and documentation (0.227174ms)
+✔ core changes fan out through the full product dependency closure (0.459778ms)
+✔ documentation changes stay documentation-scoped (0.761923ms)
+✔ impact-engine and repository foundation changes fail closed (0.488512ms)
+✔ unknown repository changes fail closed (0.292847ms)
+✔ legacy-only changes do not select product ports (0.336809ms)
+✔ classification exposes component scopes and broad infrastructure (0.535249ms)
+✔ PR framework-local changes keep sibling framework and consumer evidence skipped (5.496802ms)
+✔ documentation-local changes select docs and chromium browser evidence without package consumers (0.23588ms)
+✔ core changes fan out to all dependent ports and consumers (0.33739ms)
+✔ main uses chromium browser evidence while scheduled uses cross-browser evidence (0.345215ms)
+✔ release validation is strictly broader than main validation (0.263983ms)
 ℹ tests 19
 ℹ suites 0
 ℹ pass 19
@@ -623,7 +623,7 @@ legacy isolation: ok
 ℹ cancelled 0
 ℹ skipped 0
 ℹ todo 0
-ℹ duration_ms 63.120668
+ℹ duration_ms 92.970368
 
 [validation:foundation-readiness] node tooling/verify/foundation-readiness.mjs
 foundation readiness: ok
@@ -771,42 +771,42 @@ package smoke: elements ok
 
 [validation:consumer-core] node tooling/verify/consumer-packages.mjs core
 
-added 1 package in 143ms
+added 1 package in 236ms
 consumer imports: ok
 packed consumer verification: core ok
 
 [validation:consumer-web] node tooling/verify/consumer-packages.mjs web
 
-added 2 packages in 155ms
+added 2 packages in 262ms
 consumer imports: ok
 packed consumer verification: web ok
 
 [validation:consumer-react] node tooling/verify/consumer-packages.mjs react
 
-added 4 packages in 495ms
+added 4 packages in 647ms
 consumer imports: ok
 packed consumer verification: react ok
 
 [validation:consumer-angular] node tooling/verify/consumer-packages.mjs angular
 
-added 6 packages in 1s
+added 6 packages in 2s
 consumer imports: ok
 packed consumer verification: angular ok
 
 [validation:consumer-vue] node tooling/verify/consumer-packages.mjs vue
 
-added 26 packages in 1s
+added 26 packages in 2s
 consumer imports: ok
 packed consumer verification: vue ok
 
 [validation:consumer-elements] node tooling/verify/consumer-packages.mjs elements
 
-added 3 packages in 251ms
+added 3 packages in 366ms
 consumer imports: ok
 packed consumer verification: elements ok
 
 [validation:button-react-ssr] node --test tooling/tests/button-react.test.mjs
-✔ React Button server output is native-complete and loading remains enabled (3.744492ms)
+✔ React Button server output is native-complete and loading remains enabled (6.433208ms)
 ℹ tests 1
 ℹ suites 0
 ℹ pass 1
@@ -814,11 +814,11 @@ packed consumer verification: elements ok
 ℹ cancelled 0
 ℹ skipped 0
 ℹ todo 0
-ℹ duration_ms 54.866872
+ℹ duration_ms 84.237222
 
 [validation:button-angular-ssr] node --test tooling/tests/button-angular.test.mjs
 Angular is running in development mode.
-✔ Angular Button server output keeps a native form-participating button (29.476149ms)
+✔ Angular Button server output keeps a native form-participating button (47.926363ms)
 ℹ tests 1
 ℹ suites 0
 ℹ pass 1
@@ -826,10 +826,10 @@ Angular is running in development mode.
 ℹ cancelled 0
 ℹ skipped 0
 ℹ todo 0
-ℹ duration_ms 223.139027
+ℹ duration_ms 370.556052
 
 [validation:button-vue-ssr] node --test tooling/tests/button-vue.test.mjs
-✔ Vue Button server output is native-complete and preserves native attributes (3.68357ms)
+✔ Vue Button server output is native-complete and preserves native attributes (6.318217ms)
 ℹ tests 1
 ℹ suites 0
 ℹ pass 1
@@ -837,7 +837,7 @@ Angular is running in development mode.
 ℹ cancelled 0
 ℹ skipped 0
 ℹ todo 0
-ℹ duration_ms 74.012318
+ℹ duration_ms 115.510915
 
 [validation:docs-build] npm run build:docs
 
@@ -857,14 +857,14 @@ documentation site verification: 13 pages ok
 Installing dependencies...
 Switching to root user to install dependencies...
 Get:1 file:/etc/apt/apt-mirrors.txt Mirrorlist [144 B]
-Get:6 https://packages.microsoft.com/ubuntu/24.04/prod noble InRelease [3600 B]
 Hit:2 http://azure.archive.ubuntu.com/ubuntu noble InRelease
+Get:6 https://packages.microsoft.com/ubuntu/24.04/prod noble InRelease [3600 B]
 Get:3 http://azure.archive.ubuntu.com/ubuntu noble-updates InRelease [126 kB]
 Get:4 http://azure.archive.ubuntu.com/ubuntu noble-backports InRelease [126 kB]
 Get:5 http://azure.archive.ubuntu.com/ubuntu noble-security InRelease [126 kB]
 Get:7 https://packages.microsoft.com/ubuntu/24.04/prod noble/main armhf Packages [12.4 kB]
-Get:8 https://packages.microsoft.com/ubuntu/24.04/prod noble/main arm64 Packages [557 kB]
-Get:9 https://packages.microsoft.com/ubuntu/24.04/prod noble/main amd64 Packages [618 kB]
+Get:8 https://packages.microsoft.com/ubuntu/24.04/prod noble/main amd64 Packages [618 kB]
+Get:9 https://packages.microsoft.com/ubuntu/24.04/prod noble/main arm64 Packages [557 kB]
 Get:10 http://azure.archive.ubuntu.com/ubuntu noble-updates/main amd64 Packages [1397 kB]
 Get:11 http://azure.archive.ubuntu.com/ubuntu noble-updates/main Translation-en [308 kB]
 Get:12 http://azure.archive.ubuntu.com/ubuntu noble-updates/universe amd64 Packages [1704 kB]
@@ -877,7 +877,7 @@ Get:18 http://azure.archive.ubuntu.com/ubuntu noble-security/universe amd64 Pack
 Get:19 http://azure.archive.ubuntu.com/ubuntu noble-security/universe Translation-en [246 kB]
 Get:20 http://azure.archive.ubuntu.com/ubuntu noble-security/restricted amd64 Packages [1713 kB]
 Get:21 http://azure.archive.ubuntu.com/ubuntu noble-security/restricted Translation-en [392 kB]
-Fetched 12.5 MB in 1s (11.9 MB/s)
+Fetched 12.5 MB in 1s (10.1 MB/s)
 Reading package lists...
 Reading package lists...
 Building dependency tree...
@@ -953,7 +953,7 @@ Get:7 http://azure.archive.ubuntu.com/ubuntu noble/main amd64 xfonts-encodings a
 Get:8 http://azure.archive.ubuntu.com/ubuntu noble/main amd64 xfonts-utils amd64 1:7.7+6build3 [94.4 kB]
 Get:9 http://azure.archive.ubuntu.com/ubuntu noble/universe amd64 xfonts-cyrillic all 1:1.0.5+nmu1 [384 kB]
 Get:10 http://azure.archive.ubuntu.com/ubuntu noble/main amd64 xfonts-scalable all 1:1.0.3-1.3 [304 kB]
-Fetched 21.1 MB in 1s (14.3 MB/s)
+Fetched 21.1 MB in 1s (39.6 MB/s)
 Selecting previously unselected package fonts-ipafont-gothic.
 (Reading database ... (Reading database ... 5%(Reading database ... 10%(Reading database ... 15%(Reading database ... 20%(Reading database ... 25%(Reading database ... 30%(Reading database ... 35%(Reading database ... 40%(Reading database ... 45%(Reading database ... 50%(Reading database ... 55%(Reading database ... 60%(Reading database ... 65%(Reading database ... 70%(Reading database ... 75%(Reading database ... 80%(Reading database ... 85%(Reading database ... 90%(Reading database ... 95%(Reading database ... 100%(Reading database ... 203540 files and directories currently installed.)
 Preparing to unpack .../0-fonts-ipafont-gothic_00303-21ubuntu1_all.deb ...
@@ -1063,14 +1063,14 @@ Running 16 tests using 2 workers
 [14/16] [chromium] › tooling/browser/tests/docs-site.spec.mjs:12:1 › docs home exposes versioned accessible navigation and search
 [15/16] [chromium] › tooling/browser/tests/docs-site.spec.mjs:29:1 › framework selection exposes component-level implementation status
 [16/16] [chromium] › tooling/browser/tests/docs-site.spec.mjs:43:1 › docs remain navigable at a mobile viewport
-  16 passed (5.0s)
+  16 passed (5.9s)
 
 [validation:button-browser-web] node tooling/browser/run-button.mjs web chromium
 Installing dependencies...
 Switching to root user to install dependencies...
 Get:1 file:/etc/apt/apt-mirrors.txt Mirrorlist [144 B]
-Hit:2 http://azure.archive.ubuntu.com/ubuntu noble InRelease
 Hit:6 https://packages.microsoft.com/ubuntu/24.04/prod noble InRelease
+Hit:2 http://azure.archive.ubuntu.com/ubuntu noble InRelease
 Hit:3 http://azure.archive.ubuntu.com/ubuntu noble-updates InRelease
 Hit:4 http://azure.archive.ubuntu.com/ubuntu noble-backports InRelease
 Hit:5 http://azure.archive.ubuntu.com/ubuntu noble-security InRelease
@@ -1112,26 +1112,7 @@ fonts-wqy-zenhei is already the newest version (0.9.45-8).
 fonts-tlwg-loma-otf is already the newest version (1:0.7.3-1).
 fonts-freefont-ttf is already the newest version (20211204+svn4273-2).
 0 upgraded, 0 newly installed, 0 to remove and 44 not upgraded.
-[WebServer] node:internal/modules/cjs/loader:1520
-[WebServer]   throw err;
-[WebServer]   ^
-[WebServer] 
-[WebServer] Error: Cannot find module '/home/runner/work/vyrnforge-ui/vyrnforge-ui/tooling/browser/tooling/docs/serve.mjs'
-[WebServer]     at Module._resolveFilename (node:internal/modules/cjs/loader:1517:15)
-[WebServer]     at wrapResolveFilename (node:internal/modules/cjs/loader:1071:27)
-[WebServer]     at defaultResolveImplForCJSLoading (node:internal/modules/cjs/loader:1095:10)
-[WebServer]     at resolveForCJSWithHooks (node:internal/modules/cjs/loader:1122:12)
-[WebServer]     at Module._load (node:internal/modules/cjs/loader:1294:5)
-[WebServer]     at wrapModuleLoad (node:internal/modules/cjs/loader:255:19)
-[WebServer]     at Module.executeUserEntryPoint [as runMain] (node:internal/modules/run_main:154:5)
-[WebServer]     at node:internal/main/run_main_module:33:47 {
-[WebServer]   code: 'MODULE_NOT_FOUND',
-[WebServer]   requireStack: []
-[WebServer] }
-[WebServer] 
-[WebServer] Node.js v24.18.0
-
-Error: Process from config.webServer was not able to start. Exit code: 1
+Error: Timed out waiting 15000ms from config.webServer.
 
 node:internal/errors:985
   const err = new Error(message);
@@ -1149,7 +1130,7 @@ Error: Command failed: npx playwright test --config tooling/browser/button.confi
   status: 1,
   signal: null,
   output: [ null, null, null ],
-  pid: 4724,
+  pid: 4918,
   stdout: null,
   stderr: null
 }
@@ -1172,7 +1153,7 @@ Error: Command failed: node tooling/browser/run-button.mjs web chromium
   status: 1,
   signal: null,
   output: [ null, null, null ],
-  pid: 4374,
+  pid: 4567,
   stdout: null,
   stderr: null
 }
