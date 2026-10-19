@@ -1,6 +1,8 @@
-# VyrnForge repository testing layout
+# VyrnForge repository testing policy
 
-Testing follows product ownership. Architectural policy is explicit; repeated product instances are discovered from the repository structure and public package surfaces.
+Testing follows product ownership. Architectural policy is explicit; repeated product instances and their evidence are discovered from repository structure and public package surfaces.
+
+The `testing/` directory is intentionally policy-only. It owns this guidance and `testing/impact.json`; it is not a storage location for component, framework, browser, visual, contract, SSR, accessibility, capability, or foundation evidence. Evidence lives beside the product unit or infrastructure that it proves.
 
 `testing/impact.json` defines repository-level package topology, dependency direction, validation tiers, global sentinels, and fail-closed roots. It does not enumerate components, package subpaths, accessibility units, capabilities, or foundations.
 
@@ -21,6 +23,8 @@ Every selected component/package unit still receives the applicable package buil
 The same rule applies to reusable capabilities/accessibility/foundation units: once a conventional source unit exists, its mirrored evidence is required and its dependency edges participate in impact planning. New normal units do not require names in the CI planner, scope executor, workflow paths, or a central registry.
 
 Tests execute at the lowest reliable layer. Package-local evidence proves framework/package integration. Shared component evidence proves cross-port observable outcomes. Browser-owned behavior stays in real browser tests. Accessibility evidence belongs to the lowest owner that actually owns the behavior: pure calculations may be Core; CSS/DOM/platform behavior may be Web; component semantics belong to the component; repository-wide conformance remains repository tooling.
+
+Repository-level tests of discovery, planning, execution, workflows, and other validation infrastructure live under `tooling/tests/` because they prove the tooling itself. Generic evidence executors live under `tooling/testing/`; they are reusable execution infrastructure rather than product tests.
 
 ## Change fragments
 

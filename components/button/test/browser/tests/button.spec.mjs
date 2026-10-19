@@ -1,7 +1,7 @@
 import { test, expect } from '@playwright/test';
 import axeCore from 'axe-core';
 
-const port = process.env.VF_BUTTON_PORT || 'web';
+const port = process.env.VF_COMPONENT_PORT || 'web';
 
 test.describe('Button real-browser contract', () => {
   test.skip(port !== 'web', 'Native Web contract evidence');

@@ -22,10 +22,10 @@ export function resolveScopeDefinition(scope) {
   const unitMatch = /^unit:([^:]+):([^:]+):([^:]+):test$/.exec(scope);
   if (unitMatch) { const [, packageName, kind, id] = unitMatch; const unit = discovery.ownedUnits.find((entry) => entry.package === packageName && entry.kind === kind && entry.id === id); if (!unit) return null; return { command: ['node', 'tooling/testing/run-owned-unit.mjs', packageName, kind, id], requires: [`build-${packageName}`] }; }
   const match = /^component:([^:]+):(.+)$/.exec(scope); if (!match) return null; const [, componentId, suffix] = match; const component = componentEntry(componentId); if (!component) return null;
-  if (suffix === 'conformance:types' && component.conformanceTypes) { const requires = Object.keys(component.ports).filter((port) => port !== 'web').map(componentPrerequisite); return { command: ['node', 'tooling/types/check-component.mjs', componentId, 'conformance'], requires: [...new Set(requires)] }; }
-  const typed = /^([^:]+):types$/.exec(suffix); if (typed && component.ports?.[typed[1]]?.types) return { command: ['node', 'tooling/types/check-component.mjs', componentId, typed[1]], requires: [componentPrerequisite(typed[1])] };
+  if (suffix === 'conformance:types' && component.conformanceTypes) { const requires = Object.keys(component.ports).filter((port) => port !== 'web').map(componentPrerequisite); return { command: ['node', 'tooling/testing/check-component-types.mjs', componentId, 'conformance'], requires: [...new Set(requires)] }; }
+  const typed = /^([^:]+):types$/.exec(suffix); if (typed && component.ports?.[typed[1]]?.types) return { command: ['node', 'tooling/testing/check-component-types.mjs', componentId, typed[1]], requires: [componentPrerequisite(typed[1])] };
   const evidenceMatch = /^([^:]+):(ssr|browser|browser-cross)$/.exec(suffix); if (!evidenceMatch) return null; const [, port, evidence] = evidenceMatch; const portConfig = component.ports?.[port]; if (!portConfig) return null;
-  if (evidence === 'ssr' && portConfig.ssr) return { command: ['node', 'tooling/tests/run-component-ssr.mjs', componentId, port], requires: [componentPrerequisite(port)] };
+  if (evidence === 'ssr' && portConfig.ssr) return { command: ['node', 'tooling/testing/run-component-ssr.mjs', componentId, port], requires: [componentPrerequisite(port)] };
   if ((evidence === 'browser' || evidence === 'browser-cross') && portConfig.browser) return { command: ['node', 'tooling/browser/run-component.mjs', componentId, port, evidence === 'browser-cross' ? 'all' : 'chromium'], requires: [componentPrerequisite(port)] };
   return null;
 }

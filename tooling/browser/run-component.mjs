@@ -16,5 +16,5 @@ execFileSync(npx, ['playwright', 'install', '--with-deps', ...projects], { stdio
 const projectArgs = projects.flatMap((project) => ['--project', project]);
 execFileSync(npx, ['playwright', 'test', '--config', component.browser.config, ...projectArgs], {
   stdio: 'inherit',
-  env: { ...process.env, VF_COMPONENT_PORT: port, VF_COMPONENT_ID: componentId, VF_BUTTON_PORT: port }
+  env: { ...process.env, VF_COMPONENT_PORT: port, VF_COMPONENT_ID: componentId }
 });
