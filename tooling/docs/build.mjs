@@ -11,7 +11,7 @@ const registry = JSON.parse(await readFile(path.join(root, 'documentation/site/r
 const rootManifest = JSON.parse(await readFile(path.join(root, 'package.json'), 'utf8'));
 const compatibility = JSON.parse(await readFile(path.join(root, 'tooling/compatibility/support-status.json'), 'utf8'));
 const packageNames = ['core', 'web', 'react', 'angular', 'vue', 'elements'];
-const packageManifests = Object.fromEntries(await Promise.all(packageNames.map(async (name) => [name, JSON.parse(await readFile(path.join(root, `packages/${name}/package.json`), 'utf8')]))));
+const packageManifests = Object.fromEntries(await Promise.all(packageNames.map(async (name) => [name, JSON.parse(await readFile(path.join(root, `packages/${name}/package.json`), 'utf8'))])));
 
 function escapeHtml(value) {
   return String(value)
