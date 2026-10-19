@@ -1,0 +1,42 @@
+name: Actions Retention Audit
+
+on:
+  schedule:
+    - cron: '41 4 * * 1'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  actions: read
+
+concurrency:
+  group: actions-retention-audit
+  cancel-in-progress: true
+
+jobs:
+  retention-audit:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v7
+
+      - name: Setup Node
+        uses: actions/setup-node@v7
+        with:
+          node-version-file: .node-version
+
+      - name: Plan stale workflow-run retention
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+          RETENTION_REPORT: test-results/actions-retention.json
+        run: node tooling/actions/retention-report.mjs
+
+      - name: Upload retention plan
+        if: always()
+        uses: actions/upload-artifact@v7
+        with:
+          name: actions-retention-plan
+          path: test-results/actions-retention.json
+          if-no-files-found: error
+          retention-days: 14
