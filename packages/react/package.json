@@ -18,6 +18,11 @@
       "types": "./dist/components/button/index.d.ts",
       "import": "./dist/components/button/index.js",
       "default": "./dist/components/button/index.js"
+    },
+    "./tabs": {
+      "types": "./dist/components/tabs/index.d.ts",
+      "import": "./dist/components/tabs/index.js",
+      "default": "./dist/components/tabs/index.js"
     }
   },
   "dependencies": {

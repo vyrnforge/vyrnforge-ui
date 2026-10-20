@@ -48,7 +48,30 @@ function frameworkTopLevelModules(root, port) {
     return [entry.name.slice(0, -extension.length)];
   }).sort();
 }
-function scanRelativeUnitDependencies(root, sourcePath, ownedUnits) {
+function publicExportTarget(exportEntry) {
+  if (typeof exportEntry === 'string') return exportEntry;
+  if (!exportEntry || typeof exportEntry !== 'object') return null;
+  for (const key of ['import', 'default', 'types']) if (typeof exportEntry[key] === 'string') return exportEntry[key];
+  return Object.values(exportEntry).find((value) => typeof value === 'string') ?? null;
+}
+function publicUnitForSpecifier(root, specifier, packageManifests, ownedUnits) {
+  for (const [packageName, manifest] of packageManifests) {
+    const publicName = manifest?.name;
+    if (!publicName) continue;
+    const exportName = specifier === publicName ? '.' : specifier.startsWith(`${publicName}/`) ? `./${specifier.slice(publicName.length + 1)}` : null;
+    if (!exportName) continue;
+    const target = publicExportTarget(manifest.exports?.[exportName]);
+    if (!target) return null;
+    const sourceTarget = target.replace(/^\.\//, '').replace(/^dist\//, 'src/');
+    const resolved = path.resolve(root, `packages/${packageName}`, sourceTarget);
+    return ownedUnits.find((unit) => {
+      const unitRoot = path.resolve(root, unit.sourcePath);
+      return resolved === unitRoot || resolved.startsWith(`${unitRoot}${path.sep}`);
+    }) ?? null;
+  }
+  return null;
+}
+function scanUnitDependencies(root, sourcePath, ownedUnits, packageManifests) {
   const dependencyNodes = new Set();
   const sourceFiles = walkFiles(root, sourcePath).filter((file) => sourceExtensions.some((ext) => file.endsWith(ext)));
   for (const file of sourceFiles) {
@@ -57,17 +80,21 @@ function scanRelativeUnitDependencies(root, sourcePath, ownedUnits) {
     const pattern = /(?:from\s+|import\s*)['"]([^'"]+)['"]/g;
     for (const match of source.matchAll(pattern)) {
       const specifier = match[1];
-      if (!specifier.startsWith('.')) continue;
-      const resolved = path.resolve(path.dirname(absolute), specifier);
-      for (const unit of ownedUnits) {
-        const unitRoot = path.resolve(root, unit.sourcePath);
-        if (resolved === unitRoot || resolved.startsWith(`${unitRoot}${path.sep}`)) dependencyNodes.add(unit.node);
+      if (specifier.startsWith('.')) {
+        const resolved = path.resolve(path.dirname(absolute), specifier);
+        for (const unit of ownedUnits) {
+          const unitRoot = path.resolve(root, unit.sourcePath);
+          if (resolved === unitRoot || resolved.startsWith(`${unitRoot}${path.sep}`)) dependencyNodes.add(unit.node);
+        }
+        continue;
       }
+      const publicUnit = publicUnitForSpecifier(root, specifier, packageManifests, ownedUnits);
+      if (publicUnit) dependencyNodes.add(publicUnit.node);
     }
   }
   return [...dependencyNodes].sort();
 }
-function discoverOwnedUnits(root, packageNames) {
+function discoverOwnedUnits(root, packageNames, packageManifests) {
   const units = [];
   for (const packageName of packageNames) for (const kind of ownedKinds) for (const id of directories(root, `packages/${packageName}/src/${kind}`)) {
     const sourcePath = `packages/${packageName}/src/${kind}/${id}/`;
@@ -76,7 +103,7 @@ function discoverOwnedUnits(root, packageNames) {
     units.push({ node: `unit:${packageName}:${kind}:${id}`, package: packageName, kind, id, sourcePath, testPath, metadataPath, evidenceFiles: walkFiles(root, testPath), dependencies: [] });
   }
   for (const unit of units) {
-    const inferred = scanRelativeUnitDependencies(root, unit.sourcePath, units.filter((candidate) => candidate.node !== unit.node));
+    const inferred = scanUnitDependencies(root, unit.sourcePath, units.filter((candidate) => candidate.node !== unit.node), packageManifests);
     const metadataFile = `${unit.sourcePath}dependencies.json`;
     const declared = existingPath(root, metadataFile) ? (readJson(root, metadataFile).dependsOn ?? []) : [];
     unit.dependencies = [...new Set([...inferred, ...declared])].sort();
@@ -86,7 +113,7 @@ function discoverOwnedUnits(root, packageNames) {
 export function discoverProductUnits(root = repoRoot) {
   const packageNames = workspacePackages(root);
   const packageManifests = new Map(packageNames.map((name) => [name, readJson(root, `packages/${name}/package.json`)]));
-  const ownedUnits = discoverOwnedUnits(root, packageNames);
+  const ownedUnits = discoverOwnedUnits(root, packageNames, packageManifests);
   const frameworkExports = new Map();
   const discoveredIds = new Set(directories(root, 'components'));
   for (const port of frameworkPorts) {
@@ -100,12 +127,12 @@ export function discoverProductUnits(root = repoRoot) {
     const ports = {};
     if (webExports.has(componentId)) {
       const sourcePath = `packages/web/src/components/${componentId}/`;
-      ports.web = { paths: [sourcePath], browser: true, dependencies: scanRelativeUnitDependencies(root, sourcePath, ownedUnits) };
+      ports.web = { paths: [sourcePath], browser: true, dependencies: scanUnitDependencies(root, sourcePath, ownedUnits, packageManifests) };
     }
     for (const port of frameworkPorts) {
       if (!frameworkExports.get(port)?.has(componentId)) continue;
       const sourcePath = `packages/${port}/src/components/${componentId}/`;
-      ports[port] = { paths: [sourcePath, `packages/${port}/test/components/${componentId}/`], types: `packages/${port}/test/components/${componentId}/api.types.ts`, ...(ssrPorts.has(port) ? { ssr: `packages/${port}/test/components/${componentId}/ssr.test.mjs` } : {}), browser: true, dependencies: scanRelativeUnitDependencies(root, sourcePath, ownedUnits) };
+      ports[port] = { paths: [sourcePath, `packages/${port}/test/components/${componentId}/`], types: `packages/${port}/test/components/${componentId}/api.types.ts`, ...(ssrPorts.has(port) ? { ssr: `packages/${port}/test/components/${componentId}/ssr.test.mjs` } : {}), browser: true, dependencies: scanUnitDependencies(root, sourcePath, ownedUnits, packageManifests) };
     }
     const frameworkPortNames = Object.keys(ports).filter((port) => port !== 'web');
     const componentRoot = `components/${componentId}`;

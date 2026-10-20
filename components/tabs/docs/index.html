@@ -1,0 +1,107 @@
+<p class="vf-docs-lede">Tabs presents one active panel from a labeled set while preserving shared semantics, keyboard behavior, focus rules, and state across framework ports.</p>
+
+<section>
+  <h2>Overview</h2>
+  <p>Use Tabs when several peer sections share one region and users should switch between them without navigating to a different location. Tabs is a compound component: a root owns selection, a tablist owns directional keyboard navigation, tabs identify selectable sections, and tabpanels contain the corresponding content.</p>
+</section>
+
+<section>
+  <h2>Installation and imports</h2>
+  <div class="vf-docs-table-wrap" tabindex="0" role="region" aria-label="Tabs package imports">
+    <table>
+      <thead><tr><th>Surface</th><th>Public entrypoint</th></tr></thead>
+      <tbody>
+        <tr><th scope="row">Shared styles</th><td><code>@vyrnforge/web/styles/tabs.css</code></td></tr>
+        <tr><th scope="row">React</th><td><code>@vyrnforge/react/tabs</code></td></tr>
+        <tr><th scope="row">Angular</th><td><code>@vyrnforge/angular/tabs</code></td></tr>
+        <tr><th scope="row">Vue</th><td><code>@vyrnforge/vue/tabs</code></td></tr>
+      </tbody>
+    </table>
+  </div>
+  <p>The Web package supplies canonical Tabs styling. Interactive behavior is implemented by framework adapters; the stylesheet alone is not a standalone JavaScript Tabs implementation.</p>
+</section>
+
+<section>
+  <h2>Quick start</h2>
+  <p>Choose a framework to run the checked-in example through its public package subpath.</p>
+  <div data-vf-example="tabs/basic"></div>
+</section>
+
+<section>
+  <h2>Anatomy</h2>
+  <p>A Tabs instance contains a root, one tablist, one or more tabs, and one corresponding tabpanel per tab. The tablist uses <code>role="tablist"</code>, tabs use <code>role="tab"</code>, and panels use <code>role="tabpanel"</code>.</p>
+</section>
+
+<section>
+  <h2>Variants and sizes</h2>
+  <p>Tabs has no visual size variants in the current contract. Behavioral configuration is expressed through orientation and activation mode rather than through visual variants.</p>
+</section>
+
+<section>
+  <h2>State</h2>
+  <p>Selection and keyboard focus are related but distinct state. The selected tab exposes <code>aria-selected="true"</code>; disabled tabs expose <code>aria-disabled="true"</code> and are excluded from roving focus. Inactive panels are hidden. The supplied initial or controlled value must identify an enabled tab in the rendered collection.</p>
+</section>
+
+<section>
+  <h2>Behavior</h2>
+  <p>Automatic activation is the default: moving focus selects the destination tab. Manual activation keeps focus and selection separate until Enter or Space is pressed. Pointer activation selects an enabled tab in either mode. Provide an explicit enabled initial value for server-complete output; framework ports do not infer or rewrite selection by inspecting descendant component trees during server rendering.</p>
+</section>
+
+<section>
+  <h2>Interaction</h2>
+  <p>Horizontal tablists use Left and Right Arrow; vertical tablists use Up and Down Arrow. Home moves to the first enabled tab and End to the last. Navigation wraps and skips disabled tabs. Horizontal Left/Right mapping reverses in RTL while logical tab order remains unchanged.</p>
+</section>
+
+<section>
+  <h2>Accessibility</h2>
+  <p>Give every tablist an accessible name using <code>aria-label</code> or <code>aria-labelledby</code>. Every tab references its panel with <code>aria-controls</code>, and every panel references its tab with <code>aria-labelledby</code>. Focus indication remains distinct from selected styling. Shared styles include reduced-motion and forced-colors treatment.</p>
+</section>
+
+<section>
+  <h2>Forms</h2>
+  <p>Tabs does not participate in form submission and does not define form values, validation, or reset behavior. Place form controls inside tabpanels according to the controls' own contracts.</p>
+</section>
+
+<section>
+  <h2>Styling</h2>
+  <p>Stable hooks are <code>data-vf-tabs-root</code>, <code>data-vf-tabs-list</code>, <code>data-vf-tabs-tab</code>, and <code>data-vf-tabs-panel</code>, with state hooks for selection, disabled state, orientation, and activation. Prefer public <code>--vf-*</code> tokens; <code>--_vf-*</code> variables are private.</p>
+</section>
+
+<section>
+  <h2>Framework API</h2>
+  <div class="vf-docs-table-wrap" tabindex="0" role="region" aria-label="Tabs framework APIs">
+    <table>
+      <thead><tr><th>Surface</th><th>API</th></tr></thead>
+      <tbody>
+        <tr><th scope="row">React</th><td><code>TabsRoot</code>, <code>TabsList</code>, <code>TabsTab</code>, and <code>TabsPanel</code>; controlled <code>value</code> or uncontrolled <code>defaultValue</code>; <code>onValueChange</code>.</td></tr>
+        <tr><th scope="row">Angular</th><td>Standalone <code>VfTabsRootDirective</code>, <code>VfTabsListDirective</code>, <code>VfTabsTabDirective</code>, and <code>VfTabsPanelDirective</code> on native elements; <code>valueChange</code> output.</td></tr>
+        <tr><th scope="row">Vue</th><td><code>TabsRoot</code>, <code>TabsList</code>, <code>TabsTab</code>, and <code>TabsPanel</code> with slots; <code>modelValue</code>/<code>update:modelValue</code> plus <code>valueChange</code>.</td></tr>
+      </tbody>
+    </table>
+  </div>
+</section>
+
+<section>
+  <h2>CSR and SSR</h2>
+  <p>React, Angular, and Vue render roles, selection, roving tabindex, hidden panels, and tab/panel relationships on the server. Use an explicit root <code>id</code> when deterministic consumer-controlled DOM identifiers are important. Hydration must preserve server state and identifiers without mismatch.</p>
+</section>
+
+<section>
+  <h2>Examples</h2>
+  <p>The basic executable example demonstrates three tabs, a disabled tab, shared styling, and equivalent public concepts in React, Angular, and Vue. Additional examples should be added only when they prove a distinct supported contract such as manual activation or vertical orientation.</p>
+</section>
+
+<section>
+  <h2>Do / Don't</h2>
+  <p>Do use Tabs for peer sections within one context, provide an accessible tablist name, and keep labels concise. Don't use Tabs as application routing, hide required actions behind disabled tabs without explanation, or reproduce keyboard behavior with application-specific handlers.</p>
+</section>
+
+<section>
+  <h2>Testing guidance</h2>
+  <p>Query by role and accessible name, then assert selected state and visible panel outcomes. Keyboard tests should verify disabled skipping, wrapping, Home/End, activation mode, orientation, RTL where relevant, and actual browser focus rather than only event callbacks.</p>
+</section>
+
+<section>
+  <h2>Compatibility</h2>
+  <p>The current interactive ports are React, Angular, and Vue, with canonical styling from <code>@vyrnforge/web</code>. A Web Components Tabs surface is not currently shipped; do not infer one from the existence of the <code>@vyrnforge/elements</code> package.</p>
+</section>
