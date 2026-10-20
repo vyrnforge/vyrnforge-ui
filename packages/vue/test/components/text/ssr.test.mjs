@@ -8,7 +8,7 @@ test('Vue Text preserves the requested native element during SSR', async () => {
   const html = await renderToString(createSSRApp({ render: () => h(Text, { as: 'h3', variant: 'title', id: 'section-title' }, () => 'Section') }));
   assert.match(html, /^<h3/);
   assert.match(html, /id="section-title"/);
-  assert.match(html, /data-vf-text=""/);
+  assert.match(html, /data-vf-text(?:=""|(?=[\s>]))/);
   assert.match(html, /data-vf-text-variant="title"/);
   assert.match(html, />Section<\/h3>$/);
 });
