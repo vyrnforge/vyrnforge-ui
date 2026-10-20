@@ -37,7 +37,8 @@ export type BuiltInTextVariant = (typeof textVariants)[number];
  *   }
  * }
  */
-export interface TextVariantOverrides extends Record<never, never> {}
+// eslint-disable-next-line @typescript-eslint/no-empty-object-type -- declaration merging requires an initially empty interface.
+export interface TextVariantOverrides {}
 
 type OverrideKeysWithValue<Value extends boolean> = {
   [Key in keyof TextVariantOverrides]: TextVariantOverrides[Key] extends Value ? Key : never;
