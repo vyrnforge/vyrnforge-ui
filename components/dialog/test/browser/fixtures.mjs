@@ -45,7 +45,7 @@ if (port === 'react') {
           React.createElement('button', { id: 'react-child-open', type: 'button', onClick: () => setChildOpen(true) }, 'Open child dialog'),
           React.createElement(DialogRoot, { id: 'react-child-dialog', open: childOpen, onOpenChange: setChildOpen },
             React.createElement(DialogTitle, null, 'Child dialog'),
-            React.createElement(DialogBody, null, 'Child content')))))
+            React.createElement(DialogBody, null, 'Child content'))))
     );
   }
   const markup = renderToString(React.createElement(App));
