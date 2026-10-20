@@ -19,11 +19,17 @@
       "import": "./dist/components/icon/index.js",
       "default": "./dist/components/icon/index.js"
     },
+    "./text": {
+      "types": "./dist/components/text/index.d.ts",
+      "import": "./dist/components/text/index.js",
+      "default": "./dist/components/text/index.js"
+    },
     "./styles.css": "./dist/styles.css",
     "./styles/button.css": "./dist/components/button/button.css",
     "./styles/dialog.css": "./dist/components/dialog/dialog.css",
     "./styles/icon.css": "./dist/components/icon/icon.css",
-    "./styles/tabs.css": "./dist/components/tabs/tabs.css"
+    "./styles/tabs.css": "./dist/components/tabs/tabs.css",
+    "./styles/text.css": "./dist/components/text/text.css"
   },
   "dependencies": {
     "@vyrnforge/core": "0.0.0-rebuild"
