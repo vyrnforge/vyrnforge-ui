@@ -64,7 +64,7 @@ export class VfDialogRootDirective {
   private restoreTarget: HTMLElement | null = null;
   private backdropPointerDown = false;
 
-  readonly desiredOpen = computed(() => this.open() ?? this.internalOpen());
+  readonly desiredOpen = computed(() => this.open() ?? (this.initialized ? this.internalOpen() : this.defaultOpen()));
   readonly resolvedTitleId = computed(() => this.titleId() ?? `${this.id()}-title`);
 
   constructor() {
@@ -76,7 +76,7 @@ export class VfDialogRootDirective {
         if (controlledOpen === undefined) this.internalOpen.set(defaultOpen);
       }
 
-      const desiredOpen = controlledOpen ?? (this.initialized ? this.internalOpen() : defaultOpen);
+      const desiredOpen = controlledOpen ?? this.internalOpen();
       if (typeof document === 'undefined') return;
       const dialog = this.element.nativeElement;
       queueMicrotask(() => {
