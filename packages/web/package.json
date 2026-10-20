@@ -19,6 +19,11 @@
       "import": "./dist/components/icon/index.js",
       "default": "./dist/components/icon/index.js"
     },
+    "./layout": {
+      "types": "./dist/components/layout/index.d.ts",
+      "import": "./dist/components/layout/index.js",
+      "default": "./dist/components/layout/index.js"
+    },
     "./text": {
       "types": "./dist/components/text/index.d.ts",
       "import": "./dist/components/text/index.js",
@@ -28,6 +33,7 @@
     "./styles/button.css": "./dist/components/button/button.css",
     "./styles/dialog.css": "./dist/components/dialog/dialog.css",
     "./styles/icon.css": "./dist/components/icon/icon.css",
+    "./styles/layout.css": "./dist/components/layout/layout.css",
     "./styles/tabs.css": "./dist/components/tabs/tabs.css",
     "./styles/text.css": "./dist/components/text/text.css"
   },
