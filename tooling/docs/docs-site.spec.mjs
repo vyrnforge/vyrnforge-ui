@@ -122,7 +122,8 @@ test('Text documentation teaches the live typography scale instead of only listi
   const bodySize = await page.locator('[data-vf-type-specimen="body-md"] [data-vf-text]').evaluate((element) => Number.parseFloat(getComputedStyle(element).fontSize));
   expect(displaySize).toBeGreaterThan(bodySize);
 
-  await expect(guide).toContainText('Choose semantics first');
+  await expect(page.getByRole('heading', { level: 2, name: 'Semantics and appearance' })).toBeVisible();
+  await expect(guide).toContainText('Semantics and style are separate');
   await expect(guide).toContainText('--vf-font-family-display');
   await expect(guide).toContainText('TextVariantOverrides');
 
