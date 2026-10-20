@@ -74,6 +74,16 @@
             "bytes": 4148,
             "gzipBytes": 1622
           }
+        },
+        "elements": {
+          "subpath": {
+            "bytes": 5262,
+            "gzipBytes": 1884
+          },
+          "rootSelected": {
+            "bytes": 5063,
+            "gzipBytes": 1793
+          }
         }
       }
     },
