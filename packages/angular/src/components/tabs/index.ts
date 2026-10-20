@@ -40,7 +40,7 @@ export class VfTabsRootDirective {
 
   private readonly internalValue = signal('');
   readonly focusValue = signal('');
-  readonly selectedValue = computed(() => this.value() ?? this.internalValue() || this.defaultValue());
+  readonly selectedValue = computed(() => this.value() ?? (this.internalValue() || this.defaultValue()));
 
   constructor() {
     effect(() => {
