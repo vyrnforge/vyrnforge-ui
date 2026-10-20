@@ -76,5 +76,30 @@ test.describe('Dialog framework native modality and hydration', () => {
 
       expect(errors.filter((error) => /hydration|mismatch/i.test(error))).toEqual([]);
     });
+
+    test(`${framework} keeps nested dismissal scoped to the topmost modal`, async ({ page }) => {
+      test.skip(port !== framework, `Running ${port} evidence only`);
+      await page.goto(`/next/dialog-fixtures/${framework}.html`);
+
+      const parentTrigger = page.locator(`#${framework}-parent-open`);
+      const parent = page.locator(`#${framework}-parent-dialog`);
+      const childTrigger = page.locator(`#${framework}-child-open`);
+      const child = page.locator(`#${framework}-child-dialog`);
+
+      await parentTrigger.click();
+      await expect(parent).toHaveAttribute('open', '');
+      await childTrigger.click();
+      await expect(child).toHaveAttribute('open', '');
+      await expect(parent).toHaveAttribute('open', '');
+
+      await page.keyboard.press('Escape');
+      await expect(child).not.toHaveAttribute('open', '');
+      await expect(parent).toHaveAttribute('open', '');
+      await expect(childTrigger).toBeFocused();
+
+      await page.keyboard.press('Escape');
+      await expect(parent).not.toHaveAttribute('open', '');
+      await expect(parentTrigger).toBeFocused();
+    });
   }
 });
