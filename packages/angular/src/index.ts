@@ -17,3 +17,5 @@ export {
   VfTabsTabDirective,
 } from './components/tabs/index.js';
 export type { TabsActivation, TabsOrientation } from './components/tabs/index.js';
+export { VfTextDirective } from './components/text/index.js';
+export type { TextVariant } from './components/text/index.js';
