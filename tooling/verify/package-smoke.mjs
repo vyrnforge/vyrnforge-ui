@@ -3,7 +3,7 @@ import { access, readFile } from 'node:fs/promises';
 import { pathToFileURL } from 'node:url';
 import path from 'node:path';
 
-const allPackages = ['core', 'web', 'react', 'angular', 'vue', 'elements'];
+const allPackages = ['core', 'web', 'icons', 'react', 'angular', 'vue', 'elements'];
 const requested = process.argv.slice(2);
 const packages = requested.length ? requested : allPackages;
 function flattenExportTargets(value, targets = []) { if (typeof value === 'string') targets.push(value); else if (value && typeof value === 'object') for (const nested of Object.values(value)) flattenExportTargets(nested, targets); return targets; }
