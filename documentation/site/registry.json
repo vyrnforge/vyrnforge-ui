@@ -10,6 +10,6 @@
     { "slug": "frameworks/vue", "title": "Vue", "group": "Frameworks", "kind": "framework", "framework": "vue", "source": "documentation/frameworks/vue.html" },
     { "slug": "frameworks/elements", "title": "Elements", "group": "Frameworks", "kind": "framework", "framework": "elements", "source": "documentation/frameworks/elements.html" },
     { "slug": "frameworks/native-web", "title": "Native Web", "group": "Frameworks", "kind": "framework", "framework": "native-web", "source": "documentation/frameworks/native-web.html" },
-    { "slug": "reference/compatibility", "title": "Compatibility", "group": "Reference", "kind": "generated", "generator": "compatibility" }
+    { "slug": "reference/compatibility", "title": "Compatibility", "group": "Reference", "kind": "shared", "source": "documentation/shared/compatibility.html" }
   ]
 }
