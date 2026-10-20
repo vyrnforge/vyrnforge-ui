@@ -88,6 +88,8 @@ export const DialogRoot = forwardRef<HTMLDialogElement, DialogRootProps>(functio
   const controlled = open !== undefined;
   const [internalOpen, setInternalOpen] = useState(defaultOpen);
   const desiredOpen = controlled ? open : internalOpen;
+  const desiredOpenRef = useRef(desiredOpen);
+  desiredOpenRef.current = desiredOpen;
   const dialogRef = useRef<HTMLDialogElement>(null);
   const restoreTargetRef = useRef<HTMLElement | null>(null);
   const backdropPointerDownRef = useRef(false);
@@ -120,19 +122,34 @@ export const DialogRoot = forwardRef<HTMLDialogElement, DialogRootProps>(functio
     const dialog = dialogRef.current;
     if (!dialog) return;
 
+    function restoreFocus() {
+      const restoreTarget = restoreTargetRef.current;
+      restoreTargetRef.current = null;
+      if (canRestoreFocus(restoreTarget)) restoreTarget.focus();
+    }
+
     function handleCancel(event: Event) {
       event.preventDefault();
       requestDismiss('escape');
     }
 
     function handleClose() {
-      if (desiredOpen) {
+      if (desiredOpenRef.current) {
         if (!controlled) setInternalOpen(false);
         onOpenChange?.(false);
+        if (controlled) {
+          queueMicrotask(() => {
+            if (desiredOpenRef.current && !dialog.open) {
+              dialog.showModal();
+              initialFocusRef?.current?.focus();
+            } else if (!desiredOpenRef.current) {
+              restoreFocus();
+            }
+          });
+          return;
+        }
       }
-      const restoreTarget = restoreTargetRef.current;
-      restoreTargetRef.current = null;
-      if (canRestoreFocus(restoreTarget)) restoreTarget.focus();
+      restoreFocus();
     }
 
     dialog.addEventListener('cancel', handleCancel);
@@ -141,7 +158,7 @@ export const DialogRoot = forwardRef<HTMLDialogElement, DialogRootProps>(functio
       dialog.removeEventListener('cancel', handleCancel);
       dialog.removeEventListener('close', handleClose);
     };
-  }, [controlled, desiredOpen, onOpenChange, requestDismiss]);
+  }, [controlled, initialFocusRef, onOpenChange, requestDismiss]);
 
   const context = useMemo<DialogContextValue>(() => ({
     rootId,
