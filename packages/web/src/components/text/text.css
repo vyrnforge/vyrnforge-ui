@@ -6,34 +6,133 @@
     --_vf-text-font-size: var(--vf-font-size-md);
     --_vf-text-font-weight: var(--vf-font-weight-regular);
     --_vf-text-line-height: var(--vf-line-height-normal);
+    --_vf-text-letter-spacing: var(--vf-letter-spacing-normal);
+    --_vf-text-transform: none;
 
     color: var(--vf-color-text);
     font-family: var(--_vf-text-font-family);
     font-size: var(--_vf-text-font-size);
     font-weight: var(--_vf-text-font-weight);
+    letter-spacing: var(--_vf-text-letter-spacing);
     line-height: var(--_vf-text-line-height);
     margin: 0;
+    text-transform: var(--_vf-text-transform);
   }
 
-  :where([data-vf-text][data-vf-text-variant="body-sm"]) {
-    --_vf-text-font-size: var(--vf-font-size-sm);
+  :where([data-vf-text][data-vf-text-variant="display-lg"]) {
+    --_vf-text-font-family: var(--vf-font-family-display);
+    --_vf-text-font-size: clamp(var(--vf-font-size-4xl), 2rem + 4vw, var(--vf-font-size-6xl));
+    --_vf-text-font-weight: var(--vf-font-weight-bold);
+    --_vf-text-line-height: var(--vf-line-height-none);
+    --_vf-text-letter-spacing: var(--vf-letter-spacing-tighter);
   }
 
-  :where([data-vf-text][data-vf-text-variant="label"]) {
-    --_vf-text-font-size: var(--vf-font-size-sm);
+  :where([data-vf-text][data-vf-text-variant="display-md"]) {
+    --_vf-text-font-family: var(--vf-font-family-display);
+    --_vf-text-font-size: clamp(var(--vf-font-size-3xl), 1.75rem + 3vw, var(--vf-font-size-5xl));
+    --_vf-text-font-weight: var(--vf-font-weight-bold);
+    --_vf-text-line-height: var(--vf-line-height-none);
+    --_vf-text-letter-spacing: var(--vf-letter-spacing-tighter);
+  }
+
+  :where([data-vf-text][data-vf-text-variant="display-sm"]) {
+    --_vf-text-font-family: var(--vf-font-family-display);
+    --_vf-text-font-size: clamp(var(--vf-font-size-2xl), 1.5rem + 2vw, var(--vf-font-size-4xl));
+    --_vf-text-font-weight: var(--vf-font-weight-semibold);
+    --_vf-text-line-height: var(--vf-line-height-tight);
+    --_vf-text-letter-spacing: var(--vf-letter-spacing-tight);
+  }
+
+  :where([data-vf-text][data-vf-text-variant="heading-lg"]) {
+    --_vf-text-font-size: var(--vf-font-size-3xl);
+    --_vf-text-font-weight: var(--vf-font-weight-semibold);
+    --_vf-text-line-height: var(--vf-line-height-tight);
+    --_vf-text-letter-spacing: var(--vf-letter-spacing-tight);
+  }
+
+  :where([data-vf-text][data-vf-text-variant="heading-md"]) {
+    --_vf-text-font-size: var(--vf-font-size-2xl);
+    --_vf-text-font-weight: var(--vf-font-weight-semibold);
+    --_vf-text-line-height: var(--vf-line-height-tight);
+    --_vf-text-letter-spacing: var(--vf-letter-spacing-tight);
+  }
+
+  :where([data-vf-text][data-vf-text-variant="heading-sm"]),
+  :where([data-vf-text][data-vf-text-variant="heading"]) {
+    --_vf-text-font-size: var(--vf-font-size-xl);
+    --_vf-text-font-weight: var(--vf-font-weight-semibold);
+    --_vf-text-line-height: var(--vf-line-height-tight);
+  }
+
+  :where([data-vf-text][data-vf-text-variant="heading-xs"]) {
+    --_vf-text-font-size: var(--vf-font-size-lg);
     --_vf-text-font-weight: var(--vf-font-weight-semibold);
     --_vf-text-line-height: var(--vf-line-height-compact);
   }
 
+  :where([data-vf-text][data-vf-text-variant="title-lg"]) {
+    --_vf-text-font-size: var(--vf-font-size-xl);
+    --_vf-text-font-weight: var(--vf-font-weight-semibold);
+    --_vf-text-line-height: var(--vf-line-height-compact);
+  }
+
+  :where([data-vf-text][data-vf-text-variant="title-md"]),
   :where([data-vf-text][data-vf-text-variant="title"]) {
     --_vf-text-font-size: var(--vf-font-size-lg);
     --_vf-text-font-weight: var(--vf-font-weight-semibold);
     --_vf-text-line-height: var(--vf-line-height-compact);
   }
 
-  :where([data-vf-text][data-vf-text-variant="heading"]) {
-    --_vf-text-font-size: var(--vf-font-size-xl);
+  :where([data-vf-text][data-vf-text-variant="title-sm"]) {
+    --_vf-text-font-size: var(--vf-font-size-md);
     --_vf-text-font-weight: var(--vf-font-weight-semibold);
-    --_vf-text-line-height: var(--vf-line-height-tight);
+    --_vf-text-line-height: var(--vf-line-height-compact);
+  }
+
+  :where([data-vf-text][data-vf-text-variant="body-lg"]) {
+    --_vf-text-font-size: var(--vf-font-size-lg);
+    --_vf-text-line-height: var(--vf-line-height-relaxed);
+  }
+
+  :where([data-vf-text][data-vf-text-variant="body-md"]),
+  :where([data-vf-text][data-vf-text-variant="body"]) {
+    --_vf-text-font-size: var(--vf-font-size-md);
+    --_vf-text-line-height: var(--vf-line-height-normal);
+  }
+
+  :where([data-vf-text][data-vf-text-variant="body-sm"]) {
+    --_vf-text-font-size: var(--vf-font-size-sm);
+  }
+
+  :where([data-vf-text][data-vf-text-variant="label-lg"]) {
+    --_vf-text-font-size: var(--vf-font-size-md);
+    --_vf-text-font-weight: var(--vf-font-weight-semibold);
+    --_vf-text-line-height: var(--vf-line-height-compact);
+  }
+
+  :where([data-vf-text][data-vf-text-variant="label-md"]),
+  :where([data-vf-text][data-vf-text-variant="label"]) {
+    --_vf-text-font-size: var(--vf-font-size-sm);
+    --_vf-text-font-weight: var(--vf-font-weight-semibold);
+    --_vf-text-line-height: var(--vf-line-height-compact);
+  }
+
+  :where([data-vf-text][data-vf-text-variant="label-sm"]) {
+    --_vf-text-font-size: var(--vf-font-size-xs);
+    --_vf-text-font-weight: var(--vf-font-weight-semibold);
+    --_vf-text-line-height: var(--vf-line-height-compact);
+  }
+
+  :where([data-vf-text][data-vf-text-variant="caption"]) {
+    --_vf-text-font-size: var(--vf-font-size-xs);
+    --_vf-text-line-height: var(--vf-line-height-normal);
+  }
+
+  :where([data-vf-text][data-vf-text-variant="overline"]) {
+    --_vf-text-font-size: var(--vf-font-size-xs);
+    --_vf-text-font-weight: var(--vf-font-weight-semibold);
+    --_vf-text-line-height: var(--vf-line-height-compact);
+    --_vf-text-letter-spacing: var(--vf-letter-spacing-wider);
+    --_vf-text-transform: uppercase;
   }
 }

@@ -13,17 +13,40 @@
     --vf-color-disabled-background: #e6e9ef;
     --vf-color-disabled-foreground: #6c7484;
     --vf-color-disabled-border: #c8ced8;
+
     --vf-font-family-sans: system-ui, sans-serif;
+    --vf-font-family-serif: ui-serif, Georgia, Cambria, "Times New Roman", Times, serif;
+    --vf-font-family-mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+    --vf-font-family-display: var(--vf-font-family-sans);
+
+    --vf-font-size-xs: 0.75rem;
     --vf-font-size-sm: 0.875rem;
     --vf-font-size-md: 1rem;
     --vf-font-size-lg: 1.25rem;
     --vf-font-size-xl: 1.5rem;
+    --vf-font-size-2xl: 1.875rem;
+    --vf-font-size-3xl: 2.25rem;
+    --vf-font-size-4xl: 3rem;
+    --vf-font-size-5xl: 3.75rem;
+    --vf-font-size-6xl: 4.5rem;
+
     --vf-font-weight-regular: 400;
     --vf-font-weight-medium: 500;
     --vf-font-weight-semibold: 600;
+    --vf-font-weight-bold: 700;
+
+    --vf-line-height-none: 1;
     --vf-line-height-tight: 1.2;
     --vf-line-height-compact: 1.25;
     --vf-line-height-normal: 1.5;
+    --vf-line-height-relaxed: 1.625;
+
+    --vf-letter-spacing-tighter: -0.04em;
+    --vf-letter-spacing-tight: -0.02em;
+    --vf-letter-spacing-normal: 0;
+    --vf-letter-spacing-wide: 0.025em;
+    --vf-letter-spacing-wider: 0.05em;
+
     --vf-control-radius: 0.5rem;
     --vf-control-font-family: var(--vf-font-family-sans);
     --vf-control-font-weight: var(--vf-font-weight-semibold);
