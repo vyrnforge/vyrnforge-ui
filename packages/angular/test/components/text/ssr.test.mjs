@@ -11,7 +11,7 @@ Component({
   selector: 'vf-text-ssr-test',
   standalone: true,
   imports: [VfTextDirective],
-  template: '<h2 vfText="heading" id="title">Typography</h2>'
+  template: '<h2 vfText variant="heading" id="title">Typography</h2>'
 })(AppComponent);
 
 test('Angular Text decorates the authored native element during SSR', async () => {
