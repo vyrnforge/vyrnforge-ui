@@ -69,7 +69,7 @@ export const DialogRoot = defineComponent({
   inheritAttrs: false,
   props: {
     id: String,
-    modelValue: Boolean as PropType<boolean | undefined>,
+    modelValue: { type: Boolean as PropType<boolean | undefined>, default: undefined },
     defaultOpen: { type: Boolean, default: false },
     backdropDismiss: { type: Boolean, default: false },
     titleId: String,
