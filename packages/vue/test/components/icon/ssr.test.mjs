@@ -3,7 +3,7 @@ import assert from 'node:assert/strict';
 import { createSSRApp, h } from 'vue';
 import { renderToString } from '@vue/server-renderer';
 import { Icon } from '@vyrnforge/vue/icon';
-import { bookmarkIcon } from '@vyrnforge/web/icon';
+import { bookmarkIcon } from '@vyrnforge/icons/bookmark';
 
 test('Vue Icon SSR preserves decorative and meaningful accessibility contracts', async () => {
   const decorative = await renderToString(createSSRApp({ render: () => h(Icon, { icon: bookmarkIcon }) }));
