@@ -2,7 +2,7 @@ import '@angular/compiler';
 import { Component, provideZonelessChangeDetection } from '@angular/core';
 import { bootstrapApplication } from '@angular/platform-browser';
 import { VfIconComponent } from '@vyrnforge/angular/icon';
-import { bookmarkIcon } from '@vyrnforge/web/icon';
+import { bookmarkIcon } from '@vyrnforge/icons/bookmark';
 
 @Component({
   selector: 'vf-example-root',
