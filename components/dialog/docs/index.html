@@ -8,56 +8,100 @@
 <section>
   <h2>Installation and imports</h2>
   <div class="vf-docs-table-wrap" tabindex="0" role="region" aria-label="Dialog package imports">
-    <table><thead><tr><th>Surface</th><th>Public entrypoint</th></tr></thead><tbody>
-      <tr><th scope="row">Shared styles</th><td><code>@vyrnforge/web/styles/dialog.css</code></td></tr>
-      <tr><th scope="row">React</th><td><code>@vyrnforge/react/dialog</code></td></tr>
-      <tr><th scope="row">Angular</th><td><code>@vyrnforge/angular/dialog</code></td></tr>
-      <tr><th scope="row">Vue</th><td><code>@vyrnforge/vue/dialog</code></td></tr>
-    </tbody></table>
+    <table>
+      <thead><tr><th>Surface</th><th>Public entrypoint</th></tr></thead>
+      <tbody>
+        <tr><th scope="row">Shared styles</th><td><code>@vyrnforge/web/styles/dialog.css</code></td></tr>
+        <tr><th scope="row">React</th><td><code>@vyrnforge/react/dialog</code></td></tr>
+        <tr><th scope="row">Angular</th><td><code>@vyrnforge/angular/dialog</code></td></tr>
+        <tr><th scope="row">Vue</th><td><code>@vyrnforge/vue/dialog</code></td></tr>
+      </tbody>
+    </table>
   </div>
+  <p>The Web package supplies canonical Dialog styling. Modal activation and focus lifecycle are implemented by framework ports using the native dialog platform APIs.</p>
+</section>
+
+<section>
+  <h2>Quick start</h2>
+  <p>Choose a framework to run the checked-in Dialog example through its public package subpath.</p>
+  <div data-vf-example="dialog/basic"></div>
 </section>
 
 <section>
   <h2>Anatomy</h2>
-  <p>A Dialog contains a native dialog root, authored title, optional description, body content, and consumer-authored controls. Stable hooks are <code>data-vf-dialog-root</code>, <code>data-vf-dialog-title</code>, <code>data-vf-dialog-description</code>, <code>data-vf-dialog-body</code>, and <code>data-vf-dialog-close</code>.</p>
+  <p>A Dialog contains a native dialog root, authored title, optional description, body content, and consumer-authored controls. The title and description relationships are library-owned when the corresponding compound parts are used, while consumers own all meaningful visible text.</p>
 </section>
 
 <section>
-  <h2>State and dismissal</h2>
-  <p>Open state may be controlled or initialized as uncontrolled state. Escape, optional backdrop activation, and close controls produce a dismissal request with reason <code>escape</code>, <code>backdrop</code>, or <code>close-control</code>. Preventing the request leaves controlled state and the native modal open.</p>
+  <h2>Variants and sizes</h2>
+  <p>Dialog has no public semantic variants or size enum in the current contract. Consumers may compose responsive layout around the canonical styling hooks without changing modal semantics or dismissal behavior.</p>
 </section>
 
 <section>
-  <h2>Focus</h2>
-  <p>Native dialog focusing behavior is the default. Framework ports support an explicit initial-focus target and restore focus to the previously focused meaningful element when the dialog closes and that target is still valid.</p>
+  <h2>State</h2>
+  <p>Open is component state. React supports controlled <code>open</code> or uncontrolled <code>defaultOpen</code>; Vue uses <code>modelValue</code> with optional <code>defaultOpen</code>; Angular supports an <code>open</code> input with optional <code>defaultOpen</code>. Controlled ports notify state owners rather than unilaterally changing consumer-owned state.</p>
+</section>
+
+<section>
+  <h2>Behavior</h2>
+  <p>Opening a Dialog activates the native element with <code>showModal()</code> on the client. Escape, optional backdrop activation, and close controls produce a preventable dismissal request with reason <code>escape</code>, <code>backdrop</code>, or <code>close-control</code>. A prevented request keeps the modal open. If a native close occurs while controlled state still says open, the framework port resynchronizes the native element instead of leaving browser state and framework state split.</p>
+</section>
+
+<section>
+  <h2>Interaction</h2>
+  <p>Escape follows the native dialog <code>cancel</code> path. Backdrop dismissal is opt-in and is recognized only when pointer activation begins and ends on the dialog backdrop surface; content interactions are not treated as outside clicks. Close controls request dismissal explicitly. Nested modal ownership remains with the topmost native dialog.</p>
 </section>
 
 <section>
   <h2>Accessibility</h2>
-  <p>The root is a native <code>&lt;dialog&gt;</code> activated with <code>showModal()</code>; VyrnForge does not emulate modality with <code>role="dialog"</code> and <code>aria-modal</code>. Title relationships are generated from the root identifier. Supply <code>descriptionId</code> when a description part should be referenced by <code>aria-describedby</code>. Consumers own all visible labels and control text.</p>
+  <p>The root is a native <code>&lt;dialog&gt;</code> activated with <code>showModal()</code>; VyrnForge does not emulate modality with <code>role="dialog"</code> and <code>aria-modal</code>. Title relationships are generated from the root identifier. Supply <code>descriptionId</code> when a description part should be referenced by <code>aria-describedby</code>. Native initial focus is the default, an explicit initial-focus target is optional, and focus is restored to the previous meaningful target after close when that target remains valid.</p>
 </section>
 
 <section>
-  <h2>CSR and SSR</h2>
-  <p>Server output never claims client-side modality by serializing an <code>open</code> attribute. Intended open state may be exposed through <code>data-vf-open</code>; after client activation the framework port synchronizes the native element with <code>showModal()</code> or <code>close()</code>.</p>
+  <h2>Forms</h2>
+  <p>Dialog does not define submission, validation, confirmation, or reset policy. Forms may be composed inside a Dialog, but application form behavior remains owned by the consuming application and the controls used within it.</p>
+</section>
+
+<section>
+  <h2>Styling</h2>
+  <p>Stable hooks are <code>data-vf-dialog-root</code>, <code>data-vf-dialog-title</code>, <code>data-vf-dialog-description</code>, <code>data-vf-dialog-body</code>, and <code>data-vf-dialog-close</code>, with state/policy hooks <code>data-vf-open</code> and <code>data-vf-backdrop-dismiss</code>. The native <code>::backdrop</code> pseudo-element is the canonical backdrop styling surface. Shared CSS includes responsive sizing, overflow behavior, visible focus, reduced-motion safety, and forced-colors treatment.</p>
 </section>
 
 <section>
   <h2>Framework API</h2>
-  <p>React exports <code>DialogRoot</code>, <code>DialogTitle</code>, <code>DialogDescription</code>, <code>DialogBody</code>, and <code>DialogClose</code>. Vue exposes the same compound concepts with <code>modelValue</code>/<code>update:modelValue</code>. Angular uses standalone native-element directives rooted at <code>dialog[vfDialogRoot]</code>. All ports expose the same dismissal reasons.</p>
+  <div class="vf-docs-table-wrap" tabindex="0" role="region" aria-label="Dialog framework APIs">
+    <table>
+      <thead><tr><th>Surface</th><th>API</th></tr></thead>
+      <tbody>
+        <tr><th scope="row">React</th><td><code>DialogRoot</code>, <code>DialogTitle</code>, <code>DialogDescription</code>, <code>DialogBody</code>, and <code>DialogClose</code>; controlled <code>open</code> or uncontrolled <code>defaultOpen</code>; <code>onOpenChange</code> and <code>onDismissRequest</code>.</td></tr>
+        <tr><th scope="row">Angular</th><td>Standalone <code>VfDialogRootDirective</code>, <code>VfDialogTitleDirective</code>, <code>VfDialogDescriptionDirective</code>, <code>VfDialogBodyDirective</code>, and <code>VfDialogCloseDirective</code> on native elements; <code>openChange</code> and <code>dismissRequest</code> outputs.</td></tr>
+        <tr><th scope="row">Vue</th><td><code>DialogRoot</code>, <code>DialogTitle</code>, <code>DialogDescription</code>, <code>DialogBody</code>, and <code>DialogClose</code> with slots; <code>modelValue</code>/<code>update:modelValue</code>, <code>openChange</code>, and <code>dismissRequest</code>.</td></tr>
+      </tbody>
+    </table>
+  </div>
 </section>
 
 <section>
-  <h2>Behavior boundaries</h2>
-  <p>Dialog does not own application confirmation logic, generic outside-click handling, arbitrary portals, body-scroll locking, a universal overlay manager, or a universal focus manager. Nested modals rely on the browser top layer.</p>
+  <h2>CSR and SSR</h2>
+  <p>Server output is semantically valid but never claims client-side modality by serializing an <code>open</code> attribute. Intended open state may be exposed through <code>data-vf-open</code>; after client activation the framework port synchronizes the native element with <code>showModal()</code> or <code>close()</code>. Stable title and description identifiers preserve relationships through hydration without premature focus movement.</p>
+</section>
+
+<section>
+  <h2>Examples</h2>
+  <p>The basic executable example demonstrates the native Dialog structure, shared styling, title and description relationships, close controls, optional backdrop dismissal, and equivalent public concepts in React, Angular, and Vue.</p>
+</section>
+
+<section>
+  <h2>Do / Don't</h2>
+  <p>Do use Dialog for genuinely modal tasks, provide meaningful authored title text, and keep dismissal policy explicit. Don't use Dialog as a generic popover, application router, global notification surface, or reason to introduce document-wide outside-click, scroll-lock, overlay-stack, or focus-manager infrastructure.</p>
 </section>
 
 <section>
   <h2>Testing guidance</h2>
-  <p>Real-browser tests should prove native modal activation, background inertness, Escape cancellation, optional backdrop dismissal, close controls, initial focus, restoration, nested modals, hydration, reduced motion, forced colors, and accessibility.</p>
+  <p>Use real-browser tests to prove native modal activation, background inertness, Escape cancellation, optional backdrop dismissal, close controls, initial focus, focus restoration, nested modals, hydration, reduced motion, forced colors, and accessibility. SSR tests should verify state and relationships without an <code>open</code> attribute.</p>
 </section>
 
 <section>
   <h2>Compatibility</h2>
-  <p>The current interactive ports are React, Angular, and Vue with canonical styling from <code>@vyrnforge/web</code>. A Web Components Dialog surface is not currently shipped.</p>
+  <p>The current interactive ports are React, Angular, and Vue with canonical styling from <code>@vyrnforge/web</code>. A Web Components Dialog surface is not currently shipped; the existence of <code>@vyrnforge/elements</code> does not imply one.</p>
 </section>
