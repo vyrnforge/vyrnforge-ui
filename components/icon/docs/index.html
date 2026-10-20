@@ -1,0 +1,12 @@
+<h1>Icon</h1>
+<p>Icon is VyrnForge's non-interactive SVG primitive. The initial foundation ships one sample glyph, <code>bookmarkIcon</code>, to prove the contract before the catalog grows.</p>
+<h2>Visual axes</h2>
+<p><code>variant</code> is <code>outlined</code> or <code>filled</code>. <code>shape</code> is <code>rounded</code> or <code>sharp</code>. They are independent axes, with <code>outlined + rounded</code> as the default.</p>
+<h2>Accessibility</h2>
+<p>Icons are decorative by default and are hidden from assistive technology. Set <code>label</code> only when the icon itself carries standalone meaning. Inside an icon-only button, the Button owns the accessible name and the Icon remains decorative.</p>
+<h2>Styling</h2>
+<p>Icons inherit <code>currentColor</code>. Sizes are <code>sm</code>, <code>md</code>, and <code>lg</code>. Load <code>@vyrnforge/web/styles/icon.css</code> explicitly, or use the aggregate Web stylesheet.</p>
+<h2>Definitions</h2>
+<p>SVG-specific icon definitions live in <code>@vyrnforge/web/icon</code>. This initial slice does not introduce a registry or a separate icon package. New glyphs can be added as authored definitions later.</p>
+<h2>Elements</h2>
+<p><code>vf-icon</code> uses explicit registration. Its rich <code>icon</code> definition is a property; serializable presentation choices use attributes.</p>

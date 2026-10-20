@@ -1,4 +1,12 @@
 export {
+  VfIconElement,
+  defineIconElement,
+  type IconDefinition,
+  type IconShape,
+  type IconSize,
+  type IconVariant,
+} from './components/icon/index.js';
+export {
   VfTabsElement,
   defineTabsElement,
   type TabsActivation,

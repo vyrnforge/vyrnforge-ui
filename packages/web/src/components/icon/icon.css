@@ -1,0 +1,23 @@
+@layer vyrnforge.reset, vyrnforge.tokens, vyrnforge.themes, vyrnforge.foundation, vyrnforge.components;
+
+@layer vyrnforge.components {
+  :where([data-vf-icon-host]) {
+    display: inline-flex;
+    line-height: 0;
+  }
+
+  :where([data-vf-icon]) {
+    --_vf-icon-size: 1.25rem;
+
+    block-size: var(--_vf-icon-size);
+    color: inherit;
+    display: inline-block;
+    flex: none;
+    inline-size: var(--_vf-icon-size);
+    overflow: visible;
+    vertical-align: -0.125em;
+  }
+
+  :where([data-vf-icon][data-vf-size="sm"]) { --_vf-icon-size: 1rem; }
+  :where([data-vf-icon][data-vf-size="lg"]) { --_vf-icon-size: 1.5rem; }
+}

@@ -8,6 +8,8 @@ export {
   VfDialogTitleDirective,
 } from './components/dialog/index.js';
 export type { DialogDismissReason, DialogDismissRequest } from './components/dialog/index.js';
+export { VfIconComponent } from './components/icon/index.js';
+export type { IconDefinition, IconShape, IconSize, IconVariant } from './components/icon/index.js';
 export {
   VfTabsListDirective,
   VfTabsPanelDirective,

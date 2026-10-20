@@ -1,0 +1,13 @@
+import { VfIconElement, defineIconElement, type IconShape, type IconSize, type IconVariant } from '@vyrnforge/elements/icon';
+import { bookmarkIcon } from '@vyrnforge/web/icon';
+const element = document.createElement('vf-icon') as VfIconElement;
+element.icon = bookmarkIcon;
+element.variant = 'filled';
+element.shape = 'sharp';
+element.size = 'lg';
+element.label = 'Saved';
+const register: (registry?: CustomElementRegistry) => void = defineIconElement;
+const variants: IconVariant[] = ['outlined', 'filled'];
+const shapes: IconShape[] = ['rounded', 'sharp'];
+const sizes: IconSize[] = ['sm', 'md', 'lg'];
+void [register, variants, shapes, sizes];
