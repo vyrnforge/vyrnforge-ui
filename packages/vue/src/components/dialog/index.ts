@@ -88,6 +88,12 @@ export const DialogRoot = defineComponent({
     let backdropPointerDown = false;
     let mounted = false;
 
+    function restoreFocus() {
+      const target = restoreTarget.value;
+      restoreTarget.value = null;
+      if (canRestoreFocus(target)) target.focus();
+    }
+
     function requestDismiss(reason: DialogDismissReason) {
       const request = createDismissRequest(reason);
       emit('dismissRequest', request);
@@ -100,13 +106,13 @@ export const DialogRoot = defineComponent({
     provide(DialogContextKey, { rootId, titleId, descriptionId: props.descriptionId, requestDismiss });
     expose({ element: dialogRef });
 
-    async function syncDialog() {
+    async function syncDialog(captureRestoreTarget = true) {
       if (!mounted) return;
       await nextTick();
       const dialog = dialogRef.value;
       if (!dialog) return;
       if (desiredOpen.value && !dialog.open) {
-        restoreTarget.value = document.activeElement instanceof HTMLElement ? document.activeElement : null;
+        if (captureRestoreTarget) restoreTarget.value = document.activeElement instanceof HTMLElement ? document.activeElement : null;
         dialog.showModal();
         props.initialFocus?.()?.focus();
       } else if (!desiredOpen.value && dialog.open) {
@@ -137,13 +143,24 @@ export const DialogRoot = defineComponent({
       onClose(event: Event) {
         callHandler(attrs.onClose, event);
         if (desiredOpen.value) {
-          if (props.modelValue === undefined) internalOpen.value = false;
+          if (props.modelValue === undefined) {
+            internalOpen.value = false;
+            emit('update:modelValue', false);
+            emit('openChange', false);
+            restoreFocus();
+            return;
+          }
+
           emit('update:modelValue', false);
           emit('openChange', false);
+          queueMicrotask(async () => {
+            await nextTick();
+            if (desiredOpen.value) await syncDialog(false);
+            else restoreFocus();
+          });
+          return;
         }
-        const target = restoreTarget.value;
-        restoreTarget.value = null;
-        if (canRestoreFocus(target)) target.focus();
+        restoreFocus();
       },
       onPointerdown(event: PointerEvent) {
         callHandler(attrs.onPointerdown, event);
