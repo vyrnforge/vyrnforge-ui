@@ -1,5 +1,16 @@
-import { defineComponent, h } from 'vue';
+import { createApp, h } from 'vue';
 import { Icon } from '@vyrnforge/vue/icon';
 import { bookmarkIcon } from '@vyrnforge/web/icon';
 
-export default defineComponent({ setup: () => () => h(Icon, { icon: bookmarkIcon, variant: 'outlined', shape: 'rounded', label: 'Bookmark' }) });
+const App = {
+  setup() {
+    return () => h(Icon, {
+      icon: bookmarkIcon,
+      variant: 'outlined',
+      shape: 'rounded',
+      label: 'Bookmark'
+    });
+  }
+};
+
+createApp(App).mount('#root');

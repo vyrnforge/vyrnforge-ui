@@ -89,6 +89,23 @@ test('Button documentation uses executable multi-framework examples and a sandbo
   verifyNoErrors();
 });
 
+test('Icon documentation renders the sample glyph in every executable framework example', async ({ page }) => {
+  const verifyNoErrors = await expectNoRuntimeErrors(page);
+  await page.goto('/next/components/icon/');
+
+  const playground = page.locator('[data-vf-example-id="icon/basic"]');
+  const frame = page.frameLocator('[data-vf-example-id="icon/basic"] iframe');
+  await expect(playground).toBeVisible();
+
+  for (const label of ['React', 'Angular', 'Vue', 'Elements', 'Native Web']) {
+    await playground.getByRole('tab', { name: label }).click();
+    await expect(frame.locator('[data-vf-icon]')).toBeVisible();
+    await expect(frame.locator('[data-vf-icon] path')).toHaveCount(1);
+  }
+
+  verifyNoErrors();
+});
+
 test('docs remain navigable at a mobile viewport', async ({ page }) => {
   await page.setViewportSize({ width: 390, height: 844 });
   await page.goto('/next/foundations/accessibility/');
