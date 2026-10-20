@@ -79,16 +79,26 @@ export class VfDialogRootDirective {
       const desiredOpen = controlledOpen ?? this.internalOpen();
       if (typeof document === 'undefined') return;
       const dialog = this.element.nativeElement;
-      queueMicrotask(() => {
-        if (desiredOpen && !dialog.open) {
-          this.restoreTarget = document.activeElement instanceof HTMLElement ? document.activeElement : null;
-          dialog.showModal();
-          this.initialFocus()?.focus();
-        } else if (!desiredOpen && dialog.open) {
-          dialog.close();
-        }
-      });
+      queueMicrotask(() => this.syncDialog(dialog, desiredOpen, true));
     });
+  }
+
+  private syncDialog(dialog: HTMLDialogElement, desiredOpen: boolean, captureRestoreTarget: boolean): void {
+    if (desiredOpen && !dialog.open) {
+      if (captureRestoreTarget) {
+        this.restoreTarget = document.activeElement instanceof HTMLElement ? document.activeElement : null;
+      }
+      dialog.showModal();
+      this.initialFocus()?.focus();
+    } else if (!desiredOpen && dialog.open) {
+      dialog.close();
+    }
+  }
+
+  private restoreFocus(): void {
+    const restoreTarget = this.restoreTarget;
+    this.restoreTarget = null;
+    if (canRestoreFocus(restoreTarget)) restoreTarget.focus();
   }
 
   requestDismiss(reason: DialogDismissReason): void {
@@ -106,12 +116,23 @@ export class VfDialogRootDirective {
 
   onClose(): void {
     if (this.desiredOpen()) {
-      if (this.open() === undefined) this.internalOpen.set(false);
+      if (this.open() === undefined) {
+        this.internalOpen.set(false);
+        this.openChange.emit(false);
+        this.restoreFocus();
+        return;
+      }
+
       this.openChange.emit(false);
+      const dialog = this.element.nativeElement;
+      queueMicrotask(() => {
+        const desiredOpen = this.desiredOpen();
+        if (desiredOpen) this.syncDialog(dialog, true, false);
+        else this.restoreFocus();
+      });
+      return;
     }
-    const restoreTarget = this.restoreTarget;
-    this.restoreTarget = null;
-    if (canRestoreFocus(restoreTarget)) restoreTarget.focus();
+    this.restoreFocus();
   }
 
   onPointerDown(event: PointerEvent): void {
