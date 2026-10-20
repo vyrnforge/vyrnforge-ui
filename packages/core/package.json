@@ -13,6 +13,11 @@
       "types": "./dist/index.d.ts",
       "import": "./dist/index.js",
       "default": "./dist/index.js"
+    },
+    "./collection-navigation": {
+      "types": "./dist/capabilities/collection-navigation/index.d.ts",
+      "import": "./dist/capabilities/collection-navigation/index.js",
+      "default": "./dist/capabilities/collection-navigation/index.js"
     }
   },
   "scripts": {
