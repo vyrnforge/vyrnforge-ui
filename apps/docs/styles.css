@@ -80,12 +80,63 @@
   textarea[data-vf-example-source]:focus-visible { outline-offset: -3px; }
   .vf-example__status { min-height: 2.2rem; margin: 0; padding: .5rem .8rem; color: var(--docs-muted); font-size: .825rem; border-block-start: 1px solid var(--docs-border); }
   .vf-docs-callout { padding: 1rem; border-inline-start: .25rem solid var(--vf-color-focus-ring); background: var(--docs-surface); }
+
+  .vf-type-guide > section { scroll-margin-block-start: 6rem; }
+  .vf-type-principle { display: grid; gap: .25rem; margin-block: 0 2.5rem; border-radius: 0 .75rem .75rem 0; }
+  .vf-type-principle span { color: var(--docs-muted); }
+  .vf-type-hero { margin-block: 1.5rem 2rem; padding: clamp(1.25rem, 4vw, 2.5rem); border: 1px solid var(--docs-border); border-radius: 1rem; overflow: hidden; background: linear-gradient(135deg, var(--docs-surface), color-mix(in srgb, var(--docs-accent) 9%, var(--docs-bg))); }
+  .vf-type-hero__eyebrow { color: var(--docs-muted); }
+  .vf-type-hero__title { max-width: 13ch; margin-block-start: .75rem; }
+  .vf-type-hero__body { max-width: 50ch; margin-block-start: 1.25rem; color: var(--docs-muted); }
+  .vf-type-hero__roles { display: flex; gap: .5rem; flex-wrap: wrap; margin-block-start: 2rem; }
+  .vf-type-hero__roles span { padding: .35rem .6rem; border: 1px solid var(--docs-border); border-radius: 999px; background: color-mix(in srgb, var(--docs-bg) 74%, transparent); font-size: .8rem; }
+  .vf-docs-split, .vf-docs-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 1rem; margin-block: 1.25rem 2rem; }
+  .vf-docs-card { min-width: 0; padding: 1rem; border: 1px solid var(--docs-border); border-radius: .75rem; background: var(--docs-surface); }
+  .vf-docs-card h3 { margin-block-end: .5rem; }
+  .vf-docs-card p:last-child, .vf-docs-card ul:last-child, .vf-docs-card pre:last-child { margin-block-end: 0; }
+  .vf-docs-card pre { background: var(--docs-bg); }
+  .vf-docs-card--good { border-block-start: .2rem solid var(--docs-accent); }
+  .vf-docs-card--bad { border-block-start: .2rem solid var(--docs-muted); }
+  .vf-type-anatomy { display: grid; grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr); gap: .75rem; align-items: stretch; margin-block: 1.5rem; }
+  .vf-type-anatomy__item { display: flex; gap: .85rem; padding: 1rem; border: 1px solid var(--docs-border); border-radius: .75rem; background: var(--docs-surface); }
+  .vf-type-anatomy__item p { margin-block-end: 0; color: var(--docs-muted); }
+  .vf-type-anatomy__step { display: grid; place-items: center; flex: 0 0 2rem; block-size: 2rem; border-radius: 50%; background: var(--docs-surface-strong); font-weight: 700; }
+  .vf-type-anatomy__connector { display: grid; place-items: center; color: var(--docs-muted); font-size: 1.5rem; }
+  .vf-type-scale { margin-block: 1.5rem 2rem; border: 1px solid var(--docs-border); border-radius: 1rem; overflow: hidden; }
+  .vf-type-scale__group { padding: 1.25rem; background: var(--docs-bg); }
+  .vf-type-scale__group + .vf-type-scale__group { border-block-start: 1px solid var(--docs-border); }
+  .vf-type-scale__group-heading { display: flex; gap: 1rem; justify-content: space-between; align-items: baseline; margin-block-end: .75rem; }
+  .vf-type-scale__group-heading p { margin: 0; color: var(--docs-muted); font-size: .9rem; }
+  .vf-type-specimen { display: grid; grid-template-columns: minmax(9rem, 11rem) minmax(0, 1fr); gap: 1.25rem; align-items: baseline; padding-block: 1rem; border-block-start: 1px solid var(--docs-border); }
+  .vf-type-specimen__meta { display: grid; gap: .2rem; align-self: start; }
+  .vf-type-specimen__meta code { font-size: .8rem; }
+  .vf-type-specimen__meta span { color: var(--docs-muted); font-size: .75rem; }
+  .vf-type-specimen__sample { min-width: 0; overflow-wrap: anywhere; }
+  .vf-type-fluid-sample { display: grid; gap: .9rem; margin-block: 1rem 2rem; padding: clamp(1rem, 3vw, 1.5rem); border: 1px solid var(--docs-border); border-radius: .75rem; background: var(--docs-surface); overflow: hidden; }
+  .vf-type-fluid-sample code { color: var(--docs-muted); overflow-wrap: anywhere; }
+  .vf-type-family-grid { display: grid; gap: .75rem; margin-block: 1rem 2rem; }
+  .vf-type-family { display: grid; grid-template-columns: minmax(12rem, 15rem) minmax(0, 1fr); gap: 1rem; align-items: center; padding: 1rem; border: 1px solid var(--docs-border); border-radius: .75rem; }
+  .vf-type-family__label { color: var(--docs-muted); font-size: .825rem; }
+  .vf-type-family__sample { min-width: 0; font-size: clamp(1.4rem, 4vw, 2rem); overflow-wrap: anywhere; }
+  .vf-type-token-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: .75rem; margin-block: 1rem 2rem; }
+  .vf-type-token { min-width: 0; padding: .85rem; border: 1px solid var(--docs-border); border-radius: .65rem; background: var(--docs-surface); }
+  .vf-type-token h4 { margin: 0 0 .35rem; }
+  .vf-type-token p { margin: 0; color: var(--docs-muted); font-size: .875rem; overflow-wrap: anywhere; }
+
   @media (max-width: 640px) {
     .vf-example__header { display: grid; }
     .vf-example__tabs { justify-content: flex-start; }
     .vf-example__editor-toolbar { align-items: flex-start; flex-wrap: wrap; }
     .vf-example__editor-actions { margin-inline-start: 0; inline-size: 100%; }
+    .vf-docs-split, .vf-docs-grid { grid-template-columns: 1fr; }
+    .vf-type-anatomy { grid-template-columns: 1fr; }
+    .vf-type-anatomy__connector { block-size: 1rem; }
+    .vf-type-specimen { grid-template-columns: 1fr; gap: .55rem; }
+    .vf-type-scale__group-heading { display: grid; gap: .25rem; }
+    .vf-type-family { grid-template-columns: 1fr; gap: .5rem; }
+    .vf-type-token-grid { grid-template-columns: 1fr 1fr; }
   }
+  @media (max-width: 420px) { .vf-type-token-grid { grid-template-columns: 1fr; } }
   @media (prefers-reduced-motion: reduce) { *, *::before, *::after { scroll-behavior: auto !important; transition-duration: 0.001ms !important; animation-duration: 0.001ms !important; } }
-  @media (forced-colors: active) { .vf-docs-status, main pre, .vf-docs-tools select, .vf-docs-tools input, .vf-example, .vf-example__preview iframe { border-color: CanvasText; } }
+  @media (forced-colors: active) { .vf-docs-status, main pre, .vf-docs-tools select, .vf-docs-tools input, .vf-example, .vf-example__preview iframe, .vf-docs-card, .vf-type-hero, .vf-type-anatomy__item, .vf-type-scale, .vf-type-family, .vf-type-token { border-color: CanvasText; } }
 }

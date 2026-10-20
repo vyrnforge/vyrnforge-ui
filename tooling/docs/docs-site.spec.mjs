@@ -106,6 +106,30 @@ test('Icon documentation renders the sample glyph in every executable framework 
   verifyNoErrors();
 });
 
+test('Text documentation teaches the live typography scale instead of only listing variants', async ({ page }) => {
+  const verifyNoErrors = await expectNoRuntimeErrors(page);
+  await page.goto('/next/components/text/');
+
+  const guide = page.locator('[data-vf-typography-guide]');
+  await expect(guide).toBeVisible();
+  await expect(page.getByRole('heading', { level: 2, name: 'Variants and sizes' })).toBeVisible();
+  await expect(page.locator('[data-vf-type-specimen]')).toHaveCount(18);
+  await expect(page.locator('[data-vf-type-specimen="overline"] [data-vf-text]')).toHaveCSS('text-transform', 'uppercase');
+
+  const displaySize = await page.locator('[data-vf-type-specimen="display-lg"] [data-vf-text]').evaluate((element) => Number.parseFloat(getComputedStyle(element).fontSize));
+  const bodySize = await page.locator('[data-vf-type-specimen="body-md"] [data-vf-text]').evaluate((element) => Number.parseFloat(getComputedStyle(element).fontSize));
+  expect(displaySize).toBeGreaterThan(bodySize);
+
+  await expect(guide).toContainText('Choose semantics first');
+  await expect(guide).toContainText('--vf-font-family-display');
+  await expect(guide).toContainText('TextVariantOverrides');
+
+  await page.setViewportSize({ width: 390, height: 844 });
+  const horizontalOverflow = await guide.evaluate((element) => element.scrollWidth - element.clientWidth);
+  expect(horizontalOverflow).toBeLessThanOrEqual(1);
+  verifyNoErrors();
+});
+
 test('docs remain navigable at a mobile viewport', async ({ page }) => {
   await page.setViewportSize({ width: 390, height: 844 });
   await page.goto('/next/foundations/accessibility/');
