@@ -30,6 +30,10 @@ Component({
   `,
 })(AppComponent);
 
+function openingTag(html, id) {
+  return html.match(new RegExp(`<[^>]+id="${id}"[^>]*>`))?.[0] ?? '';
+}
+
 test('Angular Tabs server output contains complete tab relationships and state', async () => {
   const html = await renderApplication(
     (context) => bootstrapApplication(AppComponent, { providers: [provideZonelessChangeDetection()] }, context),
@@ -37,7 +41,21 @@ test('Angular Tabs server output contains complete tab relationships and state',
   );
   assert.match(html, /data-vf-tabs-root/);
   assert.match(html, /role="tablist"/);
-  assert.match(html, /id="account-tabs-tab-overview"[^>]*role="tab"[^>]*tabindex="0"[^>]*aria-selected="true"/);
-  assert.match(html, /id="account-tabs-tab-billing"[^>]*role="tab"[^>]*disabled[^>]*aria-disabled="true"/);
-  assert.match(html, /id="account-tabs-panel-security"[^>]*role="tabpanel"[^>]*hidden[^>]*aria-labelledby="account-tabs-tab-security"/);
+
+  const overview = openingTag(html, 'account-tabs-tab-overview');
+  assert.match(overview, /role="tab"/);
+  assert.match(overview, /tabindex="0"/);
+  assert.match(overview, /aria-selected="true"/);
+  assert.match(overview, /aria-controls="account-tabs-panel-overview"/);
+
+  const billing = openingTag(html, 'account-tabs-tab-billing');
+  assert.match(billing, /role="tab"/);
+  assert.match(billing, /disabled=""/);
+  assert.match(billing, /aria-disabled="true"/);
+  assert.match(billing, /aria-selected="false"/);
+
+  const securityPanel = openingTag(html, 'account-tabs-panel-security');
+  assert.match(securityPanel, /role="tabpanel"/);
+  assert.match(securityPanel, /hidden=""/);
+  assert.match(securityPanel, /aria-labelledby="account-tabs-tab-security"/);
 });
