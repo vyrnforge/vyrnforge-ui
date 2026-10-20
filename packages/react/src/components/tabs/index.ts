@@ -111,7 +111,7 @@ export function TabsRoot({
   );
 }
 
-export interface TabsListProps extends HTMLAttributes<HTMLDivElement> {}
+export type TabsListProps = HTMLAttributes<HTMLDivElement>;
 
 export function TabsList({ onKeyDown, ...props }: TabsListProps) {
   const context = useTabsContext();
