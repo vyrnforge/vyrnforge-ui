@@ -4,13 +4,18 @@
   <div class="vf-docs-callout vf-type-principle"><strong>Semantics and style are separate.</strong><span>Use <code>h1</code>–<code>h6</code>, <code>p</code>, <code>label</code>, and other native elements for meaning. Use a Text variant for appearance.</span></div>
 
   <section>
+    <h2>Overview</h2>
+    <p>Text gives product copy a shared visual language across VyrnForge without replacing native HTML semantics. Use it when you want consistent display, heading, title, body, label, caption, or overline styling.</p>
+  </section>
+
+  <section>
     <h2>Quick start</h2>
     <p>Pick the element first, then choose the typography role. The playground below shows the same Text API across supported frameworks.</p>
     <div data-vf-example="text/basic"></div>
   </section>
 
   <section>
-    <h2>Type scale</h2>
+    <h2>Variants and sizes</h2>
     <p>Choose a role based on the job the text is doing. Display roles are for big moments, headings organize a page, titles name contained content, body roles handle reading, and labels support controls and compact UI.</p>
     <div class="vf-docs-callout"><strong>A useful starting point:</strong><span>Try <code>heading-md</code> for major sections, <code>title-md</code> for cards and panels, <code>body-md</code> for most copy, and <code>label-md</code> for controls.</span></div>
 
@@ -80,7 +85,7 @@
   </section>
 
   <section>
-    <h2>Setup</h2>
+    <h2>Installation and imports</h2>
     <p>Load the Text stylesheet once, then use the API for your framework.</p>
     <pre><code>import '@vyrnforge/web/styles/text.css';</code></pre>
     <div class="vf-docs-split">
@@ -92,7 +97,7 @@
   </section>
 
   <section>
-    <h2>Customize typography</h2>
+    <h2>Styling</h2>
     <p>Start with the public typography tokens when you need to adapt VyrnForge to your brand. That keeps the same type system flowing through every supported surface.</p>
 
     <h3>Font families</h3>
