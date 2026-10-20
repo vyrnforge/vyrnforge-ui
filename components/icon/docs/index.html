@@ -1,18 +1,19 @@
-<p class="vf-docs-lede">Icon is VyrnForge's non-interactive SVG primitive. The initial foundation ships one authored Bookmark glyph to establish shared rendering, accessibility, sizing, and visual-family semantics before the catalog grows.</p>
+<p class="vf-docs-lede">Icon is VyrnForge's non-interactive SVG primitive. The renderer contract lives in Web and the official authored glyph catalog lives in the separate <code>@vyrnforge/icons</code> package so the catalog can grow without becoming part of every framework runtime.</p>
 
 <section>
   <h2>Overview</h2>
-  <p>Use Icon for symbolic visual content that accompanies or communicates UI meaning. Icon is deliberately non-interactive: actions and navigation still belong to Button, Link, or another semantic control.</p>
+  <p>Use Icon for symbolic visual content that accompanies or communicates UI meaning. Icon is deliberately non-interactive: actions and navigation still belong to Button, Link, or another semantic control. Renderer packages accept any compliant <code>IconDefinition</code>; the official VyrnForge catalog is optional.</p>
 </section>
 
 <section>
   <h2>Installation and imports</h2>
-  <p>Load the canonical Web icon stylesheet, import <code>bookmarkIcon</code> from <code>@vyrnforge/web/icon</code>, and use the renderer-specific Icon surface for your framework.</p>
+  <p>Load the canonical Web icon stylesheet, import the official Bookmark artwork from the granular <code>@vyrnforge/icons/bookmark</code> entrypoint, and use the renderer-specific Icon surface for your framework.</p>
   <div class="vf-docs-table-wrap" tabindex="0" role="region" aria-label="Icon package imports">
     <table>
       <thead><tr><th>Surface</th><th>Public entrypoint</th></tr></thead>
       <tbody>
-        <tr><th scope="row">Native Web</th><td><code>@vyrnforge/web/icon</code> and <code>@vyrnforge/web/styles/icon.css</code></td></tr>
+        <tr><th scope="row">Icon contract and Native Web styling</th><td><code>@vyrnforge/web/icon</code> and <code>@vyrnforge/web/styles/icon.css</code></td></tr>
+        <tr><th scope="row">Official Bookmark artwork</th><td><code>@vyrnforge/icons/bookmark</code></td></tr>
         <tr><th scope="row">React</th><td><code>@vyrnforge/react/icon</code></td></tr>
         <tr><th scope="row">Angular</th><td><code>@vyrnforge/angular/icon</code></td></tr>
         <tr><th scope="row">Vue</th><td><code>@vyrnforge/vue/icon</code></td></tr>
@@ -24,13 +25,13 @@
 
 <section>
   <h2>Quick start</h2>
-  <p>The executable example uses the checked-in Bookmark definition and the same public framework surfaces described on this page.</p>
+  <p>The executable example imports Bookmark from <code>@vyrnforge/icons/bookmark</code> and passes the same definition to every framework renderer.</p>
   <div data-vf-example="icon/basic"></div>
 </section>
 
 <section>
   <h2>Anatomy</h2>
-  <p>Icon has one semantic visual element: an SVG whose paths come from an <code>IconDefinition</code>. Framework adapters translate that shared definition into their native rendering model. The path structure is internal artwork, not a composition API.</p>
+  <p>Icon has one semantic visual element: an SVG whose paths come from an <code>IconDefinition</code>. Web owns that definition contract and resolver; <code>@vyrnforge/icons</code> owns official authored glyph data. Framework adapters translate definitions into their native rendering model. The path structure is internal artwork, not a composition API.</p>
 </section>
 
 <section>
@@ -86,25 +87,25 @@
 
 <section>
   <h2>CSR and SSR</h2>
-  <p>React, Angular, and Vue render semantic SVG output on the server without requiring browser globals. Elements keeps module definition server-safe and performs custom-element rendering after browser connection. Native Web requires no hydration.</p>
+  <p>React, Angular, and Vue render semantic SVG output on the server without requiring browser globals. Elements keeps module definition server-safe and performs custom-element rendering after browser connection. Native Web requires no hydration. Importing the icon catalog itself has no browser side effects.</p>
 </section>
 
 <section>
   <h2>Examples</h2>
-  <p>The Quick start example demonstrates Bookmark across Native Web, React, Angular, Vue, and Elements. Additional glyphs should be added as checked-in executable examples when real component or product needs justify them.</p>
+  <p>The Quick start example demonstrates Bookmark across Native Web, React, Angular, Vue, and Elements. Additional official glyphs should be added to <code>@vyrnforge/icons</code> through granular subpaths when real component or product needs justify them.</p>
 </section>
 
 <section>
   <h2>Do / Don't</h2>
-  <p><strong>Do</strong> keep decorative icons hidden from assistive technology and let an owning Button or Link provide the accessible name. <strong>Don't</strong> make Icon clickable by itself, invent fallback English labels, or treat a CSS stroke change as a substitute for deliberately authored icon artwork.</p>
+  <p><strong>Do</strong> prefer granular catalog imports such as <code>@vyrnforge/icons/bookmark</code>, keep decorative icons hidden from assistive technology, and let an owning Button or Link provide the accessible name. <strong>Don't</strong> make Icon clickable by itself, invent fallback English labels, or make framework packages depend on the whole official catalog.</p>
 </section>
 
 <section>
   <h2>Testing guidance</h2>
-  <p>Assert observable icon semantics: decorative icons are hidden, meaningful standalone icons expose their label, variant/shape/size hooks reflect the public API, and the SVG inherits the intended color and canonical size. Avoid coupling tests to private path ordering or private CSS variables.</p>
+  <p>Assert observable icon semantics: decorative icons are hidden, meaningful standalone icons expose their label, variant/shape/size hooks reflect the public API, the SVG inherits the intended color and canonical size, and granular catalog entrypoints remain independently consumable. Avoid coupling tests to private path ordering or private CSS variables.</p>
 </section>
 
 <section>
   <h2>Compatibility</h2>
-  <p>The first Icon slice is implemented for Native Web, React, Angular, Vue, and Elements. Broader browser and release qualification remains governed by VyrnForge's compatibility evidence rather than being inferred from this component page.</p>
+  <p>The first Icon slice is implemented for Native Web, React, Angular, Vue, and Elements. The official catalog is independently distributed through <code>@vyrnforge/icons</code>. Broader browser and release qualification remains governed by VyrnForge's compatibility evidence rather than being inferred from this component page.</p>
 </section>
