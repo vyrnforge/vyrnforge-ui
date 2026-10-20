@@ -1,130 +1,100 @@
 <div class="vf-type-guide" data-vf-typography-guide>
-  <p class="vf-docs-lede">Typography gives content hierarchy, rhythm, and emphasis. VyrnForge provides a shared type scale so applications can use consistent visual roles without giving up native HTML semantics.</p>
+  <p class="vf-docs-lede">Use VyrnForge typography to create clear hierarchy while keeping your HTML meaningful. Choose a visual role for the look you need, and keep the semantic element that fits the content.</p>
 
-  <div class="vf-docs-callout vf-type-principle"><strong>Choose semantics first.</strong><span>Pick the correct HTML element for meaning, then apply the visual role you want. A visual heading does not automatically become an <code>h1</code>–<code>h6</code>.</span></div>
+  <div class="vf-docs-callout vf-type-principle"><strong>Semantics and style are separate.</strong><span>Use <code>h1</code>–<code>h6</code>, <code>p</code>, <code>label</code>, and other native elements for meaning. Use a Text variant for appearance.</span></div>
 
   <section>
-    <h2>Overview</h2>
-    <p>Text provides the display, heading, title, body, label, caption, and overline roles used across VyrnForge. Semantic HTML and visual typography are independent decisions.</p>
-    <div class="vf-type-hero" aria-label="Typography preview">
-      <div class="vf-type-hero__eyebrow" data-vf-text data-vf-text-variant="overline">VyrnForge typography</div>
-      <div class="vf-type-hero__title" data-vf-text data-vf-text-variant="display-md">One scale. Clear hierarchy.</div>
-      <div class="vf-type-hero__body" data-vf-text data-vf-text-variant="body-lg">Use the same typography language for product headings, readable body copy, labels, captions, and dense interface text.</div>
-      <div class="vf-type-hero__roles" aria-label="Typography role families"><span>Display</span><span>Heading</span><span>Title</span><span>Body</span><span>Label</span><span>Caption</span><span>Overline</span></div>
-    </div>
-    <div class="vf-docs-split">
-      <article class="vf-docs-card"><h3>Use Text when</h3><ul><li>you want reusable visual hierarchy;</li><li>you want typography to follow public VyrnForge tokens;</li><li>you need the same role vocabulary across supported frameworks.</li></ul></article>
-      <article class="vf-docs-card"><h3>Do not use Text to</h3><ul><li>replace semantic heading levels;</li><li>create form-label relationships;</li><li>encode disabled, invalid, selected, or other application state.</li></ul></article>
-    </div>
+    <h2>Quick start</h2>
+    <p>Pick the element first, then choose the typography role. The playground below shows the same Text API across supported frameworks.</p>
+    <div data-vf-example="text/basic"></div>
   </section>
 
   <section>
-    <h2>Installation and imports</h2>
-    <p>Load the public Text stylesheet, then use the Text API for your framework.</p>
-    <div class="vf-docs-split">
-      <article class="vf-docs-card"><h3>Load the styles</h3><pre><code>import '@vyrnforge/web/styles/text.css';</code></pre><p>Native Web can use <code>data-vf-text</code> and <code>data-vf-text-variant</code> directly.</p></article>
-      <article class="vf-docs-card"><h3>Import Text</h3><pre><code>// React
-import { Text } from '@vyrnforge/react/text';
+    <h2>Type scale</h2>
+    <p>Choose a role based on the job the text is doing. Display roles are for big moments, headings organize a page, titles name contained content, body roles handle reading, and labels support controls and compact UI.</p>
+    <div class="vf-docs-callout"><strong>A useful starting point:</strong><span>Try <code>heading-md</code> for major sections, <code>title-md</code> for cards and panels, <code>body-md</code> for most copy, and <code>label-md</code> for controls.</span></div>
 
-// Angular
-import { VfTextDirective } from '@vyrnforge/angular/text';
-
-// Vue
-import { Text } from '@vyrnforge/vue/text';</code></pre></article>
-    </div>
-    <p>Elements does not provide a <code>&lt;vf-text&gt;</code> component; use semantic HTML with the Native Web hooks instead.</p>
-  </section>
-
-  <section><h2>Quick start</h2><p>Start with the semantic element your document needs, then choose its visual role.</p><div data-vf-example="text/basic"></div></section>
-
-  <section>
-    <h2>Anatomy</h2>
-    <p>Typography has two independent choices: what the content means and how it should look.</p>
-    <div class="vf-type-anatomy" aria-label="Text anatomy">
-      <article class="vf-type-anatomy__item"><span class="vf-type-anatomy__step">1</span><div><h3>Semantic element</h3><p>Choose <code>h1</code>–<code>h6</code>, <code>p</code>, <code>label</code>, <code>strong</code>, <code>em</code>, <code>span</code>, or another correct native element.</p></div></article>
-      <div class="vf-type-anatomy__connector" aria-hidden="true">+</div>
-      <article class="vf-type-anatomy__item"><span class="vf-type-anatomy__step">2</span><div><h3>Visual role</h3><p>Apply a role such as <code>heading-lg</code>, <code>body-md</code>, or <code>label-sm</code>. The role changes presentation only.</p></div></article>
-    </div>
-    <div class="vf-docs-callout"><strong>Same appearance, different meaning is possible.</strong><span>An <code>h2</code> can use a quieter visual role and a paragraph can use a large display role. Keep document structure semantically correct.</span></div>
-  </section>
-
-  <section>
-    <h2>Variants and sizes</h2>
-    <p>The built-in scale is organized by role, not by HTML tag. The size suffix is part of the role name rather than a separate <code>size</code> prop.</p>
     <div class="vf-type-scale" data-vf-type-scale aria-label="VyrnForge typography scale">
-      <section class="vf-type-scale__group" aria-labelledby="vf-type-display"><div class="vf-type-scale__group-heading"><h3 id="vf-type-display">Display</h3><p>Hero statements and major page-level moments.</p></div>
-        <div class="vf-type-specimen" data-vf-type-specimen="display-lg"><div class="vf-type-specimen__meta"><code>display-lg</code><span>fluid · bold</span></div><div class="vf-type-specimen__sample" data-vf-text data-vf-text-variant="display-lg">Build interfaces that feel intentional.</div></div>
-        <div class="vf-type-specimen" data-vf-type-specimen="display-md"><div class="vf-type-specimen__meta"><code>display-md</code><span>fluid · bold</span></div><div class="vf-type-specimen__sample" data-vf-text data-vf-text-variant="display-md">Design systems should explain themselves.</div></div>
-        <div class="vf-type-specimen" data-vf-type-specimen="display-sm"><div class="vf-type-specimen__meta"><code>display-sm</code><span>fluid · semibold</span></div><div class="vf-type-specimen__sample" data-vf-text data-vf-text-variant="display-sm">Typography creates hierarchy before decoration.</div></div>
+      <section class="vf-type-scale__group" aria-labelledby="vf-type-display">
+        <div class="vf-type-scale__group-heading"><h3 id="vf-type-display">Display</h3><p>Hero copy and high-emphasis page moments.</p></div>
+        <div class="vf-type-specimen" data-vf-type-specimen="display-lg"><div class="vf-type-specimen__meta"><code>display-lg</code><span>fluid · bold</span></div><div class="vf-type-specimen__sample" data-vf-text data-vf-text-variant="display-lg">Design for the moment that matters.</div></div>
+        <div class="vf-type-specimen" data-vf-type-specimen="display-md"><div class="vf-type-specimen__meta"><code>display-md</code><span>fluid · bold</span></div><div class="vf-type-specimen__sample" data-vf-text data-vf-text-variant="display-md">Make the next step obvious.</div></div>
+        <div class="vf-type-specimen" data-vf-type-specimen="display-sm"><div class="vf-type-specimen__meta"><code>display-sm</code><span>fluid · semibold</span></div><div class="vf-type-specimen__sample" data-vf-text data-vf-text-variant="display-sm">Clear hierarchy makes interfaces easier to scan.</div></div>
       </section>
-      <section class="vf-type-scale__group" aria-labelledby="vf-type-heading"><div class="vf-type-scale__group-heading"><h3 id="vf-type-heading">Heading</h3><p>Section and subsection hierarchy.</p></div>
-        <div class="vf-type-specimen" data-vf-type-specimen="heading-lg"><div class="vf-type-specimen__meta"><code>heading-lg</code><span>2.25rem · semibold</span></div><div class="vf-type-specimen__sample" data-vf-text data-vf-text-variant="heading-lg">Large section heading</div></div>
-        <div class="vf-type-specimen" data-vf-type-specimen="heading-md"><div class="vf-type-specimen__meta"><code>heading-md</code><span>1.875rem · semibold</span></div><div class="vf-type-specimen__sample" data-vf-text data-vf-text-variant="heading-md">Medium section heading</div></div>
-        <div class="vf-type-specimen" data-vf-type-specimen="heading-sm"><div class="vf-type-specimen__meta"><code>heading-sm</code><span>1.5rem · semibold</span></div><div class="vf-type-specimen__sample" data-vf-text data-vf-text-variant="heading-sm">Small section heading</div></div>
-        <div class="vf-type-specimen" data-vf-type-specimen="heading-xs"><div class="vf-type-specimen__meta"><code>heading-xs</code><span>1.25rem · semibold</span></div><div class="vf-type-specimen__sample" data-vf-text data-vf-text-variant="heading-xs">Compact section heading</div></div>
+
+      <section class="vf-type-scale__group" aria-labelledby="vf-type-heading">
+        <div class="vf-type-scale__group-heading"><h3 id="vf-type-heading">Heading</h3><p>Page sections and nested content.</p></div>
+        <div class="vf-type-specimen" data-vf-type-specimen="heading-lg"><div class="vf-type-specimen__meta"><code>heading-lg</code><span>2.25rem · semibold</span></div><div class="vf-type-specimen__sample" data-vf-text data-vf-text-variant="heading-lg">Account overview</div></div>
+        <div class="vf-type-specimen" data-vf-type-specimen="heading-md"><div class="vf-type-specimen__meta"><code>heading-md</code><span>1.875rem · semibold</span></div><div class="vf-type-specimen__sample" data-vf-text data-vf-text-variant="heading-md">Billing and plans</div></div>
+        <div class="vf-type-specimen" data-vf-type-specimen="heading-sm"><div class="vf-type-specimen__meta"><code>heading-sm</code><span>1.5rem · semibold</span></div><div class="vf-type-specimen__sample" data-vf-text data-vf-text-variant="heading-sm">Payment methods</div></div>
+        <div class="vf-type-specimen" data-vf-type-specimen="heading-xs"><div class="vf-type-specimen__meta"><code>heading-xs</code><span>1.25rem · semibold</span></div><div class="vf-type-specimen__sample" data-vf-text data-vf-text-variant="heading-xs">Billing address</div></div>
       </section>
-      <section class="vf-type-scale__group" aria-labelledby="vf-type-title"><div class="vf-type-scale__group-heading"><h3 id="vf-type-title">Title</h3><p>Cards, panels, dialogs, and grouped content.</p></div>
-        <div class="vf-type-specimen" data-vf-type-specimen="title-lg"><div class="vf-type-specimen__meta"><code>title-lg</code><span>1.5rem · semibold</span></div><div class="vf-type-specimen__sample" data-vf-text data-vf-text-variant="title-lg">Large content title</div></div>
-        <div class="vf-type-specimen" data-vf-type-specimen="title-md"><div class="vf-type-specimen__meta"><code>title-md</code><span>1.25rem · semibold</span></div><div class="vf-type-specimen__sample" data-vf-text data-vf-text-variant="title-md">Medium content title</div></div>
-        <div class="vf-type-specimen" data-vf-type-specimen="title-sm"><div class="vf-type-specimen__meta"><code>title-sm</code><span>1rem · semibold</span></div><div class="vf-type-specimen__sample" data-vf-text data-vf-text-variant="title-sm">Small content title</div></div>
+
+      <section class="vf-type-scale__group" aria-labelledby="vf-type-title">
+        <div class="vf-type-scale__group-heading"><h3 id="vf-type-title">Title</h3><p>Cards, panels, dialogs, and grouped content.</p></div>
+        <div class="vf-type-specimen" data-vf-type-specimen="title-lg"><div class="vf-type-specimen__meta"><code>title-lg</code><span>1.5rem · semibold</span></div><div class="vf-type-specimen__sample" data-vf-text data-vf-text-variant="title-lg">Team activity</div></div>
+        <div class="vf-type-specimen" data-vf-type-specimen="title-md"><div class="vf-type-specimen__meta"><code>title-md</code><span>1.25rem · semibold</span></div><div class="vf-type-specimen__sample" data-vf-text data-vf-text-variant="title-md">Recent invoices</div></div>
+        <div class="vf-type-specimen" data-vf-type-specimen="title-sm"><div class="vf-type-specimen__meta"><code>title-sm</code><span>1rem · semibold</span></div><div class="vf-type-specimen__sample" data-vf-text data-vf-text-variant="title-sm">Saved payment method</div></div>
       </section>
-      <section class="vf-type-scale__group" aria-labelledby="vf-type-body"><div class="vf-type-scale__group-heading"><h3 id="vf-type-body">Body</h3><p>Long-form and supporting copy.</p></div>
-        <div class="vf-type-specimen" data-vf-type-specimen="body-lg"><div class="vf-type-specimen__meta"><code>body-lg</code><span>1.25rem · relaxed</span></div><div class="vf-type-specimen__sample" data-vf-text data-vf-text-variant="body-lg">Use generous body text when content should feel prominent and readable.</div></div>
-        <div class="vf-type-specimen" data-vf-type-specimen="body-md"><div class="vf-type-specimen__meta"><code>body-md</code><span>1rem · normal</span></div><div class="vf-type-specimen__sample" data-vf-text data-vf-text-variant="body-md">This is the default reading size for most product copy and documentation text.</div></div>
-        <div class="vf-type-specimen" data-vf-type-specimen="body-sm"><div class="vf-type-specimen__meta"><code>body-sm</code><span>0.875rem · normal</span></div><div class="vf-type-specimen__sample" data-vf-text data-vf-text-variant="body-sm">Use smaller body text for secondary information.</div></div>
+
+      <section class="vf-type-scale__group" aria-labelledby="vf-type-body">
+        <div class="vf-type-scale__group-heading"><h3 id="vf-type-body">Body</h3><p>Product copy, descriptions, and longer reading.</p></div>
+        <div class="vf-type-specimen" data-vf-type-specimen="body-lg"><div class="vf-type-specimen__meta"><code>body-lg</code><span>1.25rem · relaxed</span></div><div class="vf-type-specimen__sample" data-vf-text data-vf-text-variant="body-lg">Use larger body copy when a short message needs a little more presence.</div></div>
+        <div class="vf-type-specimen" data-vf-type-specimen="body-md"><div class="vf-type-specimen__meta"><code>body-md</code><span>1rem · normal</span></div><div class="vf-type-specimen__sample" data-vf-text data-vf-text-variant="body-md">Use this for most interface descriptions, settings copy, and documentation.</div></div>
+        <div class="vf-type-specimen" data-vf-type-specimen="body-sm"><div class="vf-type-specimen__meta"><code>body-sm</code><span>0.875rem · normal</span></div><div class="vf-type-specimen__sample" data-vf-text data-vf-text-variant="body-sm">Use smaller body copy for secondary information that still needs comfortable reading.</div></div>
       </section>
-      <section class="vf-type-scale__group" aria-labelledby="vf-type-supporting"><div class="vf-type-scale__group-heading"><h3 id="vf-type-supporting">Labels and supporting text</h3><p>Controls, metadata, captions, and short interface cues.</p></div>
-        <div class="vf-type-specimen" data-vf-type-specimen="label-lg"><div class="vf-type-specimen__meta"><code>label-lg</code><span>1rem · semibold</span></div><div class="vf-type-specimen__sample" data-vf-text data-vf-text-variant="label-lg">Large label</div></div>
-        <div class="vf-type-specimen" data-vf-type-specimen="label-md"><div class="vf-type-specimen__meta"><code>label-md</code><span>0.875rem · semibold</span></div><div class="vf-type-specimen__sample" data-vf-text data-vf-text-variant="label-md">Medium label</div></div>
-        <div class="vf-type-specimen" data-vf-type-specimen="label-sm"><div class="vf-type-specimen__meta"><code>label-sm</code><span>0.75rem · semibold</span></div><div class="vf-type-specimen__sample" data-vf-text data-vf-text-variant="label-sm">Small label</div></div>
-        <div class="vf-type-specimen" data-vf-type-specimen="caption"><div class="vf-type-specimen__meta"><code>caption</code><span>0.75rem · regular</span></div><div class="vf-type-specimen__sample" data-vf-text data-vf-text-variant="caption">Supporting caption or compact metadata</div></div>
-        <div class="vf-type-specimen" data-vf-type-specimen="overline"><div class="vf-type-specimen__meta"><code>overline</code><span>0.75rem · tracked</span></div><div class="vf-type-specimen__sample" data-vf-text data-vf-text-variant="overline">Section label</div></div>
+
+      <section class="vf-type-scale__group" aria-labelledby="vf-type-supporting">
+        <div class="vf-type-scale__group-heading"><h3 id="vf-type-supporting">Labels and supporting text</h3><p>Controls, metadata, captions, and short UI cues.</p></div>
+        <div class="vf-type-specimen" data-vf-type-specimen="label-lg"><div class="vf-type-specimen__meta"><code>label-lg</code><span>1rem · semibold</span></div><div class="vf-type-specimen__sample" data-vf-text data-vf-text-variant="label-lg">Continue to checkout</div></div>
+        <div class="vf-type-specimen" data-vf-type-specimen="label-md"><div class="vf-type-specimen__meta"><code>label-md</code><span>0.875rem · semibold</span></div><div class="vf-type-specimen__sample" data-vf-text data-vf-text-variant="label-md">Email address</div></div>
+        <div class="vf-type-specimen" data-vf-type-specimen="label-sm"><div class="vf-type-specimen__meta"><code>label-sm</code><span>0.75rem · semibold</span></div><div class="vf-type-specimen__sample" data-vf-text data-vf-text-variant="label-sm">Optional</div></div>
+        <div class="vf-type-specimen" data-vf-type-specimen="caption"><div class="vf-type-specimen__meta"><code>caption</code><span>0.75rem · regular</span></div><div class="vf-type-specimen__sample" data-vf-text data-vf-text-variant="caption">Updated 5 minutes ago</div></div>
+        <div class="vf-type-specimen" data-vf-type-specimen="overline"><div class="vf-type-specimen__meta"><code>overline</code><span>0.75rem · tracked</span></div><div class="vf-type-specimen__sample" data-vf-text data-vf-text-variant="overline">New release</div></div>
       </section>
     </div>
-    <div class="vf-docs-callout"><strong>Compatibility aliases remain available.</strong><span><code>body</code>, <code>label</code>, <code>title</code>, and <code>heading</code> remain supported. Prefer explicit role names for new work.</span></div>
-  </section>
 
-  <section><h2>State</h2><p>Text has no semantic state API of its own. Disabled, invalid, required, selected, pressed, busy, or other state belongs to the owning element or component.</p></section>
-
-  <section>
-    <h2>Behavior</h2>
-    <p>Text applies typography without adding document behavior. Display roles are fluid while the rest of the scale resolves from public typography tokens.</p>
-    <h3>Fluid display typography</h3><p>Display roles use CSS <code>clamp()</code>, so they grow with the viewport while staying within deliberate minimum and maximum sizes.</p>
-    <div class="vf-type-fluid-sample"><div data-vf-text data-vf-text-variant="display-sm">Resize the browser and this display role adapts.</div><code>display-sm → clamp(--vf-font-size-2xl, 1.5rem + 2vw, --vf-font-size-4xl)</code></div>
-    <h3>Relative units</h3><p>The public size scale uses <code>rem</code>, keeping browser text-size preferences in the sizing chain.</p>
-  </section>
-
-  <section><h2>Interaction</h2><p>Text adds no pointer, keyboard, focus, selection, or event behavior. If text participates in an interaction, the owning semantic control remains responsible.</p></section>
-
-  <section>
-    <h2>Accessibility</h2>
-    <p>Accessible typography starts with semantic structure. Visual hierarchy can reinforce meaning but cannot replace native document semantics.</p>
-    <div class="vf-docs-grid">
-      <article class="vf-docs-card"><h3>Preserve heading hierarchy</h3><p>Choose <code>h1</code>–<code>h6</code> from the document structure, then choose the visual role independently.</p></article>
-      <article class="vf-docs-card"><h3>Respect text sizing</h3><p>Relative units allow browser text-size preferences to continue affecting readable text.</p></article>
-      <article class="vf-docs-card"><h3>Keep labels semantic</h3><p>A label-looking span is not a form label. Use a real <code>label</code> and proper control association.</p></article>
-      <article class="vf-docs-card"><h3>Maintain contrast</h3><p>If your application changes text or surface colors, keep the resulting contrast readable.</p></article>
-    </div>
+    <p><code>body</code>, <code>label</code>, <code>title</code>, and <code>heading</code> remain available as compatibility aliases. Prefer the explicit role names above for new work.</p>
   </section>
 
   <section>
-    <h2>Forms</h2>
-    <p>Text can style form-related copy but does not create form relationships.</p>
+    <h2>Semantics and appearance</h2>
+    <p>A typography role never decides what your content means. Keep the document structure correct, then style it to fit the layout.</p>
     <div class="vf-docs-split">
-      <article class="vf-docs-card vf-docs-card--good"><h3>Do</h3><pre><code>&lt;label for="email" data-vf-text data-vf-text-variant="label-md"&gt;
-  Email address
-&lt;/label&gt;
-&lt;input id="email" type="email" /&gt;</code></pre></article>
-      <article class="vf-docs-card vf-docs-card--bad"><h3>Don't</h3><pre><code>&lt;span data-vf-text data-vf-text-variant="label-md"&gt;
-  Email address
-&lt;/span&gt;
-&lt;input type="email" /&gt;</code></pre></article>
+      <article class="vf-docs-card">
+        <h3>Section heading</h3>
+        <pre><code>&lt;h2 data-vf-text data-vf-text-variant="heading-lg"&gt;
+  Billing and plans
+&lt;/h2&gt;</code></pre>
+        <p>The <code>h2</code> carries the document meaning. <code>heading-lg</code> controls its visual treatment.</p>
+      </article>
+      <article class="vf-docs-card">
+        <h3>Prominent paragraph</h3>
+        <pre><code>&lt;p data-vf-text data-vf-text-variant="display-sm"&gt;
+  Your workspace is ready.
+&lt;/p&gt;</code></pre>
+        <p>The text can look large without pretending to be a heading.</p>
+      </article>
+    </div>
+    <div class="vf-docs-callout"><strong>For headings, follow the page structure—not the font size.</strong><span>Do not pick <code>h1</code>, <code>h2</code>, or another heading level because of how large you want the text to look.</span></div>
+  </section>
+
+  <section>
+    <h2>Setup</h2>
+    <p>Load the Text stylesheet once, then use the API for your framework.</p>
+    <pre><code>import '@vyrnforge/web/styles/text.css';</code></pre>
+    <div class="vf-docs-split">
+      <article class="vf-docs-card"><h3>React</h3><pre><code>import { Text } from '@vyrnforge/react/text';</code></pre></article>
+      <article class="vf-docs-card"><h3>Angular</h3><pre><code>import { VfTextDirective } from '@vyrnforge/angular/text';</code></pre></article>
+      <article class="vf-docs-card"><h3>Vue</h3><pre><code>import { Text } from '@vyrnforge/vue/text';</code></pre></article>
+      <article class="vf-docs-card"><h3>Native Web and Elements</h3><p>Use semantic HTML with <code>data-vf-text</code> and <code>data-vf-text-variant</code>. Elements does not add a separate <code>&lt;vf-text&gt;</code> element.</p></article>
     </div>
   </section>
 
   <section>
-    <h2>Styling</h2>
-    <p>Use public CSS custom properties for system-wide typography decisions and the stable variant hook for application-specific roles.</p>
+    <h2>Customize typography</h2>
+    <p>Start with the public typography tokens when you need to adapt VyrnForge to your brand. That keeps the same type system flowing through every supported surface.</p>
+
     <h3>Font families</h3>
     <div class="vf-type-family-grid" aria-label="Typography font family tokens">
       <div class="vf-type-family"><span class="vf-type-family__label"><code>--vf-font-family-sans</code></span><span class="vf-type-family__sample" style="font-family: var(--vf-font-family-sans)">Aa — Product interface</span></div>
@@ -132,7 +102,8 @@ import { Text } from '@vyrnforge/vue/text';</code></pre></article>
       <div class="vf-type-family"><span class="vf-type-family__label"><code>--vf-font-family-mono</code></span><span class="vf-type-family__sample" style="font-family: var(--vf-font-family-mono)">Aa — 0123456789</span></div>
       <div class="vf-type-family"><span class="vf-type-family__label"><code>--vf-font-family-display</code></span><span class="vf-type-family__sample" style="font-family: var(--vf-font-family-display)">Aa — Display expression</span></div>
     </div>
-    <h3>Use a custom font</h3>
+
+    <h3>Use your own font</h3>
     <pre><code>@font-face {
   font-family: 'Brand Sans';
   src: url('/fonts/brand-sans.woff2') format('woff2');
@@ -143,7 +114,8 @@ import { Text } from '@vyrnforge/vue/text';</code></pre></article>
   --vf-font-family-sans: 'Brand Sans', system-ui, sans-serif;
   --vf-font-family-display: 'Brand Sans', system-ui, sans-serif;
 }</code></pre>
-    <h3>Public typography tokens</h3>
+
+    <h3>Public token groups</h3>
     <div class="vf-type-token-grid" aria-label="Typography token categories">
       <article class="vf-type-token"><h4>Families</h4><p><code>sans</code>, <code>serif</code>, <code>mono</code>, <code>display</code></p></article>
       <article class="vf-type-token"><h4>Sizes</h4><p><code>xs</code> through <code>6xl</code></p></article>
@@ -151,12 +123,12 @@ import { Text } from '@vyrnforge/vue/text';</code></pre></article>
       <article class="vf-type-token"><h4>Line heights</h4><p><code>none</code>, <code>tight</code>, <code>compact</code>, <code>normal</code>, <code>relaxed</code></p></article>
       <article class="vf-type-token"><h4>Letter spacing</h4><p><code>tighter</code>, <code>tight</code>, <code>normal</code>, <code>wide</code>, <code>wider</code></p></article>
     </div>
-    <h3>Add or disable a variant</h3>
-    <p>Applications can extend the public <code>TextVariant</code> type through <code>@vyrnforge/web/text</code>.</p>
+
+    <h3>Add an application-specific role</h3>
+    <p>If your product needs a role that is not part of the built-in scale, extend the public <code>TextVariant</code> type and provide the matching CSS.</p>
     <pre><code>declare module '@vyrnforge/web/text' {
   interface TextVariantOverrides {
     poster: true;
-    heading: false;
   }
 }</code></pre>
     <pre><code>[data-vf-text][data-vf-text-variant="poster"] {
@@ -166,30 +138,36 @@ import { Text } from '@vyrnforge/vue/text';</code></pre></article>
   </section>
 
   <section>
-    <h2>Framework API</h2>
-    <p>The supported surfaces use the same Text variants while letting you choose semantics idiomatically.</p>
-    <div class="vf-docs-table-wrap" tabindex="0" role="region" aria-label="Text framework APIs"><table><thead><tr><th>Surface</th><th>How to use Text</th><th>Semantic element</th></tr></thead><tbody>
-      <tr><th scope="row">Native Web</th><td>Apply <code>data-vf-text</code> and <code>data-vf-text-variant</code>.</td><td>You author the native element directly.</td></tr>
-      <tr><th scope="row">React</th><td><code>&lt;Text as="h2" variant="heading-lg" /&gt;</code></td><td><code>as</code> is explicit; default is <code>span</code>.</td></tr>
-      <tr><th scope="row">Angular</th><td><code>&lt;h2 vfText variant="heading-lg"&gt;</code></td><td>The directive decorates the authored host element.</td></tr>
-      <tr><th scope="row">Vue</th><td><code>&lt;Text as="h2" variant="heading-lg" /&gt;</code></td><td><code>as</code> chooses the rendered native element.</td></tr>
-      <tr><th scope="row">Elements</th><td>Use the Native Web hooks.</td><td>No custom text element is introduced.</td></tr>
-    </tbody></table></div>
+    <h2>Accessibility</h2>
+    <p>Most typography accessibility comes from the HTML around the text, not from a visual variant.</p>
+    <ul>
+      <li>Keep heading levels in a logical order. Use variants to change appearance without changing that structure.</li>
+      <li>Use a real <code>label</code> for form controls and keep the control association intact. A label-looking <code>span</code> is not a form label.</li>
+      <li>Keep custom sizes relative where practical so browser text-size preferences continue to work.</li>
+      <li>When you customize text or surface colors, maintain readable contrast.</li>
+    </ul>
   </section>
-
-  <section><h2>CSR and SSR</h2><p>Text has no browser-only behavior. React, Angular, and Vue preserve native semantic elements during SSR; Native Web requires no hydration.</p></section>
-
-  <section><h2>Examples</h2><p>The Quick start playground demonstrates supported framework syntax, while the live specimens above show the public typography scale used by applications.</p></section>
 
   <section>
-    <h2>Do / Don't</h2>
-    <div class="vf-docs-split">
-      <article class="vf-docs-card vf-docs-card--good"><h3>Do</h3><ul><li>choose semantic HTML before visual treatment;</li><li>use explicit role names for new work;</li><li>customize typography through documented public tokens;</li><li>use <code>TextVariantOverrides</code> for application-specific roles.</li></ul></article>
-      <article class="vf-docs-card vf-docs-card--bad"><h3>Don't</h3><ul><li>treat <code>display-lg</code> as meaning <code>h1</code>;</li><li>replace semantic form labels with styled spans;</li><li>depend on undocumented styling selectors;</li><li>encode component state into typography variant names.</li></ul></article>
+    <h2>Framework API</h2>
+    <p>Every surface uses the same variant vocabulary. Only the framework-specific way of choosing the native element changes.</p>
+    <div class="vf-docs-table-wrap" tabindex="0" role="region" aria-label="Text framework APIs">
+      <table>
+        <thead><tr><th>Surface</th><th>Example</th><th>Semantic element</th></tr></thead>
+        <tbody>
+          <tr><th scope="row">Native Web</th><td><code>&lt;h2 data-vf-text data-vf-text-variant="heading-lg"&gt;</code></td><td>You author the native element directly.</td></tr>
+          <tr><th scope="row">React</th><td><code>&lt;Text as="h2" variant="heading-lg" /&gt;</code></td><td><code>as</code> chooses the element; the default is <code>span</code>.</td></tr>
+          <tr><th scope="row">Angular</th><td><code>&lt;h2 vfText variant="heading-lg"&gt;</code></td><td>The directive styles the element you author.</td></tr>
+          <tr><th scope="row">Vue</th><td><code>&lt;Text as="h2" variant="heading-lg" /&gt;</code></td><td><code>as</code> chooses the rendered native element.</td></tr>
+          <tr><th scope="row">Elements</th><td>Use the Native Web hooks.</td><td>No custom text element is introduced.</td></tr>
+        </tbody>
+      </table>
     </div>
+    <p>Text has no browser-only interaction behavior, so its semantic output remains suitable for server rendering.</p>
   </section>
 
-  <section><h2>Testing guidance</h2><p>Test the rendered semantic element, the documented variant API, and application-visible typography behavior when it matters. Avoid depending on undocumented markup or styling details.</p></section>
-
-  <section><h2>Compatibility</h2><p>The richer role vocabulary is additive: existing <code>body</code>, <code>body-sm</code>, <code>label</code>, <code>title</code>, and <code>heading</code> usages remain supported. See the Compatibility reference for supported runtime and browser ranges.</p></section>
+  <section>
+    <h2>Compatibility</h2>
+    <p>Existing <code>body</code>, <code>body-sm</code>, <code>label</code>, <code>title</code>, and <code>heading</code> usages remain supported. Use the Compatibility reference for supported framework and browser ranges.</p>
+  </section>
 </div>
