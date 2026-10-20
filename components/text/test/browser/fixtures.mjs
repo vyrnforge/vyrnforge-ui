@@ -5,8 +5,11 @@ const port = process.argv[2] || 'web';
 const root = process.cwd();
 const outDir = path.join(root, 'dist/docs/next/text-fixtures');
 await mkdir(outDir, { recursive: true });
-const css = await readFile(path.join(root, 'packages/web/dist/components/text/text.css'), 'utf8');
-await writeFile(path.join(outDir, 'text.css'), css);
+
+const tokensCss = await readFile(path.join(root, 'packages/web/dist/styles/tokens.css'), 'utf8');
+const textCss = (await readFile(path.join(root, 'packages/web/dist/components/text/text.css'), 'utf8'))
+  .replace('@import "../../styles/tokens.css";\n', '');
+await writeFile(path.join(outDir, 'text.css'), `${tokensCss}\n${textCss}`);
 
 const page = (body) => `<!doctype html><html lang="en"><head><meta charset="utf-8"><link rel="stylesheet" href="./text.css"><title>Text fixture</title></head><body><main><h1>Text fixture</h1>${body}</main></body></html>`;
 
