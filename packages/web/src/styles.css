@@ -1,3 +1,4 @@
 @layer vyrnforge.reset, vyrnforge.tokens, vyrnforge.themes, vyrnforge.foundation, vyrnforge.components;
 
 @import "./components/button/button.css";
+@import "./components/tabs/tabs.css";
