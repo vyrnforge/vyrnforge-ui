@@ -5,16 +5,18 @@ import { build, transform } from 'esbuild';
 const mode = process.argv[2] ?? '--capture';
 const baselinePath = 'tooling/performance/representative-bundle-baselines.json';
 const components = ['button', 'tabs', 'dialog'];
-const ports = ['react', 'angular', 'vue'];
+const ports = ['react', 'angular', 'vue', 'elements'];
 const selectedExport = {
   react: { button: 'Button', tabs: 'TabsRoot', dialog: 'DialogRoot' },
   angular: { button: 'VfButtonDirective', tabs: 'VfTabsRootDirective', dialog: 'VfDialogRootDirective' },
   vue: { button: 'Button', tabs: 'TabsRoot', dialog: 'DialogRoot' },
+  elements: { tabs: 'VfTabsElement' },
 };
 const externals = {
   react: ['react', 'react/*'],
   angular: ['@angular/*', 'rxjs', 'rxjs/*'],
   vue: ['vue', 'vue/*'],
+  elements: [],
 };
 
 function byteCounts(text) {
@@ -42,8 +44,7 @@ async function bundle(entryPoint, external) {
   return byteCounts(output.text);
 }
 
-async function selectedRootBundle(port, component) {
-  const symbol = selectedExport[port][component];
+async function selectedRootBundle(port, component, symbol) {
   const result = await build({
     absWorkingDir: process.cwd(),
     bundle: true,
@@ -74,9 +75,11 @@ for (const component of components) {
   const minifiedCss = (await transform(css, { loader: 'css', minify: true })).code;
   const entry = { css: byteCounts(minifiedCss), ports: {} };
   for (const port of ports) {
+    const symbol = selectedExport[port]?.[component];
+    if (!symbol) continue;
     entry.ports[port] = {
       subpath: await bundle(`packages/${port}/dist/components/${component}/index.js`, externals[port]),
-      rootSelected: await selectedRootBundle(port, component),
+      rootSelected: await selectedRootBundle(port, component, symbol),
     };
   }
   measurements.components[component] = entry;
