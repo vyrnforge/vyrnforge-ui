@@ -1,7 +1,7 @@
 import { readdir, readFile } from 'node:fs/promises';
 import path from 'node:path';
 
-const packageNames = ['core', 'web', 'react', 'angular', 'vue', 'elements'];
+const packageNames = ['core', 'web', 'icons', 'react', 'angular', 'vue', 'elements'];
 const portNames = ['react', 'angular', 'vue', 'elements'];
 const expectedWorkspace = packageNames.map((name) => `packages/${name}`);
 const rootManifest = JSON.parse(await readFile('package.json', 'utf8'));
@@ -42,4 +42,12 @@ for (const name of packageNames) {
   if (manifest.dependencies?.['@playwright/test'] || manifest.peerDependencies?.['@playwright/test']) throw new Error(`${manifest.name} must not depend on repository-only browser tooling`);
   if (name !== 'web' && manifest.sideEffects !== false) throw new Error(`${manifest.name} must remain side-effect-free by default`);
 }
+
+const iconsManifest = JSON.parse(await readFile('packages/icons/package.json', 'utf8'));
+if (iconsManifest.dependencies?.['@vyrnforge/web'] !== rootManifest.version) throw new Error('@vyrnforge/icons must depend on the shared Web Icon contract at the workspace version');
+for (const port of portNames) {
+  const manifest = JSON.parse(await readFile(`packages/${port}/package.json`, 'utf8'));
+  if (manifest.dependencies?.['@vyrnforge/icons'] || manifest.peerDependencies?.['@vyrnforge/icons']) throw new Error(`${manifest.name} must not depend on the optional official icon catalog`);
+}
+
 process.stdout.write('architecture rules: ok\n');
