@@ -33,7 +33,7 @@ function createDismissRequest(reason: DialogDismissReason): DialogDismissRequest
 interface DialogContextValue {
   rootId: string;
   titleId: string;
-  descriptionId?: string;
+  descriptionId: string | undefined;
   requestDismiss(reason: DialogDismissReason): void;
 }
 
@@ -147,18 +147,12 @@ export const DialogRoot = defineComponent({
             internalOpen.value = false;
             emit('update:modelValue', false);
             emit('openChange', false);
-            restoreFocus();
+          } else {
+            emit('update:modelValue', false);
+            emit('openChange', false);
+            void nextTick(() => { void syncDialog(false); });
             return;
           }
-
-          emit('update:modelValue', false);
-          emit('openChange', false);
-          queueMicrotask(async () => {
-            await nextTick();
-            if (desiredOpen.value) await syncDialog(false);
-            else restoreFocus();
-          });
-          return;
         }
         restoreFocus();
       },
