@@ -15,7 +15,7 @@
     "build:angular": "npm run build --workspace @vyrnforge/angular",
     "build:vue": "npm run build --workspace @vyrnforge/vue",
     "build:elements": "npm run build --workspace @vyrnforge/elements",
-    "build:docs": "npm run build:core && npm run build:web && npm run build:react && npm run build:angular && npm run build:vue && node tooling/docs/build.mjs",
+    "build:docs": "npm run build && node tooling/docs/build.mjs",
     "check": "node tooling/impact/execute.mjs --mode main",
     "lint:tooling": "eslint tooling playwright.config.mjs eslint.config.mjs stylelint.config.mjs",
     "lint:docs": "eslint apps/docs && stylelint \"apps/docs/**/*.css\"",
