@@ -39,7 +39,7 @@ function createDismissRequest(reason: DialogDismissReason): DialogDismissRequest
 interface DialogContextValue {
   rootId: string;
   titleId: string;
-  descriptionId?: string;
+  descriptionId: string | undefined;
   requestDismiss(reason: DialogDismissReason): void;
 }
 
@@ -121,6 +121,7 @@ export const DialogRoot = forwardRef<HTMLDialogElement, DialogRootProps>(functio
   useEffect(() => {
     const dialog = dialogRef.current;
     if (!dialog) return;
+    const activeDialog = dialog;
 
     function restoreFocus() {
       const restoreTarget = restoreTargetRef.current;
@@ -139,8 +140,8 @@ export const DialogRoot = forwardRef<HTMLDialogElement, DialogRootProps>(functio
         onOpenChange?.(false);
         if (controlled) {
           queueMicrotask(() => {
-            if (desiredOpenRef.current && !dialog.open) {
-              dialog.showModal();
+            if (desiredOpenRef.current && !activeDialog.open) {
+              activeDialog.showModal();
               initialFocusRef?.current?.focus();
             } else if (!desiredOpenRef.current) {
               restoreFocus();
@@ -152,11 +153,11 @@ export const DialogRoot = forwardRef<HTMLDialogElement, DialogRootProps>(functio
       restoreFocus();
     }
 
-    dialog.addEventListener('cancel', handleCancel);
-    dialog.addEventListener('close', handleClose);
+    activeDialog.addEventListener('cancel', handleCancel);
+    activeDialog.addEventListener('close', handleClose);
     return () => {
-      dialog.removeEventListener('cancel', handleCancel);
-      dialog.removeEventListener('close', handleClose);
+      activeDialog.removeEventListener('cancel', handleCancel);
+      activeDialog.removeEventListener('close', handleClose);
     };
   }, [controlled, initialFocusRef, onOpenChange, requestDismiss]);
 
