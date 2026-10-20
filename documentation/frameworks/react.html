@@ -1,6 +1,30 @@
-<p class="vf-docs-status" data-vf-support-status="partial"><strong>Status:</strong> Button baseline implemented at React 19.3.x.</p>
-<p>Shared Button semantics, accessibility, forms, state, and styling are documented once on the <a href="../../components/button/">Button page</a>.</p>
-<section><h2>Button</h2><pre><code>import { Button } from '@vyrnforge/react/button';
+<p class="vf-docs-status" data-vf-support-status="partial"><strong>Status:</strong> React integration is available for the components documented in this channel.</p>
+<p>Install the React package alongside the supported React runtime, load VyrnForge styles, and import components from their documented subpaths.</p>
+<section>
+  <h2>Available component entrypoints</h2>
+  <ul>
+    <li><code>@vyrnforge/react/button</code></li>
+    <li><code>@vyrnforge/react/dialog</code></li>
+    <li><code>@vyrnforge/react/icon</code></li>
+    <li><code>@vyrnforge/react/tabs</code></li>
+    <li><code>@vyrnforge/react/text</code></li>
+  </ul>
+  <p>Use the corresponding component page for props, accessibility behavior, examples, and styling guidance.</p>
+</section>
+<section>
+  <h2>Example</h2>
+  <pre><code>import '@vyrnforge/web/styles.css';
+import { Button } from '@vyrnforge/react/button';
 
-&lt;Button variant="primary" size="md" loading={saving} onClick={save}&gt;Save&lt;/Button&gt;</code></pre><p>The component forwards native button props and its ref. <code>onClick</code> remains the native activation callback; no second VyrnForge activation event is added.</p></section>
-<section><h2>SSR and hydration</h2><p>Server output is a native button with stable VyrnForge state hooks. Hydration restores React event wiring without requiring a Button controller or browser-only semantic initialization.</p></section>
+export function SaveButton() {
+  return &lt;Button variant="primary"&gt;Save&lt;/Button&gt;;
+}</code></pre>
+</section>
+<section>
+  <h2>Native props and events</h2>
+  <p>VyrnForge React components preserve the native attributes and event patterns documented for each component. Prefer the normal React event surface unless a component page documents an additional VyrnForge callback.</p>
+</section>
+<section>
+  <h2>SSR and hydration</h2>
+  <p>Server-rendering support is documented per component. Follow the component page when behavior depends on browser APIs, focus, modal activation, or client-side upgrade.</p>
+</section>
