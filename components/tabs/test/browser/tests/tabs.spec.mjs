@@ -28,9 +28,9 @@ test.describe('Tabs Web semantic and styling contract', () => {
   });
 });
 
-test.describe('Tabs framework interaction and hydration', () => {
-  for (const framework of ['react', 'angular', 'vue']) {
-    test(`${framework} supports RTL automatic navigation, wrapping, disabled skipping, Home/End, and hydration`, async ({ page }) => {
+test.describe('Tabs port interaction and client activation', () => {
+  for (const framework of ['react', 'angular', 'vue', 'elements']) {
+    test(`${framework} supports RTL automatic navigation, wrapping, disabled skipping, Home/End, and client activation`, async ({ page }) => {
       test.skip(port !== framework, `Running ${port} evidence only`);
       const errors = [];
       page.on('console', (message) => { if (message.type() === 'error') errors.push(message.text()); });
