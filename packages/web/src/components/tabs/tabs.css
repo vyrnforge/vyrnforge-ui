@@ -41,7 +41,7 @@
   }
 
   :where([data-vf-tabs-tab][data-vf-selected]) {
-    color: var(--vf-color-accent-foreground);
+    color: var(--vf-color-accent-background);
   }
 
   :where([data-vf-tabs-tab][data-vf-selected])::after {
