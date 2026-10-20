@@ -14,25 +14,26 @@
   "frameworks": {
     "react": {
       "baseline": "19.3.x",
-      "status": "button-baseline-implemented"
+      "status": "representative-components-implemented"
     },
     "angular": {
       "baseline": "22.x",
       "typescript": ">=6.0.0 <6.1.0",
-      "status": "button-baseline-implemented"
+      "status": "representative-components-implemented"
     },
     "vue": {
       "baseline": "3.5.x",
-      "status": "button-baseline-implemented"
+      "status": "representative-components-implemented"
     },
     "elements": {
       "baseline": "standards-based Custom Elements on the selected browser baseline",
-      "status": "selected-not-implemented",
-      "button": "deferred-native-semantics"
+      "status": "tabs-baseline-implemented",
+      "button": "deferred-native-semantics",
+      "tabs": "implemented"
     },
     "native-web": {
       "baseline": "selected browser platform baseline",
-      "status": "button-baseline-implemented"
+      "status": "representative-components-implemented"
     }
   },
   "browsers": {
@@ -43,7 +44,7 @@
     "status": "selected-validation-baseline"
   },
   "ssrBundlers": {
-    "status": "button-port-validation-active",
-    "policy": "Button validates SSR/server-safe rendering and hydration per implemented framework port at the selected framework baselines; broader framework integration support remains component-by-component."
+    "status": "representative-port-validation-active",
+    "policy": "Button, Tabs, and Dialog validate SSR/server-safe rendering and hydration per implemented React, Angular, and Vue port at the selected framework baselines; Elements owns browser upgrade/connection evidence instead of framework SSR. Broader integration support remains component-by-component."
   }
 }
