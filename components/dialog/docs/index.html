@@ -1,0 +1,63 @@
+<p class="vf-docs-lede">Dialog presents focused modal content using the browser-native <code>&lt;dialog&gt;</code> and <code>showModal()</code> model while keeping dismissal intent, focus lifecycle, and state consistent across framework ports.</p>
+
+<section>
+  <h2>Overview</h2>
+  <p>Use Dialog for modal content that temporarily requires attention or a decision. VyrnForge relies on the native top layer rather than introducing a global overlay stack or framework-neutral focus-trap runtime.</p>
+</section>
+
+<section>
+  <h2>Installation and imports</h2>
+  <div class="vf-docs-table-wrap" tabindex="0" role="region" aria-label="Dialog package imports">
+    <table><thead><tr><th>Surface</th><th>Public entrypoint</th></tr></thead><tbody>
+      <tr><th scope="row">Shared styles</th><td><code>@vyrnforge/web/styles/dialog.css</code></td></tr>
+      <tr><th scope="row">React</th><td><code>@vyrnforge/react/dialog</code></td></tr>
+      <tr><th scope="row">Angular</th><td><code>@vyrnforge/angular/dialog</code></td></tr>
+      <tr><th scope="row">Vue</th><td><code>@vyrnforge/vue/dialog</code></td></tr>
+    </tbody></table>
+  </div>
+</section>
+
+<section>
+  <h2>Anatomy</h2>
+  <p>A Dialog contains a native dialog root, authored title, optional description, body content, and consumer-authored controls. Stable hooks are <code>data-vf-dialog-root</code>, <code>data-vf-dialog-title</code>, <code>data-vf-dialog-description</code>, <code>data-vf-dialog-body</code>, and <code>data-vf-dialog-close</code>.</p>
+</section>
+
+<section>
+  <h2>State and dismissal</h2>
+  <p>Open state may be controlled or initialized as uncontrolled state. Escape, optional backdrop activation, and close controls produce a dismissal request with reason <code>escape</code>, <code>backdrop</code>, or <code>close-control</code>. Preventing the request leaves controlled state and the native modal open.</p>
+</section>
+
+<section>
+  <h2>Focus</h2>
+  <p>Native dialog focusing behavior is the default. Framework ports support an explicit initial-focus target and restore focus to the previously focused meaningful element when the dialog closes and that target is still valid.</p>
+</section>
+
+<section>
+  <h2>Accessibility</h2>
+  <p>The root is a native <code>&lt;dialog&gt;</code> activated with <code>showModal()</code>; VyrnForge does not emulate modality with <code>role="dialog"</code> and <code>aria-modal</code>. Title relationships are generated from the root identifier. Supply <code>descriptionId</code> when a description part should be referenced by <code>aria-describedby</code>. Consumers own all visible labels and control text.</p>
+</section>
+
+<section>
+  <h2>CSR and SSR</h2>
+  <p>Server output never claims client-side modality by serializing an <code>open</code> attribute. Intended open state may be exposed through <code>data-vf-open</code>; after client activation the framework port synchronizes the native element with <code>showModal()</code> or <code>close()</code>.</p>
+</section>
+
+<section>
+  <h2>Framework API</h2>
+  <p>React exports <code>DialogRoot</code>, <code>DialogTitle</code>, <code>DialogDescription</code>, <code>DialogBody</code>, and <code>DialogClose</code>. Vue exposes the same compound concepts with <code>modelValue</code>/<code>update:modelValue</code>. Angular uses standalone native-element directives rooted at <code>dialog[vfDialogRoot]</code>. All ports expose the same dismissal reasons.</p>
+</section>
+
+<section>
+  <h2>Behavior boundaries</h2>
+  <p>Dialog does not own application confirmation logic, generic outside-click handling, arbitrary portals, body-scroll locking, a universal overlay manager, or a universal focus manager. Nested modals rely on the browser top layer.</p>
+</section>
+
+<section>
+  <h2>Testing guidance</h2>
+  <p>Real-browser tests should prove native modal activation, background inertness, Escape cancellation, optional backdrop dismissal, close controls, initial focus, restoration, nested modals, hydration, reduced motion, forced colors, and accessibility.</p>
+</section>
+
+<section>
+  <h2>Compatibility</h2>
+  <p>The current interactive ports are React, Angular, and Vue with canonical styling from <code>@vyrnforge/web</code>. A Web Components Dialog surface is not currently shipped.</p>
+</section>
