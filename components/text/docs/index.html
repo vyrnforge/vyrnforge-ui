@@ -17,12 +17,43 @@
 </section>
 
 <section>
-  <h2>Built-in variants</h2>
-  <p>The primary role vocabulary is <code>display-lg</code>, <code>display-md</code>, <code>display-sm</code>; <code>heading-lg</code>, <code>heading-md</code>, <code>heading-sm</code>, <code>heading-xs</code>; <code>title-lg</code>, <code>title-md</code>, <code>title-sm</code>; <code>body-lg</code>, <code>body-md</code>, <code>body-sm</code>; <code>label-lg</code>, <code>label-md</code>, <code>label-sm</code>; plus <code>caption</code> and <code>overline</code>. Variant names describe presentation, never document structure.</p>
+  <h2>Anatomy</h2>
+  <p>Text has two deliberately independent parts: the native semantic element chosen by the consumer and the VyrnForge visual role applied through <code>data-vf-text</code> plus <code>data-vf-text-variant</code>. Framework conveniences only compose those two parts; they do not create a separate typography runtime.</p>
 </section>
 
 <section>
-  <h2>Custom and disabled variants</h2>
+  <h2>Variants and sizes</h2>
+  <p>The primary visual-role vocabulary is <code>display-lg</code>, <code>display-md</code>, <code>display-sm</code>; <code>heading-lg</code>, <code>heading-md</code>, <code>heading-sm</code>, <code>heading-xs</code>; <code>title-lg</code>, <code>title-md</code>, <code>title-sm</code>; <code>body-lg</code>, <code>body-md</code>, <code>body-sm</code>; <code>label-lg</code>, <code>label-md</code>, <code>label-sm</code>; plus <code>caption</code> and <code>overline</code>. The suffix is part of the visual role rather than a separate component-size axis. Variant names describe presentation, never document structure.</p>
+</section>
+
+<section>
+  <h2>State</h2>
+  <p>Text has no semantic state API of its own. Disabled, invalid, required, selected, pressed, busy, or other state belongs to the owning semantic element or component. Typography variants must not encode application state indirectly.</p>
+</section>
+
+<section>
+  <h2>Behavior</h2>
+  <p>Text applies token-driven typography to an opted-in native element and otherwise leaves document behavior unchanged. Display roles use CSS-first fluid sizing with <code>clamp()</code>; other roles resolve to shared public typography tokens through the canonical Web stylesheet.</p>
+</section>
+
+<section>
+  <h2>Interaction</h2>
+  <p>Text adds no pointer, keyboard, focus, selection, or event behavior. If text participates in an interaction, the native element or owning Button, Link, form control, or composite component remains responsible for that interaction contract.</p>
+</section>
+
+<section>
+  <h2>Accessibility</h2>
+  <p>A heading-looking <code>span</code> remains a span, and an <code>h2</code> remains an <code>h2</code> regardless of visual treatment. Text adds no role or ARIA behavior. Consumers must choose native document semantics first, and the typography scale remains <code>rem</code>-based so browser text-size preferences continue to participate naturally.</p>
+</section>
+
+<section>
+  <h2>Forms</h2>
+  <p>Text does not define form labeling, validation, required state, descriptions, or errors. A real form label must remain a native <code>label</code> with the appropriate association. The Label/Field foundation owns reusable form relationships; a Text visual role may style their text without replacing those semantics.</p>
+</section>
+
+<section>
+  <h2>Styling</h2>
+  <p>The public foundation includes sans, serif, mono, and display font-family tokens; sizes from <code>xs</code> through <code>6xl</code>; regular, medium, semibold, and bold weights; multiple line-height roles; and letter-spacing roles. Themes may remap these CSS custom properties through the normal VyrnForge cascade. Applications may load fonts with ordinary <code>@font-face</code> rules and remap <code>--vf-font-family-sans</code>, <code>--vf-font-family-serif</code>, <code>--vf-font-family-mono</code>, or <code>--vf-font-family-display</code> in a theme scope.</p>
   <p>TypeScript consumers can extend the shared variant registry once in <code>@vyrnforge/web/text</code>. Framework ports consume that same type, so a custom variant becomes available consistently in React, Angular, and Vue. Setting a built-in key to <code>false</code> removes it from the typed API. Runtime styling for a custom variant is ordinary CSS targeting the stable <code>data-vf-text-variant</code> hook; no JavaScript theme registry is required.</p>
   <pre><code>declare module '@vyrnforge/web/text' {
   interface TextVariantOverrides {
@@ -34,26 +65,6 @@
   font-size: clamp(3rem, 7vw, 6rem);
   font-weight: var(--vf-font-weight-bold);
 }</code></pre>
-</section>
-
-<section>
-  <h2>Typography tokens</h2>
-  <p>The public foundation includes sans, serif, mono, and display font-family tokens; sizes from <code>xs</code> through <code>6xl</code>; regular, medium, semibold, and bold weights; multiple line-height roles; and letter-spacing roles. Themes may remap these CSS custom properties through the normal VyrnForge cascade.</p>
-</section>
-
-<section>
-  <h2>Responsive typography</h2>
-  <p>Display roles use CSS-first fluid sizing with <code>clamp()</code>. This keeps responsive typography framework-neutral and avoids a JavaScript typography helper. Future discrete adaptations should follow the VyrnForge responsive order: intrinsic CSS, then container size, then viewport media queries when genuinely viewport-dependent.</p>
-</section>
-
-<section>
-  <h2>Custom fonts</h2>
-  <p>Applications may load fonts with ordinary <code>@font-face</code> rules and remap <code>--vf-font-family-sans</code>, <code>--vf-font-family-serif</code>, <code>--vf-font-family-mono</code>, or <code>--vf-font-family-display</code> in a theme scope. VyrnForge does not require a font-loading runtime.</p>
-</section>
-
-<section>
-  <h2>Accessibility and semantics</h2>
-  <p>A heading-looking <code>span</code> remains a span, and an <code>h2</code> remains an <code>h2</code> regardless of visual treatment. Text adds no focus, keyboard, ARIA, or labeling behavior. Real form labels retain native label semantics and association.</p>
 </section>
 
 <section>
@@ -74,10 +85,25 @@
 
 <section>
   <h2>CSR and SSR</h2>
-  <p>Text has no browser-only runtime. React, Angular, and Vue preserve native semantic elements during SSR; Native Web requires no hydration.</p>
+  <p>Text has no browser-only runtime. React, Angular, and Vue preserve native semantic elements during SSR; Native Web requires no hydration. Custom variant typing is compile-time only and does not add a registration or hydration step.</p>
+</section>
+
+<section>
+  <h2>Examples</h2>
+  <p>The Quick start example demonstrates the shared Text contract across Native Web, React, Angular, and Vue. Custom application variants use the same native element and stable CSS hook, so examples do not need a framework-specific theming API.</p>
+</section>
+
+<section>
+  <h2>Do / Don't</h2>
+  <p><strong>Do</strong> choose semantic HTML first, use built-in role names for reusable system typography, customize fonts and visual values through tokens, and use <code>TextVariantOverrides</code> for application-specific variants. <strong>Don't</strong> use a visual variant as a substitute for heading level or form-label semantics, create framework-specific typography systems, or require a JavaScript theme registry for styling.</p>
 </section>
 
 <section>
   <h2>Testing guidance</h2>
-  <p>Assert the rendered native tag, variant hook, cross-port type vocabulary, custom-variant augmentation, SSR output, and computed typography where browser evidence is useful. Do not couple tests to private <code>--_vf-*</code> variables.</p>
+  <p>Assert the rendered native tag, variant hook, cross-port type vocabulary, custom-variant augmentation, SSR output, and computed typography where browser evidence is useful. Verify consumer CSS can style a custom variant through the public hook. Do not couple tests to private <code>--_vf-*</code> variables.</p>
+</section>
+
+<section>
+  <h2>Compatibility</h2>
+  <p>The richer role vocabulary is additive: existing <code>body</code>, <code>body-sm</code>, <code>label</code>, <code>title</code>, and <code>heading</code> usages remain supported. Custom disabling narrows TypeScript acceptance for the consuming application but does not remove built-in CSS from the distributed package. Broader browser and release qualification remains governed by VyrnForge compatibility evidence rather than inferred from this page.</p>
 </section>
