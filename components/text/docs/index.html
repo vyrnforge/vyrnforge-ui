@@ -1,59 +1,59 @@
-<p class="vf-docs-lede">Text establishes VyrnForge's shared typography vocabulary while preserving native HTML semantics. Styling is opt-in through canonical Web hooks; visual typography does not decide whether content is a heading, paragraph, label, or other semantic element.</p>
+<p class="vf-docs-lede">Text provides VyrnForge's extensible typography system while preserving native HTML semantics. Styling is opt-in through canonical Web hooks; visual typography never decides whether content is a heading, paragraph, label, or other semantic element.</p>
 
 <section>
   <h2>Overview</h2>
-  <p>Use Text when content should participate in the VyrnForge typography system. Choose the correct semantic HTML element first, then apply a typography variant. The initial variants are <code>body</code>, <code>body-sm</code>, <code>label</code>, <code>title</code>, and <code>heading</code>.</p>
+  <p>Choose the correct semantic HTML element first, then apply a visual role. The built-in scale covers display, heading, title, body, label, caption, and overline treatments. Existing <code>body</code>, <code>label</code>, <code>title</code>, and <code>heading</code> names remain compatibility aliases.</p>
 </section>
 
 <section>
   <h2>Installation and imports</h2>
-  <p>Load <code>@vyrnforge/web/styles/text.css</code> for canonical styling. Native Web uses documented data hooks directly. React imports <code>Text</code> from <code>@vyrnforge/react/text</code>, Angular imports <code>VfTextDirective</code> from <code>@vyrnforge/angular/text</code>, and Vue imports <code>Text</code> from <code>@vyrnforge/vue/text</code>.</p>
+  <p>Load <code>@vyrnforge/web/styles/text.css</code> for canonical styling. Native Web uses the documented data hooks directly. React imports <code>Text</code> from <code>@vyrnforge/react/text</code>, Angular imports <code>VfTextDirective</code> from <code>@vyrnforge/angular/text</code>, and Vue imports <code>Text</code> from <code>@vyrnforge/vue/text</code>.</p>
 </section>
 
 <section>
   <h2>Quick start</h2>
-  <p>The executable example applies the same typography variants while keeping authored heading, paragraph, span, and section-title semantics intact.</p>
+  <p>Framework conveniences preserve the authored native element. For example, a visual <code>display-lg</code> treatment can be applied to an <code>h1</code>, while <code>body-md</code> can be applied to a <code>p</code>.</p>
   <div data-vf-example="text/basic"></div>
 </section>
 
 <section>
-  <h2>Anatomy</h2>
-  <p>Text has no compound anatomy. The semantic element is the authored native element. VyrnForge contributes <code>data-vf-text</code>, <code>data-vf-text-variant</code>, and the shared token-driven stylesheet.</p>
+  <h2>Built-in variants</h2>
+  <p>The primary role vocabulary is <code>display-lg</code>, <code>display-md</code>, <code>display-sm</code>; <code>heading-lg</code>, <code>heading-md</code>, <code>heading-sm</code>, <code>heading-xs</code>; <code>title-lg</code>, <code>title-md</code>, <code>title-sm</code>; <code>body-lg</code>, <code>body-md</code>, <code>body-sm</code>; <code>label-lg</code>, <code>label-md</code>, <code>label-sm</code>; plus <code>caption</code> and <code>overline</code>. Variant names describe presentation, never document structure.</p>
 </section>
 
 <section>
-  <h2>Variants and sizes</h2>
-  <p><code>body</code> is the default reading style. <code>body-sm</code> is a smaller supporting style. <code>label</code> is compact and semibold, <code>title</code> is a stronger section-level style, and <code>heading</code> is the largest initial heading treatment. Variant is visual; it never assigns heading level or element semantics.</p>
+  <h2>Custom and disabled variants</h2>
+  <p>TypeScript consumers can extend the shared variant registry once in <code>@vyrnforge/web/text</code>. Framework ports consume that same type, so a custom variant becomes available consistently in React, Angular, and Vue. Setting a built-in key to <code>false</code> removes it from the typed API. Runtime styling for a custom variant is ordinary CSS targeting the stable <code>data-vf-text-variant</code> hook; no JavaScript theme registry is required.</p>
+  <pre><code>declare module '@vyrnforge/web/text' {
+  interface TextVariantOverrides {
+    poster: true;
+    heading: false;
+  }
+}</code></pre>
+  <pre><code>[data-vf-text][data-vf-text-variant="poster"] {
+  font-size: clamp(3rem, 7vw, 6rem);
+  font-weight: var(--vf-font-weight-bold);
+}</code></pre>
 </section>
 
 <section>
-  <h2>State</h2>
-  <p>Text has no interactive state. Disabled, invalid, selected, expanded, or loading semantics belong to the component that owns the text. Typography variants must not be used as substitutes for semantic state.</p>
+  <h2>Typography tokens</h2>
+  <p>The public foundation includes sans, serif, mono, and display font-family tokens; sizes from <code>xs</code> through <code>6xl</code>; regular, medium, semibold, and bold weights; multiple line-height roles; and letter-spacing roles. Themes may remap these CSS custom properties through the normal VyrnForge cascade.</p>
 </section>
 
 <section>
-  <h2>Behavior</h2>
-  <p>Text only applies typography styling. It does not manage events, focus, IDs, relationships, or browser effects.</p>
+  <h2>Responsive typography</h2>
+  <p>Display roles use CSS-first fluid sizing with <code>clamp()</code>. This keeps responsive typography framework-neutral and avoids a JavaScript typography helper. Future discrete adaptations should follow the VyrnForge responsive order: intrinsic CSS, then container size, then viewport media queries when genuinely viewport-dependent.</p>
 </section>
 
 <section>
-  <h2>Interaction</h2>
-  <p>Text provides no pointer or keyboard interaction. Interactive content should use the correct Button, Link, form control, or other semantic control and may consume the same typography tokens through its own canonical stylesheet.</p>
+  <h2>Custom fonts</h2>
+  <p>Applications may load fonts with ordinary <code>@font-face</code> rules and remap <code>--vf-font-family-sans</code>, <code>--vf-font-family-serif</code>, <code>--vf-font-family-mono</code>, or <code>--vf-font-family-display</code> in a theme scope. VyrnForge does not require a font-loading runtime.</p>
 </section>
 
 <section>
-  <h2>Accessibility</h2>
-  <p>Visual style and document semantics remain independent. A heading-looking treatment on a <code>span</code> does not become a heading, and an <code>h2</code> remains an <code>h2</code> regardless of its Text variant. Consumers are responsible for choosing semantic elements that correctly express document structure and labeling relationships.</p>
-</section>
-
-<section>
-  <h2>Forms</h2>
-  <p>Text does not provide form-control semantics. When styling a real form label, retain the native <code>label</code> element and its association with the control; the later Label/Field foundation will own richer form-label contracts.</p>
-</section>
-
-<section>
-  <h2>Styling</h2>
-  <p>The canonical stylesheet is token-driven and low-specificity. The initial public typography scale provides <code>--vf-font-family-sans</code>, font sizes from <code>sm</code> through <code>xl</code>, regular/medium/semibold weights, and tight/compact/normal line heights. Existing control font tokens alias this shared typography foundation rather than maintaining a separate font family.</p>
+  <h2>Accessibility and semantics</h2>
+  <p>A heading-looking <code>span</code> remains a span, and an <code>h2</code> remains an <code>h2</code> regardless of visual treatment. Text adds no focus, keyboard, ARIA, or labeling behavior. Real form labels retain native label semantics and association.</p>
 </section>
 
 <section>
@@ -64,9 +64,9 @@
       <tbody>
         <tr><th scope="row">Native Web</th><td>Apply <code>data-vf-text</code> and <code>data-vf-text-variant</code> to the correct native element.</td></tr>
         <tr><th scope="row">React</th><td><code>Text</code> accepts <code>as</code> and <code>variant</code> plus native HTML attributes. <code>as</code> defaults to <code>span</code>.</td></tr>
-        <tr><th scope="row">Angular</th><td><code>VfTextDirective</code> uses <code>vfText</code> as the variant input and leaves the authored host element unchanged.</td></tr>
+        <tr><th scope="row">Angular</th><td><code>VfTextDirective</code> uses <code>vfText</code> to attach the contract and the separate <code>variant</code> input to choose presentation; the authored host element remains unchanged.</td></tr>
         <tr><th scope="row">Vue</th><td><code>Text</code> accepts <code>as</code> and <code>variant</code> and forwards ordinary attributes to the rendered native element.</td></tr>
-        <tr><th scope="row">Elements</th><td>No custom element is provided. Native HTML already supplies the correct semantic text elements, so Elements consumers use the Native Web contract.</td></tr>
+        <tr><th scope="row">Elements</th><td>No custom element is provided. Native HTML already supplies the semantic text elements, so Elements consumers use the Native Web contract.</td></tr>
       </tbody>
     </table>
   </div>
@@ -74,25 +74,10 @@
 
 <section>
   <h2>CSR and SSR</h2>
-  <p>Text has no browser-only runtime. React, Angular, and Vue render native semantic elements on the server; Native Web requires no hydration. The Angular directive only contributes styling attributes to its host element.</p>
-</section>
-
-<section>
-  <h2>Examples</h2>
-  <p>The Quick start example demonstrates heading, body, small body, label, and title variants across Native Web, React, Angular, and Vue without replacing native semantics.</p>
-</section>
-
-<section>
-  <h2>Do / Don't</h2>
-  <p><strong>Do</strong> choose semantic HTML first and typography second. <strong>Do</strong> reuse the shared token scale in future components. <strong>Don't</strong> use <code>variant="heading"</code> as a substitute for an actual heading element, and don't introduce a custom element solely to style ordinary text.</p>
+  <p>Text has no browser-only runtime. React, Angular, and Vue preserve native semantic elements during SSR; Native Web requires no hydration.</p>
 </section>
 
 <section>
   <h2>Testing guidance</h2>
-  <p>Assert the rendered native tag, <code>data-vf-text-variant</code>, SSR output, and computed typography where browser evidence is useful. Avoid coupling tests to private <code>--_vf-*</code> variables.</p>
-</section>
-
-<section>
-  <h2>Compatibility</h2>
-  <p>The initial Text foundation supports Native Web, React, Angular, and Vue. Elements intentionally uses the Native Web contract rather than introducing a wrapper element. Broader release qualification remains governed by VyrnForge's compatibility evidence.</p>
+  <p>Assert the rendered native tag, variant hook, cross-port type vocabulary, custom-variant augmentation, SSR output, and computed typography where browser evidence is useful. Do not couple tests to private <code>--_vf-*</code> variables.</p>
 </section>
