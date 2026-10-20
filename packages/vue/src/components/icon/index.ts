@@ -23,7 +23,11 @@ export const Icon = defineComponent({
   setup(props, { attrs }) {
     return () => {
       const glyph = resolveIconGlyph(props.icon, props.variant, props.shape);
-      const { role: _role, 'aria-label': _ariaLabel, 'aria-hidden': _ariaHidden, viewBox: _viewBox, ...safeAttrs } = attrs;
+      const safeAttrs = { ...attrs };
+      delete safeAttrs.role;
+      delete safeAttrs['aria-label'];
+      delete safeAttrs['aria-hidden'];
+      delete safeAttrs.viewBox;
       return h('svg', {
         ...safeAttrs,
         viewBox: props.icon.viewBox,
