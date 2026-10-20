@@ -57,3 +57,26 @@ test('package-owned capabilities are auto-discovered with inferred dependency ed
   assert.deepEqual(navigation.dependencies, ['unit:core:capabilities:eligibility']);
   assert.deepEqual(productPreparationProblems(root), []);
 });
+
+test('component ports infer owned-unit dependencies from workspace public subpaths', () => {
+  const root = mkdtempSync(path.join(os.tmpdir(), 'vf-public-unit-dependency-'));
+  const write = writer(root);
+  write('package.json', JSON.stringify({ workspaces: ['packages/core', 'packages/react'] }));
+  write('packages/core/package.json', JSON.stringify({
+    name: '@vyrnforge/core',
+    exports: {
+      '.': './dist/index.js',
+      './collection-navigation': {
+        types: './dist/capabilities/collection-navigation/index.d.ts',
+        import: './dist/capabilities/collection-navigation/index.js',
+      },
+    },
+  }));
+  write('packages/react/package.json', JSON.stringify({ name: '@vyrnforge/react', exports: { '.': './dist/index.js', './tabs': './dist/components/tabs/index.js' } }));
+  write('packages/core/src/capabilities/collection-navigation/index.ts', 'export const next = () => 0;\n');
+  write('packages/core/test/capabilities/collection-navigation/navigation.test.mjs', 'export {};\n');
+  write('packages/react/src/components/tabs/index.ts', "import { next } from '@vyrnforge/core/collection-navigation';\nexport const Tabs = next;\n");
+  const tabs = discoverProductUnits(root).components.find((entry) => entry.component === 'tabs');
+  assert.ok(tabs);
+  assert.deepEqual(tabs.ports.react.dependencies, ['unit:core:capabilities:collection-navigation']);
+});
