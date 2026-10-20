@@ -37,7 +37,7 @@ export type BuiltInTextVariant = (typeof textVariants)[number];
  *   }
  * }
  */
-export interface TextVariantOverrides {}
+export interface TextVariantOverrides extends Record<never, never> {}
 
 type OverrideKeysWithValue<Value extends boolean> = {
   [Key in keyof TextVariantOverrides]: TextVariantOverrides[Key] extends Value ? Key : never;
