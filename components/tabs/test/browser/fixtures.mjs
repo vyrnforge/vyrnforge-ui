@@ -62,7 +62,7 @@ if (port === 'vue') {
   ]) });
   const markup = await renderToString(createApp());
   await writeFile(path.join(outDir, 'vue.html'), page(`<div id="vue-root">${markup}</div>`, '<script type="module" src="./vue.js"></script>'));
-  await build({ stdin: { resolveDir: root, sourcefile: 'vue-tabs-client.ts', contents: `import {createSSRApp,h} from 'vue';import {TabsRoot,TabsList,TabsTab,TabsPanel} from '@vyrnforge/vue/tabs';const tabs=(id,options={})=>h(TabsRoot,{id,defaultValue:'overview',...options.root},()=>[h(TabsList,{'aria-label':options.label??'Account sections'},()=>[h(TabsTab,{value:'overview'},()=> 'Overview'),h(TabsTab,{value:'billing',disabled:true},()=> 'Billing'),h(TabsTab,{value:'security'},()=> 'Security'),...(options.activity===false?[]:[h(TabsTab,{value:'activity'},()=> 'Activity')])]),h(TabsPanel,{value:'overview'},()=> 'Overview panel'),h(TabsPanel,{value:'billing'},()=> 'Billing panel'),h(TabsPanel,{value:'security'},()=> 'Security panel'),...(options.activity===false?[]:[h(TabsPanel,{value:'activity'},()=> 'Activity panel')])]);const app=createSSRApp({render:()=>h('div',[tabs('vue-tabs',{root:{dir:'rtl',onValueChange:(value)=>document.body.dataset.value=value}}),tabs('vue-manual-tabs',{activity:false,label:'Manual vertical sections',root:{orientation:'vertical',activation:'manual',onValueChange:(value)=>document.body.dataset.manualValue=value}})])});app.mount('#vue-root');` }, bundle: true, format: 'esm', platform: 'browser', outfile: path.join(outDir, 'vue.js') });
+  await build({ stdin: { resolveDir: root, sourcefile: 'vue-tabs-client.ts', contents: `import{createSSRApp,h} from'vue';import{TabsRoot,TabsList,TabsTab,TabsPanel}from'@vyrnforge/vue/tabs';const tabs=(id,options={})=>h(TabsRoot,{id,defaultValue:'overview',...options.root},()=>[h(TabsList,{'aria-label':options.label??'Account sections'},()=>[h(TabsTab,{value:'overview'},()=> 'Overview'),h(TabsTab,{value:'billing',disabled:true},()=> 'Billing'),h(TabsTab,{value:'security'},()=> 'Security'),...(options.activity===false?[]:[h(TabsTab,{value:'activity'},()=> 'Activity')])]),h(TabsPanel,{value:'overview'},()=> 'Overview panel'),h(TabsPanel,{value:'billing'},()=> 'Billing panel'),h(TabsPanel,{value:'security'},()=> 'Security panel'),...(options.activity===false?[]:[h(TabsPanel,{value:'activity'},()=> 'Activity panel')])]);const app=createSSRApp({render:()=>h('div',[tabs('vue-tabs',{root:{dir:'rtl',onValueChange:(value)=>document.body.dataset.value=value}}),tabs('vue-manual-tabs',{activity:false,label:'Manual vertical sections',root:{orientation:'vertical',activation:'manual',onValueChange:(value)=>document.body.dataset.manualValue=value}})])});app.mount('#vue-root');` }, bundle: true, format: 'esm', platform: 'browser', outfile: path.join(outDir, 'vue.js') });
 }
 
 if (port === 'angular') {
@@ -76,5 +76,34 @@ if (port === 'angular') {
   Component({ selector: 'vf-tabs-test', standalone: true, imports: [VfTabsRootDirective, VfTabsListDirective, VfTabsTabDirective, VfTabsPanelDirective], template })(TabsTestApp);
   const html = await renderApplication((context) => bootstrapApplication(TabsTestApp, { providers: [provideZonelessChangeDetection(), provideClientHydration()] }, context), { document: '<!doctype html><html lang="en"><head><meta charset="utf-8"><link rel="stylesheet" href="./tabs.css"></head><body><vf-tabs-test></vf-tabs-test></body></html>' });
   await writeFile(path.join(outDir, 'angular.html'), html.replace('</body>', '<script type="module" src="./angular.js"></script></body>'));
-  await build({ stdin: { resolveDir: root, sourcefile: 'angular-tabs-client.ts', contents: `import '@angular/compiler';import {Component,provideZonelessChangeDetection} from '@angular/core';import {bootstrapApplication,provideClientHydration} from '@angular/platform-browser';import {VfTabsRootDirective,VfTabsListDirective,VfTabsTabDirective,VfTabsPanelDirective} from '@vyrnforge/angular/tabs';class App{changed(value){document.body.dataset.value=value}manualChanged(value){document.body.dataset.manualValue=value}}Component({selector:'vf-tabs-test',standalone:true,imports:[VfTabsRootDirective,VfTabsListDirective,VfTabsTabDirective,VfTabsPanelDirective],template:${JSON.stringify(template)}})(App);bootstrapApplication(App,{providers:[provideZonelessChangeDetection(),provideClientHydration()]});` }, bundle: true, format: 'esm', platform: 'browser', outfile: path.join(outDir, 'angular.js') });
+  await build({ stdin: { resolveDir: root, sourcefile: 'angular-tabs-client.ts', contents: `import '@angular/compiler';import{Component,provideZonelessChangeDetection}from'@angular/core';import{bootstrapApplication,provideClientHydration}from'@angular/platform-browser';import{VfTabsRootDirective,VfTabsListDirective,VfTabsTabDirective,VfTabsPanelDirective}from'@vyrnforge/angular/tabs';class App{changed(value){document.body.dataset.value=value}manualChanged(value){document.body.dataset.manualValue=value}}Component({selector:'vf-tabs-test',standalone:true,imports:[VfTabsRootDirective,VfTabsListDirective,VfTabsTabDirective,VfTabsPanelDirective],template:${JSON.stringify(template)}})(App);bootstrapApplication(App,{providers:[provideZonelessChangeDetection(),provideClientHydration()]});` }, bundle: true, format: 'esm', platform: 'browser', outfile: path.join(outDir, 'angular.js') });
+}
+
+if (port === 'elements') {
+  const automatic = `
+<vf-tabs id="elements-tabs" default-value="overview" dir="rtl">
+  <div data-vf-tabs-list aria-label="Account sections">
+    <button data-vf-tabs-tab data-vf-value="overview">Overview</button>
+    <button data-vf-tabs-tab data-vf-value="billing" disabled>Billing</button>
+    <button data-vf-tabs-tab data-vf-value="security">Security</button>
+    <button data-vf-tabs-tab data-vf-value="activity">Activity</button>
+  </div>
+  <div data-vf-tabs-panel data-vf-value="overview">Overview panel</div>
+  <div data-vf-tabs-panel data-vf-value="billing">Billing panel</div>
+  <div data-vf-tabs-panel data-vf-value="security">Security panel</div>
+  <div data-vf-tabs-panel data-vf-value="activity">Activity panel</div>
+</vf-tabs>`;
+  const manual = `
+<vf-tabs id="elements-manual-tabs" default-value="overview" orientation="vertical" activation="manual">
+  <div data-vf-tabs-list aria-label="Manual vertical sections">
+    <button data-vf-tabs-tab data-vf-value="overview">Overview</button>
+    <button data-vf-tabs-tab data-vf-value="billing" disabled>Billing</button>
+    <button data-vf-tabs-tab data-vf-value="security">Security</button>
+  </div>
+  <div data-vf-tabs-panel data-vf-value="overview">Overview panel</div>
+  <div data-vf-tabs-panel data-vf-value="billing">Billing panel</div>
+  <div data-vf-tabs-panel data-vf-value="security">Security panel</div>
+</vf-tabs>`;
+  await writeFile(path.join(outDir, 'elements.html'), page(`${automatic}${manual}`, '<script type="module" src="./elements.js"></script>'));
+  await build({ stdin: { resolveDir: root, sourcefile: 'elements-tabs-client.ts', contents: `import{defineTabsElement}from'@vyrnforge/elements/tabs';defineTabsElement();document.querySelector('#elements-tabs').addEventListener('vf-value-change',(event)=>{document.body.dataset.value=event.detail.value});document.querySelector('#elements-manual-tabs').addEventListener('vf-value-change',(event)=>{document.body.dataset.manualValue=event.detail.value});` }, bundle: true, format: 'esm', platform: 'browser', outfile: path.join(outDir, 'elements.js') });
 }
