@@ -71,7 +71,7 @@ export default defineConfig(
     rules: correctnessRules
   },
   {
-    files: ['packages/{core,web,react,angular,vue,elements}/src/**/*.{ts,tsx,mts,cts}'],
+    files: ['packages/{core,web,icons,react,angular,vue,elements}/src/**/*.{ts,tsx,mts,cts}'],
     extends: [tseslint.configs.recommended],
     languageOptions: {
       parserOptions: {
