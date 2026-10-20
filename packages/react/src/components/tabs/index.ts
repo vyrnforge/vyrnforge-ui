@@ -7,8 +7,10 @@ import {
   useMemo,
   useState,
   type ButtonHTMLAttributes,
+  type FocusEvent as ReactFocusEvent,
   type HTMLAttributes,
   type KeyboardEvent,
+  type MouseEvent as ReactMouseEvent,
   type ReactNode,
 } from 'react';
 import { resolveEnabledIndex, type CollectionNavigationIntent } from '@vyrnforge/core/collection-navigation';
@@ -184,15 +186,15 @@ export function TabsTab({ value, disabled = false, onClick, onFocus, onKeyDown, 
     'data-vf-value': value,
     'data-vf-selected': selected ? '' : undefined,
     'data-vf-disabled': disabled ? '' : undefined,
-    onFocus(event) {
+    onFocus(event: ReactFocusEvent<HTMLButtonElement>) {
       if (!disabled) context.focus(value);
       onFocus?.(event);
     },
-    onClick(event) {
+    onClick(event: ReactMouseEvent<HTMLButtonElement>) {
       onClick?.(event);
       if (!event.defaultPrevented && !disabled) context.select(value);
     },
-    onKeyDown(event) {
+    onKeyDown(event: KeyboardEvent<HTMLButtonElement>) {
       onKeyDown?.(event);
       if (event.defaultPrevented || disabled || context.activation !== 'manual') return;
       if (event.key === 'Enter' || event.key === ' ') {
