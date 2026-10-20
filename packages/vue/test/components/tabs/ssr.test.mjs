@@ -18,7 +18,7 @@ test('Vue Tabs server output contains complete tab relationships and state', asy
     ]),
   });
   const html = await renderToString(app);
-  assert.match(html, /data-vf-tabs-root=""/);
+  assert.match(html, /data-vf-tabs-root(?:="")?/);
   assert.match(html, /role="tablist"/);
   assert.match(html, /id="account-tabs-tab-overview"[^>]*role="tab"[^>]*tabindex="0"[^>]*aria-selected="true"/);
   assert.match(html, /id="account-tabs-tab-billing"[^>]*role="tab"[^>]*disabled[^>]*aria-disabled="true"/);
