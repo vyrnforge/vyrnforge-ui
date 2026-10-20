@@ -1,3 +1,25 @@
-<p class="vf-docs-status" data-vf-support-status="not-implemented"><strong>Status:</strong> Button deliberately unavailable in Elements.</p>
-<p>The Elements package remains rebuild scaffolding. Button was evaluated for the first component slice, but an autonomous custom element would not be a native button before upgrade and would require reimplementing native button/form behavior; customized built-in buttons are not a sufficiently portable baseline. VyrnForge therefore defers Elements Button rather than shipping weaker semantics.</p>
-<section><h2>Shared contract</h2><p>The semantic target remains the shared <a href="../../components/button/">Button contract</a>. A future Elements implementation must preserve that native-first contract rather than redefining it.</p></section>
+<p class="vf-docs-status" data-vf-support-status="partial"><strong>Status:</strong> Elements integration is available for Icon and Tabs in this channel.</p>
+<p>Use the Elements package when you want the documented VyrnForge custom-element APIs without a framework runtime. Custom elements are registered explicitly so importing a module does not register elements as a side effect.</p>
+<section>
+  <h2>Available component entrypoints</h2>
+  <ul>
+    <li><code>@vyrnforge/elements/icon</code></li>
+    <li><code>@vyrnforge/elements/tabs</code></li>
+  </ul>
+  <p>Button, Dialog, and Text do not currently expose Elements-specific component entrypoints. Their component pages show the supported alternatives where applicable.</p>
+</section>
+<section>
+  <h2>Explicit registration</h2>
+  <pre><code>import { defineTabsElement } from '@vyrnforge/elements/tabs';
+
+defineTabsElement();</code></pre>
+  <p>Call the documented registration function before using the corresponding custom element.</p>
+</section>
+<section>
+  <h2>Attributes, properties, and events</h2>
+  <p>Use the attributes, properties, and custom events listed on each component page. Rich JavaScript values that cannot be represented safely as attributes are exposed through documented properties.</p>
+</section>
+<section>
+  <h2>Browser rendering</h2>
+  <p>Elements components become interactive after registration and browser upgrade. Component pages document any authored markup that must be present before upgrade and any behavior that differs from server-rendered framework components.</p>
+</section>
