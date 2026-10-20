@@ -28,6 +28,24 @@ test('shared Web component changes fan out through every discovered port', () =>
   for (const scope of ['component:button:web:browser', 'component:button:react:ssr', 'component:button:angular:ssr', 'component:button:vue:ssr', 'docs-build']) assert.ok(plan.validationScopes.includes(scope), scope);
 });
 
+test('renderer-neutral capability changes select only actual Tabs consumers and their evidence', () => {
+  const plan = createPlan(['packages/core/src/capabilities/collection-navigation/index.ts']);
+  assert.deepEqual(plan.directNodes, ['unit:core:capabilities:collection-navigation']);
+  assert.equal(plan.broadened, false);
+  for (const node of ['component:tabs:react', 'component:tabs:angular', 'component:tabs:vue']) assert.ok(plan.affectedNodes.includes(node), node);
+  for (const scope of ['unit:core:capabilities:collection-navigation', 'component:tabs:react:browser', 'component:tabs:angular:browser', 'component:tabs:vue:browser']) assert.ok(plan.validationScopes.includes(scope), scope);
+  for (const node of ['component:button:react', 'component:button:angular', 'component:button:vue']) assert.ok(!plan.affectedNodes.includes(node), node);
+});
+
+test('a React Tabs implementation change stays within the React/component boundary', () => {
+  const plan = createPlan(['packages/react/src/components/tabs/index.ts']);
+  assert.deepEqual(plan.directNodes, ['component:tabs:react']);
+  assert.equal(plan.broadened, false);
+  for (const scope of ['component:tabs:react:types', 'component:tabs:react:ssr', 'component:tabs:react:browser', 'pack-react', 'consumer-react']) assert.ok(plan.validationScopes.includes(scope), scope);
+  assert.ok(!plan.validationScopes.includes('component:tabs:angular:ssr'));
+  assert.ok(!plan.validationScopes.includes('component:tabs:vue:ssr'));
+});
+
 test('component docs and examples are owned by component documentation, not global package aggregates', () => {
   const plan = createPlan(['components/button/examples/basic/react.tsx']);
   assert.deepEqual(plan.directNodes, ['component:button:documentation']);
