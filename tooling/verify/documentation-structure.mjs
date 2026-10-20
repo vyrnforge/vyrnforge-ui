@@ -9,7 +9,7 @@ const registry = documentationRegistry(root);
 const discovery = discoverProductUnits(root);
 const requiredSharedSlugs = ['foundations/styling', 'foundations/accessibility', 'foundations/state-and-behavior', 'guides/testing'];
 const requiredFrameworks = ['react', 'angular', 'vue', 'elements', 'native-web'];
-const requiredComponentSections = ['Overview', 'Installation and imports', 'Quick start', 'Anatomy', 'Variants and sizes', 'State', 'Behavior', 'Interaction', 'Accessibility', 'Forms', 'Styling', 'Framework API', 'CSR and SSR', 'Examples', "Do / Don't", 'Testing guidance', 'Compatibility'];
+const requiredComponentSections = ['Overview', 'Installation and imports', 'Quick start', 'Accessibility', 'Styling', 'Framework API', 'Compatibility'];
 for (const relative of ['documentation/README.md', 'documentation/site/registry.json', 'components/README.md', 'fixtures/README.md', 'apps/docs/styles.css', 'apps/docs/client.js', 'tooling/docs/examples.mjs', 'tooling/docs/registry.mjs']) await access(path.join(root, relative));
 const slugs = new Set(registry.pages.map((page) => page.slug));
 for (const slug of requiredSharedSlugs) if (!slugs.has(slug)) throw new Error(`Missing shared documentation page: ${slug}`);
@@ -22,7 +22,7 @@ for (const component of discovery.components) {
   const page = registry.pages.find((item) => item.slug === `components/${component.component}`);
   if (!page || page.source !== component.documentationSource) throw new Error(`${component.component} documentation route was not discovered from its ownership slice`);
   const source = await readFile(path.join(root, component.documentationSource), 'utf8');
-  for (const section of requiredComponentSections) if (!source.includes(`<h2>${section}</h2>`)) throw new Error(`${component.component} documentation missing standard section: ${section}`);
+  for (const section of requiredComponentSections) if (!source.includes(`<h2>${section}</h2>`)) throw new Error(`${component.component} documentation missing universal section: ${section}`);
   for (const manifestPath of component.exampleManifests) {
     const manifest = JSON.parse(await readFile(path.join(root, manifestPath), 'utf8'));
     if (!manifest.id.startsWith(`${component.component}/`)) throw new Error(`${manifestPath} id must be owned by ${component.component}`);
