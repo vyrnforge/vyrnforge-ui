@@ -1,5 +1,5 @@
 import { VfIconElement, defineIconElement, type IconShape, type IconSize, type IconVariant } from '@vyrnforge/elements/icon';
-import { bookmarkIcon } from '@vyrnforge/web/icon';
+import { bookmarkIcon } from '@vyrnforge/icons/bookmark';
 const element = document.createElement('vf-icon') as VfIconElement;
 element.icon = bookmarkIcon;
 element.variant = 'filled';

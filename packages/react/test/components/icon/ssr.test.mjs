@@ -3,7 +3,7 @@ import assert from 'node:assert/strict';
 import { createElement } from 'react';
 import { renderToStaticMarkup } from 'react-dom/server';
 import { Icon } from '@vyrnforge/react/icon';
-import { bookmarkIcon } from '@vyrnforge/web/icon';
+import { bookmarkIcon } from '@vyrnforge/icons/bookmark';
 
 test('React Icon SSR preserves decorative and meaningful accessibility contracts', () => {
   const decorative = renderToStaticMarkup(createElement(Icon, { icon: bookmarkIcon }));

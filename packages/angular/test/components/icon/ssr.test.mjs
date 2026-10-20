@@ -5,7 +5,7 @@ import { Component, provideZonelessChangeDetection } from '@angular/core';
 import { bootstrapApplication } from '@angular/platform-browser';
 import { renderApplication } from '@angular/platform-server';
 import { VfIconComponent } from '@vyrnforge/angular/icon';
-import { bookmarkIcon } from '@vyrnforge/web/icon';
+import { bookmarkIcon } from '@vyrnforge/icons/bookmark';
 class AppComponent { bookmark = bookmarkIcon; }
 Component({ selector: 'vf-icon-ssr-test', standalone: true, imports: [VfIconComponent], template: '<vf-icon [icon]="bookmark" variant="filled" shape="sharp" label="Saved" />' })(AppComponent);
 
