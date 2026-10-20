@@ -1,0 +1,119 @@
+{
+  "schemaVersion": 1,
+  "components": {
+    "button": {
+      "css": {
+        "bytes": 3245,
+        "gzipBytes": 907
+      },
+      "ports": {
+        "react": {
+          "subpath": {
+            "bytes": 314,
+            "gzipBytes": 227
+          },
+          "rootSelected": {
+            "bytes": 314,
+            "gzipBytes": 227
+          }
+        },
+        "angular": {
+          "subpath": {
+            "bytes": 2070,
+            "gzipBytes": 693
+          },
+          "rootSelected": {
+            "bytes": 2070,
+            "gzipBytes": 693
+          }
+        },
+        "vue": {
+          "subpath": {
+            "bytes": 446,
+            "gzipBytes": 280
+          },
+          "rootSelected": {
+            "bytes": 446,
+            "gzipBytes": 280
+          }
+        }
+      }
+    },
+    "tabs": {
+      "css": {
+        "bytes": 2677,
+        "gzipBytes": 800
+      },
+      "ports": {
+        "react": {
+          "subpath": {
+            "bytes": 3249,
+            "gzipBytes": 1474
+          },
+          "rootSelected": {
+            "bytes": 703,
+            "gzipBytes": 450
+          }
+        },
+        "angular": {
+          "subpath": {
+            "bytes": 9222,
+            "gzipBytes": 2282
+          },
+          "rootSelected": {
+            "bytes": 9147,
+            "gzipBytes": 2260
+          }
+        },
+        "vue": {
+          "subpath": {
+            "bytes": 4190,
+            "gzipBytes": 1642
+          },
+          "rootSelected": {
+            "bytes": 4148,
+            "gzipBytes": 1622
+          }
+        }
+      }
+    },
+    "dialog": {
+      "css": {
+        "bytes": 1230,
+        "gzipBytes": 501
+      },
+      "ports": {
+        "react": {
+          "subpath": {
+            "bytes": 2696,
+            "gzipBytes": 1286
+          },
+          "rootSelected": {
+            "bytes": 2007,
+            "gzipBytes": 1029
+          }
+        },
+        "angular": {
+          "subpath": {
+            "bytes": 8748,
+            "gzipBytes": 1973
+          },
+          "rootSelected": {
+            "bytes": 8631,
+            "gzipBytes": 1946
+          }
+        },
+        "vue": {
+          "subpath": {
+            "bytes": 3242,
+            "gzipBytes": 1340
+          },
+          "rootSelected": {
+            "bytes": 3169,
+            "gzipBytes": 1318
+          }
+        }
+      }
+    }
+  }
+}
