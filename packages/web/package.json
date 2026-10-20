@@ -16,6 +16,7 @@
     },
     "./styles.css": "./dist/styles.css",
     "./styles/button.css": "./dist/components/button/button.css",
+    "./styles/dialog.css": "./dist/components/dialog/dialog.css",
     "./styles/tabs.css": "./dist/components/tabs/tabs.css"
   },
   "dependencies": {
