@@ -90,7 +90,7 @@
   }
 
   :where([data-vf-text][data-vf-text-variant="body-lg"]) {
-    --_vf-text-font-size: 1.125rem;
+    --_vf-text-font-size: var(--vf-font-size-lg);
     --_vf-text-line-height: var(--vf-line-height-relaxed);
   }
 
