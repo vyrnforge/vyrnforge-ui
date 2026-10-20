@@ -10,7 +10,7 @@ await mkdir(outDir, { recursive: true });
 const tabsCss = await readFile(path.join(root, 'packages/web/dist/components/tabs/tabs.css'), 'utf8');
 const tokenCss = await readFile(path.join(root, 'packages/web/dist/styles/tokens.css'), 'utf8');
 await writeFile(path.join(outDir, 'tabs.css'), `${tokenCss}\n${tabsCss.replace('@import "../../styles/tokens.css";', '')}`);
-const page = (body, script = '') => `<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width"><link rel="stylesheet" href="./tabs.css"><title>Tabs fixture</title></head><body>${body}${script}</body></html>`;
+const page = (body, script = '') => `<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width"><link rel="stylesheet" href="./tabs.css"><title>Tabs fixture</title></head><body><main><h1>Tabs browser fixture</h1>${body}</main>${script}</body></html>`;
 
 const staticTabs = `
 <div id="web-tabs" data-vf-tabs-root data-vf-orientation="horizontal" data-vf-activation="automatic">
