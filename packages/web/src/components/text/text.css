@@ -1,0 +1,39 @@
+@import "../../styles/tokens.css";
+
+@layer vyrnforge.components {
+  :where([data-vf-text]) {
+    --_vf-text-font-family: var(--vf-font-family-sans);
+    --_vf-text-font-size: var(--vf-font-size-md);
+    --_vf-text-font-weight: var(--vf-font-weight-regular);
+    --_vf-text-line-height: var(--vf-line-height-normal);
+
+    color: var(--vf-color-text);
+    font-family: var(--_vf-text-font-family);
+    font-size: var(--_vf-text-font-size);
+    font-weight: var(--_vf-text-font-weight);
+    line-height: var(--_vf-text-line-height);
+    margin: 0;
+  }
+
+  :where([data-vf-text][data-vf-text-variant="body-sm"]) {
+    --_vf-text-font-size: var(--vf-font-size-sm);
+  }
+
+  :where([data-vf-text][data-vf-text-variant="label"]) {
+    --_vf-text-font-size: var(--vf-font-size-sm);
+    --_vf-text-font-weight: var(--vf-font-weight-semibold);
+    --_vf-text-line-height: var(--vf-line-height-compact);
+  }
+
+  :where([data-vf-text][data-vf-text-variant="title"]) {
+    --_vf-text-font-size: var(--vf-font-size-lg);
+    --_vf-text-font-weight: var(--vf-font-weight-semibold);
+    --_vf-text-line-height: var(--vf-line-height-compact);
+  }
+
+  :where([data-vf-text][data-vf-text-variant="heading"]) {
+    --_vf-text-font-size: var(--vf-font-size-xl);
+    --_vf-text-font-weight: var(--vf-font-weight-semibold);
+    --_vf-text-line-height: var(--vf-line-height-tight);
+  }
+}

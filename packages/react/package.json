@@ -13,7 +13,8 @@
     "./button": { "types": "./dist/components/button/index.d.ts", "import": "./dist/components/button/index.js", "default": "./dist/components/button/index.js" },
     "./dialog": { "types": "./dist/components/dialog/index.d.ts", "import": "./dist/components/dialog/index.js", "default": "./dist/components/dialog/index.js" },
     "./icon": { "types": "./dist/components/icon/index.d.ts", "import": "./dist/components/icon/index.js", "default": "./dist/components/icon/index.js" },
-    "./tabs": { "types": "./dist/components/tabs/index.d.ts", "import": "./dist/components/tabs/index.js", "default": "./dist/components/tabs/index.js" }
+    "./tabs": { "types": "./dist/components/tabs/index.d.ts", "import": "./dist/components/tabs/index.js", "default": "./dist/components/tabs/index.js" },
+    "./text": { "types": "./dist/components/text/index.d.ts", "import": "./dist/components/text/index.js", "default": "./dist/components/text/index.js" }
   },
   "dependencies": { "@vyrnforge/core": "0.0.0-rebuild", "@vyrnforge/web": "0.0.0-rebuild" },
   "peerDependencies": { "react": ">=19.3.0 <20" },

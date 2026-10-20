@@ -13,9 +13,20 @@
     --vf-color-disabled-background: #e6e9ef;
     --vf-color-disabled-foreground: #6c7484;
     --vf-color-disabled-border: #c8ced8;
+    --vf-font-family-sans: system-ui, sans-serif;
+    --vf-font-size-sm: 0.875rem;
+    --vf-font-size-md: 1rem;
+    --vf-font-size-lg: 1.25rem;
+    --vf-font-size-xl: 1.5rem;
+    --vf-font-weight-regular: 400;
+    --vf-font-weight-medium: 500;
+    --vf-font-weight-semibold: 600;
+    --vf-line-height-tight: 1.2;
+    --vf-line-height-compact: 1.25;
+    --vf-line-height-normal: 1.5;
     --vf-control-radius: 0.5rem;
-    --vf-control-font-family: system-ui, sans-serif;
-    --vf-control-font-weight: 600;
+    --vf-control-font-family: var(--vf-font-family-sans);
+    --vf-control-font-weight: var(--vf-font-weight-semibold);
     --vf-control-motion-duration: 120ms;
   }
 }

@@ -13,3 +13,5 @@ export type {
   TabsRootProps,
   TabsTabProps,
 } from './components/tabs/index.js';
+export { Text } from './components/text/index.js';
+export type { TextElement, TextVariant } from './components/text/index.js';
