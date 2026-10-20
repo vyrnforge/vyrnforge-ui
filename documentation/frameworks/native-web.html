@@ -1,5 +1,24 @@
-<p class="vf-docs-status" data-vf-support-status="implemented"><strong>Status:</strong> Button baseline implemented.</p>
-<p>Native Web uses the same semantic Button contract and canonical CSS without a JavaScript component runtime. See the shared <a href="../../components/button/">Button documentation</a>.</p>
-<section><h2>Button</h2><pre><code>import '@vyrnforge/web/styles/button.css';
-
-&lt;button data-vf-button data-vf-variant="primary" data-vf-size="md" type="button"&gt;Save&lt;/button&gt;</code></pre><p>Add <code>data-vf-loading</code> and <code>aria-busy="true"</code> together for loading state. Native <code>disabled</code>, form behavior, keyboard activation, and focus remain browser-owned.</p></section>
+<p class="vf-docs-status" data-vf-support-status="implemented"><strong>Status:</strong> Native Web styling and documented data-hook APIs are available in this channel.</p>
+<p>Use Native Web when your application authors native HTML directly and wants VyrnForge styling and supported browser-facing APIs without a framework component layer.</p>
+<section>
+  <h2>Load styles</h2>
+  <pre><code>import '@vyrnforge/web/styles.css';</code></pre>
+  <p>Component pages also list focused stylesheet entrypoints such as <code>@vyrnforge/web/styles/button.css</code>.</p>
+</section>
+<section>
+  <h2>Example</h2>
+  <pre><code>&lt;button
+  data-vf-button
+  data-vf-variant="primary"
+  data-vf-size="md"
+  type="button"
+&gt;Save&lt;/button&gt;</code></pre>
+</section>
+<section>
+  <h2>Native semantics</h2>
+  <p>Author the correct native HTML element first, then apply the public VyrnForge hooks documented for that component. Native form behavior, keyboard activation, and focus semantics remain available unless a component page explicitly documents additional behavior.</p>
+</section>
+<section>
+  <h2>JavaScript APIs</h2>
+  <p>Some components expose public browser-facing TypeScript or JavaScript APIs through <code>@vyrnforge/web</code> subpaths. Import only the entrypoints documented by the component you are using.</p>
+</section>
