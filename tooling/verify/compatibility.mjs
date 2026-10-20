@@ -11,12 +11,15 @@ if (support.authoring?.typescriptEslint !== root.devDependencies['typescript-esl
 
 for (const framework of ['react', 'angular', 'vue']) {
   const entry = support.frameworks?.[framework];
-  if (!entry?.baseline || entry.status !== 'button-baseline-implemented') throw new Error(`${framework} must identify the implemented Button baseline without implying the whole framework port is complete`);
+  if (!entry?.baseline || entry.status !== 'representative-components-implemented') throw new Error(`${framework} must identify the implemented Button, Tabs, and Dialog proof-component baseline without implying release support`);
 }
-if (support.frameworks?.elements?.status !== 'selected-not-implemented' || support.frameworks?.elements?.button !== 'deferred-native-semantics') throw new Error('Elements Button must remain explicitly deferred until native button semantics can be preserved');
-if (support.frameworks?.['native-web']?.status !== 'button-baseline-implemented') throw new Error('Native Web must identify the implemented Button baseline');
+const elements = support.frameworks?.elements;
+if (!elements?.baseline || elements.status !== 'tabs-baseline-implemented' || elements.button !== 'deferred-native-semantics' || elements.tabs !== 'implemented') {
+  throw new Error('Elements must identify its implemented Tabs baseline while preserving the deliberate native Button deferral');
+}
+if (support.frameworks?.['native-web']?.status !== 'representative-components-implemented') throw new Error('Native Web must identify the implemented representative-component baseline');
 if (support.browsers?.playwright !== root.devDependencies['@playwright/test']) throw new Error('browser validation baseline must match the pinned Playwright toolchain');
 for (const engine of ['chromium', 'firefox', 'webkit']) if (!support.browsers?.[engine]) throw new Error(`browser validation baseline is missing ${engine}`);
-if (support.ssrBundlers?.status !== 'button-port-validation-active') throw new Error('SSR/bundler compatibility must identify Button port validation once real framework ports exist');
+if (support.ssrBundlers?.status !== 'representative-port-validation-active') throw new Error('SSR/bundler compatibility must identify representative framework-port validation once the proof components exist');
 
 process.stdout.write('compatibility metadata: ok\n');
