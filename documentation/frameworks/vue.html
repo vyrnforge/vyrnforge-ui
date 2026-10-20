@@ -1,6 +1,31 @@
-<p class="vf-docs-status" data-vf-support-status="partial"><strong>Status:</strong> Button baseline implemented at Vue 3.5.x.</p>
-<p>Shared Button semantics, accessibility, forms, state, and styling are documented once on the <a href="../../components/button/">Button page</a>.</p>
-<section><h2>Button</h2><pre><code>import { Button } from '@vyrnforge/vue/button';
+<p class="vf-docs-status" data-vf-support-status="partial"><strong>Status:</strong> Vue integration is available for the components documented in this channel.</p>
+<p>Install the Vue package alongside the supported Vue runtime, load VyrnForge styles, and import components from their documented subpaths.</p>
+<section>
+  <h2>Available component entrypoints</h2>
+  <ul>
+    <li><code>@vyrnforge/vue/button</code></li>
+    <li><code>@vyrnforge/vue/dialog</code></li>
+    <li><code>@vyrnforge/vue/icon</code></li>
+    <li><code>@vyrnforge/vue/tabs</code></li>
+    <li><code>@vyrnforge/vue/text</code></li>
+  </ul>
+  <p>Use the corresponding component page for props, emitted events, accessibility behavior, examples, and styling guidance.</p>
+</section>
+<section>
+  <h2>Example</h2>
+  <pre><code>&lt;script setup&gt;
+import { Button } from '@vyrnforge/vue/button';
+&lt;/script&gt;
 
-&lt;Button variant="primary" size="md" :loading="saving" @click="save"&gt;Save&lt;/Button&gt;</code></pre><p>The component renders a native button, forwards fallthrough native attributes, and uses the default slot for ordinary content.</p></section>
-<section><h2>SSR and hydration</h2><p>Vue SSR output is native-complete. Hydration restores Vue event wiring without changing the Button semantic state.</p></section>
+&lt;template&gt;
+  &lt;Button variant="primary"&gt;Save&lt;/Button&gt;
+&lt;/template&gt;</code></pre>
+</section>
+<section>
+  <h2>Attributes and events</h2>
+  <p>VyrnForge Vue components preserve the native attributes and Vue event patterns documented for each component. Use additional emitted events only where the component page documents them.</p>
+</section>
+<section>
+  <h2>SSR and hydration</h2>
+  <p>Server-rendering support is documented per component. Follow the component page when behavior depends on browser APIs, focus, modal activation, or hydration.</p>
+</section>

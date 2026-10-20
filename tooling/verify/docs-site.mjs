@@ -9,7 +9,6 @@ const channel = process.env.VYRNFORGE_DOCS_CHANNEL || 'next';
 const channelRoot = path.join(root, 'dist/docs', channel);
 const registry = documentationRegistry(root);
 const discovery = discoverProductUnits(root);
-const compatibility = JSON.parse(await readFile(path.join(root, 'tooling/compatibility/support-status.json'), 'utf8'));
 const slugs = new Set();
 for (const page of registry.pages) {
   if (slugs.has(page.slug)) throw new Error(`Duplicate docs slug: ${page.slug}`);
@@ -19,8 +18,6 @@ for (const page of registry.pages) {
 for (const framework of ['react', 'angular', 'vue', 'elements', 'native-web']) if (!registry.pages.some((item) => item.framework === framework)) throw new Error(`Missing framework documentation page for ${framework}`);
 function htmlLinks(html) { return [...html.matchAll(/\bhref="([^"]+)"/g)].map((match) => match[1]); }
 function resolveLocalLink(pageDirectory, href) { if (/^(?:https?:|mailto:|#)/.test(href)) return null; const withoutHash = href.split('#')[0].split('?')[0]; if (!withoutHash) return null; const resolved = path.resolve(pageDirectory, withoutHash); return /\.[a-z0-9]+$/i.test(withoutHash) ? resolved : path.join(resolved, 'index.html'); }
-function escapeHtml(value) { return String(value).replaceAll('&', '&amp;').replaceAll('<', '&lt;').replaceAll('>', '&gt;').replaceAll('"', '&quot;'); }
-function leafValues(value) { if (Array.isArray(value)) return value.flatMap(leafValues); if (value && typeof value === 'object') return Object.values(value).flatMap(leafValues); return value === null || value === undefined ? [] : [value]; }
 function safeName(value) { return value.replace(/[^a-z0-9]+/gi, '-').replace(/^-|-$/g, '').toLowerCase(); }
 for (const page of registry.pages) {
   const pageDirectory = path.join(channelRoot, page.slug);
@@ -60,7 +57,8 @@ const searchIndex = JSON.parse(await readFile(path.join(channelRoot, 'search-ind
 if (searchIndex.length !== registry.pages.length) throw new Error('Docs search index does not include every discovered page');
 for (const item of searchIndex) { const slug = item.path === './' ? '' : item.path.replace(/\/$/, ''); if (!slugs.has(slug)) throw new Error(`Search index points to unknown docs page: ${item.path}`); }
 const compatibilityHtml = await readFile(path.join(channelRoot, 'reference/compatibility/index.html'), 'utf8');
-for (const value of leafValues(compatibility)) if (!compatibilityHtml.includes(escapeHtml(value))) throw new Error(`Compatibility page drifted from support source leaf value: ${value}`);
+for (const required of ['Framework versions', 'Component availability', 'Browser support', 'Server rendering', '19.3.x', '22.x', '3.5.x']) if (!compatibilityHtml.includes(required)) throw new Error(`Compatibility page missing public support information: ${required}`);
+for (const marker of ['implementation-baseline', 'representative-components-implemented', 'selected-validation-baseline', 'typescriptEslint']) if (compatibilityHtml.includes(marker)) throw new Error(`Compatibility page exposes internal support metadata: ${marker}`);
 const siteManifest = JSON.parse(await readFile(path.join(channelRoot, 'site-manifest.json'), 'utf8'));
 for (const id of expectedExampleIds) if (!siteManifest.examples?.includes(id)) throw new Error(`Site manifest is missing executable example ${id}`);
 await access(path.join(root, 'dist/docs/index.html'));

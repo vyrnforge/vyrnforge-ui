@@ -1,9 +1,31 @@
-<p class="vf-docs-status" data-vf-support-status="partial"><strong>Status:</strong> Button baseline implemented at Angular 22.x.</p>
-<p>Shared Button semantics, accessibility, forms, state, and styling are documented once on the <a href="../../components/button/">Button page</a>.</p>
-<section><h2>Button</h2><pre><code>import { VfButtonDirective } from '@vyrnforge/angular/button';
+<p class="vf-docs-status" data-vf-support-status="partial"><strong>Status:</strong> Angular integration is available for the components documented in this channel.</p>
+<p>Install the Angular package alongside the supported Angular runtime, load VyrnForge styles, and import standalone directives or components from their documented subpaths.</p>
+<section>
+  <h2>Available component entrypoints</h2>
+  <ul>
+    <li><code>@vyrnforge/angular/button</code></li>
+    <li><code>@vyrnforge/angular/dialog</code></li>
+    <li><code>@vyrnforge/angular/icon</code></li>
+    <li><code>@vyrnforge/angular/tabs</code></li>
+    <li><code>@vyrnforge/angular/text</code></li>
+  </ul>
+  <p>Use the corresponding component page for inputs, outputs, accessibility behavior, examples, and styling guidance.</p>
+</section>
+<section>
+  <h2>Example</h2>
+  <pre><code>import { VfButtonDirective } from '@vyrnforge/angular/button';
 
-@Component({ imports: [VfButtonDirective] })
-class Example {}
-
-&lt;button vfButton variant="primary" size="md" [loading]="saving" (click)="save()"&gt;Save&lt;/button&gt;</code></pre><p>The standalone directive decorates an actual native <code>&lt;button&gt;</code>; native Angular event syntax and form attributes remain available.</p></section>
-<section><h2>SSR and hydration</h2><p>Server rendering preserves the native button and directive-owned stable attributes. Hydration restores Angular event wiring without replacing the control.</p></section>
+@Component({
+  imports: [VfButtonDirective],
+  template: '&lt;button vfButton variant="primary"&gt;Save&lt;/button&gt;'
+})
+export class Example {}</code></pre>
+</section>
+<section>
+  <h2>Native elements and events</h2>
+  <p>Directive-based VyrnForge APIs keep the authored native element and Angular's normal event and attribute syntax. Use additional outputs only when a component page documents them.</p>
+</section>
+<section>
+  <h2>SSR and hydration</h2>
+  <p>Server-rendering support is documented per component. Follow the component page when behavior depends on browser APIs, focus, modal activation, or client-side hydration.</p>
+</section>

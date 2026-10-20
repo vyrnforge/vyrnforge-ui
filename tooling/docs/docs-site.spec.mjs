@@ -26,17 +26,19 @@ test('docs home exposes versioned accessible navigation and search', async ({ pa
   verifyNoErrors();
 });
 
-test('framework selection exposes component-level implementation status', async ({ page }) => {
+test('framework selection exposes current public component availability', async ({ page }) => {
   const verifyNoErrors = await expectNoRuntimeErrors(page);
   await page.goto('/next/');
   await page.getByLabel('Framework').selectOption('react');
   await expect(page).toHaveURL(/\/next\/frameworks\/react\/$/);
-  await expect(page.locator('[data-vf-support-status="partial"]')).toContainText('Button baseline implemented');
-  await expect(page.getByRole('heading', { level: 2, name: 'Button' })).toBeVisible();
+  await expect(page.locator('[data-vf-support-status="partial"]')).toContainText('React integration is available');
+  await expect(page.getByRole('heading', { level: 2, name: 'Available component entrypoints' })).toBeVisible();
+  await expect(page.locator('main')).toContainText('@vyrnforge/react/dialog');
 
   await page.getByLabel('Framework').selectOption('elements');
   await expect(page).toHaveURL(/\/next\/frameworks\/elements\/$/);
-  await expect(page.locator('[data-vf-support-status="not-implemented"]')).toContainText('deliberately unavailable');
+  await expect(page.locator('[data-vf-support-status="partial"]')).toContainText('Icon and Tabs');
+  await expect(page.locator('main')).toContainText('@vyrnforge/elements/tabs');
   verifyNoErrors();
 });
 
