@@ -6,7 +6,7 @@ import { createExecutionPlan } from '../impact/execute.mjs';
 test('PR component-local changes keep sibling framework evidence skipped', () => {
   const plan = createPlan(['packages/react/src/components/button/index.ts']);
   for (const selected of ['pack-react', 'consumer-react', 'component:button:react:types', 'component:button:react:ssr', 'component:button:react:browser']) assert.ok(plan.validationScopes.includes(selected), selected);
-  for (const skipped of ['pack-angular', 'consumer-angular', 'component:button:angular:ssr', 'browser-docs-cross']) assert.equal(plan.validationScopes.includes(skipped), false, skipped);
+  for (const skipped of ['pack-angular', 'consumer-angular', 'component:button:angular:ssr', 'browser-docs-cross', 'bundle-baselines']) assert.equal(plan.validationScopes.includes(skipped), false, skipped);
   const execution = createExecutionPlan(plan);
   assert.ok(execution.some((entry) => entry.scope === 'build-react'));
   assert.equal(execution.some((entry) => entry.scope === 'build-angular'), false);
@@ -20,7 +20,7 @@ test('documentation-local changes select docs without package consumers', () => 
 
 test('main includes all discovered package-local and shared component evidence', () => {
   const main = createTierPlan('main');
-  for (const scope of ['change-fragments', 'changes-preview', 'component:button:conformance:types', 'component:button:react:types', 'component:button:react:ssr', 'component:button:web:browser', 'component:button:angular:ssr', 'component:button:vue:ssr']) assert.ok(main.validationScopes.includes(scope), scope);
+  for (const scope of ['change-fragments', 'changes-preview', 'bundle-baselines', 'component:button:conformance:types', 'component:button:react:types', 'component:button:react:ssr', 'component:button:web:browser', 'component:button:angular:ssr', 'component:button:vue:ssr']) assert.ok(main.validationScopes.includes(scope), scope);
   assert.equal(main.validationScopes.includes('component:button:web:browser-cross'), false);
 });
 
@@ -29,6 +29,8 @@ test('scheduled and release add cross-browser evidence, release adds readiness',
   const release = createTierPlan('release');
   assert.ok(scheduled.validationScopes.includes('component:button:web:browser-cross'));
   assert.ok(scheduled.validationScopes.includes('browser-docs-cross'));
+  assert.ok(scheduled.validationScopes.includes('bundle-baselines'));
   assert.ok(release.validationScopes.includes('component:button:web:browser-cross'));
+  assert.ok(release.validationScopes.includes('bundle-baselines'));
   assert.ok(release.validationScopes.includes('release-readiness'));
 });
