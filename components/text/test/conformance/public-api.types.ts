@@ -3,11 +3,28 @@ import type { TextVariant as ReactVariant } from '@vyrnforge/react/text';
 import type { TextVariant as AngularVariant } from '@vyrnforge/angular/text';
 import type { TextVariant as VueVariant } from '@vyrnforge/vue/text';
 
-const variants: [WebVariant, ReactVariant, AngularVariant, VueVariant] = ['body', 'heading', 'label', 'title'];
+declare module '@vyrnforge/web/text' {
+  interface TextVariantOverrides {
+    poster: true;
+    heading: false;
+  }
+}
 
-const reactFromWeb: ReactVariant = variants[0];
-const angularFromReact: AngularVariant = variants[1];
-const vueFromAngular: VueVariant = variants[2];
-const webFromVue: WebVariant = variants[3];
+const variants: [WebVariant, ReactVariant, AngularVariant, VueVariant] = [
+  'display-lg',
+  'heading-md',
+  'body-md',
+  'label-sm',
+];
 
-void [variants, reactFromWeb, angularFromReact, vueFromAngular, webFromVue];
+const customWeb: WebVariant = 'poster';
+const customReact: ReactVariant = customWeb;
+const customAngular: AngularVariant = customWeb;
+const customVue: VueVariant = customWeb;
+
+// @ts-expect-error disabled variants are removed from every typed port.
+const disabledWeb: WebVariant = 'heading';
+// @ts-expect-error unknown variants require explicit augmentation.
+const unknownReact: ReactVariant = 'marketing-hero';
+
+void [variants, customWeb, customReact, customAngular, customVue, disabledWeb, unknownReact];
