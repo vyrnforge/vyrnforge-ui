@@ -39,12 +39,12 @@
 
 <section>
   <h2>State</h2>
-  <p>Selection and keyboard focus are related but distinct state. The selected tab exposes <code>aria-selected="true"</code>; disabled tabs expose <code>aria-disabled="true"</code> and are excluded from roving focus. Inactive panels are hidden.</p>
+  <p>Selection and keyboard focus are related but distinct state. The selected tab exposes <code>aria-selected="true"</code>; disabled tabs expose <code>aria-disabled="true"</code> and are excluded from roving focus. Inactive panels are hidden. The supplied initial or controlled value must identify an enabled tab in the rendered collection.</p>
 </section>
 
 <section>
   <h2>Behavior</h2>
-  <p>Automatic activation is the default: moving focus selects the destination tab. Manual activation keeps focus and selection separate until Enter or Space is pressed. Pointer activation selects an enabled tab in either mode. Provide an explicit initial value for server-complete output.</p>
+  <p>Automatic activation is the default: moving focus selects the destination tab. Manual activation keeps focus and selection separate until Enter or Space is pressed. Pointer activation selects an enabled tab in either mode. Provide an explicit enabled initial value for server-complete output; framework ports do not infer or rewrite selection by inspecting descendant component trees during server rendering.</p>
 </section>
 
 <section>
