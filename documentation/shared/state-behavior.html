@@ -1,13 +1,17 @@
-<p class="vf-docs-lede">VyrnForge standardizes semantic state, behavior policy, and interaction intent without forcing every framework through one shared state runtime.</p>
+<p class="vf-docs-lede">VyrnForge components expose state and interaction in ways that fit the platform and your framework. Component guides document which state your application controls, which state the browser owns, and which callbacks or events report user intent.</p>
 <section>
-  <h2>Intent is not committed state</h2>
-  <p>An interaction may request a state change without guaranteeing that externally controlled state changes. Framework ports deliver intent idiomatically; the consumer owns committed state when a component is controlled.</p>
+  <h2>Controlled state</h2>
+  <p>When a component is controlled, an interaction can request a change without changing application-owned state by itself. Handle the documented callback or event, update your state, and pass the new value back through the component's public API.</p>
 </section>
 <section>
-  <h2>Browser truth</h2>
-  <p>Native browser state should not be mirrored into a generic VyrnForge store without a demonstrated need. Browser effects follow committed state and must be safe to reconcile during activation or hydration.</p>
+  <h2>Uncontrolled state</h2>
+  <p>When an uncontrolled API is available, use the documented default value to establish initial state and let the component manage subsequent changes. Component pages identify whether controlled, uncontrolled, or both forms are supported.</p>
+</section>
+<section>
+  <h2>Native behavior</h2>
+  <p>Native browser behavior remains authoritative where the public component contract relies on it. Use documented properties, attributes, callbacks, and events instead of attempting to synchronize the same state through application-specific DOM bookkeeping.</p>
 </section>
 <section>
   <h2>Meaningful distinctions</h2>
-  <p>Public documentation preserves distinctions such as loading versus disabled, selected versus focused, invalid versus an error message, and open state versus a dismissal request.</p>
+  <p>Keep different states distinct: loading is not automatically disabled, selected is not the same as focused, invalid is not the same as an error message, and open state is not the same as a dismissal request. Each component guide explains the distinctions that apply.</p>
 </section>
