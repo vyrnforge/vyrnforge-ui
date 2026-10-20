@@ -1,0 +1,11 @@
+{
+  "id": "tabs/basic",
+  "title": "Basic tabs",
+  "description": "The shared Tabs contract rendered through each implemented framework adapter.",
+  "defaultFramework": "react",
+  "frameworks": {
+    "react": { "label": "React", "language": "tsx", "source": "react.tsx" },
+    "angular": { "label": "Angular", "language": "ts", "source": "angular.ts" },
+    "vue": { "label": "Vue", "language": "ts", "source": "vue.ts" }
+  }
+}
