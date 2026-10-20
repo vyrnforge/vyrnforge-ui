@@ -33,7 +33,7 @@ test('renderer-neutral capability changes select only actual Tabs consumers and 
   assert.deepEqual(plan.directNodes, ['unit:core:capabilities:collection-navigation']);
   assert.equal(plan.broadened, false);
   for (const node of ['component:tabs:react', 'component:tabs:angular', 'component:tabs:vue']) assert.ok(plan.affectedNodes.includes(node), node);
-  for (const scope of ['unit:core:capabilities:collection-navigation', 'component:tabs:react:browser', 'component:tabs:angular:browser', 'component:tabs:vue:browser']) assert.ok(plan.validationScopes.includes(scope), scope);
+  for (const scope of ['unit:core:capabilities:collection-navigation:test', 'component:tabs:react:browser', 'component:tabs:angular:browser', 'component:tabs:vue:browser']) assert.ok(plan.validationScopes.includes(scope), scope);
   for (const node of ['component:button:react', 'component:button:angular', 'component:button:vue']) assert.ok(!plan.affectedNodes.includes(node), node);
 });
 
