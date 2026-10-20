@@ -1,111 +1,54 @@
-<p class="vf-docs-lede">Icon is VyrnForge's non-interactive SVG primitive. The renderer contract lives in Web and the official authored glyph catalog lives in the separate <code>@vyrnforge/icons</code> package so the catalog can grow without becoming part of every framework runtime.</p>
+<p class="vf-docs-lede">Icon renders non-interactive SVG artwork with consistent size, color, variant, shape, and accessibility behavior.</p>
 
-<section>
-  <h2>Overview</h2>
-  <p>Use Icon for symbolic visual content that accompanies or communicates UI meaning. Icon is deliberately non-interactive: actions and navigation still belong to Button, Link, or another semantic control. Renderer packages accept any compliant <code>IconDefinition</code>; the official VyrnForge catalog is optional.</p>
-</section>
+<section><h2>Overview</h2><p>Use Icon for symbolic visual content. Keep actions and navigation on semantic controls such as Button or Link. Official VyrnForge artwork is available from <code>@vyrnforge/icons</code>.</p></section>
 
 <section>
   <h2>Installation and imports</h2>
-  <p>Load the canonical Web icon stylesheet, import the official Bookmark artwork from the granular <code>@vyrnforge/icons/bookmark</code> entrypoint, and use the renderer-specific Icon surface for your framework.</p>
-  <div class="vf-docs-table-wrap" tabindex="0" role="region" aria-label="Icon package imports">
-    <table>
-      <thead><tr><th>Surface</th><th>Public entrypoint</th></tr></thead>
-      <tbody>
-        <tr><th scope="row">Icon contract and Native Web styling</th><td><code>@vyrnforge/web/icon</code> and <code>@vyrnforge/web/styles/icon.css</code></td></tr>
-        <tr><th scope="row">Official Bookmark artwork</th><td><code>@vyrnforge/icons/bookmark</code></td></tr>
-        <tr><th scope="row">React</th><td><code>@vyrnforge/react/icon</code></td></tr>
-        <tr><th scope="row">Angular</th><td><code>@vyrnforge/angular/icon</code></td></tr>
-        <tr><th scope="row">Vue</th><td><code>@vyrnforge/vue/icon</code></td></tr>
-        <tr><th scope="row">Elements</th><td><code>@vyrnforge/elements/icon</code></td></tr>
-      </tbody>
-    </table>
-  </div>
+  <div class="vf-docs-table-wrap" tabindex="0" role="region" aria-label="Icon package imports"><table><thead><tr><th>Surface</th><th>Public entrypoint</th></tr></thead><tbody>
+    <tr><th scope="row">Native Web</th><td><code>@vyrnforge/web/icon</code> and <code>@vyrnforge/web/styles/icon.css</code></td></tr>
+    <tr><th scope="row">Official artwork</th><td><code>@vyrnforge/icons/bookmark</code></td></tr>
+    <tr><th scope="row">React</th><td><code>@vyrnforge/react/icon</code></td></tr>
+    <tr><th scope="row">Angular</th><td><code>@vyrnforge/angular/icon</code></td></tr>
+    <tr><th scope="row">Vue</th><td><code>@vyrnforge/vue/icon</code></td></tr>
+    <tr><th scope="row">Elements</th><td><code>@vyrnforge/elements/icon</code></td></tr>
+  </tbody></table></div>
 </section>
 
-<section>
-  <h2>Quick start</h2>
-  <p>The executable example imports Bookmark from <code>@vyrnforge/icons/bookmark</code> and passes the same definition to every framework renderer.</p>
-  <div data-vf-example="icon/basic"></div>
-</section>
+<section><h2>Quick start</h2><p>The example uses the Bookmark icon from <code>@vyrnforge/icons/bookmark</code>.</p><div data-vf-example="icon/basic"></div></section>
 
-<section>
-  <h2>Anatomy</h2>
-  <p>Icon has one semantic visual element: an SVG whose paths come from an <code>IconDefinition</code>. Web owns that definition contract and resolver; <code>@vyrnforge/icons</code> owns official authored glyph data. Framework adapters translate definitions into their native rendering model. The path structure is internal artwork, not a composition API.</p>
-</section>
+<section><h2>Anatomy</h2><p>Icon renders SVG artwork from an <code>IconDefinition</code>. Treat the definition as the public artwork input; SVG path details are not a composition surface.</p></section>
 
-<section>
-  <h2>Variants and sizes</h2>
-  <p><code>variant</code> is <code>outlined</code> or <code>filled</code>. <code>shape</code> is <code>rounded</code> or <code>sharp</code>. These are independent axes, with <code>outlined + rounded</code> as the default. Sizes are <code>sm</code>, <code>md</code>, and <code>lg</code>; <code>md</code> is the default.</p>
-</section>
+<section><h2>Variants and sizes</h2><p><code>variant</code> is <code>outlined</code> or <code>filled</code>. <code>shape</code> is <code>rounded</code> or <code>sharp</code>. Sizes are <code>sm</code>, <code>md</code>, and <code>lg</code>; <code>outlined + rounded</code> and <code>md</code> are the defaults.</p></section>
 
-<section>
-  <h2>State</h2>
-  <p>Icon has no interactive state of its own. Selected, disabled, invalid, busy, or pressed state belongs to the component or application concept that owns the icon. A consumer may deliberately choose a different authored icon variant to support that owning state, but Icon does not infer semantic state from fill or shape.</p>
-</section>
+<section><h2>State</h2><p>Icon has no selected, disabled, invalid, busy, or pressed state of its own. Those states belong to the component or application concept that owns the icon.</p></section>
 
-<section>
-  <h2>Behavior</h2>
-  <p>Icon resolves the requested authored variant and shape, renders the resulting SVG paths, inherits <code>currentColor</code>, and applies the canonical size hook. It does not dispatch events, manage focus, or register global icon names.</p>
-</section>
+<section><h2>Behavior</h2><p>Icon renders the requested artwork, inherits <code>currentColor</code>, and applies the selected size. It does not dispatch activation events or manage focus.</p></section>
 
-<section>
-  <h2>Interaction</h2>
-  <p>Icon is not focusable and does not provide pointer or keyboard interaction. Place it inside the appropriate semantic interactive component when an icon participates in an action.</p>
-</section>
+<section><h2>Interaction</h2><p>Icon is not interactive or focusable. Place it inside the appropriate semantic control when it participates in an action.</p></section>
 
-<section>
-  <h2>Accessibility</h2>
-  <p>Icons are decorative by default and hidden from assistive technology. Set <code>label</code> only when the icon itself carries standalone meaning; that produces image semantics with the supplied accessible name. Inside an icon-only Button, the Button owns the accessible name and Icon remains decorative to avoid duplicate announcements.</p>
-</section>
+<section><h2>Accessibility</h2><p>Icons are decorative by default. Set <code>label</code> only when the icon itself carries standalone meaning. Inside an icon-only Button, give the Button the accessible name and keep Icon decorative to avoid duplicate announcements.</p></section>
 
-<section>
-  <h2>Forms</h2>
-  <p>Icon does not participate in forms. When used inside a form control or form-related component, labeling, validation, disabled state, submission, and value semantics remain owned by that control.</p>
-</section>
+<section><h2>Forms</h2><p>Icon does not participate in forms. Form labeling, validation, disabled state, submission, and value semantics belong to the control that contains or accompanies it.</p></section>
 
-<section>
-  <h2>Styling</h2>
-  <p>Icons inherit <code>currentColor</code>. The canonical stylesheet maps <code>sm</code> to <code>1rem</code>, <code>md</code> to <code>1.25rem</code>, and <code>lg</code> to <code>1.5rem</code>. Stable hooks include <code>data-vf-icon</code>, <code>data-vf-icon-name</code>, <code>data-vf-variant</code>, <code>data-vf-shape</code>, and <code>data-vf-size</code>. Private <code>--_vf-*</code> variables are implementation details.</p>
-</section>
+<section><h2>Styling</h2><p>Icons inherit <code>currentColor</code>. The public stylesheet maps <code>sm</code> to <code>1rem</code>, <code>md</code> to <code>1.25rem</code>, and <code>lg</code> to <code>1.5rem</code>. Stable hooks include <code>data-vf-icon</code>, <code>data-vf-icon-name</code>, <code>data-vf-variant</code>, <code>data-vf-shape</code>, and <code>data-vf-size</code>.</p></section>
 
 <section>
   <h2>Framework API</h2>
-  <div class="vf-docs-table-wrap" tabindex="0" role="region" aria-label="Icon framework APIs">
-    <table>
-      <thead><tr><th>Surface</th><th>Icon API</th></tr></thead>
-      <tbody>
-        <tr><th scope="row">React</th><td><code>Icon</code> accepts an <code>IconDefinition</code>, <code>variant</code>, <code>shape</code>, <code>size</code>, optional <code>label</code>, and safe native SVG attributes.</td></tr>
-        <tr><th scope="row">Angular</th><td><code>VfIconComponent</code> is a standalone <code>vf-icon</code> component with the same shared inputs.</td></tr>
-        <tr><th scope="row">Vue</th><td><code>Icon</code> exposes the same shared props while keeping VyrnForge ownership of viewBox and accessibility attributes.</td></tr>
-        <tr><th scope="row">Elements</th><td><code>VfIconElement</code> is registered explicitly with <code>defineIconElement()</code>. Assign the rich icon definition as the <code>icon</code> property; serializable presentation choices use attributes/properties.</td></tr>
-        <tr><th scope="row">Native Web</th><td>Use SVG markup with the documented <code>data-vf-*</code> hooks and canonical Web stylesheet.</td></tr>
-      </tbody>
-    </table>
-  </div>
+  <div class="vf-docs-table-wrap" tabindex="0" role="region" aria-label="Icon framework APIs"><table><thead><tr><th>Surface</th><th>Icon API</th></tr></thead><tbody>
+    <tr><th scope="row">React</th><td><code>Icon</code> accepts an <code>IconDefinition</code>, <code>variant</code>, <code>shape</code>, <code>size</code>, optional <code>label</code>, and supported SVG attributes.</td></tr>
+    <tr><th scope="row">Angular</th><td><code>VfIconComponent</code> exposes the same presentation and accessibility inputs.</td></tr>
+    <tr><th scope="row">Vue</th><td><code>Icon</code> exposes the same public props.</td></tr>
+    <tr><th scope="row">Elements</th><td>Register <code>VfIconElement</code> with <code>defineIconElement()</code>; assign rich artwork through the <code>icon</code> property.</td></tr>
+    <tr><th scope="row">Native Web</th><td>Use SVG markup with the documented hooks and public stylesheet.</td></tr>
+  </tbody></table></div>
 </section>
 
-<section>
-  <h2>CSR and SSR</h2>
-  <p>React, Angular, and Vue render semantic SVG output on the server without requiring browser globals. Elements keeps module definition server-safe and performs custom-element rendering after browser connection. Native Web requires no hydration. Importing the icon catalog itself has no browser side effects.</p>
-</section>
+<section><h2>CSR and SSR</h2><p>React, Angular, and Vue can render SVG output during SSR. Elements becomes active after registration and browser upgrade. Native Web requires no hydration.</p></section>
 
-<section>
-  <h2>Examples</h2>
-  <p>The Quick start example demonstrates Bookmark across Native Web, React, Angular, Vue, and Elements. Additional official glyphs should be added to <code>@vyrnforge/icons</code> through granular subpaths when real component or product needs justify them.</p>
-</section>
+<section><h2>Examples</h2><p>The Quick start example demonstrates Bookmark across Native Web, React, Angular, Vue, and Elements. Prefer granular icon imports such as <code>@vyrnforge/icons/bookmark</code>.</p></section>
 
-<section>
-  <h2>Do / Don't</h2>
-  <p><strong>Do</strong> prefer granular catalog imports such as <code>@vyrnforge/icons/bookmark</code>, keep decorative icons hidden from assistive technology, and let an owning Button or Link provide the accessible name. <strong>Don't</strong> make Icon clickable by itself, invent fallback English labels, or make framework packages depend on the whole official catalog.</p>
-</section>
+<section><h2>Do / Don't</h2><p><strong>Do</strong> keep decorative icons hidden from assistive technology and let an owning control provide the accessible name. <strong>Don't</strong> make Icon clickable by itself or invent fallback labels that were not authored by the application.</p></section>
 
-<section>
-  <h2>Testing guidance</h2>
-  <p>Assert observable icon semantics: decorative icons are hidden, meaningful standalone icons expose their label, variant/shape/size hooks reflect the public API, the SVG inherits the intended color and canonical size, and granular catalog entrypoints remain independently consumable. Avoid coupling tests to private path ordering or private CSS variables.</p>
-</section>
+<section><h2>Testing guidance</h2><p>Test observable semantics: decorative icons are hidden, meaningful standalone icons expose their label, requested presentation options are reflected, and the icon inherits the intended color and size. Depend only on documented APIs and hooks.</p></section>
 
-<section>
-  <h2>Compatibility</h2>
-  <p>The first Icon slice is implemented for Native Web, React, Angular, Vue, and Elements. The official catalog is independently distributed through <code>@vyrnforge/icons</code>. Broader browser and release qualification remains governed by VyrnForge's compatibility evidence rather than being inferred from this component page.</p>
-</section>
+<section><h2>Compatibility</h2><p>Icon is documented for Native Web, React, Angular, Vue, and Elements in this channel. See the Compatibility reference for supported runtime and browser ranges.</p></section>
