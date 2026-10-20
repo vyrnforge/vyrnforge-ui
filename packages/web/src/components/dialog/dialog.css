@@ -1,0 +1,62 @@
+@import "../../styles/tokens.css";
+
+@layer vyrnforge.components {
+  :where([data-vf-dialog-root]) {
+    background: var(--vf-color-surface);
+    border: 1px solid var(--vf-color-border);
+    border-radius: var(--vf-control-radius);
+    color: var(--vf-color-text);
+    inline-size: min(36rem, calc(100vw - 2rem));
+    max-block-size: min(85vh, 48rem);
+    margin: auto;
+    overflow: auto;
+    padding: 1.25rem;
+  }
+
+  :where([data-vf-dialog-root])::backdrop {
+    background: color-mix(in srgb, var(--vf-color-text) 45%, transparent);
+  }
+
+  :where([data-vf-dialog-title]) {
+    font-family: var(--vf-control-font-family);
+    margin-block: 0 0.75rem;
+  }
+
+  :where([data-vf-dialog-description]) {
+    margin-block: 0 1rem;
+  }
+
+  :where([data-vf-dialog-body]) {
+    min-inline-size: 0;
+  }
+
+  :where([data-vf-dialog-close]:focus-visible),
+  :where([data-vf-dialog-root]:focus-visible) {
+    outline: 3px solid var(--vf-color-focus-ring);
+    outline-offset: 2px;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    :where([data-vf-dialog-root]),
+    :where([data-vf-dialog-root])::backdrop {
+      scroll-behavior: auto;
+    }
+  }
+
+  @media (forced-colors: active) {
+    :where([data-vf-dialog-root]) {
+      border-color: CanvasText;
+      forced-color-adjust: auto;
+    }
+
+    :where([data-vf-dialog-root])::backdrop {
+      background: Canvas;
+      opacity: 0.5;
+    }
+
+    :where([data-vf-dialog-close]:focus-visible),
+    :where([data-vf-dialog-root]:focus-visible) {
+      outline-color: Highlight;
+    }
+  }
+}
