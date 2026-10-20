@@ -3,8 +3,8 @@ import { mkdtemp, mkdir, readFile, rm, writeFile } from 'node:fs/promises';
 import os from 'node:os';
 import path from 'node:path';
 
-const allowed = ['core', 'web', 'react', 'angular', 'vue', 'elements'];
-const dependencies = { core: [], web: ['core'], react: ['core', 'web'], angular: ['core', 'web'], vue: ['core', 'web'], elements: ['core', 'web'] };
+const allowed = ['core', 'web', 'icons', 'react', 'angular', 'vue', 'elements'];
+const dependencies = { core: [], web: ['core'], icons: ['web'], react: ['core', 'web'], angular: ['core', 'web'], vue: ['core', 'web'], elements: ['core', 'web'] };
 const requestedArg = process.argv[2] || 'all';
 const requested = requestedArg === 'all' ? allowed : requestedArg.split(',').filter(Boolean);
 for (const name of requested) if (!allowed.includes(name)) throw new Error(`Unknown consumer scope: ${name}`);
@@ -40,6 +40,7 @@ try {
       else if (target.endsWith('.js')) checks.push(`await import(${JSON.stringify(specifier)});`);
     }
   }
+  if (requested.includes('icons')) checks.push(`{ const { bookmarkIcon } = await import('@vyrnforge/icons/bookmark'); if (bookmarkIcon.name !== 'bookmark') throw new Error('Granular Bookmark export did not resolve'); }`);
   checks.push(`process.stdout.write('consumer public exports: ok\\n');`);
   await writeFile(path.join(consumerDir, 'verify.mjs'), `${checks.join('\n')}\n`);
   execFileSync(process.execPath, ['verify.mjs'], { cwd: consumerDir, stdio: 'inherit' });
