@@ -6,7 +6,7 @@ export const AccountOverview = defineComponent({
     return () => h(Container, { as: 'main', size: 'lg', gutter: 'md' }, () =>
       h(Stack, { as: 'section', gap: 'lg', 'aria-labelledby': 'account-heading' }, () => [
         h(Stack, { as: 'header', gap: 'xs' }, () => [h('h2', { id: 'account-heading' }, 'Account overview'), h('p', 'Review workspace details and recent activity.')]),
-        h(Grid, { gap: 'md', style: { '--vf-grid-min-item-size': '12rem' } }, () => [h('article', 'Profile settings'), h('article', 'Team access'), h('article', 'Recent activity')]),
+        h(Grid, { gap: 'md' }, () => [h('article', 'Profile settings'), h('article', 'Team access'), h('article', 'Recent activity')]),
         h(Cluster, { gap: 'sm', align: 'center' }, () => [h('button', { type: 'button' }, 'Edit profile'), h('button', { type: 'button' }, 'Manage team')]),
       ])
     );

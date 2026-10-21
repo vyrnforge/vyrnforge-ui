@@ -9,7 +9,7 @@ document.querySelector('#root')!.innerHTML = `
         <h2>Account overview</h2>
         <p>Review workspace details and recent activity.</p>
       </header>
-      <vf-grid gap="md" style="--vf-grid-min-item-size: 12rem">
+      <vf-grid gap="md">
         <article>Profile settings</article>
         <article>Team access</article>
         <article>Recent activity</article>

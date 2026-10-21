@@ -12,7 +12,7 @@ import { VfClusterDirective, VfContainerDirective, VfGridDirective, VfStackDirec
           <h2 id="account-heading">Account overview</h2>
           <p>Review workspace details and recent activity.</p>
         </header>
-        <div vfGrid vfGridGap="md" style="--vf-grid-min-item-size: 12rem">
+        <div vfGrid vfGridGap="md">
           <article>Profile settings</article>
           <article>Team access</article>
           <article>Recent activity</article>
