@@ -1,4 +1,4 @@
-import { Container, Stack } from '@vyrnforge/react/layout';
+import { Cluster, Container, Stack } from '@vyrnforge/react/layout';
 
 export function AccountOverview() {
   return (
@@ -8,10 +8,10 @@ export function AccountOverview() {
           <h2 id="account-heading">Account overview</h2>
           <p>Review workspace details and recent activity.</p>
         </Stack>
-        <Stack direction="inline" gap="sm" align="center">
+        <Cluster gap="sm" align="center">
           <button type="button">Edit profile</button>
           <button type="button">Manage team</button>
-        </Stack>
+        </Cluster>
       </Stack>
     </Container>
   );

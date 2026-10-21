@@ -9,10 +9,10 @@ document.querySelector('#root')!.innerHTML = `
         <h2>Account overview</h2>
         <p>Review workspace details and recent activity.</p>
       </header>
-      <vf-stack direction="inline" gap="sm" align="center">
+      <vf-cluster gap="sm" align="center">
         <button type="button">Edit profile</button>
         <button type="button">Manage team</button>
-      </vf-stack>
+      </vf-cluster>
     </vf-stack>
   </vf-container>
 `;
