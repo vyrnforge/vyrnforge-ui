@@ -1,20 +1,21 @@
 <div data-vf-layout-guide>
-  <p class="vf-docs-lede">Build page structure with two simple jobs: use <strong>Container</strong> to control readable content width and gutters, then use <strong>Stack</strong> to create consistent space between related items.</p>
+  <p class="vf-docs-lede">Build page structure with focused primitives: use <strong>Container</strong> for content bounds, <strong>Stack</strong> for block flow, and <strong>Cluster</strong> for wrapping inline groups.</p>
 
   <div class="vf-docs-callout"><strong>Start with the browser's layout model.</strong><span>VyrnForge layout primitives add shared spacing and predictable defaults without replacing CSS Grid, Flexbox, container queries, or semantic HTML.</span></div>
 
   <section>
     <h2>Overview</h2>
-    <p>The first layout foundation is intentionally small. <code>Container</code> handles centered content bounds. <code>Stack</code> handles one-dimensional flow. Together they cover common page, section, form, card, and action-group layouts without creating a utility framework.</p>
+    <p>Each layout primitive owns one job. <code>Container</code> constrains and centers page or section content. <code>Stack</code> creates block-axis rhythm between related siblings. <code>Cluster</code> groups inline content such as actions, tags, and controls and wraps it when space runs out.</p>
     <div class="vf-docs-split">
       <article class="vf-docs-card"><h3>Container</h3><p>Use it around page or section content that needs a maximum inline size and consistent logical gutters.</p><pre><code>&lt;main data-vf-container data-vf-container-size="lg"&gt;…&lt;/main&gt;</code></pre></article>
-      <article class="vf-docs-card"><h3>Stack</h3><p>Use it when siblings should flow in one direction with a shared gap instead of individual margins.</p><pre><code>&lt;section data-vf-stack data-vf-stack-gap="lg"&gt;…&lt;/section&gt;</code></pre></article>
+      <article class="vf-docs-card"><h3>Stack</h3><p>Use it when related siblings should flow vertically with a shared gap instead of individual margins.</p><pre><code>&lt;section data-vf-stack data-vf-stack-gap="lg"&gt;…&lt;/section&gt;</code></pre></article>
+      <article class="vf-docs-card"><h3>Cluster</h3><p>Use it when related inline items should stay together and wrap naturally as available space changes.</p><pre><code>&lt;div data-vf-cluster data-vf-cluster-gap="sm"&gt;…&lt;/div&gt;</code></pre></article>
     </div>
   </section>
 
   <section>
     <h2>Quick start</h2>
-    <p>A typical page composes a constrained Container with block-direction Stacks for sections and an inline Stack for actions. The example keeps the same layout vocabulary across every supported surface.</p>
+    <p>A typical page composes a constrained Container with Stacks for section rhythm and a Cluster for actions. The example keeps the same layout vocabulary across every supported surface.</p>
     <div data-vf-example="layout/basic"></div>
   </section>
 
@@ -35,8 +36,14 @@
 
   <section>
     <h2>Stack</h2>
-    <p><code>direction="block"</code> is the default for forms, sections, panels, and vertical content rhythm. Use <code>direction="inline"</code> for action rows and other one-line groups. Because these are logical directions, inline flow follows the document direction.</p>
-    <p><code>align</code> controls the cross axis; <code>justify</code> controls the main axis. Stack does not add wrapping or responsive breakpoint props in this first contract.</p>
+    <p>Stack is deliberately block-flow only. Use it for forms, sections, panels, and vertical content rhythm. <code>align</code> controls the cross axis and <code>justify</code> controls the block-flow main axis.</p>
+    <p>Stack does not expose a direction switch, wrapping, responsive breakpoint props, or arbitrary style props. Use Cluster for wrapping inline groups and ordinary CSS when the requirement does not match a shared primitive.</p>
+  </section>
+
+  <section>
+    <h2>Cluster</h2>
+    <p>Cluster lays out children on the inline axis with wrapping enabled. It is intended for action groups, tags, filters, compact tool groups, and similar content where the items should wrap rather than overflow or require viewport breakpoint props.</p>
+    <p>Inline order follows the document direction, so the same contract works in left-to-right and right-to-left contexts.</p>
   </section>
 
   <section>
@@ -51,13 +58,13 @@
     <div class="vf-docs-split">
       <article class="vf-docs-card"><h3>Styles</h3><pre><code>import '@vyrnforge/web/styles/layout.css';</code></pre><p>Native Web can use the documented <code>data-vf-*</code> hooks directly.</p></article>
       <article class="vf-docs-card"><h3>Framework imports</h3><pre><code>// React
-import { Container, Stack } from '@vyrnforge/react/layout';
+import { Cluster, Container, Stack } from '@vyrnforge/react/layout';
 
 // Angular
-import { VfContainerDirective, VfStackDirective } from '@vyrnforge/angular/layout';
+import { VfClusterDirective, VfContainerDirective, VfStackDirective } from '@vyrnforge/angular/layout';
 
 // Vue
-import { Container, Stack } from '@vyrnforge/vue/layout';
+import { Cluster, Container, Stack } from '@vyrnforge/vue/layout';
 
 // Elements
 import { defineLayoutElements } from '@vyrnforge/elements/layout';</code></pre></article>
@@ -72,27 +79,23 @@ import { defineLayoutElements } from '@vyrnforge/elements/layout';</code></pre><
 
   <section>
     <h2>Styling</h2>
-    <p>The canonical stylesheet lives in <code>@vyrnforge/web</code>, uses low-specificity selectors, and consumes the public <code>--vf-space-*</code> tokens. Application CSS can override the public spacing tokens in a local scope to adapt rhythm without a JavaScript theme or style-prop runtime.</p>
-    <pre><code>.compact-panel {
-  --vf-space-md: 0.75rem;
-  --vf-space-lg: 1rem;
-}</code></pre>
-    <p>Use ordinary CSS for layout needs outside these primitives. This release intentionally does not provide arbitrary margin/padding/display props, a 12-column grid abstraction, or viewport breakpoint props.</p>
+    <p>The canonical stylesheet lives in <code>@vyrnforge/web</code>, uses low-specificity selectors, and consumes the public <code>--vf-space-*</code> tokens. Application CSS can override public spacing tokens in a local scope to adapt rhythm without a JavaScript theme or style-prop runtime.</p>
+    <p>Use ordinary CSS for layout needs outside these primitives. VyrnForge does not provide arbitrary margin/padding/display props, a fixed 12-column abstraction, or viewport breakpoint prop objects.</p>
   </section>
 
   <section>
     <h2>Framework API</h2>
     <div class="vf-docs-split">
-      <article class="vf-docs-card"><h3>React / Vue</h3><p><code>Stack</code>: <code>as</code>, <code>direction</code>, <code>gap</code>, <code>align</code>, <code>justify</code>. <code>Container</code>: <code>as</code>, <code>size</code>, <code>gutter</code>.</p></article>
-      <article class="vf-docs-card"><h3>Angular</h3><p><code>vfStack</code> with <code>vfStackDirection</code>, <code>vfStackGap</code>, <code>vfStackAlign</code>, <code>vfStackJustify</code>; <code>vfContainer</code> with <code>vfContainerSize</code> and <code>vfContainerGutter</code>.</p></article>
-      <article class="vf-docs-card"><h3>Native Web</h3><p>Use <code>data-vf-stack</code> / <code>data-vf-container</code> and the documented configuration attributes on your semantic element.</p></article>
-      <article class="vf-docs-card"><h3>Elements</h3><p>Call <code>defineLayoutElements()</code> to register <code>&lt;vf-stack&gt;</code> and <code>&lt;vf-container&gt;</code>. Their <code>direction</code>, <code>gap</code>, <code>align</code>, <code>justify</code>, <code>size</code>, and <code>gutter</code> attributes map to the same shared contract.</p></article>
+      <article class="vf-docs-card"><h3>React / Vue</h3><p><code>Stack</code>: <code>as</code>, <code>gap</code>, <code>align</code>, <code>justify</code>. <code>Cluster</code>: <code>as</code>, <code>gap</code>, <code>align</code>, <code>justify</code>. <code>Container</code>: <code>as</code>, <code>size</code>, <code>gutter</code>.</p></article>
+      <article class="vf-docs-card"><h3>Angular</h3><p><code>vfStack</code> owns block flow; <code>vfCluster</code> owns wrapping inline flow; <code>vfContainer</code> owns content bounds. Each exposes the corresponding typed spacing/alignment options.</p></article>
+      <article class="vf-docs-card"><h3>Native Web</h3><p>Use <code>data-vf-stack</code>, <code>data-vf-cluster</code>, or <code>data-vf-container</code> and the documented configuration attributes on your semantic element.</p></article>
+      <article class="vf-docs-card"><h3>Elements</h3><p>Call <code>defineLayoutElements()</code> to register <code>&lt;vf-stack&gt;</code>, <code>&lt;vf-cluster&gt;</code>, and <code>&lt;vf-container&gt;</code>. Custom layout elements remain semantically neutral.</p></article>
     </div>
   </section>
 
   <section>
     <h2>Compatibility</h2>
-    <p>The exported layout types, documented data attributes, Elements attributes, and public <code>--vf-space-*</code> tokens are compatibility commitments. Undocumented implementation details are not part of the public contract.</p>
-    <p><strong>Not included yet:</strong> Grid, Inline/Cluster, and Box. They remain separate design decisions so this first release does not accidentally turn VyrnForge into a general CSS-prop API.</p>
+    <p>The exported layout types, documented data attributes, Elements attributes, and public <code>--vf-space-*</code> tokens are compatibility commitments. The pre-release rebuild intentionally removes the earlier Stack direction option rather than preserving overlapping responsibilities.</p>
+    <p><strong>Not included yet:</strong> Grid and Box. Grid still needs an independently validated intrinsic sizing contract. Box will not be added unless it owns a meaningful cross-framework responsibility beyond exposing generic CSS properties.</p>
   </section>
 </div>
