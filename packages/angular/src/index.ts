@@ -10,8 +10,8 @@ export {
 export type { DialogDismissReason, DialogDismissRequest } from './components/dialog/index.js';
 export { VfIconComponent } from './components/icon/index.js';
 export type { IconDefinition, IconShape, IconSize, IconVariant } from './components/icon/index.js';
-export { VfContainerDirective, VfStackDirective } from './components/layout/index.js';
-export type { ContainerSize, LayoutSpace, StackAlign, StackDirection, StackJustify } from './components/layout/index.js';
+export { VfClusterDirective, VfContainerDirective, VfStackDirective } from './components/layout/index.js';
+export type { ClusterAlign, ClusterJustify, ContainerSize, LayoutSpace, StackAlign, StackJustify } from './components/layout/index.js';
 export {
   VfTabsListDirective,
   VfTabsPanelDirective,

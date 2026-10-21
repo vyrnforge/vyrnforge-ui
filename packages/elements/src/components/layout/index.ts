@@ -1,17 +1,19 @@
 import {
+  clusterAlignments,
+  clusterJustifications,
   containerSizes,
   layoutSpaces,
   stackAlignments,
-  stackDirections,
   stackJustifications,
+  type ClusterAlign,
+  type ClusterJustify,
   type ContainerSize,
   type LayoutSpace,
   type StackAlign,
-  type StackDirection,
   type StackJustify,
 } from '@vyrnforge/web/layout';
 
-export type { ContainerSize, LayoutSpace, StackAlign, StackDirection, StackJustify } from '@vyrnforge/web/layout';
+export type { ClusterAlign, ClusterJustify, ContainerSize, LayoutSpace, StackAlign, StackJustify } from '@vyrnforge/web/layout';
 
 const HTMLElementBase = (globalThis.HTMLElement ?? class {}) as typeof HTMLElement;
 
@@ -24,13 +26,10 @@ function reflectValue(element: HTMLElement, name: string, value: string): void {
 }
 
 export class VfStackElement extends HTMLElementBase {
-  static readonly observedAttributes = ['direction', 'gap', 'align', 'justify'];
+  static readonly observedAttributes = ['gap', 'align', 'justify'];
 
   connectedCallback(): void { this.#syncContractAttributes(); }
   attributeChangedCallback(): void { if (this.isConnected) this.#syncContractAttributes(); }
-
-  get direction(): StackDirection { return normalizedValue(stackDirections, this.getAttribute('direction'), 'block'); }
-  set direction(value: StackDirection) { this.setAttribute('direction', value); }
 
   get gap(): LayoutSpace { return normalizedValue(layoutSpaces, this.getAttribute('gap'), 'md'); }
   set gap(value: LayoutSpace) { this.setAttribute('gap', value); }
@@ -43,10 +42,32 @@ export class VfStackElement extends HTMLElementBase {
 
   #syncContractAttributes(): void {
     this.setAttribute('data-vf-stack', '');
-    reflectValue(this, 'data-vf-stack-direction', this.direction);
     reflectValue(this, 'data-vf-stack-gap', this.gap);
     reflectValue(this, 'data-vf-stack-align', this.align);
     reflectValue(this, 'data-vf-stack-justify', this.justify);
+  }
+}
+
+export class VfClusterElement extends HTMLElementBase {
+  static readonly observedAttributes = ['gap', 'align', 'justify'];
+
+  connectedCallback(): void { this.#syncContractAttributes(); }
+  attributeChangedCallback(): void { if (this.isConnected) this.#syncContractAttributes(); }
+
+  get gap(): LayoutSpace { return normalizedValue(layoutSpaces, this.getAttribute('gap'), 'md'); }
+  set gap(value: LayoutSpace) { this.setAttribute('gap', value); }
+
+  get align(): ClusterAlign { return normalizedValue(clusterAlignments, this.getAttribute('align'), 'center'); }
+  set align(value: ClusterAlign) { this.setAttribute('align', value); }
+
+  get justify(): ClusterJustify { return normalizedValue(clusterJustifications, this.getAttribute('justify'), 'start'); }
+  set justify(value: ClusterJustify) { this.setAttribute('justify', value); }
+
+  #syncContractAttributes(): void {
+    this.setAttribute('data-vf-cluster', '');
+    reflectValue(this, 'data-vf-cluster-gap', this.gap);
+    reflectValue(this, 'data-vf-cluster-align', this.align);
+    reflectValue(this, 'data-vf-cluster-justify', this.justify);
   }
 }
 
@@ -74,6 +95,11 @@ export function defineStackElement(registry: CustomElementRegistry | undefined =
   if (!registry.get('vf-stack')) registry.define('vf-stack', VfStackElement);
 }
 
+export function defineClusterElement(registry: CustomElementRegistry | undefined = globalThis.customElements): void {
+  if (!registry) throw new Error('VyrnForge Elements Cluster registration requires a CustomElementRegistry.');
+  if (!registry.get('vf-cluster')) registry.define('vf-cluster', VfClusterElement);
+}
+
 export function defineContainerElement(registry: CustomElementRegistry | undefined = globalThis.customElements): void {
   if (!registry) throw new Error('VyrnForge Elements Container registration requires a CustomElementRegistry.');
   if (!registry.get('vf-container')) registry.define('vf-container', VfContainerElement);
@@ -81,5 +107,6 @@ export function defineContainerElement(registry: CustomElementRegistry | undefin
 
 export function defineLayoutElements(registry: CustomElementRegistry | undefined = globalThis.customElements): void {
   defineStackElement(registry);
+  defineClusterElement(registry);
   defineContainerElement(registry);
 }

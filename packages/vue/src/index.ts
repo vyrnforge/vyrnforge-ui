@@ -4,14 +4,16 @@ export { DialogBody, DialogClose, DialogDescription, DialogRoot, DialogTitle } f
 export type { DialogDismissReason, DialogDismissRequest, DialogRootProps } from './components/dialog/index.js';
 export { Icon } from './components/icon/index.js';
 export type { IconDefinition, IconShape, IconSize, IconVariant } from './components/icon/index.js';
-export { Container, Stack } from './components/layout/index.js';
+export { Cluster, Container, Stack } from './components/layout/index.js';
 export type {
+  ClusterAlign,
+  ClusterJustify,
+  ClusterProps,
   ContainerProps,
   ContainerSize,
   LayoutElement,
   LayoutSpace,
   StackAlign,
-  StackDirection,
   StackJustify,
   StackProps,
 } from './components/layout/index.js';
