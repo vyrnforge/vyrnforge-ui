@@ -1,0 +1,62 @@
+@import "../../styles/tokens.css";
+
+@layer vyrnforge.components {
+  :where(input[data-vf-input]) {
+    background: var(--vf-color-surface);
+    border: 1px solid var(--vf-color-border);
+    border-radius: var(--vf-control-radius);
+    box-sizing: border-box;
+    color: var(--vf-color-text);
+    font-family: var(--vf-control-font-family);
+    font-size: var(--vf-font-size-md);
+    font-weight: var(--vf-font-weight-regular);
+    line-height: var(--vf-line-height-normal);
+    min-block-size: 2.5rem;
+    min-inline-size: 0;
+    padding-block: 0.4375rem;
+    padding-inline: 0.75rem;
+    transition: border-color var(--vf-control-motion-duration) ease, background-color var(--vf-control-motion-duration) ease;
+  }
+
+  :where(input[data-vf-input]::placeholder) {
+    color: var(--vf-color-text-muted);
+    opacity: 1;
+  }
+
+  :where(input[data-vf-input]:focus-visible) {
+    outline: 3px solid var(--vf-color-focus-ring);
+    outline-offset: 2px;
+  }
+
+  :where(input[data-vf-input]:disabled) {
+    background: var(--vf-color-disabled-background);
+    border-color: var(--vf-color-disabled-border);
+    color: var(--vf-color-disabled-foreground);
+    cursor: not-allowed;
+  }
+
+  :where(input[data-vf-input]:read-only:not(:disabled)) {
+    background: var(--vf-color-surface-hover);
+  }
+
+  :where(input[data-vf-input]:invalid:not(:placeholder-shown), input[data-vf-input][aria-invalid="true"]) {
+    border-color: var(--vf-color-danger-border);
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    :where(input[data-vf-input]) { transition: none; }
+  }
+
+  @media (forced-colors: active) {
+    :where(input[data-vf-input]) {
+      background: Field;
+      border-color: FieldText;
+      color: FieldText;
+      forced-color-adjust: auto;
+    }
+
+    :where(input[data-vf-input]:focus-visible) { outline-color: Highlight; }
+    :where(input[data-vf-input]:disabled) { border-color: GrayText; color: GrayText; }
+    :where(input[data-vf-input]:invalid:not(:placeholder-shown), input[data-vf-input][aria-invalid="true"]) { border-color: Highlight; }
+  }
+}

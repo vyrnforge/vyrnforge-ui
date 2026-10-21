@@ -1,0 +1,8 @@
+<p class="vf-docs-lede">Input styles a native text-entry control while preserving browser and form semantics.</p>
+<section><h2>Overview</h2><p>Use Input for ordinary text-like form values. The browser remains responsible for editing, focus, value, submission, reset, and constraint validation.</p></section>
+<section><h2>Installation and imports</h2><p>Load <code>@vyrnforge/web/styles/input.css</code>. React, Angular, and Vue use their <code>/input</code> package entrypoints; Native Web and Custom Elements applications use <code>data-vf-input</code> on a native input.</p></section>
+<section><h2>Quick start</h2><div data-vf-example="input/basic"></div></section>
+<section><h2>Accessibility</h2><p>Always provide an accessible name. Prefer a native <code>&lt;label&gt;</code> when practical. Keep disabled, readonly, required, and invalid semantics distinct.</p></section>
+<section><h2>Styling</h2><p>The stable styling hook is <code>data-vf-input</code>. Shared semantic tokens drive surface, text, border, focus, disabled, readonly, and invalid presentation.</p></section>
+<section><h2>Framework API</h2><p>React and Vue expose <code>Input</code>; Angular exposes <code>vfInput</code>. The supported initial types are text, email, password, search, tel, and url. No <code>&lt;vf-input&gt;</code> custom element is introduced.</p></section>
+<section><h2>Compatibility</h2><p>The rebuild contract preserves native form behavior and uses the same canonical Web styling across implemented framework ports.</p></section>

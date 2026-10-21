@@ -8,7 +8,9 @@
     --vf-color-surface: #ffffff;
     --vf-color-surface-hover: #f2f5fb;
     --vf-color-text: #172033;
+    --vf-color-text-muted: #5d687a;
     --vf-color-border: #8b96aa;
+    --vf-color-danger-border: #b42318;
     --vf-color-focus-ring: #0b63ce;
     --vf-color-disabled-background: #e6e9ef;
     --vf-color-disabled-foreground: #6c7484;
@@ -73,7 +75,9 @@
     --vf-color-surface: #171b24;
     --vf-color-surface-hover: #232a36;
     --vf-color-text: #f2f5fb;
+    --vf-color-text-muted: #b2bac8;
     --vf-color-border: #7b8597;
+    --vf-color-danger-border: #ff8a80;
     --vf-color-focus-ring: #9dc1ff;
     --vf-color-disabled-background: #2c323d;
     --vf-color-disabled-foreground: #9aa3b2;
@@ -93,7 +97,9 @@
       --vf-color-surface: #171b24;
       --vf-color-surface-hover: #232a36;
       --vf-color-text: #f2f5fb;
+      --vf-color-text-muted: #b2bac8;
       --vf-color-border: #7b8597;
+      --vf-color-danger-border: #ff8a80;
       --vf-color-focus-ring: #9dc1ff;
       --vf-color-disabled-background: #2c323d;
       --vf-color-disabled-foreground: #9aa3b2;
