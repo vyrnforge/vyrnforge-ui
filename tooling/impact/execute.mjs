@@ -24,7 +24,15 @@ export function executeValidationPlan(validationPlan, { dryRun = false, output }
   for (const item of execution) {
     const [command, ...args] = item.command;
     process.stdout.write(`\n[validation:${item.scope}] ${command} ${args.join(' ')}\n`);
-    execFileSync(command, args, { stdio: 'inherit', env });
+    try {
+      execFileSync(command, args, { stdio: 'inherit', env });
+    } catch (error) {
+      if (output) {
+        report.failedScope = item.scope;
+        writeFileSync(output, `${JSON.stringify(report, null, 2)}\n`);
+      }
+      throw error;
+    }
   }
   return execution;
 }
