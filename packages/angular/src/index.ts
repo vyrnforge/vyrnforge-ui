@@ -6,6 +6,7 @@ export { VfIconComponent } from './components/icon/index.js';
 export type { IconDefinition, IconShape, IconSize, IconVariant } from './components/icon/index.js';
 export { VfClusterDirective, VfContainerDirective, VfGridDirective, VfStackDirective } from './components/layout/index.js';
 export type { ClusterAlign, ClusterJustify, ContainerSize, LayoutSpace, StackAlign, StackJustify } from './components/layout/index.js';
+export { VfSurfaceDirective } from './components/surface/index.js';
 export { VfTabsListDirective, VfTabsPanelDirective, VfTabsRootDirective, VfTabsTabDirective } from './components/tabs/index.js';
 export type { TabsActivation, TabsOrientation } from './components/tabs/index.js';
 export { VfTextDirective } from './components/text/index.js';

@@ -1,0 +1,18 @@
+<p class="vf-docs-lede">Surface is a non-interactive visual boundary for themed content containment.</p>
+<section><h2>Overview</h2><p>Use Surface when content needs the shared VyrnForge background, foreground, border, and radius treatment. Layout remains the responsibility of layout primitives or ordinary CSS.</p></section>
+<section><h2>Installation and imports</h2><p>Native Web uses <code>@vyrnforge/web/styles/surface.css</code>. Framework entrypoints are <code>@vyrnforge/react/surface</code>, <code>@vyrnforge/angular/surface</code>, <code>@vyrnforge/vue/surface</code>, and <code>@vyrnforge/elements/surface</code>.</p></section>
+<section><h2>Quick start</h2><div data-vf-example="surface/basic"></div></section>
+<section><h2>Anatomy</h2><p>Surface has one visual root and preserves authored content.</p></section>
+<section><h2>Variants and sizes</h2><p>There are no variants or size props in the initial contract.</p></section>
+<section><h2>State</h2><p>Surface has no component state.</p></section>
+<section><h2>Behavior</h2><p>Surface applies visual containment only.</p></section>
+<section><h2>Interaction</h2><p>Surface adds no keyboard, focus, or pointer behavior.</p></section>
+<section><h2>Accessibility</h2><p>Surface adds no role or ARIA semantics. Choose the semantic element required by the content.</p></section>
+<section><h2>Forms</h2><p>Surface does not participate in form state or submission.</p></section>
+<section><h2>Styling</h2><p>The stable Native Web hook is <code>data-vf-surface</code>. Paint uses semantic color tokens and <code>--vf-radius-surface</code>. Surface intentionally adds no padding.</p></section>
+<section><h2>Framework API</h2><p>React and Vue expose <code>Surface</code> with <code>as</code>; Angular exposes <code>vfSurface</code>; Elements exposes <code>vf-surface</code>; Native Web uses the data hook.</p></section>
+<section><h2>CSR and SSR</h2><p>Native Web needs no hydration. React, Angular, and Vue preserve the shared hook during SSR. Elements registration is explicit and server-safe to import.</p></section>
+<section><h2>Examples</h2><p>The basic example shows the same visual contract on all five surfaces.</p></section>
+<section><h2>Do / Don't</h2><p><strong>Do</strong> compose Surface with layout primitives when spacing is needed. <strong>Don't</strong> treat Surface as a generic style-prop Box.</p></section>
+<section><h2>Testing guidance</h2><p>Test the stable hook, semantic root, token-driven paint, and absence of interaction or implicit spacing.</p></section>
+<section><h2>Compatibility</h2><p>Surface is defined for Native Web, React, Angular, Vue, and Elements in the rebuild channel.</p></section>
