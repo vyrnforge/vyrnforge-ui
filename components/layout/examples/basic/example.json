@@ -8,6 +8,6 @@
     "react": { "label": "React", "language": "tsx", "source": "react.tsx" },
     "angular": { "label": "Angular", "language": "ts", "source": "angular.ts" },
     "vue": { "label": "Vue", "language": "ts", "source": "vue.ts" },
-    "elements": { "label": "Elements", "language": "html", "source": "elements.html" }
+    "elements": { "label": "Elements", "language": "ts", "source": "elements.ts" }
   }
 }
