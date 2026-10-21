@@ -24,23 +24,7 @@ export function executeValidationPlan(validationPlan, { dryRun = false, output }
   for (const item of execution) {
     const [command, ...args] = item.command;
     process.stdout.write(`\n[validation:${item.scope}] ${command} ${args.join(' ')}\n`);
-    try {
-      execFileSync(command, args, { stdio: 'inherit', env });
-    } catch (error) {
-      if (output) {
-        report.failedScope = item.scope;
-        try {
-          execFileSync(command, args, { env, encoding: 'utf8', maxBuffer: 10 * 1024 * 1024 });
-        } catch (diagnosticError) {
-          report.failedOutput = {
-            stdout: String(diagnosticError.stdout ?? '').slice(-40000),
-            stderr: String(diagnosticError.stderr ?? '').slice(-40000),
-          };
-        }
-        writeFileSync(output, `${JSON.stringify(report, null, 2)}\n`);
-      }
-      throw error;
-    }
+    execFileSync(command, args, { stdio: 'inherit', env });
   }
   return execution;
 }
