@@ -66,11 +66,10 @@
 
   :where([data-vf-grid], vf-grid) {
     --_vf-grid-gap: var(--vf-space-md);
-    --vf-grid-min-item-size: 16rem;
 
     display: grid;
     gap: var(--_vf-grid-gap);
-    grid-template-columns: repeat(auto-fit, minmax(min(100%, var(--vf-grid-min-item-size)), 1fr));
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, var(--vf-grid-min-item-size, 16rem)), 1fr));
     min-inline-size: 0;
   }
 
