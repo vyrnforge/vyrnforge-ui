@@ -12,6 +12,17 @@ export type {
 } from './components/dialog/index.js';
 export { Icon } from './components/icon/index.js';
 export type { IconDefinition, IconProps, IconShape, IconSize, IconVariant } from './components/icon/index.js';
+export { Container, Stack } from './components/layout/index.js';
+export type {
+  ContainerProps,
+  ContainerSize,
+  LayoutElement,
+  LayoutSpace,
+  StackAlign,
+  StackDirection,
+  StackJustify,
+  StackProps,
+} from './components/layout/index.js';
 export { TabsList, TabsPanel, TabsRoot, TabsTab } from './components/tabs/index.js';
 export type {
   TabsActivation,
