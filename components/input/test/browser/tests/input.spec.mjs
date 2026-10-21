@@ -40,8 +40,8 @@ test('Input preserves native form semantics and shared styling across ports', as
 
   const lightBackground = await editable.evaluate((input) => getComputedStyle(input).backgroundColor);
   await page.locator('html').evaluate((html) => html.setAttribute('data-vf-theme', 'dark'));
-  const darkBackground = await editable.evaluate((input) => getComputedStyle(input).backgroundColor);
-  expect(darkBackground).not.toBe(lightBackground);
+  await expect.poll(() => editable.evaluate((input) => getComputedStyle(input).backgroundColor)).not.toBe(lightBackground);
+  expect(await editable.evaluate((input) => getComputedStyle(input).backgroundColor)).toBe('rgb(23, 27, 36)');
 
   await page.addScriptTag({ content: axeCore.source });
   const results = await page.evaluate(async () => globalThis.axe.run(document));
