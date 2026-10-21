@@ -7,15 +7,18 @@ export {
   type IconVariant,
 } from './components/icon/index.js';
 export {
+  VfClusterElement,
   VfContainerElement,
   VfStackElement,
+  defineClusterElement,
   defineContainerElement,
   defineLayoutElements,
   defineStackElement,
+  type ClusterAlign,
+  type ClusterJustify,
   type ContainerSize,
   type LayoutSpace,
   type StackAlign,
-  type StackDirection,
   type StackJustify,
 } from './components/layout/index.js';
 export {

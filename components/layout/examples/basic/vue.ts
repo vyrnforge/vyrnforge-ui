@@ -1,5 +1,5 @@
 import { defineComponent, h } from 'vue';
-import { Container, Stack } from '@vyrnforge/vue/layout';
+import { Cluster, Container, Stack } from '@vyrnforge/vue/layout';
 
 export const AccountOverview = defineComponent({
   setup() {
@@ -9,7 +9,7 @@ export const AccountOverview = defineComponent({
           h('h2', { id: 'account-heading' }, 'Account overview'),
           h('p', 'Review workspace details and recent activity.'),
         ]),
-        h(Stack, { direction: 'inline', gap: 'sm', align: 'center' }, () => [
+        h(Cluster, { gap: 'sm', align: 'center' }, () => [
           h('button', { type: 'button' }, 'Edit profile'),
           h('button', { type: 'button' }, 'Manage team'),
         ]),
