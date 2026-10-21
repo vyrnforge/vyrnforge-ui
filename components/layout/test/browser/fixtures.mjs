@@ -28,7 +28,29 @@ if (port === 'vue') {
   const { createSSRApp, h } = await import('vue');
   const { renderToString } = await import('@vue/server-renderer');
   const { Cluster, Container, Stack } = await import('@vyrnforge/vue/layout');
-  const markup = await renderToString(createSSRApp({ render: () => h(Container, { as: 'main', id: 'container', size: 'sm', gutter: 'md' }, () => h(Stack, { as: 'section', id: 'stack', gap: 'lg', align: 'start', 'aria-labelledby': 'heading' }, () => [h('h1', { id: 'heading' }, 'Layout fixture'), h(Cluster, { id: 'actions', gap: 'sm', align: 'center', justify: 'space-between', dir: 'rtl' }, () => [h('button', { id: 'first', type: 'button' }, 'First'), h('button', { id: 'second', type: 'button' }, 'Second'), h('button', { id: 'third', type: 'button' }, 'Third')])])) ) }));
+  const app = createSSRApp({
+    render: () => h(
+      Container,
+      { as: 'main', id: 'container', size: 'sm', gutter: 'md' },
+      () => h(
+        Stack,
+        { as: 'section', id: 'stack', gap: 'lg', align: 'start', 'aria-labelledby': 'heading' },
+        () => [
+          h('h1', { id: 'heading' }, 'Layout fixture'),
+          h(
+            Cluster,
+            { id: 'actions', gap: 'sm', align: 'center', justify: 'space-between', dir: 'rtl' },
+            () => [
+              h('button', { id: 'first', type: 'button' }, 'First'),
+              h('button', { id: 'second', type: 'button' }, 'Second'),
+              h('button', { id: 'third', type: 'button' }, 'Third'),
+            ]
+          ),
+        ]
+      )
+    ),
+  });
+  const markup = await renderToString(app);
   await writeFile(path.join(outDir, 'vue.html'), page(markup));
 }
 
