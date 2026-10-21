@@ -6,6 +6,8 @@ export { Icon } from './components/icon/index.js';
 export type { IconDefinition, IconProps, IconShape, IconSize, IconVariant } from './components/icon/index.js';
 export { Cluster, Container, Grid, Stack } from './components/layout/index.js';
 export type { ClusterAlign, ClusterJustify, ClusterProps, ContainerProps, ContainerSize, GridProps, LayoutElement, LayoutSpace, StackAlign, StackJustify, StackProps } from './components/layout/index.js';
+export { Surface } from './components/surface/index.js';
+export type { SurfaceElement, SurfaceProps } from './components/surface/index.js';
 export { TabsList, TabsPanel, TabsRoot, TabsTab } from './components/tabs/index.js';
 export type { TabsActivation, TabsListProps, TabsOrientation, TabsPanelProps, TabsRootProps, TabsTabProps } from './components/tabs/index.js';
 export { Text } from './components/text/index.js';

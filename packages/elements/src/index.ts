@@ -16,4 +16,5 @@ export {
   type StackAlign,
   type StackJustify,
 } from './components/layout/index.js';
+export { VfSurfaceElement, defineSurfaceElement } from './components/surface/index.js';
 export { VfTabsElement, defineTabsElement, type TabsActivation, type TabsOrientation, type TabsValueChangeDetail, type TabsValueChangeEvent } from './components/tabs/index.js';

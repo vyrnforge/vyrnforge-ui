@@ -12,6 +12,7 @@
     ".": { "types": "./dist/index.d.ts", "import": "./dist/index.js", "default": "./dist/index.js" },
     "./icon": { "types": "./dist/components/icon/index.d.ts", "import": "./dist/components/icon/index.js", "default": "./dist/components/icon/index.js" },
     "./layout": { "types": "./dist/components/layout/index.d.ts", "import": "./dist/components/layout/index.js", "default": "./dist/components/layout/index.js" },
+    "./surface": { "types": "./dist/components/surface/index.d.ts", "import": "./dist/components/surface/index.js", "default": "./dist/components/surface/index.js" },
     "./tabs": { "types": "./dist/components/tabs/index.d.ts", "import": "./dist/components/tabs/index.js", "default": "./dist/components/tabs/index.js" }
   },
   "dependencies": { "@vyrnforge/core": "0.0.0-rebuild", "@vyrnforge/web": "0.0.0-rebuild" },
