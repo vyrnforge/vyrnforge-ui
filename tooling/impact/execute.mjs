@@ -29,6 +29,14 @@ export function executeValidationPlan(validationPlan, { dryRun = false, output }
     } catch (error) {
       if (output) {
         report.failedScope = item.scope;
+        try {
+          execFileSync(command, args, { env, encoding: 'utf8', maxBuffer: 10 * 1024 * 1024 });
+        } catch (diagnosticError) {
+          report.failedOutput = {
+            stdout: String(diagnosticError.stdout ?? '').slice(-40000),
+            stderr: String(diagnosticError.stderr ?? '').slice(-40000),
+          };
+        }
         writeFileSync(output, `${JSON.stringify(report, null, 2)}\n`);
       }
       throw error;
