@@ -73,7 +73,7 @@ if (port === 'angular') {
 }
 
 if (port === 'elements') {
-  const markup = '<vf-container id="container" size="sm" gutter="md"><vf-stack id="stack" gap="lg" align="start"><h1 id="heading">Layout fixture</h1><vf-stack id="actions" dir="rtl" direction="inline" gap="sm" align="center" justify="space-between"><button id="first" type="button">First</button><button id="second" type="button">Second</button></vf-stack></vf-stack></vf-container>';
+  const markup = '<main><vf-container id="container" size="sm" gutter="md"><vf-stack id="stack" gap="lg" align="start"><h1 id="heading">Layout fixture</h1><vf-stack id="actions" dir="rtl" direction="inline" gap="sm" align="center" justify="space-between"><button id="first" type="button">First</button><button id="second" type="button">Second</button></vf-stack></vf-stack></vf-container></main>';
   await writeFile(path.join(outDir, 'elements.html'), page(markup, '<script type="module" src="./elements.js"></script>'));
   await build({
     stdin: { resolveDir: root, sourcefile: 'elements-layout.ts', contents: "import { defineLayoutElements } from '@vyrnforge/elements/layout'; defineLayoutElements();" },
