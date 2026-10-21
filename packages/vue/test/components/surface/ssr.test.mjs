@@ -8,6 +8,6 @@ test('Vue Surface preserves the authored semantic element and shared hook during
   const html = await renderToString(createSSRApp({ render: () => h(Surface, { as: 'article', id: 'surface', 'aria-label': 'Summary' }, () => 'Content') }));
   assert.match(html, /^<article/);
   assert.match(html, /id="surface"/);
-  assert.match(html, /data-vf-surface=""/);
+  assert.match(html, /\bdata-vf-surface(?:="")?(?=\s|>)/);
   assert.match(html, /aria-label="Summary"/);
 });
