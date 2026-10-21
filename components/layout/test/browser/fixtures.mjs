@@ -9,7 +9,7 @@ await mkdir(outDir, { recursive: true });
 
 const tokensCss = await readFile(path.join(root, 'packages/web/dist/styles/tokens.css'), 'utf8');
 const layoutCss = (await readFile(path.join(root, 'packages/web/dist/components/layout/layout.css'), 'utf8')).replace('@import "../../styles/tokens.css";\n', '');
-const fixtureCss = 'html { font-size: 16px; } body { margin: 0; } #actions { inline-size: 13rem; } #grid { inline-size: 31rem; --vf-grid-min-item-size: 9rem; } button { min-inline-size: 6rem; }';
+const fixtureCss = 'html { font-size: 16px; } body { margin: 0; --vf-grid-min-item-size: 9rem; } #actions { inline-size: 13rem; } #grid { inline-size: 31rem; } button { min-inline-size: 6rem; }';
 await writeFile(path.join(outDir, 'layout.css'), `${tokensCss}\n${layoutCss}\n${fixtureCss}`);
 
 const page = (body, script = '') => `<!doctype html><html lang="en"><head><meta charset="utf-8"><link rel="stylesheet" href="./layout.css"><title>Layout fixture</title></head><body>${body}${script}</body></html>`;
@@ -30,7 +30,23 @@ if (port === 'vue') {
   const { createSSRApp, h } = await import('vue');
   const { renderToString } = await import('@vue/server-renderer');
   const { Cluster, Container, Grid, Stack } = await import('@vyrnforge/vue/layout');
-  const app = createSSRApp({ render: () => h(Container, { as: 'main', id: 'container', size: 'sm', gutter: 'md' }, () => h(Stack, { as: 'section', id: 'stack', gap: 'lg', align: 'start', 'aria-labelledby': 'heading' }, () => [h('h1', { id: 'heading' }, 'Layout fixture'), h(Grid, { as: 'section', id: 'grid', gap: 'sm' }, () => ['A', 'B', 'C', 'D'].map((label, index) => h('article', { id: `card-${String.fromCharCode(97 + index)}` }, label))), h(Cluster, { id: 'actions', gap: 'sm', align: 'center', justify: 'space-between', dir: 'rtl' }, () => [h('button', { id: 'first', type: 'button' }, 'First'), h('button', { id: 'second', type: 'button' }, 'Second'), h('button', { id: 'third', type: 'button' }, 'Third')])])) ) });
+  const app = createSSRApp({
+    render: () => h(Container, { as: 'main', id: 'container', size: 'sm', gutter: 'md' }, () =>
+      h(Stack, { as: 'section', id: 'stack', gap: 'lg', align: 'start', 'aria-labelledby': 'heading' }, () => [
+        h('h1', { id: 'heading' }, 'Layout fixture'),
+        h(Grid, { as: 'section', id: 'grid', gap: 'sm' }, () =>
+          ['A', 'B', 'C', 'D'].map((label, index) =>
+            h('article', { id: `card-${String.fromCharCode(97 + index)}` }, label)
+          )
+        ),
+        h(Cluster, { id: 'actions', gap: 'sm', align: 'center', justify: 'space-between', dir: 'rtl' }, () => [
+          h('button', { id: 'first', type: 'button' }, 'First'),
+          h('button', { id: 'second', type: 'button' }, 'Second'),
+          h('button', { id: 'third', type: 'button' }, 'Third'),
+        ]),
+      ])
+    ),
+  });
   const markup = await renderToString(app);
   await writeFile(path.join(outDir, 'vue.html'), page(markup));
 }
