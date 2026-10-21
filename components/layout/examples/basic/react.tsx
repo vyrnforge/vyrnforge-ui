@@ -1,3 +1,4 @@
+import type { CSSProperties } from 'react';
 import { Cluster, Container, Grid, Stack } from '@vyrnforge/react/layout';
 
 export function AccountOverview() {
@@ -8,7 +9,7 @@ export function AccountOverview() {
           <h2 id="account-heading">Account overview</h2>
           <p>Review workspace details and recent activity.</p>
         </Stack>
-        <Grid gap="md" style={{ '--vf-grid-min-item-size': '12rem' } as React.CSSProperties}>
+        <Grid gap="md" style={{ '--vf-grid-min-item-size': '12rem' } as CSSProperties}>
           <article>Profile settings</article>
           <article>Team access</article>
           <article>Recent activity</article>
