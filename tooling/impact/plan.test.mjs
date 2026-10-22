@@ -57,6 +57,12 @@ test('component docs and examples use component-local documentation evidence', (
   assert.ok(!plan.validationScopes.includes('pack-angular'));
 });
 
+test('shared documentation changes retain the full documentation gate', () => {
+  const plan = createPlan(['documentation/shared/styling.html']);
+  assert.deepEqual(plan.directNodes, ['documentation']);
+  for (const scope of ['lint-docs', 'docs-source', 'docs-build', 'docs-site', 'browser-docs-chromium']) assert.ok(plan.validationScopes.includes(scope), scope);
+});
+
 test('package public surfaces validate the package without marking every component affected', () => {
   for (const file of ['packages/react/src/index.ts', 'packages/react/package.json']) {
     const plan = createPlan([file]);
