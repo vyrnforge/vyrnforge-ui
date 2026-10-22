@@ -18,9 +18,14 @@ test('documentation-local changes select docs without package consumers', () => 
   assert.equal(plan.validationScopes.includes('consumer-react'), false);
 });
 
+test('Web foundation changes include the shared visual regression baseline', () => {
+  const plan = createPlan(['packages/web/src/styles/tokens.css']);
+  assert.ok(plan.validationScopes.includes('browser-foundation-visual'));
+});
+
 test('main includes all discovered package-local and shared component evidence', () => {
   const main = createTierPlan('main');
-  for (const scope of ['change-fragments', 'changes-preview', 'bundle-baselines', 'component:button:conformance:types', 'component:button:react:types', 'component:button:react:ssr', 'component:button:web:browser', 'component:button:angular:ssr', 'component:button:vue:ssr']) assert.ok(main.validationScopes.includes(scope), scope);
+  for (const scope of ['change-fragments', 'changes-preview', 'bundle-baselines', 'browser-foundation-visual', 'component:button:conformance:types', 'component:button:react:types', 'component:button:react:ssr', 'component:button:web:browser', 'component:button:angular:ssr', 'component:button:vue:ssr']) assert.ok(main.validationScopes.includes(scope), scope);
   assert.equal(main.validationScopes.includes('component:button:web:browser-cross'), false);
 });
 
@@ -29,8 +34,10 @@ test('scheduled and release add cross-browser evidence, release adds readiness',
   const release = createTierPlan('release');
   assert.ok(scheduled.validationScopes.includes('component:button:web:browser-cross'));
   assert.ok(scheduled.validationScopes.includes('browser-docs-cross'));
+  assert.ok(scheduled.validationScopes.includes('browser-foundation-visual'));
   assert.ok(scheduled.validationScopes.includes('bundle-baselines'));
   assert.ok(release.validationScopes.includes('component:button:web:browser-cross'));
+  assert.ok(release.validationScopes.includes('browser-foundation-visual'));
   assert.ok(release.validationScopes.includes('bundle-baselines'));
   assert.ok(release.validationScopes.includes('release-readiness'));
 });

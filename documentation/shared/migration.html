@@ -1,0 +1,26 @@
+<p class="vf-docs-lede">VyrnForge migrations are driven by documented public contracts, scoped change fragments, compatibility evidence, and versioned documentation. The rebuild channel is not yet a stable release, so this guide distinguishes current preview migration work from future stable upgrade guarantees.</p>
+<section>
+  <h2>Before upgrading</h2>
+  <ol>
+    <li>Read the release or preview change summary for the version you are adopting.</li>
+    <li>Check the Compatibility reference for the framework, browser, runtime, and SSR baseline associated with that documentation channel.</li>
+    <li>Review the component pages you use for public API, styling hook, accessibility, and behavior changes.</li>
+    <li>Run your application tests against the packed VyrnForge packages before promoting the upgrade.</li>
+  </ol>
+</section>
+<section>
+  <h2>Public compatibility boundary</h2>
+  <p>Documented component properties, events or intents, exported subpaths, semantic tokens, documented component tokens, stable data attributes, and declared behavior are compatibility commitments once released. Private CSS aliases, internal helpers, generated implementation structure, and framework internals are not.</p>
+</section>
+<section>
+  <h2>Rebuild preview migrations</h2>
+  <p>The current <strong>next</strong> documentation channel describes a rebuild bootstrap rather than a stable upgrade path. Existing legacy APIs are not automatically preserved. Migrate only to surfaces documented in this channel, and treat missing compatibility claims as unavailable rather than implied.</p>
+</section>
+<section>
+  <h2>Breaking changes</h2>
+  <p>A future breaking release must document the old contract, the replacement contract, required consumer changes, and any temporary deprecation path. VyrnForge does not hide breaking semantic changes behind styling-only release notes.</p>
+</section>
+<section>
+  <h2>Migration evidence</h2>
+  <p>When a migration affects your application, validate the observable outcome: package imports, SSR/server rendering where relevant, keyboard and focus behavior, accessibility semantics, CSS/token overrides, and real-browser behavior. A successful type check alone is not migration proof.</p>
+</section>

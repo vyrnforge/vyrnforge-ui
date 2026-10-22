@@ -7,7 +7,15 @@ import { discoverProductUnits } from '../testing/discover-product-units.mjs';
 const root = path.resolve(fileURLToPath(new URL('../../', import.meta.url)));
 const registry = documentationRegistry(root);
 const discovery = discoverProductUnits(root);
-const requiredSharedSlugs = ['foundations/styling', 'foundations/accessibility', 'foundations/state-and-behavior', 'guides/testing'];
+const requiredSharedSlugs = [
+  'foundations/styling',
+  'foundations/accessibility',
+  'foundations/state-and-behavior',
+  'guides/testing',
+  'guides/migration',
+  'guides/diagnostics',
+  'support/developer-support',
+];
 const requiredFrameworks = ['react', 'angular', 'vue', 'elements', 'native-web'];
 const requiredComponentSections = ['Overview', 'Installation and imports', 'Quick start', 'Accessibility', 'Styling', 'Framework API', 'Compatibility'];
 for (const relative of ['documentation/README.md', 'documentation/site/registry.json', 'components/README.md', 'fixtures/README.md', 'apps/docs/styles.css', 'apps/docs/client.js', 'tooling/docs/examples.mjs', 'tooling/docs/registry.mjs']) await access(path.join(root, relative));
@@ -31,4 +39,4 @@ for (const component of discovery.components) {
     if (!source.includes(`data-vf-example="${manifest.id}"`)) throw new Error(`${component.component} documentation must compose executable example ${manifest.id}`);
   }
 }
-process.stdout.write(`documentation source structure: ${discovery.components.length} discovered component pages and examples ok\n`);
+process.stdout.write(`documentation source structure: ${discovery.components.length} discovered component pages and L0 DX surfaces ok\n`);

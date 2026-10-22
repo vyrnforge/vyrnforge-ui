@@ -1,0 +1,26 @@
+<p class="vf-docs-lede">Developer support starts with canonical documentation, executable examples, inspectable diagnostics, and reproducible issue reports. This page collects the common questions that otherwise turn into undocumented tribal knowledge.</p>
+<section>
+  <h2>Executable examples as playgrounds</h2>
+  <p>Component pages embed executable examples owned by the same component slice as its implementation evidence. Use those examples as the canonical playground for supported APIs rather than copying internal fixtures or undocumented markup.</p>
+</section>
+<section>
+  <h2>Frequently asked questions</h2>
+  <h3>Do I need a VyrnForge theme provider?</h3>
+  <p>No. Runtime theming uses CSS custom properties and <code>data-vf-theme</code>. Framework-specific providers are not the source of theme truth.</p>
+  <h3>Is the reset mandatory?</h3>
+  <p>No. The reset is an explicit optional stylesheet. Components must remain usable without requiring an application-wide reset.</p>
+  <h3>Should every framework render identical source code?</h3>
+  <p>No. Framework ports are idiomatic siblings. They must preserve the same semantics, accessibility, design language, behavior, and test intent without sharing one universal renderer.</p>
+  <h3>Can I depend on private CSS variables or internal helpers?</h3>
+  <p>No. Only documented public contracts are compatibility commitments. Private aliases and implementation details may change without notice.</p>
+  <h3>Why is a documented component unavailable in one framework?</h3>
+  <p>Multi-framework architecture does not imply every framework surface ships at the same time. The relevant component and framework documentation must explicitly show what is implemented.</p>
+</section>
+<section>
+  <h2>Where to start when something fails</h2>
+  <p>Use the Diagnostics &amp; Troubleshooting guide to identify whether the failure is package, token/CSS, browser, SSR, documentation, or component behavior related. Then reduce the problem to the smallest public surface that reproduces it.</p>
+</section>
+<section>
+  <h2>Reporting a problem</h2>
+  <p>Report issues with a minimal reproduction and the diagnostics listed in the troubleshooting guide. Include the affected public package/subpath and avoid relying on private implementation details as the reproduction contract.</p>
+</section>

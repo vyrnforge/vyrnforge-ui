@@ -1,10 +1,12 @@
 import { readFile } from 'node:fs/promises';
 import { renderRuntimeTokens } from '../tokens/render.mjs';
+import { referenceTokens } from '../tokens/source.mjs';
 
 const root = JSON.parse(await readFile('package.json', 'utf8'));
 const support = JSON.parse(await readFile('tooling/compatibility/support-status.json', 'utf8'));
 const impact = JSON.parse(await readFile('testing/impact.json', 'utf8'));
 const browserQualification = JSON.parse(await readFile('tooling/compatibility/foundation-browser-qualification.json', 'utf8'));
+const visualBaseline = JSON.parse(await readFile('tooling/visual/foundation-baseline.json', 'utf8'));
 const webManifest = JSON.parse(await readFile('packages/web/package.json', 'utf8'));
 
 const packages = ['core', 'web', 'icons', 'react', 'angular', 'vue', 'elements'];
@@ -17,8 +19,16 @@ for (const name of packages) {
 
 if (root.scripts?.['generate:tokens'] !== 'node tooling/tokens/generate.mjs --write') throw new Error('Token authoring must expose the canonical generation command');
 if (root.scripts?.['verify:tokens'] !== 'node tooling/tokens/generate.mjs --check') throw new Error('Token authoring must expose the canonical drift check');
+if (root.scripts?.['test:visual:foundation'] !== 'node tooling/visual/run-foundation.mjs') throw new Error('Foundation visual regression must expose the canonical test command');
+for (const category of ['color', 'fontFamily', 'fontSize', 'fontWeight', 'lineHeight', 'letterSpacing', 'space', 'radius', 'shadow', 'motion', 'breakpoint']) {
+  if (!referenceTokens[category] || Object.keys(referenceTokens[category]).length === 0) throw new Error(`Reference token authoring is missing the L0 design category: ${category}`);
+}
 const tokensCss = await readFile('packages/web/src/styles/tokens.css', 'utf8');
 if (tokensCss !== renderRuntimeTokens()) throw new Error('Runtime token CSS has drifted from the repository-owned token source');
+for (const token of ['--vf-shadow-sm', '--vf-shadow-md', '--vf-shadow-lg', '--vf-motion-easing-standard']) {
+  if (!tokensCss.includes(token)) throw new Error(`Runtime token CSS is missing required L0 public token: ${token}`);
+}
+if (tokensCss.includes('--vf-breakpoint-')) throw new Error('Breakpoint authoring tokens must remain static/build-time values rather than runtime CSS variables');
 
 const requiredCssExports = {
   './styles.css': './dist/styles.css',
@@ -36,6 +46,20 @@ const foundationCss = await readFile('packages/web/src/styles/foundation.css', '
 if (!foundationCss.includes('[data-vf-visually-hidden]')) throw new Error('Foundation CSS must provide the shared visually-hidden contract');
 if (!foundationCss.includes('prefers-reduced-motion: reduce')) throw new Error('Foundation CSS must provide reduced-motion plumbing');
 await readFile('packages/web/src/styles/reset.css', 'utf8');
+
+if (!impact.scopeOrder?.includes('browser-foundation-visual')) throw new Error('Foundation visual regression evidence is missing from impact validation');
+if (!impact.tiers?.main?.includes('browser-foundation-visual') || !impact.tiers?.scheduled?.includes('browser-foundation-visual') || !impact.tiers?.release?.includes('browser-foundation-visual')) {
+  throw new Error('Foundation visual regression must be required by main, scheduled, and release validation tiers');
+}
+if (visualBaseline.schemaVersion !== 1 || visualBaseline.browser !== 'chromium' || visualBaseline.playwright !== root.devDependencies?.['@playwright/test']) {
+  throw new Error('Foundation visual baseline metadata does not match the selected browser toolchain');
+}
+if (visualBaseline.fixture !== 'foundation-design-language-v1') throw new Error('Foundation visual baseline fixture identity has drifted');
+if (!/^[a-f0-9]{64}$/.test(visualBaseline.sha256)) throw new Error('Foundation visual baseline must contain a committed SHA-256 digest');
+
+for (const file of ['documentation/shared/migration.html', 'documentation/shared/diagnostics.html', 'documentation/shared/developer-support.html', 'CONTRIBUTING.md']) {
+  await readFile(file, 'utf8');
+}
 
 if (root.devDependencies?.typescript !== '6.0.3') throw new Error('Foundation authoring compiler must remain pinned to TypeScript 6.0.3 until compatibility is deliberately revised');
 if (root.devDependencies?.['typescript-eslint'] !== '8.71.2') throw new Error('Foundation TypeScript lint tooling must remain pinned until deliberately revised');
@@ -73,4 +97,4 @@ if (browserQualification.playwright !== support.browsers?.playwright) {
   throw new Error('Foundation browser qualification must match the selected Playwright baseline');
 }
 
-process.stdout.write('foundation readiness: ok\n');
+process.stdout.write('foundation readiness: literal L0 architecture baseline ok\n');

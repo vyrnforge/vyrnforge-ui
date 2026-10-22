@@ -1,0 +1,30 @@
+<p class="vf-docs-lede">Use these diagnostics to distinguish package, styling, compatibility, documentation, and browser failures before changing component code. VyrnForge favors inspectable checks over hidden runtime diagnostics.</p>
+<section>
+  <h2>Foundation checks</h2>
+  <p><code>npm run verify:foundation-readiness</code> verifies the active token/CSS foundation, compatibility metadata, package-level lint evidence, and recorded browser qualification. <code>npm run verify:tokens</code> detects generated token CSS drift.</p>
+</section>
+<section>
+  <h2>Targeted development checks</h2>
+  <p><code>npm run check:changed:plan</code> prints the impact-selected validation plan for local changes. <code>npm run check:changed</code> executes that plan. <code>npm run check</code> runs the broader main-tier validation when a foundation-wide result is required.</p>
+</section>
+<section>
+  <h2>Styling problems</h2>
+  <ul>
+    <li>Confirm the application loaded either <code>@vyrnforge/web/styles.css</code> or every granular stylesheet required by the rendered components.</li>
+    <li>Check whether an application override changes a documented <code>--vf-*</code> token or ordinary CSS. Do not depend on undocumented implementation variables or internal selectors.</li>
+    <li>Do not assume the optional reset is included by the aggregate stylesheet; load it explicitly only when the application wants it.</li>
+    <li>Inspect the active <code>data-vf-theme</code> scope and inherited custom properties when nested themes do not render as expected.</li>
+  </ul>
+</section>
+<section>
+  <h2>Accessibility or interaction problems</h2>
+  <p>Start from native semantics and the component contract. Verify roles, names, relationships, keyboard outcomes, focus behavior, disabled/read-only distinctions, reduced motion, and forced-colors behavior. Automated accessibility scans are guardrails, not a substitute for browser interaction evidence.</p>
+</section>
+<section>
+  <h2>SSR or framework problems</h2>
+  <p>Check the Compatibility reference first. Browser-only behavior must not execute during server rendering. Framework ports may differ in lifecycle and binding syntax while preserving the same observable VyrnForge contract.</p>
+</section>
+<section>
+  <h2>Collecting a useful failure report</h2>
+  <p>Include the VyrnForge documentation channel/version, framework and version, browser/runtime baseline, public import path, smallest reproduction, expected and actual behavior, and the failing validation command. For browser failures, attach the Playwright trace or screenshot when available.</p>
+</section>
