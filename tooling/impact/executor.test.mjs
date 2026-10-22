@@ -30,6 +30,15 @@ test('component scopes resolve from discovered ownership instead of CI definitio
   assert.deepEqual(execution.find((item) => item.scope === 'component:button:conformance:types').command, ['node', 'tooling/testing/check-component-types.mjs', 'button', 'conformance']);
 });
 
+test('component documentation uses a targeted source/example checker without full docs prerequisites', () => {
+  const execution = expandScopes(['docs-source', 'component:button:docs']);
+  assert.deepEqual(execution.map((item) => item.scope), ['docs-source', 'component:button:docs']);
+  assert.deepEqual(execution.at(-1)?.command, ['node', 'tooling/docs/check-component.mjs', 'button']);
+  for (const scope of ['build-react', 'build-angular', 'build-vue', 'build-elements', 'docs-build', 'browser-docs-chromium']) {
+    assert.equal(execution.some((item) => item.scope === scope), false, scope);
+  }
+});
+
 test('browser setup is deduplicated to the widest selected browser matrix', () => {
   const chromium = expandScopes(['component:button:react:browser', 'component:button:vue:browser']);
   assert.deepEqual(browserProjectsForExecution(chromium), ['chromium']);
