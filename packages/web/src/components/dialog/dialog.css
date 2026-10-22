@@ -4,7 +4,7 @@
   :where([data-vf-dialog-root]) {
     background: var(--vf-color-surface);
     border: 1px solid var(--vf-color-border);
-    border-radius: var(--vf-control-radius);
+    border-radius: var(--vf-radius-surface);
     color: var(--vf-color-text);
     inline-size: min(36rem, calc(100vw - 2rem));
     max-block-size: min(85vh, 48rem);

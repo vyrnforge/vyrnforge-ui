@@ -8,7 +8,9 @@
     --vf-color-surface: #ffffff;
     --vf-color-surface-hover: #f2f5fb;
     --vf-color-text: #172033;
+    --vf-color-text-muted: #5d687a;
     --vf-color-border: #8b96aa;
+    --vf-color-danger-border: #b42318;
     --vf-color-focus-ring: #0b63ce;
     --vf-color-disabled-background: #e6e9ef;
     --vf-color-disabled-foreground: #6c7484;
@@ -47,6 +49,16 @@
     --vf-letter-spacing-wide: 0.025em;
     --vf-letter-spacing-wider: 0.05em;
 
+    --vf-space-none: 0;
+    --vf-space-xs: 0.25rem;
+    --vf-space-sm: 0.5rem;
+    --vf-space-md: 1rem;
+    --vf-space-lg: 1.5rem;
+    --vf-space-xl: 2rem;
+    --vf-space-2xl: 3rem;
+    --vf-space-3xl: 4rem;
+
+    --vf-radius-surface: 0.5rem;
     --vf-control-radius: 0.5rem;
     --vf-control-font-family: var(--vf-font-family-sans);
     --vf-control-font-weight: var(--vf-font-weight-semibold);
@@ -63,7 +75,9 @@
     --vf-color-surface: #171b24;
     --vf-color-surface-hover: #232a36;
     --vf-color-text: #f2f5fb;
+    --vf-color-text-muted: #b2bac8;
     --vf-color-border: #7b8597;
+    --vf-color-danger-border: #ff8a80;
     --vf-color-focus-ring: #9dc1ff;
     --vf-color-disabled-background: #2c323d;
     --vf-color-disabled-foreground: #9aa3b2;
@@ -83,7 +97,9 @@
       --vf-color-surface: #171b24;
       --vf-color-surface-hover: #232a36;
       --vf-color-text: #f2f5fb;
+      --vf-color-text-muted: #b2bac8;
       --vf-color-border: #7b8597;
+      --vf-color-danger-border: #ff8a80;
       --vf-color-focus-ring: #9dc1ff;
       --vf-color-disabled-background: #2c323d;
       --vf-color-disabled-foreground: #9aa3b2;

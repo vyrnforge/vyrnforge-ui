@@ -1,0 +1,70 @@
+<div data-vf-layout-guide>
+  <p class="vf-docs-lede">Build page structure with focused primitives: <strong>Container</strong> for content bounds, <strong>Stack</strong> for block flow, <strong>Cluster</strong> for wrapping inline groups, and <strong>Grid</strong> for intrinsic repeated-item layouts.</p>
+
+  <div class="vf-docs-callout"><strong>Start with the browser's layout model.</strong><span>VyrnForge adds shared intent and defaults without replacing CSS Grid, Flexbox, container queries, or semantic HTML.</span></div>
+
+  <section>
+    <h2>Overview</h2>
+    <p>Each primitive owns one job. Container constrains page or section content. Stack creates block-axis rhythm. Cluster groups inline content and wraps it. Grid creates equal flexible tracks for repeated peers and changes track count from available space.</p>
+    <div class="vf-docs-split">
+      <article class="vf-docs-card"><h3>Container</h3><p>Content bounds and logical gutters.</p><pre><code>&lt;main data-vf-container data-vf-container-size="lg"&gt;…&lt;/main&gt;</code></pre></article>
+      <article class="vf-docs-card"><h3>Stack</h3><p>Block-flow rhythm between related siblings.</p><pre><code>&lt;section data-vf-stack data-vf-stack-gap="lg"&gt;…&lt;/section&gt;</code></pre></article>
+      <article class="vf-docs-card"><h3>Cluster</h3><p>Wrapping inline groups such as actions or tags.</p><pre><code>&lt;div data-vf-cluster data-vf-cluster-gap="sm"&gt;…&lt;/div&gt;</code></pre></article>
+      <article class="vf-docs-card"><h3>Grid</h3><p>Repeated peers that need intrinsic equal tracks.</p><pre><code>&lt;section data-vf-grid data-vf-grid-gap="md"&gt;…&lt;/section&gt;</code></pre></article>
+    </div>
+  </section>
+
+  <section>
+    <h2>Quick start</h2>
+    <p>A typical page composes Container and Stack, then uses Grid for repeated content and Cluster for compact actions.</p>
+    <div data-vf-example="layout/basic"></div>
+  </section>
+
+  <section>
+    <h2>Spacing</h2>
+    <p>Layout uses one public spacing vocabulary rather than arbitrary pixel props. The same <code>LayoutSpace</code> values drive Stack, Cluster, Grid, and Container gutters.</p>
+    <table><thead><tr><th>Name</th><th>Token</th><th>Default value</th></tr></thead><tbody>
+      <tr><td><code>none</code></td><td><code>--vf-space-none</code></td><td>0</td></tr><tr><td><code>xs</code></td><td><code>--vf-space-xs</code></td><td>0.25rem</td></tr><tr><td><code>sm</code></td><td><code>--vf-space-sm</code></td><td>0.5rem</td></tr><tr><td><code>md</code></td><td><code>--vf-space-md</code></td><td>1rem</td></tr><tr><td><code>lg</code></td><td><code>--vf-space-lg</code></td><td>1.5rem</td></tr><tr><td><code>xl</code></td><td><code>--vf-space-xl</code></td><td>2rem</td></tr><tr><td><code>2xl</code></td><td><code>--vf-space-2xl</code></td><td>3rem</td></tr><tr><td><code>3xl</code></td><td><code>--vf-space-3xl</code></td><td>4rem</td></tr>
+    </tbody></table>
+  </section>
+
+  <section><h2>Stack</h2><p>Stack is block-flow only. It exposes tokenized gap plus alignment and justification for its single flex axis. It does not switch direction or wrap.</p></section>
+  <section><h2>Cluster</h2><p>Cluster is inline flow with wrapping enabled. Use it for actions, tags, filters, and compact control groups. Inline order follows document direction, including RTL.</p></section>
+
+  <section>
+    <h2>Grid</h2>
+    <p>Grid is for repeated peers such as cards, summaries, galleries, or dashboard tiles. It uses equal flexible tracks and <code>auto-fit</code>, so the number of columns follows available inline space rather than viewport breakpoint props.</p>
+    <p>The framework API intentionally exposes only <code>gap</code>. The default minimum item width is <code>16rem</code>. When a repeated-item family needs another minimum, override the public component token <code>--vf-grid-min-item-size</code> in CSS.</p>
+    <pre><code>.account-cards {
+  --vf-grid-min-item-size: 12rem;
+}</code></pre>
+    <p>Use ordinary CSS Grid for explicit column counts, named areas, item placement, alignment, spanning, dense packing, or layouts whose tracks have different meanings. Grid is not a 12-column system and does not reorder content.</p>
+  </section>
+
+  <section><h2>Container</h2><p>Container sizes are content bounds, not viewport breakpoints: <code>sm</code> 40rem, <code>md</code> 48rem, <code>lg</code> 64rem, <code>xl</code> 80rem, <code>2xl</code> 96rem, and <code>full</code> without a maximum. Logical gutters work in LTR and RTL.</p></section>
+
+  <section>
+    <h2>Installation and imports</h2>
+    <p>Load <code>@vyrnforge/web/styles/layout.css</code> once, then use the surface appropriate to the application.</p>
+    <div class="vf-docs-split">
+      <article class="vf-docs-card"><h3>React / Vue</h3><pre><code>import { Cluster, Container, Grid, Stack } from '@vyrnforge/react/layout';</code></pre></article>
+      <article class="vf-docs-card"><h3>Angular</h3><pre><code>import { VfClusterDirective, VfContainerDirective, VfGridDirective, VfStackDirective } from '@vyrnforge/angular/layout';</code></pre></article>
+      <article class="vf-docs-card"><h3>Elements</h3><pre><code>import { defineLayoutElements } from '@vyrnforge/elements/layout';</code></pre></article>
+    </div>
+  </section>
+
+  <section><h2>Accessibility</h2><p>Layout primitives add no ARIA roles, keyboard model, or source-order manipulation. Keep semantic HTML and logical reading order. React and Vue use <code>as</code>; Angular decorates authored elements; Elements remain semantically neutral.</p></section>
+  <section><h2>Styling</h2><p>Canonical CSS lives in <code>@vyrnforge/web</code> with low specificity. Use spacing tokens and the documented <code>--vf-grid-min-item-size</code> component token; use ordinary CSS beyond the focused primitive contracts.</p></section>
+
+  <section>
+    <h2>Framework API</h2>
+    <div class="vf-docs-split">
+      <article class="vf-docs-card"><h3>React / Vue</h3><p><code>Stack</code>: <code>as</code>, <code>gap</code>, <code>align</code>, <code>justify</code>. <code>Cluster</code>: the same inline-group options. <code>Grid</code>: <code>as</code>, <code>gap</code>. <code>Container</code>: <code>as</code>, <code>size</code>, <code>gutter</code>.</p></article>
+      <article class="vf-docs-card"><h3>Angular</h3><p><code>vfGrid</code> exposes <code>vfGridGap</code>; other grid decisions remain CSS. Stack, Cluster, and Container retain their focused directive contracts.</p></article>
+      <article class="vf-docs-card"><h3>Native Web</h3><p>Use <code>data-vf-grid</code> and <code>data-vf-grid-gap</code> alongside the existing Stack, Cluster, and Container hooks.</p></article>
+      <article class="vf-docs-card"><h3>Elements</h3><p><code>defineLayoutElements()</code> registers <code>&lt;vf-grid&gt;</code> with the other layout elements. <code>&lt;vf-grid gap="md"&gt;</code> emits the same shared DOM contract.</p></article>
+    </div>
+  </section>
+
+  <section><h2>Compatibility</h2><p>The exported layout APIs, documented data attributes, Elements attributes, spacing tokens, and <code>--vf-grid-min-item-size</code> are compatibility commitments.</p><p><strong>Still deferred:</strong> Box. It will not be added unless it owns a cross-framework responsibility beyond exposing generic CSS properties.</p></section>
+</div>

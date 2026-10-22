@@ -1,0 +1,19 @@
+@import "../../styles/tokens.css";
+
+@layer vyrnforge.components {
+  :where([data-vf-surface], vf-surface) {
+    background: var(--vf-color-surface);
+    border: 1px solid var(--vf-color-border);
+    border-radius: var(--vf-radius-surface);
+    box-sizing: border-box;
+    color: var(--vf-color-text);
+    display: block;
+  }
+
+  @media (forced-colors: active) {
+    :where([data-vf-surface], vf-surface) {
+      border-color: CanvasText;
+      forced-color-adjust: auto;
+    }
+  }
+}

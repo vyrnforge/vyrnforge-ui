@@ -100,7 +100,7 @@
           },
           "rootSelected": {
             "bytes": 2007,
-            "gzipBytes": 1029
+            "gzipBytes": 1028
           }
         },
         "angular": {
@@ -110,7 +110,7 @@
           },
           "rootSelected": {
             "bytes": 8631,
-            "gzipBytes": 1945
+            "gzipBytes": 1944
           }
         },
         "vue": {
@@ -120,7 +120,7 @@
           },
           "rootSelected": {
             "bytes": 3169,
-            "gzipBytes": 1318
+            "gzipBytes": 1319
           }
         }
       }
