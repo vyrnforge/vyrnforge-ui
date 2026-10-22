@@ -16,9 +16,11 @@
     "./input": { "types": "./dist/components/input/index.d.ts", "import": "./dist/components/input/index.js", "default": "./dist/components/input/index.js" },
     "./textarea": { "types": "./dist/components/textarea/index.d.ts", "import": "./dist/components/textarea/index.js", "default": "./dist/components/textarea/index.js" },
     "./layout": { "types": "./dist/components/layout/index.d.ts", "import": "./dist/components/layout/index.js", "default": "./dist/components/layout/index.js" },
+    "./separator": { "types": "./dist/components/separator/index.d.ts", "import": "./dist/components/separator/index.js", "default": "./dist/components/separator/index.js" },
     "./surface": { "types": "./dist/components/surface/index.d.ts", "import": "./dist/components/surface/index.js", "default": "./dist/components/surface/index.js" },
     "./tabs": { "types": "./dist/components/tabs/index.d.ts", "import": "./dist/components/tabs/index.js", "default": "./dist/components/tabs/index.js" },
-    "./text": { "types": "./dist/components/text/index.d.ts", "import": "./dist/components/text/index.js", "default": "./dist/components/text/index.js" }
+    "./text": { "types": "./dist/components/text/index.d.ts", "import": "./dist/components/text/index.js", "default": "./dist/components/text/index.js" },
+    "./visually-hidden": { "types": "./dist/components/visually-hidden/index.d.ts", "import": "./dist/components/visually-hidden/index.js", "default": "./dist/components/visually-hidden/index.js" }
   },
   "dependencies": { "@vyrnforge/core": "0.0.0-rebuild", "@vyrnforge/web": "0.0.0-rebuild" },
   "peerDependencies": { "vue": ">=3.5.0 <3.6.0" },
