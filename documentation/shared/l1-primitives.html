@@ -1,0 +1,39 @@
+<p class="vf-docs-lede">Layer 1 is the elemental, non-interactive foundation above L0. The canonical inventory distinguishes public primitives, private visual recipes, native-first HTML, and candidates that remain deliberately deferred.</p>
+<section>
+  <h2>Core L1</h2>
+  <p>The established Core L1 set is <strong>Text</strong>, <strong>Icon</strong>, <strong>Surface</strong>, <strong>Separator</strong>, and <strong>VisuallyHidden</strong>. Their component contracts remain authoritative.</p>
+</section>
+<section>
+  <h2>Promoted elemental primitives</h2>
+  <p>These non-interactive candidates are now part of the Layer 1 Web contract:</p>
+  <ul>
+    <li><strong>Code</strong> — use native <code>code</code> or <code>pre</code> semantics with <code>data-vf-code</code> / <code>data-vf-code-block</code>.</li>
+    <li><strong>Kbd</strong> — use native <code>kbd</code> with <code>data-vf-kbd</code>.</li>
+    <li><strong>Mark</strong> — use native <code>mark</code> with <code>data-vf-mark</code>.</li>
+    <li><strong>Image</strong> — use native <code>img</code> with <code>data-vf-image</code>; ordinary HTML alternative-text rules remain authoritative.</li>
+    <li><strong>Skeleton</strong> — use <code>data-vf-skeleton</code> on a decorative placeholder. The placeholder is not the accessible loading message and should be <code>aria-hidden="true"</code>.</li>
+    <li><strong>ColorSwatch</strong> — use <code>data-vf-color-swatch</code> and set <code>--vf-color-swatch</code>. If color conveys meaning, provide equivalent text or an authored accessible name.</li>
+  </ul>
+  <p>All six are CSS/native-first. They do not introduce keyboard behavior, Core runtime, or mandatory framework wrappers.</p>
+</section>
+<section>
+  <h2>Deferred candidates</h2>
+  <p><strong>StatusIndicator</strong> is deferred until higher-layer consumers prove a stable semantic status vocabulary and non-color communication contract. <strong>AvatarFallback</strong> is deferred until Avatar composition, image-failure policy, fallback ownership, and naming behavior are defined. These are explicit architecture decisions rather than missing implementations.</p>
+</section>
+<section>
+  <h2>Internal L1 recipes</h2>
+  <p>Checkmark, Radiomark, and SelectionIndicator are private Web-owned visual recipes for later selectable controls. They are not public exports or public data hooks. Semantic checked/selected state always belongs to the owning native or ARIA control.</p>
+</section>
+<section>
+  <h2>Native-first primitives</h2>
+  <p>VyrnForge keeps document semantics native. Add <code>data-vf-prose</code> to an authored container to opt into token-driven presentation for native semantic content. No Heading, Paragraph, Quote, Blockquote, Figure, or List wrapper is required.</p>
+  <p>Supported native elements include <code>blockquote</code>, <code>q</code>, <code>h1</code>–<code>h6</code>, <code>p</code>, <code>figure</code>, <code>figcaption</code>, <code>ul</code>, <code>ol</code>, <code>li</code>, <code>strong</code>, <code>em</code>, <code>small</code>, <code>sub</code>, <code>sup</code>, <code>abbr</code>, <code>address</code>, <code>cite</code>, and <code>time</code>. Native <code>code</code>, <code>kbd</code>, and <code>mark</code> also retain their semantics inside prose.</p>
+</section>
+<section>
+  <h2>Consumption</h2>
+  <p>The aggregate <code>@vyrnforge/web/styles.css</code> includes Layer 1 elemental styling. Consumers that want only this tranche can load <code>@vyrnforge/web/styles/elemental-primitives.css</code>. The stylesheet is low-specificity, token-driven, SSR-safe, logical-property based, reduced-motion aware, and compatible with forced-colors environments.</p>
+</section>
+<section>
+  <h2>Accessibility</h2>
+  <p>Layer 1 does not recreate browser semantics or keyboard interaction. Native elements remain the source of semantics. Skeleton is decorative, Image keeps ordinary <code>alt</code> requirements, and ColorSwatch must never make color the only carrier of meaning.</p>
+</section>
