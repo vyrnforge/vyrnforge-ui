@@ -2,7 +2,7 @@ import { mkdtemp, readFile, readdir, rm } from 'node:fs/promises';
 import os from 'node:os';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
-import { build } from 'esbuild';
+import { compileFrameworkExample, publicPackageAliases } from './examples.mjs';
 import { discoverProductUnits } from '../testing/discover-product-units.mjs';
 
 const root = path.resolve(fileURLToPath(new URL('../../', import.meta.url)));
@@ -12,23 +12,6 @@ const discovery = discoverProductUnits(root);
 const component = discovery.components.find((entry) => entry.component === componentId);
 if (!component) throw new Error(`Unknown component documentation owner: ${componentId}`);
 
-function exportTarget(value) {
-  if (typeof value === 'string') return value;
-  if (!value || typeof value !== 'object') return null;
-  return value.import || value.default || Object.values(value).find((entry) => typeof entry === 'string') || null;
-}
-function sourceAliases() {
-  const aliases = {};
-  for (const { name, manifest } of discovery.packages) {
-    for (const [exportName, value] of Object.entries(manifest.exports ?? {})) {
-      const target = exportTarget(value);
-      if (!target?.startsWith('./dist/')) continue;
-      const specifier = exportName === '.' ? manifest.name : `${manifest.name}${exportName.slice(1)}`;
-      aliases[specifier] = path.join(root, `packages/${name}`, target.replace(/^\.\/dist\//, 'src/'));
-    }
-  }
-  return aliases;
-}
 async function manifestsUnder(directory) {
   const results = [];
   async function walk(current) {
@@ -47,7 +30,7 @@ const referencedExamples = new Set([...docsHtml.matchAll(/data-vf-example="([^"]
 const exampleRoot = path.join(root, `components/${componentId}/examples`);
 const manifests = await manifestsUnder(exampleRoot);
 if (manifests.length === 0) throw new Error(`${componentId} has no executable documentation examples`);
-const aliases = sourceAliases();
+const aliases = publicPackageAliases(root, { source: true });
 const temp = await mkdtemp(path.join(os.tmpdir(), `vf-docs-${componentId}-`));
 const found = new Set();
 try {
@@ -63,16 +46,11 @@ try {
       const sourcePath = path.join(directory, config.source);
       await readFile(sourcePath, 'utf8');
       if (framework === 'native-web') continue;
-      await build({
-        entryPoints: [sourcePath],
-        alias: aliases,
-        bundle: true,
-        write: false,
-        format: 'iife',
-        platform: 'browser',
-        target: ['es2022'],
-        legalComments: 'none',
-        tsconfigRaw: { compilerOptions: { experimentalDecorators: true, useDefineForClassFields: false, jsx: 'react' } },
+      await compileFrameworkExample({
+        root,
+        sourcePath,
+        outputPath: path.join(temp, `${manifest.id.replaceAll('/', '-')}-${framework}.js`),
+        aliases,
       });
     }
   }
