@@ -37,6 +37,10 @@ Canonical shared styling is owned by `@vyrnforge/web`. The aggregate `@vyrnforge
 
 Pull requests do not run an arbitrary full suite. CI classifies changed areas, computes reverse product dependencies, selects required validation evidence, expands execution prerequisites, and uploads the resulting validation plan for inspection. Main, scheduled, and release workflows deliberately broaden validation at their respective gates.
 
+For normal local work, use `npm run check:changed`. It compares the current branch and working tree (including untracked files) against `origin/main`, then executes the same targeted PR validation model. Use `npm run check:changed:plan` to inspect the execution plan without running it. Set `VF_BASE_REF` or pass `--base-ref` when a different reachable comparison base is required. `npm run check` intentionally runs the broader main validation graph and should be reserved for deliberate integration-level verification.
+
+Component-owned CSS is classified separately from semantic/API implementation changes. A component CSS edit selects the shared Web style/package evidence and affected component browser evidence across implemented ports without automatically selecting unrelated type or SSR evidence. Browser installation is prepared once per validation execution and reused by selected component/docs browser scopes.
+
 Real-browser documentation validation uses Playwright; automated accessibility scans run with axe-core. Packed-package consumer checks install actual tarballs through public entrypoints. Visual and framework-specific SSR/hydration evidence are intentionally added only when real rebuilt components and deliberately supported runtimes exist.
 
 ## Source of truth

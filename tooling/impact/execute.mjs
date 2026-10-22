@@ -7,6 +7,22 @@ import { expandScopes } from './scopes.mjs';
 
 export function createExecutionPlan(validationPlan) { return expandScopes(validationPlan.validationScopes); }
 
+export function browserProjectsForExecution(execution) {
+  const browserScopes = execution.map((item) => item.scope).filter((scope) => scope.includes('browser'));
+  if (browserScopes.length === 0) return [];
+  if (browserScopes.some((scope) => scope.endsWith('browser-cross') || scope === 'browser-docs-cross')) return ['chromium', 'firefox', 'webkit'];
+  return ['chromium'];
+}
+
+function prepareBrowsers(execution, env) {
+  const projects = browserProjectsForExecution(execution);
+  if (projects.length === 0) return env;
+  const npx = process.platform === 'win32' ? 'npx.cmd' : 'npx';
+  process.stdout.write(`\n[validation:browser-setup] ${npx} playwright install --with-deps ${projects.join(' ')}\n`);
+  execFileSync(npx, ['playwright', 'install', '--with-deps', ...projects], { stdio: 'inherit', env });
+  return { ...env, VF_PLAYWRIGHT_READY: '1' };
+}
+
 export function executeValidationPlan(validationPlan, { dryRun = false, output } = {}) {
   const execution = createExecutionPlan(validationPlan);
   const report = { validationPlan, execution };
@@ -16,11 +32,12 @@ export function executeValidationPlan(validationPlan, { dryRun = false, output }
     writeFileSync(output, `${JSON.stringify(report, null, 2)}\n`);
   }
   if (dryRun) return execution;
-  const env = {
+  let env = {
     ...process.env,
     VF_VALIDATION_MODE: validationPlan.mode,
     VF_CHANGED_PATHS: JSON.stringify(validationPlan.changedPaths ?? [])
   };
+  env = prepareBrowsers(execution, env);
   for (const item of execution) {
     const [command, ...args] = item.command;
     process.stdout.write(`\n[validation:${item.scope}] ${command} ${args.join(' ')}\n`);

@@ -131,7 +131,8 @@ export function discoverProductUnits(root = repoRoot) {
     const ports = {};
     if (webExports.has(componentId)) {
       const sourcePath = `packages/web/src/components/${componentId}/`;
-      ports.web = { paths: [sourcePath], browser: true, dependencies: scanUnitDependencies(root, sourcePath, ownedUnits, packageManifests) };
+      const stylePaths = walkFiles(root, sourcePath).filter((file) => file.endsWith('.css'));
+      ports.web = { paths: [sourcePath], stylePaths, browser: true, dependencies: scanUnitDependencies(root, sourcePath, ownedUnits, packageManifests) };
     }
     for (const port of frameworkPorts) {
       if (!frameworkExports.get(port)?.has(componentId)) continue;
