@@ -12,9 +12,24 @@ function compileTargets() {
   for (const unit of discovery.ownedUnits) targets[unit.node] = { paths: [unit.sourcePath, unit.testPath, unit.metadataPath], dependsOn: [unit.package, ...unit.dependencies], evidence: [`${unit.node}:test`, ...packageEvidence(unit.package)] };
   for (const component of discovery.components) {
     const webNode = component.ports.web ? `component:${component.component}:web` : null;
+    const webStyleNode = component.ports.web?.stylePaths?.length ? `component:${component.component}:web-style` : null;
     for (const [port, config] of Object.entries(component.ports)) {
       const node = `component:${component.component}:${port}`; const evidence = [...packageEvidence(port)]; if (config.types) evidence.push(componentScope(component.component, `${port}:types`)); if (config.ssr) evidence.push(componentScope(component.component, `${port}:ssr`)); if (config.browser) evidence.push(componentScope(component.component, `${port}:browser`));
-      targets[node] = { paths: config.paths, dependsOn: [...new Set([port, ...config.dependencies, ...(port !== 'web' && webNode ? [webNode] : [])])], evidence };
+      targets[node] = { paths: config.paths, dependsOn: [...new Set([port, ...config.dependencies, ...(port !== 'web' && webNode ? [webNode] : [])])], evidence, ...(port === 'web' && webStyleNode ? { aggregate: true } : {}) };
+      if (port !== 'web' && webStyleNode && config.browser) {
+        targets[`component:${component.component}:${port}:style-impact`] = {
+          paths: [],
+          dependsOn: [webStyleNode],
+          evidence: [componentScope(component.component, `${port}:browser`)],
+        };
+      }
+    }
+    if (webStyleNode) {
+      targets[webStyleNode] = {
+        paths: component.ports.web.stylePaths,
+        dependsOn: ['web'],
+        evidence: ['lint-web-css', ...packageEvidence('web'), componentScope(component.component, 'web:browser')],
+      };
     }
     const conformanceNode = `component:${component.component}:conformance`; const conformanceEvidence = []; if (component.conformanceTypes) conformanceEvidence.push(componentScope(component.component, 'conformance:types')); for (const [port, config] of Object.entries(component.ports)) if (config.browser) conformanceEvidence.push(componentScope(component.component, `${port}:browser`)); targets[conformanceNode] = { paths: [...(component.conformanceTypes ? [component.conformanceTypes] : []), ...component.browser.paths], dependsOn: webNode ? [webNode] : [], evidence: conformanceEvidence };
     const documentationNode = `component:${component.component}:documentation`; targets[documentationNode] = { paths: component.documentationPaths, dependsOn: [conformanceNode], evidence: ['lint-docs', 'docs-source', 'docs-build', 'docs-site', 'browser-docs-chromium'] }; componentDocumentationTargets.push(documentationNode);
