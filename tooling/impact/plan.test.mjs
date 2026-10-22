@@ -21,11 +21,12 @@ test('package-local evidence remains scoped to its component port', () => {
   assert.ok(!plan.validationScopes.includes('component:button:vue:ssr'));
 });
 
-test('shared Web component changes fan out through every discovered port', () => {
+test('shared component CSS selects style and browser evidence without type or SSR fan-out', () => {
   const plan = createPlan(['packages/web/src/components/button/button.css']);
-  assert.deepEqual(plan.directNodes, ['component:button:web']);
-  for (const node of ['component:button:web', 'component:button:react', 'component:button:angular', 'component:button:vue', 'component:button:conformance', 'component:button:documentation']) assert.ok(plan.affectedNodes.includes(node), node);
-  for (const scope of ['component:button:web:browser', 'component:button:react:ssr', 'component:button:angular:ssr', 'component:button:vue:ssr', 'docs-build']) assert.ok(plan.validationScopes.includes(scope), scope);
+  assert.deepEqual(plan.directNodes, ['component:button:web-style']);
+  assert.equal(plan.broadened, false);
+  for (const scope of ['lint-web-css', 'pack-web', 'consumer-web', 'component:button:web:browser', 'component:button:react:browser', 'component:button:angular:browser', 'component:button:vue:browser']) assert.ok(plan.validationScopes.includes(scope), scope);
+  for (const scope of ['component:button:react:types', 'component:button:react:ssr', 'component:button:angular:ssr', 'component:button:vue:ssr', 'pack-react', 'pack-angular', 'pack-vue', 'docs-build']) assert.equal(plan.validationScopes.includes(scope), false, scope);
 });
 
 test('renderer-neutral capability changes select only actual Tabs consumers and their evidence', () => {
@@ -93,6 +94,7 @@ test('legacy-only changes remain isolated', () => {
 });
 
 test('classification returns the most specific owner', () => {
+  assert.deepEqual(classifyPath('packages/web/src/components/button/button.css'), { nodes: ['component:button:web-style'], broad: false });
   assert.deepEqual(classifyPath('packages/vue/src/components/button/index.ts'), { nodes: ['component:button:vue'], broad: false });
   assert.deepEqual(classifyPath('components/button/docs/index.html'), { nodes: ['component:button:documentation'], broad: false });
   assert.deepEqual(classifyPath('packages/vue/src/index.ts'), { nodes: ['vue'], broad: false });
