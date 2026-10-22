@@ -8,6 +8,7 @@ Public package direction:
 
 - `@vyrnforge/core`
 - `@vyrnforge/web`
+- `@vyrnforge/icons`
 - `@vyrnforge/react`
 - `@vyrnforge/angular`
 - `@vyrnforge/vue`

@@ -21,6 +21,28 @@ test('current Button is discovered from package subpaths and component ownership
   assert.deepEqual(productPreparationProblems(), []);
 });
 
+test('shared Web foundation stylesheet exports are not component products', () => {
+  const root = mkdtempSync(path.join(os.tmpdir(), 'vf-foundation-style-discovery-'));
+  const write = writer(root);
+  write('package.json', JSON.stringify({ workspaces: ['packages/web'] }));
+  write('packages/web/package.json', JSON.stringify({
+    name: '@vyrnforge/web',
+    exports: {
+      '.': './dist/index.js',
+      './styles.css': './dist/styles.css',
+      './styles/tokens.css': './dist/styles/tokens.css',
+      './styles/foundation.css': './dist/styles/foundation.css',
+      './styles/reset.css': './dist/styles/reset.css',
+    },
+  }));
+  write('packages/web/src/styles/tokens.css');
+  write('packages/web/src/styles/foundation.css');
+  write('packages/web/src/styles/reset.css');
+  const discovery = discoverProductUnits(root);
+  assert.deepEqual(discovery.components, []);
+  assert.deepEqual(productPreparationProblems(root), []);
+});
+
 test('a newly exposed component automatically requires its owned evidence', () => {
   const root = mkdtempSync(path.join(os.tmpdir(), 'vf-product-discovery-'));
   const write = writer(root);

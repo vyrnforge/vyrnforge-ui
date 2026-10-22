@@ -1,17 +1,41 @@
 import { readFile } from 'node:fs/promises';
+import { renderRuntimeTokens } from '../tokens/render.mjs';
 
 const root = JSON.parse(await readFile('package.json', 'utf8'));
 const support = JSON.parse(await readFile('tooling/compatibility/support-status.json', 'utf8'));
 const impact = JSON.parse(await readFile('testing/impact.json', 'utf8'));
 const browserQualification = JSON.parse(await readFile('tooling/compatibility/foundation-browser-qualification.json', 'utf8'));
+const webManifest = JSON.parse(await readFile('packages/web/package.json', 'utf8'));
 
-const packages = ['core', 'web', 'react', 'angular', 'vue', 'elements'];
+const packages = ['core', 'web', 'icons', 'react', 'angular', 'vue', 'elements'];
 for (const name of packages) {
   const script = `lint:${name}`;
   if (!root.scripts?.[script]) throw new Error(`Missing scoped TypeScript lint script: ${script}`);
   const scope = `lint-${name}`;
   if (!impact.scopeOrder?.includes(scope)) throw new Error(`Testing impact metadata is missing scoped lint evidence: ${scope}`);
 }
+
+if (root.scripts?.['generate:tokens'] !== 'node tooling/tokens/generate.mjs --write') throw new Error('Token authoring must expose the canonical generation command');
+if (root.scripts?.['verify:tokens'] !== 'node tooling/tokens/generate.mjs --check') throw new Error('Token authoring must expose the canonical drift check');
+const tokensCss = await readFile('packages/web/src/styles/tokens.css', 'utf8');
+if (tokensCss !== renderRuntimeTokens()) throw new Error('Runtime token CSS has drifted from the repository-owned token source');
+
+const requiredCssExports = {
+  './styles.css': './dist/styles.css',
+  './styles/tokens.css': './dist/styles/tokens.css',
+  './styles/foundation.css': './dist/styles/foundation.css',
+  './styles/reset.css': './dist/styles/reset.css',
+};
+for (const [entrypoint, target] of Object.entries(requiredCssExports)) {
+  if (webManifest.exports?.[entrypoint] !== target) throw new Error(`@vyrnforge/web is missing canonical CSS export ${entrypoint}`);
+}
+const aggregateCss = await readFile('packages/web/src/styles.css', 'utf8');
+if (!aggregateCss.includes('@import "./styles/foundation.css";')) throw new Error('Aggregate Web CSS must include the shared foundation stylesheet');
+if (aggregateCss.includes('@import "./styles/reset.css";')) throw new Error('The optional reset must not be included by the aggregate stylesheet');
+const foundationCss = await readFile('packages/web/src/styles/foundation.css', 'utf8');
+if (!foundationCss.includes('[data-vf-visually-hidden]')) throw new Error('Foundation CSS must provide the shared visually-hidden contract');
+if (!foundationCss.includes('prefers-reduced-motion: reduce')) throw new Error('Foundation CSS must provide reduced-motion plumbing');
+await readFile('packages/web/src/styles/reset.css', 'utf8');
 
 if (root.devDependencies?.typescript !== '6.0.3') throw new Error('Foundation authoring compiler must remain pinned to TypeScript 6.0.3 until compatibility is deliberately revised');
 if (root.devDependencies?.['typescript-eslint'] !== '8.71.2') throw new Error('Foundation TypeScript lint tooling must remain pinned until deliberately revised');
