@@ -7,6 +7,8 @@ for (const project of projects) {
   if (!['chromium', 'firefox', 'webkit'].includes(project)) throw new Error(`Unknown browser project: ${project}`);
 }
 
-execFileSync(npx, ['playwright', 'install', '--with-deps', ...projects], { stdio: 'inherit' });
+if (process.env.VF_PLAYWRIGHT_READY !== '1') {
+  execFileSync(npx, ['playwright', 'install', '--with-deps', ...projects], { stdio: 'inherit' });
+}
 const projectArgs = projects.flatMap((project) => ['--project', project]);
 execFileSync(npx, ['playwright', 'test', ...projectArgs], { stdio: 'inherit' });
