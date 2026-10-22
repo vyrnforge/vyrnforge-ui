@@ -11,7 +11,7 @@
   <h2>Styling problems</h2>
   <ul>
     <li>Confirm the application loaded either <code>@vyrnforge/web/styles.css</code> or every granular stylesheet required by the rendered components.</li>
-    <li>Check whether an application override changes a documented <code>--vf-*</code> token or ordinary CSS rather than depending on private <code>--_vf-*</code> aliases.</li>
+    <li>Check whether an application override changes a documented <code>--vf-*</code> token or ordinary CSS. Do not depend on undocumented implementation variables or internal selectors.</li>
     <li>Do not assume the optional reset is included by the aggregate stylesheet; load it explicitly only when the application wants it.</li>
     <li>Inspect the active <code>data-vf-theme</code> scope and inherited custom properties when nested themes do not render as expected.</li>
   </ul>
