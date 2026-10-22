@@ -1,0 +1,8 @@
+{
+  "schemaVersion": 1,
+  "browser": "chromium",
+  "playwright": "1.64.1",
+  "viewport": { "width": 480, "height": 260, "deviceScaleFactor": 1 },
+  "fixture": "foundation-design-language-v1",
+  "sha256": "BOOTSTRAP"
+}
