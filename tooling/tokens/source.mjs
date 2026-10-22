@@ -36,7 +36,16 @@ export const referenceTokens = Object.freeze({
   letterSpacing: Object.freeze({ tighter: '-0.04em', tight: '-0.02em', normal: '0', wide: '0.025em', wider: '0.05em' }),
   space: Object.freeze({ none: '0', xs: '0.25rem', sm: '0.5rem', md: '1rem', lg: '1.5rem', xl: '2rem', '2xl': '3rem', '3xl': '4rem' }),
   radius: Object.freeze({ surface: '0.5rem', control: '0.5rem' }),
-  motion: Object.freeze({ controlDuration: '120ms' }),
+  shadow: Object.freeze({
+    sm: '0 1px 2px rgb(13 23 48 / 0.12)',
+    md: '0 4px 12px rgb(13 23 48 / 0.16)',
+    lg: '0 12px 32px rgb(13 23 48 / 0.2)',
+  }),
+  motion: Object.freeze({
+    controlDuration: '120ms',
+    standardEasing: 'cubic-bezier(0.2, 0, 0, 1)',
+  }),
+  breakpoint: Object.freeze({ sm: '30rem', md: '48rem', lg: '64rem', xl: '80rem' }),
 });
 
 const c = referenceTokens.color;
@@ -65,10 +74,14 @@ export const runtimeTokenDefaults = Object.freeze({
   ...Object.fromEntries(Object.entries(referenceTokens.letterSpacing).map(([name, value]) => [`--vf-letter-spacing-${name}`, value])),
   ...Object.fromEntries(Object.entries(referenceTokens.space).map(([name, value]) => [`--vf-space-${name}`, value])),
   '--vf-radius-surface': referenceTokens.radius.surface,
+  '--vf-shadow-sm': referenceTokens.shadow.sm,
+  '--vf-shadow-md': referenceTokens.shadow.md,
+  '--vf-shadow-lg': referenceTokens.shadow.lg,
   '--vf-control-radius': referenceTokens.radius.control,
   '--vf-control-font-family': 'var(--vf-font-family-sans)',
   '--vf-control-font-weight': 'var(--vf-font-weight-semibold)',
   '--vf-control-motion-duration': referenceTokens.motion.controlDuration,
+  '--vf-motion-easing-standard': referenceTokens.motion.standardEasing,
 });
 
 export const darkThemeOverrides = Object.freeze({
