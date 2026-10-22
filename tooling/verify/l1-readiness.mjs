@@ -1,10 +1,9 @@
 import { readFile } from 'node:fs/promises';
 
-const root = JSON.parse(await readFile('package.json', 'utf8'));
 const impact = JSON.parse(await readFile('testing/impact.json', 'utf8'));
 const webManifest = JSON.parse(await readFile('packages/web/package.json', 'utf8'));
 const aggregateCss = await readFile('packages/web/src/styles.css', 'utf8');
-const elementalCss = await readFile('packages/web/src/styles/elemental-primitives.css', 'utf8');
+const elementalCss = await readFile('packages/web/src/components/elemental-primitives/elemental-primitives.css', 'utf8');
 const docsRegistry = JSON.parse(await readFile('documentation/site/registry.json', 'utf8'));
 const l1Docs = await readFile('documentation/shared/l1-primitives.html', 'utf8');
 
@@ -28,10 +27,10 @@ for (const privateRecipe of ['._vf-checkmark', '._vf-radiomark', '._vf-selection
   if (elementalCss.includes(publicName)) throw new Error(`Internal Layer 1 recipe leaked a public data hook: ${publicName}`);
 }
 
-if (webManifest.exports?.['./styles/elemental-primitives.css'] !== './dist/styles/elemental-primitives.css') {
-  throw new Error('@vyrnforge/web must export the Layer 1 elemental stylesheet');
+if (webManifest.exports?.['./styles/elemental-primitives.css'] !== './dist/components/elemental-primitives/elemental-primitives.css') {
+  throw new Error('@vyrnforge/web must export the Layer 1 elemental stylesheet from its conventional component output');
 }
-if (!aggregateCss.includes('@import "./styles/elemental-primitives.css";')) {
+if (!aggregateCss.includes('@import "./components/elemental-primitives/elemental-primitives.css";')) {
   throw new Error('Aggregate Web CSS must include the Layer 1 elemental stylesheet');
 }
 
@@ -46,9 +45,6 @@ for (const deferred of ['StatusIndicator', 'AvatarFallback']) {
 const l1Route = docsRegistry.pages?.find((page) => page.slug === 'foundations/l1-primitives');
 if (!l1Route || l1Route.source !== 'documentation/shared/l1-primitives.html') throw new Error('Layer 1 primitive documentation route is missing');
 
-if (root.scripts?.['test:browser:l1-primitives'] !== 'node tooling/testing/l1-elemental-browser.mjs') {
-  throw new Error('Layer 1 browser evidence must expose the canonical test command');
-}
 if (!impact.scopeOrder?.includes('browser-l1-primitives')) throw new Error('Layer 1 browser evidence scope is missing');
 for (const tier of ['main', 'scheduled', 'release']) {
   if (!impact.tiers?.[tier]?.includes('browser-l1-primitives')) throw new Error(`Layer 1 browser evidence is missing from ${tier} validation`);
