@@ -7,6 +7,7 @@ const frameworkPorts = ['react', 'angular', 'vue', 'elements'];
 const ssrPorts = new Set(['react', 'angular', 'vue']);
 const sourceExtensions = ['.ts', '.tsx', '.mts', '.cts'];
 const ownedKinds = ['capabilities', 'accessibility', 'foundations'];
+const webFoundationStyleIds = new Set(['tokens', 'foundation', 'reset']);
 
 function readJson(root, relativePath) { return JSON.parse(readFileSync(path.join(root, relativePath), 'utf8')); }
 function existingPath(root, relativePath) { return existsSync(path.join(root, relativePath)); }
@@ -35,7 +36,10 @@ function workspacePackages(root) {
   return (manifest.workspaces ?? []).filter((workspace) => /^packages\/[^/*]+$/.test(workspace)).map((workspace) => path.posix.basename(workspace)).filter((name) => existingPath(root, `packages/${name}/package.json`));
 }
 function componentIdFromFrameworkExport(exportName) { return /^\.\/([a-z][a-z0-9-]*)$/.exec(exportName)?.[1] ?? null; }
-function componentIdFromWebExport(exportName) { return /^\.\/styles\/([a-z][a-z0-9-]*)\.css$/.exec(exportName)?.[1] ?? null; }
+function componentIdFromWebExport(exportName) {
+  const componentId = /^\.\/styles\/([a-z][a-z0-9-]*)\.css$/.exec(exportName)?.[1] ?? null;
+  return componentId && !webFoundationStyleIds.has(componentId) ? componentId : null;
+}
 function findExampleManifests(root, componentId) { return walkFiles(root, `components/${componentId}/examples`).filter((file) => file.endsWith('/example.json')); }
 function frameworkTopLevelModules(root, port) {
   const directory = path.join(root, `packages/${port}/src`);
