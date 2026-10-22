@@ -53,10 +53,14 @@
     --vf-space-2xl: 3rem;
     --vf-space-3xl: 4rem;
     --vf-radius-surface: 0.5rem;
+    --vf-shadow-sm: 0 1px 2px rgb(13 23 48 / 0.12);
+    --vf-shadow-md: 0 4px 12px rgb(13 23 48 / 0.16);
+    --vf-shadow-lg: 0 12px 32px rgb(13 23 48 / 0.2);
     --vf-control-radius: 0.5rem;
     --vf-control-font-family: var(--vf-font-family-sans);
     --vf-control-font-weight: var(--vf-font-weight-semibold);
     --vf-control-motion-duration: 120ms;
+    --vf-motion-easing-standard: cubic-bezier(0.2, 0, 0, 1);
   }
 }
 
