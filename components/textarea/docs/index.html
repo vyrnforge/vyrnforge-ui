@@ -1,0 +1,8 @@
+<p class="vf-docs-lede">Textarea styles a native multiline text-entry control while preserving browser and form semantics.</p>
+<section><h2>Overview</h2><p>Use Textarea for ordinary multiline text values. The browser remains responsible for editing, line breaks, selection, focus, value, resize, submission, reset, and constraint validation.</p></section>
+<section><h2>Installation and imports</h2><p>Load <code>@vyrnforge/web/styles/textarea.css</code>. React, Angular, and Vue use their <code>/textarea</code> package entrypoints; Native Web and Custom Elements applications use <code>data-vf-textarea</code> on a native textarea.</p></section>
+<section><h2>Quick start</h2><div data-vf-example="textarea/basic"></div></section>
+<section><h2>Accessibility</h2><p>Always provide an accessible name. Prefer a native <code>&lt;label&gt;</code> when practical. Keep disabled, readonly, required, and invalid semantics distinct.</p></section>
+<section><h2>Styling</h2><p>The stable styling hook is <code>data-vf-textarea</code>. Shared semantic tokens drive surface, text, border, focus, disabled, readonly, and invalid presentation without suppressing native resize behavior.</p></section>
+<section><h2>Framework API</h2><p>React and Vue expose <code>Textarea</code>; Angular exposes <code>vfTextarea</code>. Native <code>rows</code>, <code>cols</code>, <code>wrap</code>, minlength, and maxlength remain available. No <code>&lt;vf-textarea&gt;</code> custom element is introduced.</p></section>
+<section><h2>Compatibility</h2><p>The rebuild contract preserves native multiline and form behavior and uses the same canonical Web styling across implemented framework ports.</p></section>

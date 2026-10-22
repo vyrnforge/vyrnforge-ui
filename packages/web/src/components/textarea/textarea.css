@@ -1,0 +1,62 @@
+@import "../../styles/tokens.css";
+
+@layer vyrnforge.components {
+  :where(textarea[data-vf-textarea]) {
+    background: var(--vf-color-surface);
+    border: 1px solid var(--vf-color-border);
+    border-radius: var(--vf-control-radius);
+    box-sizing: border-box;
+    color: var(--vf-color-text);
+    font-family: var(--vf-control-font-family);
+    font-size: var(--vf-font-size-md);
+    font-weight: var(--vf-font-weight-regular);
+    line-height: var(--vf-line-height-normal);
+    min-block-size: 2.5rem;
+    min-inline-size: 0;
+    padding-block: 0.4375rem;
+    padding-inline: 0.75rem;
+    transition: border-color var(--vf-control-motion-duration) ease, background-color var(--vf-control-motion-duration) ease;
+  }
+
+  :where(textarea[data-vf-textarea]::placeholder) {
+    color: var(--vf-color-text-muted);
+    opacity: 1;
+  }
+
+  :where(textarea[data-vf-textarea]:focus-visible) {
+    outline: 3px solid var(--vf-color-focus-ring);
+    outline-offset: 2px;
+  }
+
+  :where(textarea[data-vf-textarea]:disabled) {
+    background: var(--vf-color-disabled-background);
+    border-color: var(--vf-color-disabled-border);
+    color: var(--vf-color-disabled-foreground);
+    cursor: not-allowed;
+  }
+
+  :where(textarea[data-vf-textarea]:read-only:not(:disabled)) {
+    background: var(--vf-color-surface-hover);
+  }
+
+  :where(textarea[data-vf-textarea]:invalid:not(:placeholder-shown), textarea[data-vf-textarea][aria-invalid="true"]) {
+    border-color: var(--vf-color-danger-border);
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    :where(textarea[data-vf-textarea]) { transition: none; }
+  }
+
+  @media (forced-colors: active) {
+    :where(textarea[data-vf-textarea]) {
+      background: Field;
+      border-color: FieldText;
+      color: FieldText;
+      forced-color-adjust: auto;
+    }
+
+    :where(textarea[data-vf-textarea]:focus-visible) { outline-color: Highlight; }
+    :where(textarea[data-vf-textarea]:disabled) { border-color: GrayText; color: GrayText; }
+    :where(textarea[data-vf-textarea]:invalid:not(:placeholder-shown), textarea[data-vf-textarea][aria-invalid="true"]) { border-color: Highlight; }
+  }
+}

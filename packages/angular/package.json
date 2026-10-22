@@ -14,6 +14,7 @@
     "./dialog": { "types": "./dist/components/dialog/index.d.ts", "import": "./dist/components/dialog/index.js", "default": "./dist/components/dialog/index.js" },
     "./icon": { "types": "./dist/components/icon/index.d.ts", "import": "./dist/components/icon/index.js", "default": "./dist/components/icon/index.js" },
     "./input": { "types": "./dist/components/input/index.d.ts", "import": "./dist/components/input/index.js", "default": "./dist/components/input/index.js" },
+    "./textarea": { "types": "./dist/components/textarea/index.d.ts", "import": "./dist/components/textarea/index.js", "default": "./dist/components/textarea/index.js" },
     "./layout": { "types": "./dist/components/layout/index.d.ts", "import": "./dist/components/layout/index.js", "default": "./dist/components/layout/index.js" },
     "./surface": { "types": "./dist/components/surface/index.d.ts", "import": "./dist/components/surface/index.js", "default": "./dist/components/surface/index.js" },
     "./tabs": { "types": "./dist/components/tabs/index.d.ts", "import": "./dist/components/tabs/index.js", "default": "./dist/components/tabs/index.js" },
