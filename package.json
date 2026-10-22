@@ -40,6 +40,7 @@
     "verify:packages": "node tooling/verify/package-contracts.mjs",
     "verify:compatibility": "node tooling/verify/compatibility.mjs",
     "verify:foundation-readiness": "node tooling/verify/foundation-readiness.mjs",
+    "verify:l1-readiness": "node tooling/verify/l1-readiness.mjs",
     "verify:documentation": "node tooling/verify/documentation-structure.mjs",
     "verify:docs-site": "node tooling/verify/docs-site.mjs",
     "verify:testing-structure": "node tooling/verify/testing-structure.mjs",
