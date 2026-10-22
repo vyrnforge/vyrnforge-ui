@@ -1,0 +1,28 @@
+@import "../../styles/tokens.css";
+
+@layer vyrnforge.components {
+  :where([data-vf-separator]) {
+    border: 0;
+    box-sizing: border-box;
+    flex-shrink: 0;
+    margin: 0;
+    padding: 0;
+  }
+
+  :where([data-vf-separator-orientation="horizontal"]) {
+    border-block-start: 1px solid var(--vf-color-border);
+    inline-size: 100%;
+  }
+
+  :where([data-vf-separator-orientation="vertical"]) {
+    block-size: 100%;
+    border-inline-start: 1px solid var(--vf-color-border);
+  }
+
+  @media (forced-colors: active) {
+    :where([data-vf-separator]) {
+      border-color: CanvasText;
+      forced-color-adjust: auto;
+    }
+  }
+}
