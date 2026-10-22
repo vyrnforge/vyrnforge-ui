@@ -1,0 +1,9 @@
+{
+  "id": "elemental-primitives/basic",
+  "title": "Layer 1 elemental primitives",
+  "description": "Native-first code, keyboard input, mark, image, loading placeholder, color sample, and semantic prose using the shared Web contract.",
+  "defaultFramework": "native-web",
+  "frameworks": {
+    "native-web": { "label": "Native Web", "language": "html", "source": "native-web.html" }
+  }
+}
