@@ -27,7 +27,6 @@ function compileTargets() {
     dependsOn: [],
     evidence: ['bundle-baselines'],
   };
-  const componentDocumentationTargets = [];
   for (const unit of discovery.ownedUnits) targets[unit.node] = { paths: [unit.sourcePath, unit.testPath, unit.metadataPath], dependsOn: [unit.package, ...unit.dependencies], evidence: [`${unit.node}:test`, ...packageEvidence(unit.package)] };
   for (const component of discovery.components) {
     const webNode = component.ports.web ? `component:${component.component}:web` : null;
@@ -61,10 +60,8 @@ function compileTargets() {
     targets[conformanceNode] = { paths: [...(component.conformanceTypes ? [component.conformanceTypes] : []), ...component.browser.paths], dependsOn: webNode ? [webNode] : [], evidence: conformanceEvidence };
     const documentationNode = `component:${component.component}:documentation`;
     targets[documentationNode] = { paths: component.documentationPaths, dependsOn: [conformanceNode], evidence: ['docs-source', componentScope(component.component, 'docs')] };
-    componentDocumentationTargets.push(documentationNode);
     targets[`component:${component.component}:changes`] = { paths: [component.changesPath], dependsOn: [], evidence: ['change-fragments'] };
   }
-  targets.documentation.dependsOn = [...new Set([...targets.documentation.dependsOn, ...componentDocumentationTargets])];
   return targets;
 }
 const targets = compileTargets();
