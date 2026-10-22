@@ -6,6 +6,8 @@ export { Icon } from './components/icon/index.js';
 export type { IconDefinition, IconProps, IconShape, IconSize, IconVariant } from './components/icon/index.js';
 export { Input } from './components/input/index.js';
 export type { InputProps, InputType } from './components/input/index.js';
+export { Textarea } from './components/textarea/index.js';
+export type { TextareaProps } from './components/textarea/index.js';
 export { Cluster, Container, Grid, Stack } from './components/layout/index.js';
 export type { ClusterAlign, ClusterJustify, ClusterProps, ContainerProps, ContainerSize, GridProps, LayoutElement, LayoutSpace, StackAlign, StackJustify, StackProps } from './components/layout/index.js';
 export { Surface } from './components/surface/index.js';

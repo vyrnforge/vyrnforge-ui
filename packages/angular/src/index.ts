@@ -6,6 +6,7 @@ export { VfIconComponent } from './components/icon/index.js';
 export type { IconDefinition, IconShape, IconSize, IconVariant } from './components/icon/index.js';
 export { VfInputDirective } from './components/input/index.js';
 export type { InputType } from './components/input/index.js';
+export { VfTextareaDirective } from './components/textarea/index.js';
 export { VfClusterDirective, VfContainerDirective, VfGridDirective, VfStackDirective } from './components/layout/index.js';
 export type { ClusterAlign, ClusterJustify, ContainerSize, LayoutSpace, StackAlign, StackJustify } from './components/layout/index.js';
 export { VfSurfaceDirective } from './components/surface/index.js';

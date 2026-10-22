@@ -39,6 +39,7 @@
     "./styles/dialog.css": "./dist/components/dialog/dialog.css",
     "./styles/icon.css": "./dist/components/icon/icon.css",
     "./styles/input.css": "./dist/components/input/input.css",
+    "./styles/textarea.css": "./dist/components/textarea/textarea.css",
     "./styles/layout.css": "./dist/components/layout/layout.css",
     "./styles/surface.css": "./dist/components/surface/surface.css",
     "./styles/tabs.css": "./dist/components/tabs/tabs.css",
