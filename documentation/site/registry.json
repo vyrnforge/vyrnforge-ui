@@ -2,6 +2,7 @@
   "pages": [
     { "slug": "", "title": "Getting Started", "group": "Getting Started", "kind": "shared", "source": "documentation/shared/getting-started.html" },
     { "slug": "foundations/styling", "title": "Styling", "group": "Foundations", "kind": "shared", "source": "documentation/shared/styling.html" },
+    { "slug": "foundations/l1-primitives", "title": "Layer 1 Primitives", "group": "Foundations", "kind": "shared", "source": "documentation/shared/l1-primitives.html" },
     { "slug": "foundations/accessibility", "title": "Accessibility", "group": "Foundations", "kind": "shared", "source": "documentation/shared/accessibility.html" },
     { "slug": "foundations/state-and-behavior", "title": "State & Behavior", "group": "Foundations", "kind": "shared", "source": "documentation/shared/state-behavior.html" },
     { "slug": "guides/testing", "title": "Testing Applications", "group": "Guides", "kind": "shared", "source": "documentation/shared/testing.html" },
