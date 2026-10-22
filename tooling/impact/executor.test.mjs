@@ -1,7 +1,7 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import { expandScopes } from '../impact/scopes.mjs';
-import { createExecutionPlan } from '../impact/execute.mjs';
+import { browserProjectsForExecution, createExecutionPlan } from '../impact/execute.mjs';
 
 test('framework build execution includes foundation prerequisites once', () => {
   const execution = expandScopes(['build-react']);
@@ -28,6 +28,14 @@ test('component scopes resolve from discovered ownership instead of CI definitio
   assert.deepEqual(execution.find((item) => item.scope === 'component:button:react:ssr').command, ['node', 'tooling/testing/run-component-ssr.mjs', 'button', 'react']);
   assert.deepEqual(execution.find((item) => item.scope === 'component:button:react:browser').command, ['node', 'tooling/testing/run-component-browser.mjs', 'button', 'react', 'chromium']);
   assert.deepEqual(execution.find((item) => item.scope === 'component:button:conformance:types').command, ['node', 'tooling/testing/check-component-types.mjs', 'button', 'conformance']);
+});
+
+test('browser setup is deduplicated to the widest selected browser matrix', () => {
+  const chromium = expandScopes(['component:button:react:browser', 'component:button:vue:browser']);
+  assert.deepEqual(browserProjectsForExecution(chromium), ['chromium']);
+  const cross = expandScopes(['component:button:web:browser-cross', 'component:button:react:browser']);
+  assert.deepEqual(browserProjectsForExecution(cross), ['chromium', 'firefox', 'webkit']);
+  assert.deepEqual(browserProjectsForExecution(expandScopes(['pack-core'])), []);
 });
 
 test('change rendering depends on fragment validation', () => {
