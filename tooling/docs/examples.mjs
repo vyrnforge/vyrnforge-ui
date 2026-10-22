@@ -6,7 +6,7 @@ import { discoverProductUnits } from '../testing/discover-product-units.mjs';
 const supportedFrameworks = ['native-web', 'react', 'angular', 'vue', 'elements'];
 
 function safeName(value) { return value.replace(/[^a-z0-9]+/gi, '-').replace(/^-|-$/g, '').toLowerCase(); }
-function escapeHtml(value) { return String(value).replaceAll('&', '&amp;').replaceAll('<', '&lt;').replaceAll('>', '&gt;').replaceAll('"', '&quot;'); }
+function escapeHtml(value) { return String(value).replaceAll('&', '&amp;').replaceAll('<', '&lt;').replaceAll('"', '&quot;'); }
 function safeJson(value) { return JSON.stringify(value).replaceAll('<', '\\u003c'); }
 
 function exportTarget(value) {
@@ -15,14 +15,15 @@ function exportTarget(value) {
   return value.import || value.default || Object.values(value).find((entry) => typeof entry === 'string') || null;
 }
 
-function publicPackageAliases(root) {
+export function publicPackageAliases(root, { source = false } = {}) {
   const aliases = {};
   for (const { name, manifest } of discoverProductUnits(root).packages) {
     for (const [exportName, value] of Object.entries(manifest.exports ?? {})) {
       if (exportName === '.') continue;
       const target = exportTarget(value);
       if (!target?.startsWith('./dist/')) continue;
-      aliases[`${manifest.name}${exportName.slice(1)}`] = path.join(root, `packages/${name}`, target);
+      const resolvedTarget = source ? target.replace(/^\.\/dist\//, './src/') : target;
+      aliases[`${manifest.name}${exportName.slice(1)}`] = path.join(root, `packages/${name}`, resolvedTarget);
     }
   }
   return aliases;
@@ -89,7 +90,7 @@ function previewDocument({ rootMarkup, script, stylesHref, frameCssHref }) {
   return `<!doctype html><html lang="en" data-vf-theme="light"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width"><link rel="stylesheet" href="${escapeHtml(stylesHref)}"><link rel="stylesheet" href="${escapeHtml(frameCssHref)}"><title>VyrnForge example</title></head><body>${rootMarkup}${script ? `<script src="${escapeHtml(script)}"></script>` : ''}</body></html>`;
 }
 
-async function compileFrameworkExample({ root, sourcePath, outputPath, aliases }) {
+export async function compileFrameworkExample({ root, sourcePath, outputPath, aliases }) {
   await build({ entryPoints: [sourcePath], alias: aliases, bundle: true, format: 'iife', platform: 'browser', target: ['es2022'], legalComments: 'none', tsconfigRaw: { compilerOptions: { experimentalDecorators: true, useDefineForClassFields: false, jsx: 'react' } }, outfile: outputPath });
 }
 
