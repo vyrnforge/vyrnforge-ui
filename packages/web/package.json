@@ -9,31 +9,11 @@
   "main": "./dist/index.js",
   "types": "./dist/index.d.ts",
   "exports": {
-    ".": {
-      "types": "./dist/index.d.ts",
-      "import": "./dist/index.js",
-      "default": "./dist/index.js"
-    },
-    "./icon": {
-      "types": "./dist/components/icon/index.d.ts",
-      "import": "./dist/components/icon/index.js",
-      "default": "./dist/components/icon/index.js"
-    },
-    "./input": {
-      "types": "./dist/components/input/index.d.ts",
-      "import": "./dist/components/input/index.js",
-      "default": "./dist/components/input/index.js"
-    },
-    "./layout": {
-      "types": "./dist/components/layout/index.d.ts",
-      "import": "./dist/components/layout/index.js",
-      "default": "./dist/components/layout/index.js"
-    },
-    "./text": {
-      "types": "./dist/components/text/index.d.ts",
-      "import": "./dist/components/text/index.js",
-      "default": "./dist/components/text/index.js"
-    },
+    ".": { "types": "./dist/index.d.ts", "import": "./dist/index.js", "default": "./dist/index.js" },
+    "./icon": { "types": "./dist/components/icon/index.d.ts", "import": "./dist/components/icon/index.js", "default": "./dist/components/icon/index.js" },
+    "./input": { "types": "./dist/components/input/index.d.ts", "import": "./dist/components/input/index.js", "default": "./dist/components/input/index.js" },
+    "./layout": { "types": "./dist/components/layout/index.d.ts", "import": "./dist/components/layout/index.js", "default": "./dist/components/layout/index.js" },
+    "./text": { "types": "./dist/components/text/index.d.ts", "import": "./dist/components/text/index.js", "default": "./dist/components/text/index.js" },
     "./styles.css": "./dist/styles.css",
     "./styles/tokens.css": "./dist/styles/tokens.css",
     "./styles/foundation.css": "./dist/styles/foundation.css",
@@ -44,14 +24,12 @@
     "./styles/input.css": "./dist/components/input/input.css",
     "./styles/textarea.css": "./dist/components/textarea/textarea.css",
     "./styles/layout.css": "./dist/components/layout/layout.css",
+    "./styles/separator.css": "./dist/components/separator/separator.css",
     "./styles/surface.css": "./dist/components/surface/surface.css",
     "./styles/tabs.css": "./dist/components/tabs/tabs.css",
-    "./styles/text.css": "./dist/components/text/text.css"
+    "./styles/text.css": "./dist/components/text/text.css",
+    "./styles/visually-hidden.css": "./dist/components/visually-hidden/visually-hidden.css"
   },
-  "dependencies": {
-    "@vyrnforge/core": "0.0.0-rebuild"
-  },
-  "scripts": {
-    "build": "node ../../tooling/tokens/generate.mjs --check && tsc -p tsconfig.json && node ../../tooling/build/copy-web-assets.mjs"
-  }
+  "dependencies": { "@vyrnforge/core": "0.0.0-rebuild" },
+  "scripts": { "build": "node ../../tooling/tokens/generate.mjs --check && tsc -p tsconfig.json && node ../../tooling/build/copy-web-assets.mjs" }
 }

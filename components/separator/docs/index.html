@@ -1,0 +1,18 @@
+<p class="vf-docs-lede">Separator is a native-first Layer 1 primitive for meaningful boundaries between adjacent content groups.</p>
+<section><h2>Overview</h2><p>Use Separator to represent a visible and semantic boundary between adjacent groups of content. It is non-interactive and owns only separator semantics, orientation, and one-dimensional visual treatment.</p></section>
+<section><h2>Installation and imports</h2><p>Native Web uses <code>@vyrnforge/web/styles/separator.css</code>. Framework entrypoints are <code>@vyrnforge/react/separator</code>, <code>@vyrnforge/angular/separator</code>, and <code>@vyrnforge/vue/separator</code>. Elements consumers use the Native Web contract directly.</p></section>
+<section><h2>Quick start</h2><div data-vf-example="separator/basic"></div></section>
+<section><h2>Anatomy</h2><p>Separator renders or decorates one native <code>hr</code> boundary and has no child content.</p></section>
+<section><h2>Variants and sizes</h2><p>The public contract exposes only <code>orientation="horizontal | vertical"</code>. Visual variants, sizes, thickness, and length props are intentionally deferred.</p></section>
+<section><h2>State</h2><p>Separator has no interactive or lifecycle state. Orientation is configuration rather than state.</p></section>
+<section><h2>Behavior</h2><p>Horizontal is the native default. Vertical usage preserves <code>hr</code> semantics and adds <code>aria-orientation="vertical"</code>.</p></section>
+<section><h2>Interaction</h2><p>Separator is never focusable by VyrnForge and adds no pointer or keyboard behavior.</p></section>
+<section><h2>Accessibility</h2><p>The native separator role is preserved. Vertical orientation is conveyed with <code>aria-orientation="vertical"</code>. A consumer may intentionally add <code>aria-hidden="true"</code> for a purely decorative line.</p></section>
+<section><h2>Forms</h2><p>Separator does not participate in form state, validation, or submission.</p></section>
+<section><h2>Styling</h2><p>The stable hooks are <code>data-vf-separator</code> and <code>data-vf-separator-orientation</code>. Canonical Web CSS uses the shared semantic border color, logical properties, low-specificity selectors, and forced-colors support.</p></section>
+<section><h2>Framework API</h2><p>React and Vue expose <code>Separator</code>; Angular exposes <code>VfSeparatorDirective</code> on an authored <code>hr</code>; Native Web uses the documented hooks. No dedicated custom element is required because native HTML already owns the semantic element.</p></section>
+<section><h2>CSR and SSR</h2><p>Native Web needs no JavaScript or hydration. React, Angular, and Vue preserve native <code>hr</code> output and the stable hooks during SSR.</p></section>
+<section><h2>Examples</h2><p>The basic executable example demonstrates the same semantic boundary contract across Native Web, React, Angular, and Vue.</p></section>
+<section><h2>Do / Don't</h2><p><strong>Do</strong> use Separator for meaningful group boundaries. <strong>Don't</strong> turn it into a spacing, responsive-layout, or generic border utility.</p></section>
+<section><h2>Testing guidance</h2><p>Verify native <code>hr</code> semantics, stable hooks, vertical ARIA orientation, token-driven borders, forced-colors visibility, and absence of interaction.</p></section>
+<section><h2>Compatibility</h2><p>Separator is defined for Native Web, React, Angular, and Vue in the rebuild channel. Elements consumption intentionally uses the Native Web contract rather than a redundant wrapper.</p></section>
