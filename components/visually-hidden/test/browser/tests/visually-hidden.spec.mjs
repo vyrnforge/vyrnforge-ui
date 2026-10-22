@@ -1,0 +1,22 @@
+import { test, expect } from '@playwright/test';
+import axeCore from 'axe-core';
+const port = process.env.VF_COMPONENT_PORT || 'web';
+test('VisuallyHidden removes visual layout while preserving accessible content', async ({ page }) => {
+  await page.goto(`/next/visually-hidden-fixtures/${port}.html`);
+  const hidden = page.locator('#hidden-label');
+  await expect(hidden).toHaveAttribute('data-vf-visually-hidden', '');
+  await expect(hidden).not.toHaveAttribute('aria-hidden', 'true');
+  await expect(hidden).not.toHaveAttribute('hidden', '');
+  expect(await hidden.textContent()).toBe('Notifications');
+  const style = await hidden.evaluate((el) => { const s = getComputedStyle(el); return { position: s.position, width: s.width, height: s.height, overflow: s.overflow, clipPath: s.clipPath, display: s.display, visibility: s.visibility }; });
+  expect(style.position).toBe('absolute');
+  expect(style.width).toBe('1px');
+  expect(style.height).toBe('1px');
+  expect(style.overflow).toBe('hidden');
+  expect(style.clipPath).toBe('inset(50%)');
+  expect(style.display).not.toBe('none');
+  expect(style.visibility).not.toBe('hidden');
+  await page.addScriptTag({ content: axeCore.source });
+  const results = await page.evaluate(async () => globalThis.axe.run(document));
+  expect(results.violations).toEqual([]);
+});

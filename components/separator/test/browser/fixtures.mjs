@@ -1,0 +1,16 @@
+import { mkdir, readFile, writeFile } from 'node:fs/promises';
+import path from 'node:path';
+
+const port = process.argv[2] || 'web';
+const root = process.cwd();
+const outDir = path.join(root, 'dist/docs/next/separator-fixtures');
+await mkdir(outDir, { recursive: true });
+const tokensCss = await readFile(path.join(root, 'packages/web/dist/styles/tokens.css'), 'utf8');
+const separatorCss = (await readFile(path.join(root, 'packages/web/dist/components/separator/separator.css'), 'utf8')).replace('@import "../../styles/tokens.css";\n', '');
+await writeFile(path.join(outDir, 'separator.css'), `${tokensCss}\n${separatorCss}\n#vertical-wrap { block-size: 4rem; display: flex; }`);
+const page = (body) => `<!doctype html><html lang="en"><head><meta charset="utf-8"><link rel="stylesheet" href="./separator.css"><title>Separator fixture</title></head><body><main>${body}</main></body></html>`;
+const bodyFor = (horizontal, vertical) => `<p>Account</p>${horizontal}<p>Security</p><div id="vertical-wrap">${vertical}</div>`;
+if (port === 'web') await writeFile(path.join(outDir, 'web.html'), page(bodyFor('<hr id="horizontal" data-vf-separator data-vf-separator-orientation="horizontal">', '<hr id="vertical" data-vf-separator data-vf-separator-orientation="vertical" aria-orientation="vertical">')));
+if (port === 'react') { const { createElement } = await import('react'); const { renderToStaticMarkup } = await import('react-dom/server'); const { Separator } = await import('@vyrnforge/react/separator'); await writeFile(path.join(outDir, 'react.html'), page(bodyFor(renderToStaticMarkup(createElement(Separator, { id: 'horizontal' })), renderToStaticMarkup(createElement(Separator, { id: 'vertical', orientation: 'vertical' })) ))); }
+if (port === 'vue') { const { createSSRApp, h } = await import('vue'); const { renderToString } = await import('@vue/server-renderer'); const { Separator } = await import('@vyrnforge/vue/separator'); const render = async (id, orientation) => renderToString(createSSRApp({ render: () => h(Separator, { id, orientation }) })); await writeFile(path.join(outDir, 'vue.html'), page(bodyFor(await render('horizontal', 'horizontal'), await render('vertical', 'vertical')))); }
+if (port === 'angular') { await import('@angular/compiler'); const { Component, provideZonelessChangeDetection } = await import('@angular/core'); const { bootstrapApplication } = await import('@angular/platform-browser'); const { renderApplication } = await import('@angular/platform-server'); const { VfSeparatorDirective } = await import('@vyrnforge/angular/separator'); class App {} Component({ selector: 'vf-separator-test', standalone: true, imports: [VfSeparatorDirective], template: '<main><p>Account</p><hr id="horizontal" vfSeparator><p>Security</p><div id="vertical-wrap"><hr id="vertical" vfSeparator [vfSeparatorOrientation]="\'vertical\'"></div></main>' })(App); const html = await renderApplication((context) => bootstrapApplication(App, { providers: [provideZonelessChangeDetection()] }, context), { document: '<!doctype html><html lang="en"><head><link rel="stylesheet" href="./separator.css"></head><body><vf-separator-test></vf-separator-test></body></html>' }); await writeFile(path.join(outDir, 'angular.html'), html); }

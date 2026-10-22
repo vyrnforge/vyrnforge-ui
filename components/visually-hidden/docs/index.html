@@ -1,0 +1,4 @@
+<p class="vf-docs-lede">VisuallyHidden keeps meaningful content in the accessibility tree while removing it from ordinary visual presentation.</p>
+<section><h2>Shared foundation</h2><pre><code>import '@vyrnforge/web/styles/foundation.css';</code></pre><p>The canonical hiding recipe is shared foundation CSS. <code>@vyrnforge/web/styles/visually-hidden.css</code> is a granular alias to that same foundation, not a second implementation.</p></section>
+<section><h2>Native semantics</h2><p>Choose the correct native element and apply <code>data-vf-visually-hidden</code>. The primitive never adds <code>aria-hidden</code>, <code>hidden</code>, <code>inert</code>, <code>display:none</code>, or <code>visibility:hidden</code>.</p></section>
+<section><h2>Frameworks</h2><p>React and Vue provide native-element convenience components and Angular provides a directive. Native Web is the Elements surface because a custom element adds no semantic value.</p></section>
