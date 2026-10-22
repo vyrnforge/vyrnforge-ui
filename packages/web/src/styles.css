@@ -1,5 +1,6 @@
 @layer vyrnforge.reset, vyrnforge.tokens, vyrnforge.themes, vyrnforge.foundation, vyrnforge.components;
 
+@import "./styles/foundation.css";
 @import "./components/button/button.css";
 @import "./components/dialog/dialog.css";
 @import "./components/icon/icon.css";

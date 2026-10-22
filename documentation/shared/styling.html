@@ -1,8 +1,10 @@
-<p class="vf-docs-lede">VyrnForge styling is available through public CSS entrypoints, design tokens, and stable component hooks. Use those documented surfaces to adapt the library to your application without depending on undocumented selectors.</p>
+<p class="vf-docs-lede">VyrnForge styling is available through public CSS entrypoints, generated design tokens, and stable component hooks. Use those documented surfaces to adapt the library to your application without depending on undocumented selectors.</p>
 <section>
   <h2>Load styles</h2>
   <pre><code>import '@vyrnforge/web/styles.css';</code></pre>
-  <p>You can also load a documented component stylesheet such as <code>@vyrnforge/web/styles/button.css</code> when your application only needs that component's styles.</p>
+  <p>The aggregate stylesheet includes runtime tokens, built-in themes, shared foundation styling, and component CSS. It intentionally does not include the optional global reset.</p>
+  <pre><code>import '@vyrnforge/web/styles/reset.css';</code></pre>
+  <p>Load the reset separately only when your application wants VyrnForge's conservative normalization. You can also load <code>@vyrnforge/web/styles/foundation.css</code>, <code>@vyrnforge/web/styles/tokens.css</code>, or a documented component stylesheet such as <code>@vyrnforge/web/styles/button.css</code> when you need a narrower surface.</p>
 </section>
 <section>
   <h2>Cascade layers</h2>
@@ -10,8 +12,16 @@
   <p>The reset is optional. Tokens, themes, foundations, and component styles are ordered so application styles can customize VyrnForge predictably.</p>
 </section>
 <section>
+  <h2>Design token pipeline</h2>
+  <p>Reference design decisions are repository-internal authoring inputs. VyrnForge generates the public runtime token and theme contract as CSS custom properties in <code>@vyrnforge/web</code>. Runtime themes use the same semantic token names rather than replacing component CSS or requiring a JavaScript theme runtime.</p>
+</section>
+<section>
+  <h2>Shared foundation helpers</h2>
+  <p>The foundation stylesheet owns cross-component styling responsibilities rather than framework-specific copies. It currently provides the documented <code>data-vf-visually-hidden</code> accessibility hook and shared reduced-motion plumbing.</p>
+</section>
+<section>
   <h2>Customization hierarchy</h2>
-  <p>Prefer public semantic tokens first, then documented component tokens, then stable styling hooks, then ordinary application CSS. Public VyrnForge custom properties use the <code>--vf-*</code> prefix.</p>
+  <p>Prefer public semantic tokens first, then documented component tokens, then stable styling hooks, then ordinary application CSS. Public VyrnForge custom properties use the <code>--vf-*</code> prefix. Private implementation variables use the <code>--_vf-*</code> convention and are not compatibility commitments.</p>
 </section>
 <section>
   <h2>Framework usage</h2>

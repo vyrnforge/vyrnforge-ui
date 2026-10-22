@@ -10,6 +10,7 @@ The approved active package topology is:
 
 - `@vyrnforge/core`
 - `@vyrnforge/web`
+- `@vyrnforge/icons`
 - `@vyrnforge/react`
 - `@vyrnforge/angular`
 - `@vyrnforge/vue`
@@ -19,13 +20,18 @@ Packages remain private while the rebuild foundation is being proven. Framework 
 
 ## Repository areas
 
-- `packages/` — the six active package surfaces plus the isolated legacy quarantine.
+- `packages/` — the seven active package surfaces plus the isolated legacy quarantine.
 - `apps/docs/` — public documentation presentation/runtime assets.
 - `documentation/` — shared and framework-adaptation public documentation sources.
 - `testing/` — repository-only contract, port, browser, visual, SSR, and component validation ownership.
-- `examples/` — executable public usage examples as components are introduced.
 - `fixtures/` — repository-only consumer and validation fixtures.
-- `tooling/` — build, architecture enforcement, impact analysis, documentation generation, and quality infrastructure.
+- `tooling/` — build, token generation, architecture enforcement, impact analysis, documentation generation, and quality infrastructure.
+
+## Foundation authoring
+
+Reference design decisions remain repository-internal under `tooling/tokens/`. Run `npm run generate:tokens` after changing the token source. `npm run verify:tokens` and foundation readiness checks ensure the generated `@vyrnforge/web` runtime token CSS is current.
+
+Canonical shared styling is owned by `@vyrnforge/web`. The aggregate `@vyrnforge/web/styles.css` includes tokens, themes, shared foundation styling, and component CSS but intentionally excludes the optional global reset. Consumers can opt into `@vyrnforge/web/styles/reset.css` separately or load granular component styles.
 
 ## Validation model
 

@@ -8,6 +8,8 @@
   "workspaces": ["packages/core", "packages/web", "packages/icons", "packages/react", "packages/angular", "packages/vue", "packages/elements"],
   "scripts": {
     "clean": "node tooling/build/clean.mjs",
+    "generate:tokens": "node tooling/tokens/generate.mjs --write",
+    "verify:tokens": "node tooling/tokens/generate.mjs --check",
     "build": "npm run build:core && npm run build:web && npm run build:icons && npm run build:react && npm run build:angular && npm run build:vue && npm run build:elements",
     "build:core": "npm run build --workspace @vyrnforge/core",
     "build:web": "npm run build --workspace @vyrnforge/web",

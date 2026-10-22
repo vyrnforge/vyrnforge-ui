@@ -1,0 +1,9 @@
+@layer vyrnforge.reset {
+  :where(*, *::before, *::after) {
+    box-sizing: border-box;
+  }
+
+  :where(button, input, select, textarea) {
+    font: inherit;
+  }
+}

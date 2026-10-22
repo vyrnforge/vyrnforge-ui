@@ -35,6 +35,9 @@
       "default": "./dist/components/text/index.js"
     },
     "./styles.css": "./dist/styles.css",
+    "./styles/tokens.css": "./dist/styles/tokens.css",
+    "./styles/foundation.css": "./dist/styles/foundation.css",
+    "./styles/reset.css": "./dist/styles/reset.css",
     "./styles/button.css": "./dist/components/button/button.css",
     "./styles/dialog.css": "./dist/components/dialog/dialog.css",
     "./styles/icon.css": "./dist/components/icon/icon.css",
@@ -49,6 +52,6 @@
     "@vyrnforge/core": "0.0.0-rebuild"
   },
   "scripts": {
-    "build": "tsc -p tsconfig.json && node ../../tooling/build/copy-web-assets.mjs"
+    "build": "node ../../tooling/tokens/generate.mjs --check && tsc -p tsconfig.json && node ../../tooling/build/copy-web-assets.mjs"
   }
 }
