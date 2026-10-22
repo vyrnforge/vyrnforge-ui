@@ -55,7 +55,7 @@ if (visualBaseline.schemaVersion !== 1 || visualBaseline.browser !== 'chromium' 
   throw new Error('Foundation visual baseline metadata does not match the selected browser toolchain');
 }
 if (visualBaseline.fixture !== 'foundation-design-language-v1') throw new Error('Foundation visual baseline fixture identity has drifted');
-if (visualBaseline.sha256 !== 'BOOTSTRAP' && !/^[a-f0-9]{64}$/.test(visualBaseline.sha256)) throw new Error('Foundation visual baseline must contain a SHA-256 digest');
+if (!/^[a-f0-9]{64}$/.test(visualBaseline.sha256)) throw new Error('Foundation visual baseline must contain a committed SHA-256 digest');
 
 for (const file of ['documentation/shared/migration.html', 'documentation/shared/diagnostics.html', 'documentation/shared/developer-support.html', 'CONTRIBUTING.md']) {
   await readFile(file, 'utf8');
