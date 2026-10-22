@@ -1,0 +1,9 @@
+@import "../../styles/tokens.css";
+
+@layer vyrnforge.components {
+  :where(input[data-vf-file-input]) { background: var(--vf-color-surface); border: 1px solid var(--vf-color-border); border-radius: var(--vf-control-radius); box-sizing: border-box; color: var(--vf-color-text); font-family: var(--vf-control-font-family); font-size: var(--vf-font-size-md); line-height: var(--vf-line-height-normal); min-block-size: 2.5rem; min-inline-size: 0; padding: 0.25rem; }
+  :where(input[data-vf-file-input]::file-selector-button) { background: var(--vf-color-surface-hover); border: 1px solid var(--vf-color-border); border-radius: calc(var(--vf-control-radius) * 0.75); color: var(--vf-color-text); cursor: pointer; font: inherit; margin-inline-end: 0.75rem; padding: 0.375rem 0.75rem; }
+  :where(input[data-vf-file-input]:focus-visible) { outline: 3px solid var(--vf-color-focus-ring); outline-offset: 2px; }
+  :where(input[data-vf-file-input]:disabled) { background: var(--vf-color-disabled-background); border-color: var(--vf-color-disabled-border); color: var(--vf-color-disabled-foreground); cursor: not-allowed; }
+  @media (forced-colors: active) { :where(input[data-vf-file-input]) { background: Field; border-color: FieldText; color: FieldText; } :where(input[data-vf-file-input]:focus-visible) { outline-color: Highlight; } }
+}

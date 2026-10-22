@@ -1,0 +1,9 @@
+@import "../../styles/tokens.css";
+
+@layer vyrnforge.components {
+  :where(select[data-vf-native-select]) { background: var(--vf-color-surface); border: 1px solid var(--vf-color-border); border-radius: var(--vf-control-radius); box-sizing: border-box; color: var(--vf-color-text); font-family: var(--vf-control-font-family); font-size: var(--vf-font-size-md); line-height: var(--vf-line-height-normal); min-block-size: 2.5rem; min-inline-size: 0; padding-block: 0.4375rem; padding-inline: 0.75rem 2rem; }
+  :where(select[data-vf-native-select]:focus-visible) { outline: 3px solid var(--vf-color-focus-ring); outline-offset: 2px; }
+  :where(select[data-vf-native-select]:disabled) { background: var(--vf-color-disabled-background); border-color: var(--vf-color-disabled-border); color: var(--vf-color-disabled-foreground); cursor: not-allowed; }
+  :where(select[data-vf-native-select]:invalid, select[data-vf-native-select][aria-invalid="true"]) { border-color: var(--vf-color-danger-border); }
+  @media (forced-colors: active) { :where(select[data-vf-native-select]) { background: Field; border-color: FieldText; color: FieldText; } :where(select[data-vf-native-select]:focus-visible) { outline-color: Highlight; } }
+}
