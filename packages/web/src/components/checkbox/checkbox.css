@@ -2,25 +2,96 @@
 
 @layer vyrnforge.components {
   :where(input[data-vf-checkbox]) {
-    accent-color: var(--vf-color-accent-background);
+    appearance: none;
+    background: var(--vf-color-surface);
+    border: 1px solid var(--vf-color-border-strong);
+    border-radius: 0.25rem;
     block-size: 1.125rem;
+    box-sizing: border-box;
+    color: var(--vf-color-accent-foreground);
     cursor: pointer;
+    display: grid;
     inline-size: 1.125rem;
     margin: 0;
+    place-content: center;
+    transition:
+      background-color var(--vf-control-motion-duration) var(--vf-motion-easing-standard),
+      border-color var(--vf-control-motion-duration) var(--vf-motion-easing-standard);
+  }
+
+  :where(input[data-vf-checkbox])::before {
+    block-size: 0.3125rem;
+    border-block-end: 0.125rem solid currentColor;
+    border-inline-start: 0.125rem solid currentColor;
+    content: "";
+    inline-size: 0.5625rem;
+    transform: rotate(-45deg) scale(0);
+    transform-origin: center;
+    transition: transform var(--vf-control-motion-duration) var(--vf-motion-easing-standard);
+  }
+
+  :where(input[data-vf-checkbox]:hover:not(:disabled):not(:checked):not(:indeterminate)) {
+    background: var(--vf-color-surface-hover);
+    border-color: var(--vf-color-text-subtle);
+  }
+
+  :where(input[data-vf-checkbox]:checked, input[data-vf-checkbox]:indeterminate) {
+    background: var(--vf-color-accent-background);
+    border-color: var(--vf-color-accent-background);
+  }
+
+  :where(input[data-vf-checkbox]:checked:hover:not(:disabled), input[data-vf-checkbox]:indeterminate:hover:not(:disabled)) {
+    background: var(--vf-color-accent-background-hover);
+    border-color: var(--vf-color-accent-background-hover);
+  }
+
+  :where(input[data-vf-checkbox]:checked)::before {
+    transform: rotate(-45deg) scale(1);
+  }
+
+  :where(input[data-vf-checkbox]:indeterminate)::before {
+    background: currentColor;
+    block-size: 0.125rem;
+    border: 0;
+    inline-size: 0.625rem;
+    transform: none;
   }
 
   :where(input[data-vf-checkbox]:focus-visible) {
     outline: 2px solid var(--vf-color-focus-ring);
-    outline-offset: 3px;
+    outline-offset: 2px;
   }
 
   :where(input[data-vf-checkbox]:disabled) {
+    background: var(--vf-color-disabled-background);
+    border-color: var(--vf-color-disabled-border);
+    color: var(--vf-color-disabled-foreground);
     cursor: not-allowed;
-    opacity: 0.6;
+  }
+
+  :where(input[data-vf-checkbox]:disabled:checked, input[data-vf-checkbox]:disabled:indeterminate) {
+    background: var(--vf-color-disabled-foreground);
+    border-color: var(--vf-color-disabled-foreground);
+    color: var(--vf-color-surface);
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    :where(input[data-vf-checkbox]),
+    :where(input[data-vf-checkbox])::before { transition: none; }
   }
 
   @media (forced-colors: active) {
-    :where(input[data-vf-checkbox]) { accent-color: Highlight; }
+    :where(input[data-vf-checkbox]) {
+      appearance: auto;
+      accent-color: Highlight;
+      background: Canvas;
+      border-color: CanvasText;
+      color: CanvasText;
+      forced-color-adjust: auto;
+    }
+
+    :where(input[data-vf-checkbox])::before { display: none; }
     :where(input[data-vf-checkbox]:focus-visible) { outline-color: Highlight; }
+    :where(input[data-vf-checkbox]:disabled) { border-color: GrayText; color: GrayText; }
   }
 }
