@@ -5,7 +5,10 @@ import { test, expect } from '@playwright/test';
 const readCss = async (path) => (await readFile(new URL(path, import.meta.url), 'utf8')).replace(/^@import .*;$/gm, '');
 const tokensCss = await readCss('../../packages/web/src/styles/tokens.css');
 const buttonCss = await readCss('../../packages/web/src/components/button/button.css');
+const checkboxCss = await readCss('../../packages/web/src/components/checkbox/checkbox.css');
 const inputCss = await readCss('../../packages/web/src/components/input/input.css');
+const radioCss = await readCss('../../packages/web/src/components/radio/radio.css');
+const sliderCss = await readCss('../../packages/web/src/components/slider/slider.css');
 const switchCss = await readCss('../../packages/web/src/components/switch/switch.css');
 const surfaceCss = await readCss('../../packages/web/src/components/surface/surface.css');
 const elementalCss = await readCss('../../packages/web/src/components/elemental-primitives/elemental-primitives.css');
@@ -50,7 +53,7 @@ html, body { margin: 0; background: #e4e4e7; font-family: var(--vf-font-family-s
   display: grid;
   grid-template-columns: 1fr 1fr;
   gap: 20px;
-  inline-size: 700px;
+  inline-size: 820px;
   padding: 20px;
 }
 .presentation-theme {
@@ -64,9 +67,12 @@ html, body { margin: 0; background: #e4e4e7; font-family: var(--vf-font-family-s
   border-radius: var(--vf-radius-surface);
 }
 .presentation-row { display: flex; gap: 10px; align-items: center; flex-wrap: wrap; }
-.presentation-field { inline-size: 100%; }
+.presentation-control-row { display: grid; grid-template-columns: repeat(6, minmax(0, auto)); gap: 12px; align-items: center; justify-content: start; }
+.presentation-control-row input { flex: none; }
+.presentation-field, .presentation-slider { inline-size: 100%; }
 .presentation-card { padding: 16px; }
 .presentation-code { display: inline-block; }
+.presentation-caption { margin: 0; color: var(--vf-color-text-muted); font-size: var(--vf-font-size-xs); font-weight: var(--vf-font-weight-semibold); letter-spacing: var(--vf-letter-spacing-wide); text-transform: uppercase; }
 `;
 
 test('foundation design language matches the approved visual baseline', async ({ page }, testInfo) => {
@@ -79,8 +85,8 @@ test('foundation design language matches the approved visual baseline', async ({
 });
 
 test('Layer 0 through Layer 2 use the restrained default presentation contract', async ({ page }, testInfo) => {
-  await page.setViewportSize({ width: 740, height: 520 });
-  const css = [tokensCss, buttonCss, inputCss, switchCss, surfaceCss, elementalCss, presentationFixtureCss].join('\n');
+  await page.setViewportSize({ width: 860, height: 760 });
+  const css = [tokensCss, buttonCss, checkboxCss, inputCss, radioCss, sliderCss, switchCss, surfaceCss, elementalCss, presentationFixtureCss].join('\n');
   const theme = (name) => `<section class="presentation-theme" data-vf-theme="${name}" aria-label="${name} presentation">
     <div class="presentation-row">
       <button data-vf-button>Primary</button>
@@ -88,8 +94,24 @@ test('Layer 0 through Layer 2 use the restrained default presentation contract',
       <button data-vf-button data-vf-variant="ghost">Ghost</button>
     </div>
     <input class="presentation-field" data-vf-input aria-label="Example field" placeholder="Example field">
+    <p class="presentation-caption">Choice and value controls</p>
+    <div class="presentation-control-row">
+      <input data-vf-checkbox type="checkbox" aria-label="Unchecked checkbox">
+      <input data-vf-checkbox type="checkbox" aria-label="Checked checkbox" checked>
+      <input data-vf-radio type="radio" aria-label="Unchecked radio">
+      <input data-vf-radio type="radio" aria-label="Checked radio" checked>
+      <input data-vf-switch role="switch" type="checkbox" aria-label="Unchecked switch">
+      <input data-vf-switch role="switch" type="checkbox" aria-label="Checked switch" checked>
+    </div>
+    <input class="presentation-slider" data-vf-slider type="range" aria-label="Example slider" min="0" max="100" value="62">
+    <p class="presentation-caption">Disabled states</p>
+    <div class="presentation-control-row">
+      <input data-vf-checkbox type="checkbox" aria-label="Disabled checkbox" checked disabled>
+      <input data-vf-radio type="radio" aria-label="Disabled radio" checked disabled>
+      <input data-vf-switch role="switch" type="checkbox" aria-label="Disabled switch" checked disabled>
+    </div>
+    <input class="presentation-slider" data-vf-slider type="range" aria-label="Disabled slider" min="0" max="100" value="62" disabled>
     <div class="presentation-row">
-      <input data-vf-switch role="switch" type="checkbox" aria-label="Example switch" checked>
       <code class="presentation-code" data-vf-code>npm install @vyrnforge/web</code>
       <kbd data-vf-kbd>⌘K</kbd>
     </div>
@@ -97,11 +119,15 @@ test('Layer 0 through Layer 2 use the restrained default presentation contract',
   </section>`;
   await page.setContent(`<!doctype html><html lang="en"><head><meta charset="utf-8"><title>VyrnForge L0-L2 presentation</title><style>${css}</style></head><body><main id="presentation">${theme('light')}${theme('dark')}</main></body></html>`);
 
-  const primary = page.locator('[data-vf-theme="light"] [data-vf-button]').first();
-  const secondary = page.locator('[data-vf-theme="light"] [data-vf-button][data-vf-variant="secondary"]');
-  const input = page.locator('[data-vf-theme="light"] [data-vf-input]');
-  const surface = page.locator('[data-vf-theme="light"] [data-vf-surface]');
-  const switchControl = page.locator('[data-vf-theme="light"] [data-vf-switch]');
+  const light = page.locator('[data-vf-theme="light"]');
+  const primary = light.locator('[data-vf-button]').first();
+  const secondary = light.locator('[data-vf-button][data-vf-variant="secondary"]');
+  const input = light.locator('[data-vf-input]');
+  const checkbox = light.locator('[data-vf-checkbox]:checked').first();
+  const radio = light.locator('[data-vf-radio]:checked').first();
+  const switchControl = light.locator('[data-vf-switch]:checked').first();
+  const slider = light.locator('[data-vf-slider]:not(:disabled)').first();
+  const surface = light.locator('[data-vf-surface]');
 
   await expect(primary).toHaveCSS('background-color', 'rgb(36, 94, 219)');
   await expect(primary).toHaveCSS('border-radius', '6px');
@@ -110,15 +136,32 @@ test('Layer 0 through Layer 2 use the restrained default presentation contract',
   await expect(input).toHaveCSS('min-height', '40px');
   await expect(input).toHaveCSS('border-radius', '6px');
   await expect(input).toHaveCSS('box-shadow', 'none');
+  await expect(checkbox).toHaveCSS('appearance', 'none');
+  await expect(checkbox).toHaveCSS('background-color', 'rgb(36, 94, 219)');
+  await expect(checkbox).toHaveCSS('border-radius', '4px');
+  await expect(radio).toHaveCSS('appearance', 'none');
+  await expect(radio).toHaveCSS('background-color', 'rgb(36, 94, 219)');
+  await expect(switchControl).toHaveCSS('background-color', 'rgb(36, 94, 219)');
+  await expect(switchControl).toHaveCSS('box-shadow', 'none');
+  expect(await switchControl.evaluate((element) => getComputedStyle(element, '::before').boxShadow)).toBe('none');
+  await expect(slider).toHaveCSS('appearance', 'none');
+  await expect(slider).toHaveCSS('height', '40px');
   await expect(surface).toHaveCSS('border-radius', '8px');
   await expect(surface).toHaveCSS('box-shadow', 'none');
-  await expect(switchControl).toHaveCSS('background-color', 'rgb(36, 94, 219)');
 
   await input.focus();
   await expect(input).toHaveCSS('outline-width', '2px');
   await expect(input).toHaveCSS('border-color', 'rgb(36, 94, 219)');
+  await checkbox.focus();
+  await expect(checkbox).toHaveCSS('outline-width', '2px');
+  await radio.focus();
+  await expect(radio).toHaveCSS('outline-width', '2px');
+  await switchControl.focus();
+  await expect(switchControl).toHaveCSS('outline-width', '2px');
+  await slider.focus();
+  await expect(slider).toHaveCSS('outline-style', 'solid');
 
   const image = await page.locator('#presentation').screenshot({ path: testInfo.outputPath('l0-l2-presentation.png'), animations: 'disabled' });
-  expect(image.byteLength).toBeGreaterThan(5_000);
+  expect(image.byteLength).toBeGreaterThan(8_000);
   testInfo.annotations.push({ type: 'presentation-evidence', description: createHash('sha256').update(image).digest('hex') });
 });
