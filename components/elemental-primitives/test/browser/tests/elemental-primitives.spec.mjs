@@ -20,7 +20,7 @@ test('Elemental primitives preserve native semantics and shared presentation', a
   expect(await page.locator('#skeleton').evaluate((el) => getComputedStyle(el).animationName)).toBe('vf-skeleton-pulse');
   expect(await page.locator('#swatch').evaluate((el) => getComputedStyle(el).width)).toBe('20px');
   expect(await page.locator('#prose h2').evaluate((el) => getComputedStyle(el).fontWeight)).toBe('600');
-  expect(await page.locator('#prose blockquote').evaluate((el) => getComputedStyle(el).borderInlineStartWidth)).toBe('1px');
+  expect(await page.locator('#prose blockquote').evaluate((el) => getComputedStyle(el).borderInlineStartWidth)).toBe('3px');
   expect(await page.locator('#checkmark').evaluate((el) => getComputedStyle(el).width)).toBe('8px');
   expect(await page.locator('#radiomark').evaluate((el) => getComputedStyle(el).borderRadius)).not.toBe('0px');
   expect(await page.locator('#selection').evaluate((el) => getComputedStyle(el).backgroundColor)).not.toBe('rgba(0, 0, 0, 0)');
