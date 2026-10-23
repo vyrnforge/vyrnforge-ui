@@ -10,15 +10,13 @@
     --_vf-button-background-hover: var(--vf-color-accent-background-hover);
     --_vf-button-background-pressed: var(--vf-color-accent-background-pressed);
     --_vf-button-foreground: var(--vf-color-accent-foreground);
-    --_vf-button-border: transparent;
-    --_vf-button-shadow: 0 1px 2px rgb(15 23 42 / 0.10), 0 1px 1px rgb(15 23 42 / 0.04);
+    --_vf-button-border: var(--vf-color-accent-background);
 
     appearance: none;
     align-items: center;
     background: var(--_vf-button-background);
     border: 1px solid var(--_vf-button-border);
     border-radius: var(--vf-control-radius);
-    box-shadow: var(--_vf-button-shadow);
     color: var(--_vf-button-foreground);
     cursor: pointer;
     display: inline-flex;
@@ -35,9 +33,7 @@
     text-decoration: none;
     transition:
       background-color var(--vf-control-motion-duration) var(--vf-motion-easing-standard),
-      border-color var(--vf-control-motion-duration) var(--vf-motion-easing-standard),
-      box-shadow var(--vf-control-motion-duration) var(--vf-motion-easing-standard),
-      transform var(--vf-control-motion-duration) var(--vf-motion-easing-standard);
+      border-color var(--vf-control-motion-duration) var(--vf-motion-easing-standard);
     user-select: none;
   }
 
@@ -46,8 +42,7 @@
     --_vf-button-background-hover: var(--vf-color-surface-hover);
     --_vf-button-background-pressed: var(--vf-color-surface-pressed);
     --_vf-button-foreground: var(--vf-color-text);
-    --_vf-button-border: var(--vf-color-border);
-    --_vf-button-shadow: var(--vf-shadow-sm);
+    --_vf-button-border: var(--vf-color-border-strong);
   }
 
   :where([data-vf-button][data-vf-variant="ghost"]) {
@@ -56,7 +51,6 @@
     --_vf-button-background-pressed: var(--vf-color-surface-pressed);
     --_vf-button-foreground: var(--vf-color-text);
     --_vf-button-border: transparent;
-    --_vf-button-shadow: none;
   }
 
   :where([data-vf-button][data-vf-size="sm"]) {
@@ -68,19 +62,22 @@
 
   :where([data-vf-button][data-vf-size="lg"]) {
     --_vf-button-block-size: var(--vf-control-height-lg);
-    --_vf-button-padding-inline: 1rem;
+    --_vf-button-padding-inline: 1.125rem;
     --_vf-button-gap: 0.625rem;
     --_vf-button-font-size: var(--vf-font-size-md);
   }
 
   :where([data-vf-button]:hover:not(:disabled)) {
     background: var(--_vf-button-background-hover);
+    border-color: var(--_vf-button-background-hover);
+  }
+
+  :where([data-vf-button][data-vf-variant="secondary"]:hover:not(:disabled), [data-vf-button][data-vf-variant="ghost"]:hover:not(:disabled)) {
+    border-color: var(--_vf-button-border);
   }
 
   :where([data-vf-button]:active:not(:disabled)) {
     background: var(--_vf-button-background-pressed);
-    box-shadow: none;
-    transform: translateY(1px);
   }
 
   :where([data-vf-button]:focus-visible) {
@@ -94,7 +91,6 @@
     --_vf-button-background-pressed: var(--vf-color-disabled-background);
     --_vf-button-foreground: var(--vf-color-disabled-foreground);
     --_vf-button-border: var(--vf-color-disabled-border);
-    --_vf-button-shadow: none;
 
     cursor: not-allowed;
   }
@@ -124,7 +120,6 @@
     :where([data-vf-button]) {
       background: ButtonFace;
       border-color: ButtonText;
-      box-shadow: none;
       color: ButtonText;
       forced-color-adjust: auto;
     }
