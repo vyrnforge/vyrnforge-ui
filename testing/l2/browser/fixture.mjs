@@ -112,7 +112,8 @@ export async function buildL2BrowserFixture(componentId, port) {
   class App {}
   const template = `<form id="form">${definition.angular}</form>`;
   Component({ selector: 'vf-l2-browser-test', standalone: true, imports: [DirectiveClass], template })(App);
-  const html = await renderApplication((context) => bootstrapApplication(App, { providers: [provideZonelessChangeDetection()] }, context), { document: `<!doctype html><html lang="en"><head><meta charset="utf-8"><link rel="stylesheet" href="./${componentId}.css"></head><body><vf-l2-browser-test></vf-l2-browser-test></body></html>` });
+  const document = `<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width"><link rel="stylesheet" href="./${componentId}.css"><title>${componentId} fixture</title></head><body><main><h1>${componentId} fixture</h1><vf-l2-browser-test></vf-l2-browser-test></main></body></html>`;
+  const html = await renderApplication((context) => bootstrapApplication(App, { providers: [provideZonelessChangeDetection()] }, context), { document });
   let output = html;
   if (definition.hydrate) {
     await writeClient(outDir, 'angular.ts', `import'@angular/compiler';import{Component,provideZonelessChangeDetection}from'@angular/core';import{bootstrapApplication}from'@angular/platform-browser';import{${definition.angularName}}from'@vyrnforge/angular/${componentId}';class App{};Component({selector:'vf-l2-browser-test',standalone:true,imports:[${definition.angularName}],template:${JSON.stringify(template)}})(App);bootstrapApplication(App,{providers:[provideZonelessChangeDetection()]});`, root);
