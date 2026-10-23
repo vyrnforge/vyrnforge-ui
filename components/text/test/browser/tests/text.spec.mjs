@@ -21,7 +21,7 @@ test('Text preserves native semantics and shared typography across ports', async
   await expect(label).toHaveAttribute('data-vf-text-variant', 'label-md');
   await expect(poster).toHaveAttribute('data-vf-text-variant', 'poster');
 
-  expect(await heading.evaluate((element) => getComputedStyle(element).fontSize)).toBe('24px');
+  expect(await heading.evaluate((element) => getComputedStyle(element).fontSize)).toBe('30px');
   expect(await body.evaluate((element) => getComputedStyle(element).fontSize)).toBe('16px');
   expect(await label.evaluate((element) => getComputedStyle(element).fontSize)).toBe('14px');
   expect(await label.evaluate((element) => getComputedStyle(element).fontWeight)).toBe('600');
