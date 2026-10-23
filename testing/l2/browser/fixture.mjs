@@ -20,6 +20,15 @@ function page(componentId, body, script = '') {
   return `<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width"><link rel="stylesheet" href="./${componentId}.css"><title>${componentId} fixture</title></head><body><main><h1>${componentId} fixture</h1>${body}</main>${script}</body></html>`;
 }
 
+function vueInitialProps(props = {}) {
+  const { defaultValue, defaultChecked, ...rest } = props;
+  return {
+    ...rest,
+    ...(defaultValue !== undefined ? { value: defaultValue } : {}),
+    ...(defaultChecked !== undefined ? { checked: defaultChecked } : {}),
+  };
+}
+
 function reactControlSource(componentId, definition) {
   const name = definition.exportName;
   if (componentId === 'toggle-button') return `createElement(${name},{id:'control',defaultPressed:false},'Toggle')`;
@@ -88,9 +97,10 @@ export async function buildL2BrowserFixture(componentId, port) {
     const { renderToString } = await import('@vue/server-renderer');
     const module = await import(`@vyrnforge/vue/${componentId}`);
     const Component = module[definition.exportName];
+    const props = vueInitialProps(definition.props);
     const app = createSSRApp({ render: () => h('form', { id: 'form' }, [
       ...(definition.label === false ? [] : [h('label', { for: 'control' }, componentId)]),
-      definition.select ? h(Component, { id: 'control', ...definition.props }, () => [h('option', { value: 'one' }, 'One'), h('option', { value: 'two' }, 'Two')]) : h(Component, { id: 'control', ...definition.props }, definition.label === false ? () => (componentId === 'link' ? 'Example link' : 'Toggle') : undefined),
+      definition.select ? h(Component, { id: 'control', ...props }, () => [h('option', { value: 'one' }, 'One'), h('option', { value: 'two' }, 'Two')]) : h(Component, { id: 'control', ...props }, definition.label === false ? () => (componentId === 'link' ? 'Example link' : 'Toggle') : undefined),
     ]) });
     const markup = await renderToString(app);
     let script = '';
