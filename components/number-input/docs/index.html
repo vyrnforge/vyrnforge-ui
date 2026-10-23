@@ -3,4 +3,7 @@
 <section><h2>Installation and imports</h2><p>Load <code>@vyrnforge/web/styles/number-input.css</code>. React, Angular, and Vue use their <code>/number-input</code> entrypoints; Native Web uses <code>data-vf-number-input</code>.</p></section>
 <section><h2>Quick start</h2><div data-vf-example="number-input/basic"></div></section>
 <section><h2>Accessibility</h2><p>Provide an accessible label and use native <code>min</code>, <code>max</code>, <code>step</code>, disabled, readonly, and validation semantics.</p></section>
+<section><h2>Styling</h2><p>Canonical numeric-input styling is owned by the Web package and uses shared tokens while retaining the native editable control and browser-provided numeric affordances.</p></section>
+<section><h2>Framework API</h2><p>React and Vue expose <code>NumberInput</code>; Angular decorates <code>input[vfNumberInput]</code>. Value, min, max, step, required, disabled, and readonly behavior remain native attributes and properties.</p></section>
+<section><h2>Compatibility</h2><p>Spinner presentation and invalid-value handling can vary by browser. Consumers should rely on the standard numeric input value and constraint-validation APIs rather than visual spinner details.</p></section>
 <section><h2>Layer boundary</h2><p>A compound NumberField with separate stepper buttons coordinates multiple controls and belongs above Layer 2.</p></section>
