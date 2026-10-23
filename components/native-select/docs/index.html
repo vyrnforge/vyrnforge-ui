@@ -3,4 +3,7 @@
 <section><h2>Installation and imports</h2><p>Load <code>@vyrnforge/web/styles/native-select.css</code>. React, Angular, and Vue use their <code>/native-select</code> entrypoints; Native Web uses <code>data-vf-native-select</code>.</p></section>
 <section><h2>Quick start</h2><div data-vf-example="native-select/basic"></div></section>
 <section><h2>Accessibility</h2><p>Provide an accessible label and preserve native option, disabled, required, keyboard, focus, and form behavior.</p></section>
+<section><h2>Styling</h2><p>Canonical select styling lives in the Web package and uses shared tokens around the native control. The browser-owned popup and option rendering are not replaced by custom collection UI.</p></section>
+<section><h2>Framework API</h2><p>React and Vue expose <code>NativeSelect</code>; Angular decorates <code>select[vfNativeSelect]</code>. Options remain authored with native <code>&lt;option&gt;</code> and <code>&lt;optgroup&gt;</code> elements.</p></section>
+<section><h2>Compatibility</h2><p>Popup appearance and some option rendering details vary by browser and operating system. Selection, keyboard interaction, validation, and form submission remain standard native behavior.</p></section>
 <section><h2>Layer boundary</h2><p>Custom Select, Combobox, and Autocomplete own popup and collection behavior and belong to higher layers.</p></section>
