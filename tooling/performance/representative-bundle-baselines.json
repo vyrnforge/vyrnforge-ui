@@ -14,7 +14,7 @@
           },
           "rootSelected": {
             "bytes": 314,
-            "gzipBytes": 226
+            "gzipBytes": 227
           }
         },
         "angular": {
@@ -62,7 +62,7 @@
           },
           "rootSelected": {
             "bytes": 9147,
-            "gzipBytes": 2260
+            "gzipBytes": 2261
           }
         },
         "vue": {
@@ -72,7 +72,7 @@
           },
           "rootSelected": {
             "bytes": 4148,
-            "gzipBytes": 1624
+            "gzipBytes": 1623
           }
         },
         "elements": {
@@ -100,7 +100,7 @@
           },
           "rootSelected": {
             "bytes": 2007,
-            "gzipBytes": 1029
+            "gzipBytes": 1030
           }
         },
         "angular": {
@@ -120,7 +120,7 @@
           },
           "rootSelected": {
             "bytes": 3169,
-            "gzipBytes": 1319
+            "gzipBytes": 1318
           }
         }
       }
