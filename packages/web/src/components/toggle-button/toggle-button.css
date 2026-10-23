@@ -6,8 +6,7 @@
     --_vf-button-background-hover: var(--vf-color-surface-hover);
     --_vf-button-background-pressed: var(--vf-color-surface-pressed);
     --_vf-button-foreground: var(--vf-color-text);
-    --_vf-button-border: var(--vf-color-border);
-    --_vf-button-shadow: var(--vf-shadow-sm);
+    --_vf-button-border: var(--vf-color-border-strong);
   }
 
   :where(button[data-vf-toggle-button][aria-pressed="true"]) {
@@ -16,6 +15,5 @@
     --_vf-button-background-pressed: var(--vf-color-accent-subtle-hover);
     --_vf-button-foreground: var(--vf-color-accent-background-hover);
     --_vf-button-border: var(--vf-color-accent-background);
-    --_vf-button-shadow: none;
   }
 }

@@ -5,7 +5,6 @@
     background: var(--vf-color-surface);
     border: 1px solid var(--vf-color-border);
     border-radius: var(--vf-control-radius);
-    box-shadow: var(--vf-shadow-sm);
     box-sizing: border-box;
     color: var(--vf-color-text);
     font-family: var(--vf-control-font-family);
@@ -14,64 +13,31 @@
     min-block-size: var(--vf-control-height-md);
     min-inline-size: 0;
     padding: 0.25rem;
-    transition:
-      border-color var(--vf-control-motion-duration) var(--vf-motion-easing-standard),
-      box-shadow var(--vf-control-motion-duration) var(--vf-motion-easing-standard);
+    transition: border-color var(--vf-control-motion-duration) var(--vf-motion-easing-standard);
   }
 
   :where(input[data-vf-file-input]::file-selector-button) {
-    background: var(--vf-color-surface-hover);
-    border: 0;
-    border-radius: calc(var(--vf-control-radius) - 0.125rem);
+    background: var(--vf-color-surface-subtle);
+    border: 1px solid var(--vf-color-border);
+    border-radius: calc(var(--vf-control-radius) - 0.0625rem);
     color: var(--vf-color-text);
     cursor: pointer;
     font: inherit;
-    font-weight: var(--vf-font-weight-medium);
+    font-weight: var(--vf-font-weight-semibold);
     margin-inline-end: 0.75rem;
     min-block-size: 2rem;
     padding-inline: 0.75rem;
   }
 
-  :where(input[data-vf-file-input]:hover:not(:disabled)) {
-    border-color: var(--vf-color-border-strong);
-  }
+  :where(input[data-vf-file-input]:hover:not(:disabled)) { border-color: var(--vf-color-border-strong); }
+  :where(input[data-vf-file-input]:hover:not(:disabled)::file-selector-button) { background: var(--vf-color-surface-hover); border-color: var(--vf-color-border-strong); }
+  :where(input[data-vf-file-input]:focus-visible) { border-color: var(--vf-color-accent-background); outline: 2px solid var(--vf-color-focus-ring); outline-offset: 2px; }
+  :where(input[data-vf-file-input]:disabled) { background: var(--vf-color-disabled-background); border-color: var(--vf-color-disabled-border); color: var(--vf-color-disabled-foreground); cursor: not-allowed; }
+  :where(input[data-vf-file-input]:disabled::file-selector-button) { color: var(--vf-color-disabled-foreground); cursor: not-allowed; }
 
-  :where(input[data-vf-file-input]:hover:not(:disabled)::file-selector-button) {
-    background: var(--vf-color-surface-pressed);
-  }
-
-  :where(input[data-vf-file-input]:focus-visible) {
-    border-color: var(--vf-color-accent-background);
-    box-shadow: 0 0 0 1px var(--vf-color-accent-background);
-    outline: 2px solid var(--vf-color-focus-ring);
-    outline-offset: 2px;
-  }
-
-  :where(input[data-vf-file-input]:disabled) {
-    background: var(--vf-color-disabled-background);
-    border-color: var(--vf-color-disabled-border);
-    box-shadow: none;
-    color: var(--vf-color-disabled-foreground);
-    cursor: not-allowed;
-  }
-
-  :where(input[data-vf-file-input]:disabled::file-selector-button) {
-    color: var(--vf-color-disabled-foreground);
-    cursor: not-allowed;
-  }
-
-  @media (prefers-reduced-motion: reduce) {
-    :where(input[data-vf-file-input]) { transition: none; }
-  }
-
+  @media (prefers-reduced-motion: reduce) { :where(input[data-vf-file-input]) { transition: none; } }
   @media (forced-colors: active) {
-    :where(input[data-vf-file-input]) {
-      background: Field;
-      border-color: FieldText;
-      box-shadow: none;
-      color: FieldText;
-    }
-
+    :where(input[data-vf-file-input]) { background: Field; border-color: FieldText; color: FieldText; }
     :where(input[data-vf-file-input]:focus-visible) { outline-color: Highlight; }
   }
 }

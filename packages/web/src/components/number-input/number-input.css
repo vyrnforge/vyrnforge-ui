@@ -5,7 +5,6 @@
     background: var(--vf-color-surface);
     border: 1px solid var(--vf-color-border);
     border-radius: var(--vf-control-radius);
-    box-shadow: var(--vf-shadow-sm);
     box-sizing: border-box;
     color: var(--vf-color-text);
     font-family: var(--vf-control-font-family);
@@ -18,52 +17,18 @@
     padding-inline: 0.75rem;
     transition:
       background-color var(--vf-control-motion-duration) var(--vf-motion-easing-standard),
-      border-color var(--vf-control-motion-duration) var(--vf-motion-easing-standard),
-      box-shadow var(--vf-control-motion-duration) var(--vf-motion-easing-standard);
-
+      border-color var(--vf-control-motion-duration) var(--vf-motion-easing-standard);
   }
 
-  :where(input[data-vf-number-input]:hover:not(:disabled):not(:read-only)) {
-    border-color: var(--vf-color-border-strong);
-  }
+  :where(input[data-vf-number-input]:hover:not(:disabled):not(:read-only)) { border-color: var(--vf-color-border-strong); }
+  :where(input[data-vf-number-input]:focus-visible) { border-color: var(--vf-color-accent-background); outline: 2px solid var(--vf-color-focus-ring); outline-offset: 2px; }
+  :where(input[data-vf-number-input]:disabled) { background: var(--vf-color-disabled-background); border-color: var(--vf-color-disabled-border); color: var(--vf-color-disabled-foreground); cursor: not-allowed; }
+  :where(input[data-vf-number-input]:read-only:not(:disabled)) { background: var(--vf-color-surface-subtle); }
+  :where(input[data-vf-number-input]:invalid:not(:placeholder-shown), input[data-vf-number-input][aria-invalid="true"]) { border-color: var(--vf-color-danger-border); }
 
-  :where(input[data-vf-number-input]:focus-visible) {
-    border-color: var(--vf-color-accent-background);
-    box-shadow: 0 0 0 1px var(--vf-color-accent-background);
-    outline: 2px solid var(--vf-color-focus-ring);
-    outline-offset: 2px;
-  }
-
-  :where(input[data-vf-number-input]:disabled) {
-    background: var(--vf-color-disabled-background);
-    border-color: var(--vf-color-disabled-border);
-    box-shadow: none;
-    color: var(--vf-color-disabled-foreground);
-    cursor: not-allowed;
-  }
-
-  :where(input[data-vf-number-input]:read-only:not(:disabled)) {
-    background: var(--vf-color-surface-subtle);
-    box-shadow: none;
-  }
-
-  :where(input[data-vf-number-input]:invalid:not(:placeholder-shown), input[data-vf-number-input][aria-invalid="true"]) {
-    border-color: var(--vf-color-danger-border);
-  }
-
-  @media (prefers-reduced-motion: reduce) {
-    :where(input[data-vf-number-input]) { transition: none; }
-  }
-
+  @media (prefers-reduced-motion: reduce) { :where(input[data-vf-number-input]) { transition: none; } }
   @media (forced-colors: active) {
-    :where(input[data-vf-number-input]) {
-      background: Field;
-      border-color: FieldText;
-      box-shadow: none;
-      color: FieldText;
-      forced-color-adjust: auto;
-    }
-
+    :where(input[data-vf-number-input]) { background: Field; border-color: FieldText; color: FieldText; forced-color-adjust: auto; }
     :where(input[data-vf-number-input]:focus-visible) { outline-color: Highlight; }
     :where(input[data-vf-number-input]:disabled) { border-color: GrayText; color: GrayText; }
     :where(input[data-vf-number-input]:invalid:not(:placeholder-shown), input[data-vf-number-input][aria-invalid="true"]) { border-color: Highlight; }
