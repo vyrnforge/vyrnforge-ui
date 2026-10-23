@@ -40,6 +40,8 @@ jobs:
           path: |
             test-results/playwright-report
             test-results/playwright-results
+            test-results/*-playwright-report
+            test-results/*-playwright-results
           if-no-files-found: ignore
           retention-days: 14
       - name: Upload documentation build
