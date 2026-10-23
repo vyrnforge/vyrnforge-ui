@@ -3,4 +3,7 @@
 <section><h2>Installation and imports</h2><p>Load <code>@vyrnforge/web/styles/temporal-input.css</code>. React, Angular, and Vue use their <code>/temporal-input</code> entrypoints; the shared type vocabulary is available from <code>@vyrnforge/web/temporal-input</code>.</p></section>
 <section><h2>Quick start</h2><div data-vf-example="temporal-input/basic"></div></section>
 <section><h2>Accessibility</h2><p>Provide an accessible label and preserve native min, max, step, required, disabled, readonly where supported, and validation semantics.</p></section>
+<section><h2>Styling</h2><p>Canonical TemporalInput styling is owned by the Web package and uses shared tokens around the native input. Browser-owned picker UI is intentionally not replaced by a custom calendar or time selector.</p></section>
+<section><h2>Framework API</h2><p>React and Vue expose <code>TemporalInput</code>; Angular decorates <code>input[vfTemporalInput]</code>. The public <code>type</code> contract is restricted to the supported temporal input types.</p></section>
+<section><h2>Compatibility</h2><p>Picker UI and editing affordances vary across browser engines and operating systems, especially for month and week inputs. Consumers should rely on native value, validation, and form semantics rather than identical picker presentation.</p></section>
 <section><h2>Layer boundary</h2><p>DatePicker and TimePicker are composite widgets and belong to higher layers.</p></section>
