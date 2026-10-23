@@ -20,12 +20,12 @@
   }
 
   :where(input[data-vf-checkbox])::before {
-    block-size: 0.3125rem;
+    block-size: 0.5rem;
     border-block-end: 0.125rem solid currentColor;
-    border-inline-start: 0.125rem solid currentColor;
+    border-inline-end: 0.125rem solid currentColor;
     content: "";
-    inline-size: 0.5625rem;
-    transform: rotate(-45deg) scale(0);
+    inline-size: 0.25rem;
+    transform: rotate(45deg) scale(0);
     transform-origin: center;
     transition: transform var(--vf-control-motion-duration) var(--vf-motion-easing-standard);
   }
@@ -46,7 +46,7 @@
   }
 
   :where(input[data-vf-checkbox]:checked)::before {
-    transform: rotate(-45deg) scale(1);
+    transform: rotate(45deg) scale(1);
   }
 
   :where(input[data-vf-checkbox]:indeterminate)::before {
