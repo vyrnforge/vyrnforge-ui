@@ -3,7 +3,7 @@ import path from 'node:path';
 import { build } from 'esbuild';
 
 const definitions = {
-  link: { exportName: 'Link', angularName: 'VfLinkDirective', markup: '<a id="control" data-vf-link href="#target">Example link</a><div id="target">Target</div>', angular: '<a id="control" vfLink href="#target">Example link</a><div id="target">Target</div>', props: { href: '#target' }, label: false },
+  link: { exportName: 'Link', angularName: 'VfLinkDirective', markup: '<a id="control" data-vf-link href="#target">Example link</a><div id="target">Target</div>', angular: '<a id="control" vfLink href="#target">Example link</a><div id="target">Target</div>', label: false },
   'toggle-button': { exportName: 'ToggleButton', angularName: 'VfToggleButtonDirective', markup: '<button id="control" type="button" data-vf-button data-vf-toggle-button aria-pressed="false">Toggle</button>', angular: '<button id="control" vfToggleButton>Toggle</button>', label: false, hydrate: true },
   'number-input': { exportName: 'NumberInput', angularName: 'VfNumberInputDirective', markup: '<label for="control">Number</label><input id="control" name="control" type="number" data-vf-number-input value="42" min="0" max="100">', angular: '<label for="control">Number</label><input id="control" name="control" vfNumberInput value="42" min="0" max="100">', props: { name: 'control', defaultValue: 42, min: 0, max: 100 } },
   checkbox: { exportName: 'Checkbox', angularName: 'VfCheckboxDirective', markup: '<label for="control">Choice</label><input id="control" name="control" type="checkbox" data-vf-checkbox data-vf-indeterminate>', angular: '<label for="control">Choice</label><input id="control" name="control" vfCheckbox [indeterminate]="true">', props: { name: 'control', indeterminate: true }, hydrate: true },
@@ -105,18 +105,17 @@ export async function buildL2BrowserFixture(componentId, port) {
 
   await import('@angular/compiler');
   const { Component, provideZonelessChangeDetection } = await import('@angular/core');
-  const { bootstrapApplication, provideClientHydration } = await import('@angular/platform-browser');
+  const { bootstrapApplication } = await import('@angular/platform-browser');
   const { renderApplication } = await import('@angular/platform-server');
   const module = await import(`@vyrnforge/angular/${componentId}`);
   const DirectiveClass = module[definition.angularName];
   class App {}
   const template = `<form id="form">${definition.angular}</form>`;
   Component({ selector: 'vf-l2-browser-test', standalone: true, imports: [DirectiveClass], template })(App);
-  const providers = [provideZonelessChangeDetection(), ...(definition.hydrate ? [provideClientHydration()] : [])];
-  const html = await renderApplication((context) => bootstrapApplication(App, { providers }, context), { document: `<!doctype html><html lang="en"><head><meta charset="utf-8"><link rel="stylesheet" href="./${componentId}.css"></head><body><vf-l2-browser-test></vf-l2-browser-test></body></html>` });
+  const html = await renderApplication((context) => bootstrapApplication(App, { providers: [provideZonelessChangeDetection()] }, context), { document: `<!doctype html><html lang="en"><head><meta charset="utf-8"><link rel="stylesheet" href="./${componentId}.css"></head><body><vf-l2-browser-test></vf-l2-browser-test></body></html>` });
   let output = html;
   if (definition.hydrate) {
-    await writeClient(outDir, 'angular.ts', `import'@angular/compiler';import{Component,provideZonelessChangeDetection}from'@angular/core';import{bootstrapApplication,provideClientHydration}from'@angular/platform-browser';import{${definition.angularName}}from'@vyrnforge/angular/${componentId}';class App{};Component({selector:'vf-l2-browser-test',standalone:true,imports:[${definition.angularName}],template:${JSON.stringify(template)}})(App);bootstrapApplication(App,{providers:[provideZonelessChangeDetection(),provideClientHydration()]});`, root);
+    await writeClient(outDir, 'angular.ts', `import'@angular/compiler';import{Component,provideZonelessChangeDetection}from'@angular/core';import{bootstrapApplication}from'@angular/platform-browser';import{${definition.angularName}}from'@vyrnforge/angular/${componentId}';class App{};Component({selector:'vf-l2-browser-test',standalone:true,imports:[${definition.angularName}],template:${JSON.stringify(template)}})(App);bootstrapApplication(App,{providers:[provideZonelessChangeDetection()]});`, root);
     output = output.replace('</body>', '<script type="module" src="./angular.js"></script></body>');
   }
   await writeFile(path.join(outDir, 'angular.html'), output);
