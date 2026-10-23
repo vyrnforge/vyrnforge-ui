@@ -1,4 +1,4 @@
-import { Directive, ElementRef, Renderer2, booleanAttribute, effect, inject, input } from '@angular/core';
+import { Directive, ElementRef, Renderer2, afterRenderEffect, booleanAttribute, inject, input } from '@angular/core';
 
 @Directive({
   selector: 'input[vfCheckbox]',
@@ -15,6 +15,8 @@ export class VfCheckboxDirective {
   private readonly renderer = inject(Renderer2);
 
   constructor() {
-    effect(() => this.renderer.setProperty(this.element.nativeElement, 'indeterminate', this.indeterminate()));
+    afterRenderEffect({
+      write: () => this.renderer.setProperty(this.element.nativeElement, 'indeterminate', this.indeterminate()),
+    });
   }
 }
