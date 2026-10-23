@@ -3,4 +3,7 @@
 <section><h2>Installation and imports</h2><p>Load <code>@vyrnforge/web/styles/slider.css</code>. React, Angular, and Vue use their <code>/slider</code> entrypoints; Native Web uses <code>data-vf-slider</code>.</p></section>
 <section><h2>Quick start</h2><div data-vf-example="slider/basic"></div></section>
 <section><h2>Accessibility</h2><p>Provide an accessible name and meaningful min, max, step, and current value constraints.</p></section>
+<section><h2>Styling</h2><p>Canonical slider styling is owned by the Web package and uses shared tokens while keeping the real range input as the interaction and focus target.</p></section>
+<section><h2>Framework API</h2><p>React and Vue expose <code>Slider</code>; Angular decorates <code>input[vfSlider]</code>. Value, min, max, step, disabled, and form behavior remain native range-input contracts.</p></section>
+<section><h2>Compatibility</h2><p>Track and thumb rendering differ across browser engines and operating systems. VyrnForge preserves native keyboard and value semantics instead of replacing the control with a custom slider runtime.</p></section>
 <section><h2>Layer boundary</h2><p>Multi-thumb RangeSlider coordinates multiple values and belongs above Layer 2.</p></section>
