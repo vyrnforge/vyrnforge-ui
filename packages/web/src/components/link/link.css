@@ -1,8 +1,40 @@
 @import "../../styles/tokens.css";
 
 @layer vyrnforge.components {
-  :where(a[data-vf-link]) { color: var(--vf-color-accent-background); font-family: inherit; text-decoration: underline; text-decoration-thickness: 0.08em; text-underline-offset: 0.16em; }
-  :where(a[data-vf-link]:hover) { text-decoration-thickness: 0.13em; }
-  :where(a[data-vf-link]:focus-visible) { outline: 3px solid var(--vf-color-focus-ring); outline-offset: 2px; border-radius: 0.125rem; }
-  @media (forced-colors: active) { :where(a[data-vf-link]) { color: LinkText; } :where(a[data-vf-link]:focus-visible) { outline-color: Highlight; } }
+  :where(a[data-vf-link]) {
+    color: var(--vf-color-accent-background);
+    font-family: inherit;
+    font-weight: var(--vf-font-weight-medium);
+    text-decoration-color: currentColor;
+    text-decoration-line: underline;
+    text-decoration-thickness: 0.075em;
+    text-underline-offset: 0.18em;
+    transition:
+      color var(--vf-control-motion-duration) var(--vf-motion-easing-standard),
+      text-decoration-thickness var(--vf-control-motion-duration) var(--vf-motion-easing-standard);
+  }
+
+  :where(a[data-vf-link]:hover) {
+    color: var(--vf-color-accent-background-hover);
+    text-decoration-thickness: 0.12em;
+  }
+
+  :where(a[data-vf-link]:active) {
+    color: var(--vf-color-accent-background-pressed);
+  }
+
+  :where(a[data-vf-link]:focus-visible) {
+    border-radius: 0.25rem;
+    outline: 2px solid var(--vf-color-focus-ring);
+    outline-offset: 3px;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    :where(a[data-vf-link]) { transition: none; }
+  }
+
+  @media (forced-colors: active) {
+    :where(a[data-vf-link]) { color: LinkText; }
+    :where(a[data-vf-link]:focus-visible) { outline-color: Highlight; }
+  }
 }

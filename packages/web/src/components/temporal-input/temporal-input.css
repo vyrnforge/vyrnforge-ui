@@ -1,10 +1,71 @@
 @import "../../styles/tokens.css";
 
 @layer vyrnforge.components {
-  :where(input[data-vf-temporal-input]) { background: var(--vf-color-surface); border: 1px solid var(--vf-color-border); border-radius: var(--vf-control-radius); box-sizing: border-box; color: var(--vf-color-text); font-family: var(--vf-control-font-family); font-size: var(--vf-font-size-md); line-height: var(--vf-line-height-normal); min-block-size: 2.5rem; min-inline-size: 0; padding-block: 0.4375rem; padding-inline: 0.75rem; }
-  :where(input[data-vf-temporal-input]:focus-visible) { outline: 3px solid var(--vf-color-focus-ring); outline-offset: 2px; }
-  :where(input[data-vf-temporal-input]:disabled) { background: var(--vf-color-disabled-background); border-color: var(--vf-color-disabled-border); color: var(--vf-color-disabled-foreground); cursor: not-allowed; }
-  :where(input[data-vf-temporal-input]:read-only:not(:disabled)) { background: var(--vf-color-surface-hover); }
-  :where(input[data-vf-temporal-input]:invalid, input[data-vf-temporal-input][aria-invalid="true"]) { border-color: var(--vf-color-danger-border); }
-  @media (forced-colors: active) { :where(input[data-vf-temporal-input]) { background: Field; border-color: FieldText; color: FieldText; } :where(input[data-vf-temporal-input]:focus-visible) { outline-color: Highlight; } }
+  :where(input[data-vf-temporal-input]) {
+    background: var(--vf-color-surface);
+    border: 1px solid var(--vf-color-border);
+    border-radius: var(--vf-control-radius);
+    box-shadow: var(--vf-shadow-sm);
+    box-sizing: border-box;
+    color: var(--vf-color-text);
+    font-family: var(--vf-control-font-family);
+    font-size: var(--vf-control-font-size);
+    font-weight: var(--vf-font-weight-regular);
+    line-height: var(--vf-line-height-normal);
+    min-block-size: var(--vf-control-height-md);
+    min-inline-size: 0;
+    padding-block: 0.4375rem;
+    padding-inline: 0.75rem;
+    transition:
+      background-color var(--vf-control-motion-duration) var(--vf-motion-easing-standard),
+      border-color var(--vf-control-motion-duration) var(--vf-motion-easing-standard),
+      box-shadow var(--vf-control-motion-duration) var(--vf-motion-easing-standard);
+
+  }
+
+  :where(input[data-vf-temporal-input]:hover:not(:disabled):not(:read-only)) {
+    border-color: var(--vf-color-border-strong);
+  }
+
+  :where(input[data-vf-temporal-input]:focus-visible) {
+    border-color: var(--vf-color-accent-background);
+    box-shadow: 0 0 0 1px var(--vf-color-accent-background);
+    outline: 2px solid var(--vf-color-focus-ring);
+    outline-offset: 2px;
+  }
+
+  :where(input[data-vf-temporal-input]:disabled) {
+    background: var(--vf-color-disabled-background);
+    border-color: var(--vf-color-disabled-border);
+    box-shadow: none;
+    color: var(--vf-color-disabled-foreground);
+    cursor: not-allowed;
+  }
+
+  :where(input[data-vf-temporal-input]:read-only:not(:disabled)) {
+    background: var(--vf-color-surface-subtle);
+    box-shadow: none;
+  }
+
+  :where(input[data-vf-temporal-input]:invalid:not(:placeholder-shown), input[data-vf-temporal-input][aria-invalid="true"]) {
+    border-color: var(--vf-color-danger-border);
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    :where(input[data-vf-temporal-input]) { transition: none; }
+  }
+
+  @media (forced-colors: active) {
+    :where(input[data-vf-temporal-input]) {
+      background: Field;
+      border-color: FieldText;
+      box-shadow: none;
+      color: FieldText;
+      forced-color-adjust: auto;
+    }
+
+    :where(input[data-vf-temporal-input]:focus-visible) { outline-color: Highlight; }
+    :where(input[data-vf-temporal-input]:disabled) { border-color: GrayText; color: GrayText; }
+    :where(input[data-vf-temporal-input]:invalid:not(:placeholder-shown), input[data-vf-temporal-input][aria-invalid="true"]) { border-color: Highlight; }
+  }
 }

@@ -5,38 +5,53 @@
     background: var(--vf-color-surface);
     border: 1px solid var(--vf-color-border);
     border-radius: var(--vf-control-radius);
+    box-shadow: var(--vf-shadow-sm);
     box-sizing: border-box;
     color: var(--vf-color-text);
     font-family: var(--vf-control-font-family);
-    font-size: var(--vf-font-size-md);
+    font-size: var(--vf-control-font-size);
     font-weight: var(--vf-font-weight-regular);
     line-height: var(--vf-line-height-normal);
-    min-block-size: 2.5rem;
+    min-block-size: var(--vf-control-height-md);
     min-inline-size: 0;
     padding-block: 0.4375rem;
     padding-inline: 0.75rem;
-    transition: border-color var(--vf-control-motion-duration) ease, background-color var(--vf-control-motion-duration) ease;
+    transition:
+      background-color var(--vf-control-motion-duration) var(--vf-motion-easing-standard),
+      border-color var(--vf-control-motion-duration) var(--vf-motion-easing-standard),
+      box-shadow var(--vf-control-motion-duration) var(--vf-motion-easing-standard);
+    min-block-size: 6rem;
+    resize: vertical;
+
   }
 
   :where(textarea[data-vf-textarea]::placeholder) {
-    color: var(--vf-color-text-muted);
+    color: var(--vf-color-text-subtle);
     opacity: 1;
   }
 
+  :where(textarea[data-vf-textarea]:hover:not(:disabled):not(:read-only)) {
+    border-color: var(--vf-color-border-strong);
+  }
+
   :where(textarea[data-vf-textarea]:focus-visible) {
-    outline: 3px solid var(--vf-color-focus-ring);
+    border-color: var(--vf-color-accent-background);
+    box-shadow: 0 0 0 1px var(--vf-color-accent-background);
+    outline: 2px solid var(--vf-color-focus-ring);
     outline-offset: 2px;
   }
 
   :where(textarea[data-vf-textarea]:disabled) {
     background: var(--vf-color-disabled-background);
     border-color: var(--vf-color-disabled-border);
+    box-shadow: none;
     color: var(--vf-color-disabled-foreground);
     cursor: not-allowed;
   }
 
   :where(textarea[data-vf-textarea]:read-only:not(:disabled)) {
-    background: var(--vf-color-surface-hover);
+    background: var(--vf-color-surface-subtle);
+    box-shadow: none;
   }
 
   :where(textarea[data-vf-textarea]:invalid:not(:placeholder-shown), textarea[data-vf-textarea][aria-invalid="true"]) {
@@ -51,6 +66,7 @@
     :where(textarea[data-vf-textarea]) {
       background: Field;
       border-color: FieldText;
+      box-shadow: none;
       color: FieldText;
       forced-color-adjust: auto;
     }

@@ -10,13 +10,13 @@
   }
 
   :where([data-vf-separator-orientation="horizontal"]) {
-    border-block-start: 1px solid var(--vf-color-border);
+    border-block-start: 1px solid var(--vf-color-disabled-border);
     inline-size: 100%;
   }
 
   :where([data-vf-separator-orientation="vertical"]) {
     block-size: 100%;
-    border-inline-start: 1px solid var(--vf-color-border);
+    border-inline-start: 1px solid var(--vf-color-disabled-border);
   }
 
   @media (forced-colors: active) {
