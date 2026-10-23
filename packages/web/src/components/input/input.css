@@ -5,7 +5,6 @@
     background: var(--vf-color-surface);
     border: 1px solid var(--vf-color-border);
     border-radius: var(--vf-control-radius);
-    box-shadow: var(--vf-shadow-sm);
     box-sizing: border-box;
     color: var(--vf-color-text);
     font-family: var(--vf-control-font-family);
@@ -18,9 +17,7 @@
     padding-inline: 0.75rem;
     transition:
       background-color var(--vf-control-motion-duration) var(--vf-motion-easing-standard),
-      border-color var(--vf-control-motion-duration) var(--vf-motion-easing-standard),
-      box-shadow var(--vf-control-motion-duration) var(--vf-motion-easing-standard);
-
+      border-color var(--vf-control-motion-duration) var(--vf-motion-easing-standard);
   }
 
   :where(input[data-vf-input]::placeholder) {
@@ -34,7 +31,6 @@
 
   :where(input[data-vf-input]:focus-visible) {
     border-color: var(--vf-color-accent-background);
-    box-shadow: 0 0 0 1px var(--vf-color-accent-background);
     outline: 2px solid var(--vf-color-focus-ring);
     outline-offset: 2px;
   }
@@ -42,14 +38,12 @@
   :where(input[data-vf-input]:disabled) {
     background: var(--vf-color-disabled-background);
     border-color: var(--vf-color-disabled-border);
-    box-shadow: none;
     color: var(--vf-color-disabled-foreground);
     cursor: not-allowed;
   }
 
   :where(input[data-vf-input]:read-only:not(:disabled)) {
     background: var(--vf-color-surface-subtle);
-    box-shadow: none;
   }
 
   :where(input[data-vf-input]:invalid:not(:placeholder-shown), input[data-vf-input][aria-invalid="true"]) {
@@ -64,7 +58,6 @@
     :where(input[data-vf-input]) {
       background: Field;
       border-color: FieldText;
-      box-shadow: none;
       color: FieldText;
       forced-color-adjust: auto;
     }
