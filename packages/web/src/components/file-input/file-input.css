@@ -13,7 +13,9 @@
     min-block-size: var(--vf-control-height-md);
     min-inline-size: 0;
     padding: 0.25rem;
-    transition: border-color var(--vf-control-motion-duration) var(--vf-motion-easing-standard);
+    transition:
+      background-color var(--vf-control-motion-duration) var(--vf-motion-easing-standard),
+      border-color var(--vf-control-motion-duration) var(--vf-motion-easing-standard);
   }
 
   :where(input[data-vf-file-input]::file-selector-button) {
@@ -27,17 +29,29 @@
     margin-inline-end: 0.75rem;
     min-block-size: 2rem;
     padding-inline: 0.75rem;
+    transition:
+      background-color var(--vf-control-motion-duration) var(--vf-motion-easing-standard),
+      border-color var(--vf-control-motion-duration) var(--vf-motion-easing-standard),
+      color var(--vf-control-motion-duration) var(--vf-motion-easing-standard);
   }
 
   :where(input[data-vf-file-input]:hover:not(:disabled)) { border-color: var(--vf-color-border-strong); }
   :where(input[data-vf-file-input]:hover:not(:disabled)::file-selector-button) { background: var(--vf-color-surface-hover); border-color: var(--vf-color-border-strong); }
+  :where(input[data-vf-file-input]:active:not(:disabled)::file-selector-button) { background: var(--vf-color-surface-pressed); }
   :where(input[data-vf-file-input]:focus-visible) { border-color: var(--vf-color-accent-background); outline: 2px solid var(--vf-color-focus-ring); outline-offset: 2px; }
   :where(input[data-vf-file-input]:disabled) { background: var(--vf-color-disabled-background); border-color: var(--vf-color-disabled-border); color: var(--vf-color-disabled-foreground); cursor: not-allowed; }
-  :where(input[data-vf-file-input]:disabled::file-selector-button) { color: var(--vf-color-disabled-foreground); cursor: not-allowed; }
+  :where(input[data-vf-file-input]:disabled::file-selector-button) { background: var(--vf-color-disabled-background); border-color: var(--vf-color-disabled-border); color: var(--vf-color-disabled-foreground); cursor: not-allowed; }
 
-  @media (prefers-reduced-motion: reduce) { :where(input[data-vf-file-input]) { transition: none; } }
+  @media (prefers-reduced-motion: reduce) {
+    :where(input[data-vf-file-input]),
+    :where(input[data-vf-file-input]::file-selector-button) { transition: none; }
+  }
+
   @media (forced-colors: active) {
-    :where(input[data-vf-file-input]) { background: Field; border-color: FieldText; color: FieldText; }
+    :where(input[data-vf-file-input]) { background: Field; border-color: FieldText; color: FieldText; forced-color-adjust: auto; }
+    :where(input[data-vf-file-input]::file-selector-button) { background: ButtonFace; border-color: ButtonText; color: ButtonText; }
     :where(input[data-vf-file-input]:focus-visible) { outline-color: Highlight; }
+    :where(input[data-vf-file-input]:disabled) { border-color: GrayText; color: GrayText; }
+    :where(input[data-vf-file-input]:disabled::file-selector-button) { border-color: GrayText; color: GrayText; }
   }
 }
