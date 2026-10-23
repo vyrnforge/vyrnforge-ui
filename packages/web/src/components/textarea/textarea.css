@@ -12,17 +12,15 @@
     font-size: var(--vf-control-font-size);
     font-weight: var(--vf-font-weight-regular);
     line-height: var(--vf-line-height-normal);
-    min-block-size: var(--vf-control-height-md);
+    min-block-size: 6rem;
     min-inline-size: 0;
     padding-block: 0.4375rem;
     padding-inline: 0.75rem;
+    resize: vertical;
     transition:
       background-color var(--vf-control-motion-duration) var(--vf-motion-easing-standard),
       border-color var(--vf-control-motion-duration) var(--vf-motion-easing-standard),
       box-shadow var(--vf-control-motion-duration) var(--vf-motion-easing-standard);
-    min-block-size: 6rem;
-    resize: vertical;
-
   }
 
   :where(textarea[data-vf-textarea]::placeholder) {
