@@ -28,6 +28,15 @@ function reactControl(createElement, Component, definition) {
   return createElement(Component, props, definition.content);
 }
 
+function vueInitialProps(props = {}) {
+  const { defaultValue, defaultChecked, ...rest } = props;
+  return {
+    ...rest,
+    ...(defaultValue !== undefined ? { value: defaultValue } : {}),
+    ...(defaultChecked !== undefined ? { checked: defaultChecked } : {}),
+  };
+}
+
 export function registerReactL2SsrTest(componentId) {
   const definition = definitions[componentId];
   if (!definition) throw new Error(`Unknown Layer 2 component: ${componentId}`);
@@ -48,7 +57,7 @@ export function registerVueL2SsrTest(componentId) {
     const { renderToString } = await import('@vue/server-renderer');
     const module = await import(`@vyrnforge/vue/${componentId}`);
     const Component = module[definition.exportName];
-    const props = { id: 'control', ...definition.reactProps };
+    const props = { id: 'control', ...vueInitialProps(definition.reactProps) };
     const app = createSSRApp({ render: () => definition.select
       ? h(Component, props, () => [h('option', { value: 'one' }, 'One'), h('option', { value: 'two' }, 'Two')])
       : h(Component, props, definition.content ? () => definition.content : undefined) });
