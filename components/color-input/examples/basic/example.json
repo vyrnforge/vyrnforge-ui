@@ -1,0 +1,1 @@
+{"id":"color-input/basic","title":"Native color input","description":"Browser-owned color selection with shared VyrnForge styling.","defaultFramework":"native-web","frameworks":{"native-web":{"label":"Native Web","language":"html","source":"native-web.html"}}}

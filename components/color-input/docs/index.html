@@ -1,0 +1,9 @@
+<p class="vf-docs-lede">ColorInput is the native browser color-selection control.</p>
+<section><h2>Overview</h2><p>Use ColorInput when browser-owned <code>input[type=color]</code> behavior is sufficient.</p></section>
+<section><h2>Installation and imports</h2><p>Load <code>@vyrnforge/web/styles/color-input.css</code>. React, Angular, and Vue use their <code>/color-input</code> entrypoints; Native Web uses <code>data-vf-color-input</code>.</p></section>
+<section><h2>Quick start</h2><div data-vf-example="color-input/basic"></div></section>
+<section><h2>Accessibility</h2><p>Provide an accessible label and preserve native focus, disabled, value, and form semantics.</p></section>
+<section><h2>Styling</h2><p>Canonical styling is owned by the Web package and uses shared tokens around the native color control. Browser-owned picker chrome is not replaced or normalized into a custom popup.</p></section>
+<section><h2>Framework API</h2><p>React and Vue expose <code>ColorInput</code>; Angular decorates <code>input[vfColorInput]</code>. Native Web uses a real <code>input[type=color]</code> with the shared data hook.</p></section>
+<section><h2>Compatibility</h2><p>The control depends on each browser and operating system's native color-input implementation, so picker appearance and interaction details may vary while the value and form contract remain native.</p></section>
+<section><h2>Layer boundary</h2><p>A composite ColorPicker with popup, palettes, or coordinated fields belongs to a higher layer.</p></section>

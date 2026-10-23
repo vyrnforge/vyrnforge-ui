@@ -1,0 +1,1 @@
+{"id":"temporal-input/basic","title":"Native date input","description":"One native temporal input using the shared temporal type vocabulary.","defaultFramework":"native-web","frameworks":{"native-web":{"label":"Native Web","language":"html","source":"native-web.html"}}}

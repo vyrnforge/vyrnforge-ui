@@ -1,0 +1,9 @@
+<p class="vf-docs-lede">Switch is a checkbox-backed native boolean setting exposed with <code>role=switch</code>.</p>
+<section><h2>Overview</h2><p>Use Switch for one on/off setting. Checked state, keyboard activation, disabled state, form submission, and reset remain native.</p></section>
+<section><h2>Installation and imports</h2><p>Load <code>@vyrnforge/web/styles/switch.css</code>. React, Angular, and Vue use their <code>/switch</code> entrypoints; Native Web uses <code>data-vf-switch</code>.</p></section>
+<section><h2>Quick start</h2><div data-vf-example="switch/basic"></div></section>
+<section><h2>Accessibility</h2><p>Provide an accessible label and keep the checkbox-backed checked state synchronized with the switch semantics.</p></section>
+<section><h2>Styling</h2><p>Canonical switch styling is owned by the Web package and uses shared tokens while the underlying checkbox remains the semantic and form-control source of truth.</p></section>
+<section><h2>Framework API</h2><p>React and Vue expose <code>Switch</code>; Angular decorates <code>input[vfSwitch]</code>. The public contract uses native checked, disabled, name, value, and form semantics with <code>role="switch"</code>.</p></section>
+<section><h2>Compatibility</h2><p>Switch depends on native checkbox behavior plus the standardized switch role. Visual treatment is VyrnForge-owned, while activation and form behavior remain native across supported browsers.</p></section>
+<section><h2>Layer boundary</h2><p>Switch owns one boolean value; switch groups and coordinated settings belong above Layer 2.</p></section>

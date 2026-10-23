@@ -1,0 +1,9 @@
+<p class="vf-docs-lede">Radio is one native radio input, not a collection manager.</p>
+<section><h2>Overview</h2><p>Use Radio for an individual <code>input[type=radio]</code>. Native <code>name</code> grouping and form behavior remain browser-owned.</p></section>
+<section><h2>Installation and imports</h2><p>Load <code>@vyrnforge/web/styles/radio.css</code>. React, Angular, and Vue use their <code>/radio</code> entrypoints; Native Web uses <code>data-vf-radio</code>.</p></section>
+<section><h2>Quick start</h2><div data-vf-example="radio/basic"></div></section>
+<section><h2>Accessibility</h2><p>Provide an accessible label and preserve native grouping, keyboard, checked, disabled, and form semantics.</p></section>
+<section><h2>Styling</h2><p>Canonical radio styling lives in the Web package and is token-driven. Preserve the native radio element so grouping, focus, and assistive-technology semantics remain browser-owned.</p></section>
+<section><h2>Framework API</h2><p>React and Vue expose <code>Radio</code>; Angular decorates <code>input[vfRadio]</code>. Grouping continues to use the native <code>name</code> contract rather than a Layer 2 collection abstraction.</p></section>
+<section><h2>Compatibility</h2><p>Radio relies on standard native radio behavior across modern browsers. Visual rendering may differ slightly by platform while grouping and form semantics remain consistent.</p></section>
+<section><h2>Layer boundary</h2><p>Managed RadioGroup focus and collection coordination belong above Layer 2.</p></section>

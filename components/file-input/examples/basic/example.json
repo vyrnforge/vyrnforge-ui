@@ -1,0 +1,1 @@
+{"id":"file-input/basic","title":"Native file input","description":"Browser-owned file selection without upload workflow behavior.","defaultFramework":"native-web","frameworks":{"native-web":{"label":"Native Web","language":"html","source":"native-web.html"}}}

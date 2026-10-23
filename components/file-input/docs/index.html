@@ -1,0 +1,9 @@
+<p class="vf-docs-lede">FileInput is native file selection without upload orchestration.</p>
+<section><h2>Overview</h2><p>Use FileInput for a browser-owned <code>input[type=file]</code>. File chooser behavior, selected-file exposure, focus, disabled state, and form semantics remain native.</p></section>
+<section><h2>Installation and imports</h2><p>Load <code>@vyrnforge/web/styles/file-input.css</code>. React, Angular, and Vue use their <code>/file-input</code> entrypoints; Native Web uses <code>data-vf-file-input</code>.</p></section>
+<section><h2>Quick start</h2><div data-vf-example="file-input/basic"></div></section>
+<section><h2>Accessibility</h2><p>Provide an accessible label and use native accept, multiple, required, and disabled attributes where appropriate.</p></section>
+<section><h2>Styling</h2><p>Shared Web CSS styles the native file input without replacing its chooser semantics. Preserve the real input so keyboard, assistive technology, and browser security behavior remain intact.</p></section>
+<section><h2>Framework API</h2><p>React and Vue expose <code>FileInput</code>; Angular decorates <code>input[vfFileInput]</code>. File selection remains available through the native input and <code>files</code> property.</p></section>
+<section><h2>Compatibility</h2><p>File chooser UI is owned by the browser and operating system and may vary. Programmatic file-path control remains intentionally unavailable because the native security model is preserved.</p></section>
+<section><h2>Layer boundary</h2><p>Upload queues, drag/drop, progress, retry, and workflow state belong to FileUploader or Dropzone at higher layers.</p></section>

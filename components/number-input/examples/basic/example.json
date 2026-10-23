@@ -1,0 +1,7 @@
+{
+  "id": "number-input/basic",
+  "title": "Native number input",
+  "description": "Numeric entry with native spin and constraint semantics.",
+  "defaultFramework": "native-web",
+  "frameworks": { "native-web": { "label": "Native Web", "language": "html", "source": "native-web.html" } }
+}

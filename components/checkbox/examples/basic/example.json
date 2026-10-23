@@ -1,0 +1,1 @@
+{"id":"checkbox/basic","title":"Native checkbox","description":"A native checkbox with optional indeterminate property synchronization.","defaultFramework":"native-web","frameworks":{"native-web":{"label":"Native Web","language":"html","source":"native-web.html"}}}
