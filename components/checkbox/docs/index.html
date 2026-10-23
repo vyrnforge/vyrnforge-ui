@@ -3,4 +3,7 @@
 <section><h2>Installation and imports</h2><p>Load <code>@vyrnforge/web/styles/checkbox.css</code>. React, Angular, and Vue use their <code>/checkbox</code> entrypoints; Native Web uses <code>data-vf-checkbox</code>.</p></section>
 <section><h2>Quick start</h2><div data-vf-example="checkbox/basic"></div></section>
 <section><h2>Accessibility</h2><p>Provide an accessible label. Preserve native checked and disabled semantics; use indeterminate only to communicate partial selection.</p></section>
+<section><h2>Styling</h2><p>Canonical checkbox styling lives in the Web package and is token-driven. Keep the native input available to focus and assistive technology; do not replace it with a purely visual proxy.</p></section>
+<section><h2>Framework API</h2><p>React and Vue expose <code>Checkbox</code>; Angular decorates <code>input[vfCheckbox]</code>. The <code>indeterminate</code> API synchronizes the DOM property while checked state remains the native submitted value.</p></section>
+<section><h2>Compatibility</h2><p>Checkbox relies on native checkbox semantics supported by modern browsers. The indeterminate state is visual and accessibility state only and is not submitted as a third form value.</p></section>
 <section><h2>Layer boundary</h2><p>CheckboxGroup coordinates multiple controls and belongs above Layer 2.</p></section>
