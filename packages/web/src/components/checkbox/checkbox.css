@@ -1,8 +1,26 @@
 @import "../../styles/tokens.css";
 
 @layer vyrnforge.components {
-  :where(input[data-vf-checkbox]) { accent-color: var(--vf-color-accent-background); block-size: 1.125rem; inline-size: 1.125rem; margin: 0; }
-  :where(input[data-vf-checkbox]:focus-visible) { outline: 3px solid var(--vf-color-focus-ring); outline-offset: 2px; }
-  :where(input[data-vf-checkbox]:disabled) { cursor: not-allowed; }
-  @media (forced-colors: active) { :where(input[data-vf-checkbox]) { accent-color: Highlight; } :where(input[data-vf-checkbox]:focus-visible) { outline-color: Highlight; } }
+  :where(input[data-vf-checkbox]) {
+    accent-color: var(--vf-color-accent-background);
+    block-size: 1.125rem;
+    cursor: pointer;
+    inline-size: 1.125rem;
+    margin: 0;
+  }
+
+  :where(input[data-vf-checkbox]:focus-visible) {
+    outline: 2px solid var(--vf-color-focus-ring);
+    outline-offset: 3px;
+  }
+
+  :where(input[data-vf-checkbox]:disabled) {
+    cursor: not-allowed;
+    opacity: 0.6;
+  }
+
+  @media (forced-colors: active) {
+    :where(input[data-vf-checkbox]) { accent-color: Highlight; }
+    :where(input[data-vf-checkbox]:focus-visible) { outline-color: Highlight; }
+  }
 }

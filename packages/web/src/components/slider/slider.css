@@ -1,8 +1,26 @@
 @import "../../styles/tokens.css";
 
 @layer vyrnforge.components {
-  :where(input[data-vf-slider]) { accent-color: var(--vf-color-accent-background); cursor: pointer; inline-size: 100%; min-block-size: 2.5rem; margin: 0; }
-  :where(input[data-vf-slider]:focus-visible) { outline: 3px solid var(--vf-color-focus-ring); outline-offset: 2px; }
-  :where(input[data-vf-slider]:disabled) { cursor: not-allowed; opacity: 0.65; }
-  @media (forced-colors: active) { :where(input[data-vf-slider]) { accent-color: Highlight; } :where(input[data-vf-slider]:focus-visible) { outline-color: Highlight; } }
+  :where(input[data-vf-slider]) {
+    accent-color: var(--vf-color-accent-background);
+    cursor: pointer;
+    inline-size: 100%;
+    margin: 0;
+    min-block-size: var(--vf-control-height-md);
+  }
+
+  :where(input[data-vf-slider]:focus-visible) {
+    outline: 2px solid var(--vf-color-focus-ring);
+    outline-offset: 3px;
+  }
+
+  :where(input[data-vf-slider]:disabled) {
+    cursor: not-allowed;
+    opacity: 0.55;
+  }
+
+  @media (forced-colors: active) {
+    :where(input[data-vf-slider]) { accent-color: Highlight; }
+    :where(input[data-vf-slider]:focus-visible) { outline-color: Highlight; }
+  }
 }

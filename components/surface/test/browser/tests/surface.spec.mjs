@@ -18,11 +18,11 @@ test('Surface provides the same visual boundary without implicit layout across p
   expect(await surface.evaluate((element) => getComputedStyle(element).borderTopStyle)).toBe('solid');
   expect(await surface.evaluate((element) => getComputedStyle(element).borderRadius)).toBe('12px');
   expect(await surface.evaluate((element) => getComputedStyle(element).backgroundColor)).toBe('rgb(255, 255, 255)');
-  expect(await surface.evaluate((element) => getComputedStyle(element).color)).toBe('rgb(23, 32, 51)');
+  expect(await surface.evaluate((element) => getComputedStyle(element).color)).toBe('rgb(15, 23, 42)');
 
   await page.evaluate(() => document.documentElement.setAttribute('data-vf-theme', 'dark'));
-  expect(await surface.evaluate((element) => getComputedStyle(element).backgroundColor)).toBe('rgb(23, 27, 36)');
-  expect(await surface.evaluate((element) => getComputedStyle(element).color)).toBe('rgb(242, 245, 251)');
+  expect(await surface.evaluate((element) => getComputedStyle(element).backgroundColor)).toBe('rgb(15, 23, 42)');
+  expect(await surface.evaluate((element) => getComputedStyle(element).color)).toBe('rgb(248, 250, 252)');
 
   await page.addScriptTag({ content: axeCore.source });
   const results = await page.evaluate(async () => globalThis.axe.run(document));

@@ -1,6 +1,21 @@
 @import "../button/button.css";
 
 @layer vyrnforge.components {
-  :where(button[data-vf-toggle-button]) { --_vf-button-background: var(--vf-color-surface); --_vf-button-background-hover: var(--vf-color-surface-hover); --_vf-button-foreground: var(--vf-color-text); --_vf-button-border: var(--vf-color-border); }
-  :where(button[data-vf-toggle-button][aria-pressed="true"]) { --_vf-button-background: var(--vf-color-accent-background); --_vf-button-background-hover: var(--vf-color-accent-background-hover); --_vf-button-foreground: var(--vf-color-accent-foreground); --_vf-button-border: transparent; }
+  :where(button[data-vf-toggle-button]) {
+    --_vf-button-background: var(--vf-color-surface);
+    --_vf-button-background-hover: var(--vf-color-surface-hover);
+    --_vf-button-background-pressed: var(--vf-color-surface-pressed);
+    --_vf-button-foreground: var(--vf-color-text);
+    --_vf-button-border: var(--vf-color-border);
+    --_vf-button-shadow: var(--vf-shadow-sm);
+  }
+
+  :where(button[data-vf-toggle-button][aria-pressed="true"]) {
+    --_vf-button-background: var(--vf-color-accent-subtle);
+    --_vf-button-background-hover: var(--vf-color-accent-subtle-hover);
+    --_vf-button-background-pressed: var(--vf-color-accent-subtle-hover);
+    --_vf-button-foreground: var(--vf-color-accent-background-hover);
+    --_vf-button-border: var(--vf-color-accent-background);
+    --_vf-button-shadow: none;
+  }
 }

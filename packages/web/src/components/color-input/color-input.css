@@ -1,8 +1,48 @@
 @import "../../styles/tokens.css";
 
 @layer vyrnforge.components {
-  :where(input[data-vf-color-input]) { background: var(--vf-color-surface); border: 1px solid var(--vf-color-border); border-radius: var(--vf-control-radius); block-size: 2.5rem; box-sizing: border-box; cursor: pointer; inline-size: 3.5rem; padding: 0.25rem; }
-  :where(input[data-vf-color-input]:focus-visible) { outline: 3px solid var(--vf-color-focus-ring); outline-offset: 2px; }
-  :where(input[data-vf-color-input]:disabled) { cursor: not-allowed; opacity: 0.65; }
-  @media (forced-colors: active) { :where(input[data-vf-color-input]) { border-color: FieldText; } :where(input[data-vf-color-input]:focus-visible) { outline-color: Highlight; } }
+  :where(input[data-vf-color-input]) {
+    background: var(--vf-color-surface);
+    border: 1px solid var(--vf-color-border);
+    border-radius: var(--vf-control-radius);
+    block-size: var(--vf-control-height-md);
+    box-shadow: var(--vf-shadow-sm);
+    box-sizing: border-box;
+    cursor: pointer;
+    inline-size: 3.5rem;
+    padding: 0.25rem;
+    transition:
+      border-color var(--vf-control-motion-duration) var(--vf-motion-easing-standard),
+      box-shadow var(--vf-control-motion-duration) var(--vf-motion-easing-standard);
+  }
+
+  :where(input[data-vf-color-input]:hover:not(:disabled)) {
+    border-color: var(--vf-color-border-strong);
+  }
+
+  :where(input[data-vf-color-input]:focus-visible) {
+    border-color: var(--vf-color-accent-background);
+    box-shadow: 0 0 0 1px var(--vf-color-accent-background);
+    outline: 2px solid var(--vf-color-focus-ring);
+    outline-offset: 2px;
+  }
+
+  :where(input[data-vf-color-input]:disabled) {
+    box-shadow: none;
+    cursor: not-allowed;
+    opacity: 0.55;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    :where(input[data-vf-color-input]) { transition: none; }
+  }
+
+  @media (forced-colors: active) {
+    :where(input[data-vf-color-input]) {
+      border-color: FieldText;
+      box-shadow: none;
+    }
+
+    :where(input[data-vf-color-input]:focus-visible) { outline-color: Highlight; }
+  }
 }
