@@ -100,7 +100,12 @@ export async function buildL2BrowserFixture(componentId, port) {
     const props = vueInitialProps(definition.props);
     const app = createSSRApp({ render: () => h('form', { id: 'form' }, [
       ...(definition.label === false ? [] : [h('label', { for: 'control' }, componentId)]),
-      definition.select ? h(Component, { id: 'control', ...props }, () => [h('option', { value: 'one' }, 'One'), h('option', { value: 'two' }, 'Two')]) : h(Component, { id: 'control', ...props }, definition.label === false ? () => (componentId === 'link' ? 'Example link' : 'Toggle') : undefined),
+      definition.select
+        ? h(Component, { id: 'control', ...props }, () => [
+            h('option', { value: 'one', selected: props.value === 'one' }, 'One'),
+            h('option', { value: 'two', selected: props.value === 'two' }, 'Two'),
+          ])
+        : h(Component, { id: 'control', ...props }, definition.label === false ? () => (componentId === 'link' ? 'Example link' : 'Toggle') : undefined),
     ]) });
     const markup = await renderToString(app);
     let script = '';
