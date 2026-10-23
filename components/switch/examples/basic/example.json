@@ -1,0 +1,1 @@
+{"id":"switch/basic","title":"Native switch","description":"A checkbox-backed switch for one boolean setting.","defaultFramework":"native-web","frameworks":{"native-web":{"label":"Native Web","language":"html","source":"native-web.html"}}}

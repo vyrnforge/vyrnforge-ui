@@ -1,0 +1,7 @@
+<p class="vf-docs-lede">Link preserves native anchor navigation while applying canonical VyrnForge styling.</p>
+<section><h2>Overview</h2><p>Use Link for URL and resource navigation. The browser remains responsible for focus, activation, URL semantics, history, and modifier-key behavior.</p></section>
+<section><h2>Installation and imports</h2><p>Load <code>@vyrnforge/web/styles/link.css</code>. React, Angular, and Vue use their <code>/link</code> entrypoints. Native Web uses <code>data-vf-link</code> on an anchor.</p></section>
+<section><h2>Quick start</h2><div data-vf-example="link/basic"></div></section>
+<section><h2>Accessibility</h2><p>Use a real <code>&lt;a&gt;</code> with an <code>href</code> for navigation and provide meaningful link text. VyrnForge does not invent a disabled-anchor state.</p></section>
+<section><h2>Framework API</h2><p>React and Vue expose <code>Link</code>; Angular decorates <code>a[vfLink]</code>. Native Web and Custom Elements applications use the same native anchor contract.</p></section>
+<section><h2>Layer boundary</h2><p>Link represents one navigation action. Routing policy and application navigation workflows remain outside the library.</p></section>

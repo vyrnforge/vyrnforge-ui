@@ -1,0 +1,7 @@
+<p class="vf-docs-lede">ToggleButton is a native button with one persistent <code>aria-pressed</code> state.</p>
+<section><h2>Overview</h2><p>Use ToggleButton when one button toggles a persistent pressed state without coordinating a collection or popup.</p></section>
+<section><h2>Installation and imports</h2><p>Load <code>@vyrnforge/web/styles/toggle-button.css</code>. React, Angular, and Vue use their <code>/toggle-button</code> entrypoints. Native Web additionally uses <code>connectToggleButton</code> from <code>@vyrnforge/web/toggle-button</code>.</p></section>
+<section><h2>Quick start</h2><div data-vf-example="toggle-button/basic"></div></section>
+<section><h2>Accessibility</h2><p>The semantic source of truth is a native button with <code>aria-pressed="true|false"</code>. Native keyboard activation and disabled behavior are preserved.</p></section>
+<section><h2>Framework API</h2><p>React and Vue support controlled and uncontrolled pressed state. Angular exposes <code>pressed</code> as a model. Consumer click handlers run before VyrnForge changes pressed state and may cancel the transition.</p></section>
+<section><h2>Layer boundary</h2><p>Toggle groups and segmented controls coordinate multiple controls and belong above Layer 2.</p></section>

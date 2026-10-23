@@ -1,0 +1,7 @@
+{
+  "id": "link/basic",
+  "title": "Native navigation link",
+  "description": "A native anchor using the shared Layer 2 Link styling contract.",
+  "defaultFramework": "native-web",
+  "frameworks": { "native-web": { "label": "Native Web", "language": "html", "source": "native-web.html" } }
+}
