@@ -33,7 +33,6 @@ html, body { margin: 0; padding: 0; background: #ffffff; }
   border: 1px solid var(--vf-color-border);
   border-radius: var(--vf-radius-surface);
   background: var(--vf-color-surface);
-  box-shadow: var(--vf-shadow-md);
 }
 .swatch { inline-size: 48px; block-size: 48px; border-radius: var(--vf-control-radius); }
 .accent { background: var(--vf-color-accent-background); }
@@ -46,7 +45,7 @@ html, body { margin: 0; padding: 0; background: #ffffff; }
 
 const presentationFixtureCss = `
 * { box-sizing: border-box; }
-html, body { margin: 0; background: #e2e8f0; font-family: var(--vf-font-family-sans); }
+html, body { margin: 0; background: #e4e4e7; font-family: var(--vf-font-family-sans); }
 #presentation {
   display: grid;
   grid-template-columns: 1fr 1fr;
@@ -61,7 +60,8 @@ html, body { margin: 0; background: #e2e8f0; font-family: var(--vf-font-family-s
   padding: 20px;
   background: var(--vf-color-surface-subtle);
   color: var(--vf-color-text);
-  border-radius: calc(var(--vf-radius-surface) + 0.25rem);
+  border: 1px solid var(--vf-color-border);
+  border-radius: var(--vf-radius-surface);
 }
 .presentation-row { display: flex; gap: 10px; align-items: center; flex-wrap: wrap; }
 .presentation-field { inline-size: 100%; }
@@ -78,7 +78,7 @@ test('foundation design language matches the approved visual baseline', async ({
   expect(actual, `Visual baseline changed. Inspect ${testInfo.outputPath('foundation-visual.png')} before updating tooling/visual/foundation-baseline.json.`).toBe(baseline.sha256);
 });
 
-test('Layer 0 through Layer 2 share one coherent presentation system', async ({ page }, testInfo) => {
+test('Layer 0 through Layer 2 use the restrained default presentation contract', async ({ page }, testInfo) => {
   await page.setViewportSize({ width: 740, height: 520 });
   const css = [tokensCss, buttonCss, inputCss, switchCss, surfaceCss, elementalCss, presentationFixtureCss].join('\n');
   const theme = (name) => `<section class="presentation-theme" data-vf-theme="${name}" aria-label="${name} presentation">
@@ -98,18 +98,25 @@ test('Layer 0 through Layer 2 share one coherent presentation system', async ({ 
   await page.setContent(`<!doctype html><html lang="en"><head><meta charset="utf-8"><title>VyrnForge L0-L2 presentation</title><style>${css}</style></head><body><main id="presentation">${theme('light')}${theme('dark')}</main></body></html>`);
 
   const primary = page.locator('[data-vf-theme="light"] [data-vf-button]').first();
+  const secondary = page.locator('[data-vf-theme="light"] [data-vf-button][data-vf-variant="secondary"]');
   const input = page.locator('[data-vf-theme="light"] [data-vf-input]');
   const surface = page.locator('[data-vf-theme="light"] [data-vf-surface]');
   const switchControl = page.locator('[data-vf-theme="light"] [data-vf-switch]');
-  await expect(primary).toHaveCSS('background-color', 'rgb(79, 70, 229)');
-  await expect(primary).toHaveCSS('border-radius', '10px');
+
+  await expect(primary).toHaveCSS('background-color', 'rgb(36, 94, 219)');
+  await expect(primary).toHaveCSS('border-radius', '6px');
+  await expect(primary).toHaveCSS('box-shadow', 'none');
+  await expect(secondary).toHaveCSS('border-color', 'rgb(161, 161, 170)');
   await expect(input).toHaveCSS('min-height', '40px');
-  await expect(input).toHaveCSS('border-radius', '10px');
-  await expect(surface).toHaveCSS('border-radius', '12px');
-  await expect(switchControl).toHaveCSS('background-color', 'rgb(79, 70, 229)');
+  await expect(input).toHaveCSS('border-radius', '6px');
+  await expect(input).toHaveCSS('box-shadow', 'none');
+  await expect(surface).toHaveCSS('border-radius', '8px');
+  await expect(surface).toHaveCSS('box-shadow', 'none');
+  await expect(switchControl).toHaveCSS('background-color', 'rgb(36, 94, 219)');
 
   await input.focus();
   await expect(input).toHaveCSS('outline-width', '2px');
+  await expect(input).toHaveCSS('border-color', 'rgb(36, 94, 219)');
 
   const image = await page.locator('#presentation').screenshot({ path: testInfo.outputPath('l0-l2-presentation.png'), animations: 'disabled' });
   expect(image.byteLength).toBeGreaterThan(5_000);
