@@ -18,6 +18,21 @@
       "types": "./dist/capabilities/collection-navigation/index.d.ts",
       "import": "./dist/capabilities/collection-navigation/index.js",
       "default": "./dist/capabilities/collection-navigation/index.js"
+    },
+    "./typeahead-matching": {
+      "types": "./dist/capabilities/typeahead-matching/index.d.ts",
+      "import": "./dist/capabilities/typeahead-matching/index.js",
+      "default": "./dist/capabilities/typeahead-matching/index.js"
+    },
+    "./selection-operations": {
+      "types": "./dist/capabilities/selection-operations/index.d.ts",
+      "import": "./dist/capabilities/selection-operations/index.js",
+      "default": "./dist/capabilities/selection-operations/index.js"
+    },
+    "./composite-focus": {
+      "types": "./dist/capabilities/composite-focus/index.d.ts",
+      "import": "./dist/capabilities/composite-focus/index.js",
+      "default": "./dist/capabilities/composite-focus/index.js"
     }
   },
   "scripts": {
