@@ -34,3 +34,6 @@ export {
 } from './components/layout/index.js';
 export { VfSurfaceElement, defineSurfaceElement } from './components/surface/index.js';
 export { VfTabsElement, defineTabsElement, type TabsActivation, type TabsOrientation, type TabsValueChangeDetail, type TabsValueChangeEvent } from './components/tabs/index.js';
+export { VfPortalElement, definePortalElement } from './capabilities/portal/index.js';
+export { VfPresenceElement, definePresenceElement } from './capabilities/presence/index.js';
+export type { PresenceExitEventDetail, PresenceState } from './capabilities/presence/index.js';
