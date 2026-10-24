@@ -1,0 +1,18 @@
+<p class="vf-docs-lede">Presence / ExitLifecycle is Layer 4 infrastructure for retaining content during a consumer-controlled exit transition.</p>
+<section><h2>Overview</h2><p>Use Presence when a later component needs to remain mounted after its present state becomes false so an exit transition can finish safely.</p></section>
+<section><h2>Installation and imports</h2><p>Framework entrypoints are <code>@vyrnforge/react/presence</code>, <code>@vyrnforge/angular/presence</code>, <code>@vyrnforge/vue/presence</code>, and <code>@vyrnforge/elements/presence</code>.</p></section>
+<section><h2>Quick start</h2><div data-vf-example="presence/basic"></div></section>
+<section><h2>Anatomy</h2><p>Presence exposes mounted state, an entered/exiting lifecycle state, and explicit exit completion.</p></section>
+<section><h2>Variants and sizes</h2><p>Presence has no visual variants or sizes.</p></section>
+<section><h2>State</h2><p>The lifecycle states are entered, exiting, and exited. Exiting remains mounted until the consumer calls the explicit completion operation.</p></section>
+<section><h2>Behavior</h2><p>Changing present from true to false moves to exiting without unmounting. Completing exit moves to exited and permits unmounting/hiding.</p></section>
+<section><h2>Interaction</h2><p>Presence adds no keyboard, focus, pointer, or dismissal behavior.</p></section>
+<section><h2>Accessibility</h2><p>The consuming component must ensure exiting content does not remain interactable or exposed longer than intended. Presence itself adds no role or ARIA.</p></section>
+<section><h2>Forms</h2><p>Presence owns no form state. Consumers decide whether exiting form controls remain active during transition.</p></section>
+<section><h2>Styling</h2><p>Presence owns no motion CSS or timing tokens. Consumers use the lifecycle state with the shared motion/token foundation.</p></section>
+<section><h2>Framework API</h2><p>React and Vue expose <code>usePresence</code>; Angular exposes structural <code>vfPresence</code> with lifecycle context; Elements exposes <code>vf-presence</code> and explicit <code>completeExit()</code>.</p></section>
+<section><h2>CSR and SSR</h2><p>Imports and entered rendering are server-safe. Exit coordination begins only after committed client state changes.</p></section>
+<section><h2>Examples</h2><p>The basic example demonstrates entered, exiting, and explicit completion.</p></section>
+<section><h2>Do / Don't</h2><p><strong>Do</strong> keep exit timing and animation implementation outside Presence. <strong>Don't</strong> turn Presence into a generic state-machine or overlay controller.</p></section>
+<section><h2>Testing guidance</h2><p>Test entered rendering, retained exiting content, explicit completion, SSR safety, rapid re-entry, and consuming-component accessibility.</p></section>
+<section><h2>Compatibility</h2><p>Presence is a Layer 4 port primitive for React, Angular, Vue, and Elements. Native Web authors can coordinate equivalent lifecycle with ordinary DOM ownership when needed.</p></section>

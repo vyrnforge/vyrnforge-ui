@@ -47,8 +47,8 @@
       "ports": {
         "react": {
           "subpath": {
-            "bytes": 3249,
-            "gzipBytes": 1474
+            "bytes": 3327,
+            "gzipBytes": 1510
           },
           "rootSelected": {
             "bytes": 703,
@@ -57,32 +57,32 @@
         },
         "angular": {
           "subpath": {
-            "bytes": 9222,
-            "gzipBytes": 2282
+            "bytes": 9300,
+            "gzipBytes": 2319
           },
           "rootSelected": {
-            "bytes": 9147,
-            "gzipBytes": 2261
+            "bytes": 9225,
+            "gzipBytes": 2299
           }
         },
         "vue": {
           "subpath": {
-            "bytes": 4190,
-            "gzipBytes": 1642
+            "bytes": 4268,
+            "gzipBytes": 1681
           },
           "rootSelected": {
-            "bytes": 4148,
-            "gzipBytes": 1623
+            "bytes": 4226,
+            "gzipBytes": 1662
           }
         },
         "elements": {
           "subpath": {
-            "bytes": 5262,
-            "gzipBytes": 1884
+            "bytes": 5340,
+            "gzipBytes": 1922
           },
           "rootSelected": {
-            "bytes": 5063,
-            "gzipBytes": 1793
+            "bytes": 5141,
+            "gzipBytes": 1829
           }
         }
       }

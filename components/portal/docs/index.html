@@ -1,0 +1,18 @@
+<p class="vf-docs-lede">Portal / RenderHost is Layer 4 infrastructure for rendering authored content into an explicit alternate host without taking ownership of overlay behavior.</p>
+<section><h2>Overview</h2><p>Use Portal when a later component must render content outside its normal DOM position while preserving the framework's authored subtree and context.</p></section>
+<section><h2>Installation and imports</h2><p>Framework entrypoints are <code>@vyrnforge/react/portal</code>, <code>@vyrnforge/angular/portal</code>, <code>@vyrnforge/vue/portal</code>, and <code>@vyrnforge/elements/portal</code>.</p></section>
+<section><h2>Quick start</h2><div data-vf-example="portal/basic"></div></section>
+<section><h2>Anatomy</h2><p>Portal has authored content and one explicit target/render host. It adds no visible wrapper contract.</p></section>
+<section><h2>Variants and sizes</h2><p>Portal has no visual variants or sizes.</p></section>
+<section><h2>State</h2><p>Portal owns no open/closed or overlay state. Consumers control whether content is authored and where it renders.</p></section>
+<section><h2>Behavior</h2><p>React uses createPortal, Vue uses Teleport, Angular moves an embedded view to the supplied target, and Elements moves its authored child nodes to the target.</p></section>
+<section><h2>Interaction</h2><p>Portal adds no keyboard, pointer, focus, dismissal, or positioning behavior.</p></section>
+<section><h2>Accessibility</h2><p>Moving content does not change its semantic responsibility. The consuming composite remains responsible for relationships, focus order, labels, and modal semantics.</p></section>
+<section><h2>Forms</h2><p>Portal does not own form state. Consumers must account for native DOM form-owner behavior when moving native form controls.</p></section>
+<section><h2>Styling</h2><p>Portal has no canonical CSS. Styling belongs to the rendered content and consuming component.</p></section>
+<section><h2>Framework API</h2><p>React exposes <code>Portal</code> with <code>target</code> and <code>disabled</code>; Angular exposes <code>vfPortal</code> on an <code>ng-template</code>; Vue exposes <code>Portal</code> backed by Teleport; Elements exposes <code>vf-portal</code> with a target selector or <code>targetElement</code>.</p></section>
+<section><h2>CSR and SSR</h2><p>Imports are server-safe. React and Angular retain content inline when no live target exists; Vue supports disabled inline rendering during SSR. Portal activation must not assume browser globals at module evaluation.</p></section>
+<section><h2>Examples</h2><p>The basic example renders one button into a separate host in each framework port.</p></section>
+<section><h2>Do / Don't</h2><p><strong>Do</strong> use Portal as a rendering primitive for later overlays. <strong>Don't</strong> put focus management, dismissal, positioning, or application state into Portal.</p></section>
+<section><h2>Testing guidance</h2><p>Test target placement, cleanup, SSR fallback, context preservation where relevant, and accessibility of the consuming composition.</p></section>
+<section><h2>Compatibility</h2><p>Portal is a Layer 4 port primitive for React, Angular, Vue, and Elements. There is no Native Web wrapper because native DOM authors already choose a render host directly.</p></section>
