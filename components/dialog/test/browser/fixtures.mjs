@@ -93,3 +93,32 @@ if (port === 'angular') {
   await writeFile(path.join(outDir, 'angular.html'), html.replace('</body>', '<script type="module" src="./angular.js"></script></body>'));
   await build({ stdin: { resolveDir: root, sourcefile: 'angular-dialog-client.ts', contents: `import '@angular/compiler';import{Component,provideZonelessChangeDetection,signal}from'@angular/core';import{bootstrapApplication,provideClientHydration}from'@angular/platform-browser';import{VfDialogRootDirective,VfDialogTitleDirective,VfDialogDescriptionDirective,VfDialogBodyDirective,VfDialogCloseDirective}from'@vyrnforge/angular/dialog';class App{open=signal(false);parentOpen=signal(false);childOpen=signal(false);dismissed(request){document.body.dataset.dismissReason=request.reason}}Component({selector:'vf-dialog-test',standalone:true,imports:[VfDialogRootDirective,VfDialogTitleDirective,VfDialogDescriptionDirective,VfDialogBodyDirective,VfDialogCloseDirective],template:${JSON.stringify(template)}})(App);bootstrapApplication(App,{providers:[provideZonelessChangeDetection(),provideClientHydration()]});` }, bundle: true, format: 'esm', platform: 'browser', outfile: path.join(outDir, 'angular.js') });
 }
+
+if (port === 'elements') {
+  await writeFile(path.join(outDir, 'elements.html'), page(`
+    <button id="elements-open" type="button">Open dialog</button>
+    <vf-dialog id="elements-root" backdrop-dismiss>
+      <dialog id="elements-dialog">
+        <h2 data-vf-dialog-title>Edit profile</h2>
+        <p data-vf-dialog-description>Update your profile.</p>
+        <div data-vf-dialog-body><input id="elements-initial" aria-label="Profile name"></div>
+        <button id="elements-close" type="button" data-vf-dialog-close>Close</button>
+      </dialog>
+    </vf-dialog>
+    <button id="elements-parent-open" type="button">Open parent dialog</button>
+    <vf-dialog id="elements-parent-root">
+      <dialog id="elements-parent-dialog">
+        <h2 data-vf-dialog-title>Parent dialog</h2>
+        <div data-vf-dialog-body>
+          <button id="elements-child-open" type="button">Open child dialog</button>
+          <vf-dialog id="elements-child-root">
+            <dialog id="elements-child-dialog">
+              <h2 data-vf-dialog-title>Child dialog</h2>
+              <div data-vf-dialog-body>Child content</div>
+            </dialog>
+          </vf-dialog>
+        </div>
+      </dialog>
+    </vf-dialog>`, '<script type="module" src="./elements.js"></script>'));
+  await build({ stdin: { resolveDir: root, sourcefile: 'elements-dialog-client.ts', contents: `import{defineDialogElement}from'@vyrnforge/elements/dialog';defineDialogElement();const root=document.querySelector('#elements-root'),parent=document.querySelector('#elements-parent-root'),child=document.querySelector('#elements-child-root');const wire=(trigger,target)=>trigger.addEventListener('click',()=>{target.open=true;queueMicrotask(()=>target.querySelector('input,button,[tabindex]')?.focus())});wire(document.querySelector('#elements-open'),root);wire(document.querySelector('#elements-parent-open'),parent);wire(document.querySelector('#elements-child-open'),child);for(const el of [root,parent,child]){el.addEventListener('vf-dismiss-request',e=>{document.body.dataset.dismissReason=e.detail.reason});}` }, bundle: true, format: 'esm', platform: 'browser', outfile: path.join(outDir, 'elements.js') });
+}
