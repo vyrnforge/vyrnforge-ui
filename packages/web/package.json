@@ -57,7 +57,16 @@
     "./styles/context-menu.css": "./dist/components/context-menu/context-menu.css",
     "./styles/menubar.css": "./dist/components/menubar/menubar.css",
     "./styles/toolbar.css": "./dist/components/toolbar/toolbar.css",
-    "./styles/split-button.css": "./dist/components/split-button/split-button.css"
+    "./styles/split-button.css": "./dist/components/split-button/split-button.css",
+    "./styles/listbox.css": "./dist/components/listbox/listbox.css",
+    "./styles/select.css": "./dist/components/select/select.css",
+    "./styles/combobox.css": "./dist/components/combobox/combobox.css",
+    "./styles/multi-select.css": "./dist/components/multi-select/multi-select.css",
+    "./styles/toggle-group.css": "./dist/components/toggle-group/toggle-group.css",
+    "./styles/segmented-control.css": "./dist/components/segmented-control/segmented-control.css",
+    "./styles/tag-group.css": "./dist/components/tag-group/tag-group.css",
+    "./styles/rating.css": "./dist/components/rating/rating.css",
+    "./styles/range-slider.css": "./dist/components/range-slider/range-slider.css"
   },
   "dependencies": { "@vyrnforge/core": "0.0.0-rebuild" },
   "scripts": { "build": "node ../../tooling/tokens/generate.mjs --check && tsc -p tsconfig.json && node ../../tooling/build/copy-web-assets.mjs" }
