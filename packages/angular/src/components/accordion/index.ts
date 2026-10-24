@@ -1,4 +1,4 @@
-import { Directive, ElementRef, booleanAttribute, computed, input, output, signal } from '@angular/core';
+import { Directive, booleanAttribute, computed, input, output, signal, type ElementRef } from '@angular/core';
 import { resolveEnabledIndex, type CollectionNavigationIntent } from '@vyrnforge/core/collection-navigation';
 
 export type AccordionType = 'single' | 'multiple';
