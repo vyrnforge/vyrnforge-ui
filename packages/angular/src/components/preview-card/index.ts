@@ -1,4 +1,4 @@
-import { Directive, ElementRef, OnDestroy, booleanAttribute, computed, effect, input, output, signal } from '@angular/core';
+import { Directive, booleanAttribute, computed, effect, input, output, signal, type ElementRef, type OnDestroy } from '@angular/core';
 import { autoUpdateFloatingPosition, type FloatingPlacement } from '@vyrnforge/web/floating-positioning';
 import { createDismissalCoordinator } from '@vyrnforge/web/dismissal-coordination';
 @Directive({ selector: '[vfPreviewCardRoot]', standalone: true }) export class VfPreviewCardRootDirective { readonly open = input<boolean | undefined>(undefined); readonly defaultOpen = input(false, { transform: booleanAttribute }); readonly placement = input<FloatingPlacement>('bottom-start'); readonly openChange = output<boolean>(); private internal = signal(false); private initialized = false; readonly expanded = computed(() => this.open() ?? (this.initialized ? this.internal() : this.defaultOpen())); anchor: HTMLElement | null = null; setOpen(next: boolean) { if (next === this.expanded()) return; this.initialized = true; if (this.open() === undefined) this.internal.set(next); this.openChange.emit(next); } }
