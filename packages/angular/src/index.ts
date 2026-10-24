@@ -29,6 +29,3 @@ export type { TabsActivation, TabsOrientation } from './components/tabs/index.js
 export { VfTextDirective } from './components/text/index.js';
 export type { TextVariant } from './components/text/index.js';
 export { VfVisuallyHiddenDirective } from './components/visually-hidden/index.js';
-export { VfPortalDirective } from './components/portal/index.js';
-export { VfPresenceDirective } from './components/presence/index.js';
-export type { PresenceState, VfPresenceContext } from './components/presence/index.js';
