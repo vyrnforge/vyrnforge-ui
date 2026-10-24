@@ -14,21 +14,21 @@ export class VfPresenceElement extends HTMLElementBase {
     if (this.present || this.#state !== 'exiting') return;
     this.#state = 'exited';
     this.hidden = true;
-    this.dataset.vfPresence = this.#state;
+    this.dataset.state = this.#state;
     this.dispatchEvent(new CustomEvent<PresenceExitEventDetail>('vf-exit-complete', { detail: { state: 'exited' }, bubbles: true, composed: true }));
   }
   #sync(present: boolean): void {
     if (present) {
       this.hidden = false;
       this.#state = 'entered';
-      this.dataset.vfPresence = this.#state;
+      this.dataset.state = this.#state;
     } else if (this.#state === 'entered') {
       this.#state = 'exiting';
-      this.dataset.vfPresence = this.#state;
+      this.dataset.state = this.#state;
       this.dispatchEvent(new CustomEvent<PresenceExitEventDetail>('vf-exit-start', { detail: { state: 'exiting' }, bubbles: true, composed: true }));
     } else if (this.#state === 'exited') {
       this.hidden = true;
-      this.dataset.vfPresence = this.#state;
+      this.dataset.state = this.#state;
     }
   }
 }
