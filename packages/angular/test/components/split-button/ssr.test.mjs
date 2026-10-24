@@ -1,0 +1,1 @@
+import test from 'node:test'; import assert from 'node:assert/strict'; test('Angular SplitButton subpath is SSR-safe',async()=>{const api=await import('@vyrnforge/angular/split-button'); assert.equal(typeof api.VfSplitButtonRootDirective,'function');});

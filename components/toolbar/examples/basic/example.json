@@ -1,0 +1,1 @@
+{"id":"toolbar/basic","title":"Basic toolbar","description":"Navigate a group of peer commands.","defaultFramework":"react","frameworks":{"react":{"label":"React","language":"tsx","source":"react.tsx"}}}

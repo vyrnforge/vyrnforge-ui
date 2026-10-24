@@ -1,0 +1,1 @@
+import test from 'node:test'; import assert from 'node:assert/strict'; test('React Toolbar subpath is SSR-safe',async()=>{const api=await import('@vyrnforge/react/toolbar'); assert.equal(typeof api.ToolbarRoot,'object');});
