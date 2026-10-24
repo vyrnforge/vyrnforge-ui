@@ -10,3 +10,8 @@ export { VfDrawerElement, defineDrawerElement, type DrawerPlacement } from './co
 export { VfPopoverElement, definePopoverElement } from './components/popover/index.js';
 export { VfTooltipElement, defineTooltipElement } from './components/tooltip/index.js';
 export { VfPreviewCardElement, definePreviewCardElement } from './components/preview-card/index.js';
+export { VfMenuElement, defineMenuElement } from './components/menu/index.js';
+export { VfContextMenuElement, defineContextMenuElement } from './components/context-menu/index.js';
+export { VfMenubarElement, defineMenubarElement } from './components/menubar/index.js';
+export { VfToolbarElement, defineToolbarElement, type ToolbarOrientation } from './components/toolbar/index.js';
+export { VfSplitButtonElement, defineSplitButtonElement } from './components/split-button/index.js';
