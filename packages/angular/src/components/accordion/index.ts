@@ -1,4 +1,4 @@
-import { Directive, booleanAttribute, computed, input, output, signal, type ElementRef } from '@angular/core';
+import { Directive, ElementRef, booleanAttribute, computed, inject, input, output, signal } from '@angular/core';
 import { resolveEnabledIndex, type CollectionNavigationIntent } from '@vyrnforge/core/collection-navigation';
 
 export type AccordionType = 'single' | 'multiple';
@@ -43,8 +43,8 @@ export class VfAccordionHeaderDirective { constructor(readonly item: VfAccordion
 
 @Directive({ selector: 'button[vfAccordionTrigger]', standalone: true, host: { type: 'button', 'data-vf-accordion-trigger': '', '[attr.id]': 'item.triggerId()', '[attr.aria-expanded]': 'item.open()', '[attr.aria-controls]': 'item.panelId()', '[disabled]': 'item.disabled()', '(click)': 'toggle()', '(keydown)': 'onKeydown($event)' } })
 export class VfAccordionTriggerDirective {
-  private readonly element: ElementRef<HTMLButtonElement>;
-  constructor(readonly item: VfAccordionItemDirective, element: ElementRef<HTMLButtonElement>) { this.element = element; }
+  private readonly element = inject<ElementRef<HTMLButtonElement>>(ElementRef);
+  constructor(readonly item: VfAccordionItemDirective) {}
   toggle(): void { if (!this.item.disabled()) this.item.root.toggle(this.item.value()); }
   onKeydown(event: KeyboardEvent): void {
     let intent: CollectionNavigationIntent | null = null; if (event.key === 'ArrowDown') intent = 'next'; else if (event.key === 'ArrowUp') intent = 'previous'; else if (event.key === 'Home') intent = 'first'; else if (event.key === 'End') intent = 'last'; if (!intent) return;
