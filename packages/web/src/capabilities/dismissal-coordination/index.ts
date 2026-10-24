@@ -26,6 +26,10 @@ function eventIsInside(layer: DismissalLayer, event: Event): boolean {
   return branchesFor(layer).some((branch) => path.includes(branch));
 }
 
+function isEscapeKeyEvent(event: Event): event is KeyboardEvent {
+  return 'key' in event && event.key === 'Escape';
+}
+
 export function createDismissalCoordinator(ownerDocument: Document): DismissalCoordinator {
   const layers: DismissalLayer[] = [];
   let listening = false;
@@ -39,7 +43,7 @@ export function createDismissalCoordinator(ownerDocument: Document): DismissalCo
   };
 
   const onKeyDown = (event: Event) => {
-    if (!(event instanceof ownerDocument.defaultView!.KeyboardEvent) || event.key !== 'Escape') return;
+    if (!isEscapeKeyEvent(event)) return;
     const layer = topLayer();
     if (layer && layer.dismissOnEscape !== false) layer.onDismiss('escape', event);
   };
