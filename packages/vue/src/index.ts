@@ -34,3 +34,14 @@ export type { VisuallyHiddenElement } from './components/visually-hidden/index.j
 export { Portal } from './components/portal/index.js';
 export { usePresence } from './components/presence/index.js';
 export type { PresenceResult, PresenceState } from './components/presence/index.js';
+export { DisclosurePanel, DisclosureRoot, DisclosureTrigger } from './components/disclosure/index.js';
+export type { DisclosureRootProps } from './components/disclosure/index.js';
+export { AccordionHeader, AccordionItem, AccordionPanel, AccordionRoot, AccordionTrigger } from './components/accordion/index.js';
+export type { AccordionType, AccordionValue } from './components/accordion/index.js';
+export { AlertDialogAction, AlertDialogBody, AlertDialogCancel, AlertDialogDescription, AlertDialogRoot, AlertDialogTitle } from './components/alert-dialog/index.js';
+export type { AlertDialogDismissReason, AlertDialogDismissRequest, AlertDialogRootProps } from './components/alert-dialog/index.js';
+export { DrawerBody, DrawerClose, DrawerDescription, DrawerRoot, DrawerTitle } from './components/drawer/index.js';
+export type { DrawerPlacement, DrawerRootProps } from './components/drawer/index.js';
+export { PopoverContent, PopoverRoot, PopoverTrigger } from './components/popover/index.js';
+export { TooltipContent, TooltipRoot, TooltipTrigger } from './components/tooltip/index.js';
+export { PreviewCardContent, PreviewCardRoot, PreviewCardTrigger } from './components/preview-card/index.js';
