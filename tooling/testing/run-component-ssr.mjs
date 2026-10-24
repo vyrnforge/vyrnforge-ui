@@ -9,4 +9,5 @@ if (!component) throw new Error(`Unknown discovered component: ${componentId}`);
 const testFile = component.ports?.[port]?.ssr;
 if (!testFile) throw new Error(`No conventional SSR evidence for ${componentId}/${port}`);
 
-execFileSync(process.execPath, ['--test', testFile], { stdio: 'inherit' });
+const runtimeSetup = port === 'angular' ? ['--import', '@angular/compiler'] : [];
+execFileSync(process.execPath, [...runtimeSetup, '--test', testFile], { stdio: 'inherit' });
