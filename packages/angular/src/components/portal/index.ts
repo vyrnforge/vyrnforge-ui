@@ -1,4 +1,5 @@
-import { Directive, EmbeddedViewRef, TemplateRef, ViewContainerRef, effect, inject, input } from '@angular/core';
+import { Directive, TemplateRef, ViewContainerRef, effect, inject, input } from '@angular/core';
+import type { EmbeddedViewRef } from '@angular/core';
 
 @Directive({ selector: 'ng-template[vfPortal]', standalone: true })
 export class VfPortalDirective {
