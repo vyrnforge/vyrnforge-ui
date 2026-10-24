@@ -1,0 +1,1 @@
+import test from'node:test';import assert from'node:assert/strict';test('Vue OTPField subpath is SSR-safe',async()=>{const api=await import('@vyrnforge/vue/otp-field');assert.ok(Object.keys(api).length>0);});

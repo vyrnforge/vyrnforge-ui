@@ -1,0 +1,1 @@
+{"id":"number-field/basic","title":"Basic NumberField","description":"Bounded numeric input with step controls.","defaultFramework":"react","frameworks":{"react":{"label":"React","language":"tsx","source":"react.tsx"}}}

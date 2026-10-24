@@ -1,0 +1,1 @@
+import test from'node:test';import assert from'node:assert/strict';test('React OTPField subpath is SSR-safe',async()=>{const api=await import('@vyrnforge/react/otp-field');assert.ok(Object.keys(api).length>0);});

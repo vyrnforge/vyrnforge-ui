@@ -1,0 +1,1 @@
+import test from'node:test';import assert from'node:assert/strict';test('React SearchField subpath is SSR-safe',async()=>{const api=await import('@vyrnforge/react/search-field');assert.ok(Object.keys(api).length>0);});

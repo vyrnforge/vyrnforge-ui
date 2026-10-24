@@ -1,0 +1,1 @@
+{"id":"color-picker/basic","title":"Basic ColorPicker","description":"Synchronized native and text color entry.","defaultFramework":"react","frameworks":{"react":{"label":"React","language":"tsx","source":"react.tsx"}}}

@@ -1,0 +1,1 @@
+import * as react from '@vyrnforge/react/pagination'; import * as angular from '@vyrnforge/angular/pagination'; import * as vue from '@vyrnforge/vue/pagination'; import * as elements from '@vyrnforge/elements/pagination'; void [react, angular, vue, elements];

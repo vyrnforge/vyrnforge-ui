@@ -1,0 +1,1 @@
+{"id":"file-uploader/basic","title":"Basic FileUploader","description":"Native file selection with a drop target and file list.","defaultFramework":"react","frameworks":{"react":{"label":"React","language":"tsx","source":"react.tsx"}}}

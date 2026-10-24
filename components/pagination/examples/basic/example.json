@@ -1,0 +1,1 @@
+{"id":"pagination/basic","title":"Basic Pagination","description":"Accessible page navigation with a current item.","defaultFramework":"react","frameworks":{"react":{"label":"React","language":"tsx","source":"react.tsx"}}}
