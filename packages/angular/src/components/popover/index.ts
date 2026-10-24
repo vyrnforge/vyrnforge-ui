@@ -1,4 +1,4 @@
-import { Directive, booleanAttribute, computed, effect, input, output, signal, type ElementRef, type OnDestroy } from '@angular/core';
+import { Directive, ElementRef, booleanAttribute, computed, effect, inject, input, output, signal, type OnDestroy } from '@angular/core';
 import { autoUpdateFloatingPosition, type FloatingPlacement } from '@vyrnforge/web/floating-positioning';
 import { createDismissalCoordinator } from '@vyrnforge/web/dismissal-coordination';
 
@@ -10,11 +10,16 @@ export class VfPopoverRootDirective {
 }
 
 @Directive({ selector: 'button[vfPopoverTrigger]', standalone: true, host: { type: 'button', 'data-vf-popover-trigger': '', '[attr.aria-expanded]': 'root.expanded()', '(click)': 'toggle()' } })
-export class VfPopoverTriggerDirective { constructor(readonly root: VfPopoverRootDirective, element: ElementRef<HTMLButtonElement>) { effect(() => { this.root.anchor = element.nativeElement; }); } toggle(): void { this.root.setOpen(!this.root.expanded()); } }
+export class VfPopoverTriggerDirective {
+  private readonly element = inject<ElementRef<HTMLButtonElement>>(ElementRef);
+  constructor(readonly root: VfPopoverRootDirective) { effect(() => { this.root.anchor = this.element.nativeElement; }); }
+  toggle(): void { this.root.setOpen(!this.root.expanded()); }
+}
 
 @Directive({ selector: '[vfPopoverContent]', standalone: true, host: { role: 'dialog', tabindex: '-1', 'data-vf-popover-content': '', '[attr.data-vf-open]': 'root.expanded() ? "" : null', '[hidden]': '!root.expanded()' } })
 export class VfPopoverContentDirective implements OnDestroy {
   private cleanup: (() => void) | null = null;
-  constructor(readonly root: VfPopoverRootDirective, private readonly element: ElementRef<HTMLElement>) { effect(() => { this.cleanup?.(); this.cleanup = null; if (!this.root.expanded()) return; const surface = this.element.nativeElement; this.root.content = surface; queueMicrotask(() => { if (!this.root.anchor || !this.root.expanded()) return; const stopPosition = autoUpdateFloatingPosition(this.root.anchor, surface, { placement: this.root.placement(), offset: 6 }); const coordinator = createDismissalCoordinator(surface.ownerDocument); const unregister = coordinator.register({ element: surface, branches: [this.root.anchor], onDismiss: () => this.root.setOpen(false) }); this.cleanup = () => { unregister(); coordinator.destroy(); stopPosition(); }; }); }); }
+  private readonly element = inject<ElementRef<HTMLElement>>(ElementRef);
+  constructor(readonly root: VfPopoverRootDirective) { effect(() => { this.cleanup?.(); this.cleanup = null; if (!this.root.expanded()) return; const surface = this.element.nativeElement; this.root.content = surface; queueMicrotask(() => { if (!this.root.anchor || !this.root.expanded()) return; const stopPosition = autoUpdateFloatingPosition(this.root.anchor, surface, { placement: this.root.placement(), offset: 6 }); const coordinator = createDismissalCoordinator(surface.ownerDocument); const unregister = coordinator.register({ element: surface, branches: [this.root.anchor], onDismiss: () => this.root.setOpen(false) }); this.cleanup = () => { unregister(); coordinator.destroy(); stopPosition(); }; }); }); }
   ngOnDestroy(): void { this.cleanup?.(); }
 }
