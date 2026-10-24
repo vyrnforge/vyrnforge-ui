@@ -1,4 +1,5 @@
-import { Directive, EmbeddedViewRef, TemplateRef, ViewContainerRef, effect, inject, input } from '@angular/core';
+import { Directive, TemplateRef, ViewContainerRef, effect, inject, input } from '@angular/core';
+import type { EmbeddedViewRef } from '@angular/core';
 
 export type PresenceState = 'entered' | 'exiting' | 'exited';
 export interface VfPresenceContext {
