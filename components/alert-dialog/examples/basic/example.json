@@ -1,0 +1,1 @@
+{"id":"alert-dialog/basic","title":"Confirmation dialog","description":"Confirm or cancel a consequential action.","defaultFramework":"react","frameworks":{"react":{"label":"React","language":"tsx","source":"react.tsx"}}}

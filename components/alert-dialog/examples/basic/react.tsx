@@ -1,0 +1,1 @@
+import{AlertDialogAction,AlertDialogCancel,AlertDialogRoot,AlertDialogTitle}from'@vyrnforge/react/alert-dialog';export default()=> <AlertDialogRoot defaultOpen><AlertDialogTitle>Delete item?</AlertDialogTitle><AlertDialogCancel>Cancel</AlertDialogCancel><AlertDialogAction>Delete</AlertDialogAction></AlertDialogRoot>;

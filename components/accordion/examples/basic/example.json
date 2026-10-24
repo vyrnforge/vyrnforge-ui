@@ -1,0 +1,1 @@
+{"id":"accordion/basic","title":"Basic accordion","description":"Coordinate a single expanded section.","defaultFramework":"react","frameworks":{"react":{"label":"React","language":"tsx","source":"react.tsx"}}}
