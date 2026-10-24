@@ -1,0 +1,12 @@
+import { createElement, forwardRef, type ComponentPropsWithoutRef } from 'react';
+import { MenuContent, MenuItem, MenuRoot, MenuTrigger, type MenuContentProps, type MenuItemProps, type MenuRootProps, type MenuTriggerProps } from '../menu/index.js';
+export type MenubarRootProps = ComponentPropsWithoutRef<'div'>;
+export const MenubarRoot = forwardRef<HTMLDivElement, MenubarRootProps>(function MenubarRoot(props, ref) { return createElement('div', { ...props, ref, role: 'menubar', 'data-vf-menubar-root': '' }); });
+export type MenubarMenuProps = MenuRootProps;
+export const MenubarMenu = MenuRoot;
+export type MenubarTriggerProps = MenuTriggerProps;
+export const MenubarTrigger = forwardRef<HTMLButtonElement, MenubarTriggerProps>(function MenubarTrigger({ onKeyDown, ...props }, ref) { return createElement(MenuTrigger, { ...props, ref, role: 'menuitem', 'data-vf-menubar-trigger': '', onKeyDown(event) { onKeyDown?.(event); if (event.defaultPrevented || (event.key !== 'ArrowLeft' && event.key !== 'ArrowRight')) return; const bar = event.currentTarget.closest('[role="menubar"]'); const triggers = Array.from(bar?.querySelectorAll<HTMLButtonElement>('[data-vf-menubar-trigger]') ?? []); const index = triggers.indexOf(event.currentTarget); if (index < 0 || triggers.length < 2) return; event.preventDefault(); const delta = event.key === 'ArrowRight' ? 1 : -1; triggers[(index + delta + triggers.length) % triggers.length]?.focus(); } }); });
+export type MenubarContentProps = MenuContentProps;
+export const MenubarContent = MenuContent;
+export type MenubarItemProps = MenuItemProps;
+export const MenubarItem = MenuItem;
