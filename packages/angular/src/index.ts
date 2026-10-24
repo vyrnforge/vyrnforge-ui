@@ -44,3 +44,14 @@ export { VfMenubarContentDirective, VfMenubarItemDirective, VfMenubarMenuDirecti
 export { VfToolbarButtonDirective, VfToolbarLinkDirective, VfToolbarRootDirective, VfToolbarSeparatorDirective } from './components/toolbar/index.js';
 export type { ToolbarOrientation } from './components/toolbar/index.js';
 export { VfSplitButtonActionDirective, VfSplitButtonContentDirective, VfSplitButtonItemDirective, VfSplitButtonRootDirective, VfSplitButtonTriggerDirective } from './components/split-button/index.js';
+export { VfListboxOptionDirective, VfListboxRootDirective } from './components/listbox/index.js';
+export type { ListboxSelectionMode, ListboxValue } from './components/listbox/index.js';
+export { VfSelectContentDirective, VfSelectOptionDirective, VfSelectRootDirective, VfSelectTriggerDirective } from './components/select/index.js';
+export { VfComboboxContentDirective, VfComboboxInputDirective, VfComboboxOptionDirective, VfComboboxRootDirective } from './components/combobox/index.js';
+export { VfMultiSelectContentDirective, VfMultiSelectOptionDirective, VfMultiSelectRootDirective, VfMultiSelectTriggerDirective } from './components/multi-select/index.js';
+export { VfToggleGroupItemDirective, VfToggleGroupRootDirective } from './components/toggle-group/index.js';
+export type { ToggleGroupType } from './components/toggle-group/index.js';
+export { VfSegmentedControlItemDirective, VfSegmentedControlRootDirective } from './components/segmented-control/index.js';
+export { VfTagGroupItemDirective, VfTagGroupRemoveDirective, VfTagGroupRootDirective } from './components/tag-group/index.js';
+export { VfRatingItemDirective, VfRatingRootDirective } from './components/rating/index.js';
+export { VfRangeSliderRootDirective } from './components/range-slider/index.js';
