@@ -1,4 +1,4 @@
-import { Directive, ElementRef, OnDestroy, booleanAttribute, computed, effect, input, output, signal } from '@angular/core';
+import { Directive, booleanAttribute, computed, effect, input, output, signal, type ElementRef, type OnDestroy } from '@angular/core';
 import { autoUpdateFloatingPosition, type FloatingPlacement } from '@vyrnforge/web/floating-positioning';
 
 @Directive({ selector: '[vfTooltipRoot]', standalone: true })
