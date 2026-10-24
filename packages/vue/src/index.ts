@@ -45,3 +45,9 @@ export type { DrawerPlacement, DrawerRootProps } from './components/drawer/index
 export { PopoverContent, PopoverRoot, PopoverTrigger } from './components/popover/index.js';
 export { TooltipContent, TooltipRoot, TooltipTrigger } from './components/tooltip/index.js';
 export { PreviewCardContent, PreviewCardRoot, PreviewCardTrigger } from './components/preview-card/index.js';
+export { MenuContent, MenuItem, MenuRoot, MenuSeparator, MenuTrigger } from './components/menu/index.js';
+export { ContextMenuContent, ContextMenuItem, ContextMenuRoot, ContextMenuTrigger } from './components/context-menu/index.js';
+export { MenubarContent, MenubarItem, MenubarMenu, MenubarRoot, MenubarTrigger } from './components/menubar/index.js';
+export { ToolbarButton, ToolbarLink, ToolbarRoot, ToolbarSeparator } from './components/toolbar/index.js';
+export type { ToolbarOrientation } from './components/toolbar/index.js';
+export { SplitButtonAction, SplitButtonContent, SplitButtonItem, SplitButtonRoot, SplitButtonTrigger } from './components/split-button/index.js';
