@@ -34,7 +34,7 @@ export const Stack = defineComponent({
   setup(props, { attrs, slots }) { return () => h(props.as, { ...attrs, 'data-vf-stack': '', 'data-vf-stack-gap': props.gap, 'data-vf-stack-align': props.align, 'data-vf-stack-justify': props.justify }, slots.default?.()); },
 });
 
-export const Inline = defineComponent({
+export const Inline = /* @__PURE__ */ defineComponent({
   name: 'VfInline', inheritAttrs: false,
   props: { as: { type: String as PropType<LayoutElement>, default: 'div' }, gap: { type: String as PropType<LayoutSpace>, default: 'md' }, align: { type: String as PropType<InlineAlign>, default: 'center' }, justify: { type: String as PropType<InlineJustify>, default: 'start' } },
   setup(props, { attrs, slots }) { return () => h(props.as, { ...attrs, 'data-vf-inline': '', 'data-vf-inline-gap': props.gap, 'data-vf-inline-align': props.align, 'data-vf-inline-justify': props.justify }, slots.default?.()); },
@@ -58,30 +58,30 @@ export const Container = defineComponent({
   setup(props, { attrs, slots }) { return () => h(props.as, { ...attrs, 'data-vf-container': '', 'data-vf-container-size': props.size, 'data-vf-container-gutter': props.gutter }, slots.default?.()); },
 });
 
-export const AspectRatio = defineComponent({
+export const AspectRatio = /* @__PURE__ */ defineComponent({
   name: 'VfAspectRatio', inheritAttrs: false,
   props: { as: { type: String as PropType<LayoutElement>, default: 'div' }, ratio: { type: String as PropType<AspectRatio>, default: 'square' } },
   setup(props, { attrs, slots }) { return () => h(props.as, { ...attrs, 'data-vf-aspect-ratio': '', 'data-vf-aspect-ratio-value': props.ratio }, slots.default?.()); },
 });
 
-export const Field = defineComponent({
+export const Field = /* @__PURE__ */ defineComponent({
   name: 'VfField', inheritAttrs: false,
   props: { as: { type: String as PropType<LayoutElement>, default: 'div' }, gap: { type: String as PropType<LayoutSpace>, default: 'xs' } },
   setup(props, { attrs, slots }) { return () => h(props.as, { ...attrs, 'data-vf-field': '', 'data-vf-field-gap': props.gap }, slots.default?.()); },
 });
 
-export const Fieldset = defineComponent({
+export const Fieldset = /* @__PURE__ */ defineComponent({
   name: 'VfFieldset', inheritAttrs: false,
   props: { gap: { type: String as PropType<LayoutSpace>, default: 'sm' } },
   setup(props, { attrs, slots }) { return () => h('fieldset', { ...attrs, 'data-vf-fieldset': '', 'data-vf-fieldset-gap': props.gap }, slots.default?.()); },
 });
 
-export const InputGroup = defineComponent({
+export const InputGroup = /* @__PURE__ */ defineComponent({
   name: 'VfInputGroup', inheritAttrs: false,
   setup(_props, { attrs, slots }) { return () => h('div', { ...attrs, 'data-vf-input-group': '' }, slots.default?.()); },
 });
 
-export const RadioGroup = defineComponent({
+export const RadioGroup = /* @__PURE__ */ defineComponent({
   name: 'VfRadioGroup', inheritAttrs: false,
   props: { gap: { type: String as PropType<LayoutSpace>, default: 'sm' }, orientation: { type: String as PropType<RadioGroupOrientation>, default: 'vertical' } },
   setup(props, { attrs, slots }) { return () => h('fieldset', { ...attrs, 'data-vf-radio-group': '', 'data-vf-radio-group-gap': props.gap, 'data-vf-radio-group-orientation': props.orientation }, slots.default?.()); },
