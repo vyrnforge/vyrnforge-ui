@@ -21,7 +21,10 @@ export function focusCompositeItem(
 ): HTMLElement | null {
   if (activeIndex == null || activeIndex < 0 || activeIndex >= elements.length) return null;
   const element = elements[activeIndex] ?? null;
-  element?.focus({ preventScroll: options.preventScroll });
+  if (element) {
+    if (options.preventScroll === undefined) element.focus();
+    else element.focus({ preventScroll: options.preventScroll });
+  }
   return element;
 }
 
