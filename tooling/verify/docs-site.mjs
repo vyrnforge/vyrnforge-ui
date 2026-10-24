@@ -22,7 +22,25 @@ function safeName(value) { return value.replace(/[^a-z0-9]+/gi, '-').replace(/^-
 for (const page of registry.pages) {
   const pageDirectory = path.join(channelRoot, page.slug);
   const html = await readFile(path.join(pageDirectory, 'index.html'), 'utf8');
-  for (const required of ['<html lang="en"', 'name="viewport"', 'class="vf-skip-link"', '<nav class="vf-docs-nav"', '<main id="main">', '<h1>', 'data-vf-framework-select', 'data-vf-docs-search', 'vyrnforge/styles.css']) if (!html.includes(required)) throw new Error(`${page.slug || '<home>'} missing required docs markup: ${required}`);
+  for (const required of [
+    '<html lang="en"',
+    'name="viewport"',
+    'class="vf-skip-link"',
+    'data-vf-app-shell',
+    'data-vf-app-shell-header',
+    'data-vf-app-shell-body',
+    'data-vf-app-shell-navigation',
+    'data-vf-side-nav',
+    'data-vf-app-shell-main',
+    'id="main"',
+    'data-vf-app-shell-footer',
+    '<h1>',
+    'data-vf-framework-select',
+    'data-vf-docs-search',
+    'vyrnforge/styles.css'
+  ]) if (!html.includes(required)) throw new Error(`${page.slug || '<home>'} missing required docs markup: ${required}`);
+  if (!html.includes('aria-current="page"')) throw new Error(`${page.slug || '<home>'} missing current-page navigation semantics`);
+  if (html.includes('class="vf-docs-shell"') || html.includes('class="vf-docs-nav"')) throw new Error(`${page.slug || '<home>'} still emits the superseded docs-only shell/navigation classes`);
   if (page.kind === 'framework' && !html.includes('data-vf-support-status=')) throw new Error(`${page.slug} must explicitly declare implementation/support status`);
   for (const href of htmlLinks(html)) {
     if (href.startsWith('javascript:')) throw new Error(`${page.slug} contains javascript: URL`);
