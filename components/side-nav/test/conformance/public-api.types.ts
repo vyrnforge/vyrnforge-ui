@@ -1,1 +1,7 @@
-import type * as ReactApi from '@vyrnforge/react/side-nav'; import type * as AngularApi from '@vyrnforge/angular/side-nav'; import type * as VueApi from '@vyrnforge/vue/side-nav'; import type * as ElementsApi from '@vyrnforge/elements/side-nav'; void (0 as unknown as keyof ReactApi); void (0 as unknown as keyof AngularApi); void (0 as unknown as keyof VueApi); void (0 as unknown as keyof ElementsApi);
+type ReactModule = typeof import('@vyrnforge/react/side-nav');
+type AngularModule = typeof import('@vyrnforge/angular/side-nav');
+type VueModule = typeof import('@vyrnforge/vue/side-nav');
+type ElementsModule = typeof import('@vyrnforge/elements/side-nav');
+type Modules = [ReactModule, AngularModule, VueModule, ElementsModule];
+declare const modules: Modules;
+void modules;
