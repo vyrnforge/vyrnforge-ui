@@ -29,3 +29,12 @@ export type { TabsActivation, TabsOrientation } from './components/tabs/index.js
 export { VfTextDirective } from './components/text/index.js';
 export type { TextVariant } from './components/text/index.js';
 export { VfVisuallyHiddenDirective } from './components/visually-hidden/index.js';
+export { VfDisclosurePanelDirective, VfDisclosureRootDirective, VfDisclosureTriggerDirective } from './components/disclosure/index.js';
+export { VfAccordionHeaderDirective, VfAccordionItemDirective, VfAccordionPanelDirective, VfAccordionRootDirective, VfAccordionTriggerDirective } from './components/accordion/index.js';
+export type { AccordionType, AccordionValue } from './components/accordion/index.js';
+export { VfAlertDialogActionDirective, VfAlertDialogBodyDirective, VfAlertDialogCancelDirective, VfAlertDialogDescriptionDirective, VfAlertDialogRootDirective, VfAlertDialogTitleDirective } from './components/alert-dialog/index.js';
+export { VfDrawerBodyDirective, VfDrawerCloseDirective, VfDrawerDescriptionDirective, VfDrawerRootDirective, VfDrawerTitleDirective } from './components/drawer/index.js';
+export type { DrawerPlacement } from './components/drawer/index.js';
+export { VfPopoverContentDirective, VfPopoverRootDirective, VfPopoverTriggerDirective } from './components/popover/index.js';
+export { VfTooltipContentDirective, VfTooltipRootDirective, VfTooltipTriggerDirective } from './components/tooltip/index.js';
+export { VfPreviewCardContentDirective, VfPreviewCardRootDirective, VfPreviewCardTriggerDirective } from './components/preview-card/index.js';
