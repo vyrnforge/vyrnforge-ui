@@ -32,8 +32,8 @@
     "./tabs": { "types": "./dist/components/tabs/index.d.ts", "import": "./dist/components/tabs/index.js", "default": "./dist/components/tabs/index.js" },
     "./text": { "types": "./dist/components/text/index.d.ts", "import": "./dist/components/text/index.js", "default": "./dist/components/text/index.js" },
     "./visually-hidden": { "types": "./dist/components/visually-hidden/index.d.ts", "import": "./dist/components/visually-hidden/index.js", "default": "./dist/components/visually-hidden/index.js" },
-    "./portal": { "types": "./dist/capabilities/portal/index.d.ts", "import": "./dist/capabilities/portal/index.js", "default": "./dist/capabilities/portal/index.js" },
-    "./presence": { "types": "./dist/capabilities/presence/index.d.ts", "import": "./dist/capabilities/presence/index.js", "default": "./dist/capabilities/presence/index.js" }
+    "./portal": { "types": "./dist/components/portal/index.d.ts", "import": "./dist/components/portal/index.js", "default": "./dist/components/portal/index.js" },
+    "./presence": { "types": "./dist/components/presence/index.d.ts", "import": "./dist/components/presence/index.js", "default": "./dist/components/presence/index.js" }
   },
   "dependencies": { "@vyrnforge/core": "0.0.0-rebuild", "@vyrnforge/web": "0.0.0-rebuild" },
   "peerDependencies": { "react": ">=19.3.0 <20", "react-dom": ">=19.3.0 <20" },
