@@ -32,6 +32,38 @@
   :where([data-vf-stack][data-vf-stack-justify="end"], vf-stack[justify="end"]) { justify-content: flex-end; }
   :where([data-vf-stack][data-vf-stack-justify="space-between"], vf-stack[justify="space-between"]) { justify-content: space-between; }
 
+  :where([data-vf-inline], vf-inline) {
+    --_vf-inline-gap: var(--vf-space-md);
+
+    align-items: center;
+    display: flex;
+    flex-direction: row;
+    flex-wrap: nowrap;
+    gap: var(--_vf-inline-gap);
+    justify-content: flex-start;
+    min-inline-size: 0;
+  }
+
+  :where([data-vf-inline][data-vf-inline-gap="none"], vf-inline[gap="none"]) { --_vf-inline-gap: var(--vf-space-none); }
+  :where([data-vf-inline][data-vf-inline-gap="xs"], vf-inline[gap="xs"]) { --_vf-inline-gap: var(--vf-space-xs); }
+  :where([data-vf-inline][data-vf-inline-gap="sm"], vf-inline[gap="sm"]) { --_vf-inline-gap: var(--vf-space-sm); }
+  :where([data-vf-inline][data-vf-inline-gap="md"], vf-inline[gap="md"]) { --_vf-inline-gap: var(--vf-space-md); }
+  :where([data-vf-inline][data-vf-inline-gap="lg"], vf-inline[gap="lg"]) { --_vf-inline-gap: var(--vf-space-lg); }
+  :where([data-vf-inline][data-vf-inline-gap="xl"], vf-inline[gap="xl"]) { --_vf-inline-gap: var(--vf-space-xl); }
+  :where([data-vf-inline][data-vf-inline-gap="2xl"], vf-inline[gap="2xl"]) { --_vf-inline-gap: var(--vf-space-2xl); }
+  :where([data-vf-inline][data-vf-inline-gap="3xl"], vf-inline[gap="3xl"]) { --_vf-inline-gap: var(--vf-space-3xl); }
+
+  :where([data-vf-inline][data-vf-inline-align="start"], vf-inline[align="start"]) { align-items: flex-start; }
+  :where([data-vf-inline][data-vf-inline-align="center"], vf-inline[align="center"]) { align-items: center; }
+  :where([data-vf-inline][data-vf-inline-align="end"], vf-inline[align="end"]) { align-items: flex-end; }
+  :where([data-vf-inline][data-vf-inline-align="stretch"], vf-inline[align="stretch"]) { align-items: stretch; }
+  :where([data-vf-inline][data-vf-inline-align="baseline"], vf-inline[align="baseline"]) { align-items: baseline; }
+
+  :where([data-vf-inline][data-vf-inline-justify="start"], vf-inline[justify="start"]) { justify-content: flex-start; }
+  :where([data-vf-inline][data-vf-inline-justify="center"], vf-inline[justify="center"]) { justify-content: center; }
+  :where([data-vf-inline][data-vf-inline-justify="end"], vf-inline[justify="end"]) { justify-content: flex-end; }
+  :where([data-vf-inline][data-vf-inline-justify="space-between"], vf-inline[justify="space-between"]) { justify-content: space-between; }
+
   :where([data-vf-cluster], vf-cluster) {
     --_vf-cluster-gap: var(--vf-space-md);
 
@@ -109,4 +141,114 @@
   :where([data-vf-container][data-vf-container-gutter="xl"], vf-container[gutter="xl"]) { --_vf-container-gutter: var(--vf-space-xl); }
   :where([data-vf-container][data-vf-container-gutter="2xl"], vf-container[gutter="2xl"]) { --_vf-container-gutter: var(--vf-space-2xl); }
   :where([data-vf-container][data-vf-container-gutter="3xl"], vf-container[gutter="3xl"]) { --_vf-container-gutter: var(--vf-space-3xl); }
+
+  :where([data-vf-aspect-ratio], vf-aspect-ratio) {
+    aspect-ratio: var(--_vf-aspect-ratio, 1 / 1);
+    display: block;
+    min-inline-size: 0;
+  }
+
+  :where([data-vf-aspect-ratio][data-vf-aspect-ratio-value="square"], vf-aspect-ratio[ratio="square"]) { --_vf-aspect-ratio: 1 / 1; }
+  :where([data-vf-aspect-ratio][data-vf-aspect-ratio-value="video"], vf-aspect-ratio[ratio="video"]) { --_vf-aspect-ratio: 16 / 9; }
+  :where([data-vf-aspect-ratio][data-vf-aspect-ratio-value="landscape"], vf-aspect-ratio[ratio="landscape"]) { --_vf-aspect-ratio: 4 / 3; }
+  :where([data-vf-aspect-ratio][data-vf-aspect-ratio-value="portrait"], vf-aspect-ratio[ratio="portrait"]) { --_vf-aspect-ratio: 3 / 4; }
+
+  :where([data-vf-field], vf-field) {
+    --_vf-field-gap: var(--vf-space-xs);
+
+    display: grid;
+    gap: var(--_vf-field-gap);
+    min-inline-size: 0;
+  }
+
+  :where([data-vf-field][data-vf-field-gap="none"], vf-field[gap="none"]) { --_vf-field-gap: var(--vf-space-none); }
+  :where([data-vf-field][data-vf-field-gap="xs"], vf-field[gap="xs"]) { --_vf-field-gap: var(--vf-space-xs); }
+  :where([data-vf-field][data-vf-field-gap="sm"], vf-field[gap="sm"]) { --_vf-field-gap: var(--vf-space-sm); }
+  :where([data-vf-field][data-vf-field-gap="md"], vf-field[gap="md"]) { --_vf-field-gap: var(--vf-space-md); }
+  :where([data-vf-field][data-vf-field-gap="lg"], vf-field[gap="lg"]) { --_vf-field-gap: var(--vf-space-lg); }
+  :where([data-vf-field][data-vf-field-gap="xl"], vf-field[gap="xl"]) { --_vf-field-gap: var(--vf-space-xl); }
+  :where([data-vf-field][data-vf-field-gap="2xl"], vf-field[gap="2xl"]) { --_vf-field-gap: var(--vf-space-2xl); }
+  :where([data-vf-field][data-vf-field-gap="3xl"], vf-field[gap="3xl"]) { --_vf-field-gap: var(--vf-space-3xl); }
+
+  :where(fieldset[data-vf-fieldset], vf-fieldset) {
+    --_vf-fieldset-gap: var(--vf-space-sm);
+
+    border: 0;
+    display: grid;
+    gap: var(--_vf-fieldset-gap);
+    margin: 0;
+    min-inline-size: 0;
+    padding: 0;
+  }
+
+  :where(fieldset[data-vf-fieldset] > legend, vf-fieldset > [slot="legend"]) {
+    margin-block-end: var(--vf-space-xs);
+    padding: 0;
+  }
+
+  :where(fieldset[data-vf-fieldset][data-vf-fieldset-gap="none"], vf-fieldset[gap="none"]) { --_vf-fieldset-gap: var(--vf-space-none); }
+  :where(fieldset[data-vf-fieldset][data-vf-fieldset-gap="xs"], vf-fieldset[gap="xs"]) { --_vf-fieldset-gap: var(--vf-space-xs); }
+  :where(fieldset[data-vf-fieldset][data-vf-fieldset-gap="sm"], vf-fieldset[gap="sm"]) { --_vf-fieldset-gap: var(--vf-space-sm); }
+  :where(fieldset[data-vf-fieldset][data-vf-fieldset-gap="md"], vf-fieldset[gap="md"]) { --_vf-fieldset-gap: var(--vf-space-md); }
+  :where(fieldset[data-vf-fieldset][data-vf-fieldset-gap="lg"], vf-fieldset[gap="lg"]) { --_vf-fieldset-gap: var(--vf-space-lg); }
+  :where(fieldset[data-vf-fieldset][data-vf-fieldset-gap="xl"], vf-fieldset[gap="xl"]) { --_vf-fieldset-gap: var(--vf-space-xl); }
+  :where(fieldset[data-vf-fieldset][data-vf-fieldset-gap="2xl"], vf-fieldset[gap="2xl"]) { --_vf-fieldset-gap: var(--vf-space-2xl); }
+  :where(fieldset[data-vf-fieldset][data-vf-fieldset-gap="3xl"], vf-fieldset[gap="3xl"]) { --_vf-fieldset-gap: var(--vf-space-3xl); }
+
+  :where([data-vf-input-group], vf-input-group) {
+    align-items: stretch;
+    display: flex;
+    min-inline-size: 0;
+  }
+
+  :where([data-vf-input-group], vf-input-group) > :where(input, select, textarea, button, [data-vf-input], [data-vf-number-input], [data-vf-native-select], [data-vf-temporal-input], [data-vf-button]) {
+    min-inline-size: 0;
+    position: relative;
+  }
+
+  :where([data-vf-input-group], vf-input-group) > :where(input, select, textarea, button, [data-vf-input], [data-vf-number-input], [data-vf-native-select], [data-vf-temporal-input], [data-vf-button]):not(:first-child) {
+    border-start-start-radius: 0;
+    border-end-start-radius: 0;
+    margin-inline-start: -1px;
+  }
+
+  :where([data-vf-input-group], vf-input-group) > :where(input, select, textarea, button, [data-vf-input], [data-vf-number-input], [data-vf-native-select], [data-vf-temporal-input], [data-vf-button]):not(:last-child) {
+    border-start-end-radius: 0;
+    border-end-end-radius: 0;
+  }
+
+  :where([data-vf-input-group], vf-input-group) > :where(input, select, textarea, button, [data-vf-input], [data-vf-number-input], [data-vf-native-select], [data-vf-temporal-input], [data-vf-button]):focus-visible {
+    z-index: 1;
+  }
+
+  :where(fieldset[data-vf-radio-group], vf-radio-group) {
+    --_vf-radio-group-gap: var(--vf-space-sm);
+
+    border: 0;
+    display: grid;
+    gap: var(--_vf-radio-group-gap);
+    margin: 0;
+    min-inline-size: 0;
+    padding: 0;
+  }
+
+  :where(fieldset[data-vf-radio-group] > legend, vf-radio-group > [slot="legend"]) {
+    margin-block-end: var(--vf-space-xs);
+    padding: 0;
+  }
+
+  :where(fieldset[data-vf-radio-group][data-vf-radio-group-orientation="horizontal"], vf-radio-group[orientation="horizontal"]) {
+    align-items: center;
+    display: flex;
+    flex-wrap: wrap;
+  }
+
+  :where(fieldset[data-vf-radio-group][data-vf-radio-group-gap="none"], vf-radio-group[gap="none"]) { --_vf-radio-group-gap: var(--vf-space-none); }
+  :where(fieldset[data-vf-radio-group][data-vf-radio-group-gap="xs"], vf-radio-group[gap="xs"]) { --_vf-radio-group-gap: var(--vf-space-xs); }
+  :where(fieldset[data-vf-radio-group][data-vf-radio-group-gap="sm"], vf-radio-group[gap="sm"]) { --_vf-radio-group-gap: var(--vf-space-sm); }
+  :where(fieldset[data-vf-radio-group][data-vf-radio-group-gap="md"], vf-radio-group[gap="md"]) { --_vf-radio-group-gap: var(--vf-space-md); }
+  :where(fieldset[data-vf-radio-group][data-vf-radio-group-gap="lg"], vf-radio-group[gap="lg"]) { --_vf-radio-group-gap: var(--vf-space-lg); }
+  :where(fieldset[data-vf-radio-group][data-vf-radio-group-gap="xl"], vf-radio-group[gap="xl"]) { --_vf-radio-group-gap: var(--vf-space-xl); }
+  :where(fieldset[data-vf-radio-group][data-vf-radio-group-gap="2xl"], vf-radio-group[gap="2xl"]) { --_vf-radio-group-gap: var(--vf-space-2xl); }
+  :where(fieldset[data-vf-radio-group][data-vf-radio-group-gap="3xl"], vf-radio-group[gap="3xl"]) { --_vf-radio-group-gap: var(--vf-space-3xl); }
 }
