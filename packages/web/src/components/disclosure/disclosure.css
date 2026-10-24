@@ -1,0 +1,9 @@
+@import "../../styles/tokens.css";
+@layer vyrnforge.components {
+  :where([data-vf-disclosure-root]) { border: 1px solid var(--vf-color-border); border-radius: var(--vf-radius-surface); background: var(--vf-color-surface); color: var(--vf-color-text); }
+  :where([data-vf-disclosure-trigger]) { align-items: center; background: transparent; border: 0; color: inherit; cursor: pointer; display: flex; font: inherit; inline-size: 100%; justify-content: space-between; min-block-size: 2.5rem; padding: .625rem .75rem; text-align: start; }
+  :where([data-vf-disclosure-trigger]:focus-visible) { outline: 3px solid var(--vf-color-focus-ring); outline-offset: -2px; }
+  :where([data-vf-disclosure-panel]) { border-block-start: 1px solid var(--vf-color-border); padding: .75rem; }
+  :where([data-vf-disclosure-root][data-vf-disabled]) { opacity: .55; }
+  @media (forced-colors: active) { :where([data-vf-disclosure-root]) { border-color: CanvasText; } :where([data-vf-disclosure-trigger]:focus-visible) { outline-color: Highlight; } }
+}

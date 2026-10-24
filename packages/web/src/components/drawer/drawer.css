@@ -1,0 +1,8 @@
+@import "../dialog/dialog.css";
+@layer vyrnforge.components {
+  :where([data-vf-drawer-root]) { border-radius: 0; block-size: auto; margin: 0; max-block-size: 100dvh; max-inline-size: min(90vw, 32rem); position: fixed; }
+  :where([data-vf-drawer-root][data-vf-placement="end"]) { block-size: 100dvh; inset-block: 0; inset-inline-end: 0; }
+  :where([data-vf-drawer-root][data-vf-placement="start"]) { block-size: 100dvh; inset-block: 0; inset-inline-start: 0; }
+  :where([data-vf-drawer-root][data-vf-placement="top"]) { inset-block-start: 0; inset-inline: 0; inline-size: 100%; max-inline-size: none; }
+  :where([data-vf-drawer-root][data-vf-placement="bottom"]) { inset-block-end: 0; inset-inline: 0; inline-size: 100%; max-inline-size: none; }
+}

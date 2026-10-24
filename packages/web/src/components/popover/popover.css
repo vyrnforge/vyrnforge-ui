@@ -1,0 +1,6 @@
+@import "../../styles/tokens.css";
+@layer vyrnforge.components {
+  :where([data-vf-popover-content]) { background: var(--vf-color-surface-elevated, var(--vf-color-surface)); border: 1px solid var(--vf-color-border); border-radius: var(--vf-radius-surface); box-shadow: var(--vf-shadow-popover, 0 .5rem 1.5rem color-mix(in srgb, var(--vf-color-text) 18%, transparent)); color: var(--vf-color-text); max-inline-size: min(24rem, calc(100vw - 1rem)); padding: .75rem; z-index: 1000; }
+  :where([data-vf-popover-content]:focus-visible) { outline: 3px solid var(--vf-color-focus-ring); outline-offset: 2px; }
+  @media (forced-colors: active) { :where([data-vf-popover-content]) { border-color: CanvasText; box-shadow: none; } }
+}

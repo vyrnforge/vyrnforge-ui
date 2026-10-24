@@ -1,0 +1,12 @@
+@import "../../styles/tokens.css";
+@layer vyrnforge.components {
+  :where([data-vf-accordion-root]) { border: 1px solid var(--vf-color-border); border-radius: var(--vf-radius-surface); overflow: clip; }
+  :where([data-vf-accordion-item] + [data-vf-accordion-item]) { border-block-start: 1px solid var(--vf-color-border); }
+  :where([data-vf-accordion-header]) { margin: 0; }
+  :where([data-vf-accordion-trigger]) { align-items: center; background: var(--vf-color-surface); border: 0; color: var(--vf-color-text); cursor: pointer; display: flex; font: inherit; font-weight: 600; inline-size: 100%; justify-content: space-between; min-block-size: 2.75rem; padding: .75rem; text-align: start; }
+  :where([data-vf-accordion-trigger]:hover:not(:disabled)) { background: var(--vf-color-surface-hover); }
+  :where([data-vf-accordion-trigger]:focus-visible) { outline: 3px solid var(--vf-color-focus-ring); outline-offset: -3px; position: relative; z-index: 1; }
+  :where([data-vf-accordion-panel]) { background: var(--vf-color-surface); color: var(--vf-color-text); padding: .75rem; }
+  :where([data-vf-accordion-item][data-vf-disabled]) { opacity: .55; }
+  @media (forced-colors: active) { :where([data-vf-accordion-root]) { border-color: CanvasText; } :where([data-vf-accordion-trigger]:focus-visible) { outline-color: Highlight; } }
+}

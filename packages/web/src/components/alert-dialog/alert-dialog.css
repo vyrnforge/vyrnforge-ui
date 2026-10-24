@@ -1,0 +1,2 @@
+@import "../dialog/dialog.css";
+@layer vyrnforge.components { :where([data-vf-alert-dialog-root]) { inline-size: min(32rem, calc(100vw - 2rem)); } }
