@@ -23,7 +23,12 @@
     "./drawer": { "types": "./dist/components/drawer/index.d.ts", "import": "./dist/components/drawer/index.js", "default": "./dist/components/drawer/index.js" },
     "./popover": { "types": "./dist/components/popover/index.d.ts", "import": "./dist/components/popover/index.js", "default": "./dist/components/popover/index.js" },
     "./tooltip": { "types": "./dist/components/tooltip/index.d.ts", "import": "./dist/components/tooltip/index.js", "default": "./dist/components/tooltip/index.js" },
-    "./preview-card": { "types": "./dist/components/preview-card/index.d.ts", "import": "./dist/components/preview-card/index.js", "default": "./dist/components/preview-card/index.js" }
+    "./preview-card": { "types": "./dist/components/preview-card/index.d.ts", "import": "./dist/components/preview-card/index.js", "default": "./dist/components/preview-card/index.js" },
+    "./menu": { "types": "./dist/components/menu/index.d.ts", "import": "./dist/components/menu/index.js", "default": "./dist/components/menu/index.js" },
+    "./context-menu": { "types": "./dist/components/context-menu/index.d.ts", "import": "./dist/components/context-menu/index.js", "default": "./dist/components/context-menu/index.js" },
+    "./menubar": { "types": "./dist/components/menubar/index.d.ts", "import": "./dist/components/menubar/index.js", "default": "./dist/components/menubar/index.js" },
+    "./toolbar": { "types": "./dist/components/toolbar/index.d.ts", "import": "./dist/components/toolbar/index.js", "default": "./dist/components/toolbar/index.js" },
+    "./split-button": { "types": "./dist/components/split-button/index.d.ts", "import": "./dist/components/split-button/index.js", "default": "./dist/components/split-button/index.js" }
   },
   "dependencies": { "@vyrnforge/core": "0.0.0-rebuild", "@vyrnforge/web": "0.0.0-rebuild" },
   "scripts": { "build": "tsc -p tsconfig.json" }
