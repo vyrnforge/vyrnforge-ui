@@ -13,8 +13,30 @@
   </section>
 
   <section>
-    <h2>Quick start</h2>
+    <h2>Installation and imports</h2>
     <p>Load <code>@vyrnforge/web/styles/layout.css</code> once. The same canonical CSS contract is consumed by Native Web, React, Angular, Vue, and Elements.</p>
+    <div class="vf-docs-split">
+      <article class="vf-docs-card"><h3>React</h3><pre><code>import {
+  AspectRatio, Cluster, Container, Field, Fieldset,
+  Grid, Inline, InputGroup, RadioGroup, Stack
+} from '@vyrnforge/react/layout';</code></pre></article>
+      <article class="vf-docs-card"><h3>Angular</h3><pre><code>import {
+  VfAspectRatioDirective, VfFieldDirective,
+  VfFieldsetDirective, VfInlineDirective,
+  VfInputGroupDirective, VfRadioGroupDirective
+} from '@vyrnforge/angular/layout';</code></pre></article>
+      <article class="vf-docs-card"><h3>Vue</h3><pre><code>import {
+  AspectRatio, Cluster, Container, Field, Fieldset,
+  Grid, Inline, InputGroup, RadioGroup, Stack
+} from '@vyrnforge/vue/layout';</code></pre></article>
+      <article class="vf-docs-card"><h3>Elements</h3><pre><code>import { defineLayoutElements } from '@vyrnforge/elements/layout';
+defineLayoutElements();</code></pre></article>
+    </div>
+  </section>
+
+  <section>
+    <h2>Quick start</h2>
+    <p>Start with the executable composition example, then choose the smallest primitive that expresses the structural relationship you need.</p>
     <div data-vf-example="layout/basic"></div>
   </section>
 
@@ -46,38 +68,26 @@
   </section>
 
   <section>
-    <h2>Spacing</h2>
-    <p>The shared <code>LayoutSpace</code> vocabulary is <code>none</code>, <code>xs</code>, <code>sm</code>, <code>md</code>, <code>lg</code>, <code>xl</code>, <code>2xl</code>, and <code>3xl</code>. Composition primitives consume semantic spacing tokens instead of arbitrary JavaScript pixel props.</p>
+    <h2>Accessibility</h2>
+    <p>Spatial primitives do not invent ARIA or alter source order. Form and control relationship primitives use native grouping where possible and equivalent explicit relationships where custom-element hosts require them.</p>
+    <p>Fieldset and RadioGroup require an authored accessible group name. InputGroup is visual composition only and must not replace labels, descriptions, error relationships, focus order, or native control semantics. L3 does not implement keyboard widgets or selection controllers.</p>
   </section>
 
   <section>
-    <h2>Framework imports</h2>
-    <div class="vf-docs-split">
-      <article class="vf-docs-card"><h3>React</h3><pre><code>import {
-  AspectRatio, Cluster, Container, Field, Fieldset,
-  Grid, Inline, InputGroup, RadioGroup, Stack
-} from '@vyrnforge/react/layout';</code></pre></article>
-      <article class="vf-docs-card"><h3>Angular</h3><pre><code>import {
-  VfAspectRatioDirective, VfFieldDirective,
-  VfFieldsetDirective, VfInlineDirective,
-  VfInputGroupDirective, VfRadioGroupDirective
-} from '@vyrnforge/angular/layout';</code></pre></article>
-      <article class="vf-docs-card"><h3>Vue</h3><pre><code>import {
-  AspectRatio, Field, Fieldset, Inline,
-  InputGroup, RadioGroup
-} from '@vyrnforge/vue/layout';</code></pre></article>
-      <article class="vf-docs-card"><h3>Elements</h3><pre><code>import { defineLayoutElements } from '@vyrnforge/elements/layout';
-defineLayoutElements();</code></pre></article>
-    </div>
+    <h2>Styling</h2>
+    <p>The canonical L3 styles live in <code>@vyrnforge/web</code>. Framework ports do not own parallel visual systems. The shared <code>LayoutSpace</code> vocabulary is <code>none</code>, <code>xs</code>, <code>sm</code>, <code>md</code>, <code>lg</code>, <code>xl</code>, <code>2xl</code>, and <code>3xl</code>.</p>
+    <p>Composition primitives consume semantic spacing tokens instead of arbitrary JavaScript pixel props. Grid exposes <code>--vf-grid-min-item-size</code> for its one intentional sizing escape hatch; ordinary CSS remains the extension mechanism for specialized layout requirements.</p>
   </section>
 
   <section>
-    <h2>Accessibility and boundaries</h2>
-    <p>Spatial primitives do not invent ARIA or alter source order. Form/control relationship primitives use native grouping where possible and equivalent explicit relationships where custom-element hosts require them. L3 does not own keyboard widgets, selection controllers, routing, permissions, application state, validation engines, or app-shell behavior.</p>
+    <h2>Framework API</h2>
+    <p>All ports implement the same ten public concepts and shared value vocabularies while remaining idiomatic to their ecosystem. React and Vue expose thin components, Angular exposes directives over authored native elements, Native Web uses data attributes, and Elements exposes sibling custom elements.</p>
+    <p>The framework-neutral contract is authoritative: framework-specific lifecycle, state, rendering, or form abstractions are not part of the shared L3 API.</p>
   </section>
 
   <section>
     <h2>Compatibility</h2>
     <p>The ten exported L3 concepts, their documented data/Elements attributes, the shared spacing vocabulary, ratio/orientation values, and <code>--vf-grid-min-item-size</code> are public compatibility commitments. Ordinary CSS remains the extension mechanism for needs outside these focused contracts.</p>
+    <p>L3 does not own routing, permissions, application state, validation engines, or app-shell behavior; those concerns remain outside this compatibility surface.</p>
   </section>
 </div>
