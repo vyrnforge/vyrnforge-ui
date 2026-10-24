@@ -15,3 +15,12 @@ export { VfContextMenuElement, defineContextMenuElement } from './components/con
 export { VfMenubarElement, defineMenubarElement } from './components/menubar/index.js';
 export { VfToolbarElement, defineToolbarElement, type ToolbarOrientation } from './components/toolbar/index.js';
 export { VfSplitButtonElement, defineSplitButtonElement } from './components/split-button/index.js';
+export { VfListboxElement, defineListboxElement } from './components/listbox/index.js';
+export { VfSelectElement, defineSelectElement } from './components/select/index.js';
+export { VfComboboxElement, defineComboboxElement } from './components/combobox/index.js';
+export { VfMultiSelectElement, defineMultiSelectElement } from './components/multi-select/index.js';
+export { VfToggleGroupElement, defineToggleGroupElement } from './components/toggle-group/index.js';
+export { VfSegmentedControlElement, defineSegmentedControlElement } from './components/segmented-control/index.js';
+export { VfTagGroupElement, defineTagGroupElement } from './components/tag-group/index.js';
+export { VfRatingElement, defineRatingElement } from './components/rating/index.js';
+export { VfRangeSliderElement, defineRangeSliderElement } from './components/range-slider/index.js';
