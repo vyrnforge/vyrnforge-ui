@@ -32,5 +32,5 @@ export type { TextElement, TextVariant } from './components/text/index.js';
 export { VisuallyHidden } from './components/visually-hidden/index.js';
 export type { VisuallyHiddenElement } from './components/visually-hidden/index.js';
 export { Portal } from './components/portal/index.js';
-export { Presence } from './components/presence/index.js';
-export type { PresenceState } from './components/presence/index.js';
+export { usePresence } from './components/presence/index.js';
+export type { PresenceResult, PresenceState } from './components/presence/index.js';
