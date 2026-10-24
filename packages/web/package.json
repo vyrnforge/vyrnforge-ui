@@ -45,7 +45,14 @@
     "./styles/surface.css": "./dist/components/surface/surface.css",
     "./styles/tabs.css": "./dist/components/tabs/tabs.css",
     "./styles/text.css": "./dist/components/text/text.css",
-    "./styles/visually-hidden.css": "./dist/components/visually-hidden/visually-hidden.css"
+    "./styles/visually-hidden.css": "./dist/components/visually-hidden/visually-hidden.css",
+    "./styles/disclosure.css": "./dist/components/disclosure/disclosure.css",
+    "./styles/accordion.css": "./dist/components/accordion/accordion.css",
+    "./styles/alert-dialog.css": "./dist/components/alert-dialog/alert-dialog.css",
+    "./styles/drawer.css": "./dist/components/drawer/drawer.css",
+    "./styles/popover.css": "./dist/components/popover/popover.css",
+    "./styles/tooltip.css": "./dist/components/tooltip/tooltip.css",
+    "./styles/preview-card.css": "./dist/components/preview-card/preview-card.css"
   },
   "dependencies": { "@vyrnforge/core": "0.0.0-rebuild" },
   "scripts": { "build": "node ../../tooling/tokens/generate.mjs --check && tsc -p tsconfig.json && node ../../tooling/build/copy-web-assets.mjs" }
