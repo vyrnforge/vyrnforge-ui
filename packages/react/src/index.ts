@@ -42,7 +42,3 @@ export { Text } from './components/text/index.js';
 export type { TextElement, TextProps, TextVariant } from './components/text/index.js';
 export { VisuallyHidden } from './components/visually-hidden/index.js';
 export type { VisuallyHiddenElement, VisuallyHiddenProps } from './components/visually-hidden/index.js';
-export { Portal } from './components/portal/index.js';
-export type { PortalProps } from './components/portal/index.js';
-export { usePresence } from './components/presence/index.js';
-export type { PresenceResult, PresenceState } from './components/presence/index.js';
