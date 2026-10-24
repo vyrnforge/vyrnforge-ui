@@ -27,7 +27,7 @@ test.describe('Dialog Web semantic and styling contract', () => {
 });
 
 test.describe('Dialog framework native modality and hydration', () => {
-  for (const framework of ['react', 'angular', 'vue']) {
+  for (const framework of ['react', 'angular', 'vue', 'elements']) {
     test(`${framework} uses showModal, Escape intent, close controls, backdrop dismissal, focus lifecycle, and hydrates cleanly`, async ({ page }) => {
       test.skip(port !== framework, `Running ${port} evidence only`);
       const errors = [];
