@@ -1,0 +1,1 @@
+import test from 'node:test'; import assert from 'node:assert/strict'; test('Angular SideNav subpath is server-safe',async()=>{const api=await import('@vyrnforge/angular/side-nav'); assert.equal(typeof api.VfSideNavDirective,'function');});

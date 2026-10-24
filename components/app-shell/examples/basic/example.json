@@ -1,0 +1,1 @@
+{"id":"app-shell/basic","title":"Basic application shell","description":"Compose header, side navigation, and main content.","defaultFramework":"react","frameworks":{"react":{"label":"React","language":"tsx","source":"react.tsx"}}}

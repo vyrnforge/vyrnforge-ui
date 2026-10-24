@@ -1,0 +1,1 @@
+import { VfSideNavDirective, VfSideNavGroupDirective, VfSideNavGroupLabelDirective, VfSideNavItemDirective, VfSideNavLinkDirective, VfSideNavListDirective } from '@vyrnforge/angular/side-nav'; void VfSideNavDirective; void VfSideNavGroupDirective; void VfSideNavGroupLabelDirective; void VfSideNavListDirective; void VfSideNavItemDirective; void VfSideNavLinkDirective;

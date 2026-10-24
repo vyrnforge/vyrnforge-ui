@@ -56,3 +56,5 @@
 @import "./components/split-panel/split-panel.css";
 @import "./components/temporal-field/temporal-field.css";
 @import "./components/toast/toast.css";
+@import "./components/app-shell/app-shell.css";
+@import "./components/side-nav/side-nav.css";

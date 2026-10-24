@@ -1,0 +1,34 @@
+@import "../../styles/tokens.css";
+
+@layer vyrnforge.components {
+  :where([data-vf-app-shell], vf-app-shell) {
+    --vf-app-shell-max-inline-size: 96rem;
+    --vf-app-shell-navigation-inline-size: 16rem;
+    --vf-app-shell-gap: var(--vf-space-xl);
+    --vf-app-shell-gutter: var(--vf-space-md);
+    --vf-app-shell-block-padding: var(--vf-space-xl);
+    min-block-size: 100dvh;
+    display: grid;
+    grid-template-rows: auto minmax(0, 1fr) auto;
+    background: var(--vf-color-surface);
+    color: var(--vf-color-text);
+  }
+
+  :where([data-vf-app-shell-header], vf-app-shell-header) { min-inline-size: 0; }
+  :where([data-vf-app-shell-body], vf-app-shell-body) {
+    inline-size: min(100%, var(--vf-app-shell-max-inline-size));
+    margin-inline: auto;
+    display: grid;
+    grid-template-columns: minmax(0, var(--vf-app-shell-navigation-inline-size)) minmax(0, 1fr);
+    gap: var(--vf-app-shell-gap);
+    padding: var(--vf-app-shell-block-padding) var(--vf-app-shell-gutter);
+    min-inline-size: 0;
+  }
+  :where([data-vf-app-shell-navigation], vf-app-shell-navigation) { min-inline-size: 0; align-self: start; }
+  :where([data-vf-app-shell-main], vf-app-shell-main) { min-inline-size: 0; }
+  :where([data-vf-app-shell-footer], vf-app-shell-footer) { min-inline-size: 0; }
+
+  @media (max-width: 48rem) {
+    :where([data-vf-app-shell-body], vf-app-shell-body) { grid-template-columns: minmax(0, 1fr); gap: var(--vf-space-md); }
+  }
+}

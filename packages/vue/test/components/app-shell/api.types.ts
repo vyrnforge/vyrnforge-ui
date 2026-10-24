@@ -1,0 +1,1 @@
+import { AppShell, AppShellBody, AppShellFooter, AppShellHeader, AppShellMain, AppShellNavigation } from '@vyrnforge/vue/app-shell'; void AppShell; void AppShellHeader; void AppShellBody; void AppShellNavigation; void AppShellMain; void AppShellFooter;
