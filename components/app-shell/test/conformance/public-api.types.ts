@@ -1,1 +1,7 @@
-import type * as ReactApi from '@vyrnforge/react/app-shell'; import type * as AngularApi from '@vyrnforge/angular/app-shell'; import type * as VueApi from '@vyrnforge/vue/app-shell'; import type * as ElementsApi from '@vyrnforge/elements/app-shell'; void (0 as unknown as keyof ReactApi); void (0 as unknown as keyof AngularApi); void (0 as unknown as keyof VueApi); void (0 as unknown as keyof ElementsApi);
+type ReactModule = typeof import('@vyrnforge/react/app-shell');
+type AngularModule = typeof import('@vyrnforge/angular/app-shell');
+type VueModule = typeof import('@vyrnforge/vue/app-shell');
+type ElementsModule = typeof import('@vyrnforge/elements/app-shell');
+type Modules = [ReactModule, AngularModule, VueModule, ElementsModule];
+declare const modules: Modules;
+void modules;
