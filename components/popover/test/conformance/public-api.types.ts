@@ -1,1 +1,7 @@
-import*as r from'@vyrnforge/react/popover';import*as a from'@vyrnforge/angular/popover';import*as v from'@vyrnforge/vue/popover';import*as e from'@vyrnforge/elements/popover';void[r,a,v,e];
+type ReactModule = typeof import('@vyrnforge/react/popover');
+type AngularModule = typeof import('@vyrnforge/angular/popover');
+type VueModule = typeof import('@vyrnforge/vue/popover');
+type ElementsModule = typeof import('@vyrnforge/elements/popover');
+type Modules = [ReactModule, AngularModule, VueModule, ElementsModule];
+declare const modules: Modules;
+void modules;

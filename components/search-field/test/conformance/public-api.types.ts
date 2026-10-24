@@ -1,1 +1,7 @@
-import * as react from '@vyrnforge/react/search-field'; import * as angular from '@vyrnforge/angular/search-field'; import * as vue from '@vyrnforge/vue/search-field'; import * as elements from '@vyrnforge/elements/search-field'; void [react, angular, vue, elements];
+type ReactModule = typeof import('@vyrnforge/react/search-field');
+type AngularModule = typeof import('@vyrnforge/angular/search-field');
+type VueModule = typeof import('@vyrnforge/vue/search-field');
+type ElementsModule = typeof import('@vyrnforge/elements/search-field');
+type Modules = [ReactModule, AngularModule, VueModule, ElementsModule];
+declare const modules: Modules;
+void modules;

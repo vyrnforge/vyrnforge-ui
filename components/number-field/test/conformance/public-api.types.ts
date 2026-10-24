@@ -1,1 +1,7 @@
-import * as react from '@vyrnforge/react/number-field'; import * as angular from '@vyrnforge/angular/number-field'; import * as vue from '@vyrnforge/vue/number-field'; import * as elements from '@vyrnforge/elements/number-field'; void [react, angular, vue, elements];
+type ReactModule = typeof import('@vyrnforge/react/number-field');
+type AngularModule = typeof import('@vyrnforge/angular/number-field');
+type VueModule = typeof import('@vyrnforge/vue/number-field');
+type ElementsModule = typeof import('@vyrnforge/elements/number-field');
+type Modules = [ReactModule, AngularModule, VueModule, ElementsModule];
+declare const modules: Modules;
+void modules;

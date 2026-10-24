@@ -1,1 +1,7 @@
-import*as react from'@vyrnforge/react/accordion';import*as angular from'@vyrnforge/angular/accordion';import*as vue from'@vyrnforge/vue/accordion';import*as elements from'@vyrnforge/elements/accordion';void[react,angular,vue,elements];
+type ReactModule = typeof import('@vyrnforge/react/accordion');
+type AngularModule = typeof import('@vyrnforge/angular/accordion');
+type VueModule = typeof import('@vyrnforge/vue/accordion');
+type ElementsModule = typeof import('@vyrnforge/elements/accordion');
+type Modules = [ReactModule, AngularModule, VueModule, ElementsModule];
+declare const modules: Modules;
+void modules;

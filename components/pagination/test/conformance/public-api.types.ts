@@ -1,1 +1,7 @@
-import * as react from '@vyrnforge/react/pagination'; import * as angular from '@vyrnforge/angular/pagination'; import * as vue from '@vyrnforge/vue/pagination'; import * as elements from '@vyrnforge/elements/pagination'; void [react, angular, vue, elements];
+type ReactModule = typeof import('@vyrnforge/react/pagination');
+type AngularModule = typeof import('@vyrnforge/angular/pagination');
+type VueModule = typeof import('@vyrnforge/vue/pagination');
+type ElementsModule = typeof import('@vyrnforge/elements/pagination');
+type Modules = [ReactModule, AngularModule, VueModule, ElementsModule];
+declare const modules: Modules;
+void modules;

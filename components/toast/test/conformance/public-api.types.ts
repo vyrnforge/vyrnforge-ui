@@ -1,1 +1,7 @@
-import * as react from '@vyrnforge/react/toast'; import * as angular from '@vyrnforge/angular/toast'; import * as vue from '@vyrnforge/vue/toast'; import * as elements from '@vyrnforge/elements/toast'; void [react, angular, vue, elements];
+type ReactModule = typeof import('@vyrnforge/react/toast');
+type AngularModule = typeof import('@vyrnforge/angular/toast');
+type VueModule = typeof import('@vyrnforge/vue/toast');
+type ElementsModule = typeof import('@vyrnforge/elements/toast');
+type Modules = [ReactModule, AngularModule, VueModule, ElementsModule];
+declare const modules: Modules;
+void modules;

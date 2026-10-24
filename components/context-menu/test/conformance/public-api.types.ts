@@ -1,1 +1,7 @@
-import * as react from '@vyrnforge/react/context-menu'; import * as angular from '@vyrnforge/angular/context-menu'; import * as vue from '@vyrnforge/vue/context-menu'; import * as elements from '@vyrnforge/elements/context-menu'; void [react, angular, vue, elements];
+type ReactModule = typeof import('@vyrnforge/react/context-menu');
+type AngularModule = typeof import('@vyrnforge/angular/context-menu');
+type VueModule = typeof import('@vyrnforge/vue/context-menu');
+type ElementsModule = typeof import('@vyrnforge/elements/context-menu');
+type Modules = [ReactModule, AngularModule, VueModule, ElementsModule];
+declare const modules: Modules;
+void modules;

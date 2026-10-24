@@ -1,1 +1,7 @@
-import * as react from '@vyrnforge/react/toggle-group';import * as angular from '@vyrnforge/angular/toggle-group';import * as vue from '@vyrnforge/vue/toggle-group';import * as elements from '@vyrnforge/elements/toggle-group';void[react,angular,vue,elements];
+type ReactModule = typeof import('@vyrnforge/react/toggle-group');
+type AngularModule = typeof import('@vyrnforge/angular/toggle-group');
+type VueModule = typeof import('@vyrnforge/vue/toggle-group');
+type ElementsModule = typeof import('@vyrnforge/elements/toggle-group');
+type Modules = [ReactModule, AngularModule, VueModule, ElementsModule];
+declare const modules: Modules;
+void modules;

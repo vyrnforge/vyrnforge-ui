@@ -1,1 +1,7 @@
-import * as react from '@vyrnforge/react/tag-group';import * as angular from '@vyrnforge/angular/tag-group';import * as vue from '@vyrnforge/vue/tag-group';import * as elements from '@vyrnforge/elements/tag-group';void[react,angular,vue,elements];
+type ReactModule = typeof import('@vyrnforge/react/tag-group');
+type AngularModule = typeof import('@vyrnforge/angular/tag-group');
+type VueModule = typeof import('@vyrnforge/vue/tag-group');
+type ElementsModule = typeof import('@vyrnforge/elements/tag-group');
+type Modules = [ReactModule, AngularModule, VueModule, ElementsModule];
+declare const modules: Modules;
+void modules;

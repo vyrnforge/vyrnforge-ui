@@ -1,1 +1,7 @@
-import * as react from '@vyrnforge/react/color-picker'; import * as angular from '@vyrnforge/angular/color-picker'; import * as vue from '@vyrnforge/vue/color-picker'; import * as elements from '@vyrnforge/elements/color-picker'; void [react, angular, vue, elements];
+type ReactModule = typeof import('@vyrnforge/react/color-picker');
+type AngularModule = typeof import('@vyrnforge/angular/color-picker');
+type VueModule = typeof import('@vyrnforge/vue/color-picker');
+type ElementsModule = typeof import('@vyrnforge/elements/color-picker');
+type Modules = [ReactModule, AngularModule, VueModule, ElementsModule];
+declare const modules: Modules;
+void modules;

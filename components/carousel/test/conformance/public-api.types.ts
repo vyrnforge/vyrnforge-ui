@@ -1,1 +1,7 @@
-import * as react from '@vyrnforge/react/carousel'; import * as angular from '@vyrnforge/angular/carousel'; import * as vue from '@vyrnforge/vue/carousel'; import * as elements from '@vyrnforge/elements/carousel'; void [react, angular, vue, elements];
+type ReactModule = typeof import('@vyrnforge/react/carousel');
+type AngularModule = typeof import('@vyrnforge/angular/carousel');
+type VueModule = typeof import('@vyrnforge/vue/carousel');
+type ElementsModule = typeof import('@vyrnforge/elements/carousel');
+type Modules = [ReactModule, AngularModule, VueModule, ElementsModule];
+declare const modules: Modules;
+void modules;

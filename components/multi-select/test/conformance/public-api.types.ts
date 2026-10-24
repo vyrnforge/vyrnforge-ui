@@ -1,1 +1,7 @@
-import * as react from '@vyrnforge/react/multi-select';import * as angular from '@vyrnforge/angular/multi-select';import * as vue from '@vyrnforge/vue/multi-select';import * as elements from '@vyrnforge/elements/multi-select';void[react,angular,vue,elements];
+type ReactModule = typeof import('@vyrnforge/react/multi-select');
+type AngularModule = typeof import('@vyrnforge/angular/multi-select');
+type VueModule = typeof import('@vyrnforge/vue/multi-select');
+type ElementsModule = typeof import('@vyrnforge/elements/multi-select');
+type Modules = [ReactModule, AngularModule, VueModule, ElementsModule];
+declare const modules: Modules;
+void modules;

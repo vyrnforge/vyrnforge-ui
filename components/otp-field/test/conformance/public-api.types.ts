@@ -1,1 +1,7 @@
-import * as react from '@vyrnforge/react/otp-field'; import * as angular from '@vyrnforge/angular/otp-field'; import * as vue from '@vyrnforge/vue/otp-field'; import * as elements from '@vyrnforge/elements/otp-field'; void [react, angular, vue, elements];
+type ReactModule = typeof import('@vyrnforge/react/otp-field');
+type AngularModule = typeof import('@vyrnforge/angular/otp-field');
+type VueModule = typeof import('@vyrnforge/vue/otp-field');
+type ElementsModule = typeof import('@vyrnforge/elements/otp-field');
+type Modules = [ReactModule, AngularModule, VueModule, ElementsModule];
+declare const modules: Modules;
+void modules;

@@ -1,1 +1,7 @@
-import * as react from '@vyrnforge/react/disclosure'; import * as angular from '@vyrnforge/angular/disclosure'; import * as vue from '@vyrnforge/vue/disclosure'; import * as elements from '@vyrnforge/elements/disclosure'; void [react, angular, vue, elements];
+type ReactModule = typeof import('@vyrnforge/react/disclosure');
+type AngularModule = typeof import('@vyrnforge/angular/disclosure');
+type VueModule = typeof import('@vyrnforge/vue/disclosure');
+type ElementsModule = typeof import('@vyrnforge/elements/disclosure');
+type Modules = [ReactModule, AngularModule, VueModule, ElementsModule];
+declare const modules: Modules;
+void modules;

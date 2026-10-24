@@ -1,1 +1,7 @@
-import * as react from '@vyrnforge/react/password-field'; import * as angular from '@vyrnforge/angular/password-field'; import * as vue from '@vyrnforge/vue/password-field'; import * as elements from '@vyrnforge/elements/password-field'; void [react, angular, vue, elements];
+type ReactModule = typeof import('@vyrnforge/react/password-field');
+type AngularModule = typeof import('@vyrnforge/angular/password-field');
+type VueModule = typeof import('@vyrnforge/vue/password-field');
+type ElementsModule = typeof import('@vyrnforge/elements/password-field');
+type Modules = [ReactModule, AngularModule, VueModule, ElementsModule];
+declare const modules: Modules;
+void modules;

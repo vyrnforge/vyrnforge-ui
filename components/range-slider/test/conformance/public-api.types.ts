@@ -1,1 +1,7 @@
-import * as react from '@vyrnforge/react/range-slider';import * as angular from '@vyrnforge/angular/range-slider';import * as vue from '@vyrnforge/vue/range-slider';import * as elements from '@vyrnforge/elements/range-slider';void[react,angular,vue,elements];
+type ReactModule = typeof import('@vyrnforge/react/range-slider');
+type AngularModule = typeof import('@vyrnforge/angular/range-slider');
+type VueModule = typeof import('@vyrnforge/vue/range-slider');
+type ElementsModule = typeof import('@vyrnforge/elements/range-slider');
+type Modules = [ReactModule, AngularModule, VueModule, ElementsModule];
+declare const modules: Modules;
+void modules;

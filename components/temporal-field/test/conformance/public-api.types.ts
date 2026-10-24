@@ -1,1 +1,7 @@
-import * as react from '@vyrnforge/react/temporal-field'; import * as angular from '@vyrnforge/angular/temporal-field'; import * as vue from '@vyrnforge/vue/temporal-field'; import * as elements from '@vyrnforge/elements/temporal-field'; void [react, angular, vue, elements];
+type ReactModule = typeof import('@vyrnforge/react/temporal-field');
+type AngularModule = typeof import('@vyrnforge/angular/temporal-field');
+type VueModule = typeof import('@vyrnforge/vue/temporal-field');
+type ElementsModule = typeof import('@vyrnforge/elements/temporal-field');
+type Modules = [ReactModule, AngularModule, VueModule, ElementsModule];
+declare const modules: Modules;
+void modules;

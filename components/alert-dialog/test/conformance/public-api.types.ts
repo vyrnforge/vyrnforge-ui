@@ -1,1 +1,7 @@
-import*as r from'@vyrnforge/react/alert-dialog';import*as a from'@vyrnforge/angular/alert-dialog';import*as v from'@vyrnforge/vue/alert-dialog';import*as e from'@vyrnforge/elements/alert-dialog';void[r,a,v,e];
+type ReactModule = typeof import('@vyrnforge/react/alert-dialog');
+type AngularModule = typeof import('@vyrnforge/angular/alert-dialog');
+type VueModule = typeof import('@vyrnforge/vue/alert-dialog');
+type ElementsModule = typeof import('@vyrnforge/elements/alert-dialog');
+type Modules = [ReactModule, AngularModule, VueModule, ElementsModule];
+declare const modules: Modules;
+void modules;

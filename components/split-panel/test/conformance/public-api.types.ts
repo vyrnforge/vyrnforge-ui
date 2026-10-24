@@ -1,1 +1,7 @@
-import * as react from '@vyrnforge/react/split-panel'; import * as angular from '@vyrnforge/angular/split-panel'; import * as vue from '@vyrnforge/vue/split-panel'; import * as elements from '@vyrnforge/elements/split-panel'; void [react, angular, vue, elements];
+type ReactModule = typeof import('@vyrnforge/react/split-panel');
+type AngularModule = typeof import('@vyrnforge/angular/split-panel');
+type VueModule = typeof import('@vyrnforge/vue/split-panel');
+type ElementsModule = typeof import('@vyrnforge/elements/split-panel');
+type Modules = [ReactModule, AngularModule, VueModule, ElementsModule];
+declare const modules: Modules;
+void modules;

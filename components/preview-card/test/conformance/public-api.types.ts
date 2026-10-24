@@ -1,1 +1,7 @@
-import*as r from'@vyrnforge/react/preview-card';import*as a from'@vyrnforge/angular/preview-card';import*as v from'@vyrnforge/vue/preview-card';import*as e from'@vyrnforge/elements/preview-card';void[r,a,v,e];
+type ReactModule = typeof import('@vyrnforge/react/preview-card');
+type AngularModule = typeof import('@vyrnforge/angular/preview-card');
+type VueModule = typeof import('@vyrnforge/vue/preview-card');
+type ElementsModule = typeof import('@vyrnforge/elements/preview-card');
+type Modules = [ReactModule, AngularModule, VueModule, ElementsModule];
+declare const modules: Modules;
+void modules;

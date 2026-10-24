@@ -1,1 +1,7 @@
-import * as react from '@vyrnforge/react/split-button'; import * as angular from '@vyrnforge/angular/split-button'; import * as vue from '@vyrnforge/vue/split-button'; import * as elements from '@vyrnforge/elements/split-button'; void [react, angular, vue, elements];
+type ReactModule = typeof import('@vyrnforge/react/split-button');
+type AngularModule = typeof import('@vyrnforge/angular/split-button');
+type VueModule = typeof import('@vyrnforge/vue/split-button');
+type ElementsModule = typeof import('@vyrnforge/elements/split-button');
+type Modules = [ReactModule, AngularModule, VueModule, ElementsModule];
+declare const modules: Modules;
+void modules;

@@ -1,1 +1,7 @@
-import * as react from '@vyrnforge/react/file-uploader'; import * as angular from '@vyrnforge/angular/file-uploader'; import * as vue from '@vyrnforge/vue/file-uploader'; import * as elements from '@vyrnforge/elements/file-uploader'; void [react, angular, vue, elements];
+type ReactModule = typeof import('@vyrnforge/react/file-uploader');
+type AngularModule = typeof import('@vyrnforge/angular/file-uploader');
+type VueModule = typeof import('@vyrnforge/vue/file-uploader');
+type ElementsModule = typeof import('@vyrnforge/elements/file-uploader');
+type Modules = [ReactModule, AngularModule, VueModule, ElementsModule];
+declare const modules: Modules;
+void modules;

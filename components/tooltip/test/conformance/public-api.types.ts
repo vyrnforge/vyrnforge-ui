@@ -1,1 +1,7 @@
-import*as r from'@vyrnforge/react/tooltip';import*as a from'@vyrnforge/angular/tooltip';import*as v from'@vyrnforge/vue/tooltip';import*as e from'@vyrnforge/elements/tooltip';void[r,a,v,e];
+type ReactModule = typeof import('@vyrnforge/react/tooltip');
+type AngularModule = typeof import('@vyrnforge/angular/tooltip');
+type VueModule = typeof import('@vyrnforge/vue/tooltip');
+type ElementsModule = typeof import('@vyrnforge/elements/tooltip');
+type Modules = [ReactModule, AngularModule, VueModule, ElementsModule];
+declare const modules: Modules;
+void modules;

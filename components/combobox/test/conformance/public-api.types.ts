@@ -1,1 +1,7 @@
-import * as react from '@vyrnforge/react/combobox';import * as angular from '@vyrnforge/angular/combobox';import * as vue from '@vyrnforge/vue/combobox';import * as elements from '@vyrnforge/elements/combobox';void[react,angular,vue,elements];
+type ReactModule = typeof import('@vyrnforge/react/combobox');
+type AngularModule = typeof import('@vyrnforge/angular/combobox');
+type VueModule = typeof import('@vyrnforge/vue/combobox');
+type ElementsModule = typeof import('@vyrnforge/elements/combobox');
+type Modules = [ReactModule, AngularModule, VueModule, ElementsModule];
+declare const modules: Modules;
+void modules;
