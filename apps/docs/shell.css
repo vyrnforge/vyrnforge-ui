@@ -1,0 +1,28 @@
+body[data-vf-app-shell] {
+  --vf-app-shell-max-inline-size: var(--docs-max);
+  --vf-app-shell-navigation-inline-size: 17rem;
+  --vf-app-shell-gap: 2.75rem;
+  --vf-app-shell-gutter: 1rem;
+  --vf-app-shell-block-padding: 2rem;
+}
+
+.vf-docs-navigation {
+  position: sticky;
+  inset-block-start: 6rem;
+  align-self: start;
+  max-block-size: calc(100vh - 7rem);
+  overflow: auto;
+  padding-block-end: 1rem;
+}
+
+@media (max-width: 760px) {
+  body[data-vf-app-shell] {
+    --vf-app-shell-gap: 1rem;
+  }
+
+  .vf-docs-navigation {
+    position: static;
+    max-block-size: none;
+    border-block-end: 1px solid var(--docs-border);
+  }
+}
