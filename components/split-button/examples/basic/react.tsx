@@ -1,0 +1,2 @@
+import { SplitButtonAction, SplitButtonContent, SplitButtonItem, SplitButtonRoot, SplitButtonTrigger } from '@vyrnforge/react/split-button';
+export function Example(){return <SplitButtonRoot><SplitButtonAction>Save</SplitButtonAction><SplitButtonTrigger aria-label="More save options">▾</SplitButtonTrigger><SplitButtonContent><SplitButtonItem>Save as copy</SplitButtonItem></SplitButtonContent></SplitButtonRoot>;}

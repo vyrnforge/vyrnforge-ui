@@ -1,0 +1,1 @@
+import test from 'node:test'; import assert from 'node:assert/strict'; test('React Menubar subpath is SSR-safe',async()=>{const api=await import('@vyrnforge/react/menubar'); assert.equal(typeof api.MenubarRoot,'object');});

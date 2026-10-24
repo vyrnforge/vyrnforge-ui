@@ -1,0 +1,1 @@
+import test from 'node:test'; import assert from 'node:assert/strict'; test('Angular Toolbar subpath is SSR-safe',async()=>{const api=await import('@vyrnforge/angular/toolbar'); assert.equal(typeof api.VfToolbarRootDirective,'function');});

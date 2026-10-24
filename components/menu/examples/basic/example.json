@@ -1,0 +1,1 @@
+{"id":"menu/basic","title":"Basic menu","description":"Open a command menu and choose an action.","defaultFramework":"react","frameworks":{"react":{"label":"React","language":"tsx","source":"react.tsx"}}}

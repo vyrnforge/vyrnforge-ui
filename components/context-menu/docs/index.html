@@ -1,0 +1,16 @@
+<p class="vf-docs-lede">ContextMenu exposes commands from a context-menu invocation while preserving accessible menu semantics and keeping application command logic outside the library.</p>
+<section><h2>Overview</h2><p>Use ContextMenu for secondary commands associated with an authored region. It composes shared menu semantics and dismissal behavior rather than introducing a separate command runtime.</p></section>
+<section><h2>Installation and imports</h2><p>Import ContextMenu from the framework-specific <code>/context-menu</code> subpath and load <code>@vyrnforge/web/styles/context-menu.css</code>.</p></section>
+<section><h2>Quick start</h2><div data-vf-example="context-menu/basic"></div></section>
+<section><h2>Anatomy</h2><p>Root, Trigger, Content, and Item form the public composition. Consumers provide command labels, disabled state, and application callbacks.</p></section>
+<section><h2>State</h2><p>Open state may be framework-idiomatic controlled or uncontrolled where supported. Command execution state remains consumer-owned.</p></section>
+<section><h2>Behavior</h2><p>The native contextmenu gesture opens the command surface. Escape, selection, and configured outside dismissal close it without creating a global overlay manager.</p></section>
+<section><h2>Interaction</h2><p>Menu items support menu keyboard navigation and disabled items are skipped. Focus returns to the invoking context when dismissal requires restoration.</p></section>
+<section><h2>Accessibility</h2><p>Content uses menu semantics and items use menuitem semantics. Consumers provide clear command names and must not hide primary or required actions exclusively behind a context-menu gesture.</p></section>
+<section><h2>Forms</h2><p>ContextMenu is not form-associated. Menu action elements use non-submitting button behavior unless a consumer deliberately composes another native semantic.</p></section>
+<section><h2>Styling</h2><p>Canonical CSS is owned by <code>@vyrnforge/web</code>, uses shared tokens, and is shared across framework ports. Product-specific command content should compose within the public anatomy.</p></section>
+<section><h2>Framework API</h2><p>React and Vue expose idiomatic components, Angular exposes standalone directives, and Elements exposes an explicitly registered custom element. The same conceptual contract applies across ports.</p></section>
+<section><h2>CSR and SSR</h2><p>Imports are server safe and browser listeners, positioning, focus, and dismissal behavior attach only after rendering.</p></section>
+<section><h2>Do / Don't</h2><p>Do use ContextMenu for optional contextual commands. Don't make it the only path to essential functionality or place routing, permissions, or domain command dispatch inside VyrnForge.</p></section>
+<section><h2>Testing guidance</h2><p>Test native context invocation, menu keyboard navigation, disabled items, selection, Escape and outside dismissal, focus restoration, SSR-safe imports, and automated accessibility checks.</p></section>
+<section><h2>Compatibility</h2><p>React, Angular, Vue, and Elements implement sibling ContextMenu ports with Web-owned styling and shared lower-layer interaction capabilities.</p></section>

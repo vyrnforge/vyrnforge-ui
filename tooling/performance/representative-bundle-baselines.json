@@ -14,7 +14,7 @@
           },
           "rootSelected": {
             "bytes": 314,
-            "gzipBytes": 227
+            "gzipBytes": 228
           }
         },
         "angular": {
@@ -52,7 +52,7 @@
           },
           "rootSelected": {
             "bytes": 703,
-            "gzipBytes": 450
+            "gzipBytes": 451
           }
         },
         "angular": {
@@ -72,7 +72,7 @@
           },
           "rootSelected": {
             "bytes": 4226,
-            "gzipBytes": 1662
+            "gzipBytes": 1663
           }
         },
         "elements": {
@@ -82,7 +82,7 @@
           },
           "rootSelected": {
             "bytes": 5141,
-            "gzipBytes": 1829
+            "gzipBytes": 1828
           }
         }
       }

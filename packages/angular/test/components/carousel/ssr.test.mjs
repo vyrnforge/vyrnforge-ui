@@ -1,0 +1,1 @@
+import test from 'node:test'; import assert from 'node:assert/strict'; test('Angular Carousel subpath is SSR-safe',async()=>{const api=await import('@vyrnforge/angular/carousel');assert.ok(Object.keys(api).length>0);});

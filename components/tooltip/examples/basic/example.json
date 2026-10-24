@@ -1,0 +1,1 @@
+{"id":"tooltip/basic","title":"Basic tooltip","description":"Describe an icon button on focus or hover.","defaultFramework":"react","frameworks":{"react":{"label":"React","language":"tsx","source":"react.tsx"}}}

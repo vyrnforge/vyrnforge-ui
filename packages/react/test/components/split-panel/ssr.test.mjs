@@ -1,0 +1,1 @@
+import test from'node:test';import assert from'node:assert/strict';test('React SplitPanel subpath is SSR-safe',async()=>{const api=await import('@vyrnforge/react/split-panel');assert.ok(Object.keys(api).length>0);});

@@ -1,0 +1,2 @@
+import { MenubarContent, MenubarItem, MenubarMenu, MenubarRoot, MenubarTrigger } from '@vyrnforge/react/menubar';
+export function Example(){return <MenubarRoot><MenubarMenu><MenubarTrigger>File</MenubarTrigger><MenubarContent><MenubarItem>New</MenubarItem></MenubarContent></MenubarMenu><MenubarMenu><MenubarTrigger>Edit</MenubarTrigger><MenubarContent><MenubarItem>Undo</MenubarItem></MenubarContent></MenubarMenu></MenubarRoot>;}

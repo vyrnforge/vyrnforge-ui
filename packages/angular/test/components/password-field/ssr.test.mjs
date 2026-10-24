@@ -1,0 +1,1 @@
+import test from'node:test';import assert from'node:assert/strict';test('Angular PasswordField subpath is SSR-safe',async()=>{const api=await import('@vyrnforge/angular/password-field');assert.ok(Object.keys(api).length>0);});

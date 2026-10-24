@@ -1,0 +1,1 @@
+{"id":"search-field/basic","title":"Basic SearchField","description":"Search input with an accessible clear action.","defaultFramework":"react","frameworks":{"react":{"label":"React","language":"tsx","source":"react.tsx"}}}

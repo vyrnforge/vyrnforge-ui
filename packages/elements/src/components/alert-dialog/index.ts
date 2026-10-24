@@ -1,0 +1,3 @@
+import { VfDialogElement, defineDialogElement } from '../dialog/index.js';
+export class VfAlertDialogElement extends VfDialogElement { connectedCallback(): void { super.connectedCallback(); this.removeAttribute('backdrop-dismiss'); this.dialog?.setAttribute('role', 'alertdialog'); this.dialog?.setAttribute('data-vf-alert-dialog-root', ''); } }
+export function defineAlertDialogElement(registry: CustomElementRegistry | undefined = globalThis.customElements): void { if (!registry) throw new Error('VyrnForge AlertDialog registration requires a CustomElementRegistry.'); defineDialogElement(registry); if (!registry.get('vf-alert-dialog')) registry.define('vf-alert-dialog', VfAlertDialogElement); }

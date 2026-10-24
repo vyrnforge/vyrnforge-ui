@@ -1,0 +1,1 @@
+{"id":"split-button/basic","title":"Basic split button","description":"Keep one primary action beside related alternatives.","defaultFramework":"react","frameworks":{"react":{"label":"React","language":"tsx","source":"react.tsx"}}}

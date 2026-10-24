@@ -1,0 +1,1 @@
+{"id":"preview-card/basic","title":"Basic preview card","description":"Preview referenced content on hover or focus.","defaultFramework":"react","frameworks":{"react":{"label":"React","language":"tsx","source":"react.tsx"}}}

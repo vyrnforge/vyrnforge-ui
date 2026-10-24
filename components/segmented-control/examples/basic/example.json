@@ -1,0 +1,1 @@
+{"id":"segmented-control/basic","title":"Basic segmented control","description":"Choose one compact view option.","defaultFramework":"react","frameworks":{"react":{"label":"React","language":"tsx","source":"react.tsx"}}}

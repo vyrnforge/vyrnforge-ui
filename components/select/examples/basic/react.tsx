@@ -1,0 +1,1 @@
+import{SelectContent,SelectOption,SelectRoot,SelectTrigger}from'@vyrnforge/react/select';export function Example(){return <SelectRoot defaultValue="one"><SelectTrigger>Choose</SelectTrigger><SelectContent><SelectOption value="one">One</SelectOption><SelectOption value="two">Two</SelectOption></SelectContent></SelectRoot>;}

@@ -1,0 +1,1 @@
+{"id":"split-panel/basic","title":"Basic SplitPanel","description":"Two panes separated by a keyboard-resizable boundary.","defaultFramework":"react","frameworks":{"react":{"label":"React","language":"tsx","source":"react.tsx"}}}

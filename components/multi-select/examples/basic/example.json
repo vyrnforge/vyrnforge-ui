@@ -1,0 +1,1 @@
+{"id":"multi-select/basic","title":"Basic multi-select","description":"Choose several options.","defaultFramework":"react","frameworks":{"react":{"label":"React","language":"tsx","source":"react.tsx"}}}

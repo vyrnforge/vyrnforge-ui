@@ -1,0 +1,1 @@
+import test from'node:test';import assert from'node:assert/strict';test('Vue Toast subpath is SSR-safe',async()=>{const api=await import('@vyrnforge/vue/toast');assert.ok(Object.keys(api).length>0);});

@@ -1,0 +1,1 @@
+import test from 'node:test'; import assert from 'node:assert/strict'; test('Angular Menubar subpath is SSR-safe',async()=>{const api=await import('@vyrnforge/angular/menubar'); assert.equal(typeof api.VfMenubarRootDirective,'function');});

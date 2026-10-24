@@ -1,0 +1,1 @@
+{"id":"disclosure/basic","title":"Basic disclosure","description":"Reveal and hide one authored panel.","defaultFramework":"react","frameworks":{"react":{"label":"React","language":"tsx","source":"react.tsx"}}}

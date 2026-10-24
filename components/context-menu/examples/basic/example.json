@@ -1,0 +1,1 @@
+{"id":"context-menu/basic","title":"Basic context menu","description":"Open commands from a contextual region.","defaultFramework":"react","frameworks":{"react":{"label":"React","language":"tsx","source":"react.tsx"}}}

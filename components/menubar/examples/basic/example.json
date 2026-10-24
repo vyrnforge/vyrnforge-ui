@@ -1,0 +1,1 @@
+{"id":"menubar/basic","title":"Basic menubar","description":"Navigate persistent command groups.","defaultFramework":"react","frameworks":{"react":{"label":"React","language":"tsx","source":"react.tsx"}}}

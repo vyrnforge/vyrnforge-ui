@@ -1,0 +1,1 @@
+import test from 'node:test'; import assert from 'node:assert/strict'; test('Vue SplitButton subpath is SSR-safe',async()=>{const api=await import('@vyrnforge/vue/split-button'); assert.equal(typeof api.SplitButtonRoot,'object');});
