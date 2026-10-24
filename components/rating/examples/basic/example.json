@@ -1,0 +1,1 @@
+{"id":"rating/basic","title":"Basic rating","description":"Choose one score with native radio semantics.","defaultFramework":"react","frameworks":{"react":{"label":"React","language":"tsx","source":"react.tsx"}}}

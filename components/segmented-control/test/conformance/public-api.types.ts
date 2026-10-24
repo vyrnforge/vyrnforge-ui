@@ -1,0 +1,1 @@
+import * as react from '@vyrnforge/react/segmented-control';import * as angular from '@vyrnforge/angular/segmented-control';import * as vue from '@vyrnforge/vue/segmented-control';import * as elements from '@vyrnforge/elements/segmented-control';void[react,angular,vue,elements];

@@ -1,0 +1,1 @@
+import{SegmentedControlItem,SegmentedControlRoot}from'@vyrnforge/react/segmented-control';export function Example(){return <SegmentedControlRoot defaultValue="list" aria-label="View"><SegmentedControlItem value="list">List</SegmentedControlItem><SegmentedControlItem value="grid">Grid</SegmentedControlItem></SegmentedControlRoot>;}

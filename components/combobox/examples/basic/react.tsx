@@ -1,0 +1,1 @@
+import{ComboboxContent,ComboboxInput,ComboboxOption,ComboboxRoot}from'@vyrnforge/react/combobox';export function Example(){return <ComboboxRoot><ComboboxInput aria-label="Framework"/><ComboboxContent><ComboboxOption value="React"/><ComboboxOption value="Vue"/></ComboboxContent></ComboboxRoot>;}

@@ -1,0 +1,1 @@
+import{TagGroupItem,TagGroupRemove,TagGroupRoot}from'@vyrnforge/react/tag-group';export function Example(){return <TagGroupRoot><TagGroupItem>Design<TagGroupRemove label="Remove Design">×</TagGroupRemove></TagGroupItem></TagGroupRoot>;}

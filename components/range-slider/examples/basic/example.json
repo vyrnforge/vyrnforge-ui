@@ -1,0 +1,1 @@
+{"id":"range-slider/basic","title":"Basic range slider","description":"Choose a bounded numeric interval.","defaultFramework":"react","frameworks":{"react":{"label":"React","language":"tsx","source":"react.tsx"}}}

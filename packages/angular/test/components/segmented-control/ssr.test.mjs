@@ -1,0 +1,1 @@
+import test from'node:test';import assert from'node:assert/strict';test('Angular SegmentedControl SSR',async()=>assert.ok((await import('@vyrnforge/angular/segmented-control')).VfSegmentedControlRootDirective));
