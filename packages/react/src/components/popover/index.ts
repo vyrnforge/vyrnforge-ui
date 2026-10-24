@@ -1,14 +1,88 @@
-import { createContext, createElement, forwardRef, useCallback, useContext, useId, useMemo, useRef, useState, type ButtonHTMLAttributes, type HTMLAttributes, type ReactNode } from 'react';
+import { createContext, createElement, forwardRef, useCallback, useContext, useId, useMemo, useRef, useState, type ButtonHTMLAttributes, type HTMLAttributes, type ReactNode, type RefObject } from 'react';
 import type { FloatingPlacement } from '@vyrnforge/web/floating-positioning';
 import { Portal } from '../portal/index.js';
 import { useFloatingSurface } from '../../internal/floating-surface.js';
 
-interface PopoverContextValue { rootId: string; open: boolean; setOpen(next: boolean): void; anchorRef: React.RefObject<HTMLElement | null>; contentRef: React.RefObject<HTMLDivElement | null>; placement: FloatingPlacement; }
+interface PopoverContextValue {
+  rootId: string;
+  open: boolean;
+  setOpen(next: boolean): void;
+  anchorRef: RefObject<HTMLElement | null>;
+  contentRef: RefObject<HTMLDivElement | null>;
+  placement: FloatingPlacement;
+}
+
 const Context = createContext<PopoverContextValue | null>(null);
-function usePopover() { const value = useContext(Context); if (!value) throw new Error('VyrnForge Popover parts must be inside PopoverRoot.'); return value; }
-export interface PopoverRootProps { children?: ReactNode; open?: boolean; defaultOpen?: boolean; onOpenChange?: (open: boolean) => void; placement?: FloatingPlacement; }
-export function PopoverRoot({ children, open, defaultOpen = false, onOpenChange, placement = 'bottom-start' }: PopoverRootProps) { const generated = useId().replaceAll(':', ''); const [internal, setInternal] = useState(defaultOpen); const controlled = open !== undefined; const current = controlled ? open : internal; const anchorRef = useRef<HTMLElement>(null); const contentRef = useRef<HTMLDivElement>(null); const setOpen = useCallback((next: boolean) => { if (next === current) return; if (!controlled) setInternal(next); onOpenChange?.(next); }, [controlled, current, onOpenChange]); const context = useMemo(() => ({ rootId: `vf-popover-${generated}`, open: current, setOpen, anchorRef, contentRef, placement }), [current, generated, placement, setOpen]); return createElement(Context.Provider, { value: context }, children); }
+function usePopover(): PopoverContextValue {
+  const value = useContext(Context);
+  if (!value) throw new Error('VyrnForge Popover parts must be inside PopoverRoot.');
+  return value;
+}
+
+export interface PopoverRootProps {
+  children?: ReactNode;
+  open?: boolean;
+  defaultOpen?: boolean;
+  onOpenChange?: (open: boolean) => void;
+  placement?: FloatingPlacement;
+}
+
+export function PopoverRoot({ children, open, defaultOpen = false, onOpenChange, placement = 'bottom-start' }: PopoverRootProps) {
+  const generated = useId().replaceAll(':', '');
+  const [internal, setInternal] = useState(defaultOpen);
+  const controlled = open !== undefined;
+  const current = controlled ? open : internal;
+  const anchorRef = useRef<HTMLElement>(null);
+  const contentRef = useRef<HTMLDivElement>(null);
+  const setOpen = useCallback((next: boolean) => {
+    if (next === current) return;
+    if (!controlled) setInternal(next);
+    onOpenChange?.(next);
+  }, [controlled, current, onOpenChange]);
+  const context = useMemo(() => ({ rootId: `vf-popover-${generated}`, open: current, setOpen, anchorRef, contentRef, placement }), [current, generated, placement, setOpen]);
+  return createElement(Context.Provider, { value: context }, children);
+}
+
 export type PopoverTriggerProps = ButtonHTMLAttributes<HTMLButtonElement>;
-export const PopoverTrigger = forwardRef<HTMLButtonElement, PopoverTriggerProps>(function PopoverTrigger({ onClick, type = 'button', ...props }, forwardedRef) { const context = usePopover(); return createElement('button', { ...props, type, ref(node: HTMLButtonElement | null) { context.anchorRef.current = node; if (typeof forwardedRef === 'function') forwardedRef(node); else if (forwardedRef) forwardedRef.current = node; }, 'aria-haspopup': 'dialog', 'aria-expanded': context.open, 'aria-controls': `${context.rootId}-content`, 'data-vf-popover-trigger': '', onClick(event) { onClick?.(event); if (!event.defaultPrevented) context.setOpen(!context.open); } }); });
+export const PopoverTrigger = forwardRef<HTMLButtonElement, PopoverTriggerProps>(function PopoverTrigger({ onClick, type = 'button', ...props }, forwardedRef) {
+  const context = usePopover();
+  return createElement('button', {
+    ...props,
+    type,
+    ref(node: HTMLButtonElement | null) {
+      context.anchorRef.current = node;
+      if (typeof forwardedRef === 'function') forwardedRef(node);
+      else if (forwardedRef) forwardedRef.current = node;
+    },
+    'aria-haspopup': 'dialog',
+    'aria-expanded': context.open,
+    'aria-controls': `${context.rootId}-content`,
+    'data-vf-popover-trigger': '',
+    onClick(event) {
+      onClick?.(event);
+      if (!event.defaultPrevented) context.setOpen(!context.open);
+    },
+  });
+});
+
 export interface PopoverContentProps extends HTMLAttributes<HTMLDivElement> { portal?: boolean; }
-export const PopoverContent = forwardRef<HTMLDivElement, PopoverContentProps>(function PopoverContent({ portal = true, ...props }, forwardedRef) { const context = usePopover(); const onDismiss = useCallback(() => context.setOpen(false), [context]); const target = useFloatingSurface({ open: context.open, anchorRef: context.anchorRef, surfaceRef: context.contentRef, placement: context.placement, dismissOnOutsideFocus: false, onDismiss }); if (!context.open) return null; const content = createElement('div', { ...props, id: props.id ?? `${context.rootId}-content`, ref(node: HTMLDivElement | null) { context.contentRef.current = node; if (typeof forwardedRef === 'function') forwardedRef(node); else if (forwardedRef) forwardedRef.current = node; }, role: props.role ?? 'dialog', tabindex: -1, 'data-vf-popover-content': '', 'data-vf-open': '' }); return portal ? createElement(Portal, { target }, content) : content; });
+export const PopoverContent = forwardRef<HTMLDivElement, PopoverContentProps>(function PopoverContent({ portal = true, ...props }, forwardedRef) {
+  const context = usePopover();
+  const onDismiss = useCallback(() => context.setOpen(false), [context]);
+  const target = useFloatingSurface({ open: context.open, anchorRef: context.anchorRef, surfaceRef: context.contentRef, placement: context.placement, dismissOnOutsideFocus: false, onDismiss });
+  if (!context.open) return null;
+  const content = createElement('div', {
+    ...props,
+    id: props.id ?? `${context.rootId}-content`,
+    ref(node: HTMLDivElement | null) {
+      context.contentRef.current = node;
+      if (typeof forwardedRef === 'function') forwardedRef(node);
+      else if (forwardedRef) forwardedRef.current = node;
+    },
+    role: props.role ?? 'dialog',
+    tabIndex: -1,
+    'data-vf-popover-content': '',
+    'data-vf-open': '',
+  });
+  return portal ? createElement(Portal, { target }, content) : content;
+});
