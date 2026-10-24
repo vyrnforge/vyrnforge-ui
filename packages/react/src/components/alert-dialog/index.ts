@@ -4,7 +4,10 @@ import { DialogBody, DialogClose, DialogDescription, DialogRoot, DialogTitle, ty
 export type AlertDialogDismissReason = DialogDismissReason;
 export type AlertDialogDismissRequest = DialogDismissRequest;
 export type AlertDialogRootProps = Omit<DialogRootProps, 'backdropDismiss'>;
-export function AlertDialogRoot(props: AlertDialogRootProps) { return createElement(DialogRoot, { ...props, role: 'alertdialog', backdropDismiss: false, 'data-vf-alert-dialog-root': '' }); }
+export function AlertDialogRoot(props: AlertDialogRootProps) {
+  const rootProps = { ...props, role: 'alertdialog' as const, backdropDismiss: false, 'data-vf-alert-dialog-root': '' };
+  return createElement(DialogRoot, rootProps);
+}
 export const AlertDialogTitle = DialogTitle;
 export const AlertDialogDescription = DialogDescription;
 export const AlertDialogBody = DialogBody;
