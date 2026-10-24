@@ -20,7 +20,7 @@ export type { TemporalInputType } from './components/temporal-input/index.js';
 export { Textarea } from './components/textarea/index.js';
 export { ToggleButton } from './components/toggle-button/index.js';
 export { AspectRatio, Cluster, Container, Field, Fieldset, Grid, Inline, InputGroup, RadioGroup, Stack } from './components/layout/index.js';
-export type { AspectRatioProps, ClusterAlign, ClusterJustify, ClusterProps, ContainerProps, ContainerSize, FieldProps, FieldsetProps, GridProps, InlineAlign, InlineJustify, InlineProps, InputGroupProps, LayoutElement, LayoutSpace, RadioGroupOrientation, RadioGroupProps, StackAlign, StackJustify, StackProps } from './components/layout/index.js';
+export type { AspectRatioProps, ClusterAlign, ClusterJustify, ClusterProps, ContainerProps, ContainerSize, FieldProps, FieldsetProps, GridProps, InlineAlign, InlineJustify, InlineProps, LayoutElement, LayoutSpace, RadioGroupOrientation, RadioGroupProps, StackAlign, StackJustify, StackProps } from './components/layout/index.js';
 export { Separator } from './components/separator/index.js';
 export type { SeparatorOrientation } from './components/separator/index.js';
 export { Surface } from './components/surface/index.js';
