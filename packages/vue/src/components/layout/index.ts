@@ -1,7 +1,7 @@
 import { defineComponent, h } from 'vue';
 import type { PropType } from 'vue';
 import type {
-  AspectRatio,
+  AspectRatio as AspectRatioValue,
   ClusterAlign,
   ClusterJustify,
   ContainerSize,
@@ -13,7 +13,8 @@ import type {
   StackJustify,
 } from '@vyrnforge/web/layout';
 
-export type { AspectRatio, ClusterAlign, ClusterJustify, ContainerSize, InlineAlign, InlineJustify, LayoutSpace, RadioGroupOrientation, StackAlign, StackJustify } from '@vyrnforge/web/layout';
+export type AspectRatio = AspectRatioValue;
+export type { ClusterAlign, ClusterJustify, ContainerSize, InlineAlign, InlineJustify, LayoutSpace, RadioGroupOrientation, StackAlign, StackJustify } from '@vyrnforge/web/layout';
 
 export type LayoutElement = 'div' | 'span' | 'section' | 'main' | 'article' | 'aside' | 'nav' | 'header' | 'footer' | 'form' | 'ul' | 'ol';
 
