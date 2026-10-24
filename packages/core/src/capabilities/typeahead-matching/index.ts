@@ -10,12 +10,13 @@ export interface TypeaheadMatchOptions {
 }
 
 export function normalizeTypeaheadText(value: string, locale?: string | readonly string[]): string {
+  const locales = Array.isArray(locale) ? [...locale] : locale;
   return value
     .normalize('NFKD')
     .replace(/[\u0300-\u036f]/g, '')
     .trim()
     .replace(/\s+/g, ' ')
-    .toLocaleLowerCase(locale);
+    .toLocaleLowerCase(locales);
 }
 
 export function findTypeaheadMatch(
@@ -28,7 +29,7 @@ export function findTypeaheadMatch(
   if (!normalizedQuery) return null;
 
   const wrap = options.wrap ?? true;
-  const start = Number.isInteger(options.startIndex) ? (options.startIndex as number) : -1;
+  const start = Number.isInteger(options.startIndex) ? (options.startIndex ?? -1) : -1;
   const indexes: number[] = [];
   for (let offset = 1; offset <= items.length; offset += 1) {
     const rawIndex = start + offset;
