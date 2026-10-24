@@ -43,7 +43,7 @@ export const Stack = forwardRef<HTMLElement, StackProps>(function Stack({ as = '
   return createElement(as, { ...nativeProps, ref, 'data-vf-stack': '', 'data-vf-stack-gap': gap, 'data-vf-stack-align': align, 'data-vf-stack-justify': justify });
 });
 
-export const Inline = forwardRef<HTMLElement, InlineProps>(function Inline({ as = 'div', gap = 'md', align = 'center', justify = 'start', ...nativeProps }, ref) {
+export const Inline = /* @__PURE__ */ forwardRef<HTMLElement, InlineProps>(function Inline({ as = 'div', gap = 'md', align = 'center', justify = 'start', ...nativeProps }, ref) {
   return createElement(as, { ...nativeProps, ref, 'data-vf-inline': '', 'data-vf-inline-gap': gap, 'data-vf-inline-align': align, 'data-vf-inline-justify': justify });
 });
 
@@ -59,22 +59,22 @@ export const Container = forwardRef<HTMLElement, ContainerProps>(function Contai
   return createElement(as, { ...nativeProps, ref, 'data-vf-container': '', 'data-vf-container-size': size, 'data-vf-container-gutter': gutter });
 });
 
-export const AspectRatio = forwardRef<HTMLElement, AspectRatioProps>(function AspectRatio({ as = 'div', ratio = 'square', ...nativeProps }, ref) {
+export const AspectRatio = /* @__PURE__ */ forwardRef<HTMLElement, AspectRatioProps>(function AspectRatio({ as = 'div', ratio = 'square', ...nativeProps }, ref) {
   return createElement(as, { ...nativeProps, ref, 'data-vf-aspect-ratio': '', 'data-vf-aspect-ratio-value': ratio });
 });
 
-export const Field = forwardRef<HTMLElement, FieldProps>(function Field({ as = 'div', gap = 'xs', ...nativeProps }, ref) {
+export const Field = /* @__PURE__ */ forwardRef<HTMLElement, FieldProps>(function Field({ as = 'div', gap = 'xs', ...nativeProps }, ref) {
   return createElement(as, { ...nativeProps, ref, 'data-vf-field': '', 'data-vf-field-gap': gap });
 });
 
-export const Fieldset = forwardRef<HTMLFieldSetElement, FieldsetProps>(function Fieldset({ gap = 'sm', ...nativeProps }, ref) {
+export const Fieldset = /* @__PURE__ */ forwardRef<HTMLFieldSetElement, FieldsetProps>(function Fieldset({ gap = 'sm', ...nativeProps }, ref) {
   return createElement('fieldset', { ...nativeProps, ref, 'data-vf-fieldset': '', 'data-vf-fieldset-gap': gap });
 });
 
-export const InputGroup = forwardRef<HTMLDivElement, InputGroupProps>(function InputGroup(nativeProps, ref) {
+export const InputGroup = /* @__PURE__ */ forwardRef<HTMLDivElement, InputGroupProps>(function InputGroup(nativeProps, ref) {
   return createElement('div', { ...nativeProps, ref, 'data-vf-input-group': '' });
 });
 
-export const RadioGroup = forwardRef<HTMLFieldSetElement, RadioGroupProps>(function RadioGroup({ gap = 'sm', orientation = 'vertical', ...nativeProps }, ref) {
+export const RadioGroup = /* @__PURE__ */ forwardRef<HTMLFieldSetElement, RadioGroupProps>(function RadioGroup({ gap = 'sm', orientation = 'vertical', ...nativeProps }, ref) {
   return createElement('fieldset', { ...nativeProps, ref, 'data-vf-radio-group': '', 'data-vf-radio-group-gap': gap, 'data-vf-radio-group-orientation': orientation });
 });
