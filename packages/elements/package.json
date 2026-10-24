@@ -48,7 +48,9 @@
     "./search-field": { "types": "./dist/components/search-field/index.d.ts", "import": "./dist/components/search-field/index.js", "default": "./dist/components/search-field/index.js" },
     "./split-panel": { "types": "./dist/components/split-panel/index.d.ts", "import": "./dist/components/split-panel/index.js", "default": "./dist/components/split-panel/index.js" },
     "./temporal-field": { "types": "./dist/components/temporal-field/index.d.ts", "import": "./dist/components/temporal-field/index.js", "default": "./dist/components/temporal-field/index.js" },
-    "./toast": { "types": "./dist/components/toast/index.d.ts", "import": "./dist/components/toast/index.js", "default": "./dist/components/toast/index.js" }
+    "./toast": { "types": "./dist/components/toast/index.d.ts", "import": "./dist/components/toast/index.js", "default": "./dist/components/toast/index.js" },
+    "./app-shell": { "types": "./dist/components/app-shell/index.d.ts", "import": "./dist/components/app-shell/index.js", "default": "./dist/components/app-shell/index.js" },
+    "./side-nav": { "types": "./dist/components/side-nav/index.d.ts", "import": "./dist/components/side-nav/index.js", "default": "./dist/components/side-nav/index.js" }
   },
   "dependencies": { "@vyrnforge/core": "0.0.0-rebuild", "@vyrnforge/web": "0.0.0-rebuild" },
   "scripts": { "build": "tsc -p tsconfig.json" }
