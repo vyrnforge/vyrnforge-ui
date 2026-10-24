@@ -45,7 +45,16 @@
     "./context-menu": { "types": "./dist/components/context-menu/index.d.ts", "import": "./dist/components/context-menu/index.js", "default": "./dist/components/context-menu/index.js" },
     "./menubar": { "types": "./dist/components/menubar/index.d.ts", "import": "./dist/components/menubar/index.js", "default": "./dist/components/menubar/index.js" },
     "./toolbar": { "types": "./dist/components/toolbar/index.d.ts", "import": "./dist/components/toolbar/index.js", "default": "./dist/components/toolbar/index.js" },
-    "./split-button": { "types": "./dist/components/split-button/index.d.ts", "import": "./dist/components/split-button/index.js", "default": "./dist/components/split-button/index.js" }
+    "./split-button": { "types": "./dist/components/split-button/index.d.ts", "import": "./dist/components/split-button/index.js", "default": "./dist/components/split-button/index.js" },
+    "./listbox": { "types": "./dist/components/listbox/index.d.ts", "import": "./dist/components/listbox/index.js", "default": "./dist/components/listbox/index.js" },
+    "./select": { "types": "./dist/components/select/index.d.ts", "import": "./dist/components/select/index.js", "default": "./dist/components/select/index.js" },
+    "./combobox": { "types": "./dist/components/combobox/index.d.ts", "import": "./dist/components/combobox/index.js", "default": "./dist/components/combobox/index.js" },
+    "./multi-select": { "types": "./dist/components/multi-select/index.d.ts", "import": "./dist/components/multi-select/index.js", "default": "./dist/components/multi-select/index.js" },
+    "./toggle-group": { "types": "./dist/components/toggle-group/index.d.ts", "import": "./dist/components/toggle-group/index.js", "default": "./dist/components/toggle-group/index.js" },
+    "./segmented-control": { "types": "./dist/components/segmented-control/index.d.ts", "import": "./dist/components/segmented-control/index.js", "default": "./dist/components/segmented-control/index.js" },
+    "./tag-group": { "types": "./dist/components/tag-group/index.d.ts", "import": "./dist/components/tag-group/index.js", "default": "./dist/components/tag-group/index.js" },
+    "./rating": { "types": "./dist/components/rating/index.d.ts", "import": "./dist/components/rating/index.js", "default": "./dist/components/rating/index.js" },
+    "./range-slider": { "types": "./dist/components/range-slider/index.d.ts", "import": "./dist/components/range-slider/index.js", "default": "./dist/components/range-slider/index.js" }
   },
   "dependencies": { "@vyrnforge/core": "0.0.0-rebuild", "@vyrnforge/web": "0.0.0-rebuild" },
   "peerDependencies": { "vue": ">=3.5.0 <3.6.0" },
