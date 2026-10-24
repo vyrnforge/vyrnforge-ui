@@ -99,7 +99,8 @@ export function computeFloatingPosition(
   const padding = options.padding ?? 8;
   const offset = options.offset ?? 4;
   const crossOffset = options.crossOffset ?? 0;
-  let [side, alignment] = splitPlacement(requested);
+  const [requestedSide, alignment] = splitPlacement(requested);
+  let side = requestedSide;
   const mainSize = side === 'top' || side === 'bottom' ? floating.height : floating.width;
 
   if (options.flip ?? true) {
