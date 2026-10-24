@@ -10,7 +10,7 @@ export interface TypeaheadMatchOptions {
 }
 
 export function normalizeTypeaheadText(value: string, locale?: string | readonly string[]): string {
-  const locales = Array.isArray(locale) ? [...locale] : locale;
+  const locales = typeof locale === 'string' || locale === undefined ? locale : [...locale];
   return value
     .normalize('NFKD')
     .replace(/[\u0300-\u036f]/g, '')
