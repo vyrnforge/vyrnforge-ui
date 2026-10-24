@@ -1,0 +1,13 @@
+import { createElement, forwardRef, type ComponentPropsWithoutRef } from 'react';
+export type AppShellRootProps = ComponentPropsWithoutRef<'div'>;
+export type AppShellHeaderProps = ComponentPropsWithoutRef<'header'>;
+export type AppShellBodyProps = ComponentPropsWithoutRef<'div'>;
+export type AppShellNavigationProps = ComponentPropsWithoutRef<'aside'>;
+export type AppShellMainProps = ComponentPropsWithoutRef<'main'>;
+export type AppShellFooterProps = ComponentPropsWithoutRef<'footer'>;
+export const AppShell = forwardRef<HTMLDivElement, AppShellRootProps>(function AppShell(props, ref){ return createElement('div',{...props,ref,'data-vf-app-shell':''}); });
+export const AppShellHeader = forwardRef<HTMLElement, AppShellHeaderProps>(function AppShellHeader(props, ref){ return createElement('header',{...props,ref,'data-vf-app-shell-header':''}); });
+export const AppShellBody = forwardRef<HTMLDivElement, AppShellBodyProps>(function AppShellBody(props, ref){ return createElement('div',{...props,ref,'data-vf-app-shell-body':''}); });
+export const AppShellNavigation = forwardRef<HTMLElement, AppShellNavigationProps>(function AppShellNavigation(props, ref){ return createElement('aside',{...props,ref,'data-vf-app-shell-navigation':''}); });
+export const AppShellMain = forwardRef<HTMLElement, AppShellMainProps>(function AppShellMain(props, ref){ return createElement('main',{...props,ref,'data-vf-app-shell-main':''}); });
+export const AppShellFooter = forwardRef<HTMLElement, AppShellFooterProps>(function AppShellFooter(props, ref){ return createElement('footer',{...props,ref,'data-vf-app-shell-footer':''}); });
