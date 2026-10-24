@@ -2,6 +2,3 @@ export { VfIconElement, defineIconElement, type IconDefinition, type IconShape, 
 export { VfAspectRatioElement, VfClusterElement, VfContainerElement, VfFieldElement, VfFieldsetElement, VfGridElement, VfInlineElement, VfInputGroupElement, VfRadioGroupElement, VfStackElement, defineAspectRatioElement, defineClusterElement, defineContainerElement, defineFieldElement, defineFieldsetElement, defineGridElement, defineInlineElement, defineInputGroupElement, defineLayoutElements, defineRadioGroupElement, defineStackElement, type AspectRatio, type ClusterAlign, type ClusterJustify, type ContainerSize, type InlineAlign, type InlineJustify, type LayoutSpace, type RadioGroupOrientation, type StackAlign, type StackJustify } from './components/layout/index.js';
 export { VfSurfaceElement, defineSurfaceElement } from './components/surface/index.js';
 export { VfTabsElement, defineTabsElement, type TabsActivation, type TabsOrientation, type TabsValueChangeDetail, type TabsValueChangeEvent } from './components/tabs/index.js';
-export { VfPortalElement, definePortalElement } from './components/portal/index.js';
-export { VfPresenceElement, definePresenceElement } from './components/presence/index.js';
-export type { PresenceExitEventDetail, PresenceState } from './components/presence/index.js';
