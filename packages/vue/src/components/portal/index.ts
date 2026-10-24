@@ -1,6 +1,6 @@
 import { Teleport, defineComponent, h, type PropType } from 'vue';
 
-export const Portal = defineComponent({
+export const Portal = /* @__PURE__ */ defineComponent({
   name: 'VfPortal',
   props: {
     to: { type: [String, Object] as PropType<string | Element>, required: true },
