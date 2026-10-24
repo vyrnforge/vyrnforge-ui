@@ -25,7 +25,14 @@ if (!/<title(?:\s|>)/i.test(fixtureHtml)) {
   }
 }
 if (!/<main(?:\s|>)/i.test(fixtureHtml)) {
-  fixtureHtml = fixtureHtml.replace(/<body(\s[^>]*)?>([\s\S]*?)<\/body>/i, (_match, attributes = '', body) => `<body${attributes}><main><h1>${fixtureTitle}</h1>${body}</main></body>`);
+  fixtureHtml = fixtureHtml.replace(/<body(\s[^>]*)?>([\s\S]*?)<\/body>/i, (_match, attributes = '', body) => `<body${attributes}><main>${body}</main></body>`);
+}
+if (!/<h1(?:\s|>)/i.test(fixtureHtml)) {
+  if (/<main(?:\s[^>]*)?>/i.test(fixtureHtml)) {
+    fixtureHtml = fixtureHtml.replace(/<main(\s[^>]*)?>/i, (match) => `${match}<h1>${fixtureTitle}</h1>`);
+  } else {
+    fixtureHtml = fixtureHtml.replace(/<body(\s[^>]*)?>/i, (match) => `${match}<h1>${fixtureTitle}</h1>`);
+  }
 }
 await writeFile(fixtureDocument, fixtureHtml);
 
