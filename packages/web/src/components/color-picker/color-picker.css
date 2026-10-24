@@ -1,0 +1,1 @@
+@layer vyrnforge.components{[data-vf-color-picker-root]{gap:var(--vf-space-2)}[data-vf-color-picker-input]{inline-size:3rem;min-block-size:2.5rem}[data-vf-color-picker-swatch]{inline-size:2.5rem;block-size:2.5rem;border:1px solid var(--vf-color-border);border-radius:var(--vf-radius-control)}}
