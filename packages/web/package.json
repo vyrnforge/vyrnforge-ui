@@ -52,7 +52,12 @@
     "./styles/drawer.css": "./dist/components/drawer/drawer.css",
     "./styles/popover.css": "./dist/components/popover/popover.css",
     "./styles/tooltip.css": "./dist/components/tooltip/tooltip.css",
-    "./styles/preview-card.css": "./dist/components/preview-card/preview-card.css"
+    "./styles/preview-card.css": "./dist/components/preview-card/preview-card.css",
+    "./styles/menu.css": "./dist/components/menu/menu.css",
+    "./styles/context-menu.css": "./dist/components/context-menu/context-menu.css",
+    "./styles/menubar.css": "./dist/components/menubar/menubar.css",
+    "./styles/toolbar.css": "./dist/components/toolbar/toolbar.css",
+    "./styles/split-button.css": "./dist/components/split-button/split-button.css"
   },
   "dependencies": { "@vyrnforge/core": "0.0.0-rebuild" },
   "scripts": { "build": "node ../../tooling/tokens/generate.mjs --check && tsc -p tsconfig.json && node ../../tooling/build/copy-web-assets.mjs" }
