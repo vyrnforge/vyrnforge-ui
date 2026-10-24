@@ -66,7 +66,18 @@
     "./styles/segmented-control.css": "./dist/components/segmented-control/segmented-control.css",
     "./styles/tag-group.css": "./dist/components/tag-group/tag-group.css",
     "./styles/rating.css": "./dist/components/rating/rating.css",
-    "./styles/range-slider.css": "./dist/components/range-slider/range-slider.css"
+    "./styles/range-slider.css": "./dist/components/range-slider/range-slider.css",
+    "./styles/carousel.css": "./dist/components/carousel/carousel.css",
+    "./styles/color-picker.css": "./dist/components/color-picker/color-picker.css",
+    "./styles/file-uploader.css": "./dist/components/file-uploader/file-uploader.css",
+    "./styles/number-field.css": "./dist/components/number-field/number-field.css",
+    "./styles/otp-field.css": "./dist/components/otp-field/otp-field.css",
+    "./styles/pagination.css": "./dist/components/pagination/pagination.css",
+    "./styles/password-field.css": "./dist/components/password-field/password-field.css",
+    "./styles/search-field.css": "./dist/components/search-field/search-field.css",
+    "./styles/split-panel.css": "./dist/components/split-panel/split-panel.css",
+    "./styles/temporal-field.css": "./dist/components/temporal-field/temporal-field.css",
+    "./styles/toast.css": "./dist/components/toast/toast.css"
   },
   "dependencies": { "@vyrnforge/core": "0.0.0-rebuild" },
   "scripts": { "build": "node ../../tooling/tokens/generate.mjs --check && tsc -p tsconfig.json && node ../../tooling/build/copy-web-assets.mjs" }
