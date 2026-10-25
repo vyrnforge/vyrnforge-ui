@@ -3,6 +3,7 @@ import { loadComponentStandards, summarizeComponentStandards } from '../accessib
 import { assertProductPreparation } from '../testing/discover-product-units.mjs';
 
 const required = ['testing/README.md', 'testing/impact.json'];
+const representativeAccessibilityMappings = new Set(['button', 'tabs', 'dialog', 'combobox', 'listbox', 'menu', 'toolbar']);
 for (const file of required) await access(file);
 const impact = JSON.parse(await readFile('testing/impact.json', 'utf8'));
 if (impact.schemaVersion !== 1) throw new Error('testing impact metadata must use schemaVersion 1');
@@ -13,4 +14,6 @@ const discovery = assertProductPreparation();
 const { standards } = await loadComponentStandards();
 const accessibility = summarizeComponentStandards(standards);
 if (accessibility.total !== discovery.components.length) throw new Error('accessibility standards inventory must classify every discovered component');
+const byComponent = new Map(standards.map((entry) => [entry.component, entry]));
+for (const component of representativeAccessibilityMappings) if (byComponent.get(component)?.reviewStatus !== 'mapped') throw new Error(`representative accessibility mapping must remain mapped: ${component}`);
 process.stdout.write(`testing structure: policy-only testing root, ${discovery.components.length} components and ${discovery.ownedUnits.length} reusable scoped units prepared; accessibility ${accessibility.mapped} mapped/${accessibility.reviewRequired} review-required\n`);
