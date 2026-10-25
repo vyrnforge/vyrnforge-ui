@@ -25,7 +25,7 @@
   body { background: var(--docs-bg); color: var(--docs-fg); }
   .vf-skip-link { position: fixed; inset-inline-start: 1rem; inset-block-start: 1rem; transform: translateY(-200%); padding: .6rem .8rem; background: var(--docs-bg); border: 1px solid var(--docs-fg); z-index: 10; }
   .vf-skip-link:focus { transform: none; }
-  .vf-docs-header { position: sticky; inset-block-start: 0; z-index: 5; border-block-end: 1px solid var(--docs-border); background: color-mix(in srgb, var(--docs-bg) 94%, transparent); backdrop-filter: blur(12px); }
+  .vf-docs-header { position: sticky; inset-block-start: 0; z-index: 5; }
   .vf-docs-header__inner { max-width: var(--docs-max); margin-inline: auto; min-height: 4rem; padding: .75rem 1rem; display: flex; gap: 1rem; align-items: center; flex-wrap: wrap; }
   .vf-docs-brand { font-weight: 750; text-decoration: none; }
   .vf-docs-version { color: var(--docs-muted); font-size: .875rem; }

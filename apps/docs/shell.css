@@ -9,9 +9,6 @@
 
 .vf-docs-header {
   min-block-size: var(--vf-docs-app-bar-block-size);
-  border-block-end: 1px solid var(--docs-border);
-  background: color-mix(in srgb, var(--docs-bg) 92%, var(--docs-surface-strong));
-  box-shadow: 0 1px 0 color-mix(in srgb, var(--docs-fg) 5%, transparent), 0 .5rem 2rem color-mix(in srgb, var(--docs-fg) 5%, transparent);
 }
 
 .vf-docs-header__inner {
@@ -51,34 +48,7 @@
   max-block-size: none;
   overflow: auto;
   padding: 1.25rem 1rem 2rem;
-  border-inline-end: 1px solid var(--docs-border);
-  background: color-mix(in srgb, var(--docs-bg) 96%, var(--docs-surface));
   scrollbar-gutter: stable;
-}
-
-.vf-docs-navigation [data-vf-side-nav-group-label] {
-  margin-block-start: .4rem;
-  padding-inline: .65rem;
-  color: var(--docs-muted);
-}
-
-.vf-docs-navigation [data-vf-side-nav-link] {
-  position: relative;
-  min-block-size: 2.65rem;
-  padding-inline: .75rem;
-  border: 1px solid transparent;
-  border-radius: .65rem;
-}
-
-.vf-docs-navigation [data-vf-side-nav-link]:hover {
-  border-color: color-mix(in srgb, var(--docs-border) 76%, transparent);
-  background: var(--docs-surface);
-}
-
-.vf-docs-navigation [data-vf-side-nav-link][aria-current="page"] {
-  border-color: color-mix(in srgb, var(--docs-accent) 28%, var(--docs-border));
-  background: color-mix(in srgb, var(--docs-accent) 12%, var(--docs-bg));
-  box-shadow: inset .18rem 0 0 var(--docs-accent);
 }
 
 :where(vf-app-shell[data-vf-app-shell]) [data-vf-app-shell-main] {
@@ -130,8 +100,6 @@
     block-size: auto;
     max-block-size: none;
     padding: 1rem;
-    border-inline-end: 0;
-    border-block-end: 1px solid var(--docs-border);
   }
 
   :where(vf-app-shell[data-vf-app-shell]) [data-vf-app-shell-main] {

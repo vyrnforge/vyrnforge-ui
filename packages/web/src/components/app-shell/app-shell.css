@@ -16,7 +16,14 @@
     color: var(--vf-color-text);
   }
 
-  :where([data-vf-app-shell-header], vf-app-shell-header) { min-inline-size: 0; }
+  :where([data-vf-app-shell-header], vf-app-shell-header) {
+    box-sizing: border-box;
+    min-inline-size: 0;
+    border-block-end: 1px solid var(--vf-color-border);
+    background: var(--vf-color-surface);
+    box-shadow: var(--vf-shadow-sm);
+  }
+
   :where([data-vf-app-shell-body], vf-app-shell-body) {
     box-sizing: border-box;
     inline-size: min(100%, var(--vf-app-shell-max-inline-size));
@@ -27,11 +34,27 @@
     padding: var(--vf-app-shell-block-padding) var(--vf-app-shell-gutter);
     min-inline-size: 0;
   }
-  :where([data-vf-app-shell-navigation], vf-app-shell-navigation) { min-inline-size: 0; align-self: start; }
+
+  :where([data-vf-app-shell-navigation], vf-app-shell-navigation) {
+    box-sizing: border-box;
+    min-inline-size: 0;
+    align-self: start;
+    border-inline-end: 1px solid var(--vf-color-border);
+    background: var(--vf-color-surface-subtle);
+  }
+
   :where([data-vf-app-shell-main], vf-app-shell-main) { min-inline-size: 0; }
   :where([data-vf-app-shell-footer], vf-app-shell-footer) { min-inline-size: 0; }
 
   @media (max-width: 48rem) {
-    :where([data-vf-app-shell-body], vf-app-shell-body) { grid-template-columns: minmax(0, 1fr); gap: var(--vf-space-md); }
+    :where([data-vf-app-shell-body], vf-app-shell-body) {
+      grid-template-columns: minmax(0, 1fr);
+      gap: var(--vf-space-md);
+    }
+
+    :where([data-vf-app-shell-navigation], vf-app-shell-navigation) {
+      border-inline-end: 0;
+      border-block-end: 1px solid var(--vf-color-border);
+    }
   }
 }
