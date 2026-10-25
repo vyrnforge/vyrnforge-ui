@@ -3,6 +3,7 @@ import assert from 'node:assert/strict';
 import { mkdtempSync, readFileSync, rmSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import path from 'node:path';
+import { componentBrowserServerManagedEnv, managedPlaywrightConfigSource } from '../testing/component-browser-runtime.mjs';
 import { expandScopes } from '../impact/scopes.mjs';
 import { browserProjectsForExecution, createExecutionPlan, executeValidationPlan } from '../impact/execute.mjs';
 
@@ -51,6 +52,13 @@ test('browser setup is deduplicated to the widest selected browser matrix', () =
   assert.deepEqual(browserProjectsForExecution(expandScopes(['pack-core'])), []);
 });
 
+test('managed component browser config preserves the original config while reusing its web server', () => {
+  const source = managedPlaywrightConfigSource('playwright.config.mjs');
+  assert.match(source, /import config from "\.\/playwright\.config\.mjs"/);
+  assert.match(source, /reuseExistingServer: true/);
+  assert.match(source, /export default \{ \.\.\.config, webServer:/);
+});
+
 test('change rendering depends on fragment validation', () => {
   const execution = expandScopes(['changes-preview']);
   assert.deepEqual(execution.map((item) => item.scope), ['change-fragments', 'changes-preview']);
@@ -65,12 +73,12 @@ test('validation plans become inspectable execution plans with selection and pre
   assert.deepEqual(execution.find((item) => item.scope === 'pack-core').reasons, ['evidence for package:core:public-surface']);
 });
 
-test('executor persists per-scope duration and prerequisite provenance', () => {
+test('executor persists per-scope duration and prerequisite provenance', async () => {
   const directory = mkdtempSync(path.join(tmpdir(), 'vf-impact-'));
   const output = path.join(directory, 'validation-plan.json');
   let clock = 0;
   try {
-    executeValidationPlan(
+    await executeValidationPlan(
       { mode: 'pr', changedPaths: [], validationScopes: ['pack-core'], scopeReasons: { 'pack-core': ['package verification'] } },
       { output, runCommand: () => { clock += 25; }, now: () => clock },
     );
@@ -85,12 +93,12 @@ test('executor persists per-scope duration and prerequisite provenance', () => {
   }
 });
 
-test('executor preserves partial timing evidence when a scope fails', () => {
+test('executor preserves partial timing evidence when a scope fails', async () => {
   const directory = mkdtempSync(path.join(tmpdir(), 'vf-impact-failure-'));
   const output = path.join(directory, 'validation-plan.json');
   let clock = 0;
   try {
-    assert.throws(() => executeValidationPlan(
+    await assert.rejects(() => executeValidationPlan(
       { mode: 'pr', changedPaths: [], validationScopes: ['pack-core'], scopeReasons: { 'pack-core': ['package verification'] } },
       {
         output,
@@ -109,6 +117,95 @@ test('executor preserves partial timing evidence when a scope fails', () => {
     assert.deepEqual(report.results.map((result) => [result.scope, result.outcome]), [['lint-core', 'success'], ['build-core', 'failure']]);
     assert.equal(report.results.at(-1).exitCode, 7);
     assert.equal(report.results.at(-1).durationMs, 10);
+  } finally {
+    rmSync(directory, { recursive: true, force: true });
+  }
+});
+
+test('executor starts one shared docs server for component browser scopes and marks only those commands as managed', async () => {
+  const directory = mkdtempSync(path.join(tmpdir(), 'vf-impact-browser-server-'));
+  const output = path.join(directory, 'validation-plan.json');
+  let clock = 0;
+  let starts = 0;
+  let stops = 0;
+  const managedCommands = [];
+  try {
+    await executeValidationPlan(
+      { mode: 'pr', changedPaths: [], validationScopes: ['component:button:react:browser', 'component:button:vue:browser'], scopeReasons: {} },
+      {
+        output,
+        now: () => clock,
+        runCommand: (_command, args, options) => {
+          clock += 5;
+          if (args.includes('tooling/testing/run-component-browser.mjs')) managedCommands.push(options.env[componentBrowserServerManagedEnv]);
+          else assert.equal(options.env[componentBrowserServerManagedEnv], undefined);
+        },
+        startBrowserServer: async ({ env }) => {
+          starts += 1;
+          assert.equal(env[componentBrowserServerManagedEnv], undefined);
+          assert.equal(env.VF_VALIDATION_MODE, 'pr');
+          clock += 7;
+          return { pid: 1234 };
+        },
+        stopBrowserServer: async () => { stops += 1; },
+      },
+    );
+    const report = JSON.parse(readFileSync(output, 'utf8'));
+    assert.equal(starts, 1);
+    assert.equal(stops, 1);
+    assert.deepEqual(managedCommands, ['1', '1']);
+    assert.deepEqual(report.componentBrowserServer, { outcome: 'success', durationMs: 7 });
+  } finally {
+    rmSync(directory, { recursive: true, force: true });
+  }
+});
+
+test('executor does not start the component docs server for non-component browser scopes', async () => {
+  let starts = 0;
+  await executeValidationPlan(
+    { mode: 'pr', changedPaths: [], validationScopes: ['browser-docs-chromium'], scopeReasons: {} },
+    {
+      runCommand: () => {},
+      startBrowserServer: async () => { starts += 1; return {}; },
+      stopBrowserServer: async () => {},
+    },
+  );
+  assert.equal(starts, 0);
+});
+
+test('executor stops the shared component docs server when a component browser scope fails', async () => {
+  let stops = 0;
+  await assert.rejects(() => executeValidationPlan(
+    { mode: 'pr', changedPaths: [], validationScopes: ['component:button:react:browser'], scopeReasons: {} },
+    {
+      runCommand: (_command, args) => {
+        if (args.includes('tooling/testing/run-component-browser.mjs')) throw new Error('browser failed');
+      },
+      startBrowserServer: async () => ({ pid: 1234 }),
+      stopBrowserServer: async () => { stops += 1; },
+    },
+  ), /browser failed/);
+  assert.equal(stops, 1);
+});
+
+test('executor records component docs server startup failure before browser execution', async () => {
+  const directory = mkdtempSync(path.join(tmpdir(), 'vf-impact-browser-server-failure-'));
+  const output = path.join(directory, 'validation-plan.json');
+  let browserCommands = 0;
+  try {
+    await assert.rejects(() => executeValidationPlan(
+      { mode: 'pr', changedPaths: [], validationScopes: ['component:button:react:browser'], scopeReasons: {} },
+      {
+        output,
+        runCommand: (_command, args) => {
+          if (args.includes('tooling/testing/run-component-browser.mjs')) browserCommands += 1;
+        },
+        startBrowserServer: async () => { throw new Error('server startup failed'); },
+      },
+    ), /server startup failed/);
+    const report = JSON.parse(readFileSync(output, 'utf8'));
+    assert.equal(browserCommands, 0);
+    assert.equal(report.componentBrowserServer.outcome, 'failure');
   } finally {
     rmSync(directory, { recursive: true, force: true });
   }

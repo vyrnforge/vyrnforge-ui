@@ -1,7 +1,8 @@
 import { execFileSync } from 'node:child_process';
 import { existsSync } from 'node:fs';
-import { readFile, writeFile } from 'node:fs/promises';
+import { readFile, rm, writeFile } from 'node:fs/promises';
 import path from 'node:path';
+import { componentBrowserServerManagedEnv, managedPlaywrightConfigSource } from './component-browser-runtime.mjs';
 import { discoverProductUnits } from './discover-product-units.mjs';
 
 const [componentId, port, mode = 'chromium'] = process.argv.slice(2);
@@ -43,8 +44,21 @@ const npx = process.platform === 'win32' ? 'npx.cmd' : 'npx';
 if (process.env.VF_PLAYWRIGHT_READY !== '1') {
   execFileSync(npx, ['playwright', 'install', '--with-deps', ...projects], { stdio: 'inherit' });
 }
+
 const projectArgs = projects.flatMap((project) => ['--project', project]);
-execFileSync(npx, ['playwright', 'test', '--config', component.browser.config, ...projectArgs], {
-  stdio: 'inherit',
-  env: { ...process.env, VF_COMPONENT_PORT: port, VF_COMPONENT_ID: componentId }
-});
+let playwrightConfig = component.browser.config;
+let managedConfig = null;
+if (process.env[componentBrowserServerManagedEnv] === '1') {
+  managedConfig = path.join(path.dirname(component.browser.config), `.vyrnforge-managed-playwright-${process.pid}.config.mjs`);
+  await writeFile(managedConfig, managedPlaywrightConfigSource(path.basename(component.browser.config)), 'utf8');
+  playwrightConfig = managedConfig;
+}
+
+try {
+  execFileSync(npx, ['playwright', 'test', '--config', playwrightConfig, ...projectArgs], {
+    stdio: 'inherit',
+    env: { ...process.env, VF_COMPONENT_PORT: port, VF_COMPONENT_ID: componentId }
+  });
+} finally {
+  if (managedConfig) await rm(managedConfig, { force: true });
+}
