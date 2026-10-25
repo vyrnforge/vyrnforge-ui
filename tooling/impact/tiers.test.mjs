@@ -3,12 +3,14 @@ import assert from 'node:assert/strict';
 import { createPlan, createTierPlan } from '../impact/plan.mjs';
 import { createExecutionPlan } from '../impact/execute.mjs';
 
-test('PR component-local changes keep sibling framework evidence skipped', () => {
+test('PR component-local changes keep package consumers and sibling framework evidence skipped', () => {
   const plan = createPlan(['packages/react/src/components/button/index.ts']);
-  for (const selected of ['pack-react', 'consumer-react', 'component:button:react:types', 'component:button:react:ssr', 'component:button:react:browser']) assert.ok(plan.validationScopes.includes(selected), selected);
-  for (const skipped of ['pack-angular', 'consumer-angular', 'component:button:angular:ssr', 'browser-docs-cross', 'bundle-baselines']) assert.equal(plan.validationScopes.includes(skipped), false, skipped);
+  for (const selected of ['component:button:react:types', 'component:button:react:ssr', 'component:button:react:browser']) assert.ok(plan.validationScopes.includes(selected), selected);
+  for (const skipped of ['pack-react', 'consumer-react', 'pack-angular', 'consumer-angular', 'component:button:angular:ssr', 'browser-docs-cross', 'bundle-baselines']) assert.equal(plan.validationScopes.includes(skipped), false, skipped);
   const execution = createExecutionPlan(plan);
   assert.ok(execution.some((entry) => entry.scope === 'build-react'));
+  assert.equal(execution.some((entry) => entry.scope === 'pack-react'), false);
+  assert.equal(execution.some((entry) => entry.scope === 'consumer-react'), false);
   assert.equal(execution.some((entry) => entry.scope === 'build-angular'), false);
 });
 
@@ -25,7 +27,7 @@ test('Web foundation changes include the shared visual regression baseline', () 
 
 test('main includes all discovered package-local and shared component evidence', () => {
   const main = createTierPlan('main');
-  for (const scope of ['change-fragments', 'changes-preview', 'bundle-baselines', 'browser-foundation-visual', 'component:button:conformance:types', 'component:button:react:types', 'component:button:react:ssr', 'component:button:web:browser', 'component:button:angular:ssr', 'component:button:vue:ssr']) assert.ok(main.validationScopes.includes(scope), scope);
+  for (const scope of ['change-fragments', 'changes-preview', 'pack-react', 'consumer-all', 'bundle-baselines', 'browser-foundation-visual', 'component:button:conformance:types', 'component:button:react:types', 'component:button:react:ssr', 'component:button:web:browser', 'component:button:angular:ssr', 'component:button:vue:ssr']) assert.ok(main.validationScopes.includes(scope), scope);
   assert.equal(main.validationScopes.includes('component:button:web:browser-cross'), false);
 });
 
