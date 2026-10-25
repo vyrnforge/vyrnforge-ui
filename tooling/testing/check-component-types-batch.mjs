@@ -34,10 +34,10 @@ const concurrency = Math.max(1, Math.min(4, availableParallelism()));
 process.stdout.write(`component type batch: ${jobs.length} isolated evidence programs, concurrency ${concurrency}\n`);
 
 let cursor = 0;
-let failed = false;
+const failures = [];
 
 async function worker() {
-  while (!failed) {
+  while (true) {
     const index = cursor++;
     if (index >= jobs.length) return;
     const job = jobs[index];
@@ -54,10 +54,10 @@ async function worker() {
         });
       });
     } catch (error) {
-      failed = true;
-      throw error;
+      failures.push(error instanceof Error ? error.message : String(error));
     }
   }
 }
 
 await Promise.all(Array.from({ length: concurrency }, () => worker()));
+if (failures.length) throw new Error(`Component type batch failed:\n${failures.map((failure) => `- ${failure}`).join('\n')}`);
