@@ -23,6 +23,12 @@ test('docs home consumes the reusable AppShell and exposes versioned accessible 
   await expect(page.getByRole('link', { name: 'Skip to content' })).toBeAttached();
   await expect(page.locator('[data-vf-docs-version]')).toContainText('next');
 
+  const frameworkPicker = page.getByRole('group', { name: 'Framework' });
+  await expect(frameworkPicker).toBeVisible();
+  await expect(frameworkPicker.getByRole('button')).toHaveCount(5);
+  await expect(frameworkPicker.locator('[data-vf-framework-mark]')).toHaveCount(5);
+  for (const mark of await frameworkPicker.locator('[data-vf-framework-mark]').all()) await expect(mark).toHaveAttribute('aria-hidden', 'true');
+
   const search = page.getByRole('searchbox', { name: 'Search' });
   await search.fill('styling');
   const result = page.getByRole('link', { name: 'Styling' }).last();
@@ -35,14 +41,19 @@ test('docs home consumes the reusable AppShell and exposes versioned accessible 
 test('framework selection exposes current public component availability', async ({ page }) => {
   const verifyNoErrors = await expectNoRuntimeErrors(page);
   await page.goto('/next/');
-  await page.getByLabel('Framework').selectOption('react');
+  let frameworkPicker = page.getByRole('group', { name: 'Framework' });
+  await frameworkPicker.getByRole('button', { name: 'React' }).click();
   await expect(page).toHaveURL(/\/next\/frameworks\/react\/$/);
+  frameworkPicker = page.getByRole('group', { name: 'Framework' });
+  await expect(frameworkPicker.getByRole('button', { name: 'React' })).toHaveAttribute('aria-pressed', 'true');
+  await expect(page.getByRole('heading', { level: 1, name: 'React' }).locator('[data-vf-framework-mark="react"]')).toHaveCount(1);
   await expect(page.locator('[data-vf-support-status="partial"]')).toContainText('React integration is available');
   await expect(page.getByRole('heading', { level: 2, name: 'Available component entrypoints' })).toBeVisible();
   await expect(page.locator('main')).toContainText('@vyrnforge/react/dialog');
 
-  await page.getByLabel('Framework').selectOption('elements');
+  await frameworkPicker.getByRole('button', { name: 'Custom Elements' }).click();
   await expect(page).toHaveURL(/\/next\/frameworks\/elements\/$/);
+  await expect(page.getByRole('heading', { level: 1, name: 'Custom Elements' })).toBeVisible();
   await expect(page.locator('[data-vf-support-status="partial"]')).toContainText('Icon and Tabs');
   await expect(page.locator('main')).toContainText('@vyrnforge/elements/tabs');
   verifyNoErrors();
@@ -59,13 +70,15 @@ test('Button documentation uses executable multi-framework examples and a sandbo
   await expect(playground.locator('iframe')).toHaveAttribute('sandbox', 'allow-scripts');
 
   const expectations = [
-    ['React', '@vyrnforge/react/button'],
-    ['Angular', '@vyrnforge/angular/button'],
-    ['Vue', '@vyrnforge/vue/button'],
-    ['Native Web', 'data-vf-button']
+    ['React', 'react', '@vyrnforge/react/button'],
+    ['Angular', 'angular', '@vyrnforge/angular/button'],
+    ['Vue', 'vue', '@vyrnforge/vue/button'],
+    ['Native Web', 'native-web', 'data-vf-button']
   ];
-  for (const [label, sourceNeedle] of expectations) {
-    await playground.getByRole('tab', { name: label }).click();
+  for (const [label, framework, sourceNeedle] of expectations) {
+    const tab = playground.getByRole('tab', { name: label });
+    await expect(tab.locator(`[data-vf-framework-mark="${framework}"]`)).toHaveCount(1);
+    await tab.click();
     await expect(editor).toHaveValue(new RegExp(sourceNeedle.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')));
     await expect(frame.getByRole('button', { name: 'Save changes' })).toBeVisible();
   }
@@ -105,8 +118,17 @@ test('Icon documentation renders the sample glyph in every executable framework 
   const frame = page.frameLocator('[data-vf-example-id="icon/basic"] iframe');
   await expect(playground).toBeVisible();
 
-  for (const label of ['React', 'Angular', 'Vue', 'Elements', 'Native Web']) {
-    await playground.getByRole('tab', { name: label }).click();
+  const frameworks = [
+    ['React', 'react'],
+    ['Angular', 'angular'],
+    ['Vue', 'vue'],
+    ['Custom Elements', 'elements'],
+    ['Native Web', 'native-web']
+  ];
+  for (const [label, framework] of frameworks) {
+    const tab = playground.getByRole('tab', { name: label });
+    await expect(tab.locator(`[data-vf-framework-mark="${framework}"]`)).toHaveCount(1);
+    await tab.click();
     await expect(frame.locator('[data-vf-icon]')).toBeVisible();
     await expect(frame.locator('[data-vf-icon] path')).toHaveCount(1);
   }
@@ -144,5 +166,8 @@ test('docs remain navigable at a mobile viewport', async ({ page }) => {
   await page.goto('/next/foundations/accessibility/');
   await expect(page.getByRole('navigation', { name: 'Documentation' })).toBeVisible();
   await expect(page.getByRole('heading', { level: 1, name: 'Accessibility' })).toBeVisible();
-  await expect(page.getByLabel('Framework')).toBeVisible();
+  const frameworkPicker = page.getByRole('group', { name: 'Framework' });
+  await expect(frameworkPicker).toBeVisible();
+  const overflow = await frameworkPicker.evaluate((element) => element.scrollWidth - element.clientWidth);
+  expect(overflow).toBeGreaterThanOrEqual(0);
 });
