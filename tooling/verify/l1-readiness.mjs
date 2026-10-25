@@ -45,10 +45,11 @@ for (const deferred of ['StatusIndicator', 'AvatarFallback']) {
 const l1Route = docsRegistry.pages?.find((page) => page.slug === 'foundations/l1-primitives');
 if (!l1Route || l1Route.source !== 'documentation/shared/l1-primitives.html') throw new Error('Layer 1 primitive documentation route is missing');
 
-if (!impact.scopeOrder?.includes('browser-l1-primitives')) throw new Error('Layer 1 browser evidence scope is missing');
-for (const tier of ['main', 'scheduled', 'release']) {
-  if (!impact.tiers?.[tier]?.includes('browser-l1-primitives')) throw new Error(`Layer 1 browser evidence is missing from ${tier} validation`);
+for (const scope of ['l1-readiness', 'browser-l1-primitives']) {
+  if (!impact.scopeOrder?.includes(scope)) throw new Error(`Layer 1 validation scope is missing: ${scope}`);
+  for (const tier of ['main', 'scheduled', 'release']) {
+    if (!impact.tiers?.[tier]?.includes(scope)) throw new Error(`Layer 1 ${scope} evidence is missing from ${tier} validation`);
+  }
 }
-if (!impact.globalSentinels?.includes('l1-readiness')) throw new Error('Layer 1 readiness must be a global PR sentinel');
 
 process.stdout.write('layer 1 readiness: complete inventory resolved\n');
