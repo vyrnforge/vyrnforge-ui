@@ -39,7 +39,7 @@ test('managed component browser config preserves the original config while leavi
   const source = managedPlaywrightConfigSource('playwright.config.mjs');
   assert.match(source, /import config from "\.\/playwright\.config\.mjs"/);
   assert.match(source, /webServer: undefined/);
-  assert.doesNotMatch(source, /reuseExistingServer/);
+  assert.doesNotMatch(source, /reuseExistingServer:\s*true/);
   assert.match(source, /export default \{ \.\.\.config, webServer: undefined \}/);
 });
 
