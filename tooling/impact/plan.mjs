@@ -89,7 +89,7 @@ function reverseClosure(initialNodes) {
   }
   return selected;
 }
-function dynamicTierScopes(mode) {
+function dynamicPrScopes() {
   const scopes = discovery.ownedUnits.map((unit) => `${unit.node}:test`);
   for (const component of discovery.components) {
     if (component.conformanceTypes) scopes.push(componentScope(component.component, 'conformance:types'));
@@ -98,11 +98,22 @@ function dynamicTierScopes(mode) {
       if (config.ssr) scopes.push(componentScope(component.component, `${port}:ssr`));
       if (config.browser) scopes.push(componentScope(component.component, `${port}:browser`));
     }
+  }
+  return scopes;
+}
+function dynamicTierScopes(mode) {
+  const scopes = [
+    ...discovery.ownedUnits.map((unit) => `${unit.node}:test`),
+    'component-types-all',
+    'component-ssr-all',
+  ];
+  for (const component of discovery.components) {
+    for (const [port, config] of Object.entries(component.ports)) if (config.browser) scopes.push(componentScope(component.component, `${port}:browser`));
     if ((mode === 'scheduled' || mode === 'release') && component.ports.web?.browser) scopes.push(componentScope(component.component, 'web:browser-cross'));
   }
   return scopes;
 }
-export function allKnownScopes() { return [...new Set([...impact.scopeOrder, ...dynamicTierScopes('release'), ...discovery.components.map((component) => componentScope(component.component, 'docs'))])]; }
+export function allKnownScopes() { return [...new Set([...impact.scopeOrder, 'component-types-all', 'component-ssr-all', ...dynamicPrScopes(), ...dynamicTierScopes('release'), ...discovery.components.map((component) => componentScope(component.component, 'docs'))])]; }
 function orderedScopes(scopes) { const order = new Map(allKnownScopes().map((scope, index) => [scope, index])); return [...scopes].sort((a, b) => (order.get(a) ?? Number.MAX_SAFE_INTEGER) - (order.get(b) ?? Number.MAX_SAFE_INTEGER) || a.localeCompare(b)); }
 function scopeReasonsFor(affectedNodes, selectedScopes) {
   const reasons = new Map();
