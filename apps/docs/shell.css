@@ -1,4 +1,4 @@
-body[data-vf-app-shell] {
+:where(vf-app-shell[data-vf-app-shell]) {
   --vf-app-shell-max-inline-size: var(--docs-max);
   --vf-app-shell-navigation-inline-size: 17rem;
   --vf-app-shell-gap: 2.75rem;
@@ -16,7 +16,7 @@ body[data-vf-app-shell] {
 }
 
 @media (max-width: 760px) {
-  body[data-vf-app-shell] {
+  :where(vf-app-shell[data-vf-app-shell]) {
     --vf-app-shell-gap: 1rem;
   }
 
