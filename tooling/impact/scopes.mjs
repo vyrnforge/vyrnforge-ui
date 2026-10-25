@@ -31,4 +31,30 @@ export function resolveScopeDefinition(scope) {
   if ((evidence === 'browser' || evidence === 'browser-cross') && portConfig.browser) { const requires = [componentPrerequisite(port)]; if (componentId === 'icon') requires.push('build-icons'); return { command: ['node', 'tooling/testing/run-component-browser.mjs', componentId, port, evidence === 'browser-cross' ? 'all' : 'chromium'], requires: [...new Set(requires)] }; }
   return null;
 }
-export function expandScopes(selectedScopes) { const selected = new Set(selectedScopes); const ordered = []; const visiting = new Set(); const visited = new Set(); function visit(scope) { if (visited.has(scope)) return; if (visiting.has(scope)) throw new Error(`Validation scope prerequisite cycle at ${scope}`); const definition = resolveScopeDefinition(scope); if (!definition) throw new Error(`No executor registered for validation scope ${scope}`); visiting.add(scope); for (const prerequisite of definition.requires) visit(prerequisite); visiting.delete(scope); visited.add(scope); ordered.push({ scope, selected: selected.has(scope), command: definition.command }); } for (const scope of selectedScopes) visit(scope); return ordered; }
+export function expandScopes(selectedScopes) {
+  const selected = new Set(selectedScopes);
+  const ordered = [];
+  const visiting = new Set();
+  const visited = new Set();
+  const definitions = new Map();
+  const requiredBy = new Map();
+  function visit(scope, parent = null) {
+    if (parent) {
+      const parents = requiredBy.get(scope) ?? new Set();
+      parents.add(parent);
+      requiredBy.set(scope, parents);
+    }
+    if (visited.has(scope)) return;
+    if (visiting.has(scope)) throw new Error(`Validation scope prerequisite cycle at ${scope}`);
+    const definition = resolveScopeDefinition(scope);
+    if (!definition) throw new Error(`No executor registered for validation scope ${scope}`);
+    definitions.set(scope, definition);
+    visiting.add(scope);
+    for (const prerequisite of definition.requires) visit(prerequisite, scope);
+    visiting.delete(scope);
+    visited.add(scope);
+    ordered.push(scope);
+  }
+  for (const scope of selectedScopes) visit(scope);
+  return ordered.map((scope) => ({ scope, selected: selected.has(scope), requiredBy: [...(requiredBy.get(scope) ?? [])].sort(), command: definitions.get(scope).command }));
+}
