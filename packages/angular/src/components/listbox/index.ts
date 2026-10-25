@@ -120,5 +120,5 @@ export class VfListboxOptionDirective {
   readonly disabled = input(false);
   constructor(readonly root: VfListboxRootDirective, private readonly element: ElementRef<HTMLElement>) {}
   selectFromPointer(event: MouseEvent) { if (!this.disabled() && !event.defaultPrevented) { this.element.nativeElement.focus(); this.root.select(this.value()); } }
-  selectFromKeyboard(event: KeyboardEvent) { if (!this.disabled() && !event.defaultPrevented) { event.preventDefault(); this.root.select(this.value()); } }
+  selectFromKeyboard(event: Event) { if (!this.disabled() && !event.defaultPrevented) { event.preventDefault(); this.root.select(this.value()); } }
 }
