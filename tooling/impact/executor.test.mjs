@@ -95,9 +95,9 @@ test('executor preserves partial timing evidence when a scope fails', () => {
       {
         output,
         now: () => clock,
-        runCommand: (command, args) => {
+        runCommand: (_command, args) => {
           clock += 10;
-          if (command === 'npm' && args.includes('build:core')) {
+          if (args.includes('build:core')) {
             const error = new Error('build failed');
             error.status = 7;
             throw error;
