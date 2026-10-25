@@ -9,10 +9,16 @@ async function expectNoRuntimeErrors(page) {
   return () => expect(errors, errors.join('\n')).toEqual([]);
 }
 
-test('docs home exposes versioned accessible navigation and search', async ({ page }) => {
+test('docs home consumes the reusable AppShell and exposes versioned accessible navigation and search', async ({ page }) => {
   const verifyNoErrors = await expectNoRuntimeErrors(page);
   await page.goto('/next/');
   await expect(page).toHaveTitle(/Getting Started · VyrnForge/);
+  await expect(page.locator('vf-app-shell')).toHaveCount(1);
+  await expect.poll(() => page.evaluate(() => customElements.get('vf-app-shell')?.name ?? '')).toBe('VfAppShellElement');
+  await expect(page.locator('vf-app-shell')).toHaveAttribute('data-vf-app-shell', '');
+  await expect(page.locator('vf-app-shell > [data-vf-app-shell-header]')).toHaveCount(1);
+  await expect(page.locator('vf-app-shell > [data-vf-app-shell-body]')).toHaveCount(1);
+  await expect(page.locator('vf-app-shell > [data-vf-app-shell-footer]')).toHaveCount(1);
   await expect(page.getByRole('heading', { level: 1, name: 'Getting Started' })).toBeVisible();
   await expect(page.getByRole('link', { name: 'Skip to content' })).toBeAttached();
   await expect(page.locator('[data-vf-docs-version]')).toContainText('next');
