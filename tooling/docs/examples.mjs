@@ -2,7 +2,7 @@ import { mkdir, readFile, readdir, writeFile } from 'node:fs/promises';
 import path from 'node:path';
 import { build } from 'esbuild';
 import { discoverProductUnits } from '../testing/discover-product-units.mjs';
-import { renderFrameworkMark, supportedFrameworks } from './framework-presentation.mjs';
+import { frameworkLabel, renderFrameworkMark, supportedFrameworks } from './framework-presentation.mjs';
 
 function safeName(value) { return value.replace(/[^a-z0-9]+/gi, '-').replace(/^-|-$/g, '').toLowerCase(); }
 function escapeHtml(value) { return String(value).replaceAll('&', '&amp;').replaceAll('<', '&lt;').replaceAll('"', '&quot;'); }
@@ -139,7 +139,7 @@ export async function buildDocumentationExamples({ root, channelRoot }) {
         await writeFile(previewPath, previewDocument({ rootMarkup, script: `../compiled/${compiledFilename}`, stylesHref, frameCssHref }));
       }
 
-      publicFrameworks[framework] = { label: config.label, language: config.language, source, preview: `assets/examples/previews/${previewFilename}`, runtime, imports: analysis.imports, bindings: analysis.bindings };
+      publicFrameworks[framework] = { label: frameworkLabel(framework), language: config.language, source, preview: `assets/examples/previews/${previewFilename}`, runtime, imports: analysis.imports, bindings: analysis.bindings };
     }
 
     examples.set(manifest.id, { id: manifest.id, component, title: manifest.title, description: manifest.description || '', defaultFramework: manifest.defaultFramework, frameworks: publicFrameworks, compiler: 'assets/examples/typescript.js', styles: 'assets/vyrnforge/styles.css', frameCss: 'assets/examples/frame.css' });
