@@ -11,11 +11,11 @@ test('framework build execution includes foundation prerequisites once', () => {
   assert.deepEqual(execution.map((item) => item.scope), ['lint-react', 'lint-core', 'build-core', 'lint-web', 'build-web', 'build-react']);
 });
 
-test('duplicate prerequisites execute once', () => {
+test('duplicate prerequisites execute once and retain all immediate prerequisite consumers', () => {
   const execution = expandScopes(['pack-react', 'pack-vue']);
   assert.equal(execution.filter((item) => item.scope === 'build-core').length, 1);
   assert.equal(execution.filter((item) => item.scope === 'build-web').length, 1);
-  assert.deepEqual(execution.find((item) => item.scope === 'build-core').requiredBy, ['build-react', 'build-vue']);
+  assert.deepEqual(execution.find((item) => item.scope === 'build-core').requiredBy, ['build-react', 'build-vue', 'build-web']);
 });
 
 test('representative bundle baselines build every implemented proof-component port once', () => {
