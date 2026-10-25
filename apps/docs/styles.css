@@ -31,7 +31,9 @@
   .vf-docs-version { color: var(--docs-muted); font-size: .875rem; }
   .vf-docs-tools { margin-inline-start: auto; display: flex; gap: .75rem; align-items: center; flex-wrap: wrap; }
   .vf-docs-tools label { display: inline-flex; gap: .4rem; align-items: center; }
-  .vf-docs-tools select, .vf-docs-tools input { min-height: 2.25rem; border: 1px solid var(--docs-border); background: var(--docs-bg); color: var(--docs-fg); border-radius: var(--vf-control-radius); padding-inline: .6rem; }
+  .vf-docs-tools input { min-height: 2.25rem; border: 1px solid var(--docs-border); background: var(--docs-bg); color: var(--docs-fg); border-radius: var(--vf-control-radius); padding-inline: .6rem; }
+  .vf-docs-framework-picker { display: inline-flex; gap: .25rem; align-items: center; flex-wrap: wrap; padding: .2rem; border: 1px solid var(--docs-border); border-radius: calc(var(--vf-control-radius) + .2rem); background: var(--docs-surface); }
+  .vf-docs-framework-picker [data-vf-framework-choice] { display: inline-flex; gap: .4rem; align-items: center; white-space: nowrap; }
   .vf-docs-shell { max-width: var(--docs-max); margin-inline: auto; display: grid; grid-template-columns: minmax(13rem, 17rem) minmax(0, 1fr); gap: 2.75rem; padding: 2rem 1rem 4rem; }
   .vf-docs-nav { position: sticky; inset-block-start: 6rem; align-self: start; max-height: calc(100vh - 7rem); overflow: auto; }
   .vf-docs-nav h2 { font-size: .75rem; text-transform: uppercase; letter-spacing: .08em; color: var(--docs-muted); margin-block: 1.25rem .4rem; }
@@ -41,6 +43,8 @@
   .vf-docs-nav a[aria-current="page"] { background: var(--docs-surface-strong); font-weight: 650; }
   main { min-width: 0; max-width: 58rem; }
   main h1 { font-size: clamp(2rem, 5vw, 3.25rem); line-height: 1.05; margin-block: 0 .75rem; letter-spacing: -.025em; }
+  .vf-docs-page-title { display: flex; gap: .75rem; align-items: center; }
+  .vf-docs-page-title .vf-framework-mark { inline-size: .9em; block-size: .9em; }
   main h2 { margin-block-start: 2.75rem; }
   main h3 { margin-block: 0 .35rem; }
   main p, main li { max-width: 72ch; }
@@ -60,12 +64,21 @@
     .vf-docs-shell { grid-template-columns: 1fr; gap: 1rem; }
     .vf-docs-nav { position: static; max-height: none; border-block-end: 1px solid var(--docs-border); padding-block-end: 1rem; }
     .vf-docs-tools { width: 100%; margin-inline-start: 0; }
+    .vf-docs-framework-picker { inline-size: 100%; overflow-x: auto; flex-wrap: nowrap; }
     .vf-docs-tools input { max-width: 100%; }
   }
 }
 
 @layer docs.components {
   :focus-visible { outline: 2px solid var(--docs-accent); outline-offset: 3px; }
+  .vf-framework-mark { display: inline-block; flex: 0 0 auto; inline-size: 1.05rem; block-size: 1.05rem; fill: currentcolor; vertical-align: -.125em; }
+  .vf-framework-mark[data-vf-framework-mark="native-web"] { color: #e34f26; }
+  .vf-framework-mark[data-vf-framework-mark="react"] { color: #149eca; }
+  .vf-framework-mark[data-vf-framework-mark="angular"] { color: #dd0031; }
+  .vf-framework-mark[data-vf-framework-mark="vue"] { color: #42b883; }
+  .vf-framework-mark[data-vf-framework-mark="elements"] { color: #29abe2; }
+  [data-vf-side-nav-link] > .vf-framework-mark { inline-size: 1rem; block-size: 1rem; }
+  [data-vf-example-framework] { display: inline-flex; gap: .4rem; align-items: center; }
   .vf-example { margin-block: 1.5rem 2.5rem; border: 1px solid var(--docs-border); border-radius: .75rem; overflow: clip; background: var(--docs-bg); }
   .vf-example__header { display: flex; gap: 1rem; align-items: flex-start; justify-content: space-between; padding: 1rem 1rem .9rem; border-block-end: 1px solid var(--docs-border); }
   .vf-example__header p { margin: 0; color: var(--docs-muted); font-size: .925rem; }
@@ -138,5 +151,8 @@
   }
   @media (max-width: 420px) { .vf-type-token-grid { grid-template-columns: 1fr; } }
   @media (prefers-reduced-motion: reduce) { *, *::before, *::after { scroll-behavior: auto !important; transition-duration: 0.001ms !important; animation-duration: 0.001ms !important; } }
-  @media (forced-colors: active) { .vf-docs-status, main pre, .vf-docs-tools select, .vf-docs-tools input, .vf-example, .vf-example__preview iframe, .vf-docs-card, .vf-type-hero, .vf-type-anatomy__item, .vf-type-scale, .vf-type-family, .vf-type-token { border-color: CanvasText; } }
+  @media (forced-colors: active) {
+    .vf-framework-mark { color: CanvasText; }
+    .vf-docs-status, main pre, .vf-docs-framework-picker, .vf-docs-tools input, .vf-example, .vf-example__preview iframe, .vf-docs-card, .vf-type-hero, .vf-type-anatomy__item, .vf-type-scale, .vf-type-family, .vf-type-token { border-color: CanvasText; }
+  }
 }

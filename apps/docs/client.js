@@ -1,17 +1,35 @@
 const root = document.documentElement;
 const body = document.body;
 const siteRoot = new URL(body.dataset.vfSiteRoot || './', window.location.href);
-const frameworkSelect = document.querySelector('[data-vf-framework-select]');
+const frameworkPicker = document.querySelector('[data-vf-framework-picker]');
 const frameworkRoutesNode = document.querySelector('#vf-framework-routes');
 const storageKey = 'vyrnforge.docs.framework';
 const exampleNodes = [...document.querySelectorAll('[data-vf-example-id]')];
 function exampleSupportsFramework(framework) { return exampleNodes.some((node) => [...node.querySelectorAll('[data-vf-example-framework]')].some((tab) => tab.dataset.vfExampleFramework === framework)); }
-if (frameworkSelect && frameworkRoutesNode) {
+function setFrameworkPickerState(framework) {
+  if (!frameworkPicker) return;
+  for (const choice of frameworkPicker.querySelectorAll('[data-vf-framework-choice]')) {
+    const selected = choice.dataset.vfFrameworkChoice === framework;
+    choice.setAttribute('aria-pressed', String(selected));
+    choice.dataset.vfVariant = selected ? 'secondary' : 'ghost';
+  }
+}
+if (frameworkPicker && frameworkRoutesNode) {
   const routes = JSON.parse(frameworkRoutesNode.textContent || '{}');
   const currentFramework = body.dataset.vfFramework || '';
   const storedFramework = window.localStorage.getItem(storageKey) || '';
-  frameworkSelect.value = currentFramework || storedFramework || '';
-  frameworkSelect.addEventListener('change', () => { const framework = frameworkSelect.value; if (!framework) return; window.localStorage.setItem(storageKey, framework); if (exampleSupportsFramework(framework)) return document.dispatchEvent(new CustomEvent('vfdocsframeworkchange', { detail: { framework } })); const target = routes[framework]; if (target) window.location.assign(new URL(target, siteRoot)); });
+  setFrameworkPickerState(currentFramework || storedFramework || '');
+  for (const choice of frameworkPicker.querySelectorAll('[data-vf-framework-choice]')) {
+    choice.addEventListener('click', () => {
+      const framework = choice.dataset.vfFrameworkChoice;
+      if (!framework) return;
+      window.localStorage.setItem(storageKey, framework);
+      setFrameworkPickerState(framework);
+      if (exampleSupportsFramework(framework)) return document.dispatchEvent(new CustomEvent('vfdocsframeworkchange', { detail: { framework } }));
+      const target = routes[framework];
+      if (target) window.location.assign(new URL(target, siteRoot));
+    });
+  }
 }
 const searchInput = document.querySelector('[data-vf-docs-search]');
 const searchResults = document.querySelector('[data-vf-docs-search-results]');
@@ -29,7 +47,7 @@ function nativeDocument({ id, source, stylesUrl, frameCssUrl }) { return `<!doct
 const exampleStates = new Map();
 for (const node of exampleNodes) {
   const data = JSON.parse(node.querySelector('[data-vf-example-data]').textContent || '{}'); const frame = node.querySelector('[data-vf-example-frame]'); const editor = node.querySelector('[data-vf-example-source]'); const language = node.querySelector('[data-vf-example-language]'); const status = node.querySelector('[data-vf-example-status]'); const runButton = node.querySelector('[data-vf-example-run]'); const resetButton = node.querySelector('[data-vf-example-reset]'); const tabs = [...node.querySelectorAll('[data-vf-example-framework]')]; let framework = window.localStorage.getItem(storageKey); if (!data.frameworks[framework]) framework = data.defaultFramework; const state = { data, frame, status }; exampleStates.set(data.id, state);
-  function setFramework(nextFramework) { const config = data.frameworks[nextFramework]; if (!config) return; framework = nextFramework; window.localStorage.setItem(storageKey, framework); if (frameworkSelect && [...frameworkSelect.options].some((option) => option.value === framework)) frameworkSelect.value = framework; for (const tab of tabs) { const selected = tab.dataset.vfExampleFramework === framework; tab.setAttribute('aria-selected', String(selected)); tab.dataset.vfVariant = selected ? 'secondary' : 'ghost'; tab.tabIndex = selected ? 0 : -1; } editor.value = config.source; language.textContent = config.language.toUpperCase(); frame.removeAttribute('srcdoc'); frame.src = new URL(config.preview, siteRoot); frame.title = `${data.title} ${config.label} preview`; status.textContent = `${config.label} example ready.`; }
+  function setFramework(nextFramework) { const config = data.frameworks[nextFramework]; if (!config) return; framework = nextFramework; window.localStorage.setItem(storageKey, framework); setFrameworkPickerState(framework); for (const tab of tabs) { const selected = tab.dataset.vfExampleFramework === framework; tab.setAttribute('aria-selected', String(selected)); tab.dataset.vfVariant = selected ? 'secondary' : 'ghost'; tab.tabIndex = selected ? 0 : -1; } editor.value = config.source; language.textContent = config.language.toUpperCase(); frame.removeAttribute('srcdoc'); frame.src = new URL(config.preview, siteRoot); frame.title = `${data.title} ${config.label} preview`; status.textContent = `${config.label} example ready.`; }
   for (const tab of tabs) tab.addEventListener('click', () => setFramework(tab.dataset.vfExampleFramework)); document.addEventListener('vfdocsframeworkchange', (event) => setFramework(event.detail.framework)); resetButton.addEventListener('click', () => setFramework(framework));
   runButton.addEventListener('click', async () => { const config = data.frameworks[framework]; runButton.disabled = true; status.textContent = 'Compiling example…'; try { const stylesUrl = new URL(data.styles, siteRoot).href; const frameCssUrl = new URL(data.frameCss, siteRoot).href; frame.removeAttribute('src'); if (framework === 'native-web') frame.srcdoc = nativeDocument({ id: data.id, source: editor.value, stylesUrl, frameCssUrl }); else { const ts = await loadCompiler(new URL(data.compiler, siteRoot).href); const code = transpile(editor.value, config, ts); frame.srcdoc = liveDocument({ id: data.id, framework, code, runtimeUrl: new URL(config.runtime, siteRoot).href, stylesUrl, frameCssUrl }); } status.textContent = 'Running example…'; } catch (error) { status.textContent = `Unable to run: ${error.message}`; } finally { runButton.disabled = false; } }); setFramework(framework);
 }
