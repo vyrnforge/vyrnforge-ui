@@ -1,6 +1,7 @@
 import { access, readFile } from 'node:fs/promises';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
+import { componentUsageGroups } from '../docs/component-usage-groups.mjs';
 import { documentationRegistry } from '../docs/registry.mjs';
 import { discoverProductUnits } from '../testing/discover-product-units.mjs';
 
@@ -40,9 +41,13 @@ for (const page of registry.pages) {
     'data-vf-framework-picker',
     'data-vf-framework-choice',
     'data-vf-framework-mark',
+    'data-vf-docs-component-subgroup',
     'data-vf-docs-search',
     'vyrnforge/styles.css'
   ]) if (!html.includes(required)) throw new Error(`${page.slug || '<home>'} missing required docs markup: ${required}`);
+  for (const group of componentUsageGroups) if (!html.includes(`<span>${group.title}</span>`)) throw new Error(`${page.slug || '<home>'} missing component usage group: ${group.title}`);
+  const componentGroupCount = [...html.matchAll(/data-vf-docs-component-subgroup/g)].length;
+  if (componentGroupCount !== componentUsageGroups.length) throw new Error(`${page.slug || '<home>'} renders ${componentGroupCount} component groups; expected ${componentUsageGroups.length}`);
   if (html.includes('data-vf-framework-select')) throw new Error(`${page.slug || '<home>'} still emits the superseded text-only framework select`);
   if (html.includes('<body data-vf-app-shell')) throw new Error(`${page.slug || '<home>'} still uses body as an AppShell lookalike instead of consuming vf-app-shell`);
   if (!html.includes('aria-current="page"')) throw new Error(`${page.slug || '<home>'} missing current-page navigation semantics`);
