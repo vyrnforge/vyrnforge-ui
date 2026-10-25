@@ -36,11 +36,14 @@ for (const page of registry.pages) {
     'data-vf-app-shell-footer',
     'defineAppShellElements',
     'vyrnforge/elements/app-shell.js',
-    '<h1>',
-    'data-vf-framework-select',
+    '<h1',
+    'data-vf-framework-picker',
+    'data-vf-framework-choice',
+    'data-vf-framework-mark',
     'data-vf-docs-search',
     'vyrnforge/styles.css'
   ]) if (!html.includes(required)) throw new Error(`${page.slug || '<home>'} missing required docs markup: ${required}`);
+  if (html.includes('data-vf-framework-select')) throw new Error(`${page.slug || '<home>'} still emits the superseded text-only framework select`);
   if (html.includes('<body data-vf-app-shell')) throw new Error(`${page.slug || '<home>'} still uses body as an AppShell lookalike instead of consuming vf-app-shell`);
   if (!html.includes('aria-current="page"')) throw new Error(`${page.slug || '<home>'} missing current-page navigation semantics`);
   if (html.includes('class="vf-docs-shell"') || html.includes('class="vf-docs-nav"')) throw new Error(`${page.slug || '<home>'} still emits the superseded docs-only shell/navigation classes`);
