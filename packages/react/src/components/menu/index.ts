@@ -56,7 +56,16 @@ export const MenuContent = forwardRef<HTMLDivElement, MenuContentProps>(function
   const menu = useMenu();
   const query = useRef('');
   const timer = useRef<ReturnType<typeof setTimeout> | null>(null);
-  const portalTarget = useFloatingSurface({ open: menu.open, anchorRef: menu.anchorRef, surfaceRef: menu.surfaceRef, placement: menu.placement, onDismiss: () => menu.setOpen(false) });
+  const portalTarget = useFloatingSurface({
+    open: menu.open,
+    anchorRef: menu.anchorRef,
+    surfaceRef: menu.surfaceRef,
+    placement: menu.placement,
+    onDismiss(reason) {
+      if (reason === 'escape') menu.anchorRef.current?.focus();
+      menu.setOpen(false);
+    },
+  });
   if (!menu.open) return null;
   const content = createElement('div', {
     ...props,
