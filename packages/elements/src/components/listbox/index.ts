@@ -6,7 +6,7 @@ const HTMLElementBase: typeof HTMLElement = globalThis.HTMLElement ?? class {} a
 const optionSelector = '[data-vf-listbox-option]';
 
 function optionsFor(root: HTMLElement): HTMLElement[] { return Array.from(root.querySelectorAll<HTMLElement>(optionSelector)); }
-function disabled(option: HTMLElement): boolean { return option.getAttribute('aria-disabled') === 'true' || option.hasAttribute('disabled'); }
+function disabled(option: HTMLElement): boolean { return option.getAttribute('aria-disabled') === 'true'; }
 function optionFromTarget(root: HTMLElement, target: EventTarget | null): HTMLElement | null { const element = target instanceof HTMLElement ? target.closest<HTMLElement>(optionSelector) : null; return element && root.contains(element) ? element : null; }
 function optionValue(option: HTMLElement): string { return option.getAttribute('value') ?? option.dataset.value ?? option.textContent?.trim() ?? ''; }
 function syncTabStops(root: HTMLElement, preferred?: HTMLElement | null) {
@@ -32,6 +32,7 @@ export class VfListboxElement extends HTMLElementBase {
   connectedCallback() {
     this.setAttribute('role', 'listbox');
     this.setAttribute('data-vf-listbox-root', '');
+    this.removeAttribute('tabindex');
     this.syncSelectionMode();
     this.syncOptions();
     this.addEventListener('click', this.onClick);
@@ -39,7 +40,7 @@ export class VfListboxElement extends HTMLElementBase {
     this.addEventListener('focusin', this.onFocusIn);
     if (typeof MutationObserver !== 'undefined') {
       this.observer = new MutationObserver(() => this.syncOptions());
-      this.observer.observe(this, { childList: true, subtree: true, attributes: true, attributeFilter: ['aria-disabled', 'aria-selected', 'disabled', 'data-vf-listbox-option'] });
+      this.observer.observe(this, { childList: true, subtree: true, attributes: true, attributeFilter: ['aria-disabled', 'aria-selected', 'data-vf-listbox-option'] });
     }
   }
 
@@ -52,15 +53,23 @@ export class VfListboxElement extends HTMLElementBase {
     if (this.timer) clearTimeout(this.timer);
   }
 
-  attributeChangedCallback(name: string) { if (name === 'selection-mode') this.syncSelectionMode(); }
+  attributeChangedCallback(name: string) {
+    if (name !== 'selection-mode') return;
+    this.syncSelectionMode();
+    if (this.isConnected) this.syncOptions();
+  }
 
   private get multiple() { return this.getAttribute('selection-mode') === 'multiple'; }
   private syncSelectionMode() { if (this.multiple) this.setAttribute('aria-multiselectable', 'true'); else this.removeAttribute('aria-multiselectable'); }
   private syncOptions(preferred?: HTMLElement | null) {
+    let selectedSeen = false;
     for (const option of optionsFor(this)) {
       option.setAttribute('role', 'option');
       if (!option.hasAttribute('aria-selected')) option.setAttribute('aria-selected', 'false');
-      if (disabled(option)) option.setAttribute('aria-disabled', 'true');
+      if (!this.multiple && option.getAttribute('aria-selected') === 'true') {
+        if (selectedSeen) option.setAttribute('aria-selected', 'false');
+        else selectedSeen = true;
+      }
     }
     syncTabStops(this, preferred);
   }
@@ -98,7 +107,10 @@ export class VfListboxElement extends HTMLElementBase {
       return;
     }
     let intent: 'next' | 'previous' | 'first' | 'last' | null = null;
-    if (event.key === 'ArrowDown') intent = 'next'; else if (event.key === 'ArrowUp') intent = 'previous'; else if (event.key === 'Home') intent = 'first'; else if (event.key === 'End') intent = 'last';
+    if (event.key === 'ArrowDown') intent = 'next';
+    else if (event.key === 'ArrowUp') intent = 'previous';
+    else if (event.key === 'Home') intent = 'first';
+    else if (event.key === 'End') intent = 'last';
     let next: number | null = null;
     if (intent) next = resolveEnabledIndex(options.map((option) => ({ disabled: disabled(option) })), current, intent);
     else if (event.key.length === 1 && !event.ctrlKey && !event.metaKey && !event.altKey) {
