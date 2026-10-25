@@ -30,6 +30,9 @@ test('main batches exhaustive type and SSR evidence while retaining browser cove
   for (const scope of ['change-fragments', 'changes-preview', 'pack-react', 'consumer-all', 'bundle-baselines', 'browser-foundation-visual', 'component-types-all', 'component-ssr-all', 'component:button:web:browser', 'component:button:react:browser']) assert.ok(main.validationScopes.includes(scope), scope);
   for (const replaced of ['component:button:conformance:types', 'component:button:react:types', 'component:button:react:ssr', 'component:button:angular:ssr', 'component:button:vue:ssr']) assert.equal(main.validationScopes.includes(replaced), false, replaced);
   assert.equal(main.validationScopes.includes('component:button:web:browser-cross'), false);
+  const execution = createExecutionPlan(main);
+  assert.deepEqual(execution.find((entry) => entry.scope === 'component-types-all')?.command, ['node', 'tooling/testing/check-component-types-batch.mjs']);
+  assert.deepEqual(execution.find((entry) => entry.scope === 'component-ssr-all')?.command, ['node', 'tooling/testing/run-component-ssr-batch.mjs']);
 });
 
 test('scheduled and release add cross-browser evidence, release adds readiness', () => {
