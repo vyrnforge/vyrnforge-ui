@@ -58,15 +58,17 @@
 
   :where([data-vf-side-nav-link][aria-current="page"], [data-vf-side-nav-link][data-vf-current="true"]) {
     border-color: color-mix(in srgb, var(--vf-color-focus-ring) 30%, var(--vf-color-border));
+    border-inline-start-width: .1875rem;
+    border-inline-start-color: var(--vf-color-focus-ring);
     background: var(--vf-color-accent-subtle);
     color: var(--vf-color-text);
     font-weight: var(--vf-font-weight-semibold);
-    box-shadow: inset .1875rem 0 0 var(--vf-color-focus-ring);
   }
 
   @media (forced-colors: active) {
     :where([data-vf-side-nav-link][aria-current="page"], [data-vf-side-nav-link][data-vf-current="true"]) {
       border-color: CanvasText;
+      border-inline-start-width: .1875rem;
       outline: 1px solid CanvasText;
     }
   }
