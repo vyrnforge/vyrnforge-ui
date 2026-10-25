@@ -1,4 +1,4 @@
-import { Directive, ElementRef, OnDestroy, afterNextRender, computed, inject, input, output, signal } from '@angular/core';
+import { Directive, ElementRef, afterNextRender, computed, inject, input, output, signal, type OnDestroy } from '@angular/core';
 import { resolveEnabledIndex } from '@vyrnforge/core/collection-navigation';
 import { rovingTabIndex } from '@vyrnforge/core/composite-focus';
 import { toggleSelection } from '@vyrnforge/core/selection-operations';
