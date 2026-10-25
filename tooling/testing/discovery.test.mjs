@@ -18,6 +18,8 @@ test('current Button is discovered from package subpaths and component ownership
   assert.equal(button.documentationSource, 'components/button/docs/index.html');
   assert.match(button.exampleManifests[0], /^components\/button\/examples\//);
   assert.equal(button.browser.fixture, 'components/button/test/browser/fixtures.mjs');
+  assert.equal(button.accessibilityPath, 'components/button/accessibility.json');
+  assert.ok(button.browser.paths.includes(button.accessibilityPath));
   assert.deepEqual(productPreparationProblems(), []);
 });
 
@@ -58,6 +60,8 @@ test('a newly exposed component automatically requires its owned evidence', () =
   const tabs = discoverProductUnits(root).components.find((entry) => entry.component === 'tabs');
   assert.ok(tabs);
   assert.deepEqual(Object.keys(tabs.ports).sort(), ['react', 'web']);
+  assert.equal(tabs.accessibilityPath, 'components/tabs/accessibility.json');
+  assert.ok(tabs.browser.paths.includes(tabs.accessibilityPath));
   const problems = productPreparationProblems(root);
   assert.ok(problems.some((problem) => problem.includes('packages/react/test/components/tabs/api.types.ts')));
   assert.ok(problems.some((problem) => problem.includes('packages/react/test/components/tabs/ssr.test.mjs')));
