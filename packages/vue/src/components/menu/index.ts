@@ -111,7 +111,14 @@ export const MenuItem = defineComponent({
       disabled: undefined,
       'aria-disabled': props.disabled || undefined,
       'data-vf-menu-item': '',
-      onClick: (event: MouseEvent) => { invoke(attrs.onClick, event); if (event.defaultPrevented) return; if (props.disabled) { event.preventDefault(); return; } emit('select'); menu.setOpen(false); menu.anchor.value?.focus(); },
+      onClick: (event: MouseEvent) => {
+        if (props.disabled) { event.preventDefault(); return; }
+        invoke(attrs.onClick, event);
+        if (event.defaultPrevented) return;
+        emit('select');
+        menu.setOpen(false);
+        menu.anchor.value?.focus();
+      },
     }, slots.default?.());
   },
 });
