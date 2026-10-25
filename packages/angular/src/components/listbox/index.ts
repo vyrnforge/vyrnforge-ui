@@ -32,6 +32,7 @@ function syncTabStops(root: HTMLElement, preferred?: HTMLElement | null) {
   host: {
     role: 'listbox',
     'data-vf-listbox-root': '',
+    '[attr.tabindex]': 'null',
     '[attr.aria-multiselectable]': 'selectionMode()==="multiple"?true:null',
     '(focusin)': 'onFocusIn($event)',
     '(keydown)': 'onKeydown($event)',
