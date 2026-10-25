@@ -1,5 +1,6 @@
 import { readFileSync } from 'node:fs';
 import path from 'node:path';
+import { componentUsageGroup } from './component-usage-groups.mjs';
 import { discoverProductUnits } from '../testing/discover-product-units.mjs';
 
 function titleCase(id) {
@@ -10,14 +11,19 @@ export function documentationRegistry(root) {
   const base = JSON.parse(readFileSync(path.join(root, 'documentation/site/registry.json'), 'utf8'));
   const manualComponents = (base.pages ?? []).filter((page) => /^components\//.test(page.slug ?? ''));
   if (manualComponents.length) throw new Error('Component documentation routes are discovered from components/<id>/docs; remove manual component routes from documentation/site/registry.json');
-  const componentPages = discoverProductUnits(root).components.map((component) => ({
-    slug: `components/${component.component}`,
-    title: titleCase(component.component),
-    group: 'Components',
-    kind: 'component',
-    component: component.component,
-    source: component.documentationSource
-  }));
+  const componentPages = discoverProductUnits(root).components.map((component) => {
+    const usageGroup = componentUsageGroup(component.component);
+    return {
+      slug: `components/${component.component}`,
+      title: titleCase(component.component),
+      group: 'Components',
+      subgroup: usageGroup.title,
+      subgroupId: usageGroup.id,
+      kind: 'component',
+      component: component.component,
+      source: component.documentationSource
+    };
+  });
   const [home, ...rest] = base.pages ?? [];
   return { ...base, pages: [...(home ? [home] : []), ...componentPages, ...rest] };
 }
