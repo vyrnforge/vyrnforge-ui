@@ -113,18 +113,36 @@ function dynamicTierScopes(mode) {
   }
   return scopes;
 }
+function batchBroadComponentEvidence(selectedScopes) {
+  let hasTypes = false;
+  let hasSsr = false;
+  for (const scope of [...selectedScopes]) {
+    if (/^component:[^:]+:[^:]+:types$/.test(scope)) {
+      selectedScopes.delete(scope);
+      hasTypes = true;
+    } else if (/^component:[^:]+:[^:]+:ssr$/.test(scope)) {
+      selectedScopes.delete(scope);
+      hasSsr = true;
+    }
+  }
+  if (hasTypes) selectedScopes.add('component-types-all');
+  if (hasSsr) selectedScopes.add('component-ssr-all');
+}
 export function allKnownScopes() { return [...new Set([...impact.scopeOrder, 'component-types-all', 'component-ssr-all', ...dynamicPrScopes(), ...dynamicTierScopes('release'), ...discovery.components.map((component) => componentScope(component.component, 'docs'))])]; }
 function orderedScopes(scopes) { const order = new Map(allKnownScopes().map((scope, index) => [scope, index])); return [...scopes].sort((a, b) => (order.get(a) ?? Number.MAX_SAFE_INTEGER) - (order.get(b) ?? Number.MAX_SAFE_INTEGER) || a.localeCompare(b)); }
-function scopeReasonsFor(affectedNodes, selectedScopes) {
+function scopeReasonsFor(affectedNodes, selectedScopes, broad = false) {
   const reasons = new Map();
   for (const scope of impact.globalSentinels) reasons.set(scope, ['global sentinel']);
   for (const node of affectedNodes) {
     for (const scope of targets[node]?.evidence ?? []) {
+      if (!selectedScopes.has(scope)) continue;
       const values = reasons.get(scope) ?? [];
       values.push(`evidence for ${node}`);
       reasons.set(scope, values);
     }
   }
+  if (broad && selectedScopes.has('component-types-all')) reasons.set('component-types-all', ['batched exhaustive type evidence for broadened PR']);
+  if (broad && selectedScopes.has('component-ssr-all')) reasons.set('component-ssr-all', ['batched exhaustive SSR evidence for broadened PR']);
   return Object.fromEntries(orderedScopes(selectedScopes).map((scope) => [scope, reasons.get(scope) ?? ['selected by tier']]));
 }
 export function createPlan(paths) {
@@ -140,8 +158,9 @@ export function createPlan(paths) {
   if (directNodes.has('legacy')) affectedNodes.add('legacy');
   const selectedScopes = new Set(impact.globalSentinels);
   for (const node of affectedNodes) for (const scope of targets[node]?.evidence ?? []) selectedScopes.add(scope);
+  if (broad) batchBroadComponentEvidence(selectedScopes);
   const ordered = orderedScopes(selectedScopes);
-  return { mode: 'pr', changedPaths: [...paths].sort(), directNodes: [...directNodes].sort(), affectedNodes: [...affectedNodes].sort(), validationScopes: ordered, scopeReasons: scopeReasonsFor(affectedNodes, selectedScopes), skippedValidationScopes: allKnownScopes().filter((scope) => !selectedScopes.has(scope)), broadened: broad };
+  return { mode: 'pr', changedPaths: [...paths].sort(), directNodes: [...directNodes].sort(), affectedNodes: [...affectedNodes].sort(), validationScopes: ordered, scopeReasons: scopeReasonsFor(affectedNodes, selectedScopes, broad), skippedValidationScopes: allKnownScopes().filter((scope) => !selectedScopes.has(scope)), broadened: broad };
 }
 export function createTierPlan(mode) {
   const tierScopes = impact.tiers?.[mode];
