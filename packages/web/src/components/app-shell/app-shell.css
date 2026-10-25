@@ -2,12 +2,13 @@
 
 @layer vyrnforge.components {
   :where([data-vf-app-shell], vf-app-shell) {
-    --vf-app-shell-max-inline-size: 96rem;
+    --vf-app-shell-max-inline-size: 100%;
     --vf-app-shell-navigation-inline-size: 16rem;
     --vf-app-shell-gap: var(--vf-space-xl);
     --vf-app-shell-gutter: var(--vf-space-md);
     --vf-app-shell-block-padding: var(--vf-space-xl);
     min-block-size: 100dvh;
+    inline-size: 100%;
     display: grid;
     grid-template-rows: auto minmax(0, 1fr) auto;
     background: var(--vf-color-surface);
