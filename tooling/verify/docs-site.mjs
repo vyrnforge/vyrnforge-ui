@@ -26,7 +26,7 @@ for (const page of registry.pages) {
     '<html lang="en"',
     'name="viewport"',
     'class="vf-skip-link"',
-    'data-vf-app-shell',
+    '<vf-app-shell data-vf-app-shell>',
     'data-vf-app-shell-header',
     'data-vf-app-shell-body',
     'data-vf-app-shell-navigation',
@@ -34,11 +34,14 @@ for (const page of registry.pages) {
     'data-vf-app-shell-main',
     'id="main"',
     'data-vf-app-shell-footer',
+    'defineAppShellElements',
+    'vyrnforge/elements/app-shell.js',
     '<h1>',
     'data-vf-framework-select',
     'data-vf-docs-search',
     'vyrnforge/styles.css'
   ]) if (!html.includes(required)) throw new Error(`${page.slug || '<home>'} missing required docs markup: ${required}`);
+  if (html.includes('<body data-vf-app-shell')) throw new Error(`${page.slug || '<home>'} still uses body as an AppShell lookalike instead of consuming vf-app-shell`);
   if (!html.includes('aria-current="page"')) throw new Error(`${page.slug || '<home>'} missing current-page navigation semantics`);
   if (html.includes('class="vf-docs-shell"') || html.includes('class="vf-docs-nav"')) throw new Error(`${page.slug || '<home>'} still emits the superseded docs-only shell/navigation classes`);
   if (page.kind === 'framework' && !html.includes('data-vf-support-status=')) throw new Error(`${page.slug} must explicitly declare implementation/support status`);
@@ -50,6 +53,7 @@ for (const page of registry.pages) {
 }
 await access(path.join(channelRoot, 'assets/vyrnforge/styles.css'));
 await access(path.join(channelRoot, 'assets/vyrnforge/styles/tokens.css'));
+await access(path.join(channelRoot, 'assets/vyrnforge/elements/app-shell.js'));
 await access(path.join(channelRoot, 'assets/examples/typescript.js'));
 await access(path.join(channelRoot, 'assets/examples/frame.css'));
 const expectedExampleIds = [];
