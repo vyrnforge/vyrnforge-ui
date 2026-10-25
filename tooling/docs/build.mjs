@@ -41,7 +41,11 @@ function renderComponentNavigation(currentPage, pages) {
     items.push(item);
     grouped.set(item.subgroup, items);
   }
-  return [...grouped.entries()].filter(([, items]) => items.length).map(([subgroup, items]) => `<div class="vf-docs-component-subgroup" data-vf-docs-component-subgroup><h3 class="vf-docs-component-subgroup__label">${escapeHtml(subgroup)}</h3><ul data-vf-side-nav-list>${items.sort((a, b) => a.title.localeCompare(b.title)).map((item) => renderNavItem(currentPage, item)).join('')}</ul></div>`).join('');
+  return [...grouped.entries()].filter(([, items]) => items.length).map(([subgroup, items]) => {
+    const sortedItems = items.sort((a, b) => a.title.localeCompare(b.title));
+    const containsCurrentPage = sortedItems.some((item) => item.slug === currentPage.slug);
+    return `<details class="vf-docs-component-subgroup" data-vf-docs-component-subgroup${containsCurrentPage ? ' data-vf-current-group="true" open' : ''}><summary class="vf-docs-component-subgroup__label"><span>${escapeHtml(subgroup)}</span><span class="vf-docs-component-subgroup__count" aria-hidden="true">${sortedItems.length}</span></summary><ul data-vf-side-nav-list>${sortedItems.map((item) => renderNavItem(currentPage, item)).join('')}</ul></details>`;
+  }).join('');
 }
 function renderNavigation(currentPage) {
   return [...groups.entries()].map(([group, pages]) => {
