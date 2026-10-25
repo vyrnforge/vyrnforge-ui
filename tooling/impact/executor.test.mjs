@@ -52,11 +52,12 @@ test('browser setup is deduplicated to the widest selected browser matrix', () =
   assert.deepEqual(browserProjectsForExecution(expandScopes(['pack-core'])), []);
 });
 
-test('managed component browser config preserves the original config while reusing its web server', () => {
+test('managed component browser config preserves the original config while leaving server ownership to the executor', () => {
   const source = managedPlaywrightConfigSource('playwright.config.mjs');
   assert.match(source, /import config from "\.\/playwright\.config\.mjs"/);
-  assert.match(source, /reuseExistingServer: true/);
-  assert.match(source, /export default \{ \.\.\.config, webServer:/);
+  assert.match(source, /webServer: undefined/);
+  assert.doesNotMatch(source, /reuseExistingServer:\s*true/);
+  assert.match(source, /export default \{ \.\.\.config, webServer: undefined \}/);
 });
 
 test('change rendering depends on fragment validation', () => {

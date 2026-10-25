@@ -2,5 +2,5 @@ export const componentBrowserServerManagedEnv = 'VF_COMPONENT_BROWSER_SERVER_MAN
 
 export function managedPlaywrightConfigSource(configFileName) {
   const importSpecifier = `./${configFileName.replaceAll('\\', '/')}`;
-  return `import config from ${JSON.stringify(importSpecifier)};\n\nfunction reuseExistingWebServer(webServer) {\n  if (Array.isArray(webServer)) return webServer.map((server) => ({ ...server, reuseExistingServer: true }));\n  if (!webServer) return webServer;\n  return { ...webServer, reuseExistingServer: true };\n}\n\nexport default { ...config, webServer: reuseExistingWebServer(config.webServer) };\n`;
+  return `import config from ${JSON.stringify(importSpecifier)};\n\n// The impact executor owns the shared component browser server when this managed config is used.\n// Remove Playwright's per-config webServer entirely rather than relying on reuseExistingServer:\n// Playwright may still attempt to launch the configured command if its readiness probe does not\n// match the already-running shared server, which causes an EADDRINUSE race on the shared port.\nexport default { ...config, webServer: undefined };\n`;
 }
