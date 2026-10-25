@@ -89,7 +89,7 @@ function reverseClosure(initialNodes) {
   }
   return selected;
 }
-function dynamicTierScopes(mode) {
+function dynamicPrScopes() {
   const scopes = discovery.ownedUnits.map((unit) => `${unit.node}:test`);
   for (const component of discovery.components) {
     if (component.conformanceTypes) scopes.push(componentScope(component.component, 'conformance:types'));
@@ -98,22 +98,51 @@ function dynamicTierScopes(mode) {
       if (config.ssr) scopes.push(componentScope(component.component, `${port}:ssr`));
       if (config.browser) scopes.push(componentScope(component.component, `${port}:browser`));
     }
+  }
+  return scopes;
+}
+function dynamicTierScopes(mode) {
+  const scopes = [
+    ...discovery.ownedUnits.map((unit) => `${unit.node}:test`),
+    'component-types-all',
+    'component-ssr-all',
+  ];
+  for (const component of discovery.components) {
+    for (const [port, config] of Object.entries(component.ports)) if (config.browser) scopes.push(componentScope(component.component, `${port}:browser`));
     if ((mode === 'scheduled' || mode === 'release') && component.ports.web?.browser) scopes.push(componentScope(component.component, 'web:browser-cross'));
   }
   return scopes;
 }
-export function allKnownScopes() { return [...new Set([...impact.scopeOrder, ...dynamicTierScopes('release'), ...discovery.components.map((component) => componentScope(component.component, 'docs'))])]; }
+function batchBroadComponentEvidence(selectedScopes) {
+  let hasTypes = false;
+  let hasSsr = false;
+  for (const scope of [...selectedScopes]) {
+    if (/^component:[^:]+:[^:]+:types$/.test(scope)) {
+      selectedScopes.delete(scope);
+      hasTypes = true;
+    } else if (/^component:[^:]+:[^:]+:ssr$/.test(scope)) {
+      selectedScopes.delete(scope);
+      hasSsr = true;
+    }
+  }
+  if (hasTypes) selectedScopes.add('component-types-all');
+  if (hasSsr) selectedScopes.add('component-ssr-all');
+}
+export function allKnownScopes() { return [...new Set([...impact.scopeOrder, 'component-types-all', 'component-ssr-all', ...dynamicPrScopes(), ...dynamicTierScopes('release'), ...discovery.components.map((component) => componentScope(component.component, 'docs'))])]; }
 function orderedScopes(scopes) { const order = new Map(allKnownScopes().map((scope, index) => [scope, index])); return [...scopes].sort((a, b) => (order.get(a) ?? Number.MAX_SAFE_INTEGER) - (order.get(b) ?? Number.MAX_SAFE_INTEGER) || a.localeCompare(b)); }
-function scopeReasonsFor(affectedNodes, selectedScopes) {
+function scopeReasonsFor(affectedNodes, selectedScopes, broad = false) {
   const reasons = new Map();
   for (const scope of impact.globalSentinels) reasons.set(scope, ['global sentinel']);
   for (const node of affectedNodes) {
     for (const scope of targets[node]?.evidence ?? []) {
+      if (!selectedScopes.has(scope)) continue;
       const values = reasons.get(scope) ?? [];
       values.push(`evidence for ${node}`);
       reasons.set(scope, values);
     }
   }
+  if (broad && selectedScopes.has('component-types-all')) reasons.set('component-types-all', ['batched exhaustive type evidence for broadened PR']);
+  if (broad && selectedScopes.has('component-ssr-all')) reasons.set('component-ssr-all', ['batched exhaustive SSR evidence for broadened PR']);
   return Object.fromEntries(orderedScopes(selectedScopes).map((scope) => [scope, reasons.get(scope) ?? ['selected by tier']]));
 }
 export function createPlan(paths) {
@@ -129,8 +158,9 @@ export function createPlan(paths) {
   if (directNodes.has('legacy')) affectedNodes.add('legacy');
   const selectedScopes = new Set(impact.globalSentinels);
   for (const node of affectedNodes) for (const scope of targets[node]?.evidence ?? []) selectedScopes.add(scope);
+  if (broad) batchBroadComponentEvidence(selectedScopes);
   const ordered = orderedScopes(selectedScopes);
-  return { mode: 'pr', changedPaths: [...paths].sort(), directNodes: [...directNodes].sort(), affectedNodes: [...affectedNodes].sort(), validationScopes: ordered, scopeReasons: scopeReasonsFor(affectedNodes, selectedScopes), skippedValidationScopes: allKnownScopes().filter((scope) => !selectedScopes.has(scope)), broadened: broad };
+  return { mode: 'pr', changedPaths: [...paths].sort(), directNodes: [...directNodes].sort(), affectedNodes: [...affectedNodes].sort(), validationScopes: ordered, scopeReasons: scopeReasonsFor(affectedNodes, selectedScopes, broad), skippedValidationScopes: allKnownScopes().filter((scope) => !selectedScopes.has(scope)), broadened: broad };
 }
 export function createTierPlan(mode) {
   const tierScopes = impact.tiers?.[mode];
