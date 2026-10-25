@@ -94,7 +94,7 @@ export const MenuContent = forwardRef<HTMLDivElement, MenuContentProps>(function
 });
 
 export interface MenuItemProps extends Omit<ComponentPropsWithoutRef<'button'>, 'onSelect'> { onSelect?(): void; }
-export const MenuItem = forwardRef<HTMLButtonElement, MenuItemProps>(function MenuItem({ disabled, onClick, onSelect, tabIndex: _tabIndex, ...props }, ref) {
+export const MenuItem = forwardRef<HTMLButtonElement, MenuItemProps>(function MenuItem({ disabled, onClick, onSelect, ...props }, ref) {
   const menu = useMenu();
   return createElement('button', {
     ...props,
@@ -105,9 +105,9 @@ export const MenuItem = forwardRef<HTMLButtonElement, MenuItemProps>(function Me
     'aria-disabled': disabled || undefined,
     'data-vf-menu-item': '',
     onClick(event) {
+      if (disabled) { event.preventDefault(); return; }
       onClick?.(event);
-      if (!event.defaultPrevented && !disabled) { onSelect?.(); menu.setOpen(false); menu.anchorRef.current?.focus(); }
-      else if (disabled) event.preventDefault();
+      if (!event.defaultPrevented) { onSelect?.(); menu.setOpen(false); menu.anchorRef.current?.focus(); }
     },
   });
 });
