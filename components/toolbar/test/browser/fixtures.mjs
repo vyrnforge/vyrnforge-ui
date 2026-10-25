@@ -17,6 +17,11 @@ const ids = {
   vertical: { root: 'vertical-toolbar', one: 'vertical-one', disabled: 'vertical-disabled', three: 'vertical-three' },
 };
 
+if (port === 'web') {
+  const markup = `<button id="before">Before</button><div id="toolbar" role="toolbar" aria-label="Formatting" aria-orientation="horizontal" data-vf-toolbar-root data-vf-orientation="horizontal" dir="rtl"><button id="bold" data-vf-toolbar-item>Bold</button><button id="disabled" data-vf-toolbar-item disabled>Disabled</button><button id="italic" data-vf-toolbar-item>Italic</button><span data-vf-toolbar-separator role="separator"></span><a id="link" data-vf-toolbar-item href="#target">Help</a></div><button id="after">After</button><div id="vertical-toolbar" role="toolbar" aria-label="Vertical tools" aria-orientation="vertical" data-vf-toolbar-root data-vf-orientation="vertical"><button id="vertical-one" data-vf-toolbar-item>One</button><button id="vertical-disabled" data-vf-toolbar-item disabled>Disabled</button><button id="vertical-three" data-vf-toolbar-item>Three</button></div><div id="target">Target</div>`;
+  await writeFile(path.join(outDir, 'web.html'), page(markup));
+}
+
 if (port === 'react') {
   const { createElement, Fragment } = await import('react');
   const { renderToString } = await import('react-dom/server');
