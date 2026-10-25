@@ -70,6 +70,7 @@ export const ListboxRoot = forwardRef<HTMLDivElement, ListboxRootProps>(function
       else if (forwardedRef) forwardedRef.current = node;
     },
     role: 'listbox',
+    tabIndex: undefined,
     'aria-multiselectable': selectionMode === 'multiple' || undefined,
     'data-vf-listbox-root': '',
     onFocusCapture(event) {
