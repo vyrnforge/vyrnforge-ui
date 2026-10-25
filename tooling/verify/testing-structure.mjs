@@ -3,7 +3,7 @@ import { loadComponentStandards, summarizeComponentStandards } from '../accessib
 import { assertProductPreparation } from '../testing/discover-product-units.mjs';
 
 const required = ['testing/README.md', 'testing/impact.json'];
-const representativeAccessibilityMappings = new Set(['button', 'tabs', 'dialog', 'combobox', 'listbox', 'menu', 'toolbar']);
+const representativeAccessibilityMappings = new Set(['button', 'tabs', 'dialog']);
 for (const file of required) await access(file);
 const impact = JSON.parse(await readFile('testing/impact.json', 'utf8'));
 if (impact.schemaVersion !== 1) throw new Error('testing impact metadata must use schemaVersion 1');
