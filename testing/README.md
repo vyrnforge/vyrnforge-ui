@@ -14,7 +14,7 @@ Reusable package-owned units are discovered under `packages/<package>/src/capabi
 
 A specific owned path suppresses its aggregate package root during PR classification. Therefore a React Button implementation change selects the React/Button product unit and its transitive consumers, not every React component. Package-wide files such as `packages/react/src/index.ts`, package manifests, or package configuration select the aggregate React package and fan out to all dependent React product surfaces.
 
-Every selected component/package unit still receives the applicable package build, packed-package, and consumer-entrypoint evidence. Shared Web component changes fan out to all discovered framework ports that consume that Web component. Package-wide Core or Web changes retain broader reverse-dependency closure.
+A selected component or reusable owned unit receives the build prerequisites required by its chosen type, SSR, browser, or unit evidence. Packed-package and consumer-entrypoint verification is reserved for affected package/public surfaces, aggregate package changes, and the broader main, scheduled, and release tiers; implementation locality inside a package is not sufficient by itself. Shared Web component changes may fan out to discovered framework ports that consume that Web component, but each affected port receives only the validation evidence required by the affected contract or behavior. Package-wide Core or Web changes retain broader reverse-dependency closure.
 
 ## Evidence and omission detection
 
@@ -35,3 +35,5 @@ Fragments are unreleased evidence, not permanent component structure. Targeted P
 ## Safety model
 
 Unknown paths, testing/impact infrastructure, workflows, root package configuration, and other architecture-wide changes fail closed to broad validation. Main is broader than PR validation, scheduled validation adds expensive cross-browser evidence, and release validation is broadest. These tiers remain independent safety nets for discovery mistakes.
+
+PR reports are inspectable evidence. They record why validation scopes were selected, which prerequisite scopes were pulled in transitively, browser setup cost, and per-scope outcomes and durations. Partial execution evidence is preserved when a selected scope fails so CI cost and failure location remain diagnosable.
