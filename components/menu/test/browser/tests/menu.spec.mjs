@@ -51,6 +51,7 @@ test.describe('enhanced menu interaction', () => {
     await expect(menu).toBeVisible();
     await expect(trigger).toHaveAttribute('aria-expanded', 'true');
     await expect(page.locator('body')).not.toHaveAttribute('data-selected', /.+/);
+    if (port === 'react' || port === 'vue') await expect(page.locator('body')).not.toHaveAttribute('data-disabled-clicked', /.+/);
 
     await page.keyboard.press('ArrowDown');
     await expect(duplicate).toBeFocused();
