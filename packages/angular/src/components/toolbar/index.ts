@@ -32,6 +32,7 @@ export class VfToolbarRootDirective implements AfterViewInit, OnDestroy {
   private readonly element = inject<ElementRef<HTMLElement>>(ElementRef);
   private observer: MutationObserver | null = null;
   ngAfterViewInit() {
+    if (typeof window === 'undefined') return;
     const root = this.element.nativeElement;
     syncTabStops(root);
     if (typeof MutationObserver !== 'undefined') {
@@ -41,11 +42,13 @@ export class VfToolbarRootDirective implements AfterViewInit, OnDestroy {
   }
   ngOnDestroy() { this.observer?.disconnect(); }
   onFocusin(event: FocusEvent) {
+    if (typeof window === 'undefined') return;
     const root = this.element.nativeElement;
     const item = itemFromTarget(root, event.target);
     if (item && !disabled(item)) syncTabStops(root, item);
   }
   onKeydown(event: KeyboardEvent) {
+    if (typeof window === 'undefined') return;
     const root = this.element.nativeElement;
     const direction = typeof getComputedStyle === 'function' && getComputedStyle(root).direction === 'rtl' ? 'rtl' : 'ltr';
     const intent = intentForKey(event.key, this.orientation(), direction);
