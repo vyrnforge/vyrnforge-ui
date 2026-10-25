@@ -14,6 +14,18 @@ test('PR component-local changes keep package consumers and sibling framework ev
   assert.equal(execution.some((entry) => entry.scope === 'build-angular'), false);
 });
 
+test('broadened PRs batch exhaustive type and SSR evidence', () => {
+  const plan = createPlan(['tooling/impact/plan.mjs']);
+  assert.equal(plan.broadened, true);
+  assert.ok(plan.validationScopes.includes('component-types-all'));
+  assert.ok(plan.validationScopes.includes('component-ssr-all'));
+  for (const replaced of ['component:button:conformance:types', 'component:button:react:types', 'component:button:react:ssr']) {
+    assert.equal(plan.validationScopes.includes(replaced), false, replaced);
+  }
+  assert.deepEqual(plan.scopeReasons['component-types-all'], ['batched exhaustive type evidence for broadened PR']);
+  assert.deepEqual(plan.scopeReasons['component-ssr-all'], ['batched exhaustive SSR evidence for broadened PR']);
+});
+
 test('documentation-local changes select docs without package consumers', () => {
   const plan = createPlan(['documentation/shared/styling.html']);
   for (const scope of ['docs-build', 'docs-site', 'browser-docs-chromium']) assert.ok(plan.validationScopes.includes(scope), scope);
