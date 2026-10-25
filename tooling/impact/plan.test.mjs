@@ -6,7 +6,8 @@ test('component subpath changes suppress the aggregate package owner', () => {
   const plan = createPlan(['packages/react/src/components/button/index.ts']);
   assert.deepEqual(plan.directNodes, ['component:button:react']);
   assert.equal(plan.broadened, false);
-  for (const scope of ['pack-react', 'consumer-react', 'component:button:react:types', 'component:button:react:ssr', 'component:button:react:browser']) assert.ok(plan.validationScopes.includes(scope), scope);
+  for (const scope of ['component:button:react:types', 'component:button:react:ssr', 'component:button:react:browser']) assert.ok(plan.validationScopes.includes(scope), scope);
+  for (const scope of ['pack-react', 'consumer-react', 'package-contracts']) assert.equal(plan.validationScopes.includes(scope), false, scope);
   assert.ok(!plan.affectedNodes.includes('component:button:conformance'));
   assert.ok(!plan.affectedNodes.includes('component:button:documentation'));
   assert.ok(!plan.validationScopes.includes('component:button:angular:ssr'));
@@ -19,14 +20,15 @@ test('package-local evidence remains scoped to its component port', () => {
   assert.equal(plan.broadened, false);
   assert.ok(plan.validationScopes.includes('component:button:react:ssr'));
   assert.ok(!plan.validationScopes.includes('component:button:vue:ssr'));
+  assert.ok(!plan.validationScopes.includes('consumer-react'));
 });
 
-test('shared component CSS selects style and browser evidence without type or SSR fan-out', () => {
+test('shared component CSS selects style and browser evidence without package or type fan-out', () => {
   const plan = createPlan(['packages/web/src/components/button/button.css']);
   assert.deepEqual(plan.directNodes, ['component:button:web-style']);
   assert.equal(plan.broadened, false);
-  for (const scope of ['lint-web-css', 'pack-web', 'consumer-web', 'component:button:web:browser', 'component:button:react:browser', 'component:button:angular:browser', 'component:button:vue:browser']) assert.ok(plan.validationScopes.includes(scope), scope);
-  for (const scope of ['component:button:react:types', 'component:button:react:ssr', 'component:button:angular:ssr', 'component:button:vue:ssr', 'pack-react', 'pack-angular', 'pack-vue', 'docs-build']) assert.equal(plan.validationScopes.includes(scope), false, scope);
+  for (const scope of ['lint-web-css', 'component:button:web:browser', 'component:button:react:browser', 'component:button:angular:browser', 'component:button:vue:browser']) assert.ok(plan.validationScopes.includes(scope), scope);
+  for (const scope of ['pack-web', 'consumer-web', 'component:button:react:types', 'component:button:react:ssr', 'component:button:angular:ssr', 'component:button:vue:ssr', 'pack-react', 'pack-angular', 'pack-vue', 'docs-build']) assert.equal(plan.validationScopes.includes(scope), false, scope);
 });
 
 test('renderer-neutral capability changes select only actual Tabs consumers and their evidence', () => {
@@ -35,6 +37,7 @@ test('renderer-neutral capability changes select only actual Tabs consumers and 
   assert.equal(plan.broadened, false);
   for (const node of ['component:tabs:react', 'component:tabs:angular', 'component:tabs:vue']) assert.ok(plan.affectedNodes.includes(node), node);
   for (const scope of ['unit:core:capabilities:collection-navigation:test', 'component:tabs:react:browser', 'component:tabs:angular:browser', 'component:tabs:vue:browser']) assert.ok(plan.validationScopes.includes(scope), scope);
+  for (const scope of ['pack-core', 'consumer-core']) assert.equal(plan.validationScopes.includes(scope), false, scope);
   for (const node of ['component:button:react', 'component:button:angular', 'component:button:vue']) assert.ok(!plan.affectedNodes.includes(node), node);
 });
 
@@ -42,9 +45,8 @@ test('a React Tabs implementation change stays within the React/component bounda
   const plan = createPlan(['packages/react/src/components/tabs/index.ts']);
   assert.deepEqual(plan.directNodes, ['component:tabs:react']);
   assert.equal(plan.broadened, false);
-  for (const scope of ['component:tabs:react:types', 'component:tabs:react:ssr', 'component:tabs:react:browser', 'pack-react', 'consumer-react']) assert.ok(plan.validationScopes.includes(scope), scope);
-  assert.ok(!plan.validationScopes.includes('component:tabs:angular:ssr'));
-  assert.ok(!plan.validationScopes.includes('component:tabs:vue:ssr'));
+  for (const scope of ['component:tabs:react:types', 'component:tabs:react:ssr', 'component:tabs:react:browser']) assert.ok(plan.validationScopes.includes(scope), scope);
+  for (const scope of ['pack-react', 'consumer-react', 'component:tabs:angular:ssr', 'component:tabs:vue:ssr']) assert.equal(plan.validationScopes.includes(scope), false, scope);
 });
 
 test('component docs and examples use component-local documentation evidence', () => {
@@ -128,13 +130,24 @@ test('change fragments stay owner scoped while syntax validation remains global'
   assert.ok(!plan.validationScopes.includes('pack-react'));
 });
 
+test('narrow PRs keep expensive readiness and impact checks out of the global sentinel set', () => {
+  const plan = createPlan(['components/button/changes/2026-10-19-scoped-product-units.md']);
+  for (const scope of ['impact-engine', 'foundation-readiness', 'l1-readiness', 'l2-readiness']) assert.equal(plan.validationScopes.includes(scope), false, scope);
+  assert.deepEqual(plan.scopeReasons['change-fragments'], ['global sentinel', 'evidence for component:button:changes']);
+});
+
 test('documentation and unknown paths keep safe behavior', () => {
   assert.deepEqual(createPlan(['documentation/shared/styling.html']).directNodes, ['documentation']);
   assert.equal(createPlan(['some-unclassified-root-file.txt']).broadened, true);
 });
 
 test('testing discovery and repository foundation changes fail closed', () => {
-  for (const file of ['tooling/testing/discover-product-units.mjs', 'testing/impact.json', 'tooling/impact/plan.mjs', '.github/workflows/ci.yml', 'package.json']) assert.equal(createPlan([file]).broadened, true, file);
+  for (const file of ['tooling/testing/discover-product-units.mjs', 'testing/impact.json', 'tooling/impact/plan.mjs', '.github/workflows/ci.yml', 'package.json']) {
+    const plan = createPlan([file]);
+    assert.equal(plan.broadened, true, file);
+    assert.ok(plan.validationScopes.includes('impact-engine'), `${file}: impact-engine`);
+    for (const scope of ['foundation-readiness', 'l1-readiness', 'l2-readiness']) assert.ok(plan.validationScopes.includes(scope), `${file}: ${scope}`);
+  }
 });
 
 test('legacy-only changes remain isolated', () => {
