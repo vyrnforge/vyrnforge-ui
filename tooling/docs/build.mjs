@@ -2,6 +2,7 @@ import { cp, mkdir, readFile, rm, writeFile } from 'node:fs/promises';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { buildDocumentationExamples, renderDocumentationExample } from './examples.mjs';
+import { componentUsageGroups } from './component-usage-groups.mjs';
 import { renderFrameworkMark } from './framework-presentation.mjs';
 import { documentationRegistry } from './registry.mjs';
 
@@ -32,12 +33,32 @@ function composeExamples(bodyHtml, examples) { return bodyHtml.replace(/<div\s+d
 async function pageBody(page, examples) { if (page.kind === 'generated') { if (page.generator === 'packages') return renderPackages(); if (page.generator === 'compatibility') return renderCompatibility(); throw new Error(`Unknown documentation generator: ${page.generator}`); } return composeExamples(await readFile(path.join(root, page.source), 'utf8'), examples); }
 function navGroups() { const groups = new Map(); for (const page of registry.pages) { const pages = groups.get(page.group) || []; pages.push(page); groups.set(page.group, pages); } return groups; }
 function renderNavLabel(item) { return item.kind === 'framework' ? `${renderFrameworkMark(item.framework)}<span>${escapeHtml(item.title)}</span>` : escapeHtml(item.title); }
+function renderNavItem(currentPage, item) { return `<li data-vf-side-nav-item><a data-vf-side-nav-link href="${relativeRoute(currentPage.slug, item.slug)}"${item.slug === currentPage.slug ? ' data-vf-current="true" aria-current="page"' : ''}>${renderNavLabel(item)}</a></li>`; }
+function renderComponentNavigation(currentPage, pages) {
+  const grouped = new Map(componentUsageGroups.map((group) => [group.title, []]));
+  for (const item of pages) {
+    const items = grouped.get(item.subgroup) ?? [];
+    items.push(item);
+    grouped.set(item.subgroup, items);
+  }
+  return [...grouped.entries()].filter(([, items]) => items.length).map(([subgroup, items]) => {
+    const sortedItems = items.sort((a, b) => a.title.localeCompare(b.title));
+    const containsCurrentPage = sortedItems.some((item) => item.slug === currentPage.slug);
+    return `<details class="vf-docs-component-subgroup" data-vf-docs-component-subgroup${containsCurrentPage ? ' data-vf-current-group="true" open' : ''}><summary class="vf-docs-component-subgroup__label"><span>${escapeHtml(subgroup)}</span><span class="vf-docs-component-subgroup__count" aria-hidden="true">${sortedItems.length}</span></summary><ul data-vf-side-nav-list>${sortedItems.map((item) => renderNavItem(currentPage, item)).join('')}</ul></details>`;
+  }).join('');
+}
+function renderNavigation(currentPage) {
+  return [...groups.entries()].map(([group, pages]) => {
+    const contents = group === 'Components' ? renderComponentNavigation(currentPage, pages) : `<ul data-vf-side-nav-list>${pages.map((item) => renderNavItem(currentPage, item)).join('')}</ul>`;
+    return `<section data-vf-side-nav-group><h2 data-vf-side-nav-group-label>${escapeHtml(group)}</h2>${contents}</section>`;
+  }).join('');
+}
 const groups = navGroups();
 const sharedFoundationPages = registry.pages.filter((page) => page.kind === 'shared' && page.slug !== '');
 const frameworkPages = registry.pages.filter((page) => page.kind === 'framework');
 
 function renderLayout(page, bodyHtml) {
-  const nav = [...groups.entries()].map(([group, pages]) => `<section data-vf-side-nav-group><h2 data-vf-side-nav-group-label>${escapeHtml(group)}</h2><ul data-vf-side-nav-list>${pages.map((item) => `<li data-vf-side-nav-item><a data-vf-side-nav-link href="${relativeRoute(page.slug, item.slug)}"${item.slug === page.slug ? ' data-vf-current="true" aria-current="page"' : ''}>${renderNavLabel(item)}</a></li>`).join('')}</ul></section>`).join('');
+  const nav = renderNavigation(page);
   const frameworkRoutes = Object.fromEntries(frameworkPages.map((item) => [item.framework, item.slug ? `${item.slug}/` : './']));
   const frameworkChoices = frameworkPages.map((item) => `<button type="button" data-vf-button data-vf-size="sm" data-vf-variant="${item.framework === page.framework ? 'secondary' : 'ghost'}" data-vf-framework-choice="${escapeHtml(item.framework)}" aria-pressed="${item.framework === page.framework ? 'true' : 'false'}">${renderFrameworkMark(item.framework)}<span>${escapeHtml(item.title)}</span></button>`).join('');
   const sharedLinks = page.kind === 'framework' ? `<section class="vf-docs-shared-links"><h2>Shared VyrnForge foundations</h2><p>These concepts are shared across framework ports and are intentionally not copied into this framework guide.</p><ul>${sharedFoundationPages.map((item) => `<li><a href="${relativeRoute(page.slug, item.slug)}">${escapeHtml(item.title)}</a></li>`).join('')}</ul></section>` : '';

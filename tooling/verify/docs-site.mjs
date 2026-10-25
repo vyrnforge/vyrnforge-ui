@@ -1,6 +1,7 @@
 import { access, readFile } from 'node:fs/promises';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
+import { componentUsageGroups } from '../docs/component-usage-groups.mjs';
 import { documentationRegistry } from '../docs/registry.mjs';
 import { discoverProductUnits } from '../testing/discover-product-units.mjs';
 
@@ -19,6 +20,7 @@ for (const framework of ['react', 'angular', 'vue', 'elements', 'native-web']) i
 function htmlLinks(html) { return [...html.matchAll(/\bhref="([^"]+)"/g)].map((match) => match[1]); }
 function resolveLocalLink(pageDirectory, href) { if (/^(?:https?:|mailto:|#)/.test(href)) return null; const withoutHash = href.split('#')[0].split('?')[0]; if (!withoutHash) return null; const resolved = path.resolve(pageDirectory, withoutHash); return /\.[a-z0-9]+$/i.test(withoutHash) ? resolved : path.join(resolved, 'index.html'); }
 function safeName(value) { return value.replace(/[^a-z0-9]+/gi, '-').replace(/^-|-$/g, '').toLowerCase(); }
+function escapedText(value) { return String(value).replaceAll('&', '&amp;').replaceAll('<', '&lt;').replaceAll('>', '&gt;'); }
 for (const page of registry.pages) {
   const pageDirectory = path.join(channelRoot, page.slug);
   const html = await readFile(path.join(pageDirectory, 'index.html'), 'utf8');
@@ -40,9 +42,13 @@ for (const page of registry.pages) {
     'data-vf-framework-picker',
     'data-vf-framework-choice',
     'data-vf-framework-mark',
+    'data-vf-docs-component-subgroup',
     'data-vf-docs-search',
     'vyrnforge/styles.css'
   ]) if (!html.includes(required)) throw new Error(`${page.slug || '<home>'} missing required docs markup: ${required}`);
+  for (const group of componentUsageGroups) if (!html.includes(`<span>${escapedText(group.title)}</span>`)) throw new Error(`${page.slug || '<home>'} missing component usage group: ${group.title}`);
+  const componentGroupCount = [...html.matchAll(/data-vf-docs-component-subgroup/g)].length;
+  if (componentGroupCount !== componentUsageGroups.length) throw new Error(`${page.slug || '<home>'} renders ${componentGroupCount} component groups; expected ${componentUsageGroups.length}`);
   if (html.includes('data-vf-framework-select')) throw new Error(`${page.slug || '<home>'} still emits the superseded text-only framework select`);
   if (html.includes('<body data-vf-app-shell')) throw new Error(`${page.slug || '<home>'} still uses body as an AppShell lookalike instead of consuming vf-app-shell`);
   if (!html.includes('aria-current="page"')) throw new Error(`${page.slug || '<home>'} missing current-page navigation semantics`);

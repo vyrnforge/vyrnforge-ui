@@ -38,6 +38,42 @@ test('docs home consumes the reusable AppShell and exposes versioned accessible 
   verifyNoErrors();
 });
 
+test('component navigation groups the discovered inventory by developer usage', async ({ page }) => {
+  const verifyNoErrors = await expectNoRuntimeErrors(page);
+  await page.goto('/next/');
+
+  const navigation = page.getByRole('navigation', { name: 'Documentation' });
+  const componentSection = navigation.locator('[data-vf-side-nav-group]').filter({ has: page.locator('[data-vf-side-nav-group-label]', { hasText: 'Components' }) });
+  const groups = componentSection.locator('[data-vf-docs-component-subgroup]');
+  await expect(groups).toHaveCount(9);
+
+  const expectedGroups = [
+    'Actions',
+    'Form Controls',
+    'Selection & Choice',
+    'Specialized Fields',
+    'Navigation & Menus',
+    'Layout & Structure',
+    'Content & Disclosure',
+    'Overlays & Feedback',
+    'Utilities & Accessibility'
+  ];
+  for (const label of expectedGroups) await expect(componentSection.locator('summary', { hasText: label })).toBeVisible();
+
+  const formControls = groups.filter({ has: page.locator('summary', { hasText: 'Form Controls' }) });
+  await expect(formControls).not.toHaveAttribute('open', '');
+  await formControls.locator('summary').click();
+  await expect(formControls.getByRole('link', { name: 'Input', exact: true })).toBeVisible();
+  await expect(formControls.getByRole('link', { name: 'Textarea', exact: true })).toBeVisible();
+
+  await page.goto('/next/components/button/');
+  const actions = page.locator('[data-vf-docs-component-subgroup]').filter({ has: page.locator('summary', { hasText: 'Actions' }) });
+  await expect(actions).toHaveAttribute('open', '');
+  await expect(actions).toHaveAttribute('data-vf-current-group', 'true');
+  await expect(actions.getByRole('link', { name: 'Button', exact: true })).toHaveAttribute('aria-current', 'page');
+  verifyNoErrors();
+});
+
 test('framework selection exposes current public component availability', async ({ page }) => {
   const verifyNoErrors = await expectNoRuntimeErrors(page);
   await page.goto('/next/');
