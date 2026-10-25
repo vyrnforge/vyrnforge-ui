@@ -27,13 +27,13 @@ function compileTargets() {
     dependsOn: [],
     evidence: ['bundle-baselines'],
   };
-  for (const unit of discovery.ownedUnits) targets[unit.node] = { paths: [unit.sourcePath, unit.testPath, unit.metadataPath], dependsOn: [unit.package, ...unit.dependencies], evidence: [`${unit.node}:test`, ...packageEvidence(unit.package)] };
+  for (const unit of discovery.ownedUnits) targets[unit.node] = { paths: [unit.sourcePath, unit.testPath, unit.metadataPath], dependsOn: [unit.package, ...unit.dependencies], evidence: [`${unit.node}:test`] };
   for (const component of discovery.components) {
     const webNode = component.ports.web ? `component:${component.component}:web` : null;
     const webStyleNode = component.ports.web?.stylePaths?.length ? `component:${component.component}:web-style` : null;
     for (const [port, config] of Object.entries(component.ports)) {
       const node = `component:${component.component}:${port}`;
-      const evidence = [...packageEvidence(port)];
+      const evidence = [];
       if (config.types) evidence.push(componentScope(component.component, `${port}:types`));
       if (config.ssr) evidence.push(componentScope(component.component, `${port}:ssr`));
       if (config.browser) evidence.push(componentScope(component.component, `${port}:browser`));
@@ -50,7 +50,7 @@ function compileTargets() {
       targets[webStyleNode] = {
         paths: component.ports.web.stylePaths,
         dependsOn: ['web'],
-        evidence: ['lint-web-css', ...packageEvidence('web'), componentScope(component.component, 'web:browser')],
+        evidence: ['lint-web-css', componentScope(component.component, 'web:browser')],
       };
     }
     const conformanceNode = `component:${component.component}:conformance`;
@@ -104,6 +104,18 @@ function dynamicTierScopes(mode) {
 }
 export function allKnownScopes() { return [...new Set([...impact.scopeOrder, ...dynamicTierScopes('release'), ...discovery.components.map((component) => componentScope(component.component, 'docs'))])]; }
 function orderedScopes(scopes) { const order = new Map(allKnownScopes().map((scope, index) => [scope, index])); return [...scopes].sort((a, b) => (order.get(a) ?? Number.MAX_SAFE_INTEGER) - (order.get(b) ?? Number.MAX_SAFE_INTEGER) || a.localeCompare(b)); }
+function scopeReasonsFor(affectedNodes, selectedScopes) {
+  const reasons = new Map();
+  for (const scope of impact.globalSentinels) reasons.set(scope, ['global sentinel']);
+  for (const node of affectedNodes) {
+    for (const scope of targets[node]?.evidence ?? []) {
+      const values = reasons.get(scope) ?? [];
+      values.push(`evidence for ${node}`);
+      reasons.set(scope, values);
+    }
+  }
+  return Object.fromEntries(orderedScopes(selectedScopes).map((scope) => [scope, reasons.get(scope) ?? ['selected by tier']]));
+}
 export function createPlan(paths) {
   const directNodes = new Set();
   let broad = false;
@@ -117,14 +129,16 @@ export function createPlan(paths) {
   if (directNodes.has('legacy')) affectedNodes.add('legacy');
   const selectedScopes = new Set(impact.globalSentinels);
   for (const node of affectedNodes) for (const scope of targets[node]?.evidence ?? []) selectedScopes.add(scope);
-  return { mode: 'pr', changedPaths: [...paths].sort(), directNodes: [...directNodes].sort(), affectedNodes: [...affectedNodes].sort(), validationScopes: orderedScopes(selectedScopes), skippedValidationScopes: allKnownScopes().filter((scope) => !selectedScopes.has(scope)), broadened: broad };
+  const ordered = orderedScopes(selectedScopes);
+  return { mode: 'pr', changedPaths: [...paths].sort(), directNodes: [...directNodes].sort(), affectedNodes: [...affectedNodes].sort(), validationScopes: ordered, scopeReasons: scopeReasonsFor(affectedNodes, selectedScopes), skippedValidationScopes: allKnownScopes().filter((scope) => !selectedScopes.has(scope)), broadened: broad };
 }
 export function createTierPlan(mode) {
   const tierScopes = impact.tiers?.[mode];
   if (!tierScopes) throw new Error(`Unknown validation tier: ${mode}`);
   const scopes = [...new Set([...tierScopes, ...dynamicTierScopes(mode)])];
   const selected = new Set(scopes);
-  return { mode, changedPaths: [], directNodes: [], affectedNodes: Object.entries(targets).filter(([, config]) => !config.legacy).map(([node]) => node).sort(), validationScopes: orderedScopes(scopes), skippedValidationScopes: allKnownScopes().filter((scope) => !selected.has(scope)), broadened: true };
+  const affectedNodes = Object.entries(targets).filter(([, config]) => !config.legacy).map(([node]) => node).sort();
+  return { mode, changedPaths: [], directNodes: [], affectedNodes, validationScopes: orderedScopes(scopes), scopeReasons: Object.fromEntries(orderedScopes(scopes).map((scope) => [scope, [`${mode} tier`]])), skippedValidationScopes: allKnownScopes().filter((scope) => !selected.has(scope)), broadened: true };
 }
 export function parseArg(name, argv = process.argv) { const direct = argv.find((value) => value.startsWith(`${name}=`)); if (direct) return direct.slice(name.length + 1); const index = argv.indexOf(name); return index >= 0 ? argv[index + 1] : undefined; }
 export function changedPathsFromGit(base, head) { if (!base || !head) throw new Error('Both --base and --head are required when --files is not provided'); return execFileSync('git', ['diff', '--name-only', `${base}...${head}`], { encoding: 'utf8' }).split('\n').map((value) => value.trim()).filter(Boolean); }
