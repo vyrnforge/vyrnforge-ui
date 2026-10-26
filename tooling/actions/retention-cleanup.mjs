@@ -142,7 +142,10 @@ try {
 
     if (eventName === 'schedule' || eventName === 'workflow_dispatch') {
       report.mode = 'merged-history-and-age-based';
-      const agePlan = planRunDeletions(runs, policy, { currentRunId });
+      const agePlan = planRunDeletions(runs, policy, {
+        currentRunId,
+        protectedRunIds: mergedPlan.protectedRunIds
+      });
       report.plan = combinedPlan(mergedPlan, agePlan);
     } else {
       report.mode = 'merged-pull-request-history';
