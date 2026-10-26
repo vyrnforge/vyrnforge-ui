@@ -33,7 +33,7 @@ jobs:
         if: always()
         uses: actions/upload-artifact@v7
         with:
-          name: validation-plan-main
+          name: validation-plan-main-${{ github.sha }}
           path: test-results/validation-plan.json
           if-no-files-found: error
           retention-days: 14
@@ -41,7 +41,7 @@ jobs:
         if: always()
         uses: actions/upload-artifact@v7
         with:
-          name: browser-evidence-main
+          name: browser-evidence-main-${{ github.sha }}
           path: |
             test-results/playwright-report
             test-results/playwright-results
@@ -49,11 +49,11 @@ jobs:
             test-results/*-playwright-results
           if-no-files-found: ignore
           retention-days: 14
-      - name: Upload documentation build when selected
+      - name: Upload validated documentation build when selected
         if: always()
         uses: actions/upload-artifact@v7
         with:
-          name: vyrnforge-docs-next
+          name: vyrnforge-docs-next-${{ github.sha }}
           path: dist/docs
           if-no-files-found: ignore
-          retention-days: 7
+          retention-days: 14

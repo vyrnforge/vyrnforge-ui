@@ -8,6 +8,10 @@ on:
 permissions:
   contents: read
 
+concurrency:
+  group: scheduled-assurance
+  cancel-in-progress: true
+
 jobs:
   scheduled-gate:
     runs-on: ubuntu-latest
@@ -37,5 +41,7 @@ jobs:
           path: |
             test-results/playwright-report
             test-results/playwright-results
+            test-results/*-playwright-report
+            test-results/*-playwright-results
           if-no-files-found: ignore
           retention-days: 14

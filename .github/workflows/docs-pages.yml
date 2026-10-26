@@ -1,45 +1,123 @@
 name: Documentation Pages
 
 on:
-  push:
-    branches: [main]
+  workflow_run:
+    workflows: ["Main Validation"]
+    types: [completed]
   workflow_dispatch:
+    inputs:
+      run_id:
+        description: Successful Main Validation workflow run ID containing the docs artifact
+        required: true
+        type: string
+      head_sha:
+        description: Exact main commit SHA validated by that run
+        required: true
+        type: string
 
 permissions:
   contents: read
-  pages: write
-  id-token: write
+  actions: read
 
 concurrency:
-  group: vyrnforge-docs-pages
+  group: vyrnforge-docs-pages-${{ github.event.workflow_run.head_sha || inputs.head_sha }}
   cancel-in-progress: true
 
 jobs:
-  build:
+  prepare:
+    if: github.event_name == 'workflow_dispatch' || (github.event.workflow_run.conclusion == 'success' && github.event.workflow_run.head_branch == 'main')
     runs-on: ubuntu-latest
+    timeout-minutes: 10
+    permissions:
+      contents: read
+      actions: read
+      pages: write
+    outputs:
+      found: ${{ steps.resolve.outputs.found }}
+      head_sha: ${{ steps.resolve.outputs.head_sha }}
+      artifact_name: ${{ steps.resolve.outputs.artifact_name }}
     steps:
-      - uses: actions/checkout@v7
-      - uses: actions/setup-node@v7
-        with:
-          node-version-file: .node-version
-          cache: npm
-      - run: npm ci --ignore-scripts --no-audit --no-fund
-      - name: Build and verify version-aware docs
+      - name: Resolve validated documentation artifact
+        id: resolve
+        env:
+          GH_TOKEN: ${{ github.token }}
+          RUN_ID: ${{ github.event.workflow_run.id || inputs.run_id }}
+          EXPECTED_HEAD_SHA: ${{ github.event.workflow_run.head_sha || inputs.head_sha }}
         run: |
-          npm run build:docs
-          npm run verify:docs-site
-      - uses: actions/configure-pages@v6
-      - uses: actions/upload-pages-artifact@v5
+          node --input-type=module <<'NODE'
+          import fs from 'node:fs';
+          const api = process.env.GITHUB_API_URL;
+          const repository = process.env.GITHUB_REPOSITORY;
+          const runId = process.env.RUN_ID;
+          const expectedHeadSha = process.env.EXPECTED_HEAD_SHA;
+          const headers = {
+            Accept: 'application/vnd.github+json',
+            Authorization: `Bearer ${process.env.GH_TOKEN}`,
+            'X-GitHub-Api-Version': '2022-11-28'
+          };
+          async function get(path) {
+            const response = await fetch(`${api}/repos/${repository}${path}`, { headers });
+            if (!response.ok) throw new Error(`${path} failed: ${response.status} ${await response.text()}`);
+            return response.json();
+          }
+          const run = await get(`/actions/runs/${runId}`);
+          if (run.path !== '.github/workflows/main.yml') throw new Error(`Run ${runId} is not Main Validation: ${run.path}`);
+          if (run.conclusion !== 'success') throw new Error(`Run ${runId} is not successful: ${run.conclusion}`);
+          if (run.head_branch !== 'main') throw new Error(`Run ${runId} did not validate main: ${run.head_branch}`);
+          if (run.head_sha !== expectedHeadSha) throw new Error(`Run ${runId} head ${run.head_sha} does not match requested ${expectedHeadSha}`);
+          const artifactName = `vyrnforge-docs-next-${expectedHeadSha}`;
+          const artifacts = await get(`/actions/runs/${runId}/artifacts?per_page=100`);
+          const artifact = (artifacts.artifacts || []).find((item) => item.name === artifactName && !item.expired);
+          fs.appendFileSync(process.env.GITHUB_OUTPUT, `found=${artifact ? 'true' : 'false'}\n`);
+          fs.appendFileSync(process.env.GITHUB_OUTPUT, `head_sha=${expectedHeadSha}\n`);
+          fs.appendFileSync(process.env.GITHUB_OUTPUT, `artifact_name=${artifactName}\n`);
+          fs.appendFileSync(process.env.GITHUB_OUTPUT, `artifact_id=${artifact?.id ?? ''}\n`);
+          NODE
+
+      - name: Download exact validated documentation artifact
+        if: steps.resolve.outputs.found == 'true'
+        env:
+          GH_TOKEN: ${{ github.token }}
+          ARTIFACT_ID: ${{ steps.resolve.outputs.artifact_id }}
+        run: |
+          node --input-type=module <<'NODE'
+          import fs from 'node:fs';
+          const url = `${process.env.GITHUB_API_URL}/repos/${process.env.GITHUB_REPOSITORY}/actions/artifacts/${process.env.ARTIFACT_ID}/zip`;
+          const response = await fetch(url, {
+            headers: {
+              Accept: 'application/vnd.github+json',
+              Authorization: `Bearer ${process.env.GH_TOKEN}`,
+              'X-GitHub-Api-Version': '2022-11-28'
+            }
+          });
+          if (!response.ok) throw new Error(`Artifact download failed: ${response.status} ${await response.text()}`);
+          fs.writeFileSync('validated-docs.zip', Buffer.from(await response.arrayBuffer()));
+          NODE
+          mkdir -p dist/docs
+          unzip -q validated-docs.zip -d dist/docs
+
+      - name: Configure Pages
+        if: steps.resolve.outputs.found == 'true'
+        uses: actions/configure-pages@v6
+
+      - name: Upload Pages artifact from validated docs
+        if: steps.resolve.outputs.found == 'true'
+        uses: actions/upload-pages-artifact@v5
         with:
           path: dist/docs
 
   deploy:
+    if: needs.prepare.outputs.found == 'true'
+    needs: prepare
+    permissions:
+      pages: write
+      id-token: write
     environment:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}
     runs-on: ubuntu-latest
-    needs: build
+    timeout-minutes: 10
     steps:
-      - name: Deploy documentation
+      - name: Deploy validated documentation
         id: deployment
         uses: actions/deploy-pages@v5
