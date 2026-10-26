@@ -1,2 +1,2 @@
-import { registerAngularL2SsrTest } from '../../../../../testing/l2/ssr.mjs';
+import { registerAngularL2SsrTest } from '../../../../../tooling/testing/native-component-ssr.mjs';
 registerAngularL2SsrTest('switch');

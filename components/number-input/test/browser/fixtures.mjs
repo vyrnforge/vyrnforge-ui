@@ -1,2 +1,2 @@
-import { buildL2BrowserFixture } from '../../../../testing/l2/browser/fixture.mjs';
+import { buildL2BrowserFixture } from '../../../../tooling/testing/native-component-browser-fixture.mjs';
 await buildL2BrowserFixture('number-input', process.argv[2] || 'web');

@@ -14,7 +14,7 @@ Reusable package-owned units are discovered under `packages/<package>/src/capabi
 
 A specific owned path suppresses its aggregate package root during PR classification. Therefore a React Button implementation change selects the React/Button product unit and its transitive consumers, not every React component. Package-wide files such as `packages/react/src/index.ts`, package manifests, or package configuration select the aggregate React package and fan out to all dependent React product surfaces.
 
-A selected component or reusable owned unit receives the build prerequisites required by its chosen type, SSR, browser, or unit evidence. Packed-package and consumer-entrypoint verification is reserved for affected package/public surfaces, aggregate package changes, and the broader main, scheduled, and release tiers; implementation locality inside a package is not sufficient by itself. Shared Web component changes may fan out to discovered framework ports that consume that Web component, but each affected port receives only the validation evidence required by the affected contract or behavior. Package-wide Core or Web changes retain broader reverse-dependency closure.
+A selected component or reusable owned unit receives the build prerequisites required by its chosen type, SSR, browser, or unit evidence. Packed-package and consumer-entrypoint verification is reserved for affected package/public surfaces, aggregate package changes, and explicit broad validation tiers; implementation locality inside a package is not sufficient by itself. Shared Web component changes may fan out to discovered framework ports that consume that Web component, but each affected port receives only the validation evidence required by the affected contract or behavior. Package-wide Core or Web changes retain broader reverse-dependency closure.
 
 ## Evidence and omission detection
 
@@ -24,7 +24,7 @@ The same rule applies to reusable capabilities/accessibility/foundation units: o
 
 Tests execute at the lowest reliable layer. Package-local evidence proves framework/package integration. Shared component evidence proves cross-port observable outcomes. Browser-owned behavior stays in real browser tests. Accessibility evidence belongs to the lowest owner that actually owns the behavior: pure calculations may be Core; CSS/DOM/platform behavior may be Web; component semantics belong to the component; repository-wide conformance remains repository tooling.
 
-Repository-level tests of discovery, planning, execution, workflows, and other validation infrastructure live under `tooling/tests/` because they prove the tooling itself. Generic evidence executors live under `tooling/testing/`; they are reusable execution infrastructure rather than product tests.
+Repository-level tests of discovery, planning, execution, workflows, and other validation infrastructure live under `tooling/tests/` because they prove the tooling itself. Generic evidence executors and reusable test harnesses live under `tooling/testing/`; they are execution infrastructure rather than product tests. No executable test or harness code belongs under the policy-only `testing/` root.
 
 ## Change fragments
 
@@ -34,6 +34,6 @@ Fragments are unreleased evidence, not permanent component structure. Targeted P
 
 ## Safety model
 
-Unknown paths, testing/impact infrastructure, workflows, root package configuration, and other architecture-wide changes fail closed to broad validation. Main is broader than PR validation, scheduled validation adds expensive cross-browser evidence, and release validation is broadest. These tiers remain independent safety nets for discovery mistakes.
+Unknown paths, unowned testing infrastructure, root package configuration, and other architecture-wide changes fail closed to broad validation. Normal PR and main-push validation both use changed-path impact plans and the same ownership model; main evaluates the merged change range rather than automatically executing the exhaustive graph. An explicit broad `main` tier remains available for manual exhaustive validation. Scheduled and release validation remain broad safety nets, with scheduled adding recurring cross-browser assurance and release adding release-readiness evidence.
 
-PR reports are inspectable evidence. They record why validation scopes were selected, which prerequisite scopes were pulled in transitively, browser setup cost, and per-scope outcomes and durations. Partial execution evidence is preserved when a selected scope fails so CI cost and failure location remain diagnosable.
+PR and main reports are inspectable evidence. They record why validation scopes were selected, which prerequisite scopes were pulled in transitively, browser setup cost, and per-scope outcomes and durations. Partial execution evidence is preserved when a selected scope fails so CI cost and failure location remain diagnosable.

@@ -1,2 +1,2 @@
-import { registerReactL2SsrTest } from '../../../../../testing/l2/ssr.mjs';
+import { registerReactL2SsrTest } from '../../../../../tooling/testing/native-component-ssr.mjs';
 registerReactL2SsrTest('file-input');
