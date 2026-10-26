@@ -12,7 +12,7 @@ const channel = process.env.VYRNFORGE_DOCS_CHANNEL || 'next';
 const channelRoot = path.join(outRoot, channel);
 const registry = documentationRegistry(root);
 const rootManifest = JSON.parse(await readFile(path.join(root, 'package.json'), 'utf8'));
-const compatibility = JSON.parse(await readFile(path.join(root, 'tooling/compatibility/support-status.json'), 'utf8'));
+const compatibility = JSON.parse(await readFile(path.join(root, 'tooling/testing/compatibility/support-status.json'), 'utf8'));
 const packageNames = ['core', 'web', 'react', 'angular', 'vue', 'elements'];
 const packageManifests = Object.fromEntries(await Promise.all(packageNames.map(async (name) => [name, JSON.parse(await readFile(path.join(root, `packages/${name}/package.json`), 'utf8'))])));
 
