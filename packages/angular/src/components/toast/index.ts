@@ -51,7 +51,6 @@ export class VfToastRootDirective implements OnDestroy {
   private readonly internalOpen = signal(true);
   private readonly initialized = signal(false);
   private destroyed = false;
-  private syncGeneration = 0;
   private timer: ReturnType<typeof setTimeout> | undefined;
   private deadline = 0;
   private remaining: number | null = null;
@@ -72,16 +71,12 @@ export class VfToastRootDirective implements OnDestroy {
       const open = controlledOpen ?? this.internalOpen();
       const duration = this.duration();
       if (typeof window === 'undefined') return;
-      const generation = ++this.syncGeneration;
-      queueMicrotask(() => {
-        if (!this.destroyed && generation === this.syncGeneration) this.syncTimer(open, duration);
-      });
+      this.syncTimer(open, duration);
     });
   }
 
   ngOnDestroy(): void {
     this.destroyed = true;
-    this.syncGeneration += 1;
     this.clearTimer();
   }
 
