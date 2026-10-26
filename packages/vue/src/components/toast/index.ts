@@ -56,7 +56,7 @@ export const ToastRoot = defineComponent({
     const pauseReasons = new Set<PauseReason>();
     let timer: ReturnType<typeof setTimeout> | undefined;
     let deadline = 0;
-    let remaining = 0;
+    let remaining: number | null = null;
     let timeoutRequested = false;
     let wasOpen = false;
     let mounted = false;
@@ -69,13 +69,13 @@ export const ToastRoot = defineComponent({
     }
     function expire() {
       clearTimer();
-      remaining = 0;
+      remaining = null;
       if (timeoutRequested) return;
       timeoutRequested = true;
       requestClose();
     }
     function armRemaining() {
-      if (!mounted || !committedOpen.value || timeoutRequested || pauseReasons.size > 0) return;
+      if (!mounted || !committedOpen.value || timeoutRequested || pauseReasons.size > 0 || remaining === null) return;
       if (remaining <= 0) { expire(); return; }
       clearTimer();
       deadline = Date.now() + remaining;
@@ -98,7 +98,7 @@ export const ToastRoot = defineComponent({
       if (!mounted || !committedOpen.value) {
         wasOpen = false;
         timeoutRequested = false;
-        remaining = 0;
+        remaining = null;
         pauseReasons.clear();
         return;
       }
@@ -109,7 +109,7 @@ export const ToastRoot = defineComponent({
       }
       if (timeoutRequested) return;
       const duration = normalizedDuration(props.duration);
-      remaining = duration ?? 0;
+      remaining = duration;
       if (duration !== null && pauseReasons.size === 0) {
         deadline = Date.now() + duration;
         timer = setTimeout(expire, duration);
