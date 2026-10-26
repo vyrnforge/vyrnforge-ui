@@ -7,7 +7,7 @@ import { discoverProductUnits, productPreparationProblems } from '../testing/dis
 
 function writer(root) { return (relativePath, content = '') => { const target = path.join(root, relativePath); mkdirSync(path.dirname(target), { recursive: true }); writeFileSync(target, content); }; }
 
-test('current Button is discovered from package subpaths and component ownership', () => {
+test('current Button is discovered from package subpaths and product ownership', () => {
   const { components } = discoverProductUnits();
   const button = components.find((entry) => entry.component === 'button');
   assert.ok(button);
@@ -15,10 +15,10 @@ test('current Button is discovered from package subpaths and component ownership
   assert.equal(button.ports.react.paths[0], 'packages/react/src/components/button/');
   assert.equal(button.ports.react.types, 'packages/react/test/components/button/api.types.ts');
   assert.equal(button.ports.react.ssr, 'packages/react/test/components/button/ssr.test.mjs');
-  assert.equal(button.documentationSource, 'components/button/docs/index.html');
-  assert.match(button.exampleManifests[0], /^components\/button\/examples\//);
-  assert.equal(button.browser.fixture, 'components/button/test/browser/fixtures.mjs');
-  assert.equal(button.accessibilityPath, 'components/button/accessibility.json');
+  assert.equal(button.documentationSource, 'product/button/docs/index.html');
+  assert.match(button.exampleManifests[0], /^product\/button\/examples\//);
+  assert.equal(button.browser.fixture, 'product/button/test/browser/fixtures.mjs');
+  assert.equal(button.accessibilityPath, 'product/button/accessibility.json');
   assert.ok(button.browser.paths.includes(button.accessibilityPath));
   assert.deepEqual(productPreparationProblems(), []);
 });
@@ -54,18 +54,18 @@ test('a newly exposed component automatically requires its owned evidence', () =
   write('packages/react/package.json', JSON.stringify({ name: '@vyrnforge/react', exports: { '.': './dist/index.js', './tabs': './dist/components/tabs/index.js' } }));
   write('packages/react/src/components/tabs/index.ts', 'export const Tabs = null;\n');
   write('packages/web/src/components/tabs/tabs.css', '[data-vf-tabs] {}\n');
-  write('components/tabs/docs/index.html', '<h2>Overview</h2>');
-  write('components/tabs/examples/basic/example.json', JSON.stringify({ id: 'tabs/basic' }));
-  write('components/tabs/changes/add-tabs.md', '---\ntype: minor\n---\n\nAdd Tabs.\n');
+  write('product/tabs/docs/index.html', '<h2>Overview</h2>');
+  write('product/tabs/examples/basic/example.json', JSON.stringify({ id: 'tabs/basic' }));
+  write('product/tabs/changes/add-tabs.md', '---\ntype: minor\n---\n\nAdd Tabs.\n');
   const tabs = discoverProductUnits(root).components.find((entry) => entry.component === 'tabs');
   assert.ok(tabs);
   assert.deepEqual(Object.keys(tabs.ports).sort(), ['react', 'web']);
-  assert.equal(tabs.accessibilityPath, 'components/tabs/accessibility.json');
+  assert.equal(tabs.accessibilityPath, 'product/tabs/accessibility.json');
   assert.ok(tabs.browser.paths.includes(tabs.accessibilityPath));
   const problems = productPreparationProblems(root);
   assert.ok(problems.some((problem) => problem.includes('packages/react/test/components/tabs/api.types.ts')));
   assert.ok(problems.some((problem) => problem.includes('packages/react/test/components/tabs/ssr.test.mjs')));
-  assert.ok(problems.some((problem) => problem.includes('components/tabs/test/browser/fixtures.mjs')));
+  assert.ok(problems.some((problem) => problem.includes('product/tabs/test/browser/fixtures.mjs')));
 });
 
 test('package-owned capabilities are auto-discovered with inferred dependency edges', () => {

@@ -18,7 +18,7 @@ const requiredSharedSlugs = [
 ];
 const requiredFrameworks = ['react', 'angular', 'vue', 'elements', 'native-web'];
 const requiredComponentSections = ['Overview', 'Installation and imports', 'Quick start', 'Accessibility', 'Styling', 'Framework API', 'Compatibility'];
-for (const relative of ['documentation/README.md', 'documentation/site/registry.json', 'components/README.md', 'fixtures/README.md', 'apps/docs/styles.css', 'apps/docs/client.js', 'tooling/docs/examples.mjs', 'tooling/docs/registry.mjs']) await access(path.join(root, relative));
+for (const relative of ['documentation/README.md', 'documentation/site/registry.json', 'product/README.md', 'apps/docs/styles.css', 'apps/docs/client.js', 'tooling/docs/examples.mjs', 'tooling/docs/registry.mjs']) await access(path.join(root, relative));
 const slugs = new Set(registry.pages.map((page) => page.slug));
 for (const slug of requiredSharedSlugs) if (!slugs.has(slug)) throw new Error(`Missing shared documentation page: ${slug}`);
 for (const framework of requiredFrameworks) {
@@ -28,7 +28,7 @@ for (const framework of requiredFrameworks) {
 for (const page of registry.pages) if (page.source) await access(path.join(root, page.source));
 for (const component of discovery.components) {
   const page = registry.pages.find((item) => item.slug === `components/${component.component}`);
-  if (!page || page.source !== component.documentationSource) throw new Error(`${component.component} documentation route was not discovered from its ownership slice`);
+  if (!page || page.source !== component.documentationSource) throw new Error(`${component.component} documentation route was not discovered from its product ownership slice`);
   const source = await readFile(path.join(root, component.documentationSource), 'utf8');
   for (const section of requiredComponentSections) if (!source.includes(`<h2>${section}</h2>`)) throw new Error(`${component.component} documentation missing universal section: ${section}`);
   for (const manifestPath of component.exampleManifests) {

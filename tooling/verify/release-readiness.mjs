@@ -1,7 +1,7 @@
 import { readFile } from 'node:fs/promises';
 
 const root = JSON.parse(await readFile('package.json', 'utf8'));
-const support = JSON.parse(await readFile('tooling/compatibility/support-status.json', 'utf8'));
+const support = JSON.parse(await readFile('tooling/testing/compatibility/support-status.json', 'utf8'));
 const docsManifest = JSON.parse(await readFile('dist/docs/next/site-manifest.json', 'utf8'));
 
 if (root.version.endsWith('-rebuild')) {

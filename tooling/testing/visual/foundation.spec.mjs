@@ -3,19 +3,19 @@ import { readFile } from 'node:fs/promises';
 import { test, expect } from '@playwright/test';
 
 const readCss = async (path) => (await readFile(new URL(path, import.meta.url), 'utf8')).replace(/^@import .*;$/gm, '');
-const tokensCss = await readCss('../../packages/web/src/styles/tokens.css');
-const buttonCss = await readCss('../../packages/web/src/components/button/button.css');
-const checkboxCss = await readCss('../../packages/web/src/components/checkbox/checkbox.css');
-const colorInputCss = await readCss('../../packages/web/src/components/color-input/color-input.css');
-const fileInputCss = await readCss('../../packages/web/src/components/file-input/file-input.css');
-const inputCss = await readCss('../../packages/web/src/components/input/input.css');
-const nativeSelectCss = await readCss('../../packages/web/src/components/native-select/native-select.css');
-const radioCss = await readCss('../../packages/web/src/components/radio/radio.css');
-const sliderCss = await readCss('../../packages/web/src/components/slider/slider.css');
-const switchCss = await readCss('../../packages/web/src/components/switch/switch.css');
-const temporalInputCss = await readCss('../../packages/web/src/components/temporal-input/temporal-input.css');
-const surfaceCss = await readCss('../../packages/web/src/components/surface/surface.css');
-const elementalCss = await readCss('../../packages/web/src/components/elemental-primitives/elemental-primitives.css');
+const tokensCss = await readCss('../../../packages/web/src/styles/tokens.css');
+const buttonCss = await readCss('../../../packages/web/src/components/button/button.css');
+const checkboxCss = await readCss('../../../packages/web/src/components/checkbox/checkbox.css');
+const colorInputCss = await readCss('../../../packages/web/src/components/color-input/color-input.css');
+const fileInputCss = await readCss('../../../packages/web/src/components/file-input/file-input.css');
+const inputCss = await readCss('../../../packages/web/src/components/input/input.css');
+const nativeSelectCss = await readCss('../../../packages/web/src/components/native-select/native-select.css');
+const radioCss = await readCss('../../../packages/web/src/components/radio/radio.css');
+const sliderCss = await readCss('../../../packages/web/src/components/slider/slider.css');
+const switchCss = await readCss('../../../packages/web/src/components/switch/switch.css');
+const temporalInputCss = await readCss('../../../packages/web/src/components/temporal-input/temporal-input.css');
+const surfaceCss = await readCss('../../../packages/web/src/components/surface/surface.css');
+const elementalCss = await readCss('../../../packages/web/src/components/elemental-primitives/elemental-primitives.css');
 const baseline = JSON.parse(await readFile(new URL('./foundation-baseline.json', import.meta.url), 'utf8'));
 
 const fixtureCss = `
@@ -86,7 +86,7 @@ test('foundation design language matches the approved visual baseline', async ({
   const actual = createHash('sha256').update(image).digest('hex');
   testInfo.annotations.push({ type: 'visual-sha256', description: actual });
   console.log(`FOUNDATION_VISUAL_SHA256=${actual}`);
-  expect(actual, `Visual baseline changed. Inspect ${testInfo.outputPath('foundation-visual.png')} before updating tooling/visual/foundation-baseline.json.`).toBe(baseline.sha256);
+  expect(actual, `Visual baseline changed. Inspect ${testInfo.outputPath('foundation-visual.png')} before updating tooling/testing/visual/foundation-baseline.json.`).toBe(baseline.sha256);
 });
 
 test('Layer 0 through Layer 2 use the restrained default presentation contract', async ({ page }, testInfo) => {

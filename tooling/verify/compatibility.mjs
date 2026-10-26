@@ -1,7 +1,7 @@
 import { readFile } from 'node:fs/promises';
 
 const root = JSON.parse(await readFile(new URL('../../package.json', import.meta.url), 'utf8'));
-const support = JSON.parse(await readFile(new URL('../compatibility/support-status.json', import.meta.url), 'utf8'));
+const support = JSON.parse(await readFile(new URL('../testing/compatibility/support-status.json', import.meta.url), 'utf8'));
 
 if (support.schemaVersion !== 2) throw new Error('compatibility metadata schemaVersion must be 2');
 if (support.status !== 'implementation-baseline') throw new Error('compatibility metadata must expose an implementation baseline during component rollout');

@@ -6,29 +6,39 @@ VyrnForge is a clean-slate rebuild inside an existing repository. Canonical arch
 
 1. Read the smallest relevant canonical architecture, standard, and component documents.
 2. Inspect the current active repository surface before making implementation claims.
-3. Identify the reusable capability and whether it belongs in a shared contract, Core, Web, a framework port, documentation, or repository-only tooling.
+3. Identify the reusable capability and whether it belongs in a shared contract, Core, Web, a framework port, documentation, product ownership, or repository-only tooling.
 4. Reuse an approved foundation when it is correct. Do not preserve a legacy abstraction merely because it already exists.
 5. Define observable acceptance evidence before considering the change complete.
 
-## Setup and tooling
+## Setup and common commands
 
 Use the Node/npm versions declared by `.node-version`, `.nvmrc`, and the root `package.json`, then install the locked workspace with `npm ci --ignore-scripts --no-audit --no-fund`.
 
-Common commands:
-
 - `npm run build` — build all seven active packages in dependency order.
 - `npm run build:docs` — build packages plus the documentation site and executable examples.
-- `npm run lint:tooling`, `npm run lint:web-css`, and the package-scoped lint commands — validate authoring surfaces.
-- `npm run generate:tokens` — regenerate browser-facing token CSS from the repository-owned token source.
-- `npm run verify:tokens` — fail when generated token CSS has drifted.
-- `npm run verify:foundation-readiness` — check the current foundation baseline and its recorded evidence.
+- `npm run lint:tooling`, `npm run lint:web-css`, and package-scoped lint commands — validate authoring surfaces.
+- `npm run generate:tokens` / `npm run verify:tokens` — generate and verify repository-owned token output.
 - `npm run check:changed:plan` — inspect the validation plan selected from local changes.
-- `npm run check:changed` — execute the targeted local validation plan.
+- `npm run check:changed` — execute targeted local validation.
 - `npm run check:full` — deliberately execute the exhaustive broad validation tier.
-- `npm run test:tooling` — run repository tooling tests grouped by impact, testing infrastructure, accessibility tooling, and Actions tooling.
-- `npm run test:visual:foundation` — run the deterministic Chromium visual-regression fixture for the foundation design language.
+- `npm run test:tooling` — test impact, reusable testing, accessibility, and CI tooling.
+- `npm run test:visual:foundation` — run deterministic Chromium foundation visual evidence.
 
-Do not bypass a failing verifier by weakening the verifier unless the canonical architecture itself has deliberately changed.
+Do not bypass a failing verifier by weakening it unless the canonical architecture itself has deliberately changed.
+
+## Repository topology
+
+Keep the repository root intentionally small:
+
+- `packages/` — seven publishable package surfaces and package-owned evidence.
+- `product/` — repository-only framework-neutral product slices spanning packages.
+- `apps/` — runnable repository applications, currently the documentation app.
+- `documentation/` — shared/framework/reference consumer documentation not owned by one component.
+- `tooling/` — repository automation grouped by durable function.
+
+Do not introduce top-level `components/`, `fixtures/`, `testing/`, `scripts/`, `utils/`, or other concern-specific roots. Empty placeholder directories are not architecture.
+
+`tooling/` has eight functional owners: `build/`, `ci/`, `docs/`, `impact/`, `release/`, `testing/`, `tokens/`, and `verify/`. Quality-specific reusable validation infrastructure such as accessibility, compatibility, performance, and repository-wide visual evidence belongs beneath `tooling/testing/`, not as additional tooling roots. See `tooling/README.md` for placement rules.
 
 ## Package boundaries
 
@@ -36,38 +46,36 @@ The active public package graph is:
 
 - `@vyrnforge/core` — DOM-free renderer-neutral semantic types and genuinely portable logic.
 - `@vyrnforge/web` — canonical CSS, tokens/themes at runtime, and narrow shared browser foundations.
-- `@vyrnforge/icons` — optional official authored glyph catalog that builds on Web's icon definition contract.
+- `@vyrnforge/icons` — optional official authored glyph catalog built on Web's icon definition contract.
 - `@vyrnforge/react`, `@vyrnforge/angular`, `@vyrnforge/vue`, `@vyrnforge/elements` — sibling idiomatic ports depending only on Core and Web.
 
-Do not introduce sibling-port dependencies, cycles, a universal component controller/runtime, framework-specific shared contracts, port-local visual systems, or application business architecture. Repository component folders are ownership and validation boundaries; they do not create additional public npm packages.
+Do not introduce sibling-port dependencies, cycles, a universal component controller/runtime, framework-specific shared contracts, port-local visual systems, or application business architecture. Repository product folders are ownership and validation boundaries; they do not create additional public npm packages.
 
 ## Product ownership and testing
 
-Architectural policy is explicit; normal product instances are discovered. Framework component implementations live under `packages/<port>/src/components/<component>/`, with package-local evidence under `packages/<port>/test/components/<component>/`. Shared component docs, examples, cross-port/browser evidence, and unreleased changes live under `components/<component>/`.
+Framework component implementations live under `packages/<port>/src/components/<component>/`, with package-local evidence under `packages/<port>/test/components/<component>/`. Shared component docs, examples, accessibility mapping, cross-port/browser evidence, and unreleased changes live under `product/<component>/`.
 
 Reusable package-owned units may live under `packages/<package>/src/capabilities/`, `src/accessibility/`, or `src/foundations/` when that package is the correct architectural owner, with mirrored evidence under `packages/<package>/test/<kind>/`. Do not add per-instance CI mappings or a central component testing registry. Public exports, conventional ownership, and source dependencies drive discovery.
 
-Canonical component contracts own behavioral scenarios. Use real browsers for browser-owned behavior. Automated accessibility scanning complements rather than replaces keyboard/focus/browser behavior and assistive-technology evidence. Put evidence at the lowest owner that actually proves the behavior rather than centralizing unrelated tests in generic tooling folders.
+Canonical component contracts own behavioral scenarios. Use real browsers for browser-owned behavior. Automated accessibility scanning complements rather than replaces keyboard/focus/browser behavior and assistive-technology evidence. Put evidence at the lowest owner that actually proves the behavior.
 
-Foundation-wide visual regression is repository-owned evidence under `tooling/visual/` because it proves the shared design-language output rather than one component. Component-specific visual evidence should remain with the component when introduced.
-
-Repository tooling tests are grouped by the infrastructure they prove. `test:impact` covers the impact engine and its product discovery; `test:testing-tooling` covers reusable testing infrastructure contracts; `test:accessibility-tooling` covers repository accessibility tooling; `test:actions` covers Actions tooling. `test:tooling` is only their aggregate convenience command. These suites do not replace product-owned component/package evidence.
+Repository-wide reusable test infrastructure lives under `tooling/testing/`; product-specific evidence does not move there merely because it uses a shared harness. Foundation-wide visual regression is repository-owned testing infrastructure; component-specific visual evidence remains with the component when introduced.
 
 ## Documentation and changes
 
-Framework-neutral foundation content is authored once under shared documentation sources and composed into framework experiences. Framework guides own only framework-specific installation/API/integration guidance. Component documentation and executable examples are component-owned and discovered from `components/<component>/`. An unimplemented framework must be shown as unavailable rather than implied to work.
+Framework-neutral foundation content is authored once under shared documentation sources and composed into framework experiences. Framework guides own only framework-specific installation/API/integration guidance. Component documentation and executable examples are discovered from `product/<component>/`.
 
-Implementation changes to a component or reusable scoped unit require a matching unreleased change fragment beside that owner. Use `major`, `minor`, or `patch` for consumer-visible release significance and `internal` for repository-only changes. The fragment records change meaning; it must not contain a hand-maintained list of CI jobs. Release tooling composes the centralized changelog from scoped fragments.
+Implementation changes to a component or reusable scoped unit require a matching unreleased change fragment beside that owner. Use `major`, `minor`, or `patch` for consumer-visible release significance and `internal` for repository-only changes. Release tooling under `tooling/release/` composes centralized changelog output from scoped fragments.
 
 ## CI and validation
 
-Pull requests and push-triggered Main validation both use dependency-derived validation. Changed paths resolve to the most specific discovered owner, then reverse dependency closure selects applicable evidence. Main uses the pushed base/head range. Known CI/impact infrastructure follows its explicit owner; unknown or unclassified changes intentionally fail closed and broaden. Package builds, packing, and consumer checks may execute as prerequisites without making unrelated sibling product units selected evidence. Review the validation-plan artifact instead of assuming every test should run.
+Pull requests and push-triggered Main validation both use dependency-derived validation. Changed paths resolve to the most specific discovered owner, then reverse dependency closure selects applicable evidence. Impact policy and execution live under `tooling/impact/`; GitHub workflow YAML is orchestration only. Known CI/impact infrastructure follows its explicit owner; unknown or unclassified changes fail closed and broaden.
 
 - PR: targeted affected evidence plus small global architecture sentinels.
-- push-triggered `main`: targeted affected evidence for the merged push range through the same impact graph.
+- push-triggered `main`: targeted affected evidence for the merged push range.
 - explicit broad/local `main` tier: deliberate exhaustive verification exposed as `npm run check:full`.
 - scheduled: broad recurring safety net including cross-browser assurance.
-- release: broadest release-readiness graph, not merely the PR selection.
+- release: broadest release-readiness graph.
 
 Do not encode large path-condition matrices in workflow YAML. A passing scoped run proves its selected and executed evidence; it is not a claim that every repository test ran.
 

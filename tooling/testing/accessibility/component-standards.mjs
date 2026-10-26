@@ -1,6 +1,6 @@
 import { readFile } from 'node:fs/promises';
 import path from 'node:path';
-import { discoverProductUnits } from '../testing/discover-product-units.mjs';
+import { discoverProductUnits } from '../discover-product-units.mjs';
 
 const reviewStatuses = new Set(['mapped', 'review-required']);
 const nativeKinds = new Set(['native', 'composite', 'structural', 'utility', 'review-required']);
@@ -30,7 +30,7 @@ export function unresolvedComponentStandard(component) {
 }
 
 export function validateComponentStandard(standard, component) {
-  const prefix = `components/${component}/accessibility.json`;
+  const prefix = `product/${component}/accessibility.json`;
   if (!standard || typeof standard !== 'object' || Array.isArray(standard)) throw new Error(`${prefix} must contain an object`);
   if (standard.schemaVersion !== 1) throw new Error(`${prefix} must use schemaVersion 1`);
   if (standard.component !== component) throw new Error(`${prefix} component must equal ${component}`);
@@ -59,7 +59,7 @@ export function validateComponentStandard(standard, component) {
 export async function loadComponentStandards(root = process.cwd()) {
   const discovery = discoverProductUnits(root); const standards = [];
   for (const entry of discovery.components) {
-    const component = entry.component; const file = path.join(root, 'components', component, 'accessibility.json');
+    const component = entry.component; const file = path.join(root, 'product', component, 'accessibility.json');
     try { standards.push(validateComponentStandard(JSON.parse(await readFile(file, 'utf8')), component)); }
     catch (error) { if (error?.code === 'ENOENT') standards.push(unresolvedComponentStandard(component)); else throw error; }
   }

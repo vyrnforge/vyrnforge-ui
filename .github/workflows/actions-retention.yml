@@ -42,7 +42,7 @@ jobs:
           GITHUB_TOKEN: ${{ github.token }}
           RETENTION_PR_NUMBER: ${{ inputs.pull_request || '' }}
           RETENTION_REPORT: test-results/actions-retention.json
-        run: node tooling/actions/retention-cleanup.mjs
+        run: node tooling/ci/retention-cleanup.mjs
 
       - name: Upload cleanup report
         if: always()

@@ -22,7 +22,7 @@ function walk(root, relativePath) {
 }
 
 export function fragmentOwner(relativePath) {
-  const component = /^components\/([^/]+)\/changes\//.exec(relativePath);
+  const component = /^product\/([^/]+)\/changes\//.exec(relativePath);
   if (component) return { kind: 'component', id: component[1] };
   const unit = /^packages\/([^/]+)\/changes\/([^/]+)\/([^/]+)\//.exec(relativePath);
   if (unit) return { kind: unit[2], id: unit[3], package: unit[1] };
@@ -42,12 +42,12 @@ export function parseChangeFragment(root, relativePath) {
   }));
   if (!changeTypes.has(metadata.type)) throw new Error(`${relativePath} type must be one of ${[...changeTypes].join(', ')}`);
   const owner = fragmentOwner(relativePath);
-  if (!owner) throw new Error(`${relativePath} is not under a recognized component, package, or scoped-unit changes directory`);
+  if (!owner) throw new Error(`${relativePath} is not under a recognized product component, package, or scoped-unit changes directory`);
   return { path: relativePath, owner, type: metadata.type, description: match[2].trim() };
 }
 
 export function discoverChangeFragments(root = defaultRoot) {
-  const paths = [...walk(root, 'components'), ...walk(root, 'packages')]
+  const paths = [...walk(root, 'product'), ...walk(root, 'packages')]
     .filter((file) => file.includes('/changes/'))
     .filter((file, index, values) => values.indexOf(file) === index)
     .sort();

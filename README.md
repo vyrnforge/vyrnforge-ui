@@ -18,14 +18,32 @@ The approved active package topology is:
 
 Packages remain private while the rebuild foundation is being proven. Framework package scaffolds do not imply component availability or supported framework-version ranges.
 
-## Repository areas
+## Repository topology
 
-- `packages/` — the seven active package surfaces.
-- `apps/docs/` — public documentation presentation/runtime assets.
-- `documentation/` — shared and framework-adaptation public documentation sources.
-- `testing/` — repository testing policy and impact metadata only; executable evidence stays with its owner and reusable harnesses live under `tooling/testing/`.
-- `fixtures/` — repository-only consumer and validation fixture policy/reference material.
-- `tooling/` — build, token generation, architecture enforcement, impact analysis, reusable test infrastructure, documentation generation, and quality infrastructure.
+The repository has five primary implementation roots:
+
+- `packages/` — the seven publishable package surfaces and package-owned evidence.
+- `product/` — framework-neutral, repository-only product ownership slices for cross-package components: shared docs, examples, accessibility metadata, cross-port/browser evidence, and unreleased component changes. Runtime implementation does not live here.
+- `apps/` — runnable repository applications. `apps/docs/` is the documentation application/runtime.
+- `documentation/` — authored shared/framework/reference documentation sources that are not owned by one component.
+- `tooling/` — repository-only automation, organized by durable function. See `tooling/README.md`.
+
+Do not create new top-level roots for a test type, fixture type, generator, script family, or temporary concern. Repository-only infrastructure belongs under the existing tooling owner that performs that function. Empty placeholder directories are not architecture.
+
+## Tooling model
+
+`tooling/` has exactly eight top-level functional owners:
+
+- `build/` — repository build orchestration and build-only asset preparation.
+- `ci/` — CI operational support such as workflow evidence retention; workflow YAML remains orchestration.
+- `docs/` — documentation generation, serving, compilation, and docs-specific browser adapters.
+- `impact/` — impact policy, product/validation graph construction, plan selection, and plan execution.
+- `release/` — change-fragment discovery and release/changelog composition.
+- `testing/` — reusable test/evidence infrastructure, including accessibility, compatibility, performance, and visual harnesses or metadata.
+- `tokens/` — repository-owned token authoring and generation.
+- `verify/` — executable repository invariants and architecture/public-boundary verification.
+
+A new tooling top-level directory requires a genuinely new repository capability that cannot be owned cleanly by one of these areas. Tests for tooling stay with the tooling they prove.
 
 ## Foundation authoring
 
@@ -35,15 +53,13 @@ Canonical shared styling is owned by `@vyrnforge/web`. The aggregate `@vyrnforge
 
 ## Validation model
 
-Pull requests do not run an arbitrary full suite. CI classifies changed areas, computes reverse product dependencies, selects required validation evidence, expands execution prerequisites, and uploads the resulting validation plan for inspection. Push-triggered Main validation uses the pushed change range through the same impact graph. Known, classified CI/impact infrastructure follows its explicit owner and evidence closure; a change does not broaden merely because it is infrastructure. Unknown or unclassified changes still fail closed and broaden, while shared or genuinely repository-wide infrastructure may legitimately have broad impact. Scheduled and release workflows remain deliberately broad safety nets.
+Pull requests do not run an arbitrary full suite. CI classifies changed areas, computes reverse product dependencies, selects required validation evidence, expands execution prerequisites, and uploads the resulting validation plan for inspection. Push-triggered Main validation uses the pushed change range through the same impact graph. Known, classified CI/impact infrastructure follows its explicit owner and evidence closure; a change does not broaden merely because it is infrastructure. Unknown or unclassified changes fail closed and broaden, while shared or genuinely repository-wide infrastructure may legitimately have broad impact. Scheduled and release workflows remain deliberately broad safety nets.
 
-For normal local work, use `npm run check:changed`. It compares the current branch and working tree (including untracked files) against `origin/main`, then executes the targeted impact plan. Use `npm run check:changed:plan` to inspect the execution plan without running it. Set `VF_BASE_REF` or pass `--base-ref` when a different reachable comparison base is required. Use `npm run check:full` only for deliberate exhaustive repository validation; it executes the explicit broad main tier and is distinct from the normal push-triggered Main gate.
+For normal local work, use `npm run check:changed`. It compares the current branch and working tree (including untracked files) against `origin/main`, then executes the targeted impact plan. Use `npm run check:changed:plan` to inspect the execution plan without running it. Set `VF_BASE_REF` or pass `--base-ref` when a different reachable comparison base is required. Use `npm run check:full` only for deliberate exhaustive repository validation.
 
-Tooling tests are grouped by evidence owner: `npm run test:impact`, `npm run test:testing-tooling`, `npm run test:accessibility-tooling`, and `npm run test:actions`. `npm run test:tooling` runs those repository-tooling suites together. Component type, SSR, and browser runners remain focused debugging interfaces; normal validation should flow through the impact graph.
+Tooling tests are grouped by evidence owner: `npm run test:impact`, `npm run test:testing-tooling`, `npm run test:accessibility-tooling`, and `npm run test:ci-tooling`. `npm run test:tooling` runs those repository-tooling suites together. Component type, SSR, and browser runners remain focused debugging interfaces; normal validation should flow through the impact graph.
 
-Component-owned CSS is classified separately from semantic/API implementation changes. A component CSS edit selects the shared Web style/package evidence and affected component browser evidence across implemented ports without automatically selecting unrelated type or SSR evidence. Browser installation is prepared once per validation execution and reused by selected component/docs browser scopes.
-
-Real-browser documentation validation uses Playwright; automated accessibility scans run with axe-core. Packed-package consumer checks install actual tarballs through public entrypoints. Visual and framework-specific SSR/hydration evidence are intentionally added only when real rebuilt components and deliberately supported runtimes exist.
+Real-browser documentation validation uses Playwright; automated accessibility scans run with axe-core. Packed-package consumer checks install actual tarballs through public entrypoints. Visual and framework-specific SSR/hydration evidence are added only where real rebuilt components and deliberately supported runtimes require them.
 
 ## Source of truth
 
