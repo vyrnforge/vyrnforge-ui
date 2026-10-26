@@ -141,12 +141,29 @@ test('documentation and unknown paths keep safe behavior', () => {
   assert.equal(createPlan(['some-unclassified-root-file.txt']).broadened, true);
 });
 
-test('testing discovery and repository foundation changes fail closed', () => {
-  for (const file of ['tooling/testing/discover-product-units.mjs', 'testing/impact.json', 'tooling/impact/plan.mjs', '.github/workflows/ci.yml', 'package.json']) {
+test('owned CI and impact-engine changes stay scoped to their contract evidence', () => {
+  const workflows = createPlan(['.github/workflows/ci.yml']);
+  assert.deepEqual(workflows.directNodes, ['ci-workflows']);
+  assert.equal(workflows.broadened, false);
+  assert.ok(workflows.validationScopes.includes('workflow-contracts'));
+  assert.equal(workflows.validationScopes.includes('component-types-all'), false);
+  assert.equal(workflows.validationScopes.includes('component:button:react:browser'), false);
+
+  for (const file of ['tooling/impact/plan.mjs', 'testing/impact.json', 'tooling/testing/discover-product-units.mjs']) {
+    const plan = createPlan([file]);
+    assert.deepEqual(plan.directNodes, ['impact-engine'], file);
+    assert.equal(plan.broadened, false, file);
+    for (const scope of ['lint-tooling', 'impact-engine']) assert.ok(plan.validationScopes.includes(scope), `${file}: ${scope}`);
+    assert.equal(plan.validationScopes.includes('component-types-all'), false, file);
+    assert.equal(plan.validationScopes.includes('component:button:react:browser'), false, file);
+  }
+});
+
+test('unknown repository foundations still fail closed', () => {
+  for (const file of ['package.json', '.github/CODEOWNERS', 'testing/unowned-fixture.mjs', 'tooling/unowned-script.mjs']) {
     const plan = createPlan([file]);
     assert.equal(plan.broadened, true, file);
     assert.ok(plan.validationScopes.includes('impact-engine'), `${file}: impact-engine`);
-    for (const scope of ['foundation-readiness', 'l1-readiness', 'l2-readiness']) assert.ok(plan.validationScopes.includes(scope), `${file}: ${scope}`);
   }
 });
 
@@ -163,5 +180,8 @@ test('classification returns the most specific owner', () => {
   assert.deepEqual(classifyPath('packages/vue/src/index.ts'), { nodes: ['package:vue:public-surface'], broad: false });
   assert.deepEqual(classifyPath('packages/web/src/styles.css'), { nodes: ['web:aggregate-style'], broad: false });
   assert.deepEqual(classifyPath('tooling/performance/representative-bundle-baselines.json'), { nodes: ['performance:bundle-baselines'], broad: false });
+  assert.deepEqual(classifyPath('tooling/impact/plan.mjs'), { nodes: ['impact-engine'], broad: false });
+  assert.deepEqual(classifyPath('.github/workflows/ci.yml'), { nodes: ['ci-workflows'], broad: false });
+  assert.deepEqual(classifyPath('tooling/verify/workflows.mjs'), { nodes: ['workflow-contracts'], broad: false });
   assert.deepEqual(classifyPath('tooling/verify/package-contracts.mjs'), { nodes: ['tooling'], broad: true });
 });
