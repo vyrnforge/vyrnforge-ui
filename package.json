@@ -19,7 +19,7 @@
     "build:vue": "npm run build --workspace @vyrnforge/vue",
     "build:elements": "npm run build --workspace @vyrnforge/elements",
     "build:docs": "npm run build && node tooling/docs/build.mjs",
-    "check:full": "node tooling/impact/execute.mjs --mode main",
+    "check:full": "node tooling/impact/execute.mjs --mode full",
     "check:changed": "node tooling/impact/local.mjs",
     "check:changed:plan": "node tooling/impact/local.mjs --dry-run",
     "lint:tooling": "eslint tooling playwright.config.mjs eslint.config.mjs stylelint.config.mjs",
