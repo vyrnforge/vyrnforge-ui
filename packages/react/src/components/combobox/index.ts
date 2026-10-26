@@ -1,9 +1,168 @@
-import{createContext,createElement,forwardRef,useContext,useId,useMemo,useRef,useState,type ComponentPropsWithoutRef,type ReactNode}from'react';import{createPortal}from'react-dom';import{useFloatingSurface}from'../../internal/floating-surface.js';
-interface Ctx{open:boolean;setOpen(v:boolean):void;value:string;setValue(v:string):void;query:string;setQuery(v:string):void;inputId:string;listboxId:string;anchorRef:React.MutableRefObject<HTMLElement|null>;surfaceRef:React.MutableRefObject<HTMLElement|null>;}
-const C=createContext<Ctx|null>(null);function useCombo(){const v=useContext(C);if(!v)throw new Error('Combobox parts must be inside ComboboxRoot.');return v;}
-export interface ComboboxRootProps{children?:ReactNode;value?:string;defaultValue?:string;onValueChange?(value:string):void;}
-export function ComboboxRoot({children,value,defaultValue='',onValueChange}:ComboboxRootProps){const[iv,setIv]=useState(defaultValue),[open,setOpen]=useState(false),[query,setQuery]=useState('');const uid=useId(),inputId=`vf-combobox-${uid}-input`,listboxId=`vf-combobox-${uid}-listbox`;const anchorRef=useRef<HTMLElement|null>(null),surfaceRef=useRef<HTMLElement|null>(null);const selected=value??iv;const ctx=useMemo(()=>({open,setOpen,value:selected,setValue(v:string){if(value===undefined)setIv(v);onValueChange?.(v);setQuery(v);setOpen(false);},query,setQuery,inputId,listboxId,anchorRef,surfaceRef}),[open,selected,query,value,onValueChange,inputId,listboxId]);return createElement(C.Provider,{value:ctx},children);}
-export const ComboboxInput=forwardRef<HTMLInputElement,ComponentPropsWithoutRef<'input'>>(function ComboboxInput(props,ref){const c=useCombo();return createElement('input',{...props,id:props.id??c.inputId,ref(n:HTMLInputElement|null){c.anchorRef.current=n;if(typeof ref==='function')ref(n);else if(ref)ref.current=n;},role:'combobox','aria-autocomplete':'list','aria-expanded':c.open,'aria-controls':props['aria-controls']??c.listboxId,'data-vf-combobox-input':'',value:props.value??c.query,onChange:e=>{props.onChange?.(e);if(!e.defaultPrevented){c.setQuery(e.currentTarget.value);c.setOpen(true);}},onFocus:e=>{props.onFocus?.(e);if(!e.defaultPrevented)c.setOpen(true);},onKeyDown:e=>{props.onKeyDown?.(e);if(e.key==='ArrowDown'){e.preventDefault();c.setOpen(true);queueMicrotask(()=>c.surfaceRef.current?.querySelector<HTMLElement>('[role="option"]:not([hidden])')?.focus());}if(e.key==='Escape'){c.setOpen(false);}}});});
-export const ComboboxContent=forwardRef<HTMLDivElement,ComponentPropsWithoutRef<'div'>>(function ComboboxContent(props,ref){const c=useCombo();const target=useFloatingSurface({open:c.open,anchorRef:c.anchorRef,surfaceRef:c.surfaceRef,onDismiss:()=>c.setOpen(false)});if(!c.open)return null;const n=createElement('div',{...props,id:props.id??c.listboxId,ref(x:HTMLDivElement|null){c.surfaceRef.current=x;if(typeof ref==='function')ref(x);else if(ref)ref.current=x;},role:'listbox','aria-labelledby':props['aria-labelledby']??c.inputId,'data-vf-combobox-content':''});return target?createPortal(n,target):n;});
-export interface ComboboxOptionProps extends Omit<ComponentPropsWithoutRef<'button'>,'value'>{value:string;textValue?:string;}
-export const ComboboxOption=forwardRef<HTMLButtonElement,ComboboxOptionProps>(function ComboboxOption({value,textValue,disabled,...props},ref){const c=useCombo();const label=textValue??value;const hidden=!!c.query&&!label.toLocaleLowerCase().includes(c.query.toLocaleLowerCase());return createElement('button',{...props,ref,type:'button',role:'option',hidden,disabled,'aria-selected':c.value===value,'data-vf-combobox-option':'',onClick:()=>{if(!disabled){c.setValue(value);c.anchorRef.current?.focus();}}});});
+import { createContext, createElement, forwardRef, useContext, useId, useMemo, useRef, useState, type ComponentPropsWithoutRef, type ReactNode } from 'react';
+import { createPortal } from 'react-dom';
+import { resolveEnabledIndex, type CollectionNavigationIntent } from '@vyrnforge/core/collection-navigation';
+import { useFloatingSurface } from '../../internal/floating-surface.js';
+
+interface Ctx {
+  open: boolean;
+  setOpen(value: boolean): void;
+  value: string;
+  setValue(value: string): void;
+  query: string;
+  setQuery(value: string): void;
+  activeId: string | null;
+  setActiveId(value: string | null): void;
+  inputId: string;
+  listboxId: string;
+  anchorRef: React.MutableRefObject<HTMLElement | null>;
+  surfaceRef: React.MutableRefObject<HTMLElement | null>;
+}
+const C = createContext<Ctx | null>(null);
+function useCombo() { const value = useContext(C); if (!value) throw new Error('Combobox parts must be inside ComboboxRoot.'); return value; }
+
+const optionSelector = '[data-vf-combobox-option]';
+function visibleOptions(root: HTMLElement | null): HTMLElement[] { return root ? Array.from(root.querySelectorAll<HTMLElement>(optionSelector)).filter((option) => !option.hidden) : []; }
+function disabled(option: HTMLElement): boolean { return option.getAttribute('aria-disabled') === 'true' || option.hasAttribute('disabled'); }
+function activeOption(context: Ctx): HTMLElement | null {
+  if (!context.activeId) return null;
+  return visibleOptions(context.surfaceRef.current).find((option) => option.id === context.activeId && !disabled(option)) ?? null;
+}
+function moveActive(context: Ctx, intent: Extract<CollectionNavigationIntent, 'next' | 'previous'>) {
+  const options = visibleOptions(context.surfaceRef.current);
+  const current = options.findIndex((option) => option.id === context.activeId);
+  const start = current >= 0 ? current : intent === 'previous' ? options.length : -1;
+  const next = resolveEnabledIndex(options.map((option) => ({ disabled: disabled(option) })), start, intent, { loop: false });
+  if (next == null) return;
+  const target = options[next];
+  if (!target?.id) return;
+  context.setActiveId(target.id);
+  target.scrollIntoView?.({ block: 'nearest' });
+}
+
+export interface ComboboxRootProps { children?: ReactNode; value?: string; defaultValue?: string; onValueChange?(value: string): void; }
+export function ComboboxRoot({ children, value, defaultValue = '', onValueChange }: ComboboxRootProps) {
+  const [internalValue, setInternalValue] = useState(defaultValue);
+  const [open, setOpenState] = useState(false);
+  const [query, setQueryState] = useState('');
+  const [activeId, setActiveId] = useState<string | null>(null);
+  const uid = useId();
+  const inputId = `vf-combobox-${uid}-input`;
+  const listboxId = `vf-combobox-${uid}-listbox`;
+  const anchorRef = useRef<HTMLElement | null>(null);
+  const surfaceRef = useRef<HTMLElement | null>(null);
+  const selected = value ?? internalValue;
+  const context = useMemo<Ctx>(() => ({
+    open,
+    setOpen(next) { setOpenState(next); if (!next) setActiveId(null); },
+    value: selected,
+    setValue(next) {
+      if (value === undefined) setInternalValue(next);
+      onValueChange?.(next);
+      setQueryState(next);
+      setActiveId(null);
+      setOpenState(false);
+      queueMicrotask(() => anchorRef.current?.focus());
+    },
+    query,
+    setQuery(next) { setQueryState(next); setActiveId(null); },
+    activeId,
+    setActiveId,
+    inputId,
+    listboxId,
+    anchorRef,
+    surfaceRef,
+  }), [activeId, inputId, listboxId, onValueChange, open, query, selected, value]);
+  return createElement(C.Provider, { value: context }, children);
+}
+
+export const ComboboxInput = forwardRef<HTMLInputElement, ComponentPropsWithoutRef<'input'>>(function ComboboxInput(props, ref) {
+  const context = useCombo();
+  return createElement('input', {
+    ...props,
+    id: props.id ?? context.inputId,
+    ref(node: HTMLInputElement | null) {
+      context.anchorRef.current = node;
+      if (typeof ref === 'function') ref(node); else if (ref) ref.current = node;
+    },
+    role: 'combobox',
+    'aria-autocomplete': 'list',
+    'aria-expanded': context.open,
+    'aria-controls': props['aria-controls'] ?? context.listboxId,
+    'aria-activedescendant': context.activeId ?? undefined,
+    'data-vf-combobox-input': '',
+    value: props.value ?? context.query,
+    onChange(event) {
+      props.onChange?.(event);
+      if (!event.defaultPrevented) { context.setQuery(event.currentTarget.value); context.setOpen(true); }
+    },
+    onFocus(event) {
+      props.onFocus?.(event);
+      if (!event.defaultPrevented) context.setOpen(true);
+    },
+    onKeyDown(event) {
+      props.onKeyDown?.(event);
+      if (event.defaultPrevented) return;
+      if (event.key === 'ArrowDown' || event.key === 'ArrowUp') {
+        event.preventDefault();
+        context.setOpen(true);
+        const intent = event.key === 'ArrowDown' ? 'next' : 'previous';
+        queueMicrotask(() => moveActive(context, intent));
+        return;
+      }
+      if (event.key === 'Enter' && context.open) {
+        const target = activeOption(context);
+        if (target) { event.preventDefault(); target.click(); }
+        return;
+      }
+      if (event.key === 'Escape' && context.open) {
+        event.preventDefault();
+        context.setOpen(false);
+      }
+    },
+  });
+});
+
+export const ComboboxContent = forwardRef<HTMLDivElement, ComponentPropsWithoutRef<'div'>>(function ComboboxContent(props, ref) {
+  const context = useCombo();
+  const target = useFloatingSurface({ open: context.open, anchorRef: context.anchorRef, surfaceRef: context.surfaceRef, onDismiss: () => context.setOpen(false) });
+  if (!context.open) return null;
+  const node = createElement('div', {
+    ...props,
+    id: props.id ?? context.listboxId,
+    ref(element: HTMLDivElement | null) {
+      context.surfaceRef.current = element;
+      if (typeof ref === 'function') ref(element); else if (ref) ref.current = element;
+    },
+    role: 'listbox',
+    'aria-labelledby': props['aria-labelledby'] ?? context.inputId,
+    'data-vf-combobox-content': '',
+  });
+  return target ? createPortal(node, target) : node;
+});
+
+export interface ComboboxOptionProps extends Omit<ComponentPropsWithoutRef<'button'>, 'value'> { value: string; textValue?: string; }
+export const ComboboxOption = forwardRef<HTMLButtonElement, ComboboxOptionProps>(function ComboboxOption({ value, textValue, disabled: isDisabled, onClick, ...props }, ref) {
+  const context = useCombo();
+  const uid = useId();
+  const id = props.id ?? `vf-combobox-option-${uid}`;
+  const label = textValue ?? value;
+  const hidden = !!context.query && !label.toLocaleLowerCase().includes(context.query.toLocaleLowerCase());
+  return createElement('button', {
+    ...props,
+    id,
+    ref,
+    type: 'button',
+    role: 'option',
+    tabIndex: -1,
+    hidden,
+    disabled: isDisabled,
+    'aria-disabled': isDisabled || undefined,
+    'aria-selected': context.activeId ? context.activeId === id : context.value === value,
+    'data-vf-combobox-option': '',
+    'data-vf-text-value': label,
+    onClick(event) {
+      onClick?.(event);
+      if (!event.defaultPrevented && !isDisabled) context.setValue(value);
+    },
+  });
+});

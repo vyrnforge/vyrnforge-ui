@@ -1,1 +1,139 @@
-import{Directive,computed,input,output,signal}from'@angular/core';let comboboxId=0;@Directive({selector:'[vfComboboxRoot]',standalone:true})export class VfComboboxRootDirective{readonly value=input<string|undefined>(undefined);readonly defaultValue=input('');readonly valueChange=output<string>();private iv=signal<string|undefined>(undefined);readonly selected=computed(()=>this.value()??this.iv()??this.defaultValue());readonly query=signal('');readonly open=signal(false);readonly inputId=`vf-combobox-${++comboboxId}-input`;readonly listboxId=`vf-combobox-${comboboxId}-listbox`;setValue(v:string){if(this.value()===undefined)this.iv.set(v);this.query.set(v);this.open.set(false);this.valueChange.emit(v);}}@Directive({selector:'input[vfComboboxInput]',standalone:true,host:{role:'combobox','aria-autocomplete':'list','data-vf-combobox-input':'','[id]':'root.inputId','[attr.aria-expanded]':'root.open()','[attr.aria-controls]':'root.listboxId','(input)':'onInput($event)','(focus)':'root.open.set(true)'}})export class VfComboboxInputDirective{constructor(readonly root:VfComboboxRootDirective){}onInput(e:Event){this.root.query.set((e.target as HTMLInputElement).value);this.root.open.set(true);}}@Directive({selector:'[vfComboboxContent]',standalone:true,host:{role:'listbox','data-vf-combobox-content':'','[id]':'root.listboxId','[attr.aria-labelledby]':'root.inputId','[hidden]':'!root.open()'}})export class VfComboboxContentDirective{constructor(readonly root:VfComboboxRootDirective){}}@Directive({selector:'button[vfComboboxOption]',standalone:true,host:{type:'button',role:'option','data-vf-combobox-option':'','[attr.aria-selected]':'root.selected()===value()','[hidden]':'hidden()','(click)':'select()'}})export class VfComboboxOptionDirective{readonly value=input.required<string>({alias:'vfComboboxOption'});readonly textValue=input('');readonly disabled=input(false);constructor(readonly root:VfComboboxRootDirective){}readonly hidden=computed(()=>!!this.root.query()&&!(this.textValue()||this.value()).toLowerCase().includes(this.root.query().toLowerCase()));select(){if(!this.disabled())this.root.setValue(this.value());}}
+import { Directive, ElementRef, computed, inject, input, output, signal } from '@angular/core';
+import { resolveEnabledIndex, type CollectionNavigationIntent } from '@vyrnforge/core/collection-navigation';
+
+let comboboxId = 0;
+const optionSelector = '[data-vf-combobox-option]';
+function visibleOptions(root: HTMLElement, query = ''): HTMLElement[] {
+  const normalizedQuery = query.trim().toLowerCase();
+  return Array.from(root.querySelectorAll<HTMLElement>(optionSelector)).filter((option) => {
+    if (!normalizedQuery) return true;
+    return (option.textContent ?? '').toLowerCase().includes(normalizedQuery);
+  });
+}
+function disabled(option: HTMLElement): boolean { return option.getAttribute('aria-disabled') === 'true' || option.hasAttribute('disabled'); }
+
+@Directive({ selector: '[vfComboboxRoot]', standalone: true })
+export class VfComboboxRootDirective {
+  readonly value = input<string | undefined>(undefined);
+  readonly defaultValue = input('');
+  readonly valueChange = output<string>();
+  private readonly internalValue = signal<string | undefined>(undefined);
+  readonly selected = computed(() => this.value() ?? this.internalValue() ?? this.defaultValue());
+  readonly query = signal('');
+  readonly open = signal(false);
+  readonly activeId = signal<string | null>(null);
+  readonly inputId = `vf-combobox-${++comboboxId}-input`;
+  readonly listboxId = `vf-combobox-${comboboxId}-listbox`;
+  private optionIndex = 0;
+  private readonly element = inject<ElementRef<HTMLElement>>(ElementRef);
+
+  nextOptionId() { return `${this.listboxId}-option-${++this.optionIndex}`; }
+  setOpen(value: boolean) { this.open.set(value); if (!value) this.activeId.set(null); }
+  setQuery(value: string) { this.query.set(value); this.activeId.set(null); this.setOpen(true); }
+  setValue(value: string) {
+    if (this.value() === undefined) this.internalValue.set(value);
+    this.query.set(value);
+    this.activeId.set(null);
+    this.open.set(false);
+    this.valueChange.emit(value);
+    this.focusInput();
+  }
+  focusInput() { this.element.nativeElement.querySelector<HTMLInputElement>('[data-vf-combobox-input]')?.focus(); }
+  moveActive(intent: Extract<CollectionNavigationIntent, 'next' | 'previous'>) {
+    const options = visibleOptions(this.element.nativeElement, this.query());
+    const current = options.findIndex((option) => option.id === this.activeId());
+    const start = current >= 0 ? current : intent === 'previous' ? options.length : -1;
+    const next = resolveEnabledIndex(options.map((option) => ({ disabled: disabled(option) })), start, intent, { loop: false });
+    if (next == null) return;
+    const target = options[next];
+    if (!target?.id) return;
+    this.activeId.set(target.id);
+    target.scrollIntoView?.({ block: 'nearest' });
+  }
+  activateActive() {
+    const id = this.activeId();
+    if (!id) return false;
+    const target = visibleOptions(this.element.nativeElement, this.query()).find((option) => option.id === id && !disabled(option));
+    if (!target) return false;
+    target.click();
+    return true;
+  }
+}
+
+@Directive({
+  selector: 'input[vfComboboxInput]',
+  standalone: true,
+  host: {
+    role: 'combobox',
+    'aria-autocomplete': 'list',
+    'data-vf-combobox-input': '',
+    '[id]': 'root.inputId',
+    '[value]': 'root.query()',
+    '[attr.aria-expanded]': 'root.open()',
+    '[attr.aria-controls]': 'root.listboxId',
+    '[attr.aria-activedescendant]': 'root.activeId()',
+    '(input)': 'onInput($event)',
+    '(focus)': 'root.setOpen(true)',
+    '(keydown)': 'onKeydown($event)',
+  },
+})
+export class VfComboboxInputDirective {
+  constructor(readonly root: VfComboboxRootDirective) {}
+  onInput(event: Event) { this.root.setQuery((event.target as HTMLInputElement).value); }
+  onKeydown(event: KeyboardEvent) {
+    if (event.defaultPrevented) return;
+    if (event.key === 'ArrowDown' || event.key === 'ArrowUp') {
+      event.preventDefault();
+      this.root.setOpen(true);
+      this.root.moveActive(event.key === 'ArrowDown' ? 'next' : 'previous');
+      return;
+    }
+    if (event.key === 'Enter' && this.root.open()) {
+      if (this.root.activateActive()) event.preventDefault();
+      return;
+    }
+    if (event.key === 'Escape' && this.root.open()) {
+      event.preventDefault();
+      this.root.setOpen(false);
+    }
+  }
+}
+
+@Directive({
+  selector: '[vfComboboxContent]',
+  standalone: true,
+  host: {
+    role: 'listbox',
+    'data-vf-combobox-content': '',
+    '[id]': 'root.listboxId',
+    '[attr.aria-labelledby]': 'root.inputId',
+    '[hidden]': '!root.open()',
+  },
+})
+export class VfComboboxContentDirective { constructor(readonly root: VfComboboxRootDirective) {} }
+
+@Directive({
+  selector: 'button[vfComboboxOption]',
+  standalone: true,
+  host: {
+    type: 'button',
+    role: 'option',
+    tabindex: '-1',
+    'data-vf-combobox-option': '',
+    '[id]': 'optionId',
+    '[disabled]': 'disabled()',
+    '[attr.aria-disabled]': 'disabled() || null',
+    '[attr.aria-selected]': 'root.activeId() ? root.activeId() === optionId : root.selected() === value()',
+    '[hidden]': 'hidden()',
+    '(click)': 'select($event)',
+  },
+})
+export class VfComboboxOptionDirective {
+  readonly value = input.required<string>({ alias: 'vfComboboxOption' });
+  readonly textValue = input('');
+  readonly disabled = input(false);
+  readonly optionId: string;
+  constructor(readonly root: VfComboboxRootDirective, element: ElementRef<HTMLElement>) { this.optionId = element.nativeElement.id || root.nextOptionId(); }
+  readonly hidden = computed(() => !!this.root.query() && !(this.textValue() || this.value()).toLowerCase().includes(this.root.query().toLowerCase()));
+  select(event: MouseEvent) { if (!event.defaultPrevented && !this.disabled()) this.root.setValue(this.value()); }
+}
