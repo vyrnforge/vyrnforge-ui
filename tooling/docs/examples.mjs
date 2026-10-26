@@ -2,7 +2,7 @@ import { mkdir, readFile, readdir, writeFile } from 'node:fs/promises';
 import path from 'node:path';
 import { build } from 'esbuild';
 import { discoverProductUnits } from '../testing/discover-product-units.mjs';
-import { frameworkLabel, renderFrameworkMark, supportedFrameworks } from './framework-presentation.mjs';
+import { frameworkLabel, renderFrameworkMark, supportedFrameworks } from '../../apps/docs/framework-presentation.mjs';
 
 function safeName(value) { return value.replace(/[^a-z0-9]+/gi, '-').replace(/^-|-$/g, '').toLowerCase(); }
 function escapeHtml(value) { return String(value).replaceAll('&', '&amp;').replaceAll('<', '&lt;').replaceAll('"', '&quot;'); }
