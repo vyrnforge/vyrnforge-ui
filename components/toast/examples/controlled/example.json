@@ -1,0 +1,1 @@
+{"id":"toast/controlled","title":"Controlled Toast","description":"Owner-controlled visibility with an authored localized close name.","defaultFramework":"react","frameworks":{"react":{"label":"React","language":"tsx","source":"react.tsx"}}}
