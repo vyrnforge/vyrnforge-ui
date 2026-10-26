@@ -13,12 +13,13 @@ async function waitForClient(page) {
   await expect(page.locator('body')).toHaveAttribute('data-controlled-requests', '0');
 }
 
-test('uses polite real output with authored localized naming', async ({ page }) => {
+test('uses polite real output with authored English and localized naming', async ({ page }) => {
   await page.goto(fixture);
   const viewport = page.locator('#viewport');
   await expect(viewport).toHaveAttribute('aria-live', 'polite');
   await expect(page.locator('#controlled-toast')).toHaveAttribute('role', 'status');
   await expect(page.locator('#controlled-close')).toHaveAccessibleName('Tutup notifikasi');
+  if (port !== 'web') await expect(page.locator('#sibling-b-close')).toHaveAccessibleName('Close notification');
   await expect(page.locator('body')).not.toContainText('Dismiss notification');
   await page.addScriptTag({ content: axeCore.source });
   expect((await page.evaluate(async () => globalThis.axe.run(document))).violations).toEqual([]);
@@ -58,6 +59,17 @@ test('consumer cancellation, native keyboard activation, and sibling ownership a
   await expect(page.locator('#sibling-b')).toBeVisible();
   await page.locator('#sibling-b-close').press('Space');
   await expect(page.locator('#sibling-b')).toBeHidden();
+});
+
+test('nested close is owned by the nearest toast root only', async ({ page }) => {
+  test.skip(port === 'web', 'Web fixture is static CSS/semantic evidence only.');
+  await page.goto(fixture);
+  await waitForClient(page);
+  await expect(page.locator('#nested-outer')).toBeVisible();
+  await expect(page.locator('#nested-inner')).toBeVisible();
+  await page.locator('#nested-inner-close').click();
+  await expect(page.locator('#nested-inner')).toBeHidden();
+  await expect(page.locator('#nested-outer')).toBeVisible();
 });
 
 test('showing a dynamic status does not move focus', async ({ page }) => {
@@ -113,6 +125,10 @@ test('duration changes restart the active cycle and persistent or invalid values
   expect(await requests(page, 'timerRequests')).toBe(1);
 
   await page.locator('#timer-duration-negative').click();
+  await page.clock.fastForward(5000);
+  expect(await requests(page, 'timerRequests')).toBe(1);
+
+  await page.locator('#timer-duration-nonfinite').click();
   await page.clock.fastForward(5000);
   expect(await requests(page, 'timerRequests')).toBe(1);
 });
