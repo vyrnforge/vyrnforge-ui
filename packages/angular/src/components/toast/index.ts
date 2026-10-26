@@ -64,9 +64,8 @@ export class VfToastRootDirective implements OnDestroy {
   constructor() {
     effect(() => {
       const controlledOpen = this.open();
-      const defaultOpen = this.defaultOpen();
       if (!this.initialized()) {
-        if (controlledOpen === undefined) this.internalOpen.set(defaultOpen);
+        if (controlledOpen === undefined) this.internalOpen.set(this.defaultOpen());
         this.initialized.set(true);
       }
 
