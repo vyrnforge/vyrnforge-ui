@@ -3,7 +3,13 @@ import { resolveEnabledIndex, type CollectionNavigationIntent } from '@vyrnforge
 
 let comboboxId = 0;
 const optionSelector = '[data-vf-combobox-option]';
-function visibleOptions(root: HTMLElement): HTMLElement[] { return Array.from(root.querySelectorAll<HTMLElement>(optionSelector)).filter((option) => !option.hidden); }
+function visibleOptions(root: HTMLElement, query = ''): HTMLElement[] {
+  const normalizedQuery = query.trim().toLowerCase();
+  return Array.from(root.querySelectorAll<HTMLElement>(optionSelector)).filter((option) => {
+    if (!normalizedQuery) return true;
+    return (option.textContent ?? '').toLowerCase().includes(normalizedQuery);
+  });
+}
 function disabled(option: HTMLElement): boolean { return option.getAttribute('aria-disabled') === 'true' || option.hasAttribute('disabled'); }
 
 @Directive({ selector: '[vfComboboxRoot]', standalone: true })
@@ -34,7 +40,7 @@ export class VfComboboxRootDirective {
   }
   focusInput() { this.element.nativeElement.querySelector<HTMLInputElement>('[data-vf-combobox-input]')?.focus(); }
   moveActive(intent: Extract<CollectionNavigationIntent, 'next' | 'previous'>) {
-    const options = visibleOptions(this.element.nativeElement);
+    const options = visibleOptions(this.element.nativeElement, this.query());
     const current = options.findIndex((option) => option.id === this.activeId());
     const start = current >= 0 ? current : intent === 'previous' ? options.length : -1;
     const next = resolveEnabledIndex(options.map((option) => ({ disabled: disabled(option) })), start, intent, { loop: false });
@@ -47,7 +53,7 @@ export class VfComboboxRootDirective {
   activateActive() {
     const id = this.activeId();
     if (!id) return false;
-    const target = visibleOptions(this.element.nativeElement).find((option) => option.id === id && !disabled(option));
+    const target = visibleOptions(this.element.nativeElement, this.query()).find((option) => option.id === id && !disabled(option));
     if (!target) return false;
     target.click();
     return true;
@@ -62,6 +68,7 @@ export class VfComboboxRootDirective {
     'aria-autocomplete': 'list',
     'data-vf-combobox-input': '',
     '[id]': 'root.inputId',
+    '[value]': 'root.query()',
     '[attr.aria-expanded]': 'root.open()',
     '[attr.aria-controls]': 'root.listboxId',
     '[attr.aria-activedescendant]': 'root.activeId()',
