@@ -1,9 +1,11 @@
 import type { ToastRootProps as ReactToastRootProps } from '@vyrnforge/react/toast';
-import { VfToastRootDirective } from '@vyrnforge/angular/toast';
-import { ToastRoot as VueToastRoot } from '@vyrnforge/vue/toast';
-import { VfToastRootElement, defineToastRootElement, defineToastViewportElement } from '@vyrnforge/elements/toast';
 
-type VueToastRootProps = InstanceType<typeof VueToastRoot>['$props'];
+type AngularToastRoot = InstanceType<typeof import('@vyrnforge/angular/toast')['VfToastRootDirective']>;
+type VueToastRoot = typeof import('@vyrnforge/vue/toast')['ToastRoot'];
+type VueToastRootProps = InstanceType<VueToastRoot>['$props'];
+type ElementsToastRoot = InstanceType<typeof import('@vyrnforge/elements/toast')['VfToastRootElement']>;
+type DefineToastViewportElement = typeof import('@vyrnforge/elements/toast')['defineToastViewportElement'];
+type DefineToastRootElement = typeof import('@vyrnforge/elements/toast')['defineToastRootElement'];
 
 const reactRoot: ReactToastRootProps = {
   defaultOpen: true,
@@ -17,14 +19,14 @@ const vueRoot: VueToastRootProps = {
   'onUpdate:open': (open: boolean) => { void open; },
 };
 
-declare const angularRoot: VfToastRootDirective;
+declare const angularRoot: AngularToastRoot;
 angularRoot.open;
 angularRoot.defaultOpen;
 angularRoot.duration;
 angularRoot.openChange;
 angularRoot.requestClose();
 
-declare const elementsRoot: VfToastRootElement;
+declare const elementsRoot: ElementsToastRoot;
 elementsRoot.open = true;
 elementsRoot.open = false;
 elementsRoot.open = undefined;
@@ -32,7 +34,9 @@ elementsRoot.defaultOpen = true;
 elementsRoot.duration = 5000;
 elementsRoot.requestClose();
 
-defineToastViewportElement;
-defineToastRootElement;
+declare const defineToastViewportElement: DefineToastViewportElement;
+declare const defineToastRootElement: DefineToastRootElement;
+defineToastViewportElement('vf-toast-viewport');
+defineToastRootElement('vf-toast');
 void reactRoot;
 void vueRoot;
