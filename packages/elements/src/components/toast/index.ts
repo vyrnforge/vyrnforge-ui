@@ -43,13 +43,16 @@ export class VfToastElement extends HTMLElementBase {
     this.#clearTimer();
   }
 
-  attributeChangedCallback(name: string, _oldValue: string | null, newValue: string | null): void {
+  attributeChangedCallback(name: string, oldValue: string | null, newValue: string | null): void {
+    if (oldValue === newValue) return;
+    if (name === 'default-open' && this.#initialized) return;
     if (name === 'open' && this.#initialized) this.#controlledOpen = newValue === null ? false : true;
     if (this.isConnected) this.#sync();
   }
 
   get open(): boolean | undefined { return this.#controlledOpen; }
   set open(value: boolean | undefined) {
+    if (this.#controlledOpen === value) return;
     this.#controlledOpen = value;
     this.#sync();
   }
@@ -61,7 +64,11 @@ export class VfToastElement extends HTMLElementBase {
     if (!this.hasAttribute('duration')) return DEFAULT_DURATION;
     return Number(this.getAttribute('duration'));
   }
-  set duration(value: number) { this.setAttribute('duration', String(value)); }
+  set duration(value: number) {
+    const serialized = String(value);
+    if (this.getAttribute('duration') === serialized) return;
+    this.setAttribute('duration', serialized);
+  }
 
   #committedOpen(): boolean { return this.#controlledOpen ?? this.#internalOpen; }
   #clearTimer(): void { if (this.#timer !== undefined) clearTimeout(this.#timer); this.#timer = undefined; }
