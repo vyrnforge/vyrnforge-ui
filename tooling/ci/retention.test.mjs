@@ -5,7 +5,7 @@ import {
   planMergedPullRequestHistoryDeletions,
   planMergedPullRequestRunDeletions,
   planRunDeletions
-} from '../actions/retention.mjs';
+} from './retention.mjs';
 
 const now = new Date('2026-10-19T03:00:00Z');
 const policy = {
