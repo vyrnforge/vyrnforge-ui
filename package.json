@@ -27,7 +27,7 @@
     "lint:web-css": "stylelint \"packages/web/src/**/*.css\"",
     "lint:packages": "eslint \"packages/{core,web,icons,react,angular,vue,elements}/src/**/*.{ts,tsx,mts,cts}\"",
     "lint:core": "eslint \"packages/core/src/**/*.{ts,tsx,mts,cts}\"",
-    "lint:web": "eslint \"packages/web/src/**/*.{ts,tsx,mts,cts}\"",
+    "lint:web": "eslint \"packages/web/src/**/*.{ts,tsx,mts,cts}\" \"packages/web/build/**/*.mjs\"",
     "lint:icons": "eslint \"packages/icons/src/**/*.{ts,tsx,mts,cts}\"",
     "lint:react": "eslint \"packages/react/src/**/*.{ts,tsx,mts,cts}\"",
     "lint:angular": "eslint \"packages/angular/src/**/*.{ts,tsx,mts,cts}\"",
