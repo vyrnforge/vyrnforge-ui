@@ -2,7 +2,7 @@ import { execFileSync } from 'node:child_process';
 import { readFileSync } from 'node:fs';
 import { fileURLToPath } from 'node:url';
 import { discoverProductUnits } from '../testing/discover-product-units.mjs';
-const impact = JSON.parse(readFileSync(new URL('../../testing/impact.json', import.meta.url), 'utf8'));
+const impact = JSON.parse(readFileSync(new URL('./config.json', import.meta.url), 'utf8'));
 const discovery = discoverProductUnits();
 function matchesPath(filePath, pattern) { return pattern.endsWith('/') ? filePath.startsWith(pattern) : filePath === pattern; }
 function componentScope(component, suffix) { return `component:${component}:${suffix}`; }
@@ -23,7 +23,7 @@ function compileTargets() {
     evidence: ['lint-web-css', ...packageEvidence('web')],
   };
   targets['performance:bundle-baselines'] = {
-    paths: ['tooling/performance/representative-bundle-baselines.json'],
+    paths: ['tooling/testing/performance/representative-bundle-baselines.json'],
     dependsOn: [],
     evidence: ['bundle-baselines'],
   };

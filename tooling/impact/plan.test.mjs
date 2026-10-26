@@ -50,7 +50,7 @@ test('a React Tabs implementation change stays within the React/component bounda
 });
 
 test('component docs and examples use component-local documentation evidence', () => {
-  const plan = createPlan(['components/button/examples/basic/react.tsx']);
+  const plan = createPlan(['product/button/examples/basic/react.tsx']);
   assert.deepEqual(plan.directNodes, ['component:button:documentation']);
   assert.equal(plan.broadened, false);
   assert.ok(plan.validationScopes.includes('component:button:docs'));
@@ -85,7 +85,7 @@ test('Web aggregate stylesheet validates the Web package without component fan-o
 });
 
 test('representative bundle baseline data selects only bundle baseline evidence', () => {
-  const plan = createPlan(['tooling/performance/representative-bundle-baselines.json']);
+  const plan = createPlan(['tooling/testing/performance/representative-bundle-baselines.json']);
   assert.deepEqual(plan.directNodes, ['performance:bundle-baselines']);
   assert.equal(plan.broadened, false);
   assert.ok(plan.validationScopes.includes('bundle-baselines'));
@@ -94,8 +94,8 @@ test('representative bundle baseline data selects only bundle baseline evidence'
 
 test('a normal component addition surface remains targeted rather than broad', () => {
   const plan = createPlan([
-    'components/textarea/docs/index.html',
-    'components/textarea/examples/basic/react.tsx',
+    'product/textarea/docs/index.html',
+    'product/textarea/examples/basic/react.tsx',
     'packages/react/package.json',
     'packages/react/src/index.ts',
     'packages/react/src/components/textarea/index.ts',
@@ -108,7 +108,7 @@ test('a normal component addition surface remains targeted rather than broad', (
     'packages/web/package.json',
     'packages/web/src/styles.css',
     'packages/web/src/components/textarea/textarea.css',
-    'tooling/performance/representative-bundle-baselines.json',
+    'tooling/testing/performance/representative-bundle-baselines.json',
   ]);
   assert.equal(plan.broadened, false);
   assert.ok(plan.validationScopes.includes('component:textarea:docs'));
@@ -124,14 +124,14 @@ test('true package implementation changes still retain dependency closure', () =
 });
 
 test('change fragments stay owner scoped while syntax validation remains global', () => {
-  const plan = createPlan(['components/button/changes/2026-10-19-scoped-product-units.md']);
+  const plan = createPlan(['product/button/changes/2026-10-19-scoped-product-units.md']);
   assert.deepEqual(plan.directNodes, ['component:button:changes']);
   assert.ok(plan.validationScopes.includes('change-fragments'));
   assert.ok(!plan.validationScopes.includes('pack-react'));
 });
 
 test('narrow PRs keep expensive readiness and impact checks out of the global sentinel set', () => {
-  const plan = createPlan(['components/button/changes/2026-10-19-scoped-product-units.md']);
+  const plan = createPlan(['product/button/changes/2026-10-19-scoped-product-units.md']);
   for (const scope of ['impact-engine', 'foundation-readiness', 'l1-readiness', 'l2-readiness']) assert.equal(plan.validationScopes.includes(scope), false, scope);
   assert.deepEqual(plan.scopeReasons['change-fragments'], ['global sentinel', 'evidence for component:button:changes']);
 });
@@ -149,7 +149,7 @@ test('owned CI and impact-engine changes stay scoped to their contract evidence'
   assert.equal(workflows.validationScopes.includes('component-types-all'), false);
   assert.equal(workflows.validationScopes.includes('component:button:react:browser'), false);
 
-  for (const file of ['tooling/impact/plan.mjs', 'testing/impact.json', 'tooling/testing/discover-product-units.mjs']) {
+  for (const file of ['tooling/impact/plan.mjs', 'tooling/impact/config.json', 'tooling/testing/discover-product-units.mjs']) {
     const plan = createPlan([file]);
     assert.deepEqual(plan.directNodes, ['impact-engine'], file);
     assert.equal(plan.broadened, false, file);
@@ -160,7 +160,7 @@ test('owned CI and impact-engine changes stay scoped to their contract evidence'
 });
 
 test('unknown repository foundations still fail closed', () => {
-  for (const file of ['package.json', '.github/CODEOWNERS', 'testing/unowned-fixture.mjs', 'tooling/unowned-script.mjs', 'packages/legacy/archive/root/README.md']) {
+  for (const file of ['package.json', '.github/CODEOWNERS', 'product/unowned-fixture.mjs', 'tooling/unowned-script.mjs', 'packages/legacy/archive/root/README.md']) {
     const plan = createPlan([file]);
     assert.equal(plan.broadened, true, file);
     assert.ok(plan.validationScopes.includes('impact-engine'), `${file}: impact-engine`);
@@ -170,10 +170,10 @@ test('unknown repository foundations still fail closed', () => {
 test('classification returns the most specific owner', () => {
   assert.deepEqual(classifyPath('packages/web/src/components/button/button.css'), { nodes: ['component:button:web-style'], broad: false });
   assert.deepEqual(classifyPath('packages/vue/src/components/button/index.ts'), { nodes: ['component:button:vue'], broad: false });
-  assert.deepEqual(classifyPath('components/button/docs/index.html'), { nodes: ['component:button:documentation'], broad: false });
+  assert.deepEqual(classifyPath('product/button/docs/index.html'), { nodes: ['component:button:documentation'], broad: false });
   assert.deepEqual(classifyPath('packages/vue/src/index.ts'), { nodes: ['package:vue:public-surface'], broad: false });
   assert.deepEqual(classifyPath('packages/web/src/styles.css'), { nodes: ['web:aggregate-style'], broad: false });
-  assert.deepEqual(classifyPath('tooling/performance/representative-bundle-baselines.json'), { nodes: ['performance:bundle-baselines'], broad: false });
+  assert.deepEqual(classifyPath('tooling/testing/performance/representative-bundle-baselines.json'), { nodes: ['performance:bundle-baselines'], broad: false });
   assert.deepEqual(classifyPath('tooling/impact/plan.mjs'), { nodes: ['impact-engine'], broad: false });
   assert.deepEqual(classifyPath('.github/workflows/ci.yml'), { nodes: ['ci-workflows'], broad: false });
   assert.deepEqual(classifyPath('tooling/verify/workflows.mjs'), { nodes: ['workflow-contracts'], broad: false });

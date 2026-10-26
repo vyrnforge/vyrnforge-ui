@@ -24,7 +24,7 @@ test('representative bundle baselines build every implemented proof-component po
   for (const scope of ['build-web', 'build-react', 'build-angular', 'build-vue', 'build-elements', 'bundle-baselines']) {
     assert.equal(execution.filter((item) => item.scope === scope).length, 1, scope);
   }
-  assert.deepEqual(execution.at(-1)?.command, ['node', 'tooling/performance/measure-representative-bundles.mjs', '--check']);
+  assert.deepEqual(execution.at(-1)?.command, ['node', 'tooling/testing/performance/measure-representative-bundles.mjs', '--check']);
 });
 
 test('component scopes resolve from discovered ownership instead of CI definitions', () => {

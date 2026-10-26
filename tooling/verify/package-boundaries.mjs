@@ -2,7 +2,7 @@ import { readdir, readFile } from 'node:fs/promises';
 import path from 'node:path';
 
 const rootManifest = JSON.parse(await readFile(new URL('../../package.json', import.meta.url), 'utf8'));
-const impact = JSON.parse(await readFile(new URL('../../testing/impact.json', import.meta.url), 'utf8'));
+const impact = JSON.parse(await readFile(new URL('../impact/config.json', import.meta.url), 'utf8'));
 const workspaces = rootManifest.workspaces.filter((workspace) => workspace.startsWith('packages/'));
 const packageNames = workspaces.map((workspace) => path.basename(workspace));
 const packageNameSet = new Set(packageNames);
@@ -22,7 +22,7 @@ async function walk(directory) {
 for (const [index, name] of packageNames.entries()) {
   const workspace = workspaces[index];
   const target = impact.targets[name];
-  if (!target) throw new Error(`testing/impact.json is missing package policy for ${name}`);
+  if (!target) throw new Error(`tooling/impact/config.json is missing package policy for ${name}`);
   const allowed = new Set((target.dependsOn ?? []).filter((dependency) => packageNameSet.has(dependency)).map((dependency) => `@vyrnforge/${dependency}`));
   const manifest = JSON.parse(await readFile(new URL(`../../${workspace}/package.json`, import.meta.url), 'utf8'));
   const declared = new Set();

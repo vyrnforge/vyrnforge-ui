@@ -1,4 +1,4 @@
-import { discoverChangeFragments } from '../changes/fragments.mjs';
+import { discoverChangeFragments } from '../release/fragments.mjs';
 
 const fragments = discoverChangeFragments();
 const seen = new Set();
@@ -17,7 +17,7 @@ function changedPaths() {
 
 function requiredOwner(filePath) {
   const component = /^packages\/(?:web|react|angular|vue|elements)\/src\/components\/([^/]+)\//.exec(filePath);
-  if (component) return { key: `component:${component[1]}`, prefix: `components/${component[1]}/changes/` };
+  if (component) return { key: `component:${component[1]}`, prefix: `product/${component[1]}/changes/` };
   const unit = /^packages\/([^/]+)\/src\/(capabilities|accessibility|foundations)\/([^/]+)\//.exec(filePath);
   if (unit) return { key: `unit:${unit[1]}:${unit[2]}:${unit[3]}`, prefix: `packages/${unit[1]}/changes/${unit[2]}/${unit[3]}/` };
   return null;

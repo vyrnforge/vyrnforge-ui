@@ -27,7 +27,7 @@ async function manifestsUnder(directory) {
 
 const docsHtml = await readFile(path.join(root, component.documentationSource), 'utf8');
 const referencedExamples = new Set([...docsHtml.matchAll(/data-vf-example="([^"]+)"/g)].map((match) => match[1]));
-const exampleRoot = path.join(root, `components/${componentId}/examples`);
+const exampleRoot = path.join(root, `product/${componentId}/examples`);
 const manifests = await manifestsUnder(exampleRoot);
 if (manifests.length === 0) throw new Error(`${componentId} has no executable documentation examples`);
 const aliases = publicPackageAliases(root, { source: true });

@@ -170,7 +170,7 @@ const retentionConcurrency = topLevelBlock(sources.retention, 'concurrency');
 requireMatch(retentionConcurrency, /cancel-in-progress: false/, 'Actions Retention cleanup must not cancel an active cleanup');
 const retentionJob = jobBlock(sources.retention, 'cleanup');
 requireMatch(retentionJob, /ref: \$\{\{ github\.event\.repository\.default_branch \}\}/, 'Actions Retention must execute trusted default-branch code');
-requireMatch(retentionJob, /node tooling\/actions\/retention-cleanup\.mjs/, 'Actions Retention must use the repository cleanup implementation');
+requireMatch(retentionJob, /node tooling\/ci\/retention-cleanup\.mjs/, 'Actions Retention must use the repository CI cleanup implementation');
 forbidMatch(retentionJob, /npm\s+(ci|install)/, 'Actions Retention must not install the product toolchain');
 
 for (const [label, source] of Object.entries(sources)) {

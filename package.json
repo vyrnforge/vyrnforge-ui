@@ -45,7 +45,7 @@
     "verify:docs-site": "node tooling/verify/docs-site.mjs",
     "verify:testing-structure": "node tooling/verify/testing-structure.mjs",
     "verify:changes": "node tooling/verify/change-fragments.mjs",
-    "changes:preview": "node tooling/changes/render.mjs",
+    "changes:preview": "node tooling/release/render.mjs",
     "verify:package-smoke": "node tooling/verify/package-smoke.mjs",
     "verify:consumer": "node tooling/verify/consumer-packages.mjs",
     "test:component:types": "node tooling/testing/check-component-types.mjs",
@@ -53,12 +53,12 @@
     "test:component:browser": "node tooling/testing/run-component-browser.mjs",
     "test:browser:docs": "node tooling/docs/run-browser.mjs chromium",
     "test:browser:docs:cross": "node tooling/docs/run-browser.mjs all",
-    "test:visual:foundation": "node tooling/visual/run-foundation.mjs",
+    "test:visual:foundation": "node tooling/testing/visual/run-foundation.mjs",
     "test:impact": "node --test tooling/impact/plan.test.mjs tooling/impact/executor.test.mjs tooling/impact/browser-concurrency.test.mjs tooling/impact/tiers.test.mjs tooling/impact/local.test.mjs tooling/impact/modes.test.mjs tooling/testing/discovery.test.mjs",
     "test:testing-tooling": "node --test tooling/testing/component-browser-config.test.mjs",
-    "test:accessibility-tooling": "node --test tooling/accessibility/component-standards.test.mjs",
-    "test:actions": "node --test tooling/actions/retention.test.mjs",
-    "test:tooling": "npm run test:impact && npm run test:testing-tooling && npm run test:accessibility-tooling && npm run test:actions"
+    "test:accessibility-tooling": "node --test tooling/testing/accessibility/component-standards.test.mjs",
+    "test:ci-tooling": "node --test tooling/ci/retention.test.mjs",
+    "test:tooling": "npm run test:impact && npm run test:testing-tooling && npm run test:accessibility-tooling && npm run test:ci-tooling"
   },
   "devDependencies": {
     "@angular/common": "22.2.3", "@angular/compiler": "22.2.3", "@angular/compiler-cli": "22.2.3", "@angular/core": "22.2.3", "@angular/platform-browser": "22.2.3", "@angular/platform-server": "22.2.3",

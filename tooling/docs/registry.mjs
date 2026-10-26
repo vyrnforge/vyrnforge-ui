@@ -10,7 +10,7 @@ function titleCase(id) {
 export function documentationRegistry(root) {
   const base = JSON.parse(readFileSync(path.join(root, 'documentation/site/registry.json'), 'utf8'));
   const manualComponents = (base.pages ?? []).filter((page) => /^components\//.test(page.slug ?? ''));
-  if (manualComponents.length) throw new Error('Component documentation routes are discovered from components/<id>/docs; remove manual component routes from documentation/site/registry.json');
+  if (manualComponents.length) throw new Error('Component documentation routes are discovered from product/<id>/docs; remove manual component routes from documentation/site/registry.json');
   const componentPages = discoverProductUnits(root).components.map((component) => {
     const usageGroup = componentUsageGroup(component.component);
     return {

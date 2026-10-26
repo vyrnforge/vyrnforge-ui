@@ -3,10 +3,10 @@ import { renderRuntimeTokens } from '../tokens/render.mjs';
 import { referenceTokens } from '../tokens/source.mjs';
 
 const root = JSON.parse(await readFile('package.json', 'utf8'));
-const support = JSON.parse(await readFile('tooling/compatibility/support-status.json', 'utf8'));
-const impact = JSON.parse(await readFile('testing/impact.json', 'utf8'));
-const browserQualification = JSON.parse(await readFile('tooling/compatibility/foundation-browser-qualification.json', 'utf8'));
-const visualBaseline = JSON.parse(await readFile('tooling/visual/foundation-baseline.json', 'utf8'));
+const support = JSON.parse(await readFile('tooling/testing/compatibility/support-status.json', 'utf8'));
+const impact = JSON.parse(await readFile('tooling/impact/config.json', 'utf8'));
+const browserQualification = JSON.parse(await readFile('tooling/testing/compatibility/foundation-browser-qualification.json', 'utf8'));
+const visualBaseline = JSON.parse(await readFile('tooling/testing/visual/foundation-baseline.json', 'utf8'));
 const webManifest = JSON.parse(await readFile('packages/web/package.json', 'utf8'));
 
 const packages = ['core', 'web', 'icons', 'react', 'angular', 'vue', 'elements'];
@@ -14,12 +14,12 @@ for (const name of packages) {
   const script = `lint:${name}`;
   if (!root.scripts?.[script]) throw new Error(`Missing scoped TypeScript lint script: ${script}`);
   const scope = `lint-${name}`;
-  if (!impact.scopeOrder?.includes(scope)) throw new Error(`Testing impact metadata is missing scoped lint evidence: ${scope}`);
+  if (!impact.scopeOrder?.includes(scope)) throw new Error(`Impact metadata is missing scoped lint evidence: ${scope}`);
 }
 
 if (root.scripts?.['generate:tokens'] !== 'node tooling/tokens/generate.mjs --write') throw new Error('Token authoring must expose the canonical generation command');
 if (root.scripts?.['verify:tokens'] !== 'node tooling/tokens/generate.mjs --check') throw new Error('Token authoring must expose the canonical drift check');
-if (root.scripts?.['test:visual:foundation'] !== 'node tooling/visual/run-foundation.mjs') throw new Error('Foundation visual regression must expose the canonical test command');
+if (root.scripts?.['test:visual:foundation'] !== 'node tooling/testing/visual/run-foundation.mjs') throw new Error('Foundation visual regression must expose the canonical test command');
 for (const category of ['color', 'fontFamily', 'fontSize', 'fontWeight', 'lineHeight', 'letterSpacing', 'space', 'radius', 'shadow', 'motion', 'breakpoint']) {
   if (!referenceTokens[category] || Object.keys(referenceTokens[category]).length === 0) throw new Error(`Reference token authoring is missing the L0 design category: ${category}`);
 }

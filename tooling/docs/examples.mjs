@@ -31,7 +31,7 @@ export function publicPackageAliases(root, { source = false } = {}) {
 async function discoverExampleManifests(root) {
   const manifests = [];
   for (const component of discoverProductUnits(root).components) {
-    const exampleRoot = path.join(root, `components/${component.component}/examples`);
+    const exampleRoot = path.join(root, `product/${component.component}/examples`);
     async function walk(directory) {
       for (const entry of await readdir(directory, { withFileTypes: true })) {
         const target = path.join(directory, entry.name);

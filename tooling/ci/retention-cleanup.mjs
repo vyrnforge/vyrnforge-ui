@@ -6,7 +6,7 @@ import {
   planRunDeletions
 } from './retention.mjs';
 
-const policy = JSON.parse(await readFile('tooling/actions/retention-policy.json', 'utf8'));
+const policy = JSON.parse(await readFile('tooling/ci/retention-policy.json', 'utf8'));
 const repository = process.env.GITHUB_REPOSITORY;
 const token = process.env.GITHUB_TOKEN;
 const currentRunId = process.env.GITHUB_RUN_ID;
