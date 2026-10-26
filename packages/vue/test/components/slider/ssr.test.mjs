@@ -1,2 +1,2 @@
-import { registerVueL2SsrTest } from '../../../../../tooling/testing/native-component-ssr.mjs';
-registerVueL2SsrTest('slider');
+import { registerVueNativeControlSsrTest } from '../../../../../tooling/testing/native-control-ssr.mjs';
+await registerVueNativeControlSsrTest('slider');

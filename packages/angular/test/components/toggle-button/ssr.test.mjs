@@ -1,2 +1,2 @@
-import { registerAngularL2SsrTest } from '../../../../../tooling/testing/native-component-ssr.mjs';
-registerAngularL2SsrTest('toggle-button');
+import { registerAngularNativeControlSsrTest } from '../../../../../tooling/testing/native-control-ssr.mjs';
+await registerAngularNativeControlSsrTest('toggle-button');

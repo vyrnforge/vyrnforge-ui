@@ -1,2 +1,2 @@
-import { buildL2BrowserFixture } from '../../../../tooling/testing/native-component-browser-fixture.mjs';
-await buildL2BrowserFixture('slider', process.argv[2] || 'web');
+import { buildNativeControlBrowserFixture } from '../../../../tooling/testing/native-control-browser-fixture.mjs';
+await buildNativeControlBrowserFixture('slider', process.argv[2] || 'web');

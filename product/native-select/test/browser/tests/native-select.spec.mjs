@@ -1,2 +1,2 @@
-import { defineL2BrowserTests } from '../../../../../tooling/testing/native-component-browser-tests.mjs';
-defineL2BrowserTests('native-select');
+import { defineNativeControlBrowserTests } from '../../../../../tooling/testing/native-control-browser-tests.mjs';
+await defineNativeControlBrowserTests('native-select');
