@@ -23,6 +23,7 @@ if (port === 'react') {
     stdin: {
       resolveDir: root,
       sourcefile: 'react-toast-client.tsx',
+      loader: 'tsx',
       contents: `
 import React,{useState}from'react';
 import{createRoot}from'react-dom/client';
