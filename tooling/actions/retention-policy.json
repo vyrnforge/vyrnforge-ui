@@ -1,8 +1,14 @@
 {
-  "schemaVersion": 2,
+  "schemaVersion": 3,
   "minimumRunsPerWorkflow": 5,
   "minimumSuccessfulRunsPerWorkflow": 2,
   "maxDeletionsPerRun": 500,
+  "preserveSuccessfulCategories": [
+    "main",
+    "scheduled",
+    "release",
+    "docs"
+  ],
   "mergedPullRequest": {
     "preserveSuccessfulRunsPerWorkflow": 1,
     "preserveWorkflowPaths": [
