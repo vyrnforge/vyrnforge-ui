@@ -47,7 +47,9 @@ test('executor overlaps different components while serializing ports of the same
       activeComponents.add(component);
       active += 1;
       maxActive = Math.max(maxActive, active);
-      await new Promise((resolve) => setTimeout(resolve, component === 'button' && port === 'react' ? 20 : 5));
+      await new Promise((resolve) => {
+        setTimeout(resolve, component === 'button' && port === 'react' ? 20 : 5);
+      });
       active -= 1;
       activeComponents.delete(component);
     },
@@ -84,7 +86,9 @@ test('executor stops scheduling new browser evidence after failure and preserves
           const component = args[1];
           started.push(component);
           if (component === 'button') throw Object.assign(new Error('browser failed'), { status: 9 });
-          await new Promise((resolve) => setTimeout(resolve, 10));
+          await new Promise((resolve) => {
+            setTimeout(resolve, 10);
+          });
         },
       },
     ), /browser failed/);
