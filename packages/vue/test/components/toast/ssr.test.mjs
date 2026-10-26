@@ -18,7 +18,7 @@ test('Vue Toast server render emits stable semantics without client effects', as
   const html = await renderToString(app);
   assert.match(html, /aria-live="polite"/);
   assert.match(html, /role="status"/);
-  assert.match(html, /data-vf-toast-root=""/);
+  assert.match(html, /data-vf-toast-root(?:="")?(?=[ >])/);
   assert.match(html, /aria-label="Tutup notifikasi"/);
   assert.equal(requested, 0);
 });
