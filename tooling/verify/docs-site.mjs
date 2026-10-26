@@ -1,7 +1,7 @@
 import { access, readFile } from 'node:fs/promises';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
-import { componentUsageGroups } from '../docs/component-usage-groups.mjs';
+import { componentUsageGroups } from '../../apps/docs/component-usage-groups.mjs';
 import { documentationRegistry } from '../docs/registry.mjs';
 import { discoverProductUnits } from '../testing/discover-product-units.mjs';
 
