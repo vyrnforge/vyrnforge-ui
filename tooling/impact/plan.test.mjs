@@ -160,17 +160,11 @@ test('owned CI and impact-engine changes stay scoped to their contract evidence'
 });
 
 test('unknown repository foundations still fail closed', () => {
-  for (const file of ['package.json', '.github/CODEOWNERS', 'testing/unowned-fixture.mjs', 'tooling/unowned-script.mjs']) {
+  for (const file of ['package.json', '.github/CODEOWNERS', 'testing/unowned-fixture.mjs', 'tooling/unowned-script.mjs', 'packages/legacy/archive/root/README.md']) {
     const plan = createPlan([file]);
     assert.equal(plan.broadened, true, file);
     assert.ok(plan.validationScopes.includes('impact-engine'), `${file}: impact-engine`);
   }
-});
-
-test('legacy-only changes remain isolated', () => {
-  const plan = createPlan(['packages/legacy/archive/root/README.md']);
-  assert.deepEqual(plan.affectedNodes, ['legacy']);
-  assert.ok(!plan.validationScopes.includes('pack-react'));
 });
 
 test('classification returns the most specific owner', () => {

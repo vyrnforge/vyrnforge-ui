@@ -1,1 +1,0 @@
-import "../../../tests/dom/setup";

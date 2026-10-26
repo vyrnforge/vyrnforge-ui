@@ -7,7 +7,7 @@ const baseScopeDefinitions = {
   'testing-structure': { command: ['node', 'tooling/verify/testing-structure.mjs'], requires: [] },
   'change-fragments': { command: ['node', 'tooling/verify/change-fragments.mjs'], requires: [] },
   'changes-preview': { command: ['node', 'tooling/changes/render.mjs'], requires: ['change-fragments'] },
-  'repository-guidance': { command: ['node', 'tooling/verify/repository-guidance.mjs'], requires: [] }, boundaries: { command: ['node', 'tooling/verify/package-boundaries.mjs'], requires: [] }, 'architecture-rules': { command: ['node', 'tooling/verify/architecture-rules.mjs'], requires: [] }, 'workflow-contracts': { command: ['node', 'tooling/verify/workflows.mjs'], requires: [] }, 'legacy-isolation': { command: ['node', 'tooling/verify/legacy-isolation.mjs'], requires: [] },
+  'repository-guidance': { command: ['node', 'tooling/verify/repository-guidance.mjs'], requires: [] }, boundaries: { command: ['node', 'tooling/verify/package-boundaries.mjs'], requires: [] }, 'architecture-rules': { command: ['node', 'tooling/verify/architecture-rules.mjs'], requires: [] }, 'workflow-contracts': { command: ['node', 'tooling/verify/workflows.mjs'], requires: [] },
   'impact-engine': { command: [npm, 'run', 'test:impact'], requires: [] },
   'testing-tooling': { command: [npm, 'run', 'test:testing-tooling'], requires: [] },
   'accessibility-tooling': { command: [npm, 'run', 'test:accessibility-tooling'], requires: [] },

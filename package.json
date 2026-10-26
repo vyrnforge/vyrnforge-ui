@@ -36,7 +36,6 @@
     "verify:structure": "node tooling/verify/workspace-structure.mjs",
     "verify:boundaries": "node tooling/verify/package-boundaries.mjs",
     "verify:architecture": "node tooling/verify/architecture-rules.mjs",
-    "verify:legacy": "node tooling/verify/legacy-isolation.mjs",
     "verify:packages": "node tooling/verify/package-contracts.mjs",
     "verify:compatibility": "node tooling/verify/compatibility.mjs",
     "verify:foundation-readiness": "node tooling/verify/foundation-readiness.mjs",

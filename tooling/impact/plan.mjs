@@ -153,9 +153,7 @@ export function createPlan(paths) {
     for (const node of classification.nodes) directNodes.add(node);
     broad ||= classification.broad;
   }
-  const nonLegacyTargets = Object.entries(targets).filter(([, config]) => !config.legacy).map(([node]) => node);
-  const affectedNodes = broad ? new Set(nonLegacyTargets) : reverseClosure(directNodes);
-  if (directNodes.has('legacy')) affectedNodes.add('legacy');
+  const affectedNodes = broad ? new Set(Object.keys(targets)) : reverseClosure(directNodes);
   const selectedScopes = new Set(impact.globalSentinels);
   for (const node of affectedNodes) for (const scope of targets[node]?.evidence ?? []) selectedScopes.add(scope);
   if (broad) batchBroadComponentEvidence(selectedScopes);
@@ -167,7 +165,7 @@ export function createTierPlan(mode) {
   if (!tierScopes) throw new Error(`Unknown validation tier: ${mode}`);
   const scopes = [...new Set([...tierScopes, ...dynamicTierScopes(mode)])];
   const selected = new Set(scopes);
-  const affectedNodes = Object.entries(targets).filter(([, config]) => !config.legacy).map(([node]) => node).sort();
+  const affectedNodes = Object.keys(targets).sort();
   return { mode, changedPaths: [], directNodes: [], affectedNodes, validationScopes: orderedScopes(scopes), scopeReasons: Object.fromEntries(orderedScopes(scopes).map((scope) => [scope, [`${mode} tier`]])), skippedValidationScopes: allKnownScopes().filter((scope) => !selected.has(scope)), broadened: true };
 }
 export function parseArg(name, argv = process.argv) { const direct = argv.find((value) => value.startsWith(`${name}=`)); if (direct) return direct.slice(name.length + 1); const index = argv.indexOf(name); return index >= 0 ? argv[index + 1] : undefined; }

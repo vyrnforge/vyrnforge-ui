@@ -1,9 +1,0 @@
-{
-  "schemaVersion": 1,
-  "sourceOfTruth": {
-    "canonical": true,
-    "scope": "temporary assistive-technology release waivers",
-    "documentation": "docs/release/assistive-technology-waivers.md"
-  },
-  "waivers": []
-}

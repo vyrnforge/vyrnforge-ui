@@ -1,8 +1,8 @@
 # VyrnForge repository guidance
 
-Canonical VyrnForge architecture and standards live in the connected Google Drive documentation, not in legacy repository code.
+Canonical VyrnForge architecture and standards live in the connected Google Drive documentation, not in retired repository implementations.
 
-The repository is being rebuilt from zero conceptually. Treat `packages/legacy` as historical reference only.
+The repository is being rebuilt from zero conceptually. Retired implementations in Git history are historical reference only.
 
 Public package direction:
 

@@ -1,5 +1,0 @@
-.udg-filter-bar,
-.udg-column-menu {
-  display: flex;
-  gap: var(--udg-space-2);
-}
