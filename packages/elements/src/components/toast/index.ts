@@ -12,7 +12,7 @@ export class VfToastElement extends HTMLElementBase {
   #initialized = false;
   #timer: ReturnType<typeof setTimeout> | undefined;
   #deadline = 0;
-  #remaining = 0;
+  #remaining: number | null = null;
   #timeoutRequested = false;
   #wasOpen = false;
   #pauseReasons = new Set<PauseReason>();
@@ -76,7 +76,7 @@ export class VfToastElement extends HTMLElementBase {
 
   #expire(): void {
     this.#clearTimer();
-    this.#remaining = 0;
+    this.#remaining = null;
     if (this.#timeoutRequested) return;
     this.#timeoutRequested = true;
     this.#requestClose();
@@ -91,7 +91,7 @@ export class VfToastElement extends HTMLElementBase {
     if (!open) {
       this.#wasOpen = false;
       this.#timeoutRequested = false;
-      this.#remaining = 0;
+      this.#remaining = null;
       this.#pauseReasons.clear();
       return;
     }
@@ -102,16 +102,17 @@ export class VfToastElement extends HTMLElementBase {
     }
     if (this.#timeoutRequested) return;
     const duration = normalizedDuration(this.duration);
-    this.#remaining = duration ?? 0;
+    this.#remaining = duration;
     if (duration !== null && this.#pauseReasons.size === 0) this.#armRemaining();
   }
 
   #armRemaining(): void {
-    if (!this.#committedOpen() || this.#timeoutRequested || this.#pauseReasons.size > 0) return;
-    if (this.#remaining <= 0) { this.#expire(); return; }
+    const remaining = this.#remaining;
+    if (!this.#committedOpen() || this.#timeoutRequested || this.#pauseReasons.size > 0 || remaining === null) return;
+    if (remaining <= 0) { this.#expire(); return; }
     this.#clearTimer();
-    this.#deadline = Date.now() + this.#remaining;
-    this.#timer = setTimeout(() => this.#expire(), this.#remaining);
+    this.#deadline = Date.now() + remaining;
+    this.#timer = setTimeout(() => this.#expire(), remaining);
   }
 
   #pause(reason: PauseReason): void {
