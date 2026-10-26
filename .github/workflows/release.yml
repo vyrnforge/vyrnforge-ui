@@ -1,4 +1,4 @@
-name: Release Validation
+name: Release Readiness
 
 on:
   workflow_dispatch:
@@ -8,6 +8,10 @@ on:
 
 permissions:
   contents: read
+
+concurrency:
+  group: release-readiness-${{ github.ref }}
+  cancel-in-progress: false
 
 jobs:
   release-gate:
@@ -38,5 +42,7 @@ jobs:
           path: |
             test-results/playwright-report
             test-results/playwright-results
+            test-results/*-playwright-report
+            test-results/*-playwright-results
           if-no-files-found: ignore
           retention-days: 30
