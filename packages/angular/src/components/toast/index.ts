@@ -49,7 +49,7 @@ export class VfToastRootDirective implements OnDestroy {
 
   private readonly element = inject<ElementRef<HTMLElement>>(ElementRef);
   private readonly internalOpen = signal(true);
-  private initialized = false;
+  private readonly initialized = signal(false);
   private destroyed = false;
   private timer: ReturnType<typeof setTimeout> | undefined;
   private deadline = 0;
@@ -58,15 +58,15 @@ export class VfToastRootDirective implements OnDestroy {
   private wasOpen = false;
   private readonly pauseReasons = new Set<PauseReason>();
 
-  readonly committedOpen = computed(() => this.open() ?? (this.initialized ? this.internalOpen() : this.defaultOpen()));
+  readonly committedOpen = computed(() => this.open() ?? (this.initialized() ? this.internalOpen() : this.defaultOpen()));
 
   constructor() {
     effect(() => {
       const controlledOpen = this.open();
       const defaultOpen = this.defaultOpen();
-      if (!this.initialized) {
-        this.initialized = true;
+      if (!this.initialized()) {
         if (controlledOpen === undefined) this.internalOpen.set(defaultOpen);
+        this.initialized.set(true);
       }
 
       const open = controlledOpen ?? this.internalOpen();
