@@ -269,8 +269,17 @@ export async function executeValidationPlan(validationPlan, {
   return execution;
 }
 
+export function validationPlanFromArgs(argv = process.argv) {
+  const mode = parseArg('--mode', argv) || 'pr';
+  if (mode === 'pr') return createPlan(pathsFromArgs(argv));
+  if (mode === 'main') {
+    const hasImpactInput = parseArg('--files', argv) !== undefined || parseArg('--base', argv) !== undefined || parseArg('--head', argv) !== undefined;
+    if (hasImpactInput) return { ...createPlan(pathsFromArgs(argv)), mode: 'main' };
+  }
+  return createTierPlan(mode);
+}
+
 if (fileURLToPath(import.meta.url) === process.argv[1]) {
-  const mode = parseArg('--mode') || 'pr';
-  const validationPlan = mode === 'pr' ? createPlan(pathsFromArgs(process.argv)) : createTierPlan(mode);
+  const validationPlan = validationPlanFromArgs(process.argv);
   await executeValidationPlan(validationPlan, { dryRun: process.argv.includes('--dry-run'), output: parseArg('--output') });
 }

@@ -1,7 +1,7 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import { createPlan, createTierPlan } from '../impact/plan.mjs';
-import { createExecutionPlan } from '../impact/execute.mjs';
+import { createExecutionPlan, validationPlanFromArgs } from '../impact/execute.mjs';
 
 test('PR component-local changes keep package consumers and sibling framework evidence skipped', () => {
   const plan = createPlan(['packages/react/src/components/button/index.ts']);
@@ -37,7 +37,15 @@ test('Web foundation changes include the shared visual regression baseline', () 
   assert.ok(plan.validationScopes.includes('browser-foundation-visual'));
 });
 
-test('main batches exhaustive type and SSR evidence while retaining browser coverage', () => {
+test('main workflow mode can use the same changed-path impact plan as PR validation', () => {
+  const main = validationPlanFromArgs(['node', 'execute.mjs', '--mode', 'main', '--files', 'packages/react/src/components/button/index.ts']);
+  assert.equal(main.mode, 'main');
+  assert.equal(main.broadened, false);
+  for (const selected of ['component:button:react:types', 'component:button:react:ssr', 'component:button:react:browser']) assert.ok(main.validationScopes.includes(selected), selected);
+  for (const skipped of ['pack-react', 'consumer-react', 'consumer-all', 'component-types-all', 'component-ssr-all', 'component:button:angular:ssr', 'component:button:vue:browser']) assert.equal(main.validationScopes.includes(skipped), false, skipped);
+});
+
+test('explicit broad main tier remains available for manual exhaustive validation', () => {
   const main = createTierPlan('main');
   for (const scope of ['change-fragments', 'changes-preview', 'pack-react', 'consumer-all', 'bundle-baselines', 'browser-foundation-visual', 'component-types-all', 'component-ssr-all', 'component:button:web:browser', 'component:button:react:browser']) assert.ok(main.validationScopes.includes(scope), scope);
   for (const replaced of ['component:button:conformance:types', 'component:button:react:types', 'component:button:react:ssr', 'component:button:angular:ssr', 'component:button:vue:ssr']) assert.equal(main.validationScopes.includes(replaced), false, replaced);
