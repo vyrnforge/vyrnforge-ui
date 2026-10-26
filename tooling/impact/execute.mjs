@@ -272,9 +272,11 @@ export async function executeValidationPlan(validationPlan, {
 export function validationPlanFromArgs(argv = process.argv) {
   const mode = parseArg('--mode', argv) || 'pr';
   if (mode === 'pr') return createPlan(pathsFromArgs(argv));
+  if (mode === 'full') return { ...createTierPlan('main'), mode: 'full' };
   if (mode === 'main') {
     const hasImpactInput = parseArg('--files', argv) !== undefined || parseArg('--base', argv) !== undefined || parseArg('--head', argv) !== undefined;
-    if (hasImpactInput) return { ...createPlan(pathsFromArgs(argv)), mode: 'main' };
+    if (!hasImpactInput) throw new Error('Main validation requires changed-path input; use --mode full for deliberate exhaustive validation');
+    return { ...createPlan(pathsFromArgs(argv)), mode: 'main' };
   }
   return createTierPlan(mode);
 }
