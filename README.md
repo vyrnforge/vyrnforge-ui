@@ -23,9 +23,9 @@ Packages remain private while the rebuild foundation is being proven. Framework 
 - `packages/` — the seven active package surfaces plus the isolated legacy quarantine.
 - `apps/docs/` — public documentation presentation/runtime assets.
 - `documentation/` — shared and framework-adaptation public documentation sources.
-- `testing/` — repository-only contract, port, browser, visual, SSR, and component validation ownership.
-- `fixtures/` — repository-only consumer and validation fixtures.
-- `tooling/` — build, token generation, architecture enforcement, impact analysis, documentation generation, and quality infrastructure.
+- `testing/` — repository testing policy and impact metadata only; executable evidence stays with its owner and reusable harnesses live under `tooling/testing/`.
+- `fixtures/` — repository-only consumer and validation fixture policy/reference material.
+- `tooling/` — build, token generation, architecture enforcement, impact analysis, reusable test infrastructure, documentation generation, and quality infrastructure.
 
 ## Foundation authoring
 
@@ -35,9 +35,11 @@ Canonical shared styling is owned by `@vyrnforge/web`. The aggregate `@vyrnforge
 
 ## Validation model
 
-Pull requests do not run an arbitrary full suite. CI classifies changed areas, computes reverse product dependencies, selects required validation evidence, expands execution prerequisites, and uploads the resulting validation plan for inspection. Main, scheduled, and release workflows deliberately broaden validation at their respective gates.
+Pull requests do not run an arbitrary full suite. CI classifies changed areas, computes reverse product dependencies, selects required validation evidence, expands execution prerequisites, and uploads the resulting validation plan for inspection. Push-triggered Main validation uses the pushed change range through the same impact graph. Unknown or unclassified changes still fail closed and broaden. Scheduled and release workflows remain deliberately broad safety nets.
 
-For normal local work, use `npm run check:changed`. It compares the current branch and working tree (including untracked files) against `origin/main`, then executes the same targeted PR validation model. Use `npm run check:changed:plan` to inspect the execution plan without running it. Set `VF_BASE_REF` or pass `--base-ref` when a different reachable comparison base is required. `npm run check` intentionally runs the broader main validation graph and should be reserved for deliberate integration-level verification.
+For normal local work, use `npm run check:changed`. It compares the current branch and working tree (including untracked files) against `origin/main`, then executes the targeted impact plan. Use `npm run check:changed:plan` to inspect the execution plan without running it. Set `VF_BASE_REF` or pass `--base-ref` when a different reachable comparison base is required. Use `npm run check:full` only for deliberate exhaustive repository validation; it executes the explicit broad main tier and is distinct from the normal push-triggered Main gate.
+
+Tooling tests are grouped by evidence owner: `npm run test:impact`, `npm run test:testing-tooling`, `npm run test:accessibility-tooling`, and `npm run test:actions`. `npm run test:tooling` runs those repository-tooling suites together. Component type, SSR, and browser runners remain focused debugging interfaces; normal validation should flow through the impact graph.
 
 Component-owned CSS is classified separately from semantic/API implementation changes. A component CSS edit selects the shared Web style/package evidence and affected component browser evidence across implemented ports without automatically selecting unrelated type or SSR evidence. Browser installation is prepared once per validation execution and reused by selected component/docs browser scopes.
 

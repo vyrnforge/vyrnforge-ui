@@ -24,7 +24,8 @@ Common commands:
 - `npm run verify:foundation-readiness` — check the current foundation baseline and its recorded evidence.
 - `npm run check:changed:plan` — inspect the validation plan selected from local changes.
 - `npm run check:changed` — execute the targeted local validation plan.
-- `npm run check` — execute the broader main-tier validation graph.
+- `npm run check:full` — deliberately execute the exhaustive broad validation tier.
+- `npm run test:tooling` — run repository tooling tests grouped by impact, testing infrastructure, accessibility tooling, and Actions tooling.
 - `npm run test:visual:foundation` — run the deterministic Chromium visual-regression fixture for the foundation design language.
 
 Do not bypass a failing verifier by weakening the verifier unless the canonical architecture itself has deliberately changed.
@@ -50,6 +51,8 @@ Canonical component contracts own behavioral scenarios. Use real browsers for br
 
 Foundation-wide visual regression is repository-owned evidence under `tooling/visual/` because it proves the shared design-language output rather than one component. Component-specific visual evidence should remain with the component when introduced.
 
+Repository tooling tests are grouped by the infrastructure they prove. `test:impact` covers the impact engine and its product discovery; `test:testing-tooling` covers reusable testing infrastructure contracts; `test:accessibility-tooling` covers repository accessibility tooling; `test:actions` covers Actions tooling. `test:tooling` is only their aggregate convenience command. These suites do not replace product-owned component/package evidence.
+
 ## Documentation and changes
 
 Framework-neutral foundation content is authored once under shared documentation sources and composed into framework experiences. Framework guides own only framework-specific installation/API/integration guidance. Component documentation and executable examples are component-owned and discovered from `components/<component>/`. An unimplemented framework must be shown as unavailable rather than implied to work.
@@ -58,14 +61,15 @@ Implementation changes to a component or reusable scoped unit require a matching
 
 ## CI and validation
 
-Pull requests use dependency-derived validation. Changed paths resolve to the most specific discovered owner, then reverse dependency closure selects applicable evidence. Package builds, packing, and consumer checks may execute as prerequisites without making unrelated sibling product units selected evidence. Review the validation-plan artifact instead of assuming every test should run.
+Pull requests and push-triggered Main validation both use dependency-derived validation. Changed paths resolve to the most specific discovered owner, then reverse dependency closure selects applicable evidence. Main uses the pushed base/head range. Known CI/impact infrastructure follows its explicit owner; unknown or unclassified changes intentionally fail closed and broaden. Package builds, packing, and consumer checks may execute as prerequisites without making unrelated sibling product units selected evidence. Review the validation-plan artifact instead of assuming every test should run.
 
 - PR: targeted affected evidence plus small global architecture sentinels.
-- `main`: broader package, consumer, documentation, integration, and foundation visual assurance.
-- scheduled: expensive cross-browser/compatibility/accessibility evidence plus the foundation visual baseline.
-- release: complete required release graph, not merely the PR selection.
+- push-triggered `main`: targeted affected evidence for the merged push range through the same impact graph.
+- explicit broad/local `main` tier: deliberate exhaustive verification exposed as `npm run check:full`.
+- scheduled: broad recurring safety net including cross-browser assurance.
+- release: broadest release-readiness graph, not merely the PR selection.
 
-Unknown or unclassified changes intentionally fail closed and broaden validation. Do not encode large path-condition matrices in workflow YAML.
+Do not encode large path-condition matrices in workflow YAML. A passing scoped run proves its selected and executed evidence; it is not a claim that every repository test ran.
 
 ## Completion
 
