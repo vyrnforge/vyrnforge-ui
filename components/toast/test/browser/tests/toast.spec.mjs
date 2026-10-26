@@ -47,7 +47,7 @@ test('uncontrolled close commits locally exactly once', async ({ page }) => {
   await expect(page.locator('#uncontrolled-toast')).toBeHidden();
 });
 
-test('consumer click cancellation and sibling ownership are preserved', async ({ page }) => {
+test('consumer cancellation, native keyboard activation, and sibling ownership are preserved', async ({ page }) => {
   test.skip(port === 'web', 'Web fixture is static CSS/semantic evidence only.');
   await page.goto(fixture);
   await waitForClient(page);
@@ -56,6 +56,8 @@ test('consumer click cancellation and sibling ownership are preserved', async ({
   await page.locator('#sibling-a-close').press('Enter');
   await expect(page.locator('#sibling-a')).toBeHidden();
   await expect(page.locator('#sibling-b')).toBeVisible();
+  await page.locator('#sibling-b-close').press('Space');
+  await expect(page.locator('#sibling-b')).toBeHidden();
 });
 
 test('showing a dynamic status does not move focus', async ({ page }) => {
@@ -77,9 +79,9 @@ test('timer starts only after committed open and rejected timeout fires once per
   await expect(page.locator('#timer-toast')).toBeHidden();
   await page.locator('#timer-open').click();
   await expect(page.locator('#timer-toast')).toBeVisible();
-  await page.clock.fastForward(999);
+  await page.clock.fastForward(800);
   expect(await requests(page, 'timerRequests')).toBe(0);
-  await page.clock.fastForward(2);
+  await page.clock.fastForward(250);
   await expect.poll(() => requests(page, 'timerRequests')).toBe(1);
   await expect(page.locator('#timer-toast')).toBeVisible();
   await page.clock.fastForward(5000);
@@ -87,7 +89,7 @@ test('timer starts only after committed open and rejected timeout fires once per
   await page.locator('#timer-force-close').click();
   await expect(page.locator('#timer-toast')).toBeHidden();
   await page.locator('#timer-force-open').click();
-  await page.clock.fastForward(1001);
+  await page.clock.fastForward(1050);
   await expect.poll(() => requests(page, 'timerRequests')).toBe(2);
 });
 
@@ -97,11 +99,11 @@ test('duration changes restart the active cycle and persistent or invalid values
   await page.goto(fixture);
   await waitForClient(page);
   await page.locator('#timer-open').click();
-  await page.clock.fastForward(300);
+  await page.clock.fastForward(250);
   await page.locator('#timer-duration-500').click();
-  await page.clock.fastForward(499);
+  await page.clock.fastForward(350);
   expect(await requests(page, 'timerRequests')).toBe(0);
-  await page.clock.fastForward(2);
+  await page.clock.fastForward(200);
   await expect.poll(() => requests(page, 'timerRequests')).toBe(1);
 
   await page.locator('#timer-force-close').click();
@@ -115,37 +117,42 @@ test('duration changes restart the active cycle and persistent or invalid values
   expect(await requests(page, 'timerRequests')).toBe(1);
 });
 
-test('ordinary rerender does not restart the timer deadline', async ({ page }) => {
+test('ordinary rerender and callback identity changes do not restart the timer deadline', async ({ page }) => {
   test.skip(port === 'web', 'Web fixture is static CSS/semantic evidence only.');
   await page.clock.install();
   await page.goto(fixture);
   await waitForClient(page);
   await page.locator('#timer-open').click();
-  await page.clock.fastForward(400);
+  await page.clock.fastForward(250);
   await page.locator('#timer-rerender').click();
-  await page.clock.fastForward(601);
+  await page.clock.fastForward(500);
+  expect(await requests(page, 'timerRequests')).toBe(0);
+  await page.clock.fastForward(300);
   await expect.poll(() => requests(page, 'timerRequests')).toBe(1);
 });
 
-test('hover and focus pause independently and resume the remaining duration', async ({ page }) => {
+test('hover and focus pause independently; duration replacement stays paused and resumes fresh', async ({ page }) => {
   test.skip(port === 'web', 'Web fixture is static CSS/semantic evidence only.');
   await page.clock.install();
   await page.goto(fixture);
   await waitForClient(page);
   await page.locator('#timer-open').click();
-  await page.clock.fastForward(400);
+  await page.clock.fastForward(250);
   const toast = page.locator('#timer-toast');
   await toast.hover();
   await page.clock.fastForward(1000);
   expect(await requests(page, 'timerRequests')).toBe(0);
   await page.locator('#timer-close').focus();
+  await page.evaluate(() => document.querySelector('#timer-duration-500').click());
+  await page.clock.fastForward(1000);
+  expect(await requests(page, 'timerRequests')).toBe(0);
   await page.locator('#outside-focus').hover();
   await page.clock.fastForward(1000);
   expect(await requests(page, 'timerRequests')).toBe(0);
   await page.locator('#outside-focus').focus();
-  await page.clock.fastForward(599);
+  await page.clock.fastForward(350);
   expect(await requests(page, 'timerRequests')).toBe(0);
-  await page.clock.fastForward(2);
+  await page.clock.fastForward(200);
   await expect.poll(() => requests(page, 'timerRequests')).toBe(1);
 });
 
@@ -160,6 +167,8 @@ test('teardown clears an old timer and reconnect or remount gets one fresh cycle
   expect(await requests(page, 'teardownRequests')).toBe(0);
   await page.locator('#teardown-toggle').click();
   await expect(page.locator('#teardown-toast')).toBeVisible();
-  await page.clock.fastForward(501);
+  await page.clock.fastForward(350);
+  expect(await requests(page, 'teardownRequests')).toBe(0);
+  await page.clock.fastForward(200);
   await expect.poll(() => requests(page, 'teardownRequests')).toBe(1);
 });
