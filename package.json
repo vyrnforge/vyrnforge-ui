@@ -19,7 +19,7 @@
     "build:vue": "npm run build --workspace @vyrnforge/vue",
     "build:elements": "npm run build --workspace @vyrnforge/elements",
     "build:docs": "npm run build && node tooling/docs/build.mjs",
-    "check": "node tooling/impact/execute.mjs --mode main",
+    "check:full": "node tooling/impact/execute.mjs --mode main",
     "check:changed": "node tooling/impact/local.mjs",
     "check:changed:plan": "node tooling/impact/local.mjs --dry-run",
     "lint:tooling": "eslint tooling playwright.config.mjs eslint.config.mjs stylelint.config.mjs",
@@ -55,13 +55,11 @@
     "test:browser:docs": "node tooling/docs/run-browser.mjs chromium",
     "test:browser:docs:cross": "node tooling/docs/run-browser.mjs all",
     "test:visual:foundation": "node tooling/visual/run-foundation.mjs",
-    "test:impact": "node --test tooling/impact/plan.test.mjs tooling/impact/executor.test.mjs tooling/impact/tiers.test.mjs tooling/impact/local.test.mjs tooling/testing/discovery.test.mjs tooling/testing/component-browser-config.test.mjs tooling/accessibility/component-standards.test.mjs tooling/actions/retention.test.mjs",
-    "test:actions-retention": "node --test tooling/actions/retention.test.mjs",
-    "ci:plan": "node tooling/impact/plan.mjs",
-    "ci:pr": "node tooling/impact/execute.mjs --mode pr",
-    "ci:main": "node tooling/impact/execute.mjs --mode main",
-    "ci:scheduled": "node tooling/impact/execute.mjs --mode scheduled",
-    "ci:release": "node tooling/impact/execute.mjs --mode release"
+    "test:impact": "node --test tooling/impact/plan.test.mjs tooling/impact/executor.test.mjs tooling/impact/browser-concurrency.test.mjs tooling/impact/tiers.test.mjs tooling/impact/local.test.mjs tooling/testing/discovery.test.mjs",
+    "test:testing-tooling": "node --test tooling/testing/component-browser-config.test.mjs",
+    "test:accessibility-tooling": "node --test tooling/accessibility/component-standards.test.mjs",
+    "test:actions": "node --test tooling/actions/retention.test.mjs",
+    "test:tooling": "npm run test:impact && npm run test:testing-tooling && npm run test:accessibility-tooling && npm run test:actions"
   },
   "devDependencies": {
     "@angular/common": "22.2.3", "@angular/compiler": "22.2.3", "@angular/compiler-cli": "22.2.3", "@angular/core": "22.2.3", "@angular/platform-browser": "22.2.3", "@angular/platform-server": "22.2.3",

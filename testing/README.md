@@ -24,7 +24,9 @@ The same rule applies to reusable capabilities/accessibility/foundation units: o
 
 Tests execute at the lowest reliable layer. Package-local evidence proves framework/package integration. Shared component evidence proves cross-port observable outcomes. Browser-owned behavior stays in real browser tests. Accessibility evidence belongs to the lowest owner that actually owns the behavior: pure calculations may be Core; CSS/DOM/platform behavior may be Web; component semantics belong to the component; repository-wide conformance remains repository tooling.
 
-Repository-level tests of discovery, planning, execution, workflows, and other validation infrastructure live under `tooling/tests/` because they prove the tooling itself. Generic evidence executors and reusable test harnesses live under `tooling/testing/`; they are execution infrastructure rather than product tests. No executable test or harness code belongs under the policy-only `testing/` root.
+Reusable evidence executors and harnesses live under `tooling/testing/`. Tests of repository infrastructure stay with their infrastructure owner as colocated `*.test.mjs` files or an owner-local test directory when that structure is warranted. They are grouped into semantic root commands: `test:impact`, `test:testing-tooling`, `test:accessibility-tooling`, and `test:actions`; `test:tooling` runs those groups together. No executable test or harness code belongs under the policy-only `testing/` root.
+
+Owner-local wrappers are intentional discovery and ownership anchors. Repetition alone is not a reason to centralize or delete them when they prove package/component-local integration or make missing evidence detectable.
 
 ## Change fragments
 
@@ -34,6 +36,6 @@ Fragments are unreleased evidence, not permanent component structure. Targeted P
 
 ## Safety model
 
-Unknown paths, unowned testing infrastructure, root package configuration, and other architecture-wide changes fail closed to broad validation. Normal PR and main-push validation both use changed-path impact plans and the same ownership model; main evaluates the merged change range rather than automatically executing the exhaustive graph. An explicit broad `main` tier remains available for manual exhaustive validation. Scheduled and release validation remain broad safety nets, with scheduled adding recurring cross-browser assurance and release adding release-readiness evidence.
+Unknown paths, unowned testing infrastructure, root package configuration, and other architecture-wide changes fail closed to broad validation. Normal PR and main-push validation both use changed-path impact plans and the same ownership model; main evaluates the merged change range rather than automatically executing the exhaustive graph. `npm run check:full` exposes the explicit broad main tier for deliberate exhaustive local/manual validation. Scheduled and release validation remain broad safety nets, with scheduled adding recurring cross-browser assurance and release adding release-readiness evidence.
 
 PR and main reports are inspectable evidence. They record why validation scopes were selected, which prerequisite scopes were pulled in transitively, browser setup cost, and per-scope outcomes and durations. Partial execution evidence is preserved when a selected scope fails so CI cost and failure location remain diagnosable.
