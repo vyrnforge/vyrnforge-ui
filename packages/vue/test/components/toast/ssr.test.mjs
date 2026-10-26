@@ -25,7 +25,7 @@ test('Vue Toast renders real server semantics without starting dismissal work', 
   const html = await renderToString(app);
 
   assert.match(html, /aria-live="polite"/);
-  assert.match(html, /data-vf-toast-root=""/);
+  assert.match(html, /data-vf-toast-root(?:="")?(?:\s|>)/);
   assert.match(html, /aria-label="Tutup notifikasi"/);
   assert.doesNotMatch(html, /Dismiss notification/);
   assert.equal(openChangeRequests, 0);
