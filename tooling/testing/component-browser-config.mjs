@@ -19,7 +19,7 @@ function projectsFor(browsers) {
 export function createComponentBrowserConfig({
   componentId,
   port = process.env.VF_COMPONENT_PORT || 'react',
-  readinessPath = '/next/',
+  readinessPath,
   browsers = ['chromium'],
   perPortOutput = true,
   reporter = 'line',
@@ -28,7 +28,9 @@ export function createComponentBrowserConfig({
   ...config
 }) {
   if (!componentId) throw new Error('componentId is required for component browser configuration');
-  if (!readinessPath.startsWith('/')) throw new Error('readinessPath must be an absolute URL path');
+
+  const resolvedReadinessPath = readinessPath ?? `/next/${componentId}-fixtures/${port}.html`;
+  if (!resolvedReadinessPath.startsWith('/')) throw new Error('readinessPath must be an absolute URL path');
 
   const outputRoot = `${repositoryRootFromComponentBrowserConfig}/test-results/${componentId}-playwright-results`;
   const outputDir = perPortOutput ? `${outputRoot}/${port}` : outputRoot;
@@ -40,7 +42,7 @@ export function createComponentBrowserConfig({
     use: { baseURL: componentBrowserBaseURL, ...use },
     webServer: {
       command: `cd ${repositoryRootFromComponentBrowserConfig} && node tooling/docs/serve.mjs`,
-      url: `${componentBrowserBaseURL}${readinessPath}`,
+      url: `${componentBrowserBaseURL}${resolvedReadinessPath}`,
       reuseExistingServer: !process.env.CI,
       ...webServer,
     },
@@ -51,8 +53,8 @@ export function createComponentBrowserConfig({
 
 export function createCrossBrowserComponentBrowserConfig({
   componentId,
-  port = process.env.VF_COMPONENT_PORT || 'react',
-  readinessPath = '/next/',
+  port = process.env.VF_COMPONENT_PORT || 'web',
+  readinessPath,
   perPortOutput = false,
   ...config
 }) {
