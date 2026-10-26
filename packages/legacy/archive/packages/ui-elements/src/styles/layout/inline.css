@@ -1,6 +1,0 @@
-.vf-inline--wrap {
-  flex-wrap: wrap;
-}
-.vf-inline:not(.vf-inline--wrap) {
-  flex-wrap: nowrap;
-}

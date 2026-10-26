@@ -4,7 +4,7 @@ VyrnForge is being rebuilt as a native-web-first, framework-neutral UI foundatio
 
 ## Rebuild status
 
-The repository is in foundation bootstrap. The previous implementation is quarantined under `packages/legacy` and is not an architectural source of truth or an active workspace dependency.
+The repository contains the current rebuild implementation only. Retired implementations remain available through Git history for provenance when needed, but they are not architectural sources of truth or active package dependencies.
 
 The approved active package topology is:
 
@@ -20,7 +20,7 @@ Packages remain private while the rebuild foundation is being proven. Framework 
 
 ## Repository areas
 
-- `packages/` — the seven active package surfaces plus the isolated legacy quarantine.
+- `packages/` — the seven active package surfaces.
 - `apps/docs/` — public documentation presentation/runtime assets.
 - `documentation/` — shared and framework-adaptation public documentation sources.
 - `testing/` — repository testing policy and impact metadata only; executable evidence stays with its owner and reusable harnesses live under `tooling/testing/`.

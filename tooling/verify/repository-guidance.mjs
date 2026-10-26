@@ -2,7 +2,6 @@ import { readdir, readFile } from 'node:fs/promises';
 import path from 'node:path';
 
 const ignoredRoots = new Set(['.git', 'dist', 'node_modules', 'test-results']);
-const ignoredPrefixes = ['packages/legacy/'];
 const ignoredFiles = new Set(['tooling/verify/repository-guidance.mjs']);
 const textExtensions = new Set(['.md', '.json', '.yml', '.yaml', '.js', '.mjs', '.ts', '.tsx', '.css', '.html']);
 const legacyTokens = [
@@ -24,7 +23,6 @@ async function walk(directory = '.') {
   for (const entry of entries) {
     if (directory === '.' && ignoredRoots.has(entry.name)) continue;
     const full = path.posix.normalize(path.join(directory, entry.name).replaceAll('\\', '/')).replace(/^\.\//, '');
-    if (ignoredPrefixes.some((prefix) => full.startsWith(prefix))) continue;
     if (entry.isDirectory()) files.push(...await walk(full));
     else if (textExtensions.has(path.extname(entry.name)) && !ignoredFiles.has(full)) files.push(full);
   }
@@ -39,5 +37,5 @@ for (const file of await walk()) {
   }
 }
 
-if (violations.length) throw new Error(`Active repository guidance references quarantined architecture:\n${violations.join('\n')}`);
-process.stdout.write('repository guidance: no active legacy architecture references\n');
+if (violations.length) throw new Error(`Active repository guidance references retired architecture:\n${violations.join('\n')}`);
+process.stdout.write('repository guidance: no active retired architecture references\n');

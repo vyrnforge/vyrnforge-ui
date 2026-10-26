@@ -1,6 +1,6 @@
 # Contributing to VyrnForge
 
-VyrnForge is a clean-slate rebuild inside an existing repository. Canonical architecture and standards live in the connected VyrnForge Google Drive documentation; repository code is implementation evidence, and `packages/legacy` is historical reference only.
+VyrnForge is a clean-slate rebuild inside an existing repository. Canonical architecture and standards live in the connected VyrnForge Google Drive documentation; repository code is implementation evidence, and retired implementations in Git history are historical reference only.
 
 ## Before implementation
 

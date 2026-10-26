@@ -1,7 +1,0 @@
-.vf-dismissable-layer {
-  z-index: var(--vf-overlay-stack-index, var(--vf-layer-popover));
-}
-
-.vf-focus-scope {
-  min-width: 0;
-}
