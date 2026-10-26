@@ -101,6 +101,7 @@ test('timer starts only after committed open and rejected timeout fires once per
   await page.locator('#timer-force-close').click();
   await expect(page.locator('#timer-toast')).toBeHidden();
   await page.locator('#timer-force-open').click();
+  await expect(page.locator('#timer-toast')).toBeVisible();
   await page.clock.fastForward(1050);
   await expect.poll(() => requests(page, 'timerRequests')).toBe(2);
 });
@@ -110,7 +111,9 @@ test('duration changes restart the active cycle and persistent or invalid values
   await page.clock.install();
   await page.goto(fixture);
   await waitForClient(page);
+  const toast = page.locator('#timer-toast');
   await page.locator('#timer-open').click();
+  await expect(toast).toBeVisible();
   await page.clock.fastForward(250);
   await page.locator('#timer-duration-500').click();
   await page.clock.fastForward(350);
@@ -119,7 +122,9 @@ test('duration changes restart the active cycle and persistent or invalid values
   await expect.poll(() => requests(page, 'timerRequests')).toBe(1);
 
   await page.locator('#timer-force-close').click();
+  await expect(toast).toBeHidden();
   await page.locator('#timer-force-open').click();
+  await expect(toast).toBeVisible();
   await page.locator('#timer-duration-zero').click();
   await page.clock.fastForward(5000);
   expect(await requests(page, 'timerRequests')).toBe(1);
