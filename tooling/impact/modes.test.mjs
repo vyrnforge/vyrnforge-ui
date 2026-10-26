@@ -12,7 +12,7 @@ test('main mode requires changed-path input', () => {
 test('full mode explicitly selects the exhaustive main tier', () => {
   const plan = validationPlanFromArgs(['node', 'tooling/impact/execute.mjs', '--mode', 'full']);
   assert.equal(plan.mode, 'full');
-  assert.equal(plan.changedPaths, undefined);
+  assert.deepEqual(plan.changedPaths, []);
   assert.ok(plan.validationScopes.includes('consumer-all'));
   assert.ok(plan.validationScopes.includes('browser-docs-chromium'));
 });
