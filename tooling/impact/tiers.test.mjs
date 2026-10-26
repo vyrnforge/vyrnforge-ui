@@ -14,8 +14,8 @@ test('PR component-local changes keep package consumers and sibling framework ev
   assert.equal(execution.some((entry) => entry.scope === 'build-angular'), false);
 });
 
-test('broadened PRs batch exhaustive type and SSR evidence', () => {
-  const plan = createPlan(['tooling/impact/plan.mjs']);
+test('genuinely broad PRs batch exhaustive type and SSR evidence', () => {
+  const plan = createPlan(['package-lock.json']);
   assert.equal(plan.broadened, true);
   assert.ok(plan.validationScopes.includes('component-types-all'));
   assert.ok(plan.validationScopes.includes('component-ssr-all'));
