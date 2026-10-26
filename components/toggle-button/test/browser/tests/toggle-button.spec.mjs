@@ -1,2 +1,2 @@
-import { defineL2BrowserTests } from '../../../../../testing/l2/browser/tests.mjs';
+import { defineL2BrowserTests } from '../../../../../tooling/testing/native-component-browser-tests.mjs';
 defineL2BrowserTests('toggle-button');

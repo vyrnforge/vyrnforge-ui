@@ -1,11 +1,26 @@
-import { access, readFile } from 'node:fs/promises';
+import { access, readFile, readdir } from 'node:fs/promises';
+import path from 'node:path';
 import { loadComponentStandards, summarizeComponentStandards } from '../accessibility/component-standards.mjs';
 import { assertProductPreparation } from '../testing/discover-product-units.mjs';
 
 const required = ['testing/README.md', 'testing/impact.json'];
 const representativeAccessibilityMappings = new Set(['button', 'tabs', 'dialog']);
 const sharedBrowserConfigSpecifier = '../../../../tooling/testing/component-browser-config.mjs';
+const executableTestingExtension = /\.(?:[cm]?[jt]s|[jt]sx)$/;
+
+async function assertPolicyOnlyTestingRoot(directory = 'testing') {
+  for (const entry of await readdir(directory, { withFileTypes: true })) {
+    const target = path.join(directory, entry.name);
+    if (entry.isDirectory()) {
+      await assertPolicyOnlyTestingRoot(target);
+      continue;
+    }
+    if (entry.isFile() && executableTestingExtension.test(entry.name)) throw new Error(`${target} is executable test infrastructure; testing/ is policy-only and reusable harnesses belong under tooling/testing`);
+  }
+}
+
 for (const file of required) await access(file);
+await assertPolicyOnlyTestingRoot();
 const impact = JSON.parse(await readFile('testing/impact.json', 'utf8'));
 if (impact.schemaVersion !== 1) throw new Error('testing impact metadata must use schemaVersion 1');
 if (!impact.targets || typeof impact.targets !== 'object') throw new Error('testing impact metadata must expose targets');
@@ -15,12 +30,6 @@ const discovery = assertProductPreparation();
 for (const component of discovery.components) {
   const source = await readFile(component.browser.config, 'utf8');
   if (!source.includes(sharedBrowserConfigSpecifier) || !/create(?:CrossBrowser)?ComponentBrowserConfig/.test(source)) throw new Error(`${component.component} browser config must use the shared tooling/testing component browser harness`);
-}
-try {
-  await access('testing/l2/browser/config.mjs');
-  throw new Error('testing/l2/browser/config.mjs is legacy executable infrastructure; reusable browser harnesses belong under tooling/testing');
-} catch (error) {
-  if (error?.code !== 'ENOENT') throw error;
 }
 const { standards } = await loadComponentStandards();
 const accessibility = summarizeComponentStandards(standards);
