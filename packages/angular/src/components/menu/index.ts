@@ -3,7 +3,7 @@ import { resolveEnabledIndex } from '@vyrnforge/core/collection-navigation';
 import { findTypeaheadMatch } from '@vyrnforge/core/typeahead-matching';
 
 const menuItemSelector = '[data-vf-menu-item]';
-function menuItems(root: HTMLElement): HTMLElement[] { return Array.from(root.querySelectorAll<HTMLElement>>(menuItemSelector)); }
+function menuItems(root: HTMLElement): HTMLElement[] { return Array.from(root.querySelectorAll<HTMLElement>(menuItemSelector)); }
 function itemFromTarget(root: HTMLElement, target: EventTarget | null): HTMLElement | null { const item = target instanceof HTMLElement ? target.closest<HTMLElement>(menuItemSelector) : null; return item && root.contains(item) ? item : null; }
 
 @Directive({ selector: '[vfMenuRoot]', standalone: true })
