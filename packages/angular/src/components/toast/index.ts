@@ -1,7 +1,6 @@
 import {
   Directive,
   ElementRef,
-  OnDestroy,
   booleanAttribute,
   computed,
   effect,
@@ -10,6 +9,7 @@ import {
   numberAttribute,
   output,
   signal,
+  type OnDestroy,
 } from '@angular/core';
 
 const DEFAULT_DURATION = 5000;
