@@ -23,6 +23,8 @@ test('executor overlaps different components while serializing ports of the same
     mode: 'pr',
     changedPaths: [],
     validationScopes: [
+      'build-react',
+      'build-vue',
       'component:button:react:browser',
       'component:button:vue:browser',
       'component:checkbox:react:browser',
@@ -89,14 +91,15 @@ test('executor stops scheduling new browser evidence after failure and preserves
 
     assert.deepEqual(started.sort(), ['button', 'checkbox']);
     const report = JSON.parse(readFileSync(output, 'utf8'));
+    const browserResults = report.results.filter((result) => result.scope.includes(':browser'));
     assert.deepEqual(report.componentBrowserExecution, { concurrency: 2, isolation: 'component' });
-    assert.deepEqual(report.results.map((result) => result.scope), [
+    assert.deepEqual(browserResults.map((result) => result.scope), [
       'component:button:react:browser',
       'component:checkbox:react:browser',
     ]);
-    assert.equal(report.results[0].outcome, 'failure');
-    assert.equal(report.results[0].exitCode, 9);
-    assert.equal(report.results[1].outcome, 'success');
+    assert.equal(browserResults[0].outcome, 'failure');
+    assert.equal(browserResults[0].exitCode, 9);
+    assert.equal(browserResults[1].outcome, 'success');
   } finally {
     rmSync(directory, { recursive: true, force: true });
   }
