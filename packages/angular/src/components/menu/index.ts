@@ -3,7 +3,7 @@ import { resolveEnabledIndex } from '@vyrnforge/core/collection-navigation';
 import { findTypeaheadMatch } from '@vyrnforge/core/typeahead-matching';
 
 const menuItemSelector = '[data-vf-menu-item]';
-function menuItems(root: HTMLElement): HTMLElement[] { return Array.from(root.querySelectorAll<HTMLElement>(menuItemSelector)); }
+function menuItems(root: HTMLElement): HTMLElement[] { return Array.from(root.querySelectorAll<HTMLElement>>(menuItemSelector)); }
 function itemFromTarget(root: HTMLElement, target: EventTarget | null): HTMLElement | null { const item = target instanceof HTMLElement ? target.closest<HTMLElement>(menuItemSelector) : null; return item && root.contains(item) ? item : null; }
 
 @Directive({ selector: '[vfMenuRoot]', standalone: true })
@@ -12,11 +12,11 @@ export class VfMenuRootDirective {
   readonly defaultOpen = input(false);
   readonly openChange = output<boolean>();
   private internal = signal(false);
-  private initialized = false;
-  readonly expanded = computed(() => this.open() ?? (this.initialized ? this.internal() : this.defaultOpen()));
+  private initialized = signal(false);
+  readonly expanded = computed(() => this.open() ?? (this.initialized() ? this.internal() : this.defaultOpen()));
   anchor: HTMLElement | null = null;
   surface: HTMLElement | null = null;
-  setOpen(next: boolean) { this.initialized = true; if (this.open() === undefined) this.internal.set(next); this.openChange.emit(next); }
+  setOpen(next: boolean) { this.initialized.set(true); if (this.open() === undefined) this.internal.set(next); this.openChange.emit(next); }
   focusMenu(edge: 'first' | 'last') { queueMicrotask(() => { const items = this.surface ? menuItems(this.surface) : []; const index = resolveEnabledIndex(items.map(() => ({})), edge === 'first' ? -1 : items.length, edge); if (index != null) items[index]?.focus(); }); }
 }
 
