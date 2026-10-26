@@ -14,7 +14,7 @@
     "ci-tooling": { "paths": ["tooling/ci/"], "dependsOn": [], "evidence": ["lint-tooling", "ci-tooling"] },
     "accessibility-tooling": { "paths": ["tooling/testing/accessibility/"], "dependsOn": [], "evidence": ["lint-tooling", "accessibility-tooling"] },
     "compatibility-tooling": { "paths": ["tooling/testing/compatibility/"], "dependsOn": [], "evidence": ["lint-tooling", "compatibility"] },
-    "performance-tooling": { "paths": ["tooling/testing/performance/"], "dependsOn": [], "evidence": ["lint-tooling", "bundle-baselines"] },
+    "performance-tooling": { "paths": ["tooling/testing/performance/"], "dependsOn": [], "evidence": ["lint-tooling", "bundle-baselines"], "aggregate": true },
     "visual-tooling": { "paths": ["tooling/testing/visual/"], "dependsOn": [], "evidence": ["lint-tooling", "browser-foundation-visual"] },
     "release-tooling": { "paths": ["tooling/release/"], "dependsOn": [], "evidence": ["lint-tooling", "change-fragments", "changes-preview"] },
     "workflow-contracts": { "paths": ["tooling/verify/workflows.mjs"], "dependsOn": [], "evidence": ["lint-tooling", "workflow-contracts"] },
