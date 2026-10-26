@@ -73,7 +73,7 @@ export const ToastRoot = forwardRef<HTMLDivElement, ToastRootProps>(function Toa
 
   const timerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const deadlineRef = useRef(0);
-  const remainingRef = useRef(0);
+  const remainingRef = useRef<number | null>(null);
   const pauseReasonsRef = useRef(new Set<PauseReason>());
   const timeoutRequestedRef = useRef(false);
   const previousOpenRef = useRef(false);
@@ -90,21 +90,22 @@ export const ToastRoot = forwardRef<HTMLDivElement, ToastRootProps>(function Toa
 
   const expire = useCallback(() => {
     clearTimer();
-    remainingRef.current = 0;
+    remainingRef.current = null;
     if (timeoutRequestedRef.current) return;
     timeoutRequestedRef.current = true;
     requestClose();
   }, [clearTimer, requestClose]);
 
   const armRemaining = useCallback(() => {
-    if (!committedOpen || timeoutRequestedRef.current || pauseReasonsRef.current.size > 0) return;
-    if (remainingRef.current <= 0) {
+    const remaining = remainingRef.current;
+    if (!committedOpen || timeoutRequestedRef.current || pauseReasonsRef.current.size > 0 || remaining === null) return;
+    if (remaining <= 0) {
       expire();
       return;
     }
     clearTimer();
-    deadlineRef.current = Date.now() + remainingRef.current;
-    timerRef.current = setTimeout(expire, remainingRef.current);
+    deadlineRef.current = Date.now() + remaining;
+    timerRef.current = setTimeout(expire, remaining);
   }, [clearTimer, committedOpen, expire]);
 
   const pause = useCallback((reason: PauseReason) => {
@@ -129,7 +130,7 @@ export const ToastRoot = forwardRef<HTMLDivElement, ToastRootProps>(function Toa
     if (!committedOpen) {
       previousOpenRef.current = false;
       timeoutRequestedRef.current = false;
-      remainingRef.current = 0;
+      remainingRef.current = null;
       pauseReasonsRef.current.clear();
       return;
     }
@@ -142,7 +143,7 @@ export const ToastRoot = forwardRef<HTMLDivElement, ToastRootProps>(function Toa
 
     if (timeoutRequestedRef.current) return;
     const nextDuration = normalizedDuration(duration);
-    remainingRef.current = nextDuration ?? 0;
+    remainingRef.current = nextDuration;
     if (nextDuration !== null && pauseReasonsRef.current.size === 0) {
       deadlineRef.current = Date.now() + nextDuration;
       timerRef.current = setTimeout(expire, nextDuration);
