@@ -1,4 +1,4 @@
-import { computed, defineComponent, h, inject, provide, ref, type InjectionKey, type PropType, type Ref } from 'vue';
+import { computed, defineComponent, h, inject, nextTick, provide, ref, type InjectionKey, type PropType, type Ref } from 'vue';
 import { resolveEnabledIndex } from '@vyrnforge/core/collection-navigation';
 import { findTypeaheadMatch } from '@vyrnforge/core/typeahead-matching';
 import type { FloatingPlacement } from '@vyrnforge/web/floating-positioning';
@@ -14,7 +14,11 @@ function useMenu(): MenuContext { const value = inject(key); if (!value) throw n
 
 export const MenuRoot = defineComponent({
   name: 'MenuRoot',
-  props: { open: Boolean as PropType<boolean | undefined>, defaultOpen: { type: Boolean, default: false }, placement: { type: String as PropType<FloatingPlacement>, default: 'bottom-start' } },
+  props: {
+    open: { type: Boolean as PropType<boolean | undefined>, default: undefined },
+    defaultOpen: { type: Boolean, default: false },
+    placement: { type: String as PropType<FloatingPlacement>, default: 'bottom-start' },
+  },
   emits: ['update:open'],
   setup(props, { slots, emit }) {
     const internal = ref(props.defaultOpen);
@@ -28,7 +32,13 @@ export const MenuRoot = defineComponent({
       anchor,
       surface,
       placement: computed(() => props.placement),
-      focusMenu(edge) { queueMicrotask(() => { const items = surface.value ? menuItems(surface.value) : []; const index = resolveEnabledIndex(items.map(() => ({})), edge === 'first' ? -1 : items.length, edge); if (index != null) items[index]?.focus(); }); },
+      focusMenu(edge) {
+        void nextTick(() => {
+          const items = surface.value ? menuItems(surface.value) : [];
+          const index = resolveEnabledIndex(items.map(() => ({})), edge === 'first' ? -1 : items.length, edge);
+          if (index != null) items[index]?.focus();
+        });
+      },
     });
     return () => slots.default?.();
   },
