@@ -12,6 +12,7 @@ const policy = {
   minimumRunsPerWorkflow: 2,
   minimumSuccessfulRunsPerWorkflow: 1,
   maxDeletionsPerRun: 2,
+  preserveSuccessfulCategories: ['main', 'scheduled', 'release', 'docs'],
   mergedPullRequest: {
     preserveSuccessfulRunsPerWorkflow: 1,
     preserveWorkflowPaths: ['.github/workflows/ci.yml']
@@ -19,8 +20,10 @@ const policy = {
   categories: {
     pr: { successDays: 30, nonSuccessDays: 7 },
     main: { successDays: 60, nonSuccessDays: 14 },
+    scheduled: { successDays: 45, nonSuccessDays: 14 },
     docs: { successDays: 30, nonSuccessDays: 14 },
     release: { successDays: 365, nonSuccessDays: 90 },
+    dynamic: { successDays: 14, nonSuccessDays: 7 },
     unknown: { successDays: 30, nonSuccessDays: 7 }
   }
 };
@@ -101,15 +104,28 @@ test('never proposes queued or in-progress runs', () => {
   assert.ok(result.deletions.every((item) => item.id !== 1 && item.id !== 2));
 });
 
-test('release evidence uses the longer retention window', () => {
+test('preserves successful main, scheduled, release, and docs acceptance evidence regardless of age', () => {
   const runs = [
     run(1, { days: 1, workflow: 9, path: '.github/workflows/release.yml' }),
-    run(2, { days: 2, workflow: 9, path: '.github/workflows/release.yml' }),
-    run(3, { days: 120, workflow: 9, path: '.github/workflows/release.yml' }),
-    run(4, { days: 400, workflow: 9, path: '.github/workflows/release.yml' })
+    run(2, { days: 400, workflow: 9, path: '.github/workflows/release.yml' }),
+    run(3, { days: 500, workflow: 10, path: '.github/workflows/main.yml', branch: 'main' }),
+    run(4, { days: 500, workflow: 11, path: '.github/workflows/scheduled.yml', event: 'schedule', branch: 'main' }),
+    run(5, { days: 500, workflow: 12, path: '.github/workflows/docs-pages.yml', branch: 'main' })
   ];
   const result = planRunDeletions(runs, policy, { now });
-  assert.deepEqual(result.deletions.map((item) => item.id), [4]);
+  assert.deepEqual(result.deletions, []);
+  assert.ok(result.protectedRuns >= 5);
+});
+
+test('old failed acceptance runs remain eligible for bounded cleanup', () => {
+  const runs = [
+    run(1, { days: 1, workflow: 9, path: '.github/workflows/main.yml', branch: 'main', conclusion: 'success' }),
+    run(2, { days: 2, workflow: 9, path: '.github/workflows/main.yml', branch: 'main', conclusion: 'success' }),
+    run(3, { days: 40, workflow: 9, path: '.github/workflows/main.yml', branch: 'main', conclusion: 'failure' }),
+    run(4, { days: 50, workflow: 9, path: '.github/workflows/main.yml', branch: 'main', conclusion: 'cancelled' })
+  ];
+  const result = planRunDeletions(runs, policy, { now });
+  assert.deepEqual(result.deletions.map((item) => item.id), [4, 3]);
 });
 
 test('hard caps proposed deletions per cleanup execution', () => {
@@ -125,7 +141,7 @@ test('hard caps proposed deletions per cleanup execution', () => {
   assert.equal(result.deferredByCap, 1);
 });
 
-test('merged PR cleanup preserves only the newest successful validation evidence', () => {
+test('merged PR cleanup preserves the newest successful PR validation and ignores non-PR workflows', () => {
   const mergedPolicy = { ...policy, maxDeletionsPerRun: 100 };
   const pr = pullRequest(890, 'feat/button-vertical-slice');
   const runs = [
@@ -145,9 +161,9 @@ test('merged PR cleanup preserves only the newest successful validation evidence
   ];
 
   const result = planMergedPullRequestRunDeletions(runs, mergedPolicy, pr);
-  assert.equal(result.matchedRuns, 4);
+  assert.equal(result.matchedRuns, 3);
   assert.equal(result.protectedRuns, 1);
-  assert.deepEqual(result.deletions.map((item) => item.id), [9, 8, 7]);
+  assert.deepEqual(result.deletions.map((item) => item.id), [9, 8]);
   assert.ok(result.deletions.every((item) => item.reason.includes('#890')));
 });
 

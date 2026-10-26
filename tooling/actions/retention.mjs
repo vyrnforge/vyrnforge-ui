@@ -1,5 +1,5 @@
 const completedStatuses = new Set(['completed']);
-const mergedPullRequestCleanupCategories = new Set(['pr', 'dynamic', 'unknown']);
+const mergedPullRequestCleanupCategories = new Set(['pr']);
 
 function workflowPath(run) {
   const value = String(run.path || '');
@@ -57,12 +57,14 @@ export function planRunDeletions(runs, policy, { now = new Date(), currentRunId 
     .sort((a, b) => Date.parse(b.updated_at || b.created_at) - Date.parse(a.updated_at || a.created_at));
 
   const protectedIds = new Set();
+  const preservedSuccessfulCategories = new Set((policy.preserveSuccessfulCategories || []).map(String));
   const perWorkflow = new Map();
 
   for (const run of completed) {
     const key = workflowKey(run);
     if (!perWorkflow.has(key)) perWorkflow.set(key, []);
     perWorkflow.get(key).push(run);
+    if (isSuccess(run) && preservedSuccessfulCategories.has(categoryForRun(run))) protectedIds.add(run.id);
   }
 
   for (const workflowRuns of perWorkflow.values()) {
@@ -148,7 +150,7 @@ export function planMergedPullRequestRunDeletions(runs, policy, pullRequest, { c
     .map((run) => runSummary(run, {
       category: categoryForRun(run),
       pullRequestNumber: Number(pullRequest.number),
-      reason: `superseded run for merged pull request #${pullRequest.number}`
+      reason: `superseded PR validation run for merged pull request #${pullRequest.number}`
     }));
 
   return {
