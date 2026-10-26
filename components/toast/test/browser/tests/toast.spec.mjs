@@ -10,7 +10,7 @@ async function requests(page, name) {
 
 async function waitForClient(page) {
   if (port === 'web') return;
-  await expect.poll(() => requests(page, 'controlledRequests')).toBe(0);
+  await expect(page.locator('body')).toHaveAttribute('data-controlled-requests', '0');
 }
 
 test('uses polite real output with authored localized naming', async ({ page }) => {
