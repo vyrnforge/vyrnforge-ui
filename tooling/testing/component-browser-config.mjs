@@ -48,3 +48,31 @@ export function createComponentBrowserConfig({
     ...config,
   });
 }
+
+export function createCrossBrowserComponentBrowserConfig({
+  componentId,
+  port = process.env.VF_COMPONENT_PORT || 'react',
+  readinessPath = '/next/',
+  perPortOutput = false,
+  ...config
+}) {
+  if (!componentId) throw new Error('componentId is required for component browser configuration');
+  const reportRoot = `${repositoryRootFromComponentBrowserConfig}/test-results/${componentId}-playwright-report`;
+  const outputFolder = perPortOutput ? `${reportRoot}/${port}` : reportRoot;
+  return createComponentBrowserConfig({
+    componentId,
+    port,
+    readinessPath,
+    perPortOutput,
+    browsers: ['chromium', 'firefox', 'webkit'],
+    timeout: 30_000,
+    expect: { timeout: 5_000 },
+    fullyParallel: false,
+    forbidOnly: Boolean(process.env.CI),
+    retries: 0,
+    reporter: process.env.CI ? [['line'], ['html', { outputFolder, open: 'never' }]] : 'line',
+    use: { trace: 'retain-on-failure', screenshot: 'only-on-failure' },
+    webServer: { timeout: 15_000 },
+    ...config,
+  });
+}

@@ -1,16 +1,2 @@
-import { defineConfig, devices } from '@playwright/test';
-
-const port = process.env.VF_COMPONENT_PORT || 'react';
-
-export default defineConfig({
-  testDir: './tests',
-  outputDir: `../../../../test-results/app-shell-playwright-results/${port}`,
-  reporter: 'line',
-  use: { baseURL: 'http://127.0.0.1:4173' },
-  webServer: {
-    command: 'cd ../../../.. && node tooling/docs/serve.mjs',
-    url: 'http://127.0.0.1:4173/next/',
-    reuseExistingServer: !process.env.CI
-  },
-  projects: [{ name: 'chromium', use: { ...devices['Desktop Chrome'] } }]
-});
+import { createComponentBrowserConfig } from '../../../../tooling/testing/component-browser-config.mjs';
+export default createComponentBrowserConfig({ componentId: 'app-shell' });
