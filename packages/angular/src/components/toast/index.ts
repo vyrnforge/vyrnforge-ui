@@ -53,7 +53,7 @@ export class VfToastRootDirective implements OnDestroy {
   private destroyed = false;
   private timer: ReturnType<typeof setTimeout> | undefined;
   private deadline = 0;
-  private remaining = 0;
+  private remaining: number | null = null;
   private timeoutRequested = false;
   private wasOpen = false;
   private readonly pauseReasons = new Set<PauseReason>();
@@ -102,7 +102,7 @@ export class VfToastRootDirective implements OnDestroy {
 
   private expire(): void {
     this.clearTimer();
-    this.remaining = 0;
+    this.remaining = null;
     if (this.timeoutRequested) return;
     this.timeoutRequested = true;
     this.requestClose();
@@ -113,7 +113,7 @@ export class VfToastRootDirective implements OnDestroy {
     if (!open) {
       this.wasOpen = false;
       this.timeoutRequested = false;
-      this.remaining = 0;
+      this.remaining = null;
       this.pauseReasons.clear();
       return;
     }
@@ -124,16 +124,17 @@ export class VfToastRootDirective implements OnDestroy {
     }
     if (this.timeoutRequested) return;
     const nextDuration = normalizedDuration(duration);
-    this.remaining = nextDuration ?? 0;
+    this.remaining = nextDuration;
     if (nextDuration !== null && this.pauseReasons.size === 0) this.armRemaining();
   }
 
   private armRemaining(): void {
-    if (this.destroyed || !this.committedOpen() || this.timeoutRequested || this.pauseReasons.size > 0) return;
-    if (this.remaining <= 0) { this.expire(); return; }
+    const remaining = this.remaining;
+    if (this.destroyed || !this.committedOpen() || this.timeoutRequested || this.pauseReasons.size > 0 || remaining === null) return;
+    if (remaining <= 0) { this.expire(); return; }
     this.clearTimer();
-    this.deadline = Date.now() + this.remaining;
-    this.timer = setTimeout(() => this.expire(), this.remaining);
+    this.deadline = Date.now() + remaining;
+    this.timer = setTimeout(() => this.expire(), remaining);
   }
 
   private pause(reason: PauseReason): void {
