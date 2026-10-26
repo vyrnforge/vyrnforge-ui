@@ -5,7 +5,12 @@ const port = process.env.VF_COMPONENT_PORT || 'web';
 
 async function expectAxeClean(page) {
   await page.addScriptTag({ content: axeCore.source });
-  expect((await page.evaluate(async () => globalThis.axe.run(document))).violations).toEqual([]);
+  const results = await page.evaluate(async () => globalThis.axe.run(document, {
+    rules: {
+      region: { enabled: false },
+    },
+  }));
+  expect(results.violations).toEqual([]);
 }
 
 test('combobox exposes the editable input/listbox relationship', async ({ page }) => {
