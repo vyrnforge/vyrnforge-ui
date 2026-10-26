@@ -1,6 +1,6 @@
 import { readFileSync } from 'node:fs';
 import path from 'node:path';
-import { componentUsageGroup } from './component-usage-groups.mjs';
+import { componentUsageGroup } from '../../apps/docs/component-usage-groups.mjs';
 import { discoverProductUnits } from '../testing/discover-product-units.mjs';
 
 function titleCase(id) {
@@ -21,7 +21,7 @@ export function documentationRegistry(root) {
       subgroupId: usageGroup.id,
       kind: 'component',
       component: component.component,
-      source: component.documentationSource
+      source: component.documentationSource,
     };
   });
   const [home, ...rest] = base.pages ?? [];

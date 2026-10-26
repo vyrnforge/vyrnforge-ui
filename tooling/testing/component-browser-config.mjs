@@ -34,13 +34,14 @@ export function createComponentBrowserConfig({
 
   const outputRoot = `${repositoryRootFromComponentBrowserConfig}/test-results/${componentId}-playwright-results`;
   const outputDir = perPortOutput ? `${outputRoot}/${port}` : outputRoot;
+  const managedServer = process.env.VF_COMPONENT_BROWSER_SERVER_MANAGED === '1';
 
   return defineConfig({
     testDir: './tests',
     outputDir,
     reporter,
     use: { baseURL: componentBrowserBaseURL, ...use },
-    webServer: {
+    webServer: managedServer ? undefined : {
       command: `cd ${repositoryRootFromComponentBrowserConfig} && node tooling/docs/serve.mjs`,
       url: `${componentBrowserBaseURL}${resolvedReadinessPath}`,
       reuseExistingServer: !process.env.CI,
