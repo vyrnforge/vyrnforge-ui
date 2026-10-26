@@ -252,3 +252,28 @@ test('merged history sweep cleans multiple merged PRs with one global deletion c
   assert.deepEqual(result.deletions.map((item) => item.id), [18, 19, 15]);
   assert.equal(result.deferredByCap, 1);
 });
+
+test('age-based cleanup preserves the last successful validation for each merged PR', () => {
+  const historyPolicy = { ...policy, maxDeletionsPerRun: 100 };
+  const pr890 = pullRequest(890, 'feat/old-change');
+  const pr891 = pullRequest(891, 'feat/newer-change');
+  const runs = [
+    run(30, { days: 1, pr: 891, branch: pr891.head.ref, conclusion: 'success' }),
+    run(29, { days: 2, pr: 891, branch: pr891.head.ref, conclusion: 'failure' }),
+    run(20, { days: 45, pr: 890, branch: pr890.head.ref, conclusion: 'success' }),
+    run(19, { days: 50, pr: 890, branch: pr890.head.ref, conclusion: 'failure' })
+  ];
+
+  const mergedPlan = planMergedPullRequestHistoryDeletions(runs, historyPolicy, [pr890, pr891]);
+  assert.deepEqual(new Set(mergedPlan.protectedRunIds), new Set([20, 30]));
+
+  const unprotectedAgePlan = planRunDeletions(runs, historyPolicy, { now });
+  assert.ok(unprotectedAgePlan.deletions.some((item) => item.id === 20));
+
+  const protectedAgePlan = planRunDeletions(runs, historyPolicy, {
+    now,
+    protectedRunIds: mergedPlan.protectedRunIds
+  });
+  assert.ok(protectedAgePlan.deletions.every((item) => item.id !== 20 && item.id !== 30));
+  assert.ok(protectedAgePlan.deletions.some((item) => item.id === 19));
+});
