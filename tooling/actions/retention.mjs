@@ -35,6 +35,10 @@ function workflowKey(run) {
   return String(run.workflow_id || workflowPath(run) || run.name || 'unknown');
 }
 
+function normalizedRunId(runId) {
+  return Number(runId);
+}
+
 function runSummary(run, extra = {}) {
   return {
     id: run.id,
@@ -50,13 +54,13 @@ function runSummary(run, extra = {}) {
   };
 }
 
-export function planRunDeletions(runs, policy, { now = new Date(), currentRunId } = {}) {
+export function planRunDeletions(runs, policy, { now = new Date(), currentRunId, protectedRunIds = [] } = {}) {
   const completed = runs
     .filter((run) => completedStatuses.has(run.status))
-    .filter((run) => Number(run.id) !== Number(currentRunId))
+    .filter((run) => normalizedRunId(run.id) !== normalizedRunId(currentRunId))
     .sort((a, b) => Date.parse(b.updated_at || b.created_at) - Date.parse(a.updated_at || a.created_at));
 
-  const protectedIds = new Set();
+  const protectedIds = new Set(protectedRunIds.map(normalizedRunId));
   const preservedSuccessfulCategories = new Set((policy.preserveSuccessfulCategories || []).map(String));
   const perWorkflow = new Map();
 
@@ -64,18 +68,18 @@ export function planRunDeletions(runs, policy, { now = new Date(), currentRunId 
     const key = workflowKey(run);
     if (!perWorkflow.has(key)) perWorkflow.set(key, []);
     perWorkflow.get(key).push(run);
-    if (isSuccess(run) && preservedSuccessfulCategories.has(categoryForRun(run))) protectedIds.add(run.id);
+    if (isSuccess(run) && preservedSuccessfulCategories.has(categoryForRun(run))) protectedIds.add(normalizedRunId(run.id));
   }
 
   for (const workflowRuns of perWorkflow.values()) {
-    for (const run of workflowRuns.slice(0, policy.minimumRunsPerWorkflow)) protectedIds.add(run.id);
+    for (const run of workflowRuns.slice(0, policy.minimumRunsPerWorkflow)) protectedIds.add(normalizedRunId(run.id));
     const successful = workflowRuns.filter(isSuccess).slice(0, policy.minimumSuccessfulRunsPerWorkflow);
-    for (const run of successful) protectedIds.add(run.id);
+    for (const run of successful) protectedIds.add(normalizedRunId(run.id));
   }
 
   const candidates = [];
   for (const run of completed) {
-    if (protectedIds.has(run.id)) continue;
+    if (protectedIds.has(normalizedRunId(run.id))) continue;
     const category = categoryForRun(run);
     const rule = policy.categories[category] || policy.categories.unknown;
     const threshold = isSuccess(run) ? rule.successDays : rule.nonSuccessDays;
@@ -94,6 +98,7 @@ export function planRunDeletions(runs, policy, { now = new Date(), currentRunId 
     totalRuns: runs.length,
     completedRuns: completed.length,
     protectedRuns: protectedIds.size,
+    protectedRunIds: [...protectedIds],
     candidateCount: candidates.length,
     deletionCap: policy.maxDeletionsPerRun,
     deletions: candidates.slice(0, policy.maxDeletionsPerRun),
@@ -133,7 +138,7 @@ export function planMergedPullRequestRunDeletions(runs, policy, pullRequest, { c
 
   const matched = runs
     .filter((run) => completedStatuses.has(run.status))
-    .filter((run) => Number(run.id) !== Number(currentRunId))
+    .filter((run) => normalizedRunId(run.id) !== normalizedRunId(currentRunId))
     .filter((run) => belongsToPullRequest(run, pullRequest))
     .sort((a, b) => Date.parse(b.updated_at || b.created_at) - Date.parse(a.updated_at || a.created_at));
 
@@ -142,11 +147,11 @@ export function planMergedPullRequestRunDeletions(runs, policy, pullRequest, { c
     const successful = matched
       .filter((run) => workflowPath(run) === path && isSuccess(run))
       .slice(0, preserveSuccessCount);
-    for (const run of successful) protectedIds.add(run.id);
+    for (const run of successful) protectedIds.add(normalizedRunId(run.id));
   }
 
   const candidates = matched
-    .filter((run) => !protectedIds.has(run.id))
+    .filter((run) => !protectedIds.has(normalizedRunId(run.id)))
     .map((run) => runSummary(run, {
       category: categoryForRun(run),
       pullRequestNumber: Number(pullRequest.number),
@@ -159,6 +164,7 @@ export function planMergedPullRequestRunDeletions(runs, policy, pullRequest, { c
     totalRuns: runs.length,
     matchedRuns: matched.length,
     protectedRuns: protectedIds.size,
+    protectedRunIds: [...protectedIds],
     candidateCount: candidates.length,
     deletionCap,
     deletions: candidates.slice(0, deletionCap),
@@ -169,8 +175,8 @@ export function planMergedPullRequestRunDeletions(runs, policy, pullRequest, { c
 export function planMergedPullRequestHistoryDeletions(runs, policy, pullRequests, { currentRunId } = {}) {
   const deletionCap = Number(policy.maxDeletionsPerRun || 0);
   const deletionsById = new Map();
+  const protectedIds = new Set();
   let matchedRuns = 0;
-  let protectedRuns = 0;
 
   for (const pullRequest of pullRequests) {
     const plan = planMergedPullRequestRunDeletions(runs, policy, pullRequest, {
@@ -178,7 +184,7 @@ export function planMergedPullRequestHistoryDeletions(runs, policy, pullRequests
       deletionCap: Number.MAX_SAFE_INTEGER
     });
     matchedRuns += plan.matchedRuns;
-    protectedRuns += plan.protectedRuns;
+    for (const runId of plan.protectedRunIds) protectedIds.add(normalizedRunId(runId));
     for (const deletion of plan.deletions) deletionsById.set(deletion.id, deletion);
   }
 
@@ -189,7 +195,8 @@ export function planMergedPullRequestHistoryDeletions(runs, policy, pullRequests
     mergedPullRequests: pullRequests.length,
     totalRuns: runs.length,
     matchedRuns,
-    protectedRuns,
+    protectedRuns: protectedIds.size,
+    protectedRunIds: [...protectedIds],
     candidateCount: candidates.length,
     deletionCap,
     deletions: candidates.slice(0, deletionCap),
