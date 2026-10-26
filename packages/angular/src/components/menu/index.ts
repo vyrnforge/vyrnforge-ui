@@ -1,4 +1,4 @@
-import { Directive, ElementRef, computed, inject, input, output, signal } from '@angular/core';
+import { Directive, ElementRef, Injector, afterNextRender, computed, inject, input, output, signal } from '@angular/core';
 import { resolveEnabledIndex } from '@vyrnforge/core/collection-navigation';
 import { findTypeaheadMatch } from '@vyrnforge/core/typeahead-matching';
 
@@ -11,13 +11,20 @@ export class VfMenuRootDirective {
   readonly open = input<boolean | undefined>(undefined);
   readonly defaultOpen = input(false);
   readonly openChange = output<boolean>();
+  private readonly injector = inject(Injector);
   private internal = signal(false);
   private initialized = signal(false);
   readonly expanded = computed(() => this.open() ?? (this.initialized() ? this.internal() : this.defaultOpen()));
   anchor: HTMLElement | null = null;
   surface: HTMLElement | null = null;
   setOpen(next: boolean) { this.initialized.set(true); if (this.open() === undefined) this.internal.set(next); this.openChange.emit(next); }
-  focusMenu(edge: 'first' | 'last') { queueMicrotask(() => { const items = this.surface ? menuItems(this.surface) : []; const index = resolveEnabledIndex(items.map(() => ({})), edge === 'first' ? -1 : items.length, edge); if (index != null) items[index]?.focus(); }); }
+  focusMenu(edge: 'first' | 'last') {
+    afterNextRender(() => {
+      const items = this.surface ? menuItems(this.surface) : [];
+      const index = resolveEnabledIndex(items.map(() => ({})), edge === 'first' ? -1 : items.length, edge);
+      if (index != null) items[index]?.focus();
+    }, { injector: this.injector });
+  }
 }
 
 @Directive({
