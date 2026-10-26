@@ -1,6 +1,6 @@
 import { readFile } from 'node:fs/promises';
 
-const impact = JSON.parse(await readFile('testing/impact.json', 'utf8'));
+const impact = JSON.parse(await readFile('tooling/impact/config.json', 'utf8'));
 const webManifest = JSON.parse(await readFile('packages/web/package.json', 'utf8'));
 const aggregateCss = await readFile('packages/web/src/styles.css', 'utf8');
 const elementalCss = await readFile('packages/web/src/components/elemental-primitives/elemental-primitives.css', 'utf8');
