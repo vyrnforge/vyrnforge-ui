@@ -54,7 +54,7 @@
     "test:browser:docs": "node tooling/docs/run-browser.mjs chromium",
     "test:browser:docs:cross": "node tooling/docs/run-browser.mjs all",
     "test:visual:foundation": "node tooling/visual/run-foundation.mjs",
-    "test:impact": "node --test tooling/impact/plan.test.mjs tooling/impact/executor.test.mjs tooling/impact/tiers.test.mjs tooling/impact/local.test.mjs tooling/testing/discovery.test.mjs tooling/accessibility/component-standards.test.mjs tooling/actions/retention.test.mjs",
+    "test:impact": "node --test tooling/impact/plan.test.mjs tooling/impact/executor.test.mjs tooling/impact/tiers.test.mjs tooling/impact/local.test.mjs tooling/testing/discovery.test.mjs tooling/testing/component-browser-config.test.mjs tooling/accessibility/component-standards.test.mjs tooling/actions/retention.test.mjs",
     "test:actions-retention": "node --test tooling/actions/retention.test.mjs",
     "ci:plan": "node tooling/impact/plan.mjs",
     "ci:pr": "node tooling/impact/execute.mjs --mode pr",
