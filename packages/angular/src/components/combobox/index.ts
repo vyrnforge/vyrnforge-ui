@@ -3,11 +3,12 @@ import { resolveEnabledIndex, type CollectionNavigationIntent } from '@vyrnforge
 
 let comboboxId = 0;
 const optionSelector = '[data-vf-combobox-option]';
-function visibleOptions(root: HTMLElement, query = ''): HTMLElement[] {
-  const normalizedQuery = query.trim().toLowerCase();
+function normalizeFilterText(value: string, locale?: string): string { return locale ? value.toLocaleLowerCase(locale) : value.toLowerCase(); }
+function visibleOptions(root: HTMLElement, query = '', locale?: string): HTMLElement[] {
+  const normalizedQuery = normalizeFilterText(query.trim(), locale);
   return Array.from(root.querySelectorAll<HTMLElement>(optionSelector)).filter((option) => {
     if (!normalizedQuery) return true;
-    return (option.textContent ?? '').toLowerCase().includes(normalizedQuery);
+    return normalizeFilterText(option.textContent ?? '', locale).includes(normalizedQuery);
   });
 }
 function disabled(option: HTMLElement): boolean { return option.getAttribute('aria-disabled') === 'true' || option.hasAttribute('disabled'); }
@@ -16,6 +17,7 @@ function disabled(option: HTMLElement): boolean { return option.getAttribute('ar
 export class VfComboboxRootDirective {
   readonly value = input<string | undefined>(undefined);
   readonly defaultValue = input('');
+  readonly locale = input<string | undefined>(undefined);
   readonly valueChange = output<string>();
   private readonly internalValue = signal<string | undefined>(undefined);
   readonly selected = computed(() => this.value() ?? this.internalValue() ?? this.defaultValue());
@@ -40,7 +42,7 @@ export class VfComboboxRootDirective {
   }
   focusInput() { this.element.nativeElement.querySelector<HTMLInputElement>('[data-vf-combobox-input]')?.focus(); }
   moveActive(intent: Extract<CollectionNavigationIntent, 'next' | 'previous'>) {
-    const options = visibleOptions(this.element.nativeElement, this.query());
+    const options = visibleOptions(this.element.nativeElement, this.query(), this.locale());
     const current = options.findIndex((option) => option.id === this.activeId());
     const start = current >= 0 ? current : intent === 'previous' ? options.length : -1;
     const next = resolveEnabledIndex(options.map((option) => ({ disabled: disabled(option) })), start, intent, { loop: false });
@@ -53,7 +55,7 @@ export class VfComboboxRootDirective {
   activateActive() {
     const id = this.activeId();
     if (!id) return false;
-    const target = visibleOptions(this.element.nativeElement, this.query()).find((option) => option.id === id && !disabled(option));
+    const target = visibleOptions(this.element.nativeElement, this.query(), this.locale()).find((option) => option.id === id && !disabled(option));
     if (!target) return false;
     target.click();
     return true;
@@ -74,14 +76,20 @@ export class VfComboboxRootDirective {
     '[attr.aria-activedescendant]': 'root.activeId()',
     '(input)': 'onInput($event)',
     '(focus)': 'root.setOpen(true)',
+    '(compositionstart)': 'onCompositionStart()',
+    '(compositionend)': 'onCompositionEnd()',
     '(keydown)': 'onKeydown($event)',
   },
 })
 export class VfComboboxInputDirective {
+  private composing = false;
   constructor(readonly root: VfComboboxRootDirective) {}
   onInput(event: Event) { this.root.setQuery((event.target as HTMLInputElement).value); }
+  onCompositionStart() { this.composing = true; }
+  onCompositionEnd() { this.composing = false; }
   onKeydown(event: KeyboardEvent) {
     if (event.defaultPrevented) return;
+    if (this.composing || event.isComposing) return;
     if (event.key === 'ArrowDown' || event.key === 'ArrowUp') {
       event.preventDefault();
       this.root.setOpen(true);
@@ -134,6 +142,6 @@ export class VfComboboxOptionDirective {
   readonly disabled = input(false);
   readonly optionId: string;
   constructor(readonly root: VfComboboxRootDirective, element: ElementRef<HTMLElement>) { this.optionId = element.nativeElement.id || root.nextOptionId(); }
-  readonly hidden = computed(() => !!this.root.query() && !(this.textValue() || this.value()).toLowerCase().includes(this.root.query().toLowerCase()));
+  readonly hidden = computed(() => !!this.root.query() && !normalizeFilterText(this.textValue() || this.value(), this.root.locale()).includes(normalizeFilterText(this.root.query(), this.root.locale())));
   select(event: MouseEvent) { if (!event.defaultPrevented && !this.disabled()) this.root.setValue(this.value()); }
 }

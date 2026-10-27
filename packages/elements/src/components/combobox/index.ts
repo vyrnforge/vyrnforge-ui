@@ -8,11 +8,13 @@ function visibleOptions(root: HTMLElement): HTMLElement[] { return Array.from(ro
 function disabled(option: HTMLElement): boolean { return option.getAttribute('aria-disabled') === 'true' || option.hasAttribute('disabled'); }
 function optionValue(option: HTMLElement): string { return option.dataset.value ?? option.getAttribute('value') ?? option.textContent?.trim() ?? ''; }
 function optionLabel(option: HTMLElement): string { return option.dataset.vfTextValue ?? option.textContent?.trim() ?? optionValue(option); }
+function normalizeFilterText(value: string, locale?: string): string { return locale ? value.toLocaleLowerCase(locale) : value.toLowerCase(); }
 
 export class VfComboboxElement extends HTMLElementBase {
   private inputId = '';
   private listboxId = '';
   private activeId: string | null = null;
+  private composing = false;
 
   connectedCallback() {
     this.setAttribute('data-vf-combobox-root', '');
@@ -36,17 +38,22 @@ export class VfComboboxElement extends HTMLElementBase {
     this.syncOptions();
     this.addEventListener('input', this.onInput);
     this.addEventListener('click', this.onClick);
+    this.addEventListener('compositionstart', this.onCompositionStart);
+    this.addEventListener('compositionend', this.onCompositionEnd);
     this.addEventListener('keydown', this.onKeydown);
   }
 
   disconnectedCallback() {
     this.removeEventListener('input', this.onInput);
     this.removeEventListener('click', this.onClick);
+    this.removeEventListener('compositionstart', this.onCompositionStart);
+    this.removeEventListener('compositionend', this.onCompositionEnd);
     this.removeEventListener('keydown', this.onKeydown);
   }
 
   private inputElement() { return this.querySelector<HTMLInputElement>('[data-vf-combobox-input]'); }
   private contentElement() { return this.querySelector<HTMLElement>('[data-vf-combobox-content]'); }
+  private locale() { return this.getAttribute('locale') || undefined; }
   private syncOptions() {
     const selectedValue = this.getAttribute('value') ?? '';
     this.querySelectorAll<HTMLElement>(optionSelector).forEach((option, index) => {
@@ -97,9 +104,10 @@ export class VfComboboxElement extends HTMLElementBase {
   private onInput = (event: Event) => {
     const input = (event.target as HTMLElement).closest<HTMLInputElement>('[data-vf-combobox-input]');
     if (!input || !this.contains(input)) return;
-    const query = input.value.toLocaleLowerCase();
+    const locale = this.locale();
+    const query = normalizeFilterText(input.value, locale);
     this.activeId = null;
-    this.querySelectorAll<HTMLElement>(optionSelector).forEach((option) => { option.hidden = !optionLabel(option).toLocaleLowerCase().includes(query); });
+    this.querySelectorAll<HTMLElement>(optionSelector).forEach((option) => { option.hidden = !normalizeFilterText(optionLabel(option), locale).includes(query); });
     this.setOpen(true);
     this.syncOptions();
   };
@@ -111,10 +119,21 @@ export class VfComboboxElement extends HTMLElementBase {
     this.select(option);
   };
 
+  private onCompositionStart = (event: Event) => {
+    const input = (event.target as HTMLElement).closest<HTMLInputElement>('[data-vf-combobox-input]');
+    if (input && this.contains(input)) this.composing = true;
+  };
+
+  private onCompositionEnd = (event: Event) => {
+    const input = (event.target as HTMLElement).closest<HTMLInputElement>('[data-vf-combobox-input]');
+    if (input && this.contains(input)) this.composing = false;
+  };
+
   private onKeydown = (event: KeyboardEvent) => {
     if (event.defaultPrevented) return;
     const input = (event.target as HTMLElement).closest<HTMLInputElement>('[data-vf-combobox-input]');
     if (!input || !this.contains(input)) return;
+    if (this.composing || event.isComposing) return;
     if (event.key === 'ArrowDown' || event.key === 'ArrowUp') {
       event.preventDefault();
       this.setOpen(true);

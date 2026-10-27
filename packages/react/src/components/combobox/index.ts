@@ -10,6 +10,7 @@ interface Ctx {
   setValue(value: string): void;
   query: string;
   setQuery(value: string): void;
+  locale: string | undefined;
   activeId: string | null;
   setActiveId(value: string | null): void;
   inputId: string;
@@ -23,6 +24,7 @@ function useCombo() { const value = useContext(C); if (!value) throw new Error('
 const optionSelector = '[data-vf-combobox-option]';
 function visibleOptions(root: HTMLElement | null): HTMLElement[] { return root ? Array.from(root.querySelectorAll<HTMLElement>(optionSelector)).filter((option) => !option.hidden) : []; }
 function disabled(option: HTMLElement): boolean { return option.getAttribute('aria-disabled') === 'true' || option.hasAttribute('disabled'); }
+function normalizeFilterText(value: string, locale?: string): string { return locale ? value.toLocaleLowerCase(locale) : value.toLowerCase(); }
 function activeOption(context: Ctx): HTMLElement | null {
   if (!context.activeId) return null;
   return visibleOptions(context.surfaceRef.current).find((option) => option.id === context.activeId && !disabled(option)) ?? null;
@@ -39,8 +41,8 @@ function moveActive(context: Ctx, intent: Extract<CollectionNavigationIntent, 'n
   target.scrollIntoView?.({ block: 'nearest' });
 }
 
-export interface ComboboxRootProps { children?: ReactNode; value?: string; defaultValue?: string; onValueChange?(value: string): void; }
-export function ComboboxRoot({ children, value, defaultValue = '', onValueChange }: ComboboxRootProps) {
+export interface ComboboxRootProps { children?: ReactNode; value?: string; defaultValue?: string; locale?: string; onValueChange?(value: string): void; }
+export function ComboboxRoot({ children, value, defaultValue = '', locale, onValueChange }: ComboboxRootProps) {
   const [internalValue, setInternalValue] = useState(defaultValue);
   const [open, setOpenState] = useState(false);
   const [query, setQueryState] = useState('');
@@ -65,18 +67,20 @@ export function ComboboxRoot({ children, value, defaultValue = '', onValueChange
     },
     query,
     setQuery(next) { setQueryState(next); setActiveId(null); },
+    locale,
     activeId,
     setActiveId,
     inputId,
     listboxId,
     anchorRef,
     surfaceRef,
-  }), [activeId, inputId, listboxId, onValueChange, open, query, selected, value]);
+  }), [activeId, inputId, listboxId, locale, onValueChange, open, query, selected, value]);
   return createElement(C.Provider, { value: context }, children);
 }
 
 export const ComboboxInput = forwardRef<HTMLInputElement, ComponentPropsWithoutRef<'input'>>(function ComboboxInput(props, ref) {
   const context = useCombo();
+  const composingRef = useRef(false);
   return createElement('input', {
     ...props,
     id: props.id ?? context.inputId,
@@ -99,9 +103,20 @@ export const ComboboxInput = forwardRef<HTMLInputElement, ComponentPropsWithoutR
       props.onFocus?.(event);
       if (!event.defaultPrevented) context.setOpen(true);
     },
+    onCompositionStart(event) {
+      props.onCompositionStart?.(event);
+      composingRef.current = true;
+      if (!event.defaultPrevented) context.setOpen(true);
+    },
+    onCompositionEnd(event) {
+      props.onCompositionEnd?.(event);
+      composingRef.current = false;
+      if (!event.defaultPrevented) { context.setQuery(event.currentTarget.value); context.setOpen(true); }
+    },
     onKeyDown(event) {
       props.onKeyDown?.(event);
       if (event.defaultPrevented) return;
+      if (composingRef.current || event.nativeEvent.isComposing) return;
       if (event.key === 'ArrowDown' || event.key === 'ArrowUp') {
         event.preventDefault();
         context.setOpen(true);
@@ -124,7 +139,7 @@ export const ComboboxInput = forwardRef<HTMLInputElement, ComponentPropsWithoutR
 
 export const ComboboxContent = forwardRef<HTMLDivElement, ComponentPropsWithoutRef<'div'>>(function ComboboxContent(props, ref) {
   const context = useCombo();
-  const target = useFloatingSurface({ open: context.open, anchorRef: context.anchorRef, surfaceRef: context.surfaceRef, onDismiss: () => context.setOpen(false) });
+  const target = useFloatingSurface({ open: context.open, anchorRef: context.anchorRef, surfaceRef: context.surfaceRef, dismissOnEscape: false, onDismiss: () => context.setOpen(false) });
   if (!context.open) return null;
   const node = createElement('div', {
     ...props,
@@ -146,7 +161,7 @@ export const ComboboxOption = forwardRef<HTMLButtonElement, ComboboxOptionProps>
   const uid = useId();
   const id = props.id ?? `vf-combobox-option-${uid}`;
   const label = textValue ?? value;
-  const hidden = !!context.query && !label.toLocaleLowerCase().includes(context.query.toLocaleLowerCase());
+  const hidden = !!context.query && !normalizeFilterText(label, context.locale).includes(normalizeFilterText(context.query, context.locale));
   return createElement('button', {
     ...props,
     id,

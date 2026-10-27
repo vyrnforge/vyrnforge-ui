@@ -87,15 +87,62 @@ test.describe('enhanced combobox interaction', () => {
     await expect(input).toBeFocused();
   });
 
+  test('uses the declared locale for case-sensitive language rules', async ({ page }) => {
+    await page.goto(`/next/combobox-fixtures/${port}.html`);
+    const input = page.getByRole('combobox', { name: 'Turkish city' });
+    const istanbul = page.locator(`#${port}-locale-istanbul`);
+    const isparta = page.locator(`#${port}-locale-isparta`);
+
+    await input.fill('i');
+    await expect(istanbul).toBeVisible();
+    await expect(isparta).toBeHidden();
+  });
+
+  test('does not run navigation, selection, or dismissal commands during composition', async ({ page }) => {
+    await page.goto(`/next/combobox-fixtures/${port}.html`);
+    const input = page.getByRole('combobox', { name: 'Framework' });
+    const vue = page.locator(`#${port}-vue`);
+
+    await input.focus();
+    await input.evaluate((node) => {
+      node.dispatchEvent(new CompositionEvent('compositionstart', { bubbles: true, composed: true, data: 'V' }));
+    });
+    await input.fill('Vue');
+    await expect(vue).toBeVisible();
+    await expect(input).not.toHaveAttribute('aria-activedescendant', /.+/);
+
+    for (const key of ['ArrowDown', 'Enter', 'Escape']) {
+      await input.evaluate((node, value) => {
+        node.dispatchEvent(new KeyboardEvent('keydown', { bubbles: true, composed: true, isComposing: true, key: value, code: value }));
+      }, key);
+    }
+
+    await expect(input).toHaveAttribute('aria-expanded', 'true');
+    await expect(input).not.toHaveAttribute('aria-activedescendant', /.+/);
+    await expect(input).toHaveValue('Vue');
+
+    await input.evaluate((node) => {
+      node.dispatchEvent(new CompositionEvent('compositionend', { bubbles: true, composed: true, data: 'Vue' }));
+    });
+    await page.keyboard.press('ArrowDown');
+    await expect(input).toHaveAttribute('aria-activedescendant', `${port}-vue`);
+    await page.keyboard.press('Enter');
+    await expect(input).toHaveAttribute('aria-expanded', 'false');
+    await expect(input).toHaveValue('Vue');
+  });
+
   test('keeps popup options out of the page Tab sequence', async ({ page }) => {
     await page.goto(`/next/combobox-fixtures/${port}.html`);
     const before = page.locator('#before');
     const input = page.getByRole('combobox', { name: 'Framework' });
+    const localeInput = page.getByRole('combobox', { name: 'Turkish city' });
     const after = page.locator('#after');
 
     await before.focus();
     await page.keyboard.press('Tab');
     await expect(input).toBeFocused();
+    await page.keyboard.press('Tab');
+    await expect(localeInput).toBeFocused();
     await page.keyboard.press('Tab');
     await expect(after).toBeFocused();
   });

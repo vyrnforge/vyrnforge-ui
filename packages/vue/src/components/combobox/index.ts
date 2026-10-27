@@ -6,6 +6,7 @@ interface Ctx {
   value: Ref<string>;
   open: Ref<boolean>;
   activeId: Ref<string | null>;
+  locale(): string | undefined;
   inputId: string;
   listboxId: string;
   inputRef: Ref<HTMLInputElement | null>;
@@ -20,6 +21,7 @@ function useC() { const value = inject(key); if (!value) throw new Error('Combob
 const optionSelector = '[data-vf-combobox-option]';
 function visibleOptions(root: HTMLElement | null): HTMLElement[] { return root ? Array.from(root.querySelectorAll<HTMLElement>(optionSelector)).filter((option) => !option.hidden) : []; }
 function disabled(option: HTMLElement): boolean { return option.getAttribute('aria-disabled') === 'true' || option.hasAttribute('disabled'); }
+function normalizeFilterText(value: string, locale?: string): string { return locale ? value.toLocaleLowerCase(locale) : value.toLowerCase(); }
 function invoke(handler: unknown, event: Event) { if (typeof handler === 'function') handler(event); else if (Array.isArray(handler)) for (const item of handler) if (typeof item === 'function') item(event); }
 function activeOption(context: Ctx): HTMLElement | null {
   const id = context.activeId.value;
@@ -40,7 +42,7 @@ function moveActive(context: Ctx, intent: Extract<CollectionNavigationIntent, 'n
 
 export const ComboboxRoot = defineComponent({
   name: 'ComboboxRoot',
-  props: { value: String, defaultValue: { type: String, default: '' } },
+  props: { value: String, defaultValue: { type: String, default: '' }, locale: String },
   emits: ['update:value'],
   setup(props, { slots, emit }) {
     const internalValue = ref(props.defaultValue);
@@ -58,6 +60,7 @@ export const ComboboxRoot = defineComponent({
       value,
       open,
       activeId,
+      locale: () => props.locale,
       inputId,
       listboxId,
       inputRef,
@@ -82,6 +85,7 @@ export const ComboboxInput = defineComponent({
   name: 'ComboboxInput',
   setup(_, { attrs }) {
     const context = useC();
+    const composing = ref(false);
     return () => h('input', {
       ...attrs,
       ref: context.inputRef,
@@ -101,9 +105,18 @@ export const ComboboxInput = defineComponent({
         invoke(attrs.onFocus, event);
         if (!event.defaultPrevented) context.setOpen(true);
       },
+      onCompositionstart: (event: CompositionEvent) => {
+        invoke(attrs.onCompositionstart, event);
+        composing.value = true;
+      },
+      onCompositionend: (event: CompositionEvent) => {
+        invoke(attrs.onCompositionend, event);
+        composing.value = false;
+      },
       onKeydown: (event: KeyboardEvent) => {
         invoke(attrs.onKeydown, event);
         if (event.defaultPrevented) return;
+        if (composing.value || event.isComposing) return;
         if (event.key === 'ArrowDown' || event.key === 'ArrowUp') {
           event.preventDefault();
           context.setOpen(true);
@@ -156,7 +169,7 @@ export const ComboboxOption = defineComponent({
         role: 'option',
         tabindex: -1,
         disabled: props.disabled,
-        hidden: !!context.query.value && !label.toLocaleLowerCase().includes(context.query.value.toLocaleLowerCase()),
+        hidden: !!context.query.value && !normalizeFilterText(label, context.locale()).includes(normalizeFilterText(context.query.value, context.locale())),
         'aria-disabled': props.disabled || undefined,
         'aria-selected': context.activeId.value ? context.activeId.value === id : context.value.value === props.value,
         'data-vf-combobox-option': '',
