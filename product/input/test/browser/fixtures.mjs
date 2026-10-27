@@ -48,6 +48,7 @@ if (port === 'react') {
     bundle: true,
     format: 'iife',
     platform: 'browser',
+    jsx: 'automatic',
     outdir: outDir,
     write: false,
   });
