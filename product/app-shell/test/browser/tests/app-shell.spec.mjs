@@ -162,3 +162,52 @@ test('permission-aware task preserves work across authoritative denial and mid-t
   await page.addScriptTag({ content: axeCore.source });
   expect((await page.evaluate(async () => globalThis.axe.run(document))).violations).toEqual([]);
 });
+
+test('item management preserves transaction truth and retries only unresolved bulk results', async ({ page }) => {
+  test.skip(port !== 'react', 'STD-10 representative CRUD integration is intentionally verified through the React public entrypoints.');
+
+  await page.goto('/next/app-shell-fixtures/item-management-react.html');
+
+  const createName = page.locator('#crud-create-name');
+  await createName.fill('Delta');
+  await page.getByRole('button', { name: 'Create item', exact: true }).click();
+  await expect(page.getByText('Created Delta.', { exact: true })).toBeVisible();
+  await expect(page.locator('[data-item-id="item-5"]')).toContainText('Delta');
+
+  await page.getByRole('button', { name: 'Edit Atlas', exact: true }).click();
+  const editName = page.locator('#crud-edit-name');
+  await expect(editName).toHaveValue('Atlas');
+  await editName.fill('Atlas revised');
+  await page.getByRole('button', { name: 'Save changes', exact: true }).click();
+  await expect(page.locator('[data-item-id="atlas"]')).toContainText('Atlas revised');
+
+  await page.getByRole('button', { name: 'Archive Beacon', exact: true }).click();
+  await expect(page.getByRole('button', { name: 'Restore Beacon', exact: true })).toBeVisible();
+  await page.getByRole('button', { name: 'Restore Beacon', exact: true }).click();
+  await expect(page.getByRole('button', { name: 'Archive Beacon', exact: true })).toBeVisible();
+
+  await page.getByRole('checkbox', { name: 'Select Atlas revised', exact: true }).check();
+  await page.getByRole('checkbox', { name: 'Select Beacon', exact: true }).check();
+  await page.getByRole('checkbox', { name: 'Select Cedar', exact: true }).check();
+  await expect(page.getByText('3 selected. Selection applies only to the explicitly checked active items.', { exact: true })).toBeVisible();
+
+  const archiveSelected = page.getByRole('button', { name: 'Archive selected', exact: true });
+  await archiveSelected.focus();
+  await archiveSelected.click();
+  await expect(page.getByText('1 item archived. 1 needs attention. 1 outcome is unknown.', { exact: true })).toBeVisible();
+  await expect(archiveSelected).toBeFocused();
+  await expect(page.getByRole('button', { name: 'Restore Atlas revised', exact: true })).toBeVisible();
+  await expect(page.getByRole('checkbox', { name: 'Select Beacon', exact: true })).toBeChecked();
+  await expect(page.getByRole('checkbox', { name: 'Select Cedar', exact: true })).toBeChecked();
+  await expect(page.getByText('Beacon: Retention hold prevents archiving.', { exact: true })).toBeVisible();
+  await expect(page.getByText('Cedar: outcome unknown; reconcile before retrying.', { exact: true })).toBeVisible();
+
+  await page.getByRole('button', { name: 'Retry unresolved', exact: true }).click();
+  await expect(page.getByText('2 unresolved items archived. Known successes were not repeated.', { exact: true })).toBeVisible();
+  await expect(page.getByText('Last retry request: Beacon, Cedar.', { exact: true })).toBeVisible();
+  await expect(page.getByRole('button', { name: 'Restore Beacon', exact: true })).toBeVisible();
+  await expect(page.getByRole('button', { name: 'Restore Cedar', exact: true })).toBeVisible();
+
+  await page.addScriptTag({ content: axeCore.source });
+  expect((await page.evaluate(async () => globalThis.axe.run(document))).violations).toEqual([]);
+});
