@@ -1,0 +1,1 @@
+{"id":"search-field/data-explorer","title":"List explorer","description":"Compose SearchField with two facets, sorting, reset, URL-restorable criteria, stale-response suppression, and zero-result recovery while data services remain application-owned.","defaultFramework":"react","frameworks":{"react":{"label":"React","language":"tsx","source":"react.tsx"}}}
