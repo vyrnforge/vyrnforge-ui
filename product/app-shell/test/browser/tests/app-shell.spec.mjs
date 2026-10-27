@@ -52,10 +52,10 @@ test('settings navigation preserves deep links, route history, title and focus w
   await page.goto('/next/app-shell-fixtures/settings-navigation-react.html?route=%2Fsettings%2Fprofile&tab=preferences');
 
   const main = page.locator('[data-vf-app-shell-main]');
-  const profileLink = page.getByRole('link', { name: 'Profile' });
-  const securityLink = page.getByRole('link', { name: 'Security' });
-  const detailsTab = page.getByRole('tab', { name: 'Details' });
-  const preferencesTab = page.getByRole('tab', { name: 'Preferences' });
+  const profileLink = page.getByRole('link', { name: 'Profile', exact: true });
+  const securityLink = page.getByRole('link', { name: 'Security', exact: true });
+  const detailsTab = page.getByRole('tab', { name: 'Details', exact: true });
+  const preferencesTab = page.getByRole('tab', { name: 'Preferences', exact: true });
 
   await expect(page).toHaveTitle('Profile settings');
   await expect(page.getByRole('heading', { level: 1, name: 'Profile settings' })).toBeVisible();
@@ -86,14 +86,14 @@ test('settings navigation preserves deep links, route history, title and focus w
   await expect(detailsTab).toHaveAttribute('aria-selected', 'true');
   await expect(main).toBeFocused();
 
-  await page.getByRole('link', { name: 'Edit profile' }).click();
+  await page.getByRole('link', { name: 'Edit profile', exact: true }).click();
   await expect(page).toHaveURL(/route=%2Fsettings%2Fprofile%2Fedit/);
   await expect(page).toHaveTitle('Edit profile');
   await expect(page.getByRole('heading', { level: 1, name: 'Edit profile' })).toBeVisible();
   await expect(profileLink).toHaveAttribute('aria-current', 'page');
   await expect(main).toBeFocused();
 
-  await page.getByRole('link', { name: 'Return to profile settings' }).click();
+  await page.getByRole('link', { name: 'Return to profile settings', exact: true }).click();
   await expect(page).toHaveURL(/route=%2Fsettings%2Fprofile/);
   await expect(page).toHaveURL(/tab=details/);
   await expect(page).toHaveTitle('Profile settings');
@@ -101,12 +101,12 @@ test('settings navigation preserves deep links, route history, title and focus w
 
   await page.setViewportSize({ width: 640, height: 800 });
   await expect(page.locator('.settings-persistent-navigation')).toBeHidden();
-  const navigationTrigger = page.getByRole('button', { name: 'Settings navigation' });
+  const navigationTrigger = page.getByRole('button', { name: 'Settings navigation', exact: true });
   await expect(navigationTrigger).toBeVisible();
   await navigationTrigger.click();
   await expect(page.getByRole('dialog', { name: 'Settings navigation' })).toBeVisible();
-  await expect(page.getByRole('navigation', { name: 'Settings' }).getByRole('link', { name: 'Profile' })).toHaveAttribute('aria-current', 'page');
-  await page.getByRole('button', { name: 'Close navigation' }).click();
+  await expect(page.getByRole('navigation', { name: 'Settings' }).getByRole('link', { name: 'Profile', exact: true })).toHaveAttribute('aria-current', 'page');
+  await page.getByRole('button', { name: 'Close navigation', exact: true }).click();
   await expect(page.getByRole('dialog', { name: 'Settings navigation' })).toBeHidden();
   await expect(navigationTrigger).toBeFocused();
 
