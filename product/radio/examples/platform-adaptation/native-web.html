@@ -1,0 +1,19 @@
+<form id="delivery-form">
+  <fieldset>
+    <legend>Delivery speed</legend>
+    <label><input data-vf-radio type="radio" name="deliverySpeed" value="standard" checked> Standard</label>
+    <label><input data-vf-radio type="radio" name="deliverySpeed" value="express"> Express</label>
+    <label><input data-vf-radio type="radio" name="deliverySpeed" value="same-day" disabled> Same day — unavailable</label>
+  </fieldset>
+  <button data-vf-button data-vf-variant="primary" type="submit">Confirm delivery speed</button>
+  <p id="delivery-status" role="status">Not confirmed.</p>
+</form>
+<script>
+  const form = document.querySelector('#delivery-form');
+  const status = document.querySelector('#delivery-status');
+  form.addEventListener('submit', (event) => {
+    event.preventDefault();
+    const value = new FormData(form).get('deliverySpeed');
+    status.textContent = `Confirmed: ${value}.`;
+  });
+</script>
