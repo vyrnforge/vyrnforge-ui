@@ -2,6 +2,8 @@
 
 <section><h2>Overview</h2><p>Use Button for actions such as saving, confirming, opening UI, or submitting a form. Use a link when the user is navigating to another location.</p></section>
 
+<section><h2>When to use and alternatives</h2><p>Use Button when the user activates an action or command. Do not use it for destination navigation; use Link or a native anchor for that semantic. Do not replace native button activation with a custom div, generic ARIA controller, or application-specific keyboard handler merely for visual consistency.</p></section>
+
 <section>
   <h2>Installation and imports</h2>
   <div class="vf-docs-table-wrap" tabindex="0" role="region" aria-label="Button package imports"><table><thead><tr><th>Surface</th><th>Public entrypoint</th></tr></thead><tbody>
@@ -24,7 +26,15 @@
 
 <section><h2>Interaction</h2><p>Pointer activation and Enter/Space keyboard activation follow native button behavior. Keyboard-visible focus is styled with <code>:focus-visible</code>.</p></section>
 
-<section><h2>Accessibility</h2><p>Provide an accessible name through visible content or an appropriate platform naming mechanism. Loading preserves the accessible name while exposing busy state. Reduced-motion and forced-colors treatments are included in the public stylesheet.</p></section>
+<section><h2>Accessibility</h2><p>Provide an accessible name through visible content or an appropriate platform naming mechanism. Loading preserves the accessible name while exposing busy state. Reduced-motion and forced-colors treatments are included in the public stylesheet. Button is native-backed; an APG widget/controller abstraction is not required to reproduce behavior the platform already owns.</p></section>
+
+<section><h2>Responsive and platform adaptation</h2><p>Button keeps the same action semantics under narrow layouts, zoom, touch, pointer, keyboard, and direction changes. Surrounding composition owns placement and wrapping; the component must not switch to a different semantic control merely because layout changes. Native mobile/desktop renderer support is not implied by the Web component.</p></section>
+
+<section><h2>Loading and async ownership</h2><p><code>loading</code> is a presentation/busy state, not an application request manager and not an automatic disabled policy. The consuming workflow owns operation truth, duplicate-submission policy, retries, cancellation, and authoritative success or failure.</p></section>
+
+<section><h2>Error and validation</h2><p>Button has no generic invalid or error state. Form validation, operational failure, and recovery belong to the affected fields, form, task, or workflow. Error styling must not be invented on Button as a substitute for communicating the actual failure.</p></section>
+
+<section><h2>Content and localization</h2><p>Consumers author the action label and its translation. Prefer concise visible labels that describe the action. Icon-only buttons require an authored accessible name; VyrnForge does not add a hidden English fallback. Text expansion and bidirectional content must remain usable without changing the action meaning.</p></section>
 
 <section><h2>Forms</h2><p>Button preserves native form behavior. Native attributes such as <code>type</code>, <code>name</code>, <code>value</code>, <code>form</code>, and form override attributes remain available through the framework's native attribute surface.</p></section>
 
@@ -40,12 +50,14 @@
   </tbody></table></div>
 </section>
 
-<section><h2>CSR and SSR</h2><p>React, Angular, and Vue render a native button during SSR and restore framework event handling during hydration. Native Web does not require hydration.</p></section>
+<section><h2>CSR and SSR</h2><p>React, Angular, and Vue render a native button during SSR and restore framework event handling during hydration. Native Web does not require hydration. These statements are component- and evidence-scoped; they do not imply every VyrnForge component has equivalent hydration evidence.</p></section>
+
+<section><h2>Implementation and evidence status</h2><p>Button is an implemented native-backed Web concept on the declared Native Web, React, Angular, and Vue surfaces. An Elements wrapper is intentionally not required merely for catalog symmetry because native <code>&lt;button&gt;</code> already completes the semantic control. Existing native-control, accessibility, SSR, and browser evidence remains authoritative only for the revisions and scenarios that recorded it; this documentation does not promote release or production maturity.</p></section>
 
 <section><h2>Examples</h2><p>The Quick start playground demonstrates the supported Button surfaces. Add application-specific composition around Button through ordinary framework patterns.</p></section>
 
 <section><h2>Do / Don't</h2><p><strong>Do</strong> use Button for actions and explicitly disable it when repeated activation must be blocked. <strong>Don't</strong> use Button as a navigation link or assume loading automatically prevents activation.</p></section>
 
-<section><h2>Testing guidance</h2><p>Query Button by role and accessible name and assert observable outcomes such as activation or form submission. Depend only on documented props, events, attributes, and styling hooks.</p></section>
+<section><h2>Testing guidance</h2><p>Query Button by role and accessible name and assert observable outcomes such as activation or form submission. Depend only on documented props, events, attributes, and styling hooks. Test native form behavior and keep loading-state tests separate from disabled-state tests.</p></section>
 
-<section><h2>Compatibility</h2><p>Button is documented for Native Web, React, Angular, and Vue in this channel. See the Compatibility reference for supported runtime and browser ranges.</p></section>
+<section><h2>Compatibility and migration</h2><p>Button is documented for Native Web, React, Angular, and Vue in this channel. Documented native semantics, variant/size/loading options, form behavior, public hooks, and framework entrypoints are compatibility commitments. Internal implementation structure is not. See the Compatibility reference for validated runtime and browser ranges rather than inferring support from source presence.</p></section>
