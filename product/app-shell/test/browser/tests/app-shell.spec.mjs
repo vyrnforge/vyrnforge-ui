@@ -113,3 +113,52 @@ test('settings navigation preserves deep links, route history, title and focus w
   await page.addScriptTag({ content: axeCore.source });
   expect((await page.evaluate(async () => globalThis.axe.run(document))).violations).toEqual([]);
 });
+
+test('permission-aware task preserves work across authoritative denial and mid-task access loss', async ({ page }) => {
+  test.skip(port !== 'react', 'STD-16 representative authorization integration is intentionally verified through the React public entrypoints.');
+
+  await page.goto('/next/app-shell-fixtures/permission-access-react.html');
+
+  const draft = page.getByLabel('Plan notes');
+  const save = page.getByRole('button', { name: 'Save changes', exact: true });
+  const impersonation = page.getByLabel('Impersonation context');
+
+  await expect(impersonation).toContainText('Avery');
+  await expect(impersonation).toContainText('Jordan');
+  await expect(page.getByText('Illustrative organization role:')).toContainText('Editor');
+  await expect(draft).not.toHaveAttribute('readonly');
+
+  await draft.fill('Quarterly plan draft — unsaved change');
+  await save.click();
+
+  await expect(page.getByText('Your changes were not saved because edit access is no longer available. Your draft is preserved here.')).toBeVisible();
+  await expect(draft).toHaveValue('Quarterly plan draft — unsaved change');
+  await expect(draft).toHaveAttribute('readonly', '');
+  await expect(save).toBeDisabled();
+  await expect(page.getByText('Last committed value: “Quarterly plan draft”.')).toBeVisible();
+
+  await draft.focus();
+  await expect(draft).toBeFocused();
+
+  const requestAccess = page.getByRole('button', { name: 'Request edit access', exact: true });
+  await expect(requestAccess).toBeEnabled();
+  await requestAccess.click();
+  await expect(page.getByRole('button', { name: 'Request submitted', exact: true })).toBeDisabled();
+  await expect(page.getByText('Edit access request submitted. Access has not been granted yet.')).toBeVisible();
+
+  await page.getByRole('button', { name: 'Grant edit access for demo', exact: true }).click();
+  await expect(draft).not.toHaveAttribute('readonly');
+  await draft.fill('Second unsaved draft');
+  await page.getByRole('button', { name: 'Revoke edit access for demo', exact: true }).click();
+  await expect(draft).toHaveValue('Second unsaved draft');
+  await expect(draft).toHaveAttribute('readonly', '');
+  await expect(page.getByText('Edit access changed while you were working. Your unsaved draft is preserved in read-only mode.')).toBeVisible();
+
+  await expect(impersonation).toBeVisible();
+  await page.getByRole('button', { name: 'End impersonation', exact: true }).click();
+  await expect(impersonation).toHaveCount(0);
+  await expect(page.getByText('Avery is using their own identity.')).toBeVisible();
+
+  await page.addScriptTag({ content: axeCore.source });
+  expect((await page.evaluate(async () => globalThis.axe.run(document))).violations).toEqual([]);
+});
