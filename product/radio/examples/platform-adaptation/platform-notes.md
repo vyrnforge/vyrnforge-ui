@@ -1,0 +1,1 @@
+Android, Apple-platform, and desktop variants should preserve the semantic delivery values and commitment boundary while using their platform-native selection, command, navigation, input, and accessibility conventions. These mappings are design guidance only and are not VyrnForge renderer implementations.
