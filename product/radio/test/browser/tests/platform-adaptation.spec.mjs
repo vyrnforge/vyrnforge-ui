@@ -3,9 +3,21 @@ import axeCore from 'axe-core';
 
 const port = process.env.VF_COMPONENT_PORT || 'web';
 
+async function openPlatformFixture(page) {
+  const pageErrors = [];
+  page.on('pageerror', (error) => pageErrors.push(error.message));
+  await page.goto(`/next/radio-fixtures/platform-${port}.html`);
+  try {
+    await expect(page.getByRole('status')).toHaveText('Not confirmed.', { timeout: 3000 });
+  } catch {
+    const body = await page.locator('body').innerText();
+    throw new Error(`Platform fixture did not mount for ${port}. pageErrors=${JSON.stringify(pageErrors)} body=${JSON.stringify(body)}`);
+  }
+}
+
 test.describe('STD-25 platform-adaptable selection and confirmation', () => {
   test('preserves semantic values while selection stays staged until confirmation', async ({ page }) => {
-    await page.goto(`/next/radio-fixtures/platform-${port}.html`);
+    await openPlatformFixture(page);
 
     const standard = page.getByLabel('Standard');
     const express = page.getByLabel('Express');
@@ -17,7 +29,6 @@ test.describe('STD-25 platform-adaptable selection and confirmation', () => {
     await expect(unavailable).toBeDisabled();
     await expect(standard).toHaveAttribute('name', 'deliverySpeed');
     await expect(express).toHaveAttribute('name', 'deliverySpeed');
-    await expect(status).toHaveText('Not confirmed.');
 
     await express.check();
     await expect(express).toBeChecked();
@@ -32,7 +43,7 @@ test.describe('STD-25 platform-adaptable selection and confirmation', () => {
   });
 
   test('has no automated accessibility violations in the representative state', async ({ page }) => {
-    await page.goto(`/next/radio-fixtures/platform-${port}.html`);
+    await openPlatformFixture(page);
     await page.addScriptTag({ content: axeCore.source });
     const results = await page.evaluate(async () => globalThis.axe.run(document));
     expect(results.violations).toEqual([]);
