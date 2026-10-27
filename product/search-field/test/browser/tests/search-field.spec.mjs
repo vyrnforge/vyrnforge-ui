@@ -80,7 +80,7 @@ test('STD-08 list explorer preserves committed criteria, history, IME, stale-res
   await expect(page.getByRole('heading', { name: 'No matching projects' })).toBeVisible();
   await expect(query).toHaveValue('zzzz');
 
-  await page.getByRole('button', { name: 'Reset search and filters' }).click();
+  await page.getByRole('button', { name: 'Reset search and filters' }).first().click();
   await expect(query).toHaveValue('');
   await expect(active).not.toBeChecked();
   await expect(mine).not.toBeChecked();
