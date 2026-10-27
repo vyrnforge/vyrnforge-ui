@@ -10,7 +10,7 @@ interface Ctx {
   setValue(value: string): void;
   query: string;
   setQuery(value: string): void;
-  locale?: string;
+  locale: string | undefined;
   activeId: string | null;
   setActiveId(value: string | null): void;
   inputId: string;
