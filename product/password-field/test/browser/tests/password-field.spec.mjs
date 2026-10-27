@@ -1,1 +1,59 @@
-import{test,expect}from'@playwright/test';import axeCore from'axe-core';const port=process.env.VF_COMPONENT_PORT||'react';test('password field toggles visibility accessibly',async({page})=>{await page.goto(`/next/password-field-fixtures/${port}.html`);await page.locator('#toggle').click();await expect(page.locator('#password')).toHaveAttribute('type','text');await expect(page.locator('#toggle')).toHaveAttribute('aria-pressed','true');await page.addScriptTag({content:axeCore.source});expect((await page.evaluate(async()=>globalThis.axe.run(document))).violations).toEqual([]);});
+import { test, expect } from '@playwright/test';
+import axeCore from 'axe-core';
+
+const port = process.env.VF_COMPONENT_PORT || 'react';
+
+test('password field toggles visibility accessibly', async ({ page }) => {
+  await page.goto(`/next/password-field-fixtures/${port}.html`);
+  await page.locator('#toggle').click();
+  await expect(page.locator('#password')).toHaveAttribute('type', 'text');
+  await expect(page.locator('#toggle')).toHaveAttribute('aria-pressed', 'true');
+  await page.addScriptTag({ content: axeCore.source });
+  expect((await page.evaluate(async () => globalThis.axe.run(document))).violations).toEqual([]);
+});
+
+test('STD-15 representative session recovery preserves task context', async ({ page }) => {
+  test.skip(port !== 'react', 'The complete STD-15 workflow is a declared React representative example.');
+  await page.goto('/next/password-field-fixtures/session-recovery-react.html');
+
+  const note = page.getByLabel('Profile note');
+  await note.fill('Unsaved identity workflow draft');
+  await page.getByRole('button', { name: 'Simulate session expiry' }).click();
+  await expect(page.getByRole('heading', { name: 'Sign in again to continue editing' })).toBeFocused();
+  await expect(page.getByTestId('draft-value')).toHaveText('Unsaved identity workflow draft');
+
+  await page.getByRole('button', { name: 'Continue with passkey' }).click();
+  await expect(page.getByRole('alert')).toContainText('passkey sign-in did not complete');
+  await expect(page.getByRole('alert')).toBeFocused();
+  await expect(page.getByRole('button', { name: 'Use password instead' })).toBeVisible();
+
+  await page.getByRole('button', { name: 'Continue with organization SSO' }).click();
+  await expect(page.getByRole('alert')).toContainText('Organization sign-in did not complete');
+  await expect(page.getByRole('alert')).toBeFocused();
+
+  await page.getByRole('button', { name: 'Use password instead' }).click();
+  await expect(page.getByLabel('Email address')).toHaveAttribute('autocomplete', 'username');
+  await expect(page.getByLabel('Password')).toHaveAttribute('autocomplete', 'current-password');
+  await page.getByRole('button', { name: 'Continue' }).click();
+  await expect(page.getByRole('alert')).toHaveText('We could not sign you in with those credentials. Check them or use another allowed method.');
+
+  await page.getByRole('button', { name: 'Continue' }).click();
+  await expect(page.getByRole('heading', { name: 'Enter your verification code' })).toBeFocused();
+  const otpCells = page.getByRole('group', { name: 'Verification code' }).locator('input');
+  await expect(otpCells).toHaveCount(4);
+  await otpCells.nth(0).fill('1');
+  await otpCells.nth(1).fill('2');
+  await otpCells.nth(2).fill('3');
+  await otpCells.nth(3).fill('4');
+  await page.getByRole('button', { name: 'Verify and return to edit' }).click();
+  await expect(page.getByRole('alert')).toContainText('incorrect or expired');
+  await expect(page.getByTestId('draft-value')).toHaveText('Unsaved identity workflow draft');
+
+  await page.getByRole('button', { name: 'Verify and return to edit' }).click();
+  await expect(page.getByRole('heading', { name: 'Edit profile note' })).toBeFocused();
+  await expect(note).toHaveValue('Unsaved identity workflow draft');
+  await expect(page.getByText('Profile note saved by the example service.')).toHaveCount(0);
+
+  await page.addScriptTag({ content: axeCore.source });
+  expect((await page.evaluate(async () => globalThis.axe.run(document))).violations).toEqual([]);
+});
