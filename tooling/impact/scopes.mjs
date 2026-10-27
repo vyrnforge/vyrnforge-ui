@@ -33,7 +33,7 @@ const baseScopeDefinitions = {
   'docs-source': { command: ['node', 'tooling/verify/documentation-structure.mjs'], requires: [] },
   'browser-foundation-visual': { command: [npm, 'run', 'test:visual:foundation'], requires: ['build-web'] },
   'browser-elemental-primitives': { command: ['node', 'tooling/testing/run-component-browser.mjs', 'elemental-primitives', 'web', 'chromium'], requires: ['build-web'] },
-  'docs-build': { command: [npm, 'run', 'build:docs'], requires: ['docs-source', 'compatibility', 'package-contracts', ...allPackageBuilds] },
+  'docs-build': { command: [npm, 'run', 'build:docs:site'], requires: ['docs-source', 'compatibility', 'package-contracts', ...allPackageBuilds] },
   'docs-site': { command: ['node', 'tooling/verify/docs-site.mjs'], requires: ['docs-build'] },
   'browser-docs-chromium': { command: [npm, 'run', 'test:browser:docs'], requires: ['docs-site'] },
   'browser-docs-cross': { command: [npm, 'run', 'test:browser:docs:cross'], requires: ['docs-site'] },
