@@ -1,0 +1,1 @@
+{"id":"app-shell/settings-navigation","title":"Settings navigation","description":"Compose AppShell and SideNav with application-owned history, deep-link, title, focus, and local Tabs behavior.","defaultFramework":"react","frameworks":{"react":{"label":"React","language":"tsx","source":"react.tsx"}}}
