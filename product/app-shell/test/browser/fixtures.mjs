@@ -24,9 +24,9 @@ await writeFile(
 );
 
 if (port === 'react') {
-  const entry = path.join(root, 'product/app-shell/examples/settings-navigation/react.tsx');
+  const settingsEntry = path.join(root, 'product/app-shell/examples/settings-navigation/react.tsx');
   await build({
-    entryPoints: [entry],
+    entryPoints: [settingsEntry],
     bundle: true,
     format: 'esm',
     platform: 'browser',
@@ -36,5 +36,19 @@ if (port === 'react') {
   await writeFile(
     path.join(dir, 'settings-navigation-react.html'),
     '<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width"><title>Settings navigation fixture</title><link rel="stylesheet" href="./settings-navigation-react.css"><style>html,body{margin:0;min-block-size:100%;}</style></head><body><div id="root"></div><script type="module" src="./settings-navigation-react.js"></script></body></html>',
+  );
+
+  const permissionEntry = path.join(root, 'product/app-shell/examples/permission-access/react.tsx');
+  await build({
+    entryPoints: [permissionEntry],
+    bundle: true,
+    format: 'esm',
+    platform: 'browser',
+    outdir: dir,
+    entryNames: 'permission-access-react',
+  });
+  await writeFile(
+    path.join(dir, 'permission-access-react.html'),
+    '<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width"><title>Permission access fixture</title><link rel="stylesheet" href="./permission-access-react.css"><style>html,body{margin:0;min-block-size:100%;}</style></head><body><div id="root"></div><script type="module" src="./permission-access-react.js"></script></body></html>',
   );
 }
