@@ -15,7 +15,8 @@ type Profile = {
   hasWorkPhone: boolean;
   workPhone: string;
 };
-type Errors = Partial<Record<'displayName' | 'email' | 'workPhone', string>>;
+type ErrorKey = 'displayName' | 'email' | 'workPhone';
+type Errors = Partial<Record<ErrorKey, string>>;
 
 const initialProfile: Profile = {
   displayName: 'Atlas Research',
@@ -101,7 +102,12 @@ export function Example() {
   function change<K extends keyof Profile>(key: K, value: Profile[K]) {
     setProfile((current) => ({ ...current, [key]: value }));
     if (key === 'displayName' || key === 'email' || key === 'workPhone') {
-      setErrors((current) => ({ ...current, [key]: undefined }));
+      const errorKey: ErrorKey = key;
+      setErrors((current) => {
+        const next = { ...current };
+        delete next[errorKey];
+        return next;
+      });
     }
     setStatus('');
   }
@@ -129,7 +135,7 @@ export function Example() {
 
     setPending(true);
     setStatus('');
-    await new Promise((resolve) => setTimeout(resolve, 80));
+    await new Promise((resolve) => setTimeout(resolve, 250));
     if (profile.email.toLowerCase() === 'taken@example.com') {
       setErrors({ email: t.emailTaken });
       setPending(false);
