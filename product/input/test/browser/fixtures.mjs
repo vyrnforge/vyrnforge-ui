@@ -39,18 +39,23 @@ if (port === 'react') {
   ));
   await writeFile(path.join(outDir, 'react.html'), page(markup));
 
-  await writeFile(path.join(outDir, 'react-profile.html'), `<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width"><link rel="stylesheet" href="./react-profile.css"><title>Profile form fixture</title></head><body><main><h1>STD-06 profile form fixture</h1><div id="profile-app"></div></main><script type="module" src="./react-profile.js"></script></body></html>`);
-  await build({
+  const profileBuild = await build({
     stdin: {
       resolveDir: root,
       sourcefile: 'react-profile-client.tsx',
-      contents: `import{createElement}from'react';import{createRoot}from'react-dom/client';import{Example}from'./product/input/examples/profile-edit/react.tsx';createRoot(document.querySelector('#profile-app')).render(createElement(Example));`,
+      contents: `import{createElement}from'react';import{createRoot}from'react-dom/client';import{Example}from'./product/input/examples/profile-edit/react.tsx';const root=document.querySelector('#profile-app');if(!root)throw new Error('Missing #profile-app');createRoot(root).render(createElement(Example));`,
     },
     bundle: true,
-    format: 'esm',
+    format: 'iife',
     platform: 'browser',
-    outfile: path.join(outDir, 'react-profile.js'),
+    outdir: outDir,
+    write: false,
   });
+  const profileJs = profileBuild.outputFiles.find((file) => file.path.endsWith('.js'))?.text;
+  const profileCss = profileBuild.outputFiles.find((file) => file.path.endsWith('.css'))?.text ?? '';
+  if (!profileJs) throw new Error('Profile fixture client bundle was not generated');
+  const safeProfileJs = profileJs.replaceAll('</script', '<\\/script');
+  await writeFile(path.join(outDir, 'react-profile.html'), `<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width"><title>Profile form fixture</title><style>${profileCss}</style></head><body><main><h1>STD-06 profile form fixture</h1><div id="profile-app"></div></main><script>${safeProfileJs}</script></body></html>`);
 }
 
 if (port === 'vue') {
