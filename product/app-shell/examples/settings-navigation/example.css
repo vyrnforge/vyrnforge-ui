@@ -1,0 +1,20 @@
+.settings-shell-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--vf-space-3, 0.75rem);
+}
+
+.settings-nav-trigger {
+  display: none;
+}
+
+@media (max-width: 48rem) {
+  .settings-persistent-navigation {
+    display: none;
+  }
+
+  .settings-nav-trigger {
+    display: inline-flex;
+  }
+}
