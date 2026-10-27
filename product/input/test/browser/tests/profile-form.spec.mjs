@@ -7,7 +7,16 @@ test.describe('STD-06 profile form workflow', () => {
   test.skip(port !== 'react', 'The full representative workflow is declared and verified in React only.');
 
   test.beforeEach(async ({ page }) => {
-    await page.goto('/next/input-fixtures/react-profile.html');
+    const pageErrors = [];
+    page.on('pageerror', (error) => pageErrors.push(error.message));
+    const response = await page.goto('/next/input-fixtures/react-profile.html');
+    expect(response?.status()).toBe(200);
+    try {
+      await expect(page.locator('#profile-display-name')).toBeAttached({ timeout: 2000 });
+    } catch {
+      const body = await page.locator('body').innerText();
+      throw new Error(`Profile fixture did not mount. pageErrors=${JSON.stringify(pageErrors)} body=${JSON.stringify(body)}`);
+    }
   });
 
   test('preserves native form data, autocomplete, and conditional submission semantics', async ({ page }) => {
