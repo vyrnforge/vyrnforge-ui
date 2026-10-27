@@ -25,7 +25,7 @@ test('documentation build expresses package builds as graph prerequisites exactl
   for (const scope of ['build-core', 'build-web', 'build-icons', 'build-react', 'build-angular', 'build-vue', 'build-elements']) {
     assert.equal(execution.filter((item) => item.scope === scope).length, 1, scope);
   }
-  assert.deepEqual(execution.find((item) => item.scope === 'docs-build').command, [process.platform === 'win32' ? 'npm.cmd' : 'npm', 'run', 'build:docs']);
+  assert.deepEqual(execution.find((item) => item.scope === 'docs-build').command, [process.platform === 'win32' ? 'npm.cmd' : 'npm', 'run', 'build:docs:site']);
 });
 
 test('component scopes resolve from discovered ownership rather than CI definitions', () => {
