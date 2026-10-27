@@ -13,16 +13,18 @@ test('PR component-local changes keep package consumers and sibling framework ev
   assert.equal(execution.some((entry) => entry.scope === 'build-angular'), false);
 });
 
-test('genuinely broad PRs batch exhaustive type and SSR evidence', () => {
+test('genuinely broad PRs batch exhaustive component and packed-consumer evidence', () => {
   const plan = createPlan(['package-lock.json']);
   assert.equal(plan.broadened, true);
   assert.ok(plan.validationScopes.includes('component-types-all'));
   assert.ok(plan.validationScopes.includes('component-ssr-all'));
-  for (const replaced of ['component:button:conformance:types', 'component:button:react:types', 'component:button:react:ssr']) {
+  assert.ok(plan.validationScopes.includes('consumer-all'));
+  for (const replaced of ['component:button:conformance:types', 'component:button:react:types', 'component:button:react:ssr', 'consumer-core', 'consumer-web', 'consumer-react', 'consumer-angular', 'consumer-vue', 'consumer-elements', 'consumer-icons']) {
     assert.equal(plan.validationScopes.includes(replaced), false, replaced);
   }
   assert.deepEqual(plan.scopeReasons['component-types-all'], ['batched exhaustive type evidence for broadened PR']);
   assert.deepEqual(plan.scopeReasons['component-ssr-all'], ['batched exhaustive SSR evidence for broadened PR']);
+  assert.deepEqual(plan.scopeReasons['consumer-all'], ['single packed-consumer pass for the full affected package closure']);
 });
 
 test('documentation-local changes select docs without package consumers', () => {
