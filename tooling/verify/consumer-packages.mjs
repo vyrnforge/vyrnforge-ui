@@ -3,13 +3,27 @@ import { mkdtemp, mkdir, readFile, rm, writeFile } from 'node:fs/promises';
 import os from 'node:os';
 import path from 'node:path';
 
-const allowed = ['core', 'web', 'icons', 'react', 'angular', 'vue', 'elements'];
-const dependencies = { core: [], web: ['core'], icons: ['web'], react: ['core', 'web'], angular: ['core', 'web'], vue: ['core', 'web'], elements: ['core', 'web'] };
+const rootManifest = JSON.parse(await readFile(path.resolve('package.json'), 'utf8'));
+const allowed = (rootManifest.workspaces ?? [])
+  .filter((workspace) => /^packages\/[^/*]+$/.test(workspace))
+  .map((workspace) => path.posix.basename(workspace));
+const manifests = new Map(await Promise.all(allowed.map(async (name) => [
+  name,
+  JSON.parse(await readFile(path.resolve('packages', name, 'package.json'), 'utf8')),
+])));
+const allowedSet = new Set(allowed);
+const dependencies = new Map(allowed.map((name) => [
+  name,
+  Object.keys(manifests.get(name).dependencies ?? {})
+    .filter((dependency) => dependency.startsWith('@vyrnforge/'))
+    .map((dependency) => dependency.slice('@vyrnforge/'.length))
+    .filter((dependency) => allowedSet.has(dependency)),
+]));
 const requestedArg = process.argv[2] || 'all';
 const requested = requestedArg === 'all' ? allowed : requestedArg.split(',').filter(Boolean);
-for (const name of requested) if (!allowed.includes(name)) throw new Error(`Unknown consumer scope: ${name}`);
+for (const name of requested) if (!allowedSet.has(name)) throw new Error(`Unknown consumer scope: ${name}`);
 const closure = new Set();
-function include(name) { if (closure.has(name)) return; for (const dependency of dependencies[name]) include(dependency); closure.add(name); }
+function include(name) { if (closure.has(name)) return; for (const dependency of dependencies.get(name) ?? []) include(dependency); closure.add(name); }
 for (const name of requested) include(name);
 const temporaryRoot = await mkdtemp(path.join(os.tmpdir(), 'vyrnforge-consumer-'));
 const tarballDir = path.join(temporaryRoot, 'tarballs');
@@ -32,11 +46,9 @@ function verifyPackedPayload(name, manifest, result) {
   }
 }
 try {
-  const manifests = new Map();
   const tarballs = [];
   for (const name of closure) {
-    const manifest = JSON.parse(await readFile(path.resolve('packages', name, 'package.json'), 'utf8'));
-    manifests.set(name, manifest);
+    const manifest = manifests.get(name);
     const raw = execFileSync('npm', ['pack', '--json', '--pack-destination', tarballDir, path.resolve('packages', name)], { encoding: 'utf8', stdio: ['ignore', 'pipe', 'inherit'] });
     const result = JSON.parse(raw)[0];
     verifyPackedPayload(name, manifest, result);
