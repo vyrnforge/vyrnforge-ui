@@ -1,5 +1,4 @@
-import { useRef, useState } from 'react';
-import type { FormEvent } from 'react';
+import * as React from 'react';
 import { createRoot } from 'react-dom/client';
 import { Button } from '@vyrnforge/react/button';
 import { Input } from '@vyrnforge/react/input';
@@ -15,17 +14,17 @@ type AuthStep = 'task' | 'reauth' | 'password' | 'otp';
 type ProviderResult = 'idle' | 'passkey-failed' | 'sso-failed' | 'credentials-failed' | 'otp-failed';
 
 export function Example() {
-  const [note, setNote] = useState('Quarterly planning notes');
-  const [step, setStep] = useState<AuthStep>('task');
-  const [providerResult, setProviderResult] = useState<ProviderResult>('idle');
-  const [username, setUsername] = useState('editor@example.com');
-  const [password, setPassword] = useState('');
-  const [otp, setOtp] = useState('');
-  const [credentialAttempts, setCredentialAttempts] = useState(0);
-  const [otpAttempts, setOtpAttempts] = useState(0);
-  const [saved, setSaved] = useState(false);
-  const headingRef = useRef<HTMLHeadingElement>(null);
-  const statusRef = useRef<HTMLDivElement>(null);
+  const [note, setNote] = React.useState('Quarterly planning notes');
+  const [step, setStep] = React.useState<AuthStep>('task');
+  const [providerResult, setProviderResult] = React.useState<ProviderResult>('idle');
+  const [username, setUsername] = React.useState('editor@example.com');
+  const [password, setPassword] = React.useState('');
+  const [otp, setOtp] = React.useState('');
+  const [credentialAttempts, setCredentialAttempts] = React.useState(0);
+  const [otpAttempts, setOtpAttempts] = React.useState(0);
+  const [saved, setSaved] = React.useState(false);
+  const headingRef = React.useRef<HTMLHeadingElement>(null);
+  const statusRef = React.useRef<HTMLDivElement>(null);
 
   function focusHeading() {
     requestAnimationFrame(() => headingRef.current?.focus());
@@ -48,7 +47,7 @@ export function Example() {
     focusHeading();
   }
 
-  function submitPassword(event: FormEvent<HTMLFormElement>) {
+  function submitPassword(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
     const nextAttempt = credentialAttempts + 1;
     setCredentialAttempts(nextAttempt);
@@ -61,7 +60,7 @@ export function Example() {
     focusHeading();
   }
 
-  function submitOtp(event: FormEvent<HTMLFormElement>) {
+  function submitOtp(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
     const nextAttempt = otpAttempts + 1;
     setOtpAttempts(nextAttempt);
