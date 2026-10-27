@@ -3,12 +3,29 @@ import path from 'node:path';
 
 const expectedWorkspaces = ['packages/core', 'packages/web', 'packages/icons', 'packages/react', 'packages/angular', 'packages/vue', 'packages/elements'];
 const repositoryRoots = ['apps', 'documentation', 'packages', 'product', 'tooling'];
-const recognizedToolingOwners = new Set(['ci', 'docs', 'impact', 'release', 'testing', 'tokens', 'verify']);
+const forbiddenToolingCapabilityNames = new Set(['common', 'misc', 'scripts', 'utils']);
+const capabilityNamePattern = /^[a-z][a-z0-9-]*$/;
 const packageJson = JSON.parse(await readFile(new URL('../../package.json', import.meta.url), 'utf8'));
+const toolingPackageJson = JSON.parse(await readFile(new URL('../package.json', import.meta.url), 'utf8'));
 
 if (JSON.stringify(packageJson.workspaces) !== JSON.stringify(expectedWorkspaces)) {
-  throw new Error(`Root workspaces must be exactly: ${expectedWorkspaces.join(', ')}`);
+  throw new Error(`Root workspaces must be exactly the public packages: ${expectedWorkspaces.join(', ')}`);
 }
+if (toolingPackageJson.name !== '@vyrnforge/repository-tooling') {
+  throw new Error(`tooling/package.json must declare @vyrnforge/repository-tooling, found ${toolingPackageJson.name ?? '<missing>'}`);
+}
+if (toolingPackageJson.private !== true) throw new Error('tooling/package.json must remain private');
+if (toolingPackageJson.type !== 'module') throw new Error('tooling/package.json must declare type=module');
+
+const rootEngines = packageJson.engines ?? {};
+const toolingEngines = toolingPackageJson.engines ?? {};
+if (
+  Object.keys(rootEngines).length !== Object.keys(toolingEngines).length ||
+  Object.entries(rootEngines).some(([engine, range]) => toolingEngines[engine] !== range)
+) {
+  throw new Error('tooling/package.json engines must match the repository root engines');
+}
+
 for (const relative of repositoryRoots) await access(new URL(`../../${relative}/`, import.meta.url));
 for (const removedRoot of ['components', 'fixtures', 'testing']) {
   try {
@@ -18,14 +35,32 @@ for (const removedRoot of ['components', 'fixtures', 'testing']) {
     if (error?.code !== 'ENOENT') throw error;
   }
 }
-for (const entry of await readdir(new URL('../', import.meta.url), { withFileTypes: true })) {
-  if (entry.isDirectory() && !recognizedToolingOwners.has(entry.name)) {
-    throw new Error(`Unknown top-level tooling capability: tooling/${entry.name}/`);
+
+const toolingEntries = await readdir(new URL('../', import.meta.url), { withFileTypes: true });
+const toolingCapabilities = toolingEntries.filter((entry) => entry.isDirectory());
+if (toolingCapabilities.length === 0) throw new Error('tooling/ must contain at least one maintained capability directory');
+
+for (const capability of toolingCapabilities) {
+  if (!capabilityNamePattern.test(capability.name)) {
+    throw new Error(`Tooling capability names must use lowercase kebab-case: tooling/${capability.name}/`);
+  }
+  if (forbiddenToolingCapabilityNames.has(capability.name)) {
+    throw new Error(`Generic catch-all tooling capability is forbidden: tooling/${capability.name}/`);
+  }
+  try {
+    await access(new URL(`../${capability.name}/README.md`, import.meta.url));
+  } catch (error) {
+    if (error?.code === 'ENOENT') {
+      throw new Error(`Tooling capability must define its local ownership contract: tooling/${capability.name}/README.md`);
+    }
+    throw error;
   }
 }
+
 for (const workspace of expectedWorkspaces) {
   const manifest = JSON.parse(await readFile(new URL(`../../${workspace}/package.json`, import.meta.url), 'utf8'));
   const expectedName = `@vyrnforge/${path.basename(workspace)}`;
   if (manifest.name !== expectedName) throw new Error(`${workspace} must declare ${expectedName}, found ${manifest.name ?? '<missing>'}`);
 }
-process.stdout.write(`workspace structure: ${repositoryRoots.length} repository roots, ${expectedWorkspaces.length} public packages, and need-driven tooling capabilities ok\n`);
+
+process.stdout.write(`workspace structure: ${repositoryRoots.length} repository roots, ${expectedWorkspaces.length} public packages, 1 private tooling package, and ${toolingCapabilities.length} need-driven tooling capabilities ok\n`);
