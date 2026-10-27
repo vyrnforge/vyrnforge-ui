@@ -104,20 +104,20 @@ test.describe('enhanced combobox interaction', () => {
     const vue = page.locator(`#${port}-vue`);
 
     await input.focus();
-    await input.dispatchEvent('compositionstart', { data: 'V' });
+    await input.dispatchEvent('compositionstart', { bubbles: true, composed: true, data: 'V' });
     await input.fill('Vue');
     await expect(vue).toBeVisible();
     await expect(input).not.toHaveAttribute('aria-activedescendant', /.+/);
 
     for (const key of ['ArrowDown', 'Enter', 'Escape']) {
-      await input.dispatchEvent('keydown', { key, code: key, isComposing: true });
+      await input.dispatchEvent('keydown', { bubbles: true, composed: true, key, code: key, isComposing: true });
     }
 
     await expect(input).toHaveAttribute('aria-expanded', 'true');
     await expect(input).not.toHaveAttribute('aria-activedescendant', /.+/);
     await expect(input).toHaveValue('Vue');
 
-    await input.dispatchEvent('compositionend', { data: 'Vue' });
+    await input.dispatchEvent('compositionend', { bubbles: true, composed: true, data: 'Vue' });
     await page.keyboard.press('ArrowDown');
     await expect(input).toHaveAttribute('aria-activedescendant', `${port}-vue`);
     await page.keyboard.press('Enter');
@@ -129,11 +129,14 @@ test.describe('enhanced combobox interaction', () => {
     await page.goto(`/next/combobox-fixtures/${port}.html`);
     const before = page.locator('#before');
     const input = page.getByRole('combobox', { name: 'Framework' });
+    const localeInput = page.getByRole('combobox', { name: 'Turkish city' });
     const after = page.locator('#after');
 
     await before.focus();
     await page.keyboard.press('Tab');
     await expect(input).toBeFocused();
+    await page.keyboard.press('Tab');
+    await expect(localeInput).toBeFocused();
     await page.keyboard.press('Tab');
     await expect(after).toBeFocused();
   });
