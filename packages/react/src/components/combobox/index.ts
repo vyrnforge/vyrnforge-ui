@@ -139,7 +139,7 @@ export const ComboboxInput = forwardRef<HTMLInputElement, ComponentPropsWithoutR
 
 export const ComboboxContent = forwardRef<HTMLDivElement, ComponentPropsWithoutRef<'div'>>(function ComboboxContent(props, ref) {
   const context = useCombo();
-  const target = useFloatingSurface({ open: context.open, anchorRef: context.anchorRef, surfaceRef: context.surfaceRef, onDismiss: () => context.setOpen(false) });
+  const target = useFloatingSurface({ open: context.open, anchorRef: context.anchorRef, surfaceRef: context.surfaceRef, dismissOnEscape: false, onDismiss: () => context.setOpen(false) });
   if (!context.open) return null;
   const node = createElement('div', {
     ...props,
