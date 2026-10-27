@@ -1,0 +1,43 @@
+.permission-shell-header,
+.permission-identity-context,
+.permission-actions,
+.permission-demo-controls {
+  display: flex;
+  align-items: center;
+  gap: var(--vf-space-3, 0.75rem);
+  flex-wrap: wrap;
+}
+
+.permission-shell-header {
+  justify-content: space-between;
+}
+
+.permission-example-main {
+  display: grid;
+  gap: var(--vf-space-4, 1rem);
+  max-inline-size: 48rem;
+}
+
+.permission-editor {
+  display: grid;
+  gap: var(--vf-space-2, 0.5rem);
+}
+
+.permission-editor textarea {
+  inline-size: 100%;
+  min-block-size: 9rem;
+  box-sizing: border-box;
+  font: inherit;
+}
+
+.permission-status,
+.permission-identity-context,
+.permission-demo-controls {
+  padding: var(--vf-space-3, 0.75rem);
+  border: 1px solid currentColor;
+}
+
+.permission-status p,
+.permission-identity-context p {
+  margin: 0;
+}
