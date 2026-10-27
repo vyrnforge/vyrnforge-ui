@@ -8,12 +8,13 @@ export interface FloatingSurfaceOptions {
   surfaceRef: RefObject<HTMLElement | null>;
   placement?: FloatingPlacement;
   offset?: number;
+  dismissOnEscape?: boolean;
   dismissOnOutsidePointer?: boolean;
   dismissOnOutsideFocus?: boolean;
   onDismiss(reason: DismissalReason): void;
 }
 
-export function useFloatingSurface({ open, anchorRef, surfaceRef, placement = 'bottom-start', offset = 6, dismissOnOutsidePointer = true, dismissOnOutsideFocus = false, onDismiss }: FloatingSurfaceOptions): Element | null {
+export function useFloatingSurface({ open, anchorRef, surfaceRef, placement = 'bottom-start', offset = 6, dismissOnEscape = true, dismissOnOutsidePointer = true, dismissOnOutsideFocus = false, onDismiss }: FloatingSurfaceOptions): Element | null {
   const [portalTarget, setPortalTarget] = useState<Element | null>(null);
 
   useEffect(() => {
@@ -30,6 +31,7 @@ export function useFloatingSurface({ open, anchorRef, surfaceRef, placement = 'b
     const unregister = coordinator.register({
       element: surface,
       branches: [anchor],
+      dismissOnEscape,
       dismissOnOutsidePointer,
       dismissOnOutsideFocus,
       onDismiss(reason) { onDismiss(reason); },
@@ -39,7 +41,7 @@ export function useFloatingSurface({ open, anchorRef, surfaceRef, placement = 'b
       coordinator.destroy();
       stopPositioning();
     };
-  }, [anchorRef, dismissOnOutsideFocus, dismissOnOutsidePointer, offset, onDismiss, open, placement, surfaceRef]);
+  }, [anchorRef, dismissOnEscape, dismissOnOutsideFocus, dismissOnOutsidePointer, offset, onDismiss, open, placement, surfaceRef]);
 
   return portalTarget;
 }
