@@ -1,0 +1,58 @@
+.crud-shell-header,
+.crud-section-heading,
+.crud-actions,
+.crud-select-label {
+  display: flex;
+  align-items: center;
+  gap: var(--vf-space-3, 0.75rem);
+  flex-wrap: wrap;
+}
+
+.crud-shell-header,
+.crud-section-heading {
+  justify-content: space-between;
+}
+
+.crud-example-main {
+  display: grid;
+  gap: var(--vf-space-5, 1.25rem);
+  max-inline-size: 56rem;
+}
+
+.crud-form {
+  display: grid;
+  gap: var(--vf-space-2, 0.5rem);
+  max-inline-size: 28rem;
+}
+
+.crud-status,
+.crud-results {
+  padding: var(--vf-space-3, 0.75rem);
+  border: 1px solid currentColor;
+}
+
+.crud-status p,
+.crud-section-heading p {
+  margin-block: var(--vf-space-1, 0.25rem) 0;
+}
+
+.crud-item-list {
+  display: grid;
+  gap: var(--vf-space-2, 0.5rem);
+  padding: 0;
+  list-style: none;
+}
+
+.crud-item-list > li {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--vf-space-3, 0.75rem);
+  padding: var(--vf-space-3, 0.75rem);
+  border: 1px solid currentColor;
+  flex-wrap: wrap;
+}
+
+.crud-results ul {
+  margin-block-end: var(--vf-space-3, 0.75rem);
+}
