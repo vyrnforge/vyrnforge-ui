@@ -1,0 +1,9 @@
+{
+  "id": "password-field/session-recovery",
+  "title": "Session recovery and step-up authentication",
+  "description": "STD-15 representative React workflow for session expiry during an unsaved edit, failed passkey/SSO attempts with an accessible password fallback, and OTP retry without losing task context.",
+  "defaultFramework": "react",
+  "frameworks": {
+    "react": { "label": "React", "language": "tsx", "source": "react.tsx" }
+  }
+}
