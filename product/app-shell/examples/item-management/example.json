@@ -1,6 +1,1 @@
-{
-  "id": "app-shell/item-management",
-  "title": "Item management CRUD workflow",
-  "description": "STD-10 React representative for create, edit, archive, restore, exact bulk selection, partial failure, and unresolved-only retry through existing public entrypoints plus an application-local fake service.",
-  "ports": ["react"]
-}
+{"id":"app-shell/item-management","title":"Item management CRUD workflow","description":"STD-10 React representative for create, edit, archive, restore, exact bulk selection, partial failure, and unresolved-only retry through existing public entrypoints plus an application-local fake service.","defaultFramework":"react","frameworks":{"react":{"label":"React","language":"tsx","source":"react.tsx"}}}
