@@ -6,10 +6,9 @@ import { createExecutionPlan, validationPlanFromArgs } from '../impact/execute.m
 test('PR component-local changes keep package consumers and sibling framework evidence skipped', () => {
   const plan = createPlan(['packages/react/src/components/button/index.ts']);
   for (const selected of ['component:button:react:types', 'component:button:react:ssr', 'component:button:react:browser']) assert.ok(plan.validationScopes.includes(selected), selected);
-  for (const skipped of ['pack-react', 'consumer-react', 'pack-angular', 'consumer-angular', 'component:button:angular:ssr', 'component-types-all', 'component-ssr-all', 'browser-docs-cross', 'bundle-baselines']) assert.equal(plan.validationScopes.includes(skipped), false, skipped);
+  for (const skipped of ['consumer-react', 'consumer-angular', 'component:button:angular:ssr', 'component-types-all', 'component-ssr-all', 'browser-docs-cross', 'bundle-baselines']) assert.equal(plan.validationScopes.includes(skipped), false, skipped);
   const execution = createExecutionPlan(plan);
   assert.ok(execution.some((entry) => entry.scope === 'build-react'));
-  assert.equal(execution.some((entry) => entry.scope === 'pack-react'), false);
   assert.equal(execution.some((entry) => entry.scope === 'consumer-react'), false);
   assert.equal(execution.some((entry) => entry.scope === 'build-angular'), false);
 });
@@ -28,8 +27,10 @@ test('genuinely broad PRs batch exhaustive type and SSR evidence', () => {
 
 test('documentation-local changes select docs without package consumers', () => {
   const plan = createPlan(['documentation/shared/styling.html']);
-  for (const scope of ['docs-build', 'docs-site', 'browser-docs-chromium']) assert.ok(plan.validationScopes.includes(scope), scope);
+  assert.ok(plan.validationScopes.includes('browser-docs-chromium'));
   assert.equal(plan.validationScopes.includes('consumer-react'), false);
+  const execution = createExecutionPlan(plan);
+  for (const scope of ['docs-source', 'docs-build', 'docs-site', 'browser-docs-chromium']) assert.ok(execution.some((entry) => entry.scope === scope), scope);
 });
 
 test('Web foundation changes include the shared visual regression baseline', () => {
@@ -42,17 +43,19 @@ test('main workflow mode can use the same changed-path impact plan as PR validat
   assert.equal(main.mode, 'main');
   assert.equal(main.broadened, false);
   for (const selected of ['component:button:react:types', 'component:button:react:ssr', 'component:button:react:browser']) assert.ok(main.validationScopes.includes(selected), selected);
-  for (const skipped of ['pack-react', 'consumer-react', 'consumer-all', 'component-types-all', 'component-ssr-all', 'component:button:angular:ssr', 'component:button:vue:browser']) assert.equal(main.validationScopes.includes(skipped), false, skipped);
+  for (const skipped of ['consumer-react', 'consumer-all', 'component-types-all', 'component-ssr-all', 'component:button:angular:ssr', 'component:button:vue:browser']) assert.equal(main.validationScopes.includes(skipped), false, skipped);
 });
 
-test('explicit broad main tier remains available for manual exhaustive validation', () => {
+test('explicit broad main tier selects evidence endpoints and derives shared prerequisites', () => {
   const main = createTierPlan('main');
-  for (const scope of ['change-fragments', 'changes-preview', 'pack-react', 'consumer-all', 'bundle-baselines', 'browser-foundation-visual', 'component-types-all', 'component-ssr-all', 'component:button:web:browser', 'component:button:react:browser']) assert.ok(main.validationScopes.includes(scope), scope);
+  for (const scope of ['changes-preview', 'consumer-all', 'bundle-baselines', 'browser-foundation-visual', 'component-types-all', 'component-ssr-all', 'component:button:web:browser', 'component:button:react:browser']) assert.ok(main.validationScopes.includes(scope), scope);
+  for (const prerequisite of ['change-fragments', 'build-react', 'build-web', 'docs-build', 'docs-site']) assert.equal(main.validationScopes.includes(prerequisite), false, `${prerequisite} should be executor-owned prerequisite evidence`);
   for (const replaced of ['component:button:conformance:types', 'component:button:react:types', 'component:button:react:ssr', 'component:button:angular:ssr', 'component:button:vue:ssr']) assert.equal(main.validationScopes.includes(replaced), false, replaced);
   assert.equal(main.validationScopes.includes('component:button:web:browser-cross'), false);
   const execution = createExecutionPlan(main);
   assert.deepEqual(execution.find((entry) => entry.scope === 'component-types-all')?.command, ['node', 'tooling/testing/check-component-types-batch.mjs']);
   assert.deepEqual(execution.find((entry) => entry.scope === 'component-ssr-all')?.command, ['node', 'tooling/testing/run-component-ssr-batch.mjs']);
+  for (const prerequisite of ['change-fragments', 'build-react', 'build-web', 'docs-build', 'docs-site']) assert.ok(execution.some((entry) => entry.scope === prerequisite), prerequisite);
 });
 
 test('scheduled and release add cross-browser evidence, release adds readiness', () => {
