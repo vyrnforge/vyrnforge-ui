@@ -106,10 +106,12 @@ export const ComboboxInput = forwardRef<HTMLInputElement, ComponentPropsWithoutR
     onCompositionStart(event) {
       props.onCompositionStart?.(event);
       composingRef.current = true;
+      if (!event.defaultPrevented) context.setOpen(true);
     },
     onCompositionEnd(event) {
       props.onCompositionEnd?.(event);
       composingRef.current = false;
+      if (!event.defaultPrevented) { context.setQuery(event.currentTarget.value); context.setOpen(true); }
     },
     onKeyDown(event) {
       props.onKeyDown?.(event);
