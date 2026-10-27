@@ -1,4 +1,5 @@
-import { FormEvent, useRef, useState } from 'react';
+import { useRef, useState } from 'react';
+import type { FormEvent } from 'react';
 import { Button } from '@vyrnforge/react/button';
 import { Input } from '@vyrnforge/react/input';
 import { Textarea } from '@vyrnforge/react/textarea';
