@@ -14,10 +14,18 @@ test('framework build execution includes foundation prerequisites once', () => {
 });
 
 test('duplicate prerequisites execute once and retain immediate consumers', () => {
-  const execution = expandScopes(['pack-react', 'pack-vue']);
+  const execution = expandScopes(['consumer-react', 'consumer-vue']);
   assert.equal(execution.filter((item) => item.scope === 'build-core').length, 1);
   assert.equal(execution.filter((item) => item.scope === 'build-web').length, 1);
   assert.deepEqual(execution.find((item) => item.scope === 'build-core').requiredBy, ['build-react', 'build-vue', 'build-web']);
+});
+
+test('documentation build expresses package builds as graph prerequisites exactly once', () => {
+  const execution = expandScopes(['docs-build']);
+  for (const scope of ['build-core', 'build-web', 'build-icons', 'build-react', 'build-angular', 'build-vue', 'build-elements']) {
+    assert.equal(execution.filter((item) => item.scope === scope).length, 1, scope);
+  }
+  assert.deepEqual(execution.find((item) => item.scope === 'docs-build').command, [process.platform === 'win32' ? 'npm.cmd' : 'npm', 'run', 'build:docs']);
 });
 
 test('component scopes resolve from discovered ownership rather than CI definitions', () => {
@@ -38,7 +46,7 @@ test('browser setup selects the widest required browser matrix', () => {
   assert.deepEqual(browserProjectsForExecution(chromium), ['chromium']);
   const cross = expandScopes(['component:button:web:browser-cross', 'component:button:react:browser']);
   assert.deepEqual(browserProjectsForExecution(cross), ['chromium', 'firefox', 'webkit']);
-  assert.deepEqual(browserProjectsForExecution(expandScopes(['pack-core'])), []);
+  assert.deepEqual(browserProjectsForExecution(expandScopes(['consumer-core'])), []);
 });
 
 test('executor-owned browser server is expressed directly by shared config', () => {
@@ -61,13 +69,13 @@ test('change rendering depends on fragment validation', () => {
 
 test('validation plans retain selection and prerequisite provenance', () => {
   const execution = createExecutionPlan({
-    validationScopes: ['structure', 'pack-core'],
-    scopeReasons: { structure: ['global sentinel'], 'pack-core': ['package verification'] },
+    validationScopes: ['structure', 'consumer-core'],
+    scopeReasons: { structure: ['global sentinel'], 'consumer-core': ['package verification'] },
   });
-  assert.deepEqual(execution.map((item) => item.scope), ['structure', 'lint-core', 'build-core', 'pack-core']);
+  assert.deepEqual(execution.map((item) => item.scope), ['structure', 'lint-core', 'build-core', 'consumer-core']);
   assert.deepEqual(execution.find((item) => item.scope === 'structure').reasons, ['global sentinel']);
-  assert.deepEqual(execution.find((item) => item.scope === 'build-core').reasons, ['prerequisite for pack-core']);
-  assert.deepEqual(execution.find((item) => item.scope === 'pack-core').reasons, ['package verification']);
+  assert.deepEqual(execution.find((item) => item.scope === 'build-core').reasons, ['prerequisite for consumer-core']);
+  assert.deepEqual(execution.find((item) => item.scope === 'consumer-core').reasons, ['package verification']);
 });
 
 test('executor persists duration and partial failure evidence', async () => {
@@ -76,7 +84,7 @@ test('executor persists duration and partial failure evidence', async () => {
   let clock = 0;
   try {
     await assert.rejects(() => executeValidationPlan(
-      { mode: 'pr', changedPaths: [], validationScopes: ['pack-core'], scopeReasons: { 'pack-core': ['package verification'] } },
+      { mode: 'pr', changedPaths: [], validationScopes: ['consumer-core'], scopeReasons: { 'consumer-core': ['package verification'] } },
       {
         output,
         now: () => clock,
@@ -136,4 +144,5 @@ test('non-component browser evidence does not start the shared component server'
 test('unknown validation scopes fail closed', () => {
   assert.throws(() => expandScopes(['not-real']), /No executor registered/);
   assert.throws(() => expandScopes(['component:not-real:react:ssr']), /No executor registered/);
+  assert.throws(() => expandScopes(['pack-core']), /No executor registered/);
 });
