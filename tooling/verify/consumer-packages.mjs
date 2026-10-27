@@ -18,19 +18,34 @@ await mkdir(tarballDir, { recursive: true });
 await mkdir(consumerDir, { recursive: true });
 function publicSpecifier(packageName, exportName) { return exportName === '.' ? packageName : `${packageName}${exportName.slice(1)}`; }
 function importTarget(value) { if (typeof value === 'string') return value; if (!value || typeof value !== 'object') return null; return value.import || value.default || Object.values(value).find((entry) => typeof entry === 'string') || null; }
+function flattenExportTargets(value, targets = []) { if (typeof value === 'string') targets.push(value); else if (value && typeof value === 'object') for (const nested of Object.values(value)) flattenExportTargets(nested, targets); return targets; }
+function verifyPackedPayload(name, manifest, result) {
+  if (!result || result.name !== `@vyrnforge/${name}` || !result.filename) throw new Error(`Unexpected npm pack result for ${name}`);
+  const files = new Set((result.files ?? []).map((file) => file.path));
+  if ([...files].some((file) => file.startsWith('src/') || file.includes('legacy') || file.startsWith('tooling/') || file.startsWith('test/'))) {
+    throw new Error(`${name} tarball exposes source, tests, legacy, or repository tooling`);
+  }
+  for (const target of new Set(flattenExportTargets(manifest.exports))) {
+    const relative = target.replace(/^\.\//, '');
+    if (!files.has(relative)) throw new Error(`${manifest.name} tarball is missing exported artifact ${relative}`);
+  }
+}
 try {
+  const manifests = new Map();
   const tarballs = [];
   for (const name of closure) {
+    const manifest = JSON.parse(await readFile(path.resolve('packages', name, 'package.json'), 'utf8'));
+    manifests.set(name, manifest);
     const raw = execFileSync('npm', ['pack', '--json', '--pack-destination', tarballDir, path.resolve('packages', name)], { encoding: 'utf8', stdio: ['ignore', 'pipe', 'inherit'] });
     const result = JSON.parse(raw)[0];
-    if (!result?.filename) throw new Error(`npm pack did not produce a tarball for ${name}`);
+    verifyPackedPayload(name, manifest, result);
     tarballs.push(path.join(tarballDir, result.filename));
   }
   await writeFile(path.join(consumerDir, 'package.json'), `${JSON.stringify({ name: 'vyrnforge-bootstrap-consumer', private: true, type: 'module' }, null, 2)}\n`);
   execFileSync('npm', ['install', '--ignore-scripts', '--no-audit', '--no-fund', '--package-lock=false', ...tarballs], { cwd: consumerDir, stdio: 'inherit' });
   const checks = [`import { readFile } from 'node:fs/promises';`];
   for (const name of requested) {
-    const manifest = JSON.parse(await readFile(path.resolve('packages', name, 'package.json'), 'utf8'));
+    const manifest = manifests.get(name);
     for (const [exportName, value] of Object.entries(manifest.exports ?? {})) {
       const specifier = publicSpecifier(manifest.name, exportName);
       const target = importTarget(value);
