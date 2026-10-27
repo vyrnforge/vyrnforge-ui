@@ -113,7 +113,7 @@ test.describe('enhanced combobox interaction', () => {
 
     for (const key of ['ArrowDown', 'Enter', 'Escape']) {
       await input.evaluate((node, value) => {
-        node.dispatchEvent(new KeyboardEvent('keydown', { bubbles: true, composed: true, key: value, code: value }));
+        node.dispatchEvent(new KeyboardEvent('keydown', { bubbles: true, composed: true, isComposing: true, key: value, code: value }));
       }, key);
     }
 
