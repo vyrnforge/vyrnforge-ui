@@ -123,7 +123,7 @@ function App() {
             />
             {!canEdit ? <p id="permission-readonly-help">You can review and copy this preserved draft, but you cannot save changes without edit access.</p> : null}
             <div className="permission-actions">
-              {canEdit ? <Button type="button" onClick={save}>Save changes</Button> : null}
+              <Button type="button" disabled={!canEdit} onClick={save}>Save changes</Button>
               {!canEdit ? (
                 <Button type="button" variant="secondary" disabled={requestState === 'pending'} onClick={requestAccess}>
                   {requestState === 'pending' ? 'Request submitted' : 'Request edit access'}
