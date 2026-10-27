@@ -1,5 +1,6 @@
 import { mkdir, readFile, writeFile } from 'node:fs/promises';
 import path from 'node:path';
+import { build } from 'esbuild';
 
 const port = process.argv[2] || 'web';
 const root = process.cwd();
@@ -37,6 +38,25 @@ if (port === 'react') {
     createElement('label', { htmlFor: 'app-invalid' }, 'Application invalid'), input('app-invalid', { 'aria-invalid': true, defaultValue: 'bad' })
   ));
   await writeFile(path.join(outDir, 'react.html'), page(markup));
+
+  const profileBuild = await build({
+    stdin: {
+      resolveDir: root,
+      sourcefile: 'react-profile-client.tsx',
+      contents: `import{createElement}from'react';import{createRoot}from'react-dom/client';import{Example}from'./product/input/examples/profile-edit/react.tsx';const root=document.querySelector('#profile-app');if(!root)throw new Error('Missing #profile-app');createRoot(root).render(createElement(Example));`,
+    },
+    bundle: true,
+    format: 'iife',
+    platform: 'browser',
+    jsx: 'automatic',
+    outdir: outDir,
+    write: false,
+  });
+  const profileJs = profileBuild.outputFiles.find((file) => file.path.endsWith('.js'))?.text;
+  const profileCss = profileBuild.outputFiles.find((file) => file.path.endsWith('.css'))?.text ?? '';
+  if (!profileJs) throw new Error('Profile fixture client bundle was not generated');
+  const safeProfileJs = profileJs.replaceAll('</script', '<\\/script');
+  await writeFile(path.join(outDir, 'react-profile.html'), `<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width"><title>Profile form fixture</title><style>${profileCss}</style></head><body><main><h1>STD-06 profile form fixture</h1><div id="profile-app"></div></main><script>${safeProfileJs}</script></body></html>`);
 }
 
 if (port === 'vue') {

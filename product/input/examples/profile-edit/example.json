@@ -1,0 +1,9 @@
+{
+  "id": "input/profile-edit",
+  "title": "Profile edit form workflow",
+  "description": "STD-06 representative form using native form semantics with field errors, a linked summary, a conditional field, reset, cancel, draft recovery, and localized authored content.",
+  "defaultFramework": "react",
+  "frameworks": {
+    "react": { "label": "React", "language": "tsx", "source": "react.tsx" }
+  }
+}
