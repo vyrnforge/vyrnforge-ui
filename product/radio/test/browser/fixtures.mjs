@@ -22,6 +22,7 @@ if (port === 'web') {
     platform: 'browser',
     outdir: outDir,
     entryNames: `platform-${port}`,
+    ...(port === 'angular' ? { tsconfigRaw: { compilerOptions: { experimentalDecorators: true } } } : {}),
   });
   const mount = port === 'angular' ? '<vf-example-root></vf-example-root>' : '<div id="root"></div>';
   await writeFile(path.join(outDir, `platform-${port}.html`), `<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width"><title>Platform adaptation fixture</title><link rel="stylesheet" href="./platform-${port}.css"></head><body><main><h1>Delivery preference</h1>${mount}</main><script type="module" src="./platform-${port}.js"></script></body></html>`);
