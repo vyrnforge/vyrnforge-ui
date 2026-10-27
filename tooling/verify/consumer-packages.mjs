@@ -25,9 +25,10 @@ function verifyPackedPayload(name, manifest, result) {
   if ([...files].some((file) => file.startsWith('src/') || file.includes('legacy') || file.startsWith('tooling/') || file.startsWith('test/'))) {
     throw new Error(`${name} tarball exposes source, tests, legacy, or repository tooling`);
   }
-  for (const target of new Set(flattenExportTargets(manifest.exports))) {
+  const publishedTargets = new Set([manifest.main, manifest.types, ...flattenExportTargets(manifest.exports)].filter(Boolean));
+  for (const target of publishedTargets) {
     const relative = target.replace(/^\.\//, '');
-    if (!files.has(relative)) throw new Error(`${manifest.name} tarball is missing exported artifact ${relative}`);
+    if (!files.has(relative)) throw new Error(`${manifest.name} tarball is missing published artifact ${relative}`);
   }
 }
 try {
