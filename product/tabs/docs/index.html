@@ -2,6 +2,8 @@
 
 <section><h2>Overview</h2><p>Use Tabs when several peer sections share one region and users should switch between them without navigating to another location. A Tabs instance contains a root, tablist, tabs, and corresponding tabpanels.</p></section>
 
+<section><h2>When to use and alternatives</h2><p>Use Tabs for peer panels inside one task or content region when switching panels is not destination navigation. Do not use Tabs as an application router, breadcrumb substitute, side navigation, or generic segmented control. If the choices are form values rather than panels, use the appropriate selection control instead.</p></section>
+
 <section>
   <h2>Installation and imports</h2>
   <div class="vf-docs-table-wrap" tabindex="0" role="region" aria-label="Tabs package imports"><table><thead><tr><th>Surface</th><th>Public entrypoint</th></tr></thead><tbody>
@@ -19,13 +21,21 @@
 
 <section><h2>Variants and sizes</h2><p>Tabs has no size variants in this channel. Configure behavior with orientation and activation mode.</p></section>
 
-<section><h2>State</h2><p>Selection and keyboard focus are distinct. The selected tab exposes <code>aria-selected="true"</code>; disabled tabs expose <code>aria-disabled="true"</code> and are skipped during keyboard movement. Inactive panels are hidden.</p></section>
+<section><h2>State</h2><p>Selection and keyboard focus are distinct. The selected tab exposes <code>aria-selected="true"</code>; disabled tabs expose <code>aria-disabled="true"</code> and are skipped during keyboard movement. Inactive panels are hidden. The selected value is externally meaningful; focus position remains managed interaction state.</p></section>
 
-<section><h2>Behavior</h2><p>Automatic activation selects a tab when keyboard focus moves to it. Manual activation keeps focus and selection separate until Enter or Space is pressed. Pointer activation selects an enabled tab in either mode.</p></section>
+<section><h2>Behavior</h2><p>Automatic activation selects a tab when keyboard focus moves to it. Manual activation keeps focus and selection separate until Enter or Space is pressed. Pointer activation selects an enabled tab in either mode. A requested selection remains distinct from committed controlled state.</p></section>
 
 <section><h2>Interaction</h2><p>Horizontal tablists use Left and Right Arrow; vertical tablists use Up and Down Arrow. Home moves to the first enabled tab and End to the last. Navigation wraps and skips disabled tabs. Horizontal arrow mapping follows text direction.</p></section>
 
-<section><h2>Accessibility</h2><p>Give every tablist an accessible name with <code>aria-label</code> or <code>aria-labelledby</code>. Every tab must identify its panel and every panel must identify its tab. Keep focus indication visually distinct from selected styling.</p></section>
+<section><h2>Accessibility</h2><p>Give every tablist an accessible name with <code>aria-label</code> or <code>aria-labelledby</code>. Every tab must identify its panel and every panel must identify its tab. Keep focus indication visually distinct from selected styling. Tabs uses the accepted custom tab interaction model with roving focus and documented activation policy; application authors own meaningful tab labels and panel content.</p></section>
+
+<section><h2>Responsive and platform adaptation</h2><p>Responsive layout may change spacing, wrapping strategy, or surrounding composition, but it must preserve logical order, tab/panel relationships, selected value, focus visibility, and keyboard behavior. A cramped Web layout is not permission to silently replace Tabs with unrelated navigation. Native-platform products may choose a platform-native peer-section pattern while preserving the same task meaning; that does not create a VyrnForge native renderer.</p></section>
+
+<section><h2>Loading and async ownership</h2><p>Tabs does not own application loading, fetching, retry, or persistence state. Individual panels may compose loading/status patterns and application data services, but those states must not be collapsed into tab selection or disabled semantics.</p></section>
+
+<section><h2>Error and validation</h2><p>Tabs has no generic error or validation state. A panel may contain forms or task errors under their own contracts. Do not color a tab as an “error tab” and assume that visual state alone communicates the affected problem; any such application composition needs an explicit semantic/content contract.</p></section>
+
+<section><h2>Content and localization</h2><p>Consumers author concise tab labels and panel content. Labels must remain localizable and should tolerate text expansion without destroying focus order or relationships. Direction-aware keyboard behavior follows the document/component direction contract; VyrnForge does not introduce hidden English labels.</p></section>
 
 <section><h2>Forms</h2><p>Tabs does not define form values, validation, submission, or reset behavior. Place form controls inside tabpanels according to the controls' own documentation.</p></section>
 
@@ -41,12 +51,14 @@
   </tbody></table></div>
 </section>
 
-<section><h2>CSR and SSR</h2><p>React, Angular, and Vue can render tab roles, selection, panel visibility, and relationships during SSR. Elements becomes interactive after registration and browser upgrade. Follow the component API for controlled state during hydration.</p></section>
+<section><h2>CSR and SSR</h2><p>React, Angular, and Vue can render tab roles, selection, panel visibility, and relationships during SSR and hydrate those relationships before post-activation interaction. Elements becomes interactive after explicit registration and browser upgrade. Existing representative browser evidence covers actual hydration/activation for Tabs in its recorded scope; it does not imply every VyrnForge component is hydration-tested.</p></section>
+
+<section><h2>Implementation and evidence status</h2><p>Tabs is an implemented compound Web component concept across React, Angular, Vue, and Elements, with canonical styling owned by Web. Accepted accessibility mapping identifies tab semantics, roving focus, orientation/RTL behavior, and activation policy. Existing protected browser evidence demonstrates representative SSR/hydration or upgrade plus post-activation behavior for the declared surfaces. Manual assistive-technology evidence remains a separate requirement where spoken interoperability is claimed.</p></section>
 
 <section><h2>Examples</h2><p>The Quick start example demonstrates three tabs, a disabled tab, and the supported React, Angular, Vue, and Elements APIs.</p></section>
 
 <section><h2>Do / Don't</h2><p><strong>Do</strong> use Tabs for peer sections, provide an accessible tablist name, and keep tab labels concise. <strong>Don't</strong> use Tabs as application routing or recreate its keyboard behavior with application-specific handlers.</p></section>
 
-<section><h2>Testing guidance</h2><p>Query by role and accessible name, assert selected state and visible panel outcomes, and test keyboard movement, disabled skipping, wrapping, Home/End, activation mode, orientation, directionality, and browser focus.</p></section>
+<section><h2>Testing guidance</h2><p>Query by role and accessible name, assert selected state and visible panel outcomes, and test keyboard movement, disabled skipping, wrapping, Home/End, activation mode, orientation, directionality, browser focus, controlled-owner acceptance/rejection where applicable, and activation without phantom selection intent.</p></section>
 
-<section><h2>Compatibility</h2><p>Tabs is documented for React, Angular, Vue, and Elements in this channel. See the Compatibility reference for supported runtime and browser ranges.</p></section>
+<section><h2>Compatibility and migration</h2><p>Tabs is documented for React, Angular, Vue, and Elements in this channel. Documented anatomy, selection semantics, activation/orientation policy, intent events, accessibility relationships, public styling hooks, and entrypoints are compatibility commitments. Framework grammar remains idiomatic and is not required to be identical across ports. See the Compatibility reference for validated runtime/browser ranges.</p></section>
