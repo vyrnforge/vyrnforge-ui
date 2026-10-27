@@ -2,8 +2,8 @@ import { cp, mkdir, readFile, rm, writeFile } from 'node:fs/promises';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { buildDocumentationExamples, renderDocumentationExample } from './examples.mjs';
-import { componentUsageGroups } from './component-usage-groups.mjs';
-import { renderFrameworkMark } from './framework-presentation.mjs';
+import { componentUsageGroups } from '../../apps/docs/component-usage-groups.mjs';
+import { renderFrameworkMark } from '../../apps/docs/framework-presentation.mjs';
 import { documentationRegistry } from './registry.mjs';
 
 const root = path.resolve(fileURLToPath(new URL('../../', import.meta.url)));

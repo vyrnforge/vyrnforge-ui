@@ -1,2 +1,2 @@
-import { registerReactL2SsrTest } from '../../../../../tooling/testing/native-component-ssr.mjs';
-registerReactL2SsrTest('native-select');
+import { registerReactNativeControlSsrTest } from '../../../../../tooling/testing/native-control-ssr.mjs';
+await registerReactNativeControlSsrTest('native-select');

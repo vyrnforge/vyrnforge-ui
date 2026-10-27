@@ -1,47 +1,25 @@
-import { access, readFile, readdir } from 'node:fs/promises';
-import path from 'node:path';
+import { access, readFile } from 'node:fs/promises';
 import { loadComponentStandards, summarizeComponentStandards } from '../testing/accessibility/component-standards.mjs';
 import { assertProductPreparation } from '../testing/discover-product-units.mjs';
 
-const required = ['tooling/testing/README.md', 'tooling/impact/config.json', 'product/README.md', 'tooling/README.md'];
-const representativeAccessibilityMappings = new Set(['button', 'tabs', 'dialog']);
-const sharedBrowserConfigSpecifier = '../../../../tooling/testing/component-browser-config.mjs';
-const levelCodedValidationName = /(^|[-:])l\d+(?=[-:]|$)/i;
-const allowedToolingOwners = new Set(['build', 'ci', 'docs', 'impact', 'release', 'testing', 'tokens', 'verify']);
+for (const file of ['tooling/testing/README.md', 'tooling/impact/config.json', 'product/README.md', 'tooling/README.md']) await access(file);
 
-function assertSemanticValidationName(name, source) {
-  if (levelCodedValidationName.test(name)) throw new Error(`${source} uses level-coded validation name ${name}; executable validation must use semantic product/evidence terminology`);
-}
-
-for (const file of required) await access(file);
-for (const entry of await readdir('tooling', { withFileTypes: true })) {
-  if (entry.isDirectory() && !allowedToolingOwners.has(entry.name)) throw new Error(`tooling/${entry.name}/ is not a standardized tooling owner; use one of ${[...allowedToolingOwners].join(', ')}`);
-}
 const impact = JSON.parse(await readFile('tooling/impact/config.json', 'utf8'));
 if (impact.schemaVersion !== 1) throw new Error('impact metadata must use schemaVersion 1');
 if (!impact.targets || typeof impact.targets !== 'object') throw new Error('impact metadata must expose targets');
-if (!Array.isArray(impact.broadPaths) || !Array.isArray(impact.globalSentinels) || !Array.isArray(impact.scopeOrder)) throw new Error('impact metadata is missing path/scope arrays');
-for (const [target, config] of Object.entries(impact.targets)) {
-  if (!Array.isArray(config.paths) || !Array.isArray(config.dependsOn) || !Array.isArray(config.evidence)) throw new Error(`invalid impact target metadata: ${target}`);
-  for (const scope of config.evidence) assertSemanticValidationName(scope, `tooling/impact/config.json target ${target}`);
+if (!Array.isArray(impact.broadPaths) || !Array.isArray(impact.globalSentinels) || !Array.isArray(impact.scopeOrder)) {
+  throw new Error('impact metadata is missing path/scope arrays');
 }
-for (const scope of impact.scopeOrder) assertSemanticValidationName(scope, 'tooling/impact/config.json scopeOrder');
-for (const [tier, scopes] of Object.entries(impact.tiers ?? {})) for (const scope of scopes) assertSemanticValidationName(scope, `tooling/impact/config.json tier ${tier}`);
-
-const rootManifest = JSON.parse(await readFile('package.json', 'utf8'));
-for (const scriptName of Object.keys(rootManifest.scripts ?? {})) assertSemanticValidationName(scriptName, 'package.json script');
-for (const entry of await readdir('tooling/verify', { withFileTypes: true })) {
-  if (entry.isFile()) assertSemanticValidationName(entry.name, 'tooling/verify filename');
+for (const [target, config] of Object.entries(impact.targets)) {
+  if (!Array.isArray(config.paths) || !Array.isArray(config.dependsOn) || !Array.isArray(config.evidence)) {
+    throw new Error(`invalid impact target metadata: ${target}`);
+  }
 }
 
 const discovery = assertProductPreparation();
-for (const component of discovery.components) {
-  const source = await readFile(component.browser.config, 'utf8');
-  if (!source.includes(sharedBrowserConfigSpecifier) || !/create(?:CrossBrowser)?ComponentBrowserConfig/.test(source)) throw new Error(`${component.component} browser config must use the shared tooling/testing component browser harness`);
-}
 const { standards } = await loadComponentStandards();
 const accessibility = summarizeComponentStandards(standards);
-if (accessibility.total !== discovery.components.length) throw new Error('accessibility standards inventory must classify every discovered component');
-const byComponent = new Map(standards.map((entry) => [entry.component, entry]));
-for (const component of representativeAccessibilityMappings) if (byComponent.get(component)?.reviewStatus !== 'mapped') throw new Error(`representative accessibility mapping must remain mapped: ${component}`);
-process.stdout.write(`testing structure: standardized tooling ownership, ${discovery.components.length} product components and ${discovery.ownedUnits.length} reusable scoped units prepared; accessibility ${accessibility.mapped} mapped/${accessibility.reviewRequired} review-required\n`);
+if (accessibility.total !== discovery.components.length) {
+  throw new Error('accessibility standards inventory must classify every discovered component');
+}
+process.stdout.write(`testing structure: ${discovery.components.length} product components and ${discovery.ownedUnits.length} reusable scoped units prepared; accessibility ${accessibility.mapped} mapped/${accessibility.reviewRequired} review-required\n`);

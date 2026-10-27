@@ -1,2 +1,2 @@
-import { registerAngularL2SsrTest } from '../../../../../tooling/testing/native-component-ssr.mjs';
-registerAngularL2SsrTest('checkbox');
+import { registerAngularNativeControlSsrTest } from '../../../../../tooling/testing/native-control-ssr.mjs';
+await registerAngularNativeControlSsrTest('checkbox');

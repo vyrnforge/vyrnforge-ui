@@ -1,7 +1,7 @@
 import { defineConfig, devices } from '@playwright/test';
 
 export default defineConfig({
-  testDir: './tooling/docs',
+  testDir: './apps/docs/test/browser',
   testMatch: '*.spec.mjs',
   outputDir: 'test-results/playwright-results',
   timeout: 30_000,
@@ -13,17 +13,17 @@ export default defineConfig({
   use: {
     baseURL: 'http://127.0.0.1:4173',
     trace: 'retain-on-failure',
-    screenshot: 'only-on-failure'
+    screenshot: 'only-on-failure',
   },
   webServer: {
     command: 'node tooling/docs/serve.mjs',
     url: 'http://127.0.0.1:4173/next/',
     reuseExistingServer: !process.env.CI,
-    timeout: 15_000
+    timeout: 15_000,
   },
   projects: [
     { name: 'chromium', use: { ...devices['Desktop Chrome'] } },
     { name: 'firefox', use: { ...devices['Desktop Firefox'] } },
-    { name: 'webkit', use: { ...devices['Desktop Safari'] } }
-  ]
+    { name: 'webkit', use: { ...devices['Desktop Safari'] } },
+  ],
 });

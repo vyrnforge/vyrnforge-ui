@@ -1,4 +1,5 @@
 import { defineConfig, devices } from '@playwright/test';
+import { componentBrowserServerManagedEnv } from './component-browser-runtime.mjs';
 
 const repositoryRootFromComponentBrowserConfig = '../../../..';
 const componentBrowserBaseURL = 'http://127.0.0.1:4173';
@@ -34,13 +35,14 @@ export function createComponentBrowserConfig({
 
   const outputRoot = `${repositoryRootFromComponentBrowserConfig}/test-results/${componentId}-playwright-results`;
   const outputDir = perPortOutput ? `${outputRoot}/${port}` : outputRoot;
+  const managedServer = process.env[componentBrowserServerManagedEnv] === '1';
 
   return defineConfig({
     testDir: './tests',
     outputDir,
     reporter,
     use: { baseURL: componentBrowserBaseURL, ...use },
-    webServer: {
+    webServer: managedServer ? undefined : {
       command: `cd ${repositoryRootFromComponentBrowserConfig} && node tooling/docs/serve.mjs`,
       url: `${componentBrowserBaseURL}${resolvedReadinessPath}`,
       reuseExistingServer: !process.env.CI,

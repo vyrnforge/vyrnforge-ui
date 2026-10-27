@@ -82,5 +82,5 @@
     "./styles/side-nav.css": "./dist/components/side-nav/side-nav.css"
   },
   "dependencies": { "@vyrnforge/core": "0.0.0-rebuild" },
-  "scripts": { "build": "node ../../tooling/tokens/generate.mjs --check && tsc -p tsconfig.json && node ../../tooling/build/copy-web-assets.mjs" }
+  "scripts": { "build": "node ../../tooling/tokens/generate.mjs --check && tsc -p tsconfig.json && node build/copy-assets.mjs" }
 }

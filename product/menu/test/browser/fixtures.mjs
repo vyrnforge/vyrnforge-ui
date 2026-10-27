@@ -7,7 +7,7 @@ const root = process.cwd();
 const dir = path.join(root, 'dist/docs/next/menu-fixtures');
 await mkdir(dir, { recursive: true });
 
-const page = (body, script = '') => `<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width"><title>Menu fixture</title></head><body><button id="before">Before</button>${body}<button id="after">After</button>${script}</body></html>`;
+const page = (body, script = '') => `<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width"><title>Menu fixture</title></head><body><main><h1>Menu browser fixture</h1><button id="before">Before</button>${body}<button id="after">After</button></main>${script}</body></html>`;
 
 if (port === 'web') {
   const markup = `<button id="web-trigger" type="button" data-vf-menu-trigger aria-haspopup="menu" aria-expanded="true">Actions</button><div id="web-menu" role="menu" tabindex="-1" aria-label="Actions" data-vf-menu-content><button id="web-edit" type="button" role="menuitem" tabindex="-1" data-vf-menu-item>Edit</button><button id="web-locked" type="button" role="menuitem" tabindex="-1" aria-disabled="true" data-vf-menu-item>Locked</button><button id="web-duplicate" type="button" role="menuitem" tabindex="-1" data-vf-menu-item>Duplicate</button><button id="web-archive" type="button" role="menuitem" tabindex="-1" data-vf-menu-item>Archive</button></div>`;
@@ -33,5 +33,5 @@ if (port === 'angular') {
 if (port === 'elements') {
   const markup = `<vf-menu><button id="elements-trigger" type="button" data-vf-menu-trigger>Actions</button><div id="elements-menu" data-vf-menu-content aria-label="Actions"><button id="elements-edit" type="button" data-vf-menu-item>Edit</button><button id="elements-locked" type="button" data-vf-menu-item aria-disabled="true">Locked</button><button id="elements-duplicate" type="button" data-vf-menu-item>Duplicate</button><button id="elements-archive" type="button" data-vf-menu-item>Archive</button></div></vf-menu>`;
   await writeFile(path.join(dir, 'elements.html'), page(markup, '<script type="module" src="./elements.js"></script>'));
-  await build({ stdin: { resolveDir: root, sourcefile: 'elements-menu-client.ts', contents: `import{defineMenuElement}from'@vyrnforge/elements/menu';defineMenuElement();document.querySelector('vf-menu').addEventListener('vf-select',(event)=>{document.body.dataset.selected=event.detail.item.id});` }, bundle: true, format: 'esm', platform: 'browser', outfile: path.join(dir, 'elements.js') });
+  await build({ stdin: { resolveDir: root, sourcefile: 'elements-menu-client.ts', contents: `import{defineMenuElement}from'@vyrnforge/elements/menu';defineMenuElement();document.querySelector('vf-menu').addEventListener('vf-select',(event)=>{document.body.dataset.selected=event.detail.item.id});` }, bundle:true,format:'esm',platform:'browser',outfile:path.join(dir,'elements.js') });
 }
