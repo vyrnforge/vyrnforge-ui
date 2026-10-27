@@ -51,4 +51,18 @@ if (port === 'react') {
     path.join(dir, 'permission-access-react.html'),
     '<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width"><title>Permission access fixture</title><link rel="stylesheet" href="./permission-access-react.css"><style>html,body{margin:0;min-block-size:100%;}</style></head><body><div id="root"></div><script type="module" src="./permission-access-react.js"></script></body></html>',
   );
+
+  const crudEntry = path.join(root, 'product/app-shell/examples/item-management/react.tsx');
+  await build({
+    entryPoints: [crudEntry],
+    bundle: true,
+    format: 'esm',
+    platform: 'browser',
+    outdir: dir,
+    entryNames: 'item-management-react',
+  });
+  await writeFile(
+    path.join(dir, 'item-management-react.html'),
+    '<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width"><title>Item management fixture</title><link rel="stylesheet" href="./item-management-react.css"><style>html,body{margin:0;min-block-size:100%;}</style></head><body><div id="root"></div><script type="module" src="./item-management-react.js"></script></body></html>',
+  );
 }
