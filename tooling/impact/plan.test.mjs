@@ -7,7 +7,7 @@ test('component subpath changes suppress the aggregate package owner', () => {
   assert.deepEqual(plan.directNodes, ['component:button:react']);
   assert.equal(plan.broadened, false);
   for (const scope of ['component:button:react:types', 'component:button:react:ssr', 'component:button:react:browser']) assert.ok(plan.validationScopes.includes(scope), scope);
-  for (const scope of ['pack-react', 'consumer-react', 'package-contracts']) assert.equal(plan.validationScopes.includes(scope), false, scope);
+  for (const scope of ['consumer-react', 'package-contracts']) assert.equal(plan.validationScopes.includes(scope), false, scope);
   assert.ok(!plan.affectedNodes.includes('component:button:conformance'));
   assert.ok(!plan.affectedNodes.includes('component:button:documentation'));
   assert.ok(!plan.validationScopes.includes('component:button:angular:ssr'));
@@ -28,7 +28,7 @@ test('shared component CSS selects style and browser evidence without package or
   assert.deepEqual(plan.directNodes, ['component:button:web-style']);
   assert.equal(plan.broadened, false);
   for (const scope of ['lint-web-css', 'component:button:web:browser', 'component:button:react:browser', 'component:button:angular:browser', 'component:button:vue:browser']) assert.ok(plan.validationScopes.includes(scope), scope);
-  for (const scope of ['pack-web', 'consumer-web', 'component:button:react:types', 'component:button:react:ssr', 'component:button:angular:ssr', 'component:button:vue:ssr', 'pack-react', 'pack-angular', 'pack-vue', 'docs-build']) assert.equal(plan.validationScopes.includes(scope), false, scope);
+  for (const scope of ['consumer-web', 'component:button:react:types', 'component:button:react:ssr', 'component:button:angular:ssr', 'component:button:vue:ssr', 'consumer-react', 'consumer-angular', 'consumer-vue', 'docs-build']) assert.equal(plan.validationScopes.includes(scope), false, scope);
 });
 
 test('renderer-neutral capability changes select only actual Tabs consumers and their evidence', () => {
@@ -37,7 +37,7 @@ test('renderer-neutral capability changes select only actual Tabs consumers and 
   assert.equal(plan.broadened, false);
   for (const node of ['component:tabs:react', 'component:tabs:angular', 'component:tabs:vue']) assert.ok(plan.affectedNodes.includes(node), node);
   for (const scope of ['unit:core:capabilities:collection-navigation:test', 'component:tabs:react:browser', 'component:tabs:angular:browser', 'component:tabs:vue:browser']) assert.ok(plan.validationScopes.includes(scope), scope);
-  for (const scope of ['pack-core', 'consumer-core']) assert.equal(plan.validationScopes.includes(scope), false, scope);
+  assert.equal(plan.validationScopes.includes('consumer-core'), false);
   for (const node of ['component:button:react', 'component:button:angular', 'component:button:vue']) assert.ok(!plan.affectedNodes.includes(node), node);
 });
 
@@ -46,7 +46,7 @@ test('a React Tabs implementation change stays within the React/component bounda
   assert.deepEqual(plan.directNodes, ['component:tabs:react']);
   assert.equal(plan.broadened, false);
   for (const scope of ['component:tabs:react:types', 'component:tabs:react:ssr', 'component:tabs:react:browser']) assert.ok(plan.validationScopes.includes(scope), scope);
-  for (const scope of ['pack-react', 'consumer-react', 'component:tabs:angular:ssr', 'component:tabs:vue:ssr']) assert.equal(plan.validationScopes.includes(scope), false, scope);
+  for (const scope of ['consumer-react', 'component:tabs:angular:ssr', 'component:tabs:vue:ssr']) assert.equal(plan.validationScopes.includes(scope), false, scope);
 });
 
 test('component docs and examples use component-local documentation evidence', () => {
@@ -56,21 +56,22 @@ test('component docs and examples use component-local documentation evidence', (
   assert.ok(plan.validationScopes.includes('component:button:docs'));
   assert.ok(plan.validationScopes.includes('docs-source'));
   assert.ok(!plan.validationScopes.includes('docs-build'));
-  assert.ok(!plan.validationScopes.includes('pack-angular'));
+  assert.ok(!plan.validationScopes.includes('consumer-angular'));
 });
 
 test('shared documentation changes retain the full documentation gate', () => {
   const plan = createPlan(['documentation/shared/styling.html']);
   assert.deepEqual(plan.directNodes, ['documentation']);
-  for (const scope of ['lint-docs', 'docs-source', 'docs-build', 'docs-site', 'browser-docs-chromium']) assert.ok(plan.validationScopes.includes(scope), scope);
+  for (const scope of ['lint-docs', 'docs-source', 'browser-docs-chromium']) assert.ok(plan.validationScopes.includes(scope), scope);
+  assert.equal(plan.validationScopes.includes('docs-build'), false, 'docs-build is an execution prerequisite, not duplicate selected evidence');
 });
 
-test('package public surfaces validate the package without marking every component affected', () => {
+test('package public surfaces validate the packed consumer without marking every component affected', () => {
   for (const file of ['packages/react/src/index.ts', 'packages/react/package.json']) {
     const plan = createPlan([file]);
     assert.deepEqual(plan.directNodes, ['package:react:public-surface']);
     assert.equal(plan.broadened, false);
-    for (const scope of ['package-contracts', 'pack-react', 'consumer-react']) assert.ok(plan.validationScopes.includes(scope), `${file}: ${scope}`);
+    for (const scope of ['package-contracts', 'consumer-react']) assert.ok(plan.validationScopes.includes(scope), `${file}: ${scope}`);
     for (const node of ['component:button:react', 'component:tabs:react', 'documentation']) assert.ok(!plan.affectedNodes.includes(node), `${file}: ${node}`);
     assert.ok(!plan.validationScopes.includes('docs-build'));
   }
@@ -80,7 +81,7 @@ test('Web aggregate stylesheet validates the Web package without component fan-o
   const plan = createPlan(['packages/web/src/styles.css']);
   assert.deepEqual(plan.directNodes, ['web:aggregate-style']);
   assert.equal(plan.broadened, false);
-  for (const scope of ['lint-web-css', 'pack-web', 'consumer-web']) assert.ok(plan.validationScopes.includes(scope), scope);
+  for (const scope of ['lint-web-css', 'consumer-web']) assert.ok(plan.validationScopes.includes(scope), scope);
   for (const node of ['component:button:web', 'component:button:react', 'react', 'angular', 'vue']) assert.ok(!plan.affectedNodes.includes(node), node);
 });
 
@@ -127,7 +128,7 @@ test('change fragments stay owner scoped while syntax validation remains global'
   const plan = createPlan(['product/button/changes/2026-10-19-scoped-product-units.md']);
   assert.deepEqual(plan.directNodes, ['component:button:changes']);
   assert.ok(plan.validationScopes.includes('change-fragments'));
-  assert.ok(!plan.validationScopes.includes('pack-react'));
+  assert.ok(!plan.validationScopes.includes('consumer-react'));
 });
 
 test('narrow PRs keep expensive readiness and impact checks out of the global sentinel set', () => {

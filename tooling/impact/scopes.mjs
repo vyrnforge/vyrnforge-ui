@@ -1,7 +1,16 @@
 import { discoverProductUnits } from '../testing/discover-product-units.mjs';
 const npm = process.platform === 'win32' ? 'npm.cmd' : 'npm';
 const discovery = discoverProductUnits();
-const allComponentBuilds = ['build-core', 'build-web', 'build-icons', 'build-react', 'build-angular', 'build-vue', 'build-elements'];
+const packageNames = discovery.packages.map(({ name }) => name);
+const packageNameSet = new Set(packageNames);
+const packageDependencies = new Map(discovery.packages.map(({ name, manifest }) => [
+  name,
+  Object.keys(manifest.dependencies ?? {})
+    .filter((dependency) => dependency.startsWith('@vyrnforge/'))
+    .map((dependency) => dependency.slice('@vyrnforge/'.length))
+    .filter((dependency) => packageNameSet.has(dependency)),
+]));
+const allPackageBuilds = packageNames.map((name) => `build-${name}`);
 const baseScopeDefinitions = {
   structure: { command: ['node', 'tooling/verify/workspace-structure.mjs'], requires: [] },
   'testing-structure': { command: ['node', 'tooling/verify/testing-structure.mjs'], requires: [] },
@@ -14,52 +23,35 @@ const baseScopeDefinitions = {
   'testing-tooling': { command: [npm, 'run', 'test:testing-tooling'], requires: [] },
   'accessibility-tooling': { command: [npm, 'run', 'test:accessibility-tooling'], requires: [] },
   'ci-tooling': { command: [npm, 'run', 'test:ci-tooling'], requires: [] },
-  'component-types-all': { command: ['node', 'tooling/testing/check-component-types-batch.mjs'], requires: allComponentBuilds },
-  'component-ssr-all': { command: ['node', 'tooling/testing/run-component-ssr-batch.mjs'], requires: allComponentBuilds },
+  'component-types-all': { command: ['node', 'tooling/testing/check-component-types-batch.mjs'], requires: allPackageBuilds },
+  'component-ssr-all': { command: ['node', 'tooling/testing/run-component-ssr-batch.mjs'], requires: allPackageBuilds },
   'lint-tooling': { command: [npm, 'run', 'lint:tooling'], requires: [] },
   'lint-web-css': { command: [npm, 'run', 'lint:web-css'], requires: [] },
   'lint-docs': { command: [npm, 'run', 'lint:docs'], requires: [] },
-  'lint-core': { command: [npm, 'run', 'lint:core'], requires: [] },
-  'lint-web': { command: [npm, 'run', 'lint:web'], requires: [] },
-  'lint-icons': { command: [npm, 'run', 'lint:icons'], requires: [] },
-  'lint-react': { command: [npm, 'run', 'lint:react'], requires: [] },
-  'lint-angular': { command: [npm, 'run', 'lint:angular'], requires: [] },
-  'lint-vue': { command: [npm, 'run', 'lint:vue'], requires: [] },
-  'lint-elements': { command: [npm, 'run', 'lint:elements'], requires: [] },
   compatibility: { command: ['node', 'tooling/verify/compatibility.mjs'], requires: [] },
   'package-contracts': { command: ['node', 'tooling/verify/package-contracts.mjs'], requires: [] },
   'docs-source': { command: ['node', 'tooling/verify/documentation-structure.mjs'], requires: [] },
-  'build-core': { command: [npm, 'run', 'build:core'], requires: ['lint-core'] },
-  'build-web': { command: [npm, 'run', 'build:web'], requires: ['lint-web', 'build-core'] },
-  'build-icons': { command: [npm, 'run', 'build:icons'], requires: ['lint-icons', 'build-web'] },
-  'build-react': { command: [npm, 'run', 'build:react'], requires: ['lint-react', 'build-core', 'build-web'] },
-  'build-angular': { command: [npm, 'run', 'build:angular'], requires: ['lint-angular', 'build-core', 'build-web'] },
-  'build-vue': { command: [npm, 'run', 'build:vue'], requires: ['lint-vue', 'build-core', 'build-web'] },
-  'build-elements': { command: [npm, 'run', 'build:elements'], requires: ['lint-elements', 'build-core', 'build-web'] },
-  'pack-core': { command: ['node', 'tooling/verify/package-smoke.mjs', 'core'], requires: ['build-core'] },
-  'pack-web': { command: ['node', 'tooling/verify/package-smoke.mjs', 'web'], requires: ['build-web'] },
-  'pack-icons': { command: ['node', 'tooling/verify/package-smoke.mjs', 'icons'], requires: ['build-icons'] },
-  'pack-react': { command: ['node', 'tooling/verify/package-smoke.mjs', 'react'], requires: ['build-react'] },
-  'pack-angular': { command: ['node', 'tooling/verify/package-smoke.mjs', 'angular'], requires: ['build-angular'] },
-  'pack-vue': { command: ['node', 'tooling/verify/package-smoke.mjs', 'vue'], requires: ['build-vue'] },
-  'pack-elements': { command: ['node', 'tooling/verify/package-smoke.mjs', 'elements'], requires: ['build-elements'] },
-  'consumer-core': { command: ['node', 'tooling/verify/consumer-packages.mjs', 'core'], requires: ['build-core'] },
-  'consumer-web': { command: ['node', 'tooling/verify/consumer-packages.mjs', 'web'], requires: ['build-web'] },
-  'consumer-icons': { command: ['node', 'tooling/verify/consumer-packages.mjs', 'icons'], requires: ['build-icons'] },
-  'consumer-react': { command: ['node', 'tooling/verify/consumer-packages.mjs', 'react'], requires: ['build-react'] },
-  'consumer-angular': { command: ['node', 'tooling/verify/consumer-packages.mjs', 'angular'], requires: ['build-angular'] },
-  'consumer-vue': { command: ['node', 'tooling/verify/consumer-packages.mjs', 'vue'], requires: ['build-vue'] },
-  'consumer-elements': { command: ['node', 'tooling/verify/consumer-packages.mjs', 'elements'], requires: ['build-elements'] },
   'browser-foundation-visual': { command: [npm, 'run', 'test:visual:foundation'], requires: ['build-web'] },
   'browser-elemental-primitives': { command: ['node', 'tooling/testing/run-component-browser.mjs', 'elemental-primitives', 'web', 'chromium'], requires: ['build-web'] },
-  'docs-build': { command: [npm, 'run', 'build:docs'], requires: ['docs-source', 'compatibility', 'package-contracts'] },
+  'docs-build': { command: [npm, 'run', 'build:docs:site'], requires: ['docs-source', 'compatibility', 'package-contracts', ...allPackageBuilds] },
   'docs-site': { command: ['node', 'tooling/verify/docs-site.mjs'], requires: ['docs-build'] },
   'browser-docs-chromium': { command: [npm, 'run', 'test:browser:docs'], requires: ['docs-site'] },
   'browser-docs-cross': { command: [npm, 'run', 'test:browser:docs:cross'], requires: ['docs-site'] },
-  'consumer-all': { command: ['node', 'tooling/verify/consumer-packages.mjs', 'all'], requires: allComponentBuilds },
-  'bundle-baselines': { command: ['node', 'tooling/testing/performance/measure-representative-bundles.mjs', '--check'], requires: ['build-web', 'build-icons', 'build-react', 'build-angular', 'build-vue', 'build-elements'] },
+  'consumer-all': { command: ['node', 'tooling/verify/consumer-packages.mjs', 'all'], requires: allPackageBuilds },
+  'bundle-baselines': { command: ['node', 'tooling/testing/performance/measure-representative-bundles.mjs', '--check'], requires: packageNames.filter((name) => name !== 'core').map((name) => `build-${name}`) },
   'release-readiness': { command: ['node', 'tooling/verify/release-readiness.mjs'], requires: ['consumer-all', 'docs-site', 'browser-docs-cross', 'browser-foundation-visual', 'browser-elemental-primitives', 'changes-preview', 'bundle-baselines'] },
 };
+for (const packageName of packageNames) {
+  baseScopeDefinitions[`lint-${packageName}`] = { command: [npm, 'run', `lint:${packageName}`], requires: [] };
+  baseScopeDefinitions[`build-${packageName}`] = {
+    command: [npm, 'run', `build:${packageName}`],
+    requires: [`lint-${packageName}`, ...(packageDependencies.get(packageName) ?? []).map((dependency) => `build-${dependency}`)],
+  };
+  baseScopeDefinitions[`consumer-${packageName}`] = {
+    command: ['node', 'tooling/verify/consumer-packages.mjs', packageName],
+    requires: [`build-${packageName}`],
+  };
+}
 function componentEntry(componentId) { return discovery.components.find((entry) => entry.component === componentId); }
 function componentPrerequisite(port) { return port === 'web' ? 'build-web' : `build-${port}`; }
 export function resolveScopeDefinition(scope) {

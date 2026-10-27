@@ -4,9 +4,18 @@ import { fileURLToPath } from 'node:url';
 import { discoverProductUnits } from '../testing/discover-product-units.mjs';
 const impact = JSON.parse(readFileSync(new URL('./config.json', import.meta.url), 'utf8'));
 const discovery = discoverProductUnits();
+const packageNames = discovery.packages.map(({ name }) => name);
+const packageNameSet = new Set(packageNames);
+const packageDependencies = new Map(discovery.packages.map(({ name, manifest }) => [
+  name,
+  Object.keys(manifest.dependencies ?? {})
+    .filter((dependency) => dependency.startsWith('@vyrnforge/'))
+    .map((dependency) => dependency.slice('@vyrnforge/'.length))
+    .filter((dependency) => packageNameSet.has(dependency)),
+]));
 function matchesPath(filePath, pattern) { return pattern.endsWith('/') ? filePath.startsWith(pattern) : filePath === pattern; }
 function componentScope(component, suffix) { return `component:${component}:${suffix}`; }
-function packageEvidence(port) { return ['package-contracts', `pack-${port}`, `consumer-${port}`]; }
+function packageEvidence(port) { return ['package-contracts', `consumer-${port}`]; }
 function compileTargets() {
   const targets = structuredClone(impact.targets);
   for (const { name } of discovery.packages) {
@@ -128,9 +137,26 @@ function batchBroadComponentEvidence(selectedScopes) {
   if (hasTypes) selectedScopes.add('component-types-all');
   if (hasSsr) selectedScopes.add('component-ssr-all');
 }
-export function allKnownScopes() { return [...new Set([...impact.scopeOrder, 'component-types-all', 'component-ssr-all', ...dynamicPrScopes(), ...dynamicTierScopes('release'), ...discovery.components.map((component) => componentScope(component.component, 'docs'))])]; }
+function batchFullPackageConsumerEvidence(selectedScopes) {
+  const requested = [...selectedScopes]
+    .map((scope) => /^consumer-([a-z][a-z0-9-]*)$/.exec(scope)?.[1] ?? null)
+    .filter((name) => packageNameSet.has(name));
+  if (requested.length < 2) return false;
+  const closure = new Set();
+  function include(name) {
+    if (closure.has(name)) return;
+    for (const dependency of packageDependencies.get(name) ?? []) include(dependency);
+    closure.add(name);
+  }
+  for (const name of requested) include(name);
+  if (closure.size !== packageNames.length) return false;
+  for (const name of requested) selectedScopes.delete(`consumer-${name}`);
+  selectedScopes.add('consumer-all');
+  return true;
+}
+export function allKnownScopes() { return [...new Set([...impact.scopeOrder, ...(impact.tierBase ?? []), 'component-types-all', 'component-ssr-all', ...dynamicPrScopes(), ...dynamicTierScopes('release'), ...discovery.components.map((component) => componentScope(component.component, 'docs'))])]; }
 function orderedScopes(scopes) { const order = new Map(allKnownScopes().map((scope, index) => [scope, index])); return [...scopes].sort((a, b) => (order.get(a) ?? Number.MAX_SAFE_INTEGER) - (order.get(b) ?? Number.MAX_SAFE_INTEGER) || a.localeCompare(b)); }
-function scopeReasonsFor(affectedNodes, selectedScopes, broad = false) {
+function scopeReasonsFor(affectedNodes, selectedScopes, broad = false, batchedConsumers = false) {
   const reasons = new Map();
   for (const scope of impact.globalSentinels) reasons.set(scope, ['global sentinel']);
   for (const node of affectedNodes) {
@@ -143,6 +169,7 @@ function scopeReasonsFor(affectedNodes, selectedScopes, broad = false) {
   }
   if (broad && selectedScopes.has('component-types-all')) reasons.set('component-types-all', ['batched exhaustive type evidence for broadened PR']);
   if (broad && selectedScopes.has('component-ssr-all')) reasons.set('component-ssr-all', ['batched exhaustive SSR evidence for broadened PR']);
+  if (batchedConsumers && selectedScopes.has('consumer-all')) reasons.set('consumer-all', ['single packed-consumer pass for the full affected package closure']);
   return Object.fromEntries(orderedScopes(selectedScopes).map((scope) => [scope, reasons.get(scope) ?? ['selected by tier']]));
 }
 export function createPlan(paths) {
@@ -157,13 +184,14 @@ export function createPlan(paths) {
   const selectedScopes = new Set(impact.globalSentinels);
   for (const node of affectedNodes) for (const scope of targets[node]?.evidence ?? []) selectedScopes.add(scope);
   if (broad) batchBroadComponentEvidence(selectedScopes);
+  const batchedConsumers = batchFullPackageConsumerEvidence(selectedScopes);
   const ordered = orderedScopes(selectedScopes);
-  return { mode: 'pr', changedPaths: [...paths].sort(), directNodes: [...directNodes].sort(), affectedNodes: [...affectedNodes].sort(), validationScopes: ordered, scopeReasons: scopeReasonsFor(affectedNodes, selectedScopes, broad), skippedValidationScopes: allKnownScopes().filter((scope) => !selectedScopes.has(scope)), broadened: broad };
+  return { mode: 'pr', changedPaths: [...paths].sort(), directNodes: [...directNodes].sort(), affectedNodes: [...affectedNodes].sort(), validationScopes: ordered, scopeReasons: scopeReasonsFor(affectedNodes, selectedScopes, broad, batchedConsumers), skippedValidationScopes: allKnownScopes().filter((scope) => !selectedScopes.has(scope)), broadened: broad };
 }
 export function createTierPlan(mode) {
   const tierScopes = impact.tiers?.[mode];
   if (!tierScopes) throw new Error(`Unknown validation tier: ${mode}`);
-  const scopes = [...new Set([...tierScopes, ...dynamicTierScopes(mode)])];
+  const scopes = [...new Set([...(impact.tierBase ?? []), ...tierScopes, ...dynamicTierScopes(mode)])];
   const selected = new Set(scopes);
   const affectedNodes = Object.keys(targets).sort();
   return { mode, changedPaths: [], directNodes: [], affectedNodes, validationScopes: orderedScopes(scopes), scopeReasons: Object.fromEntries(orderedScopes(scopes).map((scope) => [scope, [`${mode} tier`]])), skippedValidationScopes: allKnownScopes().filter((scope) => !selected.has(scope)), broadened: true };
