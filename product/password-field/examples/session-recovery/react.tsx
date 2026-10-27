@@ -1,5 +1,6 @@
 import { useRef, useState } from 'react';
 import type { FormEvent } from 'react';
+import { createRoot } from 'react-dom/client';
 import { Button } from '@vyrnforge/react/button';
 import { Input } from '@vyrnforge/react/input';
 import { PasswordFieldInput, PasswordFieldRoot, PasswordFieldToggle } from '@vyrnforge/react/password-field';
@@ -155,4 +156,4 @@ export function Example() {
 }
 
 const mount = document.querySelector<HTMLElement>('#root');
-if (mount) import('react-dom/client').then(({ createRoot }) => createRoot(mount).render(<Example />));
+if (mount) createRoot(mount).render(<Example />);
