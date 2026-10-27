@@ -6,7 +6,7 @@ const impact = JSON.parse(readFileSync(new URL('./config.json', import.meta.url)
 const discovery = discoverProductUnits();
 function matchesPath(filePath, pattern) { return pattern.endsWith('/') ? filePath.startsWith(pattern) : filePath === pattern; }
 function componentScope(component, suffix) { return `component:${component}:${suffix}`; }
-function packageEvidence(port) { return ['package-contracts', `pack-${port}`, `consumer-${port}`]; }
+function packageEvidence(port) { return ['package-contracts', `consumer-${port}`]; }
 function compileTargets() {
   const targets = structuredClone(impact.targets);
   for (const { name } of discovery.packages) {
@@ -128,7 +128,7 @@ function batchBroadComponentEvidence(selectedScopes) {
   if (hasTypes) selectedScopes.add('component-types-all');
   if (hasSsr) selectedScopes.add('component-ssr-all');
 }
-export function allKnownScopes() { return [...new Set([...impact.scopeOrder, 'component-types-all', 'component-ssr-all', ...dynamicPrScopes(), ...dynamicTierScopes('release'), ...discovery.components.map((component) => componentScope(component.component, 'docs'))])]; }
+export function allKnownScopes() { return [...new Set([...impact.scopeOrder, ...(impact.tierBase ?? []), 'component-types-all', 'component-ssr-all', ...dynamicPrScopes(), ...dynamicTierScopes('release'), ...discovery.components.map((component) => componentScope(component.component, 'docs'))])]; }
 function orderedScopes(scopes) { const order = new Map(allKnownScopes().map((scope, index) => [scope, index])); return [...scopes].sort((a, b) => (order.get(a) ?? Number.MAX_SAFE_INTEGER) - (order.get(b) ?? Number.MAX_SAFE_INTEGER) || a.localeCompare(b)); }
 function scopeReasonsFor(affectedNodes, selectedScopes, broad = false) {
   const reasons = new Map();
@@ -163,7 +163,7 @@ export function createPlan(paths) {
 export function createTierPlan(mode) {
   const tierScopes = impact.tiers?.[mode];
   if (!tierScopes) throw new Error(`Unknown validation tier: ${mode}`);
-  const scopes = [...new Set([...tierScopes, ...dynamicTierScopes(mode)])];
+  const scopes = [...new Set([...(impact.tierBase ?? []), ...tierScopes, ...dynamicTierScopes(mode)])];
   const selected = new Set(scopes);
   const affectedNodes = Object.keys(targets).sort();
   return { mode, changedPaths: [], directNodes: [], affectedNodes, validationScopes: orderedScopes(scopes), scopeReasons: Object.fromEntries(orderedScopes(scopes).map((scope) => [scope, [`${mode} tier`]])), skippedValidationScopes: allKnownScopes().filter((scope) => !selected.has(scope)), broadened: true };
