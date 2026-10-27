@@ -3,8 +3,9 @@ import axeCore from 'axe-core';
 
 const port = process.env.VF_COMPONENT_PORT || 'react';
 
-test('search field clears and restores focus', async ({ page }) => {
+test('search field clears with authored naming and restores focus', async ({ page }) => {
   await page.goto(`/next/search-field-fixtures/${port}.html`);
+  await expect(page.locator('#clear')).toHaveAccessibleName('Clear query');
   await page.locator('#clear').click();
   await expect(page.locator('#search')).toHaveValue('');
   await expect(page.locator('#search')).toBeFocused();
