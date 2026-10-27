@@ -1,0 +1,1 @@
+{"id":"combobox/internationalization","title":"Internationalized combobox","description":"Use native direction semantics with mixed-direction content and explicit locale, time-zone, and currency formatting from semantic source values.","defaultFramework":"react","frameworks":{"react":{"label":"React","language":"tsx","source":"react.tsx"}}}
