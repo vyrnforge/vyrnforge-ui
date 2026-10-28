@@ -31,6 +31,9 @@ test('STD-22 trend distinguishes missing and estimated data and preserves an exa
   await expect(page.locator('[data-status="estimated"]')).toHaveCount(1);
   await expect(page.locator('.viz-uncertainty')).toHaveCount(1);
 
+  const dashboardBox = await page.locator('.viz-dashboard').boundingBox();
+  expect(dashboardBox?.width).toBeGreaterThan(900);
+
   const trendTable = page.getByRole('table', { name: 'Weekly completion rate data' });
   await expect(trendTable).toBeVisible();
   const missingRow = trendTable.getByRole('row', { name: /Jul 20/ });
