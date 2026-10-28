@@ -1,1 +1,1 @@
-import test from 'node:test'; import assert from 'node:assert/strict'; test('Angular AppShell subpath is server-safe',async()=>{const api=await import('@vyrnforge/angular/app-shell'); assert.equal(typeof api.VfAppShellDirective,'function');});
+import { test } from 'vitest'; import assert from 'node:assert/strict'; test('Angular AppShell subpath is server-safe',async()=>{const api=await import('@vyrnforge/angular/app-shell'); assert.equal(typeof api.VfAppShellDirective,'function');});

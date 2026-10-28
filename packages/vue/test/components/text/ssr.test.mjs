@@ -1,4 +1,4 @@
-import test from 'node:test';
+import { test } from 'vitest';
 import assert from 'node:assert/strict';
 import { createSSRApp, h } from 'vue';
 import { renderToString } from '@vue/server-renderer';

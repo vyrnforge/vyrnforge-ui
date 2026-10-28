@@ -4,21 +4,65 @@
   "private": true,
   "type": "module",
   "description": "Browser-facing VyrnForge foundations, canonical CSS, and DOM helpers.",
-  "sideEffects": ["./dist/**/*.css"],
-  "files": ["dist"],
+  "sideEffects": [
+    "./dist/**/*.css"
+  ],
+  "files": [
+    "dist"
+  ],
   "main": "./dist/index.js",
   "types": "./dist/index.d.ts",
   "exports": {
-    ".": { "types": "./dist/index.d.ts", "import": "./dist/index.js", "default": "./dist/index.js" },
-    "./icon": { "types": "./dist/components/icon/index.d.ts", "import": "./dist/components/icon/index.js", "default": "./dist/components/icon/index.js" },
-    "./input": { "types": "./dist/components/input/index.d.ts", "import": "./dist/components/input/index.js", "default": "./dist/components/input/index.js" },
-    "./layout": { "types": "./dist/components/layout/index.d.ts", "import": "./dist/components/layout/index.js", "default": "./dist/components/layout/index.js" },
-    "./temporal-input": { "types": "./dist/components/temporal-input/index.d.ts", "import": "./dist/components/temporal-input/index.js", "default": "./dist/components/temporal-input/index.js" },
-    "./text": { "types": "./dist/components/text/index.d.ts", "import": "./dist/components/text/index.js", "default": "./dist/components/text/index.js" },
-    "./toggle-button": { "types": "./dist/components/toggle-button/index.d.ts", "import": "./dist/components/toggle-button/index.js", "default": "./dist/components/toggle-button/index.js" },
-    "./composite-focus": { "types": "./dist/capabilities/composite-focus/index.d.ts", "import": "./dist/capabilities/composite-focus/index.js", "default": "./dist/capabilities/composite-focus/index.js" },
-    "./floating-positioning": { "types": "./dist/capabilities/floating-positioning/index.d.ts", "import": "./dist/capabilities/floating-positioning/index.js", "default": "./dist/capabilities/floating-positioning/index.js" },
-    "./dismissal-coordination": { "types": "./dist/capabilities/dismissal-coordination/index.d.ts", "import": "./dist/capabilities/dismissal-coordination/index.js", "default": "./dist/capabilities/dismissal-coordination/index.js" },
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js",
+      "default": "./dist/index.js"
+    },
+    "./icon": {
+      "types": "./dist/components/icon/index.d.ts",
+      "import": "./dist/components/icon/index.js",
+      "default": "./dist/components/icon/index.js"
+    },
+    "./input": {
+      "types": "./dist/components/input/index.d.ts",
+      "import": "./dist/components/input/index.js",
+      "default": "./dist/components/input/index.js"
+    },
+    "./layout": {
+      "types": "./dist/components/layout/index.d.ts",
+      "import": "./dist/components/layout/index.js",
+      "default": "./dist/components/layout/index.js"
+    },
+    "./temporal-input": {
+      "types": "./dist/components/temporal-input/index.d.ts",
+      "import": "./dist/components/temporal-input/index.js",
+      "default": "./dist/components/temporal-input/index.js"
+    },
+    "./text": {
+      "types": "./dist/components/text/index.d.ts",
+      "import": "./dist/components/text/index.js",
+      "default": "./dist/components/text/index.js"
+    },
+    "./toggle-button": {
+      "types": "./dist/components/toggle-button/index.d.ts",
+      "import": "./dist/components/toggle-button/index.js",
+      "default": "./dist/components/toggle-button/index.js"
+    },
+    "./composite-focus": {
+      "types": "./dist/capabilities/composite-focus/index.d.ts",
+      "import": "./dist/capabilities/composite-focus/index.js",
+      "default": "./dist/capabilities/composite-focus/index.js"
+    },
+    "./floating-positioning": {
+      "types": "./dist/capabilities/floating-positioning/index.d.ts",
+      "import": "./dist/capabilities/floating-positioning/index.js",
+      "default": "./dist/capabilities/floating-positioning/index.js"
+    },
+    "./dismissal-coordination": {
+      "types": "./dist/capabilities/dismissal-coordination/index.d.ts",
+      "import": "./dist/capabilities/dismissal-coordination/index.js",
+      "default": "./dist/capabilities/dismissal-coordination/index.js"
+    },
     "./styles.css": "./dist/styles.css",
     "./styles/tokens.css": "./dist/styles/tokens.css",
     "./styles/foundation.css": "./dist/styles/foundation.css",
@@ -81,6 +125,10 @@
     "./styles/app-shell.css": "./dist/components/app-shell/app-shell.css",
     "./styles/side-nav.css": "./dist/components/side-nav/side-nav.css"
   },
-  "dependencies": { "@vyrnforge/core": "0.0.0-rebuild" },
-  "scripts": { "build": "node ../../tooling/tokens/generate.mjs --check && tsc -p tsconfig.json && node build/copy-assets.mjs" }
+  "dependencies": {
+    "@vyrnforge/core": "workspace:*"
+  },
+  "scripts": {
+    "build": "node ../../tooling/tokens/generate.mjs --check && tsc -p tsconfig.json && node build/copy-assets.mjs"
+  }
 }

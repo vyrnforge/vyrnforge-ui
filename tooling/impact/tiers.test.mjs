@@ -1,4 +1,4 @@
-import test from 'node:test';
+import { test } from 'vitest';
 import assert from 'node:assert/strict';
 import { createPlan, createTierPlan } from '../impact/plan.mjs';
 import { createExecutionPlan, validationPlanFromArgs } from '../impact/execute.mjs';

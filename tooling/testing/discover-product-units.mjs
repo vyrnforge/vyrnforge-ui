@@ -32,8 +32,7 @@ function walkFiles(root, relativePath) {
   return files.sort();
 }
 function workspacePackages(root) {
-  const manifest = readJson(root, 'package.json');
-  return (manifest.workspaces ?? []).filter((workspace) => /^packages\/[^/*]+$/.test(workspace)).map((workspace) => path.posix.basename(workspace)).filter((name) => existingPath(root, `packages/${name}/package.json`));
+  return ["core","web","icons","react","angular","vue","elements"].filter((name) => existingPath(root, `packages/${name}/package.json`));
 }
 function componentIdFromFrameworkExport(exportName) { return /^\.\/([a-z][a-z0-9-]*)$/.exec(exportName)?.[1] ?? null; }
 function componentIdFromWebExport(exportName) {
@@ -143,7 +142,7 @@ export function discoverProductUnits(root = repoRoot) {
     const componentRoot = `product/${componentId}`;
     const browserRoot = `${componentRoot}/test/browser`;
     const accessibilityPath = `${componentRoot}/accessibility.json`;
-    return { component: componentId, status: 'implemented', root: `${componentRoot}/`, ports, documentationSource: `${componentRoot}/docs/index.html`, documentationPaths: [`${componentRoot}/docs/`, `${componentRoot}/examples/`], exampleManifests: findExampleManifests(root, componentId), conformanceTypes: frameworkPortNames.length > 1 ? `${componentRoot}/test/conformance/public-api.types.ts` : null, browser: { fixture: `${browserRoot}/fixtures.mjs`, config: `${browserRoot}/playwright.config.mjs`, tests: `${browserRoot}/tests/`, paths: [`${browserRoot}/`, accessibilityPath] }, accessibilityPath, changesPath: `${componentRoot}/changes/`, changeFragments: walkFiles(root, `${componentRoot}/changes`).filter((file) => file.endsWith('.md')), discovery: { webExport: webExports.has(componentId), frameworkExports: frameworkPortNames, componentSlice: existingPath(root, componentRoot) } };
+    return { component: componentId, status: 'implemented', root: `${componentRoot}/`, ports, documentationSource: `${componentRoot}/docs/index.html`, documentationPaths: [`${componentRoot}/docs/`, `${componentRoot}/examples/`], exampleManifests: findExampleManifests(root, componentId), conformanceTypes: frameworkPortNames.length > 1 ? `${componentRoot}/test/conformance/public-api.types.ts` : null, browser: { fixture: `${browserRoot}/fixtures.mjs`, tests: `${browserRoot}/tests/`, paths: [`${browserRoot}/`, accessibilityPath] }, accessibilityPath, changesPath: `${componentRoot}/changes/`, changeFragments: walkFiles(root, `${componentRoot}/changes`).filter((file) => file.endsWith('.md')), discovery: { webExport: webExports.has(componentId), frameworkExports: frameworkPortNames, componentSlice: existingPath(root, componentRoot) } };
   });
   return { packages: packageNames.map((name) => ({ name, manifest: packageManifests.get(name) })), components, ownedUnits, frameworkExports, webExports };
 }
@@ -166,7 +165,7 @@ export function productPreparationProblems(root = repoRoot) {
       if (config.ssr && !existingPath(root, config.ssr)) problems.push(`${component.component}/${port} is public but missing package-local SSR evidence: ${config.ssr}`);
     }
     if (component.conformanceTypes && !existingPath(root, component.conformanceTypes)) problems.push(`${component.component} has multiple framework ports but is missing cross-port type conformance: ${component.conformanceTypes}`);
-    for (const browserPath of [component.browser.fixture, component.browser.config, component.browser.tests]) if (!existingPath(root, browserPath.replace(/\/$/, ''))) problems.push(`${component.component} is public but missing shared browser evidence preparation: ${browserPath}`);
+    for (const browserPath of [component.browser.fixture, component.browser.tests]) if (!existingPath(root, browserPath.replace(/\/$/, ''))) problems.push(`${component.component} is public but missing shared browser evidence preparation: ${browserPath}`);
   }
   for (const unit of discovery.ownedUnits) {
     if (!existingPath(root, unit.testPath.replace(/\/$/, '')) || unit.evidenceFiles.length === 0) problems.push(`${unit.node} is a scoped product unit but has no mirrored evidence under ${unit.testPath}`);

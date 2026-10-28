@@ -1,0 +1,32 @@
+{
+  "name": "product-conformance",
+  "$schema": "../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "product",
+  "projectType": "library",
+  "tags": [
+    "scope:product"
+  ],
+  "targets": {
+    "lint": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "pnpm exec eslint product --max-warnings=0"
+      }
+    },
+    "test": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "pnpm exec vitest run --project product --passWithNoTests"
+      }
+    },
+    "browser": {
+      "executor": "nx:run-commands",
+      "dependsOn": [
+        "^build"
+      ],
+      "options": {
+        "command": "pnpm exec playwright test --project=chromium"
+      }
+    }
+  }
+}

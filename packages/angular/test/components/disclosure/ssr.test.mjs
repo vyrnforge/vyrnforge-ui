@@ -1,1 +1,1 @@
-import test from 'node:test'; import assert from 'node:assert/strict'; test('Angular Disclosure subpath is SSR-safe', async()=>{const api=await import('@vyrnforge/angular/disclosure'); assert.equal(typeof api.VfDisclosureRootDirective,'function');});
+import { test } from 'vitest'; import assert from 'node:assert/strict'; test('Angular Disclosure subpath is SSR-safe', async()=>{const api=await import('@vyrnforge/angular/disclosure'); assert.equal(typeof api.VfDisclosureRootDirective,'function');});

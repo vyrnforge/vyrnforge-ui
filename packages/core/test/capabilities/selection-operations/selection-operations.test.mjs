@@ -1,4 +1,4 @@
-import test from 'node:test';
+import { test } from 'vitest';
 import assert from 'node:assert/strict';
 import { addToSelection, normalizeSelection, removeFromSelection, replaceSelection, toggleSelection } from '../../../dist/capabilities/selection-operations/index.js';
 

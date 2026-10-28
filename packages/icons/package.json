@@ -5,7 +5,9 @@
   "type": "module",
   "description": "Official VyrnForge SVG icon catalog for the shared Icon contract.",
   "sideEffects": false,
-  "files": ["dist"],
+  "files": [
+    "dist"
+  ],
   "main": "./dist/index.js",
   "types": "./dist/index.d.ts",
   "exports": {
@@ -21,7 +23,7 @@
     }
   },
   "dependencies": {
-    "@vyrnforge/web": "0.0.0-rebuild"
+    "@vyrnforge/web": "workspace:*"
   },
   "scripts": {
     "build": "tsc -p tsconfig.json"

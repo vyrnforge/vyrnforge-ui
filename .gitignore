@@ -9,3 +9,6 @@ playwright-report/
 .env
 .env.*
 !.env.example
+.nx/
+.pnpm-store/
+tmp/package-validation/

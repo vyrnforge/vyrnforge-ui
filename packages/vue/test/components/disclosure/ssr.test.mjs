@@ -1,1 +1,1 @@
-import test from 'node:test'; import assert from 'node:assert/strict'; test('Vue Disclosure subpath is SSR-safe', async()=>{const api=await import('@vyrnforge/vue/disclosure'); assert.ok(api.DisclosureRoot);});
+import { test } from 'vitest'; import assert from 'node:assert/strict'; test('Vue Disclosure subpath is SSR-safe', async()=>{const api=await import('@vyrnforge/vue/disclosure'); assert.ok(api.DisclosureRoot);});

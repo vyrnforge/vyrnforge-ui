@@ -1,0 +1,45 @@
+{
+  "name": "@vyrnforge/web",
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "packages/web/src",
+  "projectType": "library",
+  "tags": [
+    "scope:public",
+    "platform:web"
+  ],
+  "targets": {
+    "build": {
+      "executor": "nx:run-commands",
+      "outputs": [
+        "{projectRoot}/dist"
+      ],
+      "options": {
+        "command": "pnpm --filter @vyrnforge/web run build"
+      }
+    },
+    "lint": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "pnpm exec eslint packages/web/src packages/web/test --max-warnings=0"
+      }
+    },
+    "typecheck": {
+      "executor": "nx:run-commands",
+      "dependsOn": [
+        "^build"
+      ],
+      "options": {
+        "command": "pnpm exec tsc -p packages/web/tsconfig.json --noEmit && pnpm exec tsc -p packages/web/tsconfig.test.json"
+      }
+    },
+    "test": {
+      "executor": "nx:run-commands",
+      "dependsOn": [
+        "build"
+      ],
+      "options": {
+        "command": "pnpm exec vitest run --project web --passWithNoTests"
+      }
+    }
+  }
+}

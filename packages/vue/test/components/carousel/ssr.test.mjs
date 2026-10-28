@@ -1,1 +1,1 @@
-import test from 'node:test'; import assert from 'node:assert/strict'; test('Vue Carousel subpath is SSR-safe',async()=>{const api=await import('@vyrnforge/vue/carousel');assert.ok(Object.keys(api).length>0);});
+import { test } from 'vitest'; import assert from 'node:assert/strict'; test('Vue Carousel subpath is SSR-safe',async()=>{const api=await import('@vyrnforge/vue/carousel');assert.ok(Object.keys(api).length>0);});

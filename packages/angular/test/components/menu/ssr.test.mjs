@@ -1,1 +1,1 @@
-import test from 'node:test'; import assert from 'node:assert/strict'; test('Angular Menu subpath is SSR-safe',async()=>{const api=await import('@vyrnforge/angular/menu'); assert.equal(typeof api.VfMenuRootDirective,'function');});
+import { test } from 'vitest'; import assert from 'node:assert/strict'; test('Angular Menu subpath is SSR-safe',async()=>{const api=await import('@vyrnforge/angular/menu'); assert.equal(typeof api.VfMenuRootDirective,'function');});

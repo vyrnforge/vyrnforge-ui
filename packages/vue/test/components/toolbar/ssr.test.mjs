@@ -1,1 +1,1 @@
-import test from 'node:test'; import assert from 'node:assert/strict'; test('Vue Toolbar subpath is SSR-safe',async()=>{const api=await import('@vyrnforge/vue/toolbar'); assert.equal(typeof api.ToolbarRoot,'object');});
+import { test } from 'vitest'; import assert from 'node:assert/strict'; test('Vue Toolbar subpath is SSR-safe',async()=>{const api=await import('@vyrnforge/vue/toolbar'); assert.equal(typeof api.ToolbarRoot,'object');});

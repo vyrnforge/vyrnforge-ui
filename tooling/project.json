@@ -1,0 +1,23 @@
+{
+  "name": "repository-tooling",
+  "$schema": "../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "tooling",
+  "projectType": "library",
+  "tags": [
+    "scope:repository"
+  ],
+  "targets": {
+    "lint": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "pnpm exec eslint tooling --max-warnings=0"
+      }
+    },
+    "test": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "pnpm exec vitest run --project repository --passWithNoTests"
+      }
+    }
+  }
+}
