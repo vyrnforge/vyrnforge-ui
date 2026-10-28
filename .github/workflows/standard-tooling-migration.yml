@@ -1,3 +1,4 @@
+# One-shot branch migration; remove after the transformed tree is committed.
 name: Standard Tooling Migration
 
 on:
