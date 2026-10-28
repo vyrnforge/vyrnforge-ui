@@ -44,7 +44,7 @@ for (const name of packageNames) {
 }
 
 const iconsManifest = JSON.parse(await readFile('packages/icons/package.json', 'utf8'));
-if (iconsManifest.dependencies?.['@vyrnforge/web'] !== rootManifest.version) throw new Error('@vyrnforge/icons must depend on the shared Web Icon contract at the workspace version');
+if (iconsManifest.dependencies?.['@vyrnforge/web'] !== 'workspace:*') throw new Error('@vyrnforge/icons must depend on the shared Web Icon contract through the explicit workspace protocol');
 for (const port of portNames) {
   const manifest = JSON.parse(await readFile(`packages/${port}/package.json`, 'utf8'));
   if (manifest.dependencies?.['@vyrnforge/icons'] || manifest.peerDependencies?.['@vyrnforge/icons']) throw new Error(`${manifest.name} must not depend on the optional official icon catalog`);
