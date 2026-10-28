@@ -171,7 +171,6 @@
 }
 
 .viz-zero-label {
-  margin-inline-start: calc(.6fr + var(--vf-space-sm, .5rem));
   color: var(--vf-color-text-muted, #52525b);
   font-size: .75rem;
 }
@@ -206,23 +205,11 @@
   }
 
   .viz-trend {
-    min-inline-size: 34rem;
+    display: none;
   }
 
-  .viz-panel:has(.viz-trend) > .viz-chart {
-    max-inline-size: 100%;
-  }
-
-  .viz-panel:has(.viz-trend) {
-    overflow: hidden;
-  }
-
-  .viz-panel:has(.viz-trend) .viz-trend {
-    inline-size: 34rem;
-    max-inline-size: none;
-    transform-origin: top left;
-    transform: scale(.5);
-    margin-block-end: -8rem;
+  .viz-key {
+    display: none;
   }
 
   .viz-bar-row {
@@ -232,10 +219,6 @@
   .viz-bar-track {
     grid-column: 1 / -1;
     grid-row: 2;
-  }
-
-  .viz-zero-label {
-    margin-inline-start: 0;
   }
 }
 
@@ -256,9 +239,11 @@
     fill: Canvas;
   }
 
-  .viz-estimated-point,
-  .viz-bar {
+  .viz-estimated-point {
     fill: CanvasText;
+  }
+
+  .viz-bar {
     background: CanvasText;
   }
 
