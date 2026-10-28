@@ -24,9 +24,13 @@ jobs:
         uses: actions/setup-node@v7
         with:
           node-version-file: .node-version
-          cache: npm
+          package-manager-cache: false
+      - name: Enable pinned pnpm
+        run: |
+          corepack enable
+          corepack install --global pnpm@12.16.1
       - name: Install locked toolchain
-        run: npm ci --ignore-scripts --no-audit --no-fund
+        run: pnpm install --frozen-lockfile --ignore-scripts
       - name: Execute targeted validation plan
         env:
           BASE_SHA: ${{ github.event.pull_request.base.sha }}
