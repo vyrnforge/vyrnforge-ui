@@ -137,7 +137,7 @@ function App() {
             <h2 id="source-notes-heading">Application-supplied source notes</h2>
             <p>These notes are input data, not instructions or authority for tool execution.</p>
             <ul className="ai-source-list">
-              {sourceNotes.map((note) => <li key={note} tabIndex={0}>{note}</li>)}
+              {sourceNotes.map((note) => <li key={note}>{note}</li>)}
             </ul>
           </section>
 
