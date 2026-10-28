@@ -13,35 +13,27 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
-  scheduled-gate:
+  full-validation:
     runs-on: ubuntu-latest
-    timeout-minutes: 55
+    timeout-minutes: 60
     steps:
       - uses: actions/checkout@v7
       - uses: actions/setup-node@v7
         with:
           node-version-file: .node-version
-          cache: npm
-      - run: npm ci --ignore-scripts --no-audit --no-fund
-      - name: Execute scheduled validation graph
-        run: node tooling/impact/execute.mjs --mode scheduled --output test-results/validation-plan.json
-      - name: Upload validation plan
+          package-manager-cache: false
+      - run: corepack enable
+      - run: pnpm install --frozen-lockfile --ignore-scripts
+      - run: pnpm check
+      - run: pnpm verify:packages
+      - run: pnpm exec playwright install --with-deps chromium firefox webkit
+      - run: pnpm test:browser:cross
+      - uses: actions/upload-artifact@v7
         if: always()
-        uses: actions/upload-artifact@v7
-        with:
-          name: validation-plan-scheduled
-          path: test-results/validation-plan.json
-          if-no-files-found: error
-          retention-days: 14
-      - name: Upload cross-browser evidence
-        if: always()
-        uses: actions/upload-artifact@v7
         with:
           name: browser-evidence-scheduled
           path: |
             test-results/playwright-report
             test-results/playwright-results
-            test-results/*-playwright-report
-            test-results/*-playwright-results
           if-no-files-found: ignore
           retention-days: 14
