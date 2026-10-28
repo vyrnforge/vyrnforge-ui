@@ -21,7 +21,7 @@ test('STD-21 settings task preserves draft, actions, focus, and reflow across wi
   test.skip(port !== 'react', 'STD-21 representative responsive application evidence is intentionally verified through the React public entrypoints.');
 
   await page.setViewportSize({ width: 1280, height: 800 });
-  await page.goto('/next/app-shell-fixtures/settings-navigation-react.html?route=%2Fsettings%2Fprofile&tab=details');
+  await page.goto('/components/app-shell/settings-navigation-react.html?route=%2Fsettings%2Fprofile&tab=details');
 
   const draft = page.getByLabel('Display name');
   const save = page.getByRole('button', { name: 'Save profile', exact: true });
@@ -75,7 +75,7 @@ test('STD-21 data-list task preserves selection, required actions, focus, and re
   test.skip(port !== 'react', 'STD-21 representative responsive application evidence is intentionally verified through the React public entrypoints.');
 
   await page.setViewportSize({ width: 1280, height: 900 });
-  await page.goto('/next/app-shell-fixtures/item-management-react.html');
+  await page.goto('/components/app-shell/item-management-react.html');
 
   const atlas = page.getByRole('checkbox', { name: 'Select Atlas', exact: true });
   const beacon = page.getByRole('checkbox', { name: 'Select Beacon', exact: true });
