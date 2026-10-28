@@ -51,6 +51,8 @@
   "packages/web/src/components/split-button/split-button.css: --vf-color-text-on-action",
   "packages/web/src/components/split-button/split-button.css: --vf-radius-sm",
   "packages/web/src/components/split-button/split-button.css: --vf-space-3",
+  "packages/web/src/components/split-panel/split-panel.css: --vf-color-border-muted",
+  "packages/web/src/components/split-panel/split-panel.css: --vf-color-focus",
   "packages/web/src/components/tag-group/tag-group.css: --vf-color-surface-muted",
   "packages/web/src/components/tag-group/tag-group.css: --vf-space-1",
   "packages/web/src/components/tag-group/tag-group.css: --vf-space-2",
