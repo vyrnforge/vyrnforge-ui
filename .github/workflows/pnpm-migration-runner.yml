@@ -1,0 +1,37 @@
+name: pnpm migration runner
+
+on:
+  push:
+    branches: [chore/pnpm-workspace-migration]
+
+permissions:
+  contents: write
+
+jobs:
+  migrate:
+    if: github.actor != 'github-actions[bot]'
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-node@v7
+        with:
+          node-version-file: .node-version
+          package-manager-cache: false
+      - name: Install migration-only pnpm bootstrap
+        run: npm install --global pnpm@12.16.1 --no-audit --no-fund
+      - name: Rewrite repository for pnpm
+        run: node tooling/pnpm-migration-bootstrap.mjs
+      - name: Generate lockfile
+        run: pnpm install --lockfile-only --ignore-scripts
+      - name: Verify clean frozen install
+        run: pnpm install --frozen-lockfile --ignore-scripts
+      - name: Commit migration output
+        run: |
+          git config user.name github-actions[bot]
+          git config user.email 41898282+github-actions[bot]@users.noreply.github.com
+          git add -A
+          git commit -m "chore: migrate workspace management to pnpm"
+          git push
