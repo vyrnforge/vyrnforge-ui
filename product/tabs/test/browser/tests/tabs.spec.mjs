@@ -7,7 +7,7 @@ test.describe('Tabs Web semantic and styling contract', () => {
   test.skip(port !== 'web', 'Web owns canonical Tabs CSS and semantic styling evidence.');
 
   test('focus, disabled, accessibility, reduced motion, forced colors, and direction remain usable', async ({ page }) => {
-    await page.goto('/next/tabs-fixtures/web.html');
+    await page.goto('/components/tabs/web.html');
     const selected = page.locator('#web-tabs-tab-overview');
     await expect(selected).toHaveAttribute('aria-selected', 'true');
     await expect(page.locator('#web-tabs-tab-billing')).toBeDisabled();
@@ -34,7 +34,7 @@ test.describe('Tabs port interaction and client activation', () => {
       test.skip(port !== framework, `Running ${port} evidence only`);
       const errors = [];
       page.on('console', (message) => { if (message.type() === 'error') errors.push(message.text()); });
-      await page.goto(`/next/tabs-fixtures/${framework}.html`);
+      await page.goto(`/components/tabs/${framework}.html`);
 
       const root = page.locator(`#${framework}-tabs`);
       const overview = page.locator(`#${framework}-tabs-tab-overview`);
@@ -72,7 +72,7 @@ test.describe('Tabs port interaction and client activation', () => {
       test.skip(port !== framework, `Running ${port} evidence only`);
       const errors = [];
       page.on('console', (message) => { if (message.type() === 'error') errors.push(message.text()); });
-      await page.goto(`/next/tabs-fixtures/${framework}.html`);
+      await page.goto(`/components/tabs/${framework}.html`);
 
       const root = page.locator(`#${framework}-manual-tabs`);
       const overview = page.locator(`#${framework}-manual-tabs-tab-overview`);
