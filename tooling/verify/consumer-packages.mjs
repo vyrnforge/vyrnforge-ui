@@ -34,7 +34,7 @@ function publicSpecifier(packageName, exportName) { return exportName === '.' ? 
 function importTarget(value) { if (typeof value === 'string') return value; if (!value || typeof value !== 'object') return null; return value.import || value.default || Object.values(value).find((entry) => typeof entry === 'string') || null; }
 function flattenExportTargets(value, targets = []) { if (typeof value === 'string') targets.push(value); else if (value && typeof value === 'object') for (const nested of Object.values(value)) flattenExportTargets(nested, targets); return targets; }
 function verifyPackedPayload(name, manifest, result) {
-  if (!result || result.name !== `@vyrnforge/${name}` || !result.filename) throw new Error(`Unexpected npm pack result for ${name}`);
+  if (!result || result.name !== `@vyrnforge/${name}` || !result.filename) throw new Error(`Unexpected pnpm pack result for ${name}`);
   const files = new Set((result.files ?? []).map((file) => file.path));
   if ([...files].some((file) => file.startsWith('src/') || file.includes('legacy') || file.startsWith('tooling/') || file.startsWith('test/'))) {
     throw new Error(`${name} tarball exposes source, tests, legacy, or repository tooling`);
@@ -49,13 +49,15 @@ try {
   const tarballs = [];
   for (const name of closure) {
     const manifest = manifests.get(name);
-    const raw = execFileSync('npm', ['pack', '--json', '--pack-destination', tarballDir, path.resolve('packages', name)], { encoding: 'utf8', stdio: ['ignore', 'pipe', 'inherit'] });
-    const result = JSON.parse(raw)[0];
+    const raw = execFileSync('pnpm', ['--dir', path.resolve('packages', name), 'pack', '--pack-destination', tarballDir], { encoding: 'utf8', stdio: ['ignore', 'pipe', 'inherit'] });
+    const filename = path.basename(raw.trim().split(/\r?\n/).at(-1));
+    const packedFiles = execFileSync('tar', ['-tzf', path.join(tarballDir, filename)], { encoding: 'utf8' }).trim().split(/\r?\n/).filter(Boolean).map((entry) => ({ path: entry.replace(/^package\//, '') }));
+    const result = { name: manifest.name, filename, files: packedFiles };
     verifyPackedPayload(name, manifest, result);
     tarballs.push(path.join(tarballDir, result.filename));
   }
   await writeFile(path.join(consumerDir, 'package.json'), `${JSON.stringify({ name: 'vyrnforge-bootstrap-consumer', private: true, type: 'module' }, null, 2)}\n`);
-  execFileSync('npm', ['install', '--ignore-scripts', '--no-audit', '--no-fund', '--package-lock=false', ...tarballs], { cwd: consumerDir, stdio: 'inherit' });
+  execFileSync('pnpm', ['add', '--ignore-scripts', ...tarballs], { cwd: consumerDir, stdio: 'inherit' });
   const checks = [`import { readFile } from 'node:fs/promises';`];
   for (const name of requested) {
     const manifest = manifests.get(name);
@@ -75,6 +77,7 @@ try {
   for (const name of closure) {
     const manifest = JSON.parse(await readFile(path.join(consumerDir, 'node_modules', '@vyrnforge', name, 'package.json'), 'utf8'));
     if (manifest.name !== `@vyrnforge/${name}`) throw new Error(`Installed consumer package mismatch for ${name}`);
+    for (const range of Object.values(manifest.dependencies ?? {})) if (typeof range === 'string' && range.startsWith('workspace:')) throw new Error(`${manifest.name} packed manifest leaked workspace protocol`);
   }
 } finally { await rm(temporaryRoot, { recursive: true, force: true }); }
 process.stdout.write(`packed consumer verification: ${requested.join(', ')} ok\n`);

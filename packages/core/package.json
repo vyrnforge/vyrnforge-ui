@@ -5,7 +5,9 @@
   "type": "module",
   "description": "Pure renderer-neutral VyrnForge logic and semantic types.",
   "sideEffects": false,
-  "files": ["dist"],
+  "files": [
+    "dist"
+  ],
   "main": "./dist/index.js",
   "types": "./dist/index.d.ts",
   "exports": {

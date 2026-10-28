@@ -12,17 +12,17 @@ VyrnForge is a clean-slate rebuild inside an existing repository. Canonical arch
 
 ## Setup and common commands
 
-Use the Node/npm versions declared by `.node-version`, `.nvmrc`, and the root `package.json`, then install the locked workspace with `npm ci --ignore-scripts --no-audit --no-fund`.
+Use the Node/npm versions declared by `.node-version`, `.nvmrc`, and the root `package.json`, then install the locked workspace with `ppnpm install --frozen-lockfile`.
 
-- `npm run build` — build all seven active packages in dependency order.
-- `npm run build:docs` — build packages plus the documentation site and executable examples.
-- `npm run lint:tooling`, `npm run lint:web-css`, and package-scoped lint commands — validate authoring surfaces.
-- `npm run generate:tokens` / `npm run verify:tokens` — generate and verify repository-owned token output.
-- `npm run check:changed:plan` — inspect the validation plan selected from local changes.
-- `npm run check:changed` — execute targeted local validation.
-- `npm run check:full` — deliberately execute the exhaustive broad validation tier.
-- `npm run test:tooling` — test impact, reusable testing, accessibility, and CI tooling.
-- `npm run test:visual:foundation` — run deterministic Chromium foundation visual evidence.
+- `pnpm build` — build all seven active packages in dependency order.
+- `pnpm build:docs` — build packages plus the documentation site and executable examples.
+- `pnpm lint:tooling`, `pnpm lint:web-css`, and package-scoped lint commands — validate authoring surfaces.
+- `pnpm generate:tokens` / `pnpm verify:tokens` — generate and verify repository-owned token output.
+- `pnpm check:changed:plan` — inspect the validation plan selected from local changes.
+- `pnpm check:changed` — execute targeted local validation.
+- `pnpm check:full` — deliberately execute the exhaustive broad validation tier.
+- `pnpm test:tooling` — test impact, reusable testing, accessibility, and CI tooling.
+- `pnpm test:visual:foundation` — run deterministic Chromium foundation visual evidence.
 
 Do not bypass a failing verifier by weakening it unless the canonical architecture itself has deliberately changed.
 
@@ -73,7 +73,7 @@ Pull requests and push-triggered Main validation both use dependency-derived val
 
 - PR: targeted affected evidence plus small global architecture sentinels.
 - push-triggered `main`: targeted affected evidence for the merged push range.
-- explicit broad/local `main` tier: deliberate exhaustive verification exposed as `npm run check:full`.
+- explicit broad/local `main` tier: deliberate exhaustive verification exposed as `pnpm check:full`.
 - scheduled: broad recurring safety net including cross-browser assurance.
 - release: broadest release-readiness graph.
 

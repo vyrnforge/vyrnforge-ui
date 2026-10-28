@@ -47,7 +47,7 @@ A new tooling top-level directory requires a genuinely new repository capability
 
 ## Foundation authoring
 
-Reference design decisions remain repository-internal under `tooling/tokens/`. Run `npm run generate:tokens` after changing the token source. `npm run verify:tokens` and foundation readiness checks ensure the generated `@vyrnforge/web` runtime token CSS is current.
+Reference design decisions remain repository-internal under `tooling/tokens/`. Run `pnpm generate:tokens` after changing the token source. `pnpm verify:tokens` and foundation readiness checks ensure the generated `@vyrnforge/web` runtime token CSS is current.
 
 Canonical shared styling is owned by `@vyrnforge/web`. The aggregate `@vyrnforge/web/styles.css` includes tokens, themes, shared foundation styling, and component CSS but intentionally excludes the optional global reset. Consumers can opt into `@vyrnforge/web/styles/reset.css` separately or load granular component styles.
 
@@ -55,9 +55,9 @@ Canonical shared styling is owned by `@vyrnforge/web`. The aggregate `@vyrnforge
 
 Pull requests do not run an arbitrary full suite. CI classifies changed areas, computes reverse product dependencies, selects required validation evidence, expands execution prerequisites, and uploads the resulting validation plan for inspection. Push-triggered Main validation uses the pushed change range through the same impact graph. Known, classified CI/impact infrastructure follows its explicit owner and evidence closure; a change does not broaden merely because it is infrastructure. Unknown or unclassified changes fail closed and broaden, while shared or genuinely repository-wide infrastructure may legitimately have broad impact. Scheduled and release workflows remain deliberately broad safety nets.
 
-For normal local work, use `npm run check:changed`. It compares the current branch and working tree (including untracked files) against `origin/main`, then executes the targeted impact plan. Use `npm run check:changed:plan` to inspect the execution plan without running it. Set `VF_BASE_REF` or pass `--base-ref` when a different reachable comparison base is required. Use `npm run check:full` only for deliberate exhaustive repository validation.
+For normal local work, use `pnpm check:changed`. It compares the current branch and working tree (including untracked files) against `origin/main`, then executes the targeted impact plan. Use `pnpm check:changed:plan` to inspect the execution plan without running it. Set `VF_BASE_REF` or pass `--base-ref` when a different reachable comparison base is required. Use `pnpm check:full` only for deliberate exhaustive repository validation.
 
-Tooling tests are grouped by evidence owner: `npm run test:impact`, `npm run test:testing-tooling`, `npm run test:accessibility-tooling`, and `npm run test:ci-tooling`. `npm run test:tooling` runs those repository-tooling suites together. Component type, SSR, and browser runners remain focused debugging interfaces; normal validation should flow through the impact graph.
+Tooling tests are grouped by evidence owner: `pnpm test:impact`, `pnpm test:testing-tooling`, `pnpm test:accessibility-tooling`, and `pnpm test:ci-tooling`. `pnpm test:tooling` runs those repository-tooling suites together. Component type, SSR, and browser runners remain focused debugging interfaces; normal validation should flow through the impact graph.
 
 Real-browser documentation validation uses Playwright; automated accessibility scans run with axe-core. Packed-package consumer checks install actual tarballs through public entrypoints. Visual and framework-specific SSR/hydration evidence are added only where real rebuilt components and deliberately supported runtimes require them.
 
