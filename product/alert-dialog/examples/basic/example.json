@@ -1,1 +1,1 @@
-{"id":"alert-dialog/basic","title":"Confirmation dialog","description":"Confirm or cancel a consequential action.","defaultFramework":"react","frameworks":{"react":{"label":"React","language":"tsx","source":"react.tsx"}}}
+{"id":"alert-dialog/basic","title":"High-risk shared collection deletion","description":"Review a concrete high-risk destructive action with explicit target, consequence, recovery status, Cancel, and a consequence-specific action label.","defaultFramework":"react","frameworks":{"react":{"label":"React","language":"tsx","source":"react.tsx"}}}
