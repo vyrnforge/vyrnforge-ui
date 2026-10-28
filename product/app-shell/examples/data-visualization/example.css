@@ -1,6 +1,9 @@
 .viz-dashboard {
   display: grid;
   gap: var(--vf-space-lg, 1.5rem);
+  box-sizing: border-box;
+  inline-size: min(72rem, calc(100vw - 2rem));
+  max-inline-size: 100%;
   min-inline-size: 0;
   padding: var(--vf-space-lg, 1.5rem);
 }
