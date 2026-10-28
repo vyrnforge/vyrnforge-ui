@@ -1,9 +1,9 @@
 import { access, readFile } from 'node:fs/promises';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
-import { documentationRegistry } from '../../tooling/docs/registry.mjs';
 import { discoverProductUnits } from '../../tooling/testing/discover-product-units.mjs';
 import { componentUsageGroups } from './component-usage-groups.mjs';
+import { documentationRegistry } from './registry.mjs';
 
 const root = path.resolve(fileURLToPath(new URL('../../', import.meta.url)));
 const channel = process.env.VYRNFORGE_DOCS_CHANNEL || 'next';
