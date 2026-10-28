@@ -1,0 +1,43 @@
+name: Standard Tooling Migration
+
+on:
+  push:
+    branches:
+      - refactor/1051-standard-tooling
+    paths:
+      - tooling/verify/standard-tooling-migration.mjs
+      - .github/workflows/standard-tooling-migration.yml
+
+permissions:
+  contents: write
+
+concurrency:
+  group: standard-tooling-migration
+  cancel-in-progress: false
+
+jobs:
+  migrate:
+    if: github.actor != 'github-actions[bot]'
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          fetch-depth: 0
+          ref: refactor/1051-standard-tooling
+      - uses: actions/setup-node@v7
+        with:
+          node-version-file: .node-version
+      - name: Enable Corepack
+        run: corepack enable
+      - name: Apply standards migration
+        run: node tooling/verify/standard-tooling-migration.mjs
+      - name: Install pnpm workspace and generate lockfile
+        run: pnpm install --ignore-scripts
+      - name: Record migration output
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add -A
+          git commit -m "refactor(tooling): migrate workspace to standard infrastructure"
+          git push origin HEAD:refactor/1051-standard-tooling
