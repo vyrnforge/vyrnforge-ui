@@ -1,0 +1,36 @@
+name: Axe Migration
+
+on:
+  push:
+    branches: [refactor/1051-standard-tooling]
+    paths:
+      - tooling/verify/migrate-axe-playwright.mjs
+      - .github/workflows/axe-migration.yml
+
+permissions:
+  contents: write
+
+concurrency:
+  group: axe-migration
+  cancel-in-progress: true
+
+jobs:
+  migrate:
+    if: github.actor != 'github-actions[bot]'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          ref: refactor/1051-standard-tooling
+      - uses: actions/setup-node@v7
+        with:
+          node-version-file: .node-version
+          package-manager-cache: false
+      - run: node tooling/verify/migrate-axe-playwright.mjs
+      - run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add product
+          if git diff --cached --quiet; then exit 0; fi
+          git commit -m "refactor(testing): use @axe-core/playwright"
+          git push origin HEAD:refactor/1051-standard-tooling
