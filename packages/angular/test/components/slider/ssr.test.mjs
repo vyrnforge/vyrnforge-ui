@@ -1,2 +1,3 @@
-import { registerAngularNativeControlSsrTest } from '../../../../../tooling/testing/native-control-ssr.mjs';
-await registerAngularNativeControlSsrTest('slider');
+import { registerAngularNativeControlSsrChecks } from '../../../../../product/_test-support/native-controls/native-control-ssr.mjs';
+
+registerAngularNativeControlSsrChecks('slider');
