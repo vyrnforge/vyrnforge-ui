@@ -48,6 +48,9 @@ test('STD-22 trend distinguishes missing and estimated data and preserves an exa
   await expect(trendTable).toBeVisible();
   await expect(missingRow).toContainText('Missing observation');
   await expect(estimateRow).toContainText('82%–88%');
+  const trendDataRegion = page.getByLabel('Scrollable weekly completion rate data');
+  await trendDataRegion.focus();
+  await expect(trendDataRegion).toBeFocused();
   await expectNoPageInlineOverflow(page);
   await attachScreenshot(page, testInfo, 'visualization-reflow-320');
 
@@ -70,6 +73,9 @@ test('STD-22 categorical comparison uses a zero-based magnitude encoding and loc
   await expect(comparisonTable).toBeVisible();
   await expect(comparisonTable.getByRole('row', { name: /Web/ })).toContainText('1.248');
   await expect(comparisonTable.getByRole('row', { name: /Partner/ })).toContainText('936');
+  const comparisonDataRegion = page.getByLabel('Scrollable completed order counts by channel');
+  await comparisonDataRegion.focus();
+  await expect(comparisonDataRegion).toBeFocused();
   await expectNoPageInlineOverflow(page);
 
   await page.addScriptTag({ content: axeCore.source });
