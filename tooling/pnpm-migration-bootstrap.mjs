@@ -1,4 +1,4 @@
-import { readFile, writeFile, readdir, rm } from 'node:fs/promises';
+import { readFile, writeFile, rm } from 'node:fs/promises';
 import path from 'node:path';
 
 const packageNames = ['core', 'web', 'icons', 'react', 'angular', 'vue', 'elements'];
@@ -27,20 +27,6 @@ for (const name of packageNames) {
 
 await writeFile('pnpm-workspace.yaml', `packages:\n${workspacePaths.map((item) => `  - ${item}`).join('\n')}\n`);
 await rm('package-lock.json', { force: true });
-
-for (const entry of await readdir('.github/workflows')) {
-  if (!entry.endsWith('.yml') || entry === 'pnpm-migration-runner.yml') continue;
-  const file = path.join('.github/workflows', entry);
-  let source = await readFile(file, 'utf8');
-  source = source
-    .replace(/^\s*cache: npm\s*$/gm, '')
-    .replace(/node-version-file: \.node-version\n(?!\s*package-manager-cache:)/g, 'node-version-file: .node-version\n          package-manager-cache: false\n')
-    .replace(/(      - (?:name: Setup Node\n        )?uses: actions\/setup-node@v7\n        with:\n(?:          .+\n)+)(?!      - name: Enable pinned pnpm)/g, '$1      - name: Enable pinned pnpm\n        run: |\n          corepack enable\n          corepack install --global pnpm@12.16.1\n')
-    .replace(/npm ci --ignore-scripts(?: --no-audit)?(?: --no-fund)?/g, 'pnpm install --frozen-lockfile --ignore-scripts')
-    .replace(/npm run ([A-Za-z0-9:_-]+)/g, 'pnpm $1')
-    .replaceAll('npx playwright', 'pnpm exec playwright');
-  await writeFile(file, source);
-}
 
 for (const file of ['README.md', 'CONTRIBUTING.md', 'AGENTS.md']) {
   let source = await readFile(file, 'utf8');
