@@ -21,7 +21,7 @@ test('STD-22 trend distinguishes missing and estimated data and preserves an exa
   test.skip(port !== 'react', 'STD-22 representative consumer evidence is intentionally verified through the React public AppShell entrypoint.');
 
   await page.setViewportSize({ width: 1280, height: 900 });
-  await page.goto('/next/app-shell-fixtures/data-visualization-react.html');
+  await page.goto('/components/app-shell/data-visualization-react.html');
 
   await expect(page.getByRole('heading', { name: 'Weekly completion rate, 6 Jul–24 Aug 2026' })).toBeVisible();
   await expect(page.getByText('Completion increased from 71% to an estimated 85%; the 20 Jul observation is missing, and the 24 Aug estimate ranges from 82% to 88%.', { exact: true })).toBeVisible();
@@ -65,7 +65,7 @@ test('STD-22 categorical comparison uses a zero-based magnitude encoding and loc
   test.skip(port !== 'react', 'STD-22 representative consumer evidence is intentionally verified through the React public AppShell entrypoint.');
 
   await page.setViewportSize({ width: 960, height: 900 });
-  await page.goto('/next/app-shell-fixtures/data-visualization-react.html?locale=de-DE');
+  await page.goto('/components/app-shell/data-visualization-react.html?locale=de-DE');
 
   await expect(page.locator('[data-example-locale="de-DE"]')).toHaveCount(1);
   await expect(page.getByRole('heading', { name: 'Completed orders by channel' })).toBeVisible();
