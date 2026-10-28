@@ -32,6 +32,8 @@
     "verify:package-contracts": "node tooling/verify/package-contracts.mjs",
     "verify:compatibility": "node tooling/verify/compatibility.mjs",
     "verify:workflows": "node tooling/verify/workflows.mjs",
+    "verify:api": "node tooling/verify/api-reports.mjs",
+    "verify:api:update": "node tooling/verify/api-reports.mjs --local",
     "verify:packages": "node tooling/verify/package-artifacts.mjs",
     "impact:plan": "node tooling/impact/plan.mjs",
     "changeset": "changeset",
