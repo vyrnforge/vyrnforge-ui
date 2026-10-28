@@ -1,6 +1,6 @@
 import { readdir, readFile } from 'node:fs/promises';
 import path from 'node:path';
-import { verifyPublicCssTokenReferences } from './public-css-token-references.mjs';
+import { verifyPublicCssVariableReferences } from './public-css-token-references.mjs';
 
 const packageNames = ['core', 'web', 'icons', 'react', 'angular', 'vue', 'elements'];
 const portNames = ['react', 'angular', 'vue', 'elements'];
@@ -15,7 +15,7 @@ if (JSON.stringify(coreTsconfig.compilerOptions?.lib) !== JSON.stringify(['ES202
 const expectedLayerOrder = '@layer vyrnforge.reset, vyrnforge.tokens, vyrnforge.themes, vyrnforge.foundation, vyrnforge.components;';
 const webCss = (await readFile('packages/web/src/styles.css', 'utf8')).trim();
 if (!webCss.startsWith(expectedLayerOrder)) throw new Error('@vyrnforge/web must own the canonical documented cascade-layer order');
-await verifyPublicCssTokenReferences();
+await verifyPublicCssVariableReferences();
 
 async function walk(directory) {
   const entries = await readdir(directory, { withFileTypes: true });
