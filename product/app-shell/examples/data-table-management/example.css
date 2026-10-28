@@ -1,0 +1,86 @@
+@import "@vyrnforge/web/styles/tokens.css";
+
+.table-example-main {
+  box-sizing: border-box;
+  display: grid;
+  gap: var(--vf-space-lg);
+  inline-size: 100%;
+  min-inline-size: 0;
+  padding: var(--vf-space-lg);
+}
+
+.table-toolbar,
+.table-actions {
+  align-items: center;
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--vf-space-sm);
+}
+
+.table-toolbar label {
+  font-weight: var(--vf-font-weight-semibold);
+}
+
+.table-scroll {
+  border: 1px solid var(--vf-color-border);
+  border-radius: var(--vf-radius-surface);
+  max-inline-size: 100%;
+  overflow-x: auto;
+}
+
+.table-scroll:focus-visible {
+  outline: 2px solid var(--vf-color-focus-ring);
+  outline-offset: 2px;
+}
+
+table {
+  border-collapse: collapse;
+  inline-size: 100%;
+  min-inline-size: 34rem;
+}
+
+caption {
+  font-weight: var(--vf-font-weight-semibold);
+  padding: var(--vf-space-md);
+  text-align: start;
+}
+
+th,
+td {
+  border-block-start: 1px solid var(--vf-color-border);
+  padding: var(--vf-space-sm) var(--vf-space-md);
+  text-align: start;
+  vertical-align: middle;
+}
+
+thead th {
+  background: var(--vf-color-surface-subtle);
+}
+
+.selection-cell {
+  inline-size: 3rem;
+  text-align: center;
+}
+
+.grid-decision-note {
+  border-inline-start: 0.25rem solid var(--vf-color-border-strong);
+  padding-inline-start: var(--vf-space-md);
+}
+
+@media (max-width: 30rem) {
+  .table-example-main {
+    gap: var(--vf-space-md);
+    padding: var(--vf-space-md);
+  }
+
+  .table-toolbar,
+  .table-actions {
+    align-items: stretch;
+    flex-direction: column;
+  }
+
+  .table-toolbar > *,
+  .table-actions > * {
+    max-inline-size: 100%;
+  }
+}
