@@ -4,7 +4,7 @@ import axeCore from 'axe-core';
 const port = process.env.VF_COMPONENT_PORT || 'web';
 
 test('Surface provides the same visual boundary without implicit layout across ports', async ({ page }) => {
-  await page.goto(`/next/surface-fixtures/${port}.html`);
+  await page.goto(`/components/surface/${port}.html`);
 
   const surface = page.locator('#surface');
   await expect(surface).toHaveAttribute('data-vf-surface', '');

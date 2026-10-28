@@ -3,7 +3,7 @@ import path from 'node:path';
 
 const port = process.argv[2] || 'web';
 const root = process.cwd();
-const outDir = path.join(root, 'dist/docs/next/separator-fixtures');
+const outDir = path.join(root, 'dist/browser-fixtures/components/separator');
 await mkdir(outDir, { recursive: true });
 const tokensCss = await readFile(path.join(root, 'packages/web/dist/styles/tokens.css'), 'utf8');
 const separatorCss = (await readFile(path.join(root, 'packages/web/dist/components/separator/separator.css'), 'utf8')).replace('@import "../../styles/tokens.css";\n', '');
