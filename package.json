@@ -55,7 +55,8 @@
     "test:testing-tooling": "node --test tooling/testing/component-browser-config.test.mjs",
     "test:accessibility-tooling": "node --test tooling/testing/accessibility/component-standards.test.mjs",
     "test:ci-tooling": "node --test tooling/ci/retention.test.mjs",
-    "test:tooling": "npm run test:impact && npm run test:testing-tooling && npm run test:accessibility-tooling && npm run test:ci-tooling"
+    "test:verification-tooling": "node --test tooling/verify/public-css-token-references.test.mjs",
+    "test:tooling": "npm run test:impact && npm run test:testing-tooling && npm run test:accessibility-tooling && npm run test:ci-tooling && npm run test:verification-tooling"
   },
   "devDependencies": {
     "@angular/common": "22.2.3", "@angular/compiler": "22.2.3", "@angular/compiler-cli": "22.2.3", "@angular/core": "22.2.3", "@angular/platform-browser": "22.2.3", "@angular/platform-server": "22.2.3",
