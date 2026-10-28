@@ -79,4 +79,18 @@ if (port === 'react') {
     path.join(dir, 'privacy-controls-react.html'),
     '<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width"><title>Privacy controls fixture</title><link rel="stylesheet" href="./privacy-controls-react.css"><style>html,body{margin:0;min-block-size:100%;}</style></head><body><div id="root"></div><script type="module" src="./privacy-controls-react.js"></script></body></html>',
   );
+
+  const visualizationEntry = path.join(root, 'product/app-shell/examples/data-visualization/react.tsx');
+  await build({
+    entryPoints: [visualizationEntry],
+    bundle: true,
+    format: 'esm',
+    platform: 'browser',
+    outdir: dir,
+    entryNames: 'data-visualization-react',
+  });
+  await writeFile(
+    path.join(dir, 'data-visualization-react.html'),
+    '<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width"><title>Data visualization fixture</title><link rel="stylesheet" href="./data-visualization-react.css"><style>html,body{margin:0;min-block-size:100%;}</style></head><body><div id="root"></div><script type="module" src="./data-visualization-react.js"></script></body></html>',
+  );
 }
