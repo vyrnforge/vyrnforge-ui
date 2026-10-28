@@ -1,0 +1,109 @@
+.perf-main {
+  box-sizing: border-box;
+  inline-size: min(100%, 76rem);
+  min-inline-size: 0;
+  margin-inline: auto;
+  padding: var(--vf-space-lg);
+}
+
+.perf-heading,
+.perf-section-heading,
+.perf-actions {
+  display: flex;
+  gap: var(--vf-space-md);
+  align-items: flex-start;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  min-inline-size: 0;
+}
+
+.perf-heading > *,
+.perf-section-heading > *,
+.perf-actions > * {
+  min-inline-size: 0;
+}
+
+.perf-heading { margin-block-end: var(--vf-space-lg); }
+.perf-heading h1,
+.perf-panel h2 { margin-block-start: 0; }
+
+.perf-badge {
+  border: 1px solid var(--vf-color-border-strong);
+  border-radius: var(--vf-control-radius);
+  padding: var(--vf-space-xs) var(--vf-space-sm);
+  background: var(--vf-color-surface-subtle);
+  font-weight: 600;
+}
+
+.perf-panel {
+  box-sizing: border-box;
+  min-inline-size: 0;
+  max-inline-size: 100%;
+  margin-block: var(--vf-space-md);
+  padding: var(--vf-space-lg);
+  border: 1px solid var(--vf-color-border);
+  border-radius: var(--vf-radius-surface);
+  background: var(--vf-color-surface);
+}
+
+.perf-panel label {
+  display: block;
+  margin-block: var(--vf-space-sm) var(--vf-space-xs);
+  font-weight: 600;
+}
+
+.perf-panel textarea {
+  box-sizing: border-box;
+  inline-size: 100%;
+  min-inline-size: 0;
+  max-inline-size: 100%;
+}
+
+.perf-actions { justify-content: flex-start; align-items: center; }
+
+.perf-table-wrap {
+  max-inline-size: 100%;
+  overflow-x: auto;
+}
+
+.perf-table-wrap table {
+  inline-size: 100%;
+  border-collapse: collapse;
+}
+
+.perf-table-wrap caption {
+  text-align: start;
+  margin-block-end: var(--vf-space-sm);
+}
+
+.perf-table-wrap th,
+.perf-table-wrap td {
+  padding: var(--vf-space-sm);
+  border-block-end: 1px solid var(--vf-color-border);
+  text-align: start;
+}
+
+.perf-motion {
+  display: inline-block;
+  padding: var(--vf-space-sm) var(--vf-space-md);
+  border-radius: var(--vf-control-radius);
+  background: var(--vf-color-surface-subtle);
+  transform: translateX(0);
+  opacity: 1;
+  transition: transform 160ms ease, opacity 160ms ease;
+}
+
+.perf-motion:hover,
+.perf-motion:focus-within {
+  transform: translateX(var(--vf-space-xs));
+  opacity: .82;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .perf-motion { transition: none; }
+}
+
+@media (max-width: 40rem) {
+  .perf-main { padding: var(--vf-space-md); }
+  .perf-panel { padding: var(--vf-space-md); }
+}
