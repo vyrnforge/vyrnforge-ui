@@ -32,6 +32,7 @@ if (port === 'react') {
     ['data-visualization', 'Data visualization fixture'],
     ['ai-assisted-reply', 'AI-assisted reply fixture'],
     ['data-table-management', 'Native table management fixture'],
+    ['foundation-density', 'Foundation density fixture'],
   ];
 
   for (const [name, title] of examples) {

@@ -1,6 +1,19 @@
 @import "./tokens.css";
 
 @layer vyrnforge.foundation {
+  :root,
+  :where([data-vf-density="comfortable"]) {
+    --_vf-density-control-height-sm: var(--vf-control-height-sm);
+    --_vf-density-control-height-md: var(--vf-control-height-md);
+    --_vf-density-control-height-lg: var(--vf-control-height-lg);
+  }
+
+  :where([data-vf-density="compact"]) {
+    --_vf-density-control-height-sm: var(--vf-control-height-sm);
+    --_vf-density-control-height-md: var(--vf-control-height-sm);
+    --_vf-density-control-height-lg: var(--vf-control-height-md);
+  }
+
   :where([data-vf-visually-hidden]) {
     border: 0;
     block-size: 1px;
