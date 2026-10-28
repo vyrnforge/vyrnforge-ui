@@ -1,3 +1,2 @@
-import { registerAngularNativeControlSsrChecks } from '../../../../../product/_test-support/native-controls/native-control-ssr.mjs';
-
-registerAngularNativeControlSsrChecks('toggle-button');
+import { registerAngularNativeControlSsrTest } from '../../../../../product/_test-support/native-controls/native-control-ssr.mjs';
+await registerAngularNativeControlSsrTest('toggle-button');

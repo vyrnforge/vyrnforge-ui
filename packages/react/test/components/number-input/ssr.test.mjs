@@ -1,3 +1,2 @@
-import { registerReactNativeControlSsrChecks } from '../../../../../product/_test-support/native-controls/native-control-ssr.mjs';
-
-registerReactNativeControlSsrChecks('number-input');
+import { registerReactNativeControlSsrTest } from '../../../../../product/_test-support/native-controls/native-control-ssr.mjs';
+await registerReactNativeControlSsrTest('number-input');
