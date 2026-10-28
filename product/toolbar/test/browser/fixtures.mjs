@@ -4,7 +4,7 @@ import { build } from 'esbuild';
 
 const port = process.argv[2] || 'react';
 const root = process.cwd();
-const outDir = path.join(root, 'dist/docs/next/toolbar-fixtures');
+const outDir = path.join(root, 'dist/browser-fixtures/components/toolbar');
 await mkdir(outDir, { recursive: true });
 
 const toolbarCss = await readFile(path.join(root, 'packages/web/dist/components/toolbar/toolbar.css'), 'utf8');

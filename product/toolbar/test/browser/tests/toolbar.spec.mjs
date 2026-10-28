@@ -8,7 +8,7 @@ async function openFixture(page) {
   const errors = [];
   page.on('console', (message) => { if (message.type() === 'error') errors.push(message.text()); });
   page.on('pageerror', (error) => errors.push(error.message));
-  await page.goto(`/next/toolbar-fixtures/${port}.html`);
+  await page.goto(`/components/toolbar/${port}.html`);
   if (runtimePort) await expect.poll(() => page.locator('#bold').getAttribute('tabindex')).toBe('0');
   return errors;
 }
