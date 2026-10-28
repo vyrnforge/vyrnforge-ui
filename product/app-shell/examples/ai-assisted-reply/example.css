@@ -1,5 +1,7 @@
 .ai-example-main {
+  box-sizing: border-box;
   inline-size: min(100%, 72rem);
+  min-inline-size: 0;
   margin-inline: auto;
   padding: var(--vf-space-lg);
 }
@@ -12,6 +14,13 @@
   align-items: flex-start;
   justify-content: space-between;
   flex-wrap: wrap;
+  min-inline-size: 0;
+}
+
+.ai-heading > *,
+.ai-section-heading > *,
+.ai-actions > * {
+  min-inline-size: 0;
 }
 
 .ai-heading {
@@ -34,6 +43,9 @@
 
 .ai-panel,
 .ai-review {
+  box-sizing: border-box;
+  min-inline-size: 0;
+  max-inline-size: 100%;
   margin-block: var(--vf-space-md);
   padding: var(--vf-space-lg);
   border: 1px solid var(--vf-color-border);
@@ -53,7 +65,10 @@
 }
 
 .ai-panel textarea {
+  box-sizing: border-box;
   inline-size: 100%;
+  min-inline-size: 0;
+  max-inline-size: 100%;
   min-block-size: 8rem;
 }
 
@@ -68,15 +83,19 @@
 .ai-source-list {
   display: grid;
   gap: var(--vf-space-sm);
+  min-inline-size: 0;
   padding-inline-start: 1.25rem;
 }
 
-.ai-source-list li:focus-visible {
-  outline: 2px solid var(--vf-color-focus-ring);
-  outline-offset: 2px;
+.ai-source-list li {
+  min-inline-size: 0;
+  overflow-wrap: anywhere;
 }
 
 .ai-review-draft {
+  box-sizing: border-box;
+  min-inline-size: 0;
+  max-inline-size: 100%;
   white-space: pre-wrap;
   overflow-wrap: anywhere;
   padding: var(--vf-space-md);
