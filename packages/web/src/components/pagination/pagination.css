@@ -1,1 +1,45 @@
-@layer vyrnforge.components{[data-vf-pagination-root]{display:flex;align-items:center;gap:var(--vf-space-1)}[data-vf-pagination-item],[data-vf-pagination-previous],[data-vf-pagination-next]{display:inline-flex;min-inline-size:2.25rem;min-block-size:2.25rem;align-items:center;justify-content:center;padding:0 var(--vf-space-2);border:1px solid var(--vf-color-border);border-radius:var(--vf-radius-control);color:inherit;text-decoration:none}[data-vf-pagination-item][aria-current='page']{background:var(--vf-color-accent);color:var(--vf-color-on-accent)}}
+@import "../../styles/tokens.css";
+
+@layer vyrnforge.components {
+  :where([data-vf-pagination-root]) {
+    align-items: center;
+    display: flex;
+    gap: var(--vf-space-xs);
+  }
+
+  :where([data-vf-pagination-item], [data-vf-pagination-previous], [data-vf-pagination-next]) {
+    align-items: center;
+    border: 1px solid var(--vf-color-border);
+    border-radius: var(--vf-control-radius);
+    color: inherit;
+    display: inline-flex;
+    justify-content: center;
+    min-block-size: 2.25rem;
+    min-inline-size: 2.25rem;
+    padding-inline: var(--vf-space-sm);
+    text-decoration: none;
+  }
+
+  :where([data-vf-pagination-item][aria-current="page"]) {
+    background: var(--vf-color-accent-background);
+    border-color: var(--vf-color-accent-background);
+    color: var(--vf-color-accent-foreground);
+  }
+
+  :where([data-vf-pagination-item], [data-vf-pagination-previous], [data-vf-pagination-next]):focus-visible {
+    outline: 2px solid var(--vf-color-focus-ring);
+    outline-offset: 2px;
+  }
+
+  @media (forced-colors: active) {
+    :where([data-vf-pagination-item][aria-current="page"]) {
+      background: Highlight;
+      border-color: Highlight;
+      color: HighlightText;
+    }
+
+    :where([data-vf-pagination-item], [data-vf-pagination-previous], [data-vf-pagination-next]):focus-visible {
+      outline-color: Highlight;
+    }
+  }
+}

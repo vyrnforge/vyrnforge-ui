@@ -1,4 +1,7 @@
 import { cp, copyFile, mkdir } from 'node:fs/promises';
+import { verifyPublicCssVariableReferences } from './verify-css-token-references.mjs';
+
+await verifyPublicCssVariableReferences();
 
 const dist = new URL('../dist/', import.meta.url);
 await mkdir(dist, { recursive: true });
