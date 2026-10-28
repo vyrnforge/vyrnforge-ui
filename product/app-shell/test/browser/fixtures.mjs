@@ -93,4 +93,18 @@ if (port === 'react') {
     path.join(dir, 'data-visualization-react.html'),
     '<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width"><title>Data visualization fixture</title><link rel="stylesheet" href="./data-visualization-react.css"><style>html,body{margin:0;min-block-size:100%;}</style></head><body><div id="root"></div><script type="module" src="./data-visualization-react.js"></script></body></html>',
   );
+
+  const aiReplyEntry = path.join(root, 'product/app-shell/examples/ai-assisted-reply/react.tsx');
+  await build({
+    entryPoints: [aiReplyEntry],
+    bundle: true,
+    format: 'esm',
+    platform: 'browser',
+    outdir: dir,
+    entryNames: 'ai-assisted-reply-react',
+  });
+  await writeFile(
+    path.join(dir, 'ai-assisted-reply-react.html'),
+    '<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width"><title>AI-assisted reply fixture</title><link rel="stylesheet" href="./ai-assisted-reply-react.css"><style>html,body{margin:0;min-block-size:100%;}</style></head><body><div id="root"></div><script type="module" src="./ai-assisted-reply-react.js"></script></body></html>',
+  );
 }

@@ -1,0 +1,117 @@
+.ai-example-main {
+  box-sizing: border-box;
+  inline-size: min(100%, 72rem);
+  min-inline-size: 0;
+  margin-inline: auto;
+  padding: var(--vf-space-lg);
+}
+
+.ai-heading,
+.ai-section-heading,
+.ai-actions {
+  display: flex;
+  gap: var(--vf-space-md);
+  align-items: flex-start;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  min-inline-size: 0;
+}
+
+.ai-heading > *,
+.ai-section-heading > *,
+.ai-actions > * {
+  min-inline-size: 0;
+}
+
+.ai-heading {
+  margin-block-end: var(--vf-space-lg);
+}
+
+.ai-heading h1,
+.ai-panel h2,
+.ai-review h2 {
+  margin-block-start: 0;
+}
+
+.ai-disclosure {
+  border: 1px solid var(--vf-color-border-strong);
+  border-radius: var(--vf-control-radius);
+  padding: var(--vf-space-xs) var(--vf-space-sm);
+  background: var(--vf-color-surface-subtle);
+  font-weight: 600;
+}
+
+.ai-panel,
+.ai-review {
+  box-sizing: border-box;
+  min-inline-size: 0;
+  max-inline-size: 100%;
+  margin-block: var(--vf-space-md);
+  padding: var(--vf-space-lg);
+  border: 1px solid var(--vf-color-border);
+  border-radius: var(--vf-radius-surface);
+  background: var(--vf-color-surface);
+}
+
+.ai-review {
+  border-color: var(--vf-color-border-strong);
+}
+
+.ai-panel label,
+.ai-review label {
+  display: block;
+  margin-block: var(--vf-space-sm) var(--vf-space-xs);
+  font-weight: 600;
+}
+
+.ai-panel textarea {
+  box-sizing: border-box;
+  inline-size: 100%;
+  min-inline-size: 0;
+  max-inline-size: 100%;
+  min-block-size: 8rem;
+}
+
+#ai-draft {
+  min-block-size: 13rem;
+}
+
+.ai-actions {
+  justify-content: flex-start;
+}
+
+.ai-source-list {
+  display: grid;
+  gap: var(--vf-space-sm);
+  min-inline-size: 0;
+  padding-inline-start: 1.25rem;
+}
+
+.ai-source-list li {
+  min-inline-size: 0;
+  overflow-wrap: anywhere;
+}
+
+.ai-review-draft {
+  box-sizing: border-box;
+  min-inline-size: 0;
+  max-inline-size: 100%;
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+  padding: var(--vf-space-md);
+  border: 1px solid var(--vf-color-border);
+  border-radius: var(--vf-control-radius);
+  background: var(--vf-color-surface-subtle);
+  font: inherit;
+}
+
+@media (max-width: 40rem) {
+  .ai-example-main {
+    padding: var(--vf-space-md);
+  }
+
+  .ai-panel,
+  .ai-review {
+    padding: var(--vf-space-md);
+  }
+}
