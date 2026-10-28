@@ -2,8 +2,9 @@ import { createReadStream } from 'node:fs';
 import { stat } from 'node:fs/promises';
 import { createServer } from 'node:http';
 import path from 'node:path';
+import { fileURLToPath } from 'node:url';
 
-const root = path.resolve('dist/docs');
+const root = path.resolve(fileURLToPath(new URL('../../dist/docs/', import.meta.url)));
 const host = '127.0.0.1';
 const port = Number(process.env.VYRNFORGE_DOCS_PORT || 4173);
 const types = new Map([
