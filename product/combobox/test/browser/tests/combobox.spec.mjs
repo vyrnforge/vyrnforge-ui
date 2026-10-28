@@ -14,7 +14,7 @@ async function expectAxeClean(page) {
 }
 
 test('combobox exposes the editable input/listbox relationship', async ({ page }) => {
-  await page.goto(`/next/combobox-fixtures/${port}.html`);
+  await page.goto(`/components/combobox/${port}.html`);
   const input = page.getByRole('combobox', { name: 'Framework' });
   await expect(input).toBeVisible();
   await expect(input).toHaveAttribute('aria-autocomplete', 'list');
@@ -33,7 +33,7 @@ test.describe('enhanced combobox interaction', () => {
     const errors = [];
     page.on('console', (message) => { if (message.type() === 'error') errors.push(message.text()); });
     page.on('pageerror', (error) => errors.push(error.message));
-    await page.goto(`/next/combobox-fixtures/${port}.html`);
+    await page.goto(`/components/combobox/${port}.html`);
 
     const input = page.getByRole('combobox', { name: 'Framework' });
     const first = page.locator(`#${port}-react`);
@@ -65,7 +65,7 @@ test.describe('enhanced combobox interaction', () => {
   });
 
   test('filters authored options, starts Up Arrow at the last enabled match, and dismisses with Escape', async ({ page }) => {
-    await page.goto(`/next/combobox-fixtures/${port}.html`);
+    await page.goto(`/components/combobox/${port}.html`);
     const input = page.getByRole('combobox', { name: 'Framework' });
     const react = page.locator(`#${port}-react`);
     const vue = page.locator(`#${port}-vue`);
@@ -88,7 +88,7 @@ test.describe('enhanced combobox interaction', () => {
   });
 
   test('uses the declared locale for case-sensitive language rules', async ({ page }) => {
-    await page.goto(`/next/combobox-fixtures/${port}.html`);
+    await page.goto(`/components/combobox/${port}.html`);
     const input = page.getByRole('combobox', { name: 'Turkish city' });
     const istanbul = page.locator(`#${port}-locale-istanbul`);
     const isparta = page.locator(`#${port}-locale-isparta`);
@@ -99,7 +99,7 @@ test.describe('enhanced combobox interaction', () => {
   });
 
   test('does not run navigation, selection, or dismissal commands during composition', async ({ page }) => {
-    await page.goto(`/next/combobox-fixtures/${port}.html`);
+    await page.goto(`/components/combobox/${port}.html`);
     const input = page.getByRole('combobox', { name: 'Framework' });
     const vue = page.locator(`#${port}-vue`);
 
@@ -132,7 +132,7 @@ test.describe('enhanced combobox interaction', () => {
   });
 
   test('keeps popup options out of the page Tab sequence', async ({ page }) => {
-    await page.goto(`/next/combobox-fixtures/${port}.html`);
+    await page.goto(`/components/combobox/${port}.html`);
     const before = page.locator('#before');
     const input = page.getByRole('combobox', { name: 'Framework' });
     const localeInput = page.getByRole('combobox', { name: 'Turkish city' });
