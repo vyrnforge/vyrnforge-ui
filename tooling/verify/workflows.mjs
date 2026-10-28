@@ -28,7 +28,11 @@ function requireReadOnlyContents(source, label) {
 
 for (const label of ['pr', 'main', 'scheduled', 'release']) {
   requireReadOnlyContents(sources[label], label);
-  requireText(sources[label], 'npm ci', `${label} must install the committed dependency graph with npm ci`);
+  requireText(sources[label], 'package-manager-cache: false', `${label} must not implicitly cache a package manager before the pinned pnpm toolchain is activated`);
+  requireText(sources[label], 'corepack enable', `${label} must enable Corepack before using pnpm`);
+  requireText(sources[label], 'corepack install --global pnpm@12.16.1', `${label} must activate the repository-pinned pnpm version`);
+  requireText(sources[label], 'pnpm install --frozen-lockfile --ignore-scripts', `${label} must install the committed dependency graph with a frozen pnpm lockfile`);
+  forbidText(sources[label], 'npm ci', `${label} must not use the retired npm workspace install path`);
   forbidText(sources[label], 'git push', `${label} validation must not mutate source refs`);
 }
 
@@ -60,8 +64,10 @@ requireText(sources.docs, "run.conclusion !== 'success'", 'Documentation Pages m
 requireText(sources.docs, 'run.head_sha !== expectedHeadSha', 'Documentation Pages must verify artifact commit lineage');
 requireText(sources.docs, 'deploy-pages', 'Documentation Pages must deploy through the Pages deployment action');
 forbidText(sources.docs, 'actions/checkout@', 'Documentation Pages promotion must not rebuild from repository source');
-forbidText(sources.docs, 'npm ci', 'Documentation Pages promotion must not reinstall the toolchain');
-forbidText(sources.docs, 'npm run build:docs', 'Documentation Pages promotion must not rebuild validated docs');
+forbidText(sources.docs, 'npm ci', 'Documentation Pages promotion must not reinstall the retired npm toolchain');
+forbidText(sources.docs, 'pnpm install', 'Documentation Pages promotion must not reinstall the validated pnpm toolchain');
+forbidText(sources.docs, 'npm run build:docs', 'Documentation Pages promotion must not rebuild validated docs through npm');
+forbidText(sources.docs, 'pnpm build:docs', 'Documentation Pages promotion must not rebuild validated docs through pnpm');
 
 requireReadOnlyContents(sources.retention, 'Actions Retention');
 requireText(sources.retention, 'pull_request_target:', 'Actions Retention must react to merged pull requests');
@@ -70,6 +76,7 @@ requireText(sources.retention, 'workflow_dispatch:', 'Actions Retention must sup
 requireText(sources.retention, 'actions: write', 'Actions Retention needs narrowly scoped Actions write access');
 requireText(sources.retention, 'github.event.repository.default_branch', 'Actions Retention must execute trusted default-branch code');
 requireText(sources.retention, 'tooling/ci/retention-cleanup.mjs', 'Actions Retention must use the maintained cleanup implementation');
-forbidText(sources.retention, 'npm ci', 'Actions Retention must not install the product dependency graph');
+forbidText(sources.retention, 'npm ci', 'Actions Retention must not install the retired npm product dependency graph');
+forbidText(sources.retention, 'pnpm install', 'Actions Retention must not install the product dependency graph');
 
-process.stdout.write('workflow contracts: security, trigger, validation-mode, artifact-lineage, and mutation boundaries ok\n');
+process.stdout.write('workflow contracts: security, trigger, pnpm bootstrap, validation-mode, artifact-lineage, and mutation boundaries ok\n');
