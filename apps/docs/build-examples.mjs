@@ -7,6 +7,10 @@ import { compileFrameworkExample, frameworkCompilerOptions, publicPackageAliases
 function safeName(value) { return value.replace(/[^a-z0-9]+/gi, '-').replace(/^-|-$/g, '').toLowerCase(); }
 function escapeHtml(value) { return String(value).replaceAll('&', '&amp;').replaceAll('<', '&lt;').replaceAll('"', '&quot;'); }
 
+export function runtimeResolveDirectory(sourcePath) {
+  return path.dirname(sourcePath);
+}
+
 async function discoverExampleManifests(root) {
   const manifests = [];
   for (const component of discoverProductUnits(root).components) {
@@ -23,7 +27,7 @@ async function discoverExampleManifests(root) {
   return manifests.sort((a, b) => a.manifestPath.localeCompare(b.manifestPath));
 }
 
-function importAnalysis(source) {
+export function importAnalysis(source) {
   const sourceStatements = source.match(/^\s*import\s+(?:[^'"\n]+?\s+from\s+)?['"][^'"\n]+['"];?\s*$/gm) ?? [];
   const statements = [];
   const imports = [];
@@ -62,10 +66,10 @@ async function buildTypeScriptCompiler(assetRoot) {
   await build({ stdin: { resolveDir: process.cwd(), sourcefile: 'vyrnforge-docs-typescript.ts', contents: `import * as ts from 'typescript'; globalThis.__vfDocsTypeScript = ts;` }, bundle: true, format: 'iife', platform: 'browser', target: ['es2022'], minify: true, legalComments: 'none', outfile: path.join(assetRoot, 'typescript.js') });
 }
 
-async function buildRuntime({ assetRoot, key, framework, analysis, aliases, sourceDirectory }) {
+async function buildRuntime({ assetRoot, key, framework, analysis, aliases, sourcePath }) {
   const filename = `runtime-${key}-${framework}.js`;
   const contents = `${analysis.statements.join('\n')}\nglobalThis.__vfRuntime = { ${analysis.bindings.join(', ')} };`;
-  await build({ stdin: { resolveDir: sourceDirectory, sourcefile: `docs-runtime-${key}-${framework}.ts`, contents }, alias: aliases, bundle: true, format: 'iife', platform: 'browser', target: ['es2022'], minify: true, legalComments: 'none', tsconfigRaw: { compilerOptions: frameworkCompilerOptions(framework) }, outfile: path.join(assetRoot, filename) });
+  await build({ stdin: { resolveDir: runtimeResolveDirectory(sourcePath), sourcefile: `docs-runtime-${key}-${framework}.ts`, loader: 'ts', contents }, alias: aliases, bundle: true, format: 'iife', platform: 'browser', target: ['es2022'], minify: true, legalComments: 'none', tsconfigRaw: { compilerOptions: frameworkCompilerOptions(framework) }, outfile: path.join(assetRoot, filename) });
   return `assets/examples/${filename}`;
 }
 
@@ -110,7 +114,7 @@ export async function buildDocumentationExamples({ root, channelRoot }) {
         await writeFile(previewPath, previewDocument({ rootMarkup: `<main class="vf-example-root">${source}</main>`, stylesHref, frameCssHref }));
       } else {
         analysis = importAnalysis(source);
-        runtime = await buildRuntime({ assetRoot, key, framework, analysis, aliases, sourceDirectory: directory });
+        runtime = await buildRuntime({ assetRoot, key, framework, analysis, aliases, sourcePath });
         const compiledFilename = `${key}-${framework}.js`;
         await compileFrameworkExample({ root, framework, sourcePath, outputPath: path.join(compiledRoot, compiledFilename), aliases });
         const rootMarkup = framework === 'angular' ? '<vf-example-root id="root" class="vf-example-root"></vf-example-root>' : '<main id="root" class="vf-example-root"></main>';
