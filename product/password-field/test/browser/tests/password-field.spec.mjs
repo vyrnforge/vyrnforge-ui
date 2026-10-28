@@ -4,7 +4,7 @@ import axeCore from 'axe-core';
 const port = process.env.VF_COMPONENT_PORT || 'react';
 
 test('password field toggles visibility accessibly', async ({ page }) => {
-  await page.goto(`/next/password-field-fixtures/${port}.html`);
+  await page.goto(`/components/password-field/${port}.html`);
   await page.locator('#toggle').click();
   await expect(page.locator('#password')).toHaveAttribute('type', 'text');
   await expect(page.locator('#toggle')).toHaveAttribute('aria-pressed', 'true');
@@ -14,7 +14,7 @@ test('password field toggles visibility accessibly', async ({ page }) => {
 
 test('STD-15 representative session recovery preserves task context', async ({ page }) => {
   test.skip(port !== 'react', 'The complete STD-15 workflow is a declared React representative example.');
-  await page.goto('/next/password-field-fixtures/session-recovery-react.html');
+  await page.goto('/components/password-field/session-recovery-react.html');
 
   const note = page.getByRole('textbox', { name: 'Profile note', exact: true });
   await note.fill('Unsaved identity workflow draft');
