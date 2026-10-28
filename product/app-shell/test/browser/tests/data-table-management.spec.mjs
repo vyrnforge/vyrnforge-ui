@@ -7,7 +7,7 @@ test.describe('STD-09 native table management', () => {
   test.skip(port !== 'react', 'Representative STD-09 evidence is intentionally bounded to the React public-entrypoint consumer.');
 
   test('preserves native semantics, sort state, page selection scope, and focus', async ({ page }) => {
-    await page.goto('/next/app-shell-fixtures/data-table-management-react.html');
+    await page.goto('/components/app-shell/data-table-management-react.html');
 
     const table = page.getByRole('table', { name: 'Records available for review' });
     await expect(table).toBeVisible();
@@ -45,7 +45,7 @@ test.describe('STD-09 native table management', () => {
 
   test('keeps the task accessible at 320 CSS pixels without page-level horizontal overflow', async ({ page }) => {
     await page.setViewportSize({ width: 320, height: 800 });
-    await page.goto('/next/app-shell-fixtures/data-table-management-react.html');
+    await page.goto('/components/app-shell/data-table-management-react.html');
 
     const metrics = await page.evaluate(() => ({ documentWidth: document.documentElement.scrollWidth, viewportWidth: window.innerWidth }));
     expect(metrics.documentWidth).toBeLessThanOrEqual(metrics.viewportWidth);
@@ -56,7 +56,7 @@ test.describe('STD-09 native table management', () => {
   });
 
   test('passes structural accessibility guardrails', async ({ page }) => {
-    await page.goto('/next/app-shell-fixtures/data-table-management-react.html');
+    await page.goto('/components/app-shell/data-table-management-react.html');
     await page.addScriptTag({ content: axeCore.source });
     const results = await page.evaluate(async () => globalThis.axe.run(document));
     expect(results.violations).toEqual([]);
