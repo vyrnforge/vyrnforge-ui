@@ -4,7 +4,7 @@ import { build } from 'esbuild';
 
 const port = process.argv[2] || 'web';
 const root = process.cwd();
-const dir = path.join(root, 'dist/docs/next/menu-fixtures');
+const dir = path.join(root, 'dist/browser-fixtures/components/menu');
 await mkdir(dir, { recursive: true });
 
 const page = (body, script = '') => `<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width"><title>Menu fixture</title></head><body><main><h1>Menu browser fixture</h1><button id="before">Before</button>${body}<button id="after">After</button></main>${script}</body></html>`;
