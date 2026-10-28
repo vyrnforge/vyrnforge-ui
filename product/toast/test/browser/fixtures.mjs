@@ -4,7 +4,7 @@ import { build } from 'esbuild';
 
 const port = process.argv[2] || 'web';
 const root = process.cwd();
-const outDir = path.join(root, 'dist/docs/next/toast-fixtures');
+const outDir = path.join(root, 'dist/browser-fixtures/components/toast');
 await mkdir(outDir, { recursive: true });
 
 const toastCss = await readFile(path.join(root, 'packages/web/dist/components/toast/toast.css'), 'utf8');

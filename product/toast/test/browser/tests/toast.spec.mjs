@@ -2,7 +2,7 @@ import { test, expect } from '@playwright/test';
 import axeCore from 'axe-core';
 
 const port = process.env.VF_COMPONENT_PORT || 'react';
-const fixture = `/next/toast-fixtures/${port}.html`;
+const fixture = `/components/toast/${port}.html`;
 
 async function requests(page, name) {
   return page.evaluate((key) => Number(document.body.dataset[key] || 0), name);
