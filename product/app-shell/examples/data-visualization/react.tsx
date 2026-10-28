@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { createRoot } from 'react-dom/client';
-import { AppShell, AppShellBody, AppShellHeader, AppShellMain } from '@vyrnforge/react/app-shell';
+import { AppShell, AppShellBody, AppShellHeader, AppShellMain, AppShellNavigation } from '@vyrnforge/react/app-shell';
 import '@vyrnforge/web/styles/app-shell.css';
 import './example.css';
 
@@ -63,6 +63,15 @@ function App() {
     <AppShell data-example-locale={locale}>
       <AppShellHeader><strong>Operations overview</strong></AppShellHeader>
       <AppShellBody>
+        <AppShellNavigation className="viz-navigation">
+          <nav aria-label="Operations overview sections">
+            <strong>Overview</strong>
+            <ul>
+              <li><a href="#completion-trend">Completion trend</a></li>
+              <li><a href="#channel-comparison">Channel comparison</a></li>
+            </ul>
+          </nav>
+        </AppShellNavigation>
         <AppShellMain>
           <div className="viz-dashboard">
             <header className="viz-dashboard-heading">
@@ -73,7 +82,7 @@ function App() {
               <p className="viz-freshness"><strong>As of:</strong> 24 Aug 2026 · Source: example operations dataset</p>
             </header>
 
-            <section className="viz-panel" aria-labelledby="trend-title">
+            <section id="completion-trend" className="viz-panel" aria-labelledby="trend-title">
               <div className="viz-panel-heading">
                 <div>
                   <h2 id="trend-title">Weekly completion rate, 6 Jul–24 Aug 2026</h2>
@@ -139,7 +148,7 @@ function App() {
               </div>
             </section>
 
-            <section className="viz-panel" aria-labelledby="channel-title">
+            <section id="channel-comparison" className="viz-panel" aria-labelledby="channel-title">
               <div className="viz-panel-heading">
                 <div>
                   <h2 id="channel-title">Completed orders by channel</h2>
