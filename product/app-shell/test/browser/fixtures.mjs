@@ -107,4 +107,20 @@ if (port === 'react') {
     path.join(dir, 'ai-assisted-reply-react.html'),
     '<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width"><title>AI-assisted reply fixture</title><link rel="stylesheet" href="./ai-assisted-reply-react.css"><style>html,body{margin:0;min-block-size:100%;}</style></head><body><div id="root"></div><script type="module" src="./ai-assisted-reply-react.js"></script></body></html>',
   );
+
+  const performanceEntry = path.join(root, 'product/app-shell/examples/performance-feedback/react.tsx');
+  await build({
+    entryPoints: [performanceEntry],
+    bundle: true,
+    splitting: true,
+    format: 'esm',
+    platform: 'browser',
+    outdir: dir,
+    entryNames: 'performance-feedback-react',
+    chunkNames: 'performance-chunks/[name]-[hash]',
+  });
+  await writeFile(
+    path.join(dir, 'performance-feedback-react.html'),
+    '<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width"><title>Performance UX fixture</title><link rel="stylesheet" href="./performance-feedback-react.css"><style>html,body{margin:0;min-block-size:100%;}</style></head><body><div id="root"></div><script type="module" src="./performance-feedback-react.js"></script></body></html>',
+  );
 }
