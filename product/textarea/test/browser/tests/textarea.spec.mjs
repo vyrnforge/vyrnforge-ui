@@ -4,7 +4,7 @@ import axeCore from 'axe-core';
 const port = process.env.VF_COMPONENT_PORT || 'web';
 
 test('Textarea preserves native multiline form semantics and shared styling across ports', async ({ page }) => {
-  await page.goto(`/next/textarea-fixtures/${port}.html`);
+  await page.goto(`/components/textarea/${port}.html`);
 
   const editable = page.locator('#editable');
   const readonly = page.locator('#readonly');

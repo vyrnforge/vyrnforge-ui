@@ -3,7 +3,7 @@ import path from 'node:path';
 
 const port = process.argv[2] || 'web';
 const root = process.cwd();
-const outDir = path.join(root, 'dist/docs/next/visually-hidden-fixtures');
+const outDir = path.join(root, 'dist/browser-fixtures/components/visually-hidden');
 await mkdir(outDir, { recursive: true });
 const foundationCss = await readFile(path.join(root, 'packages/web/dist/styles/foundation.css'), 'utf8');
 const tokensCss = await readFile(path.join(root, 'packages/web/dist/styles/tokens.css'), 'utf8');

@@ -3,7 +3,7 @@ import path from 'node:path';
 
 const port = process.argv[2] || 'web';
 const root = process.cwd();
-const outDir = path.join(root, 'dist/docs/next/text-fixtures');
+const outDir = path.join(root, 'dist/browser-fixtures/components/text');
 await mkdir(outDir, { recursive: true });
 
 const tokensCss = await readFile(path.join(root, 'packages/web/dist/styles/tokens.css'), 'utf8');
