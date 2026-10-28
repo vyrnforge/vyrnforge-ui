@@ -5,7 +5,7 @@ const support = JSON.parse(await readFile(new URL('../testing/compatibility/supp
 
 if (support.schemaVersion !== 2) throw new Error('compatibility metadata schemaVersion must be 2');
 if (!support.status || typeof support.status !== 'string') throw new Error('compatibility metadata must expose a status');
-if (support.runtime?.node !== root.engines.node || support.runtime?.npm !== root.engines.npm) {
+if (support.runtime?.node !== root.engines.node || support.runtime?.pnpm !== root.engines.pnpm) {
   throw new Error('root engines and compatibility runtime metadata must match');
 }
 if (support.authoring?.typescriptPinned !== root.devDependencies.typescript) {
