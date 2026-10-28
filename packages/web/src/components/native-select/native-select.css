@@ -10,7 +10,7 @@
     font-family: var(--vf-control-font-family);
     font-size: var(--vf-control-font-size);
     line-height: var(--vf-line-height-normal);
-    min-block-size: var(--vf-density-control-height-md, var(--vf-control-height-md));
+    min-block-size: var(--_vf-density-control-height-md, var(--vf-control-height-md));
     min-inline-size: 0;
     padding-block: 0.4375rem;
     padding-inline: 0.75rem 2rem;
