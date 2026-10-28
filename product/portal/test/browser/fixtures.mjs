@@ -1,7 +1,7 @@
 import { mkdir, writeFile } from 'node:fs/promises';
 import path from 'node:path';
 import { build } from 'esbuild';
-const port = process.argv[2]; const root = process.cwd(); const outDir = path.join(root, 'dist/docs/next/portal-fixtures'); await mkdir(outDir, { recursive: true });
+const port = process.argv[2]; const root = process.cwd(); const outDir = path.join(root, 'dist/browser-fixtures/components/portal'); await mkdir(outDir, { recursive: true });
 const page = (script) => `<!doctype html><html lang="en"><head><meta charset="utf-8"><title>Portal fixture</title></head><body><main><h1>Portal fixture</h1><div id="app"></div><div id="portal-target" aria-label="Portal target"></div></main><script type="module" src="./${script}"></script></body></html>`;
 if (port === 'react') await build({ stdin: { resolveDir: root, sourcefile: 'portal-react.ts', contents: `import{createElement}from'react';import{createRoot}from'react-dom/client';import{Portal}from'@vyrnforge/react/portal';createRoot(document.querySelector('#app')).render(createElement(Portal,{target:document.querySelector('#portal-target')},createElement('button',{id:'portal-content'},'Action')));` }, bundle: true, format: 'esm', platform: 'browser', outfile: path.join(outDir, 'react.js') });
 if (port === 'vue') await build({ stdin: { resolveDir: root, sourcefile: 'portal-vue.ts', contents: `import{createApp,h}from'vue';import{Portal}from'@vyrnforge/vue/portal';createApp({render:()=>h(Portal,{to:'#portal-target'},()=>h('button',{id:'portal-content'},'Action'))}).mount('#app');` }, bundle: true, format: 'esm', platform: 'browser', outfile: path.join(outDir, 'vue.js') });
