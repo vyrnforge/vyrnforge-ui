@@ -1,5 +1,5 @@
 import { test, expect } from '@playwright/test';
-import axeCore from 'axe-core';
+import AxeBuilder from '@axe-core/playwright';
 
 const port = process.env.VF_COMPONENT_PORT || 'web';
 
@@ -14,8 +14,7 @@ test.describe('Tabs Web semantic and styling contract', () => {
     await selected.focus();
     expect(await selected.evaluate((element) => getComputedStyle(element).outlineStyle)).not.toBe('none');
 
-    await page.addScriptTag({ content: axeCore.source });
-    const results = await page.evaluate(async () => globalThis.axe.run(document));
+    const results = await new AxeBuilder({ page }).analyze();
     expect(results.violations).toEqual([]);
 
     await page.evaluate(() => { document.documentElement.dir = 'rtl'; });
@@ -63,8 +62,7 @@ test.describe('Tabs port interaction and client activation', () => {
       await expect(overview).toBeFocused();
 
       expect(errors.filter((error) => /hydration|mismatch/i.test(error))).toEqual([]);
-      await page.addScriptTag({ content: axeCore.source });
-      const results = await page.evaluate(async (selector) => globalThis.axe.run(document.querySelector(selector)), `#${framework}-tabs`);
+        const results = await new AxeBuilder({ page }).include(`#${framework}-tabs`).analyze();
       expect(results.violations).toEqual([]);
     });
 

@@ -1,5 +1,5 @@
 import { test, expect } from '@playwright/test';
-import axeCore from 'axe-core';
+import AxeBuilder from '@axe-core/playwright';
 
 const port = process.env.VF_COMPONENT_PORT || 'web';
 const trackCount = (value) => value.trim().split(/\s+/).filter(Boolean).length;
@@ -90,7 +90,7 @@ test('L3 composition primitives preserve spatial, form, and control relationship
   await expect(radios.nth(0)).not.toBeChecked();
 
   await page.addScriptTag({ content: axeCore.source });
-  const results = await page.evaluate(async () => globalThis.axe.run(document));
+  const results = await new AxeBuilder({ page }).analyze();
   expect(results.violations).toEqual([]);
 
   await page.screenshot({ path: testInfo.outputPath(`l3-composition-${port}.png`), fullPage: true });

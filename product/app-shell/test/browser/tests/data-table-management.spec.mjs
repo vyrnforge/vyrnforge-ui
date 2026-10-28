@@ -1,5 +1,5 @@
 import { test, expect } from '@playwright/test';
-import axeCore from 'axe-core';
+import AxeBuilder from '@axe-core/playwright';
 
 const port = process.env.VF_COMPONENT_PORT || 'react';
 
@@ -57,8 +57,7 @@ test.describe('STD-09 native table management', () => {
 
   test('passes structural accessibility guardrails', async ({ page }) => {
     await page.goto('/components/app-shell/data-table-management-react.html');
-    await page.addScriptTag({ content: axeCore.source });
-    const results = await page.evaluate(async () => globalThis.axe.run(document));
+    const results = await new AxeBuilder({ page }).analyze();
     expect(results.violations).toEqual([]);
   });
 });

@@ -1,5 +1,5 @@
 import { test, expect } from '@playwright/test';
-import axeCore from 'axe-core';
+import AxeBuilder from '@axe-core/playwright';
 const port=process.env.VF_COMPONENT_PORT||'react';
 test('Presence retains exiting content until explicit completion',async({page})=>{
   await page.goto(`/components/presence/${port}.html`);

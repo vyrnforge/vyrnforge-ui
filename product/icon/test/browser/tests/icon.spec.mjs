@@ -1,5 +1,5 @@
 import { test, expect } from '@playwright/test';
-import axeCore from 'axe-core';
+import AxeBuilder from '@axe-core/playwright';
 const port = process.env.VF_COMPONENT_PORT || 'web';
 
 test('Icon exposes one semantic contract across ports', async ({ page }) => {
@@ -15,6 +15,6 @@ test('Icon exposes one semantic contract across ports', async ({ page }) => {
   await expect(meaningful).toHaveAttribute('data-vf-size', 'lg');
   expect(await meaningful.evaluate((element) => getComputedStyle(element).inlineSize)).toBe('24px');
   await page.addScriptTag({ content: axeCore.source });
-  const results = await page.evaluate(async () => globalThis.axe.run(document));
+  const results = await new AxeBuilder({ page }).analyze();
   expect(results.violations).toEqual([]);
 });
