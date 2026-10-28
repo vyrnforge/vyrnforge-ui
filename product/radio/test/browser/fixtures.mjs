@@ -1,11 +1,11 @@
 import { readFile, writeFile } from 'node:fs/promises';
 import path from 'node:path';
 import { build } from 'esbuild';
-import { buildNativeControlBrowserFixture } from '../../../../tooling/testing/native-control-browser-fixture.mjs';
+import { buildNativeControlBrowserFixture } from '../../../_test-support/native-controls/native-control-browser-fixture.mjs';
 
 const port = process.argv[2] || 'web';
 const root = process.cwd();
-const outDir = path.join(root, 'dist/docs/next/radio-fixtures');
+const outDir = path.join(root, 'dist/browser-fixtures/components/radio');
 await buildNativeControlBrowserFixture('radio', port);
 
 const exampleDir = path.join(root, 'product/radio/examples/platform-adaptation');

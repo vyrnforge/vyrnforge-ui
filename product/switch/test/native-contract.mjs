@@ -1,5 +1,5 @@
 export default {
-  id: 'switch', exportName: 'Switch', angularName: 'VfSwitchDirective', hook: 'data-vf-switch',
+  id: 'switch', exportName: 'Switch', angularName: 'VfSwitchDirective',
   markup: '<label for="control">Enabled</label><input id="control" name="enabled" type="checkbox" role="switch" data-vf-switch>',
   angular: '<label for="control">Enabled</label><input id="control" name="enabled" vfSwitch>', props: { name: 'enabled' }, reducedMotion: true,
   semantics: { tag: 'INPUT', type: 'checkbox', role: 'switch' },

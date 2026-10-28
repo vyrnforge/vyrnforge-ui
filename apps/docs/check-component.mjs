@@ -2,12 +2,12 @@ import { mkdtemp, readFile, readdir, rm } from 'node:fs/promises';
 import os from 'node:os';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
-import { compileFrameworkExample, publicPackageAliases } from './examples.mjs';
-import { discoverProductUnits } from '../testing/discover-product-units.mjs';
+import { discoverProductUnits } from '../../tooling/testing/discover-product-units.mjs';
+import { compileFrameworkExample, publicPackageAliases } from './example-compiler.mjs';
 
 const root = path.resolve(fileURLToPath(new URL('../../', import.meta.url)));
 const componentId = process.argv[2];
-if (!componentId) throw new Error('Usage: node tooling/docs/check-component.mjs <component>');
+if (!componentId) throw new Error('Usage: node apps/docs/check-component.mjs <component>');
 const discovery = discoverProductUnits(root);
 const component = discovery.components.find((entry) => entry.component === componentId);
 if (!component) throw new Error(`Unknown component documentation owner: ${componentId}`);
@@ -48,6 +48,7 @@ try {
       if (framework === 'native-web') continue;
       await compileFrameworkExample({
         root,
+        framework,
         sourcePath,
         outputPath: path.join(temp, `${manifest.id.replaceAll('/', '-')}-${framework}.js`),
         aliases,

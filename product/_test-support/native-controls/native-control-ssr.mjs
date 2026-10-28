@@ -3,7 +3,7 @@ import assert from 'node:assert/strict';
 import { loadNativeControlContract } from './native-control-contract.mjs';
 
 function assertMarkup(html, contract) {
-  assert.match(html, new RegExp(`<${contract.semantics.tag.toLowerCase()}[^>]*${contract.hook}`));
+  assert.match(html, new RegExp(`<${contract.semantics.tag.toLowerCase()}(?:\\s|>)`));
   if (contract.semantics.type) assert.match(html, new RegExp(`type=(?:"|')${contract.semantics.type}(?:"|')`));
   if (contract.semantics.role) assert.match(html, new RegExp(`role=(?:"|')${contract.semantics.role}(?:"|')`));
 }

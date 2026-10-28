@@ -1,6 +1,6 @@
 # Testing infrastructure
 
-Testing follows product ownership. Reusable harnesses live here; evidence lives with the product or repository capability it proves.
+Testing follows ownership. Reusable repository harnesses live here; evidence and owner-specific semantics live with the product, package, application, or other source that defines them.
 
 ## Ownership
 
@@ -8,12 +8,16 @@ Testing follows product ownership. Reusable harnesses live here; evidence lives 
 - Framework/package implementation evidence lives under `packages/<package>/test/...`.
 - Reusable package-owned capabilities mirror their source owner under `packages/<package>/test/<kind>/<id>/`.
 - Repository-wide reusable browser/type/SSR helpers live directly under `tooling/testing/`.
-- Accessibility, compatibility, performance, and repository-wide visual infrastructure live in their named subdirectories here.
+- Compatibility environment-baseline metadata lives under `tooling/testing/compatibility/`.
+- Product-owned shared accessibility, native-control, and performance support lives under `product/_test-support/`; it may depend on generic testing mechanisms here, but generic tooling must not depend on owner-specific semantics or evidence.
+- Product-owned visual evidence belongs with the package or product that defines the visual contract; shared tooling may provide reusable visual harnesses only when more than one owner needs them.
+
+Component browser fixtures are emitted under `dist/browser-fixtures/` and served by the testing-owned `browser-server.mjs`; reusable browser evidence must not depend on the documentation application or its output layout.
 
 `tooling/impact/config.json` contains repository-level impact policy, package topology, validation tiers, global sentinels, and fail-closed roots. It does not enumerate normal components or reusable product instances; those are discovered from public surfaces and ownership conventions.
 
-Normal product additions must not require editing a central testing registry, CI workflow, or validation executor. Expose the real product surface and provide its conventionally owned evidence. Product discovery and structure verification fail when required evidence is missing.
+Normal product additions must not require editing a central testing registry, CI workflow, or validation executor. Expose the real product surface and provide its conventionally owned evidence. Product discovery and owner-local tests fail when required evidence is missing.
 
 Browser-owned behavior is proven in real browsers. Cross-port conformance validates observable outcomes rather than identical internals. Packed-package consumer verification uses public package surfaces rather than monorepo-private imports.
 
-Do not put product-specific tests here merely because they use a shared harness. The harness belongs here; the evidence belongs to its product owner.
+Do not put product-specific tests, classification rules, baselines, or semantics here merely because they use a shared harness. The harness belongs here; owner-specific evidence and policy belong to the owner.

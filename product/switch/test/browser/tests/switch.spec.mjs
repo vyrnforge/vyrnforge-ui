@@ -1,2 +1,2 @@
-import { defineNativeControlBrowserTests } from '../../../../../tooling/testing/native-control-browser-tests.mjs';
+import { defineNativeControlBrowserTests } from '../../../../_test-support/native-controls/native-control-browser-tests.mjs';
 await defineNativeControlBrowserTests('switch');

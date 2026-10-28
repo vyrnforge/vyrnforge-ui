@@ -7,7 +7,7 @@ import { componentBrowserServerManagedEnv } from '../testing/component-browser-r
 import { createPlan, createTierPlan, parseArg, pathsFromArgs } from './plan.mjs';
 import { expandScopes } from './scopes.mjs';
 
-const componentBrowserServerUrl = 'http://127.0.0.1:4173/next/';
+const componentBrowserServerUrl = 'http://127.0.0.1:4173/';
 const defaultComponentBrowserConcurrency = 4;
 
 export function createExecutionPlan(validationPlan) {
@@ -53,7 +53,7 @@ function delay(milliseconds) {
     setTimeout(resolve, milliseconds);
   });
 }
-async function docsServerResponds(fetchUrl = fetch) {
+async function componentBrowserServerResponds(fetchUrl = fetch) {
   const controller = new AbortController();
   const timeout = setTimeout(() => controller.abort(), 500);
   try {
@@ -122,7 +122,7 @@ async function executeComponentBrowserBatch(items, { concurrency, runItem }) {
 }
 
 export async function startComponentBrowserServer({ env = process.env, spawnProcess = spawn, fetchUrl = fetch, timeoutMs = 15_000, pollIntervalMs = 100 } = {}) {
-  const serverProcess = spawnProcess(process.execPath, ['tooling/docs/serve.mjs'], { stdio: 'inherit', env });
+  const serverProcess = spawnProcess(process.execPath, ['tooling/testing/browser-server.mjs'], { stdio: 'inherit', env });
   let spawnError = null;
   const captureSpawnError = (error) => { spawnError = error; };
   serverProcess.once('error', captureSpawnError);
@@ -132,12 +132,12 @@ export async function startComponentBrowserServer({ env = process.env, spawnProc
     while (Date.now() < deadline) {
       if (spawnError) throw spawnError;
       if (serverProcess.exitCode !== null || serverProcess.signalCode !== null) {
-        throw new Error(`Component browser docs server exited before readiness (code ${serverProcess.exitCode ?? 'none'}, signal ${serverProcess.signalCode ?? 'none'})`);
+        throw new Error(`Component browser fixture server exited before readiness (code ${serverProcess.exitCode ?? 'none'}, signal ${serverProcess.signalCode ?? 'none'})`);
       }
-      if (await docsServerResponds(fetchUrl)) return serverProcess;
+      if (await componentBrowserServerResponds(fetchUrl)) return serverProcess;
       await delay(pollIntervalMs);
     }
-    throw new Error(`Component browser docs server did not become ready at ${componentBrowserServerUrl} within ${timeoutMs}ms`);
+    throw new Error(`Component browser fixture server did not become ready at ${componentBrowserServerUrl} within ${timeoutMs}ms`);
   } catch (error) {
     if (serverProcess.exitCode === null && serverProcess.signalCode === null) serverProcess.kill();
     throw error;
@@ -215,7 +215,7 @@ export async function executeValidationPlan(validationPlan, {
   let componentBrowserServerReady = false;
   const ensureComponentBrowserServer = async () => {
     if (componentBrowserServerReady) return;
-    process.stdout.write(`\n[validation:component-browser-server] ${process.execPath} tooling/docs/serve.mjs\n`);
+    process.stdout.write(`\n[validation:component-browser-server] ${process.execPath} tooling/testing/browser-server.mjs\n`);
     const startedAt = now();
     try {
       componentBrowserServer = await startBrowserServer({ env });

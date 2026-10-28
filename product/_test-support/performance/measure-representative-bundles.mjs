@@ -3,7 +3,7 @@ import { gzipSync } from 'node:zlib';
 import { build, transform } from 'esbuild';
 
 const mode = process.argv[2] ?? '--capture';
-const baselinePath = 'tooling/testing/performance/representative-bundle-baselines.json';
+const baselinePath = 'product/_test-support/performance/representative-bundle-baselines.json';
 const components = ['button', 'tabs', 'dialog'];
 const ports = ['react', 'angular', 'vue', 'elements'];
 const selectedExport = {

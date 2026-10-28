@@ -4,7 +4,7 @@ import { build } from 'esbuild';
 
 const port = process.argv[2] || 'web';
 const root = process.cwd();
-const outDir = path.join(root, 'dist/docs/next/button-fixtures');
+const outDir = path.join(root, 'dist/browser-fixtures/components/button');
 await mkdir(outDir, { recursive: true });
 
 const buttonCss = await readFile(path.join(root, 'packages/web/dist/components/button/button.css'), 'utf8');
