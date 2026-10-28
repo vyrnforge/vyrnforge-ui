@@ -28,6 +28,10 @@ export function publicPackageAliases(root, { source = false } = {}) {
   return aliases;
 }
 
+export function runtimeResolveDirectory(sourcePath) {
+  return path.dirname(sourcePath);
+}
+
 async function discoverExampleManifests(root) {
   const manifests = [];
   for (const component of discoverProductUnits(root).components) {
@@ -78,10 +82,10 @@ async function buildTypeScriptCompiler(assetRoot) {
   await build({ stdin: { resolveDir: process.cwd(), sourcefile: 'vyrnforge-docs-typescript.ts', contents: `import * as ts from 'typescript'; globalThis.__vfDocsTypeScript = ts;` }, bundle: true, format: 'iife', platform: 'browser', target: ['es2022'], minify: true, legalComments: 'none', outfile: path.join(assetRoot, 'typescript.js') });
 }
 
-async function buildRuntime({ root, assetRoot, key, framework, analysis, aliases }) {
+async function buildRuntime({ assetRoot, key, framework, analysis, aliases, sourcePath }) {
   const filename = `runtime-${key}-${framework}.js`;
   const contents = `${analysis.statements.join('\n')}\nglobalThis.__vfRuntime = { ${analysis.bindings.join(', ')} };`;
-  await build({ stdin: { resolveDir: root, sourcefile: `docs-runtime-${key}-${framework}.ts`, contents }, alias: aliases, bundle: true, format: 'iife', platform: 'browser', target: ['es2022'], minify: true, legalComments: 'none', tsconfigRaw: { compilerOptions: { experimentalDecorators: true, useDefineForClassFields: false } }, outfile: path.join(assetRoot, filename) });
+  await build({ stdin: { resolveDir: runtimeResolveDirectory(sourcePath), sourcefile: `docs-runtime-${key}-${framework}.ts`, contents }, alias: aliases, bundle: true, format: 'iife', platform: 'browser', target: ['es2022'], minify: true, legalComments: 'none', tsconfigRaw: { compilerOptions: { experimentalDecorators: true, useDefineForClassFields: false } }, outfile: path.join(assetRoot, filename) });
   return `assets/examples/${filename}`;
 }
 
@@ -132,7 +136,7 @@ export async function buildDocumentationExamples({ root, channelRoot }) {
         await writeFile(previewPath, previewDocument({ rootMarkup: `<main class="vf-example-root">${source}</main>`, stylesHref, frameCssHref }));
       } else {
         analysis = importAnalysis(source);
-        runtime = await buildRuntime({ root, assetRoot, key, framework, analysis, aliases });
+        runtime = await buildRuntime({ assetRoot, key, framework, analysis, aliases, sourcePath });
         const compiledFilename = `${key}-${framework}.js`;
         await compileFrameworkExample({ root, sourcePath, outputPath: path.join(compiledRoot, compiledFilename), aliases });
         const rootMarkup = framework === 'angular' ? '<vf-example-root id="root" class="vf-example-root"></vf-example-root>' : '<main id="root" class="vf-example-root"></main>';
