@@ -2,7 +2,7 @@ import { test, expect } from '@playwright/test';
 import axeCore from 'axe-core';
 const port=process.env.VF_COMPONENT_PORT||'react';
 test('Presence retains exiting content until explicit completion',async({page})=>{
-  await page.goto(`/next/presence-fixtures/${port}.html`);
+  await page.goto(`/components/presence/${port}.html`);
   const panel=page.locator('#panel');
   await expect(panel).toHaveAttribute('data-state','entered');
   await page.locator('#close').click();

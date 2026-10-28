@@ -6,7 +6,7 @@ const port = process.env.VF_COMPONENT_PORT || 'react';
 test('privacy controls preserve optional choice symmetry, permission recovery, export truth, and deletion confirmation', async ({ page }) => {
   test.skip(port !== 'react', 'STD-17 representative privacy integration is intentionally verified through the React public entrypoints.');
 
-  await page.goto('/next/app-shell-fixtures/privacy-controls-react.html');
+  await page.goto('/components/app-shell/privacy-controls-react.html');
 
   const allow = page.getByRole('button', { name: 'Allow optional analytics', exact: true });
   const decline = page.getByRole('button', { name: 'Decline optional analytics', exact: true });

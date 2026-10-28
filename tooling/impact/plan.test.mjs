@@ -85,11 +85,12 @@ test('Web aggregate stylesheet validates the Web package without component fan-o
   for (const node of ['component:button:web', 'component:button:react', 'react', 'angular', 'vue']) assert.ok(!plan.affectedNodes.includes(node), node);
 });
 
-test('representative bundle baseline data selects only bundle baseline evidence', () => {
-  const plan = createPlan(['tooling/testing/performance/representative-bundle-baselines.json']);
-  assert.deepEqual(plan.directNodes, ['performance:bundle-baselines']);
+test('representative bundle baseline data stays product-owned and selects only bundle evidence', () => {
+  const plan = createPlan(['product/_test-support/performance/representative-bundle-baselines.json']);
+  assert.deepEqual(plan.directNodes, ['bundle-baseline-evidence']);
   assert.equal(plan.broadened, false);
   assert.ok(plan.validationScopes.includes('bundle-baselines'));
+  assert.ok(plan.validationScopes.includes('lint-product-support'));
   assert.ok(!plan.validationScopes.includes('docs-build'));
 });
 
@@ -109,7 +110,7 @@ test('a normal component addition surface remains targeted rather than broad', (
     'packages/web/package.json',
     'packages/web/src/styles.css',
     'packages/web/src/components/textarea/textarea.css',
-    'tooling/testing/performance/representative-bundle-baselines.json',
+    'product/_test-support/performance/representative-bundle-baselines.json',
   ]);
   assert.equal(plan.broadened, false);
   assert.ok(plan.validationScopes.includes('component:textarea:docs'));
@@ -174,7 +175,7 @@ test('classification returns the most specific owner', () => {
   assert.deepEqual(classifyPath('product/button/docs/index.html'), { nodes: ['component:button:documentation'], broad: false });
   assert.deepEqual(classifyPath('packages/vue/src/index.ts'), { nodes: ['package:vue:public-surface'], broad: false });
   assert.deepEqual(classifyPath('packages/web/src/styles.css'), { nodes: ['web:aggregate-style'], broad: false });
-  assert.deepEqual(classifyPath('tooling/testing/performance/representative-bundle-baselines.json'), { nodes: ['performance:bundle-baselines'], broad: false });
+  assert.deepEqual(classifyPath('product/_test-support/performance/representative-bundle-baselines.json'), { nodes: ['bundle-baseline-evidence'], broad: false });
   assert.deepEqual(classifyPath('tooling/impact/plan.mjs'), { nodes: ['impact-engine'], broad: false });
   assert.deepEqual(classifyPath('.github/workflows/ci.yml'), { nodes: ['ci-workflows'], broad: false });
   assert.deepEqual(classifyPath('tooling/verify/workflows.mjs'), { nodes: ['workflow-contracts'], broad: false });

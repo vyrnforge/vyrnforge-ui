@@ -1,9 +1,9 @@
 import { access, readFile } from 'node:fs/promises';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
-import { componentUsageGroups } from '../../apps/docs/component-usage-groups.mjs';
-import { documentationRegistry } from '../docs/registry.mjs';
-import { discoverProductUnits } from '../testing/discover-product-units.mjs';
+import { discoverProductUnits } from '../../tooling/testing/discover-product-units.mjs';
+import { componentUsageGroups } from './component-usage-groups.mjs';
+import { documentationRegistry } from './registry.mjs';
 
 const root = path.resolve(fileURLToPath(new URL('../../', import.meta.url)));
 const channel = process.env.VYRNFORGE_DOCS_CHANNEL || 'next';
@@ -29,26 +29,11 @@ for (const page of registry.pages) {
   const pageDirectory = path.join(channelRoot, page.slug);
   const html = await readFile(path.join(pageDirectory, 'index.html'), 'utf8');
   for (const required of [
-    '<html lang="en"',
-    'name="viewport"',
-    'class="vf-skip-link"',
-    '<vf-app-shell data-vf-app-shell>',
-    'data-vf-app-shell-header',
-    'data-vf-app-shell-body',
-    'data-vf-app-shell-navigation',
-    'data-vf-side-nav',
-    'data-vf-app-shell-main',
-    'id="main"',
-    'data-vf-app-shell-footer',
-    'defineAppShellElements',
-    'vyrnforge/elements/app-shell.js',
-    '<h1',
-    'data-vf-framework-picker',
-    'data-vf-framework-choice',
-    'data-vf-framework-mark',
-    'data-vf-docs-component-subgroup',
-    'data-vf-docs-search',
-    'vyrnforge/styles.css'
+    '<html lang="en"', 'name="viewport"', 'class="vf-skip-link"', '<vf-app-shell data-vf-app-shell>',
+    'data-vf-app-shell-header', 'data-vf-app-shell-body', 'data-vf-app-shell-navigation', 'data-vf-side-nav',
+    'data-vf-app-shell-main', 'id="main"', 'data-vf-app-shell-footer', 'defineAppShellElements',
+    'vyrnforge/elements/app-shell.js', '<h1', 'data-vf-framework-picker', 'data-vf-framework-choice',
+    'data-vf-framework-mark', 'data-vf-docs-component-subgroup', 'data-vf-docs-search', 'vyrnforge/styles.css'
   ]) if (!html.includes(required)) throw new Error(`${page.slug || '<home>'} missing required docs markup: ${required}`);
   for (const componentPage of componentPages) {
     const expectedHref = relativeRoute(page.slug, componentPage.slug);

@@ -24,7 +24,7 @@ test('STD-24 records list/page-change measurements without a flaky timing gate',
   test.skip(port !== 'react', 'STD-24 representative evidence is intentionally bounded to the React public AppShell entrypoint.');
 
   await page.setViewportSize({ width: 1120, height: 900 });
-  await page.goto('/next/app-shell-fixtures/performance-feedback-react.html');
+  await page.goto('/components/app-shell/performance-feedback-react.html');
   await expect(page.getByRole('heading', { name: 'Measured performance without fake certainty' })).toBeVisible();
   await expect(page.getByText('2,000 records · 50 per page', { exact: true })).toBeVisible();
   await expect(page.locator('tbody tr')).toHaveCount(50);
@@ -45,7 +45,7 @@ test('STD-24 records list/page-change measurements without a flaky timing gate',
 test('STD-24 delayed save exposes pending state and does not fabricate success', async ({ page }) => {
   test.skip(port !== 'react', 'STD-24 representative evidence is intentionally bounded to the React public AppShell entrypoint.');
 
-  await page.goto('/next/app-shell-fixtures/performance-feedback-react.html');
+  await page.goto('/components/app-shell/performance-feedback-react.html');
   const note = page.getByLabel('Review note');
   await note.fill('Edited note remains visible during the delayed save.');
   const save = page.getByRole('button', { name: 'Save note' });
@@ -59,7 +59,7 @@ test('STD-24 delayed save exposes pending state and does not fabricate success',
 test('STD-24 optional detail defers module activation and primary task remains usable', async ({ page }, testInfo) => {
   test.skip(port !== 'react', 'STD-24 representative evidence is intentionally bounded to the React public AppShell entrypoint.');
 
-  await page.goto('/next/app-shell-fixtures/performance-feedback-react.html');
+  await page.goto('/components/app-shell/performance-feedback-react.html');
   const activatedBefore = await page.evaluate(() => Boolean(globalThis.__vfPerformanceDetailEvaluated));
   expect(activatedBefore).toBe(false);
 
@@ -79,7 +79,7 @@ test('STD-24 reduced motion disables the non-essential transition and narrow lay
 
   await page.emulateMedia({ reducedMotion: 'reduce' });
   await page.setViewportSize({ width: 320, height: 900 });
-  await page.goto('/next/app-shell-fixtures/performance-feedback-react.html');
+  await page.goto('/components/app-shell/performance-feedback-react.html');
 
   const transition = await page.getByTestId('motion-indicator').evaluate((element) => getComputedStyle(element).transitionDuration);
   expect(transition.split(',').every((value) => value.trim() === '0s')).toBe(true);

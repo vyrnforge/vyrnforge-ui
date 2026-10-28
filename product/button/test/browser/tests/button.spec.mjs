@@ -7,7 +7,7 @@ test.describe('Button real-browser contract', () => {
   test.skip(port !== 'web', 'Native Web contract evidence');
 
   test('native activation, disabled, loading, forms, focus, accessibility, theme, direction, and media states', async ({ page, browserName }) => {
-    await page.goto('/next/button-fixtures/web.html');
+    await page.goto('/components/button/web.html');
     const activation = page.locator('#activation');
     await activation.click();
     await expect(page.locator('body')).toHaveAttribute('data-activations', '1');
@@ -63,7 +63,7 @@ test.describe('Button framework hydration', () => {
       test.skip(port !== framework, `Running ${port} evidence only`);
       const errors = [];
       page.on('console', (message) => { if (message.type() === 'error') errors.push(message.text()); });
-      await page.goto(`/next/button-fixtures/${framework}.html`);
+      await page.goto(`/components/button/${framework}.html`);
       const button = page.locator(`#${framework}-button`);
       await expect(button).toHaveAttribute('data-vf-button', '');
       await expect(button).toHaveAttribute('aria-busy', 'true');

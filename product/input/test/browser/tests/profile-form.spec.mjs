@@ -9,7 +9,7 @@ test.describe('STD-06 profile form workflow', () => {
   test.beforeEach(async ({ page }) => {
     const pageErrors = [];
     page.on('pageerror', (error) => pageErrors.push(error.message));
-    const response = await page.goto('/next/input-fixtures/react-profile.html');
+    const response = await page.goto('/components/input/react-profile.html');
     expect(response?.status()).toBe(200);
     try {
       await expect(page.locator('#profile-display-name')).toBeAttached({ timeout: 2000 });

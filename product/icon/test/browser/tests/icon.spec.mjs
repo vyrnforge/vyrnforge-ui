@@ -3,7 +3,7 @@ import axeCore from 'axe-core';
 const port = process.env.VF_COMPONENT_PORT || 'web';
 
 test('Icon exposes one semantic contract across ports', async ({ page }) => {
-  await page.goto(`/next/icon-fixtures/${port}.html`);
+  await page.goto(`/components/icon/${port}.html`);
   const decorative = page.locator('#decorative').locator('[data-vf-icon]').or(page.locator('#decorative[data-vf-icon]'));
   const meaningful = page.locator('#meaningful').locator('[data-vf-icon]').or(page.locator('#meaningful[data-vf-icon]'));
   await expect(decorative).toHaveAttribute('aria-hidden', 'true');

@@ -4,7 +4,7 @@ import { build } from 'esbuild';
 
 const port = process.argv[2] || 'web';
 const root = process.cwd();
-const outDir = path.join(root, 'dist/docs/next/tabs-fixtures');
+const outDir = path.join(root, 'dist/browser-fixtures/components/tabs');
 await mkdir(outDir, { recursive: true });
 
 const tabsCss = await readFile(path.join(root, 'packages/web/dist/components/tabs/tabs.css'), 'utf8');

@@ -4,7 +4,7 @@ import { build } from 'esbuild';
 
 const port = process.argv[2];
 const root = process.cwd();
-const dir = path.join(root, 'dist/docs/next/password-field-fixtures');
+const dir = path.join(root, 'dist/browser-fixtures/components/password-field');
 await mkdir(dir, { recursive: true });
 await writeFile(path.join(dir, `${port}.html`), `<!doctype html><html lang="en"><head><title>Password field browser fixture</title></head><body><main><h1>Password field browser fixture</h1><div><input id="password" type="password" aria-label="Password"><button id="toggle" type="button" aria-pressed="false" aria-label="Show password">Show</button></div></main><script>toggle.onclick=()=>{const visible=password.type==='password';password.type=visible?'text':'password';toggle.setAttribute('aria-pressed',String(visible));toggle.setAttribute('aria-label',visible?'Hide password':'Show password');toggle.textContent=visible?'Hide':'Show';}</script></body></html>`);
 

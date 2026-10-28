@@ -1,7 +1,7 @@
 import { readFileSync } from 'node:fs';
 import path from 'node:path';
-import { componentUsageGroup } from '../../apps/docs/component-usage-groups.mjs';
-import { discoverProductUnits } from '../testing/discover-product-units.mjs';
+import { discoverProductUnits } from '../../tooling/testing/discover-product-units.mjs';
+import { componentUsageGroup } from './component-usage-groups.mjs';
 
 function titleCase(id) {
   return id.split('-').map((part) => part ? `${part[0].toUpperCase()}${part.slice(1)}` : part).join(' ');

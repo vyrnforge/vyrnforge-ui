@@ -4,7 +4,7 @@ import { build } from 'esbuild';
 
 const port = process.argv[2] || 'web';
 const root = process.cwd();
-const outDir = path.join(root, 'dist/docs/next/listbox-fixtures');
+const outDir = path.join(root, 'dist/browser-fixtures/components/listbox');
 await mkdir(outDir, { recursive: true });
 
 const listboxCss = await readFile(path.join(root, 'packages/web/dist/components/listbox/listbox.css'), 'utf8');

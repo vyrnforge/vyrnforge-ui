@@ -31,11 +31,6 @@ function compileTargets() {
     dependsOn: [],
     evidence: ['lint-web-css', ...packageEvidence('web')],
   };
-  targets['performance:bundle-baselines'] = {
-    paths: ['tooling/testing/performance/representative-bundle-baselines.json'],
-    dependsOn: [],
-    evidence: ['bundle-baselines'],
-  };
   for (const unit of discovery.ownedUnits) targets[unit.node] = { paths: [unit.sourcePath, unit.testPath, unit.metadataPath], dependsOn: [unit.package, ...unit.dependencies], evidence: [`${unit.node}:test`] };
   for (const component of discovery.components) {
     const webNode = component.ports.web ? `component:${component.component}:web` : null;

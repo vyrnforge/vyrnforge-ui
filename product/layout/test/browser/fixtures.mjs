@@ -4,7 +4,7 @@ import { build } from 'esbuild';
 
 const port = process.argv[2] || 'web';
 const root = process.cwd();
-const outDir = path.join(root, 'dist/docs/next/layout-fixtures');
+const outDir = path.join(root, 'dist/browser-fixtures/components/layout');
 await mkdir(outDir, { recursive: true });
 
 const tokensCss = await readFile(path.join(root, 'packages/web/dist/styles/tokens.css'), 'utf8');

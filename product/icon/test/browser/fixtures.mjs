@@ -3,7 +3,7 @@ import path from 'node:path';
 import { build } from 'esbuild';
 const port = process.argv[2] || 'web';
 const root = process.cwd();
-const outDir = path.join(root, 'dist/docs/next/icon-fixtures');
+const outDir = path.join(root, 'dist/browser-fixtures/components/icon');
 await mkdir(outDir, { recursive: true });
 const css = await readFile(path.join(root, 'packages/web/dist/components/icon/icon.css'), 'utf8');
 await writeFile(path.join(outDir, 'icon.css'), css);

@@ -30,7 +30,7 @@ export function createComponentBrowserConfig({
 }) {
   if (!componentId) throw new Error('componentId is required for component browser configuration');
 
-  const resolvedReadinessPath = readinessPath ?? `/next/${componentId}-fixtures/${port}.html`;
+  const resolvedReadinessPath = readinessPath ?? `/components/${componentId}/${port}.html`;
   if (!resolvedReadinessPath.startsWith('/')) throw new Error('readinessPath must be an absolute URL path');
 
   const outputRoot = `${repositoryRootFromComponentBrowserConfig}/test-results/${componentId}-playwright-results`;
@@ -43,7 +43,7 @@ export function createComponentBrowserConfig({
     reporter,
     use: { baseURL: componentBrowserBaseURL, ...use },
     webServer: managedServer ? undefined : {
-      command: `cd ${repositoryRootFromComponentBrowserConfig} && node tooling/docs/serve.mjs`,
+      command: `cd ${repositoryRootFromComponentBrowserConfig} && node tooling/testing/browser-server.mjs`,
       url: `${componentBrowserBaseURL}${resolvedReadinessPath}`,
       reuseExistingServer: !process.env.CI,
       ...webServer,

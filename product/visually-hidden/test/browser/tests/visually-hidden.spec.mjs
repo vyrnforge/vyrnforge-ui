@@ -2,7 +2,7 @@ import { test, expect } from '@playwright/test';
 import axeCore from 'axe-core';
 const port = process.env.VF_COMPONENT_PORT || 'web';
 test('VisuallyHidden removes visual layout while preserving accessible content', async ({ page }) => {
-  await page.goto(`/next/visually-hidden-fixtures/${port}.html`);
+  await page.goto(`/components/visually-hidden/${port}.html`);
   const hidden = page.locator('#hidden-label');
   await expect(hidden).toHaveAttribute('data-vf-visually-hidden', '');
   await expect(hidden).not.toHaveAttribute('aria-hidden', 'true');

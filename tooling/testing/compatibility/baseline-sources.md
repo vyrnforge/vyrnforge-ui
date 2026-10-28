@@ -11,4 +11,4 @@ Selected 2026-10-19 baseline:
 - Vue targets the current stable 3.5 line; 3.6 is not selected while it remains pre-release.
 - Browser engine validation is pinned by Playwright 1.64.1: Chromium 156.0.8078.4, Firefox 157.0, and WebKit 27.2.
 
-These are implementation and validation baselines. A framework port is not a shipped support claim until its compatibility entry is marked implemented and the corresponding package, consumer, browser, SSR/CSR, documentation, and release evidence exists.
+These values are implementation and validation baselines only. They do not claim shipped compatibility, component maturity, or release support; those claims require owner-local evidence and release policy.

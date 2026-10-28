@@ -5,7 +5,7 @@ const port = process.argv[2] || 'web';
 if (port !== 'web') throw new Error(`elemental-primitives supports Native Web browser evidence only; received ${port}`);
 
 const root = process.cwd();
-const outDir = path.join(root, 'dist/docs/next/elemental-primitives-fixtures');
+const outDir = path.join(root, 'dist/browser-fixtures/components/elemental-primitives');
 await mkdir(outDir, { recursive: true });
 const tokensCss = await readFile(path.join(root, 'packages/web/dist/styles/tokens.css'), 'utf8');
 const elementalCss = (await readFile(path.join(root, 'packages/web/dist/components/elemental-primitives/elemental-primitives.css'), 'utf8')).replace('@import "../../styles/tokens.css";\n', '');
