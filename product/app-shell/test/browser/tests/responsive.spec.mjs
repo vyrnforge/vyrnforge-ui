@@ -12,10 +12,9 @@ async function expectNoPageInlineOverflow(page) {
 }
 
 async function attachScreenshot(page, testInfo, name) {
-  await testInfo.attach(name, {
-    body: await page.screenshot({ fullPage: true }),
-    contentType: 'image/png',
-  });
+  const path = testInfo.outputPath(`${name}.png`);
+  await page.screenshot({ path, fullPage: true });
+  await testInfo.attach(name, { path, contentType: 'image/png' });
 }
 
 test('STD-21 settings task preserves draft, actions, focus, and reflow across wide, zoom-equivalent, and 320 CSS pixel layouts', async ({ page }, testInfo) => {
