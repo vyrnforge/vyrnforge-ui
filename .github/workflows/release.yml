@@ -22,8 +22,12 @@ jobs:
       - uses: actions/setup-node@v7
         with:
           node-version-file: .node-version
-          cache: npm
-      - run: npm ci --ignore-scripts --no-audit --no-fund
+          package-manager-cache: false
+      - name: Enable pinned pnpm
+        run: |
+          corepack enable
+          corepack install --global pnpm@12.16.1
+      - run: pnpm install --frozen-lockfile --ignore-scripts
       - name: Execute complete required release graph
         run: node tooling/impact/execute.mjs --mode release --output test-results/validation-plan.json
       - name: Upload release validation plan
