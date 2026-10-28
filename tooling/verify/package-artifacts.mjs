@@ -21,6 +21,7 @@ rmSync(outputRoot, { recursive: true, force: true });
 mkdirSync(tarballRoot, { recursive: true });
 
 run('pnpm', ['exec', 'nx', 'run-many', '-t', 'build']);
+run('node', ['tooling/verify/api-reports.mjs']);
 
 for (const name of packageNames) {
   const packageRoot = path.join(root, 'packages', name);
@@ -39,4 +40,4 @@ for (const name of packageNames) {
   run('pnpm', ['exec', 'attw', '--profile', 'node16', tarballPath]);
 }
 
-console.log(`Validated ${packageNames.length} packed public packages with publint and attw.`);
+console.log(`Validated ${packageNames.length} packed public packages with API Extractor, publint, and attw.`);
