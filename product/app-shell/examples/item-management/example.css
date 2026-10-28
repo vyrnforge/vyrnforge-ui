@@ -13,6 +13,13 @@
   justify-content: space-between;
 }
 
+.crud-example-main,
+.crud-form,
+.crud-item-list,
+.crud-item-list > li {
+  min-inline-size: 0;
+}
+
 .crud-example-main {
   display: grid;
   gap: var(--vf-space-5, 1.25rem);
