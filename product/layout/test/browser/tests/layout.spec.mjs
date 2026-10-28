@@ -5,7 +5,7 @@ const port = process.env.VF_COMPONENT_PORT || 'web';
 const trackCount = (value) => value.trim().split(/\s+/).filter(Boolean).length;
 
 test('L3 composition primitives preserve spatial, form, and control relationships across ports', async ({ page }, testInfo) => {
-  await page.goto(`/next/layout-fixtures/${port}.html`);
+  await page.goto(`/components/layout/${port}.html`);
   const container = page.locator('#container');
   const stack = page.locator('#stack');
   const grid = page.locator('#grid');
