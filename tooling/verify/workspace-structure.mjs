@@ -7,9 +7,17 @@ const forbiddenToolingCapabilityNames = new Set(['common', 'misc', 'scripts', 'u
 const capabilityNamePattern = /^[a-z][a-z0-9-]*$/;
 const packageJson = JSON.parse(await readFile(new URL('../../package.json', import.meta.url), 'utf8'));
 const toolingPackageJson = JSON.parse(await readFile(new URL('../package.json', import.meta.url), 'utf8'));
+const expectedPnpmWorkspace = `packages:\n${expectedWorkspaces.map((workspace) => `  - ${workspace}`).join('\n')}\n`;
+const actualPnpmWorkspace = await readFile(new URL('../../pnpm-workspace.yaml', import.meta.url), 'utf8');
 
 if (JSON.stringify(packageJson.workspaces) !== JSON.stringify(expectedWorkspaces)) {
   throw new Error(`Root workspaces must be exactly the public packages: ${expectedWorkspaces.join(', ')}`);
+}
+if (actualPnpmWorkspace !== expectedPnpmWorkspace) {
+  throw new Error('pnpm-workspace.yaml must contain exactly the approved seven-package topology');
+}
+if (packageJson.packageManager !== 'pnpm@12.16.1') {
+  throw new Error(`Repository packageManager must pin pnpm@12.16.1, found ${packageJson.packageManager ?? '<missing>'}`);
 }
 if (toolingPackageJson.name !== '@vyrnforge/repository-tooling') {
   throw new Error(`tooling/package.json must declare @vyrnforge/repository-tooling, found ${toolingPackageJson.name ?? '<missing>'}`);
@@ -61,6 +69,13 @@ for (const workspace of expectedWorkspaces) {
   const manifest = JSON.parse(await readFile(new URL(`../../${workspace}/package.json`, import.meta.url), 'utf8'));
   const expectedName = `@vyrnforge/${path.basename(workspace)}`;
   if (manifest.name !== expectedName) throw new Error(`${workspace} must declare ${expectedName}, found ${manifest.name ?? '<missing>'}`);
+  for (const section of ['dependencies', 'devDependencies', 'optionalDependencies', 'peerDependencies']) {
+    for (const [dependency, range] of Object.entries(manifest[section] ?? {})) {
+      if (dependency.startsWith('@vyrnforge/') && range !== 'workspace:*') {
+        throw new Error(`${manifest.name} ${section}.${dependency} must use workspace:*`);
+      }
+    }
+  }
 }
 
 process.stdout.write(`workspace structure: ${repositoryRoots.length} repository roots, ${expectedWorkspaces.length} public packages, 1 private tooling package, and ${toolingCapabilities.length} need-driven tooling capabilities ok\n`);
