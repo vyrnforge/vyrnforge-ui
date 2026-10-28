@@ -11,11 +11,14 @@ test.describe('STD-09 native table management', () => {
 
     const table = page.getByRole('table', { name: 'Records available for review' });
     await expect(table).toBeVisible();
-    await expect(table.getByRole('columnheader').nth(1)).toHaveAttribute('aria-sort', 'ascending');
+    const nameHeader = table.getByRole('columnheader').nth(1);
+    const nameSort = nameHeader.getByRole('button');
+    await expect(nameHeader).toHaveAttribute('aria-sort', 'ascending');
+    await expect(nameSort).toHaveAccessibleName(/Name, ascending/);
 
-    const nameSort = page.getByRole('button', { name: /Name, ascending/ });
     await nameSort.click();
-    await expect(table.getByRole('columnheader').nth(1)).toHaveAttribute('aria-sort', 'descending');
+    await expect(nameHeader).toHaveAttribute('aria-sort', 'descending');
+    await expect(nameSort).toHaveAccessibleName(/Name, descending/);
     await expect(nameSort).toBeFocused();
 
     await page.getByRole('checkbox', { name: 'Select Lumen' }).check();
