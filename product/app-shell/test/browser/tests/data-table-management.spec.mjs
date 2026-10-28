@@ -18,7 +18,7 @@ test.describe('STD-09 native table management', () => {
     await expect(table.getByRole('columnheader').nth(1)).toHaveAttribute('aria-sort', 'descending');
     await expect(nameSort).toBeFocused();
 
-    await page.getByRole('checkbox', { name: 'Select Atlas' }).check();
+    await page.getByRole('checkbox', { name: 'Select Lumen' }).check();
     const pageSelector = page.getByRole('checkbox', { name: 'Select all rows on this page' });
     await expect(pageSelector).toHaveJSProperty('indeterminate', true);
     await expect(page.getByRole('status').filter({ hasText: 'selected on this page' })).toContainText('1 selected on this page');
