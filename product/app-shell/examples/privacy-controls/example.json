@@ -1,0 +1,13 @@
+{
+  "id": "app-shell/privacy-controls",
+  "title": "Privacy controls workflow",
+  "description": "STD-17 React representative for optional analytics choice and revocation, contextual camera permission recovery, truthful data-export state, and account deletion confirmation through existing public entrypoints plus application-local fake services.",
+  "defaultFramework": "react",
+  "frameworks": {
+    "react": {
+      "label": "React",
+      "language": "tsx",
+      "source": "react.tsx"
+    }
+  }
+}

@@ -1,0 +1,41 @@
+.privacy-shell-header,
+.privacy-choice-actions,
+.privacy-dialog-actions {
+  display: flex;
+  align-items: center;
+  gap: var(--vf-space-3, 0.75rem);
+  flex-wrap: wrap;
+}
+
+.privacy-shell-header {
+  justify-content: space-between;
+}
+
+.privacy-example-main {
+  display: grid;
+  gap: var(--vf-space-5, 1.25rem);
+  max-inline-size: 56rem;
+}
+
+.privacy-card,
+.privacy-status {
+  display: grid;
+  gap: var(--vf-space-2, 0.5rem);
+  padding: var(--vf-space-3, 0.75rem);
+  border: 1px solid currentColor;
+}
+
+.privacy-card h2,
+.privacy-card p,
+.privacy-status h2,
+.privacy-status p {
+  margin-block: 0;
+}
+
+.privacy-note {
+  max-inline-size: 48rem;
+}
+
+.privacy-dialog-actions {
+  margin-block-start: var(--vf-space-3, 0.75rem);
+}
