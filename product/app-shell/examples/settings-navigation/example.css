@@ -3,10 +3,24 @@
   align-items: center;
   justify-content: space-between;
   gap: var(--vf-space-3, 0.75rem);
+  flex-wrap: wrap;
 }
 
 .settings-nav-trigger {
   display: none;
+}
+
+.settings-profile-form {
+  display: grid;
+  gap: var(--vf-space-2, 0.5rem);
+  max-inline-size: 32rem;
+  min-inline-size: 0;
+}
+
+.settings-profile-actions {
+  display: flex;
+  gap: var(--vf-space-2, 0.5rem);
+  flex-wrap: wrap;
 }
 
 @media (max-width: 48rem) {
