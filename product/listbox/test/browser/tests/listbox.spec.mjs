@@ -9,7 +9,7 @@ async function expectAxeClean(page) {
 }
 
 test('listbox exposes authored naming and selection semantics', async ({ page }) => {
-  await page.goto(`/next/listbox-fixtures/${port}.html`);
+  await page.goto(`/components/listbox/${port}.html`);
   await expect(page.getByRole('listbox', { name: 'Choose an item' })).toBeVisible();
   await expect(page.locator(`#${port}-one`)).toHaveAttribute('aria-selected', 'true');
   await expect(page.locator(`#${port}-disabled`)).toHaveAttribute('aria-disabled', 'true');
@@ -24,7 +24,7 @@ test.describe('enhanced listbox interaction', () => {
     const errors = [];
     page.on('console', (message) => { if (message.type() === 'error') errors.push(message.text()); });
     page.on('pageerror', (error) => errors.push(error.message));
-    await page.goto(`/next/listbox-fixtures/${port}.html`);
+    await page.goto(`/components/listbox/${port}.html`);
 
     const before = page.locator('#before');
     const one = page.locator(`#${port}-one`);
@@ -64,7 +64,7 @@ test.describe('enhanced listbox interaction', () => {
   });
 
   test('multi-select keeps selection independent from focus and toggles with Space', async ({ page }) => {
-    await page.goto(`/next/listbox-fixtures/${port}.html`);
+    await page.goto(`/components/listbox/${port}.html`);
     const one = page.locator(`#${port}-multi-one`);
     const three = page.locator(`#${port}-multi-three`);
 

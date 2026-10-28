@@ -4,7 +4,7 @@ import { build } from 'esbuild';
 
 const port = process.argv[2] || 'web';
 const root = process.cwd();
-const outDir = path.join(root, 'dist/docs/next/dialog-fixtures');
+const outDir = path.join(root, 'dist/browser-fixtures/components/dialog');
 await mkdir(outDir, { recursive: true });
 
 const dialogCss = await readFile(path.join(root, 'packages/web/dist/components/dialog/dialog.css'), 'utf8');

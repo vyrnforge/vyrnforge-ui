@@ -4,7 +4,7 @@ import axeCore from 'axe-core';
 const port = process.env.VF_COMPONENT_PORT || 'web';
 
 test('Text preserves native semantics and shared typography across ports', async ({ page }) => {
-  await page.goto(`/next/text-fixtures/${port}.html`);
+  await page.goto(`/components/text/${port}.html`);
 
   const heading = page.locator('#heading');
   const body = page.locator('#body');

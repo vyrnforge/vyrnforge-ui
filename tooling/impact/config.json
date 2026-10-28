@@ -2,23 +2,22 @@
   "schemaVersion": 1,
   "targets": {
     "core": { "paths": ["packages/core/"], "dependsOn": [], "evidence": ["package-contracts", "consumer-core"] },
-    "web": { "paths": ["packages/web/"], "dependsOn": ["core"], "evidence": ["package-contracts", "consumer-web", "lint-web-css", "browser-foundation-visual", "browser-elemental-primitives"] },
+    "web": { "paths": ["packages/web/"], "dependsOn": ["core"], "evidence": ["package-contracts", "consumer-web", "lint-web-css", "browser-foundation-visual"] },
     "icons": { "paths": ["packages/icons/"], "dependsOn": ["web"], "evidence": ["package-contracts", "consumer-icons"] },
     "react": { "paths": ["packages/react/"], "dependsOn": ["core", "web"], "evidence": ["package-contracts", "consumer-react"] },
     "angular": { "paths": ["packages/angular/"], "dependsOn": ["core", "web"], "evidence": ["package-contracts", "consumer-angular"] },
     "vue": { "paths": ["packages/vue/"], "dependsOn": ["core", "web"], "evidence": ["package-contracts", "consumer-vue"] },
     "elements": { "paths": ["packages/elements/"], "dependsOn": ["core", "web"], "evidence": ["package-contracts", "consumer-elements"] },
-    "documentation": { "paths": ["documentation/", "apps/docs/", "README.md", "tooling/docs/"], "dependsOn": ["core", "web", "icons", "react", "angular", "vue", "elements"], "evidence": ["lint-docs", "docs-source", "browser-docs-chromium"] },
+    "documentation": { "paths": ["documentation/", "apps/docs/", "README.md"], "dependsOn": ["core", "web", "icons", "react", "angular", "vue", "elements"], "evidence": ["lint-docs", "docs-source", "browser-docs-chromium"] },
     "ci-workflows": { "paths": [".github/workflows/"], "dependsOn": [], "evidence": ["workflow-contracts"] },
     "impact-engine": { "paths": ["tooling/impact/", "tooling/testing/discover-product-units.mjs", "tooling/testing/discovery.test.mjs"], "dependsOn": [], "evidence": ["lint-tooling", "impact-engine"] },
     "ci-tooling": { "paths": ["tooling/ci/"], "dependsOn": [], "evidence": ["lint-tooling", "ci-tooling"] },
-    "accessibility-tooling": { "paths": ["tooling/testing/accessibility/"], "dependsOn": [], "evidence": ["lint-tooling", "accessibility-tooling"] },
     "compatibility-tooling": { "paths": ["tooling/testing/compatibility/"], "dependsOn": [], "evidence": ["lint-tooling", "compatibility"] },
-    "performance-tooling": { "paths": ["tooling/testing/performance/"], "dependsOn": [], "evidence": ["lint-tooling", "bundle-baselines"], "aggregate": true },
-    "visual-tooling": { "paths": ["tooling/testing/visual/"], "dependsOn": [], "evidence": ["lint-tooling", "browser-foundation-visual"] },
+    "product-test-support": { "paths": ["product/_test-support/"], "dependsOn": [], "evidence": ["lint-product-support", "product-support"], "aggregate": true },
+    "bundle-baseline-evidence": { "paths": ["product/_test-support/performance/"], "dependsOn": [], "evidence": ["lint-product-support", "bundle-baselines"] },
     "release-tooling": { "paths": ["tooling/release/"], "dependsOn": [], "evidence": ["lint-tooling", "changes-preview"] },
     "workflow-contracts": { "paths": ["tooling/verify/workflows.mjs"], "dependsOn": [], "evidence": ["lint-tooling", "workflow-contracts"] },
-    "tooling": { "paths": ["tooling/"], "dependsOn": [], "evidence": ["lint-tooling", "impact-engine", "testing-tooling", "accessibility-tooling", "ci-tooling", "compatibility", "package-contracts", "architecture-rules", "workflow-contracts", "bundle-baselines", "browser-foundation-visual", "browser-elemental-primitives"], "broad": true }
+    "tooling": { "paths": ["tooling/"], "dependsOn": [], "evidence": ["lint-tooling", "impact-engine", "testing-tooling", "ci-tooling", "compatibility", "package-contracts", "architecture-rules", "workflow-contracts"], "broad": true }
   },
   "broadPaths": ["package.json", "package-lock.json", "tsconfig.base.json", ".node-version", ".nvmrc", ".gitignore"],
   "globalSentinels": ["structure", "testing-structure", "change-fragments", "boundaries", "architecture-rules", "workflow-contracts"],
@@ -31,9 +30,10 @@
     "workflow-contracts",
     "impact-engine",
     "testing-tooling",
-    "accessibility-tooling",
+    "product-support",
     "ci-tooling",
     "lint-tooling",
+    "lint-product-support",
     "lint-web-css",
     "lint-docs",
     "compatibility",
@@ -41,13 +41,12 @@
     "docs-source",
     "consumer-all",
     "bundle-baselines",
-    "browser-foundation-visual",
-    "browser-elemental-primitives"
+    "browser-foundation-visual"
   ],
   "tiers": {
     "main": ["browser-docs-chromium"],
     "scheduled": ["browser-docs-cross"],
     "release": ["browser-docs-cross", "release-readiness"]
   },
-  "scopeOrder": ["structure", "testing-structure", "change-fragments", "changes-preview", "boundaries", "architecture-rules", "workflow-contracts", "impact-engine", "testing-tooling", "accessibility-tooling", "ci-tooling", "lint-tooling", "lint-web-css", "lint-docs", "lint-core", "lint-web", "lint-icons", "lint-react", "lint-angular", "lint-vue", "lint-elements", "compatibility", "package-contracts", "docs-source", "build-core", "build-web", "build-icons", "build-react", "build-angular", "build-vue", "build-elements", "consumer-core", "consumer-web", "consumer-icons", "consumer-react", "consumer-angular", "consumer-vue", "consumer-elements", "bundle-baselines", "browser-foundation-visual", "browser-elemental-primitives", "docs-build", "docs-site", "browser-docs-chromium", "browser-docs-cross", "consumer-all", "release-readiness"]
+  "scopeOrder": ["structure", "testing-structure", "change-fragments", "changes-preview", "boundaries", "architecture-rules", "workflow-contracts", "impact-engine", "testing-tooling", "product-support", "ci-tooling", "lint-tooling", "lint-product-support", "lint-web-css", "lint-docs", "lint-core", "lint-web", "lint-icons", "lint-react", "lint-angular", "lint-vue", "lint-elements", "compatibility", "package-contracts", "docs-source", "build-core", "build-web", "build-icons", "build-react", "build-angular", "build-vue", "build-elements", "consumer-core", "consumer-web", "consumer-icons", "consumer-react", "consumer-angular", "consumer-vue", "consumer-elements", "bundle-baselines", "browser-foundation-visual", "docs-build", "docs-site", "browser-docs-chromium", "browser-docs-cross", "consumer-all", "release-readiness"]
 }

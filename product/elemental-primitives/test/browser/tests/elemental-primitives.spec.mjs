@@ -4,7 +4,7 @@ import axeCore from 'axe-core';
 const port = process.env.VF_COMPONENT_PORT || 'web';
 
 test('Elemental primitives preserve native semantics and shared presentation', async ({ page }) => {
-  await page.goto(`/next/elemental-primitives-fixtures/${port}.html`);
+  await page.goto(`/components/elemental-primitives/${port}.html`);
 
   await expect(page.locator('#code')).toHaveJSProperty('tagName', 'CODE');
   await expect(page.locator('#kbd')).toHaveJSProperty('tagName', 'KBD');

@@ -1,6 +1,6 @@
 import { readFile } from 'node:fs/promises';
 import path from 'node:path';
-import { discoverProductUnits } from '../discover-product-units.mjs';
+import { discoverProductUnits } from '../../../tooling/testing/discover-product-units.mjs';
 
 const reviewStatuses = new Set(['mapped', 'review-required']);
 const nativeKinds = new Set(['native', 'composite', 'structural', 'utility', 'review-required']);

@@ -2,7 +2,7 @@ import { test, expect } from '@playwright/test';
 import axeCore from 'axe-core';
 const port = process.env.VF_COMPONENT_PORT || 'web';
 test('Separator preserves native semantics and orientation across ports', async ({ page }) => {
-  await page.goto(`/next/separator-fixtures/${port}.html`);
+  await page.goto(`/components/separator/${port}.html`);
   const horizontal = page.locator('#horizontal');
   const vertical = page.locator('#vertical');
   await expect(horizontal).toHaveJSProperty('tagName', 'HR');

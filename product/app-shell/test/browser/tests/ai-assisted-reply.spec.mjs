@@ -21,7 +21,7 @@ test('STD-23 keeps AI output draft-only, preserves edits through failure, and ig
   test.skip(port !== 'react', 'STD-23 representative consumer evidence is intentionally verified through the React public AppShell entrypoint.');
 
   await page.setViewportSize({ width: 1120, height: 900 });
-  await page.goto('/next/app-shell-fixtures/ai-assisted-reply-react.html');
+  await page.goto('/components/app-shell/ai-assisted-reply-react.html');
 
   await expect(page.getByRole('heading', { name: 'AI-assisted customer reply' })).toBeVisible();
   await expect(page.getByText('AI-assisted drafting', { exact: true })).toBeVisible();
@@ -65,7 +65,7 @@ test('STD-23 keeps AI output draft-only, preserves edits through failure, and ig
 test('STD-23 cancellation does not allow a late generation to overwrite the current draft', async ({ page }) => {
   test.skip(port !== 'react', 'STD-23 representative consumer evidence is intentionally verified through the React public AppShell entrypoint.');
 
-  await page.goto('/next/app-shell-fixtures/ai-assisted-reply-react.html');
+  await page.goto('/components/app-shell/ai-assisted-reply-react.html');
   await page.getByRole('button', { name: 'Generate draft' }).click();
   await expect(page.getByRole('button', { name: 'Cancel generation' })).toBeVisible();
   await page.getByRole('button', { name: 'Cancel generation' }).click();
@@ -79,7 +79,7 @@ test('STD-23 requires explicit review before send and preserves the draft throug
   test.skip(port !== 'react', 'STD-23 representative consumer evidence is intentionally verified through the React public AppShell entrypoint.');
 
   await page.setViewportSize({ width: 320, height: 900 });
-  await page.goto('/next/app-shell-fixtures/ai-assisted-reply-react.html');
+  await page.goto('/components/app-shell/ai-assisted-reply-react.html');
   await page.getByRole('button', { name: 'Generate draft' }).click();
   await expect(page.getByText('AI-assisted draft ready. Review and edit it before any send action.', { exact: true })).toBeVisible();
 

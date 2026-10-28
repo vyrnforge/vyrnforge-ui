@@ -4,7 +4,7 @@ import { build } from 'esbuild';
 
 const port = process.argv[2] || 'web';
 const root = process.cwd();
-const outDir = path.join(root, 'dist/docs/next/combobox-fixtures');
+const outDir = path.join(root, 'dist/browser-fixtures/components/combobox');
 await mkdir(outDir, { recursive: true });
 
 const comboboxCss = await readFile(path.join(root, 'packages/web/dist/components/combobox/combobox.css'), 'utf8');

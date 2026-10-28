@@ -9,7 +9,7 @@ async function expectAxeClean(page) {
 }
 
 test('menu exposes menu-button and item semantics', async ({ page }) => {
-  await page.goto(`/next/menu-fixtures/${port}.html`);
+  await page.goto(`/components/menu/${port}.html`);
   const trigger = page.locator(`#${port}-trigger`);
   await expect(trigger).toHaveAttribute('aria-haspopup', 'menu');
   if (port === 'web') {
@@ -28,7 +28,7 @@ test.describe('enhanced menu interaction', () => {
     const errors = [];
     page.on('console', (message) => { if (message.type() === 'error') errors.push(message.text()); });
     page.on('pageerror', (error) => errors.push(error.message));
-    await page.goto(`/next/menu-fixtures/${port}.html`);
+    await page.goto(`/components/menu/${port}.html`);
 
     const trigger = page.locator(`#${port}-trigger`);
     const menu = page.locator(`#${port}-menu`);
@@ -73,7 +73,7 @@ test.describe('enhanced menu interaction', () => {
   });
 
   test('activates enabled items, restores focus, and Tab exits instead of traversing menu items', async ({ page }) => {
-    await page.goto(`/next/menu-fixtures/${port}.html`);
+    await page.goto(`/components/menu/${port}.html`);
     const before = page.locator('#before');
     const after = page.locator('#after');
     const trigger = page.locator(`#${port}-trigger`);

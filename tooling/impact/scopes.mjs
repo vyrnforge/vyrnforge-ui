@@ -21,25 +21,25 @@ const baseScopeDefinitions = {
   'workflow-contracts': { command: ['node', 'tooling/verify/workflows.mjs'], requires: [] },
   'impact-engine': { command: [npm, 'run', 'test:impact'], requires: [] },
   'testing-tooling': { command: [npm, 'run', 'test:testing-tooling'], requires: [] },
-  'accessibility-tooling': { command: [npm, 'run', 'test:accessibility-tooling'], requires: [] },
+  'product-support': { command: [npm, 'run', 'test:product-support'], requires: [] },
   'ci-tooling': { command: [npm, 'run', 'test:ci-tooling'], requires: [] },
   'component-types-all': { command: ['node', 'tooling/testing/check-component-types-batch.mjs'], requires: allPackageBuilds },
   'component-ssr-all': { command: ['node', 'tooling/testing/run-component-ssr-batch.mjs'], requires: allPackageBuilds },
   'lint-tooling': { command: [npm, 'run', 'lint:tooling'], requires: [] },
+  'lint-product-support': { command: [npm, 'run', 'lint:product-support'], requires: [] },
   'lint-web-css': { command: [npm, 'run', 'lint:web-css'], requires: [] },
   'lint-docs': { command: [npm, 'run', 'lint:docs'], requires: [] },
   compatibility: { command: ['node', 'tooling/verify/compatibility.mjs'], requires: [] },
   'package-contracts': { command: ['node', 'tooling/verify/package-contracts.mjs'], requires: [] },
-  'docs-source': { command: ['node', 'tooling/verify/documentation-structure.mjs'], requires: [] },
+  'docs-source': { command: ['node', 'apps/docs/verify-source.mjs'], requires: [] },
   'browser-foundation-visual': { command: [npm, 'run', 'test:visual:foundation'], requires: ['build-web'] },
-  'browser-elemental-primitives': { command: ['node', 'tooling/testing/run-component-browser.mjs', 'elemental-primitives', 'web', 'chromium'], requires: ['build-web'] },
   'docs-build': { command: [npm, 'run', 'build:docs:site'], requires: ['docs-source', 'compatibility', 'package-contracts', ...allPackageBuilds] },
-  'docs-site': { command: ['node', 'tooling/verify/docs-site.mjs'], requires: ['docs-build'] },
+  'docs-site': { command: ['node', 'apps/docs/verify-site.mjs'], requires: ['docs-build'] },
   'browser-docs-chromium': { command: [npm, 'run', 'test:browser:docs'], requires: ['docs-site'] },
   'browser-docs-cross': { command: [npm, 'run', 'test:browser:docs:cross'], requires: ['docs-site'] },
   'consumer-all': { command: ['node', 'tooling/verify/consumer-packages.mjs', 'all'], requires: allPackageBuilds },
-  'bundle-baselines': { command: ['node', 'tooling/testing/performance/measure-representative-bundles.mjs', '--check'], requires: packageNames.filter((name) => name !== 'core').map((name) => `build-${name}`) },
-  'release-readiness': { command: ['node', 'tooling/verify/release-readiness.mjs'], requires: ['consumer-all', 'docs-site', 'browser-docs-cross', 'browser-foundation-visual', 'browser-elemental-primitives', 'changes-preview', 'bundle-baselines'] },
+  'bundle-baselines': { command: ['node', 'product/_test-support/performance/measure-representative-bundles.mjs', '--check'], requires: packageNames.filter((name) => name !== 'core').map((name) => `build-${name}`) },
+  'release-readiness': { command: ['node', 'tooling/verify/release-readiness.mjs'], requires: ['consumer-all', 'docs-site', 'browser-docs-cross', 'browser-foundation-visual', 'changes-preview', 'bundle-baselines'] },
 };
 for (const packageName of packageNames) {
   baseScopeDefinitions[`lint-${packageName}`] = { command: [npm, 'run', `lint:${packageName}`], requires: [] };
@@ -68,7 +68,7 @@ export function resolveScopeDefinition(scope) {
   const [, componentId, suffix] = match;
   const component = componentEntry(componentId);
   if (!component) return null;
-  if (suffix === 'docs') return { command: ['node', 'tooling/docs/check-component.mjs', componentId], requires: [] };
+  if (suffix === 'docs') return { command: ['node', 'apps/docs/check-component.mjs', componentId], requires: [] };
   if (suffix === 'conformance:types' && component.conformanceTypes) {
     const requires = Object.keys(component.ports).filter((port) => port !== 'web').map(componentPrerequisite);
     if (componentId === 'icon') requires.push('build-icons');

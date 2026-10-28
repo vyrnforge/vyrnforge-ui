@@ -1,8 +1,8 @@
 import { access, readFile } from 'node:fs/promises';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
-import { documentationRegistry } from '../docs/registry.mjs';
-import { discoverProductUnits } from '../testing/discover-product-units.mjs';
+import { documentationRegistry } from './registry.mjs';
+import { discoverProductUnits } from '../../tooling/testing/discover-product-units.mjs';
 
 const root = path.resolve(fileURLToPath(new URL('../../', import.meta.url)));
 const registry = documentationRegistry(root);
@@ -18,7 +18,7 @@ const requiredSharedSlugs = [
 ];
 const requiredFrameworks = ['react', 'angular', 'vue', 'elements', 'native-web'];
 const requiredComponentSections = ['Overview', 'Installation and imports', 'Quick start', 'Accessibility', 'Styling', 'Framework API', 'Compatibility'];
-for (const relative of ['documentation/README.md', 'documentation/site/registry.json', 'product/README.md', 'apps/docs/styles.css', 'apps/docs/client.js', 'tooling/docs/examples.mjs', 'tooling/docs/registry.mjs']) await access(path.join(root, relative));
+for (const relative of ['documentation/README.md', 'documentation/site/registry.json', 'product/README.md', 'apps/docs/build.mjs', 'apps/docs/build-examples.mjs', 'apps/docs/registry.mjs', 'apps/docs/styles.css', 'apps/docs/client.js']) await access(path.join(root, relative));
 const slugs = new Set(registry.pages.map((page) => page.slug));
 for (const slug of requiredSharedSlugs) if (!slugs.has(slug)) throw new Error(`Missing shared documentation page: ${slug}`);
 for (const framework of requiredFrameworks) {

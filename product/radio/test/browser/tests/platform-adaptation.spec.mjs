@@ -6,7 +6,7 @@ const port = process.env.VF_COMPONENT_PORT || 'web';
 async function openPlatformFixture(page) {
   const pageErrors = [];
   page.on('pageerror', (error) => pageErrors.push(error.message));
-  await page.goto(`/next/radio-fixtures/platform-${port}.html`);
+  await page.goto(`/components/radio/platform-${port}.html`);
   try {
     await expect(page.getByRole('status')).toHaveText('Not confirmed.', { timeout: 3000 });
   } catch {

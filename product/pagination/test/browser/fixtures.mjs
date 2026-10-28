@@ -4,7 +4,7 @@ import { build } from 'esbuild';
 
 const port = process.argv[2];
 const root = process.cwd();
-const dir = path.join(root, 'dist/docs/next/pagination-fixtures');
+const dir = path.join(root, 'dist/browser-fixtures/components/pagination');
 await mkdir(dir, { recursive: true });
 
 await writeFile(

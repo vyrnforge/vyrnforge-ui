@@ -1,10 +1,12 @@
 import { cp, mkdir, readFile, rm, writeFile } from 'node:fs/promises';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
-import { buildDocumentationExamples, renderDocumentationExample } from './examples.mjs';
-import { componentUsageGroups } from '../../apps/docs/component-usage-groups.mjs';
-import { renderFrameworkMark } from '../../apps/docs/framework-presentation.mjs';
+import { discoverProductUnits } from '../../tooling/testing/discover-product-units.mjs';
+import { buildDocumentationExamples } from './build-examples.mjs';
+import { componentUsageGroups } from './component-usage-groups.mjs';
+import { renderFrameworkMark } from './framework-presentation.mjs';
 import { documentationRegistry } from './registry.mjs';
+import { renderDocumentationExample } from './render-example.mjs';
 
 const root = path.resolve(fileURLToPath(new URL('../../', import.meta.url)));
 const outRoot = path.join(root, 'dist/docs');
@@ -13,8 +15,9 @@ const channelRoot = path.join(outRoot, channel);
 const registry = documentationRegistry(root);
 const rootManifest = JSON.parse(await readFile(path.join(root, 'package.json'), 'utf8'));
 const compatibility = JSON.parse(await readFile(path.join(root, 'tooling/testing/compatibility/support-status.json'), 'utf8'));
-const packageNames = ['core', 'web', 'react', 'angular', 'vue', 'elements'];
-const packageManifests = Object.fromEntries(await Promise.all(packageNames.map(async (name) => [name, JSON.parse(await readFile(path.join(root, `packages/${name}/package.json`), 'utf8'))])));
+const packageEntries = discoverProductUnits(root).packages;
+const packageNames = packageEntries.map(({ name }) => name);
+const packageManifests = Object.fromEntries(packageEntries.map(({ name, manifest }) => [name, manifest]));
 
 function escapeHtml(value) { return String(value).replaceAll('&', '&amp;').replaceAll('<', '&lt;').replaceAll('>', '&gt;').replaceAll('"', '&quot;'); }
 function stripHtml(value) { return value.replace(/<script[\s\S]*?<\/script>/gi, ' ').replace(/<style[\s\S]*?<\/style>/gi, ' ').replace(/<[^>]+>/g, ' ').replace(/\s+/g, ' ').trim(); }

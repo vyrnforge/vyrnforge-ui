@@ -11,4 +11,4 @@ if (process.env.VF_PLAYWRIGHT_READY !== '1') {
   execFileSync(npx, ['playwright', 'install', '--with-deps', ...projects], { stdio: 'inherit' });
 }
 const projectArgs = projects.flatMap((project) => ['--project', project]);
-execFileSync(npx, ['playwright', 'test', ...projectArgs], { stdio: 'inherit' });
+execFileSync(npx, ['playwright', 'test', '--config', 'apps/docs/playwright.config.mjs', ...projectArgs], { stdio: 'inherit' });

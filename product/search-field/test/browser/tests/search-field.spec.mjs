@@ -4,7 +4,7 @@ import axeCore from 'axe-core';
 const port = process.env.VF_COMPONENT_PORT || 'react';
 
 test('search field clears with authored naming and restores focus', async ({ page }) => {
-  await page.goto(`/next/search-field-fixtures/${port}.html`);
+  await page.goto(`/components/search-field/${port}.html`);
   await expect(page.locator('#clear')).toHaveAccessibleName('Clear query');
   await page.locator('#clear').click();
   await expect(page.locator('#search')).toHaveValue('');
@@ -16,7 +16,7 @@ test('search field clears with authored naming and restores focus', async ({ pag
 test('STD-08 list explorer preserves committed criteria, history, IME, stale-response, and zero-result recovery', async ({ page }) => {
   test.skip(port !== 'react', 'Representative STD-08 application integration is intentionally React-only.');
 
-  await page.goto('/next/search-field-fixtures/data-explorer-react.html?q=forge&active=1&sort=updated');
+  await page.goto('/components/search-field/data-explorer-react.html?q=forge&active=1&sort=updated');
   const query = page.getByLabel('Search projects');
   const active = page.getByLabel('Active only');
   const mine = page.getByLabel('Owned by me');

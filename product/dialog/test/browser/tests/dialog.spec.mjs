@@ -7,7 +7,7 @@ test.describe('Dialog Web semantic and styling contract', () => {
   test.skip(port !== 'web', 'Web owns canonical Dialog CSS evidence.');
 
   test('dialog styling remains usable with focus, reduced motion, forced colors, and accessibility', async ({ page }) => {
-    await page.goto('/next/dialog-fixtures/web.html');
+    await page.goto('/components/dialog/web.html');
     const dialog = page.locator('#web-dialog');
     const close = dialog.locator('[data-vf-dialog-close]');
     await expect(dialog).toBeVisible();
@@ -32,7 +32,7 @@ test.describe('Dialog framework native modality and hydration', () => {
       test.skip(port !== framework, `Running ${port} evidence only`);
       const errors = [];
       page.on('console', (message) => { if (message.type() === 'error') errors.push(message.text()); });
-      await page.goto(`/next/dialog-fixtures/${framework}.html`);
+      await page.goto(`/components/dialog/${framework}.html`);
 
       const trigger = page.locator(`#${framework}-open`);
       const dialog = page.locator(`#${framework}-dialog`);
@@ -79,7 +79,7 @@ test.describe('Dialog framework native modality and hydration', () => {
 
     test(`${framework} keeps nested dismissal scoped to the topmost modal`, async ({ page }) => {
       test.skip(port !== framework, `Running ${port} evidence only`);
-      await page.goto(`/next/dialog-fixtures/${framework}.html`);
+      await page.goto(`/components/dialog/${framework}.html`);
 
       const parentTrigger = page.locator(`#${framework}-parent-open`);
       const parent = page.locator(`#${framework}-parent-dialog`);

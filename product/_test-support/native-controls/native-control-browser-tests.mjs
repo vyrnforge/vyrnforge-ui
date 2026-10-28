@@ -7,7 +7,7 @@ export async function defineNativeControlBrowserTests(componentId) {
   const port = process.env.VF_COMPONENT_PORT || 'web';
 
   test(`${componentId}/${port} preserves native semantics, focus, styling, and accessibility`, async ({ page }) => {
-    await page.goto(`/next/${componentId}-fixtures/${port}.html`);
+    await page.goto(`/components/${componentId}/${port}.html`);
     const control = page.locator('#control');
     await expect(control).toHaveJSProperty('tagName', contract.semantics.tag);
     if (contract.semantics.type) await expect(control).toHaveAttribute('type', contract.semantics.type);
@@ -24,7 +24,7 @@ export async function defineNativeControlBrowserTests(componentId) {
   if (contract.reducedMotion) {
     test(`${componentId}/${port} honors reduced motion`, async ({ page }) => {
       await page.emulateMedia({ reducedMotion: 'reduce' });
-      await page.goto(`/next/${componentId}-fixtures/${port}.html`);
+      await page.goto(`/components/${componentId}/${port}.html`);
       expect(await page.locator('#control').evaluate((element) => getComputedStyle(element).transitionDuration)).toBe('0s');
     });
   }

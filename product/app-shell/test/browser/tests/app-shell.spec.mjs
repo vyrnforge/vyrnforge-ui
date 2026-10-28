@@ -5,7 +5,7 @@ const port = process.env.VF_COMPONENT_PORT || 'react';
 
 test('app shell preserves landmarks, shared chrome, full-bleed desktop structure, and responsive structure', async ({ page }) => {
   await page.setViewportSize({ width: 1440, height: 900 });
-  await page.goto(`/next/app-shell-fixtures/${port}.html`);
+  await page.goto(`/components/app-shell/${port}.html`);
   await expect(page.locator('main')).toHaveCount(1);
   await expect(page.getByRole('navigation', { name: 'Primary' })).toHaveCount(1);
   const presentation = await page.evaluate(() => {
@@ -49,7 +49,7 @@ test('settings navigation preserves deep links, route history, title and focus w
   test.skip(port !== 'react', 'STD-07 representative route integration is intentionally verified through the React public entrypoints.');
 
   await page.setViewportSize({ width: 1200, height: 800 });
-  await page.goto('/next/app-shell-fixtures/settings-navigation-react.html?route=%2Fsettings%2Fprofile&tab=preferences');
+  await page.goto('/components/app-shell/settings-navigation-react.html?route=%2Fsettings%2Fprofile&tab=preferences');
 
   const main = page.locator('[data-vf-app-shell-main]');
   const profileLink = page.getByRole('link', { name: 'Profile', exact: true });
@@ -117,7 +117,7 @@ test('settings navigation preserves deep links, route history, title and focus w
 test('permission-aware task preserves work across authoritative denial and mid-task access loss', async ({ page }) => {
   test.skip(port !== 'react', 'STD-16 representative authorization integration is intentionally verified through the React public entrypoints.');
 
-  await page.goto('/next/app-shell-fixtures/permission-access-react.html');
+  await page.goto('/components/app-shell/permission-access-react.html');
 
   const draft = page.getByLabel('Plan notes');
   const save = page.getByRole('button', { name: 'Save changes', exact: true });
@@ -166,7 +166,7 @@ test('permission-aware task preserves work across authoritative denial and mid-t
 test('item management preserves transaction truth and retries only unresolved bulk results', async ({ page }) => {
   test.skip(port !== 'react', 'STD-10 representative CRUD integration is intentionally verified through the React public entrypoints.');
 
-  await page.goto('/next/app-shell-fixtures/item-management-react.html');
+  await page.goto('/components/app-shell/item-management-react.html');
 
   const createName = page.locator('#crud-create-name');
   await createName.fill('Delta');

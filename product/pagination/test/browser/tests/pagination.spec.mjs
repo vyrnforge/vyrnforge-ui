@@ -4,7 +4,7 @@ import axeCore from 'axe-core';
 const port = process.env.VF_COMPONENT_PORT || 'react';
 
 test('pagination exposes a named landmark and current page', async ({ page }) => {
-  await page.goto(`/next/pagination-fixtures/${port}.html`);
+  await page.goto(`/components/pagination/${port}.html`);
   await expect(page.locator('#pagination')).toHaveAttribute('aria-label', 'Pagination');
   await expect(page.getByText('2')).toHaveAttribute('aria-current', 'page');
   await page.addScriptTag({ content: axeCore.source });
@@ -14,7 +14,7 @@ test('pagination exposes a named landmark and current page', async ({ page }) =>
 test('React public entrypoint uses semantic tokens and exposes keyboard focus', async ({ page }) => {
   test.skip(port !== 'react', 'Public-entrypoint styling evidence is intentionally bounded to React for this repair.');
 
-  await page.goto('/next/pagination-fixtures/public-react.html');
+  await page.goto('/components/pagination/public-react.html');
   const pagination = page.locator('#public-pagination');
   const current = pagination.getByText('2');
 

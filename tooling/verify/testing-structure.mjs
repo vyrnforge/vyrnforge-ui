@@ -1,8 +1,7 @@
 import { access, readFile } from 'node:fs/promises';
-import { loadComponentStandards, summarizeComponentStandards } from '../testing/accessibility/component-standards.mjs';
 import { assertProductPreparation } from '../testing/discover-product-units.mjs';
 
-for (const file of ['tooling/testing/README.md', 'tooling/impact/config.json', 'product/README.md', 'tooling/README.md']) await access(file);
+for (const file of ['tooling/testing/README.md', 'tooling/impact/config.json', 'tooling/README.md']) await access(file);
 
 const impact = JSON.parse(await readFile('tooling/impact/config.json', 'utf8'));
 if (impact.schemaVersion !== 1) throw new Error('impact metadata must use schemaVersion 1');
@@ -17,9 +16,4 @@ for (const [target, config] of Object.entries(impact.targets)) {
 }
 
 const discovery = assertProductPreparation();
-const { standards } = await loadComponentStandards();
-const accessibility = summarizeComponentStandards(standards);
-if (accessibility.total !== discovery.components.length) {
-  throw new Error('accessibility standards inventory must classify every discovered component');
-}
-process.stdout.write(`testing structure: ${discovery.components.length} product components and ${discovery.ownedUnits.length} reusable scoped units prepared; accessibility ${accessibility.mapped} mapped/${accessibility.reviewRequired} review-required\n`);
+process.stdout.write(`testing structure: ${discovery.components.length} product components and ${discovery.ownedUnits.length} reusable scoped units prepared; repository testing infrastructure and impact metadata are structurally valid\n`);

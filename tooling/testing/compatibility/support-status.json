@@ -1,6 +1,6 @@
 {
   "schemaVersion": 2,
-  "status": "implementation-baseline",
+  "status": "selected-validation-baseline",
   "runtime": {
     "node": ">=24.18 <25",
     "npm": ">=11.16 <12"
@@ -14,26 +14,24 @@
   "frameworks": {
     "react": {
       "baseline": "19.3.x",
-      "status": "representative-components-implemented"
+      "status": "selected-validation-baseline"
     },
     "angular": {
       "baseline": "22.x",
       "typescript": ">=6.0.0 <6.1.0",
-      "status": "representative-components-implemented"
+      "status": "selected-validation-baseline"
     },
     "vue": {
       "baseline": "3.5.x",
-      "status": "representative-components-implemented"
+      "status": "selected-validation-baseline"
     },
     "elements": {
       "baseline": "standards-based Custom Elements on the selected browser baseline",
-      "status": "tabs-baseline-implemented",
-      "button": "deferred-native-semantics",
-      "tabs": "implemented"
+      "status": "selected-validation-baseline"
     },
     "native-web": {
       "baseline": "selected browser platform baseline",
-      "status": "representative-components-implemented"
+      "status": "selected-validation-baseline"
     }
   },
   "browsers": {
@@ -44,7 +42,7 @@
     "status": "selected-validation-baseline"
   },
   "ssrBundlers": {
-    "status": "representative-port-validation-active",
-    "policy": "Button, Tabs, and Dialog validate SSR/server-safe rendering and hydration per implemented React, Angular, and Vue port at the selected framework baselines; Elements owns browser upgrade/connection evidence instead of framework SSR. Broader integration support remains component-by-component."
+    "status": "selected-validation-baseline",
+    "policy": "Selected framework baselines are exercised through repository-owned SSR/server validation where applicable; Elements uses browser-native upgrade/connection validation. This metadata records validation environments only and does not assert product support or maturity."
   }
 }
