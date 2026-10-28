@@ -121,7 +121,7 @@ function App() {
                 <span><span className="viz-key-sample viz-key-missing" aria-hidden="true">×</span>Missing observation</span>
               </div>
 
-              <div className="viz-table-wrap">
+              <div className="viz-table-wrap" tabIndex={0} aria-label="Scrollable weekly completion rate data">
                 <table>
                   <caption>Weekly completion rate data</caption>
                   <thead><tr><th scope="col">Week</th><th scope="col">Rate</th><th scope="col">Status</th><th scope="col">Range</th></tr></thead>
@@ -159,7 +159,7 @@ function App() {
                 <div className="viz-zero-label" aria-hidden="true">0</div>
               </div>
 
-              <div className="viz-table-wrap">
+              <div className="viz-table-wrap" tabIndex={0} aria-label="Scrollable completed order counts by channel">
                 <table>
                   <caption>Completed order counts by channel</caption>
                   <thead><tr><th scope="col">Channel</th><th scope="col">Completed orders</th></tr></thead>
