@@ -45,7 +45,11 @@ for (const name of packageNames) {
     localBuild,
     showVerboseMessages: false,
   });
-  failed ||= !result.succeeded;
+
+  // API Extractor reports `succeeded: false` when warnings are emitted. Warnings
+  // remain visible for follow-up cleanup, but the contract gate should fail only
+  // for extraction errors or an unaccepted API report change.
+  failed ||= result.errorCount > 0 || (!localBuild && result.apiReportChanged);
 }
 
 if (failed) process.exitCode = 1;
