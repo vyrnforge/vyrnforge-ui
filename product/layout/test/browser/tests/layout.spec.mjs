@@ -89,7 +89,7 @@ test('L3 composition primitives preserve spatial, form, and control relationship
   await expect(radios.nth(1)).toBeChecked();
   await expect(radios.nth(0)).not.toBeChecked();
 
-  await page.addScriptTag({ content: axeCore.source });
+  
   const results = await new AxeBuilder({ page }).analyze();
   expect(results.violations).toEqual([]);
 

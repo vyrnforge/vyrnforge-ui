@@ -55,7 +55,7 @@ test('Textarea preserves native multiline form semantics and shared styling acro
     .poll(() => editable.evaluate((textarea) => getComputedStyle(textarea).backgroundColor))
     .toBe('rgb(24, 24, 27)');
 
-  await page.addScriptTag({ content: axeCore.source });
+  
   const results = await new AxeBuilder({ page }).analyze();
   expect(results.violations).toEqual([]);
 });

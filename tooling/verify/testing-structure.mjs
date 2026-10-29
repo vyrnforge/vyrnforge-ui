@@ -1,4 +1,5 @@
-import { access } from 'node:fs/promises';
+import { access, readdir, readFile } from 'node:fs/promises';
+import path from 'node:path';
 import { assertProductPreparation } from '../testing/discover-product-units.mjs';
 import { createSemanticImpact } from '../impact/plan.mjs';
 
@@ -8,6 +9,31 @@ const impact = createSemanticImpact(['nx.json', 'tooling/verify/package-artifact
 if (impact.orchestration !== 'nx') throw new Error('Nx must remain the only task orchestrator');
 if (!impact.repositoryWide || !impact.semanticEvidence.includes('package-artifacts') || !impact.semanticEvidence.includes('browser')) {
   throw new Error('semantic impact classification must retain repository-wide package and browser evidence');
+}
+
+async function collectBrowserSpecs(directory) {
+  const entries = await readdir(directory, { withFileTypes: true });
+  const files = [];
+  for (const entry of entries) {
+    const target = path.join(directory, entry.name);
+    if (entry.isDirectory()) files.push(...await collectBrowserSpecs(target));
+    else if (entry.isFile() && /\.spec\.mjs$/.test(entry.name) && target.includes(`${path.sep}test${path.sep}browser${path.sep}tests${path.sep}`)) files.push(target);
+  }
+  return files;
+}
+
+const legacyAxePatterns = [
+  /axeCore\.source/,
+  /globalThis\.axe(?:\.|\b)/,
+  /page\.addScriptTag\(\{\s*content:\s*axeCore/,
+];
+const legacyAxeFiles = [];
+for (const file of await collectBrowserSpecs('product')) {
+  const source = await readFile(file, 'utf8');
+  if (legacyAxePatterns.some((pattern) => pattern.test(source))) legacyAxeFiles.push(file.split(path.sep).join('/'));
+}
+if (legacyAxeFiles.length) {
+  throw new Error(`legacy raw axe injection remains in browser evidence:\n${legacyAxeFiles.map((file) => `- ${file}`).join('\n')}\nUse @axe-core/playwright through browser-owned test code instead.`);
 }
 
 const discovery = assertProductPreparation();

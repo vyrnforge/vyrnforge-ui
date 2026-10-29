@@ -43,7 +43,7 @@ test('Input preserves native form semantics and shared styling across ports', as
     .poll(() => editable.evaluate((input) => getComputedStyle(input).backgroundColor))
     .toBe('rgb(24, 24, 27)');
 
-  await page.addScriptTag({ content: axeCore.source });
+  
   const results = await new AxeBuilder({ page }).analyze();
   expect(results.violations).toEqual([]);
 });

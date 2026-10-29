@@ -25,7 +25,7 @@ test('Surface provides the same visual boundary without implicit layout across p
   expect(await surface.evaluate((element) => getComputedStyle(element).backgroundColor)).toBe('rgb(24, 24, 27)');
   expect(await surface.evaluate((element) => getComputedStyle(element).color)).toBe('rgb(250, 250, 250)');
 
-  await page.addScriptTag({ content: axeCore.source });
+  
   const results = await new AxeBuilder({ page }).analyze();
   expect(results.violations).toEqual([]);
 });

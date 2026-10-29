@@ -1,6 +1,5 @@
 import { test, expect } from '@playwright/test';
-import AxeBuilder from '@axe-core/playwright';
-
+import { expectNoAxeViolations } from '../../../../../tooling/testing/accessibility.mjs';
 const port = process.env.VF_COMPONENT_PORT || 'react';
 
 test('privacy controls preserve optional choice symmetry, permission recovery, export truth, and deletion confirmation', async ({ page }) => {
@@ -59,6 +58,6 @@ test('privacy controls preserve optional choice symmetry, permission recovery, e
   await expect(page.getByText('Fake account state: deleted. This UI evidence does not prove backend erasure or retention compliance.', { exact: true })).toBeVisible();
   await expect(page.getByText('Account deletion committed by the fake service. This does not prove universal erasure, retention fulfillment, or legal compliance.', { exact: true })).toBeVisible();
 
-  await page.addScriptTag({ content: axeCore.source });
-  expect((await page.evaluate(async () => globalThis.axe.run(document))).violations).toEqual([]);
+  
+  expect((await expectNoAxeViolations(page)).violations).toEqual([]);
 });

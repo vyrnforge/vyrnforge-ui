@@ -1,6 +1,5 @@
 import { test, expect } from '@playwright/test';
-import AxeBuilder from '@axe-core/playwright';
-
+import { expectNoAxeViolations } from '../../../../../tooling/testing/accessibility.mjs';
 const port = process.env.VF_COMPONENT_PORT || 'react';
 
 test('app shell preserves landmarks, shared chrome, full-bleed desktop structure, and responsive structure', async ({ page }) => {
@@ -41,8 +40,8 @@ test('app shell preserves landmarks, shared chrome, full-bleed desktop structure
   });
   expect(mobileNavigation.inlineEnd).toBe('0px');
   expect(mobileNavigation.blockEnd).toBe('1px');
-  await page.addScriptTag({ content: axeCore.source });
-  expect((await page.evaluate(async () => globalThis.axe.run(document))).violations).toEqual([]);
+  
+  expect((await expectNoAxeViolations(page)).violations).toEqual([]);
 });
 
 test('settings navigation preserves deep links, route history, title and focus while local state remains local', async ({ page }) => {
@@ -110,8 +109,8 @@ test('settings navigation preserves deep links, route history, title and focus w
   await expect(page.getByRole('dialog', { name: 'Settings navigation' })).toBeHidden();
   await expect(navigationTrigger).toBeFocused();
 
-  await page.addScriptTag({ content: axeCore.source });
-  expect((await page.evaluate(async () => globalThis.axe.run(document))).violations).toEqual([]);
+  
+  expect((await expectNoAxeViolations(page)).violations).toEqual([]);
 });
 
 test('permission-aware task preserves work across authoritative denial and mid-task access loss', async ({ page }) => {
@@ -159,8 +158,8 @@ test('permission-aware task preserves work across authoritative denial and mid-t
   await expect(impersonation).toHaveCount(0);
   await expect(page.getByText('Avery is using their own identity.')).toBeVisible();
 
-  await page.addScriptTag({ content: axeCore.source });
-  expect((await page.evaluate(async () => globalThis.axe.run(document))).violations).toEqual([]);
+  
+  expect((await expectNoAxeViolations(page)).violations).toEqual([]);
 });
 
 test('item management preserves transaction truth and retries only unresolved bulk results', async ({ page }) => {
@@ -208,6 +207,6 @@ test('item management preserves transaction truth and retries only unresolved bu
   await expect(page.getByRole('button', { name: 'Restore Beacon', exact: true })).toBeVisible();
   await expect(page.getByRole('button', { name: 'Restore Cedar', exact: true })).toBeVisible();
 
-  await page.addScriptTag({ content: axeCore.source });
-  expect((await page.evaluate(async () => globalThis.axe.run(document))).violations).toEqual([]);
+  
+  expect((await expectNoAxeViolations(page)).violations).toEqual([]);
 });

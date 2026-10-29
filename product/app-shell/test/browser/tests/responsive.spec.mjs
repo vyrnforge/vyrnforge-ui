@@ -1,6 +1,5 @@
 import { test, expect } from '@playwright/test';
-import AxeBuilder from '@axe-core/playwright';
-
+import { expectNoAxeViolations } from '../../../../../tooling/testing/accessibility.mjs';
 const port = process.env.VF_COMPONENT_PORT || 'react';
 
 async function expectNoPageInlineOverflow(page) {
@@ -67,8 +66,8 @@ test('STD-21 settings task preserves draft, actions, focus, and reflow across wi
   await expect(navigationTrigger).toBeFocused();
   await expect(draft).toHaveValue('Unsaved responsive draft');
 
-  await page.addScriptTag({ content: axeCore.source });
-  expect((await page.evaluate(async () => globalThis.axe.run(document))).violations).toEqual([]);
+  
+  expect((await expectNoAxeViolations(page)).violations).toEqual([]);
 });
 
 test('STD-21 data-list task preserves selection, required actions, focus, and reflow across wide, zoom-equivalent, and 320 CSS pixel layouts', async ({ page }, testInfo) => {
@@ -116,6 +115,6 @@ test('STD-21 data-list task preserves selection, required actions, focus, and re
   await archiveSelected.press('Tab');
   await expect(clearSelection).toBeFocused();
 
-  await page.addScriptTag({ content: axeCore.source });
-  expect((await page.evaluate(async () => globalThis.axe.run(document))).violations).toEqual([]);
+  
+  expect((await expectNoAxeViolations(page)).violations).toEqual([]);
 });

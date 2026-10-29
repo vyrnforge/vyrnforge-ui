@@ -1,6 +1,5 @@
 import { test, expect } from '@playwright/test';
-import AxeBuilder from '@axe-core/playwright';
-
+import { expectNoAxeViolations } from '../../../../../tooling/testing/accessibility.mjs';
 const port = process.env.VF_COMPONENT_PORT || 'react';
 
 async function expectNoPageInlineOverflow(page) {
@@ -57,8 +56,8 @@ test('STD-22 trend distinguishes missing and estimated data and preserves an exa
   await expectNoPageInlineOverflow(page);
   await attachScreenshot(page, testInfo, 'visualization-reflow-320');
 
-  await page.addScriptTag({ content: axeCore.source });
-  expect((await page.evaluate(async () => globalThis.axe.run(document))).violations).toEqual([]);
+  
+  expect((await expectNoAxeViolations(page)).violations).toEqual([]);
 });
 
 test('STD-22 categorical comparison uses a zero-based magnitude encoding and localized exact values', async ({ page }) => {
@@ -81,6 +80,6 @@ test('STD-22 categorical comparison uses a zero-based magnitude encoding and loc
   await expect(comparisonDataRegion).toBeFocused();
   await expectNoPageInlineOverflow(page);
 
-  await page.addScriptTag({ content: axeCore.source });
-  expect((await page.evaluate(async () => globalThis.axe.run(document))).violations).toEqual([]);
+  
+  expect((await expectNoAxeViolations(page)).violations).toEqual([]);
 });

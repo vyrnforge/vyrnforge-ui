@@ -1,6 +1,5 @@
 import { test, expect } from '@playwright/test';
-import AxeBuilder from '@axe-core/playwright';
-
+import { expectNoAxeViolations } from '../../../../../tooling/testing/accessibility.mjs';
 const port = process.env.VF_COMPONENT_PORT || 'react';
 const runtimePort = port !== 'web';
 
@@ -81,6 +80,6 @@ test('toolbar updates the roving stop when availability changes', async ({ page 
 
 test('toolbar has no automated accessibility violations', async ({ page }) => {
   await openFixture(page);
-  await page.addScriptTag({ content: axeCore.source });
-  expect((await page.evaluate(async () => globalThis.axe.run(document))).violations).toEqual([]);
+  
+  expect((await expectNoAxeViolations(page)).violations).toEqual([]);
 });

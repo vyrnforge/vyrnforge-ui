@@ -28,7 +28,7 @@ test('Text preserves native semantics and shared typography across ports', async
   expect(await poster.evaluate((element) => getComputedStyle(element).fontSize)).toBe('42px');
   expect(await poster.evaluate((element) => getComputedStyle(element).fontWeight)).toBe('700');
 
-  await page.addScriptTag({ content: axeCore.source });
+  
   const results = await new AxeBuilder({ page }).analyze();
   expect(results.violations).toEqual([]);
 });

@@ -1,6 +1,5 @@
 import { test, expect } from '@playwright/test';
-import AxeBuilder from '@axe-core/playwright';
-
+import { expectNoAxeViolations } from '../../../../../tooling/testing/accessibility.mjs';
 const port = process.env.VF_COMPONENT_PORT || 'react';
 
 async function expectNoPageInlineOverflow(page) {
@@ -58,8 +57,8 @@ test('STD-23 keeps AI output draft-only, preserves edits through failure, and ig
   await expectNoPageInlineOverflow(page);
   await attachScreenshot(page, testInfo, 'ai-assisted-reply-wide');
 
-  await page.addScriptTag({ content: axeCore.source });
-  expect((await page.evaluate(async () => globalThis.axe.run(document))).violations).toEqual([]);
+  
+  expect((await expectNoAxeViolations(page)).violations).toEqual([]);
 });
 
 test('STD-23 cancellation does not allow a late generation to overwrite the current draft', async ({ page }) => {
@@ -105,6 +104,6 @@ test('STD-23 requires explicit review before send and preserves the draft throug
   await expectNoPageInlineOverflow(page);
   await attachScreenshot(page, testInfo, 'ai-assisted-reply-reflow-320');
 
-  await page.addScriptTag({ content: axeCore.source });
-  expect((await page.evaluate(async () => globalThis.axe.run(document))).violations).toEqual([]);
+  
+  expect((await expectNoAxeViolations(page)).violations).toEqual([]);
 });
