@@ -1,4 +1,4 @@
-import { execFileSync } from 'node:child_process';
+import { spawnSync } from 'node:child_process';
 import { existsSync, readdirSync, rmSync } from 'node:fs';
 import path from 'node:path';
 
@@ -17,11 +17,25 @@ const components = readdirSync(productRoot, { withFileTypes: true })
   .sort();
 
 let fixtureScripts = 0;
+let skippedUnsupported = 0;
 for (const component of components) {
   const fixture = path.join(productRoot, component, 'test/browser/fixtures.mjs');
   if (!existsSync(fixture)) continue;
-  fixtureScripts += 1;
-  execFileSync(process.execPath, [fixture, port], { cwd: root, stdio: 'inherit' });
+  const result = spawnSync(process.execPath, [fixture, port], { cwd: root, encoding: 'utf8' });
+  if (result.status === 0) {
+    fixtureScripts += 1;
+    if (result.stdout) process.stdout.write(result.stdout);
+    if (result.stderr) process.stderr.write(result.stderr);
+    continue;
+  }
+  const output = `${result.stdout ?? ''}\n${result.stderr ?? ''}`;
+  if (/supports .* browser evidence only; received/i.test(output)) {
+    skippedUnsupported += 1;
+    continue;
+  }
+  if (result.stdout) process.stdout.write(result.stdout);
+  if (result.stderr) process.stderr.write(result.stderr);
+  throw new Error(`Browser fixture preparation failed for ${component} on ${port}`);
 }
 
 function countPortPages(directory) {
@@ -40,8 +54,5 @@ function countPortPages(directory) {
 }
 
 const pages = countPortPages(outputRoot);
-if (fixtureScripts === 0 || pages === 0) {
-  throw new Error(`Browser fixture preparation produced no ${port} evidence pages`);
-}
-
-console.log(`Prepared ${pages} ${port} browser fixture pages from ${fixtureScripts} component fixture scripts.`);
+if (fixtureScripts === 0 || pages === 0) throw new Error(`Browser fixture preparation produced no ${port} evidence pages`);
+console.log(`Prepared ${pages} ${port} browser fixture pages from ${fixtureScripts} applicable component fixture scripts; skipped ${skippedUnsupported} explicitly unsupported fixtures.`);
