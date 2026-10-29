@@ -12,17 +12,32 @@ VyrnForge is a clean-slate rebuild inside an existing repository. Canonical arch
 
 ## Setup and common commands
 
-Use the Node/npm versions declared by `.node-version`, `.nvmrc`, and the root `package.json`, then install the locked workspace with `pnpm install --frozen-lockfile --ignore-scripts`.
+Use the Node and pnpm versions declared by `.node-version`, `.nvmrc`, and the root `package.json`, then install the locked workspace with `pnpm install --frozen-lockfile --ignore-scripts`.
 
-- `pnpm build` — build all seven active packages in dependency order.
+- `pnpm build` — run the Nx `build` target across the workspace with dependency ordering.
+- `pnpm lint` — run the Nx `lint` target across the workspace.
+- `pnpm typecheck` — run the Nx `typecheck` target across the workspace.
+- `pnpm test` — run the Nx/Vitest unit and tooling test targets across the workspace.
+- `pnpm check` — run formatting plus the repository's static/unit/build verification set.
+- `pnpm check:changed` — run Nx affected lint, typecheck, test, and build against the configured base/head.
 - `pnpm build:docs` — build packages plus the documentation site and executable examples.
-- `pnpm lint:tooling`, `pnpm lint:web-css`, and package-scoped lint commands — validate authoring surfaces.
+- `pnpm verify:packages` — build and validate packed public-package artifacts and clean consumers.
+- `pnpm test:browser` — run Playwright browser evidence; set `VF_COMPONENT_PORT` or use a port-specific script for focused port work.
 - `pnpm generate:tokens` / `pnpm verify:tokens` — generate and verify repository-owned token output.
-- `pnpm check:changed:plan` — inspect the validation plan selected from local changes.
-- `pnpm check:changed` — execute targeted local validation.
-- `pnpm check:full` — deliberately execute the exhaustive broad validation tier.
-- `pnpm test:tooling` — test impact, reusable testing, accessibility, and CI tooling.
-- `pnpm test:visual:foundation` — run deterministic Chromium foundation visual evidence.
+
+For direct Nx investigation, use commands such as `pnpm exec nx graph`, `pnpm exec nx show projects`, or `pnpm exec nx affected -t lint,typecheck,test,build --base=<sha> --head=<sha>`. Nx is the generic task executor; semantic-impact tooling classifies VyrnForge evidence and does not replace Nx scheduling.
+
+### Vitest developer workflow
+
+Vitest owns pure logic, package unit tests, and repository/tooling tests. These projects run in Node by default; browser-owned behavior remains in Playwright rather than a DOM-emulation environment.
+
+- `pnpm exec vitest --project core` — run one configured package project.
+- `pnpm exec vitest --project repository` — run repository/tooling tests.
+- `pnpm exec vitest --watch --project core` — watch one project while developing.
+- `pnpm exec vitest packages/core/test/<path>.test.mjs` — filter to a concrete test file.
+- `pnpm exec vitest -t "<test name>" --project repository` — filter by test name within a project.
+
+Editor integrations should use the repository root and `vitest.config.mjs`; do not create package-local competing Vitest configurations merely for editor discovery. Browser test debugging should use Playwright's own filtering/debugging facilities instead of moving browser contracts into Vitest.
 
 Do not bypass a failing verifier by weakening it unless the canonical architecture itself has deliberately changed.
 
@@ -69,15 +84,13 @@ Implementation changes to a component or reusable scoped unit require a matching
 
 ## CI and validation
 
-Pull requests and push-triggered Main validation both use dependency-derived validation. Changed paths resolve to the most specific discovered owner, then reverse dependency closure selects applicable evidence. Impact policy and execution live under `tooling/impact/`; GitHub workflow YAML is orchestration only. Known CI/impact infrastructure follows its explicit owner; unknown or unclassified changes fail closed and broaden.
+Pull requests and push-triggered Main validation both use dependency-derived validation. Changed paths resolve to the most specific discovered owner, then reverse dependency closure selects applicable evidence. Semantic-impact policy lives under `tooling/impact/`, while Nx remains the generic executor and GitHub workflow YAML remains orchestration only. Unknown or unclassified changes broaden rather than silently skipping evidence.
 
-- PR: targeted affected evidence plus small global architecture sentinels.
-- push-triggered `main`: targeted affected evidence for the merged push range.
-- explicit broad/local `main` tier: deliberate exhaustive verification exposed as `pnpm check:full`.
-- scheduled: broad recurring safety net including cross-browser assurance.
-- release: broadest release-readiness graph.
+- PR: Nx affected evidence plus repository architecture sentinels, packed-package validation, and the browser-port matrix selected by the workflow.
+- push-triggered `main`: the same Nx/package foundations plus documentation validation for the merged push.
+- scheduled/release workflows: broad safety nets defined by their workflow purpose.
 
-Do not encode large path-condition matrices in workflow YAML. A passing scoped run proves its selected and executed evidence; it is not a claim that every repository test ran.
+Do not encode large component path-condition matrices in workflow YAML. A passing scoped run proves its selected and executed evidence; it is not a claim that every repository test ran.
 
 ## Completion
 
