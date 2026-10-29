@@ -1,2 +1,28 @@
-import{test,expect}from'@playwright/test';
-import { expectNoAxeViolations } from '../../../../../tooling/testing/accessibility.mjs';const port=process.env.VF_COMPONENT_PORT||'react';test('split panel exposes keyboard-resizable separator semantics',async({page})=>{await page.goto(`/components/split-panel/${port}.html`);await page.locator('#handle').focus();await page.keyboard.press('ArrowRight');await expect(page.locator('#handle')).toHaveAttribute('aria-valuenow','51');expect((await expectNoAxeViolations(page)).violations).toEqual([]);});
+import { test, expect } from '@playwright/test';
+import { expectNoAxeViolations } from '../../../../../tooling/testing/accessibility.mjs';
+const port = process.env.VF_COMPONENT_PORT || 'react';
+
+test('split panel exposes keyboard-resizable separator semantics', async ({ page }) => {
+  await page.goto(`/components/split-panel/${port}.html`);
+  await page.locator('#handle').focus();
+  await page.keyboard.press('ArrowRight');
+  await expect(page.locator('#handle')).toHaveAttribute('aria-valuenow', '51');
+  expect((await expectNoAxeViolations(page)).violations).toEqual([]);
+});
+
+test('public SplitPanel CSS resolves the canonical focus ring in light and dark themes', async ({ page }) => {
+  test.skip(port !== 'web', 'Public CSS resolution evidence is owned by the Web lane.');
+  await page.goto('/components/split-panel/web.html');
+  const handle = page.locator('#handle');
+  const focusRingByTheme = {
+    light: 'rgb(47, 111, 237)',
+    dark: 'rgb(141, 180, 255)',
+  };
+
+  for (const theme of ['light', 'dark']) {
+    await page.locator('html').evaluate((element, value) => element.setAttribute('data-vf-theme', value), theme);
+    await handle.focus();
+    await expect(handle).toHaveCSS('outline-width', '2px');
+    await expect(handle).toHaveCSS('outline-color', focusRingByTheme[theme]);
+  }
+});
