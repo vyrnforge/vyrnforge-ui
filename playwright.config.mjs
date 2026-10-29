@@ -6,6 +6,10 @@ const browserDeviceNames = {
   firefox: 'Desktop Firefox',
   webkit: 'Desktop Safari',
 };
+const axeCompatibilityImport = '--import=./tooling/testing/axe-global.mjs';
+if (!process.env.NODE_OPTIONS?.includes(axeCompatibilityImport)) {
+  process.env.NODE_OPTIONS = [process.env.NODE_OPTIONS, axeCompatibilityImport].filter(Boolean).join(' ');
+}
 
 export default defineConfig({
   testDir: './product',
