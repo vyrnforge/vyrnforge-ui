@@ -17,6 +17,11 @@ createServer(async (request, response) => {
   try {
     const url = new URL(request.url || '/', `http://${host}:${port}`);
     const decoded = decodeURIComponent(url.pathname);
+    if (decoded === '/') {
+      response.writeHead(200, { 'content-type': 'text/plain; charset=utf-8', 'cache-control': 'no-store' });
+      response.end('VyrnForge browser fixture server');
+      return;
+    }
     const candidate = path.resolve(root, `.${decoded}`);
     if (!candidate.startsWith(`${root}${path.sep}`) && candidate !== root) throw new Error('invalid path');
     let file = candidate;
