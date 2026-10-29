@@ -60,6 +60,13 @@ jobs:
       - run: corepack enable
       - run: pnpm install --frozen-lockfile --ignore-scripts
       - run: pnpm verify:packages
+      - uses: actions/upload-artifact@v7
+        if: always()
+        with:
+          name: api-report-bootstrap
+          path: packages/*/etc/*.api.md
+          if-no-files-found: error
+          retention-days: 1
 
   browser-chromium:
     name: browser-chromium-${{ matrix.port }}
