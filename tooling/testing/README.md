@@ -18,6 +18,14 @@ Component browser fixtures are emitted under `dist/browser-fixtures/` and served
 
 Normal product additions must not require editing a central testing registry, CI workflow, or validation executor. Expose the real product surface and provide its conventionally owned evidence. Product discovery and owner-local tests fail when required evidence is missing.
 
+## Browser accessibility and visual evidence
+
 Browser-owned behavior is proven in real browsers. Cross-port conformance validates observable outcomes rather than identical internals. Packed-package consumer verification uses public package surfaces rather than monorepo-private imports.
+
+Use `expectNoAxeViolations()` for the shared structural accessibility scan. Axe is a supplemental signal only: interactive acceptance must still assert the semantics that matter for the contract, including keyboard behavior, focus movement/restoration, accessible naming and relationships, disabled/read-only state, interaction outcomes, and browser-owned modality or form behavior where applicable. Repository validation rejects legacy raw axe injection so the shared configuration cannot silently diverge.
+
+Visual regression is product-owned evidence and should capture only meaningful styling contracts. Prefer focused snapshots of states such as focus-visible, forced-colors, RTL, theme/density or validation/loading states when those states are part of the product contract; do not snapshot every incidental DOM state. Reduced-motion and other media-state behavior should be asserted as executable behavior when the contract is behavioral rather than merely pictorial.
+
+Automated browser evidence does not prove blanket WCAG conformance, screen-reader interoperability, usability, announcement quality, browse-mode behavior, touch exploration, or platform/assistive-technology combinations. Manual assistive-technology and usability checks remain a separate evidence class and must be recorded/scoped by the owning product or release activity when required; they are never inferred from a passing axe scan, keyboard test, or screenshot.
 
 Do not put product-specific tests, classification rules, baselines, or semantics here merely because they use a shared harness. The harness belongs here; owner-specific evidence and policy belong to the owner.
