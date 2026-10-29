@@ -1,8 +1,8 @@
-name: Actions Retention Cleanup
+name: Repository Retention Cleanup
 
 on:
   schedule:
-    - cron: '41 4 * * 1'
+    - cron: '41 4 * * *'
   pull_request_target:
     types: [closed]
   workflow_dispatch:
@@ -13,12 +13,12 @@ on:
         type: string
 
 permissions:
-  contents: read
+  contents: write
   pull-requests: read
   actions: write
 
 concurrency:
-  group: actions-retention-cleanup
+  group: repository-retention-cleanup
   cancel-in-progress: false
 
 jobs:
@@ -37,7 +37,7 @@ jobs:
         with:
           node-version-file: .node-version
 
-      - name: Clean workflow-run history
+      - name: Apply repository retention policy
         env:
           GITHUB_TOKEN: ${{ github.token }}
           RETENTION_PR_NUMBER: ${{ inputs.pull_request || '' }}
