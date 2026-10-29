@@ -1,18 +1,42 @@
 import { execFileSync } from 'node:child_process';
+import { readFileSync } from 'node:fs';
+
+function git(args, options = {}) {
+  return execFileSync('git', args, { encoding: 'utf8', ...options }).trim();
+}
 
 function canResolve(ref) {
   try {
-    execFileSync('git', ['rev-parse', '--verify', ref], { stdio: 'ignore' });
+    git(['rev-parse', '--verify', ref], { stdio: 'ignore' });
     return true;
   } catch {
     return false;
   }
 }
 
+function isShallow() {
+  try {
+    return git(['rev-parse', '--is-shallow-repository']) === 'true';
+  } catch {
+    return false;
+  }
+}
+
+const config = JSON.parse(readFileSync(new URL('../../.changeset/config.json', import.meta.url), 'utf8'));
+const configuredBase = config.baseBranch || 'main';
 const explicit = process.env.CHANGESETS_BASE_REF;
-const baseRef = explicit || (canResolve('main') ? 'main' : canResolve('origin/main') ? 'origin/main' : null);
+
+let baseRef = explicit || (canResolve(configuredBase) ? configuredBase : canResolve(`origin/${configuredBase}`) ? `origin/${configuredBase}` : null);
+if (!baseRef || isShallow()) {
+  const args = ['fetch', '--no-tags'];
+  if (isShallow()) args.push('--unshallow');
+  args.push('origin', `${configuredBase}:refs/remotes/origin/${configuredBase}`);
+  git(args, { stdio: 'inherit' });
+  baseRef = explicit || (canResolve(configuredBase) ? configuredBase : canResolve(`origin/${configuredBase}`) ? `origin/${configuredBase}` : null);
+}
+
 if (!baseRef) {
-  throw new Error('Changesets status requires a resolvable main/origin/main base. Fetch repository history or set CHANGESETS_BASE_REF.');
+  throw new Error(`Changesets status requires a resolvable ${configuredBase} base. Fetch repository history or set CHANGESETS_BASE_REF.`);
 }
 
 const pnpm = process.platform === 'win32' ? 'pnpm.cmd' : 'pnpm';
