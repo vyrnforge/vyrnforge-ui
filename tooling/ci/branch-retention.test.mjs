@@ -5,14 +5,12 @@ const now = new Date('2026-10-29T00:00:00Z');
 const repository = 'vyrnforge/vyrnforge-ui';
 const policy = { staleDays: 7, maxDeletionsPerRun: 2, protectedBranches: [], protectedPrefixes: ['release/', 'hotfix/'] };
 
-function branch(name, { days = 10, protected: isProtected = false, mergedPullRequest = false, aheadByDefault = 0, sha = `${name}-sha` } = {}) {
+function branch(name, { days = 10, protected: isProtected = false, sha = `${name}-sha` } = {}) {
   return {
     name,
     sha,
     protected: isProtected,
-    commitDate: new Date(now.getTime() - days * 86_400_000).toISOString(),
-    mergedPullRequest,
-    aheadByDefault
+    commitDate: new Date(now.getTime() - days * 86_400_000).toISOString()
   };
 }
 
@@ -26,17 +24,16 @@ describe('branch retention policy', () => {
     expect(new Set(names)).toEqual(new Set(['main', 'feature/child', 'feature/parent']));
   });
 
-  test('selects only stale branches whose work is merged or fully contained', () => {
+  test('selects every stale non-protected branch regardless of merge state', () => {
     const result = planBranchDeletions([
       branch('main'),
-      branch('feature/contained', { aheadByDefault: 0 }),
-      branch('feature/squash-merged', { mergedPullRequest: true, aheadByDefault: 3 }),
-      branch('feature/unmerged', { aheadByDefault: 1 }),
-      branch('feature/recent', { days: 3, aheadByDefault: 0 })
+      branch('feature/merged'),
+      branch('feature/unmerged'),
+      branch('feature/recent', { days: 3 })
     ], [], { ...policy, maxDeletionsPerRun: 10 }, { now, defaultBranch: 'main', repository });
 
-    expect(result.deletions.map((item) => item.name)).toEqual(['feature/contained', 'feature/squash-merged']);
-    expect(result.skipped.some((item) => item.name === 'feature/unmerged' && item.reason === 'unmerged-work')).toBe(true);
+    expect(result.deletions.map((item) => item.name)).toEqual(['feature/merged', 'feature/unmerged']);
+    expect(result.deletions.every((item) => item.reason === 'stale')).toBe(true);
     expect(result.skipped.some((item) => item.name === 'feature/recent' && item.reason === 'not-stale')).toBe(true);
   });
 
