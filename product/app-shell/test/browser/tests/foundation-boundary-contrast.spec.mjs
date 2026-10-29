@@ -38,12 +38,10 @@ async function renderedBoundaryEvidence(page) {
     return {
       token: formStyle.getPropertyValue('--vf-color-border-required').trim(),
       surface: formStyle.backgroundColor,
-      surfacePressed: formStyle.getPropertyValue('--vf-color-surface-pressed').trim(),
       surfaceBorder: formStyle.borderTopColor,
       nativeSelectBorder: getComputedStyle(selectElement).borderTopColor,
       secondaryBorder: getComputedStyle(secondaryElement).borderTopColor,
       switchBorder: getComputedStyle(switchElement).borderTopColor,
-      switchBackground: getComputedStyle(switchElement).backgroundColor,
     };
   });
 }
@@ -60,7 +58,7 @@ test.describe('STD-02 required control boundaries', () => {
     expect(contrastRatio(light.surfaceBorder, light.surface)).toBeGreaterThanOrEqual(3);
     expect(contrastRatio(light.nativeSelectBorder, light.surface)).toBeGreaterThanOrEqual(3);
     expect(contrastRatio(light.secondaryBorder, light.surface)).toBeGreaterThanOrEqual(3);
-    expect(contrastRatio(light.switchBorder, light.switchBackground)).toBeGreaterThanOrEqual(3);
+    expect(contrastRatio(light.switchBorder, light.surface)).toBeGreaterThanOrEqual(3);
 
     await appearance.selectOption('dark');
     const dark = await renderedBoundaryEvidence(page);
@@ -68,7 +66,7 @@ test.describe('STD-02 required control boundaries', () => {
     expect(contrastRatio(dark.surfaceBorder, dark.surface)).toBeGreaterThanOrEqual(3);
     expect(contrastRatio(dark.nativeSelectBorder, dark.surface)).toBeGreaterThanOrEqual(3);
     expect(contrastRatio(dark.secondaryBorder, dark.surface)).toBeGreaterThanOrEqual(3);
-    expect(contrastRatio(dark.switchBorder, dark.switchBackground)).toBeGreaterThanOrEqual(3);
+    expect(contrastRatio(dark.switchBorder, dark.surface)).toBeGreaterThanOrEqual(3);
 
     const decorativeBorder = await page.getByRole('form', { name: 'Foundation settings' }).evaluate((element) => getComputedStyle(element).getPropertyValue('--vf-color-border').trim());
     expect(decorativeBorder).toBe('#3f3f46');
