@@ -22,6 +22,8 @@ export const browserFixture = {
         import { createElement } from 'react';
         import { createRoot } from 'react-dom/client';
         import { OTPFieldInput, OTPFieldRoot } from '@vyrnforge/react/otp-field';
+        import '@vyrnforge/web/styles/tokens.css';
+        import '@vyrnforge/web/styles/otp-field.css';
         const labels = ${JSON.stringify(labels)};
         createRoot(document.querySelector('#root')).render(
           createElement(OTPFieldRoot, { length: 4, 'aria-label': 'Code de vérification' },
@@ -93,9 +95,10 @@ export const browserFixture = {
     });
 
     const mount = port === 'angular' ? '<vf-otp-fixture></vf-otp-fixture>' : '<div id="root"></div>';
+    const stylesheet = port === 'react' ? '<link rel="stylesheet" href="./react.css">' : '';
     await writeFile(
       path.join(dir, `${port}.html`),
-      `<!doctype html><html lang="fr"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width"><title>OTP field browser fixture</title></head><body><main><h1>OTP field browser fixture</h1>${mount}</main><script type="module" src="./${port}.js"></script></body></html>`,
+      `<!doctype html><html lang="fr"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width"><title>OTP field browser fixture</title>${stylesheet}</head><body><main><h1>OTP field browser fixture</h1>${mount}</main><script type="module" src="./${port}.js"></script></body></html>`,
     );
   },
 };
