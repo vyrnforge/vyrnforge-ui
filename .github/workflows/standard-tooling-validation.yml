@@ -13,7 +13,6 @@ concurrency:
 
 jobs:
   validate:
-    if: github.actor != 'github-actions[bot]' || contains(github.event.head_commit.message, 'validate standard tooling')
     runs-on: ubuntu-latest
     timeout-minutes: 40
     steps:
@@ -30,16 +29,16 @@ jobs:
         run: pnpm exec nx show projects
       - name: Workspace structure
         run: pnpm verify:structure
-      - name: Unit tests
+      - name: Tests
         run: |
           set -o pipefail
-          pnpm test:unit 2>&1 | tee unit-test.log
-      - name: Upload unit-test diagnostics
+          pnpm test 2>&1 | tee test.log
+      - name: Upload test diagnostics
         if: failure()
         uses: actions/upload-artifact@v7
         with:
-          name: unit-test-diagnostics
-          path: unit-test.log
+          name: test-diagnostics
+          path: test.log
           if-no-files-found: error
           retention-days: 1
       - name: Build
