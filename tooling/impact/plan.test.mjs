@@ -34,13 +34,14 @@ test('canonical Tabs evidence fans across every implemented Tabs surface', () =>
   assert.equal(impact.selectors.browserRequired, true);
 });
 
-test('Web component CSS selects browser and visual evidence without unrelated package consumers', () => {
+test('Web component CSS selects only the component real ports plus visual evidence', () => {
   const impact = createSemanticImpact(['packages/web/src/components/button/button.css']);
   assert.deepEqual(impact.components, ['button']);
   assert.ok(impact.semanticEvidence.includes('visual'));
   assert.equal(impact.selectors.browserRequired, true);
   assert.equal(impact.selectors.packageArtifactsRequired, false);
-  for (const port of ['web', 'react', 'angular', 'vue', 'elements']) assert.ok(impact.browserPorts.includes(port));
+  assert.deepEqual(impact.browserPorts, ['web', 'react', 'angular', 'vue']);
+  assert.equal(impact.browserPorts.includes('elements'), false);
 });
 
 test('package manifest changes select packed API and consumer validation', () => {
