@@ -11,7 +11,7 @@ export function protectedBranchNames(openPullRequests, { defaultBranch, reposito
 
 function matchesPrefix(name, prefixes) { return prefixes.some((prefix) => name.startsWith(prefix)); }
 
-export function planBranchDeletions(branches, openPullRequests, policy, { now = new Date(), defaultBranch = 'main', repository, targetBranch = null, targetWasMerged = false } = {}) {
+export function planBranchDeletions(branches, openPullRequests, policy, { now = new Date(), defaultBranch = 'main', repository } = {}) {
   if (!repository) throw new Error('repository is required');
   const protectedNames = protectedBranchNames(openPullRequests, { defaultBranch, repository });
   const explicitNames = new Set(policy.protectedBranches ?? []);
@@ -21,19 +21,13 @@ export function planBranchDeletions(branches, openPullRequests, policy, { now = 
   const skipped = [];
   for (const branch of branches) {
     const name = branch.name;
-    const isTarget = targetBranch === name;
-    if (targetBranch && !isTarget) { skipped.push({ name, reason: 'not-target' }); continue; }
     if (protectedNames.has(name) || explicitNames.has(name)) { skipped.push({ name, reason: 'protected-name-or-open-pr' }); continue; }
     if (branch.protected) { skipped.push({ name, reason: 'github-protected' }); continue; }
     if (matchesPrefix(name, protectedPrefixes)) { skipped.push({ name, reason: 'protected-prefix' }); continue; }
     const commitTime = Date.parse(branch.commitDate ?? '');
     if (!Number.isFinite(commitTime)) { skipped.push({ name, reason: 'unknown-commit-date' }); continue; }
-    if (!isTarget && commitTime > staleBefore) { skipped.push({ name, reason: 'not-stale' }); continue; }
-    const mergedByEvent = isTarget && targetWasMerged;
-    const mergedByPullRequest = branch.mergedPullRequest === true;
-    const fullyContained = branch.aheadByDefault === 0;
-    if (!mergedByEvent && !mergedByPullRequest && !fullyContained) { skipped.push({ name, reason: 'unmerged-work' }); continue; }
-    candidates.push({ name, sha: branch.sha, commitDate: branch.commitDate, reason: mergedByEvent ? 'merged-pull-request' : mergedByPullRequest ? 'merged-pull-request-history' : 'fully-contained-in-default' });
+    if (commitTime > staleBefore) { skipped.push({ name, reason: 'not-stale' }); continue; }
+    candidates.push({ name, sha: branch.sha, commitDate: branch.commitDate, reason: 'stale' });
   }
   candidates.sort((left, right) => Date.parse(left.commitDate) - Date.parse(right.commitDate) || left.name.localeCompare(right.name));
   const maxDeletions = Math.max(0, policy.maxDeletionsPerRun ?? 0);
