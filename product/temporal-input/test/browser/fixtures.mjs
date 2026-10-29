@@ -1,2 +1,6 @@
 import { buildNativeControlBrowserFixture } from '../../../_test-support/native-controls/native-control-browser-fixture.mjs';
-await buildNativeControlBrowserFixture('temporal-input', process.argv[2] || 'web');
+
+export const browserFixture = {
+  component: 'temporal-input',
+  prepare: ({ port }) => buildNativeControlBrowserFixture('temporal-input', port),
+};

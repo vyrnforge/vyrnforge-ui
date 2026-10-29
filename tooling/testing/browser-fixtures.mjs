@@ -178,14 +178,41 @@ const preparers = {
   elements: prepareElements,
 };
 
-export async function prepareBrowserFixture({ root, fixturePath, fixtureModule, port }) {
+export function validateBrowserFixtureModule({ fixturePath, fixtureModule, component }) {
   const definition = fixtureModule.browserFixture;
-  if (!definition || typeof definition !== 'object') {
+  if (!definition || typeof definition !== 'object' || Array.isArray(definition)) {
     throw new Error(`${fixturePath} must export a browserFixture definition.`);
   }
-  if (!definition.component || !definition.title || !definition.heading || !definition.ports) {
+  if (!definition.component || (component && definition.component !== component)) {
+    throw new Error(`${fixturePath} must declare browserFixture.component as ${component ?? 'its product owner'}.`);
+  }
+
+  if (definition.prepare !== undefined) {
+    if (typeof definition.prepare !== 'function') {
+      throw new Error(`${fixturePath} browserFixture.prepare must be a function when provided.`);
+    }
+    return definition;
+  }
+
+  if (!definition.title || !definition.heading || !definition.ports || typeof definition.ports !== 'object' || Array.isArray(definition.ports)) {
     throw new Error(`${fixturePath} has an incomplete browserFixture definition.`);
   }
+  for (const [port, config] of Object.entries(definition.ports)) {
+    if (!preparers[port]) throw new Error(`${fixturePath} declares unsupported browser fixture port: ${port}.`);
+    if (!config || typeof config !== 'object' || Array.isArray(config)) {
+      throw new Error(`${fixturePath} browserFixture.ports.${port} must be an object.`);
+    }
+  }
+  return definition;
+}
+
+export async function prepareBrowserFixture({ root, fixturePath, fixtureModule, port, component }) {
+  const definition = validateBrowserFixtureModule({ fixturePath, fixtureModule, component });
+  if (definition.prepare) {
+    const prepared = await definition.prepare({ root, fixturePath, port });
+    return prepared !== false;
+  }
+
   const config = definition.ports[port];
   if (!config) return false;
   const prepare = preparers[port];

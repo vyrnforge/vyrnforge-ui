@@ -2,7 +2,7 @@ import { afterEach, describe, expect, test } from 'vitest';
 import { mkdtemp, mkdir, readFile, rm, writeFile } from 'node:fs/promises';
 import os from 'node:os';
 import path from 'node:path';
-import { prepareBrowserFixture } from './browser-fixtures.mjs';
+import { prepareBrowserFixture, validateBrowserFixtureModule } from './browser-fixtures.mjs';
 
 const roots = [];
 
@@ -45,6 +45,7 @@ describe('browser fixture infrastructure', () => {
       fixturePath: path.join(root, 'product/example/test/browser/fixtures.mjs'),
       fixtureModule,
       port: 'web',
+      component: 'example',
     })).resolves.toBe(true);
 
     const html = await readFile(path.join(root, 'dist/browser-fixtures/components/example/web.html'), 'utf8');
@@ -73,6 +74,48 @@ describe('browser fixture infrastructure', () => {
       fixturePath: path.join(root, 'product/example/test/browser/fixtures.mjs'),
       fixtureModule,
       port: 'react',
+      component: 'example',
     })).resolves.toBe(false);
+  });
+
+  test('runs an explicit owner preparation hook in-process', async () => {
+    const calls = [];
+    const fixtureModule = {
+      browserFixture: {
+        component: 'example',
+        prepare: async ({ root, fixturePath, port }) => {
+          calls.push({ root, fixturePath, port });
+        },
+      },
+    };
+
+    await expect(prepareBrowserFixture({
+      root: '/repo',
+      fixturePath: '/repo/product/example/test/browser/fixtures.mjs',
+      fixtureModule,
+      port: 'react',
+      component: 'example',
+    })).resolves.toBe(true);
+    expect(calls).toEqual([{
+      root: '/repo',
+      fixturePath: '/repo/product/example/test/browser/fixtures.mjs',
+      port: 'react',
+    }]);
+  });
+
+  test('rejects missing, mismatched, and invalid fixture-module exports', () => {
+    const fixturePath = '/repo/product/example/test/browser/fixtures.mjs';
+    expect(() => validateBrowserFixtureModule({ fixturePath, fixtureModule: {}, component: 'example' }))
+      .toThrow('must export a browserFixture definition');
+    expect(() => validateBrowserFixtureModule({
+      fixturePath,
+      fixtureModule: { browserFixture: { component: 'other', prepare() {} } },
+      component: 'example',
+    })).toThrow('must declare browserFixture.component as example');
+    expect(() => validateBrowserFixtureModule({
+      fixturePath,
+      fixtureModule: { browserFixture: { component: 'example', prepare: true } },
+      component: 'example',
+    })).toThrow('browserFixture.prepare must be a function');
   });
 });

@@ -1,6 +1,7 @@
 import { access, readdir, readFile } from 'node:fs/promises';
 import path from 'node:path';
 import { assertProductPreparation } from '../testing/discover-product-units.mjs';
+import { loadBrowserFixtureModule, validateBrowserFixtureModule } from '../testing/browser-fixtures.mjs';
 import { createSemanticImpact } from '../impact/plan.mjs';
 
 for (const file of ['tooling/testing/README.md', 'tooling/impact/README.md', 'tooling/impact/plan.mjs', 'tooling/README.md']) await access(file);
@@ -37,4 +38,23 @@ if (legacyAxeFiles.length) {
 }
 
 const discovery = assertProductPreparation();
+const invalidFixtureSources = [];
+for (const component of discovery.components) {
+  const fixturePath = path.resolve(component.browser.fixture);
+  const source = await readFile(fixturePath, 'utf8');
+  if (/process\.argv\s*\[\s*2\s*\]/.test(source) || /(?:node:)?child_process/.test(source)) {
+    invalidFixtureSources.push(component.browser.fixture);
+    continue;
+  }
+  const fixtureModule = await loadBrowserFixtureModule(fixturePath);
+  validateBrowserFixtureModule({
+    fixturePath: component.browser.fixture,
+    fixtureModule,
+    component: component.component,
+  });
+}
+if (invalidFixtureSources.length) {
+  throw new Error(`browser fixture modules must use the explicit in-process contract without argv or child-process preparation:\n${invalidFixtureSources.map((file) => `- ${file}`).join('\n')}`);
+}
+
 process.stdout.write(`testing structure: ${discovery.components.length} product components and ${discovery.ownedUnits.length} reusable scoped units prepared; repository testing infrastructure and Nx-owned impact classification are structurally valid\n`);
