@@ -1,0 +1,35 @@
+name: Format Standard Tooling
+
+on:
+  push:
+    branches: [refactor/1051-standard-tooling]
+    paths:
+      - .github/workflows/format-standard-tooling.yml
+
+permissions:
+  contents: write
+
+jobs:
+  format:
+    if: github.actor != 'github-actions[bot]'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          ref: refactor/1051-standard-tooling
+          fetch-depth: 0
+      - uses: actions/setup-node@v7
+        with:
+          node-version-file: .node-version
+          package-manager-cache: false
+      - run: corepack enable
+      - run: pnpm install --frozen-lockfile --ignore-scripts
+      - run: pnpm exec prettier --write vitest.config.mjs tooling/verify/package-artifacts.mjs
+      - run: rm .github/workflows/format-standard-tooling.yml
+      - run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add -A
+          git commit -m "style(tooling): format migrated validation files"
+          git pull --rebase origin refactor/1051-standard-tooling
+          git push origin HEAD:refactor/1051-standard-tooling
