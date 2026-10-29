@@ -92,11 +92,16 @@ jobs:
       - run: pnpm install --frozen-lockfile --ignore-scripts
       - run: pnpm exec playwright install --with-deps chromium
       - run: pnpm build
-      - name: Diagnose tracked browser-test mutation
+      - name: Assert build did not mutate tracked button browser tests
+        run: git diff --exit-code -- product/button/test/browser/tests/button.spec.mjs
+      - name: Run Playwright and expose any test-source mutation
         run: |
+          set +e
+          pnpm exec playwright test --project=chromium
+          status=$?
           git status --short
           git diff -- product/button/test/browser/tests/button.spec.mjs
-      - run: pnpm exec playwright test --project=chromium
+          exit $status
       - uses: actions/upload-artifact@v7
         if: always()
         with:
