@@ -2,7 +2,8 @@ import { execFileSync } from 'node:child_process';
 import { readFileSync } from 'node:fs';
 
 function git(args, options = {}) {
-  return execFileSync('git', args, { encoding: 'utf8', ...options }).trim();
+  const result = execFileSync('git', args, { encoding: 'utf8', ...options });
+  return typeof result === 'string' ? result.trim() : '';
 }
 
 function canResolve(ref) {
