@@ -29,7 +29,7 @@ jobs:
           import { mkdirSync, readFileSync, writeFileSync } from 'node:fs';
           const root = 'packages/angular';
           const manifest = JSON.parse(readFileSync(`${root}/package.json`, 'utf8'));
-          writeFileSync(`${root}/ng-package.json`, `${JSON.stringify({ $schema: '../../node_modules/ng-packagr/ng-package.schema.json', dest: '../../dist/angular-apf', lib: { entryFile: 'src/index.ts' } }, null, 2)}\n`);
+          writeFileSync(`${root}/ng-package.json`, `${JSON.stringify({ $schema: '../../node_modules/ng-packagr/ng-package.schema.json', dest: '../../dist/angular-apf', allowedNonPeerDependencies: ['@vyrnforge/core', '@vyrnforge/web'], lib: { entryFile: 'src/index.ts' } }, null, 2)}\n`);
           writeFileSync(`${root}/tsconfig.lib.json`, `${JSON.stringify({ extends: '../../node_modules/ng-packagr/src/lib/ts/conf/tsconfig.ngc.json', compilerOptions: { target: 'ES2022', lib: ['ES2022', 'DOM', 'DOM.Iterable'], strict: true, declarationMap: true, sourceMap: true, exactOptionalPropertyTypes: true, noUncheckedIndexedAccess: true, useUnknownInCatchVariables: true, forceConsistentCasingInFileNames: true, skipLibCheck: true }, angularCompilerOptions: { compilationMode: 'partial', strictTemplates: true } }, null, 2)}\n`);
           for (const key of Object.keys(manifest.exports ?? {})) {
             if (key === '.' || !key.startsWith('./') || key.includes('*')) continue;
