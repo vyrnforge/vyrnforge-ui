@@ -3,7 +3,6 @@ import { expectNoAxeViolations } from '../../../../../tooling/testing/accessibil
 const port = process.env.VF_COMPONENT_PORT || 'web';
 
 async function expectAxeClean(page) {
-  
   const results = await expectNoAxeViolations(page, { disableRules: ['region'] });
   expect(results.violations).toEqual([]);
 }
@@ -19,6 +18,16 @@ test('combobox exposes the editable input/listbox relationship', async ({ page }
   await expect(page.locator(`#${controls}`)).toHaveAttribute('role', 'listbox');
   await expect(page.locator(`#${port}-angular`)).toHaveAttribute('aria-disabled', 'true');
   await expectAxeClean(page);
+});
+
+test('public Combobox CSS resolves the canonical control radius in light and dark themes', async ({ page }) => {
+  test.skip(port !== 'web', 'Public CSS resolution evidence is owned by the Web lane.');
+  await page.goto('/components/combobox/web.html');
+  const input = page.getByRole('combobox', { name: 'Framework' });
+  for (const theme of ['light', 'dark']) {
+    await page.locator('html').evaluate((element, value) => element.setAttribute('data-vf-theme', value), theme);
+    await expect(input).toHaveCSS('border-radius', '6px');
+  }
 });
 
 test.describe('enhanced combobox interaction', () => {
