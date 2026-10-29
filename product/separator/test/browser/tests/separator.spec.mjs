@@ -12,7 +12,6 @@ test('Separator preserves native semantics and orientation across ports', async 
   await expect(vertical).toHaveAttribute('aria-orientation', 'vertical');
   expect(await horizontal.evaluate((el) => getComputedStyle(el).borderTopWidth)).toBe('1px');
   expect(await vertical.evaluate((el) => getComputedStyle(el).borderLeftWidth)).toBe('1px');
-  await page.addScriptTag({ content: axeCore.source });
   const results = await new AxeBuilder({ page }).analyze();
   expect(results.violations).toEqual([]);
 });
