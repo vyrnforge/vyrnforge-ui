@@ -92,16 +92,15 @@ jobs:
       - run: pnpm install --frozen-lockfile --ignore-scripts
       - run: pnpm exec playwright install --with-deps chromium
       - run: pnpm build
-      - name: Assert build did not mutate tracked button browser tests
-        run: git diff --exit-code -- product/button/test/browser/tests/button.spec.mjs
-      - name: Run Playwright and expose any test-source mutation
+      - name: Assert build isolation
         run: |
-          set +e
-          pnpm exec playwright test --project=chromium
-          status=$?
-          git status --short
-          git diff -- product/button/test/browser/tests/button.spec.mjs
-          exit $status
+          git diff --exit-code -- product/button/test/browser/tests/button.spec.mjs
+          if [ -d tmp/package-validation ]; then
+            echo "::error::pnpm build leaked tmp/package-validation into the browser job"
+            find tmp/package-validation -maxdepth 5 -type f | head -50
+            exit 1
+          fi
+      - run: pnpm exec playwright test --project=chromium
       - uses: actions/upload-artifact@v7
         if: always()
         with:
