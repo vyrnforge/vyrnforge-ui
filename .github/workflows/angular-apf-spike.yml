@@ -1,0 +1,50 @@
+name: Angular APF Spike
+
+on:
+  push:
+    branches: [refactor/1051-standard-tooling]
+    paths:
+      - .github/workflows/angular-apf-spike.yml
+
+permissions:
+  contents: read
+
+jobs:
+  apf:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-node@v7
+        with:
+          node-version-file: .node-version
+      - run: corepack enable
+      - run: pnpm install --frozen-lockfile --ignore-scripts
+      - name: Generate APF entrypoint configs in the runner
+        run: |
+          node --input-type=module <<'NODE'
+          import { mkdirSync, readFileSync, writeFileSync } from 'node:fs';
+          import path from 'node:path';
+          const root = 'packages/angular';
+          const manifest = JSON.parse(readFileSync(`${root}/package.json`, 'utf8'));
+          writeFileSync(`${root}/ng-package.json`, `${JSON.stringify({ $schema: '../../node_modules/ng-packagr/ng-package.schema.json', dest: '../../dist/angular-apf', lib: { entryFile: 'src/index.ts' } }, null, 2)}\n`);
+          for (const key of Object.keys(manifest.exports ?? {})) {
+            if (key === '.' || !key.startsWith('./') || key.includes('*')) continue;
+            const name = key.slice(2);
+            const source = `${root}/src/components/${name}/index.ts`;
+            try { readFileSync(source); } catch { continue; }
+            const entry = `${root}/${name}`;
+            mkdirSync(entry, { recursive: true });
+            writeFileSync(`${entry}/ng-package.json`, `${JSON.stringify({ $schema: '../../../node_modules/ng-packagr/ng-entrypoint.schema.json', lib: { entryFile: 'public-api.ts' } }, null, 2)}\n`);
+            writeFileSync(`${entry}/public-api.ts`, `export * from '../src/components/${name}/index.js';\n`);
+          }
+          NODE
+      - name: Build APF
+        run: |
+          set -o pipefail
+          pnpm exec ng-packagr -p packages/angular/ng-package.json 2>&1 | tee apf.log
+      - uses: actions/upload-artifact@v7
+        if: always()
+        with:
+          name: angular-apf-spike
+          path: apf.log
+          retention-days: 1
