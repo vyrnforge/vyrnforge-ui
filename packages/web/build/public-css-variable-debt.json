@@ -40,6 +40,5 @@
   "packages/web/src/components/toggle-group/toggle-group.css: --vf-space-3",
   "packages/web/src/components/toolbar/toolbar.css: --vf-color-border-muted",
   "packages/web/src/components/toolbar/toolbar.css: --vf-radius-sm",
-  "packages/web/src/components/tooltip/tooltip.css: --vf-control-font",
-  "packages/web/src/components/tooltip/tooltip.css: --vf-radius-control"
+  "packages/web/src/components/tooltip/tooltip.css: --vf-control-font"
 ]
