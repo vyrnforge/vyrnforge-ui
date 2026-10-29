@@ -12,7 +12,7 @@ Testing follows ownership. Reusable repository harnesses live here; evidence and
 - Product-owned shared accessibility, native-control, and performance support lives under `product/_test-support/`; it may depend on generic testing mechanisms here, but generic tooling must not depend on owner-specific semantics or evidence.
 - Product-owned visual evidence belongs with the package or product that defines the visual contract; shared tooling may provide reusable visual harnesses only when more than one owner needs them.
 
-Component browser fixtures are emitted under `dist/browser-fixtures/` and served by the testing-owned `browser-server.mjs`; reusable browser evidence must not depend on the documentation application or its output layout.
+Component browser fixtures are emitted under `dist/browser-fixtures/` and served by the testing-owned `browser-server.mjs`; reusable browser evidence must not depend on the documentation application or its output layout. Playwright derives the current port's eligible component specs from `discoverProductUnits()`, so a component is not run against a framework port that is absent from its real public package surface.
 
 `tooling/impact/config.json` contains repository-level impact policy, package topology, validation tiers, global sentinels, and fail-closed roots. It does not enumerate normal components or reusable product instances; those are discovered from public surfaces and ownership conventions.
 

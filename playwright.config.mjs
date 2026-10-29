@@ -1,4 +1,5 @@
 import { defineConfig, devices } from '@playwright/test';
+import { discoverProductUnits } from './tooling/testing/discover-product-units.mjs';
 
 const port = process.env.VF_COMPONENT_PORT || 'web';
 const browserDeviceNames = {
@@ -6,12 +7,22 @@ const browserDeviceNames = {
   firefox: 'Desktop Firefox',
   webkit: 'Desktop Safari',
 };
+const axeCompatibilityImport = '--import=./tooling/testing/axe-global.mjs';
+if (!process.env.NODE_OPTIONS?.includes(axeCompatibilityImport)) {
+  process.env.NODE_OPTIONS = [process.env.NODE_OPTIONS, axeCompatibilityImport].filter(Boolean).join(' ');
+}
+
+const discovery = discoverProductUnits();
+const unsupportedComponentSpecs = discovery.components
+  .filter((component) => !component.ports[port])
+  .map((component) => `**/${component.component}/test/browser/tests/**/*.spec.mjs`);
 
 export default defineConfig({
   testDir: './product',
   testMatch: '*/test/browser/tests/**/*.spec.mjs',
+  testIgnore: unsupportedComponentSpecs,
   outputDir: `test-results/playwright-results/${port}`,
-  snapshotPathTemplate: `{testDir}/__screenshots__/{arg}-${port}-{projectName}{ext}`,
+  snapshotPathTemplate: `{testDir}/{testFileDir}/__screenshots__/{arg}-{projectName}{ext}`,
   fullyParallel: false,
   forbidOnly: Boolean(process.env.CI),
   retries: process.env.CI ? 1 : 0,
