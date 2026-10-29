@@ -25,6 +25,19 @@ test('Web surface preserves static toolbar semantics and shared styling', async 
   expect(errors).toEqual([]);
 });
 
+test('public Toolbar CSS resolves canonical spacing in light and dark themes', async ({ page }) => {
+  test.skip(runtimePort, 'Public CSS resolution evidence is owned by the Web lane.');
+  await openFixture(page);
+  const toolbar = page.locator('#toolbar');
+  const item = page.locator('#bold');
+  for (const theme of ['light', 'dark']) {
+    await page.locator('html').evaluate((element, value) => element.setAttribute('data-vf-theme', value), theme);
+    await expect(toolbar).toHaveCSS('gap', '4px');
+    await expect(item).toHaveCSS('padding-left', '8px');
+    await expect(item).toHaveCSS('padding-right', '8px');
+  }
+});
+
 test('toolbar exposes one roving tab stop and preserves the last focused item', async ({ page }) => {
   test.skip(!runtimePort, 'Roving focus is owned by framework/Elements runtime surfaces, not @vyrnforge/web CSS.');
   const errors = await openFixture(page);
@@ -80,6 +93,5 @@ test('toolbar updates the roving stop when availability changes', async ({ page 
 
 test('toolbar has no automated accessibility violations', async ({ page }) => {
   await openFixture(page);
-  
   expect((await expectNoAxeViolations(page)).violations).toEqual([]);
 });
