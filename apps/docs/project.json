@@ -4,7 +4,15 @@
   "sourceRoot": "apps/docs",
   "projectType": "application",
   "tags": ["scope:docs"],
-  "implicitDependencies": ["@vyrnforge/elements"],
+  "implicitDependencies": [
+    "@vyrnforge/core",
+    "@vyrnforge/web",
+    "@vyrnforge/icons",
+    "@vyrnforge/react",
+    "@vyrnforge/angular",
+    "@vyrnforge/vue",
+    "@vyrnforge/elements"
+  ],
   "targets": {
     "build": {
       "executor": "nx:run-commands",
