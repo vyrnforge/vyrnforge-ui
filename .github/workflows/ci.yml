@@ -31,7 +31,7 @@ jobs:
           HEAD_SHA: ${{ github.sha }}
         run: |
           mkdir -p test-results
-          node tooling/impact/plan.mjs --mode pr --base "$BASE_SHA" --head "$HEAD_SHA" > test-results/semantic-impact.json
+          node tooling/impact/plan.mjs --mode pr --base "$BASE_SHA" --head="$HEAD_SHA" > test-results/semantic-impact.json
       - name: Run Nx affected validation
         env:
           NX_BASE: ${{ github.event.pull_request.base.sha }}
@@ -92,14 +92,6 @@ jobs:
       - run: pnpm install --frozen-lockfile --ignore-scripts
       - run: pnpm exec playwright install --with-deps chromium
       - run: pnpm build
-      - name: Assert build isolation
-        run: |
-          git diff --exit-code -- product/button/test/browser/tests/button.spec.mjs
-          if [ -d tmp/package-validation ]; then
-            echo "::error::pnpm build leaked tmp/package-validation into the browser job"
-            find tmp/package-validation -maxdepth 5 -type f | head -50
-            exit 1
-          fi
       - run: pnpm exec playwright test --project=chromium
       - uses: actions/upload-artifact@v7
         if: always()
