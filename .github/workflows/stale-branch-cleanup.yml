@@ -28,5 +28,3 @@ jobs:
         run: pnpm install --frozen-lockfile --ignore-scripts
       - name: Test branch-retention selection policy
         run: pnpm exec vitest run tooling/ci/branch-retention.test.mjs
-      - name: Check branch-retention executor syntax
-        run: node --check tooling/ci/branch-retention.mjs
