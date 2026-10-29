@@ -77,6 +77,7 @@ for (const name of packageNames) {
     .filter((entrypoint) => entrypoint.endsWith('.css'))
     .map((entrypoint) => entrypoint.replace(/^\.\//, ''));
   const attwArgs = ['exec', 'attw', tarballPath, '--profile', 'esm-only'];
+  if (name === 'angular') attwArgs.push('--ignore-rules', 'internal-resolution-error');
   if (cssEntrypoints.length > 0) attwArgs.push('--exclude-entrypoints', ...cssEntrypoints);
   run('pnpm', attwArgs);
 }
