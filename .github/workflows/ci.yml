@@ -38,7 +38,7 @@ jobs:
           NX_HEAD: ${{ github.sha }}
         run: pnpm exec nx affected -t lint,typecheck,test,build --base="$NX_BASE" --head="$NX_HEAD"
       - name: Verify repository contracts
-        run: pnpm verify:structure && pnpm verify:boundaries && pnpm verify:architecture
+        run: pnpm verify:structure && pnpm verify:testing-structure && pnpm verify:boundaries && pnpm verify:architecture
       - uses: actions/upload-artifact@v7
         if: always()
         with:
@@ -62,9 +62,15 @@ jobs:
       - run: pnpm verify:packages
 
   browser-chromium:
-    name: browser-chromium
+    name: browser-chromium-${{ matrix.port }}
     runs-on: ubuntu-latest
     timeout-minutes: 40
+    strategy:
+      fail-fast: false
+      matrix:
+        port: [web, react, angular, vue, elements]
+    env:
+      VF_COMPONENT_PORT: ${{ matrix.port }}
     steps:
       - uses: actions/checkout@v7
       - uses: actions/setup-node@v7
@@ -75,13 +81,13 @@ jobs:
       - run: pnpm install --frozen-lockfile --ignore-scripts
       - run: pnpm exec playwright install --with-deps chromium
       - run: pnpm build
-      - run: pnpm test:browser
+      - run: pnpm exec playwright test --project=chromium
       - uses: actions/upload-artifact@v7
         if: always()
         with:
-          name: browser-evidence-pr
+          name: browser-evidence-${{ matrix.port }}-pr
           path: |
-            test-results/playwright-report
-            test-results/playwright-results
+            test-results/playwright-report/${{ matrix.port }}
+            test-results/playwright-results/${{ matrix.port }}
           if-no-files-found: ignore
           retention-days: 7
