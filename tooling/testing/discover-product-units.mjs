@@ -32,12 +32,17 @@ function walkFiles(root, relativePath) {
   return files.sort();
 }
 function workspacePackages(root) {
-  return ["core","web","icons","react","angular","vue","elements"].filter((name) => existingPath(root, `packages/${name}/package.json`));
+  return ['core', 'web', 'icons', 'react', 'angular', 'vue', 'elements'].filter((name) => existingPath(root, `packages/${name}/package.json`));
 }
 function componentIdFromFrameworkExport(exportName) { return /^\.\/([a-z][a-z0-9-]*)$/.exec(exportName)?.[1] ?? null; }
 function componentIdFromWebExport(exportName) {
   const componentId = /^\.\/styles\/([a-z][a-z0-9-]*)\.css$/.exec(exportName)?.[1] ?? null;
   return componentId && !webFoundationStyleIds.has(componentId) ? componentId : null;
+}
+function frameworkComponentSourcePath(port, componentId) {
+  return port === 'angular'
+    ? `packages/angular/${componentId}/src/`
+    : `packages/${port}/src/components/${componentId}/`;
 }
 function findExampleManifests(root, componentId) { return walkFiles(root, `product/${componentId}/examples`).filter((file) => file.endsWith('/example.json')); }
 function frameworkTopLevelModules(root, port) {
@@ -135,7 +140,7 @@ export function discoverProductUnits(root = repoRoot) {
     }
     for (const port of frameworkPorts) {
       if (!frameworkExports.get(port)?.has(componentId)) continue;
-      const sourcePath = `packages/${port}/src/components/${componentId}/`;
+      const sourcePath = frameworkComponentSourcePath(port, componentId);
       ports[port] = { paths: [sourcePath, `packages/${port}/test/components/${componentId}/`], types: `packages/${port}/test/components/${componentId}/api.types.ts`, ...(ssrPorts.has(port) ? { ssr: `packages/${port}/test/components/${componentId}/ssr.test.mjs` } : {}), browser: true, dependencies: scanUnitDependencies(root, sourcePath, ownedUnits, packageManifests) };
     }
     const frameworkPortNames = Object.keys(ports).filter((port) => port !== 'web');
@@ -150,8 +155,10 @@ export function productPreparationProblems(root = repoRoot) {
   const discovery = discoverProductUnits(root);
   const problems = [];
   for (const port of frameworkPorts) {
-    for (const moduleId of frameworkTopLevelModules(root, port)) problems.push(`packages/${port}/src/${moduleId} is an unclassified top-level source module; component implementations belong under src/components/<id>/ and internal modules belong under src/internal/ or use an _ prefix`);
-    for (const componentId of directories(root, `packages/${port}/src/components`)) if (!discovery.frameworkExports.get(port)?.has(componentId)) problems.push(`packages/${port}/src/components/${componentId}/ exists but @vyrnforge/${port} does not expose ./${componentId}`);
+    for (const moduleId of frameworkTopLevelModules(root, port)) problems.push(`packages/${port}/src/${moduleId} is an unclassified top-level source module; component implementations belong under ${port === 'angular' ? 'secondary entrypoint roots' : 'src/components/<id>/'} and internal modules belong under src/internal/ or use an _ prefix`);
+    if (port !== 'angular') {
+      for (const componentId of directories(root, `packages/${port}/src/components`)) if (!discovery.frameworkExports.get(port)?.has(componentId)) problems.push(`packages/${port}/src/components/${componentId}/ exists but @vyrnforge/${port} does not expose ./${componentId}`);
+    }
   }
   for (const componentId of directories(root, 'packages/web/src/components')) if (!discovery.webExports.has(componentId)) problems.push(`packages/web/src/components/${componentId}/ exists but @vyrnforge/web does not expose ./styles/${componentId}.css`);
   for (const component of discovery.components) {
