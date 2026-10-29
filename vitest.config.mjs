@@ -4,6 +4,7 @@ const packageProjects = ["core","web","icons","react","angular","vue","elements"
   test: {
     name,
     environment: 'node',
+    setupFiles: name === 'angular' ? ['./tooling/testing/angular-vitest.setup.mjs'] : [],
     include: [`packages/${name}/test/**/*.test.mjs`],
     testTimeout: 30_000,
   },

@@ -71,6 +71,13 @@
     "nx": "24.0.2",
     "prettier": "3.9.0",
     "publint": "0.3.25",
-    "vitest": "5.0.5"
+    "vitest": "5.0.5",
+    "@vyrnforge/core": "workspace:*",
+    "@vyrnforge/web": "workspace:*",
+    "@vyrnforge/icons": "workspace:*",
+    "@vyrnforge/react": "workspace:*",
+    "@vyrnforge/angular": "workspace:*",
+    "@vyrnforge/vue": "workspace:*",
+    "@vyrnforge/elements": "workspace:*"
   }
 }
