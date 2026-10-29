@@ -4,7 +4,7 @@ on:
   pull_request:
 
 permissions:
-  contents: read
+  contents: write
 
 concurrency:
   group: pr-validation-${{ github.event.pull_request.number }}
@@ -17,24 +17,24 @@ jobs:
     timeout-minutes: 10
     steps:
       - uses: actions/checkout@v7
+        with:
+          ref: ${{ github.head_ref }}
       - uses: actions/setup-node@v7
         with:
           node-version-file: .node-version
           package-manager-cache: false
-      - name: Generate deterministic legacy-axe migration candidate
+      - name: Apply deterministic legacy-axe migration
         run: |
-          mkdir -p test-results
           node tooling/testing/migrate-legacy-axe.mjs
-          git diff --name-only -- product > test-results/axe-migration-files.txt
-          tar -czf test-results/axe-migration.tgz -T test-results/axe-migration-files.txt
-      - uses: actions/upload-artifact@v7
-        with:
-          name: axe-migration-candidate
-          path: |
-            test-results/axe-migration-files.txt
-            test-results/axe-migration.tgz
-          if-no-files-found: error
-          retention-days: 1
+          if git diff --quiet -- product; then
+            echo "No legacy axe migration changes remain."
+            exit 0
+          fi
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add product
+          git commit -m "test(a11y): migrate legacy axe scans"
+          git push origin "HEAD:${{ github.head_ref }}"
 
   affected:
     name: affected
