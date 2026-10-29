@@ -18,6 +18,8 @@ export const browserFixture = {
         import { createElement } from 'react';
         import { createRoot } from 'react-dom/client';
         import { PasswordFieldInput, PasswordFieldRoot, PasswordFieldToggle } from '@vyrnforge/react/password-field';
+        import '@vyrnforge/web/styles/tokens.css';
+        import '@vyrnforge/web/styles/password-field.css';
         const mount = document.querySelector('#root');
         createRoot(mount).render(createElement(PasswordFieldRoot, null,
           createElement(PasswordFieldInput, { id: 'password', 'aria-label': 'Mot de passe', defaultValue: 's3cret', autoComplete: 'current-password' }),
@@ -86,9 +88,10 @@ export const browserFixture = {
     });
 
     const mount = port === 'angular' ? '<vf-password-fixture></vf-password-fixture>' : '<div id="root"></div>';
+    const stylesheet = port === 'react' ? '<link rel="stylesheet" href="./react.css">' : '';
     await writeFile(
       path.join(dir, `${port}.html`),
-      `<!doctype html><html lang="fr"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width"><title>Password field browser fixture</title></head><body><main><h1>Password field browser fixture</h1>${mount}</main><script type="module" src="./${port}.js"></script></body></html>`,
+      `<!doctype html><html lang="fr"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width"><title>Password field browser fixture</title>${stylesheet}</head><body><main><h1>Password field browser fixture</h1>${mount}</main><script type="module" src="./${port}.js"></script></body></html>`,
     );
 
     if (port === 'react') {

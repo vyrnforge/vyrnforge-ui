@@ -29,6 +29,18 @@ test('password field uses authored state labels without changing credential valu
   expect((await expectNoAxeViolations(page)).violations).toEqual([]);
 });
 
+test('public PasswordField CSS resolves the canonical control radius in light and dark themes', async ({ page }) => {
+  test.skip(port !== 'react', 'Representative public CSS resolution evidence uses the React public entrypoint.');
+  await page.goto('/components/password-field/react.html');
+
+  const toggle = page.getByRole('button', { name: showLabel, exact: true });
+  for (const theme of ['light', 'dark']) {
+    await page.locator('html').evaluate((element, value) => element.setAttribute('data-vf-theme', value), theme);
+    await expect(toggle).toHaveCSS('border-top-right-radius', '6px');
+    await expect(toggle).toHaveCSS('border-bottom-right-radius', '6px');
+  }
+});
+
 test('STD-15 representative session recovery preserves task context', async ({ page }) => {
   test.skip(port !== 'react', 'The complete STD-15 workflow is a declared React representative example.');
   await page.goto('/components/password-field/session-recovery-react.html');

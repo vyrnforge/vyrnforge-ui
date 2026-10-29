@@ -29,6 +29,18 @@ test('otp field keeps accessible names consumer-authored and exposes one-time-co
   expect((await expectNoAxeViolations(page)).violations).toEqual([]);
 });
 
+test('public OTPField CSS resolves canonical spacing and control radius in light and dark themes', async ({ page }) => {
+  test.skip(port !== 'react', 'Representative public CSS resolution evidence uses the React public entrypoint.');
+  const { group, cells } = await openFixture(page);
+
+  for (const theme of ['light', 'dark']) {
+    await page.locator('html').evaluate((element, value) => element.setAttribute('data-vf-theme', value), theme);
+    await expect(group).toHaveCSS('gap', '8px');
+    await expect(cells.nth(0)).toHaveCSS('border-top-left-radius', '6px');
+    await expect(cells.nth(0)).toHaveCSS('border-top-right-radius', '6px');
+  }
+});
+
 test('otp field advances on entry and empty backspace returns focus', async ({ page }) => {
   const { cells } = await openFixture(page);
 
