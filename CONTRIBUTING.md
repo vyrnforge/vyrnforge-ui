@@ -22,6 +22,7 @@ Use the Node and pnpm versions declared by `.node-version`, `.nvmrc`, and the ro
 - `pnpm check:changed` — run Nx affected lint, typecheck, test, and build against the configured base/head.
 - `pnpm build:docs` — build packages plus the documentation site and executable examples.
 - `pnpm verify:packages` — build and validate packed public-package artifacts and clean consumers.
+- `pnpm verify:release` — verify Changesets behavior and the current release-intent state.
 - `pnpm test:browser` — run Playwright browser evidence; set `VF_COMPONENT_PORT` or use a port-specific script for focused port work.
 - `pnpm generate:tokens` / `pnpm verify:tokens` — generate and verify repository-owned token output.
 
@@ -68,7 +69,7 @@ Do not introduce sibling-port dependencies, cycles, a universal component contro
 
 ## Product ownership and testing
 
-Framework component implementations live under `packages/<port>/src/components/<component>/`, with package-local evidence under `packages/<port>/test/components/<component>/`. Shared component docs, examples, accessibility mapping, cross-port/browser evidence, and unreleased changes live under `product/<component>/`.
+Framework component implementations live under `packages/<port>/src/components/<component>/`, with package-local evidence under `packages/<port>/test/components/<component>/`. Shared component docs, examples, accessibility mapping, and cross-port/browser evidence live under `product/<component>/`.
 
 Reusable package-owned units may live under `packages/<package>/src/capabilities/`, `src/accessibility/`, or `src/foundations/` when that package is the correct architectural owner, with mirrored evidence under `packages/<package>/test/<kind>/`. Do not add per-instance CI mappings or a central component testing registry. Public exports, conventional ownership, and source dependencies drive discovery.
 
@@ -80,7 +81,9 @@ Repository-wide reusable test infrastructure lives under `tooling/testing/`; pro
 
 Framework-neutral foundation content is authored once under shared documentation sources and composed into framework experiences. Framework guides own only framework-specific installation/API/integration guidance. Component documentation and executable examples are discovered from `product/<component>/`.
 
-Implementation changes to a component or reusable scoped unit require a matching unreleased change fragment beside that owner. Use `major`, `minor`, or `patch` for consumer-visible release significance and `internal` for repository-only changes. Release tooling under `tooling/release/` composes centralized changelog output from scoped fragments.
+Changesets is the single source of current package release intent. For a consumer-visible change, run `pnpm changeset`, select the affected publishable packages, choose `patch`, `minor`, or `major`, and write a summary that preserves relevant deprecation, compatibility, and migration information. Repository-only work with intentionally no package release may use an empty Changeset so that the no-release decision is explicit without inventing a package bump. Historical owner-local `changes/` fragments are provenance only and must not be added or used as current release input.
+
+`pnpm release:version` applies Changesets versioning/dependency-range updates and generated package changelogs for review. `pnpm verify:release` proves representative version/dependent handling and checks current release intent. Publication is not automatic: release readiness must still pass broad repository, documentation, browser, packed-package, public API, and clean-consumer validation before a publish action is eligible.
 
 ## CI and validation
 
