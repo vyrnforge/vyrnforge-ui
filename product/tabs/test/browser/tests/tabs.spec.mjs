@@ -1,5 +1,5 @@
 import { test, expect } from '@playwright/test';
-import AxeBuilder from '@axe-core/playwright';
+import { expectNoAxeViolations } from '../../../../../tooling/testing/accessibility.mjs';
 
 const port = process.env.VF_COMPONENT_PORT || 'web';
 
@@ -8,14 +8,15 @@ test.describe('Tabs Web semantic and styling contract', () => {
 
   test('focus, disabled, accessibility, reduced motion, forced colors, and direction remain usable', async ({ page }) => {
     await page.goto('/components/tabs/web.html');
+    const root = page.locator('#web-tabs');
     const selected = page.locator('#web-tabs-tab-overview');
     await expect(selected).toHaveAttribute('aria-selected', 'true');
     await expect(page.locator('#web-tabs-tab-billing')).toBeDisabled();
     await selected.focus();
     expect(await selected.evaluate((element) => getComputedStyle(element).outlineStyle)).not.toBe('none');
+    await expect(root).toHaveScreenshot('tabs-focus-visible.png');
 
-    const results = await new AxeBuilder({ page }).analyze();
-    expect(results.violations).toEqual([]);
+    await expectNoAxeViolations(page);
 
     await page.evaluate(() => { document.documentElement.dir = 'rtl'; });
     expect(await selected.evaluate((element) => getComputedStyle(element).direction)).toBe('rtl');
@@ -24,6 +25,7 @@ test.describe('Tabs Web semantic and styling contract', () => {
     await page.emulateMedia({ reducedMotion: 'reduce', forcedColors: 'active' });
     expect(await page.evaluate(() => matchMedia('(forced-colors: active)').matches)).toBe(true);
     await expect(selected).toBeVisible();
+    await expect(root).toHaveScreenshot('tabs-forced-colors-rtl.png');
   });
 });
 
@@ -62,8 +64,7 @@ test.describe('Tabs port interaction and client activation', () => {
       await expect(overview).toBeFocused();
 
       expect(errors.filter((error) => /hydration|mismatch/i.test(error))).toEqual([]);
-        const results = await new AxeBuilder({ page }).include(`#${framework}-tabs`).analyze();
-      expect(results.violations).toEqual([]);
+      await expectNoAxeViolations(page, { include: `#${framework}-tabs` });
     });
 
     test(`${framework} keeps vertical manual focus separate from selection until Enter or Space`, async ({ page }) => {
