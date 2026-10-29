@@ -16,33 +16,46 @@ concurrency:
 jobs:
   release-gate:
     runs-on: ubuntu-latest
-    timeout-minutes: 60
+    timeout-minutes: 70
     steps:
       - uses: actions/checkout@v7
       - uses: actions/setup-node@v7
         with:
           node-version-file: .node-version
-          cache: npm
-      - run: npm ci --ignore-scripts --no-audit --no-fund
-      - name: Execute complete required release graph
-        run: node tooling/impact/execute.mjs --mode release --output test-results/validation-plan.json
-      - name: Upload release validation plan
-        if: always()
-        uses: actions/upload-artifact@v7
+          package-manager-cache: false
+      - run: corepack enable
+      - run: pnpm install --frozen-lockfile --ignore-scripts
+      - run: pnpm check
+      - run: pnpm verify:packages
+      - run: pnpm changeset:status
+
+  browser-matrix:
+    name: release-browser-${{ matrix.port }}
+    runs-on: ubuntu-latest
+    timeout-minutes: 70
+    strategy:
+      fail-fast: false
+      matrix:
+        port: [web, react, angular, vue, elements]
+    env:
+      VF_COMPONENT_PORT: ${{ matrix.port }}
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-node@v7
         with:
-          name: validation-plan-release
-          path: test-results/validation-plan.json
-          if-no-files-found: error
-          retention-days: 30
-      - name: Upload release browser evidence
+          node-version-file: .node-version
+          package-manager-cache: false
+      - run: corepack enable
+      - run: pnpm install --frozen-lockfile --ignore-scripts
+      - run: pnpm exec playwright install --with-deps chromium firefox webkit
+      - run: pnpm build
+      - run: pnpm test:browser:cross
+      - uses: actions/upload-artifact@v7
         if: always()
-        uses: actions/upload-artifact@v7
         with:
-          name: browser-evidence-release
+          name: browser-evidence-${{ matrix.port }}-release
           path: |
-            test-results/playwright-report
-            test-results/playwright-results
-            test-results/*-playwright-report
-            test-results/*-playwright-results
+            test-results/playwright-report/${{ matrix.port }}
+            test-results/playwright-results/${{ matrix.port }}
           if-no-files-found: ignore
           retention-days: 30

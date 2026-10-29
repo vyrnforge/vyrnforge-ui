@@ -14,7 +14,7 @@ concurrency:
 jobs:
   main-gate:
     runs-on: ubuntu-latest
-    timeout-minutes: 45
+    timeout-minutes: 50
     steps:
       - uses: actions/checkout@v7
         with:
@@ -22,38 +22,36 @@ jobs:
       - uses: actions/setup-node@v7
         with:
           node-version-file: .node-version
-          cache: npm
-      - run: npm ci --ignore-scripts --no-audit --no-fund
-      - name: Execute scoped main validation plan
+          package-manager-cache: false
+      - run: corepack enable
+      - run: pnpm install --frozen-lockfile --ignore-scripts
+      - name: Record semantic impact
         env:
           BASE_SHA: ${{ github.event.before }}
           HEAD_SHA: ${{ github.sha }}
-        run: node tooling/impact/execute.mjs --mode main --base "$BASE_SHA" --head "$HEAD_SHA" --output test-results/validation-plan.json
-      - name: Upload validation plan
+        run: |
+          mkdir -p test-results
+          node tooling/impact/plan.mjs --mode pr --base "$BASE_SHA" --head "$HEAD_SHA" > test-results/semantic-impact.json
+      - name: Run affected Nx validation
+        env:
+          NX_BASE: ${{ github.event.before }}
+          NX_HEAD: ${{ github.sha }}
+        run: pnpm exec nx affected -t lint,typecheck,test,build --base="$NX_BASE" --head="$NX_HEAD"
+      - name: Verify packed packages
+        run: pnpm verify:packages
+      - name: Build documentation
+        run: pnpm build:docs
+      - uses: actions/upload-artifact@v7
         if: always()
-        uses: actions/upload-artifact@v7
         with:
-          name: validation-plan-main-${{ github.sha }}
-          path: test-results/validation-plan.json
+          name: semantic-impact-main-${{ github.sha }}
+          path: test-results/semantic-impact.json
           if-no-files-found: error
           retention-days: 14
-      - name: Upload browser evidence
+      - uses: actions/upload-artifact@v7
         if: always()
-        uses: actions/upload-artifact@v7
-        with:
-          name: browser-evidence-main-${{ github.sha }}
-          path: |
-            test-results/playwright-report
-            test-results/playwright-results
-            test-results/*-playwright-report
-            test-results/*-playwright-results
-          if-no-files-found: ignore
-          retention-days: 14
-      - name: Upload validated documentation build when selected
-        if: always()
-        uses: actions/upload-artifact@v7
         with:
           name: vyrnforge-docs-next-${{ github.sha }}
           path: dist/docs
-          if-no-files-found: ignore
+          if-no-files-found: error
           retention-days: 14

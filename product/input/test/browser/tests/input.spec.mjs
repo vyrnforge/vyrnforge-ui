@@ -1,5 +1,5 @@
 import { test, expect } from '@playwright/test';
-import axeCore from 'axe-core';
+import AxeBuilder from '@axe-core/playwright';
 
 const port = process.env.VF_COMPONENT_PORT || 'web';
 
@@ -44,6 +44,6 @@ test('Input preserves native form semantics and shared styling across ports', as
     .toBe('rgb(24, 24, 27)');
 
   await page.addScriptTag({ content: axeCore.source });
-  const results = await page.evaluate(async () => globalThis.axe.run(document));
+  const results = await new AxeBuilder({ page }).analyze();
   expect(results.violations).toEqual([]);
 });

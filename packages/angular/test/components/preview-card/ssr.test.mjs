@@ -1,1 +1,1 @@
-import test from'node:test';import assert from'node:assert/strict';test('Angular PreviewCard import is SSR-safe',async()=>assert.ok((await import('@vyrnforge/angular/preview-card')).VfPreviewCardRootDirective));
+import { test } from 'vitest';import assert from'node:assert/strict';test('Angular PreviewCard import is SSR-safe',async()=>assert.ok((await import('@vyrnforge/angular/preview-card')).VfPreviewCardRootDirective));

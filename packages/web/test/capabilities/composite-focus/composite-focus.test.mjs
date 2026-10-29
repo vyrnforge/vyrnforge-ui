@@ -1,4 +1,4 @@
-import test from 'node:test';
+import { test } from 'vitest';
 import assert from 'node:assert/strict';
 import { applyActiveDescendant, applyRovingTabIndex, focusCompositeItem } from '../../../dist/capabilities/composite-focus/index.js';
 

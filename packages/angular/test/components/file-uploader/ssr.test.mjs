@@ -1,1 +1,1 @@
-import test from'node:test';import assert from'node:assert/strict';test('Angular FileUploader subpath is SSR-safe',async()=>{const api=await import('@vyrnforge/angular/file-uploader');assert.ok(Object.keys(api).length>0);});
+import { test } from 'vitest';import assert from'node:assert/strict';test('Angular FileUploader subpath is SSR-safe',async()=>{const api=await import('@vyrnforge/angular/file-uploader');assert.ok(Object.keys(api).length>0);});

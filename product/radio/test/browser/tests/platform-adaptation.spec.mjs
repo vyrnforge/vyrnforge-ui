@@ -1,5 +1,5 @@
 import { test, expect } from '@playwright/test';
-import axeCore from 'axe-core';
+import AxeBuilder from '@axe-core/playwright';
 
 const port = process.env.VF_COMPONENT_PORT || 'web';
 
@@ -44,8 +44,7 @@ test.describe('STD-25 platform-adaptable selection and confirmation', () => {
 
   test('has no automated accessibility violations in the representative state', async ({ page }) => {
     await openPlatformFixture(page);
-    await page.addScriptTag({ content: axeCore.source });
-    const results = await page.evaluate(async () => globalThis.axe.run(document));
+    const results = await new AxeBuilder({ page }).analyze();
     expect(results.violations).toEqual([]);
   });
 });

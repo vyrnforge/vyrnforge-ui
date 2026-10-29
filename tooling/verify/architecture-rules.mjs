@@ -4,8 +4,11 @@ import path from 'node:path';
 const packageNames = ['core', 'web', 'icons', 'react', 'angular', 'vue', 'elements'];
 const portNames = ['react', 'angular', 'vue', 'elements'];
 const expectedWorkspace = packageNames.map((name) => `packages/${name}`);
+const workspaceYaml = await readFile('pnpm-workspace.yaml', 'utf8');
+const workspaceEntries = [...workspaceYaml.matchAll(/^\s*-\s+['"]?([^'"\s]+)['"]?\s*$/gm)].map((match) => match[1]);
+if (JSON.stringify(workspaceEntries) !== JSON.stringify(expectedWorkspace)) throw new Error(`pnpm workspace must contain only the approved public package graph: ${expectedWorkspace.join(', ')}`);
 const rootManifest = JSON.parse(await readFile('package.json', 'utf8'));
-if (JSON.stringify(rootManifest.workspaces) !== JSON.stringify(expectedWorkspace)) throw new Error(`Root workspaces must contain only the approved public package graph: ${expectedWorkspace.join(', ')}`);
+if (rootManifest.workspaces) throw new Error('pnpm-workspace.yaml, not package.json, must own workspace membership');
 if (!rootManifest.devDependencies?.['@playwright/test']) throw new Error('Real-browser validation tooling must be repository-owned');
 
 const coreTsconfig = JSON.parse(await readFile('packages/core/tsconfig.json', 'utf8'));
@@ -44,7 +47,7 @@ for (const name of packageNames) {
 }
 
 const iconsManifest = JSON.parse(await readFile('packages/icons/package.json', 'utf8'));
-if (iconsManifest.dependencies?.['@vyrnforge/web'] !== rootManifest.version) throw new Error('@vyrnforge/icons must depend on the shared Web Icon contract at the workspace version');
+if (iconsManifest.dependencies?.['@vyrnforge/web'] !== 'workspace:*') throw new Error('@vyrnforge/icons must depend on the shared Web Icon contract through the workspace protocol');
 for (const port of portNames) {
   const manifest = JSON.parse(await readFile(`packages/${port}/package.json`, 'utf8'));
   if (manifest.dependencies?.['@vyrnforge/icons'] || manifest.peerDependencies?.['@vyrnforge/icons']) throw new Error(`${manifest.name} must not depend on the optional official icon catalog`);

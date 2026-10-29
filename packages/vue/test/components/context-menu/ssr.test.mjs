@@ -1,1 +1,1 @@
-import test from 'node:test'; import assert from 'node:assert/strict'; test('Vue ContextMenu subpath is SSR-safe',async()=>{const api=await import('@vyrnforge/vue/context-menu'); assert.equal(typeof api.ContextMenuRoot,'object');});
+import { test } from 'vitest'; import assert from 'node:assert/strict'; test('Vue ContextMenu subpath is SSR-safe',async()=>{const api=await import('@vyrnforge/vue/context-menu'); assert.equal(typeof api.ContextMenuRoot,'object');});

@@ -1,5 +1,5 @@
 import { test, expect } from '@playwright/test';
-import axeCore from 'axe-core';
+import AxeBuilder from '@axe-core/playwright';
 
 const port = process.env.VF_COMPONENT_PORT || 'web';
 
@@ -14,8 +14,7 @@ test.describe('Dialog Web semantic and styling contract', () => {
     await close.focus();
     expect(await close.evaluate((element) => getComputedStyle(element).outlineStyle)).not.toBe('none');
 
-    await page.addScriptTag({ content: axeCore.source });
-    const results = await page.evaluate(async () => globalThis.axe.run(document));
+    const results = await new AxeBuilder({ page }).analyze();
     expect(results.violations).toEqual([]);
 
     await page.emulateMedia({ reducedMotion: 'reduce' });
@@ -51,8 +50,7 @@ test.describe('Dialog framework native modality and hydration', () => {
         return document.activeElement === triggerElement;
       }, framework)).toBe(false);
 
-      await page.addScriptTag({ content: axeCore.source });
-      const results = await page.evaluate(async (selector) => globalThis.axe.run(document.querySelector(selector)), `#${framework}-dialog`);
+        const results = await new AxeBuilder({ page }).include(`#${framework}-dialog`).analyze();
       expect(results.violations).toEqual([]);
 
       await page.keyboard.press('Escape');

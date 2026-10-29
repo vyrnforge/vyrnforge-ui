@@ -1,0 +1,8 @@
+packages:
+  - packages/core
+  - packages/web
+  - packages/icons
+  - packages/react
+  - packages/angular
+  - packages/vue
+  - packages/elements

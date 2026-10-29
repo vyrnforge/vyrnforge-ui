@@ -1,4 +1,4 @@
-import test from 'node:test';
+import { test } from 'vitest';
 import assert from 'node:assert/strict';
 import { validateWebNativeControlContract } from './native-control-adapters/web.mjs';
 import { validateReactNativeControlContract } from './native-control-adapters/react.mjs';

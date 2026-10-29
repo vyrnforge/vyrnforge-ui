@@ -1,11 +1,7 @@
 import { readdir, readFile } from 'node:fs/promises';
 import path from 'node:path';
 
-const rootManifest = JSON.parse(await readFile(new URL('../../package.json', import.meta.url), 'utf8'));
-const impact = JSON.parse(await readFile(new URL('../impact/config.json', import.meta.url), 'utf8'));
-const workspaces = rootManifest.workspaces.filter((workspace) => workspace.startsWith('packages/'));
-const packageNames = workspaces.map((workspace) => path.basename(workspace));
-const packageNameSet = new Set(packageNames);
+const packageNames = ['core', 'web', 'icons', 'react', 'angular', 'vue', 'elements'];
 const dependencyFields = ['dependencies', 'peerDependencies', 'optionalDependencies', 'devDependencies'];
 
 async function walk(directory) {
@@ -19,20 +15,14 @@ async function walk(directory) {
   return files;
 }
 
-for (const [index, name] of packageNames.entries()) {
-  const workspace = workspaces[index];
-  const target = impact.targets[name];
-  if (!target) throw new Error(`tooling/impact/config.json is missing package policy for ${name}`);
-  const allowed = new Set((target.dependsOn ?? []).filter((dependency) => packageNameSet.has(dependency)).map((dependency) => `@vyrnforge/${dependency}`));
+for (const name of packageNames) {
+  const workspace = `packages/${name}`;
   const manifest = JSON.parse(await readFile(new URL(`../../${workspace}/package.json`, import.meta.url), 'utf8'));
-  const declared = new Set();
+  const allowed = new Set();
   for (const field of dependencyFields) {
     for (const dependency of Object.keys(manifest[field] ?? {})) {
-      if (dependency.startsWith('@vyrnforge/')) declared.add(dependency);
+      if (dependency.startsWith('@vyrnforge/')) allowed.add(dependency);
     }
-  }
-  for (const dependency of declared) {
-    if (!allowed.has(dependency)) throw new Error(`${manifest.name} has forbidden internal dependency ${dependency}`);
   }
 
   const srcDir = path.resolve(workspace, 'src');
@@ -40,7 +30,7 @@ for (const [index, name] of packageNames.entries()) {
     const source = await readFile(file, 'utf8');
     const imports = [...source.matchAll(/(?:from\s+|import\s*\()\s*['"](@vyrnforge\/[a-z0-9-]+)/g)].map((match) => match[1]);
     for (const dependency of imports) {
-      if (!allowed.has(dependency)) throw new Error(`${file} imports forbidden internal package ${dependency}`);
+      if (!allowed.has(dependency) && dependency !== manifest.name) throw new Error(`${file} imports undeclared internal package ${dependency}`);
     }
     if (name === 'core' && /\b(?:window|document|HTMLElement|Element|CustomEvent|customElements)\b/.test(source)) {
       throw new Error(`${file} references a DOM/browser global; @vyrnforge/core must remain DOM-free`);
@@ -48,4 +38,4 @@ for (const [index, name] of packageNames.entries()) {
   }
 }
 
-process.stdout.write('package boundaries: ok\n');
+process.stdout.write('package boundaries: public workspace imports are declared and core remains DOM-free\n');

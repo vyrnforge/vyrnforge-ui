@@ -11,44 +11,83 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
-  ci-gate:
-    name: ci-gate
+  affected:
+    name: affected
     runs-on: ubuntu-latest
     timeout-minutes: 40
     steps:
-      - name: Checkout
-        uses: actions/checkout@v7
+      - uses: actions/checkout@v7
         with:
           fetch-depth: 0
-      - name: Setup Node
-        uses: actions/setup-node@v7
+      - uses: actions/setup-node@v7
         with:
           node-version-file: .node-version
-          cache: npm
-      - name: Install locked toolchain
-        run: npm ci --ignore-scripts --no-audit --no-fund
-      - name: Execute targeted validation plan
+          package-manager-cache: false
+      - run: corepack enable
+      - run: pnpm install --frozen-lockfile --ignore-scripts
+      - name: Record VyrnForge semantic impact
         env:
           BASE_SHA: ${{ github.event.pull_request.base.sha }}
           HEAD_SHA: ${{ github.sha }}
-        run: node tooling/impact/execute.mjs --mode pr --base "$BASE_SHA" --head "$HEAD_SHA" --output test-results/validation-plan.json
-      - name: Upload inspectable validation plan
+        run: |
+          mkdir -p test-results
+          node tooling/impact/plan.mjs --mode pr --base "$BASE_SHA" --head "$HEAD_SHA" > test-results/semantic-impact.json
+      - name: Run Nx affected validation
+        env:
+          NX_BASE: ${{ github.event.pull_request.base.sha }}
+          NX_HEAD: ${{ github.sha }}
+        run: pnpm exec nx affected -t lint,typecheck,test,build --base="$NX_BASE" --head="$NX_HEAD"
+      - name: Verify repository contracts
+        run: pnpm verify:structure && pnpm verify:testing-structure && pnpm verify:boundaries && pnpm verify:architecture
+      - uses: actions/upload-artifact@v7
         if: always()
-        uses: actions/upload-artifact@v7
         with:
-          name: validation-plan-pr
-          path: test-results/validation-plan.json
+          name: semantic-impact-pr
+          path: test-results/semantic-impact.json
           if-no-files-found: error
           retention-days: 7
-      - name: Upload browser evidence when selected
-        if: always()
-        uses: actions/upload-artifact@v7
+
+  package-artifacts:
+    name: package-artifacts
+    runs-on: ubuntu-latest
+    timeout-minutes: 40
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-node@v7
         with:
-          name: browser-evidence-pr
+          node-version-file: .node-version
+          package-manager-cache: false
+      - run: corepack enable
+      - run: pnpm install --frozen-lockfile --ignore-scripts
+      - run: pnpm verify:packages
+
+  browser-chromium:
+    name: browser-chromium-${{ matrix.port }}
+    runs-on: ubuntu-latest
+    timeout-minutes: 40
+    strategy:
+      fail-fast: false
+      matrix:
+        port: [web, react, angular, vue, elements]
+    env:
+      VF_COMPONENT_PORT: ${{ matrix.port }}
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-node@v7
+        with:
+          node-version-file: .node-version
+          package-manager-cache: false
+      - run: corepack enable
+      - run: pnpm install --frozen-lockfile --ignore-scripts
+      - run: pnpm exec playwright install --with-deps chromium
+      - run: pnpm build
+      - run: pnpm exec playwright test --project=chromium
+      - uses: actions/upload-artifact@v7
+        if: always()
+        with:
+          name: browser-evidence-${{ matrix.port }}-pr
           path: |
-            test-results/playwright-report
-            test-results/playwright-results
-            test-results/*-playwright-report
-            test-results/*-playwright-results
+            test-results/playwright-report/${{ matrix.port }}
+            test-results/playwright-results/${{ matrix.port }}
           if-no-files-found: ignore
           retention-days: 7

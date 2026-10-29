@@ -1,5 +1,5 @@
 import { test, expect } from '@playwright/test';
-import axeCore from 'axe-core';
+import AxeBuilder from '@axe-core/playwright';
 
 const port = process.env.VF_COMPONENT_PORT || 'web';
 
@@ -36,8 +36,7 @@ test.describe('Button real-browser contract', () => {
     await expect(focused).toBeVisible();
     expect(await focused.evaluate((element) => getComputedStyle(element).outlineStyle)).not.toBe('none');
 
-    await page.addScriptTag({ content: axeCore.source });
-    const results = await page.evaluate(async () => globalThis.axe.run(document));
+    const results = await new AxeBuilder({ page }).analyze();
     expect(results.violations).toEqual([]);
 
     if (browserName === 'chromium') await expect(page.locator('[data-visual-matrix]')).toHaveScreenshot('button-visual-matrix.png');
@@ -72,8 +71,7 @@ test.describe('Button framework hydration', () => {
       await expect(page.locator('body')).toHaveAttribute('data-activated', 'true');
       expect(errors.filter((error) => /hydration|mismatch/i.test(error))).toEqual([]);
 
-      await page.addScriptTag({ content: axeCore.source });
-      const results = await page.evaluate(async (selector) => globalThis.axe.run(document.querySelector(selector)), `#${framework}-button`);
+        const results = await new AxeBuilder({ page }).include(`#${framework}-button`).analyze();
       expect(results.violations).toEqual([]);
     });
   }

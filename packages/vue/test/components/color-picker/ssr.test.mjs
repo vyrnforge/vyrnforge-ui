@@ -1,1 +1,1 @@
-import test from 'node:test';import assert from'node:assert/strict';test('Vue ColorPicker subpath is SSR-safe',async()=>{const api=await import('@vyrnforge/vue/color-picker');assert.ok(Object.keys(api).length>0);});
+import { test } from 'vitest';import assert from'node:assert/strict';test('Vue ColorPicker subpath is SSR-safe',async()=>{const api=await import('@vyrnforge/vue/color-picker');assert.ok(Object.keys(api).length>0);});

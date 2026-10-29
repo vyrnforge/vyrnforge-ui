@@ -1,1 +1,1 @@
-import test from 'node:test'; import assert from 'node:assert/strict'; test('React SplitButton subpath is SSR-safe',async()=>{const api=await import('@vyrnforge/react/split-button'); assert.equal(typeof api.SplitButtonRoot,'object');});
+import { test } from 'vitest'; import assert from 'node:assert/strict'; test('React SplitButton subpath is SSR-safe',async()=>{const api=await import('@vyrnforge/react/split-button'); assert.equal(typeof api.SplitButtonRoot,'object');});

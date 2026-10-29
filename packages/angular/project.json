@@ -1,0 +1,45 @@
+{
+  "name": "@vyrnforge/angular",
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "packages/angular",
+  "projectType": "library",
+  "tags": [
+    "scope:public",
+    "platform:angular"
+  ],
+  "targets": {
+    "build": {
+      "executor": "nx:run-commands",
+      "outputs": [
+        "{projectRoot}/dist"
+      ],
+      "options": {
+        "command": "pnpm --filter @vyrnforge/angular run build"
+      }
+    },
+    "lint": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "pnpm exec eslint packages/angular --max-warnings=0"
+      }
+    },
+    "typecheck": {
+      "executor": "nx:run-commands",
+      "dependsOn": [
+        "build"
+      ],
+      "options": {
+        "command": "pnpm exec ngc -p packages/angular/tsconfig.json --noEmit && pnpm exec tsc -p packages/angular/tsconfig.test.json"
+      }
+    },
+    "test": {
+      "executor": "nx:run-commands",
+      "dependsOn": [
+        "build"
+      ],
+      "options": {
+        "command": "pnpm exec vitest run --project angular --passWithNoTests"
+      }
+    }
+  }
+}

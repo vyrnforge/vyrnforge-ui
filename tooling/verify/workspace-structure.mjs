@@ -6,11 +6,14 @@ const repositoryRoots = ['apps', 'documentation', 'packages', 'product', 'toolin
 const forbiddenToolingCapabilityNames = new Set(['common', 'misc', 'scripts', 'utils']);
 const capabilityNamePattern = /^[a-z][a-z0-9-]*$/;
 const packageJson = JSON.parse(await readFile(new URL('../../package.json', import.meta.url), 'utf8'));
+const pnpmWorkspace = await readFile(new URL('../../pnpm-workspace.yaml', import.meta.url), 'utf8');
 const toolingPackageJson = JSON.parse(await readFile(new URL('../package.json', import.meta.url), 'utf8'));
 
-if (JSON.stringify(packageJson.workspaces) !== JSON.stringify(expectedWorkspaces)) {
-  throw new Error(`Root workspaces must be exactly the public packages: ${expectedWorkspaces.join(', ')}`);
+const workspaceEntries = [...pnpmWorkspace.matchAll(/^\s*-\s+(packages\/[^\s]+)\s*$/gm)].map((match) => match[1]);
+if (JSON.stringify(workspaceEntries) !== JSON.stringify(expectedWorkspaces)) {
+  throw new Error(`pnpm workspace must contain exactly the public packages: ${expectedWorkspaces.join(', ')}`);
 }
+if ('workspaces' in packageJson) throw new Error('npm workspaces must not remain after the pnpm migration');
 if (toolingPackageJson.name !== '@vyrnforge/repository-tooling') {
   throw new Error(`tooling/package.json must declare @vyrnforge/repository-tooling, found ${toolingPackageJson.name ?? '<missing>'}`);
 }

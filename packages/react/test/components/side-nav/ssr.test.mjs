@@ -1,1 +1,1 @@
-import test from 'node:test'; import assert from 'node:assert/strict'; test('React SideNav subpath is SSR-safe',async()=>{const api=await import('@vyrnforge/react/side-nav'); assert.equal(typeof api.SideNav,'object');});
+import { test } from 'vitest'; import assert from 'node:assert/strict'; test('React SideNav subpath is SSR-safe',async()=>{const api=await import('@vyrnforge/react/side-nav'); assert.equal(typeof api.SideNav,'object');});

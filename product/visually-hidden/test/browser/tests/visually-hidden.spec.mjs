@@ -1,5 +1,5 @@
 import { test, expect } from '@playwright/test';
-import axeCore from 'axe-core';
+import AxeBuilder from '@axe-core/playwright';
 const port = process.env.VF_COMPONENT_PORT || 'web';
 test('VisuallyHidden removes visual layout while preserving accessible content', async ({ page }) => {
   await page.goto(`/components/visually-hidden/${port}.html`);
@@ -17,6 +17,6 @@ test('VisuallyHidden removes visual layout while preserving accessible content',
   expect(style.display).not.toBe('none');
   expect(style.visibility).not.toBe('hidden');
   await page.addScriptTag({ content: axeCore.source });
-  const results = await page.evaluate(async () => globalThis.axe.run(document));
+  const results = await new AxeBuilder({ page }).analyze();
   expect(results.violations).toEqual([]);
 });

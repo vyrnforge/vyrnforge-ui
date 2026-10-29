@@ -3,8 +3,5 @@
   "staleDays": 30,
   "maxDeletionsPerRun": 25,
   "protectedBranches": [],
-  "protectedPrefixes": [
-    "release/",
-    "hotfix/"
-  ]
+  "protectedPrefixes": ["release/", "hotfix/"]
 }

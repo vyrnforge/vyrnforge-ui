@@ -1,5 +1,5 @@
 import { test, expect } from '@playwright/test';
-import axeCore from 'axe-core';
+import AxeBuilder from '@axe-core/playwright';
 const port = process.env.VF_COMPONENT_PORT || 'web';
 test('Separator preserves native semantics and orientation across ports', async ({ page }) => {
   await page.goto(`/components/separator/${port}.html`);
@@ -13,6 +13,6 @@ test('Separator preserves native semantics and orientation across ports', async 
   expect(await horizontal.evaluate((el) => getComputedStyle(el).borderTopWidth)).toBe('1px');
   expect(await vertical.evaluate((el) => getComputedStyle(el).borderLeftWidth)).toBe('1px');
   await page.addScriptTag({ content: axeCore.source });
-  const results = await page.evaluate(async () => globalThis.axe.run(document));
+  const results = await new AxeBuilder({ page }).analyze();
   expect(results.violations).toEqual([]);
 });
