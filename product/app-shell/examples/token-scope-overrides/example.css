@@ -1,0 +1,20 @@
+.token-scope-demo {
+  padding: var(--vf-space-md);
+}
+
+.consumer-accent {
+  --vf-color-accent-background: #b91c1c;
+}
+
+.consumer-space {
+  --vf-space-md: 2rem;
+}
+
+.consumer-brand {
+  --vf-color-accent-background: #0f766e;
+  --vf-color-accent-background-hover: #115e59;
+  --vf-color-accent-background-pressed: #134e4a;
+  --vf-color-accent-foreground: #ffffff;
+  --vf-color-surface: #f0fdfa;
+  --vf-color-text: #134e4a;
+}
