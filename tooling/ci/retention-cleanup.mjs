@@ -90,11 +90,33 @@ function combinedPlan(mergedPlan, agePlan) {
 function encodeRef(name) { return name.split('/').map(encodeURIComponent).join('/'); }
 async function listOpenPullRequests() { return listPages('/pulls?state=open'); }
 
-async function branchRecords() {
+async function aheadByDefault(defaultBranch, branchName) {
+  const response = await githubResponse(`/compare/${encodeURIComponent(defaultBranch)}...${encodeURIComponent(branchName)}`);
+  if (!response.ok) return null;
+  const comparison = await response.json();
+  return Number.isInteger(comparison.ahead_by) ? comparison.ahead_by : null;
+}
+
+async function branchRecords(defaultBranch, mergedPullRequests) {
+  const mergedIntoDefault = new Set(
+    mergedPullRequests
+      .filter((pullRequest) => pullRequest?.base?.ref === defaultBranch && pullRequest?.head?.repo?.full_name === repository && pullRequest?.head?.ref)
+      .map((pullRequest) => pullRequest.head.ref)
+  );
   const branches = await listPages('/branches');
   return Promise.all(branches.map(async (branch) => {
-    const commit = await githubJson(`/commits/${branch.commit.sha}`);
-    return { name: branch.name, sha: branch.commit.sha, protected: branch.protected === true, commitDate: commit.commit?.committer?.date ?? commit.commit?.author?.date ?? null };
+    const [commit, ahead] = await Promise.all([
+      githubJson(`/commits/${branch.commit.sha}`),
+      aheadByDefault(defaultBranch, branch.name)
+    ]);
+    return {
+      name: branch.name,
+      sha: branch.commit.sha,
+      protected: branch.protected === true,
+      commitDate: commit.commit?.committer?.date ?? commit.commit?.author?.date ?? null,
+      aheadByDefault: ahead,
+      mergedPullRequest: mergedIntoDefault.has(branch.name)
+    };
   }));
 }
 
@@ -115,19 +137,30 @@ async function deleteBranch(name) {
 async function cleanupStaleBranches() {
   const repositoryInfo = await githubJson('');
   const defaultBranch = repositoryInfo.default_branch;
-  const [branches, openPullRequests] = await Promise.all([branchRecords(), listOpenPullRequests()]);
+  const [openPullRequests, mergedPullRequests] = await Promise.all([listOpenPullRequests(), listMergedPullRequests()]);
+  const branches = await branchRecords(defaultBranch, mergedPullRequests);
   const plan = planBranchDeletions(branches, openPullRequests, branchPolicy, { defaultBranch, repository });
   const results = [];
+
   for (const candidate of plan.deletions) {
     const freshOpenPullRequests = await listOpenPullRequests();
     const protectedNames = protectedBranchNames(freshOpenPullRequests, { defaultBranch, repository });
     if (protectedNames.has(candidate.name)) { results.push({ name: candidate.name, status: 'skipped', reason: 'open-pr-created-during-run' }); continue; }
+
     const ref = await branchRef(candidate.name);
     if (!ref) { results.push({ name: candidate.name, status: 'already-absent' }); continue; }
     if (ref.object?.sha !== candidate.sha) { results.push({ name: candidate.name, status: 'skipped', reason: 'branch-moved-during-run' }); continue; }
+
     results.push(await deleteBranch(candidate.name));
   }
-  return { policy: branchPolicy, plan, results, deletedBranches: results.filter((result) => result.status === 'deleted').length, failedBranches: results.filter((result) => result.status === 'failed').length };
+
+  return {
+    policy: branchPolicy,
+    plan,
+    results,
+    deletedBranches: results.filter((result) => result.status === 'deleted').length,
+    failedBranches: results.filter((result) => result.status === 'failed').length
+  };
 }
 
 async function writeReport(report) {
