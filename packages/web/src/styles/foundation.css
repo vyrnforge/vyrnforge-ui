@@ -27,7 +27,8 @@
   }
 
   @media (prefers-reduced-motion: reduce) {
-    :root {
+    :root,
+    :where([data-vf-theme]) {
       --vf-control-motion-duration: 0ms;
     }
   }

@@ -44,6 +44,29 @@ test.describe('STD-02 inherited density foundation', () => {
     await expect(updates).toHaveCSS('height', '22px');
   });
 
+  test('preserves reduced-motion duration inside explicit light and dark theme scopes', async ({ page }) => {
+    await page.emulateMedia({ reducedMotion: 'reduce' });
+    await page.goto('/components/app-shell/foundation-density-react.html');
+    expect(await page.evaluate(() => matchMedia('(prefers-reduced-motion: reduce)').matches)).toBe(true);
+
+    const form = page.getByRole('form', { name: 'Foundation settings' });
+    const appearance = page.getByLabel('Appearance');
+    const updates = page.getByRole('switch', { name: 'Product updates' });
+    const save = page.getByRole('button', { name: 'Save settings' });
+
+    expect(await form.evaluate((element) => getComputedStyle(element).getPropertyValue('--vf-control-motion-duration').trim())).toBe('0ms');
+    await expect(appearance).toHaveCSS('transition-duration', '0s');
+    await expect(updates).toHaveCSS('transition-duration', '0s');
+    await expect(save).toHaveCSS('transition-duration', '0s');
+
+    await appearance.selectOption('dark');
+    await expect(form).toHaveAttribute('data-vf-theme', 'dark');
+    expect(await form.evaluate((element) => getComputedStyle(element).getPropertyValue('--vf-control-motion-duration').trim())).toBe('0ms');
+    await expect(appearance).toHaveCSS('transition-duration', '0s');
+    await expect(updates).toHaveCSS('transition-duration', '0s');
+    await expect(save).toHaveCSS('transition-duration', '0s');
+  });
+
   test('preserves task access and page reflow at 320 CSS pixels', async ({ page }) => {
     await page.setViewportSize({ width: 320, height: 800 });
     await page.goto('/components/app-shell/foundation-density-react.html');
