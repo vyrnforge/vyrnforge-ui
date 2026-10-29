@@ -1,4 +1,5 @@
 import { defineConfig, devices } from '@playwright/test';
+import { discoverProductUnits } from './tooling/testing/discover-product-units.mjs';
 
 const port = process.env.VF_COMPONENT_PORT || 'web';
 const browserDeviceNames = {
@@ -11,9 +12,15 @@ if (!process.env.NODE_OPTIONS?.includes(axeCompatibilityImport)) {
   process.env.NODE_OPTIONS = [process.env.NODE_OPTIONS, axeCompatibilityImport].filter(Boolean).join(' ');
 }
 
+const discovery = discoverProductUnits();
+const unsupportedComponentSpecs = discovery.components
+  .filter((component) => !component.ports[port])
+  .map((component) => `**/${component.component}/test/browser/tests/**/*.spec.mjs`);
+
 export default defineConfig({
   testDir: './product',
   testMatch: '*/test/browser/tests/**/*.spec.mjs',
+  testIgnore: unsupportedComponentSpecs,
   outputDir: `test-results/playwright-results/${port}`,
   snapshotPathTemplate: `{testDir}/{testFileDir}/__screenshots__/{arg}-{projectName}{ext}`,
   fullyParallel: false,
