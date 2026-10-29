@@ -1,15 +1,10 @@
 import { test, expect } from '@playwright/test';
-import AxeBuilder from '@axe-core/playwright';
-
+import { expectNoAxeViolations } from '../../../../../tooling/testing/accessibility.mjs';
 const port = process.env.VF_COMPONENT_PORT || 'web';
 
 async function expectAxeClean(page) {
-  await page.addScriptTag({ content: axeCore.source });
-  const results = await page.evaluate(async () => globalThis.axe.run(document, {
-    rules: {
-      region: { enabled: false },
-    },
-  }));
+  
+  const results = await expectNoAxeViolations(page, { disableRules: ['region'] });
   expect(results.violations).toEqual([]);
 }
 

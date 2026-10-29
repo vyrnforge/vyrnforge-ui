@@ -1,6 +1,5 @@
 import { test, expect } from '@playwright/test';
-import AxeBuilder from '@axe-core/playwright';
-
+import { expectNoAxeViolations } from '../../../../../tooling/testing/accessibility.mjs';
 const port = process.env.VF_COMPONENT_PORT || 'react';
 
 test('search field clears with authored naming and restores focus', async ({ page }) => {
@@ -9,8 +8,8 @@ test('search field clears with authored naming and restores focus', async ({ pag
   await page.locator('#clear').click();
   await expect(page.locator('#search')).toHaveValue('');
   await expect(page.locator('#search')).toBeFocused();
-  await page.addScriptTag({ content: axeCore.source });
-  expect((await page.evaluate(async () => globalThis.axe.run(document))).violations).toEqual([]);
+  
+  expect((await expectNoAxeViolations(page)).violations).toEqual([]);
 });
 
 test('STD-08 list explorer preserves committed criteria, history, IME, stale-response, and zero-result recovery', async ({ page }) => {
@@ -89,6 +88,6 @@ test('STD-08 list explorer preserves committed criteria, history, IME, stale-res
   await expect(page).not.toHaveURL(/[?&](q|active|mine|sort)=/);
   await expect(page.getByRole('status')).toHaveText('6 projects');
 
-  await page.addScriptTag({ content: axeCore.source });
-  expect((await page.evaluate(async () => globalThis.axe.run(document))).violations).toEqual([]);
+  
+  expect((await expectNoAxeViolations(page)).violations).toEqual([]);
 });

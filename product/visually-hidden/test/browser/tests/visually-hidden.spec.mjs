@@ -16,7 +16,7 @@ test('VisuallyHidden removes visual layout while preserving accessible content',
   expect(style.clipPath).toBe('inset(50%)');
   expect(style.display).not.toBe('none');
   expect(style.visibility).not.toBe('hidden');
-  await page.addScriptTag({ content: axeCore.source });
+  
   const results = await new AxeBuilder({ page }).analyze();
   expect(results.violations).toEqual([]);
 });

@@ -1,6 +1,5 @@
 import { test, expect } from '@playwright/test';
-import AxeBuilder from '@axe-core/playwright';
-
+import { expectNoAxeViolations } from '../../../../../tooling/testing/accessibility.mjs';
 const port = process.env.VF_COMPONENT_PORT || 'react';
 const fixture = `/components/toast/${port}.html`;
 
@@ -25,8 +24,8 @@ test('uses polite real output with authored English and localized naming', async
   await expect(page.locator('#controlled-close')).toHaveAccessibleName('Tutup notifikasi');
   if (port !== 'web') await expect(page.locator('#sibling-b-close')).toHaveAccessibleName('Close notification');
   await expect(page.locator('body')).not.toContainText('Dismiss notification');
-  await page.addScriptTag({ content: axeCore.source });
-  expect((await page.evaluate(async () => globalThis.axe.run(document))).violations).toEqual([]);
+  
+  expect((await expectNoAxeViolations(page)).violations).toEqual([]);
 });
 
 test('controlled close is intent until the owner commits it', async ({ page }) => {

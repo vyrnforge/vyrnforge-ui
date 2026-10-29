@@ -1,14 +1,13 @@
 import { test, expect } from '@playwright/test';
-import AxeBuilder from '@axe-core/playwright';
-
+import { expectNoAxeViolations } from '../../../../../tooling/testing/accessibility.mjs';
 const port = process.env.VF_COMPONENT_PORT || 'react';
 
 test('pagination exposes a named landmark and current page', async ({ page }) => {
   await page.goto(`/components/pagination/${port}.html`);
   await expect(page.locator('#pagination')).toHaveAttribute('aria-label', 'Pagination');
   await expect(page.getByText('2')).toHaveAttribute('aria-current', 'page');
-  await page.addScriptTag({ content: axeCore.source });
-  expect((await page.evaluate(async () => globalThis.axe.run(document))).violations).toEqual([]);
+  
+  expect((await expectNoAxeViolations(page)).violations).toEqual([]);
 });
 
 test('React public entrypoint uses semantic tokens and exposes keyboard focus', async ({ page }) => {
@@ -44,6 +43,6 @@ test('React public entrypoint uses semantic tokens and exposes keyboard focus', 
   expect(forcedColorStyles.backgroundColor).not.toBe('rgba(0, 0, 0, 0)');
   expect(forcedColorStyles.outlineStyle).not.toBe('none');
 
-  await page.addScriptTag({ content: axeCore.source });
-  expect((await page.evaluate(async () => globalThis.axe.run(document))).violations).toEqual([]);
+  
+  expect((await expectNoAxeViolations(page)).violations).toEqual([]);
 });

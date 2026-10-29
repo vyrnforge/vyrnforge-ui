@@ -1,6 +1,5 @@
 import { test, expect } from '@playwright/test';
-import AxeBuilder from '@axe-core/playwright';
-
+import { expectNoAxeViolations } from '../../../../../tooling/testing/accessibility.mjs';
 const port = process.env.VF_COMPONENT_PORT || 'react';
 
 async function attachJson(testInfo, name, value) {
@@ -38,8 +37,8 @@ test('STD-24 records list/page-change measurements without a flaky timing gate',
   expect(metrics.measures.some((entry) => entry.name === 'vf-list-render' && Number.isFinite(entry.duration))).toBe(true);
   await attachJson(testInfo, 'performance-diagnostics', metrics);
 
-  await page.addScriptTag({ content: axeCore.source });
-  expect((await page.evaluate(async () => globalThis.axe.run(document))).violations).toEqual([]);
+  
+  expect((await expectNoAxeViolations(page)).violations).toEqual([]);
 });
 
 test('STD-24 delayed save exposes pending state and does not fabricate success', async ({ page }) => {

@@ -1,6 +1,5 @@
 import { test, expect } from '@playwright/test';
-import AxeBuilder from '@axe-core/playwright';
-
+import { expectNoAxeViolations } from '../../../../../tooling/testing/accessibility.mjs';
 const port = process.env.VF_COMPONENT_PORT || 'react';
 
 test('password field toggles visibility accessibly', async ({ page }) => {
@@ -8,8 +7,8 @@ test('password field toggles visibility accessibly', async ({ page }) => {
   await page.locator('#toggle').click();
   await expect(page.locator('#password')).toHaveAttribute('type', 'text');
   await expect(page.locator('#toggle')).toHaveAttribute('aria-pressed', 'true');
-  await page.addScriptTag({ content: axeCore.source });
-  expect((await page.evaluate(async () => globalThis.axe.run(document))).violations).toEqual([]);
+  
+  expect((await expectNoAxeViolations(page)).violations).toEqual([]);
 });
 
 test('STD-15 representative session recovery preserves task context', async ({ page }) => {
@@ -54,6 +53,6 @@ test('STD-15 representative session recovery preserves task context', async ({ p
   await expect(note).toHaveValue('Unsaved identity workflow draft');
   await expect(page.getByText('Profile note saved by the example service.', { exact: true })).toHaveCount(0);
 
-  await page.addScriptTag({ content: axeCore.source });
-  expect((await page.evaluate(async () => globalThis.axe.run(document))).violations).toEqual([]);
+  
+  expect((await expectNoAxeViolations(page)).violations).toEqual([]);
 });
