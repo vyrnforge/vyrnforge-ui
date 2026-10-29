@@ -12,9 +12,45 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
-  main-gate:
+  plan:
+    name: semantic-impact
     runs-on: ubuntu-latest
-    timeout-minutes: 50
+    timeout-minutes: 10
+    outputs:
+      package_artifacts_required: ${{ steps.plan.outputs.package_artifacts_required }}
+      browser_required: ${{ steps.plan.outputs.browser_required }}
+      browser_ports: ${{ steps.plan.outputs.browser_ports }}
+      docs_required: ${{ steps.plan.outputs.docs_required }}
+      release_required: ${{ steps.plan.outputs.release_required }}
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-node@v7
+        with:
+          node-version-file: .node-version
+          package-manager-cache: false
+      - name: Record semantic impact
+        id: plan
+        env:
+          BASE_SHA: ${{ github.event.before }}
+          HEAD_SHA: ${{ github.sha }}
+        run: |
+          mkdir -p test-results
+          node tooling/impact/plan.mjs --mode main --base "$BASE_SHA" --head "$HEAD_SHA" --output test-results/semantic-impact.json --github-output "$GITHUB_OUTPUT"
+      - uses: actions/upload-artifact@v7
+        if: always()
+        with:
+          name: semantic-impact-main-${{ github.sha }}
+          path: test-results/semantic-impact.json
+          if-no-files-found: error
+          retention-days: 14
+
+  affected:
+    name: affected
+    needs: plan
+    runs-on: ubuntu-latest
+    timeout-minutes: 40
     steps:
       - uses: actions/checkout@v7
         with:
@@ -25,33 +61,127 @@ jobs:
           package-manager-cache: false
       - run: corepack enable
       - run: pnpm install --frozen-lockfile --ignore-scripts
-      - name: Record semantic impact
-        env:
-          BASE_SHA: ${{ github.event.before }}
-          HEAD_SHA: ${{ github.sha }}
-        run: |
-          mkdir -p test-results
-          node tooling/impact/plan.mjs --mode pr --base "$BASE_SHA" --head "$HEAD_SHA" > test-results/semantic-impact.json
       - name: Run affected Nx validation
         env:
           NX_BASE: ${{ github.event.before }}
           NX_HEAD: ${{ github.sha }}
         run: pnpm exec nx affected -t lint,typecheck,test,build --base="$NX_BASE" --head="$NX_HEAD"
-      - name: Verify packed packages
-        run: pnpm verify:packages
-      - name: Build documentation
-        run: pnpm build:docs
-      - uses: actions/upload-artifact@v7
-        if: always()
+      - name: Verify repository contracts
+        run: pnpm verify:structure && pnpm verify:testing-structure && pnpm verify:boundaries && pnpm verify:architecture && pnpm verify:workflows
+
+  package-artifacts:
+    name: package-artifacts
+    needs: [plan, affected]
+    if: needs.plan.outputs.package_artifacts_required == 'true'
+    runs-on: ubuntu-latest
+    timeout-minutes: 40
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-node@v7
         with:
-          name: semantic-impact-main-${{ github.sha }}
-          path: test-results/semantic-impact.json
-          if-no-files-found: error
-          retention-days: 14
+          node-version-file: .node-version
+          package-manager-cache: false
+      - run: corepack enable
+      - run: pnpm install --frozen-lockfile --ignore-scripts
+      - run: pnpm verify:packages
+
+  release-intent:
+    name: release-intent
+    needs: [plan, affected]
+    if: needs.plan.outputs.release_required == 'true'
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-node@v7
+        with:
+          node-version-file: .node-version
+          package-manager-cache: false
+      - run: corepack enable
+      - run: pnpm install --frozen-lockfile --ignore-scripts
+      - run: pnpm verify:release
+
+  documentation:
+    name: documentation
+    needs: [plan, affected]
+    if: needs.plan.outputs.docs_required == 'true'
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-node@v7
+        with:
+          node-version-file: .node-version
+          package-manager-cache: false
+      - run: corepack enable
+      - run: pnpm install --frozen-lockfile --ignore-scripts
+      - run: pnpm build:docs
       - uses: actions/upload-artifact@v7
-        if: always()
         with:
           name: vyrnforge-docs-next-${{ github.sha }}
           path: dist/docs
           if-no-files-found: error
           retention-days: 14
+
+  browser-chromium:
+    name: browser-chromium-${{ matrix.port }}
+    needs: [plan, affected]
+    if: needs.plan.outputs.browser_required == 'true'
+    runs-on: ubuntu-latest
+    timeout-minutes: 40
+    strategy:
+      fail-fast: false
+      matrix:
+        port: ${{ fromJSON(needs.plan.outputs.browser_ports) }}
+    env:
+      VF_COMPONENT_PORT: ${{ matrix.port }}
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-node@v7
+        with:
+          node-version-file: .node-version
+          package-manager-cache: false
+      - run: corepack enable
+      - run: pnpm install --frozen-lockfile --ignore-scripts
+      - run: pnpm exec playwright install --with-deps chromium
+      - run: pnpm build
+      - run: pnpm exec playwright test --project=chromium
+      - uses: actions/upload-artifact@v7
+        if: always()
+        with:
+          name: browser-evidence-${{ matrix.port }}-main-${{ github.sha }}
+          path: |
+            test-results/playwright-report/${{ matrix.port }}
+            test-results/playwright-results/${{ matrix.port }}
+          if-no-files-found: ignore
+          retention-days: 14
+
+  main-gate:
+    name: main-gate
+    if: always()
+    needs: [plan, affected, package-artifacts, release-intent, documentation, browser-chromium]
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - name: Require all selected validation evidence
+        env:
+          PLAN: ${{ needs.plan.result }}
+          AFFECTED: ${{ needs.affected.result }}
+          PACKAGES: ${{ needs.package-artifacts.result }}
+          RELEASE: ${{ needs.release-intent.result }}
+          DOCS: ${{ needs.documentation.result }}
+          BROWSER: ${{ needs.browser-chromium.result }}
+        run: |
+          node --input-type=module <<'NODE'
+          const required = new Map([
+            ['plan', process.env.PLAN],
+            ['affected', process.env.AFFECTED],
+            ['package-artifacts', process.env.PACKAGES],
+            ['release-intent', process.env.RELEASE],
+            ['documentation', process.env.DOCS],
+            ['browser-chromium', process.env.BROWSER],
+          ]);
+          const failed = [...required].filter(([, result]) => !['success', 'skipped'].includes(result));
+          if (failed.length) throw new Error(`Selected validation failed: ${failed.map(([name, result]) => `${name}=${result}`).join(', ')}`);
+          console.log('All selected VyrnForge Main evidence passed.');
+          NODE
