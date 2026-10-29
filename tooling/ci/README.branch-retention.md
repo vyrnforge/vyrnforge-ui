@@ -1,7 +1,7 @@
 # Branch retention
 
-The branch-retention planner is intended for repository maintenance automation. It protects the default branch, GitHub-protected branches, release and hotfix prefixes, and every same-repository branch currently used as either the head or base of an open pull request.
+Branch cleanup is repository maintenance automation. A branch becomes eligible when its head commit is at least 7 days old and its work is already represented on the default branch: either the branch has no commits ahead of the default branch or GitHub records a merged pull request from that same-repository branch into the default branch.
 
-Scheduled cleanup uses a 30-day stale threshold and requires evidence that the branch was merged through a pull request or has no commits ahead of the default branch. Cleanup is capped at 25 branches per run. A merged pull-request event may select only that pull request's own head branch, and stacked pull-request bases remain protected.
+The default branch, GitHub-protected branches, `release/*`, `hotfix/*`, and every same-repository branch currently used as either the head or base of an open pull request are protected. Stale branches with unique, unmerged work are skipped. The executor refreshes open pull requests and rechecks the branch SHA immediately before removal so a newly opened PR or a branch that moved during the run is skipped.
 
-The planner is deliberately separate from the execution mechanism so selection policy remains unit-testable and reviewable.
+The repository retention workflow runs daily and may also be dispatched manually. Each run handles at most 25 eligible branches and records branch results in the retention audit report. Repository rules remain an additional enforcement boundary.

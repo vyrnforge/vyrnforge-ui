@@ -89,13 +89,14 @@ forbidText(sources.docs, 'actions/checkout@', 'Documentation Pages promotion mus
 forbidText(sources.docs, 'pnpm install', 'Documentation Pages promotion must not reinstall the toolchain');
 forbidText(sources.docs, 'pnpm build:docs', 'Documentation Pages promotion must not rebuild validated docs');
 
-requireReadOnlyContents(sources.retention, 'Actions Retention');
-requireText(sources.retention, 'pull_request_target:', 'Actions Retention must react to merged pull requests');
-requireText(sources.retention, 'schedule:', 'Actions Retention must have periodic cleanup');
-requireText(sources.retention, 'workflow_dispatch:', 'Actions Retention must support manual cleanup');
-requireText(sources.retention, 'actions: write', 'Actions Retention needs narrowly scoped Actions write access');
-requireText(sources.retention, 'github.event.repository.default_branch', 'Actions Retention must execute trusted default-branch code');
-requireText(sources.retention, 'tooling/ci/retention-cleanup.mjs', 'Actions Retention must use the maintained cleanup implementation');
-forbidText(sources.retention, 'pnpm install', 'Actions Retention must not install the product dependency graph');
+requireText(sources.retention, 'contents: write', 'Repository Retention needs repository contents write access to delete stale branch refs');
+requireText(sources.retention, 'pull_request_target:', 'Repository Retention must react to merged pull requests');
+requireText(sources.retention, 'schedule:', 'Repository Retention must have periodic cleanup');
+requireText(sources.retention, 'workflow_dispatch:', 'Repository Retention must support manual cleanup');
+requireText(sources.retention, 'actions: write', 'Repository Retention needs narrowly scoped Actions write access');
+requireText(sources.retention, 'pull-requests: read', 'Repository Retention needs pull-request read access to protect active branch heads and bases');
+requireText(sources.retention, 'github.event.repository.default_branch', 'Repository Retention must execute trusted default-branch code');
+requireText(sources.retention, 'tooling/ci/retention-cleanup.mjs', 'Repository Retention must use the maintained cleanup implementation');
+forbidText(sources.retention, 'pnpm install', 'Repository Retention must not install the product dependency graph');
 
 process.stdout.write('workflow contracts: pnpm security, shared semantic modes, Nx execution ownership, broad safety nets, artifact lineage, and mutation boundaries ok\n');
