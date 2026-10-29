@@ -14,7 +14,29 @@ concurrency:
   cancel-in-progress: false
 
 jobs:
+  plan:
+    name: semantic-impact
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-node@v7
+        with:
+          node-version-file: .node-version
+          package-manager-cache: false
+      - name: Record release broad semantic impact
+        run: |
+          mkdir -p test-results
+          node tooling/impact/plan.mjs --mode release --output test-results/semantic-impact.json
+      - uses: actions/upload-artifact@v7
+        with:
+          name: semantic-impact-release-${{ github.run_id }}
+          path: test-results/semantic-impact.json
+          if-no-files-found: error
+          retention-days: 30
+
   release-gate:
+    needs: plan
     runs-on: ubuntu-latest
     timeout-minutes: 70
     steps:
@@ -38,6 +60,7 @@ jobs:
 
   browser-matrix:
     name: release-browser-${{ matrix.port }}
+    needs: plan
     runs-on: ubuntu-latest
     timeout-minutes: 70
     strategy:

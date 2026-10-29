@@ -13,7 +13,29 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
+  plan:
+    name: semantic-impact
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-node@v7
+        with:
+          node-version-file: .node-version
+          package-manager-cache: false
+      - name: Record scheduled broad semantic impact
+        run: |
+          mkdir -p test-results
+          node tooling/impact/plan.mjs --mode scheduled --output test-results/semantic-impact.json
+      - uses: actions/upload-artifact@v7
+        with:
+          name: semantic-impact-scheduled-${{ github.run_id }}
+          path: test-results/semantic-impact.json
+          if-no-files-found: error
+          retention-days: 14
+
   full-validation:
+    needs: plan
     runs-on: ubuntu-latest
     timeout-minutes: 60
     steps:
@@ -25,10 +47,13 @@ jobs:
       - run: corepack enable
       - run: pnpm install --frozen-lockfile --ignore-scripts
       - run: pnpm check
+      - run: pnpm verify:release
       - run: pnpm verify:packages
+      - run: pnpm build:docs
 
   browser-matrix:
     name: browser-${{ matrix.port }}
+    needs: plan
     runs-on: ubuntu-latest
     timeout-minutes: 60
     strategy:
