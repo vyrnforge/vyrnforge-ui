@@ -57,9 +57,8 @@ for (const name of packageNames) {
   const cssEntrypoints = Object.keys(manifest.exports ?? {})
     .filter((entrypoint) => entrypoint.endsWith('.css'))
     .map((entrypoint) => entrypoint.replace(/^\.\//, ''));
-  const attwArgs = ['exec', 'attw', '--profile', 'esm-only'];
+  const attwArgs = ['exec', 'attw', tarballPath, '--profile', 'esm-only'];
   if (cssEntrypoints.length > 0) attwArgs.push('--exclude-entrypoints', ...cssEntrypoints);
-  attwArgs.push(tarballPath);
   run('pnpm', attwArgs);
 }
 
