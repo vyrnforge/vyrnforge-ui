@@ -15,7 +15,9 @@ const sharedInfrastructure = [
 function componentFromPath(filePath) {
   const product = /^product\/([^/]+)\//.exec(filePath)?.[1];
   if (product && !product.startsWith('_')) return product;
-  return /^packages\/(?:web|react|angular|vue|elements)\/src\/components\/([^/]+)\//.exec(filePath)?.[1] ?? null;
+  const conventional = /^packages\/(?:web|react|vue|elements)\/src\/components\/([^/]+)\//.exec(filePath)?.[1];
+  if (conventional) return conventional;
+  return /^packages\/angular\/([^/]+)\/src\//.exec(filePath)?.[1] ?? null;
 }
 
 function packageFromPath(filePath) {
