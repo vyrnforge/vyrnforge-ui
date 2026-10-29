@@ -25,9 +25,16 @@ jobs:
           package-manager-cache: false
       - run: corepack enable
       - run: pnpm install --frozen-lockfile --ignore-scripts
-      - run: pnpm check
-      - run: pnpm verify:packages
-      - run: pnpm changeset:status
+      - name: Verify Changesets release intent
+        run: pnpm verify:release
+      - name: Run broad repository validation
+        run: pnpm check
+      - name: Verify packed packages, public API, and clean consumers
+        run: pnpm verify:packages
+      - name: Verify documentation build
+        run: pnpm build:docs
+      - name: Verify tracked generated artifacts are clean
+        run: git diff --exit-code
 
   browser-matrix:
     name: release-browser-${{ matrix.port }}
