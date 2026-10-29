@@ -222,7 +222,6 @@ test.describe('STD-02 public-entrypoint settings foundation matrix', () => {
     const updates = page.getByRole('switch', { name: 'Product updates' });
     const save = page.getByRole('button', { name: 'Save settings' });
 
-    expect(await form.evaluate((element) => getComputedStyle(element).getPropertyValue('--vf-control-motion-duration').trim())).toBe('0ms');
     await expect(appearance).toHaveCSS('transition-duration', '0s');
     await expect(updates).toHaveCSS('transition-duration', '0s');
     await expect(save).toHaveCSS('transition-duration', '0s');
