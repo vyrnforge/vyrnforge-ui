@@ -31,7 +31,7 @@ jobs:
           HEAD_SHA: ${{ github.sha }}
         run: |
           mkdir -p test-results
-          node tooling/impact/plan.mjs --mode pr --base "$BASE_SHA" --head="$HEAD_SHA" > test-results/semantic-impact.json
+          node tooling/impact/plan.mjs --mode pr --base "$BASE_SHA" --head "$HEAD_SHA" > test-results/semantic-impact.json
       - name: Run Nx affected validation
         env:
           NX_BASE: ${{ github.event.pull_request.base.sha }}
