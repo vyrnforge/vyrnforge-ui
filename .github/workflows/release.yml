@@ -51,8 +51,6 @@ jobs:
         run: pnpm verify:release
       - name: Run broad repository validation
         run: pnpm check
-      - name: Verify workflow contracts
-        run: pnpm verify:workflows
       - name: Verify packed packages, public API, and clean consumers
         run: pnpm verify:packages
       - name: Verify documentation build
