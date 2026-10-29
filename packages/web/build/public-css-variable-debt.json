@@ -36,7 +36,6 @@
   "packages/web/src/components/rating/rating.css: --vf-color-accent",
   "packages/web/src/components/rating/rating.css: --vf-color-focus",
   "packages/web/src/components/rating/rating.css: --vf-space-1",
-  "packages/web/src/components/search-field/search-field.css: --vf-radius-control",
   "packages/web/src/components/select/select.css: --vf-radius-control",
   "packages/web/src/components/select/select.css: --vf-space-3",
   "packages/web/src/components/split-button/split-button.css: --vf-color-action-primary",
