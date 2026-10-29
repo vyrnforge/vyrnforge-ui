@@ -5,7 +5,6 @@ on:
     paths:
       - '.github/workflows/stale-branch-cleanup.yml'
       - 'tooling/ci/branch-retention*'
-      - 'tooling/ci/branch-cleanup.mjs'
   workflow_dispatch:
 
 permissions:
@@ -29,5 +28,5 @@ jobs:
         run: pnpm install --frozen-lockfile --ignore-scripts
       - name: Test branch-retention selection policy
         run: pnpm exec vitest run tooling/ci/branch-retention.test.mjs
-      - name: Check cleanup executor syntax
-        run: node --check tooling/ci/branch-cleanup.mjs
+      - name: Check branch-retention executor syntax
+        run: node --check tooling/ci/branch-retention.mjs
