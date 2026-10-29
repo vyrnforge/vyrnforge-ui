@@ -11,10 +11,12 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
-  axe-migration:
-    name: axe-migration
+  visual-baseline:
+    name: visual-baseline
     runs-on: ubuntu-latest
-    timeout-minutes: 10
+    timeout-minutes: 20
+    env:
+      VF_COMPONENT_PORT: web
     steps:
       - uses: actions/checkout@v7
         with:
@@ -23,17 +25,22 @@ jobs:
         with:
           node-version-file: .node-version
           package-manager-cache: false
-      - name: Apply deterministic legacy-axe migration
+      - run: corepack enable
+      - run: pnpm install --frozen-lockfile --ignore-scripts
+      - run: pnpm exec playwright install --with-deps chromium
+      - run: pnpm build
+      - name: Generate canonical Tabs visual baselines
+        run: pnpm exec playwright test product/tabs/test/browser/tests/tabs.spec.mjs --project=chromium --update-snapshots
+      - name: Commit generated product-owned baselines
         run: |
-          node tooling/testing/migrate-legacy-axe.mjs
-          if git diff --quiet -- product; then
-            echo "No legacy axe migration changes remain."
+          if git diff --quiet -- product/tabs/test/browser/tests/__screenshots__; then
+            echo "Visual baselines already current."
             exit 0
           fi
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add product
-          git commit -m "test(a11y): migrate legacy axe scans"
+          git add product/tabs/test/browser/tests/__screenshots__
+          git commit -m "test(visual): baseline canonical Tabs states"
           git push origin "HEAD:${{ github.head_ref }}"
 
   affected:
