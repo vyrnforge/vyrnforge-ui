@@ -26,6 +26,25 @@ function releaseManifest(manifest) {
       if (typeof value === 'string' && value.startsWith('workspace:')) result[field][name] = '0.0.0-rebuild';
     }
   }
+
+  // The Angular workspace manifest describes build outputs under ./dist. Its
+  // release manifest must also use standards-compliant condition ordering and
+  // expose package metadata from the packed root.
+  if (result.name === '@vyrnforge/angular') {
+    for (const [entrypoint, target] of Object.entries(result.exports ?? {})) {
+      if (entrypoint === './package.json') {
+        result.exports[entrypoint] = './package.json';
+        continue;
+      }
+      if (target && typeof target === 'object' && typeof target.types === 'string' && typeof target.import === 'string') {
+        result.exports[entrypoint] = {
+          types: target.types,
+          import: { types: target.types, default: target.import },
+          default: target.default ?? target.import,
+        };
+      }
+    }
+  }
   return result;
 }
 
