@@ -19,6 +19,23 @@ test('file uploader exposes selected files accessibly', async ({ page }) => {
   expect((await expectNoAxeViolations(page)).violations).toEqual([]);
 });
 
+test('public FileUploader CSS resolves the canonical focus ring in light and dark themes', async ({ page }) => {
+  test.skip(port !== 'web', 'Public CSS resolution evidence is owned by the Web lane.');
+  await page.goto('/components/file-uploader/web.html');
+  const dropzone = page.locator('#dropzone');
+  const focusRingByTheme = {
+    light: 'rgb(47, 111, 237)',
+    dark: 'rgb(141, 180, 255)',
+  };
+
+  for (const theme of ['light', 'dark']) {
+    await page.locator('html').evaluate((element, value) => element.setAttribute('data-vf-theme', value), theme);
+    await dropzone.focus();
+    await expect(dropzone).toHaveCSS('outline-width', '2px');
+    await expect(dropzone).toHaveCSS('outline-color', focusRingByTheme[theme]);
+  }
+});
+
 test.describe('STD-12 upload/import recovery workflow', () => {
   test.skip(port !== 'react', 'The complete import workflow is intentionally bounded to the React public entrypoint and an application-owned deterministic service.');
 
