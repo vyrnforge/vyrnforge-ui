@@ -1,0 +1,10 @@
+{
+  "schemaVersion": 1,
+  "staleDays": 30,
+  "maxDeletionsPerRun": 25,
+  "protectedBranches": [],
+  "protectedPrefixes": [
+    "release/",
+    "hotfix/"
+  ]
+}
