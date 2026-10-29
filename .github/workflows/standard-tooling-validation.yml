@@ -14,7 +14,7 @@ concurrency:
 jobs:
   validate:
     runs-on: ubuntu-latest
-    timeout-minutes: 40
+    timeout-minutes: 60
     steps:
       - uses: actions/checkout@v7
         with:
@@ -25,21 +25,30 @@ jobs:
           package-manager-cache: false
       - run: corepack enable
       - run: pnpm install --frozen-lockfile --ignore-scripts
-      - name: Nx project graph
-        run: pnpm exec nx show projects
-      - name: Workspace structure
-        run: pnpm verify:structure
-      - name: Tests
+      - name: Standard repository validation
         run: |
           set -o pipefail
-          pnpm test 2>&1 | tee test.log
-      - name: Upload test diagnostics
+          pnpm check 2>&1 | tee check.log
+      - name: Packed package validation
+        run: |
+          set -o pipefail
+          pnpm verify:packages 2>&1 | tee package-validation.log
+      - name: Reject superseded tooling and axe injection
+        run: |
+          test ! -e tooling/impact/execute.mjs
+          test ! -e tooling/testing/run-owned-unit.mjs
+          test ! -e package-lock.json
+          if grep -R --line-number --exclude-dir=node_modules --exclude-dir=dist 'axeCore\.source' product; then
+            echo 'Legacy axe-core script injection remains' >&2
+            exit 1
+          fi
+      - name: Upload validation diagnostics
         if: failure()
         uses: actions/upload-artifact@v7
         with:
-          name: test-diagnostics
-          path: test.log
-          if-no-files-found: error
+          name: standard-tooling-diagnostics
+          path: |
+            check.log
+            package-validation.log
+          if-no-files-found: ignore
           retention-days: 1
-      - name: Build
-        run: pnpm build
