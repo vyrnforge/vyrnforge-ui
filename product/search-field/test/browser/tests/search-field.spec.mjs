@@ -12,6 +12,18 @@ test('search field clears with authored naming and restores focus', async ({ pag
   expect((await expectNoAxeViolations(page)).violations).toEqual([]);
 });
 
+test('public SearchField CSS resolves the canonical control radius in light and dark themes', async ({ page }) => {
+  test.skip(port !== 'react', 'Representative public CSS resolution evidence uses the React public entrypoint.');
+  await page.goto('/components/search-field/react.html');
+
+  const clear = page.locator('#clear');
+  for (const theme of ['light', 'dark']) {
+    await page.locator('html').evaluate((element, value) => element.setAttribute('data-vf-theme', value), theme);
+    await expect(clear).toHaveCSS('border-top-right-radius', '6px');
+    await expect(clear).toHaveCSS('border-bottom-right-radius', '6px');
+  }
+});
+
 test('STD-08 list explorer preserves committed criteria, history, IME, stale-response, and zero-result recovery', async ({ page }) => {
   test.skip(port !== 'react', 'Representative STD-08 application integration is intentionally React-only.');
 

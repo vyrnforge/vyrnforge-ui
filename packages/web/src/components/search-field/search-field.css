@@ -1,1 +1,1 @@
-@layer vyrnforge.components{[data-vf-search-field-input]{border-start-end-radius:0;border-end-end-radius:0}[data-vf-search-field-clear]{border-inline-start:0;border-start-end-radius:var(--vf-radius-control);border-end-end-radius:var(--vf-radius-control)}}
+@layer vyrnforge.components{[data-vf-search-field-input]{border-start-end-radius:0;border-end-end-radius:0}[data-vf-search-field-clear]{border-inline-start:0;border-start-end-radius:var(--vf-control-radius);border-end-end-radius:var(--vf-control-radius)}}
