@@ -35,13 +35,13 @@ jobs:
           for (const key of Object.keys(manifest.exports ?? {})) {
             if (key === '.' || !key.startsWith('./') || key.includes('*')) continue;
             const name = key.slice(2);
-            const source = `${root}/src/components/${name}/index.ts`;
-            try { readFileSync(source); } catch { continue; }
+            const sourceDirectory = `${root}/src/components/${name}`;
+            try { readFileSync(`${sourceDirectory}/index.ts`); } catch { continue; }
             const entry = `${root}/${name}`;
-            mkdirSync(`${entry}/src`, { recursive: true });
-            renameSync(source, `${entry}/src/index.ts`);
+            mkdirSync(entry, { recursive: true });
+            renameSync(sourceDirectory, `${entry}/src`);
             writeFileSync(`${entry}/ng-package.json`, `${JSON.stringify({ $schema: '../../../node_modules/ng-packagr/ng-entrypoint.schema.json', lib: { entryFile: 'src/index.ts' } }, null, 2)}\n`);
-            primary = primary.replaceAll(`./components/${name}/index.js`, `../${name}/src/index.js`);
+            primary = primary.replaceAll(`./components/${name}/index.js`, `@vyrnforge/angular/${name}`);
           }
           writeFileSync(`${root}/src/index.ts`, primary);
           rmSync(`${root}/src/components`, { recursive: true, force: true });
