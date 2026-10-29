@@ -33,10 +33,10 @@
     "verify:api": "node tooling/verify/api-reports.mjs",
     "verify:api:update": "node tooling/verify/api-reports.mjs --local",
     "verify:packages": "node tooling/verify/package-artifacts.mjs",
-    "verify:release": "vitest run tooling/release/changesets.test.mjs && changeset status",
+    "verify:release": "vitest run tooling/release/changesets.test.mjs && node tooling/release/verify-status.mjs",
     "impact:plan": "node tooling/impact/plan.mjs --mode local",
     "changeset": "changeset",
-    "changeset:status": "changeset status",
+    "changeset:status": "node tooling/release/verify-status.mjs",
     "release:version": "changeset version",
     "release": "pnpm verify:release && pnpm verify:packages && changeset publish"
   },
