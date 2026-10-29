@@ -33,7 +33,7 @@ jobs:
         run: |
           set -o pipefail
           pnpm verify:packages 2>&1 | tee package-validation.log
-      - name: Reject superseded tooling and axe injection
+      - name: Reject superseded tooling and nested Angular package scopes
         run: |
           test ! -e tooling/impact/execute.mjs
           test ! -e tooling/testing/run-owned-unit.mjs
@@ -44,6 +44,10 @@ jobs:
           test ! -e .github/workflows/axe-migration.yml
           test ! -e .github/workflows/standard-tooling-migration.yml
           test ! -e package-lock.json
+          if find packages/angular/dist -name package.json -print -quit | grep -q .; then
+            echo 'Angular APF output contains a nested package scope' >&2
+            exit 1
+          fi
           if grep -R --line-number --exclude-dir=node_modules --exclude-dir=dist 'axeCore\.source' product; then
             echo 'Legacy axe-core script injection remains' >&2
             exit 1
