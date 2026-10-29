@@ -22,7 +22,7 @@ export const browserFixture = {
         import { createElement } from 'react';
         import { createRoot } from 'react-dom/client';
         import { OTPFieldInput, OTPFieldRoot } from '@vyrnforge/react/otp-field';
-        const labels = ${JSON.stringify(['Chiffre 1 sur 4 du code','Chiffre 2 sur 4 du code','Chiffre 3 sur 4 du code','Chiffre 4 sur 4 du code'])};
+        const labels = ${JSON.stringify(labels)};
         createRoot(document.querySelector('#root')).render(
           createElement(OTPFieldRoot, { length: 4, 'aria-label': 'Code de vérification' },
             ...labels.map((label, index) => createElement(OTPFieldInput, { key: index, index, 'aria-label': label }))
@@ -32,7 +32,7 @@ export const browserFixture = {
       vue: `
         import { createApp, h } from 'vue';
         import { OTPFieldInput, OTPFieldRoot } from '@vyrnforge/vue/otp-field';
-        const labels = ${JSON.stringify(['Chiffre 1 sur 4 du code','Chiffre 2 sur 4 du code','Chiffre 3 sur 4 du code','Chiffre 4 sur 4 du code'])};
+        const labels = ${JSON.stringify(labels)};
         createApp({
           render() {
             return h(OTPFieldRoot, { length: 4, 'aria-label': 'Code de vérification' }, {
