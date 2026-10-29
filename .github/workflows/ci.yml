@@ -33,7 +33,7 @@ jobs:
         run: pnpm exec playwright test product/tabs/test/browser/tests/tabs.spec.mjs --project=chromium --update-snapshots
       - name: Commit generated product-owned baselines
         run: |
-          if git diff --quiet -- product/tabs/test/browser/tests/__screenshots__; then
+          if [[ -z "$(git status --porcelain -- product/tabs/test/browser/tests/__screenshots__)" ]]; then
             echo "Visual baselines already current."
             exit 0
           fi
