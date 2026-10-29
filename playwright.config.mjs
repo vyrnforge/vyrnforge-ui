@@ -26,7 +26,7 @@ export default defineConfig({
     screenshot: 'only-on-failure',
   },
   webServer: {
-    command: 'node tooling/testing/prepare-browser-fixtures.mjs && node tooling/testing/browser-server.mjs',
+    command: 'node tooling/testing/browser-server.mjs',
     url: 'http://127.0.0.1:4173',
     reuseExistingServer: !process.env.CI,
     timeout: 60_000,
