@@ -52,3 +52,5 @@ jobs:
             package-validation.log
           if-no-files-found: ignore
           retention-days: 1
+
+# Temporary acceptance gate for #1051; remove after the clean branch passes.
