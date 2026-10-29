@@ -1,13 +1,31 @@
 import { test, expect } from '@playwright/test';
 import { expectNoAxeViolations } from '../../../../../tooling/testing/accessibility.mjs';
 const port = process.env.VF_COMPONENT_PORT || 'react';
+const frameworkPorts = new Set(['react', 'angular', 'vue', 'elements']);
+const showLabel = 'Visibilité du mot de passe : afficher';
+const hideLabel = 'Visibilité du mot de passe : masquer';
 
-test('password field toggles visibility accessibly', async ({ page }) => {
+test('password field uses authored state labels without changing credential value', async ({ page }) => {
+  test.skip(!frameworkPorts.has(port), 'Interactive PasswordField behavior is implemented by framework/Elements ports; Web owns CSS only.');
   await page.goto(`/components/password-field/${port}.html`);
-  await page.locator('#toggle').click();
-  await expect(page.locator('#password')).toHaveAttribute('type', 'text');
-  await expect(page.locator('#toggle')).toHaveAttribute('aria-pressed', 'true');
-  
+
+  const password = page.getByLabel('Mot de passe', { exact: true });
+  const showToggle = page.getByRole('button', { name: showLabel, exact: true });
+  await expect(password).toHaveAttribute('type', 'password');
+  await expect(password).toHaveValue('s3cret');
+  await expect(showToggle).toHaveAttribute('aria-pressed', 'false');
+
+  await showToggle.click();
+  await expect(password).toHaveAttribute('type', 'text');
+  await expect(password).toHaveValue('s3cret');
+  const hideToggle = page.getByRole('button', { name: hideLabel, exact: true });
+  await expect(hideToggle).toHaveAttribute('aria-pressed', 'true');
+
+  await hideToggle.click();
+  await expect(password).toHaveAttribute('type', 'password');
+  await expect(password).toHaveValue('s3cret');
+  await expect(page.getByRole('button', { name: showLabel, exact: true })).toBeVisible();
+
   expect((await expectNoAxeViolations(page)).violations).toEqual([]);
 });
 
@@ -53,6 +71,5 @@ test('STD-15 representative session recovery preserves task context', async ({ p
   await expect(note).toHaveValue('Unsaved identity workflow draft');
   await expect(page.getByText('Profile note saved by the example service.', { exact: true })).toHaveCount(0);
 
-  
   expect((await expectNoAxeViolations(page)).violations).toEqual([]);
 });

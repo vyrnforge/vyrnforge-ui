@@ -5,3 +5,8 @@ type ElementsModule = typeof import('@vyrnforge/elements/otp-field');
 type Modules = [ReactModule, AngularModule, VueModule, ElementsModule];
 declare const modules: Modules;
 void modules;
+
+type ReactInput = typeof import('@vyrnforge/react/otp-field').OTPFieldInput;
+type VueInput = typeof import('@vyrnforge/vue/otp-field').OTPFieldInput;
+declare const inputs: [ReactInput, VueInput];
+void inputs;
