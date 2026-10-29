@@ -4,6 +4,8 @@ import AxeBuilder from '@axe-core/playwright';
 const port = process.env.VF_COMPONENT_PORT || 'web';
 
 test('Elemental primitives preserve native semantics and shared presentation', async ({ page }) => {
+  test.skip(port !== 'web', `Elemental primitives have no ${port} browser surface to validate.`);
+
   await page.goto(`/components/elemental-primitives/${port}.html`);
 
   await expect(page.locator('#code')).toHaveJSProperty('tagName', 'CODE');
@@ -29,7 +31,6 @@ test('Elemental primitives preserve native semantics and shared presentation', a
     await expect(page.locator(`#prose ${tag}`).first()).toHaveJSProperty('tagName', tag.toUpperCase());
   }
 
-  await page.addScriptTag({ content: axeCore.source });
   const results = await new AxeBuilder({ page }).analyze();
   expect(results.violations).toEqual([]);
 
