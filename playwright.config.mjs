@@ -11,7 +11,7 @@ export default defineConfig({
   testDir: './product',
   testMatch: '*/test/browser/tests/**/*.spec.mjs',
   outputDir: `test-results/playwright-results/${port}`,
-  snapshotPathTemplate: `{testDir}/__screenshots__/{arg}-${port}-{projectName}{ext}`,
+  snapshotPathTemplate: `{testDir}/{testFileDir}/__screenshots__/{arg}-{projectName}{ext}`,
   fullyParallel: false,
   forbidOnly: Boolean(process.env.CI),
   retries: process.env.CI ? 1 : 0,
