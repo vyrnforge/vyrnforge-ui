@@ -3,8 +3,8 @@
   "components": {
     "button": {
       "css": {
-        "bytes": 3962,
-        "gzipBytes": 963
+        "bytes": 4078,
+        "gzipBytes": 985
       },
       "ports": {
         "react": {

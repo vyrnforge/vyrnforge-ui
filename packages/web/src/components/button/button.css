@@ -42,7 +42,7 @@
     --_vf-button-background-hover: var(--vf-color-surface-hover);
     --_vf-button-background-pressed: var(--vf-color-surface-pressed);
     --_vf-button-foreground: var(--vf-color-text);
-    --_vf-button-border: var(--vf-color-border-strong);
+    --_vf-button-border: var(--vf-color-border-required);
   }
 
   :where([data-vf-button][data-vf-variant="ghost"]) {

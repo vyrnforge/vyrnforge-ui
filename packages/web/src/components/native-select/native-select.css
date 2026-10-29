@@ -3,7 +3,7 @@
 @layer vyrnforge.components {
   :where(select[data-vf-native-select]) {
     background: var(--vf-color-surface);
-    border: 1px solid var(--vf-color-border);
+    border: 1px solid var(--vf-color-border-required);
     border-radius: var(--vf-control-radius);
     box-sizing: border-box;
     color: var(--vf-color-text);
@@ -19,7 +19,7 @@
       border-color var(--vf-control-motion-duration) var(--vf-motion-easing-standard);
   }
 
-  :where(select[data-vf-native-select]:hover:not(:disabled)) { border-color: var(--vf-color-border-strong); }
+  :where(select[data-vf-native-select]:hover:not(:disabled)) { border-color: var(--vf-color-border-required); }
   :where(select[data-vf-native-select]:focus-visible) { border-color: var(--vf-color-accent-background); outline: 2px solid var(--vf-color-focus-ring); outline-offset: 2px; }
   :where(select[data-vf-native-select]:disabled) { background: var(--vf-color-disabled-background); border-color: var(--vf-color-disabled-border); color: var(--vf-color-disabled-foreground); cursor: not-allowed; }
   :where(select[data-vf-native-select]:invalid, select[data-vf-native-select][aria-invalid="true"]) { border-color: var(--vf-color-danger-border); }

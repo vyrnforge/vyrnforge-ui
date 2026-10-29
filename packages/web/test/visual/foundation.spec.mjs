@@ -150,7 +150,7 @@ test('Layer 0 through Layer 2 use the restrained default presentation contract',
   await expect(primary).toHaveCSS('background-color', 'rgb(36, 94, 219)');
   await expect(primary).toHaveCSS('border-radius', '6px');
   await expect(primary).toHaveCSS('box-shadow', 'none');
-  await expect(secondary).toHaveCSS('border-color', 'rgb(161, 161, 170)');
+  await expect(secondary).toHaveCSS('border-color', 'rgb(113, 113, 122)');
   await expect(input).toHaveCSS('min-height', '40px');
   await expect(input).toHaveCSS('border-radius', '6px');
   await expect(input).toHaveCSS('box-shadow', 'none');
