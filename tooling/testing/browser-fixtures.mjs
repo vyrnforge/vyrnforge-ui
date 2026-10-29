@@ -117,11 +117,18 @@ function angularDocument({ selector, stylesheet }) {
 async function prepareAngular({ root, outDir, definition, stylesheet, config, fixtureModule, fixturePath }) {
   await import('@angular/compiler');
   const { provideZonelessChangeDetection } = await import('@angular/core');
-  const { bootstrapApplication, provideClientHydration } = await import('@angular/platform-browser');
+  const {
+    bootstrapApplication,
+    provideClientHydration,
+    withNoIncrementalHydration,
+  } = await import('@angular/platform-browser');
   const { renderApplication } = await import('@angular/platform-server');
   const createStory = storyExport(fixtureModule, config.story, fixturePath, 'angular');
   const RootComponent = await createStory({ client: false });
-  const providers = [provideZonelessChangeDetection(), provideClientHydration()];
+  const providers = [
+    provideZonelessChangeDetection(),
+    provideClientHydration(withNoIncrementalHydration()),
+  ];
   const html = await renderApplication(
     (context) => bootstrapApplication(RootComponent, { providers }, context),
     { document: angularDocument({ selector: config.selector, stylesheet }) },
@@ -136,7 +143,7 @@ async function prepareAngular({ root, outDir, definition, stylesheet, config, fi
     outDir,
     component: definition.component,
     port: 'angular',
-    contents: `import '@angular/compiler';import{provideZonelessChangeDetection}from'@angular/core';import{bootstrapApplication,provideClientHydration}from'@angular/platform-browser';import{${config.story} as createStory}from${JSON.stringify(specifier)};(async()=>{const RootComponent=await createStory({client:true});await bootstrapApplication(RootComponent,{providers:[provideZonelessChangeDetection(),provideClientHydration()]});})();`,
+    contents: `import '@angular/compiler';import{provideZonelessChangeDetection}from'@angular/core';import{bootstrapApplication,provideClientHydration,withNoIncrementalHydration}from'@angular/platform-browser';import{${config.story} as createStory}from${JSON.stringify(specifier)};(async()=>{const RootComponent=await createStory({client:true});await bootstrapApplication(RootComponent,{providers:[provideZonelessChangeDetection(),provideClientHydration(withNoIncrementalHydration())]});})();`,
   });
 }
 
