@@ -1,1 +1,1 @@
-import test from'node:test';import assert from'node:assert/strict';test('Angular NumberField subpath is SSR-safe',async()=>{const api=await import('@vyrnforge/angular/number-field');assert.ok(Object.keys(api).length>0);});
+import { test } from 'vitest';import assert from'node:assert/strict';test('Angular NumberField subpath is SSR-safe',async()=>{const api=await import('@vyrnforge/angular/number-field');assert.ok(Object.keys(api).length>0);});

@@ -1,1 +1,1 @@
-import test from'node:test';import assert from'node:assert/strict';test('Angular Accordion import is SSR-safe',async()=>assert.ok((await import('@vyrnforge/angular/accordion')).VfAccordionRootDirective));
+import { test } from 'vitest';import assert from'node:assert/strict';test('Angular Accordion import is SSR-safe',async()=>assert.ok((await import('@vyrnforge/angular/accordion')).VfAccordionRootDirective));

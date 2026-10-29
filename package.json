@@ -19,7 +19,7 @@
     "lint": "nx run-many -t lint",
     "typecheck": "nx run-many -t typecheck",
     "test": "nx run-many -t test",
-    "test:unit": "vitest run",
+    "test:unit": "nx run-many -t test",
     "test:browser": "cross-env VF_COMPONENT_PORT=web playwright test --project=chromium",
     "test:browser:cross": "cross-env VF_COMPONENT_PORT=web playwright test",
     "check": "pnpm format:check && nx run-many -t lint,typecheck,test,build && pnpm verify:structure && pnpm verify:boundaries && pnpm verify:architecture",
