@@ -92,7 +92,7 @@ jobs:
       - run: pnpm install --frozen-lockfile --ignore-scripts
       - run: pnpm exec playwright install --with-deps chromium
       - run: pnpm build
-      - run: pnpm exec playwright test --project=chromium
+      - run: pnpm test:browser
       - uses: actions/upload-artifact@v7
         if: always()
         with:
