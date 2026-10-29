@@ -15,31 +15,35 @@ async function collectSpecs(directory) {
 const files = await collectSpecs('product');
 const migrated = [];
 const unresolved = [];
+const sharedImport = "import { expectNoAxeViolations } from '../../../../../tooling/testing/accessibility.mjs';";
 
 for (const file of files) {
   let source = await readFile(file, 'utf8');
   if (!/axeCore\.source|globalThis\.axe(?:\.|\b)/.test(source)) continue;
   const original = source;
 
-  const hadAxeBuilder = source.includes("@axe-core/playwright");
   source = source
     .replace(/import\s+axeCore\s+from\s*['"]axe-core['"];?/g, '')
     .replace(/await\s+page\.addScriptTag\(\{\s*content\s*:\s*axeCore\.source\s*\}\);?/g, '');
 
   source = source.replace(
     /await\s+page\.evaluate\(\s*async\s*\(\)\s*=>\s*globalThis\.axe\.run\(document\)\s*\)/g,
-    'await new AxeBuilder({ page }).analyze()',
+    'await expectNoAxeViolations(page)',
   );
 
   source = source.replace(
     /await\s+page\.evaluate\(\s*async\s*\(\)\s*=>\s*globalThis\.axe\.run\(document\s*,\s*\{\s*rules\s*:\s*\{\s*region\s*:\s*\{\s*enabled\s*:\s*false\s*\}\s*,?\s*\}\s*,?\s*\}\)\s*\)/g,
-    "await new AxeBuilder({ page }).disableRules(['region']).analyze()",
+    "await expectNoAxeViolations(page, { disableRules: ['region'] })",
   );
 
-  if (!hadAxeBuilder && !source.includes("@axe-core/playwright") && source !== original) {
-    const compactImport = /import\s*\{\s*test\s*,\s*expect\s*\}\s*from\s*['"]@playwright\/test['"];?/;
-    const match = source.match(compactImport);
-    if (match) source = source.replace(match[0], `${match[0]}\nimport AxeBuilder from '@axe-core/playwright';`);
+  if (source !== original && source.includes('expectNoAxeViolations') && !source.includes("tooling/testing/accessibility.mjs")) {
+    const playwrightImport = /import\s*\{\s*test\s*,\s*expect\s*\}\s*from\s*['"]@playwright\/test['"];?/;
+    const match = source.match(playwrightImport);
+    if (match) source = source.replace(match[0], `${match[0]}\n${sharedImport}`);
+  }
+
+  if (source.includes("@axe-core/playwright") && !source.includes('new AxeBuilder')) {
+    source = source.replace(/import\s+AxeBuilder\s+from\s*['"]@axe-core\/playwright['"];?\s*/g, '');
   }
 
   if (/axeCore\.source|globalThis\.axe(?:\.|\b)|import\s+axeCore\s+from\s*['"]axe-core['"]/.test(source)) {
