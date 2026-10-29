@@ -8,8 +8,8 @@ permissions:
   contents: read
 
 concurrency:
-  group: standard-tooling-validation
-  cancel-in-progress: true
+  group: standard-tooling-validation-${{ github.sha }}
+  cancel-in-progress: false
 
 jobs:
   validate:
@@ -37,6 +37,12 @@ jobs:
         run: |
           test ! -e tooling/impact/execute.mjs
           test ! -e tooling/testing/run-owned-unit.mjs
+          test ! -e tooling/verify/consumer-packages.mjs
+          test ! -e tooling/verify/migrate-axe-playwright.mjs
+          test ! -e tooling/verify/standard-tooling-migration.mjs
+          test ! -e .github/workflows/angular-apf-spike.yml
+          test ! -e .github/workflows/axe-migration.yml
+          test ! -e .github/workflows/standard-tooling-migration.yml
           test ! -e package-lock.json
           if grep -R --line-number --exclude-dir=node_modules --exclude-dir=dist 'axeCore\.source' product; then
             echo 'Legacy axe-core script injection remains' >&2
@@ -46,7 +52,7 @@ jobs:
         if: failure()
         uses: actions/upload-artifact@v7
         with:
-          name: standard-tooling-diagnostics
+          name: standard-tooling-diagnostics-${{ github.run_id }}
           path: |
             check.log
             package-validation.log
