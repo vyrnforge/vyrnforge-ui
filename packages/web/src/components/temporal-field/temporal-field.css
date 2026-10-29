@@ -1,1 +1,1 @@
-@layer vyrnforge.components{[data-vf-temporal-field-root]{display:grid;gap:var(--vf-space-1)}}
+@layer vyrnforge.components{[data-vf-temporal-field-root]{display:grid;gap:var(--vf-space-xs)}}
