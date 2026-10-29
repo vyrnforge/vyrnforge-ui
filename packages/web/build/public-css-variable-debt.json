@@ -17,7 +17,6 @@
   "packages/web/src/components/menubar/menubar.css: --vf-color-surface-default",
   "packages/web/src/components/menubar/menubar.css: --vf-radius-md",
   "packages/web/src/components/menubar/menubar.css: --vf-radius-sm",
-  "packages/web/src/components/number-field/number-field.css: --vf-radius-control",
   "packages/web/src/components/number-field/number-field.css: --vf-space-3",
   "packages/web/src/components/range-slider/range-slider.css: --vf-color-accent",
   "packages/web/src/components/rating/rating.css: --vf-color-accent",
