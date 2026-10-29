@@ -74,7 +74,7 @@ try {
   );
   writeFileSync(
     path.join(consumerRoot, 'consumer.ts'),
-    `import type * as Core from '@vyrnforge/core';\nimport type * as ReactPort from '@vyrnforge/react/button';\nimport type * as AngularPort from '@vyrnforge/angular/button';\nimport type * as VuePort from '@vyrnforge/vue/button';\nimport type * as ElementsPort from '@vyrnforge/elements/icon';\nvoid (null as unknown as Core);\nvoid (null as unknown as ReactPort);\nvoid (null as unknown as AngularPort);\nvoid (null as unknown as VuePort);\nvoid (null as unknown as ElementsPort);\n`,
+    `import type * as Core from '@vyrnforge/core';\nimport type * as ReactPort from '@vyrnforge/react/button';\nimport type * as AngularPort from '@vyrnforge/angular/button';\nimport type * as VuePort from '@vyrnforge/vue/button';\nimport type * as ElementsPort from '@vyrnforge/elements/icon';\nexport type PackedConsumerSurface = [typeof Core, typeof ReactPort, typeof AngularPort, typeof VuePort, typeof ElementsPort];\n`,
   );
   writeFileSync(
     path.join(consumerRoot, 'tsconfig.json'),
