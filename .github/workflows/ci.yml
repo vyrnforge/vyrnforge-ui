@@ -59,7 +59,18 @@ jobs:
           package-manager-cache: false
       - run: corepack enable
       - run: pnpm install --frozen-lockfile --ignore-scripts
-      - run: pnpm verify:packages
+      - name: Verify packed packages
+        run: |
+          mkdir -p test-results
+          set -o pipefail
+          pnpm verify:packages 2>&1 | tee test-results/package-validation.log
+      - uses: actions/upload-artifact@v7
+        if: always()
+        with:
+          name: package-validation-pr
+          path: test-results/package-validation.log
+          if-no-files-found: error
+          retention-days: 7
 
   browser-chromium:
     name: browser-chromium-${{ matrix.port }}
