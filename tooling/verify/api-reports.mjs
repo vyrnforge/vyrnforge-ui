@@ -1,3 +1,4 @@
+import { readFileSync } from 'node:fs';
 import { Extractor, ExtractorConfig } from '@microsoft/api-extractor';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
@@ -9,10 +10,15 @@ let failed = false;
 
 for (const name of packageNames) {
   const packageRoot = path.join(root, 'packages', name);
+  const manifest = JSON.parse(readFileSync(path.join(packageRoot, 'package.json'), 'utf8'));
+  if (typeof manifest.types !== 'string') {
+    throw new Error(`${manifest.name} must declare its public type entrypoint before API extraction`);
+  }
+  const typeEntry = manifest.types.replace(/^\.\//, '');
   const config = ExtractorConfig.prepare({
     configObject: {
       projectFolder: packageRoot,
-      mainEntryPointFilePath: '<projectFolder>/dist/index.d.ts',
+      mainEntryPointFilePath: `<projectFolder>/${typeEntry}`,
       compiler: { tsconfigFilePath: '<projectFolder>/tsconfig.json' },
       apiReport: {
         enabled: true,
