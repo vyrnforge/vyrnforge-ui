@@ -1,0 +1,45 @@
+name: Normalize Angular APF Manifest
+
+on:
+  push:
+    branches: [refactor/1051-standard-tooling]
+    paths:
+      - .github/workflows/normalize-angular-apf-manifest.yml
+
+permissions:
+  contents: write
+
+jobs:
+  normalize:
+    if: github.actor != 'github-actions[bot]'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          ref: refactor/1051-standard-tooling
+          fetch-depth: 0
+      - name: Remove legacy pre-APF export targets
+        run: |
+          node --input-type=module <<'NODE'
+          import { readFileSync, writeFileSync, rmSync } from 'node:fs';
+          const file = 'packages/angular/package.json';
+          const manifest = JSON.parse(readFileSync(file, 'utf8'));
+          for (const target of Object.values(manifest.exports ?? {})) {
+            if (!target || typeof target !== 'object') continue;
+            if (typeof target.default === 'string') target.import = target.default;
+          }
+          const root = manifest.exports?.['.'];
+          if (!root?.default || !root?.types) throw new Error('Angular APF root export is incomplete');
+          manifest.main = root.default;
+          manifest.module = root.default;
+          manifest.types = root.types;
+          writeFileSync(file, `${JSON.stringify(manifest, null, 2)}\n`);
+          rmSync('.github/workflows/normalize-angular-apf-manifest.yml');
+          NODE
+      - run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add -A
+          git commit -m "fix(angular): normalize APF root export metadata"
+          git pull --rebase origin refactor/1051-standard-tooling
+          git push origin HEAD:refactor/1051-standard-tooling
