@@ -118,7 +118,7 @@ function App() {
       <p>This example uses a deterministic application-owned import service. VyrnForge owns file acquisition and button semantics, not transport or job orchestration.</p>
       <FileUploaderRoot onFilesChange={(next) => { setFiles(next); setPhase('idle'); setMessage(`${next.length} file selected. Import has not started.`); }}>
         <FileUploaderDropzone>Choose or drop a file</FileUploaderDropzone>
-        <FileUploaderInput id="import-file" aria-label="Choose import file" />
+        <FileUploaderInput id="input" aria-label="Choose import file" />
         <FileUploaderList aria-label="Selected files" />
       </FileUploaderRoot>
 
