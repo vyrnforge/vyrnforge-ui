@@ -11,6 +11,31 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
+  axe-migration:
+    name: axe-migration
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-node@v7
+        with:
+          node-version-file: .node-version
+          package-manager-cache: false
+      - name: Generate deterministic legacy-axe migration candidate
+        run: |
+          mkdir -p test-results
+          node tooling/testing/migrate-legacy-axe.mjs
+          git diff --name-only -- product > test-results/axe-migration-files.txt
+          tar -czf test-results/axe-migration.tgz -T test-results/axe-migration-files.txt
+      - uses: actions/upload-artifact@v7
+        with:
+          name: axe-migration-candidate
+          path: |
+            test-results/axe-migration-files.txt
+            test-results/axe-migration.tgz
+          if-no-files-found: error
+          retention-days: 1
+
   affected:
     name: affected
     runs-on: ubuntu-latest
