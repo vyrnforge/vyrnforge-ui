@@ -1,0 +1,16 @@
+name: Temporary stale branch cleanup audit
+
+on:
+  push:
+    branches:
+      - maintenance/stale-branch-cleanup-20261029
+
+permissions:
+  contents: read
+
+jobs:
+  audit:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Show branch
+        run: echo "temporary stale branch cleanup audit"
