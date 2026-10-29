@@ -55,6 +55,7 @@ function App() {
 
         <div>
           <Button type="submit">Save settings</Button>{' '}
+          <Button type="button" variant="secondary">Cancel</Button>{' '}
           <Button type="button" size="sm" variant="secondary">Small action</Button>{' '}
           <Button type="button" size="lg" variant="secondary">Large action</Button>
         </div>
