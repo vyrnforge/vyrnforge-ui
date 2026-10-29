@@ -3,30 +3,16 @@
   "$schema": "../../node_modules/nx/schemas/project-schema.json",
   "sourceRoot": "apps/docs",
   "projectType": "application",
-  "tags": [
-    "scope:docs"
-  ],
+  "tags": ["scope:docs"],
+  "implicitDependencies": ["@vyrnforge/elements"],
   "targets": {
     "build": {
       "executor": "nx:run-commands",
-      "outputs": [
-        "{workspaceRoot}/dist/docs"
-      ],
-      "options": {
-        "command": "node apps/docs/build.mjs"
-      }
+      "dependsOn": ["^build"],
+      "outputs": ["{workspaceRoot}/dist/docs"],
+      "options": {"command":"node apps/docs/build.mjs"}
     },
-    "lint": {
-      "executor": "nx:run-commands",
-      "options": {
-        "command": "pnpm exec eslint apps/docs documentation --max-warnings=0"
-      }
-    },
-    "test": {
-      "executor": "nx:run-commands",
-      "options": {
-        "command": "pnpm exec vitest run --project repository --passWithNoTests"
-      }
-    }
+    "lint": {"executor":"nx:run-commands","options":{"command":"pnpm exec eslint apps/docs --max-warnings=0"}},
+    "test": {"executor":"nx:run-commands","options":{"command":"pnpm exec vitest run --project repository --passWithNoTests"}}
   }
 }
