@@ -10,6 +10,7 @@ const browserDeviceNames = {
 export default defineConfig({
   testDir: './product',
   testMatch: '*/test/browser/tests/**/*.spec.mjs',
+  testIgnore: ['**/tmp/**', '**/dist/**'],
   outputDir: `test-results/playwright-results/${port}`,
   snapshotPathTemplate: `{testDir}/__screenshots__/{arg}-${port}-{projectName}{ext}`,
   fullyParallel: false,
