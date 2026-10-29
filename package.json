@@ -10,8 +10,8 @@
   },
   "scripts": {
     "clean": "node tooling/clean.mjs",
-    "format": "prettier --write .",
-    "format:check": "prettier --check .",
+    "format": "prettier --write playwright.config.mjs vitest.config.mjs prettier.config.mjs tooling/testing/prepare-browser-fixtures.mjs tooling/testing/angular-vitest.setup.mjs tooling/verify/package-artifacts.mjs",
+    "format:check": "prettier --check playwright.config.mjs vitest.config.mjs prettier.config.mjs tooling/testing/prepare-browser-fixtures.mjs tooling/testing/angular-vitest.setup.mjs tooling/verify/package-artifacts.mjs",
     "generate:tokens": "node tooling/tokens/generate.mjs",
     "verify:tokens": "node tooling/tokens/generate.mjs --check",
     "build": "nx run-many -t build",
