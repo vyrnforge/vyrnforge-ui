@@ -16,7 +16,7 @@
     "test": {
       "executor": "nx:run-commands",
       "options": {
-        "command": "pnpm exec vitest run --project repository --passWithNoTests"
+        "command": "pnpm exec vitest run --project repository-tooling --passWithNoTests"
       }
     }
   }

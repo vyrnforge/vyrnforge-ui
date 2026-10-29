@@ -1,1 +1,11 @@
-import{mkdir,writeFile}from'node:fs/promises';import path from'node:path';const port=process.argv[2];const dir=path.join(process.cwd(),'dist/browser-fixtures/components/color-picker');await mkdir(dir,{recursive:true});await writeFile(path.join(dir,`${port}.html`),`<!doctype html><html lang="en"><head><title>Color picker browser fixture</title></head><body><main><h1>Color picker browser fixture</h1><div data-vf-color-picker-root><input id="color" type="color" aria-label="Choose color" value="#3366ff"><input id="text" type="text" aria-label="Color value" value="#3366ff"><span id="swatch" aria-hidden="true" style="display:inline-block;width:2rem;height:2rem;background:#3366ff"></span></div></main><script>function sync(v){if(!/^#[0-9a-f]{6}$/i.test(v))return;color.value=v;text.value=v;swatch.style.backgroundColor=v}text.addEventListener('input',()=>sync(text.value));color.addEventListener('input',()=>sync(color.value));</script></body></html>`);
+import { mkdir, writeFile } from 'node:fs/promises';
+import path from 'node:path';
+
+export const browserFixture = {
+  component: 'color-picker',
+  prepare: async ({ port }) => {
+    const dir = path.join(process.cwd(), 'dist/browser-fixtures/components/color-picker');
+    await mkdir(dir, { recursive: true });
+    await writeFile(path.join(dir, `${port}.html`), `<!doctype html><html lang="en"><head><title>Color picker browser fixture</title></head><body><main><h1>Color picker browser fixture</h1><div data-vf-color-picker-root><input id="color" type="color" aria-label="Choose color" value="#3366ff"><input id="text" type="text" aria-label="Color value" value="#3366ff"><span id="swatch" aria-hidden="true" style="display:inline-block;width:2rem;height:2rem;background:#3366ff"></span></div></main><script>function sync(v){if(!/^#[0-9a-f]{6}$/i.test(v))return;color.value=v;text.value=v;swatch.style.backgroundColor=v}text.addEventListener('input',()=>sync(text.value));color.addEventListener('input',()=>sync(color.value));</script></body></html>`);
+  },
+};

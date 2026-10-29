@@ -1,2 +1,6 @@
 import { buildNativeControlBrowserFixture } from '../../../_test-support/native-controls/native-control-browser-fixture.mjs';
-await buildNativeControlBrowserFixture('switch', process.argv[2] || 'web');
+
+export const browserFixture = {
+  component: 'switch',
+  prepare: ({ port }) => buildNativeControlBrowserFixture('switch', port),
+};

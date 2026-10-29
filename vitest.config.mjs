@@ -16,9 +16,18 @@ export default defineConfig({
       ...packageProjects,
       {
         test: {
-          name: 'repository',
+          name: 'repository-tooling',
           environment: 'node',
-          include: ['tooling/**/*.test.mjs', 'apps/docs/**/*.test.mjs'],
+          include: ['tooling/**/*.test.mjs'],
+          exclude: ['**/node_modules/**', '**/dist/**'],
+          testTimeout: 30_000,
+        },
+      },
+      {
+        test: {
+          name: 'docs',
+          environment: 'node',
+          include: ['apps/docs/**/*.test.mjs'],
           exclude: ['**/node_modules/**', '**/dist/**'],
           testTimeout: 30_000,
         },

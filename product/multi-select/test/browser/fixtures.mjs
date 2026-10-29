@@ -1,1 +1,11 @@
-import{mkdir,writeFile}from'node:fs/promises';import path from'node:path';const port=process.argv[2],dir=path.join(process.cwd(),'dist/browser-fixtures/components/multi-select');await mkdir(dir,{recursive:true});await writeFile(path.join(dir,`${port}.html`),`<!doctype html><html lang="en"><head><title>Multi-select browser fixture</title></head><body><main><h1>Multi-select browser fixture</h1><p id="multi-select-label">Choose items</p><div role="listbox" aria-multiselectable="true" aria-labelledby="multi-select-label"><button role="option" aria-selected="false" id="a">A</button><button role="option" aria-selected="false" id="b">B</button></div></main><script>[a,b].forEach(x=>x.onclick=()=>x.setAttribute('aria-selected',String(x.getAttribute('aria-selected')!=='true')))</script></body></html>`);
+import { mkdir, writeFile } from 'node:fs/promises';
+import path from 'node:path';
+
+export const browserFixture = {
+  component: 'multi-select',
+  prepare: async ({ port }) => {
+    const dir = path.join(process.cwd(), 'dist/browser-fixtures/components/multi-select');
+    await mkdir(dir, { recursive: true });
+    await writeFile(path.join(dir, `${port}.html`), `<!doctype html><html lang="en"><head><title>Multi-select browser fixture</title></head><body><main><h1>Multi-select browser fixture</h1><p id="multi-select-label">Choose items</p><div role="listbox" aria-multiselectable="true" aria-labelledby="multi-select-label"><button role="option" aria-selected="false" id="a">A</button><button role="option" aria-selected="false" id="b">B</button></div></main><script>[a,b].forEach(x=>x.onclick=()=>x.setAttribute('aria-selected',String(x.getAttribute('aria-selected')!=='true')))</script></body></html>`);
+  },
+};

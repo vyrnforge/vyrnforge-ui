@@ -17,7 +17,6 @@ const { components } = discoverProductUnits(root);
 let fixtureModules = 0;
 let generatedPages = 0;
 let skippedUnsupported = 0;
-let legacyFixtureModules = 0;
 
 for (const component of components) {
   const fixturePath = path.join(root, component.browser.fixture);
@@ -29,31 +28,14 @@ for (const component of components) {
     continue;
   }
 
-  // Legacy fixture modules still read process.argv[2]. Keep that compatibility local
-  // to the repository preparer while migrated galleries use browserFixture.ports.
-  const previousArgv = process.argv.slice();
-  process.argv[2] = port;
-  let fixtureModule;
-  try {
-    fixtureModule = await loadBrowserFixtureModule(fixturePath);
-  } finally {
-    process.argv.splice(0, process.argv.length, ...previousArgv);
-  }
-
-  let generated = false;
-  if (fixtureModule.browserFixture) {
-    generated = await prepareBrowserFixture({ root, fixturePath, fixtureModule, port });
-  } else {
-    legacyFixtureModules += 1;
-    generated = existsSync(
-      path.join(outputRoot, 'components', component.component, `${port}.html`),
-    );
-    if (!generated) {
-      throw new Error(
-        `${fixturePath} neither exports browserFixture nor generated legacy ${port} browser evidence.`,
-      );
-    }
-  }
+  const fixtureModule = await loadBrowserFixtureModule(fixturePath);
+  const generated = await prepareBrowserFixture({
+    root,
+    fixturePath,
+    fixtureModule,
+    port,
+    component: component.component,
+  });
 
   if (generated) generatedPages += 1;
   else skippedUnsupported += 1;
@@ -67,5 +49,5 @@ if (fixtureModules === 0 || generatedPages === 0) {
 
 console.log(
   `Prepared ${generatedPages} "${port}" browser fixture page(s) from ${fixtureModules} product fixture module(s); ` +
-    `skipped ${skippedUnsupported} unsupported fixture(s); ${legacyFixtureModules} legacy fixture module(s) remain to migrate.`,
+    `skipped ${skippedUnsupported} unsupported fixture(s).`,
 );

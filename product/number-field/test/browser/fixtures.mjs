@@ -1,1 +1,11 @@
-import{mkdir,writeFile}from'node:fs/promises';import path from'node:path';const port=process.argv[2];const dir=path.join(process.cwd(),'dist/browser-fixtures/components/number-field');await mkdir(dir,{recursive:true});await writeFile(path.join(dir,`${port}.html`),`<!doctype html><html lang="en"><head><title>Number field browser fixture</title></head><body><main><h1>Number field browser fixture</h1><div data-vf-number-field-root><button id="dec" type="button" aria-label="Decrease value">−</button><input id="input" type="number" aria-label="Quantity" min="0" max="10" step="1" value="2"><button id="inc" type="button" aria-label="Increase value">+</button></div></main><script>inc.onclick=()=>{input.stepUp();input.dispatchEvent(new Event('input',{bubbles:true}))};dec.onclick=()=>{input.stepDown();input.dispatchEvent(new Event('input',{bubbles:true}))};</script></body></html>`);
+import { mkdir, writeFile } from 'node:fs/promises';
+import path from 'node:path';
+
+export const browserFixture = {
+  component: 'number-field',
+  prepare: async ({ port }) => {
+    const dir = path.join(process.cwd(), 'dist/browser-fixtures/components/number-field');
+    await mkdir(dir, { recursive: true });
+    await writeFile(path.join(dir, `${port}.html`), `<!doctype html><html lang="en"><head><title>Number field browser fixture</title></head><body><main><h1>Number field browser fixture</h1><div data-vf-number-field-root><button id="dec" type="button" aria-label="Decrease value">−</button><input id="input" type="number" aria-label="Quantity" min="0" max="10" step="1" value="2"><button id="inc" type="button" aria-label="Increase value">+</button></div></main><script>inc.onclick=()=>{input.stepUp();input.dispatchEvent(new Event('input',{bubbles:true}))};dec.onclick=()=>{input.stepDown();input.dispatchEvent(new Event('input',{bubbles:true}))};</script></body></html>`);
+  },
+};

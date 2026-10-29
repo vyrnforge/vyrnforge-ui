@@ -1,1 +1,11 @@
-import{mkdir,writeFile}from'node:fs/promises';import path from'node:path';const port=process.argv[2];const dir=path.join(process.cwd(),'dist/browser-fixtures/components/split-button');await mkdir(dir,{recursive:true});await writeFile(path.join(dir,`${port}.html`),`<!doctype html><html lang="en"><head><title>Split button browser fixture</title></head><body><main><h1>Split button browser fixture</h1><div><button id="action">Save</button><button id="trigger" aria-haspopup="menu" aria-expanded="false" aria-label="More save options">More</button><div id="menu" role="menu" hidden><button role="menuitem">Save as copy</button></div></div></main><script>let primary=0;action.onclick=()=>primary++;trigger.onclick=()=>{menu.hidden=!menu.hidden;trigger.setAttribute('aria-expanded',String(!menu.hidden))};window.primary=()=>primary</script></body></html>`);
+import { mkdir, writeFile } from 'node:fs/promises';
+import path from 'node:path';
+
+export const browserFixture = {
+  component: 'split-button',
+  prepare: async ({ port }) => {
+    const dir = path.join(process.cwd(), 'dist/browser-fixtures/components/split-button');
+    await mkdir(dir, { recursive: true });
+    await writeFile(path.join(dir, `${port}.html`), `<!doctype html><html lang="en"><head><title>Split button browser fixture</title></head><body><main><h1>Split button browser fixture</h1><div><button id="action">Save</button><button id="trigger" aria-haspopup="menu" aria-expanded="false" aria-label="More save options">More</button><div id="menu" role="menu" hidden><button role="menuitem">Save as copy</button></div></div></main><script>let primary=0;action.onclick=()=>primary++;trigger.onclick=()=>{menu.hidden=!menu.hidden;trigger.setAttribute('aria-expanded',String(!menu.hidden))};window.primary=()=>primary</script></body></html>`);
+  },
+};

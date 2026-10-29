@@ -1,1 +1,11 @@
-import{mkdir,writeFile}from'node:fs/promises';import path from'node:path';const port=process.argv[2],dir=path.join(process.cwd(),'dist/browser-fixtures/components/select');await mkdir(dir,{recursive:true});await writeFile(path.join(dir,`${port}.html`),`<!doctype html><html lang="en"><head><title>Select browser fixture</title></head><body><main><h1>Select browser fixture</h1><div id="select-label">Choose an option</div><button id="trigger" aria-haspopup="listbox" aria-expanded="false" aria-controls="list">Choose</button><div id="list" role="listbox" aria-labelledby="select-label" hidden><button role="option" aria-selected="false" id="opt">One</button></div></main><script>trigger.onclick=()=>{list.hidden=false;trigger.setAttribute('aria-expanded','true')};opt.onclick=()=>{opt.setAttribute('aria-selected','true');list.hidden=true;trigger.setAttribute('aria-expanded','false');trigger.focus()}</script></body></html>`);
+import { mkdir, writeFile } from 'node:fs/promises';
+import path from 'node:path';
+
+export const browserFixture = {
+  component: 'select',
+  prepare: async ({ port }) => {
+    const dir = path.join(process.cwd(), 'dist/browser-fixtures/components/select');
+    await mkdir(dir, { recursive: true });
+    await writeFile(path.join(dir, `${port}.html`), `<!doctype html><html lang="en"><head><title>Select browser fixture</title></head><body><main><h1>Select browser fixture</h1><div id="select-label">Choose an option</div><button id="trigger" aria-haspopup="listbox" aria-expanded="false" aria-controls="list">Choose</button><div id="list" role="listbox" aria-labelledby="select-label" hidden><button role="option" aria-selected="false" id="opt">One</button></div></main><script>trigger.onclick=()=>{list.hidden=false;trigger.setAttribute('aria-expanded','true')};opt.onclick=()=>{opt.setAttribute('aria-selected','true');list.hidden=true;trigger.setAttribute('aria-expanded','false');trigger.focus()}</script></body></html>`);
+  },
+};

@@ -1,2 +1,6 @@
 import { buildNativeControlBrowserFixture } from '../../../_test-support/native-controls/native-control-browser-fixture.mjs';
-await buildNativeControlBrowserFixture('toggle-button', process.argv[2] || 'web');
+
+export const browserFixture = {
+  component: 'toggle-button',
+  prepare: ({ port }) => buildNativeControlBrowserFixture('toggle-button', port),
+};

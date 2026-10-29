@@ -14,7 +14,9 @@ Testing follows ownership. Reusable repository harnesses live here; evidence and
 
 Component browser fixtures are emitted under `dist/browser-fixtures/` and served by the testing-owned `browser-server.mjs`; reusable browser evidence must not depend on the documentation application or its output layout. Playwright derives the current port's eligible component specs from `discoverProductUnits()`, so a component is not run against a framework port that is absent from its real public package surface.
 
-`tooling/impact/config.json` contains repository-level impact policy, package topology, validation tiers, global sentinels, and fail-closed roots. It does not enumerate normal components or reusable product instances; those are discovered from public surfaces and ownership conventions.
+Every product browser fixture module exports an explicit `browserFixture` definition for its owner. Shared testing infrastructure validates and invokes that contract in-process. Generic page, stylesheet, bundling, discovery, and serving mechanics may be shared here, while component scenarios, semantics, and specialized fixture preparation remain owner-local. Fixture modules must not depend on argv mutation, child-process launchers, import-time side effects, or emitted-file guessing to establish eligibility.
+
+Repository impact policy is executable in `tooling/impact/plan.mjs` and derives package/product topology from workspace configuration, public surfaces, and ownership conventions. Normal components and reusable product instances are not centrally enumerated.
 
 Normal product additions must not require editing a central testing registry, CI workflow, or validation executor. Expose the real product surface and provide its conventionally owned evidence. Product discovery and owner-local tests fail when required evidence is missing.
 
