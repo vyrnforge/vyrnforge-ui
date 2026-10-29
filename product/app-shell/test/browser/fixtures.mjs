@@ -35,6 +35,7 @@ if (port === 'react') {
     ['foundation-density', 'Foundation density fixture'],
     ['token-scope-overrides', 'Token scope overrides fixture'],
     ['recovery-workflows', 'Recovery workflows fixture'],
+    ['notification-feedback', 'Notification feedback fixture'],
   ];
 
   for (const [name, title] of examples) {
