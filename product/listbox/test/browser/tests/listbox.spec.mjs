@@ -3,7 +3,6 @@ import { expectNoAxeViolations } from '../../../../../tooling/testing/accessibil
 const port = process.env.VF_COMPONENT_PORT || 'web';
 
 async function expectAxeClean(page) {
-  
   expect((await expectNoAxeViolations(page)).violations).toEqual([]);
 }
 
@@ -14,6 +13,34 @@ test('listbox exposes authored naming and selection semantics', async ({ page })
   await expect(page.locator(`#${port}-disabled`)).toHaveAttribute('aria-disabled', 'true');
   await expect(page.getByRole('listbox', { name: 'Choose several' })).toHaveAttribute('aria-multiselectable', 'true');
   await expectAxeClean(page);
+});
+
+test('public Listbox CSS resolves canonical compact spacing, radius, and focus ring', async ({ page }) => {
+  test.skip(port !== 'web', 'Public CSS resolution evidence is owned by the Web lane.');
+  await page.goto('/components/listbox/web.html');
+  const listbox = page.locator('#web-list');
+  const option = page.locator('#web-one');
+  const focusRingByTheme = {
+    light: 'rgb(47, 111, 237)',
+    dark: 'rgb(141, 180, 255)',
+  };
+
+  for (const theme of ['light', 'dark']) {
+    await page.locator('html').evaluate((element, value) => element.setAttribute('data-vf-theme', value), theme);
+    await expect(listbox).toHaveCSS('gap', '4px');
+    await expect(listbox).toHaveCSS('padding-top', '4px');
+    await expect(listbox).toHaveCSS('padding-left', '4px');
+    await expect(listbox).toHaveCSS('border-radius', '6px');
+    await expect(option).toHaveCSS('padding-top', '8px');
+    await expect(option).toHaveCSS('padding-bottom', '8px');
+    await expect(option).toHaveCSS('border-radius', '6px');
+
+    await page.locator('#before').focus();
+    await page.keyboard.press('Tab');
+    await expect(option).toBeFocused();
+    await expect(option).toHaveCSS('outline-width', '2px');
+    await expect(option).toHaveCSS('outline-color', focusRingByTheme[theme]);
+  }
 });
 
 test.describe('enhanced listbox interaction', () => {
