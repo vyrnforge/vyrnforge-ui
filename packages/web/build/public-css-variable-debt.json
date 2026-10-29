@@ -1,8 +1,4 @@
 [
-  "packages/web/src/components/carousel/carousel.css: --vf-radius-control",
-  "packages/web/src/components/carousel/carousel.css: --vf-space-2",
-  "packages/web/src/components/color-picker/color-picker.css: --vf-radius-control",
-  "packages/web/src/components/color-picker/color-picker.css: --vf-space-2",
   "packages/web/src/components/combobox/combobox.css: --vf-radius-control",
   "packages/web/src/components/combobox/combobox.css: --vf-space-3",
   "packages/web/src/components/file-uploader/file-uploader.css: --vf-color-focus",
