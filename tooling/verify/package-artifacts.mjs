@@ -84,7 +84,8 @@ for (const name of packageNames) {
 
 const consumerRoot = mkdtempSync(path.join(tmpdir(), 'vyrnforge-packed-consumer-'));
 try {
-  const dependencies = Object.fromEntries(packageNames.map((name) => [`@vyrnforge/${name}`, `file:${tarballs.get(name)}`]));
+  const internalOverrides = Object.fromEntries(packageNames.map((name) => [`@vyrnforge/${name}`, `file:${tarballs.get(name)}`]));
+  const dependencies = { ...internalOverrides };
   Object.assign(dependencies, {
     '@angular/common': '22.2.3',
     '@angular/compiler': '22.2.3',
@@ -99,7 +100,7 @@ try {
     typescript: '6.0.3',
     vue: '3.5.44',
   });
-  writeFileSync(path.join(consumerRoot, 'package.json'), `${JSON.stringify({ name: 'vyrnforge-packed-consumer', private: true, type: 'module', dependencies }, null, 2)}\n`);
+  writeFileSync(path.join(consumerRoot, 'package.json'), `${JSON.stringify({ name: 'vyrnforge-packed-consumer', private: true, type: 'module', dependencies, pnpm: { overrides: internalOverrides } }, null, 2)}\n`);
   writeFileSync(path.join(consumerRoot, 'smoke.mjs'), `import '@angular/compiler';\nawait Promise.all([import('@vyrnforge/core'),import('@vyrnforge/web'),import('@vyrnforge/icons'),import('@vyrnforge/react'),import('@vyrnforge/react/button'),import('@vyrnforge/angular'),import('@vyrnforge/angular/button'),import('@vyrnforge/vue'),import('@vyrnforge/vue/button'),import('@vyrnforge/elements'),import('@vyrnforge/elements/icon')]);\n`);
   writeFileSync(path.join(consumerRoot, 'consumer.ts'), `import type * as Core from '@vyrnforge/core';\nimport type * as ReactPort from '@vyrnforge/react/button';\nimport type * as AngularPort from '@vyrnforge/angular/button';\nimport type * as VuePort from '@vyrnforge/vue/button';\nimport type * as ElementsPort from '@vyrnforge/elements/icon';\nexport type PackedConsumerSurface=[typeof Core,typeof ReactPort,typeof AngularPort,typeof VuePort,typeof ElementsPort];\n`);
   writeFileSync(path.join(consumerRoot, 'tsconfig.json'), `${JSON.stringify({ compilerOptions: { target: 'ES2022', module: 'NodeNext', moduleResolution: 'NodeNext', strict: true, noEmit: true, skipLibCheck: false }, include: ['consumer.ts'] }, null, 2)}\n`);
