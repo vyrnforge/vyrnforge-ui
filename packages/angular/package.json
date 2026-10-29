@@ -8,306 +8,307 @@
   "files": [
     "dist"
   ],
-  "main": "./dist/dist/index.js",
-  "types": "./dist/dist/index.d.ts",
+  "main": "./dist/fesm2022/vyrnforge-angular.mjs",
+  "types": "./dist/types/vyrnforge-angular.d.ts",
   "exports": {
     ".": {
-      "import": "./dist/dist/index.js",
+      "import": "./dist/fesm2022/vyrnforge-angular.mjs",
       "types": "./dist/types/vyrnforge-angular.d.ts",
       "default": "./dist/fesm2022/vyrnforge-angular.mjs"
     },
     "./button": {
-      "import": "./dist/dist/components/button/index.js",
+      "import": "./dist/fesm2022/vyrnforge-angular-button.mjs",
       "types": "./dist/types/vyrnforge-angular-button.d.ts",
       "default": "./dist/fesm2022/vyrnforge-angular-button.mjs"
     },
     "./checkbox": {
-      "import": "./dist/dist/components/checkbox/index.js",
+      "import": "./dist/fesm2022/vyrnforge-angular-checkbox.mjs",
       "types": "./dist/types/vyrnforge-angular-checkbox.d.ts",
       "default": "./dist/fesm2022/vyrnforge-angular-checkbox.mjs"
     },
     "./color-input": {
-      "import": "./dist/dist/components/color-input/index.js",
+      "import": "./dist/fesm2022/vyrnforge-angular-color-input.mjs",
       "types": "./dist/types/vyrnforge-angular-color-input.d.ts",
       "default": "./dist/fesm2022/vyrnforge-angular-color-input.mjs"
     },
     "./dialog": {
-      "import": "./dist/dist/components/dialog/index.js",
+      "import": "./dist/fesm2022/vyrnforge-angular-dialog.mjs",
       "types": "./dist/types/vyrnforge-angular-dialog.d.ts",
       "default": "./dist/fesm2022/vyrnforge-angular-dialog.mjs"
     },
     "./file-input": {
-      "import": "./dist/dist/components/file-input/index.js",
+      "import": "./dist/fesm2022/vyrnforge-angular-file-input.mjs",
       "types": "./dist/types/vyrnforge-angular-file-input.d.ts",
       "default": "./dist/fesm2022/vyrnforge-angular-file-input.mjs"
     },
     "./icon": {
-      "import": "./dist/dist/components/icon/index.js",
+      "import": "./dist/fesm2022/vyrnforge-angular-icon.mjs",
       "types": "./dist/types/vyrnforge-angular-icon.d.ts",
       "default": "./dist/fesm2022/vyrnforge-angular-icon.mjs"
     },
     "./input": {
-      "import": "./dist/dist/components/input/index.js",
+      "import": "./dist/fesm2022/vyrnforge-angular-input.mjs",
       "types": "./dist/types/vyrnforge-angular-input.d.ts",
       "default": "./dist/fesm2022/vyrnforge-angular-input.mjs"
     },
     "./link": {
-      "import": "./dist/dist/components/link/index.js",
+      "import": "./dist/fesm2022/vyrnforge-angular-link.mjs",
       "types": "./dist/types/vyrnforge-angular-link.d.ts",
       "default": "./dist/fesm2022/vyrnforge-angular-link.mjs"
     },
     "./native-select": {
-      "import": "./dist/dist/components/native-select/index.js",
+      "import": "./dist/fesm2022/vyrnforge-angular-native-select.mjs",
       "types": "./dist/types/vyrnforge-angular-native-select.d.ts",
       "default": "./dist/fesm2022/vyrnforge-angular-native-select.mjs"
     },
     "./number-input": {
-      "import": "./dist/dist/components/number-input/index.js",
+      "import": "./dist/fesm2022/vyrnforge-angular-number-input.mjs",
       "types": "./dist/types/vyrnforge-angular-number-input.d.ts",
       "default": "./dist/fesm2022/vyrnforge-angular-number-input.mjs"
     },
     "./radio": {
-      "import": "./dist/dist/components/radio/index.js",
+      "import": "./dist/fesm2022/vyrnforge-angular-radio.mjs",
       "types": "./dist/types/vyrnforge-angular-radio.d.ts",
       "default": "./dist/fesm2022/vyrnforge-angular-radio.mjs"
     },
     "./slider": {
-      "import": "./dist/dist/components/slider/index.js",
+      "import": "./dist/fesm2022/vyrnforge-angular-slider.mjs",
       "types": "./dist/types/vyrnforge-angular-slider.d.ts",
       "default": "./dist/fesm2022/vyrnforge-angular-slider.mjs"
     },
     "./switch": {
-      "import": "./dist/dist/components/switch/index.js",
+      "import": "./dist/fesm2022/vyrnforge-angular-switch.mjs",
       "types": "./dist/types/vyrnforge-angular-switch.d.ts",
       "default": "./dist/fesm2022/vyrnforge-angular-switch.mjs"
     },
     "./temporal-input": {
-      "import": "./dist/dist/components/temporal-input/index.js",
+      "import": "./dist/fesm2022/vyrnforge-angular-temporal-input.mjs",
       "types": "./dist/types/vyrnforge-angular-temporal-input.d.ts",
       "default": "./dist/fesm2022/vyrnforge-angular-temporal-input.mjs"
     },
     "./textarea": {
-      "import": "./dist/dist/components/textarea/index.js",
+      "import": "./dist/fesm2022/vyrnforge-angular-textarea.mjs",
       "types": "./dist/types/vyrnforge-angular-textarea.d.ts",
       "default": "./dist/fesm2022/vyrnforge-angular-textarea.mjs"
     },
     "./toggle-button": {
-      "import": "./dist/dist/components/toggle-button/index.js",
+      "import": "./dist/fesm2022/vyrnforge-angular-toggle-button.mjs",
       "types": "./dist/types/vyrnforge-angular-toggle-button.d.ts",
       "default": "./dist/fesm2022/vyrnforge-angular-toggle-button.mjs"
     },
     "./layout": {
-      "import": "./dist/dist/components/layout/index.js",
+      "import": "./dist/fesm2022/vyrnforge-angular-layout.mjs",
       "types": "./dist/types/vyrnforge-angular-layout.d.ts",
       "default": "./dist/fesm2022/vyrnforge-angular-layout.mjs"
     },
     "./separator": {
-      "import": "./dist/dist/components/separator/index.js",
+      "import": "./dist/fesm2022/vyrnforge-angular-separator.mjs",
       "types": "./dist/types/vyrnforge-angular-separator.d.ts",
       "default": "./dist/fesm2022/vyrnforge-angular-separator.mjs"
     },
     "./surface": {
-      "import": "./dist/dist/components/surface/index.js",
+      "import": "./dist/fesm2022/vyrnforge-angular-surface.mjs",
       "types": "./dist/types/vyrnforge-angular-surface.d.ts",
       "default": "./dist/fesm2022/vyrnforge-angular-surface.mjs"
     },
     "./tabs": {
-      "import": "./dist/dist/components/tabs/index.js",
+      "import": "./dist/fesm2022/vyrnforge-angular-tabs.mjs",
       "types": "./dist/types/vyrnforge-angular-tabs.d.ts",
       "default": "./dist/fesm2022/vyrnforge-angular-tabs.mjs"
     },
     "./text": {
-      "import": "./dist/dist/components/text/index.js",
+      "import": "./dist/fesm2022/vyrnforge-angular-text.mjs",
       "types": "./dist/types/vyrnforge-angular-text.d.ts",
       "default": "./dist/fesm2022/vyrnforge-angular-text.mjs"
     },
     "./visually-hidden": {
-      "import": "./dist/dist/components/visually-hidden/index.js",
+      "import": "./dist/fesm2022/vyrnforge-angular-visually-hidden.mjs",
       "types": "./dist/types/vyrnforge-angular-visually-hidden.d.ts",
       "default": "./dist/fesm2022/vyrnforge-angular-visually-hidden.mjs"
     },
     "./portal": {
-      "import": "./dist/dist/components/portal/index.js",
+      "import": "./dist/fesm2022/vyrnforge-angular-portal.mjs",
       "types": "./dist/types/vyrnforge-angular-portal.d.ts",
       "default": "./dist/fesm2022/vyrnforge-angular-portal.mjs"
     },
     "./presence": {
-      "import": "./dist/dist/components/presence/index.js",
+      "import": "./dist/fesm2022/vyrnforge-angular-presence.mjs",
       "types": "./dist/types/vyrnforge-angular-presence.d.ts",
       "default": "./dist/fesm2022/vyrnforge-angular-presence.mjs"
     },
     "./disclosure": {
-      "import": "./dist/dist/components/disclosure/index.js",
+      "import": "./dist/fesm2022/vyrnforge-angular-disclosure.mjs",
       "types": "./dist/types/vyrnforge-angular-disclosure.d.ts",
       "default": "./dist/fesm2022/vyrnforge-angular-disclosure.mjs"
     },
     "./accordion": {
-      "import": "./dist/dist/components/accordion/index.js",
+      "import": "./dist/fesm2022/vyrnforge-angular-accordion.mjs",
       "types": "./dist/types/vyrnforge-angular-accordion.d.ts",
       "default": "./dist/fesm2022/vyrnforge-angular-accordion.mjs"
     },
     "./alert-dialog": {
-      "import": "./dist/dist/components/alert-dialog/index.js",
+      "import": "./dist/fesm2022/vyrnforge-angular-alert-dialog.mjs",
       "types": "./dist/types/vyrnforge-angular-alert-dialog.d.ts",
       "default": "./dist/fesm2022/vyrnforge-angular-alert-dialog.mjs"
     },
     "./drawer": {
-      "import": "./dist/dist/components/drawer/index.js",
+      "import": "./dist/fesm2022/vyrnforge-angular-drawer.mjs",
       "types": "./dist/types/vyrnforge-angular-drawer.d.ts",
       "default": "./dist/fesm2022/vyrnforge-angular-drawer.mjs"
     },
     "./popover": {
-      "import": "./dist/dist/components/popover/index.js",
+      "import": "./dist/fesm2022/vyrnforge-angular-popover.mjs",
       "types": "./dist/types/vyrnforge-angular-popover.d.ts",
       "default": "./dist/fesm2022/vyrnforge-angular-popover.mjs"
     },
     "./tooltip": {
-      "import": "./dist/dist/components/tooltip/index.js",
+      "import": "./dist/fesm2022/vyrnforge-angular-tooltip.mjs",
       "types": "./dist/types/vyrnforge-angular-tooltip.d.ts",
       "default": "./dist/fesm2022/vyrnforge-angular-tooltip.mjs"
     },
     "./preview-card": {
-      "import": "./dist/dist/components/preview-card/index.js",
+      "import": "./dist/fesm2022/vyrnforge-angular-preview-card.mjs",
       "types": "./dist/types/vyrnforge-angular-preview-card.d.ts",
       "default": "./dist/fesm2022/vyrnforge-angular-preview-card.mjs"
     },
     "./menu": {
-      "import": "./dist/dist/components/menu/index.js",
+      "import": "./dist/fesm2022/vyrnforge-angular-menu.mjs",
       "types": "./dist/types/vyrnforge-angular-menu.d.ts",
       "default": "./dist/fesm2022/vyrnforge-angular-menu.mjs"
     },
     "./context-menu": {
-      "import": "./dist/dist/components/context-menu/index.js",
+      "import": "./dist/fesm2022/vyrnforge-angular-context-menu.mjs",
       "types": "./dist/types/vyrnforge-angular-context-menu.d.ts",
       "default": "./dist/fesm2022/vyrnforge-angular-context-menu.mjs"
     },
     "./menubar": {
-      "import": "./dist/dist/components/menubar/index.js",
+      "import": "./dist/fesm2022/vyrnforge-angular-menubar.mjs",
       "types": "./dist/types/vyrnforge-angular-menubar.d.ts",
       "default": "./dist/fesm2022/vyrnforge-angular-menubar.mjs"
     },
     "./toolbar": {
-      "import": "./dist/dist/components/toolbar/index.js",
+      "import": "./dist/fesm2022/vyrnforge-angular-toolbar.mjs",
       "types": "./dist/types/vyrnforge-angular-toolbar.d.ts",
       "default": "./dist/fesm2022/vyrnforge-angular-toolbar.mjs"
     },
     "./split-button": {
-      "import": "./dist/dist/components/split-button/index.js",
+      "import": "./dist/fesm2022/vyrnforge-angular-split-button.mjs",
       "types": "./dist/types/vyrnforge-angular-split-button.d.ts",
       "default": "./dist/fesm2022/vyrnforge-angular-split-button.mjs"
     },
     "./listbox": {
-      "import": "./dist/dist/components/listbox/index.js",
+      "import": "./dist/fesm2022/vyrnforge-angular-listbox.mjs",
       "types": "./dist/types/vyrnforge-angular-listbox.d.ts",
       "default": "./dist/fesm2022/vyrnforge-angular-listbox.mjs"
     },
     "./select": {
-      "import": "./dist/dist/components/select/index.js",
+      "import": "./dist/fesm2022/vyrnforge-angular-select.mjs",
       "types": "./dist/types/vyrnforge-angular-select.d.ts",
       "default": "./dist/fesm2022/vyrnforge-angular-select.mjs"
     },
     "./combobox": {
-      "import": "./dist/dist/components/combobox/index.js",
+      "import": "./dist/fesm2022/vyrnforge-angular-combobox.mjs",
       "types": "./dist/types/vyrnforge-angular-combobox.d.ts",
       "default": "./dist/fesm2022/vyrnforge-angular-combobox.mjs"
     },
     "./multi-select": {
-      "import": "./dist/dist/components/multi-select/index.js",
+      "import": "./dist/fesm2022/vyrnforge-angular-multi-select.mjs",
       "types": "./dist/types/vyrnforge-angular-multi-select.d.ts",
       "default": "./dist/fesm2022/vyrnforge-angular-multi-select.mjs"
     },
     "./toggle-group": {
-      "import": "./dist/dist/components/toggle-group/index.js",
+      "import": "./dist/fesm2022/vyrnforge-angular-toggle-group.mjs",
       "types": "./dist/types/vyrnforge-angular-toggle-group.d.ts",
       "default": "./dist/fesm2022/vyrnforge-angular-toggle-group.mjs"
     },
     "./segmented-control": {
-      "import": "./dist/dist/components/segmented-control/index.js",
+      "import": "./dist/fesm2022/vyrnforge-angular-segmented-control.mjs",
       "types": "./dist/types/vyrnforge-angular-segmented-control.d.ts",
       "default": "./dist/fesm2022/vyrnforge-angular-segmented-control.mjs"
     },
     "./tag-group": {
-      "import": "./dist/dist/components/tag-group/index.js",
+      "import": "./dist/fesm2022/vyrnforge-angular-tag-group.mjs",
       "types": "./dist/types/vyrnforge-angular-tag-group.d.ts",
       "default": "./dist/fesm2022/vyrnforge-angular-tag-group.mjs"
     },
     "./rating": {
-      "import": "./dist/dist/components/rating/index.js",
+      "import": "./dist/fesm2022/vyrnforge-angular-rating.mjs",
       "types": "./dist/types/vyrnforge-angular-rating.d.ts",
       "default": "./dist/fesm2022/vyrnforge-angular-rating.mjs"
     },
     "./range-slider": {
-      "import": "./dist/dist/components/range-slider/index.js",
+      "import": "./dist/fesm2022/vyrnforge-angular-range-slider.mjs",
       "types": "./dist/types/vyrnforge-angular-range-slider.d.ts",
       "default": "./dist/fesm2022/vyrnforge-angular-range-slider.mjs"
     },
     "./carousel": {
-      "import": "./dist/dist/components/carousel/index.js",
+      "import": "./dist/fesm2022/vyrnforge-angular-carousel.mjs",
       "types": "./dist/types/vyrnforge-angular-carousel.d.ts",
       "default": "./dist/fesm2022/vyrnforge-angular-carousel.mjs"
     },
     "./color-picker": {
-      "import": "./dist/dist/components/color-picker/index.js",
+      "import": "./dist/fesm2022/vyrnforge-angular-color-picker.mjs",
       "types": "./dist/types/vyrnforge-angular-color-picker.d.ts",
       "default": "./dist/fesm2022/vyrnforge-angular-color-picker.mjs"
     },
     "./file-uploader": {
-      "import": "./dist/dist/components/file-uploader/index.js",
+      "import": "./dist/fesm2022/vyrnforge-angular-file-uploader.mjs",
       "types": "./dist/types/vyrnforge-angular-file-uploader.d.ts",
       "default": "./dist/fesm2022/vyrnforge-angular-file-uploader.mjs"
     },
     "./number-field": {
-      "import": "./dist/dist/components/number-field/index.js",
+      "import": "./dist/fesm2022/vyrnforge-angular-number-field.mjs",
       "types": "./dist/types/vyrnforge-angular-number-field.d.ts",
       "default": "./dist/fesm2022/vyrnforge-angular-number-field.mjs"
     },
     "./otp-field": {
-      "import": "./dist/dist/components/otp-field/index.js",
+      "import": "./dist/fesm2022/vyrnforge-angular-otp-field.mjs",
       "types": "./dist/types/vyrnforge-angular-otp-field.d.ts",
       "default": "./dist/fesm2022/vyrnforge-angular-otp-field.mjs"
     },
     "./pagination": {
-      "import": "./dist/dist/components/pagination/index.js",
+      "import": "./dist/fesm2022/vyrnforge-angular-pagination.mjs",
       "types": "./dist/types/vyrnforge-angular-pagination.d.ts",
       "default": "./dist/fesm2022/vyrnforge-angular-pagination.mjs"
     },
     "./password-field": {
-      "import": "./dist/dist/components/password-field/index.js",
+      "import": "./dist/fesm2022/vyrnforge-angular-password-field.mjs",
       "types": "./dist/types/vyrnforge-angular-password-field.d.ts",
       "default": "./dist/fesm2022/vyrnforge-angular-password-field.mjs"
     },
     "./search-field": {
-      "import": "./dist/dist/components/search-field/index.js",
+      "import": "./dist/fesm2022/vyrnforge-angular-search-field.mjs",
       "types": "./dist/types/vyrnforge-angular-search-field.d.ts",
       "default": "./dist/fesm2022/vyrnforge-angular-search-field.mjs"
     },
     "./split-panel": {
-      "import": "./dist/dist/components/split-panel/index.js",
+      "import": "./dist/fesm2022/vyrnforge-angular-split-panel.mjs",
       "types": "./dist/types/vyrnforge-angular-split-panel.d.ts",
       "default": "./dist/fesm2022/vyrnforge-angular-split-panel.mjs"
     },
     "./temporal-field": {
-      "import": "./dist/dist/components/temporal-field/index.js",
+      "import": "./dist/fesm2022/vyrnforge-angular-temporal-field.mjs",
       "types": "./dist/types/vyrnforge-angular-temporal-field.d.ts",
       "default": "./dist/fesm2022/vyrnforge-angular-temporal-field.mjs"
     },
     "./toast": {
-      "import": "./dist/dist/components/toast/index.js",
+      "import": "./dist/fesm2022/vyrnforge-angular-toast.mjs",
       "types": "./dist/types/vyrnforge-angular-toast.d.ts",
       "default": "./dist/fesm2022/vyrnforge-angular-toast.mjs"
     },
     "./app-shell": {
-      "import": "./dist/dist/components/app-shell/index.js",
+      "import": "./dist/fesm2022/vyrnforge-angular-app-shell.mjs",
       "types": "./dist/types/vyrnforge-angular-app-shell.d.ts",
       "default": "./dist/fesm2022/vyrnforge-angular-app-shell.mjs"
     },
     "./side-nav": {
-      "import": "./dist/dist/components/side-nav/index.js",
+      "import": "./dist/fesm2022/vyrnforge-angular-side-nav.mjs",
       "types": "./dist/types/vyrnforge-angular-side-nav.d.ts",
       "default": "./dist/fesm2022/vyrnforge-angular-side-nav.mjs"
     },
     "./package.json": {
-      "default": "./dist/package.json"
+      "default": "./dist/package.json",
+      "import": "./dist/package.json"
     }
   },
   "dependencies": {
@@ -321,5 +322,5 @@
   "scripts": {
     "build": "ng-packagr -p ng-package.json --config tsconfig.lib.json"
   },
-  "module": "fesm2022/vyrnforge-angular.mjs"
+  "module": "./dist/fesm2022/vyrnforge-angular.mjs"
 }
