@@ -5,3 +5,10 @@ type ElementsModule = typeof import('@vyrnforge/elements/password-field');
 type Modules = [ReactModule, AngularModule, VueModule, ElementsModule];
 declare const modules: Modules;
 void modules;
+
+type ReactToggleProps = import('@vyrnforge/react/password-field').PasswordFieldToggleProps;
+const authoredLabels: Pick<ReactToggleProps, 'showLabel' | 'hideLabel'> = {
+  showLabel: 'Show password',
+  hideLabel: 'Hide password',
+};
+void authoredLabels;

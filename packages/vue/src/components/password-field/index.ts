@@ -1,1 +1,72 @@
-import{defineComponent,h,inject,provide,ref,type InjectionKey,type Ref}from'vue';interface Ctx{visible:Ref<boolean>;}const k:InjectionKey<Ctx>=Symbol('pf');function useP(){const v=inject(k);if(!v)throw new Error('PasswordField parts must be inside root.');return v;}export const PasswordFieldRoot=defineComponent({name:'PasswordFieldRoot',props:{defaultVisible:Boolean},setup(p,{attrs,slots}){const visible=ref(p.defaultVisible);provide(k,{visible});return()=>h('div',{...attrs,'data-vf-password-field-root':''},slots.default?.());}});export const PasswordFieldInput=defineComponent({name:'PasswordFieldInput',setup(_,{attrs}){const p=useP();return()=>h('input',{...attrs,type:p.visible.value?'text':'password','data-vf-password-field-input':''});}});export const PasswordFieldToggle=defineComponent({name:'PasswordFieldToggle',setup(_,{attrs,slots}){const p=useP();return()=>h('button',{...attrs,type:'button','aria-pressed':p.visible.value,'aria-label':(attrs['aria-label']as string|undefined)??(p.visible.value?'Hide password':'Show password'),'data-vf-password-field-toggle':'',onClick:()=>{p.visible.value=!p.visible.value;}},slots.default?.()??(p.visible.value?'Hide':'Show'));}});
+import {
+  defineComponent,
+  h,
+  inject,
+  provide,
+  ref,
+  type InjectionKey,
+  type Ref,
+} from 'vue';
+
+interface PasswordFieldContextValue {
+  visible: Ref<boolean>;
+}
+
+const passwordFieldKey: InjectionKey<PasswordFieldContextValue> = Symbol('password-field');
+
+function usePasswordField() {
+  const value = inject(passwordFieldKey);
+  if (!value) throw new Error('PasswordField parts must be inside root.');
+  return value;
+}
+
+export const PasswordFieldRoot = defineComponent({
+  name: 'PasswordFieldRoot',
+  props: { defaultVisible: Boolean },
+  setup(props, { attrs, slots }) {
+    const visible = ref(props.defaultVisible);
+    provide(passwordFieldKey, { visible });
+    return () => h('div', { ...attrs, 'data-vf-password-field-root': '' }, slots.default?.());
+  },
+});
+
+export const PasswordFieldInput = defineComponent({
+  name: 'PasswordFieldInput',
+  setup(_, { attrs }) {
+    const passwordField = usePasswordField();
+    return () =>
+      h('input', {
+        ...attrs,
+        type: passwordField.visible.value ? 'text' : 'password',
+        'data-vf-password-field-input': '',
+      });
+  },
+});
+
+export const PasswordFieldToggle = defineComponent({
+  name: 'PasswordFieldToggle',
+  props: {
+    showLabel: { type: String, required: true },
+    hideLabel: { type: String, required: true },
+  },
+  setup(props, { attrs, slots }) {
+    const passwordField = usePasswordField();
+    return () => {
+      const label = passwordField.visible.value ? props.hideLabel : props.showLabel;
+      return h(
+        'button',
+        {
+          ...attrs,
+          type: (attrs.type as string | undefined) ?? 'button',
+          'aria-pressed': passwordField.visible.value,
+          'aria-label': label,
+          'data-vf-password-field-toggle': '',
+          onClick: () => {
+            passwordField.visible.value = !passwordField.visible.value;
+          },
+        },
+        slots.default?.() ?? label,
+      );
+    };
+  },
+});

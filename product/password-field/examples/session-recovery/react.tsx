@@ -127,7 +127,7 @@ export function Example() {
             <label htmlFor="identity-password">Password</label>
             <PasswordFieldRoot>
               <PasswordFieldInput id="identity-password" name="password" autoComplete="current-password" value={password} onChange={(event) => { setPassword(event.currentTarget.value); setProviderResult('idle'); }} />
-              <PasswordFieldToggle aria-label="Show or hide password">Show or hide password</PasswordFieldToggle>
+              <PasswordFieldToggle showLabel="Show password" hideLabel="Hide password" />
             </PasswordFieldRoot>
             {providerResult === 'credentials-failed' && <p role="alert">We could not sign you in with those credentials. Check them or use another allowed method.</p>}
             <Button type="submit">Continue</Button>
