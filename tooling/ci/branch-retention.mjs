@@ -19,17 +19,36 @@ export function planBranchDeletions(branches, openPullRequests, policy, { now = 
   const staleBefore = now.getTime() - policy.staleDays * DAY_MS;
   const candidates = [];
   const skipped = [];
+
   for (const branch of branches) {
     const name = branch.name;
     if (protectedNames.has(name) || explicitNames.has(name)) { skipped.push({ name, reason: 'protected-name-or-open-pr' }); continue; }
     if (branch.protected) { skipped.push({ name, reason: 'github-protected' }); continue; }
     if (matchesPrefix(name, protectedPrefixes)) { skipped.push({ name, reason: 'protected-prefix' }); continue; }
+
     const commitTime = Date.parse(branch.commitDate ?? '');
     if (!Number.isFinite(commitTime)) { skipped.push({ name, reason: 'unknown-commit-date' }); continue; }
     if (commitTime > staleBefore) { skipped.push({ name, reason: 'not-stale' }); continue; }
-    candidates.push({ name, sha: branch.sha, commitDate: branch.commitDate, reason: 'stale' });
+
+    const mergedByPullRequest = branch.mergedPullRequest === true;
+    const fullyContained = branch.aheadByDefault === 0;
+    if (!mergedByPullRequest && !fullyContained) { skipped.push({ name, reason: 'unmerged-work' }); continue; }
+
+    candidates.push({
+      name,
+      sha: branch.sha,
+      commitDate: branch.commitDate,
+      reason: mergedByPullRequest ? 'merged-pull-request-history' : 'fully-contained-in-default'
+    });
   }
+
   candidates.sort((left, right) => Date.parse(left.commitDate) - Date.parse(right.commitDate) || left.name.localeCompare(right.name));
   const maxDeletions = Math.max(0, policy.maxDeletionsPerRun ?? 0);
-  return { deletions: candidates.slice(0, maxDeletions), deferredByCap: Math.max(0, candidates.length - maxDeletions), candidateCount: candidates.length, skipped, protectedBranches: [...protectedNames].sort() };
+  return {
+    deletions: candidates.slice(0, maxDeletions),
+    deferredByCap: Math.max(0, candidates.length - maxDeletions),
+    candidateCount: candidates.length,
+    skipped,
+    protectedBranches: [...protectedNames].sort()
+  };
 }
