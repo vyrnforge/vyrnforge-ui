@@ -1,13 +1,15 @@
 {
   "extends": "../../tsconfig.base.json",
   "compilerOptions": {
-    "rootDir": "src",
-    "outDir": "dist",
-    "experimentalDecorators": true
+    "rootDir": ".",
+    "outDir": "dist/typecheck"
   },
   "angularCompilerOptions": {
     "compilationMode": "partial",
     "strictTemplates": true
   },
-  "include": ["src/**/*.ts"]
+  "include": [
+    "src/**/*.ts",
+    "*/src/**/*.ts"
+  ]
 }
