@@ -33,6 +33,7 @@ if (port === 'react') {
     ['ai-assisted-reply', 'AI-assisted reply fixture'],
     ['data-table-management', 'Native table management fixture'],
     ['foundation-density', 'Foundation density fixture'],
+    ['token-scope-overrides', 'Token scope overrides fixture'],
   ];
 
   for (const [name, title] of examples) {
