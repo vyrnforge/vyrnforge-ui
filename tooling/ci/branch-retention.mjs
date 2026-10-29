@@ -30,16 +30,7 @@ export function planBranchDeletions(branches, openPullRequests, policy, { now = 
     if (!Number.isFinite(commitTime)) { skipped.push({ name, reason: 'unknown-commit-date' }); continue; }
     if (commitTime > staleBefore) { skipped.push({ name, reason: 'not-stale' }); continue; }
 
-    const mergedByPullRequest = branch.mergedPullRequest === true;
-    const fullyContained = branch.aheadByDefault === 0;
-    if (!mergedByPullRequest && !fullyContained) { skipped.push({ name, reason: 'unmerged-work' }); continue; }
-
-    candidates.push({
-      name,
-      sha: branch.sha,
-      commitDate: branch.commitDate,
-      reason: mergedByPullRequest ? 'merged-pull-request-history' : 'fully-contained-in-default'
-    });
+    candidates.push({ name, sha: branch.sha, commitDate: branch.commitDate, reason: 'stale' });
   }
 
   candidates.sort((left, right) => Date.parse(left.commitDate) - Date.parse(right.commitDate) || left.name.localeCompare(right.name));
