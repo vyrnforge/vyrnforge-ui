@@ -1,6 +1,6 @@
 import { defineConfig } from 'vitest/config';
 
-const packageProjects = ["core","web","icons","react","angular","vue","elements"].map((name) => ({
+const packageProjects = ['core', 'web', 'icons', 'react', 'angular', 'vue', 'elements'].map((name) => ({
   test: {
     name,
     environment: 'node',

@@ -88,4 +88,6 @@ try {
   rmSync(consumerRoot, { recursive: true, force: true });
 }
 
-console.log(`Validated ${packageNames.length} packed public packages with API Extractor, publint, attw, and an installed tarball consumer.`);
+console.log(
+  `Validated ${packageNames.length} packed public packages with API Extractor, publint, attw, and an installed tarball consumer.`,
+);
