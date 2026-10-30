@@ -23,4 +23,5 @@ test('Vue Tabs server output contains complete tab relationships and state', asy
   assert.match(html, /id="account-tabs-tab-overview"[^>]*role="tab"[^>]*tabindex="0"[^>]*aria-selected="true"/);
   assert.match(html, /id="account-tabs-tab-billing"[^>]*role="tab"[^>]*disabled[^>]*aria-disabled="true"/);
   assert.match(html, /id="account-tabs-panel-security"[^>]*role="tabpanel"[^>]*hidden[^>]*aria-labelledby="account-tabs-tab-security"/);
+  assert.doesNotMatch(html, /data-vf-selected/);
 });
