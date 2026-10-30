@@ -184,6 +184,8 @@ export function TabsTab({ value, disabled = false, onClick, onFocus, onKeyDown, 
     'aria-controls': panelId(context.rootId, value),
     'data-vf-tabs-tab': '',
     'data-vf-value': value,
+    // Keep the previously published inferred return type without restoring a redundant DOM state mirror.
+    'data-vf-disabled': undefined as string | undefined,
     onFocus(event: ReactFocusEvent<HTMLButtonElement>) {
       if (!disabled) context.focus(value);
       onFocus?.(event);
