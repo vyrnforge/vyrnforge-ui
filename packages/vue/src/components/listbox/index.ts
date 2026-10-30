@@ -24,6 +24,7 @@ function syncTabStops(root: HTMLElement, preferred?: HTMLElement | null) {
   if (activeIndex < 0 || states[activeIndex]?.disabled) activeIndex = options.findIndex((option, index) => !states[index]?.disabled && option.getAttribute('aria-selected') === 'true');
   if (activeIndex < 0) activeIndex = states.findIndex((option) => !option.disabled);
   const resolved = activeIndex < 0 ? null : activeIndex;
+  root.tabIndex = resolved === null ? 0 : -1;
   options.forEach((option, index) => { option.tabIndex = rovingTabIndex(index, resolved, states[index]?.disabled); });
 }
 function invoke(handler: unknown, event: Event) { if (typeof handler === 'function') handler(event); else if (Array.isArray(handler)) for (const item of handler) if (typeof item === 'function') item(event); }
@@ -57,7 +58,7 @@ export const ListboxRoot = defineComponent({
       role: 'listbox',
       'aria-multiselectable': props.selectionMode === 'multiple' || undefined,
       'data-vf-listbox-root': '',
-      tabindex: undefined,
+      tabindex: 0,
       onFocusin: (event: FocusEvent) => { invoke(attrs.onFocusin, event); const element = event.currentTarget as HTMLElement; const option = optionFromTarget(element, event.target); if (option && !disabled(option)) syncTabStops(element, option); },
       onKeydown: (event: KeyboardEvent) => {
         invoke(attrs.onKeydown, event);
@@ -95,7 +96,7 @@ export const ListboxOption = defineComponent({
     return () => h('div', {
       ...attrs,
       role: 'option',
-      tabindex: props.disabled ? -1 : 0,
+      tabindex: -1,
       'aria-selected': listbox.values.value.includes(props.value),
       'aria-disabled': props.disabled || undefined,
       'data-vf-listbox-option': '',
