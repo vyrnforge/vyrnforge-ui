@@ -91,9 +91,7 @@ jobs:
         if: always()
         with:
           name: package-validation-pr
-          path: |
-            test-results/package-validation.log
-            packages/*/temp/*.api.md
+          path: test-results/package-validation.log
           if-no-files-found: error
           retention-days: 7
 
