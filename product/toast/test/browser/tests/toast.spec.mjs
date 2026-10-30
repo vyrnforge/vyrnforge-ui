@@ -28,6 +28,22 @@ test('uses polite real output with authored English and localized naming', async
   expect((await expectNoAxeViolations(page)).violations).toEqual([]);
 });
 
+test('public Toast CSS resolves the canonical surface and border in light and dark themes', async ({ page }) => {
+  test.skip(port !== 'web', 'Public CSS resolution evidence is owned by the Web lane.');
+  await page.goto('/components/toast/web.html');
+  const toast = page.locator('#controlled-toast');
+  const colorsByTheme = {
+    light: { surface: 'rgb(255, 255, 255)', border: 'rgb(212, 212, 216)' },
+    dark: { surface: 'rgb(24, 24, 27)', border: 'rgb(63, 63, 70)' },
+  };
+
+  for (const theme of ['light', 'dark']) {
+    await page.locator('html').evaluate((element, value) => element.setAttribute('data-vf-theme', value), theme);
+    await expect(toast).toHaveCSS('background-color', colorsByTheme[theme].surface);
+    await expect(toast).toHaveCSS('border-top-color', colorsByTheme[theme].border);
+  }
+});
+
 test('controlled close is intent until the owner commits it', async ({ page }) => {
   test.skip(port === 'web', 'Web fixture is static CSS/semantic evidence only.');
   await page.goto(fixture);
