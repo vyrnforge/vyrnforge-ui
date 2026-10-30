@@ -23,12 +23,16 @@ test('selection-family component styles compose one private shared stylesheet', 
   assert.match(shared, /data-vf-select-content/);
   assert.match(shared, /data-vf-combobox-content/);
   assert.match(shared, /data-vf-multi-select-content/);
-  assert.match(shared, /data-vf-listbox-option/);
   assert.match(shared, /data-vf-select-option/);
   assert.match(shared, /data-vf-combobox-option/);
   assert.match(shared, /data-vf-multi-select-option/);
+  assert.match(shared, /data-vf-listbox-option/);
   assert.match(shared, /data-vf-select-trigger/);
   assert.match(shared, /data-vf-multi-select-trigger/);
+  assert.match(shared, /\[data-vf-select-content\]\[hidden\]/);
+  assert.match(shared, /\[data-vf-combobox-content\]\[hidden\]/);
+  assert.match(shared, /\[data-vf-multi-select-content\]\[hidden\]/);
+  assert.match(shared, /display:\s*none/);
 
   assert.doesNotMatch(listbox, /data-vf-(?:select|combobox|multi-select)-/);
   assert.doesNotMatch(select, /data-vf-(?:listbox|combobox|multi-select)-/);
