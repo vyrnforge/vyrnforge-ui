@@ -1,5 +1,5 @@
 import { execFileSync } from 'node:child_process';
-import { appendFileSync, writeFileSync } from 'node:fs';
+import { appendFileSync, readFileSync, writeFileSync } from 'node:fs';
 import { fileURLToPath } from 'node:url';
 import { discoverProductUnits } from '../testing/discover-product-units.mjs';
 
@@ -28,6 +28,12 @@ const publicSurfaceBasenames = new Set([
 ]);
 const evidenceOrder = ['architecture', 'impact', 'release', 'package-artifacts', 'docs', 'browser', 'visual'];
 const preferredPortOrder = ['web', 'react', 'angular', 'vue', 'elements'];
+const docsProject = JSON.parse(readFileSync(fileURLToPath(new URL('../../apps/docs/project.json', import.meta.url)), 'utf8'));
+const docsPackageDependencies = new Set(
+  (docsProject.implicitDependencies ?? [])
+    .map((dependency) => /^@vyrnforge\/([^/]+)$/.exec(dependency)?.[1])
+    .filter(Boolean),
+);
 
 function pathWithin(filePath, root) {
   const normalized = root.endsWith('/') ? root : `${root}/`;
@@ -229,6 +235,10 @@ export function createSemanticImpact(paths, options = {}) {
     }
 
     const packageName = packageFromPath(filePath);
+    if (packageName && docsPackageDependencies.has(packageName)) {
+      addEvidence(state, 'docs', `${packageName} is a declared dependency of the Reference docs application`, filePath);
+    }
+
     if (packageName && isPackagePublicSurface(filePath)) {
       state.packages.add(packageName);
       addReason(state.reasons, `package:${packageName}`, 'package manifest/public entrypoint/build contract changed', filePath);
