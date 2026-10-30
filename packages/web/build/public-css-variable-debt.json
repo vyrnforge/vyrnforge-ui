@@ -1,17 +1,3 @@
 [
-  "packages/web/src/components/combobox/combobox.css: --vf-space-3",
-  "packages/web/src/components/file-uploader/file-uploader.css: --vf-space-3",
-  "packages/web/src/components/file-uploader/file-uploader.css: --vf-space-4",
-  "packages/web/src/components/listbox/listbox.css: --vf-space-3",
-  "packages/web/src/components/menu/menu.css: --vf-space-2",
-  "packages/web/src/components/menu/menu.css: --vf-space-3",
-  "packages/web/src/components/number-field/number-field.css: --vf-space-3",
-  "packages/web/src/components/select/select.css: --vf-space-3",
-  "packages/web/src/components/split-button/split-button.css: --vf-space-3",
-  "packages/web/src/components/toast/toast.css: --vf-space-1",
-  "packages/web/src/components/toast/toast.css: --vf-space-2",
-  "packages/web/src/components/toast/toast.css: --vf-space-3",
-  "packages/web/src/components/toast/toast.css: --vf-space-4",
-  "packages/web/src/components/toggle-group/toggle-group.css: --vf-space-3",
   "packages/web/src/components/tooltip/tooltip.css: --vf-control-font"
 ]
