@@ -1,0 +1,45 @@
+{
+  "schemaVersion": 1,
+  "component": "side-nav",
+  "reviewStatus": "mapped",
+  "nativeBaseline": {
+    "kind": "structural",
+    "reference": "named navigation landmark containing authored native destination links"
+  },
+  "wcag": {
+    "target": "2.2 AA",
+    "status": "mapped",
+    "criteria": ["1.3.1", "2.1.1", "2.4.1", "2.4.3", "2.4.4", "2.4.7", "4.1.2"]
+  },
+  "aria": {
+    "status": "mapped",
+    "apgPattern": null
+  },
+  "interaction": {
+    "keyboard": "native",
+    "focus": "native",
+    "directionality": "logical"
+  },
+  "ownership": {
+    "library": [
+      "preserve native link behavior, DOM keyboard order, current-page semantics, visible focus, and logical directionality",
+      "provide grouped navigation structure without introducing tree-navigation or router behavior"
+    ],
+    "consumer": [
+      "author meaningful destinations and a navigation landmark name when required by page context",
+      "own URLs, route matching, current destination, route guards, authentication, permissions, and navigation policy"
+    ]
+  },
+  "forms": { "status": "not-applicable" },
+  "visualAccessibility": { "status": "component-specific" },
+  "ssrHydration": { "status": "native" },
+  "evidence": {
+    "browser": "required",
+    "assistiveTechnology": "not-applicable"
+  },
+  "profileVariability": [],
+  "notes": [
+    "SideNav intentionally relies on native navigation-landmark and link semantics rather than an APG tree or menu interaction model.",
+    "Current-page semantics and landmark naming are machine-testable contract requirements; no component-specific spoken-announcement behavior is claimed."
+  ]
+}

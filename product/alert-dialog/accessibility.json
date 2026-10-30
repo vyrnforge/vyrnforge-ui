@@ -1,0 +1,45 @@
+{
+  "schemaVersion": 1,
+  "component": "alert-dialog",
+  "reviewStatus": "mapped",
+  "nativeBaseline": {
+    "kind": "composite",
+    "reference": "Dialog-based native modal surface exposed with alertdialog semantics"
+  },
+  "wcag": {
+    "target": "2.2 AA",
+    "status": "mapped",
+    "criteria": ["1.3.1", "2.1.1", "2.1.2", "2.4.3", "2.4.7", "3.3.4", "4.1.2"]
+  },
+  "aria": {
+    "status": "mapped",
+    "apgPattern": "alert-dialog"
+  },
+  "interaction": {
+    "keyboard": "managed",
+    "focus": "managed-modal",
+    "directionality": "native"
+  },
+  "ownership": {
+    "library": [
+      "provide alertdialog semantics, deterministic title/description relationships, native modality, initial focus, and focus restoration",
+      "prevent backdrop dismissal while preserving the Dialog dismissal/controlled-state contract"
+    ],
+    "consumer": [
+      "author localized consequence, recovery, cancel, and action content appropriate to the real risk",
+      "own destructive transaction truth, authorization, reauthentication, approval, undo/recovery, and backend enforcement"
+    ]
+  },
+  "forms": { "status": "not-applicable" },
+  "visualAccessibility": { "status": "component-specific" },
+  "ssrHydration": { "status": "contract-required" },
+  "evidence": {
+    "browser": "required",
+    "assistiveTechnology": "required"
+  },
+  "profileVariability": ["initial-focus-policy", "controlled-or-uncontrolled-open-state"],
+  "notes": [
+    "AlertDialog inherits Dialog-class modality and focus behavior while strengthening the decision semantics and backdrop policy.",
+    "Automated role/name/focus assertions do not establish screen-reader interoperability for the modal decision experience."
+  ]
+}
