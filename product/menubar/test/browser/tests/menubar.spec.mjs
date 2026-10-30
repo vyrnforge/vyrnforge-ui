@@ -10,7 +10,7 @@ test('menubar moves focus horizontally', async ({ page }) => {
   expect((await expectNoAxeViolations(page)).violations).toEqual([]);
 });
 
-test('public Menubar CSS resolves canonical surface, border, spacing, and geometry in light and dark themes', async ({ page }) => {
+test('public Menubar CSS resolves canonical surface, border, spacing, and geometry in light, dark, and forced-colors modes', async ({ page }) => {
   test.skip(port !== 'web', 'Public CSS resolution evidence is owned by the Web lane.');
   await page.goto('/components/menubar/web.html');
   const bar = page.locator('#bar');
@@ -32,4 +32,7 @@ test('public Menubar CSS resolves canonical surface, border, spacing, and geomet
     await expect(file).toHaveCSS('padding-right', '8px');
     await expect(file).toHaveCSS('border-radius', '6px');
   }
+
+  await page.emulateMedia({ forcedColors: 'active' });
+  await expect(bar).toHaveCSS('border-top-width', '1px');
 });
