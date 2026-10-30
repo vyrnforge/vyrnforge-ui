@@ -58,4 +58,5 @@ test('Angular Tabs server output contains complete tab relationships and state',
   assert.match(securityPanel, /role="tabpanel"/);
   assert.match(securityPanel, /hidden=""/);
   assert.match(securityPanel, /aria-labelledby="account-tabs-tab-security"/);
+  assert.doesNotMatch(html, /data-vf-selected/);
 });
