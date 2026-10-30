@@ -1,7 +1,9 @@
 import { access, readFile } from 'node:fs/promises';
 import { discoverProductUnits } from '../testing/discover-product-units.mjs';
 
+const root = JSON.parse(await readFile(new URL('../../package.json', import.meta.url), 'utf8'));
 const packages = ['core', 'web', 'icons', 'react', 'angular', 'vue', 'elements'];
+const publishMarkers = ['changeset publish', 'npm publish', 'pnpm publish'];
 const allowedDependencies = {
   core: [],
   web: ['@vyrnforge/core'],
@@ -18,10 +20,21 @@ function flattenExportTargets(value, targets = []) {
   }
   return targets;
 }
+function assertPrivateRebuildManifest(manifest, label) {
+  if (manifest.private !== true) throw new Error(`${label} must remain private during the rebuild`);
+  for (const [script, command] of Object.entries(manifest.scripts ?? {})) {
+    if (publishMarkers.some((marker) => command.includes(marker))) {
+      throw new Error(`${label} script ${script} must not publish while the rebuild is private`);
+    }
+  }
+}
+
+assertPrivateRebuildManifest(root, 'root package');
 for (const name of packages) {
   const manifest = JSON.parse(
     await readFile(new URL(`../../packages/${name}/package.json`, import.meta.url), 'utf8'),
   );
+  assertPrivateRebuildManifest(manifest, manifest.name);
   if (manifest.type !== 'module') throw new Error(`${manifest.name} must be ESM`);
   if (JSON.stringify(manifest.files) !== JSON.stringify(['dist'])) {
     throw new Error(`${manifest.name} must publish only dist`);
@@ -101,5 +114,5 @@ for (const component of discovery.components) {
   }
 }
 process.stdout.write(
-  `package contracts: ${packages.length} packages and ${discovery.components.length} component subpaths ok\n`,
+  `package contracts: ${packages.length} private rebuild packages and ${discovery.components.length} component subpaths ok\n`,
 );

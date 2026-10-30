@@ -1324,6 +1324,21 @@ export const NumberInput: DefineComponent<    {}, () => VNode<RendererNode, Rend
 }>, {}, {}, {}, ComponentOptionsMixin, ComponentOptionsMixin, {}, string, PublicProps, Readonly<{}> & Readonly<{}>, {}, {}, {}, {}, string, ComponentProvideOptions, true, {}, any>;
 
 // @public (undocumented)
+export const OTPFieldInput: DefineComponent<ExtractPropTypes<    {
+index: {
+type: NumberConstructor;
+required: true;
+};
+}>, () => VNode<RendererNode, RendererElement, {
+[key: string]: any;
+}>, {}, {}, {}, ComponentOptionsMixin, ComponentOptionsMixin, {}, string, PublicProps, Readonly<ExtractPropTypes<    {
+index: {
+type: NumberConstructor;
+required: true;
+};
+}>> & Readonly<{}>, {}, {}, {}, {}, string, ComponentProvideOptions, true, {}, any>;
+
+// @public (undocumented)
 export const OTPFieldRoot: DefineComponent<ExtractPropTypes<    {
 value: StringConstructor;
 defaultValue: {
@@ -1396,9 +1411,27 @@ defaultVisible: boolean;
 }, {}, {}, {}, string, ComponentProvideOptions, true, {}, any>;
 
 // @public (undocumented)
-export const PasswordFieldToggle: DefineComponent<    {}, () => VNode<RendererNode, RendererElement, {
+export const PasswordFieldToggle: DefineComponent<ExtractPropTypes<    {
+showLabel: {
+type: StringConstructor;
+required: true;
+};
+hideLabel: {
+type: StringConstructor;
+required: true;
+};
+}>, () => VNode<RendererNode, RendererElement, {
 [key: string]: any;
-}>, {}, {}, {}, ComponentOptionsMixin, ComponentOptionsMixin, {}, string, PublicProps, Readonly<{}> & Readonly<{}>, {}, {}, {}, {}, string, ComponentProvideOptions, true, {}, any>;
+}>, {}, {}, {}, ComponentOptionsMixin, ComponentOptionsMixin, {}, string, PublicProps, Readonly<ExtractPropTypes<    {
+showLabel: {
+type: StringConstructor;
+required: true;
+};
+hideLabel: {
+type: StringConstructor;
+required: true;
+};
+}>> & Readonly<{}>, {}, {}, {}, {}, string, ComponentProvideOptions, true, {}, any>;
 
 // @public (undocumented)
 export const PopoverContent: DefineComponent<ExtractPropTypes<    {

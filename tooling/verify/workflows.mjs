@@ -32,6 +32,9 @@ for (const label of ['pr', 'main', 'scheduled', 'release']) {
   requireText(sources[label], 'pnpm install --frozen-lockfile --ignore-scripts', `${label} must install the committed pnpm dependency graph`);
   forbidText(sources[label], 'npm ci', `${label} must not use the retired npm workspace install path`);
   forbidText(sources[label], 'git push', `${label} validation must not mutate source refs`);
+  for (const publishCommand of ['changeset publish', 'npm publish', 'pnpm publish']) {
+    forbidText(sources[label], publishCommand, `${label} must not publish packages during the private rebuild`);
+  }
   requireText(sources[label], 'tooling/impact/plan.mjs', `${label} must use the shared semantic-impact model`);
   forbidText(sources[label], 'paths-ignore:', `${label} must not encode duplicate path-selection truth in workflow YAML`);
 }
@@ -42,6 +45,8 @@ requireText(sources.pr, '--mode pr', 'PR validation must use impact-scoped PR mo
 requireText(sources.pr, 'BASE_SHA', 'PR validation must provide a base SHA');
 requireText(sources.pr, 'HEAD_SHA', 'PR validation must provide a head SHA');
 requireText(sources.pr, 'nx affected -t lint,typecheck,test,build', 'PR generic affected execution must remain owned by Nx');
+requireText(sources.pr, 'pnpm verify:package-contracts', 'PR repository contracts must enforce private package/public-entrypoint invariants');
+requireText(sources.pr, 'pnpm verify:compatibility', 'PR repository contracts must enforce compatibility metadata alignment');
 requireText(sources.pr, 'package_artifacts_required', 'PR package evidence must be selected from the semantic plan');
 requireText(sources.pr, 'browser_ports', 'PR browser ports must be selected from the semantic plan');
 requireText(sources.pr, 'fromJSON(needs.plan.outputs.browser_ports)', 'PR browser matrix must consume the plan rather than a hand-maintained component matrix');
@@ -52,6 +57,8 @@ requireText(sources.main, 'branches: [main]', 'Main validation must target the m
 requireText(sources.main, '--mode main', 'Main validation must use impact-scoped main mode');
 forbidText(sources.main, '--mode full', 'Main push validation must not silently become exhaustive validation');
 requireText(sources.main, 'nx affected -t lint,typecheck,test,build', 'Main generic affected execution must remain owned by Nx');
+requireText(sources.main, 'pnpm verify:package-contracts', 'Main repository contracts must enforce private package/public-entrypoint invariants');
+requireText(sources.main, 'pnpm verify:compatibility', 'Main repository contracts must enforce compatibility metadata alignment');
 requireText(sources.main, 'package_artifacts_required', 'Main package evidence must be selected from the semantic plan');
 requireText(sources.main, 'browser_ports', 'Main browser ports must be selected from the semantic plan');
 requireText(sources.main, '${{ github.sha }}', 'Main validation evidence must be tied to the validated commit');
@@ -99,4 +106,4 @@ requireText(sources.retention, 'github.event.repository.default_branch', 'Reposi
 requireText(sources.retention, 'tooling/ci/retention-cleanup.mjs', 'Repository Retention must use the maintained cleanup implementation');
 forbidText(sources.retention, 'pnpm install', 'Repository Retention must not install the product dependency graph');
 
-process.stdout.write('workflow contracts: pnpm security, shared semantic modes, Nx execution ownership, broad safety nets, artifact lineage, and mutation boundaries ok\n');
+process.stdout.write('workflow contracts: pnpm security, private rebuild release posture, shared semantic modes, Nx execution ownership, broad safety nets, artifact lineage, and mutation boundaries ok\n');

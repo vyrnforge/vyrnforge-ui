@@ -21,7 +21,7 @@ Use the Node and pnpm versions declared by `.node-version`, `.nvmrc`, and the ro
 - `pnpm check` — run formatting plus the repository's static/unit/build verification set.
 - `pnpm check:changed` — run Nx affected lint, typecheck, test, and build against the configured base/head.
 - `pnpm build:docs` — build packages plus the documentation site and executable examples.
-- `pnpm verify:packages` — build and validate packed public-package artifacts and clean consumers.
+- `pnpm verify:packages` — build and validate release-shaped package artifacts and clean consumers.
 - `pnpm verify:release` — verify Changesets behavior and the current release-intent state.
 - `pnpm test:browser` — run Playwright browser evidence; set `VF_COMPONENT_PORT` or use a port-specific script for focused port work.
 - `pnpm generate:tokens` / `pnpm verify:tokens` — generate and verify repository-owned token output.
@@ -33,10 +33,10 @@ For direct Nx investigation, use commands such as `pnpm exec nx graph`, `pnpm ex
 Vitest owns pure logic, package unit tests, and repository/tooling tests. These projects run in Node by default; browser-owned behavior remains in Playwright rather than a DOM-emulation environment.
 
 - `pnpm exec vitest --project core` — run one configured package project.
-- `pnpm exec vitest --project repository` — run repository/tooling tests.
+- `pnpm exec vitest --project repository-tooling` — run repository/tooling tests.
 - `pnpm exec vitest --watch --project core` — watch one project while developing.
 - `pnpm exec vitest packages/core/test/<path>.test.mjs` — filter to a concrete test file.
-- `pnpm exec vitest -t "<test name>" --project repository` — filter by test name within a project.
+- `pnpm exec vitest -t "<test name>" --project repository-tooling` — filter by test name within a project.
 
 Editor integrations should use the repository root and `vitest.config.mjs`; do not create package-local competing Vitest configurations merely for editor discovery. Browser test debugging should use Playwright's own filtering/debugging facilities instead of moving browser contracts into Vitest.
 
@@ -46,7 +46,7 @@ Do not bypass a failing verifier by weakening it unless the canonical architectu
 
 Keep the repository root intentionally small:
 
-- `packages/` — seven publishable package surfaces and package-owned evidence.
+- `packages/` — seven private-rebuild package surfaces and package-owned evidence.
 - `product/` — repository-only framework-neutral product slices spanning packages.
 - `apps/` — runnable repository applications, currently the documentation app.
 - `documentation/` — shared/framework/reference consumer documentation not owned by one component.
@@ -54,11 +54,11 @@ Keep the repository root intentionally small:
 
 Do not introduce top-level `components/`, `fixtures/`, `testing/`, `scripts/`, `utils/`, or other concern-specific roots. Empty placeholder directories are not architecture.
 
-`tooling/` has eight functional owners: `build/`, `ci/`, `docs/`, `impact/`, `release/`, `testing/`, `tokens/`, and `verify/`. Quality-specific reusable validation infrastructure such as accessibility, compatibility, performance, and repository-wide visual evidence belongs beneath `tooling/testing/`, not as additional tooling roots. See `tooling/README.md` for placement rules.
+Top-level `tooling/` capability directories are need-driven recurring automation owners, not a fixed architecture checklist. Each capability owns a local `README.md`; adding or removing one must not require maintaining a centralized directory inventory. Quality-specific reusable validation infrastructure such as accessibility, compatibility, performance, and repository-wide visual evidence belongs beneath `tooling/testing/` when that is the correct recurring owner. See `tooling/README.md` for the placement rules.
 
 ## Package boundaries
 
-The active public package graph is:
+The active package graph exposes the rebuild's intended public API contracts while distribution remains private:
 
 - `@vyrnforge/core` — DOM-free renderer-neutral semantic types and genuinely portable logic.
 - `@vyrnforge/web` — canonical CSS, tokens/themes at runtime, and narrow shared browser foundations.
@@ -81,9 +81,9 @@ Repository-wide reusable test infrastructure lives under `tooling/testing/`; pro
 
 Framework-neutral foundation content is authored once under shared documentation sources and composed into framework experiences. Framework guides own only framework-specific installation/API/integration guidance. Component documentation and executable examples are discovered from `product/<component>/`.
 
-Changesets is the single source of current package release intent. For a consumer-visible change, run `pnpm changeset`, select the affected publishable packages, choose `patch`, `minor`, or `major`, and write a summary that preserves relevant deprecation, compatibility, and migration information. Repository-only work with intentionally no package release may use an empty Changeset so that the no-release decision is explicit without inventing a package bump. Historical owner-local `changes/` fragments are provenance only and must not be added or used as current release input.
+Changesets is the single source of current package release intent. For a consumer-visible change, run `pnpm changeset`, select the affected package surfaces, choose `patch`, `minor`, or `major`, and write a summary that preserves relevant deprecation, compatibility, and migration information. Repository-only work with intentionally no package release may use an empty Changeset so that the no-release decision is explicit without inventing a package bump. Historical owner-local `changes/` fragments are provenance only and must not be added or used as current release input.
 
-`pnpm release:version` applies Changesets versioning/dependency-range updates and generated package changelogs for review. `pnpm verify:release` proves representative version/dependent handling and checks current release intent. Publication is not automatic: release readiness must still pass broad repository, documentation, browser, packed-package, public API, and clean-consumer validation before a publish action is eligible.
+`pnpm release:version` applies Changesets versioning/dependency-range updates and generated package changelogs for review. `pnpm verify:release` proves representative version/dependent handling and checks current release intent. Publication is not currently enabled for the private rebuild. Release Readiness remains a non-publishing evidence gate; publication mechanics require a separate accepted release decision before they may be introduced.
 
 ## CI and validation
 

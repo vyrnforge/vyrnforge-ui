@@ -279,37 +279,37 @@ export class VfAlertDialogElement extends VfDialogElement {
 }
 
 // @public (undocumented)
-export class VfAppShellBodyElement extends HTMLElementBase_19 {
+export class VfAppShellBodyElement extends HTMLElementBase_21 {
     // (undocumented)
     connectedCallback(): void;
 }
 
 // @public (undocumented)
-export class VfAppShellElement extends HTMLElementBase_19 {
+export class VfAppShellElement extends HTMLElementBase_21 {
     // (undocumented)
     connectedCallback(): void;
 }
 
 // @public (undocumented)
-export class VfAppShellFooterElement extends HTMLElementBase_19 {
+export class VfAppShellFooterElement extends HTMLElementBase_21 {
     // (undocumented)
     connectedCallback(): void;
 }
 
 // @public (undocumented)
-export class VfAppShellHeaderElement extends HTMLElementBase_19 {
+export class VfAppShellHeaderElement extends HTMLElementBase_21 {
     // (undocumented)
     connectedCallback(): void;
 }
 
 // @public (undocumented)
-export class VfAppShellMainElement extends HTMLElementBase_19 {
+export class VfAppShellMainElement extends HTMLElementBase_21 {
     // (undocumented)
     connectedCallback(): void;
 }
 
 // @public (undocumented)
-export class VfAppShellNavigationElement extends HTMLElementBase_19 {
+export class VfAppShellNavigationElement extends HTMLElementBase_21 {
     // (undocumented)
     connectedCallback(): void;
 }
@@ -587,23 +587,38 @@ export class VfNumberFieldElement extends H_11 {
 }
 
 // @public (undocumented)
-export class VfOtpFieldElement extends H_12 {
-    // (undocumented)
-    connectedCallback(): void;
-}
-
-// @public (undocumented)
-export class VfPaginationElement extends H_13 {
-    // (undocumented)
-    connectedCallback(): void;
-}
-
-// @public (undocumented)
-export class VfPasswordFieldElement extends H_14 {
+export class VfOtpFieldElement extends HTMLElementBase_18 {
     // (undocumented)
     connectedCallback(): void;
     // (undocumented)
     disconnectedCallback(): void;
+    // (undocumented)
+    get value(): string;
+    set value(value: string);
+}
+
+// @public (undocumented)
+export class VfPaginationElement extends H_12 {
+    // (undocumented)
+    connectedCallback(): void;
+}
+
+// @public (undocumented)
+export class VfPasswordFieldElement extends HTMLElementBase_19 {
+    // (undocumented)
+    attributeChangedCallback(): void;
+    // (undocumented)
+    connectedCallback(): void;
+    // (undocumented)
+    disconnectedCallback(): void;
+    // (undocumented)
+    get hideLabel(): string;
+    set hideLabel(value: string);
+    // (undocumented)
+    static get observedAttributes(): string[];
+    // (undocumented)
+    get showLabel(): string;
+    set showLabel(value: string);
 }
 
 // @public (undocumented)
@@ -669,7 +684,7 @@ export class VfRatingElement extends H_6 {
 }
 
 // @public (undocumented)
-export class VfSearchFieldElement extends H_15 {
+export class VfSearchFieldElement extends H_13 {
     // (undocumented)
     connectedCallback(): void;
     // (undocumented)
@@ -693,7 +708,7 @@ export class VfSelectElement extends H {
 }
 
 // @public (undocumented)
-export class VfSideNavElement extends HTMLElementBase_20 {
+export class VfSideNavElement extends HTMLElementBase_22 {
     // (undocumented)
     connectedCallback(): void;
 }
@@ -707,7 +722,7 @@ export class VfSplitButtonElement extends HTMLElementBase_15 {
 }
 
 // @public (undocumented)
-export class VfSplitPanelElement extends H_16 {
+export class VfSplitPanelElement extends H_14 {
     // (undocumented)
     connectedCallback(): void;
 }
@@ -768,13 +783,13 @@ export class VfTagGroupElement extends H_5 {
 }
 
 // @public (undocumented)
-export class VfTemporalFieldElement extends H_17 {
+export class VfTemporalFieldElement extends H_15 {
     // (undocumented)
     connectedCallback(): void;
 }
 
 // @public (undocumented)
-export class VfToastElement extends HTMLElementBase_18 {
+export class VfToastElement extends HTMLElementBase_20 {
     // (undocumented)
     attributeChangedCallback(name: string, oldValue: string | null, newValue: string | null): void;
     // (undocumented)
@@ -795,7 +810,7 @@ export class VfToastElement extends HTMLElementBase_18 {
 }
 
 // @public (undocumented)
-export class VfToastViewportElement extends HTMLElementBase_18 {
+export class VfToastViewportElement extends HTMLElementBase_20 {
     // (undocumented)
     connectedCallback(): void;
     // (undocumented)
