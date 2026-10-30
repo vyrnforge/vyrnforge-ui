@@ -31,6 +31,16 @@ test('React-only component implementation stays port-local while retaining Refer
   assert.ok(hasReason(impact, 'evidence:docs'));
 });
 
+test('Reference evidence stays additive to generic package fallback classification', () => {
+  const impact = createSemanticImpact(['packages/react/src/internal/example.ts']);
+  assert.ok(impact.packages.includes('react'));
+  assert.equal(impact.selectors.docsRequired, true);
+  assert.equal(impact.selectors.browserRequired, true);
+  assert.ok(impact.browserPorts.includes('react'));
+  assert.ok(hasReason(impact, 'evidence:docs'));
+  assert.ok(hasReason(impact, 'port:react'));
+});
+
 test('canonical Tabs evidence fans across every implemented Tabs surface', () => {
   const impact = createSemanticImpact(['product/tabs/accessibility.json']);
   assert.deepEqual(impact.components, ['tabs']);
