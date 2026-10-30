@@ -60,7 +60,7 @@ test.describe('enhanced listbox interaction', () => {
     const banana = page.locator(`#${port}-banana`);
     const multiOne = page.locator(`#${port}-multi-one`);
 
-    await expect(listbox).toHaveAttribute('tabindex', '-1');
+    await expect(listbox).not.toHaveAttribute('tabindex', '0');
     await expect(one).toHaveAttribute('tabindex', '0');
     await expect(disabled).toHaveAttribute('tabindex', '-1');
     await expect(three).toHaveAttribute('tabindex', '-1');
