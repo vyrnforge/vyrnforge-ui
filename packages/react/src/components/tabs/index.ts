@@ -184,7 +184,6 @@ export function TabsTab({ value, disabled = false, onClick, onFocus, onKeyDown, 
     'aria-controls': panelId(context.rootId, value),
     'data-vf-tabs-tab': '',
     'data-vf-value': value,
-    'data-vf-disabled': disabled ? '' : undefined,
     onFocus(event: ReactFocusEvent<HTMLButtonElement>) {
       if (!disabled) context.focus(value);
       onFocus?.(event);
