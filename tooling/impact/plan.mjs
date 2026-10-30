@@ -237,7 +237,6 @@ export function createSemanticImpact(paths, options = {}) {
     const packageName = packageFromPath(filePath);
     if (packageName && docsPackageDependencies.has(packageName)) {
       addEvidence(state, 'docs', `${packageName} is a declared dependency of the Reference docs application`, filePath);
-      classified = true;
     }
 
     if (packageName && isPackagePublicSurface(filePath)) {
