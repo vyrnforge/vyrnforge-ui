@@ -1,4 +1,4 @@
-import { mkdir, readFile, writeFile } from 'node:fs/promises';
+import { mkdir, writeFile } from 'node:fs/promises';
 import path from 'node:path';
 import { build } from 'esbuild';
 
@@ -9,9 +9,16 @@ export const browserFixture = {
     const outDir = path.join(root, 'dist/browser-fixtures/components/listbox');
     await mkdir(outDir, { recursive: true });
 
-    const listboxCss = await readFile(path.join(root, 'packages/web/dist/components/listbox/listbox.css'), 'utf8');
-    const tokenCss = await readFile(path.join(root, 'packages/web/dist/styles/tokens.css'), 'utf8');
-    await writeFile(path.join(outDir, 'listbox.css'), `${tokenCss}\n${listboxCss.replace('@import "../../styles/tokens.css";', '')}`);
+    await build({
+      stdin: {
+        contents: '@import "@vyrnforge/web/styles/tokens.css";@import "@vyrnforge/web/styles/listbox.css";',
+        resolveDir: root,
+        sourcefile: 'listbox-public.css',
+        loader: 'css',
+      },
+      bundle: true,
+      outfile: path.join(outDir, 'listbox.css'),
+    });
     const page = (body, script = '') => `<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width"><link rel="stylesheet" href="./listbox.css"><title>Listbox fixture</title></head><body><main><h1>Listbox browser fixture</h1><button id="before">Before</button>${body}<button id="after">After</button></main>${script}</body></html>`;
 
     const webListbox = `<div id="web-list" role="listbox" aria-label="Choose an item" data-vf-listbox-root><div id="web-one" role="option" tabindex="0" aria-selected="true" data-vf-listbox-option>One</div><div id="web-disabled" role="option" tabindex="-1" aria-selected="false" aria-disabled="true" data-vf-listbox-option>Disabled</div><div id="web-three" role="option" tabindex="0" aria-selected="false" data-vf-listbox-option>Three</div><div id="web-banana" role="option" tabindex="0" aria-selected="false" data-vf-listbox-option>Banana</div></div><div id="web-multi" role="listbox" aria-label="Choose several" aria-multiselectable="true" data-vf-listbox-root><div id="web-multi-one" role="option" tabindex="0" aria-selected="true" data-vf-listbox-option>One</div><div id="web-multi-three" role="option" tabindex="0" aria-selected="false" data-vf-listbox-option>Three</div></div>`;
