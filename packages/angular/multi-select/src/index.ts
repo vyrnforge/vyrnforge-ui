@@ -83,8 +83,8 @@ export class VfMultiSelectRootDirective {
   readonly values = computed(() => this.value() ?? this.internalValue() ?? this.defaultValue());
   readonly open = signal(false);
 
-  toggle(candidate: string): void {
-    const next = toggleSelection(this.values(), candidate);
+  toggle(v: string): void {
+    const next = toggleSelection(this.values(), v);
     if (this.value() === undefined) this.internalValue.set(next);
     this.valueChange.emit(next);
   }
