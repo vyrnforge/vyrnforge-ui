@@ -1,1 +1,1 @@
-@layer vyrnforge.components{[data-vf-combobox-input]{min-block-size:2.5rem;padding:0 var(--vf-space-3);border:1px solid var(--vf-color-border);border-radius:var(--vf-control-radius);background:var(--vf-color-surface);color:inherit}}
+@layer vyrnforge.components{[data-vf-combobox-input]{min-block-size:2.5rem;padding:0 var(--vf-space-md);border:1px solid var(--vf-color-border);border-radius:var(--vf-control-radius);background:var(--vf-color-surface);color:inherit}}
