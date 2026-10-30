@@ -53,12 +53,14 @@ test.describe('enhanced listbox interaction', () => {
     await page.goto(`/components/listbox/${port}.html`);
 
     const before = page.locator('#before');
+    const listbox = page.getByRole('listbox', { name: 'Choose an item' });
     const one = page.locator(`#${port}-one`);
     const disabled = page.locator(`#${port}-disabled`);
     const three = page.locator(`#${port}-three`);
     const banana = page.locator(`#${port}-banana`);
     const multiOne = page.locator(`#${port}-multi-one`);
 
+    await expect(listbox).not.toHaveAttribute('tabindex', '0');
     await expect(one).toHaveAttribute('tabindex', '0');
     await expect(disabled).toHaveAttribute('tabindex', '-1');
     await expect(three).toHaveAttribute('tabindex', '-1');
