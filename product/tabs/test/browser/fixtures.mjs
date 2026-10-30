@@ -1,11 +1,11 @@
 const webTabs = `
 <div id="web-tabs" data-vf-tabs-root data-vf-orientation="horizontal" data-vf-activation="automatic">
   <div role="tablist" aria-label="Account sections" aria-orientation="horizontal" data-vf-tabs-list data-vf-orientation="horizontal">
-    <button id="web-tabs-tab-overview" type="button" role="tab" tabindex="0" aria-selected="true" aria-controls="web-tabs-panel-overview" data-vf-tabs-tab data-vf-value="overview" data-vf-selected>Overview</button>
+    <button id="web-tabs-tab-overview" type="button" role="tab" tabindex="0" aria-selected="true" aria-controls="web-tabs-panel-overview" data-vf-tabs-tab data-vf-value="overview">Overview</button>
     <button id="web-tabs-tab-billing" type="button" role="tab" tabindex="-1" aria-selected="false" aria-disabled="true" disabled aria-controls="web-tabs-panel-billing" data-vf-tabs-tab data-vf-value="billing" data-vf-disabled>Billing</button>
     <button id="web-tabs-tab-security" type="button" role="tab" tabindex="-1" aria-selected="false" aria-controls="web-tabs-panel-security" data-vf-tabs-tab data-vf-value="security">Security</button>
   </div>
-  <div id="web-tabs-panel-overview" role="tabpanel" tabindex="0" aria-labelledby="web-tabs-tab-overview" data-vf-tabs-panel data-vf-selected>Overview panel</div>
+  <div id="web-tabs-panel-overview" role="tabpanel" tabindex="0" aria-labelledby="web-tabs-tab-overview" data-vf-tabs-panel>Overview panel</div>
   <div id="web-tabs-panel-billing" role="tabpanel" tabindex="0" aria-labelledby="web-tabs-tab-billing" data-vf-tabs-panel hidden>Billing panel</div>
   <div id="web-tabs-panel-security" role="tabpanel" tabindex="0" aria-labelledby="web-tabs-tab-security" data-vf-tabs-panel hidden>Security panel</div>
 </div>`;
