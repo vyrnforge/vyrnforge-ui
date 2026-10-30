@@ -58,7 +58,7 @@ function useS(): Ctx {
 export interface SegmentedControlRootProps extends Omit<ComponentPropsWithoutRef<'div'>, 'defaultValue'> {
   value?: string;
   defaultValue?: string;
-  onValueChange?(value: string): void;
+  onValueChange?(v: string): void;
   children?: ReactNode;
 }
 
