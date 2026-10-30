@@ -1,7 +1,25 @@
-import { Directive, ElementRef, computed, inject, input, output, signal } from '@angular/core';
+import {
+  APP_ID,
+  Directive,
+  ElementRef,
+  InjectionToken,
+  computed,
+  inject,
+  input,
+  output,
+  signal,
+} from '@angular/core';
 import { resolveEnabledIndex, type CollectionNavigationIntent } from '@vyrnforge/core/collection-navigation';
 
-let comboboxId = 0;
+const COMBOBOX_ID_GENERATOR = new InjectionToken<() => string>('VyrnForge Combobox ID generator', {
+  providedIn: 'root',
+  factory: () => {
+    const appId = inject(APP_ID);
+    let nextId = 0;
+    return () => `vf-combobox-${appId}-${nextId++}`;
+  },
+});
+
 const optionSelector = '[data-vf-combobox-option]';
 function normalizeFilterText(value: string, locale?: string): string { return locale ? value.toLocaleLowerCase(locale) : value.toLowerCase(); }
 function visibleOptions(root: HTMLElement, query = '', locale?: string): HTMLElement[] {
@@ -13,23 +31,33 @@ function visibleOptions(root: HTMLElement, query = '', locale?: string): HTMLEle
 }
 function disabled(option: HTMLElement): boolean { return option.getAttribute('aria-disabled') === 'true' || option.hasAttribute('disabled'); }
 
-@Directive({ selector: '[vfComboboxRoot]', standalone: true })
+@Directive({
+  selector: '[vfComboboxRoot]',
+  standalone: true,
+  host: {
+    '[attr.id]': 'rootId()',
+    'data-vf-combobox-root': '',
+  },
+})
 export class VfComboboxRootDirective {
+  readonly id = input<string | undefined>(undefined);
   readonly value = input<string | undefined>(undefined);
   readonly defaultValue = input('');
   readonly locale = input<string | undefined>(undefined);
   readonly valueChange = output<string>();
   private readonly internalValue = signal<string | undefined>(undefined);
+  private readonly generatedId = inject(COMBOBOX_ID_GENERATOR)();
+  readonly rootId = computed(() => this.id() ?? this.generatedId);
+  readonly inputId = computed(() => `${this.rootId()}-input`);
+  readonly listboxId = computed(() => `${this.rootId()}-listbox`);
   readonly selected = computed(() => this.value() ?? this.internalValue() ?? this.defaultValue());
   readonly query = signal('');
   readonly open = signal(false);
   readonly activeId = signal<string | null>(null);
-  readonly inputId = `vf-combobox-${++comboboxId}-input`;
-  readonly listboxId = `vf-combobox-${comboboxId}-listbox`;
   private optionIndex = 0;
   private readonly element = inject<ElementRef<HTMLElement>>(ElementRef);
 
-  nextOptionId() { return `${this.listboxId}-option-${++this.optionIndex}`; }
+  nextOptionId() { return `${this.listboxId()}-option-${++this.optionIndex}`; }
   setOpen(value: boolean) { this.open.set(value); if (!value) this.activeId.set(null); }
   setQuery(value: string) { this.query.set(value); this.activeId.set(null); this.setOpen(true); }
   setValue(value: string) {
@@ -69,10 +97,10 @@ export class VfComboboxRootDirective {
     role: 'combobox',
     'aria-autocomplete': 'list',
     'data-vf-combobox-input': '',
-    '[id]': 'root.inputId',
+    '[id]': 'root.inputId()',
     '[value]': 'root.query()',
     '[attr.aria-expanded]': 'root.open()',
-    '[attr.aria-controls]': 'root.listboxId',
+    '[attr.aria-controls]': 'root.listboxId()',
     '[attr.aria-activedescendant]': 'root.activeId()',
     '(input)': 'onInput($event)',
     '(focus)': 'root.setOpen(true)',
@@ -113,8 +141,8 @@ export class VfComboboxInputDirective {
   host: {
     role: 'listbox',
     'data-vf-combobox-content': '',
-    '[id]': 'root.listboxId',
-    '[attr.aria-labelledby]': 'root.inputId',
+    '[id]': 'root.listboxId()',
+    '[attr.aria-labelledby]': 'root.inputId()',
     '[hidden]': '!root.open()',
   },
 })
