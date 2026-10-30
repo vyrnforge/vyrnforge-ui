@@ -23,6 +23,7 @@ function syncTabStops(root: HTMLElement, preferred?: HTMLElement | null) {
   if (activeIndex < 0 || states[activeIndex]?.disabled) activeIndex = options.findIndex((option, index) => !states[index]?.disabled && option.getAttribute('aria-selected') === 'true');
   if (activeIndex < 0) activeIndex = states.findIndex((option) => !option.disabled);
   const resolved = activeIndex < 0 ? null : activeIndex;
+  root.tabIndex = resolved === null ? 0 : -1;
   options.forEach((option, index) => { option.tabIndex = rovingTabIndex(index, resolved, states[index]?.disabled); });
 }
 
@@ -32,7 +33,7 @@ function syncTabStops(root: HTMLElement, preferred?: HTMLElement | null) {
   host: {
     role: 'listbox',
     'data-vf-listbox-root': '',
-    '[attr.tabindex]': 'null',
+    tabindex: '0',
     '[attr.aria-multiselectable]': 'selectionMode()==="multiple"?true:null',
     '(focusin)': 'onFocusIn($event)',
     '(keydown)': 'onKeydown($event)',
@@ -106,7 +107,7 @@ export class VfListboxRootDirective implements OnDestroy {
   standalone: true,
   host: {
     role: 'option',
-    tabindex: '0',
+    tabindex: '-1',
     'data-vf-listbox-option': '',
     '[attr.aria-selected]': 'root.values().includes(value())',
     '[attr.aria-disabled]': 'disabled()||null',
