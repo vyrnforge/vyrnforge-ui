@@ -3,7 +3,6 @@ import { expectNoAxeViolations } from '../../../../../tooling/testing/accessibil
 const port = process.env.VF_COMPONENT_PORT || 'web';
 
 async function expectAxeClean(page) {
-  
   expect((await expectNoAxeViolations(page)).violations).toEqual([]);
 }
 
@@ -18,6 +17,18 @@ test('menu exposes menu-button and item semantics', async ({ page }) => {
     await expect(trigger).toHaveAttribute('aria-expanded', 'false');
   }
   await expectAxeClean(page);
+});
+
+test('public Menu CSS resolves canonical popup surface and item radii in light and dark themes', async ({ page }) => {
+  test.skip(port !== 'web', 'Public CSS resolution evidence is owned by the Web lane.');
+  await page.goto('/components/menu/web.html');
+  const menu = page.locator('#web-menu');
+  const item = page.locator('#web-edit');
+  for (const theme of ['light', 'dark']) {
+    await page.locator('html').evaluate((element, value) => element.setAttribute('data-vf-theme', value), theme);
+    await expect(menu).toHaveCSS('border-radius', '8px');
+    await expect(item).toHaveCSS('border-radius', '6px');
+  }
 });
 
 test.describe('enhanced menu interaction', () => {

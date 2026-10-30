@@ -8,8 +8,18 @@ export const browserFixture = {
     const root = process.cwd();
     const dir = path.join(root, 'dist/browser-fixtures/components/menu');
     await mkdir(dir, { recursive: true });
+    await build({
+      stdin: {
+        contents: '@import "@vyrnforge/web/styles/tokens.css";@import "@vyrnforge/web/styles/menu.css";',
+        resolveDir: root,
+        sourcefile: 'menu-public.css',
+        loader: 'css',
+      },
+      bundle: true,
+      outfile: path.join(dir, 'styles.css'),
+    });
 
-    const page = (body, script = '') => `<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width"><title>Menu fixture</title></head><body><main><h1>Menu browser fixture</h1><button id="before">Before</button>${body}<button id="after">After</button></main>${script}</body></html>`;
+    const page = (body, script = '') => `<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width"><link rel="stylesheet" href="./styles.css"><title>Menu fixture</title></head><body><main><h1>Menu browser fixture</h1><button id="before">Before</button>${body}<button id="after">After</button></main>${script}</body></html>`;
 
     if (port === 'web') {
       const markup = `<button id="web-trigger" type="button" data-vf-menu-trigger aria-haspopup="menu" aria-expanded="true">Actions</button><div id="web-menu" role="menu" tabindex="-1" aria-label="Actions" data-vf-menu-content><button id="web-edit" type="button" role="menuitem" tabindex="-1" data-vf-menu-item>Edit</button><button id="web-locked" type="button" role="menuitem" tabindex="-1" aria-disabled="true" data-vf-menu-item>Locked</button><button id="web-duplicate" type="button" role="menuitem" tabindex="-1" data-vf-menu-item>Duplicate</button><button id="web-archive" type="button" role="menuitem" tabindex="-1" data-vf-menu-item>Archive</button></div>`;

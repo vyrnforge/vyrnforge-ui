@@ -10,7 +10,7 @@ test('menubar moves focus horizontally', async ({ page }) => {
   expect((await expectNoAxeViolations(page)).violations).toEqual([]);
 });
 
-test('public Menubar CSS resolves canonical compact spacing in light and dark themes', async ({ page }) => {
+test('public Menubar CSS resolves canonical compact spacing and geometry in light and dark themes', async ({ page }) => {
   test.skip(port !== 'web', 'Public CSS resolution evidence is owned by the Web lane.');
   await page.goto('/components/menubar/web.html');
   const bar = page.locator('#bar');
@@ -21,7 +21,9 @@ test('public Menubar CSS resolves canonical compact spacing in light and dark th
     await expect(bar).toHaveCSS('gap', '4px');
     await expect(bar).toHaveCSS('padding-top', '4px');
     await expect(bar).toHaveCSS('padding-left', '4px');
+    await expect(bar).toHaveCSS('border-radius', '8px');
     await expect(file).toHaveCSS('padding-left', '8px');
     await expect(file).toHaveCSS('padding-right', '8px');
+    await expect(file).toHaveCSS('border-radius', '6px');
   }
 });
