@@ -26,7 +26,7 @@ function tabValue(element: HTMLElement): string {
 
 function tabDisabled(element: HTMLElement): boolean {
   if (element instanceof HTMLButtonElement && element.disabled) return true;
-  return element.hasAttribute('disabled') || element.hasAttribute('data-vf-disabled') || element.getAttribute('aria-disabled') === 'true';
+  return element.hasAttribute('disabled') || element.getAttribute('aria-disabled') === 'true';
 }
 
 export class VfTabsElement extends HTMLElementBase {
@@ -51,7 +51,7 @@ export class VfTabsElement extends HTMLElementBase {
       subtree: true,
       childList: true,
       attributes: true,
-      attributeFilter: ['disabled', 'data-vf-disabled', 'data-vf-value'],
+      attributeFilter: ['disabled', 'aria-disabled', 'data-vf-value'],
     });
     this.#sync();
   }
@@ -170,7 +170,6 @@ export class VfTabsElement extends HTMLElementBase {
       tab.setAttribute('aria-selected', selected ? 'true' : 'false');
       tab.setAttribute('aria-controls', `${rootId}-panel-${token}`);
       tab.tabIndex = !disabled && focusable ? 0 : -1;
-      tab.toggleAttribute('data-vf-disabled', disabled);
       if (disabled) tab.setAttribute('aria-disabled', 'true');
       else tab.removeAttribute('aria-disabled');
     }
