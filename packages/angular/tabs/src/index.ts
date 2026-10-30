@@ -131,7 +131,6 @@ export class VfTabsListDirective {
     role: 'tab',
     'data-vf-tabs-tab': '',
     '[attr.data-vf-value]': 'value()',
-    '[attr.data-vf-disabled]': 'disabled() ? "" : null',
     '[attr.aria-selected]': 'selected() ? "true" : "false"',
     '[attr.aria-disabled]': 'disabled() ? "true" : null',
     '[attr.aria-controls]': 'root.panelId(value())',
