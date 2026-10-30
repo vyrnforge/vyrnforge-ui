@@ -58,7 +58,7 @@ test.describe('Button real-browser contract', () => {
 
 test.describe('Button framework hydration', () => {
   for (const framework of ['react', 'angular', 'vue']) {
-    test(`${framework} hydrates native-complete Button markup and retains activation`, async ({ page }) => {
+    test(`${framework} preserves native Button busy/disabled semantics through hydration`, async ({ page }) => {
       test.skip(port !== framework, `Running ${port} evidence only`);
       const errors = [];
       page.on('console', (message) => { if (message.type() === 'error') errors.push(message.text()); });
@@ -69,9 +69,25 @@ test.describe('Button framework hydration', () => {
       await expect(button).toBeEnabled();
       await button.click();
       await expect(page.locator('body')).toHaveAttribute('data-activated', 'true');
+
+      const consumerBusy = page.locator(`#${framework}-consumer-busy`);
+      await expect(consumerBusy).toHaveAttribute('aria-busy', 'false');
+      await expect(consumerBusy).not.toHaveAttribute('data-vf-loading', '');
+      await expect(consumerBusy).toBeEnabled();
+
+      const disabled = page.locator(`#${framework}-disabled`);
+      await expect(disabled).toBeDisabled();
+      await expect(disabled).not.toHaveAttribute('aria-disabled', 'true');
+      await disabled.evaluate((element) => element.click());
+      await expect(page.locator('body')).not.toHaveAttribute('data-disabled-activated', 'true');
+
       expect(errors.filter((error) => /hydration|mismatch/i.test(error))).toEqual([]);
 
-        const results = await new AxeBuilder({ page }).include(`#${framework}-button`).analyze();
+      const results = await new AxeBuilder({ page })
+        .include(`#${framework}-button`)
+        .include(`#${framework}-consumer-busy`)
+        .include(`#${framework}-disabled`)
+        .analyze();
       expect(results.violations).toEqual([]);
     });
   }

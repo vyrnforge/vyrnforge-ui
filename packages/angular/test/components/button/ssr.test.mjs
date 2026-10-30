@@ -11,10 +11,10 @@ Component({
   selector: 'vf-button-ssr-test',
   standalone: true,
   imports: [VfButtonDirective],
-  template: '<button vfButton loading name="save" value="yes">Save</button>'
+  template: '<button vfButton loading aria-busy="false" name="save" value="yes">Save</button><button vfButton aria-busy="false" id="consumer-busy">Status</button>'
 })(AppComponent);
 
-test('Angular Button server output keeps a native form-participating button', async () => {
+test('Angular Button server output keeps native form participation and busy-state ownership', async () => {
   const html = await renderApplication(
     (context) => bootstrapApplication(AppComponent, { providers: [provideZonelessChangeDetection()] }, context),
     { document: '<!doctype html><html><body><vf-button-ssr-test></vf-button-ssr-test></body></html>' }
@@ -24,4 +24,9 @@ test('Angular Button server output keeps a native form-participating button', as
   assert.match(html, /aria-busy="true"/);
   assert.match(html, /name="save"/);
   assert.doesNotMatch(html, /<button[^>]*disabled/);
+
+  const consumerBusyButton = html.match(/<button\b[^>]*\bid="consumer-busy"[^>]*>/)?.[0];
+  assert.ok(consumerBusyButton);
+  assert.match(consumerBusyButton, /aria-busy="false"/);
+  assert.doesNotMatch(consumerBusyButton, /data-vf-loading/);
 });
