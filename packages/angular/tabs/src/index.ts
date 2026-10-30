@@ -1,6 +1,8 @@
 import {
+  APP_ID,
   Directive,
   ElementRef,
+  InjectionToken,
   booleanAttribute,
   computed,
   effect,
@@ -14,6 +16,15 @@ import { resolveEnabledIndex, type CollectionNavigationIntent } from '@vyrnforge
 export type TabsOrientation = 'horizontal' | 'vertical';
 export type TabsActivation = 'automatic' | 'manual';
 
+const TABS_ID_GENERATOR = new InjectionToken<() => string>('VyrnForge Tabs ID generator', {
+  providedIn: 'root',
+  factory: () => {
+    const appId = inject(APP_ID);
+    let nextId = 0;
+    return () => `vf-tabs-${appId}-${nextId++}`;
+  },
+});
+
 function valueToken(value: string): string {
   return encodeURIComponent(value).replaceAll('%', '_');
 }
@@ -22,7 +33,7 @@ function valueToken(value: string): string {
   selector: '[vfTabsRoot]',
   standalone: true,
   host: {
-    '[attr.id]': 'id()',
+    '[attr.id]': 'rootId()',
     '[attr.dir]': 'dir()',
     'data-vf-tabs-root': '',
     '[attr.data-vf-orientation]': 'orientation()',
@@ -30,7 +41,7 @@ function valueToken(value: string): string {
   },
 })
 export class VfTabsRootDirective {
-  readonly id = input.required<string>();
+  readonly id = input<string | undefined>(undefined);
   readonly value = input<string | undefined>(undefined);
   readonly defaultValue = input('');
   readonly orientation = input<TabsOrientation>('horizontal');
@@ -38,7 +49,9 @@ export class VfTabsRootDirective {
   readonly dir = input<'ltr' | 'rtl'>('ltr');
   readonly valueChange = output<string>();
 
+  private readonly generatedId = inject(TABS_ID_GENERATOR)();
   private readonly internalValue = signal('');
+  readonly rootId = computed(() => this.id() ?? this.generatedId);
   readonly focusValue = signal('');
   readonly selectedValue = computed(() => this.value() ?? (this.internalValue() || this.defaultValue()));
 
@@ -54,11 +67,11 @@ export class VfTabsRootDirective {
   }
 
   tabId(value: string): string {
-    return `${this.id()}-tab-${valueToken(value)}`;
+    return `${this.rootId()}-tab-${valueToken(value)}`;
   }
 
   panelId(value: string): string {
-    return `${this.id()}-panel-${valueToken(value)}`;
+    return `${this.rootId()}-panel-${valueToken(value)}`;
   }
 }
 
