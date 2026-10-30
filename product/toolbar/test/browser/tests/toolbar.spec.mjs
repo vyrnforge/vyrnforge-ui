@@ -25,7 +25,7 @@ test('Web surface preserves static toolbar semantics and shared styling', async 
   expect(errors).toEqual([]);
 });
 
-test('public Toolbar CSS resolves canonical spacing in light and dark themes', async ({ page }) => {
+test('public Toolbar CSS resolves canonical spacing and control radius in light and dark themes', async ({ page }) => {
   test.skip(runtimePort, 'Public CSS resolution evidence is owned by the Web lane.');
   await openFixture(page);
   const toolbar = page.locator('#toolbar');
@@ -35,6 +35,7 @@ test('public Toolbar CSS resolves canonical spacing in light and dark themes', a
     await expect(toolbar).toHaveCSS('gap', '4px');
     await expect(item).toHaveCSS('padding-left', '8px');
     await expect(item).toHaveCSS('padding-right', '8px');
+    await expect(item).toHaveCSS('border-radius', '6px');
   }
 });
 

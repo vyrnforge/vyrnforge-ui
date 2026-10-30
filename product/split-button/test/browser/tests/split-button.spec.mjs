@@ -25,7 +25,7 @@ test('split button keeps primary action independent', async ({ page }) => {
   expect((await expectNoAxeViolations(page)).violations).toEqual([]);
 });
 
-test('public SplitButton CSS resolves canonical accent and border colors in light and dark themes', async ({ page }) => {
+test('public SplitButton CSS resolves canonical accent, border, and control radius in light and dark themes', async ({ page }) => {
   test.skip(port !== 'web', 'Public CSS resolution evidence is owned by the Web lane.');
   await page.goto('/components/split-button/web.html');
   const action = page.locator('#action');
@@ -38,5 +38,9 @@ test('public SplitButton CSS resolves canonical accent and border colors in ligh
       await expect(control).toHaveCSS('color', expected.foreground);
       await expect(control).toHaveCSS('border-top-color', expected.border);
     }
+    await expect(action).toHaveCSS('border-top-left-radius', '6px');
+    await expect(action).toHaveCSS('border-top-right-radius', '0px');
+    await expect(trigger).toHaveCSS('border-top-left-radius', '0px');
+    await expect(trigger).toHaveCSS('border-top-right-radius', '6px');
   }
 });
