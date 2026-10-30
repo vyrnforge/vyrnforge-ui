@@ -1871,7 +1871,11 @@ export class VfOtpFieldInputDirective {
     // (undocumented)
     readonly index: InputSignal<number>;
     // (undocumented)
-    onInput(e: Event): void;
+    onInput(event: Event): void;
+    // (undocumented)
+    onKeyDown(event: KeyboardEvent): void;
+    // (undocumented)
+    onPaste(event: ClipboardEvent): void;
     // (undocumented)
     readonly root: VfOtpFieldRootDirective;
     // (undocumented)
@@ -1889,13 +1893,15 @@ export class VfOtpFieldInputDirective {
 // @public (undocumented)
 export class VfOtpFieldRootDirective {
     // (undocumented)
+    charAt(index: number): string;
+    // (undocumented)
     current(): string;
     // (undocumented)
     readonly defaultValue: InputSignal<string>;
     // (undocumented)
     readonly length: InputSignal<number>;
     // (undocumented)
-    setAt(i: number, c: string): void;
+    setFrom(index: number, raw: string): number;
     // (undocumented)
     readonly value: InputSignal<string | undefined>;
     // (undocumented)
@@ -1978,9 +1984,11 @@ export class VfPasswordFieldInputDirective {
 // @public (undocumented)
 export class VfPasswordFieldRootDirective {
     // (undocumented)
+    toggle(): void;
+    // (undocumented)
     readonly visible: WritableSignal<boolean>;
     // (undocumented)
-    static ɵdir: i0.ɵɵDirectiveDeclaration<VfPasswordFieldRootDirective, "[vfPasswordFieldRoot]", never, {}, {}, never, never, true, never>;
+    static ɵdir: i0.ɵɵDirectiveDeclaration<VfPasswordFieldRootDirective, "[vfPasswordFieldRoot]", ["vfPasswordFieldRoot"], {}, {}, never, never, true, never>;
     // (undocumented)
     static ɵfac: i0.ɵɵFactoryDeclaration<VfPasswordFieldRootDirective, never>;
 }
@@ -1989,9 +1997,26 @@ export class VfPasswordFieldRootDirective {
 export class VfPasswordFieldToggleDirective {
     constructor(root: VfPasswordFieldRootDirective);
     // (undocumented)
+    readonly hideLabel: InputSignal<string>;
+    // (undocumented)
     readonly root: VfPasswordFieldRootDirective;
     // (undocumented)
-    static ɵdir: i0.ɵɵDirectiveDeclaration<VfPasswordFieldToggleDirective, "button[vfPasswordFieldToggle]", never, {}, {}, never, never, true, never>;
+    readonly showLabel: InputSignal<string>;
+    // (undocumented)
+    readonly stateLabel: Signal<string>;
+    // (undocumented)
+    static ɵdir: i0.ɵɵDirectiveDeclaration<VfPasswordFieldToggleDirective, "button[vfPasswordFieldToggle]", never, {
+        "showLabel": {
+            "alias": "showLabel";
+            "required": true;
+            "isSignal": true;
+        };
+        "hideLabel": {
+            "alias": "hideLabel";
+            "required": true;
+            "isSignal": true;
+        };
+    }, {}, never, never, true, never>;
     // (undocumented)
     static ɵfac: i0.ɵɵFactoryDeclaration<VfPasswordFieldToggleDirective, never>;
 }

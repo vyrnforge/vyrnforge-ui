@@ -2562,7 +2562,7 @@ export interface OTPFieldRootProps extends ComponentPropsWithoutRef<'div'> {
     // (undocumented)
     length?: number;
     // (undocumented)
-    onValueChange?(v: string): void;
+    onValueChange?(value: string): void;
     // (undocumented)
     value?: string;
 }
@@ -2603,7 +2603,15 @@ export interface PasswordFieldRootProps extends ComponentPropsWithoutRef<'div'> 
 }
 
 // @public (undocumented)
-export const PasswordFieldToggle: ForwardRefExoticComponent<Omit<DetailedHTMLProps<ButtonHTMLAttributes<HTMLButtonElement>, HTMLButtonElement>, "ref"> & RefAttributes<HTMLButtonElement>>;
+export const PasswordFieldToggle: ForwardRefExoticComponent<PasswordFieldToggleProps & RefAttributes<HTMLButtonElement>>;
+
+// @public (undocumented)
+export interface PasswordFieldToggleProps extends ComponentPropsWithoutRef<'button'> {
+    // (undocumented)
+    hideLabel: string;
+    // (undocumented)
+    showLabel: string;
+}
 
 // @public (undocumented)
 export const PopoverContent: ForwardRefExoticComponent<PopoverContentProps & RefAttributes<HTMLDivElement>>;
