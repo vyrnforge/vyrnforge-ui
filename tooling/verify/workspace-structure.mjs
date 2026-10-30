@@ -1,15 +1,15 @@
 import { access, readFile, readdir } from 'node:fs/promises';
 import path from 'node:path';
+import { readPnpmWorkspacePaths } from '../workspaces.mjs';
 
 const expectedWorkspaces = ['packages/core', 'packages/web', 'packages/icons', 'packages/react', 'packages/angular', 'packages/vue', 'packages/elements'];
 const repositoryRoots = ['apps', 'documentation', 'packages', 'product', 'tooling'];
 const forbiddenToolingCapabilityNames = new Set(['common', 'misc', 'scripts', 'utils']);
 const capabilityNamePattern = /^[a-z][a-z0-9-]*$/;
 const packageJson = JSON.parse(await readFile(new URL('../../package.json', import.meta.url), 'utf8'));
-const pnpmWorkspace = await readFile(new URL('../../pnpm-workspace.yaml', import.meta.url), 'utf8');
+const workspaceEntries = await readPnpmWorkspacePaths(new URL('../../pnpm-workspace.yaml', import.meta.url));
 const toolingPackageJson = JSON.parse(await readFile(new URL('../package.json', import.meta.url), 'utf8'));
 
-const workspaceEntries = [...pnpmWorkspace.matchAll(/^\s*-\s+(packages\/[^\s]+)\s*$/gm)].map((match) => match[1]);
 if (JSON.stringify(workspaceEntries) !== JSON.stringify(expectedWorkspaces)) {
   throw new Error(`pnpm workspace must contain exactly the public packages: ${expectedWorkspaces.join(', ')}`);
 }
