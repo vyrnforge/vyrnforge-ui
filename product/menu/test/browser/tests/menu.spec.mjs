@@ -19,7 +19,7 @@ test('menu exposes menu-button and item semantics', async ({ page }) => {
   await expectAxeClean(page);
 });
 
-test('public Menu CSS resolves canonical popup surface, boundaries, and item radii in light and dark themes', async ({ page }) => {
+test('public Menu CSS resolves canonical popup surface, boundaries, and item radii in light, dark, and forced-colors modes', async ({ page }) => {
   test.skip(port !== 'web', 'Public CSS resolution evidence is owned by the Web lane.');
   await page.goto('/components/menu/web.html');
   const menu = page.locator('#web-menu');
@@ -45,6 +45,10 @@ test('public Menu CSS resolves canonical popup surface, boundaries, and item rad
     await expect(menu).toHaveCSS('border-radius', '8px');
     await expect(item).toHaveCSS('border-radius', '6px');
   }
+
+  await page.emulateMedia({ forcedColors: 'active' });
+  await expect(menu).toHaveCSS('border-top-width', '1px');
+  await expect(separator).toHaveCSS('height', '1px');
 });
 
 test.describe('enhanced menu interaction', () => {
