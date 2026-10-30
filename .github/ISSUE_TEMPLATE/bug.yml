@@ -13,13 +13,13 @@ body:
       options:
         - Core
         - Web / styling
+        - Icons
         - React
         - Angular
         - Vue
         - Elements
         - Documentation
         - Testing / CI / tooling
-        - Legacy quarantine
     validations:
       required: true
   - type: input

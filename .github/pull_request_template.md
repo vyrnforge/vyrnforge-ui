@@ -6,13 +6,13 @@ What reusable VyrnForge problem does this change solve, and which canonical cont
 
 - [ ] Core
 - [ ] Web / CSS / tokens
+- [ ] Icons
 - [ ] React
 - [ ] Angular
 - [ ] Vue
 - [ ] Elements
 - [ ] Documentation
 - [ ] Testing / CI / tooling
-- [ ] Legacy quarantine only
 
 ## Contract and architecture
 
@@ -39,4 +39,4 @@ CI derives required evidence from the product and validation dependency graphs. 
 
 ## Notes
 
-List intentional deferrals, compatibility decisions, reviewer context, or follow-up work. `packages/legacy` is historical evidence only and must not become a dependency or source of truth.
+List intentional deferrals, compatibility decisions, reviewer context, or follow-up work. Retired implementations in Git history are provenance only and must not become dependencies or architectural sources of truth.

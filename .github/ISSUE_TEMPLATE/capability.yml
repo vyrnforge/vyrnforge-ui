@@ -5,7 +5,7 @@ body:
   - type: markdown
     attributes:
       value: |
-        Proposals are evaluated against canonical VyrnForge architecture first. Existing abstractions are not preserved merely for compatibility with the quarantined implementation.
+        Proposals are evaluated against canonical VyrnForge architecture first. Existing abstractions are not preserved merely because they existed in a retired implementation.
   - type: input
     id: capability
     attributes:
@@ -35,6 +35,7 @@ body:
         - label: Semantic/component contract
         - label: Core renderer-neutral logic
         - label: Web CSS/tokens/browser foundation
+        - label: Icons
         - label: React port
         - label: Angular port
         - label: Vue port
