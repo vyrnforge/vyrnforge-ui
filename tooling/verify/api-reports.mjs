@@ -8,6 +8,24 @@ const packageNames = ['core', 'web', 'icons', 'react', 'angular', 'vue', 'elemen
 const localBuild = process.argv.includes('--local');
 let failed = false;
 
+function reportFirstDifference(name, packageRoot) {
+  const expectedPath = path.join(packageRoot, 'etc', `${name}.api.md`);
+  const actualPath = path.join(packageRoot, 'temp', `${name}.api.md`);
+  const expected = readFileSync(expectedPath, 'utf8').split(/\r?\n/);
+  const actual = readFileSync(actualPath, 'utf8').split(/\r?\n/);
+  const length = Math.max(expected.length, actual.length);
+  let index = 0;
+  while (index < length && expected[index] === actual[index]) index += 1;
+  if (index >= length) return;
+  const start = Math.max(0, index - 3);
+  const end = Math.min(length, index + 4);
+  console.error(`API report first difference for ${name} at line ${index + 1}:`);
+  for (let line = start; line < end; line += 1) {
+    console.error(`  ${line + 1} expected: ${expected[line] ?? '<missing>'}`);
+    console.error(`  ${line + 1} actual:   ${actual[line] ?? '<missing>'}`);
+  }
+}
+
 for (const name of packageNames) {
   const packageRoot = path.join(root, 'packages', name);
   const manifest = JSON.parse(readFileSync(path.join(packageRoot, 'package.json'), 'utf8'));
@@ -45,6 +63,8 @@ for (const name of packageNames) {
     localBuild,
     showVerboseMessages: false,
   });
+
+  if (!localBuild && result.apiReportChanged) reportFirstDifference(name, packageRoot);
 
   // API Extractor reports `succeeded: false` when warnings are emitted. Warnings
   // remain visible for follow-up cleanup, but the contract gate should fail only
