@@ -175,7 +175,8 @@ test('ordinary rerender and callback identity changes do not restart the timer d
   await page.locator('#timer-open').click();
   await flushScheduledRender(page);
   await page.clock.fastForward(250);
-  await page.locator('#timer-rerender').click();
+  // The fixture intentionally renders many simultaneous toasts; bypass pointer actionability so geometry cannot consume fake-clock time.
+  await page.evaluate(() => document.querySelector('#timer-rerender').click());
   await flushScheduledRender(page);
   await page.clock.fastForward(500);
   expect(await requests(page, 'timerRequests')).toBe(0);
