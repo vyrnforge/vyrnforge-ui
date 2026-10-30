@@ -10,10 +10,13 @@ test.describe('Tabs Web semantic and styling contract', () => {
     await page.goto('/components/tabs/web.html');
     const root = page.locator('#web-tabs');
     const selected = page.locator('#web-tabs-tab-overview');
+    const disabled = page.locator('#web-tabs-tab-billing');
     await expect(selected).toHaveAttribute('aria-selected', 'true');
     await expect(selected).not.toHaveAttribute('data-vf-selected', '');
     await expect(page.locator('#web-tabs-panel-overview')).not.toHaveAttribute('data-vf-selected', '');
-    await expect(page.locator('#web-tabs-tab-billing')).toBeDisabled();
+    await expect(disabled).toBeDisabled();
+    await expect(disabled).toHaveAttribute('aria-disabled', 'true');
+    await expect(disabled).not.toHaveAttribute('data-vf-disabled', '');
     await selected.focus();
     expect(await selected.evaluate((element) => getComputedStyle(element).outlineStyle)).not.toBe('none');
     await expect(root).toHaveScreenshot('tabs-focus-visible.png');
@@ -50,6 +53,8 @@ test.describe('Tabs port interaction and client activation', () => {
       await expect(overview).not.toHaveAttribute('data-vf-selected', '');
       await expect(page.locator(`#${framework}-tabs-panel-overview`)).not.toHaveAttribute('data-vf-selected', '');
       await expect(billing).toBeDisabled();
+      await expect(billing).toHaveAttribute('aria-disabled', 'true');
+      await expect(billing).not.toHaveAttribute('data-vf-disabled', '');
 
       await overview.focus();
       await page.keyboard.press('ArrowLeft');
@@ -88,6 +93,8 @@ test.describe('Tabs port interaction and client activation', () => {
       await expect(overview).toHaveAttribute('aria-selected', 'true');
       await expect(overview).not.toHaveAttribute('data-vf-selected', '');
       await expect(billing).toBeDisabled();
+      await expect(billing).toHaveAttribute('aria-disabled', 'true');
+      await expect(billing).not.toHaveAttribute('data-vf-disabled', '');
 
       await overview.focus();
       await page.keyboard.press('ArrowDown');
