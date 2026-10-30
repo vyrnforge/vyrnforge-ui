@@ -170,7 +170,6 @@ export class VfTabsElement extends HTMLElementBase {
       tab.setAttribute('aria-selected', selected ? 'true' : 'false');
       tab.setAttribute('aria-controls', `${rootId}-panel-${token}`);
       tab.tabIndex = !disabled && focusable ? 0 : -1;
-      tab.toggleAttribute('data-vf-selected', selected);
       tab.toggleAttribute('data-vf-disabled', disabled);
       if (disabled) tab.setAttribute('aria-disabled', 'true');
       else tab.removeAttribute('aria-disabled');
@@ -185,7 +184,6 @@ export class VfTabsElement extends HTMLElementBase {
       panel.setAttribute('aria-labelledby', `${rootId}-tab-${token}`);
       panel.tabIndex = 0;
       panel.hidden = !selected;
-      panel.toggleAttribute('data-vf-selected', selected);
     }
   }
 
