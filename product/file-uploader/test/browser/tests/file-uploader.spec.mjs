@@ -19,20 +19,21 @@ test('file uploader exposes selected files accessibly', async ({ page }) => {
   expect((await expectNoAxeViolations(page)).violations).toEqual([]);
 });
 
-test('public FileUploader CSS resolves the canonical focus ring in light and dark themes', async ({ page }) => {
+test('public FileUploader CSS resolves the canonical subtle surface and focus ring in light and dark themes', async ({ page }) => {
   test.skip(port !== 'web', 'Public CSS resolution evidence is owned by the Web lane.');
   await page.goto('/components/file-uploader/web.html');
   const dropzone = page.locator('#dropzone');
-  const focusRingByTheme = {
-    light: 'rgb(47, 111, 237)',
-    dark: 'rgb(141, 180, 255)',
+  const expectedByTheme = {
+    light: { background: 'rgb(250, 250, 250)', focus: 'rgb(47, 111, 237)' },
+    dark: { background: 'rgb(9, 9, 11)', focus: 'rgb(141, 180, 255)' },
   };
 
-  for (const theme of ['light', 'dark']) {
+  for (const [theme, expected] of Object.entries(expectedByTheme)) {
     await page.locator('html').evaluate((element, value) => element.setAttribute('data-vf-theme', value), theme);
+    await expect(dropzone).toHaveCSS('background-color', expected.background);
     await dropzone.focus();
     await expect(dropzone).toHaveCSS('outline-width', '2px');
-    await expect(dropzone).toHaveCSS('outline-color', focusRingByTheme[theme]);
+    await expect(dropzone).toHaveCSS('outline-color', expected.focus);
   }
 });
 

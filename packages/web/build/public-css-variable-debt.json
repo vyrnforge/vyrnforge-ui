@@ -1,6 +1,5 @@
 [
   "packages/web/src/components/combobox/combobox.css: --vf-space-3",
-  "packages/web/src/components/file-uploader/file-uploader.css: --vf-color-surface-muted",
   "packages/web/src/components/file-uploader/file-uploader.css: --vf-space-3",
   "packages/web/src/components/file-uploader/file-uploader.css: --vf-space-4",
   "packages/web/src/components/listbox/listbox.css: --vf-space-3",
