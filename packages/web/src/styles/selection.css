@@ -14,6 +14,14 @@
   }
 
   :where(
+    [data-vf-select-content][hidden],
+    [data-vf-combobox-content][hidden],
+    [data-vf-multi-select-content][hidden]
+  ) {
+    display: none;
+  }
+
+  :where(
     [data-vf-listbox-option],
     [data-vf-select-option],
     [data-vf-combobox-option],
