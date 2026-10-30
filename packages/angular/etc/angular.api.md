@@ -760,9 +760,11 @@ export class VfComboboxRootDirective {
     // (undocumented)
     focusInput(): void;
     // (undocumented)
-    readonly inputId: string;
+    readonly id: InputSignal<string | undefined>;
     // (undocumented)
-    readonly listboxId: string;
+    readonly inputId: Signal<string>;
+    // (undocumented)
+    readonly listboxId: Signal<string>;
     // (undocumented)
     readonly locale: InputSignal<string | undefined>;
     // (undocumented)
@@ -773,6 +775,8 @@ export class VfComboboxRootDirective {
     readonly open: WritableSignal<boolean>;
     // (undocumented)
     readonly query: WritableSignal<string>;
+    // (undocumented)
+    readonly rootId: Signal<string>;
     // (undocumented)
     readonly selected: Signal<string>;
     // (undocumented)
@@ -787,6 +791,11 @@ export class VfComboboxRootDirective {
     readonly valueChange: OutputEmitterRef<string>;
     // (undocumented)
     static ɵdir: i0.ɵɵDirectiveDeclaration<VfComboboxRootDirective, "[vfComboboxRoot]", never, {
+        "id": {
+            "alias": "id";
+            "required": false;
+            "isSignal": true;
+        };
         "value": {
             "alias": "value";
             "required": false;

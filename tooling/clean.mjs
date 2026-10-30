@@ -1,15 +1,19 @@
-import { readFile, rm } from 'node:fs/promises';
+import { rm } from 'node:fs/promises';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
+import { readPnpmWorkspacePaths } from './workspaces.mjs';
 
-const root = path.resolve(fileURLToPath(new URL('../', import.meta.url)));
-const manifest = JSON.parse(await readFile(path.join(root, 'package.json'), 'utf8'));
+const repositoryRoot = path.resolve(fileURLToPath(new URL('../', import.meta.url)));
 
-await rm(path.join(root, 'dist'), { recursive: true, force: true });
+export async function cleanRepository(root = repositoryRoot) {
+  const workspaces = await readPnpmWorkspacePaths(path.join(root, 'pnpm-workspace.yaml'));
 
-for (const workspace of manifest.workspaces ?? []) {
-  if (typeof workspace !== 'string' || workspace.includes('*')) {
-    throw new Error(`Repository clean requires explicit workspace paths, found ${JSON.stringify(workspace)}`);
+  await rm(path.join(root, 'dist'), { recursive: true, force: true });
+  for (const workspace of workspaces) {
+    await rm(path.join(root, workspace, 'dist'), { recursive: true, force: true });
   }
-  await rm(path.join(root, workspace, 'dist'), { recursive: true, force: true });
+}
+
+if (process.argv[1] && path.resolve(process.argv[1]) === fileURLToPath(import.meta.url)) {
+  await cleanRepository();
 }
