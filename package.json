@@ -19,7 +19,7 @@
     "test:unit": "nx run-many -t test",
     "test:browser": "playwright test --project=chromium",
     "test:browser:cross": "playwright test",
-    "check": "pnpm format:check && nx run-many -t lint,typecheck,test,build && pnpm verify:structure && pnpm verify:testing-structure && pnpm verify:boundaries && pnpm verify:architecture && pnpm verify:impact && pnpm verify:workflows",
+    "check": "pnpm format:check && nx run-many -t lint,typecheck,test,build && pnpm verify:structure && pnpm verify:testing-structure && pnpm verify:boundaries && pnpm verify:architecture && pnpm verify:impact && pnpm verify:package-contracts && pnpm verify:compatibility && pnpm verify:workflows",
     "check:full": "pnpm check",
     "check:changed": "node tooling/impact/plan.mjs --mode local && nx affected -t lint,typecheck,test,build",
     "verify:structure": "node tooling/verify/workspace-structure.mjs",
@@ -37,8 +37,7 @@
     "impact:plan": "node tooling/impact/plan.mjs --mode local",
     "changeset": "changeset",
     "changeset:status": "node tooling/release/verify-status.mjs",
-    "release:version": "changeset version",
-    "release": "pnpm verify:release && pnpm verify:packages && changeset publish"
+    "release:version": "changeset version"
   },
   "devDependencies": {
     "@angular/common":"22.2.3","@angular/compiler":"22.2.3","@angular/compiler-cli":"22.2.3","@angular/core":"22.2.3","@angular/platform-browser":"22.2.3","@angular/platform-server":"22.2.3","@playwright/test":"1.64.1","@types/react":"19.3.0","@types/react-dom":"19.3.0","@vue/server-renderer":"3.5.44","axe-core":"4.14.0","esbuild":"0.28.2","eslint":"10.13.0","react":"19.3.0","react-dom":"19.3.0","rxjs":"7.8.2","stylelint":"17.16.0","typescript":"6.0.3","typescript-eslint":"8.71.2","vue":"3.5.44","@arethetypeswrong/cli":"0.18.5","@axe-core/playwright":"4.14.0","@changesets/cli":"3.0.3","@microsoft/api-extractor":"7.59.4","cross-env":"10.1.0","ng-packagr":"22.2.5","nx":"24.0.2","prettier":"3.9.0","publint":"0.3.25","vitest":"5.0.5","@vyrnforge/core":"workspace:*","@vyrnforge/web":"workspace:*","@vyrnforge/icons":"workspace:*","@vyrnforge/react":"workspace:*","@vyrnforge/angular":"workspace:*","@vyrnforge/vue":"workspace:*","@vyrnforge/elements":"workspace:*"

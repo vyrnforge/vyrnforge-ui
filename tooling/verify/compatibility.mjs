@@ -13,7 +13,7 @@ const frameworkFields = new Map([
 
 if (support.schemaVersion !== 2) throw new Error('compatibility metadata schemaVersion must be 2');
 if (support.status !== baselineStatus) throw new Error(`compatibility metadata status must be ${baselineStatus}`);
-if (support.runtime?.node !== root.engines.node || support.runtime?.npm !== root.engines.npm) {
+if (support.runtime?.node !== root.engines.node || support.runtime?.pnpm !== root.engines.pnpm) {
   throw new Error('root engines and compatibility runtime metadata must match');
 }
 if (support.authoring?.typescriptPinned !== root.devDependencies.typescript) {
