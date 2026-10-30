@@ -16,7 +16,6 @@
   "packages/web/src/components/select/select.css: --vf-space-3",
   "packages/web/src/components/split-button/split-button.css: --vf-space-3",
   "packages/web/src/components/split-panel/split-panel.css: --vf-color-border-muted",
-  "packages/web/src/components/tag-group/tag-group.css: --vf-color-surface-muted",
   "packages/web/src/components/toast/toast.css: --vf-color-surface-raised",
   "packages/web/src/components/toast/toast.css: --vf-shadow-popover",
   "packages/web/src/components/toast/toast.css: --vf-space-1",
