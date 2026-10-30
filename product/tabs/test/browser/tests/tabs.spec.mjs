@@ -11,6 +11,8 @@ test.describe('Tabs Web semantic and styling contract', () => {
     const root = page.locator('#web-tabs');
     const selected = page.locator('#web-tabs-tab-overview');
     await expect(selected).toHaveAttribute('aria-selected', 'true');
+    await expect(selected).not.toHaveAttribute('data-vf-selected', '');
+    await expect(page.locator('#web-tabs-panel-overview')).not.toHaveAttribute('data-vf-selected', '');
     await expect(page.locator('#web-tabs-tab-billing')).toBeDisabled();
     await selected.focus();
     expect(await selected.evaluate((element) => getComputedStyle(element).outlineStyle)).not.toBe('none');
@@ -45,12 +47,15 @@ test.describe('Tabs port interaction and client activation', () => {
       await expect(root).toHaveAttribute('data-vf-tabs-root', '');
       await expect(root).toHaveAttribute('dir', 'rtl');
       await expect(overview).toHaveAttribute('aria-selected', 'true');
+      await expect(overview).not.toHaveAttribute('data-vf-selected', '');
+      await expect(page.locator(`#${framework}-tabs-panel-overview`)).not.toHaveAttribute('data-vf-selected', '');
       await expect(billing).toBeDisabled();
 
       await overview.focus();
       await page.keyboard.press('ArrowLeft');
       await expect(security).toBeFocused();
       await expect(security).toHaveAttribute('aria-selected', 'true');
+      await expect(security).not.toHaveAttribute('data-vf-selected', '');
       await expect(page.locator(`#${framework}-tabs-panel-security`)).toBeVisible();
       await expect(page.locator('body')).toHaveAttribute('data-value', 'security');
 
@@ -81,6 +86,7 @@ test.describe('Tabs port interaction and client activation', () => {
       await expect(root).toHaveAttribute('data-vf-activation', 'manual');
       await expect(root.locator('[role="tablist"]')).toHaveAttribute('aria-orientation', 'vertical');
       await expect(overview).toHaveAttribute('aria-selected', 'true');
+      await expect(overview).not.toHaveAttribute('data-vf-selected', '');
       await expect(billing).toBeDisabled();
 
       await overview.focus();
@@ -93,6 +99,7 @@ test.describe('Tabs port interaction and client activation', () => {
 
       await page.keyboard.press('Enter');
       await expect(security).toHaveAttribute('aria-selected', 'true');
+      await expect(security).not.toHaveAttribute('data-vf-selected', '');
       await expect(page.locator(`#${framework}-manual-tabs-panel-security`)).toBeVisible();
       await expect(page.locator('body')).toHaveAttribute('data-manual-value', 'security');
 
