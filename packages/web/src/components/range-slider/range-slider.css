@@ -1,1 +1,1 @@
-@layer vyrnforge.components{[data-vf-range-slider-root]{display:grid;gap:var(--vf-space-sm);min-inline-size:12rem}[data-vf-range-slider-root] input[type='range']{inline-size:100%;accent-color:var(--vf-color-accent)}}
+@layer vyrnforge.components{[data-vf-range-slider-root]{display:grid;gap:var(--vf-space-sm);min-inline-size:12rem}[data-vf-range-slider-root] input[type='range']{inline-size:100%;accent-color:var(--vf-color-accent-background)}}
