@@ -2,7 +2,7 @@
 
 VyrnForge security reports should be submitted privately. Do not publish potential vulnerabilities in issues, pull requests, discussions, or other public channels.
 
-VyrnForge is currently in rebuild bootstrap. The active package architecture is `@vyrnforge/core`, `@vyrnforge/web`, `@vyrnforge/react`, `@vyrnforge/angular`, `@vyrnforge/vue`, and `@vyrnforge/elements`. These packages remain unreleased bootstrap surfaces unless the release process explicitly states otherwise.
+VyrnForge is currently in rebuild bootstrap. The active package architecture is `@vyrnforge/core`, `@vyrnforge/web`, `@vyrnforge/icons`, `@vyrnforge/react`, `@vyrnforge/angular`, `@vyrnforge/vue`, and `@vyrnforge/elements`. These packages remain unreleased private-rebuild surfaces unless the release process explicitly states otherwise.
 
 ## Supported versions
 
@@ -18,7 +18,7 @@ Do not include real credentials, customer data, private keys, access tokens, or 
 
 Potential VyrnForge-specific security impact may include active package code and public entrypoints, browser/runtime behavior, package and release configuration, documentation tooling that creates a real security issue, or repository automation that affects distributed artifacts.
 
-`packages/legacy` is quarantined historical reference and is not a supported runtime surface. Findings that only affect quarantined code are normally not release vulnerabilities unless the same issue exists in the rebuilt implementation or active tooling.
+Retired implementations available only through Git history are not supported runtime surfaces. A historical defect is relevant only when the same issue affects the current rebuild implementation, active tooling, or release/documentation infrastructure.
 
 Third-party dependency findings should demonstrate that the dependency is present and that the vulnerable path affects an active VyrnForge artifact or development/release workflow.
 

@@ -2727,11 +2727,13 @@ export class VfTabsRootDirective {
     // (undocumented)
     readonly focusValue: WritableSignal<string>;
     // (undocumented)
-    readonly id: InputSignal<string>;
+    readonly id: InputSignal<string | undefined>;
     // (undocumented)
     readonly orientation: InputSignal<TabsOrientation>;
     // (undocumented)
     panelId(value: string): string;
+    // (undocumented)
+    readonly rootId: Signal<string>;
     // (undocumented)
     select(value: string): void;
     // (undocumented)
@@ -2746,7 +2748,7 @@ export class VfTabsRootDirective {
     static ɵdir: i0.ɵɵDirectiveDeclaration<VfTabsRootDirective, "[vfTabsRoot]", never, {
         "id": {
             "alias": "id";
-            "required": true;
+            "required": false;
             "isSignal": true;
         };
         "value": {

@@ -8,4 +8,4 @@ Component documentation is owned by the repository product slice under `product/
 
 The docs shell uses public VyrnForge Web tokens and component styling where those surfaces exist. Documentation-specific CSS owns only the documentation product's layout and presentation concerns.
 
-The static site is assembled by `tooling/docs/build.mjs` into `dist/docs/<channel>/`. The rebuild publishes only the `next` channel until a stable release exists.
+The documentation application is assembled by `apps/docs/build.mjs` through the Nx `docs:build` target and emits `dist/docs/<channel>/`. The private rebuild publishes only the `next` documentation channel until a stable release exists.
