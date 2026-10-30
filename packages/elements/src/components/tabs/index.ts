@@ -35,6 +35,7 @@ export class VfTabsElement extends HTMLElementBase {
   #internalValue = '';
   #focusValue = '';
   #observer: MutationObserver | null = null;
+  #generatedAriaDisabled = new WeakSet<HTMLElement>();
 
   connectedCallback(): void {
     if (typeof HTMLElement === 'undefined') return;
@@ -159,6 +160,10 @@ export class VfTabsElement extends HTMLElementBase {
 
     const tabs = this.#tabs();
     for (const tab of tabs) {
+      if (tab instanceof HTMLButtonElement && !tab.disabled && this.#generatedAriaDisabled.has(tab)) {
+        tab.removeAttribute('aria-disabled');
+        this.#generatedAriaDisabled.delete(tab);
+      }
       const value = tabValue(tab);
       const disabled = tabDisabled(tab);
       const selected = value !== '' && value === selectedValue;
@@ -170,8 +175,14 @@ export class VfTabsElement extends HTMLElementBase {
       tab.setAttribute('aria-selected', selected ? 'true' : 'false');
       tab.setAttribute('aria-controls', `${rootId}-panel-${token}`);
       tab.tabIndex = !disabled && focusable ? 0 : -1;
-      if (disabled) tab.setAttribute('aria-disabled', 'true');
-      else tab.removeAttribute('aria-disabled');
+      if (disabled) {
+        if (tab.getAttribute('aria-disabled') !== 'true') {
+          tab.setAttribute('aria-disabled', 'true');
+          if (tab instanceof HTMLButtonElement && tab.disabled) this.#generatedAriaDisabled.add(tab);
+        }
+      } else if (tab.hasAttribute('aria-disabled')) {
+        tab.removeAttribute('aria-disabled');
+      }
     }
 
     for (const panel of this.#panels()) {
