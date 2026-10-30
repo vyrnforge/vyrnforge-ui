@@ -11,11 +11,13 @@ import {
   VfTabsTabDirective,
 } from '@vyrnforge/angular/tabs';
 
+const tabsImports = [VfTabsRootDirective, VfTabsListDirective, VfTabsTabDirective, VfTabsPanelDirective];
+
 class AppComponent {}
 Component({
   selector: 'vf-tabs-ssr-test',
   standalone: true,
-  imports: [VfTabsRootDirective, VfTabsListDirective, VfTabsTabDirective, VfTabsPanelDirective],
+  imports: tabsImports,
   template: `
     <div vfTabsRoot id="account-tabs" defaultValue="overview">
       <div vfTabsList aria-label="Account sections">
@@ -30,15 +32,40 @@ Component({
   `,
 })(AppComponent);
 
+class GeneratedIdAppComponent {}
+Component({
+  selector: 'vf-tabs-generated-id-ssr-test',
+  standalone: true,
+  imports: tabsImports,
+  template: `
+    <div vfTabsRoot defaultValue="first">
+      <div vfTabsList aria-label="First sections"><button vfTabsTab="first">First</button></div>
+      <div vfTabsPanel="first">First panel</div>
+    </div>
+    <div vfTabsRoot defaultValue="second">
+      <div vfTabsList aria-label="Second sections"><button vfTabsTab="second">Second</button></div>
+      <div vfTabsPanel="second">Second panel</div>
+    </div>
+  `,
+})(GeneratedIdAppComponent);
+
 function openingTag(html, id) {
   return html.match(new RegExp(`<[^>]+id="${id}"[^>]*>`))?.[0] ?? '';
 }
 
-test('Angular Tabs server output contains complete tab relationships and state', async () => {
-  const html = await renderApplication(
-    (context) => bootstrapApplication(AppComponent, { providers: [provideZonelessChangeDetection()] }, context),
-    { document: '<!doctype html><html><body><vf-tabs-ssr-test></vf-tabs-ssr-test></body></html>' },
+function attribute(tag, name) {
+  return tag.match(new RegExp(`${name}="([^"]+)"`))?.[1] ?? '';
+}
+
+async function render(component, selector) {
+  return renderApplication(
+    (context) => bootstrapApplication(component, { providers: [provideZonelessChangeDetection()] }, context),
+    { document: `<!doctype html><html><body><${selector}></${selector}></body></html>` },
   );
+}
+
+test('Angular Tabs server output contains complete tab relationships and state', async () => {
+  const html = await render(AppComponent, 'vf-tabs-ssr-test');
   assert.match(html, /data-vf-tabs-root/);
   assert.match(html, /role="tablist"/);
 
@@ -59,4 +86,26 @@ test('Angular Tabs server output contains complete tab relationships and state',
   assert.match(securityPanel, /hidden=""/);
   assert.match(securityPanel, /aria-labelledby="account-tabs-tab-security"/);
   assert.doesNotMatch(html, /data-vf-selected/);
+});
+
+test('Angular Tabs generates unique deterministic relationship ids per application', async () => {
+  const firstHtml = await render(GeneratedIdAppComponent, 'vf-tabs-generated-id-ssr-test');
+  const secondHtml = await render(GeneratedIdAppComponent, 'vf-tabs-generated-id-ssr-test');
+
+  const idsFor = (html) => [...html.matchAll(/<div[^>]*data-vf-tabs-root[^>]*>/g)]
+    .map((match) => attribute(match[0], 'id'));
+  const firstIds = idsFor(firstHtml);
+  const secondIds = idsFor(secondHtml);
+
+  assert.equal(firstIds.length, 2);
+  assert.ok(firstIds.every(Boolean));
+  assert.notEqual(firstIds[0], firstIds[1]);
+  assert.deepEqual(firstIds, secondIds);
+
+  for (const [rootId, value] of [[firstIds[0], 'first'], [firstIds[1], 'second']]) {
+    const tab = openingTag(firstHtml, `${rootId}-tab-${value}`);
+    const panel = openingTag(firstHtml, `${rootId}-panel-${value}`);
+    assert.match(tab, new RegExp(`aria-controls="${rootId}-panel-${value}"`));
+    assert.match(panel, new RegExp(`aria-labelledby="${rootId}-tab-${value}"`));
+  }
 });
