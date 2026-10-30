@@ -20,7 +20,7 @@ export const browserFixture = {
     });
     await writeFile(
       path.join(dir, `${port}.html`),
-      '<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width"><title>Rating browser fixture</title><link rel="stylesheet" href="./styles.css"></head><body><main><h1>Rating browser fixture</h1><div id="root" data-vf-rating-root role="radiogroup" aria-label="Rating"><label id="one-item" data-vf-rating-item><input id="one" type="radio" name="r" aria-label="1 star">☆</label><label id="five-item" data-vf-rating-item><input id="five" type="radio" name="r" aria-label="5 stars">☆</label></div></main></body></html>',
+      '<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width"><title>Rating browser fixture</title><link rel="stylesheet" href="./styles.css"></head><body><main><h1>Rating browser fixture</h1><div id="root" data-vf-rating-root role="radiogroup" aria-label="Rating"><label id="one-item" data-vf-rating-item><input id="one" type="radio" name="r" aria-label="1 star">☆</label><label id="five-item" data-vf-rating-item><input id="five" type="radio" name="r" aria-label="5 stars">☆</label></div><span id="filled-item" data-vf-rating-item data-vf-state="filled" aria-hidden="true">★</span></main></body></html>',
     );
   },
 };
