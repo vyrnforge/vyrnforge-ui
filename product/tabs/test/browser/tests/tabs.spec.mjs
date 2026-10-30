@@ -56,6 +56,14 @@ test.describe('Tabs port interaction and client activation', () => {
       await expect(billing).toHaveAttribute('aria-disabled', 'true');
       await expect(billing).not.toHaveAttribute('data-vf-disabled', '');
 
+      if (framework === 'elements') {
+        await billing.evaluate((element) => element.removeAttribute('disabled'));
+        await expect(billing).not.toHaveAttribute('aria-disabled', 'true');
+        await billing.evaluate((element) => element.setAttribute('disabled', ''));
+        await expect(billing).toHaveAttribute('aria-disabled', 'true');
+        await expect(billing).not.toHaveAttribute('data-vf-disabled', '');
+      }
+
       await overview.focus();
       await page.keyboard.press('ArrowLeft');
       await expect(security).toBeFocused();
