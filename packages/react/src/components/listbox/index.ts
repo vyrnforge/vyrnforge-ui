@@ -26,6 +26,7 @@ function syncTabStops(root: HTMLElement, preferred?: HTMLElement | null) {
   if (activeIndex < 0 || states[activeIndex]?.disabled) activeIndex = options.findIndex((option, index) => !states[index]?.disabled && option.getAttribute('aria-selected') === 'true');
   if (activeIndex < 0) activeIndex = states.findIndex((option) => !option.disabled);
   const resolved = activeIndex < 0 ? null : activeIndex;
+  root.tabIndex = resolved === null ? 0 : -1;
   options.forEach((option, index) => { option.tabIndex = rovingTabIndex(index, resolved, states[index]?.disabled); });
 }
 function normalize(value: ListboxValue | undefined) { return value === undefined ? [] : typeof value === 'string' ? (value ? [value] : []) : value; }
@@ -70,7 +71,7 @@ export const ListboxRoot = forwardRef<HTMLDivElement, ListboxRootProps>(function
       else if (forwardedRef) forwardedRef.current = node;
     },
     role: 'listbox',
-    tabIndex: undefined,
+    tabIndex: 0,
     'aria-multiselectable': selectionMode === 'multiple' || undefined,
     'data-vf-listbox-root': '',
     onFocusCapture(event) {
@@ -116,7 +117,7 @@ export const ListboxOption = forwardRef<HTMLDivElement, ListboxOptionProps>(func
     ...props,
     ref,
     role: 'option',
-    tabIndex: isDisabled ? -1 : 0,
+    tabIndex: -1,
     'aria-selected': selected,
     'aria-disabled': isDisabled || undefined,
     'data-vf-listbox-option': '',
