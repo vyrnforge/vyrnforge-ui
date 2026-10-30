@@ -191,7 +191,6 @@ export const TabsTab = defineComponent({
         'aria-controls': panelId(context.rootId, props.value),
         'data-vf-tabs-tab': '',
         'data-vf-value': props.value,
-        'data-vf-disabled': props.disabled ? '' : undefined,
         onFocus(event: FocusEvent) {
           callHandler(attrs.onFocus, event);
           if (!props.disabled) context.focusValue.value = props.value;
