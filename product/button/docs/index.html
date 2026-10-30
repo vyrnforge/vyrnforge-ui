@@ -44,7 +44,7 @@
   <h2>Framework API</h2>
   <div class="vf-docs-table-wrap" tabindex="0" role="region" aria-label="Button framework APIs"><table><thead><tr><th>Surface</th><th>Button API</th></tr></thead><tbody>
     <tr><th scope="row">React</th><td><code>Button</code> accepts native button props and ref plus <code>variant</code>, <code>size</code>, and <code>loading</code>.</td></tr>
-    <tr><th scope="row">Angular</th><td><code>VfButtonDirective</code> attaches to an actual <code>&lt;button vfButton&gt;</code> and exposes <code>variant</code>, <code>size</code>, <code>loading</code>, and <code>disabled</code> inputs.</td></tr>
+    <tr><th scope="row">Angular</th><td><code>VfButtonDirective</code> attaches to an actual <code>&lt;button vfButton&gt;</code> and exposes <code>variant</code>, <code>size</code>, <code>loading</code>, and <code>disabled</code> inputs. <code>aria-busy</code> remains a native ARIA passthrough value: an authored value is preserved while idle, while <code>loading</code> derives <code>aria-busy="true"</code>.</td></tr>
     <tr><th scope="row">Vue</th><td><code>Button</code> exposes <code>variant</code>, <code>size</code>, and <code>loading</code>; native attributes fall through and content uses the default slot.</td></tr>
     <tr><th scope="row">Native Web</th><td>Use a native <code>&lt;button&gt;</code> with the documented <code>data-vf-*</code> hooks and stylesheet.</td></tr>
   </tbody></table></div>
