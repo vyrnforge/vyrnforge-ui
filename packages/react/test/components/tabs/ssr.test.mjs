@@ -25,4 +25,5 @@ test('React Tabs server output contains complete tab relationships and state', (
   assert.match(html, /id="account-tabs-tab-billing"[^>]*role="tab"[^>]*disabled=""[^>]*tabindex="-1"[^>]*aria-selected="false"[^>]*aria-disabled="true"/);
   assert.match(html, /id="account-tabs-panel-overview"[^>]*role="tabpanel"[^>]*aria-labelledby="account-tabs-tab-overview"/);
   assert.match(html, /id="account-tabs-panel-security"[^>]*role="tabpanel"[^>]*hidden=""[^>]*aria-labelledby="account-tabs-tab-security"/);
+  assert.doesNotMatch(html, /data-vf-selected/);
 });
