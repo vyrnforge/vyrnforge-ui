@@ -1,4 +1,4 @@
-import { mkdir, readFile, writeFile } from 'node:fs/promises';
+import { mkdir, writeFile } from 'node:fs/promises';
 import path from 'node:path';
 import { build } from 'esbuild';
 
@@ -9,9 +9,16 @@ export const browserFixture = {
     const outDir = path.join(root, 'dist/browser-fixtures/components/combobox');
     await mkdir(outDir, { recursive: true });
 
-    const comboboxCss = await readFile(path.join(root, 'packages/web/dist/components/combobox/combobox.css'), 'utf8');
-    const tokenCss = await readFile(path.join(root, 'packages/web/dist/styles/tokens.css'), 'utf8');
-    await writeFile(path.join(outDir, 'combobox.css'), `${tokenCss}\n${comboboxCss.replace('@import "../../styles/tokens.css";', '')}`);
+    await build({
+      stdin: {
+        contents: '@import "@vyrnforge/web/styles/tokens.css";@import "@vyrnforge/web/styles/combobox.css";',
+        resolveDir: root,
+        sourcefile: 'combobox-public.css',
+        loader: 'css',
+      },
+      bundle: true,
+      outfile: path.join(outDir, 'combobox.css'),
+    });
     const page = (body, script = '') => `<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width"><link rel="stylesheet" href="./combobox.css"><title>Combobox fixture</title></head><body><main><h1>Combobox browser fixture</h1><button id="before">Before</button>${body}<button id="after">After</button></main>${script}</body></html>`;
 
     const options = (prefix) => [
