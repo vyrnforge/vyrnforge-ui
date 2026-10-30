@@ -1,5 +1,5 @@
 @import "../../styles/tokens.css";
 @layer vyrnforge.components {
-  :where([data-vf-tooltip-content]) { background: var(--vf-color-text); border-radius: var(--vf-control-radius); color: var(--vf-color-surface); font: var(--vf-control-font); max-inline-size: 20rem; padding: .375rem .5rem; pointer-events: none; z-index: 1100; }
+  :where([data-vf-tooltip-content]) { background: var(--vf-color-text); border-radius: var(--vf-control-radius); color: var(--vf-color-surface); font-family: var(--vf-control-font-family); font-size: var(--vf-control-font-size); font-weight: var(--vf-control-font-weight); max-inline-size: 20rem; padding: .375rem .5rem; pointer-events: none; z-index: 1100; }
   @media (forced-colors: active) { :where([data-vf-tooltip-content]) { background: Canvas; border: 1px solid CanvasText; color: CanvasText; } }
 }
