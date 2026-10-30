@@ -191,7 +191,6 @@ export const TabsTab = defineComponent({
         'aria-controls': panelId(context.rootId, props.value),
         'data-vf-tabs-tab': '',
         'data-vf-value': props.value,
-        'data-vf-selected': selected ? '' : undefined,
         'data-vf-disabled': props.disabled ? '' : undefined,
         onFocus(event: FocusEvent) {
           callHandler(attrs.onFocus, event);
@@ -230,7 +229,6 @@ export const TabsPanel = defineComponent({
         hidden: !selected,
         'aria-labelledby': tabId(context.rootId, props.value),
         'data-vf-tabs-panel': '',
-        'data-vf-selected': selected ? '' : undefined,
       }, slots.default?.());
     };
   },

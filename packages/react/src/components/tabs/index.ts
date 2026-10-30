@@ -184,7 +184,6 @@ export function TabsTab({ value, disabled = false, onClick, onFocus, onKeyDown, 
     'aria-controls': panelId(context.rootId, value),
     'data-vf-tabs-tab': '',
     'data-vf-value': value,
-    'data-vf-selected': selected ? '' : undefined,
     'data-vf-disabled': disabled ? '' : undefined,
     onFocus(event: ReactFocusEvent<HTMLButtonElement>) {
       if (!disabled) context.focus(value);
@@ -220,6 +219,5 @@ export function TabsPanel({ value, ...props }: TabsPanelProps) {
     hidden: !selected,
     'aria-labelledby': tabId(context.rootId, value),
     'data-vf-tabs-panel': '',
-    'data-vf-selected': selected ? '' : undefined,
   });
 }

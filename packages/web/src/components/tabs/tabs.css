@@ -33,18 +33,18 @@
     min-block-size: 2.5rem;
     padding: var(--_vf-tabs-tab-padding-block) var(--_vf-tabs-tab-padding-inline);
     position: relative;
-    transition: background-color var(--vf-control-motion-duration) ease, color var(--vf-control-motion-duration) ease;
+    transition: background-color var(--vf-control-motion-duration) var(--vf-motion-easing-standard), color var(--vf-control-motion-duration) var(--vf-motion-easing-standard);
   }
 
   :where([data-vf-tabs-tab]:hover:not(:disabled):not([aria-disabled="true"])) {
     background: var(--vf-color-surface-hover);
   }
 
-  :where([data-vf-tabs-tab][data-vf-selected]) {
+  :where([data-vf-tabs-tab][aria-selected="true"]) {
     color: var(--vf-color-accent-background);
   }
 
-  :where([data-vf-tabs-tab][data-vf-selected])::after {
+  :where([data-vf-tabs-tab][aria-selected="true"])::after {
     background: currentColor;
     block-size: var(--_vf-tabs-indicator-size);
     content: "";
@@ -58,7 +58,7 @@
     text-align: start;
   }
 
-  :where([data-vf-tabs-list][data-vf-orientation="vertical"] [data-vf-tabs-tab][data-vf-selected])::after {
+  :where([data-vf-tabs-list][data-vf-orientation="vertical"] [data-vf-tabs-tab][aria-selected="true"])::after {
     block-size: auto;
     inline-size: var(--_vf-tabs-indicator-size);
     inset-block: 0;
@@ -94,7 +94,7 @@
   @media (forced-colors: active) {
     :where([data-vf-tabs-list]) { border-color: CanvasText; }
     :where([data-vf-tabs-tab]) { color: ButtonText; forced-color-adjust: auto; }
-    :where([data-vf-tabs-tab][data-vf-selected]) { color: Highlight; }
+    :where([data-vf-tabs-tab][aria-selected="true"]) { color: Highlight; }
     :where([data-vf-tabs-tab]:disabled),
     :where([data-vf-tabs-tab][aria-disabled="true"]) { color: GrayText; }
     :where([data-vf-tabs-tab]:focus-visible),
