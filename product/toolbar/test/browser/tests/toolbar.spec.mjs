@@ -25,7 +25,7 @@ test('Web surface preserves static toolbar semantics and shared styling', async 
   expect(errors).toEqual([]);
 });
 
-test('public Toolbar CSS resolves canonical spacing, control radius, and separator boundary in light and dark themes', async ({ page }) => {
+test('public Toolbar CSS resolves canonical spacing, control radius, and separator boundary in light, dark, and forced-colors modes', async ({ page }) => {
   test.skip(runtimePort, 'Public CSS resolution evidence is owned by the Web lane.');
   await openFixture(page);
   const toolbar = page.locator('#toolbar');
@@ -43,6 +43,10 @@ test('public Toolbar CSS resolves canonical spacing, control radius, and separat
     await expect(item).toHaveCSS('border-radius', '6px');
     await expect(separator).toHaveCSS('background-color', borderByTheme[theme]);
   }
+
+  await page.emulateMedia({ forcedColors: 'active' });
+  await expect(separator).toBeVisible();
+  await expect(separator).toHaveCSS('width', '1px');
 });
 
 test('toolbar exposes one roving tab stop and preserves the last focused item', async ({ page }) => {
