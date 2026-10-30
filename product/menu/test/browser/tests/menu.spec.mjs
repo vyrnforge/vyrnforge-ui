@@ -19,16 +19,36 @@ test('menu exposes menu-button and item semantics', async ({ page }) => {
   await expectAxeClean(page);
 });
 
-test('public Menu CSS resolves canonical popup surface and item radii in light and dark themes', async ({ page }) => {
+test('public Menu CSS resolves canonical popup surface, boundaries, and item radii in light, dark, and forced-colors modes', async ({ page }) => {
   test.skip(port !== 'web', 'Public CSS resolution evidence is owned by the Web lane.');
   await page.goto('/components/menu/web.html');
   const menu = page.locator('#web-menu');
   const item = page.locator('#web-edit');
+  await menu.evaluate((element) => {
+    const separator = document.createElement('div');
+    separator.id = 'web-separator';
+    separator.setAttribute('role', 'separator');
+    separator.setAttribute('data-vf-menu-separator', '');
+    element.append(separator);
+  });
+  const separator = page.locator('#web-separator');
+  const colorsByTheme = {
+    light: { surface: 'rgb(255, 255, 255)', border: 'rgb(212, 212, 216)' },
+    dark: { surface: 'rgb(24, 24, 27)', border: 'rgb(63, 63, 70)' },
+  };
+
   for (const theme of ['light', 'dark']) {
     await page.locator('html').evaluate((element, value) => element.setAttribute('data-vf-theme', value), theme);
+    await expect(menu).toHaveCSS('background-color', colorsByTheme[theme].surface);
+    await expect(menu).toHaveCSS('border-top-color', colorsByTheme[theme].border);
+    await expect(separator).toHaveCSS('background-color', colorsByTheme[theme].border);
     await expect(menu).toHaveCSS('border-radius', '8px');
     await expect(item).toHaveCSS('border-radius', '6px');
   }
+
+  await page.emulateMedia({ forcedColors: 'active' });
+  await expect(menu).toHaveCSS('border-top-width', '1px');
+  await expect(separator).toHaveCSS('height', '1px');
 });
 
 test.describe('enhanced menu interaction', () => {
