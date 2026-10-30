@@ -1,0 +1,45 @@
+{
+  "schemaVersion": 1,
+  "component": "drawer",
+  "reviewStatus": "mapped",
+  "nativeBaseline": {
+    "kind": "composite",
+    "reference": "edge-attached modal surface built on native Dialog behavior"
+  },
+  "wcag": {
+    "target": "2.2 AA",
+    "status": "mapped",
+    "criteria": ["1.3.1", "2.1.1", "2.1.2", "2.4.3", "2.4.7", "4.1.2"]
+  },
+  "aria": {
+    "status": "mapped",
+    "apgPattern": "dialog-modal"
+  },
+  "interaction": {
+    "keyboard": "managed",
+    "focus": "managed-modal",
+    "directionality": "logical"
+  },
+  "ownership": {
+    "library": [
+      "preserve Dialog labeling, native modality, dismissal, and focus restoration while applying edge placement",
+      "provide logical start/end/top/bottom placement without turning the Drawer into application navigation state"
+    ],
+    "consumer": [
+      "author meaningful title, description, close naming, and secondary-workflow content",
+      "own application navigation, routing, forms, data, and business state rendered inside the Drawer"
+    ]
+  },
+  "forms": { "status": "not-applicable" },
+  "visualAccessibility": { "status": "component-specific" },
+  "ssrHydration": { "status": "contract-required" },
+  "evidence": {
+    "browser": "required",
+    "assistiveTechnology": "required"
+  },
+  "profileVariability": ["placement", "controlled-or-uncontrolled-open-state"],
+  "notes": [
+    "Drawer reuses the Dialog accessibility model; edge placement does not create a separate navigation or disclosure pattern.",
+    "Automated modal semantics and focus assertions do not substitute for manual assistive-technology interoperability evidence when that support is claimed."
+  ]
+}
