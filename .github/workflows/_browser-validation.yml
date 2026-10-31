@@ -1,0 +1,272 @@
+name: Browser Validation
+
+on:
+  workflow_call:
+    inputs:
+      scopes_json:
+        description: Component-aware browser scopes emitted by semantic impact planning
+        required: true
+        type: string
+      revision:
+        description: Exact validated revision used to key reusable build output
+        required: true
+        type: string
+      browser_profile:
+        description: Stable browser cache profile name (chromium or cross)
+        required: true
+        type: string
+      browsers:
+        description: Space-delimited Playwright browser engines to provision
+        required: true
+        type: string
+      playwright_project:
+        description: Optional Playwright project selector for targeted runs
+        required: false
+        default: ''
+        type: string
+      artifact_suffix:
+        description: Stable suffix for evidence and metric artifacts
+        required: true
+        type: string
+      retention_days:
+        description: Evidence artifact retention
+        required: true
+        type: number
+
+permissions:
+  contents: read
+
+jobs:
+  prepare:
+    name: prepare-shared-prerequisites
+    runs-on: ubuntu-latest
+    timeout-minutes: 35
+    env:
+      PLAYWRIGHT_BROWSERS_PATH: .cache/ms-playwright
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-node@v7
+        with:
+          node-version-file: .node-version
+          package-manager-cache: false
+      - run: corepack enable
+      - run: pnpm install --frozen-lockfile --ignore-scripts
+      - name: Restore or create shared Playwright browser runtime
+        id: browser-cache
+        uses: actions/cache@v6
+        with:
+          path: .cache/ms-playwright
+          key: vyrnforge-playwright-${{ runner.os }}-${{ hashFiles('pnpm-lock.yaml') }}-${{ inputs.browser_profile }}
+      - name: Provision browser binaries on cache miss
+        id: browser-runtime
+        if: steps.browser-cache.outputs.cache-hit != 'true'
+        shell: bash
+        run: |
+          start=$(date +%s)
+          set +e
+          pnpm exec playwright install ${{ inputs.browsers }}
+          status=$?
+          end=$(date +%s)
+          echo "duration_seconds=$((end-start))" >> "$GITHUB_OUTPUT"
+          exit "$status"
+      - name: Build shared browser prerequisites through Nx
+        id: build-prerequisite
+        shell: bash
+        run: |
+          start=$(date +%s)
+          set +e
+          pnpm build
+          status=$?
+          end=$(date +%s)
+          echo "duration_seconds=$((end-start))" >> "$GITHUB_OUTPUT"
+          exit "$status"
+      - name: Archive exact-revision package build outputs
+        if: steps.build-prerequisite.outcome == 'success'
+        shell: bash
+        run: |
+          mkdir -p test-results/browser-prerequisites
+          shopt -s nullglob
+          build_dirs=(packages/*/dist)
+          if [ "${#build_dirs[@]}" -eq 0 ]; then
+            echo "Nx build produced no package dist directories for browser evidence." >&2
+            exit 1
+          fi
+          tar -czf test-results/browser-prerequisites/package-build-outputs.tgz "${build_dirs[@]}"
+      - uses: actions/upload-artifact@v7
+        if: steps.build-prerequisite.outcome == 'success'
+        with:
+          name: browser-build-${{ inputs.revision }}-${{ inputs.artifact_suffix }}
+          path: test-results/browser-prerequisites/package-build-outputs.tgz
+          if-no-files-found: error
+          retention-days: ${{ inputs.retention_days }}
+      - name: Record shared prerequisite metrics
+        if: always()
+        env:
+          VF_REVISION: ${{ inputs.revision }}
+          VF_BROWSER_PROFILE: ${{ inputs.browser_profile }}
+          VF_BROWSER_CACHE_HIT: ${{ steps.browser-cache.outputs.cache-hit }}
+          VF_BROWSER_RUNTIME_DURATION: ${{ steps.browser-runtime.outputs.duration_seconds }}
+          VF_BROWSER_RUNTIME_OUTCOME: ${{ steps.browser-runtime.outcome }}
+          VF_BUILD_DURATION: ${{ steps.build-prerequisite.outputs.duration_seconds }}
+          VF_BUILD_OUTCOME: ${{ steps.build-prerequisite.outcome }}
+        shell: bash
+        run: |
+          mkdir -p test-results/validation-metrics
+          node --input-type=module - <<'NODE'
+          import { writeFileSync } from 'node:fs';
+          const cacheHit = (value) => value === 'true';
+          const duration = (value, reused) => reused ? 0 : value ? Number(value) : null;
+          const browserReused = cacheHit(process.env.VF_BROWSER_CACHE_HIT);
+          const report = {
+            schemaVersion: 1,
+            scope: 'browser-prerequisites',
+            revision: process.env.VF_REVISION,
+            browserProfile: process.env.VF_BROWSER_PROFILE,
+            metrics: [
+              {
+                name: 'browser-runtime',
+                durationSeconds: duration(process.env.VF_BROWSER_RUNTIME_DURATION, browserReused),
+                result: browserReused ? 'reused' : (process.env.VF_BROWSER_RUNTIME_OUTCOME || 'unknown'),
+                cacheHit: browserReused,
+              },
+              {
+                name: 'build-prerequisite',
+                durationSeconds: duration(process.env.VF_BUILD_DURATION, false),
+                result: process.env.VF_BUILD_OUTCOME || 'unknown',
+                reused: false,
+              },
+            ],
+          };
+          writeFileSync('test-results/validation-metrics/browser-prerequisites.json', `${JSON.stringify(report, null, 2)}\n`);
+          NODE
+      - uses: actions/upload-artifact@v7
+        if: always()
+        with:
+          name: validation-metrics-browser-prerequisites-${{ inputs.artifact_suffix }}
+          path: test-results/validation-metrics/browser-prerequisites.json
+          if-no-files-found: error
+          retention-days: ${{ inputs.retention_days }}
+
+  browser:
+    name: browser-${{ matrix.scope.port }}
+    needs: prepare
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+    strategy:
+      fail-fast: false
+      matrix:
+        scope: ${{ fromJSON(inputs.scopes_json) }}
+    env:
+      PLAYWRIGHT_BROWSERS_PATH: .cache/ms-playwright
+      VF_COMPONENT_PORT: ${{ matrix.scope.port }}
+      VF_COMPONENTS: ${{ matrix.scope.components }}
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-node@v7
+        with:
+          node-version-file: .node-version
+          package-manager-cache: false
+      - run: corepack enable
+      - run: pnpm install --frozen-lockfile --ignore-scripts
+      - name: Restore prepared Playwright browser runtime
+        id: browser-cache
+        uses: actions/cache@v6
+        with:
+          path: .cache/ms-playwright
+          key: vyrnforge-playwright-${{ runner.os }}-${{ hashFiles('pnpm-lock.yaml') }}-${{ inputs.browser_profile }}
+          fail-on-cache-miss: true
+      - name: Download exact-revision package build outputs
+        uses: actions/download-artifact@v7
+        with:
+          name: browser-build-${{ inputs.revision }}-${{ inputs.artifact_suffix }}
+          path: test-results/browser-prerequisites
+      - name: Install runner browser dependencies
+        id: browser-deps
+        shell: bash
+        run: |
+          start=$(date +%s)
+          set +e
+          pnpm exec playwright install-deps ${{ inputs.browsers }}
+          status=$?
+          end=$(date +%s)
+          echo "duration_seconds=$((end-start))" >> "$GITHUB_OUTPUT"
+          exit "$status"
+      - name: Restore exact-revision package build outputs
+        id: build-restore
+        shell: bash
+        run: |
+          start=$(date +%s)
+          set +e
+          tar -xzf test-results/browser-prerequisites/package-build-outputs.tgz -C .
+          status=$?
+          end=$(date +%s)
+          echo "duration_seconds=$((end-start))" >> "$GITHUB_OUTPUT"
+          exit "$status"
+      - name: Run selected browser evidence
+        id: browser-test
+        shell: bash
+        run: |
+          start=$(date +%s)
+          set +e
+          if [ -n "${{ inputs.playwright_project }}" ]; then
+            pnpm exec playwright test --project="${{ inputs.playwright_project }}"
+          else
+            pnpm exec playwright test
+          fi
+          status=$?
+          end=$(date +%s)
+          echo "duration_seconds=$((end-start))" >> "$GITHUB_OUTPUT"
+          exit "$status"
+      - name: Record browser execution metrics
+        if: always()
+        env:
+          VF_REVISION: ${{ inputs.revision }}
+          VF_PORT: ${{ matrix.scope.port }}
+          VF_COMPONENTS_SCOPE: ${{ matrix.scope.components }}
+          VF_BROWSER_DEPS_DURATION: ${{ steps.browser-deps.outputs.duration_seconds }}
+          VF_BROWSER_DEPS_OUTCOME: ${{ steps.browser-deps.outcome }}
+          VF_BUILD_RESTORE_DURATION: ${{ steps.build-restore.outputs.duration_seconds }}
+          VF_BUILD_RESTORE_OUTCOME: ${{ steps.build-restore.outcome }}
+          VF_BROWSER_TEST_DURATION: ${{ steps.browser-test.outputs.duration_seconds }}
+          VF_BROWSER_TEST_OUTCOME: ${{ steps.browser-test.outcome }}
+          VF_BROWSER_CACHE_HIT: ${{ steps.browser-cache.outputs.cache-hit }}
+        shell: bash
+        run: |
+          mkdir -p test-results/validation-metrics
+          node --input-type=module - <<'NODE'
+          import { writeFileSync } from 'node:fs';
+          const duration = (value) => value ? Number(value) : null;
+          const report = {
+            schemaVersion: 1,
+            scope: 'browser-port',
+            revision: process.env.VF_REVISION,
+            port: process.env.VF_PORT,
+            components: (process.env.VF_COMPONENTS_SCOPE || '').split(',').filter(Boolean),
+            cache: {
+              browserRuntimeHit: process.env.VF_BROWSER_CACHE_HIT === 'true',
+              buildArtifactRestored: process.env.VF_BUILD_RESTORE_OUTCOME === 'success',
+            },
+            metrics: [
+              { name: 'browser-runner-dependencies', durationSeconds: duration(process.env.VF_BROWSER_DEPS_DURATION), result: process.env.VF_BROWSER_DEPS_OUTCOME || 'unknown' },
+              { name: 'build-artifact-restore', durationSeconds: duration(process.env.VF_BUILD_RESTORE_DURATION), result: process.env.VF_BUILD_RESTORE_OUTCOME || 'unknown' },
+              { name: 'browser-test', durationSeconds: duration(process.env.VF_BROWSER_TEST_DURATION), result: process.env.VF_BROWSER_TEST_OUTCOME || 'unknown' },
+            ],
+          };
+          writeFileSync(`test-results/validation-metrics/browser-${process.env.VF_PORT}.json`, `${JSON.stringify(report, null, 2)}\n`);
+          NODE
+      - uses: actions/upload-artifact@v7
+        if: always()
+        with:
+          name: validation-metrics-browser-${{ matrix.scope.port }}-${{ inputs.artifact_suffix }}
+          path: test-results/validation-metrics/browser-${{ matrix.scope.port }}.json
+          if-no-files-found: error
+          retention-days: ${{ inputs.retention_days }}
+      - uses: actions/upload-artifact@v7
+        if: always()
+        with:
+          name: browser-evidence-${{ matrix.scope.port }}-${{ inputs.artifact_suffix }}
+          path: |
+            test-results/playwright-report/${{ matrix.scope.port }}
+            test-results/playwright-results/${{ matrix.scope.port }}
+          if-no-files-found: ignore
+          retention-days: ${{ inputs.retention_days }}
