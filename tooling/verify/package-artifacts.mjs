@@ -184,7 +184,7 @@ try {
   const sortedSpecifiers = [...publicSpecifiers].sort();
   writeFileSync(
     path.join(consumerRoot, 'smoke.mjs'),
-    `${validationPackages.includes('angular') ? "import '@angular/compiler';\\n" : ''}const publicSpecifiers=${JSON.stringify(sortedSpecifiers)};\nawait Promise.all(publicSpecifiers.map((specifier)=>import(specifier)));\nconst privateSpecifiers=${JSON.stringify(validationPackages.flatMap((name) => [`@vyrnforge/${name}/internal`, `@vyrnforge/${name}/src/index.js`]))};\nfor(const specifier of privateSpecifiers){try{await import(specifier);throw new Error('private subpath unexpectedly importable: '+specifier)}catch(error){if(error?.message?.startsWith('private subpath unexpectedly importable:'))throw error;if(error?.code!=='ERR_PACKAGE_PATH_NOT_EXPORTED')throw error;}}\n`,
+    `${validationPackages.includes('angular') ? "import '@angular/compiler';\n" : ''}const publicSpecifiers=${JSON.stringify(sortedSpecifiers)};\nawait Promise.all(publicSpecifiers.map((specifier)=>import(specifier)));\nconst privateSpecifiers=${JSON.stringify(validationPackages.flatMap((name) => [`@vyrnforge/${name}/internal`, `@vyrnforge/${name}/src/index.js`]))};\nfor(const specifier of privateSpecifiers){try{await import(specifier);throw new Error('private subpath unexpectedly importable: '+specifier)}catch(error){if(error?.message?.startsWith('private subpath unexpectedly importable:'))throw error;if(error?.code!=='ERR_PACKAGE_PATH_NOT_EXPORTED')throw error;}}\n`,
   );
 
   const typeImports = sortedSpecifiers
