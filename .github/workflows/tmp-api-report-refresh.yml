@@ -1,0 +1,40 @@
+name: Temporary API Report Refresh
+
+on:
+  push:
+    branches:
+      - chatgpt/ci-tooling-cleanup
+    paths:
+      - .github/workflows/tmp-api-report-refresh.yml
+
+permissions:
+  contents: write
+
+jobs:
+  refresh:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          ref: chatgpt/ci-tooling-cleanup
+      - uses: actions/setup-node@v7
+        with:
+          node-version-file: .node-version
+          package-manager-cache: false
+      - run: corepack enable
+      - run: pnpm install --frozen-lockfile --ignore-scripts
+      - run: pnpm build
+      - run: pnpm verify:api:update
+      - name: Commit generated report and remove temporary workflow
+        shell: bash
+        run: |
+          git rm .github/workflows/tmp-api-report-refresh.yml
+          git add packages/angular/etc/angular.api.md
+          if git diff --cached --quiet; then
+            echo "Expected API report drift was not generated." >&2
+            exit 1
+          fi
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git commit -m "chore: refresh Angular API report baseline"
+          git push origin HEAD:chatgpt/ci-tooling-cleanup
