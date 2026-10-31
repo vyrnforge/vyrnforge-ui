@@ -21,6 +21,7 @@ export const broadInfrastructure = new Set([
 ]);
 export const broadWorkflowPaths = new Set([
   '.github/workflows/_targeted-validation.yml',
+  '.github/workflows/_browser-validation.yml',
   '.github/workflows/ci.yml',
   '.github/workflows/main.yml',
   '.github/workflows/scheduled.yml',
