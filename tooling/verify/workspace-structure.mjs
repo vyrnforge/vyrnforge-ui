@@ -7,7 +7,9 @@ const repositoryRoots = ['apps', 'documentation', 'packages', 'product', 'toolin
 const forbiddenToolingCapabilityNames = new Set(['common', 'misc', 'scripts', 'utils']);
 const capabilityNamePattern = /^[a-z][a-z0-9-]*$/;
 const packageJson = JSON.parse(await readFile(new URL('../../package.json', import.meta.url), 'utf8'));
-const workspaceEntries = await readPnpmWorkspacePaths();
+const workspaceEntries = await readPnpmWorkspacePaths(
+  new URL('../../pnpm-workspace.yaml', import.meta.url),
+);
 const toolingPackageJson = JSON.parse(
   await readFile(new URL('../package.json', import.meta.url), 'utf8'),
 );
