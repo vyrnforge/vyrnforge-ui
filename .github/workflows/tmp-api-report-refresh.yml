@@ -22,19 +22,20 @@ jobs:
           node-version-file: .node-version
           package-manager-cache: false
       - run: corepack enable
+      - run: pnpm install --lockfile-only --ignore-scripts
       - run: pnpm install --frozen-lockfile --ignore-scripts
       - run: pnpm build
       - run: pnpm verify:api:update
-      - name: Commit generated report and remove temporary workflow
+      - name: Commit generated baselines and remove temporary workflow
         shell: bash
         run: |
           git rm .github/workflows/tmp-api-report-refresh.yml
-          git add packages/angular/etc/angular.api.md
+          git add pnpm-lock.yaml packages/angular/etc/angular.api.md
           if git diff --cached --quiet; then
-            echo "Expected API report drift was not generated." >&2
+            echo "Expected generated baseline changes were not produced." >&2
             exit 1
           fi
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git commit -m "chore: refresh Angular API report baseline"
+          git commit -m "chore: refresh generated validation baselines"
           git push origin HEAD:chatgpt/ci-tooling-cleanup
