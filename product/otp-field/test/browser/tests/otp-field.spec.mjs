@@ -57,8 +57,10 @@ test('otp field distributes paste across cells', async ({ page }) => {
 
   await cells.nth(0).evaluate((element) => {
     const data = new DataTransfer();
-    data.setData('text', '5931');
-    element.dispatchEvent(new ClipboardEvent('paste', { bubbles: true, cancelable: true, clipboardData: data }));
+    data.setData('text/plain', '5931');
+    const event = new ClipboardEvent('paste', { bubbles: true, cancelable: true });
+    Object.defineProperty(event, 'clipboardData', { value: data });
+    element.dispatchEvent(event);
   });
 
   await expect(cells.nth(0)).toHaveValue('5');

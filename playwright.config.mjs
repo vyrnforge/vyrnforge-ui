@@ -52,6 +52,6 @@ export default defineConfig({
   },
   projects: Object.entries(browserDeviceNames).map(([name, deviceName]) => ({
     name,
-    use: { ...devices[deviceName] },
+    use: { ...devices[deviceName], colorScheme: 'light' },
   })),
 });
