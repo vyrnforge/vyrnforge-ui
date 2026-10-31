@@ -1,9 +1,12 @@
 import { describe, expect, it } from 'vitest';
 import {
   allowedInternalDependencies,
+  browserPortNames,
   frameworkPortNames,
   publicPackageNames,
   publicPackagePaths,
+  sharedImplementationPackageNames,
+  ssrPortNames,
 } from './public-package-model.mjs';
 
 describe('public package model', () => {
@@ -12,8 +15,13 @@ describe('public package model', () => {
     expect(publicPackagePaths).toEqual(publicPackageNames.map((name) => `packages/${name}`));
   });
 
-  it('keeps framework ports inside the public package set', () => {
+  it('derives framework, browser, SSR, and shared implementation roles from the package model', () => {
+    expect(frameworkPortNames).toEqual(['react', 'angular', 'vue', 'elements']);
+    expect(browserPortNames).toEqual(['web', 'react', 'angular', 'vue', 'elements']);
+    expect(ssrPortNames).toEqual(['react', 'angular', 'vue']);
+    expect(sharedImplementationPackageNames).toEqual(['core', 'web']);
     expect(frameworkPortNames.every((name) => publicPackageNames.includes(name))).toBe(true);
+    expect(browserPortNames.every((name) => publicPackageNames.includes(name))).toBe(true);
   });
 
   it('encodes the approved internal dependency graph', () => {
