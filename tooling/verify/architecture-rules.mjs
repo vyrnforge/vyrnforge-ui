@@ -7,7 +7,9 @@ import {
   publicPackagePaths,
 } from './public-package-model.mjs';
 
-const workspaceEntries = await readPnpmWorkspacePaths();
+const workspaceEntries = await readPnpmWorkspacePaths(
+  new URL('../../pnpm-workspace.yaml', import.meta.url),
+);
 if (JSON.stringify(workspaceEntries) !== JSON.stringify(publicPackagePaths)) {
   throw new Error(
     `pnpm workspace must contain only the approved public package graph: ${publicPackagePaths.join(', ')}`,
