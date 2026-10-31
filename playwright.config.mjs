@@ -18,11 +18,12 @@ const discovery = discoverProductUnits();
 const unsupportedComponentSpecs = discovery.components
   .filter((component) => !component.ports[port])
   .map((component) => `**/${component.component}/test/browser/tests/**/*.spec.mjs`);
-const unselectedComponentSpecs = selectedComponents.size > 0
-  ? discovery.components
-      .filter((component) => !selectedComponents.has(component.component))
-      .map((component) => `**/${component.component}/test/browser/tests/**/*.spec.mjs`)
-  : [];
+const unselectedComponentSpecs =
+  selectedComponents.size > 0
+    ? discovery.components
+        .filter((component) => !selectedComponents.has(component.component))
+        .map((component) => `**/${component.component}/test/browser/tests/**/*.spec.mjs`)
+    : [];
 
 export default defineConfig({
   testDir: './product',
@@ -34,7 +35,10 @@ export default defineConfig({
   forbidOnly: Boolean(process.env.CI),
   retries: process.env.CI ? 1 : 0,
   reporter: process.env.CI
-    ? [['line'], ['html', { outputFolder: `test-results/playwright-report/${port}`, open: 'never' }]]
+    ? [
+        ['line'],
+        ['html', { outputFolder: `test-results/playwright-report/${port}`, open: 'never' }],
+      ]
     : 'line',
   timeout: 30_000,
   expect: { timeout: 5_000 },
