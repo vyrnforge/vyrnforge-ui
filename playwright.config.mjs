@@ -35,10 +35,7 @@ export default defineConfig({
   forbidOnly: Boolean(process.env.CI),
   retries: process.env.CI ? 1 : 0,
   reporter: process.env.CI
-    ? [
-        ['line'],
-        ['html', { outputFolder: `test-results/playwright-report/${port}`, open: 'never' }],
-      ]
+    ? [['line'], ['html', { outputFolder: `test-results/playwright-report/${port}`, open: 'never' }]]
     : 'line',
   timeout: 30_000,
   expect: { timeout: 5_000 },
