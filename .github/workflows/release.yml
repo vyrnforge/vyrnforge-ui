@@ -3,12 +3,9 @@ name: Release Readiness
 on:
   workflow_dispatch:
   push:
-    branches:
-      - 'acceptance/1183-final-assurance'
     tags:
       - 'v*'
 
-# Acceptance branch push coverage is temporary evidence plumbing for #1183.
 permissions:
   contents: read
 
