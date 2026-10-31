@@ -1,11 +1,12 @@
 import { existsSync, rmSync } from 'node:fs';
 import path from 'node:path';
 import process from 'node:process';
+import { browserPortNames } from '../package-model.mjs';
 import { discoverProductUnits } from './discover-product-units.mjs';
 import { loadBrowserFixtureModule, prepareBrowserFixture } from './browser-fixtures.mjs';
 
 const port = process.env.VF_COMPONENT_PORT ?? process.argv[2] ?? 'web';
-const supportedPorts = new Set(['web', 'react', 'angular', 'vue', 'elements']);
+const supportedPorts = new Set(browserPortNames);
 if (!supportedPorts.has(port)) throw new Error(`Unsupported VyrnForge browser port: ${port}`);
 
 const root = process.cwd();
