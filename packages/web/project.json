@@ -20,7 +20,11 @@
     "lint": {
       "executor": "nx:run-commands",
       "options": {
-        "command": "pnpm exec eslint packages/web/src packages/web/test --max-warnings=0"
+        "commands": [
+          "pnpm exec eslint packages/web/src packages/web/test --max-warnings=0",
+          "pnpm exec stylelint \"packages/web/src/**/*.css\""
+        ],
+        "parallel": false
       }
     },
     "typecheck": {
