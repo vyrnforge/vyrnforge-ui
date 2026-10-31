@@ -1,6 +1,7 @@
 import { execFileSync } from 'node:child_process';
 import { appendFileSync, readFileSync, writeFileSync } from 'node:fs';
 import { fileURLToPath } from 'node:url';
+import { browserPortNames, packageDefinition } from '../package-model.mjs';
 import { discoverProductUnits } from '../testing/discover-product-units.mjs';
 
 const modes = new Set(['local', 'pr', 'main', 'scheduled', 'release']);
@@ -16,6 +17,7 @@ const broadInfrastructure = new Set([
   'playwright.config.mjs',
   'vitest.config.mjs',
   'prettier.config.mjs',
+  'tooling/package-model.mjs',
   '.node-version',
   '.nvmrc',
 ]);
@@ -27,7 +29,7 @@ const publicSurfaceBasenames = new Set([
   'ng-package.json',
 ]);
 const evidenceOrder = ['architecture', 'impact', 'release', 'package-artifacts', 'docs', 'browser', 'visual'];
-const preferredPortOrder = ['web', 'react', 'angular', 'vue', 'elements'];
+const preferredPortOrder = browserPortNames;
 const docsProject = JSON.parse(readFileSync(fileURLToPath(new URL('../../apps/docs/project.json', import.meta.url)), 'utf8'));
 const docsPackageDependencies = new Set(
   (docsProject.implicitDependencies ?? [])
@@ -248,12 +250,12 @@ export function createSemanticImpact(paths, options = {}) {
 
     if (packageName && !classified) {
       state.packages.add(packageName);
-      if (/^packages\/(?:core|web)\/src\//.test(filePath)) {
+      const definition = packageDefinition(packageName);
+      if (definition?.changeFanout === 'all-components' && filePath.startsWith(`packages/${packageName}/src/`)) {
         for (const component of discovery.components) addComponent(state, component, componentPorts(component), `${packageName} shared implementation changed outside a narrower discovered owner`, filePath);
-      } else if (/^packages\/(?:react|angular|vue|elements)\/src\//.test(filePath)) {
-        const port = packageName;
-        for (const component of discovery.components.filter((candidate) => candidate.ports[port])) {
-          addComponent(state, component, [port], `${port} shared implementation changed outside a narrower component owner`, filePath);
+      } else if (definition?.changeFanout === 'port-components' && filePath.startsWith(`packages/${packageName}/src/`)) {
+        for (const component of discovery.components.filter((candidate) => candidate.ports[packageName])) {
+          addComponent(state, component, [packageName], `${packageName} shared implementation changed outside a narrower component owner`, filePath);
         }
       } else {
         addEvidence(state, 'architecture', 'package-owned non-runtime evidence changed', filePath);
