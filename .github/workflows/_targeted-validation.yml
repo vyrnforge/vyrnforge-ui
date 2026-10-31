@@ -90,7 +90,7 @@ jobs:
           NX_HEAD: ${{ inputs.head_sha }}
         run: pnpm exec nx affected -t lint,typecheck,test,build --base="$NX_BASE" --head="$NX_HEAD"
       - name: Verify repository contracts
-        run: pnpm verify:structure && pnpm verify:testing-structure && pnpm verify:boundaries && pnpm verify:architecture && pnpm verify:impact && pnpm verify:package-contracts && pnpm verify:compatibility && pnpm verify:workflows
+        run: pnpm verify:structure && pnpm verify:testing-structure && pnpm verify:boundaries && pnpm verify:architecture && pnpm verify:impact && pnpm verify:package-contracts && pnpm verify:compatibility && pnpm verify:workflows && pnpm verify:validation
 
   package-artifacts:
     name: package-artifacts
@@ -163,38 +163,17 @@ jobs:
           retention-days: ${{ inputs.retention_days }}
 
   browser-chromium:
-    name: browser-chromium-${{ matrix.scope.port }}
     needs: [plan, affected]
     if: needs.plan.outputs.browser_required == 'true'
-    runs-on: ubuntu-latest
-    timeout-minutes: 40
-    strategy:
-      fail-fast: false
-      matrix:
-        scope: ${{ fromJSON(needs.plan.outputs.browser_scopes) }}
-    env:
-      VF_COMPONENT_PORT: ${{ matrix.scope.port }}
-      VF_COMPONENTS: ${{ matrix.scope.components }}
-    steps:
-      - uses: actions/checkout@v7
-      - uses: actions/setup-node@v7
-        with:
-          node-version-file: .node-version
-          package-manager-cache: false
-      - run: corepack enable
-      - run: pnpm install --frozen-lockfile --ignore-scripts
-      - run: pnpm exec playwright install --with-deps chromium
-      - run: pnpm build
-      - run: pnpm exec playwright test --project=chromium
-      - uses: actions/upload-artifact@v7
-        if: always()
-        with:
-          name: browser-evidence-${{ matrix.scope.port }}-${{ inputs.artifact_suffix }}
-          path: |
-            test-results/playwright-report/${{ matrix.scope.port }}
-            test-results/playwright-results/${{ matrix.scope.port }}
-          if-no-files-found: ignore
-          retention-days: ${{ inputs.retention_days }}
+    uses: ./.github/workflows/_browser-validation.yml
+    with:
+      scopes_json: ${{ needs.plan.outputs.browser_scopes }}
+      revision: ${{ inputs.head_sha }}
+      browser_profile: chromium
+      browsers: chromium
+      playwright_project: chromium
+      artifact_suffix: ${{ inputs.artifact_suffix }}
+      retention_days: ${{ inputs.retention_days }}
 
   selected-evidence:
     name: selected-evidence
@@ -208,6 +187,13 @@ jobs:
         with:
           name: semantic-impact-${{ inputs.artifact_suffix }}
           path: test-results
+      - uses: actions/download-artifact@v7
+        if: needs.plan.outputs.browser_required == 'true'
+        continue-on-error: true
+        with:
+          pattern: validation-metrics-*-${{ inputs.artifact_suffix }}
+          path: test-results/validation-metrics
+          merge-multiple: true
       - name: Summarize and require selected evidence
         env:
           VF_HEAD_SHA: ${{ inputs.head_sha }}
@@ -216,7 +202,7 @@ jobs:
           VF_RESULT_RELEASE: ${{ needs.release-intent.result }}
           VF_RESULT_DOCS: ${{ needs.documentation.result }}
           VF_RESULT_BROWSER: ${{ needs.browser-chromium.result }}
-        run: node tooling/validation/summarize.mjs --plan test-results/semantic-impact.json --output-dir test-results/validation-summary
+        run: node tooling/validation/summarize.mjs --plan test-results/semantic-impact.json --metrics-dir test-results/validation-metrics --output-dir test-results/validation-summary
       - uses: actions/upload-artifact@v7
         if: always()
         with:

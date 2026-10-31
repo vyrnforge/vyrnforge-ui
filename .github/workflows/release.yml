@@ -20,6 +20,7 @@ jobs:
     timeout-minutes: 10
     outputs:
       browser_ports: ${{ steps.impact.outputs.browser_ports }}
+      browser_scopes: ${{ steps.impact.outputs.browser_scopes }}
     steps:
       - uses: actions/checkout@v7
       - uses: actions/setup-node@v7
@@ -60,35 +61,16 @@ jobs:
         run: pnpm build:docs
       - name: Verify tracked generated artifacts are clean
         run: git diff --exit-code
+      - name: Preserve private-rebuild release boundary
+        run: echo "Release Readiness is machine evidence only; publication and required human AT/usability acceptance remain separate."
 
   browser-matrix:
-    name: release-browser-${{ matrix.port }}
     needs: plan
-    runs-on: ubuntu-latest
-    timeout-minutes: 70
-    strategy:
-      fail-fast: false
-      matrix:
-        port: ${{ fromJSON(needs.plan.outputs.browser_ports) }}
-    env:
-      VF_COMPONENT_PORT: ${{ matrix.port }}
-    steps:
-      - uses: actions/checkout@v7
-      - uses: actions/setup-node@v7
-        with:
-          node-version-file: .node-version
-          package-manager-cache: false
-      - run: corepack enable
-      - run: pnpm install --frozen-lockfile --ignore-scripts
-      - run: pnpm exec playwright install --with-deps chromium firefox webkit
-      - run: pnpm build
-      - run: pnpm test:browser:cross
-      - uses: actions/upload-artifact@v7
-        if: always()
-        with:
-          name: browser-evidence-${{ matrix.port }}-release
-          path: |
-            test-results/playwright-report/${{ matrix.port }}
-            test-results/playwright-results/${{ matrix.port }}
-          if-no-files-found: ignore
-          retention-days: 30
+    uses: ./.github/workflows/_browser-validation.yml
+    with:
+      scopes_json: ${{ needs.plan.outputs.browser_scopes }}
+      revision: ${{ github.sha }}
+      browser_profile: cross
+      browsers: chromium firefox webkit
+      artifact_suffix: release
+      retention_days: 30
