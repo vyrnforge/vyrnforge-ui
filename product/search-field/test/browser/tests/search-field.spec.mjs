@@ -45,10 +45,10 @@ test('STD-08 list explorer preserves committed criteria, history, IME, stale-res
   await expect(page.getByRole('list', { name: 'Project results' })).toContainText('Forge beta');
 
   await query.dispatchEvent('compositionstart');
-  await query.fill('Delta');
   await query.press('Enter');
   await expect(page).toHaveURL(/q=forge/);
   await query.dispatchEvent('compositionend');
+  await query.fill('Delta');
   await query.press('Enter');
   await expect(page).toHaveURL(/q=Delta/);
   await expect(page.getByRole('list', { name: 'Project results' })).toContainText('Delta research');
