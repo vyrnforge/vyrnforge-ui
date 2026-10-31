@@ -21,7 +21,7 @@ export const browserFixture = {
     <label for="required">Required</label><input id="required" data-vf-input name="required" required placeholder="Required value">
     <label for="app-invalid">Application invalid</label><input id="app-invalid" data-vf-input name="app-invalid" aria-invalid="true" value="bad">
   </form>`;
-    const page = (body) => `<!doctype html><html lang="en"><head><meta charset="utf-8"><link rel="stylesheet" href="./input.css"><title>Input fixture</title></head><body><main><h1>Input fixture</h1>${body}</main></body></html>`;
+    const page = (body) => `<!doctype html><html lang="en"><head><meta charset="utf-8"><link rel="stylesheet" href="./input.css"><title>Input fixture</title><style>body{background:var(--vf-color-surface);color:var(--vf-color-text);}</style></head><body><main><h1>Input fixture</h1>${body}</main></body></html>`;
 
     if (port === 'web' || port === 'elements') {
       await writeFile(path.join(outDir, `${port}.html`), page(fields));
@@ -84,7 +84,7 @@ export const browserFixture = {
       const { VfInputDirective } = await import('@vyrnforge/angular/input');
       class App {}
       Component({ selector: 'vf-input-test', standalone: true, imports: [VfInputDirective], template: `<main><h1>Input fixture</h1><form id="form"><label for="editable">Editable</label><input id="editable" vfInput name="editable" value="alpha" required><label for="readonly">Readonly</label><input id="readonly" vfInput name="readonly" value="kept" readonly><label for="disabled">Disabled</label><input id="disabled" vfInput name="disabled" value="omitted" disabled><label for="required">Required</label><input id="required" vfInput name="required" required placeholder="Required value"><label for="app-invalid">Application invalid</label><input id="app-invalid" vfInput name="app-invalid" aria-invalid="true" value="bad"></form></main>` })(App);
-      const html = await renderApplication((context) => bootstrapApplication(App, { providers: [provideZonelessChangeDetection()] }, context), { document: '<!doctype html><html lang="en"><head><title>Input fixture</title><link rel="stylesheet" href="./input.css"></head><body><vf-input-test></vf-input-test></body></html>' });
+      const html = await renderApplication((context) => bootstrapApplication(App, { providers: [provideZonelessChangeDetection()] }, context), { document: '<!doctype html><html lang="en"><head><title>Input fixture</title><link rel="stylesheet" href="./input.css"><style>body{background:var(--vf-color-surface);color:var(--vf-color-text);}</style></head><body><vf-input-test></vf-input-test></body></html>' });
       await writeFile(path.join(outDir, 'angular.html'), html);
     }
   },

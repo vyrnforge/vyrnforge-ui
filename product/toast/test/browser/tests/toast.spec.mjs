@@ -197,7 +197,7 @@ test('hover and focus pause independently; duration replacement stays paused and
   await page.clock.fastForward(1000);
   expect(await requests(page, 'timerRequests')).toBe(0);
   await page.locator('#timer-close').focus();
-  await page.evaluate(() => document.querySelector('#timer-duration-500').click());
+  await page.locator('#timer-duration-500').dispatchEvent('click');
   await flushScheduledRender(page);
   await page.clock.fastForward(1000);
   expect(await requests(page, 'timerRequests')).toBe(0);

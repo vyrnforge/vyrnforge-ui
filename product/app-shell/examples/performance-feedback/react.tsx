@@ -88,7 +88,7 @@ function App() {
                 <Button type="button" variant="secondary" disabled={page >= pageCount - 1} onClick={() => changePage(page + 1)}>Next page</Button>
               </div>
             </div>
-            <div className="perf-table-wrap">
+            <div className="perf-table-wrap" role="region" aria-label="Project records" tabIndex={0}>
               <table>
                 <caption>Current page of the representative 2,000-record collection</caption>
                 <thead><tr><th scope="col">ID</th><th scope="col">Name</th><th scope="col">Status</th></tr></thead>

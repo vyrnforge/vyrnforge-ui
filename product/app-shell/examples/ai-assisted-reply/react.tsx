@@ -25,7 +25,7 @@ function createFakeAiService() {
     generate(): PendingGeneration {
       generation += 1;
       const id = generation;
-      const delay = id === 3 ? 360 : id === 4 ? 70 : 140;
+      const delay = id === 1 ? 600 : id === 3 ? 360 : id === 4 ? 70 : 140;
       const promise = new Promise<GenerationResult>((resolve) => {
         window.setTimeout(() => {
           if (id === 2) {
