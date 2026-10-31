@@ -467,6 +467,8 @@ export class VfAspectRatioDirective {
 // @public (undocumented)
 export class VfButtonDirective {
     // (undocumented)
+    readonly ariaBusy: InputSignal<string | boolean | null>;
+    // (undocumented)
     readonly disabled: InputSignalWithTransform<boolean, unknown>;
     // (undocumented)
     readonly loading: InputSignalWithTransform<boolean, unknown>;
@@ -493,6 +495,11 @@ export class VfButtonDirective {
         };
         "disabled": {
             "alias": "disabled";
+            "required": false;
+            "isSignal": true;
+        };
+        "ariaBusy": {
+            "alias": "aria-busy";
             "required": false;
             "isSignal": true;
         };
