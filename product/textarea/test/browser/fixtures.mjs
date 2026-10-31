@@ -21,7 +21,7 @@ export const browserFixture = {
     <label for="constrained">Constrained</label><textarea id="constrained" data-vf-textarea name="constrained" minlength="3" maxlength="8"></textarea>
     <label for="app-invalid">Application invalid</label><textarea id="app-invalid" data-vf-textarea name="app-invalid" aria-invalid="true">bad</textarea>
   </form>`;
-    const page = (body) => `<!doctype html><html lang="en"><head><meta charset="utf-8"><link rel="stylesheet" href="./textarea.css"><title>Textarea fixture</title></head><body><main><h1>Textarea fixture</h1>${body}</main></body></html>`;
+    const page = (body) => `<!doctype html><html lang="en"><head><meta charset="utf-8"><link rel="stylesheet" href="./textarea.css"><title>Textarea fixture</title><style>body{background:var(--vf-color-surface);color:var(--vf-color-text);}</style></head><body><main><h1>Textarea fixture</h1>${body}</main></body></html>`;
 
     if (port === 'web' || port === 'elements') {
       await writeFile(path.join(outDir, `${port}.html`), page(fields));
