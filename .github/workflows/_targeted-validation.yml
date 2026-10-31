@@ -84,6 +84,8 @@ jobs:
           package-manager-cache: false
       - run: corepack enable
       - run: pnpm install --frozen-lockfile --ignore-scripts
+      - name: Verify configuration formatting
+        run: pnpm format:configs:check
       - name: Run Nx affected validation
         env:
           NX_BASE: ${{ inputs.base_sha }}

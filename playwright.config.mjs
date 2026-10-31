@@ -18,11 +18,12 @@ const discovery = discoverProductUnits();
 const unsupportedComponentSpecs = discovery.components
   .filter((component) => !component.ports[port])
   .map((component) => `**/${component.component}/test/browser/tests/**/*.spec.mjs`);
-const unselectedComponentSpecs = selectedComponents.size > 0
-  ? discovery.components
-      .filter((component) => !selectedComponents.has(component.component))
-      .map((component) => `**/${component.component}/test/browser/tests/**/*.spec.mjs`)
-  : [];
+const unselectedComponentSpecs =
+  selectedComponents.size > 0
+    ? discovery.components
+        .filter((component) => !selectedComponents.has(component.component))
+        .map((component) => `**/${component.component}/test/browser/tests/**/*.spec.mjs`)
+    : [];
 
 export default defineConfig({
   testDir: './product',

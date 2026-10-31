@@ -65,6 +65,7 @@ requireText(sources.main, 'github.sha', 'Main validation must tie evidence to th
 requireText(sources.main, 'main-gate:', 'Main validation must preserve the main-gate identity');
 
 requireText(sources.targeted, 'workflow_call:', 'shared targeted validation must be reusable from PR/Main wrappers');
+requireText(sources.targeted, 'pnpm format:configs:check', 'targeted PR/Main validation must reject configuration-format drift before merge');
 requireText(sources.targeted, 'nx affected -t lint,typecheck,test,build', 'generic affected execution must remain owned by Nx');
 requireText(sources.targeted, 'pnpm verify:package-contracts', 'repository contracts must enforce private package/public-entrypoint invariants');
 requireText(sources.targeted, 'pnpm verify:compatibility', 'repository contracts must enforce compatibility metadata alignment');
