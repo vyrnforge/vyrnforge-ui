@@ -6,9 +6,23 @@ import { publicPackageNames } from './public-package-model.mjs';
 
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '../..');
 const localBuild = process.argv.includes('--local');
-let failed = false;
 
-for (const name of publicPackageNames) {
+function arg(name) {
+  const index = process.argv.indexOf(name);
+  return index >= 0 ? process.argv[index + 1] : undefined;
+}
+
+function selectedPackages() {
+  const raw = arg('--packages') ?? process.env.VF_PACKAGE_SCOPE ?? '';
+  if (!raw.trim()) return [...publicPackageNames];
+  const selected = [...new Set(raw.split(',').map((value) => value.trim()).filter(Boolean))].sort();
+  const unknown = selected.filter((name) => !publicPackageNames.includes(name));
+  if (unknown.length) throw new Error(`Unknown API report package scope: ${unknown.join(', ')}`);
+  return selected;
+}
+
+let failed = false;
+for (const name of selectedPackages()) {
   const packageRoot = path.join(root, 'packages', name);
   const manifest = JSON.parse(readFileSync(path.join(packageRoot, 'package.json'), 'utf8'));
   if (typeof manifest.types !== 'string') {

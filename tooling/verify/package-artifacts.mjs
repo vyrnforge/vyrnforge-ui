@@ -3,11 +3,12 @@ import { cpSync, existsSync, mkdirSync, mkdtempSync, readFileSync, rmSync, write
 import { tmpdir } from 'node:os';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
-import { publicPackageNames } from './public-package-model.mjs';
+import { packageDefinition, publicPackageNames } from './public-package-model.mjs';
 
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '../..');
 const outputRoot = path.join(root, 'tmp/package-validation');
 const tarballRoot = path.join(outputRoot, 'tarballs');
+const rootManifest = JSON.parse(readFileSync(path.join(root, 'package.json'), 'utf8'));
 
 function run(command, args, options = {}) {
   return execFileSync(command, args, {
@@ -16,6 +17,48 @@ function run(command, args, options = {}) {
     stdio: options.capture ? ['ignore', 'pipe', 'inherit'] : 'inherit',
     ...options,
   });
+}
+
+function arg(name) {
+  const index = process.argv.indexOf(name);
+  return index >= 0 ? process.argv[index + 1] : undefined;
+}
+
+function requestedPackageNames() {
+  const raw = arg('--packages') ?? process.env.VF_PACKAGE_SCOPE ?? '';
+  if (!raw.trim()) return [...publicPackageNames];
+  const selected = [...new Set(raw.split(',').map((value) => value.trim()).filter(Boolean))].sort();
+  const unknown = selected.filter((name) => !publicPackageNames.includes(name));
+  if (unknown.length) throw new Error(`Unknown packed-package scope: ${unknown.join(', ')}`);
+  return selected;
+}
+
+function internalPackageName(specifier) {
+  return /^@vyrnforge\/([^/]+)$/.exec(specifier)?.[1] ?? null;
+}
+
+function packageDependencyClosure(selected) {
+  const closure = new Set();
+  const visit = (name) => {
+    if (closure.has(name)) return;
+    closure.add(name);
+    for (const dependency of packageDefinition(name)?.internalDependencies ?? []) {
+      const dependencyName = internalPackageName(dependency);
+      if (dependencyName) visit(dependencyName);
+    }
+  };
+  for (const name of selected) visit(name);
+  return publicPackageNames.filter((name) => closure.has(name));
+}
+
+function rootVersion(name) {
+  const version = rootManifest.devDependencies?.[name]
+    ?? rootManifest.dependencies?.[name]
+    ?? rootManifest.peerDependencies?.[name];
+  if (!version || version.startsWith('workspace:')) {
+    throw new Error(`Packed consumer requires a pinned root dependency version for ${name}`);
+  }
+  return version;
 }
 
 function flattenExportTargets(value, targets = []) {
@@ -71,15 +114,20 @@ function releaseManifest(manifest) {
   return result;
 }
 
+const requestedPackages = requestedPackageNames();
+const validationPackages = packageDependencyClosure(requestedPackages);
+
 rmSync(outputRoot, { recursive: true, force: true });
 mkdirSync(tarballRoot, { recursive: true });
-run('pnpm', ['exec', 'nx', 'run-many', '-t', 'build']);
+
+const projects = validationPackages.map((name) => `@vyrnforge/${name}`).join(',');
+run('pnpm', ['exec', 'nx', 'run-many', '-t', 'build', `--projects=${projects}`]);
 run('node', ['tooling/verify/package-contracts.mjs']);
-run('node', ['tooling/verify/api-reports.mjs']);
+run('node', ['tooling/verify/api-reports.mjs', '--packages', validationPackages.join(',')]);
 
 const tarballs = new Map();
 const publicSpecifiers = new Set();
-for (const name of publicPackageNames) {
+for (const name of validationPackages) {
   const packageRoot = path.join(root, 'packages', name);
   if (!existsSync(path.join(packageRoot, 'dist'))) throw new Error(`@vyrnforge/${name} did not produce a dist directory`);
 
@@ -110,27 +158,33 @@ for (const name of publicPackageNames) {
 
 const consumerRoot = mkdtempSync(path.join(tmpdir(), 'vyrnforge-packed-consumer-'));
 try {
-  const dependencies = Object.fromEntries(publicPackageNames.map((name) => [`@vyrnforge/${name}`, `file:${tarballs.get(name)}`]));
-  Object.assign(dependencies, {
-    '@angular/common': '22.2.3',
-    '@angular/compiler': '22.2.3',
-    '@angular/core': '22.2.3',
-    '@angular/platform-browser': '22.2.3',
-    '@angular/platform-server': '22.2.3',
-    '@types/react': '19.3.0',
-    '@types/react-dom': '19.3.0',
-    react: '19.3.0',
-    'react-dom': '19.3.0',
-    rxjs: '7.8.2',
-    typescript: '6.0.3',
-    vue: '3.5.44',
-  });
+  const dependencies = Object.fromEntries(validationPackages.map((name) => [`@vyrnforge/${name}`, `file:${tarballs.get(name)}`]));
+  dependencies.typescript = rootVersion('typescript');
+  if (validationPackages.includes('angular')) {
+    Object.assign(dependencies, {
+      '@angular/common': rootVersion('@angular/common'),
+      '@angular/compiler': rootVersion('@angular/compiler'),
+      '@angular/core': rootVersion('@angular/core'),
+      '@angular/platform-browser': rootVersion('@angular/platform-browser'),
+      '@angular/platform-server': rootVersion('@angular/platform-server'),
+      rxjs: rootVersion('rxjs'),
+    });
+  }
+  if (validationPackages.includes('react')) {
+    Object.assign(dependencies, {
+      '@types/react': rootVersion('@types/react'),
+      '@types/react-dom': rootVersion('@types/react-dom'),
+      react: rootVersion('react'),
+      'react-dom': rootVersion('react-dom'),
+    });
+  }
+  if (validationPackages.includes('vue')) dependencies.vue = rootVersion('vue');
   writeFileSync(path.join(consumerRoot, 'package.json'), `${JSON.stringify({ name: 'vyrnforge-packed-consumer', private: true, type: 'module', dependencies }, null, 2)}\n`);
 
   const sortedSpecifiers = [...publicSpecifiers].sort();
   writeFileSync(
     path.join(consumerRoot, 'smoke.mjs'),
-    `import '@angular/compiler';\nconst publicSpecifiers=${JSON.stringify(sortedSpecifiers)};\nawait Promise.all(publicSpecifiers.map((specifier)=>import(specifier)));\nconst privateSpecifiers=${JSON.stringify(publicPackageNames.flatMap((name) => [`@vyrnforge/${name}/internal`, `@vyrnforge/${name}/src/index.js`]))};\nfor(const specifier of privateSpecifiers){try{await import(specifier);throw new Error('private subpath unexpectedly importable: '+specifier)}catch(error){if(error?.message?.startsWith('private subpath unexpectedly importable:'))throw error;if(error?.code!=='ERR_PACKAGE_PATH_NOT_EXPORTED')throw error;}}\n`,
+    `${validationPackages.includes('angular') ? "import '@angular/compiler';\n" : ''}const publicSpecifiers=${JSON.stringify(sortedSpecifiers)};\nawait Promise.all(publicSpecifiers.map((specifier)=>import(specifier)));\nconst privateSpecifiers=${JSON.stringify(validationPackages.flatMap((name) => [`@vyrnforge/${name}/internal`, `@vyrnforge/${name}/src/index.js`]))};\nfor(const specifier of privateSpecifiers){try{await import(specifier);throw new Error('private subpath unexpectedly importable: '+specifier)}catch(error){if(error?.message?.startsWith('private subpath unexpectedly importable:'))throw error;if(error?.code!=='ERR_PACKAGE_PATH_NOT_EXPORTED')throw error;}}\n`,
   );
 
   const typeImports = sortedSpecifiers
@@ -149,4 +203,7 @@ try {
   rmSync(consumerRoot, { recursive: true, force: true });
 }
 
-console.log(`Validated ${publicPackageNames.length} packed public packages and ${publicSpecifiers.size} explicit public module entrypoints with package contracts, API Extractor, publint, attw, and an installed tarball consumer.`);
+console.log(
+  `Validated requested packages ${requestedPackages.join(', ')} using dependency closure ${validationPackages.join(', ')} ` +
+  `and ${publicSpecifiers.size} explicit public module entrypoints with package contracts, API Extractor, publint, attw, and an installed tarball consumer.`,
+);

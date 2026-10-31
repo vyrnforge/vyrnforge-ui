@@ -1,0 +1,226 @@
+name: Targeted Validation
+
+on:
+  workflow_call:
+    inputs:
+      mode:
+        description: Semantic impact mode (pr or main)
+        required: true
+        type: string
+      base_sha:
+        description: Base revision for changed-path analysis
+        required: true
+        type: string
+      head_sha:
+        description: Exact revision being validated
+        required: true
+        type: string
+      artifact_suffix:
+        description: Stable suffix for evidence artifacts
+        required: true
+        type: string
+      retention_days:
+        description: Evidence artifact retention
+        required: true
+        type: number
+      upload_docs_artifact:
+        description: Upload deployable docs for exact-main promotion
+        required: false
+        default: false
+        type: boolean
+
+permissions:
+  contents: read
+
+jobs:
+  plan:
+    name: semantic-impact
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    outputs:
+      package_artifacts_required: ${{ steps.plan.outputs.package_artifacts_required }}
+      package_artifact_packages: ${{ steps.plan.outputs.package_artifact_packages }}
+      browser_required: ${{ steps.plan.outputs.browser_required }}
+      browser_ports: ${{ steps.plan.outputs.browser_ports }}
+      browser_scopes: ${{ steps.plan.outputs.browser_scopes }}
+      docs_required: ${{ steps.plan.outputs.docs_required }}
+      release_required: ${{ steps.plan.outputs.release_required }}
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-node@v7
+        with:
+          node-version-file: .node-version
+          package-manager-cache: false
+      - name: Record semantic impact
+        id: plan
+        env:
+          BASE_SHA: ${{ inputs.base_sha }}
+          HEAD_SHA: ${{ inputs.head_sha }}
+        run: |
+          mkdir -p test-results
+          node tooling/impact/plan.mjs --mode "${{ inputs.mode }}" --base "$BASE_SHA" --head "$HEAD_SHA" --output test-results/semantic-impact.json --github-output "$GITHUB_OUTPUT"
+      - uses: actions/upload-artifact@v7
+        if: always()
+        with:
+          name: semantic-impact-${{ inputs.artifact_suffix }}
+          path: test-results/semantic-impact.json
+          if-no-files-found: error
+          retention-days: ${{ inputs.retention_days }}
+
+  affected:
+    name: affected
+    needs: plan
+    runs-on: ubuntu-latest
+    timeout-minutes: 40
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-node@v7
+        with:
+          node-version-file: .node-version
+          package-manager-cache: false
+      - run: corepack enable
+      - run: pnpm install --frozen-lockfile --ignore-scripts
+      - name: Run Nx affected validation
+        env:
+          NX_BASE: ${{ inputs.base_sha }}
+          NX_HEAD: ${{ inputs.head_sha }}
+        run: pnpm exec nx affected -t lint,typecheck,test,build --base="$NX_BASE" --head="$NX_HEAD"
+      - name: Verify repository contracts
+        run: pnpm verify:structure && pnpm verify:testing-structure && pnpm verify:boundaries && pnpm verify:architecture && pnpm verify:impact && pnpm verify:package-contracts && pnpm verify:compatibility && pnpm verify:workflows
+
+  package-artifacts:
+    name: package-artifacts
+    needs: [plan, affected]
+    if: needs.plan.outputs.package_artifacts_required == 'true'
+    runs-on: ubuntu-latest
+    timeout-minutes: 40
+    env:
+      VF_PACKAGE_SCOPE: ${{ needs.plan.outputs.package_artifact_packages }}
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-node@v7
+        with:
+          node-version-file: .node-version
+          package-manager-cache: false
+      - run: corepack enable
+      - run: pnpm install --frozen-lockfile --ignore-scripts
+      - name: Verify selected packed package closure
+        run: |
+          mkdir -p test-results
+          set -o pipefail
+          pnpm verify:packages 2>&1 | tee test-results/package-validation.log
+      - uses: actions/upload-artifact@v7
+        if: always()
+        with:
+          name: package-validation-${{ inputs.artifact_suffix }}
+          path: test-results/package-validation.log
+          if-no-files-found: error
+          retention-days: ${{ inputs.retention_days }}
+
+  release-intent:
+    name: release-intent
+    needs: [plan, affected]
+    if: needs.plan.outputs.release_required == 'true'
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-node@v7
+        with:
+          node-version-file: .node-version
+          package-manager-cache: false
+      - run: corepack enable
+      - run: pnpm install --frozen-lockfile --ignore-scripts
+      - run: pnpm verify:release
+
+  documentation:
+    name: documentation
+    needs: [plan, affected]
+    if: needs.plan.outputs.docs_required == 'true'
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-node@v7
+        with:
+          node-version-file: .node-version
+          package-manager-cache: false
+      - run: corepack enable
+      - run: pnpm install --frozen-lockfile --ignore-scripts
+      - run: pnpm build:docs
+      - uses: actions/upload-artifact@v7
+        if: inputs.upload_docs_artifact
+        with:
+          name: vyrnforge-docs-next-${{ inputs.head_sha }}
+          path: dist/docs
+          if-no-files-found: error
+          retention-days: ${{ inputs.retention_days }}
+
+  browser-chromium:
+    name: browser-chromium-${{ matrix.scope.port }}
+    needs: [plan, affected]
+    if: needs.plan.outputs.browser_required == 'true'
+    runs-on: ubuntu-latest
+    timeout-minutes: 40
+    strategy:
+      fail-fast: false
+      matrix:
+        scope: ${{ fromJSON(needs.plan.outputs.browser_scopes) }}
+    env:
+      VF_COMPONENT_PORT: ${{ matrix.scope.port }}
+      VF_COMPONENTS: ${{ matrix.scope.components }}
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-node@v7
+        with:
+          node-version-file: .node-version
+          package-manager-cache: false
+      - run: corepack enable
+      - run: pnpm install --frozen-lockfile --ignore-scripts
+      - run: pnpm exec playwright install --with-deps chromium
+      - run: pnpm build
+      - run: pnpm exec playwright test --project=chromium
+      - uses: actions/upload-artifact@v7
+        if: always()
+        with:
+          name: browser-evidence-${{ matrix.scope.port }}-${{ inputs.artifact_suffix }}
+          path: |
+            test-results/playwright-report/${{ matrix.scope.port }}
+            test-results/playwright-results/${{ matrix.scope.port }}
+          if-no-files-found: ignore
+          retention-days: ${{ inputs.retention_days }}
+
+  selected-evidence:
+    name: selected-evidence
+    if: always()
+    needs: [plan, affected, package-artifacts, release-intent, documentation, browser-chromium]
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/download-artifact@v7
+        with:
+          name: semantic-impact-${{ inputs.artifact_suffix }}
+          path: test-results
+      - name: Summarize and require selected evidence
+        env:
+          VF_HEAD_SHA: ${{ inputs.head_sha }}
+          VF_RESULT_AFFECTED: ${{ needs.affected.result }}
+          VF_RESULT_PACKAGES: ${{ needs.package-artifacts.result }}
+          VF_RESULT_RELEASE: ${{ needs.release-intent.result }}
+          VF_RESULT_DOCS: ${{ needs.documentation.result }}
+          VF_RESULT_BROWSER: ${{ needs.browser-chromium.result }}
+        run: node tooling/validation/summarize.mjs --plan test-results/semantic-impact.json --output-dir test-results/validation-summary
+      - uses: actions/upload-artifact@v7
+        if: always()
+        with:
+          name: validation-summary-${{ inputs.artifact_suffix }}
+          path: test-results/validation-summary
+          if-no-files-found: error
+          retention-days: ${{ inputs.retention_days }}
