@@ -42,7 +42,7 @@ for (const label of ['pr', 'main', 'targeted', 'scheduled', 'release']) {
 
 for (const label of ['targeted', 'scheduled', 'release']) {
   requireText(sources[label], 'pnpm install --frozen-lockfile --ignore-scripts', `${label} must install the committed pnpm dependency graph`);
-  requireText(sources[label], 'tooling/impact/plan.mjs', `${label} must use the shared semantic-impact modelg);
+  requireText(sources[label], 'tooling/impact/plan.mjs', `${label} must use the shared semantic-impact model`);
 }
 
 requireText(sources.pr, 'pull_request:', 'PR validation must run for pull requests');
