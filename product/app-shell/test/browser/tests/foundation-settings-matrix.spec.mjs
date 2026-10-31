@@ -125,6 +125,7 @@ test.describe('STD-02 public-entrypoint settings foundation matrix', () => {
   });
 
   test('keeps every rendered required boundary pair at or above 3:1 in both themes', async ({ page }) => {
+    await page.emulateMedia({ reducedMotion: 'reduce' });
     await page.goto('/components/app-shell/foundation-density-react.html');
     const appearance = page.getByLabel('Appearance');
 
