@@ -69,6 +69,7 @@ requireText(sources.scheduled, 'workflow_dispatch:', 'Scheduled assurance must s
 requireText(sources.scheduled, '--mode scheduled', 'Scheduled assurance must execute the scheduled broad tier through the shared model');
 requireText(sources.scheduled, 'pnpm verify:packages', 'Scheduled assurance must retain packed-package/consumer evidence');
 requireText(sources.scheduled, 'chromium firefox webkit', 'Scheduled assurance must retain broad cross-browser evidence');
+requireText(sources.scheduled, 'fromJSON(needs.plan.outputs.browser_ports)', 'Scheduled browser matrix must consume discovered broad ports from the semantic plan');
 
 requireText(sources.release, 'workflow_dispatch:', 'Release readiness must support manual execution');
 requireText(sources.release, "- 'v*'", 'Release readiness must run for release tags');
@@ -77,6 +78,7 @@ requireText(sources.release, 'pnpm verify:release', 'Release readiness must vali
 requireText(sources.release, 'pnpm verify:packages', 'Release readiness must retain packed-package/API/consumer evidence');
 requireText(sources.release, 'pnpm build:docs', 'Release readiness must retain documentation evidence');
 requireText(sources.release, 'pnpm test:browser:cross', 'Release readiness must retain broad cross-browser evidence');
+requireText(sources.release, 'fromJSON(needs.plan.outputs.browser_ports)', 'Release browser matrix must consume discovered broad ports from the semantic plan');
 
 for (const command of ["execFileSync('pnpm'", "execFileSync('nx'", "execFileSync('playwright'", 'spawn(', 'spawnSync(']) {
   forbidText(sources.impact, command, 'semantic-impact tooling must classify evidence, not execute generic tasks or browser/package commands');
