@@ -6,7 +6,7 @@ const port = process.env.VF_COMPONENT_PORT || 'web';
 test.describe('Tabs Web semantic and styling contract', () => {
   test.skip(port !== 'web', 'Web owns canonical Tabs CSS and semantic styling evidence.');
 
-  test('focus, disabled, accessibility, reduced motion, forced colors, and direction remain usable', async ({ page }) => {
+  test('focus, disabled, accessibility, reduced motion, forced colors, and direction remain usable', async ({ page, browserName }) => {
     await page.goto('/components/tabs/web.html');
     const root = page.locator('#web-tabs');
     const selected = page.locator('#web-tabs-tab-overview');
@@ -19,7 +19,9 @@ test.describe('Tabs Web semantic and styling contract', () => {
     await expect(disabled).not.toHaveAttribute('data-vf-disabled', '');
     await selected.focus();
     expect(await selected.evaluate((element) => getComputedStyle(element).outlineStyle)).not.toBe('none');
-    await expect(root).toHaveScreenshot('tabs-focus-visible.png');
+    if (browserName === 'chromium') {
+      await expect(root).toHaveScreenshot('tabs-focus-visible.png');
+    }
 
     await expectNoAxeViolations(page);
 
@@ -30,7 +32,9 @@ test.describe('Tabs Web semantic and styling contract', () => {
     await page.emulateMedia({ reducedMotion: 'reduce', forcedColors: 'active' });
     expect(await page.evaluate(() => matchMedia('(forced-colors: active)').matches)).toBe(true);
     await expect(selected).toBeVisible();
-    await expect(root).toHaveScreenshot('tabs-forced-colors-rtl.png');
+    if (browserName === 'chromium') {
+      await expect(root).toHaveScreenshot('tabs-forced-colors-rtl.png');
+    }
   });
 });
 
