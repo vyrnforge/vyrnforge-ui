@@ -69,7 +69,7 @@ function App() {
   const [draftQuery, setDraftQuery] = React.useState(initial.query);
   const [results, setResults] = React.useState<Project[]>([]);
   const [loading, setLoading] = React.useState(true);
-  const [isComposing, setIsComposing] = React.useState(false);
+  const isComposing = React.useRef(false);
   const requestId = React.useRef(0);
 
   const run = React.useCallback((next: Criteria) => {
@@ -101,7 +101,7 @@ function App() {
 
   const submitQuery = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    if (isComposing) return;
+    if (isComposing.current) return;
     commit({ ...criteria, query: draftQuery });
   };
 
@@ -118,8 +118,8 @@ function App() {
           <label htmlFor="project-query">Search projects</label>
           <SearchFieldInput
             id="project-query"
-            onCompositionStart={() => setIsComposing(true)}
-            onCompositionEnd={() => setIsComposing(false)}
+            onCompositionStart={() => { isComposing.current = true; }}
+            onCompositionEnd={() => { isComposing.current = false; }}
           />
           <SearchFieldClear aria-label="Clear project search" />
         </SearchFieldRoot>
@@ -130,17 +130,11 @@ function App() {
         <fieldset className="vf-data-explorer__facets">
           <legend>Filters</legend>
           <label className="vf-data-explorer__facet">
-            <Checkbox
-              checked={criteria.activeOnly}
-              onChange={(event) => commit({ ...criteria, activeOnly: event.currentTarget.checked })}
-            />
+            <Checkbox checked={criteria.activeOnly} onChange={(event) => commit({ ...criteria, activeOnly: event.currentTarget.checked })} />
             Active only
           </label>
           <label className="vf-data-explorer__facet">
-            <Checkbox
-              checked={criteria.mineOnly}
-              onChange={(event) => commit({ ...criteria, mineOnly: event.currentTarget.checked })}
-            />
+            <Checkbox checked={criteria.mineOnly} onChange={(event) => commit({ ...criteria, mineOnly: event.currentTarget.checked })} />
             Owned by me
           </label>
         </fieldset>
