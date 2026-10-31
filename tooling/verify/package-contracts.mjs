@@ -1,18 +1,14 @@
 import { access, readFile } from 'node:fs/promises';
 import { discoverProductUnits } from '../testing/discover-product-units.mjs';
+import {
+  allowedInternalDependencies,
+  frameworkPortNames,
+  publicPackageNames,
+} from './public-package-model.mjs';
 
 const root = JSON.parse(await readFile(new URL('../../package.json', import.meta.url), 'utf8'));
-const packages = ['core', 'web', 'icons', 'react', 'angular', 'vue', 'elements'];
 const publishMarkers = ['changeset publish', 'npm publish', 'pnpm publish'];
-const allowedDependencies = {
-  core: [],
-  web: ['@vyrnforge/core'],
-  icons: ['@vyrnforge/web'],
-  react: ['@vyrnforge/core', '@vyrnforge/web'],
-  angular: ['@vyrnforge/core', '@vyrnforge/web'],
-  vue: ['@vyrnforge/core', '@vyrnforge/web'],
-  elements: ['@vyrnforge/core', '@vyrnforge/web'],
-};
+
 function flattenExportTargets(value, targets = []) {
   if (typeof value === 'string') targets.push(value);
   else if (value && typeof value === 'object') {
@@ -20,6 +16,7 @@ function flattenExportTargets(value, targets = []) {
   }
   return targets;
 }
+
 function assertPrivateRebuildManifest(manifest, label) {
   if (manifest.private !== true) throw new Error(`${label} must remain private during the rebuild`);
   for (const [script, command] of Object.entries(manifest.scripts ?? {})) {
@@ -30,7 +27,7 @@ function assertPrivateRebuildManifest(manifest, label) {
 }
 
 assertPrivateRebuildManifest(root, 'root package');
-for (const name of packages) {
+for (const name of publicPackageNames) {
   const manifest = JSON.parse(
     await readFile(new URL(`../../packages/${name}/package.json`, import.meta.url), 'utf8'),
   );
@@ -57,22 +54,31 @@ for (const name of packages) {
   const declared = Object.keys(manifest.dependencies ?? {})
     .filter((dependency) => dependency.startsWith('@vyrnforge/'))
     .sort();
-  const expected = [...allowedDependencies[name]].sort();
+  const expected = [...allowedInternalDependencies[name]].sort();
   if (JSON.stringify(declared) !== JSON.stringify(expected)) {
-    throw new Error(`${manifest.name} internal dependencies must be ${expected.join(', ') || '<none>'}`);
+    throw new Error(
+      `${manifest.name} internal dependencies must be ${expected.join(', ') || '<none>'}`,
+    );
   }
   await access(new URL(`../../packages/${name}/tsconfig.json`, import.meta.url));
 }
-const web = JSON.parse(await readFile(new URL('../../packages/web/package.json', import.meta.url), 'utf8'));
+
+const web = JSON.parse(
+  await readFile(new URL('../../packages/web/package.json', import.meta.url), 'utf8'),
+);
 if (JSON.stringify(web.sideEffects) !== JSON.stringify(['./dist/**/*.css'])) {
   throw new Error('@vyrnforge/web CSS assets must be declared as side effects');
 }
 if (web.exports?.['./styles.css'] !== './dist/styles.css') {
   throw new Error('@vyrnforge/web must expose the canonical stylesheet explicitly');
 }
-const icons = JSON.parse(await readFile(new URL('../../packages/icons/package.json', import.meta.url), 'utf8'));
+
+const icons = JSON.parse(
+  await readFile(new URL('../../packages/icons/package.json', import.meta.url), 'utf8'),
+);
 if (icons.sideEffects !== false) throw new Error('@vyrnforge/icons must remain side-effect-free');
-for (const port of ['react', 'angular', 'vue', 'elements']) {
+
+for (const port of frameworkPortNames) {
   const manifest = JSON.parse(
     await readFile(new URL(`../../packages/${port}/package.json`, import.meta.url), 'utf8'),
   );
@@ -80,6 +86,7 @@ for (const port of ['react', 'angular', 'vue', 'elements']) {
     throw new Error(`${manifest.name} must not depend on the optional icon catalog`);
   }
 }
+
 const discovery = discoverProductUnits();
 for (const component of discovery.components) {
   if (
@@ -91,7 +98,7 @@ for (const component of discovery.components) {
       `@vyrnforge/web ${component.component} stylesheet export must target its component bundle`,
     );
   }
-  for (const port of ['react', 'angular', 'vue', 'elements']) {
+  for (const port of frameworkPortNames) {
     if (!component.ports[port]) continue;
     const manifest = JSON.parse(
       await readFile(new URL(`../../packages/${port}/package.json`, import.meta.url), 'utf8'),
@@ -101,18 +108,26 @@ for (const component of discovery.components) {
     const targets = flattenExportTargets(entry);
     if (port === 'angular') {
       const artifactStem = `vyrnforge-angular-${component.component}`;
-      if (!targets.every((target) => target.startsWith('./dist/')) || !targets.some((target) => target.includes(artifactStem))) {
-        throw new Error(`@vyrnforge/angular/${component.component} must resolve to its APF secondary entrypoint`);
+      if (
+        !targets.every((target) => target.startsWith('./dist/')) ||
+        !targets.some((target) => target.includes(artifactStem))
+      ) {
+        throw new Error(
+          `@vyrnforge/angular/${component.component} must resolve to its APF secondary entrypoint`,
+        );
       }
       continue;
     }
-    if (targets.some((target) => !target.startsWith(`./dist/components/${component.component}/`))) {
+    if (
+      targets.some((target) => !target.startsWith(`./dist/components/${component.component}/`))
+    ) {
       throw new Error(
         `@vyrnforge/${port}/${component.component} must build from its component-owned output directory`,
       );
     }
   }
 }
+
 process.stdout.write(
-  `package contracts: ${packages.length} private rebuild packages and ${discovery.components.length} component subpaths ok\n`,
+  `package contracts: ${publicPackageNames.length} private rebuild packages and ${discovery.components.length} component subpaths ok\n`,
 );

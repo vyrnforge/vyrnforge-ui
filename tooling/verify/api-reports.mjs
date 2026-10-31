@@ -2,13 +2,13 @@ import { readFileSync } from 'node:fs';
 import { Extractor, ExtractorConfig } from '@microsoft/api-extractor';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
+import { publicPackageNames } from './public-package-model.mjs';
 
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '../..');
-const packageNames = ['core', 'web', 'icons', 'react', 'angular', 'vue', 'elements'];
 const localBuild = process.argv.includes('--local');
 let failed = false;
 
-for (const name of packageNames) {
+for (const name of publicPackageNames) {
   const packageRoot = path.join(root, 'packages', name);
   const manifest = JSON.parse(readFileSync(path.join(packageRoot, 'package.json'), 'utf8'));
   if (typeof manifest.types !== 'string') {

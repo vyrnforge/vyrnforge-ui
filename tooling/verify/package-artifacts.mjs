@@ -3,9 +3,9 @@ import { cpSync, existsSync, mkdirSync, mkdtempSync, readFileSync, rmSync, write
 import { tmpdir } from 'node:os';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
+import { publicPackageNames } from './public-package-model.mjs';
 
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '../..');
-const packageNames = ['core', 'web', 'icons', 'react', 'angular', 'vue', 'elements'];
 const outputRoot = path.join(root, 'tmp/package-validation');
 const tarballRoot = path.join(outputRoot, 'tarballs');
 
@@ -55,7 +55,7 @@ run('node', ['tooling/verify/package-contracts.mjs']);
 run('node', ['tooling/verify/api-reports.mjs']);
 
 const tarballs = new Map();
-for (const name of packageNames) {
+for (const name of publicPackageNames) {
   const packageRoot = path.join(root, 'packages', name);
   if (!existsSync(path.join(packageRoot, 'dist'))) throw new Error(`@vyrnforge/${name} did not produce a dist directory`);
 
@@ -85,7 +85,7 @@ for (const name of packageNames) {
 
 const consumerRoot = mkdtempSync(path.join(tmpdir(), 'vyrnforge-packed-consumer-'));
 try {
-  const dependencies = Object.fromEntries(packageNames.map((name) => [`@vyrnforge/${name}`, `file:${tarballs.get(name)}`]));
+  const dependencies = Object.fromEntries(publicPackageNames.map((name) => [`@vyrnforge/${name}`, `file:${tarballs.get(name)}`]));
   Object.assign(dependencies, {
     '@angular/common': '22.2.3',
     '@angular/compiler': '22.2.3',
@@ -101,7 +101,7 @@ try {
     vue: '3.5.44',
   });
   writeFileSync(path.join(consumerRoot, 'package.json'), `${JSON.stringify({ name: 'vyrnforge-packed-consumer', private: true, type: 'module', dependencies }, null, 2)}\n`);
-  writeFileSync(path.join(consumerRoot, 'smoke.mjs'), `import '@angular/compiler';\nawait Promise.all([import('@vyrnforge/core'),import('@vyrnforge/web'),import('@vyrnforge/icons'),import('@vyrnforge/react'),import('@vyrnforge/react/button'),import('@vyrnforge/angular'),import('@vyrnforge/angular/button'),import('@vyrnforge/vue'),import('@vyrnforge/vue/button'),import('@vyrnforge/elements'),import('@vyrnforge/elements/icon')]);\nconst privateSpecifiers=${JSON.stringify(packageNames.flatMap((name) => [`@vyrnforge/${name}/internal`, `@vyrnforge/${name}/src/index.js`]))};\nfor(const specifier of privateSpecifiers){try{await import(specifier);throw new Error('private subpath unexpectedly importable: '+specifier)}catch(error){if(error?.message?.startsWith('private subpath unexpectedly importable:'))throw error;if(error?.code!=='ERR_PACKAGE_PATH_NOT_EXPORTED')throw error;}}\n`);
+  writeFileSync(path.join(consumerRoot, 'smoke.mjs'), `import '@angular/compiler';\nawait Promise.all([import('@vyrnforge/core'),import('@vyrnforge/web'),import('@vyrnforge/icons'),import('@vyrnforge/react'),import('@vyrnforge/react/button'),import('@vyrnforge/angular'),import('@vyrnforge/angular/button'),import('@vyrnforge/vue'),import('@vyrnforge/vue/button'),import('@vyrnforge/elements'),import('@vyrnforge/elements/icon')]);\nconst privateSpecifiers=${JSON.stringify(publicPackageNames.flatMap((name) => [`@vyrnforge/${name}/internal`, `@vyrnforge/${name}/src/index.js`]))};\nfor(const specifier of privateSpecifiers){try{await import(specifier);throw new Error('private subpath unexpectedly importable: '+specifier)}catch(error){if(error?.message?.startsWith('private subpath unexpectedly importable:'))throw error;if(error?.code!=='ERR_PACKAGE_PATH_NOT_EXPORTED')throw error;}}\n`);
   writeFileSync(path.join(consumerRoot, 'consumer.ts'), `import type * as Core from '@vyrnforge/core';\nimport type * as ReactPort from '@vyrnforge/react/button';\nimport type * as AngularPort from '@vyrnforge/angular/button';\nimport type * as VuePort from '@vyrnforge/vue/button';\nimport type * as ElementsPort from '@vyrnforge/elements/icon';\nexport type PackedConsumerSurface=[typeof Core,typeof ReactPort,typeof AngularPort,typeof VuePort,typeof ElementsPort];\n`);
   writeFileSync(path.join(consumerRoot, 'tsconfig.json'), `${JSON.stringify({ compilerOptions: { target: 'ES2022', module: 'NodeNext', moduleResolution: 'NodeNext', strict: true, noEmit: true, skipLibCheck: false }, include: ['consumer.ts'] }, null, 2)}\n`);
   run('npm', ['install', '--ignore-scripts', '--no-audit', '--no-fund'], { cwd: consumerRoot });
@@ -111,4 +111,4 @@ try {
   rmSync(consumerRoot, { recursive: true, force: true });
 }
 
-console.log(`Validated ${packageNames.length} packed public packages with package contracts, API Extractor, publint, attw, and an installed tarball consumer.`);
+console.log(`Validated ${publicPackageNames.length} packed public packages with package contracts, API Extractor, publint, attw, and an installed tarball consumer.`);
