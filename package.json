@@ -66,6 +66,7 @@
     "@vyrnforge/react": "workspace:*",
     "@vyrnforge/vue": "workspace:*",
     "@vyrnforge/web": "workspace:*",
+    "axe-core": "4.14.0",
     "esbuild": "0.28.2",
     "eslint": "10.13.0",
     "ng-packagr": "22.2.5",
