@@ -84,7 +84,7 @@ export const browserFixture = {
       const { VfInputDirective } = await import('@vyrnforge/angular/input');
       class App {}
       Component({ selector: 'vf-input-test', standalone: true, imports: [VfInputDirective], template: `<main><h1>Input fixture</h1><form id="form"><label for="editable">Editable</label><input id="editable" vfInput name="editable" value="alpha" required><label for="readonly">Readonly</label><input id="readonly" vfInput name="readonly" value="kept" readonly><label for="disabled">Disabled</label><input id="disabled" vfInput name="disabled" value="omitted" disabled><label for="required">Required</label><input id="required" vfInput name="required" required placeholder="Required value"><label for="app-invalid">Application invalid</label><input id="app-invalid" vfInput name="app-invalid" aria-invalid="true" value="bad"></form></main>` })(App);
-      const html = await renderApplication((context) => bootstrapApplication(App, { providers: [provideZonelessChangeDetection()] }, context), { document: '<!doctype html><html lang="en"><head><title>Input fixture</title><link rel="stylesheet" href="./input.css"></head><body><vf-input-test></vf-input-test></body></html>' });
+      const html = await renderApplication((context) => bootstrapApplication(App, { providers: [provideZonelessChangeDetection()] }, context), { document: '<!doctype html><html lang="en"><head><title>Input fixture</title><link rel="stylesheet" href="./input.css"><style>body{background:var(--vf-color-surface);color:var(--vf-color-text);}</style></head><body><vf-input-test></vf-input-test></body></html>' });
       await writeFile(path.join(outDir, 'angular.html'), html);
     }
   },
