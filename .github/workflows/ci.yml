@@ -11,181 +11,29 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
-  plan:
-    name: semantic-impact
-    runs-on: ubuntu-latest
-    timeout-minutes: 10
-    outputs:
-      package_artifacts_required: ${{ steps.plan.outputs.package_artifacts_required }}
-      browser_required: ${{ steps.plan.outputs.browser_required }}
-      browser_ports: ${{ steps.plan.outputs.browser_ports }}
-      docs_required: ${{ steps.plan.outputs.docs_required }}
-      release_required: ${{ steps.plan.outputs.release_required }}
-    steps:
-      - uses: actions/checkout@v7
-        with:
-          fetch-depth: 0
-      - uses: actions/setup-node@v7
-        with:
-          node-version-file: .node-version
-          package-manager-cache: false
-      - name: Record VyrnForge semantic impact
-        id: plan
-        env:
-          BASE_SHA: ${{ github.event.pull_request.base.sha }}
-          HEAD_SHA: ${{ github.sha }}
-        run: |
-          mkdir -p test-results
-          node tooling/impact/plan.mjs --mode pr --base "$BASE_SHA" --head "$HEAD_SHA" --output test-results/semantic-impact.json --github-output "$GITHUB_OUTPUT"
-      - uses: actions/upload-artifact@v7
-        if: always()
-        with:
-          name: semantic-impact-pr
-          path: test-results/semantic-impact.json
-          if-no-files-found: error
-          retention-days: 7
-
-  affected:
-    name: affected
-    needs: plan
-    runs-on: ubuntu-latest
-    timeout-minutes: 40
-    steps:
-      - uses: actions/checkout@v7
-        with:
-          fetch-depth: 0
-      - uses: actions/setup-node@v7
-        with:
-          node-version-file: .node-version
-          package-manager-cache: false
-      - run: corepack enable
-      - run: pnpm install --frozen-lockfile --ignore-scripts
-      - name: Run Nx affected validation
-        env:
-          NX_BASE: ${{ github.event.pull_request.base.sha }}
-          NX_HEAD: ${{ github.sha }}
-        run: pnpm exec nx affected -t lint,typecheck,test,build --base="$NX_BASE" --head="$NX_HEAD"
-      - name: Verify repository contracts
-        run: pnpm verify:structure && pnpm verify:testing-structure && pnpm verify:boundaries && pnpm verify:architecture && pnpm verify:impact && pnpm verify:package-contracts && pnpm verify:compatibility && pnpm verify:workflows
-
-  package-artifacts:
-    name: package-artifacts
-    needs: [plan, affected]
-    if: needs.plan.outputs.package_artifacts_required == 'true'
-    runs-on: ubuntu-latest
-    timeout-minutes: 40
-    steps:
-      - uses: actions/checkout@v7
-      - uses: actions/setup-node@v7
-        with:
-          node-version-file: .node-version
-          package-manager-cache: false
-      - run: corepack enable
-      - run: pnpm install --frozen-lockfile --ignore-scripts
-      - name: Verify packed packages
-        run: |
-          mkdir -p test-results
-          set -o pipefail
-          pnpm verify:packages 2>&1 | tee test-results/package-validation.log
-      - uses: actions/upload-artifact@v7
-        if: always()
-        with:
-          name: package-validation-pr
-          path: test-results/package-validation.log
-          if-no-files-found: error
-          retention-days: 7
-
-  release-intent:
-    name: release-intent
-    needs: [plan, affected]
-    if: needs.plan.outputs.release_required == 'true'
-    runs-on: ubuntu-latest
-    timeout-minutes: 20
-    steps:
-      - uses: actions/checkout@v7
-      - uses: actions/setup-node@v7
-        with:
-          node-version-file: .node-version
-          package-manager-cache: false
-      - run: corepack enable
-      - run: pnpm install --frozen-lockfile --ignore-scripts
-      - run: pnpm verify:release
-
-  documentation:
-    name: documentation
-    needs: [plan, affected]
-    if: needs.plan.outputs.docs_required == 'true'
-    runs-on: ubuntu-latest
-    timeout-minutes: 30
-    steps:
-      - uses: actions/checkout@v7
-      - uses: actions/setup-node@v7
-        with:
-          node-version-file: .node-version
-          package-manager-cache: false
-      - run: corepack enable
-      - run: pnpm install --frozen-lockfile --ignore-scripts
-      - run: pnpm build:docs
-
-  browser-chromium:
-    name: browser-chromium-${{ matrix.port }}
-    needs: [plan, affected]
-    if: needs.plan.outputs.browser_required == 'true'
-    runs-on: ubuntu-latest
-    timeout-minutes: 40
-    strategy:
-      fail-fast: false
-      matrix:
-        port: ${{ fromJSON(needs.plan.outputs.browser_ports) }}
-    env:
-      VF_COMPONENT_PORT: ${{ matrix.port }}
-    steps:
-      - uses: actions/checkout@v7
-      - uses: actions/setup-node@v7
-        with:
-          node-version-file: .node-version
-          package-manager-cache: false
-      - run: corepack enable
-      - run: pnpm install --frozen-lockfile --ignore-scripts
-      - run: pnpm exec playwright install --with-deps chromium
-      - run: pnpm build
-      - run: pnpm exec playwright test --project=chromium
-      - uses: actions/upload-artifact@v7
-        if: always()
-        with:
-          name: browser-evidence-${{ matrix.port }}-pr
-          path: |
-            test-results/playwright-report/${{ matrix.port }}
-            test-results/playwright-results/${{ matrix.port }}
-          if-no-files-found: ignore
-          retention-days: 7
+  targeted-validation:
+    uses: ./.github/workflows/_targeted-validation.yml
+    with:
+      mode: pr
+      base_sha: ${{ github.event.pull_request.base.sha }}
+      head_sha: ${{ github.sha }}
+      artifact_suffix: pr
+      retention_days: 7
+      upload_docs_artifact: false
 
   ci-gate:
     name: ci-gate
     if: always()
-    needs: [plan, affected, package-artifacts, release-intent, documentation, browser-chromium]
+    needs: targeted-validation
     runs-on: ubuntu-latest
     timeout-minutes: 5
     steps:
-      - name: Require all selected validation evidence
+      - name: Require targeted validation
         env:
-          PLAN: ${{ needs.plan.result }}
-          AFFECTED: ${{ needs.affected.result }}
-          PACKAGES: ${{ needs.package-artifacts.result }}
-          RELEASE: ${{ needs.release-intent.result }}
-          DOCS: ${{ needs.documentation.result }}
-          BROWSER: ${{ needs.browser-chromium.result }}
+          TARGETED_VALIDATION: ${{ needs.targeted-validation.result }}
         run: |
-          node --input-type=module <<'NODE'
-          const required = new Map([
-            ['plan', process.env.PLAN],
-            ['affected', process.env.AFFECTED],
-            ['package-artifacts', process.env.PACKAGES],
-            ['release-intent', process.env.RELEASE],
-            ['documentation', process.env.DOCS],
-            ['browser-chromium', process.env.BROWSER],
-          ]);
-          const failed = [...required].filter(([, result]) => !['success', 'skipped'].includes(result));
-          if (failed.length) throw new Error(`Selected validation failed: ${failed.map(([name, result]) => `${name}=${result}`).join(', ')}`);
-          console.log('All selected VyrnForge validation evidence passed.');
-          NODE
+          if [ "$TARGETED_VALIDATION" != "success" ]; then
+            echo "Targeted validation did not succeed: $TARGETED_VALIDATION" >&2
+            exit 1
+          fi
+          echo "All selected VyrnForge validation evidence passed."
