@@ -21,7 +21,7 @@ export const browserFixture = {
     <label for="required">Required</label><input id="required" data-vf-input name="required" required placeholder="Required value">
     <label for="app-invalid">Application invalid</label><input id="app-invalid" data-vf-input name="app-invalid" aria-invalid="true" value="bad">
   </form>`;
-    const page = (body) => `<!doctype html><html lang="en"><head><meta charset="utf-8"><link rel="stylesheet" href="./input.css"><title>Input fixture</title></head><body><main><h1>Input fixture</h1>${body}</main></body></html>`;
+    const page = (body) => `<!doctype html><html lang="en"><head><meta charset="utf-8"><link rel="stylesheet" href="./input.css"><title>Input fixture</title><style>body{background:var(--vf-color-surface);color:var(--vf-color-text);}</style></head><body><main><h1>Input fixture</h1>${body}</main></body></html>`;
 
     if (port === 'web' || port === 'elements') {
       await writeFile(path.join(outDir, `${port}.html`), page(fields));
