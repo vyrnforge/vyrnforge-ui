@@ -17,6 +17,8 @@ jobs:
     name: semantic-impact
     runs-on: ubuntu-latest
     timeout-minutes: 10
+    outputs:
+      browser_ports: ${{ steps.impact.outputs.browser_ports }}
     steps:
       - uses: actions/checkout@v7
       - uses: actions/setup-node@v7
@@ -24,9 +26,10 @@ jobs:
           node-version-file: .node-version
           package-manager-cache: false
       - name: Record scheduled broad semantic impact
+        id: impact
         run: |
           mkdir -p test-results
-          node tooling/impact/plan.mjs --mode scheduled --output test-results/semantic-impact.json
+          node tooling/impact/plan.mjs --mode scheduled --output test-results/semantic-impact.json --github-output "$GITHUB_OUTPUT"
       - uses: actions/upload-artifact@v7
         with:
           name: semantic-impact-scheduled-${{ github.run_id }}
@@ -59,7 +62,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        port: [web, react, angular, vue, elements]
+        port: ${{ fromJSON(needs.plan.outputs.browser_ports) }}
     env:
       VF_COMPONENT_PORT: ${{ matrix.port }}
     steps:

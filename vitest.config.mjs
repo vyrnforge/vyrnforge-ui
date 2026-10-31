@@ -1,10 +1,11 @@
 import { defineConfig } from 'vitest/config';
+import { publicPackageNames, publicPackageModel } from './tooling/package-model.mjs';
 
-const packageProjects = ['core', 'web', 'icons', 'react', 'angular', 'vue', 'elements'].map((name) => ({
+const packageProjects = publicPackageNames.map((name) => ({
   test: {
     name,
     environment: 'node',
-    setupFiles: name === 'angular' ? ['./tooling/testing/angular-vitest.setup.mjs'] : [],
+    setupFiles: publicPackageModel[name].vitestSetup ? [publicPackageModel[name].vitestSetup] : [],
     include: [`packages/${name}/test/**/*.test.mjs`],
     testTimeout: 30_000,
   },

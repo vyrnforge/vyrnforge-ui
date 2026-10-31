@@ -1,10 +1,15 @@
 import { existsSync, readFileSync, readdirSync } from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
+import {
+  frameworkPortNames,
+  publicPackageNames,
+  ssrPortNames,
+} from '../package-model.mjs';
 
 export const repoRoot = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '../..');
-const frameworkPorts = ['react', 'angular', 'vue', 'elements'];
-const ssrPorts = new Set(['react', 'angular', 'vue']);
+const frameworkPorts = frameworkPortNames;
+const ssrPorts = new Set(ssrPortNames);
 const sourceExtensions = ['.ts', '.tsx', '.mts', '.cts'];
 const ownedKinds = ['capabilities', 'accessibility', 'foundations'];
 const webFoundationStyleIds = new Set(['tokens', 'foundation', 'reset']);
@@ -32,7 +37,7 @@ function walkFiles(root, relativePath) {
   return files.sort();
 }
 function workspacePackages(root) {
-  return ['core', 'web', 'icons', 'react', 'angular', 'vue', 'elements'].filter((name) => existingPath(root, `packages/${name}/package.json`));
+  return publicPackageNames.filter((name) => existingPath(root, `packages/${name}/package.json`));
 }
 function componentIdFromFrameworkExport(exportName) { return /^\.\/([a-z][a-z0-9-]*)$/.exec(exportName)?.[1] ?? null; }
 function componentIdFromWebExport(exportName) {
@@ -143,11 +148,29 @@ export function discoverProductUnits(root = repoRoot) {
       const sourcePath = frameworkComponentSourcePath(port, componentId);
       ports[port] = { paths: [sourcePath, `packages/${port}/test/components/${componentId}/`], types: `packages/${port}/test/components/${componentId}/api.types.ts`, ...(ssrPorts.has(port) ? { ssr: `packages/${port}/test/components/${componentId}/ssr.test.mjs` } : {}), browser: true, dependencies: scanUnitDependencies(root, sourcePath, ownedUnits, packageManifests) };
     }
-    const frameworkPortNames = Object.keys(ports).filter((port) => port !== 'web');
+    const frameworkPortNamesForComponent = Object.keys(ports).filter((port) => port !== 'web');
     const componentRoot = `product/${componentId}`;
     const browserRoot = `${componentRoot}/test/browser`;
     const accessibilityPath = `${componentRoot}/accessibility.json`;
-    return { component: componentId, status: 'implemented', root: `${componentRoot}/`, ports, documentationSource: `${componentRoot}/docs/index.html`, documentationPaths: [`${componentRoot}/docs/`, `${componentRoot}/examples/`], exampleManifests: findExampleManifests(root, componentId), conformanceTypes: frameworkPortNames.length > 1 ? `${componentRoot}/test/conformance/public-api.types.ts` : null, browser: { fixture: `${browserRoot}/fixtures.mjs`, tests: `${browserRoot}/tests/`, paths: [`${browserRoot}/`, accessibilityPath] }, accessibilityPath, changesPath: `${componentRoot}/changes/`, changeFragments: walkFiles(root, `${componentRoot}/changes`).filter((file) => file.endsWith('.md')), discovery: { webExport: webExports.has(componentId), frameworkExports: frameworkPortNames, componentSlice: existingPath(root, componentRoot) } };
+    const metadataPath = `${componentRoot}/component.json`;
+    const metadata = existingPath(root, metadataPath) ? readJson(root, metadataPath) : null;
+    return {
+      component: componentId,
+      status: 'implemented',
+      root: `${componentRoot}/`,
+      ports,
+      metadataPath,
+      documentationGroup: metadata?.documentation?.group ?? null,
+      documentationSource: `${componentRoot}/docs/index.html`,
+      documentationPaths: [`${componentRoot}/docs/`, `${componentRoot}/examples/`],
+      exampleManifests: findExampleManifests(root, componentId),
+      conformanceTypes: frameworkPortNamesForComponent.length > 1 ? `${componentRoot}/test/conformance/public-api.types.ts` : null,
+      browser: { fixture: `${browserRoot}/fixtures.mjs`, tests: `${browserRoot}/tests/`, paths: [`${browserRoot}/`, accessibilityPath] },
+      accessibilityPath,
+      changesPath: `${componentRoot}/changes/`,
+      changeFragments: walkFiles(root, `${componentRoot}/changes`).filter((file) => file.endsWith('.md')),
+      discovery: { webExport: webExports.has(componentId), frameworkExports: frameworkPortNamesForComponent, componentSlice: existingPath(root, componentRoot) },
+    };
   });
   return { packages: packageNames.map((name) => ({ name, manifest: packageManifests.get(name) })), components, ownedUnits, frameworkExports, webExports };
 }
@@ -163,6 +186,8 @@ export function productPreparationProblems(root = repoRoot) {
   for (const componentId of directories(root, 'packages/web/src/components')) if (!discovery.webExports.has(componentId)) problems.push(`packages/web/src/components/${componentId}/ exists but @vyrnforge/web does not expose ./styles/${componentId}.css`);
   for (const component of discovery.components) {
     if (!existingPath(root, component.root)) problems.push(`${component.component} is public but missing repository product ownership slice: ${component.root}`);
+    if (!existingPath(root, component.metadataPath)) problems.push(`${component.component} is public but missing component-owned metadata: ${component.metadataPath}`);
+    else if (!component.documentationGroup) problems.push(`${component.component} component metadata must declare documentation.group`);
     if (!existingPath(root, component.documentationSource)) problems.push(`${component.component} is public but missing component documentation: ${component.documentationSource}`);
     if (component.exampleManifests.length === 0) problems.push(`${component.component} is public but has no executable example.json under product/${component.component}/examples/`);
     for (const [port, config] of Object.entries(component.ports)) {

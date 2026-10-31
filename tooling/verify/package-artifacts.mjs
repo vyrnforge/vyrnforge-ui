@@ -18,6 +18,29 @@ function run(command, args, options = {}) {
   });
 }
 
+function flattenExportTargets(value, targets = []) {
+  if (typeof value === 'string') targets.push(value);
+  else if (value && typeof value === 'object') {
+    for (const nested of Object.values(value)) flattenExportTargets(nested, targets);
+  }
+  return targets;
+}
+
+function publicModuleSpecifiers(manifest) {
+  const specifiers = [];
+  for (const [subpath, target] of Object.entries(manifest.exports ?? {})) {
+    if (subpath !== '.' && !subpath.startsWith('./')) continue;
+    if (subpath.includes('*')) {
+      throw new Error(`${manifest.name} uses wildcard public export ${subpath}; packed-consumer enumeration requires explicit public module subpaths`);
+    }
+    if (subpath === './package.json' || subpath.endsWith('.css')) continue;
+    const targets = flattenExportTargets(target);
+    if (!targets.some((entry) => /\.(?:[cm]?js)$/.test(entry))) continue;
+    specifiers.push(subpath === '.' ? manifest.name : `${manifest.name}/${subpath.slice(2)}`);
+  }
+  return specifiers;
+}
+
 function releaseManifest(manifest) {
   const result = structuredClone(manifest);
   delete result.private;
@@ -55,6 +78,7 @@ run('node', ['tooling/verify/package-contracts.mjs']);
 run('node', ['tooling/verify/api-reports.mjs']);
 
 const tarballs = new Map();
+const publicSpecifiers = new Set();
 for (const name of publicPackageNames) {
   const packageRoot = path.join(root, 'packages', name);
   if (!existsSync(path.join(packageRoot, 'dist'))) throw new Error(`@vyrnforge/${name} did not produce a dist directory`);
@@ -64,6 +88,7 @@ for (const name of publicPackageNames) {
   cpSync(path.join(packageRoot, 'dist'), path.join(stage, 'dist'), { recursive: true });
 
   const manifest = releaseManifest(JSON.parse(readFileSync(path.join(packageRoot, 'package.json'), 'utf8')));
+  for (const specifier of publicModuleSpecifiers(manifest)) publicSpecifiers.add(specifier);
   writeFileSync(path.join(stage, 'package.json'), `${JSON.stringify(manifest, null, 2)}\n`);
 
   const packedOutput = run('npm', ['pack', '--ignore-scripts', '--pack-destination', tarballRoot], { cwd: stage, capture: true }).trim();
@@ -101,8 +126,21 @@ try {
     vue: '3.5.44',
   });
   writeFileSync(path.join(consumerRoot, 'package.json'), `${JSON.stringify({ name: 'vyrnforge-packed-consumer', private: true, type: 'module', dependencies }, null, 2)}\n`);
-  writeFileSync(path.join(consumerRoot, 'smoke.mjs'), `import '@angular/compiler';\nawait Promise.all([import('@vyrnforge/core'),import('@vyrnforge/web'),import('@vyrnforge/icons'),import('@vyrnforge/react'),import('@vyrnforge/react/button'),import('@vyrnforge/angular'),import('@vyrnforge/angular/button'),import('@vyrnforge/vue'),import('@vyrnforge/vue/button'),import('@vyrnforge/elements'),import('@vyrnforge/elements/icon')]);\nconst privateSpecifiers=${JSON.stringify(publicPackageNames.flatMap((name) => [`@vyrnforge/${name}/internal`, `@vyrnforge/${name}/src/index.js`]))};\nfor(const specifier of privateSpecifiers){try{await import(specifier);throw new Error('private subpath unexpectedly importable: '+specifier)}catch(error){if(error?.message?.startsWith('private subpath unexpectedly importable:'))throw error;if(error?.code!=='ERR_PACKAGE_PATH_NOT_EXPORTED')throw error;}}\n`);
-  writeFileSync(path.join(consumerRoot, 'consumer.ts'), `import type * as Core from '@vyrnforge/core';\nimport type * as ReactPort from '@vyrnforge/react/button';\nimport type * as AngularPort from '@vyrnforge/angular/button';\nimport type * as VuePort from '@vyrnforge/vue/button';\nimport type * as ElementsPort from '@vyrnforge/elements/icon';\nexport type PackedConsumerSurface=[typeof Core,typeof ReactPort,typeof AngularPort,typeof VuePort,typeof ElementsPort];\n`);
+
+  const sortedSpecifiers = [...publicSpecifiers].sort();
+  writeFileSync(
+    path.join(consumerRoot, 'smoke.mjs'),
+    `import '@angular/compiler';\nconst publicSpecifiers=${JSON.stringify(sortedSpecifiers)};\nawait Promise.all(publicSpecifiers.map((specifier)=>import(specifier)));\nconst privateSpecifiers=${JSON.stringify(publicPackageNames.flatMap((name) => [`@vyrnforge/${name}/internal`, `@vyrnforge/${name}/src/index.js`]))};\nfor(const specifier of privateSpecifiers){try{await import(specifier);throw new Error('private subpath unexpectedly importable: '+specifier)}catch(error){if(error?.message?.startsWith('private subpath unexpectedly importable:'))throw error;if(error?.code!=='ERR_PACKAGE_PATH_NOT_EXPORTED')throw error;}}\n`,
+  );
+
+  const typeImports = sortedSpecifiers
+    .map((specifier, index) => `import type * as Surface${index} from ${JSON.stringify(specifier)};`)
+    .join('\n');
+  const typeTuple = sortedSpecifiers.map((_, index) => `typeof Surface${index}`).join(',');
+  writeFileSync(
+    path.join(consumerRoot, 'consumer.ts'),
+    `${typeImports}\nexport type PackedConsumerSurface=[${typeTuple}];\n`,
+  );
   writeFileSync(path.join(consumerRoot, 'tsconfig.json'), `${JSON.stringify({ compilerOptions: { target: 'ES2022', module: 'NodeNext', moduleResolution: 'NodeNext', strict: true, noEmit: true, skipLibCheck: false }, include: ['consumer.ts'] }, null, 2)}\n`);
   run('npm', ['install', '--ignore-scripts', '--no-audit', '--no-fund'], { cwd: consumerRoot });
   run('npm', ['exec', '--', 'tsc', '-p', 'tsconfig.json'], { cwd: consumerRoot });
@@ -111,4 +149,4 @@ try {
   rmSync(consumerRoot, { recursive: true, force: true });
 }
 
-console.log(`Validated ${publicPackageNames.length} packed public packages with package contracts, API Extractor, publint, attw, and an installed tarball consumer.`);
+console.log(`Validated ${publicPackageNames.length} packed public packages and ${publicSpecifiers.size} explicit public module entrypoints with package contracts, API Extractor, publint, attw, and an installed tarball consumer.`);

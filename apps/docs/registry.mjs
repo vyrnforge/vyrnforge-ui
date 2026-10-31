@@ -12,7 +12,7 @@ export function documentationRegistry(root) {
   const manualComponents = (base.pages ?? []).filter((page) => /^components\//.test(page.slug ?? ''));
   if (manualComponents.length) throw new Error('Component documentation routes are discovered from product/<id>/docs; remove manual component routes from documentation/site/registry.json');
   const componentPages = discoverProductUnits(root).components.map((component) => {
-    const usageGroup = componentUsageGroup(component.component);
+    const usageGroup = componentUsageGroup(component.documentationGroup);
     return {
       slug: `components/${component.component}`,
       title: titleCase(component.component),
