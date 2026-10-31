@@ -11,7 +11,7 @@ export const browserFixture = {
 
     const tokensCss = await readFile(path.join(root, 'packages/web/dist/styles/tokens.css'), 'utf8');
     const surfaceCss = (await readFile(path.join(root, 'packages/web/dist/components/surface/surface.css'), 'utf8')).replace('@import "../../styles/tokens.css";\n', '');
-    const fixtureCss = 'body { margin: 0; --vf-radius-surface: 0.75rem; } #surface { inline-size: 20rem; } #surface > * { margin: 0; }';
+    const fixtureCss = 'body { margin: 0; background: var(--vf-color-surface); color: var(--vf-color-text); --vf-radius-surface: 0.75rem; } #surface { inline-size: 20rem; } #surface > * { margin: 0; }';
     await writeFile(path.join(outDir, 'surface.css'), `${tokensCss}\n${surfaceCss}\n${fixtureCss}`);
 
     const page = (body, script = '') => `<!doctype html><html lang="en"><head><meta charset="utf-8"><link rel="stylesheet" href="./surface.css"><title>Surface fixture</title></head><body><main><h1>Surface fixture</h1>${body}</main>${script}</body></html>`;
