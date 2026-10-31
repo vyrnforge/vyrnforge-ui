@@ -1,9 +1,6 @@
 name: Scheduled Assurance
 
 on:
-  push:
-    branches:
-      - 'acceptance/1183-final-assurance'
   schedule:
     - cron: '17 3 * * 2,5'
   workflow_dispatch:
