@@ -55,8 +55,10 @@ export function packageProjectionPlan(root, packageId, graph = discoverProductGr
 }
 
 function copyStandardPackageSource(root, packageId, stageRoot) {
-  const sourceRoot = absoluteWithin(root, `packages/${packageId}/src`, 'Package source');
+  const packageRoot = absoluteWithin(root, `packages/${packageId}`, 'Package root');
+  const sourceRoot = path.join(packageRoot, 'src');
   if (!existsSync(sourceRoot)) throw new Error(`Package ${packageId} has no src directory`);
+  cpSync(path.join(packageRoot, 'package.json'), path.join(stageRoot, 'package.json'));
   cpSync(sourceRoot, path.join(stageRoot, 'src'), { recursive: true });
 }
 
