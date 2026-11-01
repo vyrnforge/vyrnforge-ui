@@ -29,16 +29,20 @@ test('current repository is normalized into one product graph', () => {
   const button = graph.components.find((component) => component.unitId === 'button');
   assert.ok(button);
   assert.equal(button.id, 'component:button');
-  assert.equal(button.facets.legacyRoot, 'product/button/');
-  assert.equal(button.facets.canonicalRoot, null);
-  assert.equal(button.surfaces.react.authoringMode, 'legacy-package');
-  assert.ok(button.surfaces.react.authoringPaths.includes('packages/react/src/components/button/'));
+  assert.equal(button.facets.legacyRoot, null);
+  assert.equal(button.facets.canonicalRoot, 'product/components/button/');
+  assert.equal(button.metadataSource, 'product-unit');
+  assert.equal(button.documentationGroup, 'actions');
+  assert.equal(button.surfaces.react.authoringMode, 'product-unit');
+  assert.deepEqual(button.surfaces.react.authoringPaths, ['product/components/button/react/']);
   assert.equal(button.surfaces.react.projectionPath, 'packages/react/src/components/button/');
+  assert.equal(button.surfaces.angular.authoringMode, 'product-unit');
   assert.equal(button.surfaces.angular.projectionPath, 'packages/angular/button/src/');
+  assert.equal(button.surfaces.web.authoringMode, 'product-unit');
   assert.equal(button.surfaces.web.projectionPath, 'packages/web/src/components/button/');
   assert.ok(button.surfaces.react.publicEntrypoints.includes('@vyrnforge/react/button'));
   assert.ok(button.surfaces.web.publicEntrypoints.includes('@vyrnforge/web/styles/button.css'));
-  assert.equal(button.migration.state, 'legacy');
+  assert.equal(button.migration.state, 'product-unit');
   assert.deepEqual(productGraphProblems(), []);
 });
 
@@ -111,7 +115,7 @@ test('legacy and canonical ownership can coexist as one mixed component during m
   assert.equal(button.surfaces.web.authoringMode, 'product-unit');
   assert.deepEqual(button.surfaces.web.authoringPaths, ['product/components/button/web/']);
   assert.equal(button.surfaces.web.projectionPath, 'packages/web/src/components/button/');
-  assert.deepEqual(button.surfaces.web.legacyPaths, ['packages/web/src/components/button/']);
+  assert.deepEqual(button.surfaces.web.legacyPaths, []);
   assert.deepEqual(button.surfaces.web.publicEntrypoints, ['@vyrnforge/web/styles/button.css']);
 });
 
