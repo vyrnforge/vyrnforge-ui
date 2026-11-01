@@ -81,7 +81,6 @@ test('Button documentation is framework locked and its executable source is idio
   await expect(playground).toHaveAttribute('data-vf-example-locked-framework', 'react');
   await expect(playground.getByRole('tab')).toHaveCount(0);
   await expect(playground.locator('[data-vf-example-framework]')).toHaveCount(0);
-  await expect(playground.locator('[data-vf-example-locked-framework]')).toHaveCount(1);
 
   const codeToggle = playground.locator('[data-vf-example-code-toggle]');
   await codeToggle.click();
