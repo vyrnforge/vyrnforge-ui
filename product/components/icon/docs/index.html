@@ -2,19 +2,9 @@
 
 <section><h2>Overview</h2><p>Use Icon for symbolic visual content. Keep actions and navigation on semantic controls such as Button or Link. Official VyrnForge artwork is available from <code>@vyrnforge/icons</code>.</p></section>
 
-<section>
-  <h2>Installation and imports</h2>
-  <div class="vf-docs-table-wrap" tabindex="0" role="region" aria-label="Icon package imports"><table><thead><tr><th>Surface</th><th>Public entrypoint</th></tr></thead><tbody>
-    <tr><th scope="row">Native Web</th><td><code>@vyrnforge/web/icon</code> and <code>@vyrnforge/web/styles/icon.css</code></td></tr>
-    <tr><th scope="row">Official artwork</th><td><code>@vyrnforge/icons/bookmark</code></td></tr>
-    <tr><th scope="row">React</th><td><code>@vyrnforge/react/icon</code></td></tr>
-    <tr><th scope="row">Angular</th><td><code>@vyrnforge/angular/icon</code></td></tr>
-    <tr><th scope="row">Vue</th><td><code>@vyrnforge/vue/icon</code></td></tr>
-    <tr><th scope="row">Elements</th><td><code>@vyrnforge/elements/icon</code></td></tr>
-  </tbody></table></div>
-</section>
+<section><h2>Quick start</h2><p>The example uses the Bookmark icon and runs in the framework selected in the documentation shell.</p><div data-vf-example="icon/basic"></div></section>
 
-<section><h2>Quick start</h2><p>The example uses the Bookmark icon from <code>@vyrnforge/icons/bookmark</code>.</p><div data-vf-example="icon/basic"></div></section>
+<div data-vf-framework-content></div>
 
 <section><h2>Anatomy</h2><p>Icon renders SVG artwork from an <code>IconDefinition</code>. Treat the definition as the public artwork input; SVG path details are not a composition surface.</p></section>
 
@@ -26,29 +16,18 @@
 
 <section><h2>Interaction</h2><p>Icon is not interactive or focusable. Place it inside the appropriate semantic control when it participates in an action.</p></section>
 
-<section><h2>Accessibility</h2><p>Icons are decorative by default. Set <code>label</code> only when the icon itself carries standalone meaning. Inside an icon-only Button, give the Button the accessible name and keep Icon decorative to avoid duplicate announcements.</p></section>
+<section><h2>Accessibility</h2><p>Icons are decorative by default. Set a label only when the icon itself carries standalone meaning. Inside an icon-only Button, give the Button the accessible name and keep Icon decorative to avoid duplicate announcements.</p></section>
 
 <section><h2>Forms</h2><p>Icon does not participate in forms. Form labeling, validation, disabled state, submission, and value semantics belong to the control that contains or accompanies it.</p></section>
 
 <section><h2>Styling</h2><p>Icons inherit <code>currentColor</code>. The public stylesheet maps <code>sm</code> to <code>1rem</code>, <code>md</code> to <code>1.25rem</code>, and <code>lg</code> to <code>1.5rem</code>. Stable hooks include <code>data-vf-icon</code>, <code>data-vf-icon-name</code>, <code>data-vf-variant</code>, <code>data-vf-shape</code>, and <code>data-vf-size</code>.</p></section>
 
-<section>
-  <h2>Framework API</h2>
-  <div class="vf-docs-table-wrap" tabindex="0" role="region" aria-label="Icon framework APIs"><table><thead><tr><th>Surface</th><th>Icon API</th></tr></thead><tbody>
-    <tr><th scope="row">React</th><td><code>Icon</code> accepts an <code>IconDefinition</code>, <code>variant</code>, <code>shape</code>, <code>size</code>, optional <code>label</code>, and supported SVG attributes.</td></tr>
-    <tr><th scope="row">Angular</th><td><code>VfIconComponent</code> exposes the same presentation and accessibility inputs.</td></tr>
-    <tr><th scope="row">Vue</th><td><code>Icon</code> exposes the same public props.</td></tr>
-    <tr><th scope="row">Elements</th><td>Register <code>VfIconElement</code> with <code>defineIconElement()</code>; assign rich artwork through the <code>icon</code> property.</td></tr>
-    <tr><th scope="row">Native Web</th><td>Use SVG markup with the documented hooks and public stylesheet.</td></tr>
-  </tbody></table></div>
-</section>
+<section><h2>CSR and SSR</h2><p>Framework ports can render SVG output during SSR where their runtime supports it. Elements becomes active after explicit registration and browser upgrade. Native Web requires no hydration.</p></section>
 
-<section><h2>CSR and SSR</h2><p>React, Angular, and Vue can render SVG output during SSR. Elements becomes active after registration and browser upgrade. Native Web requires no hydration.</p></section>
-
-<section><h2>Examples</h2><p>The Quick start example demonstrates Bookmark across Native Web, React, Angular, Vue, and Elements. Prefer granular icon imports such as <code>@vyrnforge/icons/bookmark</code>.</p></section>
+<section><h2>Examples</h2><p>The Quick start example demonstrates Bookmark in the selected framework. Prefer granular artwork imports such as <code>@vyrnforge/icons/bookmark</code> where the framework integration accepts an <code>IconDefinition</code>.</p></section>
 
 <section><h2>Do / Don't</h2><p><strong>Do</strong> keep decorative icons hidden from assistive technology and let an owning control provide the accessible name. <strong>Don't</strong> make Icon clickable by itself or invent fallback labels that were not authored by the application.</p></section>
 
 <section><h2>Testing guidance</h2><p>Test observable semantics: decorative icons are hidden, meaningful standalone icons expose their label, requested presentation options are reflected, and the icon inherits the intended color and size. Depend only on documented APIs and hooks.</p></section>
 
-<section><h2>Compatibility</h2><p>Icon is documented for Native Web, React, Angular, Vue, and Elements in this channel. See the Compatibility reference for supported runtime and browser ranges.</p></section>
+<section><h2>Compatibility</h2><p>Documented artwork input, presentation options, accessibility behavior, and public styling hooks are shared compatibility commitments. Framework grammar remains idiomatic and is documented in the framework adaptation above. See the Compatibility reference for supported runtime and browser ranges.</p></section>

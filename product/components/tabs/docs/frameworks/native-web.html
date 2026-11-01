@@ -1,0 +1,8 @@
+<section data-vf-framework-adaptation="native-web">
+  <h2>Native Web usage</h2>
+  <p>Load <code>@vyrnforge/web/styles/tabs.css</code> or the aggregate stylesheet and author the documented Tabs hooks on native buttons and panel elements.</p>
+  <h3>Behavior ownership</h3>
+  <p>Native Web has no Tabs runtime wrapper. Application code must implement the documented tab roles and relationships, roving <code>tabindex</code>, selection/panel visibility, disabled skipping, orientation- and direction-aware arrow keys, Home/End, and activation policy. The executable example shows the automatic horizontal case.</p>
+  <h3>Accessibility execution</h3>
+  <p>Give the tablist an accessible name and keep each <code>aria-controls</code>/<code>aria-labelledby</code> relationship stable. Do not replace keyboard behavior with pointer-only handlers. No framework hydration is required.</p>
+</section>
