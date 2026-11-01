@@ -28,6 +28,8 @@ Use the Node and pnpm versions declared by `.node-version`, `.nvmrc`, and the ro
 
 For direct Nx investigation, use commands such as `pnpm exec nx graph`, `pnpm exec nx show projects`, or `pnpm exec nx affected -t lint,typecheck,test,build --base=<sha> --head=<sha>`. Nx is the generic task executor; semantic-impact tooling classifies VyrnForge evidence and does not replace Nx scheduling.
 
+Package builds that contain migrated product-owned surfaces are projected through their Nx targets. Do not treat a package source directory as the canonical owner merely because it is the distribution destination; use the repository root/Nx commands above so Product Graph projection participates in the build.
+
 ### Vitest developer workflow
 
 Vitest owns pure logic, package unit tests, and repository/tooling tests. These projects run in Node by default; browser-owned behavior remains in Playwright rather than a DOM-emulation environment.
@@ -46,10 +48,10 @@ Do not bypass a failing verifier by weakening it unless the canonical architectu
 
 Keep the repository root intentionally small:
 
-- `packages/` — seven private-rebuild package surfaces and package-owned evidence.
-- `product/` — repository-only framework-neutral product slices spanning packages.
+- `packages/` — seven private-rebuild distribution/package shells plus package-owned capabilities and package evidence where the package is the correct owner.
+- `product/` — repository-only product-unit authoring and ownership across package boundaries.
 - `apps/` — runnable repository applications, currently the documentation app.
-- `documentation/` — shared/framework/reference consumer documentation not owned by one component.
+- `documentation/` — shared/framework/reference consumer documentation not owned by one product unit.
 - `tooling/` — repository automation grouped by durable function.
 
 Do not introduce top-level `components/`, `fixtures/`, `testing/`, `scripts/`, `utils/`, or other concern-specific roots. Empty placeholder directories are not architecture.
@@ -65,21 +67,25 @@ The active package graph exposes the rebuild's intended public API contracts whi
 - `@vyrnforge/icons` — optional official authored glyph catalog built on Web's icon definition contract.
 - `@vyrnforge/react`, `@vyrnforge/angular`, `@vyrnforge/vue`, `@vyrnforge/elements` — sibling idiomatic ports depending only on Core and Web.
 
-Do not introduce sibling-port dependencies, cycles, a universal component controller/runtime, framework-specific shared contracts, port-local visual systems, or application business architecture. Repository product folders are ownership and validation boundaries; they do not create additional public npm packages.
+Do not introduce sibling-port dependencies, cycles, a universal component controller/runtime, framework-specific shared contracts, port-local visual systems, or application business architecture. Product units are authoring and validation boundaries; they do not create additional public npm packages. Public packages remain the compatibility, versioning, and distribution boundary.
 
 ## Product ownership and testing
 
-Framework component implementations live under `packages/<port>/src/components/<component>/`, with package-local evidence under `packages/<port>/test/components/<component>/`. Shared component docs, examples, accessibility mapping, and cross-port/browser evidence live under `product/<component>/`.
+Canonical component authoring lives under `product/components/<component>/`. A component unit may own `component.json`, contract material, justified `core/` or `web/` surfaces, framework integrations such as `react/`, `angular/`, `vue/`, and `elements/`, shared docs/examples, accessibility mapping, cross-port conformance, and real-browser evidence. Not every component needs every surface, and directory symmetry is not a goal.
 
-Reusable package-owned units may live under `packages/<package>/src/capabilities/`, `src/accessibility/`, or `src/foundations/` when that package is the correct architectural owner, with mirrored evidence under `packages/<package>/test/<kind>/`. Do not add per-instance CI mappings or a central component testing registry. Public exports, conventional ownership, and source dependencies drive discovery.
+Build tooling projects approved product-owned surfaces into the existing public package layout and entrypoints. Package directories remain responsible for package identity, dependency metadata, package-wide configuration/entrypoints, release-shaped artifacts, and package evidence such as public-entrypoint, type, side-effect, packed-artifact, and clean-consumer verification. Published package code must not import repository source directly from `product/` at runtime.
 
-Canonical component contracts own behavioral scenarios. Use real browsers for browser-owned behavior. Automated accessibility scanning complements rather than replaces keyboard/focus/browser behavior and assistive-technology evidence. Put evidence at the lowest owner that actually proves the behavior.
+Reusable package-owned units may live under `packages/<package>/src/capabilities/`, `src/accessibility/`, or `src/foundations/` when that package is the correct architectural owner, with mirrored evidence under `packages/<package>/test/<kind>/`. Reusable behavior may also become an approved product capability when it genuinely spans product/package ownership; do not create component-shaped Core abstractions merely for symmetry.
+
+Migration is incremental. Product Graph tooling may temporarily normalize legacy package-local component source/evidence and canonical product-unit source as one logical component. `Button`, `Tabs`, `Dialog`, and `Icon` are the representative canonical product-unit pilots; other legacy locations remain migration input until deliberately moved. Do not infer target architecture from an unmigrated legacy path.
+
+Do not add per-instance CI mappings or a central component testing registry. Product Graph discovery, public exports, conventional ownership, source dependencies, and semantic-impact policy drive selection. Canonical component contracts own behavioral scenarios. Use real browsers for browser-owned behavior. Automated accessibility scanning complements rather than replaces keyboard/focus/browser behavior and assistive-technology evidence. Put evidence at the lowest owner that actually proves the behavior.
 
 Repository-wide reusable test infrastructure lives under `tooling/testing/`; product-specific evidence does not move there merely because it uses a shared harness. Foundation-wide visual regression is repository-owned testing infrastructure; component-specific visual evidence remains with the component when introduced.
 
 ## Documentation and changes
 
-Framework-neutral foundation content is authored once under shared documentation sources and composed into framework experiences. Framework guides own only framework-specific installation/API/integration guidance. Component documentation and executable examples are discovered from `product/<component>/`.
+Framework-neutral foundation content is authored once under shared documentation sources and composed into framework experiences. Framework guides own only framework-specific installation/API/integration guidance. Product-unit documentation and executable examples are discovered from their canonical product unit, such as `product/components/<component>/docs/` and `product/components/<component>/examples/`, with legacy discovery retained only as a migration adapter where still required.
 
 Changesets is the single source of current package release intent. For a consumer-visible change, run `pnpm changeset`, select the affected package surfaces, choose `patch`, `minor`, or `major`, and write a summary that preserves relevant deprecation, compatibility, and migration information. Repository-only work with intentionally no package release may use an empty Changeset so that the no-release decision is explicit without inventing a package bump. Historical owner-local `changes/` fragments are provenance only and must not be added or used as current release input.
 
