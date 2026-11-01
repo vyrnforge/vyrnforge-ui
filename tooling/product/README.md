@@ -15,9 +15,12 @@ The Product Graph is transitional infrastructure for the source-ownership migrat
 - Public exports remain authoritative consumer contracts.
 - During migration, canonical product-owned source takes authoring precedence while legacy paths remain visible as migration evidence.
 - Independent hand-maintained inventories should be replaced only after the graph proves equivalent discovery and validation.
+- `tooling/testing/discover-product-units.mjs` is transitional discovery plumbing beneath this boundary; repository consumers should depend on the Product Graph rather than import that scanner directly.
 
 ## Current Phase
 
-Phase 2 introduces normalized discovery only. It does **not** move runtime source and does **not** change public package entrypoints.
+Phase 3 makes the Product Graph a shared repository model. Impact analysis, component documentation/example discovery, and package/public-entrypoint verification consume the graph instead of maintaining their own direct dependency on the legacy testing scanner.
+
+This phase still does **not** move runtime source and does **not** change public package entrypoints. Package projection/compiler changes and physical source migration remain later phases.
 
 Representative migration pilots remain Button, Tabs, Dialog, and Icon.
