@@ -231,6 +231,9 @@ function classifyOwnedComponent(state, filePath, owned) {
   }
 
   state.packages.add(port);
+  if (docsPackageDependencies.has(port)) {
+    addEvidence(state, 'docs', `${port} is a declared dependency of the Reference docs application`, filePath);
+  }
   if (port === 'web') {
     addComponent(
       state,
