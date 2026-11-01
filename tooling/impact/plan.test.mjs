@@ -26,7 +26,7 @@ test('Core collection navigation fans to discovered component/conformance consum
 });
 
 test('React-only component implementation stays component and port local while retaining Reference evidence', () => {
-  const impact = createSemanticImpact(['packages/react/src/components/button/index.ts']);
+  const impact = createSemanticImpact(['product/components/button/react/index.ts']);
   assert.deepEqual(impact.components, ['button']);
   assert.deepEqual(impact.browserPorts, ['react']);
   assert.deepEqual(impact.browserScopes, [{ port: 'react', components: ['button'] }]);
@@ -63,7 +63,7 @@ test('canonical Tabs evidence fans across every implemented Tabs surface', () =>
 });
 
 test('Web component CSS selects only the component real ports plus visual and Reference evidence', () => {
-  const impact = createSemanticImpact(['packages/web/src/components/button/button.css']);
+  const impact = createSemanticImpact(['product/components/button/web/button.css']);
   assert.deepEqual(impact.components, ['button']);
   assert.ok(impact.semanticEvidence.includes('visual'));
   assert.equal(impact.selectors.browserRequired, true);
@@ -185,7 +185,7 @@ test('archived legacy package changes do not request current Reference evidence'
 });
 
 test('validation scopes keep selected evidence separate from execution prerequisites', () => {
-  const impact = createSemanticImpact(['packages/react/src/components/button/index.ts']);
+  const impact = createSemanticImpact(['product/components/button/react/index.ts']);
   assert.ok(impact.validationScopes.some((scope) => scope.selected === false));
   assert.ok(impact.executionPrerequisites.includes('dependencies'));
   assert.ok(impact.executionPrerequisites.includes('build:react'));
