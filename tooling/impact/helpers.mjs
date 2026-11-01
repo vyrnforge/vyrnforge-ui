@@ -7,6 +7,7 @@ import {
 } from './policy.mjs';
 
 export function pathWithin(filePath, root) {
+  if (!root) return false;
   const normalized = root.endsWith('/') ? root : `${root}/`;
   return filePath === root.replace(/\/$/, '') || filePath.startsWith(normalized);
 }
@@ -44,19 +45,21 @@ export function componentPorts(component) {
 
 export function componentForOwnedPath(discovery, filePath) {
   for (const component of discovery.components) {
-    if (pathWithin(filePath, component.root)) return { component, port: 'shared', area: 'product' };
+    // Target-specific ownership must win over the enclosing product root. This is
+    // what keeps product/components/button/react/** React-local during migration.
     for (const [port, config] of Object.entries(component.ports)) {
-      if ((config.paths ?? []).some((ownedPath) => pathWithin(filePath, ownedPath))) {
-        return { component, port, area: 'implementation' };
-      }
+      const ownedPath = (config.paths ?? []).find((candidate) => pathWithin(filePath, candidate));
+      if (ownedPath) return { component, port, area: 'implementation', root: ownedPath };
     }
+    const productRoot = (component.roots ?? [component.root]).find((candidate) => pathWithin(filePath, candidate));
+    if (productRoot) return { component, port: 'shared', area: 'product', root: productRoot };
   }
   return null;
 }
 
 export function ownedUnitForPath(discovery, filePath) {
-  return discovery.ownedUnits.find(
-    (unit) => [unit.sourcePath, unit.testPath, unit.metadataPath]
+  return discovery.ownedUnits.find((unit) =>
+    (unit.paths ?? [unit.sourcePath, unit.testPath, unit.metadataPath])
       .some((ownedPath) => pathWithin(filePath, ownedPath)),
   ) ?? null;
 }
@@ -107,7 +110,7 @@ export function addComponent(state, component, ports, because, filePath = null) 
 }
 
 export function addPackageArtifactEvidence(state, packageNames, because, filePath = null) {
-  for (const packageName of packageNames) state.packageArtifactPackages.add(packageName);
+  for (const packageName of packageNames.filter(Boolean)) state.packageArtifactPackages.add(packageName);
   addEvidence(state, 'package-artifacts', because, filePath);
 }
 
@@ -129,9 +132,12 @@ export function broaden(state, discovery, because, filePath = null) {
 
 export function reverseDependents(discovery, unit) {
   const affected = [];
+  const dependencyIds = new Set(unit.nodes ?? [unit.node]);
   for (const component of discovery.components) {
     for (const [port, config] of Object.entries(component.ports)) {
-      if ((config.dependencies ?? []).includes(unit.node)) affected.push({ component, port });
+      if ((config.dependencies ?? []).some((dependency) => dependencyIds.has(dependency))) {
+        affected.push({ component, port });
+      }
     }
   }
   return affected;
@@ -147,7 +153,9 @@ export function logicalValidationScopes(state, discovery, browserScopes, package
   choose('architecture', 'repository invariants are always validated');
   for (const unitNode of state.ownedUnits) {
     const unit = discovery.ownedUnits.find((candidate) => candidate.node === unitNode);
-    if (unit?.package === 'core') choose('pure-core', `${unit.node} is renderer-neutral Core-owned evidence`, unit.node);
+    if (unit && (unit.package === 'core' || unit.packages?.includes('core'))) {
+      choose('pure-core', `${unit.node} is renderer-neutral Core-owned evidence`, unit.node);
+    }
   }
   for (const packageName of state.packages) {
     const definition = packageDefinition(packageName);
