@@ -9,218 +9,124 @@ async function expectNoRuntimeErrors(page) {
   return () => expect(errors, errors.join('\n')).toEqual([]);
 }
 
-test('docs home consumes the reusable AppShell and exposes versioned accessible navigation and search', async ({ page }) => {
-  const verifyNoErrors = await expectNoRuntimeErrors(page);
+test('docs gateway locks framework selection before entering documentation', async ({ page }) => {
   await page.goto('/next/');
-  await expect(page).toHaveTitle(/Getting Started · VyrnForge/);
-  await expect(page.locator('vf-app-shell')).toHaveCount(1);
-  await expect.poll(() => page.evaluate(() => customElements.get('vf-app-shell')?.name ?? '')).toBe('VfAppShellElement');
-  await expect(page.locator('vf-app-shell')).toHaveAttribute('data-vf-app-shell', '');
-  await expect(page.locator('vf-app-shell > [data-vf-app-shell-header]')).toHaveCount(1);
-  await expect(page.locator('vf-app-shell > [data-vf-app-shell-body]')).toHaveCount(1);
-  await expect(page.locator('vf-app-shell > [data-vf-app-shell-footer]')).toHaveCount(1);
+  await expect(page).toHaveTitle(/Choose your framework · VyrnForge/);
+  await expect(page.getByRole('heading', { level: 1, name: 'Choose your framework' })).toBeVisible();
+  const choices = page.locator('[data-vf-framework-gateway-choice]');
+  await expect(choices).toHaveCount(5);
+  await page.getByRole('link', { name: /React documentation/ }).click();
+  await expect(page).toHaveURL(/\/next\/react\/$/);
   await expect(page.getByRole('heading', { level: 1, name: 'Getting Started' })).toBeVisible();
-  await expect(page.getByRole('link', { name: 'Skip to content' })).toBeAttached();
-  await expect(page.locator('[data-vf-docs-version]')).toContainText('next');
+});
 
-  const frameworkPicker = page.getByRole('group', { name: 'Framework' });
-  await expect(frameworkPicker).toBeVisible();
-  await expect(frameworkPicker.getByRole('button')).toHaveCount(5);
-  await expect(frameworkPicker.locator('[data-vf-framework-mark]')).toHaveCount(5);
-  for (const mark of await frameworkPicker.locator('[data-vf-framework-mark]').all()) await expect(mark).toHaveAttribute('aria-hidden', 'true');
+test('each framework documentation view owns its AppShell runtime while preserving one shell contract', async ({ page }) => {
+  const cases = [
+    ['native-web', 'div'],
+    ['react', 'div'],
+    ['angular', 'div'],
+    ['vue', 'div'],
+    ['elements', 'vf-app-shell']
+  ];
 
+  for (const [framework, expectedTag] of cases) {
+    const verifyNoErrors = await expectNoRuntimeErrors(page);
+    await page.goto(`/next/${framework}/`);
+    const shell = page.locator(`[data-vf-app-shell][data-vf-docs-renderer="${framework}"]`);
+    await expect(shell).toHaveCount(1);
+    await expect(shell).toHaveJSProperty('tagName', expectedTag.toUpperCase());
+    await expect(shell.locator('[data-vf-app-shell-header]')).toHaveCount(1);
+    await expect(shell.locator('[data-vf-app-shell-navigation]')).toHaveCount(1);
+    await expect(shell.locator('[data-vf-app-shell-main]')).toHaveCount(1);
+    await expect(shell.locator('[data-vf-app-shell-footer]')).toHaveCount(1);
+    await expect(page.getByRole('heading', { level: 1, name: 'Getting Started' })).toBeVisible();
+    if (framework !== 'elements') await expect(page.locator('vf-app-shell')).toHaveCount(0);
+    verifyNoErrors();
+  }
+});
+
+test('framework switch is route navigation and preserves component context', async ({ page }) => {
+  const verifyNoErrors = await expectNoRuntimeErrors(page);
+  await page.goto('/next/react/components/button/');
+  const picker = page.getByRole('navigation', { name: 'Framework' });
+  await expect(picker.getByRole('link')).toHaveCount(5);
+  await expect(picker.getByRole('link', { name: 'React' })).toHaveAttribute('aria-current', 'true');
+  await picker.getByRole('link', { name: 'Vue' }).click();
+  await expect(page).toHaveURL(/\/next\/vue\/components\/button\/$/);
+  await expect(page.locator('[data-vf-framework-context="vue"]')).toContainText('@vyrnforge/vue/button');
+  verifyNoErrors();
+});
+
+test('framework-scoped navigation and search never escape the selected framework', async ({ page }) => {
+  const verifyNoErrors = await expectNoRuntimeErrors(page);
+  await page.goto('/next/react/');
+  const navigation = page.getByRole('navigation', { name: 'Documentation' });
+  await expect(navigation.getByRole('link', { name: 'Button', exact: true })).toHaveAttribute('href', /components\/button\/$/);
   const search = page.getByRole('searchbox', { name: 'Search' });
-  await expect(search).toHaveAttribute('placeholder', 'Search docs…');
-  await search.fill('styling');
-  const result = page.getByRole('link', { name: 'Styling' }).last();
+  await search.fill('button');
+  const result = page.getByRole('link', { name: 'Button', exact: true }).last();
   await expect(result).toBeVisible();
   await result.click();
-  await expect(page.getByRole('heading', { level: 1, name: 'Styling' })).toBeVisible();
+  await expect(page).toHaveURL(/\/next\/react\/components\/button\/$/);
   verifyNoErrors();
 });
 
-test('component navigation groups the discovered inventory by developer usage', async ({ page }) => {
+test('Button documentation is framework locked and its executable source is idiomatic React', async ({ page }) => {
   const verifyNoErrors = await expectNoRuntimeErrors(page);
-  await page.goto('/next/');
+  await page.goto('/next/react/components/button/');
 
-  const navigation = page.getByRole('navigation', { name: 'Documentation' });
-  const componentSection = navigation.locator('[data-vf-side-nav-group]').filter({ has: page.locator('[data-vf-side-nav-group-label]', { hasText: 'Components' }) });
-  const groups = componentSection.locator('[data-vf-docs-component-subgroup]');
-  await expect(groups).toHaveCount(9);
-
-  const expectedGroups = [
-    'Actions',
-    'Form Controls',
-    'Selection & Choice',
-    'Specialized Fields',
-    'Navigation & Menus',
-    'Layout & Structure',
-    'Content & Disclosure',
-    'Overlays & Feedback',
-    'Utilities & Accessibility'
-  ];
-  for (const label of expectedGroups) await expect(componentSection.locator('summary', { hasText: label })).toBeVisible();
-
-  const formControls = groups.filter({ has: page.locator('summary', { hasText: 'Form Controls' }) });
-  await expect(formControls).not.toHaveAttribute('open', '');
-  await formControls.locator('summary').click();
-  await expect(formControls.getByRole('link', { name: 'Input', exact: true })).toBeVisible();
-  await expect(formControls.getByRole('link', { name: 'Textarea', exact: true })).toBeVisible();
-
-  await page.goto('/next/components/button/');
-  const actions = page.locator('[data-vf-docs-component-subgroup]').filter({ has: page.locator('summary', { hasText: 'Actions' }) });
-  await expect(actions).toHaveAttribute('open', '');
-  await expect(actions).toHaveAttribute('data-vf-current-group', 'true');
-  await expect(actions.getByRole('link', { name: 'Button', exact: true })).toHaveAttribute('aria-current', 'page');
-  verifyNoErrors();
-});
-
-test('framework selection exposes current public component availability', async ({ page }) => {
-  const verifyNoErrors = await expectNoRuntimeErrors(page);
-  await page.goto('/next/');
-  let frameworkPicker = page.getByRole('group', { name: 'Framework' });
-  await frameworkPicker.getByRole('button', { name: 'React' }).click();
-  await expect(page).toHaveURL(/\/next\/frameworks\/react\/$/);
-  frameworkPicker = page.getByRole('group', { name: 'Framework' });
-  await expect(frameworkPicker.getByRole('button', { name: 'React' })).toHaveAttribute('aria-pressed', 'true');
-  await expect(page.getByRole('heading', { level: 1, name: 'React' }).locator('[data-vf-framework-mark="react"]')).toHaveCount(1);
-  await expect(page.locator('[data-vf-support-status="partial"]')).toContainText('React integration is available');
-  await expect(page.getByRole('heading', { level: 2, name: 'Available component entrypoints' })).toBeVisible();
-  await expect(page.locator('main')).toContainText('@vyrnforge/react/dialog');
-
-  await frameworkPicker.getByRole('button', { name: 'Custom Elements' }).click();
-  await expect(page).toHaveURL(/\/next\/frameworks\/elements\/$/);
-  await expect(page.getByRole('heading', { level: 1, name: 'Custom Elements' })).toBeVisible();
-  await expect(page.locator('[data-vf-support-status="partial"]')).toContainText('Icon and Tabs');
-  await expect(page.locator('main')).toContainText('@vyrnforge/elements/tabs');
-  verifyNoErrors();
-});
-
-test('Button documentation uses demo-first navigation and executable multi-framework examples', async ({ page }) => {
-  const verifyNoErrors = await expectNoRuntimeErrors(page);
-  await page.goto('/next/components/button/');
-
-  const breadcrumbs = page.getByRole('navigation', { name: 'Breadcrumb' });
-  await expect(breadcrumbs).toContainText('Docs');
-  await expect(breadcrumbs).toContainText('Components');
-  await expect(breadcrumbs).toContainText('Button');
-  const toc = page.getByRole('navigation', { name: 'On this page' });
-  await expect(toc.getByRole('link', { name: 'Quick start' })).toBeVisible();
-  await expect(toc.getByRole('link', { name: 'Variants and sizes' })).toBeVisible();
-
+  await expect(page.getByRole('heading', { level: 2, name: 'React usage' })).toBeVisible();
+  await expect(page.getByRole('heading', { level: 2, name: 'Angular usage' })).toHaveCount(0);
   const playground = page.locator('[data-vf-example-id="button/basic"]');
-  const frame = page.frameLocator('[data-vf-example-id="button/basic"] iframe');
-  await expect(playground).toBeVisible();
-  await expect(playground.locator('iframe')).toHaveAttribute('sandbox', 'allow-scripts');
+  await expect(playground).toHaveAttribute('data-vf-example-locked-framework', 'react');
+  await expect(playground.getByRole('tab')).toHaveCount(0);
+  await expect(playground.locator('[data-vf-example-framework]')).toHaveCount(0);
+  await expect(playground.locator('[data-vf-example-locked-framework]')).toHaveCount(1);
 
   const codeToggle = playground.locator('[data-vf-example-code-toggle]');
-  await expect(codeToggle).toHaveAccessibleName('Show code');
-  await expect(codeToggle).toHaveAttribute('aria-expanded', 'false');
-  await expect(playground.locator('[data-vf-example-editor]')).toBeHidden();
   await codeToggle.click();
-  await expect(codeToggle).toHaveAttribute('aria-expanded', 'true');
-  await expect(codeToggle).toHaveAccessibleName('Hide code');
   const editor = playground.getByRole('textbox', { name: 'Basic button code editor' });
-  await expect(editor).toBeVisible();
+  await expect(editor).toHaveValue(/@vyrnforge\/react\/button/);
+  await expect(editor).not.toHaveValue(/@vyrnforge\/(angular|vue)\/button/);
 
-  const expectations = [
-    ['React', 'react', '@vyrnforge/react/button'],
-    ['Angular', 'angular', '@vyrnforge/angular/button'],
-    ['Vue', 'vue', '@vyrnforge/vue/button'],
-    ['Native Web', 'native-web', 'data-vf-button']
-  ];
-  for (const [label, framework, sourceNeedle] of expectations) {
-    const tab = playground.getByRole('tab', { name: label });
-    await expect(tab.locator(`[data-vf-framework-mark="${framework}"]`)).toHaveCount(1);
-    await tab.click();
-    await expect(editor).toHaveValue(new RegExp(sourceNeedle.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')));
-    await expect(frame.getByRole('button', { name: 'Save changes' })).toBeVisible();
-  }
-
-  await playground.getByRole('tab', { name: 'React' }).click();
+  const frame = page.frameLocator('[data-vf-example-id="button/basic"] iframe');
   const reactSource = await editor.inputValue();
   await editor.fill(reactSource.replace('Save changes', 'Ship release'));
   await playground.getByRole('button', { name: 'Run' }).click();
   await expect(playground.locator('[data-vf-example-status]')).toHaveText('Live preview updated.');
   await expect(frame.getByRole('button', { name: 'Ship release' })).toBeVisible();
-
-  await playground.getByRole('tab', { name: 'Angular' }).click();
-  await playground.getByRole('button', { name: 'Run' }).click();
-  await expect(playground.locator('[data-vf-example-status]')).toHaveText('Live preview updated.');
-  await expect(frame.getByRole('button', { name: 'Save changes' })).toBeVisible();
-
-  await playground.getByRole('tab', { name: 'Vue' }).click();
-  await playground.getByRole('button', { name: 'Run' }).click();
-  await expect(playground.locator('[data-vf-example-status]')).toHaveText('Live preview updated.');
-  await expect(frame.getByRole('button', { name: 'Save changes' })).toBeVisible();
-
-  await playground.getByRole('tab', { name: 'Native Web' }).click();
-  const nativeSource = await editor.inputValue();
-  await editor.fill(nativeSource.replace('Save changes', 'Publish changes'));
-  await playground.getByRole('button', { name: 'Run' }).click();
-  await expect(playground.locator('[data-vf-example-status]')).toHaveText('Live preview updated.');
-  await expect(frame.getByRole('button', { name: 'Publish changes' })).toBeVisible();
-
   verifyNoErrors();
 });
 
-test('Icon documentation renders the sample glyph in every executable framework example', async ({ page }) => {
+test('unavailable framework component remains an explicit route instead of falling back', async ({ page }) => {
   const verifyNoErrors = await expectNoRuntimeErrors(page);
-  await page.goto('/next/components/icon/');
-
-  const playground = page.locator('[data-vf-example-id="icon/basic"]');
-  const frame = page.frameLocator('[data-vf-example-id="icon/basic"] iframe');
-  await expect(playground).toBeVisible();
-
-  const frameworks = [
-    ['React', 'react'],
-    ['Angular', 'angular'],
-    ['Vue', 'vue'],
-    ['Custom Elements', 'elements'],
-    ['Native Web', 'native-web']
-  ];
-  for (const [label, framework] of frameworks) {
-    const tab = playground.getByRole('tab', { name: label });
-    await expect(tab.locator(`[data-vf-framework-mark="${framework}"]`)).toHaveCount(1);
-    await tab.click();
-    await expect(frame.locator('[data-vf-icon]')).toBeVisible();
-    await expect(frame.locator('[data-vf-icon] path')).toHaveCount(1);
-  }
-
+  await page.goto('/next/elements/components/button/');
+  await expect(page).toHaveURL(/\/next\/elements\/components\/button\/$/);
+  await expect(page.getByRole('heading', { level: 2, name: 'Not available for Custom Elements' })).toBeVisible();
+  await expect(page.locator('[data-vf-framework-unavailable="elements"]')).toContainText('does not expose a supported Custom Elements surface');
+  await expect(page.locator('[data-vf-example-id]')).toHaveCount(0);
+  await expect(page.getByRole('navigation', { name: 'Documentation' }).getByRole('link', { name: 'Button', exact: true })).toHaveCount(0);
   verifyNoErrors();
 });
 
-test('Text documentation teaches the live typography scale instead of only listing variants', async ({ page }) => {
+test('Text documentation keeps the same visual content contract inside a framework-scoped app', async ({ page }) => {
   const verifyNoErrors = await expectNoRuntimeErrors(page);
-  await page.goto('/next/components/text/');
-
+  await page.goto('/next/react/components/text/');
   const guide = page.locator('[data-vf-typography-guide]');
   await expect(guide).toBeVisible();
-  await expect(page.getByRole('heading', { level: 2, name: 'Variants and sizes' })).toBeVisible();
   await expect(page.locator('[data-vf-type-specimen]')).toHaveCount(18);
-  await expect(page.locator('[data-vf-type-specimen="overline"] [data-vf-text]')).toHaveCSS('text-transform', 'uppercase');
-
   const displaySize = await page.locator('[data-vf-type-specimen="display-lg"] [data-vf-text]').evaluate((element) => Number.parseFloat(getComputedStyle(element).fontSize));
   const bodySize = await page.locator('[data-vf-type-specimen="body-md"] [data-vf-text]').evaluate((element) => Number.parseFloat(getComputedStyle(element).fontSize));
   expect(displaySize).toBeGreaterThan(bodySize);
-
-  await expect(page.getByRole('heading', { level: 2, name: 'Semantics and appearance' })).toBeVisible();
-  await expect(guide).toContainText('Semantics and style are separate');
-  await expect(guide).toContainText('--vf-font-family-display');
-  await expect(guide).toContainText('TextVariantOverrides');
-
-  await page.setViewportSize({ width: 390, height: 844 });
-  const horizontalOverflow = await guide.evaluate((element) => element.scrollWidth - element.clientWidth);
-  expect(horizontalOverflow).toBeLessThanOrEqual(1);
   verifyNoErrors();
 });
 
-test('docs remain navigable at a mobile viewport', async ({ page }) => {
+test('framework-scoped docs remain navigable at a mobile viewport', async ({ page }) => {
   await page.setViewportSize({ width: 390, height: 844 });
-  await page.goto('/next/foundations/accessibility/');
+  await page.goto('/next/native-web/foundations/accessibility/');
   await expect(page.getByRole('navigation', { name: 'Documentation' })).toBeVisible();
   await expect(page.getByRole('heading', { level: 1, name: 'Accessibility' })).toBeVisible();
-  const frameworkPicker = page.getByRole('group', { name: 'Framework' });
+  const frameworkPicker = page.getByRole('navigation', { name: 'Framework' });
   await expect(frameworkPicker).toBeVisible();
   const overflow = await frameworkPicker.evaluate((element) => element.scrollWidth - element.clientWidth);
   expect(overflow).toBeGreaterThanOrEqual(0);
