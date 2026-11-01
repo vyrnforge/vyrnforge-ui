@@ -2,6 +2,7 @@ import { existsSync, readFileSync, readdirSync } from 'node:fs';
 import path from 'node:path';
 import { frameworkPortNames } from '../package-model.mjs';
 import { discoverProductUnits, repoRoot } from '../testing/discover-product-units.mjs';
+import { componentPackageProjectionPath } from './package-layout.mjs';
 
 const productKinds = Object.freeze({
   components: 'component',
@@ -78,6 +79,7 @@ function normalizeComponentSurface(root, manifests, component, componentId, targ
     package: packageForTarget[target],
     authoringMode: canonicalPath ? 'product-unit' : 'legacy-package',
     authoringPaths: canonicalPath ? [canonicalPath] : legacyPaths.length ? [legacyPaths[0]] : [],
+    projectionPath: componentPackageProjectionPath(target, componentId) ?? legacyPaths[0] ?? null,
     legacyPaths,
     publicEntrypoints: componentPublicEntrypoints(manifests, target, componentId),
     dependencies: legacy?.dependencies ?? [],
@@ -248,7 +250,7 @@ export function discoverProductGraph(root = repoRoot) {
   const units = [...components, ...canonicalUnits, ...legacyUnits].sort((a, b) => a.id.localeCompare(b.id));
 
   return {
-    schemaVersion: 1,
+    schemaVersion: 2,
     root,
     packages: discovery.packages.map(({ name, manifest }) => ({
       id: name,
@@ -279,6 +281,9 @@ export function productGraphProblems(root = repoRoot) {
     }
     for (const surface of Object.values(component.surfaces)) {
       if (!surface.authoringPaths.length) problems.push(`${component.id}/${surface.target} has no authoring source`);
+      if (surface.authoringMode === 'product-unit' && !surface.projectionPath) {
+        problems.push(`${component.id}/${surface.target} has no package projection destination`);
+      }
       if (!graph.packages.some((pkg) => pkg.id === surface.package)) {
         problems.push(`${component.id}/${surface.target} projects to unknown package ${surface.package}`);
       }

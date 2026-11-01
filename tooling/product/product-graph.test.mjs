@@ -33,6 +33,9 @@ test('current repository is normalized into one product graph', () => {
   assert.equal(button.facets.canonicalRoot, null);
   assert.equal(button.surfaces.react.authoringMode, 'legacy-package');
   assert.ok(button.surfaces.react.authoringPaths.includes('packages/react/src/components/button/'));
+  assert.equal(button.surfaces.react.projectionPath, 'packages/react/src/components/button/');
+  assert.equal(button.surfaces.angular.projectionPath, 'packages/angular/button/src/');
+  assert.equal(button.surfaces.web.projectionPath, 'packages/web/src/components/button/');
   assert.ok(button.surfaces.react.publicEntrypoints.includes('@vyrnforge/react/button'));
   assert.ok(button.surfaces.web.publicEntrypoints.includes('@vyrnforge/web/styles/button.css'));
   assert.equal(button.migration.state, 'legacy');
@@ -69,6 +72,7 @@ test('canonical product-unit source overrides package-local authoring without ch
   assert.equal(button.documentationGroup, 'actions');
   assert.equal(button.surfaces.react.authoringMode, 'product-unit');
   assert.deepEqual(button.surfaces.react.authoringPaths, ['product/components/button/react/']);
+  assert.equal(button.surfaces.react.projectionPath, 'packages/react/src/components/button/');
   assert.deepEqual(button.surfaces.react.legacyPaths, []);
   assert.deepEqual(button.surfaces.react.publicEntrypoints, ['@vyrnforge/react/button']);
   assert.equal(button.migration.state, 'product-unit');
@@ -106,8 +110,27 @@ test('legacy and canonical ownership can coexist as one mixed component during m
   assert.equal(button.facets.legacyRoot, 'product/button/');
   assert.equal(button.surfaces.web.authoringMode, 'product-unit');
   assert.deepEqual(button.surfaces.web.authoringPaths, ['product/components/button/web/']);
+  assert.equal(button.surfaces.web.projectionPath, 'packages/web/src/components/button/');
   assert.deepEqual(button.surfaces.web.legacyPaths, ['packages/web/src/components/button/']);
   assert.deepEqual(button.surfaces.web.publicEntrypoints, ['@vyrnforge/web/styles/button.css']);
+});
+
+test('component Core source fails closed until its projection is deliberately defined', () => {
+  const root = mkdtempSync(path.join(os.tmpdir(), 'vf-product-graph-core-projection-'));
+  const write = writer(root);
+
+  write('packages/core/package.json', JSON.stringify({
+    name: '@vyrnforge/core',
+    exports: { '.': './dist/index.js' },
+  }));
+  write('product/components/example/component.json', JSON.stringify({ name: 'Example' }));
+  write('product/components/example/core/index.ts', 'export const value = 1;\n');
+
+  const graph = discoverProductGraph(root);
+  const example = graph.components.find((component) => component.unitId === 'example');
+  assert.ok(example);
+  assert.equal(example.surfaces.core.projectionPath, null);
+  assert.ok(productGraphProblems(root).includes('component:example/core has no package projection destination'));
 });
 
 test('canonical capabilities merge legacy package ownership into one logical node', () => {

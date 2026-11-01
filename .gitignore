@@ -11,4 +11,5 @@ playwright-report/
 !.env.example
 .nx/
 .pnpm-store/
+.vf-projection/
 tmp/package-validation/

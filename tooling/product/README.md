@@ -14,13 +14,18 @@ The Product Graph is transitional infrastructure for the source-ownership migrat
 - The graph is repository-only tooling and must never become a runtime dependency of published packages.
 - Public exports remain authoritative consumer contracts.
 - During migration, canonical product-owned source takes authoring precedence while legacy paths remain visible as migration evidence.
+- Package projection destinations are derived from package shape rather than from component-specific registries.
+- Product-owned surfaces without an intentional package projection fail closed; Core is not inferred from component symmetry.
+- Unprojected product drafts are excluded from distributable package projection.
 - Independent hand-maintained inventories should be replaced only after the graph proves equivalent discovery and validation.
 - `tooling/testing/discover-product-units.mjs` is transitional discovery plumbing beneath this boundary; repository consumers should depend on the Product Graph rather than import that scanner directly.
 
 ## Current Phase
 
-Phase 3 makes the Product Graph a shared repository model. Impact analysis, component documentation/example discovery, and package/public-entrypoint verification consume the graph instead of maintaining their own direct dependency on the legacy testing scanner.
+Phase 4 proves package projection before physical source migration.
 
-This phase still does **not** move runtime source and does **not** change public package entrypoints. Package projection/compiler changes and physical source migration remain later phases.
+Each public package build creates an ignored `.vf-projection/<package>/` staging tree from the existing package shell, overlays any publicly projected product-owned surfaces at their package distribution paths, builds the package with its existing public output shape, and removes the staging tree afterward. React, Vue, Elements, Core, Icons, and Web use projected TypeScript source; Web additionally copies canonical CSS/assets from the projected source tree. Angular preserves its ng-packagr primary/secondary-entrypoint structure in the staging tree and writes APF output to the existing `packages/angular/dist` boundary.
 
-Representative migration pilots remain Button, Tabs, Dialog, and Icon.
+The projection layer changes repository build plumbing only. It does **not** change public package names, public subpaths, runtime contracts, package versions, or consumer import paths.
+
+Button remains the first physical source-migration pilot after this projection layer passes repository evidence. Tabs, Dialog, and Icon follow only after the Button migration proves authoring, package, docs, impact, browser, and consumer evidence end to end.
