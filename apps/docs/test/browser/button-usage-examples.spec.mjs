@@ -9,41 +9,51 @@ async function expectNoRuntimeErrors(page) {
   return () => expect(errors, errors.join('\n')).toEqual([]);
 }
 
-test('every Button usage specimen exposes the executable code editor experience', async ({ page }) => {
-  const verifyNoErrors = await expectNoRuntimeErrors(page);
-  await page.goto('/next/components/button/');
+const frameworks = [
+  ['react', /@vyrnforge\/react\/button/],
+  ['angular', /@vyrnforge\/angular\/button/],
+  ['vue', /@vyrnforge\/vue\/button/],
+  ['native-web', /data-vf-button/]
+];
 
-  const examples = [
-    ['button/basic', /@vyrnforge\/react\/button/, ['Save changes', 'Preview', 'Cancel']],
-    ['button/variants', /variant="ghost"/, ['Primary', 'Secondary', 'Ghost']],
-    ['button/sizes', /size="lg"/, ['Small', 'Medium', 'Large']],
-    ['button/states', /loading/, ['Ready', 'Disabled', 'Loading', 'Loading and disabled']]
-  ];
+for (const [framework, importNeedle] of frameworks) {
+  test(`every Button usage specimen is executable and locked to ${framework}`, async ({ page }) => {
+    const verifyNoErrors = await expectNoRuntimeErrors(page);
+    await page.goto(`/next/${framework}/components/button/`);
 
-  for (const [id, sourceNeedle, previewLabels] of examples) {
-    const playground = page.locator(`[data-vf-example-id="${id}"]`);
-    const frame = page.frameLocator(`[data-vf-example-id="${id}"] iframe`);
-    await expect(playground).toBeVisible();
-    await expect(playground.getByRole('tab')).toHaveCount(4);
-    await expect(playground.locator('iframe')).toHaveAttribute('sandbox', 'allow-scripts');
+    const examples = [
+      ['button/basic', importNeedle, ['Save changes', 'Preview', 'Cancel']],
+      ['button/variants', /ghost/, ['Primary', 'Secondary', 'Ghost']],
+      ['button/sizes', /lg/, ['Small', 'Medium', 'Large']],
+      ['button/states', /loading/, ['Ready', 'Disabled', 'Loading', 'Loading and disabled']]
+    ];
 
-    const codeToggle = playground.locator('[data-vf-example-code-toggle]');
-    await expect(codeToggle).toHaveAccessibleName('Show code');
-    await expect(playground.locator('[data-vf-example-editor]')).toBeHidden();
-    await codeToggle.click();
-    await expect(codeToggle).toHaveAccessibleName('Hide code');
+    for (const [id, sourceNeedle, previewLabels] of examples) {
+      const playground = page.locator(`[data-vf-example-id="${id}"]`);
+      const frame = page.frameLocator(`[data-vf-example-id="${id}"] iframe`);
+      await expect(playground).toBeVisible();
+      await expect(playground).toHaveAttribute('data-vf-example-locked-framework', framework);
+      await expect(playground.getByRole('tab')).toHaveCount(0);
+      await expect(playground.locator('iframe')).toHaveAttribute('sandbox', 'allow-scripts');
 
-    const editor = playground.locator('[data-vf-example-editor]');
-    const source = playground.locator('[data-vf-example-source]');
-    await expect(editor).toBeVisible();
-    await expect(source).toHaveValue(sourceNeedle);
-    await expect(playground.getByRole('button', { name: 'Run' })).toBeVisible();
-    await expect(playground.getByRole('button', { name: 'Reset' })).toBeVisible();
+      const codeToggle = playground.locator('[data-vf-example-code-toggle]');
+      await expect(codeToggle).toHaveAccessibleName('Show code');
+      await expect(playground.locator('[data-vf-example-editor]')).toBeHidden();
+      await codeToggle.click();
+      await expect(codeToggle).toHaveAccessibleName('Hide code');
 
-    for (const label of previewLabels) {
-      await expect(frame.getByRole('button', { name: label, exact: true })).toBeVisible();
+      const editor = playground.locator('[data-vf-example-editor]');
+      const source = playground.locator('[data-vf-example-source]');
+      await expect(editor).toBeVisible();
+      await expect(source).toHaveValue(sourceNeedle);
+      await expect(playground.getByRole('button', { name: 'Run' })).toBeVisible();
+      await expect(playground.getByRole('button', { name: 'Reset' })).toBeVisible();
+
+      for (const label of previewLabels) {
+        await expect(frame.getByRole('button', { name: label, exact: true })).toBeVisible();
+      }
     }
-  }
 
-  verifyNoErrors();
-});
+    verifyNoErrors();
+  });
+}

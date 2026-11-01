@@ -18,7 +18,7 @@
       "executor": "nx:run-commands",
       "dependsOn": ["^build"],
       "outputs": ["{workspaceRoot}/dist/docs"],
-      "options": {"command":"node apps/docs/build.mjs"}
+      "options": {"command":"node apps/docs/build-framework-docs.mjs"}
     },
     "lint": {"executor":"nx:run-commands","options":{"command":"pnpm exec eslint apps/docs --max-warnings=0"}},
     "test": {"executor":"nx:run-commands","options":{"command":"pnpm exec vitest run --project docs --passWithNoTests"}}
