@@ -31,29 +31,16 @@
   <h2>Variants and sizes</h2>
   <p>Variant communicates visual emphasis without changing the activation contract. Use <code>primary</code> for the strongest action, <code>secondary</code> for an alternative action, and <code>ghost</code> for lower-emphasis actions.</p>
   <h3>Variants</h3>
-  <div class="vf-docs-demo-strip" aria-label="Button variant examples">
-    <button type="button" data-vf-button data-vf-variant="primary">Primary</button>
-    <button type="button" data-vf-button data-vf-variant="secondary">Secondary</button>
-    <button type="button" data-vf-button data-vf-variant="ghost">Ghost</button>
-  </div>
+  <div data-vf-example="button/variants"></div>
   <h3>Sizes</h3>
   <p>Button supports <code>sm</code>, <code>md</code>, and <code>lg</code>. Medium is the default.</p>
-  <div class="vf-docs-demo-strip" aria-label="Button size examples">
-    <button type="button" data-vf-button data-vf-size="sm">Small</button>
-    <button type="button" data-vf-button data-vf-size="md">Medium</button>
-    <button type="button" data-vf-button data-vf-size="lg">Large</button>
-  </div>
+  <div data-vf-example="button/sizes"></div>
 </section>
 
 <section>
   <h2>State and loading</h2>
   <p><code>disabled</code> and <code>loading</code> are independent. Disabled prevents activation using the native <code>disabled</code> attribute. Loading exposes busy state with <code>aria-busy="true"</code> but remains focusable and activatable unless you also disable the button.</p>
-  <div class="vf-docs-demo-strip" aria-label="Button state examples">
-    <button type="button" data-vf-button>Ready</button>
-    <button type="button" data-vf-button disabled>Disabled</button>
-    <button type="button" data-vf-button data-vf-loading aria-busy="true">Loading</button>
-    <button type="button" data-vf-button data-vf-loading aria-busy="true" disabled>Loading and disabled</button>
-  </div>
+  <div data-vf-example="button/states"></div>
   <aside class="vf-docs-note"><strong>Loading does not imply disabled.</strong> If repeat activation must be blocked while application work is in progress, set both states explicitly.</aside>
 </section>
 
