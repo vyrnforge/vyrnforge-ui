@@ -1,0 +1,8 @@
+<section data-vf-framework-adaptation="native-web">
+  <h2>Native Web usage</h2>
+  <p>Author a native <code>&lt;dialog&gt;</code> with the documented <code>data-vf-dialog-*</code> hooks and load <code>@vyrnforge/web/styles/dialog.css</code> or the aggregate stylesheet.</p>
+  <h3>State and interaction ownership</h3>
+  <p>Native Web intentionally adds no wrapper runtime. Application code calls <code>showModal()</code>/<code>close()</code>, owns optional backdrop and close-control policy, and restores focus when required. Escape arrives through the native <code>cancel</code> event.</p>
+  <h3>Accessibility execution</h3>
+  <p>Use the native dialog element, connect a meaningful title with <code>aria-labelledby</code>, add <code>aria-describedby</code> when useful, and preserve a visible focus path. No framework hydration is required.</p>
+</section>

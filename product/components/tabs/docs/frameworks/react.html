@@ -1,0 +1,8 @@
+<section data-vf-framework-adaptation="react">
+  <h2>React adaptation</h2>
+  <p>Import <code>TabsRoot</code>, <code>TabsList</code>, <code>TabsTab</code>, and <code>TabsPanel</code> from <code>@vyrnforge/react/tabs</code>.</p>
+  <h3>Selection and composition</h3>
+  <p>Give each tab/panel pair the same <code>value</code>. Use <code>value</code>/<code>onValueChange</code> for controlled selection or <code>defaultValue</code> for uncontrolled initialization. Configure <code>orientation</code> and <code>activation</code> on the root.</p>
+  <h3>Accessibility and hydration</h3>
+  <p>Provide an accessible name on <code>TabsList</code>. React renders the tab roles and relationships while the VyrnForge behavior contract owns roving focus, disabled skipping, orientation/RTL movement, and manual versus automatic activation.</p>
+</section>

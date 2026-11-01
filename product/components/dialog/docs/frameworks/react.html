@@ -1,0 +1,8 @@
+<section data-vf-framework-adaptation="react">
+  <h2>React adaptation</h2>
+  <p>Import Dialog primitives from <code>@vyrnforge/react/dialog</code> and load <code>@vyrnforge/web/styles/dialog.css</code> or the aggregate stylesheet.</p>
+  <h3>Composition and state</h3>
+  <p>Compose <code>DialogRoot</code>, <code>DialogTitle</code>, <code>DialogDescription</code>, <code>DialogBody</code>, and <code>DialogClose</code>. Use <code>open</code>/<code>onOpenChange</code> for controlled state or <code>defaultOpen</code> where uncontrolled state is appropriate. <code>backdropDismiss</code> opts into backdrop dismissal.</p>
+  <h3>Accessibility and hydration</h3>
+  <p>Keep the authored title and optional description connected through the documented IDs. Modal activation, dismissal, and focus restoration begin in the browser; controlled React state remains authoritative through hydration.</p>
+</section>
