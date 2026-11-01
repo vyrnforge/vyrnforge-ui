@@ -25,7 +25,7 @@ export function impactProductView(graph = discoverProductGraph()) {
       return {
         component: component.unitId,
         status: component.status,
-        root: roots[0] ?? component.facets.root,
+        root: component.facets.root,
         roots,
         ports,
         metadataPath: component.metadataPath,
@@ -37,11 +37,12 @@ export function impactProductView(graph = discoverProductGraph()) {
       .map((unit) => {
         const legacyNodes = unit.legacyNodes ?? [];
         const primaryLegacy = legacyNodes[0] ?? null;
+        const packages = unique([...(unit.packages ?? []), ...legacyNodes.map((legacy) => legacy.package)]);
         return {
           node: primaryLegacy?.node ?? unit.id,
           nodes: unique([unit.id, ...legacyNodes.map((legacy) => legacy.node)]),
-          package: unit.packages?.[0] ?? primaryLegacy?.package ?? null,
-          packages: unique(unit.packages ?? legacyNodes.map((legacy) => legacy.package)),
+          package: packages[0] ?? null,
+          packages,
           kind: unit.kind,
           id: unit.unitId,
           sourcePath: unit.migration?.canonicalRoot ?? primaryLegacy?.sourcePath ?? unit.root,
