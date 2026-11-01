@@ -31,6 +31,26 @@ function requireReadOnlyContents(source, label) {
   forbidText(source, 'contents: write', `${label} must not mutate repository contents`);
 }
 
+function requireImmutableExternalActionRefs(source, label) {
+  for (const [index, line] of source.split('\n').entries()) {
+    const match = line.match(/^\s*uses:\s*([^\s#]+)(?:\s+#.*)?$/);
+    if (!match) continue;
+    const reference = match[1];
+    if (reference.startsWith('./')) continue;
+    const at = reference.lastIndexOf('@');
+    const revision = at >= 0 ? reference.slice(at + 1) : '';
+    if (!/^[0-9a-f]{40}$/i.test(revision)) {
+      throw new Error(
+        `workflow contract: ${label} external action on line ${index + 1} must be pinned to a full commit SHA: ${reference}`,
+      );
+    }
+  }
+}
+
+for (const label of ['pr', 'main', 'targeted', 'browser', 'scheduled', 'release', 'docs', 'retention']) {
+  requireImmutableExternalActionRefs(sources[label], label);
+}
+
 for (const label of ['pr', 'main', 'targeted', 'browser', 'scheduled', 'release']) {
   requireReadOnlyContents(sources[label], label);
   forbidText(sources[label], 'npm ci', `${label} must not use the retired npm workspace install path`);
@@ -86,7 +106,7 @@ requireText(sources.browser, 'workflow_call:', 'browser execution must be a reus
 requireText(sources.browser, 'fromJSON(inputs.scopes_json)', 'browser executor must consume planned component × port scopes');
 requireText(sources.browser, 'VF_COMPONENT_PORT', 'browser executor must retain per-port isolation');
 requireText(sources.browser, 'VF_COMPONENTS', 'browser executor must pass selected components to Playwright/fixture preparation');
-requireText(sources.browser, 'actions/cache@v6', 'browser prerequisite reuse must use the current Node 24 cache action');
+requireText(sources.browser, 'uses: actions/cache@', 'browser prerequisite reuse must use the maintained cache action');
 requireText(sources.browser, '.cache/ms-playwright', 'browser binaries must use an explicit reusable cache path');
 requireText(sources.browser, 'browser-build-${{ inputs.revision }}-', 'shared browser build artifacts must be tied to the exact validated revision');
 requireText(sources.browser, 'pnpm exec playwright install ${{ inputs.browsers }}', 'widest selected browser binaries must be prepared once');
@@ -153,4 +173,4 @@ requireText(sources.retention, 'github.event.repository.default_branch', 'Reposi
 requireText(sources.retention, 'tooling/ci/retention-cleanup.mjs', 'Repository Retention must use the maintained cleanup implementation');
 forbidText(sources.retention, 'pnpm install', 'Repository Retention must not install the product dependency graph');
 
-process.stdout.write('workflow contracts: reusable targeted/browser validation, scoped evidence, measured prerequisite reuse, pnpm security, private rebuild posture, Nx ownership, broad safety nets, artifact lineage, and mutation boundaries ok\n');
+process.stdout.write('workflow contracts: immutable action refs, reusable targeted/browser validation, scoped evidence, measured prerequisite reuse, pnpm security, private rebuild posture, Nx ownership, broad safety nets, artifact lineage, and mutation boundaries ok\n');
