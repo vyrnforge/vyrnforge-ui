@@ -5,7 +5,7 @@ import { publicPackageAliases } from './example-compiler.mjs';
 
 const sources = Object.freeze({
   react: `
-    import React, { createElement } from 'react';
+    import { createElement } from 'react';
     import { createRoot } from 'react-dom/client';
     import { flushSync } from 'react-dom';
     import { AppShell, AppShellHeader, AppShellBody, AppShellNavigation, AppShellMain, AppShellFooter } from '@vyrnforge/react/app-shell';
