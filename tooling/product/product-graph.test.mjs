@@ -29,7 +29,7 @@ test('current repository is normalized into one product graph', () => {
   const button = graph.components.find((component) => component.unitId === 'button');
   assert.ok(button);
   assert.equal(button.id, 'component:button');
-  assert.equal(button.facets.legacyRoot, 'product/button/');
+  assert.equal(button.facets.legacyRoot, null);
   assert.equal(button.facets.canonicalRoot, 'product/components/button/');
   assert.equal(button.metadataSource, 'product-unit');
   assert.equal(button.documentationGroup, 'actions');
@@ -42,7 +42,7 @@ test('current repository is normalized into one product graph', () => {
   assert.equal(button.surfaces.web.projectionPath, 'packages/web/src/components/button/');
   assert.ok(button.surfaces.react.publicEntrypoints.includes('@vyrnforge/react/button'));
   assert.ok(button.surfaces.web.publicEntrypoints.includes('@vyrnforge/web/styles/button.css'));
-  assert.equal(button.migration.state, 'mixed');
+  assert.equal(button.migration.state, 'product-unit');
   assert.deepEqual(productGraphProblems(), []);
 });
 
