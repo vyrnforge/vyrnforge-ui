@@ -1,63 +1,145 @@
-<p class="vf-docs-lede">Button triggers an action or command while preserving native <code>&lt;button&gt;</code> semantics, form behavior, keyboard activation, and focus.</p>
+<p class="vf-docs-lede">Button triggers an action or command while preserving native <code>&lt;button&gt;</code> semantics, keyboard activation, focus, and form behavior.</p>
 
-<section><h2>Overview</h2><p>Use Button for actions such as saving, confirming, opening UI, or submitting a form. Use a link when the user is navigating to another location.</p></section>
+<div class="vf-docs-page-meta" aria-label="Button characteristics">
+  <span>Actions</span>
+  <span>Native-backed</span>
+  <span>React · Angular · Vue · Native Web</span>
+</div>
 
-<section><h2>When to use and alternatives</h2><p>Use Button when the user activates an action or command. Do not use it for destination navigation; use Link or a native anchor for that semantic. Do not replace native button activation with a custom div, generic ARIA controller, or application-specific keyboard handler merely for visual consistency.</p></section>
+<section>
+  <h2>Overview</h2>
+  <p>Use Button when a user should perform an immediate action: save, confirm, submit, open an interface, retry, or cancel an operation. Button is deliberately native-first, so ordinary browser semantics remain the baseline rather than being reproduced with a custom controller.</p>
+  <div class="vf-docs-split">
+    <article class="vf-docs-card vf-docs-card--good">
+      <h3>Use Button</h3>
+      <p>For actions and commands whose primary intent is activation.</p>
+    </article>
+    <article class="vf-docs-card vf-docs-card--bad">
+      <h3>Use something else</h3>
+      <p>For navigation, use Link or a native anchor. Do not turn a generic element into a button only to achieve a visual style.</p>
+    </article>
+  </div>
+</section>
+
+<section>
+  <h2>Quick start</h2>
+  <p>The example below uses the same Button contract across every implemented framework surface. Switch framework tabs to compare idiomatic usage, or reveal the source when you want to edit and run it.</p>
+  <div data-vf-example="button/basic"></div>
+</section>
+
+<section>
+  <h2>Variants and sizes</h2>
+  <p>Variant communicates visual emphasis without changing the activation contract. Use <code>primary</code> for the strongest action, <code>secondary</code> for an alternative action, and <code>ghost</code> for lower-emphasis actions.</p>
+  <h3>Variants</h3>
+  <div class="vf-docs-demo-strip" aria-label="Button variant examples">
+    <button type="button" data-vf-button data-vf-variant="primary">Primary</button>
+    <button type="button" data-vf-button data-vf-variant="secondary">Secondary</button>
+    <button type="button" data-vf-button data-vf-variant="ghost">Ghost</button>
+  </div>
+  <h3>Sizes</h3>
+  <p>Button supports <code>sm</code>, <code>md</code>, and <code>lg</code>. Medium is the default.</p>
+  <div class="vf-docs-demo-strip" aria-label="Button size examples">
+    <button type="button" data-vf-button data-vf-size="sm">Small</button>
+    <button type="button" data-vf-button data-vf-size="md">Medium</button>
+    <button type="button" data-vf-button data-vf-size="lg">Large</button>
+  </div>
+</section>
+
+<section>
+  <h2>State and loading</h2>
+  <p><code>disabled</code> and <code>loading</code> are independent. Disabled prevents activation using the native <code>disabled</code> attribute. Loading exposes busy state with <code>aria-busy="true"</code> but remains focusable and activatable unless you also disable the button.</p>
+  <div class="vf-docs-demo-strip" aria-label="Button state examples">
+    <button type="button" data-vf-button>Ready</button>
+    <button type="button" data-vf-button disabled>Disabled</button>
+    <button type="button" data-vf-button data-vf-loading aria-busy="true">Loading</button>
+    <button type="button" data-vf-button data-vf-loading aria-busy="true" disabled>Loading and disabled</button>
+  </div>
+  <aside class="vf-docs-note"><strong>Loading does not imply disabled.</strong> If repeat activation must be blocked while application work is in progress, set both states explicitly.</aside>
+</section>
 
 <section>
   <h2>Installation and imports</h2>
-  <div class="vf-docs-table-wrap" tabindex="0" role="region" aria-label="Button package imports"><table><thead><tr><th>Surface</th><th>Public entrypoint</th></tr></thead><tbody>
-    <tr><th scope="row">Native Web</th><td><code>@vyrnforge/web/styles/button.css</code></td></tr>
-    <tr><th scope="row">React</th><td><code>@vyrnforge/react/button</code></td></tr>
-    <tr><th scope="row">Angular</th><td><code>@vyrnforge/angular/button</code></td></tr>
-    <tr><th scope="row">Vue</th><td><code>@vyrnforge/vue/button</code></td></tr>
-  </tbody></table></div>
+  <p>Use the public entrypoint for your implemented surface. Native Web can load the Button stylesheet independently or through the aggregate Web stylesheet.</p>
+  <div class="vf-docs-table-wrap" tabindex="0" role="region" aria-label="Button package imports">
+    <table>
+      <thead><tr><th>Surface</th><th>Public entrypoint</th></tr></thead>
+      <tbody>
+        <tr><th scope="row">React</th><td><code>@vyrnforge/react/button</code></td></tr>
+        <tr><th scope="row">Angular</th><td><code>@vyrnforge/angular/button</code></td></tr>
+        <tr><th scope="row">Vue</th><td><code>@vyrnforge/vue/button</code></td></tr>
+        <tr><th scope="row">Native Web</th><td><code>@vyrnforge/web/styles/button.css</code></td></tr>
+        <tr><th scope="row">Custom Elements</th><td>Unavailable for Button; native <code>&lt;button&gt;</code> is the semantic baseline.</td></tr>
+      </tbody>
+    </table>
+  </div>
 </section>
 
-<section><h2>Quick start</h2><p>Choose a framework to see the supported Button API and run the example.</p><div data-vf-example="button/basic"></div></section>
+<section>
+  <h2>Interaction and forms</h2>
+  <p>Pointer activation plus Enter and Space keyboard activation are supplied by the native button. VyrnForge does not add JavaScript key handling or a second activation event. Focus remains native and receives the canonical <code>:focus-visible</code> treatment.</p>
+  <p>Button also preserves native form participation. The baseline does not override the platform default <code>type</code>, so an omitted type inside a form can submit it. Use <code>type="button"</code> for non-submit actions and <code>type="reset"</code> for native reset behavior.</p>
+</section>
 
-<section><h2>Anatomy</h2><p>Button has one semantic control: the button itself. Compose text, icons, and other inline content through your framework's normal content model.</p></section>
+<section>
+  <h2>Accessibility</h2>
+  <p>The semantic control is an actual <code>&lt;button&gt;</code>, so no explicit button role is needed. Provide an accessible name through visible content or an appropriate naming mechanism such as <code>aria-label</code> or <code>aria-labelledby</code>. VyrnForge does not generate fallback English labels.</p>
+  <ul>
+    <li><code>disabled</code> uses native disabled semantics rather than replacing them with <code>aria-disabled</code>.</li>
+    <li><code>loading</code> preserves the accessible name and derives <code>aria-busy="true"</code>.</li>
+    <li>The loading indicator is decorative and does not duplicate the accessible name.</li>
+    <li>Forced-colors, reduced-motion, LTR, and RTL behavior are handled by canonical Web styling.</li>
+  </ul>
+</section>
 
-<section><h2>Variants and sizes</h2><p>Use <code>primary</code> for the strongest action, <code>secondary</code> for an alternative action, and <code>ghost</code> for lower-emphasis actions. Sizes are <code>sm</code>, <code>md</code>, and <code>lg</code>; <code>md</code> is the default.</p></section>
+<section>
+  <h2>Content and responsive use</h2>
+  <p>Author concise action labels that describe what will happen. Icon-only content requires an authored accessible name; Button does not introduce a special icon-only API. Text expansion, bidirectional content, zoom, touch, pointer, and keyboard use must preserve the action meaning. Surrounding composition owns placement and wrapping.</p>
+</section>
 
-<section><h2>State</h2><p><code>disabled</code> and <code>loading</code> are different states. Disabled prevents activation. Loading exposes busy state with <code>aria-busy</code> and a progress treatment but does not automatically disable the button. Set both when repeated activation must be prevented.</p></section>
-
-<section><h2>Behavior</h2><p>Use the framework's normal click/event surface for activation. Button preserves native activation and form participation instead of adding a second activation event.</p></section>
-
-<section><h2>Interaction</h2><p>Pointer activation and Enter/Space keyboard activation follow native button behavior. Keyboard-visible focus is styled with <code>:focus-visible</code>.</p></section>
-
-<section><h2>Accessibility</h2><p>Provide an accessible name through visible content or an appropriate platform naming mechanism. Loading preserves the accessible name while exposing busy state. Reduced-motion and forced-colors treatments are included in the public stylesheet. Button is native-backed; an APG widget/controller abstraction is not required to reproduce behavior the platform already owns.</p></section>
-
-<section><h2>Responsive and platform adaptation</h2><p>Button keeps the same action semantics under narrow layouts, zoom, touch, pointer, keyboard, and direction changes. Surrounding composition owns placement and wrapping; the component must not switch to a different semantic control merely because layout changes. Native mobile/desktop renderer support is not implied by the Web component.</p></section>
-
-<section><h2>Loading and async ownership</h2><p><code>loading</code> is a presentation/busy state, not an application request manager and not an automatic disabled policy. The consuming workflow owns operation truth, duplicate-submission policy, retries, cancellation, and authoritative success or failure.</p></section>
-
-<section><h2>Error and validation</h2><p>Button has no generic invalid or error state. Form validation, operational failure, and recovery belong to the affected fields, form, task, or workflow. Error styling must not be invented on Button as a substitute for communicating the actual failure.</p></section>
-
-<section><h2>Content and localization</h2><p>Consumers author the action label and its translation. Prefer concise visible labels that describe the action. Icon-only buttons require an authored accessible name; VyrnForge does not add a hidden English fallback. Text expansion and bidirectional content must remain usable without changing the action meaning.</p></section>
-
-<section><h2>Forms</h2><p>Button preserves native form behavior. Native attributes such as <code>type</code>, <code>name</code>, <code>value</code>, <code>form</code>, and form override attributes remain available through the framework's native attribute surface.</p></section>
-
-<section><h2>Styling</h2><p>Stable styling hooks are <code>data-vf-button</code>, <code>data-vf-variant</code>, <code>data-vf-size</code>, and <code>data-vf-loading</code>. Prefer documented <code>--vf-*</code> tokens and stable hooks when customizing Button.</p></section>
+<section>
+  <h2>Styling</h2>
+  <p>Canonical Button CSS is owned by <code>@vyrnforge/web</code>. Prefer documented <code>--vf-*</code> tokens and stable hooks rather than implementation selectors.</p>
+  <div class="vf-docs-table-wrap" tabindex="0" role="region" aria-label="Button styling hooks">
+    <table>
+      <thead><tr><th>Hook</th><th>Meaning</th></tr></thead>
+      <tbody>
+        <tr><th scope="row"><code>data-vf-button</code></th><td>Stable Button styling hook.</td></tr>
+        <tr><th scope="row"><code>data-vf-variant</code></th><td><code>primary</code>, <code>secondary</code>, or <code>ghost</code>.</td></tr>
+        <tr><th scope="row"><code>data-vf-size</code></th><td><code>sm</code>, <code>md</code>, or <code>lg</code>.</td></tr>
+        <tr><th scope="row"><code>data-vf-loading</code></th><td>Stable loading presentation state.</td></tr>
+      </tbody>
+    </table>
+  </div>
+</section>
 
 <section>
   <h2>Framework API</h2>
-  <div class="vf-docs-table-wrap" tabindex="0" role="region" aria-label="Button framework APIs"><table><thead><tr><th>Surface</th><th>Button API</th></tr></thead><tbody>
-    <tr><th scope="row">React</th><td><code>Button</code> accepts native button props and ref plus <code>variant</code>, <code>size</code>, and <code>loading</code>.</td></tr>
-    <tr><th scope="row">Angular</th><td><code>VfButtonDirective</code> attaches to an actual <code>&lt;button vfButton&gt;</code> and exposes <code>variant</code>, <code>size</code>, <code>loading</code>, and <code>disabled</code> inputs. <code>aria-busy</code> remains a native ARIA passthrough value: an authored value is preserved while idle, while <code>loading</code> derives <code>aria-busy="true"</code>.</td></tr>
-    <tr><th scope="row">Vue</th><td><code>Button</code> exposes <code>variant</code>, <code>size</code>, and <code>loading</code>; native attributes fall through and content uses the default slot.</td></tr>
-    <tr><th scope="row">Native Web</th><td>Use a native <code>&lt;button&gt;</code> with the documented <code>data-vf-*</code> hooks and stylesheet.</td></tr>
-  </tbody></table></div>
+  <p>The semantic contract is shared; each framework exposes it idiomatically rather than cloning one framework's API grammar.</p>
+  <div class="vf-docs-table-wrap" tabindex="0" role="region" aria-label="Button framework APIs">
+    <table>
+      <thead><tr><th>Surface</th><th>Button API</th></tr></thead>
+      <tbody>
+        <tr><th scope="row">React</th><td><code>Button</code> forwards native button props and ref and adds <code>variant</code>, <code>size</code>, and <code>loading</code>. Native <code>onClick</code> is activation.</td></tr>
+        <tr><th scope="row">Angular</th><td><code>VfButtonDirective</code> attaches to an actual <code>&lt;button vfButton&gt;</code>. Inputs map variant, size, loading, and disabled; native <code>(click)</code> remains activation.</td></tr>
+        <tr><th scope="row">Vue</th><td><code>Button</code> renders a native button, exposes variant, size, and loading, forwards fallthrough native attributes, and uses the default slot for content.</td></tr>
+        <tr><th scope="row">Native Web</th><td>Author a native <code>&lt;button data-vf-button&gt;</code> with the documented state/configuration attributes and public stylesheet.</td></tr>
+      </tbody>
+    </table>
+  </div>
 </section>
 
-<section><h2>CSR and SSR</h2><p>React, Angular, and Vue render a native button during SSR and restore framework event handling during hydration. Native Web does not require hydration. These statements are component- and evidence-scoped; they do not imply every VyrnForge component has equivalent hydration evidence.</p></section>
+<section>
+  <h2>Rendering and hydration</h2>
+  <p>React, Angular, and Vue SSR output is native-complete before hydration for semantics, keyboard interaction, focus, disabled state, and forms. Hydration adds framework event wiring rather than replacing the semantic control. Native Web requires no hydration.</p>
+</section>
 
-<section><h2>Implementation and evidence status</h2><p>Button is an implemented native-backed Web concept on the declared Native Web, React, Angular, and Vue surfaces. An Elements wrapper is intentionally not required merely for catalog symmetry because native <code>&lt;button&gt;</code> already completes the semantic control. Existing native-control, accessibility, SSR, and browser evidence remains authoritative only for the revisions and scenarios that recorded it; this documentation does not promote release or production maturity.</p></section>
+<section>
+  <h2>Testing guidance</h2>
+  <p>Query Button by role and accessible name, then assert observable outcomes such as activation or form submission. Keep loading-state tests separate from disabled-state tests. Depend only on documented props, native attributes/events, public entrypoints, and stable styling hooks.</p>
+</section>
 
-<section><h2>Examples</h2><p>The Quick start playground demonstrates the supported Button surfaces. Add application-specific composition around Button through ordinary framework patterns.</p></section>
-
-<section><h2>Do / Don't</h2><p><strong>Do</strong> use Button for actions and explicitly disable it when repeated activation must be blocked. <strong>Don't</strong> use Button as a navigation link or assume loading automatically prevents activation.</p></section>
-
-<section><h2>Testing guidance</h2><p>Query Button by role and accessible name and assert observable outcomes such as activation or form submission. Depend only on documented props, events, attributes, and styling hooks. Test native form behavior and keep loading-state tests separate from disabled-state tests.</p></section>
-
-<section><h2>Compatibility</h2><p>Button is documented for Native Web, React, Angular, and Vue in this channel. Documented native semantics, variant/size/loading options, form behavior, public hooks, and framework entrypoints are compatibility commitments. Internal implementation structure is not. Migration impact must be documented when those commitments change. See the Compatibility reference for validated runtime and browser ranges rather than inferring support from source presence.</p></section>
+<section>
+  <h2>Compatibility</h2>
+  <p>Button is implemented for Native Web, React, Angular, and Vue in this documentation channel. Its native semantics, variant/size/loading meanings, form behavior, public hooks, and shipped framework entrypoints are compatibility commitments. Custom Elements Button remains explicitly unavailable rather than shipping a weaker semantic substitute.</p>
+  <p>Use the Compatibility reference for validated framework, browser, and runtime ranges. Implementation and test evidence are scoped to the revisions and scenarios that recorded them; this page does not promote a broader release or production-maturity claim.</p>
+</section>
