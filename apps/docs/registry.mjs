@@ -11,26 +11,28 @@ export function documentationRegistry(root) {
   }
 
   const graph = discoverProductGraph(root);
-  const componentPages = graph.components.map((component) => {
-    const usageGroup = componentUsageGroup(component.documentationGroup);
-    const docsRoot = component.facets.docs;
-    if (!docsRoot) throw new Error(`${component.id} is missing product-owned documentation`);
-    const source = `${docsRoot}index.html`;
-    if (!existsSync(path.join(root, source))) {
-      throw new Error(`${component.id} documentation has no currently supported index.html source at ${source}`);
-    }
-    return {
-      slug: `components/${component.unitId}`,
-      title: component.name,
-      group: 'Components',
-      subgroup: usageGroup.title,
-      subgroupId: usageGroup.id,
-      kind: 'component',
-      component: component.unitId,
-      source,
-      surfaces: Object.keys(component.surfaces).sort(),
-    };
-  });
+  const componentPages = graph.components
+    .filter((component) => component.publicEntrypoints.length > 0 || component.status === 'implemented')
+    .map((component) => {
+      const usageGroup = componentUsageGroup(component.documentationGroup);
+      const docsRoot = component.facets.docs;
+      if (!docsRoot) throw new Error(`${component.id} is public/implemented but missing product-owned documentation`);
+      const source = `${docsRoot}index.html`;
+      if (!existsSync(path.join(root, source))) {
+        throw new Error(`${component.id} documentation has no currently supported index.html source at ${source}`);
+      }
+      return {
+        slug: `components/${component.unitId}`,
+        title: component.name,
+        group: 'Components',
+        subgroup: usageGroup.title,
+        subgroupId: usageGroup.id,
+        kind: 'component',
+        component: component.unitId,
+        source,
+        surfaces: Object.keys(component.surfaces).sort(),
+      };
+    });
 
   const [home, ...rest] = base.pages ?? [];
   return { ...base, pages: [...(home ? [home] : []), ...componentPages, ...rest] };
