@@ -14,7 +14,7 @@
         "{projectRoot}/dist"
       ],
       "options": {
-        "command": "pnpm --filter @vyrnforge/vue run build"
+        "command": "node tooling/product/build-projected-package.mjs vue"
       }
     },
     "lint": {
