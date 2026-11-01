@@ -34,8 +34,9 @@ test('every Button usage specimen exposes the executable code editor experience'
     await expect(codeToggle).toHaveAccessibleName('Hide code');
 
     const editor = playground.locator('[data-vf-example-editor]');
+    const source = playground.locator('[data-vf-example-source]');
     await expect(editor).toBeVisible();
-    await expect(editor).toHaveValue(sourceNeedle);
+    await expect(source).toHaveValue(sourceNeedle);
     await expect(playground.getByRole('button', { name: 'Run' })).toBeVisible();
     await expect(playground.getByRole('button', { name: 'Reset' })).toBeVisible();
 
