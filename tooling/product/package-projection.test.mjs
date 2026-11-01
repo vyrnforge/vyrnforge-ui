@@ -37,6 +37,7 @@ test('standard package projection overlays product-owned source onto the package
   const root = mkdtempSync(path.join(os.tmpdir(), 'vf-package-projection-'));
   const write = writer(root);
 
+  write('packages/react/package.json', JSON.stringify({ name: '@vyrnforge/react', type: 'module' }));
   write('packages/react/src/index.ts', "export * from './components/button/index.js';\n");
   write('packages/react/src/components/button/index.ts', 'export const Button = "legacy";\n');
   write('packages/react/src/components/checkbox/index.ts', 'export const Checkbox = true;\n');
@@ -53,6 +54,10 @@ test('standard package projection overlays product-owned source onto the package
   const result = preparePackageProjection({ root, packageId: 'react', graph });
   assert.equal(readFileSync(path.join(result.stageRoot, 'src/components/button/index.ts'), 'utf8'), 'export const Button = "product";\n');
   assert.equal(readFileSync(path.join(result.stageRoot, 'src/components/checkbox/index.ts'), 'utf8'), 'export const Checkbox = true;\n');
+  assert.deepEqual(JSON.parse(readFileSync(path.join(result.stageRoot, 'package.json'), 'utf8')), {
+    name: '@vyrnforge/react',
+    type: 'module',
+  });
   const projectedTsconfig = JSON.parse(readFileSync(path.join(result.stageRoot, 'tsconfig.json'), 'utf8'));
   assert.equal(projectedTsconfig.compilerOptions.rootDir, './src');
   assert.ok(projectedTsconfig.compilerOptions.outDir.endsWith('packages/react/dist'));
@@ -63,6 +68,7 @@ test('standard package projection overlays product-owned source onto the package
 test('unprojected product drafts are excluded from distributable package projection', () => {
   const root = mkdtempSync(path.join(os.tmpdir(), 'vf-package-projection-draft-'));
   const write = writer(root);
+  write('packages/react/package.json', JSON.stringify({ name: '@vyrnforge/react', type: 'module' }));
   write('packages/react/src/index.ts', 'export {};\n');
   write('packages/react/tsconfig.json', '{}\n');
   write('product/components/draft/react/index.ts', 'export const Draft = true;\n');
