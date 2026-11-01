@@ -78,9 +78,9 @@ await mkdir(path.join(channelRoot, 'assets/vyrnforge/elements'), { recursive: tr
 await cp(path.join(root, 'apps/docs/styles.css'), path.join(channelRoot, 'assets/styles.css'));
 await cp(path.join(root, 'apps/docs/shell.css'), path.join(channelRoot, 'assets/shell.css'));
 await cp(path.join(root, 'apps/docs/client.js'), path.join(channelRoot, 'assets/client.js'));
-await cp(path.join(root, 'packages/web/src/styles.css'), path.join(channelRoot, 'assets/vyrnforge/styles.css'));
-await cp(path.join(root, 'packages/web/src/styles'), path.join(channelRoot, 'assets/vyrnforge/styles'), { recursive: true });
-await cp(path.join(root, 'packages/web/src/components'), path.join(channelRoot, 'assets/vyrnforge/components'), { recursive: true });
+await cp(path.join(root, 'packages/web/dist/styles.css'), path.join(channelRoot, 'assets/vyrnforge/styles.css'));
+await cp(path.join(root, 'packages/web/dist/styles'), path.join(channelRoot, 'assets/vyrnforge/styles'), { recursive: true });
+await cp(path.join(root, 'packages/web/dist/components'), path.join(channelRoot, 'assets/vyrnforge/components'), { recursive: true });
 await cp(path.join(root, 'packages/elements/dist/components/app-shell/index.js'), path.join(channelRoot, 'assets/vyrnforge/elements/app-shell.js'));
 const examples = await buildDocumentationExamples({ root, channelRoot });
 await writeFile(path.join(outRoot, 'index.html'), `<!doctype html><html lang="en"><head><meta charset="utf-8"><meta http-equiv="refresh" content="0;url=./${channel}/"><title>VyrnForge documentation</title></head><body><a href="./${channel}/">Open VyrnForge ${channel} documentation</a></body></html>`);

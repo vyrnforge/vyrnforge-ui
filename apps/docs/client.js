@@ -31,8 +31,82 @@ if (frameworkPicker && frameworkRoutesNode) {
     });
   }
 }
+function headingId(value) {
+  return String(value).trim().toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '') || 'section';
+}
+function enhanceDocumentationPage() {
+  const main = document.querySelector('[data-vf-app-shell-main]');
+  if (!main || main.querySelector(':scope > .vf-docs-content-layout')) return;
+  const currentLink = document.querySelector('[data-vf-side-nav-link][aria-current="page"]');
+  const currentGroup = currentLink?.closest('[data-vf-side-nav-group]')?.querySelector('[data-vf-side-nav-group-label]')?.textContent?.trim();
+  const article = document.createElement('article');
+  article.className = 'vf-docs-article';
+  while (main.firstChild) article.append(main.firstChild);
+  const title = article.querySelector(':scope > h1');
+  if (title) {
+    const breadcrumbs = document.createElement('nav');
+    breadcrumbs.className = 'vf-docs-breadcrumbs';
+    breadcrumbs.setAttribute('aria-label', 'Breadcrumb');
+    const list = document.createElement('ol');
+    const homeItem = document.createElement('li');
+    const homeLink = document.createElement('a');
+    homeLink.href = siteRoot;
+    homeLink.textContent = 'Docs';
+    homeItem.append(homeLink);
+    list.append(homeItem);
+    if (currentGroup) {
+      const groupItem = document.createElement('li');
+      groupItem.textContent = currentGroup;
+      list.append(groupItem);
+    }
+    const pageItem = document.createElement('li');
+    pageItem.textContent = title.textContent.trim();
+    pageItem.setAttribute('aria-current', 'page');
+    list.append(pageItem);
+    breadcrumbs.append(list);
+    article.insertBefore(breadcrumbs, article.firstChild);
+  }
+  const usedIds = new Set([...article.querySelectorAll('[id]')].map((node) => node.id));
+  const headings = [...article.querySelectorAll('h2, h3')];
+  for (const heading of headings) {
+    if (heading.id) continue;
+    const base = headingId(heading.textContent);
+    let id = base;
+    let suffix = 2;
+    while (usedIds.has(id)) id = `${base}-${suffix++}`;
+    heading.id = id;
+    usedIds.add(id);
+  }
+  const layout = document.createElement('div');
+  layout.className = 'vf-docs-content-layout';
+  layout.append(article);
+  if (headings.length) {
+    const aside = document.createElement('aside');
+    aside.className = 'vf-docs-toc';
+    const label = document.createElement('strong');
+    label.textContent = 'On this page';
+    const nav = document.createElement('nav');
+    nav.setAttribute('aria-label', 'On this page');
+    const list = document.createElement('ul');
+    for (const heading of headings) {
+      const item = document.createElement('li');
+      item.dataset.vfTocLevel = heading.tagName === 'H3' ? '3' : '2';
+      const link = document.createElement('a');
+      link.href = `#${heading.id}`;
+      link.textContent = heading.textContent.trim();
+      item.append(link);
+      list.append(item);
+    }
+    nav.append(list);
+    aside.append(label, nav);
+    layout.append(aside);
+  }
+  main.append(layout);
+}
+enhanceDocumentationPage();
 const searchInput = document.querySelector('[data-vf-docs-search]');
 const searchResults = document.querySelector('[data-vf-docs-search-results]');
+if (searchInput) searchInput.placeholder = 'Search docs…';
 let searchIndexPromise;
 function loadSearchIndex() { searchIndexPromise ||= fetch(new URL('search-index.json', siteRoot)).then((response) => { if (!response.ok) throw new Error(`Unable to load docs search index: ${response.status}`); return response.json(); }); return searchIndexPromise; }
 function renderSearchResults(items) { if (!searchResults) return; searchResults.replaceChildren(); for (const item of items.slice(0, 8)) { const li = document.createElement('li'); const anchor = document.createElement('a'); anchor.textContent = item.title; anchor.href = new URL(item.path || './', siteRoot); li.append(anchor); searchResults.append(li); } searchResults.hidden = items.length === 0; }
@@ -46,8 +120,9 @@ function liveDocument({ id, framework, code, runtimeUrl, stylesUrl, frameCssUrl 
 function nativeDocument({ id, source, stylesUrl, frameCssUrl }) { return `<!doctype html><html lang="en" data-vf-theme="light"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width"><link rel="stylesheet" href="${stylesUrl}"><link rel="stylesheet" href="${frameCssUrl}"></head><body><main class="vf-example-root">${source}</main><script>parent.postMessage({type:'vf-example-result',id:${JSON.stringify(id)},status:'ready'},'*')</script></body></html>`; }
 const exampleStates = new Map();
 for (const node of exampleNodes) {
-  const data = JSON.parse(node.querySelector('[data-vf-example-data]').textContent || '{}'); const frame = node.querySelector('[data-vf-example-frame]'); const editor = node.querySelector('[data-vf-example-source]'); const language = node.querySelector('[data-vf-example-language]'); const status = node.querySelector('[data-vf-example-status]'); const runButton = node.querySelector('[data-vf-example-run]'); const resetButton = node.querySelector('[data-vf-example-reset]'); const tabs = [...node.querySelectorAll('[data-vf-example-framework]')]; let framework = window.localStorage.getItem(storageKey); if (!data.frameworks[framework]) framework = data.defaultFramework; const state = { data, frame, status }; exampleStates.set(data.id, state);
+  const data = JSON.parse(node.querySelector('[data-vf-example-data]').textContent || '{}'); const frame = node.querySelector('[data-vf-example-frame]'); const editor = node.querySelector('[data-vf-example-source]'); const editorPanel = node.querySelector('[data-vf-example-editor]'); const codeToggle = node.querySelector('[data-vf-example-code-toggle]'); const language = node.querySelector('[data-vf-example-language]'); const status = node.querySelector('[data-vf-example-status]'); const runButton = node.querySelector('[data-vf-example-run]'); const resetButton = node.querySelector('[data-vf-example-reset]'); const tabs = [...node.querySelectorAll('[data-vf-example-framework]')]; let framework = window.localStorage.getItem(storageKey); if (!data.frameworks[framework]) framework = data.defaultFramework; const state = { data, frame, status }; exampleStates.set(data.id, state);
   function setFramework(nextFramework) { const config = data.frameworks[nextFramework]; if (!config) return; framework = nextFramework; window.localStorage.setItem(storageKey, framework); setFrameworkPickerState(framework); for (const tab of tabs) { const selected = tab.dataset.vfExampleFramework === framework; tab.setAttribute('aria-selected', String(selected)); tab.dataset.vfVariant = selected ? 'secondary' : 'ghost'; tab.tabIndex = selected ? 0 : -1; } editor.value = config.source; language.textContent = config.language.toUpperCase(); frame.removeAttribute('srcdoc'); frame.src = new URL(config.preview, siteRoot); frame.title = `${data.title} ${config.label} preview`; status.textContent = `${config.label} example ready.`; }
+  if (codeToggle && editorPanel) codeToggle.addEventListener('click', () => { const expanded = codeToggle.getAttribute('aria-expanded') !== 'true'; codeToggle.setAttribute('aria-expanded', String(expanded)); codeToggle.textContent = expanded ? 'Hide code' : 'Show code'; editorPanel.hidden = !expanded; });
   for (const tab of tabs) tab.addEventListener('click', () => setFramework(tab.dataset.vfExampleFramework)); document.addEventListener('vfdocsframeworkchange', (event) => setFramework(event.detail.framework)); resetButton.addEventListener('click', () => setFramework(framework));
   runButton.addEventListener('click', async () => { const config = data.frameworks[framework]; runButton.disabled = true; status.textContent = 'Compiling example…'; try { const stylesUrl = new URL(data.styles, siteRoot).href; const frameCssUrl = new URL(data.frameCss, siteRoot).href; frame.removeAttribute('src'); if (framework === 'native-web') frame.srcdoc = nativeDocument({ id: data.id, source: editor.value, stylesUrl, frameCssUrl }); else { const ts = await loadCompiler(new URL(data.compiler, siteRoot).href); const code = transpile(editor.value, config, ts); frame.srcdoc = liveDocument({ id: data.id, framework, code, runtimeUrl: new URL(config.runtime, siteRoot).href, stylesUrl, frameCssUrl }); } status.textContent = 'Running example…'; } catch (error) { status.textContent = `Unable to run: ${error.message}`; } finally { runButton.disabled = false; } }); setFramework(framework);
 }

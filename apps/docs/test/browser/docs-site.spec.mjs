@@ -30,6 +30,7 @@ test('docs home consumes the reusable AppShell and exposes versioned accessible 
   for (const mark of await frameworkPicker.locator('[data-vf-framework-mark]').all()) await expect(mark).toHaveAttribute('aria-hidden', 'true');
 
   const search = page.getByRole('searchbox', { name: 'Search' });
+  await expect(search).toHaveAttribute('placeholder', 'Search docs…');
   await search.fill('styling');
   const result = page.getByRole('link', { name: 'Styling' }).last();
   await expect(result).toBeVisible();
@@ -95,15 +96,32 @@ test('framework selection exposes current public component availability', async 
   verifyNoErrors();
 });
 
-test('Button documentation uses executable multi-framework examples and a sandboxed live editor', async ({ page }) => {
+test('Button documentation uses demo-first navigation and executable multi-framework examples', async ({ page }) => {
   const verifyNoErrors = await expectNoRuntimeErrors(page);
   await page.goto('/next/components/button/');
 
+  const breadcrumbs = page.getByRole('navigation', { name: 'Breadcrumb' });
+  await expect(breadcrumbs).toContainText('Docs');
+  await expect(breadcrumbs).toContainText('Components');
+  await expect(breadcrumbs).toContainText('Button');
+  const toc = page.getByRole('navigation', { name: 'On this page' });
+  await expect(toc.getByRole('link', { name: 'Quick start' })).toBeVisible();
+  await expect(toc.getByRole('link', { name: 'Variants and sizes' })).toBeVisible();
+
   const playground = page.locator('[data-vf-example-id="button/basic"]');
-  const editor = playground.getByRole('textbox', { name: 'Basic button code editor' });
   const frame = page.frameLocator('[data-vf-example-id="button/basic"] iframe');
   await expect(playground).toBeVisible();
   await expect(playground.locator('iframe')).toHaveAttribute('sandbox', 'allow-scripts');
+
+  const codeToggle = playground.locator('[data-vf-example-code-toggle]');
+  await expect(codeToggle).toHaveAccessibleName('Show code');
+  await expect(codeToggle).toHaveAttribute('aria-expanded', 'false');
+  await expect(playground.locator('[data-vf-example-editor]')).toBeHidden();
+  await codeToggle.click();
+  await expect(codeToggle).toHaveAttribute('aria-expanded', 'true');
+  await expect(codeToggle).toHaveAccessibleName('Hide code');
+  const editor = playground.getByRole('textbox', { name: 'Basic button code editor' });
+  await expect(editor).toBeVisible();
 
   const expectations = [
     ['React', 'react', '@vyrnforge/react/button'],
