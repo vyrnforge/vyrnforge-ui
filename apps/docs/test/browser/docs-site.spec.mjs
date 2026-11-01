@@ -61,7 +61,9 @@ test('framework-scoped navigation and search never escape the selected framework
   const verifyNoErrors = await expectNoRuntimeErrors(page);
   await page.goto('/next/react/');
   const navigation = page.getByRole('navigation', { name: 'Documentation' });
-  await expect(navigation.getByRole('link', { name: 'Button', exact: true })).toHaveAttribute('href', /components\/button\/$/);
+  const buttonNavLink = navigation.locator('[data-vf-side-nav-link][href$="components/button/"]');
+  await expect(buttonNavLink).toHaveCount(1);
+  await expect(buttonNavLink).toHaveAttribute('href', /components\/button\/$/);
   const search = page.getByRole('searchbox', { name: 'Search' });
   await search.fill('button');
   const result = page.getByRole('link', { name: 'Button', exact: true }).last();
