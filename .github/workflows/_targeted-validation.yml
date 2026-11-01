@@ -146,7 +146,7 @@ jobs:
     needs: [plan, affected]
     if: needs.plan.outputs.docs_required == 'true'
     runs-on: ubuntu-latest
-    timeout-minutes: 30
+    timeout-minutes: 40
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
       - uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7
@@ -156,6 +156,17 @@ jobs:
       - run: corepack enable
       - run: pnpm install --frozen-lockfile --ignore-scripts
       - run: pnpm build:docs
+      - name: Run documentation browser evidence
+        run: node apps/docs/run-browser.mjs chromium
+      - uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7
+        if: always()
+        with:
+          name: docs-browser-${{ inputs.artifact_suffix }}
+          path: |
+            test-results/docs-playwright-results
+            test-results/docs-playwright-report
+          if-no-files-found: warn
+          retention-days: ${{ inputs.retention_days }}
       - uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7
         if: inputs.upload_docs_artifact
         with:
