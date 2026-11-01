@@ -1,0 +1,121 @@
+import { test } from 'vitest';
+import assert from 'node:assert/strict';
+import { mkdtempSync, mkdirSync, writeFileSync } from 'node:fs';
+import os from 'node:os';
+import path from 'node:path';
+import { discoverProductGraph, productGraphProblems } from './discover-product-graph.mjs';
+
+function writer(root) {
+  return (relativePath, content = '') => {
+    const target = path.join(root, relativePath);
+    mkdirSync(path.dirname(target), { recursive: true });
+    writeFileSync(target, content);
+  };
+}
+
+test('current repository is normalized into one product graph', () => {
+  const graph = discoverProductGraph();
+
+  for (const id of ['button', 'tabs', 'dialog', 'icon']) {
+    assert.ok(graph.components.some((component) => component.unitId === id), `${id} should exist`);
+  }
+
+  const button = graph.components.find((component) => component.unitId === 'button');
+  assert.ok(button);
+  assert.equal(button.id, 'component:button');
+  assert.equal(button.facets.legacyRoot, 'product/button/');
+  assert.equal(button.facets.canonicalRoot, null);
+  assert.equal(button.surfaces.react.authoringMode, 'legacy-package');
+  assert.ok(button.surfaces.react.authoringPaths.includes('packages/react/src/components/button/'));
+  assert.ok(button.surfaces.react.publicEntrypoints.includes('@vyrnforge/react/button'));
+  assert.ok(button.surfaces.web.publicEntrypoints.includes('@vyrnforge/web/styles/button.css'));
+  assert.equal(button.migration.state, 'legacy');
+  assert.deepEqual(productGraphProblems(), []);
+});
+
+test('canonical product-unit source overrides package-local authoring without changing package projection', () => {
+  const root = mkdtempSync(path.join(os.tmpdir(), 'vf-product-graph-canonical-'));
+  const write = writer(root);
+
+  write('packages/react/package.json', JSON.stringify({
+    name: '@vyrnforge/react',
+    version: '1.0.0',
+    exports: {
+      '.': './dist/index.js',
+      './button': './dist/components/button/index.js',
+    },
+  }));
+  write('product/components/button/component.json', JSON.stringify({
+    id: 'button',
+    name: 'Button',
+    group: 'actions',
+  }));
+  write('product/components/button/react/index.ts', 'export const Button = null;\n');
+  write('product/components/button/docs/overview.md', '# Button\n');
+
+  const graph = discoverProductGraph(root);
+  const button = graph.components.find((component) => component.unitId === 'button');
+
+  assert.ok(button);
+  assert.equal(button.facets.canonicalRoot, 'product/components/button/');
+  assert.equal(button.facets.legacyRoot, null);
+  assert.equal(button.metadataSource, 'product-unit');
+  assert.equal(button.documentationGroup, 'actions');
+  assert.equal(button.surfaces.react.authoringMode, 'product-unit');
+  assert.deepEqual(button.surfaces.react.authoringPaths, ['product/components/button/react/']);
+  assert.deepEqual(button.surfaces.react.legacyPaths, []);
+  assert.deepEqual(button.surfaces.react.publicEntrypoints, ['@vyrnforge/react/button']);
+  assert.equal(button.migration.state, 'product-unit');
+  assert.deepEqual(productGraphProblems(root), []);
+});
+
+test('legacy and canonical ownership can coexist as one mixed component during migration', () => {
+  const root = mkdtempSync(path.join(os.tmpdir(), 'vf-product-graph-mixed-'));
+  const write = writer(root);
+
+  write('packages/web/package.json', JSON.stringify({
+    name: '@vyrnforge/web',
+    exports: {
+      '.': './dist/index.js',
+      './styles/button.css': './dist/components/button/button.css',
+    },
+  }));
+  write('packages/web/src/components/button/button.css', '[data-vf-button] {}\n');
+  write('product/button/component.json', JSON.stringify({ documentation: { group: 'actions' } }));
+  write('product/button/docs/index.html', '<h2>Button</h2>\n');
+  write('product/components/button/web/button.css', '[data-vf-button] {}\n');
+
+  const graph = discoverProductGraph(root);
+  const button = graph.components.find((component) => component.unitId === 'button');
+
+  assert.ok(button);
+  assert.equal(button.migration.state, 'mixed');
+  assert.equal(button.facets.canonicalRoot, 'product/components/button/');
+  assert.equal(button.facets.legacyRoot, 'product/button/');
+  assert.equal(button.surfaces.web.authoringMode, 'product-unit');
+  assert.deepEqual(button.surfaces.web.authoringPaths, ['product/components/button/web/']);
+  assert.deepEqual(button.surfaces.web.legacyPaths, ['packages/web/src/components/button/']);
+  assert.deepEqual(button.surfaces.web.publicEntrypoints, ['@vyrnforge/web/styles/button.css']);
+});
+
+test('canonical capabilities merge legacy package ownership into one logical node', () => {
+  const root = mkdtempSync(path.join(os.tmpdir(), 'vf-product-graph-capability-'));
+  const write = writer(root);
+
+  write('packages/core/package.json', JSON.stringify({
+    name: '@vyrnforge/core',
+    exports: { '.': './dist/index.js' },
+  }));
+  write('packages/core/src/capabilities/collection-navigation/index.ts', 'export const next = () => 0;\n');
+  write('packages/core/test/capabilities/collection-navigation/navigation.test.mjs', 'export {};\n');
+  write('product/capabilities/collection-navigation/core/index.ts', 'export const next = () => 0;\n');
+
+  const graph = discoverProductGraph(root);
+  const capability = graph.units.find((unit) => unit.id === 'capability:collection-navigation');
+
+  assert.ok(capability);
+  assert.equal(capability.authoringMode, 'product-unit');
+  assert.deepEqual(capability.packages, ['core']);
+  assert.equal(capability.legacyNodes.length, 1);
+  assert.equal(capability.migration.state, 'mixed');
+});
