@@ -113,12 +113,13 @@ test('Button documentation uses demo-first navigation and executable multi-frame
   await expect(playground).toBeVisible();
   await expect(playground.locator('iframe')).toHaveAttribute('sandbox', 'allow-scripts');
 
-  const codeToggle = playground.getByRole('button', { name: 'Show code' });
+  const codeToggle = playground.locator('[data-vf-example-code-toggle]');
+  await expect(codeToggle).toHaveAccessibleName('Show code');
   await expect(codeToggle).toHaveAttribute('aria-expanded', 'false');
   await expect(playground.locator('[data-vf-example-editor]')).toBeHidden();
   await codeToggle.click();
   await expect(codeToggle).toHaveAttribute('aria-expanded', 'true');
-  await expect(codeToggle).toHaveText('Hide code');
+  await expect(codeToggle).toHaveAccessibleName('Hide code');
   const editor = playground.getByRole('textbox', { name: 'Basic button code editor' });
   await expect(editor).toBeVisible();
 
