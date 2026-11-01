@@ -74,7 +74,9 @@ function normalizeComponentSurface(root, manifests, component, componentId, targ
   if (!canonicalPath && !legacy) return null;
 
   const legacyPaths = (legacy?.paths ?? []).filter((relativePath) =>
-    relativePath.startsWith('packages/') && exists(root, relativePath.replace(/\/$/, '')),
+    relativePath.startsWith('packages/') &&
+    !relativePath.includes('/test/') &&
+    exists(root, relativePath.replace(/\/$/, '')),
   );
   return {
     target,
