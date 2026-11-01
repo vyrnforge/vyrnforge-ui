@@ -3,8 +3,10 @@
 <div class="vf-docs-page-meta" aria-label="Button characteristics">
   <span>Actions</span>
   <span>Native-backed</span>
-  <span>React · Angular · Vue · Native Web</span>
+  <span>Shared semantic contract</span>
 </div>
+
+<div data-vf-framework-content></div>
 
 <section>
   <h2>Overview</h2>
@@ -23,7 +25,7 @@
 
 <section>
   <h2>Quick start</h2>
-  <p>The example below uses the same Button contract across every implemented framework surface. Switch framework tabs to compare idiomatic usage, or reveal the source when you want to edit and run it.</p>
+  <p>The executable example below is locked to the framework selected for this documentation view. Reveal the source when you want to edit and run the framework-native usage directly.</p>
   <div data-vf-example="button/basic"></div>
 </section>
 
@@ -42,23 +44,6 @@
   <p><code>disabled</code> and <code>loading</code> are independent. Disabled prevents activation using the native <code>disabled</code> attribute. Loading exposes busy state with <code>aria-busy="true"</code> but remains focusable and activatable unless you also disable the button.</p>
   <div data-vf-example="button/states"></div>
   <aside class="vf-docs-note"><strong>Loading does not imply disabled.</strong> If repeat activation must be blocked while application work is in progress, set both states explicitly.</aside>
-</section>
-
-<section>
-  <h2>Installation and imports</h2>
-  <p>Use the public entrypoint for your implemented surface. Native Web can load the Button stylesheet independently or through the aggregate Web stylesheet.</p>
-  <div class="vf-docs-table-wrap" tabindex="0" role="region" aria-label="Button package imports">
-    <table>
-      <thead><tr><th>Surface</th><th>Public entrypoint</th></tr></thead>
-      <tbody>
-        <tr><th scope="row">React</th><td><code>@vyrnforge/react/button</code></td></tr>
-        <tr><th scope="row">Angular</th><td><code>@vyrnforge/angular/button</code></td></tr>
-        <tr><th scope="row">Vue</th><td><code>@vyrnforge/vue/button</code></td></tr>
-        <tr><th scope="row">Native Web</th><td><code>@vyrnforge/web/styles/button.css</code></td></tr>
-        <tr><th scope="row">Custom Elements</th><td>Unavailable for Button; native <code>&lt;button&gt;</code> is the semantic baseline.</td></tr>
-      </tbody>
-    </table>
-  </div>
 </section>
 
 <section>
@@ -100,33 +85,12 @@
 </section>
 
 <section>
-  <h2>Framework API</h2>
-  <p>The semantic contract is shared; each framework exposes it idiomatically rather than cloning one framework's API grammar.</p>
-  <div class="vf-docs-table-wrap" tabindex="0" role="region" aria-label="Button framework APIs">
-    <table>
-      <thead><tr><th>Surface</th><th>Button API</th></tr></thead>
-      <tbody>
-        <tr><th scope="row">React</th><td><code>Button</code> forwards native button props and ref and adds <code>variant</code>, <code>size</code>, and <code>loading</code>. Native <code>onClick</code> is activation.</td></tr>
-        <tr><th scope="row">Angular</th><td><code>VfButtonDirective</code> attaches to an actual <code>&lt;button vfButton&gt;</code>. Inputs map variant, size, loading, and disabled; native <code>(click)</code> remains activation.</td></tr>
-        <tr><th scope="row">Vue</th><td><code>Button</code> renders a native button, exposes variant, size, and loading, forwards fallthrough native attributes, and uses the default slot for content.</td></tr>
-        <tr><th scope="row">Native Web</th><td>Author a native <code>&lt;button data-vf-button&gt;</code> with the documented state/configuration attributes and public stylesheet.</td></tr>
-      </tbody>
-    </table>
-  </div>
-</section>
-
-<section>
-  <h2>Rendering and hydration</h2>
-  <p>React, Angular, and Vue SSR output is native-complete before hydration for semantics, keyboard interaction, focus, disabled state, and forms. Hydration adds framework event wiring rather than replacing the semantic control. Native Web requires no hydration.</p>
-</section>
-
-<section>
   <h2>Testing guidance</h2>
-  <p>Query Button by role and accessible name, then assert observable outcomes such as activation or form submission. Keep loading-state tests separate from disabled-state tests. Depend only on documented props, native attributes/events, public entrypoints, and stable styling hooks.</p>
+  <p>Query Button by role and accessible name, then assert observable outcomes such as activation or form submission. Keep loading-state tests separate from disabled-state tests. Depend only on documented framework APIs, native attributes/events, public entrypoints, and stable styling hooks.</p>
 </section>
 
 <section>
   <h2>Compatibility</h2>
-  <p>Button is implemented for Native Web, React, Angular, and Vue in this documentation channel. Its native semantics, variant/size/loading meanings, form behavior, public hooks, and shipped framework entrypoints are compatibility commitments. Custom Elements Button remains explicitly unavailable rather than shipping a weaker semantic substitute.</p>
+  <p>The semantic Button contract, native activation and form behavior, variant/size/loading meanings, and stable styling hooks are shared compatibility commitments. Framework availability and the exact public API are resolved by the selected documentation view from current product/package reality.</p>
   <p>Use the Compatibility reference for validated framework, browser, and runtime ranges. Implementation and test evidence are scoped to the revisions and scenarios that recorded them; this page does not promote a broader release or production-maturity claim.</p>
 </section>
