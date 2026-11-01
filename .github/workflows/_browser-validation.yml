@@ -44,8 +44,8 @@ jobs:
     env:
       PLAYWRIGHT_BROWSERS_PATH: .cache/ms-playwright
     steps:
-      - uses: actions/checkout@v7
-      - uses: actions/setup-node@v7
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
+      - uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7
         with:
           node-version-file: .node-version
           package-manager-cache: false
@@ -53,7 +53,7 @@ jobs:
       - run: pnpm install --frozen-lockfile --ignore-scripts
       - name: Restore or create shared Playwright browser runtime
         id: browser-cache
-        uses: actions/cache@v6
+        uses: actions/cache@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6
         with:
           path: .cache/ms-playwright
           key: vyrnforge-playwright-${{ runner.os }}-${{ hashFiles('pnpm-lock.yaml') }}-${{ inputs.browser_profile }}
@@ -92,7 +92,7 @@ jobs:
             exit 1
           fi
           tar -czf test-results/browser-prerequisites/package-build-outputs.tgz "${build_dirs[@]}"
-      - uses: actions/upload-artifact@v7
+      - uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7
         if: steps.build-prerequisite.outcome == 'success'
         with:
           name: browser-build-${{ inputs.revision }}-${{ inputs.artifact_suffix }}
@@ -139,7 +139,7 @@ jobs:
           };
           writeFileSync('test-results/validation-metrics/browser-prerequisites.json', `${JSON.stringify(report, null, 2)}\n`);
           NODE
-      - uses: actions/upload-artifact@v7
+      - uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7
         if: always()
         with:
           name: validation-metrics-browser-prerequisites-${{ inputs.artifact_suffix }}
@@ -161,8 +161,8 @@ jobs:
       VF_COMPONENT_PORT: ${{ matrix.scope.port }}
       VF_COMPONENTS: ${{ matrix.scope.components }}
     steps:
-      - uses: actions/checkout@v7
-      - uses: actions/setup-node@v7
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
+      - uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7
         with:
           node-version-file: .node-version
           package-manager-cache: false
@@ -170,13 +170,13 @@ jobs:
       - run: pnpm install --frozen-lockfile --ignore-scripts
       - name: Restore prepared Playwright browser runtime
         id: browser-cache
-        uses: actions/cache@v6
+        uses: actions/cache@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6
         with:
           path: .cache/ms-playwright
           key: vyrnforge-playwright-${{ runner.os }}-${{ hashFiles('pnpm-lock.yaml') }}-${{ inputs.browser_profile }}
           fail-on-cache-miss: true
       - name: Download exact-revision package build outputs
-        uses: actions/download-artifact@v7
+        uses: actions/download-artifact@37930b1c2abaa49bbe596cd826c3c89aef350131 # v7
         with:
           name: browser-build-${{ inputs.revision }}-${{ inputs.artifact_suffix }}
           path: test-results/browser-prerequisites
@@ -254,14 +254,14 @@ jobs:
           };
           writeFileSync(`test-results/validation-metrics/browser-${process.env.VF_PORT}.json`, `${JSON.stringify(report, null, 2)}\n`);
           NODE
-      - uses: actions/upload-artifact@v7
+      - uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7
         if: always()
         with:
           name: validation-metrics-browser-${{ matrix.scope.port }}-${{ inputs.artifact_suffix }}
           path: test-results/validation-metrics/browser-${{ matrix.scope.port }}.json
           if-no-files-found: error
           retention-days: ${{ inputs.retention_days }}
-      - uses: actions/upload-artifact@v7
+      - uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7
         if: always()
         with:
           name: browser-evidence-${{ matrix.scope.port }}-${{ inputs.artifact_suffix }}
