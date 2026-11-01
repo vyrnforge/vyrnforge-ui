@@ -29,7 +29,7 @@
         "build"
       ],
       "options": {
-        "command": "pnpm exec ngc -p packages/angular/tsconfig.json --noEmit && pnpm exec tsc -p packages/angular/tsconfig.test.json"
+        "command": "node tooling/product/typecheck-projected-package.mjs angular && pnpm exec tsc -p packages/angular/tsconfig.test.json"
       }
     },
     "test": {
