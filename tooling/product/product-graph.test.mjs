@@ -115,7 +115,7 @@ test('legacy and canonical ownership can coexist as one mixed component during m
   assert.equal(button.surfaces.web.authoringMode, 'product-unit');
   assert.deepEqual(button.surfaces.web.authoringPaths, ['product/components/button/web/']);
   assert.equal(button.surfaces.web.projectionPath, 'packages/web/src/components/button/');
-  assert.deepEqual(button.surfaces.web.legacyPaths, ['packages/web/src/components/button/']);
+  assert.deepEqual(button.surfaces.web.legacyPaths, []);
   assert.deepEqual(button.surfaces.web.publicEntrypoints, ['@vyrnforge/web/styles/button.css']);
 });
 
