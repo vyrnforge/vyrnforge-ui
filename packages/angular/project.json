@@ -14,7 +14,7 @@
         "{projectRoot}/dist"
       ],
       "options": {
-        "command": "pnpm --filter @vyrnforge/angular run build"
+        "command": "node tooling/product/build-projected-package.mjs angular"
       }
     },
     "lint": {
