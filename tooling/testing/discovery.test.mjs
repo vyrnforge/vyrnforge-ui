@@ -7,7 +7,7 @@ import { discoverProductUnits, productPreparationProblems } from '../testing/dis
 
 function writer(root) { return (relativePath, content = '') => { const target = path.join(root, relativePath); mkdirSync(path.dirname(target), { recursive: true }); writeFileSync(target, content); }; }
 
-test('current Button is discovered from canonical source and legacy evidence facets', () => {
+test('current Button is discovered from its canonical product unit', () => {
   const { components } = discoverProductUnits();
   const button = components.find((entry) => entry.component === 'button');
   assert.ok(button);
@@ -16,10 +16,10 @@ test('current Button is discovered from canonical source and legacy evidence fac
   assert.equal(button.ports.react.paths[0], 'product/components/button/react/');
   assert.equal(button.ports.react.types, 'packages/react/test/components/button/api.types.ts');
   assert.equal(button.ports.react.ssr, 'packages/react/test/components/button/ssr.test.mjs');
-  assert.equal(button.documentationSource, 'product/button/docs/index.html');
-  assert.match(button.exampleManifests[0], /^product\/button\/examples\//);
-  assert.equal(button.browser.fixture, 'product/button/test/browser/fixtures.mjs');
-  assert.equal(button.accessibilityPath, 'product/button/accessibility.json');
+  assert.equal(button.documentationSource, 'product/components/button/docs/index.html');
+  assert.match(button.exampleManifests[0], /^product\/components\/button\/examples\//);
+  assert.equal(button.browser.fixture, 'product/components/button/test/browser/fixtures.mjs');
+  assert.equal(button.accessibilityPath, 'product/components/button/accessibility.json');
   assert.ok(button.browser.paths.includes(button.accessibilityPath));
   assert.deepEqual(productPreparationProblems(), []);
 });
