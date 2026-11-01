@@ -54,7 +54,7 @@ test('Reference evidence stays additive to generic package fallback classificati
 });
 
 test('canonical Tabs evidence fans across every implemented Tabs surface', () => {
-  const impact = createSemanticImpact(['product/tabs/accessibility.json']);
+  const impact = createSemanticImpact(['product/components/tabs/accessibility.json']);
   assert.deepEqual(impact.components, ['tabs']);
   for (const port of ['web', 'react', 'angular', 'vue', 'elements']) assert.ok(impact.browserPorts.includes(port));
   for (const scope of impact.browserScopes) assert.deepEqual(scope.components, ['tabs']);
