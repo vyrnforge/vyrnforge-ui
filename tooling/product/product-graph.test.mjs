@@ -4,6 +4,7 @@ import { mkdtempSync, mkdirSync, writeFileSync } from 'node:fs';
 import os from 'node:os';
 import path from 'node:path';
 import { discoverProductGraph, productGraphProblems } from './discover-product-graph.mjs';
+import { impactProductView } from './product-graph-view.mjs';
 
 function writer(root) {
   return (relativePath, content = '') => {
@@ -19,6 +20,11 @@ test('current repository is normalized into one product graph', () => {
   for (const id of ['button', 'tabs', 'dialog', 'icon']) {
     assert.ok(graph.components.some((component) => component.unitId === id), `${id} should exist`);
   }
+
+  const reactPackage = graph.packages.find((pkg) => pkg.id === 'react');
+  assert.ok(reactPackage);
+  assert.equal(reactPackage.manifest.name, '@vyrnforge/react');
+  assert.ok(reactPackage.manifest.exports['./button']);
 
   const button = graph.components.find((component) => component.unitId === 'button');
   assert.ok(button);
@@ -66,6 +72,12 @@ test('canonical product-unit source overrides package-local authoring without ch
   assert.deepEqual(button.surfaces.react.legacyPaths, []);
   assert.deepEqual(button.surfaces.react.publicEntrypoints, ['@vyrnforge/react/button']);
   assert.equal(button.migration.state, 'product-unit');
+
+  const impactView = impactProductView(graph);
+  const impactButton = impactView.components.find((component) => component.component === 'button');
+  assert.ok(impactButton);
+  assert.equal(impactButton.root, 'product/components/button/');
+  assert.deepEqual(impactButton.ports.react.paths, ['product/components/button/react/']);
   assert.deepEqual(productGraphProblems(root), []);
 });
 
@@ -118,4 +130,11 @@ test('canonical capabilities merge legacy package ownership into one logical nod
   assert.deepEqual(capability.packages, ['core']);
   assert.equal(capability.legacyNodes.length, 1);
   assert.equal(capability.migration.state, 'mixed');
+
+  const impactCapability = impactProductView(graph).ownedUnits.find((unit) => unit.id === 'collection-navigation');
+  assert.ok(impactCapability);
+  assert.ok(impactCapability.nodes.includes('capability:collection-navigation'));
+  assert.ok(impactCapability.nodes.includes('unit:core:capabilities:collection-navigation'));
+  assert.ok(impactCapability.paths.includes('product/capabilities/collection-navigation/'));
+  assert.ok(impactCapability.paths.includes('packages/core/src/capabilities/collection-navigation/'));
 });

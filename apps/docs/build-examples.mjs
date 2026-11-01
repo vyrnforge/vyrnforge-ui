@@ -1,7 +1,7 @@
 import { mkdir, readFile, readdir, writeFile } from 'node:fs/promises';
 import path from 'node:path';
 import { build } from 'esbuild';
-import { discoverProductUnits } from '../../tooling/testing/discover-product-units.mjs';
+import { discoverProductGraph } from '../../tooling/product/discover-product-graph.mjs';
 import { compileFrameworkExample, frameworkCompilerOptions, publicPackageAliases } from './example-compiler.mjs';
 
 function safeName(value) { return value.replace(/[^a-z0-9]+/gi, '-').replace(/^-|-$/g, '').toLowerCase(); }
@@ -13,13 +13,18 @@ export function runtimeResolveDirectory(sourcePath) {
 
 async function discoverExampleManifests(root) {
   const manifests = [];
-  for (const component of discoverProductUnits(root).components) {
-    const exampleRoot = path.join(root, `product/${component.component}/examples`);
+  const graph = discoverProductGraph(root);
+  for (const component of graph.components) {
+    if (component.publicEntrypoints.length === 0 && component.status !== 'implemented') continue;
+    if (!component.facets.examples) continue;
+    const exampleRoot = path.join(root, component.facets.examples);
     async function walk(directory) {
       for (const entry of await readdir(directory, { withFileTypes: true })) {
         const target = path.join(directory, entry.name);
         if (entry.isDirectory()) await walk(target);
-        else if (entry.name === 'example.json') manifests.push({ component: component.component, exampleRoot, manifestPath: target });
+        else if (entry.name === 'example.json') {
+          manifests.push({ component: component.unitId, exampleRoot, manifestPath: target });
+        }
       }
     }
     await walk(exampleRoot);

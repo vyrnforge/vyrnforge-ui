@@ -1,5 +1,6 @@
 import { packageDefinition } from '../package-model.mjs';
-import { discoverProductUnits } from '../testing/discover-product-units.mjs';
+import { discoverProductGraph } from '../product/discover-product-graph.mjs';
+import { impactProductView } from '../product/product-graph-view.mjs';
 import {
   broadInfrastructure,
   broadModes,
@@ -34,7 +35,7 @@ import {
 export function createSemanticImpact(paths, options = {}) {
   const mode = options.mode ?? 'pr';
   if (!modes.has(mode)) throw new Error(`Unsupported impact mode: ${mode}`);
-  const discovery = options.discovery ?? discoverProductUnits();
+  const discovery = options.discovery ?? impactProductView(discoverProductGraph());
   const state = {
     components: new Set(),
     packages: new Set(),
@@ -79,6 +80,10 @@ function classifyPath(state, discovery, filePath) {
   if (filePath.startsWith('tooling/impact/')) {
     broaden(state, discovery, 'semantic-impact infrastructure changes require self-validation and conservative broad evidence', filePath);
     addEvidence(state, 'impact', 'semantic-impact infrastructure changed', filePath);
+    classified = true;
+  } else if (filePath.startsWith('tooling/product/')) {
+    broaden(state, discovery, 'Product Graph infrastructure can change repository-wide ownership and dependency selection', filePath);
+    addEvidence(state, 'impact', 'Product Graph infrastructure changed', filePath);
     classified = true;
   } else if (filePath.startsWith('tooling/testing/')) {
     for (const component of discovery.components) {
@@ -148,7 +153,9 @@ function classifyPath(state, discovery, filePath) {
   const unit = ownedUnitForPath(discovery, filePath);
   if (unit) {
     state.ownedUnits.add(unit.node);
-    state.packages.add(unit.package);
+    for (const packageName of unit.packages ?? [unit.package]) {
+      if (packageName) state.packages.add(packageName);
+    }
     addReason(state.reasons, `unit:${unit.node}`, 'reusable owned unit changed', filePath);
     for (const dependent of reverseDependents(discovery, unit)) {
       const ports = dependent.port === 'web' ? componentPorts(dependent.component) : [dependent.port];
@@ -199,9 +206,9 @@ function classifyPath(state, discovery, filePath) {
 }
 
 function classifyOwnedComponent(state, filePath, owned) {
-  const { component, port, area } = owned;
+  const { component, port, area, root } = owned;
   if (area === 'product') {
-    const relative = filePath.slice(component.root.length);
+    const relative = filePath.slice(root.length);
     if (relative.startsWith('changes/')) {
       addEvidence(state, 'architecture', 'historical owner-local change provenance changed', filePath);
     } else if (relative.startsWith('docs/') || relative.startsWith('examples/')) {
@@ -224,6 +231,9 @@ function classifyOwnedComponent(state, filePath, owned) {
   }
 
   state.packages.add(port);
+  if (docsPackageDependencies.has(port)) {
+    addEvidence(state, 'docs', `${port} is a declared dependency of the Reference docs application`, filePath);
+  }
   if (port === 'web') {
     addComponent(
       state,

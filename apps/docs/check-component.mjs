@@ -2,15 +2,17 @@ import { mkdtemp, readFile, readdir, rm } from 'node:fs/promises';
 import os from 'node:os';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
-import { discoverProductUnits } from '../../tooling/testing/discover-product-units.mjs';
+import { discoverProductGraph } from '../../tooling/product/discover-product-graph.mjs';
 import { compileFrameworkExample, publicPackageAliases } from './example-compiler.mjs';
 
 const root = path.resolve(fileURLToPath(new URL('../../', import.meta.url)));
 const componentId = process.argv[2];
 if (!componentId) throw new Error('Usage: node apps/docs/check-component.mjs <component>');
-const discovery = discoverProductUnits(root);
-const component = discovery.components.find((entry) => entry.component === componentId);
+const graph = discoverProductGraph(root);
+const component = graph.components.find((entry) => entry.unitId === componentId);
 if (!component) throw new Error(`Unknown component documentation owner: ${componentId}`);
+if (!component.facets.docs) throw new Error(`${componentId} has no Product Graph documentation facet`);
+if (!component.facets.examples) throw new Error(`${componentId} has no Product Graph examples facet`);
 
 async function manifestsUnder(directory) {
   const results = [];
@@ -25,9 +27,10 @@ async function manifestsUnder(directory) {
   return results.sort();
 }
 
-const docsHtml = await readFile(path.join(root, component.documentationSource), 'utf8');
+const documentationSource = `${component.facets.docs}index.html`;
+const docsHtml = await readFile(path.join(root, documentationSource), 'utf8');
 const referencedExamples = new Set([...docsHtml.matchAll(/data-vf-example="([^"]+)"/g)].map((match) => match[1]));
-const exampleRoot = path.join(root, `product/${componentId}/examples`);
+const exampleRoot = path.join(root, component.facets.examples);
 const manifests = await manifestsUnder(exampleRoot);
 if (manifests.length === 0) throw new Error(`${componentId} has no executable documentation examples`);
 const aliases = publicPackageAliases(root, { source: true });
@@ -55,7 +58,9 @@ try {
       });
     }
   }
-  for (const exampleId of referencedExamples) if (!found.has(exampleId)) throw new Error(`${componentId} docs reference unknown example ${exampleId}`);
+  for (const exampleId of referencedExamples) {
+    if (!found.has(exampleId)) throw new Error(`${componentId} docs reference unknown example ${exampleId}`);
+  }
 } finally {
   await rm(temp, { recursive: true, force: true });
 }
