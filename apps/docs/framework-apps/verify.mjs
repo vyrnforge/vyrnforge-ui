@@ -8,17 +8,32 @@ const renderers = Object.freeze({
   react: {
     file: 'renderers/react.js',
     marker: "'data-vf-docs-renderer': 'react'",
-    entrypoints: ['@vyrnforge/react/app-shell', '@vyrnforge/react/input', '@vyrnforge/react/side-nav'],
+    entrypoints: [
+      '@vyrnforge/react/app-shell',
+      '@vyrnforge/react/input',
+      '@vyrnforge/react/native-select',
+      '@vyrnforge/react/side-nav',
+    ],
   },
   angular: {
     file: 'renderers/angular.ts',
     marker: 'data-vf-docs-renderer="angular"',
-    entrypoints: ['@vyrnforge/angular/app-shell', '@vyrnforge/angular/input', '@vyrnforge/angular/side-nav'],
+    entrypoints: [
+      '@vyrnforge/angular/app-shell',
+      '@vyrnforge/angular/input',
+      '@vyrnforge/angular/native-select',
+      '@vyrnforge/angular/side-nav',
+    ],
   },
   vue: {
     file: 'renderers/vue.js',
     marker: "'data-vf-docs-renderer': 'vue'",
-    entrypoints: ['@vyrnforge/vue/app-shell', '@vyrnforge/vue/input', '@vyrnforge/vue/side-nav'],
+    entrypoints: [
+      '@vyrnforge/vue/app-shell',
+      '@vyrnforge/vue/input',
+      '@vyrnforge/vue/native-select',
+      '@vyrnforge/vue/side-nav',
+    ],
   },
 });
 
@@ -30,12 +45,24 @@ const forbiddenRuntimeInjection = [
   'v-html',
 ];
 
+const forbiddenReverseDetection = [
+  'componentFor(',
+  "hasAttribute('data-vf-side-nav",
+  "replaceAll('data-vf-side-nav",
+];
+
 for (const [framework, contract] of Object.entries(renderers)) {
   const source = await readFile(path.join(packageRoot, contract.file), 'utf8');
 
   for (const token of forbiddenRuntimeInjection) {
     if (source.includes(token)) {
       throw new Error(`${framework} docs renderer must not inject generated page HTML with ${token}`);
+    }
+  }
+
+  for (const token of forbiddenReverseDetection) {
+    if (source.includes(token)) {
+      throw new Error(`${framework} docs renderer must not infer framework components from generated DOM hooks with ${token}`);
     }
   }
 
