@@ -19,22 +19,15 @@ import {
   VfSideNavItemDirective,
   VfSideNavLinkDirective,
 } from '@vyrnforge/angular/side-nav';
+import { parseFragment } from '../fragment.js';
 import { markDocsRendered, readDocsPageModel } from '../page-model.js';
 
 const model = readDocsPageModel();
 
 @Component({
-  selector: 'vf-docs-article-content',
-  standalone: true,
-  template: model.mainHtml || '',
-})
-class DocsArticleContent {}
-
-@Component({
   selector: 'vf-docs-angular-root',
   standalone: true,
   imports: [
-    DocsArticleContent,
     VfAppShellDirective,
     VfAppShellHeaderDirective,
     VfAppShellBodyDirective,
@@ -120,7 +113,7 @@ class DocsArticleContent {}
             }
           </nav>
         </aside>
-        <main vfAppShellMain id="main"><vf-docs-article-content /></main>
+        <main vfAppShellMain id="main"></main>
       </div>
       <footer vfAppShellFooter class="vf-docs-footer">{{ footerText }}</footer>
     </div>
@@ -136,5 +129,8 @@ class DocsApp {
 }
 
 bootstrapApplication(DocsApp, { providers: [provideZonelessChangeDetection()] }).then(() => {
+  const main = document.querySelector('[data-vf-app-shell-main]');
+  if (!main) throw new Error('Angular docs AppShell main region did not render');
+  main.replaceChildren(...parseFragment(model.mainHtml));
   markDocsRendered('angular');
 });
