@@ -23,66 +23,18 @@ import { markDocsRendered, readDocsPageModel } from '../page-model.js';
 
 const model = readDocsPageModel();
 
-function escapeHtml(value: unknown): string {
-  return String(value ?? '')
-    .replaceAll('&', '&amp;')
-    .replaceAll('<', '&lt;')
-    .replaceAll('>', '&gt;')
-    .replaceAll('"', '&quot;');
-}
-
-function navItemsTemplate(items: Array<{ title: string; href: string; current: boolean }>): string {
-  return items
-    .map((item) => `<li vfSideNavItem><a vfSideNavLink href="${escapeHtml(item.href)}"${item.current ? ' [vfSideNavCurrent]="true"' : ''}>${escapeHtml(item.title)}</a></li>`)
-    .join('');
-}
-
-function navigationTemplate(): string {
-  const groups = model.navigation.map((group: { label: string; items: Array<{ title: string; href: string; current: boolean }>; subgroups: Array<{ label: string; count: number; open: boolean; items: Array<{ title: string; href: string; current: boolean }> }> }) => {
-    const body = group.subgroups.length
-      ? group.subgroups.map((subgroup) => `<details class="vf-docs-component-subgroup" data-vf-docs-component-subgroup${subgroup.open ? ' data-vf-current-group="true" open' : ''}><summary class="vf-docs-component-subgroup__label"><span>${escapeHtml(subgroup.label)}</span><span class="vf-docs-component-subgroup__count" aria-hidden="true">${subgroup.count}</span></summary><ul vfSideNavList>${navItemsTemplate(subgroup.items)}</ul></details>`).join('')
-      : `<ul vfSideNavList>${navItemsTemplate(group.items)}</ul>`;
-    return `<section vfSideNavGroup><h2 vfSideNavGroupLabel>${escapeHtml(group.label)}</h2>${body}</section>`;
-  }).join('');
-  return `<nav vfSideNav aria-label="Documentation">${groups}</nav>`;
-}
-
-function frameworkSelectorTemplate(): string {
-  const options = model.frameworkChoices
-    .map((choice: { id: string; label: string; href: string; current: boolean }) => `<option value="${escapeHtml(choice.href)}" data-vf-framework-value="${escapeHtml(choice.id)}"${choice.current ? ' selected' : ''}>${escapeHtml(choice.label)}</option>`)
-    .join('');
-  return `<div class="vf-docs-framework-selector"><label for="vf-docs-framework-select">Framework</label><select vfNativeSelect id="vf-docs-framework-select" data-vf-framework-select aria-label="Framework">${options}</select></div>`;
-}
-
-const template = `
-  <div vfAppShell data-vf-docs-renderer="angular">
-    <a class="vf-skip-link" href="#main">Skip to content</a>
-    <header vfAppShellHeader class="vf-docs-header">
-      <div class="vf-docs-header__inner">
-        <a class="vf-docs-brand" href="${escapeHtml(model.brandHref)}">VyrnForge</a>
-        <span class="vf-docs-version" data-vf-docs-version>${escapeHtml(model.versionText)}</span>
-        <div class="vf-docs-tools">
-          <div class="vf-docs-search-wrap">
-            <label for="vf-docs-search">Search</label>
-            <input vfInput id="vf-docs-search" data-vf-docs-search type="search" autocomplete="off">
-            <ul class="vf-docs-search-results" data-vf-docs-search-results hidden></ul>
-          </div>
-          ${frameworkSelectorTemplate()}
-        </div>
-      </div>
-    </header>
-    <div vfAppShellBody>
-      <aside vfAppShellNavigation class="vf-docs-navigation">${navigationTemplate()}</aside>
-      <main vfAppShellMain id="main">${model.mainHtml || ''}</main>
-    </div>
-    <footer vfAppShellFooter class="vf-docs-footer">${escapeHtml(model.footerText || '')}</footer>
-  </div>
-`;
+@Component({
+  selector: 'vf-docs-article-content',
+  standalone: true,
+  template: model.mainHtml || '',
+})
+class DocsArticleContent {}
 
 @Component({
   selector: 'vf-docs-angular-root',
   standalone: true,
   imports: [
+    DocsArticleContent,
     VfAppShellDirective,
     VfAppShellHeaderDirective,
     VfAppShellBodyDirective,
@@ -98,9 +50,90 @@ const template = `
     VfSideNavItemDirective,
     VfSideNavLinkDirective,
   ],
-  template,
+  template: `
+    <div vfAppShell data-vf-docs-renderer="angular">
+      <a class="vf-skip-link" href="#main">Skip to content</a>
+      <header vfAppShellHeader class="vf-docs-header">
+        <div class="vf-docs-header__inner">
+          <a class="vf-docs-brand" [href]="brandHref">VyrnForge</a>
+          <span class="vf-docs-version" data-vf-docs-version>{{ versionText }}</span>
+          <div class="vf-docs-tools">
+            <div class="vf-docs-search-wrap">
+              <label for="vf-docs-search">Search</label>
+              <input vfInput id="vf-docs-search" data-vf-docs-search type="search" autocomplete="off">
+              <ul class="vf-docs-search-results" data-vf-docs-search-results hidden></ul>
+            </div>
+            <div class="vf-docs-framework-selector">
+              <label for="vf-docs-framework-select">Framework</label>
+              <select
+                vfNativeSelect
+                id="vf-docs-framework-select"
+                data-vf-framework-select
+                aria-label="Framework"
+                [value]="currentFrameworkHref"
+              >
+                @for (choice of frameworkChoices; track choice.id) {
+                  <option [value]="choice.href" [attr.data-vf-framework-value]="choice.id">{{ choice.label }}</option>
+                }
+              </select>
+            </div>
+          </div>
+        </div>
+      </header>
+      <div vfAppShellBody>
+        <aside vfAppShellNavigation class="vf-docs-navigation">
+          <nav vfSideNav aria-label="Documentation">
+            @for (group of navigation; track group.label) {
+              <section vfSideNavGroup>
+                <h2 vfSideNavGroupLabel>{{ group.label }}</h2>
+                @if (group.subgroups.length) {
+                  @for (subgroup of group.subgroups; track subgroup.label) {
+                    <details
+                      class="vf-docs-component-subgroup"
+                      data-vf-docs-component-subgroup
+                      [attr.data-vf-current-group]="subgroup.open ? 'true' : null"
+                      [open]="subgroup.open"
+                    >
+                      <summary class="vf-docs-component-subgroup__label">
+                        <span>{{ subgroup.label }}</span>
+                        <span class="vf-docs-component-subgroup__count" aria-hidden="true">{{ subgroup.count }}</span>
+                      </summary>
+                      <ul vfSideNavList>
+                        @for (item of subgroup.items; track item.href) {
+                          <li vfSideNavItem>
+                            <a vfSideNavLink [href]="item.href" [vfSideNavCurrent]="item.current">{{ item.title }}</a>
+                          </li>
+                        }
+                      </ul>
+                    </details>
+                  }
+                } @else {
+                  <ul vfSideNavList>
+                    @for (item of group.items; track item.href) {
+                      <li vfSideNavItem>
+                        <a vfSideNavLink [href]="item.href" [vfSideNavCurrent]="item.current">{{ item.title }}</a>
+                      </li>
+                    }
+                  </ul>
+                }
+              </section>
+            }
+          </nav>
+        </aside>
+        <main vfAppShellMain id="main"><vf-docs-article-content /></main>
+      </div>
+      <footer vfAppShellFooter class="vf-docs-footer">{{ footerText }}</footer>
+    </div>
+  `,
 })
-class DocsApp {}
+class DocsApp {
+  readonly brandHref = model.brandHref || './';
+  readonly versionText = model.versionText || '';
+  readonly frameworkChoices = model.frameworkChoices || [];
+  readonly currentFrameworkHref = this.frameworkChoices.find((choice: { current?: boolean }) => choice.current)?.href || '';
+  readonly navigation = model.navigation || [];
+  readonly footerText = model.footerText || '';
+}
 
 bootstrapApplication(DocsApp, { providers: [provideZonelessChangeDetection()] }).then(() => {
   markDocsRendered('angular');
