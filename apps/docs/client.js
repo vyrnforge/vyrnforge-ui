@@ -149,14 +149,14 @@ function initializeDocs() {
   const framework = body.dataset.vfFramework || '';
   if (framework) window.localStorage.setItem(storageKey, framework);
 
-  const frameworkPicker = document.querySelector('[data-vf-framework-picker]');
-  if (frameworkPicker) {
-    for (const choice of frameworkPicker.querySelectorAll('[data-vf-framework-choice]')) {
-      choice.addEventListener('click', () => {
-        const target = choice.dataset.vfFrameworkChoice;
-        if (target) window.localStorage.setItem(storageKey, target);
-      });
-    }
+  const frameworkSelect = document.querySelector('[data-vf-framework-select]');
+  if (frameworkSelect) {
+    frameworkSelect.addEventListener('change', () => {
+      const selected = frameworkSelect.selectedOptions?.[0];
+      const target = selected?.dataset.vfFrameworkValue;
+      if (target) window.localStorage.setItem(storageKey, target);
+      if (frameworkSelect.value) window.location.assign(frameworkSelect.value);
+    });
   }
 
   enhanceDocumentationPage(siteRoot);
@@ -280,6 +280,17 @@ function initializeDocs() {
   root.dataset.vfDocsReady = 'true';
 }
 
-if (document.querySelector('[data-vf-app-shell]')) initializeDocs();
-document.addEventListener('vfdocsrendered', initializeDocs, { once: true });
-window.addEventListener('DOMContentLoaded', initializeDocs, { once: true });
+function rendererIsReady() {
+  const shell = document.querySelector('[data-vf-app-shell]');
+  if (!shell) return false;
+  const renderer = shell.dataset.vfDocsRenderer || '';
+  return renderer === 'native-web' || renderer === 'elements' || root.dataset.vfDocsRendered === renderer;
+}
+
+function initializeWhenReady() {
+  if (rendererIsReady()) initializeDocs();
+}
+
+initializeWhenReady();
+document.addEventListener('vfdocsrendered', initializeDocs);
+window.addEventListener('DOMContentLoaded', initializeWhenReady, { once: true });

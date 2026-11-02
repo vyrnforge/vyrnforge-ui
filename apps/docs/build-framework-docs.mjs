@@ -21,7 +21,7 @@ const frameworkSurface = Object.freeze({
   react: 'react',
   angular: 'angular',
   vue: 'vue',
-  elements: 'elements'
+  elements: 'elements',
 });
 const componentById = new Map(productGraph.components.map((component) => [component.unitId, component]));
 const frameworkPages = new Map(registry.pages.filter((page) => page.kind === 'framework').map((page) => [page.framework, page]));
@@ -77,43 +77,54 @@ function routeForFramework(page, currentFramework, targetFramework) {
   return relativeRoute(scopedSlug(currentFramework, page.slug), scopedSlug(targetFramework, targetPage.slug));
 }
 
-function renderFrameworkPicker(page, framework) {
-  const currentSlug = scopedSlug(framework, page.slug);
-  const links = supportedFrameworks.map((target) => {
-    const href = routeForFramework(page, framework, target);
-    const current = target === framework ? ' aria-current="true"' : '';
-    return `<a href="${href}" data-vf-framework-choice="${escapeHtml(target)}"${current}>${renderFrameworkMark(target)}<span>${escapeHtml(frameworkLabel(target))}</span></a>`;
-  }).join('');
-  return `<nav class="vf-docs-framework-picker" aria-label="Framework" data-vf-framework-picker data-vf-current-framework="${escapeHtml(framework)}">${links}</nav>`;
+function frameworkChoices(page, framework) {
+  return supportedFrameworks.map((target) => ({
+    id: target,
+    label: frameworkLabel(target),
+    href: routeForFramework(page, framework, target),
+    current: target === framework,
+  }));
+}
+
+function renderFrameworkSelector(page, framework) {
+  const options = frameworkChoices(page, framework)
+    .map((choice) => `<option value="${escapeHtml(choice.href)}" data-vf-framework-value="${escapeHtml(choice.id)}"${choice.current ? ' selected' : ''}>${escapeHtml(choice.label)}</option>`)
+    .join('');
+  return `<div class="vf-docs-framework-selector"><label for="vf-docs-framework-select">Framework</label><select id="vf-docs-framework-select" data-vf-native-select data-vf-framework-select aria-label="Framework">${options}</select></div>`;
 }
 
 function renderHeader(page, framework) {
-  return `<div class="vf-docs-header__inner"><a class="vf-docs-brand" href="${relativeRoute(scopedSlug(framework, page.slug), framework)}">VyrnForge</a><span class="vf-docs-version" data-vf-docs-version>${escapeHtml(channel)} · ${escapeHtml(rootManifest.version)}</span><div class="vf-docs-tools">${renderFrameworkPicker(page, framework)}<div class="vf-docs-search-wrap"><label for="vf-docs-search">Search</label> <input id="vf-docs-search" data-vf-docs-search type="search" autocomplete="off"><ul class="vf-docs-search-results" data-vf-docs-search-results hidden></ul></div></div></div>`;
+  return `<div class="vf-docs-header__inner"><a class="vf-docs-brand" href="${relativeRoute(scopedSlug(framework, page.slug), framework)}">VyrnForge</a><span class="vf-docs-version" data-vf-docs-version>${escapeHtml(channel)} · ${escapeHtml(rootManifest.version)}</span><div class="vf-docs-tools"><div class="vf-docs-search-wrap"><label for="vf-docs-search">Search</label> <input id="vf-docs-search" data-vf-docs-search data-vf-input type="search" autocomplete="off"><ul class="vf-docs-search-results" data-vf-docs-search-results hidden></ul></div>${renderFrameworkSelector(page, framework)}</div></div>`;
 }
 
-function renderNavLabel(item) {
-  return item.kind === 'framework'
-    ? `${renderFrameworkMark(item.framework)}<span>${escapeHtml(item.title)}</span>`
-    : escapeHtml(item.title);
+function navItemModel(currentPage, item, framework) {
+  return {
+    title: item.title,
+    href: relativeRoute(scopedSlug(framework, currentPage.slug), scopedSlug(framework, item.slug)),
+    current: item.slug === currentPage.slug,
+    framework: item.kind === 'framework' ? item.framework : null,
+  };
 }
 
-function renderNavItem(currentPage, item, framework) {
-  const current = item.slug === currentPage.slug;
-  return `<li data-vf-side-nav-item><a data-vf-side-nav-link href="${relativeRoute(scopedSlug(framework, currentPage.slug), scopedSlug(framework, item.slug))}"${current ? ' data-vf-current="true" aria-current="page"' : ''}>${renderNavLabel(item)}</a></li>`;
-}
-
-function renderComponentNavigation(currentPage, pages, framework) {
+function componentNavigationModel(currentPage, pages, framework) {
   const grouped = new Map(componentUsageGroups.map((group) => [group.title, []]));
   for (const item of pages) {
     const items = grouped.get(item.subgroup) ?? [];
     items.push(item);
     grouped.set(item.subgroup, items);
   }
-  return [...grouped.entries()].filter(([, items]) => items.length).map(([subgroup, items]) => {
-    const sortedItems = items.sort((a, b) => a.title.localeCompare(b.title));
-    const containsCurrentPage = sortedItems.some((item) => item.slug === currentPage.slug);
-    return `<details class="vf-docs-component-subgroup" data-vf-docs-component-subgroup${containsCurrentPage ? ' data-vf-current-group="true" open' : ''}><summary class="vf-docs-component-subgroup__label"><span>${escapeHtml(subgroup)}</span><span class="vf-docs-component-subgroup__count" aria-hidden="true">${sortedItems.length}</span></summary><ul data-vf-side-nav-list>${sortedItems.map((item) => renderNavItem(currentPage, item, framework)).join('')}</ul></details>`;
-  }).join('');
+
+  return [...grouped.entries()]
+    .filter(([, items]) => items.length)
+    .map(([label, items]) => {
+      const sortedItems = items.sort((a, b) => a.title.localeCompare(b.title));
+      return {
+        label,
+        count: sortedItems.length,
+        open: sortedItems.some((item) => item.slug === currentPage.slug),
+        items: sortedItems.map((item) => navItemModel(currentPage, item, framework)),
+      };
+    });
 }
 
 function pagesForNavigation(framework) {
@@ -123,18 +134,37 @@ function pagesForNavigation(framework) {
   });
 }
 
-function renderNavigation(currentPage, framework) {
+function navigationModel(currentPage, framework) {
   const groups = new Map();
   for (const page of pagesForNavigation(framework)) {
     const pages = groups.get(page.group) || [];
     pages.push(page);
     groups.set(page.group, pages);
   }
-  const contents = [...groups.entries()].map(([group, pages]) => {
-    const body = group === 'Components'
-      ? renderComponentNavigation(currentPage, pages, framework)
-      : `<ul data-vf-side-nav-list>${pages.map((item) => renderNavItem(currentPage, item, framework)).join('')}</ul>`;
-    return `<section data-vf-side-nav-group><h2 data-vf-side-nav-group-label>${escapeHtml(group)}</h2>${body}</section>`;
+
+  return [...groups.entries()].map(([label, pages]) => ({
+    label,
+    items: label === 'Components' ? [] : pages.map((item) => navItemModel(currentPage, item, framework)),
+    subgroups: label === 'Components' ? componentNavigationModel(currentPage, pages, framework) : [],
+  }));
+}
+
+function renderNavLabel(item) {
+  return item.framework
+    ? `${renderFrameworkMark(item.framework)}<span>${escapeHtml(item.title)}</span>`
+    : escapeHtml(item.title);
+}
+
+function renderNavItems(items) {
+  return items.map((item) => `<li data-vf-side-nav-item><a data-vf-side-nav-link href="${escapeHtml(item.href)}"${item.current ? ' data-vf-current="true" aria-current="page"' : ''}>${renderNavLabel(item)}</a></li>`).join('');
+}
+
+function renderNavigation(currentPage, framework) {
+  const contents = navigationModel(currentPage, framework).map((group) => {
+    const body = group.subgroups.length
+      ? group.subgroups.map((subgroup) => `<details class="vf-docs-component-subgroup" data-vf-docs-component-subgroup${subgroup.open ? ' data-vf-current-group="true" open' : ''}><summary class="vf-docs-component-subgroup__label"><span>${escapeHtml(subgroup.label)}</span><span class="vf-docs-component-subgroup__count" aria-hidden="true">${subgroup.count}</span></summary><ul data-vf-side-nav-list>${renderNavItems(subgroup.items)}</ul></details>`).join('')
+      : `<ul data-vf-side-nav-list>${renderNavItems(group.items)}</ul>`;
+    return `<section data-vf-side-nav-group><h2 data-vf-side-nav-group-label>${escapeHtml(group.label)}</h2>${body}</section>`;
   }).join('');
   return `<nav data-vf-side-nav aria-label="Documentation">${contents}</nav>`;
 }
@@ -160,9 +190,7 @@ function renderExample(example, framework) {
 }
 
 function lockExamples(mainHtml, framework) {
-  return mainHtml.replace(/<section class="vf-example" data-vf-example-id="[^"]+"[\s\S]*?<script type="application\/json" data-vf-example-data>([\s\S]*?)<\/script>\s*<\/section>/g, (_match, data) => {
-    return renderExample(JSON.parse(data), framework);
-  });
+  return mainHtml.replace(/<section class="vf-example" data-vf-example-id="[^"]+"[\s\S]*?<script type="application\/json" data-vf-example-data>([\s\S]*?)<\/script>\s*<\/section>/g, (_match, data) => renderExample(JSON.parse(data), framework));
 }
 
 async function frameworkAdaptation(page, framework) {
@@ -205,14 +233,20 @@ function documentShell({ page, framework, mainHtml }) {
   const fullSlug = scopedSlug(framework, page.slug);
   const siteRoot = relativeRoute(fullSlug, framework);
   const assetRoot = relativeRoute(fullSlug, '');
-  const headerHtml = renderHeader(page, framework);
-  const navigationHtml = renderNavigation(page, framework);
   const footerText = `VyrnForge ${frameworkLabel(framework)} documentation · ${channel} channel`;
   const title = `${page.title} · ${frameworkLabel(framework)} · VyrnForge`;
-  const model = { headerHtml, navigationHtml, mainHtml, footerText };
+  const model = {
+    currentFramework: framework,
+    brandHref: relativeRoute(fullSlug, framework),
+    versionText: `${channel} · ${rootManifest.version}`,
+    frameworkChoices: frameworkChoices(page, framework),
+    navigation: navigationModel(page, framework),
+    mainHtml,
+    footerText,
+  };
   const styles = `<link rel="stylesheet" href="${assetRoot}assets/vyrnforge/styles.css"><link rel="stylesheet" href="${assetRoot}assets/styles.css"><link rel="stylesheet" href="${assetRoot}assets/shell.css"><link rel="stylesheet" href="${assetRoot}assets/framework-sites.css">`;
   const bodyAttrs = `data-vf-site-root="${siteRoot}" data-vf-asset-root="${assetRoot}" data-vf-framework="${escapeHtml(framework)}" data-vf-version="${escapeHtml(rootManifest.version)}"`;
-  const staticShell = (tag, renderer, elementsScript = '') => `<${tag} data-vf-app-shell data-vf-docs-renderer="${renderer}"><a class="vf-skip-link" href="#main">Skip to content</a><header data-vf-app-shell-header class="vf-docs-header">${headerHtml}</header><div data-vf-app-shell-body><aside data-vf-app-shell-navigation class="vf-docs-navigation">${navigationHtml}</aside><main data-vf-app-shell-main id="main">${mainHtml}</main></div><footer data-vf-app-shell-footer class="vf-docs-footer">${escapeHtml(footerText)}</footer></${tag}>${elementsScript}`;
+  const staticShell = (tag, renderer, elementsScript = '') => `<${tag} data-vf-app-shell data-vf-docs-renderer="${renderer}"><a class="vf-skip-link" href="#main">Skip to content</a><header data-vf-app-shell-header class="vf-docs-header">${renderHeader(page, framework)}</header><div data-vf-app-shell-body><aside data-vf-app-shell-navigation class="vf-docs-navigation">${renderNavigation(page, framework)}</aside><main data-vf-app-shell-main id="main">${mainHtml}</main></div><footer data-vf-app-shell-footer class="vf-docs-footer">${escapeHtml(footerText)}</footer></${tag}>${elementsScript}`;
   let app = '';
   if (framework === 'native-web') {
     app = staticShell('div', 'native-web');
@@ -271,7 +305,7 @@ for (const framework of supportedFrameworks) {
         title: sourceEntry?.title ?? page.title,
         path: page.slug ? `${page.slug}/` : './',
         text: sourceEntry?.text ?? '',
-        framework
+        framework,
       });
     }
   }

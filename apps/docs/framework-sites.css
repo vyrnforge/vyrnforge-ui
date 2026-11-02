@@ -24,38 +24,27 @@
   margin-inline: auto;
 }
 
-.vf-docs-framework-picker {
-  display: flex;
-  gap: .15rem;
+.vf-docs-framework-selector {
+  display: grid;
+  grid-template-columns: auto minmax(9rem, 12rem);
+  gap: .45rem;
   align-items: center;
-  overflow-x: auto;
+  margin-inline-start: auto;
 }
 
-.vf-docs-framework-picker a[data-vf-framework-choice] {
-  display: inline-flex;
-  align-items: center;
-  gap: .4rem;
-  min-block-size: 2.2rem;
-  padding: .4rem .6rem;
-  border-radius: .5rem;
+.vf-docs-framework-selector label {
   color: var(--vf-color-text-muted);
-  font-size: var(--vf-font-size-sm);
+  font-size: var(--vf-font-size-xs);
   font-weight: var(--vf-font-weight-semibold);
-  text-decoration: none;
-  white-space: nowrap;
 }
 
-.vf-docs-framework-picker a[data-vf-framework-choice]:hover {
-  background: var(--vf-color-surface-hover);
-  color: var(--vf-color-text);
+.vf-docs-framework-selector select {
+  min-block-size: 2.4rem;
+  min-inline-size: 9rem;
+  padding-inline: .65rem 2rem;
 }
 
-.vf-docs-framework-picker a[data-vf-framework-choice][aria-current="true"] {
-  background: var(--vf-color-surface-active);
-  color: var(--vf-color-text);
-}
-
-.vf-docs-framework-picker a[data-vf-framework-choice]:focus-visible,
+.vf-docs-framework-selector select:focus-visible,
 .vf-docs-framework-card:focus-visible {
   outline: 2px solid var(--vf-color-focus-ring);
   outline-offset: 2px;
@@ -169,8 +158,20 @@
 }
 
 @media (max-width: 900px) {
-  .vf-docs-framework-picker a[data-vf-framework-choice] span {
-    display: none;
+  .vf-docs-framework-selector {
+    grid-template-columns: minmax(8.5rem, 1fr);
+  }
+
+  .vf-docs-framework-selector label {
+    position: absolute;
+    inline-size: 1px;
+    block-size: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border: 0;
   }
 }
 
@@ -179,13 +180,14 @@
     padding: 1.5rem 1rem 4rem;
   }
 
-  .vf-docs-framework-picker a[data-vf-framework-choice] span {
-    display: inline;
+  .vf-docs-framework-selector {
+    margin-inline-start: 0;
+    inline-size: min(12rem, 100%);
   }
 }
 
 @media (forced-colors: active) {
-  .vf-docs-framework-picker a[data-vf-framework-choice][aria-current="true"],
+  .vf-docs-framework-selector select,
   .vf-docs-framework-context,
   .vf-example__framework,
   .vf-example--unavailable,
