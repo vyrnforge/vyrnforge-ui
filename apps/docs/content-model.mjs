@@ -1,5 +1,3 @@
-import { readFile } from 'node:fs/promises';
-
 export const documentationContentFormat = 'vyrnforge.docs.content.v1';
 
 function escapeHtml(value) {
@@ -47,8 +45,8 @@ export function assertDocumentationContentModel(model, source = 'documentation c
   return model;
 }
 
-export async function readDocumentationContentModel(filePath) {
-  return assertDocumentationContentModel(JSON.parse(await readFile(filePath, 'utf8')), filePath);
+export function parseDocumentationContentModel(value, source = 'documentation content model') {
+  return assertDocumentationContentModel(JSON.parse(value), source);
 }
 
 export function referencedDocumentationExamples(model) {
