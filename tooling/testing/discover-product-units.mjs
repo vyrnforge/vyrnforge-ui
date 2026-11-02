@@ -174,6 +174,8 @@ export function discoverProductUnits(root = repoRoot) {
     const metadataPath = componentFacetPath(root, componentId, 'component.json', { file: true });
     const metadata = existingPath(root, metadataPath) ? readJson(root, metadataPath) : null;
     const docsRoot = componentFacetPath(root, componentId, 'docs');
+    const documentationCandidates = [`${docsRoot}index.json`, `${docsRoot}index.html`];
+    const documentationSources = documentationCandidates.filter((candidate) => existingPath(root, candidate));
     const examplesRoot = componentFacetPath(root, componentId, 'examples');
     const testRoot = componentFacetPath(root, componentId, 'test');
     const browserRoot = `${testRoot}browser`;
@@ -187,7 +189,9 @@ export function discoverProductUnits(root = repoRoot) {
       ports,
       metadataPath,
       documentationGroup: metadata?.group ?? metadata?.documentation?.group ?? null,
-      documentationSource: `${docsRoot}index.html`,
+      documentationSource: documentationSources[0] ?? null,
+      documentationSources,
+      documentationCandidates,
       documentationPaths: [docsRoot, examplesRoot],
       exampleManifests: findExampleManifests(root, componentId),
       conformanceTypes: frameworkPortNamesForComponent.length > 1 ? `${conformanceRoot}/public-api.types.ts` : null,
@@ -214,7 +218,8 @@ export function productPreparationProblems(root = repoRoot) {
     if (!existingPath(root, component.root)) problems.push(`${component.component} is public but missing repository product ownership slice: ${component.root}`);
     if (!existingPath(root, component.metadataPath)) problems.push(`${component.component} is public but missing component-owned metadata: ${component.metadataPath}`);
     else if (!component.documentationGroup) problems.push(`${component.component} component metadata must declare documentation.group`);
-    if (!existingPath(root, component.documentationSource)) problems.push(`${component.component} is public but missing component documentation: ${component.documentationSource}`);
+    if (component.documentationSources.length === 0) problems.push(`${component.component} is public but missing component documentation: expected ${component.documentationCandidates.join(' or ')}`);
+    else if (component.documentationSources.length > 1) problems.push(`${component.component} has competing primary component documentation sources: ${component.documentationSources.join(', ')}`);
     if (component.exampleManifests.length === 0) problems.push(`${component.component} is public but has no executable example.json under its product-owned examples facet`);
     for (const [port, config] of Object.entries(component.ports)) {
       const sourcePath = config.paths[0];

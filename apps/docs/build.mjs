@@ -4,6 +4,11 @@ import { fileURLToPath } from 'node:url';
 import { discoverProductGraph } from '../../tooling/product/discover-product-graph.mjs';
 import { buildDocumentationExamples } from './build-examples.mjs';
 import { componentUsageGroups } from './component-usage-groups.mjs';
+import {
+  parseDocumentationContentModel,
+  renderDocumentationContentHtml,
+  resolveDocumentationContent,
+} from './content-model.mjs';
 import { renderFrameworkMark } from './framework-presentation.mjs';
 import { documentationRegistry } from './registry.mjs';
 import { renderDocumentationExample } from './render-example.mjs';
@@ -34,7 +39,24 @@ function renderPackages() {
 function renderCompatibilityValue(value) { if (value && typeof value === 'object' && !Array.isArray(value)) return `<dl>${Object.entries(value).map(([key, nested]) => `<dt><code>${escapeHtml(key)}</code></dt><dd>${renderCompatibilityValue(nested)}</dd>`).join('')}</dl>`; if (Array.isArray(value)) return `<ul>${value.map((item) => `<li>${escapeHtml(item)}</li>`).join('')}</ul>`; return `<code>${escapeHtml(value)}</code>`; }
 function renderCompatibility() { return `<p class="vf-docs-lede">This page is generated from the repository compatibility source used by CI and future release checks. Unselected support ranges remain visibly unselected instead of being guessed.</p>${renderCompatibilityValue(compatibility)}`; }
 function composeExamples(bodyHtml, examples) { return bodyHtml.replace(/<div\s+data-vf-example="([^"]+)"\s*><\/div>/g, (_match, id) => { const example = examples.get(id); if (!example) throw new Error(`Documentation references unknown executable example: ${id}`); return renderDocumentationExample(example); }); }
-async function pageBody(page, examples) { if (page.kind === 'generated') { if (page.generator === 'packages') return renderPackages(); if (page.generator === 'compatibility') return renderCompatibility(); throw new Error(`Unknown documentation generator: ${page.generator}`); } return composeExamples(await readFile(path.join(root, page.source), 'utf8'), examples); }
+async function pageBody(page, examples) {
+  if (page.kind === 'generated') {
+    if (page.generator === 'packages') return renderPackages();
+    if (page.generator === 'compatibility') return renderCompatibility();
+    throw new Error(`Unknown documentation generator: ${page.generator}`);
+  }
+  if (page.sourceFormat === 'model') {
+    const filePath = path.join(root, page.source);
+    const model = parseDocumentationContentModel(await readFile(filePath, 'utf8'), filePath);
+    const content = resolveDocumentationContent(model, {
+      framework: 'native-web',
+      examples,
+      pageTitle: page.title,
+    });
+    return renderDocumentationContentHtml(content).replace(/^<h1[^>]*>[\s\S]*?<\/h1>/, '');
+  }
+  return composeExamples(await readFile(path.join(root, page.source), 'utf8'), examples);
+}
 function navGroups() { const groups = new Map(); for (const page of registry.pages) { const pages = groups.get(page.group) || []; pages.push(page); groups.set(page.group, pages); } return groups; }
 function renderNavLabel(item) { return item.kind === 'framework' ? `${renderFrameworkMark(item.framework)}<span>${escapeHtml(item.title)}</span>` : escapeHtml(item.title); }
 function renderNavItem(currentPage, item) { return `<li data-vf-side-nav-item><a data-vf-side-nav-link href="${relativeRoute(currentPage.slug, item.slug)}"${item.slug === currentPage.slug ? ' data-vf-current="true" aria-current="page"' : ''}>${renderNavLabel(item)}</a></li>`; }
@@ -82,10 +104,16 @@ await cp(path.join(root, 'packages/web/dist/styles.css'), path.join(channelRoot,
 await cp(path.join(root, 'packages/web/dist/styles'), path.join(channelRoot, 'assets/vyrnforge/styles'), { recursive: true });
 await cp(path.join(root, 'packages/web/dist/components'), path.join(channelRoot, 'assets/vyrnforge/components'), { recursive: true });
 await cp(path.join(root, 'packages/elements/dist/components/app-shell/index.js'), path.join(channelRoot, 'assets/vyrnforge/elements/app-shell.js'));
-const examples = await buildDocumentationExamples({ root, channelRoot });
+export const documentationExamples = await buildDocumentationExamples({ root, channelRoot });
 await writeFile(path.join(outRoot, 'index.html'), `<!doctype html><html lang="en"><head><meta charset="utf-8"><meta http-equiv="refresh" content="0;url=./${channel}/"><title>VyrnForge documentation</title></head><body><a href="./${channel}/">Open VyrnForge ${channel} documentation</a></body></html>`);
 const searchIndex = [];
-for (const page of registry.pages) { const bodyHtml = makeScrollableRegionsKeyboardReachable(await pageBody(page, examples)); const outputDirectory = path.join(channelRoot, page.slug); await mkdir(outputDirectory, { recursive: true }); await writeFile(path.join(outputDirectory, 'index.html'), renderLayout(page, bodyHtml)); searchIndex.push({ title: page.title, path: page.slug ? `${page.slug}/` : './', text: stripHtml(bodyHtml), framework: page.framework || null }); }
+for (const page of registry.pages) {
+  const bodyHtml = makeScrollableRegionsKeyboardReachable(await pageBody(page, documentationExamples));
+  const outputDirectory = path.join(channelRoot, page.slug);
+  await mkdir(outputDirectory, { recursive: true });
+  await writeFile(path.join(outputDirectory, 'index.html'), renderLayout(page, bodyHtml));
+  searchIndex.push({ title: page.title, path: page.slug ? `${page.slug}/` : './', text: stripHtml(bodyHtml), framework: page.framework || null });
+}
 await writeFile(path.join(channelRoot, 'search-index.json'), `${JSON.stringify(searchIndex, null, 2)}\n`);
-await writeFile(path.join(channelRoot, 'site-manifest.json'), `${JSON.stringify({ channel, version: rootManifest.version, pages: registry.pages.map(({ slug, title, kind, framework }) => ({ slug, title, kind, framework: framework || null })), examples: [...examples.keys()] }, null, 2)}\n`);
-process.stdout.write(`documentation build: ${registry.pages.length} pages, ${examples.size} executable examples -> ${path.relative(root, channelRoot)}\n`);
+await writeFile(path.join(channelRoot, 'site-manifest.json'), `${JSON.stringify({ channel, version: rootManifest.version, pages: registry.pages.map(({ slug, title, kind, framework }) => ({ slug, title, kind, framework: framework || null })), examples: [...documentationExamples.keys()] }, null, 2)}\n`);
+process.stdout.write(`documentation build: ${registry.pages.length} pages, ${documentationExamples.size} executable examples -> ${path.relative(root, channelRoot)}\n`);

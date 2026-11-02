@@ -17,10 +17,15 @@ export function documentationRegistry(root) {
       const usageGroup = componentUsageGroup(component.documentationGroup);
       const docsRoot = component.facets.docs;
       if (!docsRoot) throw new Error(`${component.id} is public/implemented but missing product-owned documentation`);
-      const source = `${docsRoot}index.html`;
-      if (!existsSync(path.join(root, source))) {
-        throw new Error(`${component.id} documentation has no currently supported index.html source at ${source}`);
+
+      const modelSource = `${docsRoot}index.json`;
+      const htmlSource = `${docsRoot}index.html`;
+      const hasModel = existsSync(path.join(root, modelSource));
+      const hasHtml = existsSync(path.join(root, htmlSource));
+      if (!hasModel && !hasHtml) {
+        throw new Error(`${component.id} documentation has no supported index.json or index.html source under ${docsRoot}`);
       }
+
       return {
         slug: `components/${component.unitId}`,
         title: component.name,
@@ -29,7 +34,8 @@ export function documentationRegistry(root) {
         subgroupId: usageGroup.id,
         kind: 'component',
         component: component.unitId,
-        source,
+        source: hasModel ? modelSource : htmlSource,
+        sourceFormat: hasModel ? 'model' : 'html',
         surfaces: Object.keys(component.surfaces).sort(),
       };
     });

@@ -1,4 +1,4 @@
-import './build.mjs';
+import { documentationExamples } from './build.mjs';
 
 import { cp, mkdir, readFile, rm, writeFile } from 'node:fs/promises';
 import { existsSync } from 'node:fs';
@@ -7,6 +7,12 @@ import { fileURLToPath } from 'node:url';
 import { discoverProductGraph } from '../../tooling/product/discover-product-graph.mjs';
 import { buildFrameworkDocsApps } from './build-framework-apps.mjs';
 import { componentUsageGroups } from './component-usage-groups.mjs';
+import {
+  documentationContentText,
+  readDocumentationContentModel,
+  renderDocumentationContentHtml,
+  resolveDocumentationContent,
+} from './content-model.mjs';
 import { frameworkLabel, frameworkMarkDefinition, renderFrameworkMark, supportedFrameworks } from './framework-presentation.mjs';
 import { documentationRegistry } from './registry.mjs';
 
@@ -26,6 +32,7 @@ const frameworkSurface = Object.freeze({
 const componentById = new Map(productGraph.components.map((component) => [component.unitId, component]));
 const frameworkPages = new Map(registry.pages.filter((page) => page.kind === 'framework').map((page) => [page.framework, page]));
 const sourcePages = new Map();
+const sourceModels = new Map();
 
 function escapeHtml(value) {
   return String(value)
@@ -114,7 +121,6 @@ function componentNavigationModel(currentPage, pages, framework) {
     items.push(item);
     grouped.set(item.subgroup, items);
   }
-
   return [...grouped.entries()]
     .filter(([, items]) => items.length)
     .map(([label, items]) => {
@@ -142,7 +148,6 @@ function navigationModel(currentPage, framework) {
     pages.push(page);
     groups.set(page.group, pages);
   }
-
   return [...groups.entries()].map(([label, pages]) => ({
     label,
     items: label === 'Components' ? [] : pages.map((item) => navItemModel(currentPage, item, framework)),
@@ -170,7 +175,7 @@ function renderNavigation(currentPage, framework) {
   return `<nav data-vf-side-nav aria-label="Documentation">${contents}</nav>`;
 }
 
-function renderExample(example, framework) {
+function renderLegacyExample(example, framework) {
   const config = example.frameworks?.[framework];
   if (!config) {
     return `<section class="vf-example--unavailable" data-vf-example-unavailable="${escapeHtml(example.id)}"><h3>${escapeHtml(example.title)}</h3><p>This executable example is not available for ${escapeHtml(frameworkLabel(framework))} in this documentation channel.</p></section>`;
@@ -190,12 +195,12 @@ function renderExample(example, framework) {
   </section>`;
 }
 
-function lockExamples(mainHtml, framework) {
-  return mainHtml.replace(/<section class="vf-example" data-vf-example-id="[^"]+"[\s\S]*?<script type="application\/json" data-vf-example-data>([\s\S]*?)<\/script>\s*<\/section>/g, (_match, data) => renderExample(JSON.parse(data), framework));
+function lockLegacyExamples(mainHtml, framework) {
+  return mainHtml.replace(/<section class="vf-example" data-vf-example-id="[^"]+"[\s\S]*?<script type="application\/json" data-vf-example-data>([\s\S]*?)<\/script>\s*<\/section>/g, (_match, data) => renderLegacyExample(JSON.parse(data), framework));
 }
 
 async function frameworkAdaptation(page, framework) {
-  if (page.kind !== 'component' || !page.source) return '';
+  if (page.kind !== 'component' || !page.source || page.sourceFormat === 'model') return '';
   const directory = path.dirname(path.join(root, page.source));
   const target = path.join(directory, 'frameworks', `${framework}.html`);
   return existsSync(target) ? readFile(target, 'utf8') : '';
@@ -209,15 +214,26 @@ async function composeFrameworkContent(page, mainHtml, framework) {
   return mainHtml;
 }
 
-function componentContext(page, framework) {
-  if (page.kind !== 'component') return '';
+function componentContextModel(page, framework) {
+  if (page.kind !== 'component') return null;
   const component = componentById.get(page.component);
   const surface = component?.surfaces?.[frameworkSurface[framework]];
-  const entrypoint = surface?.publicEntrypoints?.[0];
-  const detail = entrypoint
-    ? `Public entrypoint: <code>${escapeHtml(entrypoint)}</code>`
-    : `This component has a ${escapeHtml(frameworkLabel(framework))} surface in this documentation channel.`;
-  return `<div class="vf-docs-framework-context" data-vf-framework-context="${escapeHtml(framework)}"><strong>${renderFrameworkMark(framework)}<span>${escapeHtml(frameworkLabel(framework))}</span></strong><span>${detail}</span></div>`;
+  const entrypoint = surface?.publicEntrypoints?.[0] ?? null;
+  return {
+    framework,
+    label: frameworkLabel(framework),
+    entrypoint,
+    mark: frameworkMarkDefinition(framework),
+  };
+}
+
+function componentContext(page, framework) {
+  const context = componentContextModel(page, framework);
+  if (!context) return '';
+  const detail = context.entrypoint
+    ? `Public entrypoint: <code>${escapeHtml(context.entrypoint)}</code>`
+    : `This component has a ${escapeHtml(context.label)} surface in this documentation channel.`;
+  return `<div class="vf-docs-framework-context" data-vf-framework-context="${escapeHtml(framework)}"><strong>${renderFrameworkMark(framework)}<span>${escapeHtml(context.label)}</span></strong><span>${detail}</span></div>`;
 }
 
 function insertComponentContext(page, mainHtml, framework) {
@@ -230,7 +246,7 @@ function renderUnavailable(page, framework) {
   return `<h1>${escapeHtml(page.title)}</h1><div class="vf-docs-framework-context" data-vf-framework-context="${escapeHtml(framework)}"><strong>${renderFrameworkMark(framework)}<span>${escapeHtml(frameworkLabel(framework))}</span></strong><span>Framework-specific documentation view</span></div><div class="vf-docs-unavailable" data-vf-framework-unavailable="${escapeHtml(framework)}"><h2>Not available for ${escapeHtml(frameworkLabel(framework))}</h2><p>${escapeHtml(page.title)} does not expose a supported ${escapeHtml(frameworkLabel(framework))} surface in this documentation channel. VyrnForge does not substitute another framework implementation or fabricate an equivalent API.</p><p>Choose another framework above to keep this component context while viewing an implemented surface.</p></div>`;
 }
 
-function documentShell({ page, framework, mainHtml }) {
+function documentShell({ page, framework, mainHtml = '', mainContent = null }) {
   const fullSlug = scopedSlug(framework, page.slug);
   const siteRoot = relativeRoute(fullSlug, framework);
   const assetRoot = relativeRoute(fullSlug, '');
@@ -242,12 +258,13 @@ function documentShell({ page, framework, mainHtml }) {
     versionText: `${channel} · ${rootManifest.version}`,
     frameworkChoices: frameworkChoices(page, framework),
     navigation: navigationModel(page, framework),
-    mainHtml,
+    ...(mainContent ? { mainContent } : { mainHtml }),
     footerText,
   };
   const styles = `<link rel="stylesheet" href="${assetRoot}assets/vyrnforge/styles.css"><link rel="stylesheet" href="${assetRoot}assets/styles.css"><link rel="stylesheet" href="${assetRoot}assets/shell.css"><link rel="stylesheet" href="${assetRoot}assets/framework-sites.css">`;
   const bodyAttrs = `data-vf-site-root="${siteRoot}" data-vf-asset-root="${assetRoot}" data-vf-framework="${escapeHtml(framework)}" data-vf-version="${escapeHtml(rootManifest.version)}"`;
-  const staticShell = (tag, renderer, elementsScript = '') => `<${tag} data-vf-app-shell data-vf-docs-renderer="${renderer}"><a class="vf-skip-link" href="#main">Skip to content</a><header data-vf-app-shell-header class="vf-docs-header">${renderHeader(page, framework)}</header><div data-vf-app-shell-body><aside data-vf-app-shell-navigation class="vf-docs-navigation">${renderNavigation(page, framework)}</aside><main data-vf-app-shell-main id="main">${mainHtml}</main></div><footer data-vf-app-shell-footer class="vf-docs-footer">${escapeHtml(footerText)}</footer></${tag}>${elementsScript}`;
+  const staticMain = mainContent ? renderDocumentationContentHtml(mainContent) : mainHtml;
+  const staticShell = (tag, renderer, elementsScript = '') => `<${tag} data-vf-app-shell data-vf-docs-renderer="${renderer}"><a class="vf-skip-link" href="#main">Skip to content</a><header data-vf-app-shell-header class="vf-docs-header">${renderHeader(page, framework)}</header><div data-vf-app-shell-body><aside data-vf-app-shell-navigation class="vf-docs-navigation">${renderNavigation(page, framework)}</aside><main data-vf-app-shell-main id="main">${staticMain}</main></div><footer data-vf-app-shell-footer class="vf-docs-footer">${escapeHtml(footerText)}</footer></${tag}>${elementsScript}`;
   let app = '';
   if (framework === 'native-web') {
     app = staticShell('div', 'native-web');
@@ -267,6 +284,10 @@ function gatewayDocument() {
 }
 
 for (const page of registry.pages) {
+  if (page.sourceFormat === 'model') {
+    sourceModels.set(page.slug, await readDocumentationContentModel(path.join(root, page.source)));
+    continue;
+  }
   const file = path.join(channelRoot, page.slug, 'index.html');
   sourcePages.set(page.slug, extractMain(await readFile(file, 'utf8'), page));
 }
@@ -286,18 +307,31 @@ for (const framework of supportedFrameworks) {
   for (const page of registry.pages) {
     if (page.kind === 'framework' && page.framework !== framework) continue;
     const available = pageAvailable(page, framework);
-    let mainHtml = available ? sourcePages.get(page.slug) : renderUnavailable(page, framework);
-    if (available) {
-      mainHtml = lockExamples(mainHtml, framework);
+    let mainHtml = '';
+    let mainContent = null;
+
+    if (!available) {
+      mainHtml = renderUnavailable(page, framework);
+    } else if (page.sourceFormat === 'model') {
+      mainContent = resolveDocumentationContent(sourceModels.get(page.slug), {
+        framework,
+        examples: documentationExamples,
+        pageTitle: page.title,
+        context: componentContextModel(page, framework),
+      });
+    } else {
+      mainHtml = sourcePages.get(page.slug);
+      mainHtml = lockLegacyExamples(mainHtml, framework);
       mainHtml = await composeFrameworkContent(page, mainHtml, framework);
       mainHtml = insertComponentContext(page, mainHtml, framework);
     }
+
     const fullSlug = scopedSlug(framework, page.slug);
     const output = path.join(channelRoot, fullSlug, 'index.html');
     await mkdir(path.dirname(output), { recursive: true });
-    await writeFile(output, documentShell({ page, framework, mainHtml }));
+    await writeFile(output, documentShell({ page, framework, mainHtml, mainContent }));
 
-    const manifestEntry = { slug: fullSlug, logicalSlug: page.slug, title: page.title, kind: page.kind, framework, available };
+    const manifestEntry = { slug: fullSlug, logicalSlug: page.slug, title: page.title, kind: page.kind, framework, available, sourceFormat: page.sourceFormat ?? 'html' };
     publishedPages.push(manifestEntry);
     frameworkManifestPages.push(manifestEntry);
     if (available) {
@@ -305,7 +339,7 @@ for (const framework of supportedFrameworks) {
       frameworkSearch.push({
         title: sourceEntry?.title ?? page.title,
         path: page.slug ? `${page.slug}/` : './',
-        text: sourceEntry?.text ?? '',
+        text: mainContent ? documentationContentText(mainContent) : sourceEntry?.text ?? '',
         framework,
       });
     }
@@ -317,5 +351,3 @@ for (const framework of supportedFrameworks) {
 await writeFile(path.join(channelRoot, 'index.html'), gatewayDocument());
 await writeFile(path.join(channelRoot, 'site-manifest.json'), `${JSON.stringify({ channel, version: rootManifest.version, frameworks: supportedFrameworks, pages: publishedPages }, null, 2)}\n`);
 await rm(path.join(channelRoot, 'search-index.json'), { force: true });
-
-process.stdout.write(`framework documentation build: ${publishedPages.length} framework-scoped routes across ${supportedFrameworks.length} framework views -> ${path.relative(root, channelRoot)}\n`);
