@@ -24,6 +24,7 @@ import { Surface } from '@vyrnforge/react/surface';
 import { Text } from '@vyrnforge/react/text';
 import { Textarea } from '@vyrnforge/react/textarea';
 import { parseInline } from '../../content-model.mjs';
+import { buildContentLayoutModel } from '../content-layout.js';
 import { parseFragment, textNodeValue } from '../fragment.js';
 import { markDocsRendered, readDocsPageModel } from '../page-model.js';
 
@@ -175,7 +176,7 @@ function ContentBlock({ block, framework }: { block: any; framework: string }) {
   }
   if (block.type === 'heading') {
     const as = `h${Math.min(6, Math.max(3, Number(block.level) || 3))}` as any;
-    return <Text as={as} variant="heading-sm"><RichText value={block.text} /></Text>;
+    return <Text as={as} id={block.id} variant="heading-sm"><RichText value={block.text} /></Text>;
   }
   if (block.type === 'code') {
     return (
@@ -222,33 +223,60 @@ function ContentBlock({ block, framework }: { block: any; framework: string }) {
   throw new Error(`Unsupported React documentation content block: ${block.type}`);
 }
 
-function ModelContent({ content }: { content: any }) {
-  const context = content.context;
+function ModelContent({ content, navigation, homeHref }: { content: any; navigation: any[]; homeHref: string }) {
+  const layout = buildContentLayoutModel(content, navigation, homeHref);
+  const resolved = layout.content;
+  const context = resolved.context;
   return (
-    <>
-      <Text as="h1" variant="heading-lg">{content.pageTitle}</Text>
-      {context ? (
-        <div className="vf-docs-framework-context" data-vf-framework-context={context.framework}>
-          <Text as="strong" variant="label-md">
-            <FrameworkMark id={context.framework} mark={context.mark} />
-            <span>{context.label}</span>
-          </Text>
-          <span>{context.entrypoint ? <>Public entrypoint: <code>{context.entrypoint}</code></> : 'Framework-specific documentation view'}</span>
-        </div>
+    <div className="vf-docs-content-layout">
+      <article className="vf-docs-article">
+        <nav className="vf-docs-breadcrumbs" aria-label="Breadcrumb">
+          <ol>
+            {layout.breadcrumbs.map((item: any, index: number) => (
+              <li key={`${item.label}-${index}`} aria-current={item.current ? 'page' : undefined}>
+                {item.href ? <Link href={item.href}>{item.label}</Link> : item.label}
+              </li>
+            ))}
+          </ol>
+        </nav>
+        <Text as="h1" variant="heading-lg">{resolved.pageTitle}</Text>
+        {context ? (
+          <div className="vf-docs-framework-context" data-vf-framework-context={context.framework}>
+            <Text as="strong" variant="label-md">
+              <FrameworkMark id={context.framework} mark={context.mark} />
+              <span>{context.label}</span>
+            </Text>
+            <span>{context.entrypoint ? <>Public entrypoint: <code>{context.entrypoint}</code></> : 'Framework-specific documentation view'}</span>
+          </div>
+        ) : null}
+        <Text as="p" variant="body-lg" className="vf-docs-lede"><RichText value={resolved.lede} /></Text>
+        {resolved.meta?.length ? (
+          <div className="vf-docs-page-meta" aria-label={`${resolved.pageTitle} characteristics`}>
+            {resolved.meta.map((item: string) => <Text as="span" variant="label-md" key={item}>{item}</Text>)}
+          </div>
+        ) : null}
+        {(resolved.sections || []).map((section: any) => (
+          <section key={`${section.adaptation || 'shared'}-${section.title}`} data-vf-framework-adaptation={section.adaptation || undefined}>
+            <Text as="h2" id={section.id} variant="heading-md">{section.title}</Text>
+            {(section.blocks || []).map((block: any, index: number) => <ContentBlock key={`${block.type}-${index}`} block={block} framework={resolved.framework} />)}
+          </section>
+        ))}
+      </article>
+      {layout.headings.length ? (
+        <aside className="vf-docs-toc">
+          <Text as="strong" variant="label-md">On this page</Text>
+          <nav aria-label="On this page">
+            <ul>
+              {layout.headings.map((heading: any) => (
+                <li key={heading.id} data-vf-toc-level={String(heading.level)}>
+                  <Link href={`#${heading.id}`}>{heading.title}</Link>
+                </li>
+              ))}
+            </ul>
+          </nav>
+        </aside>
       ) : null}
-      <Text as="p" variant="body-lg" className="vf-docs-lede"><RichText value={content.lede} /></Text>
-      {content.meta?.length ? (
-        <div className="vf-docs-page-meta" aria-label={`${content.pageTitle} characteristics`}>
-          {content.meta.map((item: string) => <Text as="span" variant="label-md" key={item}>{item}</Text>)}
-        </div>
-      ) : null}
-      {(content.sections || []).map((section: any) => (
-        <section key={`${section.adaptation || 'shared'}-${section.title}`} data-vf-framework-adaptation={section.adaptation || undefined}>
-          <Text as="h2" variant="heading-md">{section.title}</Text>
-          {(section.blocks || []).map((block: any, index: number) => <ContentBlock key={`${block.type}-${index}`} block={block} framework={content.framework} />)}
-        </section>
-      ))}
-    </>
+    </div>
   );
 }
 
@@ -341,7 +369,9 @@ flushSync(() => {
           <SideNav aria-label="Documentation">{model.navigation.map(renderNavGroup)}</SideNav>
         </AppShellNavigation>
         <AppShellMain id="main">
-          {model.mainContent ? <ModelContent content={model.mainContent} /> : renderLegacyFragment(model.mainHtml || '')}
+          {model.mainContent
+            ? <ModelContent content={model.mainContent} navigation={model.navigation} homeHref={model.brandHref} />
+            : renderLegacyFragment(model.mainHtml || '')}
         </AppShellMain>
       </AppShellBody>
       <AppShellFooter className="vf-docs-footer">
