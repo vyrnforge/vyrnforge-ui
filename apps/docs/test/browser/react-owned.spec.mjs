@@ -22,12 +22,12 @@ test('model-native React docs own search and playground interactions', async ({ 
   await expect(page.locator('[data-vf-docs-search-results]')).toHaveCount(0);
 
   const search = page.getByRole('searchbox', { name: 'Search' });
-  await search.fill('text');
-  const textResult = reactSearch.getByRole('link', { name: 'Text', exact: true });
-  await expect(textResult).toBeVisible();
-  await expect(textResult).toHaveAttribute('href', /\/next\/react\/components\/text\/$/);
+  await search.fill('button');
+  const buttonResult = reactSearch.getByRole('link', { name: 'Button', exact: true });
+  await expect(buttonResult).toBeVisible();
+  await expect(buttonResult).toHaveAttribute('href', /\/next\/react\/components\/button\/$/);
   await search.press('Escape');
-  await expect(textResult).toHaveCount(0);
+  await expect(buttonResult).toHaveCount(0);
 
   const playground = page.locator('[data-vf-example-id="button/basic"]');
   await expect(playground).toHaveAttribute('data-vf-example-owner', 'react');
