@@ -8,6 +8,7 @@ import {
   AppShellFooter,
 } from '@vyrnforge/vue/app-shell';
 import { Input } from '@vyrnforge/vue/input';
+import { NativeSelect } from '@vyrnforge/vue/native-select';
 import {
   SideNav,
   SideNavGroup,
@@ -16,7 +17,7 @@ import {
   SideNavItem,
   SideNavLink,
 } from '@vyrnforge/vue/side-nav';
-import { parseFragment } from '../fragment.js';
+import { parseFragment, textNodeValue } from '../fragment.js';
 import { markDocsRendered, readDocsPageModel } from '../page-model.js';
 
 function propsFor(element) {
@@ -27,34 +28,94 @@ function propsFor(element) {
   return props;
 }
 
-function componentFor(element) {
-  if (element.hasAttribute('data-vf-side-nav')) return SideNav;
-  if (element.hasAttribute('data-vf-side-nav-group')) return SideNavGroup;
-  if (element.hasAttribute('data-vf-side-nav-group-label')) return SideNavGroupLabel;
-  if (element.hasAttribute('data-vf-side-nav-list')) return SideNavList;
-  if (element.hasAttribute('data-vf-side-nav-item')) return SideNavItem;
-  if (element.hasAttribute('data-vf-side-nav-link')) return SideNavLink;
-  if (element.matches('input[data-vf-docs-search], input[data-vf-input]')) return Input;
-  return element.localName;
-}
-
-function renderNode(node) {
-  if (node.nodeType === Node.TEXT_NODE) return node.textContent;
+function renderSemanticNode(node) {
+  if (node.nodeType === Node.TEXT_NODE) return textNodeValue(node);
   if (node.nodeType !== Node.ELEMENT_NODE) return null;
-
   const element = node;
-  const Component = componentFor(element);
-  const props = propsFor(element);
-  if (Component === SideNavLink) props.current = element.getAttribute('data-vf-current') === 'true';
-
-  const children = Array.from(element.childNodes).map(renderNode);
-  return typeof Component === 'string'
-    ? h(Component, props, children)
-    : h(Component, props, { default: () => children });
+  return h(element.localName, propsFor(element), Array.from(element.childNodes).map(renderSemanticNode));
 }
 
-function renderFragment(value) {
-  return parseFragment(value).map(renderNode);
+function renderSemanticFragment(value) {
+  return parseFragment(value).map(renderSemanticNode);
+}
+
+function renderNavItem(item) {
+  return h(SideNavItem, { key: item.href }, {
+    default: () => h(SideNavLink, { href: item.href, current: item.current }, { default: () => item.title }),
+  });
+}
+
+function renderNavGroup(group) {
+  const body = group.subgroups?.length
+    ? group.subgroups.map((subgroup) =>
+        h(
+          'details',
+          {
+            key: subgroup.label,
+            class: 'vf-docs-component-subgroup',
+            'data-vf-docs-component-subgroup': '',
+            'data-vf-current-group': subgroup.open ? 'true' : undefined,
+            open: subgroup.open || undefined,
+          },
+          [
+            h('summary', { class: 'vf-docs-component-subgroup__label' }, [
+              h('span', null, subgroup.label),
+              h('span', { class: 'vf-docs-component-subgroup__count', 'aria-hidden': 'true' }, String(subgroup.count)),
+            ]),
+            h(SideNavList, null, { default: () => subgroup.items.map(renderNavItem) }),
+          ]
+        )
+      )
+    : [h(SideNavList, { key: `${group.label}-list` }, { default: () => group.items.map(renderNavItem) })];
+
+  return h(SideNavGroup, { key: group.label }, {
+    default: () => [h(SideNavGroupLabel, null, { default: () => group.label }), ...body],
+  });
+}
+
+function renderFrameworkSelector(model) {
+  const current = model.frameworkChoices.find((choice) => choice.current);
+  return h('div', { class: 'vf-docs-framework-selector' }, [
+    h('label', { for: 'vf-docs-framework-select' }, 'Framework'),
+    h(
+      NativeSelect,
+      {
+        id: 'vf-docs-framework-select',
+        'data-vf-framework-select': '',
+        'aria-label': 'Framework',
+        value: current?.href,
+      },
+      {
+        default: () => model.frameworkChoices.map((choice) =>
+          h('option', { key: choice.id, value: choice.href, 'data-vf-framework-value': choice.id }, choice.label)
+        ),
+      }
+    ),
+  ]);
+}
+
+function renderHeader(model) {
+  return h('div', { class: 'vf-docs-header__inner' }, [
+    h('a', { class: 'vf-docs-brand', href: model.brandHref }, 'VyrnForge'),
+    h('span', { class: 'vf-docs-version', 'data-vf-docs-version': '' }, model.versionText),
+    h('div', { class: 'vf-docs-tools' }, [
+      h('div', { class: 'vf-docs-search-wrap' }, [
+        h('label', { for: 'vf-docs-search' }, 'Search'),
+        h(Input, {
+          id: 'vf-docs-search',
+          'data-vf-docs-search': '',
+          type: 'search',
+          autocomplete: 'off',
+        }),
+        h('ul', {
+          class: 'vf-docs-search-results',
+          'data-vf-docs-search-results': '',
+          hidden: true,
+        }),
+      ]),
+      renderFrameworkSelector(model),
+    ]),
+  ]);
 }
 
 const model = readDocsPageModel();
@@ -63,15 +124,13 @@ const app = createApp({
     return h(AppShell, { 'data-vf-docs-renderer': 'vue' }, {
       default: () => [
         h('a', { class: 'vf-skip-link', href: '#main' }, 'Skip to content'),
-        h(AppShellHeader, { class: 'vf-docs-header' }, { default: () => renderFragment(model.headerHtml) }),
+        h(AppShellHeader, { class: 'vf-docs-header' }, { default: () => renderHeader(model) }),
         h(AppShellBody, null, {
           default: () => [
-            h(
-              AppShellNavigation,
-              { class: 'vf-docs-navigation' },
-              { default: () => renderFragment(model.navigationHtml) }
-            ),
-            h(AppShellMain, { id: 'main' }, { default: () => renderFragment(model.mainHtml) }),
+            h(AppShellNavigation, { class: 'vf-docs-navigation' }, {
+              default: () => h(SideNav, { 'aria-label': 'Documentation' }, { default: () => model.navigation.map(renderNavGroup) }),
+            }),
+            h(AppShellMain, { id: 'main' }, { default: () => renderSemanticFragment(model.mainHtml) }),
           ],
         }),
         h(AppShellFooter, { class: 'vf-docs-footer' }, { default: () => model.footerText || '' }),
