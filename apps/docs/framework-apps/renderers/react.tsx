@@ -165,7 +165,6 @@ function DocsSearch({ siteRoot }: { siteRoot: string }) {
       <Text as="label" variant="label-md" htmlFor="vf-docs-search">Search</Text>
       <Input
         id="vf-docs-search"
-        data-vf-docs-search=""
         type="search"
         autoComplete="off"
         placeholder="Search docs…"
@@ -175,7 +174,7 @@ function DocsSearch({ siteRoot }: { siteRoot: string }) {
           if (event.key === 'Escape') updateQuery('');
         }}
       />
-      <ul className="vf-docs-search-results" data-vf-docs-search-results="" hidden={results.length === 0}>
+      <ul className="vf-docs-search-results" hidden={results.length === 0}>
         {results.map((item) => (
           <li key={`${item.path}-${item.title}`}>
             <Link href={new URL(item.path || './', siteRootUrl).href}>{item.title}</Link>
@@ -490,14 +489,14 @@ function renderFrameworkSwitcher(model: any) {
   );
 }
 
-function Header({ model }: { model: any }) {
+function Header({ model, siteRoot }: { model: any; siteRoot: string }) {
   return (
     <div className="vf-docs-header__inner">
       <Link className="vf-docs-brand" href={model.brandHref}>VyrnForge</Link>
       <Text as="span" variant="label-md" className="vf-docs-version" data-vf-docs-version="">{model.versionText}</Text>
       <div className="vf-docs-tools">
-        {model.clientOwner === 'react' ? (
-          <DocsSearch siteRoot={model.siteRoot || model.brandHref} />
+        {model.mainContent ? (
+          <DocsSearch siteRoot={siteRoot} />
         ) : (
           <div className="vf-docs-search-wrap">
             <Text as="label" variant="label-md" htmlFor="vf-docs-search">Search</Text>
@@ -512,22 +511,26 @@ function Header({ model }: { model: any }) {
 }
 
 function DocsApp({ model }: { model: any }) {
+  const modelNative = Boolean(model.mainContent);
+  const siteRoot = model.siteRoot || document.body.dataset.vfSiteRoot || model.brandHref || './';
+  const assetRoot = model.assetRoot || document.body.dataset.vfAssetRoot || './';
+
   React.useEffect(() => {
     window.localStorage.setItem(storageKey, 'react');
-    if (model.clientOwner === 'react') document.documentElement.dataset.vfDocsReady = 'true';
-  }, [model.clientOwner]);
+    if (modelNative) document.documentElement.dataset.vfDocsReady = 'true';
+  }, [modelNative]);
 
   return (
-    <AppShell data-vf-docs-renderer="react" data-vf-docs-client-owner={model.clientOwner || undefined}>
+    <AppShell data-vf-docs-renderer="react" data-vf-docs-client-owner={modelNative ? 'react' : undefined}>
       <Link className="vf-skip-link" href="#main">Skip to content</Link>
-      <AppShellHeader className="vf-docs-header"><Header model={model} /></AppShellHeader>
+      <AppShellHeader className="vf-docs-header"><Header model={model} siteRoot={siteRoot} /></AppShellHeader>
       <AppShellBody>
         <AppShellNavigation className="vf-docs-navigation">
           <SideNav aria-label="Documentation">{model.navigation.map(renderNavGroup)}</SideNav>
         </AppShellNavigation>
         <AppShellMain id="main">
           {model.mainContent
-            ? <ModelContent content={model.mainContent} navigation={model.navigation} homeHref={model.brandHref} assetRoot={model.assetRoot || './'} />
+            ? <ModelContent content={model.mainContent} navigation={model.navigation} homeHref={model.brandHref} assetRoot={assetRoot} />
             : renderLegacyFragment(model.mainHtml || '')}
         </AppShellMain>
       </AppShellBody>
