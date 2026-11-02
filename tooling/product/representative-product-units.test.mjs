@@ -7,9 +7,10 @@ const expectedSurfaces = {
   tabs: ['angular', 'elements', 'react', 'vue', 'web'],
   dialog: ['angular', 'elements', 'react', 'vue', 'web'],
   icon: ['angular', 'elements', 'react', 'vue', 'web'],
+  text: ['angular', 'react', 'vue', 'web'],
 };
 
-test('representative component migrations have one canonical product owner', () => {
+test('canonical component migrations have one product owner', () => {
   const graph = discoverProductGraph();
 
   for (const [id, surfaces] of Object.entries(expectedSurfaces)) {

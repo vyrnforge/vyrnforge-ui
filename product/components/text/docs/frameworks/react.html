@@ -1,0 +1,11 @@
+<section data-vf-framework-adaptation="react">
+  <h2>React usage</h2>
+  <p>Load <code>@vyrnforge/web/styles/text.css</code> and import <code>Text</code> from <code>@vyrnforge/react/text</code>.</p>
+  <pre><code>import { Text } from '@vyrnforge/react/text';
+
+&lt;Text as="h2" variant="heading-md"&gt;Billing and plans&lt;/Text&gt;</code></pre>
+  <h3>React API</h3>
+  <p><code>as</code> selects the native element and defaults to <code>span</code>; <code>variant</code> uses the shared <code>TextVariant</code> vocabulary. Supported native attributes are forwarded to the rendered element.</p>
+  <h3>SSR</h3>
+  <p>Server rendering preserves the requested native element and Text hooks; Text requires no browser-only activation step.</p>
+</section>
