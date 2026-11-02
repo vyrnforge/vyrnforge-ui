@@ -39,7 +39,7 @@ for (const entrypoint of requiredPublicSurfaces) {
 }
 
 for (const framework of ['react', 'angular', 'vue']) {
-  if (!source.includes(`data-vf-docs-renderer': '${framework}`) && !source.includes(`data-vf-docs-renderer=\"${framework}\"`)) {
+  if (!source.includes(`data-vf-docs-renderer': '${framework}`) && !source.includes(`data-vf-docs-renderer="${framework}"`)) {
     throw new Error(`Framework docs renderer marker is missing for ${framework}`);
   }
 }
