@@ -1,7 +1,17 @@
 <section data-vf-framework-adaptation="react">
   <h2>React usage</h2>
   <p>Import <code>Button</code> from <code>@vyrnforge/react/button</code> and load the canonical Web Button stylesheet or aggregate VyrnForge styles separately.</p>
-  <p><code>Button</code> renders a native <code>&lt;button&gt;</code>, forwards supported native button props and the element ref, and adds the VyrnForge <code>variant</code>, <code>size</code>, and <code>loading</code> props. Use the native <code>onClick</code> callback for activation rather than a VyrnForge-specific event wrapper.</p>
+  <h3>Component API</h3>
+  <pre tabindex="0" data-vf-framework-usage-code="react"><code class="language-tsx">import { Button } from '@vyrnforge/react/button';
+
+export function SaveAction() {
+  return (
+    &lt;Button variant="primary" type="button"&gt;
+      Save changes
+    &lt;/Button&gt;
+  );
+}</code></pre>
+  <p><code>Button</code> is an idiomatic React component. It renders a native <code>&lt;button&gt;</code>, forwards supported native button props and the element ref, and adds the VyrnForge <code>variant</code>, <code>size</code>, and <code>loading</code> props. Use the native <code>onClick</code> callback for activation rather than a VyrnForge-specific event wrapper.</p>
   <h3>React state and accessibility execution</h3>
   <p>React owns prop/state synchronization, ref delivery, event wiring, and hydration. VyrnForge still relies on native button semantics: <code>disabled</code> is rendered as the native attribute, loading derives <code>aria-busy</code>, and an authored accessible name remains the consumer's responsibility.</p>
   <h3>Rendering and hydration</h3>

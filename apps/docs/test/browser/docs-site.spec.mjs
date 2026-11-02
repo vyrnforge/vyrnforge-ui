@@ -91,30 +91,65 @@ test('framework-scoped navigation and search never escape the selected framework
   verifyNoErrors();
 });
 
-test('Button documentation is framework locked and its executable source is idiomatic React', async ({ page }) => {
-  const verifyNoErrors = await expectNoRuntimeErrors(page);
-  await page.goto('/next/react/components/button/');
+test('Button documentation exposes idiomatic usage and executes each implemented framework surface', async ({ page }) => {
+  const cases = [
+    {
+      framework: 'native-web',
+      heading: 'Native Web usage',
+      usage: /data-vf-button[\s\S]*data-vf-variant/,
+      executable: /data-vf-button/
+    },
+    {
+      framework: 'react',
+      heading: 'React usage',
+      usage: /@vyrnforge\/react\/button[\s\S]*<Button/,
+      executable: /@vyrnforge\/react\/button/
+    },
+    {
+      framework: 'angular',
+      heading: 'Angular usage',
+      usage: /@vyrnforge\/angular\/button[\s\S]*VfButtonDirective[\s\S]*vfButton/,
+      executable: /@vyrnforge\/angular\/button/
+    },
+    {
+      framework: 'vue',
+      heading: 'Vue usage',
+      usage: /<script setup lang="ts">[\s\S]*@vyrnforge\/vue\/button[\s\S]*<Button/,
+      executable: /@vyrnforge\/vue\/button/
+    }
+  ];
 
-  await expect(page.getByRole('heading', { level: 2, name: 'React usage' })).toBeVisible();
-  await expect(page.getByRole('heading', { level: 2, name: 'Angular usage' })).toHaveCount(0);
-  const playground = page.locator('[data-vf-example-id="button/basic"]');
-  await expect(playground).toHaveAttribute('data-vf-example-locked-framework', 'react');
-  await expect(playground.getByRole('tab')).toHaveCount(0);
-  await expect(playground.locator('[data-vf-example-framework]')).toHaveCount(0);
+  for (const { framework, heading, usage, executable } of cases) {
+    const verifyNoErrors = await expectNoRuntimeErrors(page);
+    await page.goto(`/next/${framework}/components/button/`);
 
-  const codeToggle = playground.locator('[data-vf-example-code-toggle]');
-  await codeToggle.click();
-  const editor = playground.getByRole('textbox', { name: 'Basic button code editor' });
-  await expect(editor).toHaveValue(/@vyrnforge\/react\/button/);
-  await expect(editor).not.toHaveValue(/@vyrnforge\/(angular|vue)\/button/);
+    const adaptation = page.locator(`[data-vf-framework-adaptation="${framework}"]`);
+    await expect(adaptation).toHaveCount(1);
+    await expect(adaptation.getByRole('heading', { level: 2, name: heading })).toBeVisible();
+    const usageCode = adaptation.locator(`[data-vf-framework-usage-code="${framework}"]`);
+    await expect(usageCode).toHaveCount(1);
+    await expect(usageCode).toContainText(usage);
+    await expect(page.locator('[data-vf-framework-usage-code]')).toHaveCount(1);
 
-  const frame = page.frameLocator('[data-vf-example-id="button/basic"] iframe');
-  const reactSource = await editor.inputValue();
-  await editor.fill(reactSource.replace('Save changes', 'Ship release'));
-  await playground.getByRole('button', { name: 'Run' }).click();
-  await expect(playground.locator('[data-vf-example-status]')).toHaveText('Live preview updated.');
-  await expect(frame.getByRole('button', { name: 'Ship release' })).toBeVisible();
-  verifyNoErrors();
+    const playground = page.locator('[data-vf-example-id="button/basic"]');
+    await expect(playground).toHaveAttribute('data-vf-example-locked-framework', framework);
+    const frame = page.frameLocator('[data-vf-example-id="button/basic"] iframe');
+    await expect(frame.getByRole('button', { name: 'Save changes' })).toBeVisible();
+
+    await playground.locator('[data-vf-example-code-toggle]').click();
+    const editor = playground.getByRole('textbox', { name: 'Basic button code editor' });
+    await expect(editor).toHaveValue(executable);
+
+    if (framework === 'react') {
+      const reactSource = await editor.inputValue();
+      await editor.fill(reactSource.replace('Save changes', 'Ship release'));
+      await playground.getByRole('button', { name: 'Run' }).click();
+      await expect(playground.locator('[data-vf-example-status]')).toHaveText('Live preview updated.');
+      await expect(frame.getByRole('button', { name: 'Ship release' })).toBeVisible();
+    }
+
+    verifyNoErrors();
+  }
 });
 
 test('unavailable framework component remains an explicit route instead of falling back', async ({ page }) => {
