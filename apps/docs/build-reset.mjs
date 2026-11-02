@@ -1,4 +1,4 @@
-import { mkdir, rm, writeFile } from 'node:fs/promises';
+import { mkdir, readFile, rm, writeFile } from 'node:fs/promises';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 
@@ -6,6 +6,11 @@ const root = path.resolve(fileURLToPath(new URL('../../', import.meta.url)));
 const outRoot = path.join(root, 'dist/docs');
 const channel = process.env.VYRNFORGE_DOCS_CHANNEL || 'next';
 const channelRoot = path.join(outRoot, channel);
+const registry = JSON.parse(await readFile(path.join(root, 'documentation/site/registry.json'), 'utf8'));
+
+if (registry.mode !== 'native-html-first-reset' || !Array.isArray(registry.pages) || registry.pages.length !== 0) {
+  throw new Error('Documentation reset build requires documentation/site/registry.json to declare native-html-first-reset mode with no published pages');
+}
 
 const html = `<!doctype html>
 <html lang="en">
