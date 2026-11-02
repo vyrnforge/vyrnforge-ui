@@ -8,8 +8,8 @@ const packageRoot = path.dirname(fileURLToPath(import.meta.url));
 
 const renderers = Object.freeze({
   react: {
-    entry: path.join(packageRoot, 'renderers/react.js'),
-    compilerOptions: {},
+    entry: path.join(packageRoot, 'renderers/react.tsx'),
+    compilerOptions: { jsx: 'react' },
   },
   angular: {
     entry: path.join(packageRoot, 'renderers/angular.ts'),
