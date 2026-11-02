@@ -1,6 +1,10 @@
 import { existsSync, readFileSync } from 'node:fs';
 import path from 'node:path';
 import { discoverProductGraph } from '../../tooling/product/discover-product-graph.mjs';
+import {
+  assertDocumentationContentModel,
+  referencedDocumentationExamples,
+} from './content-model.mjs';
 
 export const documentationFrameworkSurfaces = Object.freeze({
   'native-web': 'web',
@@ -14,7 +18,7 @@ function readJson(filePath) {
   return JSON.parse(readFileSync(filePath, 'utf8'));
 }
 
-function referencedExampleIds(html) {
+function referencedHtmlExampleIds(html) {
   return [...html.matchAll(/data-vf-example="([^"]+)"/g)].map((match) => match[1]);
 }
 
@@ -35,22 +39,38 @@ export function documentationCoverage(root, graph = discoverProductGraph(root)) 
       continue;
     }
 
-    const docsPath = component.facets.docs
-      ? path.join(root, component.facets.docs, 'index.html')
-      : path.join(root, component.facets.canonicalRoot, 'docs', 'index.html');
+    const docsRoot = component.facets.docs
+      ? path.join(root, component.facets.docs)
+      : path.join(root, component.facets.canonicalRoot, 'docs');
+    const modelPath = path.join(docsRoot, 'index.json');
+    const htmlPath = path.join(docsRoot, 'index.html');
+    const modelNative = existsSync(modelPath);
 
-    if (!existsSync(docsPath)) {
-      problems.push(`${component.unitId}: canonical component is missing docs/index.html`);
+    if (!modelNative && !existsSync(htmlPath)) {
+      problems.push(`${component.unitId}: canonical component is missing docs/index.json or docs/index.html`);
       continue;
     }
 
-    const html = readFileSync(docsPath, 'utf8');
-    if (!html.includes('<div data-vf-framework-content></div>')) {
-      problems.push(`${component.unitId}: shared documentation is missing data-vf-framework-content`);
+    let exampleIds = [];
+    let model = null;
+    if (modelNative) {
+      try {
+        model = assertDocumentationContentModel(readJson(modelPath), modelPath);
+        exampleIds = referencedDocumentationExamples(model);
+      } catch (error) {
+        problems.push(`${component.unitId}: ${error instanceof Error ? error.message : String(error)}`);
+        continue;
+      }
+    } else {
+      const html = readFileSync(htmlPath, 'utf8');
+      if (!html.includes('<div data-vf-framework-content></div>')) {
+        problems.push(`${component.unitId}: shared documentation is missing data-vf-framework-content`);
+      }
+      exampleIds = referencedHtmlExampleIds(html);
     }
 
     const manifests = [];
-    for (const exampleId of referencedExampleIds(html)) {
+    for (const exampleId of exampleIds) {
       const manifestPath = exampleManifestPath(root, component, exampleId);
       if (!manifestPath || !existsSync(manifestPath)) {
         problems.push(`${component.unitId}: referenced executable example ${exampleId} has no manifest`);
@@ -63,8 +83,9 @@ export function documentationCoverage(root, graph = discoverProductGraph(root)) 
       const surface = component.surfaces?.[surfaceTarget];
       if (!surface) continue;
 
-      const overlayPath = path.join(root, component.facets.canonicalRoot, 'docs', 'frameworks', `${framework}.html`);
-      const overlayExists = existsSync(overlayPath);
+      const adaptationExists = modelNative
+        ? Boolean(model?.frameworks?.[framework])
+        : existsSync(path.join(docsRoot, 'frameworks', `${framework}.html`));
       const exampleExists = manifests.some((manifest) => Boolean(manifest.frameworks?.[framework]));
       const entrypointExists = (surface.publicEntrypoints?.length ?? 0) > 0;
 
@@ -72,17 +93,19 @@ export function documentationCoverage(root, graph = discoverProductGraph(root)) 
         component: component.unitId,
         framework,
         surface: surfaceTarget,
-        overlay: overlayExists,
+        overlay: adaptationExists,
         example: exampleExists,
         publicEntrypoint: entrypointExists,
+        sourceFormat: modelNative ? 'model' : 'html',
       });
 
       if (!entrypointExists) {
         problems.push(`${component.unitId}/${framework}: Product Graph surface has no public entrypoint`);
       }
-      if (!overlayExists) {
-        problems.push(`${component.unitId}/${framework}: missing docs/frameworks/${framework}.html`);
-      } else {
+      if (!adaptationExists) {
+        problems.push(`${component.unitId}/${framework}: missing framework adaptation content`);
+      } else if (!modelNative) {
+        const overlayPath = path.join(docsRoot, 'frameworks', `${framework}.html`);
         const overlay = readFileSync(overlayPath, 'utf8');
         if (!overlay.includes(`data-vf-framework-adaptation="${framework}"`)) {
           problems.push(`${component.unitId}/${framework}: adaptation file is missing its framework marker`);
