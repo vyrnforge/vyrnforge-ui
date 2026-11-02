@@ -1,5 +1,5 @@
 import '@angular/compiler';
-import { Component, input, provideZonelessChangeDetection } from '@angular/core';
+import { Component, Input as AngularInput, provideZonelessChangeDetection } from '@angular/core';
 import { bootstrapApplication } from '@angular/platform-browser';
 import {
   VfAppShellDirective,
@@ -45,9 +45,10 @@ const model = readDocsPageModel();
   `,
 })
 class DocsRichText {
-  readonly value = input('');
+  @AngularInput() value = '';
+
   parts() {
-    return parseInline(this.value());
+    return parseInline(this.value);
   }
 }
 
