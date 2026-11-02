@@ -50,7 +50,11 @@ export function parseDocumentationContentModel(value, source = 'documentation co
 }
 
 export async function readDocumentationContentModel(filePath) {
-  const { readFile } = await import('node:fs/promises');
+  const processApi = globalThis.process;
+  if (!processApi?.getBuiltinModule) {
+    throw new Error('readDocumentationContentModel is only available in the Node documentation compiler');
+  }
+  const { readFile } = processApi.getBuiltinModule('node:fs/promises');
   return parseDocumentationContentModel(await readFile(filePath, 'utf8'), filePath);
 }
 
