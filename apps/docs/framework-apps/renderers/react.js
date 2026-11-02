@@ -47,9 +47,29 @@ const booleanAttributes = new Set([
   'selected',
 ]);
 
+function reactStyleName(property) {
+  if (property.startsWith('--')) return property;
+  return property
+    .replace(/^-ms-/, 'ms-')
+    .replace(/^-webkit-/, 'Webkit-')
+    .replace(/-([a-z])/g, (_match, letter) => letter.toUpperCase());
+}
+
+function styleFor(element) {
+  const style = {};
+  for (const property of element.style) {
+    style[reactStyleName(property)] = element.style.getPropertyValue(property).trim();
+  }
+  return style;
+}
+
 function propsFor(element) {
   const props = {};
   for (const attribute of element.attributes) {
+    if (attribute.name === 'style') {
+      props.style = styleFor(element);
+      continue;
+    }
     const name = reactAttributeNames[attribute.name] || attribute.name;
     props[name] = booleanAttributes.has(attribute.name) ? true : attribute.value;
   }
