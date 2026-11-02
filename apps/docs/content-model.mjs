@@ -49,6 +49,11 @@ export function parseDocumentationContentModel(value, source = 'documentation co
   return assertDocumentationContentModel(JSON.parse(value), source);
 }
 
+export async function readDocumentationContentModel(filePath) {
+  const { readFile } = await import('node:fs/promises');
+  return parseDocumentationContentModel(await readFile(filePath, 'utf8'), filePath);
+}
+
 export function referencedDocumentationExamples(model) {
   const ids = [];
   for (const section of model.sections ?? []) {
