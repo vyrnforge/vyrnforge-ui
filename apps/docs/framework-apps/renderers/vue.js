@@ -8,7 +8,7 @@ import {
   AppShellFooter,
 } from '@vyrnforge/vue/app-shell';
 import { Input } from '@vyrnforge/vue/input';
-import { NativeSelect } from '@vyrnforge/vue/native-select';
+import { Link } from '@vyrnforge/vue/link';
 import {
   SideNav,
   SideNavGroup,
@@ -73,23 +73,41 @@ function renderNavGroup(group) {
   });
 }
 
-function renderFrameworkSelector(model) {
-  const current = model.frameworkChoices.find((choice) => choice.current);
-  return h('div', { class: 'vf-docs-framework-selector' }, [
-    h('label', { for: 'vf-docs-framework-select' }, 'Framework'),
-    h(
-      NativeSelect,
-      {
-        id: 'vf-docs-framework-select',
-        'data-vf-framework-select': '',
-        'aria-label': 'Framework',
-        value: current?.href,
-      },
-      {
-        default: () => model.frameworkChoices.map((choice) =>
-          h('option', { key: choice.id, value: choice.href, 'data-vf-framework-value': choice.id }, choice.label)
-        ),
-      }
+function renderFrameworkMark(choice) {
+  if (!choice.mark) return null;
+  return h(
+    'svg',
+    {
+      class: 'vf-framework-mark',
+      'data-vf-framework-mark': choice.id,
+      viewBox: choice.mark.viewBox,
+      'aria-hidden': 'true',
+      focusable: 'false',
+    },
+    [h('path', { d: choice.mark.path })]
+  );
+}
+
+function renderFrameworkSwitcher(model) {
+  return h('nav', { class: 'vf-docs-framework-switcher', 'aria-label': 'Framework' }, [
+    h('ul', { class: 'vf-docs-framework-switcher__list' },
+      model.frameworkChoices.map((choice) =>
+        h('li', { key: choice.id }, [
+          h(
+            Link,
+            {
+              href: choice.href,
+              class: 'vf-docs-framework-switcher__link',
+              'data-vf-framework-choice': choice.id,
+              'data-vf-framework-current': choice.current ? 'true' : undefined,
+              'aria-current': choice.current ? 'page' : undefined,
+              'aria-label': `${choice.label} documentation`,
+              title: choice.label,
+            },
+            { default: () => renderFrameworkMark(choice) }
+          ),
+        ])
+      )
     ),
   ]);
 }
@@ -113,7 +131,7 @@ function renderHeader(model) {
           hidden: true,
         }),
       ]),
-      renderFrameworkSelector(model),
+      renderFrameworkSwitcher(model),
     ]),
   ]);
 }
