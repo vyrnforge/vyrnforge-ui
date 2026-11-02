@@ -27,6 +27,9 @@ import { parseInline } from '../../content-model.mjs';
 import { buildContentLayoutModel } from '../content-layout.js';
 import { parseFragment, textNodeValue } from '../fragment.js';
 import { markDocsRendered, readDocsPageModel } from '../page-model.js';
+import { liveExampleDocument, loadCompiler, transpileExample } from '../playground';
+
+const storageKey = 'vyrnforge.docs.framework';
 
 const reactAttributeNames = Object.freeze({
   class: 'className',
@@ -119,7 +122,70 @@ function RichText({ value }: { value: string }) {
   })}</>;
 }
 
-function Example({ block }: { block: any }) {
+type SearchItem = {
+  title: string;
+  path: string;
+  text: string;
+};
+
+function DocsSearch({ siteRoot }: { siteRoot: string }) {
+  const [query, setQuery] = React.useState('');
+  const [results, setResults] = React.useState<SearchItem[]>([]);
+  const searchIndex = React.useRef<Promise<SearchItem[]> | null>(null);
+  const requestId = React.useRef(0);
+  const siteRootUrl = React.useMemo(() => new URL(siteRoot || './', window.location.href), [siteRoot]);
+
+  function loadSearchIndex() {
+    searchIndex.current ||= fetch(new URL('search-index.json', siteRootUrl)).then((response) => {
+      if (!response.ok) throw new Error(`Unable to load docs search index: ${response.status}`);
+      return response.json();
+    });
+    return searchIndex.current;
+  }
+
+  async function search(value: string) {
+    const currentRequest = ++requestId.current;
+    const normalized = value.trim().toLowerCase();
+    if (!normalized) {
+      setResults([]);
+      return;
+    }
+    const index = await loadSearchIndex();
+    if (currentRequest !== requestId.current) return;
+    setResults(index.filter((item) => `${item.title} ${item.text}`.toLowerCase().includes(normalized)).slice(0, 8));
+  }
+
+  function updateQuery(value: string) {
+    setQuery(value);
+    void search(value);
+  }
+
+  return (
+    <div className="vf-docs-search-wrap" data-vf-docs-search-owner="react">
+      <Text as="label" variant="label-md" htmlFor="vf-docs-search">Search</Text>
+      <Input
+        id="vf-docs-search"
+        type="search"
+        autoComplete="off"
+        placeholder="Search docs…"
+        value={query}
+        onChange={(event: React.ChangeEvent<HTMLInputElement>) => updateQuery(event.currentTarget.value)}
+        onKeyDown={(event: React.KeyboardEvent<HTMLInputElement>) => {
+          if (event.key === 'Escape') updateQuery('');
+        }}
+      />
+      <ul className="vf-docs-search-results" hidden={results.length === 0}>
+        {results.map((item) => (
+          <li key={`${item.path}-${item.title}`}>
+            <Link href={new URL(item.path || './', siteRootUrl).href}>{item.title}</Link>
+          </li>
+        ))}
+      </ul>
+    </div>
+  );
+}
+
+function Example({ block, assetRoot }: { block: any; assetRoot: string }) {
   if (block.type === 'example-unavailable') {
     return (
       <Surface as="section" className="vf-example--unavailable" data-vf-example-unavailable={block.id}>
@@ -129,7 +195,59 @@ function Example({ block }: { block: any }) {
     );
   }
 
-  const data = JSON.stringify(block.data).replaceAll('<', '\\u003c');
+  const data = block.data;
+  const config = data.frameworks?.[block.framework];
+  if (!config) throw new Error(`React documentation example ${block.id} is missing ${block.framework} configuration`);
+
+  const assetRootUrl = React.useMemo(() => new URL(assetRoot || './', window.location.href), [assetRoot]);
+  const previewUrl = React.useMemo(() => new URL(config.preview, assetRootUrl).href, [assetRootUrl, config.preview]);
+  const [expanded, setExpanded] = React.useState(false);
+  const [source, setSource] = React.useState(config.source);
+  const [running, setRunning] = React.useState(false);
+  const [status, setStatus] = React.useState(`${block.framework} example ready.`);
+  const [frameSource, setFrameSource] = React.useState<{ src?: string; srcDoc?: string }>({ src: previewUrl });
+  const frameRef = React.useRef<HTMLIFrameElement>(null);
+
+  React.useEffect(() => {
+    function receiveExampleResult(event: MessageEvent) {
+      const message = event.data;
+      if (!message || message.type !== 'vf-example-result' || message.id !== block.id) return;
+      if (event.source !== frameRef.current?.contentWindow) return;
+      setStatus(message.status === 'ready' ? 'Live preview updated.' : `Runtime error: ${message.message || 'Unknown error'}`);
+    }
+    window.addEventListener('message', receiveExampleResult);
+    return () => window.removeEventListener('message', receiveExampleResult);
+  }, [block.id]);
+
+  function resetExample() {
+    setSource(config.source);
+    setFrameSource({ src: previewUrl });
+    setStatus(`${block.framework} example ready.`);
+  }
+
+  async function runExample() {
+    setRunning(true);
+    setStatus('Compiling example…');
+    try {
+      const ts = await loadCompiler(new URL(data.compiler, assetRootUrl).href);
+      const code = transpileExample(source, config, ts);
+      const documentSource = liveExampleDocument({
+        id: data.id,
+        framework: block.framework,
+        code,
+        runtimeUrl: config.runtime ? new URL(config.runtime, assetRootUrl).href : '',
+        stylesUrl: new URL(data.styles, assetRootUrl).href,
+        frameCssUrl: new URL(data.frameCss, assetRootUrl).href,
+      });
+      setFrameSource({ srcDoc: documentSource });
+      setStatus('Running example…');
+    } catch (error) {
+      setStatus(`Unable to run: ${error instanceof Error ? error.message : String(error)}`);
+    } finally {
+      setRunning(false);
+    }
+  }
+
   return (
     <Surface
       as="section"
@@ -137,6 +255,7 @@ function Example({ block }: { block: any }) {
       data-vf-example-id={block.id}
       data-vf-example-default-framework={block.framework}
       data-vf-example-locked-framework={block.framework}
+      data-vf-example-owner="react"
     >
       <header className="vf-example__header">
         <div>
@@ -146,31 +265,50 @@ function Example({ block }: { block: any }) {
         <Text as="span" variant="label-md" className="vf-example__framework">{block.framework}</Text>
       </header>
       <div className="vf-example__preview">
-        <iframe data-vf-example-frame="" title={`${block.title} preview`} sandbox="allow-scripts" />
+        <iframe
+          ref={frameRef}
+          data-vf-example-frame=""
+          title={`${block.title} preview`}
+          sandbox="allow-scripts"
+          src={frameSource.src}
+          srcDoc={frameSource.srcDoc}
+        />
       </div>
       <div className="vf-example__controls">
-        <Button type="button" variant="ghost" size="sm" data-vf-example-code-toggle="" aria-expanded="false">
-          Show code
+        <Button
+          type="button"
+          variant="ghost"
+          size="sm"
+          data-vf-example-code-toggle=""
+          aria-expanded={expanded}
+          onClick={() => setExpanded((value) => !value)}
+        >
+          {expanded ? 'Hide code' : 'Show code'}
         </Button>
       </div>
-      <div className="vf-example__editor" data-vf-example-editor="" hidden>
+      <div className="vf-example__editor" data-vf-example-editor="" hidden={!expanded}>
         <div className="vf-example__editor-toolbar">
           <Text as="strong" variant="label-md">Editable source</Text>
-          <span data-vf-example-language="" />
+          <span data-vf-example-language="">{String(config.language || '').toUpperCase()}</span>
           <span className="vf-example__editor-actions">
-            <Button type="button" variant="primary" size="sm" data-vf-example-run="">Run</Button>
-            <Button type="button" variant="secondary" size="sm" data-vf-example-reset="">Reset</Button>
+            <Button type="button" variant="primary" size="sm" data-vf-example-run="" disabled={running} onClick={() => void runExample()}>Run</Button>
+            <Button type="button" variant="secondary" size="sm" data-vf-example-reset="" onClick={resetExample}>Reset</Button>
           </span>
         </div>
-        <Textarea data-vf-example-source="" spellCheck={false} aria-label={`${block.title} code editor`} />
-        <Text as="p" variant="body-sm" className="vf-example__status" data-vf-example-status="" aria-live="polite">Ready.</Text>
+        <Textarea
+          data-vf-example-source=""
+          spellCheck={false}
+          aria-label={`${block.title} code editor`}
+          value={source}
+          onChange={(event: React.ChangeEvent<HTMLTextAreaElement>) => setSource(event.currentTarget.value)}
+        />
+        <Text as="p" variant="body-sm" className="vf-example__status" data-vf-example-status="" aria-live="polite">{status}</Text>
       </div>
-      <script type="application/json" data-vf-example-data="">{data}</script>
     </Surface>
   );
 }
 
-function ContentBlock({ block, framework }: { block: any; framework: string }) {
+function ContentBlock({ block, framework, assetRoot }: { block: any; framework: string; assetRoot: string }) {
   if (block.type === 'paragraph') {
     return <Text as="p" variant="body-md"><RichText value={block.text} /></Text>;
   }
@@ -197,7 +335,7 @@ function ContentBlock({ block, framework }: { block: any; framework: string }) {
       </div>
     );
   }
-  if (block.type === 'example' || block.type === 'example-unavailable') return <Example block={block} />;
+  if (block.type === 'example' || block.type === 'example-unavailable') return <Example block={block} assetRoot={assetRoot} />;
   if (block.type === 'list') {
     return <ul>{(block.items || []).map((item: string, index: number) => <li key={index}><RichText value={item} /></li>)}</ul>;
   }
@@ -223,7 +361,17 @@ function ContentBlock({ block, framework }: { block: any; framework: string }) {
   throw new Error(`Unsupported React documentation content block: ${block.type}`);
 }
 
-function ModelContent({ content, navigation, homeHref }: { content: any; navigation: any[]; homeHref: string }) {
+function ModelContent({
+  content,
+  navigation,
+  homeHref,
+  assetRoot,
+}: {
+  content: any;
+  navigation: any[];
+  homeHref: string;
+  assetRoot: string;
+}) {
   const layout = buildContentLayoutModel(content, navigation, homeHref);
   const resolved = layout.content;
   const context = resolved.context;
@@ -258,7 +406,9 @@ function ModelContent({ content, navigation, homeHref }: { content: any; navigat
         {(resolved.sections || []).map((section: any) => (
           <section key={`${section.adaptation || 'shared'}-${section.title}`} data-vf-framework-adaptation={section.adaptation || undefined}>
             <Text as="h2" id={section.id} variant="heading-md">{section.title}</Text>
-            {(section.blocks || []).map((block: any, index: number) => <ContentBlock key={`${block.type}-${index}`} block={block} framework={resolved.framework} />)}
+            {(section.blocks || []).map((block: any, index: number) => (
+              <ContentBlock key={`${block.type}-${index}`} block={block} framework={resolved.framework} assetRoot={assetRoot} />
+            ))}
           </section>
         ))}
       </article>
@@ -339,38 +489,48 @@ function renderFrameworkSwitcher(model: any) {
   );
 }
 
-function Header({ model }: { model: any }) {
+function Header({ model, siteRoot }: { model: any; siteRoot: string }) {
   return (
     <div className="vf-docs-header__inner">
       <Link className="vf-docs-brand" href={model.brandHref}>VyrnForge</Link>
       <Text as="span" variant="label-md" className="vf-docs-version" data-vf-docs-version="">{model.versionText}</Text>
       <div className="vf-docs-tools">
-        <div className="vf-docs-search-wrap">
-          <Text as="label" variant="label-md" htmlFor="vf-docs-search">Search</Text>
-          <Input id="vf-docs-search" data-vf-docs-search="" type="search" autoComplete="off" />
-          <ul className="vf-docs-search-results" data-vf-docs-search-results="" hidden />
-        </div>
+        {model.mainContent ? (
+          <DocsSearch siteRoot={siteRoot} />
+        ) : (
+          <div className="vf-docs-search-wrap">
+            <Text as="label" variant="label-md" htmlFor="vf-docs-search">Search</Text>
+            <Input id="vf-docs-search" data-vf-docs-search="" type="search" autoComplete="off" />
+            <ul className="vf-docs-search-results" data-vf-docs-search-results="" hidden />
+          </div>
+        )}
         {renderFrameworkSwitcher(model)}
       </div>
     </div>
   );
 }
 
-const model = readDocsPageModel();
-const root = createRoot(document.querySelector('#vf-docs-app')!);
+function DocsApp({ model }: { model: any }) {
+  const modelNative = Boolean(model.mainContent);
+  const siteRoot = model.siteRoot || document.body.dataset.vfSiteRoot || model.brandHref || './';
+  const assetRoot = model.assetRoot || document.body.dataset.vfAssetRoot || './';
 
-flushSync(() => {
-  root.render(
-    <AppShell data-vf-docs-renderer="react">
+  React.useEffect(() => {
+    window.localStorage.setItem(storageKey, 'react');
+    if (modelNative) document.documentElement.dataset.vfDocsReady = 'true';
+  }, [modelNative]);
+
+  return (
+    <AppShell data-vf-docs-renderer="react" data-vf-docs-client-owner={modelNative ? 'react' : undefined}>
       <Link className="vf-skip-link" href="#main">Skip to content</Link>
-      <AppShellHeader className="vf-docs-header"><Header model={model} /></AppShellHeader>
+      <AppShellHeader className="vf-docs-header"><Header model={model} siteRoot={siteRoot} /></AppShellHeader>
       <AppShellBody>
         <AppShellNavigation className="vf-docs-navigation">
           <SideNav aria-label="Documentation">{model.navigation.map(renderNavGroup)}</SideNav>
         </AppShellNavigation>
         <AppShellMain id="main">
           {model.mainContent
-            ? <ModelContent content={model.mainContent} navigation={model.navigation} homeHref={model.brandHref} />
+            ? <ModelContent content={model.mainContent} navigation={model.navigation} homeHref={model.brandHref} assetRoot={assetRoot} />
             : renderLegacyFragment(model.mainHtml || '')}
         </AppShellMain>
       </AppShellBody>
@@ -379,6 +539,13 @@ flushSync(() => {
       </AppShellFooter>
     </AppShell>
   );
+}
+
+const model = readDocsPageModel();
+const root = createRoot(document.querySelector('#vf-docs-app')!);
+
+flushSync(() => {
+  root.render(<DocsApp model={model} />);
 });
 
 markDocsRendered('react');

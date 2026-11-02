@@ -92,6 +92,22 @@ for (const [framework, contract] of Object.entries(renderers)) {
   }
 }
 
+const reactSource = await readFile(path.join(packageRoot, renderers.react.file), 'utf8');
+for (const token of [
+  "from '../playground'",
+  'data-vf-docs-search-owner="react"',
+  'data-vf-example-owner="react"',
+  'onClick={() => setExpanded',
+  'onChange={(event: React.ChangeEvent<HTMLTextAreaElement>)',
+]) {
+  if (!reactSource.includes(token)) {
+    throw new Error(`Model-native React docs must keep React-owned interaction token: ${token}`);
+  }
+}
+if (reactSource.includes('data-vf-example-data')) {
+  throw new Error('Model-native React examples must not serialize data for the legacy DOM client');
+}
+
 const fragmentSource = await readFile(path.join(packageRoot, 'fragment.js'), 'utf8');
 if (fragmentSource.includes('.innerHTML')) {
   throw new Error('Shared docs fragment parsing must not write through innerHTML');
