@@ -5,7 +5,7 @@ import { discoverProductGraph } from '../../tooling/product/discover-product-gra
 import { buildDocumentationExamples } from './build-examples.mjs';
 import { componentUsageGroups } from './component-usage-groups.mjs';
 import {
-  readDocumentationContentModel,
+  parseDocumentationContentModel,
   renderDocumentationContentHtml,
   resolveDocumentationContent,
 } from './content-model.mjs';
@@ -46,7 +46,8 @@ async function pageBody(page, examples) {
     throw new Error(`Unknown documentation generator: ${page.generator}`);
   }
   if (page.sourceFormat === 'model') {
-    const model = await readDocumentationContentModel(path.join(root, page.source));
+    const filePath = path.join(root, page.source);
+    const model = parseDocumentationContentModel(await readFile(filePath, 'utf8'), filePath);
     const content = resolveDocumentationContent(model, {
       framework: 'native-web',
       examples,
