@@ -13,6 +13,10 @@ for (const framework of ['react', 'angular', 'vue']) {
 
     const shell = page.locator(`[data-vf-app-shell][data-vf-docs-renderer="${framework}"]`);
     await expect(shell).toHaveCount(1);
+    const main = shell.locator('[data-vf-app-shell-main]');
+    await expect(main.locator(':scope > .vf-docs-content-layout')).toHaveCount(1);
+    await expect(main.locator('.vf-docs-breadcrumbs')).toHaveCount(1);
+    await expect(main.locator('.vf-docs-toc')).toHaveCount(1);
     await expect(shell.getByRole('heading', { level: 1, name: 'Button' })).toHaveAttribute('data-vf-text', '');
 
     const playground = shell.locator('[data-vf-example-id="button/basic"]');
