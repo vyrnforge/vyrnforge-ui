@@ -10,7 +10,7 @@
 
   <section>
     <h2>Quick start</h2>
-    <p>Pick the element first, then choose the typography role. The playground below shows the same Text API across supported frameworks.</p>
+    <p>Pick the element first, then choose the typography role. The executable example below is locked to the framework selected for this documentation view.</p>
     <div data-vf-example="text/basic"></div>
   </section>
 
@@ -84,17 +84,7 @@
     <div class="vf-docs-callout"><strong>For headings, follow the page structure—not the font size.</strong><span>Do not pick <code>h1</code>, <code>h2</code>, or another heading level because of how large you want the text to look.</span></div>
   </section>
 
-  <section>
-    <h2>Installation and imports</h2>
-    <p>Load the Text stylesheet once, then use the API for your framework.</p>
-    <pre><code>import '@vyrnforge/web/styles/text.css';</code></pre>
-    <div class="vf-docs-split">
-      <article class="vf-docs-card"><h3>React</h3><pre><code>import { Text } from '@vyrnforge/react/text';</code></pre></article>
-      <article class="vf-docs-card"><h3>Angular</h3><pre><code>import { VfTextDirective } from '@vyrnforge/angular/text';</code></pre></article>
-      <article class="vf-docs-card"><h3>Vue</h3><pre><code>import { Text } from '@vyrnforge/vue/text';</code></pre></article>
-      <article class="vf-docs-card"><h3>Native Web and Elements</h3><p>Use semantic HTML with <code>data-vf-text</code> and <code>data-vf-text-variant</code>. Elements does not add a separate <code>&lt;vf-text&gt;</code> element.</p></article>
-    </div>
-  </section>
+  <div data-vf-framework-content></div>
 
   <section>
     <h2>Styling</h2>
@@ -154,25 +144,7 @@
   </section>
 
   <section>
-    <h2>Framework API</h2>
-    <p>Every surface uses the same variant vocabulary. Only the framework-specific way of choosing the native element changes.</p>
-    <div class="vf-docs-table-wrap" tabindex="0" role="region" aria-label="Text framework APIs">
-      <table>
-        <thead><tr><th>Surface</th><th>Example</th><th>Semantic element</th></tr></thead>
-        <tbody>
-          <tr><th scope="row">Native Web</th><td><code>&lt;h2 data-vf-text data-vf-text-variant="heading-lg"&gt;</code></td><td>You author the native element directly.</td></tr>
-          <tr><th scope="row">React</th><td><code>&lt;Text as="h2" variant="heading-lg" /&gt;</code></td><td><code>as</code> chooses the element; the default is <code>span</code>.</td></tr>
-          <tr><th scope="row">Angular</th><td><code>&lt;h2 vfText variant="heading-lg"&gt;</code></td><td>The directive styles the element you author.</td></tr>
-          <tr><th scope="row">Vue</th><td><code>&lt;Text as="h2" variant="heading-lg" /&gt;</code></td><td><code>as</code> chooses the rendered native element.</td></tr>
-          <tr><th scope="row">Elements</th><td>Use the Native Web hooks.</td><td>No custom text element is introduced.</td></tr>
-        </tbody>
-      </table>
-    </div>
-    <p>Text has no browser-only interaction behavior, so its semantic output remains suitable for server rendering.</p>
-  </section>
-
-  <section>
     <h2>Compatibility</h2>
-    <p>Existing <code>body</code>, <code>body-sm</code>, <code>label</code>, <code>title</code>, and <code>heading</code> usages remain supported. Use the Compatibility reference for supported framework and browser ranges.</p>
+    <p>Existing <code>body</code>, <code>body-sm</code>, <code>label</code>, <code>title</code>, and <code>heading</code> usages remain supported. Text intentionally has no dedicated Elements entrypoint; Elements applications use the Native Web hooks on semantic HTML. Use the Compatibility reference for supported framework and browser ranges.</p>
   </section>
 </div>
