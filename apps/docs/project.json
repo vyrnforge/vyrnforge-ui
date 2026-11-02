@@ -25,7 +25,7 @@
         "{workspaceRoot}/dist/docs"
       ],
       "options": {
-        "command": "node apps/docs/verify-documentation-coverage.mjs && node apps/docs/verify-framework-renderers.mjs && node apps/docs/build-framework-docs.mjs"
+        "command": "node apps/docs/verify-documentation-coverage.mjs && node apps/docs/framework-apps/verify.mjs && node apps/docs/build-framework-docs.mjs"
       }
     },
     "lint": {
