@@ -1,0 +1,363 @@
+{
+  "format": "vyrnforge.docs.content.v1",
+  "lede": "Button triggers an action or command while preserving native `<button>` semantics, keyboard activation, focus, and form behavior.",
+  "meta": [
+    "Actions",
+    "Native-backed",
+    "Shared semantic contract"
+  ],
+  "frameworks": {
+    "native-web": {
+      "title": "Native Web usage",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Author a native `<button>` with the documented `data-vf-button` configuration hooks and load `@vyrnforge/web/styles/button.css` or the aggregate VyrnForge stylesheet."
+        },
+        {
+          "type": "heading",
+          "level": 3,
+          "text": "Native API"
+        },
+        {
+          "type": "code",
+          "language": "html",
+          "frameworkUsage": true,
+          "value": "<button data-vf-button data-vf-variant=\"primary\" type=\"button\">\n  Save changes\n</button>"
+        },
+        {
+          "type": "paragraph",
+          "text": "Native Web does not introduce a wrapper component or framework event model. Use ordinary HTML attributes, DOM events, form behavior, and element APIs directly."
+        },
+        {
+          "type": "heading",
+          "level": 3,
+          "text": "Native state and accessibility execution"
+        },
+        {
+          "type": "paragraph",
+          "text": "The browser supplies activation, focus, keyboard interaction, disabled behavior, and form participation. Loading is expressed through the documented VyrnForge state hook and `aria-busy`; accessible naming remains normal HTML/ARIA authoring."
+        },
+        {
+          "type": "heading",
+          "level": 3,
+          "text": "Runtime model"
+        },
+        {
+          "type": "paragraph",
+          "text": "Native Web requires no framework hydration. Optional Web helpers are used only where a component needs browser behavior beyond the platform's native control semantics."
+        }
+      ]
+    },
+    "react": {
+      "title": "React usage",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Import `Button` from `@vyrnforge/react/button` and load the canonical Web Button stylesheet or aggregate VyrnForge styles separately."
+        },
+        {
+          "type": "heading",
+          "level": 3,
+          "text": "Component API"
+        },
+        {
+          "type": "code",
+          "language": "tsx",
+          "frameworkUsage": true,
+          "value": "import { Button } from '@vyrnforge/react/button';\n\nexport function SaveAction() {\n  return (\n    <Button variant=\"primary\" type=\"button\">\n      Save changes\n    </Button>\n  );\n}"
+        },
+        {
+          "type": "paragraph",
+          "text": "`Button` is an idiomatic React component. It renders a native `<button>`, forwards supported native button props and the element ref, and adds the VyrnForge `variant`, `size`, and `loading` props. Use the native `onClick` callback for activation rather than a VyrnForge-specific event wrapper."
+        },
+        {
+          "type": "heading",
+          "level": 3,
+          "text": "React state and accessibility execution"
+        },
+        {
+          "type": "paragraph",
+          "text": "React owns prop/state synchronization, ref delivery, event wiring, and hydration. VyrnForge still relies on native button semantics: `disabled` is rendered as the native attribute, loading derives `aria-busy`, and an authored accessible name remains the consumer's responsibility."
+        },
+        {
+          "type": "heading",
+          "level": 3,
+          "text": "Rendering and hydration"
+        },
+        {
+          "type": "paragraph",
+          "text": "The React port renders native-complete button semantics before hydration. Hydration adds React event/ref behavior; it does not replace the semantic control or require a second VyrnForge lifecycle."
+        }
+      ]
+    },
+    "angular": {
+      "title": "Angular usage",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Import `VfButtonDirective` from `@vyrnforge/angular/button` and apply `vfButton` to a real `<button>`. Load the canonical Web Button stylesheet or aggregate VyrnForge styles separately."
+        },
+        {
+          "type": "heading",
+          "level": 3,
+          "text": "Directive API"
+        },
+        {
+          "type": "code",
+          "language": "ts",
+          "frameworkUsage": true,
+          "value": "import { Component } from '@angular/core';\nimport { VfButtonDirective } from '@vyrnforge/angular/button';\n\n@Component({\n  standalone: true,\n  imports: [VfButtonDirective],\n  template: `\n    <button vfButton variant=\"primary\" type=\"button\">\n      Save changes\n    </button>\n  `\n})\nexport class SaveAction {}"
+        },
+        {
+          "type": "paragraph",
+          "text": "The Angular surface is intentionally a standalone attribute directive rather than a wrapper component, so the host remains the actual native `<button>`. Angular inputs configure VyrnForge state while native `(click)`, button attributes, content, and form participation remain ordinary Angular/HTML behavior."
+        },
+        {
+          "type": "heading",
+          "level": 3,
+          "text": "Angular state and accessibility execution"
+        },
+        {
+          "type": "paragraph",
+          "text": "Angular owns binding updates, directive lifecycle, native event integration, and framework-safe rendering. The directive preserves the native button and renders VyrnForge-owned state such as loading without replacing native `disabled`, naming, focus, or keyboard semantics."
+        },
+        {
+          "type": "heading",
+          "level": 3,
+          "text": "Rendering and hydration"
+        },
+        {
+          "type": "paragraph",
+          "text": "The Angular port keeps the native control semantically complete in rendered output. Angular lifecycle and hydration integrate bindings and events without introducing a separate VyrnForge runtime model underneath Angular."
+        }
+      ]
+    },
+    "vue": {
+      "title": "Vue usage",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Import `Button` from `@vyrnforge/vue/button` and load the canonical Web Button stylesheet or aggregate VyrnForge styles separately."
+        },
+        {
+          "type": "heading",
+          "level": 3,
+          "text": "Component API"
+        },
+        {
+          "type": "code",
+          "language": "vue",
+          "frameworkUsage": true,
+          "value": "<script setup lang=\"ts\">\nimport { Button } from '@vyrnforge/vue/button';\n</script>\n\n<template>\n  <Button variant=\"primary\" type=\"button\">\n    Save changes\n  </Button>\n</template>"
+        },
+        {
+          "type": "paragraph",
+          "text": "The Vue surface is an idiomatic Vue component. It renders a native button, accepts the VyrnForge `variant`, `size`, and `loading` props, uses the default slot for content, and preserves appropriate fallthrough native attributes and events."
+        },
+        {
+          "type": "heading",
+          "level": 3,
+          "text": "Vue state and accessibility execution"
+        },
+        {
+          "type": "paragraph",
+          "text": "Vue owns reactive prop updates, refs, event delivery, slots, and lifecycle. VyrnForge continues to rely on the native button for activation, focus, disabled behavior, and accessible naming while the port renders shared VyrnForge state such as loading."
+        },
+        {
+          "type": "heading",
+          "level": 3,
+          "text": "Rendering and hydration"
+        },
+        {
+          "type": "paragraph",
+          "text": "The Vue port keeps the native button semantically complete before hydration. Vue hydration attaches framework behavior without replacing the underlying native control or introducing a second lifecycle layer."
+        }
+      ]
+    }
+  },
+  "sections": [
+    {
+      "title": "Overview",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Use Button when a user should perform an immediate action: save, confirm, submit, open an interface, retry, or cancel an operation. Button is deliberately native-first, so ordinary browser semantics remain the baseline rather than being reproduced with a custom controller."
+        },
+        {
+          "type": "split",
+          "items": [
+            {
+              "tone": "good",
+              "title": "Use Button",
+              "text": "For actions and commands whose primary intent is activation."
+            },
+            {
+              "tone": "bad",
+              "title": "Use something else",
+              "text": "For navigation, use Link or a native anchor. Do not turn a generic element into a button only to achieve a visual style."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "title": "Quick start",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "The executable example below is locked to the framework selected for this documentation view. Reveal the source when you want to edit and run the framework-native usage directly."
+        },
+        {
+          "type": "example",
+          "id": "button/basic"
+        }
+      ]
+    },
+    {
+      "title": "Variants and sizes",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Variant communicates visual emphasis without changing the activation contract. Use `primary` for the strongest action, `secondary` for an alternative action, and `ghost` for lower-emphasis actions."
+        },
+        {
+          "type": "heading",
+          "level": 3,
+          "text": "Variants"
+        },
+        {
+          "type": "example",
+          "id": "button/variants"
+        },
+        {
+          "type": "heading",
+          "level": 3,
+          "text": "Sizes"
+        },
+        {
+          "type": "paragraph",
+          "text": "Button supports `sm`, `md`, and `lg`. Medium is the default."
+        },
+        {
+          "type": "example",
+          "id": "button/sizes"
+        }
+      ]
+    },
+    {
+      "title": "State and loading",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "`disabled` and `loading` are independent. Disabled prevents activation using the native `disabled` attribute. Loading exposes busy state with `aria-busy=\"true\"` but remains focusable and activatable unless you also disable the button."
+        },
+        {
+          "type": "example",
+          "id": "button/states"
+        },
+        {
+          "type": "note",
+          "text": "**Loading does not imply disabled.** If repeat activation must be blocked while application work is in progress, set both states explicitly."
+        }
+      ]
+    },
+    {
+      "title": "Interaction and forms",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Pointer activation plus Enter and Space keyboard activation are supplied by the native button. VyrnForge does not add JavaScript key handling or a second activation event. Focus remains native and receives the canonical `:focus-visible` treatment."
+        },
+        {
+          "type": "paragraph",
+          "text": "Button also preserves native form participation. The baseline does not override the platform default `type`, so an omitted type inside a form can submit it. Use `type=\"button\"` for non-submit actions and `type=\"reset\"` for native reset behavior."
+        }
+      ]
+    },
+    {
+      "title": "Accessibility",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "The semantic control is an actual `<button>`, so no explicit button role is needed. Provide an accessible name through visible content or an appropriate naming mechanism such as `aria-label` or `aria-labelledby`. VyrnForge does not generate fallback English labels."
+        },
+        {
+          "type": "list",
+          "items": [
+            "`disabled` uses native disabled semantics rather than replacing them with `aria-disabled`.",
+            "`loading` preserves the accessible name and derives `aria-busy=\"true\"`.",
+            "The loading indicator is decorative and does not duplicate the accessible name.",
+            "Forced-colors, reduced-motion, LTR, and RTL behavior are handled by canonical Web styling."
+          ]
+        }
+      ]
+    },
+    {
+      "title": "Content and responsive use",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Author concise action labels that describe what will happen. Icon-only content requires an authored accessible name; Button does not introduce a special icon-only API. Text expansion, bidirectional content, zoom, touch, pointer, and keyboard use must preserve the action meaning. Surrounding composition owns placement and wrapping."
+        }
+      ]
+    },
+    {
+      "title": "Styling",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Canonical Button CSS is owned by `@vyrnforge/web`. Prefer documented `--vf-*` tokens and stable hooks rather than implementation selectors."
+        },
+        {
+          "type": "table",
+          "label": "Button styling hooks",
+          "columns": [
+            "Hook",
+            "Meaning"
+          ],
+          "rows": [
+            [
+              "`data-vf-button`",
+              "Stable Button styling hook."
+            ],
+            [
+              "`data-vf-variant`",
+              "`primary`, `secondary`, or `ghost`."
+            ],
+            [
+              "`data-vf-size`",
+              "`sm`, `md`, or `lg`."
+            ],
+            [
+              "`data-vf-loading`",
+              "Stable loading presentation state."
+            ]
+          ]
+        }
+      ]
+    },
+    {
+      "title": "Testing guidance",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "Query Button by role and accessible name, then assert observable outcomes such as activation or form submission. Keep loading-state tests separate from disabled-state tests. Depend only on documented framework APIs, native attributes/events, public entrypoints, and stable styling hooks."
+        }
+      ]
+    },
+    {
+      "title": "Compatibility",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "text": "The semantic Button contract, native activation and form behavior, variant/size/loading meanings, and stable styling hooks are shared compatibility commitments. Framework availability and the exact public API are resolved by the selected documentation view from current product/package reality."
+        },
+        {
+          "type": "paragraph",
+          "text": "Use the Compatibility reference for validated framework, browser, and runtime ranges. Implementation and test evidence are scoped to the revisions and scenarios that recorded them; this page does not promote a broader release or production-maturity claim."
+        }
+      ]
+    }
+  ]
+}
