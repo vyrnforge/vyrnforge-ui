@@ -40,21 +40,36 @@ test('each framework documentation view owns its AppShell runtime while preservi
     await expect(shell.locator('[data-vf-app-shell-main]')).toHaveCount(1);
     await expect(shell.locator('[data-vf-app-shell-footer]')).toHaveCount(1);
     await expect(page.getByRole('heading', { level: 1, name: 'Getting Started' })).toBeVisible();
-    await expect(page.getByRole('combobox', { name: 'Framework' })).toBeVisible();
+    const frameworkSwitcher = page.getByRole('navigation', { name: 'Framework' });
+    await expect(frameworkSwitcher).toBeVisible();
+    await expect(frameworkSwitcher.getByRole('link')).toHaveCount(5);
+    await expect(frameworkSwitcher.locator('.vf-framework-mark')).toHaveCount(5);
     if (framework !== 'elements') await expect(page.locator('vf-app-shell')).toHaveCount(0);
     verifyNoErrors();
   }
 });
 
-test('framework switch is one selector, performs route navigation, and preserves component context', async ({ page }) => {
+test('framework switch is one icon list, performs route navigation, and preserves component context', async ({ page }) => {
   const verifyNoErrors = await expectNoRuntimeErrors(page);
   await page.goto('/next/react/components/button/');
-  const selector = page.getByRole('combobox', { name: 'Framework' });
-  await expect(selector).toHaveCount(1);
-  await expect(page.locator('[data-vf-framework-choice]')).toHaveCount(0);
-  await expect(selector.locator('option')).toHaveCount(5);
-  await expect(selector.locator('option:checked')).toHaveText('React');
-  await selector.selectOption({ label: 'Vue' });
+  const switcher = page.getByRole('navigation', { name: 'Framework' });
+  await expect(switcher).toHaveCount(1);
+  await expect(page.getByRole('combobox', { name: 'Framework' })).toHaveCount(0);
+  const choices = switcher.locator('[data-vf-framework-choice]');
+  await expect(choices).toHaveCount(5);
+
+  const reactChoice = switcher.getByRole('link', { name: 'React documentation' });
+  await expect(reactChoice).toHaveAttribute('aria-current', 'page');
+  await expect(reactChoice).toHaveAttribute('title', 'React');
+  await expect(reactChoice.locator('[data-vf-framework-mark="react"]')).toHaveCount(1);
+
+  for (const choice of await choices.all()) {
+    const box = await choice.boundingBox();
+    expect(box?.width ?? 0).toBeGreaterThanOrEqual(24);
+    expect(box?.height ?? 0).toBeGreaterThanOrEqual(24);
+  }
+
+  await switcher.getByRole('link', { name: 'Vue documentation' }).click();
   await expect(page).toHaveURL(/\/next\/vue\/components\/button\/$/);
   await expect(page.locator('[data-vf-framework-context="vue"]')).toContainText('@vyrnforge/vue/button');
   verifyNoErrors();
@@ -130,8 +145,9 @@ test('framework-scoped docs remain navigable at a mobile viewport', async ({ pag
   await page.goto('/next/native-web/foundations/accessibility/');
   await expect(page.getByRole('navigation', { name: 'Documentation' })).toBeVisible();
   await expect(page.getByRole('heading', { level: 1, name: 'Accessibility' })).toBeVisible();
-  const frameworkSelector = page.getByRole('combobox', { name: 'Framework' });
-  await expect(frameworkSelector).toBeVisible();
-  const box = await frameworkSelector.boundingBox();
-  expect(box.x + box.width).toBeLessThanOrEqual(390);
+  const frameworkSwitcher = page.getByRole('navigation', { name: 'Framework' });
+  await expect(frameworkSwitcher).toBeVisible();
+  await expect(frameworkSwitcher.getByRole('link')).toHaveCount(5);
+  const box = await frameworkSwitcher.boundingBox();
+  expect((box?.x ?? 0) + (box?.width ?? 0)).toBeLessThanOrEqual(390);
 });
