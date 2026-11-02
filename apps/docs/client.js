@@ -280,18 +280,15 @@ function initializeDocs() {
   root.dataset.vfDocsReady = 'true';
 }
 
-function initializeWhenReady() {
-  if (document.querySelector('[data-vf-app-shell]')) {
-    initializeDocs();
-    return;
-  }
+function rendererIsReady() {
+  const shell = document.querySelector('[data-vf-app-shell]');
+  if (!shell) return false;
+  const renderer = shell.dataset.vfDocsRenderer || '';
+  return renderer === 'native-web' || renderer === 'elements' || root.dataset.vfDocsRendered === renderer;
+}
 
-  const observer = new MutationObserver(() => {
-    if (!document.querySelector('[data-vf-app-shell]')) return;
-    observer.disconnect();
-    initializeDocs();
-  });
-  observer.observe(document.body, { childList: true, subtree: true });
+function initializeWhenReady() {
+  if (rendererIsReady()) initializeDocs();
 }
 
 initializeWhenReady();
