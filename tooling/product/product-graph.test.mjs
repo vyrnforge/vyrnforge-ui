@@ -4,6 +4,7 @@ import { mkdtempSync, mkdirSync, writeFileSync } from 'node:fs';
 import os from 'node:os';
 import path from 'node:path';
 import { discoverProductGraph, productGraphProblems } from './discover-product-graph.mjs';
+import { impactProductView } from './product-graph-view.mjs';
 
 function writer(root) {
   return (relativePath, content = '') => {
@@ -20,16 +21,28 @@ test('current repository is normalized into one product graph', () => {
     assert.ok(graph.components.some((component) => component.unitId === id), `${id} should exist`);
   }
 
+  const reactPackage = graph.packages.find((pkg) => pkg.id === 'react');
+  assert.ok(reactPackage);
+  assert.equal(reactPackage.manifest.name, '@vyrnforge/react');
+  assert.ok(reactPackage.manifest.exports['./button']);
+
   const button = graph.components.find((component) => component.unitId === 'button');
   assert.ok(button);
   assert.equal(button.id, 'component:button');
-  assert.equal(button.facets.legacyRoot, 'product/button/');
-  assert.equal(button.facets.canonicalRoot, null);
-  assert.equal(button.surfaces.react.authoringMode, 'legacy-package');
-  assert.ok(button.surfaces.react.authoringPaths.includes('packages/react/src/components/button/'));
+  assert.equal(button.facets.legacyRoot, null);
+  assert.equal(button.facets.canonicalRoot, 'product/components/button/');
+  assert.equal(button.metadataSource, 'product-unit');
+  assert.equal(button.documentationGroup, 'actions');
+  assert.equal(button.surfaces.react.authoringMode, 'product-unit');
+  assert.deepEqual(button.surfaces.react.authoringPaths, ['product/components/button/react/']);
+  assert.equal(button.surfaces.react.projectionPath, 'packages/react/src/components/button/');
+  assert.equal(button.surfaces.angular.authoringMode, 'product-unit');
+  assert.equal(button.surfaces.angular.projectionPath, 'packages/angular/button/src/');
+  assert.equal(button.surfaces.web.authoringMode, 'product-unit');
+  assert.equal(button.surfaces.web.projectionPath, 'packages/web/src/components/button/');
   assert.ok(button.surfaces.react.publicEntrypoints.includes('@vyrnforge/react/button'));
   assert.ok(button.surfaces.web.publicEntrypoints.includes('@vyrnforge/web/styles/button.css'));
-  assert.equal(button.migration.state, 'legacy');
+  assert.equal(button.migration.state, 'product-unit');
   assert.deepEqual(productGraphProblems(), []);
 });
 
@@ -63,9 +76,16 @@ test('canonical product-unit source overrides package-local authoring without ch
   assert.equal(button.documentationGroup, 'actions');
   assert.equal(button.surfaces.react.authoringMode, 'product-unit');
   assert.deepEqual(button.surfaces.react.authoringPaths, ['product/components/button/react/']);
+  assert.equal(button.surfaces.react.projectionPath, 'packages/react/src/components/button/');
   assert.deepEqual(button.surfaces.react.legacyPaths, []);
   assert.deepEqual(button.surfaces.react.publicEntrypoints, ['@vyrnforge/react/button']);
   assert.equal(button.migration.state, 'product-unit');
+
+  const impactView = impactProductView(graph);
+  const impactButton = impactView.components.find((component) => component.component === 'button');
+  assert.ok(impactButton);
+  assert.equal(impactButton.root, 'product/components/button/');
+  assert.deepEqual(impactButton.ports.react.paths, ['product/components/button/react/']);
   assert.deepEqual(productGraphProblems(root), []);
 });
 
@@ -94,8 +114,27 @@ test('legacy and canonical ownership can coexist as one mixed component during m
   assert.equal(button.facets.legacyRoot, 'product/button/');
   assert.equal(button.surfaces.web.authoringMode, 'product-unit');
   assert.deepEqual(button.surfaces.web.authoringPaths, ['product/components/button/web/']);
-  assert.deepEqual(button.surfaces.web.legacyPaths, ['packages/web/src/components/button/']);
+  assert.equal(button.surfaces.web.projectionPath, 'packages/web/src/components/button/');
+  assert.deepEqual(button.surfaces.web.legacyPaths, []);
   assert.deepEqual(button.surfaces.web.publicEntrypoints, ['@vyrnforge/web/styles/button.css']);
+});
+
+test('component Core source fails closed until its projection is deliberately defined', () => {
+  const root = mkdtempSync(path.join(os.tmpdir(), 'vf-product-graph-core-projection-'));
+  const write = writer(root);
+
+  write('packages/core/package.json', JSON.stringify({
+    name: '@vyrnforge/core',
+    exports: { '.': './dist/index.js' },
+  }));
+  write('product/components/example/component.json', JSON.stringify({ name: 'Example' }));
+  write('product/components/example/core/index.ts', 'export const value = 1;\n');
+
+  const graph = discoverProductGraph(root);
+  const example = graph.components.find((component) => component.unitId === 'example');
+  assert.ok(example);
+  assert.equal(example.surfaces.core.projectionPath, null);
+  assert.ok(productGraphProblems(root).includes('component:example/core has no package projection destination'));
 });
 
 test('canonical capabilities merge legacy package ownership into one logical node', () => {
@@ -118,4 +157,11 @@ test('canonical capabilities merge legacy package ownership into one logical nod
   assert.deepEqual(capability.packages, ['core']);
   assert.equal(capability.legacyNodes.length, 1);
   assert.equal(capability.migration.state, 'mixed');
+
+  const impactCapability = impactProductView(graph).ownedUnits.find((unit) => unit.id === 'collection-navigation');
+  assert.ok(impactCapability);
+  assert.ok(impactCapability.nodes.includes('capability:collection-navigation'));
+  assert.ok(impactCapability.nodes.includes('unit:core:capabilities:collection-navigation'));
+  assert.ok(impactCapability.paths.includes('product/capabilities/collection-navigation/'));
+  assert.ok(impactCapability.paths.includes('packages/core/src/capabilities/collection-navigation/'));
 });

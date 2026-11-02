@@ -1,0 +1,8 @@
+<section data-vf-framework-adaptation="angular">
+  <h2>Angular adaptation</h2>
+  <p>Import the standalone Dialog directives from <code>@vyrnforge/angular/dialog</code> and load <code>@vyrnforge/web/styles/dialog.css</code> or the aggregate stylesheet.</p>
+  <h3>Composition and state</h3>
+  <p>Apply <code>VfDialogRootDirective</code> to a native <code>&lt;dialog&gt;</code> and compose the title, description, body, and close directives. Bind <code>open</code> and handle <code>openChange</code>; <code>dismissRequest</code> exposes preventable dismissal intent and <code>backdropDismiss</code> opts into backdrop dismissal.</p>
+  <h3>Accessibility and hydration</h3>
+  <p>The authored native dialog remains the semantic element. Keep title/description IDs meaningful and let Angular application state commit requested changes during client hydration.</p>
+</section>

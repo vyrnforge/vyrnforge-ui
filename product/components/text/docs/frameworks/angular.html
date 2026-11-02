@@ -1,0 +1,9 @@
+<section data-vf-framework-adaptation="angular">
+  <h2>Angular usage</h2>
+  <p>Load <code>@vyrnforge/web/styles/text.css</code> and import standalone <code>VfTextDirective</code> from <code>@vyrnforge/angular/text</code>.</p>
+  <pre tabindex="0" role="region" aria-label="Angular Text example"><code>&lt;h2 vfText variant="heading-md"&gt;Billing and plans&lt;/h2&gt;</code></pre>
+  <h3>Angular API</h3>
+  <p><code>vfText</code> decorates the authored host element and <code>variant</code> configures the shared visual role. The directive does not replace the native host.</p>
+  <h3>SSR and hydration</h3>
+  <p>The authored element and Text data hooks remain present in server output; the directive does not require a separate browser runtime model.</p>
+</section>

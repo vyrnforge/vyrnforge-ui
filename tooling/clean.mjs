@@ -9,6 +9,7 @@ export async function cleanRepository(root = repositoryRoot) {
   const workspaces = await readPnpmWorkspacePaths(path.join(root, 'pnpm-workspace.yaml'));
 
   await rm(path.join(root, 'dist'), { recursive: true, force: true });
+  await rm(path.join(root, '.vf-projection'), { recursive: true, force: true });
   for (const workspace of workspaces) {
     await rm(path.join(root, workspace, 'dist'), { recursive: true, force: true });
   }

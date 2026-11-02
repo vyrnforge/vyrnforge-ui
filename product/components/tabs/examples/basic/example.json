@@ -1,0 +1,13 @@
+{
+  "id": "tabs/basic",
+  "title": "Basic tabs",
+  "description": "The shared Tabs contract rendered through each implemented framework surface.",
+  "defaultFramework": "react",
+  "frameworks": {
+    "native-web": { "label": "Native Web", "language": "html", "source": "native-web.html" },
+    "react": { "label": "React", "language": "tsx", "source": "react.tsx" },
+    "angular": { "label": "Angular", "language": "ts", "source": "angular.ts" },
+    "vue": { "label": "Vue", "language": "ts", "source": "vue.ts" },
+    "elements": { "label": "Elements", "language": "ts", "source": "elements.ts" }
+  }
+}

@@ -1,0 +1,33 @@
+<p class="vf-docs-lede">Dialog presents focused modal content with native dialog semantics and documented open, dismissal, and focus behavior.</p>
+
+<section><h2>Overview</h2><p>Use Dialog for modal tasks that temporarily require attention or a decision. Use a non-modal surface such as Popover for contextual content that should not block interaction with the rest of the page.</p></section>
+
+<section><h2>Quick start</h2><p>Run the Dialog example for the framework selected in the documentation shell.</p><div data-vf-example="dialog/basic"></div></section>
+
+<div data-vf-framework-content></div>
+
+<section><h2>Anatomy</h2><p>A Dialog contains a dialog root, authored title, optional description, body content, and consumer-authored controls. Use the documented title and description parts to establish accessible relationships.</p></section>
+
+<section><h2>Variants and sizes</h2><p>Dialog has no semantic variant or size enum in this channel. Adjust layout through documented styling hooks and application CSS without changing modal semantics.</p></section>
+
+<section><h2>State</h2><p>Open state may be application-controlled or initialized through an idiomatic uncontrolled/default-state API where the selected framework supports it. A dismissal request is distinct from a committed state change; controlled applications remain authoritative for whether the dialog actually closes.</p></section>
+
+<section><h2>Behavior</h2><p>Opening activates modal dialog behavior in the browser. Escape, optional backdrop activation, and close controls can request dismissal with reason <code>escape</code>, <code>backdrop</code>, or <code>close-control</code>. Preventing a documented dismissal request keeps the dialog open.</p></section>
+
+<section><h2>Interaction</h2><p>Escape requests dismissal. Backdrop dismissal is opt-in. Interacting with dialog content does not count as backdrop activation, and close controls request dismissal explicitly.</p></section>
+
+<section><h2>Accessibility</h2><p>Provide meaningful title text and, when useful, a description. An initial-focus target is optional. When the dialog closes, focus returns to the previous meaningful target when that target remains available.</p></section>
+
+<section><h2>Forms</h2><p>Forms may be composed inside Dialog. Submission, validation, confirmation, and reset behavior remain application concerns and follow the contracts of the controls used inside the dialog.</p></section>
+
+<section><h2>Styling</h2><p>Stable hooks are <code>data-vf-dialog-root</code>, <code>data-vf-dialog-title</code>, <code>data-vf-dialog-description</code>, <code>data-vf-dialog-body</code>, and <code>data-vf-dialog-close</code>, with <code>data-vf-open</code> and <code>data-vf-backdrop-dismiss</code> for documented state and policy. Use <code>::backdrop</code> for backdrop styling.</p></section>
+
+<section><h2>CSR and SSR</h2><p>Server output should preserve dialog content and accessible relationships. Browser modal activation and focus behavior begin on the client or during custom-element upgrade. Follow the selected framework's state contract during hydration so application state remains authoritative.</p></section>
+
+<section><h2>Examples</h2><p>The Quick start example demonstrates title and description relationships, close controls, and the selected framework's supported Dialog API.</p></section>
+
+<section><h2>Do / Don't</h2><p><strong>Do</strong> use Dialog for genuinely modal tasks, provide a meaningful title, and choose dismissal policy deliberately. <strong>Don't</strong> use Dialog for lightweight contextual content or hide essential close/confirmation actions.</p></section>
+
+<section><h2>Testing guidance</h2><p>Test opening and closing, Escape behavior, optional backdrop dismissal, close controls, focus movement and restoration, controlled-state requests where applicable, hydration or upgrade, and accessibility through observable browser behavior.</p></section>
+
+<section><h2>Compatibility</h2><p>Documented anatomy, dismissal semantics, focus behavior, accessibility relationships, and public styling hooks are shared compatibility commitments. Framework grammar remains idiomatic and is documented in the framework adaptation above. See the Compatibility reference for validated runtime and browser ranges.</p></section>

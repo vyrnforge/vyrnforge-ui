@@ -2,6 +2,7 @@ import { existsSync, readFileSync, readdirSync } from 'node:fs';
 import path from 'node:path';
 import { frameworkPortNames } from '../package-model.mjs';
 import { discoverProductUnits, repoRoot } from '../testing/discover-product-units.mjs';
+import { componentPackageProjectionPath } from './package-layout.mjs';
 
 const productKinds = Object.freeze({
   components: 'component',
@@ -11,9 +12,7 @@ const productKinds = Object.freeze({
 });
 const componentTargets = Object.freeze(['core', 'web', ...frameworkPortNames]);
 const reservedLegacyProductRoots = new Set(Object.keys(productKinds));
-const packageForTarget = Object.freeze(
-  Object.fromEntries(componentTargets.map((target) => [target, target])),
-);
+const packageForTarget = Object.freeze(Object.fromEntries(componentTargets.map((target) => [target, target])));
 
 function exists(root, relativePath) {
   return existsSync(path.join(root, relativePath));
@@ -58,7 +57,6 @@ function componentPublicEntrypoints(manifests, target, componentId) {
     const subpath = `./styles/${componentId}.css`;
     return manifest.exports[subpath] ? [`${publicName}/styles/${componentId}.css`] : [];
   }
-
   if (target === 'core') return [];
 
   const subpath = `./${componentId}`;
@@ -75,22 +73,19 @@ function normalizeComponentSurface(root, manifests, component, componentId, targ
   const legacy = component?.ports?.[target] ?? null;
   if (!canonicalPath && !legacy) return null;
 
-  const authoringMode = canonicalPath ? 'product-unit' : 'legacy-package';
-  const legacyPaths = (legacy?.paths ?? []).filter((relativePath) => exists(root, relativePath.replace(/\/$/, '')));
-  const publicEntrypoints = componentPublicEntrypoints(manifests, target, componentId);
-  const resolvedAuthoringPaths = canonicalPath
-    ? [canonicalPath]
-    : legacyPaths.length
-      ? [legacyPaths[0]]
-      : [];
-
+  const legacyPaths = (legacy?.paths ?? []).filter((relativePath) =>
+    relativePath.startsWith('packages/') &&
+    !relativePath.includes('/test/') &&
+    exists(root, relativePath.replace(/\/$/, '')),
+  );
   return {
     target,
     package: packageForTarget[target],
-    authoringMode,
-    authoringPaths: resolvedAuthoringPaths,
+    authoringMode: canonicalPath ? 'product-unit' : 'legacy-package',
+    authoringPaths: canonicalPath ? [canonicalPath] : legacyPaths.length ? [legacyPaths[0]] : [],
+    projectionPath: componentPackageProjectionPath(target, componentId) ?? legacyPaths[0] ?? null,
     legacyPaths,
-    publicEntrypoints,
+    publicEntrypoints: componentPublicEntrypoints(manifests, target, componentId),
     dependencies: legacy?.dependencies ?? [],
     browser: legacy?.browser ?? false,
     types: legacy?.types ?? null,
@@ -101,15 +96,20 @@ function normalizeComponentSurface(root, manifests, component, componentId, targ
 function componentMetadata(root, componentId) {
   const canonicalPath = `product/components/${componentId}/component.json`;
   const legacyPath = `product/${componentId}/component.json`;
-  if (exists(root, canonicalPath)) return { path: canonicalPath, value: readJson(root, canonicalPath), source: 'product-unit' };
-  if (exists(root, legacyPath)) return { path: legacyPath, value: readJson(root, legacyPath), source: 'legacy-product-slice' };
+  if (exists(root, canonicalPath)) {
+    return { path: canonicalPath, value: readJson(root, canonicalPath), source: 'product-unit' };
+  }
+  if (exists(root, legacyPath)) {
+    return { path: legacyPath, value: readJson(root, legacyPath), source: 'legacy-product-slice' };
+  }
   return { path: canonicalPath, value: null, source: 'missing' };
 }
 
 function componentFacets(root, componentId) {
   const canonicalRoot = `product/components/${componentId}`;
   const legacyRoot = `product/${componentId}`;
-  const preferredRoot = exists(root, canonicalRoot) ? canonicalRoot : legacyRoot;
+  const hasCanonicalRoot = exists(root, canonicalRoot);
+  const hasLegacyRoot = exists(root, legacyRoot);
   const facet = (name) => {
     const canonicalPath = `${canonicalRoot}/${name}/`;
     if (exists(root, canonicalPath)) return canonicalPath;
@@ -118,9 +118,9 @@ function componentFacets(root, componentId) {
   };
 
   return {
-    root: exists(root, canonicalRoot) ? `${canonicalRoot}/` : exists(root, legacyRoot) ? `${legacyRoot}/` : `${preferredRoot}/`,
-    canonicalRoot: exists(root, canonicalRoot) ? `${canonicalRoot}/` : null,
-    legacyRoot: exists(root, legacyRoot) ? `${legacyRoot}/` : null,
+    root: hasCanonicalRoot ? `${canonicalRoot}/` : hasLegacyRoot ? `${legacyRoot}/` : `${canonicalRoot}/`,
+    canonicalRoot: hasCanonicalRoot ? `${canonicalRoot}/` : null,
+    legacyRoot: hasLegacyRoot ? `${legacyRoot}/` : null,
     contract: facet('contract'),
     docs: facet('docs'),
     examples: facet('examples'),
@@ -245,10 +245,7 @@ export function discoverProductGraph(root = repoRoot) {
       .filter((component) => !reservedLegacyProductRoots.has(component.component))
       .map((component) => [component.component, component]),
   );
-  const componentIds = unique([
-    ...legacyComponents.keys(),
-    ...directories(root, 'product/components'),
-  ]);
+  const componentIds = unique([...legacyComponents.keys(), ...directories(root, 'product/components')]);
   const components = componentIds.map((componentId) =>
     normalizeComponentNode(root, manifests, componentId, legacyComponents.get(componentId)),
   );
@@ -257,12 +254,14 @@ export function discoverProductGraph(root = repoRoot) {
   const units = [...components, ...canonicalUnits, ...legacyUnits].sort((a, b) => a.id.localeCompare(b.id));
 
   return {
-    schemaVersion: 1,
+    schemaVersion: 2,
     root,
     packages: discovery.packages.map(({ name, manifest }) => ({
       id: name,
       name: manifest.name ?? `@vyrnforge/${name}`,
       version: manifest.version ?? null,
+      manifestPath: `packages/${name}/package.json`,
+      manifest,
     })),
     components,
     units,
@@ -286,6 +285,9 @@ export function productGraphProblems(root = repoRoot) {
     }
     for (const surface of Object.values(component.surfaces)) {
       if (!surface.authoringPaths.length) problems.push(`${component.id}/${surface.target} has no authoring source`);
+      if (surface.authoringMode === 'product-unit' && !surface.projectionPath) {
+        problems.push(`${component.id}/${surface.target} has no package projection destination`);
+      }
       if (!graph.packages.some((pkg) => pkg.id === surface.package)) {
         problems.push(`${component.id}/${surface.target} projects to unknown package ${surface.package}`);
       }

@@ -1,11 +1,11 @@
 import { test, expect } from '@playwright/test';
 
-test('guide AppShell uses full-width application chrome at desktop size', async ({ page }) => {
+test('React documentation AppShell uses the shared full-width application chrome', async ({ page }) => {
   await page.setViewportSize({ width: 1600, height: 1000 });
-  await page.goto('/next/');
+  await page.goto('/next/react/');
 
   const geometry = await page.evaluate(() => {
-    const shell = document.querySelector('vf-app-shell');
+    const shell = document.querySelector('[data-vf-app-shell]');
     const header = document.querySelector('[data-vf-app-shell-header]');
     const body = document.querySelector('[data-vf-app-shell-body]');
     const navigation = document.querySelector('[data-vf-app-shell-navigation]');
@@ -31,9 +31,9 @@ test('guide AppShell uses full-width application chrome at desktop size', async 
   expect(geometry.main.width).toBeGreaterThan(900);
 });
 
-test('guide AppShell remains single-column and overflow-safe on mobile', async ({ page }) => {
+test('Native Web documentation AppShell remains single-column and overflow-safe on mobile', async ({ page }) => {
   await page.setViewportSize({ width: 390, height: 844 });
-  await page.goto('/next/');
+  await page.goto('/next/native-web/');
 
   const overflow = await page.evaluate(() => document.documentElement.scrollWidth - document.documentElement.clientWidth);
   expect(overflow).toBeLessThanOrEqual(1);

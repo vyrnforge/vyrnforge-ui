@@ -1,12 +1,8 @@
-<p class="vf-docs-status" data-vf-support-status="partial"><strong>Status:</strong> Elements integration is available for Icon and Tabs in this channel.</p>
-<p>Use the Elements package when you want the documented VyrnForge custom-element APIs without a framework runtime. Custom elements are registered explicitly so importing a module does not register elements as a side effect.</p>
+<p class="vf-docs-status" data-vf-support-status="partial"><strong>Status:</strong> Elements integration is available for the component surfaces published in this framework view.</p>
+<p>Use the Elements package when you want documented VyrnForge custom-element APIs without a framework runtime. Custom elements are registered explicitly so importing a module does not register elements as a side effect.</p>
 <section>
-  <h2>Available component entrypoints</h2>
-  <ul>
-    <li><code>@vyrnforge/elements/icon</code></li>
-    <li><code>@vyrnforge/elements/tabs</code></li>
-  </ul>
-  <p>Button, Dialog, and Text do not currently expose Elements-specific component entrypoints. Their component pages show the supported alternatives where applicable.</p>
+  <h2>Component entrypoints</h2>
+  <p>The component navigation and route availability in this Elements view are derived from the Product Graph. Treat each component page as the authority for its public entrypoint, registration function, attributes, properties, custom events, authored markup, and executable example. Unsupported routes remain explicit rather than substituting another framework.</p>
 </section>
 <section>
   <h2>Explicit registration</h2>
@@ -17,9 +13,9 @@ defineTabsElement();</code></pre>
 </section>
 <section>
   <h2>Attributes, properties, and events</h2>
-  <p>Use the attributes, properties, and custom events listed on each component page. Rich JavaScript values that cannot be represented safely as attributes are exposed through documented properties.</p>
+  <p>Use only the attributes, properties, and custom events listed by the selected component adaptation. Rich JavaScript values that cannot be represented safely as attributes are exposed through documented properties.</p>
 </section>
 <section>
   <h2>Browser rendering</h2>
-  <p>Elements components become interactive after registration and browser upgrade. Component pages document any authored markup that must be present before upgrade and any behavior that differs from server-rendered framework components.</p>
+  <p>Elements components become interactive after registration and browser upgrade. Component adaptations document any authored markup that must be present before upgrade and any behavior that differs from server-rendered framework components.</p>
 </section>

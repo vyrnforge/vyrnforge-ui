@@ -13,6 +13,7 @@ const ssrPorts = new Set(ssrPortNames);
 const sourceExtensions = ['.ts', '.tsx', '.mts', '.cts'];
 const ownedKinds = ['capabilities', 'accessibility', 'foundations'];
 const webFoundationStyleIds = new Set(['tokens', 'foundation', 'reset']);
+const reservedProductRoots = new Set(['components', 'capabilities', 'foundations', 'catalogs']);
 
 function readJson(root, relativePath) { return JSON.parse(readFileSync(path.join(root, relativePath), 'utf8')); }
 function existingPath(root, relativePath) { return existsSync(path.join(root, relativePath)); }
@@ -49,7 +50,24 @@ function frameworkComponentSourcePath(port, componentId) {
     ? `packages/angular/${componentId}/src/`
     : `packages/${port}/src/components/${componentId}/`;
 }
-function findExampleManifests(root, componentId) { return walkFiles(root, `product/${componentId}/examples`).filter((file) => file.endsWith('/example.json')); }
+function canonicalComponentSourcePath(root, componentId, port) {
+  const candidate = `product/components/${componentId}/${port}/`;
+  return existingPath(root, candidate.replace(/\/$/, '')) ? candidate : null;
+}
+function componentSourcePath(root, componentId, port) {
+  return canonicalComponentSourcePath(root, componentId, port)
+    ?? (port === 'web' ? `packages/web/src/components/${componentId}/` : frameworkComponentSourcePath(port, componentId));
+}
+function componentFacetPath(root, componentId, facet, { file = false } = {}) {
+  const suffix = file ? facet : `${facet}/`;
+  const canonical = `product/components/${componentId}/${suffix}`;
+  if (existingPath(root, canonical.replace(/\/$/, ''))) return canonical;
+  return `product/${componentId}/${suffix}`;
+}
+function findExampleManifests(root, componentId) {
+  const examplesRoot = componentFacetPath(root, componentId, 'examples');
+  return walkFiles(root, examplesRoot).filter((file) => file.endsWith('/example.json'));
+}
 function frameworkTopLevelModules(root, port) {
   const directory = path.join(root, `packages/${port}/src`);
   if (!existsSync(directory)) return [];
@@ -128,7 +146,8 @@ export function discoverProductUnits(root = repoRoot) {
   const packageManifests = new Map(packageNames.map((name) => [name, readJson(root, `packages/${name}/package.json`)]));
   const ownedUnits = discoverOwnedUnits(root, packageNames, packageManifests);
   const frameworkExports = new Map();
-  const discoveredIds = new Set(directories(root, 'product'));
+  const legacyProductIds = directories(root, 'product').filter((id) => !reservedProductRoots.has(id));
+  const discoveredIds = new Set([...legacyProductIds, ...directories(root, 'product/components')]);
   for (const port of frameworkPorts) {
     const exports = new Set(Object.keys(packageManifests.get(port)?.exports ?? {}).map(componentIdFromFrameworkExport).filter(Boolean));
     frameworkExports.set(port, exports);
@@ -139,37 +158,44 @@ export function discoverProductUnits(root = repoRoot) {
   const components = [...discoveredIds].sort().map((componentId) => {
     const ports = {};
     if (webExports.has(componentId)) {
-      const sourcePath = `packages/web/src/components/${componentId}/`;
+      const sourcePath = componentSourcePath(root, componentId, 'web');
       const stylePaths = walkFiles(root, sourcePath).filter((file) => file.endsWith('.css'));
       ports.web = { paths: [sourcePath], stylePaths, browser: true, dependencies: scanUnitDependencies(root, sourcePath, ownedUnits, packageManifests) };
     }
     for (const port of frameworkPorts) {
       if (!frameworkExports.get(port)?.has(componentId)) continue;
-      const sourcePath = frameworkComponentSourcePath(port, componentId);
+      const sourcePath = componentSourcePath(root, componentId, port);
       ports[port] = { paths: [sourcePath, `packages/${port}/test/components/${componentId}/`], types: `packages/${port}/test/components/${componentId}/api.types.ts`, ...(ssrPorts.has(port) ? { ssr: `packages/${port}/test/components/${componentId}/ssr.test.mjs` } : {}), browser: true, dependencies: scanUnitDependencies(root, sourcePath, ownedUnits, packageManifests) };
     }
     const frameworkPortNamesForComponent = Object.keys(ports).filter((port) => port !== 'web');
-    const componentRoot = `product/${componentId}`;
-    const browserRoot = `${componentRoot}/test/browser`;
-    const accessibilityPath = `${componentRoot}/accessibility.json`;
-    const metadataPath = `${componentRoot}/component.json`;
+    const canonicalRoot = `product/components/${componentId}`;
+    const legacyRoot = `product/${componentId}`;
+    const componentRoot = existingPath(root, canonicalRoot) ? canonicalRoot : legacyRoot;
+    const metadataPath = componentFacetPath(root, componentId, 'component.json', { file: true });
     const metadata = existingPath(root, metadataPath) ? readJson(root, metadataPath) : null;
+    const docsRoot = componentFacetPath(root, componentId, 'docs');
+    const examplesRoot = componentFacetPath(root, componentId, 'examples');
+    const testRoot = componentFacetPath(root, componentId, 'test');
+    const browserRoot = `${testRoot}browser`;
+    const accessibilityPath = componentFacetPath(root, componentId, 'accessibility.json', { file: true });
+    const changesRoot = componentFacetPath(root, componentId, 'changes');
+    const conformanceRoot = `${testRoot}conformance`;
     return {
       component: componentId,
       status: 'implemented',
       root: `${componentRoot}/`,
       ports,
       metadataPath,
-      documentationGroup: metadata?.documentation?.group ?? null,
-      documentationSource: `${componentRoot}/docs/index.html`,
-      documentationPaths: [`${componentRoot}/docs/`, `${componentRoot}/examples/`],
+      documentationGroup: metadata?.group ?? metadata?.documentation?.group ?? null,
+      documentationSource: `${docsRoot}index.html`,
+      documentationPaths: [docsRoot, examplesRoot],
       exampleManifests: findExampleManifests(root, componentId),
-      conformanceTypes: frameworkPortNamesForComponent.length > 1 ? `${componentRoot}/test/conformance/public-api.types.ts` : null,
+      conformanceTypes: frameworkPortNamesForComponent.length > 1 ? `${conformanceRoot}/public-api.types.ts` : null,
       browser: { fixture: `${browserRoot}/fixtures.mjs`, tests: `${browserRoot}/tests/`, paths: [`${browserRoot}/`, accessibilityPath] },
       accessibilityPath,
-      changesPath: `${componentRoot}/changes/`,
-      changeFragments: walkFiles(root, `${componentRoot}/changes`).filter((file) => file.endsWith('.md')),
-      discovery: { webExport: webExports.has(componentId), frameworkExports: frameworkPortNamesForComponent, componentSlice: existingPath(root, componentRoot) },
+      changesPath: changesRoot,
+      changeFragments: walkFiles(root, changesRoot).filter((file) => file.endsWith('.md')),
+      discovery: { webExport: webExports.has(componentId), frameworkExports: frameworkPortNamesForComponent, componentSlice: existingPath(root, canonicalRoot) || existingPath(root, legacyRoot) },
     };
   });
   return { packages: packageNames.map((name) => ({ name, manifest: packageManifests.get(name) })), components, ownedUnits, frameworkExports, webExports };
@@ -189,10 +215,10 @@ export function productPreparationProblems(root = repoRoot) {
     if (!existingPath(root, component.metadataPath)) problems.push(`${component.component} is public but missing component-owned metadata: ${component.metadataPath}`);
     else if (!component.documentationGroup) problems.push(`${component.component} component metadata must declare documentation.group`);
     if (!existingPath(root, component.documentationSource)) problems.push(`${component.component} is public but missing component documentation: ${component.documentationSource}`);
-    if (component.exampleManifests.length === 0) problems.push(`${component.component} is public but has no executable example.json under product/${component.component}/examples/`);
+    if (component.exampleManifests.length === 0) problems.push(`${component.component} is public but has no executable example.json under its product-owned examples facet`);
     for (const [port, config] of Object.entries(component.ports)) {
       const sourcePath = config.paths[0];
-      if (!existingPath(root, sourcePath.replace(/\/$/, ''))) problems.push(`${component.component}/${port} public surface is missing conventional source: ${sourcePath}`);
+      if (!existingPath(root, sourcePath.replace(/\/$/, ''))) problems.push(`${component.component}/${port} public surface is missing authoring source: ${sourcePath}`);
       if (config.types && !existingPath(root, config.types)) problems.push(`${component.component}/${port} is public but missing package-local type evidence: ${config.types}`);
       if (config.ssr && !existingPath(root, config.ssr)) problems.push(`${component.component}/${port} is public but missing package-local SSR evidence: ${config.ssr}`);
     }

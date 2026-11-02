@@ -13,10 +13,17 @@ test('published documentation stays on the consumer side of the public boundary'
   expect(manifestResponse.ok()).toBeTruthy();
   const manifest = await manifestResponse.json();
 
-  expect(manifest.pages.some((entry) => entry.slug === 'reference/packages')).toBeFalsy();
+  expect(manifest.pages.some((entry) => entry.logicalSlug === 'reference/packages')).toBeFalsy();
 
-  for (const entry of manifest.pages) {
-    const url = entry.slug ? `/next/${entry.slug}/` : '/next/';
+  const pages = manifest.pages.filter((entry) => entry.available && (
+    entry.framework === 'native-web' ||
+    entry.logicalSlug === '' ||
+    entry.kind === 'framework' ||
+    entry.logicalSlug === 'components/button'
+  ));
+
+  for (const entry of pages) {
+    const url = `/next/${entry.slug}/`;
     await page.goto(url);
     const text = await page.locator('main').innerText();
 

@@ -1,0 +1,41 @@
+<div data-vf-tabs-root data-vf-orientation="horizontal" data-vf-activation="automatic">
+  <div data-vf-tabs-list role="tablist" aria-label="Account sections">
+    <button id="overview-tab" type="button" role="tab" data-vf-tabs-tab aria-selected="true" aria-controls="overview-panel" tabindex="0">Overview</button>
+    <button id="billing-tab" type="button" role="tab" data-vf-tabs-tab aria-selected="false" aria-controls="billing-panel" tabindex="-1" disabled>Billing</button>
+    <button id="security-tab" type="button" role="tab" data-vf-tabs-tab aria-selected="false" aria-controls="security-panel" tabindex="-1">Security</button>
+  </div>
+  <div id="overview-panel" role="tabpanel" data-vf-tabs-panel aria-labelledby="overview-tab" tabindex="0">Overview content</div>
+  <div id="billing-panel" role="tabpanel" data-vf-tabs-panel aria-labelledby="billing-tab" tabindex="0" hidden>Billing content</div>
+  <div id="security-panel" role="tabpanel" data-vf-tabs-panel aria-labelledby="security-tab" tabindex="0" hidden>Security content</div>
+</div>
+<script>
+  const root = document.querySelector('[data-vf-tabs-root]');
+  const tabs = [...root.querySelectorAll('[role="tab"]')];
+  const enabledTabs = () => tabs.filter((tab) => !tab.disabled);
+
+  function select(tab) {
+    for (const candidate of tabs) {
+      const selected = candidate === tab;
+      candidate.setAttribute('aria-selected', String(selected));
+      candidate.tabIndex = selected ? 0 : -1;
+      document.querySelector(`#${candidate.getAttribute('aria-controls')}`).hidden = !selected;
+    }
+  }
+
+  for (const tab of tabs) {
+    tab.addEventListener('click', () => select(tab));
+    tab.addEventListener('keydown', (event) => {
+      const enabled = enabledTabs();
+      const current = enabled.indexOf(tab);
+      let next = null;
+      if (event.key === 'Home') next = enabled[0];
+      if (event.key === 'End') next = enabled.at(-1);
+      if (event.key === 'ArrowRight') next = enabled[(current + 1) % enabled.length];
+      if (event.key === 'ArrowLeft') next = enabled[(current - 1 + enabled.length) % enabled.length];
+      if (!next) return;
+      event.preventDefault();
+      select(next);
+      next.focus();
+    });
+  }
+</script>

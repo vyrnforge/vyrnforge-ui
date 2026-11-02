@@ -14,7 +14,7 @@
         "{projectRoot}/dist"
       ],
       "options": {
-        "command": "pnpm --filter @vyrnforge/web run build"
+        "command": "node tooling/product/build-projected-package.mjs web"
       }
     },
     "lint": {
@@ -22,7 +22,7 @@
       "options": {
         "commands": [
           "pnpm exec eslint packages/web/src packages/web/test --max-warnings=0",
-          "pnpm exec stylelint \"packages/web/src/**/*.css\""
+          "pnpm exec stylelint \"packages/web/src/**/*.css\" \"product/components/*/web/**/*.css\""
         ],
         "parallel": false
       }
@@ -33,7 +33,7 @@
         "^build"
       ],
       "options": {
-        "command": "pnpm exec tsc -p packages/web/tsconfig.json --noEmit && pnpm exec tsc -p packages/web/tsconfig.test.json"
+        "command": "node tooling/product/typecheck-projected-package.mjs web && pnpm exec tsc -p packages/web/tsconfig.test.json"
       }
     },
     "test": {
