@@ -34,6 +34,12 @@ export function frameworkLabel(framework) {
   return frameworks[framework]?.label ?? framework;
 }
 
+export function frameworkMarkDefinition(framework) {
+  const definition = frameworks[framework];
+  if (!definition) return null;
+  return Object.freeze({ viewBox: definition.viewBox, path: definition.path });
+}
+
 export function renderFrameworkMark(framework) {
   const definition = frameworks[framework];
   if (!definition) return '';
