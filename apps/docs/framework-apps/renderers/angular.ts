@@ -10,7 +10,7 @@ import {
   VfAppShellFooterDirective,
 } from '@vyrnforge/angular/app-shell';
 import { VfInputDirective } from '@vyrnforge/angular/input';
-import { VfNativeSelectDirective } from '@vyrnforge/angular/native-select';
+import { VfLinkDirective } from '@vyrnforge/angular/link';
 import {
   VfSideNavDirective,
   VfSideNavGroupDirective,
@@ -35,7 +35,7 @@ const model = readDocsPageModel();
     VfAppShellMainDirective,
     VfAppShellFooterDirective,
     VfInputDirective,
-    VfNativeSelectDirective,
+    VfLinkDirective,
     VfSideNavDirective,
     VfSideNavGroupDirective,
     VfSideNavGroupLabelDirective,
@@ -56,20 +56,36 @@ const model = readDocsPageModel();
               <input vfInput id="vf-docs-search" data-vf-docs-search type="search" autocomplete="off">
               <ul class="vf-docs-search-results" data-vf-docs-search-results hidden></ul>
             </div>
-            <div class="vf-docs-framework-selector">
-              <label for="vf-docs-framework-select">Framework</label>
-              <select
-                vfNativeSelect
-                id="vf-docs-framework-select"
-                data-vf-framework-select
-                aria-label="Framework"
-                [value]="currentFrameworkHref"
-              >
+            <nav class="vf-docs-framework-switcher" aria-label="Framework">
+              <ul class="vf-docs-framework-switcher__list">
                 @for (choice of frameworkChoices; track choice.id) {
-                  <option [value]="choice.href" [attr.data-vf-framework-value]="choice.id">{{ choice.label }}</option>
+                  <li>
+                    <a
+                      vfLink
+                      class="vf-docs-framework-switcher__link"
+                      [href]="choice.href"
+                      [attr.data-vf-framework-choice]="choice.id"
+                      [attr.data-vf-framework-current]="choice.current ? 'true' : null"
+                      [attr.aria-current]="choice.current ? 'page' : null"
+                      [attr.aria-label]="choice.label + ' documentation'"
+                      [attr.title]="choice.label"
+                    >
+                      @if (choice.mark) {
+                        <svg
+                          class="vf-framework-mark"
+                          [attr.data-vf-framework-mark]="choice.id"
+                          [attr.viewBox]="choice.mark.viewBox"
+                          aria-hidden="true"
+                          focusable="false"
+                        >
+                          <path [attr.d]="choice.mark.path"></path>
+                        </svg>
+                      }
+                    </a>
+                  </li>
                 }
-              </select>
-            </div>
+              </ul>
+            </nav>
           </div>
         </div>
       </header>
@@ -123,7 +139,6 @@ class DocsApp {
   readonly brandHref = model.brandHref || './';
   readonly versionText = model.versionText || '';
   readonly frameworkChoices = model.frameworkChoices || [];
-  readonly currentFrameworkHref = this.frameworkChoices.find((choice: { current?: boolean }) => choice.current)?.href || '';
   readonly navigation = model.navigation || [];
   readonly footerText = model.footerText || '';
 }

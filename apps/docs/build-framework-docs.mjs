@@ -7,7 +7,7 @@ import { fileURLToPath } from 'node:url';
 import { discoverProductGraph } from '../../tooling/product/discover-product-graph.mjs';
 import { buildFrameworkDocsApps } from './build-framework-apps.mjs';
 import { componentUsageGroups } from './component-usage-groups.mjs';
-import { frameworkLabel, renderFrameworkMark, supportedFrameworks } from './framework-presentation.mjs';
+import { frameworkLabel, frameworkMarkDefinition, renderFrameworkMark, supportedFrameworks } from './framework-presentation.mjs';
 import { documentationRegistry } from './registry.mjs';
 
 const root = path.resolve(fileURLToPath(new URL('../../', import.meta.url)));
@@ -83,18 +83,19 @@ function frameworkChoices(page, framework) {
     label: frameworkLabel(target),
     href: routeForFramework(page, framework, target),
     current: target === framework,
+    mark: frameworkMarkDefinition(target),
   }));
 }
 
-function renderFrameworkSelector(page, framework) {
-  const options = frameworkChoices(page, framework)
-    .map((choice) => `<option value="${escapeHtml(choice.href)}" data-vf-framework-value="${escapeHtml(choice.id)}"${choice.current ? ' selected' : ''}>${escapeHtml(choice.label)}</option>`)
+function renderFrameworkSwitcher(page, framework) {
+  const links = frameworkChoices(page, framework)
+    .map((choice) => `<li><a data-vf-link class="vf-docs-framework-switcher__link" href="${escapeHtml(choice.href)}" data-vf-framework-choice="${escapeHtml(choice.id)}"${choice.current ? ' data-vf-framework-current="true" aria-current="page"' : ''} aria-label="${escapeHtml(choice.label)} documentation" title="${escapeHtml(choice.label)}">${renderFrameworkMark(choice.id)}</a></li>`)
     .join('');
-  return `<div class="vf-docs-framework-selector"><label for="vf-docs-framework-select">Framework</label><select id="vf-docs-framework-select" data-vf-native-select data-vf-framework-select aria-label="Framework">${options}</select></div>`;
+  return `<nav class="vf-docs-framework-switcher" aria-label="Framework"><ul class="vf-docs-framework-switcher__list">${links}</ul></nav>`;
 }
 
 function renderHeader(page, framework) {
-  return `<div class="vf-docs-header__inner"><a class="vf-docs-brand" href="${relativeRoute(scopedSlug(framework, page.slug), framework)}">VyrnForge</a><span class="vf-docs-version" data-vf-docs-version>${escapeHtml(channel)} · ${escapeHtml(rootManifest.version)}</span><div class="vf-docs-tools"><div class="vf-docs-search-wrap"><label for="vf-docs-search">Search</label> <input id="vf-docs-search" data-vf-docs-search data-vf-input type="search" autocomplete="off"><ul class="vf-docs-search-results" data-vf-docs-search-results hidden></ul></div>${renderFrameworkSelector(page, framework)}</div></div>`;
+  return `<div class="vf-docs-header__inner"><a class="vf-docs-brand" href="${relativeRoute(scopedSlug(framework, page.slug), framework)}">VyrnForge</a><span class="vf-docs-version" data-vf-docs-version>${escapeHtml(channel)} · ${escapeHtml(rootManifest.version)}</span><div class="vf-docs-tools"><div class="vf-docs-search-wrap"><label for="vf-docs-search">Search</label> <input id="vf-docs-search" data-vf-docs-search data-vf-input type="search" autocomplete="off"><ul class="vf-docs-search-results" data-vf-docs-search-results hidden></ul></div>${renderFrameworkSwitcher(page, framework)}</div></div>`;
 }
 
 function navItemModel(currentPage, item, framework) {

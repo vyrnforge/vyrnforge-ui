@@ -10,7 +10,7 @@ import {
   AppShellFooter,
 } from '@vyrnforge/react/app-shell';
 import { Input } from '@vyrnforge/react/input';
-import { NativeSelect } from '@vyrnforge/react/native-select';
+import { Link } from '@vyrnforge/react/link';
 import {
   SideNav,
   SideNavGroup,
@@ -134,25 +134,45 @@ function renderNavGroup(group) {
   );
 }
 
-function renderFrameworkSelector(model) {
-  const current = model.frameworkChoices.find((choice) => choice.current);
+function renderFrameworkMark(choice) {
+  if (!choice.mark) return null;
   return createElement(
-    'div',
-    { className: 'vf-docs-framework-selector' },
-    createElement('label', { htmlFor: 'vf-docs-framework-select' }, 'Framework'),
+    'svg',
+    {
+      className: 'vf-framework-mark',
+      'data-vf-framework-mark': choice.id,
+      viewBox: choice.mark.viewBox,
+      'aria-hidden': 'true',
+      focusable: 'false',
+    },
+    createElement('path', { d: choice.mark.path })
+  );
+}
+
+function renderFrameworkSwitcher(model) {
+  return createElement(
+    'nav',
+    { className: 'vf-docs-framework-switcher', 'aria-label': 'Framework' },
     createElement(
-      NativeSelect,
-      {
-        id: 'vf-docs-framework-select',
-        'data-vf-framework-select': '',
-        'aria-label': 'Framework',
-        defaultValue: current?.href,
-      },
+      'ul',
+      { className: 'vf-docs-framework-switcher__list' },
       ...model.frameworkChoices.map((choice) =>
         createElement(
-          'option',
-          { key: choice.id, value: choice.href, 'data-vf-framework-value': choice.id },
-          choice.label
+          'li',
+          { key: choice.id },
+          createElement(
+            Link,
+            {
+              href: choice.href,
+              className: 'vf-docs-framework-switcher__link',
+              'data-vf-framework-choice': choice.id,
+              'data-vf-framework-current': choice.current ? 'true' : undefined,
+              'aria-current': choice.current ? 'page' : undefined,
+              'aria-label': `${choice.label} documentation`,
+              title: choice.label,
+            },
+            renderFrameworkMark(choice)
+          )
         )
       )
     )
@@ -184,7 +204,7 @@ function renderHeader(model) {
           hidden: true,
         })
       ),
-      renderFrameworkSelector(model)
+      renderFrameworkSwitcher(model)
     )
   );
 }

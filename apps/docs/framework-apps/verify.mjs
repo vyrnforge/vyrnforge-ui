@@ -11,7 +11,7 @@ const renderers = Object.freeze({
     entrypoints: [
       '@vyrnforge/react/app-shell',
       '@vyrnforge/react/input',
-      '@vyrnforge/react/native-select',
+      '@vyrnforge/react/link',
       '@vyrnforge/react/side-nav',
     ],
   },
@@ -21,7 +21,7 @@ const renderers = Object.freeze({
     entrypoints: [
       '@vyrnforge/angular/app-shell',
       '@vyrnforge/angular/input',
-      '@vyrnforge/angular/native-select',
+      '@vyrnforge/angular/link',
       '@vyrnforge/angular/side-nav',
     ],
   },
@@ -31,7 +31,7 @@ const renderers = Object.freeze({
     entrypoints: [
       '@vyrnforge/vue/app-shell',
       '@vyrnforge/vue/input',
-      '@vyrnforge/vue/native-select',
+      '@vyrnforge/vue/link',
       '@vyrnforge/vue/side-nav',
     ],
   },
