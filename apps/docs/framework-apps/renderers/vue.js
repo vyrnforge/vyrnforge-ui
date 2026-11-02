@@ -22,6 +22,7 @@ import { Surface } from '@vyrnforge/vue/surface';
 import { Text } from '@vyrnforge/vue/text';
 import { Textarea } from '@vyrnforge/vue/textarea';
 import { parseInline } from '../../content-model.mjs';
+import { buildContentLayoutModel } from '../content-layout.js';
 import { parseFragment, textNodeValue } from '../fragment.js';
 import { markDocsRendered, readDocsPageModel } from '../page-model.js';
 
@@ -118,7 +119,7 @@ function renderExample(block) {
 
 function renderContentBlock(block, framework) {
   if (block.type === 'paragraph') return text('p', 'body-md', block.text);
-  if (block.type === 'heading') return text(`h${Math.min(6, Math.max(3, Number(block.level) || 3))}`, 'heading-sm', block.text);
+  if (block.type === 'heading') return text(`h${Math.min(6, Math.max(3, Number(block.level) || 3))}`, 'heading-sm', block.text, { id: block.id });
   if (block.type === 'code') {
     return h('pre', {
       tabindex: 0,
@@ -150,25 +151,43 @@ function renderContentBlock(block, framework) {
   throw new Error(`Unsupported Vue documentation content block: ${block.type}`);
 }
 
-function renderModelContent(content) {
-  const context = content.context;
-  return [
-    text('h1', 'heading-lg', content.pageTitle),
+function renderModelContent(content, navigation, homeHref) {
+  const layout = buildContentLayoutModel(content, navigation, homeHref);
+  const resolved = layout.content;
+  const context = resolved.context;
+  const article = h('article', { class: 'vf-docs-article' }, [
+    h('nav', { class: 'vf-docs-breadcrumbs', 'aria-label': 'Breadcrumb' }, [
+      h('ol', null, layout.breadcrumbs.map((item, index) => h('li', {
+        key: `${item.label}-${index}`,
+        'aria-current': item.current ? 'page' : undefined,
+      }, [item.href ? h(Link, { href: item.href }, { default: () => item.label }) : item.label]))),
+    ]),
+    text('h1', 'heading-lg', resolved.pageTitle),
     context ? h('div', { class: 'vf-docs-framework-context', 'data-vf-framework-context': context.framework }, [
       text('strong', 'label-md', [frameworkMark(context.framework, context.mark), h('span', null, context.label)]),
       h('span', null, context.entrypoint ? ['Public entrypoint: ', h('code', null, context.entrypoint)] : 'Framework-specific documentation view'),
     ]) : null,
-    text('p', 'body-lg', content.lede, { class: 'vf-docs-lede' }),
-    content.meta?.length ? h('div', { class: 'vf-docs-page-meta', 'aria-label': `${content.pageTitle} characteristics` },
-      content.meta.map((item) => text('span', 'label-md', item, { key: item }))) : null,
-    ...(content.sections || []).map((section) => h('section', {
+    text('p', 'body-lg', resolved.lede, { class: 'vf-docs-lede' }),
+    resolved.meta?.length ? h('div', { class: 'vf-docs-page-meta', 'aria-label': `${resolved.pageTitle} characteristics` },
+      resolved.meta.map((item) => text('span', 'label-md', item, { key: item }))) : null,
+    ...(resolved.sections || []).map((section) => h('section', {
       key: `${section.adaptation || 'shared'}-${section.title}`,
       'data-vf-framework-adaptation': section.adaptation || undefined,
     }, [
-      text('h2', 'heading-md', section.title),
-      ...(section.blocks || []).map((block) => renderContentBlock(block, content.framework)),
+      text('h2', 'heading-md', section.title, { id: section.id }),
+      ...(section.blocks || []).map((block) => renderContentBlock(block, resolved.framework)),
     ])),
-  ];
+  ]);
+  const toc = layout.headings.length ? h('aside', { class: 'vf-docs-toc' }, [
+    text('strong', 'label-md', 'On this page'),
+    h('nav', { 'aria-label': 'On this page' }, [
+      h('ul', null, layout.headings.map((heading) => h('li', {
+        key: heading.id,
+        'data-vf-toc-level': String(heading.level),
+      }, [h(Link, { href: `#${heading.id}` }, { default: () => heading.title })]))),
+    ]),
+  ]) : null;
+  return h('div', { class: 'vf-docs-content-layout' }, [article, toc]);
 }
 
 function renderNavItem(item) {
@@ -248,7 +267,11 @@ const app = createApp({
             h(AppShellNavigation, { class: 'vf-docs-navigation' }, {
               default: () => h(SideNav, { 'aria-label': 'Documentation' }, { default: () => model.navigation.map(renderNavGroup) }),
             }),
-            h(AppShellMain, { id: 'main' }, { default: () => model.mainContent ? renderModelContent(model.mainContent) : renderLegacyFragment(model.mainHtml) }),
+            h(AppShellMain, { id: 'main' }, {
+              default: () => model.mainContent
+                ? renderModelContent(model.mainContent, model.navigation, model.brandHref)
+                : renderLegacyFragment(model.mainHtml),
+            }),
           ],
         }),
         h(AppShellFooter, { class: 'vf-docs-footer' }, { default: () => text('span', 'body-sm', model.footerText || '') }),
