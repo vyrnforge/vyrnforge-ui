@@ -149,16 +149,6 @@ function initializeDocs() {
   const framework = body.dataset.vfFramework || '';
   if (framework) window.localStorage.setItem(storageKey, framework);
 
-  const frameworkSelect = document.querySelector('[data-vf-framework-select]');
-  if (frameworkSelect) {
-    frameworkSelect.addEventListener('change', () => {
-      const selected = frameworkSelect.selectedOptions?.[0];
-      const target = selected?.dataset.vfFrameworkValue;
-      if (target) window.localStorage.setItem(storageKey, target);
-      if (frameworkSelect.value) window.location.assign(frameworkSelect.value);
-    });
-  }
-
   enhanceDocumentationPage(siteRoot);
 
   const searchInput = document.querySelector('[data-vf-docs-search]');
