@@ -14,6 +14,7 @@ test.describe('Theme Toggle real-browser contract', () => {
     const track = root.locator('[data-vf-theme-toggle-track]');
     const breath = root.locator('[data-vf-theme-toggle-breath]');
     const dragon = root.locator('[data-vf-theme-toggle-dragon]');
+    const dragonArt = dragon.locator('svg.vf-theme-toggle-dragon-art');
     const thumb = root.locator('[data-vf-theme-toggle-thumb]');
     const ember = root.locator('[data-vf-theme-toggle-ember]');
 
@@ -25,10 +26,18 @@ test.describe('Theme Toggle real-browser contract', () => {
     expect(target?.width ?? 0).toBeGreaterThanOrEqual(24);
     expect(target?.height ?? 0).toBeGreaterThanOrEqual(24);
 
+    await expect(dragonArt).toHaveAttribute('viewBox', '0 0 116 68');
+    await expect(dragonArt.locator('path')).toHaveCount(8);
+    await expect(dragonArt.locator('ellipse')).toHaveCount(2);
+    const dragonArtBox = await dragonArt.boundingBox();
+    expect(dragonArtBox?.width ?? 0).toBeGreaterThanOrEqual(40);
+    expect(dragonArtBox?.height ?? 0).toBeGreaterThanOrEqual(24);
+
     const presentation = await root.evaluate((element) => {
       const thumbElement = element.querySelector('[data-vf-theme-toggle-thumb]');
       const breathElement = element.querySelector('[data-vf-theme-toggle-breath]');
       const dragonElement = element.querySelector('[data-vf-theme-toggle-dragon]');
+      const dragonVector = dragonElement.querySelector('svg.vf-theme-toggle-dragon-art');
       const emberElement = element.querySelector('[data-vf-theme-toggle-ember]');
       const duration = getComputedStyle(thumbElement).transitionDuration
         .split(',')
@@ -37,21 +46,23 @@ test.describe('Theme Toggle real-browser contract', () => {
       return {
         maxThumbTransitionSeconds: Math.max(...duration),
         breathHasDetail: getComputedStyle(breathElement).backgroundImage !== 'none',
-        dragonHeadHasDetail: getComputedStyle(dragonElement, '::before').clipPath !== 'none'
-          && getComputedStyle(dragonElement, '::before').backgroundImage !== 'none',
-        dragonJawHasDetail: getComputedStyle(dragonElement, '::after').clipPath !== 'none',
+        dragonVectorPresent: Boolean(dragonVector),
+        dragonVectorPathCount: dragonVector?.querySelectorAll('path').length ?? 0,
+        dragonVectorEllipseCount: dragonVector?.querySelectorAll('ellipse').length ?? 0,
         emberHasDetail: getComputedStyle(emberElement).backgroundImage !== 'none',
       };
     });
     expect(presentation.maxThumbTransitionSeconds).toBeGreaterThanOrEqual(0.5);
     expect(presentation.breathHasDetail).toBe(true);
-    expect(presentation.dragonHeadHasDetail).toBe(true);
-    expect(presentation.dragonJawHasDetail).toBe(true);
+    expect(presentation.dragonVectorPresent).toBe(true);
+    expect(presentation.dragonVectorPathCount).toBeGreaterThanOrEqual(8);
+    expect(presentation.dragonVectorEllipseCount).toBeGreaterThanOrEqual(2);
     expect(presentation.emberHasDetail).toBe(true);
 
     await expect(dragon).toHaveCSS('opacity', '0.08');
     await expect(ember).toHaveCSS('opacity', '1');
     await page.screenshot({ path: testInfo.outputPath('theme-toggle-light.png'), fullPage: true });
+    await root.screenshot({ path: testInfo.outputPath('theme-toggle-light-control.png') });
 
     const lightTransform = await thumb.evaluate((element) => getComputedStyle(element).transform);
     await control.focus();
@@ -62,6 +73,7 @@ test.describe('Theme Toggle real-browser contract', () => {
     await expect.poll(() => ember.evaluate((element) => getComputedStyle(element).opacity)).toBe('0');
     await expect.poll(() => breath.evaluate((element) => getComputedStyle(element).opacity)).toBe('0');
     await page.screenshot({ path: testInfo.outputPath('theme-toggle-dark.png'), fullPage: true });
+    await root.screenshot({ path: testInfo.outputPath('theme-toggle-dark-control.png') });
 
     await control.focus();
     expect(await track.evaluate((element) => getComputedStyle(element).outlineStyle)).not.toBe('none');
@@ -86,6 +98,7 @@ test.describe('Theme Toggle real-browser contract', () => {
     expect(releaseFrame.breathScaleX).toBeGreaterThan(0.1);
     expect(releaseFrame.dragonOpacity).toBeGreaterThan(0.35);
     await page.screenshot({ path: testInfo.outputPath('theme-toggle-release.png'), fullPage: true });
+    await root.screenshot({ path: testInfo.outputPath('theme-toggle-release-control.png') });
     await expect.poll(() => ember.evaluate((element) => getComputedStyle(element).opacity)).toBe('1');
     await expect.poll(() => dragon.evaluate((element) => getComputedStyle(element).opacity)).toBe('0.08');
 
