@@ -2,7 +2,7 @@ import { defineConfig, devices } from '@playwright/test';
 
 export default defineConfig({
   testDir: './test/browser',
-  testMatch: 'docs-reset.spec.mjs',
+  testMatch: 'native-docs.spec.mjs',
   outputDir: '../../test-results/docs-playwright-results',
   timeout: 30_000,
   expect: { timeout: 5_000 },
@@ -17,7 +17,7 @@ export default defineConfig({
   },
   webServer: {
     command: 'node serve.mjs',
-    url: 'http://127.0.0.1:4173/next/',
+    url: 'http://127.0.0.1:4173/next/native-web/',
     reuseExistingServer: !process.env.CI,
     timeout: 15_000,
   },

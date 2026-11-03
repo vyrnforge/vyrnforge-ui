@@ -1,0 +1,262 @@
+@layer vfdocs {
+  *,
+  *::before,
+  *::after {
+    box-sizing: border-box;
+  }
+
+  html {
+    background: var(--vf-color-surface);
+    color: var(--vf-color-text);
+    font-family: var(--vf-font-family-sans);
+    line-height: var(--vf-line-height-normal);
+  }
+
+  body {
+    margin: 0;
+  }
+
+  a {
+    color: var(--vf-color-accent-background);
+  }
+
+  a:focus-visible,
+  summary:focus-visible {
+    outline: 2px solid var(--vf-color-focus-ring);
+    outline-offset: 2px;
+  }
+
+  code,
+  pre {
+    font-family: var(--vf-font-family-mono);
+  }
+
+  code {
+    font-size: 0.9em;
+  }
+
+  pre {
+    background: var(--vf-color-surface-subtle);
+    border: 1px solid var(--vf-color-border);
+    border-radius: var(--vf-radius-surface);
+    font-size: var(--vf-font-size-sm);
+    line-height: var(--vf-line-height-relaxed);
+    overflow: auto;
+    padding: var(--vf-space-md);
+  }
+
+  .vf-docs-skip {
+    background: var(--vf-color-surface);
+    inset-block-start: var(--vf-space-sm);
+    inset-inline-start: var(--vf-space-sm);
+    padding: var(--vf-space-sm) var(--vf-space-md);
+    position: fixed;
+    transform: translateY(-200%);
+    z-index: 10;
+  }
+
+  .vf-docs-skip:focus {
+    transform: translateY(0);
+  }
+
+  .vf-docs-header {
+    align-items: center;
+    background: var(--vf-color-surface);
+    border-block-end: 1px solid var(--vf-color-border);
+    display: flex;
+    gap: var(--vf-space-md);
+    justify-content: space-between;
+    min-block-size: 3.5rem;
+    padding-inline: clamp(var(--vf-space-md), 4vw, var(--vf-space-2xl));
+  }
+
+  .vf-docs-brand {
+    color: var(--vf-color-text);
+    font-size: var(--vf-font-size-lg);
+    font-weight: var(--vf-font-weight-bold);
+    text-decoration: none;
+  }
+
+  .vf-docs-surface,
+  .vf-docs-eyebrow,
+  .vf-docs-nav-label {
+    color: var(--vf-color-text-muted);
+    font-size: var(--vf-font-size-sm);
+    font-weight: var(--vf-font-weight-semibold);
+    letter-spacing: var(--vf-letter-spacing-wide);
+  }
+
+  .vf-docs-layout {
+    display: grid;
+    grid-template-columns: minmax(11rem, 15rem) minmax(0, 1fr);
+    margin-inline: auto;
+    max-inline-size: 90rem;
+    min-block-size: calc(100vh - 3.5rem);
+  }
+
+  .vf-docs-side-nav {
+    border-inline-end: 1px solid var(--vf-color-border);
+    padding: var(--vf-space-xl) var(--vf-space-lg);
+  }
+
+  .vf-docs-side-nav ul,
+  .vf-docs-card-list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+
+  .vf-docs-side-nav a {
+    border-radius: var(--vf-control-radius);
+    color: var(--vf-color-text-muted);
+    display: block;
+    padding: var(--vf-space-sm) var(--vf-space-md);
+    text-decoration: none;
+  }
+
+  .vf-docs-side-nav a:hover,
+  .vf-docs-side-nav a[aria-current="page"] {
+    background: var(--vf-color-accent-subtle);
+    color: var(--vf-color-text);
+  }
+
+  .vf-docs-main {
+    inline-size: min(100%, 55rem);
+    padding: clamp(var(--vf-space-xl), 5vw, var(--vf-space-3xl));
+  }
+
+  .vf-docs-main h1 {
+    font-size: clamp(var(--vf-font-size-3xl), 5vw, var(--vf-font-size-5xl));
+    letter-spacing: var(--vf-letter-spacing-tight);
+    line-height: var(--vf-line-height-tight);
+    margin-block: var(--vf-space-sm) var(--vf-space-lg);
+  }
+
+  .vf-docs-main h2 {
+    border-block-start: 1px solid var(--vf-color-border);
+    font-size: var(--vf-font-size-xl);
+    margin-block: var(--vf-space-2xl) var(--vf-space-md);
+    padding-block-start: var(--vf-space-xl);
+  }
+
+  .vf-docs-main h3 {
+    font-size: var(--vf-font-size-lg);
+    margin-block: var(--vf-space-xl) var(--vf-space-sm);
+  }
+
+  .vf-docs-main p,
+  .vf-docs-main li {
+    color: var(--vf-color-text-muted);
+  }
+
+  .vf-docs-main li + li {
+    margin-block-start: var(--vf-space-sm);
+  }
+
+  .vf-docs-hero,
+  .vf-docs-component-header {
+    margin-block-end: var(--vf-space-2xl);
+  }
+
+  .vf-docs-card-list {
+    display: grid;
+    gap: var(--vf-space-md);
+  }
+
+  .vf-docs-card-list a {
+    align-items: center;
+    border: 1px solid var(--vf-color-border);
+    border-radius: var(--vf-radius-surface);
+    color: var(--vf-color-text);
+    display: flex;
+    justify-content: space-between;
+    padding: var(--vf-space-lg);
+    text-decoration: none;
+  }
+
+  .vf-docs-card-list a:hover {
+    background: var(--vf-color-surface-hover);
+  }
+
+  .vf-docs-card-list span {
+    color: var(--vf-color-text-muted);
+    font-size: var(--vf-font-size-sm);
+  }
+
+  .vf-docs-example {
+    margin-block-start: var(--vf-space-xl);
+  }
+
+  .vf-docs-preview {
+    align-items: center;
+    background: var(--vf-color-surface-subtle);
+    border: 1px solid var(--vf-color-border);
+    border-radius: var(--vf-radius-surface);
+    display: flex;
+    min-block-size: 8rem;
+    overflow: auto;
+    padding: var(--vf-space-xl);
+  }
+
+  .vf-example-stack {
+    align-items: center;
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--vf-space-md);
+  }
+
+  .vf-docs-example details {
+    margin-block-start: var(--vf-space-md);
+  }
+
+  .vf-docs-example summary {
+    cursor: pointer;
+    font-weight: var(--vf-font-weight-semibold);
+    inline-size: fit-content;
+  }
+
+  .vf-docs-evidence {
+    background: var(--vf-color-accent-subtle);
+    border: 1px solid var(--vf-color-border);
+    border-radius: var(--vf-radius-surface);
+    margin-block-start: var(--vf-space-3xl);
+    padding: var(--vf-space-lg);
+  }
+
+  .vf-docs-evidence h2 {
+    border: 0;
+    margin-block-start: 0;
+    padding-block-start: 0;
+  }
+
+  @media (max-width: 48rem) {
+    .vf-docs-layout {
+      display: block;
+    }
+
+    .vf-docs-side-nav {
+      border-block-end: 1px solid var(--vf-color-border);
+      border-inline-end: 0;
+      padding: var(--vf-space-md);
+    }
+
+    .vf-docs-side-nav ul {
+      display: flex;
+      flex-wrap: wrap;
+      gap: var(--vf-space-xs);
+    }
+
+    .vf-docs-main {
+      padding: var(--vf-space-xl) var(--vf-space-md);
+    }
+  }
+
+  @media (forced-colors: active) {
+    .vf-docs-card-list a,
+    .vf-docs-preview,
+    .vf-docs-evidence,
+    pre {
+      border-color: CanvasText;
+    }
+  }
+}

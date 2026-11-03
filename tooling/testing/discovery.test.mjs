@@ -16,8 +16,8 @@ test('current Button is discovered from its canonical product unit', () => {
   assert.equal(button.ports.react.paths[0], 'product/components/button/react/');
   assert.equal(button.ports.react.types, 'packages/react/test/components/button/api.types.ts');
   assert.equal(button.ports.react.ssr, 'packages/react/test/components/button/ssr.test.mjs');
-  assert.equal(button.documentationSource, null);
-  assert.deepEqual(button.documentationSources, []);
+  assert.equal(button.documentationSource, 'product/components/button/docs/index.md');
+  assert.deepEqual(button.documentationSources, ['product/components/button/docs/index.md']);
   assert.match(button.exampleManifests[0], /^product\/components\/button\/examples\//);
   assert.equal(button.browser.fixture, 'product/components/button/test/browser/fixtures.mjs');
   assert.equal(button.accessibilityPath, 'product/components/button/accessibility.json');
@@ -87,6 +87,34 @@ test('component discovery rejects competing model and HTML primary documentation
   assert.deepEqual(button.documentationSources, ['product/button/docs/index.json', 'product/button/docs/index.html']);
   const problems = productPreparationProblems(root);
   assert.ok(problems.some((problem) => problem.includes('competing primary component documentation sources')));
+});
+
+test('native-html-first discovers Markdown docs without requiring placeholder pages for every component', () => {
+  const root = mkdtempSync(path.join(os.tmpdir(), 'vf-native-doc-rollout-'));
+  const write = writer(root);
+  write('package.json', JSON.stringify({ workspaces: ['packages/web'] }));
+  write('documentation/site/registry.json', JSON.stringify({ mode: 'native-html-first', framework: 'native-web' }));
+  write('packages/web/package.json', JSON.stringify({
+    name: '@vyrnforge/web',
+    exports: {
+      '.': './dist/index.js',
+      './styles/button.css': './dist/components/button/button.css',
+      './styles/checkbox.css': './dist/components/checkbox/checkbox.css',
+    },
+  }));
+  for (const component of ['button', 'checkbox']) {
+    write(`packages/web/src/components/${component}/${component}.css`, `[data-vf-${component}] {}\n`);
+    write(`product/${component}/component.json`, JSON.stringify({ group: 'controls' }));
+    write(`product/${component}/examples/basic/example.json`, JSON.stringify({ id: `${component}/basic` }));
+  }
+  write('product/button/docs/index.md', '# Button\n\nNative Button guidance.\n');
+  const discovery = discoverProductUnits(root);
+  const button = discovery.components.find((entry) => entry.component === 'button');
+  const checkbox = discovery.components.find((entry) => entry.component === 'checkbox');
+  assert.equal(button.documentationSource, 'product/button/docs/index.md');
+  assert.equal(checkbox.documentationSource, null);
+  const problems = productPreparationProblems(root);
+  assert.ok(!problems.some((problem) => problem.includes('missing component documentation')));
 });
 
 test('package-owned capabilities are auto-discovered with inferred dependency edges', () => {

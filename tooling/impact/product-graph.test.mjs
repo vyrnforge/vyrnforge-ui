@@ -2,7 +2,7 @@ import { strict as assert } from 'node:assert';
 import { test } from 'vitest';
 import { createSemanticImpact } from './plan.mjs';
 
-test('canonical product-unit framework source remains port-local', () => {
+test('canonical product-unit framework source remains port-local without unrelated Native docs evidence', () => {
   const discovery = {
     packages: [{ name: 'react', manifest: {} }],
     components: [{
@@ -35,7 +35,7 @@ test('canonical product-unit framework source remains port-local', () => {
   assert.deepEqual(impact.browserPorts, ['react']);
   assert.deepEqual(impact.browserScopes, [{ port: 'react', components: ['button'] }]);
   assert.equal(impact.repositoryWide, false);
-  assert.equal(impact.selectors.docsRequired, true);
+  assert.equal(impact.selectors.docsRequired, false);
   assert.equal(impact.selectors.packageArtifactsRequired, false);
 });
 

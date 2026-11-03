@@ -10,22 +10,22 @@ function selectedScope(plan, scope, owner = null) {
   return plan.validationScopes.some((entry) => entry.scope === scope && entry.selected && (owner === null || entry.owner === owner));
 }
 
-test('Core collection navigation fans to discovered component/conformance consumers', () => {
+test('Core collection navigation fans to discovered component/conformance consumers without unrelated Native docs evidence', () => {
   const impact = createSemanticImpact(['packages/core/src/capabilities/collection-navigation/index.ts']);
   assert.ok(impact.ownedUnits.includes('unit:core:capabilities:collection-navigation'));
   assert.ok(impact.packages.includes('core'));
   assert.ok(impact.components.includes('tabs'));
   for (const port of ['react', 'angular', 'vue', 'elements']) assert.ok(impact.browserPorts.includes(port));
   assert.equal(impact.selectors.browserRequired, true);
-  assert.equal(impact.selectors.docsRequired, true);
+  assert.equal(impact.selectors.docsRequired, false);
   assert.equal(impact.orchestration, 'nx');
   assert.ok(hasReason(impact, 'unit:unit:core:capabilities:collection-navigation'));
-  assert.ok(hasReason(impact, 'evidence:docs'));
+  assert.equal(hasReason(impact, 'evidence:docs'), false);
   assert.ok(selectedScope(impact, 'pure-core', 'unit:core:capabilities:collection-navigation'));
   assert.ok(impact.executionPrerequisites.includes('browser-runtime'));
 });
 
-test('React-only component implementation stays component and port local while retaining Reference evidence', () => {
+test('React-only component implementation stays component and port local without selecting Native docs evidence', () => {
   const impact = createSemanticImpact(['product/components/button/react/index.ts']);
   assert.deepEqual(impact.components, ['button']);
   assert.deepEqual(impact.browserPorts, ['react']);
@@ -35,21 +35,21 @@ test('React-only component implementation stays component and port local while r
   assert.equal(impact.browserPorts.includes('vue'), false);
   assert.equal(impact.selectors.packageArtifactsRequired, false);
   assert.deepEqual(impact.packageArtifactPackages, []);
-  assert.equal(impact.selectors.docsRequired, true);
-  assert.ok(hasReason(impact, 'evidence:docs'));
+  assert.equal(impact.selectors.docsRequired, false);
+  assert.equal(hasReason(impact, 'evidence:docs'), false);
   assert.ok(selectedScope(impact, 'port-integration', 'react'));
   assert.ok(selectedScope(impact, 'type-level', 'react'));
   assert.ok(selectedScope(impact, 'browser-behavior', 'react'));
   assert.ok(impact.executionPrerequisites.includes('fixture:react:button'));
 });
 
-test('Reference evidence stays additive to generic package fallback classification', () => {
+test('generic React package fallback classification does not select Native docs evidence', () => {
   const impact = createSemanticImpact(['packages/react/src/internal/example.ts']);
   assert.ok(impact.packages.includes('react'));
-  assert.equal(impact.selectors.docsRequired, true);
+  assert.equal(impact.selectors.docsRequired, false);
   assert.equal(impact.selectors.browserRequired, true);
   assert.ok(impact.browserPorts.includes('react'));
-  assert.ok(hasReason(impact, 'evidence:docs'));
+  assert.equal(hasReason(impact, 'evidence:docs'), false);
   assert.ok(hasReason(impact, 'port:react'));
 });
 
@@ -62,7 +62,7 @@ test('canonical Tabs evidence fans across every implemented Tabs surface', () =>
   assert.ok(selectedScope(impact, 'cross-port-conformance', 'tabs'));
 });
 
-test('Web component CSS selects only the component real ports plus visual and Reference evidence', () => {
+test('Web component CSS selects only the component real ports plus visual and Native docs evidence', () => {
   const impact = createSemanticImpact(['product/components/button/web/button.css']);
   assert.deepEqual(impact.components, ['button']);
   assert.ok(impact.semanticEvidence.includes('visual'));
@@ -81,9 +81,9 @@ test('package manifest changes select only the package root for packed API and c
   assert.equal(impact.selectors.packageArtifactsRequired, true);
   assert.deepEqual(impact.packageArtifactPackages, ['react']);
   assert.equal(impact.selectors.browserRequired, false);
-  assert.equal(impact.selectors.docsRequired, true);
+  assert.equal(impact.selectors.docsRequired, false);
   assert.ok(hasReason(impact, 'package:react'));
-  assert.ok(hasReason(impact, 'evidence:docs'));
+  assert.equal(hasReason(impact, 'evidence:docs'), false);
   assert.ok(selectedScope(impact, 'package-public-entrypoint', 'react'));
   assert.ok(selectedScope(impact, 'consumer-validation', 'react'));
 });
@@ -178,7 +178,7 @@ test('Changesets select release-intent evidence without fabricating package/brow
   assert.ok(selectedScope(impact, 'release-intent'));
 });
 
-test('archived legacy package changes do not request current Reference evidence', () => {
+test('archived legacy package changes do not request current Native docs evidence', () => {
   const impact = createSemanticImpact(['packages/legacy/archive/root/package-lock.json']);
   assert.equal(impact.selectors.docsRequired, false);
   assert.equal(impact.repositoryWide, false);
