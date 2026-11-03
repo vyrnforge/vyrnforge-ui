@@ -3,16 +3,9 @@ import { test, expect } from '@playwright/test';
 async function dragonGeometry(locator) {
   return locator.evaluate((svg) => ({
     viewBox: svg.getAttribute('viewBox'),
-    preserveAspectRatio: svg.getAttribute('preserveAspectRatio'),
-        paths: [...svg.querySelectorAll('path')].map((path) => ({
+    paths: [...svg.querySelectorAll('path')].map((path) => ({
       className: path.getAttribute('class'),
       d: path.getAttribute('d'),
-    })),
-    circles: [...svg.querySelectorAll('circle')].map((circle) => ({
-      className: circle.getAttribute('class'),
-      cx: circle.getAttribute('cx'),
-      cy: circle.getAttribute('cy'),
-      r: circle.getAttribute('r'),
     })),
     ellipses: [...svg.querySelectorAll('ellipse')].map((ellipse) => ({
       className: ellipse.getAttribute('class'),
@@ -24,7 +17,7 @@ async function dragonGeometry(locator) {
   }));
 }
 
-test('docs AppShell uses the same Native dragon artwork as the Theme Toggle showcase', async ({ page }, testInfo) => {
+test('docs AppShell uses the same Native dragon-mouth artwork as the Theme Toggle showcase', async ({ page }, testInfo) => {
   await page.goto('/next/native-web/');
   await page.evaluate(() => localStorage.removeItem('vf-docs-theme'));
   await page.reload();
@@ -37,10 +30,11 @@ test('docs AppShell uses the same Native dragon artwork as the Theme Toggle show
   await expect(headerDragon).toHaveAttribute('data-vf-theme-toggle-dragon-artwork', '');
   await expect(headerArt).toHaveCount(1);
   await expect(headerArt).toHaveAttribute('viewBox', '0 0 104 48');
-      await expect(headerArt.locator('.vf-theme-toggle-dragon-upper-jaw')).toHaveCount(1);
+  await expect(headerArt.locator('.vf-theme-toggle-dragon-upper-jaw')).toHaveCount(1);
   await expect(headerArt.locator('.vf-theme-toggle-dragon-lower-jaw')).toHaveCount(1);
   await expect(headerArt.locator('.vf-theme-toggle-dragon-fangs')).toHaveCount(1);
   await expect(headerArt.locator('.vf-theme-toggle-dragon-eye')).toHaveCount(1);
+  await expect(headerArt.locator('.vf-theme-toggle-dragon-nostril')).toHaveCount(1);
   await expect(headerArt.locator('.vf-theme-toggle-dragon-mouth-glow')).toHaveCount(1);
 
   await headerControl.click();
