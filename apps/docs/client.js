@@ -87,7 +87,6 @@ function initializeSearch() {
 
   const close = () => {
     panel.hidden = true;
-    input.setAttribute('aria-expanded', 'false');
     for (const item of items) item.hidden = true;
     empty.hidden = true;
   };
@@ -107,7 +106,6 @@ function initializeSearch() {
     }
     empty.hidden = visible !== 0;
     panel.hidden = false;
-    input.setAttribute('aria-expanded', 'true');
   };
 
   input.addEventListener('input', update);
