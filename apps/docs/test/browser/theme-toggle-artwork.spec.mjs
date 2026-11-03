@@ -18,7 +18,7 @@ async function dragonGeometry(locator) {
 }
 
 async function expectDragonAnatomy(art) {
-  await expect(art).toHaveAttribute('viewBox', '0 0 104 48');
+  await expect(art).toHaveAttribute('viewBox', '0 0 64 56');
   await expect(art.locator('.vf-theme-toggle-dragon-neck')).toHaveCount(1);
   await expect(art.locator('.vf-theme-toggle-dragon-crest')).toHaveCount(1);
   await expect(art.locator('.vf-theme-toggle-dragon-upper-jaw')).toHaveCount(1);
