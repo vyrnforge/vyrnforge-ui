@@ -1,0 +1,13 @@
+{
+  "id": "theme-toggle/basic",
+  "title": "Light and dark theme toggle",
+  "description": "A checkbox-backed switch with an animated daytime and night-sky presentation.",
+  "defaultFramework": "native-web",
+  "frameworks": {
+    "native-web": {
+      "label": "Native Web",
+      "language": "html",
+      "source": "native-web.html"
+    }
+  }
+}
