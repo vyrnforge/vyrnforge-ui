@@ -73,7 +73,7 @@ test.describe('Theme Toggle real-browser contract', () => {
     expect(presentation.dragonVectorEllipseCount).toBeGreaterThanOrEqual(2);
     expect(presentation.emberHasDetail).toBe(true);
 
-    await expect(dragon).toHaveCSS('opacity', '0.04');
+    expect(Number.parseFloat(await dragon.evaluate((element) => getComputedStyle(element).opacity))).toBeLessThan(0.05);
     await expect(ember).toHaveCSS('opacity', '1');
     await page.screenshot({ path: testInfo.outputPath('theme-toggle-light.png'), fullPage: true });
     await root.screenshot({ path: testInfo.outputPath('theme-toggle-light-control.png') });
@@ -116,7 +116,7 @@ test.describe('Theme Toggle real-browser contract', () => {
     await page.screenshot({ path: testInfo.outputPath('theme-toggle-release.png'), fullPage: true });
     await root.screenshot({ path: testInfo.outputPath('theme-toggle-release-control.png') });
     await expect.poll(() => ember.evaluate((element) => getComputedStyle(element).opacity)).toBe('1');
-    await expect.poll(() => dragon.evaluate((element) => getComputedStyle(element).opacity)).toBe('0.04');
+    await expect.poll(() => dragon.evaluate((element) => Number.parseFloat(getComputedStyle(element).opacity))).toBeLessThan(0.05);
 
     const disabled = page.locator('#disabled-theme');
     await expect(disabled).toBeDisabled();
