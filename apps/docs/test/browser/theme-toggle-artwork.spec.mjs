@@ -4,8 +4,7 @@ async function dragonGeometry(locator) {
   return locator.evaluate((svg) => ({
     viewBox: svg.getAttribute('viewBox'),
     preserveAspectRatio: svg.getAttribute('preserveAspectRatio'),
-    groupTransform: svg.querySelector('g')?.getAttribute('transform'),
-    paths: [...svg.querySelectorAll('path')].map((path) => ({
+        paths: [...svg.querySelectorAll('path')].map((path) => ({
       className: path.getAttribute('class'),
       d: path.getAttribute('d'),
     })),
@@ -37,10 +36,10 @@ test('docs AppShell uses the same Native dragon artwork as the Theme Toggle show
 
   await expect(headerDragon).toHaveAttribute('data-vf-theme-toggle-dragon-artwork', '');
   await expect(headerArt).toHaveCount(1);
-  await expect(headerArt).toHaveAttribute('viewBox', '0 0 512 512');
-  await expect(headerArt).toHaveAttribute('preserveAspectRatio', 'xMidYMid meet');
-  await expect(headerArt.locator('g')).toHaveAttribute('transform', 'translate(512 0) scale(-1 1)');
-  await expect(headerArt.locator('path.vf-theme-toggle-dragon-silhouette')).toHaveCount(1);
+  await expect(headerArt).toHaveAttribute('viewBox', '0 0 104 48');
+      await expect(headerArt.locator('.vf-theme-toggle-dragon-upper-jaw')).toHaveCount(1);
+  await expect(headerArt.locator('.vf-theme-toggle-dragon-lower-jaw')).toHaveCount(1);
+  await expect(headerArt.locator('.vf-theme-toggle-dragon-fangs')).toHaveCount(1);
   await expect(headerArt.locator('.vf-theme-toggle-dragon-eye')).toHaveCount(1);
   await expect(headerArt.locator('.vf-theme-toggle-dragon-mouth-glow')).toHaveCount(1);
 
