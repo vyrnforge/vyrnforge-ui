@@ -30,7 +30,7 @@ async function gotoWithCleanDocsState(page, route) {
   await page.reload();
 }
 
-test('Native Web home uses the public Web shell and Product Graph navigation', async ({ page }) => {
+test('Native Web home uses the public Web shell and Product Graph navigation', async ({ page }, testInfo) => {
   const errors = collectPageErrors(page);
   await gotoWithCleanDocsState(page, '/next/native-web/');
 
@@ -40,6 +40,7 @@ test('Native Web home uses the public Web shell and Product Graph navigation', a
   await expect(page.getByRole('link', { name: 'Button' }).first()).toHaveAttribute('href', '/next/native-web/components/button/');
   await expect(page.locator('[data-vf-docs-framework], [data-vf-framework-picker]')).toHaveCount(0);
   await expect(page.getByRole('searchbox', { name: 'Search documentation' })).toHaveAttribute('data-vf-input', '');
+  await expect(page.getByRole('searchbox', { name: 'Search documentation' })).not.toHaveAttribute('aria-expanded');
   await expect(page.getByLabel('Theme')).toHaveAttribute('data-vf-native-select', '');
   await expect(page.locator('.vf-docs-card-list [data-vf-surface]')).toHaveCount(1);
 
@@ -80,6 +81,7 @@ test('Native Web home uses the public Web shell and Product Graph navigation', a
   await expect(page.locator('[data-vf-docs-search-results]')).toBeHidden();
   await expect(search).toBeFocused();
 
+  await page.screenshot({ path: testInfo.outputPath('native-home.png'), fullPage: true });
   await expectNoAccessibilityViolations(page);
   expect(errors, errors.join('\n')).toEqual([]);
 });
@@ -107,7 +109,7 @@ test('Native Web theme selection is explicit and persists without a theme runtim
   expect(errors, errors.join('\n')).toEqual([]);
 });
 
-test('Button page composes native guidance, TOC, examples, and public Web behavior', async ({ page }) => {
+test('Button page composes native guidance, TOC, examples, and public Web behavior', async ({ page }, testInfo) => {
   const errors = collectPageErrors(page);
   await gotoWithCleanDocsState(page, '/next/native-web/components/button/');
 
@@ -141,8 +143,9 @@ test('Button page composes native guidance, TOC, examples, and public Web behavi
   await expect(loading).toHaveAttribute('aria-busy', 'true');
   await expect(loading).toBeEnabled();
 
+  await page.screenshot({ path: testInfo.outputPath('native-button.png'), fullPage: true });
   const firstExample = page.locator('[data-vf-docs-example]').first();
-  const copy = firstExample.getByRole('button', { name: 'Copy HTML' });
+  const copy = firstExample.locator('[data-vf-docs-copy]');
   await copy.click();
   await expect(copy).toHaveText('Copied');
   await expect(firstExample.getByRole('status')).toHaveText('HTML copied to clipboard.');
@@ -152,7 +155,7 @@ test('Button page composes native guidance, TOC, examples, and public Web behavi
   expect(errors, errors.join('\n')).toEqual([]);
 });
 
-test('Native shell reflows at 320 CSS pixels and exposes responsive navigation', async ({ page }) => {
+test('Native shell reflows at 320 CSS pixels and exposes responsive navigation', async ({ page }, testInfo) => {
   const errors = collectPageErrors(page);
   await page.setViewportSize({ width: 320, height: 720 });
   await gotoWithCleanDocsState(page, '/next/native-web/components/button/');
@@ -176,6 +179,7 @@ test('Native shell reflows at 320 CSS pixels and exposes responsive navigation',
   }));
   expect(dimensions.scrollWidth).toBeLessThanOrEqual(dimensions.clientWidth + 1);
 
+  await page.screenshot({ path: testInfo.outputPath('native-responsive-200.png'), fullPage: true });
   await expectNoAccessibilityViolations(page);
   expect(errors, errors.join('\n')).toEqual([]);
 });
