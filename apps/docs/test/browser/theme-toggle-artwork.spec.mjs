@@ -3,7 +3,7 @@ import { test, expect } from '@playwright/test';
 async function dragonGeometry(locator) {
   return locator.evaluate((svg) => ({
     viewBox: svg.getAttribute('viewBox'),
-    preserveAspectRatio: svg.getAttribute('preserveAspectRatio'),
+    groupTransform: svg.querySelector('g')?.getAttribute('transform'),
     paths: [...svg.querySelectorAll('path')].map((path) => path.getAttribute('d')),
     ellipses: [...svg.querySelectorAll('ellipse')].map((ellipse) => ({
       cx: ellipse.getAttribute('cx'),
@@ -26,10 +26,10 @@ test('docs AppShell uses the same Native dragon artwork as the Theme Toggle show
 
   await expect(headerDragon).toHaveAttribute('data-vf-theme-toggle-dragon-artwork', '');
   await expect(headerArt).toHaveCount(1);
-  await expect(headerArt).toHaveAttribute('viewBox', '0 0 70 40');
-  await expect(headerArt).toHaveAttribute('preserveAspectRatio', 'none');
+  await expect(headerArt).toHaveAttribute('viewBox', '0 0 64 32');
+  await expect(headerArt.locator('g')).toHaveAttribute('transform', 'translate(25 0) scale(0.85 0.727)');
   await expect(headerArt.locator('path')).toHaveCount(10);
-  await expect(headerArt.locator('ellipse')).toHaveCount(1);
+  await expect(headerArt.locator('ellipse')).toHaveCount(2);
 
   await headerControl.click();
   await expect(headerControl).toBeChecked();
