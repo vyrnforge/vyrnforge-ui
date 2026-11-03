@@ -28,9 +28,9 @@
     --_vf-theme-toggle-dragon-light: #fff3d4;
     --_vf-theme-toggle-dragon-light-edge: #c98e43;
     --_vf-theme-toggle-dragon-light-accent: #ffe8b2;
-    --_vf-theme-toggle-dragon-dark: #2a2145;
-    --_vf-theme-toggle-dragon-dark-edge: #9f8cf1;
-    --_vf-theme-toggle-dragon-dark-accent: #7765c7;
+    --_vf-theme-toggle-dragon-dark: #6754a3;
+    --_vf-theme-toggle-dragon-dark-edge: #c6baff;
+    --_vf-theme-toggle-dragon-dark-accent: #8f79d7;
     --_vf-theme-toggle-eye-light: #dd6c24;
     --_vf-theme-toggle-eye-dark: #d9ceff;
 
@@ -445,7 +445,7 @@
     border-block-end-color: transparent;
     border-inline-start-color: transparent;
     opacity: 0.34;
-    transform: translateX(calc(var(--_vf-theme-toggle-travel) - 0.25rem)) rotate(248deg) scale(0.98);
+    transform: translateX(calc(var(--_vf-theme-toggle-travel) - 0.25rem)) rotate(378deg) scale(0.98);
   }
 
   :where([data-vf-theme-toggle-control]:checked) ~ :where([data-vf-theme-toggle-track]) :where([data-vf-theme-toggle-dragon]),
@@ -457,7 +457,7 @@
     filter:
       drop-shadow(0 0.06rem 0.1rem rgb(0 0 0 / 0.5))
       drop-shadow(0 0 0.28rem rgb(155 132 241 / 0.3));
-    transform: translateX(calc(var(--_vf-theme-toggle-travel) - 0.35rem)) rotate(248deg) scale(0.92);
+    transform: translateX(calc(var(--_vf-theme-toggle-travel) - 0.35rem)) rotate(378deg) scale(0.92);
   }
 
   :where([data-vf-theme-toggle-control]:checked) ~ :where([data-vf-theme-toggle-track]) :where(.vf-theme-toggle-dragon-eye) {
@@ -480,7 +480,7 @@
   :where([dir="rtl"] [data-vf-theme-toggle-control]:checked) ~ :where([data-vf-theme-toggle-track]) :where([data-vf-theme-toggle-clouds]),
   :where([dir="rtl"] [data-vf-theme-toggle-control]:checked) ~ :where([data-vf-theme-toggle-track]) :where([data-vf-theme-toggle-dragon]),
   :where([dir="rtl"] [data-vf-theme-toggle-control]:checked) ~ :where([data-vf-theme-toggle-track]) :where([data-vf-theme-toggle-stars]) {
-    transform: translateX(calc(-1 * var(--_vf-theme-toggle-travel) + 0.35rem)) rotate(-248deg) scaleX(-1) scale(0.92);
+    transform: translateX(calc(-1 * var(--_vf-theme-toggle-travel) + 0.35rem)) rotate(-378deg) scaleX(-1) scale(0.92);
   }
 
   :where([data-vf-theme-toggle-control]:disabled) {
