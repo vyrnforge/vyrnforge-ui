@@ -9,6 +9,8 @@
     --_vf-theme-toggle-padding: 0.25rem;
     --_vf-theme-toggle-thumb-size: 2.5rem;
     --_vf-theme-toggle-dragon-size: 3.7rem;
+    --_vf-theme-toggle-dragon-inline-size: 4rem;
+    --_vf-theme-toggle-dragon-block-size: 3.1rem;
     --_vf-theme-toggle-travel: 3.5rem;
     --_vf-theme-toggle-scene-duration: 520ms;
     --_vf-theme-toggle-story-duration: 620ms;
@@ -180,7 +182,8 @@
       block-size var(--_vf-theme-toggle-detail-duration) var(--vf-motion-easing-standard),
       box-shadow var(--_vf-theme-toggle-detail-duration) var(--vf-motion-easing-standard),
       inline-size var(--_vf-theme-toggle-detail-duration) var(--vf-motion-easing-standard),
-      inset var(--_vf-theme-toggle-detail-duration) var(--vf-motion-easing-standard);
+      inset-block-start var(--_vf-theme-toggle-detail-duration) var(--vf-motion-easing-standard),
+      inset-inline-start var(--_vf-theme-toggle-detail-duration) var(--vf-motion-easing-standard);
   }
 
   :where([data-vf-theme-toggle-ember])::after,
@@ -224,13 +227,13 @@
     --_vf-theme-toggle-dragon-edge: var(--_vf-theme-toggle-dragon-light-edge);
     --_vf-theme-toggle-dragon-accent: var(--_vf-theme-toggle-dragon-light-accent);
 
-    block-size: var(--_vf-theme-toggle-dragon-size);
+    block-size: var(--_vf-theme-toggle-dragon-block-size);
     color: var(--_vf-theme-toggle-dragon-light);
     filter:
       drop-shadow(0 0.06rem 0.08rem rgb(84 46 22 / 0.22))
       drop-shadow(0 0 0.2rem rgb(255 208 123 / 0.2));
-    inline-size: var(--_vf-theme-toggle-dragon-size);
-    inset-block-start: -0.1rem;
+    inline-size: var(--_vf-theme-toggle-dragon-inline-size);
+    inset-block-start: 0;
     inset-inline-start: 0;
     pointer-events: none;
     position: absolute;
