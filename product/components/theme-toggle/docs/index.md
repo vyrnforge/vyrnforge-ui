@@ -2,7 +2,7 @@
 
 Use Theme Toggle for a compact binary choice between explicit light and dark appearance. Use the generic Switch for arbitrary boolean settings, and use a broader settings control when the product must expose a third `system` preference.
 
-The default VyrnForge presentation uses one simplified dragon geometry wrapped around the moving orb. In light mode the dragon is ivory/gold around a warm orb. Switching to dark moves the orb toward inline-end while that same dragon rotates around it and transitions to an obsidian/violet palette. The geometry does not path-morph between themes, which keeps the SVG small, scalable, and predictable to animate.
+The default VyrnForge presentation uses one detailed serpentine eastern-dragon geometry wrapped around the moving orb. In light mode the dragon is ivory/gold around a warm orb. Switching to dark moves the orb toward inline-end while that same dragon rotates around it and transitions to an obsidian/violet palette. The geometry keeps the approved head, horns, mane, whiskers, foreleg/claws, curled body, tail plume, eye, and line accents without path-morphing between themes, so the artwork remains scalable and predictable to animate.
 
 ## When to use
 
@@ -23,7 +23,7 @@ Preferred presentation hooks are `data-vf-theme-toggle`, `data-vf-theme-toggle-c
 
 The track, orbit accent, dragon, and orb decoration are decorative. Keep them `aria-hidden="true"` through the track container. The checkbox remains the only interactive target.
 
-The preferred Native example uses a compact 48×48 inline SVG inside `data-vf-theme-toggle-dragon`. The dragon artwork is intentionally limited to four vector elements: a curled body path, wing, head, and eye. The same geometry is used in both themes. Theme changes are expressed through translation, rotation, color, track atmosphere, and orb color rather than path morphing.
+The preferred Native example uses a compact 72×56 inline SVG inside `data-vf-theme-toggle-dragon`. Its public decorative anatomy includes the curled body, tail, tail plume, head, mane, horns, whiskers, foreleg/claws, body/face accents, and eye. Those details are deliberately encoded as a small set of stable paths rather than raster art or per-frame SVG morphs. The same geometry is used in both themes; theme changes are expressed through translation, rotation, color, track atmosphere, and orb treatment.
 
 An empty `data-vf-theme-toggle-dragon` span remains render-compatible through a simplified CSS silhouette so existing markup does not disappear. New VyrnForge-authored examples should use the vector artwork.
 
@@ -31,9 +31,9 @@ Earlier Theme Toggle markup used `data-vf-theme-toggle-clouds`, `data-vf-theme-t
 
 ## Visual story
 
-In light mode, the orb rests at inline-start with an ivory/gold dragon curled around it. The track uses a restrained forge-light field.
+In light mode, the orb rests at inline-start with an ivory/gold serpentine dragon curled around it. Its horns, mane, whiskers, claw, and tail plume remain visible at the settled control size. The track uses a restrained forge-light field.
 
-When dark mode is selected, the orb moves toward inline-end while the dragon travels with it and rotates around the orb. During that motion the dragon changes from the light palette to an obsidian/violet palette, the orb changes from warm amber to violet, and the dark track atmosphere fades in.
+When dark mode is selected, the orb moves toward inline-end while the dragon travels with it and rotates around the orb. During that motion the dragon changes from the light palette to an obsidian/violet palette, the orb changes from warm amber to a violet moon orb with a crescent mark, and the dark track atmosphere fades in.
 
 Returning to light reverses the same movement and palette transition. No path morph is required and no additional semantic state is introduced. There are still only two values: unchecked/light and checked/dark.
 

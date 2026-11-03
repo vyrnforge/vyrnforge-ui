@@ -16,7 +16,14 @@ test.describe('Theme Toggle real-browser contract', () => {
     const dragon = root.locator('[data-vf-theme-toggle-dragon]');
     const dragonArt = dragon.locator('svg.vf-theme-toggle-dragon-art');
     const body = dragonArt.locator('.vf-theme-toggle-dragon-body');
-    const wing = dragonArt.locator('.vf-theme-toggle-dragon-wing');
+    const tail = dragonArt.locator('.vf-theme-toggle-dragon-tail');
+    const tailPlume = dragonArt.locator('.vf-theme-toggle-dragon-tail-plume');
+    const mane = dragonArt.locator('.vf-theme-toggle-dragon-mane');
+    const horns = dragonArt.locator('.vf-theme-toggle-dragon-horns');
+    const whiskers = dragonArt.locator('.vf-theme-toggle-dragon-whiskers');
+    const foreleg = dragonArt.locator('.vf-theme-toggle-dragon-foreleg');
+    const bodyDetail = dragonArt.locator('.vf-theme-toggle-dragon-body-detail');
+    const faceDetail = dragonArt.locator('.vf-theme-toggle-dragon-face-detail');
     const head = dragonArt.locator('.vf-theme-toggle-dragon-head');
     const eye = dragonArt.locator('.vf-theme-toggle-dragon-eye');
     const thumb = root.locator('[data-vf-theme-toggle-thumb]');
@@ -31,12 +38,19 @@ test.describe('Theme Toggle real-browser contract', () => {
     expect(target?.height ?? 0).toBeGreaterThanOrEqual(24);
 
     await expect(dragon).toHaveAttribute('data-vf-theme-toggle-dragon-artwork', '');
-    await expect(dragonArt).toHaveAttribute('viewBox', '0 0 48 48');
+    await expect(dragonArt).toHaveAttribute('viewBox', '0 0 72 56');
     await expect(body).toHaveCount(1);
-    await expect(wing).toHaveCount(1);
+    await expect(tail).toHaveCount(1);
+    await expect(tailPlume).toHaveCount(1);
     await expect(head).toHaveCount(1);
+    await expect(mane).toHaveCount(1);
+    await expect(horns).toHaveCount(1);
+    await expect(whiskers).toHaveCount(1);
+    await expect(foreleg).toHaveCount(1);
+    await expect(bodyDetail).toHaveCount(1);
+    await expect(faceDetail).toHaveCount(1);
     await expect(eye).toHaveCount(1);
-    await expect(dragonArt.locator('path')).toHaveCount(3);
+    await expect(dragonArt.locator('path')).toHaveCount(10);
     await expect(dragonArt.locator('circle')).toHaveCount(1);
 
     const dragonArtLayout = await dragonArt.evaluate((element) => ({
@@ -67,6 +81,7 @@ test.describe('Theme Toggle real-browser contract', () => {
         dragonTransform: getComputedStyle(dragonElement).transform,
         dragonColor: getComputedStyle(dragonElement).color,
         orbBackground: getComputedStyle(orbElement).backgroundColor,
+        orbMarkShadow: getComputedStyle(orbElement, '::before').boxShadow,
         orbitTransform: getComputedStyle(orbitElement).transform,
         nightOpacity: Number.parseFloat(getComputedStyle(trackElement, '::after').opacity),
       };
@@ -84,6 +99,7 @@ test.describe('Theme Toggle real-browser contract', () => {
     await expect.poll(() => dragon.evaluate((element) => getComputedStyle(element).transform)).not.toBe(light.dragonTransform);
     await expect.poll(() => dragon.evaluate((element) => getComputedStyle(element).color)).not.toBe(light.dragonColor);
     await expect.poll(() => orb.evaluate((element) => getComputedStyle(element).backgroundColor)).not.toBe(light.orbBackground);
+    await expect.poll(() => orb.evaluate((element) => getComputedStyle(element, '::before').boxShadow)).not.toBe(light.orbMarkShadow);
     await expect.poll(() => orbit.evaluate((element) => getComputedStyle(element).transform)).not.toBe(light.orbitTransform);
     await expect.poll(() => track.evaluate((element) => Number.parseFloat(getComputedStyle(element, '::after').opacity))).toBe(1);
 
