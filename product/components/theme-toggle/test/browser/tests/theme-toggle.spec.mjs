@@ -30,17 +30,17 @@ test.describe('Theme Toggle real-browser contract', () => {
 
     await expect(dragon).toHaveAttribute('data-vf-theme-toggle-dragon-artwork', '');
     await expect(dragonArt).toHaveAttribute('viewBox', '0 0 104 48');
+    await expect(dragonArt.locator('.vf-theme-toggle-dragon-neck')).toHaveCount(1);
     await expect(dragonArt.locator('.vf-theme-toggle-dragon-crest')).toHaveCount(1);
     await expect(upperJaw).toHaveCount(1);
+    await expect(dragonArt.locator('.vf-theme-toggle-dragon-cheek')).toHaveCount(1);
+    await expect(dragonArt.locator('.vf-theme-toggle-dragon-brow')).toHaveCount(1);
     await expect(lowerJaw).toHaveCount(1);
-    await expect(dragonArt.locator('.vf-theme-toggle-dragon-brow')).toHaveCount(1);
-    await expect(dragonArt.locator('.vf-theme-toggle-dragon-neck')).toHaveCount(1);
     await expect(dragonArt.locator('.vf-theme-toggle-dragon-fangs')).toHaveCount(1);
-    await expect(dragonArt.locator('.vf-theme-toggle-dragon-brow')).toHaveCount(1);
     await expect(dragonArt.locator('.vf-theme-toggle-dragon-eye')).toHaveCount(1);
-    await expect(dragonArt.locator('.vf-theme-toggle-dragon-eye-glint')).toHaveCount(1);
     await expect(dragonArt.locator('.vf-theme-toggle-dragon-nostril')).toHaveCount(1);
     await expect(dragonArt.locator('.vf-theme-toggle-dragon-mouth-glow')).toHaveCount(1);
+    await expect(dragonArt.locator('.vf-theme-toggle-dragon-scales')).toHaveCount(1);
 
     const dragonArtLayout = await dragonArt.evaluate((element) => ({
       width: element.clientWidth,
@@ -71,11 +71,13 @@ test.describe('Theme Toggle real-browser contract', () => {
         upperJawPresent: Boolean(dragonVector?.querySelector('.vf-theme-toggle-dragon-upper-jaw')),
         lowerJawPresent: Boolean(dragonVector?.querySelector('.vf-theme-toggle-dragon-lower-jaw')),
         neckPresent: Boolean(dragonVector?.querySelector('.vf-theme-toggle-dragon-neck')),
+        cheekPresent: Boolean(dragonVector?.querySelector('.vf-theme-toggle-dragon-cheek')),
         fangPresent: Boolean(dragonVector?.querySelector('.vf-theme-toggle-dragon-fangs')),
         browPresent: Boolean(dragonVector?.querySelector('.vf-theme-toggle-dragon-brow')),
         eyePresent: Boolean(dragonVector?.querySelector('.vf-theme-toggle-dragon-eye')),
-        eyeGlintPresent: Boolean(dragonVector?.querySelector('.vf-theme-toggle-dragon-eye-glint')),
+        nostrilPresent: Boolean(dragonVector?.querySelector('.vf-theme-toggle-dragon-nostril')),
         mouthGlowPresent: Boolean(dragonVector?.querySelector('.vf-theme-toggle-dragon-mouth-glow')),
+        scaleDetailPresent: Boolean(dragonVector?.querySelector('.vf-theme-toggle-dragon-scales')),
         emberHasDetail: getComputedStyle(emberElement).backgroundImage !== 'none',
       };
     });
@@ -85,11 +87,13 @@ test.describe('Theme Toggle real-browser contract', () => {
     expect(presentation.upperJawPresent).toBe(true);
     expect(presentation.lowerJawPresent).toBe(true);
     expect(presentation.neckPresent).toBe(true);
+    expect(presentation.cheekPresent).toBe(true);
     expect(presentation.fangPresent).toBe(true);
     expect(presentation.browPresent).toBe(true);
     expect(presentation.eyePresent).toBe(true);
-    expect(presentation.eyeGlintPresent).toBe(true);
+    expect(presentation.nostrilPresent).toBe(true);
     expect(presentation.mouthGlowPresent).toBe(true);
+    expect(presentation.scaleDetailPresent).toBe(true);
     expect(presentation.emberHasDetail).toBe(true);
 
     expect(Number.parseFloat(await dragon.evaluate((element) => getComputedStyle(element).opacity))).toBeLessThan(0.05);
