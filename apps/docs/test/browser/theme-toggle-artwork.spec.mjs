@@ -3,6 +3,7 @@ import { test, expect } from '@playwright/test';
 async function dragonGeometry(locator) {
   return locator.evaluate((svg) => ({
     viewBox: svg.getAttribute('viewBox'),
+    preserveAspectRatio: svg.getAttribute('preserveAspectRatio'),
     paths: [...svg.querySelectorAll('path')].map((path) => path.getAttribute('d')),
     ellipses: [...svg.querySelectorAll('ellipse')].map((ellipse) => ({
       cx: ellipse.getAttribute('cx'),
@@ -25,13 +26,15 @@ test('docs AppShell uses the same Native dragon artwork as the Theme Toggle show
 
   await expect(headerDragon).toHaveAttribute('data-vf-theme-toggle-dragon-artwork', '');
   await expect(headerArt).toHaveCount(1);
-  await expect(headerArt).toHaveAttribute('viewBox', '0 0 82 40');
+  await expect(headerArt).toHaveAttribute('viewBox', '0 0 70 40');
+  await expect(headerArt).toHaveAttribute('preserveAspectRatio', 'none');
   await expect(headerArt.locator('path')).toHaveCount(10);
   await expect(headerArt.locator('ellipse')).toHaveCount(1);
 
   await headerControl.click();
   await expect(headerControl).toBeChecked();
   await expect.poll(() => headerDragon.evaluate((element) => getComputedStyle(element).opacity)).toBe('1');
+  await page.waitForTimeout(600);
   await headerRoot.screenshot({ path: testInfo.outputPath('native-docs-header-theme-toggle-dark.png') });
 
   const headerGeometry = await dragonGeometry(headerArt);
@@ -48,5 +51,7 @@ test('docs AppShell uses the same Native dragon artwork as the Theme Toggle show
   const showcaseControl = showcaseRoot.getByRole('switch', { name: 'Dark theme' });
   await showcaseControl.check();
   await expect(showcaseControl).toBeChecked();
+  await expect.poll(() => showcaseDragon.evaluate((element) => getComputedStyle(element).opacity)).toBe('1');
+  await page.waitForTimeout(600);
   await showcaseRoot.screenshot({ path: testInfo.outputPath('native-showcase-theme-toggle-dark.png') });
 });
