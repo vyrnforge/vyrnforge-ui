@@ -24,13 +24,15 @@ function collectPageErrors(page) {
   return errors;
 }
 
-test.beforeEach(async ({ page }) => {
-  await page.addInitScript(() => localStorage.clear());
-});
+async function gotoWithCleanDocsState(page, route) {
+  await page.goto(route);
+  await page.evaluate(() => localStorage.removeItem('vf-docs-theme'));
+  await page.reload();
+}
 
 test('Native Web home uses the public Web shell and Product Graph navigation', async ({ page }) => {
   const errors = collectPageErrors(page);
-  await page.goto('/next/native-web/');
+  await gotoWithCleanDocsState(page, '/next/native-web/');
 
   await expect(page.getByRole('heading', { level: 1, name: 'VyrnForge Native Web' })).toBeVisible();
   await expect(page.locator('[data-vf-app-shell]')).toHaveCount(1);
@@ -84,7 +86,7 @@ test('Native Web home uses the public Web shell and Product Graph navigation', a
 
 test('Native Web theme selection is explicit and persists without a theme runtime', async ({ page }) => {
   const errors = collectPageErrors(page);
-  await page.goto('/next/native-web/');
+  await gotoWithCleanDocsState(page, '/next/native-web/');
 
   await expect(page.locator('html')).toHaveAttribute('data-vf-theme', 'light');
   const lightSurface = await page.evaluate(() => getComputedStyle(document.documentElement).getPropertyValue('--vf-color-surface').trim());
@@ -107,7 +109,7 @@ test('Native Web theme selection is explicit and persists without a theme runtim
 
 test('Button page composes native guidance, TOC, examples, and public Web behavior', async ({ page }) => {
   const errors = collectPageErrors(page);
-  await page.goto('/next/native-web/components/button/');
+  await gotoWithCleanDocsState(page, '/next/native-web/components/button/');
 
   await expect(page.getByRole('heading', { level: 1, name: 'Button' })).toBeVisible();
   await expect(page.getByRole('navigation', { name: 'Breadcrumb' })).toContainText('Native Web');
@@ -153,7 +155,7 @@ test('Button page composes native guidance, TOC, examples, and public Web behavi
 test('Native shell reflows at 320 CSS pixels and exposes responsive navigation', async ({ page }) => {
   const errors = collectPageErrors(page);
   await page.setViewportSize({ width: 320, height: 720 });
-  await page.goto('/next/native-web/components/button/');
+  await gotoWithCleanDocsState(page, '/next/native-web/components/button/');
 
   const toggle = page.getByRole('button', { name: 'Menu' });
   const navigation = page.locator('#vf-docs-navigation');
