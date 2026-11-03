@@ -61,7 +61,7 @@ test('Button page uses native semantics, public Web styling, and Native Web exam
   const save = page.getByRole('button', { name: 'Save changes' });
   await expect(save).toHaveAttribute('data-vf-button', '');
   await expect(save).toHaveAttribute('data-vf-variant', 'primary');
-  await expect(save).toHaveCSS('display', 'inline-flex');
+  await expect(save).toHaveCSS('cursor', 'pointer');
 
   await save.evaluate((button) => {
     window.__vfActivations = 0;
