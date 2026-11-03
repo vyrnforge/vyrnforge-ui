@@ -2,18 +2,18 @@ const storedThemeValues = new Set(['light', 'dark', 'system']);
 const explicitThemes = new Set(['light', 'dark']);
 const themeStorageKey = 'vf-docs-theme';
 const themeToggleDragonArtwork = `
-  <svg class="vf-theme-toggle-dragon-art" viewBox="0 0 82 40" width="100%" height="100%" aria-hidden="true" focusable="false">
-    <path d="M82 38L73 34L69 29L64 26L58 24L52 23L46 24L40 23L34 24L28 27L20 28L13 26L8 23L16 21L27 21L33 18L37 14L39 8L42 15L47 13L55 4L53 16L60 14L73 7L66 20L73 23L81 25Z" fill="var(--_vf-theme-toggle-dragon-mid)" stroke="var(--_vf-theme-toggle-dragon-highlight)" stroke-width="1.35" stroke-linejoin="round"/>
-    <path d="M31 21L41 17L52 18L58 22L47 22L39 24Z" fill="var(--_vf-theme-toggle-dragon-highlight)" opacity="0.92"/>
-    <path d="M13 27L24 28L35 27L45 26L55 27L49 31L39 33L28 33L18 31Z" fill="var(--_vf-theme-toggle-night-start)"/>
-    <path d="M16 31L27 34L39 34L50 31L55 29L50 35L42 39L28 39L18 36L12 33Z" fill="var(--_vf-theme-toggle-dragon-shadow)" stroke="var(--_vf-theme-toggle-dragon-highlight)" stroke-width="1.15" stroke-linejoin="round"/>
-    <path d="M51 24L60 25L67 29L61 32L52 29L45 27Z" fill="var(--_vf-theme-toggle-dragon-highlight)" opacity="0.52"/>
-    <path d="M38 15L39 5L43 15ZM51 15L59 3L55 18ZM63 19L76 8L68 23Z" fill="var(--_vf-theme-toggle-dragon-horn)" stroke="var(--_vf-theme-toggle-dragon-horn-edge)" stroke-width="0.75" stroke-linejoin="round"/>
-    <path d="M24 27L28 28L25.8 34ZM34 27L38 27L35.5 33ZM43 27L47 27L44.8 32Z" fill="var(--_vf-theme-toggle-dragon-fang)"/>
-    <path class="vf-theme-toggle-dragon-eye" d="M38 20L47 18L43 23Z" fill="var(--_vf-theme-toggle-dragon-eye)"/>
-    <path d="M41.5 20.5L44.2 19.7L43 21.6Z" fill="white" opacity="0.94"/>
-    <ellipse class="vf-theme-toggle-dragon-nostril" cx="16" cy="24.2" rx="2.4" ry="1.4" fill="var(--_vf-theme-toggle-ember-edge)"/>
-    <path d="M59 31L66 29L71 33L65 36ZM67 35L74 33L80 37L73 40Z" fill="var(--_vf-theme-toggle-dragon-shadow)" stroke="var(--_vf-theme-toggle-dragon-highlight)" stroke-width="0.6"/>
+  <svg class="vf-theme-toggle-dragon-art" viewBox="0 0 70 40" preserveAspectRatio="none" width="100%" height="100%" aria-hidden="true" focusable="false">
+    <path d="M68 36C63 30 58 27 54 25C50 23 47 22 44 22C50 19 54 16 57 13L66 9L57 9L63 2L52 8L48 0L45 10C39 9 34 10 30 13L24 18L12 18L4 22L0 25L5 29L17 29C22 29 27 31 31 34L36 36L45 33L52 29C57 29 63 32 68 36Z" fill="var(--_vf-theme-toggle-dragon-mid)" stroke="var(--_vf-theme-toggle-dragon-highlight)" stroke-width="1.35" stroke-linejoin="round"/>
+    <path d="M30 13L38 11L46 12L51 16L43 17L35 18Z" fill="var(--_vf-theme-toggle-dragon-highlight)" opacity="0.95"/>
+    <path d="M5 29C12 31 19 31 25 29C31 27 36 23 41 22C45 21 48 22 51 24C47 27 43 29 38 31C31 35 23 36 16 34L8 32Z" fill="var(--_vf-theme-toggle-night-start)"/>
+    <path d="M8 32L16 35L25 36L34 34L43 30L38 35L29 39L18 38L10 35Z" fill="var(--_vf-theme-toggle-dragon-shadow)" stroke="var(--_vf-theme-toggle-dragon-highlight)" stroke-width="1.15" stroke-linejoin="round"/>
+    <path d="M45 21L53 20L59 24L55 28L48 26L40 23Z" fill="var(--_vf-theme-toggle-dragon-highlight)" opacity="0.58"/>
+    <path d="M45 10L48 0L52 9ZM52 8L63 2L57 13ZM57 13L66 9L61 18Z" fill="var(--_vf-theme-toggle-dragon-horn)" stroke="var(--_vf-theme-toggle-dragon-horn-edge)" stroke-width="0.78" stroke-linejoin="round"/>
+    <path d="M13 28L17 29L14.5 34ZM21 29L25 29L22.5 34ZM29 27L33 26L31 32Z" fill="var(--_vf-theme-toggle-dragon-fang)"/>
+    <path class="vf-theme-toggle-dragon-eye" d="M27 17L36 14.5L33 20Z" fill="var(--_vf-theme-toggle-dragon-eye)"/>
+    <path d="M30.5 17L33.3 16.2L32 18.1Z" fill="white" opacity="0.94"/>
+    <path d="M53 29L59 27L63 31L59 34ZM60 33L66 31L70 35L66 38Z" fill="var(--_vf-theme-toggle-dragon-shadow)" stroke="var(--_vf-theme-toggle-dragon-highlight)" stroke-width="0.65" stroke-linejoin="round"/>
+    <ellipse class="vf-theme-toggle-dragon-nostril" cx="4.5" cy="24.5" rx="2.2" ry="1.25" fill="var(--_vf-theme-toggle-ember-edge)"/>
   </svg>`;
 
 function readStoredTheme() {
