@@ -1,6 +1,20 @@
 const storedThemeValues = new Set(['light', 'dark', 'system']);
 const explicitThemes = new Set(['light', 'dark']);
 const themeStorageKey = 'vf-docs-theme';
+const themeToggleDragonArtwork = `
+  <svg class="vf-theme-toggle-dragon-art" viewBox="0 0 82 40" width="100%" height="100%" aria-hidden="true" focusable="false">
+    <path d="M82 38L73 34L69 29L64 26L58 24L52 23L46 24L40 23L34 24L28 27L20 28L13 26L8 23L16 21L27 21L33 18L37 14L39 8L42 15L47 13L55 4L53 16L60 14L73 7L66 20L73 23L81 25Z" fill="var(--_vf-theme-toggle-dragon-mid)" stroke="var(--_vf-theme-toggle-dragon-highlight)" stroke-width="1.35" stroke-linejoin="round"/>
+    <path d="M31 21L41 17L52 18L58 22L47 22L39 24Z" fill="var(--_vf-theme-toggle-dragon-highlight)" opacity="0.92"/>
+    <path d="M13 27L24 28L35 27L45 26L55 27L49 31L39 33L28 33L18 31Z" fill="var(--_vf-theme-toggle-night-start)"/>
+    <path d="M16 31L27 34L39 34L50 31L55 29L50 35L42 39L28 39L18 36L12 33Z" fill="var(--_vf-theme-toggle-dragon-shadow)" stroke="var(--_vf-theme-toggle-dragon-highlight)" stroke-width="1.15" stroke-linejoin="round"/>
+    <path d="M51 24L60 25L67 29L61 32L52 29L45 27Z" fill="var(--_vf-theme-toggle-dragon-highlight)" opacity="0.52"/>
+    <path d="M38 15L39 5L43 15ZM51 15L59 3L55 18ZM63 19L76 8L68 23Z" fill="var(--_vf-theme-toggle-dragon-horn)" stroke="var(--_vf-theme-toggle-dragon-horn-edge)" stroke-width="0.75" stroke-linejoin="round"/>
+    <path d="M24 27L28 28L25.8 34ZM34 27L38 27L35.5 33ZM43 27L47 27L44.8 32Z" fill="var(--_vf-theme-toggle-dragon-fang)"/>
+    <path class="vf-theme-toggle-dragon-eye" d="M38 20L47 18L43 23Z" fill="var(--_vf-theme-toggle-dragon-eye)"/>
+    <path d="M41.5 20.5L44.2 19.7L43 21.6Z" fill="white" opacity="0.94"/>
+    <ellipse class="vf-theme-toggle-dragon-nostril" cx="16" cy="24.2" rx="2.4" ry="1.4" fill="var(--_vf-theme-toggle-ember-edge)"/>
+    <path d="M59 31L66 29L71 33L65 36ZM67 35L74 33L80 37L73 40Z" fill="var(--_vf-theme-toggle-dragon-shadow)" stroke="var(--_vf-theme-toggle-dragon-highlight)" stroke-width="0.6"/>
+  </svg>`;
 
 function readStoredTheme() {
   try {
@@ -57,6 +71,8 @@ function createThemeToggle(fallback) {
 
   const dragon = document.createElement('span');
   dragon.setAttribute('data-vf-theme-toggle-dragon', '');
+  dragon.setAttribute('data-vf-theme-toggle-dragon-artwork', '');
+  dragon.innerHTML = themeToggleDragonArtwork;
 
   const thumb = document.createElement('span');
   thumb.setAttribute('data-vf-theme-toggle-thumb', '');
