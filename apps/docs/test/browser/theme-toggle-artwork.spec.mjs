@@ -7,32 +7,26 @@ async function dragonGeometry(locator) {
       className: path.getAttribute('class'),
       d: path.getAttribute('d'),
     })),
-    ellipses: [...svg.querySelectorAll('ellipse')].map((ellipse) => ({
-      className: ellipse.getAttribute('class'),
-      cx: ellipse.getAttribute('cx'),
-      cy: ellipse.getAttribute('cy'),
-      rx: ellipse.getAttribute('rx'),
-      ry: ellipse.getAttribute('ry'),
+    circles: [...svg.querySelectorAll('circle')].map((circle) => ({
+      className: circle.getAttribute('class'),
+      cx: circle.getAttribute('cx'),
+      cy: circle.getAttribute('cy'),
+      r: circle.getAttribute('r'),
     })),
   }));
 }
 
 async function expectDragonAnatomy(art) {
-  await expect(art).toHaveAttribute('viewBox', '0 0 64 56');
-  await expect(art.locator('.vf-theme-toggle-dragon-neck')).toHaveCount(1);
-  await expect(art.locator('.vf-theme-toggle-dragon-crest')).toHaveCount(1);
-  await expect(art.locator('.vf-theme-toggle-dragon-upper-jaw')).toHaveCount(1);
-  await expect(art.locator('.vf-theme-toggle-dragon-cheek')).toHaveCount(1);
-  await expect(art.locator('.vf-theme-toggle-dragon-brow')).toHaveCount(1);
-  await expect(art.locator('.vf-theme-toggle-dragon-lower-jaw')).toHaveCount(1);
-  await expect(art.locator('.vf-theme-toggle-dragon-fangs')).toHaveCount(1);
+  await expect(art).toHaveAttribute('viewBox', '0 0 48 48');
+  await expect(art.locator('.vf-theme-toggle-dragon-body')).toHaveCount(1);
+  await expect(art.locator('.vf-theme-toggle-dragon-wing')).toHaveCount(1);
+  await expect(art.locator('.vf-theme-toggle-dragon-head')).toHaveCount(1);
   await expect(art.locator('.vf-theme-toggle-dragon-eye')).toHaveCount(1);
-  await expect(art.locator('.vf-theme-toggle-dragon-nostril')).toHaveCount(1);
-  await expect(art.locator('.vf-theme-toggle-dragon-mouth-glow')).toHaveCount(1);
-  await expect(art.locator('.vf-theme-toggle-dragon-scales')).toHaveCount(1);
+  await expect(art.locator('path')).toHaveCount(3);
+  await expect(art.locator('circle')).toHaveCount(1);
 }
 
-test('docs AppShell uses the same Native dragon-mouth artwork as the Theme Toggle showcase', async ({ page }, testInfo) => {
+test('docs AppShell uses the same simplified orbiting dragon artwork as the Theme Toggle showcase', async ({ page }, testInfo) => {
   await page.goto('/next/native-web/');
   await page.evaluate(() => localStorage.removeItem('vf-docs-theme'));
   await page.reload();
@@ -46,10 +40,14 @@ test('docs AppShell uses the same Native dragon-mouth artwork as the Theme Toggl
   await expect(headerArt).toHaveCount(1);
   await expectDragonAnatomy(headerArt);
 
+  const lightTransform = await headerDragon.evaluate((element) => getComputedStyle(element).transform);
+  const lightColor = await headerDragon.evaluate((element) => getComputedStyle(element).color);
+
   await headerControl.click();
   await expect(headerControl).toBeChecked();
-  await expect.poll(() => headerDragon.evaluate((element) => getComputedStyle(element).opacity)).toBe('1');
-  await page.waitForTimeout(600);
+  await expect.poll(() => headerDragon.evaluate((element) => getComputedStyle(element).transform)).not.toBe(lightTransform);
+  await expect.poll(() => headerDragon.evaluate((element) => getComputedStyle(element).color)).not.toBe(lightColor);
+  await page.waitForTimeout(650);
   await headerRoot.screenshot({ path: testInfo.outputPath('native-docs-header-theme-toggle-dark.png') });
 
   const headerGeometry = await dragonGeometry(headerArt);
@@ -65,9 +63,10 @@ test('docs AppShell uses the same Native dragon-mouth artwork as the Theme Toggl
   expect(await dragonGeometry(showcaseArt)).toEqual(headerGeometry);
 
   const showcaseControl = showcaseRoot.getByRole('switch', { name: 'Dark theme' });
+  const showcaseLightTransform = await showcaseDragon.evaluate((element) => getComputedStyle(element).transform);
   await showcaseControl.check();
   await expect(showcaseControl).toBeChecked();
-  await expect.poll(() => showcaseDragon.evaluate((element) => getComputedStyle(element).opacity)).toBe('1');
-  await page.waitForTimeout(600);
+  await expect.poll(() => showcaseDragon.evaluate((element) => getComputedStyle(element).transform)).not.toBe(showcaseLightTransform);
+  await page.waitForTimeout(650);
   await showcaseRoot.screenshot({ path: testInfo.outputPath('native-showcase-theme-toggle-dark.png') });
 });

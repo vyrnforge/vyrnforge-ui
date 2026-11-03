@@ -9,7 +9,14 @@
   "wcag": {
     "target": "2.2 AA",
     "status": "mapped",
-    "criteria": ["1.3.1", "1.4.11", "2.1.1", "2.4.7", "2.5.8", "4.1.2"]
+    "criteria": [
+      "1.3.1",
+      "1.4.11",
+      "2.1.1",
+      "2.4.7",
+      "2.5.8",
+      "4.1.2"
+    ]
   },
   "aria": {
     "status": "mapped",
@@ -49,6 +56,6 @@
   "notes": [
     "Theme Toggle is a specialized binary light/dark presentation over the approved checkbox-backed switch semantic baseline.",
     "Checked means dark theme and unchecked means light theme; system-theme selection remains application policy rather than a third switch state.",
-    "The wyvern, ember, and breath story is decorative and must not be the only indication of state; thumb position and native checked semantics remain authoritative."
+    "The simplified dragon and orb animation is decorative and must not be the only indication of state; thumb position and native checked semantics remain authoritative."
   ]
 }

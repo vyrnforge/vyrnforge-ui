@@ -2,12 +2,12 @@
 
 Use Theme Toggle for a compact binary choice between explicit light and dark appearance. Use the generic Switch for arbitrary boolean settings, and use a broader settings control when the product must expose a third `system` preference.
 
-The default VyrnForge presentation uses a small wyvern-and-ember story: light mode presents a glowing forge ember, switching to dark moves and collapses that ember toward a wyvern silhouette as though the light is consumed, and switching back releases the ember with a brief breath trail. The story is decorative; native checked state and thumb position remain the actual state cues.
+The default VyrnForge presentation uses one simplified dragon geometry wrapped around the moving orb. In light mode the dragon is ivory/gold around a warm orb. Switching to dark moves the orb toward inline-end while that same dragon rotates around it and transitions to an obsidian/violet palette. The geometry does not path-morph between themes, which keeps the SVG small, scalable, and predictable to animate.
 
 ## When to use
 
 - Use Theme Toggle when light and dark are the only user-facing choices in the current surface.
-- Use it in compact application chrome such as a header or toolbar where the VyrnForge dragon-and-ember treatment reinforces brand identity without replacing semantics.
+- Use it in compact application chrome such as a header or toolbar where the VyrnForge dragon treatment reinforces brand identity without replacing semantics.
 - Use a generic Switch when the setting is not specifically about appearance.
 - Use a separate three-option control when `light`, `dark`, and `system` must all remain directly selectable.
 
@@ -21,22 +21,21 @@ Unchecked means light theme. Checked means dark theme. The browser owns checked 
 
 Preferred presentation hooks are `data-vf-theme-toggle`, `data-vf-theme-toggle-control`, `data-vf-theme-toggle-track`, `data-vf-theme-toggle-breath`, `data-vf-theme-toggle-dragon`, `data-vf-theme-toggle-thumb`, and `data-vf-theme-toggle-ember`.
 
-The track, breath, dragon, and ember are decorative. Keep them `aria-hidden="true"` through the track container. The checkbox remains the only interactive target.
+The track, orbit accent, dragon, and orb decoration are decorative. Keep them `aria-hidden="true"` through the track container. The checkbox remains the only interactive target.
 
-The preferred Native example nests original VyrnForge decorative artwork inside `data-vf-theme-toggle-dragon`. The artwork is not a miniature standalone dragon logo: a tall wyvern head emerges from the inline-end edge of the 104×48 track and is allowed to extend into the larger 112×56 control bounds. That extra vertical room keeps the swept horns, skull, cheek, eye, lower jaw, fangs, nostril, and mouth glow readable instead of flattening the head into a long fish-like profile. The SVG is presentation anatomy, not an additional interactive element or semantic state. Keep it hidden from assistive technology and non-focusable.
+The preferred Native example uses a compact 48×48 inline SVG inside `data-vf-theme-toggle-dragon`. The dragon artwork is intentionally limited to four vector elements: a curled body path, wing, head, and eye. The same geometry is used in both themes. Theme changes are expressed through translation, rotation, color, track atmosphere, and orb color rather than path morphing.
 
+An empty `data-vf-theme-toggle-dragon` span remains render-compatible through a simplified CSS silhouette so existing markup does not disappear. New VyrnForge-authored examples should use the vector artwork.
 
-An empty `data-vf-theme-toggle-dragon` span remains render-compatible through a simplified CSS mouth fallback so existing markup does not disappear. New VyrnForge-authored examples should use the vector artwork so the upper and lower jaws can stage the consume/release motion independently.
-
-Earlier Theme Toggle markup used `data-vf-theme-toggle-clouds`, `data-vf-theme-toggle-stars`, `data-vf-theme-toggle-sun`, and `data-vf-theme-toggle-moon`. The Web stylesheet continues to accept those hooks as compatibility aliases so existing markup does not lose its presentation, but new authoring should use the dragon-specific anatomy above. The previous moon hook has no visual role in the dragon treatment.
+Earlier Theme Toggle markup used `data-vf-theme-toggle-clouds`, `data-vf-theme-toggle-stars`, `data-vf-theme-toggle-sun`, and `data-vf-theme-toggle-moon`. The Web stylesheet continues to accept those hooks as compatibility aliases. The previous moon hook has no visual role in the current dragon treatment.
 
 ## Visual story
 
-In light mode, the thumb carries a warm forge ember against a restrained bronze-and-amber field while the dragon remains almost entirely outside the track.
+In light mode, the orb rests at inline-start with an ivory/gold dragon curled around it. The track uses a restrained forge-light field.
 
-When dark mode is selected, the thumb moves toward inline-end and the dragon slides in from that edge with its jaws closing around the arriving ember. The ember collapses inside the mouth while the eye and inner-mouth glow settle into the obsidian night state. Returning to light opens the jaws, exposes a brief warm breath trail, and sends the ember back toward inline-start as the dragon retreats out of the track.
+When dark mode is selected, the orb moves toward inline-end while the dragon travels with it and rotates around the orb. During that motion the dragon changes from the light palette to an obsidian/violet palette, the orb changes from warm amber to violet, and the dark track atmosphere fades in.
 
-The story must not introduce an additional semantic state. There are still only two values: unchecked/light and checked/dark.
+Returning to light reverses the same movement and palette transition. No path morph is required and no additional semantic state is introduced. There are still only two values: unchecked/light and checked/dark.
 
 ## State and application integration
 
@@ -48,24 +47,24 @@ If an application previously stored a `system` preference, resolve that applicat
 
 Pointer and keyboard activation come from the native checkbox. Do not recreate Space handling with custom key listeners.
 
-The visual thumb moves toward inline-end when checked and toward inline-start when unchecked. The component mirrors the movement and dragon orientation in right-to-left documents.
+The orb and dragon move toward inline-end when checked and toward inline-start when unchecked. Direction is mirrored in right-to-left documents.
 
 ## Accessibility
 
 Provide a localizable accessible name that describes the setting, for example `aria-label="Dark theme"` or an associated visible label. Checked state then communicates whether dark theme is on or off.
 
-The dragon story is not the only indication of state: the thumb changes position and native checked semantics remain authoritative. Forced-colors mode removes decorative dragon, ember, and breath scenery while retaining checked semantics, thumb position, system colors, and focus indication.
+The dragon is not the only indication of state: the orb changes position and native checked semantics remain authoritative. Forced-colors mode removes decorative dragon/orbit scenery while retaining checked semantics, thumb position, system colors, and focus indication.
 
 ## Motion
 
-The default presentation uses deliberately slower component-owned story timing than ordinary hover or focus feedback so the consume/release sequence remains legible. The state itself commits immediately; application correctness never waits for the visual story to finish.
+The state commits immediately; application correctness never waits for the visual transition to finish.
 
-The ember travel and jaw close/open sequence form the primary motion. Dragon entry, eye glow, track atmosphere, and the breath trail are secondary detail and should remain restrained rather than behaving like a game animation.
+The primary motion is the shared orb/dragon translation plus dragon rotation. Color interpolation and the track atmosphere are secondary. This deliberately avoids SVG path morphing, per-scale animation, or large filter stacks that would make the small control expensive and fragile.
 
-When `prefers-reduced-motion: reduce` is active, the component removes those transitions without changing behavior or state visibility. Light and dark remain distinguishable through settled thumb position and system-supported state presentation.
+When `prefers-reduced-motion: reduce` is active, the component removes transitions without changing behavior or state visibility. Light and dark remain distinguishable through settled thumb position and system-supported state presentation.
 
 ## Styling and tokens
 
-Theme Toggle reuses the shared VyrnForge focus, border, disabled, and easing tokens. Its ember, dragon, breath, forge-light, and obsidian-night colors and story timing are private component implementation values because they are not shared design roles.
+Theme Toggle reuses the shared VyrnForge focus, border, disabled, and easing tokens. Its illustration colors and story timing remain private component implementation values because they are not shared design roles.
 
 Private custom properties prefixed with `--_vf-` are implementation details and are not customization API. Do not promote illustration-specific values into global design tokens unless another reusable design role proves that need.
