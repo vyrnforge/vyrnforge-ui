@@ -3,16 +3,15 @@ const explicitThemes = new Set(['light', 'dark']);
 const themeStorageKey = 'vf-docs-theme';
 const themeToggleDragonArtwork = `
   <svg class="vf-theme-toggle-dragon-art" viewBox="0 0 104 48" width="100%" height="100%" aria-hidden="true" focusable="false">
-  <path class="vf-theme-toggle-dragon-neck" d="M104 5L94 5L87 10L86 17L90 23L87 29L90 36L96 43L104 45Z"/>
-  <path class="vf-theme-toggle-dragon-upper-jaw" d="M104 8L97 7L93 2L91 13L83 6L82 15L75 12L70 16L65 17L60 20L53 20L48 22L42 22L37 25L43 28L51 27L58 27L65 25L72 25L78 28L84 28L91 25L99 28L104 27Z"/>
-  <path class="vf-theme-toggle-dragon-brow" d="M65 18L74 15L82 17L78 22L68 22Z"/>
-  <path class="vf-theme-toggle-dragon-lower-jaw" d="M104 33L97 31L90 32L83 31L76 32L69 31L61 33L54 32L47 33L41 35L48 39L57 40L66 39L74 41L82 43L90 40L98 44L104 44Z"/>
-  <path class="vf-theme-toggle-dragon-fangs" d="M58 27L56 33L62 29ZM69 26L67 33L73 29ZM77 28L75 33L81 30Z"/>
-  <path class="vf-theme-toggle-dragon-eye" d="M68 18L77 16L74 21Z"/>
-  <circle class="vf-theme-toggle-dragon-eye-glint" cx="72.5" cy="18.6" r="0.8"/>
-  <ellipse class="vf-theme-toggle-dragon-nostril" cx="43" cy="25" rx="1.8" ry="1.1"/>
-  <ellipse class="vf-theme-toggle-dragon-mouth-glow" cx="82" cy="31" rx="3.2" ry="1.6"/>
-</svg>`;
+    <path class="vf-theme-toggle-dragon-crest" d="M101 6C94 5 90 7 85 11L91 1C83 4 77 9 72 14L76 3C68 8 63 13 60 18L70 20L84 19L97 22Z"/>
+    <path class="vf-theme-toggle-dragon-upper-jaw" d="M104 8C96 8 90 10 84 13C78 16 72 17 66 17C61 17 57 18 53 20L47 20L43 23L35 24L42 27L51 28L59 27C64 25 69 23 75 23C82 23 88 25 94 28L104 27Z"/>
+    <path class="vf-theme-toggle-dragon-brow" d="M58 18L69 14L80 15L73 20L62 21Z"/>
+    <path class="vf-theme-toggle-dragon-lower-jaw" d="M104 34C96 33 91 34 85 35C78 36 72 34 67 32C62 31 57 31 53 32L47 34L42 36L48 39C56 43 64 45 73 45C82 45 90 42 96 40L104 43Z"/>
+    <path class="vf-theme-toggle-dragon-fangs" d="M47 27L50 33L53 28ZM56 27L59 34L62 27ZM67 25L70 32L73 24ZM50 35L53 31L56 36ZM61 39L64 33L68 40Z"/>
+    <path class="vf-theme-toggle-dragon-eye" d="M65 18L73 16L70 21L64 21Z"/>
+    <ellipse class="vf-theme-toggle-dragon-nostril" cx="42.5" cy="24.5" rx="1.8" ry="1.2"/>
+    <ellipse class="vf-theme-toggle-dragon-mouth-glow" cx="79" cy="30.5" rx="4" ry="2.3"/>
+  </svg>`;
 
 function readStoredTheme() {
   try {
