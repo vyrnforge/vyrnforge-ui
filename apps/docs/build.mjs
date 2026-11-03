@@ -16,7 +16,7 @@ if (registry.mode !== 'native-html-first' || registry.framework !== 'native-web'
 }
 
 const model = compileNativeDocumentation(root);
-if (!model.pages.length) throw new Error('Native documentation build requires at least one Product Graph-owned Markdown component page');
+if (!model.componentCatalog.length) throw new Error('Native documentation build requires at least one public Native Web component in the Product Graph');
 
 function escapeHtml(value) {
   return String(value)
@@ -52,6 +52,14 @@ function artifactHref(pageDirectory, target) {
   return directoryTarget ? `${relative}/` : relative;
 }
 
+function pageDirectory(route = '') {
+  return `${nativeSitePath}${route}`.replace(/\/$/, '');
+}
+
+function routeTarget(route = '') {
+  return `${nativeSitePath}${route}`;
+}
+
 function renderInline(value) {
   return String(value).split(/(`[^`]+`)/g).map((part) => {
     if (part.startsWith('`') && part.endsWith('`')) return `<code>${escapeHtml(part.slice(1, -1))}</code>`;
@@ -59,7 +67,7 @@ function renderInline(value) {
   }).join('');
 }
 
-function renderBlocks(blocks) {
+function renderBlocks(blocks = []) {
   return blocks.map((block) => {
     if (block.type === 'paragraph') return `<p>${renderInline(block.text)}</p>`;
     if (block.type === 'list') return `<ul>${block.items.map((item) => `<li>${renderInline(item)}</li>`).join('')}</ul>`;
@@ -67,53 +75,71 @@ function renderBlocks(blocks) {
   }).join('\n');
 }
 
-function groupedPages() {
-  const groups = new Map();
-  for (const page of model.pages) {
-    const entries = groups.get(page.group) ?? [];
-    entries.push(page);
-    groups.set(page.group, entries);
-  }
-  return [...groups.entries()].sort(([left], [right]) => left.localeCompare(right));
+function navigationGroups() {
+  return [
+    {
+      label: 'Native Web',
+      items: [{ id: 'overview', title: 'Overview', route: '' }],
+    },
+    {
+      label: 'Foundations',
+      items: model.foundationPages.map((page) => ({ id: `foundation:${page.id}`, title: page.title, route: page.route })),
+    },
+    {
+      label: 'Components',
+      items: [
+        { id: 'components:index', title: 'Showcase', route: 'components/' },
+        ...model.showcasePages.map((page) => ({ id: `showcase:${page.id}`, title: page.title, route: page.route })),
+      ],
+    },
+    {
+      label: 'API Reference',
+      items: [
+        { id: 'api:index', title: 'Components API', route: 'api/components/' },
+        ...model.apiPages.map((page) => ({ id: `api:${page.id}`, title: page.title, route: page.route })),
+      ],
+    },
+  ];
 }
 
-function componentNavigation(pageDirectory, currentId = null) {
-  const overviewCurrent = currentId === null ? ' aria-current="page"' : '';
-  const groups = groupedPages().map(([group, pages]) => `<div data-vf-side-nav-group>
-      <p data-vf-side-nav-group-label>${escapeHtml(titleCase(group))}</p>
-      <ul data-vf-side-nav-list>${pages.map((page) => `<li data-vf-side-nav-item><a data-vf-side-nav-link href="${artifactHref(pageDirectory, `${nativeSitePath}${page.route}`)}"${page.id === currentId ? ' aria-current="page"' : ''}>${escapeHtml(page.title)}</a></li>`).join('')}</ul>
+function documentationNavigation(currentPageDirectory, currentRoute = '') {
+  const groups = navigationGroups().map((group) => `<div data-vf-side-nav-group>
+      <p data-vf-side-nav-group-label>${escapeHtml(group.label)}</p>
+      <ul data-vf-side-nav-list>${group.items.map((item) => `<li data-vf-side-nav-item><a data-vf-side-nav-link href="${artifactHref(currentPageDirectory, routeTarget(item.route))}"${item.route === currentRoute ? ' aria-current="page"' : ''}>${escapeHtml(item.title)}</a></li>`).join('')}</ul>
     </div>`).join('\n');
 
-  return `<nav data-vf-side-nav aria-label="Documentation">
-    <div data-vf-side-nav-group>
-      <p data-vf-side-nav-group-label>Native Web</p>
-      <ul data-vf-side-nav-list>
-        <li data-vf-side-nav-item><a data-vf-side-nav-link href="${artifactHref(pageDirectory, nativeSitePath)}"${overviewCurrent}>Overview</a></li>
-      </ul>
-    </div>
-    ${groups}
-  </nav>`;
+  return `<nav data-vf-side-nav aria-label="Documentation">${groups}</nav>`;
 }
 
 function pageSearchText(page) {
-  const content = [
-    page.title,
-    page.group,
-    page.content.title,
-    ...page.content.intro.flatMap((block) => block.type === 'paragraph' ? [block.text] : block.items),
-    ...page.content.sections.flatMap((section) => [
+  const values = [page.title, page.group, page.description, ...(page.publicEntrypoints ?? [])];
+  const content = page.content ?? page.sharedContent;
+  if (content) {
+    values.push(content.title);
+    values.push(...content.intro.flatMap((block) => block.type === 'paragraph' ? [block.text] : block.items));
+    values.push(...content.sections.flatMap((section) => [
       section.heading,
       ...section.blocks.flatMap((block) => block.type === 'paragraph' ? [block.text] : block.items),
-    ]),
-  ];
-  return content.join(' ').toLocaleLowerCase();
+    ]));
+  }
+  return values.filter(Boolean).join(' ').toLocaleLowerCase();
 }
 
-function searchMarkup(pageDirectory) {
-  const results = model.pages.map((page) => `<li data-vf-docs-search-item data-vf-docs-search-text="${escapeHtml(pageSearchText(page))}" hidden>
-        <a href="${artifactHref(pageDirectory, `${nativeSitePath}${page.route}`)}">
+function searchablePages() {
+  return [
+    ...model.foundationPages.map((page) => ({ ...page, searchKind: 'Foundation' })),
+    { id: 'components-index', title: 'Component showcase', route: 'components/', searchKind: 'Components' },
+    ...model.showcasePages.map((page) => ({ ...page, searchKind: 'Component showcase' })),
+    { id: 'api-index', title: 'Components API', route: 'api/components/', searchKind: 'API Reference' },
+    ...model.apiPages.map((page) => ({ ...page, searchKind: 'API Reference' })),
+  ];
+}
+
+function searchMarkup(currentPageDirectory) {
+  const results = searchablePages().map((page) => `<li data-vf-docs-search-item data-vf-docs-search-text="${escapeHtml(pageSearchText(page))}" hidden>
+        <a href="${artifactHref(currentPageDirectory, routeTarget(page.route))}">
           <strong>${escapeHtml(page.title)}</strong>
-          <span>${escapeHtml(titleCase(page.group))} · Native Web</span>
+          <span>${escapeHtml(page.searchKind)} · Native Web</span>
         </a>
       </li>`).join('');
 
@@ -128,13 +154,14 @@ function searchMarkup(pageDirectory) {
   </div>`;
 }
 
-function styleLinks(pageDirectory, componentStyle = null) {
+function styleLinks(currentPageDirectory, componentStyle = null) {
   const assets = [...model.shellStyles.map((entry) => entry.assetPath)];
   if (componentStyle && !assets.includes(componentStyle)) assets.push(componentStyle);
-  return assets.map((assetPath) => `  <link rel="stylesheet" href="${escapeHtml(artifactHref(pageDirectory, assetPath))}">`).join('\n');
+  return assets.map((assetPath) => `  <link rel="stylesheet" href="${escapeHtml(artifactHref(currentPageDirectory, assetPath))}">`).join('\n');
 }
 
-function shell({ pageDirectory, title, description, currentId = null, content, componentStyle = null }) {
+function shell({ route = '', title, description, content, componentStyle = null }) {
+  const currentPageDirectory = pageDirectory(route);
   return `<!doctype html>
 <html lang="en" data-vf-theme="light" data-vf-density="comfortable">
 <head>
@@ -144,9 +171,9 @@ function shell({ pageDirectory, title, description, currentId = null, content, c
   <meta name="color-scheme" content="light dark">
   <title>${escapeHtml(title)} · VyrnForge</title>
   <script>try{const value=localStorage.getItem('vf-docs-theme');if(['light','dark','system'].includes(value))document.documentElement.dataset.vfTheme=value}catch{}</script>
-${styleLinks(pageDirectory, componentStyle)}
-  <link rel="stylesheet" href="${artifactHref(pageDirectory, 'assets/docs.css')}">
-  <script src="${artifactHref(pageDirectory, 'assets/docs.js')}" defer></script>
+${styleLinks(currentPageDirectory, componentStyle)}
+  <link rel="stylesheet" href="${artifactHref(currentPageDirectory, 'assets/docs.css')}">
+  <script src="${artifactHref(currentPageDirectory, 'assets/docs.js')}" defer></script>
 </head>
 <body>
   <a class="vf-docs-skip" href="#main">Skip to content</a>
@@ -155,11 +182,11 @@ ${styleLinks(pageDirectory, componentStyle)}
       <div class="vf-docs-header-inner">
         <div class="vf-docs-brand-row">
           <button type="button" data-vf-button data-vf-variant="ghost" data-vf-size="sm" class="vf-docs-menu-toggle" data-vf-docs-nav-toggle aria-controls="vf-docs-navigation" aria-expanded="true">Menu</button>
-          <a class="vf-docs-brand" href="${artifactHref(pageDirectory, nativeSitePath)}">VyrnForge <span>Docs</span></a>
+          <a class="vf-docs-brand" href="${artifactHref(currentPageDirectory, nativeSitePath)}">VyrnForge <span>Docs</span></a>
           <span class="vf-docs-surface" aria-label="Documentation surface">Native Web · ${escapeHtml(channel)}</span>
         </div>
         <div class="vf-docs-header-tools">
-          ${searchMarkup(pageDirectory)}
+          ${searchMarkup(currentPageDirectory)}
           <div class="vf-docs-theme-control">
             <label for="vf-docs-theme">Theme</label>
             <select id="vf-docs-theme" data-vf-native-select data-vf-docs-theme>
@@ -173,7 +200,7 @@ ${styleLinks(pageDirectory, componentStyle)}
     </header>
     <div data-vf-app-shell-body class="vf-docs-app-body">
       <aside id="vf-docs-navigation" data-vf-app-shell-navigation class="vf-docs-navigation-region">
-        <div class="vf-docs-navigation-scroll">${componentNavigation(pageDirectory, currentId)}</div>
+        <div class="vf-docs-navigation-scroll">${documentationNavigation(currentPageDirectory, route)}</div>
       </aside>
       <main id="main" data-vf-app-shell-main class="vf-docs-main">${content}</main>
     </div>
@@ -186,41 +213,130 @@ ${styleLinks(pageDirectory, componentStyle)}
 </html>`;
 }
 
-function renderHome() {
-  const pageDirectory = nativeSitePath.replace(/\/$/, '');
-  const cards = model.pages.map((page) => `<li data-vf-surface>
-      <a class="vf-docs-card-link" href="${artifactHref(pageDirectory, `${nativeSitePath}${page.route}`)}">
+function cardList(entries, currentPageDirectory) {
+  return `<ul class="vf-docs-card-list">${entries.map((entry) => `<li data-vf-surface>
+      <a class="vf-docs-card-link" href="${artifactHref(currentPageDirectory, routeTarget(entry.route))}">
         <span>
-          <strong>${escapeHtml(page.title)}</strong>
-          <small>${escapeHtml(titleCase(page.group))}</small>
+          <strong>${escapeHtml(entry.title)}</strong>
+          <small>${escapeHtml(entry.meta ?? '')}</small>
         </span>
         <span aria-hidden="true">→</span>
       </a>
-    </li>`).join('');
-  const firstPage = model.pages[0];
+    </li>`).join('')}</ul>`;
+}
+
+function renderHome() {
+  const route = '';
+  const currentPageDirectory = pageDirectory(route);
+  const foundationCards = model.foundationPages.map((page) => ({ ...page, meta: 'Foundation' }));
   return shell({
-    pageDirectory,
+    route,
     title: 'Native Web documentation',
     description: 'VyrnForge Native Web documentation',
     content: `<section class="vf-docs-hero">
-      <p class="vf-docs-eyebrow">Native HTML first</p>
+      <p class="vf-docs-eyebrow">Framework-scoped documentation</p>
       <h1>VyrnForge Native Web</h1>
-      <p class="vf-docs-lede">Build with semantic HTML, the browser platform, and the canonical <code>@vyrnforge/web</code> styling foundation. This is the first documentation surface being rebuilt from the clean foundation.</p>
+      <p class="vf-docs-lede">This view uses semantic Native HTML and the public <code>@vyrnforge/web</code> foundation. Components are discovered from the Product Graph for the active framework surface; showcase guidance, API reference, and foundations are separate documentation concerns.</p>
       <div class="vf-docs-hero-actions">
-        <a href="${artifactHref(pageDirectory, `${nativeSitePath}${firstPage.route}`)}" data-vf-button>Explore ${escapeHtml(firstPage.title)}</a>
-        <span>${model.pages.length} documented component${model.pages.length === 1 ? '' : 's'}</span>
+        <a href="${artifactHref(currentPageDirectory, routeTarget('components/'))}" data-vf-button>Explore components</a>
+        <a href="${artifactHref(currentPageDirectory, routeTarget('api/components/'))}" data-vf-link>Browse API reference</a>
       </div>
     </section>
-    <section class="vf-docs-catalog" aria-labelledby="components-heading">
+    <section class="vf-docs-catalog" aria-labelledby="foundations-heading">
       <div class="vf-docs-section-heading">
         <div>
-          <p class="vf-docs-eyebrow">Catalog</p>
-          <h2 id="components-heading">Components</h2>
+          <p class="vf-docs-eyebrow">Shared foundation</p>
+          <h2 id="foundations-heading">Foundations</h2>
         </div>
-        <p>Only components with rebuilt Native Web guidance are published here.</p>
+        <p>Styling and tokens are documented independently from component usage.</p>
       </div>
-      <ul class="vf-docs-card-list">${cards}</ul>
+      ${cardList(foundationCards, currentPageDirectory)}
+    </section>
+    <section class="vf-docs-catalog" aria-labelledby="catalog-heading">
+      <div class="vf-docs-section-heading">
+        <div>
+          <p class="vf-docs-eyebrow">Product Graph</p>
+          <h2 id="catalog-heading">Native component catalog</h2>
+        </div>
+        <p>${model.componentCatalog.length} public Native Web component surface${model.componentCatalog.length === 1 ? '' : 's'} discovered; ${model.showcasePages.length} currently have complete showcase guidance.</p>
+      </div>
+      ${cardList([
+        { title: 'Component showcase', route: 'components/', meta: `${model.showcasePages.length} showcase-ready` },
+        { title: 'Components API', route: 'api/components/', meta: `${model.apiPages.length} public API entries` },
+      ], currentPageDirectory)}
     </section>`,
+  });
+}
+
+function renderComponentsIndex() {
+  const route = 'components/';
+  const currentPageDirectory = pageDirectory(route);
+  const cards = model.componentCatalog.map((component) => ({
+    title: component.title,
+    route: component.showcaseAvailable ? component.showcaseRoute : component.apiRoute,
+    meta: component.showcaseAvailable ? `${titleCase(component.group)} · Showcase + API` : `${titleCase(component.group)} · API reference`,
+  }));
+  return shell({
+    route,
+    title: 'Component showcase',
+    description: 'Native Web component showcase and availability',
+    content: `<section class="vf-docs-hero">
+      <p class="vf-docs-eyebrow">Components</p>
+      <h1>Component showcase</h1>
+      <p class="vf-docs-lede">The catalog is discovered from Native Web Product Graph surfaces. Components with complete authored guidance and executable Native examples open a showcase; implemented components without that guidance remain visible through their API reference.</p>
+    </section>
+    <section class="vf-docs-catalog" aria-labelledby="component-catalog-heading">
+      <div class="vf-docs-section-heading"><div><h2 id="component-catalog-heading">Native Web components</h2></div><p>${model.componentCatalog.length} public surfaces</p></div>
+      ${cardList(cards, currentPageDirectory)}
+    </section>`,
+  });
+}
+
+function renderApiIndex() {
+  const route = 'api/components/';
+  const currentPageDirectory = pageDirectory(route);
+  const cards = model.apiPages.map((page) => ({ title: page.title, route: page.route, meta: page.publicEntrypoints.join(', ') }));
+  return shell({
+    route,
+    title: 'Components API',
+    description: 'Generated Native Web component API reference',
+    content: `<section class="vf-docs-hero">
+      <p class="vf-docs-eyebrow">API Reference</p>
+      <h1>Components API</h1>
+      <p class="vf-docs-lede">Reference availability follows real public Native Web package projections. It is separate from showcase readiness so implemented APIs do not disappear merely because authored usage guidance is still being rebuilt.</p>
+    </section>
+    <section class="vf-docs-catalog" aria-labelledby="api-catalog-heading">
+      <div class="vf-docs-section-heading"><div><h2 id="api-catalog-heading">Public component entrypoints</h2></div><p>${model.apiPages.length} components</p></div>
+      ${cardList(cards, currentPageDirectory)}
+    </section>`,
+  });
+}
+
+function renderFoundation(page) {
+  const entrypoints = page.entrypoints.map((entrypoint) => `<li><code>${escapeHtml(entrypoint)}</code></li>`).join('');
+  const extra = page.id === 'tokens'
+    ? '<p>Tokens are the shared visual contract. Component and documentation CSS should consume token values rather than introduce hard-coded design decisions.</p>'
+    : '<p>Load the foundation once, then load component styles through their public entrypoints as needed. Documentation-specific CSS may style the docs product, but it does not replace VyrnForge component CSS.</p>';
+  return shell({
+    route: page.route,
+    title: page.title,
+    description: page.description,
+    content: `${renderBreadcrumbs(page, pageDirectory(page.route), 'Foundations')}
+    <article class="vf-docs-article">
+      <header class="vf-docs-component-header">
+        <p class="vf-docs-eyebrow">Foundation</p>
+        <h1>${escapeHtml(page.title)}</h1>
+        <p class="vf-docs-lede">${escapeHtml(page.description)}</p>
+      </header>
+      <section>
+        <h2>Public entrypoints</h2>
+        <ul>${entrypoints}</ul>
+      </section>
+      <section>
+        <h2>Usage boundary</h2>
+        ${extra}
+      </section>
+    </article>`,
   });
 }
 
@@ -243,11 +359,12 @@ function renderExample(example) {
   </article>`;
 }
 
-function renderBreadcrumbs(page, pageDirectory) {
+function renderBreadcrumbs(page, currentPageDirectory, family = 'Components') {
+  const familyRoute = family === 'API Reference' ? 'api/components/' : family === 'Foundations' ? 'foundations/' : 'components/';
   return `<nav class="vf-docs-breadcrumbs" aria-label="Breadcrumb">
     <ol>
-      <li><a data-vf-link href="${artifactHref(pageDirectory, nativeSitePath)}">Native Web</a></li>
-      <li><span aria-hidden="true">/</span> Components</li>
+      <li><a data-vf-link href="${artifactHref(currentPageDirectory, nativeSitePath)}">Native Web</a></li>
+      <li><span aria-hidden="true">/</span> ${escapeHtml(familyRoute === 'foundations/' ? 'Foundations' : family)}</li>
       <li><span aria-hidden="true">/</span> <span aria-current="page">${escapeHtml(page.title)}</span></li>
     </ol>
   </nav>`;
@@ -262,8 +379,22 @@ function renderTableOfContents(entries) {
   </aside>`;
 }
 
+function renderFrameworkContent(content, uniqueId) {
+  if (!content) return { markup: '', toc: [] };
+  const introId = uniqueId('Native Web integration');
+  const sections = content.sections.map((section) => ({ ...section, id: uniqueId(section.heading) }));
+  return {
+    toc: [{ id: introId, label: 'Native Web integration' }, ...sections.map((section) => ({ id: section.id, label: section.heading }))],
+    markup: `<section aria-labelledby="${escapeHtml(introId)}">
+      <h2 id="${escapeHtml(introId)}">Native Web integration</h2>
+      ${renderBlocks(content.intro)}
+    </section>
+    ${sections.map((section) => `<section aria-labelledby="${escapeHtml(section.id)}"><h2 id="${escapeHtml(section.id)}">${escapeHtml(section.heading)}</h2>${renderBlocks(section.blocks)}</section>`).join('\n')}`,
+  };
+}
+
 function renderComponent(page) {
-  const pageDirectory = `${nativeSitePath}${page.route}`.replace(/\/$/, '');
+  const currentPageDirectory = pageDirectory(page.route);
   const usedIds = new Set();
   const uniqueId = (heading) => {
     const base = slugify(heading);
@@ -276,13 +407,17 @@ function renderComponent(page) {
 
   const setupId = uniqueId('Native Web setup');
   const sectionModels = page.content.sections.map((section) => ({ ...section, id: uniqueId(section.heading) }));
+  const framework = renderFrameworkContent(page.frameworkContent, uniqueId);
   const examplesId = uniqueId('Examples');
   const evidenceId = uniqueId('Accessibility evidence');
+  const referenceId = uniqueId('Reference');
   const toc = [
     { id: setupId, label: 'Native Web setup' },
     ...sectionModels.map((section) => ({ id: section.id, label: section.heading })),
+    ...framework.toc,
     { id: examplesId, label: 'Examples' },
     { id: evidenceId, label: 'Accessibility evidence' },
+    { id: referenceId, label: 'Reference' },
   ];
 
   const sections = sectionModels.map((section) => `<section aria-labelledby="${escapeHtml(section.id)}">
@@ -293,12 +428,11 @@ function renderComponent(page) {
   const criteria = page.accessibility.wcag?.criteria ?? [];
 
   return shell({
-    pageDirectory,
+    route: page.route,
     title: page.title,
-    description: `${page.title} documentation for VyrnForge Native Web`,
-    currentId: page.id,
+    description: `${page.title} showcase for VyrnForge Native Web`,
     componentStyle: page.styleAssetPath,
-    content: `${renderBreadcrumbs(page, pageDirectory)}
+    content: `${renderBreadcrumbs(page, currentPageDirectory)}
     <div class="vf-docs-content-grid">
       <article class="vf-docs-article" data-vf-docs-component="${escapeHtml(page.id)}">
         <header class="vf-docs-component-header">
@@ -306,6 +440,7 @@ function renderComponent(page) {
             <span>Native Web</span>
             <span>${escapeHtml(channel)}</span>
             <span>${escapeHtml(titleCase(page.group))}</span>
+            <span>Showcase</span>
           </div>
           <h1>${escapeHtml(page.content.title)}</h1>
           <div class="vf-docs-lede">${renderBlocks(page.content.intro)}</div>
@@ -316,12 +451,10 @@ function renderComponent(page) {
           <pre tabindex="0"><code class="language-css">@import &quot;${escapeHtml(page.styleSpecifier)}&quot;;</code></pre>
         </section>
         ${sections}
+        ${framework.markup}
         <section aria-labelledby="${escapeHtml(examplesId)}">
           <div class="vf-docs-section-heading">
-            <div>
-              <p class="vf-docs-eyebrow">Executable Native HTML</p>
-              <h2 id="${escapeHtml(examplesId)}">Examples</h2>
-            </div>
+            <div><p class="vf-docs-eyebrow">Executable Native HTML</p><h2 id="${escapeHtml(examplesId)}">Examples</h2></div>
             <p>Examples are checked-in product-unit sources rendered against public Web CSS.</p>
           </div>
           <div class="vf-docs-examples">${examples}</div>
@@ -333,13 +466,55 @@ function renderComponent(page) {
           ${criteria.length ? `<p>Mapped criteria: ${criteria.map((criterion) => `<code>${escapeHtml(criterion)}</code>`).join(', ')}.</p>` : ''}
           <p>This is repository evidence metadata, not a blanket compliance claim.</p>
         </aside>
+        <section aria-labelledby="${escapeHtml(referenceId)}">
+          <h2 id="${escapeHtml(referenceId)}">Reference</h2>
+          <ul>
+            <li><a data-vf-link href="${artifactHref(currentPageDirectory, routeTarget(page.apiRoute))}">${escapeHtml(page.title)} API reference</a></li>
+            <li><a data-vf-link href="${artifactHref(currentPageDirectory, routeTarget('foundations/styling/'))}">Styling foundation</a></li>
+            <li><a data-vf-link href="${artifactHref(currentPageDirectory, routeTarget('foundations/tokens/'))}">Design tokens</a></li>
+          </ul>
+        </section>
       </article>
       ${renderTableOfContents(toc)}
     </div>`,
   });
 }
 
-async function verifyLocalAssets(pageDirectory, html) {
+function renderApiPage(page) {
+  const currentPageDirectory = pageDirectory(page.route);
+  const entrypoints = page.publicEntrypoints.map((entrypoint) => `<li><code>${escapeHtml(entrypoint)}</code></li>`).join('');
+  return shell({
+    route: page.route,
+    title: `${page.title} API`,
+    description: `${page.title} Native Web API reference`,
+    content: `${renderBreadcrumbs(page, currentPageDirectory, 'API Reference')}
+    <article class="vf-docs-article" data-vf-docs-api-component="${escapeHtml(page.id)}">
+      <header class="vf-docs-component-header">
+        <div class="vf-docs-page-meta"><span>Native Web</span><span>API Reference</span></div>
+        <h1>${escapeHtml(page.title)} API</h1>
+        <p class="vf-docs-lede">Generated from the public Native Web Product Graph projection. This reference is separate from authored showcase guidance.</p>
+      </header>
+      <section>
+        <h2>Public entrypoints</h2>
+        <ul>${entrypoints}</ul>
+      </section>
+      <section>
+        <h2>Documentation availability</h2>
+        <p>${page.showcaseAvailable ? `A complete Native Web showcase is available for ${escapeHtml(page.title)}.` : `The public Native Web surface exists, but complete showcase guidance is not yet rebuilt for ${escapeHtml(page.title)}.`}</p>
+        ${page.showcaseAvailable ? `<p><a data-vf-link href="${artifactHref(currentPageDirectory, routeTarget(page.showcaseRoute))}">Open ${escapeHtml(page.title)} showcase</a></p>` : ''}
+      </section>
+      <section>
+        <h2>Foundation links</h2>
+        <ul>
+          <li><a data-vf-link href="${artifactHref(currentPageDirectory, routeTarget('foundations/styling/'))}">Styling foundation</a></li>
+          <li><a data-vf-link href="${artifactHref(currentPageDirectory, routeTarget('foundations/tokens/'))}">Design tokens</a></li>
+        </ul>
+      </section>
+    </article>`,
+  });
+}
+
+async function verifyLocalAssets(currentPageDirectory, html) {
   const references = [
     ...html.matchAll(/<link\b[^>]*\bhref="([^"]+)"[^>]*>/g),
     ...html.matchAll(/<script\b[^>]*\bsrc="([^"]+)"[^>]*>/g),
@@ -349,7 +524,7 @@ async function verifyLocalAssets(pageDirectory, html) {
     if (/^(?:[a-z]+:|\/\/)/i.test(reference)) continue;
     if (reference.startsWith('/')) throw new Error(`Documentation asset URL must be deployment-relative: ${reference}`);
     const pathname = reference.split(/[?#]/, 1)[0];
-    const resolved = path.resolve(outRoot, pageDirectory, pathname);
+    const resolved = path.resolve(outRoot, currentPageDirectory, pathname);
     const outPrefix = `${outRoot}${path.sep}`;
     if (resolved !== outRoot && !resolved.startsWith(outPrefix)) {
       throw new Error(`Documentation asset URL escapes the output root: ${reference}`);
@@ -359,10 +534,11 @@ async function verifyLocalAssets(pageDirectory, html) {
   }
 }
 
-async function writePage(pageDirectory, html) {
-  const pageRoot = path.join(outRoot, pageDirectory);
+async function writePage(route, html) {
+  const currentPageDirectory = pageDirectory(route);
+  const pageRoot = path.join(outRoot, currentPageDirectory);
   await mkdir(pageRoot, { recursive: true });
-  await verifyLocalAssets(pageDirectory, html);
+  await verifyLocalAssets(currentPageDirectory, html);
   await writeFile(path.join(pageRoot, 'index.html'), html);
 }
 
@@ -373,17 +549,26 @@ await cp(path.join(root, 'packages/web/dist'), path.join(outRoot, 'assets/vyrnfo
 await cp(path.join(root, 'apps/docs/native.css'), path.join(outRoot, 'assets/docs.css'));
 await cp(path.join(root, 'apps/docs/client.js'), path.join(outRoot, 'assets/docs.js'));
 
-await writePage(nativeSitePath.replace(/\/$/, ''), renderHome());
-for (const page of model.pages) {
-  const pageDirectory = `${nativeSitePath}${page.route}`.replace(/\/$/, '');
-  await writePage(pageDirectory, renderComponent(page));
-}
+await writePage('', renderHome());
+await writePage('components/', renderComponentsIndex());
+await writePage('api/components/', renderApiIndex());
+for (const page of model.foundationPages) await writePage(page.route, renderFoundation(page));
+for (const page of model.showcasePages) await writePage(page.route, renderComponent(page));
+for (const page of model.apiPages) await writePage(page.route, renderApiPage(page));
 
 const manifest = {
   channel,
   status: registry.mode,
   framework: model.framework,
-  pages: model.pages.map((page) => ({
+  componentCatalog: model.componentCatalog.map((component) => ({
+    slug: component.id,
+    title: component.title,
+    group: component.group,
+    showcase: component.showcaseAvailable,
+    api: component.apiAvailable,
+    publicEntrypoints: component.publicEntrypoints,
+  })),
+  pages: model.showcasePages.map((page) => ({
     slug: page.route,
     title: page.title,
     group: page.group,
@@ -391,9 +576,11 @@ const manifest = {
     source: page.sourcePath,
     examples: page.examples.map((example) => example.id),
   })),
+  api: model.apiPages.map((page) => ({ slug: page.route, title: page.title, publicEntrypoints: page.publicEntrypoints })),
+  foundations: model.foundationPages.map((page) => ({ slug: page.route, title: page.title })),
 };
 await writeFile(path.join(channelRoot, 'site-manifest.json'), `${JSON.stringify(manifest, null, 2)}\n`);
 await writeFile(path.join(channelRoot, 'index.html'), '<!doctype html><html lang="en"><head><meta charset="utf-8"><meta http-equiv="refresh" content="0;url=./native-web/"><title>VyrnForge documentation</title></head><body><a href="./native-web/">Open Native Web documentation</a></body></html>');
 await writeFile(path.join(outRoot, 'index.html'), `<!doctype html><html lang="en"><head><meta charset="utf-8"><meta http-equiv="refresh" content="0;url=./${channel}/native-web/"><title>VyrnForge documentation</title></head><body><a href="./${channel}/native-web/">Open VyrnForge documentation</a></body></html>`);
 
-process.stdout.write(`native documentation build -> ${path.relative(root, nativeRoot)} (${model.pages.length} component page${model.pages.length === 1 ? '' : 's'})\n`);
+process.stdout.write(`native documentation build -> ${path.relative(root, nativeRoot)} (${model.componentCatalog.length} public component${model.componentCatalog.length === 1 ? '' : 's'}, ${model.showcasePages.length} showcase${model.showcasePages.length === 1 ? '' : 's'})\n`);
