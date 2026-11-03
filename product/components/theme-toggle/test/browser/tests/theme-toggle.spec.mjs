@@ -26,7 +26,7 @@ test.describe('Theme Toggle real-browser contract', () => {
     expect(target?.width ?? 0).toBeGreaterThanOrEqual(24);
     expect(target?.height ?? 0).toBeGreaterThanOrEqual(24);
 
-    await expect(dragonArt).toHaveAttribute('viewBox', '0 0 116 68');
+    await expect(dragonArt).toHaveAttribute('viewBox', '0 0 96 64');
     await expect(dragonArt.locator('path')).toHaveCount(9);
     await expect(dragonArt.locator('ellipse')).toHaveCount(2);
     const dragonArtLayout = await dragonArt.evaluate((element) => ({
