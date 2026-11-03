@@ -19,14 +19,17 @@ async function dragonGeometry(locator) {
 
 async function expectDragonAnatomy(art) {
   await expect(art).toHaveAttribute('viewBox', '0 0 104 48');
+  await expect(art.locator('.vf-theme-toggle-dragon-neck')).toHaveCount(1);
   await expect(art.locator('.vf-theme-toggle-dragon-crest')).toHaveCount(1);
   await expect(art.locator('.vf-theme-toggle-dragon-upper-jaw')).toHaveCount(1);
+  await expect(art.locator('.vf-theme-toggle-dragon-cheek')).toHaveCount(1);
   await expect(art.locator('.vf-theme-toggle-dragon-brow')).toHaveCount(1);
   await expect(art.locator('.vf-theme-toggle-dragon-lower-jaw')).toHaveCount(1);
   await expect(art.locator('.vf-theme-toggle-dragon-fangs')).toHaveCount(1);
   await expect(art.locator('.vf-theme-toggle-dragon-eye')).toHaveCount(1);
   await expect(art.locator('.vf-theme-toggle-dragon-nostril')).toHaveCount(1);
   await expect(art.locator('.vf-theme-toggle-dragon-mouth-glow')).toHaveCount(1);
+  await expect(art.locator('.vf-theme-toggle-dragon-scales')).toHaveCount(1);
 }
 
 test('docs AppShell uses the same Native dragon-mouth artwork as the Theme Toggle showcase', async ({ page }, testInfo) => {
