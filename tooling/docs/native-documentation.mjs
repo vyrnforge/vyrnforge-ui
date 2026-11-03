@@ -15,7 +15,6 @@ const nativeShellStyleSpecifiers = [
   '@vyrnforge/web/styles/link.css',
   '@vyrnforge/web/styles/surface.css',
   '@vyrnforge/web/styles/button.css',
-  '@vyrnforge/web/styles/visually-hidden.css',
 ];
 
 function readJson(root, relativePath) {
