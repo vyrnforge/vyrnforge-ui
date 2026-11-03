@@ -15,6 +15,7 @@
 @import "./components/radio/radio.css";
 @import "./components/slider/slider.css";
 @import "./components/switch/switch.css";
+@import "./components/theme-toggle/theme-toggle.css";
 @import "./components/temporal-input/temporal-input.css";
 @import "./components/textarea/textarea.css";
 @import "./components/toggle-button/toggle-button.css";
