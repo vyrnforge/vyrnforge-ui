@@ -1,4 +1,4 @@
-import { cp, mkdir, readFile, rm, writeFile } from 'node:fs/promises';
+import { cp, mkdir, readFile, rm, stat, writeFile } from 'node:fs/promises';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { compileNativeDocumentation } from '../../tooling/docs/native-documentation.mjs';
@@ -8,7 +8,7 @@ const outRoot = path.join(root, 'dist/docs');
 const channel = process.env.VYRNFORGE_DOCS_CHANNEL || 'next';
 const channelRoot = path.join(outRoot, channel);
 const nativeRoot = path.join(channelRoot, 'native-web');
-const nativeBasePath = `/${channel}/native-web/`;
+const nativeSitePath = `${channel}/native-web/`;
 const registry = JSON.parse(await readFile(path.join(root, 'documentation/site/registry.json'), 'utf8'));
 
 if (registry.mode !== 'native-html-first' || registry.framework !== 'native-web') {
@@ -42,6 +42,16 @@ function titleCase(value) {
     .join(' ');
 }
 
+function artifactHref(pageDirectory, target) {
+  const sourceDirectory = String(pageDirectory).replace(/^\/+|\/+$/g, '');
+  const rawTarget = String(target);
+  const directoryTarget = rawTarget.endsWith('/');
+  const normalizedTarget = rawTarget.replace(/^\/+|\/+$/g, '');
+  const relative = path.posix.relative(sourceDirectory, normalizedTarget);
+  if (!relative) return directoryTarget ? './' : '.';
+  return directoryTarget ? `${relative}/` : relative;
+}
+
 function renderInline(value) {
   return String(value).split(/(`[^`]+`)/g).map((part) => {
     if (part.startsWith('`') && part.endsWith('`')) return `<code>${escapeHtml(part.slice(1, -1))}</code>`;
@@ -67,18 +77,18 @@ function groupedPages() {
   return [...groups.entries()].sort(([left], [right]) => left.localeCompare(right));
 }
 
-function componentNavigation(currentId = null) {
+function componentNavigation(pageDirectory, currentId = null) {
   const overviewCurrent = currentId === null ? ' aria-current="page"' : '';
   const groups = groupedPages().map(([group, pages]) => `<div data-vf-side-nav-group>
       <p data-vf-side-nav-group-label>${escapeHtml(titleCase(group))}</p>
-      <ul data-vf-side-nav-list>${pages.map((page) => `<li data-vf-side-nav-item><a data-vf-side-nav-link href="${nativeBasePath}${page.route}"${page.id === currentId ? ' aria-current="page"' : ''}>${escapeHtml(page.title)}</a></li>`).join('')}</ul>
+      <ul data-vf-side-nav-list>${pages.map((page) => `<li data-vf-side-nav-item><a data-vf-side-nav-link href="${artifactHref(pageDirectory, `${nativeSitePath}${page.route}`)}"${page.id === currentId ? ' aria-current="page"' : ''}>${escapeHtml(page.title)}</a></li>`).join('')}</ul>
     </div>`).join('\n');
 
   return `<nav data-vf-side-nav aria-label="Documentation">
     <div data-vf-side-nav-group>
       <p data-vf-side-nav-group-label>Native Web</p>
       <ul data-vf-side-nav-list>
-        <li data-vf-side-nav-item><a data-vf-side-nav-link href="${nativeBasePath}"${overviewCurrent}>Overview</a></li>
+        <li data-vf-side-nav-item><a data-vf-side-nav-link href="${artifactHref(pageDirectory, nativeSitePath)}"${overviewCurrent}>Overview</a></li>
       </ul>
     </div>
     ${groups}
@@ -99,9 +109,9 @@ function pageSearchText(page) {
   return content.join(' ').toLocaleLowerCase();
 }
 
-function searchMarkup() {
+function searchMarkup(pageDirectory) {
   const results = model.pages.map((page) => `<li data-vf-docs-search-item data-vf-docs-search-text="${escapeHtml(pageSearchText(page))}" hidden>
-        <a href="${nativeBasePath}${page.route}">
+        <a href="${artifactHref(pageDirectory, `${nativeSitePath}${page.route}`)}">
           <strong>${escapeHtml(page.title)}</strong>
           <span>${escapeHtml(titleCase(page.group))} · Native Web</span>
         </a>
@@ -118,13 +128,13 @@ function searchMarkup() {
   </div>`;
 }
 
-function styleLinks(componentStyle = null) {
+function styleLinks(pageDirectory, componentStyle = null) {
   const assets = [...model.shellStyles.map((entry) => entry.assetPath)];
   if (componentStyle && !assets.includes(componentStyle)) assets.push(componentStyle);
-  return assets.map((assetPath) => `  <link rel="stylesheet" href="${escapeHtml(assetPath)}">`).join('\n');
+  return assets.map((assetPath) => `  <link rel="stylesheet" href="${escapeHtml(artifactHref(pageDirectory, assetPath))}">`).join('\n');
 }
 
-function shell({ title, description, currentId = null, content, componentStyle = null }) {
+function shell({ pageDirectory, title, description, currentId = null, content, componentStyle = null }) {
   return `<!doctype html>
 <html lang="en" data-vf-theme="light" data-vf-density="comfortable">
 <head>
@@ -134,9 +144,9 @@ function shell({ title, description, currentId = null, content, componentStyle =
   <meta name="color-scheme" content="light dark">
   <title>${escapeHtml(title)} · VyrnForge</title>
   <script>try{const value=localStorage.getItem('vf-docs-theme');if(['light','dark','system'].includes(value))document.documentElement.dataset.vfTheme=value}catch{}</script>
-${styleLinks(componentStyle)}
-  <link rel="stylesheet" href="/assets/docs.css">
-  <script src="/assets/docs.js" defer></script>
+${styleLinks(pageDirectory, componentStyle)}
+  <link rel="stylesheet" href="${artifactHref(pageDirectory, 'assets/docs.css')}">
+  <script src="${artifactHref(pageDirectory, 'assets/docs.js')}" defer></script>
 </head>
 <body>
   <a class="vf-docs-skip" href="#main">Skip to content</a>
@@ -145,11 +155,11 @@ ${styleLinks(componentStyle)}
       <div class="vf-docs-header-inner">
         <div class="vf-docs-brand-row">
           <button type="button" data-vf-button data-vf-variant="ghost" data-vf-size="sm" class="vf-docs-menu-toggle" data-vf-docs-nav-toggle aria-controls="vf-docs-navigation" aria-expanded="true">Menu</button>
-          <a class="vf-docs-brand" href="${nativeBasePath}">VyrnForge <span>Docs</span></a>
+          <a class="vf-docs-brand" href="${artifactHref(pageDirectory, nativeSitePath)}">VyrnForge <span>Docs</span></a>
           <span class="vf-docs-surface" aria-label="Documentation surface">Native Web · ${escapeHtml(channel)}</span>
         </div>
         <div class="vf-docs-header-tools">
-          ${searchMarkup()}
+          ${searchMarkup(pageDirectory)}
           <div class="vf-docs-theme-control">
             <label for="vf-docs-theme">Theme</label>
             <select id="vf-docs-theme" data-vf-native-select data-vf-docs-theme>
@@ -163,7 +173,7 @@ ${styleLinks(componentStyle)}
     </header>
     <div data-vf-app-shell-body class="vf-docs-app-body">
       <aside id="vf-docs-navigation" data-vf-app-shell-navigation class="vf-docs-navigation-region">
-        <div class="vf-docs-navigation-scroll">${componentNavigation(currentId)}</div>
+        <div class="vf-docs-navigation-scroll">${componentNavigation(pageDirectory, currentId)}</div>
       </aside>
       <main id="main" data-vf-app-shell-main class="vf-docs-main">${content}</main>
     </div>
@@ -177,8 +187,9 @@ ${styleLinks(componentStyle)}
 }
 
 function renderHome() {
+  const pageDirectory = nativeSitePath.replace(/\/$/, '');
   const cards = model.pages.map((page) => `<li data-vf-surface>
-      <a class="vf-docs-card-link" href="${nativeBasePath}${page.route}">
+      <a class="vf-docs-card-link" href="${artifactHref(pageDirectory, `${nativeSitePath}${page.route}`)}">
         <span>
           <strong>${escapeHtml(page.title)}</strong>
           <small>${escapeHtml(titleCase(page.group))}</small>
@@ -188,6 +199,7 @@ function renderHome() {
     </li>`).join('');
   const firstPage = model.pages[0];
   return shell({
+    pageDirectory,
     title: 'Native Web documentation',
     description: 'VyrnForge Native Web documentation',
     content: `<section class="vf-docs-hero">
@@ -195,7 +207,7 @@ function renderHome() {
       <h1>VyrnForge Native Web</h1>
       <p class="vf-docs-lede">Build with semantic HTML, the browser platform, and the canonical <code>@vyrnforge/web</code> styling foundation. This is the first documentation surface being rebuilt from the clean foundation.</p>
       <div class="vf-docs-hero-actions">
-        <a href="${nativeBasePath}${firstPage.route}" data-vf-button>Explore ${escapeHtml(firstPage.title)}</a>
+        <a href="${artifactHref(pageDirectory, `${nativeSitePath}${firstPage.route}`)}" data-vf-button>Explore ${escapeHtml(firstPage.title)}</a>
         <span>${model.pages.length} documented component${model.pages.length === 1 ? '' : 's'}</span>
       </div>
     </section>
@@ -231,10 +243,10 @@ function renderExample(example) {
   </article>`;
 }
 
-function renderBreadcrumbs(page) {
+function renderBreadcrumbs(page, pageDirectory) {
   return `<nav class="vf-docs-breadcrumbs" aria-label="Breadcrumb">
     <ol>
-      <li><a data-vf-link href="${nativeBasePath}">Native Web</a></li>
+      <li><a data-vf-link href="${artifactHref(pageDirectory, nativeSitePath)}">Native Web</a></li>
       <li><span aria-hidden="true">/</span> Components</li>
       <li><span aria-hidden="true">/</span> <span aria-current="page">${escapeHtml(page.title)}</span></li>
     </ol>
@@ -251,6 +263,7 @@ function renderTableOfContents(entries) {
 }
 
 function renderComponent(page) {
+  const pageDirectory = `${nativeSitePath}${page.route}`.replace(/\/$/, '');
   const usedIds = new Set();
   const uniqueId = (heading) => {
     const base = slugify(heading);
@@ -280,11 +293,12 @@ function renderComponent(page) {
   const criteria = page.accessibility.wcag?.criteria ?? [];
 
   return shell({
+    pageDirectory,
     title: page.title,
     description: `${page.title} documentation for VyrnForge Native Web`,
     currentId: page.id,
     componentStyle: page.styleAssetPath,
-    content: `${renderBreadcrumbs(page)}
+    content: `${renderBreadcrumbs(page, pageDirectory)}
     <div class="vf-docs-content-grid">
       <article class="vf-docs-article" data-vf-docs-component="${escapeHtml(page.id)}">
         <header class="vf-docs-component-header">
@@ -325,6 +339,33 @@ function renderComponent(page) {
   });
 }
 
+async function verifyLocalAssets(pageDirectory, html) {
+  const references = [
+    ...html.matchAll(/<link\b[^>]*\bhref="([^"]+)"[^>]*>/g),
+    ...html.matchAll(/<script\b[^>]*\bsrc="([^"]+)"[^>]*>/g),
+  ].map((match) => match[1]);
+
+  for (const reference of references) {
+    if (/^(?:[a-z]+:|\/\/)/i.test(reference)) continue;
+    if (reference.startsWith('/')) throw new Error(`Documentation asset URL must be deployment-relative: ${reference}`);
+    const pathname = reference.split(/[?#]/, 1)[0];
+    const resolved = path.resolve(outRoot, pageDirectory, pathname);
+    const outPrefix = `${outRoot}${path.sep}`;
+    if (resolved !== outRoot && !resolved.startsWith(outPrefix)) {
+      throw new Error(`Documentation asset URL escapes the output root: ${reference}`);
+    }
+    const info = await stat(resolved).catch(() => null);
+    if (!info?.isFile()) throw new Error(`Documentation asset URL does not resolve to a built file: ${reference}`);
+  }
+}
+
+async function writePage(pageDirectory, html) {
+  const pageRoot = path.join(outRoot, pageDirectory);
+  await mkdir(pageRoot, { recursive: true });
+  await verifyLocalAssets(pageDirectory, html);
+  await writeFile(path.join(pageRoot, 'index.html'), html);
+}
+
 await rm(outRoot, { recursive: true, force: true });
 await mkdir(nativeRoot, { recursive: true });
 await mkdir(path.join(outRoot, 'assets'), { recursive: true });
@@ -332,11 +373,10 @@ await cp(path.join(root, 'packages/web/dist'), path.join(outRoot, 'assets/vyrnfo
 await cp(path.join(root, 'apps/docs/native.css'), path.join(outRoot, 'assets/docs.css'));
 await cp(path.join(root, 'apps/docs/client.js'), path.join(outRoot, 'assets/docs.js'));
 
-await writeFile(path.join(nativeRoot, 'index.html'), renderHome());
+await writePage(nativeSitePath.replace(/\/$/, ''), renderHome());
 for (const page of model.pages) {
-  const pageRoot = path.join(nativeRoot, page.route);
-  await mkdir(pageRoot, { recursive: true });
-  await writeFile(path.join(pageRoot, 'index.html'), renderComponent(page));
+  const pageDirectory = `${nativeSitePath}${page.route}`.replace(/\/$/, '');
+  await writePage(pageDirectory, renderComponent(page));
 }
 
 const manifest = {
