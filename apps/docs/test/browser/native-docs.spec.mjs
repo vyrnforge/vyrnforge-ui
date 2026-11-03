@@ -42,19 +42,27 @@ async function expectDeploymentRelativeStyles(page) {
   return styleHrefs;
 }
 
-test('Native Web home uses the public Web shell and Product Graph navigation', async ({ page }, testInfo) => {
+function buttonCatalogEntry() {
+  const entry = manifest.componentCatalog.find((component) => component.slug === 'button');
+  expect(entry, 'Button must be present in the Native Web Product Graph catalog').toBeTruthy();
+  return entry;
+}
+
+test('Native Web home uses the VyrnForge shell and separates documentation surfaces', async ({ page }, testInfo) => {
   const errors = collectPageErrors(page);
   await gotoWithCleanDocsState(page, '/next/native-web/');
 
   await expect(page.getByRole('heading', { level: 1, name: 'VyrnForge Native Web' })).toBeVisible();
   await expect(page.locator('[data-vf-app-shell]')).toHaveCount(1);
   await expect(page.locator('[data-vf-side-nav]')).toHaveCount(1);
-  await expect(page.getByRole('link', { name: 'Button' }).first()).toHaveAttribute('href', 'components/button/');
+  await expect(page.getByRole('link', { name: 'Showcase', exact: true })).toHaveAttribute('href', 'components/');
+  await expect(page.getByRole('link', { name: 'Components API', exact: true })).toHaveAttribute('href', 'api/components/');
+  await expect(page.getByRole('link', { name: 'Styling', exact: true })).toHaveAttribute('href', 'foundations/styling/');
+  await expect(page.getByRole('link', { name: 'Design tokens', exact: true })).toHaveAttribute('href', 'foundations/tokens/');
   await expect(page.locator('[data-vf-docs-framework], [data-vf-framework-picker]')).toHaveCount(0);
   await expect(page.getByRole('searchbox', { name: 'Search documentation' })).toHaveAttribute('data-vf-input', '');
   await expect(page.getByRole('searchbox', { name: 'Search documentation' })).not.toHaveAttribute('aria-expanded');
   await expect(page.getByLabel('Theme')).toHaveAttribute('data-vf-native-select', '');
-  await expect(page.locator('.vf-docs-card-list [data-vf-surface]')).toHaveCount(1);
 
   const styleHrefs = await expectDeploymentRelativeStyles(page);
   for (const suffix of [
@@ -74,26 +82,69 @@ test('Native Web home uses the public Web shell and Product Graph navigation', a
 
   expect(manifest.status).toBe('native-html-first');
   expect(manifest.framework).toBe('native-web');
-  expect(manifest.pages).toEqual([
-    {
-      slug: 'components/button/',
-      title: 'Button',
-      group: 'actions',
-      framework: 'native-web',
-      source: 'product/components/button/docs/index.md',
-      examples: ['button/basic', 'button/sizes', 'button/states', 'button/variants']
-    }
+  expect(manifest.componentCatalog.length).toBeGreaterThan(0);
+  expect(manifest.api.length).toBe(manifest.componentCatalog.length);
+  expect(manifest.foundations.map((pageEntry) => pageEntry.slug)).toEqual([
+    'foundations/styling/',
+    'foundations/tokens/'
   ]);
+
+  const button = buttonCatalogEntry();
+  expect(button.api).toBe(true);
+  expect(button.publicEntrypoints).toContain('@vyrnforge/web/styles/button.css');
+  expect(manifest.pages.some((pageEntry) => pageEntry.slug === 'components/button/')).toBe(button.showcase);
 
   const search = page.getByRole('searchbox', { name: 'Search documentation' });
   await search.fill('button');
   await expect(page.locator('[data-vf-docs-search-results]')).toBeVisible();
-  await expect(page.locator('[data-vf-docs-search-item]:not([hidden])').getByRole('link', { name: /Button/ })).toBeVisible();
+  await expect(page.locator('[data-vf-docs-search-item]:not([hidden])').getByRole('link', { name: /Button/ }).first()).toBeVisible();
   await page.keyboard.press('Escape');
   await expect(page.locator('[data-vf-docs-search-results]')).toBeHidden();
   await expect(search).toBeFocused();
 
   await page.screenshot({ path: testInfo.outputPath('native-home.png'), fullPage: true });
+  await expectNoAccessibilityViolations(page);
+  expect(errors, errors.join('\n')).toEqual([]);
+});
+
+test('Native component catalog is Product Graph scoped and API reference is independent of showcase readiness', async ({ page }) => {
+  const errors = collectPageErrors(page);
+  const button = buttonCatalogEntry();
+
+  await gotoWithCleanDocsState(page, '/next/native-web/components/');
+  await expect(page.getByRole('heading', { level: 1, name: 'Component showcase' })).toBeVisible();
+  await expect(page.locator('.vf-docs-card-list > li')).toHaveCount(manifest.componentCatalog.length);
+  const buttonCatalogLink = page.locator('.vf-docs-card-list a').filter({ hasText: 'Button' }).first();
+  await expect(buttonCatalogLink).toHaveAttribute('href', button.showcase ? 'button/' : '../api/components/button/');
+
+  await gotoWithCleanDocsState(page, '/next/native-web/api/components/');
+  await expect(page.getByRole('heading', { level: 1, name: 'Components API' })).toBeVisible();
+  await expect(page.locator('.vf-docs-card-list > li')).toHaveCount(manifest.api.length);
+  await expect(page.getByRole('link', { name: 'Button', exact: true }).last()).toHaveAttribute('href', 'button/');
+
+  await gotoWithCleanDocsState(page, '/next/native-web/api/components/button/');
+  await expect(page.getByRole('heading', { level: 1, name: 'Button API' })).toBeVisible();
+  await expect(page.getByText('@vyrnforge/web/styles/button.css', { exact: true })).toBeVisible();
+  if (button.showcase) {
+    await expect(page.getByRole('link', { name: 'Open Button showcase' })).toHaveAttribute('href', '../../../components/button/');
+  }
+  await expectDeploymentRelativeStyles(page);
+  await expectNoAccessibilityViolations(page);
+  expect(errors, errors.join('\n')).toEqual([]);
+});
+
+test('Native foundations keep styling and tokens separate from component pages', async ({ page }) => {
+  const errors = collectPageErrors(page);
+
+  await gotoWithCleanDocsState(page, '/next/native-web/foundations/styling/');
+  await expect(page.getByRole('heading', { level: 1, name: 'Styling' })).toBeVisible();
+  await expect(page.getByRole('heading', { level: 2, name: 'Public entrypoints' })).toBeVisible();
+  await expect(page.getByText('@vyrnforge/web/styles/button.css', { exact: true })).toBeVisible();
+
+  await gotoWithCleanDocsState(page, '/next/native-web/foundations/tokens/');
+  await expect(page.getByRole('heading', { level: 1, name: 'Design tokens' })).toBeVisible();
+  await expect(page.getByText('@vyrnforge/web/styles/tokens.css', { exact: true })).toBeVisible();
+  await expectDeploymentRelativeStyles(page);
   await expectNoAccessibilityViolations(page);
   expect(errors, errors.join('\n')).toEqual([]);
 });
@@ -121,8 +172,10 @@ test('Native Web theme selection is explicit and persists without a theme runtim
   expect(errors, errors.join('\n')).toEqual([]);
 });
 
-test('Button page composes native guidance, TOC, examples, and public Web behavior', async ({ page }, testInfo) => {
+test('Button showcase composes shared guidance, Native adaptation, examples, reference links, and public Web behavior', async ({ page }, testInfo) => {
   const errors = collectPageErrors(page);
+  const button = buttonCatalogEntry();
+  expect(button.showcase).toBe(true);
   await gotoWithCleanDocsState(page, '/next/native-web/components/button/');
 
   await expect(page.getByRole('heading', { level: 1, name: 'Button' })).toBeVisible();
@@ -130,10 +183,14 @@ test('Button page composes native guidance, TOC, examples, and public Web behavi
   const toc = page.getByRole('navigation', { name: 'On this page' });
   await expect(toc.getByRole('link', { name: 'Native Web setup' })).toHaveAttribute('href', '#native-web-setup');
   await expect(toc.getByRole('link', { name: 'Examples' })).toHaveAttribute('href', '#examples');
+  await expect(toc.getByRole('link', { name: 'Reference' })).toHaveAttribute('href', '#reference');
   await expect(page.getByText('@vyrnforge/web/styles/button.css', { exact: false }).first()).toBeVisible();
   await expect(page.locator('article[data-vf-docs-component="button"]')).toHaveCount(1);
   await expect(page.locator('[data-vf-docs-example]')).toHaveCount(4);
   await expect(page.locator('[data-vf-docs-example][data-vf-surface]')).toHaveCount(4);
+  await expect(page.getByRole('link', { name: 'Button API reference' })).toHaveAttribute('href', '../../api/components/button/');
+  await expect(page.getByRole('link', { name: 'Styling foundation' })).toHaveAttribute('href', '../../foundations/styling/');
+  await expect(page.getByRole('link', { name: 'Design tokens' })).toHaveAttribute('href', '../../foundations/tokens/');
   await expectDeploymentRelativeStyles(page);
 
   const save = page.getByRole('button', { name: 'Save changes' });
@@ -141,9 +198,9 @@ test('Button page composes native guidance, TOC, examples, and public Web behavi
   await expect(save).toHaveAttribute('data-vf-variant', 'primary');
   await expect(save).toHaveCSS('cursor', 'pointer');
 
-  await save.evaluate((button) => {
+  await save.evaluate((buttonElement) => {
     window.__vfActivations = 0;
-    button.addEventListener('click', () => { window.__vfActivations += 1; });
+    buttonElement.addEventListener('click', () => { window.__vfActivations += 1; });
   });
   await save.focus();
   await page.keyboard.press('Enter');
@@ -182,7 +239,7 @@ test('Native shell reflows at 320 CSS pixels and exposes responsive navigation',
   await toggle.click();
   await expect(toggle).toHaveAttribute('aria-expanded', 'true');
   await expect(navigation).toBeVisible();
-  await expect(navigation.getByRole('link', { name: 'Button' })).toHaveAttribute('aria-current', 'page');
+  await expect(navigation.locator('a[aria-current="page"]')).toHaveText('Button');
 
   await page.evaluate(() => { document.documentElement.style.fontSize = '200%'; });
   await expect(page.getByRole('heading', { level: 1, name: 'Button' })).toBeVisible();
