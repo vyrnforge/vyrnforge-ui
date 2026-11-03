@@ -49,6 +49,6 @@
   "notes": [
     "Theme Toggle is a specialized binary light/dark presentation over the approved checkbox-backed switch semantic baseline.",
     "Checked means dark theme and unchecked means light theme; system-theme selection remains application policy rather than a third switch state.",
-    "The sky illustration is decorative and must not be the only indication of state; thumb position and native checked semantics remain authoritative."
+    "The wyvern, ember, and breath story is decorative and must not be the only indication of state; thumb position and native checked semantics remain authoritative."
   ]
 }

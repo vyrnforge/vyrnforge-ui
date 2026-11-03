@@ -52,23 +52,20 @@ function createThemeToggle(fallback) {
   track.setAttribute('data-vf-theme-toggle-track', '');
   track.setAttribute('aria-hidden', 'true');
 
-  const clouds = document.createElement('span');
-  clouds.setAttribute('data-vf-theme-toggle-clouds', '');
+  const breath = document.createElement('span');
+  breath.setAttribute('data-vf-theme-toggle-breath', '');
 
-  const stars = document.createElement('span');
-  stars.setAttribute('data-vf-theme-toggle-stars', '');
+  const dragon = document.createElement('span');
+  dragon.setAttribute('data-vf-theme-toggle-dragon', '');
 
   const thumb = document.createElement('span');
   thumb.setAttribute('data-vf-theme-toggle-thumb', '');
 
-  const sun = document.createElement('span');
-  sun.setAttribute('data-vf-theme-toggle-sun', '');
+  const ember = document.createElement('span');
+  ember.setAttribute('data-vf-theme-toggle-ember', '');
 
-  const moon = document.createElement('span');
-  moon.setAttribute('data-vf-theme-toggle-moon', '');
-
-  thumb.append(sun, moon);
-  track.append(clouds, stars, thumb);
+  thumb.append(ember);
+  track.append(breath, dragon, thumb);
   root.append(control, track);
   container.replaceChildren(root);
   return control;
