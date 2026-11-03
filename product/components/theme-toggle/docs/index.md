@@ -23,6 +23,10 @@ Preferred presentation hooks are `data-vf-theme-toggle`, `data-vf-theme-toggle-c
 
 The track, breath, dragon, and ember are decorative. Keep them `aria-hidden="true"` through the track container. The checkbox remains the only interactive target.
 
+The preferred Native example nests the supplied decorative vector artwork inside `data-vf-theme-toggle-dragon`. That inline SVG gives the wyvern an actual profile with horns, brow, snout, open jaw, fangs, nostril, eye, cheek plates, and neck instead of relying on a coarse CSS polygon. The SVG is presentation anatomy, not an additional interactive element or semantic state. Keep it hidden from assistive technology and non-focusable.
+
+An empty `data-vf-theme-toggle-dragon` span remains render-compatible with the earlier CSS-only silhouette so existing markup does not disappear. New VyrnForge-authored examples should use the vector artwork so the intended brand treatment is visually legible at the control's real size.
+
 Earlier Theme Toggle markup used `data-vf-theme-toggle-clouds`, `data-vf-theme-toggle-stars`, `data-vf-theme-toggle-sun`, and `data-vf-theme-toggle-moon`. The Web stylesheet continues to accept those hooks as compatibility aliases so existing markup does not lose its presentation, but new authoring should use the dragon-specific anatomy above. The previous moon hook has no visual role in the dragon treatment.
 
 ## Visual story
