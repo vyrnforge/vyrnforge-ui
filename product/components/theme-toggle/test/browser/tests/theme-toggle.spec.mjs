@@ -6,7 +6,7 @@ const port = process.env.VF_COMPONENT_PORT || 'web';
 test.describe('Theme Toggle real-browser contract', () => {
   test.skip(port !== 'web', 'Native Web contract evidence');
 
-  test('preserves native switch semantics while the wyvern consumes and releases the light', async ({ page }, testInfo) => {
+  test('preserves native switch semantics while the dragon consumes and releases the light', async ({ page }, testInfo) => {
     await page.goto('/components/theme-toggle/web.html');
 
     const control = page.locator('#light-theme');
@@ -26,17 +26,26 @@ test.describe('Theme Toggle real-browser contract', () => {
     expect(target?.width ?? 0).toBeGreaterThanOrEqual(24);
     expect(target?.height ?? 0).toBeGreaterThanOrEqual(24);
 
-    await expect(dragonArt).toHaveAttribute('viewBox', '0 0 70 44');
-    await expect(dragonArt.locator('path')).toHaveCount(7);
-    await expect(dragonArt.locator('ellipse')).toHaveCount(2);
+    await expect(dragon).toHaveAttribute('data-vf-theme-toggle-dragon-artwork', '');
+    await expect(dragonArt).toHaveAttribute('viewBox', '0 0 512 512');
+    await expect(dragonArt).toHaveAttribute('preserveAspectRatio', 'xMidYMid meet');
+    await expect(dragonArt.locator('g')).toHaveAttribute('transform', 'translate(512 0) scale(-1 1)');
+    await expect(dragonArt.locator('path.vf-theme-toggle-dragon-silhouette')).toHaveCount(1);
+    await expect(dragonArt.locator('.vf-theme-toggle-dragon-eye')).toHaveCount(1);
+    await expect(dragonArt.locator('.vf-theme-toggle-dragon-mouth-glow')).toHaveCount(1);
+
     const dragonArtLayout = await dragonArt.evaluate((element) => ({
       width: element.clientWidth,
       height: element.clientHeight,
       zIndex: getComputedStyle(element).zIndex,
+      fallbackBeforeDisplay: getComputedStyle(element.parentElement, '::before').display,
+      fallbackAfterDisplay: getComputedStyle(element.parentElement, '::after').display,
     }));
-    expect(dragonArtLayout.width).toBeGreaterThanOrEqual(40);
-    expect(dragonArtLayout.height).toBeGreaterThanOrEqual(24);
+    expect(dragonArtLayout.width).toBeGreaterThanOrEqual(60);
+    expect(dragonArtLayout.height).toBeGreaterThanOrEqual(30);
     expect(Number.parseInt(dragonArtLayout.zIndex, 10)).toBeGreaterThanOrEqual(1);
+    expect(dragonArtLayout.fallbackBeforeDisplay).toBe('none');
+    expect(dragonArtLayout.fallbackAfterDisplay).toBe('none');
 
     const presentation = await root.evaluate((element) => {
       const thumbElement = element.querySelector('[data-vf-theme-toggle-thumb]');
@@ -52,19 +61,21 @@ test.describe('Theme Toggle real-browser contract', () => {
         maxThumbTransitionSeconds: Math.max(...duration),
         breathHasDetail: getComputedStyle(breathElement).backgroundImage !== 'none',
         dragonVectorPresent: Boolean(dragonVector),
-        dragonVectorPathCount: dragonVector?.querySelectorAll('path').length ?? 0,
-        dragonVectorEllipseCount: dragonVector?.querySelectorAll('ellipse').length ?? 0,
+        dragonSilhouetteCount: dragonVector?.querySelectorAll('path.vf-theme-toggle-dragon-silhouette').length ?? 0,
+        dragonEyeCount: dragonVector?.querySelectorAll('.vf-theme-toggle-dragon-eye').length ?? 0,
+        dragonMouthGlowCount: dragonVector?.querySelectorAll('.vf-theme-toggle-dragon-mouth-glow').length ?? 0,
         emberHasDetail: getComputedStyle(emberElement).backgroundImage !== 'none',
       };
     });
     expect(presentation.maxThumbTransitionSeconds).toBeGreaterThanOrEqual(0.5);
     expect(presentation.breathHasDetail).toBe(true);
     expect(presentation.dragonVectorPresent).toBe(true);
-    expect(presentation.dragonVectorPathCount).toBeGreaterThanOrEqual(7);
-    expect(presentation.dragonVectorEllipseCount).toBeGreaterThanOrEqual(2);
+    expect(presentation.dragonSilhouetteCount).toBe(1);
+    expect(presentation.dragonEyeCount).toBe(1);
+    expect(presentation.dragonMouthGlowCount).toBe(1);
     expect(presentation.emberHasDetail).toBe(true);
 
-    await expect(dragon).toHaveCSS('opacity', '0.08');
+    expect(Number.parseFloat(await dragon.evaluate((element) => getComputedStyle(element).opacity))).toBeLessThan(0.05);
     await expect(ember).toHaveCSS('opacity', '1');
     await page.screenshot({ path: testInfo.outputPath('theme-toggle-light.png'), fullPage: true });
     await root.screenshot({ path: testInfo.outputPath('theme-toggle-light-control.png') });
@@ -77,6 +88,8 @@ test.describe('Theme Toggle real-browser contract', () => {
     await expect.poll(() => dragon.evaluate((element) => getComputedStyle(element).opacity)).toBe('1');
     await expect.poll(() => ember.evaluate((element) => getComputedStyle(element).opacity)).toBe('0');
     await expect.poll(() => breath.evaluate((element) => getComputedStyle(element).opacity)).toBe('0');
+    expect(Number.parseFloat(await thumb.evaluate((element) => getComputedStyle(element).opacity))).toBeLessThan(0.4);
+    await page.waitForTimeout(600);
     await page.screenshot({ path: testInfo.outputPath('theme-toggle-dark.png'), fullPage: true });
     await root.screenshot({ path: testInfo.outputPath('theme-toggle-dark-control.png') });
 
@@ -105,7 +118,7 @@ test.describe('Theme Toggle real-browser contract', () => {
     await page.screenshot({ path: testInfo.outputPath('theme-toggle-release.png'), fullPage: true });
     await root.screenshot({ path: testInfo.outputPath('theme-toggle-release-control.png') });
     await expect.poll(() => ember.evaluate((element) => getComputedStyle(element).opacity)).toBe('1');
-    await expect.poll(() => dragon.evaluate((element) => getComputedStyle(element).opacity)).toBe('0.08');
+    await expect.poll(() => dragon.evaluate((element) => Number.parseFloat(getComputedStyle(element).opacity))).toBeLessThan(0.05);
 
     const disabled = page.locator('#disabled-theme');
     await expect(disabled).toBeDisabled();
