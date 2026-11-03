@@ -30,8 +30,10 @@ test('docs AppShell uses the same Native dragon-mouth artwork as the Theme Toggl
   await expect(headerDragon).toHaveAttribute('data-vf-theme-toggle-dragon-artwork', '');
   await expect(headerArt).toHaveCount(1);
   await expect(headerArt).toHaveAttribute('viewBox', '0 0 104 48');
+  await expect(headerArt.locator('.vf-theme-toggle-dragon-crest')).toHaveCount(1);
   await expect(headerArt.locator('.vf-theme-toggle-dragon-upper-jaw')).toHaveCount(1);
   await expect(headerArt.locator('.vf-theme-toggle-dragon-lower-jaw')).toHaveCount(1);
+  await expect(headerArt.locator('.vf-theme-toggle-dragon-brow')).toHaveCount(1);
   await expect(headerArt.locator('.vf-theme-toggle-dragon-neck')).toHaveCount(1);
   await expect(headerArt.locator('.vf-theme-toggle-dragon-fangs')).toHaveCount(1);
   await expect(headerArt.locator('.vf-theme-toggle-dragon-brow')).toHaveCount(1);
