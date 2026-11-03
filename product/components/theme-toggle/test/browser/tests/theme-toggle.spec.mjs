@@ -27,7 +27,7 @@ test.describe('Theme Toggle real-browser contract', () => {
     expect(target?.height ?? 0).toBeGreaterThanOrEqual(24);
 
     await expect(dragonArt).toHaveAttribute('viewBox', '0 0 116 68');
-    await expect(dragonArt.locator('path')).toHaveCount(8);
+    await expect(dragonArt.locator('path')).toHaveCount(9);
     await expect(dragonArt.locator('ellipse')).toHaveCount(2);
     const dragonArtBox = await dragonArt.boundingBox();
     expect(dragonArtBox?.width ?? 0).toBeGreaterThanOrEqual(40);
@@ -55,7 +55,7 @@ test.describe('Theme Toggle real-browser contract', () => {
     expect(presentation.maxThumbTransitionSeconds).toBeGreaterThanOrEqual(0.5);
     expect(presentation.breathHasDetail).toBe(true);
     expect(presentation.dragonVectorPresent).toBe(true);
-    expect(presentation.dragonVectorPathCount).toBeGreaterThanOrEqual(8);
+    expect(presentation.dragonVectorPathCount).toBeGreaterThanOrEqual(9);
     expect(presentation.dragonVectorEllipseCount).toBeGreaterThanOrEqual(2);
     expect(presentation.emberHasDetail).toBe(true);
 
