@@ -3,9 +3,20 @@ import { test, expect } from '@playwright/test';
 async function dragonGeometry(locator) {
   return locator.evaluate((svg) => ({
     viewBox: svg.getAttribute('viewBox'),
+    preserveAspectRatio: svg.getAttribute('preserveAspectRatio'),
     groupTransform: svg.querySelector('g')?.getAttribute('transform'),
-    paths: [...svg.querySelectorAll('path')].map((path) => path.getAttribute('d')),
+    paths: [...svg.querySelectorAll('path')].map((path) => ({
+      className: path.getAttribute('class'),
+      d: path.getAttribute('d'),
+    })),
+    circles: [...svg.querySelectorAll('circle')].map((circle) => ({
+      className: circle.getAttribute('class'),
+      cx: circle.getAttribute('cx'),
+      cy: circle.getAttribute('cy'),
+      r: circle.getAttribute('r'),
+    })),
     ellipses: [...svg.querySelectorAll('ellipse')].map((ellipse) => ({
+      className: ellipse.getAttribute('class'),
       cx: ellipse.getAttribute('cx'),
       cy: ellipse.getAttribute('cy'),
       rx: ellipse.getAttribute('rx'),
@@ -26,10 +37,12 @@ test('docs AppShell uses the same Native dragon artwork as the Theme Toggle show
 
   await expect(headerDragon).toHaveAttribute('data-vf-theme-toggle-dragon-artwork', '');
   await expect(headerArt).toHaveCount(1);
-  await expect(headerArt).toHaveAttribute('viewBox', '0 0 64 32');
-  await expect(headerArt.locator('g')).toHaveAttribute('transform', 'translate(25 0) scale(0.85 0.727)');
-  await expect(headerArt.locator('path')).toHaveCount(10);
-  await expect(headerArt.locator('ellipse')).toHaveCount(2);
+  await expect(headerArt).toHaveAttribute('viewBox', '0 0 512 512');
+  await expect(headerArt).toHaveAttribute('preserveAspectRatio', 'xMidYMid meet');
+  await expect(headerArt.locator('g')).toHaveAttribute('transform', 'translate(512 0) scale(-1 1)');
+  await expect(headerArt.locator('path.vf-theme-toggle-dragon-silhouette')).toHaveCount(1);
+  await expect(headerArt.locator('.vf-theme-toggle-dragon-eye')).toHaveCount(1);
+  await expect(headerArt.locator('.vf-theme-toggle-dragon-mouth-glow')).toHaveCount(1);
 
   await headerControl.click();
   await expect(headerControl).toBeChecked();
