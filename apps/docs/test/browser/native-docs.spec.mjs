@@ -30,6 +30,18 @@ async function gotoWithCleanDocsState(page, route) {
   await page.reload();
 }
 
+async function expectDeploymentRelativeStyles(page) {
+  const styleHrefs = await page.locator('link[rel="stylesheet"]').evaluateAll((links) => links.map((link) => link.getAttribute('href')));
+  expect(styleHrefs.length).toBeGreaterThan(0);
+  for (const href of styleHrefs) {
+    expect(href, 'stylesheet URL must remain inside the deployed docs base path').toBeTruthy();
+    expect(href.startsWith('/'), `stylesheet URL must be deployment-relative: ${href}`).toBe(false);
+    const response = await page.request.get(new URL(href, page.url()).href);
+    expect(response.ok(), `stylesheet must resolve: ${href}`).toBe(true);
+  }
+  return styleHrefs;
+}
+
 test('Native Web home uses the public Web shell and Product Graph navigation', async ({ page }, testInfo) => {
   const errors = collectPageErrors(page);
   await gotoWithCleanDocsState(page, '/next/native-web/');
@@ -37,14 +49,14 @@ test('Native Web home uses the public Web shell and Product Graph navigation', a
   await expect(page.getByRole('heading', { level: 1, name: 'VyrnForge Native Web' })).toBeVisible();
   await expect(page.locator('[data-vf-app-shell]')).toHaveCount(1);
   await expect(page.locator('[data-vf-side-nav]')).toHaveCount(1);
-  await expect(page.getByRole('link', { name: 'Button' }).first()).toHaveAttribute('href', '/next/native-web/components/button/');
+  await expect(page.getByRole('link', { name: 'Button' }).first()).toHaveAttribute('href', 'components/button/');
   await expect(page.locator('[data-vf-docs-framework], [data-vf-framework-picker]')).toHaveCount(0);
   await expect(page.getByRole('searchbox', { name: 'Search documentation' })).toHaveAttribute('data-vf-input', '');
   await expect(page.getByRole('searchbox', { name: 'Search documentation' })).not.toHaveAttribute('aria-expanded');
   await expect(page.getByLabel('Theme')).toHaveAttribute('data-vf-native-select', '');
   await expect(page.locator('.vf-docs-card-list [data-vf-surface]')).toHaveCount(1);
 
-  const styleHrefs = await page.locator('link[rel="stylesheet"]').evaluateAll((links) => links.map((link) => link.getAttribute('href')));
+  const styleHrefs = await expectDeploymentRelativeStyles(page);
   for (const suffix of [
     '/styles/tokens.css',
     '/styles/reset.css',
@@ -55,7 +67,8 @@ test('Native Web home uses the public Web shell and Product Graph navigation', a
     '/components/native-select/native-select.css',
     '/components/link/link.css',
     '/components/surface/surface.css',
-    '/components/button/button.css'
+    '/components/button/button.css',
+    '/components/visually-hidden/visually-hidden.css'
   ]) {
     expect(styleHrefs.some((href) => href?.endsWith(suffix)), `missing public Web stylesheet ${suffix}`).toBe(true);
   }
@@ -122,6 +135,7 @@ test('Button page composes native guidance, TOC, examples, and public Web behavi
   await expect(page.locator('article[data-vf-docs-component="button"]')).toHaveCount(1);
   await expect(page.locator('[data-vf-docs-example]')).toHaveCount(4);
   await expect(page.locator('[data-vf-docs-example][data-vf-surface]')).toHaveCount(4);
+  await expectDeploymentRelativeStyles(page);
 
   const save = page.getByRole('button', { name: 'Save changes' });
   await expect(save).toHaveAttribute('data-vf-button', '');
