@@ -1,13 +1,16 @@
 const dragonArt = `
   <svg class="vf-theme-toggle-dragon-art" viewBox="0 0 104 48" width="100%" height="100%" aria-hidden="true" focusable="false">
-    <path class="vf-theme-toggle-dragon-crest" d="M101 6C94 5 90 7 85 11L91 1C83 4 77 9 72 14L76 3C68 8 63 13 60 18L70 20L84 19L97 22Z"/>
-    <path class="vf-theme-toggle-dragon-upper-jaw" d="M104 8C96 8 90 10 84 13C78 16 72 17 66 17C61 17 57 18 53 20L47 20L43 23L35 24L42 27L51 28L59 27C64 25 69 23 75 23C82 23 88 25 94 28L104 27Z"/>
-    <path class="vf-theme-toggle-dragon-brow" d="M58 18L69 14L80 15L73 20L62 21Z"/>
-    <path class="vf-theme-toggle-dragon-lower-jaw" d="M104 34C96 33 91 34 85 35C78 36 72 34 67 32C62 31 57 31 53 32L47 34L42 36L48 39C56 43 64 45 73 45C82 45 90 42 96 40L104 43Z"/>
-    <path class="vf-theme-toggle-dragon-fangs" d="M47 27L50 33L53 28ZM56 27L59 34L62 27ZM67 25L70 32L73 24ZM50 35L53 31L56 36ZM61 39L64 33L68 40Z"/>
-    <path class="vf-theme-toggle-dragon-eye" d="M65 18L73 16L70 21L64 21Z"/>
-    <ellipse class="vf-theme-toggle-dragon-nostril" cx="42.5" cy="24.5" rx="1.8" ry="1.2"/>
-    <ellipse class="vf-theme-toggle-dragon-mouth-glow" cx="79" cy="30.5" rx="4" ry="2.3"/>
+    <path class="vf-theme-toggle-dragon-neck" d="M104 6C95 7 90 9 85 13C80 17 79 23 80 29C82 35 88 40 97 44L104 45Z"/>
+    <path class="vf-theme-toggle-dragon-crest" d="M92 14C96 9 99 5 101 1C94 2 87 6 82 12C85 11 89 12 92 14ZM81 13C83 8 84 4 83 1C77 4 72 8 68 14C72 12 77 12 81 13Z"/>
+    <path class="vf-theme-toggle-dragon-upper-jaw" d="M100 13C93 11 87 11 82 13L75 16L69 16L64 14L58 16L55 19L47 20L43 22L34 22L29 25L34 28L44 29L52 28L59 26L67 25L75 26L82 29L90 28L97 31L104 29L104 14Z"/>
+    <path class="vf-theme-toggle-dragon-cheek" d="M79 25L88 28L96 27L101 31L96 36L88 35L81 32L73 31Z"/>
+    <path class="vf-theme-toggle-dragon-brow" d="M56 19L66 14L77 15L72 20L61 22Z"/>
+    <path class="vf-theme-toggle-dragon-lower-jaw" d="M104 34L96 33L89 34L82 33L75 32L68 31L60 32L53 33L45 32L38 31L43 36L51 40L61 43L72 44L82 42L91 39L99 42L104 44Z"/>
+    <path class="vf-theme-toggle-dragon-fangs" d="M44 29L47 34L50 29ZM54 28L57 34L60 28ZM65 26L68 32L71 26ZM50 34L53 38L56 35ZM61 38L64 42L67 37Z"/>
+    <path class="vf-theme-toggle-dragon-eye" d="M62 18L71 16L68 21L61 21Z"/>
+    <ellipse class="vf-theme-toggle-dragon-nostril" cx="35.5" cy="25.3" rx="1.6" ry="1"/>
+    <ellipse class="vf-theme-toggle-dragon-mouth-glow" cx="79" cy="31" rx="2.6" ry="1.7"/>
+    <path class="vf-theme-toggle-dragon-scales" d="M85 17L92 14M87 21L95 19M88 37L95 34"/>
   </svg>`;
 
 export const browserFixture = {
