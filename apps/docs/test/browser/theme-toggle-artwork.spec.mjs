@@ -17,16 +17,23 @@ async function dragonGeometry(locator) {
 }
 
 async function expectDragonAnatomy(art) {
-  await expect(art).toHaveAttribute('viewBox', '0 0 48 48');
+  await expect(art).toHaveAttribute('viewBox', '0 0 72 56');
   await expect(art.locator('.vf-theme-toggle-dragon-body')).toHaveCount(1);
-  await expect(art.locator('.vf-theme-toggle-dragon-wing')).toHaveCount(1);
+  await expect(art.locator('.vf-theme-toggle-dragon-tail')).toHaveCount(1);
+  await expect(art.locator('.vf-theme-toggle-dragon-tail-plume')).toHaveCount(1);
   await expect(art.locator('.vf-theme-toggle-dragon-head')).toHaveCount(1);
+  await expect(art.locator('.vf-theme-toggle-dragon-mane')).toHaveCount(1);
+  await expect(art.locator('.vf-theme-toggle-dragon-horns')).toHaveCount(1);
+  await expect(art.locator('.vf-theme-toggle-dragon-whiskers')).toHaveCount(1);
+  await expect(art.locator('.vf-theme-toggle-dragon-foreleg')).toHaveCount(1);
+  await expect(art.locator('.vf-theme-toggle-dragon-body-detail')).toHaveCount(1);
+  await expect(art.locator('.vf-theme-toggle-dragon-face-detail')).toHaveCount(1);
   await expect(art.locator('.vf-theme-toggle-dragon-eye')).toHaveCount(1);
-  await expect(art.locator('path')).toHaveCount(3);
+  await expect(art.locator('path')).toHaveCount(10);
   await expect(art.locator('circle')).toHaveCount(1);
 }
 
-test('docs AppShell uses the same simplified orbiting dragon artwork as the Theme Toggle showcase', async ({ page }, testInfo) => {
+test('docs AppShell uses the same detailed serpentine dragon artwork as the Theme Toggle showcase', async ({ page }, testInfo) => {
   await page.goto('/next/native-web/');
   await page.evaluate(() => localStorage.removeItem('vf-docs-theme'));
   await page.reload();
