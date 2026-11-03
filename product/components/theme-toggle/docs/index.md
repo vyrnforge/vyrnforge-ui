@@ -23,7 +23,7 @@ Preferred presentation hooks are `data-vf-theme-toggle`, `data-vf-theme-toggle-c
 
 The track, breath, dragon, and ember are decorative. Keep them `aria-hidden="true"` through the track container. The checkbox remains the only interactive target.
 
-The preferred Native example nests original VyrnForge decorative artwork inside `data-vf-theme-toggle-dragon`. The artwork is not a miniature standalone dragon logo: the dragon emerges from the inline-end edge of the track as an upper skull and horn crest, eye, lower jaw, fangs, nostril, and mouth glow. The track itself becomes the dragon during the story, which keeps the mouth large enough to read at the control's real size. The SVG is presentation anatomy, not an additional interactive element or semantic state. Keep it hidden from assistive technology and non-focusable.
+The preferred Native example nests original VyrnForge decorative artwork inside `data-vf-theme-toggle-dragon`. The artwork is not a miniature standalone dragon logo: a tall wyvern head emerges from the inline-end edge of the 104×48 track and is allowed to extend into the larger 112×56 control bounds. That extra vertical room keeps the swept horns, skull, cheek, eye, lower jaw, fangs, nostril, and mouth glow readable instead of flattening the head into a long fish-like profile. The SVG is presentation anatomy, not an additional interactive element or semantic state. Keep it hidden from assistive technology and non-focusable.
 
 
 An empty `data-vf-theme-toggle-dragon` span remains render-compatible through a simplified CSS mouth fallback so existing markup does not disappear. New VyrnForge-authored examples should use the vector artwork so the upper and lower jaws can stage the consume/release motion independently.
