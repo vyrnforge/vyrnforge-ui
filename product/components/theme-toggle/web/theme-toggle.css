@@ -131,8 +131,8 @@
     transform: scaleX(0) scaleY(0.78);
     transform-origin: right center;
     transition:
-      opacity 280ms var(--vf-motion-easing-standard) 110ms,
-      transform var(--_vf-theme-toggle-story-duration) var(--vf-motion-easing-standard);
+      opacity 400ms var(--vf-motion-easing-standard) 80ms,
+      transform 760ms var(--vf-motion-easing-standard);
     z-index: 4;
   }
 
@@ -295,7 +295,9 @@
   :where([data-vf-theme-toggle-control]:checked) ~ :where([data-vf-theme-toggle-track]) :where([data-vf-theme-toggle-clouds]) {
     opacity: 0;
     transform: scaleX(1) scaleY(1);
-    transition-delay: 0ms;
+    transition:
+      opacity 80ms var(--vf-motion-easing-standard),
+      transform var(--_vf-theme-toggle-story-duration) var(--vf-motion-easing-standard);
   }
 
   :where([data-vf-theme-toggle-control]:checked) ~ :where([data-vf-theme-toggle-track]) :where([data-vf-theme-toggle-thumb]) {
