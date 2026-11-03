@@ -17,6 +17,8 @@ test.describe('Theme Toggle real-browser contract', () => {
     const dragonArt = dragon.locator('svg.vf-theme-toggle-dragon-art');
     const thumb = root.locator('[data-vf-theme-toggle-thumb]');
     const ember = root.locator('[data-vf-theme-toggle-ember]');
+    const upperJaw = dragonArt.locator('.vf-theme-toggle-dragon-upper-jaw');
+    const lowerJaw = dragonArt.locator('.vf-theme-toggle-dragon-lower-jaw');
 
     await expect(control).toHaveAttribute('type', 'checkbox');
     await expect(control).toHaveAttribute('role', 'switch');
@@ -27,10 +29,12 @@ test.describe('Theme Toggle real-browser contract', () => {
     expect(target?.height ?? 0).toBeGreaterThanOrEqual(24);
 
     await expect(dragon).toHaveAttribute('data-vf-theme-toggle-dragon-artwork', '');
-    await expect(dragonArt).toHaveAttribute('viewBox', '0 0 512 512');
+    await expect(dragonArt).toHaveAttribute('viewBox', '0 0 104 48');
     await expect(dragonArt).toHaveAttribute('preserveAspectRatio', 'xMidYMid meet');
-    await expect(dragonArt.locator('g')).toHaveAttribute('transform', 'translate(512 0) scale(-1 1)');
-    await expect(dragonArt.locator('path.vf-theme-toggle-dragon-silhouette')).toHaveCount(1);
+        await expect(dragonArt.locator('path.vf-theme-toggle-dragon-silhouette')).toHaveCount(1);
+    await expect(dragonArt.locator('.vf-theme-toggle-dragon-upper-jaw')).toHaveCount(1);
+    await expect(dragonArt.locator('.vf-theme-toggle-dragon-lower-jaw')).toHaveCount(1);
+    await expect(dragonArt.locator('.vf-theme-toggle-dragon-fangs')).toHaveCount(1);
     await expect(dragonArt.locator('.vf-theme-toggle-dragon-eye')).toHaveCount(1);
     await expect(dragonArt.locator('.vf-theme-toggle-dragon-mouth-glow')).toHaveCount(1);
 
@@ -41,8 +45,8 @@ test.describe('Theme Toggle real-browser contract', () => {
       fallbackBeforeDisplay: getComputedStyle(element.parentElement, '::before').display,
       fallbackAfterDisplay: getComputedStyle(element.parentElement, '::after').display,
     }));
-    expect(dragonArtLayout.width).toBeGreaterThanOrEqual(60);
-    expect(dragonArtLayout.height).toBeGreaterThanOrEqual(30);
+    expect(dragonArtLayout.width).toBeGreaterThanOrEqual(100);
+    expect(dragonArtLayout.height).toBeGreaterThanOrEqual(45);
     expect(Number.parseInt(dragonArtLayout.zIndex, 10)).toBeGreaterThanOrEqual(1);
     expect(dragonArtLayout.fallbackBeforeDisplay).toBe('none');
     expect(dragonArtLayout.fallbackAfterDisplay).toBe('none');
@@ -88,6 +92,8 @@ test.describe('Theme Toggle real-browser contract', () => {
     await expect.poll(() => dragon.evaluate((element) => getComputedStyle(element).opacity)).toBe('1');
     await expect.poll(() => ember.evaluate((element) => getComputedStyle(element).opacity)).toBe('0');
     await expect.poll(() => breath.evaluate((element) => getComputedStyle(element).opacity)).toBe('0');
+    await expect.poll(() => upperJaw.evaluate((element) => getComputedStyle(element).transform)).toBe('none');
+    await expect.poll(() => lowerJaw.evaluate((element) => getComputedStyle(element).transform)).toBe('none');
     expect(Number.parseFloat(await thumb.evaluate((element) => getComputedStyle(element).opacity))).toBeLessThan(0.4);
     await page.waitForTimeout(600);
     await page.screenshot({ path: testInfo.outputPath('theme-toggle-dark.png'), fullPage: true });
