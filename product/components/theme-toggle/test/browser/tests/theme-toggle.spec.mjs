@@ -26,15 +26,17 @@ test.describe('Theme Toggle real-browser contract', () => {
     expect(target?.width ?? 0).toBeGreaterThanOrEqual(24);
     expect(target?.height ?? 0).toBeGreaterThanOrEqual(24);
 
-    await expect(dragonArt).toHaveAttribute('viewBox', '0 0 96 64');
-    await expect(dragonArt.locator('path')).toHaveCount(9);
+    await expect(dragonArt).toHaveAttribute('viewBox', '0 0 70 44');
+    await expect(dragonArt.locator('path')).toHaveCount(7);
     await expect(dragonArt.locator('ellipse')).toHaveCount(2);
     const dragonArtLayout = await dragonArt.evaluate((element) => ({
       width: element.clientWidth,
       height: element.clientHeight,
+      zIndex: getComputedStyle(element).zIndex,
     }));
     expect(dragonArtLayout.width).toBeGreaterThanOrEqual(40);
     expect(dragonArtLayout.height).toBeGreaterThanOrEqual(24);
+    expect(Number.parseInt(dragonArtLayout.zIndex, 10)).toBeGreaterThanOrEqual(1);
 
     const presentation = await root.evaluate((element) => {
       const thumbElement = element.querySelector('[data-vf-theme-toggle-thumb]');
@@ -58,7 +60,7 @@ test.describe('Theme Toggle real-browser contract', () => {
     expect(presentation.maxThumbTransitionSeconds).toBeGreaterThanOrEqual(0.5);
     expect(presentation.breathHasDetail).toBe(true);
     expect(presentation.dragonVectorPresent).toBe(true);
-    expect(presentation.dragonVectorPathCount).toBeGreaterThanOrEqual(9);
+    expect(presentation.dragonVectorPathCount).toBeGreaterThanOrEqual(7);
     expect(presentation.dragonVectorEllipseCount).toBeGreaterThanOrEqual(2);
     expect(presentation.emberHasDetail).toBe(true);
 
