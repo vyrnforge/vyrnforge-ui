@@ -188,9 +188,10 @@ test('Button showcase composes shared guidance, Native adaptation, examples, ref
   await expect(page.locator('article[data-vf-docs-component="button"]')).toHaveCount(1);
   await expect(page.locator('[data-vf-docs-example]')).toHaveCount(4);
   await expect(page.locator('[data-vf-docs-example][data-vf-surface]')).toHaveCount(4);
-  await expect(page.getByRole('link', { name: 'Button API reference' })).toHaveAttribute('href', '../../api/components/button/');
-  await expect(page.getByRole('link', { name: 'Styling foundation' })).toHaveAttribute('href', '../../foundations/styling/');
-  await expect(page.getByRole('link', { name: 'Design tokens' })).toHaveAttribute('href', '../../foundations/tokens/');
+  const reference = page.locator('#main');
+  await expect(reference.getByRole('link', { name: 'Button API reference' })).toHaveAttribute('href', '../../api/components/button/');
+  await expect(reference.getByRole('link', { name: 'Styling foundation' })).toHaveAttribute('href', '../../foundations/styling/');
+  await expect(reference.getByRole('link', { name: 'Design tokens' })).toHaveAttribute('href', '../../foundations/tokens/');
   await expectDeploymentRelativeStyles(page);
 
   const save = page.getByRole('button', { name: 'Save changes' });
