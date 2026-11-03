@@ -29,9 +29,12 @@ test.describe('Theme Toggle real-browser contract', () => {
     await expect(dragonArt).toHaveAttribute('viewBox', '0 0 116 68');
     await expect(dragonArt.locator('path')).toHaveCount(9);
     await expect(dragonArt.locator('ellipse')).toHaveCount(2);
-    const dragonArtBox = await dragonArt.boundingBox();
-    expect(dragonArtBox?.width ?? 0).toBeGreaterThanOrEqual(40);
-    expect(dragonArtBox?.height ?? 0).toBeGreaterThanOrEqual(24);
+    const dragonArtLayout = await dragonArt.evaluate((element) => ({
+      width: element.clientWidth,
+      height: element.clientHeight,
+    }));
+    expect(dragonArtLayout.width).toBeGreaterThanOrEqual(40);
+    expect(dragonArtLayout.height).toBeGreaterThanOrEqual(24);
 
     const presentation = await root.evaluate((element) => {
       const thumbElement = element.querySelector('[data-vf-theme-toggle-thumb]');
