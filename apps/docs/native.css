@@ -84,6 +84,7 @@
     font-size: var(--vf-font-size-lg);
     font-weight: var(--vf-font-weight-bold);
     letter-spacing: var(--vf-letter-spacing-tight);
+    min-inline-size: 0;
     text-decoration: none;
   }
 
@@ -202,10 +203,10 @@
   .vf-docs-navigation-region {
     align-self: start;
     block-size: calc(100dvh - 4.4rem);
+    inset-block-start: 4.4rem;
     max-block-size: calc(100dvh - 4.4rem);
     overflow: auto;
     position: sticky;
-    inset-block-start: 4.4rem;
   }
 
   .vf-docs-navigation-scroll {
@@ -624,8 +625,21 @@
   }
 
   @media (max-width: 30rem) {
+    .vf-docs-brand-row {
+      align-items: start;
+      display: grid;
+      grid-template-columns: minmax(0, 1fr);
+    }
+
+    .vf-docs-menu-toggle {
+      justify-self: start;
+    }
+
+    .vf-docs-brand {
+      overflow-wrap: anywhere;
+    }
+
     .vf-docs-surface {
-      flex-basis: 100%;
       inline-size: fit-content;
     }
 
@@ -636,12 +650,14 @@
     }
 
     .vf-docs-theme-control {
+      align-items: stretch;
       display: grid;
-      grid-template-columns: auto minmax(0, 1fr);
+      grid-template-columns: minmax(0, 1fr);
     }
 
     .vf-docs-theme-control select {
       inline-size: 100%;
+      min-inline-size: 0;
     }
 
     .vf-docs-example-header,
