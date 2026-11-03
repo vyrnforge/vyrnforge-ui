@@ -69,16 +69,22 @@ test.describe('Theme Toggle real-browser contract', () => {
     await page.keyboard.press('Space');
     await expect(control).not.toBeChecked();
     await page.waitForTimeout(280);
-    const releaseFrame = await breath.evaluate((element) => {
-      const style = getComputedStyle(element);
-      const transform = style.transform === 'none' ? new DOMMatrixReadOnly() : new DOMMatrixReadOnly(style.transform);
+    const releaseFrame = await root.evaluate((element) => {
+      const breathElement = element.querySelector('[data-vf-theme-toggle-breath]');
+      const dragonElement = element.querySelector('[data-vf-theme-toggle-dragon]');
+      const breathStyle = getComputedStyle(breathElement);
+      const transform = breathStyle.transform === 'none'
+        ? new DOMMatrixReadOnly()
+        : new DOMMatrixReadOnly(breathStyle.transform);
       return {
-        opacity: Number.parseFloat(style.opacity),
-        scaleX: Math.abs(transform.a),
+        breathOpacity: Number.parseFloat(breathStyle.opacity),
+        breathScaleX: Math.abs(transform.a),
+        dragonOpacity: Number.parseFloat(getComputedStyle(dragonElement).opacity),
       };
     });
-    expect(releaseFrame.opacity).toBeGreaterThan(0.2);
-    expect(releaseFrame.scaleX).toBeGreaterThan(0.1);
+    expect(releaseFrame.breathOpacity).toBeGreaterThan(0.2);
+    expect(releaseFrame.breathScaleX).toBeGreaterThan(0.1);
+    expect(releaseFrame.dragonOpacity).toBeGreaterThan(0.35);
     await page.screenshot({ path: testInfo.outputPath('theme-toggle-release.png'), fullPage: true });
     await expect.poll(() => ember.evaluate((element) => getComputedStyle(element).opacity)).toBe('1');
     await expect.poll(() => dragon.evaluate((element) => getComputedStyle(element).opacity)).toBe('0.08');
