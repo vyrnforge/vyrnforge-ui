@@ -67,8 +67,11 @@ test.describe('Theme Toggle real-browser contract', () => {
     await control.uncheck();
     await control.check();
     await expect(control).toBeChecked();
-    const rtlTransform = await thumb.evaluate((element) => getComputedStyle(element).transform);
-    expect(rtlTransform).toContain('-');
+    await expect.poll(() => thumb.evaluate((element) => {
+      const transform = getComputedStyle(element).transform;
+      if (transform === 'none') return 0;
+      return new DOMMatrixReadOnly(transform).m41;
+    })).toBeLessThan(0);
 
     await page.emulateMedia({ reducedMotion: 'reduce' });
     expect(await thumb.evaluate((element) => getComputedStyle(element).transitionDuration)).toBe('0s');
