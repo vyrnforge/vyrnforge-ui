@@ -15,6 +15,7 @@ test.describe('Theme Toggle real-browser contract', () => {
     const thumb = root.locator('[data-vf-theme-toggle-thumb]');
     const clouds = root.locator('[data-vf-theme-toggle-clouds]');
     const stars = root.locator('[data-vf-theme-toggle-stars]');
+    const moon = root.locator('[data-vf-theme-toggle-moon]');
 
     await expect(control).toHaveAttribute('type', 'checkbox');
     await expect(control).toHaveAttribute('role', 'switch');
@@ -24,6 +25,27 @@ test.describe('Theme Toggle real-browser contract', () => {
     expect(target?.width ?? 0).toBeGreaterThanOrEqual(24);
     expect(target?.height ?? 0).toBeGreaterThanOrEqual(24);
 
+    const presentation = await root.evaluate((element) => {
+      const thumbElement = element.querySelector('[data-vf-theme-toggle-thumb]');
+      const cloudsElement = element.querySelector('[data-vf-theme-toggle-clouds]');
+      const starsElement = element.querySelector('[data-vf-theme-toggle-stars]');
+      const moonElement = element.querySelector('[data-vf-theme-toggle-moon]');
+      const duration = getComputedStyle(thumbElement).transitionDuration
+        .split(',')
+        .map((value) => Number.parseFloat(value.trim()))
+        .filter(Number.isFinite);
+      return {
+        maxThumbTransitionSeconds: Math.max(...duration),
+        cloudsHaveDetail: getComputedStyle(cloudsElement, '::before').backgroundImage !== 'none',
+        starsHaveDetail: getComputedStyle(starsElement).backgroundImage !== 'none',
+        moonHasDetail: getComputedStyle(moonElement).backgroundImage !== 'none',
+      };
+    });
+    expect(presentation.maxThumbTransitionSeconds).toBeGreaterThanOrEqual(0.4);
+    expect(presentation.cloudsHaveDetail).toBe(true);
+    expect(presentation.starsHaveDetail).toBe(true);
+    expect(presentation.moonHasDetail).toBe(true);
+
     const lightTransform = await thumb.evaluate((element) => getComputedStyle(element).transform);
     await control.focus();
     await page.keyboard.press('Space');
@@ -31,6 +53,7 @@ test.describe('Theme Toggle real-browser contract', () => {
     await expect.poll(() => thumb.evaluate((element) => getComputedStyle(element).transform)).not.toBe(lightTransform);
     await expect.poll(() => stars.evaluate((element) => getComputedStyle(element).opacity)).toBe('1');
     await expect.poll(() => clouds.evaluate((element) => getComputedStyle(element).opacity)).toBe('0');
+    await expect.poll(() => moon.evaluate((element) => getComputedStyle(element).opacity)).toBe('1');
 
     await control.focus();
     expect(await track.evaluate((element) => getComputedStyle(element).outlineStyle)).not.toBe('none');
@@ -44,8 +67,11 @@ test.describe('Theme Toggle real-browser contract', () => {
     await control.uncheck();
     await control.check();
     await expect(control).toBeChecked();
-    const rtlTransform = await thumb.evaluate((element) => getComputedStyle(element).transform);
-    expect(rtlTransform).toContain('-');
+    await expect.poll(() => thumb.evaluate((element) => {
+      const transform = getComputedStyle(element).transform;
+      if (transform === 'none') return 0;
+      return new DOMMatrixReadOnly(transform).m41;
+    })).toBeLessThan(0);
 
     await page.emulateMedia({ reducedMotion: 'reduce' });
     expect(await thumb.evaluate((element) => getComputedStyle(element).transitionDuration)).toBe('0s');
