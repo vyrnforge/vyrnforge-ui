@@ -2,18 +2,18 @@ const storedThemeValues = new Set(['light', 'dark', 'system']);
 const explicitThemes = new Set(['light', 'dark']);
 const themeStorageKey = 'vf-docs-theme';
 const themeToggleDragonArtwork = `
-  <svg class="vf-theme-toggle-dragon-art" viewBox="0 0 104 48" width="100%" height="100%" aria-hidden="true" focusable="false">
-    <path class="vf-theme-toggle-dragon-neck" d="M104 6C95 7 90 9 85 13C80 17 79 23 80 29C82 35 88 40 97 44L104 45Z"/>
-    <path class="vf-theme-toggle-dragon-crest" d="M92 14C96 9 99 5 101 1C94 2 87 6 82 12C85 11 89 12 92 14ZM81 13C83 8 84 4 83 1C77 4 72 8 68 14C72 12 77 12 81 13Z"/>
-    <path class="vf-theme-toggle-dragon-upper-jaw" d="M100 13C93 11 87 11 82 13L75 16L69 16L64 14L58 16L55 19L47 20L43 22L34 22L29 25L34 28L44 29L52 28L59 26L67 25L75 26L82 29L90 28L97 31L104 29L104 14Z"/>
-    <path class="vf-theme-toggle-dragon-cheek" d="M79 25L88 28L96 27L101 31L96 36L88 35L81 32L73 31Z"/>
-    <path class="vf-theme-toggle-dragon-brow" d="M56 19L66 14L77 15L72 20L61 22Z"/>
-    <path class="vf-theme-toggle-dragon-lower-jaw" d="M104 34L96 33L89 34L82 33L75 32L68 31L60 32L53 33L45 32L38 31L43 36L51 40L61 43L72 44L82 42L91 39L99 42L104 44Z"/>
-    <path class="vf-theme-toggle-dragon-fangs" d="M44 29L47 34L50 29ZM54 28L57 34L60 28ZM65 26L68 32L71 26ZM50 34L53 38L56 35ZM61 38L64 42L67 37Z"/>
-    <path class="vf-theme-toggle-dragon-eye" d="M62 18L71 16L68 21L61 21Z"/>
-    <ellipse class="vf-theme-toggle-dragon-nostril" cx="35.5" cy="25.3" rx="1.6" ry="1"/>
-    <ellipse class="vf-theme-toggle-dragon-mouth-glow" cx="79" cy="31" rx="2.6" ry="1.7"/>
-    <path class="vf-theme-toggle-dragon-scales" d="M85 17L92 14M87 21L95 19M88 37L95 34"/>
+  <svg class="vf-theme-toggle-dragon-art" viewBox="0 0 64 56" width="100%" height="100%" aria-hidden="true" focusable="false">
+    <path class="vf-theme-toggle-dragon-neck" d="M64 9C57 7 52 9 48 13C45 17 44 22 45 28C46 36 51 44 60 51L64 53Z"/>
+    <path class="vf-theme-toggle-dragon-crest" d="M48 14C54 10 59 5 62 0C54 1 46 5 40 11C43 10 46 11 48 14ZM39 13C42 9 44 4 43 0C37 3 31 8 28 14C32 12 36 12 39 13Z"/>
+    <path class="vf-theme-toggle-dragon-upper-jaw" d="M61 14C55 11 49 12 44 15L38 18L32 17L27 15L23 18L20 21L14 22L10 24L4 24L1 27L4 30L11 31L17 30L23 28L30 27L36 28L42 31L49 31L55 29L61 32L64 31L64 16Z"/>
+    <path class="vf-theme-toggle-dragon-cheek" d="M39 18L49 16L57 19L52 25L43 27L35 24Z"/>
+    <path class="vf-theme-toggle-dragon-brow" d="M23 20L31 16L40 17L35 22L27 23Z"/>
+    <path class="vf-theme-toggle-dragon-lower-jaw" d="M64 35L58 33L52 34L46 33L40 32L34 31L28 32L23 34L17 34L11 32L6 32L9 37L15 42L23 46L32 49L42 49L51 46L58 43L64 47Z"/>
+    <path class="vf-theme-toggle-dragon-fangs" d="M12 31L15 35L18 31ZM21 29L24 34L27 29ZM31 28L34 33L37 28ZM17 35L20 39L23 35ZM27 39L30 43L33 38Z"/>
+    <path class="vf-theme-toggle-dragon-eye" d="M27 19L35 18L32 22L26 22Z"/>
+    <ellipse class="vf-theme-toggle-dragon-nostril" cx="6.5" cy="27.2" rx="1.6" ry="1"/>
+    <ellipse class="vf-theme-toggle-dragon-mouth-glow" cx="44" cy="32" rx="2.4" ry="1.6"/>
+    <path class="vf-theme-toggle-dragon-scales" d="M45 20L52 18M47 24L55 22M49 41L56 38"/>
   </svg>`;
 
 function readStoredTheme() {
