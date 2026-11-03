@@ -42,10 +42,18 @@ async function expectDeploymentRelativeStyles(page) {
   return styleHrefs;
 }
 
-function buttonCatalogEntry() {
-  const entry = manifest.componentCatalog.find((component) => component.slug === 'button');
-  expect(entry, 'Button must be present in the Native Web Product Graph catalog').toBeTruthy();
+function catalogEntry(slug, title) {
+  const entry = manifest.componentCatalog.find((component) => component.slug === slug);
+  expect(entry, `${title} must be present in the Native Web Product Graph catalog`).toBeTruthy();
   return entry;
+}
+
+function buttonCatalogEntry() {
+  return catalogEntry('button', 'Button');
+}
+
+function themeToggleCatalogEntry() {
+  return catalogEntry('theme-toggle', 'Theme Toggle');
 }
 
 test('Native Web home uses the VyrnForge shell and separates documentation surfaces', async ({ page }, testInfo) => {
@@ -62,7 +70,8 @@ test('Native Web home uses the VyrnForge shell and separates documentation surfa
   await expect(page.locator('[data-vf-docs-framework], [data-vf-framework-picker]')).toHaveCount(0);
   await expect(page.getByRole('searchbox', { name: 'Search documentation' })).toHaveAttribute('data-vf-input', '');
   await expect(page.getByRole('searchbox', { name: 'Search documentation' })).not.toHaveAttribute('aria-expanded');
-  await expect(page.getByLabel('Theme')).toHaveAttribute('data-vf-native-select', '');
+  await expect(page.locator('[data-vf-theme-toggle]')).toHaveCount(1);
+  await expect(page.getByRole('switch', { name: 'Dark theme' })).toHaveAttribute('data-vf-theme-toggle-control', '');
 
   const styleHrefs = await expectDeploymentRelativeStyles(page);
   for (const suffix of [
@@ -73,6 +82,7 @@ test('Native Web home uses the VyrnForge shell and separates documentation surfa
     '/components/side-nav/side-nav.css',
     '/components/input/input.css',
     '/components/native-select/native-select.css',
+    '/components/theme-toggle/theme-toggle.css',
     '/components/link/link.css',
     '/components/surface/surface.css',
     '/components/button/button.css'
@@ -94,10 +104,16 @@ test('Native Web home uses the VyrnForge shell and separates documentation surfa
   expect(button.publicEntrypoints).toContain('@vyrnforge/web/styles/button.css');
   expect(manifest.pages.some((pageEntry) => pageEntry.slug === 'components/button/')).toBe(button.showcase);
 
+  const themeToggle = themeToggleCatalogEntry();
+  expect(themeToggle.api).toBe(true);
+  expect(themeToggle.showcase).toBe(true);
+  expect(themeToggle.publicEntrypoints).toContain('@vyrnforge/web/styles/theme-toggle.css');
+  expect(manifest.pages.some((pageEntry) => pageEntry.slug === 'components/theme-toggle/')).toBe(true);
+
   const search = page.getByRole('searchbox', { name: 'Search documentation' });
-  await search.fill('button');
+  await search.fill('theme toggle');
   await expect(page.locator('[data-vf-docs-search-results]')).toBeVisible();
-  await expect(page.locator('[data-vf-docs-search-item]:not([hidden])').getByRole('link', { name: /Button/ }).first()).toBeVisible();
+  await expect(page.locator('[data-vf-docs-search-item]:not([hidden])').getByRole('link', { name: /Theme Toggle/ }).first()).toBeVisible();
   await page.keyboard.press('Escape');
   await expect(page.locator('[data-vf-docs-search-results]')).toBeHidden();
   await expect(search).toBeFocused();
@@ -110,17 +126,21 @@ test('Native Web home uses the VyrnForge shell and separates documentation surfa
 test('Native component catalog is Product Graph scoped and API reference is independent of showcase readiness', async ({ page }) => {
   const errors = collectPageErrors(page);
   const button = buttonCatalogEntry();
+  const themeToggle = themeToggleCatalogEntry();
 
   await gotoWithCleanDocsState(page, '/next/native-web/components/');
   await expect(page.getByRole('heading', { level: 1, name: 'Component showcase' })).toBeVisible();
   await expect(page.locator('.vf-docs-card-list > li')).toHaveCount(manifest.componentCatalog.length);
   const buttonCatalogLink = page.locator('.vf-docs-card-list a').filter({ hasText: 'Button' }).first();
   await expect(buttonCatalogLink).toHaveAttribute('href', button.showcase ? 'button/' : '../api/components/button/');
+  const themeToggleCatalogLink = page.locator('.vf-docs-card-list a').filter({ hasText: 'Theme Toggle' }).first();
+  await expect(themeToggleCatalogLink).toHaveAttribute('href', themeToggle.showcase ? 'theme-toggle/' : '../api/components/theme-toggle/');
 
   await gotoWithCleanDocsState(page, '/next/native-web/api/components/');
   await expect(page.getByRole('heading', { level: 1, name: 'Components API' })).toBeVisible();
   await expect(page.locator('.vf-docs-card-list > li')).toHaveCount(manifest.api.length);
   await expect(page.getByRole('link', { name: 'Button', exact: true }).last()).toHaveAttribute('href', 'button/');
+  await expect(page.getByRole('link', { name: 'Theme Toggle', exact: true }).last()).toHaveAttribute('href', 'theme-toggle/');
 
   await gotoWithCleanDocsState(page, '/next/native-web/api/components/button/');
   await expect(page.getByRole('heading', { level: 1, name: 'Button API' })).toBeVisible();
@@ -140,6 +160,7 @@ test('Native foundations keep styling and tokens separate from component pages',
   await expect(page.getByRole('heading', { level: 1, name: 'Styling' })).toBeVisible();
   await expect(page.getByRole('heading', { level: 2, name: 'Public entrypoints' })).toBeVisible();
   await expect(page.getByText('@vyrnforge/web/styles/button.css', { exact: true })).toBeVisible();
+  await expect(page.getByText('@vyrnforge/web/styles/theme-toggle.css', { exact: true })).toBeVisible();
 
   await gotoWithCleanDocsState(page, '/next/native-web/foundations/tokens/');
   await expect(page.getByRole('heading', { level: 1, name: 'Design tokens' })).toBeVisible();
@@ -149,25 +170,83 @@ test('Native foundations keep styling and tokens separate from component pages',
   expect(errors, errors.join('\n')).toEqual([]);
 });
 
-test('Native Web theme selection is explicit and persists without a theme runtime', async ({ page }) => {
+test('Native Web Theme Toggle selects and persists explicit light and dark themes', async ({ page }) => {
   const errors = collectPageErrors(page);
   await gotoWithCleanDocsState(page, '/next/native-web/');
 
   await expect(page.locator('html')).toHaveAttribute('data-vf-theme', 'light');
   const lightSurface = await page.evaluate(() => getComputedStyle(document.documentElement).getPropertyValue('--vf-color-surface').trim());
 
-  const theme = page.getByLabel('Theme');
-  await theme.selectOption('dark');
+  const theme = page.getByRole('switch', { name: 'Dark theme' });
+  await expect(theme).not.toBeChecked();
+  await theme.focus();
+  await page.keyboard.press('Space');
+  await expect(theme).toBeChecked();
   await expect(page.locator('html')).toHaveAttribute('data-vf-theme', 'dark');
   const darkSurface = await page.evaluate(() => getComputedStyle(document.documentElement).getPropertyValue('--vf-color-surface').trim());
   expect(darkSurface).not.toBe(lightSurface);
+  expect(await page.evaluate(() => localStorage.getItem('vf-docs-theme'))).toBe('dark');
 
   await page.reload();
+  const persistedTheme = page.getByRole('switch', { name: 'Dark theme' });
   await expect(page.locator('html')).toHaveAttribute('data-vf-theme', 'dark');
-  await expect(theme).toHaveValue('dark');
+  await expect(persistedTheme).toBeChecked();
 
-  await theme.selectOption('system');
-  await expect(page.locator('html')).toHaveAttribute('data-vf-theme', 'system');
+  await persistedTheme.click();
+  await expect(persistedTheme).not.toBeChecked();
+  await expect(page.locator('html')).toHaveAttribute('data-vf-theme', 'light');
+  expect(await page.evaluate(() => localStorage.getItem('vf-docs-theme'))).toBe('light');
+
+  await page.evaluate(() => localStorage.setItem('vf-docs-theme', 'system'));
+  await page.reload();
+  const migrated = await page.evaluate(() => ({
+    stored: localStorage.getItem('vf-docs-theme'),
+    active: document.documentElement.dataset.vfTheme
+  }));
+  expect(['light', 'dark']).toContain(migrated.stored);
+  expect(migrated.active).toBe(migrated.stored);
+  await expectNoAccessibilityViolations(page);
+  expect(errors, errors.join('\n')).toEqual([]);
+});
+
+test('Theme Toggle showcase uses native switch state and component-owned motion', async ({ page }, testInfo) => {
+  const errors = collectPageErrors(page);
+  const themeToggle = themeToggleCatalogEntry();
+  expect(themeToggle.showcase).toBe(true);
+  await gotoWithCleanDocsState(page, '/next/native-web/components/theme-toggle/');
+
+  await expect(page.getByRole('heading', { level: 1, name: 'Theme Toggle' })).toBeVisible();
+  await expect(page.getByText('@vyrnforge/web/styles/theme-toggle.css', { exact: false }).first()).toBeVisible();
+  await expect(page.locator('article[data-vf-docs-component="theme-toggle"]')).toHaveCount(1);
+  await expect(page.locator('[data-vf-docs-example]')).toHaveCount(1);
+  await expectDeploymentRelativeStyles(page);
+
+  const example = page.locator('[data-vf-docs-example]').first();
+  const control = example.getByRole('switch', { name: 'Dark theme' });
+  const thumb = example.locator('[data-vf-theme-toggle-thumb]');
+  const track = example.locator('[data-vf-theme-toggle-track]');
+  await expect(control).not.toBeChecked();
+
+  const target = await control.boundingBox();
+  expect(target?.width ?? 0).toBeGreaterThanOrEqual(24);
+  expect(target?.height ?? 0).toBeGreaterThanOrEqual(24);
+
+  const before = await thumb.evaluate((element) => getComputedStyle(element).transform);
+  await control.click();
+  await expect(control).toBeChecked();
+  const after = await thumb.evaluate((element) => getComputedStyle(element).transform);
+  expect(after).not.toBe(before);
+
+  await control.focus();
+  await page.keyboard.press('Space');
+  await expect(control).not.toBeChecked();
+
+  await page.emulateMedia({ reducedMotion: 'reduce' });
+  const reducedMotion = await thumb.evaluate((element) => getComputedStyle(element).transitionDuration);
+  expect(reducedMotion).toBe('0s');
+  await expect(track).toBeVisible();
+
+  await page.screenshot({ path: testInfo.outputPath('native-theme-toggle.png'), fullPage: true });
   await expectNoAccessibilityViolations(page);
   expect(errors, errors.join('\n')).toEqual([]);
 });

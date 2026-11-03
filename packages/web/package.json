@@ -81,6 +81,7 @@
     "./styles/radio.css": "./dist/components/radio/radio.css",
     "./styles/slider.css": "./dist/components/slider/slider.css",
     "./styles/switch.css": "./dist/components/switch/switch.css",
+    "./styles/theme-toggle.css": "./dist/components/theme-toggle/theme-toggle.css",
     "./styles/temporal-input.css": "./dist/components/temporal-input/temporal-input.css",
     "./styles/textarea.css": "./dist/components/textarea/textarea.css",
     "./styles/toggle-button.css": "./dist/components/toggle-button/toggle-button.css",
