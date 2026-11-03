@@ -229,6 +229,13 @@
     z-index: 2;
   }
 
+  :where(.vf-theme-toggle-dragon-neck) {
+    fill: color-mix(in srgb, var(--_vf-theme-toggle-dragon-shadow) 62%, var(--_vf-theme-toggle-dragon-mid));
+    stroke: var(--_vf-theme-toggle-dragon-highlight);
+    stroke-linejoin: round;
+    stroke-width: 1;
+  }
+
   :where(.vf-theme-toggle-dragon-crest) {
     fill: var(--_vf-theme-toggle-dragon-horn);
     stroke: var(--_vf-theme-toggle-dragon-horn-edge);
@@ -245,6 +252,13 @@
     transform-box: fill-box;
     transform-origin: right bottom;
     transition: transform 420ms var(--vf-motion-easing-standard);
+  }
+
+  :where(.vf-theme-toggle-dragon-cheek) {
+    fill: color-mix(in srgb, var(--_vf-theme-toggle-dragon-shadow) 54%, var(--_vf-theme-toggle-dragon-mid));
+    stroke: var(--_vf-theme-toggle-dragon-highlight);
+    stroke-linejoin: round;
+    stroke-width: 0.7;
   }
 
   :where(.vf-theme-toggle-dragon-brow) {
@@ -277,6 +291,14 @@
   :where(.vf-theme-toggle-dragon-nostril) {
     fill: var(--_vf-theme-toggle-ember-edge);
     filter: drop-shadow(0 0 0.16rem rgb(238 107 45 / 0.92));
+  }
+
+  :where(.vf-theme-toggle-dragon-scales) {
+    fill: none;
+    opacity: 0.68;
+    stroke: var(--_vf-theme-toggle-dragon-highlight);
+    stroke-linecap: round;
+    stroke-width: 0.8;
   }
 
   :where(.vf-theme-toggle-dragon-mouth-glow) {
