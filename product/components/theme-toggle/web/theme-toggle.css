@@ -24,8 +24,8 @@
     --_vf-theme-toggle-dragon-mid: #263953;
     --_vf-theme-toggle-dragon-shadow: #080d18;
     --_vf-theme-toggle-dragon-eye: #b7e5ff;
-    --_vf-theme-toggle-breath-core: rgb(229 245 255 / 0.94);
-    --_vf-theme-toggle-breath-edge: rgb(143 208 255 / 0.26);
+    --_vf-theme-toggle-breath-core: rgb(255 239 193 / 0.96);
+    --_vf-theme-toggle-breath-edge: rgb(255 139 56 / 0.3);
 
     block-size: var(--_vf-theme-toggle-block-size);
     box-sizing: border-box;
@@ -116,12 +116,12 @@
       transparent 0%,
       var(--_vf-theme-toggle-breath-edge) 28%,
       var(--_vf-theme-toggle-breath-core) 72%,
-      rgb(255 255 255 / 0.96) 100%
+      rgb(255 251 225 / 0.98) 100%
     );
     block-size: 0.72rem;
     border-radius: 999px;
     clip-path: polygon(0 42%, 78% 13%, 100% 0, 86% 50%, 100% 100%, 78% 87%, 0 58%);
-    filter: blur(0.015rem) drop-shadow(0 0 0.2rem rgb(123 194 246 / 0.42));
+    filter: blur(0.015rem) drop-shadow(0 0 0.22rem rgb(255 137 54 / 0.42));
     inline-size: 2.7rem;
     inset-block-start: 0.88rem;
     inset-inline-end: 1.5rem;
@@ -213,7 +213,7 @@
     transform-origin: right center;
     transition:
       filter var(--_vf-theme-toggle-detail-duration) var(--vf-motion-easing-standard),
-      opacity var(--_vf-theme-toggle-detail-duration) var(--vf-motion-easing-standard),
+      opacity 420ms var(--vf-motion-easing-standard) 180ms,
       transform var(--_vf-theme-toggle-story-duration) var(--vf-motion-easing-standard);
     z-index: 3;
   }
@@ -254,7 +254,9 @@
 
   :where([data-vf-theme-toggle-dragon])::after,
   :where([data-vf-theme-toggle-stars])::after {
-    background: var(--_vf-theme-toggle-night-start);
+    background:
+      radial-gradient(circle at 11% 18%, rgb(255 157 67 / 0.72) 0 3%, transparent 12%),
+      var(--_vf-theme-toggle-night-start);
     block-size: 0.58rem;
     clip-path: polygon(0 8%, 100% 22%, 84% 54%, 30% 100%, 8% 78%);
     content: "";
@@ -324,6 +326,10 @@
       drop-shadow(0 0 0.2rem rgb(106 153 207 / 0.14));
     opacity: 1;
     transform: translateX(0) scale(1);
+    transition:
+      filter var(--_vf-theme-toggle-detail-duration) var(--vf-motion-easing-standard),
+      opacity var(--_vf-theme-toggle-detail-duration) var(--vf-motion-easing-standard),
+      transform var(--_vf-theme-toggle-story-duration) var(--vf-motion-easing-standard);
   }
 
   :where([dir="rtl"] [data-vf-theme-toggle-breath]),
@@ -333,7 +339,7 @@
       transparent 0%,
       var(--_vf-theme-toggle-breath-edge) 28%,
       var(--_vf-theme-toggle-breath-core) 72%,
-      rgb(255 255 255 / 0.96) 100%
+      rgb(255 251 225 / 0.98) 100%
     );
     transform-origin: left center;
   }
