@@ -1,4 +1,4 @@
 {
-  "mode": "native-html-first-reset",
-  "pages": []
+  "mode": "native-html-first",
+  "framework": "native-web"
 }

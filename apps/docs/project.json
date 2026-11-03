@@ -7,13 +7,7 @@
     "scope:docs"
   ],
   "implicitDependencies": [
-    "@vyrnforge/core",
-    "@vyrnforge/web",
-    "@vyrnforge/icons",
-    "@vyrnforge/react",
-    "@vyrnforge/angular",
-    "@vyrnforge/vue",
-    "@vyrnforge/elements"
+    "@vyrnforge/web"
   ],
   "targets": {
     "build": {
@@ -25,13 +19,13 @@
         "{workspaceRoot}/dist/docs"
       ],
       "options": {
-        "command": "node apps/docs/build-reset.mjs"
+        "command": "node apps/docs/build.mjs"
       }
     },
     "lint": {
       "executor": "nx:run-commands",
       "options": {
-        "command": "pnpm exec eslint apps/docs --max-warnings=0"
+        "command": "pnpm exec eslint apps/docs tooling/docs --max-warnings=0"
       }
     },
     "test": {
