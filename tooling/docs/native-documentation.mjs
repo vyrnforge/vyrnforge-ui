@@ -18,7 +18,7 @@ export function parseMarkdownDocument(source) {
   const intro = [];
   const sections = [];
   let currentBlocks = intro;
-  let paragraph = [];
+  const paragraph = [];
   let list = null;
 
   const flushList = () => {
