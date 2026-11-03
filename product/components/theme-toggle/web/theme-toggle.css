@@ -215,8 +215,8 @@
     transform-origin: right center;
     transition:
       filter var(--_vf-theme-toggle-detail-duration) var(--vf-motion-easing-standard),
-      opacity 260ms var(--vf-motion-easing-standard),
-      transform var(--_vf-theme-toggle-story-duration) var(--vf-motion-easing-standard);
+      opacity 420ms var(--vf-motion-easing-standard) 240ms,
+      transform var(--_vf-theme-toggle-story-duration) var(--vf-motion-easing-standard) 80ms;
     z-index: 3;
   }
 
@@ -379,7 +379,7 @@
     transform: translateX(0) scale(1);
     transition:
       filter var(--_vf-theme-toggle-detail-duration) var(--vf-motion-easing-standard),
-      opacity var(--_vf-theme-toggle-detail-duration) var(--vf-motion-easing-standard),
+      opacity 260ms var(--vf-motion-easing-standard),
       transform var(--_vf-theme-toggle-story-duration) var(--vf-motion-easing-standard);
   }
 
