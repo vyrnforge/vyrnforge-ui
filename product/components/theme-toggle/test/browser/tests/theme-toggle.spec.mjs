@@ -37,18 +37,19 @@ test.describe('Theme Toggle real-browser contract', () => {
       return {
         maxThumbTransitionSeconds: Math.max(...duration),
         breathHasDetail: getComputedStyle(breathElement).backgroundImage !== 'none',
-        dragonHasSilhouette: getComputedStyle(dragonElement).clipPath !== 'none',
-        dragonEyeHasDetail: getComputedStyle(dragonElement, '::after').boxShadow !== 'none',
+        dragonHeadHasDetail: getComputedStyle(dragonElement, '::before').clipPath !== 'none'
+          && getComputedStyle(dragonElement, '::before').backgroundImage !== 'none',
+        dragonJawHasDetail: getComputedStyle(dragonElement, '::after').clipPath !== 'none',
         emberHasDetail: getComputedStyle(emberElement).backgroundImage !== 'none',
       };
     });
     expect(presentation.maxThumbTransitionSeconds).toBeGreaterThanOrEqual(0.5);
     expect(presentation.breathHasDetail).toBe(true);
-    expect(presentation.dragonHasSilhouette).toBe(true);
-    expect(presentation.dragonEyeHasDetail).toBe(true);
+    expect(presentation.dragonHeadHasDetail).toBe(true);
+    expect(presentation.dragonJawHasDetail).toBe(true);
     expect(presentation.emberHasDetail).toBe(true);
 
-    await expect(dragon).toHaveCSS('opacity', '0.24');
+    await expect(dragon).toHaveCSS('opacity', '0.08');
     await expect(ember).toHaveCSS('opacity', '1');
     await page.screenshot({ path: testInfo.outputPath('theme-toggle-light.png'), fullPage: true });
 
@@ -67,10 +68,14 @@ test.describe('Theme Toggle real-browser contract', () => {
 
     await page.keyboard.press('Space');
     await expect(control).not.toBeChecked();
-    await expect.poll(async () => Number.parseFloat(await breath.evaluate((element) => getComputedStyle(element).opacity))).toBeGreaterThan(0.05);
+    await expect.poll(() => breath.evaluate((element) => {
+      const style = getComputedStyle(element);
+      const transform = style.transform === 'none' ? new DOMMatrixReadOnly() : new DOMMatrixReadOnly(style.transform);
+      return Number.parseFloat(style.opacity) > 0.15 && Math.abs(transform.a) > 0.35;
+    })).toBe(true);
     await page.screenshot({ path: testInfo.outputPath('theme-toggle-release.png'), fullPage: true });
     await expect.poll(() => ember.evaluate((element) => getComputedStyle(element).opacity)).toBe('1');
-    await expect.poll(() => dragon.evaluate((element) => getComputedStyle(element).opacity)).toBe('0.24');
+    await expect.poll(() => dragon.evaluate((element) => getComputedStyle(element).opacity)).toBe('0.08');
 
     const disabled = page.locator('#disabled-theme');
     await expect(disabled).toBeDisabled();
