@@ -30,8 +30,10 @@ test.describe('Theme Toggle real-browser contract', () => {
 
     await expect(dragon).toHaveAttribute('data-vf-theme-toggle-dragon-artwork', '');
     await expect(dragonArt).toHaveAttribute('viewBox', '0 0 104 48');
+    await expect(dragonArt.locator('.vf-theme-toggle-dragon-crest')).toHaveCount(1);
     await expect(upperJaw).toHaveCount(1);
     await expect(lowerJaw).toHaveCount(1);
+    await expect(dragonArt.locator('.vf-theme-toggle-dragon-brow')).toHaveCount(1);
     await expect(dragonArt.locator('.vf-theme-toggle-dragon-neck')).toHaveCount(1);
     await expect(dragonArt.locator('.vf-theme-toggle-dragon-fangs')).toHaveCount(1);
     await expect(dragonArt.locator('.vf-theme-toggle-dragon-brow')).toHaveCount(1);
@@ -65,6 +67,7 @@ test.describe('Theme Toggle real-browser contract', () => {
       return {
         maxThumbTransitionSeconds: Math.max(...duration),
         breathHasDetail: getComputedStyle(breathElement).backgroundImage !== 'none',
+        crestPresent: Boolean(dragonVector?.querySelector('.vf-theme-toggle-dragon-crest')),
         upperJawPresent: Boolean(dragonVector?.querySelector('.vf-theme-toggle-dragon-upper-jaw')),
         lowerJawPresent: Boolean(dragonVector?.querySelector('.vf-theme-toggle-dragon-lower-jaw')),
         neckPresent: Boolean(dragonVector?.querySelector('.vf-theme-toggle-dragon-neck')),
@@ -78,6 +81,7 @@ test.describe('Theme Toggle real-browser contract', () => {
     });
     expect(presentation.maxThumbTransitionSeconds).toBeGreaterThanOrEqual(0.5);
     expect(presentation.breathHasDetail).toBe(true);
+    expect(presentation.crestPresent).toBe(true);
     expect(presentation.upperJawPresent).toBe(true);
     expect(presentation.lowerJawPresent).toBe(true);
     expect(presentation.neckPresent).toBe(true);
