@@ -1,10 +1,11 @@
-const allowedThemes = new Set(['light', 'dark', 'system']);
+const storedThemeValues = new Set(['light', 'dark', 'system']);
+const explicitThemes = new Set(['light', 'dark']);
 const themeStorageKey = 'vf-docs-theme';
 
 function readStoredTheme() {
   try {
     const value = localStorage.getItem(themeStorageKey);
-    return allowedThemes.has(value) ? value : null;
+    return storedThemeValues.has(value) ? value : null;
   } catch {
     return null;
   }
@@ -18,10 +19,59 @@ function persistTheme(value) {
   }
 }
 
+function resolveTheme(value) {
+  if (explicitThemes.has(value)) return value;
+  if (value === 'system') {
+    return window.matchMedia?.('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+  }
+  return 'light';
+}
+
 function setTheme(value, { persist = true } = {}) {
-  const next = allowedThemes.has(value) ? value : 'light';
+  const next = resolveTheme(value);
   document.documentElement.dataset.vfTheme = next;
   if (persist) persistTheme(next);
+  return next;
+}
+
+function createThemeToggle(fallback) {
+  const container = fallback.closest('.vf-docs-theme-control');
+  if (!container) return null;
+
+  const root = document.createElement('label');
+  root.setAttribute('data-vf-theme-toggle', '');
+
+  const control = document.createElement('input');
+  control.type = 'checkbox';
+  control.setAttribute('role', 'switch');
+  control.setAttribute('data-vf-theme-toggle-control', '');
+  control.setAttribute('data-vf-docs-theme', '');
+  control.setAttribute('aria-label', 'Dark theme');
+
+  const track = document.createElement('span');
+  track.setAttribute('data-vf-theme-toggle-track', '');
+  track.setAttribute('aria-hidden', 'true');
+
+  const clouds = document.createElement('span');
+  clouds.setAttribute('data-vf-theme-toggle-clouds', '');
+
+  const stars = document.createElement('span');
+  stars.setAttribute('data-vf-theme-toggle-stars', '');
+
+  const thumb = document.createElement('span');
+  thumb.setAttribute('data-vf-theme-toggle-thumb', '');
+
+  const sun = document.createElement('span');
+  sun.setAttribute('data-vf-theme-toggle-sun', '');
+
+  const moon = document.createElement('span');
+  moon.setAttribute('data-vf-theme-toggle-moon', '');
+
+  thumb.append(sun, moon);
+  track.append(clouds, stars, thumb);
+  root.append(control, track);
+  container.replaceChildren(root);
+  return control;
 }
 
 async function copyText(value) {
@@ -46,15 +96,17 @@ async function copyText(value) {
 }
 
 function initializeTheme() {
-  const control = document.querySelector('[data-vf-docs-theme]');
+  const fallback = document.querySelector('select[data-vf-docs-theme]');
   const stored = readStoredTheme();
-  if (stored) setTheme(stored, { persist: false });
-  const active = allowedThemes.has(document.documentElement.dataset.vfTheme)
-    ? document.documentElement.dataset.vfTheme
-    : 'light';
+  const configured = stored ?? document.documentElement.dataset.vfTheme ?? 'light';
+  const active = setTheme(configured, { persist: stored === 'system' });
+  const control = fallback ? createThemeToggle(fallback) : document.querySelector('[data-vf-docs-theme]');
   if (!control) return;
-  control.value = active;
-  control.addEventListener('change', () => setTheme(control.value));
+
+  control.checked = active === 'dark';
+  control.addEventListener('change', () => {
+    setTheme(control.checked ? 'dark' : 'light');
+  });
 }
 
 function initializeNavigation() {
