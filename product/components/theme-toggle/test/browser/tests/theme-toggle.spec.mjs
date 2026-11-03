@@ -26,17 +26,25 @@ test.describe('Theme Toggle real-browser contract', () => {
     expect(target?.width ?? 0).toBeGreaterThanOrEqual(24);
     expect(target?.height ?? 0).toBeGreaterThanOrEqual(24);
 
-    await expect(dragonArt).toHaveAttribute('viewBox', '0 0 70 44');
-    await expect(dragonArt.locator('path')).toHaveCount(7);
-    await expect(dragonArt.locator('ellipse')).toHaveCount(2);
+    await expect(dragon).toHaveAttribute('data-vf-theme-toggle-dragon-artwork', '');
+    await expect(dragonArt).toHaveAttribute('viewBox', '0 0 82 40');
+    await expect(dragonArt.locator('path')).toHaveCount(10);
+    await expect(dragonArt.locator('ellipse')).toHaveCount(1);
+    await expect(dragonArt.locator('.vf-theme-toggle-dragon-eye')).toHaveCount(1);
+    await expect(dragonArt.locator('.vf-theme-toggle-dragon-nostril')).toHaveCount(1);
+
     const dragonArtLayout = await dragonArt.evaluate((element) => ({
       width: element.clientWidth,
       height: element.clientHeight,
       zIndex: getComputedStyle(element).zIndex,
+      fallbackBeforeDisplay: getComputedStyle(element.parentElement, '::before').display,
+      fallbackAfterDisplay: getComputedStyle(element.parentElement, '::after').display,
     }));
-    expect(dragonArtLayout.width).toBeGreaterThanOrEqual(40);
-    expect(dragonArtLayout.height).toBeGreaterThanOrEqual(24);
+    expect(dragonArtLayout.width).toBeGreaterThanOrEqual(60);
+    expect(dragonArtLayout.height).toBeGreaterThanOrEqual(30);
     expect(Number.parseInt(dragonArtLayout.zIndex, 10)).toBeGreaterThanOrEqual(1);
+    expect(dragonArtLayout.fallbackBeforeDisplay).toBe('none');
+    expect(dragonArtLayout.fallbackAfterDisplay).toBe('none');
 
     const presentation = await root.evaluate((element) => {
       const thumbElement = element.querySelector('[data-vf-theme-toggle-thumb]');
@@ -60,11 +68,11 @@ test.describe('Theme Toggle real-browser contract', () => {
     expect(presentation.maxThumbTransitionSeconds).toBeGreaterThanOrEqual(0.5);
     expect(presentation.breathHasDetail).toBe(true);
     expect(presentation.dragonVectorPresent).toBe(true);
-    expect(presentation.dragonVectorPathCount).toBeGreaterThanOrEqual(7);
-    expect(presentation.dragonVectorEllipseCount).toBeGreaterThanOrEqual(2);
+    expect(presentation.dragonVectorPathCount).toBeGreaterThanOrEqual(10);
+    expect(presentation.dragonVectorEllipseCount).toBeGreaterThanOrEqual(1);
     expect(presentation.emberHasDetail).toBe(true);
 
-    await expect(dragon).toHaveCSS('opacity', '0.08');
+    await expect(dragon).toHaveCSS('opacity', '0.04');
     await expect(ember).toHaveCSS('opacity', '1');
     await page.screenshot({ path: testInfo.outputPath('theme-toggle-light.png'), fullPage: true });
     await root.screenshot({ path: testInfo.outputPath('theme-toggle-light-control.png') });
@@ -77,6 +85,7 @@ test.describe('Theme Toggle real-browser contract', () => {
     await expect.poll(() => dragon.evaluate((element) => getComputedStyle(element).opacity)).toBe('1');
     await expect.poll(() => ember.evaluate((element) => getComputedStyle(element).opacity)).toBe('0');
     await expect.poll(() => breath.evaluate((element) => getComputedStyle(element).opacity)).toBe('0');
+    expect(Number.parseFloat(await thumb.evaluate((element) => getComputedStyle(element).opacity))).toBeLessThan(0.4);
     await page.screenshot({ path: testInfo.outputPath('theme-toggle-dark.png'), fullPage: true });
     await root.screenshot({ path: testInfo.outputPath('theme-toggle-dark-control.png') });
 
@@ -105,7 +114,7 @@ test.describe('Theme Toggle real-browser contract', () => {
     await page.screenshot({ path: testInfo.outputPath('theme-toggle-release.png'), fullPage: true });
     await root.screenshot({ path: testInfo.outputPath('theme-toggle-release-control.png') });
     await expect.poll(() => ember.evaluate((element) => getComputedStyle(element).opacity)).toBe('1');
-    await expect.poll(() => dragon.evaluate((element) => getComputedStyle(element).opacity)).toBe('0.08');
+    await expect.poll(() => dragon.evaluate((element) => getComputedStyle(element).opacity)).toBe('0.04');
 
     const disabled = page.locator('#disabled-theme');
     await expect(disabled).toBeDisabled();
