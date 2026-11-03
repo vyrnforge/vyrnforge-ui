@@ -20,12 +20,12 @@
     --_vf-theme-toggle-ember-mid: #ffc44d;
     --_vf-theme-toggle-ember-edge: #ee6b2d;
     --_vf-theme-toggle-ember-glow: rgb(255 122 52 / 0.56);
-    --_vf-theme-toggle-dragon-highlight: #86acd8;
-    --_vf-theme-toggle-dragon-mid: #294566;
-    --_vf-theme-toggle-dragon-shadow: #07101d;
-    --_vf-theme-toggle-dragon-eye: #c3f3ff;
-    --_vf-theme-toggle-dragon-horn: #b7d2ec;
-    --_vf-theme-toggle-dragon-horn-edge: #edf7ff;
+    --_vf-theme-toggle-dragon-highlight: #b8dcff;
+    --_vf-theme-toggle-dragon-mid: #3b638f;
+    --_vf-theme-toggle-dragon-shadow: #0d1c31;
+    --_vf-theme-toggle-dragon-eye: #9beaff;
+    --_vf-theme-toggle-dragon-horn: #8db8e4;
+    --_vf-theme-toggle-dragon-horn-edge: #e9f7ff;
     --_vf-theme-toggle-dragon-fang: #fff3d6;
     --_vf-theme-toggle-breath-core: rgb(255 239 193 / 0.96);
     --_vf-theme-toggle-breath-edge: rgb(255 139 56 / 0.3);
@@ -251,8 +251,20 @@
     transition: transform 420ms var(--vf-motion-easing-standard);
   }
 
+  :where(.vf-theme-toggle-dragon-horns) {
+    fill: var(--_vf-theme-toggle-dragon-horn);
+    stroke: var(--_vf-theme-toggle-dragon-horn-edge);
+    stroke-linejoin: round;
+    stroke-width: 0.7;
+  }
+
   :where(.vf-theme-toggle-dragon-fangs) {
     fill: var(--_vf-theme-toggle-dragon-fang);
+  }
+
+  :where(.vf-theme-toggle-dragon-brow) {
+    fill: color-mix(in srgb, var(--_vf-theme-toggle-dragon-shadow) 78%, var(--_vf-theme-toggle-dragon-mid));
+    opacity: 0.92;
   }
 
   :where(.vf-theme-toggle-dragon-eye) {
