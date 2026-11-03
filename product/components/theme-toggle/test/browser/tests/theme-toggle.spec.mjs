@@ -29,7 +29,7 @@ test.describe('Theme Toggle real-browser contract', () => {
     expect(target?.height ?? 0).toBeGreaterThanOrEqual(24);
 
     await expect(dragon).toHaveAttribute('data-vf-theme-toggle-dragon-artwork', '');
-    await expect(dragonArt).toHaveAttribute('viewBox', '0 0 104 48');
+    await expect(dragonArt).toHaveAttribute('viewBox', '0 0 64 56');
     await expect(dragonArt.locator('.vf-theme-toggle-dragon-neck')).toHaveCount(1);
     await expect(dragonArt.locator('.vf-theme-toggle-dragon-crest')).toHaveCount(1);
     await expect(upperJaw).toHaveCount(1);
@@ -49,8 +49,8 @@ test.describe('Theme Toggle real-browser contract', () => {
       fallbackBeforeDisplay: getComputedStyle(element.parentElement, '::before').display,
       fallbackAfterDisplay: getComputedStyle(element.parentElement, '::after').display,
     }));
-    expect(dragonArtLayout.width).toBeGreaterThanOrEqual(100);
-    expect(dragonArtLayout.height).toBeGreaterThanOrEqual(45);
+    expect(dragonArtLayout.width).toBeGreaterThanOrEqual(60);
+    expect(dragonArtLayout.height).toBeGreaterThanOrEqual(54);
     expect(Number.parseInt(dragonArtLayout.zIndex, 10)).toBeGreaterThanOrEqual(1);
     expect(dragonArtLayout.fallbackBeforeDisplay).toBe('none');
     expect(dragonArtLayout.fallbackAfterDisplay).toBe('none');
