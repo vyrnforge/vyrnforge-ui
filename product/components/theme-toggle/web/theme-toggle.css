@@ -204,19 +204,18 @@
 
   :where([data-vf-theme-toggle-dragon]),
   :where([data-vf-theme-toggle-stars]) {
-    block-size: 2.5rem;
+    block-size: 100%;
     filter: drop-shadow(-0.08rem 0.08rem 0.12rem rgb(0 0 0 / 0.38));
-    inline-size: 4.75rem;
-    inset-block-start: 0.25rem;
-    inset-inline-end: 0.04rem;
-    opacity: 0.035;
+    inline-size: 100%;
+    inset: 0;
+    opacity: 0.02;
     pointer-events: none;
     position: absolute;
-    transform: translateX(0.8rem) scale(0.9);
+    transform: translateX(2.6rem) scale(0.98);
     transform-origin: right center;
     transition:
       filter var(--_vf-theme-toggle-detail-duration) var(--vf-motion-easing-standard),
-      opacity 420ms var(--vf-motion-easing-standard) 180ms,
+      opacity 260ms var(--vf-motion-easing-standard),
       transform var(--_vf-theme-toggle-story-duration) var(--vf-motion-easing-standard);
     z-index: 3;
   }
@@ -230,63 +229,74 @@
     z-index: 2;
   }
 
+  :where(.vf-theme-toggle-dragon-upper-jaw) {
+    fill: var(--_vf-theme-toggle-dragon-mid);
+    stroke: var(--_vf-theme-toggle-dragon-highlight);
+    stroke-linejoin: round;
+    stroke-width: 1.2;
+    transform: translateY(-0.16rem) rotate(-2deg);
+    transform-box: fill-box;
+    transform-origin: right bottom;
+    transition: transform 420ms var(--vf-motion-easing-standard);
+  }
+
+  :where(.vf-theme-toggle-dragon-lower-jaw) {
+    fill: var(--_vf-theme-toggle-dragon-shadow);
+    stroke: var(--_vf-theme-toggle-dragon-highlight);
+    stroke-linejoin: round;
+    stroke-width: 1.1;
+    transform: translateY(0.16rem) rotate(2deg);
+    transform-box: fill-box;
+    transform-origin: right top;
+    transition: transform 420ms var(--vf-motion-easing-standard);
+  }
+
+  :where(.vf-theme-toggle-dragon-fangs) {
+    fill: var(--_vf-theme-toggle-dragon-fang);
+  }
+
   :where(.vf-theme-toggle-dragon-eye) {
+    fill: var(--_vf-theme-toggle-dragon-eye);
     filter: drop-shadow(0 0 0.14rem rgb(195 243 255 / 0.96));
   }
 
   :where(.vf-theme-toggle-dragon-nostril) {
-    filter: drop-shadow(0 0 0.16rem rgb(238 107 45 / 0.92));
+    fill: var(--_vf-theme-toggle-ember-edge);
+    filter: drop-shadow(0 0 0.14rem rgb(238 107 45 / 0.86));
   }
 
   :where(.vf-theme-toggle-dragon-mouth-glow) {
-    filter: drop-shadow(0 0 0.16rem rgb(238 107 45 / 0.56));
+    fill: var(--_vf-theme-toggle-ember-edge);
+    filter: drop-shadow(0 0 0.18rem rgb(238 107 45 / 0.74));
+    opacity: 0;
+    transition: opacity var(--_vf-theme-toggle-detail-duration) var(--vf-motion-easing-standard);
   }
 
   :where([data-vf-theme-toggle-dragon])::before,
   :where([data-vf-theme-toggle-stars])::before {
-    background:
-      radial-gradient(circle at 39% 34%, rgb(183 229 255 / 0.3) 0 4%, transparent 11%),
-      radial-gradient(ellipse at 39% 34%, var(--_vf-theme-toggle-dragon-eye) 0 2.5%, transparent 3.6%),
-      linear-gradient(
-        145deg,
-        var(--_vf-theme-toggle-dragon-highlight) 0 15%,
-        var(--_vf-theme-toggle-dragon-mid) 42%,
-        var(--_vf-theme-toggle-dragon-shadow) 100%
-      );
-    block-size: 100%;
-    clip-path: polygon(
-      100% 8%,
-      78% 12%,
-      84% 0,
-      63% 14%,
-      52% 20%,
-      39% 29%,
-      10% 34%,
-      0 43%,
-      14% 49%,
-      39% 47%,
-      48% 55%,
-      61% 72%,
-      74% 62%,
-      100% 80%
+    background: linear-gradient(
+      145deg,
+      var(--_vf-theme-toggle-dragon-mid),
+      var(--_vf-theme-toggle-dragon-shadow)
     );
+    block-size: 58%;
+    clip-path: polygon(100% 0, 84% 4%, 74% 0, 71% 22%, 58% 28%, 45% 43%, 34% 48%, 43% 60%, 58% 56%, 70% 48%, 82% 58%, 100% 54%);
     content: "";
-    inline-size: 100%;
-    inset: 0;
+    inline-size: 64%;
+    inset-block-start: 4%;
+    inset-inline-end: 0;
     position: absolute;
   }
 
   :where([data-vf-theme-toggle-dragon])::after,
   :where([data-vf-theme-toggle-stars])::after {
-    background:
-      radial-gradient(circle at 11% 18%, rgb(255 157 67 / 0.72) 0 3%, transparent 12%),
-      var(--_vf-theme-toggle-night-start);
-    block-size: 0.58rem;
-    clip-path: polygon(0 8%, 100% 22%, 84% 54%, 30% 100%, 8% 78%);
+    background: var(--_vf-theme-toggle-dragon-shadow);
+    block-size: 40%;
+    clip-path: polygon(100% 10%, 82% 0, 72% 12%, 58% 10%, 45% 18%, 35% 10%, 44% 34%, 58% 54%, 70% 54%, 82% 42%, 100% 70%);
     content: "";
-    inline-size: 1.5rem;
-    inset-block-start: 0.82rem;
-    inset-inline-start: 0;
+    inline-size: 62%;
+    inset-block-end: 3%;
+    inset-inline-end: 0;
     position: absolute;
   }
 
@@ -361,6 +371,15 @@
       transform var(--_vf-theme-toggle-story-duration) var(--vf-motion-easing-standard);
   }
 
+  :where([data-vf-theme-toggle-control]:checked) ~ :where([data-vf-theme-toggle-track]) :where(.vf-theme-toggle-dragon-upper-jaw),
+  :where([data-vf-theme-toggle-control]:checked) ~ :where([data-vf-theme-toggle-track]) :where(.vf-theme-toggle-dragon-lower-jaw) {
+    transform: none;
+  }
+
+  :where([data-vf-theme-toggle-control]:checked) ~ :where([data-vf-theme-toggle-track]) :where(.vf-theme-toggle-dragon-mouth-glow) {
+    opacity: 0.88;
+  }
+
   :where([dir="rtl"] [data-vf-theme-toggle-breath]),
   :where([dir="rtl"] [data-vf-theme-toggle-clouds]) {
     background: linear-gradient(
@@ -376,7 +395,7 @@
   :where([dir="rtl"] [data-vf-theme-toggle-dragon]),
   :where([dir="rtl"] [data-vf-theme-toggle-stars]) {
     filter: drop-shadow(0.08rem 0.08rem 0.12rem rgb(0 0 0 / 0.38));
-    transform: translateX(-0.8rem) scaleX(-1) scale(0.9);
+    transform: translateX(-2.6rem) scaleX(-1) scale(0.98);
   }
 
   :where([dir="rtl"] [data-vf-theme-toggle-control]:checked) ~ :where([data-vf-theme-toggle-track]) :where([data-vf-theme-toggle-thumb]) {
@@ -416,7 +435,10 @@
     :where([data-vf-theme-toggle-ember]),
     :where([data-vf-theme-toggle-sun]),
     :where([data-vf-theme-toggle-dragon]),
-    :where([data-vf-theme-toggle-stars]) {
+    :where([data-vf-theme-toggle-stars]),
+    :where(.vf-theme-toggle-dragon-upper-jaw),
+    :where(.vf-theme-toggle-dragon-lower-jaw),
+    :where(.vf-theme-toggle-dragon-mouth-glow) {
       transition: none;
     }
   }
