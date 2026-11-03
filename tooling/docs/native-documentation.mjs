@@ -4,6 +4,18 @@ import { fileURLToPath } from 'node:url';
 import { discoverProductGraph } from '../product/discover-product-graph.mjs';
 
 const repoRoot = path.resolve(fileURLToPath(new URL('../../', import.meta.url)));
+const nativeShellStyleSpecifiers = [
+  '@vyrnforge/web/styles/tokens.css',
+  '@vyrnforge/web/styles/reset.css',
+  '@vyrnforge/web/styles/foundation.css',
+  '@vyrnforge/web/styles/app-shell.css',
+  '@vyrnforge/web/styles/side-nav.css',
+  '@vyrnforge/web/styles/input.css',
+  '@vyrnforge/web/styles/native-select.css',
+  '@vyrnforge/web/styles/link.css',
+  '@vyrnforge/web/styles/surface.css',
+  '@vyrnforge/web/styles/button.css',
+];
 
 function readJson(root, relativePath) {
   return JSON.parse(readFileSync(path.join(root, relativePath), 'utf8'));
@@ -106,11 +118,32 @@ function nativeExamples(root, component) {
   });
 }
 
+function resolvePublicStyleAsset(webPackage, specifier) {
+  const packagePrefix = `${webPackage.name}/`;
+  if (!specifier.startsWith(packagePrefix)) {
+    throw new Error(`Native documentation stylesheet must use ${webPackage.name}: ${specifier}`);
+  }
+  const exportName = `./${specifier.slice(packagePrefix.length)}`;
+  const exportTarget = webPackage.manifest.exports?.[exportName];
+  if (typeof exportTarget !== 'string') {
+    throw new Error(`Native documentation requires ${exportName} in ${webPackage.manifestPath}`);
+  }
+  const relativeAssetPath = exportTarget.replace(/^\.\/dist\//, '');
+  if (relativeAssetPath === exportTarget) {
+    throw new Error(`Native Web stylesheet export ${exportName} must resolve beneath @vyrnforge/web dist`);
+  }
+  return {
+    specifier,
+    assetPath: `/assets/vyrnforge-web/${relativeAssetPath}`,
+  };
+}
+
 export function compileNativeDocumentation(root = repoRoot) {
   const graph = discoverProductGraph(root);
   const webPackage = graph.packages.find((entry) => entry.id === 'web');
   if (!webPackage?.manifest) throw new Error('Native documentation requires the @vyrnforge/web package');
 
+  const shellStyles = nativeShellStyleSpecifiers.map((specifier) => resolvePublicStyleAsset(webPackage, specifier));
   const pages = graph.components
     .flatMap((component) => {
       if (!component.surfaces.web || !component.facets.docs) return [];
@@ -121,15 +154,7 @@ export function compileNativeDocumentation(root = repoRoot) {
       if (!component.surfaces.web.publicEntrypoints.includes(styleSpecifier)) {
         throw new Error(`${component.unitId} Native Web documentation requires public entrypoint ${styleSpecifier}`);
       }
-      const exportName = `./styles/${component.unitId}.css`;
-      const exportTarget = webPackage.manifest.exports?.[exportName];
-      if (typeof exportTarget !== 'string') {
-        throw new Error(`${component.unitId} Native Web documentation requires ${exportName} in ${webPackage.manifestPath}`);
-      }
-      const relativeAssetPath = exportTarget.replace(/^\.\/dist\//, '');
-      if (relativeAssetPath === exportTarget) {
-        throw new Error(`${component.unitId} Native Web stylesheet export must resolve beneath @vyrnforge/web dist`);
-      }
+      const styleAsset = resolvePublicStyleAsset(webPackage, styleSpecifier);
 
       const accessibilityPath = `${component.facets.root}accessibility.json`;
       if (!existsSync(path.join(root, accessibilityPath))) {
@@ -148,7 +173,7 @@ export function compileNativeDocumentation(root = repoRoot) {
         sourcePath,
         content: parseMarkdownDocument(readFileSync(path.join(root, sourcePath), 'utf8')),
         styleSpecifier,
-        styleAssetPath: `/assets/vyrnforge-web/${relativeAssetPath}`,
+        styleAssetPath: styleAsset.assetPath,
         accessibility: readJson(root, accessibilityPath),
         examples,
       }];
@@ -159,6 +184,7 @@ export function compileNativeDocumentation(root = repoRoot) {
     framework: 'native-web',
     frameworkLabel: 'Native Web',
     packageName: webPackage.name,
+    shellStyles,
     pages,
   };
 }
