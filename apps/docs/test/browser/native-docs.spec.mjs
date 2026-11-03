@@ -72,7 +72,7 @@ test('Button page uses native semantics, public Web styling, and Native Web exam
   await page.keyboard.press('Space');
   expect(await page.evaluate(() => window.__vfActivations)).toBe(2);
 
-  const disabled = page.getByRole('button', { name: 'Disabled' });
+  const disabled = page.getByRole('button', { name: 'Disabled', exact: true });
   await expect(disabled).toBeDisabled();
   const loading = page.getByRole('button', { name: 'Loading', exact: true });
   await expect(loading).toHaveAttribute('aria-busy', 'true');
