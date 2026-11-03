@@ -122,15 +122,16 @@
     background: linear-gradient(
       90deg,
       transparent 0%,
-      var(--_vf-theme-toggle-breath-edge) 28%,
-      var(--_vf-theme-toggle-breath-core) 72%,
-      rgb(255 251 225 / 0.98) 100%
+      rgb(255 101 35 / 0.34) 22%,
+      var(--_vf-theme-toggle-breath-edge) 44%,
+      var(--_vf-theme-toggle-breath-core) 76%,
+      rgb(255 248 205 / 0.98) 100%
     );
     block-size: 0.78rem;
     border-radius: 999px;
     clip-path: polygon(0 42%, 78% 13%, 100% 0, 86% 50%, 100% 100%, 78% 87%, 0 58%);
     filter: blur(0.015rem) drop-shadow(0 0 0.22rem rgb(255 137 54 / 0.42));
-    inline-size: 3.35rem;
+    inline-size: 3.75rem;
     inset-block-start: 1.1rem;
     inset-inline-end: 1.5rem;
     opacity: 0.9;
@@ -221,8 +222,8 @@
     transform-origin: right center;
     transition:
       filter var(--_vf-theme-toggle-detail-duration) var(--vf-motion-easing-standard),
-      opacity 520ms var(--vf-motion-easing-standard) 260ms,
-      transform 760ms var(--vf-motion-easing-standard) 220ms;
+      opacity 280ms var(--vf-motion-easing-standard) 620ms,
+      transform 420ms var(--vf-motion-easing-standard) 520ms;
     z-index: 3;
   }
 
