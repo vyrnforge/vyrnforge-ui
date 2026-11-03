@@ -27,7 +27,8 @@ test.describe('Theme Toggle real-browser contract', () => {
     expect(target?.height ?? 0).toBeGreaterThanOrEqual(24);
 
     await expect(dragon).toHaveAttribute('data-vf-theme-toggle-dragon-artwork', '');
-    await expect(dragonArt).toHaveAttribute('viewBox', '0 0 82 40');
+    await expect(dragonArt).toHaveAttribute('viewBox', '0 0 70 40');
+    await expect(dragonArt).toHaveAttribute('preserveAspectRatio', 'none');
     await expect(dragonArt.locator('path')).toHaveCount(10);
     await expect(dragonArt.locator('ellipse')).toHaveCount(1);
     await expect(dragonArt.locator('.vf-theme-toggle-dragon-eye')).toHaveCount(1);
@@ -86,6 +87,7 @@ test.describe('Theme Toggle real-browser contract', () => {
     await expect.poll(() => ember.evaluate((element) => getComputedStyle(element).opacity)).toBe('0');
     await expect.poll(() => breath.evaluate((element) => getComputedStyle(element).opacity)).toBe('0');
     expect(Number.parseFloat(await thumb.evaluate((element) => getComputedStyle(element).opacity))).toBeLessThan(0.4);
+    await page.waitForTimeout(600);
     await page.screenshot({ path: testInfo.outputPath('theme-toggle-dark.png'), fullPage: true });
     await root.screenshot({ path: testInfo.outputPath('theme-toggle-dark-control.png') });
 
