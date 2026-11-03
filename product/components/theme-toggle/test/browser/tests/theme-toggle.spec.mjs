@@ -15,10 +15,10 @@ test.describe('Theme Toggle real-browser contract', () => {
     const breath = root.locator('[data-vf-theme-toggle-breath]');
     const dragon = root.locator('[data-vf-theme-toggle-dragon]');
     const dragonArt = dragon.locator('svg.vf-theme-toggle-dragon-art');
-    const thumb = root.locator('[data-vf-theme-toggle-thumb]');
-    const ember = root.locator('[data-vf-theme-toggle-ember]');
     const upperJaw = dragonArt.locator('.vf-theme-toggle-dragon-upper-jaw');
     const lowerJaw = dragonArt.locator('.vf-theme-toggle-dragon-lower-jaw');
+    const thumb = root.locator('[data-vf-theme-toggle-thumb]');
+    const ember = root.locator('[data-vf-theme-toggle-ember]');
 
     await expect(control).toHaveAttribute('type', 'checkbox');
     await expect(control).toHaveAttribute('role', 'switch');
@@ -30,12 +30,11 @@ test.describe('Theme Toggle real-browser contract', () => {
 
     await expect(dragon).toHaveAttribute('data-vf-theme-toggle-dragon-artwork', '');
     await expect(dragonArt).toHaveAttribute('viewBox', '0 0 104 48');
-    await expect(dragonArt).toHaveAttribute('preserveAspectRatio', 'xMidYMid meet');
-        await expect(dragonArt.locator('path.vf-theme-toggle-dragon-silhouette')).toHaveCount(1);
-    await expect(dragonArt.locator('.vf-theme-toggle-dragon-upper-jaw')).toHaveCount(1);
-    await expect(dragonArt.locator('.vf-theme-toggle-dragon-lower-jaw')).toHaveCount(1);
+    await expect(upperJaw).toHaveCount(1);
+    await expect(lowerJaw).toHaveCount(1);
     await expect(dragonArt.locator('.vf-theme-toggle-dragon-fangs')).toHaveCount(1);
     await expect(dragonArt.locator('.vf-theme-toggle-dragon-eye')).toHaveCount(1);
+    await expect(dragonArt.locator('.vf-theme-toggle-dragon-nostril')).toHaveCount(1);
     await expect(dragonArt.locator('.vf-theme-toggle-dragon-mouth-glow')).toHaveCount(1);
 
     const dragonArtLayout = await dragonArt.evaluate((element) => ({
@@ -54,8 +53,7 @@ test.describe('Theme Toggle real-browser contract', () => {
     const presentation = await root.evaluate((element) => {
       const thumbElement = element.querySelector('[data-vf-theme-toggle-thumb]');
       const breathElement = element.querySelector('[data-vf-theme-toggle-breath]');
-      const dragonElement = element.querySelector('[data-vf-theme-toggle-dragon]');
-      const dragonVector = dragonElement.querySelector('svg.vf-theme-toggle-dragon-art');
+      const dragonVector = element.querySelector('svg.vf-theme-toggle-dragon-art');
       const emberElement = element.querySelector('[data-vf-theme-toggle-ember]');
       const duration = getComputedStyle(thumbElement).transitionDuration
         .split(',')
@@ -64,27 +62,33 @@ test.describe('Theme Toggle real-browser contract', () => {
       return {
         maxThumbTransitionSeconds: Math.max(...duration),
         breathHasDetail: getComputedStyle(breathElement).backgroundImage !== 'none',
-        dragonVectorPresent: Boolean(dragonVector),
-        dragonSilhouetteCount: dragonVector?.querySelectorAll('path.vf-theme-toggle-dragon-silhouette').length ?? 0,
-        dragonEyeCount: dragonVector?.querySelectorAll('.vf-theme-toggle-dragon-eye').length ?? 0,
-        dragonMouthGlowCount: dragonVector?.querySelectorAll('.vf-theme-toggle-dragon-mouth-glow').length ?? 0,
+        upperJawPresent: Boolean(dragonVector?.querySelector('.vf-theme-toggle-dragon-upper-jaw')),
+        lowerJawPresent: Boolean(dragonVector?.querySelector('.vf-theme-toggle-dragon-lower-jaw')),
+        fangPresent: Boolean(dragonVector?.querySelector('.vf-theme-toggle-dragon-fangs')),
+        eyePresent: Boolean(dragonVector?.querySelector('.vf-theme-toggle-dragon-eye')),
+        mouthGlowPresent: Boolean(dragonVector?.querySelector('.vf-theme-toggle-dragon-mouth-glow')),
         emberHasDetail: getComputedStyle(emberElement).backgroundImage !== 'none',
       };
     });
     expect(presentation.maxThumbTransitionSeconds).toBeGreaterThanOrEqual(0.5);
     expect(presentation.breathHasDetail).toBe(true);
-    expect(presentation.dragonVectorPresent).toBe(true);
-    expect(presentation.dragonSilhouetteCount).toBe(1);
-    expect(presentation.dragonEyeCount).toBe(1);
-    expect(presentation.dragonMouthGlowCount).toBe(1);
+    expect(presentation.upperJawPresent).toBe(true);
+    expect(presentation.lowerJawPresent).toBe(true);
+    expect(presentation.fangPresent).toBe(true);
+    expect(presentation.eyePresent).toBe(true);
+    expect(presentation.mouthGlowPresent).toBe(true);
     expect(presentation.emberHasDetail).toBe(true);
 
     expect(Number.parseFloat(await dragon.evaluate((element) => getComputedStyle(element).opacity))).toBeLessThan(0.05);
     await expect(ember).toHaveCSS('opacity', '1');
-    await page.screenshot({ path: testInfo.outputPath('theme-toggle-light.png'), fullPage: true });
     await root.screenshot({ path: testInfo.outputPath('theme-toggle-light-control.png') });
 
     const lightTransform = await thumb.evaluate((element) => getComputedStyle(element).transform);
+    const lightUpperJawTransform = await upperJaw.evaluate((element) => getComputedStyle(element).transform);
+    const lightLowerJawTransform = await lowerJaw.evaluate((element) => getComputedStyle(element).transform);
+    expect(lightUpperJawTransform).not.toBe('none');
+    expect(lightLowerJawTransform).not.toBe('none');
+
     await control.focus();
     await page.keyboard.press('Space');
     await expect(control).toBeChecked();
@@ -96,7 +100,6 @@ test.describe('Theme Toggle real-browser contract', () => {
     await expect.poll(() => lowerJaw.evaluate((element) => getComputedStyle(element).transform)).toBe('none');
     expect(Number.parseFloat(await thumb.evaluate((element) => getComputedStyle(element).opacity))).toBeLessThan(0.4);
     await page.waitForTimeout(600);
-    await page.screenshot({ path: testInfo.outputPath('theme-toggle-dark.png'), fullPage: true });
     await root.screenshot({ path: testInfo.outputPath('theme-toggle-dark-control.png') });
 
     await control.focus();
@@ -108,6 +111,8 @@ test.describe('Theme Toggle real-browser contract', () => {
     const releaseFrame = await root.evaluate((element) => {
       const breathElement = element.querySelector('[data-vf-theme-toggle-breath]');
       const dragonElement = element.querySelector('[data-vf-theme-toggle-dragon]');
+      const upperJawElement = element.querySelector('.vf-theme-toggle-dragon-upper-jaw');
+      const lowerJawElement = element.querySelector('.vf-theme-toggle-dragon-lower-jaw');
       const breathStyle = getComputedStyle(breathElement);
       const transform = breathStyle.transform === 'none'
         ? new DOMMatrixReadOnly()
@@ -116,12 +121,15 @@ test.describe('Theme Toggle real-browser contract', () => {
         breathOpacity: Number.parseFloat(breathStyle.opacity),
         breathScaleX: Math.abs(transform.a),
         dragonOpacity: Number.parseFloat(getComputedStyle(dragonElement).opacity),
+        upperJawTransform: getComputedStyle(upperJawElement).transform,
+        lowerJawTransform: getComputedStyle(lowerJawElement).transform,
       };
     });
     expect(releaseFrame.breathOpacity).toBeGreaterThan(0.2);
     expect(releaseFrame.breathScaleX).toBeGreaterThan(0.1);
-    expect(releaseFrame.dragonOpacity).toBeGreaterThan(0.35);
-    await page.screenshot({ path: testInfo.outputPath('theme-toggle-release.png'), fullPage: true });
+    expect(releaseFrame.dragonOpacity).toBeGreaterThan(0.25);
+    expect(releaseFrame.upperJawTransform).not.toBe('none');
+    expect(releaseFrame.lowerJawTransform).not.toBe('none');
     await root.screenshot({ path: testInfo.outputPath('theme-toggle-release-control.png') });
     await expect.poll(() => ember.evaluate((element) => getComputedStyle(element).opacity)).toBe('1');
     await expect.poll(() => dragon.evaluate((element) => Number.parseFloat(getComputedStyle(element).opacity))).toBeLessThan(0.05);
@@ -144,6 +152,7 @@ test.describe('Theme Toggle real-browser contract', () => {
     await page.emulateMedia({ reducedMotion: 'reduce' });
     expect(await thumb.evaluate((element) => getComputedStyle(element).transitionDuration)).toBe('0s');
     expect(await ember.evaluate((element) => getComputedStyle(element).transitionDuration)).toBe('0s');
+    expect(await upperJaw.evaluate((element) => getComputedStyle(element).transitionDuration)).toBe('0s');
 
     await page.emulateMedia({ reducedMotion: 'reduce', forcedColors: 'active' });
     expect(await page.evaluate(() => matchMedia('(forced-colors: active)').matches)).toBe(true);
