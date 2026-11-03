@@ -6,7 +6,7 @@ const port = process.env.VF_COMPONENT_PORT || 'web';
 test.describe('Theme Toggle real-browser contract', () => {
   test.skip(port !== 'web', 'Native Web contract evidence');
 
-  test('preserves native switch semantics while the wyvern consumes and releases the light', async ({ page }, testInfo) => {
+  test('preserves native switch semantics while the dragon consumes and releases the light', async ({ page }, testInfo) => {
     await page.goto('/components/theme-toggle/web.html');
 
     const control = page.locator('#light-theme');
@@ -27,12 +27,12 @@ test.describe('Theme Toggle real-browser contract', () => {
     expect(target?.height ?? 0).toBeGreaterThanOrEqual(24);
 
     await expect(dragon).toHaveAttribute('data-vf-theme-toggle-dragon-artwork', '');
-    await expect(dragonArt).toHaveAttribute('viewBox', '0 0 70 40');
-    await expect(dragonArt).toHaveAttribute('preserveAspectRatio', 'none');
+    await expect(dragonArt).toHaveAttribute('viewBox', '0 0 64 32');
+    await expect(dragonArt.locator('g')).toHaveAttribute('transform', 'translate(25 0) scale(0.85 0.727)');
     await expect(dragonArt.locator('path')).toHaveCount(10);
-    await expect(dragonArt.locator('ellipse')).toHaveCount(1);
+    await expect(dragonArt.locator('ellipse')).toHaveCount(2);
     await expect(dragonArt.locator('.vf-theme-toggle-dragon-eye')).toHaveCount(1);
-    await expect(dragonArt.locator('.vf-theme-toggle-dragon-nostril')).toHaveCount(1);
+    await expect(dragonArt.locator('.vf-theme-toggle-dragon-nostril')).toHaveCount(2);
 
     const dragonArtLayout = await dragonArt.evaluate((element) => ({
       width: element.clientWidth,
@@ -70,7 +70,7 @@ test.describe('Theme Toggle real-browser contract', () => {
     expect(presentation.breathHasDetail).toBe(true);
     expect(presentation.dragonVectorPresent).toBe(true);
     expect(presentation.dragonVectorPathCount).toBeGreaterThanOrEqual(10);
-    expect(presentation.dragonVectorEllipseCount).toBeGreaterThanOrEqual(1);
+    expect(presentation.dragonVectorEllipseCount).toBeGreaterThanOrEqual(2);
     expect(presentation.emberHasDetail).toBe(true);
 
     await expect(dragon).toHaveCSS('opacity', '0.04');
