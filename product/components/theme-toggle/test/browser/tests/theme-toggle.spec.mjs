@@ -27,12 +27,12 @@ test.describe('Theme Toggle real-browser contract', () => {
     expect(target?.height ?? 0).toBeGreaterThanOrEqual(24);
 
     await expect(dragon).toHaveAttribute('data-vf-theme-toggle-dragon-artwork', '');
-    await expect(dragonArt).toHaveAttribute('viewBox', '0 0 64 32');
-    await expect(dragonArt.locator('g')).toHaveAttribute('transform', 'translate(25 0) scale(0.85 0.727)');
-    await expect(dragonArt.locator('path')).toHaveCount(10);
-    await expect(dragonArt.locator('ellipse')).toHaveCount(2);
+    await expect(dragonArt).toHaveAttribute('viewBox', '0 0 512 512');
+    await expect(dragonArt).toHaveAttribute('preserveAspectRatio', 'xMidYMid meet');
+    await expect(dragonArt.locator('g')).toHaveAttribute('transform', 'translate(512 0) scale(-1 1)');
+    await expect(dragonArt.locator('path.vf-theme-toggle-dragon-silhouette')).toHaveCount(1);
     await expect(dragonArt.locator('.vf-theme-toggle-dragon-eye')).toHaveCount(1);
-    await expect(dragonArt.locator('.vf-theme-toggle-dragon-nostril')).toHaveCount(2);
+    await expect(dragonArt.locator('.vf-theme-toggle-dragon-mouth-glow')).toHaveCount(1);
 
     const dragonArtLayout = await dragonArt.evaluate((element) => ({
       width: element.clientWidth,
@@ -61,16 +61,18 @@ test.describe('Theme Toggle real-browser contract', () => {
         maxThumbTransitionSeconds: Math.max(...duration),
         breathHasDetail: getComputedStyle(breathElement).backgroundImage !== 'none',
         dragonVectorPresent: Boolean(dragonVector),
-        dragonVectorPathCount: dragonVector?.querySelectorAll('path').length ?? 0,
-        dragonVectorEllipseCount: dragonVector?.querySelectorAll('ellipse').length ?? 0,
+        dragonSilhouetteCount: dragonVector?.querySelectorAll('path.vf-theme-toggle-dragon-silhouette').length ?? 0,
+        dragonEyeCount: dragonVector?.querySelectorAll('.vf-theme-toggle-dragon-eye').length ?? 0,
+        dragonMouthGlowCount: dragonVector?.querySelectorAll('.vf-theme-toggle-dragon-mouth-glow').length ?? 0,
         emberHasDetail: getComputedStyle(emberElement).backgroundImage !== 'none',
       };
     });
     expect(presentation.maxThumbTransitionSeconds).toBeGreaterThanOrEqual(0.5);
     expect(presentation.breathHasDetail).toBe(true);
     expect(presentation.dragonVectorPresent).toBe(true);
-    expect(presentation.dragonVectorPathCount).toBeGreaterThanOrEqual(10);
-    expect(presentation.dragonVectorEllipseCount).toBeGreaterThanOrEqual(2);
+    expect(presentation.dragonSilhouetteCount).toBe(1);
+    expect(presentation.dragonEyeCount).toBe(1);
+    expect(presentation.dragonMouthGlowCount).toBe(1);
     expect(presentation.emberHasDetail).toBe(true);
 
     expect(Number.parseFloat(await dragon.evaluate((element) => getComputedStyle(element).opacity))).toBeLessThan(0.05);
