@@ -32,10 +32,11 @@ test.describe('Theme Toggle real-browser contract', () => {
     await expect(dragonArt).toHaveAttribute('viewBox', '0 0 104 48');
     await expect(upperJaw).toHaveCount(1);
     await expect(lowerJaw).toHaveCount(1);
-    await expect(dragonArt.locator('.vf-theme-toggle-dragon-horns')).toHaveCount(1);
+    await expect(dragonArt.locator('.vf-theme-toggle-dragon-neck')).toHaveCount(1);
     await expect(dragonArt.locator('.vf-theme-toggle-dragon-fangs')).toHaveCount(1);
     await expect(dragonArt.locator('.vf-theme-toggle-dragon-brow')).toHaveCount(1);
     await expect(dragonArt.locator('.vf-theme-toggle-dragon-eye')).toHaveCount(1);
+    await expect(dragonArt.locator('.vf-theme-toggle-dragon-eye-glint')).toHaveCount(1);
     await expect(dragonArt.locator('.vf-theme-toggle-dragon-nostril')).toHaveCount(1);
     await expect(dragonArt.locator('.vf-theme-toggle-dragon-mouth-glow')).toHaveCount(1);
 
@@ -66,10 +67,11 @@ test.describe('Theme Toggle real-browser contract', () => {
         breathHasDetail: getComputedStyle(breathElement).backgroundImage !== 'none',
         upperJawPresent: Boolean(dragonVector?.querySelector('.vf-theme-toggle-dragon-upper-jaw')),
         lowerJawPresent: Boolean(dragonVector?.querySelector('.vf-theme-toggle-dragon-lower-jaw')),
-        hornsPresent: Boolean(dragonVector?.querySelector('.vf-theme-toggle-dragon-horns')),
+        neckPresent: Boolean(dragonVector?.querySelector('.vf-theme-toggle-dragon-neck')),
         fangPresent: Boolean(dragonVector?.querySelector('.vf-theme-toggle-dragon-fangs')),
         browPresent: Boolean(dragonVector?.querySelector('.vf-theme-toggle-dragon-brow')),
         eyePresent: Boolean(dragonVector?.querySelector('.vf-theme-toggle-dragon-eye')),
+        eyeGlintPresent: Boolean(dragonVector?.querySelector('.vf-theme-toggle-dragon-eye-glint')),
         mouthGlowPresent: Boolean(dragonVector?.querySelector('.vf-theme-toggle-dragon-mouth-glow')),
         emberHasDetail: getComputedStyle(emberElement).backgroundImage !== 'none',
       };
@@ -78,10 +80,11 @@ test.describe('Theme Toggle real-browser contract', () => {
     expect(presentation.breathHasDetail).toBe(true);
     expect(presentation.upperJawPresent).toBe(true);
     expect(presentation.lowerJawPresent).toBe(true);
-    expect(presentation.hornsPresent).toBe(true);
+    expect(presentation.neckPresent).toBe(true);
     expect(presentation.fangPresent).toBe(true);
     expect(presentation.browPresent).toBe(true);
     expect(presentation.eyePresent).toBe(true);
+    expect(presentation.eyeGlintPresent).toBe(true);
     expect(presentation.mouthGlowPresent).toBe(true);
     expect(presentation.emberHasDetail).toBe(true);
 
