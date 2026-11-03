@@ -215,8 +215,8 @@
     transform-origin: right center;
     transition:
       filter var(--_vf-theme-toggle-detail-duration) var(--vf-motion-easing-standard),
-      opacity 420ms var(--vf-motion-easing-standard) 240ms,
-      transform var(--_vf-theme-toggle-story-duration) var(--vf-motion-easing-standard) 80ms;
+      opacity 420ms var(--vf-motion-easing-standard) 260ms,
+      transform var(--_vf-theme-toggle-story-duration) var(--vf-motion-easing-standard) 320ms;
     z-index: 3;
   }
 
@@ -227,6 +227,13 @@
     overflow: visible;
     position: relative;
     z-index: 2;
+  }
+
+  :where(.vf-theme-toggle-dragon-neck) {
+    fill: color-mix(in srgb, var(--_vf-theme-toggle-dragon-shadow) 76%, var(--_vf-theme-toggle-dragon-mid));
+    stroke: var(--_vf-theme-toggle-dragon-highlight);
+    stroke-linejoin: round;
+    stroke-width: 0.85;
   }
 
   :where(.vf-theme-toggle-dragon-upper-jaw) {
@@ -241,21 +248,14 @@
   }
 
   :where(.vf-theme-toggle-dragon-lower-jaw) {
-    fill: var(--_vf-theme-toggle-dragon-shadow);
+    fill: color-mix(in srgb, var(--_vf-theme-toggle-dragon-shadow) 72%, var(--_vf-theme-toggle-dragon-mid));
     stroke: var(--_vf-theme-toggle-dragon-highlight);
     stroke-linejoin: round;
-    stroke-width: 1.1;
+    stroke-width: 1;
     transform: translateY(0.16rem) rotate(2deg);
     transform-box: fill-box;
     transform-origin: right top;
     transition: transform 420ms var(--vf-motion-easing-standard);
-  }
-
-  :where(.vf-theme-toggle-dragon-horns) {
-    fill: var(--_vf-theme-toggle-dragon-horn);
-    stroke: var(--_vf-theme-toggle-dragon-horn-edge);
-    stroke-linejoin: round;
-    stroke-width: 0.7;
   }
 
   :where(.vf-theme-toggle-dragon-fangs) {
@@ -270,6 +270,10 @@
   :where(.vf-theme-toggle-dragon-eye) {
     fill: var(--_vf-theme-toggle-dragon-eye);
     filter: drop-shadow(0 0 0.14rem rgb(195 243 255 / 0.96));
+  }
+
+  :where(.vf-theme-toggle-dragon-eye-glint) {
+    fill: #fff;
   }
 
   :where(.vf-theme-toggle-dragon-nostril) {
