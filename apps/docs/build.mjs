@@ -109,7 +109,7 @@ function searchMarkup() {
 
   return `<div class="vf-docs-search" data-vf-docs-search-container>
     <label for="vf-docs-search" data-vf-visually-hidden>Search documentation</label>
-    <input id="vf-docs-search" type="search" data-vf-input data-vf-docs-search placeholder="Search documentation" autocomplete="off" aria-controls="vf-docs-search-results" aria-expanded="false">
+    <input id="vf-docs-search" type="search" data-vf-input data-vf-docs-search placeholder="Search documentation" autocomplete="off" aria-controls="vf-docs-search-results">
     <div id="vf-docs-search-results" class="vf-docs-search-panel" data-vf-surface data-vf-docs-search-results hidden>
       <p class="vf-docs-search-label">Documentation results</p>
       <ul>${results}</ul>
@@ -353,7 +353,7 @@ const manifest = {
   })),
 };
 await writeFile(path.join(channelRoot, 'site-manifest.json'), `${JSON.stringify(manifest, null, 2)}\n`);
-await writeFile(path.join(channelRoot, 'index.html'), `<!doctype html><html lang="en"><head><meta charset="utf-8"><meta http-equiv="refresh" content="0;url=./native-web/"><title>VyrnForge documentation</title></head><body><a href="./native-web/">Open Native Web documentation</a></body></html>`);
+await writeFile(path.join(channelRoot, 'index.html'), '<!doctype html><html lang="en"><head><meta charset="utf-8"><meta http-equiv="refresh" content="0;url=./native-web/"><title>VyrnForge documentation</title></head><body><a href="./native-web/">Open Native Web documentation</a></body></html>');
 await writeFile(path.join(outRoot, 'index.html'), `<!doctype html><html lang="en"><head><meta charset="utf-8"><meta http-equiv="refresh" content="0;url=./${channel}/native-web/"><title>VyrnForge documentation</title></head><body><a href="./${channel}/native-web/">Open VyrnForge documentation</a></body></html>`);
 
 process.stdout.write(`native documentation build -> ${path.relative(root, nativeRoot)} (${model.pages.length} component page${model.pages.length === 1 ? '' : 's'})\n`);
