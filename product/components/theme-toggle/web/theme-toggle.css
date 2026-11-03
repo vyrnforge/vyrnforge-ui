@@ -8,7 +8,7 @@
     --_vf-theme-toggle-track-block-size: 3rem;
     --_vf-theme-toggle-padding: 0.25rem;
     --_vf-theme-toggle-thumb-size: 2.5rem;
-    --_vf-theme-toggle-dragon-size: 3rem;
+    --_vf-theme-toggle-dragon-size: 3.7rem;
     --_vf-theme-toggle-travel: 3.5rem;
     --_vf-theme-toggle-scene-duration: 520ms;
     --_vf-theme-toggle-story-duration: 620ms;
@@ -25,8 +25,10 @@
     --_vf-theme-toggle-orb-dark-edge: #5b49b5;
     --_vf-theme-toggle-dragon-light: #fff3d4;
     --_vf-theme-toggle-dragon-light-edge: #c98e43;
+    --_vf-theme-toggle-dragon-light-accent: #ffe8b2;
     --_vf-theme-toggle-dragon-dark: #2a2145;
     --_vf-theme-toggle-dragon-dark-edge: #9f8cf1;
+    --_vf-theme-toggle-dragon-dark-accent: #7765c7;
     --_vf-theme-toggle-eye-light: #dd6c24;
     --_vf-theme-toggle-eye-dark: #d9ceff;
 
@@ -167,11 +169,18 @@
     background: rgb(255 255 255 / 0.72);
     block-size: 0.34rem;
     border-radius: 50%;
+    box-shadow: none;
     content: "";
     inline-size: 0.34rem;
     inset-block-start: 0.18rem;
     inset-inline-start: 0.2rem;
     position: absolute;
+    transition:
+      background-color var(--_vf-theme-toggle-detail-duration) var(--vf-motion-easing-standard),
+      block-size var(--_vf-theme-toggle-detail-duration) var(--vf-motion-easing-standard),
+      box-shadow var(--_vf-theme-toggle-detail-duration) var(--vf-motion-easing-standard),
+      inline-size var(--_vf-theme-toggle-detail-duration) var(--vf-motion-easing-standard),
+      inset var(--_vf-theme-toggle-detail-duration) var(--vf-motion-easing-standard);
   }
 
   :where([data-vf-theme-toggle-ember])::after,
@@ -212,18 +221,21 @@
 
   :where([data-vf-theme-toggle-dragon]),
   :where([data-vf-theme-toggle-stars]) {
+    --_vf-theme-toggle-dragon-edge: var(--_vf-theme-toggle-dragon-light-edge);
+    --_vf-theme-toggle-dragon-accent: var(--_vf-theme-toggle-dragon-light-accent);
+
     block-size: var(--_vf-theme-toggle-dragon-size);
     color: var(--_vf-theme-toggle-dragon-light);
     filter:
       drop-shadow(0 0.06rem 0.08rem rgb(84 46 22 / 0.22))
       drop-shadow(0 0 0.2rem rgb(255 208 123 / 0.2));
     inline-size: var(--_vf-theme-toggle-dragon-size);
-    inset-block-start: 0;
+    inset-block-start: -0.1rem;
     inset-inline-start: 0;
     pointer-events: none;
     position: absolute;
-    transform: translateX(-0.25rem) rotate(-14deg) scale(0.94);
-    transform-origin: center;
+    transform: translateX(-0.35rem) rotate(-14deg) scale(0.92);
+    transform-origin: 33.333% 53.571%;
     transition:
       color var(--_vf-theme-toggle-scene-duration) var(--vf-motion-easing-standard),
       filter var(--_vf-theme-toggle-detail-duration) var(--vf-motion-easing-standard),
@@ -238,29 +250,88 @@
     overflow: visible;
   }
 
-  :where(.vf-theme-toggle-dragon-body) {
+  :where(.vf-theme-toggle-dragon-body),
+  :where(.vf-theme-toggle-dragon-tail) {
     fill: none;
     stroke: currentColor;
     stroke-linecap: round;
     stroke-linejoin: round;
-    stroke-width: 4.6;
   }
 
-  :where(.vf-theme-toggle-dragon-wing) {
-    fill: currentColor;
-    opacity: 0.68;
-    stroke: var(--_vf-theme-toggle-dragon-light-edge);
+  :where(.vf-theme-toggle-dragon-body) {
+    stroke-width: 7.4;
+  }
+
+  :where(.vf-theme-toggle-dragon-tail) {
+    stroke-width: 5.8;
+  }
+
+  :where(.vf-theme-toggle-dragon-body-detail),
+  :where(.vf-theme-toggle-dragon-face-detail) {
+    fill: none;
+    opacity: 0.48;
+    stroke: var(--_vf-theme-toggle-dragon-edge);
+    stroke-linecap: round;
     stroke-linejoin: round;
-    stroke-width: 0.7;
     transition: stroke var(--_vf-theme-toggle-scene-duration) var(--vf-motion-easing-standard);
+  }
+
+  :where(.vf-theme-toggle-dragon-body-detail) {
+    stroke-width: 1.1;
+  }
+
+  :where(.vf-theme-toggle-dragon-face-detail) {
+    opacity: 0.74;
+    stroke-width: 0.8;
+  }
+
+  :where(.vf-theme-toggle-dragon-tail-plume),
+  :where(.vf-theme-toggle-dragon-head) {
+    fill: currentColor;
+    stroke: var(--_vf-theme-toggle-dragon-edge);
+    stroke-linejoin: round;
+    transition:
+      fill var(--_vf-theme-toggle-scene-duration) var(--vf-motion-easing-standard),
+      stroke var(--_vf-theme-toggle-scene-duration) var(--vf-motion-easing-standard);
+  }
+
+  :where(.vf-theme-toggle-dragon-tail-plume) {
+    stroke-width: 0.7;
   }
 
   :where(.vf-theme-toggle-dragon-head) {
-    fill: currentColor;
-    stroke: var(--_vf-theme-toggle-dragon-light-edge);
-    stroke-linejoin: round;
     stroke-width: 0.8;
-    transition: stroke var(--_vf-theme-toggle-scene-duration) var(--vf-motion-easing-standard);
+  }
+
+  :where(.vf-theme-toggle-dragon-mane) {
+    fill: var(--_vf-theme-toggle-dragon-accent);
+    stroke: var(--_vf-theme-toggle-dragon-edge);
+    stroke-linejoin: round;
+    stroke-width: 0.62;
+    transition:
+      fill var(--_vf-theme-toggle-scene-duration) var(--vf-motion-easing-standard),
+      stroke var(--_vf-theme-toggle-scene-duration) var(--vf-motion-easing-standard);
+  }
+
+  :where(.vf-theme-toggle-dragon-horns),
+  :where(.vf-theme-toggle-dragon-whiskers),
+  :where(.vf-theme-toggle-dragon-foreleg) {
+    fill: none;
+    stroke: currentColor;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+  }
+
+  :where(.vf-theme-toggle-dragon-horns) {
+    stroke-width: 1.55;
+  }
+
+  :where(.vf-theme-toggle-dragon-whiskers) {
+    stroke-width: 1.15;
+  }
+
+  :where(.vf-theme-toggle-dragon-foreleg) {
+    stroke-width: 1.45;
   }
 
   :where(.vf-theme-toggle-dragon-eye) {
@@ -348,6 +419,16 @@
     transform: rotate(180deg) scale(0.94);
   }
 
+  :where([data-vf-theme-toggle-control]:checked) ~ :where([data-vf-theme-toggle-track]) :where([data-vf-theme-toggle-ember])::before,
+  :where([data-vf-theme-toggle-control]:checked) ~ :where([data-vf-theme-toggle-track]) :where([data-vf-theme-toggle-sun])::before {
+    background: rgb(247 242 255 / 0.96);
+    block-size: 0.58rem;
+    box-shadow: 0.18rem -0.04rem 0 0 var(--_vf-theme-toggle-orb-dark);
+    inline-size: 0.58rem;
+    inset-block-start: 0.25rem;
+    inset-inline-start: 0.23rem;
+  }
+
   :where([data-vf-theme-toggle-control]:checked) ~ :where([data-vf-theme-toggle-track]) :where([data-vf-theme-toggle-ember])::after,
   :where([data-vf-theme-toggle-control]:checked) ~ :where([data-vf-theme-toggle-track]) :where([data-vf-theme-toggle-sun])::after {
     border-color: rgb(207 196 255 / 0.46);
@@ -366,16 +447,14 @@
 
   :where([data-vf-theme-toggle-control]:checked) ~ :where([data-vf-theme-toggle-track]) :where([data-vf-theme-toggle-dragon]),
   :where([data-vf-theme-toggle-control]:checked) ~ :where([data-vf-theme-toggle-track]) :where([data-vf-theme-toggle-stars]) {
+    --_vf-theme-toggle-dragon-edge: var(--_vf-theme-toggle-dragon-dark-edge);
+    --_vf-theme-toggle-dragon-accent: var(--_vf-theme-toggle-dragon-dark-accent);
+
     color: var(--_vf-theme-toggle-dragon-dark);
     filter:
       drop-shadow(0 0.06rem 0.1rem rgb(0 0 0 / 0.5))
       drop-shadow(0 0 0.28rem rgb(155 132 241 / 0.3));
-    transform: translateX(calc(var(--_vf-theme-toggle-travel) - 0.25rem)) rotate(248deg) scale(0.94);
-  }
-
-  :where([data-vf-theme-toggle-control]:checked) ~ :where([data-vf-theme-toggle-track]) :where(.vf-theme-toggle-dragon-wing),
-  :where([data-vf-theme-toggle-control]:checked) ~ :where([data-vf-theme-toggle-track]) :where(.vf-theme-toggle-dragon-head) {
-    stroke: var(--_vf-theme-toggle-dragon-dark-edge);
+    transform: translateX(calc(var(--_vf-theme-toggle-travel) - 0.35rem)) rotate(248deg) scale(0.92);
   }
 
   :where([data-vf-theme-toggle-control]:checked) ~ :where([data-vf-theme-toggle-track]) :where(.vf-theme-toggle-dragon-eye) {
@@ -387,7 +466,7 @@
   :where([dir="rtl"] [data-vf-theme-toggle-clouds]),
   :where([dir="rtl"] [data-vf-theme-toggle-dragon]),
   :where([dir="rtl"] [data-vf-theme-toggle-stars]) {
-    transform: translateX(0.25rem) rotate(14deg) scaleX(-1) scale(0.94);
+    transform: translateX(0.35rem) rotate(14deg) scaleX(-1) scale(0.92);
   }
 
   :where([dir="rtl"] [data-vf-theme-toggle-control]:checked) ~ :where([data-vf-theme-toggle-track]) :where([data-vf-theme-toggle-thumb]) {
@@ -398,7 +477,7 @@
   :where([dir="rtl"] [data-vf-theme-toggle-control]:checked) ~ :where([data-vf-theme-toggle-track]) :where([data-vf-theme-toggle-clouds]),
   :where([dir="rtl"] [data-vf-theme-toggle-control]:checked) ~ :where([data-vf-theme-toggle-track]) :where([data-vf-theme-toggle-dragon]),
   :where([dir="rtl"] [data-vf-theme-toggle-control]:checked) ~ :where([data-vf-theme-toggle-track]) :where([data-vf-theme-toggle-stars]) {
-    transform: translateX(calc(-1 * var(--_vf-theme-toggle-travel) + 0.25rem)) rotate(-248deg) scaleX(-1) scale(0.94);
+    transform: translateX(calc(-1 * var(--_vf-theme-toggle-travel) + 0.35rem)) rotate(-248deg) scaleX(-1) scale(0.92);
   }
 
   :where([data-vf-theme-toggle-control]:disabled) {
@@ -420,12 +499,17 @@
     :where([data-vf-theme-toggle-thumb]),
     :where([data-vf-theme-toggle-ember]),
     :where([data-vf-theme-toggle-sun]),
+    :where([data-vf-theme-toggle-ember])::before,
+    :where([data-vf-theme-toggle-sun])::before,
     :where([data-vf-theme-toggle-ember])::after,
     :where([data-vf-theme-toggle-sun])::after,
     :where([data-vf-theme-toggle-dragon]),
     :where([data-vf-theme-toggle-stars]),
-    :where(.vf-theme-toggle-dragon-wing),
+    :where(.vf-theme-toggle-dragon-body-detail),
+    :where(.vf-theme-toggle-dragon-face-detail),
+    :where(.vf-theme-toggle-dragon-tail-plume),
     :where(.vf-theme-toggle-dragon-head),
+    :where(.vf-theme-toggle-dragon-mane),
     :where(.vf-theme-toggle-dragon-eye) {
       transition: none;
     }
