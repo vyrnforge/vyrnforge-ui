@@ -2,10 +2,12 @@
 
 Use Theme Toggle for a compact binary choice between explicit light and dark appearance. Use the generic Switch for arbitrary boolean settings, and use a broader settings control when the product must expose a third `system` preference.
 
+The default VyrnForge presentation uses a small wyvern-and-ember story: light mode presents a glowing forge ember, switching to dark moves and collapses that ember toward a wyvern silhouette as though the light is consumed, and switching back releases the ember with a brief breath trail. The story is decorative; native checked state and thumb position remain the actual state cues.
+
 ## When to use
 
 - Use Theme Toggle when light and dark are the only user-facing choices in the current surface.
-- Use it in compact application chrome such as a header or toolbar where the day and night illustration improves recognition without replacing semantics.
+- Use it in compact application chrome such as a header or toolbar where the VyrnForge dragon-and-ember treatment reinforces brand identity without replacing semantics.
 - Use a generic Switch when the setting is not specifically about appearance.
 - Use a separate three-option control when `light`, `dark`, and `system` must all remain directly selectable.
 
@@ -17,9 +19,19 @@ Unchecked means light theme. Checked means dark theme. The browser owns checked 
 
 ## Anatomy
 
-The public presentation hooks are `data-vf-theme-toggle`, `data-vf-theme-toggle-control`, `data-vf-theme-toggle-track`, `data-vf-theme-toggle-clouds`, `data-vf-theme-toggle-stars`, `data-vf-theme-toggle-thumb`, `data-vf-theme-toggle-sun`, and `data-vf-theme-toggle-moon`.
+Preferred presentation hooks are `data-vf-theme-toggle`, `data-vf-theme-toggle-control`, `data-vf-theme-toggle-track`, `data-vf-theme-toggle-breath`, `data-vf-theme-toggle-dragon`, `data-vf-theme-toggle-thumb`, and `data-vf-theme-toggle-ember`.
 
-The track, clouds, stars, sun, and moon are decorative. Keep them `aria-hidden="true"` through the track container. The checkbox remains the only interactive target.
+The track, breath, dragon, and ember are decorative. Keep them `aria-hidden="true"` through the track container. The checkbox remains the only interactive target.
+
+Earlier Theme Toggle markup used `data-vf-theme-toggle-clouds`, `data-vf-theme-toggle-stars`, `data-vf-theme-toggle-sun`, and `data-vf-theme-toggle-moon`. The Web stylesheet continues to accept those hooks as compatibility aliases so existing markup does not lose its presentation, but new authoring should use the dragon-specific anatomy above. The previous moon hook has no visual role in the dragon treatment.
+
+## Visual story
+
+In light mode, the thumb carries a warm forge ember against a restrained bronze-and-amber field. The wyvern remains present only as a faint silhouette at the far side, so the control still reads as a toggle before it reads as an illustration.
+
+When dark mode is selected, the thumb moves toward inline-end, the ember contracts toward the wyvern's mouth, the wyvern becomes fully visible, and the surrounding field settles into an obsidian night tone. Returning to light reverses the transition and briefly exposes the breath trail while the ember expands and returns toward inline-start.
+
+The story must not introduce an additional semantic state. There are still only two values: unchecked/light and checked/dark.
 
 ## State and application integration
 
@@ -31,22 +43,24 @@ If an application previously stored a `system` preference, resolve that applicat
 
 Pointer and keyboard activation come from the native checkbox. Do not recreate Space handling with custom key listeners.
 
-The visual thumb moves toward inline-end when checked and toward inline-start when unchecked. The component mirrors that movement in right-to-left documents.
+The visual thumb moves toward inline-end when checked and toward inline-start when unchecked. The component mirrors the movement and dragon orientation in right-to-left documents.
 
 ## Accessibility
 
 Provide a localizable accessible name that describes the setting, for example `aria-label="Dark theme"` or an associated visible label. Checked state then communicates whether dark theme is on or off.
 
-The light and dark states are not communicated by color alone: the thumb changes position and the sun/moon illustration changes with it. Forced-colors mode removes decorative scenery while retaining native checked semantics, thumb position, system colors, and focus indication.
+The dragon story is not the only indication of state: the thumb changes position and native checked semantics remain authoritative. Forced-colors mode removes decorative dragon, ember, and breath scenery while retaining checked semantics, thumb position, system colors, and focus indication.
 
 ## Motion
 
-The default transition animates the thumb, sky, clouds, stars, sun, and moon with the shared VyrnForge control motion duration and easing. State changes commit immediately and never depend on animation completion.
+The default presentation uses deliberately slower component-owned story timing than ordinary hover or focus feedback so the consume/release sequence remains legible. The state itself commits immediately; application correctness never waits for the visual story to finish.
 
-When `prefers-reduced-motion: reduce` is active, the component removes those transitions without changing behavior or state visibility.
+The ember and thumb travel form the primary motion. Dragon visibility, eye glow, track atmosphere, and the breath trail are secondary detail and should remain restrained rather than behaving like a game animation.
+
+When `prefers-reduced-motion: reduce` is active, the component removes those transitions without changing behavior or state visibility. Light and dark remain distinguishable through settled thumb position and system-supported state presentation.
 
 ## Styling and tokens
 
-Theme Toggle reuses the shared VyrnForge focus, border, disabled, and motion tokens. Its day-sky, night-sky, cloud, star, sun, and moon colors are private component implementation values because they are not shared design roles.
+Theme Toggle reuses the shared VyrnForge focus, border, disabled, and easing tokens. Its ember, dragon, breath, forge-light, and obsidian-night colors and story timing are private component implementation values because they are not shared design roles.
 
 Private custom properties prefixed with `--_vf-` are implementation details and are not customization API. Do not promote illustration-specific values into global design tokens unless another reusable design role proves that need.
