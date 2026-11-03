@@ -71,7 +71,7 @@
     display: block;
     inset: 0;
     isolation: isolate;
-    overflow: hidden;
+    overflow: visible;
     pointer-events: none;
     position: absolute;
     transition:
@@ -204,14 +204,15 @@
 
   :where([data-vf-theme-toggle-dragon]),
   :where([data-vf-theme-toggle-stars]) {
-    block-size: 100%;
+    block-size: 3.5rem;
     filter: drop-shadow(-0.08rem 0.08rem 0.12rem rgb(0 0 0 / 0.38));
-    inline-size: 100%;
-    inset: 0;
-    opacity: 0.02;
+    inline-size: 4rem;
+    inset-block-start: -0.25rem;
+    inset-inline-end: -0.5rem;
+    opacity: 0.015;
     pointer-events: none;
     position: absolute;
-    transform: translateX(2.6rem) scale(0.98);
+    transform: translateX(2.8rem) scale(0.88);
     transform-origin: right center;
     transition:
       filter var(--_vf-theme-toggle-detail-duration) var(--vf-motion-easing-standard),
@@ -431,7 +432,7 @@
   :where([dir="rtl"] [data-vf-theme-toggle-dragon]),
   :where([dir="rtl"] [data-vf-theme-toggle-stars]) {
     filter: drop-shadow(0.08rem 0.08rem 0.12rem rgb(0 0 0 / 0.38));
-    transform: translateX(-2.6rem) scaleX(-1) scale(0.98);
+    transform: translateX(-2.8rem) scaleX(-1) scale(0.88);
   }
 
   :where([dir="rtl"] [data-vf-theme-toggle-control]:checked) ~ :where([data-vf-theme-toggle-track]) :where([data-vf-theme-toggle-thumb]) {
