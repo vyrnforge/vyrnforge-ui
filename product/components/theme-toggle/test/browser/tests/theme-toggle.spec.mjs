@@ -138,13 +138,19 @@ test.describe('Theme Toggle real-browser contract', () => {
         breathOpacity: Number.parseFloat(breathStyle.opacity),
         breathScaleX: Math.abs(transform.a),
         dragonOpacity: Number.parseFloat(getComputedStyle(dragonElement).opacity),
+        dragonTranslateX: (() => {
+          const dragonTransform = getComputedStyle(dragonElement).transform;
+          if (dragonTransform === 'none') return 0;
+          return new DOMMatrixReadOnly(dragonTransform).m41;
+        })(),
         upperJawTransform: getComputedStyle(upperJawElement).transform,
         lowerJawTransform: getComputedStyle(lowerJawElement).transform,
       };
     });
     expect(releaseFrame.breathOpacity).toBeGreaterThan(0.2);
     expect(releaseFrame.breathScaleX).toBeGreaterThan(0.1);
-    expect(releaseFrame.dragonOpacity).toBeGreaterThan(0.25);
+    expect(releaseFrame.dragonOpacity).toBeGreaterThan(0.9);
+    expect(Math.abs(releaseFrame.dragonTranslateX)).toBeLessThan(1);
     expect(releaseFrame.upperJawTransform).not.toBe('none');
     expect(releaseFrame.lowerJawTransform).not.toBe('none');
     await root.screenshot({ path: testInfo.outputPath('theme-toggle-release-control.png') });
