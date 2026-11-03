@@ -1,16 +1,9 @@
 const dragonArt = `
-  <svg class="vf-theme-toggle-dragon-art" viewBox="0 0 64 56" width="100%" height="100%" aria-hidden="true" focusable="false">
-    <path class="vf-theme-toggle-dragon-neck" d="M64 9C57 7 52 9 48 13C45 17 44 22 45 28C46 36 51 44 60 51L64 53Z"/>
-    <path class="vf-theme-toggle-dragon-crest" d="M48 14C54 10 59 5 62 0C54 1 46 5 40 11C43 10 46 11 48 14ZM39 13C42 9 44 4 43 0C37 3 31 8 28 14C32 12 36 12 39 13Z"/>
-    <path class="vf-theme-toggle-dragon-upper-jaw" d="M61 14C55 11 49 12 44 15L38 18L32 17L27 15L23 18L20 21L14 22L10 24L4 24L1 27L4 30L11 31L17 30L23 28L30 27L36 28L42 31L49 31L55 29L61 32L64 31L64 16Z"/>
-    <path class="vf-theme-toggle-dragon-cheek" d="M39 18L49 16L57 19L52 25L43 27L35 24Z"/>
-    <path class="vf-theme-toggle-dragon-brow" d="M23 20L31 16L40 17L35 22L27 23Z"/>
-    <path class="vf-theme-toggle-dragon-lower-jaw" d="M64 35L58 33L52 34L46 33L40 32L34 31L28 32L23 34L17 34L11 32L6 32L9 37L15 42L23 46L32 49L42 49L51 46L58 43L64 47Z"/>
-    <path class="vf-theme-toggle-dragon-fangs" d="M12 31L15 35L18 31ZM21 29L24 34L27 29ZM31 28L34 33L37 28ZM17 35L20 39L23 35ZM27 39L30 43L33 38Z"/>
-    <path class="vf-theme-toggle-dragon-eye" d="M27 19L35 18L32 22L26 22Z"/>
-    <ellipse class="vf-theme-toggle-dragon-nostril" cx="6.5" cy="27.2" rx="1.6" ry="1"/>
-    <ellipse class="vf-theme-toggle-dragon-mouth-glow" cx="44" cy="32" rx="2.4" ry="1.6"/>
-    <path class="vf-theme-toggle-dragon-scales" d="M45 20L52 18M47 24L55 22M49 41L56 38"/>
+  <svg class="vf-theme-toggle-dragon-art" viewBox="0 0 48 48" width="100%" height="100%" aria-hidden="true" focusable="false">
+    <path class="vf-theme-toggle-dragon-body" d="M40.5 21.5C40.2 15.9 37.4 10.8 32.8 7.9C25.1 3 14.5 5 8.8 12.4C2.5 20.5 4.6 32.6 13.6 38C22.4 43.3 34 39.9 38.5 31.2"/>
+    <path class="vf-theme-toggle-dragon-wing" d="M17.1 10.7C20.2 4.7 27.6 2 34 4.3C30.5 5.9 27.8 8.4 25.8 11.8C23.4 10.6 20.1 10.2 17.1 10.7Z"/>
+    <path class="vf-theme-toggle-dragon-head" d="M40.2 18.2C43.8 17.4 46.2 19.2 46.7 21.5L43.7 21.5L46 24L43.3 24.8L41 28.8L37.7 26.2L39 23.1L36.5 21.5Z"/>
+    <circle class="vf-theme-toggle-dragon-eye" cx="42.4" cy="21.1" r="0.9"/>
   </svg>`;
 
 export const browserFixture = {
