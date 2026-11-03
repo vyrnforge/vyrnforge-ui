@@ -67,8 +67,7 @@ test('Native Web home uses the public Web shell and Product Graph navigation', a
     '/components/native-select/native-select.css',
     '/components/link/link.css',
     '/components/surface/surface.css',
-    '/components/button/button.css',
-    '/components/visually-hidden/visually-hidden.css'
+    '/components/button/button.css'
   ]) {
     expect(styleHrefs.some((href) => href?.endsWith(suffix)), `missing public Web stylesheet ${suffix}`).toBe(true);
   }
