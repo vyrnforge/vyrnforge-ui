@@ -27,7 +27,6 @@ test.describe('Theme Toggle real-browser contract', () => {
     const dragonMark = svg.locator('[data-vf-theme-toggle-dragon-mark]');
     const orb = svg.locator('[data-vf-theme-toggle-orb]');
     const silhouette = svg.locator('.vf-theme-toggle-dragon-silhouette');
-    const accent = svg.locator('.vf-theme-toggle-dragon-accent');
     const eye = svg.locator('.vf-theme-toggle-dragon-eye');
     const eyeSlit = svg.locator('.vf-theme-toggle-dragon-eye-slit');
     const thumb = root.locator('[data-vf-theme-toggle-thumb]');
@@ -45,10 +44,9 @@ test.describe('Theme Toggle real-browser contract', () => {
     await expect(dragonMark).toHaveCount(1);
     await expect(orb).toHaveCount(1);
     await expect(silhouette).toHaveCount(1);
-    await expect(accent).toHaveCount(1);
     await expect(eye).toHaveCount(1);
     await expect(eyeSlit).toHaveCount(1);
-    await expect(svg.locator('path')).toHaveCount(4);
+    await expect(svg.locator('path')).toHaveCount(3);
     await expect(svg.locator('circle')).toHaveCount(2);
     await expect(svg.locator('ellipse')).toHaveCount(1);
 
@@ -73,14 +71,12 @@ test.describe('Theme Toggle real-browser contract', () => {
       const mark = element.querySelector('[data-vf-theme-toggle-dragon-mark]');
       const orbElement = element.querySelector('[data-vf-theme-toggle-orb]');
       const silhouetteElement = element.querySelector('.vf-theme-toggle-dragon-silhouette');
-      const accentElement = element.querySelector('.vf-theme-toggle-dragon-accent');
       const trackElement = element.querySelector('[data-vf-theme-toggle-track]');
       return {
         artTransform: getComputedStyle(art).transform,
         markTransform: getComputedStyle(mark).transform,
         orbTransform: getComputedStyle(orbElement).transform,
         silhouetteFill: getComputedStyle(silhouetteElement).fill,
-        accentFill: getComputedStyle(accentElement).fill,
         nightOpacity: Number.parseFloat(getComputedStyle(trackElement, '::after').opacity),
         artDuration: getComputedStyle(art).transitionDuration,
         markDuration: getComputedStyle(mark).transitionDuration,
@@ -103,7 +99,6 @@ test.describe('Theme Toggle real-browser contract', () => {
     await root.screenshot({ path: testInfo.outputPath('theme-toggle-transition-control.png') });
 
     await expect.poll(() => silhouette.evaluate((element) => getComputedStyle(element).fill)).not.toBe(light.silhouetteFill);
-    await expect.poll(() => accent.evaluate((element) => getComputedStyle(element).fill)).not.toBe(light.accentFill);
     await expect.poll(() => track.evaluate((element) => Number.parseFloat(getComputedStyle(element, '::after').opacity))).toBe(1);
 
     await page.waitForTimeout(560);
