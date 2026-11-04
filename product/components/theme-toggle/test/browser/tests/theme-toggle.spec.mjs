@@ -69,8 +69,12 @@ test.describe('Theme Toggle real-browser contract', () => {
       return { width: box.width, height: box.height };
     });
     expect(eyeBox.width).toBeGreaterThan(25);
-    expect(eyeBox.width).toBeLessThan(45);
-    expect(eyeBox.height).toBeLessThan(16);
+    expect(eyeBox.width).toBeLessThan(50);
+    expect(eyeBox.height).toBeGreaterThan(12);
+    expect(eyeBox.height).toBeLessThan(22);
+    const pupilBox = await eyeSlit.evaluate((element) => { const box = element.getBBox(); return { width: box.width, height: box.height }; });
+    expect(pupilBox.width).toBeGreaterThan(7);
+    expect(pupilBox.height).toBeGreaterThan(14);
 
     const layout = await svg.evaluate((element) => ({
       width: element.clientWidth,
