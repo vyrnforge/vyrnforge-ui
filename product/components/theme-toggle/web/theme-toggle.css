@@ -119,6 +119,7 @@
     --_vf-theme-toggle-dragon-eye: #fff2c9;
     --_vf-theme-toggle-dragon-eye-slit: #6e3a12;
     --_vf-theme-toggle-dragon-detail: #8b4714;
+    --_vf-theme-toggle-dragon-brow: #b77212;
     --_vf-theme-toggle-orb-ring: #fff8e7;
     --_vf-theme-toggle-orb-highlight: #ffe58d;
     --_vf-theme-toggle-orb-core: #ff9700;
@@ -183,6 +184,16 @@
 
   :where(.vf-theme-toggle-dragon-muzzle-detail) {
     fill: var(--_vf-theme-toggle-dragon-detail);
+    transition: fill var(--_vf-theme-toggle-scene-duration) var(--vf-motion-easing-standard);
+  }
+
+  :where(.vf-theme-toggle-dragon-jaw-accent) {
+    fill: var(--_vf-theme-toggle-dragon-accent);
+    transition: fill var(--_vf-theme-toggle-scene-duration) var(--vf-motion-easing-standard);
+  }
+
+  :where(.vf-theme-toggle-dragon-brow) {
+    fill: var(--_vf-theme-toggle-dragon-brow);
     transition: fill var(--_vf-theme-toggle-scene-duration) var(--vf-motion-easing-standard);
   }
 
@@ -268,6 +279,7 @@
     --_vf-theme-toggle-dragon-eye: #eadfff;
     --_vf-theme-toggle-dragon-eye-slit: #2b1644;
     --_vf-theme-toggle-dragon-detail: #c5a1f2;
+    --_vf-theme-toggle-dragon-brow: #ad84e5;
     --_vf-theme-toggle-orb-ring: #f1eaff;
     --_vf-theme-toggle-orb-highlight: #d6a7ff;
     --_vf-theme-toggle-orb-core: #7435c6;
@@ -330,6 +342,8 @@
     :where(.vf-theme-toggle-dragon-eye),
     :where(.vf-theme-toggle-dragon-eye-slit),
     :where(.vf-theme-toggle-dragon-muzzle-detail),
+    :where(.vf-theme-toggle-dragon-jaw-accent),
+    :where(.vf-theme-toggle-dragon-brow),
     :where([data-vf-theme-toggle-thumb]) {
       transition: none;
     }
