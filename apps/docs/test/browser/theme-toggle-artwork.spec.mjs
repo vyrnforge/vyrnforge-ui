@@ -6,34 +6,26 @@ async function dragonGeometry(locator) {
     paths: [...svg.querySelectorAll('path')].map((path) => ({
       className: path.getAttribute('class'),
       d: path.getAttribute('d'),
-    })),
-    circles: [...svg.querySelectorAll('circle')].map((circle) => ({
-      className: circle.getAttribute('class'),
-      cx: circle.getAttribute('cx'),
-      cy: circle.getAttribute('cy'),
-      r: circle.getAttribute('r'),
+      fillRule: path.getAttribute('fill-rule'),
     })),
   }));
 }
 
-async function expectDragonAnatomy(art) {
-  await expect(art).toHaveAttribute('viewBox', '0 0 72 56');
-  await expect(art.locator('.vf-theme-toggle-dragon-body')).toHaveCount(1);
-  await expect(art.locator('.vf-theme-toggle-dragon-tail')).toHaveCount(1);
-  await expect(art.locator('.vf-theme-toggle-dragon-tail-plume')).toHaveCount(1);
-  await expect(art.locator('.vf-theme-toggle-dragon-head')).toHaveCount(1);
-  await expect(art.locator('.vf-theme-toggle-dragon-mane')).toHaveCount(1);
-  await expect(art.locator('.vf-theme-toggle-dragon-horns')).toHaveCount(1);
-  await expect(art.locator('.vf-theme-toggle-dragon-whiskers')).toHaveCount(1);
-  await expect(art.locator('.vf-theme-toggle-dragon-foreleg')).toHaveCount(1);
-  await expect(art.locator('.vf-theme-toggle-dragon-body-detail')).toHaveCount(1);
-  await expect(art.locator('.vf-theme-toggle-dragon-face-detail')).toHaveCount(1);
+async function expectDragonArtwork(art) {
+  await expect(art).toHaveAttribute('viewBox', '0 0 402 200');
+  await expect(art.locator('.vf-theme-toggle-dragon-primary')).toHaveCount(2);
+  await expect(art.locator('.vf-theme-toggle-dragon-secondary')).toHaveCount(1);
+  await expect(art.locator('.vf-theme-toggle-dragon-gold')).toHaveCount(1);
+  await expect(art.locator('.vf-theme-toggle-dragon-highlight')).toHaveCount(3);
+  await expect(art.locator('.vf-theme-toggle-dragon-whisker')).toHaveCount(1);
   await expect(art.locator('.vf-theme-toggle-dragon-eye')).toHaveCount(1);
-  await expect(art.locator('path')).toHaveCount(10);
-  await expect(art.locator('circle')).toHaveCount(1);
+  await expect(art.locator('.vf-theme-toggle-dragon-eye-slit')).toHaveCount(1);
+  await expect(art.locator('.vf-theme-toggle-dragon-face-line')).toHaveCount(1);
+  await expect(art.locator('path')).toHaveCount(11);
+  await expect(art.locator('circle')).toHaveCount(0);
 }
 
-test('docs AppShell uses the same detailed serpentine dragon artwork as the Theme Toggle showcase', async ({ page }, testInfo) => {
+test('docs AppShell and showcase use the exact same approved traced dragon geometry', async ({ page }, testInfo) => {
   await page.goto('/next/native-web/');
   await page.evaluate(() => localStorage.removeItem('vf-docs-theme'));
   await page.reload();
@@ -45,15 +37,17 @@ test('docs AppShell uses the same detailed serpentine dragon artwork as the Them
 
   await expect(headerDragon).toHaveAttribute('data-vf-theme-toggle-dragon-artwork', '');
   await expect(headerArt).toHaveCount(1);
-  await expectDragonAnatomy(headerArt);
+  await expectDragonArtwork(headerArt);
 
   const lightTransform = await headerDragon.evaluate((element) => getComputedStyle(element).transform);
-  const lightColor = await headerDragon.evaluate((element) => getComputedStyle(element).color);
+  const lightPrimary = await headerArt.locator('.vf-theme-toggle-dragon-primary').first()
+    .evaluate((element) => getComputedStyle(element).fill);
 
   await headerControl.click();
   await expect(headerControl).toBeChecked();
   await expect.poll(() => headerDragon.evaluate((element) => getComputedStyle(element).transform)).not.toBe(lightTransform);
-  await expect.poll(() => headerDragon.evaluate((element) => getComputedStyle(element).color)).not.toBe(lightColor);
+  await expect.poll(() => headerArt.locator('.vf-theme-toggle-dragon-primary').first()
+    .evaluate((element) => getComputedStyle(element).fill)).not.toBe(lightPrimary);
   await page.waitForTimeout(650);
   await headerRoot.screenshot({ path: testInfo.outputPath('native-docs-header-theme-toggle-dark.png') });
 
@@ -66,7 +60,7 @@ test('docs AppShell uses the same detailed serpentine dragon artwork as the Them
 
   await expect(showcaseDragon).toHaveAttribute('data-vf-theme-toggle-dragon-artwork', '');
   await expect(showcaseArt).toHaveCount(1);
-  await expectDragonAnatomy(showcaseArt);
+  await expectDragonArtwork(showcaseArt);
   expect(await dragonGeometry(showcaseArt)).toEqual(headerGeometry);
 
   const showcaseControl = showcaseRoot.getByRole('switch', { name: 'Dark theme' });
