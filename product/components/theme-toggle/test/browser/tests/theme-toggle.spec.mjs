@@ -133,11 +133,10 @@ test.describe('Theme Toggle real-browser contract', () => {
 
     await page.evaluate(() => { document.documentElement.dir = 'rtl'; });
     await control.uncheck();
-    const rtlLightM11 = await dragon.evaluate((element) => {
+    await expect.poll(() => dragon.evaluate((element) => {
       const transform = getComputedStyle(element).transform;
       return transform === 'none' ? 1 : new DOMMatrixReadOnly(transform).m11;
-    });
-    expect(rtlLightM11).toBeLessThan(0);
+    })).toBeLessThan(0);
 
     await control.check();
     await expect(control).toBeChecked();
