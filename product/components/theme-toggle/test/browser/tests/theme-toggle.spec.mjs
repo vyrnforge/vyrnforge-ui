@@ -6,8 +6,8 @@ const port = process.env.VF_COMPONENT_PORT || 'web';
 const canonicalArtworkUrl = new URL('../../../web/theme-toggle-dragon-orb.svg', import.meta.url);
 
 function normalizedPathData(source) {
-  return [...source.matchAll(/<path\\b[^>]*\\bd="([^"]+)"/g)]
-    .map((match) => match[1].replace(/\\s+/g, ' ').trim());
+  return [...source.matchAll(/<path\b[^>]*\bd="([^"]+)"/g)]
+    .map((match) => match[1].replace(/\s+/g, ' ').trim());
 }
 
 test.describe('Theme Toggle real-browser contract', () => {
@@ -51,7 +51,7 @@ test.describe('Theme Toggle real-browser contract', () => {
     await expect(svg.locator('ellipse')).toHaveCount(1);
 
     const livePaths = await svg.locator('path').evaluateAll((paths) =>
-      paths.map((path) => (path.getAttribute('d') ?? '').replace(/\\s+/g, ' ').trim())
+      paths.map((path) => (path.getAttribute('d') ?? '').replace(/\s+/g, ' ').trim())
     );
     expect(livePaths).toEqual(canonicalPaths);
 
