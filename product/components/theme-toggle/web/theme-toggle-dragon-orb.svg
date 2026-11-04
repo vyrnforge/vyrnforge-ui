@@ -22,7 +22,7 @@
       d="M 461 170 C 472 162 490 162 503 170 C 492 179 475 181 465 176 C 463 175 462 172 461 170 Z"
       fill="var(--_vf-theme-toggle-dragon-eye, #fff2c9)"/>
     <path class="vf-theme-toggle-dragon-eye-slit"
-      d="M 483 164 C 488 169 488 175 483 180 C 479 175 479 169 483 164 Z"
+      d="M 483 164 C 490 169 490 175 483 180 C 476 175 476 169 483 164 Z"
       fill="var(--_vf-theme-toggle-dragon-eye-slit, #6e3a12)"/>
     <path class="vf-theme-toggle-dragon-muzzle-detail"
       d="M 556 215 C 562 212 570 211 575 216 C 571 216 566 218 562 219 C 560 218 558 217 556 215 Z
