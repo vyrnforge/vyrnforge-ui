@@ -30,9 +30,8 @@ test.describe('Theme Toggle real-browser contract', () => {
     const accent = svg.locator('.vf-theme-toggle-dragon-accent');
     const eye = svg.locator('.vf-theme-toggle-dragon-eye');
     const eyeSlit = svg.locator('.vf-theme-toggle-dragon-eye-slit');
-    const muzzleDetail = svg.locator('.vf-theme-toggle-dragon-muzzle-detail');
-    const jawAccent = svg.locator('.vf-theme-toggle-dragon-jaw-accent');
-    const brow = svg.locator('.vf-theme-toggle-dragon-brow');
+    const hornDetail = svg.locator('.vf-theme-toggle-dragon-horn-detail');
+    const faceContour = svg.locator('.vf-theme-toggle-dragon-face-contour');
     const thumb = root.locator('[data-vf-theme-toggle-thumb]');
 
     await expect(control).toHaveAttribute('type', 'checkbox');
@@ -52,19 +51,9 @@ test.describe('Theme Toggle real-browser contract', () => {
     await expect(accent).toHaveCount(1);
     await expect(eye).toHaveCount(1);
     await expect(eyeSlit).toHaveCount(1);
-    await expect(svg.locator('.vf-theme-toggle-dragon-horn-detail')).toHaveCount(0);
-    await expect(muzzleDetail).toHaveCount(1);
-    const muzzleBox = await muzzleDetail.evaluate((element) => { const box = element.getBBox(); return { x: box.x, width: box.width }; });
-    expect(muzzleBox.x).toBeGreaterThan(535);
-    expect(muzzleBox.width).toBeLessThan(45);
-    const jawBox = await jawAccent.evaluate((element) => { const b = element.getBBox(); return { x: b.x, y: b.y, width: b.width, height: b.height }; });
-    expect(jawBox.x).toBeGreaterThan(545);
-    expect(jawBox.y).toBeGreaterThan(235);
-    expect(jawBox.width).toBeLessThan(60);
-    expect(jawBox.height).toBeLessThan(35);
-    await expect(jawAccent).toHaveCount(1);
-    await expect(brow).toHaveCount(1);
-    await expect(svg.locator('path')).toHaveCount(7);
+    await expect(hornDetail).toHaveCount(1);
+    await expect(faceContour).toHaveCount(1);
+    await expect(svg.locator('path')).toHaveCount(6);
     await expect(svg.locator('circle')).toHaveCount(2);
     await expect(svg.locator('ellipse')).toHaveCount(1);
 
@@ -78,12 +67,8 @@ test.describe('Theme Toggle real-browser contract', () => {
       return { width: box.width, height: box.height };
     });
     expect(eyeBox.width).toBeGreaterThan(25);
-    expect(eyeBox.width).toBeLessThan(50);
-    expect(eyeBox.height).toBeGreaterThan(12);
-    expect(eyeBox.height).toBeLessThan(22);
-    const pupilBox = await eyeSlit.evaluate((element) => { const box = element.getBBox(); return { width: box.width, height: box.height }; });
-    expect(pupilBox.width).toBeGreaterThan(7);
-    expect(pupilBox.height).toBeGreaterThan(14);
+    expect(eyeBox.width).toBeLessThan(45);
+    expect(eyeBox.height).toBeLessThan(16);
 
     const layout = await svg.evaluate((element) => ({
       width: element.clientWidth,
@@ -101,18 +86,16 @@ test.describe('Theme Toggle real-browser contract', () => {
       const mark = element.querySelector('[data-vf-theme-toggle-dragon-mark]');
       const orbElement = element.querySelector('[data-vf-theme-toggle-orb]');
       const silhouetteElement = element.querySelector('.vf-theme-toggle-dragon-silhouette');
-      const muzzleDetailElement = element.querySelector('.vf-theme-toggle-dragon-muzzle-detail');
-      const jawAccentElement = element.querySelector('.vf-theme-toggle-dragon-jaw-accent');
-      const browElement = element.querySelector('.vf-theme-toggle-dragon-brow');
+      const hornDetailElement = element.querySelector('.vf-theme-toggle-dragon-horn-detail');
+      const faceContourElement = element.querySelector('.vf-theme-toggle-dragon-face-contour');
       const trackElement = element.querySelector('[data-vf-theme-toggle-track]');
       return {
         artTransform: getComputedStyle(art).transform,
         markTransform: getComputedStyle(mark).transform,
         orbTransform: getComputedStyle(orbElement).transform,
         silhouetteFill: getComputedStyle(silhouetteElement).fill,
-        muzzleDetailFill: getComputedStyle(muzzleDetailElement).fill,
-        jawAccentFill: getComputedStyle(jawAccentElement).fill,
-        browFill: getComputedStyle(browElement).fill,
+        hornDetailStroke: getComputedStyle(hornDetailElement).stroke,
+        faceContourStroke: getComputedStyle(faceContourElement).stroke,
         nightOpacity: Number.parseFloat(getComputedStyle(trackElement, '::after').opacity),
         artDuration: getComputedStyle(art).transitionDuration,
         markDuration: getComputedStyle(mark).transitionDuration,
@@ -135,9 +118,8 @@ test.describe('Theme Toggle real-browser contract', () => {
     await root.screenshot({ path: testInfo.outputPath('theme-toggle-transition-control.png') });
 
     await expect.poll(() => silhouette.evaluate((element) => getComputedStyle(element).fill)).not.toBe(light.silhouetteFill);
-    await expect.poll(() => muzzleDetail.evaluate((element) => getComputedStyle(element).fill)).not.toBe(light.muzzleDetailFill);
-    await expect.poll(() => jawAccent.evaluate((element) => getComputedStyle(element).fill)).not.toBe(light.jawAccentFill);
-    await expect.poll(() => brow.evaluate((element) => getComputedStyle(element).fill)).not.toBe(light.browFill);
+    await expect.poll(() => hornDetail.evaluate((element) => getComputedStyle(element).stroke)).not.toBe(light.hornDetailStroke);
+    await expect.poll(() => faceContour.evaluate((element) => getComputedStyle(element).stroke)).not.toBe(light.faceContourStroke);
     await expect.poll(() => track.evaluate((element) => Number.parseFloat(getComputedStyle(element, '::after').opacity))).toBe(1);
 
     await page.waitForTimeout(560);
@@ -181,9 +163,8 @@ test.describe('Theme Toggle real-browser contract', () => {
     expect(await dragonMark.evaluate((element) => getComputedStyle(element).transitionDuration)).toBe('0s');
     expect(await orb.evaluate((element) => getComputedStyle(element).transitionDuration)).toBe('0s');
     expect(await silhouette.evaluate((element) => getComputedStyle(element).transitionDuration)).toBe('0s');
-    expect(await muzzleDetail.evaluate((element) => getComputedStyle(element).transitionDuration)).toBe('0s');
-    expect(await jawAccent.evaluate((element) => getComputedStyle(element).transitionDuration)).toBe('0s');
-    expect(await brow.evaluate((element) => getComputedStyle(element).transitionDuration)).toBe('0s');
+    expect(await hornDetail.evaluate((element) => getComputedStyle(element).transitionDuration)).toBe('0s');
+    expect(await faceContour.evaluate((element) => getComputedStyle(element).transitionDuration)).toBe('0s');
 
     await page.emulateMedia({ reducedMotion: 'reduce', forcedColors: 'active' });
     expect(await page.evaluate(() => matchMedia('(forced-colors: active)').matches)).toBe(true);
