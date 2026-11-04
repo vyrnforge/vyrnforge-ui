@@ -27,6 +27,7 @@ test.describe('Theme Toggle real-browser contract', () => {
     const dragonMark = svg.locator('[data-vf-theme-toggle-dragon-mark]');
     const orb = svg.locator('[data-vf-theme-toggle-orb]');
     const silhouette = svg.locator('.vf-theme-toggle-dragon-silhouette');
+    const accent = svg.locator('.vf-theme-toggle-dragon-accent');
     const eye = svg.locator('.vf-theme-toggle-dragon-eye');
     const eyeSlit = svg.locator('.vf-theme-toggle-dragon-eye-slit');
     const thumb = root.locator('[data-vf-theme-toggle-thumb]');
@@ -45,9 +46,10 @@ test.describe('Theme Toggle real-browser contract', () => {
     await expect(orb).toHaveCount(1);
     await expect(silhouette).toHaveCount(1);
     expect(await silhouette.getAttribute('d')).not.toMatch(/\bM\b[\s\S]*\bM\b/);
+    await expect(accent).toHaveCount(1);
     await expect(eye).toHaveCount(1);
     await expect(eyeSlit).toHaveCount(1);
-    await expect(svg.locator('path')).toHaveCount(3);
+    await expect(svg.locator('path')).toHaveCount(4);
     await expect(svg.locator('circle')).toHaveCount(2);
     await expect(svg.locator('ellipse')).toHaveCount(1);
 
@@ -55,6 +57,14 @@ test.describe('Theme Toggle real-browser contract', () => {
       paths.map((path) => (path.getAttribute('d') ?? '').replace(/\s+/g, ' ').trim())
     );
     expect(livePaths).toEqual(canonicalPaths);
+
+    const eyeBox = await eye.evaluate((element) => {
+      const box = element.getBBox();
+      return { width: box.width, height: box.height };
+    });
+    expect(eyeBox.width).toBeGreaterThan(25);
+    expect(eyeBox.width).toBeLessThan(45);
+    expect(eyeBox.height).toBeLessThan(16);
 
     const layout = await svg.evaluate((element) => ({
       width: element.clientWidth,
