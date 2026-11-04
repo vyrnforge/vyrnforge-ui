@@ -2,7 +2,7 @@
 
 Use Theme Toggle for a compact binary choice between explicit light and dark appearance. Use the generic Switch for arbitrary boolean settings, and use a broader settings control when the product must expose a third `system` preference.
 
-The default VyrnForge presentation now uses the canonical smooth circular dragon-orb SVG from `web/theme-toggle-dragon-orb.svg`. The dragon silhouette, cream inner accent, compact eye, compact nostril and short mouth crease, and orb are stable vector geometry. Light and dark reuse that exact geometry; theme changes are expressed through position, rotation, and palette rather than alternate drawings or path morphing.
+The default VyrnForge presentation now uses the canonical smooth circular dragon-orb SVG from `web/theme-toggle-dragon-orb.svg`. The dragon silhouette, cream inner accent, compact eye, restrained brow, angular jaw, small nostril, short mouth corner, narrow jaw opening and fang, and orb are stable vector geometry. Light and dark reuse that exact geometry; theme changes are expressed through position, rotation, and palette rather than alternate drawings or path morphing.
 
 ## When to use
 
@@ -21,7 +21,7 @@ Unchecked means light theme. Checked means dark theme. The browser owns checked 
 
 Preferred presentation hooks are `data-vf-theme-toggle`, `data-vf-theme-toggle-control`, `data-vf-theme-toggle-track`, `data-vf-theme-toggle-dragon`, `data-vf-theme-toggle-thumb`, and `data-vf-theme-toggle-ember`.
 
-The authored artwork is an inline copy of the canonical 650×740 SVG source. It contains one `data-vf-theme-toggle-dragon-mark` group with five paths: the solid outer silhouette, cream inner wing/body accent, compact slanted eye, slit pupil, and one small muzzle-detail path for the nostril and mouth. One independent `data-vf-theme-toggle-orb` group keeps the two orb circles and highlight ellipse separate from the dragon. Browser evidence verifies that the live path data matches the canonical asset.
+The authored artwork is an inline copy of the canonical 650×740 SVG source. It contains one `data-vf-theme-toggle-dragon-mark` group with seven paths: the solid outer silhouette, cream inner wing/body accent, compact slanted eye, slit pupil, one small muzzle-detail path for nostril and mouth corner, a narrow jaw-and-fang accent, and an attached brow. One independent `data-vf-theme-toggle-orb` group keeps the two orb circles and highlight ellipse separate from the dragon. Browser evidence verifies that the live path data matches the canonical asset.
 
 The artwork is decorative and remains inside the track's `aria-hidden="true"` subtree. The checkbox remains the only interactive target. The legacy thumb hook is retained as a forced-colors fallback and compatibility surface; in normal color modes the SVG orb is the visible thumb.
 
@@ -29,7 +29,7 @@ Earlier Theme Toggle markup used `data-vf-theme-toggle-clouds`, `data-vf-theme-t
 
 ## Visual story
 
-In light mode, the gold/cream dragon-orb emblem rests at inline-start on the warm track. The head uses no floating horn scratches or long cheek-to-jaw line. Only a small filled nostril and mouth crease sit within the snout. Filled shapes, rather than subpixel hairline strokes, keep these details legible at control size without modifying the silhouette, eye, or orb.
+In light mode, the gold/cream dragon-orb emblem rests at inline-start on the warm track. The head uses no floating horn scratches or long cheek-to-jaw line. The head replaces the old zigzagging lower jaw and rounded beak-like muzzle with a cleaner tapered jaw. A subtle attached brow, small nostril, short mouth corner, and narrow fang accent define the face at control scale without disconnected horn scratches or a full cheek cutout. The curling body, eye placement, and orb remain unchanged.
 
 When dark mode is selected, the entire emblem slides toward inline-end. During that travel the dragon ring performs one complete turn around the orb, the orb highlight rotates slightly, the dragon and orb palettes transition to violet, and the dark track atmosphere fades in. The settled dark geometry is the same orientation and path data as light mode.
 
