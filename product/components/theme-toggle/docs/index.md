@@ -2,7 +2,7 @@
 
 Use Theme Toggle for a compact binary choice between explicit light and dark appearance. Use the generic Switch for arbitrary boolean settings, and use a broader settings control when the product must expose a third `system` preference.
 
-The default VyrnForge presentation uses one detailed serpentine eastern-dragon geometry wrapped around the moving orb. In light mode the dragon is ivory/gold around a warm orb. Switching to dark moves the orb toward inline-end while that same dragon rotates around it and transitions to an obsidian/violet palette. The geometry keeps the approved head, horns, mane, whiskers, foreleg/claws, curled body, tail plume, eye, and line accents without path-morphing between themes, so the artwork remains scalable and predictable to animate.
+The default VyrnForge presentation uses one horizontal serpentine dragon geometry traced from the approved toggle-scale artwork. The production SVG keeps the recognizable head, horn and mane silhouette, whisker loop, foreclaw, neck mass, and long tail sweep from that approved composition. Light and dark use the exact same path data; dark mode changes the palette and mirrors the same SVG around the moving orb rather than drawing a second dragon or morphing path data.
 
 ## When to use
 
@@ -23,7 +23,7 @@ Preferred presentation hooks are `data-vf-theme-toggle`, `data-vf-theme-toggle-c
 
 The track, orbit accent, dragon, and orb decoration are decorative. Keep them `aria-hidden="true"` through the track container. The checkbox remains the only interactive target.
 
-The preferred Native example uses a compact 72×56 inline SVG inside `data-vf-theme-toggle-dragon`. Its public decorative anatomy includes the curled body, tail, tail plume, head, mane, horns, whiskers, foreleg/claws, body/face accents, and eye. Those details are deliberately encoded as a small set of stable paths rather than raster art or per-frame SVG morphs. The same geometry is used in both themes; theme changes are expressed through translation, rotation, color, track atmosphere, and orb treatment.
+The preferred Native example uses a 402×200 inline SVG inside `data-vf-theme-toggle-dragon`. Its eleven paths are the production trace used by the docs AppShell and component showcase. Two primary silhouette paths carry the head/mane and tail sweep, with stable secondary, gold, highlight, whisker, eye, and face-line paths layered above them. The same path geometry is reused in both themes.
 
 An empty `data-vf-theme-toggle-dragon` span remains render-compatible through a simplified CSS silhouette so existing markup does not disappear. New VyrnForge-authored examples should use the vector artwork.
 
@@ -31,9 +31,9 @@ Earlier Theme Toggle markup used `data-vf-theme-toggle-clouds`, `data-vf-theme-t
 
 ## Visual story
 
-In light mode, the orb rests at inline-start with an ivory/gold serpentine dragon curled around it. Its horns, mane, whiskers, claw, and tail plume remain visible at the settled control size. The track uses a restrained forge-light field.
+In light mode, the orb rests at inline-start with the approved ivory/gold dragon composition wrapped around it and the long tail sweeping toward inline-end. The track uses a restrained forge-light field.
 
-When dark mode is selected, the orb moves toward inline-end while the dragon travels with it and rotates around the orb. During that motion the dragon changes from the light palette to an obsidian/violet palette, the orb changes from warm amber to a violet moon orb with a crescent mark, and the dark track atmosphere fades in.
+When dark mode is selected, the orb moves toward inline-end while the exact same SVG turns around its Y axis so the head remains wrapped around the orb on the opposite side. During that turn the path palette changes from ivory/gold to lavender/deep violet, the orb becomes a violet moon with a crescent mark, and the dark track atmosphere fades in.
 
 Returning to light reverses the same movement and palette transition. No path morph is required and no additional semantic state is introduced. There are still only two values: unchecked/light and checked/dark.
 
@@ -59,7 +59,7 @@ The dragon is not the only indication of state: the orb changes position and nat
 
 The state commits immediately; application correctness never waits for the visual transition to finish.
 
-The primary motion is the shared orb/dragon translation plus dragon rotation. Color interpolation and the track atmosphere are secondary. This deliberately avoids SVG path morphing, per-scale animation, or large filter stacks that would make the small control expensive and fragile.
+The primary motion is the native thumb translation plus the dragon's Y-axis turn, supported by the existing orbit accent and palette transition. The SVG path data remains static for the whole interaction: no path morphing, alternate dark-mode drawing, per-scale animation, or frame-by-frame geometry is used.
 
 When `prefers-reduced-motion: reduce` is active, the component removes transitions without changing behavior or state visibility. Light and dark remain distinguishable through settled thumb position and system-supported state presentation.
 
