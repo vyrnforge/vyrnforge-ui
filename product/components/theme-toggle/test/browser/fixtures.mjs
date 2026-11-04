@@ -17,10 +17,10 @@ const dragonArt = `
         fill="var(--_vf-theme-toggle-dragon-primary, #e0a128)"
         fill-rule="evenodd"/>
       <path class="vf-theme-toggle-dragon-eye"
-        d="M 472 173 C 480 167 491 166 501 171 C 494 177 484 179 476 176 Z"
+        d="M 464 182 C 477 173 497 174 514 187 C 503 198 486 202 472 197 C 466 194 463 188 464 182 Z"
         fill="var(--_vf-theme-toggle-dragon-eye, #fff2c9)"/>
       <path class="vf-theme-toggle-dragon-eye-slit"
-        d="M 487 169 C 490 172 490 175 488 178 C 486 175 486 172 487 169 Z"
+        d="M 489 178 C 494 184 494 191 489 198 C 485 192 485 184 489 178 Z"
         fill="var(--_vf-theme-toggle-dragon-eye-slit, #6e3a12)"/>
     </g>
   
