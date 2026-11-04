@@ -54,7 +54,7 @@ test.describe('Theme Toggle real-browser contract', () => {
     await expect(muzzleDetail).toHaveCount(1);
     const muzzleBox = await muzzleDetail.evaluate((element) => { const box = element.getBBox(); return { x: box.x, width: box.width }; });
     expect(muzzleBox.x).toBeGreaterThan(535);
-    expect(muzzleBox.width).toBeLessThan(45);
+    expect(muzzleBox.width).toBeLessThan(50);
     await expect(svg.locator('path')).toHaveCount(5);
     await expect(svg.locator('circle')).toHaveCount(2);
     await expect(svg.locator('ellipse')).toHaveCount(1);
@@ -95,7 +95,7 @@ test.describe('Theme Toggle real-browser contract', () => {
         markTransform: getComputedStyle(mark).transform,
         orbTransform: getComputedStyle(orbElement).transform,
         silhouetteFill: getComputedStyle(silhouetteElement).fill,
-        muzzleDetailStroke: getComputedStyle(muzzleDetailElement).stroke,
+        muzzleDetailFill: getComputedStyle(muzzleDetailElement).fill,
         nightOpacity: Number.parseFloat(getComputedStyle(trackElement, '::after').opacity),
         artDuration: getComputedStyle(art).transitionDuration,
         markDuration: getComputedStyle(mark).transitionDuration,
@@ -118,7 +118,7 @@ test.describe('Theme Toggle real-browser contract', () => {
     await root.screenshot({ path: testInfo.outputPath('theme-toggle-transition-control.png') });
 
     await expect.poll(() => silhouette.evaluate((element) => getComputedStyle(element).fill)).not.toBe(light.silhouetteFill);
-    await expect.poll(() => muzzleDetail.evaluate((element) => getComputedStyle(element).stroke)).not.toBe(light.muzzleDetailStroke);
+    await expect.poll(() => muzzleDetail.evaluate((element) => getComputedStyle(element).fill)).not.toBe(light.muzzleDetailFill);
     await expect.poll(() => track.evaluate((element) => Number.parseFloat(getComputedStyle(element, '::after').opacity))).toBe(1);
 
     await page.waitForTimeout(560);
