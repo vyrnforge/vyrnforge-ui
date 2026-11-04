@@ -25,6 +25,30 @@ const dragonArt = `
       <path class="vf-theme-toggle-dragon-eye-slit"
         d="M 484 167 C 487 171 487 175 484 179 C 481 175 481 171 484 167 Z"
         fill="var(--_vf-theme-toggle-dragon-eye-slit, #6e3a12)"/>
+      <path class="vf-theme-toggle-dragon-jaw-shadow"
+        d="M 405 229 C 434 220 468 221 497 234 C 523 246 545 266 559 291 C 544 288 531 281 519 272 C 501 258 479 250 456 248 C 437 247 421 250 407 256 C 412 247 412 238 405 229 Z"
+        fill="var(--_vf-theme-toggle-dragon-shadow, #b96812)"/>
+      <path class="vf-theme-toggle-dragon-highlight"
+        d="M 318 73 C 335 91 356 107 382 120 C 369 114 356 108 344 101 C 332 94 323 84 318 73 Z
+           M 382 71 C 401 88 421 106 442 129 C 428 119 414 110 400 102 C 391 96 385 86 382 71 Z
+           M 443 150 C 458 143 475 142 491 147 C 480 148 469 152 460 158 C 453 163 448 169 445 176 C 446 166 445 157 443 150 Z"
+        fill="var(--_vf-theme-toggle-dragon-highlight, #ffd16a)"/>
+      <path class="vf-theme-toggle-dragon-face-detail"
+        d="M 555 217 C 562 213 570 213 576 217
+           M 530 247 C 545 250 558 257 568 268"
+        fill="none"
+        stroke="var(--_vf-theme-toggle-dragon-detail, #8f4a0d)"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+        stroke-width="8"/>
+      <path class="vf-theme-toggle-dragon-body-ridges"
+        d="M 176 548 C 190 562 208 569 228 568
+           M 188 582 C 203 595 220 601 239 600
+           M 205 613 C 219 624 234 629 250 628"
+        fill="none"
+        stroke="var(--_vf-theme-toggle-dragon-ridge, #f2bd55)"
+        stroke-linecap="round"
+        stroke-width="9"/>
     </g>
   
     <g data-vf-theme-toggle-orb>
