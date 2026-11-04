@@ -2,7 +2,7 @@
 
 Use Theme Toggle for a compact binary choice between explicit light and dark appearance. Use the generic Switch for arbitrary boolean settings, and use a broader settings control when the product must expose a third `system` preference.
 
-The default VyrnForge presentation uses one horizontal serpentine dragon geometry traced from the approved toggle-scale artwork. The production SVG keeps the recognizable head, horn and mane silhouette, whisker loop, foreclaw, neck mass, and long tail sweep from that approved composition. Light and dark use the exact same path data; dark mode changes the palette and mirrors the same SVG around the moving orb rather than drawing a second dragon or morphing path data.
+The default VyrnForge presentation now uses the canonical smooth circular dragon-orb SVG from `web/theme-toggle-dragon-orb.svg`. The dragon silhouette, inner accent, eye, and orb are stable vector geometry. Light and dark reuse that exact geometry; theme changes are expressed through position, rotation, and palette rather than alternate drawings or path morphing.
 
 ## When to use
 
@@ -19,23 +19,21 @@ Unchecked means light theme. Checked means dark theme. The browser owns checked 
 
 ## Anatomy
 
-Preferred presentation hooks are `data-vf-theme-toggle`, `data-vf-theme-toggle-control`, `data-vf-theme-toggle-track`, `data-vf-theme-toggle-breath`, `data-vf-theme-toggle-dragon`, `data-vf-theme-toggle-thumb`, and `data-vf-theme-toggle-ember`.
+Preferred presentation hooks are `data-vf-theme-toggle`, `data-vf-theme-toggle-control`, `data-vf-theme-toggle-track`, `data-vf-theme-toggle-dragon`, `data-vf-theme-toggle-thumb`, and `data-vf-theme-toggle-ember`.
 
-The track, orbit accent, dragon, and orb decoration are decorative. Keep them `aria-hidden="true"` through the track container. The checkbox remains the only interactive target.
+The authored artwork is an inline copy of the canonical 650×740 SVG source. It contains one `data-vf-theme-toggle-dragon-mark` group with three paths—a primary silhouette, inner accent, and eye—and one independent `data-vf-theme-toggle-orb` group with two circles and a highlight ellipse. Browser evidence verifies that the live path data matches the canonical asset.
 
-The preferred Native example uses a 402×200 inline SVG inside `data-vf-theme-toggle-dragon`. Its eleven paths are the production trace used by the docs AppShell and component showcase. Two primary silhouette paths carry the head/mane and tail sweep, with stable secondary, gold, highlight, whisker, eye, and face-line paths layered above them. The same path geometry is reused in both themes.
+The artwork is decorative and remains inside the track's `aria-hidden="true"` subtree. The checkbox remains the only interactive target. The legacy thumb hook is retained as a forced-colors fallback and compatibility surface; in normal color modes the SVG orb is the visible thumb.
 
-An empty `data-vf-theme-toggle-dragon` span remains render-compatible through a simplified CSS silhouette so existing markup does not disappear. New VyrnForge-authored examples should use the vector artwork.
-
-Earlier Theme Toggle markup used `data-vf-theme-toggle-clouds`, `data-vf-theme-toggle-stars`, `data-vf-theme-toggle-sun`, and `data-vf-theme-toggle-moon`. The Web stylesheet continues to accept those hooks as compatibility aliases. The previous moon hook has no visual role in the current dragon treatment.
+Earlier Theme Toggle markup used `data-vf-theme-toggle-clouds`, `data-vf-theme-toggle-stars`, `data-vf-theme-toggle-sun`, and `data-vf-theme-toggle-moon`. The Web stylesheet continues to accept those hooks as compatibility aliases where practical.
 
 ## Visual story
 
-In light mode, the orb rests at inline-start with the approved ivory/gold dragon composition wrapped around it and the long tail sweeping toward inline-end. The track uses a restrained forge-light field.
+In light mode, the gold/cream dragon-orb emblem rests at inline-start on the warm track.
 
-When dark mode is selected, the orb moves toward inline-end while the exact same SVG turns around its Y axis so the head remains wrapped around the orb on the opposite side. During that turn the path palette changes from ivory/gold to lavender/deep violet, the orb becomes a violet moon with a crescent mark, and the dark track atmosphere fades in.
+When dark mode is selected, the entire emblem slides toward inline-end. During that travel the dragon ring performs one complete turn around the orb, the orb highlight rotates slightly, the dragon and orb palettes transition to violet, and the dark track atmosphere fades in. The settled dark geometry is the same orientation and path data as light mode.
 
-Returning to light reverses the same movement and palette transition. No path morph is required and no additional semantic state is introduced. There are still only two values: unchecked/light and checked/dark.
+Returning to light reverses the same motion. No SVG path data changes and no second dark-mode dragon is introduced.
 
 ## State and application integration
 
@@ -47,24 +45,24 @@ If an application previously stored a `system` preference, resolve that applicat
 
 Pointer and keyboard activation come from the native checkbox. Do not recreate Space handling with custom key listeners.
 
-The orb moves toward inline-end when checked and toward inline-start when unchecked. The dragon keeps the same path data and turns so its head remains wrapped around the active orb; that orientation is mirrored logically in right-to-left documents.
+The artwork moves toward inline-end when checked and toward inline-start when unchecked. Right-to-left documents reverse that travel and reverse the decorative rotation direction.
 
 ## Accessibility
 
-Provide a localizable accessible name that describes the setting, for example `aria-label="Dark theme"` or an associated visible label. Checked state then communicates whether dark theme is on or off.
+Provide a localizable accessible name that describes the setting, for example `aria-label="Dark theme"` or an associated visible label. Checked state communicates whether dark theme is on or off.
 
-The dragon is not the only indication of state: the orb changes position and native checked semantics remain authoritative. Forced-colors mode removes decorative dragon/orbit scenery while retaining checked semantics, thumb position, system colors, and focus indication.
+The dragon is not the only indication of state: the artwork changes position and native checked semantics remain authoritative. Forced-colors mode hides the decorative SVG and restores a system-colored thumb while retaining checked state, target size, and focus indication.
 
 ## Motion
 
 The state commits immediately; application correctness never waits for the visual transition to finish.
 
-The primary motion is the native thumb translation plus the dragon's Y-axis turn, supported by the existing orbit accent and palette transition. The SVG path data remains static for the whole interaction: no path morphing, alternate dark-mode drawing, per-scale animation, or frame-by-frame geometry is used.
+The primary motion is a 680 ms emblem translation plus a full dragon-ring rotation around the fixed orb center. The orb receives a smaller rotation/scale treatment so its highlight participates without competing with the dragon. Palette and track transitions are secondary.
 
-When `prefers-reduced-motion: reduce` is active, the component removes transitions without changing behavior or state visibility. Light and dark remain distinguishable through settled thumb position and system-supported state presentation.
+When `prefers-reduced-motion: reduce` is active, all artwork and track transitions are removed. The checked state remains visually distinct through the settled inline position and theme palette.
 
 ## Styling and tokens
 
-Theme Toggle reuses the shared VyrnForge focus, border, disabled, and easing tokens. Its illustration colors and story timing remain private component implementation values because they are not shared design roles.
+Theme Toggle reuses shared VyrnForge focus, border, disabled, and standard easing tokens where they represent shared roles. The illustration palette, geometry sizing, and story timing remain private component implementation values.
 
 Private custom properties prefixed with `--_vf-` are implementation details and are not customization API. Do not promote illustration-specific values into global design tokens unless another reusable design role proves that need.
