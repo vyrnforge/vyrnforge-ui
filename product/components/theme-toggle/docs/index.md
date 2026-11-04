@@ -21,7 +21,7 @@ Unchecked means light theme. Checked means dark theme. The browser owns checked 
 
 Preferred presentation hooks are `data-vf-theme-toggle`, `data-vf-theme-toggle-control`, `data-vf-theme-toggle-track`, `data-vf-theme-toggle-dragon`, `data-vf-theme-toggle-thumb`, and `data-vf-theme-toggle-ember`.
 
-The authored artwork is an inline copy of the canonical 650×740 SVG source. It contains one `data-vf-theme-toggle-dragon-mark` group with three paths—a primary silhouette, inner accent, and eye—and one independent `data-vf-theme-toggle-orb` group with two circles and a highlight ellipse. Browser evidence verifies that the live path data matches the canonical asset.
+The authored artwork is an inline copy of the canonical 650×740 SVG source. It contains one `data-vf-theme-toggle-dragon-mark` group with four paths—a primary silhouette, inner accent, almond eye, and slit pupil—and one independent `data-vf-theme-toggle-orb` group with two circles and a highlight ellipse. Browser evidence verifies that the live path data matches the canonical asset.
 
 The artwork is decorative and remains inside the track's `aria-hidden="true"` subtree. The checkbox remains the only interactive target. The legacy thumb hook is retained as a forced-colors fallback and compatibility surface; in normal color modes the SVG orb is the visible thumb.
 

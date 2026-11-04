@@ -29,6 +29,7 @@ test.describe('Theme Toggle real-browser contract', () => {
     const silhouette = svg.locator('.vf-theme-toggle-dragon-silhouette');
     const accent = svg.locator('.vf-theme-toggle-dragon-accent');
     const eye = svg.locator('.vf-theme-toggle-dragon-eye');
+    const eyeSlit = svg.locator('.vf-theme-toggle-dragon-eye-slit');
     const thumb = root.locator('[data-vf-theme-toggle-thumb]');
 
     await expect(control).toHaveAttribute('type', 'checkbox');
@@ -46,7 +47,8 @@ test.describe('Theme Toggle real-browser contract', () => {
     await expect(silhouette).toHaveCount(1);
     await expect(accent).toHaveCount(1);
     await expect(eye).toHaveCount(1);
-    await expect(svg.locator('path')).toHaveCount(3);
+    await expect(eyeSlit).toHaveCount(1);
+    await expect(svg.locator('path')).toHaveCount(4);
     await expect(svg.locator('circle')).toHaveCount(2);
     await expect(svg.locator('ellipse')).toHaveCount(1);
 
