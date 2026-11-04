@@ -28,11 +28,9 @@ async function expectArtwork(art) {
   await expect(art.locator('.vf-theme-toggle-dragon-accent')).toHaveCount(1);
   await expect(art.locator('.vf-theme-toggle-dragon-eye')).toHaveCount(1);
   await expect(art.locator('.vf-theme-toggle-dragon-eye-slit')).toHaveCount(1);
-  await expect(art.locator('.vf-theme-toggle-dragon-jaw-shadow')).toHaveCount(1);
-  await expect(art.locator('.vf-theme-toggle-dragon-highlight')).toHaveCount(1);
-  await expect(art.locator('.vf-theme-toggle-dragon-face-detail')).toHaveCount(1);
-  await expect(art.locator('.vf-theme-toggle-dragon-body-ridges')).toHaveCount(1);
-  await expect(art.locator('path')).toHaveCount(8);
+  await expect(art.locator('.vf-theme-toggle-dragon-horn-detail')).toHaveCount(1);
+  await expect(art.locator('.vf-theme-toggle-dragon-face-contour')).toHaveCount(1);
+  await expect(art.locator('path')).toHaveCount(6);
   await expect(art.locator('circle')).toHaveCount(2);
   await expect(art.locator('ellipse')).toHaveCount(1);
 }
