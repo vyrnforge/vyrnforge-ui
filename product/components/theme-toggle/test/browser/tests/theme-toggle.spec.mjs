@@ -44,6 +44,7 @@ test.describe('Theme Toggle real-browser contract', () => {
     await expect(dragonMark).toHaveCount(1);
     await expect(orb).toHaveCount(1);
     await expect(silhouette).toHaveCount(1);
+    expect(await silhouette.getAttribute('d')).not.toMatch(/\bM\b[\s\S]*\bM\b/);
     await expect(eye).toHaveCount(1);
     await expect(eyeSlit).toHaveCount(1);
     await expect(svg.locator('path')).toHaveCount(3);
