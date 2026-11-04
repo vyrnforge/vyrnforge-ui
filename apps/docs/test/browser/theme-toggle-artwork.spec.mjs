@@ -4,15 +4,15 @@ import { test, expect } from '@playwright/test';
 const canonicalArtworkUrl = new URL('../../../../product/components/theme-toggle/web/theme-toggle-dragon-orb.svg', import.meta.url);
 
 function normalizedPathData(source) {
-  return [...source.matchAll(/<path\\b[^>]*\\bd="([^"]+)"/g)]
-    .map((match) => match[1].replace(/\\s+/g, ' ').trim());
+  return [...source.matchAll(/<path\b[^>]*\bd="([^"]+)"/g)]
+    .map((match) => match[1].replace(/\s+/g, ' ').trim());
 }
 
 async function artworkGeometry(locator) {
   return locator.evaluate((svg) => ({
     viewBox: svg.getAttribute('viewBox'),
     paths: [...svg.querySelectorAll('path')].map((path) =>
-      (path.getAttribute('d') ?? '').replace(/\\s+/g, ' ').trim()
+      (path.getAttribute('d') ?? '').replace(/\s+/g, ' ').trim()
     ),
     circles: svg.querySelectorAll('circle').length,
     ellipses: svg.querySelectorAll('ellipse').length,
