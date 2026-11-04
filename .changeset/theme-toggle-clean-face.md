@@ -2,4 +2,4 @@
 "@vyrnforge/web": patch
 ---
 
-Remove distracting horn scratches and the long cheek line from the Theme Toggle dragon. Retain its silhouette, eye, and orb while keeping only short, local nostril and mouth details inside the muzzle. Synchronize the Native example, docs runtime, browser fixture and geometry tests.
+Refine the Theme Toggle dragon head by replacing its zigzag lower jaw and rounded beak-like snout with a cleaner jaw, attached brow, and restrained fang and muzzle details. Keep the body, eye placement, orb, motion, accessibility and theme behavior intact. Synchronize the Native example, docs runtime, browser fixture, and geometry tests.
