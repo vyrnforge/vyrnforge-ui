@@ -47,7 +47,7 @@ If an application previously stored a `system` preference, resolve that applicat
 
 Pointer and keyboard activation come from the native checkbox. Do not recreate Space handling with custom key listeners.
 
-The orb and dragon move toward inline-end when checked and toward inline-start when unchecked. Direction is mirrored in right-to-left documents.
+The orb moves toward inline-end when checked and toward inline-start when unchecked. The dragon keeps the same path data and turns so its head remains wrapped around the active orb; that orientation is mirrored logically in right-to-left documents.
 
 ## Accessibility
 
