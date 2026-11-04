@@ -71,15 +71,15 @@ test.describe('Theme Toggle real-browser contract', () => {
     expect(eyeBox.width).toBeLessThan(60);
     expect(eyeBox.height).toBeGreaterThan(15);
     expect(eyeBox.height).toBeLessThan(25);
-    const pupilBox = await eyeSlit.evaluate((element) => element.getBBox());
+    const pupilBox = await eyeSlit.evaluate((element) => { const box = element.getBBox(); return { width: box.width, height: box.height }; });
     expect(pupilBox.width).toBeGreaterThan(6);
     expect(pupilBox.height).toBeGreaterThan(13);
 
     // Keep the face within the head, not as detached horns or a large cheek hole.
-    const nostrilBox = await nostril.evaluate((element) => element.getBBox());
+    const nostrilBox = await nostril.evaluate((element) => { const box = element.getBBox(); return { x: box.x, width: box.width }; });
     expect(nostrilBox.x).toBeGreaterThan(545);
     expect(nostrilBox.width).toBeLessThan(24);
-    const mouthBox = await mouth.evaluate((element) => element.getBBox());
+    const mouthBox = await mouth.evaluate((element) => { const box = element.getBBox(); return { x: box.x, width: box.width }; });
     expect(mouthBox.x).toBeGreaterThan(440);
     expect(mouthBox.width).toBeGreaterThan(105);
     expect(mouthBox.width).toBeLessThan(140);
