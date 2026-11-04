@@ -244,6 +244,7 @@
 
     backface-visibility: visible;
     block-size: var(--_vf-theme-toggle-dragon-block-size);
+    color: var(--_vf-theme-toggle-dragon-primary);
     filter:
       drop-shadow(0 0.04rem 0.06rem rgb(84 46 22 / 0.18))
       drop-shadow(0 0 0.14rem rgb(255 208 123 / 0.16));
@@ -256,6 +257,7 @@
     transform-origin: center;
     transform-style: preserve-3d;
     transition:
+      color var(--_vf-theme-toggle-scene-duration) var(--vf-motion-easing-standard),
       filter var(--_vf-theme-toggle-detail-duration) var(--vf-motion-easing-standard),
       transform var(--_vf-theme-toggle-story-duration) var(--vf-motion-easing-standard);
     z-index: 3;
