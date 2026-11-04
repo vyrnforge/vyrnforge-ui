@@ -29,7 +29,7 @@ Earlier Theme Toggle markup used `data-vf-theme-toggle-clouds`, `data-vf-theme-t
 
 ## Visual story
 
-In light mode, the gold/cream dragon-orb emblem rests at inline-start on the warm track. The head uses no floating horn scratches or long cheek-to-jaw line. Only a tiny nostril and a short mouth crease sit within the snout, leaving the approved silhouette, eye, and orb intact.
+In light mode, the gold/cream dragon-orb emblem rests at inline-start on the warm track. The head uses no floating horn scratches or long cheek-to-jaw line. Only a small filled nostril and mouth crease sit within the snout. Filled shapes, rather than subpixel hairline strokes, keep these details legible at control size without modifying the silhouette, eye, or orb.
 
 When dark mode is selected, the entire emblem slides toward inline-end. During that travel the dragon ring performs one complete turn around the orb, the orb highlight rotates slightly, the dragon and orb palettes transition to violet, and the dark track atmosphere fades in. The settled dark geometry is the same orientation and path data as light mode.
 
