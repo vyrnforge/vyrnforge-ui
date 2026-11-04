@@ -26,13 +26,9 @@ const dragonArt = `
         d="M 484 167 C 487 171 487 175 484 179 C 481 175 481 171 484 167 Z"
         fill="var(--_vf-theme-toggle-dragon-eye-slit, #6e3a12)"/>
       <path class="vf-theme-toggle-dragon-muzzle-detail"
-        d="M 557 218 C 561 215 567 215 570 217
-           M 544 252 C 554 255 566 260 577 260"
-        fill="none"
-        stroke="var(--_vf-theme-toggle-dragon-detail, #9a5a18)"
-        stroke-linecap="round"
-        stroke-linejoin="round"
-        stroke-width="4"/>
+        d="M 556 215 C 562 212 570 211 575 216 C 571 216 566 218 562 219 C 560 218 558 217 556 215 Z
+           M 544 250 C 558 251 571 256 585 251 C 580 263 570 267 557 260 C 550 257 547 254 544 250 Z"
+        fill="var(--_vf-theme-toggle-dragon-detail, #8b4714)"/>
     </g>
   
     <g data-vf-theme-toggle-orb>
