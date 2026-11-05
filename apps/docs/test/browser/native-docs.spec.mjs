@@ -67,7 +67,9 @@ test('Native Web home uses the VyrnForge shell and separates documentation surfa
   const explore = page.getByRole('link', { name: 'Explore components' });
   await expect(explore).toHaveAttribute('data-vf-link', '');
   await expect(explore).not.toHaveAttribute('data-vf-button', '');
-  await expect(explore).toHaveCSS('display', 'inline-flex');
+  await expect(explore).toHaveAttribute('href', 'components/');
+  const exploreBox = await explore.boundingBox();
+  expect(exploreBox?.height ?? 0).toBeGreaterThanOrEqual(32);
   await expect(page.getByRole('link', { name: 'Components API', exact: true })).toHaveAttribute('href', 'api/components/');
   await expect(page.getByRole('link', { name: 'Styling', exact: true })).toHaveAttribute('href', 'foundations/styling/');
   await expect(page.getByRole('link', { name: 'Design tokens', exact: true })).toHaveAttribute('href', 'foundations/tokens/');
@@ -238,8 +240,7 @@ test('Theme Toggle showcase uses native switch state and component-owned motion'
   const before = await thumb.evaluate((element) => getComputedStyle(element).transform);
   await control.click();
   await expect(control).toBeChecked();
-  const after = await thumb.evaluate((element) => getComputedStyle(element).transform);
-  expect(after).not.toBe(before);
+  await expect.poll(() => thumb.evaluate((element) => getComputedStyle(element).transform)).not.toBe(before);
 
   await control.focus();
   await page.keyboard.press('Space');
