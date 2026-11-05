@@ -25,6 +25,8 @@ test.describe('Button real-browser contract', () => {
     await busy.click();
     await expect(page.locator('body')).toHaveAttribute('data-busy-activated', 'true');
 
+    await page.locator('#plain').click();
+    await expect(page.locator('body')).not.toHaveAttribute('data-submitted', 'true');
     await page.locator('#submit').click();
     await expect(page.locator('body')).toHaveAttribute('data-submitted', 'true');
     await page.locator('input[name="field"]').fill('new');
@@ -81,12 +83,30 @@ test.describe('Button framework hydration', () => {
       await disabled.evaluate((element) => element.click());
       await expect(page.locator('body')).not.toHaveAttribute('data-disabled-activated', 'true');
 
+      const form = page.locator(`#${framework}-form`);
+      const field = form.locator('input[name="field"]');
+      const submit = form.locator(`#${framework}-submit`);
+      const reset = form.locator(`#${framework}-reset`);
+      const plain = form.locator(`#${framework}-plain`);
+      await expect(field).toHaveValue('changed');
+      expect(await submit.getAttribute('type')).toBeNull(); // native default submit
+      await expect(reset).toHaveAttribute('type', 'reset');
+      await expect(plain).toHaveAttribute('type', 'button');
+      await plain.click();
+      await expect(page.locator('body')).not.toHaveAttribute('data-form-submitted', 'true');
+      await field.fill('edited');
+      await reset.click();
+      await expect(field).toHaveValue('changed');
+      await submit.click();
+      await expect(page.locator('body')).toHaveAttribute('data-form-submitted', 'true');
+
       expect(errors.filter((error) => /hydration|mismatch/i.test(error))).toEqual([]);
 
       const results = await new AxeBuilder({ page })
         .include(`#${framework}-button`)
         .include(`#${framework}-consumer-busy`)
         .include(`#${framework}-disabled`)
+        .include(`#${framework}-form`)
         .analyze();
       expect(results.violations).toEqual([]);
     });
