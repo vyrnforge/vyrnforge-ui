@@ -64,6 +64,12 @@ test('Native Web home uses the VyrnForge shell and separates documentation surfa
   await expect(page.locator('[data-vf-app-shell]')).toHaveCount(1);
   await expect(page.locator('[data-vf-side-nav]')).toHaveCount(1);
   await expect(page.getByRole('link', { name: 'Showcase', exact: true })).toHaveAttribute('href', 'components/');
+  const explore = page.getByRole('link', { name: 'Explore components' });
+  await expect(explore).toHaveAttribute('data-vf-link', '');
+  await expect(explore).not.toHaveAttribute('data-vf-button', '');
+  await expect(explore).toHaveAttribute('href', 'components/');
+  const exploreBox = await explore.boundingBox();
+  expect(exploreBox?.height ?? 0).toBeGreaterThanOrEqual(32);
   await expect(page.getByRole('link', { name: 'Components API', exact: true })).toHaveAttribute('href', 'api/components/');
   await expect(page.getByRole('link', { name: 'Styling', exact: true })).toHaveAttribute('href', 'foundations/styling/');
   await expect(page.getByRole('link', { name: 'Design tokens', exact: true })).toHaveAttribute('href', 'foundations/tokens/');
@@ -234,8 +240,7 @@ test('Theme Toggle showcase uses native switch state and component-owned motion'
   const before = await thumb.evaluate((element) => getComputedStyle(element).transform);
   await control.click();
   await expect(control).toBeChecked();
-  const after = await thumb.evaluate((element) => getComputedStyle(element).transform);
-  expect(after).not.toBe(before);
+  await expect.poll(() => thumb.evaluate((element) => getComputedStyle(element).transform)).not.toBe(before);
 
   await control.focus();
   await page.keyboard.press('Space');
@@ -265,8 +270,8 @@ test('Button showcase composes shared guidance, Native adaptation, examples, ref
   await expect(toc.getByRole('link', { name: 'Reference' })).toHaveAttribute('href', '#reference');
   await expect(page.getByText('@vyrnforge/web/styles/button.css', { exact: false }).first()).toBeVisible();
   await expect(page.locator('article[data-vf-docs-component="button"]')).toHaveCount(1);
-  await expect(page.locator('[data-vf-docs-example]')).toHaveCount(4);
-  await expect(page.locator('[data-vf-docs-example][data-vf-surface]')).toHaveCount(4);
+  await expect(page.locator('[data-vf-docs-example]')).toHaveCount(5);
+  await expect(page.locator('[data-vf-docs-example][data-vf-surface]')).toHaveCount(5);
   const reference = page.locator('#main');
   await expect(reference.getByRole('link', { name: 'Button API reference' })).toHaveAttribute('href', '../../api/components/button/');
   await expect(reference.getByRole('link', { name: 'Styling foundation' })).toHaveAttribute('href', '../../foundations/styling/');
@@ -292,6 +297,29 @@ test('Button showcase composes shared guidance, Native adaptation, examples, ref
   const loading = page.getByRole('button', { name: 'Loading', exact: true });
   await expect(loading).toHaveAttribute('aria-busy', 'true');
   await expect(loading).toBeEnabled();
+
+  const formExample = page.locator('[data-vf-docs-example="button/forms"]');
+  const form = formExample.locator('form');
+  const field = form.getByRole('textbox', { name: 'Example value' });
+  const submit = form.getByRole('button', { name: 'Submit form' });
+  const reset = form.getByRole('button', { name: 'Reset form' });
+  const plain = form.getByRole('button', { name: 'Other action' });
+  const feedback = formExample.locator('[data-vf-docs-form-feedback]');
+  await expect(form).toHaveCount(1);
+  await expect(field).toHaveValue('Original');
+  await expect(submit).toHaveAttribute('type', 'submit');
+  await expect(reset).toHaveAttribute('type', 'reset');
+  await expect(plain).toHaveAttribute('type', 'button');
+  await plain.click();
+  await expect(feedback).toBeEmpty();
+  await field.fill('Edited');
+  await submit.click();
+  await expect(page).toHaveURL(/\/next\/native-web\/components\/button\/$/);
+  await expect(feedback).toHaveText('Demo form submitted locally. No data was sent.');
+  await expect(field).toHaveValue('Edited');
+  await reset.click();
+  await expect(field).toHaveValue('Original');
+  await expect(feedback).toHaveText('Demo form reset.');
 
   await page.screenshot({ path: testInfo.outputPath('native-button.png'), fullPage: true });
   const firstExample = page.locator('[data-vf-docs-example]').first();
