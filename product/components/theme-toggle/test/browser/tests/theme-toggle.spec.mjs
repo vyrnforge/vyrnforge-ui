@@ -30,8 +30,8 @@ test.describe('Theme Toggle real-browser contract', () => {
     const accent = svg.locator('.vf-theme-toggle-dragon-accent');
     const eye = svg.locator('.vf-theme-toggle-dragon-eye');
     const eyeSlit = svg.locator('.vf-theme-toggle-dragon-eye-slit');
-    const hornDetail = svg.locator('.vf-theme-toggle-dragon-horn-detail');
-    const faceContour = svg.locator('.vf-theme-toggle-dragon-face-contour');
+    const nostril = svg.locator('.vf-theme-toggle-dragon-nostril');
+    const mouth = svg.locator('.vf-theme-toggle-dragon-mouth');
     const thumb = root.locator('[data-vf-theme-toggle-thumb]');
 
     await expect(control).toHaveAttribute('type', 'checkbox');
@@ -51,8 +51,8 @@ test.describe('Theme Toggle real-browser contract', () => {
     await expect(accent).toHaveCount(1);
     await expect(eye).toHaveCount(1);
     await expect(eyeSlit).toHaveCount(1);
-    await expect(hornDetail).toHaveCount(1);
-    await expect(faceContour).toHaveCount(1);
+    await expect(nostril).toHaveCount(1);
+    await expect(mouth).toHaveCount(1);
     await expect(svg.locator('path')).toHaveCount(6);
     await expect(svg.locator('circle')).toHaveCount(2);
     await expect(svg.locator('ellipse')).toHaveCount(1);
@@ -67,8 +67,22 @@ test.describe('Theme Toggle real-browser contract', () => {
       return { width: box.width, height: box.height };
     });
     expect(eyeBox.width).toBeGreaterThan(25);
-    expect(eyeBox.width).toBeLessThan(45);
-    expect(eyeBox.height).toBeLessThan(16);
+    expect(eyeBox.width).toBeGreaterThan(42);
+    expect(eyeBox.width).toBeLessThan(60);
+    expect(eyeBox.height).toBeGreaterThan(15);
+    expect(eyeBox.height).toBeLessThan(25);
+    const pupilBox = await eyeSlit.evaluate((element) => { const box = element.getBBox(); return { width: box.width, height: box.height }; });
+    expect(pupilBox.width).toBeGreaterThan(6);
+    expect(pupilBox.height).toBeGreaterThan(13);
+
+    // Keep the face within the head, not as detached horns or a large cheek hole.
+    const nostrilBox = await nostril.evaluate((element) => { const box = element.getBBox(); return { x: box.x, width: box.width }; });
+    expect(nostrilBox.x).toBeGreaterThan(545);
+    expect(nostrilBox.width).toBeLessThan(24);
+    const mouthBox = await mouth.evaluate((element) => { const box = element.getBBox(); return { x: box.x, width: box.width }; });
+    expect(mouthBox.x).toBeGreaterThan(440);
+    expect(mouthBox.width).toBeGreaterThan(105);
+    expect(mouthBox.width).toBeLessThan(140);
 
     const layout = await svg.evaluate((element) => ({
       width: element.clientWidth,
@@ -86,16 +100,16 @@ test.describe('Theme Toggle real-browser contract', () => {
       const mark = element.querySelector('[data-vf-theme-toggle-dragon-mark]');
       const orbElement = element.querySelector('[data-vf-theme-toggle-orb]');
       const silhouetteElement = element.querySelector('.vf-theme-toggle-dragon-silhouette');
-      const hornDetailElement = element.querySelector('.vf-theme-toggle-dragon-horn-detail');
-      const faceContourElement = element.querySelector('.vf-theme-toggle-dragon-face-contour');
+      const nostrilElement = element.querySelector('.vf-theme-toggle-dragon-nostril');
+      const mouthElement = element.querySelector('.vf-theme-toggle-dragon-mouth');
       const trackElement = element.querySelector('[data-vf-theme-toggle-track]');
       return {
         artTransform: getComputedStyle(art).transform,
         markTransform: getComputedStyle(mark).transform,
         orbTransform: getComputedStyle(orbElement).transform,
         silhouetteFill: getComputedStyle(silhouetteElement).fill,
-        hornDetailStroke: getComputedStyle(hornDetailElement).stroke,
-        faceContourStroke: getComputedStyle(faceContourElement).stroke,
+        nostrilFill: getComputedStyle(nostrilElement).fill,
+        mouthFill: getComputedStyle(mouthElement).fill,
         nightOpacity: Number.parseFloat(getComputedStyle(trackElement, '::after').opacity),
         artDuration: getComputedStyle(art).transitionDuration,
         markDuration: getComputedStyle(mark).transitionDuration,
@@ -118,8 +132,8 @@ test.describe('Theme Toggle real-browser contract', () => {
     await root.screenshot({ path: testInfo.outputPath('theme-toggle-transition-control.png') });
 
     await expect.poll(() => silhouette.evaluate((element) => getComputedStyle(element).fill)).not.toBe(light.silhouetteFill);
-    await expect.poll(() => hornDetail.evaluate((element) => getComputedStyle(element).stroke)).not.toBe(light.hornDetailStroke);
-    await expect.poll(() => faceContour.evaluate((element) => getComputedStyle(element).stroke)).not.toBe(light.faceContourStroke);
+    await expect.poll(() => nostril.evaluate((element) => getComputedStyle(element).fill)).not.toBe(light.nostrilFill);
+    await expect.poll(() => mouth.evaluate((element) => getComputedStyle(element).fill)).not.toBe(light.mouthFill);
     await expect.poll(() => track.evaluate((element) => Number.parseFloat(getComputedStyle(element, '::after').opacity))).toBe(1);
 
     await page.waitForTimeout(560);
@@ -163,8 +177,8 @@ test.describe('Theme Toggle real-browser contract', () => {
     expect(await dragonMark.evaluate((element) => getComputedStyle(element).transitionDuration)).toBe('0s');
     expect(await orb.evaluate((element) => getComputedStyle(element).transitionDuration)).toBe('0s');
     expect(await silhouette.evaluate((element) => getComputedStyle(element).transitionDuration)).toBe('0s');
-    expect(await hornDetail.evaluate((element) => getComputedStyle(element).transitionDuration)).toBe('0s');
-    expect(await faceContour.evaluate((element) => getComputedStyle(element).transitionDuration)).toBe('0s');
+    expect(await nostril.evaluate((element) => getComputedStyle(element).transitionDuration)).toBe('0s');
+    expect(await mouth.evaluate((element) => getComputedStyle(element).transitionDuration)).toBe('0s');
 
     await page.emulateMedia({ reducedMotion: 'reduce', forcedColors: 'active' });
     expect(await page.evaluate(() => matchMedia('(forced-colors: active)').matches)).toBe(true);

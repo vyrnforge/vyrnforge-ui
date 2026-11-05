@@ -2,7 +2,7 @@
 
 Use Theme Toggle for a compact binary choice between explicit light and dark appearance. Use the generic Switch for arbitrary boolean settings, and use a broader settings control when the product must expose a third `system` preference.
 
-The default VyrnForge presentation now uses the canonical smooth circular dragon-orb SVG from `web/theme-toggle-dragon-orb.svg`. The dragon silhouette, cream inner accent, compact eye, thin horn highlights, subtle jaw/nostril contour, and orb are stable vector geometry. Light and dark reuse that exact geometry; theme changes are expressed through position, rotation, and palette rather than alternate drawings or path morphing.
+The default VyrnForge presentation now uses the canonical smooth circular dragon-orb SVG from `web/theme-toggle-dragon-orb.svg`. The dragon silhouette, cream inner accent, single sweeping crest, shaped almond eye with slit pupil, closed tapered muzzle, nostril, restrained mouth line, and orb are stable vector geometry. Light and dark reuse that exact geometry; theme changes are expressed through position, rotation, and palette rather than alternate drawings or path morphing.
 
 ## When to use
 
@@ -21,7 +21,7 @@ Unchecked means light theme. Checked means dark theme. The browser owns checked 
 
 Preferred presentation hooks are `data-vf-theme-toggle`, `data-vf-theme-toggle-control`, `data-vf-theme-toggle-track`, `data-vf-theme-toggle-dragon`, `data-vf-theme-toggle-thumb`, and `data-vf-theme-toggle-ember`.
 
-The authored artwork is an inline copy of the canonical 650×740 SVG source. It contains one `data-vf-theme-toggle-dragon-mark` group with six paths: the solid outer silhouette, cream inner wing/body accent, compact slanted eye, slit pupil, two thin inner-horn highlight strokes grouped into one path, and one restrained jaw/nostril contour path. One independent `data-vf-theme-toggle-orb` group keeps the two orb circles and highlight ellipse separate from the dragon. Browser evidence verifies that the live path data matches the canonical asset.
+The authored artwork is an inline copy of the canonical 650×740 SVG source. It contains one `data-vf-theme-toggle-dragon-mark` group with six paths: the solid outer silhouette, cream inner wing/body accent, compact slanted eye, slit pupil, one small filled nostril and a simple filled mouth line. One independent `data-vf-theme-toggle-orb` group keeps the two orb circles and highlight ellipse separate from the dragon. Browser evidence verifies that the live path data matches the canonical asset.
 
 The artwork is decorative and remains inside the track's `aria-hidden="true"` subtree. The checkbox remains the only interactive target. The legacy thumb hook is retained as a forced-colors fallback and compatibility surface; in normal color modes the SVG orb is the visible thumb.
 
@@ -29,7 +29,7 @@ Earlier Theme Toggle markup used `data-vf-theme-toggle-clouds`, `data-vf-theme-t
 
 ## Visual story
 
-In light mode, the gold/cream dragon-orb emblem rests at inline-start on the warm track. Thin inner-horn highlights and a single contour-following jaw/nostril line add definition without altering the silhouette or turning the emblem into a detailed illustration.
+In light mode, the gold/cream dragon-orb emblem rests at inline-start on the warm track. A single swept-back horn and coherent closed snout replace the competing horns and zigzag lower jaw. The almond eye, filled nostril and subtle closed-mouth line are integrated into the head instead of floating as disconnected scratches. The body ring and orb remain unchanged.
 
 When dark mode is selected, the entire emblem slides toward inline-end. During that travel the dragon ring performs one complete turn around the orb, the orb highlight rotates slightly, the dragon and orb palettes transition to violet, and the dark track atmosphere fades in. The settled dark geometry is the same orientation and path data as light mode.
 
