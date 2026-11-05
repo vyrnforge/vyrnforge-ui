@@ -50,6 +50,21 @@ export async function createReactStory({ client }) {
       },
       'React disabled',
     ),
+    createElement(
+      'form',
+      {
+        id: 'react-form',
+        onSubmit: client ? (event) => {
+          event.preventDefault();
+          document.body.dataset.formSubmitted = 'true';
+        } : undefined,
+      },
+      createElement('label', { htmlFor: 'react-field' }, 'Field'),
+      createElement('input', { id: 'react-field', name: 'field', defaultValue: 'changed' }),
+      createElement(Button, { id: 'react-submit' }, 'Submit'),
+      createElement(Button, { id: 'react-reset', type: 'reset' }, 'Reset'),
+      createElement(Button, { id: 'react-plain', type: 'button' }, 'Plain'),
+    ),
   );
 }
 
@@ -78,6 +93,19 @@ export async function createVueStory({ client }) {
         },
         () => 'Vue disabled',
       ),
+      h('form', {
+        id: 'vue-form',
+        onSubmit: (event) => {
+          event.preventDefault();
+          if (client) document.body.dataset.formSubmitted = 'true';
+        },
+      }, [
+        h('label', { for: 'vue-field' }, 'Field'),
+        h('input', { id: 'vue-field', name: 'field', value: 'changed' }),
+        h(Button, { id: 'vue-submit' }, () => 'Submit'),
+        h(Button, { id: 'vue-reset', type: 'reset' }, () => 'Reset'),
+        h(Button, { id: 'vue-plain', type: 'button' }, () => 'Plain'),
+      ]),
     ]),
   });
 }
@@ -95,13 +123,18 @@ export async function createAngularStory({ client }) {
     disabledActivated() {
       if (client) document.body.dataset.disabledActivated = 'true';
     }
+
+    formSubmitted(event) {
+      event.preventDefault();
+      if (client) document.body.dataset.formSubmitted = 'true';
+    }
   }
 
   Component({
     selector: 'vf-button-test',
     standalone: true,
     imports: [VfButtonDirective],
-    template: '<button vfButton loading aria-busy="false" id="angular-button" (click)="activated()">Angular action</button><button vfButton aria-busy="false" id="angular-consumer-busy">Angular status</button><button vfButton disabled id="angular-disabled" (click)="disabledActivated()">Angular disabled</button>',
+    template: '<button vfButton loading aria-busy="false" id="angular-button" (click)="activated()">Angular action</button><button vfButton aria-busy="false" id="angular-consumer-busy">Angular status</button><button vfButton disabled id="angular-disabled" (click)="disabledActivated()">Angular disabled</button><form id="angular-form" (submit)="formSubmitted($event)"><label for="angular-field">Field</label><input id="angular-field" name="field" value="changed"><button vfButton id="angular-submit">Submit</button><button vfButton type="reset" id="angular-reset">Reset</button><button vfButton type="button" id="angular-plain">Plain</button></form>',
   })(ButtonTestApp);
 
   return ButtonTestApp;

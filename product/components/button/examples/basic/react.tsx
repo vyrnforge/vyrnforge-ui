@@ -5,9 +5,9 @@ import { Button } from '@vyrnforge/react/button';
 function App() {
   return (
     <div className="vf-example-stack">
-      <Button variant="primary">Save changes</Button>
-      <Button variant="secondary">Preview</Button>
-      <Button variant="ghost">Cancel</Button>
+      <Button variant="primary" type="button">Save changes</Button>
+      <Button variant="secondary" type="button">Preview</Button>
+      <Button variant="ghost" type="button">Cancel</Button>
     </div>
   );
 }

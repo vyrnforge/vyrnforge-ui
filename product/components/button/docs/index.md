@@ -42,10 +42,20 @@ Do not add an explicit button role to a native button. Use native `disabled` rat
 
 Button preserves native form behavior. VyrnForge does not override the platform default `type`.
 
-Inside a form, omit `type` only when submit behavior is intended. Use `type="button"` for non-submit actions and `type="reset"` when native reset behavior is intended.
+Inside a form, omitting `type` invokes the browser's default **submit** behavior. Use `type="submit"` for an intentional submit action, `type="reset"` for native reset, and `type="button"` for non-submit commands. Preserve native `name`, `value`, and `form` behavior; application code owns submission, validation and persistence.
+
+The **Native form actions** example demonstrates all three types with a labeled input. In the documentation preview only, the docs application prevents navigation and announces local submission/reset outcomes; that demo behavior is not part of VyrnForge Button. Copying the source into an application requires its own submit handler.
 
 ## Styling and adaptation
 
 Canonical Button styling is owned by `@vyrnforge/web`. It supports theme inheritance, focus-visible presentation, forced colors, reduced motion, and logical-direction styling.
 
 Prefer the public VyrnForge tokens and supported hooks. Private custom properties prefixed with `--_vf-` are implementation details and are not customization API.
+
+## Framework availability
+
+Native Web uses a native `<button data-vf-button>`. React provides `Button` with native button props/ref; Angular provides `VfButtonDirective` on a native button; Vue provides `Button` with native attributes and slot content. Each port preserves the same Button semantics with idiomatic framework syntax. The Elements Button surface is intentionally not shipped; do not use a custom element to imitate a native button.
+
+## Contract and evidence boundaries
+
+Button has no built-in asynchronous operation, busy-state controller, form submission handler, or programmatic focus manager. Consumer code owns these concerns. The component's keyboard, form, accessibility, visual, and runtime expectations are defined by the canonical Button Contract; automated browser checks and component evidence prove only their tested revision and surfaces, not universal assistive-technology or production readiness.

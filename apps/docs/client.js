@@ -236,7 +236,27 @@ function initializeCopyButtons() {
   }
 }
 
+function initializeExampleForms() {
+  // Live documentation previews must never navigate away or send demo data.
+  // The real Button has no submit handler; consumer applications own that behavior.
+  for (const form of document.querySelectorAll('[data-vf-docs-preview] form')) {
+    const status = document.createElement('p');
+    status.setAttribute('role', 'status');
+    status.setAttribute('data-vf-docs-form-feedback', '');
+    form.insertAdjacentElement('afterend', status);
+
+    form.addEventListener('submit', (event) => {
+      event.preventDefault();
+      status.textContent = 'Demo form submitted locally. No data was sent.';
+    });
+    form.addEventListener('reset', () => {
+      status.textContent = 'Demo form reset.';
+    });
+  }
+}
+
 initializeTheme();
 initializeNavigation();
 initializeSearch();
 initializeCopyButtons();
+initializeExampleForms();
