@@ -238,7 +238,7 @@ function renderHome() {
       <h1>VyrnForge Native Web</h1>
       <p class="vf-docs-lede">This view uses semantic Native HTML and the public <code>@vyrnforge/web</code> foundation. Components are discovered from the Product Graph for the active framework surface; showcase guidance, API reference, and foundations are separate documentation concerns.</p>
       <div class="vf-docs-hero-actions">
-        <a href="${artifactHref(currentPageDirectory, routeTarget('components/'))}" data-vf-button>Explore components</a>
+        <a href="${artifactHref(currentPageDirectory, routeTarget('components/'))}" data-vf-link class="vf-docs-hero-cta">Explore components</a>
         <a href="${artifactHref(currentPageDirectory, routeTarget('api/components/'))}" data-vf-link>Browse API reference</a>
       </div>
     </section>
