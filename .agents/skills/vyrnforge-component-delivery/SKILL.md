@@ -19,6 +19,7 @@ Treat a port extension, redesign or breaking API change as the relevant mode plu
 2. Read the three canonical entry documents: Foundation Charter, ChatGPT Project Context, Documentation Map. Use the map for **only** the applicable component contract, component/public API, behavior, accessibility, CSS/token, Product Unit/Package Projection, docs, testing and versioning sources. Check relevant current design references when visual fidelity matters.
 3. Inspect active repository code, Product Graph ownership, relevant dependencies, public exports, tests/docs/examples, recent related PRs/issues and the current branch SHA. Retired code is provenance, not a design contract.
 4. Record discrepancies between Drive intent and live code and determine whether to fix documentation, implementation, or explicitly defer a decision. Do not silently adopt either side.
+5. For NEW rollout, verify the enterprise program's first-20 cross-cutting **contract** gate and applicable component rules are satisfied at their documented scope. Do not confuse contract-complete status with implementation, human evidence, or release readiness.
 
 **Output:** short scope record with `Mode`, `Component`, `User goal`, `Surfaces`, `Canonical links`, `Repository SHA`, `Constraints`, `Conflicts/unresolved decisions`.
 
