@@ -10,6 +10,14 @@ VyrnForge is a clean-slate rebuild inside an existing repository. Canonical arch
 4. Reuse an approved foundation when it is correct. Do not preserve a legacy abstraction merely because it already exists.
 5. Define observable acceptance evidence before considering the change complete.
 
+## Standard component delivery workflow
+
+For a **new component**, **migration of an existing component**, new framework surface, or material semantics/API/visual change, use [VyrnForge component delivery](.agents/skills/vyrnforge-component-delivery/SKILL.md). This is a repository-local agent skill and a human-readable review procedure; it does not replace the canonical Drive standards, Product Graph, the existing component metadata, or impact-driven testing.
+
+The same gated process applies to NEW and MIGRATE. NEW starts by proving that a distinct component is justified over native HTML, existing components or a pattern. MIGRATE starts by inventorying actual consumers and classifying existing behavior/public contracts as retain, refactor, replace, remove or defer. Both paths then require a framework-neutral contract, correct product/package ownership, an appropriate vertical slice, evidence, documentation/Changeset decisions and merge acceptance.
+
+A visible UI or SVG redesign requires **actual-size browser evidence and an explicit visual acceptance decision** independent from green CI; no draft or visually rejected PR should merge. Record non-applicable tests and deferred manual evidence honestly. The PR template collects this information; CI continues to derive executable validation from the existing dependency and semantic-impact system.
+
 ## Setup and common commands
 
 Use the Node and pnpm versions declared by `.node-version`, `.nvmrc`, and the root `package.json`, then install the locked workspace with `pnpm install --frozen-lockfile --ignore-scripts`.
