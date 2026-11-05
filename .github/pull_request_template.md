@@ -2,6 +2,18 @@
 
 What reusable VyrnForge problem does this change solve, and which canonical contract/architecture governs it?
 
+## Component delivery (only when this PR changes a component)
+
+- **Mode:** NEW / MIGRATE / scoped port or existing-component change / not applicable
+- **Component and outcome:** <!-- Product unit ID and user/consumer purpose -->
+- **Decision:** implement new / use existing-native or pattern / retain / refactor / replace / remove / defer
+- **Canonical contract / source revision:** <!-- Link to authoritative document and inspected SHA -->
+- **Supported surfaces and deliberate non-support:** <!-- Identify actual implemented ports, not intended future ports -->
+- **Migration or compatibility:** <!-- Old → new public API / migration guide / not applicable -->
+- **Evidence and environment:** <!-- Exact current head SHA, CI validation-plan link, real-port browser/consumer tests, relevant SSR/package evidence, deferrals -->
+- **Visual acceptance (when visible styling/art changes):** <!-- Actual-size before/after light/dark etc.; approved by reviewer/requester or pending. Green CI does not imply signoff. -->
+- [ ] The NEW/MIGRATE delivery gates in [the repo skill](../.agents/skills/vyrnforge-component-delivery/SKILL.md) are satisfied or exceptions are explicitly documented.
+
 ## Affected product nodes
 
 - [ ] Core
