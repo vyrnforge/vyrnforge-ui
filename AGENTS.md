@@ -21,3 +21,5 @@ Repository tooling is private, organized by durable function, and need-driven ra
 Do not introduce sibling-port dependencies, a universal component runtime, framework-specific shared contracts, or application business architecture.
 
 Before substantial work, inspect the relevant canonical documentation and current repository state.
+
+For new component implementations, existing-component migrations, new framework ports, or material component behavior/API/visual changes, follow the repository skill at `.agents/skills/vyrnforge-component-delivery/SKILL.md`. Classify NEW vs MIGRATE and complete the contract, ownership, implementation, evidence and approval gates. Canonical Drive standards remain authoritative; the skill is an operational procedure, not another component contract. Do not auto-merge a user-facing visual redesign without actual-size evidence and explicit visual acceptance.
