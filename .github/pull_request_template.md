@@ -12,7 +12,7 @@ What reusable VyrnForge problem does this change solve, and which canonical cont
 - **Migration or compatibility:** <!-- Old → new public API / migration guide / not applicable -->
 - **Evidence and environment:** <!-- Exact current head SHA, CI validation-plan link, real-port browser/consumer tests, relevant SSR/package evidence, deferrals -->
 - **Visual acceptance (when visible styling/art changes):** <!-- Actual-size before/after light/dark etc.; approved by reviewer/requester or pending. Green CI does not imply signoff. -->
-- [ ] The NEW/MIGRATE delivery gates in [the repo skill](../.agents/skills/vyrnforge-component-delivery/SKILL.md) are satisfied or exceptions are explicitly documented.
+- [ ] The NEW/MIGRATE delivery gates in [the repo skill](https://github.com/vyrnforge/vyrnforge-ui/blob/main/.agents/skills/vyrnforge-component-delivery/SKILL.md) are satisfied or exceptions are explicitly documented.
 
 ## Affected product nodes
 
