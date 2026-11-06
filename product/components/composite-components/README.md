@@ -9,3 +9,5 @@ The accepted Layer 5 contract and Product Unit architecture govern subsequent mi
 AlertDialog, Drawer, Popover, Tooltip and PreviewCard form the second legacy L5 ownership wave. Their existing surface semantics and package projections are retained; this move does not redesign modal or anchored-surface behavior.
 
 Menu, ContextMenu, Menubar, Toolbar and SplitButton form the command-composition ownership wave. Their existing collection-navigation, command semantics and package entrypoints remain unchanged.
+
+Listbox, Select, Combobox, MultiSelect, ToggleGroup, SegmentedControl, TagGroup, Rating and RangeSlider form the selection/value ownership wave. Their stable value/selection contracts and package projections are preserved.
