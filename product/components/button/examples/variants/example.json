@@ -2,7 +2,7 @@
   "id": "button/variants",
   "title": "Button variants",
   "description": "Compare the shared Button emphasis variants across each implemented framework surface.",
-  "defaultFramework": "react",
+  "defaultFramework": "native-web",
   "frameworks": {
     "native-web": {
       "label": "Native Web",
