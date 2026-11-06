@@ -13,3 +13,5 @@ NumberInput, NativeSelect and Slider are a second L2 source-ownership wave. They
 FileInput, ColorInput and TemporalInput are a third source-migration wave. Their underlying native HTML input types, validation, browser pickers, accessible names, and form ownership must be preserved. No custom file uploader, color picker, or date/time overlay behavior is introduced by this migration.
 
 Input and Textarea are now owned under L2. Their native editing, browser form semantics, selection, input modes and validation are retained, and the representative React profile-form fixture now refers to the canonical Input example path. The move does not create new form-field/group compositions or rewrite the approved input APIs.
+
+Radio and ToggleButton complete the legacy L2 owner relocation inventory. Radio's separate platform-adaptation fixture is still app/example behavior and its relocated source path is resolved by the test setup. ToggleButton remains a native button carrying aria-pressed, not a compound toggle group. Both use the existing public Web and framework contracts.

@@ -1,7 +1,7 @@
 import { readFile, writeFile } from 'node:fs/promises';
 import path from 'node:path';
 import { build } from 'esbuild';
-import { buildNativeControlBrowserFixture } from '../../../_test-support/native-controls/native-control-browser-fixture.mjs';
+import { buildNativeControlBrowserFixture } from '../../../../../_test-support/native-controls/native-control-browser-fixture.mjs';
 
 export const browserFixture = {
   component: 'radio',
@@ -10,7 +10,7 @@ export const browserFixture = {
     const outDir = path.join(root, 'dist/browser-fixtures/components/radio');
     await buildNativeControlBrowserFixture('radio', port);
 
-    const exampleDir = path.join(root, 'product/radio/examples/platform-adaptation');
+    const exampleDir = path.join(root, 'product/components/interactive-controls/radio/examples/platform-adaptation');
 
     if (port === 'web') {
       const body = await readFile(path.join(exampleDir, 'native-web.html'), 'utf8');
