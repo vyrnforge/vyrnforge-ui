@@ -7,3 +7,5 @@ This is an ownership-only relocation: product metadata, examples, tests, release
 The accepted Layer 5 contract and Product Unit architecture govern subsequent migrations. Passing source discovery does not imply full user-facing component maturity. Validate Product Graph discovery, package projection, public exports, SSR, packed consumers, Native Web browser/keyboard/accessibility outcomes, and existing framework behavior on the exact final revision. No redesign or public package release is introduced by this wave.
 
 AlertDialog, Drawer, Popover, Tooltip and PreviewCard form the second legacy L5 ownership wave. Their existing surface semantics and package projections are retained; this move does not redesign modal or anchored-surface behavior.
+
+Menu, ContextMenu, Menubar, Toolbar and SplitButton form the command-composition ownership wave. Their existing collection-navigation, command semantics and package entrypoints remain unchanged.
