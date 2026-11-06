@@ -2,7 +2,7 @@
   "id": "button/basic",
   "title": "Basic button",
   "description": "The same Button contract rendered by each implemented framework surface.",
-  "defaultFramework": "react",
+  "defaultFramework": "native-web",
   "frameworks": {
     "native-web": {
       "label": "Native Web",

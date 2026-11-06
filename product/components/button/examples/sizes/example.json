@@ -2,7 +2,7 @@
   "id": "button/sizes",
   "title": "Button sizes",
   "description": "Compare small, medium, and large Button sizing without changing the activation contract.",
-  "defaultFramework": "react",
+  "defaultFramework": "native-web",
   "frameworks": {
     "native-web": {
       "label": "Native Web",

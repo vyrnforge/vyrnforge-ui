@@ -16,6 +16,8 @@ For a **new component**, **migration of an existing component**, new framework s
 
 The same gated process applies to NEW and MIGRATE. NEW starts by proving that a distinct component is justified over native HTML, existing components or a pattern. MIGRATE starts by inventorying actual consumers and classifying existing behavior/public contracts as retain, refactor, replace, remove or defer. Both paths then require a framework-neutral contract, correct product/package ownership, an appropriate vertical slice, evidence, documentation/Changeset decisions and merge acceptance.
 
+Current delivery order is **framework-neutral contract → Native HTML/public Web CSS → Native Web documentation and browser/visual acceptance → later framework-port rollout**. Already-shipped framework ports still receive relevant regression checks; Native-first is sequencing, not a Web-owned semantic contract. Record documented exceptions when a native implementation is genuinely inapplicable.
+
 A visible UI or SVG redesign requires **actual-size browser evidence and an explicit visual acceptance decision** independent from green CI; no draft or visually rejected PR should merge. Record non-applicable tests and deferred manual evidence honestly. The PR template collects this information; CI continues to derive executable validation from the existing dependency and semantic-impact system.
 
 ## Setup and common commands

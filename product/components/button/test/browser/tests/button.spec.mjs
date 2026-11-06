@@ -29,6 +29,15 @@ test.describe('Button real-browser contract', () => {
     await expect(page.locator('body')).not.toHaveAttribute('data-submitted', 'true');
     await page.locator('#submit').click();
     await expect(page.locator('body')).toHaveAttribute('data-submitted', 'true');
+    expect(JSON.parse(await page.locator('body').getAttribute('data-form-data'))).toEqual([
+      ['field', 'changed'],
+      ['intent', 'submit'],
+    ]);
+    await page.locator('#external-submit').click();
+    expect(JSON.parse(await page.locator('body').getAttribute('data-form-data'))).toEqual([
+      ['field', 'changed'],
+      ['intent', 'external'],
+    ]);
     await page.locator('input[name="field"]').fill('new');
     await page.locator('#reset').click();
     await expect(page.locator('input[name="field"]')).toHaveValue('changed');
@@ -41,10 +50,26 @@ test.describe('Button real-browser contract', () => {
     const results = await new AxeBuilder({ page }).analyze();
     expect(results.violations).toEqual([]);
 
-    if (browserName === 'chromium') await expect(page.locator('[data-visual-matrix]')).toHaveScreenshot('button-visual-matrix.png');
+    if (browserName === 'chromium') {
+      await expect(page.locator('[data-visual-matrix]')).toHaveScreenshot('button-visual-matrix.png');
+      await page.screenshot({ path: test.info().outputPath('button-native-light.png'), fullPage: true });
+    }
+
+    // The public semantic token remains consumer-overrideable without !important.
+    await activation.evaluate((element) => {
+      element.style.setProperty('--vf-color-accent-background', 'rgb(12 34 56)');
+    });
+    await expect.poll(() => activation.evaluate((element) => getComputedStyle(element).backgroundColor))
+      .toBe('rgb(12, 34, 56)');
+    await activation.evaluate((element) => {
+      element.style.removeProperty('--vf-color-accent-background');
+    });
 
     await page.evaluate(() => { document.documentElement.dataset.vfTheme = 'dark'; });
     expect(await busy.evaluate((element) => getComputedStyle(element).colorScheme)).toContain('dark');
+    if (browserName === 'chromium') {
+      await page.screenshot({ path: test.info().outputPath('button-native-dark.png'), fullPage: true });
+    }
 
     await page.evaluate(() => { document.documentElement.dir = 'rtl'; });
     expect(await busy.evaluate((element) => getComputedStyle(element).direction)).toBe('rtl');
@@ -55,6 +80,11 @@ test.describe('Button real-browser contract', () => {
     await page.emulateMedia({ reducedMotion: 'reduce', forcedColors: 'active' });
     expect(await page.evaluate(() => matchMedia('(forced-colors: active)').matches)).toBe(true);
     await expect(busy).toBeVisible();
+    const borderWidth = await busy.evaluate((element) => parseFloat(getComputedStyle(element).borderTopWidth));
+    expect(borderWidth).toBeGreaterThan(0);
+    if (browserName === 'chromium') {
+      await page.screenshot({ path: test.info().outputPath('button-native-forced-colors.png'), fullPage: true });
+    }
   });
 });
 

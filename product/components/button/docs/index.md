@@ -44,7 +44,7 @@ Button preserves native form behavior. VyrnForge does not override the platform 
 
 Inside a form, omitting `type` invokes the browser's default **submit** behavior. Use `type="submit"` for an intentional submit action, `type="reset"` for native reset, and `type="button"` for non-submit commands. Preserve native `name`, `value`, and `form` behavior; application code owns submission, validation and persistence.
 
-The **Native form actions** example demonstrates all three types with a labeled input. In the documentation preview only, the docs application prevents navigation and announces local submission/reset outcomes; that demo behavior is not part of VyrnForge Button. Copying the source into an application requires its own submit handler.
+The **Native form actions** example demonstrates all three button types with a labeled Input and explicit submitter `name`/`value`. The Native Web documentation page loads both `@vyrnforge/web/styles/button.css` and `@vyrnforge/web/styles/input.css` for that composition; consumers using the Input styling hook must load its public stylesheet too. In the **documentation preview only**, the docs application prevents navigation and shows a local submit, reset, or “Inspect value” result. These demonstration handlers are application code, not part of VyrnForge Button. Copying this HTML to a consuming application requires its own submit and non-submit action handlers.
 
 ## Styling and adaptation
 
@@ -53,6 +53,8 @@ Canonical Button styling is owned by `@vyrnforge/web`. It supports theme inherit
 Prefer the public VyrnForge tokens and supported hooks. Private custom properties prefixed with `--_vf-` are implementation details and are not customization API.
 
 ## Framework availability
+
+The current documentation rollout is **Native Web first**. This shared guidance describes the component concept once; Native Web usage examples and public CSS are the current documentation focus. Framework-specific usage and source belong in their own future framework-scoped documentation views.
 
 Native Web uses a native `<button data-vf-button>`. React provides `Button` with native button props/ref; Angular provides `VfButtonDirective` on a native button; Vue provides `Button` with native attributes and slot content. Each port preserves the same Button semantics with idiomatic framework syntax. The Elements Button surface is intentionally not shipped; do not use a custom element to imitate a native button.
 

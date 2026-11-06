@@ -2,6 +2,8 @@
 
 @layer vyrnforge.components {
   :where([data-vf-button]) {
+    /* Optical inline padding and icon gaps use deliberate intermediate component-only
+       steps for readable labels at sm/md/lg; they are not public spacing tokens. */
     --_vf-button-block-size: var(--_vf-density-control-height-md, var(--vf-control-height-md));
     --_vf-button-padding-inline: 0.875rem;
     --_vf-button-gap: 0.5rem;
