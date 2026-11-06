@@ -8,7 +8,7 @@ This is an ownership tree, **not** a public import hierarchy. The canonical Prod
 | L2 | `interactive-controls/` | One action or value; `button`, `link`, `checkbox`, `switch`, `number-input`, `native-select`, `slider`, `file-input`, `color-input`, `temporal-input`, `input`, `textarea`, `radio`, `toggle-button` |
 | L3 | `composition-primitives/` | Layout and authored control relationships |
 | L4 | `behavioral-infrastructure/` | Components only when justified; reusable non-UI behavior belongs under `product/capabilities/` |
-| L5 | `composite-components/` | Multi-element UI; `dialog`, `tabs` |
+| L5 | `composite-components/` | Multi-element UI; `dialog`, `tabs`, `disclosure`, `accordion` |
 | L6 | `complex-components/` | Higher-level structures and complex widgets |
 
 An empty layer need not contain placeholder files. The original `product/components/<id>/` convention remains a transitional discovery fallback. `theme-toggle/` is not silently assigned to an unapproved layer and remains flat pending classification.

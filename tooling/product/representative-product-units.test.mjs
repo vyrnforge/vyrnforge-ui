@@ -194,3 +194,26 @@ test('L2 Radio and ToggleButton remain native single-focus controls with stable 
   }
   assert.deepEqual(productGraphProblems(), []);
 });
+
+test('L5 Disclosure and Accordion are canonical composite owners with unchanged public projections', () => {
+  const graph = discoverProductGraph();
+  for (const id of ['disclosure', 'accordion']) {
+    const component = graph.components.find((entry) => entry.unitId === id);
+    assert.ok(component, id + ' must be discovered');
+    assert.equal(component.id, 'component:' + id);
+    assert.equal(component.layer, 'composite-components');
+    assert.equal(component.facets.canonicalRoot, 'product/components/composite-components/' + id + '/');
+    assert.equal(component.facets.legacyRoot, null);
+    assert.equal(component.metadataSource, 'product-unit');
+    assert.equal(component.migration.state, 'product-unit');
+    assert.deepEqual(Object.keys(component.surfaces).sort(), ['angular', 'elements', 'react', 'vue', 'web']);
+    for (const surface of Object.values(component.surfaces)) {
+      assert.equal(surface.authoringMode, 'product-unit');
+      assert.deepEqual(surface.legacyPaths, []);
+      assert.ok(surface.authoringPaths[0].startsWith(component.facets.canonicalRoot));
+      assert.ok(surface.projectionPath?.startsWith('packages/' + surface.package + '/'));
+      assert.ok(surface.publicEntrypoints.length > 0);
+    }
+  }
+  assert.deepEqual(productGraphProblems(), []);
+});
