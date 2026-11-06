@@ -50,3 +50,31 @@ test('Icon component projections remain separate from the icon catalog package',
   assert.equal(icon.packages.includes('icons'), false);
   assert.ok(graph.packages.some((pkg) => pkg.id === 'icons'));
 });
+
+test('L1 legacy primitives acquire layered authoring while package shells remain transitional', () => {
+  const graph = discoverProductGraph();
+  for (const [id, surfaces] of [
+    ['surface', ['angular', 'elements', 'react', 'vue', 'web']],
+    ['separator', ['angular', 'react', 'vue', 'web']],
+    ['visually-hidden', ['angular', 'react', 'vue', 'web']],
+  ]) {
+    const component = graph.components.find((entry) => entry.unitId === id);
+    assert.ok(component, id + ' must remain discoverable');
+    assert.equal(component.layer, 'elemental-primitives');
+    assert.equal(component.id, 'component:' + id);
+    assert.equal(component.metadataSource, 'product-unit');
+    assert.equal(component.facets.canonicalRoot, 'product/components/elemental-primitives/' + id + '/');
+    assert.equal(component.facets.legacyRoot, null);
+    assert.deepEqual(Object.keys(component.surfaces).sort(), surfaces);
+    for (const surface of Object.values(component.surfaces)) {
+      assert.equal(surface.authoringMode, 'product-unit');
+      assert.ok(surface.authoringPaths[0].startsWith(component.facets.canonicalRoot));
+      assert.ok(surface.projectionPath?.startsWith('packages/' + surface.package + '/'));
+      assert.ok(surface.publicEntrypoints.length > 0);
+    }
+    // The package entrypoints remain stable while their sources are projected from this unit.
+    assert.equal(component.migration.state, 'product-unit');
+    for (const surface of Object.values(component.surfaces)) assert.deepEqual(surface.legacyPaths, []);
+  }
+  assert.deepEqual(productGraphProblems(), []);
+});
