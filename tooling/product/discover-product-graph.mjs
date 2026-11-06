@@ -3,6 +3,7 @@ import path from 'node:path';
 import { frameworkPortNames } from '../package-model.mjs';
 import { discoverProductUnits, repoRoot } from '../testing/discover-product-units.mjs';
 import { componentPackageProjectionPath } from './package-layout.mjs';
+import { discoverComponentRoots } from './component-paths.mjs';
 
 const productKinds = Object.freeze({
   components: 'component',
@@ -63,13 +64,13 @@ function componentPublicEntrypoints(manifests, target, componentId) {
   return manifest.exports[subpath] ? [`${publicName}/${componentId}`] : [];
 }
 
-function canonicalComponentSurface(root, componentId, target) {
-  const relativePath = `product/components/${componentId}/${target}/`;
+function canonicalComponentSurface(root, canonicalRoot, target) {
+  const relativePath = `${canonicalRoot}/${target}/`;
   return exists(root, relativePath) ? relativePath : null;
 }
 
-function normalizeComponentSurface(root, manifests, component, componentId, target) {
-  const canonicalPath = canonicalComponentSurface(root, componentId, target);
+function normalizeComponentSurface(root, manifests, component, canonicalRoot, componentId, target) {
+  const canonicalPath = canonicalComponentSurface(root, canonicalRoot, target);
   const legacy = component?.ports?.[target] ?? null;
   if (!canonicalPath && !legacy) return null;
 
@@ -93,8 +94,8 @@ function normalizeComponentSurface(root, manifests, component, componentId, targ
   };
 }
 
-function componentMetadata(root, componentId) {
-  const canonicalPath = `product/components/${componentId}/component.json`;
+function componentMetadata(root, componentId, canonicalRoot) {
+  const canonicalPath = `${canonicalRoot}/component.json`;
   const legacyPath = `product/${componentId}/component.json`;
   if (exists(root, canonicalPath)) {
     return { path: canonicalPath, value: readJson(root, canonicalPath), source: 'product-unit' };
@@ -105,8 +106,7 @@ function componentMetadata(root, componentId) {
   return { path: canonicalPath, value: null, source: 'missing' };
 }
 
-function componentFacets(root, componentId) {
-  const canonicalRoot = `product/components/${componentId}`;
+function componentFacets(root, componentId, canonicalRoot) {
   const legacyRoot = `product/${componentId}`;
   const hasCanonicalRoot = exists(root, canonicalRoot);
   const hasLegacyRoot = exists(root, legacyRoot);
@@ -128,12 +128,14 @@ function componentFacets(root, componentId) {
   };
 }
 
-function normalizeComponentNode(root, manifests, componentId, legacyComponent) {
-  const metadata = componentMetadata(root, componentId);
-  const facets = componentFacets(root, componentId);
+function normalizeComponentNode(root, manifests, componentId, legacyComponent, componentRoots) {
+  const location = componentRoots.get(componentId);
+  const canonicalRoot = location?.root ?? `product/components/${componentId}`;
+  const metadata = componentMetadata(root, componentId, canonicalRoot);
+  const facets = componentFacets(root, componentId, canonicalRoot);
   const surfaces = Object.fromEntries(
     componentTargets
-      .map((target) => [target, normalizeComponentSurface(root, manifests, legacyComponent, componentId, target)])
+      .map((target) => [target, normalizeComponentSurface(root, manifests, legacyComponent, canonicalRoot, componentId, target)])
       .filter(([, surface]) => surface),
   );
   const packages = unique(Object.values(surfaces).map((surface) => surface.package));
@@ -148,6 +150,8 @@ function normalizeComponentNode(root, manifests, componentId, legacyComponent) {
     id: `component:${componentId}`,
     unitId: componentId,
     kind: 'component',
+    layer: location?.layer ?? null,
+    category: location?.category ?? null,
     name: metadata.value?.name ?? titleCase(componentId),
     status: legacyComponent?.status ?? (publicEntrypoints.length ? 'implemented' : 'unprojected'),
     metadataPath: metadata.path,
@@ -245,9 +249,10 @@ export function discoverProductGraph(root = repoRoot) {
       .filter((component) => !reservedLegacyProductRoots.has(component.component))
       .map((component) => [component.component, component]),
   );
-  const componentIds = unique([...legacyComponents.keys(), ...directories(root, 'product/components')]);
+  const componentRoots = discoverComponentRoots(root);
+  const componentIds = unique([...legacyComponents.keys(), ...componentRoots.keys()]);
   const components = componentIds.map((componentId) =>
-    normalizeComponentNode(root, manifests, componentId, legacyComponents.get(componentId)),
+    normalizeComponentNode(root, manifests, componentId, legacyComponents.get(componentId), componentRoots),
   );
   const canonicalUnits = canonicalUnitNodes(root);
   const legacyUnits = normalizeLegacyOwnedUnits(discovery, canonicalUnits);

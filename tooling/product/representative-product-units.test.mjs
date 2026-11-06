@@ -2,6 +2,14 @@ import { test } from 'vitest';
 import assert from 'node:assert/strict';
 import { discoverProductGraph, productGraphProblems } from './discover-product-graph.mjs';
 
+const expectedRoots = {
+  button: 'interactive-controls/button',
+  tabs: 'composite-components/tabs',
+  dialog: 'composite-components/dialog',
+  icon: 'elemental-primitives/icon',
+  text: 'elemental-primitives/typography/text',
+};
+
 const expectedSurfaces = {
   button: ['angular', 'react', 'vue', 'web'],
   tabs: ['angular', 'elements', 'react', 'vue', 'web'],
@@ -16,7 +24,9 @@ test('canonical component migrations have one product owner', () => {
   for (const [id, surfaces] of Object.entries(expectedSurfaces)) {
     const component = graph.components.find((candidate) => candidate.unitId === id);
     assert.ok(component, `${id} should exist in the Product Graph`);
-    assert.equal(component.facets.canonicalRoot, `product/components/${id}/`);
+    const canonicalRoot = `product/components/${expectedRoots[id]}/`;
+    assert.equal(component.facets.canonicalRoot, canonicalRoot);
+    assert.ok(component.layer, `${id} must have an approved source layer`);
     assert.equal(component.facets.legacyRoot, null);
     assert.equal(component.metadataSource, 'product-unit');
     assert.equal(component.migration.state, 'product-unit');
@@ -25,7 +35,7 @@ test('canonical component migrations have one product owner', () => {
     for (const surface of Object.values(component.surfaces)) {
       assert.equal(surface.authoringMode, 'product-unit');
       assert.equal(surface.legacyPaths.length, 0);
-      assert.ok(surface.authoringPaths[0].startsWith(`product/components/${id}/`));
+      assert.ok(surface.authoringPaths[0].startsWith(canonicalRoot));
       assert.ok(surface.projectionPath?.startsWith(`packages/${surface.package}/`));
     }
   }

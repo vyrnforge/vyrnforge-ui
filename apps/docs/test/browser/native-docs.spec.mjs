@@ -71,6 +71,16 @@ test('Native Web home uses the VyrnForge shell and separates documentation surfa
   const exploreBox = await explore.boundingBox();
   expect(exploreBox?.height ?? 0).toBeGreaterThanOrEqual(32);
   await expect(page.getByRole('link', { name: 'Components API', exact: true })).toHaveAttribute('href', 'api/components/');
+  const sideNavigation = page.locator('[data-vf-side-nav]');
+  const groupLabels = await sideNavigation.locator('[data-vf-side-nav-group-label]').allTextContents();
+  expect(groupLabels).toContain('Showcase · L2 — Interactive Controls');
+  expect(groupLabels).toContain('API · L1 — Elemental Primitives / Typography');
+  const buttonLayer = sideNavigation.locator('[data-vf-side-nav-group]')
+    .filter({ has: page.getByText('Showcase · L2 — Interactive Controls', { exact: true }) });
+  await expect(buttonLayer.getByRole('link', { name: 'Button' })).toHaveAttribute('href', 'components/button/');
+  const textLayer = sideNavigation.locator('[data-vf-side-nav-group]')
+    .filter({ has: page.getByText('API · L1 — Elemental Primitives / Typography', { exact: true }) });
+  await expect(textLayer.getByRole('link', { name: 'Text' })).toHaveAttribute('href', 'api/components/text/');
   await expect(page.getByRole('link', { name: 'Styling', exact: true })).toHaveAttribute('href', 'foundations/styling/');
   await expect(page.getByRole('link', { name: 'Design tokens', exact: true })).toHaveAttribute('href', 'foundations/tokens/');
   await expect(page.locator('[data-vf-docs-framework], [data-vf-framework-picker]')).toHaveCount(0);
