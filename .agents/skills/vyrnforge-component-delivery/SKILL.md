@@ -60,7 +60,9 @@ Place authoring in the existing `product/components/<id>/` unit when applicable 
 
 Plan implementation, tests, docs, examples, package/consumer evidence and version intent **together**. For migration, include removal/cutover and a consumer-facing old→new mapping when public behavior changes. For new work, start from the correct native/semantic baseline and complete at least one honest, consumable vertical slice; future ports remain labeled unimplemented.
 
-**Exit condition:** files/owners, supported and deferred surfaces, dependency effects, release intent and test strategy are identified.
+**Native-first rollout gate:** For component NEW, MIGRATE, or redesign work targeting Web, establish the shared framework-neutral contract first, then complete a usable **Native HTML + canonical @vyrnforge/web CSS** vertical slice and its version-scoped Native Web documentation page before initiating *new* React, Angular, Vue, or Elements implementation/documentation rollout. Verify native browser semantics, forms where applicable, keyboard/focus, accessibility, theme/density/RTL/reduced-motion/forced-colors, and actual-size visual evidence. This sequencing does not make Web the conceptual source of truth, require every possible framework port to ship, or prevent regression checks/necessary repairs in already-shipped ports when shared assets change. If a native DOM surface is technically inapplicable, record a contract-backed exception and the appropriate baseline before implementing another port. Do not represent a framework implementation or its docs as ready based solely on a shared contract or another port's evidence.
+
+**Exit condition:** files/owners, supported and deferred surfaces, dependency effects, release intent, Native-first delivery and test strategy (or justified exception) are identified.
 
 ## Gate 4 — Implement against the contract
 
