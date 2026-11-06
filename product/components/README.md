@@ -4,7 +4,7 @@ This is an ownership tree, **not** a public import hierarchy. The canonical Prod
 
 | Layer | Source directory | Role |
 | --- | --- | --- |
-| L1 | `elemental-primitives/` | Non-interactive building blocks; `typography/text`, `icon` |
+| L1 | `elemental-primitives/` | Non-interactive building blocks; `typography/text`, `icon`, `surface`, `separator`, `visually-hidden` |
 | L2 | `interactive-controls/` | One action or value; `button` |
 | L3 | `composition-primitives/` | Layout and authored control relationships |
 | L4 | `behavioral-infrastructure/` | Components only when justified; reusable non-UI behavior belongs under `product/capabilities/` |
