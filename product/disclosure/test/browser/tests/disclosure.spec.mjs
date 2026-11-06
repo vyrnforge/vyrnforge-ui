@@ -1,2 +1,0 @@
-import{test,expect}from'@playwright/test';
-import { expectNoAxeViolations } from '../../../../../tooling/testing/accessibility.mjs';const port=process.env.VF_COMPONENT_PORT||'react';test('disclosure reveals panel accessibly',async({page})=>{await page.goto(`/components/disclosure/${port}.html`);await page.locator('#trigger').click();await expect(page.locator('#panel')).toBeVisible();expect((await expectNoAxeViolations(page)).violations).toEqual([]);});
