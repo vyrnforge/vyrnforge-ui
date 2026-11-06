@@ -1,0 +1,9 @@
+# Layer 2 — native-backed interactive controls
+
+Button, Link, Checkbox and Switch use the approved L2 ownership hierarchy. The component ID remains the final directory name; source paths are not npm exports.
+
+This migration moves Link, Checkbox and Switch with their product metadata, evidence, examples, browser fixtures and existing Web, React, Angular and Vue implementation sources. The old package-local implementation copies are removed, while public package entrypoints, package shells and framework-native semantics remain intact.
+
+Native Web is the first implementation and evidence gate. Link decorates a native anchor; Checkbox uses a native checkbox and DOM indeterminate state; Switch uses a checkbox-backed role=switch. None should acquire collection navigation, popup behavior, complex form coordination or application business logic simply because its source moved.
+
+Passing source discovery does not imply mature support. Verify native semantics, form participation, keyboard/focus, accessibility, RTL, theme, forced colors, packaging, SSR and clean consumers at the exact reviewed SHA. The remaining L2 controls are separate migration scopes and are not claimed complete by this wave.
