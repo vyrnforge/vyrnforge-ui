@@ -45,7 +45,7 @@ export const browserFixture = {
         stdin: {
           resolveDir: root,
           sourcefile: 'react-profile-client.tsx',
-          contents: `import{createElement}from'react';import{createRoot}from'react-dom/client';import{Example}from'./product/input/examples/profile-edit/react.tsx';const root=document.querySelector('#profile-app');if(!root)throw new Error('Missing #profile-app');createRoot(root).render(createElement(Example));`,
+          contents: `import{createElement}from'react';import{createRoot}from'react-dom/client';import{Example}from'./product/components/interactive-controls/input/examples/profile-edit/react.tsx';const root=document.querySelector('#profile-app');if(!root)throw new Error('Missing #profile-app');createRoot(root).render(createElement(Example));`,
         },
         bundle: true,
         format: 'iife',
