@@ -18,7 +18,7 @@ test('current Button is discovered from its canonical product unit', () => {
   assert.equal(button.ports.react.ssr, 'packages/react/test/components/button/ssr.test.mjs');
   assert.equal(button.documentationSource, 'product/components/interactive-controls/button/docs/index.md');
   assert.deepEqual(button.documentationSources, ['product/components/interactive-controls/button/docs/index.md']);
-  assert.match(button.exampleManifests[0], /^product\/components\/button\/examples\//);
+  assert.match(button.exampleManifests[0], /^product\/components\/interactive-controls\/button\/examples\//);
   assert.equal(button.browser.fixture, 'product/components/interactive-controls/button/test/browser/fixtures.mjs');
   assert.equal(button.accessibilityPath, 'product/components/interactive-controls/button/accessibility.json');
   assert.ok(button.browser.paths.includes(button.accessibilityPath));
