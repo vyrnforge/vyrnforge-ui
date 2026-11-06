@@ -5,7 +5,7 @@ This directory owns repository-internal discovery for VyrnForge product units an
 The Product Graph is transitional infrastructure for the source-ownership migration defined by the canonical **Product Unit & Package Projection Architecture**. It must be able to describe both:
 
 - the current package-local implementation layout (`packages/<package>/...` plus legacy `product/<component>/` slices); and
-- the target product-owned layout (`product/components`, `product/capabilities`, `product/foundations`, and `product/catalogs`).
+- the layer-classified product-owned layout (`product/components/<layer>/<category?>/<id>`, `product/capabilities`, `product/foundations`, and `product/catalogs`). The flat `product/components/<id>` layout remains a temporary migration input.
 
 ## Rules
 
@@ -28,4 +28,4 @@ Each public package build creates an ignored `.vf-projection/<package>/` staging
 
 The projection layer changes repository build plumbing only. It does **not** change public package names, public subpaths, runtime contracts, package versions, or consumer import paths.
 
-Button remains the first physical source-migration pilot after this projection layer passes repository evidence. Tabs, Dialog, and Icon follow only after the Button migration proves authoring, package, docs, impact, browser, and consumer evidence end to end.
+Layered ownership is discovered through the component's existing `component.json` at its final unit directory; path categories (for example, `elemental-primitives/typography/text`) do not create new component IDs or public packages. Public source paths remain an implementation detail. The approved pilot relocation covers Button, Icon, Text, Dialog, and Tabs. Theme Toggle remains in its flat unit until its architectural layer is deliberately classified. The Product Graph must fail on duplicate flat/layered IDs, and projections, docs, impact, browser fixtures and public exports must continue to use the stable logical IDs.

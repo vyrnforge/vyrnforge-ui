@@ -26,7 +26,7 @@ test('Core collection navigation fans to discovered component/conformance consum
 });
 
 test('React-only component implementation stays component and port local without selecting Native docs evidence', () => {
-  const impact = createSemanticImpact(['product/components/button/react/index.ts']);
+  const impact = createSemanticImpact(['product/components/interactive-controls/button/react/index.ts']);
   assert.deepEqual(impact.components, ['button']);
   assert.deepEqual(impact.browserPorts, ['react']);
   assert.deepEqual(impact.browserScopes, [{ port: 'react', components: ['button'] }]);
@@ -54,7 +54,7 @@ test('generic React package fallback classification does not select Native docs 
 });
 
 test('canonical Tabs evidence fans across every implemented Tabs surface', () => {
-  const impact = createSemanticImpact(['product/components/tabs/accessibility.json']);
+  const impact = createSemanticImpact(['product/components/composite-components/tabs/accessibility.json']);
   assert.deepEqual(impact.components, ['tabs']);
   for (const port of ['web', 'react', 'angular', 'vue', 'elements']) assert.ok(impact.browserPorts.includes(port));
   for (const scope of impact.browserScopes) assert.deepEqual(scope.components, ['tabs']);
@@ -63,7 +63,7 @@ test('canonical Tabs evidence fans across every implemented Tabs surface', () =>
 });
 
 test('Web component CSS selects only the component real ports plus visual and Native docs evidence', () => {
-  const impact = createSemanticImpact(['product/components/button/web/button.css']);
+  const impact = createSemanticImpact(['product/components/interactive-controls/button/web/button.css']);
   assert.deepEqual(impact.components, ['button']);
   assert.ok(impact.semanticEvidence.includes('visual'));
   assert.equal(impact.selectors.browserRequired, true);
@@ -185,7 +185,7 @@ test('archived legacy package changes do not request current Native docs evidenc
 });
 
 test('validation scopes keep selected evidence separate from execution prerequisites', () => {
-  const impact = createSemanticImpact(['product/components/button/react/index.ts']);
+  const impact = createSemanticImpact(['product/components/interactive-controls/button/react/index.ts']);
   assert.ok(impact.validationScopes.some((scope) => scope.selected === false));
   assert.ok(impact.executionPrerequisites.includes('dependencies'));
   assert.ok(impact.executionPrerequisites.includes('build:react'));

@@ -6,6 +6,7 @@ import {
   publicPackageNames,
   ssrPortNames,
 } from '../package-model.mjs';
+import { discoverComponentRoots } from '../product/component-paths.mjs';
 
 export const repoRoot = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '../..');
 const frameworkPorts = frameworkPortNames;
@@ -50,22 +51,22 @@ function frameworkComponentSourcePath(port, componentId) {
     ? `packages/angular/${componentId}/src/`
     : `packages/${port}/src/components/${componentId}/`;
 }
-function canonicalComponentSourcePath(root, componentId, port) {
-  const candidate = `product/components/${componentId}/${port}/`;
+function canonicalComponentSourcePath(root, canonicalRoot, port) {
+  const candidate = `${canonicalRoot}/${port}/`;
   return existingPath(root, candidate.replace(/\/$/, '')) ? candidate : null;
 }
-function componentSourcePath(root, componentId, port) {
-  return canonicalComponentSourcePath(root, componentId, port)
+function componentSourcePath(root, canonicalRoot, componentId, port) {
+  return canonicalComponentSourcePath(root, canonicalRoot, port)
     ?? (port === 'web' ? `packages/web/src/components/${componentId}/` : frameworkComponentSourcePath(port, componentId));
 }
-function componentFacetPath(root, componentId, facet, { file = false } = {}) {
+function componentFacetPath(root, canonicalRoot, componentId, facet, { file = false } = {}) {
   const suffix = file ? facet : `${facet}/`;
-  const canonical = `product/components/${componentId}/${suffix}`;
+  const canonical = `${canonicalRoot}/${suffix}`;
   if (existingPath(root, canonical.replace(/\/$/, ''))) return canonical;
   return `product/${componentId}/${suffix}`;
 }
-function findExampleManifests(root, componentId) {
-  const examplesRoot = componentFacetPath(root, componentId, 'examples');
+function findExampleManifests(root, canonicalRoot, componentId) {
+  const examplesRoot = componentFacetPath(root, canonicalRoot, componentId, 'examples');
   return walkFiles(root, examplesRoot).filter((file) => file.endsWith('/example.json'));
 }
 function frameworkTopLevelModules(root, port) {
@@ -147,7 +148,8 @@ export function discoverProductUnits(root = repoRoot) {
   const ownedUnits = discoverOwnedUnits(root, packageNames, packageManifests);
   const frameworkExports = new Map();
   const legacyProductIds = directories(root, 'product').filter((id) => !reservedProductRoots.has(id));
-  const discoveredIds = new Set([...legacyProductIds, ...directories(root, 'product/components')]);
+  const componentRoots = discoverComponentRoots(root);
+  const discoveredIds = new Set([...legacyProductIds, ...componentRoots.keys()]);
   for (const port of frameworkPorts) {
     const exports = new Set(Object.keys(packageManifests.get(port)?.exports ?? {}).map(componentIdFromFrameworkExport).filter(Boolean));
     frameworkExports.set(port, exports);
@@ -156,31 +158,31 @@ export function discoverProductUnits(root = repoRoot) {
   const webExports = new Set(Object.keys(packageManifests.get('web')?.exports ?? {}).map(componentIdFromWebExport).filter(Boolean));
   for (const id of webExports) discoveredIds.add(id);
   const components = [...discoveredIds].sort().map((componentId) => {
+    const canonicalRoot = componentRoots.get(componentId)?.root ?? `product/components/${componentId}`;
     const ports = {};
     if (webExports.has(componentId)) {
-      const sourcePath = componentSourcePath(root, componentId, 'web');
+      const sourcePath = componentSourcePath(root, canonicalRoot, componentId, 'web');
       const stylePaths = walkFiles(root, sourcePath).filter((file) => file.endsWith('.css'));
       ports.web = { paths: [sourcePath], stylePaths, browser: true, dependencies: scanUnitDependencies(root, sourcePath, ownedUnits, packageManifests) };
     }
     for (const port of frameworkPorts) {
       if (!frameworkExports.get(port)?.has(componentId)) continue;
-      const sourcePath = componentSourcePath(root, componentId, port);
+      const sourcePath = componentSourcePath(root, canonicalRoot, componentId, port);
       ports[port] = { paths: [sourcePath, `packages/${port}/test/components/${componentId}/`], types: `packages/${port}/test/components/${componentId}/api.types.ts`, ...(ssrPorts.has(port) ? { ssr: `packages/${port}/test/components/${componentId}/ssr.test.mjs` } : {}), browser: true, dependencies: scanUnitDependencies(root, sourcePath, ownedUnits, packageManifests) };
     }
     const frameworkPortNamesForComponent = Object.keys(ports).filter((port) => port !== 'web');
-    const canonicalRoot = `product/components/${componentId}`;
     const legacyRoot = `product/${componentId}`;
     const componentRoot = existingPath(root, canonicalRoot) ? canonicalRoot : legacyRoot;
-    const metadataPath = componentFacetPath(root, componentId, 'component.json', { file: true });
+    const metadataPath = componentFacetPath(root, canonicalRoot, componentId, 'component.json', { file: true });
     const metadata = existingPath(root, metadataPath) ? readJson(root, metadataPath) : null;
-    const docsRoot = componentFacetPath(root, componentId, 'docs');
+    const docsRoot = componentFacetPath(root, canonicalRoot, componentId, 'docs');
     const documentationCandidates = [`${docsRoot}index.json`, `${docsRoot}index.html`];
     const documentationSources = documentationCandidates.filter((candidate) => existingPath(root, candidate));
-    const examplesRoot = componentFacetPath(root, componentId, 'examples');
-    const testRoot = componentFacetPath(root, componentId, 'test');
+    const examplesRoot = componentFacetPath(root, canonicalRoot, componentId, 'examples');
+    const testRoot = componentFacetPath(root, canonicalRoot, componentId, 'test');
     const browserRoot = `${testRoot}browser`;
-    const accessibilityPath = componentFacetPath(root, componentId, 'accessibility.json', { file: true });
-    const changesRoot = componentFacetPath(root, componentId, 'changes');
+    const accessibilityPath = componentFacetPath(root, canonicalRoot, componentId, 'accessibility.json', { file: true });
+    const changesRoot = componentFacetPath(root, canonicalRoot, componentId, 'changes');
     const conformanceRoot = `${testRoot}conformance`;
     return {
       component: componentId,
@@ -193,7 +195,7 @@ export function discoverProductUnits(root = repoRoot) {
       documentationSources,
       documentationCandidates,
       documentationPaths: [docsRoot, examplesRoot],
-      exampleManifests: findExampleManifests(root, componentId),
+      exampleManifests: findExampleManifests(root, canonicalRoot, componentId),
       conformanceTypes: frameworkPortNamesForComponent.length > 1 ? `${conformanceRoot}/public-api.types.ts` : null,
       browser: { fixture: `${browserRoot}/fixtures.mjs`, tests: `${browserRoot}/tests/`, paths: [`${browserRoot}/`, accessibilityPath] },
       accessibilityPath,

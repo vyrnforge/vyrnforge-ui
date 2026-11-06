@@ -2,6 +2,7 @@ import { cp, mkdir, readFile, rm, stat, writeFile } from 'node:fs/promises';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { compileNativeDocumentation } from '../../tooling/docs/native-documentation.mjs';
+import { componentLayerDefinitions } from '../../tooling/product/component-paths.mjs';
 
 const root = path.resolve(fileURLToPath(new URL('../../', import.meta.url)));
 const outRoot = path.join(root, 'dist/docs');
@@ -75,6 +76,31 @@ function renderBlocks(blocks = []) {
   }).join('\n');
 }
 
+function componentNavigationGroups(pages, scope, prefix) {
+  const groups = [];
+  for (const layer of componentLayerDefinitions) {
+    const layerPages = pages.filter((page) => page.layer === layer.id);
+    const categories = [...new Set(layerPages.map((page) => page.category ?? ''))].sort();
+    for (const category of categories) {
+      const members = layerPages.filter((page) => (page.category ?? '') === category);
+      if (!members.length) continue;
+      const categoryLabel = category ? ' / ' + titleCase(category) : '';
+      groups.push({
+        label: scope + ' · ' + layer.label + categoryLabel,
+        items: members.map((page) => ({ id: prefix + ':' + page.id, title: page.title, route: page.route })),
+      });
+    }
+  }
+  const unclassified = pages.filter((page) => !page.layer);
+  if (unclassified.length) {
+    groups.push({
+      label: scope + ' · Unclassified (migration pending)',
+      items: unclassified.map((page) => ({ id: prefix + ':' + page.id, title: page.title, route: page.route })),
+    });
+  }
+  return groups;
+}
+
 function navigationGroups() {
   return [
     {
@@ -83,22 +109,18 @@ function navigationGroups() {
     },
     {
       label: 'Foundations',
-      items: model.foundationPages.map((page) => ({ id: `foundation:${page.id}`, title: page.title, route: page.route })),
+      items: model.foundationPages.map((page) => ({ id: 'foundation:' + page.id, title: page.title, route: page.route })),
     },
     {
       label: 'Components',
-      items: [
-        { id: 'components:index', title: 'Showcase', route: 'components/' },
-        ...model.showcasePages.map((page) => ({ id: `showcase:${page.id}`, title: page.title, route: page.route })),
-      ],
+      items: [{ id: 'components:index', title: 'Showcase', route: 'components/' }],
     },
+    ...componentNavigationGroups(model.showcasePages, 'Showcase', 'showcase'),
     {
       label: 'API Reference',
-      items: [
-        { id: 'api:index', title: 'Components API', route: 'api/components/' },
-        ...model.apiPages.map((page) => ({ id: `api:${page.id}`, title: page.title, route: page.route })),
-      ],
+      items: [{ id: 'api:index', title: 'Components API', route: 'api/components/' }],
     },
+    ...componentNavigationGroups(model.apiPages, 'API', 'api'),
   ];
 }
 

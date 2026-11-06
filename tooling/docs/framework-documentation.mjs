@@ -168,6 +168,8 @@ function normalizeComponent(root, component, framework) {
     id: component.unitId,
     title: component.name,
     group,
+    layer: component.layer ?? null,
+    category: component.category ?? null,
     framework: framework.id,
     frameworkLabel: framework.label,
     surface: framework.surface,

@@ -20,6 +20,12 @@ Current delivery order is **framework-neutral contract → Native HTML/public We
 
 A visible UI or SVG redesign requires **actual-size browser evidence and an explicit visual acceptance decision** independent from green CI; no draft or visually rejected PR should merge. Record non-applicable tests and deferred manual evidence honestly. The PR template collects this information; CI continues to derive executable validation from the existing dependency and semantic-impact system.
 
+## Layer-based component source ownership
+
+Component product units are organized by approved architectural layer and optional domain category, for example `product/components/elemental-primitives/typography/text/`, `product/components/elemental-primitives/icon/`, and `product/components/interactive-controls/button/`. This classifies **source ownership**, not npm package names, public import paths, or component IDs. The Product Graph derives paths from the existing unit metadata, and the documentation compiler derives layer navigation from that graph. Use canonical layer contracts before assigning a component; flat units remain readable while classifications are unresolved or migration is pending. Shared L0 foundations and pure reusable capabilities stay in their own product-unit kinds rather than being forced into component directories.
+
+Existing public links such as `/next/native-web/components/button/` and package exports such as `@vyrnforge/web/styles/button.css` must stay stable. A folder migration requires graph, impact, docs, example, package-projection, and clean-consumer verification.
+
 ## Setup and common commands
 
 Use the Node and pnpm versions declared by `.node-version`, `.nvmrc`, and the root `package.json`, then install the locked workspace with `pnpm install --frozen-lockfile --ignore-scripts`.

@@ -56,7 +56,7 @@ Reference canonical rules; never duplicate or redefine them in the skill. A fram
 
 ## Gate 3 — Plan the smallest coherent vertical slice
 
-Place authoring in the existing `product/components/<id>/` unit when applicable and project deliverables through the existing Product Graph into the proper public packages. Pure portable logic belongs in Core only when justified; Web owns canonical CSS/browser foundations; sibling framework ports remain independent. Do not force every port or invent a new package, runtime, registry, DSL or generator for symmetry.
+Place component authoring in its approved layered unit `product/components/<layer>/<optional-category>/<id>/` where classified (for example, `elemental-primitives/typography/text` or `interactive-controls/button`), and project deliverables through the existing Product Graph into the proper public packages. Keep the logical component ID and public exports stable; do not treat a source-folder rename as consumer API migration. Legacy flat units remain readable only during deliberate classification and migration. Pure portable logic belongs in Core only when justified; Web owns canonical CSS/browser foundations; sibling framework ports remain independent. Do not force every port or invent a new package, runtime, registry, DSL or generator for symmetry.
 
 Plan implementation, tests, docs, examples, package/consumer evidence and version intent **together**. For migration, include removal/cutover and a consumer-facing old→new mapping when public behavior changes. For new work, start from the correct native/semantic baseline and complete at least one honest, consumable vertical slice; future ports remain labeled unimplemented.
 
