@@ -101,3 +101,27 @@ test('Native-first L2 controls retain stable package projections after source mi
   }
   assert.deepEqual(productGraphProblems(), []);
 });
+
+
+test('L2 number, native selection and range controls project through unchanged ports', () => {
+  const graph = discoverProductGraph();
+  for (const id of ['number-input', 'native-select', 'slider']) {
+    const component = graph.components.find((entry) => entry.unitId === id);
+    assert.ok(component, id + ' exists in the normalized Product Graph');
+    assert.equal(component.layer, 'interactive-controls');
+    assert.equal(component.id, 'component:' + id);
+    assert.equal(component.facets.canonicalRoot, 'product/components/interactive-controls/' + id + '/');
+    assert.equal(component.facets.legacyRoot, null);
+    assert.equal(component.metadataSource, 'product-unit');
+    assert.equal(component.migration.state, 'product-unit');
+    assert.deepEqual(Object.keys(component.surfaces).sort(), ['angular', 'react', 'vue', 'web']);
+    for (const surface of Object.values(component.surfaces)) {
+      assert.equal(surface.authoringMode, 'product-unit');
+      assert.deepEqual(surface.legacyPaths, []);
+      assert.ok(surface.authoringPaths[0].startsWith(component.facets.canonicalRoot));
+      assert.ok(surface.projectionPath?.startsWith('packages/' + surface.package + '/'));
+      assert.ok(surface.publicEntrypoints.length > 0);
+    }
+  }
+  assert.deepEqual(productGraphProblems(), []);
+});
