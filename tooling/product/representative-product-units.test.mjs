@@ -309,3 +309,56 @@ test('final L5 compound composites use canonical ownership and stable five-port 
   }
   assert.deepEqual(productGraphProblems(), []);
 });
+
+test('L6 AppShell and SideNav retain canonical five-port projections', () => {
+  const graph = discoverProductGraph();
+  for (const id of ['app-shell', 'side-nav']) {
+    const component = graph.components.find((entry) => entry.unitId === id);
+    assert.ok(component, id + ' must be discovered');
+    assert.equal(component.layer, 'complex-components');
+    assert.equal(component.facets.canonicalRoot, 'product/components/complex-components/' + id + '/');
+    assert.equal(component.facets.legacyRoot, null);
+    assert.equal(component.migration.state, 'product-unit');
+    assert.deepEqual(Object.keys(component.surfaces).sort(), ['angular', 'elements', 'react', 'vue', 'web']);
+  }
+  assert.deepEqual(productGraphProblems(), []);
+});
+
+test('L3 grouped layout projection has canonical composition ownership', () => {
+  const graph = discoverProductGraph();
+  const component = graph.components.find((entry) => entry.unitId === 'layout');
+  assert.ok(component);
+  assert.equal(component.layer, 'composition-primitives');
+  assert.equal(component.facets.canonicalRoot, 'product/components/composition-primitives/layout/');
+  assert.equal(component.facets.legacyRoot, null);
+  assert.equal(component.migration.state, 'product-unit');
+  assert.deepEqual(Object.keys(component.surfaces).sort(), ['angular', 'elements', 'react', 'vue', 'web']);
+  assert.deepEqual(productGraphProblems(), []);
+});
+
+test('L4 Portal and Presence use canonical port-infrastructure ownership', () => {
+  const graph = discoverProductGraph();
+  for (const id of ['portal', 'presence']) {
+    const component = graph.components.find((entry) => entry.unitId === id);
+    assert.ok(component);
+    assert.equal(component.layer, 'behavioral-infrastructure');
+    assert.equal(component.facets.canonicalRoot, 'product/components/behavioral-infrastructure/' + id + '/');
+    assert.equal(component.facets.legacyRoot, null);
+    assert.equal(component.migration.state, 'product-unit');
+    assert.deepEqual(Object.keys(component.surfaces).sort(), ['angular', 'elements', 'react', 'vue']);
+  }
+  assert.deepEqual(productGraphProblems(), []);
+});
+
+test('L1 elemental-primitives grouping is a canonical Web projection owner', () => {
+  const graph = discoverProductGraph();
+  const component = graph.components.find((entry) => entry.unitId === 'elemental-primitives');
+  assert.ok(component);
+  assert.equal(component.layer, 'elemental-primitives');
+  assert.equal(component.facets.canonicalRoot, 'product/components/elemental-primitives/elemental-primitives/');
+  assert.equal(component.facets.legacyRoot, null);
+  assert.equal(component.migration.state, 'product-unit');
+  assert.deepEqual(Object.keys(component.surfaces).sort(), ['web']);
+  assert.ok(component.surfaces.web.publicEntrypoints.includes('@vyrnforge/web/styles/elemental-primitives.css'));
+  assert.deepEqual(productGraphProblems(), []);
+});
