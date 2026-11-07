@@ -14,7 +14,7 @@ Public package direction:
 - `@vyrnforge/vue`
 - `@vyrnforge/elements`
 
-Repository implementation roots are intentionally limited to `packages/`, `product/`, `apps/`, `documentation/`, and `tooling/`. Shared cross-package component ownership lives under `product/<component>/`; runtime implementation remains in the owning package.
+Repository implementation roots are intentionally limited to `packages/`, `product/`, `apps/`, `documentation/`, and `tooling/`. Shared component authoring lives under the approved layered product-unit hierarchy `product/components/<layer>/<optional-category>/<id>/`. Product-owned framework/Web implementation sources are projected into stable public package paths; package shells, package-wide metadata, and package verification remain package-owned.
 
 Repository tooling is private, organized by durable function, and need-driven rather than a fixed directory checklist. Each top-level tooling capability owns a local `README.md`, and `tooling/README.md` defines the placement rules. Do not create random top-level tooling buckets, catch-all `scripts`/`utils` areas, or placeholder roots. Quality-specific reusable validation infrastructure belongs beneath `tooling/testing/` when that is the correct recurring owner.
 

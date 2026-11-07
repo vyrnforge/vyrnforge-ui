@@ -362,3 +362,23 @@ test('L1 elemental-primitives grouping is a canonical Web projection owner', () 
   assert.ok(component.surfaces.web.publicEntrypoints.includes('@vyrnforge/web/styles/elemental-primitives.css'));
   assert.deepEqual(productGraphProblems(), []);
 });
+
+test('L2 Theme Toggle uses canonical Native Web ownership without inventing framework wrappers', () => {
+  const graph = discoverProductGraph();
+  const component = graph.components.find((entry) => entry.unitId === 'theme-toggle');
+  assert.ok(component, 'theme-toggle must be discovered');
+  assert.equal(component.id, 'component:theme-toggle');
+  assert.equal(component.layer, 'interactive-controls');
+  assert.equal(component.facets.canonicalRoot, 'product/components/interactive-controls/theme-toggle/');
+  assert.equal(component.facets.legacyRoot, null);
+  assert.equal(component.metadataSource, 'product-unit');
+  assert.equal(component.migration.state, 'product-unit');
+  assert.deepEqual(Object.keys(component.surfaces).sort(), ['web']);
+  const web = component.surfaces.web;
+  assert.equal(web.authoringMode, 'product-unit');
+  assert.deepEqual(web.legacyPaths, []);
+  assert.ok(web.authoringPaths[0].startsWith(component.facets.canonicalRoot));
+  assert.equal(web.projectionPath, 'packages/web/src/components/theme-toggle/');
+  assert.ok(web.publicEntrypoints.includes('@vyrnforge/web/styles/theme-toggle.css'));
+  assert.deepEqual(productGraphProblems(), []);
+});

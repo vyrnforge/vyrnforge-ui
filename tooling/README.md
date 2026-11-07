@@ -13,7 +13,7 @@ Small repository-wide helpers that do not justify a capability directory may liv
 ## Placement rules
 
 1. Put logic with the capability or product owner that defines it, not with the command that happens to call it.
-2. Product-specific tests, fixtures, semantics, examples, and evidence stay with `product/<component>/`, `packages/<package>/test/`, or the owning application.
+2. Product-specific tests, fixtures, semantics, examples, and evidence stay with the canonical layered product owner under `product/components/<layer>/<optional-category>/<id>/`, `packages/<package>/test/` when proving the distributable package, or the owning application.
 3. Keep tooling tests beside the tooling they prove.
 4. Workflow files orchestrate; `impact/` owns validation selection and dependency truth.
 5. `verify/` enforces durable invariants. Never keep a verifier solely to preserve an already-completed rollout milestone.

@@ -20,9 +20,10 @@ test('nested layer and optional typography category preserve stable component ID
   write('product/components/elemental-primitives/typography/text/component.json');
   write('product/components/elemental-primitives/icon/component.json');
   write('product/components/interactive-controls/button/component.json', '{"id":"button"}');
-  write('product/components/theme-toggle/component.json');
+  write('product/components/interactive-controls/theme-toggle/component.json');
+  write('product/components/legacy-flat/component.json');
   const components = discoverComponentRoots(root);
-  assert.equal(components.size, 4);
+  assert.equal(components.size, 5);
   assert.deepEqual(componentLayerDefinitions.map((layer) => layer.id), [
     'elemental-primitives', 'interactive-controls', 'composition-primitives',
     'behavioral-infrastructure', 'composite-components', 'complex-components',
@@ -33,8 +34,10 @@ test('nested layer and optional typography category preserve stable component ID
   });
   assert.equal(components.get('icon').category, null);
   assert.equal(components.get('button').layer, 'interactive-controls');
-  assert.equal(components.get('theme-toggle').layer, null);
-  assert.equal(components.get('theme-toggle').flat, true);
+  assert.equal(components.get('theme-toggle').layer, 'interactive-controls');
+  assert.equal(components.get('theme-toggle').flat, false);
+  assert.equal(components.get('legacy-flat').layer, null);
+  assert.equal(components.get('legacy-flat').flat, true);
 });
 
 test('duplicate flat/nested component identities fail instead of silently selecting a source', () => {
