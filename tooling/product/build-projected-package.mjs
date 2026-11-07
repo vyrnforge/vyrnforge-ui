@@ -22,7 +22,7 @@ function run(command, args, options = {}) {
 
 if (!packageId) throw new Error('Usage: node tooling/product/build-projected-package.mjs <package-id>');
 
-const projection = preparePackageProjection({ root, packageId });
+const projection = preparePackageProjection({ root, packageId, stageId: 'build' });
 try {
   if (packageId === 'angular') {
     run(pnpm, [
@@ -44,5 +44,5 @@ try {
     }
   }
 } finally {
-  cleanupPackageProjection(root, packageId);
+  cleanupPackageProjection(root, packageId, 'build');
 }
