@@ -18,7 +18,7 @@ export const browserFixture = {
     if (port === 'react') {
       await writeFile(path.join(dir, 'react.html'), page('<div id="app"></div>', '<script type="module" src="./react.js"></script>', '<link rel="stylesheet" href="./react.css">'));
       await build({ stdin: { resolveDir: root, sourcefile: 'react-search-field-client.ts', contents: `import{createElement}from'react';import{createRoot}from'react-dom/client';import{SearchFieldRoot,SearchFieldInput,SearchFieldClear}from'@vyrnforge/react/search-field';import'@vyrnforge/web/styles/tokens.css';import'@vyrnforge/web/styles/search-field.css';createRoot(document.querySelector('#app')).render(createElement(SearchFieldRoot,{defaultValue:'forge'},createElement(SearchFieldInput,{id:'search','aria-label':'Search'}),createElement(SearchFieldClear,{id:'clear'},'Clear query')));` }, bundle: true, format: 'esm', platform: 'browser', outfile: path.join(dir, 'react.js') });
-      const entry = path.join(root, 'product/search-field/examples/data-explorer/react.tsx');
+      const entry = path.join(root, 'product/components/composite-components/search-field/examples/data-explorer/react.tsx');
       await build({ entryPoints: [entry], bundle: true, format: 'esm', platform: 'browser', outdir: dir, entryNames: 'data-explorer-react' });
       await writeFile(path.join(dir, 'data-explorer-react.html'), '<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width"><title>Search data explorer fixture</title><link rel="stylesheet" href="./data-explorer-react.css"><style>html,body{margin:0;min-block-size:100%;padding:1rem}</style></head><body><div id="root"></div><script type="module" src="./data-explorer-react.js"></script></body></html>');
     }
