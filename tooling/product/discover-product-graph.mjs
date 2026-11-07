@@ -288,7 +288,13 @@ export function productGraphProblems(root = repoRoot) {
     if (!component.facets.canonicalRoot && !component.facets.legacyRoot && component.publicEntrypoints.length === 0) {
       problems.push(`${component.id} has no product ownership root and no public projection`);
     }
+    if (component.facets.legacyRoot) {
+      problems.push(`${component.id} uses legacy product ownership ${component.facets.legacyRoot}`);
+    }
     for (const surface of Object.values(component.surfaces)) {
+      if (surface.legacyPaths.length) {
+        problems.push(`${component.id}/${surface.target} retains package-local implementation source ${surface.legacyPaths.join(', ')}`);
+      }
       if (!surface.authoringPaths.length) problems.push(`${component.id}/${surface.target} has no authoring source`);
       if (surface.authoringMode === 'product-unit' && !surface.projectionPath) {
         problems.push(`${component.id}/${surface.target} has no package projection destination`);
