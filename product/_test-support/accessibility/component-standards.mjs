@@ -1,6 +1,6 @@
 import { readFile } from 'node:fs/promises';
 import path from 'node:path';
-import { discoverProductUnits } from '../../../tooling/testing/discover-product-units.mjs';
+import { discoverProductGraph } from '../../../tooling/product/discover-product-graph.mjs';
 
 const reviewStatuses = new Set(['mapped', 'review-required']);
 const nativeKinds = new Set(['native', 'composite', 'structural', 'utility', 'review-required']);
@@ -57,9 +57,11 @@ export function validateComponentStandard(standard, component) {
 }
 
 export async function loadComponentStandards(root = process.cwd()) {
-  const discovery = discoverProductUnits(root); const standards = [];
+  const discovery = discoverProductGraph(root); const standards = [];
   for (const entry of discovery.components) {
-    const component = entry.component; const file = path.join(root, 'product', component, 'accessibility.json');
+    const component = entry.unitId;
+    const ownerRoot = entry.facets?.root ?? `product/${component}/`;
+    const file = path.join(root, ownerRoot, 'accessibility.json');
     try { standards.push(validateComponentStandard(JSON.parse(await readFile(file, 'utf8')), component)); }
     catch (error) { if (error?.code === 'ENOENT') standards.push(unresolvedComponentStandard(component)); else throw error; }
   }
