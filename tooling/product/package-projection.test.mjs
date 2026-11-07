@@ -123,3 +123,25 @@ test('projection refuses destinations outside the selected package', () => {
 
   assert.throws(() => packageProjectionPlan(root, 'react', graph), /does not belong to package react/);
 });
+
+
+test('named package projection stages isolate parallel build and typecheck work', () => {
+  const root = mkdtempSync(path.join(os.tmpdir(), 'vf-package-projection-parallel-'));
+  const write = writer(root);
+  write('packages/react/package.json', JSON.stringify({ name: '@vyrnforge/react', type: 'module' }));
+  write('packages/react/src/index.ts', 'export {};\n');
+  write('packages/react/tsconfig.json', '{}\n');
+  const graph = graphFor('react', []);
+
+  const build = preparePackageProjection({ root, packageId: 'react', graph, stageId: 'build' });
+  const typecheck = preparePackageProjection({ root, packageId: 'react', graph, stageId: 'typecheck' });
+  assert.notEqual(build.stageRoot, typecheck.stageRoot);
+  assert.ok(existsSync(build.stageRoot));
+  assert.ok(existsSync(typecheck.stageRoot));
+
+  cleanupPackageProjection(root, 'react', 'build');
+  assert.equal(existsSync(build.stageRoot), false);
+  assert.ok(existsSync(typecheck.stageRoot));
+  cleanupPackageProjection(root, 'react', 'typecheck');
+  assert.equal(existsSync(typecheck.stageRoot), false);
+});
