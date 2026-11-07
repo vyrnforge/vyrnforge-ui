@@ -21,8 +21,8 @@ function childDirectories(absolute) {
     .sort();
 }
 
-// Descend layer/category folders until finding the unit metadata. Old flat units
-// are still discovered during migration, but duplicate stable IDs fail closed.
+// Descend approved layer/category folders until finding unit metadata.
+// Legacy flat component owners are no longer an accepted authoring model.
 export function discoverComponentRoots(root) {
   const relativeRoot = 'product/components';
   const absoluteRoot = path.join(root, relativeRoot);
@@ -32,12 +32,14 @@ export function discoverComponentRoots(root) {
     const absolute = path.join(absoluteRoot, ...segments);
     const metadataPath = path.join(absolute, 'component.json');
     const isLayerDirectory = segments.length === 1 && layerNames.has(segments[0]);
-    const isFlatUnit = segments.length === 1 && !isLayerDirectory;
     const hasMetadata = existsSync(metadataPath);
 
-    if (hasMetadata || isFlatUnit) {
+    if (hasMetadata) {
       if (isLayerDirectory) {
         throw new Error('Layer folder must not be a component: ' + relativeRoot + '/' + segments[0]);
+      }
+      if (!layerNames.has(segments[0])) {
+        throw new Error('Component owner must use an approved layer: ' + relativeRoot + '/' + segments.join('/'));
       }
       const id = segments[segments.length - 1];
       const metadata = hasMetadata ? JSON.parse(readFileSync(metadataPath, 'utf8')) : null;
@@ -48,13 +50,12 @@ export function discoverComponentRoots(root) {
       if (components.has(id)) {
         throw new Error('Duplicate component owner for ' + id + ': ' + components.get(id).root + ' and ' + canonicalRoot);
       }
-      const isLayered = layerNames.has(segments[0]);
       components.set(id, {
         id,
         root: canonicalRoot,
-        layer: isLayered ? segments[0] : null,
-        category: isLayered && segments.length > 2 ? segments.slice(1, -1).join('/') : null,
-        flat: isFlatUnit,
+        layer: segments[0],
+        category: segments.length > 2 ? segments.slice(1, -1).join('/') : null,
+        flat: false,
       });
       return;
     }
@@ -64,6 +65,11 @@ export function discoverComponentRoots(root) {
     for (const name of childDirectories(absolute)) walk([...segments, name]);
   };
 
-  for (const name of childDirectories(absoluteRoot)) walk([name]);
+  for (const name of childDirectories(absoluteRoot)) {
+    if (!layerNames.has(name)) {
+      throw new Error('Component owner must use an approved layer: ' + relativeRoot + '/' + name);
+    }
+    walk([name]);
+  }
   return components;
 }
