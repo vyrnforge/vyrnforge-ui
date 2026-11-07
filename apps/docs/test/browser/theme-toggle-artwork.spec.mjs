@@ -1,7 +1,7 @@
 import { readFile } from 'node:fs/promises';
 import { test, expect } from '@playwright/test';
 
-const canonicalArtworkUrl = new URL('../../../../product/components/theme-toggle/web/theme-toggle-dragon-orb.svg', import.meta.url);
+const canonicalArtworkUrl = new URL('../../../../product/components/interactive-controls/theme-toggle/web/theme-toggle-dragon-orb.svg', import.meta.url);
 
 function normalizedPathData(source) {
   return [...source.matchAll(/<path\b[^>]*\bd="([^"]+)"/g)]
