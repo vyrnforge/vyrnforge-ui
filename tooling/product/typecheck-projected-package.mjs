@@ -15,7 +15,7 @@ function run(command, args) {
 
 if (!packageId) throw new Error('Usage: node tooling/product/typecheck-projected-package.mjs <package-id>');
 
-const projection = preparePackageProjection({ root, packageId });
+const projection = preparePackageProjection({ root, packageId, stageId: 'typecheck' });
 try {
   if (packageId === 'angular') {
     run(pnpm, ['exec', 'ngc', '-p', path.relative(root, path.join(projection.stageRoot, 'tsconfig.json')), '--noEmit']);
@@ -23,5 +23,5 @@ try {
     run(pnpm, ['exec', 'tsc', '-p', path.relative(root, path.join(projection.stageRoot, 'tsconfig.json')), '--noEmit']);
   }
 } finally {
-  cleanupPackageProjection(root, packageId);
+  cleanupPackageProjection(root, packageId, 'typecheck');
 }
