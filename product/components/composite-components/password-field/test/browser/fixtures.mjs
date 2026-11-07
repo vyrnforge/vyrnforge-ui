@@ -95,7 +95,7 @@ export const browserFixture = {
     );
 
     if (port === 'react') {
-      const entry = path.join(root, 'product/password-field/examples/session-recovery/react.tsx');
+      const entry = path.join(root, 'product/components/composite-components/password-field/examples/session-recovery/react.tsx');
       await build({
         entryPoints: [entry],
         bundle: true,
