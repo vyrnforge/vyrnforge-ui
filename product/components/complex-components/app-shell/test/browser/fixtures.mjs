@@ -41,7 +41,7 @@ export const browserFixture = {
       ];
 
       for (const [name, title] of examples) {
-        const entry = path.join(root, `product/app-shell/examples/${name}/react.tsx`);
+        const entry = path.join(root, `product/components/complex-components/app-shell/examples/${name}/react.tsx`);
         await build({ entryPoints: [entry], bundle: true, format: 'esm', platform: 'browser', outdir: dir, entryNames: `${name}-react` });
         await writeFile(
           path.join(dir, `${name}-react.html`),
@@ -49,7 +49,7 @@ export const browserFixture = {
         );
       }
 
-      const performanceEntry = path.join(root, 'product/app-shell/examples/performance-feedback/react.tsx');
+      const performanceEntry = path.join(root, 'product/components/complex-components/app-shell/examples/performance-feedback/react.tsx');
       await build({
         entryPoints: [performanceEntry],
         bundle: true,
