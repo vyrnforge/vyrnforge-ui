@@ -2,15 +2,16 @@ import { readFile } from 'node:fs/promises';
 import assert from 'node:assert/strict';
 import { test } from 'vitest';
 
-const read = (path) => readFile(new URL(`../../../src/${path}`, import.meta.url), 'utf8');
+const readPackage = (path) => readFile(new URL(`../../../src/${path}`, import.meta.url), 'utf8');
+const readComponent = (id) => readFile(new URL(`../../../../../product/components/composite-components/${id}/web/${id}.css`, import.meta.url), 'utf8');
 
 test('selection-family component styles compose one private shared stylesheet', async () => {
   const [shared, listbox, select, combobox, multiSelect] = await Promise.all([
-    read('styles/selection.css'),
-    read('components/listbox/listbox.css'),
-    read('components/select/select.css'),
-    read('components/combobox/combobox.css'),
-    read('components/multi-select/multi-select.css'),
+    readPackage('styles/selection.css'),
+    readComponent('listbox'),
+    readComponent('select'),
+    readComponent('combobox'),
+    readComponent('multi-select'),
   ]);
 
   const sharedImport = '@import "../../styles/selection.css";';
