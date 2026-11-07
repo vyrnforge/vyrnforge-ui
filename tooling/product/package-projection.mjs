@@ -107,10 +107,15 @@ function writeStandardTsconfig(root, packageId, stageRoot) {
   }, null, 2)}\n`);
 }
 
-export function preparePackageProjection({ root, packageId, graph = null } = {}) {
+function projectionStageRoot(root, packageId, stageId = null) {
+  if (stageId !== null && !/^[a-z0-9-]+$/.test(stageId)) throw new Error(`Invalid projection stage id: ${stageId}`);
+  return absoluteWithin(root, `.vf-projection/${packageId}${stageId ? `-${stageId}` : ''}`, 'Projection stage');
+}
+
+export function preparePackageProjection({ root, packageId, graph = null, stageId = null } = {}) {
   if (!root || !packageId) throw new Error('preparePackageProjection requires root and packageId');
   const resolvedGraph = graph ?? assertProductGraph(root);
-  const stageRoot = absoluteWithin(root, `.vf-projection/${packageId}`, 'Projection stage');
+  const stageRoot = projectionStageRoot(root, packageId, stageId);
   rmSync(stageRoot, { recursive: true, force: true });
   mkdirSync(stageRoot, { recursive: true });
 
@@ -130,6 +135,6 @@ export function preparePackageProjection({ root, packageId, graph = null } = {})
   };
 }
 
-export function cleanupPackageProjection(root, packageId) {
-  rmSync(absoluteWithin(root, `.vf-projection/${packageId}`, 'Projection stage'), { recursive: true, force: true });
+export function cleanupPackageProjection(root, packageId, stageId = null) {
+  rmSync(projectionStageRoot(root, packageId, stageId), { recursive: true, force: true });
 }

@@ -11,3 +11,5 @@ AlertDialog, Drawer, Popover, Tooltip and PreviewCard form the second legacy L5 
 Menu, ContextMenu, Menubar, Toolbar and SplitButton form the command-composition ownership wave. Their existing collection-navigation, command semantics and package entrypoints remain unchanged.
 
 Listbox, Select, Combobox, MultiSelect, ToggleGroup, SegmentedControl, TagGroup, Rating and RangeSlider form the selection/value ownership wave. Their stable value/selection contracts and package projections are preserved.
+
+Carousel, ColorPicker, FileUploader, NumberField, OTPField, Pagination, PasswordField, SearchField, SplitPanel, TemporalField and Toast complete the legacy L5 source-owner relocation. Their existing semantics, public package projections and documented routes are preserved; this migration does not redesign the accepted composites.

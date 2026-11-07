@@ -286,3 +286,26 @@ test('L5 selection and value composites retain canonical five-port projections',
   }
   assert.deepEqual(productGraphProblems(), []);
 });
+
+test('final L5 compound composites use canonical ownership and stable five-port projections', () => {
+  const graph = discoverProductGraph();
+  for (const id of ['carousel', 'color-picker', 'file-uploader', 'number-field', 'otp-field', 'pagination', 'password-field', 'search-field', 'split-panel', 'temporal-field', 'toast']) {
+    const component = graph.components.find((entry) => entry.unitId === id);
+    assert.ok(component, id + ' must be discovered');
+    assert.equal(component.id, 'component:' + id);
+    assert.equal(component.layer, 'composite-components');
+    assert.equal(component.facets.canonicalRoot, 'product/components/composite-components/' + id + '/');
+    assert.equal(component.facets.legacyRoot, null);
+    assert.equal(component.metadataSource, 'product-unit');
+    assert.equal(component.migration.state, 'product-unit');
+    assert.deepEqual(Object.keys(component.surfaces).sort(), ['angular', 'elements', 'react', 'vue', 'web']);
+    for (const surface of Object.values(component.surfaces)) {
+      assert.equal(surface.authoringMode, 'product-unit');
+      assert.deepEqual(surface.legacyPaths, []);
+      assert.ok(surface.authoringPaths[0].startsWith(component.facets.canonicalRoot));
+      assert.ok(surface.projectionPath?.startsWith('packages/' + surface.package + '/'));
+      assert.ok(surface.publicEntrypoints.length > 0);
+    }
+  }
+  assert.deepEqual(productGraphProblems(), []);
+});
