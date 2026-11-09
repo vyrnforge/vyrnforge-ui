@@ -2,7 +2,7 @@ import { existsSync, readFileSync, readdirSync } from 'node:fs';
 import path from 'node:path';
 import { frameworkPortNames } from '../package-model.mjs';
 import { discoverProductUnits, repoRoot } from '../testing/discover-product-units.mjs';
-import { componentPackageProjectionPath } from './package-layout.mjs';
+import { componentPackageProjectionPath, foundationPackageProjectionPath } from './package-layout.mjs';
 import { discoverComponentRoots } from './component-paths.mjs';
 
 const productKinds = Object.freeze({
@@ -170,12 +170,46 @@ function normalizeComponentNode(root, manifests, componentId, legacyComponent, c
   };
 }
 
-function canonicalUnitNodes(root) {
+function foundationPublicEntrypoints(manifests, target, unitId) {
+  if (target !== 'web') return [];
+  const manifest = manifests.get('web');
+  const subpath = `./styles/${unitId}.css`;
+  return manifest?.exports?.[subpath]
+    ? [`${packagePublicName(manifests, 'web')}/styles/${unitId}.css`]
+    : [];
+}
+
+function normalizeFoundationSurface(root, manifests, unitRoot, unitId, target) {
+  const authoringPath = `${unitRoot}${target}/`;
+  if (!exists(root, authoringPath.replace(/\/$/, ''))) return null;
+  return {
+    target,
+    package: packageForTarget[target],
+    authoringMode: 'product-unit',
+    authoringPaths: [authoringPath],
+    projectionPath: foundationPackageProjectionPath(target, unitId),
+    legacyPaths: [],
+    publicEntrypoints: foundationPublicEntrypoints(manifests, target, unitId),
+    dependencies: [],
+    browser: target === 'web' && exists(root, `${unitRoot}test/browser/fixtures.mjs`),
+    types: null,
+    ssr: null,
+  };
+}
+
+function canonicalUnitNodes(root, manifests) {
   const nodes = [];
   for (const [directory, kind] of Object.entries(productKinds)) {
     if (kind === 'component') continue;
     for (const unitId of directories(root, `product/${directory}`)) {
       const unitRoot = `product/${directory}/${unitId}/`;
+      const surfaces = kind === 'foundation'
+        ? Object.fromEntries(
+            componentTargets
+              .map((target) => [target, normalizeFoundationSurface(root, manifests, unitRoot, unitId, target)])
+              .filter(([, surface]) => surface),
+          )
+        : {};
       nodes.push({
         id: `${kind}:${unitId}`,
         unitId,
@@ -183,7 +217,9 @@ function canonicalUnitNodes(root) {
         name: titleCase(unitId),
         root: unitRoot,
         authoringMode: 'product-unit',
-        packages: [],
+        surfaces,
+        packages: unique(Object.values(surfaces).map((surface) => surface.package)),
+        publicEntrypoints: unique(Object.values(surfaces).flatMap((surface) => surface.publicEntrypoints)),
         dependencies: [],
         legacyNodes: [],
         migration: { state: 'product-unit', canonicalRoot: unitRoot },
@@ -254,7 +290,7 @@ export function discoverProductGraph(root = repoRoot) {
   const components = componentIds.map((componentId) =>
     normalizeComponentNode(root, manifests, componentId, legacyComponents.get(componentId), componentRoots),
   );
-  const canonicalUnits = canonicalUnitNodes(root);
+  const canonicalUnits = canonicalUnitNodes(root, manifests);
   const legacyUnits = normalizeLegacyOwnedUnits(discovery, canonicalUnits);
   const units = [...components, ...canonicalUnits, ...legacyUnits].sort((a, b) => a.id.localeCompare(b.id));
 
@@ -295,6 +331,18 @@ export function productGraphProblems(root = repoRoot) {
       }
       if (!graph.packages.some((pkg) => pkg.id === surface.package)) {
         problems.push(`${component.id}/${surface.target} projects to unknown package ${surface.package}`);
+      }
+    }
+  }
+
+  for (const unit of graph.units.filter((candidate) => candidate.kind !== 'component')) {
+    for (const surface of Object.values(unit.surfaces ?? {})) {
+      if (!surface.authoringPaths.length) problems.push(`${unit.id}/${surface.target} has no authoring source`);
+      if (surface.publicEntrypoints.length > 0 && !surface.projectionPath) {
+        problems.push(`${unit.id}/${surface.target} has no package projection destination`);
+      }
+      if (!graph.packages.some((pkg) => pkg.id === surface.package)) {
+        problems.push(`${unit.id}/${surface.target} projects to unknown package ${surface.package}`);
       }
     }
   }

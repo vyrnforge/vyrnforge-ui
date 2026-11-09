@@ -43,6 +43,17 @@ test('canonical component migrations have one product owner', () => {
   assert.deepEqual(productGraphProblems(), []);
 });
 
+test('Layer 1 aggregate presentation is foundation-owned, not a nested component', () => {
+  const graph = discoverProductGraph();
+  assert.equal(graph.components.some((entry) => entry.unitId === 'elemental-primitives'), false);
+  const foundation = graph.units.find((entry) => entry.id === 'foundation:elemental-primitives');
+  assert.ok(foundation);
+  assert.equal(foundation.root, 'product/foundations/elemental-primitives/');
+  assert.deepEqual(foundation.packages, ['web']);
+  assert.deepEqual(Object.keys(foundation.surfaces), ['web']);
+  assert.deepEqual(foundation.surfaces.web.publicEntrypoints, ['@vyrnforge/web/styles/elemental-primitives.css']);
+});
+
 test('Icon component projections remain separate from the icon catalog package', () => {
   const graph = discoverProductGraph();
   const icon = graph.components.find((component) => component.unitId === 'icon');
@@ -347,19 +358,6 @@ test('L4 Portal and Presence use canonical port-infrastructure ownership', () =>
     assert.equal(component.migration.state, 'product-unit');
     assert.deepEqual(Object.keys(component.surfaces).sort(), ['angular', 'elements', 'react', 'vue']);
   }
-  assert.deepEqual(productGraphProblems(), []);
-});
-
-test('L1 elemental-primitives grouping is a canonical Web projection owner', () => {
-  const graph = discoverProductGraph();
-  const component = graph.components.find((entry) => entry.unitId === 'elemental-primitives');
-  assert.ok(component);
-  assert.equal(component.layer, 'elemental-primitives');
-  assert.equal(component.facets.canonicalRoot, 'product/components/elemental-primitives/elemental-primitives/');
-  assert.equal(component.facets.legacyRoot, null);
-  assert.equal(component.migration.state, 'product-unit');
-  assert.deepEqual(Object.keys(component.surfaces).sort(), ['web']);
-  assert.ok(component.surfaces.web.publicEntrypoints.includes('@vyrnforge/web/styles/elemental-primitives.css'));
   assert.deepEqual(productGraphProblems(), []);
 });
 

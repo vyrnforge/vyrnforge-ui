@@ -10,7 +10,8 @@
   "namedInputs": {
     "default": [
       "productGraphInputs",
-      "{workspaceRoot}/product/components/**/web/**/*"
+      "{workspaceRoot}/product/components/**/web/**/*",
+      "{workspaceRoot}/product/foundations/**/web/**/*"
     ]
   },
   "targets": {
@@ -28,7 +29,7 @@
       "options": {
         "commands": [
           "pnpm exec eslint packages/web/src packages/web/test --max-warnings=0",
-          "pnpm exec stylelint \"packages/web/src/**/*.css\" \"product/components/**/web/**/*.css\""
+          "pnpm exec stylelint \"packages/web/src/**/*.css\" \"product/components/**/web/**/*.css\" \"product/foundations/**/web/**/*.css\""
         ],
         "parallel": false
       }

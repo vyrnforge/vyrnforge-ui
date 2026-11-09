@@ -54,6 +54,10 @@ export function impactProductView(graph = discoverProductGraph()) {
             ...legacyNodes.flatMap((legacy) => [legacy.sourcePath, legacy.testPath, legacy.metadataPath]),
           ]),
           dependencies: [...(unit.dependencies ?? [])],
+          browserPorts: Object.values(unit.surfaces ?? {})
+            .filter((surface) => surface.browser)
+            .map((surface) => surface.target)
+            .sort(),
         };
       }),
   };

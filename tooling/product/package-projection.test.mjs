@@ -65,6 +65,46 @@ test('standard package projection overlays product-owned source onto the package
   assert.equal(existsSync(result.stageRoot), false);
 });
 
+test('foundation-owned Web styles project to the stable distribution path', () => {
+  const root = mkdtempSync(path.join(os.tmpdir(), 'vf-foundation-projection-'));
+  const write = writer(root);
+  write('packages/web/package.json', JSON.stringify({ name: '@vyrnforge/web', type: 'module' }));
+  write('packages/web/src/index.ts', 'export {};\n');
+  write('packages/web/tsconfig.json', '{}\n');
+  write('product/foundations/elemental-primitives/web/elemental-primitives.css', '[data-vf-mark] {}\n');
+
+  const graph = {
+    packages: [{ id: 'web', name: '@vyrnforge/web', manifest: {} }],
+    units: [{
+      id: 'foundation:elemental-primitives',
+      unitId: 'elemental-primitives',
+      kind: 'foundation',
+      surfaces: {
+        web: {
+          package: 'web',
+          target: 'web',
+          authoringMode: 'product-unit',
+          authoringPaths: ['product/foundations/elemental-primitives/web/'],
+          projectionPath: 'packages/web/src/foundations/elemental-primitives/',
+          publicEntrypoints: ['@vyrnforge/web/styles/elemental-primitives.css'],
+        },
+      },
+    }],
+  };
+
+  const plan = packageProjectionPlan(root, 'web', graph);
+  assert.equal(plan.length, 1);
+  assert.equal(plan[0].sourcePath, 'product/foundations/elemental-primitives/web/');
+  assert.equal(plan[0].packageRelativePath, 'src/foundations/elemental-primitives/');
+
+  const result = preparePackageProjection({ root, packageId: 'web', graph });
+  assert.equal(
+    readFileSync(path.join(result.stageRoot, 'src/foundations/elemental-primitives/elemental-primitives.css'), 'utf8'),
+    '[data-vf-mark] {}\n',
+  );
+  cleanupPackageProjection(root, 'web');
+});
+
 test('unprojected product drafts are excluded from distributable package projection', () => {
   const root = mkdtempSync(path.join(os.tmpdir(), 'vf-package-projection-draft-'));
   const write = writer(root);

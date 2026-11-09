@@ -15,12 +15,13 @@ const browserDeviceNames = {
 };
 
 const discovery = discoverProductUnits();
-const unsupportedComponentSpecs = discovery.components
+const browserUnits = [...discovery.components, ...(discovery.browserUnits ?? [])];
+const unsupportedComponentSpecs = browserUnits
   .filter((component) => !component.ports[port])
   .map((component) => `**/${component.component}/test/browser/tests/**/*.spec.mjs`);
 const unselectedComponentSpecs =
   selectedComponents.size > 0
-    ? discovery.components
+    ? browserUnits
         .filter((component) => !selectedComponents.has(component.component))
         .map((component) => `**/${component.component}/test/browser/tests/**/*.spec.mjs`)
     : [];

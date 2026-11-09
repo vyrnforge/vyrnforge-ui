@@ -122,6 +122,7 @@
   }
 
   @media (forced-colors: active) {
+    :where([data-vf-mark]) { background: Highlight; color: HighlightText; }
     :where([data-vf-kbd], pre[data-vf-code-block]) { border-color: CanvasText; }
     :where([data-vf-color-swatch]) { border-color: Canvas; box-shadow: 0 0 0 1px CanvasText; }
     :where([data-vf-skeleton]) { background: CanvasText; opacity: 0.25; }

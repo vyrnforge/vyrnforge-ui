@@ -42,9 +42,9 @@ function workspacePackages(root) {
   return publicPackageNames.filter((name) => existingPath(root, `packages/${name}/package.json`));
 }
 function componentIdFromFrameworkExport(exportName) { return /^\.\/([a-z][a-z0-9-]*)$/.exec(exportName)?.[1] ?? null; }
-function componentIdFromWebExport(exportName) {
+function componentIdFromWebExport(exportName, foundationStyleIds = webFoundationStyleIds) {
   const componentId = /^\.\/styles\/([a-z][a-z0-9-]*)\.css$/.exec(exportName)?.[1] ?? null;
-  return componentId && !webFoundationStyleIds.has(componentId) ? componentId : null;
+  return componentId && !foundationStyleIds.has(componentId) ? componentId : null;
 }
 function frameworkComponentSourcePath(port, componentId) {
   return port === 'angular'
@@ -142,6 +142,41 @@ function discoverOwnedUnits(root, packageNames, packageManifests) {
   }
   return units;
 }
+function discoverProductBrowserUnits(root, packageManifests, ownedUnits) {
+  const webManifest = packageManifests.get('web');
+  if (!webManifest?.exports) return [];
+
+  return directories(root, 'product/foundations').flatMap((id) => {
+    const unitRoot = `product/foundations/${id}/`;
+    const sourcePath = `${unitRoot}web/`;
+    const browserRoot = `${unitRoot}test/browser`;
+    const fixture = `${browserRoot}/fixtures.mjs`;
+    const tests = `${browserRoot}/tests/`;
+    const publicStyle = `./styles/${id}.css`;
+    if (!webManifest.exports[publicStyle] || !existingPath(root, sourcePath.replace(/\/$/, ''))) return [];
+    if (!existingPath(root, fixture) || !existingPath(root, tests.replace(/\/$/, ''))) return [];
+
+    return [{
+      component: id,
+      kind: 'foundation',
+      status: 'implemented',
+      root: unitRoot,
+      ports: {
+        web: {
+          paths: [sourcePath],
+          browser: true,
+          dependencies: scanUnitDependencies(root, sourcePath, ownedUnits, packageManifests),
+        },
+      },
+      browser: {
+        fixture,
+        tests,
+        paths: [`${browserRoot}/`],
+      },
+    }];
+  });
+}
+
 export function discoverProductUnits(root = repoRoot) {
   const packageNames = workspacePackages(root);
   const packageManifests = new Map(packageNames.map((name) => [name, readJson(root, `packages/${name}/package.json`)]));
@@ -155,7 +190,12 @@ export function discoverProductUnits(root = repoRoot) {
     frameworkExports.set(port, exports);
     for (const id of exports) discoveredIds.add(id);
   }
-  const webExports = new Set(Object.keys(packageManifests.get('web')?.exports ?? {}).map(componentIdFromWebExport).filter(Boolean));
+  const foundationStyleIds = new Set([...webFoundationStyleIds, ...directories(root, 'product/foundations')]);
+  const webExports = new Set(
+    Object.keys(packageManifests.get('web')?.exports ?? {})
+      .map((exportName) => componentIdFromWebExport(exportName, foundationStyleIds))
+      .filter(Boolean),
+  );
   for (const id of webExports) discoveredIds.add(id);
   const components = [...discoveredIds].sort().map((componentId) => {
     const canonicalRoot = componentRoots.get(componentId)?.root ?? `product/components/${componentId}`;
@@ -204,7 +244,8 @@ export function discoverProductUnits(root = repoRoot) {
       discovery: { webExport: webExports.has(componentId), frameworkExports: frameworkPortNamesForComponent, componentSlice: existingPath(root, canonicalRoot) || existingPath(root, legacyRoot) },
     };
   });
-  return { packages: packageNames.map((name) => ({ name, manifest: packageManifests.get(name) })), components, ownedUnits, frameworkExports, webExports };
+  const browserUnits = discoverProductBrowserUnits(root, packageManifests, ownedUnits);
+  return { packages: packageNames.map((name) => ({ name, manifest: packageManifests.get(name) })), components, ownedUnits, browserUnits, frameworkExports, webExports };
 }
 export function productPreparationProblems(root = repoRoot) {
   const discovery = discoverProductUnits(root);

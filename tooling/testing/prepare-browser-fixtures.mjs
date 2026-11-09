@@ -19,9 +19,10 @@ const root = process.cwd();
 const outputRoot = path.join(root, 'dist/browser-fixtures');
 rmSync(outputRoot, { recursive: true, force: true });
 
-const { components } = discoverProductUnits(root);
+const { components, browserUnits = [] } = discoverProductUnits(root);
+const units = [...components, ...browserUnits];
 const unknownComponents = [...selectedComponents].filter(
-  (componentId) => !components.some((component) => component.component === componentId),
+  (componentId) => !units.some((component) => component.component === componentId),
 );
 if (unknownComponents.length) {
   throw new Error(`Unknown VyrnForge browser component scope: ${unknownComponents.join(', ')}`);
@@ -32,7 +33,7 @@ let generatedPages = 0;
 let skippedUnsupported = 0;
 let skippedUnselected = 0;
 
-for (const component of components) {
+for (const component of units) {
   if (selectedComponents.size > 0 && !selectedComponents.has(component.component)) {
     skippedUnselected += 1;
     continue;

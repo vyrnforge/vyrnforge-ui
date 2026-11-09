@@ -66,7 +66,7 @@
     "./styles.css": "./dist/styles.css",
     "./styles/tokens.css": "./dist/styles/tokens.css",
     "./styles/foundation.css": "./dist/styles/foundation.css",
-    "./styles/elemental-primitives.css": "./dist/components/elemental-primitives/elemental-primitives.css",
+    "./styles/elemental-primitives.css": "./dist/foundations/elemental-primitives/elemental-primitives.css",
     "./styles/reset.css": "./dist/styles/reset.css",
     "./styles/button.css": "./dist/components/button/button.css",
     "./styles/checkbox.css": "./dist/components/checkbox/checkbox.css",

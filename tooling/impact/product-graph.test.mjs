@@ -39,6 +39,35 @@ test('canonical product-unit framework source remains port-local without unrelat
   assert.equal(impact.selectors.packageArtifactsRequired, false);
 });
 
+test('foundation-owned browser styling selects its Web evidence without becoming a component', () => {
+  const discovery = {
+    packages: [{ name: 'web', manifest: {} }],
+    components: [],
+    ownedUnits: [{
+      node: 'foundation:elemental-primitives',
+      nodes: ['foundation:elemental-primitives'],
+      id: 'elemental-primitives',
+      kind: 'foundation',
+      packages: ['web'],
+      paths: ['product/foundations/elemental-primitives/'],
+      browserPorts: ['web'],
+      dependencies: [],
+    }],
+  };
+
+  const impact = createSemanticImpact(
+    ['product/foundations/elemental-primitives/web/elemental-primitives.css'],
+    { discovery },
+  );
+
+  assert.deepEqual(impact.components, []);
+  assert.deepEqual(impact.ownedUnits, ['foundation:elemental-primitives']);
+  assert.deepEqual(impact.packages, ['web']);
+  assert.deepEqual(impact.browserScopes, [{ port: 'web', components: ['elemental-primitives'] }]);
+  assert.ok(impact.semanticEvidence.includes('browser'));
+  assert.ok(impact.semanticEvidence.includes('visual'));
+});
+
 test('Product Graph infrastructure changes fail closed to broad evidence', () => {
   const impact = createSemanticImpact(['tooling/product/discover-product-graph.mjs']);
   assert.equal(impact.repositoryWide, true);

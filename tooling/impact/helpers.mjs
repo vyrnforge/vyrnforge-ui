@@ -33,6 +33,9 @@ export function actualBrowserPorts(discovery) {
   for (const component of discovery.components) {
     for (const [port, config] of Object.entries(component.ports)) if (config.browser) ports.add(port);
   }
+  for (const unit of discovery.ownedUnits ?? []) {
+    for (const port of unit.browserPorts ?? []) ports.add(port);
+  }
   return ordered(ports, preferredPortOrder);
 }
 
@@ -124,6 +127,11 @@ export function broaden(state, discovery, because, filePath = null) {
     state.components.add(component.component);
     for (const port of componentPorts(component)) {
       addBrowserScope(state, port, component.component, because, filePath);
+    }
+  }
+  for (const unit of discovery.ownedUnits ?? []) {
+    for (const port of unit.browserPorts ?? []) {
+      addBrowserScope(state, port, unit.id, because, filePath);
     }
   }
   for (const evidence of evidenceOrder) addEvidence(state, evidence, because, filePath);

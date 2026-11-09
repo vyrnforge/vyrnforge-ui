@@ -48,6 +48,22 @@ test('current repository is normalized into one product graph', () => {
   assert.deepEqual(productGraphProblems(), []);
 });
 
+test('elemental aggregate is a foundation with the stable Web stylesheet projection', () => {
+  const graph = discoverProductGraph();
+  assert.equal(graph.components.some((component) => component.unitId === 'elemental-primitives'), false);
+
+  const foundation = graph.units.find((unit) => unit.id === 'foundation:elemental-primitives');
+  assert.ok(foundation);
+  assert.equal(foundation.root, 'product/foundations/elemental-primitives/');
+  assert.equal(foundation.migration.state, 'product-unit');
+  assert.deepEqual(foundation.packages, ['web']);
+  assert.deepEqual(foundation.publicEntrypoints, ['@vyrnforge/web/styles/elemental-primitives.css']);
+  assert.deepEqual(foundation.surfaces.web.authoringPaths, ['product/foundations/elemental-primitives/web/']);
+  assert.equal(foundation.surfaces.web.projectionPath, 'packages/web/src/foundations/elemental-primitives/');
+  assert.equal(foundation.surfaces.web.browser, true);
+  assert.deepEqual(productGraphProblems(), []);
+});
+
 test('nested component location drives package authoring but not public exports', () => {
   const root = mkdtempSync(path.join(os.tmpdir(), 'vf-product-graph-layered-'));
   const write = writer(root);
