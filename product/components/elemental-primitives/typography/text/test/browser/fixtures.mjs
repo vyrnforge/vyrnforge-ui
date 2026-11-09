@@ -41,6 +41,9 @@ export const browserFixture = {
         <p id="body" data-vf-text data-vf-text-variant="body-md">Readable body copy</p>
         <span id="label" data-vf-text data-vf-text-variant="label-md">Account name</span>
         <p id="poster" data-vf-text data-vf-text-variant="poster">Custom poster</p>
+        <blockquote id="quote" data-vf-text data-vf-text-variant="body-lg" cite="https://example.com/source">Quotation</blockquote>
+        <mark id="mark" data-vf-text data-vf-text-variant="body-md">Highlighted</mark>
+        <time id="time" data-vf-text data-vf-text-variant="caption" datetime="2026-11-10">November 10, 2026</time>
 
         <section aria-label="Native typography composition">
           <h1 id="semantic-heading" data-vf-text data-vf-text-variant="body-sm">Semantic heading with a body-sized visual treatment</h1>
