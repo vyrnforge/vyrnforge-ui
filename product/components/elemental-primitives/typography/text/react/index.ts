@@ -29,10 +29,13 @@ export type TextElement =
   | 'time'
   | 'figcaption';
 
-export type TextProps<Element extends TextElement = TextElement> = {
-  as?: Element;
-  variant?: TextVariant;
-} & Omit<ComponentPropsWithoutRef<Element>, 'as'>;
+export type TextProps<Element extends TextElement = TextElement> =
+  Element extends TextElement
+    ? {
+        as?: Element;
+        variant?: TextVariant;
+      } & Omit<ComponentPropsWithoutRef<Element>, 'as'>
+    : never;
 
 export type TextComponent = <Element extends TextElement = 'span'>(
   props: TextProps<Element> & { ref?: ComponentPropsWithRef<Element>['ref'] }
