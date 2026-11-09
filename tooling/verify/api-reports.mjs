@@ -1,4 +1,5 @@
 import { readFileSync } from 'node:fs';
+import { execFileSync } from 'node:child_process';
 import { Extractor, ExtractorConfig } from '@microsoft/api-extractor';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
@@ -59,6 +60,16 @@ for (const name of selectedPackages()) {
     localBuild,
     showVerboseMessages: false,
   });
+
+  if (!localBuild && name === 'react' && result.apiReportChanged) {
+    const accepted = path.join(packageRoot, 'etc', 'react.api.md');
+    const generated = path.join(packageRoot, 'temp', 'react.api.md');
+    try {
+      execFileSync('diff', ['-u', accepted, generated], { encoding: 'utf8', stdio: ['ignore', 'pipe', 'ignore'] });
+    } catch (error) {
+      process.stderr.write(`VF_DEBUG_REACT_API_DIFF_START\n${error.stdout ?? ''}VF_DEBUG_REACT_API_DIFF_END\n`);
+    }
+  }
 
   // API Extractor reports `succeeded: false` when warnings are emitted. Warnings
   // remain visible for follow-up cleanup, but the contract gate should fail only
