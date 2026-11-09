@@ -1,0 +1,41 @@
+@import "./tokens.css";
+
+@layer vyrnforge.foundation {
+  :where([data-vf-prose]) {
+    color: var(--vf-color-text);
+    font-family: var(--vf-font-family-sans);
+    line-height: var(--vf-line-height-relaxed);
+  }
+
+  :where([data-vf-prose]) :where(h1, h2, h3, h4, h5, h6) {
+    font-weight: var(--vf-font-weight-semibold);
+    letter-spacing: var(--vf-letter-spacing-tight);
+    line-height: var(--vf-line-height-tight);
+    margin-block: 0 var(--vf-space-sm);
+  }
+
+  :where([data-vf-prose]) :where(h1) { font-size: var(--vf-font-size-3xl); }
+  :where([data-vf-prose]) :where(h2) { font-size: var(--vf-font-size-2xl); }
+  :where([data-vf-prose]) :where(h3) { font-size: var(--vf-font-size-xl); }
+  :where([data-vf-prose]) :where(h4, h5, h6) { font-size: var(--vf-font-size-lg); }
+
+  :where([data-vf-prose]) :where(p, blockquote, figure, ul, ol, address) { margin-block: 0 var(--vf-space-md); }
+  :where([data-vf-prose]) :where(blockquote) {
+    border-inline-start: 3px solid var(--vf-color-accent-background);
+    color: var(--vf-color-text-muted);
+    margin-inline: 0;
+    padding-inline-start: var(--vf-space-md);
+  }
+  :where([data-vf-prose]) :where(figure) { margin-inline: 0; }
+  :where([data-vf-prose]) :where(figcaption, small) {
+    color: var(--vf-color-text-muted);
+    font-size: var(--vf-font-size-sm);
+  }
+  :where([data-vf-prose]) :where(ul, ol) { padding-inline-start: var(--vf-space-xl); }
+  :where([data-vf-prose]) :where(li + li) { margin-block-start: var(--vf-space-xs); }
+  :where([data-vf-prose]) :where(code, kbd) { font-family: var(--vf-font-family-mono); }
+  :where([data-vf-prose]) :where(abbr[title]) {
+    text-decoration-style: dotted;
+    text-underline-offset: 0.15em;
+  }
+}

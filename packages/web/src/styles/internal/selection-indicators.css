@@ -1,0 +1,28 @@
+@layer vyrnforge.components {
+  :where(._vf-checkmark, ._vf-radiomark, ._vf-selection-indicator) {
+    block-size: 0.875rem;
+    box-sizing: border-box;
+    color: currentColor;
+    display: inline-block;
+    flex: none;
+    inline-size: 0.875rem;
+  }
+
+  :where(._vf-checkmark) {
+    block-size: 0.75rem;
+    border-block-end: 0.125rem solid currentColor;
+    border-inline-end: 0.125rem solid currentColor;
+    inline-size: 0.5rem;
+    transform: rotate(45deg);
+  }
+
+  :where(._vf-radiomark) {
+    border: 0.25rem solid currentColor;
+    border-radius: 50%;
+  }
+
+  :where(._vf-selection-indicator) {
+    background: currentColor;
+    border-radius: 50%;
+  }
+}

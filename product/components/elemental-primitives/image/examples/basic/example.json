@@ -1,0 +1,13 @@
+{
+  "id": "image/basic",
+  "title": "Image — basic",
+  "description": "Responsive presentation over native img while preserving authored image semantics and loading attributes.",
+  "defaultFramework": "native-web",
+  "frameworks": {
+    "native-web": {
+      "label": "Native Web",
+      "language": "html",
+      "source": "native-web.html"
+    }
+  }
+}

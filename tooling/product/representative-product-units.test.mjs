@@ -350,16 +350,15 @@ test('L4 Portal and Presence use canonical port-infrastructure ownership', () =>
   assert.deepEqual(productGraphProblems(), []);
 });
 
-test('L1 elemental-primitives grouping is a canonical Web projection owner', () => {
+test('L1 aggregate stylesheet is not a component owner', () => {
   const graph = discoverProductGraph();
-  const component = graph.components.find((entry) => entry.unitId === 'elemental-primitives');
-  assert.ok(component);
-  assert.equal(component.layer, 'elemental-primitives');
-  assert.equal(component.facets.canonicalRoot, 'product/components/elemental-primitives/elemental-primitives/');
-  assert.equal(component.facets.legacyRoot, null);
-  assert.equal(component.migration.state, 'product-unit');
-  assert.deepEqual(Object.keys(component.surfaces).sort(), ['web']);
-  assert.ok(component.surfaces.web.publicEntrypoints.includes('@vyrnforge/web/styles/elemental-primitives.css'));
+  assert.equal(graph.components.some((entry) => entry.unitId === 'elemental-primitives'), false);
+  for (const id of ['code', 'kbd', 'mark', 'image', 'skeleton', 'color-swatch']) {
+    const component = graph.components.find((entry) => entry.unitId === id);
+    assert.ok(component, id + ' is independently owned');
+    assert.equal(component.layer, 'elemental-primitives');
+    assert.deepEqual(Object.keys(component.surfaces), ['web']);
+  }
   assert.deepEqual(productGraphProblems(), []);
 });
 

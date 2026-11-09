@@ -13,7 +13,7 @@ const frameworkPorts = frameworkPortNames;
 const ssrPorts = new Set(ssrPortNames);
 const sourceExtensions = ['.ts', '.tsx', '.mts', '.cts'];
 const ownedKinds = ['capabilities', 'accessibility', 'foundations'];
-const webFoundationStyleIds = new Set(['tokens', 'foundation', 'reset']);
+const webNonComponentStyleIds = new Set(['tokens', 'foundation', 'reset', 'elemental-primitives', 'native-elements']);
 const reservedProductRoots = new Set(['components', 'capabilities', 'foundations', 'catalogs']);
 
 function readJson(root, relativePath) { return JSON.parse(readFileSync(path.join(root, relativePath), 'utf8')); }
@@ -44,7 +44,7 @@ function workspacePackages(root) {
 function componentIdFromFrameworkExport(exportName) { return /^\.\/([a-z][a-z0-9-]*)$/.exec(exportName)?.[1] ?? null; }
 function componentIdFromWebExport(exportName) {
   const componentId = /^\.\/styles\/([a-z][a-z0-9-]*)\.css$/.exec(exportName)?.[1] ?? null;
-  return componentId && !webFoundationStyleIds.has(componentId) ? componentId : null;
+  return componentId && !webNonComponentStyleIds.has(componentId) ? componentId : null;
 }
 function frameworkComponentSourcePath(port, componentId) {
   return port === 'angular'

@@ -155,3 +155,22 @@ test('component ports infer owned-unit dependencies from workspace public subpat
   assert.ok(tabs);
   assert.deepEqual(tabs.ports.react.dependencies, ['unit:core:capabilities:collection-navigation']);
 });
+
+test('aggregate and native-element Web styles stay outside component discovery', () => {
+  const root = mkdtempSync(path.join(os.tmpdir(), 'vf-non-component-style-discovery-'));
+  const write = writer(root);
+  write('package.json', JSON.stringify({ workspaces: ['packages/web'] }));
+  write('packages/web/package.json', JSON.stringify({
+    name: '@vyrnforge/web',
+    exports: {
+      '.': './dist/index.js',
+      './styles/elemental-primitives.css': './dist/styles/elemental-primitives.css',
+      './styles/native-elements.css': './dist/styles/native-elements.css',
+    },
+  }));
+  write('packages/web/src/styles/elemental-primitives.css');
+  write('packages/web/src/styles/native-elements.css');
+  const result = discoverProductUnits(root);
+  assert.deepEqual(result.components, []);
+  assert.deepEqual(productPreparationProblems(root), []);
+});
