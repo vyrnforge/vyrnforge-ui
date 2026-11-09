@@ -350,15 +350,26 @@ test('L4 Portal and Presence use canonical port-infrastructure ownership', () =>
   assert.deepEqual(productGraphProblems(), []);
 });
 
-test('L1 aggregate stylesheet is not a component owner', () => {
+test('L1 aggregate stylesheet is not a component owner and Typography owns textual specialization', () => {
   const graph = discoverProductGraph();
   assert.equal(graph.components.some((entry) => entry.unitId === 'elemental-primitives'), false);
-  for (const id of ['code', 'kbd', 'mark', 'image', 'skeleton', 'color-swatch']) {
+  assert.equal(graph.components.some((entry) => entry.unitId === 'mark'), false);
+
+  for (const id of ['code', 'kbd']) {
+    const component = graph.components.find((entry) => entry.unitId === id);
+    assert.ok(component, id + ' is independently owned inside Typography');
+    assert.equal(component.layer, 'elemental-primitives');
+    assert.equal(component.facets.canonicalRoot, 'product/components/elemental-primitives/typography/' + id + '/');
+    assert.deepEqual(Object.keys(component.surfaces), ['web']);
+  }
+
+  for (const id of ['image', 'skeleton', 'color-swatch']) {
     const component = graph.components.find((entry) => entry.unitId === id);
     assert.ok(component, id + ' is independently owned');
     assert.equal(component.layer, 'elemental-primitives');
     assert.deepEqual(Object.keys(component.surfaces), ['web']);
   }
+
   assert.deepEqual(productGraphProblems(), []);
 });
 

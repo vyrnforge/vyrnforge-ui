@@ -81,6 +81,6 @@
     --_vf-type-overline-font-weight: var(--vf-font-weight-semibold);
     --_vf-type-overline-line-height: var(--vf-line-height-compact);
     --_vf-type-overline-letter-spacing: var(--vf-letter-spacing-wider);
-    --_vf-type-overline-transform: uppercase;
+    --_vf-type-overline-transform: none;
   }
 }

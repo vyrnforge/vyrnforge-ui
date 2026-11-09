@@ -15,6 +15,7 @@ import { ClusterAlign } from '@vyrnforge/web/layout';
 import { ClusterJustify } from '@vyrnforge/web/layout';
 import { ComponentProps } from 'react';
 import { ComponentPropsWithoutRef } from 'react';
+import type { ComponentPropsWithRef } from 'react';
 import { CompositionEventHandler } from 'react';
 import { ContainerSize } from '@vyrnforge/web/layout';
 import { CSSProperties } from 'react';
@@ -1700,7 +1701,6 @@ export const FileUploaderInput: ForwardRefExoticComponent<Omit<DetailedHTMLProps
 // @public (undocumented)
 export function FileUploaderList(props: ComponentPropsWithoutRef<'ul'>): DetailedReactHTMLElement<    {
 'data-vf-file-uploader-list': string;
-title?: string | undefined | undefined;
 defaultChecked?: boolean | undefined | undefined;
 defaultValue?: string | number | readonly string[] | undefined;
 suppressContentEditableWarning?: boolean | undefined | undefined;
@@ -1722,6 +1722,7 @@ slot?: string | undefined | undefined;
 spellCheck?: (boolean | "true" | "false") | undefined;
 style?: CSSProperties | undefined;
 tabIndex?: number | undefined | undefined;
+title?: string | undefined | undefined;
 translate?: "yes" | "no" | undefined | undefined;
 radioGroup?: string | undefined | undefined;
 role?: AriaRole | undefined;
@@ -2186,7 +2187,6 @@ export interface MenuRootProps {
 export function MenuSeparator(props: ComponentPropsWithoutRef<'div'>): DetailedReactHTMLElement<    {
 role: "separator";
 'data-vf-menu-separator': string;
-title?: string | undefined | undefined;
 defaultChecked?: boolean | undefined | undefined;
 defaultValue?: string | number | readonly string[] | undefined;
 suppressContentEditableWarning?: boolean | undefined | undefined;
@@ -2208,6 +2208,7 @@ slot?: string | undefined | undefined;
 spellCheck?: (boolean | "true" | "false") | undefined;
 style?: CSSProperties | undefined;
 tabIndex?: number | undefined | undefined;
+title?: string | undefined | undefined;
 translate?: "yes" | "no" | undefined | undefined;
 radioGroup?: string | undefined | undefined;
 about?: string | undefined | undefined;
@@ -3297,7 +3298,6 @@ tabIndex: number;
 hidden: boolean;
 'aria-labelledby': string;
 'data-vf-tabs-panel': string;
-title?: string | undefined | undefined;
 defaultChecked?: boolean | undefined | undefined;
 defaultValue?: string | number | readonly string[] | undefined;
 suppressContentEditableWarning?: boolean | undefined | undefined;
@@ -3316,6 +3316,7 @@ nonce?: string | undefined | undefined;
 slot?: string | undefined | undefined;
 spellCheck?: (boolean | "true" | "false") | undefined;
 style?: CSSProperties | undefined;
+title?: string | undefined | undefined;
 translate?: "yes" | "no" | undefined | undefined;
 radioGroup?: string | undefined | undefined;
 about?: string | undefined | undefined;
@@ -3608,7 +3609,6 @@ tabIndex: number;
 onFocus(event: FocusEvent_2<HTMLButtonElement>): void;
 onClick(event: MouseEvent_2<HTMLButtonElement>): void;
 onKeyDown(event: KeyboardEvent_2<HTMLButtonElement>): void;
-title?: string | undefined | undefined;
 form?: string | undefined | undefined;
 formAction?: string | ((formData: FormData) => void | Promise<void>) | undefined;
 formEncType?: string | undefined | undefined;
@@ -3635,6 +3635,7 @@ nonce?: string | undefined | undefined;
 slot?: string | undefined | undefined;
 spellCheck?: (boolean | "true" | "false") | undefined;
 style?: CSSProperties | undefined;
+title?: string | undefined | undefined;
 translate?: "yes" | "no" | undefined | undefined;
 radioGroup?: string | undefined | undefined;
 about?: string | undefined | undefined;
@@ -3945,7 +3946,9 @@ export interface TemporalInputProps extends Omit<InputHTMLAttributes<HTMLInputEl
 export { TemporalInputType }
 
 // @public (undocumented)
-const Text_2: ForwardRefExoticComponent<TextProps & RefAttributes<HTMLElement>>;
+const Text_2: <Element extends TextElement = "span">(props: TextProps<Element> & {
+    ref?: ComponentPropsWithRef<Element>["ref"];
+}) => ReactElement | null;
 export { Text_2 as Text }
 
 // @public (undocumented)
@@ -3955,15 +3958,13 @@ export const Textarea: ForwardRefExoticComponent<TextareaProps & RefAttributes<H
 export type TextareaProps = TextareaHTMLAttributes<HTMLTextAreaElement>;
 
 // @public (undocumented)
-export type TextElement = 'span' | 'p' | 'div' | 'strong' | 'em' | 'small' | 'label' | 'h1' | 'h2' | 'h3' | 'h4' | 'h5' | 'h6';
+export type TextElement = 'span' | 'p' | 'div' | 'h1' | 'h2' | 'h3' | 'h4' | 'h5' | 'h6' | 'blockquote' | 'q' | 'cite' | 'strong' | 'em' | 'small' | 'mark' | 'abbr' | 'sub' | 'sup' | 'del' | 'ins' | 'time' | 'figcaption';
 
 // @public (undocumented)
-export interface TextProps extends HTMLAttributes<HTMLElement> {
-    // (undocumented)
-    as?: TextElement;
-    // (undocumented)
+export type TextProps<Element extends TextElement = TextElement> = Element extends TextElement ? {
+    as?: Element;
     variant?: TextVariant;
-}
+} & Omit<ComponentPropsWithoutRef<Element>, 'as'> : never;
 
 export { TextVariant }
 
@@ -3973,7 +3974,6 @@ export const ToastClose: ForwardRefExoticComponent<Omit<DetailedHTMLProps<Button
 // @public (undocumented)
 export function ToastDescription(props: ComponentPropsWithoutRef<'div'>): DetailedReactHTMLElement<    {
 'data-vf-toast-description': string;
-title?: string | undefined | undefined;
 defaultChecked?: boolean | undefined | undefined;
 defaultValue?: string | number | readonly string[] | undefined;
 suppressContentEditableWarning?: boolean | undefined | undefined;
@@ -3995,6 +3995,7 @@ slot?: string | undefined | undefined;
 spellCheck?: (boolean | "true" | "false") | undefined;
 style?: CSSProperties | undefined;
 tabIndex?: number | undefined | undefined;
+title?: string | undefined | undefined;
 translate?: "yes" | "no" | undefined | undefined;
 radioGroup?: string | undefined | undefined;
 role?: AriaRole | undefined;
@@ -4276,7 +4277,6 @@ export interface ToastRootProps extends ComponentPropsWithoutRef<'div'> {
 // @public (undocumented)
 export function ToastTitle(props: ComponentPropsWithoutRef<'div'>): DetailedReactHTMLElement<    {
 'data-vf-toast-title': string;
-title?: string | undefined | undefined;
 defaultChecked?: boolean | undefined | undefined;
 defaultValue?: string | number | readonly string[] | undefined;
 suppressContentEditableWarning?: boolean | undefined | undefined;
@@ -4298,6 +4298,7 @@ slot?: string | undefined | undefined;
 spellCheck?: (boolean | "true" | "false") | undefined;
 style?: CSSProperties | undefined;
 tabIndex?: number | undefined | undefined;
+title?: string | undefined | undefined;
 translate?: "yes" | "no" | undefined | undefined;
 radioGroup?: string | undefined | undefined;
 role?: AriaRole | undefined;
@@ -4635,7 +4636,6 @@ export interface ToolbarRootProps extends ComponentPropsWithoutRef<'div'> {
 export function ToolbarSeparator(props: ComponentPropsWithoutRef<'div'>): DetailedReactHTMLElement<    {
 role: "separator";
 'data-vf-toolbar-separator': string;
-title?: string | undefined | undefined;
 defaultChecked?: boolean | undefined | undefined;
 defaultValue?: string | number | readonly string[] | undefined;
 suppressContentEditableWarning?: boolean | undefined | undefined;
@@ -4657,6 +4657,7 @@ slot?: string | undefined | undefined;
 spellCheck?: (boolean | "true" | "false") | undefined;
 style?: CSSProperties | undefined;
 tabIndex?: number | undefined | undefined;
+title?: string | undefined | undefined;
 translate?: "yes" | "no" | undefined | undefined;
 radioGroup?: string | undefined | undefined;
 about?: string | undefined | undefined;

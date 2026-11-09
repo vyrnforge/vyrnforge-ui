@@ -70,7 +70,6 @@
     "./styles/native-elements.css": "./dist/styles/native-elements.css",
     "./styles/code.css": "./dist/components/code/code.css",
     "./styles/kbd.css": "./dist/components/kbd/kbd.css",
-    "./styles/mark.css": "./dist/components/mark/mark.css",
     "./styles/image.css": "./dist/components/image/image.css",
     "./styles/skeleton.css": "./dist/components/skeleton/skeleton.css",
     "./styles/color-swatch.css": "./dist/components/color-swatch/color-swatch.css",

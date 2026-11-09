@@ -19,7 +19,7 @@ export const browserFixture = {
     const typographyRolesCss = stripFoundationImports(await readFile(path.join(root, 'packages/web/dist/styles/internal/typography-roles.css'), 'utf8'));
     const nativeElementsCss = stripFoundationImports(await readFile(path.join(root, 'packages/web/dist/styles/native-elements.css'), 'utf8'));
     const compositionComponents = port === 'web'
-      ? ['button', 'link', 'code', 'kbd', 'mark']
+      ? ['button', 'link', 'code', 'kbd']
       : port === 'react'
         ? ['button', 'link']
         : [];
@@ -40,7 +40,11 @@ export const browserFixture = {
         <h2 id="heading" data-vf-text data-vf-text-variant="heading-md">Typography</h2>
         <p id="body" data-vf-text data-vf-text-variant="body-md">Readable body copy</p>
         <span id="label" data-vf-text data-vf-text-variant="label-md">Account name</span>
+        <span id="overline" data-vf-text data-vf-text-variant="overline">Case-Sensitive Ωß</span>
         <p id="poster" data-vf-text data-vf-text-variant="poster">Custom poster</p>
+        <blockquote id="quote" data-vf-text data-vf-text-variant="body-lg" cite="https://example.com/source">Quotation</blockquote>
+        <mark id="mark" data-vf-text data-vf-text-variant="body-md">Highlighted</mark>
+        <time id="time" data-vf-text data-vf-text-variant="caption" datetime="2026-11-10">November 10, 2026</time>
 
         <section aria-label="Native typography composition">
           <h1 id="semantic-heading" data-vf-text data-vf-text-variant="body-sm">Semantic heading with a body-sized visual treatment</h1>
@@ -50,7 +54,7 @@ export const browserFixture = {
           <code id="composed-code" data-vf-code data-vf-text data-vf-text-variant="body-lg">composed code</code>
           <kbd id="default-kbd" data-vf-kbd>Ctrl</kbd>
           <kbd id="composed-kbd" data-vf-kbd data-vf-text data-vf-text-variant="body-sm">Shift</kbd>
-          <mark id="composed-mark" data-vf-mark data-vf-text data-vf-text-variant="heading-xs">Highlighted text</mark>
+          <mark id="composed-mark" data-vf-text data-vf-text-variant="heading-xs">Highlighted text</mark>
           <span id="target">Target</span>
         </section>
 
@@ -72,7 +76,11 @@ export const browserFixture = {
         createElement(Text, { id: 'heading', as: 'h2', variant: 'heading-md' }, 'Typography'),
         createElement(Text, { id: 'body', as: 'p', variant: 'body-md' }, 'Readable body copy'),
         createElement(Text, { id: 'label', variant: 'label-md' }, 'Account name'),
+        createElement(Text, { id: 'overline', variant: 'overline' }, 'Case-Sensitive Ωß'),
         createElement(Text, { id: 'poster', as: 'p', variant: 'poster' }, 'Custom poster'),
+        createElement(Text, { id: 'quote', as: 'blockquote', variant: 'body-lg', cite: 'https://example.com/source' }, 'Quotation'),
+        createElement(Text, { id: 'mark', as: 'mark', variant: 'body-md' }, 'Highlighted'),
+        createElement(Text, { id: 'time', as: 'time', variant: 'caption', dateTime: '2026-11-10' }, 'November 10, 2026'),
         createElement('section', { 'aria-label': 'React typography composition' },
           createElement(Link, { id: 'react-composed-link', href: '#react-target', textVariant: 'body-sm' }, 'React composed link'),
           createElement(Link, { id: 'react-default-link', href: '#react-target' }, 'React default link'),
@@ -93,7 +101,11 @@ export const browserFixture = {
           h(Text, { id: 'heading', as: 'h2', variant: 'heading-md' }, () => 'Typography'),
           h(Text, { id: 'body', as: 'p', variant: 'body-md' }, () => 'Readable body copy'),
           h(Text, { id: 'label', variant: 'label-md' }, () => 'Account name'),
-          h(Text, { id: 'poster', as: 'p', variant: 'poster' }, () => 'Custom poster')
+          h(Text, { id: 'overline', variant: 'overline' }, () => 'Case-Sensitive Ωß'),
+          h(Text, { id: 'poster', as: 'p', variant: 'poster' }, () => 'Custom poster'),
+          h(Text, { id: 'quote', as: 'blockquote', variant: 'body-lg', cite: 'https://example.com/source' }, () => 'Quotation'),
+          h(Text, { id: 'mark', as: 'mark', variant: 'body-md' }, () => 'Highlighted'),
+          h(Text, { id: 'time', as: 'time', variant: 'caption', datetime: '2026-11-10' }, () => 'November 10, 2026')
         ])
       }));
       await writeFile(path.join(outDir, 'vue.html'), page(markup));
@@ -110,7 +122,7 @@ export const browserFixture = {
         selector: 'vf-text-test',
         standalone: true,
         imports: [VfTextDirective],
-        template: '<main><h1>Text fixture</h1><h2 id="heading" vfText variant="heading-md">Typography</h2><p id="body" vfText variant="body-md">Readable body copy</p><span id="label" vfText variant="label-md">Account name</span><p id="poster" vfText variant="poster">Custom poster</p></main>'
+        template: '<main><h1>Text fixture</h1><h2 id="heading" vfText variant="heading-md">Typography</h2><p id="body" vfText variant="body-md">Readable body copy</p><span id="label" vfText variant="label-md">Account name</span><span id="overline" vfText variant="overline">Case-Sensitive Ωß</span><p id="poster" vfText variant="poster">Custom poster</p><blockquote id="quote" vfText variant="body-lg" cite="https://example.com/source">Quotation</blockquote><mark id="mark" vfText variant="body-md">Highlighted</mark><time id="time" vfText variant="caption" datetime="2026-11-10">November 10, 2026</time></main>'
       })(App);
       const html = await renderApplication(
         (context) => bootstrapApplication(App, { providers: [provideZonelessChangeDetection()] }, context),

@@ -5,11 +5,11 @@ import { Text } from '@vyrnforge/react/text';
 function App() {
   return (
     <div className="vf-example-stack">
-      <Text as="h2" variant="heading">Typography foundation</Text>
-      <Text as="p">Native elements keep their semantics while VyrnForge supplies the visual typography contract.</Text>
-      <Text as="p" variant="body-sm">Small body text remains readable without becoming a new semantic element.</Text>
-      <Text variant="label">Account name</Text>
-      <Text as="h3" variant="title">Section title</Text>
+      <Text as="h2" variant="heading-md">Typography foundation</Text>
+      <Text as="p" variant="body-md">Native elements keep their semantics while VyrnForge supplies the visual typography contract.</Text>
+      <Text as="blockquote" variant="body-lg">Semantic quotation with an independent visual role.</Text>
+      <Text as="mark" variant="body-md">Important annotation</Text>
+      <Text as="time" variant="caption" dateTime="2026-11-10">November 10, 2026</Text>
     </div>
   );
 }
