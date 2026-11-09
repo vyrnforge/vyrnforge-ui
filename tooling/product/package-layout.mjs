@@ -25,14 +25,3 @@ export function componentPackageProjectionPath(target, componentId) {
   }
   return null;
 }
-
-/**
- * Foundations may keep a stable distribution path even when their authoring
- * ownership lives outside product/components. This avoids making repository
- * taxonomy part of the public package contract.
- */
-export function foundationPackageProjectionPath(target, foundationId) {
-  assertComponentId(foundationId);
-  if (target === 'web') return `packages/web/src/foundations/${foundationId}/`;
-  return null;
-}

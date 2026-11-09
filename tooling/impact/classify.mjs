@@ -167,13 +167,6 @@ function classifyPath(state, discovery, filePath) {
         filePath,
       );
     }
-    for (const port of unit.browserPorts ?? []) {
-      addBrowserScope(state, port, unit.id, `${unit.node} owns browser evidence`, filePath);
-      addEvidence(state, 'browser', `${unit.node} owns browser evidence`, filePath);
-    }
-    if (filePath.endsWith('.css')) {
-      addEvidence(state, 'visual', `${unit.node} styling changed`, filePath);
-    }
     classified = true;
   }
 

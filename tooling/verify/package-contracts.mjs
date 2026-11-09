@@ -80,19 +80,6 @@ for (const port of frameworkPortNames) {
   }
 }
 
-let projectedFoundationSurfaces = 0;
-for (const unit of productGraph.units.filter((candidate) => candidate.kind === 'foundation')) {
-  const webSurface = unit.surfaces?.web;
-  if (!webSurface?.publicEntrypoints.length) continue;
-  projectedFoundationSurfaces += 1;
-  if (
-    web.exports?.[`./styles/${unit.unitId}.css`] !==
-    `./dist/foundations/${unit.unitId}/${unit.unitId}.css`
-  ) {
-    throw new Error(`@vyrnforge/web ${unit.unitId} foundation stylesheet export must target its foundation bundle`);
-  }
-}
-
 let projectedComponentSurfaces = 0;
 for (const component of productGraph.components) {
   const componentId = component.unitId;
@@ -132,5 +119,5 @@ for (const component of productGraph.components) {
 }
 
 process.stdout.write(
-  `package contracts: ${publicPackageNames.length} private rebuild packages, ${projectedFoundationSurfaces} foundation projection(s), and ${projectedComponentSurfaces} component projections ok\n`,
+  `package contracts: ${publicPackageNames.length} private rebuild packages and ${projectedComponentSurfaces} Product Graph component projections ok\n`,
 );

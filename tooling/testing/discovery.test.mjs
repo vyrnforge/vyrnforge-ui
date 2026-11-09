@@ -37,39 +37,14 @@ test('shared Web foundation stylesheet exports are not component products', () =
       './styles/tokens.css': './dist/styles/tokens.css',
       './styles/foundation.css': './dist/styles/foundation.css',
       './styles/reset.css': './dist/styles/reset.css',
-      './styles/elemental-primitives.css': './dist/foundations/elemental-primitives/elemental-primitives.css',
     },
   }));
   write('packages/web/src/styles/tokens.css');
   write('packages/web/src/styles/foundation.css');
   write('packages/web/src/styles/reset.css');
-  write('product/foundations/elemental-primitives/web/elemental-primitives.css');
   const discovery = discoverProductUnits(root);
   assert.deepEqual(discovery.components, []);
   assert.deepEqual(productPreparationProblems(root), []);
-});
-
-test('elemental-primitives style is a browser-tested foundation rather than a component product', () => {
-  const root = mkdtempSync(path.join(os.tmpdir(), 'vf-elemental-foundation-discovery-'));
-  const write = writer(root);
-  write('package.json', JSON.stringify({ workspaces: ['packages/web'] }));
-  write('packages/web/package.json', JSON.stringify({
-    name: '@vyrnforge/web',
-    exports: {
-      '.': './dist/index.js',
-      './styles/elemental-primitives.css': './dist/foundations/elemental-primitives/elemental-primitives.css',
-    },
-  }));
-  write('product/foundations/elemental-primitives/web/elemental-primitives.css', '[data-vf-mark] {}\n');
-  write('product/foundations/elemental-primitives/test/browser/fixtures.mjs', 'export const browserFixture = {};\n');
-  write('product/foundations/elemental-primitives/test/browser/tests/elemental-primitives.spec.mjs', 'export {};\n');
-
-  const discovery = discoverProductUnits(root);
-  assert.equal(discovery.components.some((entry) => entry.component === 'elemental-primitives'), false);
-  const foundation = discovery.browserUnits.find((entry) => entry.component === 'elemental-primitives');
-  assert.ok(foundation);
-  assert.equal(foundation.kind, 'foundation');
-  assert.deepEqual(Object.keys(foundation.ports), ['web']);
 });
 
 test('a newly exposed component automatically requires its owned evidence', () => {
@@ -179,4 +154,23 @@ test('component ports infer owned-unit dependencies from workspace public subpat
   const tabs = discoverProductUnits(root).components.find((entry) => entry.component === 'tabs');
   assert.ok(tabs);
   assert.deepEqual(tabs.ports.react.dependencies, ['unit:core:capabilities:collection-navigation']);
+});
+
+test('aggregate and native-element Web styles stay outside component discovery', () => {
+  const root = mkdtempSync(path.join(os.tmpdir(), 'vf-non-component-style-discovery-'));
+  const write = writer(root);
+  write('package.json', JSON.stringify({ workspaces: ['packages/web'] }));
+  write('packages/web/package.json', JSON.stringify({
+    name: '@vyrnforge/web',
+    exports: {
+      '.': './dist/index.js',
+      './styles/elemental-primitives.css': './dist/styles/elemental-primitives.css',
+      './styles/native-elements.css': './dist/styles/native-elements.css',
+    },
+  }));
+  write('packages/web/src/styles/elemental-primitives.css');
+  write('packages/web/src/styles/native-elements.css');
+  const result = discoverProductUnits(root);
+  assert.deepEqual(result.components, []);
+  assert.deepEqual(productPreparationProblems(root), []);
 });

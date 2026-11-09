@@ -48,22 +48,6 @@ test('current repository is normalized into one product graph', () => {
   assert.deepEqual(productGraphProblems(), []);
 });
 
-test('elemental aggregate is a foundation with the stable Web stylesheet projection', () => {
-  const graph = discoverProductGraph();
-  assert.equal(graph.components.some((component) => component.unitId === 'elemental-primitives'), false);
-
-  const foundation = graph.units.find((unit) => unit.id === 'foundation:elemental-primitives');
-  assert.ok(foundation);
-  assert.equal(foundation.root, 'product/foundations/elemental-primitives/');
-  assert.equal(foundation.migration.state, 'product-unit');
-  assert.deepEqual(foundation.packages, ['web']);
-  assert.deepEqual(foundation.publicEntrypoints, ['@vyrnforge/web/styles/elemental-primitives.css']);
-  assert.deepEqual(foundation.surfaces.web.authoringPaths, ['product/foundations/elemental-primitives/web/']);
-  assert.equal(foundation.surfaces.web.projectionPath, 'packages/web/src/foundations/elemental-primitives/');
-  assert.equal(foundation.surfaces.web.browser, true);
-  assert.deepEqual(productGraphProblems(), []);
-});
-
 test('nested component location drives package authoring but not public exports', () => {
   const root = mkdtempSync(path.join(os.tmpdir(), 'vf-product-graph-layered-'));
   const write = writer(root);
@@ -201,4 +185,26 @@ test('canonical capabilities merge legacy package ownership into one logical nod
   assert.ok(impactCapability.nodes.includes('unit:core:capabilities:collection-navigation'));
   assert.ok(impactCapability.paths.includes('product/capabilities/collection-navigation/'));
   assert.ok(impactCapability.paths.includes('packages/core/src/capabilities/collection-navigation/'));
+});
+
+test('L1 promoted public primitives are independent Native Web product units', () => {
+  const graph = discoverProductGraph();
+  assert.equal(graph.components.some((entry) => entry.unitId === 'elemental-primitives'), false);
+
+  for (const id of ['code', 'kbd', 'mark', 'image', 'skeleton', 'color-swatch']) {
+    const component = graph.components.find((entry) => entry.unitId === id);
+    assert.ok(component, id + ' must be discovered');
+    assert.equal(component.id, 'component:' + id);
+    assert.equal(component.layer, 'elemental-primitives');
+    assert.equal(component.facets.canonicalRoot, 'product/components/elemental-primitives/' + id + '/');
+    assert.equal(component.facets.legacyRoot, null);
+    assert.equal(component.metadataSource, 'product-unit');
+    assert.equal(component.migration.state, 'product-unit');
+    assert.deepEqual(Object.keys(component.surfaces), ['web']);
+    assert.deepEqual(component.surfaces.web.authoringPaths, ['product/components/elemental-primitives/' + id + '/web/']);
+    assert.equal(component.surfaces.web.projectionPath, 'packages/web/src/components/' + id + '/');
+    assert.ok(component.surfaces.web.publicEntrypoints.includes('@vyrnforge/web/styles/' + id + '.css'));
+  }
+
+  assert.deepEqual(productGraphProblems(), []);
 });

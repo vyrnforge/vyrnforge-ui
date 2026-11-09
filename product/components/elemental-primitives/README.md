@@ -1,5 +1,7 @@
 # Layer 1 — Elemental primitive source ownership
 
-This folder contains actual Layer 1 component product units such as Text, Icon, Surface, Separator, and VisuallyHidden.
+Layer 1 owns semantic product units, not an aggregate `ElementalPrimitives` component.
 
-The shared native-element presentation for Code, Kbd, Mark, Image, Skeleton, ColorSwatch, opt-in prose styling, and private selection-mark recipes is **not** a nested component. Its canonical owner is `product/foundations/elemental-primitives/`, while the stable consumer stylesheet remains `@vyrnforge/web/styles/elemental-primitives.css`.
+Promoted public primitives are independently owned under this layer: Code, Kbd, Mark, Image, Skeleton, and ColorSwatch. The established core primitives remain Text, Icon, Surface, Separator, and VisuallyHidden.
+
+Shared native prose presentation lives in the Web package's `styles/native-elements.css`. Private selection-mark recipes live in internal Web styling and are not public product units. The existing `@vyrnforge/web/styles/elemental-primitives.css` entrypoint is an aggregate convenience/compatibility stylesheet only; it is not a component identity or Product Graph owner.

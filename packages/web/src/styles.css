@@ -1,7 +1,7 @@
 @layer vyrnforge.reset, vyrnforge.tokens, vyrnforge.themes, vyrnforge.foundation, vyrnforge.components;
 
 @import "./styles/foundation.css";
-@import "./foundations/elemental-primitives/elemental-primitives.css";
+@import "./styles/elemental-primitives.css";
 @import "./components/button/button.css";
 @import "./components/checkbox/checkbox.css";
 @import "./components/color-input/color-input.css";

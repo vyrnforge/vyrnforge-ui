@@ -25,9 +25,6 @@ test('Nx follows layered sources into their package targets and documentation', 
   assert.ok(react.includes('@vyrnforge/react'));
   assert.ok(!react.includes('@vyrnforge/vue'));
 
-  const foundation = affectedBy('product/foundations/elemental-primitives/web/elemental-primitives.css');
-  assert.ok(foundation.includes('@vyrnforge/web'));
-
   const docs = affectedBy('product/components/interactive-controls/theme-toggle/docs/index.md');
   assert.ok(docs.includes('docs'));
   assert.ok(!docs.includes('@vyrnforge/web'));
