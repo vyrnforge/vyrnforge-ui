@@ -3,10 +3,6 @@ import type { AnchorHTMLAttributes } from 'react';
 import type { TextVariant } from '@vyrnforge/web/text';
 
 export interface LinkProps extends AnchorHTMLAttributes<HTMLAnchorElement> {
-  /**
-   * Optional shared typography treatment. Link retains native anchor semantics,
-   * navigation behavior, focus, and Link-specific presentation.
-   */
   textVariant?: TextVariant;
 }
 

@@ -9,10 +9,6 @@ export interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
   variant?: ButtonVariant;
   size?: ButtonSize;
   loading?: boolean;
-  /**
-   * Optional shared typography treatment. Button retains native button semantics,
-   * interaction/state behavior, and Button-specific presentation.
-   */
   textVariant?: TextVariant;
 }
 

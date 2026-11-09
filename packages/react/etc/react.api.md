@@ -224,6 +224,7 @@ export interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
     loading?: boolean;
     // (undocumented)
     size?: ButtonSize;
+    // (undocumented)
     textVariant?: TextVariant;
     // (undocumented)
     variant?: ButtonVariant;
@@ -2075,6 +2076,7 @@ export const Link: ForwardRefExoticComponent<LinkProps & RefAttributes<HTMLAncho
 
 // @public (undocumented)
 export interface LinkProps extends AnchorHTMLAttributes<HTMLAnchorElement> {
+    // (undocumented)
     textVariant?: TextVariant;
 }
 
