@@ -41,11 +41,13 @@ export type TextComponent = <Element extends TextElement = 'span'>(
   props: TextProps<Element> & { ref?: ComponentPropsWithRef<Element>['ref'] }
 ) => ReactElement | null;
 
+const createTextElement = createElement as (type: TextElement, props: object) => ReactElement;
+
 const TextImpl = forwardRef<HTMLElement, TextProps<TextElement>>(function Text(
   { as = 'span', variant = 'body-md', ...nativeProps },
   ref
 ) {
-  return createElement(as, {
+  return createTextElement(as, {
     ...nativeProps,
     ref,
     'data-vf-text': '',
