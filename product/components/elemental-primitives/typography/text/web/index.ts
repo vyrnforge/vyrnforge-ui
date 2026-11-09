@@ -17,11 +17,6 @@ export const textVariants = [
   'label-sm',
   'caption',
   'overline',
-  // Compatibility aliases from the initial Text contract.
-  'body',
-  'label',
-  'title',
-  'heading',
 ] as const;
 
 export type BuiltInTextVariant = (typeof textVariants)[number];
@@ -33,7 +28,7 @@ export type BuiltInTextVariant = (typeof textVariants)[number];
  * declare module '@vyrnforge/web/text' {
  *   interface TextVariantOverrides {
  *     poster: true;
- *     heading: false;
+ *     heading-xs: false;
  *   }
  * }
  */
