@@ -29,7 +29,7 @@ export type TextElement =
   | 'time'
   | 'figcaption';
 
-export type TextProps<Element extends TextElement = 'span'> = {
+export type TextProps<Element extends TextElement = TextElement> = {
   as?: Element;
   variant?: TextVariant;
 } & Omit<ComponentPropsWithoutRef<Element>, 'as'>;
