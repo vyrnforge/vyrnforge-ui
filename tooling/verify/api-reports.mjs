@@ -1,4 +1,4 @@
-import { readFileSync } from 'node:fs';
+import { readFileSync, writeFileSync } from 'node:fs';
 import { Extractor, ExtractorConfig } from '@microsoft/api-extractor';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
@@ -99,6 +99,7 @@ for (const name of selectedPackages()) {
       generatedContext: firstDiff >= 0 ? generatedNormalized.slice(Math.max(0, firstDiff - 240), firstDiff + 480) : '',
       committedContext: firstDiff >= 0 ? committedNormalized.slice(Math.max(0, firstDiff - 240), firstDiff + 480) : '',
     }));
+    writeFileSync(path.join(root, 'test-results', 'generated-react.api.md'), generated);
   }
 
   // API Extractor reports `succeeded: false` when warnings are emitted. Warnings
