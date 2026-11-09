@@ -23,6 +23,8 @@ Preferred presentation hooks are `data-vf-theme-toggle`, `data-vf-theme-toggle-c
 
 The authored artwork is an inline copy of the canonical 650×740 SVG source. It contains one `data-vf-theme-toggle-dragon-mark` group with six paths: the solid outer silhouette, cream inner wing/body accent, compact slanted eye, slit pupil, one small filled nostril and a simple filled mouth line. One independent `data-vf-theme-toggle-orb` group keeps the two orb circles and highlight ellipse separate from the dragon. Browser evidence verifies that the live path data matches the canonical asset.
 
+When inlining the artwork more than once on a page, give each switch its own SVG gradient ID. Use that same ID in the orb circle’s `fill="url(#…)"` so each switch uses its own light or dark palette.
+
 The artwork is decorative and remains inside the track's `aria-hidden="true"` subtree. The checkbox remains the only interactive target. The legacy thumb hook is retained as a forced-colors fallback and compatibility surface; in normal color modes the SVG orb is the visible thumb.
 
 Earlier Theme Toggle markup used `data-vf-theme-toggle-clouds`, `data-vf-theme-toggle-stars`, `data-vf-theme-toggle-sun`, and `data-vf-theme-toggle-moon`. The Web stylesheet continues to accept those hooks as compatibility aliases where practical.

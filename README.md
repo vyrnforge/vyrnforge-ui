@@ -23,7 +23,7 @@ Packages remain private while the rebuild foundation is being proven. Framework 
 The repository has five primary implementation roots:
 
 - `packages/` — the seven private-rebuild package surfaces and package-owned evidence.
-- `product/` — framework-neutral, repository-only product ownership slices for cross-package components: shared docs, examples, accessibility metadata, cross-port/browser evidence, and unreleased component changes. Runtime implementation does not live here.
+- `product/` — product units own component implementation, documentation, examples, and conformance evidence. Builds project component sources from `product/components/<layer>/<optional-category>/<id>/` into their public package entrypoints.
 - `apps/` — runnable repository applications. `apps/docs/` is the documentation application/runtime.
 - `documentation/` — authored shared/framework/reference documentation sources that are not owned by one component.
 - `tooling/` — repository-only automation, organized by durable function. See `tooling/README.md`.

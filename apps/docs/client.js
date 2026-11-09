@@ -1,14 +1,14 @@
 const storedThemeValues = new Set(['light', 'dark', 'system']);
 const explicitThemes = new Set(['light', 'dark']);
 const themeStorageKey = 'vf-docs-theme';
-const themeToggleDragonArtwork = `
+const themeToggleDragonArtwork = (gradientId) => `
   <svg class="vf-theme-toggle-dragon-art" xmlns="http://www.w3.org/2000/svg" width="100%" height="100%"
     viewBox="0 0 650 740"
     aria-hidden="true"
     focusable="false"
     shape-rendering="geometricPrecision">
     <defs>
-      <radialGradient id="vf-theme-toggle-orb-gradient" cx="35%" cy="30%" r="72%">
+      <radialGradient id="${gradientId}" cx="35%" cy="30%" r="72%">
         <stop offset="0" stop-color="var(--_vf-theme-toggle-orb-highlight, #ffe58d)"/>
         <stop offset="1" stop-color="var(--_vf-theme-toggle-orb-core, #ff9700)"/>
       </radialGradient>
@@ -40,7 +40,7 @@ const themeToggleDragonArtwork = `
       <circle cx="382" cy="456" r="154"
         fill="var(--_vf-theme-toggle-orb-ring, #fff8e7)"/>
       <circle cx="382" cy="456" r="142"
-        fill="url(#vf-theme-toggle-orb-gradient)"/>
+        fill="url(#${gradientId})"/>
       <ellipse cx="333" cy="402" rx="28" ry="36"
         transform="rotate(28 333 402)"
         fill="#fff"
@@ -104,7 +104,9 @@ function createThemeToggle(fallback) {
   const dragon = document.createElement('span');
   dragon.setAttribute('data-vf-theme-toggle-dragon', '');
   dragon.setAttribute('data-vf-theme-toggle-dragon-artwork', '');
-  dragon.innerHTML = themeToggleDragonArtwork;
+  let gradientId = 'vf-docs-theme-orb-gradient';
+  while (document.getElementById(gradientId)) gradientId += '-orb';
+  dragon.innerHTML = themeToggleDragonArtwork(gradientId);
 
   const thumb = document.createElement('span');
   thumb.setAttribute('data-vf-theme-toggle-thumb', '');

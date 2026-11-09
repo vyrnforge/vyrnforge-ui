@@ -6,6 +6,14 @@
       "{projectRoot}/**/*",
       "sharedGlobals"
     ],
+    "productGraphInputs": [
+      "{projectRoot}/**/*",
+      "sharedGlobals",
+      "{workspaceRoot}/product/components/**/component.json",
+      "{workspaceRoot}/tooling/product/*.mjs",
+      "{workspaceRoot}/tooling/testing/discover-product-units*.mjs",
+      "{workspaceRoot}/tooling/package-model.mjs"
+    ],
     "production": [
       "default",
       "!{projectRoot}/test/**/*",
