@@ -18,11 +18,14 @@ export const browserFixture = {
     const textCss = stripFoundationImports(await readFile(path.join(root, 'packages/web/dist/components/text/text.css'), 'utf8'));
     const typographyRolesCss = stripFoundationImports(await readFile(path.join(root, 'packages/web/dist/styles/internal/typography-roles.css'), 'utf8'));
     const nativeElementsCss = stripFoundationImports(await readFile(path.join(root, 'packages/web/dist/styles/native-elements.css'), 'utf8'));
-    const compositionCss = port === 'web'
-      ? await Promise.all(['button', 'link', 'code', 'kbd', 'mark'].map(async (component) =>
-          stripFoundationImports(await readFile(path.join(root, `packages/web/dist/components/${component}/${component}.css`), 'utf8'))
-        ))
-      : [];
+    const compositionComponents = port === 'web'
+      ? ['button', 'link', 'code', 'kbd', 'mark']
+      : port === 'react'
+        ? ['button', 'link']
+        : [];
+    const compositionCss = await Promise.all(compositionComponents.map(async (component) =>
+      stripFoundationImports(await readFile(path.join(root, `packages/web/dist/components/${component}/${component}.css`), 'utf8'))
+    ));
     const customCss = '[data-vf-text][data-vf-text-variant="poster"] { font-size: 2.625rem; font-weight: 700; }';
 
     // Component CSS intentionally appears before Text CSS here. The canonical
@@ -63,11 +66,20 @@ export const browserFixture = {
       const { createElement } = await import('react');
       const { renderToString } = await import('react-dom/server');
       const { Text } = await import('@vyrnforge/react/text');
+      const { Link } = await import('@vyrnforge/react/link');
+      const { Button } = await import('@vyrnforge/react/button');
       const markup = renderToString(createElement('div', null,
         createElement(Text, { id: 'heading', as: 'h2', variant: 'heading-md' }, 'Typography'),
         createElement(Text, { id: 'body', as: 'p', variant: 'body-md' }, 'Readable body copy'),
         createElement(Text, { id: 'label', variant: 'label-md' }, 'Account name'),
-        createElement(Text, { id: 'poster', as: 'p', variant: 'poster' }, 'Custom poster')
+        createElement(Text, { id: 'poster', as: 'p', variant: 'poster' }, 'Custom poster'),
+        createElement('section', { 'aria-label': 'React typography composition' },
+          createElement(Link, { id: 'react-composed-link', href: '#react-target', textVariant: 'body-sm' }, 'React composed link'),
+          createElement(Link, { id: 'react-default-link', href: '#react-target' }, 'React default link'),
+          createElement(Button, { id: 'react-composed-button', type: 'button', textVariant: 'label-sm' }, 'React composed button'),
+          createElement(Button, { id: 'react-default-button', type: 'button' }, 'React default button'),
+          createElement('span', { id: 'react-target' }, 'React target')
+        )
       ));
       await writeFile(path.join(outDir, 'react.html'), page(markup));
     }
