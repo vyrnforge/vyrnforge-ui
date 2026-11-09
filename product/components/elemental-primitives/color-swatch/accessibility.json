@@ -1,0 +1,53 @@
+{
+  "schemaVersion": 1,
+  "component": "color-swatch",
+  "reviewStatus": "mapped",
+  "nativeBaseline": {
+    "kind": "utility",
+    "reference": "non-interactive color sample with textual or accessible-name equivalent when meaningful"
+  },
+  "wcag": {
+    "target": "2.2 AA",
+    "status": "mapped",
+    "criteria": [
+      "1.4.1",
+      "1.4.11"
+    ]
+  },
+  "aria": {
+    "status": "mapped",
+    "apgPattern": null
+  },
+  "interaction": {
+    "keyboard": "not-applicable",
+    "focus": "not-applicable",
+    "directionality": "native"
+  },
+  "ownership": {
+    "library": [
+      "provide a visible swatch boundary including forced-colors presentation",
+      "keep the primitive non-interactive"
+    ],
+    "consumer": [
+      "do not use color as the sole carrier of meaning",
+      "pair meaningful colors with visible text or an accessible name appropriate to the surrounding semantics"
+    ]
+  },
+  "forms": {
+    "status": "not-applicable"
+  },
+  "visualAccessibility": {
+    "status": "component-specific"
+  },
+  "ssrHydration": {
+    "status": "native"
+  },
+  "evidence": {
+    "browser": "required",
+    "assistiveTechnology": "not-applicable"
+  },
+  "profileVariability": [],
+  "notes": [
+    "A role and accessible name are needed only when the swatch itself must act as the named semantic object; adjacent visible text may carry the meaning instead."
+  ]
+}

@@ -1,0 +1,53 @@
+{
+  "schemaVersion": 1,
+  "component": "image",
+  "reviewStatus": "mapped",
+  "nativeBaseline": {
+    "kind": "native",
+    "reference": "img"
+  },
+  "wcag": {
+    "target": "2.2 AA",
+    "status": "mapped",
+    "criteria": [
+      "1.1.1",
+      "1.3.1"
+    ]
+  },
+  "aria": {
+    "status": "not-applicable",
+    "apgPattern": null
+  },
+  "interaction": {
+    "keyboard": "not-applicable",
+    "focus": "not-applicable",
+    "directionality": "native"
+  },
+  "ownership": {
+    "library": [
+      "preserve native img semantics and authored attributes",
+      "provide responsive presentation without replacing intrinsic image behavior"
+    ],
+    "consumer": [
+      "provide appropriate alt text or an empty alt for decorative images",
+      "author width/height, loading, decoding, and source attributes according to content requirements"
+    ]
+  },
+  "forms": {
+    "status": "not-applicable"
+  },
+  "visualAccessibility": {
+    "status": "component-specific"
+  },
+  "ssrHydration": {
+    "status": "native"
+  },
+  "evidence": {
+    "browser": "required",
+    "assistiveTechnology": "not-applicable"
+  },
+  "profileVariability": [],
+  "notes": [
+    "The Image primitive does not infer alternative text or loading policy."
+  ]
+}

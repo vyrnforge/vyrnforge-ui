@@ -1,0 +1,52 @@
+{
+  "schemaVersion": 1,
+  "component": "kbd",
+  "reviewStatus": "mapped",
+  "nativeBaseline": {
+    "kind": "native",
+    "reference": "kbd"
+  },
+  "wcag": {
+    "target": "2.2 AA",
+    "status": "mapped",
+    "criteria": [
+      "1.3.1"
+    ]
+  },
+  "aria": {
+    "status": "not-applicable",
+    "apgPattern": null
+  },
+  "interaction": {
+    "keyboard": "not-applicable",
+    "focus": "not-applicable",
+    "directionality": "native"
+  },
+  "ownership": {
+    "library": [
+      "preserve native kbd semantics",
+      "provide visible key presentation including forced-colors boundaries"
+    ],
+    "consumer": [
+      "use kbd only for user input or key names",
+      "provide understandable surrounding instructions"
+    ]
+  },
+  "forms": {
+    "status": "not-applicable"
+  },
+  "visualAccessibility": {
+    "status": "component-specific"
+  },
+  "ssrHydration": {
+    "status": "native"
+  },
+  "evidence": {
+    "browser": "required",
+    "assistiveTechnology": "not-applicable"
+  },
+  "profileVariability": [],
+  "notes": [
+    "Kbd adds no custom keyboard behavior; it describes keyboard input rather than creating an interactive control."
+  ]
+}
