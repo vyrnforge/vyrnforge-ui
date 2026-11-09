@@ -119,10 +119,8 @@ jobs:
         if: always()
         with:
           name: package-validation-${{ inputs.artifact_suffix }}
-          path: |
-            test-results/package-validation.log
-            test-results/generated-react.api.md
-          if-no-files-found: warn
+          path: test-results/package-validation.log
+          if-no-files-found: error
           retention-days: ${{ inputs.retention_days }}
 
   release-intent:

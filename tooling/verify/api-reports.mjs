@@ -1,4 +1,4 @@
-import { readFileSync, writeFileSync } from 'node:fs';
+import { readFileSync } from 'node:fs';
 import { Extractor, ExtractorConfig } from '@microsoft/api-extractor';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
@@ -59,48 +59,6 @@ for (const name of selectedPackages()) {
     localBuild,
     showVerboseMessages: false,
   });
-
-  if (!localBuild && name === 'react' && result.apiReportChanged) {
-    const generated = readFileSync(path.join(packageRoot, 'temp', 'react.api.md'), 'utf8');
-    for (const marker of ['export interface ButtonProps', 'export interface LinkProps', 'export type LinkProps']) {
-      const index = generated.indexOf(marker);
-      if (index >= 0) {
-        console.error(`API REPORT DIAGNOSTIC [${marker}]\n${generated.slice(Math.max(0, index - 120), index + 700)}`);
-      }
-    }
-
-    const committed = readFileSync(path.join(packageRoot, 'etc', 'react.api.md'), 'utf8');
-    const eolStats = (value) => ({
-      length: value.length,
-      crlf: (value.match(/\\r\\n/g) ?? []).length,
-      bareLf: (value.match(/(^|[^\\r])\\n/g) ?? []).length,
-      finalCodes: [...value.slice(-8)].map((char) => char.charCodeAt(0)),
-    });
-    console.error('API REPORT EOL DIAGNOSTIC', JSON.stringify({
-      generated: eolStats(generated),
-      committed: eolStats(committed),
-    }));
-
-    const normalize = (value) => value.replace(/\\r\\n/g, '\\n').replace(/\\r/g, '\\n');
-    const generatedNormalized = normalize(generated);
-    const committedNormalized = normalize(committed);
-    let firstDiff = -1;
-    const maxLength = Math.max(generatedNormalized.length, committedNormalized.length);
-    for (let i = 0; i < maxLength; i += 1) {
-      if (generatedNormalized[i] !== committedNormalized[i]) {
-        firstDiff = i;
-        break;
-      }
-    }
-    console.error('API REPORT FIRST DIFF', JSON.stringify({
-      firstDiff,
-      generatedLength: generatedNormalized.length,
-      committedLength: committedNormalized.length,
-      generatedContext: firstDiff >= 0 ? generatedNormalized.slice(Math.max(0, firstDiff - 240), firstDiff + 480) : '',
-      committedContext: firstDiff >= 0 ? committedNormalized.slice(Math.max(0, firstDiff - 240), firstDiff + 480) : '',
-    }));
-    writeFileSync(path.join(root, 'test-results', 'generated-react.api.md'), generated);
-  }
 
   // API Extractor reports `succeeded: false` when warnings are emitted. Warnings
   // remain visible for follow-up cleanup, but the contract gate should fail only
