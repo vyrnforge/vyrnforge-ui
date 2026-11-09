@@ -9,11 +9,11 @@ import { VfTextDirective } from '@vyrnforge/angular/text';
   imports: [VfTextDirective],
   template: `
     <div class="vf-example-stack">
-      <h2 vfText variant="heading">Typography foundation</h2>
-      <p vfText>Native elements keep their semantics while VyrnForge supplies the visual typography contract.</p>
-      <p vfText variant="body-sm">Small body text remains readable without becoming a new semantic element.</p>
-      <span vfText variant="label">Account name</span>
-      <h3 vfText variant="title">Section title</h3>
+      <h2 vfText variant="heading-md">Typography foundation</h2>
+      <p vfText variant="body-md">Native elements keep their semantics while VyrnForge supplies the visual typography contract.</p>
+      <blockquote vfText variant="body-lg">Semantic quotation with an independent visual role.</blockquote>
+      <mark vfText variant="body-md">Important annotation</mark>
+      <time vfText variant="caption" datetime="2026-11-10">November 10, 2026</time>
     </div>
   `
 })
