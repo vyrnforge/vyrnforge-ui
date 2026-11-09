@@ -8,7 +8,7 @@ Text is VyrnForge's shared typography treatment. Native HTML semantics remain th
 - In that composition, Text owns typography. The semantic/component contract still owns semantics, interaction, state, color, borders, backgrounds, focus, and other component-specific presentation.
 - Code and Kbd retain their monospace identity while an explicit Text role may control their size, weight, line height, and related shared typography.
 - `data-vf-prose` remains the scoped automatic treatment for authored native content such as headings, paragraphs, blockquotes, figures, and lists. It does not create Heading or Paragraph components.
-- React and Vue currently provide convenience `Text` components with an explicit `as` element; Angular provides the `vfText` directive. Their API expansion is intentionally outside this Native Web slice.
+- React provides `Text` for ordinary non-interactive text semantics. React `Link` and `Button` expose an optional `textVariant` prop that projects the same Text hooks onto their own native anchor/button element instead of nesting a Text wrapper. Vue/Angular composition mapping remains separate follow-up work.
 - No custom-element wrapper is provided because ordinary text semantics are already native HTML.
 - Built-in roles cover display, heading, title, body, label, caption, and overline treatments.
 - Applications can add or disable typed variants through `TextVariantOverrides` and style custom variants through the same stable Web hook.
@@ -39,3 +39,13 @@ Native composition examples:
 
 <code data-vf-code data-vf-text data-vf-text-variant="body-lg">pnpm test</code>
 ```
+
+React composition:
+
+```tsx
+<Text as="h1" variant="heading-lg">Account settings</Text>
+<Link href="/billing" textVariant="body-sm">Billing</Link>
+<Button type="button" textVariant="label-sm">Save</Button>
+```
+
+`Text` does not gain `as="a"` or `as="button"`; interactive semantics stay owned by Link and Button.

@@ -225,6 +225,8 @@ export interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
     // (undocumented)
     size?: ButtonSize;
     // (undocumented)
+    textVariant?: TextVariant;
+    // (undocumented)
     variant?: ButtonVariant;
 }
 
@@ -1698,6 +1700,7 @@ export const FileUploaderInput: ForwardRefExoticComponent<Omit<DetailedHTMLProps
 // @public (undocumented)
 export function FileUploaderList(props: ComponentPropsWithoutRef<'ul'>): DetailedReactHTMLElement<    {
 'data-vf-file-uploader-list': string;
+title?: string | undefined | undefined;
 defaultChecked?: boolean | undefined | undefined;
 defaultValue?: string | number | readonly string[] | undefined;
 suppressContentEditableWarning?: boolean | undefined | undefined;
@@ -1719,7 +1722,6 @@ slot?: string | undefined | undefined;
 spellCheck?: (boolean | "true" | "false") | undefined;
 style?: CSSProperties | undefined;
 tabIndex?: number | undefined | undefined;
-title?: string | undefined | undefined;
 translate?: "yes" | "no" | undefined | undefined;
 radioGroup?: string | undefined | undefined;
 role?: AriaRole | undefined;
@@ -2073,7 +2075,10 @@ export { LayoutSpace }
 export const Link: ForwardRefExoticComponent<LinkProps & RefAttributes<HTMLAnchorElement>>;
 
 // @public (undocumented)
-export type LinkProps = AnchorHTMLAttributes<HTMLAnchorElement>;
+export interface LinkProps extends AnchorHTMLAttributes<HTMLAnchorElement> {
+    // (undocumented)
+    textVariant?: TextVariant;
+}
 
 // @public (undocumented)
 export const ListboxOption: ForwardRefExoticComponent<ListboxOptionProps & RefAttributes<HTMLDivElement>>;
@@ -2181,6 +2186,7 @@ export interface MenuRootProps {
 export function MenuSeparator(props: ComponentPropsWithoutRef<'div'>): DetailedReactHTMLElement<    {
 role: "separator";
 'data-vf-menu-separator': string;
+title?: string | undefined | undefined;
 defaultChecked?: boolean | undefined | undefined;
 defaultValue?: string | number | readonly string[] | undefined;
 suppressContentEditableWarning?: boolean | undefined | undefined;
@@ -2202,7 +2208,6 @@ slot?: string | undefined | undefined;
 spellCheck?: (boolean | "true" | "false") | undefined;
 style?: CSSProperties | undefined;
 tabIndex?: number | undefined | undefined;
-title?: string | undefined | undefined;
 translate?: "yes" | "no" | undefined | undefined;
 radioGroup?: string | undefined | undefined;
 about?: string | undefined | undefined;
@@ -3292,6 +3297,7 @@ tabIndex: number;
 hidden: boolean;
 'aria-labelledby': string;
 'data-vf-tabs-panel': string;
+title?: string | undefined | undefined;
 defaultChecked?: boolean | undefined | undefined;
 defaultValue?: string | number | readonly string[] | undefined;
 suppressContentEditableWarning?: boolean | undefined | undefined;
@@ -3310,7 +3316,6 @@ nonce?: string | undefined | undefined;
 slot?: string | undefined | undefined;
 spellCheck?: (boolean | "true" | "false") | undefined;
 style?: CSSProperties | undefined;
-title?: string | undefined | undefined;
 translate?: "yes" | "no" | undefined | undefined;
 radioGroup?: string | undefined | undefined;
 about?: string | undefined | undefined;
@@ -3603,6 +3608,7 @@ tabIndex: number;
 onFocus(event: FocusEvent_2<HTMLButtonElement>): void;
 onClick(event: MouseEvent_2<HTMLButtonElement>): void;
 onKeyDown(event: KeyboardEvent_2<HTMLButtonElement>): void;
+title?: string | undefined | undefined;
 form?: string | undefined | undefined;
 formAction?: string | ((formData: FormData) => void | Promise<void>) | undefined;
 formEncType?: string | undefined | undefined;
@@ -3629,7 +3635,6 @@ nonce?: string | undefined | undefined;
 slot?: string | undefined | undefined;
 spellCheck?: (boolean | "true" | "false") | undefined;
 style?: CSSProperties | undefined;
-title?: string | undefined | undefined;
 translate?: "yes" | "no" | undefined | undefined;
 radioGroup?: string | undefined | undefined;
 about?: string | undefined | undefined;
@@ -3968,6 +3973,7 @@ export const ToastClose: ForwardRefExoticComponent<Omit<DetailedHTMLProps<Button
 // @public (undocumented)
 export function ToastDescription(props: ComponentPropsWithoutRef<'div'>): DetailedReactHTMLElement<    {
 'data-vf-toast-description': string;
+title?: string | undefined | undefined;
 defaultChecked?: boolean | undefined | undefined;
 defaultValue?: string | number | readonly string[] | undefined;
 suppressContentEditableWarning?: boolean | undefined | undefined;
@@ -3989,7 +3995,6 @@ slot?: string | undefined | undefined;
 spellCheck?: (boolean | "true" | "false") | undefined;
 style?: CSSProperties | undefined;
 tabIndex?: number | undefined | undefined;
-title?: string | undefined | undefined;
 translate?: "yes" | "no" | undefined | undefined;
 radioGroup?: string | undefined | undefined;
 role?: AriaRole | undefined;
@@ -4271,6 +4276,7 @@ export interface ToastRootProps extends ComponentPropsWithoutRef<'div'> {
 // @public (undocumented)
 export function ToastTitle(props: ComponentPropsWithoutRef<'div'>): DetailedReactHTMLElement<    {
 'data-vf-toast-title': string;
+title?: string | undefined | undefined;
 defaultChecked?: boolean | undefined | undefined;
 defaultValue?: string | number | readonly string[] | undefined;
 suppressContentEditableWarning?: boolean | undefined | undefined;
@@ -4292,7 +4298,6 @@ slot?: string | undefined | undefined;
 spellCheck?: (boolean | "true" | "false") | undefined;
 style?: CSSProperties | undefined;
 tabIndex?: number | undefined | undefined;
-title?: string | undefined | undefined;
 translate?: "yes" | "no" | undefined | undefined;
 radioGroup?: string | undefined | undefined;
 role?: AriaRole | undefined;
@@ -4630,6 +4635,7 @@ export interface ToolbarRootProps extends ComponentPropsWithoutRef<'div'> {
 export function ToolbarSeparator(props: ComponentPropsWithoutRef<'div'>): DetailedReactHTMLElement<    {
 role: "separator";
 'data-vf-toolbar-separator': string;
+title?: string | undefined | undefined;
 defaultChecked?: boolean | undefined | undefined;
 defaultValue?: string | number | readonly string[] | undefined;
 suppressContentEditableWarning?: boolean | undefined | undefined;
@@ -4651,7 +4657,6 @@ slot?: string | undefined | undefined;
 spellCheck?: (boolean | "true" | "false") | undefined;
 style?: CSSProperties | undefined;
 tabIndex?: number | undefined | undefined;
-title?: string | undefined | undefined;
 translate?: "yes" | "no" | undefined | undefined;
 radioGroup?: string | undefined | undefined;
 about?: string | undefined | undefined;
