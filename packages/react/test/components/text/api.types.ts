@@ -8,6 +8,11 @@ const timeProps: TextProps<'time'> = {
   variant: 'caption',
   dateTime: '2026-11-10',
 };
+const inferredTimeProps: TextProps = {
+  as: 'time',
+  variant: 'caption',
+  dateTime: '2026-11-10',
+};
 const quoteProps: TextProps<'blockquote'> = {
   as: 'blockquote',
   variant: 'body-lg',
@@ -21,4 +26,4 @@ const legacy: TextVariant = 'heading';
 // @ts-expect-error unsupported typography variant
 const invalid: TextVariant = 'display';
 
-void [props, timeProps, quoteProps, interactive, legacy, invalid];
+void [props, timeProps, inferredTimeProps, quoteProps, interactive, legacy, invalid];
