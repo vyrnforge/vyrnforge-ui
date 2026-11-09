@@ -60,6 +60,16 @@ for (const name of selectedPackages()) {
     showVerboseMessages: false,
   });
 
+  if (!localBuild && name === 'react' && result.apiReportChanged) {
+    const generated = readFileSync(path.join(packageRoot, 'temp', 'react.api.md'), 'utf8');
+    for (const marker of ['export interface ButtonProps', 'export interface LinkProps', 'export type LinkProps']) {
+      const index = generated.indexOf(marker);
+      if (index >= 0) {
+        console.error(`API REPORT DIAGNOSTIC [${marker}]\n${generated.slice(Math.max(0, index - 120), index + 700)}`);
+      }
+    }
+  }
+
   // API Extractor reports `succeeded: false` when warnings are emitted. Warnings
   // remain visible for follow-up cleanup, but the contract gate should fail only
   // for extraction errors or an unaccepted API report change.
