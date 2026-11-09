@@ -60,13 +60,6 @@ for (const name of selectedPackages()) {
     showVerboseMessages: false,
   });
 
-  if (!localBuild && name === 'react' && result.apiReportChanged) {
-    const generated = readFileSync(path.join(packageRoot, 'temp', 'react.api.md'), 'utf8');
-    const start = Math.max(0, generated.indexOf('const Text_2') - 800);
-    const end = generated.indexOf('export { TextVariant }') + 'export { TextVariant }'.length;
-    console.warn(`VF_DEBUG_REACT_TEXT_API_START\n${generated.slice(start, end)}\nVF_DEBUG_REACT_TEXT_API_END`);
-  }
-
   // API Extractor reports `succeeded: false` when warnings are emitted. Warnings
   // remain visible for follow-up cleanup, but the contract gate should fail only
   // for extraction errors or an unaccepted API report change.
