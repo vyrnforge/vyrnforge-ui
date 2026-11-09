@@ -33,7 +33,7 @@ test('Text preserves native semantics and shared typography across ports', async
   expect(results.violations).toEqual([]);
 });
 
-test('Native Web composes Text typography with semantic and component hooks on one element', async ({ page }) => {
+test('Native Web composes Text typography with semantic and component hooks on one element', async ({ page, browserName }) => {
   test.skip(port !== 'web', 'Native Web composition evidence');
 
   await page.goto('/components/text/web.html');
@@ -84,4 +84,11 @@ test('Native Web composes Text typography with semantic and component hooks on o
 
   const results = await new AxeBuilder({ page }).analyze();
   expect(results.violations).toEqual([]);
+
+  if (browserName === 'chromium') {
+    await page.screenshot({
+      path: test.info().outputPath('text-native-composition.png'),
+      fullPage: true,
+    });
+  }
 });
