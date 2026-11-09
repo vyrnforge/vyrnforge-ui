@@ -1,3 +1,5 @@
+@layer vyrnforge.reset, vyrnforge.tokens, vyrnforge.themes, vyrnforge.foundation, vyrnforge.components;
+
 @import "../../styles/tokens.css";
 
 @layer vyrnforge.components {
@@ -6,9 +8,12 @@
     border: 1px solid var(--vf-color-border);
     border-radius: 0.25rem;
     font-family: var(--vf-font-family-mono);
-    font-size: 0.875em;
     padding-block: 0.1em;
     padding-inline: 0.35em;
+  }
+
+  :where([data-vf-code]:not([data-vf-text])) {
+    font-size: 0.875em;
   }
 
   :where(pre[data-vf-code-block]) {

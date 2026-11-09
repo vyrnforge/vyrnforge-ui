@@ -1,6 +1,12 @@
 import { mkdir, readFile, writeFile } from 'node:fs/promises';
 import path from 'node:path';
 
+const stripFoundationImports = (css) => css
+  .replace('@import "../../styles/tokens.css";\n', '')
+  .replace('@import "../../styles/internal/typography-roles.css";\n', '')
+  .replace('@import "./tokens.css";\n', '')
+  .replace('@import "./internal/typography-roles.css";\n', '');
+
 export const browserFixture = {
   component: 'text',
   prepare: async ({ port }) => {
@@ -9,15 +15,48 @@ export const browserFixture = {
     await mkdir(outDir, { recursive: true });
 
     const tokensCss = await readFile(path.join(root, 'packages/web/dist/styles/tokens.css'), 'utf8');
-    const textCss = (await readFile(path.join(root, 'packages/web/dist/components/text/text.css'), 'utf8'))
-      .replace('@import "../../styles/tokens.css";\n', '');
+    const textCss = stripFoundationImports(await readFile(path.join(root, 'packages/web/dist/components/text/text.css'), 'utf8'));
+    const typographyRolesCss = stripFoundationImports(await readFile(path.join(root, 'packages/web/dist/styles/internal/typography-roles.css'), 'utf8'));
+    const nativeElementsCss = stripFoundationImports(await readFile(path.join(root, 'packages/web/dist/styles/native-elements.css'), 'utf8'));
+    const compositionCss = port === 'web'
+      ? await Promise.all(['button', 'link', 'code', 'kbd', 'mark'].map(async (component) =>
+          stripFoundationImports(await readFile(path.join(root, `packages/web/dist/components/${component}/${component}.css`), 'utf8'))
+        ))
+      : [];
     const customCss = '[data-vf-text][data-vf-text-variant="poster"] { font-size: 2.625rem; font-weight: 700; }';
-    await writeFile(path.join(outDir, 'text.css'), `${tokensCss}\n${textCss}\n${customCss}`);
+
+    // Component CSS intentionally appears before Text CSS here. The canonical
+    // layer order must keep component presentation above the typography foundation
+    // regardless of stylesheet import order.
+    await writeFile(path.join(outDir, 'text.css'), `${tokensCss}\n${typographyRolesCss}\n${nativeElementsCss}\n${compositionCss.join('\n')}\n${textCss}\n${customCss}`);
 
     const page = (body) => `<!doctype html><html lang="en"><head><meta charset="utf-8"><link rel="stylesheet" href="./text.css"><title>Text fixture</title></head><body><main><h1>Text fixture</h1>${body}</main></body></html>`;
 
     if (port === 'web') {
-      await writeFile(path.join(outDir, 'web.html'), page('<h2 id="heading" data-vf-text data-vf-text-variant="heading-md">Typography</h2><p id="body" data-vf-text data-vf-text-variant="body-md">Readable body copy</p><span id="label" data-vf-text data-vf-text-variant="label-md">Account name</span><p id="poster" data-vf-text data-vf-text-variant="poster">Custom poster</p>'));
+      await writeFile(path.join(outDir, 'web.html'), page(`
+        <h2 id="heading" data-vf-text data-vf-text-variant="heading-md">Typography</h2>
+        <p id="body" data-vf-text data-vf-text-variant="body-md">Readable body copy</p>
+        <span id="label" data-vf-text data-vf-text-variant="label-md">Account name</span>
+        <p id="poster" data-vf-text data-vf-text-variant="poster">Custom poster</p>
+
+        <section aria-label="Native typography composition">
+          <h1 id="semantic-heading" data-vf-text data-vf-text-variant="body-sm">Semantic heading with a body-sized visual treatment</h1>
+          <a id="composed-link" data-vf-link data-vf-text data-vf-text-variant="body-sm" href="#target">Composed link</a>
+          <button id="composed-button" data-vf-button data-vf-variant="primary" data-vf-size="md" data-vf-text data-vf-text-variant="label-sm" type="button">Composed button</button>
+          <code id="default-code" data-vf-code>default code</code>
+          <code id="composed-code" data-vf-code data-vf-text data-vf-text-variant="body-lg">composed code</code>
+          <kbd id="default-kbd" data-vf-kbd>Ctrl</kbd>
+          <kbd id="composed-kbd" data-vf-kbd data-vf-text data-vf-text-variant="body-sm">Shift</kbd>
+          <mark id="composed-mark" data-vf-mark data-vf-text data-vf-text-variant="heading-xs">Highlighted text</mark>
+          <span id="target">Target</span>
+        </section>
+
+        <article data-vf-prose>
+          <h1 id="prose-heading">Native prose heading</h1>
+          <h2 id="prose-explicit" data-vf-text data-vf-text-variant="body-sm">Native h2 with explicit Text treatment</h2>
+          <p>Native paragraph remains ordinary prose rather than a Paragraph component.</p>
+        </article>
+      `));
     }
 
     if (port === 'react') {

@@ -1,0 +1,86 @@
+@import "../tokens.css";
+
+@layer vyrnforge.foundation {
+  :root {
+    --_vf-type-display-lg-font-family: var(--vf-font-family-display);
+    --_vf-type-display-lg-font-size: clamp(var(--vf-font-size-4xl), 2rem + 4vw, var(--vf-font-size-6xl));
+    --_vf-type-display-lg-font-weight: var(--vf-font-weight-bold);
+    --_vf-type-display-lg-line-height: var(--vf-line-height-none);
+    --_vf-type-display-lg-letter-spacing: var(--vf-letter-spacing-tighter);
+
+    --_vf-type-display-md-font-family: var(--vf-font-family-display);
+    --_vf-type-display-md-font-size: clamp(var(--vf-font-size-3xl), 1.75rem + 3vw, var(--vf-font-size-5xl));
+    --_vf-type-display-md-font-weight: var(--vf-font-weight-bold);
+    --_vf-type-display-md-line-height: var(--vf-line-height-none);
+    --_vf-type-display-md-letter-spacing: var(--vf-letter-spacing-tighter);
+
+    --_vf-type-display-sm-font-family: var(--vf-font-family-display);
+    --_vf-type-display-sm-font-size: clamp(var(--vf-font-size-2xl), 1.5rem + 2vw, var(--vf-font-size-4xl));
+    --_vf-type-display-sm-font-weight: var(--vf-font-weight-semibold);
+    --_vf-type-display-sm-line-height: var(--vf-line-height-tight);
+    --_vf-type-display-sm-letter-spacing: var(--vf-letter-spacing-tight);
+
+    --_vf-type-heading-lg-font-size: var(--vf-font-size-3xl);
+    --_vf-type-heading-lg-font-weight: var(--vf-font-weight-semibold);
+    --_vf-type-heading-lg-line-height: var(--vf-line-height-tight);
+    --_vf-type-heading-lg-letter-spacing: var(--vf-letter-spacing-tight);
+
+    --_vf-type-heading-md-font-size: var(--vf-font-size-2xl);
+    --_vf-type-heading-md-font-weight: var(--vf-font-weight-semibold);
+    --_vf-type-heading-md-line-height: var(--vf-line-height-tight);
+    --_vf-type-heading-md-letter-spacing: var(--vf-letter-spacing-tight);
+
+    --_vf-type-heading-sm-font-size: var(--vf-font-size-xl);
+    --_vf-type-heading-sm-font-weight: var(--vf-font-weight-semibold);
+    --_vf-type-heading-sm-line-height: var(--vf-line-height-tight);
+
+    --_vf-type-heading-xs-font-size: var(--vf-font-size-lg);
+    --_vf-type-heading-xs-font-weight: var(--vf-font-weight-semibold);
+    --_vf-type-heading-xs-line-height: var(--vf-line-height-compact);
+
+    --_vf-type-title-lg-font-size: var(--vf-font-size-xl);
+    --_vf-type-title-lg-font-weight: var(--vf-font-weight-semibold);
+    --_vf-type-title-lg-line-height: var(--vf-line-height-compact);
+
+    --_vf-type-title-md-font-size: var(--vf-font-size-lg);
+    --_vf-type-title-md-font-weight: var(--vf-font-weight-semibold);
+    --_vf-type-title-md-line-height: var(--vf-line-height-compact);
+
+    --_vf-type-title-sm-font-size: var(--vf-font-size-md);
+    --_vf-type-title-sm-font-weight: var(--vf-font-weight-semibold);
+    --_vf-type-title-sm-line-height: var(--vf-line-height-compact);
+
+    --_vf-type-body-lg-font-size: var(--vf-font-size-lg);
+    --_vf-type-body-lg-line-height: var(--vf-line-height-relaxed);
+
+    --_vf-type-body-md-font-family: var(--vf-font-family-sans);
+    --_vf-type-body-md-font-size: var(--vf-font-size-md);
+    --_vf-type-body-md-font-weight: var(--vf-font-weight-regular);
+    --_vf-type-body-md-line-height: var(--vf-line-height-normal);
+    --_vf-type-body-md-letter-spacing: var(--vf-letter-spacing-normal);
+    --_vf-type-body-md-transform: none;
+
+    --_vf-type-body-sm-font-size: var(--vf-font-size-sm);
+
+    --_vf-type-label-lg-font-size: var(--vf-font-size-md);
+    --_vf-type-label-lg-font-weight: var(--vf-font-weight-semibold);
+    --_vf-type-label-lg-line-height: var(--vf-line-height-compact);
+
+    --_vf-type-label-md-font-size: var(--vf-font-size-sm);
+    --_vf-type-label-md-font-weight: var(--vf-font-weight-semibold);
+    --_vf-type-label-md-line-height: var(--vf-line-height-compact);
+
+    --_vf-type-label-sm-font-size: var(--vf-font-size-xs);
+    --_vf-type-label-sm-font-weight: var(--vf-font-weight-semibold);
+    --_vf-type-label-sm-line-height: var(--vf-line-height-compact);
+
+    --_vf-type-caption-font-size: var(--vf-font-size-xs);
+    --_vf-type-caption-line-height: var(--vf-line-height-normal);
+
+    --_vf-type-overline-font-size: var(--vf-font-size-xs);
+    --_vf-type-overline-font-weight: var(--vf-font-weight-semibold);
+    --_vf-type-overline-line-height: var(--vf-line-height-compact);
+    --_vf-type-overline-letter-spacing: var(--vf-letter-spacing-wider);
+    --_vf-type-overline-transform: uppercase;
+  }
+}

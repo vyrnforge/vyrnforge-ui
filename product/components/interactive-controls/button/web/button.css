@@ -1,3 +1,5 @@
+@layer vyrnforge.reset, vyrnforge.tokens, vyrnforge.themes, vyrnforge.foundation, vyrnforge.components;
+
 @import "../../styles/tokens.css";
 
 @layer vyrnforge.components {
@@ -22,12 +24,8 @@
     color: var(--_vf-button-foreground);
     cursor: pointer;
     display: inline-flex;
-    font-family: var(--vf-control-font-family);
-    font-size: var(--_vf-button-font-size);
-    font-weight: var(--vf-control-font-weight);
     gap: var(--_vf-button-gap);
     justify-content: center;
-    line-height: 1.2;
     min-block-size: var(--_vf-button-block-size);
     padding-block: 0.5rem;
     padding-inline: var(--_vf-button-padding-inline);
@@ -37,6 +35,13 @@
       background-color var(--vf-control-motion-duration) var(--vf-motion-easing-standard),
       border-color var(--vf-control-motion-duration) var(--vf-motion-easing-standard);
     user-select: none;
+  }
+
+  :where([data-vf-button]:not([data-vf-text])) {
+    font-family: var(--vf-control-font-family);
+    font-size: var(--_vf-button-font-size);
+    font-weight: var(--vf-control-font-weight);
+    line-height: 1.2;
   }
 
   :where([data-vf-button][data-vf-variant="secondary"]) {
