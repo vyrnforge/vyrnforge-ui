@@ -1,7 +1,11 @@
 import { mkdir, readFile, writeFile } from 'node:fs/promises';
 import path from 'node:path';
 
-const stripTokenImport = (css) => css.replace('@import "../../styles/tokens.css";\n', '').replace('@import "./tokens.css";\n', '');
+const stripFoundationImports = (css) => css
+  .replace('@import "../../styles/tokens.css";\n', '')
+  .replace('@import "../../styles/internal/typography-roles.css";\n', '')
+  .replace('@import "./tokens.css";\n', '')
+  .replace('@import "./internal/typography-roles.css";\n', '');
 
 export const browserFixture = {
   component: 'text',
@@ -11,11 +15,12 @@ export const browserFixture = {
     await mkdir(outDir, { recursive: true });
 
     const tokensCss = await readFile(path.join(root, 'packages/web/dist/styles/tokens.css'), 'utf8');
-    const textCss = stripTokenImport(await readFile(path.join(root, 'packages/web/dist/components/text/text.css'), 'utf8'));
-    const nativeElementsCss = stripTokenImport(await readFile(path.join(root, 'packages/web/dist/styles/native-elements.css'), 'utf8'));
+    const textCss = stripFoundationImports(await readFile(path.join(root, 'packages/web/dist/components/text/text.css'), 'utf8'));
+    const typographyRolesCss = stripFoundationImports(await readFile(path.join(root, 'packages/web/dist/styles/internal/typography-roles.css'), 'utf8'));
+    const nativeElementsCss = stripFoundationImports(await readFile(path.join(root, 'packages/web/dist/styles/native-elements.css'), 'utf8'));
     const compositionCss = port === 'web'
       ? await Promise.all(['button', 'link', 'code', 'kbd', 'mark'].map(async (component) =>
-          stripTokenImport(await readFile(path.join(root, `packages/web/dist/components/${component}/${component}.css`), 'utf8'))
+          stripFoundationImports(await readFile(path.join(root, `packages/web/dist/components/${component}/${component}.css`), 'utf8'))
         ))
       : [];
     const customCss = '[data-vf-text][data-vf-text-variant="poster"] { font-size: 2.625rem; font-weight: 700; }';
@@ -23,7 +28,7 @@ export const browserFixture = {
     // Component CSS intentionally appears before Text CSS here. The canonical
     // layer order must keep component presentation above the typography foundation
     // regardless of stylesheet import order.
-    await writeFile(path.join(outDir, 'text.css'), `${tokensCss}\n${nativeElementsCss}\n${compositionCss.join('\n')}\n${textCss}\n${customCss}`);
+    await writeFile(path.join(outDir, 'text.css'), `${tokensCss}\n${typographyRolesCss}\n${nativeElementsCss}\n${compositionCss.join('\n')}\n${textCss}\n${customCss}`);
 
     const page = (body) => `<!doctype html><html lang="en"><head><meta charset="utf-8"><link rel="stylesheet" href="./text.css"><title>Text fixture</title></head><body><main><h1>Text fixture</h1>${body}</main></body></html>`;
 

@@ -1,6 +1,7 @@
 @layer vyrnforge.reset, vyrnforge.tokens, vyrnforge.themes, vyrnforge.foundation, vyrnforge.components;
 
 @import "./tokens.css";
+@import "./internal/typography-roles.css";
 
 @layer vyrnforge.foundation {
   :where([data-vf-prose]) {
@@ -10,16 +11,16 @@
   }
 
   :where([data-vf-prose]) :where(h1, h2, h3, h4, h5, h6) {
-    font-weight: var(--vf-font-weight-semibold);
-    letter-spacing: var(--vf-letter-spacing-tight);
-    line-height: var(--vf-line-height-tight);
+    font-weight: var(--_vf-type-heading-sm-font-weight);
+    letter-spacing: var(--_vf-type-heading-md-letter-spacing);
+    line-height: var(--_vf-type-heading-sm-line-height);
     margin-block: 0 var(--vf-space-sm);
   }
 
-  :where([data-vf-prose]) :where(h1) { font-size: var(--vf-font-size-3xl); }
-  :where([data-vf-prose]) :where(h2) { font-size: var(--vf-font-size-2xl); }
-  :where([data-vf-prose]) :where(h3) { font-size: var(--vf-font-size-xl); }
-  :where([data-vf-prose]) :where(h4, h5, h6) { font-size: var(--vf-font-size-lg); }
+  :where([data-vf-prose]) :where(h1) { font-size: var(--_vf-type-heading-lg-font-size); }
+  :where([data-vf-prose]) :where(h2) { font-size: var(--_vf-type-heading-md-font-size); }
+  :where([data-vf-prose]) :where(h3) { font-size: var(--_vf-type-heading-sm-font-size); }
+  :where([data-vf-prose]) :where(h4, h5, h6) { font-size: var(--_vf-type-heading-xs-font-size); }
 
   :where([data-vf-prose]) :where(p, blockquote, figure, ul, ol, address) { margin-block: 0 var(--vf-space-md); }
   :where([data-vf-prose]) :where(blockquote) {
