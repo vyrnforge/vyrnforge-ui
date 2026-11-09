@@ -26,7 +26,7 @@
     "typecheck": {
       "executor": "nx:run-commands",
       "dependsOn": [
-        "^build"
+        "build"
       ],
       "options": {
         "command": "pnpm exec tsc -p packages/core/tsconfig.json --noEmit && pnpm exec tsc -p packages/core/tsconfig.test.json"

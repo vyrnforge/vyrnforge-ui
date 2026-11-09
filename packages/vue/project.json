@@ -32,7 +32,7 @@
     "typecheck": {
       "executor": "nx:run-commands",
       "dependsOn": [
-        "^build"
+        "build"
       ],
       "options": {
         "command": "node tooling/product/typecheck-projected-package.mjs vue && pnpm exec tsc -p packages/vue/tsconfig.test.json"
