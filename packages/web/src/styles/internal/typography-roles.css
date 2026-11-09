@@ -53,8 +53,12 @@
     --_vf-type-body-lg-font-size: var(--vf-font-size-lg);
     --_vf-type-body-lg-line-height: var(--vf-line-height-relaxed);
 
+    --_vf-type-body-md-font-family: var(--vf-font-family-sans);
     --_vf-type-body-md-font-size: var(--vf-font-size-md);
+    --_vf-type-body-md-font-weight: var(--vf-font-weight-regular);
     --_vf-type-body-md-line-height: var(--vf-line-height-normal);
+    --_vf-type-body-md-letter-spacing: var(--vf-letter-spacing-normal);
+    --_vf-type-body-md-transform: none;
 
     --_vf-type-body-sm-font-size: var(--vf-font-size-sm);
 

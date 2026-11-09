@@ -7,12 +7,12 @@
    semantic/component hook; component-layer presentation still owns non-typographic UI. */
 @layer vyrnforge.foundation {
   [data-vf-text] {
-    --_vf-text-font-family: var(--vf-font-family-sans);
-    --_vf-text-font-size: var(--vf-font-size-md);
-    --_vf-text-font-weight: var(--vf-font-weight-regular);
-    --_vf-text-line-height: var(--vf-line-height-normal);
-    --_vf-text-letter-spacing: var(--vf-letter-spacing-normal);
-    --_vf-text-transform: none;
+    --_vf-text-font-family: var(--_vf-type-body-md-font-family);
+    --_vf-text-font-size: var(--_vf-type-body-md-font-size);
+    --_vf-text-font-weight: var(--_vf-type-body-md-font-weight);
+    --_vf-text-line-height: var(--_vf-type-body-md-line-height);
+    --_vf-text-letter-spacing: var(--_vf-type-body-md-letter-spacing);
+    --_vf-text-transform: var(--_vf-type-body-md-transform);
 
     color: var(--vf-color-text);
     font-family: var(--_vf-text-font-family);
@@ -138,6 +138,6 @@
     --_vf-text-font-weight: var(--_vf-type-overline-font-weight);
     --_vf-text-line-height: var(--_vf-type-overline-line-height);
     --_vf-text-letter-spacing: var(--_vf-type-overline-letter-spacing);
-    --_vf-text-transform: uppercase;
+    --_vf-text-transform: var(--_vf-type-overline-transform);
   }
 }
