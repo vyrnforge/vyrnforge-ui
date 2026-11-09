@@ -3946,8 +3946,8 @@ export interface TemporalInputProps extends Omit<InputHTMLAttributes<HTMLInputEl
 export { TemporalInputType }
 
 // @public (undocumented)
-const Text_2: <Element extends TextElement = 'span'>(props: TextProps<Element> & {
-    ref?: ComponentPropsWithRef<Element>['ref'];
+const Text_2: <Element extends TextElement = "span">(props: TextProps<Element> & {
+    ref?: ComponentPropsWithRef<Element>["ref"];
 }) => ReactElement | null;
 export { Text_2 as Text }
 
