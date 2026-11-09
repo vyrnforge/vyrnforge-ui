@@ -1,15 +1,7 @@
 # Code
 
-Token-driven presentation for native inline and block code without replacing code/pre semantics.
+Code is specialized typography for native inline and block code.
 
-## Native baseline
+Use native `code`/`pre` semantics and load `@vyrnforge/web/styles/code.css`. Code presentation may compose with the shared Text typography hooks on the same native element. The Text role controls shared size/weight/line-height treatment; Code retains monospace identity and code-specific surface treatment.
 
-Use the native semantic element or authored semantic context defined by the Layer 1 contract. VyrnForge adds presentation only; browser semantics and authored attributes remain authoritative.
-
-## Accessibility
-
-Follow the Layer 1 contract's consumer responsibilities. This primitive adds no custom keyboard interaction. Forced-colors and reduced-motion behavior apply where relevant.
-
-## Native Web
-
-Load `@vyrnforge/web/styles/code.css` and use its documented `data-vf-*` hook.
+Code is read-only presentation. Editing, caret/selection behavior, syntax engines, autocomplete, diagnostics, and CodeEditor experiences belong to higher layers.
