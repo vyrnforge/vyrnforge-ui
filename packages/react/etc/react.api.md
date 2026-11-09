@@ -15,6 +15,7 @@ import { ClusterAlign } from '@vyrnforge/web/layout';
 import { ClusterJustify } from '@vyrnforge/web/layout';
 import { ComponentProps } from 'react';
 import { ComponentPropsWithoutRef } from 'react';
+import { ComponentPropsWithRef } from 'react';
 import { CompositionEventHandler } from 'react';
 import { ContainerSize } from '@vyrnforge/web/layout';
 import { CSSProperties } from 'react';
@@ -3945,8 +3946,7 @@ export interface TemporalInputProps extends Omit<InputHTMLAttributes<HTMLInputEl
 export { TemporalInputType }
 
 // @public (undocumented)
-const Text_2: ForwardRefExoticComponent<TextProps & RefAttributes<HTMLElement>>;
-export { Text_2 as Text }
+export const Text: TextComponent
 
 // @public (undocumented)
 export const Textarea: ForwardRefExoticComponent<TextareaProps & RefAttributes<HTMLTextAreaElement>>;
@@ -3955,15 +3955,18 @@ export const Textarea: ForwardRefExoticComponent<TextareaProps & RefAttributes<H
 export type TextareaProps = TextareaHTMLAttributes<HTMLTextAreaElement>;
 
 // @public (undocumented)
-export type TextElement = 'span' | 'p' | 'div' | 'strong' | 'em' | 'small' | 'label' | 'h1' | 'h2' | 'h3' | 'h4' | 'h5' | 'h6';
+export type TextElement = 'span' | 'p' | 'div' | 'h1' | 'h2' | 'h3' | 'h4' | 'h5' | 'h6' | 'blockquote' | 'q' | 'cite' | 'strong' | 'em' | 'small' | 'mark' | 'abbr' | 'sub' | 'sup' | 'del' | 'ins' | 'time' | 'figcaption';
 
 // @public (undocumented)
-export interface TextProps extends HTMLAttributes<HTMLElement> {
-    // (undocumented)
-    as?: TextElement;
-    // (undocumented)
+export type TextComponent = <Element extends TextElement = 'span'>(props: TextProps<Element> & {
+    ref?: ComponentPropsWithRef<Element>['ref'];
+}) => ReactElement | null;
+
+// @public (undocumented)
+export type TextProps<Element extends TextElement = 'span'> = {
+    as?: Element;
     variant?: TextVariant;
-}
+} & Omit<ComponentPropsWithoutRef<Element>, 'as'>;
 
 export { TextVariant }
 
