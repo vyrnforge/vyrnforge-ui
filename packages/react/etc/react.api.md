@@ -997,7 +997,8 @@ suppressHydrationWarning?: boolean | undefined;
 accessKey?: string | undefined;
 autoCapitalize?: "off" | "none" | "on" | "sentences" | "words" | "characters" | undefined | (string & {});
 autoFocus?: boolean | undefined;
-className?: string | undefined;contentEditable?: (boolean | "true" | "false") | "inherit" | "plaintext-only" | undefined;
+className?: string | undefined;
+contentEditable?: (boolean | "true" | "false") | "inherit" | "plaintext-only" | undefined;
 contextMenu?: string | undefined;
 dir?: string | undefined;
 draggable?: (boolean | "true" | "false") | undefined;
@@ -1996,7 +1997,8 @@ export interface FileUploaderRootProps extends ComponentPropsWithoutRef<'div'> {
 // @public (undocumented)
 export const Grid: ForwardRefExoticComponent<GridProps & RefAttributes<HTMLElement>>;
 
-// @public (undocumented)export interface GridProps extends HTMLAttributes<HTMLElement> {
+// @public (undocumented)
+export interface GridProps extends HTMLAttributes<HTMLElement> {
     // (undocumented)
     as?: LayoutElement;
     // (undocumented)
@@ -2995,7 +2997,8 @@ export type SwitchProps = Omit<InputHTMLAttributes<HTMLInputElement>, 'type' | '
 // @public (undocumented)
 export type TabsActivation = 'automatic' | 'manual';
 
-// @public (undocumented)export function TabsList(input: TabsListProps): DetailedReactHTMLElement<    {
+// @public (undocumented)
+export function TabsList(input: TabsListProps): DetailedReactHTMLElement<    {
 role: "tablist";
 'aria-orientation': TabsOrientation;
 'data-vf-tabs-list': string;
@@ -3994,7 +3997,8 @@ style?: CSSProperties | undefined;
 tabIndex?: number | undefined | undefined;
 translate?: "yes" | "no" | undefined | undefined;
 radioGroup?: string | undefined | undefined;
-role?: AriaRole | undefined;about?: string | undefined | undefined;
+role?: AriaRole | undefined;
+about?: string | undefined | undefined;
 content?: string | undefined | undefined;
 datatype?: string | undefined | undefined;
 inlist?: any;
