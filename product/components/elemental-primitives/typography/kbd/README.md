@@ -1,5 +1,10 @@
-# Kbd
+# Typography / Kbd
 
-Presentation for native keyboard-input semantics without custom interaction.
+Kbd is the specialized keyboard-input text member of the Layer 1 Typography family.
 
-Canonical semantics and accessibility requirements are governed by **VyrnForge — Layer 1 Elemental Primitives Contract**. Native Web presentation is exposed from `@vyrnforge/web/styles/kbd.css`. This unit introduces no custom keyboard model or Core runtime dependency.
+- Native `kbd` semantics remain authoritative.
+- Kbd owns keycap/keyboard-input presentation and intrinsic monospace identity.
+- Kbd does not create a separate typography scale. Explicit Text hooks may supply a shared typography role while Kbd retains its intrinsic presentation.
+- Kbd introduces no keyboard interaction, shortcut handling, focus behavior, or Core runtime dependency.
+
+Canonical Web presentation is exposed from `@vyrnforge/web/styles/kbd.css`.
