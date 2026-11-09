@@ -1,7 +1,11 @@
+@layer vyrnforge.reset, vyrnforge.tokens, vyrnforge.themes, vyrnforge.foundation, vyrnforge.components;
+
 @import "../../styles/tokens.css";
 
-@layer vyrnforge.components {
-  :where([data-vf-text]) {
+/* Text is an opt-in typography treatment. It may share an element with another
+   semantic/component hook; component-layer presentation still owns non-typographic UI. */
+@layer vyrnforge.foundation {
+  [data-vf-text] {
     --_vf-text-font-family: var(--vf-font-family-sans);
     --_vf-text-font-size: var(--vf-font-size-md);
     --_vf-text-font-weight: var(--vf-font-weight-regular);
@@ -19,7 +23,7 @@
     text-transform: var(--_vf-text-transform);
   }
 
-  :where([data-vf-text][data-vf-text-variant="display-lg"]) {
+  :where([data-vf-text])[data-vf-text-variant="display-lg"] {
     --_vf-text-font-family: var(--vf-font-family-display);
     --_vf-text-font-size: clamp(var(--vf-font-size-4xl), 2rem + 4vw, var(--vf-font-size-6xl));
     --_vf-text-font-weight: var(--vf-font-weight-bold);
@@ -27,7 +31,7 @@
     --_vf-text-letter-spacing: var(--vf-letter-spacing-tighter);
   }
 
-  :where([data-vf-text][data-vf-text-variant="display-md"]) {
+  :where([data-vf-text])[data-vf-text-variant="display-md"] {
     --_vf-text-font-family: var(--vf-font-family-display);
     --_vf-text-font-size: clamp(var(--vf-font-size-3xl), 1.75rem + 3vw, var(--vf-font-size-5xl));
     --_vf-text-font-weight: var(--vf-font-weight-bold);
@@ -35,7 +39,7 @@
     --_vf-text-letter-spacing: var(--vf-letter-spacing-tighter);
   }
 
-  :where([data-vf-text][data-vf-text-variant="display-sm"]) {
+  :where([data-vf-text])[data-vf-text-variant="display-sm"] {
     --_vf-text-font-family: var(--vf-font-family-display);
     --_vf-text-font-size: clamp(var(--vf-font-size-2xl), 1.5rem + 2vw, var(--vf-font-size-4xl));
     --_vf-text-font-weight: var(--vf-font-weight-semibold);
@@ -43,92 +47,92 @@
     --_vf-text-letter-spacing: var(--vf-letter-spacing-tight);
   }
 
-  :where([data-vf-text][data-vf-text-variant="heading-lg"]) {
+  :where([data-vf-text])[data-vf-text-variant="heading-lg"] {
     --_vf-text-font-size: var(--vf-font-size-3xl);
     --_vf-text-font-weight: var(--vf-font-weight-semibold);
     --_vf-text-line-height: var(--vf-line-height-tight);
     --_vf-text-letter-spacing: var(--vf-letter-spacing-tight);
   }
 
-  :where([data-vf-text][data-vf-text-variant="heading-md"]) {
+  :where([data-vf-text])[data-vf-text-variant="heading-md"] {
     --_vf-text-font-size: var(--vf-font-size-2xl);
     --_vf-text-font-weight: var(--vf-font-weight-semibold);
     --_vf-text-line-height: var(--vf-line-height-tight);
     --_vf-text-letter-spacing: var(--vf-letter-spacing-tight);
   }
 
-  :where([data-vf-text][data-vf-text-variant="heading-sm"]),
-  :where([data-vf-text][data-vf-text-variant="heading"]) {
+  :where([data-vf-text])[data-vf-text-variant="heading-sm"],
+  :where([data-vf-text])[data-vf-text-variant="heading"] {
     --_vf-text-font-size: var(--vf-font-size-xl);
     --_vf-text-font-weight: var(--vf-font-weight-semibold);
     --_vf-text-line-height: var(--vf-line-height-tight);
   }
 
-  :where([data-vf-text][data-vf-text-variant="heading-xs"]) {
+  :where([data-vf-text])[data-vf-text-variant="heading-xs"] {
     --_vf-text-font-size: var(--vf-font-size-lg);
     --_vf-text-font-weight: var(--vf-font-weight-semibold);
     --_vf-text-line-height: var(--vf-line-height-compact);
   }
 
-  :where([data-vf-text][data-vf-text-variant="title-lg"]) {
+  :where([data-vf-text])[data-vf-text-variant="title-lg"] {
     --_vf-text-font-size: var(--vf-font-size-xl);
     --_vf-text-font-weight: var(--vf-font-weight-semibold);
     --_vf-text-line-height: var(--vf-line-height-compact);
   }
 
-  :where([data-vf-text][data-vf-text-variant="title-md"]),
-  :where([data-vf-text][data-vf-text-variant="title"]) {
+  :where([data-vf-text])[data-vf-text-variant="title-md"],
+  :where([data-vf-text])[data-vf-text-variant="title"] {
     --_vf-text-font-size: var(--vf-font-size-lg);
     --_vf-text-font-weight: var(--vf-font-weight-semibold);
     --_vf-text-line-height: var(--vf-line-height-compact);
   }
 
-  :where([data-vf-text][data-vf-text-variant="title-sm"]) {
+  :where([data-vf-text])[data-vf-text-variant="title-sm"] {
     --_vf-text-font-size: var(--vf-font-size-md);
     --_vf-text-font-weight: var(--vf-font-weight-semibold);
     --_vf-text-line-height: var(--vf-line-height-compact);
   }
 
-  :where([data-vf-text][data-vf-text-variant="body-lg"]) {
+  :where([data-vf-text])[data-vf-text-variant="body-lg"] {
     --_vf-text-font-size: var(--vf-font-size-lg);
     --_vf-text-line-height: var(--vf-line-height-relaxed);
   }
 
-  :where([data-vf-text][data-vf-text-variant="body-md"]),
-  :where([data-vf-text][data-vf-text-variant="body"]) {
+  :where([data-vf-text])[data-vf-text-variant="body-md"],
+  :where([data-vf-text])[data-vf-text-variant="body"] {
     --_vf-text-font-size: var(--vf-font-size-md);
     --_vf-text-line-height: var(--vf-line-height-normal);
   }
 
-  :where([data-vf-text][data-vf-text-variant="body-sm"]) {
+  :where([data-vf-text])[data-vf-text-variant="body-sm"] {
     --_vf-text-font-size: var(--vf-font-size-sm);
   }
 
-  :where([data-vf-text][data-vf-text-variant="label-lg"]) {
+  :where([data-vf-text])[data-vf-text-variant="label-lg"] {
     --_vf-text-font-size: var(--vf-font-size-md);
     --_vf-text-font-weight: var(--vf-font-weight-semibold);
     --_vf-text-line-height: var(--vf-line-height-compact);
   }
 
-  :where([data-vf-text][data-vf-text-variant="label-md"]),
-  :where([data-vf-text][data-vf-text-variant="label"]) {
+  :where([data-vf-text])[data-vf-text-variant="label-md"],
+  :where([data-vf-text])[data-vf-text-variant="label"] {
     --_vf-text-font-size: var(--vf-font-size-sm);
     --_vf-text-font-weight: var(--vf-font-weight-semibold);
     --_vf-text-line-height: var(--vf-line-height-compact);
   }
 
-  :where([data-vf-text][data-vf-text-variant="label-sm"]) {
+  :where([data-vf-text])[data-vf-text-variant="label-sm"] {
     --_vf-text-font-size: var(--vf-font-size-xs);
     --_vf-text-font-weight: var(--vf-font-weight-semibold);
     --_vf-text-line-height: var(--vf-line-height-compact);
   }
 
-  :where([data-vf-text][data-vf-text-variant="caption"]) {
+  :where([data-vf-text])[data-vf-text-variant="caption"] {
     --_vf-text-font-size: var(--vf-font-size-xs);
     --_vf-text-line-height: var(--vf-line-height-normal);
   }
 
-  :where([data-vf-text][data-vf-text-variant="overline"]) {
+  :where([data-vf-text])[data-vf-text-variant="overline"] {
     --_vf-text-font-size: var(--vf-font-size-xs);
     --_vf-text-font-weight: var(--vf-font-weight-semibold);
     --_vf-text-line-height: var(--vf-line-height-compact);

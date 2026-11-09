@@ -32,3 +32,56 @@ test('Text preserves native semantics and shared typography across ports', async
   const results = await new AxeBuilder({ page }).analyze();
   expect(results.violations).toEqual([]);
 });
+
+test('Native Web composes Text typography with semantic and component hooks on one element', async ({ page }) => {
+  test.skip(port !== 'web', 'Native Web composition evidence');
+
+  await page.goto('/components/text/web.html');
+
+  const semanticHeading = page.locator('#semantic-heading');
+  await expect(semanticHeading).toHaveJSProperty('tagName', 'H1');
+  expect(await semanticHeading.evaluate((element) => getComputedStyle(element).fontSize)).toBe('14px');
+  expect(await semanticHeading.evaluate((element) => getComputedStyle(element).fontWeight)).toBe('400');
+
+  const link = page.locator('#composed-link');
+  await expect(link).toHaveJSProperty('tagName', 'A');
+  await expect(link).toHaveAttribute('href', '#target');
+  expect(await link.evaluate((element) => getComputedStyle(element).fontSize)).toBe('14px');
+  expect(await link.evaluate((element) => getComputedStyle(element).fontWeight)).toBe('400');
+  expect(await link.evaluate((element) => getComputedStyle(element).textDecorationLine)).toContain('underline');
+  expect(await link.evaluate((element) => getComputedStyle(element).color)).not.toBe('rgb(24, 24, 27)');
+
+  const button = page.locator('#composed-button');
+  await expect(button).toHaveJSProperty('tagName', 'BUTTON');
+  expect(await button.evaluate((element) => getComputedStyle(element).fontSize)).toBe('12px');
+  expect(await button.evaluate((element) => getComputedStyle(element).fontWeight)).toBe('600');
+  expect(await button.evaluate((element) => getComputedStyle(element).backgroundColor)).not.toBe('rgba(0, 0, 0, 0)');
+  expect(await button.evaluate((element) => getComputedStyle(element).color)).not.toBe('rgb(24, 24, 27)');
+
+  const defaultCode = page.locator('#default-code');
+  const composedCode = page.locator('#composed-code');
+  expect(await defaultCode.evaluate((element) => getComputedStyle(element).fontSize)).toBe('14px');
+  expect(await composedCode.evaluate((element) => getComputedStyle(element).fontSize)).toBe('20px');
+  expect(await composedCode.evaluate((element) => getComputedStyle(element).fontFamily)).toMatch(/mono/i);
+
+  const defaultKbd = page.locator('#default-kbd');
+  const composedKbd = page.locator('#composed-kbd');
+  expect(await defaultKbd.evaluate((element) => getComputedStyle(element).fontSize)).toBe('14px');
+  expect(await composedKbd.evaluate((element) => getComputedStyle(element).fontSize)).toBe('14px');
+  expect(await composedKbd.evaluate((element) => getComputedStyle(element).fontFamily)).toMatch(/mono/i);
+
+  const mark = page.locator('#composed-mark');
+  await expect(mark).toHaveJSProperty('tagName', 'MARK');
+  expect(await mark.evaluate((element) => getComputedStyle(element).fontSize)).toBe('20px');
+  expect(await mark.evaluate((element) => getComputedStyle(element).backgroundColor)).not.toBe('rgba(0, 0, 0, 0)');
+
+  const proseHeading = page.locator('#prose-heading');
+  const proseExplicit = page.locator('#prose-explicit');
+  await expect(proseHeading).toHaveJSProperty('tagName', 'H1');
+  await expect(proseExplicit).toHaveJSProperty('tagName', 'H2');
+  expect(await proseHeading.evaluate((element) => getComputedStyle(element).fontSize)).toBe('36px');
+  expect(await proseExplicit.evaluate((element) => getComputedStyle(element).fontSize)).toBe('14px');
+
+  const results = await new AxeBuilder({ page }).analyze();
+  expect(results.violations).toEqual([]);
+});

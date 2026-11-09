@@ -1,10 +1,10 @@
+@layer vyrnforge.reset, vyrnforge.tokens, vyrnforge.themes, vyrnforge.foundation, vyrnforge.components;
+
 @import "../../styles/tokens.css";
 
 @layer vyrnforge.components {
   :where(a[data-vf-link]) {
     color: var(--vf-color-accent-background);
-    font-family: inherit;
-    font-weight: var(--vf-font-weight-medium);
     text-decoration-color: currentColor;
     text-decoration-line: underline;
     text-decoration-thickness: 0.075em;
@@ -12,6 +12,10 @@
     transition:
       color var(--vf-control-motion-duration) var(--vf-motion-easing-standard),
       text-decoration-thickness var(--vf-control-motion-duration) var(--vf-motion-easing-standard);
+  }
+
+  :where(a[data-vf-link]:not([data-vf-text])) {
+    font-weight: var(--vf-font-weight-medium);
   }
 
   :where(a[data-vf-link]:hover) {
