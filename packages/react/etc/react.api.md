@@ -3946,7 +3946,8 @@ export interface TemporalInputProps extends Omit<InputHTMLAttributes<HTMLInputEl
 export { TemporalInputType }
 
 // @public (undocumented)
-export const Text: TextComponent
+const Text_2: TextComponent;
+export { Text_2 as Text }
 
 // @public (undocumented)
 export const Textarea: ForwardRefExoticComponent<TextareaProps & RefAttributes<HTMLTextAreaElement>>;
