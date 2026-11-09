@@ -1,15 +1,7 @@
 # Kbd
 
-Presentation for native keyboard-input semantics without custom interaction.
+Kbd is specialized typography for native keyboard-input semantics.
 
-## Native baseline
+Use native `kbd` semantics and load `@vyrnforge/web/styles/kbd.css`. Kbd presentation may compose with the shared Text typography hooks on the same native element. The Text role controls shared size/weight/line-height treatment; Kbd retains monospace identity and keycap presentation.
 
-Use the native semantic element or authored semantic context defined by the Layer 1 contract. VyrnForge adds presentation only; browser semantics and authored attributes remain authoritative.
-
-## Accessibility
-
-Follow the Layer 1 contract's consumer responsibilities. This primitive adds no custom keyboard interaction. Forced-colors and reduced-motion behavior apply where relevant.
-
-## Native Web
-
-Load `@vyrnforge/web/styles/kbd.css` and use its documented `data-vf-*` hook.
+Kbd adds no keyboard behavior or shortcut handling.
