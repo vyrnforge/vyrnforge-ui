@@ -3963,7 +3963,7 @@ export type TextComponent = <Element extends TextElement = 'span'>(props: TextPr
 }) => ReactElement | null;
 
 // @public (undocumented)
-export type TextProps<Element extends TextElement = 'span'> = {
+export type TextProps<Element extends TextElement = TextElement> = {
     as?: Element;
     variant?: TextVariant;
 } & Omit<ComponentPropsWithoutRef<Element>, 'as'>;
