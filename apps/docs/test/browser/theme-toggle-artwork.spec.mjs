@@ -74,6 +74,17 @@ test('docs AppShell and showcase use the canonical smooth dragon asset and motio
   expect(await artworkGeometry(showcaseArt)).toEqual(headerGeometry);
 
   const showcaseControl = showcaseRoot.getByRole('switch', { name: 'Dark theme' });
+  await expect(headerControl).toBeChecked();
+  await expect(showcaseControl).not.toBeChecked();
+  for (const art of [headerArt, showcaseArt]) {
+    const usesOwnGradient = await art.evaluate((svg) => {
+      const gradient = svg.querySelector('radialGradient');
+      const orb = svg.querySelector('circle[fill^="url"]');
+      return gradient !== null && orb?.getAttribute('fill') === `url(#${gradient.id})`
+        && document.getElementById(gradient.id) === gradient;
+    });
+    expect(usesOwnGradient).toBe(true);
+  }
   const showcaseLightTransform = await showcaseDragon.evaluate((element) => getComputedStyle(element).transform);
   await showcaseControl.check();
   await expect(showcaseControl).toBeChecked();
