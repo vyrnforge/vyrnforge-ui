@@ -37,10 +37,6 @@ export type TextProps<Element extends TextElement = TextElement> =
       } & Omit<ComponentPropsWithoutRef<Element>, 'as'>
     : never;
 
-export type TextComponent = <Element extends TextElement = 'span'>(
-  props: TextProps<Element> & { ref?: ComponentPropsWithRef<Element>['ref'] }
-) => ReactElement | null;
-
 const createTextElement = createElement as (type: TextElement, props: object) => ReactElement;
 
 const TextImpl = forwardRef<HTMLElement, TextProps<TextElement>>(function Text(
@@ -55,4 +51,6 @@ const TextImpl = forwardRef<HTMLElement, TextProps<TextElement>>(function Text(
   });
 });
 
-export const Text = TextImpl as TextComponent;
+export const Text = TextImpl as <Element extends TextElement = 'span'>(
+  props: TextProps<Element> & { ref?: ComponentPropsWithRef<Element>['ref'] }
+) => ReactElement | null;
