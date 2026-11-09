@@ -62,8 +62,7 @@
     --_vf-text-letter-spacing: var(--_vf-type-heading-md-letter-spacing);
   }
 
-  :where([data-vf-text])[data-vf-text-variant="heading-sm"],
-  :where([data-vf-text])[data-vf-text-variant="heading"] {
+  :where([data-vf-text])[data-vf-text-variant="heading-sm"] {
     --_vf-text-font-size: var(--_vf-type-heading-sm-font-size);
     --_vf-text-font-weight: var(--_vf-type-heading-sm-font-weight);
     --_vf-text-line-height: var(--_vf-type-heading-sm-line-height);
@@ -81,8 +80,7 @@
     --_vf-text-line-height: var(--_vf-type-title-lg-line-height);
   }
 
-  :where([data-vf-text])[data-vf-text-variant="title-md"],
-  :where([data-vf-text])[data-vf-text-variant="title"] {
+  :where([data-vf-text])[data-vf-text-variant="title-md"] {
     --_vf-text-font-size: var(--_vf-type-title-md-font-size);
     --_vf-text-font-weight: var(--_vf-type-title-md-font-weight);
     --_vf-text-line-height: var(--_vf-type-title-md-line-height);
@@ -99,8 +97,7 @@
     --_vf-text-line-height: var(--_vf-type-body-lg-line-height);
   }
 
-  :where([data-vf-text])[data-vf-text-variant="body-md"],
-  :where([data-vf-text])[data-vf-text-variant="body"] {
+  :where([data-vf-text])[data-vf-text-variant="body-md"] {
     --_vf-text-font-size: var(--_vf-type-body-md-font-size);
     --_vf-text-line-height: var(--_vf-type-body-md-line-height);
   }
@@ -115,8 +112,7 @@
     --_vf-text-line-height: var(--_vf-type-label-lg-line-height);
   }
 
-  :where([data-vf-text])[data-vf-text-variant="label-md"],
-  :where([data-vf-text])[data-vf-text-variant="label"] {
+  :where([data-vf-text])[data-vf-text-variant="label-md"] {
     --_vf-text-font-size: var(--_vf-type-label-md-font-size);
     --_vf-text-font-weight: var(--_vf-type-label-md-font-weight);
     --_vf-text-line-height: var(--_vf-type-label-md-line-height);
@@ -139,5 +135,17 @@
     --_vf-text-line-height: var(--_vf-type-overline-line-height);
     --_vf-text-letter-spacing: var(--_vf-type-overline-letter-spacing);
     --_vf-text-transform: var(--_vf-type-overline-transform);
+  }
+  :where(mark[data-vf-text]) {
+    background: var(--vf-color-accent-subtle);
+    color: var(--vf-color-text);
+    padding-inline: 0.15em;
+  }
+
+  @media (forced-colors: active) {
+    :where(mark[data-vf-text]) {
+      background: Highlight;
+      color: HighlightText;
+    }
   }
 }
