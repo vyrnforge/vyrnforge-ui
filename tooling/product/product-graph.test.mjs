@@ -29,12 +29,14 @@ test('current repository is normalized into one product graph', () => {
   const button = graph.components.find((component) => component.unitId === 'button');
   assert.ok(button);
   assert.equal(button.id, 'component:button');
+  assert.equal(button.layer, 'interactive-controls');
+  assert.equal(button.category, null);
   assert.equal(button.facets.legacyRoot, null);
-  assert.equal(button.facets.canonicalRoot, 'product/components/button/');
+  assert.equal(button.facets.canonicalRoot, 'product/components/interactive-controls/button/');
   assert.equal(button.metadataSource, 'product-unit');
   assert.equal(button.documentationGroup, 'actions');
   assert.equal(button.surfaces.react.authoringMode, 'product-unit');
-  assert.deepEqual(button.surfaces.react.authoringPaths, ['product/components/button/react/']);
+  assert.deepEqual(button.surfaces.react.authoringPaths, ['product/components/interactive-controls/button/react/']);
   assert.equal(button.surfaces.react.projectionPath, 'packages/react/src/components/button/');
   assert.equal(button.surfaces.angular.authoringMode, 'product-unit');
   assert.equal(button.surfaces.angular.projectionPath, 'packages/angular/button/src/');
@@ -44,6 +46,25 @@ test('current repository is normalized into one product graph', () => {
   assert.ok(button.surfaces.web.publicEntrypoints.includes('@vyrnforge/web/styles/button.css'));
   assert.equal(button.migration.state, 'product-unit');
   assert.deepEqual(productGraphProblems(), []);
+});
+
+test('nested component location drives package authoring but not public exports', () => {
+  const root = mkdtempSync(path.join(os.tmpdir(), 'vf-product-graph-layered-'));
+  const write = writer(root);
+  write('packages/web/package.json', JSON.stringify({
+    name: '@vyrnforge/web',
+    exports: { './styles/button.css': './dist/components/button/button.css' },
+  }));
+  write('product/components/interactive-controls/button/component.json', '{"id":"button","name":"Button"}');
+  write('product/components/interactive-controls/button/web/button.css', '[data-vf-button] {}\n');
+  const graph = discoverProductGraph(root);
+  const button = graph.components.find((component) => component.unitId === 'button');
+  assert.equal(button.facets.canonicalRoot, 'product/components/interactive-controls/button/');
+  assert.equal(button.layer, 'interactive-controls');
+  assert.deepEqual(button.surfaces.web.authoringPaths, ['product/components/interactive-controls/button/web/']);
+  assert.equal(button.surfaces.web.projectionPath, 'packages/web/src/components/button/');
+  assert.deepEqual(button.surfaces.web.publicEntrypoints, ['@vyrnforge/web/styles/button.css']);
+  assert.deepEqual(productGraphProblems(root), []);
 });
 
 test('canonical product-unit source overrides package-local authoring without changing package projection', () => {
@@ -164,4 +185,26 @@ test('canonical capabilities merge legacy package ownership into one logical nod
   assert.ok(impactCapability.nodes.includes('unit:core:capabilities:collection-navigation'));
   assert.ok(impactCapability.paths.includes('product/capabilities/collection-navigation/'));
   assert.ok(impactCapability.paths.includes('packages/core/src/capabilities/collection-navigation/'));
+});
+
+test('L1 promoted public primitives are independent Native Web product units', () => {
+  const graph = discoverProductGraph();
+  assert.equal(graph.components.some((entry) => entry.unitId === 'elemental-primitives'), false);
+
+  for (const id of ['code', 'kbd', 'mark', 'image', 'skeleton', 'color-swatch']) {
+    const component = graph.components.find((entry) => entry.unitId === id);
+    assert.ok(component, id + ' must be discovered');
+    assert.equal(component.id, 'component:' + id);
+    assert.equal(component.layer, 'elemental-primitives');
+    assert.equal(component.facets.canonicalRoot, 'product/components/elemental-primitives/' + id + '/');
+    assert.equal(component.facets.legacyRoot, null);
+    assert.equal(component.metadataSource, 'product-unit');
+    assert.equal(component.migration.state, 'product-unit');
+    assert.deepEqual(Object.keys(component.surfaces), ['web']);
+    assert.deepEqual(component.surfaces.web.authoringPaths, ['product/components/elemental-primitives/' + id + '/web/']);
+    assert.equal(component.surfaces.web.projectionPath, 'packages/web/src/components/' + id + '/');
+    assert.ok(component.surfaces.web.publicEntrypoints.includes('@vyrnforge/web/styles/' + id + '.css'));
+  }
+
+  assert.deepEqual(productGraphProblems(), []);
 });

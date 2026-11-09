@@ -1,0 +1,13 @@
+{
+  "id": "kbd/basic",
+  "title": "Kbd — basic",
+  "description": "Presentation for native keyboard-input semantics without custom interaction.",
+  "defaultFramework": "native-web",
+  "frameworks": {
+    "native-web": {
+      "label": "Native Web",
+      "language": "html",
+      "source": "native-web.html"
+    }
+  }
+}

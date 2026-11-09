@@ -1,0 +1,10 @@
+@import "../../styles/tokens.css";
+
+@layer vyrnforge.components {
+  :where(img[data-vf-image]) {
+    block-size: auto;
+    border-radius: var(--vf-radius-surface);
+    display: block;
+    max-inline-size: 100%;
+  }
+}

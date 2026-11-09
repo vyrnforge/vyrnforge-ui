@@ -12,14 +12,15 @@ test('current Button is discovered from its canonical product unit', () => {
   const button = components.find((entry) => entry.component === 'button');
   assert.ok(button);
   assert.deepEqual(Object.keys(button.ports).sort(), ['angular', 'react', 'vue', 'web']);
-  assert.equal(button.root, 'product/components/button/');
-  assert.equal(button.ports.react.paths[0], 'product/components/button/react/');
+  assert.equal(button.root, 'product/components/interactive-controls/button/');
+  assert.equal(button.ports.react.paths[0], 'product/components/interactive-controls/button/react/');
   assert.equal(button.ports.react.types, 'packages/react/test/components/button/api.types.ts');
   assert.equal(button.ports.react.ssr, 'packages/react/test/components/button/ssr.test.mjs');
-  assert.equal(button.documentationSource, 'product/components/button/docs/index.html');
-  assert.match(button.exampleManifests[0], /^product\/components\/button\/examples\//);
-  assert.equal(button.browser.fixture, 'product/components/button/test/browser/fixtures.mjs');
-  assert.equal(button.accessibilityPath, 'product/components/button/accessibility.json');
+  assert.equal(button.documentationSource, 'product/components/interactive-controls/button/docs/index.md');
+  assert.deepEqual(button.documentationSources, ['product/components/interactive-controls/button/docs/index.md']);
+  assert.match(button.exampleManifests[0], /^product\/components\/interactive-controls\/button\/examples\//);
+  assert.equal(button.browser.fixture, 'product/components/interactive-controls/button/test/browser/fixtures.mjs');
+  assert.equal(button.accessibilityPath, 'product/components/interactive-controls/button/accessibility.json');
   assert.ok(button.browser.paths.includes(button.accessibilityPath));
   assert.deepEqual(productPreparationProblems(), []);
 });
@@ -61,12 +62,59 @@ test('a newly exposed component automatically requires its owned evidence', () =
   const tabs = discoverProductUnits(root).components.find((entry) => entry.component === 'tabs');
   assert.ok(tabs);
   assert.deepEqual(Object.keys(tabs.ports).sort(), ['react', 'web']);
+  assert.equal(tabs.documentationSource, 'product/tabs/docs/index.html');
+  assert.deepEqual(tabs.documentationSources, ['product/tabs/docs/index.html']);
   assert.equal(tabs.accessibilityPath, 'product/tabs/accessibility.json');
   assert.ok(tabs.browser.paths.includes(tabs.accessibilityPath));
   const problems = productPreparationProblems(root);
   assert.ok(problems.some((problem) => problem.includes('packages/react/test/components/tabs/api.types.ts')));
   assert.ok(problems.some((problem) => problem.includes('packages/react/test/components/tabs/ssr.test.mjs')));
   assert.ok(problems.some((problem) => problem.includes('product/tabs/test/browser/fixtures.mjs')));
+});
+
+test('component discovery rejects competing model and HTML primary documentation sources', () => {
+  const root = mkdtempSync(path.join(os.tmpdir(), 'vf-product-doc-source-discovery-'));
+  const write = writer(root);
+  write('package.json', JSON.stringify({ workspaces: ['packages/web'] }));
+  write('packages/web/package.json', JSON.stringify({ name: '@vyrnforge/web', exports: { '.': './dist/index.js', './styles/button.css': './dist/components/button/button.css' } }));
+  write('packages/web/src/components/button/button.css', '[data-vf-button] {}\n');
+  write('product/button/component.json', JSON.stringify({ documentation: { group: 'Actions' } }));
+  write('product/button/docs/index.json', JSON.stringify({ format: 'vyrnforge.docs.content.v1', lede: 'Button', sections: [] }));
+  write('product/button/docs/index.html', '<h2>Button</h2>');
+  write('product/button/examples/basic/example.json', JSON.stringify({ id: 'button/basic' }));
+  const button = discoverProductUnits(root).components.find((entry) => entry.component === 'button');
+  assert.ok(button);
+  assert.deepEqual(button.documentationSources, ['product/button/docs/index.json', 'product/button/docs/index.html']);
+  const problems = productPreparationProblems(root);
+  assert.ok(problems.some((problem) => problem.includes('competing primary component documentation sources')));
+});
+
+test('native-html-first discovers Markdown docs without requiring placeholder pages for every component', () => {
+  const root = mkdtempSync(path.join(os.tmpdir(), 'vf-native-doc-rollout-'));
+  const write = writer(root);
+  write('package.json', JSON.stringify({ workspaces: ['packages/web'] }));
+  write('documentation/site/registry.json', JSON.stringify({ mode: 'native-html-first', framework: 'native-web' }));
+  write('packages/web/package.json', JSON.stringify({
+    name: '@vyrnforge/web',
+    exports: {
+      '.': './dist/index.js',
+      './styles/button.css': './dist/components/button/button.css',
+      './styles/checkbox.css': './dist/components/checkbox/checkbox.css',
+    },
+  }));
+  for (const component of ['button', 'checkbox']) {
+    write(`packages/web/src/components/${component}/${component}.css`, `[data-vf-${component}] {}\n`);
+    write(`product/${component}/component.json`, JSON.stringify({ group: 'controls' }));
+    write(`product/${component}/examples/basic/example.json`, JSON.stringify({ id: `${component}/basic` }));
+  }
+  write('product/button/docs/index.md', '# Button\n\nNative Button guidance.\n');
+  const discovery = discoverProductUnits(root);
+  const button = discovery.components.find((entry) => entry.component === 'button');
+  const checkbox = discovery.components.find((entry) => entry.component === 'checkbox');
+  assert.equal(button.documentationSource, 'product/button/docs/index.md');
+  assert.equal(checkbox.documentationSource, null);
+  const problems = productPreparationProblems(root);
+  assert.ok(!problems.some((problem) => problem.includes('missing component documentation')));
 });
 
 test('package-owned capabilities are auto-discovered with inferred dependency edges', () => {
@@ -106,4 +154,23 @@ test('component ports infer owned-unit dependencies from workspace public subpat
   const tabs = discoverProductUnits(root).components.find((entry) => entry.component === 'tabs');
   assert.ok(tabs);
   assert.deepEqual(tabs.ports.react.dependencies, ['unit:core:capabilities:collection-navigation']);
+});
+
+test('aggregate and native-element Web styles stay outside component discovery', () => {
+  const root = mkdtempSync(path.join(os.tmpdir(), 'vf-non-component-style-discovery-'));
+  const write = writer(root);
+  write('package.json', JSON.stringify({ workspaces: ['packages/web'] }));
+  write('packages/web/package.json', JSON.stringify({
+    name: '@vyrnforge/web',
+    exports: {
+      '.': './dist/index.js',
+      './styles/elemental-primitives.css': './dist/styles/elemental-primitives.css',
+      './styles/native-elements.css': './dist/styles/native-elements.css',
+    },
+  }));
+  write('packages/web/src/styles/elemental-primitives.css');
+  write('packages/web/src/styles/native-elements.css');
+  const result = discoverProductUnits(root);
+  assert.deepEqual(result.components, []);
+  assert.deepEqual(productPreparationProblems(root), []);
 });

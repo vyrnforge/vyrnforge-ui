@@ -1,9 +1,0 @@
-<section data-vf-framework-adaptation="native-web">
-  <h2>Native Web usage</h2>
-  <p>Load <code>@vyrnforge/web/styles/text.css</code>, choose the correct semantic HTML element, then opt it into Text styling with <code>data-vf-text</code> and <code>data-vf-text-variant</code>.</p>
-  <pre tabindex="0" role="region" aria-label="Native Web Text example"><code>&lt;h2 data-vf-text data-vf-text-variant="heading-md"&gt;Billing and plans&lt;/h2&gt;</code></pre>
-  <h3>API and semantics</h3>
-  <p><code>@vyrnforge/web/text</code> exports the shared <code>TextVariant</code> vocabulary and <code>TextVariantOverrides</code> augmentation point. The native element owns document semantics; the variant controls presentation only.</p>
-  <h3>Runtime model</h3>
-  <p>Text has no browser-only runtime or hydration. Existing semantic HTML remains the rendered contract. Elements applications use this same Native Web contract rather than a dedicated <code>&lt;vf-text&gt;</code> element.</p>
-</section>

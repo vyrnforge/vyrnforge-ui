@@ -1,8 +1,0 @@
-<section data-vf-framework-adaptation="elements">
-  <h2>Custom Elements adaptation</h2>
-  <p>Import <code>defineDialogElement</code> from <code>@vyrnforge/elements/dialog</code>, load the Dialog stylesheet, and register <code>&lt;vf-dialog&gt;</code> explicitly.</p>
-  <h3>Composition and state</h3>
-  <p>Place a native <code>&lt;dialog&gt;</code> inside <code>&lt;vf-dialog&gt;</code> and mark title, description, body, and close content with the documented <code>data-vf-dialog-*</code> hooks. The <code>open</code> property/attribute controls visibility and <code>backdrop-dismiss</code> opts into backdrop dismissal. Listen for cancelable <code>vf-dismiss-request</code> and committed <code>vf-open-change</code>.</p>
-  <h3>Accessibility and upgrade</h3>
-  <p>Registration upgrades authored markup, connects title/description relationships, activates modal behavior, and restores focus after close. Do not rely on cross-framework hydration semantics for the custom-element surface.</p>
-</section>

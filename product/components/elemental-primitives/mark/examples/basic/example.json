@@ -1,0 +1,13 @@
+{
+  "id": "mark/basic",
+  "title": "Mark — basic",
+  "description": "Highlight presentation on native mark semantics with token and forced-colors support.",
+  "defaultFramework": "native-web",
+  "frameworks": {
+    "native-web": {
+      "label": "Native Web",
+      "language": "html",
+      "source": "native-web.html"
+    }
+  }
+}

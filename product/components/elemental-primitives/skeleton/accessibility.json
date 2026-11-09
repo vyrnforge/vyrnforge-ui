@@ -1,0 +1,53 @@
+{
+  "schemaVersion": 1,
+  "component": "skeleton",
+  "reviewStatus": "mapped",
+  "nativeBaseline": {
+    "kind": "utility",
+    "reference": "decorative placeholder with authored loading context"
+  },
+  "wcag": {
+    "target": "2.2 AA",
+    "status": "mapped",
+    "criteria": [
+      "1.3.1",
+      "4.1.3"
+    ]
+  },
+  "aria": {
+    "status": "mapped",
+    "apgPattern": null
+  },
+  "interaction": {
+    "keyboard": "not-applicable",
+    "focus": "not-applicable",
+    "directionality": "native"
+  },
+  "ownership": {
+    "library": [
+      "keep the visual skeleton decorative when authored with aria-hidden",
+      "disable pulse animation for prefers-reduced-motion and retain a visible forced-colors fallback"
+    ],
+    "consumer": [
+      "provide aria-hidden=true on decorative skeleton shapes",
+      "communicate loading state through an appropriate surrounding aria-busy region or status message when users need that information"
+    ]
+  },
+  "forms": {
+    "status": "not-applicable"
+  },
+  "visualAccessibility": {
+    "status": "component-specific"
+  },
+  "ssrHydration": {
+    "status": "native"
+  },
+  "evidence": {
+    "browser": "required",
+    "assistiveTechnology": "not-applicable"
+  },
+  "profileVariability": [],
+  "notes": [
+    "CSS cannot add accessibility attributes; loading semantics remain an author responsibility."
+  ]
+}

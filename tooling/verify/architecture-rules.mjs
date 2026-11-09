@@ -30,7 +30,8 @@ if (
   !Array.isArray(webLintCommands) ||
   !webLintCommands.some((command) => command.includes('eslint ')) ||
   !webLintCommands.some(
-    (command) => command.includes('stylelint ') && command.includes('packages/web/src/**/*.css'),
+    (command) => command.includes('stylelint ') && command.includes('packages/web/src/**/*.css')
+      && command.includes('product/components/**/web/**/*.css'),
   )
 ) {
   throw new Error('@vyrnforge/web lint must run both ESLint and Stylelint over canonical Web CSS');

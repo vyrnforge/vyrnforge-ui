@@ -1,0 +1,21 @@
+@import "../../styles/tokens.css";
+
+@layer vyrnforge.components {
+  :where([data-vf-kbd]) {
+    background: var(--vf-color-surface);
+    border: 1px solid var(--vf-color-border-strong);
+    border-block-end-width: 2px;
+    border-radius: 0.25rem;
+    display: inline-block;
+    font-family: var(--vf-font-family-mono);
+    font-size: 0.875em;
+    min-inline-size: 1.65em;
+    padding-block: 0.05em;
+    padding-inline: 0.4em;
+    text-align: center;
+  }
+
+  @media (forced-colors: active) {
+    :where([data-vf-kbd]) { border-color: CanvasText; }
+  }
+}

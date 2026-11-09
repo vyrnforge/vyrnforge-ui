@@ -10,6 +10,22 @@ VyrnForge is a clean-slate rebuild inside an existing repository. Canonical arch
 4. Reuse an approved foundation when it is correct. Do not preserve a legacy abstraction merely because it already exists.
 5. Define observable acceptance evidence before considering the change complete.
 
+## Standard component delivery workflow
+
+For a **new component**, **migration of an existing component**, new framework surface, or material semantics/API/visual change, use [VyrnForge component delivery](.agents/skills/vyrnforge-component-delivery/SKILL.md). This is a repository-local agent skill and a human-readable review procedure; it does not replace the canonical Drive standards, Product Graph, the existing component metadata, or impact-driven testing.
+
+The same gated process applies to NEW and MIGRATE. NEW starts by proving that a distinct component is justified over native HTML, existing components or a pattern. MIGRATE starts by inventorying actual consumers and classifying existing behavior/public contracts as retain, refactor, replace, remove or defer. Both paths then require a framework-neutral contract, correct product/package ownership, an appropriate vertical slice, evidence, documentation/Changeset decisions and merge acceptance.
+
+Current delivery order is **framework-neutral contract → Native HTML/public Web CSS → Native Web documentation and browser/visual acceptance → later framework-port rollout**. Already-shipped framework ports still receive relevant regression checks; Native-first is sequencing, not a Web-owned semantic contract. Record documented exceptions when a native implementation is genuinely inapplicable.
+
+A visible UI or SVG redesign requires **actual-size browser evidence and an explicit visual acceptance decision** independent from green CI; no draft or visually rejected PR should merge. Record non-applicable tests and deferred manual evidence honestly. The PR template collects this information; CI continues to derive executable validation from the existing dependency and semantic-impact system.
+
+## Layer-based component source ownership
+
+Component product units are organized by approved architectural layer and optional domain category, for example `product/components/elemental-primitives/typography/text/`, `product/components/elemental-primitives/icon/`, and `product/components/interactive-controls/button/`. This classifies **source ownership**, not npm package names, public import paths, or component IDs. The Product Graph derives paths from the existing unit metadata, and the documentation compiler derives layer navigation from that graph. Use canonical layer contracts before assigning a component; flat units remain readable while classifications are unresolved or migration is pending. Shared L0 foundations and pure reusable capabilities stay in their own product-unit kinds rather than being forced into component directories.
+
+Existing public links such as `/next/native-web/components/button/` and package exports such as `@vyrnforge/web/styles/button.css` must stay stable. A folder migration requires graph, impact, docs, example, package-projection, and clean-consumer verification.
+
 ## Setup and common commands
 
 Use the Node and pnpm versions declared by `.node-version`, `.nvmrc`, and the root `package.json`, then install the locked workspace with `pnpm install --frozen-lockfile --ignore-scripts`.
@@ -77,7 +93,7 @@ Build tooling projects approved product-owned surfaces into the existing public 
 
 Reusable package-owned units may live under `packages/<package>/src/capabilities/`, `src/accessibility/`, or `src/foundations/` when that package is the correct architectural owner, with mirrored evidence under `packages/<package>/test/<kind>/`. Reusable behavior may also become an approved product capability when it genuinely spans product/package ownership; do not create component-shaped Core abstractions merely for symmetry.
 
-Migration is incremental. Product Graph tooling may temporarily normalize legacy package-local component source/evidence and canonical product-unit source as one logical component. `Button`, `Tabs`, `Dialog`, and `Icon` are the representative canonical product-unit pilots; other legacy locations remain migration input until deliberately moved. Do not infer target architecture from an unmigrated legacy path.
+Component source ownership has completed the layered migration. Canonical component authoring lives under `product/components/<layer>/<optional-category>/<id>/`; the Product Graph projects supported surfaces into the existing public packages. Transitional flat/legacy discovery remains a compatibility safeguard for repository tooling, not an active component ownership model. Do not add new flat component owners or package-local component implementation copies.
 
 Do not add per-instance CI mappings or a central component testing registry. Product Graph discovery, public exports, conventional ownership, source dependencies, and semantic-impact policy drive selection. Canonical component contracts own behavioral scenarios. Use real browsers for browser-owned behavior. Automated accessibility scanning complements rather than replaces keyboard/focus/browser behavior and assistive-technology evidence. Put evidence at the lowest owner that actually proves the behavior.
 
@@ -85,7 +101,7 @@ Repository-wide reusable test infrastructure lives under `tooling/testing/`; pro
 
 ## Documentation and changes
 
-Framework-neutral foundation content is authored once under shared documentation sources and composed into framework experiences. Framework guides own only framework-specific installation/API/integration guidance. Product-unit documentation and executable examples are discovered from their canonical product unit, such as `product/components/<component>/docs/` and `product/components/<component>/examples/`, with legacy discovery retained only as a migration adapter where still required.
+Framework-neutral foundation content is authored once under shared documentation sources and composed into framework experiences. Framework guides own only framework-specific installation/API/integration guidance. Product-unit documentation and executable examples are discovered from their canonical layered product unit, such as `product/components/<layer>/<optional-category>/<id>/docs/` and `product/components/<layer>/<optional-category>/<id>/examples/`. Transitional legacy discovery may remain as a defensive adapter, but current component owners must use the canonical layered hierarchy.
 
 Changesets is the single source of current package release intent. For a consumer-visible change, run `pnpm changeset`, select the affected package surfaces, choose `patch`, `minor`, or `major`, and write a summary that preserves relevant deprecation, compatibility, and migration information. Repository-only work with intentionally no package release may use an empty Changeset so that the no-release decision is explicit without inventing a package bump. Historical owner-local `changes/` fragments are provenance only and must not be added or used as current release input.
 
