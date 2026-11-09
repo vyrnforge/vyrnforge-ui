@@ -18,7 +18,7 @@ test('React Text preserves approved native semantics and typography roles during
     dateTime: '2026-11-10',
   }, 'November 10'));
   assert.match(time, /^<time/);
-  assert.match(time, /datetime="2026-11-10"/);
+  assert.match(time, /dateTime="2026-11-10"/);
   assert.match(time, /data-vf-text-variant="caption"/);
 
   const quote = renderToStaticMarkup(createElement(Text, {
