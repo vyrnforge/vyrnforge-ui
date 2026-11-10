@@ -1,8 +1,8 @@
 # Loading
 
-Loading is the VyrnForge Feedback & Status family for pending work. It provides reusable visual treatments without owning the application operation that caused them.
+Loading is the VyrnForge asynchronous-feedback Pattern for pending work. It provides reusable visual treatments without owning the application operation that caused them.
 
-Canonical behavior and selection guidance lives in **VyrnForge — Loading Component Contract** and **VyrnForge — Async Operations & Recovery Patterns**. Native Web presentation is exposed from `@vyrnforge/web/styles/loading.css`.
+Canonical behavior and selection guidance lives in **VyrnForge — Loading Pattern Contract** and **VyrnForge — Async Operations & Recovery Patterns**. Native Web presentation is exposed from `@vyrnforge/web/styles/loading.css`.
 
 Built-in presentations include compact indeterminate indicators (`spinner`, `dots`, `bars`, and `pulse`), structured placeholders, and native `<progress>` styling. Consumer-authored custom loading artwork is first-class through `data-vf-loading-custom`.
 

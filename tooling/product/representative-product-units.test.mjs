@@ -380,11 +380,13 @@ test('L1 aggregate stylesheet is not a component owner and responsibility famili
   assert.deepEqual(Object.keys(colorSwatch.surfaces), ['web']);
 
   assert.equal(graph.components.some((entry) => entry.unitId === 'skeleton'), false);
+  assert.equal(graph.components.some((entry) => entry.unitId === 'loading'), false);
 
-  const loading = graph.components.find((entry) => entry.unitId === 'loading');
-  assert.ok(loading, 'loading owns feedback presentation above L1');
-  assert.equal(loading.layer, 'composite-components');
-  assert.equal(loading.facets.canonicalRoot, 'product/components/composite-components/loading/');
+  const loading = graph.patterns.find((entry) => entry.unitId === 'loading');
+  assert.ok(loading, 'loading owns async feedback as a Pattern outside L1-L6');
+  assert.equal(loading.id, 'pattern:loading');
+  assert.equal(loading.layer, null);
+  assert.equal(loading.facets.canonicalRoot, 'product/patterns/loading/');
   assert.deepEqual(Object.keys(loading.surfaces), ['web']);
 
   assert.deepEqual(productGraphProblems(), []);

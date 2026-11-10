@@ -56,6 +56,12 @@ function themeToggleCatalogEntry() {
   return catalogEntry('theme-toggle', 'Theme Toggle');
 }
 
+function loadingPatternEntry() {
+  const entry = manifest.patternCatalog?.find((pattern) => pattern.slug === 'loading');
+  expect(entry, 'Loading must be present in the Native Web Pattern catalog').toBeTruthy();
+  return entry;
+}
+
 test('Native Web home uses the VyrnForge shell and separates documentation surfaces', async ({ page }, testInfo) => {
   const errors = collectPageErrors(page);
   await gotoWithCleanDocsState(page, '/next/native-web/');
@@ -190,6 +196,34 @@ test('Native component catalog is Product Graph scoped and API reference is inde
     await expect(page.getByRole('link', { name: 'Open Button showcase' })).toHaveAttribute('href', '../../../components/button/');
   }
   await expectDeploymentRelativeStyles(page);
+  await expectNoAccessibilityViolations(page);
+  expect(errors, errors.join('\n')).toEqual([]);
+});
+
+test('Loading is documented as a Pattern rather than a component while preserving its public Web stylesheet', async ({ page }) => {
+  const errors = collectPageErrors(page);
+  const loading = loadingPatternEntry();
+
+  expect(manifest.componentCatalog.some((component) => component.slug === 'loading')).toBe(false);
+  expect(manifest.api.some((entry) => entry.slug === 'api/components/loading/')).toBe(false);
+  expect(loading.publicEntrypoints).toContain('@vyrnforge/web/styles/loading.css');
+  expect(manifest.patternApi.some((entry) => entry.slug === 'api/patterns/loading/')).toBe(true);
+
+  await gotoWithCleanDocsState(page, '/next/native-web/patterns/');
+  await expect(page.getByRole('heading', { level: 1, name: 'Patterns' })).toBeVisible();
+  await expect(page.getByRole('link', { name: 'Loading', exact: true })).toHaveAttribute('href', 'loading/');
+
+  await gotoWithCleanDocsState(page, '/next/native-web/patterns/loading/');
+  await expect(page.getByRole('heading', { level: 1, name: 'Loading' })).toBeVisible();
+  await expect(page.locator('article[data-vf-docs-pattern="loading"]')).toHaveCount(1);
+  await expect(page.getByText('@vyrnforge/web/styles/loading.css', { exact: false }).first()).toBeVisible();
+  await expectDeploymentRelativeStyles(page);
+
+  await gotoWithCleanDocsState(page, '/next/native-web/api/patterns/loading/');
+  await expect(page.getByRole('heading', { level: 1, name: 'Loading API' })).toBeVisible();
+  await expect(page.locator('article[data-vf-docs-api-pattern="loading"]')).toHaveCount(1);
+  await expect(page.getByText('@vyrnforge/web/styles/loading.css', { exact: true })).toBeVisible();
+
   await expectNoAccessibilityViolations(page);
   expect(errors, errors.join('\n')).toEqual([]);
 });

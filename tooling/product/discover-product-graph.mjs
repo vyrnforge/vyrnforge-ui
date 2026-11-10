@@ -10,6 +10,7 @@ const productKinds = Object.freeze({
   capabilities: 'capability',
   foundations: 'foundation',
   catalogs: 'catalog',
+  patterns: 'pattern',
 });
 const componentTargets = Object.freeze(['core', 'web', ...frameworkPortNames]);
 const reservedLegacyProductRoots = new Set(Object.keys(productKinds));
@@ -170,10 +171,75 @@ function normalizeComponentNode(root, manifests, componentId, legacyComponent, c
   };
 }
 
+function patternFacets(root, patternId) {
+  const canonicalRoot = `product/patterns/${patternId}`;
+  const facet = (name) => {
+    const relativePath = `${canonicalRoot}/${name}/`;
+    return exists(root, relativePath) ? relativePath : null;
+  };
+  return {
+    root: `${canonicalRoot}/`,
+    canonicalRoot: `${canonicalRoot}/`,
+    legacyRoot: null,
+    contract: facet('contract'),
+    docs: facet('docs'),
+    examples: facet('examples'),
+    test: facet('test'),
+  };
+}
+
+function normalizePatternNode(root, manifests, patternId) {
+  const canonicalRoot = `product/patterns/${patternId}`;
+  const metadataPath = `${canonicalRoot}/pattern.json`;
+  const metadata = exists(root, metadataPath) ? readJson(root, metadataPath) : null;
+  const facets = patternFacets(root, patternId);
+  const webRoot = `${canonicalRoot}/web/`;
+  const publicEntrypoints = componentPublicEntrypoints(manifests, 'web', patternId);
+  const surfaces = exists(root, webRoot)
+    ? {
+        web: {
+          target: 'web',
+          package: 'web',
+          authoringMode: 'product-unit',
+          authoringPaths: [webRoot],
+          projectionPath: componentPackageProjectionPath('web', patternId),
+          legacyPaths: [],
+          publicEntrypoints,
+          dependencies: [],
+          browser: true,
+          types: null,
+          ssr: null,
+        },
+      }
+    : {};
+  return {
+    id: `pattern:${patternId}`,
+    unitId: patternId,
+    kind: 'pattern',
+    layer: null,
+    category: null,
+    name: metadata?.name ?? titleCase(patternId),
+    status: publicEntrypoints.length ? 'implemented' : 'unprojected',
+    metadataPath,
+    metadataSource: metadata ? 'product-unit' : 'missing',
+    documentationGroup: metadata?.documentation?.group ?? metadata?.group ?? null,
+    facets,
+    surfaces,
+    packages: unique(Object.values(surfaces).map((surface) => surface.package)),
+    publicEntrypoints,
+    dependencies: unique(Object.values(surfaces).flatMap((surface) => surface.dependencies)),
+    migration: {
+      state: 'product-unit',
+      canonicalRoot: `${canonicalRoot}/`,
+      legacyRoot: null,
+    },
+  };
+}
+
 function canonicalUnitNodes(root) {
   const nodes = [];
   for (const [directory, kind] of Object.entries(productKinds)) {
-    if (kind === 'component') continue;
+    if (kind === 'component' || kind === 'pattern') continue;
     for (const unitId of directories(root, `product/${directory}`)) {
       const unitRoot = `product/${directory}/${unitId}/`;
       nodes.push({
@@ -254,9 +320,12 @@ export function discoverProductGraph(root = repoRoot) {
   const components = componentIds.map((componentId) =>
     normalizeComponentNode(root, manifests, componentId, legacyComponents.get(componentId), componentRoots),
   );
+  const patterns = directories(root, 'product/patterns').map((patternId) =>
+    normalizePatternNode(root, manifests, patternId),
+  );
   const canonicalUnits = canonicalUnitNodes(root);
   const legacyUnits = normalizeLegacyOwnedUnits(discovery, canonicalUnits);
-  const units = [...components, ...canonicalUnits, ...legacyUnits].sort((a, b) => a.id.localeCompare(b.id));
+  const units = [...components, ...patterns, ...canonicalUnits, ...legacyUnits].sort((a, b) => a.id.localeCompare(b.id));
 
   return {
     schemaVersion: 2,
@@ -269,6 +338,7 @@ export function discoverProductGraph(root = repoRoot) {
       manifest,
     })),
     components,
+    patterns,
     units,
     legacyDiscovery: discovery,
   };
@@ -284,17 +354,20 @@ export function productGraphProblems(root = repoRoot) {
     ids.add(unit.id);
   }
 
-  for (const component of graph.components) {
-    if (!component.facets.canonicalRoot && !component.facets.legacyRoot && component.publicEntrypoints.length === 0) {
-      problems.push(`${component.id} has no product ownership root and no public projection`);
+  for (const owner of [...graph.components, ...graph.patterns]) {
+    if (!owner.facets.canonicalRoot && !owner.facets.legacyRoot && owner.publicEntrypoints.length === 0) {
+      problems.push(`${owner.id} has no product ownership root and no public projection`);
     }
-    for (const surface of Object.values(component.surfaces)) {
-      if (!surface.authoringPaths.length) problems.push(`${component.id}/${surface.target} has no authoring source`);
+    if (owner.metadataSource === 'missing') {
+      problems.push(`${owner.id} is missing owned metadata at ${owner.metadataPath}`);
+    }
+    for (const surface of Object.values(owner.surfaces)) {
+      if (!surface.authoringPaths.length) problems.push(`${owner.id}/${surface.target} has no authoring source`);
       if (surface.authoringMode === 'product-unit' && !surface.projectionPath) {
-        problems.push(`${component.id}/${surface.target} has no package projection destination`);
+        problems.push(`${owner.id}/${surface.target} has no package projection destination`);
       }
       if (!graph.packages.some((pkg) => pkg.id === surface.package)) {
-        problems.push(`${component.id}/${surface.target} projects to unknown package ${surface.package}`);
+        problems.push(`${owner.id}/${surface.target} projects to unknown package ${surface.package}`);
       }
     }
   }
