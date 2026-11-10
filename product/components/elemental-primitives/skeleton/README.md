@@ -8,7 +8,7 @@ The public Native Web contract is `data-vf-skeleton` plus the optional `data-vf-
 
 Skeleton deliberately does not duplicate existing composition responsibilities:
 
-- shared loading cadence/keyframes come from `@vyrnforge/web/styles/loading-motion.css`;
+- shared loading cadence/keyframes come from the canonical Web motion foundation; consumers do not load a separate Loading Motion component stylesheet;
 - Stack, Inline, and Grid own spatial composition;
 - AspectRatio owns stable square/media ratios;
 - Surface may preserve a real pending containment boundary when the eventual UI has one;
