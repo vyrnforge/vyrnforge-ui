@@ -83,10 +83,10 @@ test('Native Web home uses the VyrnForge shell and separates documentation surfa
   const input = catalogEntry('input', 'Input');
   const actions = sideNavigation.locator('[data-vf-side-nav-group]')
     .filter({ has: page.getByText('Actions', { exact: true }) });
-  await expect(actions.getByRole('link', { name: 'Button' })).toHaveAttribute('href', button.showcase ? 'components/button/' : 'api/components/button/');
+  await expect(actions.getByRole('link', { name: 'Button', exact: true })).toHaveAttribute('href', button.showcase ? 'components/button/' : 'api/components/button/');
   const content = sideNavigation.locator('[data-vf-side-nav-group]')
     .filter({ has: page.getByText('Content & Media', { exact: true }) });
-  await expect(content.getByRole('link', { name: 'Text' })).toHaveAttribute('href', text.showcase ? 'components/text/' : 'api/components/text/');
+  await expect(content.getByRole('link', { name: 'Text', exact: true })).toHaveAttribute('href', text.showcase ? 'components/text/' : 'api/components/text/');
   const forms = sideNavigation.locator('[data-vf-side-nav-group]')
     .filter({ has: page.getByText('Forms & Inputs', { exact: true }) });
   await expect(forms.getByRole('link', { name: 'Input', exact: true })).toHaveAttribute('href', input.showcase ? 'components/input/' : 'api/components/input/');
@@ -175,8 +175,13 @@ test('Native component catalog is Product Graph scoped and API reference is inde
   const inputApiLink = page.locator('[data-vf-docs-component-group="forms-inputs"] .vf-docs-card-link')
     .filter({ has: page.getByText('Input', { exact: true }) });
   await expect(inputApiLink).toHaveAttribute('href', 'input/');
-  await expect(page.getByRole('link', { name: 'Button', exact: true }).last()).toHaveAttribute('href', 'button/');
-  await expect(page.getByRole('link', { name: 'Theme Toggle', exact: true }).last()).toHaveAttribute('href', 'theme-toggle/');
+  const actionsApiGroup = page.locator('[data-vf-docs-component-group="actions"]');
+  const buttonApiLink = actionsApiGroup.locator('.vf-docs-card-link')
+    .filter({ has: page.getByText('Button', { exact: true }) });
+  const themeToggleApiLink = actionsApiGroup.locator('.vf-docs-card-link')
+    .filter({ has: page.getByText('Theme Toggle', { exact: true }) });
+  await expect(buttonApiLink).toHaveAttribute('href', 'button/');
+  await expect(themeToggleApiLink).toHaveAttribute('href', 'theme-toggle/');
 
   await gotoWithCleanDocsState(page, '/next/native-web/api/components/button/');
   await expect(page.getByRole('heading', { level: 1, name: 'Button API' })).toBeVisible();
