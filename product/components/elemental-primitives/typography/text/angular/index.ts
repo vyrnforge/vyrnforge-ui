@@ -12,5 +12,5 @@ export type { TextVariant } from '@vyrnforge/web/text';
   },
 })
 export class VfTextDirective {
-  readonly variant = input<TextVariant>('body');
+  readonly variant = input<TextVariant>('body-md');
 }

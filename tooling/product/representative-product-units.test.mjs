@@ -6,7 +6,7 @@ const expectedRoots = {
   button: 'interactive-controls/button',
   tabs: 'composite-components/tabs',
   dialog: 'composite-components/dialog',
-  icon: 'elemental-primitives/icon',
+  icon: 'elemental-primitives/media/icon',
   text: 'elemental-primitives/typography/text',
 };
 
@@ -350,15 +350,45 @@ test('L4 Portal and Presence use canonical port-infrastructure ownership', () =>
   assert.deepEqual(productGraphProblems(), []);
 });
 
-test('L1 aggregate stylesheet is not a component owner', () => {
+test('L1 aggregate stylesheet is not a component owner and responsibility families own their product units', () => {
   const graph = discoverProductGraph();
   assert.equal(graph.components.some((entry) => entry.unitId === 'elemental-primitives'), false);
-  for (const id of ['code', 'kbd', 'mark', 'image', 'skeleton', 'color-swatch']) {
+  assert.equal(graph.components.some((entry) => entry.unitId === 'media'), false);
+  assert.equal(graph.components.some((entry) => entry.unitId === 'mark'), false);
+
+  for (const id of ['code', 'kbd']) {
     const component = graph.components.find((entry) => entry.unitId === id);
-    assert.ok(component, id + ' is independently owned');
+    assert.ok(component, id + ' is independently owned inside Typography');
     assert.equal(component.layer, 'elemental-primitives');
+    assert.equal(component.facets.canonicalRoot, 'product/components/elemental-primitives/typography/' + id + '/');
     assert.deepEqual(Object.keys(component.surfaces), ['web']);
   }
+
+  const icon = graph.components.find((entry) => entry.unitId === 'icon');
+  assert.ok(icon, 'icon is independently owned inside Media');
+  assert.equal(icon.facets.canonicalRoot, 'product/components/elemental-primitives/media/icon/');
+  assert.deepEqual(Object.keys(icon.surfaces).sort(), ['angular', 'elements', 'react', 'vue', 'web']);
+
+  const image = graph.components.find((entry) => entry.unitId === 'image');
+  assert.ok(image, 'image is independently owned inside Media');
+  assert.equal(image.facets.canonicalRoot, 'product/components/elemental-primitives/media/image/');
+  assert.deepEqual(Object.keys(image.surfaces), ['web']);
+
+  const colorSwatch = graph.components.find((entry) => entry.unitId === 'color-swatch');
+  assert.ok(colorSwatch, 'color-swatch remains independently owned outside Media');
+  assert.equal(colorSwatch.layer, 'elemental-primitives');
+  assert.deepEqual(Object.keys(colorSwatch.surfaces), ['web']);
+
+  assert.equal(graph.components.some((entry) => entry.unitId === 'skeleton'), false);
+  assert.equal(graph.components.some((entry) => entry.unitId === 'loading'), false);
+
+  const loading = graph.patterns.find((entry) => entry.unitId === 'loading');
+  assert.ok(loading, 'loading owns async feedback as a Pattern outside L1-L6');
+  assert.equal(loading.id, 'pattern:loading');
+  assert.equal(loading.layer, null);
+  assert.equal(loading.facets.canonicalRoot, 'product/patterns/loading/');
+  assert.deepEqual(Object.keys(loading.surfaces), ['web']);
+
   assert.deepEqual(productGraphProblems(), []);
 });
 

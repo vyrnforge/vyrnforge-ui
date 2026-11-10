@@ -29,8 +29,8 @@ function App() {
       style={{ inlineSize: 'min(100%, 36rem)', margin: '1rem auto', padding: '1rem' }}
     >
       <Stack>
-        <Text as="h1" variant="heading">Interface settings</Text>
-        <Text as="p" variant="body">Appearance and density are independent inherited presentation axes.</Text>
+        <Text as="h1" variant="heading-sm">Interface settings</Text>
+        <Text as="p" variant="body-md">Appearance and density are independent inherited presentation axes.</Text>
 
         <Field>
           <label htmlFor="foundation-appearance">Appearance</label>

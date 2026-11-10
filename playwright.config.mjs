@@ -1,5 +1,5 @@
 import { defineConfig, devices } from '@playwright/test';
-import { discoverProductUnits } from './tooling/testing/discover-product-units.mjs';
+import { discoverProductGraph } from './tooling/product/discover-product-graph.mjs';
 
 const port = process.env.VF_COMPONENT_PORT || 'web';
 const selectedComponents = new Set(
@@ -14,15 +14,16 @@ const browserDeviceNames = {
   webkit: 'Desktop Safari',
 };
 
-const discovery = discoverProductUnits();
-const unsupportedComponentSpecs = discovery.components
-  .filter((component) => !component.ports[port])
-  .map((component) => `**/${component.component}/test/browser/tests/**/*.spec.mjs`);
+const graph = discoverProductGraph();
+const browserOwners = [...graph.components, ...graph.patterns];
+const unsupportedComponentSpecs = browserOwners
+  .filter((owner) => !owner.surfaces[port])
+  .map((owner) => `**/${owner.unitId}/test/browser/tests/**/*.spec.mjs`);
 const unselectedComponentSpecs =
   selectedComponents.size > 0
-    ? discovery.components
-        .filter((component) => !selectedComponents.has(component.component))
-        .map((component) => `**/${component.component}/test/browser/tests/**/*.spec.mjs`)
+    ? browserOwners
+        .filter((owner) => !selectedComponents.has(owner.unitId))
+        .map((owner) => `**/${owner.unitId}/test/browser/tests/**/*.spec.mjs`)
     : [];
 
 export default defineConfig({

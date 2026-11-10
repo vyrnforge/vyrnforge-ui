@@ -2,7 +2,7 @@ import { existsSync, rmSync } from 'node:fs';
 import path from 'node:path';
 import process from 'node:process';
 import { browserPortNames } from '../package-model.mjs';
-import { discoverProductUnits } from './discover-product-units.mjs';
+import { discoverProductGraph } from '../product/discover-product-graph.mjs';
 import { loadBrowserFixtureModule, prepareBrowserFixture } from './browser-fixtures.mjs';
 
 const port = process.env.VF_COMPONENT_PORT ?? process.argv[2] ?? 'web';
@@ -19,9 +19,10 @@ const root = process.cwd();
 const outputRoot = path.join(root, 'dist/browser-fixtures');
 rmSync(outputRoot, { recursive: true, force: true });
 
-const { components } = discoverProductUnits(root);
+const graph = discoverProductGraph(root);
+const components = [...graph.components, ...graph.patterns];
 const unknownComponents = [...selectedComponents].filter(
-  (componentId) => !components.some((component) => component.component === componentId),
+  (componentId) => !components.some((component) => component.unitId === componentId),
 );
 if (unknownComponents.length) {
   throw new Error(`Unknown VyrnForge browser component scope: ${unknownComponents.join(', ')}`);
@@ -33,16 +34,20 @@ let skippedUnsupported = 0;
 let skippedUnselected = 0;
 
 for (const component of components) {
-  if (selectedComponents.size > 0 && !selectedComponents.has(component.component)) {
+  if (selectedComponents.size > 0 && !selectedComponents.has(component.unitId)) {
     skippedUnselected += 1;
     continue;
   }
 
-  const fixturePath = path.join(root, component.browser.fixture);
+  const fixtureRelativePath = component.facets.test
+    ? `${component.facets.test}browser/fixtures.mjs`
+    : null;
+  if (!fixtureRelativePath) continue;
+  const fixturePath = path.join(root, fixtureRelativePath);
   if (!existsSync(fixturePath)) continue;
 
   fixtureModules += 1;
-  if (!component.ports[port]) {
+  if (!component.surfaces[port]) {
     skippedUnsupported += 1;
     continue;
   }
@@ -53,7 +58,7 @@ for (const component of components) {
     fixturePath,
     fixtureModule,
     port,
-    component: component.component,
+    component: component.unitId,
   });
 
   if (generated) generatedPages += 1;

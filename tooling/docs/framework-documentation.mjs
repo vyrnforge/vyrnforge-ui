@@ -154,7 +154,7 @@ function accessibilityEvidence(root, component) {
   return { sourcePath, value: readJson(root, sourcePath) };
 }
 
-function normalizeComponent(root, component, framework) {
+function normalizeOwner(root, component, framework) {
   const surface = component.surfaces[framework.surface];
   if (!surface || !surface.publicEntrypoints.length) return null;
 
@@ -168,6 +168,7 @@ function normalizeComponent(root, component, framework) {
     id: component.unitId,
     title: component.name,
     group,
+    kind: component.kind,
     layer: component.layer ?? null,
     category: component.category ?? null,
     framework: framework.id,
@@ -185,8 +186,12 @@ function normalizeComponent(root, component, framework) {
     accessibility: accessibility.value,
     showcaseAvailable: Boolean(shared.content && examples.length),
     apiAvailable: true,
-    showcaseRoute: `components/${component.unitId}/`,
-    apiRoute: `api/components/${component.unitId}/`,
+    showcaseRoute: component.kind === 'pattern'
+      ? `patterns/${component.unitId}/`
+      : `components/${component.unitId}/`,
+    apiRoute: component.kind === 'pattern'
+      ? `api/patterns/${component.unitId}/`
+      : `api/components/${component.unitId}/`,
   };
 }
 
@@ -200,18 +205,21 @@ export function compileFrameworkDocumentation(frameworkId, root = repoRoot) {
     throw new Error(`${framework.label} documentation requires package @vyrnforge/${framework.packageId}`);
   }
 
-  const componentCatalog = graph.components
-    .map((component) => normalizeComponent(root, component, framework))
+  const publicCatalog = [...graph.components, ...graph.patterns]
+    .map((owner) => normalizeOwner(root, owner, framework))
     .filter(Boolean)
     .sort((left, right) => left.title.localeCompare(right.title));
 
-  const showcasePages = componentCatalog
-    .filter((component) => component.showcaseAvailable)
-    .map((component) => ({ ...component, route: component.showcaseRoute, pageKind: 'showcase' }));
+  const componentCatalog = publicCatalog.filter((owner) => owner.kind === 'component');
+  const patternCatalog = publicCatalog.filter((owner) => owner.kind === 'pattern');
 
-  const apiPages = componentCatalog.map((component) => ({
-    ...component,
-    route: component.apiRoute,
+  const showcasePages = publicCatalog
+    .filter((owner) => owner.showcaseAvailable)
+    .map((owner) => ({ ...owner, route: owner.showcaseRoute, pageKind: 'showcase' }));
+
+  const apiPages = publicCatalog.map((owner) => ({
+    ...owner,
+    route: owner.apiRoute,
     pageKind: 'api',
   }));
 
@@ -222,9 +230,15 @@ export function compileFrameworkDocumentation(frameworkId, root = repoRoot) {
     packageId: framework.packageId,
     packageName: packageEntry.name,
     packageManifest: packageEntry.manifest,
+    publicCatalog,
     componentCatalog,
+    patternCatalog,
     showcasePages,
     apiPages,
+    componentShowcasePages: showcasePages.filter((page) => page.kind === 'component'),
+    patternShowcasePages: showcasePages.filter((page) => page.kind === 'pattern'),
+    componentApiPages: apiPages.filter((page) => page.kind === 'component'),
+    patternApiPages: apiPages.filter((page) => page.kind === 'pattern'),
     // Compatibility alias while the Native renderer is migrated to the shared model.
     pages: showcasePages,
   };

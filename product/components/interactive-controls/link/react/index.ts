@@ -1,8 +1,20 @@
 import { createElement, forwardRef } from 'react';
 import type { AnchorHTMLAttributes } from 'react';
+import type { TextVariant } from '@vyrnforge/web/text';
 
-export type LinkProps = AnchorHTMLAttributes<HTMLAnchorElement>;
+export interface LinkProps extends AnchorHTMLAttributes<HTMLAnchorElement> {
+  textVariant?: TextVariant;
+}
 
-export const Link = forwardRef<HTMLAnchorElement, LinkProps>(function Link(props, ref) {
-  return createElement('a', { ...props, ref, 'data-vf-link': '' });
+export const Link = forwardRef<HTMLAnchorElement, LinkProps>(function Link(
+  { textVariant, ...nativeProps },
+  ref
+) {
+  return createElement('a', {
+    ...nativeProps,
+    ref,
+    'data-vf-link': '',
+    'data-vf-text': textVariant === undefined ? undefined : '',
+    'data-vf-text-variant': textVariant,
+  });
 });

@@ -7,7 +7,7 @@ function unique(values) {
 export function impactProductView(graph = discoverProductGraph()) {
   return {
     packages: graph.packages.map(({ id, manifest }) => ({ name: id, manifest })),
-    components: graph.components.map((component) => {
+    components: [...graph.components, ...graph.patterns].map((component) => {
       const ports = Object.fromEntries(
         Object.values(component.surfaces).map((surface) => [surface.target, {
           paths: unique([...surface.authoringPaths, ...surface.legacyPaths]),
@@ -33,7 +33,7 @@ export function impactProductView(graph = discoverProductGraph()) {
       };
     }),
     ownedUnits: graph.units
-      .filter((unit) => unit.kind !== 'component')
+      .filter((unit) => unit.kind !== 'component' && unit.kind !== 'pattern')
       .map((unit) => {
         const legacyNodes = unit.legacyNodes ?? [];
         const primaryLegacy = legacyNodes[0] ?? null;

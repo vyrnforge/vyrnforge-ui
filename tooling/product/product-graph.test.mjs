@@ -187,24 +187,69 @@ test('canonical capabilities merge legacy package ownership into one logical nod
   assert.ok(impactCapability.paths.includes('packages/core/src/capabilities/collection-navigation/'));
 });
 
-test('L1 promoted public primitives are independent Native Web product units', () => {
+test('L1 responsibility families preserve deliberate Native Web product ownership', () => {
   const graph = discoverProductGraph();
   assert.equal(graph.components.some((entry) => entry.unitId === 'elemental-primitives'), false);
+  assert.equal(graph.components.some((entry) => entry.unitId === 'mark'), false);
 
-  for (const id of ['code', 'kbd', 'mark', 'image', 'skeleton', 'color-swatch']) {
+  for (const id of ['code', 'kbd']) {
     const component = graph.components.find((entry) => entry.unitId === id);
-    assert.ok(component, id + ' must be discovered');
+    assert.ok(component, id + ' must be discovered as specialized Typography');
     assert.equal(component.id, 'component:' + id);
     assert.equal(component.layer, 'elemental-primitives');
-    assert.equal(component.facets.canonicalRoot, 'product/components/elemental-primitives/' + id + '/');
+    assert.equal(component.facets.canonicalRoot, 'product/components/elemental-primitives/typography/' + id + '/');
     assert.equal(component.facets.legacyRoot, null);
     assert.equal(component.metadataSource, 'product-unit');
     assert.equal(component.migration.state, 'product-unit');
     assert.deepEqual(Object.keys(component.surfaces), ['web']);
-    assert.deepEqual(component.surfaces.web.authoringPaths, ['product/components/elemental-primitives/' + id + '/web/']);
+    assert.deepEqual(component.surfaces.web.authoringPaths, ['product/components/elemental-primitives/typography/' + id + '/web/']);
     assert.equal(component.surfaces.web.projectionPath, 'packages/web/src/components/' + id + '/');
     assert.ok(component.surfaces.web.publicEntrypoints.includes('@vyrnforge/web/styles/' + id + '.css'));
   }
+
+  const image = graph.components.find((entry) => entry.unitId === 'image');
+  assert.ok(image, 'image must be discovered as native-backed Media');
+  assert.equal(image.id, 'component:image');
+  assert.equal(image.layer, 'elemental-primitives');
+  assert.equal(image.facets.canonicalRoot, 'product/components/elemental-primitives/media/image/');
+  assert.equal(image.facets.legacyRoot, null);
+  assert.equal(image.metadataSource, 'product-unit');
+  assert.equal(image.migration.state, 'product-unit');
+  assert.deepEqual(Object.keys(image.surfaces), ['web']);
+  assert.deepEqual(image.surfaces.web.authoringPaths, ['product/components/elemental-primitives/media/image/web/']);
+  assert.equal(image.surfaces.web.projectionPath, 'packages/web/src/components/image/');
+  assert.ok(image.surfaces.web.publicEntrypoints.includes('@vyrnforge/web/styles/image.css'));
+
+  const icon = graph.components.find((entry) => entry.unitId === 'icon');
+  assert.ok(icon, 'icon must be discovered as genuine Media primitive');
+  assert.equal(icon.layer, 'elemental-primitives');
+  assert.equal(icon.facets.canonicalRoot, 'product/components/elemental-primitives/media/icon/');
+
+  const colorSwatch = graph.components.find((entry) => entry.unitId === 'color-swatch');
+  assert.ok(colorSwatch, 'color-swatch must remain independently owned outside Media');
+  assert.equal(colorSwatch.id, 'component:color-swatch');
+  assert.equal(colorSwatch.layer, 'elemental-primitives');
+  assert.equal(colorSwatch.facets.canonicalRoot, 'product/components/elemental-primitives/color-swatch/');
+  assert.equal(colorSwatch.facets.legacyRoot, null);
+  assert.equal(colorSwatch.metadataSource, 'product-unit');
+  assert.equal(colorSwatch.migration.state, 'product-unit');
+  assert.deepEqual(Object.keys(colorSwatch.surfaces), ['web']);
+
+  assert.equal(graph.components.some((entry) => entry.unitId === 'skeleton'), false);
+  assert.equal(graph.components.some((entry) => entry.unitId === 'loading'), false);
+
+  const loading = graph.patterns.find((entry) => entry.unitId === 'loading');
+  assert.ok(loading, 'loading must own async feedback as a Pattern outside L1-L6');
+  assert.equal(loading.id, 'pattern:loading');
+  assert.equal(loading.kind, 'pattern');
+  assert.equal(loading.layer, null);
+  assert.equal(loading.facets.canonicalRoot, 'product/patterns/loading/');
+  assert.equal(loading.facets.legacyRoot, null);
+  assert.equal(loading.metadataPath, 'product/patterns/loading/pattern.json');
+  assert.equal(loading.metadataSource, 'product-unit');
+  assert.equal(loading.migration.state, 'product-unit');
+  assert.deepEqual(Object.keys(loading.surfaces), ['web']);
+  assert.ok(loading.surfaces.web.publicEntrypoints.includes('@vyrnforge/web/styles/loading.css'));
 
   assert.deepEqual(productGraphProblems(), []);
 });

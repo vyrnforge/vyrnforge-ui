@@ -13,8 +13,8 @@ const frameworkPorts = frameworkPortNames;
 const ssrPorts = new Set(ssrPortNames);
 const sourceExtensions = ['.ts', '.tsx', '.mts', '.cts'];
 const ownedKinds = ['capabilities', 'accessibility', 'foundations'];
-const webNonComponentStyleIds = new Set(['tokens', 'foundation', 'reset', 'elemental-primitives', 'native-elements']);
-const reservedProductRoots = new Set(['components', 'capabilities', 'foundations', 'catalogs']);
+const webNonComponentStyleIds = new Set(['tokens', 'foundation', 'reset', 'elemental-primitives', 'native-elements', 'loading']);
+const reservedProductRoots = new Set(['components', 'capabilities', 'foundations', 'catalogs', 'patterns']);
 
 function readJson(root, relativePath) { return JSON.parse(readFileSync(path.join(root, relativePath), 'utf8')); }
 function existingPath(root, relativePath) { return existsSync(path.join(root, relativePath)); }

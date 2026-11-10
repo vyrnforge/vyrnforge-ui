@@ -56,6 +56,12 @@ function themeToggleCatalogEntry() {
   return catalogEntry('theme-toggle', 'Theme Toggle');
 }
 
+function loadingPatternEntry() {
+  const entry = manifest.patternCatalog?.find((pattern) => pattern.slug === 'loading');
+  expect(entry, 'Loading must be present in the Native Web Pattern catalog').toBeTruthy();
+  return entry;
+}
+
 test('Native Web home uses the VyrnForge shell and separates documentation surfaces', async ({ page }, testInfo) => {
   const errors = collectPageErrors(page);
   await gotoWithCleanDocsState(page, '/next/native-web/');
@@ -63,8 +69,8 @@ test('Native Web home uses the VyrnForge shell and separates documentation surfa
   await expect(page.getByRole('heading', { level: 1, name: 'VyrnForge Native Web' })).toBeVisible();
   await expect(page.locator('[data-vf-app-shell]')).toHaveCount(1);
   await expect(page.locator('[data-vf-side-nav]')).toHaveCount(1);
-  await expect(page.getByRole('link', { name: 'Showcase', exact: true })).toHaveAttribute('href', 'components/');
-  const explore = page.getByRole('link', { name: 'Explore components' });
+  await expect(page.getByRole('link', { name: 'Browse all', exact: true })).toHaveAttribute('href', 'components/');
+  const explore = page.getByRole('link', { name: 'Browse components', exact: true });
   await expect(explore).toHaveAttribute('data-vf-link', '');
   await expect(explore).not.toHaveAttribute('data-vf-button', '');
   await expect(explore).toHaveAttribute('href', 'components/');
@@ -73,14 +79,23 @@ test('Native Web home uses the VyrnForge shell and separates documentation surfa
   await expect(page.getByRole('link', { name: 'Components API', exact: true })).toHaveAttribute('href', 'api/components/');
   const sideNavigation = page.locator('[data-vf-side-nav]');
   const groupLabels = await sideNavigation.locator('[data-vf-side-nav-group-label]').allTextContents();
-  expect(groupLabels).toContain('Showcase · L2 — Interactive Controls');
-  expect(groupLabels).toContain('API · L1 — Elemental Primitives / Typography');
-  const buttonLayer = sideNavigation.locator('[data-vf-side-nav-group]')
-    .filter({ has: page.getByText('Showcase · L2 — Interactive Controls', { exact: true }) });
-  await expect(buttonLayer.getByRole('link', { name: 'Button' })).toHaveAttribute('href', 'components/button/');
-  const textLayer = sideNavigation.locator('[data-vf-side-nav-group]')
-    .filter({ has: page.getByText('API · L1 — Elemental Primitives / Typography', { exact: true }) });
-  await expect(textLayer.getByRole('link', { name: 'Text' })).toHaveAttribute('href', 'api/components/text/');
+  expect(groupLabels).toContain('Actions');
+  expect(groupLabels).toContain('Forms & Inputs');
+  expect(groupLabels).toContain('Content & Media');
+  expect(groupLabels.some((label) => /\bL[1-6]\b|Elemental Primitives|Interactive Controls|Composite Components/.test(label))).toBe(false);
+
+  const button = buttonCatalogEntry();
+  const text = catalogEntry('text', 'Text');
+  const input = catalogEntry('input', 'Input');
+  const actions = sideNavigation.locator('[data-vf-side-nav-group]')
+    .filter({ has: page.getByText('Actions', { exact: true }) });
+  await expect(actions.getByRole('link', { name: 'Button', exact: true })).toHaveAttribute('href', button.showcase ? 'components/button/' : 'api/components/button/');
+  const content = sideNavigation.locator('[data-vf-side-nav-group]')
+    .filter({ has: page.getByText('Content & Media', { exact: true }) });
+  await expect(content.getByRole('link', { name: 'Text', exact: true })).toHaveAttribute('href', text.showcase ? 'components/text/' : 'api/components/text/');
+  const forms = sideNavigation.locator('[data-vf-side-nav-group]')
+    .filter({ has: page.getByText('Forms & Inputs', { exact: true }) });
+  await expect(forms.getByRole('link', { name: 'Input', exact: true })).toHaveAttribute('href', input.showcase ? 'components/input/' : 'api/components/input/');
   await expect(page.getByRole('link', { name: 'Styling', exact: true })).toHaveAttribute('href', 'foundations/styling/');
   await expect(page.getByRole('link', { name: 'Design tokens', exact: true })).toHaveAttribute('href', 'foundations/tokens/');
   await expect(page.locator('[data-vf-docs-framework], [data-vf-framework-picker]')).toHaveCount(0);
@@ -115,8 +130,8 @@ test('Native Web home uses the VyrnForge shell and separates documentation surfa
     'foundations/tokens/'
   ]);
 
-  const button = buttonCatalogEntry();
   expect(button.api).toBe(true);
+  expect(button.category).toBe('Actions');
   expect(button.publicEntrypoints).toContain('@vyrnforge/web/styles/button.css');
   expect(manifest.pages.some((pageEntry) => pageEntry.slug === 'components/button/')).toBe(button.showcase);
 
@@ -139,24 +154,40 @@ test('Native Web home uses the VyrnForge shell and separates documentation surfa
   expect(errors, errors.join('\n')).toEqual([]);
 });
 
-test('Native component catalog is Product Graph scoped and API reference is independent of showcase readiness', async ({ page }) => {
+test('Native component catalog is Product Graph scoped and API reference is independent of showcase readiness', async ({ page }, testInfo) => {
   const errors = collectPageErrors(page);
   const button = buttonCatalogEntry();
   const themeToggle = themeToggleCatalogEntry();
 
   await gotoWithCleanDocsState(page, '/next/native-web/components/');
-  await expect(page.getByRole('heading', { level: 1, name: 'Component showcase' })).toBeVisible();
+  await expect(page.getByRole('heading', { level: 1, name: 'Components' })).toBeVisible();
   await expect(page.locator('.vf-docs-card-list > li')).toHaveCount(manifest.componentCatalog.length);
+  await expect(page.locator('[data-vf-docs-component-group="forms-inputs"]').getByRole('heading', { name: 'Forms & Inputs' })).toBeVisible();
+  await expect(page.locator('[data-vf-docs-component-group="actions"]').getByRole('heading', { name: 'Actions' })).toBeVisible();
+  await expect(page.locator('[data-vf-docs-component-group="content-media"]').getByRole('heading', { name: 'Content & Media' })).toBeVisible();
+  const inputCatalogLink = page.locator('[data-vf-docs-component-group="forms-inputs"] .vf-docs-card-link')
+    .filter({ has: page.getByText('Input', { exact: true }) });
+  await expect(inputCatalogLink).toBeVisible();
   const buttonCatalogLink = page.locator('.vf-docs-card-list a').filter({ hasText: 'Button' }).first();
   await expect(buttonCatalogLink).toHaveAttribute('href', button.showcase ? 'button/' : '../api/components/button/');
   const themeToggleCatalogLink = page.locator('.vf-docs-card-list a').filter({ hasText: 'Theme Toggle' }).first();
   await expect(themeToggleCatalogLink).toHaveAttribute('href', themeToggle.showcase ? 'theme-toggle/' : '../api/components/theme-toggle/');
 
+  await page.screenshot({ path: testInfo.outputPath('native-components.png'), fullPage: true });
+
   await gotoWithCleanDocsState(page, '/next/native-web/api/components/');
   await expect(page.getByRole('heading', { level: 1, name: 'Components API' })).toBeVisible();
   await expect(page.locator('.vf-docs-card-list > li')).toHaveCount(manifest.api.length);
-  await expect(page.getByRole('link', { name: 'Button', exact: true }).last()).toHaveAttribute('href', 'button/');
-  await expect(page.getByRole('link', { name: 'Theme Toggle', exact: true }).last()).toHaveAttribute('href', 'theme-toggle/');
+  const inputApiLink = page.locator('[data-vf-docs-component-group="forms-inputs"] .vf-docs-card-link')
+    .filter({ has: page.getByText('Input', { exact: true }) });
+  await expect(inputApiLink).toHaveAttribute('href', 'input/');
+  const actionsApiGroup = page.locator('[data-vf-docs-component-group="actions"]');
+  const buttonApiLink = actionsApiGroup.locator('.vf-docs-card-link')
+    .filter({ has: page.getByText('Button', { exact: true }) });
+  const themeToggleApiLink = actionsApiGroup.locator('.vf-docs-card-link')
+    .filter({ has: page.getByText('Theme Toggle', { exact: true }) });
+  await expect(buttonApiLink).toHaveAttribute('href', 'button/');
+  await expect(themeToggleApiLink).toHaveAttribute('href', 'theme-toggle/');
 
   await gotoWithCleanDocsState(page, '/next/native-web/api/components/button/');
   await expect(page.getByRole('heading', { level: 1, name: 'Button API' })).toBeVisible();
@@ -165,6 +196,34 @@ test('Native component catalog is Product Graph scoped and API reference is inde
     await expect(page.getByRole('link', { name: 'Open Button showcase' })).toHaveAttribute('href', '../../../components/button/');
   }
   await expectDeploymentRelativeStyles(page);
+  await expectNoAccessibilityViolations(page);
+  expect(errors, errors.join('\n')).toEqual([]);
+});
+
+test('Loading is documented as a Pattern rather than a component while preserving its public Web stylesheet', async ({ page }) => {
+  const errors = collectPageErrors(page);
+  const loading = loadingPatternEntry();
+
+  expect(manifest.componentCatalog.some((component) => component.slug === 'loading')).toBe(false);
+  expect(manifest.api.some((entry) => entry.slug === 'api/components/loading/')).toBe(false);
+  expect(loading.publicEntrypoints).toContain('@vyrnforge/web/styles/loading.css');
+  expect(manifest.patternApi.some((entry) => entry.slug === 'api/patterns/loading/')).toBe(true);
+
+  await gotoWithCleanDocsState(page, '/next/native-web/patterns/');
+  await expect(page.getByRole('heading', { level: 1, name: 'Patterns' })).toBeVisible();
+  await expect(page.getByRole('link', { name: 'Loading', exact: true })).toHaveAttribute('href', 'loading/');
+
+  await gotoWithCleanDocsState(page, '/next/native-web/patterns/loading/');
+  await expect(page.getByRole('heading', { level: 1, name: 'Loading' })).toBeVisible();
+  await expect(page.locator('article[data-vf-docs-pattern="loading"]')).toHaveCount(1);
+  await expect(page.getByText('@vyrnforge/web/styles/loading.css', { exact: false }).first()).toBeVisible();
+  await expectDeploymentRelativeStyles(page);
+
+  await gotoWithCleanDocsState(page, '/next/native-web/api/patterns/loading/');
+  await expect(page.getByRole('heading', { level: 1, name: 'Loading API' })).toBeVisible();
+  await expect(page.locator('article[data-vf-docs-api-pattern="loading"]')).toHaveCount(1);
+  await expect(page.getByText('@vyrnforge/web/styles/loading.css', { exact: true })).toBeVisible();
+
   await expectNoAccessibilityViolations(page);
   expect(errors, errors.join('\n')).toEqual([]);
 });
