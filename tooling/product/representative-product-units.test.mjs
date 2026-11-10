@@ -6,7 +6,7 @@ const expectedRoots = {
   button: 'interactive-controls/button',
   tabs: 'composite-components/tabs',
   dialog: 'composite-components/dialog',
-  icon: 'elemental-primitives/icon',
+  icon: 'elemental-primitives/media/icon',
   text: 'elemental-primitives/typography/text',
 };
 
@@ -350,9 +350,10 @@ test('L4 Portal and Presence use canonical port-infrastructure ownership', () =>
   assert.deepEqual(productGraphProblems(), []);
 });
 
-test('L1 aggregate stylesheet is not a component owner and Typography owns textual specialization', () => {
+test('L1 aggregate stylesheet is not a component owner and responsibility families own their product units', () => {
   const graph = discoverProductGraph();
   assert.equal(graph.components.some((entry) => entry.unitId === 'elemental-primitives'), false);
+  assert.equal(graph.components.some((entry) => entry.unitId === 'media'), false);
   assert.equal(graph.components.some((entry) => entry.unitId === 'mark'), false);
 
   for (const id of ['code', 'kbd']) {
@@ -363,9 +364,19 @@ test('L1 aggregate stylesheet is not a component owner and Typography owns textu
     assert.deepEqual(Object.keys(component.surfaces), ['web']);
   }
 
-  for (const id of ['image', 'skeleton', 'color-swatch']) {
+  const icon = graph.components.find((entry) => entry.unitId === 'icon');
+  assert.ok(icon, 'icon is independently owned inside Media');
+  assert.equal(icon.facets.canonicalRoot, 'product/components/elemental-primitives/media/icon/');
+  assert.deepEqual(Object.keys(icon.surfaces).sort(), ['angular', 'elements', 'react', 'vue', 'web']);
+
+  const image = graph.components.find((entry) => entry.unitId === 'image');
+  assert.ok(image, 'image is independently owned inside Media');
+  assert.equal(image.facets.canonicalRoot, 'product/components/elemental-primitives/media/image/');
+  assert.deepEqual(Object.keys(image.surfaces), ['web']);
+
+  for (const id of ['skeleton', 'color-swatch']) {
     const component = graph.components.find((entry) => entry.unitId === id);
-    assert.ok(component, id + ' is independently owned');
+    assert.ok(component, id + ' remains independently owned outside Media');
     assert.equal(component.layer, 'elemental-primitives');
     assert.deepEqual(Object.keys(component.surfaces), ['web']);
   }
