@@ -1,7 +1,7 @@
 {
   "id": "loading/basic",
   "title": "Loading presentations",
-  "description": "Built-in indeterminate indicators, structured placeholders, native progress, and consumer-authored custom loading artwork.",
+  "description": "Built-in indicators, structured placeholders, native progress, and custom artwork with public color, size, speed, stroke, and geometry overrides.",
   "defaultFramework": "native-web",
   "frameworks": {
     "native-web": {

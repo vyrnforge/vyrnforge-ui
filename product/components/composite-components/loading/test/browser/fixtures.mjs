@@ -38,15 +38,54 @@ export const browserFixture = {
     const body = `
       <section id="examples" data-vf-stack data-vf-stack-gap="lg" aria-labelledby="heading">
         <h1 id="heading">Loading fixture</h1>
+
         <div id="indicator-row" data-vf-inline data-vf-inline-gap="md">
-          <span id="scope-sm" data-vf-loading data-vf-loading-size="sm"><span id="spinner" data-vf-loading-indicator data-vf-loading-variant="spinner" aria-hidden="true"></span></span>
-          <span data-vf-loading><span id="dots" data-vf-loading-indicator data-vf-loading-variant="dots" aria-hidden="true"></span></span>
-          <span data-vf-loading><span id="bars" data-vf-loading-indicator data-vf-loading-variant="bars" aria-hidden="true"></span></span>
-          <span data-vf-loading data-vf-loading-size="lg"><span id="pulse" data-vf-loading-indicator data-vf-loading-variant="pulse" aria-hidden="true"></span></span>
+          <span
+            id="scope-sm"
+            data-vf-loading
+            data-vf-loading-size="sm"
+            style="
+              --vf-loading-spinner-color: rgb(120 40 200);
+              --vf-loading-spinner-track-color: rgb(230 220 240);
+              --vf-loading-indicator-thickness: 0.2em;
+              --vf-loading-spinner-duration: 1.1s;
+            "
+          >
+            <span id="spinner" data-vf-loading-indicator data-vf-loading-variant="spinner" aria-hidden="true"></span>
+          </span>
+
+          <span
+            data-vf-loading
+            style="
+              --vf-loading-dots-color: rgb(20 120 160);
+              --vf-loading-indicator-size: 2rem;
+              --vf-loading-dots-duration: 1.2s;
+            "
+          >
+            <span id="dots" data-vf-loading-indicator data-vf-loading-variant="dots" aria-hidden="true"></span>
+          </span>
+
+          <span data-vf-loading style="--vf-loading-bars-color: rgb(25 90 60); --vf-loading-bars-duration: 1.3s">
+            <span id="bars" data-vf-loading-indicator data-vf-loading-variant="bars" aria-hidden="true"></span>
+          </span>
+
+          <span data-vf-loading data-vf-loading-size="lg" style="--vf-loading-pulse-color: rgb(180 80 20)">
+            <span id="pulse" data-vf-loading-indicator data-vf-loading-variant="pulse" aria-hidden="true"></span>
+          </span>
         </div>
 
         <section id="busy-region" aria-label="Account summary" aria-busy="true">
-          <article id="placeholder-card" data-vf-surface>
+          <article
+            id="placeholder-card"
+            data-vf-loading
+            data-vf-surface
+            style="
+              --vf-loading-placeholder-color: rgb(225 235 255);
+              --vf-loading-placeholder-highlight: rgb(190 210 250);
+              --vf-loading-placeholder-radius: 0.75rem;
+              --vf-loading-placeholder-duration: 1.8s;
+            "
+          >
             <div data-vf-stack data-vf-stack-gap="sm">
               <div id="media" data-vf-loading-placeholder data-vf-aspect-ratio data-vf-aspect-ratio-value="video" aria-hidden="true"></div>
               <div data-vf-inline data-vf-inline-gap="sm">
@@ -62,19 +101,38 @@ export const browserFixture = {
 
         <div>
           <label for="determinate">Importing records</label>
-          <progress id="determinate" data-vf-loading-progress max="100" value="48">48%</progress>
+          <progress
+            id="determinate"
+            data-vf-loading-progress
+            max="100"
+            value="48"
+            style="
+              --vf-loading-progress-color: rgb(35 105 225);
+              --vf-loading-progress-track-color: rgb(225 235 255);
+              --vf-loading-progress-size: 1rem;
+              --vf-loading-progress-radius: 0.75rem;
+            "
+          >48%</progress>
         </div>
+
         <div>
           <label for="indeterminate">Preparing import</label>
           <progress id="indeterminate" data-vf-loading-progress max="100">Preparing</progress>
         </div>
 
-        <div id="custom" data-vf-loading data-vf-loading-custom aria-hidden="true">
+        <div
+          id="custom"
+          data-vf-loading
+          data-vf-loading-custom
+          aria-hidden="true"
+          style="--vf-loading-custom-color: rgb(90 70 210)"
+        >
           <svg width="48" height="48" viewBox="0 0 48 48" role="presentation">
             <path d="M24 5 40 14v20L24 43 8 34V14Z" fill="none" stroke="currentColor" stroke-width="3"/>
             <circle cx="24" cy="24" r="4" fill="currentColor"/>
           </svg>
         </div>
+
         <p id="status" role="status">Loading account summary</p>
       </section>
     `;

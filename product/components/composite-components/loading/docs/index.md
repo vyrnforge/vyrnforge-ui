@@ -26,16 +26,72 @@ Built-in presentation hooks may also be used without an extra wrapper when that 
 
 ## Customization
 
-Documented public variables:
+Loading's visual API is deliberately open through CSS custom properties. Preset variants select a visual recipe; they do not lock its color, size, stroke, speed, radius, or brand treatment.
 
-- `--vf-loading-indicator-size`
-- `--vf-loading-indicator-thickness`
-- `--vf-loading-color`
-- `--vf-loading-track-color`
+Shared variables:
+
+- `--vf-loading-color` — shared presentation color; defaults to the accent color.
+- `--vf-loading-track-color` — shared track/background color.
+- `--vf-loading-indicator-size` — compact indicator size.
+- `--vf-loading-indicator-thickness` — spinner stroke thickness.
+- `--vf-loading-indicator-duration` — shared compact-indicator motion override.
+
+Indicator-specific overrides:
+
+- `--vf-loading-spinner-color`
+- `--vf-loading-spinner-track-color`
+- `--vf-loading-spinner-duration`
+- `--vf-loading-dots-color`
+- `--vf-loading-dots-duration`
+- `--vf-loading-bars-color`
+- `--vf-loading-bars-duration`
+- `--vf-loading-pulse-color`
+- `--vf-loading-pulse-duration`
+
+Structured-placeholder overrides:
+
 - `--vf-loading-placeholder-color`
 - `--vf-loading-placeholder-highlight`
+- `--vf-loading-placeholder-radius`
+- `--vf-loading-placeholder-line-radius`
+- `--vf-loading-placeholder-duration`
 
-Custom content is the primary extension point. Do not request another built-in variant merely to support product-specific artwork.
+Progress overrides:
+
+- `--vf-loading-progress-color`
+- `--vf-loading-progress-track-color`
+- `--vf-loading-progress-size`
+- `--vf-loading-progress-radius`
+
+Custom-content override:
+
+- `--vf-loading-custom-color`
+
+Set shared variables on a `data-vf-loading` scope to theme a whole loading composition, or set a presentation-specific variable directly on one indicator, placeholder, progress element, or custom artwork host.
+
+For example:
+
+```html
+<span
+  data-vf-loading
+  style="
+    --vf-loading-spinner-color: rebeccapurple;
+    --vf-loading-spinner-track-color: lavender;
+    --vf-loading-indicator-size: 2rem;
+    --vf-loading-indicator-thickness: 0.18em;
+  "
+>
+  <span
+    data-vf-loading-indicator
+    data-vf-loading-variant="spinner"
+    aria-hidden="true"
+  ></span>
+</span>
+```
+
+Any valid CSS color can be used. Prefer VyrnForge tokens when the loading presentation should follow the active theme. Color remains presentational; do not use a loader color alone to communicate success, warning, danger, or another semantic state.
+
+Custom content is the primary extension point. Do not add a new built-in variant merely to support product-specific artwork.
 
 ## Structured placeholders
 
