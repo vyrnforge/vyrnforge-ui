@@ -1,0 +1,53 @@
+{
+  "schemaVersion": 1,
+  "component": "icon",
+  "reviewStatus": "mapped",
+  "nativeBaseline": {
+    "kind": "native",
+    "reference": "svg"
+  },
+  "wcag": {
+    "target": "2.2 AA",
+    "status": "mapped",
+    "criteria": [
+      "1.1.1",
+      "1.4.11"
+    ]
+  },
+  "aria": {
+    "status": "mapped",
+    "apgPattern": null
+  },
+  "interaction": {
+    "keyboard": "not-applicable",
+    "focus": "not-applicable",
+    "directionality": "native"
+  },
+  "ownership": {
+    "library": [
+      "render decorative icons hidden from assistive technology by default",
+      "map an explicit standalone label to image semantics without making Icon focusable"
+    ],
+    "consumer": [
+      "provide a meaningful accessible label only when the icon itself carries standalone meaning",
+      "keep Icon decorative when an owning interactive component already supplies the accessible name"
+    ]
+  },
+  "forms": {
+    "status": "not-applicable"
+  },
+  "visualAccessibility": {
+    "status": "component-specific"
+  },
+  "ssrHydration": {
+    "status": "contract-required"
+  },
+  "evidence": {
+    "browser": "required",
+    "assistiveTechnology": "not-applicable"
+  },
+  "profileVariability": [],
+  "notes": [
+    "Icon is non-interactive; Button, Link, or another semantic owner owns interaction and naming when Icon is composed inside a control."
+  ]
+}
