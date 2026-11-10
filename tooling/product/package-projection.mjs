@@ -31,17 +31,18 @@ export function packageProjectionPlan(root, packageId, graph = discoverProductGr
   if (!pkg) throw new Error(`Unknown Product Graph package: ${packageId}`);
 
   const entries = [];
-  for (const component of graph.components) {
-    for (const surface of Object.values(component.surfaces)) {
+  for (const owner of [...graph.components, ...graph.patterns]) {
+    for (const surface of Object.values(owner.surfaces)) {
       if (surface.package !== packageId || surface.authoringMode !== 'product-unit') continue;
       if (surface.publicEntrypoints.length === 0) continue;
       if (!surface.projectionPath) {
-        throw new Error(`${component.id}/${surface.target} has no package projection destination`);
+        throw new Error(`${owner.id}/${surface.target} has no package projection destination`);
       }
       const sourcePath = surface.authoringPaths[0];
-      if (!sourcePath) throw new Error(`${component.id}/${surface.target} has no product-owned authoring path`);
+      if (!sourcePath) throw new Error(`${owner.id}/${surface.target} has no product-owned authoring path`);
       entries.push({
-        component: component.unitId,
+        component: owner.unitId,
+        ownerKind: owner.kind,
         target: surface.target,
         sourcePath,
         projectionPath: surface.projectionPath,
