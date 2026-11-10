@@ -1,5 +1,6 @@
 @import "./tokens.css";
 @import "./loading-motion.css";
+@import "../components/visually-hidden/visually-hidden.css";
 
 @layer vyrnforge.foundation {
   :root,
@@ -15,17 +16,6 @@
     --_vf-density-control-height-lg: var(--vf-control-height-md);
   }
 
-  :where([data-vf-visually-hidden]) {
-    border: 0;
-    block-size: 1px;
-    clip-path: inset(50%);
-    inline-size: 1px;
-    margin: -1px;
-    overflow: hidden;
-    padding: 0;
-    position: absolute;
-    white-space: nowrap;
-  }
 
   @media (prefers-reduced-motion: reduce) {
     :root,
