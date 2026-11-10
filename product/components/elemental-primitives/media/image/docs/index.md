@@ -1,15 +1,32 @@
 # Image
 
-Responsive presentation over native img while preserving authored image semantics and loading attributes.
+Image is the native-backed treatment inside the Layer 1 Media family.
 
 ## Native baseline
 
-Use the native semantic element or authored semantic context defined by the Layer 1 contract. VyrnForge adds presentation only; browser semantics and authored attributes remain authoritative.
+Use a native `img` element. VyrnForge augments it with responsive presentation only; browser semantics and authored attributes remain authoritative.
+
+Native HTML continues to own alternative text, resource/source selection, intrinsic dimensions, loading, decoding, fetch priority, referrer/CORS policy, and load/error behavior.
 
 ## Accessibility
 
-Follow the Layer 1 contract's consumer responsibilities. This primitive adds no custom keyboard interaction. Forced-colors and reduced-motion behavior apply where relevant.
+Authors provide context-appropriate alternative text, including an empty `alt` for decorative images where appropriate. VyrnForge does not infer meaning, invent hidden labels, add focusability, or replace native image semantics.
 
 ## Native Web
 
-Load `@vyrnforge/web/styles/image.css` and use its documented `data-vf-*` hook.
+Load `@vyrnforge/web/styles/image.css` and apply `data-vf-image` directly to the native `img` element.
+
+```html
+<img
+  data-vf-image
+  src="/artwork/example.webp"
+  alt="Example artwork"
+  width="640"
+  height="320"
+  loading="lazy"
+  decoding="async"
+  fetchpriority="low"
+/>
+```
+
+Framework-specific Image wrappers are not required merely for symmetry. Higher-level fallback, gallery, zoom, crop, or asset-loading behavior belongs elsewhere.
