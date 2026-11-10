@@ -2,7 +2,6 @@ import { cp, mkdir, readFile, rm, stat, writeFile } from 'node:fs/promises';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { compileNativeDocumentation } from '../../tooling/docs/native-documentation.mjs';
-import { componentLayerDefinitions } from '../../tooling/product/component-paths.mjs';
 
 const root = path.resolve(fileURLToPath(new URL('../../', import.meta.url)));
 const outRoot = path.join(root, 'dist/docs');
@@ -11,6 +10,7 @@ const channelRoot = path.join(outRoot, channel);
 const nativeRoot = path.join(channelRoot, 'native-web');
 const nativeSitePath = `${channel}/native-web/`;
 const registry = JSON.parse(await readFile(path.join(root, 'documentation/site/registry.json'), 'utf8'));
+const componentTaxonomy = JSON.parse(await readFile(path.join(root, 'documentation/site/component-taxonomy.json'), 'utf8'));
 
 if (registry.mode !== 'native-html-first' || registry.framework !== 'native-web') {
   throw new Error('Native documentation build requires documentation/site/registry.json to declare native-html-first mode for native-web');
@@ -76,29 +76,75 @@ function renderBlocks(blocks = []) {
   }).join('\n');
 }
 
-function componentNavigationGroups(pages, scope, prefix) {
-  const groups = [];
-  for (const layer of componentLayerDefinitions) {
-    const layerPages = pages.filter((page) => page.layer === layer.id);
-    const categories = [...new Set(layerPages.map((page) => page.category ?? ''))].sort();
-    for (const category of categories) {
-      const members = layerPages.filter((page) => (page.category ?? '') === category);
-      if (!members.length) continue;
-      const categoryLabel = category ? ' / ' + titleCase(category) : '';
-      groups.push({
-        label: scope + ' · ' + layer.label + categoryLabel,
-        items: members.map((page) => ({ id: prefix + ':' + page.id, title: page.title, route: page.route })),
-      });
+function readComponentCategories() {
+  const groups = Array.isArray(componentTaxonomy.groups) ? componentTaxonomy.groups : [];
+  const seen = new Set();
+  for (const group of groups) {
+    if (!group?.id || !group?.label || !Array.isArray(group.components)) {
+      throw new Error('documentation/site/component-taxonomy.json contains an invalid group');
+    }
+    for (const componentId of group.components) {
+      if (seen.has(componentId)) throw new Error('Duplicate documentation taxonomy component: ' + componentId);
+      seen.add(componentId);
     }
   }
-  const unclassified = pages.filter((page) => !page.layer);
+  return groups;
+}
+
+const componentCategories = readComponentCategories();
+
+function componentCategoryForId(componentId) {
+  return componentCategories.find((group) => group.components.includes(componentId)) ?? null;
+}
+
+function componentCategory(page) {
+  return componentCategoryForId(page.id) ?? {
+    id: 'other',
+    label: 'Other',
+    description: 'Additional public components that have not yet been assigned to a consumer-facing documentation category.',
+    components: [],
+  };
+}
+
+function componentDestination(page) {
+  return page.showcaseAvailable ? page.showcaseRoute : page.apiRoute;
+}
+
+function consumerComponentGroups(pages) {
+  const classified = new Set();
+  const groups = componentCategories.map((category) => {
+    const members = pages
+      .filter((page) => category.components.includes(page.id))
+      .sort((left, right) => left.title.localeCompare(right.title));
+    for (const member of members) classified.add(member.id);
+    return { ...category, members };
+  }).filter((group) => group.members.length);
+
+  const unclassified = pages
+    .filter((page) => !classified.has(page.id))
+    .sort((left, right) => left.title.localeCompare(right.title));
   if (unclassified.length) {
     groups.push({
-      label: scope + ' · Unclassified (migration pending)',
-      items: unclassified.map((page) => ({ id: prefix + ':' + page.id, title: page.title, route: page.route })),
+      id: 'other',
+      label: 'Other',
+      description: 'Additional public components that have not yet been assigned to a consumer-facing documentation category.',
+      components: [],
+      members: unclassified,
     });
   }
   return groups;
+}
+
+function componentNavigationGroups() {
+  return consumerComponentGroups(model.componentCatalog).map((group) => ({
+    label: group.label,
+    items: group.members.map((page) => ({
+      id: 'component:' + page.id,
+      title: page.title,
+      route: componentDestination(page),
+      currentRoutes: [page.showcaseRoute, page.apiRoute],
+    })),
+  }));
 }
 
 function navigationGroups() {
@@ -113,28 +159,27 @@ function navigationGroups() {
     },
     {
       label: 'Components',
-      items: [{ id: 'components:index', title: 'Showcase', route: 'components/' }],
+      items: [{ id: 'components:index', title: 'Browse all', route: 'components/' }],
     },
-    ...componentNavigationGroups(model.showcasePages, 'Showcase', 'showcase'),
+    ...componentNavigationGroups(),
     {
       label: 'API Reference',
       items: [{ id: 'api:index', title: 'Components API', route: 'api/components/' }],
     },
-    ...componentNavigationGroups(model.apiPages, 'API', 'api'),
   ];
 }
 
 function documentationNavigation(currentPageDirectory, currentRoute = '') {
   const groups = navigationGroups().map((group) => `<div data-vf-side-nav-group>
       <p data-vf-side-nav-group-label>${escapeHtml(group.label)}</p>
-      <ul data-vf-side-nav-list>${group.items.map((item) => `<li data-vf-side-nav-item><a data-vf-side-nav-link href="${artifactHref(currentPageDirectory, routeTarget(item.route))}"${item.route === currentRoute ? ' aria-current="page"' : ''}>${escapeHtml(item.title)}</a></li>`).join('')}</ul>
+      <ul data-vf-side-nav-list>${group.items.map((item) => `<li data-vf-side-nav-item><a data-vf-side-nav-link href="${artifactHref(currentPageDirectory, routeTarget(item.route))}"${(item.currentRoutes ?? [item.route]).includes(currentRoute) ? ' aria-current="page"' : ''}>${escapeHtml(item.title)}</a></li>`).join('')}</ul>
     </div>`).join('\n');
 
   return `<nav data-vf-side-nav aria-label="Documentation">${groups}</nav>`;
 }
 
 function pageSearchText(page) {
-  const values = [page.title, page.group, page.description, ...(page.publicEntrypoints ?? [])];
+  const values = [page.title, page.group, componentCategoryForId(page.id)?.label, page.description, ...(page.publicEntrypoints ?? [])];
   const content = page.content ?? page.sharedContent;
   if (content) {
     values.push(content.title);
@@ -150,8 +195,8 @@ function pageSearchText(page) {
 function searchablePages() {
   return [
     ...model.foundationPages.map((page) => ({ ...page, searchKind: 'Foundation' })),
-    { id: 'components-index', title: 'Component showcase', route: 'components/', searchKind: 'Components' },
-    ...model.showcasePages.map((page) => ({ ...page, searchKind: 'Component showcase' })),
+    { id: 'components-index', title: 'Components', route: 'components/', searchKind: 'Components' },
+    ...model.showcasePages.map((page) => ({ ...page, searchKind: 'Component guide' })),
     { id: 'api-index', title: 'Components API', route: 'api/components/', searchKind: 'API Reference' },
     ...model.apiPages.map((page) => ({ ...page, searchKind: 'API Reference' })),
   ];
@@ -256,11 +301,11 @@ function renderHome() {
     title: 'Native Web documentation',
     description: 'VyrnForge Native Web documentation',
     content: `<section class="vf-docs-hero">
-      <p class="vf-docs-eyebrow">Framework-scoped documentation</p>
+      <p class="vf-docs-eyebrow">Native Web documentation</p>
       <h1>VyrnForge Native Web</h1>
-      <p class="vf-docs-lede">This view uses semantic Native HTML and the public <code>@vyrnforge/web</code> foundation. Components are discovered from the Product Graph for the active framework surface; showcase guidance, API reference, and foundations are separate documentation concerns.</p>
+      <p class="vf-docs-lede">Find components by the interface job they solve, then open practical guidance, examples, or the exact public API. Internal VyrnForge architecture stays behind the documentation instead of becoming something consumers need to learn.</p>
       <div class="vf-docs-hero-actions">
-        <a href="${artifactHref(currentPageDirectory, routeTarget('components/'))}" data-vf-link class="vf-docs-hero-cta">Explore components</a>
+        <a href="${artifactHref(currentPageDirectory, routeTarget('components/'))}" data-vf-link class="vf-docs-hero-cta">Browse components</a>
         <a href="${artifactHref(currentPageDirectory, routeTarget('api/components/'))}" data-vf-link>Browse API reference</a>
       </div>
     </section>
@@ -277,39 +322,56 @@ function renderHome() {
     <section class="vf-docs-catalog" aria-labelledby="catalog-heading">
       <div class="vf-docs-section-heading">
         <div>
-          <p class="vf-docs-eyebrow">Product Graph</p>
-          <h2 id="catalog-heading">Native component catalog</h2>
+          <p class="vf-docs-eyebrow">Components</p>
+          <h2 id="catalog-heading">Browse components</h2>
         </div>
-        <p>${model.componentCatalog.length} public Native Web component surface${model.componentCatalog.length === 1 ? '' : 's'} discovered; ${model.showcasePages.length} currently have complete showcase guidance.</p>
+        <p>${model.componentCatalog.length} public Native Web components, organized by familiar UI categories. ${model.showcasePages.length} currently include complete usage guidance and examples.</p>
       </div>
       ${cardList([
-        { title: 'Component showcase', route: 'components/', meta: `${model.showcasePages.length} showcase-ready` },
-        { title: 'Components API', route: 'api/components/', meta: `${model.apiPages.length} public API entries` },
+        { title: 'Browse components', route: 'components/', meta: `${model.componentCatalog.length} components by UI purpose` },
+        { title: 'API reference', route: 'api/components/', meta: `${model.apiPages.length} public API entries` },
       ], currentPageDirectory)}
     </section>`,
   });
 }
 
+function renderComponentGroupSections(pages, currentPageDirectory, { apiOnly = false } = {}) {
+  return '<div class="vf-docs-component-groups">' + consumerComponentGroups(pages).map((group) => {
+    const cards = group.members.map((component) => ({
+      title: component.title,
+      route: apiOnly ? component.apiRoute : componentDestination(component),
+      meta: apiOnly
+        ? component.publicEntrypoints.join(', ')
+        : component.showcaseAvailable ? 'Guide + API' : 'API reference',
+    }));
+    return `<section class="vf-docs-component-group" data-vf-docs-component-group="${escapeHtml(group.id)}" aria-labelledby="component-group-${escapeHtml(group.id)}">
+      <div class="vf-docs-component-group-header">
+        <div>
+          <h2 id="component-group-${escapeHtml(group.id)}">${escapeHtml(group.label)}</h2>
+          <p>${escapeHtml(group.description)}</p>
+        </div>
+        <span>${group.members.length} component${group.members.length === 1 ? '' : 's'}</span>
+      </div>
+      ${cardList(cards, currentPageDirectory)}
+    </section>`;
+  }).join('\n') + '</div>';
+}
+
 function renderComponentsIndex() {
   const route = 'components/';
   const currentPageDirectory = pageDirectory(route);
-  const cards = model.componentCatalog.map((component) => ({
-    title: component.title,
-    route: component.showcaseAvailable ? component.showcaseRoute : component.apiRoute,
-    meta: component.showcaseAvailable ? `${titleCase(component.group)} · Showcase + API` : `${titleCase(component.group)} · API reference`,
-  }));
   return shell({
     route,
-    title: 'Component showcase',
-    description: 'Native Web component showcase and availability',
+    title: 'Components',
+    description: 'Browse Native Web components by familiar interface purpose',
     content: `<section class="vf-docs-hero">
       <p class="vf-docs-eyebrow">Components</p>
-      <h1>Component showcase</h1>
-      <p class="vf-docs-lede">The catalog is discovered from Native Web Product Graph surfaces. Components with complete authored guidance and executable Native examples open a showcase; implemented components without that guidance remain visible through their API reference.</p>
+      <h1>Components</h1>
+      <p class="vf-docs-lede">Browse by what you are building: forms and inputs, actions, navigation, layout, content, feedback, overlays, collections, and supporting utilities. Internal VyrnForge layers do not define this catalog.</p>
     </section>
     <section class="vf-docs-catalog" aria-labelledby="component-catalog-heading">
-      <div class="vf-docs-section-heading"><div><h2 id="component-catalog-heading">Native Web components</h2></div><p>${model.componentCatalog.length} public surfaces</p></div>
-      ${cardList(cards, currentPageDirectory)}
+      <div class="vf-docs-section-heading"><div><h2 id="component-catalog-heading">Browse by UI purpose</h2></div><p>${model.componentCatalog.length} public Native Web components</p></div>
+      ${renderComponentGroupSections(model.componentCatalog, currentPageDirectory)}
     </section>`,
   });
 }
@@ -317,19 +379,18 @@ function renderComponentsIndex() {
 function renderApiIndex() {
   const route = 'api/components/';
   const currentPageDirectory = pageDirectory(route);
-  const cards = model.apiPages.map((page) => ({ title: page.title, route: page.route, meta: page.publicEntrypoints.join(', ') }));
   return shell({
     route,
     title: 'Components API',
-    description: 'Generated Native Web component API reference',
+    description: 'Verified Native Web component API reference',
     content: `<section class="vf-docs-hero">
       <p class="vf-docs-eyebrow">API Reference</p>
       <h1>Components API</h1>
-      <p class="vf-docs-lede">Reference availability follows real public Native Web package projections. It is separate from showcase readiness so implemented APIs do not disappear merely because authored usage guidance is still being rebuilt.</p>
+      <p class="vf-docs-lede">Use this reference when you need exact public entrypoints. Components are grouped with the same consumer-facing categories used by the main catalog; availability still comes from the real Native Web package surface.</p>
     </section>
     <section class="vf-docs-catalog" aria-labelledby="api-catalog-heading">
       <div class="vf-docs-section-heading"><div><h2 id="api-catalog-heading">Public component entrypoints</h2></div><p>${model.apiPages.length} components</p></div>
-      ${cardList(cards, currentPageDirectory)}
+      ${renderComponentGroupSections(model.apiPages, currentPageDirectory, { apiOnly: true })}
     </section>`,
   });
 }
@@ -383,10 +444,12 @@ function renderExample(example) {
 
 function renderBreadcrumbs(page, currentPageDirectory, family = 'Components') {
   const familyRoute = family === 'API Reference' ? 'api/components/' : family === 'Foundations' ? 'foundations/' : 'components/';
+  const category = family === 'Components' ? componentCategoryForId(page.id) : null;
   return `<nav class="vf-docs-breadcrumbs" aria-label="Breadcrumb">
     <ol>
       <li><a data-vf-link href="${artifactHref(currentPageDirectory, nativeSitePath)}">Native Web</a></li>
       <li><span aria-hidden="true">/</span> ${escapeHtml(familyRoute === 'foundations/' ? 'Foundations' : family)}</li>
+      ${category ? `<li><span aria-hidden="true">/</span> ${escapeHtml(category.label)}</li>` : ''}
       <li><span aria-hidden="true">/</span> <span aria-current="page">${escapeHtml(page.title)}</span></li>
     </ol>
   </nav>`;
@@ -461,8 +524,8 @@ function renderComponent(page) {
           <div class="vf-docs-page-meta" aria-label="Page metadata">
             <span>Native Web</span>
             <span>${escapeHtml(channel)}</span>
-            <span>${escapeHtml(titleCase(page.group))}</span>
-            <span>Showcase</span>
+            <span>${escapeHtml(componentCategory(page).label)}</span>
+            <span>Guide</span>
           </div>
           <h1>${escapeHtml(page.content.title)}</h1>
           <div class="vf-docs-lede">${renderBlocks(page.content.intro)}</div>
@@ -512,9 +575,9 @@ function renderApiPage(page) {
     content: `${renderBreadcrumbs(page, currentPageDirectory, 'API Reference')}
     <article class="vf-docs-article" data-vf-docs-api-component="${escapeHtml(page.id)}">
       <header class="vf-docs-component-header">
-        <div class="vf-docs-page-meta"><span>Native Web</span><span>API Reference</span></div>
+        <div class="vf-docs-page-meta"><span>Native Web</span><span>${escapeHtml(componentCategory(page).label)}</span><span>API Reference</span></div>
         <h1>${escapeHtml(page.title)} API</h1>
-        <p class="vf-docs-lede">Generated from the public Native Web Product Graph projection. This reference is separate from authored showcase guidance.</p>
+        <p class="vf-docs-lede">Verified from the public Native Web package surface. Use the component guide for design and usage guidance when one is available.</p>
       </header>
       <section>
         <h2>Public entrypoints</h2>
@@ -586,6 +649,7 @@ const manifest = {
     slug: component.id,
     title: component.title,
     group: component.group,
+    category: componentCategory(component).label,
     showcase: component.showcaseAvailable,
     api: component.apiAvailable,
     publicEntrypoints: component.publicEntrypoints,
@@ -594,6 +658,7 @@ const manifest = {
     slug: page.route,
     title: page.title,
     group: page.group,
+    category: componentCategory(page).label,
     framework: model.framework,
     source: page.sourcePath,
     examples: page.examples.map((example) => example.id),
