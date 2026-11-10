@@ -295,7 +295,7 @@ function renderHome() {
     content: `<section class="vf-docs-hero">
       <p class="vf-docs-eyebrow">Native Web documentation</p>
       <h1>VyrnForge Native Web</h1>
-      <p class="vf-docs-lede">Find components by the interface job they solve, then open practical guidance, examples, or the exact public API. Internal VyrnForge architecture stays behind the documentation instead of becoming something consumers need to learn.</p>
+      <p class="vf-docs-lede">Start with the interface you need to build, browse components by familiar UI purpose, then open practical guidance, examples, or the exact public API.</p>
       <div class="vf-docs-hero-actions">
         <a href="${artifactHref(currentPageDirectory, routeTarget('components/'))}" data-vf-link class="vf-docs-hero-cta">Browse components</a>
         <a href="${artifactHref(currentPageDirectory, routeTarget('api/components/'))}" data-vf-link>Browse API reference</a>
@@ -359,7 +359,7 @@ function renderComponentsIndex() {
     content: `<section class="vf-docs-hero">
       <p class="vf-docs-eyebrow">Components</p>
       <h1>Components</h1>
-      <p class="vf-docs-lede">Browse by what you are building: forms and inputs, actions, navigation, layout, content, feedback, overlays, collections, and supporting utilities. Internal VyrnForge layers do not define this catalog.</p>
+      <p class="vf-docs-lede">Browse by what you are building: forms and inputs, actions, navigation, layout, content, feedback, overlays, collections, and supporting utilities.</p>
     </section>
     <section class="vf-docs-catalog" aria-labelledby="component-catalog-heading">
       <div class="vf-docs-section-heading"><div><h2 id="component-catalog-heading">Browse by UI purpose</h2></div><p>${model.componentCatalog.length} public Native Web components</p></div>
