@@ -2,4 +2,4 @@
 '@vyrnforge/web': minor
 ---
 
-Expand the Native Web Skeleton presentation contract with documented block, line, and circle geometry while keeping loading state, status communication, timing, and application async behavior outside the primitive.
+Replace the short-lived standalone Skeleton primitive with the Native Web Loading Feedback & Status family. Loading provides spinner, dots, bars, pulse, structured-placeholder, native progress, and custom authored presentation hooks while keeping async lifecycle state application-owned.
