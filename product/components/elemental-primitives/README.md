@@ -23,17 +23,7 @@ Media is a first-class L1 ownership family, not a runtime component or public pa
 - Framework-specific Image wrappers are not required merely for symmetry; Native Web styling is currently the smallest correct reusable layer.
 - The official glyph catalog remains independently distributed through `@vyrnforge/icons`; Media is source ownership, not a package boundary.
 
-## Approved public inventory
-
-The current public L1 inventory is exactly nine product units:
-
-- Typography: Text, Code, Kbd.
-- Media: Icon, Image.
-- Independent primitives: Surface, Separator, ColorSwatch, VisuallyHidden.
-
-Framework surfaces are justified by responsibility, not symmetry. Text, Surface, Separator, and VisuallyHidden use React/Angular/Vue convenience mappings but no dedicated Elements wrapper; Image, Code, Kbd, and ColorSwatch are Native Web-only; Icon retains all five ports because it performs real IconDefinition-to-SVG rendering.
-
-Structured loading placeholders are not an L1 primitive; they are one presentation inside the Loading Pattern under `product/patterns/loading/`.
+Other L1 responsibilities remain independently owned only where they add a distinct reusable contract: Surface, Separator, ColorSwatch, and VisuallyHidden. Structured loading placeholders are not an L1 primitive; they are one presentation inside the Loading Pattern under `product/patterns/loading/`.
 
 Figure/List/Table/form/interactive semantics remain owned by their native structure or higher-layer contracts.
 
