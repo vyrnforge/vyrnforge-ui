@@ -64,7 +64,7 @@ test('Native Web home uses the VyrnForge shell and separates documentation surfa
   await expect(page.locator('[data-vf-app-shell]')).toHaveCount(1);
   await expect(page.locator('[data-vf-side-nav]')).toHaveCount(1);
   await expect(page.getByRole('link', { name: 'Browse all', exact: true })).toHaveAttribute('href', 'components/');
-  const explore = page.getByRole('link', { name: 'Browse components' });
+  const explore = page.getByRole('link', { name: 'Browse components', exact: true });
   await expect(explore).toHaveAttribute('data-vf-link', '');
   await expect(explore).not.toHaveAttribute('data-vf-button', '');
   await expect(explore).toHaveAttribute('href', 'components/');
@@ -148,7 +148,7 @@ test('Native Web home uses the VyrnForge shell and separates documentation surfa
   expect(errors, errors.join('\n')).toEqual([]);
 });
 
-test('Native component catalog is Product Graph scoped and API reference is independent of showcase readiness', async ({ page }) => {
+test('Native component catalog is Product Graph scoped and API reference is independent of showcase readiness', async ({ page }, testInfo) => {
   const errors = collectPageErrors(page);
   const button = buttonCatalogEntry();
   const themeToggle = themeToggleCatalogEntry();
@@ -159,16 +159,22 @@ test('Native component catalog is Product Graph scoped and API reference is inde
   await expect(page.locator('[data-vf-docs-component-group="forms-inputs"]').getByRole('heading', { name: 'Forms & Inputs' })).toBeVisible();
   await expect(page.locator('[data-vf-docs-component-group="actions"]').getByRole('heading', { name: 'Actions' })).toBeVisible();
   await expect(page.locator('[data-vf-docs-component-group="content-media"]').getByRole('heading', { name: 'Content & Media' })).toBeVisible();
-  await expect(page.locator('[data-vf-docs-component-group="forms-inputs"]').getByRole('link', { name: 'Input', exact: true })).toBeVisible();
+  const inputCatalogLink = page.locator('[data-vf-docs-component-group="forms-inputs"] .vf-docs-card-link')
+    .filter({ has: page.getByText('Input', { exact: true }) });
+  await expect(inputCatalogLink).toBeVisible();
   const buttonCatalogLink = page.locator('.vf-docs-card-list a').filter({ hasText: 'Button' }).first();
   await expect(buttonCatalogLink).toHaveAttribute('href', button.showcase ? 'button/' : '../api/components/button/');
   const themeToggleCatalogLink = page.locator('.vf-docs-card-list a').filter({ hasText: 'Theme Toggle' }).first();
   await expect(themeToggleCatalogLink).toHaveAttribute('href', themeToggle.showcase ? 'theme-toggle/' : '../api/components/theme-toggle/');
 
+  await page.screenshot({ path: testInfo.outputPath('native-components.png'), fullPage: true });
+
   await gotoWithCleanDocsState(page, '/next/native-web/api/components/');
   await expect(page.getByRole('heading', { level: 1, name: 'Components API' })).toBeVisible();
   await expect(page.locator('.vf-docs-card-list > li')).toHaveCount(manifest.api.length);
-  await expect(page.locator('[data-vf-docs-component-group="forms-inputs"]').getByRole('link', { name: 'Input', exact: true })).toHaveAttribute('href', 'input/');
+  const inputApiLink = page.locator('[data-vf-docs-component-group="forms-inputs"] .vf-docs-card-link')
+    .filter({ has: page.getByText('Input', { exact: true }) });
+  await expect(inputApiLink).toHaveAttribute('href', 'input/');
   await expect(page.getByRole('link', { name: 'Button', exact: true }).last()).toHaveAttribute('href', 'button/');
   await expect(page.getByRole('link', { name: 'Theme Toggle', exact: true }).last()).toHaveAttribute('href', 'theme-toggle/');
 
