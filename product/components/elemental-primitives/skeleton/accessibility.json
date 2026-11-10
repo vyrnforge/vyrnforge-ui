@@ -25,12 +25,14 @@
   },
   "ownership": {
     "library": [
-      "keep the visual skeleton decorative when authored with aria-hidden",
-      "disable pulse animation for prefers-reduced-motion and retain a visible forced-colors fallback"
+      "provide decorative block, line, and circle placeholder geometry without semantic loading state",
+      "disable non-essential animation for prefers-reduced-motion and retain a visible forced-colors fallback"
     ],
     "consumer": [
-      "provide aria-hidden=true on decorative skeleton shapes",
-      "communicate loading state through an appropriate surrounding aria-busy region or status message when users need that information"
+      "provide aria-hidden=true on every decorative skeleton shape",
+      "communicate loading state through an appropriate surrounding aria-busy region or authored status message when users need that information",
+      "replace skeleton presentation with truthful loaded, empty, error, permission, or other authoritative state",
+      "choose dimensions that approximate only structure the application actually knows"
     ]
   },
   "forms": {
@@ -48,6 +50,7 @@
   },
   "profileVariability": [],
   "notes": [
-    "CSS cannot add accessibility attributes; loading semantics remain an author responsibility."
+    "CSS cannot add accessibility attributes; loading semantics remain an author responsibility.",
+    "Skeleton does not own asynchronous operation state, progress, retry, cancellation, or timing policy."
   ]
 }
