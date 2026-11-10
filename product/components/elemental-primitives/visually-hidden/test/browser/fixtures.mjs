@@ -7,11 +7,9 @@ export const browserFixture = {
     const root = process.cwd();
     const outDir = path.join(root, 'dist/browser-fixtures/components/visually-hidden');
     await mkdir(outDir, { recursive: true });
-    const visuallyHiddenCss = await readFile(
-      path.join(root, 'packages/web/dist/components/visually-hidden/visually-hidden.css'),
-      'utf8',
-    );
-    await writeFile(path.join(outDir, 'visually-hidden.css'), visuallyHiddenCss);
+    const foundationCss = await readFile(path.join(root, 'packages/web/dist/styles/foundation.css'), 'utf8');
+    const tokensCss = await readFile(path.join(root, 'packages/web/dist/styles/tokens.css'), 'utf8');
+    await writeFile(path.join(outDir, 'visually-hidden.css'), `${tokensCss}\n${foundationCss.replace('@import "./tokens.css";\n', '')}`);
     const page = (body) => `<!doctype html><html lang="en"><head><meta charset="utf-8"><link rel="stylesheet" href="./visually-hidden.css"><title>VisuallyHidden fixture</title></head><body><main><h1>VisuallyHidden fixture</h1>${body}</main></body></html>`;
     if (port === 'web') await writeFile(path.join(outDir, 'web.html'), page('<span id="hidden-label" data-vf-visually-hidden>Notifications</span>'));
     if (port === 'react') { const { createElement } = await import('react'); const { renderToStaticMarkup } = await import('react-dom/server'); const { VisuallyHidden } = await import('@vyrnforge/react/visually-hidden'); await writeFile(path.join(outDir, 'react.html'), page(renderToStaticMarkup(createElement(VisuallyHidden, { id: 'hidden-label' }, 'Notifications')))); }
