@@ -46,10 +46,10 @@ export const chartBarIcon: IconDefinition;
 export const chartLineIcon: IconDefinition;
 
 // @public (undocumented)
-export const checkIcon: IconDefinition;
+export const checkCircleIcon: IconDefinition;
 
 // @public (undocumented)
-export const checkCircleIcon: IconDefinition;
+export const checkIcon: IconDefinition;
 
 // @public (undocumented)
 export const chevronDownIcon: IconDefinition;
@@ -229,10 +229,10 @@ export const settingsIcon: IconDefinition;
 export const shareIcon: IconDefinition;
 
 // @public (undocumented)
-export const shieldIcon: IconDefinition;
+export const shieldCheckIcon: IconDefinition;
 
 // @public (undocumented)
-export const shieldCheckIcon: IconDefinition;
+export const shieldIcon: IconDefinition;
 
 // @public (undocumented)
 export const sparklesIcon: IconDefinition;
