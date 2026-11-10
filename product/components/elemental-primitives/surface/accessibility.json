@@ -1,0 +1,53 @@
+{
+  "schemaVersion": 1,
+  "component": "surface",
+  "reviewStatus": "mapped",
+  "nativeBaseline": {
+    "kind": "native",
+    "reference": "consumer-chosen semantic block element"
+  },
+  "wcag": {
+    "target": "2.2 AA",
+    "status": "mapped",
+    "criteria": [
+      "1.3.1",
+      "1.4.11"
+    ]
+  },
+  "aria": {
+    "status": "not-applicable",
+    "apgPattern": null
+  },
+  "interaction": {
+    "keyboard": "not-applicable",
+    "focus": "not-applicable",
+    "directionality": "native"
+  },
+  "ownership": {
+    "library": [
+      "provide token-driven surface paint and a perceivable boundary including forced-colors handling",
+      "avoid adding roles, focusability, layout, interaction, or implicit semantic grouping"
+    ],
+    "consumer": [
+      "choose the native element that matches the content semantics",
+      "provide any required landmark, grouping, or accessible-name semantics through the actual owning structure"
+    ]
+  },
+  "forms": {
+    "status": "not-applicable"
+  },
+  "visualAccessibility": {
+    "status": "component-specific"
+  },
+  "ssrHydration": {
+    "status": "contract-required"
+  },
+  "evidence": {
+    "browser": "required",
+    "assistiveTechnology": "not-applicable"
+  },
+  "profileVariability": [],
+  "notes": [
+    "Surface is presentation only; visual containment does not create article, region, landmark, dialog, group, or control semantics."
+  ]
+}
