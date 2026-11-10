@@ -16,6 +16,8 @@ It sits between the Product Graph and presentation applications. Documentation t
 - Repository accessibility metadata is evidence input, not an automatic compliance claim.
 - Component showcase readiness and API/reference availability are different states. A public framework surface may have generated reference before complete authored showcase guidance.
 - Foundations such as styling and tokens are separate documentation surfaces and should be linked from component pages instead of duplicated into every component.
+- Public component browsing uses a consumer-facing documentation taxonomy (for example Forms & Inputs, Actions, Navigation, Layout, and Content & Media). Product Graph layers remain repository ownership metadata and must not define public navigation.
+- The documentation taxonomy classifies already-discovered Product Graph components for presentation only. It must never become a second source of component availability or package truth.
 - This tooling is repository-only and must never become a runtime dependency of published VyrnForge packages.
 
 ## Model
