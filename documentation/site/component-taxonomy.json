@@ -89,7 +89,6 @@
       "label": "Feedback & Status",
       "description": "Components that communicate loading, progress, confirmation, and transient status.",
       "components": [
-        "loading",
         "toast"
       ]
     },
