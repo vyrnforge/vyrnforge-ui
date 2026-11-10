@@ -3,16 +3,36 @@
 @layer vyrnforge.components {
   :where([data-vf-skeleton]) {
     animation: vf-skeleton-pulse 1.4s var(--vf-motion-easing-standard) infinite;
-    background: linear-gradient(90deg, var(--vf-color-disabled-background) 0%, var(--vf-color-surface-hover) 45%, var(--vf-color-disabled-background) 90%);
+    background: linear-gradient(
+      90deg,
+      var(--vf-color-disabled-background) 0%,
+      var(--vf-color-surface-hover) 45%,
+      var(--vf-color-disabled-background) 90%
+    );
     background-size: 220% 100%;
-    border-radius: var(--vf-control-radius);
+    border-radius: var(--vf-radius-surface);
     display: block;
     min-block-size: 1rem;
   }
 
+  :where([data-vf-skeleton][data-vf-skeleton-shape="line"]) {
+    border-radius: 999px;
+    min-block-size: 0.75rem;
+  }
+
+  :where([data-vf-skeleton][data-vf-skeleton-shape="circle"]) {
+    aspect-ratio: 1;
+    border-radius: 50%;
+  }
+
   @keyframes vf-skeleton-pulse {
-    from { background-position: 200% 0; }
-    to { background-position: -200% 0; }
+    from {
+      background-position: 200% 0;
+    }
+
+    to {
+      background-position: -200% 0;
+    }
   }
 
   @media (prefers-reduced-motion: reduce) {
