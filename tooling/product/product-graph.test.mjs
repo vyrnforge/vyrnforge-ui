@@ -236,13 +236,16 @@ test('L1 responsibility families preserve deliberate Native Web product ownershi
   assert.deepEqual(Object.keys(colorSwatch.surfaces), ['web']);
 
   assert.equal(graph.components.some((entry) => entry.unitId === 'skeleton'), false);
+  assert.equal(graph.components.some((entry) => entry.unitId === 'loading'), false);
 
-  const loading = graph.components.find((entry) => entry.unitId === 'loading');
-  assert.ok(loading, 'loading must own loading feedback above Layer 1');
-  assert.equal(loading.id, 'component:loading');
-  assert.equal(loading.layer, 'composite-components');
-  assert.equal(loading.facets.canonicalRoot, 'product/components/composite-components/loading/');
+  const loading = graph.patterns.find((entry) => entry.unitId === 'loading');
+  assert.ok(loading, 'loading must own async feedback as a Pattern outside L1-L6');
+  assert.equal(loading.id, 'pattern:loading');
+  assert.equal(loading.kind, 'pattern');
+  assert.equal(loading.layer, null);
+  assert.equal(loading.facets.canonicalRoot, 'product/patterns/loading/');
   assert.equal(loading.facets.legacyRoot, null);
+  assert.equal(loading.metadataPath, 'product/patterns/loading/pattern.json');
   assert.equal(loading.metadataSource, 'product-unit');
   assert.equal(loading.migration.state, 'product-unit');
   assert.deepEqual(Object.keys(loading.surfaces), ['web']);
