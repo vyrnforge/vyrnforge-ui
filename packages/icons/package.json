@@ -16,10 +16,470 @@
       "import": "./dist/index.js",
       "default": "./dist/index.js"
     },
-    "./*": {
-      "types": "./dist/*/index.d.ts",
-      "import": "./dist/*/index.js",
-      "default": "./dist/*/index.js"
+    "./add": {
+      "types": "./dist/add/index.d.ts",
+      "import": "./dist/add/index.js",
+      "default": "./dist/add/index.js"
+    },
+    "./arrow-down": {
+      "types": "./dist/arrow-down/index.d.ts",
+      "import": "./dist/arrow-down/index.js",
+      "default": "./dist/arrow-down/index.js"
+    },
+    "./arrow-left": {
+      "types": "./dist/arrow-left/index.d.ts",
+      "import": "./dist/arrow-left/index.js",
+      "default": "./dist/arrow-left/index.js"
+    },
+    "./arrow-right": {
+      "types": "./dist/arrow-right/index.d.ts",
+      "import": "./dist/arrow-right/index.js",
+      "default": "./dist/arrow-right/index.js"
+    },
+    "./arrow-up": {
+      "types": "./dist/arrow-up/index.d.ts",
+      "import": "./dist/arrow-up/index.js",
+      "default": "./dist/arrow-up/index.js"
+    },
+    "./attachment": {
+      "types": "./dist/attachment/index.d.ts",
+      "import": "./dist/attachment/index.js",
+      "default": "./dist/attachment/index.js"
+    },
+    "./bell": {
+      "types": "./dist/bell/index.d.ts",
+      "import": "./dist/bell/index.js",
+      "default": "./dist/bell/index.js"
+    },
+    "./bookmark": {
+      "types": "./dist/bookmark/index.d.ts",
+      "import": "./dist/bookmark/index.js",
+      "default": "./dist/bookmark/index.js"
+    },
+    "./calendar": {
+      "types": "./dist/calendar/index.d.ts",
+      "import": "./dist/calendar/index.js",
+      "default": "./dist/calendar/index.js"
+    },
+    "./camera": {
+      "types": "./dist/camera/index.d.ts",
+      "import": "./dist/camera/index.js",
+      "default": "./dist/camera/index.js"
+    },
+    "./cart": {
+      "types": "./dist/cart/index.d.ts",
+      "import": "./dist/cart/index.js",
+      "default": "./dist/cart/index.js"
+    },
+    "./chart-bar": {
+      "types": "./dist/chart-bar/index.d.ts",
+      "import": "./dist/chart-bar/index.js",
+      "default": "./dist/chart-bar/index.js"
+    },
+    "./chart-line": {
+      "types": "./dist/chart-line/index.d.ts",
+      "import": "./dist/chart-line/index.js",
+      "default": "./dist/chart-line/index.js"
+    },
+    "./check": {
+      "types": "./dist/check/index.d.ts",
+      "import": "./dist/check/index.js",
+      "default": "./dist/check/index.js"
+    },
+    "./check-circle": {
+      "types": "./dist/check-circle/index.d.ts",
+      "import": "./dist/check-circle/index.js",
+      "default": "./dist/check-circle/index.js"
+    },
+    "./chevron-down": {
+      "types": "./dist/chevron-down/index.d.ts",
+      "import": "./dist/chevron-down/index.js",
+      "default": "./dist/chevron-down/index.js"
+    },
+    "./chevron-left": {
+      "types": "./dist/chevron-left/index.d.ts",
+      "import": "./dist/chevron-left/index.js",
+      "default": "./dist/chevron-left/index.js"
+    },
+    "./chevron-right": {
+      "types": "./dist/chevron-right/index.d.ts",
+      "import": "./dist/chevron-right/index.js",
+      "default": "./dist/chevron-right/index.js"
+    },
+    "./chevron-up": {
+      "types": "./dist/chevron-up/index.d.ts",
+      "import": "./dist/chevron-up/index.js",
+      "default": "./dist/chevron-up/index.js"
+    },
+    "./clock": {
+      "types": "./dist/clock/index.d.ts",
+      "import": "./dist/clock/index.js",
+      "default": "./dist/clock/index.js"
+    },
+    "./close": {
+      "types": "./dist/close/index.d.ts",
+      "import": "./dist/close/index.js",
+      "default": "./dist/close/index.js"
+    },
+    "./cloud": {
+      "types": "./dist/cloud/index.d.ts",
+      "import": "./dist/cloud/index.js",
+      "default": "./dist/cloud/index.js"
+    },
+    "./code": {
+      "types": "./dist/code/index.d.ts",
+      "import": "./dist/code/index.js",
+      "default": "./dist/code/index.js"
+    },
+    "./copy": {
+      "types": "./dist/copy/index.d.ts",
+      "import": "./dist/copy/index.js",
+      "default": "./dist/copy/index.js"
+    },
+    "./credit-card": {
+      "types": "./dist/credit-card/index.d.ts",
+      "import": "./dist/credit-card/index.js",
+      "default": "./dist/credit-card/index.js"
+    },
+    "./database": {
+      "types": "./dist/database/index.d.ts",
+      "import": "./dist/database/index.js",
+      "default": "./dist/database/index.js"
+    },
+    "./download": {
+      "types": "./dist/download/index.d.ts",
+      "import": "./dist/download/index.js",
+      "default": "./dist/download/index.js"
+    },
+    "./edit": {
+      "types": "./dist/edit/index.d.ts",
+      "import": "./dist/edit/index.js",
+      "default": "./dist/edit/index.js"
+    },
+    "./error-circle": {
+      "types": "./dist/error-circle/index.d.ts",
+      "import": "./dist/error-circle/index.js",
+      "default": "./dist/error-circle/index.js"
+    },
+    "./external-link": {
+      "types": "./dist/external-link/index.d.ts",
+      "import": "./dist/external-link/index.js",
+      "default": "./dist/external-link/index.js"
+    },
+    "./eye": {
+      "types": "./dist/eye/index.d.ts",
+      "import": "./dist/eye/index.js",
+      "default": "./dist/eye/index.js"
+    },
+    "./eye-off": {
+      "types": "./dist/eye-off/index.d.ts",
+      "import": "./dist/eye-off/index.js",
+      "default": "./dist/eye-off/index.js"
+    },
+    "./file": {
+      "types": "./dist/file/index.d.ts",
+      "import": "./dist/file/index.js",
+      "default": "./dist/file/index.js"
+    },
+    "./file-text": {
+      "types": "./dist/file-text/index.d.ts",
+      "import": "./dist/file-text/index.js",
+      "default": "./dist/file-text/index.js"
+    },
+    "./filter": {
+      "types": "./dist/filter/index.d.ts",
+      "import": "./dist/filter/index.js",
+      "default": "./dist/filter/index.js"
+    },
+    "./folder": {
+      "types": "./dist/folder/index.d.ts",
+      "import": "./dist/folder/index.js",
+      "default": "./dist/folder/index.js"
+    },
+    "./folder-open": {
+      "types": "./dist/folder-open/index.d.ts",
+      "import": "./dist/folder-open/index.js",
+      "default": "./dist/folder-open/index.js"
+    },
+    "./globe": {
+      "types": "./dist/globe/index.d.ts",
+      "import": "./dist/globe/index.js",
+      "default": "./dist/globe/index.js"
+    },
+    "./grid": {
+      "types": "./dist/grid/index.d.ts",
+      "import": "./dist/grid/index.js",
+      "default": "./dist/grid/index.js"
+    },
+    "./heart": {
+      "types": "./dist/heart/index.d.ts",
+      "import": "./dist/heart/index.js",
+      "default": "./dist/heart/index.js"
+    },
+    "./help-circle": {
+      "types": "./dist/help-circle/index.d.ts",
+      "import": "./dist/help-circle/index.js",
+      "default": "./dist/help-circle/index.js"
+    },
+    "./home": {
+      "types": "./dist/home/index.d.ts",
+      "import": "./dist/home/index.js",
+      "default": "./dist/home/index.js"
+    },
+    "./image": {
+      "types": "./dist/image/index.d.ts",
+      "import": "./dist/image/index.js",
+      "default": "./dist/image/index.js"
+    },
+    "./info": {
+      "types": "./dist/info/index.d.ts",
+      "import": "./dist/info/index.js",
+      "default": "./dist/info/index.js"
+    },
+    "./key": {
+      "types": "./dist/key/index.d.ts",
+      "import": "./dist/key/index.js",
+      "default": "./dist/key/index.js"
+    },
+    "./lightning": {
+      "types": "./dist/lightning/index.d.ts",
+      "import": "./dist/lightning/index.js",
+      "default": "./dist/lightning/index.js"
+    },
+    "./link": {
+      "types": "./dist/link/index.d.ts",
+      "import": "./dist/link/index.js",
+      "default": "./dist/link/index.js"
+    },
+    "./list": {
+      "types": "./dist/list/index.d.ts",
+      "import": "./dist/list/index.js",
+      "default": "./dist/list/index.js"
+    },
+    "./location": {
+      "types": "./dist/location/index.d.ts",
+      "import": "./dist/location/index.js",
+      "default": "./dist/location/index.js"
+    },
+    "./lock": {
+      "types": "./dist/lock/index.d.ts",
+      "import": "./dist/lock/index.js",
+      "default": "./dist/lock/index.js"
+    },
+    "./log-out": {
+      "types": "./dist/log-out/index.d.ts",
+      "import": "./dist/log-out/index.js",
+      "default": "./dist/log-out/index.js"
+    },
+    "./mail": {
+      "types": "./dist/mail/index.d.ts",
+      "import": "./dist/mail/index.js",
+      "default": "./dist/mail/index.js"
+    },
+    "./maximize": {
+      "types": "./dist/maximize/index.d.ts",
+      "import": "./dist/maximize/index.js",
+      "default": "./dist/maximize/index.js"
+    },
+    "./menu": {
+      "types": "./dist/menu/index.d.ts",
+      "import": "./dist/menu/index.js",
+      "default": "./dist/menu/index.js"
+    },
+    "./message": {
+      "types": "./dist/message/index.d.ts",
+      "import": "./dist/message/index.js",
+      "default": "./dist/message/index.js"
+    },
+    "./microphone": {
+      "types": "./dist/microphone/index.d.ts",
+      "import": "./dist/microphone/index.js",
+      "default": "./dist/microphone/index.js"
+    },
+    "./microphone-off": {
+      "types": "./dist/microphone-off/index.d.ts",
+      "import": "./dist/microphone-off/index.js",
+      "default": "./dist/microphone-off/index.js"
+    },
+    "./minimize": {
+      "types": "./dist/minimize/index.d.ts",
+      "import": "./dist/minimize/index.js",
+      "default": "./dist/minimize/index.js"
+    },
+    "./minus": {
+      "types": "./dist/minus/index.d.ts",
+      "import": "./dist/minus/index.js",
+      "default": "./dist/minus/index.js"
+    },
+    "./moon": {
+      "types": "./dist/moon/index.d.ts",
+      "import": "./dist/moon/index.js",
+      "default": "./dist/moon/index.js"
+    },
+    "./more-horizontal": {
+      "types": "./dist/more-horizontal/index.d.ts",
+      "import": "./dist/more-horizontal/index.js",
+      "default": "./dist/more-horizontal/index.js"
+    },
+    "./more-vertical": {
+      "types": "./dist/more-vertical/index.d.ts",
+      "import": "./dist/more-vertical/index.js",
+      "default": "./dist/more-vertical/index.js"
+    },
+    "./pause": {
+      "types": "./dist/pause/index.d.ts",
+      "import": "./dist/pause/index.js",
+      "default": "./dist/pause/index.js"
+    },
+    "./phone": {
+      "types": "./dist/phone/index.d.ts",
+      "import": "./dist/phone/index.js",
+      "default": "./dist/phone/index.js"
+    },
+    "./pin": {
+      "types": "./dist/pin/index.d.ts",
+      "import": "./dist/pin/index.js",
+      "default": "./dist/pin/index.js"
+    },
+    "./play": {
+      "types": "./dist/play/index.d.ts",
+      "import": "./dist/play/index.js",
+      "default": "./dist/play/index.js"
+    },
+    "./print": {
+      "types": "./dist/print/index.d.ts",
+      "import": "./dist/print/index.js",
+      "default": "./dist/print/index.js"
+    },
+    "./redo": {
+      "types": "./dist/redo/index.d.ts",
+      "import": "./dist/redo/index.js",
+      "default": "./dist/redo/index.js"
+    },
+    "./refresh": {
+      "types": "./dist/refresh/index.d.ts",
+      "import": "./dist/refresh/index.js",
+      "default": "./dist/refresh/index.js"
+    },
+    "./save": {
+      "types": "./dist/save/index.d.ts",
+      "import": "./dist/save/index.js",
+      "default": "./dist/save/index.js"
+    },
+    "./search": {
+      "types": "./dist/search/index.d.ts",
+      "import": "./dist/search/index.js",
+      "default": "./dist/search/index.js"
+    },
+    "./send": {
+      "types": "./dist/send/index.d.ts",
+      "import": "./dist/send/index.js",
+      "default": "./dist/send/index.js"
+    },
+    "./settings": {
+      "types": "./dist/settings/index.d.ts",
+      "import": "./dist/settings/index.js",
+      "default": "./dist/settings/index.js"
+    },
+    "./share": {
+      "types": "./dist/share/index.d.ts",
+      "import": "./dist/share/index.js",
+      "default": "./dist/share/index.js"
+    },
+    "./shield": {
+      "types": "./dist/shield/index.d.ts",
+      "import": "./dist/shield/index.js",
+      "default": "./dist/shield/index.js"
+    },
+    "./shield-check": {
+      "types": "./dist/shield-check/index.d.ts",
+      "import": "./dist/shield-check/index.js",
+      "default": "./dist/shield-check/index.js"
+    },
+    "./sparkles": {
+      "types": "./dist/sparkles/index.d.ts",
+      "import": "./dist/sparkles/index.js",
+      "default": "./dist/sparkles/index.js"
+    },
+    "./star": {
+      "types": "./dist/star/index.d.ts",
+      "import": "./dist/star/index.js",
+      "default": "./dist/star/index.js"
+    },
+    "./stop": {
+      "types": "./dist/stop/index.d.ts",
+      "import": "./dist/stop/index.js",
+      "default": "./dist/stop/index.js"
+    },
+    "./sun": {
+      "types": "./dist/sun/index.d.ts",
+      "import": "./dist/sun/index.js",
+      "default": "./dist/sun/index.js"
+    },
+    "./table": {
+      "types": "./dist/table/index.d.ts",
+      "import": "./dist/table/index.js",
+      "default": "./dist/table/index.js"
+    },
+    "./tag": {
+      "types": "./dist/tag/index.d.ts",
+      "import": "./dist/tag/index.js",
+      "default": "./dist/tag/index.js"
+    },
+    "./terminal": {
+      "types": "./dist/terminal/index.d.ts",
+      "import": "./dist/terminal/index.js",
+      "default": "./dist/terminal/index.js"
+    },
+    "./trash": {
+      "types": "./dist/trash/index.d.ts",
+      "import": "./dist/trash/index.js",
+      "default": "./dist/trash/index.js"
+    },
+    "./undo": {
+      "types": "./dist/undo/index.d.ts",
+      "import": "./dist/undo/index.js",
+      "default": "./dist/undo/index.js"
+    },
+    "./unlock": {
+      "types": "./dist/unlock/index.d.ts",
+      "import": "./dist/unlock/index.js",
+      "default": "./dist/unlock/index.js"
+    },
+    "./upload": {
+      "types": "./dist/upload/index.d.ts",
+      "import": "./dist/upload/index.js",
+      "default": "./dist/upload/index.js"
+    },
+    "./user": {
+      "types": "./dist/user/index.d.ts",
+      "import": "./dist/user/index.js",
+      "default": "./dist/user/index.js"
+    },
+    "./users": {
+      "types": "./dist/users/index.d.ts",
+      "import": "./dist/users/index.js",
+      "default": "./dist/users/index.js"
+    },
+    "./volume": {
+      "types": "./dist/volume/index.d.ts",
+      "import": "./dist/volume/index.js",
+      "default": "./dist/volume/index.js"
+    },
+    "./volume-off": {
+      "types": "./dist/volume-off/index.d.ts",
+      "import": "./dist/volume-off/index.js",
+      "default": "./dist/volume-off/index.js"
+    },
+    "./warning": {
+      "types": "./dist/warning/index.d.ts",
+      "import": "./dist/warning/index.js",
+      "default": "./dist/warning/index.js"
+    },
+    "./wifi": {
+      "types": "./dist/wifi/index.d.ts",
+      "import": "./dist/wifi/index.js",
+      "default": "./dist/wifi/index.js"
     }
   },
   "dependencies": {
