@@ -1,5 +1,6 @@
 import { mkdir, readFile, writeFile } from 'node:fs/promises';
 import path from 'node:path';
+import { build } from 'esbuild';
 
 export const browserFixture = {
   component: 'surface',
@@ -13,7 +14,7 @@ export const browserFixture = {
     const fixtureCss = 'body { margin: 0; background: var(--vf-color-surface); color: var(--vf-color-text); --vf-radius-surface: 0.75rem; } #surface { inline-size: 20rem; } #surface > * { margin: 0; }';
     await writeFile(path.join(outDir, 'surface.css'), `${tokensCss}\n${surfaceCss}\n${fixtureCss}`);
 
-    const page = (body) => `<!doctype html><html lang="en"><head><meta charset="utf-8"><link rel="stylesheet" href="./surface.css"><title>Surface fixture</title></head><body><main><h1>Surface fixture</h1>${body}</main></body></html>`;
+    const page = (body, script = '') => `<!doctype html><html lang="en"><head><meta charset="utf-8"><link rel="stylesheet" href="./surface.css"><title>Surface fixture</title></head><body><main><h1>Surface fixture</h1>${body}</main>${script}</body></html>`;
     const content = '<h2>Release summary</h2><p>Visual containment only.</p>';
 
     if (port === 'web') {
@@ -47,6 +48,12 @@ export const browserFixture = {
       Component({ selector: 'vf-surface-test', standalone: true, imports: [VfSurfaceDirective], template: '<main><h1>Surface fixture</h1><article id="surface" vfSurface aria-label="Release summary"><h2>Release summary</h2><p>Visual containment only.</p></article></main>' })(App);
       const html = await renderApplication((context) => bootstrapApplication(App, { providers: [provideZonelessChangeDetection()] }, context), { document: '<!doctype html><html lang="en"><head><title>Surface fixture</title><link rel="stylesheet" href="./surface.css"></head><body><vf-surface-test></vf-surface-test></body></html>' });
       await writeFile(path.join(outDir, 'angular.html'), html);
+    }
+
+    if (port === 'elements') {
+      const markup = `<vf-surface id="surface" aria-label="Release summary">${content}</vf-surface>`;
+      await writeFile(path.join(outDir, 'elements.html'), page(markup, '<script type="module" src="./elements.js"></script>'));
+      await build({ stdin: { resolveDir: root, sourcefile: 'elements-surface.ts', contents: "import { defineSurfaceElement } from '@vyrnforge/elements/surface'; defineSurfaceElement();" }, bundle: true, format: 'esm', platform: 'browser', outfile: path.join(outDir, 'elements.js') });
     }
   },
 };
