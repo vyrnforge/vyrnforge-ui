@@ -479,6 +479,44 @@
     max-inline-size: 34rem;
   }
 
+  .vf-docs-component-groups {
+    display: grid;
+    gap: var(--vf-space-3xl);
+  }
+
+  .vf-docs-component-group {
+    min-inline-size: 0;
+  }
+
+  .vf-docs-component-group + .vf-docs-component-group {
+    border-block-start: 1px solid var(--vf-color-border);
+    padding-block-start: var(--vf-space-2xl);
+  }
+
+  .vf-docs-component-group-header {
+    align-items: end;
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--vf-space-md) var(--vf-space-xl);
+    justify-content: space-between;
+    margin-block-end: var(--vf-space-lg);
+  }
+
+  .vf-docs-component-group-header h2 {
+    margin: 0 0 var(--vf-space-xs);
+  }
+
+  .vf-docs-component-group-header p {
+    margin: 0;
+    max-inline-size: 54ch;
+  }
+
+  .vf-docs-component-group-header > span {
+    color: var(--vf-color-text-muted);
+    font-size: var(--vf-font-size-sm);
+    white-space: nowrap;
+  }
+
   .vf-docs-card-list {
     display: grid;
     gap: var(--vf-space-md);
