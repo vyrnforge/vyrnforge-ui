@@ -66,7 +66,6 @@
     "./styles.css": "./dist/styles.css",
     "./styles/tokens.css": "./dist/styles/tokens.css",
     "./styles/foundation.css": "./dist/styles/foundation.css",
-    "./styles/loading-motion.css": "./dist/styles/loading-motion.css",
     "./styles/elemental-primitives.css": "./dist/styles/elemental-primitives.css",
     "./styles/native-elements.css": "./dist/styles/native-elements.css",
     "./styles/code.css": "./dist/components/code/code.css",
