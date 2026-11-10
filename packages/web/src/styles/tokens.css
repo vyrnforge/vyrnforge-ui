@@ -74,6 +74,9 @@
     --vf-control-font-size: 0.9375rem;
     --vf-control-font-weight: var(--vf-font-weight-semibold);
     --vf-control-motion-duration: 120ms;
+    --vf-motion-duration-loading-spin: 700ms;
+    --vf-motion-duration-loading-shimmer: 1400ms;
+    --vf-motion-easing-loading: linear;
     --vf-motion-easing-standard: cubic-bezier(0.2, 0, 0, 1);
   }
 }
