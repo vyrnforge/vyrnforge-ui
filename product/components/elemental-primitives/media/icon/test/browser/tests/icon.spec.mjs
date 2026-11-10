@@ -5,9 +5,12 @@ const port = process.env.VF_COMPONENT_PORT || 'web';
 
 test('Icon exposes one semantic contract across ports', async ({ page }) => {
   await page.goto(`/components/icon/${port}.html`);
+  const custom = page.locator('#custom').locator('[data-vf-icon]').or(page.locator('#custom[data-vf-icon]'));
   const decorative = page.locator('#decorative').locator('[data-vf-icon]').or(page.locator('#decorative[data-vf-icon]'));
   const meaningful = page.locator('#meaningful').locator('[data-vf-icon]').or(page.locator('#meaningful[data-vf-icon]'));
 
+  await expect(custom).toHaveAttribute('data-vf-icon-name', 'custom-diamond');
+  await expect(custom).toHaveAttribute('aria-hidden', 'true');
   await expect(decorative).toHaveAttribute('aria-hidden', 'true');
   await expect(decorative).toHaveAttribute('data-vf-variant', 'outlined');
   await expect(decorative).toHaveAttribute('data-vf-shape', 'rounded');
