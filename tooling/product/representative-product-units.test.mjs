@@ -54,7 +54,7 @@ test('Icon component projections remain separate from the icon catalog package',
 test('L1 legacy primitives acquire layered authoring while package shells remain transitional', () => {
   const graph = discoverProductGraph();
   for (const [id, surfaces] of [
-    ['surface', ['angular', 'elements', 'react', 'vue', 'web']],
+    ['surface', ['angular', 'react', 'vue', 'web']],
     ['separator', ['angular', 'react', 'vue', 'web']],
     ['visually-hidden', ['angular', 'react', 'vue', 'web']],
   ]) {
