@@ -1,6 +1,6 @@
 @layer vyrnforge.reset, vyrnforge.tokens, vyrnforge.themes, vyrnforge.foundation, vyrnforge.components;
 
-@import "../../styles/tokens.css";
+@import "../../styles/loading-motion.css";
 
 @layer vyrnforge.components {
   :where([data-vf-button]) {
@@ -103,7 +103,7 @@
   }
 
   :where([data-vf-button][data-vf-loading])::before {
-    animation: vf-button-spin 700ms linear infinite;
+    animation: vf-loading-spin var(--vf-motion-duration-loading-spin) var(--vf-motion-easing-loading) infinite;
     block-size: 0.9em;
     border: 0.14em solid currentColor;
     border-inline-end-color: transparent;
@@ -112,10 +112,6 @@
     content: "";
     flex: 0 0 auto;
     inline-size: 0.9em;
-  }
-
-  @keyframes vf-button-spin {
-    to { transform: rotate(1turn); }
   }
 
   @media (prefers-reduced-motion: reduce) {
