@@ -25,6 +25,20 @@ test.describe('Button real-browser contract', () => {
     await busy.click();
     await expect(page.locator('body')).toHaveAttribute('data-busy-activated', 'true');
 
+    const loadingMotion = await busy.evaluate((element) => {
+      const style = getComputedStyle(element, '::before');
+      return {
+        name: style.animationName,
+        duration: style.animationDuration,
+        timing: style.animationTimingFunction,
+      };
+    });
+    expect(loadingMotion).toEqual({
+      name: 'vf-loading-spin',
+      duration: '0.7s',
+      timing: 'linear',
+    });
+
     await page.locator('#plain').click();
     await expect(page.locator('body')).not.toHaveAttribute('data-submitted', 'true');
     await page.locator('#submit').click();
@@ -76,6 +90,7 @@ test.describe('Button real-browser contract', () => {
 
     await page.emulateMedia({ reducedMotion: 'reduce' });
     expect(await busy.evaluate((element) => getComputedStyle(element).transitionDuration)).toBe('0s');
+    expect(await busy.evaluate((element) => getComputedStyle(element, '::before').animationName)).toBe('none');
 
     await page.emulateMedia({ reducedMotion: 'reduce', forcedColors: 'active' });
     expect(await page.evaluate(() => matchMedia('(forced-colors: active)').matches)).toBe(true);

@@ -1,0 +1,20 @@
+@layer vyrnforge.reset, vyrnforge.tokens, vyrnforge.themes, vyrnforge.foundation, vyrnforge.components;
+
+
+@layer vyrnforge.foundation {
+  @keyframes vf-loading-spin {
+    to {
+      transform: rotate(1turn);
+    }
+  }
+
+  @keyframes vf-loading-shimmer {
+    from {
+      background-position: 200% 0;
+    }
+
+    to {
+      background-position: -200% 0;
+    }
+  }
+}

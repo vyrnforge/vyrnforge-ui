@@ -1,8 +1,9 @@
 @import "../../styles/tokens.css";
+@import "../../styles/loading-motion.css";
 
 @layer vyrnforge.components {
   :where([data-vf-skeleton]) {
-    animation: vf-skeleton-pulse 1.4s var(--vf-motion-easing-standard) infinite;
+    animation: vf-loading-shimmer var(--vf-motion-duration-loading-shimmer) var(--vf-motion-easing-loading) infinite;
     background: linear-gradient(
       90deg,
       var(--vf-color-disabled-background) 0%,
@@ -21,18 +22,7 @@
   }
 
   :where([data-vf-skeleton][data-vf-skeleton-shape="circle"]) {
-    aspect-ratio: 1;
     border-radius: 50%;
-  }
-
-  @keyframes vf-skeleton-pulse {
-    from {
-      background-position: 200% 0;
-    }
-
-    to {
-      background-position: -200% 0;
-    }
   }
 
   @media (prefers-reduced-motion: reduce) {

@@ -25,14 +25,16 @@
   },
   "ownership": {
     "library": [
-      "provide decorative block, line, and circle placeholder geometry without semantic loading state",
+      "provide decorative block, line, and circle placeholder paint without semantic loading state",
+      "consume the shared loading-motion shimmer recipe rather than defining component-local loading cadence",
       "disable non-essential animation for prefers-reduced-motion and retain a visible forced-colors fallback"
     ],
     "consumer": [
       "provide aria-hidden=true on every decorative skeleton shape",
       "communicate loading state through an appropriate surrounding aria-busy region or authored status message when users need that information",
       "replace skeleton presentation with truthful loaded, empty, error, permission, or other authoritative state",
-      "choose dimensions that approximate only structure the application actually knows"
+      "choose dimensions that approximate only structure the application actually knows",
+      "reuse Layout/AspectRatio/Surface composition when those existing responsibilities describe the pending structure"
     ]
   },
   "forms": {
