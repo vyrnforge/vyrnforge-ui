@@ -1,5 +1,6 @@
 import { test } from 'vitest';
 import assert from 'node:assert/strict';
+import { existsSync } from 'node:fs';
 import { discoverProductGraph, productGraphProblems } from './discover-product-graph.mjs';
 
 const expectedRoots = {
@@ -51,7 +52,7 @@ test('Icon component projections remain separate from the icon catalog package',
   assert.ok(graph.packages.some((pkg) => pkg.id === 'icons'));
 });
 
-test('L1 legacy primitives acquire layered authoring while package shells remain transitional', () => {
+test('L1 native-backed primitives keep only justified framework projections', () => {
   const graph = discoverProductGraph();
   for (const [id, surfaces] of [
     ['surface', ['angular', 'react', 'vue', 'web']],
@@ -389,6 +390,45 @@ test('L1 aggregate stylesheet is not a component owner and responsibility famili
   assert.equal(loading.facets.canonicalRoot, 'product/patterns/loading/');
   assert.deepEqual(Object.keys(loading.surfaces), ['web']);
 
+  assert.deepEqual(productGraphProblems(), []);
+});
+
+test('L1 approved inventory is exact, documented, and accessibility-classified', () => {
+  const graph = discoverProductGraph();
+  const expected = new Map([
+    ['text', ['angular', 'react', 'vue', 'web']],
+    ['code', ['web']],
+    ['kbd', ['web']],
+    ['icon', ['angular', 'elements', 'react', 'vue', 'web']],
+    ['image', ['web']],
+    ['surface', ['angular', 'react', 'vue', 'web']],
+    ['separator', ['angular', 'react', 'vue', 'web']],
+    ['color-swatch', ['web']],
+    ['visually-hidden', ['angular', 'react', 'vue', 'web']],
+  ]);
+
+  const elemental = graph.components
+    .filter((component) => component.layer === 'elemental-primitives')
+    .sort((left, right) => left.unitId.localeCompare(right.unitId));
+
+  assert.deepEqual(
+    elemental.map((component) => component.unitId),
+    [...expected.keys()].sort(),
+  );
+
+  for (const component of elemental) {
+    assert.deepEqual(Object.keys(component.surfaces).sort(), expected.get(component.unitId));
+    assert.ok(component.facets.docs, component.unitId + ' must own repository documentation');
+    assert.ok(
+      existsSync(component.facets.root + 'accessibility.json'),
+      component.unitId + ' must own an accessibility classification',
+    );
+    assert.ok(component.facets.examples, component.unitId + ' must own executable examples');
+    assert.ok(component.facets.test, component.unitId + ' must own executable evidence');
+  }
+
+  assert.equal(graph.components.some((component) => component.unitId === 'skeleton'), false);
+  assert.equal(graph.components.some((component) => component.unitId === 'loading'), false);
   assert.deepEqual(productGraphProblems(), []);
 });
 
