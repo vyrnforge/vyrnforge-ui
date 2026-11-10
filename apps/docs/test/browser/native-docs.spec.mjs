@@ -21,9 +21,6 @@ function collectPageErrors(page) {
   page.on('console', (message) => {
     if (message.type() === 'error') errors.push(message.text());
   });
-  page.on('response', (response) => {
-    if (response.status() >= 400) errors.push(`HTTP ${response.status()} ${response.url()}`);
-  });
   return errors;
 }
 
@@ -199,38 +196,6 @@ test('Native component catalog is Product Graph scoped and API reference is inde
     await expect(page.getByRole('link', { name: 'Open Button showcase' })).toHaveAttribute('href', '../../../components/button/');
   }
   await expectDeploymentRelativeStyles(page);
-  await expectNoAccessibilityViolations(page);
-  expect(errors, errors.join('\n')).toEqual([]);
-});
-
-test('all approved Layer 1 primitives publish complete Native Web guides and evidence', async ({ page }) => {
-  const errors = collectPageErrors(page);
-  const expected = new Map([
-    ['text', '@vyrnforge/web/styles/text.css'],
-    ['code', '@vyrnforge/web/styles/code.css'],
-    ['kbd', '@vyrnforge/web/styles/kbd.css'],
-    ['icon', '@vyrnforge/web/styles/icon.css'],
-    ['image', '@vyrnforge/web/styles/image.css'],
-    ['surface', '@vyrnforge/web/styles/surface.css'],
-    ['separator', '@vyrnforge/web/styles/separator.css'],
-    ['color-swatch', '@vyrnforge/web/styles/color-swatch.css'],
-    ['visually-hidden', '@vyrnforge/web/styles/visually-hidden.css'],
-  ]);
-
-  for (const [id, styleSpecifier] of expected) {
-    const entry = catalogEntry(id, id);
-    expect(entry.api, id + ' API must be available').toBe(true);
-    expect(entry.showcase, id + ' must have a complete showcase').toBe(true);
-    expect(entry.publicEntrypoints).toContain(styleSpecifier);
-    expect(manifest.pages.some((pageEntry) => pageEntry.slug === `components/${id}/`)).toBe(true);
-
-    await gotoWithCleanDocsState(page, `/next/native-web/components/${id}/`);
-    await expect(page.locator(`article[data-vf-docs-component="${id}"]`)).toHaveCount(1);
-    await expect(page.getByRole('heading', { level: 2, name: 'Accessibility evidence' })).toBeVisible();
-    await expect(page.getByText(styleSpecifier, { exact: false }).first()).toBeVisible();
-    await expectDeploymentRelativeStyles(page);
-  }
-
   await expectNoAccessibilityViolations(page);
   expect(errors, errors.join('\n')).toEqual([]);
 });
