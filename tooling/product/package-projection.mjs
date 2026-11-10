@@ -31,7 +31,7 @@ export function packageProjectionPlan(root, packageId, graph = discoverProductGr
   if (!pkg) throw new Error(`Unknown Product Graph package: ${packageId}`);
 
   const entries = [];
-  for (const owner of [...graph.components, ...graph.patterns]) {
+  for (const owner of [...graph.components, ...(graph.patterns ?? [])]) {
     for (const surface of Object.values(owner.surfaces)) {
       if (surface.package !== packageId || surface.authoringMode !== 'product-unit') continue;
       if (surface.publicEntrypoints.length === 0) continue;
