@@ -24,6 +24,7 @@
 @import "./components/surface/surface.css";
 @import "./components/tabs/tabs.css";
 @import "./components/text/text.css";
+@import "./components/visually-hidden/visually-hidden.css";
 @import "./components/disclosure/disclosure.css";
 @import "./components/accordion/accordion.css";
 @import "./components/alert-dialog/alert-dialog.css";
