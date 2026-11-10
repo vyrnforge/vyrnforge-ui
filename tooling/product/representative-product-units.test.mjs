@@ -374,12 +374,18 @@ test('L1 aggregate stylesheet is not a component owner and responsibility famili
   assert.equal(image.facets.canonicalRoot, 'product/components/elemental-primitives/media/image/');
   assert.deepEqual(Object.keys(image.surfaces), ['web']);
 
-  for (const id of ['skeleton', 'color-swatch']) {
-    const component = graph.components.find((entry) => entry.unitId === id);
-    assert.ok(component, id + ' remains independently owned outside Media');
-    assert.equal(component.layer, 'elemental-primitives');
-    assert.deepEqual(Object.keys(component.surfaces), ['web']);
-  }
+  const colorSwatch = graph.components.find((entry) => entry.unitId === 'color-swatch');
+  assert.ok(colorSwatch, 'color-swatch remains independently owned outside Media');
+  assert.equal(colorSwatch.layer, 'elemental-primitives');
+  assert.deepEqual(Object.keys(colorSwatch.surfaces), ['web']);
+
+  assert.equal(graph.components.some((entry) => entry.unitId === 'skeleton'), false);
+
+  const loading = graph.components.find((entry) => entry.unitId === 'loading');
+  assert.ok(loading, 'loading owns feedback presentation above L1');
+  assert.equal(loading.layer, 'composite-components');
+  assert.equal(loading.facets.canonicalRoot, 'product/components/composite-components/loading/');
+  assert.deepEqual(Object.keys(loading.surfaces), ['web']);
 
   assert.deepEqual(productGraphProblems(), []);
 });
