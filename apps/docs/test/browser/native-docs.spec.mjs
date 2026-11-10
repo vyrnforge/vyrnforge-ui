@@ -200,6 +200,33 @@ test('Native component catalog is Product Graph scoped and API reference is inde
   expect(errors, errors.join('\n')).toEqual([]);
 });
 
+test('agreed Layer 1 Typography and Media members publish complete Native Web guidance', async ({ page }) => {
+  const errors = collectPageErrors(page);
+  const expected = new Map([
+    ['text', '@vyrnforge/web/styles/text.css'],
+    ['code', '@vyrnforge/web/styles/code.css'],
+    ['kbd', '@vyrnforge/web/styles/kbd.css'],
+    ['icon', '@vyrnforge/web/styles/icon.css'],
+    ['image', '@vyrnforge/web/styles/image.css'],
+  ]);
+
+  for (const [id, styleSpecifier] of expected) {
+    const entry = catalogEntry(id, id);
+    expect(entry.api, id + ' API must be available').toBe(true);
+    expect(entry.showcase, id + ' must have a complete showcase').toBe(true);
+    expect(entry.publicEntrypoints).toContain(styleSpecifier);
+
+    await gotoWithCleanDocsState(page, `/next/native-web/components/${id}/`);
+    await expect(page.locator(`article[data-vf-docs-component="${id}"]`)).toHaveCount(1);
+    await expect(page.getByRole('heading', { level: 2, name: 'Accessibility evidence' })).toBeVisible();
+    await expect(page.getByText(styleSpecifier, { exact: false }).first()).toBeVisible();
+    await expectDeploymentRelativeStyles(page);
+  }
+
+  await expectNoAccessibilityViolations(page);
+  expect(errors, errors.join('\n')).toEqual([]);
+});
+
 test('Loading is documented as a Pattern rather than a component while preserving its public Web stylesheet', async ({ page }) => {
   const errors = collectPageErrors(page);
   const loading = loadingPatternEntry();
