@@ -1,0 +1,155 @@
+@import "../../styles/tokens.css";
+@import "../../styles/loading-motion.css";
+
+@layer vyrnforge.components {
+  :where([data-vf-loading]) {
+    --vf-loading-indicator-size: 1.5rem;
+    --vf-loading-indicator-thickness: 0.14em;
+    --vf-loading-color: currentColor;
+    --vf-loading-track-color: var(--vf-color-border);
+    --vf-loading-placeholder-color: var(--vf-color-disabled-background);
+    --vf-loading-placeholder-highlight: var(--vf-color-surface-hover);
+
+    color: var(--vf-color-text-muted);
+  }
+
+  :where([data-vf-loading][data-vf-loading-size="sm"]) {
+    --vf-loading-indicator-size: 1rem;
+  }
+
+  :where([data-vf-loading][data-vf-loading-size="lg"]) {
+    --vf-loading-indicator-size: 2rem;
+  }
+
+  :where([data-vf-loading-indicator]) {
+    --_vf-loading-indicator-size: var(--vf-loading-indicator-size, 1.5rem);
+    --_vf-loading-indicator-color: var(--vf-loading-color, currentColor);
+
+    block-size: var(--_vf-loading-indicator-size);
+    box-sizing: border-box;
+    color: var(--_vf-loading-indicator-color);
+    display: inline-block;
+    flex: 0 0 auto;
+    inline-size: var(--_vf-loading-indicator-size);
+  }
+
+  :where([data-vf-loading-indicator][data-vf-loading-variant="spinner"]) {
+    animation: vf-loading-spin var(--vf-motion-duration-loading-spin) var(--vf-motion-easing-loading) infinite;
+    border: var(--vf-loading-indicator-thickness, 0.14em) solid currentColor;
+    border-inline-end-color: transparent;
+    border-radius: 50%;
+  }
+
+  :where([data-vf-loading-indicator][data-vf-loading-variant="dots"]) {
+    animation: vf-loading-dots 900ms ease-in-out infinite;
+    background:
+      radial-gradient(circle, currentColor 48%, transparent 52%) 0 50% / 33.333% 33.333% no-repeat,
+      radial-gradient(circle, currentColor 48%, transparent 52%) 50% 50% / 33.333% 33.333% no-repeat,
+      radial-gradient(circle, currentColor 48%, transparent 52%) 100% 50% / 33.333% 33.333% no-repeat;
+  }
+
+  :where([data-vf-loading-indicator][data-vf-loading-variant="bars"]) {
+    animation: vf-loading-bars 800ms ease-in-out infinite alternate;
+    background: repeating-linear-gradient(
+      90deg,
+      currentColor 0 18%,
+      transparent 18% 32%
+    );
+    border-radius: 0.125rem;
+  }
+
+  :where([data-vf-loading-indicator][data-vf-loading-variant="pulse"]) {
+    animation: vf-loading-pulse 900ms ease-in-out infinite;
+    background: currentColor;
+    border-radius: 50%;
+  }
+
+  :where([data-vf-loading-placeholder]) {
+    animation: vf-loading-shimmer var(--vf-motion-duration-loading-shimmer) var(--vf-motion-easing-loading) infinite;
+    background: linear-gradient(
+      90deg,
+      var(--vf-loading-placeholder-color, var(--vf-color-disabled-background)) 0%,
+      var(--vf-loading-placeholder-highlight, var(--vf-color-surface-hover)) 45%,
+      var(--vf-loading-placeholder-color, var(--vf-color-disabled-background)) 90%
+    );
+    background-size: 220% 100%;
+    border-radius: var(--vf-radius-surface);
+    display: block;
+    min-block-size: 1rem;
+  }
+
+  :where([data-vf-loading-placeholder][data-vf-loading-placeholder-shape="line"]) {
+    border-radius: 999px;
+    min-block-size: 0.75rem;
+  }
+
+  :where([data-vf-loading-placeholder][data-vf-loading-placeholder-shape="circle"]) {
+    border-radius: 50%;
+  }
+
+  :where(progress[data-vf-loading-progress]) {
+    accent-color: var(--vf-loading-color, var(--vf-color-accent-background));
+    block-size: 0.75rem;
+    inline-size: 100%;
+  }
+
+  :where(progress[data-vf-loading-progress])::-webkit-progress-bar {
+    background: var(--vf-loading-track-color, var(--vf-color-border));
+    border-radius: 999px;
+  }
+
+  :where(progress[data-vf-loading-progress])::-webkit-progress-value {
+    background: var(--vf-loading-color, var(--vf-color-accent-background));
+    border-radius: 999px;
+  }
+
+  :where(progress[data-vf-loading-progress])::-moz-progress-bar {
+    background: var(--vf-loading-color, var(--vf-color-accent-background));
+    border-radius: 999px;
+  }
+
+  :where([data-vf-loading-custom]) {
+    color: var(--vf-loading-color, currentColor);
+  }
+
+  @keyframes vf-loading-dots {
+    0%, 100% { opacity: 0.45; transform: translateY(0); }
+    50% { opacity: 1; transform: translateY(-0.12em); }
+  }
+
+  @keyframes vf-loading-bars {
+    from { opacity: 0.45; transform: scaleY(0.55); }
+    to { opacity: 1; transform: scaleY(1); }
+  }
+
+  @keyframes vf-loading-pulse {
+    0%, 100% { opacity: 0.45; transform: scale(0.72); }
+    50% { opacity: 1; transform: scale(1); }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    :where([data-vf-loading-indicator], [data-vf-loading-placeholder]) {
+      animation: none;
+      transform: none;
+    }
+
+    :where([data-vf-loading-placeholder]) {
+      background: var(--vf-loading-placeholder-color, var(--vf-color-disabled-background));
+    }
+  }
+
+  @media (forced-colors: active) {
+    :where([data-vf-loading-indicator]) {
+      forced-color-adjust: auto;
+    }
+
+    :where([data-vf-loading-placeholder]) {
+      background: CanvasText;
+      opacity: 0.25;
+    }
+
+    :where(progress[data-vf-loading-progress]) {
+      forced-color-adjust: auto;
+    }
+  }
+}

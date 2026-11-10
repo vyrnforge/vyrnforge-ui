@@ -225,17 +225,28 @@ test('L1 responsibility families preserve deliberate Native Web product ownershi
   assert.equal(icon.layer, 'elemental-primitives');
   assert.equal(icon.facets.canonicalRoot, 'product/components/elemental-primitives/media/icon/');
 
-  for (const id of ['skeleton', 'color-swatch']) {
-    const component = graph.components.find((entry) => entry.unitId === id);
-    assert.ok(component, id + ' must remain independently owned outside Media');
-    assert.equal(component.id, 'component:' + id);
-    assert.equal(component.layer, 'elemental-primitives');
-    assert.equal(component.facets.canonicalRoot, 'product/components/elemental-primitives/' + id + '/');
-    assert.equal(component.facets.legacyRoot, null);
-    assert.equal(component.metadataSource, 'product-unit');
-    assert.equal(component.migration.state, 'product-unit');
-    assert.deepEqual(Object.keys(component.surfaces), ['web']);
-  }
+  const colorSwatch = graph.components.find((entry) => entry.unitId === 'color-swatch');
+  assert.ok(colorSwatch, 'color-swatch must remain independently owned outside Media');
+  assert.equal(colorSwatch.id, 'component:color-swatch');
+  assert.equal(colorSwatch.layer, 'elemental-primitives');
+  assert.equal(colorSwatch.facets.canonicalRoot, 'product/components/elemental-primitives/color-swatch/');
+  assert.equal(colorSwatch.facets.legacyRoot, null);
+  assert.equal(colorSwatch.metadataSource, 'product-unit');
+  assert.equal(colorSwatch.migration.state, 'product-unit');
+  assert.deepEqual(Object.keys(colorSwatch.surfaces), ['web']);
+
+  assert.equal(graph.components.some((entry) => entry.unitId === 'skeleton'), false);
+
+  const loading = graph.components.find((entry) => entry.unitId === 'loading');
+  assert.ok(loading, 'loading must own loading feedback above Layer 1');
+  assert.equal(loading.id, 'component:loading');
+  assert.equal(loading.layer, 'composite-components');
+  assert.equal(loading.facets.canonicalRoot, 'product/components/composite-components/loading/');
+  assert.equal(loading.facets.legacyRoot, null);
+  assert.equal(loading.metadataSource, 'product-unit');
+  assert.equal(loading.migration.state, 'product-unit');
+  assert.deepEqual(Object.keys(loading.surfaces), ['web']);
+  assert.ok(loading.surfaces.web.publicEntrypoints.includes('@vyrnforge/web/styles/loading.css'));
 
   assert.deepEqual(productGraphProblems(), []);
 });

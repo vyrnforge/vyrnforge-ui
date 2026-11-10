@@ -1,0 +1,43 @@
+<section aria-labelledby="loading-heading" data-vf-stack data-vf-stack-gap="lg">
+  <h2 id="loading-heading">Loading presentations</h2>
+
+  <div data-vf-inline data-vf-inline-gap="md" aria-label="Indeterminate loading examples">
+    <span data-vf-loading data-vf-loading-size="sm">
+      <span data-vf-loading-indicator data-vf-loading-variant="spinner" aria-hidden="true"></span>
+    </span>
+    <span data-vf-loading>
+      <span data-vf-loading-indicator data-vf-loading-variant="dots" aria-hidden="true"></span>
+    </span>
+    <span data-vf-loading>
+      <span data-vf-loading-indicator data-vf-loading-variant="bars" aria-hidden="true"></span>
+    </span>
+    <span data-vf-loading data-vf-loading-size="lg">
+      <span data-vf-loading-indicator data-vf-loading-variant="pulse" aria-hidden="true"></span>
+    </span>
+  </div>
+
+  <section aria-label="Account summary" aria-busy="true" data-vf-surface style="padding: var(--vf-space-md)">
+    <div data-vf-stack data-vf-stack-gap="sm">
+      <div data-vf-loading-placeholder data-vf-aspect-ratio data-vf-aspect-ratio-value="video" aria-hidden="true"></div>
+      <div data-vf-inline data-vf-inline-gap="sm">
+        <div data-vf-loading-placeholder data-vf-loading-placeholder-shape="circle" data-vf-aspect-ratio data-vf-aspect-ratio-value="square" aria-hidden="true" style="inline-size: 2.5rem"></div>
+        <div data-vf-stack data-vf-stack-gap="xs" style="flex: 1 1 auto">
+          <div data-vf-loading-placeholder data-vf-loading-placeholder-shape="line" aria-hidden="true" style="inline-size: 70%"></div>
+          <div data-vf-loading-placeholder data-vf-loading-placeholder-shape="line" aria-hidden="true" style="inline-size: 45%"></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <label for="loading-progress">Importing records</label>
+  <progress id="loading-progress" data-vf-loading-progress max="100" value="48">48%</progress>
+
+  <div data-vf-loading-custom aria-hidden="true">
+    <svg width="48" height="48" viewBox="0 0 48 48" role="presentation">
+      <path d="M24 5 40 14v20L24 43 8 34V14Z" fill="none" stroke="currentColor" stroke-width="3"/>
+      <circle cx="24" cy="24" r="4" fill="currentColor"/>
+    </svg>
+  </div>
+
+  <p role="status">Loading account summary</p>
+</section>
