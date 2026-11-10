@@ -96,7 +96,7 @@
     "./styles/surface.css": "./dist/components/surface/surface.css",
     "./styles/tabs.css": "./dist/components/tabs/tabs.css",
     "./styles/text.css": "./dist/components/text/text.css",
-    "./styles/visually-hidden.css": "./dist/components/visually-hidden/visually-hidden.css",
+    "./styles/visually-hidden.css": "./dist/styles/foundation.css",
     "./styles/disclosure.css": "./dist/components/disclosure/disclosure.css",
     "./styles/accordion.css": "./dist/components/accordion/accordion.css",
     "./styles/alert-dialog.css": "./dist/components/alert-dialog/alert-dialog.css",
