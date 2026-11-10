@@ -8,7 +8,6 @@
 
     --vf-loading-indicator-size: 1.5rem;
     --vf-loading-indicator-thickness: 0.14em;
-    --vf-loading-indicator-color: var(--vf-loading-color);
     --vf-loading-spinner-color: var(--vf-loading-indicator-color);
     --vf-loading-spinner-track-color: var(--vf-loading-track-color);
     --vf-loading-spinner-duration: var(--vf-loading-indicator-duration, var(--vf-motion-duration-loading-spin));
@@ -47,7 +46,7 @@
 
     block-size: var(--_vf-loading-indicator-size);
     box-sizing: border-box;
-    color: var(--vf-loading-indicator-color, var(--vf-loading-color, var(--vf-color-accent-background)));
+    color: var(--vf-loading-color, var(--vf-color-accent-background));
     display: inline-block;
     flex: 0 0 auto;
     inline-size: var(--_vf-loading-indicator-size);
@@ -66,7 +65,7 @@
     border-block-start-color: currentColor;
     border-inline-end-color: currentColor;
     border-radius: 50%;
-    color: var(--vf-loading-spinner-color, var(--vf-loading-indicator-color, var(--vf-loading-color, var(--vf-color-accent-background))));
+    color: var(--vf-loading-spinner-color, var(--vf-loading-color, var(--vf-color-accent-background)));
   }
 
   :where([data-vf-loading-indicator][data-vf-loading-variant="dots"]) {
@@ -79,7 +78,7 @@
       radial-gradient(circle, currentColor 48%, transparent 52%) 0 50% / 33.333% 33.333% no-repeat,
       radial-gradient(circle, currentColor 48%, transparent 52%) 50% 50% / 33.333% 33.333% no-repeat,
       radial-gradient(circle, currentColor 48%, transparent 52%) 100% 50% / 33.333% 33.333% no-repeat;
-    color: var(--vf-loading-dots-color, var(--vf-loading-indicator-color, var(--vf-loading-color, var(--vf-color-accent-background))));
+    color: var(--vf-loading-dots-color, var(--vf-loading-color, var(--vf-color-accent-background)));
   }
 
   :where([data-vf-loading-indicator][data-vf-loading-variant="bars"]) {
@@ -95,7 +94,7 @@
       transparent 18% 32%
     );
     border-radius: 0.125rem;
-    color: var(--vf-loading-bars-color, var(--vf-loading-indicator-color, var(--vf-loading-color, var(--vf-color-accent-background))));
+    color: var(--vf-loading-bars-color, var(--vf-loading-color, var(--vf-color-accent-background)));
   }
 
   :where([data-vf-loading-indicator][data-vf-loading-variant="pulse"]) {
@@ -106,7 +105,7 @@
       infinite;
     background: currentColor;
     border-radius: 50%;
-    color: var(--vf-loading-pulse-color, var(--vf-loading-indicator-color, var(--vf-loading-color, var(--vf-color-accent-background))));
+    color: var(--vf-loading-pulse-color, var(--vf-loading-color, var(--vf-color-accent-background)));
   }
 
   :where([data-vf-loading-placeholder]) {
