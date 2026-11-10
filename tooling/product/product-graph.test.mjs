@@ -207,9 +207,27 @@ test('L1 responsibility families preserve deliberate Native Web product ownershi
     assert.ok(component.surfaces.web.publicEntrypoints.includes('@vyrnforge/web/styles/' + id + '.css'));
   }
 
-  for (const id of ['image', 'skeleton', 'color-swatch']) {
+  const image = graph.components.find((entry) => entry.unitId === 'image');
+  assert.ok(image, 'image must be discovered as native-backed Media');
+  assert.equal(image.id, 'component:image');
+  assert.equal(image.layer, 'elemental-primitives');
+  assert.equal(image.facets.canonicalRoot, 'product/components/elemental-primitives/media/image/');
+  assert.equal(image.facets.legacyRoot, null);
+  assert.equal(image.metadataSource, 'product-unit');
+  assert.equal(image.migration.state, 'product-unit');
+  assert.deepEqual(Object.keys(image.surfaces), ['web']);
+  assert.deepEqual(image.surfaces.web.authoringPaths, ['product/components/elemental-primitives/media/image/web/']);
+  assert.equal(image.surfaces.web.projectionPath, 'packages/web/src/components/image/');
+  assert.ok(image.surfaces.web.publicEntrypoints.includes('@vyrnforge/web/styles/image.css'));
+
+  const icon = graph.components.find((entry) => entry.unitId === 'icon');
+  assert.ok(icon, 'icon must be discovered as genuine Media primitive');
+  assert.equal(icon.layer, 'elemental-primitives');
+  assert.equal(icon.facets.canonicalRoot, 'product/components/elemental-primitives/media/icon/');
+
+  for (const id of ['skeleton', 'color-swatch']) {
     const component = graph.components.find((entry) => entry.unitId === id);
-    assert.ok(component, id + ' must be discovered');
+    assert.ok(component, id + ' must remain independently owned outside Media');
     assert.equal(component.id, 'component:' + id);
     assert.equal(component.layer, 'elemental-primitives');
     assert.equal(component.facets.canonicalRoot, 'product/components/elemental-primitives/' + id + '/');
@@ -217,9 +235,6 @@ test('L1 responsibility families preserve deliberate Native Web product ownershi
     assert.equal(component.metadataSource, 'product-unit');
     assert.equal(component.migration.state, 'product-unit');
     assert.deepEqual(Object.keys(component.surfaces), ['web']);
-    assert.deepEqual(component.surfaces.web.authoringPaths, ['product/components/elemental-primitives/' + id + '/web/']);
-    assert.equal(component.surfaces.web.projectionPath, 'packages/web/src/components/' + id + '/');
-    assert.ok(component.surfaces.web.publicEntrypoints.includes('@vyrnforge/web/styles/' + id + '.css'));
   }
 
   assert.deepEqual(productGraphProblems(), []);
