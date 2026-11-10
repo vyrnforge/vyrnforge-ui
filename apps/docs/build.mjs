@@ -35,14 +35,6 @@ function slugify(value) {
     .replace(/^-+|-+$/g, '') || 'section';
 }
 
-function titleCase(value) {
-  return String(value)
-    .split(/[-_\s]+/)
-    .filter(Boolean)
-    .map((part) => `${part[0].toLocaleUpperCase()}${part.slice(1)}`)
-    .join(' ');
-}
-
 function artifactHref(pageDirectory, target) {
   const sourceDirectory = String(pageDirectory).replace(/^\/+|\/+$/g, '');
   const rawTarget = String(target);
