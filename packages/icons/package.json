@@ -16,10 +16,10 @@
       "import": "./dist/index.js",
       "default": "./dist/index.js"
     },
-    "./bookmark": {
-      "types": "./dist/bookmark/index.d.ts",
-      "import": "./dist/bookmark/index.js",
-      "default": "./dist/bookmark/index.js"
+    "./*": {
+      "types": "./dist/*/index.d.ts",
+      "import": "./dist/*/index.js",
+      "default": "./dist/*/index.js"
     }
   },
   "dependencies": {
