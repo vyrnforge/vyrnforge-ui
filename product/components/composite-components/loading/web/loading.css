@@ -8,14 +8,14 @@
 
     --vf-loading-indicator-size: 1.5rem;
     --vf-loading-indicator-thickness: 0.14em;
-    --vf-loading-spinner-color: var(--vf-loading-indicator-color);
+    --vf-loading-spinner-color: var(--vf-loading-color);
     --vf-loading-spinner-track-color: var(--vf-loading-track-color);
     --vf-loading-spinner-duration: var(--vf-loading-indicator-duration, var(--vf-motion-duration-loading-spin));
-    --vf-loading-dots-color: var(--vf-loading-indicator-color);
+    --vf-loading-dots-color: var(--vf-loading-color);
     --vf-loading-dots-duration: var(--vf-loading-indicator-duration, 900ms);
-    --vf-loading-bars-color: var(--vf-loading-indicator-color);
+    --vf-loading-bars-color: var(--vf-loading-color);
     --vf-loading-bars-duration: var(--vf-loading-indicator-duration, 800ms);
-    --vf-loading-pulse-color: var(--vf-loading-indicator-color);
+    --vf-loading-pulse-color: var(--vf-loading-color);
     --vf-loading-pulse-duration: var(--vf-loading-indicator-duration, 900ms);
 
     --vf-loading-placeholder-color: var(--vf-color-disabled-background);
