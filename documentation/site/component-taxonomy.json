@@ -1,0 +1,131 @@
+{
+  "groups": [
+    {
+      "id": "actions",
+      "label": "Actions",
+      "description": "Controls that let people trigger, toggle, or confirm an action.",
+      "components": [
+        "button",
+        "split-button",
+        "toggle-button",
+        "toggle-group",
+        "toolbar",
+        "theme-toggle"
+      ]
+    },
+    {
+      "id": "forms-inputs",
+      "label": "Forms & Inputs",
+      "description": "Controls for entering, choosing, validating, and submitting values.",
+      "components": [
+        "input",
+        "textarea",
+        "native-select",
+        "select",
+        "combobox",
+        "checkbox",
+        "radio",
+        "switch",
+        "slider",
+        "range-slider",
+        "number-input",
+        "number-field",
+        "temporal-input",
+        "temporal-field",
+        "password-field",
+        "otp-field",
+        "search-field",
+        "color-input",
+        "color-picker",
+        "file-input",
+        "file-uploader",
+        "multi-select",
+        "rating",
+        "segmented-control",
+        "tag-group"
+      ]
+    },
+    {
+      "id": "navigation",
+      "label": "Navigation",
+      "description": "Components that help people move between destinations, views, or command sets.",
+      "components": [
+        "link",
+        "tabs",
+        "pagination",
+        "side-nav",
+        "menu",
+        "menubar",
+        "context-menu"
+      ]
+    },
+    {
+      "id": "layout",
+      "label": "Layout & Structure",
+      "description": "Building blocks for page structure, surfaces, spacing, and resizable regions.",
+      "components": [
+        "layout",
+        "surface",
+        "split-panel",
+        "app-shell",
+        "separator"
+      ]
+    },
+    {
+      "id": "content-media",
+      "label": "Content & Media",
+      "description": "Components for text, code, imagery, icons, and visual content.",
+      "components": [
+        "text",
+        "code",
+        "kbd",
+        "icon",
+        "image",
+        "color-swatch"
+      ]
+    },
+    {
+      "id": "feedback-status",
+      "label": "Feedback & Status",
+      "description": "Components that communicate loading, progress, confirmation, and transient status.",
+      "components": [
+        "toast",
+        "skeleton"
+      ]
+    },
+    {
+      "id": "overlays-disclosure",
+      "label": "Overlays & Disclosure",
+      "description": "Components that reveal, focus, or temporarily layer additional information and choices.",
+      "components": [
+        "accordion",
+        "disclosure",
+        "dialog",
+        "alert-dialog",
+        "drawer",
+        "popover",
+        "preview-card",
+        "tooltip"
+      ]
+    },
+    {
+      "id": "collections-browsing",
+      "label": "Collections & Browsing",
+      "description": "Components for browsing or choosing within visual and selectable collections.",
+      "components": [
+        "listbox",
+        "carousel"
+      ]
+    },
+    {
+      "id": "accessibility-utilities",
+      "label": "Accessibility & Utilities",
+      "description": "Support primitives used to preserve accessibility, rendering, and presence behavior.",
+      "components": [
+        "portal",
+        "presence",
+        "visually-hidden"
+      ]
+    }
+  ]
+}
