@@ -139,6 +139,22 @@ function componentNavigationGroups() {
   }));
 }
 
+function patternNavigationGroup() {
+  if (!model.patternCatalog.length) return null;
+  return {
+    label: 'Patterns',
+    items: [
+      { id: 'patterns:index', title: 'Browse patterns', route: 'patterns/' },
+      ...model.patternCatalog.map((page) => ({
+        id: 'pattern:' + page.id,
+        title: page.title,
+        route: componentDestination(page),
+        currentRoutes: [page.showcaseRoute, page.apiRoute],
+      })),
+    ],
+  };
+}
+
 function navigationGroups() {
   return [
     {
@@ -154,9 +170,13 @@ function navigationGroups() {
       items: [{ id: 'components:index', title: 'Browse all', route: 'components/' }],
     },
     ...componentNavigationGroups(),
+    ...(patternNavigationGroup() ? [patternNavigationGroup()] : []),
     {
       label: 'API Reference',
-      items: [{ id: 'api:index', title: 'Components API', route: 'api/components/' }],
+      items: [
+        { id: 'api:index', title: 'Components API', route: 'api/components/' },
+        ...(model.patternCatalog.length ? [{ id: 'pattern-api:index', title: 'Patterns API', route: 'api/patterns/' }] : []),
+      ],
     },
   ];
 }
@@ -188,9 +208,13 @@ function searchablePages() {
   return [
     ...model.foundationPages.map((page) => ({ ...page, searchKind: 'Foundation' })),
     { id: 'components-index', title: 'Components', route: 'components/', searchKind: 'Components' },
-    ...model.showcasePages.map((page) => ({ ...page, searchKind: 'Component guide' })),
+    ...model.componentShowcasePages.map((page) => ({ ...page, searchKind: 'Component guide' })),
+    ...(model.patternCatalog.length ? [{ id: 'patterns-index', title: 'Patterns', route: 'patterns/', searchKind: 'Patterns' }] : []),
+    ...model.patternShowcasePages.map((page) => ({ ...page, searchKind: 'Pattern guide' })),
     { id: 'api-index', title: 'Components API', route: 'api/components/', searchKind: 'API Reference' },
-    ...model.apiPages.map((page) => ({ ...page, searchKind: 'API Reference' })),
+    ...model.componentApiPages.map((page) => ({ ...page, searchKind: 'API Reference' })),
+    ...(model.patternCatalog.length ? [{ id: 'pattern-api-index', title: 'Patterns API', route: 'api/patterns/', searchKind: 'API Reference' }] : []),
+    ...model.patternApiPages.map((page) => ({ ...page, searchKind: 'Pattern API' })),
   ];
 }
 
