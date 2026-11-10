@@ -2,6 +2,6 @@
   "id": "loading",
   "name": "Loading",
   "documentation": {
-    "group": "overlays-feedback"
+    "group": "feedback-status"
   }
 }
