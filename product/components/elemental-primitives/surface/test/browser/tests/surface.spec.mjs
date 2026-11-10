@@ -8,8 +8,7 @@ test('Surface provides the same visual boundary without implicit layout across p
 
   const surface = page.locator('#surface');
   await expect(surface).toHaveAttribute('data-vf-surface', '');
-  if (port === 'elements') await expect(surface).toHaveJSProperty('tagName', 'VF-SURFACE');
-  else await expect(surface).toHaveJSProperty('tagName', 'ARTICLE');
+  await expect(surface).toHaveJSProperty('tagName', 'ARTICLE');
 
   expect(await surface.evaluate((element) => getComputedStyle(element).display)).toBe('block');
   expect(await surface.evaluate((element) => getComputedStyle(element).paddingTop)).toBe('0px');
