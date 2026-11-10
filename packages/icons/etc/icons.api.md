@@ -4,7 +4,7 @@
 
 ```ts
 
-import type { IconDefinition } from '@vyrnforge/web/icon';
+import { IconDefinition } from '@vyrnforge/web/icon';
 
 // @public (undocumented)
 export const addIcon: IconDefinition;
