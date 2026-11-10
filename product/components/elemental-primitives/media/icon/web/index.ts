@@ -23,6 +23,40 @@ export interface IconDefinition {
   readonly variants: Readonly<Record<IconVariant, Readonly<Record<IconShape, IconGlyphDefinition>>>>;
 }
 
+export interface DefineIconInput {
+  readonly name: string;
+  readonly viewBox?: string;
+  readonly outlined: IconGlyphDefinition;
+  readonly filled: IconGlyphDefinition;
+  readonly sharp?: {
+    readonly outlined?: IconGlyphDefinition;
+    readonly filled?: IconGlyphDefinition;
+  };
+}
+
+/**
+ * Defines framework-neutral SVG artwork that every VyrnForge Icon renderer can consume.
+ *
+ * Sharp artwork is optional for icons whose authored geometry is intentionally
+ * identical across the rounded and sharp shape requests.
+ */
+export function defineIcon(input: DefineIconInput): IconDefinition {
+  return {
+    name: input.name,
+    viewBox: input.viewBox ?? '0 0 24 24',
+    variants: {
+      outlined: {
+        rounded: input.outlined,
+        sharp: input.sharp?.outlined ?? input.outlined,
+      },
+      filled: {
+        rounded: input.filled,
+        sharp: input.sharp?.filled ?? input.filled,
+      },
+    },
+  };
+}
+
 export function resolveIconGlyph(
   icon: IconDefinition,
   variant: IconVariant = 'outlined',

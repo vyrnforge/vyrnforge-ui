@@ -4,10 +4,286 @@
 
 ```ts
 
-import type { IconDefinition } from '@vyrnforge/web/icon';
+import { IconDefinition } from '@vyrnforge/web/icon';
+
+// @public (undocumented)
+export const addIcon: IconDefinition;
+
+// @public (undocumented)
+export const arrowDownIcon: IconDefinition;
+
+// @public (undocumented)
+export const arrowLeftIcon: IconDefinition;
+
+// @public (undocumented)
+export const arrowRightIcon: IconDefinition;
+
+// @public (undocumented)
+export const arrowUpIcon: IconDefinition;
+
+// @public (undocumented)
+export const attachmentIcon: IconDefinition;
+
+// @public (undocumented)
+export const bellIcon: IconDefinition;
 
 // @public (undocumented)
 export const bookmarkIcon: IconDefinition;
+
+// @public (undocumented)
+export const calendarIcon: IconDefinition;
+
+// @public (undocumented)
+export const cameraIcon: IconDefinition;
+
+// @public (undocumented)
+export const cartIcon: IconDefinition;
+
+// @public (undocumented)
+export const chartBarIcon: IconDefinition;
+
+// @public (undocumented)
+export const chartLineIcon: IconDefinition;
+
+// @public (undocumented)
+export const checkCircleIcon: IconDefinition;
+
+// @public (undocumented)
+export const checkIcon: IconDefinition;
+
+// @public (undocumented)
+export const chevronDownIcon: IconDefinition;
+
+// @public (undocumented)
+export const chevronLeftIcon: IconDefinition;
+
+// @public (undocumented)
+export const chevronRightIcon: IconDefinition;
+
+// @public (undocumented)
+export const chevronUpIcon: IconDefinition;
+
+// @public (undocumented)
+export const clockIcon: IconDefinition;
+
+// @public (undocumented)
+export const closeIcon: IconDefinition;
+
+// @public (undocumented)
+export const cloudIcon: IconDefinition;
+
+// @public (undocumented)
+export const codeIcon: IconDefinition;
+
+// @public (undocumented)
+export const copyIcon: IconDefinition;
+
+// @public (undocumented)
+export const creditCardIcon: IconDefinition;
+
+// @public (undocumented)
+export const databaseIcon: IconDefinition;
+
+// @public (undocumented)
+export const downloadIcon: IconDefinition;
+
+// @public (undocumented)
+export const editIcon: IconDefinition;
+
+// @public (undocumented)
+export const errorCircleIcon: IconDefinition;
+
+// @public (undocumented)
+export const externalLinkIcon: IconDefinition;
+
+// @public (undocumented)
+export const eyeIcon: IconDefinition;
+
+// @public (undocumented)
+export const eyeOffIcon: IconDefinition;
+
+// @public (undocumented)
+export const fileIcon: IconDefinition;
+
+// @public (undocumented)
+export const fileTextIcon: IconDefinition;
+
+// @public (undocumented)
+export const filterIcon: IconDefinition;
+
+// @public (undocumented)
+export const folderIcon: IconDefinition;
+
+// @public (undocumented)
+export const folderOpenIcon: IconDefinition;
+
+// @public (undocumented)
+export const globeIcon: IconDefinition;
+
+// @public (undocumented)
+export const gridIcon: IconDefinition;
+
+// @public (undocumented)
+export const heartIcon: IconDefinition;
+
+// @public (undocumented)
+export const helpCircleIcon: IconDefinition;
+
+// @public (undocumented)
+export const homeIcon: IconDefinition;
+
+// @public (undocumented)
+export const imageIcon: IconDefinition;
+
+// @public (undocumented)
+export const infoIcon: IconDefinition;
+
+// @public (undocumented)
+export const keyIcon: IconDefinition;
+
+// @public (undocumented)
+export const lightningIcon: IconDefinition;
+
+// @public (undocumented)
+export const linkIcon: IconDefinition;
+
+// @public (undocumented)
+export const listIcon: IconDefinition;
+
+// @public (undocumented)
+export const locationIcon: IconDefinition;
+
+// @public (undocumented)
+export const lockIcon: IconDefinition;
+
+// @public (undocumented)
+export const logOutIcon: IconDefinition;
+
+// @public (undocumented)
+export const mailIcon: IconDefinition;
+
+// @public (undocumented)
+export const maximizeIcon: IconDefinition;
+
+// @public (undocumented)
+export const menuIcon: IconDefinition;
+
+// @public (undocumented)
+export const messageIcon: IconDefinition;
+
+// @public (undocumented)
+export const microphoneIcon: IconDefinition;
+
+// @public (undocumented)
+export const microphoneOffIcon: IconDefinition;
+
+// @public (undocumented)
+export const minimizeIcon: IconDefinition;
+
+// @public (undocumented)
+export const minusIcon: IconDefinition;
+
+// @public (undocumented)
+export const moonIcon: IconDefinition;
+
+// @public (undocumented)
+export const moreHorizontalIcon: IconDefinition;
+
+// @public (undocumented)
+export const moreVerticalIcon: IconDefinition;
+
+// @public (undocumented)
+export const pauseIcon: IconDefinition;
+
+// @public (undocumented)
+export const phoneIcon: IconDefinition;
+
+// @public (undocumented)
+export const pinIcon: IconDefinition;
+
+// @public (undocumented)
+export const playIcon: IconDefinition;
+
+// @public (undocumented)
+export const printIcon: IconDefinition;
+
+// @public (undocumented)
+export const redoIcon: IconDefinition;
+
+// @public (undocumented)
+export const refreshIcon: IconDefinition;
+
+// @public (undocumented)
+export const saveIcon: IconDefinition;
+
+// @public (undocumented)
+export const searchIcon: IconDefinition;
+
+// @public (undocumented)
+export const sendIcon: IconDefinition;
+
+// @public (undocumented)
+export const settingsIcon: IconDefinition;
+
+// @public (undocumented)
+export const shareIcon: IconDefinition;
+
+// @public (undocumented)
+export const shieldCheckIcon: IconDefinition;
+
+// @public (undocumented)
+export const shieldIcon: IconDefinition;
+
+// @public (undocumented)
+export const sparklesIcon: IconDefinition;
+
+// @public (undocumented)
+export const starIcon: IconDefinition;
+
+// @public (undocumented)
+export const stopIcon: IconDefinition;
+
+// @public (undocumented)
+export const sunIcon: IconDefinition;
+
+// @public (undocumented)
+export const tableIcon: IconDefinition;
+
+// @public (undocumented)
+export const tagIcon: IconDefinition;
+
+// @public (undocumented)
+export const terminalIcon: IconDefinition;
+
+// @public (undocumented)
+export const trashIcon: IconDefinition;
+
+// @public (undocumented)
+export const undoIcon: IconDefinition;
+
+// @public (undocumented)
+export const unlockIcon: IconDefinition;
+
+// @public (undocumented)
+export const uploadIcon: IconDefinition;
+
+// @public (undocumented)
+export const userIcon: IconDefinition;
+
+// @public (undocumented)
+export const usersIcon: IconDefinition;
+
+// @public (undocumented)
+export const volumeIcon: IconDefinition;
+
+// @public (undocumented)
+export const volumeOffIcon: IconDefinition;
+
+// @public (undocumented)
+export const warningIcon: IconDefinition;
+
+// @public (undocumented)
+export const wifiIcon: IconDefinition;
 
 // (No @packageDocumentation comment for this package)
 
