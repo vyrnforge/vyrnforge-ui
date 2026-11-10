@@ -22,7 +22,7 @@ Circle does **not** own square geometry. Compose `data-vf-aspect-ratio data-vf-a
 
 ## Loading motion
 
-Skeleton consumes the shared loading-motion shimmer recipe from `@vyrnforge/web/styles/loading-motion.css`. The cadence and easing are shared foundation tokens rather than Skeleton-specific animation constants.
+Skeleton consumes the shared loading-motion shimmer recipe from the canonical Web foundation. The internal CSS recipe is delivered through Skeleton/Foundation styles rather than a separate public Loading Motion component entrypoint. The cadence and easing are shared foundation tokens rather than Skeleton-specific animation constants.
 
 Reduced motion removes the non-essential animation while preserving the placeholder. Forced-colors retains a visible fallback.
 
