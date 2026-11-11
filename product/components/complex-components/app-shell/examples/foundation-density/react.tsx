@@ -3,14 +3,12 @@ import { createRoot } from 'react-dom/client';
 import { Button } from '@vyrnforge/react/button';
 import { Field, Stack } from '@vyrnforge/react/layout';
 import { NativeSelect } from '@vyrnforge/react/native-select';
-import { Surface } from '@vyrnforge/react/surface';
 import { Switch } from '@vyrnforge/react/switch';
 import { Text } from '@vyrnforge/react/text';
 import '@vyrnforge/web/styles/foundation.css';
 import '@vyrnforge/web/styles/button.css';
 import '@vyrnforge/web/styles/layout.css';
 import '@vyrnforge/web/styles/native-select.css';
-import '@vyrnforge/web/styles/surface.css';
 import '@vyrnforge/web/styles/switch.css';
 import '@vyrnforge/web/styles/text.css';
 
@@ -20,13 +18,12 @@ function App() {
   const [updates, setUpdates] = React.useState(true);
 
   return (
-    <Surface
-      as="form"
+    <form
       aria-label="Foundation settings"
       data-vf-theme={appearance}
       data-vf-density={density}
       onSubmit={(event) => event.preventDefault()}
-      style={{ inlineSize: 'min(100%, 36rem)', margin: '1rem auto', padding: '1rem' }}
+      style={{ background: 'var(--vf-color-surface)', border: '1px solid var(--vf-color-border-required)', borderRadius: 'var(--vf-radius-surface)', color: 'var(--vf-color-text)', inlineSize: 'min(100%, 36rem)', margin: '1rem auto', padding: '1rem' }}
     >
       <Stack>
         <Text as="h1" variant="heading-sm">Interface settings</Text>
@@ -64,7 +61,7 @@ function App() {
           <Button type="button" variant="secondary">Nested comfortable action</Button>
         </section>
       </Stack>
-    </Surface>
+    </form>
   );
 }
 
