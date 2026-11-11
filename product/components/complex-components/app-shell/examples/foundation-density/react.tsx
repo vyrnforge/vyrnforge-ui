@@ -23,7 +23,7 @@ function App() {
       data-vf-theme={appearance}
       data-vf-density={density}
       onSubmit={(event) => event.preventDefault()}
-      style={{ background: 'var(--vf-color-surface)', border: '1px solid var(--vf-color-border-required)', borderRadius: 'var(--vf-radius-surface)', color: 'var(--vf-color-text)', inlineSize: 'min(100%, 36rem)', margin: '1rem auto', padding: '1rem' }}
+      style={{ background: 'var(--vf-color-surface)', border: '1px solid var(--vf-color-border-required)', borderRadius: 'var(--vf-radius-surface)', boxSizing: 'border-box', color: 'var(--vf-color-text)', inlineSize: 'min(100%, 36rem)', margin: '1rem auto', padding: '1rem' }}
     >
       <Stack>
         <Text as="h1" variant="heading-sm">Interface settings</Text>
