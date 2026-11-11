@@ -115,7 +115,6 @@ test('Native Web home uses the VyrnForge shell and separates documentation surfa
     '/components/native-select/native-select.css',
     '/components/theme-toggle/theme-toggle.css',
     '/components/link/link.css',
-    '/components/surface/surface.css',
     '/components/button/button.css'
   ]) {
     expect(styleHrefs.some((href) => href?.endsWith(suffix)), `missing public Web stylesheet ${suffix}`).toBe(true);
@@ -367,7 +366,6 @@ test('Button showcase composes shared guidance, Native adaptation, examples, ref
   await expect(page.getByText('@vyrnforge/web/styles/button.css', { exact: false }).first()).toBeVisible();
   await expect(page.locator('article[data-vf-docs-component="button"]')).toHaveCount(1);
   await expect(page.locator('[data-vf-docs-example]')).toHaveCount(5);
-  await expect(page.locator('[data-vf-docs-example][data-vf-surface]')).toHaveCount(5);
   const reference = page.locator('#main');
   await expect(reference.getByRole('link', { name: 'Button API reference' })).toHaveAttribute('href', '../../api/components/button/');
   await expect(reference.getByRole('link', { name: 'Styling foundation' })).toHaveAttribute('href', '../../foundations/styling/');

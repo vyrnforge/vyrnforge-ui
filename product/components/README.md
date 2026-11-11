@@ -4,7 +4,7 @@ This is an ownership tree, **not** a public import hierarchy. The canonical Prod
 
 | Layer | Source directory | Role |
 | --- | --- | --- |
-| L1 | `elemental-primitives/` | Non-interactive building blocks; `typography/text`, `icon`, `surface`, `separator`, `visually-hidden`, grouped native-first projection `elemental-primitives` |
+| L1 | `elemental-primitives/` | Deliberately accepted non-interactive responsibilities; currently Typography (`text`, `code`, `kbd`) and Media (`icon`, `image`), with remaining candidates reviewed individually |
 | L2 | `interactive-controls/` | One action or value; `button`, `link`, `checkbox`, `switch`, `number-input`, `native-select`, `slider`, `file-input`, `color-input`, `temporal-input`, `input`, `textarea`, `radio`, `toggle-button`, `theme-toggle` |
 | L3 | `composition-primitives/` | Layout and authored control relationships; grouped projection owner `layout` |
 | L4 | `behavioral-infrastructure/` | Public port primitives `portal`, `presence`; reusable non-UI algorithms remain under `product/capabilities/` |

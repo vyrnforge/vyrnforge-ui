@@ -229,7 +229,7 @@ function searchMarkup(currentPageDirectory) {
   return `<div class="vf-docs-search" data-vf-docs-search-container>
     <label for="vf-docs-search" data-vf-visually-hidden>Search documentation</label>
     <input id="vf-docs-search" type="search" data-vf-input data-vf-docs-search placeholder="Search documentation" autocomplete="off" aria-controls="vf-docs-search-results">
-    <div id="vf-docs-search-results" class="vf-docs-search-panel" data-vf-surface data-vf-docs-search-results hidden>
+    <div id="vf-docs-search-results" class="vf-docs-search-panel" data-vf-docs-search-results hidden>
       <p class="vf-docs-search-label">Documentation results</p>
       <ul>${results}</ul>
       <p data-vf-docs-search-empty hidden>No matching documentation.</p>
@@ -297,7 +297,7 @@ ${styleLinks(currentPageDirectory, componentStyle)}
 }
 
 function cardList(entries, currentPageDirectory) {
-  return `<ul class="vf-docs-card-list">${entries.map((entry) => `<li data-vf-surface>
+  return `<ul class="vf-docs-card-list">${entries.map((entry) => `<li>
       <a class="vf-docs-card-link" href="${artifactHref(currentPageDirectory, routeTarget(entry.route))}">
         <span>
           <strong>${escapeHtml(entry.title)}</strong>
@@ -499,7 +499,7 @@ function renderFoundation(page) {
 }
 
 function renderExample(example) {
-  return `<article class="vf-docs-example" data-vf-surface data-vf-docs-example="${escapeHtml(example.id)}">
+  return `<article class="vf-docs-example" data-vf-docs-example="${escapeHtml(example.id)}">
     <header class="vf-docs-example-header">
       <div>
         <p class="vf-docs-example-label">Example</p>
@@ -627,7 +627,7 @@ function renderComponent(page) {
           </div>
           <div class="vf-docs-examples">${examples}</div>
         </section>
-        <aside class="vf-docs-evidence" data-vf-surface aria-labelledby="${escapeHtml(evidenceId)}">
+        <aside class="vf-docs-evidence" aria-labelledby="${escapeHtml(evidenceId)}">
           <p class="vf-docs-eyebrow">Evidence boundary</p>
           <h2 id="${escapeHtml(evidenceId)}">Accessibility evidence</h2>
           <p>Native baseline: <code>${escapeHtml(page.accessibility.nativeBaseline?.reference ?? 'not recorded')}</code>. WCAG target: ${escapeHtml(page.accessibility.wcag?.target ?? 'not recorded')}. Mapping status: ${escapeHtml(page.accessibility.wcag?.status ?? 'not recorded')}.</p>

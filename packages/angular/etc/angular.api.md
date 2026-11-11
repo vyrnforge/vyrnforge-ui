@@ -2684,14 +2684,6 @@ export class VfStackDirective {
 }
 
 // @public (undocumented)
-export class VfSurfaceDirective {
-    // (undocumented)
-    static ɵdir: i0.ɵɵDirectiveDeclaration<VfSurfaceDirective, "[vfSurface]", never, {}, {}, never, never, true, never>;
-    // (undocumented)
-    static ɵfac: i0.ɵɵFactoryDeclaration<VfSurfaceDirective, never>;
-}
-
-// @public (undocumented)
 export class VfSwitchDirective {
     // (undocumented)
     static ɵdir: i0.ɵɵDirectiveDeclaration<VfSwitchDirective, "input[vfSwitch]", never, {}, {}, never, never, true, never>;

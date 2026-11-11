@@ -23,7 +23,6 @@ export { VfAspectRatioDirective, VfClusterDirective, VfContainerDirective, VfFie
 export type { AspectRatio, ClusterAlign, ClusterJustify, ContainerSize, InlineAlign, InlineJustify, LayoutSpace, RadioGroupOrientation, StackAlign, StackJustify } from '@vyrnforge/angular/layout';
 export { VfSeparatorDirective } from '@vyrnforge/angular/separator';
 export type { SeparatorOrientation } from '@vyrnforge/angular/separator';
-export { VfSurfaceDirective } from '@vyrnforge/angular/surface';
 export { VfTabsListDirective, VfTabsPanelDirective, VfTabsRootDirective, VfTabsTabDirective } from '@vyrnforge/angular/tabs';
 export type { TabsActivation, TabsOrientation } from '@vyrnforge/angular/tabs';
 export { VfTextDirective } from '@vyrnforge/angular/text';

@@ -2064,26 +2064,6 @@ export interface StackProps {
 }
 
 // @public (undocumented)
-export const Surface: DefineComponent<ExtractPropTypes<    {
-as: {
-type: PropType<SurfaceElement>;
-default: string;
-};
-}>, () => VNode<RendererNode, RendererElement, {
-[key: string]: any;
-}>, {}, {}, {}, ComponentOptionsMixin, ComponentOptionsMixin, {}, string, PublicProps, Readonly<ExtractPropTypes<    {
-as: {
-type: PropType<SurfaceElement>;
-default: string;
-};
-}>> & Readonly<{}>, {
-as: SurfaceElement;
-}, {}, {}, {}, string, ComponentProvideOptions, true, {}, any>;
-
-// @public (undocumented)
-export type SurfaceElement = 'div' | 'section' | 'article' | 'aside' | 'main' | 'nav' | 'header' | 'footer' | 'form';
-
-// @public (undocumented)
 export const Switch: DefineComponent<    {}, () => VNode<RendererNode, RendererElement, {
 [key: string]: any;
 }>, {}, {}, {}, ComponentOptionsMixin, ComponentOptionsMixin, {}, string, PublicProps, Readonly<{}> & Readonly<{}>, {}, {}, {}, {}, string, ComponentProvideOptions, true, {}, any>;

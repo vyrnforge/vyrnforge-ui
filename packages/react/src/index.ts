@@ -34,8 +34,6 @@ export { AspectRatio, Cluster, Container, Field, Fieldset, Grid, Inline, InputGr
 export type { AspectRatioProps, ClusterAlign, ClusterJustify, ClusterProps, ContainerProps, ContainerSize, FieldProps, FieldsetProps, GridProps, InlineAlign, InlineJustify, InlineProps, InputGroupProps, LayoutElement, LayoutSpace, RadioGroupOrientation, RadioGroupProps, StackAlign, StackJustify, StackProps } from './components/layout/index.js';
 export { Separator } from './components/separator/index.js';
 export type { SeparatorOrientation, SeparatorProps } from './components/separator/index.js';
-export { Surface } from './components/surface/index.js';
-export type { SurfaceElement, SurfaceProps } from './components/surface/index.js';
 export { TabsList, TabsPanel, TabsRoot, TabsTab } from './components/tabs/index.js';
 export type { TabsActivation, TabsListProps, TabsOrientation, TabsPanelProps, TabsRootProps, TabsTabProps } from './components/tabs/index.js';
 export { Text } from './components/text/index.js';

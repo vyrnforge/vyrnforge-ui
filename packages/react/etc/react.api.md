@@ -2978,18 +2978,6 @@ export interface StackProps extends HTMLAttributes<HTMLElement> {
 }
 
 // @public (undocumented)
-export const Surface: ForwardRefExoticComponent<SurfaceProps & RefAttributes<HTMLElement>>;
-
-// @public (undocumented)
-export type SurfaceElement = 'div' | 'section' | 'article' | 'aside' | 'main' | 'nav' | 'header' | 'footer' | 'form';
-
-// @public (undocumented)
-export interface SurfaceProps extends HTMLAttributes<HTMLElement> {
-    // (undocumented)
-    as?: SurfaceElement;
-}
-
-// @public (undocumented)
 export const Switch: ForwardRefExoticComponent<SwitchProps & RefAttributes<HTMLInputElement>>;
 
 // @public (undocumented)

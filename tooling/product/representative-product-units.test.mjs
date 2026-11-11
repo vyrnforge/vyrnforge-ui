@@ -40,6 +40,11 @@ test('canonical component migrations have one product owner', () => {
     }
   }
 
+  assert.equal(graph.components.some((component) => component.unitId === 'surface'), false);
+  for (const pkg of graph.packages) {
+    assert.equal(Boolean(pkg.manifest.exports?.['./surface']), false, pkg.name + ' must not export Surface');
+    assert.equal(Boolean(pkg.manifest.exports?.['./styles/surface.css']), false, pkg.name + ' must not export Surface CSS');
+  }
   assert.deepEqual(productGraphProblems(), []);
 });
 
@@ -51,10 +56,9 @@ test('Icon component projections remain separate from the icon catalog package',
   assert.ok(graph.packages.some((pkg) => pkg.id === 'icons'));
 });
 
-test('L1 legacy primitives acquire layered authoring while package shells remain transitional', () => {
+test('remaining L1 candidates acquire layered authoring while package shells remain transitional', () => {
   const graph = discoverProductGraph();
   for (const [id, surfaces] of [
-    ['surface', ['angular', 'elements', 'react', 'vue', 'web']],
     ['separator', ['angular', 'react', 'vue', 'web']],
     ['visually-hidden', ['angular', 'react', 'vue', 'web']],
   ]) {
