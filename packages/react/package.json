@@ -106,11 +106,6 @@
       "import": "./dist/components/separator/index.js",
       "default": "./dist/components/separator/index.js"
     },
-    "./surface": {
-      "types": "./dist/components/surface/index.d.ts",
-      "import": "./dist/components/surface/index.js",
-      "default": "./dist/components/surface/index.js"
-    },
     "./tabs": {
       "types": "./dist/components/tabs/index.d.ts",
       "import": "./dist/components/tabs/index.js",

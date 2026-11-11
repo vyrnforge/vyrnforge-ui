@@ -19,11 +19,10 @@ export const browserFixture = {
     const motionCss = stripImports(await readFile(path.join(root, 'packages/web/dist/styles/loading-motion.css'), 'utf8'));
     const loadingCss = stripImports(await readFile(path.join(root, 'packages/web/dist/components/loading/loading.css'), 'utf8'));
     const layoutCss = stripImports(await readFile(path.join(root, 'packages/web/dist/components/layout/layout.css'), 'utf8'));
-    const surfaceCss = stripImports(await readFile(path.join(root, 'packages/web/dist/components/surface/surface.css'), 'utf8'));
     const fixtureCss = `
       body { margin: 0; padding: 24px; background: var(--vf-color-surface); color: var(--vf-color-text); }
       #examples { max-inline-size: 44rem; }
-      #placeholder-card { padding: var(--vf-space-md); }
+      #placeholder-card { background: var(--vf-color-surface); border: 1px solid var(--vf-color-border-required); border-radius: var(--vf-radius-surface); color: var(--vf-color-text); padding: var(--vf-space-md); }
       #avatar { inline-size: 2.5rem; }
       #line-a { inline-size: 70%; }
       #line-b { inline-size: 45%; }
@@ -32,7 +31,7 @@ export const browserFixture = {
 
     await writeFile(
       path.join(outDir, 'loading.css'),
-      `${tokensCss}\n${motionCss}\n${layoutCss}\n${surfaceCss}\n${loadingCss}\n${fixtureCss}`,
+      `${tokensCss}\n${motionCss}\n${layoutCss}\n${loadingCss}\n${fixtureCss}`,
     );
 
     const body = `
@@ -78,7 +77,6 @@ export const browserFixture = {
           <article
             id="placeholder-card"
             data-vf-loading
-            data-vf-surface
             style="
               --vf-loading-placeholder-color: rgb(225 235 255);
               --vf-loading-placeholder-highlight: rgb(190 210 250);

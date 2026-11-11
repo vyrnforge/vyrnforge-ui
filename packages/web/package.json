@@ -93,7 +93,6 @@
     "./styles/toggle-button.css": "./dist/components/toggle-button/toggle-button.css",
     "./styles/layout.css": "./dist/components/layout/layout.css",
     "./styles/separator.css": "./dist/components/separator/separator.css",
-    "./styles/surface.css": "./dist/components/surface/surface.css",
     "./styles/tabs.css": "./dist/components/tabs/tabs.css",
     "./styles/text.css": "./dist/components/text/text.css",
     "./styles/visually-hidden.css": "./dist/components/visually-hidden/visually-hidden.css",

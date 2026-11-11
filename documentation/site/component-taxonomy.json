@@ -65,7 +65,6 @@
       "description": "Building blocks for page structure, surfaces, spacing, and resizable regions.",
       "components": [
         "layout",
-        "surface",
         "split-panel",
         "app-shell",
         "separator"

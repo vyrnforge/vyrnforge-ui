@@ -106,11 +106,6 @@
       "types": "./dist/types/vyrnforge-angular-separator.d.ts",
       "default": "./dist/fesm2022/vyrnforge-angular-separator.mjs"
     },
-    "./surface": {
-      "import": "./dist/fesm2022/vyrnforge-angular-surface.mjs",
-      "types": "./dist/types/vyrnforge-angular-surface.d.ts",
-      "default": "./dist/fesm2022/vyrnforge-angular-surface.mjs"
-    },
     "./tabs": {
       "import": "./dist/fesm2022/vyrnforge-angular-tabs.mjs",
       "types": "./dist/types/vyrnforge-angular-tabs.d.ts",
