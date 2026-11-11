@@ -161,9 +161,6 @@ export function defineSplitPanelElement(tag?: string, registry?: CustomElementRe
 export function defineStackElement(registry?: CustomElementRegistry | undefined): void;
 
 // @public (undocumented)
-export function defineSurfaceElement(registry?: CustomElementRegistry | undefined): void;
-
-// @public (undocumented)
 export function defineTabsElement(registry?: CustomElementRegistry | undefined): void;
 
 // @public (undocumented)
@@ -744,12 +741,6 @@ export class VfStackElement extends HTMLElementBase_2 {
     set justify(value: StackJustify);
     // (undocumented)
     static readonly observedAttributes: string[];
-}
-
-// @public (undocumented)
-export class VfSurfaceElement extends HTMLElementBase_3 {
-    // (undocumented)
-    connectedCallback(): void;
 }
 
 // @public (undocumented)
