@@ -18,6 +18,7 @@ import { ComponentPropsWithoutRef } from 'react';
 import type { ComponentPropsWithRef } from 'react';
 import { CompositionEventHandler } from 'react';
 import { ContainerSize } from '@vyrnforge/web/layout';
+import { ControlGroupOrientation } from '@vyrnforge/web/layout';
 import { CSSProperties } from 'react';
 import { DetailedHTMLProps } from 'react';
 import { DetailedReactHTMLElement } from 'react';
@@ -361,6 +362,17 @@ export interface ContainerProps extends HTMLAttributes<HTMLElement> {
 }
 
 export { ContainerSize }
+
+// @public (undocumented)
+export const ControlGroup: ForwardRefExoticComponent<ControlGroupProps & RefAttributes<HTMLDivElement>>;
+
+export { ControlGroupOrientation }
+
+// @public (undocumented)
+export interface ControlGroupProps extends HTMLAttributes<HTMLDivElement> {
+    // (undocumented)
+    orientation?: ControlGroupOrientation;
+}
 
 // @public (undocumented)
 export const ContextMenuContent: ForwardRefExoticComponent<Omit<DetailedHTMLProps<HTMLAttributes<HTMLDivElement>, HTMLDivElement>, "ref"> & RefAttributes<HTMLDivElement>>;
@@ -2043,12 +2055,6 @@ export interface InlineProps extends HTMLAttributes<HTMLElement> {
 
 // @public (undocumented)
 export const Input: ForwardRefExoticComponent<InputProps & RefAttributes<HTMLInputElement>>;
-
-// @public (undocumented)
-export const InputGroup: ForwardRefExoticComponent<InputGroupProps & RefAttributes<HTMLDivElement>>;
-
-// @public (undocumented)
-export type InputGroupProps = HTMLAttributes<HTMLDivElement>;
 
 // @public (undocumented)
 export interface InputProps extends Omit<InputHTMLAttributes<HTMLInputElement>, 'type'> {
