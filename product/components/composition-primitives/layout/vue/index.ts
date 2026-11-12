@@ -5,6 +5,7 @@ import type {
   ClusterAlign,
   ClusterJustify,
   ContainerSize,
+  ControlGroupOrientation,
   InlineAlign,
   InlineJustify,
   LayoutSpace,
@@ -14,7 +15,7 @@ import type {
 } from '@vyrnforge/web/layout';
 
 export type AspectRatio = AspectRatioValue;
-export type { ClusterAlign, ClusterJustify, ContainerSize, InlineAlign, InlineJustify, LayoutSpace, RadioGroupOrientation, StackAlign, StackJustify } from '@vyrnforge/web/layout';
+export type { ClusterAlign, ClusterJustify, ContainerSize, ControlGroupOrientation, InlineAlign, InlineJustify, LayoutSpace, RadioGroupOrientation, StackAlign, StackJustify } from '@vyrnforge/web/layout';
 
 export type LayoutElement = 'div' | 'span' | 'section' | 'main' | 'article' | 'aside' | 'nav' | 'header' | 'footer' | 'form' | 'ul' | 'ol';
 
@@ -26,6 +27,7 @@ export interface ContainerProps { as?: LayoutElement; size?: ContainerSize; gutt
 export interface AspectRatioProps { as?: LayoutElement; ratio?: AspectRatio; }
 export interface FieldProps { as?: LayoutElement; gap?: LayoutSpace; }
 export interface FieldsetProps { gap?: LayoutSpace; }
+export interface ControlGroupProps { orientation?: ControlGroupOrientation; }
 export interface RadioGroupProps { gap?: LayoutSpace; orientation?: RadioGroupOrientation; }
 
 export const Stack = defineComponent({
@@ -76,9 +78,16 @@ export const Fieldset = /* @__PURE__ */ defineComponent({
   setup(props, { attrs, slots }) { return () => h('fieldset', { ...attrs, 'data-vf-fieldset': '', 'data-vf-fieldset-gap': props.gap }, slots.default?.()); },
 });
 
-export const InputGroup = /* @__PURE__ */ defineComponent({
-  name: 'VfInputGroup', inheritAttrs: false,
-  setup(_props, { attrs, slots }) { return () => h('div', { ...attrs, 'data-vf-input-group': '' }, slots.default?.()); },
+export const ControlGroup = /* @__PURE__ */ defineComponent({
+  name: 'VfControlGroup', inheritAttrs: false,
+  props: { orientation: { type: String as PropType<ControlGroupOrientation>, default: 'horizontal' } },
+  setup(props, { attrs, slots }) {
+    return () => h('div', {
+      ...attrs,
+      'data-vf-control-group': '',
+      'data-vf-control-group-orientation': props.orientation,
+    }, slots.default?.());
+  },
 });
 
 export const RadioGroup = /* @__PURE__ */ defineComponent({
