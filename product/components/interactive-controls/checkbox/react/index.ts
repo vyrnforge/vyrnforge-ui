@@ -27,6 +27,5 @@ export const Checkbox = forwardRef<HTMLInputElement, CheckboxProps>(function Che
     },
     type: 'checkbox',
     'data-vf-checkbox': '',
-    'data-vf-indeterminate': indeterminate ? '' : undefined,
   });
 });
