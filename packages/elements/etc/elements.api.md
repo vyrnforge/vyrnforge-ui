@@ -8,6 +8,7 @@ import { AspectRatio } from '@vyrnforge/web/layout';
 import { ClusterAlign } from '@vyrnforge/web/layout';
 import { ClusterJustify } from '@vyrnforge/web/layout';
 import { ContainerSize } from '@vyrnforge/web/layout';
+import { ControlGroupOrientation } from '@vyrnforge/web/layout';
 import { FloatingPlacement } from '@vyrnforge/web/floating-positioning';
 import { IconDefinition } from '@vyrnforge/web/icon';
 import { IconShape } from '@vyrnforge/web/icon';
@@ -36,6 +37,8 @@ export { ClusterAlign }
 export { ClusterJustify }
 
 export { ContainerSize }
+
+export { ControlGroupOrientation }
 
 // @public (undocumented)
 export function defineAccordionElement(registry?: CustomElementRegistry | undefined): void;
@@ -68,6 +71,9 @@ export function defineContainerElement(registry?: CustomElementRegistry | undefi
 export function defineContextMenuElement(tagName?: string, registry?: CustomElementRegistry | undefined): void;
 
 // @public (undocumented)
+export function defineControlGroupElement(registry?: CustomElementRegistry | undefined): void;
+
+// @public (undocumented)
 export function defineDialogElement(registry?: CustomElementRegistry | undefined): void;
 
 // @public (undocumented)
@@ -93,9 +99,6 @@ export function defineIconElement(registry?: CustomElementRegistry | undefined):
 
 // @public (undocumented)
 export function defineInlineElement(registry?: CustomElementRegistry | undefined): void;
-
-// @public (undocumented)
-export function defineInputGroupElement(registry?: CustomElementRegistry | undefined): void;
 
 // @public (undocumented)
 export function defineLayoutElements(registry?: CustomElementRegistry | undefined): void;
@@ -384,6 +387,19 @@ export class VfContainerElement extends HTMLElementBase_2 {
 }
 
 // @public (undocumented)
+export class VfControlGroupElement extends HTMLElementBase_2 {
+    // (undocumented)
+    attributeChangedCallback(): void;
+    // (undocumented)
+    connectedCallback(): void;
+    // (undocumented)
+    static readonly observedAttributes: string[];
+    // (undocumented)
+    get orientation(): ControlGroupOrientation;
+    set orientation(value: ControlGroupOrientation);
+}
+
+// @public (undocumented)
 export class VfContextMenuElement extends HTMLElementBase_11 {
     // (undocumented)
     connectedCallback(): void;
@@ -527,12 +543,6 @@ export class VfInlineElement extends HTMLElementBase_2 {
     set justify(value: InlineJustify);
     // (undocumented)
     static readonly observedAttributes: string[];
-}
-
-// @public (undocumented)
-export class VfInputGroupElement extends HTMLElementBase_2 {
-    // (undocumented)
-    connectedCallback(): void;
 }
 
 // @public (undocumented)
