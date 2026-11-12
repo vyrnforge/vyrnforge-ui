@@ -387,6 +387,14 @@ export class VfContainerElement extends HTMLElementBase_2 {
 }
 
 // @public (undocumented)
+export class VfContextMenuElement extends HTMLElementBase_11 {
+    // (undocumented)
+    connectedCallback(): void;
+    // (undocumented)
+    disconnectedCallback(): void;
+}
+
+// @public (undocumented)
 export class VfControlGroupElement extends HTMLElementBase_2 {
     // (undocumented)
     attributeChangedCallback(): void;
@@ -397,14 +405,6 @@ export class VfControlGroupElement extends HTMLElementBase_2 {
     // (undocumented)
     get orientation(): ControlGroupOrientation;
     set orientation(value: ControlGroupOrientation);
-}
-
-// @public (undocumented)
-export class VfContextMenuElement extends HTMLElementBase_11 {
-    // (undocumented)
-    connectedCallback(): void;
-    // (undocumented)
-    disconnectedCallback(): void;
 }
 
 // @public (undocumented)
