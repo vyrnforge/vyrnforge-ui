@@ -2823,17 +2823,6 @@ export class VfTagGroupRootDirective {
 }
 
 // @public (undocumented)
-export class VfTemporalFieldRootDirective {
-    // (undocumented)
-    static ɵdir: i0.ɵɵDirectiveDeclaration<VfTemporalFieldRootDirective, "[vfTemporalFieldRoot]", never, {}, {}, never, never, true, never>;
-    // (undocumented)
-    static ɵfac: i0.ɵɵFactoryDeclaration<VfTemporalFieldRootDirective, never>;
-}
-
-// @public (undocumented)
-export type TemporalFieldInputType = 'date' | 'time' | 'datetime-local' | 'month' | 'week';
-
-// @public (undocumented)
 export class VfTemporalFieldInputDirective {
     // (undocumented)
     readonly type: InputSignal<TemporalFieldInputType>;
@@ -2847,6 +2836,14 @@ export class VfTemporalFieldInputDirective {
     }, {}, never, never, true, never>;
     // (undocumented)
     static ɵfac: i0.ɵɵFactoryDeclaration<VfTemporalFieldInputDirective, never>;
+}
+
+// @public (undocumented)
+export class VfTemporalFieldRootDirective {
+    // (undocumented)
+    static ɵdir: i0.ɵɵDirectiveDeclaration<VfTemporalFieldRootDirective, "[vfTemporalFieldRoot]", never, {}, {}, never, never, true, never>;
+    // (undocumented)
+    static ɵfac: i0.ɵɵFactoryDeclaration<VfTemporalFieldRootDirective, never>;
 }
 
 // @public (undocumented)
