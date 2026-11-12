@@ -10,6 +10,7 @@ import { ClusterJustify } from '@vyrnforge/web/layout';
 import { ComponentOptionsMixin } from 'vue';
 import { ComponentProvideOptions } from 'vue';
 import { ContainerSize } from '@vyrnforge/web/layout';
+import { ControlGroupOrientation } from '@vyrnforge/web/layout';
 import { DefineComponent } from 'vue';
 import { ExtractPropTypes } from 'vue';
 import { FloatingPlacement } from '@vyrnforge/web/floating-positioning';
@@ -517,6 +518,31 @@ export interface ContainerProps {
 export { ContainerSize }
 
 // @public (undocumented)
+export const ControlGroup: DefineComponent<ExtractPropTypes<    {
+orientation: {
+type: PropType<ControlGroupOrientation>;
+default: string;
+};
+}>, () => VNode<RendererNode, RendererElement, {
+[key: string]: any;
+}>, {}, {}, {}, ComponentOptionsMixin, ComponentOptionsMixin, {}, string, PublicProps, Readonly<ExtractPropTypes<    {
+orientation: {
+type: PropType<ControlGroupOrientation>;
+default: string;
+};
+}>> & Readonly<{}>, {
+orientation: "horizontal" | "vertical";
+}, {}, {}, {}, string, ComponentProvideOptions, true, {}, any>;
+
+export { ControlGroupOrientation }
+
+// @public (undocumented)
+export interface ControlGroupProps {
+    // (undocumented)
+    orientation?: ControlGroupOrientation;
+}
+
+// @public (undocumented)
 export const ContextMenuContent: DefineComponent<    {}, () => VNode<RendererNode, RendererElement, {
 [key: string]: any;
 }> | null, {}, {}, {}, ComponentOptionsMixin, ComponentOptionsMixin, {}, string, PublicProps, Readonly<{}> & Readonly<{}>, {}, {}, {}, {}, string, ComponentProvideOptions, true, {}, any>;
@@ -1015,11 +1041,6 @@ default: string;
 }>> & Readonly<{}>, {
 type: InputType;
 }, {}, {}, {}, string, ComponentProvideOptions, true, {}, any>;
-
-// @public (undocumented)
-export const InputGroup: DefineComponent<    {}, () => VNode<RendererNode, RendererElement, {
-[key: string]: any;
-}>, {}, {}, {}, ComponentOptionsMixin, ComponentOptionsMixin, {}, string, PublicProps, Readonly<{}> & Readonly<{}>, {}, {}, {}, {}, string, ComponentProvideOptions, true, {}, any>;
 
 export { InputType }
 
