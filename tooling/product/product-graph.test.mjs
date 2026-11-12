@@ -225,15 +225,7 @@ test('L1 responsibility families preserve deliberate Native Web product ownershi
   assert.equal(icon.layer, 'elemental-primitives');
   assert.equal(icon.facets.canonicalRoot, 'product/components/elemental-primitives/media/icon/');
 
-  const colorSwatch = graph.components.find((entry) => entry.unitId === 'color-swatch');
-  assert.ok(colorSwatch, 'color-swatch must remain independently owned outside Media');
-  assert.equal(colorSwatch.id, 'component:color-swatch');
-  assert.equal(colorSwatch.layer, 'elemental-primitives');
-  assert.equal(colorSwatch.facets.canonicalRoot, 'product/components/elemental-primitives/color-swatch/');
-  assert.equal(colorSwatch.facets.legacyRoot, null);
-  assert.equal(colorSwatch.metadataSource, 'product-unit');
-  assert.equal(colorSwatch.migration.state, 'product-unit');
-  assert.deepEqual(Object.keys(colorSwatch.surfaces), ['web']);
+  assert.equal(graph.components.some((entry) => entry.unitId === 'color-swatch'), false);
 
   assert.equal(graph.components.some((entry) => entry.unitId === 'skeleton'), false);
   assert.equal(graph.components.some((entry) => entry.unitId === 'loading'), false);
