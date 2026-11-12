@@ -121,9 +121,6 @@ export type ListboxValue = string | string[];
 
 export { RadioGroupOrientation }
 
-// @public (undocumented)
-export type SeparatorOrientation = 'horizontal' | 'vertical';
-
 export { StackAlign }
 
 export { StackJustify }
@@ -2500,22 +2497,6 @@ export class VfSelectTriggerDirective {
 }
 
 // @public (undocumented)
-export class VfSeparatorDirective {
-    // (undocumented)
-    readonly vfSeparatorOrientation: InputSignal<SeparatorOrientation>;
-    // (undocumented)
-    static ɵdir: i0.ɵɵDirectiveDeclaration<VfSeparatorDirective, "hr[vfSeparator]", never, {
-        "vfSeparatorOrientation": {
-            "alias": "vfSeparatorOrientation";
-            "required": false;
-            "isSignal": true;
-        };
-    }, {}, never, never, true, never>;
-    // (undocumented)
-    static ɵfac: i0.ɵɵFactoryDeclaration<VfSeparatorDirective, never>;
-}
-
-// @public (undocumented)
 export class VfSideNavDirective {
     // (undocumented)
     static ɵdir: i0.ɵɵDirectiveDeclaration<VfSideNavDirective, "nav[vfSideNav]", never, {}, {}, never, never, true, never>;
@@ -3209,14 +3190,6 @@ export class VfTooltipTriggerDirective implements OnDestroy {
     static ɵdir: i0.ɵɵDirectiveDeclaration<VfTooltipTriggerDirective, "[vfTooltipTrigger]", never, {}, {}, never, never, true, never>;
     // (undocumented)
     static ɵfac: i0.ɵɵFactoryDeclaration<VfTooltipTriggerDirective, never>;
-}
-
-// @public (undocumented)
-export class VfVisuallyHiddenDirective {
-    // (undocumented)
-    static ɵdir: i0.ɵɵDirectiveDeclaration<VfVisuallyHiddenDirective, "[vfVisuallyHidden]", never, {}, {}, never, never, true, never>;
-    // (undocumented)
-    static ɵfac: i0.ɵɵFactoryDeclaration<VfVisuallyHiddenDirective, never>;
 }
 
 // (No @packageDocumentation comment for this package)

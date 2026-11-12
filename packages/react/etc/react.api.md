@@ -2840,18 +2840,6 @@ export interface SelectRootProps {
 export const SelectTrigger: ForwardRefExoticComponent<Omit<DetailedHTMLProps<ButtonHTMLAttributes<HTMLButtonElement>, HTMLButtonElement>, "ref"> & RefAttributes<HTMLButtonElement>>;
 
 // @public (undocumented)
-export const Separator: ForwardRefExoticComponent<SeparatorProps & RefAttributes<HTMLHRElement>>;
-
-// @public (undocumented)
-export type SeparatorOrientation = 'horizontal' | 'vertical';
-
-// @public (undocumented)
-export interface SeparatorProps extends Omit<HTMLAttributes<HTMLHRElement>, 'aria-orientation'> {
-    // (undocumented)
-    orientation?: SeparatorOrientation;
-}
-
-// @public (undocumented)
 export const SideNav: ForwardRefExoticComponent<Omit<DetailedHTMLProps<HTMLAttributes<HTMLElement>, HTMLElement>, "ref"> & RefAttributes<HTMLElement>>;
 
 // @public (undocumented)
@@ -4940,18 +4928,6 @@ export function TooltipTrigger(input: TooltipTriggerProps): ReactElement<Record<
 export interface TooltipTriggerProps {
     // (undocumented)
     children: ReactElement;
-}
-
-// @public (undocumented)
-export const VisuallyHidden: ForwardRefExoticComponent<VisuallyHiddenProps & RefAttributes<HTMLElement>>;
-
-// @public (undocumented)
-export type VisuallyHiddenElement = 'span' | 'p' | 'div' | 'strong' | 'em' | 'small' | 'label' | 'h1' | 'h2' | 'h3' | 'h4' | 'h5' | 'h6';
-
-// @public (undocumented)
-export interface VisuallyHiddenProps extends HTMLAttributes<HTMLElement> {
-    // (undocumented)
-    as?: VisuallyHiddenElement;
 }
 
 // (No @packageDocumentation comment for this package)

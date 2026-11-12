@@ -1855,26 +1855,6 @@ export const SelectTrigger: DefineComponent<    {}, () => VNode<RendererNode, Re
 }>, {}, {}, {}, ComponentOptionsMixin, ComponentOptionsMixin, {}, string, PublicProps, Readonly<{}> & Readonly<{}>, {}, {}, {}, {}, string, ComponentProvideOptions, true, {}, any>;
 
 // @public (undocumented)
-export const Separator: DefineComponent<ExtractPropTypes<    {
-orientation: {
-type: PropType<SeparatorOrientation>;
-default: string;
-};
-}>, () => VNode<RendererNode, RendererElement, {
-[key: string]: any;
-}>, {}, {}, {}, ComponentOptionsMixin, ComponentOptionsMixin, {}, string, PublicProps, Readonly<ExtractPropTypes<    {
-orientation: {
-type: PropType<SeparatorOrientation>;
-default: string;
-};
-}>> & Readonly<{}>, {
-orientation: SeparatorOrientation;
-}, {}, {}, {}, string, ComponentProvideOptions, true, {}, any>;
-
-// @public (undocumented)
-export type SeparatorOrientation = 'horizontal' | 'vertical';
-
-// @public (undocumented)
 export const SideNav: DefineComponent<    {}, () => VNode<RendererNode, RendererElement, {
 [key: string]: any;
 }>, {}, {}, {}, ComponentOptionsMixin, ComponentOptionsMixin, {}, string, PublicProps, Readonly<{}> & Readonly<{}>, {}, {}, {}, {}, string, ComponentProvideOptions, true, {}, any>;
@@ -2531,26 +2511,6 @@ export const TooltipTrigger: DefineComponent<    {}, () => VNode<RendererNode, R
 
 // @public (undocumented)
 export function usePresence(present: MaybeRefOrGetter<boolean>): PresenceResult;
-
-// @public (undocumented)
-export const VisuallyHidden: DefineComponent<ExtractPropTypes<    {
-as: {
-type: PropType<VisuallyHiddenElement>;
-default: string;
-};
-}>, () => VNode<RendererNode, RendererElement, {
-[key: string]: any;
-}>, {}, {}, {}, ComponentOptionsMixin, ComponentOptionsMixin, {}, string, PublicProps, Readonly<ExtractPropTypes<    {
-as: {
-type: PropType<VisuallyHiddenElement>;
-default: string;
-};
-}>> & Readonly<{}>, {
-as: VisuallyHiddenElement;
-}, {}, {}, {}, string, ComponentProvideOptions, true, {}, any>;
-
-// @public (undocumented)
-export type VisuallyHiddenElement = 'span' | 'p' | 'div' | 'strong' | 'em' | 'small' | 'label' | 'h1' | 'h2' | 'h3' | 'h4' | 'h5' | 'h6';
 
 // (No @packageDocumentation comment for this package)
 

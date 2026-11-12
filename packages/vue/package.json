@@ -101,11 +101,6 @@
       "import": "./dist/components/layout/index.js",
       "default": "./dist/components/layout/index.js"
     },
-    "./separator": {
-      "types": "./dist/components/separator/index.d.ts",
-      "import": "./dist/components/separator/index.js",
-      "default": "./dist/components/separator/index.js"
-    },
     "./tabs": {
       "types": "./dist/components/tabs/index.d.ts",
       "import": "./dist/components/tabs/index.js",
@@ -115,11 +110,6 @@
       "types": "./dist/components/text/index.d.ts",
       "import": "./dist/components/text/index.js",
       "default": "./dist/components/text/index.js"
-    },
-    "./visually-hidden": {
-      "types": "./dist/components/visually-hidden/index.d.ts",
-      "import": "./dist/components/visually-hidden/index.js",
-      "default": "./dist/components/visually-hidden/index.js"
     },
     "./portal": {
       "types": "./dist/components/portal/index.d.ts",
