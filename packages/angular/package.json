@@ -26,11 +26,6 @@
       "types": "./dist/types/vyrnforge-angular-checkbox.d.ts",
       "default": "./dist/fesm2022/vyrnforge-angular-checkbox.mjs"
     },
-    "./color-input": {
-      "import": "./dist/fesm2022/vyrnforge-angular-color-input.mjs",
-      "types": "./dist/types/vyrnforge-angular-color-input.d.ts",
-      "default": "./dist/fesm2022/vyrnforge-angular-color-input.mjs"
-    },
     "./dialog": {
       "import": "./dist/fesm2022/vyrnforge-angular-dialog.mjs",
       "types": "./dist/types/vyrnforge-angular-dialog.d.ts",
@@ -61,11 +56,6 @@
       "types": "./dist/types/vyrnforge-angular-native-select.d.ts",
       "default": "./dist/fesm2022/vyrnforge-angular-native-select.mjs"
     },
-    "./number-input": {
-      "import": "./dist/fesm2022/vyrnforge-angular-number-input.mjs",
-      "types": "./dist/types/vyrnforge-angular-number-input.d.ts",
-      "default": "./dist/fesm2022/vyrnforge-angular-number-input.mjs"
-    },
     "./radio": {
       "import": "./dist/fesm2022/vyrnforge-angular-radio.mjs",
       "types": "./dist/types/vyrnforge-angular-radio.d.ts",
@@ -80,11 +70,6 @@
       "import": "./dist/fesm2022/vyrnforge-angular-switch.mjs",
       "types": "./dist/types/vyrnforge-angular-switch.d.ts",
       "default": "./dist/fesm2022/vyrnforge-angular-switch.mjs"
-    },
-    "./temporal-input": {
-      "import": "./dist/fesm2022/vyrnforge-angular-temporal-input.mjs",
-      "types": "./dist/types/vyrnforge-angular-temporal-input.d.ts",
-      "default": "./dist/fesm2022/vyrnforge-angular-temporal-input.mjs"
     },
     "./textarea": {
       "import": "./dist/fesm2022/vyrnforge-angular-textarea.mjs",
