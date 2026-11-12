@@ -27,8 +27,12 @@
     color: var(--_vf-button-foreground);
     cursor: pointer;
     display: inline-flex;
+    font-family: var(--vf-control-font-family);
+    font-size: var(--_vf-button-font-size);
+    font-weight: var(--vf-control-font-weight);
     gap: var(--_vf-button-gap);
     justify-content: center;
+    line-height: var(--vf-line-height-tight);
     min-block-size: var(--_vf-button-block-size);
     padding-block: var(--_vf-button-padding-block);
     padding-inline: var(--_vf-button-padding-inline);
@@ -38,13 +42,6 @@
       background-color var(--vf-control-motion-duration) var(--vf-motion-easing-standard),
       border-color var(--vf-control-motion-duration) var(--vf-motion-easing-standard);
     user-select: none;
-  }
-
-  :where([data-vf-button]) {
-    font-family: var(--vf-control-font-family);
-    font-size: var(--_vf-button-font-size);
-    font-weight: var(--vf-control-font-weight);
-    line-height: var(--vf-line-height-tight);
   }
 
   :where([data-vf-button][data-vf-variant="secondary"]) {
