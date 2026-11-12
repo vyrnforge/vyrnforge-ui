@@ -40,7 +40,7 @@
     user-select: none;
   }
 
-  :where([data-vf-button]:not([data-vf-text])) {
+  :where([data-vf-button]) {
     font-family: var(--vf-control-font-family);
     font-size: var(--_vf-button-font-size);
     font-weight: var(--vf-control-font-weight);
