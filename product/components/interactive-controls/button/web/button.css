@@ -28,7 +28,7 @@
     gap: var(--_vf-button-gap);
     justify-content: center;
     min-block-size: var(--_vf-button-block-size);
-    padding-block: 0.5rem;
+    padding-block: var(--vf-space-sm);
     padding-inline: var(--_vf-button-padding-inline);
     text-align: center;
     text-decoration: none;
@@ -38,7 +38,7 @@
     user-select: none;
   }
 
-  :where([data-vf-button]:not([data-vf-text])) {
+  :where([data-vf-button]) {
     font-family: var(--vf-control-font-family);
     font-size: var(--_vf-button-font-size);
     font-weight: var(--vf-control-font-weight);
