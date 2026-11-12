@@ -3,5 +3,11 @@ export default {
   markup: '<button id="control" type="button" data-vf-button data-vf-toggle-button aria-pressed="false">Toggle</button>',
   angular: '<button id="control" vfToggleButton>Toggle</button>', props: { defaultPressed: false }, content: 'Toggle', label: false,
   hydrate: true, webConnector: 'connectToggleButton', styleDependencies: ['button'], reducedMotion: true, semantics: { tag: 'BUTTON' },
-  async assertBrowser({ control, expect }) { await expect(control).toHaveAttribute('aria-pressed', 'false'); await control.click(); await expect(control).toHaveAttribute('aria-pressed', 'true'); },
+  async assertBrowser({ control, expect }) {
+    await expect(control).toHaveAttribute('aria-pressed', 'false');
+    await expect(control).not.toHaveAttribute('data-vf-pressed');
+    await control.click();
+    await expect(control).toHaveAttribute('aria-pressed', 'true');
+    await expect(control).not.toHaveAttribute('data-vf-pressed');
+  },
 };
