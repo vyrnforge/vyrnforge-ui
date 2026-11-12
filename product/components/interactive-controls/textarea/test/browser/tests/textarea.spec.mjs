@@ -34,7 +34,7 @@ test('Textarea preserves native multiline form semantics and shared styling acro
   });
   expect(oneRowHeight).toBeGreaterThanOrEqual(40);
   expect(threeRowHeight).toBeGreaterThan(oneRowHeight);
-  editable.evaluate((textarea) => { textarea.rows = 4; });
+  await editable.evaluate((textarea) => { textarea.rows = 4; });
 
   await editable.fill('changed\nline');
   await expect(editable).toHaveValue('changed\nline');
