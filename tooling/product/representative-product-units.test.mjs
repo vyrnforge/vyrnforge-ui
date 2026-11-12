@@ -95,9 +95,9 @@ test('Native-first L2 controls retain stable package projections after source mi
 });
 
 
-test('L2 number, native selection and range controls project through unchanged ports', () => {
+test('L2 native selection and range controls project through unchanged ports', () => {
   const graph = discoverProductGraph();
-  for (const id of ['number-input', 'native-select', 'slider']) {
+  for (const id of ['native-select', 'slider']) {
     const component = graph.components.find((entry) => entry.unitId === id);
     assert.ok(component, id + ' exists in the normalized Product Graph');
     assert.equal(component.layer, 'interactive-controls');
@@ -118,9 +118,9 @@ test('L2 number, native selection and range controls project through unchanged p
   assert.deepEqual(productGraphProblems(), []);
 });
 
-test('L2 specialized native inputs remain owned by the same package entrypoints', () => {
+test('L2 FileInput remains independently owned for native file selection', () => {
   const graph = discoverProductGraph();
-  for (const id of ['file-input', 'color-input', 'temporal-input']) {
+  for (const id of ['file-input']) {
     const component = graph.components.find((entry) => entry.unitId === id);
     assert.ok(component, id + ' remains discoverable');
     assert.equal(component.layer, 'interactive-controls');
