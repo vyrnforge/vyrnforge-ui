@@ -22,10 +22,11 @@ export const TemporalFieldInput = forwardRef<HTMLInputElement, TemporalFieldInpu
   { type = 'date', ...props },
   ref
 ) {
-  return createElement(Input, {
+  const inputProps = {
     ...props,
     ref,
     type,
     'data-vf-temporal-field-input': '',
-  });
+  };
+  return createElement(Input, inputProps);
 });
