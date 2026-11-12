@@ -6,7 +6,7 @@ This is an ownership tree, **not** a public import hierarchy. The canonical Prod
 | --- | --- | --- |
 | L1 | `elemental-primitives/` | Deliberately accepted non-interactive responsibilities; currently Typography (`text`, `code`, `kbd`) and Media (`icon`, `image`), with remaining candidates reviewed individually |
 | L2 | `interactive-controls/` | Single independently operable controls; `button`, `toggle-button`, `link`, `input`, `textarea`, `checkbox`, `radio`, `switch`, `native-select`, `file-input`, `slider` |
-| L3 | `composition-primitives/` | Layout and authored control relationships; grouped projection owner `layout` |
+| L3 | `composition-primitives/` | Spatial, form, and control composition; grouped projection owner `layout` |
 | L4 | `behavioral-infrastructure/` | Public port primitives `portal`, `presence`; reusable non-UI algorithms remain under `product/capabilities/` |
 | L5 | `composite-components/` | Multi-element UI; `dialog`, `tabs`, `disclosure`, `accordion`, `alert-dialog`, `drawer`, `popover`, `tooltip`, `preview-card`, `menu`, `context-menu`, `menubar`, `toolbar`, `split-button`, `listbox`, `select`, `combobox`, `multi-select`, `toggle-group`, `segmented-control`, `tag-group`, `rating`, `range-slider`, `carousel`, `color-picker`, `file-uploader`, `number-field`, `otp-field`, `pagination`, `password-field`, `search-field`, `split-panel`, `temporal-field`, `toast` |
 | L6 | `complex-components/` | Higher-level structures and complex widgets; `app-shell`, `side-nav` |

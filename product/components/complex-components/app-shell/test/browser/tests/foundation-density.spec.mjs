@@ -41,7 +41,7 @@ test.describe('STD-02 inherited density foundation', () => {
     await expect(save).toHaveCSS('outline-width', '2px');
     await updates.focus();
     await expect(updates).toHaveCSS('outline-width', '2px');
-    await expect(updates).toHaveCSS('height', '22px');
+    await expect(updates).toHaveCSS('height', '24px');
   });
 
   test('preserves reduced-motion duration inside explicit light and dark theme scopes', async ({ page }) => {

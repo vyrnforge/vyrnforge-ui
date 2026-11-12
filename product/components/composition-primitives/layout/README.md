@@ -11,11 +11,11 @@ L3 owns composition, grouping, and structural relationships without becoming a b
 - **Grid** arranges repeated peers in equal flexible tracks that reflow intrinsically from available space.
 - **AspectRatio** reserves a stable preset media/content ratio without replacing ordinary CSS sizing.
 
-## Form composition
+## Form and control composition
 
 - **Field** groups a label/control/description relationship spatially without owning validation or value state.
 - **Fieldset** preserves native fieldset/legend grouping where the port can author native HTML; Elements exposes the equivalent grouping contract without pretending a custom element is a native fieldset.
-- **InputGroup** visually composes adjacent controls while leaving their native semantics and state independent.
+- **ControlGroup** visually joins adjacent independently operable controls in horizontal or vertical orientation while leaving their native semantics, state, value, disabled state, size, and variant independent.
 
 ## Control relationship
 

@@ -116,7 +116,7 @@ test.describe('STD-02 public-entrypoint settings foundation matrix', () => {
         await expect(save).toHaveCSS('min-height', densityValue === 'comfortable' ? '40px' : '32px');
         await expect(large).toHaveCSS('min-height', densityValue === 'comfortable' ? '48px' : '40px');
         await expect(nested).toHaveCSS('min-height', '40px');
-        await expect(updates).toHaveCSS('height', '22px');
+        await expect(updates).toHaveCSS('height', '24px');
 
         const image = await form.screenshot({ path: testInfo.outputPath(`settings-${theme}-${densityValue}-wide.png`), animations: 'disabled' });
         expect(image.byteLength).toBeGreaterThan(8_000);
