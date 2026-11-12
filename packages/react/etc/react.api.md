@@ -3883,10 +3883,16 @@ export const TagGroupRoot: ForwardRefExoticComponent<Omit<DetailedHTMLProps<HTML
 export type TagGroupRootProps = ComponentPropsWithoutRef<'div'>;
 
 // @public (undocumented)
-export const TemporalFieldInput: ForwardRefExoticComponent<TemporalInputProps & RefAttributes<HTMLInputElement>>;
+export const TemporalFieldInput: ForwardRefExoticComponent<TemporalFieldInputProps & RefAttributes<HTMLInputElement>>;
 
 // @public (undocumented)
-export type TemporalFieldInputProps = TemporalInputProps;
+export interface TemporalFieldInputProps extends Omit<InputProps, 'type'> {
+    // (undocumented)
+    type?: TemporalFieldInputType;
+}
+
+// @public (undocumented)
+export type TemporalFieldInputType = 'date' | 'time' | 'datetime-local' | 'month' | 'week';
 
 // @public (undocumented)
 export const TemporalFieldRoot: ForwardRefExoticComponent<TemporalFieldRootProps & RefAttributes<HTMLDivElement>>;
