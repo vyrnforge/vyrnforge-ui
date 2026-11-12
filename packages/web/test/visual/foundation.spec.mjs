@@ -139,8 +139,8 @@ test('Layer 0 through Layer 2 use the restrained default presentation contract',
   const nativeSelect = light.locator('[data-vf-native-select]');
   const temporalInput = light.locator('[data-vf-input][type="date"]');
   const fileInput = light.locator('[data-vf-file-input]');
-  const colorInput = light.locator('[data-vf-input]:not(:disabled)');
-  const disabledColorInput = light.locator('[data-vf-input]:disabled');
+  const colorInput = light.locator('[data-vf-input][type="color"]:not(:disabled)');
+  const disabledColorInput = light.locator('[data-vf-input][type="color"]:disabled');
 
   await expect(primary).toHaveCSS('background-color', 'rgb(36, 94, 219)');
   await expect(primary).toHaveCSS('border-radius', '6px');
