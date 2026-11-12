@@ -54,8 +54,8 @@ test('Input preserves native form semantics and shared styling across ports', as
   expect(modeFormData.accent).toBe('#245edb');
 
   await editable.blur();
+  await expect.poll(() => editable.evaluate((input) => getComputedStyle(input).borderColor)).toBe('rgb(113, 113, 122)');
   const normalBorder = await editable.evaluate((input) => getComputedStyle(input).borderColor);
-  expect(normalBorder).toBe('rgb(113, 113, 122)');
   const invalidBorder = await appInvalid.evaluate((input) => getComputedStyle(input).borderColor);
   expect(invalidBorder).not.toBe(normalBorder);
 
