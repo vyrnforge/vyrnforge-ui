@@ -20,6 +20,9 @@ export const browserFixture = {
     <label for="disabled">Disabled</label><input id="disabled" data-vf-input name="disabled" value="omitted" disabled>
     <label for="required">Required</label><input id="required" data-vf-input name="required" required placeholder="Required value">
     <label for="app-invalid">Application invalid</label><input id="app-invalid" data-vf-input name="app-invalid" aria-invalid="true" value="bad">
+    <label for="quantity">Quantity</label><input id="quantity" data-vf-input type="number" name="quantity" value="2" min="0" step="1">
+    <label for="starts-on">Starts on</label><input id="starts-on" data-vf-input type="date" name="startsOn" value="2026-10-23">
+    <label for="accent">Accent color</label><input id="accent" data-vf-input type="color" name="accent" value="#245edb">
   </form>`;
     const page = (body) => `<!doctype html><html lang="en"><head><meta charset="utf-8"><link rel="stylesheet" href="./input.css"><title>Input fixture</title><style>body{background:var(--vf-color-surface);color:var(--vf-color-text);}</style></head><body><main><h1>Input fixture</h1>${body}</main></body></html>`;
 
@@ -37,7 +40,10 @@ export const browserFixture = {
         createElement('label', { htmlFor: 'readonly' }, 'Readonly'), input('readonly', { defaultValue: 'kept', readOnly: true }),
         createElement('label', { htmlFor: 'disabled' }, 'Disabled'), input('disabled', { defaultValue: 'omitted', disabled: true }),
         createElement('label', { htmlFor: 'required' }, 'Required'), input('required', { required: true, placeholder: 'Required value' }),
-        createElement('label', { htmlFor: 'app-invalid' }, 'Application invalid'), input('app-invalid', { 'aria-invalid': true, defaultValue: 'bad' })
+        createElement('label', { htmlFor: 'app-invalid' }, 'Application invalid'), input('app-invalid', { 'aria-invalid': true, defaultValue: 'bad' }),
+        createElement('label', { htmlFor: 'quantity' }, 'Quantity'), input('quantity', { type: 'number', defaultValue: 2, min: 0, step: 1 }),
+        createElement('label', { htmlFor: 'starts-on' }, 'Starts on'), input('starts-on', { type: 'date', name: 'startsOn', defaultValue: '2026-10-23' }),
+        createElement('label', { htmlFor: 'accent' }, 'Accent color'), input('accent', { type: 'color', defaultValue: '#245edb' })
       ));
       await writeFile(path.join(outDir, 'react.html'), page(markup));
 
@@ -71,7 +77,10 @@ export const browserFixture = {
         h('label', { for: 'readonly' }, 'Readonly'), input('readonly', { value: 'kept', readonly: true }),
         h('label', { for: 'disabled' }, 'Disabled'), input('disabled', { value: 'omitted', disabled: true }),
         h('label', { for: 'required' }, 'Required'), input('required', { required: true, placeholder: 'Required value' }),
-        h('label', { for: 'app-invalid' }, 'Application invalid'), input('app-invalid', { 'aria-invalid': 'true', value: 'bad' })
+        h('label', { for: 'app-invalid' }, 'Application invalid'), input('app-invalid', { 'aria-invalid': 'true', value: 'bad' }),
+        h('label', { for: 'quantity' }, 'Quantity'), input('quantity', { type: 'number', value: 2, min: 0, step: 1 }),
+        h('label', { for: 'starts-on' }, 'Starts on'), input('starts-on', { type: 'date', name: 'startsOn', value: '2026-10-23' }),
+        h('label', { for: 'accent' }, 'Accent color'), input('accent', { type: 'color', value: '#245edb' })
       ]) }));
       await writeFile(path.join(outDir, 'vue.html'), page(markup));
     }
@@ -83,7 +92,7 @@ export const browserFixture = {
       const { renderApplication } = await import('@angular/platform-server');
       const { VfInputDirective } = await import('@vyrnforge/angular/input');
       class App {}
-      Component({ selector: 'vf-input-test', standalone: true, imports: [VfInputDirective], template: `<main><h1>Input fixture</h1><form id="form"><label for="editable">Editable</label><input id="editable" vfInput name="editable" value="alpha" required><label for="readonly">Readonly</label><input id="readonly" vfInput name="readonly" value="kept" readonly><label for="disabled">Disabled</label><input id="disabled" vfInput name="disabled" value="omitted" disabled><label for="required">Required</label><input id="required" vfInput name="required" required placeholder="Required value"><label for="app-invalid">Application invalid</label><input id="app-invalid" vfInput name="app-invalid" aria-invalid="true" value="bad"></form></main>` })(App);
+      Component({ selector: 'vf-input-test', standalone: true, imports: [VfInputDirective], template: `<main><h1>Input fixture</h1><form id="form"><label for="editable">Editable</label><input id="editable" vfInput name="editable" value="alpha" required><label for="readonly">Readonly</label><input id="readonly" vfInput name="readonly" value="kept" readonly><label for="disabled">Disabled</label><input id="disabled" vfInput name="disabled" value="omitted" disabled><label for="required">Required</label><input id="required" vfInput name="required" required placeholder="Required value"><label for="app-invalid">Application invalid</label><input id="app-invalid" vfInput name="app-invalid" aria-invalid="true" value="bad"><label for="quantity">Quantity</label><input id="quantity" vfInput type="number" name="quantity" value="2" min="0" step="1"><label for="starts-on">Starts on</label><input id="starts-on" vfInput type="date" name="startsOn" value="2026-10-23"><label for="accent">Accent color</label><input id="accent" vfInput type="color" name="accent" value="#245edb"></form></main>` })(App);
       const html = await renderApplication((context) => bootstrapApplication(App, { providers: [provideZonelessChangeDetection()] }, context), { document: '<!doctype html><html lang="en"><head><title>Input fixture</title><link rel="stylesheet" href="./input.css"><style>body{background:var(--vf-color-surface);color:var(--vf-color-text);}</style></head><body><vf-input-test></vf-input-test></body></html>' });
       await writeFile(path.join(outDir, 'angular.html'), html);
     }
