@@ -9,8 +9,7 @@
         "split-button",
         "toggle-button",
         "toggle-group",
-        "toolbar",
-        "theme-toggle"
+        "toolbar"
       ]
     },
     {
@@ -28,14 +27,11 @@
         "switch",
         "slider",
         "range-slider",
-        "number-input",
         "number-field",
-        "temporal-input",
         "temporal-field",
         "password-field",
         "otp-field",
         "search-field",
-        "color-input",
         "color-picker",
         "file-input",
         "file-uploader",
