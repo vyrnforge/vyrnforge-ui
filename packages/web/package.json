@@ -33,11 +33,6 @@
       "import": "./dist/components/layout/index.js",
       "default": "./dist/components/layout/index.js"
     },
-    "./temporal-input": {
-      "types": "./dist/components/temporal-input/index.d.ts",
-      "import": "./dist/components/temporal-input/index.js",
-      "default": "./dist/components/temporal-input/index.js"
-    },
     "./text": {
       "types": "./dist/components/text/index.d.ts",
       "import": "./dist/components/text/index.js",
@@ -75,19 +70,15 @@
     "./styles/reset.css": "./dist/styles/reset.css",
     "./styles/button.css": "./dist/components/button/button.css",
     "./styles/checkbox.css": "./dist/components/checkbox/checkbox.css",
-    "./styles/color-input.css": "./dist/components/color-input/color-input.css",
     "./styles/dialog.css": "./dist/components/dialog/dialog.css",
     "./styles/file-input.css": "./dist/components/file-input/file-input.css",
     "./styles/icon.css": "./dist/components/icon/icon.css",
     "./styles/input.css": "./dist/components/input/input.css",
     "./styles/link.css": "./dist/components/link/link.css",
     "./styles/native-select.css": "./dist/components/native-select/native-select.css",
-    "./styles/number-input.css": "./dist/components/number-input/number-input.css",
     "./styles/radio.css": "./dist/components/radio/radio.css",
     "./styles/slider.css": "./dist/components/slider/slider.css",
     "./styles/switch.css": "./dist/components/switch/switch.css",
-    "./styles/theme-toggle.css": "./dist/components/theme-toggle/theme-toggle.css",
-    "./styles/temporal-input.css": "./dist/components/temporal-input/temporal-input.css",
     "./styles/textarea.css": "./dist/components/textarea/textarea.css",
     "./styles/toggle-button.css": "./dist/components/toggle-button/toggle-button.css",
     "./styles/layout.css": "./dist/components/layout/layout.css",
