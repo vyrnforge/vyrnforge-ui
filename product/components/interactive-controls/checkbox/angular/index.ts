@@ -6,7 +6,6 @@ import { Directive, ElementRef, Renderer2, afterRenderEffect, booleanAttribute, 
   host: {
     'data-vf-checkbox': '',
     type: 'checkbox',
-    '[attr.data-vf-indeterminate]': 'indeterminate() ? "" : null',
   },
 })
 export class VfCheckboxDirective {
