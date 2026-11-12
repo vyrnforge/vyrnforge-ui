@@ -518,25 +518,6 @@ export interface ContainerProps {
 export { ContainerSize }
 
 // @public (undocumented)
-export const ControlGroup: DefineComponent<ExtractPropTypes<    {
-orientation: {
-type: PropType<ControlGroupOrientation>;
-default: string;
-};
-}>, () => VNode<RendererNode, RendererElement, {
-[key: string]: any;
-}>, {}, {}, {}, ComponentOptionsMixin, ComponentOptionsMixin, {}, string, PublicProps, Readonly<ExtractPropTypes<    {
-orientation: {
-type: PropType<ControlGroupOrientation>;
-default: string;
-};
-}>> & Readonly<{}>, {
-orientation: "horizontal" | "vertical";
-}, {}, {}, {}, string, ComponentProvideOptions, true, {}, any>;
-
-export { ControlGroupOrientation }
-
-// @public (undocumented)
 export interface ControlGroupProps {
     // (undocumented)
     orientation?: ControlGroupOrientation;
@@ -580,6 +561,25 @@ open: boolean;
 export const ContextMenuTrigger: DefineComponent<    {}, () => VNode<RendererNode, RendererElement, {
 [key: string]: any;
 }>, {}, {}, {}, ComponentOptionsMixin, ComponentOptionsMixin, {}, string, PublicProps, Readonly<{}> & Readonly<{}>, {}, {}, {}, {}, string, ComponentProvideOptions, true, {}, any>;
+
+// @public (undocumented)
+export const ControlGroup: DefineComponent<ExtractPropTypes<    {
+orientation: {
+type: PropType<ControlGroupOrientation>;
+default: string;
+};
+}>, () => VNode<RendererNode, RendererElement, {
+[key: string]: any;
+}>, {}, {}, {}, ComponentOptionsMixin, ComponentOptionsMixin, {}, string, PublicProps, Readonly<ExtractPropTypes<    {
+orientation: {
+type: PropType<ControlGroupOrientation>;
+default: string;
+};
+}>> & Readonly<{}>, {
+orientation: "horizontal" | "vertical";
+}, {}, {}, {}, string, ComponentProvideOptions, true, {}, any>;
+
+export { ControlGroupOrientation }
 
 // @public (undocumented)
 export const DialogBody: DefineComponent<    {}, () => VNode<RendererNode, RendererElement, {
@@ -1617,7 +1617,7 @@ default: string;
 };
 }>> & Readonly<{}>, {
 gap: "sm" | "md" | "lg" | "none" | "xs" | "xl" | "2xl" | "3xl";
-orientation: "vertical" | "horizontal";
+orientation: "horizontal" | "vertical";
 }, {}, {}, {}, string, ComponentProvideOptions, true, {}, any>;
 
 export { RadioGroupOrientation }
