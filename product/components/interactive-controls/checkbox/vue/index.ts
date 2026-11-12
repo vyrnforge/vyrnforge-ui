@@ -14,7 +14,6 @@ export const Checkbox = defineComponent({
       ref: element,
       type: 'checkbox',
       'data-vf-checkbox': '',
-      'data-vf-indeterminate': props.indeterminate ? '' : undefined,
     });
   },
 });
