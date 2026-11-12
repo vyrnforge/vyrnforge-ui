@@ -66,8 +66,7 @@
       "components": [
         "layout",
         "split-panel",
-        "app-shell",
-        "separator"
+        "app-shell"
       ]
     },
     {
@@ -79,8 +78,7 @@
         "code",
         "kbd",
         "icon",
-        "image",
-        "color-swatch"
+        "image"
       ]
     },
     {
@@ -121,8 +119,7 @@
       "description": "Support primitives used to preserve accessibility, rendering, and presence behavior.",
       "components": [
         "portal",
-        "presence",
-        "visually-hidden"
+        "presence"
       ]
     }
   ]

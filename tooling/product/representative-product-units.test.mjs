@@ -56,29 +56,17 @@ test('Icon component projections remain separate from the icon catalog package',
   assert.ok(graph.packages.some((pkg) => pkg.id === 'icons'));
 });
 
-test('remaining L1 candidates acquire layered authoring while package shells remain transitional', () => {
+test('retired inherited L1 candidates stay out of the Product Graph and public package surfaces', () => {
   const graph = discoverProductGraph();
-  for (const [id, surfaces] of [
-    ['separator', ['angular', 'react', 'vue', 'web']],
-    ['visually-hidden', ['angular', 'react', 'vue', 'web']],
-  ]) {
-    const component = graph.components.find((entry) => entry.unitId === id);
-    assert.ok(component, id + ' must remain discoverable');
-    assert.equal(component.layer, 'elemental-primitives');
-    assert.equal(component.id, 'component:' + id);
-    assert.equal(component.metadataSource, 'product-unit');
-    assert.equal(component.facets.canonicalRoot, 'product/components/elemental-primitives/' + id + '/');
-    assert.equal(component.facets.legacyRoot, null);
-    assert.deepEqual(Object.keys(component.surfaces).sort(), surfaces);
-    for (const surface of Object.values(component.surfaces)) {
-      assert.equal(surface.authoringMode, 'product-unit');
-      assert.ok(surface.authoringPaths[0].startsWith(component.facets.canonicalRoot));
-      assert.ok(surface.projectionPath?.startsWith('packages/' + surface.package + '/'));
-      assert.ok(surface.publicEntrypoints.length > 0);
-    }
-    // The package entrypoints remain stable while their sources are projected from this unit.
-    assert.equal(component.migration.state, 'product-unit');
-    for (const surface of Object.values(component.surfaces)) assert.deepEqual(surface.legacyPaths, []);
+  for (const id of ['surface', 'separator', 'visually-hidden', 'color-swatch']) {
+    assert.equal(graph.components.some((entry) => entry.unitId === id), false, id + ' must not be a standalone component product unit');
+  }
+  for (const pkg of graph.packages) {
+    assert.equal(Boolean(pkg.manifest.exports?.['./separator']), false, pkg.name + ' must not export generic Separator');
+    assert.equal(Boolean(pkg.manifest.exports?.['./visually-hidden']), false, pkg.name + ' must not export VisuallyHidden wrappers');
+    assert.equal(Boolean(pkg.manifest.exports?.['./styles/separator.css']), false, pkg.name + ' must not export generic Separator CSS');
+    assert.equal(Boolean(pkg.manifest.exports?.['./styles/visually-hidden.css']), false, pkg.name + ' must not export redundant VisuallyHidden CSS');
+    assert.equal(Boolean(pkg.manifest.exports?.['./styles/color-swatch.css']), false, pkg.name + ' must not export standalone ColorSwatch CSS');
   }
   assert.deepEqual(productGraphProblems(), []);
 });
@@ -377,11 +365,6 @@ test('L1 aggregate stylesheet is not a component owner and responsibility famili
   assert.ok(image, 'image is independently owned inside Media');
   assert.equal(image.facets.canonicalRoot, 'product/components/elemental-primitives/media/image/');
   assert.deepEqual(Object.keys(image.surfaces), ['web']);
-
-  const colorSwatch = graph.components.find((entry) => entry.unitId === 'color-swatch');
-  assert.ok(colorSwatch, 'color-swatch remains independently owned outside Media');
-  assert.equal(colorSwatch.layer, 'elemental-primitives');
-  assert.deepEqual(Object.keys(colorSwatch.surfaces), ['web']);
 
   assert.equal(graph.components.some((entry) => entry.unitId === 'skeleton'), false);
   assert.equal(graph.components.some((entry) => entry.unitId === 'loading'), false);
