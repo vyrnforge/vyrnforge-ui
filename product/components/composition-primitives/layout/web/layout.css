@@ -201,23 +201,23 @@
     min-inline-size: 0;
   }
 
-  :where([data-vf-input-group], vf-input-group) > :where(input, select, textarea, button, [data-vf-input], [data-vf-number-input], [data-vf-native-select], [data-vf-temporal-input], [data-vf-button]) {
+  :where([data-vf-input-group], vf-input-group) > :where(input, select, textarea, button, [data-vf-input], [data-vf-native-select], [data-vf-button]) {
     min-inline-size: 0;
     position: relative;
   }
 
-  :where([data-vf-input-group], vf-input-group) > :where(input, select, textarea, button, [data-vf-input], [data-vf-number-input], [data-vf-native-select], [data-vf-temporal-input], [data-vf-button]):not(:first-child) {
+  :where([data-vf-input-group], vf-input-group) > :where(input, select, textarea, button, [data-vf-input], [data-vf-native-select], [data-vf-button]):not(:first-child) {
     border-start-start-radius: 0;
     border-end-start-radius: 0;
     margin-inline-start: -1px;
   }
 
-  :where([data-vf-input-group], vf-input-group) > :where(input, select, textarea, button, [data-vf-input], [data-vf-number-input], [data-vf-native-select], [data-vf-temporal-input], [data-vf-button]):not(:last-child) {
+  :where([data-vf-input-group], vf-input-group) > :where(input, select, textarea, button, [data-vf-input], [data-vf-native-select], [data-vf-button]):not(:last-child) {
     border-start-end-radius: 0;
     border-end-end-radius: 0;
   }
 
-  :where([data-vf-input-group], vf-input-group) > :where(input, select, textarea, button, [data-vf-input], [data-vf-number-input], [data-vf-native-select], [data-vf-temporal-input], [data-vf-button]):focus-visible {
+  :where([data-vf-input-group], vf-input-group) > :where(input, select, textarea, button, [data-vf-input], [data-vf-native-select], [data-vf-button]):focus-visible {
     z-index: 1;
   }
 
