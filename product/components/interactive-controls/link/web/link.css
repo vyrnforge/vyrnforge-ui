@@ -14,7 +14,7 @@
       text-decoration-thickness var(--vf-control-motion-duration) var(--vf-motion-easing-standard);
   }
 
-  :where(a[data-vf-link]:not([data-vf-text])) {
+  :where(a[data-vf-link]) {
     font-weight: var(--vf-font-weight-medium);
   }
 
