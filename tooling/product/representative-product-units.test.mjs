@@ -379,22 +379,10 @@ test('L1 aggregate stylesheet is not a component owner and responsibility famili
   assert.deepEqual(productGraphProblems(), []);
 });
 
-test('L2 Theme Toggle uses canonical Native Web ownership without inventing framework wrappers', () => {
+test('retired L2 specializations stay out of the Product Graph', () => {
   const graph = discoverProductGraph();
-  const component = graph.components.find((entry) => entry.unitId === 'theme-toggle');
-  assert.ok(component, 'theme-toggle must be discovered');
-  assert.equal(component.id, 'component:theme-toggle');
-  assert.equal(component.layer, 'interactive-controls');
-  assert.equal(component.facets.canonicalRoot, 'product/components/interactive-controls/theme-toggle/');
-  assert.equal(component.facets.legacyRoot, null);
-  assert.equal(component.metadataSource, 'product-unit');
-  assert.equal(component.migration.state, 'product-unit');
-  assert.deepEqual(Object.keys(component.surfaces).sort(), ['web']);
-  const web = component.surfaces.web;
-  assert.equal(web.authoringMode, 'product-unit');
-  assert.deepEqual(web.legacyPaths, []);
-  assert.ok(web.authoringPaths[0].startsWith(component.facets.canonicalRoot));
-  assert.equal(web.projectionPath, 'packages/web/src/components/theme-toggle/');
-  assert.ok(web.publicEntrypoints.includes('@vyrnforge/web/styles/theme-toggle.css'));
+  for (const id of ['number-input', 'color-input', 'temporal-input', 'theme-toggle']) {
+    assert.equal(graph.components.some((entry) => entry.unitId === id), false, id + ' must not remain a standalone component product unit');
+  }
   assert.deepEqual(productGraphProblems(), []);
 });
