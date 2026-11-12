@@ -14,7 +14,7 @@ test('L3 composition primitives preserve spatial, form, and control relationship
   const ratio = page.locator('#ratio');
   const field = page.locator('#field');
   const fieldset = page.locator('#fieldset');
-  const inputGroup = page.locator('#input-group');
+  const controlGroup = page.locator('#control-group');
   const radioGroup = page.locator('#radio-group');
 
   if (port === 'elements') {
@@ -26,7 +26,7 @@ test('L3 composition primitives preserve spatial, form, and control relationship
     await expect(ratio).toHaveJSProperty('tagName', 'VF-ASPECT-RATIO');
     await expect(field).toHaveJSProperty('tagName', 'VF-FIELD');
     await expect(fieldset).toHaveJSProperty('tagName', 'VF-FIELDSET');
-    await expect(inputGroup).toHaveJSProperty('tagName', 'VF-INPUT-GROUP');
+    await expect(controlGroup).toHaveJSProperty('tagName', 'VF-CONTROL-GROUP');
     await expect(radioGroup).toHaveJSProperty('tagName', 'VF-RADIO-GROUP');
     await expect(fieldset).toHaveAttribute('role', 'group');
     await expect(radioGroup).toHaveAttribute('role', 'radiogroup');
@@ -76,8 +76,22 @@ test('L3 composition primitives preserve spatial, form, and control relationship
   expect(fieldsetStyle).toEqual({ display: 'grid', gap: '8px' });
   if (port !== 'elements') await expect(fieldset.locator('legend')).toHaveText('Profile');
 
-  expect(await inputGroup.evaluate((element) => getComputedStyle(element).display)).toBe('flex');
-  await expect(inputGroup.locator('input')).toHaveAttribute('aria-label', 'Search query');
+  await expect(controlGroup).toHaveAttribute('data-vf-control-group-orientation', 'horizontal');
+  expect(await controlGroup.evaluate((element) => getComputedStyle(element).display)).toBe('flex');
+  expect(await controlGroup.evaluate((element) => getComputedStyle(element).flexDirection)).toBe('row');
+  await expect(controlGroup.locator('input')).toHaveAttribute('aria-label', 'Search query');
+  const groupedButton = controlGroup.locator('button');
+  await expect(groupedButton).toHaveCSS('margin-inline-start', '-1px');
+
+  if (port === 'elements') {
+    await controlGroup.evaluate((element) => element.setAttribute('orientation', 'vertical'));
+    await expect(controlGroup).toHaveAttribute('data-vf-control-group-orientation', 'vertical');
+  } else {
+    await controlGroup.evaluate((element) => element.setAttribute('data-vf-control-group-orientation', 'vertical'));
+  }
+  expect(await controlGroup.evaluate((element) => getComputedStyle(element).flexDirection)).toBe('column');
+  await expect(groupedButton).toHaveCSS('margin-block-start', '-1px');
+  await expect(groupedButton).toHaveCSS('margin-inline-start', '0px');
 
   const radioStyle = await radioGroup.evaluate((element) => { const style = getComputedStyle(element); return { display: style.display, flexWrap: style.flexWrap, gap: style.gap }; });
   expect(radioStyle).toEqual({ display: 'flex', flexWrap: 'wrap', gap: '8px' });
