@@ -1,1 +1,1 @@
-import{Directive}from'@angular/core';export{VfTemporalInputDirective as VfTemporalFieldInputDirective}from'@vyrnforge/angular/temporal-input';@Directive({selector:'[vfTemporalFieldRoot]',standalone:true,host:{'data-vf-temporal-field-root':''}})export class VfTemporalFieldRootDirective{}
+import{Directive}from'@angular/core';export{VfInputDirective as VfTemporalFieldInputDirective}from'@vyrnforge/angular/input';@Directive({selector:'[vfTemporalFieldRoot]',standalone:true,host:{'data-vf-temporal-field-root':''}})export class VfTemporalFieldRootDirective{}
