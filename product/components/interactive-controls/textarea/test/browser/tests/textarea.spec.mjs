@@ -44,6 +44,7 @@ test('Textarea preserves native multiline form semantics and shared styling acro
   await expect(appInvalid).toHaveAttribute('aria-invalid', 'true');
 
   const normalBorder = await editable.evaluate((textarea) => getComputedStyle(textarea).borderColor);
+  expect(normalBorder).toBe('rgb(113, 113, 122)');
   const invalidBorder = await appInvalid.evaluate((textarea) => getComputedStyle(textarea).borderColor);
   expect(invalidBorder).not.toBe(normalBorder);
 
