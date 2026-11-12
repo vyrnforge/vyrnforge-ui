@@ -130,7 +130,8 @@ export type TabsActivation = 'automatic' | 'manual';
 // @public (undocumented)
 export type TabsOrientation = 'horizontal' | 'vertical';
 
-export { TemporalInputType }
+// @public (undocumented)
+export type TemporalFieldInputType = 'date' | 'time' | 'datetime-local' | 'month' | 'week';
 
 export { TextVariant }
 
