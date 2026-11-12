@@ -21,6 +21,6 @@ The Product Graph discovers component owners under `product/components/<layer>/<
 
 Each public package build creates an ignored `.vf-projection/<package>/` staging tree from the existing package shell, overlays any publicly projected product-owned surfaces at their package distribution paths, builds the package with its existing public output shape, and removes the staging tree afterward. React, Vue, Elements, Core, Icons, and Web use projected TypeScript source; Web additionally copies canonical CSS/assets from the projected source tree. Angular preserves its ng-packagr primary/secondary-entrypoint structure in the staging tree and writes APF output to the existing `packages/angular/dist` boundary.
 
-Component IDs and public package subpaths are stable across owner moves. For example, Theme Toggle is authored in `product/components/interactive-controls/theme-toggle/` and consumed through `@vyrnforge/web/styles/theme-toggle.css`.
+Component IDs and public package subpaths remain stable when an accepted concept changes source ownership. Retired abstractions are removed deliberately rather than preserved through projection.
 
 Nx includes product metadata and each package’s component source directories in its inputs so affected selection and cached tasks follow the projection.
