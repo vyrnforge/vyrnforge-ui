@@ -53,6 +53,7 @@ test('Input preserves native form semantics and shared styling across ports', as
   expect(modeFormData.startsOn).toBe('2026-10-23');
   expect(modeFormData.accent).toBe('#245edb');
 
+  await editable.blur();
   const normalBorder = await editable.evaluate((input) => getComputedStyle(input).borderColor);
   expect(normalBorder).toBe('rgb(113, 113, 122)');
   const invalidBorder = await appInvalid.evaluate((input) => getComputedStyle(input).borderColor);
