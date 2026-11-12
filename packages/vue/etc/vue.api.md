@@ -518,12 +518,6 @@ export interface ContainerProps {
 export { ContainerSize }
 
 // @public (undocumented)
-export interface ControlGroupProps {
-    // (undocumented)
-    orientation?: ControlGroupOrientation;
-}
-
-// @public (undocumented)
 export const ContextMenuContent: DefineComponent<    {}, () => VNode<RendererNode, RendererElement, {
 [key: string]: any;
 }> | null, {}, {}, {}, ComponentOptionsMixin, ComponentOptionsMixin, {}, string, PublicProps, Readonly<{}> & Readonly<{}>, {}, {}, {}, {}, string, ComponentProvideOptions, true, {}, any>;
@@ -580,6 +574,12 @@ orientation: "horizontal" | "vertical";
 }, {}, {}, {}, string, ComponentProvideOptions, true, {}, any>;
 
 export { ControlGroupOrientation }
+
+// @public (undocumented)
+export interface ControlGroupProps {
+    // (undocumented)
+    orientation?: ControlGroupOrientation;
+}
 
 // @public (undocumented)
 export const DialogBody: DefineComponent<    {}, () => VNode<RendererNode, RendererElement, {
