@@ -21,7 +21,20 @@ test('Textarea preserves native multiline form semantics and shared styling acro
   await expect(editable).toHaveAttribute('rows', '4');
   await expect(editable).toHaveAttribute('cols', '30');
   await expect(editable).toHaveAttribute('wrap', 'soft');
+  await expect(editable).toHaveCSS('min-height', '40px');
   expect(['auto', 'both']).toContain(await editable.evaluate((textarea) => getComputedStyle(textarea).resize));
+
+  const oneRowHeight = await editable.evaluate((textarea) => {
+    textarea.rows = 1;
+    return textarea.getBoundingClientRect().height;
+  });
+  const threeRowHeight = await editable.evaluate((textarea) => {
+    textarea.rows = 3;
+    return textarea.getBoundingClientRect().height;
+  });
+  expect(oneRowHeight).toBeGreaterThanOrEqual(40);
+  expect(threeRowHeight).toBeGreaterThan(oneRowHeight);
+  await editable.evaluate((textarea) => { textarea.rows = 4; });
 
   await editable.fill('changed\nline');
   await expect(editable).toHaveValue('changed\nline');
