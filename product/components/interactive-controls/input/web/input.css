@@ -34,7 +34,7 @@
     opacity: 1;
   }
 
-  :where(input[data-vf-input]:hover:not(:disabled):not(:read-only)) {
+  :where(input[data-vf-input]:hover:not(:disabled):not([readonly])) {
     background: var(--vf-color-surface-hover);
   }
 
@@ -55,7 +55,7 @@
     cursor: not-allowed;
   }
 
-  :where(input[data-vf-input]:read-only:not(:disabled)) {
+  :where(input[data-vf-input][readonly]:not(:disabled)) {
     background: var(--vf-color-surface-subtle);
   }
 
