@@ -7,12 +7,12 @@ type ReactInput = typeof import('@vyrnforge/react/input').Input;
 type AngularInput = typeof import('@vyrnforge/angular/input').VfInputDirective;
 type VueInput = typeof import('@vyrnforge/vue/input').Input;
 
-const types: [WebInputType, ReactInputType, AngularInputType, VueInputType] = ['text', 'email', 'search', 'url'];
+const types: [WebInputType, ReactInputType, AngularInputType, VueInputType] = ['number', 'date', 'color', 'url'];
 const reactInput: ReactInput | undefined = undefined;
 const angularInput: AngularInput | undefined = undefined;
 const vueInput: VueInput | undefined = undefined;
 // @ts-expect-error specialized native controls require separate component review.
 const invalidWeb: WebInputType = 'checkbox';
-// @ts-expect-error all typed ports share the same narrowed vocabulary.
-const invalidReact: ReactInputType = 'date';
+// @ts-expect-error file selection has its own L2 primitive.
+const invalidReact: ReactInputType = 'file';
 void [types, reactInput, angularInput, vueInput, invalidWeb, invalidReact];

@@ -30,7 +30,6 @@ import { RendererElement } from 'vue';
 import { RendererNode } from 'vue';
 import { StackAlign } from '@vyrnforge/web/layout';
 import { StackJustify } from '@vyrnforge/web/layout';
-import { TemporalInputType } from '@vyrnforge/web/temporal-input';
 import { TextVariant } from '@vyrnforge/web/text';
 import { VNode } from 'vue';
 
@@ -379,11 +378,6 @@ export interface ClusterProps {
     // (undocumented)
     justify?: ClusterJustify;
 }
-
-// @public (undocumented)
-export const ColorInput: DefineComponent<    {}, () => VNode<RendererNode, RendererElement, {
-[key: string]: any;
-}>, {}, {}, {}, ComponentOptionsMixin, ComponentOptionsMixin, {}, string, PublicProps, Readonly<{}> & Readonly<{}>, {}, {}, {}, {}, string, ComponentProvideOptions, true, {}, any>;
 
 // @public (undocumented)
 export const ColorPickerInput: DefineComponent<    {}, () => VNode<RendererNode, RendererElement, {
@@ -1319,11 +1313,6 @@ step: number;
 }, {}, {}, {}, string, ComponentProvideOptions, true, {}, any>;
 
 // @public (undocumented)
-export const NumberInput: DefineComponent<    {}, () => VNode<RendererNode, RendererElement, {
-[key: string]: any;
-}>, {}, {}, {}, ComponentOptionsMixin, ComponentOptionsMixin, {}, string, PublicProps, Readonly<{}> & Readonly<{}>, {}, {}, {}, {}, string, ComponentProvideOptions, true, {}, any>;
-
-// @public (undocumented)
 export const OTPFieldInput: DefineComponent<ExtractPropTypes<    {
 index: {
 type: NumberConstructor;
@@ -2209,33 +2198,29 @@ export const TagGroupRoot: DefineComponent<    {}, () => VNode<RendererNode, Ren
 }>, {}, {}, {}, ComponentOptionsMixin, ComponentOptionsMixin, {}, string, PublicProps, Readonly<{}> & Readonly<{}>, {}, {}, {}, {}, string, ComponentProvideOptions, true, {}, any>;
 
 // @public (undocumented)
-export const TemporalFieldInput: DefineComponent<    {}, () => VNode<RendererNode, RendererElement, {
-[key: string]: any;
-}>, {}, {}, {}, ComponentOptionsMixin, ComponentOptionsMixin, {}, string, PublicProps, Readonly<{}> & Readonly<{}>, {}, {}, {}, {}, string, ComponentProvideOptions, true, {}, any>;
-
-// @public (undocumented)
-export const TemporalFieldRoot: DefineComponent<    {}, () => VNode<RendererNode, RendererElement, {
-[key: string]: any;
-}>, {}, {}, {}, ComponentOptionsMixin, ComponentOptionsMixin, {}, string, PublicProps, Readonly<{}> & Readonly<{}>, {}, {}, {}, {}, string, ComponentProvideOptions, true, {}, any>;
-
-// @public (undocumented)
-export const TemporalInput: DefineComponent<ExtractPropTypes<    {
+export const TemporalFieldInput: DefineComponent<ExtractPropTypes<    {
 type: {
-type: PropType<TemporalInputType>;
+type: PropType<TemporalFieldInputType>;
 default: string;
 };
 }>, () => VNode<RendererNode, RendererElement, {
 [key: string]: any;
 }>, {}, {}, {}, ComponentOptionsMixin, ComponentOptionsMixin, {}, string, PublicProps, Readonly<ExtractPropTypes<    {
 type: {
-type: PropType<TemporalInputType>;
+type: PropType<TemporalFieldInputType>;
 default: string;
 };
 }>> & Readonly<{}>, {
-type: TemporalInputType;
+type: TemporalFieldInputType;
 }, {}, {}, {}, string, ComponentProvideOptions, true, {}, any>;
 
-export { TemporalInputType }
+// @public (undocumented)
+export type TemporalFieldInputType = 'date' | 'time' | 'datetime-local' | 'month' | 'week';
+
+// @public (undocumented)
+export const TemporalFieldRoot: DefineComponent<    {}, () => VNode<RendererNode, RendererElement, {
+[key: string]: any;
+}>, {}, {}, {}, ComponentOptionsMixin, ComponentOptionsMixin, {}, string, PublicProps, Readonly<{}> & Readonly<{}>, {}, {}, {}, {}, string, ComponentProvideOptions, true, {}, any>;
 
 // @public (undocumented)
 const Text_2: DefineComponent<ExtractPropTypes<    {

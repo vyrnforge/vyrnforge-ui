@@ -8,7 +8,6 @@ const nativeShellStyleSpecifiers = [
   '@vyrnforge/web/styles/side-nav.css',
   '@vyrnforge/web/styles/input.css',
   '@vyrnforge/web/styles/native-select.css',
-  '@vyrnforge/web/styles/theme-toggle.css',
   '@vyrnforge/web/styles/link.css',
   '@vyrnforge/web/styles/button.css',
 ];

@@ -95,9 +95,9 @@ test('Native-first L2 controls retain stable package projections after source mi
 });
 
 
-test('L2 number, native selection and range controls project through unchanged ports', () => {
+test('L2 native selection and range controls project through unchanged ports', () => {
   const graph = discoverProductGraph();
-  for (const id of ['number-input', 'native-select', 'slider']) {
+  for (const id of ['native-select', 'slider']) {
     const component = graph.components.find((entry) => entry.unitId === id);
     assert.ok(component, id + ' exists in the normalized Product Graph');
     assert.equal(component.layer, 'interactive-controls');
@@ -118,9 +118,9 @@ test('L2 number, native selection and range controls project through unchanged p
   assert.deepEqual(productGraphProblems(), []);
 });
 
-test('L2 specialized native inputs remain owned by the same package entrypoints', () => {
+test('L2 FileInput remains independently owned for native file selection', () => {
   const graph = discoverProductGraph();
-  for (const id of ['file-input', 'color-input', 'temporal-input']) {
+  for (const id of ['file-input']) {
     const component = graph.components.find((entry) => entry.unitId === id);
     assert.ok(component, id + ' remains discoverable');
     assert.equal(component.layer, 'interactive-controls');
@@ -379,22 +379,10 @@ test('L1 aggregate stylesheet is not a component owner and responsibility famili
   assert.deepEqual(productGraphProblems(), []);
 });
 
-test('L2 Theme Toggle uses canonical Native Web ownership without inventing framework wrappers', () => {
+test('retired L2 specializations stay out of the Product Graph', () => {
   const graph = discoverProductGraph();
-  const component = graph.components.find((entry) => entry.unitId === 'theme-toggle');
-  assert.ok(component, 'theme-toggle must be discovered');
-  assert.equal(component.id, 'component:theme-toggle');
-  assert.equal(component.layer, 'interactive-controls');
-  assert.equal(component.facets.canonicalRoot, 'product/components/interactive-controls/theme-toggle/');
-  assert.equal(component.facets.legacyRoot, null);
-  assert.equal(component.metadataSource, 'product-unit');
-  assert.equal(component.migration.state, 'product-unit');
-  assert.deepEqual(Object.keys(component.surfaces).sort(), ['web']);
-  const web = component.surfaces.web;
-  assert.equal(web.authoringMode, 'product-unit');
-  assert.deepEqual(web.legacyPaths, []);
-  assert.ok(web.authoringPaths[0].startsWith(component.facets.canonicalRoot));
-  assert.equal(web.projectionPath, 'packages/web/src/components/theme-toggle/');
-  assert.ok(web.publicEntrypoints.includes('@vyrnforge/web/styles/theme-toggle.css'));
+  for (const id of ['number-input', 'color-input', 'temporal-input', 'theme-toggle']) {
+    assert.equal(graph.components.some((entry) => entry.unitId === id), false, id + ' must not remain a standalone component product unit');
+  }
   assert.deepEqual(productGraphProblems(), []);
 });

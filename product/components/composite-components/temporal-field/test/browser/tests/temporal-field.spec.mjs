@@ -4,7 +4,13 @@ const port = process.env.VF_COMPONENT_PORT || 'react';
 
 test('temporal field preserves native temporal input semantics', async ({ page }) => {
   await page.goto(`/components/temporal-field/${port}.html`);
-  await expect(page.locator('#date')).toHaveAttribute('type', 'date');
+  const input = page.locator('#date');
+  await expect(input).toHaveAttribute('type', 'date');
+  await expect(input).toHaveAttribute('data-vf-input', '');
+  await expect(input).toHaveAttribute('data-vf-temporal-field-input', '');
+  await expect(input).toHaveCSS('min-height', '40px');
+  await input.focus();
+  await expect(input).toHaveCSS('outline-width', '2px');
   expect((await expectNoAxeViolations(page)).violations).toEqual([]);
 });
 

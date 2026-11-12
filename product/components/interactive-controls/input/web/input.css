@@ -20,6 +20,15 @@
       border-color var(--vf-control-motion-duration) var(--vf-motion-easing-standard);
   }
 
+  :where(input[data-vf-input][type="color"]) {
+    --_vf-input-color-inline-size: 3.5rem;
+
+    block-size: var(--vf-control-height-md);
+    cursor: pointer;
+    inline-size: var(--_vf-input-color-inline-size);
+    padding: var(--vf-space-xs);
+  }
+
   :where(input[data-vf-input]::placeholder) {
     color: var(--vf-color-text-subtle);
     opacity: 1;
@@ -27,6 +36,10 @@
 
   :where(input[data-vf-input]:hover:not(:disabled):not(:read-only)) {
     border-color: var(--vf-color-border-strong);
+  }
+
+  :where(input[data-vf-input][type="color"]:hover:not(:disabled)) {
+    background: var(--vf-color-surface-hover);
   }
 
   :where(input[data-vf-input]:focus-visible) {

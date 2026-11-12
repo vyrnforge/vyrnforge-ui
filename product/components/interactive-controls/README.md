@@ -1,17 +1,20 @@
-# Layer 2 — native-backed interactive controls
+# Layer 2 — interactive control primitives
 
-Button, Link, Checkbox and Switch use the approved L2 ownership hierarchy. The component ID remains the final directory name; source paths are not npm exports.
+Layer 2 contains the smallest independently operable controls that own one distinct activation, navigation, editable value, selection, file-selection, or bounded-adjustment responsibility.
 
-This migration moves Link, Checkbox and Switch with their product metadata, evidence, examples, browser fixtures and existing Web, React, Angular and Vue implementation sources. The old package-local implementation copies are removed, while public package entrypoints, package shells and framework-native semantics remain intact.
+The approved inventory is:
+- Activation: Button, ToggleButton
+- Navigation: Link
+- Entry: Input, Textarea
+- Selection: Checkbox, Radio, Switch, NativeSelect, FileInput
+- Adjustment: Slider
 
-Native Web is the first implementation and evidence gate. Link decorates a native anchor; Checkbox uses a native checkbox and DOM indeterminate state; Switch uses a checkbox-backed role=switch. None should acquire collection navigation, popup behavior, complex form coordination or application business logic simply because its source moved.
+Native Web semantics remain authoritative. Framework adapters are justified only when they add useful framework ergonomics; they are not created for catalog symmetry.
 
-Passing source discovery does not imply mature support. Verify native semantics, form participation, keyboard/focus, accessibility, RTL, theme, forced colors, packaging, SSR and clean consumers at the exact reviewed SHA. The remaining L2 controls are separate migration scopes and are not claimed complete by this wave.
+Input owns the native single-value modes `text`, `email`, `password`, `search`, `tel`, `url`, `number`, `date`, `time`, `datetime-local`, `month`, `week`, and `color`. NumberInput, ColorInput, and TemporalInput are retired as separate concepts because they only fixed the native input type. FileInput remains distinct because native file selection exposes FileList, accept/multiple/capture and security-constrained form behavior that ordinary Input modes do not share.
 
-NumberInput, NativeSelect and Slider are a second L2 source-ownership wave. They preserve native `input[type=number]`, `select`, and `input[type=range]` semantics respectively. Their existing package exports and CSS hooks remain unchanged. New framework-specific behavior or composite field patterns are out of scope.
+Theme Toggle is not an L2 product unit. Theme preference is application policy composed from Switch/native checkbox-backed switch semantics plus the shared theme contract. Branded theme-toggle artwork belongs to the consuming application.
 
-FileInput, ColorInput and TemporalInput are a third source-migration wave. Their underlying native HTML input types, validation, browser pickers, accessible names, and form ownership must be preserved. No custom file uploader, color picker, or date/time overlay behavior is introduced by this migration.
+All retained controls use the L0 token/CSS/accessibility foundation: semantic `--vf-*` tokens, private `--_vf-*` calculations only when needed, low-specificity selectors, logical properties, `:focus-visible`, native state selectors, forced-colors support, reduced-motion handling, native directionality, and native form/keyboard/focus semantics.
 
-Input and Textarea are now owned under L2. Their native editing, browser form semantics, selection, input modes and validation are retained, and the representative React profile-form fixture now refers to the canonical Input example path. The move does not create new form-field/group compositions or rewrite the approved input APIs.
-
-Radio and ToggleButton complete the legacy L2 owner relocation inventory. Radio's separate platform-adaptation fixture is still app/example behavior and its relocated source path is resolved by the test setup. ToggleButton remains a native button carrying aria-pressed, not a compound toggle group. Both use the existing public Web and framework contracts.
+Passing source discovery does not imply mature support. Evidence remains scoped to the exact reviewed revision and must cover applicable semantics, form behavior, keyboard/focus, accessibility, RTL, theme, forced colors, packaging, SSR and clean consumers.

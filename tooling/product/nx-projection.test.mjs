@@ -25,7 +25,4 @@ test('Nx follows layered sources into their package targets and documentation', 
   assert.ok(react.includes('@vyrnforge/react'));
   assert.ok(!react.includes('@vyrnforge/vue'));
 
-  const docs = affectedBy('product/components/interactive-controls/theme-toggle/docs/index.md');
-  assert.ok(docs.includes('docs'));
-  assert.ok(!docs.includes('@vyrnforge/web'));
 }, 30000);
