@@ -5,6 +5,7 @@ export default {
   hydrate: true, webConnector: 'connectToggleButton', styleDependencies: ['button'], reducedMotion: true, semantics: { tag: 'BUTTON' },
   async assertBrowser({ control, expect }) {
     await expect(control).toHaveAttribute('aria-pressed', 'false');
+    await expect(control).toHaveCSS('border-color', 'rgb(113, 113, 122)');
     await expect(control).not.toHaveAttribute('data-vf-pressed');
     await control.click();
     await expect(control).toHaveAttribute('aria-pressed', 'true');
