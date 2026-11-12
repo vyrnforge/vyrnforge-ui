@@ -39,7 +39,7 @@ export const browserFixture = {
         createElement(AspectRatio, { id: 'ratio', ratio: 'video' }),
         createElement(Field, { id: 'field', gap: 'xs' }, createElement('label', { htmlFor: 'email' }, 'Email'), createElement('input', { id: 'email', type: 'email', 'aria-describedby': 'email-help' }), createElement('small', { id: 'email-help' }, 'Work address')),
         createElement(Fieldset, { id: 'fieldset', gap: 'sm' }, createElement('legend', null, 'Profile'), createElement('label', { htmlFor: 'display-name' }, 'Display name'), createElement('input', { id: 'display-name' })),
-        createElement(ControlGroup, { id: 'input-group' }, createElement('input', { id: 'search', 'aria-label': 'Search query' }), createElement('button', { type: 'button' }, 'Search')),
+        createElement(ControlGroup, { id: 'control-group', orientation: 'horizontal' }, createElement('input', { id: 'search', 'aria-label': 'Search query' }), createElement('button', { type: 'button' }, 'Search')),
         createElement(RadioGroup, { id: 'radio-group', gap: 'sm', orientation: 'horizontal' }, createElement('legend', null, 'Plan'), createElement('label', null, createElement('input', { id: 'plan-basic', type: 'radio', name: 'plan', value: 'basic' }), ' Basic'), createElement('label', null, createElement('input', { id: 'plan-pro', type: 'radio', name: 'plan', value: 'pro' }), ' Pro'))
       )));
       await writeFile(path.join(outDir, 'react.html'), page(markup));
@@ -57,7 +57,7 @@ export const browserFixture = {
         h(AspectRatio, { id: 'ratio', ratio: 'video' }),
         h(Field, { id: 'field', gap: 'xs' }, () => [h('label', { for: 'email' }, 'Email'), h('input', { id: 'email', type: 'email', 'aria-describedby': 'email-help' }), h('small', { id: 'email-help' }, 'Work address')]),
         h(Fieldset, { id: 'fieldset', gap: 'sm' }, () => [h('legend', 'Profile'), h('label', { for: 'display-name' }, 'Display name'), h('input', { id: 'display-name' })]),
-        h(ControlGroup, { id: 'input-group' }, () => [h('input', { id: 'search', 'aria-label': 'Search query' }), h('button', { type: 'button' }, 'Search')]),
+        h(ControlGroup, { id: 'control-group', orientation: 'horizontal' }, () => [h('input', { id: 'search', 'aria-label': 'Search query' }), h('button', { type: 'button' }, 'Search')]),
         h(RadioGroup, { id: 'radio-group', gap: 'sm', orientation: 'horizontal' }, () => [h('legend', 'Plan'), h('label', [h('input', { id: 'plan-basic', type: 'radio', name: 'plan', value: 'basic' }), ' Basic']), h('label', [h('input', { id: 'plan-pro', type: 'radio', name: 'plan', value: 'pro' }), ' Pro'])]),
       ])) });
       const markup = await renderToString(app);
