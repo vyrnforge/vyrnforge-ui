@@ -2830,7 +2830,24 @@ export class VfTemporalFieldRootDirective {
     static ɵfac: i0.ɵɵFactoryDeclaration<VfTemporalFieldRootDirective, never>;
 }
 
-export { VfInputDirective as VfTemporalFieldInputDirective }
+// @public (undocumented)
+export type TemporalFieldInputType = 'date' | 'time' | 'datetime-local' | 'month' | 'week';
+
+// @public (undocumented)
+export class VfTemporalFieldInputDirective {
+    // (undocumented)
+    readonly type: InputSignal<TemporalFieldInputType>;
+    // (undocumented)
+    static ɵdir: i0.ɵɵDirectiveDeclaration<VfTemporalFieldInputDirective, "input[vfTemporalFieldInput]", never, {
+        "type": {
+            "alias": "type";
+            "required": false;
+            "isSignal": true;
+        };
+    }, {}, never, never, true, never>;
+    // (undocumented)
+    static ɵfac: i0.ɵɵFactoryDeclaration<VfTemporalFieldInputDirective, never>;
+}
 
 // @public (undocumented)
 export class VfTextareaDirective {
