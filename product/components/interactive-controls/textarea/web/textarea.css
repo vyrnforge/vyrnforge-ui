@@ -11,7 +11,7 @@
     font-size: var(--vf-control-font-size);
     font-weight: var(--vf-font-weight-regular);
     line-height: var(--vf-line-height-normal);
-    min-block-size: 6rem;
+    min-block-size: var(--vf-control-height-md);
     min-inline-size: 0;
     padding-block: var(--vf-space-sm);
     padding-inline: 0.75rem;
