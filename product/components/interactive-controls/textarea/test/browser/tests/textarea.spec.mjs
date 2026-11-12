@@ -21,7 +21,7 @@ test('Textarea preserves native multiline form semantics and shared styling acro
   await expect(editable).toHaveAttribute('rows', '4');
   await expect(editable).toHaveAttribute('cols', '30');
   await expect(editable).toHaveAttribute('wrap', 'soft');
-  expect(await editable.evaluate((textarea) => getComputedStyle(textarea).resize)).not.toBe('none');
+  expect(['auto', 'both']).toContain(await editable.evaluate((textarea) => getComputedStyle(textarea).resize));
 
   await editable.fill('changed\nline');
   await expect(editable).toHaveValue('changed\nline');
