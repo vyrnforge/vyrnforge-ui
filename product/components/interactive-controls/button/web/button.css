@@ -9,7 +9,7 @@
        steps for readable labels at sm/md/lg; they are not public spacing tokens. */
     --_vf-button-block-size: var(--_vf-density-control-height-md, var(--vf-control-height-md));
     --_vf-button-padding-inline: 0.875rem;
-    --_vf-button-gap: 0.5rem;
+    --_vf-button-gap: var(--vf-space-sm);
     --_vf-button-font-size: var(--vf-control-font-size);
     --_vf-button-background: var(--vf-color-accent-background);
     --_vf-button-background-hover: var(--vf-color-accent-background-hover);
@@ -25,6 +25,9 @@
     color: var(--_vf-button-foreground);
     cursor: pointer;
     display: inline-flex;
+    font-family: var(--vf-control-font-family);
+    font-size: var(--_vf-button-font-size);
+    font-weight: var(--vf-control-font-weight);
     gap: var(--_vf-button-gap);
     justify-content: center;
     min-block-size: var(--_vf-button-block-size);
@@ -32,17 +35,11 @@
     padding-inline: var(--_vf-button-padding-inline);
     text-align: center;
     text-decoration: none;
+    line-height: var(--vf-line-height-tight);
     transition:
       background-color var(--vf-control-motion-duration) var(--vf-motion-easing-standard),
       border-color var(--vf-control-motion-duration) var(--vf-motion-easing-standard);
     user-select: none;
-  }
-
-  :where([data-vf-button]) {
-    font-family: var(--vf-control-font-family);
-    font-size: var(--_vf-button-font-size);
-    font-weight: var(--vf-control-font-weight);
-    line-height: 1.2;
   }
 
   :where([data-vf-button][data-vf-variant="secondary"]) {
