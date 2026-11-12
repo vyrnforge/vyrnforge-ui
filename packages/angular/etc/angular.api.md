@@ -841,22 +841,6 @@ export class VfContainerDirective {
 }
 
 // @public (undocumented)
-export class VfControlGroupDirective {
-    // (undocumented)
-    readonly vfControlGroupOrientation: InputSignal<"horizontal" | "vertical">;
-    // (undocumented)
-    static ɵdir: i0.ɵɵDirectiveDeclaration<VfControlGroupDirective, "[vfControlGroup]", never, {
-        "vfControlGroupOrientation": {
-            "alias": "vfControlGroupOrientation";
-            "required": false;
-            "isSignal": true;
-        };
-    }, {}, never, never, true, never>;
-    // (undocumented)
-    static ɵfac: i0.ɵɵFactoryDeclaration<VfControlGroupDirective, never>;
-}
-
-// @public (undocumented)
 export class VfContextMenuContentDirective {
     constructor(root: VfContextMenuRootDirective);
     // (undocumented)
@@ -934,6 +918,22 @@ export class VfContextMenuTriggerDirective {
     static ɵdir: i0.ɵɵDirectiveDeclaration<VfContextMenuTriggerDirective, "[vfContextMenuTrigger]", never, {}, {}, never, never, true, never>;
     // (undocumented)
     static ɵfac: i0.ɵɵFactoryDeclaration<VfContextMenuTriggerDirective, never>;
+}
+
+// @public (undocumented)
+export class VfControlGroupDirective {
+    // (undocumented)
+    readonly vfControlGroupOrientation: InputSignal<"horizontal" | "vertical">;
+    // (undocumented)
+    static ɵdir: i0.ɵɵDirectiveDeclaration<VfControlGroupDirective, "[vfControlGroup]", never, {
+        "vfControlGroupOrientation": {
+            "alias": "vfControlGroupOrientation";
+            "required": false;
+            "isSignal": true;
+        };
+    }, {}, never, never, true, never>;
+    // (undocumented)
+    static ɵfac: i0.ɵɵFactoryDeclaration<VfControlGroupDirective, never>;
 }
 
 // @public (undocumented)
@@ -2174,7 +2174,7 @@ export class VfRadioGroupDirective {
     // (undocumented)
     readonly vfRadioGroupGap: InputSignal<"none" | "xs" | "sm" | "md" | "lg" | "xl" | "2xl" | "3xl">;
     // (undocumented)
-    readonly vfRadioGroupOrientation: InputSignal<"vertical" | "horizontal">;
+    readonly vfRadioGroupOrientation: InputSignal<"horizontal" | "vertical">;
     // (undocumented)
     static ɵdir: i0.ɵɵDirectiveDeclaration<VfRadioGroupDirective, "fieldset[vfRadioGroup]", never, {
         "vfRadioGroupGap": {
