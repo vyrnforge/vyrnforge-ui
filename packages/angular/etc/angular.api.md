@@ -31,7 +31,6 @@ import { RadioGroupOrientation } from '@vyrnforge/web/layout';
 import { Signal } from '@angular/core';
 import { StackAlign } from '@vyrnforge/web/layout';
 import { StackJustify } from '@vyrnforge/web/layout';
-import { TemporalInputType } from '@vyrnforge/web/temporal-input';
 import { TextVariant } from '@vyrnforge/web/text';
 import { WritableSignal } from '@angular/core';
 
@@ -619,14 +618,6 @@ export class VfClusterDirective {
     }, {}, never, never, true, never>;
     // (undocumented)
     static ɵfac: i0.ɵɵFactoryDeclaration<VfClusterDirective, never>;
-}
-
-// @public (undocumented)
-export class VfColorInputDirective {
-    // (undocumented)
-    static ɵdir: i0.ɵɵDirectiveDeclaration<VfColorInputDirective, "input[vfColorInput]", never, {}, {}, never, never, true, never>;
-    // (undocumented)
-    static ɵfac: i0.ɵɵFactoryDeclaration<VfColorInputDirective, never>;
 }
 
 // @public (undocumented)
@@ -1871,14 +1862,6 @@ export class VfNumberFieldRootDirective {
 }
 
 // @public (undocumented)
-export class VfNumberInputDirective {
-    // (undocumented)
-    static ɵdir: i0.ɵɵDirectiveDeclaration<VfNumberInputDirective, "input[vfNumberInput]", never, {}, {}, never, never, true, never>;
-    // (undocumented)
-    static ɵfac: i0.ɵɵFactoryDeclaration<VfNumberInputDirective, never>;
-}
-
-// @public (undocumented)
 export class VfOtpFieldInputDirective {
     constructor(root: VfOtpFieldRootDirective);
     // (undocumented)
@@ -2847,23 +2830,7 @@ export class VfTemporalFieldRootDirective {
     static ɵfac: i0.ɵɵFactoryDeclaration<VfTemporalFieldRootDirective, never>;
 }
 
-// @public (undocumented)
-class VfTemporalInputDirective {
-    // (undocumented)
-    readonly type: InputSignal<TemporalInputType>;
-    // (undocumented)
-    static ɵdir: i0.ɵɵDirectiveDeclaration<VfTemporalInputDirective, "input[vfTemporalInput]", never, {
-        "type": {
-            "alias": "type";
-            "required": false;
-            "isSignal": true;
-        };
-    }, {}, never, never, true, never>;
-    // (undocumented)
-    static ɵfac: i0.ɵɵFactoryDeclaration<VfTemporalInputDirective, never>;
-}
-export { VfTemporalInputDirective as VfTemporalFieldInputDirective }
-export { VfTemporalInputDirective }
+export { VfInputDirective as VfTemporalFieldInputDirective }
 
 // @public (undocumented)
 export class VfTextareaDirective {
