@@ -1,4 +1,5 @@
 import { readFileSync } from 'node:fs';
+import { spawnSync } from 'node:child_process';
 import { Extractor, ExtractorConfig } from '@microsoft/api-extractor';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
@@ -59,6 +60,20 @@ for (const name of selectedPackages()) {
     localBuild,
     showVerboseMessages: false,
   });
+
+  if (!localBuild && result.apiReportChanged) {
+    const acceptedReport = path.join(packageRoot, 'etc', `${name}.api.md`);
+    const generatedReport = path.join(packageRoot, 'temp', `${name}.api.md`);
+    const diff = spawnSync(
+      'git',
+      ['diff', '--no-index', '--no-color', '--', acceptedReport, generatedReport],
+      { encoding: 'utf8' },
+    );
+    const output = [diff.stdout, diff.stderr].filter(Boolean).join('');
+    if (output) {
+      console.error(`\nAPI report diff for ${manifest.name}:\n${output}`);
+    }
+  }
 
   // API Extractor reports `succeeded: false` when warnings are emitted. Warnings
   // remain visible for follow-up cleanup, but the contract gate should fail only

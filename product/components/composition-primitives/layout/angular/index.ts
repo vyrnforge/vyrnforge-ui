@@ -4,6 +4,7 @@ import type {
   ClusterAlign,
   ClusterJustify,
   ContainerSize,
+  ControlGroupOrientation,
   InlineAlign,
   InlineJustify,
   LayoutSpace,
@@ -12,7 +13,7 @@ import type {
   StackJustify,
 } from '@vyrnforge/web/layout';
 
-export type { AspectRatio, ClusterAlign, ClusterJustify, ContainerSize, InlineAlign, InlineJustify, LayoutSpace, RadioGroupOrientation, StackAlign, StackJustify } from '@vyrnforge/web/layout';
+export type { AspectRatio, ClusterAlign, ClusterJustify, ContainerSize, ControlGroupOrientation, InlineAlign, InlineJustify, LayoutSpace, RadioGroupOrientation, StackAlign, StackJustify } from '@vyrnforge/web/layout';
 
 @Directive({ selector: '[vfStack]', standalone: true, host: { 'data-vf-stack': '', '[attr.data-vf-stack-gap]': 'vfStackGap()', '[attr.data-vf-stack-align]': 'vfStackAlign()', '[attr.data-vf-stack-justify]': 'vfStackJustify()' } })
 export class VfStackDirective {
@@ -61,8 +62,17 @@ export class VfFieldsetDirective {
   readonly vfFieldsetGap = input<LayoutSpace>('sm');
 }
 
-@Directive({ selector: '[vfInputGroup]', standalone: true, host: { 'data-vf-input-group': '' } })
-export class VfInputGroupDirective {}
+@Directive({
+  selector: '[vfControlGroup]',
+  standalone: true,
+  host: {
+    'data-vf-control-group': '',
+    '[attr.data-vf-control-group-orientation]': 'vfControlGroupOrientation()'
+  }
+})
+export class VfControlGroupDirective {
+  readonly vfControlGroupOrientation = input<ControlGroupOrientation>('horizontal');
+}
 
 @Directive({ selector: 'fieldset[vfRadioGroup]', standalone: true, host: { 'data-vf-radio-group': '', '[attr.data-vf-radio-group-gap]': 'vfRadioGroupGap()', '[attr.data-vf-radio-group-orientation]': 'vfRadioGroupOrientation()' } })
 export class VfRadioGroupDirective {

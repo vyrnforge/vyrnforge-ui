@@ -10,6 +10,7 @@ import { ClusterAlign } from '@vyrnforge/web/layout';
 import { ClusterJustify } from '@vyrnforge/web/layout';
 import { CollectionNavigationIntent } from '@vyrnforge/core/collection-navigation';
 import { ContainerSize } from '@vyrnforge/web/layout';
+import { ControlGroupOrientation } from '@vyrnforge/web/layout';
 import { ElementRef } from '@angular/core';
 import { FloatingPlacement } from '@vyrnforge/web/floating-positioning';
 import * as i0 from '@angular/core';
@@ -66,6 +67,8 @@ export { ClusterAlign }
 export { ClusterJustify }
 
 export { ContainerSize }
+
+export { ControlGroupOrientation }
 
 // @public (undocumented)
 export type DialogDismissReason = 'escape' | 'backdrop' | 'close-control';
@@ -918,6 +921,22 @@ export class VfContextMenuTriggerDirective {
 }
 
 // @public (undocumented)
+export class VfControlGroupDirective {
+    // (undocumented)
+    readonly vfControlGroupOrientation: InputSignal<"horizontal" | "vertical">;
+    // (undocumented)
+    static ɵdir: i0.ɵɵDirectiveDeclaration<VfControlGroupDirective, "[vfControlGroup]", never, {
+        "vfControlGroupOrientation": {
+            "alias": "vfControlGroupOrientation";
+            "required": false;
+            "isSignal": true;
+        };
+    }, {}, never, never, true, never>;
+    // (undocumented)
+    static ɵfac: i0.ɵɵFactoryDeclaration<VfControlGroupDirective, never>;
+}
+
+// @public (undocumented)
 export class VfDialogBodyDirective {
     // (undocumented)
     readonly root: VfDialogRootDirective;
@@ -1467,14 +1486,6 @@ export class VfInputDirective {
     }, {}, never, never, true, never>;
     // (undocumented)
     static ɵfac: i0.ɵɵFactoryDeclaration<VfInputDirective, never>;
-}
-
-// @public (undocumented)
-export class VfInputGroupDirective {
-    // (undocumented)
-    static ɵdir: i0.ɵɵDirectiveDeclaration<VfInputGroupDirective, "[vfInputGroup]", never, {}, {}, never, never, true, never>;
-    // (undocumented)
-    static ɵfac: i0.ɵɵFactoryDeclaration<VfInputGroupDirective, never>;
 }
 
 // @public (undocumented)
@@ -2163,7 +2174,7 @@ export class VfRadioGroupDirective {
     // (undocumented)
     readonly vfRadioGroupGap: InputSignal<"none" | "xs" | "sm" | "md" | "lg" | "xl" | "2xl" | "3xl">;
     // (undocumented)
-    readonly vfRadioGroupOrientation: InputSignal<"vertical" | "horizontal">;
+    readonly vfRadioGroupOrientation: InputSignal<"horizontal" | "vertical">;
     // (undocumented)
     static ɵdir: i0.ɵɵDirectiveDeclaration<VfRadioGroupDirective, "fieldset[vfRadioGroup]", never, {
         "vfRadioGroupGap": {

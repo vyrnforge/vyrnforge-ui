@@ -5,6 +5,7 @@ import type {
   ClusterAlign,
   ClusterJustify,
   ContainerSize,
+  ControlGroupOrientation,
   InlineAlign,
   InlineJustify,
   LayoutSpace,
@@ -18,6 +19,7 @@ export type {
   ClusterAlign,
   ClusterJustify,
   ContainerSize,
+  ControlGroupOrientation,
   InlineAlign,
   InlineJustify,
   LayoutSpace,
@@ -36,7 +38,7 @@ export interface ContainerProps extends HTMLAttributes<HTMLElement> { as?: Layou
 export interface AspectRatioProps extends HTMLAttributes<HTMLElement> { as?: LayoutElement; ratio?: AspectRatio; }
 export interface FieldProps extends HTMLAttributes<HTMLElement> { as?: LayoutElement; gap?: LayoutSpace; }
 export interface FieldsetProps extends FieldsetHTMLAttributes<HTMLFieldSetElement> { gap?: LayoutSpace; }
-export type InputGroupProps = HTMLAttributes<HTMLDivElement>;
+export interface ControlGroupProps extends HTMLAttributes<HTMLDivElement> { orientation?: ControlGroupOrientation; }
 export interface RadioGroupProps extends FieldsetHTMLAttributes<HTMLFieldSetElement> { gap?: LayoutSpace; orientation?: RadioGroupOrientation; }
 
 export const Stack = forwardRef<HTMLElement, StackProps>(function Stack({ as = 'div', gap = 'md', align = 'stretch', justify = 'start', ...nativeProps }, ref) {
@@ -71,8 +73,13 @@ export const Fieldset = /* @__PURE__ */ forwardRef<HTMLFieldSetElement, Fieldset
   return createElement('fieldset', { ...nativeProps, ref, 'data-vf-fieldset': '', 'data-vf-fieldset-gap': gap });
 });
 
-export const InputGroup = /* @__PURE__ */ forwardRef<HTMLDivElement, InputGroupProps>(function InputGroup(nativeProps, ref) {
-  return createElement('div', { ...nativeProps, ref, 'data-vf-input-group': '' });
+export const ControlGroup = /* @__PURE__ */ forwardRef<HTMLDivElement, ControlGroupProps>(function ControlGroup({ orientation = 'horizontal', ...nativeProps }, ref) {
+  return createElement('div', {
+    ...nativeProps,
+    ref,
+    'data-vf-control-group': '',
+    'data-vf-control-group-orientation': orientation,
+  });
 });
 
 export const RadioGroup = /* @__PURE__ */ forwardRef<HTMLFieldSetElement, RadioGroupProps>(function RadioGroup({ gap = 'sm', orientation = 'vertical', ...nativeProps }, ref) {
