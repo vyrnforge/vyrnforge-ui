@@ -21,10 +21,12 @@
   }
 
   :where(input[data-vf-input][type="color"]) {
+    --_vf-input-color-inline-size: 3.5rem;
+
     block-size: var(--vf-control-height-md);
     cursor: pointer;
-    inline-size: 3.5rem;
-    padding: 0.25rem;
+    inline-size: var(--_vf-input-color-inline-size);
+    padding: var(--vf-space-xs);
   }
 
   :where(input[data-vf-input]::placeholder) {
