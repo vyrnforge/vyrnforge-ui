@@ -364,12 +364,6 @@ export interface ContainerProps extends HTMLAttributes<HTMLElement> {
 export { ContainerSize }
 
 // @public (undocumented)
-export interface ControlGroupProps extends HTMLAttributes<HTMLDivElement> {
-    // (undocumented)
-    orientation?: ControlGroupOrientation;
-}
-
-// @public (undocumented)
 export const ContextMenuContent: ForwardRefExoticComponent<Omit<DetailedHTMLProps<HTMLAttributes<HTMLDivElement>, HTMLDivElement>, "ref"> & RefAttributes<HTMLDivElement>>;
 
 // @public (undocumented)
@@ -403,6 +397,12 @@ export const ContextMenuTrigger: ForwardRefExoticComponent<Omit<DetailedHTMLProp
 export const ControlGroup: ForwardRefExoticComponent<ControlGroupProps & RefAttributes<HTMLDivElement>>;
 
 export { ControlGroupOrientation }
+
+// @public (undocumented)
+export interface ControlGroupProps extends HTMLAttributes<HTMLDivElement> {
+    // (undocumented)
+    orientation?: ControlGroupOrientation;
+}
 
 // @public (undocumented)
 export function DialogBody(props: DialogBodyProps): DetailedReactHTMLElement<    {
