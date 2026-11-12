@@ -10,7 +10,7 @@ export const browserFixture = {
     await mkdir(dir, { recursive: true });
     await build({
       stdin: {
-        contents: '@import "@vyrnforge/web/styles/tokens.css";@import "@vyrnforge/web/styles/temporal-field.css";',
+        contents: '@import "@vyrnforge/web/styles/tokens.css";@import "@vyrnforge/web/styles/input.css";@import "@vyrnforge/web/styles/temporal-field.css";',
         resolveDir: root,
         sourcefile: 'temporal-field-public.css',
         loader: 'css',
@@ -20,7 +20,7 @@ export const browserFixture = {
     });
     await writeFile(
       path.join(dir, `${port}.html`),
-      '<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width"><title>Temporal field browser fixture</title><link rel="stylesheet" href="./styles.css"></head><body><main><h1>Temporal field browser fixture</h1><div id="root" data-vf-temporal-field-root><input id="date" type="date" aria-label="Date"></div></main></body></html>',
+      '<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width"><title>Temporal field browser fixture</title><link rel="stylesheet" href="./styles.css"></head><body><main><h1>Temporal field browser fixture</h1><div id="root" data-vf-temporal-field-root><input id="date" type="date" data-vf-input data-vf-temporal-field-input aria-label="Date"></div></main></body></html>',
     );
   },
 };
