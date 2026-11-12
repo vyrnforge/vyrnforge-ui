@@ -1,1 +1,31 @@
-import{createElement,forwardRef,type ComponentPropsWithoutRef,type ReactNode}from'react';import{Input,type InputProps}from'../input/index.js';export interface TemporalFieldRootProps extends ComponentPropsWithoutRef<'div'>{children?:ReactNode;}export const TemporalFieldRoot=forwardRef<HTMLDivElement,TemporalFieldRootProps>(function TemporalFieldRoot(props,ref){return createElement('div',{...props,ref,'data-vf-temporal-field-root':''});});export type TemporalFieldInputProps=InputProps;export const TemporalFieldInput=forwardRef<HTMLInputElement,TemporalFieldInputProps>(function TemporalFieldInput({type='date',...props},ref){return createElement(Input,{...props,ref,type,'data-vf-temporal-field-input':''}as InputProps);});
+import { createElement, forwardRef, type ComponentPropsWithoutRef, type ReactNode } from 'react';
+import { Input, type InputProps } from '../input/index.js';
+
+export type TemporalFieldInputType = 'date' | 'time' | 'datetime-local' | 'month' | 'week';
+
+export interface TemporalFieldRootProps extends ComponentPropsWithoutRef<'div'> {
+  children?: ReactNode;
+}
+
+export const TemporalFieldRoot = forwardRef<HTMLDivElement, TemporalFieldRootProps>(function TemporalFieldRoot(
+  props,
+  ref
+) {
+  return createElement('div', { ...props, ref, 'data-vf-temporal-field-root': '' });
+});
+
+export interface TemporalFieldInputProps extends Omit<InputProps, 'type'> {
+  type?: TemporalFieldInputType;
+}
+
+export const TemporalFieldInput = forwardRef<HTMLInputElement, TemporalFieldInputProps>(function TemporalFieldInput(
+  { type = 'date', ...props },
+  ref
+) {
+  return createElement(Input, {
+    ...props,
+    ref,
+    type,
+    'data-vf-temporal-field-input': '',
+  });
+});
