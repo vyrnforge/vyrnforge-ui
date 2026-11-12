@@ -61,7 +61,6 @@ import { StackAlign } from '@vyrnforge/web/layout';
 import { StackJustify } from '@vyrnforge/web/layout';
 import { SubmitEventHandler } from 'react';
 import type { SVGAttributes } from 'react';
-import { TemporalInputType } from '@vyrnforge/web/temporal-input';
 import type { TextareaHTMLAttributes } from 'react';
 import { TextVariant } from '@vyrnforge/web/text';
 import { ToggleEventHandler } from 'react';
@@ -291,12 +290,6 @@ export interface ClusterProps extends HTMLAttributes<HTMLElement> {
     // (undocumented)
     justify?: ClusterJustify;
 }
-
-// @public (undocumented)
-export const ColorInput: ForwardRefExoticComponent<ColorInputProps & RefAttributes<HTMLInputElement>>;
-
-// @public (undocumented)
-export type ColorInputProps = Omit<InputHTMLAttributes<HTMLInputElement>, 'type'>;
 
 // @public (undocumented)
 export const ColorPickerInput: ForwardRefExoticComponent<Omit<DetailedHTMLProps<InputHTMLAttributes<HTMLInputElement>, HTMLInputElement>, "ref"> & RefAttributes<HTMLInputElement>>;
@@ -2542,12 +2535,6 @@ export interface NumberFieldRootProps extends ComponentPropsWithoutRef<'div'> {
 }
 
 // @public (undocumented)
-export const NumberInput: ForwardRefExoticComponent<NumberInputProps & RefAttributes<HTMLInputElement>>;
-
-// @public (undocumented)
-export type NumberInputProps = Omit<InputHTMLAttributes<HTMLInputElement>, 'type'>;
-
-// @public (undocumented)
 export const OTPFieldInput: ForwardRefExoticComponent<OTPFieldInputProps & RefAttributes<HTMLInputElement>>;
 
 // @public (undocumented)
@@ -3909,17 +3896,6 @@ export interface TemporalFieldRootProps extends ComponentPropsWithoutRef<'div'> 
     // (undocumented)
     children?: ReactNode;
 }
-
-// @public (undocumented)
-export const TemporalInput: ForwardRefExoticComponent<TemporalInputProps & RefAttributes<HTMLInputElement>>;
-
-// @public (undocumented)
-export interface TemporalInputProps extends Omit<InputHTMLAttributes<HTMLInputElement>, 'type'> {
-    // (undocumented)
-    type?: TemporalInputType;
-}
-
-export { TemporalInputType }
 
 // @public (undocumented)
 const Text_2: <Element extends TextElement = "span">(props: TextProps<Element> & {
