@@ -3,7 +3,7 @@
 @layer vyrnforge.components {
   :where(input[data-vf-input]) {
     background: var(--vf-color-surface);
-    border: 1px solid var(--vf-color-border);
+    border: 1px solid var(--vf-color-border-required);
     border-radius: var(--vf-control-radius);
     box-sizing: border-box;
     color: var(--vf-color-text);
@@ -34,8 +34,8 @@
     opacity: 1;
   }
 
-  :where(input[data-vf-input]:hover:not(:disabled):not(:read-only)) {
-    border-color: var(--vf-color-border-strong);
+  :where(input[data-vf-input]:hover:not(:disabled):not([readonly])) {
+    background: var(--vf-color-surface-hover);
   }
 
   :where(input[data-vf-input][type="color"]:hover:not(:disabled)) {
@@ -55,7 +55,7 @@
     cursor: not-allowed;
   }
 
-  :where(input[data-vf-input]:read-only:not(:disabled)) {
+  :where(input[data-vf-input][readonly]:not(:disabled)) {
     background: var(--vf-color-surface-subtle);
   }
 

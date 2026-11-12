@@ -7,7 +7,6 @@ import { Directive, ElementRef, HostListener, inject, input, model } from '@angu
     'data-vf-button': '',
     'data-vf-toggle-button': '',
     '[attr.aria-pressed]': 'pressed()',
-    '[attr.data-vf-pressed]': 'pressed() ? "" : null',
     '[attr.type]': 'type()',
   },
 })

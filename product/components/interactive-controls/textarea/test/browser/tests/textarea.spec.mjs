@@ -21,7 +21,7 @@ test('Textarea preserves native multiline form semantics and shared styling acro
   await expect(editable).toHaveAttribute('rows', '4');
   await expect(editable).toHaveAttribute('cols', '30');
   await expect(editable).toHaveAttribute('wrap', 'soft');
-  expect(await editable.evaluate((textarea) => getComputedStyle(textarea).resize)).not.toBe('none');
+  expect(['auto', 'both']).toContain(await editable.evaluate((textarea) => getComputedStyle(textarea).resize));
 
   await editable.fill('changed\nline');
   await expect(editable).toHaveValue('changed\nline');
@@ -43,6 +43,8 @@ test('Textarea preserves native multiline form semantics and shared styling acro
   await expect(constrained).toHaveAttribute('maxlength', '8');
   await expect(appInvalid).toHaveAttribute('aria-invalid', 'true');
 
+  await editable.blur();
+  await expect.poll(() => editable.evaluate((textarea) => getComputedStyle(textarea).borderColor)).toBe('rgb(113, 113, 122)');
   const normalBorder = await editable.evaluate((textarea) => getComputedStyle(textarea).borderColor);
   const invalidBorder = await appInvalid.evaluate((textarea) => getComputedStyle(textarea).borderColor);
   expect(invalidBorder).not.toBe(normalBorder);

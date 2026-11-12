@@ -3,5 +3,14 @@ export default {
   markup: '<label for="control">Enabled</label><input id="control" name="enabled" type="checkbox" role="switch" data-vf-switch>',
   angular: '<label for="control">Enabled</label><input id="control" name="enabled" vfSwitch>', props: { name: 'enabled' }, reducedMotion: true,
   semantics: { tag: 'INPUT', type: 'checkbox', role: 'switch' },
-  async assertBrowser({ page, control, expect }) { await control.click(); expect(await control.isChecked()).toBe(true); expect(await page.locator('#form').evaluate((form) => new FormData(form).get('enabled'))).not.toBeNull(); },
+  async assertBrowser({ page, control, expect }) {
+    const box = await control.boundingBox();
+    expect(box?.width ?? 0).toBeGreaterThanOrEqual(24);
+    expect(box?.height ?? 0).toBeGreaterThanOrEqual(24);
+    await control.click();
+    expect(await control.isChecked()).toBe(true);
+    expect(await page.locator('#form').evaluate((form) => new FormData(form).get('enabled'))).not.toBeNull();
+    await page.locator('html').evaluate((html) => { html.dir = 'rtl'; });
+    await expect.poll(() => control.evaluate((element) => new DOMMatrix(getComputedStyle(element, '::before').transform).m41)).toBeLessThan(0);
+  },
 };

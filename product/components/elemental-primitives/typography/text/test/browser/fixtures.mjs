@@ -70,8 +70,6 @@ export const browserFixture = {
       const { createElement } = await import('react');
       const { renderToString } = await import('react-dom/server');
       const { Text } = await import('@vyrnforge/react/text');
-      const { Link } = await import('@vyrnforge/react/link');
-      const { Button } = await import('@vyrnforge/react/button');
       const markup = renderToString(createElement('div', null,
         createElement(Text, { id: 'heading', as: 'h2', variant: 'heading-md' }, 'Typography'),
         createElement(Text, { id: 'body', as: 'p', variant: 'body-md' }, 'Readable body copy'),
@@ -80,14 +78,7 @@ export const browserFixture = {
         createElement(Text, { id: 'poster', as: 'p', variant: 'poster' }, 'Custom poster'),
         createElement(Text, { id: 'quote', as: 'blockquote', variant: 'body-lg', cite: 'https://example.com/source' }, 'Quotation'),
         createElement(Text, { id: 'mark', as: 'mark', variant: 'body-md' }, 'Highlighted'),
-        createElement(Text, { id: 'time', as: 'time', variant: 'caption', dateTime: '2026-11-10' }, 'November 10, 2026'),
-        createElement('section', { 'aria-label': 'React typography composition' },
-          createElement(Link, { id: 'react-composed-link', href: '#react-target', textVariant: 'body-sm' }, 'React composed link'),
-          createElement(Link, { id: 'react-default-link', href: '#react-target' }, 'React default link'),
-          createElement(Button, { id: 'react-composed-button', type: 'button', textVariant: 'label-sm' }, 'React composed button'),
-          createElement(Button, { id: 'react-default-button', type: 'button' }, 'React default button'),
-          createElement('span', { id: 'react-target' }, 'React target')
-        )
+        createElement(Text, { id: 'time', as: 'time', variant: 'caption', dateTime: '2026-11-10' }, 'November 10, 2026')
       ));
       await writeFile(path.join(outDir, 'react.html'), page(markup));
     }

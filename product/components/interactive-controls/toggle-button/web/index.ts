@@ -17,7 +17,6 @@ export function connectToggleButton(
 
   const render = (): void => {
     button.setAttribute('aria-pressed', String(pressed));
-    button.toggleAttribute('data-vf-pressed', pressed);
   };
   const handleClick = (event: MouseEvent): void => {
     if (button.disabled || event.defaultPrevented) return;

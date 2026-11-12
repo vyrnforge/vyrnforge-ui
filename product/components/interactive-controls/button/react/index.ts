@@ -1,6 +1,5 @@
 import { createElement, forwardRef } from 'react';
 import type { ButtonHTMLAttributes } from 'react';
-import type { TextVariant } from '@vyrnforge/web/text';
 
 export type ButtonVariant = 'primary' | 'secondary' | 'ghost';
 export type ButtonSize = 'sm' | 'md' | 'lg';
@@ -9,7 +8,6 @@ export interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
   variant?: ButtonVariant;
   size?: ButtonSize;
   loading?: boolean;
-  textVariant?: TextVariant;
 }
 
 export const Button = forwardRef<HTMLButtonElement, ButtonProps>(function Button(
@@ -17,7 +15,6 @@ export const Button = forwardRef<HTMLButtonElement, ButtonProps>(function Button
     variant = 'primary',
     size = 'md',
     loading = false,
-    textVariant,
     children,
     'aria-busy': ariaBusy,
     ...nativeProps
@@ -33,8 +30,6 @@ export const Button = forwardRef<HTMLButtonElement, ButtonProps>(function Button
       'data-vf-variant': variant,
       'data-vf-size': size,
       'data-vf-loading': loading ? '' : undefined,
-      'data-vf-text': textVariant === undefined ? undefined : '',
-      'data-vf-text-variant': textVariant,
       'aria-busy': loading ? true : ariaBusy
     },
     children

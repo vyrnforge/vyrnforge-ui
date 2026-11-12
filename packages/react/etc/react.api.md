@@ -225,8 +225,6 @@ export interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
     // (undocumented)
     size?: ButtonSize;
     // (undocumented)
-    textVariant?: TextVariant;
-    // (undocumented)
     variant?: ButtonVariant;
 }
 
@@ -2069,10 +2067,7 @@ export { LayoutSpace }
 export const Link: ForwardRefExoticComponent<LinkProps & RefAttributes<HTMLAnchorElement>>;
 
 // @public (undocumented)
-export interface LinkProps extends AnchorHTMLAttributes<HTMLAnchorElement> {
-    // (undocumented)
-    textVariant?: TextVariant;
-}
+export type LinkProps = AnchorHTMLAttributes<HTMLAnchorElement>;
 
 // @public (undocumented)
 export const ListboxOption: ForwardRefExoticComponent<ListboxOptionProps & RefAttributes<HTMLDivElement>>;

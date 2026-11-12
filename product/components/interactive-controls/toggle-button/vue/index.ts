@@ -28,7 +28,6 @@ export const ToggleButton = defineComponent({
         'aria-pressed': currentPressed,
         'data-vf-button': '',
         'data-vf-toggle-button': '',
-        'data-vf-pressed': currentPressed ? '' : undefined,
         onClick: (event: MouseEvent) => {
           callClickListener(onClick, event);
           if (event.defaultPrevented || (event.currentTarget as HTMLButtonElement).disabled) return;
