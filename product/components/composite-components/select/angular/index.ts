@@ -10,7 +10,7 @@ import {
   output,
   signal,
 } from '@angular/core';
-import { resolveEnabledIndex } from '@vyrnforge/core/collection-navigation';
+import { resolveNavigationIndex } from '@vyrnforge/core/collection-navigation';
 import { findTypeaheadMatch } from '@vyrnforge/core/typeahead-matching';
 
 const optionSelector = '[data-vf-select-option]';
@@ -50,7 +50,7 @@ function flushFocusRequests(root: VfSelectRootDirective): void {
     return;
   }
   const options = optionsFor(surface);
-  const optionStates = options.map((option) => ({ disabled: optionDisabled(option) }));
+  const optionStates = options.map((option) => ({ eligible: !(optionDisabled(option)) }));
   const selected = options.findIndex(
     (option, index) => !optionStates[index]?.disabled && option.getAttribute('aria-selected') === 'true',
   );
@@ -62,14 +62,14 @@ function flushFocusRequests(root: VfSelectRootDirective): void {
     if (request === 'first' || request === 'last') {
       index = selected >= 0
         ? selected
-        : resolveEnabledIndex(optionStates, request === 'first' ? -1 : options.length, request);
+        : resolveNavigationIndex(optionStates, request === 'first' ? -1 : options.length, request);
     } else {
       const base = current >= 0
         ? current
         : selected >= 0
           ? selected
           : request === 'next' ? -1 : options.length;
-      index = resolveEnabledIndex(optionStates, base, request);
+      index = resolveNavigationIndex(optionStates, base, request);
     }
     if (index != null) options[index]?.focus();
   }
@@ -198,14 +198,14 @@ export class VfSelectContentDirective {
       const options = optionsFor(element);
       const currentOption = optionFromTarget(element, event.target);
       const current = currentOption ? options.indexOf(currentOption) : -1;
-      const states = options.map((option) => ({ disabled: optionDisabled(option) }));
+      const states = options.map((option) => ({ eligible: !(optionDisabled(option)) }));
       let intent: 'next' | 'previous' | 'first' | 'last' | null = null;
       if (event.key === 'ArrowDown') intent = 'next';
       else if (event.key === 'ArrowUp') intent = 'previous';
       else if (event.key === 'Home') intent = 'first';
       else if (event.key === 'End') intent = 'last';
       let next: number | null = null;
-      if (intent) next = resolveEnabledIndex(states, current, intent);
+      if (intent) next = resolveNavigationIndex(states, current, intent);
       else if (event.key.length === 1 && !event.ctrlKey && !event.metaKey && !event.altKey) {
         query += event.key;
         if (timer) clearTimeout(timer);
