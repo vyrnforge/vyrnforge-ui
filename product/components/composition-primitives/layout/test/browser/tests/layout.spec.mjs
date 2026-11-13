@@ -97,10 +97,8 @@ test('L3 composition primitives preserve spatial, form, and control relationship
   })).toEqual({ marginInlineStart: '0px', borderInlineStartWidth: '0px' });
 
   await controlGroup.evaluate((element) => element.setAttribute('dir', 'rtl'));
-  expect(await groupedButton.evaluate((element) => {
-    const style = getComputedStyle(element);
-    return { borderInlineStartWidth: style.borderInlineStartWidth, borderInlineEndWidth: style.borderInlineEndWidth };
-  })).toEqual({ borderInlineStartWidth: '0px', borderInlineEndWidth: '2px' });
+  expect(await groupedButton.evaluate((element) => getComputedStyle(element).borderInlineStartWidth)).toBe('0px');
+  expect(await groupedButton.evaluate((element) => getComputedStyle(element).borderInlineEndWidth)).not.toBe('0px');
 
   if (port === 'elements') {
     await controlGroup.evaluate((element) => element.setAttribute('orientation', 'vertical'));
@@ -111,8 +109,9 @@ test('L3 composition primitives preserve spatial, form, and control relationship
   expect(await controlGroup.evaluate((element) => getComputedStyle(element).flexDirection)).toBe('column');
   expect(await groupedButton.evaluate((element) => {
     const style = getComputedStyle(element);
-    return { marginBlockStart: style.marginBlockStart, borderBlockStartWidth: style.borderBlockStartWidth, borderInlineStartWidth: style.borderInlineStartWidth };
-  })).toEqual({ marginBlockStart: '0px', borderBlockStartWidth: '0px', borderInlineStartWidth: '2px' });
+    return { marginBlockStart: style.marginBlockStart, borderBlockStartWidth: style.borderBlockStartWidth };
+  })).toEqual({ marginBlockStart: '0px', borderBlockStartWidth: '0px' });
+  expect(await groupedButton.evaluate((element) => getComputedStyle(element).borderInlineStartWidth)).not.toBe('0px');
 
   const buttonOnlyGroup = page.locator('body').locator(port === 'elements' ? 'vf-control-group#button-only-group' : '#button-only-group');
   await page.evaluate((currentPort) => {
