@@ -122,7 +122,7 @@ export class VfContextMenuElement extends HTMLElementBase {
       this.timer = setTimeout(() => { this.query = ''; }, 500);
       next = findTypeaheadMatch(items.map((item) => ({
         textValue: item.dataset.vfTextValue ?? item.textContent ?? '',
-        disabled: itemDisabled(item),
+        eligible: !itemDisabled(item),
       })), this.query, { startIndex: current });
     }
     if (next == null) return;
