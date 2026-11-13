@@ -1,6 +1,6 @@
 import {
   navigationIntentForArrow,
-  resolveEnabledIndex,
+  resolveNavigationIndex,
   type CollectionNavigationArrow,
   type CollectionNavigationIntent,
 } from '@vyrnforge/core/collection-navigation';
@@ -16,12 +16,12 @@ function disabled(item: HTMLElement): boolean {
 }
 function syncTabStops(root: HTMLElement, preferred?: HTMLElement | null): void {
   const items = toolbarItems(root);
-  const states = items.map((item) => ({ disabled: disabled(item) }));
+  const states = items.map((item) => ({ eligible: !(disabled(item)) }));
   let activeIndex = preferred ? items.indexOf(preferred) : -1;
-  if (activeIndex < 0 || states[activeIndex]?.disabled) activeIndex = items.findIndex((item) => item.tabIndex === 0 && !disabled(item));
-  if (activeIndex < 0) activeIndex = states.findIndex((item) => !item.disabled);
+  if (activeIndex < 0 || states[activeIndex]?.eligible === false) activeIndex = items.findIndex((item) => item.tabIndex === 0 && !disabled(item));
+  if (activeIndex < 0) activeIndex = states.findIndex((item) => item.eligible !== false);
   const resolved = activeIndex < 0 ? null : activeIndex;
-  items.forEach((item, index) => { item.tabIndex = !states[index]?.disabled && resolved === index ? 0 : -1; });
+  items.forEach((item, index) => { item.tabIndex = states[index]?.eligible !== false && resolved === index ? 0 : -1; });
 }
 function itemFromTarget(root: HTMLElement, target: EventTarget | null): HTMLElement | null {
   const element = target instanceof HTMLElement ? target.closest<HTMLElement>('[data-vf-toolbar-item]') : null;
@@ -73,7 +73,7 @@ export const ToolbarRoot = forwardRef<HTMLDivElement, ToolbarRootProps>(function
       const items = toolbarItems(root);
       const currentItem = itemFromTarget(root, event.target);
       const currentIndex = currentItem ? items.indexOf(currentItem) : -1;
-      const nextIndex = resolveEnabledIndex(items.map((item) => ({ disabled: disabled(item) })), currentIndex, intent);
+      const nextIndex = resolveNavigationIndex(items.map((item) => ({ eligible: !(disabled(item)) })), currentIndex, intent);
       if (nextIndex == null) return;
       const next = items[nextIndex];
       if (!next) return;
