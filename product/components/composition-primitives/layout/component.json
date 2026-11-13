@@ -1,3 +1,6 @@
 {
-  "documentation": { "group": "layout-structure" }
+  "documentation": {
+    "group": "layout-structure"
+  },
+  "name": "Layout Composition"
 }
