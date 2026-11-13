@@ -148,12 +148,12 @@ test('component ports infer owned-unit dependencies from workspace public subpat
     },
   }));
   write('packages/react/package.json', JSON.stringify({ name: '@vyrnforge/react', exports: { '.': './dist/index.js', './tabs': './dist/components/tabs/index.js' } }));
-  write('packages/core/src/capabilities/collection-navigation/index.ts', 'export const next = () => 0;\n');
-  write('packages/core/test/capabilities/collection-navigation/navigation.test.mjs', 'export {};\n');
+  write('product/capabilities/collection-navigation/core/index.ts', 'export const next = () => 0;\n');
+  write('product/capabilities/collection-navigation/test/navigation.test.mjs', 'export {};\n');
   write('packages/react/src/components/tabs/index.ts', "import { next } from '@vyrnforge/core/collection-navigation';\nexport const Tabs = next;\n");
   const tabs = discoverProductUnits(root).components.find((entry) => entry.component === 'tabs');
   assert.ok(tabs);
-  assert.deepEqual(tabs.ports.react.dependencies, ['unit:core:capabilities:collection-navigation']);
+  assert.deepEqual(tabs.ports.react.dependencies, ['capability:collection-navigation']);
 });
 
 test('aggregate and native-element Web styles stay outside component discovery', () => {
