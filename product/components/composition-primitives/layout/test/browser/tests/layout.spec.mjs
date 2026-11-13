@@ -90,6 +90,13 @@ test('L3 composition primitives preserve spatial, form, and control relationship
   await expect(controlGroup.locator('input')).toHaveAttribute('aria-label', 'Search query');
   const groupedInput = controlGroup.locator('input');
   const groupedButton = controlGroup.locator('button');
+  await groupedInput.focus();
+  await page.keyboard.press('Tab');
+  await expect(groupedButton).toBeFocused();
+  await groupedInput.evaluate((element) => { element.disabled = true; });
+  await expect(groupedInput).toBeDisabled();
+  await expect(groupedButton).toBeEnabled();
+  await groupedInput.evaluate((element) => { element.disabled = false; });
   expect(await groupedInput.evaluate((element) => getComputedStyle(element).borderInlineEndWidth)).not.toBe('0px');
   expect(await groupedButton.evaluate((element) => {
     const style = getComputedStyle(element);
@@ -99,6 +106,7 @@ test('L3 composition primitives preserve spatial, form, and control relationship
   await controlGroup.evaluate((element) => element.setAttribute('dir', 'rtl'));
   expect(await groupedButton.evaluate((element) => getComputedStyle(element).borderInlineStartWidth)).toBe('0px');
   expect(await groupedButton.evaluate((element) => getComputedStyle(element).borderInlineEndWidth)).not.toBe('0px');
+  await controlGroup.evaluate((element) => element.removeAttribute('dir'));
 
   if (port === 'elements') {
     await controlGroup.evaluate((element) => element.setAttribute('orientation', 'vertical'));
@@ -128,6 +136,7 @@ test('L3 composition primitives preserve spatial, form, and control relationship
   await expect(buttonOnlyGroup.locator('button')).toHaveCount(2);
   await expect(buttonOnlyGroup).not.toHaveAttribute('role');
   expect(await buttonOnlyGroup.locator('button').nth(1).evaluate((element) => getComputedStyle(element).borderInlineStartWidth)).toBe('0px');
+  await buttonOnlyGroup.evaluate((element) => element.remove());
 
   const radioStyle = await radioGroup.evaluate((element) => { const style = getComputedStyle(element); return { display: style.display, flexWrap: style.flexWrap, gap: style.gap }; });
   expect(radioStyle).toEqual({ display: 'flex', flexWrap: 'wrap', gap: '8px' });
@@ -143,6 +152,8 @@ test('L3 composition primitives preserve spatial, form, and control relationship
   await expect(radios.nth(0)).toBeFocused();
   await expect(radios.nth(0)).toBeChecked();
   await expect(radios.nth(1)).not.toBeChecked();
+  await radios.nth(1).check();
+  await expect(radios.nth(1)).toBeChecked();
 
   const results = await new AxeBuilder({ page }).analyze();
   expect(results.violations).toEqual([]);
