@@ -106,15 +106,6 @@ export class VfFieldElement extends HTMLElementBase {
   #syncContractAttributes(): void { this.setAttribute('data-vf-field', ''); reflectValue(this, 'data-vf-field-gap', this.gap); }
 }
 
-export class VfFieldsetElement extends HTMLElementBase {
-  static readonly observedAttributes = ['gap'];
-  connectedCallback(): void { this.#syncContractAttributes(); }
-  attributeChangedCallback(): void { if (this.isConnected) this.#syncContractAttributes(); }
-  get gap(): LayoutSpace { return normalizedValue(layoutSpaces, this.getAttribute('gap'), 'sm'); }
-  set gap(value: LayoutSpace) { this.setAttribute('gap', value); }
-  #syncContractAttributes(): void { this.setAttribute('data-vf-fieldset', ''); reflectValue(this, 'data-vf-fieldset-gap', this.gap); if (!this.hasAttribute('role')) this.setAttribute('role', 'group'); }
-}
-
 export class VfControlGroupElement extends HTMLElementBase {
   static readonly observedAttributes = ['orientation'];
   connectedCallback(): void { this.#syncContractAttributes(); }
@@ -127,17 +118,6 @@ export class VfControlGroupElement extends HTMLElementBase {
   }
 }
 
-export class VfRadioGroupElement extends HTMLElementBase {
-  static readonly observedAttributes = ['gap', 'orientation'];
-  connectedCallback(): void { this.#syncContractAttributes(); }
-  attributeChangedCallback(): void { if (this.isConnected) this.#syncContractAttributes(); }
-  get gap(): LayoutSpace { return normalizedValue(layoutSpaces, this.getAttribute('gap'), 'sm'); }
-  set gap(value: LayoutSpace) { this.setAttribute('gap', value); }
-  get orientation(): RadioGroupOrientation { return normalizedValue(radioGroupOrientations, this.getAttribute('orientation'), 'vertical'); }
-  set orientation(value: RadioGroupOrientation) { this.setAttribute('orientation', value); }
-  #syncContractAttributes(): void { this.setAttribute('data-vf-radio-group', ''); reflectValue(this, 'data-vf-radio-group-gap', this.gap); reflectValue(this, 'data-vf-radio-group-orientation', this.orientation); if (!this.hasAttribute('role')) this.setAttribute('role', 'radiogroup'); reflectValue(this, 'aria-orientation', this.orientation); }
-}
-
 export function defineStackElement(registry: CustomElementRegistry | undefined = globalThis.customElements): void { if (!registry) throw new Error('VyrnForge Elements Stack registration requires a CustomElementRegistry.'); if (!registry.get('vf-stack')) registry.define('vf-stack', VfStackElement); }
 export function defineInlineElement(registry: CustomElementRegistry | undefined = globalThis.customElements): void { if (!registry) throw new Error('VyrnForge Elements Inline registration requires a CustomElementRegistry.'); if (!registry.get('vf-inline')) registry.define('vf-inline', VfInlineElement); }
 export function defineClusterElement(registry: CustomElementRegistry | undefined = globalThis.customElements): void { if (!registry) throw new Error('VyrnForge Elements Cluster registration requires a CustomElementRegistry.'); if (!registry.get('vf-cluster')) registry.define('vf-cluster', VfClusterElement); }
@@ -145,7 +125,5 @@ export function defineGridElement(registry: CustomElementRegistry | undefined = 
 export function defineContainerElement(registry: CustomElementRegistry | undefined = globalThis.customElements): void { if (!registry) throw new Error('VyrnForge Elements Container registration requires a CustomElementRegistry.'); if (!registry.get('vf-container')) registry.define('vf-container', VfContainerElement); }
 export function defineAspectRatioElement(registry: CustomElementRegistry | undefined = globalThis.customElements): void { if (!registry) throw new Error('VyrnForge Elements AspectRatio registration requires a CustomElementRegistry.'); if (!registry.get('vf-aspect-ratio')) registry.define('vf-aspect-ratio', VfAspectRatioElement); }
 export function defineFieldElement(registry: CustomElementRegistry | undefined = globalThis.customElements): void { if (!registry) throw new Error('VyrnForge Elements Field registration requires a CustomElementRegistry.'); if (!registry.get('vf-field')) registry.define('vf-field', VfFieldElement); }
-export function defineFieldsetElement(registry: CustomElementRegistry | undefined = globalThis.customElements): void { if (!registry) throw new Error('VyrnForge Elements Fieldset registration requires a CustomElementRegistry.'); if (!registry.get('vf-fieldset')) registry.define('vf-fieldset', VfFieldsetElement); }
 export function defineControlGroupElement(registry: CustomElementRegistry | undefined = globalThis.customElements): void { if (!registry) throw new Error('VyrnForge Elements ControlGroup registration requires a CustomElementRegistry.'); if (!registry.get('vf-control-group')) registry.define('vf-control-group', VfControlGroupElement); }
-export function defineRadioGroupElement(registry: CustomElementRegistry | undefined = globalThis.customElements): void { if (!registry) throw new Error('VyrnForge Elements RadioGroup registration requires a CustomElementRegistry.'); if (!registry.get('vf-radio-group')) registry.define('vf-radio-group', VfRadioGroupElement); }
-export function defineLayoutElements(registry: CustomElementRegistry | undefined = globalThis.customElements): void { defineStackElement(registry); defineInlineElement(registry); defineClusterElement(registry); defineGridElement(registry); defineContainerElement(registry); defineAspectRatioElement(registry); defineFieldElement(registry); defineFieldsetElement(registry); defineControlGroupElement(registry); defineRadioGroupElement(registry); }
+export function defineLayoutElements(registry: CustomElementRegistry | undefined = globalThis.customElements): void { defineStackElement(registry); defineInlineElement(registry); defineClusterElement(registry); defineGridElement(registry); defineContainerElement(registry); defineAspectRatioElement(registry); defineFieldElement(registry); defineControlGroupElement(registry); }
