@@ -1,6 +1,6 @@
 import { createContext, createElement, forwardRef, useContext, useMemo, useRef, useState, type ComponentPropsWithoutRef, type ReactNode } from 'react';
 import { createPortal } from 'react-dom';
-import { resolveEnabledIndex } from '@vyrnforge/core/collection-navigation';
+import { resolveNavigationIndex } from '@vyrnforge/core/collection-navigation';
 import { findTypeaheadMatch } from '@vyrnforge/core/typeahead-matching';
 import { useFloatingSurface } from '../../internal/floating-surface.js';
 
@@ -18,8 +18,8 @@ function itemDisabled(item: HTMLElement): boolean {
 function focusItem(root: HTMLElement | null, edge: 'first' | 'last'): void {
   if (!root) return;
   const items = itemsFor(root);
-  const states = items.map((item) => ({ disabled: itemDisabled(item) }));
-  const index = resolveEnabledIndex(states, edge === 'first' ? -1 : items.length, edge);
+  const states = items.map((item) => ({ eligible: !(itemDisabled(item)) }));
+  const index = resolveNavigationIndex(states, edge === 'first' ? -1 : items.length, edge);
   if (index != null) items[index]?.focus();
 }
 
@@ -121,14 +121,14 @@ export const ContextMenuContent = forwardRef<HTMLDivElement, ComponentPropsWitho
       const items = itemsFor(event.currentTarget);
       const currentItem = itemFromTarget(event.currentTarget, event.target);
       const current = currentItem ? items.indexOf(currentItem) : -1;
-      const states = items.map((item) => ({ disabled: itemDisabled(item) }));
+      const states = items.map((item) => ({ eligible: !(itemDisabled(item)) }));
       let intent: 'next' | 'previous' | 'first' | 'last' | null = null;
       if (event.key === 'ArrowDown') intent = 'next';
       else if (event.key === 'ArrowUp') intent = 'previous';
       else if (event.key === 'Home') intent = 'first';
       else if (event.key === 'End') intent = 'last';
       let next: number | null = null;
-      if (intent) next = resolveEnabledIndex(states, current, intent);
+      if (intent) next = resolveNavigationIndex(states, current, intent);
       else if (event.key.length === 1 && !event.ctrlKey && !event.metaKey && !event.altKey) {
         query.current += event.key;
         if (timer.current) clearTimeout(timer.current);
