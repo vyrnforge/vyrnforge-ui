@@ -316,7 +316,7 @@ test('L6 AppShell and SideNav retain canonical five-port projections', () => {
   assert.deepEqual(productGraphProblems(), []);
 });
 
-test('L3 grouped layout projection has canonical composition ownership', () => {
+test('L3 aggregate layout projection owns only the six accepted composition primitives', () => {
   const graph = discoverProductGraph();
   const component = graph.components.find((entry) => entry.unitId === 'layout');
   assert.ok(component);
@@ -324,7 +324,12 @@ test('L3 grouped layout projection has canonical composition ownership', () => {
   assert.equal(component.facets.canonicalRoot, 'product/components/composition-primitives/layout/');
   assert.equal(component.facets.legacyRoot, null);
   assert.equal(component.migration.state, 'product-unit');
-  assert.deepEqual(Object.keys(component.surfaces).sort(), ['angular', 'elements', 'react', 'vue', 'web']);
+  assert.deepEqual(Object.keys(component.surfaces).sort(), ['angular', 'react', 'vue', 'web']);
+
+  const elements = graph.packages.find((pkg) => pkg.id === 'elements');
+  assert.ok(elements);
+  assert.equal(Boolean(elements.manifest.exports?.['./layout']), false, 'Elements must use native HTML plus Web layout hooks instead of an L3 runtime entrypoint');
+
   assert.deepEqual(productGraphProblems(), []);
 });
 
