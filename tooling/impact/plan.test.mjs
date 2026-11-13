@@ -11,17 +11,17 @@ function selectedScope(plan, scope, owner = null) {
 }
 
 test('Core collection navigation fans to discovered component/conformance consumers without unrelated Native docs evidence', () => {
-  const impact = createSemanticImpact(['packages/core/src/capabilities/collection-navigation/index.ts']);
-  assert.ok(impact.ownedUnits.includes('unit:core:capabilities:collection-navigation'));
+  const impact = createSemanticImpact(['product/capabilities/collection-navigation/core/index.ts']);
+  assert.ok(impact.ownedUnits.includes('capability:collection-navigation'));
   assert.ok(impact.packages.includes('core'));
   assert.ok(impact.components.includes('tabs'));
   for (const port of ['react', 'angular', 'vue', 'elements']) assert.ok(impact.browserPorts.includes(port));
   assert.equal(impact.selectors.browserRequired, true);
   assert.equal(impact.selectors.docsRequired, false);
   assert.equal(impact.orchestration, 'nx');
-  assert.ok(hasReason(impact, 'unit:unit:core:capabilities:collection-navigation'));
+  assert.ok(hasReason(impact, 'unit:capability:collection-navigation'));
   assert.equal(hasReason(impact, 'evidence:docs'), false);
-  assert.ok(selectedScope(impact, 'pure-core', 'unit:core:capabilities:collection-navigation'));
+  assert.ok(selectedScope(impact, 'pure-core', 'capability:collection-navigation'));
   assert.ok(impact.executionPrerequisites.includes('browser-runtime'));
 });
 
