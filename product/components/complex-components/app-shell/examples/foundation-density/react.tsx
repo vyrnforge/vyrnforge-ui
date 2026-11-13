@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { createRoot } from 'react-dom/client';
 import { Button } from '@vyrnforge/react/button';
-import { Field, Stack } from '@vyrnforge/react/layout';
+import { Stack } from '@vyrnforge/react/layout';
 import { NativeSelect } from '@vyrnforge/react/native-select';
 import { Switch } from '@vyrnforge/react/switch';
 import { Text } from '@vyrnforge/react/text';
@@ -25,30 +25,30 @@ function App() {
       onSubmit={(event) => event.preventDefault()}
       style={{ background: 'var(--vf-color-surface)', border: '1px solid var(--vf-color-border-required)', borderRadius: 'var(--vf-radius-surface)', boxSizing: 'border-box', color: 'var(--vf-color-text)', inlineSize: 'min(100%, 36rem)', margin: '1rem auto', padding: '1rem' }}
     >
-      <Stack>
+      <Stack id="foundation-settings-stack">
         <Text as="h1" variant="heading-sm">Interface settings</Text>
         <Text as="p" variant="body-md">Appearance and density are independent inherited presentation axes.</Text>
 
-        <Field>
+        <Stack id="foundation-appearance-field" gap="xs">
           <label htmlFor="foundation-appearance">Appearance</label>
           <NativeSelect id="foundation-appearance" value={appearance} onChange={(event) => setAppearance(event.currentTarget.value as 'light' | 'dark')}>
             <option value="light">Light</option>
             <option value="dark">Dark</option>
           </NativeSelect>
-        </Field>
+        </Stack>
 
-        <Field>
+        <Stack gap="xs">
           <label htmlFor="foundation-density">Density</label>
           <NativeSelect id="foundation-density" value={density} onChange={(event) => setDensity(event.currentTarget.value as 'comfortable' | 'compact')}>
             <option value="comfortable">Comfortable</option>
             <option value="compact">Compact</option>
           </NativeSelect>
-        </Field>
+        </Stack>
 
-        <Field>
+        <Stack gap="xs">
           <span id="foundation-updates-label">Product updates</span>
           <Switch aria-labelledby="foundation-updates-label" checked={updates} onChange={(event) => setUpdates(event.currentTarget.checked)} />
-        </Field>
+        </Stack>
 
         <div>
           <Button type="submit">Save settings</Button>{' '}

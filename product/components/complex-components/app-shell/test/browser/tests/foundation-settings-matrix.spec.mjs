@@ -62,7 +62,8 @@ test.describe('STD-02 public-entrypoint settings foundation matrix', () => {
     await page.goto('/components/app-shell/foundation-density-react.html');
 
     const form = page.getByRole('form', { name: 'Foundation settings' });
-    const stack = form.locator('[data-vf-stack]');
+    const stack = form.locator('#foundation-settings-stack');
+    const appearanceField = form.locator('#foundation-appearance-field');
     const heading = page.getByRole('heading', { name: 'Interface settings' });
     const appearance = page.getByLabel('Appearance');
     const save = page.getByRole('button', { name: 'Save settings' });
@@ -72,6 +73,7 @@ test.describe('STD-02 public-entrypoint settings foundation matrix', () => {
     await expect(heading).toHaveCSS('font-size', '24px');
     await expect(heading).toHaveCSS('font-weight', '600');
     await expect(stack).toHaveCSS('gap', '16px');
+    await expect(appearanceField).toHaveCSS('gap', '4px');
     await expect(appearance).toHaveCSS('min-height', '40px');
     await expect(appearance).toHaveCSS('border-radius', '6px');
     await expect(save).toHaveCSS('min-height', '40px');
@@ -87,6 +89,7 @@ test.describe('STD-02 public-entrypoint settings foundation matrix', () => {
     await expect(form).toHaveAttribute('data-vf-theme', 'dark');
     await expect(heading).toHaveCSS('font-size', '24px');
     await expect(stack).toHaveCSS('gap', '16px');
+    await expect(appearanceField).toHaveCSS('gap', '4px');
     await expect(appearance).toHaveCSS('min-height', '40px');
     await expect(save).toHaveCSS('background-color', 'rgb(141, 180, 255)');
     await expect(cancel).toHaveCSS('background-color', 'rgb(24, 24, 27)');

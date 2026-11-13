@@ -5,7 +5,6 @@
 ```ts
 
 import { AfterViewInit } from '@angular/core';
-import { AspectRatio } from '@vyrnforge/web/layout';
 import { ClusterAlign } from '@vyrnforge/web/layout';
 import { ClusterJustify } from '@vyrnforge/web/layout';
 import { CollectionNavigationIntent } from '@vyrnforge/core/collection-navigation';
@@ -28,7 +27,6 @@ import { LayoutSpace } from '@vyrnforge/web/layout';
 import { ModelSignal } from '@angular/core';
 import { OnDestroy } from '@angular/core';
 import { OutputEmitterRef } from '@angular/core';
-import { RadioGroupOrientation } from '@vyrnforge/web/layout';
 import { Signal } from '@angular/core';
 import { StackAlign } from '@vyrnforge/web/layout';
 import { StackJustify } from '@vyrnforge/web/layout';
@@ -53,8 +51,6 @@ export interface AlertDialogDismissRequest {
     // (undocumented)
     readonly reason: AlertDialogDismissReason;
 }
-
-export { AspectRatio }
 
 // @public (undocumented)
 export type ButtonSize = 'sm' | 'md' | 'lg';
@@ -120,8 +116,6 @@ export type ListboxSelectionMode = 'single' | 'multiple';
 
 // @public (undocumented)
 export type ListboxValue = string | string[];
-
-export { RadioGroupOrientation }
 
 export { StackAlign }
 
@@ -449,19 +443,19 @@ export class VfAppShellNavigationDirective {
 }
 
 // @public (undocumented)
-export class VfAspectRatioDirective {
+export class VfAutoGridDirective {
     // (undocumented)
-    readonly vfAspectRatio: InputSignal<"square" | "video" | "landscape" | "portrait">;
+    readonly vfAutoGridGap: InputSignal<"none" | "xs" | "sm" | "md" | "lg" | "xl" | "2xl" | "3xl">;
     // (undocumented)
-    static ɵdir: i0.ɵɵDirectiveDeclaration<VfAspectRatioDirective, "[vfAspectRatio]", never, {
-        "vfAspectRatio": {
-            "alias": "vfAspectRatio";
+    static ɵdir: i0.ɵɵDirectiveDeclaration<VfAutoGridDirective, "[vfAutoGrid]", never, {
+        "vfAutoGridGap": {
+            "alias": "vfAutoGridGap";
             "required": false;
             "isSignal": true;
         };
     }, {}, never, never, true, never>;
     // (undocumented)
-    static ɵfac: i0.ɵɵFactoryDeclaration<VfAspectRatioDirective, never>;
+    static ɵfac: i0.ɵɵFactoryDeclaration<VfAutoGridDirective, never>;
 }
 
 // @public (undocumented)
@@ -1295,38 +1289,6 @@ export class VfDrawerTitleDirective {
 }
 
 // @public (undocumented)
-export class VfFieldDirective {
-    // (undocumented)
-    readonly vfFieldGap: InputSignal<"none" | "xs" | "sm" | "md" | "lg" | "xl" | "2xl" | "3xl">;
-    // (undocumented)
-    static ɵdir: i0.ɵɵDirectiveDeclaration<VfFieldDirective, "[vfField]", never, {
-        "vfFieldGap": {
-            "alias": "vfFieldGap";
-            "required": false;
-            "isSignal": true;
-        };
-    }, {}, never, never, true, never>;
-    // (undocumented)
-    static ɵfac: i0.ɵɵFactoryDeclaration<VfFieldDirective, never>;
-}
-
-// @public (undocumented)
-export class VfFieldsetDirective {
-    // (undocumented)
-    readonly vfFieldsetGap: InputSignal<"none" | "xs" | "sm" | "md" | "lg" | "xl" | "2xl" | "3xl">;
-    // (undocumented)
-    static ɵdir: i0.ɵɵDirectiveDeclaration<VfFieldsetDirective, "fieldset[vfFieldset]", never, {
-        "vfFieldsetGap": {
-            "alias": "vfFieldsetGap";
-            "required": false;
-            "isSignal": true;
-        };
-    }, {}, never, never, true, never>;
-    // (undocumented)
-    static ɵfac: i0.ɵɵFactoryDeclaration<VfFieldsetDirective, never>;
-}
-
-// @public (undocumented)
 export class VfFileInputDirective {
     // (undocumented)
     static ɵdir: i0.ɵɵDirectiveDeclaration<VfFileInputDirective, "input[vfFileInput]", never, {}, {}, never, never, true, never>;
@@ -1378,22 +1340,6 @@ export class VfFileUploaderRootDirective {
     }, never, never, true, never>;
     // (undocumented)
     static ɵfac: i0.ɵɵFactoryDeclaration<VfFileUploaderRootDirective, never>;
-}
-
-// @public (undocumented)
-export class VfGridDirective {
-    // (undocumented)
-    readonly vfGridGap: InputSignal<"none" | "xs" | "sm" | "md" | "lg" | "xl" | "2xl" | "3xl">;
-    // (undocumented)
-    static ɵdir: i0.ɵɵDirectiveDeclaration<VfGridDirective, "[vfGrid]", never, {
-        "vfGridGap": {
-            "alias": "vfGridGap";
-            "required": false;
-            "isSignal": true;
-        };
-    }, {}, never, never, true, never>;
-    // (undocumented)
-    static ɵfac: i0.ɵɵFactoryDeclaration<VfGridDirective, never>;
 }
 
 // @public (undocumented)
@@ -2167,29 +2113,6 @@ export class VfRadioDirective {
     static ɵdir: i0.ɵɵDirectiveDeclaration<VfRadioDirective, "input[vfRadio]", never, {}, {}, never, never, true, never>;
     // (undocumented)
     static ɵfac: i0.ɵɵFactoryDeclaration<VfRadioDirective, never>;
-}
-
-// @public (undocumented)
-export class VfRadioGroupDirective {
-    // (undocumented)
-    readonly vfRadioGroupGap: InputSignal<"none" | "xs" | "sm" | "md" | "lg" | "xl" | "2xl" | "3xl">;
-    // (undocumented)
-    readonly vfRadioGroupOrientation: InputSignal<"horizontal" | "vertical">;
-    // (undocumented)
-    static ɵdir: i0.ɵɵDirectiveDeclaration<VfRadioGroupDirective, "fieldset[vfRadioGroup]", never, {
-        "vfRadioGroupGap": {
-            "alias": "vfRadioGroupGap";
-            "required": false;
-            "isSignal": true;
-        };
-        "vfRadioGroupOrientation": {
-            "alias": "vfRadioGroupOrientation";
-            "required": false;
-            "isSignal": true;
-        };
-    }, {}, never, never, true, never>;
-    // (undocumented)
-    static ɵfac: i0.ɵɵFactoryDeclaration<VfRadioGroupDirective, never>;
 }
 
 // @public (undocumented)
