@@ -11,7 +11,7 @@ import {
   output,
   signal,
 } from '@angular/core';
-import { resolveEnabledIndex, type CollectionNavigationIntent } from '@vyrnforge/core/collection-navigation';
+import { resolveNavigationIndex, type CollectionNavigationIntent } from '@vyrnforge/core/collection-navigation';
 
 export type TabsOrientation = 'horizontal' | 'vertical';
 export type TabsActivation = 'automatic' | 'manual';
@@ -108,8 +108,8 @@ export class VfTabsListDirective {
 
     const tabs = Array.from(this.element.nativeElement.querySelectorAll<HTMLElement>('[role="tab"]'));
     const currentIndex = tabs.indexOf(target);
-    const items = tabs.map((tab) => ({ disabled: tab.getAttribute('aria-disabled') === 'true' || (tab as HTMLButtonElement).disabled }));
-    const nextIndex = resolveEnabledIndex(items, currentIndex, intent);
+    const items = tabs.map((tab) => ({ eligible: !(tab.getAttribute('aria-disabled') === 'true' || (tab as HTMLButtonElement).disabled) }));
+    const nextIndex = resolveNavigationIndex(items, currentIndex, intent);
     if (nextIndex === null) return;
     const nextTab = tabs[nextIndex];
     const nextValue = nextTab?.dataset.vfValue;
