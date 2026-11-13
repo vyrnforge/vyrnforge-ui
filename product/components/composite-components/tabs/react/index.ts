@@ -13,7 +13,7 @@ import {
   type MouseEvent as ReactMouseEvent,
   type ReactNode,
 } from 'react';
-import { resolveEnabledIndex, type CollectionNavigationIntent } from '@vyrnforge/core/collection-navigation';
+import { resolveNavigationIndex, type CollectionNavigationIntent } from '@vyrnforge/core/collection-navigation';
 
 export type TabsOrientation = 'horizontal' | 'vertical';
 export type TabsActivation = 'automatic' | 'manual';
@@ -139,8 +139,8 @@ export function TabsList({ onKeyDown, ...props }: TabsListProps) {
 
     const tabs = Array.from(event.currentTarget.querySelectorAll<HTMLElement>('[role="tab"]'));
     const currentIndex = tabs.indexOf(target);
-    const items = tabs.map((tab) => ({ disabled: tab.getAttribute('aria-disabled') === 'true' || (tab as HTMLButtonElement).disabled }));
-    const nextIndex = resolveEnabledIndex(items, currentIndex, intent);
+    const items = tabs.map((tab) => ({ eligible: !(tab.getAttribute('aria-disabled') === 'true' || (tab as HTMLButtonElement).disabled) }));
+    const nextIndex = resolveNavigationIndex(items, currentIndex, intent);
     if (nextIndex === null) return;
 
     const nextTab = tabs[nextIndex];
