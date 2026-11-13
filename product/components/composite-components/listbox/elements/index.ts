@@ -17,7 +17,7 @@ function syncTabStops(root: HTMLElement, preferred?: HTMLElement | null) {
     activeIndex = focused ? options.indexOf(focused) : -1;
   }
   if (activeIndex < 0 || states[activeIndex]?.eligible === false) activeIndex = options.findIndex((option, index) => states[index]?.eligible !== false && option.getAttribute('aria-selected') === 'true');
-  if (activeIndex < 0) activeIndex = states.findIndex((option) => !option.disabled);
+  if (activeIndex < 0) activeIndex = states.findIndex((option) => option.eligible !== false);
   const resolved = activeIndex < 0 ? null : activeIndex;
   options.forEach((option, index) => { option.tabIndex = states[index]?.eligible !== false && resolved === index ? 0 : -1; });
 }
