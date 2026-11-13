@@ -25,19 +25,16 @@ test('L3 composition primitives preserve spatial, form, and control relationship
     await expect(inline).toHaveJSProperty('tagName', 'VF-INLINE');
     await expect(ratio).toHaveJSProperty('tagName', 'VF-ASPECT-RATIO');
     await expect(field).toHaveJSProperty('tagName', 'VF-FIELD');
-    await expect(fieldset).toHaveJSProperty('tagName', 'VF-FIELDSET');
     await expect(controlGroup).toHaveJSProperty('tagName', 'VF-CONTROL-GROUP');
-    await expect(radioGroup).toHaveJSProperty('tagName', 'VF-RADIO-GROUP');
-    await expect(fieldset).toHaveAttribute('role', 'group');
-    await expect(radioGroup).toHaveAttribute('role', 'radiogroup');
-    await expect(radioGroup).toHaveAttribute('aria-orientation', 'horizontal');
   } else {
     await expect(container).toHaveJSProperty('tagName', 'MAIN');
     await expect(stack).toHaveJSProperty('tagName', 'SECTION');
     await expect(grid).toHaveJSProperty('tagName', 'SECTION');
-    await expect(fieldset).toHaveJSProperty('tagName', 'FIELDSET');
-    await expect(radioGroup).toHaveJSProperty('tagName', 'FIELDSET');
   }
+  await expect(fieldset).toHaveJSProperty('tagName', 'FIELDSET');
+  await expect(radioGroup).toHaveJSProperty('tagName', 'FIELDSET');
+  await expect(fieldset).not.toHaveAttribute('role');
+  await expect(radioGroup).not.toHaveAttribute('role');
 
   const containerMetrics = await container.evaluate((element) => { const style = getComputedStyle(element); const rect = element.getBoundingClientRect(); return { width: rect.width, left: rect.left, viewportWidth: document.documentElement.clientWidth, maxInlineSize: style.maxInlineSize, paddingInlineStart: style.paddingInlineStart, paddingInlineEnd: style.paddingInlineEnd }; });
   expect(Math.abs(containerMetrics.width - 640)).toBeLessThan(1);
@@ -81,7 +78,12 @@ test('L3 composition primitives preserve spatial, form, and control relationship
 
   const fieldsetStyle = await fieldset.evaluate((element) => { const style = getComputedStyle(element); return { display: style.display, gap: style.gap }; });
   expect(fieldsetStyle).toEqual({ display: 'grid', gap: '8px' });
-  if (port !== 'elements') await expect(fieldset.locator('legend')).toHaveText('Profile');
+  await expect(fieldset.locator('legend')).toHaveText('Profile');
+  const fieldsetInput = fieldset.locator('input');
+  await fieldset.evaluate((element) => { element.disabled = true; });
+  await expect(fieldsetInput).toBeDisabled();
+  await fieldset.evaluate((element) => { element.disabled = false; });
+  await expect(fieldsetInput).toBeEnabled();
 
   await expect(controlGroup).toHaveAttribute('data-vf-control-group-orientation', 'horizontal');
   await expect(controlGroup).not.toHaveAttribute('role');
@@ -140,6 +142,7 @@ test('L3 composition primitives preserve spatial, form, and control relationship
 
   const radioStyle = await radioGroup.evaluate((element) => { const style = getComputedStyle(element); return { display: style.display, flexWrap: style.flexWrap, gap: style.gap }; });
   expect(radioStyle).toEqual({ display: 'flex', flexWrap: 'wrap', gap: '8px' });
+  await expect(radioGroup.locator('legend')).toHaveText('Plan');
   const radios = radioGroup.locator('input[type="radio"]');
   await expect(radios).toHaveCount(2);
   await expect(radios.nth(0)).toHaveAttribute('name', 'plan');
