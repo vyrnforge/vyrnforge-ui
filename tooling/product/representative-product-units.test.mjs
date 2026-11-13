@@ -333,17 +333,26 @@ test('L3 aggregate layout projection owns only the six accepted composition prim
   assert.deepEqual(productGraphProblems(), []);
 });
 
-test('L4 Portal and Presence use canonical port-infrastructure ownership', () => {
+test('L4 uses canonical Core capability ownership without component-shaped runtime units', () => {
   const graph = discoverProductGraph();
-  for (const id of ['portal', 'presence']) {
-    const component = graph.components.find((entry) => entry.unitId === id);
-    assert.ok(component);
-    assert.equal(component.layer, 'behavioral-infrastructure');
-    assert.equal(component.facets.canonicalRoot, 'product/components/behavioral-infrastructure/' + id + '/');
-    assert.equal(component.facets.legacyRoot, null);
-    assert.equal(component.migration.state, 'product-unit');
-    assert.deepEqual(Object.keys(component.surfaces).sort(), ['angular', 'elements', 'react', 'vue']);
+
+  for (const id of ['collection-navigation', 'typeahead-matching']) {
+    const capability = graph.units.find((entry) => entry.id === `capability:${id}`);
+    assert.ok(capability, id + ' must be a canonical L4 capability');
+    assert.equal(capability.kind, 'capability');
+    assert.equal(capability.authoringMode, 'product-unit');
+    assert.equal(capability.migration.state, 'product-unit');
+    assert.equal(capability.legacyNodes.length, 0);
+    assert.deepEqual(Object.keys(capability.surfaces), ['core']);
+    assert.deepEqual(capability.surfaces.core.authoringPaths, [`product/capabilities/${id}/core/`]);
+    assert.equal(capability.surfaces.core.projectionPath, `packages/core/src/capabilities/${id}/`);
+    assert.ok(capability.surfaces.core.publicEntrypoints.includes(`@vyrnforge/core/${id}`));
   }
+
+  for (const retired of ['portal', 'presence']) {
+    assert.equal(graph.components.some((entry) => entry.unitId === retired), false);
+  }
+
   assert.deepEqual(productGraphProblems(), []);
 });
 
