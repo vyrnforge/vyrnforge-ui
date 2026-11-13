@@ -19,9 +19,9 @@
     </div>
 
     <div
-      data-vf-grid
-      data-vf-grid-gap="md"
-      style="--vf-grid-min-item-size: 9rem"
+      data-vf-auto-grid
+      data-vf-auto-grid-gap="md"
+      style="--vf-auto-grid-min-item-size: 9rem"
     >
       <div
         data-vf-stack
@@ -127,19 +127,16 @@
       <div data-vf-stack data-vf-stack-gap="md">
         <div
           data-vf-loading-placeholder
-          data-vf-aspect-ratio
-          data-vf-aspect-ratio-value="video"
           aria-hidden="true"
+          style="aspect-ratio: 16 / 9"
         ></div>
 
         <div data-vf-inline data-vf-inline-gap="md">
           <div
             data-vf-loading-placeholder
             data-vf-loading-placeholder-shape="circle"
-            data-vf-aspect-ratio
-            data-vf-aspect-ratio-value="square"
             aria-hidden="true"
-            style="inline-size: 3rem"
+            style="aspect-ratio: 1 / 1; inline-size: 3rem"
           ></div>
 
           <div data-vf-stack data-vf-stack-gap="sm" style="flex: 1 1 auto">
