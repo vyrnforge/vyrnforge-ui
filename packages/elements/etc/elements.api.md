@@ -86,9 +86,6 @@ export function defineDrawerElement(registry?: CustomElementRegistry | undefined
 export function defineFieldElement(registry?: CustomElementRegistry | undefined): void;
 
 // @public (undocumented)
-export function defineFieldsetElement(registry?: CustomElementRegistry | undefined): void;
-
-// @public (undocumented)
 export function defineFileUploaderElement(tag?: string, registry?: CustomElementRegistry | undefined): void;
 
 // @public (undocumented)
@@ -132,9 +129,6 @@ export function definePopoverElement(registry?: CustomElementRegistry | undefine
 
 // @public (undocumented)
 export function definePreviewCardElement(registry?: CustomElementRegistry | undefined): void;
-
-// @public (undocumented)
-export function defineRadioGroupElement(registry?: CustomElementRegistry | undefined): void;
 
 // @public (undocumented)
 export function defineRangeSliderElement(tag?: string, registry?: CustomElementRegistry | undefined): void;
@@ -468,19 +462,6 @@ export class VfFieldElement extends HTMLElementBase_2 {
 }
 
 // @public (undocumented)
-export class VfFieldsetElement extends HTMLElementBase_2 {
-    // (undocumented)
-    attributeChangedCallback(): void;
-    // (undocumented)
-    connectedCallback(): void;
-    // (undocumented)
-    get gap(): LayoutSpace;
-    set gap(value: LayoutSpace);
-    // (undocumented)
-    static readonly observedAttributes: string[];
-}
-
-// @public (undocumented)
 export class VfFileUploaderElement extends H_10 {
     // (undocumented)
     connectedCallback(): void;
@@ -660,22 +641,6 @@ export class VfPreviewCardElement extends HTMLElementBase_9 {
     set open(value: boolean);
     // (undocumented)
     get placement(): FloatingPlacement;
-}
-
-// @public (undocumented)
-export class VfRadioGroupElement extends HTMLElementBase_2 {
-    // (undocumented)
-    attributeChangedCallback(): void;
-    // (undocumented)
-    connectedCallback(): void;
-    // (undocumented)
-    get gap(): LayoutSpace;
-    set gap(value: LayoutSpace);
-    // (undocumented)
-    static readonly observedAttributes: string[];
-    // (undocumented)
-    get orientation(): RadioGroupOrientation;
-    set orientation(value: RadioGroupOrientation);
 }
 
 // @public (undocumented)
