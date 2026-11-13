@@ -1,14 +1,15 @@
 import { Button } from '@vyrnforge/react/button';
+import { Input } from '@vyrnforge/react/input';
 import { ControlGroup } from '@vyrnforge/react/layout';
 import '@vyrnforge/web/styles/button.css';
+import '@vyrnforge/web/styles/input.css';
 import '@vyrnforge/web/styles/layout.css';
 
-export function AlignmentActions() {
+export function SearchControls() {
   return (
-    <ControlGroup role="group" aria-label="Text alignment">
-      <Button type="button" variant="secondary">Left</Button>
-      <Button type="button" variant="secondary">Center</Button>
-      <Button type="button" variant="secondary">Right</Button>
+    <ControlGroup>
+      <Input type="search" aria-label="Search query" />
+      <Button type="button" variant="secondary">Search</Button>
     </ControlGroup>
   );
 }
