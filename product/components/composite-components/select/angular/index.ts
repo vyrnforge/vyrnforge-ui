@@ -52,7 +52,7 @@ function flushFocusRequests(root: VfSelectRootDirective): void {
   const options = optionsFor(surface);
   const optionStates = options.map((option) => ({ eligible: !(optionDisabled(option)) }));
   const selected = options.findIndex(
-    (option, index) => !optionStates[index]?.disabled && option.getAttribute('aria-selected') === 'true',
+    (option, index) => optionStates[index]?.eligible !== false && option.getAttribute('aria-selected') === 'true',
   );
 
   for (const request of state.focusRequests.splice(0)) {
