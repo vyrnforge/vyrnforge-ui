@@ -15,7 +15,7 @@ L3 owns composition, grouping, and structural relationships without becoming a b
 
 - **Field** groups a label/control/description relationship spatially without owning validation or value state.
 - **Fieldset** preserves native fieldset/legend grouping where the port can author native HTML; Elements exposes the equivalent grouping contract without pretending a custom element is a native fieldset.
-- **ControlGroup** visually joins adjacent independently operable controls in horizontal or vertical orientation while leaving their native semantics, state, value, disabled state, size, and variant independent.
+- **ControlGroup** visually joins adjacent independently operable controls in horizontal or vertical orientation while leaving their native semantics, state, value, disabled state, size, and variant independent. Internal seams are collapsed with logical border-side suppression on later eligible children, not a fixed negative overlap, so adjacency does not assume a particular child border width and remains direction-safe.
 
 ## Control relationship
 
