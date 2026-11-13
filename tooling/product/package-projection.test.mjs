@@ -30,6 +30,8 @@ function graphFor(packageId, surfaces) {
         },
       },
     })),
+    patterns: [],
+    units: [],
   };
 }
 
@@ -63,6 +65,49 @@ test('standard package projection overlays product-owned source onto the package
   assert.ok(projectedTsconfig.compilerOptions.outDir.endsWith('packages/react/dist'));
   cleanupPackageProjection(root, 'react');
   assert.equal(existsSync(result.stageRoot), false);
+});
+
+test('Core capability projection overlays canonical product-owned source onto the stable capability output path', () => {
+  const root = mkdtempSync(path.join(os.tmpdir(), 'vf-capability-projection-'));
+  const write = writer(root);
+
+  write('packages/core/package.json', JSON.stringify({ name: '@vyrnforge/core', type: 'module' }));
+  write('packages/core/src/index.ts', 'export {};\n');
+  write('packages/core/src/capabilities/collection-navigation/index.ts', 'export const source = "legacy";\n');
+  write('packages/core/tsconfig.json', '{}\n');
+  write('product/capabilities/collection-navigation/core/index.ts', 'export const source = "product";\n');
+
+  const graph = {
+    packages: [{ id: 'core', name: '@vyrnforge/core', manifest: {} }],
+    components: [],
+    patterns: [],
+    units: [{
+      id: 'capability:collection-navigation',
+      unitId: 'collection-navigation',
+      kind: 'capability',
+      surfaces: {
+        core: {
+          package: 'core',
+          target: 'core',
+          authoringMode: 'product-unit',
+          authoringPaths: ['product/capabilities/collection-navigation/core/'],
+          projectionPath: 'packages/core/src/capabilities/collection-navigation/',
+          publicEntrypoints: ['@vyrnforge/core/collection-navigation'],
+        },
+      },
+    }],
+  };
+
+  const plan = packageProjectionPlan(root, 'core', graph);
+  assert.equal(plan.length, 1);
+  assert.equal(plan[0].ownerKind, 'capability');
+
+  const result = preparePackageProjection({ root, packageId: 'core', graph });
+  assert.equal(
+    readFileSync(path.join(result.stageRoot, 'src/capabilities/collection-navigation/index.ts'), 'utf8'),
+    'export const source = "product";\n',
+  );
+  cleanupPackageProjection(root, 'core');
 });
 
 test('unprojected product drafts are excluded from distributable package projection', () => {
