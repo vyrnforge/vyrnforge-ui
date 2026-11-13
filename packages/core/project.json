@@ -20,7 +20,7 @@
     "lint": {
       "executor": "nx:run-commands",
       "options": {
-        "command": "pnpm exec eslint packages/core/src packages/core/test --max-warnings=0"
+        "command": "pnpm exec eslint packages/core/src product/capabilities --max-warnings=0"
       }
     },
     "typecheck": {
