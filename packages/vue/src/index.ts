@@ -21,9 +21,6 @@ export { TabsList, TabsPanel, TabsRoot, TabsTab } from './components/tabs/index.
 export type { TabsActivation, TabsListProps, TabsOrientation, TabsPanelProps, TabsRootProps, TabsTabProps } from './components/tabs/index.js';
 export { Text } from './components/text/index.js';
 export type { TextElement, TextVariant } from './components/text/index.js';
-export { Portal } from './components/portal/index.js';
-export { usePresence } from './components/presence/index.js';
-export type { PresenceResult, PresenceState } from './components/presence/index.js';
 export * from './components/disclosure/index.js';
 export * from './components/accordion/index.js';
 export * from './components/alert-dialog/index.js';

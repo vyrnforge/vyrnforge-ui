@@ -1,5 +1,4 @@
 import { resolveEnabledIndex } from '@vyrnforge/core/collection-navigation';
-import { toggleSelection } from '@vyrnforge/core/selection-operations';
 import { findTypeaheadMatch } from '@vyrnforge/core/typeahead-matching';
 
 const H: typeof HTMLElement = globalThis.HTMLElement ?? class {} as typeof HTMLElement;
@@ -113,7 +112,7 @@ export class VfMultiSelectElement extends H {
     if (optionDisabled(option)) return;
     const value = optionValue(option);
     if (!value) return;
-    const next = toggleSelection(this.selectedValues(), value);
+    const next = this.selectedValues().includes(value) ? this.selectedValues().filter((candidate) => candidate !== value) : [...this.selectedValues(), value];
     for (const candidate of optionsFor(this)) {
       const selected = String(next.includes(optionValue(candidate)));
       if (candidate.getAttribute('aria-selected') !== selected) candidate.setAttribute('aria-selected', selected);

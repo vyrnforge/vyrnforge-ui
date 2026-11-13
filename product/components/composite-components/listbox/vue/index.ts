@@ -1,7 +1,5 @@
 import { computed, defineComponent, h, inject, onBeforeUnmount, onMounted, provide, ref, type InjectionKey, type PropType, type Ref } from 'vue';
 import { resolveEnabledIndex } from '@vyrnforge/core/collection-navigation';
-import { rovingTabIndex } from '@vyrnforge/core/composite-focus';
-import { toggleSelection } from '@vyrnforge/core/selection-operations';
 import { findTypeaheadMatch } from '@vyrnforge/core/typeahead-matching';
 
 export type ListboxSelectionMode = 'single' | 'multiple';
@@ -25,7 +23,7 @@ function syncTabStops(root: HTMLElement, preferred?: HTMLElement | null) {
   if (activeIndex < 0) activeIndex = states.findIndex((option) => !option.disabled);
   const resolved = activeIndex < 0 ? null : activeIndex;
   root.tabIndex = resolved === null ? 0 : -1;
-  options.forEach((option, index) => { option.tabIndex = rovingTabIndex(index, resolved, states[index]?.disabled); });
+  options.forEach((option, index) => { option.tabIndex = !states[index]?.disabled && resolved === index ? 0 : -1; });
 }
 function invoke(handler: unknown, event: Event) { if (typeof handler === 'function') handler(event); else if (Array.isArray(handler)) for (const item of handler) if (typeof item === 'function') item(event); }
 
@@ -41,7 +39,7 @@ export const ListboxRoot = defineComponent({
     let query = '';
     let timer: ReturnType<typeof setTimeout> | null = null;
     let observer: MutationObserver | null = null;
-    provide(key, { values, mode, select(candidate) { const next = props.selectionMode === 'single' ? [candidate] : toggleSelection(values.value, candidate); if (props.value === undefined) internal.value = next; emit('update:value', props.selectionMode === 'single' ? (next[0] ?? '') : next); } });
+    provide(key, { values, mode, select(candidate) { const next = props.selectionMode === 'single' ? [candidate] : values.value.includes(candidate) ? values.value.filter((value) => value !== candidate) : [...values.value, candidate]; if (props.value === undefined) internal.value = next; emit('update:value', props.selectionMode === 'single' ? (next[0] ?? '') : next); } });
     onMounted(() => {
       const element = root.value;
       if (!element) return;

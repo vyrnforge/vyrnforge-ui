@@ -43,11 +43,6 @@
       "import": "./dist/components/toggle-button/index.js",
       "default": "./dist/components/toggle-button/index.js"
     },
-    "./composite-focus": {
-      "types": "./dist/capabilities/composite-focus/index.d.ts",
-      "import": "./dist/capabilities/composite-focus/index.js",
-      "default": "./dist/capabilities/composite-focus/index.js"
-    },
     "./floating-positioning": {
       "types": "./dist/capabilities/floating-positioning/index.d.ts",
       "import": "./dist/capabilities/floating-positioning/index.js",

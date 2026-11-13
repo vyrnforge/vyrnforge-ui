@@ -11,7 +11,6 @@ import {
   type Ref,
 } from 'vue';
 import { resolveEnabledIndex } from '@vyrnforge/core/collection-navigation';
-import { toggleSelection } from '@vyrnforge/core/selection-operations';
 import { findTypeaheadMatch } from '@vyrnforge/core/typeahead-matching';
 
 const optionSelector = '[data-vf-multi-select-option]';
@@ -64,7 +63,7 @@ export const MultiSelectRoot = defineComponent({
       anchor,
       surface,
       toggle(candidate) {
-        const next = toggleSelection(values.value, candidate);
+        const next = values.value.includes(candidate) ? values.value.filter((value) => value !== candidate) : [...values.value, candidate];
         if (props.value === undefined) internalValue.value = next;
         emit('update:value', next);
       },

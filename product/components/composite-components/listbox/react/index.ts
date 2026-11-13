@@ -1,7 +1,5 @@
 import { createContext, createElement, forwardRef, useContext, useEffect, useMemo, useRef, useState, type ComponentPropsWithoutRef, type ReactNode } from 'react';
 import { resolveEnabledIndex } from '@vyrnforge/core/collection-navigation';
-import { rovingTabIndex } from '@vyrnforge/core/composite-focus';
-import { addToSelection, removeFromSelection, selectionContains } from '@vyrnforge/core/selection-operations';
 import { findTypeaheadMatch } from '@vyrnforge/core/typeahead-matching';
 
 export type ListboxSelectionMode = 'single' | 'multiple';
@@ -27,7 +25,7 @@ function syncTabStops(root: HTMLElement, preferred?: HTMLElement | null) {
   if (activeIndex < 0) activeIndex = states.findIndex((option) => !option.disabled);
   const resolved = activeIndex < 0 ? null : activeIndex;
   root.tabIndex = resolved === null ? 0 : -1;
-  options.forEach((option, index) => { option.tabIndex = rovingTabIndex(index, resolved, states[index]?.disabled); });
+  options.forEach((option, index) => { option.tabIndex = !states[index]?.disabled && resolved === index ? 0 : -1; });
 }
 function normalize(value: ListboxValue | undefined) { return value === undefined ? [] : typeof value === 'string' ? (value ? [value] : []) : value; }
 
@@ -48,7 +46,7 @@ export const ListboxRoot = forwardRef<HTMLDivElement, ListboxRootProps>(function
   const select = (candidate: string) => {
     let next: string[];
     if (selectionMode === 'single') next = [candidate];
-    else next = selectionContains(values, candidate) ? removeFromSelection(values, candidate) : addToSelection(values, candidate);
+    else next = values.includes(candidate) ? values.filter((value) => value !== candidate) : [...values, candidate];
     if (value === undefined) setInternal(next);
     onValueChange?.(selectionMode === 'single' ? (next[0] ?? '') : next);
   };

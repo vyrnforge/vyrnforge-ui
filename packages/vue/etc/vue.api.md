@@ -21,10 +21,8 @@ import { InlineAlign } from '@vyrnforge/web/layout';
 import { InlineJustify } from '@vyrnforge/web/layout';
 import { InputType } from '@vyrnforge/web/input';
 import { LayoutSpace } from '@vyrnforge/web/layout';
-import { MaybeRefOrGetter } from 'vue';
 import { PropType } from 'vue';
 import { PublicProps } from 'vue';
-import { Ref } from 'vue';
 import { RendererElement } from 'vue';
 import { RendererNode } from 'vue';
 import { StackAlign } from '@vyrnforge/web/layout';
@@ -1419,44 +1417,6 @@ export const PopoverTrigger: DefineComponent<    {}, () => VNode<RendererNode, R
 }>, {}, {}, {}, ComponentOptionsMixin, ComponentOptionsMixin, {}, string, PublicProps, Readonly<{}> & Readonly<{}>, {}, {}, {}, {}, string, ComponentProvideOptions, true, {}, any>;
 
 // @public (undocumented)
-export const Portal: DefineComponent<ExtractPropTypes<    {
-to: {
-type: PropType<string | Element>;
-required: true;
-};
-disabled: {
-type: BooleanConstructor;
-default: boolean;
-};
-}>, () => VNode<RendererNode, RendererElement, {
-[key: string]: any;
-}>, {}, {}, {}, ComponentOptionsMixin, ComponentOptionsMixin, {}, string, PublicProps, Readonly<ExtractPropTypes<    {
-to: {
-type: PropType<string | Element>;
-required: true;
-};
-disabled: {
-type: BooleanConstructor;
-default: boolean;
-};
-}>> & Readonly<{}>, {
-disabled: boolean;
-}, {}, {}, {}, string, ComponentProvideOptions, true, {}, any>;
-
-// @public (undocumented)
-export interface PresenceResult {
-    // (undocumented)
-    completeExit(): void;
-    // (undocumented)
-    mounted: Readonly<Ref<boolean>>;
-    // (undocumented)
-    state: Readonly<Ref<PresenceState>>;
-}
-
-// @public (undocumented)
-export type PresenceState = 'entered' | 'exiting' | 'exited';
-
-// @public (undocumented)
 export const PreviewCardContent: DefineComponent<    {}, () => VNode<RendererNode, RendererElement, {
 [key: string]: any;
 }> | null, {}, {}, {}, ComponentOptionsMixin, ComponentOptionsMixin, {}, string, PublicProps, Readonly<{}> & Readonly<{}>, {}, {}, {}, {}, string, ComponentProvideOptions, true, {}, any>;
@@ -2393,9 +2353,6 @@ closeDelay: number;
 export const TooltipTrigger: DefineComponent<    {}, () => VNode<RendererNode, RendererElement, {
 [key: string]: any;
 }>, {}, {}, {}, ComponentOptionsMixin, ComponentOptionsMixin, {}, string, PublicProps, Readonly<{}> & Readonly<{}>, {}, {}, {}, {}, string, ComponentProvideOptions, true, {}, any>;
-
-// @public (undocumented)
-export function usePresence(present: MaybeRefOrGetter<boolean>): PresenceResult;
 
 // (No @packageDocumentation comment for this package)
 

@@ -1,6 +1,6 @@
 import { createContext, createElement, forwardRef, useCallback, useContext, useId, useMemo, useRef, useState, type ButtonHTMLAttributes, type HTMLAttributes, type ReactNode, type RefObject } from 'react';
+import { createPortal } from 'react-dom';
 import type { FloatingPlacement } from '@vyrnforge/web/floating-positioning';
-import { Portal } from '../portal/index.js';
 import { useFloatingSurface } from '../../internal/floating-surface.js';
 
 interface PopoverContextValue {
@@ -84,5 +84,5 @@ export const PopoverContent = forwardRef<HTMLDivElement, PopoverContentProps>(fu
     'data-vf-popover-content': '',
     'data-vf-open': '',
   });
-  return portal ? createElement(Portal, { target }, content) : content;
+  return portal && target ? createPortal(content, target) : content;
 });
