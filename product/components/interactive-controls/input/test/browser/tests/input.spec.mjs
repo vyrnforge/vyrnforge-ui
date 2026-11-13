@@ -36,12 +36,9 @@ test('Input preserves native form semantics and shared styling across ports', as
   expect(await required.evaluate((input) => input.matches(':user-invalid'))).toBe(false);
   const normalBoundary = await readonly.evaluate((input) => getComputedStyle(input).borderColor);
   expect(await required.evaluate((input) => getComputedStyle(input).borderColor)).toBe(normalBoundary);
-  await required.focus();
-  await required.fill('valid');
-  await required.fill('');
-  await required.blur();
+  await page.locator('#form').evaluate((form) => form.requestSubmit());
   expect(await required.evaluate((input) => input.matches(':user-invalid'))).toBe(true);
-  expect(await required.evaluate((input) => getComputedStyle(input).borderColor)).not.toBe(normalBoundary);
+  await expect.poll(() => required.evaluate((input) => getComputedStyle(input).borderColor)).not.toBe(normalBoundary);
   await expect(appInvalid).toHaveAttribute('aria-invalid', 'true');
 
   await expect(quantity).toHaveAttribute('type', 'number');

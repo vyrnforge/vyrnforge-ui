@@ -20,7 +20,7 @@ export class VfCheckboxDirective {
   }
 
   @HostListener('click')
-  reconcileIndeterminateAfterActivation(): void {
+  private reconcileIndeterminateAfterActivation(): void {
     this.renderer.setProperty(this.element.nativeElement, 'indeterminate', this.indeterminate());
   }
 }

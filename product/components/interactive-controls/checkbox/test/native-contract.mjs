@@ -3,7 +3,7 @@ export default {
   markup: '<label for="control">Choice</label><input id="control" name="control" type="checkbox" data-vf-checkbox>',
   angular: '<label for="control">Choice</label><input id="control" name="control" vfCheckbox [indeterminate]="true">',
   props: { name: 'control', indeterminate: true }, hydrate: true, webInlineScript: 'document.querySelector("#control").indeterminate=true;', semantics: { tag: 'INPUT', type: 'checkbox' },
-  async assertBrowser({ control, expect, port }) {
+  async assertBrowser({ control, expect }) {
     expect(await control.evaluate((element) => element.indeterminate)).toBe(true);
     await expect(control).not.toHaveAttribute('data-vf-indeterminate');
     const box = await control.boundingBox();
@@ -12,6 +12,7 @@ export default {
     await control.click();
     expect(await control.evaluate((element) => element.checked)).toBe(true);
     const indeterminateAfterActivation = await control.evaluate((element) => element.indeterminate);
+    const port = process.env.VF_COMPONENT_PORT || 'web';
     if (port === 'web' || port === 'elements') expect(indeterminateAfterActivation).toBe(false);
     else expect(indeterminateAfterActivation).toBe(true);
   },
