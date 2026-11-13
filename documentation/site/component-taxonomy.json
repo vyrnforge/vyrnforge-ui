@@ -108,15 +108,6 @@
         "listbox",
         "carousel"
       ]
-    },
-    {
-      "id": "accessibility-utilities",
-      "label": "Accessibility & Utilities",
-      "description": "Support primitives used to preserve accessibility, rendering, and presence behavior.",
-      "components": [
-        "portal",
-        "presence"
-      ]
     }
   ]
 }
