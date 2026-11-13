@@ -4,21 +4,11 @@
 
 ```ts
 
-import { AspectRatio } from '@vyrnforge/web/layout';
-import { ClusterAlign } from '@vyrnforge/web/layout';
-import { ClusterJustify } from '@vyrnforge/web/layout';
-import { ContainerSize } from '@vyrnforge/web/layout';
-import { ControlGroupOrientation } from '@vyrnforge/web/layout';
 import { FloatingPlacement } from '@vyrnforge/web/floating-positioning';
 import { IconDefinition } from '@vyrnforge/web/icon';
 import { IconShape } from '@vyrnforge/web/icon';
 import { IconSize } from '@vyrnforge/web/icon';
 import { IconVariant } from '@vyrnforge/web/icon';
-import { InlineAlign } from '@vyrnforge/web/layout';
-import { InlineJustify } from '@vyrnforge/web/layout';
-import { LayoutSpace } from '@vyrnforge/web/layout';
-import { StackAlign } from '@vyrnforge/web/layout';
-import { StackJustify } from '@vyrnforge/web/layout';
 
 // @public (undocumented)
 export type AccordionType = 'single' | 'multiple';
@@ -28,16 +18,6 @@ export interface AccordionValueChangeDetail {
     // (undocumented)
     value: string | string[];
 }
-
-export { AspectRatio }
-
-export { ClusterAlign }
-
-export { ClusterJustify }
-
-export { ContainerSize }
-
-export { ControlGroupOrientation }
 
 // @public (undocumented)
 export function defineAccordionElement(registry?: CustomElementRegistry | undefined): void;
@@ -49,13 +29,7 @@ export function defineAlertDialogElement(registry?: CustomElementRegistry | unde
 export function defineAppShellElements(registry?: CustomElementRegistry | undefined): void;
 
 // @public (undocumented)
-export function defineAspectRatioElement(registry?: CustomElementRegistry | undefined): void;
-
-// @public (undocumented)
 export function defineCarouselElement(tag?: string, registry?: CustomElementRegistry | undefined): void;
-
-// @public (undocumented)
-export function defineClusterElement(registry?: CustomElementRegistry | undefined): void;
 
 // @public (undocumented)
 export function defineColorPickerElement(tag?: string, registry?: CustomElementRegistry | undefined): void;
@@ -64,13 +38,7 @@ export function defineColorPickerElement(tag?: string, registry?: CustomElementR
 export function defineComboboxElement(tag?: string, registry?: CustomElementRegistry | undefined): void;
 
 // @public (undocumented)
-export function defineContainerElement(registry?: CustomElementRegistry | undefined): void;
-
-// @public (undocumented)
 export function defineContextMenuElement(tagName?: string, registry?: CustomElementRegistry | undefined): void;
-
-// @public (undocumented)
-export function defineControlGroupElement(registry?: CustomElementRegistry | undefined): void;
 
 // @public (undocumented)
 export function defineDialogElement(registry?: CustomElementRegistry | undefined): void;
@@ -82,22 +50,10 @@ export function defineDisclosureElement(registry?: CustomElementRegistry | undef
 export function defineDrawerElement(registry?: CustomElementRegistry | undefined): void;
 
 // @public (undocumented)
-export function defineFieldElement(registry?: CustomElementRegistry | undefined): void;
-
-// @public (undocumented)
 export function defineFileUploaderElement(tag?: string, registry?: CustomElementRegistry | undefined): void;
 
 // @public (undocumented)
-export function defineGridElement(registry?: CustomElementRegistry | undefined): void;
-
-// @public (undocumented)
 export function defineIconElement(registry?: CustomElementRegistry | undefined): void;
-
-// @public (undocumented)
-export function defineInlineElement(registry?: CustomElementRegistry | undefined): void;
-
-// @public (undocumented)
-export function defineLayoutElements(registry?: CustomElementRegistry | undefined): void;
 
 // @public (undocumented)
 export function defineListboxElement(tagName?: string, registry?: CustomElementRegistry | undefined): void;
@@ -152,9 +108,6 @@ export function defineSplitButtonElement(tagName?: string, registry?: CustomElem
 
 // @public (undocumented)
 export function defineSplitPanelElement(tag?: string, registry?: CustomElementRegistry | undefined): void;
-
-// @public (undocumented)
-export function defineStackElement(registry?: CustomElementRegistry | undefined): void;
 
 // @public (undocumented)
 export function defineTabsElement(registry?: CustomElementRegistry | undefined): void;
@@ -212,16 +165,6 @@ export { IconSize }
 
 export { IconVariant }
 
-export { InlineAlign }
-
-export { InlineJustify }
-
-export { LayoutSpace }
-
-export { StackAlign }
-
-export { StackJustify }
-
 // @public (undocumented)
 export type TabsActivation = 'automatic' | 'manual';
 
@@ -247,7 +190,7 @@ export interface ToastOpenChangeDetail {
 export type ToolbarOrientation = 'horizontal' | 'vertical';
 
 // @public (undocumented)
-export class VfAccordionElement extends HTMLElementBase_5 {
+export class VfAccordionElement extends HTMLElementBase_4 {
     // (undocumented)
     attributeChangedCallback(): void;
     // (undocumented)
@@ -270,52 +213,39 @@ export class VfAlertDialogElement extends VfDialogElement {
 }
 
 // @public (undocumented)
-export class VfAppShellBodyElement extends HTMLElementBase_20 {
+export class VfAppShellBodyElement extends HTMLElementBase_19 {
     // (undocumented)
     connectedCallback(): void;
 }
 
 // @public (undocumented)
-export class VfAppShellElement extends HTMLElementBase_20 {
+export class VfAppShellElement extends HTMLElementBase_19 {
     // (undocumented)
     connectedCallback(): void;
 }
 
 // @public (undocumented)
-export class VfAppShellFooterElement extends HTMLElementBase_20 {
+export class VfAppShellFooterElement extends HTMLElementBase_19 {
     // (undocumented)
     connectedCallback(): void;
 }
 
 // @public (undocumented)
-export class VfAppShellHeaderElement extends HTMLElementBase_20 {
+export class VfAppShellHeaderElement extends HTMLElementBase_19 {
     // (undocumented)
     connectedCallback(): void;
 }
 
 // @public (undocumented)
-export class VfAppShellMainElement extends HTMLElementBase_20 {
+export class VfAppShellMainElement extends HTMLElementBase_19 {
     // (undocumented)
     connectedCallback(): void;
 }
 
 // @public (undocumented)
-export class VfAppShellNavigationElement extends HTMLElementBase_20 {
+export class VfAppShellNavigationElement extends HTMLElementBase_19 {
     // (undocumented)
     connectedCallback(): void;
-}
-
-// @public (undocumented)
-export class VfAspectRatioElement extends HTMLElementBase_2 {
-    // (undocumented)
-    attributeChangedCallback(): void;
-    // (undocumented)
-    connectedCallback(): void;
-    // (undocumented)
-    static readonly observedAttributes: string[];
-    // (undocumented)
-    get ratio(): AspectRatio;
-    set ratio(value: AspectRatio);
 }
 
 // @public (undocumented)
@@ -327,25 +257,6 @@ export class VfCarouselElement extends H_8 {
 }
 
 // @public (undocumented)
-export class VfClusterElement extends HTMLElementBase_2 {
-    // (undocumented)
-    get align(): ClusterAlign;
-    set align(value: ClusterAlign);
-    // (undocumented)
-    attributeChangedCallback(): void;
-    // (undocumented)
-    connectedCallback(): void;
-    // (undocumented)
-    get gap(): LayoutSpace;
-    set gap(value: LayoutSpace);
-    // (undocumented)
-    get justify(): ClusterJustify;
-    set justify(value: ClusterJustify);
-    // (undocumented)
-    static readonly observedAttributes: string[];
-}
-
-// @public (undocumented)
 export class VfColorPickerElement extends H_9 {
     // (undocumented)
     connectedCallback(): void;
@@ -354,7 +265,7 @@ export class VfColorPickerElement extends H_9 {
 }
 
 // @public (undocumented)
-export class VfComboboxElement extends HTMLElementBase_16 {
+export class VfComboboxElement extends HTMLElementBase_15 {
     // (undocumented)
     connectedCallback(): void;
     // (undocumented)
@@ -362,23 +273,7 @@ export class VfComboboxElement extends HTMLElementBase_16 {
 }
 
 // @public (undocumented)
-export class VfContainerElement extends HTMLElementBase_2 {
-    // (undocumented)
-    attributeChangedCallback(): void;
-    // (undocumented)
-    connectedCallback(): void;
-    // (undocumented)
-    get gutter(): LayoutSpace;
-    set gutter(value: LayoutSpace);
-    // (undocumented)
-    static readonly observedAttributes: string[];
-    // (undocumented)
-    get size(): ContainerSize;
-    set size(value: ContainerSize);
-}
-
-// @public (undocumented)
-export class VfContextMenuElement extends HTMLElementBase_11 {
+export class VfContextMenuElement extends HTMLElementBase_10 {
     // (undocumented)
     connectedCallback(): void;
     // (undocumented)
@@ -386,20 +281,7 @@ export class VfContextMenuElement extends HTMLElementBase_11 {
 }
 
 // @public (undocumented)
-export class VfControlGroupElement extends HTMLElementBase_2 {
-    // (undocumented)
-    attributeChangedCallback(): void;
-    // (undocumented)
-    connectedCallback(): void;
-    // (undocumented)
-    static readonly observedAttributes: string[];
-    // (undocumented)
-    get orientation(): ControlGroupOrientation;
-    set orientation(value: ControlGroupOrientation);
-}
-
-// @public (undocumented)
-export class VfDialogElement extends HTMLElementBase_6 {
+export class VfDialogElement extends HTMLElementBase_5 {
     // (undocumented)
     attributeChangedCallback(): void;
     // (undocumented)
@@ -416,7 +298,7 @@ export class VfDialogElement extends HTMLElementBase_6 {
 }
 
 // @public (undocumented)
-export class VfDisclosureElement extends HTMLElementBase_4 {
+export class VfDisclosureElement extends HTMLElementBase_3 {
     // (undocumented)
     attributeChangedCallback(): void;
     // (undocumented)
@@ -446,37 +328,11 @@ export class VfDrawerElement extends VfDialogElement {
 }
 
 // @public (undocumented)
-export class VfFieldElement extends HTMLElementBase_2 {
-    // (undocumented)
-    attributeChangedCallback(): void;
-    // (undocumented)
-    connectedCallback(): void;
-    // (undocumented)
-    get gap(): LayoutSpace;
-    set gap(value: LayoutSpace);
-    // (undocumented)
-    static readonly observedAttributes: string[];
-}
-
-// @public (undocumented)
 export class VfFileUploaderElement extends H_10 {
     // (undocumented)
     connectedCallback(): void;
     // (undocumented)
     disconnectedCallback(): void;
-}
-
-// @public (undocumented)
-export class VfGridElement extends HTMLElementBase_2 {
-    // (undocumented)
-    attributeChangedCallback(): void;
-    // (undocumented)
-    connectedCallback(): void;
-    // (undocumented)
-    get gap(): LayoutSpace;
-    set gap(value: LayoutSpace);
-    // (undocumented)
-    static readonly observedAttributes: string[];
 }
 
 // @public (undocumented)
@@ -505,26 +361,7 @@ export class VfIconElement extends HTMLElementBase {
 }
 
 // @public (undocumented)
-export class VfInlineElement extends HTMLElementBase_2 {
-    // (undocumented)
-    get align(): InlineAlign;
-    set align(value: InlineAlign);
-    // (undocumented)
-    attributeChangedCallback(): void;
-    // (undocumented)
-    connectedCallback(): void;
-    // (undocumented)
-    get gap(): LayoutSpace;
-    set gap(value: LayoutSpace);
-    // (undocumented)
-    get justify(): InlineJustify;
-    set justify(value: InlineJustify);
-    // (undocumented)
-    static readonly observedAttributes: string[];
-}
-
-// @public (undocumented)
-export class VfListboxElement extends HTMLElementBase_15 {
+export class VfListboxElement extends HTMLElementBase_14 {
     // (undocumented)
     attributeChangedCallback(name: string): void;
     // (undocumented)
@@ -536,7 +373,7 @@ export class VfListboxElement extends HTMLElementBase_15 {
 }
 
 // @public (undocumented)
-export class VfMenubarElement extends HTMLElementBase_12 {
+export class VfMenubarElement extends HTMLElementBase_11 {
     // (undocumented)
     connectedCallback(): void;
     // (undocumented)
@@ -544,7 +381,7 @@ export class VfMenubarElement extends HTMLElementBase_12 {
 }
 
 // @public (undocumented)
-export class VfMenuElement extends HTMLElementBase_10 {
+export class VfMenuElement extends HTMLElementBase_9 {
     // (undocumented)
     attributeChangedCallback(): void;
     // (undocumented)
@@ -572,7 +409,7 @@ export class VfNumberFieldElement extends H_11 {
 }
 
 // @public (undocumented)
-export class VfOtpFieldElement extends HTMLElementBase_17 {
+export class VfOtpFieldElement extends HTMLElementBase_16 {
     // (undocumented)
     connectedCallback(): void;
     // (undocumented)
@@ -589,7 +426,7 @@ export class VfPaginationElement extends H_12 {
 }
 
 // @public (undocumented)
-export class VfPasswordFieldElement extends HTMLElementBase_18 {
+export class VfPasswordFieldElement extends HTMLElementBase_17 {
     // (undocumented)
     attributeChangedCallback(): void;
     // (undocumented)
@@ -607,7 +444,7 @@ export class VfPasswordFieldElement extends HTMLElementBase_18 {
 }
 
 // @public (undocumented)
-export class VfPopoverElement extends HTMLElementBase_7 {
+export class VfPopoverElement extends HTMLElementBase_6 {
     // (undocumented)
     attributeChangedCallback(): void;
     // (undocumented)
@@ -624,7 +461,7 @@ export class VfPopoverElement extends HTMLElementBase_7 {
 }
 
 // @public (undocumented)
-export class VfPreviewCardElement extends HTMLElementBase_9 {
+export class VfPreviewCardElement extends HTMLElementBase_8 {
     // (undocumented)
     attributeChangedCallback(): void;
     // (undocumented)
@@ -677,13 +514,13 @@ export class VfSelectElement extends H {
 }
 
 // @public (undocumented)
-export class VfSideNavElement extends HTMLElementBase_21 {
+export class VfSideNavElement extends HTMLElementBase_20 {
     // (undocumented)
     connectedCallback(): void;
 }
 
 // @public (undocumented)
-export class VfSplitButtonElement extends HTMLElementBase_14 {
+export class VfSplitButtonElement extends HTMLElementBase_13 {
     // (undocumented)
     connectedCallback(): void;
     // (undocumented)
@@ -697,26 +534,7 @@ export class VfSplitPanelElement extends H_14 {
 }
 
 // @public (undocumented)
-export class VfStackElement extends HTMLElementBase_2 {
-    // (undocumented)
-    get align(): StackAlign;
-    set align(value: StackAlign);
-    // (undocumented)
-    attributeChangedCallback(): void;
-    // (undocumented)
-    connectedCallback(): void;
-    // (undocumented)
-    get gap(): LayoutSpace;
-    set gap(value: LayoutSpace);
-    // (undocumented)
-    get justify(): StackJustify;
-    set justify(value: StackJustify);
-    // (undocumented)
-    static readonly observedAttributes: string[];
-}
-
-// @public (undocumented)
-export class VfTabsElement extends HTMLElementBase_3 {
+export class VfTabsElement extends HTMLElementBase_2 {
     // (undocumented)
     get activation(): TabsActivation;
     set activation(value: TabsActivation);
@@ -752,7 +570,7 @@ export class VfTemporalFieldElement extends H_15 {
 }
 
 // @public (undocumented)
-export class VfToastElement extends HTMLElementBase_19 {
+export class VfToastElement extends HTMLElementBase_18 {
     // (undocumented)
     attributeChangedCallback(name: string, oldValue: string | null, newValue: string | null): void;
     // (undocumented)
@@ -773,7 +591,7 @@ export class VfToastElement extends HTMLElementBase_19 {
 }
 
 // @public (undocumented)
-export class VfToastViewportElement extends HTMLElementBase_19 {
+export class VfToastViewportElement extends HTMLElementBase_18 {
     // (undocumented)
     connectedCallback(): void;
     // (undocumented)
@@ -789,7 +607,7 @@ export class VfToggleGroupElement extends H_3 {
 }
 
 // @public (undocumented)
-export class VfToolbarElement extends HTMLElementBase_13 {
+export class VfToolbarElement extends HTMLElementBase_12 {
     // (undocumented)
     attributeChangedCallback(): void;
     // (undocumented)
@@ -801,7 +619,7 @@ export class VfToolbarElement extends HTMLElementBase_13 {
 }
 
 // @public (undocumented)
-export class VfTooltipElement extends HTMLElementBase_8 {
+export class VfTooltipElement extends HTMLElementBase_7 {
     // (undocumented)
     attributeChangedCallback(): void;
     // (undocumented)
