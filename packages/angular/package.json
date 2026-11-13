@@ -96,16 +96,6 @@
       "types": "./dist/types/vyrnforge-angular-text.d.ts",
       "default": "./dist/fesm2022/vyrnforge-angular-text.mjs"
     },
-    "./portal": {
-      "import": "./dist/fesm2022/vyrnforge-angular-portal.mjs",
-      "types": "./dist/types/vyrnforge-angular-portal.d.ts",
-      "default": "./dist/fesm2022/vyrnforge-angular-portal.mjs"
-    },
-    "./presence": {
-      "import": "./dist/fesm2022/vyrnforge-angular-presence.mjs",
-      "types": "./dist/types/vyrnforge-angular-presence.d.ts",
-      "default": "./dist/fesm2022/vyrnforge-angular-presence.mjs"
-    },
     "./disclosure": {
       "import": "./dist/fesm2022/vyrnforge-angular-disclosure.mjs",
       "types": "./dist/types/vyrnforge-angular-disclosure.d.ts",
