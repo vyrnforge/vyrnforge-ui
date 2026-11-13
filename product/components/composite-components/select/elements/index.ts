@@ -171,7 +171,7 @@ export class VfSelectElement extends H {
       this.timer = setTimeout(() => { this.query = ''; }, 500);
       next = findTypeaheadMatch(options.map((option) => ({
         textValue: option.dataset.vfTextValue ?? option.textContent ?? '',
-        disabled: optionDisabled(option),
+        eligible: !optionDisabled(option),
       })), this.query, { startIndex: current });
     }
     if (next == null) return;
