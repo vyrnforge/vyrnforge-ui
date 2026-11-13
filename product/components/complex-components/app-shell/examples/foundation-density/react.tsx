@@ -25,11 +25,11 @@ function App() {
       onSubmit={(event) => event.preventDefault()}
       style={{ background: 'var(--vf-color-surface)', border: '1px solid var(--vf-color-border-required)', borderRadius: 'var(--vf-radius-surface)', boxSizing: 'border-box', color: 'var(--vf-color-text)', inlineSize: 'min(100%, 36rem)', margin: '1rem auto', padding: '1rem' }}
     >
-      <Stack>
+      <Stack id="foundation-settings-stack">
         <Text as="h1" variant="heading-sm">Interface settings</Text>
         <Text as="p" variant="body-md">Appearance and density are independent inherited presentation axes.</Text>
 
-        <Stack gap="xs">
+        <Stack id="foundation-appearance-field" gap="xs">
           <label htmlFor="foundation-appearance">Appearance</label>
           <NativeSelect id="foundation-appearance" value={appearance} onChange={(event) => setAppearance(event.currentTarget.value as 'light' | 'dark')}>
             <option value="light">Light</option>
