@@ -1,5 +1,5 @@
 export interface CollectionNavigationItem {
-  disabled?: boolean;
+  eligible?: boolean;
 }
 
 export type CollectionNavigationIntent = 'previous' | 'next' | 'first' | 'last';
@@ -11,14 +11,18 @@ export interface CollectionNavigationOptions {
   loop?: boolean;
 }
 
-export function firstEnabledIndex(items: readonly CollectionNavigationItem[]): number | null {
-  const index = items.findIndex((item) => !item.disabled);
+function isEligible(item: CollectionNavigationItem | undefined): boolean {
+  return item?.eligible !== false;
+}
+
+function firstEligibleIndex(items: readonly CollectionNavigationItem[]): number | null {
+  const index = items.findIndex((item) => isEligible(item));
   return index === -1 ? null : index;
 }
 
-export function lastEnabledIndex(items: readonly CollectionNavigationItem[]): number | null {
+function lastEligibleIndex(items: readonly CollectionNavigationItem[]): number | null {
   for (let index = items.length - 1; index >= 0; index -= 1) {
-    if (!items[index]?.disabled) return index;
+    if (isEligible(items[index])) return index;
   }
   return null;
 }
@@ -38,35 +42,33 @@ export function navigationIntentForArrow(
   return null;
 }
 
-export function resolveEnabledIndex(
+export function resolveNavigationIndex(
   items: readonly CollectionNavigationItem[],
   currentIndex: number,
   intent: CollectionNavigationIntent,
   options: CollectionNavigationOptions = {},
 ): number | null {
   if (items.length === 0) return null;
-  if (intent === 'first') return firstEnabledIndex(items);
-  if (intent === 'last') return lastEnabledIndex(items);
+  if (intent === 'first') return firstEligibleIndex(items);
+  if (intent === 'last') return lastEligibleIndex(items);
 
-  const enabledCount = items.reduce((count, item) => count + (item.disabled ? 0 : 1), 0);
-  if (enabledCount === 0) return null;
+  const first = firstEligibleIndex(items);
+  if (first === null) return null;
+
+  if (!Number.isInteger(currentIndex) || currentIndex < 0 || currentIndex >= items.length) {
+    return intent === 'next' ? first : lastEligibleIndex(items);
+  }
 
   const loop = options.loop ?? true;
   const step = intent === 'next' ? 1 : -1;
-  let index = Number.isInteger(currentIndex) ? currentIndex : step > 0 ? -1 : items.length;
+  let index = currentIndex;
+
   for (let visited = 0; visited < items.length; visited += 1) {
     const candidate = index + step;
     if (!loop && (candidate < 0 || candidate >= items.length)) return null;
     index = (candidate + items.length) % items.length;
-    if (!items[index]?.disabled) return index;
+    if (isEligible(items[index])) return index;
   }
-  return null;
-}
 
-export function enabledIndexForValue<T extends CollectionNavigationItem>(
-  items: readonly T[],
-  predicate: (item: T) => boolean,
-): number | null {
-  const index = items.findIndex((item) => !item.disabled && predicate(item));
-  return index === -1 ? firstEnabledIndex(items) : index;
+  return null;
 }

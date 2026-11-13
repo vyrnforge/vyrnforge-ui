@@ -1,4 +1,4 @@
-import { resolveEnabledIndex } from '@vyrnforge/core/collection-navigation';
+import { resolveNavigationIndex } from '@vyrnforge/core/collection-navigation';
 import { findTypeaheadMatch } from '@vyrnforge/core/typeahead-matching';
 
 const H: typeof HTMLElement = globalThis.HTMLElement ?? class {} as typeof HTMLElement;
@@ -97,13 +97,13 @@ export class VfMultiSelectElement extends H {
       const content = this.content;
       if (!content) return;
       const options = optionsFor(content);
-      const states = options.map((option) => ({ disabled: optionDisabled(option) }));
+      const states = options.map((option) => ({ eligible: !(optionDisabled(option)) }));
       const selected = options.findIndex(
-        (option, index) => !states[index]?.disabled && option.getAttribute('aria-selected') === 'true',
+        (option, index) => states[index]?.eligible !== false && option.getAttribute('aria-selected') === 'true',
       );
       const index = selected >= 0
         ? selected
-        : resolveEnabledIndex(states, edge === 'first' ? -1 : options.length, edge);
+        : resolveNavigationIndex(states, edge === 'first' ? -1 : options.length, edge);
       if (index != null) options[index]?.focus();
     });
   }
@@ -167,21 +167,21 @@ export class VfMultiSelectElement extends H {
     const options = optionsFor(content);
     const currentOption = optionFromTarget(content, event.target);
     const current = currentOption ? options.indexOf(currentOption) : -1;
-    const states = options.map((option) => ({ disabled: optionDisabled(option) }));
+    const states = options.map((option) => ({ eligible: !(optionDisabled(option)) }));
     let intent: 'next' | 'previous' | 'first' | 'last' | null = null;
     if (event.key === 'ArrowDown') intent = 'next';
     else if (event.key === 'ArrowUp') intent = 'previous';
     else if (event.key === 'Home') intent = 'first';
     else if (event.key === 'End') intent = 'last';
     let next: number | null = null;
-    if (intent) next = resolveEnabledIndex(states, current, intent);
+    if (intent) next = resolveNavigationIndex(states, current, intent);
     else if (event.key !== ' ' && event.key.length === 1 && !event.ctrlKey && !event.metaKey && !event.altKey) {
       this.query += event.key;
       if (this.timer) clearTimeout(this.timer);
       this.timer = setTimeout(() => { this.query = ''; }, 500);
       next = findTypeaheadMatch(options.map((option) => ({
         textValue: option.dataset.vfTextValue ?? option.textContent ?? '',
-        disabled: optionDisabled(option),
+        eligible: !optionDisabled(option),
       })), this.query, { startIndex: current });
     }
     if (next == null) return;

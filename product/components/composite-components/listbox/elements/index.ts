@@ -1,4 +1,4 @@
-import { resolveEnabledIndex } from '@vyrnforge/core/collection-navigation';
+import { resolveNavigationIndex } from '@vyrnforge/core/collection-navigation';
 import { findTypeaheadMatch } from '@vyrnforge/core/typeahead-matching';
 
 const HTMLElementBase: typeof HTMLElement = globalThis.HTMLElement ?? class {} as typeof HTMLElement;
@@ -10,16 +10,16 @@ function optionFromTarget(root: HTMLElement, target: EventTarget | null): HTMLEl
 function optionValue(option: HTMLElement): string { return option.getAttribute('value') ?? option.dataset.value ?? option.textContent?.trim() ?? ''; }
 function syncTabStops(root: HTMLElement, preferred?: HTMLElement | null) {
   const options = optionsFor(root);
-  const states = options.map((option) => ({ disabled: disabled(option) }));
+  const states = options.map((option) => ({ eligible: !(disabled(option)) }));
   let activeIndex = preferred ? options.indexOf(preferred) : -1;
-  if (activeIndex < 0 || states[activeIndex]?.disabled) {
+  if (activeIndex < 0 || states[activeIndex]?.eligible === false) {
     const focused = typeof document === 'undefined' ? null : optionFromTarget(root, document.activeElement);
     activeIndex = focused ? options.indexOf(focused) : -1;
   }
-  if (activeIndex < 0 || states[activeIndex]?.disabled) activeIndex = options.findIndex((option, index) => !states[index]?.disabled && option.getAttribute('aria-selected') === 'true');
-  if (activeIndex < 0) activeIndex = states.findIndex((option) => !option.disabled);
+  if (activeIndex < 0 || states[activeIndex]?.eligible === false) activeIndex = options.findIndex((option, index) => states[index]?.eligible !== false && option.getAttribute('aria-selected') === 'true');
+  if (activeIndex < 0) activeIndex = states.findIndex((option) => option.eligible !== false);
   const resolved = activeIndex < 0 ? null : activeIndex;
-  options.forEach((option, index) => { option.tabIndex = !states[index]?.disabled && resolved === index ? 0 : -1; });
+  options.forEach((option, index) => { option.tabIndex = states[index]?.eligible !== false && resolved === index ? 0 : -1; });
 }
 
 export class VfListboxElement extends HTMLElementBase {
@@ -111,12 +111,12 @@ export class VfListboxElement extends HTMLElementBase {
     else if (event.key === 'Home') intent = 'first';
     else if (event.key === 'End') intent = 'last';
     let next: number | null = null;
-    if (intent) next = resolveEnabledIndex(options.map((option) => ({ disabled: disabled(option) })), current, intent);
+    if (intent) next = resolveNavigationIndex(options.map((option) => ({ eligible: !(disabled(option)) })), current, intent);
     else if (event.key.length === 1 && !event.ctrlKey && !event.metaKey && !event.altKey) {
       this.query += event.key;
       if (this.timer) clearTimeout(this.timer);
       this.timer = setTimeout(() => { this.query = ''; }, 500);
-      next = findTypeaheadMatch(options.map((option) => ({ textValue: option.dataset.vfTextValue ?? option.textContent ?? '', disabled: disabled(option) })), this.query, { startIndex: current });
+      next = findTypeaheadMatch(options.map((option) => ({ textValue: option.dataset.vfTextValue ?? option.textContent ?? '', eligible: !disabled(option) })), this.query, { startIndex: current });
     }
     if (next == null) return;
     const target = options[next];

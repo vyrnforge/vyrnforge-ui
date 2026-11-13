@@ -37,7 +37,7 @@ export default defineConfig({
         test: {
           name: 'product',
           environment: 'node',
-          include: ['product/_test-support/**/*.test.mjs'],
+          include: ['product/_test-support/**/*.test.mjs', 'product/capabilities/**/test/**/*.test.mjs'],
           exclude: ['product/*/test/browser/**'],
           testTimeout: 30_000,
         },

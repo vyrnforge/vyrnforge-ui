@@ -10,7 +10,7 @@ import {
   type InjectionKey,
   type Ref,
 } from 'vue';
-import { resolveEnabledIndex } from '@vyrnforge/core/collection-navigation';
+import { resolveNavigationIndex } from '@vyrnforge/core/collection-navigation';
 import { findTypeaheadMatch } from '@vyrnforge/core/typeahead-matching';
 
 const optionSelector = '[data-vf-select-option]';
@@ -85,13 +85,13 @@ export const SelectRoot = defineComponent({
         void nextTick(() => {
           if (!surface.value) return;
           const options = optionsFor(surface.value);
-          const states = options.map((option) => ({ disabled: optionDisabled(option) }));
+          const states = options.map((option) => ({ eligible: !(optionDisabled(option)) }));
           const selected = options.findIndex(
-            (option, index) => !states[index]?.disabled && option.getAttribute('aria-selected') === 'true',
+            (option, index) => states[index]?.eligible !== false && option.getAttribute('aria-selected') === 'true',
           );
           const index = selected >= 0
             ? selected
-            : resolveEnabledIndex(states, edge === 'first' ? -1 : options.length, edge);
+            : resolveNavigationIndex(states, edge === 'first' ? -1 : options.length, edge);
           if (index != null) options[index]?.focus();
         });
       },
@@ -168,21 +168,21 @@ export const SelectContent = defineComponent({
         const options = optionsFor(root);
         const currentOption = optionFromTarget(root, event.target);
         const current = currentOption ? options.indexOf(currentOption) : -1;
-        const states = options.map((option) => ({ disabled: optionDisabled(option) }));
+        const states = options.map((option) => ({ eligible: !(optionDisabled(option)) }));
         let intent: 'next' | 'previous' | 'first' | 'last' | null = null;
         if (event.key === 'ArrowDown') intent = 'next';
         else if (event.key === 'ArrowUp') intent = 'previous';
         else if (event.key === 'Home') intent = 'first';
         else if (event.key === 'End') intent = 'last';
         let next: number | null = null;
-        if (intent) next = resolveEnabledIndex(states, current, intent);
+        if (intent) next = resolveNavigationIndex(states, current, intent);
         else if (event.key.length === 1 && !event.ctrlKey && !event.metaKey && !event.altKey) {
           query += event.key;
           if (timer) clearTimeout(timer);
           timer = setTimeout(() => { query = ''; }, 500);
           next = findTypeaheadMatch(options.map((option) => ({
             textValue: option.dataset.vfTextValue ?? option.textContent ?? '',
-            disabled: optionDisabled(option),
+            eligible: !optionDisabled(option),
           })), query, { startIndex: current });
         }
         if (next == null) return;

@@ -1,5 +1,5 @@
 import { Directive, ElementRef, Injector, afterNextRender, computed, inject, input, output, signal } from '@angular/core';
-import { resolveEnabledIndex } from '@vyrnforge/core/collection-navigation';
+import { resolveNavigationIndex } from '@vyrnforge/core/collection-navigation';
 import { findTypeaheadMatch } from '@vyrnforge/core/typeahead-matching';
 
 const menuItemSelector = '[data-vf-menu-item]';
@@ -21,7 +21,7 @@ export class VfMenuRootDirective {
   focusMenu(edge: 'first' | 'last') {
     afterNextRender(() => {
       const items = this.surface ? menuItems(this.surface) : [];
-      const index = resolveEnabledIndex(items.map(() => ({})), edge === 'first' ? -1 : items.length, edge);
+      const index = resolveNavigationIndex(items.map(() => ({})), edge === 'first' ? -1 : items.length, edge);
       if (index != null) items[index]?.focus();
     }, { injector: this.injector });
   }
@@ -79,7 +79,7 @@ export class VfMenuContentDirective {
     else if (event.key === 'Home') intent = 'first';
     else if (event.key === 'End') intent = 'last';
     let next: number | null = null;
-    if (intent) next = resolveEnabledIndex(items.map(() => ({})), current, intent);
+    if (intent) next = resolveNavigationIndex(items.map(() => ({})), current, intent);
     else if (event.key.length === 1 && !event.ctrlKey && !event.metaKey && !event.altKey) {
       this.query += event.key;
       if (this.timer) clearTimeout(this.timer);

@@ -1,4 +1,4 @@
-import { navigationIntentForArrow, resolveEnabledIndex } from '@vyrnforge/core/collection-navigation';
+import { navigationIntentForArrow, resolveNavigationIndex } from '@vyrnforge/core/collection-navigation';
 
 const H: typeof HTMLElement = globalThis.HTMLElement ?? class {} as typeof HTMLElement;
 const itemSelector = '[data-vf-segmented-control-item]';
@@ -85,8 +85,8 @@ export class VfSegmentedControlElement extends H {
     if (!intent) return;
     const items = itemsFor(this);
     const current = items.indexOf(currentItem);
-    const next = resolveEnabledIndex(
-      items.map((item) => ({ disabled: itemDisabled(item) })),
+    const next = resolveNavigationIndex(
+      items.map((item) => ({ eligible: !(itemDisabled(item)) })),
       current,
       intent,
     );

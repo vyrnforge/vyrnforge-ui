@@ -1,5 +1,5 @@
 import { computed, defineComponent, h, inject, nextTick, provide, ref, useId, type InjectionKey, type Ref } from 'vue';
-import { resolveEnabledIndex, type CollectionNavigationIntent } from '@vyrnforge/core/collection-navigation';
+import { resolveNavigationIndex, type CollectionNavigationIntent } from '@vyrnforge/core/collection-navigation';
 
 interface Ctx {
   query: Ref<string>;
@@ -32,7 +32,7 @@ function moveActive(context: Ctx, intent: Extract<CollectionNavigationIntent, 'n
   const options = visibleOptions(context.contentRef.value);
   const current = options.findIndex((option) => option.id === context.activeId.value);
   const start = current >= 0 ? current : intent === 'previous' ? options.length : -1;
-  const next = resolveEnabledIndex(options.map((option) => ({ disabled: disabled(option) })), start, intent, { loop: false });
+  const next = resolveNavigationIndex(options.map((option) => ({ eligible: !(disabled(option)) })), start, intent, { loop: false });
   if (next == null) return;
   const target = options[next];
   if (!target?.id) return;

@@ -1,6 +1,6 @@
 import { createContext, createElement, forwardRef, useContext, useMemo, useRef, useState, type ComponentPropsWithoutRef, type ReactNode } from 'react';
 import { createPortal } from 'react-dom';
-import { resolveEnabledIndex } from '@vyrnforge/core/collection-navigation';
+import { resolveNavigationIndex } from '@vyrnforge/core/collection-navigation';
 import { findTypeaheadMatch } from '@vyrnforge/core/typeahead-matching';
 import { type FloatingPlacement } from '@vyrnforge/web/floating-positioning';
 import { useFloatingSurface } from '../../internal/floating-surface.js';
@@ -8,7 +8,7 @@ import { useFloatingSurface } from '../../internal/floating-surface.js';
 const menuItemSelector = '[data-vf-menu-item]';
 function menuItems(root: HTMLElement): HTMLElement[] { return Array.from(root.querySelectorAll<HTMLElement>(menuItemSelector)); }
 function itemFromTarget(root: HTMLElement, target: EventTarget | null): HTMLElement | null { const item = target instanceof HTMLElement ? target.closest<HTMLElement>(menuItemSelector) : null; return item && root.contains(item) ? item : null; }
-function focusItem(root: HTMLElement | null, edge: 'first' | 'last') { if (!root) return; const items = menuItems(root); const index = resolveEnabledIndex(items.map(() => ({})), edge === 'first' ? -1 : items.length, edge); if (index != null) items[index]?.focus(); }
+function focusItem(root: HTMLElement | null, edge: 'first' | 'last') { if (!root) return; const items = menuItems(root); const index = resolveNavigationIndex(items.map(() => ({})), edge === 'first' ? -1 : items.length, edge); if (index != null) items[index]?.focus(); }
 
 export interface MenuRootProps { children?: ReactNode; open?: boolean; defaultOpen?: boolean; placement?: FloatingPlacement; onOpenChange?(open: boolean): void; }
 interface MenuContextValue { open: boolean; setOpen(open: boolean): void; placement: FloatingPlacement; anchorRef: React.MutableRefObject<HTMLElement | null>; surfaceRef: React.MutableRefObject<HTMLElement | null>; focusMenu(edge: 'first' | 'last'): void; }
@@ -87,7 +87,7 @@ export const MenuContent = forwardRef<HTMLDivElement, MenuContentProps>(function
       else if (event.key === 'Home') intent = 'first';
       else if (event.key === 'End') intent = 'last';
       let next: number | null = null;
-      if (intent) next = resolveEnabledIndex(items.map(() => ({})), current, intent);
+      if (intent) next = resolveNavigationIndex(items.map(() => ({})), current, intent);
       else if (event.key.length === 1 && !event.ctrlKey && !event.metaKey && !event.altKey) {
         query.current += event.key;
         if (timer.current) clearTimeout(timer.current);

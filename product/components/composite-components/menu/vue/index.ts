@@ -1,5 +1,5 @@
 import { computed, defineComponent, h, inject, nextTick, provide, ref, type InjectionKey, type PropType, type Ref } from 'vue';
-import { resolveEnabledIndex } from '@vyrnforge/core/collection-navigation';
+import { resolveNavigationIndex } from '@vyrnforge/core/collection-navigation';
 import { findTypeaheadMatch } from '@vyrnforge/core/typeahead-matching';
 import type { FloatingPlacement } from '@vyrnforge/web/floating-positioning';
 
@@ -35,7 +35,7 @@ export const MenuRoot = defineComponent({
       focusMenu(edge) {
         void nextTick(() => {
           const items = surface.value ? menuItems(surface.value) : [];
-          const index = resolveEnabledIndex(items.map(() => ({})), edge === 'first' ? -1 : items.length, edge);
+          const index = resolveNavigationIndex(items.map(() => ({})), edge === 'first' ? -1 : items.length, edge);
           if (index != null) items[index]?.focus();
         });
       },
@@ -94,7 +94,7 @@ export const MenuContent = defineComponent({
         else if (event.key === 'Home') intent = 'first';
         else if (event.key === 'End') intent = 'last';
         let next: number | null = null;
-        if (intent) next = resolveEnabledIndex(items.map(() => ({})), current, intent);
+        if (intent) next = resolveNavigationIndex(items.map(() => ({})), current, intent);
         else if (event.key.length === 1 && !event.ctrlKey && !event.metaKey && !event.altKey) {
           query += event.key;
           if (timer) clearTimeout(timer);

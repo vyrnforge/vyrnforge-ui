@@ -1,4 +1,4 @@
-import { resolveEnabledIndex, type CollectionNavigationIntent } from '@vyrnforge/core/collection-navigation';
+import { resolveNavigationIndex, type CollectionNavigationIntent } from '@vyrnforge/core/collection-navigation';
 
 const HTMLElementBase: typeof HTMLElement = globalThis.HTMLElement ?? class {} as typeof HTMLElement;
 let comboboxId = 0;
@@ -86,7 +86,7 @@ export class VfComboboxElement extends HTMLElementBase {
     const options = visibleOptions(this);
     const current = options.findIndex((option) => option.id === this.activeId);
     const start = current >= 0 ? current : intent === 'previous' ? options.length : -1;
-    const next = resolveEnabledIndex(options.map((option) => ({ disabled: disabled(option) })), start, intent, { loop: false });
+    const next = resolveNavigationIndex(options.map((option) => ({ eligible: !(disabled(option)) })), start, intent, { loop: false });
     if (next == null) return;
     const target = options[next];
     if (target) this.setActive(target);

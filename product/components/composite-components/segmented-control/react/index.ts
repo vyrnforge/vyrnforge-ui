@@ -9,7 +9,7 @@ import {
   type KeyboardEvent,
   type ReactNode,
 } from 'react';
-import { navigationIntentForArrow, resolveEnabledIndex } from '@vyrnforge/core/collection-navigation';
+import { navigationIntentForArrow, resolveNavigationIndex } from '@vyrnforge/core/collection-navigation';
 
 const itemSelector = '[data-vf-segmented-control-item]';
 
@@ -99,8 +99,8 @@ export const SegmentedControlRoot = forwardRef<HTMLDivElement, SegmentedControlR
       if (!intent) return;
       const items = itemsFor(root);
       const current = items.indexOf(currentItem);
-      const next = resolveEnabledIndex(
-        items.map((item) => ({ disabled: itemDisabled(item) })),
+      const next = resolveNavigationIndex(
+        items.map((item) => ({ eligible: !(itemDisabled(item)) })),
         current,
         intent,
       );

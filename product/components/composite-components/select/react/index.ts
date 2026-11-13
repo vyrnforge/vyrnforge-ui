@@ -12,7 +12,7 @@ import {
   type ReactNode,
 } from 'react';
 import { createPortal } from 'react-dom';
-import { resolveEnabledIndex } from '@vyrnforge/core/collection-navigation';
+import { resolveNavigationIndex } from '@vyrnforge/core/collection-navigation';
 import { findTypeaheadMatch } from '@vyrnforge/core/typeahead-matching';
 import { useFloatingSurface } from '../../internal/floating-surface.js';
 
@@ -30,11 +30,11 @@ function optionDisabled(option: HTMLButtonElement): boolean {
 function focusOption(root: HTMLElement | null, edge: 'first' | 'last'): void {
   if (!root) return;
   const options = optionsFor(root);
-  const states = options.map((option) => ({ disabled: optionDisabled(option) }));
-  const selected = options.findIndex((option, index) => !states[index]?.disabled && option.getAttribute('aria-selected') === 'true');
+  const states = options.map((option) => ({ eligible: !(optionDisabled(option)) }));
+  const selected = options.findIndex((option, index) => states[index]?.eligible !== false && option.getAttribute('aria-selected') === 'true');
   const index = selected >= 0
     ? selected
-    : resolveEnabledIndex(states, edge === 'first' ? -1 : options.length, edge);
+    : resolveNavigationIndex(states, edge === 'first' ? -1 : options.length, edge);
   if (index != null) options[index]?.focus();
 }
 
@@ -172,21 +172,21 @@ export const SelectContent = forwardRef<HTMLDivElement, ComponentPropsWithoutRef
       const options = optionsFor(root);
       const currentOption = optionFromTarget(root, event.target);
       const current = currentOption ? options.indexOf(currentOption) : -1;
-      const states = options.map((option) => ({ disabled: optionDisabled(option) }));
+      const states = options.map((option) => ({ eligible: !(optionDisabled(option)) }));
       let intent: 'next' | 'previous' | 'first' | 'last' | null = null;
       if (event.key === 'ArrowDown') intent = 'next';
       else if (event.key === 'ArrowUp') intent = 'previous';
       else if (event.key === 'Home') intent = 'first';
       else if (event.key === 'End') intent = 'last';
       let next: number | null = null;
-      if (intent) next = resolveEnabledIndex(states, current, intent);
+      if (intent) next = resolveNavigationIndex(states, current, intent);
       else if (event.key.length === 1 && !event.ctrlKey && !event.metaKey && !event.altKey) {
         query.current += event.key;
         if (timer.current) clearTimeout(timer.current);
         timer.current = setTimeout(() => { query.current = ''; }, 500);
         next = findTypeaheadMatch(options.map((option) => ({
           textValue: option.dataset.vfTextValue ?? option.textContent ?? '',
-          disabled: optionDisabled(option),
+          eligible: !optionDisabled(option),
         })), query.current, { startIndex: current });
       }
       if (next == null) return;

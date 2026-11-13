@@ -87,6 +87,8 @@ function publicExportTarget(exportEntry) {
   return Object.values(exportEntry).find((value) => typeof value === 'string') ?? null;
 }
 function publicUnitForSpecifier(root, specifier, packageManifests, ownedUnits) {
+  const explicit = ownedUnits.find((unit) => unit.publicEntrypoints?.includes(specifier));
+  if (explicit) return explicit;
   for (const [packageName, manifest] of packageManifests) {
     const publicName = manifest?.name;
     if (!publicName) continue;
@@ -126,13 +128,13 @@ function scanUnitDependencies(root, sourcePath, ownedUnits, packageManifests) {
   }
   return [...dependencyNodes].sort();
 }
-function discoverOwnedUnits(root, packageNames, packageManifests) {
+function discoverLegacyOwnedUnits(root, packageNames, packageManifests) {
   const units = [];
   for (const packageName of packageNames) for (const kind of ownedKinds) for (const id of directories(root, `packages/${packageName}/src/${kind}`)) {
     const sourcePath = `packages/${packageName}/src/${kind}/${id}/`;
     const testPath = `packages/${packageName}/test/${kind}/${id}/`;
     const metadataPath = `packages/${packageName}/changes/${kind}/${id}/`;
-    units.push({ node: `unit:${packageName}:${kind}:${id}`, package: packageName, kind, id, sourcePath, testPath, metadataPath, evidenceFiles: walkFiles(root, testPath), dependencies: [] });
+    units.push({ node: `unit:${packageName}:${kind}:${id}`, package: packageName, packages: [packageName], kind, id, sourcePath, testPath, metadataPath, evidenceFiles: walkFiles(root, testPath), dependencies: [], publicEntrypoints: [], authoringMode: 'legacy-package' });
   }
   for (const unit of units) {
     const inferred = scanUnitDependencies(root, unit.sourcePath, units.filter((candidate) => candidate.node !== unit.node), packageManifests);
@@ -142,10 +144,37 @@ function discoverOwnedUnits(root, packageNames, packageManifests) {
   }
   return units;
 }
+
+function discoverCanonicalCapabilities(root, packageNames, packageManifests) {
+  if (!packageNames.includes('core')) return [];
+  const manifest = packageManifests.get('core');
+  const publicName = manifest?.name ?? '@vyrnforge/core';
+  return directories(root, 'product/capabilities').flatMap((id) => {
+    const sourcePath = `product/capabilities/${id}/core/`;
+    if (!existingPath(root, sourcePath.replace(/\/$/, ''))) return [];
+    const testPath = `product/capabilities/${id}/test/`;
+    const exportName = `./${id}`;
+    return [{
+      node: `capability:${id}`,
+      package: 'core',
+      packages: ['core'],
+      kind: 'capabilities',
+      id,
+      sourcePath,
+      testPath,
+      metadataPath: `product/capabilities/${id}/`,
+      evidenceFiles: walkFiles(root, testPath),
+      dependencies: [],
+      publicEntrypoints: manifest?.exports?.[exportName] ? [`${publicName}/${id}`] : [],
+      authoringMode: 'product-unit',
+    }];
+  });
+}
+
 export function discoverProductUnits(root = repoRoot) {
   const packageNames = workspacePackages(root);
   const packageManifests = new Map(packageNames.map((name) => [name, readJson(root, `packages/${name}/package.json`)]));
-  const ownedUnits = discoverOwnedUnits(root, packageNames, packageManifests);
+  const ownedUnits = [...discoverCanonicalCapabilities(root, packageNames, packageManifests), ...discoverLegacyOwnedUnits(root, packageNames, packageManifests)];
   const frameworkExports = new Map();
   const legacyProductIds = directories(root, 'product').filter((id) => !reservedProductRoots.has(id));
   const componentRoots = discoverComponentRoots(root);
