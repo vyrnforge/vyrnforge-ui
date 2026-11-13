@@ -6,7 +6,7 @@ export async function defineNativeControlBrowserTests(componentId) {
   const contract = await loadNativeControlContract(componentId);
   const port = process.env.VF_COMPONENT_PORT || 'web';
 
-  test(`${componentId}/${port} preserves native semantics, focus, styling, and accessibility`, async ({ page }) => {
+  test(`${componentId}/${port} preserves native semantics, focus, styling, and accessibility`, async ({ page, browserName }) => {
     await page.goto(`/components/${componentId}/${port}.html`);
     const control = page.locator('#control');
     await expect(control).toHaveJSProperty('tagName', contract.semantics.tag);
@@ -15,7 +15,7 @@ export async function defineNativeControlBrowserTests(componentId) {
     await control.focus();
     await expect(control).toBeFocused();
     expect(await control.evaluate((element) => getComputedStyle(element).outlineStyle)).toBeTruthy();
-    if (contract.assertBrowser) await contract.assertBrowser({ page, control, expect });
+    if (contract.assertBrowser) await contract.assertBrowser({ page, control, expect, browserName, port });
     await page.addScriptTag({ content: axeCore.source });
     const results = await page.evaluate(async () => globalThis.axe.run(document));
     expect(results.violations).toEqual([]);
