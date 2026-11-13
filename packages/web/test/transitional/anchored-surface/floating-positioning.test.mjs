@@ -1,6 +1,6 @@
 import { test } from 'vitest';
 import assert from 'node:assert/strict';
-import { computeFloatingPosition } from '../../../dist/capabilities/floating-positioning/index.js';
+import { computeFloatingPosition } from '../../../dist/transitional/anchored-surface/floating-positioning/index.js';
 
 test('floating positioning flips and shifts within viewport constraints', () => {
   const anchor = { left: 80, top: 90, right: 100, bottom: 100, width: 20, height: 10 };

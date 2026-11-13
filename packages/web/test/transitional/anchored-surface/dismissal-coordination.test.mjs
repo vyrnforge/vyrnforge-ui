@@ -1,6 +1,6 @@
 import { test } from 'vitest';
 import assert from 'node:assert/strict';
-import { createDismissalCoordinator } from '../../../dist/capabilities/dismissal-coordination/index.js';
+import { createDismissalCoordinator } from '../../../dist/transitional/anchored-surface/dismissal-coordination/index.js';
 
 class FakeKeyboardEvent { constructor(key, path = []) { this.key = key; this.path = path; } composedPath() { return this.path; } }
 class FakeEvent { constructor(path = []) { this.path = path; } composedPath() { return this.path; } }
