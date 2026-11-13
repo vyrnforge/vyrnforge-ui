@@ -21,6 +21,17 @@ test('current repository is normalized into one product graph', () => {
     assert.ok(graph.components.some((component) => component.unitId === id), `${id} should exist`);
   }
 
+  for (const id of ['collection-navigation', 'typeahead-matching']) {
+    const capability = graph.units.find((unit) => unit.id === `capability:${id}`);
+    assert.ok(capability, `${id} should be a canonical capability`);
+    assert.equal(capability.authoringMode, 'product-unit');
+    assert.equal(capability.migration.state, 'product-unit');
+    assert.deepEqual(capability.packages, ['core']);
+    assert.equal(capability.legacyNodes.length, 0);
+    assert.deepEqual(Object.keys(capability.surfaces), ['core']);
+    assert.ok(capability.surfaces.core.publicEntrypoints.includes(`@vyrnforge/core/${id}`));
+  }
+
   const reactPackage = graph.packages.find((pkg) => pkg.id === 'react');
   assert.ok(reactPackage);
   assert.equal(reactPackage.manifest.name, '@vyrnforge/react');
