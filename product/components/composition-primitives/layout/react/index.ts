@@ -39,60 +39,80 @@ export type LayoutElement =
   | 'ul'
   | 'ol';
 
-type ElementRef<Element extends LayoutElement> = HTMLElementTagNameMap[Element];
-type PolymorphicProps<Element extends LayoutElement, OwnProps> =
-  OwnProps & { as?: Element } & Omit<ComponentPropsWithoutRef<Element>, keyof OwnProps | 'as'>;
-type PolymorphicComponent<OwnProps, DefaultElement extends LayoutElement> =
+export type StackProps<Element extends LayoutElement = 'div'> = {
+  as?: Element;
+  gap?: LayoutSpace;
+  align?: StackAlign;
+  justify?: StackJustify;
+} & Omit<ComponentPropsWithoutRef<Element>, 'as' | 'gap' | 'align' | 'justify'>;
+
+export type InlineProps<Element extends LayoutElement = 'div'> = {
+  as?: Element;
+  gap?: LayoutSpace;
+  align?: InlineAlign;
+  justify?: InlineJustify;
+} & Omit<ComponentPropsWithoutRef<Element>, 'as' | 'gap' | 'align' | 'justify'>;
+
+export type ClusterProps<Element extends LayoutElement = 'div'> = {
+  as?: Element;
+  gap?: LayoutSpace;
+  align?: ClusterAlign;
+  justify?: ClusterJustify;
+} & Omit<ComponentPropsWithoutRef<Element>, 'as' | 'gap' | 'align' | 'justify'>;
+
+export type AutoGridProps<Element extends LayoutElement = 'div'> = {
+  as?: Element;
+  gap?: LayoutSpace;
+} & Omit<ComponentPropsWithoutRef<Element>, 'as' | 'gap'>;
+
+export type ContainerProps<Element extends LayoutElement = 'div'> = {
+  as?: Element;
+  size?: ContainerSize;
+  gutter?: LayoutSpace;
+} & Omit<ComponentPropsWithoutRef<Element>, 'as' | 'size' | 'gutter'>;
+
+export type ControlGroupProps<Element extends LayoutElement = 'div'> = {
+  as?: Element;
+  orientation?: ControlGroupOrientation;
+} & Omit<ComponentPropsWithoutRef<Element>, 'as' | 'orientation'>;
+
+type PolymorphicExport<Props extends { as?: LayoutElement }, DefaultElement extends LayoutElement> =
   <Element extends LayoutElement = DefaultElement>(
-    props: PolymorphicProps<Element, OwnProps> & { ref?: Ref<ElementRef<Element>> }
+    props: Props & { as?: Element; ref?: Ref<HTMLElementTagNameMap[Element]> }
   ) => ReactElement | null;
 
-function polymorphic<OwnProps, DefaultElement extends LayoutElement>(
+function createPolymorphic<DefaultElement extends LayoutElement>(
   render: (props: Record<string, unknown>, ref: Ref<HTMLElement>) => ReactElement | null,
-): PolymorphicComponent<OwnProps, DefaultElement> {
-  return forwardRef<HTMLElement, Record<string, unknown>>(render) as PolymorphicComponent<OwnProps, DefaultElement>;
+) {
+  return forwardRef<HTMLElement, Record<string, unknown>>(render);
 }
 
-interface StackOwnProps { gap?: LayoutSpace; align?: StackAlign; justify?: StackJustify; }
-interface InlineOwnProps { gap?: LayoutSpace; align?: InlineAlign; justify?: InlineJustify; }
-interface ClusterOwnProps { gap?: LayoutSpace; align?: ClusterAlign; justify?: ClusterJustify; }
-interface AutoGridOwnProps { gap?: LayoutSpace; }
-interface ContainerOwnProps { size?: ContainerSize; gutter?: LayoutSpace; }
-interface ControlGroupOwnProps { orientation?: ControlGroupOrientation; }
-
-export type StackProps<Element extends LayoutElement = 'div'> = PolymorphicProps<Element, StackOwnProps>;
-export type InlineProps<Element extends LayoutElement = 'div'> = PolymorphicProps<Element, InlineOwnProps>;
-export type ClusterProps<Element extends LayoutElement = 'div'> = PolymorphicProps<Element, ClusterOwnProps>;
-export type AutoGridProps<Element extends LayoutElement = 'div'> = PolymorphicProps<Element, AutoGridOwnProps>;
-export type ContainerProps<Element extends LayoutElement = 'div'> = PolymorphicProps<Element, ContainerOwnProps>;
-export type ControlGroupProps<Element extends LayoutElement = 'div'> = PolymorphicProps<Element, ControlGroupOwnProps>;
-
-export const Stack = polymorphic<StackOwnProps, 'div'>((props, ref) => {
+export const Stack = createPolymorphic<'div'>((props, ref) => {
   const { as = 'div', gap = 'md', align = 'stretch', justify = 'start', ...nativeProps } = props;
   return createElement(as as LayoutElement, { ...nativeProps, ref, 'data-vf-stack': '', 'data-vf-stack-gap': gap, 'data-vf-stack-align': align, 'data-vf-stack-justify': justify });
-});
+}) as PolymorphicExport<StackProps, 'div'>;
 
-export const Inline = polymorphic<InlineOwnProps, 'div'>((props, ref) => {
+export const Inline = createPolymorphic<'div'>((props, ref) => {
   const { as = 'div', gap = 'md', align = 'center', justify = 'start', ...nativeProps } = props;
   return createElement(as as LayoutElement, { ...nativeProps, ref, 'data-vf-inline': '', 'data-vf-inline-gap': gap, 'data-vf-inline-align': align, 'data-vf-inline-justify': justify });
-});
+}) as PolymorphicExport<InlineProps, 'div'>;
 
-export const Cluster = polymorphic<ClusterOwnProps, 'div'>((props, ref) => {
+export const Cluster = createPolymorphic<'div'>((props, ref) => {
   const { as = 'div', gap = 'md', align = 'center', justify = 'start', ...nativeProps } = props;
   return createElement(as as LayoutElement, { ...nativeProps, ref, 'data-vf-cluster': '', 'data-vf-cluster-gap': gap, 'data-vf-cluster-align': align, 'data-vf-cluster-justify': justify });
-});
+}) as PolymorphicExport<ClusterProps, 'div'>;
 
-export const AutoGrid = polymorphic<AutoGridOwnProps, 'div'>((props, ref) => {
+export const AutoGrid = createPolymorphic<'div'>((props, ref) => {
   const { as = 'div', gap = 'md', ...nativeProps } = props;
   return createElement(as as LayoutElement, { ...nativeProps, ref, 'data-vf-auto-grid': '', 'data-vf-auto-grid-gap': gap });
-});
+}) as PolymorphicExport<AutoGridProps, 'div'>;
 
-export const Container = polymorphic<ContainerOwnProps, 'div'>((props, ref) => {
+export const Container = createPolymorphic<'div'>((props, ref) => {
   const { as = 'div', size = 'xl', gutter = 'md', ...nativeProps } = props;
   return createElement(as as LayoutElement, { ...nativeProps, ref, 'data-vf-container': '', 'data-vf-container-size': size, 'data-vf-container-gutter': gutter });
-});
+}) as PolymorphicExport<ContainerProps, 'div'>;
 
-export const ControlGroup = polymorphic<ControlGroupOwnProps, 'div'>((props, ref) => {
+export const ControlGroup = createPolymorphic<'div'>((props, ref) => {
   const { as = 'div', orientation = 'horizontal', ...nativeProps } = props;
   return createElement(as as LayoutElement, {
     ...nativeProps,
@@ -100,4 +120,4 @@ export const ControlGroup = polymorphic<ControlGroupOwnProps, 'div'>((props, ref
     'data-vf-control-group': '',
     'data-vf-control-group-orientation': orientation,
   });
-});
+}) as PolymorphicExport<ControlGroupProps, 'div'>;
