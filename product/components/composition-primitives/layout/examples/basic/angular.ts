@@ -1,10 +1,10 @@
 import { Component } from '@angular/core';
-import { VfClusterDirective, VfContainerDirective, VfGridDirective, VfStackDirective } from '@vyrnforge/angular/layout';
+import { VfAutoGridDirective, VfClusterDirective, VfContainerDirective, VfStackDirective } from '@vyrnforge/angular/layout';
 
 @Component({
   selector: 'account-overview',
   standalone: true,
-  imports: [VfClusterDirective, VfContainerDirective, VfGridDirective, VfStackDirective],
+  imports: [VfAutoGridDirective, VfClusterDirective, VfContainerDirective, VfStackDirective],
   template: `
     <main vfContainer vfContainerSize="lg" vfContainerGutter="md">
       <section vfStack vfStackGap="lg" aria-labelledby="account-heading">
@@ -12,7 +12,7 @@ import { VfClusterDirective, VfContainerDirective, VfGridDirective, VfStackDirec
           <h2 id="account-heading">Account overview</h2>
           <p>Review workspace details and recent activity.</p>
         </header>
-        <div vfGrid vfGridGap="md">
+        <div vfAutoGrid vfAutoGridGap="md">
           <article>Profile settings</article>
           <article>Team access</article>
           <article>Recent activity</article>
