@@ -167,7 +167,10 @@ test('canonical capabilities merge legacy package ownership into one logical nod
 
   write('packages/core/package.json', JSON.stringify({
     name: '@vyrnforge/core',
-    exports: { '.': './dist/index.js' },
+    exports: {
+      '.': './dist/index.js',
+      './collection-navigation': './dist/capabilities/collection-navigation/index.js',
+    },
   }));
   write('packages/core/src/capabilities/collection-navigation/index.ts', 'export const next = () => 0;\n');
   write('packages/core/test/capabilities/collection-navigation/navigation.test.mjs', 'export {};\n');
