@@ -7,7 +7,6 @@
 import { AnchorHTMLAttributes } from 'react';
 import { AnimationEventHandler } from 'react';
 import { AriaRole } from 'react';
-import type { AspectRatio as AspectRatio_2 } from '@vyrnforge/web/layout';
 import { ButtonHTMLAttributes } from 'react';
 import { ChangeEventHandler } from 'react';
 import { ClipboardEventHandler } from 'react';
@@ -25,7 +24,6 @@ import { DetailedReactHTMLElement } from 'react';
 import { DialogHTMLAttributes } from 'react';
 import { DO_NOT_USE_OR_YOU_WILL_BE_FIRED_EXPERIMENTAL_FORM_ACTIONS } from 'react';
 import { DragEventHandler } from 'react';
-import type { FieldsetHTMLAttributes } from 'react';
 import { FloatingPlacement } from '@vyrnforge/web/floating-positioning';
 import { FocusEvent as FocusEvent_2 } from 'react';
 import { FocusEventHandler } from 'react';
@@ -51,10 +49,10 @@ import { MouseEvent as MouseEvent_2 } from 'react';
 import { MouseEventHandler } from 'react';
 import { PointerEventHandler } from 'react';
 import { ProviderProps } from 'react';
-import { RadioGroupOrientation } from '@vyrnforge/web/layout';
 import { ReactElement } from 'react';
 import { ReactEventHandler } from 'react';
 import { ReactNode } from 'react';
+import type { Ref } from 'react';
 import { RefAttributes } from 'react';
 import { RefObject } from 'react';
 import type { SelectHTMLAttributes } from 'react';
@@ -203,18 +201,15 @@ export type AppShellNavigationProps = ComponentPropsWithoutRef<'aside'>;
 export type AppShellRootProps = ComponentPropsWithoutRef<'div'>;
 
 // @public (undocumented)
-export type AspectRatio = AspectRatio_2;
+export const AutoGrid: <Element extends LayoutElement = "div">(props: AutoGridProps<Element> & {
+    ref?: Ref<HTMLElementTagNameMap[Element]>;
+}) => ReactElement | null;
 
 // @public (undocumented)
-export const AspectRatio: ForwardRefExoticComponent<AspectRatioProps & RefAttributes<HTMLElement>>;
-
-// @public (undocumented)
-export interface AspectRatioProps extends HTMLAttributes<HTMLElement> {
-    // (undocumented)
-    as?: LayoutElement;
-    // (undocumented)
-    ratio?: AspectRatio;
-}
+export type AutoGridProps<Element extends LayoutElement = 'div'> = {
+    as?: Element;
+    gap?: LayoutSpace;
+} & Omit<ComponentPropsWithoutRef<Element>, 'as' | 'gap'>;
 
 // @public (undocumented)
 export const Button: ForwardRefExoticComponent<ButtonProps & RefAttributes<HTMLButtonElement>>;
@@ -272,23 +267,21 @@ export interface CheckboxProps extends Omit<InputHTMLAttributes<HTMLInputElement
 }
 
 // @public (undocumented)
-export const Cluster: ForwardRefExoticComponent<ClusterProps & RefAttributes<HTMLElement>>;
+export const Cluster: <Element extends LayoutElement = "div">(props: ClusterProps<Element> & {
+    ref?: Ref<HTMLElementTagNameMap[Element]>;
+}) => ReactElement | null;
 
 export { ClusterAlign }
 
 export { ClusterJustify }
 
 // @public (undocumented)
-export interface ClusterProps extends HTMLAttributes<HTMLElement> {
-    // (undocumented)
-    align?: ClusterAlign;
-    // (undocumented)
-    as?: LayoutElement;
-    // (undocumented)
+export type ClusterProps<Element extends LayoutElement = 'div'> = {
+    as?: Element;
     gap?: LayoutSpace;
-    // (undocumented)
+    align?: ClusterAlign;
     justify?: ClusterJustify;
-}
+} & Omit<ComponentPropsWithoutRef<Element>, 'as' | 'gap' | 'align' | 'justify'>;
 
 // @public (undocumented)
 export const ColorPickerInput: ForwardRefExoticComponent<Omit<DetailedHTMLProps<InputHTMLAttributes<HTMLInputElement>, HTMLInputElement>, "ref"> & RefAttributes<HTMLInputElement>>;
@@ -349,17 +342,16 @@ export interface ComboboxRootProps {
 }
 
 // @public (undocumented)
-export const Container: ForwardRefExoticComponent<ContainerProps & RefAttributes<HTMLElement>>;
+export const Container: <Element extends LayoutElement = "div">(props: ContainerProps<Element> & {
+    ref?: Ref<HTMLElementTagNameMap[Element]>;
+}) => ReactElement | null;
 
 // @public (undocumented)
-export interface ContainerProps extends HTMLAttributes<HTMLElement> {
-    // (undocumented)
-    as?: LayoutElement;
-    // (undocumented)
-    gutter?: LayoutSpace;
-    // (undocumented)
+export type ContainerProps<Element extends LayoutElement = 'div'> = {
+    as?: Element;
     size?: ContainerSize;
-}
+    gutter?: LayoutSpace;
+} & Omit<ComponentPropsWithoutRef<Element>, 'as' | 'size' | 'gutter'>;
 
 export { ContainerSize }
 
@@ -394,15 +386,17 @@ export interface ContextMenuRootProps {
 export const ContextMenuTrigger: ForwardRefExoticComponent<Omit<DetailedHTMLProps<HTMLAttributes<HTMLDivElement>, HTMLDivElement>, "ref"> & RefAttributes<HTMLDivElement>>;
 
 // @public (undocumented)
-export const ControlGroup: ForwardRefExoticComponent<ControlGroupProps & RefAttributes<HTMLDivElement>>;
+export const ControlGroup: <Element extends LayoutElement = "div">(props: ControlGroupProps<Element> & {
+    ref?: Ref<HTMLElementTagNameMap[Element]>;
+}) => ReactElement | null;
 
 export { ControlGroupOrientation }
 
 // @public (undocumented)
-export interface ControlGroupProps extends HTMLAttributes<HTMLDivElement> {
-    // (undocumented)
+export type ControlGroupProps<Element extends LayoutElement = 'div'> = {
+    as?: Element;
     orientation?: ControlGroupOrientation;
-}
+} & Omit<ComponentPropsWithoutRef<Element>, 'as' | 'orientation'>;
 
 // @public (undocumented)
 export function DialogBody(props: DialogBodyProps): DetailedReactHTMLElement<    {
@@ -1670,26 +1664,6 @@ export const DrawerTitle: typeof DialogTitle;
 export type DrawerTitleProps = ComponentProps<typeof DrawerTitle>;
 
 // @public (undocumented)
-export const Field: ForwardRefExoticComponent<FieldProps & RefAttributes<HTMLElement>>;
-
-// @public (undocumented)
-export interface FieldProps extends HTMLAttributes<HTMLElement> {
-    // (undocumented)
-    as?: LayoutElement;
-    // (undocumented)
-    gap?: LayoutSpace;
-}
-
-// @public (undocumented)
-export const Fieldset: ForwardRefExoticComponent<FieldsetProps & RefAttributes<HTMLFieldSetElement>>;
-
-// @public (undocumented)
-export interface FieldsetProps extends FieldsetHTMLAttributes<HTMLFieldSetElement> {
-    // (undocumented)
-    gap?: LayoutSpace;
-}
-
-// @public (undocumented)
 export const FileInput: ForwardRefExoticComponent<FileInputProps & RefAttributes<HTMLInputElement>>;
 
 // @public (undocumented)
@@ -1999,17 +1973,6 @@ export interface FileUploaderRootProps extends ComponentPropsWithoutRef<'div'> {
 }
 
 // @public (undocumented)
-export const Grid: ForwardRefExoticComponent<GridProps & RefAttributes<HTMLElement>>;
-
-// @public (undocumented)
-export interface GridProps extends HTMLAttributes<HTMLElement> {
-    // (undocumented)
-    as?: LayoutElement;
-    // (undocumented)
-    gap?: LayoutSpace;
-}
-
-// @public (undocumented)
 export const Icon: ForwardRefExoticComponent<IconProps & RefAttributes<SVGSVGElement>>;
 
 export { IconDefinition }
@@ -2035,23 +1998,21 @@ export { IconSize }
 export { IconVariant }
 
 // @public (undocumented)
-export const Inline: ForwardRefExoticComponent<InlineProps & RefAttributes<HTMLElement>>;
+export const Inline: <Element extends LayoutElement = "div">(props: InlineProps<Element> & {
+    ref?: Ref<HTMLElementTagNameMap[Element]>;
+}) => ReactElement | null;
 
 export { InlineAlign }
 
 export { InlineJustify }
 
 // @public (undocumented)
-export interface InlineProps extends HTMLAttributes<HTMLElement> {
-    // (undocumented)
-    align?: InlineAlign;
-    // (undocumented)
-    as?: LayoutElement;
-    // (undocumented)
+export type InlineProps<Element extends LayoutElement = 'div'> = {
+    as?: Element;
     gap?: LayoutSpace;
-    // (undocumented)
+    align?: InlineAlign;
     justify?: InlineJustify;
-}
+} & Omit<ComponentPropsWithoutRef<Element>, 'as' | 'gap' | 'align' | 'justify'>;
 
 // @public (undocumented)
 export const Input: ForwardRefExoticComponent<InputProps & RefAttributes<HTMLInputElement>>;
@@ -2065,7 +2026,7 @@ export interface InputProps extends Omit<InputHTMLAttributes<HTMLInputElement>, 
 export { InputType }
 
 // @public (undocumented)
-export type LayoutElement = 'div' | 'span' | 'section' | 'main' | 'article' | 'aside' | 'nav' | 'header' | 'footer' | 'form' | 'ul' | 'ol';
+export type LayoutElement = 'div' | 'span' | 'section' | 'main' | 'article' | 'aside' | 'nav' | 'header' | 'footer' | 'form' | 'fieldset' | 'ul' | 'ol';
 
 export { LayoutSpace }
 
@@ -2675,19 +2636,6 @@ export interface PreviewCardTriggerProps {
 export const Radio: ForwardRefExoticComponent<RadioProps & RefAttributes<HTMLInputElement>>;
 
 // @public (undocumented)
-export const RadioGroup: ForwardRefExoticComponent<RadioGroupProps & RefAttributes<HTMLFieldSetElement>>;
-
-export { RadioGroupOrientation }
-
-// @public (undocumented)
-export interface RadioGroupProps extends FieldsetHTMLAttributes<HTMLFieldSetElement> {
-    // (undocumented)
-    gap?: LayoutSpace;
-    // (undocumented)
-    orientation?: RadioGroupOrientation;
-}
-
-// @public (undocumented)
 export type RadioProps = Omit<InputHTMLAttributes<HTMLInputElement>, 'type'>;
 
 // @public (undocumented)
@@ -2935,23 +2883,21 @@ export interface SplitPanelRootProps extends ComponentPropsWithoutRef<'div'> {
 }
 
 // @public (undocumented)
-export const Stack: ForwardRefExoticComponent<StackProps & RefAttributes<HTMLElement>>;
+export const Stack: <Element extends LayoutElement = "div">(props: StackProps<Element> & {
+    ref?: Ref<HTMLElementTagNameMap[Element]>;
+}) => ReactElement | null;
 
 export { StackAlign }
 
 export { StackJustify }
 
 // @public (undocumented)
-export interface StackProps extends HTMLAttributes<HTMLElement> {
-    // (undocumented)
-    align?: StackAlign;
-    // (undocumented)
-    as?: LayoutElement;
-    // (undocumented)
+export type StackProps<Element extends LayoutElement = 'div'> = {
+    as?: Element;
     gap?: LayoutSpace;
-    // (undocumented)
+    align?: StackAlign;
     justify?: StackJustify;
-}
+} & Omit<ComponentPropsWithoutRef<Element>, 'as' | 'gap' | 'align' | 'justify'>;
 
 // @public (undocumented)
 export const Switch: ForwardRefExoticComponent<SwitchProps & RefAttributes<HTMLInputElement>>;
