@@ -1,5 +1,5 @@
 import { computed, defineComponent, h, inject, provide, ref, type InjectionKey, type Ref } from 'vue';
-import { navigationIntentForArrow, resolveEnabledIndex } from '@vyrnforge/core/collection-navigation';
+import { navigationIntentForArrow, resolveNavigationIndex } from '@vyrnforge/core/collection-navigation';
 
 const itemSelector = '[data-vf-segmented-control-item]';
 
@@ -83,8 +83,8 @@ export const SegmentedControlRoot = defineComponent({
         if (!intent) return;
         const items = itemsFor(root);
         const current = items.indexOf(currentItem);
-        const next = resolveEnabledIndex(
-          items.map((item) => ({ disabled: itemDisabled(item) })),
+        const next = resolveNavigationIndex(
+          items.map((item) => ({ eligible: !(itemDisabled(item)) })),
           current,
           intent,
         );
