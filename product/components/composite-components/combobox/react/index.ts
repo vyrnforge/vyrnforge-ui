@@ -1,6 +1,6 @@
 import { createContext, createElement, forwardRef, useContext, useId, useMemo, useRef, useState, type ComponentPropsWithoutRef, type ReactNode } from 'react';
 import { createPortal } from 'react-dom';
-import { resolveEnabledIndex, type CollectionNavigationIntent } from '@vyrnforge/core/collection-navigation';
+import { resolveNavigationIndex, type CollectionNavigationIntent } from '@vyrnforge/core/collection-navigation';
 import { useFloatingSurface } from '../../internal/floating-surface.js';
 
 interface Ctx {
@@ -33,7 +33,7 @@ function moveActive(context: Ctx, intent: Extract<CollectionNavigationIntent, 'n
   const options = visibleOptions(context.surfaceRef.current);
   const current = options.findIndex((option) => option.id === context.activeId);
   const start = current >= 0 ? current : intent === 'previous' ? options.length : -1;
-  const next = resolveEnabledIndex(options.map((option) => ({ disabled: disabled(option) })), start, intent, { loop: false });
+  const next = resolveNavigationIndex(options.map((option) => ({ eligible: !(disabled(option)) })), start, intent, { loop: false });
   if (next == null) return;
   const target = options[next];
   if (!target?.id) return;
