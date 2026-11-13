@@ -23,6 +23,7 @@ export default {
     await control.evaluate((element) => { element.disabled = true; });
     await expect(control).toBeDisabled();
     expect(await control.isChecked()).toBe(true);
+    await expect.poll(() => control.evaluate((element) => getComputedStyle(element).backgroundColor)).not.toBe(enabledChecked.background);
     const disabledChecked = await control.evaluate((element) => ({
       background: getComputedStyle(element).backgroundColor,
       border: getComputedStyle(element).borderTopColor,

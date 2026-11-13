@@ -4,10 +4,8 @@ import {
   VfContainerElement,
   VfControlGroupElement,
   VfFieldElement,
-  VfFieldsetElement,
   VfGridElement,
   VfInlineElement,
-  VfRadioGroupElement,
   VfStackElement,
   defineLayoutElements,
   type AspectRatio,
@@ -16,7 +14,6 @@ import {
   type ControlGroupOrientation,
   type InlineAlign,
   type LayoutSpace,
-  type RadioGroupOrientation,
 } from '@vyrnforge/elements/layout';
 
 const stack: typeof VfStackElement = VfStackElement;
@@ -26,9 +23,7 @@ const grid: typeof VfGridElement = VfGridElement;
 const container: typeof VfContainerElement = VfContainerElement;
 const aspectRatioElement: typeof VfAspectRatioElement = VfAspectRatioElement;
 const field: typeof VfFieldElement = VfFieldElement;
-const fieldset: typeof VfFieldsetElement = VfFieldsetElement;
 const controlGroup: typeof VfControlGroupElement = VfControlGroupElement;
-const radioGroup: typeof VfRadioGroupElement = VfRadioGroupElement;
 const define: typeof defineLayoutElements = defineLayoutElements;
 
 const clusterAlign: ClusterAlign = 'center';
@@ -37,9 +32,8 @@ const size: ContainerSize = '2xl';
 const gap: LayoutSpace = 'sm';
 const ratio: AspectRatio = 'video';
 const controlOrientation: ControlGroupOrientation = 'vertical';
-const radioOrientation: RadioGroupOrientation = 'horizontal';
 
 void [
-  stack, inline, cluster, grid, container, aspectRatioElement, field, fieldset, controlGroup, radioGroup, define,
-  clusterAlign, inlineAlign, size, gap, ratio, controlOrientation, radioOrientation,
+  stack, inline, cluster, grid, container, aspectRatioElement, field, controlGroup, define,
+  clusterAlign, inlineAlign, size, gap, ratio, controlOrientation,
 ];
