@@ -1,5 +1,5 @@
 import { Directive, ElementRef, booleanAttribute, computed, inject, input, output, signal } from '@angular/core';
-import { resolveEnabledIndex, type CollectionNavigationIntent } from '@vyrnforge/core/collection-navigation';
+import { resolveNavigationIndex, type CollectionNavigationIntent } from '@vyrnforge/core/collection-navigation';
 
 export type AccordionType = 'single' | 'multiple';
 export type AccordionValue = string | readonly string[];
@@ -49,7 +49,7 @@ export class VfAccordionTriggerDirective {
   onKeydown(event: KeyboardEvent): void {
     let intent: CollectionNavigationIntent | null = null; if (event.key === 'ArrowDown') intent = 'next'; else if (event.key === 'ArrowUp') intent = 'previous'; else if (event.key === 'Home') intent = 'first'; else if (event.key === 'End') intent = 'last'; if (!intent) return;
     const root = this.element.nativeElement.closest<HTMLElement>('[data-vf-accordion-root]'); if (!root) return;
-    const triggers = Array.from(root.querySelectorAll<HTMLButtonElement>('[data-vf-accordion-trigger]')); const current = triggers.indexOf(this.element.nativeElement); const next = resolveEnabledIndex(triggers.map((candidate) => ({ disabled: candidate.disabled })), current, intent); if (next === null) return; event.preventDefault(); triggers[next]?.focus();
+    const triggers = Array.from(root.querySelectorAll<HTMLButtonElement>('[data-vf-accordion-trigger]')); const current = triggers.indexOf(this.element.nativeElement); const next = resolveNavigationIndex(triggers.map((candidate) => ({ eligible: !(candidate.disabled) })), current, intent); if (next === null) return; event.preventDefault(); triggers[next]?.focus();
   }
 }
 
