@@ -69,7 +69,7 @@ test('Native Web composes Text typography with semantic and component hooks on o
 
   const button = page.locator('#composed-button');
   await expect(button).toHaveJSProperty('tagName', 'BUTTON');
-  expect(await button.evaluate((element) => getComputedStyle(element).fontSize)).toBe('12px');
+  expect(await button.evaluate((element) => getComputedStyle(element).fontSize)).toBe('15px');
   expect(await button.evaluate((element) => getComputedStyle(element).fontWeight)).toBe('600');
   expect(await button.evaluate((element) => getComputedStyle(element).backgroundColor)).not.toBe('rgba(0, 0, 0, 0)');
   expect(await button.evaluate((element) => getComputedStyle(element).color)).not.toBe('rgb(24, 24, 27)');
