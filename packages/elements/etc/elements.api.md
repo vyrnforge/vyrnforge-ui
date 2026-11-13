@@ -17,7 +17,6 @@ import { IconVariant } from '@vyrnforge/web/icon';
 import { InlineAlign } from '@vyrnforge/web/layout';
 import { InlineJustify } from '@vyrnforge/web/layout';
 import { LayoutSpace } from '@vyrnforge/web/layout';
-import { RadioGroupOrientation } from '@vyrnforge/web/layout';
 import { StackAlign } from '@vyrnforge/web/layout';
 import { StackJustify } from '@vyrnforge/web/layout';
 
@@ -218,8 +217,6 @@ export { InlineAlign }
 export { InlineJustify }
 
 export { LayoutSpace }
-
-export { RadioGroupOrientation }
 
 export { StackAlign }
 
