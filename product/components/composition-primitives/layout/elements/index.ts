@@ -7,7 +7,6 @@ import {
   inlineAlignments,
   inlineJustifications,
   layoutSpaces,
-  radioGroupOrientations,
   stackAlignments,
   stackJustifications,
   type AspectRatio,
@@ -18,7 +17,6 @@ import {
   type InlineAlign,
   type InlineJustify,
   type LayoutSpace,
-  type RadioGroupOrientation,
   type StackAlign,
   type StackJustify,
 } from '@vyrnforge/web/layout';
