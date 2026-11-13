@@ -129,7 +129,7 @@ export const ContextMenuContent = defineComponent({
           timer = setTimeout(() => { query = ''; }, 500);
           next = findTypeaheadMatch(items.map((item) => ({
             textValue: item.dataset.vfTextValue ?? item.textContent ?? '',
-            disabled: itemDisabled(item),
+            eligible: !itemDisabled(item),
           })), query, { startIndex: current });
         }
         if (next == null) return;
