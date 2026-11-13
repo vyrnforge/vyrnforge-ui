@@ -9,7 +9,7 @@ import {
   output,
   signal,
 } from '@angular/core';
-import { resolveEnabledIndex, type CollectionNavigationIntent } from '@vyrnforge/core/collection-navigation';
+import { resolveNavigationIndex, type CollectionNavigationIntent } from '@vyrnforge/core/collection-navigation';
 
 const COMBOBOX_ID_GENERATOR = new InjectionToken<() => string>('VyrnForge Combobox ID generator', {
   providedIn: 'root',
@@ -73,7 +73,7 @@ export class VfComboboxRootDirective {
     const options = visibleOptions(this.element.nativeElement, this.query(), this.locale());
     const current = options.findIndex((option) => option.id === this.activeId());
     const start = current >= 0 ? current : intent === 'previous' ? options.length : -1;
-    const next = resolveEnabledIndex(options.map((option) => ({ disabled: disabled(option) })), start, intent, { loop: false });
+    const next = resolveNavigationIndex(options.map((option) => ({ eligible: !(disabled(option)) })), start, intent, { loop: false });
     if (next == null) return;
     const target = options[next];
     if (!target?.id) return;
