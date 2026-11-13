@@ -1,6 +1,5 @@
 import { DestroyRef, Directive, ElementRef, Injector, afterNextRender, computed, inject, input, output, signal } from '@angular/core';
 import { resolveEnabledIndex } from '@vyrnforge/core/collection-navigation';
-import { toggleSelection } from '@vyrnforge/core/selection-operations';
 import { findTypeaheadMatch } from '@vyrnforge/core/typeahead-matching';
 
 const optionSelector = '[data-vf-multi-select-option]';
@@ -84,7 +83,7 @@ export class VfMultiSelectRootDirective {
   readonly open = signal(false);
 
   toggle(v: string): void {
-    const next = toggleSelection(this.values(), v);
+    const next = this.values().includes(v) ? this.values().filter((value) => value !== v) : [...this.values(), v];
     if (this.value() === undefined) this.internalValue.set(next);
     this.valueChange.emit(next);
   }
