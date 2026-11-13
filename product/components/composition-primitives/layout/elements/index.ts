@@ -21,7 +21,7 @@ import {
   type StackJustify,
 } from '@vyrnforge/web/layout';
 
-export type { AspectRatio, ClusterAlign, ClusterJustify, ContainerSize, ControlGroupOrientation, InlineAlign, InlineJustify, LayoutSpace, RadioGroupOrientation, StackAlign, StackJustify } from '@vyrnforge/web/layout';
+export type { AspectRatio, ClusterAlign, ClusterJustify, ContainerSize, ControlGroupOrientation, InlineAlign, InlineJustify, LayoutSpace, StackAlign, StackJustify } from '@vyrnforge/web/layout';
 
 const HTMLElementBase = (globalThis.HTMLElement ?? class {}) as typeof HTMLElement;
 function normalizedValue<Value extends string>(values: readonly Value[], value: string | null, fallback: Value): Value { return value !== null && values.includes(value as Value) ? value as Value : fallback; }
