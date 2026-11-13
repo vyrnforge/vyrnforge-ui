@@ -13,7 +13,6 @@ import {
 } from 'react';
 import { createPortal } from 'react-dom';
 import { resolveEnabledIndex } from '@vyrnforge/core/collection-navigation';
-import { toggleSelection } from '@vyrnforge/core/selection-operations';
 import { findTypeaheadMatch } from '@vyrnforge/core/typeahead-matching';
 import { useFloatingSurface } from '../../internal/floating-surface.js';
 
@@ -73,7 +72,7 @@ export function MultiSelectRoot({ children, value, defaultValue = [], onValueCha
     setOpen,
     values,
     toggle(candidate) {
-      const next = toggleSelection(values, candidate);
+      const next = values.includes(candidate) ? values.filter((value) => value !== candidate) : [...values, candidate];
       if (value === undefined) setInternalValue(next);
       onValueChange?.(next);
     },
