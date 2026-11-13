@@ -17,7 +17,7 @@ export const browserFixture = {
     <label for="editable">Editable</label><textarea id="editable" data-vf-textarea name="editable" rows="4" cols="30" wrap="soft" required>alpha\nbeta</textarea>
     <label for="readonly">Readonly</label><textarea id="readonly" data-vf-textarea name="readonly" readonly>kept</textarea>
     <label for="disabled">Disabled</label><textarea id="disabled" data-vf-textarea name="disabled" disabled>omitted</textarea>
-    <label for="required">Required</label><textarea id="required" data-vf-textarea name="required" required placeholder="Required value"></textarea>
+    <label for="required">Required</label><textarea id="required" data-vf-textarea name="required" required></textarea>
     <label for="constrained">Constrained</label><textarea id="constrained" data-vf-textarea name="constrained" minlength="3" maxlength="8"></textarea>
     <label for="app-invalid">Application invalid</label><textarea id="app-invalid" data-vf-textarea name="app-invalid" aria-invalid="true">bad</textarea>
   </form>`;
@@ -36,7 +36,7 @@ export const browserFixture = {
         createElement('label', { htmlFor: 'editable' }, 'Editable'), textarea('editable', { defaultValue: 'alpha\nbeta', rows: 4, cols: 30, wrap: 'soft', required: true }),
         createElement('label', { htmlFor: 'readonly' }, 'Readonly'), textarea('readonly', { defaultValue: 'kept', readOnly: true }),
         createElement('label', { htmlFor: 'disabled' }, 'Disabled'), textarea('disabled', { defaultValue: 'omitted', disabled: true }),
-        createElement('label', { htmlFor: 'required' }, 'Required'), textarea('required', { required: true, placeholder: 'Required value' }),
+        createElement('label', { htmlFor: 'required' }, 'Required'), textarea('required', { required: true }),
         createElement('label', { htmlFor: 'constrained' }, 'Constrained'), textarea('constrained', { minLength: 3, maxLength: 8 }),
         createElement('label', { htmlFor: 'app-invalid' }, 'Application invalid'), textarea('app-invalid', { 'aria-invalid': true, defaultValue: 'bad' })
       ));
@@ -52,7 +52,7 @@ export const browserFixture = {
         h('label', { for: 'editable' }, 'Editable'), textarea('editable', { value: 'alpha\nbeta', rows: 4, cols: 30, wrap: 'soft', required: true }),
         h('label', { for: 'readonly' }, 'Readonly'), textarea('readonly', { value: 'kept', readonly: true }),
         h('label', { for: 'disabled' }, 'Disabled'), textarea('disabled', { value: 'omitted', disabled: true }),
-        h('label', { for: 'required' }, 'Required'), textarea('required', { required: true, placeholder: 'Required value' }),
+        h('label', { for: 'required' }, 'Required'), textarea('required', { required: true }),
         h('label', { for: 'constrained' }, 'Constrained'), textarea('constrained', { minlength: 3, maxlength: 8 }),
         h('label', { for: 'app-invalid' }, 'Application invalid'), textarea('app-invalid', { 'aria-invalid': 'true', value: 'bad' })
       ]) }));
@@ -66,7 +66,7 @@ export const browserFixture = {
       const { renderApplication } = await import('@angular/platform-server');
       const { VfTextareaDirective } = await import('@vyrnforge/angular/textarea');
       class App {}
-      Component({ selector: 'vf-textarea-test', standalone: true, imports: [VfTextareaDirective], template: `<main><h1>Textarea fixture</h1><form id="form"><label for="editable">Editable</label><textarea id="editable" vfTextarea name="editable" rows="4" cols="30" wrap="soft" required>alpha\nbeta</textarea><label for="readonly">Readonly</label><textarea id="readonly" vfTextarea name="readonly" readonly>kept</textarea><label for="disabled">Disabled</label><textarea id="disabled" vfTextarea name="disabled" disabled>omitted</textarea><label for="required">Required</label><textarea id="required" vfTextarea name="required" required placeholder="Required value"></textarea><label for="constrained">Constrained</label><textarea id="constrained" vfTextarea name="constrained" minlength="3" maxlength="8"></textarea><label for="app-invalid">Application invalid</label><textarea id="app-invalid" vfTextarea name="app-invalid" aria-invalid="true">bad</textarea></form></main>` })(App);
+      Component({ selector: 'vf-textarea-test', standalone: true, imports: [VfTextareaDirective], template: `<main><h1>Textarea fixture</h1><form id="form"><label for="editable">Editable</label><textarea id="editable" vfTextarea name="editable" rows="4" cols="30" wrap="soft" required>alpha\nbeta</textarea><label for="readonly">Readonly</label><textarea id="readonly" vfTextarea name="readonly" readonly>kept</textarea><label for="disabled">Disabled</label><textarea id="disabled" vfTextarea name="disabled" disabled>omitted</textarea><label for="required">Required</label><textarea id="required" vfTextarea name="required" required></textarea><label for="constrained">Constrained</label><textarea id="constrained" vfTextarea name="constrained" minlength="3" maxlength="8"></textarea><label for="app-invalid">Application invalid</label><textarea id="app-invalid" vfTextarea name="app-invalid" aria-invalid="true">bad</textarea></form></main>` })(App);
       const html = await renderApplication((context) => bootstrapApplication(App, { providers: [provideZonelessChangeDetection()] }, context), { document: '<!doctype html><html lang="en"><head><title>Textarea fixture</title><link rel="stylesheet" href="./textarea.css"><style>body{background:var(--vf-color-surface);color:var(--vf-color-text);}</style></head><body><vf-textarea-test></vf-textarea-test></body></html>' });
       await writeFile(path.join(outDir, 'angular.html'), html);
     }

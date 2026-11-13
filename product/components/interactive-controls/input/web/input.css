@@ -59,7 +59,7 @@
     background: var(--vf-color-surface-subtle);
   }
 
-  :where(input[data-vf-input]:invalid:not(:placeholder-shown), input[data-vf-input][aria-invalid="true"]) {
+  :where(input[data-vf-input]:user-invalid, input[data-vf-input][aria-invalid="true"]) {
     border-color: var(--vf-color-danger-border);
   }
 
@@ -77,6 +77,6 @@
 
     :where(input[data-vf-input]:focus-visible) { outline-color: Highlight; }
     :where(input[data-vf-input]:disabled) { border-color: GrayText; color: GrayText; }
-    :where(input[data-vf-input]:invalid:not(:placeholder-shown), input[data-vf-input][aria-invalid="true"]) { border-color: Highlight; }
+    :where(input[data-vf-input]:user-invalid, input[data-vf-input][aria-invalid="true"]) { border-color: Highlight; }
   }
 }
