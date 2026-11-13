@@ -1,7 +1,7 @@
 {
   "id": "layout/control-group",
-  "title": "Joined action controls",
-  "description": "ControlGroup visually joins independent controls. The consumer authors semantic grouping when the controls form one named action set.",
+  "title": "Joined independent controls",
+  "description": "ControlGroup visually joins independently operable controls without creating selection state, managed focus, or semantic grouping. Use RadioGroup, ToggleGroup, or Toolbar when those behaviors are the actual contract.",
   "defaultFramework": "react",
   "frameworks": {
     "native-web": { "label": "Native Web", "language": "html", "source": "native-web.html" },
