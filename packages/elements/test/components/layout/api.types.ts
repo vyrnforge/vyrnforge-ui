@@ -1,13 +1,45 @@
-import { VfClusterElement, VfContainerElement, VfControlGroupElement, VfGridElement, VfStackElement, defineLayoutElements, type ClusterAlign, type ContainerSize, type ControlGroupOrientation, type LayoutSpace } from '@vyrnforge/elements/layout';
+import {
+  VfAspectRatioElement,
+  VfClusterElement,
+  VfContainerElement,
+  VfControlGroupElement,
+  VfFieldElement,
+  VfFieldsetElement,
+  VfGridElement,
+  VfInlineElement,
+  VfRadioGroupElement,
+  VfStackElement,
+  defineLayoutElements,
+  type AspectRatio,
+  type ClusterAlign,
+  type ContainerSize,
+  type ControlGroupOrientation,
+  type InlineAlign,
+  type LayoutSpace,
+  type RadioGroupOrientation,
+} from '@vyrnforge/elements/layout';
 
 const stack: typeof VfStackElement = VfStackElement;
+const inline: typeof VfInlineElement = VfInlineElement;
 const cluster: typeof VfClusterElement = VfClusterElement;
 const grid: typeof VfGridElement = VfGridElement;
 const container: typeof VfContainerElement = VfContainerElement;
+const aspectRatioElement: typeof VfAspectRatioElement = VfAspectRatioElement;
+const field: typeof VfFieldElement = VfFieldElement;
+const fieldset: typeof VfFieldsetElement = VfFieldsetElement;
 const controlGroup: typeof VfControlGroupElement = VfControlGroupElement;
+const radioGroup: typeof VfRadioGroupElement = VfRadioGroupElement;
 const define: typeof defineLayoutElements = defineLayoutElements;
-const align: ClusterAlign = 'center';
+
+const clusterAlign: ClusterAlign = 'center';
+const inlineAlign: InlineAlign = 'baseline';
 const size: ContainerSize = '2xl';
 const gap: LayoutSpace = 'sm';
-const orientation: ControlGroupOrientation = 'vertical';
-void [stack, cluster, grid, container, controlGroup, define, align, size, gap, orientation];
+const ratio: AspectRatio = 'video';
+const controlOrientation: ControlGroupOrientation = 'vertical';
+const radioOrientation: RadioGroupOrientation = 'horizontal';
+
+void [
+  stack, inline, cluster, grid, container, aspectRatioElement, field, fieldset, controlGroup, radioGroup, define,
+  clusterAlign, inlineAlign, size, gap, ratio, controlOrientation, radioOrientation,
+];
