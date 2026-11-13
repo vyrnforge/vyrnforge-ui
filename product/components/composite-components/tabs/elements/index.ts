@@ -1,4 +1,4 @@
-import { resolveEnabledIndex, type CollectionNavigationIntent } from '@vyrnforge/core/collection-navigation';
+import { resolveNavigationIndex, type CollectionNavigationIntent } from '@vyrnforge/core/collection-navigation';
 
 export type TabsOrientation = 'horizontal' | 'vertical';
 export type TabsActivation = 'automatic' | 'manual';
@@ -227,7 +227,7 @@ export class VfTabsElement extends HTMLElementBase {
     if (intent) {
       const tabs = this.#tabs();
       const currentIndex = tabs.indexOf(current);
-      const nextIndex = resolveEnabledIndex(tabs.map((tab) => ({ disabled: tabDisabled(tab) })), currentIndex, intent);
+      const nextIndex = resolveNavigationIndex(tabs.map((tab) => ({ eligible: !(tabDisabled(tab)) })), currentIndex, intent);
       if (nextIndex === null) return;
       const next = tabs[nextIndex];
       const value = next ? tabValue(next) : '';
