@@ -5,11 +5,11 @@
 ```ts
 
 import { AfterViewInit } from '@angular/core';
-import { AspectRatio } from '@vyrnforge/web/layout';
 import { ClusterAlign } from '@vyrnforge/web/layout';
 import { ClusterJustify } from '@vyrnforge/web/layout';
 import { CollectionNavigationIntent } from '@vyrnforge/core/collection-navigation';
 import { ContainerSize } from '@vyrnforge/web/layout';
+import { ControlGroupOrientation } from '@vyrnforge/web/layout';
 import { ElementRef } from '@angular/core';
 import { FloatingPlacement } from '@vyrnforge/web/floating-positioning';
 import * as i0 from '@angular/core';
@@ -27,11 +27,9 @@ import { LayoutSpace } from '@vyrnforge/web/layout';
 import { ModelSignal } from '@angular/core';
 import { OnDestroy } from '@angular/core';
 import { OutputEmitterRef } from '@angular/core';
-import { RadioGroupOrientation } from '@vyrnforge/web/layout';
 import { Signal } from '@angular/core';
 import { StackAlign } from '@vyrnforge/web/layout';
 import { StackJustify } from '@vyrnforge/web/layout';
-import { TemporalInputType } from '@vyrnforge/web/temporal-input';
 import { TextVariant } from '@vyrnforge/web/text';
 import { WritableSignal } from '@angular/core';
 
@@ -54,8 +52,6 @@ export interface AlertDialogDismissRequest {
     readonly reason: AlertDialogDismissReason;
 }
 
-export { AspectRatio }
-
 // @public (undocumented)
 export type ButtonSize = 'sm' | 'md' | 'lg';
 
@@ -67,6 +63,8 @@ export { ClusterAlign }
 export { ClusterJustify }
 
 export { ContainerSize }
+
+export { ControlGroupOrientation }
 
 // @public (undocumented)
 export type DialogDismissReason = 'escape' | 'backdrop' | 'close-control';
@@ -119,11 +117,6 @@ export type ListboxSelectionMode = 'single' | 'multiple';
 // @public (undocumented)
 export type ListboxValue = string | string[];
 
-export { RadioGroupOrientation }
-
-// @public (undocumented)
-export type SeparatorOrientation = 'horizontal' | 'vertical';
-
 export { StackAlign }
 
 export { StackJustify }
@@ -134,7 +127,8 @@ export type TabsActivation = 'automatic' | 'manual';
 // @public (undocumented)
 export type TabsOrientation = 'horizontal' | 'vertical';
 
-export { TemporalInputType }
+// @public (undocumented)
+export type TemporalFieldInputType = 'date' | 'time' | 'datetime-local' | 'month' | 'week';
 
 export { TextVariant }
 
@@ -449,19 +443,19 @@ export class VfAppShellNavigationDirective {
 }
 
 // @public (undocumented)
-export class VfAspectRatioDirective {
+export class VfAutoGridDirective {
     // (undocumented)
-    readonly vfAspectRatio: InputSignal<"square" | "video" | "landscape" | "portrait">;
+    readonly vfAutoGridGap: InputSignal<"none" | "xs" | "sm" | "md" | "lg" | "xl" | "2xl" | "3xl">;
     // (undocumented)
-    static ɵdir: i0.ɵɵDirectiveDeclaration<VfAspectRatioDirective, "[vfAspectRatio]", never, {
-        "vfAspectRatio": {
-            "alias": "vfAspectRatio";
+    static ɵdir: i0.ɵɵDirectiveDeclaration<VfAutoGridDirective, "[vfAutoGrid]", never, {
+        "vfAutoGridGap": {
+            "alias": "vfAutoGridGap";
             "required": false;
             "isSignal": true;
         };
     }, {}, never, never, true, never>;
     // (undocumented)
-    static ɵfac: i0.ɵɵFactoryDeclaration<VfAspectRatioDirective, never>;
+    static ɵfac: i0.ɵɵFactoryDeclaration<VfAutoGridDirective, never>;
 }
 
 // @public (undocumented)
@@ -622,14 +616,6 @@ export class VfClusterDirective {
     }, {}, never, never, true, never>;
     // (undocumented)
     static ɵfac: i0.ɵɵFactoryDeclaration<VfClusterDirective, never>;
-}
-
-// @public (undocumented)
-export class VfColorInputDirective {
-    // (undocumented)
-    static ɵdir: i0.ɵɵDirectiveDeclaration<VfColorInputDirective, "input[vfColorInput]", never, {}, {}, never, never, true, never>;
-    // (undocumented)
-    static ɵfac: i0.ɵɵFactoryDeclaration<VfColorInputDirective, never>;
 }
 
 // @public (undocumented)
@@ -926,6 +912,22 @@ export class VfContextMenuTriggerDirective {
     static ɵdir: i0.ɵɵDirectiveDeclaration<VfContextMenuTriggerDirective, "[vfContextMenuTrigger]", never, {}, {}, never, never, true, never>;
     // (undocumented)
     static ɵfac: i0.ɵɵFactoryDeclaration<VfContextMenuTriggerDirective, never>;
+}
+
+// @public (undocumented)
+export class VfControlGroupDirective {
+    // (undocumented)
+    readonly vfControlGroupOrientation: InputSignal<"horizontal" | "vertical">;
+    // (undocumented)
+    static ɵdir: i0.ɵɵDirectiveDeclaration<VfControlGroupDirective, "[vfControlGroup]", never, {
+        "vfControlGroupOrientation": {
+            "alias": "vfControlGroupOrientation";
+            "required": false;
+            "isSignal": true;
+        };
+    }, {}, never, never, true, never>;
+    // (undocumented)
+    static ɵfac: i0.ɵɵFactoryDeclaration<VfControlGroupDirective, never>;
 }
 
 // @public (undocumented)
@@ -1287,38 +1289,6 @@ export class VfDrawerTitleDirective {
 }
 
 // @public (undocumented)
-export class VfFieldDirective {
-    // (undocumented)
-    readonly vfFieldGap: InputSignal<"none" | "xs" | "sm" | "md" | "lg" | "xl" | "2xl" | "3xl">;
-    // (undocumented)
-    static ɵdir: i0.ɵɵDirectiveDeclaration<VfFieldDirective, "[vfField]", never, {
-        "vfFieldGap": {
-            "alias": "vfFieldGap";
-            "required": false;
-            "isSignal": true;
-        };
-    }, {}, never, never, true, never>;
-    // (undocumented)
-    static ɵfac: i0.ɵɵFactoryDeclaration<VfFieldDirective, never>;
-}
-
-// @public (undocumented)
-export class VfFieldsetDirective {
-    // (undocumented)
-    readonly vfFieldsetGap: InputSignal<"none" | "xs" | "sm" | "md" | "lg" | "xl" | "2xl" | "3xl">;
-    // (undocumented)
-    static ɵdir: i0.ɵɵDirectiveDeclaration<VfFieldsetDirective, "fieldset[vfFieldset]", never, {
-        "vfFieldsetGap": {
-            "alias": "vfFieldsetGap";
-            "required": false;
-            "isSignal": true;
-        };
-    }, {}, never, never, true, never>;
-    // (undocumented)
-    static ɵfac: i0.ɵɵFactoryDeclaration<VfFieldsetDirective, never>;
-}
-
-// @public (undocumented)
 export class VfFileInputDirective {
     // (undocumented)
     static ɵdir: i0.ɵɵDirectiveDeclaration<VfFileInputDirective, "input[vfFileInput]", never, {}, {}, never, never, true, never>;
@@ -1370,22 +1340,6 @@ export class VfFileUploaderRootDirective {
     }, never, never, true, never>;
     // (undocumented)
     static ɵfac: i0.ɵɵFactoryDeclaration<VfFileUploaderRootDirective, never>;
-}
-
-// @public (undocumented)
-export class VfGridDirective {
-    // (undocumented)
-    readonly vfGridGap: InputSignal<"none" | "xs" | "sm" | "md" | "lg" | "xl" | "2xl" | "3xl">;
-    // (undocumented)
-    static ɵdir: i0.ɵɵDirectiveDeclaration<VfGridDirective, "[vfGrid]", never, {
-        "vfGridGap": {
-            "alias": "vfGridGap";
-            "required": false;
-            "isSignal": true;
-        };
-    }, {}, never, never, true, never>;
-    // (undocumented)
-    static ɵfac: i0.ɵɵFactoryDeclaration<VfGridDirective, never>;
 }
 
 // @public (undocumented)
@@ -1478,14 +1432,6 @@ export class VfInputDirective {
     }, {}, never, never, true, never>;
     // (undocumented)
     static ɵfac: i0.ɵɵFactoryDeclaration<VfInputDirective, never>;
-}
-
-// @public (undocumented)
-export class VfInputGroupDirective {
-    // (undocumented)
-    static ɵdir: i0.ɵɵDirectiveDeclaration<VfInputGroupDirective, "[vfInputGroup]", never, {}, {}, never, never, true, never>;
-    // (undocumented)
-    static ɵfac: i0.ɵɵFactoryDeclaration<VfInputGroupDirective, never>;
 }
 
 // @public (undocumented)
@@ -1874,14 +1820,6 @@ export class VfNumberFieldRootDirective {
 }
 
 // @public (undocumented)
-export class VfNumberInputDirective {
-    // (undocumented)
-    static ɵdir: i0.ɵɵDirectiveDeclaration<VfNumberInputDirective, "input[vfNumberInput]", never, {}, {}, never, never, true, never>;
-    // (undocumented)
-    static ɵfac: i0.ɵɵFactoryDeclaration<VfNumberInputDirective, never>;
-}
-
-// @public (undocumented)
 export class VfOtpFieldInputDirective {
     constructor(root: VfOtpFieldRootDirective);
     // (undocumented)
@@ -2175,29 +2113,6 @@ export class VfRadioDirective {
     static ɵdir: i0.ɵɵDirectiveDeclaration<VfRadioDirective, "input[vfRadio]", never, {}, {}, never, never, true, never>;
     // (undocumented)
     static ɵfac: i0.ɵɵFactoryDeclaration<VfRadioDirective, never>;
-}
-
-// @public (undocumented)
-export class VfRadioGroupDirective {
-    // (undocumented)
-    readonly vfRadioGroupGap: InputSignal<"none" | "xs" | "sm" | "md" | "lg" | "xl" | "2xl" | "3xl">;
-    // (undocumented)
-    readonly vfRadioGroupOrientation: InputSignal<"vertical" | "horizontal">;
-    // (undocumented)
-    static ɵdir: i0.ɵɵDirectiveDeclaration<VfRadioGroupDirective, "fieldset[vfRadioGroup]", never, {
-        "vfRadioGroupGap": {
-            "alias": "vfRadioGroupGap";
-            "required": false;
-            "isSignal": true;
-        };
-        "vfRadioGroupOrientation": {
-            "alias": "vfRadioGroupOrientation";
-            "required": false;
-            "isSignal": true;
-        };
-    }, {}, never, never, true, never>;
-    // (undocumented)
-    static ɵfac: i0.ɵɵFactoryDeclaration<VfRadioGroupDirective, never>;
 }
 
 // @public (undocumented)
@@ -2500,22 +2415,6 @@ export class VfSelectTriggerDirective {
 }
 
 // @public (undocumented)
-export class VfSeparatorDirective {
-    // (undocumented)
-    readonly vfSeparatorOrientation: InputSignal<SeparatorOrientation>;
-    // (undocumented)
-    static ɵdir: i0.ɵɵDirectiveDeclaration<VfSeparatorDirective, "hr[vfSeparator]", never, {
-        "vfSeparatorOrientation": {
-            "alias": "vfSeparatorOrientation";
-            "required": false;
-            "isSignal": true;
-        };
-    }, {}, never, never, true, never>;
-    // (undocumented)
-    static ɵfac: i0.ɵɵFactoryDeclaration<VfSeparatorDirective, never>;
-}
-
-// @public (undocumented)
 export class VfSideNavDirective {
     // (undocumented)
     static ɵdir: i0.ɵɵDirectiveDeclaration<VfSideNavDirective, "nav[vfSideNav]", never, {}, {}, never, never, true, never>;
@@ -2681,14 +2580,6 @@ export class VfStackDirective {
     }, {}, never, never, true, never>;
     // (undocumented)
     static ɵfac: i0.ɵɵFactoryDeclaration<VfStackDirective, never>;
-}
-
-// @public (undocumented)
-export class VfSurfaceDirective {
-    // (undocumented)
-    static ɵdir: i0.ɵɵDirectiveDeclaration<VfSurfaceDirective, "[vfSurface]", never, {}, {}, never, never, true, never>;
-    // (undocumented)
-    static ɵfac: i0.ɵɵFactoryDeclaration<VfSurfaceDirective, never>;
 }
 
 // @public (undocumented)
@@ -2867,19 +2758,11 @@ export class VfTagGroupRootDirective {
 }
 
 // @public (undocumented)
-export class VfTemporalFieldRootDirective {
+export class VfTemporalFieldInputDirective {
     // (undocumented)
-    static ɵdir: i0.ɵɵDirectiveDeclaration<VfTemporalFieldRootDirective, "[vfTemporalFieldRoot]", never, {}, {}, never, never, true, never>;
+    readonly type: InputSignal<TemporalFieldInputType>;
     // (undocumented)
-    static ɵfac: i0.ɵɵFactoryDeclaration<VfTemporalFieldRootDirective, never>;
-}
-
-// @public (undocumented)
-class VfTemporalInputDirective {
-    // (undocumented)
-    readonly type: InputSignal<TemporalInputType>;
-    // (undocumented)
-    static ɵdir: i0.ɵɵDirectiveDeclaration<VfTemporalInputDirective, "input[vfTemporalInput]", never, {
+    static ɵdir: i0.ɵɵDirectiveDeclaration<VfTemporalFieldInputDirective, "input[vfTemporalFieldInput]", never, {
         "type": {
             "alias": "type";
             "required": false;
@@ -2887,10 +2770,16 @@ class VfTemporalInputDirective {
         };
     }, {}, never, never, true, never>;
     // (undocumented)
-    static ɵfac: i0.ɵɵFactoryDeclaration<VfTemporalInputDirective, never>;
+    static ɵfac: i0.ɵɵFactoryDeclaration<VfTemporalFieldInputDirective, never>;
 }
-export { VfTemporalInputDirective as VfTemporalFieldInputDirective }
-export { VfTemporalInputDirective }
+
+// @public (undocumented)
+export class VfTemporalFieldRootDirective {
+    // (undocumented)
+    static ɵdir: i0.ɵɵDirectiveDeclaration<VfTemporalFieldRootDirective, "[vfTemporalFieldRoot]", never, {}, {}, never, never, true, never>;
+    // (undocumented)
+    static ɵfac: i0.ɵɵFactoryDeclaration<VfTemporalFieldRootDirective, never>;
+}
 
 // @public (undocumented)
 export class VfTextareaDirective {
@@ -3217,14 +3106,6 @@ export class VfTooltipTriggerDirective implements OnDestroy {
     static ɵdir: i0.ɵɵDirectiveDeclaration<VfTooltipTriggerDirective, "[vfTooltipTrigger]", never, {}, {}, never, never, true, never>;
     // (undocumented)
     static ɵfac: i0.ɵɵFactoryDeclaration<VfTooltipTriggerDirective, never>;
-}
-
-// @public (undocumented)
-export class VfVisuallyHiddenDirective {
-    // (undocumented)
-    static ɵdir: i0.ɵɵDirectiveDeclaration<VfVisuallyHiddenDirective, "[vfVisuallyHidden]", never, {}, {}, never, never, true, never>;
-    // (undocumented)
-    static ɵfac: i0.ɵɵFactoryDeclaration<VfVisuallyHiddenDirective, never>;
 }
 
 // (No @packageDocumentation comment for this package)

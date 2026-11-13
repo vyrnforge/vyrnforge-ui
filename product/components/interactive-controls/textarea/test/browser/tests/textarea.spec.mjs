@@ -21,7 +21,20 @@ test('Textarea preserves native multiline form semantics and shared styling acro
   await expect(editable).toHaveAttribute('rows', '4');
   await expect(editable).toHaveAttribute('cols', '30');
   await expect(editable).toHaveAttribute('wrap', 'soft');
-  expect(await editable.evaluate((textarea) => getComputedStyle(textarea).resize)).not.toBe('none');
+  await expect(editable).toHaveCSS('min-height', '40px');
+  expect(['auto', 'both']).toContain(await editable.evaluate((textarea) => getComputedStyle(textarea).resize));
+
+  const oneRowHeight = await editable.evaluate((textarea) => {
+    textarea.rows = 1;
+    return textarea.getBoundingClientRect().height;
+  });
+  const threeRowHeight = await editable.evaluate((textarea) => {
+    textarea.rows = 3;
+    return textarea.getBoundingClientRect().height;
+  });
+  expect(oneRowHeight).toBeGreaterThanOrEqual(40);
+  expect(threeRowHeight).toBeGreaterThan(oneRowHeight);
+  await editable.evaluate((textarea) => { textarea.rows = 4; });
 
   await editable.fill('changed\nline');
   await expect(editable).toHaveValue('changed\nline');
@@ -37,12 +50,21 @@ test('Textarea preserves native multiline form semantics and shared styling acro
   await expect(editable).toHaveValue('alpha\nbeta');
 
   expect(await required.evaluate((textarea) => textarea.validity.valueMissing)).toBe(true);
+  expect(await required.evaluate((textarea) => textarea.matches(':invalid'))).toBe(true);
+  expect(await required.evaluate((textarea) => textarea.matches(':user-invalid'))).toBe(false);
+  const normalBoundary = await readonly.evaluate((textarea) => getComputedStyle(textarea).borderColor);
+  expect(await required.evaluate((textarea) => getComputedStyle(textarea).borderColor)).toBe(normalBoundary);
+  await page.locator('#form').evaluate((form) => form.requestSubmit());
+  expect(await required.evaluate((textarea) => textarea.matches(':user-invalid'))).toBe(true);
+  await expect.poll(() => required.evaluate((textarea) => getComputedStyle(textarea).borderColor)).not.toBe(normalBoundary);
   await constrained.fill('x');
   expect(await constrained.evaluate((textarea) => textarea.validity.tooShort)).toBe(true);
   await expect(constrained).toHaveAttribute('minlength', '3');
   await expect(constrained).toHaveAttribute('maxlength', '8');
   await expect(appInvalid).toHaveAttribute('aria-invalid', 'true');
 
+  await editable.blur();
+  await expect.poll(() => editable.evaluate((textarea) => getComputedStyle(textarea).borderColor)).toBe('rgb(113, 113, 122)');
   const normalBorder = await editable.evaluate((textarea) => getComputedStyle(textarea).borderColor);
   const invalidBorder = await appInvalid.evaluate((textarea) => getComputedStyle(textarea).borderColor);
   expect(invalidBorder).not.toBe(normalBorder);

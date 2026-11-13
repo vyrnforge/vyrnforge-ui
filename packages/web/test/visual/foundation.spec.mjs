@@ -6,15 +6,12 @@ const readCss = async (path) => (await readFile(new URL(path, import.meta.url), 
 const tokensCss = await readCss('../../src/styles/tokens.css');
 const buttonCss = await readCss('../../src/components/button/button.css');
 const checkboxCss = await readCss('../../src/components/checkbox/checkbox.css');
-const colorInputCss = await readCss('../../src/components/color-input/color-input.css');
 const fileInputCss = await readCss('../../src/components/file-input/file-input.css');
 const inputCss = await readCss('../../src/components/input/input.css');
 const nativeSelectCss = await readCss('../../src/components/native-select/native-select.css');
 const radioCss = await readCss('../../src/components/radio/radio.css');
 const sliderCss = await readCss('../../src/components/slider/slider.css');
 const switchCss = await readCss('../../src/components/switch/switch.css');
-const temporalInputCss = await readCss('../../src/components/temporal-input/temporal-input.css');
-const surfaceCss = await readCss('../../src/components/surface/surface.css');
 const elementalCss = await readCss('../../src/components/elemental-primitives/elemental-primitives.css');
 const baseline = JSON.parse(await readFile(new URL('./foundation-baseline.json', import.meta.url), 'utf8'));
 
@@ -91,7 +88,7 @@ test('foundation design language matches the approved visual baseline', async ({
 
 test('Layer 0 through Layer 2 use the restrained default presentation contract', async ({ page }, testInfo) => {
   await page.setViewportSize({ width: 940, height: 1020 });
-  const css = [tokensCss, buttonCss, checkboxCss, colorInputCss, fileInputCss, inputCss, nativeSelectCss, radioCss, sliderCss, switchCss, temporalInputCss, surfaceCss, elementalCss, presentationFixtureCss].join('\n');
+  const css = [tokensCss, buttonCss, checkboxCss, fileInputCss, inputCss, nativeSelectCss, radioCss, sliderCss, switchCss, elementalCss, presentationFixtureCss].join('\n');
   const theme = (name) => `<section class="presentation-theme" data-vf-theme="${name}" aria-label="${name} presentation">
     <div class="presentation-row">
       <button data-vf-button>Primary</button>
@@ -109,13 +106,13 @@ test('Layer 0 through Layer 2 use the restrained default presentation contract',
       <input data-vf-switch role="switch" type="checkbox" aria-label="Checked switch" checked>
     </div>
     <input class="presentation-slider" data-vf-slider type="range" aria-label="Example slider" min="0" max="100" value="62">
-    <p class="presentation-caption">Specialized native controls</p>
+    <p class="presentation-caption">Native selection and input modes</p>
     <select class="presentation-specialized" data-vf-native-select aria-label="Example select"><option>Primary option</option></select>
-    <input class="presentation-specialized" data-vf-temporal-input type="date" aria-label="Example date" value="2026-10-23">
+    <input class="presentation-specialized" data-vf-input type="date" aria-label="Example date" value="2026-10-23">
     <input class="presentation-specialized" data-vf-file-input type="file" aria-label="Example file">
     <div class="presentation-specialized-grid">
-      <input data-vf-color-input type="color" aria-label="Example color" value="#245edb">
-      <input data-vf-color-input type="color" aria-label="Disabled color" value="#71717a" disabled>
+      <input data-vf-input type="color" aria-label="Example color" value="#245edb">
+      <input data-vf-input type="color" aria-label="Disabled color" value="#71717a" disabled>
     </div>
     <p class="presentation-caption">Disabled states</p>
     <div class="presentation-control-row">
@@ -128,24 +125,24 @@ test('Layer 0 through Layer 2 use the restrained default presentation contract',
       <code class="presentation-code" data-vf-code>npm install @vyrnforge/web</code>
       <kbd data-vf-kbd>⌘K</kbd>
     </div>
-    <article class="presentation-card" data-vf-surface>Surface presentation</article>
   </section>`;
   await page.setContent(`<!doctype html><html lang="en"><head><meta charset="utf-8"><title>VyrnForge L0-L2 presentation</title><style>${css}</style></head><body><main id="presentation">${theme('light')}${theme('dark')}</main></body></html>`);
 
   const light = page.locator('[data-vf-theme="light"]');
   const primary = light.locator('[data-vf-button]').first();
   const secondary = light.locator('[data-vf-button][data-vf-variant="secondary"]');
-  const input = light.locator('[data-vf-input]');
+  const input = light.locator('[data-vf-input]:not([type="date"]):not([type="color"])');
   const checkbox = light.locator('[data-vf-checkbox]:checked').first();
+  const uncheckedCheckbox = light.locator('[data-vf-checkbox]:not(:checked):not(:disabled)').first();
   const radio = light.locator('[data-vf-radio]:checked').first();
+  const uncheckedRadio = light.locator('[data-vf-radio]:not(:checked):not(:disabled)').first();
   const switchControl = light.locator('[data-vf-switch]:checked').first();
   const slider = light.locator('[data-vf-slider]:not(:disabled)').first();
   const nativeSelect = light.locator('[data-vf-native-select]');
-  const temporalInput = light.locator('[data-vf-temporal-input]');
+  const temporalInput = light.locator('[data-vf-input][type="date"]');
   const fileInput = light.locator('[data-vf-file-input]');
-  const colorInput = light.locator('[data-vf-color-input]:not(:disabled)');
-  const disabledColorInput = light.locator('[data-vf-color-input]:disabled');
-  const surface = light.locator('[data-vf-surface]');
+  const colorInput = light.locator('[data-vf-input][type="color"]:not(:disabled)');
+  const disabledColorInput = light.locator('[data-vf-input][type="color"]:disabled');
 
   await expect(primary).toHaveCSS('background-color', 'rgb(36, 94, 219)');
   await expect(primary).toHaveCSS('border-radius', '6px');
@@ -153,13 +150,22 @@ test('Layer 0 through Layer 2 use the restrained default presentation contract',
   await expect(secondary).toHaveCSS('border-color', 'rgb(113, 113, 122)');
   await expect(input).toHaveCSS('min-height', '40px');
   await expect(input).toHaveCSS('border-radius', '6px');
+  await expect(input).toHaveCSS('border-color', 'rgb(113, 113, 122)');
   await expect(input).toHaveCSS('box-shadow', 'none');
   await expect(checkbox).toHaveCSS('appearance', 'none');
   await expect(checkbox).toHaveCSS('background-color', 'rgb(36, 94, 219)');
   await expect(checkbox).toHaveCSS('border-radius', '4px');
+  await expect(uncheckedCheckbox).toHaveCSS('border-color', 'rgb(113, 113, 122)');
+  await expect(uncheckedCheckbox).toHaveCSS('width', '24px');
+  await expect(uncheckedCheckbox).toHaveCSS('height', '24px');
   await expect(radio).toHaveCSS('appearance', 'none');
   await expect(radio).toHaveCSS('background-color', 'rgb(36, 94, 219)');
+  await expect(uncheckedRadio).toHaveCSS('border-color', 'rgb(113, 113, 122)');
+  await expect(uncheckedRadio).toHaveCSS('width', '24px');
+  await expect(uncheckedRadio).toHaveCSS('height', '24px');
   await expect(switchControl).toHaveCSS('background-color', 'rgb(36, 94, 219)');
+  await expect(switchControl).toHaveCSS('width', '44px');
+  await expect(switchControl).toHaveCSS('height', '24px');
   await expect(switchControl).toHaveCSS('box-shadow', 'none');
   expect(await switchControl.evaluate((element) => getComputedStyle(element, '::before').boxShadow)).toBe('none');
   await expect(slider).toHaveCSS('appearance', 'none');
@@ -170,12 +176,11 @@ test('Layer 0 through Layer 2 use the restrained default presentation contract',
   await expect(temporalInput).toHaveCSS('border-radius', '6px');
   await expect(fileInput).toHaveCSS('min-height', '40px');
   await expect(fileInput).toHaveCSS('border-radius', '6px');
+  await expect(fileInput).toHaveCSS('border-color', 'rgb(113, 113, 122)');
   await expect(colorInput).toHaveCSS('height', '40px');
   await expect(colorInput).toHaveCSS('border-radius', '6px');
   await expect(disabledColorInput).toHaveCSS('background-color', 'rgb(244, 244, 245)');
   await expect(disabledColorInput).toHaveCSS('border-color', 'rgb(228, 228, 231)');
-  await expect(surface).toHaveCSS('border-radius', '8px');
-  await expect(surface).toHaveCSS('box-shadow', 'none');
 
   await input.focus();
   await expect(input).toHaveCSS('outline-width', '2px');

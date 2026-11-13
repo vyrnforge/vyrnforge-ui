@@ -1,5 +1,4 @@
 import { resolveEnabledIndex } from '@vyrnforge/core/collection-navigation';
-import { rovingTabIndex } from '@vyrnforge/core/composite-focus';
 import { findTypeaheadMatch } from '@vyrnforge/core/typeahead-matching';
 
 const HTMLElementBase: typeof HTMLElement = globalThis.HTMLElement ?? class {} as typeof HTMLElement;
@@ -20,7 +19,7 @@ function syncTabStops(root: HTMLElement, preferred?: HTMLElement | null) {
   if (activeIndex < 0 || states[activeIndex]?.disabled) activeIndex = options.findIndex((option, index) => !states[index]?.disabled && option.getAttribute('aria-selected') === 'true');
   if (activeIndex < 0) activeIndex = states.findIndex((option) => !option.disabled);
   const resolved = activeIndex < 0 ? null : activeIndex;
-  options.forEach((option, index) => { option.tabIndex = rovingTabIndex(index, resolved, states[index]?.disabled); });
+  options.forEach((option, index) => { option.tabIndex = !states[index]?.disabled && resolved === index ? 0 : -1; });
 }
 
 export class VfListboxElement extends HTMLElementBase {

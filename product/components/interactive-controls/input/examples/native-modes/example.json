@@ -1,0 +1,13 @@
+{
+  "id": "input/native-modes",
+  "title": "Native number, date, and color modes",
+  "description": "Input keeps browser-owned number, temporal, and color behavior while sharing the same VyrnForge styling contract.",
+  "defaultFramework": "react",
+  "frameworks": {
+    "native-web": { "label": "Native Web", "language": "html", "source": "native-web.html" },
+    "react": { "label": "React", "language": "tsx", "source": "react.tsx" },
+    "angular": { "label": "Angular", "language": "ts", "source": "angular.ts" },
+    "vue": { "label": "Vue", "language": "ts", "source": "vue.ts" },
+    "elements": { "label": "Custom Elements app", "language": "ts", "source": "elements.ts" }
+  }
+}

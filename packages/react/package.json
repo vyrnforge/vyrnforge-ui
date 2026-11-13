@@ -26,11 +26,6 @@
       "import": "./dist/components/checkbox/index.js",
       "default": "./dist/components/checkbox/index.js"
     },
-    "./color-input": {
-      "types": "./dist/components/color-input/index.d.ts",
-      "import": "./dist/components/color-input/index.js",
-      "default": "./dist/components/color-input/index.js"
-    },
     "./dialog": {
       "types": "./dist/components/dialog/index.d.ts",
       "import": "./dist/components/dialog/index.js",
@@ -61,11 +56,6 @@
       "import": "./dist/components/native-select/index.js",
       "default": "./dist/components/native-select/index.js"
     },
-    "./number-input": {
-      "types": "./dist/components/number-input/index.d.ts",
-      "import": "./dist/components/number-input/index.js",
-      "default": "./dist/components/number-input/index.js"
-    },
     "./radio": {
       "types": "./dist/components/radio/index.d.ts",
       "import": "./dist/components/radio/index.js",
@@ -80,11 +70,6 @@
       "types": "./dist/components/switch/index.d.ts",
       "import": "./dist/components/switch/index.js",
       "default": "./dist/components/switch/index.js"
-    },
-    "./temporal-input": {
-      "types": "./dist/components/temporal-input/index.d.ts",
-      "import": "./dist/components/temporal-input/index.js",
-      "default": "./dist/components/temporal-input/index.js"
     },
     "./textarea": {
       "types": "./dist/components/textarea/index.d.ts",
@@ -101,16 +86,6 @@
       "import": "./dist/components/layout/index.js",
       "default": "./dist/components/layout/index.js"
     },
-    "./separator": {
-      "types": "./dist/components/separator/index.d.ts",
-      "import": "./dist/components/separator/index.js",
-      "default": "./dist/components/separator/index.js"
-    },
-    "./surface": {
-      "types": "./dist/components/surface/index.d.ts",
-      "import": "./dist/components/surface/index.js",
-      "default": "./dist/components/surface/index.js"
-    },
     "./tabs": {
       "types": "./dist/components/tabs/index.d.ts",
       "import": "./dist/components/tabs/index.js",
@@ -120,21 +95,6 @@
       "types": "./dist/components/text/index.d.ts",
       "import": "./dist/components/text/index.js",
       "default": "./dist/components/text/index.js"
-    },
-    "./visually-hidden": {
-      "types": "./dist/components/visually-hidden/index.d.ts",
-      "import": "./dist/components/visually-hidden/index.js",
-      "default": "./dist/components/visually-hidden/index.js"
-    },
-    "./portal": {
-      "types": "./dist/components/portal/index.d.ts",
-      "import": "./dist/components/portal/index.js",
-      "default": "./dist/components/portal/index.js"
-    },
-    "./presence": {
-      "types": "./dist/components/presence/index.d.ts",
-      "import": "./dist/components/presence/index.js",
-      "default": "./dist/components/presence/index.js"
     },
     "./disclosure": {
       "types": "./dist/components/disclosure/index.d.ts",

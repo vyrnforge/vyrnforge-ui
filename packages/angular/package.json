@@ -26,11 +26,6 @@
       "types": "./dist/types/vyrnforge-angular-checkbox.d.ts",
       "default": "./dist/fesm2022/vyrnforge-angular-checkbox.mjs"
     },
-    "./color-input": {
-      "import": "./dist/fesm2022/vyrnforge-angular-color-input.mjs",
-      "types": "./dist/types/vyrnforge-angular-color-input.d.ts",
-      "default": "./dist/fesm2022/vyrnforge-angular-color-input.mjs"
-    },
     "./dialog": {
       "import": "./dist/fesm2022/vyrnforge-angular-dialog.mjs",
       "types": "./dist/types/vyrnforge-angular-dialog.d.ts",
@@ -61,11 +56,6 @@
       "types": "./dist/types/vyrnforge-angular-native-select.d.ts",
       "default": "./dist/fesm2022/vyrnforge-angular-native-select.mjs"
     },
-    "./number-input": {
-      "import": "./dist/fesm2022/vyrnforge-angular-number-input.mjs",
-      "types": "./dist/types/vyrnforge-angular-number-input.d.ts",
-      "default": "./dist/fesm2022/vyrnforge-angular-number-input.mjs"
-    },
     "./radio": {
       "import": "./dist/fesm2022/vyrnforge-angular-radio.mjs",
       "types": "./dist/types/vyrnforge-angular-radio.d.ts",
@@ -80,11 +70,6 @@
       "import": "./dist/fesm2022/vyrnforge-angular-switch.mjs",
       "types": "./dist/types/vyrnforge-angular-switch.d.ts",
       "default": "./dist/fesm2022/vyrnforge-angular-switch.mjs"
-    },
-    "./temporal-input": {
-      "import": "./dist/fesm2022/vyrnforge-angular-temporal-input.mjs",
-      "types": "./dist/types/vyrnforge-angular-temporal-input.d.ts",
-      "default": "./dist/fesm2022/vyrnforge-angular-temporal-input.mjs"
     },
     "./textarea": {
       "import": "./dist/fesm2022/vyrnforge-angular-textarea.mjs",
@@ -101,16 +86,6 @@
       "types": "./dist/types/vyrnforge-angular-layout.d.ts",
       "default": "./dist/fesm2022/vyrnforge-angular-layout.mjs"
     },
-    "./separator": {
-      "import": "./dist/fesm2022/vyrnforge-angular-separator.mjs",
-      "types": "./dist/types/vyrnforge-angular-separator.d.ts",
-      "default": "./dist/fesm2022/vyrnforge-angular-separator.mjs"
-    },
-    "./surface": {
-      "import": "./dist/fesm2022/vyrnforge-angular-surface.mjs",
-      "types": "./dist/types/vyrnforge-angular-surface.d.ts",
-      "default": "./dist/fesm2022/vyrnforge-angular-surface.mjs"
-    },
     "./tabs": {
       "import": "./dist/fesm2022/vyrnforge-angular-tabs.mjs",
       "types": "./dist/types/vyrnforge-angular-tabs.d.ts",
@@ -120,21 +95,6 @@
       "import": "./dist/fesm2022/vyrnforge-angular-text.mjs",
       "types": "./dist/types/vyrnforge-angular-text.d.ts",
       "default": "./dist/fesm2022/vyrnforge-angular-text.mjs"
-    },
-    "./visually-hidden": {
-      "import": "./dist/fesm2022/vyrnforge-angular-visually-hidden.mjs",
-      "types": "./dist/types/vyrnforge-angular-visually-hidden.d.ts",
-      "default": "./dist/fesm2022/vyrnforge-angular-visually-hidden.mjs"
-    },
-    "./portal": {
-      "import": "./dist/fesm2022/vyrnforge-angular-portal.mjs",
-      "types": "./dist/types/vyrnforge-angular-portal.d.ts",
-      "default": "./dist/fesm2022/vyrnforge-angular-portal.mjs"
-    },
-    "./presence": {
-      "import": "./dist/fesm2022/vyrnforge-angular-presence.mjs",
-      "types": "./dist/types/vyrnforge-angular-presence.d.ts",
-      "default": "./dist/fesm2022/vyrnforge-angular-presence.mjs"
     },
     "./disclosure": {
       "import": "./dist/fesm2022/vyrnforge-angular-disclosure.mjs",

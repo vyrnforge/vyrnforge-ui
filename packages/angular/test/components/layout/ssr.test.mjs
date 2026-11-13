@@ -4,16 +4,44 @@ import '@angular/compiler';
 import { Component, provideZonelessChangeDetection } from '@angular/core';
 import { bootstrapApplication } from '@angular/platform-browser';
 import { renderApplication } from '@angular/platform-server';
-import { VfClusterDirective, VfContainerDirective, VfGridDirective, VfStackDirective } from '@vyrnforge/angular/layout';
+import {
+  VfAutoGridDirective,
+  VfClusterDirective,
+  VfContainerDirective,
+  VfControlGroupDirective,
+  VfInlineDirective,
+  VfStackDirective,
+} from '@vyrnforge/angular/layout';
 
 class AppComponent {}
-Component({ selector: 'vf-layout-ssr-test', standalone: true, imports: [VfClusterDirective, VfContainerDirective, VfGridDirective, VfStackDirective], template: '<main id="container" vfContainer vfContainerSize="lg" vfContainerGutter="md"><section id="stack" vfStack vfStackGap="lg"><section id="grid" vfGrid vfGridGap="md">Cards</section><div id="cluster" vfCluster vfClusterGap="sm">Actions</div></section></main>' })(AppComponent);
+Component({
+  selector: 'vf-layout-ssr-test',
+  standalone: true,
+  imports: [VfAutoGridDirective, VfClusterDirective, VfContainerDirective, VfControlGroupDirective, VfInlineDirective, VfStackDirective],
+  template: `
+    <main id="container" vfContainer vfContainerSize="lg" vfContainerGutter="md">
+      <section id="stack" vfStack vfStackGap="lg">
+        <section id="auto-grid" vfAutoGrid vfAutoGridGap="md">Cards</section>
+        <div id="inline" vfInline vfInlineGap="sm">Inline</div>
+        <div id="cluster" vfCluster vfClusterGap="sm">Actions</div>
+        <div id="control-group" vfControlGroup vfControlGroupOrientation="vertical"><button type="button">Previous</button><button type="button">Next</button></div>
+      </section>
+    </main>
+  `,
+})(AppComponent);
 
-test('Angular layout directives decorate authored semantic elements with distinct shared contracts during SSR', async () => {
-  const html = await renderApplication((context) => bootstrapApplication(AppComponent, { providers: [provideZonelessChangeDetection()] }, context), { document: '<!doctype html><html><body><vf-layout-ssr-test></vf-layout-ssr-test></body></html>' });
-  assert.match(html, /<main[^>]*id="container"/);
-  assert.match(html, /data-vf-container-size="lg"/);
-  assert.match(html, /<section[^>]*id="grid"[^>]*data-vf-grid/);
-  assert.match(html, /data-vf-grid-gap="md"/);
-  assert.match(html, /<div[^>]*id="cluster"/);
+test('Angular SSR preserves the six L3 composition contracts on authored native elements', async () => {
+  const html = await renderApplication(
+    (context) => bootstrapApplication(AppComponent, { providers: [provideZonelessChangeDetection()] }, context),
+    { document: '<!doctype html><html><body><vf-layout-ssr-test></vf-layout-ssr-test></body></html>' },
+  );
+
+  for (const hook of ['container', 'stack', 'auto-grid', 'inline', 'cluster', 'control-group']) {
+    assert.match(html, new RegExp(`data-vf-${hook}`));
+  }
+  for (const retired of ['grid', 'aspect-ratio', 'field', 'fieldset', 'radio-group']) {
+    assert.doesNotMatch(html, new RegExp(`data-vf-${retired}(?:\\s|=)`));
+  }
+  assert.doesNotMatch(html, /id="control-group"[^>]*role=/);
+  assert.match(html, /data-vf-control-group-orientation="vertical"/);
 });

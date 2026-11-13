@@ -1,80 +1,118 @@
 import { createElement, forwardRef } from 'react';
-import type { FieldsetHTMLAttributes, HTMLAttributes } from 'react';
+import type { ComponentPropsWithoutRef, ReactElement, Ref } from 'react';
 import type {
-  AspectRatio as AspectRatioValue,
   ClusterAlign,
   ClusterJustify,
   ContainerSize,
+  ControlGroupOrientation,
   InlineAlign,
   InlineJustify,
   LayoutSpace,
-  RadioGroupOrientation,
   StackAlign,
   StackJustify,
 } from '@vyrnforge/web/layout';
 
-export type AspectRatio = AspectRatioValue;
 export type {
   ClusterAlign,
   ClusterJustify,
   ContainerSize,
+  ControlGroupOrientation,
   InlineAlign,
   InlineJustify,
   LayoutSpace,
-  RadioGroupOrientation,
   StackAlign,
   StackJustify,
 } from '@vyrnforge/web/layout';
 
-export type LayoutElement = 'div' | 'span' | 'section' | 'main' | 'article' | 'aside' | 'nav' | 'header' | 'footer' | 'form' | 'ul' | 'ol';
+export type LayoutElement =
+  | 'div'
+  | 'span'
+  | 'section'
+  | 'main'
+  | 'article'
+  | 'aside'
+  | 'nav'
+  | 'header'
+  | 'footer'
+  | 'form'
+  | 'fieldset'
+  | 'ul'
+  | 'ol';
 
-export interface StackProps extends HTMLAttributes<HTMLElement> { as?: LayoutElement; gap?: LayoutSpace; align?: StackAlign; justify?: StackJustify; }
-export interface InlineProps extends HTMLAttributes<HTMLElement> { as?: LayoutElement; gap?: LayoutSpace; align?: InlineAlign; justify?: InlineJustify; }
-export interface ClusterProps extends HTMLAttributes<HTMLElement> { as?: LayoutElement; gap?: LayoutSpace; align?: ClusterAlign; justify?: ClusterJustify; }
-export interface GridProps extends HTMLAttributes<HTMLElement> { as?: LayoutElement; gap?: LayoutSpace; }
-export interface ContainerProps extends HTMLAttributes<HTMLElement> { as?: LayoutElement; size?: ContainerSize; gutter?: LayoutSpace; }
-export interface AspectRatioProps extends HTMLAttributes<HTMLElement> { as?: LayoutElement; ratio?: AspectRatio; }
-export interface FieldProps extends HTMLAttributes<HTMLElement> { as?: LayoutElement; gap?: LayoutSpace; }
-export interface FieldsetProps extends FieldsetHTMLAttributes<HTMLFieldSetElement> { gap?: LayoutSpace; }
-export type InputGroupProps = HTMLAttributes<HTMLDivElement>;
-export interface RadioGroupProps extends FieldsetHTMLAttributes<HTMLFieldSetElement> { gap?: LayoutSpace; orientation?: RadioGroupOrientation; }
+export type StackProps<Element extends LayoutElement = 'div'> = {
+  as?: Element;
+  gap?: LayoutSpace;
+  align?: StackAlign;
+  justify?: StackJustify;
+} & Omit<ComponentPropsWithoutRef<Element>, 'as' | 'gap' | 'align' | 'justify'>;
 
-export const Stack = forwardRef<HTMLElement, StackProps>(function Stack({ as = 'div', gap = 'md', align = 'stretch', justify = 'start', ...nativeProps }, ref) {
-  return createElement(as, { ...nativeProps, ref, 'data-vf-stack': '', 'data-vf-stack-gap': gap, 'data-vf-stack-align': align, 'data-vf-stack-justify': justify });
-});
+export type InlineProps<Element extends LayoutElement = 'div'> = {
+  as?: Element;
+  gap?: LayoutSpace;
+  align?: InlineAlign;
+  justify?: InlineJustify;
+} & Omit<ComponentPropsWithoutRef<Element>, 'as' | 'gap' | 'align' | 'justify'>;
 
-export const Inline = /* @__PURE__ */ forwardRef<HTMLElement, InlineProps>(function Inline({ as = 'div', gap = 'md', align = 'center', justify = 'start', ...nativeProps }, ref) {
-  return createElement(as, { ...nativeProps, ref, 'data-vf-inline': '', 'data-vf-inline-gap': gap, 'data-vf-inline-align': align, 'data-vf-inline-justify': justify });
-});
+export type ClusterProps<Element extends LayoutElement = 'div'> = {
+  as?: Element;
+  gap?: LayoutSpace;
+  align?: ClusterAlign;
+  justify?: ClusterJustify;
+} & Omit<ComponentPropsWithoutRef<Element>, 'as' | 'gap' | 'align' | 'justify'>;
 
-export const Cluster = forwardRef<HTMLElement, ClusterProps>(function Cluster({ as = 'div', gap = 'md', align = 'center', justify = 'start', ...nativeProps }, ref) {
-  return createElement(as, { ...nativeProps, ref, 'data-vf-cluster': '', 'data-vf-cluster-gap': gap, 'data-vf-cluster-align': align, 'data-vf-cluster-justify': justify });
-});
+export type AutoGridProps<Element extends LayoutElement = 'div'> = {
+  as?: Element;
+  gap?: LayoutSpace;
+} & Omit<ComponentPropsWithoutRef<Element>, 'as' | 'gap'>;
 
-export const Grid = forwardRef<HTMLElement, GridProps>(function Grid({ as = 'div', gap = 'md', ...nativeProps }, ref) {
-  return createElement(as, { ...nativeProps, ref, 'data-vf-grid': '', 'data-vf-grid-gap': gap });
-});
+export type ContainerProps<Element extends LayoutElement = 'div'> = {
+  as?: Element;
+  size?: ContainerSize;
+  gutter?: LayoutSpace;
+} & Omit<ComponentPropsWithoutRef<Element>, 'as' | 'size' | 'gutter'>;
 
-export const Container = forwardRef<HTMLElement, ContainerProps>(function Container({ as = 'div', size = 'xl', gutter = 'md', ...nativeProps }, ref) {
-  return createElement(as, { ...nativeProps, ref, 'data-vf-container': '', 'data-vf-container-size': size, 'data-vf-container-gutter': gutter });
-});
+export type ControlGroupProps<Element extends LayoutElement = 'div'> = {
+  as?: Element;
+  orientation?: ControlGroupOrientation;
+} & Omit<ComponentPropsWithoutRef<Element>, 'as' | 'orientation'>;
 
-export const AspectRatio = /* @__PURE__ */ forwardRef<HTMLElement, AspectRatioProps>(function AspectRatio({ as = 'div', ratio = 'square', ...nativeProps }, ref) {
-  return createElement(as, { ...nativeProps, ref, 'data-vf-aspect-ratio': '', 'data-vf-aspect-ratio-value': ratio });
-});
+function createPolymorphic<DefaultElement extends LayoutElement>(
+  render: (props: Record<string, unknown>, ref: Ref<HTMLElement>) => ReactElement | null,
+) {
+  return forwardRef<HTMLElement, Record<string, unknown>>(render);
+}
 
-export const Field = /* @__PURE__ */ forwardRef<HTMLElement, FieldProps>(function Field({ as = 'div', gap = 'xs', ...nativeProps }, ref) {
-  return createElement(as, { ...nativeProps, ref, 'data-vf-field': '', 'data-vf-field-gap': gap });
-});
+export const Stack = createPolymorphic<'div'>((props, ref) => {
+  const { as = 'div', gap = 'md', align = 'stretch', justify = 'start', ...nativeProps } = props;
+  return createElement(as as LayoutElement, { ...nativeProps, ref, 'data-vf-stack': '', 'data-vf-stack-gap': gap, 'data-vf-stack-align': align, 'data-vf-stack-justify': justify });
+}) as <Element extends LayoutElement = 'div'>(props: StackProps<Element> & { ref?: Ref<HTMLElementTagNameMap[Element]> }) => ReactElement | null;
 
-export const Fieldset = /* @__PURE__ */ forwardRef<HTMLFieldSetElement, FieldsetProps>(function Fieldset({ gap = 'sm', ...nativeProps }, ref) {
-  return createElement('fieldset', { ...nativeProps, ref, 'data-vf-fieldset': '', 'data-vf-fieldset-gap': gap });
-});
+export const Inline = createPolymorphic<'div'>((props, ref) => {
+  const { as = 'div', gap = 'md', align = 'center', justify = 'start', ...nativeProps } = props;
+  return createElement(as as LayoutElement, { ...nativeProps, ref, 'data-vf-inline': '', 'data-vf-inline-gap': gap, 'data-vf-inline-align': align, 'data-vf-inline-justify': justify });
+}) as <Element extends LayoutElement = 'div'>(props: InlineProps<Element> & { ref?: Ref<HTMLElementTagNameMap[Element]> }) => ReactElement | null;
 
-export const InputGroup = /* @__PURE__ */ forwardRef<HTMLDivElement, InputGroupProps>(function InputGroup(nativeProps, ref) {
-  return createElement('div', { ...nativeProps, ref, 'data-vf-input-group': '' });
-});
+export const Cluster = createPolymorphic<'div'>((props, ref) => {
+  const { as = 'div', gap = 'md', align = 'center', justify = 'start', ...nativeProps } = props;
+  return createElement(as as LayoutElement, { ...nativeProps, ref, 'data-vf-cluster': '', 'data-vf-cluster-gap': gap, 'data-vf-cluster-align': align, 'data-vf-cluster-justify': justify });
+}) as <Element extends LayoutElement = 'div'>(props: ClusterProps<Element> & { ref?: Ref<HTMLElementTagNameMap[Element]> }) => ReactElement | null;
 
-export const RadioGroup = /* @__PURE__ */ forwardRef<HTMLFieldSetElement, RadioGroupProps>(function RadioGroup({ gap = 'sm', orientation = 'vertical', ...nativeProps }, ref) {
-  return createElement('fieldset', { ...nativeProps, ref, 'data-vf-radio-group': '', 'data-vf-radio-group-gap': gap, 'data-vf-radio-group-orientation': orientation });
-});
+export const AutoGrid = createPolymorphic<'div'>((props, ref) => {
+  const { as = 'div', gap = 'md', ...nativeProps } = props;
+  return createElement(as as LayoutElement, { ...nativeProps, ref, 'data-vf-auto-grid': '', 'data-vf-auto-grid-gap': gap });
+}) as <Element extends LayoutElement = 'div'>(props: AutoGridProps<Element> & { ref?: Ref<HTMLElementTagNameMap[Element]> }) => ReactElement | null;
+
+export const Container = createPolymorphic<'div'>((props, ref) => {
+  const { as = 'div', size = 'xl', gutter = 'md', ...nativeProps } = props;
+  return createElement(as as LayoutElement, { ...nativeProps, ref, 'data-vf-container': '', 'data-vf-container-size': size, 'data-vf-container-gutter': gutter });
+}) as <Element extends LayoutElement = 'div'>(props: ContainerProps<Element> & { ref?: Ref<HTMLElementTagNameMap[Element]> }) => ReactElement | null;
+
+export const ControlGroup = createPolymorphic<'div'>((props, ref) => {
+  const { as = 'div', orientation = 'horizontal', ...nativeProps } = props;
+  return createElement(as as LayoutElement, {
+    ...nativeProps,
+    ref,
+    'data-vf-control-group': '',
+    'data-vf-control-group-orientation': orientation,
+  });
+}) as <Element extends LayoutElement = 'div'>(props: ControlGroupProps<Element> & { ref?: Ref<HTMLElementTagNameMap[Element]> }) => ReactElement | null;

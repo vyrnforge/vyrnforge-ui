@@ -22,8 +22,5 @@ export type InlineJustify = (typeof inlineJustifications)[number];
 export const containerSizes = ['sm', 'md', 'lg', 'xl', '2xl', 'full'] as const;
 export type ContainerSize = (typeof containerSizes)[number];
 
-export const aspectRatios = ['square', 'video', 'landscape', 'portrait'] as const;
-export type AspectRatio = (typeof aspectRatios)[number];
-
-export const radioGroupOrientations = ['vertical', 'horizontal'] as const;
-export type RadioGroupOrientation = (typeof radioGroupOrientations)[number];
+export const controlGroupOrientations = ['horizontal', 'vertical'] as const;
+export type ControlGroupOrientation = (typeof controlGroupOrientations)[number];

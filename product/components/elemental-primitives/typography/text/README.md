@@ -32,8 +32,8 @@ Built-in visual roles are the explicit sized variants: display-lg/md/sm, heading
 <Text as="blockquote" variant="body-lg">Design systems reduce repeated decisions.</Text>
 <Text as="mark" variant="body-md">Important</Text>
 <Text as="time" variant="caption" dateTime="2026-11-10">November 10</Text>
-<Link href="/billing" textVariant="body-sm">Billing</Link>
-<Button type="button" textVariant="label-sm">Save</Button>
+<Link href="/billing">Billing</Link>
+<Button type="button">Save</Button>
 ```
 
 Code and Kbd retain their specialized presentation and native semantics while consuming the same shared typography scale. They are not alternate typography systems.

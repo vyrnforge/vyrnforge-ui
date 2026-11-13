@@ -1,0 +1,53 @@
+{
+  "schemaVersion": 1,
+  "component": "text",
+  "reviewStatus": "mapped",
+  "nativeBaseline": {
+    "kind": "native",
+    "reference": "consumer-chosen textual HTML element"
+  },
+  "wcag": {
+    "target": "2.2 AA",
+    "status": "mapped",
+    "criteria": [
+      "1.3.1",
+      "1.4.3"
+    ]
+  },
+  "aria": {
+    "status": "not-applicable",
+    "apgPattern": null
+  },
+  "interaction": {
+    "keyboard": "not-applicable",
+    "focus": "not-applicable",
+    "directionality": "native"
+  },
+  "ownership": {
+    "library": [
+      "preserve the authored/requested native text semantics",
+      "provide token-driven visual typography roles without introducing behavior"
+    ],
+    "consumer": [
+      "choose the native element that matches the content semantics",
+      "do not use typography styling as a substitute for headings, labels, emphasis, or other semantic structure"
+    ]
+  },
+  "forms": {
+    "status": "not-applicable"
+  },
+  "visualAccessibility": {
+    "status": "shared-foundation"
+  },
+  "ssrHydration": {
+    "status": "contract-required"
+  },
+  "evidence": {
+    "browser": "required",
+    "assistiveTechnology": "not-applicable"
+  },
+  "profileVariability": [],
+  "notes": [
+    "Text visual roles are independent from native element semantics; the default visual role is body-md."
+  ]
+}

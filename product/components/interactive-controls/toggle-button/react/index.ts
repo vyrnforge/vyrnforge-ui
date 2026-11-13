@@ -21,7 +21,6 @@ export const ToggleButton = forwardRef<HTMLButtonElement, ToggleButtonProps>(fun
     'aria-pressed': currentPressed,
     'data-vf-button': '',
     'data-vf-toggle-button': '',
-    'data-vf-pressed': currentPressed ? '' : undefined,
     onClick: (event: MouseEvent<HTMLButtonElement>) => {
       onClick?.(event);
       if (event.defaultPrevented || disabled) return;

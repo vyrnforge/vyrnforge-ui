@@ -1,18 +1,17 @@
 import { Directive, input } from '@angular/core';
 import type {
-  AspectRatio,
   ClusterAlign,
   ClusterJustify,
   ContainerSize,
+  ControlGroupOrientation,
   InlineAlign,
   InlineJustify,
   LayoutSpace,
-  RadioGroupOrientation,
   StackAlign,
   StackJustify,
 } from '@vyrnforge/web/layout';
 
-export type { AspectRatio, ClusterAlign, ClusterJustify, ContainerSize, InlineAlign, InlineJustify, LayoutSpace, RadioGroupOrientation, StackAlign, StackJustify } from '@vyrnforge/web/layout';
+export type { ClusterAlign, ClusterJustify, ContainerSize, ControlGroupOrientation, InlineAlign, InlineJustify, LayoutSpace, StackAlign, StackJustify } from '@vyrnforge/web/layout';
 
 @Directive({ selector: '[vfStack]', standalone: true, host: { 'data-vf-stack': '', '[attr.data-vf-stack-gap]': 'vfStackGap()', '[attr.data-vf-stack-align]': 'vfStackAlign()', '[attr.data-vf-stack-justify]': 'vfStackJustify()' } })
 export class VfStackDirective {
@@ -35,9 +34,9 @@ export class VfClusterDirective {
   readonly vfClusterJustify = input<ClusterJustify>('start');
 }
 
-@Directive({ selector: '[vfGrid]', standalone: true, host: { 'data-vf-grid': '', '[attr.data-vf-grid-gap]': 'vfGridGap()' } })
-export class VfGridDirective {
-  readonly vfGridGap = input<LayoutSpace>('md');
+@Directive({ selector: '[vfAutoGrid]', standalone: true, host: { 'data-vf-auto-grid': '', '[attr.data-vf-auto-grid-gap]': 'vfAutoGridGap()' } })
+export class VfAutoGridDirective {
+  readonly vfAutoGridGap = input<LayoutSpace>('md');
 }
 
 @Directive({ selector: '[vfContainer]', standalone: true, host: { 'data-vf-container': '', '[attr.data-vf-container-size]': 'vfContainerSize()', '[attr.data-vf-container-gutter]': 'vfContainerGutter()' } })
@@ -46,26 +45,14 @@ export class VfContainerDirective {
   readonly vfContainerGutter = input<LayoutSpace>('md');
 }
 
-@Directive({ selector: '[vfAspectRatio]', standalone: true, host: { 'data-vf-aspect-ratio': '', '[attr.data-vf-aspect-ratio-value]': 'vfAspectRatio()' } })
-export class VfAspectRatioDirective {
-  readonly vfAspectRatio = input<AspectRatio>('square');
-}
-
-@Directive({ selector: '[vfField]', standalone: true, host: { 'data-vf-field': '', '[attr.data-vf-field-gap]': 'vfFieldGap()' } })
-export class VfFieldDirective {
-  readonly vfFieldGap = input<LayoutSpace>('xs');
-}
-
-@Directive({ selector: 'fieldset[vfFieldset]', standalone: true, host: { 'data-vf-fieldset': '', '[attr.data-vf-fieldset-gap]': 'vfFieldsetGap()' } })
-export class VfFieldsetDirective {
-  readonly vfFieldsetGap = input<LayoutSpace>('sm');
-}
-
-@Directive({ selector: '[vfInputGroup]', standalone: true, host: { 'data-vf-input-group': '' } })
-export class VfInputGroupDirective {}
-
-@Directive({ selector: 'fieldset[vfRadioGroup]', standalone: true, host: { 'data-vf-radio-group': '', '[attr.data-vf-radio-group-gap]': 'vfRadioGroupGap()', '[attr.data-vf-radio-group-orientation]': 'vfRadioGroupOrientation()' } })
-export class VfRadioGroupDirective {
-  readonly vfRadioGroupGap = input<LayoutSpace>('sm');
-  readonly vfRadioGroupOrientation = input<RadioGroupOrientation>('vertical');
+@Directive({
+  selector: '[vfControlGroup]',
+  standalone: true,
+  host: {
+    'data-vf-control-group': '',
+    '[attr.data-vf-control-group-orientation]': 'vfControlGroupOrientation()'
+  }
+})
+export class VfControlGroupDirective {
+  readonly vfControlGroupOrientation = input<ControlGroupOrientation>('horizontal');
 }

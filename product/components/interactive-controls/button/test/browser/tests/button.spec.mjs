@@ -8,6 +8,15 @@ test.describe('Button real-browser contract', () => {
 
   test('native activation, disabled, loading, forms, focus, accessibility, theme, direction, and media states', async ({ page, browserName }) => {
     await page.goto('/components/button/web.html');
+
+    const small = page.getByRole('button', { name: 'Primary small' });
+    const medium = page.getByRole('button', { name: 'Secondary medium' });
+    const large = page.getByRole('button', { name: 'Ghost large' });
+    await expect(small).toHaveCSS('box-sizing', 'border-box');
+    await expect(small).toHaveCSS('height', '32px');
+    await expect(medium).toHaveCSS('height', '40px');
+    await expect(large).toHaveCSS('height', '48px');
+
     const activation = page.locator('#activation');
     await activation.click();
     await expect(page.locator('body')).toHaveAttribute('data-activations', '1');

@@ -3,7 +3,7 @@
 @layer vyrnforge.components {
   :where(input[data-vf-input]) {
     background: var(--vf-color-surface);
-    border: 1px solid var(--vf-color-border);
+    border: 1px solid var(--vf-color-border-required);
     border-radius: var(--vf-control-radius);
     box-sizing: border-box;
     color: var(--vf-color-text);
@@ -20,13 +20,26 @@
       border-color var(--vf-control-motion-duration) var(--vf-motion-easing-standard);
   }
 
+  :where(input[data-vf-input][type="color"]) {
+    --_vf-input-color-inline-size: 3.5rem;
+
+    block-size: var(--vf-control-height-md);
+    cursor: pointer;
+    inline-size: var(--_vf-input-color-inline-size);
+    padding: var(--vf-space-xs);
+  }
+
   :where(input[data-vf-input]::placeholder) {
     color: var(--vf-color-text-subtle);
     opacity: 1;
   }
 
-  :where(input[data-vf-input]:hover:not(:disabled):not(:read-only)) {
-    border-color: var(--vf-color-border-strong);
+  :where(input[data-vf-input]:hover:not(:disabled):not([readonly])) {
+    background: var(--vf-color-surface-hover);
+  }
+
+  :where(input[data-vf-input][type="color"]:hover:not(:disabled)) {
+    background: var(--vf-color-surface-hover);
   }
 
   :where(input[data-vf-input]:focus-visible) {
@@ -42,11 +55,11 @@
     cursor: not-allowed;
   }
 
-  :where(input[data-vf-input]:read-only:not(:disabled)) {
+  :where(input[data-vf-input][readonly]:not(:disabled)) {
     background: var(--vf-color-surface-subtle);
   }
 
-  :where(input[data-vf-input]:invalid:not(:placeholder-shown), input[data-vf-input][aria-invalid="true"]) {
+  :where(input[data-vf-input]:user-invalid, input[data-vf-input][aria-invalid="true"]) {
     border-color: var(--vf-color-danger-border);
   }
 
@@ -64,6 +77,6 @@
 
     :where(input[data-vf-input]:focus-visible) { outline-color: Highlight; }
     :where(input[data-vf-input]:disabled) { border-color: GrayText; color: GrayText; }
-    :where(input[data-vf-input]:invalid:not(:placeholder-shown), input[data-vf-input][aria-invalid="true"]) { border-color: Highlight; }
+    :where(input[data-vf-input]:user-invalid, input[data-vf-input][aria-invalid="true"]) { border-color: Highlight; }
   }
 }

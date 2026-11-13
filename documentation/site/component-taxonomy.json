@@ -9,8 +9,7 @@
         "split-button",
         "toggle-button",
         "toggle-group",
-        "toolbar",
-        "theme-toggle"
+        "toolbar"
       ]
     },
     {
@@ -28,14 +27,11 @@
         "switch",
         "slider",
         "range-slider",
-        "number-input",
         "number-field",
-        "temporal-input",
         "temporal-field",
         "password-field",
         "otp-field",
         "search-field",
-        "color-input",
         "color-picker",
         "file-input",
         "file-uploader",
@@ -65,10 +61,8 @@
       "description": "Building blocks for page structure, surfaces, spacing, and resizable regions.",
       "components": [
         "layout",
-        "surface",
         "split-panel",
-        "app-shell",
-        "separator"
+        "app-shell"
       ]
     },
     {
@@ -80,8 +74,7 @@
         "code",
         "kbd",
         "icon",
-        "image",
-        "color-swatch"
+        "image"
       ]
     },
     {
@@ -114,16 +107,6 @@
       "components": [
         "listbox",
         "carousel"
-      ]
-    },
-    {
-      "id": "accessibility-utilities",
-      "label": "Accessibility & Utilities",
-      "description": "Support primitives used to preserve accessibility, rendering, and presence behavior.",
-      "components": [
-        "portal",
-        "presence",
-        "visually-hidden"
       ]
     }
   ]

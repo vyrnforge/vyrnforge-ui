@@ -1,6 +1,5 @@
 import { Directive, ElementRef, inject, input, type AfterViewInit, type OnDestroy } from '@angular/core';
-import { navigationIntentForArrow, type CollectionNavigationArrow, type CollectionNavigationIntent } from '@vyrnforge/core/collection-navigation';
-import { resolveCompositeFocusIndex, rovingTabIndex } from '@vyrnforge/core/composite-focus';
+import { navigationIntentForArrow, resolveEnabledIndex, type CollectionNavigationArrow, type CollectionNavigationIntent } from '@vyrnforge/core/collection-navigation';
 
 export type ToolbarOrientation = 'horizontal' | 'vertical';
 
@@ -13,7 +12,7 @@ function syncTabStops(root: HTMLElement, preferred?: HTMLElement | null): void {
   if (activeIndex < 0 || states[activeIndex]?.disabled) activeIndex = items.findIndex((item) => item.tabIndex === 0 && !disabled(item));
   if (activeIndex < 0) activeIndex = states.findIndex((item) => !item.disabled);
   const resolved = activeIndex < 0 ? null : activeIndex;
-  items.forEach((item, index) => { item.tabIndex = rovingTabIndex(index, resolved, states[index]?.disabled); });
+  items.forEach((item, index) => { item.tabIndex = !states[index]?.disabled && resolved === index ? 0 : -1; });
 }
 function itemFromTarget(root: HTMLElement, target: EventTarget | null): HTMLElement | null {
   const element = target instanceof HTMLElement ? target.closest<HTMLElement>('[data-vf-toolbar-item]') : null;
@@ -56,7 +55,7 @@ export class VfToolbarRootDirective implements AfterViewInit, OnDestroy {
     const items = toolbarItems(root);
     const currentItem = itemFromTarget(root, event.target);
     const currentIndex = currentItem ? items.indexOf(currentItem) : -1;
-    const nextIndex = resolveCompositeFocusIndex(items.map((item) => ({ disabled: disabled(item) })), currentIndex, intent);
+    const nextIndex = resolveEnabledIndex(items.map((item) => ({ disabled: disabled(item) })), currentIndex, intent);
     if (nextIndex == null) return;
     const next = items[nextIndex];
     if (!next) return;

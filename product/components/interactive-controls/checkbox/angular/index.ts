@@ -1,4 +1,4 @@
-import { Directive, ElementRef, Renderer2, afterRenderEffect, booleanAttribute, inject, input } from '@angular/core';
+import { Directive, ElementRef, HostListener, Renderer2, afterRenderEffect, booleanAttribute, inject, input } from '@angular/core';
 
 @Directive({
   selector: 'input[vfCheckbox]',
@@ -6,7 +6,6 @@ import { Directive, ElementRef, Renderer2, afterRenderEffect, booleanAttribute, 
   host: {
     'data-vf-checkbox': '',
     type: 'checkbox',
-    '[attr.data-vf-indeterminate]': 'indeterminate() ? "" : null',
   },
 })
 export class VfCheckboxDirective {
@@ -18,5 +17,10 @@ export class VfCheckboxDirective {
     afterRenderEffect({
       write: () => this.renderer.setProperty(this.element.nativeElement, 'indeterminate', this.indeterminate()),
     });
+  }
+
+  @HostListener('click')
+  private reconcileIndeterminateAfterActivation(): void {
+    this.renderer.setProperty(this.element.nativeElement, 'indeterminate', this.indeterminate());
   }
 }

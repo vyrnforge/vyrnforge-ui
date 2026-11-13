@@ -40,6 +40,11 @@ test('canonical component migrations have one product owner', () => {
     }
   }
 
+  assert.equal(graph.components.some((component) => component.unitId === 'surface'), false);
+  for (const pkg of graph.packages) {
+    assert.equal(Boolean(pkg.manifest.exports?.['./surface']), false, pkg.name + ' must not export Surface');
+    assert.equal(Boolean(pkg.manifest.exports?.['./styles/surface.css']), false, pkg.name + ' must not export Surface CSS');
+  }
   assert.deepEqual(productGraphProblems(), []);
 });
 
@@ -51,30 +56,17 @@ test('Icon component projections remain separate from the icon catalog package',
   assert.ok(graph.packages.some((pkg) => pkg.id === 'icons'));
 });
 
-test('L1 legacy primitives acquire layered authoring while package shells remain transitional', () => {
+test('retired inherited L1 candidates stay out of the Product Graph and public package surfaces', () => {
   const graph = discoverProductGraph();
-  for (const [id, surfaces] of [
-    ['surface', ['angular', 'elements', 'react', 'vue', 'web']],
-    ['separator', ['angular', 'react', 'vue', 'web']],
-    ['visually-hidden', ['angular', 'react', 'vue', 'web']],
-  ]) {
-    const component = graph.components.find((entry) => entry.unitId === id);
-    assert.ok(component, id + ' must remain discoverable');
-    assert.equal(component.layer, 'elemental-primitives');
-    assert.equal(component.id, 'component:' + id);
-    assert.equal(component.metadataSource, 'product-unit');
-    assert.equal(component.facets.canonicalRoot, 'product/components/elemental-primitives/' + id + '/');
-    assert.equal(component.facets.legacyRoot, null);
-    assert.deepEqual(Object.keys(component.surfaces).sort(), surfaces);
-    for (const surface of Object.values(component.surfaces)) {
-      assert.equal(surface.authoringMode, 'product-unit');
-      assert.ok(surface.authoringPaths[0].startsWith(component.facets.canonicalRoot));
-      assert.ok(surface.projectionPath?.startsWith('packages/' + surface.package + '/'));
-      assert.ok(surface.publicEntrypoints.length > 0);
-    }
-    // The package entrypoints remain stable while their sources are projected from this unit.
-    assert.equal(component.migration.state, 'product-unit');
-    for (const surface of Object.values(component.surfaces)) assert.deepEqual(surface.legacyPaths, []);
+  for (const id of ['surface', 'separator', 'visually-hidden', 'color-swatch']) {
+    assert.equal(graph.components.some((entry) => entry.unitId === id), false, id + ' must not be a standalone component product unit');
+  }
+  for (const pkg of graph.packages) {
+    assert.equal(Boolean(pkg.manifest.exports?.['./separator']), false, pkg.name + ' must not export generic Separator');
+    assert.equal(Boolean(pkg.manifest.exports?.['./visually-hidden']), false, pkg.name + ' must not export VisuallyHidden wrappers');
+    assert.equal(Boolean(pkg.manifest.exports?.['./styles/separator.css']), false, pkg.name + ' must not export generic Separator CSS');
+    assert.equal(Boolean(pkg.manifest.exports?.['./styles/visually-hidden.css']), false, pkg.name + ' must not export redundant VisuallyHidden CSS');
+    assert.equal(Boolean(pkg.manifest.exports?.['./styles/color-swatch.css']), false, pkg.name + ' must not export standalone ColorSwatch CSS');
   }
   assert.deepEqual(productGraphProblems(), []);
 });
@@ -103,9 +95,9 @@ test('Native-first L2 controls retain stable package projections after source mi
 });
 
 
-test('L2 number, native selection and range controls project through unchanged ports', () => {
+test('L2 native selection and range controls project through unchanged ports', () => {
   const graph = discoverProductGraph();
-  for (const id of ['number-input', 'native-select', 'slider']) {
+  for (const id of ['native-select', 'slider']) {
     const component = graph.components.find((entry) => entry.unitId === id);
     assert.ok(component, id + ' exists in the normalized Product Graph');
     assert.equal(component.layer, 'interactive-controls');
@@ -126,9 +118,9 @@ test('L2 number, native selection and range controls project through unchanged p
   assert.deepEqual(productGraphProblems(), []);
 });
 
-test('L2 specialized native inputs remain owned by the same package entrypoints', () => {
+test('L2 FileInput remains independently owned for native file selection', () => {
   const graph = discoverProductGraph();
-  for (const id of ['file-input', 'color-input', 'temporal-input']) {
+  for (const id of ['file-input']) {
     const component = graph.components.find((entry) => entry.unitId === id);
     assert.ok(component, id + ' remains discoverable');
     assert.equal(component.layer, 'interactive-controls');
@@ -324,7 +316,7 @@ test('L6 AppShell and SideNav retain canonical five-port projections', () => {
   assert.deepEqual(productGraphProblems(), []);
 });
 
-test('L3 grouped layout projection has canonical composition ownership', () => {
+test('L3 aggregate layout projection owns only the six accepted composition primitives', () => {
   const graph = discoverProductGraph();
   const component = graph.components.find((entry) => entry.unitId === 'layout');
   assert.ok(component);
@@ -332,7 +324,12 @@ test('L3 grouped layout projection has canonical composition ownership', () => {
   assert.equal(component.facets.canonicalRoot, 'product/components/composition-primitives/layout/');
   assert.equal(component.facets.legacyRoot, null);
   assert.equal(component.migration.state, 'product-unit');
-  assert.deepEqual(Object.keys(component.surfaces).sort(), ['angular', 'elements', 'react', 'vue', 'web']);
+  assert.deepEqual(Object.keys(component.surfaces).sort(), ['angular', 'react', 'vue', 'web']);
+
+  const elements = graph.packages.find((pkg) => pkg.id === 'elements');
+  assert.ok(elements);
+  assert.equal(Boolean(elements.manifest.exports?.['./layout']), false, 'Elements must use native HTML plus Web layout hooks instead of an L3 runtime entrypoint');
+
   assert.deepEqual(productGraphProblems(), []);
 });
 
@@ -374,11 +371,6 @@ test('L1 aggregate stylesheet is not a component owner and responsibility famili
   assert.equal(image.facets.canonicalRoot, 'product/components/elemental-primitives/media/image/');
   assert.deepEqual(Object.keys(image.surfaces), ['web']);
 
-  const colorSwatch = graph.components.find((entry) => entry.unitId === 'color-swatch');
-  assert.ok(colorSwatch, 'color-swatch remains independently owned outside Media');
-  assert.equal(colorSwatch.layer, 'elemental-primitives');
-  assert.deepEqual(Object.keys(colorSwatch.surfaces), ['web']);
-
   assert.equal(graph.components.some((entry) => entry.unitId === 'skeleton'), false);
   assert.equal(graph.components.some((entry) => entry.unitId === 'loading'), false);
 
@@ -392,22 +384,10 @@ test('L1 aggregate stylesheet is not a component owner and responsibility famili
   assert.deepEqual(productGraphProblems(), []);
 });
 
-test('L2 Theme Toggle uses canonical Native Web ownership without inventing framework wrappers', () => {
+test('retired L2 specializations stay out of the Product Graph', () => {
   const graph = discoverProductGraph();
-  const component = graph.components.find((entry) => entry.unitId === 'theme-toggle');
-  assert.ok(component, 'theme-toggle must be discovered');
-  assert.equal(component.id, 'component:theme-toggle');
-  assert.equal(component.layer, 'interactive-controls');
-  assert.equal(component.facets.canonicalRoot, 'product/components/interactive-controls/theme-toggle/');
-  assert.equal(component.facets.legacyRoot, null);
-  assert.equal(component.metadataSource, 'product-unit');
-  assert.equal(component.migration.state, 'product-unit');
-  assert.deepEqual(Object.keys(component.surfaces).sort(), ['web']);
-  const web = component.surfaces.web;
-  assert.equal(web.authoringMode, 'product-unit');
-  assert.deepEqual(web.legacyPaths, []);
-  assert.ok(web.authoringPaths[0].startsWith(component.facets.canonicalRoot));
-  assert.equal(web.projectionPath, 'packages/web/src/components/theme-toggle/');
-  assert.ok(web.publicEntrypoints.includes('@vyrnforge/web/styles/theme-toggle.css'));
+  for (const id of ['number-input', 'color-input', 'temporal-input', 'theme-toggle']) {
+    assert.equal(graph.components.some((entry) => entry.unitId === id), false, id + ' must not remain a standalone component product unit');
+  }
   assert.deepEqual(productGraphProblems(), []);
 });

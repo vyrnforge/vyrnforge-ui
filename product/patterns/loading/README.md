@@ -8,6 +8,6 @@ Built-in presentations include compact indeterminate indicators (`spinner`, `dot
 
 Loading presentation is customizable through documented CSS variables. Consumers can tune shared or per-presentation color, indicator size, spinner thickness/track, motion duration, placeholder paint/radius, progress fill/track/height/radius, and custom-artwork color without creating new semantic variants.
 
-Loading deliberately does not become an async runtime. Applications own request/job lifecycle, progress data, cancellation, retry, completion, failure, and status text. Existing Surface/Layout/AspectRatio/Icon/Text responsibilities remain composed rather than duplicated.
+Loading deliberately does not become an async runtime. Applications own request/job lifecycle, progress data, cancellation, retry, completion, failure, and status text. Existing Layout/AspectRatio/Icon/Text responsibilities remain composed rather than duplicated; visual containment uses semantic HTML plus owning CSS and shared foundation tokens rather than a Surface component.
 
 The former standalone Skeleton product unit is superseded. Structured skeleton presentation now belongs to Loading through `data-vf-loading-placeholder`.

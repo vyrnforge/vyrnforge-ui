@@ -99,7 +99,7 @@ Placeholder paint does not own layout. Compose existing VyrnForge responsibiliti
 
 - Stack / Inline / Grid / Cluster for arrangement;
 - AspectRatio for known ratios;
-- Surface for genuine containment;
+- semantic HTML plus owning CSS/shared surface tokens for visual containment;
 - Text or native text for status copy.
 
 The former standalone Skeleton API is intentionally replaced:

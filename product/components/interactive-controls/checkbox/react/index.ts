@@ -1,5 +1,5 @@
 import { createElement, forwardRef, useEffect, useRef } from 'react';
-import type { ForwardedRef, InputHTMLAttributes } from 'react';
+import type { ForwardedRef, InputHTMLAttributes, MouseEvent } from 'react';
 
 function assignRef<T>(ref: ForwardedRef<T>, value: T | null): void {
   if (typeof ref === 'function') ref(value);
@@ -11,7 +11,7 @@ export interface CheckboxProps extends Omit<InputHTMLAttributes<HTMLInputElement
 }
 
 export const Checkbox = forwardRef<HTMLInputElement, CheckboxProps>(function Checkbox(
-  { indeterminate = false, ...nativeProps },
+  { indeterminate = false, onClick, ...nativeProps },
   forwardedRef
 ) {
   const localRef = useRef<HTMLInputElement | null>(null);
@@ -27,6 +27,9 @@ export const Checkbox = forwardRef<HTMLInputElement, CheckboxProps>(function Che
     },
     type: 'checkbox',
     'data-vf-checkbox': '',
-    'data-vf-indeterminate': indeterminate ? '' : undefined,
+    onClick: (event: MouseEvent<HTMLInputElement>) => {
+      onClick?.(event);
+      event.currentTarget.indeterminate = indeterminate;
+    },
   });
 });

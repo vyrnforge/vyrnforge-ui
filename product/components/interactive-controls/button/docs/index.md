@@ -46,12 +46,6 @@ Inside a form, omitting `type` invokes the browser's default **submit** behavior
 
 The **Native form actions** example demonstrates all three button types with a labeled Input and explicit submitter `name`/`value`. The Native Web documentation page loads both `@vyrnforge/web/styles/button.css` and `@vyrnforge/web/styles/input.css` for that composition; consumers using the Input styling hook must load its public stylesheet too. In the **documentation preview only**, the docs application prevents navigation and shows a local submit, reset, or “Inspect value” result. These demonstration handlers are application code, not part of VyrnForge Button. Copying this HTML to a consuming application requires its own submit and non-submit action handlers.
 
-## Typography composition
-
-React Button accepts an optional `textVariant` using the shared Text typography vocabulary. When supplied, the same native `<button>` carries both Button and Text styling hooks; Button semantics, activation, loading/disabled behavior, focus, color, borders, and backgrounds remain Button-owned. When omitted, the existing Button typography defaults remain unchanged.
-
-Do not wrap button text in VyrnForge `Text` merely to select a typography role, and do not render interactive buttons through `Text as="button"`.
-
 ## Styling and adaptation
 
 Canonical Button styling is owned by `@vyrnforge/web`. It supports theme inheritance, focus-visible presentation, forced colors, reduced motion, and logical-direction styling.

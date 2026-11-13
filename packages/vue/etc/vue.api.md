@@ -4,12 +4,12 @@
 
 ```ts
 
-import type { AspectRatio as AspectRatio_2 } from '@vyrnforge/web/layout';
 import { ClusterAlign } from '@vyrnforge/web/layout';
 import { ClusterJustify } from '@vyrnforge/web/layout';
 import { ComponentOptionsMixin } from 'vue';
 import { ComponentProvideOptions } from 'vue';
 import { ContainerSize } from '@vyrnforge/web/layout';
+import { ControlGroupOrientation } from '@vyrnforge/web/layout';
 import { DefineComponent } from 'vue';
 import { ExtractPropTypes } from 'vue';
 import { FloatingPlacement } from '@vyrnforge/web/floating-positioning';
@@ -21,16 +21,12 @@ import { InlineAlign } from '@vyrnforge/web/layout';
 import { InlineJustify } from '@vyrnforge/web/layout';
 import { InputType } from '@vyrnforge/web/input';
 import { LayoutSpace } from '@vyrnforge/web/layout';
-import { MaybeRefOrGetter } from 'vue';
 import { PropType } from 'vue';
 import { PublicProps } from 'vue';
-import { RadioGroupOrientation } from '@vyrnforge/web/layout';
-import { Ref } from 'vue';
 import { RendererElement } from 'vue';
 import { RendererNode } from 'vue';
 import { StackAlign } from '@vyrnforge/web/layout';
 import { StackJustify } from '@vyrnforge/web/layout';
-import { TemporalInputType } from '@vyrnforge/web/temporal-input';
 import { TextVariant } from '@vyrnforge/web/text';
 import { VNode } from 'vue';
 
@@ -185,16 +181,13 @@ export const AppShellNavigation: DefineComponent<    {}, () => VNode<RendererNod
 }>, {}, {}, {}, ComponentOptionsMixin, ComponentOptionsMixin, {}, string, PublicProps, Readonly<{}> & Readonly<{}>, {}, {}, {}, {}, string, ComponentProvideOptions, true, {}, any>;
 
 // @public (undocumented)
-export type AspectRatio = AspectRatio_2;
-
-// @public (undocumented)
-export const AspectRatio: DefineComponent<ExtractPropTypes<    {
+export const AutoGrid: DefineComponent<ExtractPropTypes<    {
 as: {
 type: PropType<LayoutElement>;
 default: string;
 };
-ratio: {
-type: PropType<AspectRatio>;
+gap: {
+type: PropType<LayoutSpace>;
 default: string;
 };
 }>, () => VNode<RendererNode, RendererElement, {
@@ -204,21 +197,21 @@ as: {
 type: PropType<LayoutElement>;
 default: string;
 };
-ratio: {
-type: PropType<AspectRatio>;
+gap: {
+type: PropType<LayoutSpace>;
 default: string;
 };
 }>> & Readonly<{}>, {
 as: LayoutElement;
-ratio: "video" | "square" | "landscape" | "portrait";
+gap: "sm" | "md" | "lg" | "none" | "xs" | "xl" | "2xl" | "3xl";
 }, {}, {}, {}, string, ComponentProvideOptions, true, {}, any>;
 
 // @public (undocumented)
-export interface AspectRatioProps {
+export interface AutoGridProps {
     // (undocumented)
     as?: LayoutElement;
     // (undocumented)
-    ratio?: AspectRatio;
+    gap?: LayoutSpace;
 }
 
 // @public (undocumented)
@@ -379,11 +372,6 @@ export interface ClusterProps {
     // (undocumented)
     justify?: ClusterJustify;
 }
-
-// @public (undocumented)
-export const ColorInput: DefineComponent<    {}, () => VNode<RendererNode, RendererElement, {
-[key: string]: any;
-}>, {}, {}, {}, ComponentOptionsMixin, ComponentOptionsMixin, {}, string, PublicProps, Readonly<{}> & Readonly<{}>, {}, {}, {}, {}, string, ComponentProvideOptions, true, {}, any>;
 
 // @public (undocumented)
 export const ColorPickerInput: DefineComponent<    {}, () => VNode<RendererNode, RendererElement, {
@@ -560,6 +548,42 @@ open: boolean;
 export const ContextMenuTrigger: DefineComponent<    {}, () => VNode<RendererNode, RendererElement, {
 [key: string]: any;
 }>, {}, {}, {}, ComponentOptionsMixin, ComponentOptionsMixin, {}, string, PublicProps, Readonly<{}> & Readonly<{}>, {}, {}, {}, {}, string, ComponentProvideOptions, true, {}, any>;
+
+// @public (undocumented)
+export const ControlGroup: DefineComponent<ExtractPropTypes<    {
+as: {
+type: PropType<LayoutElement>;
+default: string;
+};
+orientation: {
+type: PropType<ControlGroupOrientation>;
+default: string;
+};
+}>, () => VNode<RendererNode, RendererElement, {
+[key: string]: any;
+}>, {}, {}, {}, ComponentOptionsMixin, ComponentOptionsMixin, {}, string, PublicProps, Readonly<ExtractPropTypes<    {
+as: {
+type: PropType<LayoutElement>;
+default: string;
+};
+orientation: {
+type: PropType<ControlGroupOrientation>;
+default: string;
+};
+}>> & Readonly<{}>, {
+as: LayoutElement;
+orientation: "horizontal" | "vertical";
+}, {}, {}, {}, string, ComponentProvideOptions, true, {}, any>;
+
+export { ControlGroupOrientation }
+
+// @public (undocumented)
+export interface ControlGroupProps {
+    // (undocumented)
+    as?: LayoutElement;
+    // (undocumented)
+    orientation?: ControlGroupOrientation;
+}
 
 // @public (undocumented)
 export const DialogBody: DefineComponent<    {}, () => VNode<RendererNode, RendererElement, {
@@ -768,63 +792,6 @@ export const DrawerTitle: DefineComponent<    {}, () => VNode<RendererNode, Rend
 }>, {}, {}, {}, ComponentOptionsMixin, ComponentOptionsMixin, {}, string, PublicProps, Readonly<{}> & Readonly<{}>, {}, {}, {}, {}, string, ComponentProvideOptions, true, {}, any>;
 
 // @public (undocumented)
-export const Field: DefineComponent<ExtractPropTypes<    {
-as: {
-type: PropType<LayoutElement>;
-default: string;
-};
-gap: {
-type: PropType<LayoutSpace>;
-default: string;
-};
-}>, () => VNode<RendererNode, RendererElement, {
-[key: string]: any;
-}>, {}, {}, {}, ComponentOptionsMixin, ComponentOptionsMixin, {}, string, PublicProps, Readonly<ExtractPropTypes<    {
-as: {
-type: PropType<LayoutElement>;
-default: string;
-};
-gap: {
-type: PropType<LayoutSpace>;
-default: string;
-};
-}>> & Readonly<{}>, {
-as: LayoutElement;
-gap: "sm" | "md" | "lg" | "none" | "xs" | "xl" | "2xl" | "3xl";
-}, {}, {}, {}, string, ComponentProvideOptions, true, {}, any>;
-
-// @public (undocumented)
-export interface FieldProps {
-    // (undocumented)
-    as?: LayoutElement;
-    // (undocumented)
-    gap?: LayoutSpace;
-}
-
-// @public (undocumented)
-export const Fieldset: DefineComponent<ExtractPropTypes<    {
-gap: {
-type: PropType<LayoutSpace>;
-default: string;
-};
-}>, () => VNode<RendererNode, RendererElement, {
-[key: string]: any;
-}>, {}, {}, {}, ComponentOptionsMixin, ComponentOptionsMixin, {}, string, PublicProps, Readonly<ExtractPropTypes<    {
-gap: {
-type: PropType<LayoutSpace>;
-default: string;
-};
-}>> & Readonly<{}>, {
-gap: "sm" | "md" | "lg" | "none" | "xs" | "xl" | "2xl" | "3xl";
-}, {}, {}, {}, string, ComponentProvideOptions, true, {}, any>;
-
-// @public (undocumented)
-export interface FieldsetProps {
-    // (undocumented)
-    gap?: LayoutSpace;
-}
-
-// @public (undocumented)
 export const FileInput: DefineComponent<    {}, () => VNode<RendererNode, RendererElement, {
 [key: string]: any;
 }>, {}, {}, {}, ComponentOptionsMixin, ComponentOptionsMixin, {}, string, PublicProps, Readonly<{}> & Readonly<{}>, {}, {}, {}, {}, string, ComponentProvideOptions, true, {}, any>;
@@ -850,40 +817,6 @@ export const FileUploaderRoot: DefineComponent<    {}, () => VNode<RendererNode,
 }>, {}, {}, {}, ComponentOptionsMixin, ComponentOptionsMixin, "files-change"[], "files-change", PublicProps, Readonly<{}> & Readonly<{
 "onFiles-change"?: (...args: any[]) => any;
 }>, {}, {}, {}, {}, string, ComponentProvideOptions, true, {}, any>;
-
-// @public (undocumented)
-export const Grid: DefineComponent<ExtractPropTypes<    {
-as: {
-type: PropType<LayoutElement>;
-default: string;
-};
-gap: {
-type: PropType<LayoutSpace>;
-default: string;
-};
-}>, () => VNode<RendererNode, RendererElement, {
-[key: string]: any;
-}>, {}, {}, {}, ComponentOptionsMixin, ComponentOptionsMixin, {}, string, PublicProps, Readonly<ExtractPropTypes<    {
-as: {
-type: PropType<LayoutElement>;
-default: string;
-};
-gap: {
-type: PropType<LayoutSpace>;
-default: string;
-};
-}>> & Readonly<{}>, {
-as: LayoutElement;
-gap: "sm" | "md" | "lg" | "none" | "xs" | "xl" | "2xl" | "3xl";
-}, {}, {}, {}, string, ComponentProvideOptions, true, {}, any>;
-
-// @public (undocumented)
-export interface GridProps {
-    // (undocumented)
-    as?: LayoutElement;
-    // (undocumented)
-    gap?: LayoutSpace;
-}
 
 // @public (undocumented)
 export const Icon: DefineComponent<ExtractPropTypes<    {
@@ -1022,15 +955,10 @@ default: string;
 type: InputType;
 }, {}, {}, {}, string, ComponentProvideOptions, true, {}, any>;
 
-// @public (undocumented)
-export const InputGroup: DefineComponent<    {}, () => VNode<RendererNode, RendererElement, {
-[key: string]: any;
-}>, {}, {}, {}, ComponentOptionsMixin, ComponentOptionsMixin, {}, string, PublicProps, Readonly<{}> & Readonly<{}>, {}, {}, {}, {}, string, ComponentProvideOptions, true, {}, any>;
-
 export { InputType }
 
 // @public (undocumented)
-export type LayoutElement = 'div' | 'span' | 'section' | 'main' | 'article' | 'aside' | 'nav' | 'header' | 'footer' | 'form' | 'ul' | 'ol';
+export type LayoutElement = 'div' | 'span' | 'section' | 'main' | 'article' | 'aside' | 'nav' | 'header' | 'footer' | 'form' | 'fieldset' | 'ul' | 'ol';
 
 export { LayoutSpace }
 
@@ -1319,11 +1247,6 @@ step: number;
 }, {}, {}, {}, string, ComponentProvideOptions, true, {}, any>;
 
 // @public (undocumented)
-export const NumberInput: DefineComponent<    {}, () => VNode<RendererNode, RendererElement, {
-[key: string]: any;
-}>, {}, {}, {}, ComponentOptionsMixin, ComponentOptionsMixin, {}, string, PublicProps, Readonly<{}> & Readonly<{}>, {}, {}, {}, {}, string, ComponentProvideOptions, true, {}, any>;
-
-// @public (undocumented)
 export const OTPFieldInput: DefineComponent<ExtractPropTypes<    {
 index: {
 type: NumberConstructor;
@@ -1494,44 +1417,6 @@ export const PopoverTrigger: DefineComponent<    {}, () => VNode<RendererNode, R
 }>, {}, {}, {}, ComponentOptionsMixin, ComponentOptionsMixin, {}, string, PublicProps, Readonly<{}> & Readonly<{}>, {}, {}, {}, {}, string, ComponentProvideOptions, true, {}, any>;
 
 // @public (undocumented)
-export const Portal: DefineComponent<ExtractPropTypes<    {
-to: {
-type: PropType<string | Element>;
-required: true;
-};
-disabled: {
-type: BooleanConstructor;
-default: boolean;
-};
-}>, () => VNode<RendererNode, RendererElement, {
-[key: string]: any;
-}>, {}, {}, {}, ComponentOptionsMixin, ComponentOptionsMixin, {}, string, PublicProps, Readonly<ExtractPropTypes<    {
-to: {
-type: PropType<string | Element>;
-required: true;
-};
-disabled: {
-type: BooleanConstructor;
-default: boolean;
-};
-}>> & Readonly<{}>, {
-disabled: boolean;
-}, {}, {}, {}, string, ComponentProvideOptions, true, {}, any>;
-
-// @public (undocumented)
-export interface PresenceResult {
-    // (undocumented)
-    completeExit(): void;
-    // (undocumented)
-    mounted: Readonly<Ref<boolean>>;
-    // (undocumented)
-    state: Readonly<Ref<PresenceState>>;
-}
-
-// @public (undocumented)
-export type PresenceState = 'entered' | 'exiting' | 'exited';
-
-// @public (undocumented)
 export const PreviewCardContent: DefineComponent<    {}, () => VNode<RendererNode, RendererElement, {
 [key: string]: any;
 }> | null, {}, {}, {}, ComponentOptionsMixin, ComponentOptionsMixin, {}, string, PublicProps, Readonly<{}> & Readonly<{}>, {}, {}, {}, {}, string, ComponentProvideOptions, true, {}, any>;
@@ -1583,42 +1468,6 @@ export const PreviewCardTrigger: DefineComponent<    {}, () => VNode<RendererNod
 export const Radio: DefineComponent<    {}, () => VNode<RendererNode, RendererElement, {
 [key: string]: any;
 }>, {}, {}, {}, ComponentOptionsMixin, ComponentOptionsMixin, {}, string, PublicProps, Readonly<{}> & Readonly<{}>, {}, {}, {}, {}, string, ComponentProvideOptions, true, {}, any>;
-
-// @public (undocumented)
-export const RadioGroup: DefineComponent<ExtractPropTypes<    {
-gap: {
-type: PropType<LayoutSpace>;
-default: string;
-};
-orientation: {
-type: PropType<RadioGroupOrientation>;
-default: string;
-};
-}>, () => VNode<RendererNode, RendererElement, {
-[key: string]: any;
-}>, {}, {}, {}, ComponentOptionsMixin, ComponentOptionsMixin, {}, string, PublicProps, Readonly<ExtractPropTypes<    {
-gap: {
-type: PropType<LayoutSpace>;
-default: string;
-};
-orientation: {
-type: PropType<RadioGroupOrientation>;
-default: string;
-};
-}>> & Readonly<{}>, {
-gap: "sm" | "md" | "lg" | "none" | "xs" | "xl" | "2xl" | "3xl";
-orientation: "vertical" | "horizontal";
-}, {}, {}, {}, string, ComponentProvideOptions, true, {}, any>;
-
-export { RadioGroupOrientation }
-
-// @public (undocumented)
-export interface RadioGroupProps {
-    // (undocumented)
-    gap?: LayoutSpace;
-    // (undocumented)
-    orientation?: RadioGroupOrientation;
-}
 
 // @public (undocumented)
 export const RangeSliderRoot: DefineComponent<ExtractPropTypes<    {
@@ -1855,26 +1704,6 @@ export const SelectTrigger: DefineComponent<    {}, () => VNode<RendererNode, Re
 }>, {}, {}, {}, ComponentOptionsMixin, ComponentOptionsMixin, {}, string, PublicProps, Readonly<{}> & Readonly<{}>, {}, {}, {}, {}, string, ComponentProvideOptions, true, {}, any>;
 
 // @public (undocumented)
-export const Separator: DefineComponent<ExtractPropTypes<    {
-orientation: {
-type: PropType<SeparatorOrientation>;
-default: string;
-};
-}>, () => VNode<RendererNode, RendererElement, {
-[key: string]: any;
-}>, {}, {}, {}, ComponentOptionsMixin, ComponentOptionsMixin, {}, string, PublicProps, Readonly<ExtractPropTypes<    {
-orientation: {
-type: PropType<SeparatorOrientation>;
-default: string;
-};
-}>> & Readonly<{}>, {
-orientation: SeparatorOrientation;
-}, {}, {}, {}, string, ComponentProvideOptions, true, {}, any>;
-
-// @public (undocumented)
-export type SeparatorOrientation = 'horizontal' | 'vertical';
-
-// @public (undocumented)
 export const SideNav: DefineComponent<    {}, () => VNode<RendererNode, RendererElement, {
 [key: string]: any;
 }>, {}, {}, {}, ComponentOptionsMixin, ComponentOptionsMixin, {}, string, PublicProps, Readonly<{}> & Readonly<{}>, {}, {}, {}, {}, string, ComponentProvideOptions, true, {}, any>;
@@ -2064,26 +1893,6 @@ export interface StackProps {
 }
 
 // @public (undocumented)
-export const Surface: DefineComponent<ExtractPropTypes<    {
-as: {
-type: PropType<SurfaceElement>;
-default: string;
-};
-}>, () => VNode<RendererNode, RendererElement, {
-[key: string]: any;
-}>, {}, {}, {}, ComponentOptionsMixin, ComponentOptionsMixin, {}, string, PublicProps, Readonly<ExtractPropTypes<    {
-as: {
-type: PropType<SurfaceElement>;
-default: string;
-};
-}>> & Readonly<{}>, {
-as: SurfaceElement;
-}, {}, {}, {}, string, ComponentProvideOptions, true, {}, any>;
-
-// @public (undocumented)
-export type SurfaceElement = 'div' | 'section' | 'article' | 'aside' | 'main' | 'nav' | 'header' | 'footer' | 'form';
-
-// @public (undocumented)
 export const Switch: DefineComponent<    {}, () => VNode<RendererNode, RendererElement, {
 [key: string]: any;
 }>, {}, {}, {}, ComponentOptionsMixin, ComponentOptionsMixin, {}, string, PublicProps, Readonly<{}> & Readonly<{}>, {}, {}, {}, {}, string, ComponentProvideOptions, true, {}, any>;
@@ -2249,33 +2058,29 @@ export const TagGroupRoot: DefineComponent<    {}, () => VNode<RendererNode, Ren
 }>, {}, {}, {}, ComponentOptionsMixin, ComponentOptionsMixin, {}, string, PublicProps, Readonly<{}> & Readonly<{}>, {}, {}, {}, {}, string, ComponentProvideOptions, true, {}, any>;
 
 // @public (undocumented)
-export const TemporalFieldInput: DefineComponent<    {}, () => VNode<RendererNode, RendererElement, {
-[key: string]: any;
-}>, {}, {}, {}, ComponentOptionsMixin, ComponentOptionsMixin, {}, string, PublicProps, Readonly<{}> & Readonly<{}>, {}, {}, {}, {}, string, ComponentProvideOptions, true, {}, any>;
-
-// @public (undocumented)
-export const TemporalFieldRoot: DefineComponent<    {}, () => VNode<RendererNode, RendererElement, {
-[key: string]: any;
-}>, {}, {}, {}, ComponentOptionsMixin, ComponentOptionsMixin, {}, string, PublicProps, Readonly<{}> & Readonly<{}>, {}, {}, {}, {}, string, ComponentProvideOptions, true, {}, any>;
-
-// @public (undocumented)
-export const TemporalInput: DefineComponent<ExtractPropTypes<    {
+export const TemporalFieldInput: DefineComponent<ExtractPropTypes<    {
 type: {
-type: PropType<TemporalInputType>;
+type: PropType<TemporalFieldInputType>;
 default: string;
 };
 }>, () => VNode<RendererNode, RendererElement, {
 [key: string]: any;
 }>, {}, {}, {}, ComponentOptionsMixin, ComponentOptionsMixin, {}, string, PublicProps, Readonly<ExtractPropTypes<    {
 type: {
-type: PropType<TemporalInputType>;
+type: PropType<TemporalFieldInputType>;
 default: string;
 };
 }>> & Readonly<{}>, {
-type: TemporalInputType;
+type: TemporalFieldInputType;
 }, {}, {}, {}, string, ComponentProvideOptions, true, {}, any>;
 
-export { TemporalInputType }
+// @public (undocumented)
+export type TemporalFieldInputType = 'date' | 'time' | 'datetime-local' | 'month' | 'week';
+
+// @public (undocumented)
+export const TemporalFieldRoot: DefineComponent<    {}, () => VNode<RendererNode, RendererElement, {
+[key: string]: any;
+}>, {}, {}, {}, ComponentOptionsMixin, ComponentOptionsMixin, {}, string, PublicProps, Readonly<{}> & Readonly<{}>, {}, {}, {}, {}, string, ComponentProvideOptions, true, {}, any>;
 
 // @public (undocumented)
 const Text_2: DefineComponent<ExtractPropTypes<    {
@@ -2548,29 +2353,6 @@ closeDelay: number;
 export const TooltipTrigger: DefineComponent<    {}, () => VNode<RendererNode, RendererElement, {
 [key: string]: any;
 }>, {}, {}, {}, ComponentOptionsMixin, ComponentOptionsMixin, {}, string, PublicProps, Readonly<{}> & Readonly<{}>, {}, {}, {}, {}, string, ComponentProvideOptions, true, {}, any>;
-
-// @public (undocumented)
-export function usePresence(present: MaybeRefOrGetter<boolean>): PresenceResult;
-
-// @public (undocumented)
-export const VisuallyHidden: DefineComponent<ExtractPropTypes<    {
-as: {
-type: PropType<VisuallyHiddenElement>;
-default: string;
-};
-}>, () => VNode<RendererNode, RendererElement, {
-[key: string]: any;
-}>, {}, {}, {}, ComponentOptionsMixin, ComponentOptionsMixin, {}, string, PublicProps, Readonly<ExtractPropTypes<    {
-as: {
-type: PropType<VisuallyHiddenElement>;
-default: string;
-};
-}>> & Readonly<{}>, {
-as: VisuallyHiddenElement;
-}, {}, {}, {}, string, ComponentProvideOptions, true, {}, any>;
-
-// @public (undocumented)
-export type VisuallyHiddenElement = 'span' | 'p' | 'div' | 'strong' | 'em' | 'small' | 'label' | 'h1' | 'h2' | 'h3' | 'h4' | 'h5' | 'h6';
 
 // (No @packageDocumentation comment for this package)
 
