@@ -1,23 +1,22 @@
 import {
-  enabledIndexForValue,
-  firstEnabledIndex,
-  lastEnabledIndex,
-  resolveEnabledIndex,
+  navigationIntentForArrow,
+  resolveNavigationIndex,
+  type CollectionDirection,
+  type CollectionNavigationArrow,
   type CollectionNavigationIntent,
   type CollectionNavigationItem,
+  type CollectionNavigationOptions,
+  type CollectionOrientation,
 } from '@vyrnforge/core/collection-navigation';
 
-interface ValueItem extends CollectionNavigationItem {
-  value: string;
-}
-
-const items: readonly CollectionNavigationItem[] = [{}, { disabled: true }];
-const valueItems: readonly ValueItem[] = [{ value: 'a' }];
+const items: readonly CollectionNavigationItem[] = [{}, { eligible: false }];
 const intent: CollectionNavigationIntent = 'next';
+const arrow: CollectionNavigationArrow = 'right';
+const orientation: CollectionOrientation = 'horizontal';
+const direction: CollectionDirection = 'ltr';
+const options: CollectionNavigationOptions = { loop: false };
 
-const first: number | null = firstEnabledIndex(items);
-const last: number | null = lastEnabledIndex(items);
-const next: number | null = resolveEnabledIndex(items, 0, intent);
-const byValue: number | null = enabledIndexForValue(valueItems, (item) => item.value === 'a');
+const next: number | null = resolveNavigationIndex(items, 0, intent, options);
+const mapped: CollectionNavigationIntent | null = navigationIntentForArrow(arrow, orientation, direction);
 
-void [first, last, next, byValue];
+void [next, mapped];
