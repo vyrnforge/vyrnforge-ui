@@ -196,8 +196,6 @@
   :where(fieldset[data-vf-fieldset][data-vf-fieldset-gap="3xl"], vf-fieldset[gap="3xl"]) { --_vf-fieldset-gap: var(--vf-space-3xl); }
 
   :where([data-vf-control-group], vf-control-group) {
-    --_vf-control-group-overlap: -1px;
-
     align-items: stretch;
     display: flex;
     flex-direction: row;
@@ -234,7 +232,7 @@
   ):not(:first-child) {
     border-start-start-radius: 0;
     border-end-start-radius: 0;
-    margin-inline-start: var(--_vf-control-group-overlap);
+    border-inline-start-width: 0;
   }
 
   :where([data-vf-control-group]:not([data-vf-control-group-orientation="vertical"]), vf-control-group:not([orientation="vertical"])) > :where(
@@ -263,7 +261,7 @@
   ):not(:first-child) {
     border-start-start-radius: 0;
     border-start-end-radius: 0;
-    margin-block-start: var(--_vf-control-group-overlap);
+    border-block-start-width: 0;
   }
 
   :where([data-vf-control-group][data-vf-control-group-orientation="vertical"], vf-control-group[orientation="vertical"]) > :where(
