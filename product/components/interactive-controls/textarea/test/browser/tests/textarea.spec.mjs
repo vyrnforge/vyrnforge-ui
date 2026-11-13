@@ -50,6 +50,13 @@ test('Textarea preserves native multiline form semantics and shared styling acro
   await expect(editable).toHaveValue('alpha\nbeta');
 
   expect(await required.evaluate((textarea) => textarea.validity.valueMissing)).toBe(true);
+  expect(await required.evaluate((textarea) => textarea.matches(':invalid'))).toBe(true);
+  expect(await required.evaluate((textarea) => textarea.matches(':user-invalid'))).toBe(false);
+  const normalBoundary = await readonly.evaluate((textarea) => getComputedStyle(textarea).borderColor);
+  expect(await required.evaluate((textarea) => getComputedStyle(textarea).borderColor)).toBe(normalBoundary);
+  await page.locator('#form').evaluate((form) => form.requestSubmit());
+  expect(await required.evaluate((textarea) => textarea.matches(':user-invalid'))).toBe(true);
+  await expect.poll(() => required.evaluate((textarea) => getComputedStyle(textarea).borderColor)).not.toBe(normalBoundary);
   await constrained.fill('x');
   expect(await constrained.evaluate((textarea) => textarea.validity.tooShort)).toBe(true);
   await expect(constrained).toHaveAttribute('minlength', '3');

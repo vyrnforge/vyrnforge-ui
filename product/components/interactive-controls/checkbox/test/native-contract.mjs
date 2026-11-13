@@ -11,5 +11,9 @@ export default {
     expect(box?.height ?? 0).toBeGreaterThanOrEqual(24);
     await control.click();
     expect(await control.evaluate((element) => element.checked)).toBe(true);
+    const indeterminateAfterActivation = await control.evaluate((element) => element.indeterminate);
+    const port = process.env.VF_COMPONENT_PORT || 'web';
+    if (port === 'web' || port === 'elements') expect(indeterminateAfterActivation).toBe(false);
+    else expect(indeterminateAfterActivation).toBe(true);
   },
 };

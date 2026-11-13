@@ -111,6 +111,17 @@
     }
 
     :where(input[data-vf-switch]:focus-visible) { outline-color: Highlight; }
-    :where(input[data-vf-switch]:disabled) { border-color: GrayText; }
+
+    :where(input[data-vf-switch]:disabled),
+    :where(input[data-vf-switch]:disabled:checked) {
+      background: GrayText;
+      border-color: GrayText;
+    }
+
+    :where(input[data-vf-switch]:disabled)::before,
+    :where(input[data-vf-switch]:disabled:checked)::before {
+      background: Canvas;
+      border-color: Canvas;
+    }
   }
 }
