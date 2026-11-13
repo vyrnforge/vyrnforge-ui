@@ -1,4 +1,4 @@
-import { resolveEnabledIndex } from '@vyrnforge/core/collection-navigation';
+import { resolveNavigationIndex } from '@vyrnforge/core/collection-navigation';
 import { findTypeaheadMatch } from '@vyrnforge/core/typeahead-matching';
 
 const HTMLElementBase: typeof HTMLElement = globalThis.HTMLElement ?? class {} as typeof HTMLElement;
@@ -48,7 +48,7 @@ export class VfMenuElement extends HTMLElementBase {
   }
 
   private setOpen(open: boolean) { this.toggleAttribute('open', open); }
-  private focusMenu(edge: 'first' | 'last') { queueMicrotask(() => { const content = this.content; const items = content ? menuItems(content) : []; const index = resolveEnabledIndex(items.map(() => ({})), edge === 'first' ? -1 : items.length, edge); if (index != null) items[index]?.focus(); }); }
+  private focusMenu(edge: 'first' | 'last') { queueMicrotask(() => { const content = this.content; const items = content ? menuItems(content) : []; const index = resolveNavigationIndex(items.map(() => ({})), edge === 'first' ? -1 : items.length, edge); if (index != null) items[index]?.focus(); }); }
 
   private onClick = (event: Event) => {
     if (event.defaultPrevented) return;
@@ -87,7 +87,7 @@ export class VfMenuElement extends HTMLElementBase {
     else if (event.key === 'Home') intent = 'first';
     else if (event.key === 'End') intent = 'last';
     let next: number | null = null;
-    if (intent) next = resolveEnabledIndex(items.map(() => ({})), current, intent);
+    if (intent) next = resolveNavigationIndex(items.map(() => ({})), current, intent);
     else if (event.key.length === 1 && !event.ctrlKey && !event.metaKey && !event.altKey) {
       this.query += event.key;
       if (this.timer) clearTimeout(this.timer);
