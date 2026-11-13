@@ -15,3 +15,4 @@ Migration:
 - `VfFieldsetElement` / `defineFieldsetElement` are removed.
 - `<vf-radio-group gap="…" orientation="…">…</vf-radio-group>` → `<fieldset data-vf-radio-group data-vf-radio-group-gap="…" data-vf-radio-group-orientation="…"><legend>…</legend>…</fieldset>`
 - `VfRadioGroupElement` / `defineRadioGroupElement` are removed.
+- `RadioGroupOrientation` is no longer re-exported from `@vyrnforge/elements/layout`; use the native HTML attribute contract or import the shared type from a port that exposes a typed RadioGroup API.
