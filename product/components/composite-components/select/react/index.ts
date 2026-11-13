@@ -186,7 +186,7 @@ export const SelectContent = forwardRef<HTMLDivElement, ComponentPropsWithoutRef
         timer.current = setTimeout(() => { query.current = ''; }, 500);
         next = findTypeaheadMatch(options.map((option) => ({
           textValue: option.dataset.vfTextValue ?? option.textContent ?? '',
-          disabled: optionDisabled(option),
+          eligible: !optionDisabled(option),
         })), query.current, { startIndex: current });
       }
       if (next == null) return;
