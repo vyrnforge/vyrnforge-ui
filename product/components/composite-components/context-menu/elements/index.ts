@@ -1,4 +1,4 @@
-import { resolveEnabledIndex } from '@vyrnforge/core/collection-navigation';
+import { resolveNavigationIndex } from '@vyrnforge/core/collection-navigation';
 import { findTypeaheadMatch } from '@vyrnforge/core/typeahead-matching';
 
 const HTMLElementBase: typeof HTMLElement = globalThis.HTMLElement ?? class {} as typeof HTMLElement;
@@ -68,8 +68,8 @@ export class VfContextMenuElement extends HTMLElementBase {
       const content = this.content;
       if (!content) return;
       const items = itemsFor(content);
-      const states = items.map((item) => ({ disabled: itemDisabled(item) }));
-      const index = resolveEnabledIndex(states, edge === 'first' ? -1 : items.length, edge);
+      const states = items.map((item) => ({ eligible: !(itemDisabled(item)) }));
+      const index = resolveNavigationIndex(states, edge === 'first' ? -1 : items.length, edge);
       if (index != null) items[index]?.focus();
     });
   }
@@ -108,14 +108,14 @@ export class VfContextMenuElement extends HTMLElementBase {
     const items = itemsFor(content);
     const currentItem = itemFromTarget(content, event.target);
     const current = currentItem ? items.indexOf(currentItem) : -1;
-    const states = items.map((item) => ({ disabled: itemDisabled(item) }));
+    const states = items.map((item) => ({ eligible: !(itemDisabled(item)) }));
     let intent: 'next' | 'previous' | 'first' | 'last' | null = null;
     if (event.key === 'ArrowDown') intent = 'next';
     else if (event.key === 'ArrowUp') intent = 'previous';
     else if (event.key === 'Home') intent = 'first';
     else if (event.key === 'End') intent = 'last';
     let next: number | null = null;
-    if (intent) next = resolveEnabledIndex(states, current, intent);
+    if (intent) next = resolveNavigationIndex(states, current, intent);
     else if (event.key.length === 1 && !event.ctrlKey && !event.metaKey && !event.altKey) {
       this.query += event.key;
       if (this.timer) clearTimeout(this.timer);
