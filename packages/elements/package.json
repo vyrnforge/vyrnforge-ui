@@ -26,16 +26,6 @@
       "import": "./dist/components/tabs/index.js",
       "default": "./dist/components/tabs/index.js"
     },
-    "./portal": {
-      "types": "./dist/components/portal/index.d.ts",
-      "import": "./dist/components/portal/index.js",
-      "default": "./dist/components/portal/index.js"
-    },
-    "./presence": {
-      "types": "./dist/components/presence/index.d.ts",
-      "import": "./dist/components/presence/index.js",
-      "default": "./dist/components/presence/index.js"
-    },
     "./disclosure": {
       "types": "./dist/components/disclosure/index.d.ts",
       "import": "./dist/components/disclosure/index.js",
