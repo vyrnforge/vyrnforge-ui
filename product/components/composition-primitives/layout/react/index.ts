@@ -76,11 +76,6 @@ export type ControlGroupProps<Element extends LayoutElement = 'div'> = {
   orientation?: ControlGroupOrientation;
 } & Omit<ComponentPropsWithoutRef<Element>, 'as' | 'orientation'>;
 
-type PolymorphicExport<Props extends { as?: LayoutElement }, DefaultElement extends LayoutElement> =
-  <Element extends LayoutElement = DefaultElement>(
-    props: Props & { as?: Element; ref?: Ref<HTMLElementTagNameMap[Element]> }
-  ) => ReactElement | null;
-
 function createPolymorphic<DefaultElement extends LayoutElement>(
   render: (props: Record<string, unknown>, ref: Ref<HTMLElement>) => ReactElement | null,
 ) {
@@ -90,27 +85,27 @@ function createPolymorphic<DefaultElement extends LayoutElement>(
 export const Stack = createPolymorphic<'div'>((props, ref) => {
   const { as = 'div', gap = 'md', align = 'stretch', justify = 'start', ...nativeProps } = props;
   return createElement(as as LayoutElement, { ...nativeProps, ref, 'data-vf-stack': '', 'data-vf-stack-gap': gap, 'data-vf-stack-align': align, 'data-vf-stack-justify': justify });
-}) as PolymorphicExport<StackProps, 'div'>;
+}) as <Element extends LayoutElement = 'div'>(props: StackProps<Element> & { ref?: Ref<HTMLElementTagNameMap[Element]> }) => ReactElement | null;
 
 export const Inline = createPolymorphic<'div'>((props, ref) => {
   const { as = 'div', gap = 'md', align = 'center', justify = 'start', ...nativeProps } = props;
   return createElement(as as LayoutElement, { ...nativeProps, ref, 'data-vf-inline': '', 'data-vf-inline-gap': gap, 'data-vf-inline-align': align, 'data-vf-inline-justify': justify });
-}) as PolymorphicExport<InlineProps, 'div'>;
+}) as <Element extends LayoutElement = 'div'>(props: InlineProps<Element> & { ref?: Ref<HTMLElementTagNameMap[Element]> }) => ReactElement | null;
 
 export const Cluster = createPolymorphic<'div'>((props, ref) => {
   const { as = 'div', gap = 'md', align = 'center', justify = 'start', ...nativeProps } = props;
   return createElement(as as LayoutElement, { ...nativeProps, ref, 'data-vf-cluster': '', 'data-vf-cluster-gap': gap, 'data-vf-cluster-align': align, 'data-vf-cluster-justify': justify });
-}) as PolymorphicExport<ClusterProps, 'div'>;
+}) as <Element extends LayoutElement = 'div'>(props: ClusterProps<Element> & { ref?: Ref<HTMLElementTagNameMap[Element]> }) => ReactElement | null;
 
 export const AutoGrid = createPolymorphic<'div'>((props, ref) => {
   const { as = 'div', gap = 'md', ...nativeProps } = props;
   return createElement(as as LayoutElement, { ...nativeProps, ref, 'data-vf-auto-grid': '', 'data-vf-auto-grid-gap': gap });
-}) as PolymorphicExport<AutoGridProps, 'div'>;
+}) as <Element extends LayoutElement = 'div'>(props: AutoGridProps<Element> & { ref?: Ref<HTMLElementTagNameMap[Element]> }) => ReactElement | null;
 
 export const Container = createPolymorphic<'div'>((props, ref) => {
   const { as = 'div', size = 'xl', gutter = 'md', ...nativeProps } = props;
   return createElement(as as LayoutElement, { ...nativeProps, ref, 'data-vf-container': '', 'data-vf-container-size': size, 'data-vf-container-gutter': gutter });
-}) as PolymorphicExport<ContainerProps, 'div'>;
+}) as <Element extends LayoutElement = 'div'>(props: ContainerProps<Element> & { ref?: Ref<HTMLElementTagNameMap[Element]> }) => ReactElement | null;
 
 export const ControlGroup = createPolymorphic<'div'>((props, ref) => {
   const { as = 'div', orientation = 'horizontal', ...nativeProps } = props;
@@ -120,4 +115,4 @@ export const ControlGroup = createPolymorphic<'div'>((props, ref) => {
     'data-vf-control-group': '',
     'data-vf-control-group-orientation': orientation,
   });
-}) as PolymorphicExport<ControlGroupProps, 'div'>;
+}) as <Element extends LayoutElement = 'div'>(props: ControlGroupProps<Element> & { ref?: Ref<HTMLElementTagNameMap[Element]> }) => ReactElement | null;
