@@ -14,7 +14,6 @@ import {
   type ControlGroupOrientation,
   type InlineAlign,
   type LayoutSpace,
-  type RadioGroupOrientation,
 } from '@vyrnforge/elements/layout';
 
 const stack: typeof VfStackElement = VfStackElement;
@@ -33,9 +32,8 @@ const size: ContainerSize = '2xl';
 const gap: LayoutSpace = 'sm';
 const ratio: AspectRatio = 'video';
 const controlOrientation: ControlGroupOrientation = 'vertical';
-const radioOrientation: RadioGroupOrientation = 'horizontal';
 
 void [
   stack, inline, cluster, grid, container, aspectRatioElement, field, controlGroup, define,
-  clusterAlign, inlineAlign, size, gap, ratio, controlOrientation, radioOrientation,
+  clusterAlign, inlineAlign, size, gap, ratio, controlOrientation,
 ];
