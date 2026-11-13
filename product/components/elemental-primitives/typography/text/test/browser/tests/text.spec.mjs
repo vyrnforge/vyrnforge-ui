@@ -63,7 +63,7 @@ test('Native Web composes Text typography with semantic and component hooks on o
   await expect(link).toHaveJSProperty('tagName', 'A');
   await expect(link).toHaveAttribute('href', '#target');
   expect(await link.evaluate((element) => getComputedStyle(element).fontSize)).toBe('14px');
-  expect(await link.evaluate((element) => getComputedStyle(element).fontWeight)).toBe('400');
+  expect(await link.evaluate((element) => getComputedStyle(element).fontWeight)).toBe('500');
   expect(await link.evaluate((element) => getComputedStyle(element).textDecorationLine)).toContain('underline');
   expect(await link.evaluate((element) => getComputedStyle(element).color)).not.toBe('rgb(24, 24, 27)');
 
