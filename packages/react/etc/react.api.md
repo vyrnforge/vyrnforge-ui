@@ -2601,7 +2601,7 @@ export const PopoverTrigger: ForwardRefExoticComponent<PopoverTriggerProps & Ref
 export type PopoverTriggerProps = ButtonHTMLAttributes<HTMLButtonElement>;
 
 // @public (undocumented)
-export function PreviewCardContent(props: PreviewCardContentProps): FunctionComponentElement<PortalProps> | null;
+export function PreviewCardContent(props: PreviewCardContentProps): ReactNode;
 
 // @public (undocumented)
 export type PreviewCardContentProps = HTMLAttributes<HTMLDivElement>;
@@ -4824,7 +4824,7 @@ key?: Key | null | undefined;
 }, HTMLElement>;
 
 // @public (undocumented)
-export function TooltipContent(props: TooltipContentProps): FunctionComponentElement<PortalProps> | null;
+export function TooltipContent(props: TooltipContentProps): ReactNode;
 
 // @public (undocumented)
 export type TooltipContentProps = HTMLAttributes<HTMLDivElement>;
