@@ -167,7 +167,7 @@ export const MultiSelectContent = defineComponent({
           timer = setTimeout(() => { query = ''; }, 500);
           next = findTypeaheadMatch(options.map((option) => ({
             textValue: option.dataset.vfTextValue ?? option.textContent ?? '',
-            disabled: optionDisabled(option),
+            eligible: !optionDisabled(option),
           })), query, { startIndex: current });
         }
         if (next == null) return;
