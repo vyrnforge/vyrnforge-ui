@@ -1,4 +1,13 @@
-import { Directive, ElementRef, afterRenderEffect, booleanAttribute, inject, input, output, signal } from '@angular/core';
+import {
+  Directive,
+  ElementRef,
+  afterRenderEffect,
+  booleanAttribute,
+  inject,
+  input,
+  output,
+  signal,
+} from '@angular/core';
 
 type Pair = [number, number];
 type Bounds = readonly [number, number, number];
