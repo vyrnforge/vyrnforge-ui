@@ -1,9 +1,11 @@
 import {
   Fragment,
   computed,
+  createTextVNode,
   defineComponent,
   h,
   inject,
+  isVNode,
   provide,
   ref,
   type InjectionKey,
@@ -28,10 +30,16 @@ function useCarousel() {
   return context;
 }
 
-function parts(nodes: VNode[]): VNode[] {
-  return nodes.flatMap((node) =>
-    node.type === Fragment && Array.isArray(node.children) ? parts(node.children as VNode[]) : [node],
-  );
+function parts(nodes: unknown): VNode[] {
+  const items = Array.isArray(nodes) ? nodes : [nodes];
+  return items.flatMap((node) => {
+    if (Array.isArray(node)) return parts(node);
+    if (isVNode(node)) {
+      return node.type === Fragment && Array.isArray(node.children) ? parts(node.children) : [node];
+    }
+    if (typeof node === 'string' || typeof node === 'number') return [createTextVNode(String(node))];
+    return [];
+  });
 }
 
 function bounded(index: number, count: number): number {
@@ -108,8 +116,8 @@ export const CarouselRoot = defineComponent({
         ? children
         : children.map((node, index) => {
             if (node.type !== CarouselViewport) return node;
-            const viewportSlots = node.children as { default?: () => VNode[] } | null;
-            const slides = parts(viewportSlots?.default?.() ?? []);
+            const viewportSlots = node.children as { default?: () => unknown } | null;
+            const slides = parts(viewportSlots?.default?.());
             const offset = inferredCount;
             inferredCount += slides.filter((slide) => slide.type === CarouselSlide).length;
             return h(
