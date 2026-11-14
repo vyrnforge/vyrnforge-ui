@@ -1,0 +1,16 @@
+name: L5 segmented-control cross-browser proof (temporary)
+on:
+  push:
+    branches: [fix/l5-segmented-native]
+permissions:
+  contents: read
+jobs:
+  browser-matrix:
+    uses: ./.github/workflows/_browser-validation.yml
+    with:
+      scopes_json: '[{"port":"web","components":"segmented-control"},{"port":"react","components":"segmented-control"},{"port":"angular","components":"segmented-control"},{"port":"vue","components":"segmented-control"},{"port":"elements","components":"segmented-control"}]'
+      revision: ${{ github.sha }}
+      browser_profile: cross
+      browsers: chromium firefox webkit
+      artifact_suffix: segmented-control-native
+      retention_days: 14
