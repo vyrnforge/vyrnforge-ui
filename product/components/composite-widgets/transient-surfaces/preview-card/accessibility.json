@@ -25,8 +25,8 @@
   "evidence": { "browser": "required", "assistiveTechnology": "review-required" },
   "profileVariability": [],
   "notes": [
-    "Immediate pointer-leave dismissal can prevent access to portaled content.",
-    "#1280 owns migration; establish distinct informational versus interactive contract.",
+    "Native manual popover preserves pointer and focus access across the trigger and preview, dismisses on Escape, and restores trigger focus only when closing from content. Preserve native trigger navigation.",
+    "Informational previews have no interactive controls. Interactive previews must expose authored semantics and keyboard access; do not autofocus on hover or trap focus. Use Popover/Dialog for explicit activation or focus-transfer intent.",
     "Audit mapping is provisional; not a conformance claim."
   ]
 }
