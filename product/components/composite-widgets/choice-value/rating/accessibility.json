@@ -2,28 +2,47 @@
   "schemaVersion": 1,
   "component": "rating",
   "reviewStatus": "review-required",
-  "nativeBaseline": { "kind": "composite", "reference": "native radio inputs in an independently named group" },
+  "nativeBaseline": {
+    "kind": "composite",
+    "reference": "native radio inputs in an independently named group"
+  },
   "wcag": {
     "target": "2.2 AA",
     "status": "review-required",
     "criteria": ["1.3.1", "1.4.1", "1.4.11", "2.1.1", "2.4.7", "2.5.8", "3.3.2", "4.1.2"]
   },
-  "aria": { "status": "mapped", "apgPattern": "radio" },
-  "interaction": { "keyboard": "native", "focus": "native radio-group focus", "directionality": "native" },
+  "aria": {
+    "status": "mapped",
+    "apgPattern": "radio"
+  },
+  "interaction": {
+    "keyboard": "native",
+    "focus": "native radio-group focus",
+    "directionality": "native"
+  },
   "ownership": {
     "library": [
       "Maintain a distinct group name, one selected value, native radio semantics and non-color selected indicators."
     ],
     "consumer": ["Author the group name, item names and meaningful rating scale."]
   },
-  "forms": { "status": "review-required" },
-  "visualAccessibility": { "status": "component-specific" },
-  "ssrHydration": { "status": "contract-required" },
-  "evidence": { "browser": "required", "assistiveTechnology": "review-required" },
+  "forms": {
+    "status": "review-required"
+  },
+  "visualAccessibility": {
+    "status": "component-specific"
+  },
+  "ssrHydration": {
+    "status": "contract-required"
+  },
+  "evidence": {
+    "browser": "required",
+    "assistiveTechnology": "review-required"
+  },
   "profileVariability": [],
   "notes": [
-    "Default radio names can collide across separate instances.",
-    "Generated English item labels and color-only states require repair.",
+    "React and Vue generate independent native radio names unless a form name is authored. Angular requires a root name; Web and Elements use authored native names.",
+    "Group labels are authored; explicit or generated numeric item labels support localization. Filled and empty glyphs distinguish state without color.",
     "Audit mapping is provisional; not a conformance claim."
   ]
 }

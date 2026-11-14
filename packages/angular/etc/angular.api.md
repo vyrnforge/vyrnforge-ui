@@ -2337,6 +2337,8 @@ export class VfRatingRootDirective {
     // (undocumented)
     readonly defaultValue: InputSignal<number>;
     // (undocumented)
+    readonly name: InputSignal<string>;
+    // (undocumented)
     readonly selected: Signal<number>;
     // (undocumented)
     set(v: number): void;
@@ -2354,6 +2356,11 @@ export class VfRatingRootDirective {
         "defaultValue": {
             "alias": "defaultValue";
             "required": false;
+            "isSignal": true;
+        };
+        "name": {
+            "alias": "name";
+            "required": true;
             "isSignal": true;
         };
     }, {

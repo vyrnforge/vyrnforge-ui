@@ -2690,7 +2690,6 @@ export interface RangeSliderRootProps extends Omit<ComponentPropsWithoutRef<'div
 // @public (undocumented)
 export function RatingItem(input: RatingItemProps): ReactElement<    {
 'data-vf-rating-item': string;
-'data-vf-state': string;
 }, string | JSXElementConstructor<any>>;
 
 // @public (undocumented)
@@ -2711,9 +2710,13 @@ export interface RatingRootProps {
     // (undocumented)
     'aria-label'?: string;
     // (undocumented)
+    'aria-labelledby'?: string;
+    // (undocumented)
     children?: ReactNode;
     // (undocumented)
     defaultValue?: number;
+    // (undocumented)
+    getItemLabel?(value: number): string;
     // (undocumented)
     max?: number;
     // (undocumented)

@@ -1,4 +1,4 @@
-import { createContext, createElement, useContext, useMemo, useState, type ReactNode } from 'react';
+import { createContext, createElement, useContext, useId, useMemo, useState, type ReactNode } from 'react';
 interface Ctx {
   value: number;
   name: string;
@@ -15,39 +15,56 @@ export interface RatingRootProps {
   defaultValue?: number;
   name?: string;
   max?: number;
+  getItemLabel?(value: number): string;
   onValueChange?(v: number): void;
   children?: ReactNode;
   'aria-label'?: string;
+  'aria-labelledby'?: string;
 }
 export function RatingRoot({
   value,
   defaultValue = 0,
-  name = 'rating',
+  name,
   max = 5,
+  getItemLabel,
   onValueChange,
   children,
-  'aria-label': label = 'Rating',
+  'aria-label': label,
+  'aria-labelledby': labelledBy,
 }: RatingRootProps) {
+  const id = useId();
   const [iv, setIv] = useState(defaultValue);
   const selected = value ?? iv;
+  const groupName = name ?? `vf-rating-${id}`;
   const ctx = useMemo(
     () => ({
       value: selected,
-      name,
+      name: groupName,
       set(v: number) {
+        if (v === selected) return;
         if (value === undefined) setIv(v);
         onValueChange?.(v);
       },
     }),
-    [selected, name, value, onValueChange],
+    [selected, groupName, value, onValueChange],
   );
+  const count = Number.isFinite(max) ? Math.max(0, Math.floor(max)) : 0;
   return createElement(
     C.Provider,
     { value: ctx },
     createElement(
       'div',
-      { role: 'radiogroup', 'aria-label': label, 'data-vf-rating-root': '', 'data-vf-max': max },
-      children ?? Array.from({ length: max }, (_, i) => createElement(RatingItem, { key: i + 1, value: i + 1 })),
+      {
+        role: 'radiogroup',
+        'aria-label': label,
+        'aria-labelledby': labelledBy,
+        'data-vf-rating-root': '',
+        'data-vf-max': count,
+      },
+      children ??
+        Array.from({ length: count }, (_, i) =>
+          createElement(RatingItem, { key: i + 1, value: i + 1, label: getItemLabel?.(i + 1) ?? String(i + 1) }),
+        ),
     ),
   );
 }
@@ -60,16 +77,16 @@ export function RatingItem({ value, label, disabled }: RatingItemProps) {
   const r = useR();
   return createElement(
     'label',
-    { 'data-vf-rating-item': '', 'data-vf-state': r.value >= value ? 'filled' : 'empty' },
+    { 'data-vf-rating-item': '' },
     createElement('input', {
       type: 'radio',
       name: r.name,
       value,
       checked: r.value === value,
       disabled,
-      'aria-label': label ?? `${value} star${value === 1 ? '' : 's'}`,
+      'aria-label': label ?? String(value),
       onChange: () => r.set(value),
     }),
-    createElement('span', { 'aria-hidden': true }, '★'),
+    createElement('span', { 'aria-hidden': true, 'data-vf-rating-glyph': '' }),
   );
 }
