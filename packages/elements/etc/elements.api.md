@@ -20,6 +20,12 @@ export interface AccordionValueChangeDetail {
 }
 
 // @public (undocumented)
+export interface CarouselIndexChangeDetail {
+    // (undocumented)
+    index: number;
+}
+
+// @public (undocumented)
 export function defineAccordionElement(registry?: CustomElementRegistry | undefined): void;
 
 // @public (undocumented)
@@ -210,51 +216,61 @@ export class VfAlertDialogElement extends VfDialogElement {
 }
 
 // @public (undocumented)
-export class VfAppShellBodyElement extends HTMLElementBase_19 {
+export class VfAppShellBodyElement extends HTMLElementBase_20 {
     // (undocumented)
     connectedCallback(): void;
 }
 
 // @public (undocumented)
-export class VfAppShellElement extends HTMLElementBase_19 {
+export class VfAppShellElement extends HTMLElementBase_20 {
     // (undocumented)
     connectedCallback(): void;
 }
 
 // @public (undocumented)
-export class VfAppShellFooterElement extends HTMLElementBase_19 {
+export class VfAppShellFooterElement extends HTMLElementBase_20 {
     // (undocumented)
     connectedCallback(): void;
 }
 
 // @public (undocumented)
-export class VfAppShellHeaderElement extends HTMLElementBase_19 {
+export class VfAppShellHeaderElement extends HTMLElementBase_20 {
     // (undocumented)
     connectedCallback(): void;
 }
 
 // @public (undocumented)
-export class VfAppShellMainElement extends HTMLElementBase_19 {
+export class VfAppShellMainElement extends HTMLElementBase_20 {
     // (undocumented)
     connectedCallback(): void;
 }
 
 // @public (undocumented)
-export class VfAppShellNavigationElement extends HTMLElementBase_19 {
+export class VfAppShellNavigationElement extends HTMLElementBase_20 {
     // (undocumented)
     connectedCallback(): void;
 }
 
 // @public (undocumented)
-export class VfCarouselElement extends H_8 {
+export class VfCarouselElement extends HTMLElementBase_16 {
+    // (undocumented)
+    attributeChangedCallback(): void;
     // (undocumented)
     connectedCallback(): void;
+    // (undocumented)
+    get defaultIndex(): number;
+    set defaultIndex(value: number);
     // (undocumented)
     disconnectedCallback(): void;
+    // (undocumented)
+    get index(): number;
+    set index(value: number);
+    // (undocumented)
+    static readonly observedAttributes: string[];
 }
 
 // @public (undocumented)
-export class VfColorPickerElement extends H_9 {
+export class VfColorPickerElement extends H_8 {
     // (undocumented)
     connectedCallback(): void;
     // (undocumented)
@@ -325,7 +341,7 @@ export class VfDrawerElement extends VfDialogElement {
 }
 
 // @public (undocumented)
-export class VfFileUploaderElement extends H_10 {
+export class VfFileUploaderElement extends H_9 {
     // (undocumented)
     connectedCallback(): void;
     // (undocumented)
@@ -398,7 +414,7 @@ export class VfMultiSelectElement extends H_2 {
 }
 
 // @public (undocumented)
-export class VfNumberFieldElement extends H_11 {
+export class VfNumberFieldElement extends H_10 {
     // (undocumented)
     connectedCallback(): void;
     // (undocumented)
@@ -406,7 +422,7 @@ export class VfNumberFieldElement extends H_11 {
 }
 
 // @public (undocumented)
-export class VfOtpFieldElement extends HTMLElementBase_16 {
+export class VfOtpFieldElement extends HTMLElementBase_17 {
     // (undocumented)
     connectedCallback(): void;
     // (undocumented)
@@ -417,13 +433,13 @@ export class VfOtpFieldElement extends HTMLElementBase_16 {
 }
 
 // @public (undocumented)
-export class VfPaginationElement extends H_12 {
+export class VfPaginationElement extends H_11 {
     // (undocumented)
     connectedCallback(): void;
 }
 
 // @public (undocumented)
-export class VfPasswordFieldElement extends HTMLElementBase_17 {
+export class VfPasswordFieldElement extends HTMLElementBase_18 {
     // (undocumented)
     attributeChangedCallback(): void;
     // (undocumented)
@@ -487,7 +503,7 @@ export class VfRatingElement extends H_6 {
 }
 
 // @public (undocumented)
-export class VfSearchFieldElement extends H_13 {
+export class VfSearchFieldElement extends H_12 {
     // (undocumented)
     connectedCallback(): void;
     // (undocumented)
@@ -511,7 +527,7 @@ export class VfSelectElement extends H {
 }
 
 // @public (undocumented)
-export class VfSideNavElement extends HTMLElementBase_20 {
+export class VfSideNavElement extends HTMLElementBase_21 {
     // (undocumented)
     connectedCallback(): void;
 }
@@ -525,7 +541,7 @@ export class VfSplitButtonElement extends HTMLElementBase_13 {
 }
 
 // @public (undocumented)
-export class VfSplitPanelElement extends H_14 {
+export class VfSplitPanelElement extends H_13 {
     // (undocumented)
     connectedCallback(): void;
 }
@@ -561,7 +577,7 @@ export class VfTagGroupElement extends H_5 {
 }
 
 // @public (undocumented)
-export class VfToastElement extends HTMLElementBase_18 {
+export class VfToastElement extends HTMLElementBase_19 {
     // (undocumented)
     attributeChangedCallback(name: string, oldValue: string | null, newValue: string | null): void;
     // (undocumented)
@@ -582,7 +598,7 @@ export class VfToastElement extends HTMLElementBase_18 {
 }
 
 // @public (undocumented)
-export class VfToastViewportElement extends HTMLElementBase_18 {
+export class VfToastViewportElement extends HTMLElementBase_19 {
     // (undocumented)
     connectedCallback(): void;
     // (undocumented)

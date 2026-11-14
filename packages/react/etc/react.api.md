@@ -248,7 +248,7 @@ export interface CarouselRootProps extends ComponentPropsWithoutRef<'section'> {
     // (undocumented)
     index?: number;
     // (undocumented)
-    onIndexChange?(i: number): void;
+    onIndexChange?(index: number): void;
 }
 
 // @public (undocumented)
