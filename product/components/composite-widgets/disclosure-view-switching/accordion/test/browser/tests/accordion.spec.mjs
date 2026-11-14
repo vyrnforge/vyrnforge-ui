@@ -117,3 +117,21 @@ test('multiple Accordion preserves arbitrary string values without delimiter col
   await expect(comma).toHaveAttribute('aria-expanded', 'true');
   await expect(root).toHaveAttribute('data-requested', '["a,b","c"]');
 });
+
+test('Elements navigation uses owned triggers even when a nested panel precedes its header', async ({ page }) => {
+  test.skip(port !== 'elements', 'Elements DOM ownership regression.');
+  await page.goto('/components/accordion/elements.html');
+  await page.waitForFunction(() => Boolean(customElements.get('vf-accordion')));
+  const root = page.locator('#root');
+  const first = root.getByRole('button', { name: 'First section', exact: true });
+  const third = root.getByRole('button', { name: 'Third section', exact: true });
+  await first.evaluate((trigger) => {
+    const item = trigger.closest('[data-vf-accordion-item]');
+    item.prepend(item.querySelector('[data-vf-accordion-panel]'));
+  });
+  await first.focus();
+  await first.press('ArrowDown');
+  await expect(third).toBeFocused();
+  await third.press('Home');
+  await expect(first).toBeFocused();
+});

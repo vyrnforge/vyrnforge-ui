@@ -142,7 +142,7 @@ export class VfAccordionElement extends HTMLElementBase {
     else if (event.key === 'End') intent = 'last';
     if (!intent) return;
     const triggers = this.#items()
-      .map((item) => item.querySelector<HTMLButtonElement>('[data-vf-accordion-trigger]'))
+      .map((item) => this.#part<HTMLButtonElement>(item, 'button[data-vf-accordion-trigger]'))
       .filter((value): value is HTMLButtonElement => Boolean(value));
     const index = triggers.indexOf(event.target);
     const next = resolveNavigationIndex(
