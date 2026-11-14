@@ -19,6 +19,20 @@ test('file uploader exposes selected files accessibly', async ({ page }) => {
   expect((await expectNoAxeViolations(page)).violations).toEqual([]);
 });
 
+test('file uploader dropzone activates the native file input from Enter and Space', async ({ page }) => {
+  for (const [key, name] of [['Enter', 'enter.txt'], [' ', 'space.txt']]) {
+    await page.goto(fixture);
+    const dropzone = page.getByRole('button', { name: 'Choose or drop a file' });
+    await dropzone.focus();
+    const [chooser] = await Promise.all([
+      page.waitForEvent('filechooser'),
+      dropzone.press(key),
+    ]);
+    await chooser.setFiles({ name, mimeType: 'text/plain', buffer: Buffer.from('ok') });
+    await expect(page.getByText(name)).toBeVisible();
+  }
+});
+
 test('public FileUploader CSS resolves the canonical subtle surface and focus ring in light and dark themes', async ({ page }) => {
   test.skip(port !== 'web', 'Public CSS resolution evidence is owned by the Web lane.');
   await page.goto('/components/file-uploader/web.html');
