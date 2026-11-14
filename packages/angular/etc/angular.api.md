@@ -2541,6 +2541,10 @@ export class VfSplitPanelResizeHandleDirective {
     // (undocumented)
     key(e: KeyboardEvent): void;
     // (undocumented)
+    maximum(): number;
+    // (undocumented)
+    minimum(): number;
+    // (undocumented)
     readonly root: VfSplitPanelRootDirective;
     // (undocumented)
     static ɵdir: i0.ɵɵDirectiveDeclaration<VfSplitPanelResizeHandleDirective, "[vfSplitPanelResizeHandle]", never, {}, {}, never, never, true, never>;

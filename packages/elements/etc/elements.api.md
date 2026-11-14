@@ -543,7 +543,13 @@ export class VfSplitButtonElement extends HTMLElementBase_13 {
 // @public (undocumented)
 export class VfSplitPanelElement extends H_13 {
     // (undocumented)
+    attributeChangedCallback(): void;
+    // (undocumented)
     connectedCallback(): void;
+    // (undocumented)
+    disconnectedCallback(): void;
+    // (undocumented)
+    static readonly observedAttributes: string[];
 }
 
 // @public (undocumented)
