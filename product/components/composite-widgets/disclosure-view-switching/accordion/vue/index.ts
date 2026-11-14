@@ -14,16 +14,17 @@ import { resolveNavigationIndex, type CollectionNavigationIntent } from '@vyrnfo
 export type AccordionType = 'single' | 'multiple';
 export type AccordionValue = string | readonly string[];
 interface RootContext {
-  id: string;
+  id: Readonly<Ref<string>>;
+  collapsible: Readonly<Ref<boolean>>;
   type: Readonly<Ref<AccordionType>>;
   values: Readonly<Ref<readonly string[]>>;
   toggle(value: string): void;
 }
 interface ItemContext {
-  value: string;
+  value: Readonly<Ref<string>>;
   disabled: Readonly<Ref<boolean>>;
-  triggerId: string;
-  panelId: string;
+  triggerId: Readonly<Ref<string>>;
+  panelId: Readonly<Ref<string>>;
 }
 const RootKey: InjectionKey<RootContext> = Symbol('VyrnForgeAccordion');
 const ItemKey: InjectionKey<ItemContext> = Symbol('VyrnForgeAccordionItem');
@@ -38,11 +39,12 @@ function useItem() {
   return value;
 }
 function normalize(value: AccordionValue | undefined, type: AccordionType): string[] {
-  if (value === undefined) return [];
-  return typeof value === 'string' ? [value] : type === 'single' ? value.slice(0, 1) : [...value];
+  const values = typeof value === 'string' ? [value] : (value ?? []);
+  const unique = [...new Set(values.filter(Boolean))];
+  return type === 'single' ? unique.slice(0, 1) : unique;
 }
 function token(value: string) {
-  return encodeURIComponent(value).replaceAll('%', '_');
+  return encodeURIComponent(value).replaceAll('_', '_5F').replaceAll('%', '_');
 }
 export const AccordionRoot = defineComponent({
   name: 'VfAccordionRoot',
@@ -56,15 +58,17 @@ export const AccordionRoot = defineComponent({
   },
   emits: ['update:modelValue', 'valueChange'],
   setup(props, { attrs, slots, emit }) {
-    const id = props.id ?? `vf-accordion-${useId().replaceAll(':', '')}`;
+    const generated = useId().replaceAll(':', '');
+    const id = computed(() => props.id ?? `vf-accordion-${generated}`);
     const internal = ref<string[]>(normalize(props.defaultValue, props.type));
     const values = computed(() =>
-      props.modelValue === undefined ? internal.value : normalize(props.modelValue, props.type),
+      normalize(props.modelValue ?? internal.value, props.type),
     );
     const type = computed(() => props.type);
     provide(RootKey, {
       id,
       type,
+      collapsible: computed(() => props.collapsible),
       values,
       toggle(value) {
         const current = values.value;
@@ -80,7 +84,7 @@ export const AccordionRoot = defineComponent({
       },
     });
     return () =>
-      h('div', { ...attrs, id, 'data-vf-accordion-root': '', 'data-vf-type': props.type }, slots.default?.());
+      h('div', { ...attrs, id: id.value, 'data-vf-accordion-root': '', 'data-vf-type': props.type }, slots.default?.());
   },
 });
 export const AccordionItem = defineComponent({
@@ -91,10 +95,10 @@ export const AccordionItem = defineComponent({
     const root = useRoot();
     const disabled = computed(() => props.disabled);
     const item = {
-      value: props.value,
+      value: computed(() => props.value),
       disabled,
-      triggerId: `${root.id}-trigger-${token(props.value)}`,
-      panelId: `${root.id}-panel-${token(props.value)}`,
+      triggerId: computed(() => `${root.id.value}-trigger-${token(props.value)}`),
+      panelId: computed(() => `${root.id.value}-panel-${token(props.value)}`),
     };
     provide(ItemKey, item);
     const open = computed(() => root.values.value.includes(props.value));
@@ -114,35 +118,44 @@ export const AccordionItem = defineComponent({
 export const AccordionHeader = defineComponent({
   name: 'VfAccordionHeader',
   inheritAttrs: false,
-  setup(_p, { attrs, slots }) {
+  props: { level: { type: Number as PropType<1 | 2 | 3 | 4 | 5 | 6>, default: 3 } },
+  setup(props, { attrs, slots }) {
     useItem();
-    return () => h('h3', { ...attrs, 'data-vf-accordion-header': '' }, slots.default?.());
+    return () => h(`h${props.level}`, { ...attrs, 'data-vf-accordion-header': '' }, slots.default?.());
   },
 });
 export const AccordionTrigger = defineComponent({
   name: 'VfAccordionTrigger',
   inheritAttrs: false,
-  setup(_p, { attrs, slots }) {
+  props: { disabled: Boolean },
+  setup(props, { attrs, slots }) {
     const root = useRoot();
     const item = useItem();
-    const open = computed(() => root.values.value.includes(item.value));
+    const open = computed(() => root.values.value.includes(item.value.value));
+    const unavailable = computed(() => open.value && root.type.value === 'single' && !root.collapsible.value);
     return () =>
       h(
         'button',
         {
           ...attrs,
-          id: item.triggerId,
+          id: item.triggerId.value,
           type: attrs.type ?? 'button',
-          disabled: item.disabled.value,
+          disabled: item.disabled.value || props.disabled,
           'aria-expanded': open.value,
-          'aria-controls': item.panelId,
+          'aria-disabled': unavailable.value ? 'true' : undefined,
+          'aria-controls': item.panelId.value,
           'data-vf-accordion-trigger': '',
           onClick(event: MouseEvent) {
             if (typeof attrs.onClick === 'function') attrs.onClick(event);
-            if (!event.defaultPrevented && !item.disabled.value) root.toggle(item.value);
+            else if (Array.isArray(attrs.onClick))
+              for (const handler of attrs.onClick) if (typeof handler === 'function') handler(event);
+            if (!event.defaultPrevented && !item.disabled.value && !props.disabled && !unavailable.value)
+              root.toggle(item.value.value);
           },
           onKeydown(event: KeyboardEvent) {
             if (typeof attrs.onKeydown === 'function') attrs.onKeydown(event);
+            else if (Array.isArray(attrs.onKeydown))
+              for (const handler of attrs.onKeydown) if (typeof handler === 'function') handler(event);
             if (event.defaultPrevented) return;
             let intent: CollectionNavigationIntent | null = null;
             if (event.key === 'ArrowDown') intent = 'next';
@@ -152,7 +165,9 @@ export const AccordionTrigger = defineComponent({
             if (!intent) return;
             const container = (event.currentTarget as HTMLElement).closest<HTMLElement>('[data-vf-accordion-root]');
             if (!container) return;
-            const triggers = Array.from(container.querySelectorAll<HTMLButtonElement>('[data-vf-accordion-trigger]'));
+            const triggers = Array.from(container.querySelectorAll<HTMLButtonElement>('[data-vf-accordion-trigger]')).filter(
+              (trigger) => trigger.closest('[data-vf-accordion-root]') === container,
+            );
             const index = triggers.indexOf(event.currentTarget as HTMLButtonElement);
             const next = resolveNavigationIndex(
               triggers.map((candidate) => ({ eligible: !candidate.disabled })),
@@ -171,19 +186,20 @@ export const AccordionTrigger = defineComponent({
 export const AccordionPanel = defineComponent({
   name: 'VfAccordionPanel',
   inheritAttrs: false,
-  setup(_p, { attrs, slots }) {
+  props: { region: Boolean },
+  setup(props, { attrs, slots }) {
     const root = useRoot();
     const item = useItem();
-    const open = computed(() => root.values.value.includes(item.value));
+    const open = computed(() => root.values.value.includes(item.value.value));
     return () =>
       h(
         'div',
         {
           ...attrs,
-          id: attrs.id ?? item.panelId,
-          role: 'region',
+          id: item.panelId.value,
+          role: props.region ? 'region' : undefined,
           hidden: !open.value,
-          'aria-labelledby': item.triggerId,
+          'aria-labelledby': props.region ? item.triggerId.value : undefined,
           'data-vf-accordion-panel': '',
           'data-vf-open': open.value ? '' : undefined,
         },

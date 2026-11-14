@@ -4,12 +4,12 @@ import { resolveNavigationIndex, type CollectionNavigationIntent } from '@vyrnfo
 export type AccordionType = 'single' | 'multiple';
 export type AccordionValue = string | readonly string[];
 function normalize(value: AccordionValue | undefined, type: AccordionType): string[] {
-  if (value === undefined) return [];
-  if (typeof value === 'string') return value ? [value] : [];
-  return type === 'single' ? value.slice(0, 1) : [...value];
+  const values = typeof value === 'string' ? [value] : (value ?? []);
+  const unique = [...new Set(values.filter(Boolean))];
+  return type === 'single' ? unique.slice(0, 1) : unique;
 }
 function token(value: string): string {
-  return encodeURIComponent(value).replaceAll('%', '_');
+  return encodeURIComponent(value).replaceAll('_', '_5F').replaceAll('%', '_');
 }
 
 @Directive({
@@ -24,15 +24,8 @@ export class VfAccordionRootDirective {
   readonly defaultValue = input<AccordionValue | undefined>(undefined);
   readonly collapsible = input(false, { transform: booleanAttribute });
   readonly valueChange = output<AccordionValue>();
-  private readonly internal = signal<string[]>([]);
-  private initialized = false;
-  readonly values = computed(() =>
-    this.value() === undefined
-      ? this.initialized
-        ? this.internal()
-        : normalize(this.defaultValue(), this.type())
-      : normalize(this.value(), this.type()),
-  );
+  private readonly internal = signal<string[] | undefined>(undefined);
+  readonly values = computed(() => normalize(this.value() ?? this.internal() ?? this.defaultValue(), this.type()));
 
   toggle(itemValue: string): void {
     const current = this.values();
@@ -41,7 +34,6 @@ export class VfAccordionRootDirective {
     if (this.type() === 'single') next = isOpen ? (this.collapsible() ? [] : [...current]) : [itemValue];
     else next = isOpen ? current.filter((candidate) => candidate !== itemValue) : [...current, itemValue];
     if (next.length === current.length && next.every((candidate, index) => candidate === current[index])) return;
-    this.initialized = true;
     if (this.value() === undefined) this.internal.set(next);
     this.valueChange.emit(this.type() === 'single' ? (next[0] ?? '') : next);
   }
@@ -83,18 +75,25 @@ export class VfAccordionHeaderDirective {
     '[attr.id]': 'item.triggerId()',
     '[attr.aria-expanded]': 'item.open()',
     '[attr.aria-controls]': 'item.panelId()',
-    '[disabled]': 'item.disabled()',
-    '(click)': 'toggle()',
+    '[disabled]': 'item.disabled() || disabled()',
+    '[attr.aria-disabled]': 'unavailable() ? "true" : null',
+    '(click)': 'toggle($event)',
     '(keydown)': 'onKeydown($event)',
   },
 })
 export class VfAccordionTriggerDirective {
   private readonly element = inject<ElementRef<HTMLButtonElement>>(ElementRef);
   constructor(readonly item: VfAccordionItemDirective) {}
-  toggle(): void {
-    if (!this.item.disabled()) this.item.root.toggle(this.item.value());
+  readonly disabled = input(false, { transform: booleanAttribute });
+  unavailable(): boolean {
+    return this.item.open() && this.item.root.type() === 'single' && !this.item.root.collapsible();
+  }
+  toggle(event?: MouseEvent): void {
+    if (!event?.defaultPrevented && !this.item.disabled() && !this.disabled() && !this.unavailable())
+      this.item.root.toggle(this.item.value());
   }
   onKeydown(event: KeyboardEvent): void {
+    if (event.defaultPrevented) return;
     let intent: CollectionNavigationIntent | null = null;
     if (event.key === 'ArrowDown') intent = 'next';
     else if (event.key === 'ArrowUp') intent = 'previous';
@@ -103,7 +102,9 @@ export class VfAccordionTriggerDirective {
     if (!intent) return;
     const root = this.element.nativeElement.closest<HTMLElement>('[data-vf-accordion-root]');
     if (!root) return;
-    const triggers = Array.from(root.querySelectorAll<HTMLButtonElement>('[data-vf-accordion-trigger]'));
+    const triggers = Array.from(root.querySelectorAll<HTMLButtonElement>('[data-vf-accordion-trigger]')).filter(
+      (trigger) => trigger.closest('[data-vf-accordion-root]') === root,
+    );
     const current = triggers.indexOf(this.element.nativeElement);
     const next = resolveNavigationIndex(
       triggers.map((candidate) => ({ eligible: !candidate.disabled })),
@@ -120,14 +121,15 @@ export class VfAccordionTriggerDirective {
   selector: '[vfAccordionPanel]',
   standalone: true,
   host: {
-    role: 'region',
+    '[attr.role]': 'region() ? "region" : null',
     'data-vf-accordion-panel': '',
     '[attr.id]': 'item.panelId()',
-    '[attr.aria-labelledby]': 'item.triggerId()',
+    '[attr.aria-labelledby]': 'region() ? item.triggerId() : null',
     '[attr.data-vf-open]': 'item.open() ? "" : null',
     '[hidden]': '!item.open()',
   },
 })
 export class VfAccordionPanelDirective {
+  readonly region = input(false, { transform: booleanAttribute });
   constructor(readonly item: VfAccordionItemDirective) {}
 }

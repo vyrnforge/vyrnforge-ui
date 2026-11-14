@@ -9,23 +9,50 @@
   "wcag": {
     "target": "2.2 AA",
     "status": "review-required",
-    "criteria": ["1.3.1", "2.1.1", "2.4.3", "2.4.6", "2.4.7", "4.1.2"]
+    "criteria": [
+      "1.3.1",
+      "2.1.1",
+      "2.4.3",
+      "2.4.6",
+      "2.4.7",
+      "4.1.2"
+    ]
   },
-  "aria": { "status": "mapped", "apgPattern": "accordion" },
-  "interaction": { "keyboard": "managed", "focus": "native buttons", "directionality": "logical" },
+  "aria": {
+    "status": "mapped",
+    "apgPattern": "accordion"
+  },
+  "interaction": {
+    "keyboard": "managed",
+    "focus": "native buttons",
+    "directionality": "logical"
+  },
   "ownership": {
     "library": [
       "Own expansion relationships and applicable keyboard policy; avoid unrelated nested item registration."
     ],
-    "consumer": ["Author heading levels, labels and content; choose single or multiple expansion."]
+    "consumer": [
+      "Author heading levels, labels and content; choose single or multiple expansion."
+    ]
   },
-  "forms": { "status": "not-applicable" },
-  "visualAccessibility": { "status": "component-specific" },
-  "ssrHydration": { "status": "contract-required" },
-  "evidence": { "browser": "required", "assistiveTechnology": "review-required" },
+  "forms": {
+    "status": "not-applicable"
+  },
+  "visualAccessibility": {
+    "status": "component-specific"
+  },
+  "ssrHydration": {
+    "status": "contract-required"
+  },
+  "evidence": {
+    "browser": "required",
+    "assistiveTechnology": "review-required"
+  },
   "profileVariability": [],
   "notes": [
-    "Review consumer ID overrides, nested scoping, noncollapsible expanded semantics and landmark proliferation.",
-    "Audit mapping is provisional; not a conformance claim."
+    "Item values are non-empty and unique within one root; generated trigger/panel IDs use an injective token. Nested roots do not participate in parent navigation.",
+    "A noncollapsible open trigger remains focusable with aria-disabled; native disabled items are skipped. Panel regions are opt-in to avoid excessive landmarks.",
+    "Framework header level and panel region are authored; the library owns trigger/panel IDs. Elements uses authored native headings and role=region opt-in. Multiple Elements values serialize as JSON arrays (legacy comma-separated simple values can still be read).",
+    "Audit mapping is provisional; exact-head and manual evidence remain required."
   ]
 }
