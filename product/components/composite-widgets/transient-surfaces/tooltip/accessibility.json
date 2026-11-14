@@ -28,7 +28,7 @@
   "evidence": { "browser": "required", "assistiveTechnology": "review-required" },
   "profileVariability": [],
   "notes": [
-    "Tooltip CSS uses pointer-events none and current pointer-leave behavior threatens hover persistence.",
+    "All runtime ports use native manual popover and CSS anchor positioning with hover/focus persistence, Escape dismissal and retained description markup. Real public-port fixtures exercise description relationships and behavior; exact-head and cross-engine evidence remain required.",
     "#1280 owns platform-first migration; verify WCAG 1.4.13 and real port behavior.",
     "Audit mapping is provisional; not a conformance claim."
   ]
