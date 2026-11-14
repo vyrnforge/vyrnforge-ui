@@ -52,7 +52,7 @@ import { ProviderProps } from 'react';
 import { ReactElement } from 'react';
 import { ReactEventHandler } from 'react';
 import { ReactNode } from 'react';
-import type { Ref } from 'react';
+import { Ref } from 'react';
 import { RefAttributes } from 'react';
 import { RefObject } from 'react';
 import type { SelectHTMLAttributes } from 'react';
@@ -2585,7 +2585,10 @@ export interface PasswordFieldToggleProps extends ComponentPropsWithoutRef<'butt
 export const PopoverContent: ForwardRefExoticComponent<PopoverContentProps & RefAttributes<HTMLDivElement>>;
 
 // @public (undocumented)
-export type PopoverContentProps = Omit<HTMLAttributes<HTMLDivElement>, 'id' | 'role' | 'popover'>;
+export interface PopoverContentProps extends HTMLAttributes<HTMLDivElement> {
+    // (undocumented)
+    portal?: boolean;
+}
 
 // @public (undocumented)
 export function PopoverRoot(input: PopoverRootProps): FunctionComponentElement<ProviderProps<PopoverContextValue | null>>;
@@ -2594,10 +2597,6 @@ export function PopoverRoot(input: PopoverRootProps): FunctionComponentElement<P
 export interface PopoverRootProps {
     // (undocumented)
     children?: ReactNode;
-    // (undocumented)
-    contentId?: string;
-    // (undocumented)
-    contentRole?: 'dialog' | 'region';
     // (undocumented)
     defaultOpen?: boolean;
     // (undocumented)
@@ -4830,7 +4829,7 @@ key?: Key | null | undefined;
 export function TooltipContent(props: TooltipContentProps): ReactNode;
 
 // @public (undocumented)
-export type TooltipContentProps = HTMLAttributes<HTMLDivElement>;
+export type TooltipContentProps = Omit<HTMLAttributes<HTMLDivElement>, 'id'>;
 
 // @public (undocumented)
 export function TooltipRoot(input: TooltipRootProps): FunctionComponentElement<ProviderProps<TooltipContextValue | null>>;
@@ -4841,6 +4840,7 @@ export interface TooltipRootProps {
     children?: ReactNode;
     // (undocumented)
     closeDelay?: number;
+    contentId?: string;
     // (undocumented)
     defaultOpen?: boolean;
     // (undocumented)
@@ -4854,7 +4854,9 @@ export interface TooltipRootProps {
 }
 
 // @public (undocumented)
-export function TooltipTrigger(input: TooltipTriggerProps): ReactElement<Record<string, unknown>, string | JSXElementConstructor<any>>;
+export function TooltipTrigger(input: TooltipTriggerProps): ReactElement<HTMLAttributes<HTMLElement> & {
+    ref?: Ref<HTMLElement>;
+}, string | JSXElementConstructor<any>>;
 
 // @public (undocumented)
 export interface TooltipTriggerProps {
