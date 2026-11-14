@@ -57,10 +57,8 @@ interface TabsRootBaseProps extends Omit<HTMLAttributes<HTMLDivElement>, 'defaul
   onValueChange?: (value: string) => void;
 }
 
-export type TabsRootProps = TabsRootBaseProps & (
-  | { value: string; defaultValue?: never }
-  | { value?: undefined; defaultValue: string }
-);
+export type TabsRootProps = TabsRootBaseProps &
+  ({ value: string; defaultValue?: never } | { value?: undefined; defaultValue: string });
 
 export function TabsRoot({
   value,
@@ -84,19 +82,22 @@ export function TabsRoot({
     setFocusValue(selectedValue);
   }, [selectedValue]);
 
-  const context = useMemo<TabsContextValue>(() => ({
-    rootId,
-    selectedValue,
-    focusValue,
-    orientation,
-    activation,
-    direction: dir,
-    select(nextValue) {
-      if (!controlled) setInternalValue(nextValue);
-      onValueChange?.(nextValue);
-    },
-    focus: setFocusValue,
-  }), [activation, controlled, dir, focusValue, onValueChange, orientation, rootId, selectedValue]);
+  const context = useMemo<TabsContextValue>(
+    () => ({
+      rootId,
+      selectedValue,
+      focusValue,
+      orientation,
+      activation,
+      direction: dir,
+      select(nextValue) {
+        if (!controlled) setInternalValue(nextValue);
+        onValueChange?.(nextValue);
+      },
+      focus: setFocusValue,
+    }),
+    [activation, controlled, dir, focusValue, onValueChange, orientation, rootId, selectedValue],
+  );
 
   return createElement(
     TabsContext.Provider,
@@ -139,7 +140,9 @@ export function TabsList({ onKeyDown, ...props }: TabsListProps) {
 
     const tabs = Array.from(event.currentTarget.querySelectorAll<HTMLElement>('[role="tab"]'));
     const currentIndex = tabs.indexOf(target);
-    const items = tabs.map((tab) => ({ eligible: !(tab.getAttribute('aria-disabled') === 'true' || (tab as HTMLButtonElement).disabled) }));
+    const items = tabs.map((tab) => ({
+      eligible: !(tab.getAttribute('aria-disabled') === 'true' || (tab as HTMLButtonElement).disabled),
+    }));
     const nextIndex = resolveNavigationIndex(items, currentIndex, intent);
     if (nextIndex === null) return;
 
@@ -167,7 +170,15 @@ export interface TabsTabProps extends Omit<ButtonHTMLAttributes<HTMLButtonElemen
   value: string;
 }
 
-export function TabsTab({ value, disabled = false, onClick, onFocus, onKeyDown, type = 'button', ...props }: TabsTabProps) {
+export function TabsTab({
+  value,
+  disabled = false,
+  onClick,
+  onFocus,
+  onKeyDown,
+  type = 'button',
+  ...props
+}: TabsTabProps) {
   const context = useTabsContext();
   const selected = context.selectedValue === value;
   const focusable = context.focusValue === value;

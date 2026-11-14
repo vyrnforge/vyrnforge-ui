@@ -14,7 +14,9 @@ import {
 
 const DEFAULT_DURATION = 5000;
 type PauseReason = 'pointer' | 'focus';
-function normalizedDuration(duration: number): number | null { return Number.isFinite(duration) && duration > 0 ? duration : null; }
+function normalizedDuration(duration: number): number | null {
+  return Number.isFinite(duration) && duration > 0 ? duration : null;
+}
 
 @Directive({
   selector: '[vfToastViewport]',
@@ -58,7 +60,9 @@ export class VfToastRootDirective implements OnDestroy {
   private wasOpen = false;
   private readonly pauseReasons = new Set<PauseReason>();
 
-  readonly committedOpen = computed(() => this.open() ?? (this.initialized() ? this.internalOpen() : this.defaultOpen()));
+  readonly committedOpen = computed(
+    () => this.open() ?? (this.initialized() ? this.internalOpen() : this.defaultOpen()),
+  );
 
   constructor() {
     effect(() => {
@@ -85,8 +89,12 @@ export class VfToastRootDirective implements OnDestroy {
     this.openChange.emit(false);
   }
 
-  onPointerEnter(): void { this.pause('pointer'); }
-  onPointerLeave(): void { this.resume('pointer'); }
+  onPointerEnter(): void {
+    this.pause('pointer');
+  }
+  onPointerLeave(): void {
+    this.resume('pointer');
+  }
   onFocusIn(event: FocusEvent): void {
     if (!this.element.nativeElement.contains(event.relatedTarget as Node | null)) this.pause('focus');
   }
@@ -129,8 +137,18 @@ export class VfToastRootDirective implements OnDestroy {
 
   private armRemaining(): void {
     const remaining = this.remaining;
-    if (this.destroyed || !this.committedOpen() || this.timeoutRequested || this.pauseReasons.size > 0 || remaining === null) return;
-    if (remaining <= 0) { this.expire(); return; }
+    if (
+      this.destroyed ||
+      !this.committedOpen() ||
+      this.timeoutRequested ||
+      this.pauseReasons.size > 0 ||
+      remaining === null
+    )
+      return;
+    if (remaining <= 0) {
+      this.expire();
+      return;
+    }
     this.clearTimer();
     this.deadline = Date.now() + remaining;
     this.timer = setTimeout(() => this.expire(), remaining);

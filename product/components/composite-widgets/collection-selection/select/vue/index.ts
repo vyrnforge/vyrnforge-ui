@@ -58,9 +58,10 @@ export const SelectRoot = defineComponent({
     const instance = getCurrentInstance();
     const internalValue = ref(props.defaultValue);
     const internalOpen = ref(props.defaultOpen);
-    const hasOpenProp = () => Boolean(instance?.vnode.props && Object.prototype.hasOwnProperty.call(instance.vnode.props, 'open'));
+    const hasOpenProp = () =>
+      Boolean(instance?.vnode.props && Object.prototype.hasOwnProperty.call(instance.vnode.props, 'open'));
     const value = computed(() => props.value ?? internalValue.value);
-    const expanded = computed(() => hasOpenProp() ? props.open : internalOpen.value);
+    const expanded = computed(() => (hasOpenProp() ? props.open : internalOpen.value));
     const anchor = ref<HTMLElement | null>(null);
     const surface = ref<HTMLElement | null>(null);
     const openRef = computed({
@@ -75,7 +76,9 @@ export const SelectRoot = defineComponent({
       value,
       anchor,
       surface,
-      setOpen(next) { openRef.value = next; },
+      setOpen(next) {
+        openRef.value = next;
+      },
       setValue(next) {
         if (props.value === undefined) internalValue.value = next;
         emit('update:value', next);
@@ -85,13 +88,12 @@ export const SelectRoot = defineComponent({
         void nextTick(() => {
           if (!surface.value) return;
           const options = optionsFor(surface.value);
-          const states = options.map((option) => ({ eligible: !(optionDisabled(option)) }));
+          const states = options.map((option) => ({ eligible: !optionDisabled(option) }));
           const selected = options.findIndex(
             (option, index) => states[index]?.eligible !== false && option.getAttribute('aria-selected') === 'true',
           );
-          const index = selected >= 0
-            ? selected
-            : resolveNavigationIndex(states, edge === 'first' ? -1 : options.length, edge);
+          const index =
+            selected >= 0 ? selected : resolveNavigationIndex(states, edge === 'first' ? -1 : options.length, edge);
           if (index != null) options[index]?.focus();
         });
       },
@@ -109,31 +111,38 @@ export const SelectTrigger = defineComponent({
       select.setOpen(true);
       select.focusOptions(edge);
     };
-    return () => h('button', {
-      ...attrs,
-      type: (attrs.type as string | undefined) ?? 'button',
-      ref: (node: unknown) => { select.anchor.value = node as HTMLElement | null; },
-      'aria-haspopup': 'listbox',
-      'aria-expanded': select.open.value,
-      'data-vf-select-trigger': '',
-      onClick: (event: MouseEvent) => {
-        invoke(attrs.onClick, event);
-        if (event.defaultPrevented) return;
-        if (select.open.value) select.setOpen(false);
-        else openAndFocus('first');
-      },
-      onKeydown: (event: KeyboardEvent) => {
-        invoke(attrs.onKeydown, event);
-        if (event.defaultPrevented) return;
-        if (event.key === 'ArrowUp') {
-          event.preventDefault();
-          openAndFocus('last');
-        } else if (event.key === 'ArrowDown' || event.key === 'Enter' || event.key === ' ') {
-          event.preventDefault();
-          openAndFocus('first');
-        }
-      },
-    }, slots.default?.() ?? select.value.value);
+    return () =>
+      h(
+        'button',
+        {
+          ...attrs,
+          type: (attrs.type as string | undefined) ?? 'button',
+          ref: (node: unknown) => {
+            select.anchor.value = node as HTMLElement | null;
+          },
+          'aria-haspopup': 'listbox',
+          'aria-expanded': select.open.value,
+          'data-vf-select-trigger': '',
+          onClick: (event: MouseEvent) => {
+            invoke(attrs.onClick, event);
+            if (event.defaultPrevented) return;
+            if (select.open.value) select.setOpen(false);
+            else openAndFocus('first');
+          },
+          onKeydown: (event: KeyboardEvent) => {
+            invoke(attrs.onKeydown, event);
+            if (event.defaultPrevented) return;
+            if (event.key === 'ArrowUp') {
+              event.preventDefault();
+              openAndFocus('last');
+            } else if (event.key === 'ArrowDown' || event.key === 'Enter' || event.key === ' ') {
+              event.preventDefault();
+              openAndFocus('first');
+            }
+          },
+        },
+        slots.default?.() ?? select.value.value,
+      );
   },
 });
 
@@ -144,52 +153,67 @@ export const SelectContent = defineComponent({
     const select = useSelect();
     let query = '';
     let timer: ReturnType<typeof setTimeout> | null = null;
-    return () => select.open.value ? h('div', {
-      ...attrs,
-      ref: (node: unknown) => { select.surface.value = node as HTMLElement | null; },
-      role: 'listbox',
-      tabindex: -1,
-      'data-vf-select-content': '',
-      onKeydown: (event: KeyboardEvent) => {
-        invoke(attrs.onKeydown, event);
-        if (event.defaultPrevented) return;
-        if (event.key === 'Escape') {
-          event.preventDefault();
-          select.setOpen(false);
-          select.anchor.value?.focus();
-          return;
-        }
-        if (event.key === 'Tab') {
-          select.setOpen(false);
-          select.anchor.value?.focus();
-          return;
-        }
-        const root = event.currentTarget as HTMLElement;
-        const options = optionsFor(root);
-        const currentOption = optionFromTarget(root, event.target);
-        const current = currentOption ? options.indexOf(currentOption) : -1;
-        const states = options.map((option) => ({ eligible: !(optionDisabled(option)) }));
-        let intent: 'next' | 'previous' | 'first' | 'last' | null = null;
-        if (event.key === 'ArrowDown') intent = 'next';
-        else if (event.key === 'ArrowUp') intent = 'previous';
-        else if (event.key === 'Home') intent = 'first';
-        else if (event.key === 'End') intent = 'last';
-        let next: number | null = null;
-        if (intent) next = resolveNavigationIndex(states, current, intent);
-        else if (event.key.length === 1 && !event.ctrlKey && !event.metaKey && !event.altKey) {
-          query += event.key;
-          if (timer) clearTimeout(timer);
-          timer = setTimeout(() => { query = ''; }, 500);
-          next = findTypeaheadMatch(options.map((option) => ({
-            textValue: option.dataset.vfTextValue ?? option.textContent ?? '',
-            eligible: !optionDisabled(option),
-          })), query, { startIndex: current });
-        }
-        if (next == null) return;
-        event.preventDefault();
-        options[next]?.focus();
-      },
-    }, slots.default?.()) : null;
+    return () =>
+      select.open.value
+        ? h(
+            'div',
+            {
+              ...attrs,
+              ref: (node: unknown) => {
+                select.surface.value = node as HTMLElement | null;
+              },
+              role: 'listbox',
+              tabindex: -1,
+              'data-vf-select-content': '',
+              onKeydown: (event: KeyboardEvent) => {
+                invoke(attrs.onKeydown, event);
+                if (event.defaultPrevented) return;
+                if (event.key === 'Escape') {
+                  event.preventDefault();
+                  select.setOpen(false);
+                  select.anchor.value?.focus();
+                  return;
+                }
+                if (event.key === 'Tab') {
+                  select.setOpen(false);
+                  select.anchor.value?.focus();
+                  return;
+                }
+                const root = event.currentTarget as HTMLElement;
+                const options = optionsFor(root);
+                const currentOption = optionFromTarget(root, event.target);
+                const current = currentOption ? options.indexOf(currentOption) : -1;
+                const states = options.map((option) => ({ eligible: !optionDisabled(option) }));
+                let intent: 'next' | 'previous' | 'first' | 'last' | null = null;
+                if (event.key === 'ArrowDown') intent = 'next';
+                else if (event.key === 'ArrowUp') intent = 'previous';
+                else if (event.key === 'Home') intent = 'first';
+                else if (event.key === 'End') intent = 'last';
+                let next: number | null = null;
+                if (intent) next = resolveNavigationIndex(states, current, intent);
+                else if (event.key.length === 1 && !event.ctrlKey && !event.metaKey && !event.altKey) {
+                  query += event.key;
+                  if (timer) clearTimeout(timer);
+                  timer = setTimeout(() => {
+                    query = '';
+                  }, 500);
+                  next = findTypeaheadMatch(
+                    options.map((option) => ({
+                      textValue: option.dataset.vfTextValue ?? option.textContent ?? '',
+                      eligible: !optionDisabled(option),
+                    })),
+                    query,
+                    { startIndex: current },
+                  );
+                }
+                if (next == null) return;
+                event.preventDefault();
+                options[next]?.focus();
+              },
+            },
+            slots.default?.(),
+          )
+        : null;
   },
 });
 
@@ -202,23 +226,28 @@ export const SelectOption = defineComponent({
   },
   setup(props, { attrs, slots }) {
     const select = useSelect();
-    return () => h('button', {
-      ...attrs,
-      type: (attrs.type as string | undefined) ?? 'button',
-      role: 'option',
-      tabindex: -1,
-      disabled: props.disabled,
-      'aria-selected': select.value.value === props.value,
-      'aria-disabled': props.disabled || undefined,
-      'data-vf-select-option': '',
-      'data-vf-value': props.value,
-      onClick: (event: MouseEvent) => {
-        invoke(attrs.onClick, event);
-        if (!event.defaultPrevented && !props.disabled) {
-          select.setValue(props.value);
-          select.anchor.value?.focus();
-        }
-      },
-    }, slots.default?.());
+    return () =>
+      h(
+        'button',
+        {
+          ...attrs,
+          type: (attrs.type as string | undefined) ?? 'button',
+          role: 'option',
+          tabindex: -1,
+          disabled: props.disabled,
+          'aria-selected': select.value.value === props.value,
+          'aria-disabled': props.disabled || undefined,
+          'data-vf-select-option': '',
+          'data-vf-value': props.value,
+          onClick: (event: MouseEvent) => {
+            invoke(attrs.onClick, event);
+            if (!event.defaultPrevented && !props.disabled) {
+              select.setValue(props.value);
+              select.anchor.value?.focus();
+            }
+          },
+        },
+        slots.default?.(),
+      );
   },
 });

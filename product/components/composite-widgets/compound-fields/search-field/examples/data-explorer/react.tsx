@@ -58,7 +58,7 @@ function fakeSearch(criteria: Criteria) {
     if (criteria.mineOnly && !project.mine) return false;
     return true;
   });
-  next.sort((a, b) => criteria.sort === 'updated' ? b.updated - a.updated : collator.compare(a.name, b.name));
+  next.sort((a, b) => (criteria.sort === 'updated' ? b.updated - a.updated : collator.compare(a.name, b.name)));
   const delay = criteria.query.toLocaleLowerCase(locale).includes('atlas') ? 90 : 15;
   return new Promise<Project[]>((resolve) => window.setTimeout(() => resolve(next), delay));
 }
@@ -82,11 +82,14 @@ function App() {
     });
   }, []);
 
-  const commit = React.useCallback((next: Criteria, history: 'push' | 'none' = 'push') => {
-    setCriteria(next);
-    if (history === 'push') window.history.pushState({}, '', hrefFor(next));
-    run(next);
-  }, [run]);
+  const commit = React.useCallback(
+    (next: Criteria, history: 'push' | 'none' = 'push') => {
+      setCriteria(next);
+      if (history === 'push') window.history.pushState({}, '', hrefFor(next));
+      run(next);
+    },
+    [run],
+  );
 
   React.useEffect(() => {
     run(initial);
@@ -118,8 +121,12 @@ function App() {
           <label htmlFor="project-query">Search projects</label>
           <SearchFieldInput
             id="project-query"
-            onCompositionStart={() => { isComposing.current = true; }}
-            onCompositionEnd={() => { isComposing.current = false; }}
+            onCompositionStart={() => {
+              isComposing.current = true;
+            }}
+            onCompositionEnd={() => {
+              isComposing.current = false;
+            }}
           />
           <SearchFieldClear aria-label="Clear project search" />
         </SearchFieldRoot>
@@ -130,22 +137,33 @@ function App() {
         <fieldset className="vf-data-explorer__facets">
           <legend>Filters</legend>
           <label className="vf-data-explorer__facet">
-            <Checkbox checked={criteria.activeOnly} onChange={(event) => commit({ ...criteria, activeOnly: event.currentTarget.checked })} />
+            <Checkbox
+              checked={criteria.activeOnly}
+              onChange={(event) => commit({ ...criteria, activeOnly: event.currentTarget.checked })}
+            />
             Active only
           </label>
           <label className="vf-data-explorer__facet">
-            <Checkbox checked={criteria.mineOnly} onChange={(event) => commit({ ...criteria, mineOnly: event.currentTarget.checked })} />
+            <Checkbox
+              checked={criteria.mineOnly}
+              onChange={(event) => commit({ ...criteria, mineOnly: event.currentTarget.checked })}
+            />
             Owned by me
           </label>
         </fieldset>
         <label className="vf-data-explorer__sort">
           Sort by
-          <NativeSelect value={criteria.sort} onChange={(event) => commit({ ...criteria, sort: event.currentTarget.value as Sort })}>
+          <NativeSelect
+            value={criteria.sort}
+            onChange={(event) => commit({ ...criteria, sort: event.currentTarget.value as Sort })}
+          >
             <option value="name">Name</option>
             <option value="updated">Recently updated</option>
           </NativeSelect>
         </label>
-        <Button type="button" variant="secondary" onClick={reset}>Reset search and filters</Button>
+        <Button type="button" variant="secondary" onClick={reset}>
+          Reset search and filters
+        </Button>
       </div>
 
       <p className="vf-data-explorer__status" role="status" aria-live="polite">
@@ -156,14 +174,18 @@ function App() {
         <section className="vf-data-explorer__zero" aria-labelledby="zero-results-heading">
           <h2 id="zero-results-heading">No matching projects</h2>
           <p>Try another search or reset the active filters.</p>
-          <Button type="button" onClick={reset}>Reset search and filters</Button>
+          <Button type="button" onClick={reset}>
+            Reset search and filters
+          </Button>
         </section>
       ) : (
         <ul className="vf-data-explorer__results" aria-label="Project results">
           {results.map((project) => (
             <li className="vf-data-explorer__result" key={project.id}>
               <strong>{project.name}</strong>
-              <p className="vf-data-explorer__meta">{project.active ? 'Active' : 'Archived'} · {project.mine ? 'Owned by me' : 'Team-owned'}</p>
+              <p className="vf-data-explorer__meta">
+                {project.active ? 'Active' : 'Archived'} · {project.mine ? 'Owned by me' : 'Team-owned'}
+              </p>
             </li>
           ))}
         </ul>
@@ -172,4 +194,6 @@ function App() {
   );
 }
 
-createRoot(document.querySelector('#root')!).render(<App />);
+const mount = document.querySelector('#root');
+if (!mount) throw new Error('Example mount is missing.');
+createRoot(mount).render(<App />);

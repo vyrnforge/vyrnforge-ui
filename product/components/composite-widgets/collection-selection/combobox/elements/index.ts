@@ -1,14 +1,24 @@
 import { resolveNavigationIndex, type CollectionNavigationIntent } from '@vyrnforge/core/collection-navigation';
 
-const HTMLElementBase: typeof HTMLElement = globalThis.HTMLElement ?? class {} as typeof HTMLElement;
+const HTMLElementBase: typeof HTMLElement = globalThis.HTMLElement ?? (class {} as typeof HTMLElement);
 let comboboxId = 0;
 const optionSelector = '[data-vf-combobox-option]';
 
-function visibleOptions(root: HTMLElement): HTMLElement[] { return Array.from(root.querySelectorAll<HTMLElement>(optionSelector)).filter((option) => !option.hidden); }
-function disabled(option: HTMLElement): boolean { return option.getAttribute('aria-disabled') === 'true' || option.hasAttribute('disabled'); }
-function optionValue(option: HTMLElement): string { return option.dataset.value ?? option.getAttribute('value') ?? option.textContent?.trim() ?? ''; }
-function optionLabel(option: HTMLElement): string { return option.dataset.vfTextValue ?? option.textContent?.trim() ?? optionValue(option); }
-function normalizeFilterText(value: string, locale?: string): string { return locale ? value.toLocaleLowerCase(locale) : value.toLowerCase(); }
+function visibleOptions(root: HTMLElement): HTMLElement[] {
+  return Array.from(root.querySelectorAll<HTMLElement>(optionSelector)).filter((option) => !option.hidden);
+}
+function disabled(option: HTMLElement): boolean {
+  return option.getAttribute('aria-disabled') === 'true' || option.hasAttribute('disabled');
+}
+function optionValue(option: HTMLElement): string {
+  return option.dataset.value ?? option.getAttribute('value') ?? option.textContent?.trim() ?? '';
+}
+function optionLabel(option: HTMLElement): string {
+  return option.dataset.vfTextValue ?? option.textContent?.trim() ?? optionValue(option);
+}
+function normalizeFilterText(value: string, locale?: string): string {
+  return locale ? value.toLocaleLowerCase(locale) : value.toLowerCase();
+}
 
 export class VfComboboxElement extends HTMLElementBase {
   private inputId = '';
@@ -51,9 +61,15 @@ export class VfComboboxElement extends HTMLElementBase {
     this.removeEventListener('keydown', this.onKeydown);
   }
 
-  private inputElement() { return this.querySelector<HTMLInputElement>('[data-vf-combobox-input]'); }
-  private contentElement() { return this.querySelector<HTMLElement>('[data-vf-combobox-content]'); }
-  private locale() { return this.getAttribute('locale') || undefined; }
+  private inputElement() {
+    return this.querySelector<HTMLInputElement>('[data-vf-combobox-input]');
+  }
+  private contentElement() {
+    return this.querySelector<HTMLElement>('[data-vf-combobox-content]');
+  }
+  private locale() {
+    return this.getAttribute('locale') || undefined;
+  }
   private syncOptions() {
     const selectedValue = this.getAttribute('value') ?? '';
     this.querySelectorAll<HTMLElement>(optionSelector).forEach((option, index) => {
@@ -61,7 +77,9 @@ export class VfComboboxElement extends HTMLElementBase {
       option.setAttribute('role', 'option');
       option.tabIndex = -1;
       if (option.hasAttribute('disabled')) option.setAttribute('aria-disabled', 'true');
-      const selected = this.activeId ? option.id === this.activeId : optionValue(option) === selectedValue && selectedValue !== '';
+      const selected = this.activeId
+        ? option.id === this.activeId
+        : optionValue(option) === selectedValue && selectedValue !== '';
       option.setAttribute('aria-selected', String(selected));
     });
     const input = this.inputElement();
@@ -75,7 +93,10 @@ export class VfComboboxElement extends HTMLElementBase {
     const content = this.contentElement();
     if (content) content.hidden = !open;
     input?.setAttribute('aria-expanded', String(open));
-    if (!open) { this.activeId = null; this.syncOptions(); }
+    if (!open) {
+      this.activeId = null;
+      this.syncOptions();
+    }
   }
   private setActive(option: HTMLElement) {
     this.activeId = option.id;
@@ -86,7 +107,12 @@ export class VfComboboxElement extends HTMLElementBase {
     const options = visibleOptions(this);
     const current = options.findIndex((option) => option.id === this.activeId);
     const start = current >= 0 ? current : intent === 'previous' ? options.length : -1;
-    const next = resolveNavigationIndex(options.map((option) => ({ eligible: !(disabled(option)) })), start, intent, { loop: false });
+    const next = resolveNavigationIndex(
+      options.map((option) => ({ eligible: !disabled(option) })),
+      start,
+      intent,
+      { loop: false },
+    );
     if (next == null) return;
     const target = options[next];
     if (target) this.setActive(target);
@@ -107,7 +133,9 @@ export class VfComboboxElement extends HTMLElementBase {
     const locale = this.locale();
     const query = normalizeFilterText(input.value, locale);
     this.activeId = null;
-    this.querySelectorAll<HTMLElement>(optionSelector).forEach((option) => { option.hidden = !normalizeFilterText(optionLabel(option), locale).includes(query); });
+    this.querySelectorAll<HTMLElement>(optionSelector).forEach((option) => {
+      option.hidden = !normalizeFilterText(optionLabel(option), locale).includes(query);
+    });
     this.setOpen(true);
     this.syncOptions();
   };
@@ -142,7 +170,10 @@ export class VfComboboxElement extends HTMLElementBase {
     }
     if (event.key === 'Enter' && this.activeId) {
       const target = visibleOptions(this).find((option) => option.id === this.activeId && !disabled(option));
-      if (target) { event.preventDefault(); this.select(target); }
+      if (target) {
+        event.preventDefault();
+        this.select(target);
+      }
       return;
     }
     const content = this.contentElement();
@@ -153,7 +184,10 @@ export class VfComboboxElement extends HTMLElementBase {
   };
 }
 
-export function defineComboboxElement(tag = 'vf-combobox', registry: CustomElementRegistry | undefined = globalThis.customElements) {
+export function defineComboboxElement(
+  tag = 'vf-combobox',
+  registry: CustomElementRegistry | undefined = globalThis.customElements,
+) {
   if (!registry) throw new Error('VyrnForge Combobox registration requires a CustomElementRegistry.');
   if (!registry.get(tag)) registry.define(tag, VfComboboxElement);
 }

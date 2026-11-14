@@ -30,11 +30,11 @@ function optionDisabled(option: HTMLButtonElement): boolean {
 function focusOption(root: HTMLElement | null, edge: 'first' | 'last'): void {
   if (!root) return;
   const options = optionsFor(root);
-  const states = options.map((option) => ({ eligible: !(optionDisabled(option)) }));
-  const selected = options.findIndex((option, index) => states[index]?.eligible !== false && option.getAttribute('aria-selected') === 'true');
-  const index = selected >= 0
-    ? selected
-    : resolveNavigationIndex(states, edge === 'first' ? -1 : options.length, edge);
+  const states = options.map((option) => ({ eligible: !optionDisabled(option) }));
+  const selected = options.findIndex(
+    (option, index) => states[index]?.eligible !== false && option.getAttribute('aria-selected') === 'true',
+  );
+  const index = selected >= 0 ? selected : resolveNavigationIndex(states, edge === 'first' ? -1 : options.length, edge);
   if (index != null) options[index]?.focus();
 }
 
@@ -67,133 +67,155 @@ export function MultiSelectRoot({ children, value, defaultValue = [], onValueCha
   const values = value ?? internalValue;
   const anchorRef = useRef<HTMLElement | null>(null);
   const surfaceRef = useRef<HTMLElement | null>(null);
-  const context = useMemo<Ctx>(() => ({
-    open,
-    setOpen,
-    values,
-    toggle(candidate) {
-      const next = values.includes(candidate) ? values.filter((value) => value !== candidate) : [...values, candidate];
-      if (value === undefined) setInternalValue(next);
-      onValueChange?.(next);
-    },
-    anchorRef,
-    surfaceRef,
-    focusOptions(edge) {
-      queueMicrotask(() => focusOption(surfaceRef.current, edge));
-    },
-  }), [onValueChange, open, value, values]);
+  const context = useMemo<Ctx>(
+    () => ({
+      open,
+      setOpen,
+      values,
+      toggle(candidate) {
+        const next = values.includes(candidate)
+          ? values.filter((value) => value !== candidate)
+          : [...values, candidate];
+        if (value === undefined) setInternalValue(next);
+        onValueChange?.(next);
+      },
+      anchorRef,
+      surfaceRef,
+      focusOptions(edge) {
+        queueMicrotask(() => focusOption(surfaceRef.current, edge));
+      },
+    }),
+    [onValueChange, open, value, values],
+  );
   return createElement(C.Provider, { value: context }, children);
 }
 
-export const MultiSelectTrigger = forwardRef<HTMLButtonElement, ComponentPropsWithoutRef<'button'>>(function MultiSelectTrigger({ onClick, onKeyDown, ...props }, ref) {
-  const multi = useMulti();
-  function openAndFocus(edge: 'first' | 'last') {
-    multi.setOpen(true);
-    multi.focusOptions(edge);
-  }
-  return createElement('button', {
-    ...props,
-    ref(node: HTMLButtonElement | null) {
-      multi.anchorRef.current = node;
-      if (typeof ref === 'function') ref(node);
-      else if (ref) ref.current = node;
-    },
-    type: props.type ?? 'button',
-    'aria-haspopup': 'listbox',
-    'aria-expanded': multi.open,
-    'data-vf-multi-select-trigger': '',
-    onClick(event: MouseEvent<HTMLButtonElement>) {
-      onClick?.(event);
-      if (event.defaultPrevented) return;
-      if (multi.open) multi.setOpen(false);
-      else openAndFocus('first');
-    },
-    onKeyDown(event: KeyboardEvent<HTMLButtonElement>) {
-      onKeyDown?.(event);
-      if (event.defaultPrevented) return;
-      if (event.key === 'ArrowUp') {
-        event.preventDefault();
-        openAndFocus('last');
-      } else if (event.key === 'ArrowDown' || event.key === 'Enter' || event.key === ' ') {
-        event.preventDefault();
-        openAndFocus('first');
-      }
-    },
-  }, props.children ?? (multi.values.length ? multi.values.join(', ') : 'Select'));
-});
+export const MultiSelectTrigger = forwardRef<HTMLButtonElement, ComponentPropsWithoutRef<'button'>>(
+  function MultiSelectTrigger({ onClick, onKeyDown, ...props }, ref) {
+    const multi = useMulti();
+    function openAndFocus(edge: 'first' | 'last') {
+      multi.setOpen(true);
+      multi.focusOptions(edge);
+    }
+    return createElement(
+      'button',
+      {
+        ...props,
+        ref(node: HTMLButtonElement | null) {
+          multi.anchorRef.current = node;
+          if (typeof ref === 'function') ref(node);
+          else if (ref) ref.current = node;
+        },
+        type: props.type ?? 'button',
+        'aria-haspopup': 'listbox',
+        'aria-expanded': multi.open,
+        'data-vf-multi-select-trigger': '',
+        onClick(event: MouseEvent<HTMLButtonElement>) {
+          onClick?.(event);
+          if (event.defaultPrevented) return;
+          if (multi.open) multi.setOpen(false);
+          else openAndFocus('first');
+        },
+        onKeyDown(event: KeyboardEvent<HTMLButtonElement>) {
+          onKeyDown?.(event);
+          if (event.defaultPrevented) return;
+          if (event.key === 'ArrowUp') {
+            event.preventDefault();
+            openAndFocus('last');
+          } else if (event.key === 'ArrowDown' || event.key === 'Enter' || event.key === ' ') {
+            event.preventDefault();
+            openAndFocus('first');
+          }
+        },
+      },
+      props.children ?? (multi.values.length ? multi.values.join(', ') : 'Select'),
+    );
+  },
+);
 
-export const MultiSelectContent = forwardRef<HTMLDivElement, ComponentPropsWithoutRef<'div'>>(function MultiSelectContent({ onKeyDown, ...props }, ref) {
-  const multi = useMulti();
-  const query = useRef('');
-  const timer = useRef<ReturnType<typeof setTimeout> | null>(null);
-  const target = useFloatingSurface({
-    open: multi.open,
-    anchorRef: multi.anchorRef,
-    surfaceRef: multi.surfaceRef,
-    onDismiss(reason) {
-      if (reason === 'escape') multi.anchorRef.current?.focus();
-      multi.setOpen(false);
-    },
-  });
-  if (!multi.open) return null;
-  const content = createElement('div', {
-    ...props,
-    ref(node: HTMLDivElement | null) {
-      multi.surfaceRef.current = node;
-      if (typeof ref === 'function') ref(node);
-      else if (ref) ref.current = node;
-    },
-    role: 'listbox',
-    tabIndex: -1,
-    'aria-multiselectable': true,
-    'data-vf-multi-select-content': '',
-    onKeyDown(event: KeyboardEvent<HTMLDivElement>) {
-      onKeyDown?.(event);
-      if (event.defaultPrevented) return;
-      if (event.key === 'Escape') {
+export const MultiSelectContent = forwardRef<HTMLDivElement, ComponentPropsWithoutRef<'div'>>(
+  function MultiSelectContent({ onKeyDown, ...props }, ref) {
+    const multi = useMulti();
+    const query = useRef('');
+    const timer = useRef<ReturnType<typeof setTimeout> | null>(null);
+    const target = useFloatingSurface({
+      open: multi.open,
+      anchorRef: multi.anchorRef,
+      surfaceRef: multi.surfaceRef,
+      onDismiss(reason) {
+        if (reason === 'escape') multi.anchorRef.current?.focus();
+        multi.setOpen(false);
+      },
+    });
+    if (!multi.open) return null;
+    const content = createElement('div', {
+      ...props,
+      ref(node: HTMLDivElement | null) {
+        multi.surfaceRef.current = node;
+        if (typeof ref === 'function') ref(node);
+        else if (ref) ref.current = node;
+      },
+      role: 'listbox',
+      tabIndex: -1,
+      'aria-multiselectable': true,
+      'data-vf-multi-select-content': '',
+      onKeyDown(event: KeyboardEvent<HTMLDivElement>) {
+        onKeyDown?.(event);
+        if (event.defaultPrevented) return;
+        if (event.key === 'Escape') {
+          event.preventDefault();
+          multi.setOpen(false);
+          multi.anchorRef.current?.focus();
+          return;
+        }
+        if (event.key === 'Tab') {
+          multi.setOpen(false);
+          multi.anchorRef.current?.focus();
+          return;
+        }
+        const root = event.currentTarget;
+        const options = optionsFor(root);
+        const currentOption = optionFromTarget(root, event.target);
+        const current = currentOption ? options.indexOf(currentOption) : -1;
+        const states = options.map((option) => ({ eligible: !optionDisabled(option) }));
+        let intent: 'next' | 'previous' | 'first' | 'last' | null = null;
+        if (event.key === 'ArrowDown') intent = 'next';
+        else if (event.key === 'ArrowUp') intent = 'previous';
+        else if (event.key === 'Home') intent = 'first';
+        else if (event.key === 'End') intent = 'last';
+        let next: number | null = null;
+        if (intent) next = resolveNavigationIndex(states, current, intent);
+        else if (event.key.length === 1 && !event.ctrlKey && !event.metaKey && !event.altKey) {
+          query.current += event.key;
+          if (timer.current) clearTimeout(timer.current);
+          timer.current = setTimeout(() => {
+            query.current = '';
+          }, 500);
+          next = findTypeaheadMatch(
+            options.map((option) => ({
+              textValue: option.dataset.vfTextValue ?? option.textContent ?? '',
+              eligible: !optionDisabled(option),
+            })),
+            query.current,
+            { startIndex: current },
+          );
+        }
+        if (next == null) return;
         event.preventDefault();
-        multi.setOpen(false);
-        multi.anchorRef.current?.focus();
-        return;
-      }
-      if (event.key === 'Tab') {
-        multi.setOpen(false);
-        multi.anchorRef.current?.focus();
-        return;
-      }
-      const root = event.currentTarget;
-      const options = optionsFor(root);
-      const currentOption = optionFromTarget(root, event.target);
-      const current = currentOption ? options.indexOf(currentOption) : -1;
-      const states = options.map((option) => ({ eligible: !(optionDisabled(option)) }));
-      let intent: 'next' | 'previous' | 'first' | 'last' | null = null;
-      if (event.key === 'ArrowDown') intent = 'next';
-      else if (event.key === 'ArrowUp') intent = 'previous';
-      else if (event.key === 'Home') intent = 'first';
-      else if (event.key === 'End') intent = 'last';
-      let next: number | null = null;
-      if (intent) next = resolveNavigationIndex(states, current, intent);
-      else if (event.key.length === 1 && !event.ctrlKey && !event.metaKey && !event.altKey) {
-        query.current += event.key;
-        if (timer.current) clearTimeout(timer.current);
-        timer.current = setTimeout(() => { query.current = ''; }, 500);
-        next = findTypeaheadMatch(options.map((option) => ({
-          textValue: option.dataset.vfTextValue ?? option.textContent ?? '',
-          eligible: !optionDisabled(option),
-        })), query.current, { startIndex: current });
-      }
-      if (next == null) return;
-      event.preventDefault();
-      options[next]?.focus();
-    },
-  });
-  return target ? createPortal(content, target) : content;
-});
+        options[next]?.focus();
+      },
+    });
+    return target ? createPortal(content, target) : content;
+  },
+);
 
 export interface MultiSelectOptionProps extends Omit<ComponentPropsWithoutRef<'button'>, 'value'> {
   value: string;
 }
-export const MultiSelectOption = forwardRef<HTMLButtonElement, MultiSelectOptionProps>(function MultiSelectOption({ value, disabled, onClick, ...props }, ref) {
+export const MultiSelectOption = forwardRef<HTMLButtonElement, MultiSelectOptionProps>(function MultiSelectOption(
+  { value, disabled, onClick, ...props },
+  ref,
+) {
   const multi = useMulti();
   const selected = multi.values.includes(value);
   return createElement('button', {

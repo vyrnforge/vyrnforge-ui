@@ -19,15 +19,25 @@ export const browserFixture = {
       outfile: path.join(dir, 'styles.css'),
     });
 
-    const page = (body, script = '') => `<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width"><title>Segmented control browser fixture</title><link rel="stylesheet" href="./styles.css"></head><body><main><h1>Segmented control browser fixture</h1><button id="before">Before</button>${body}<button id="after">After</button></main>${script}</body></html>`;
-    const staticItems = (prefix) => `<button id="${prefix}-list" type="button" role="radio" aria-checked="true" tabindex="0" data-vf-segmented-control-item data-vf-value="list">List</button><button id="${prefix}-disabled" type="button" role="radio" aria-checked="false" tabindex="-1" disabled data-vf-segmented-control-item data-vf-value="disabled">Disabled</button><button id="${prefix}-grid" type="button" role="radio" aria-checked="false" tabindex="-1" data-vf-segmented-control-item data-vf-value="grid">Grid</button><button id="${prefix}-details" type="button" role="radio" aria-checked="false" tabindex="-1" data-vf-segmented-control-item data-vf-value="details">Details</button>`;
+    const page = (body, script = '') =>
+      `<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width"><title>Segmented control browser fixture</title><link rel="stylesheet" href="./styles.css"></head><body><main><h1>Segmented control browser fixture</h1><button id="before">Before</button>${body}<button id="after">After</button></main>${script}</body></html>`;
+    const staticItems = (prefix) =>
+      `<button id="${prefix}-list" type="button" role="radio" aria-checked="true" tabindex="0" data-vf-segmented-control-item data-vf-value="list">List</button><button id="${prefix}-disabled" type="button" role="radio" aria-checked="false" tabindex="-1" disabled data-vf-segmented-control-item data-vf-value="disabled">Disabled</button><button id="${prefix}-grid" type="button" role="radio" aria-checked="false" tabindex="-1" data-vf-segmented-control-item data-vf-value="grid">Grid</button><button id="${prefix}-details" type="button" role="radio" aria-checked="false" tabindex="-1" data-vf-segmented-control-item data-vf-value="details">Details</button>`;
 
     if (port === 'web') {
-      await writeFile(path.join(dir, 'web.html'), page(`<div id="group" role="radiogroup" aria-label="View" data-vf-segmented-control-root>${staticItems('web')}</div>`));
+      await writeFile(
+        path.join(dir, 'web.html'),
+        page(
+          `<div id="group" role="radiogroup" aria-label="View" data-vf-segmented-control-root>${staticItems('web')}</div>`,
+        ),
+      );
     }
 
     if (port === 'react') {
-      await writeFile(path.join(dir, 'react.html'), page('<div id="app"></div>', '<script type="module" src="./react.js"></script>'));
+      await writeFile(
+        path.join(dir, 'react.html'),
+        page('<div id="app"></div>', '<script type="module" src="./react.js"></script>'),
+      );
       await build({
         stdin: {
           resolveDir: root,
@@ -42,7 +52,10 @@ export const browserFixture = {
     }
 
     if (port === 'vue') {
-      await writeFile(path.join(dir, 'vue.html'), page('<div id="app"></div>', '<script type="module" src="./vue.js"></script>'));
+      await writeFile(
+        path.join(dir, 'vue.html'),
+        page('<div id="app"></div>', '<script type="module" src="./vue.js"></script>'),
+      );
       await build({
         stdin: {
           resolveDir: root,
@@ -57,7 +70,13 @@ export const browserFixture = {
     }
 
     if (port === 'angular') {
-      await writeFile(path.join(dir, 'angular.html'), page('<vf-segmented-control-test></vf-segmented-control-test>', '<script type="module" src="./angular.js"></script>'));
+      await writeFile(
+        path.join(dir, 'angular.html'),
+        page(
+          '<vf-segmented-control-test></vf-segmented-control-test>',
+          '<script type="module" src="./angular.js"></script>',
+        ),
+      );
       await build({
         stdin: {
           resolveDir: root,
@@ -73,7 +92,10 @@ export const browserFixture = {
 
     if (port === 'elements') {
       const body = `<vf-segmented-control id="group" aria-label="View">${staticItems('elements')}</vf-segmented-control>`;
-      await writeFile(path.join(dir, 'elements.html'), page(body, '<script type="module" src="./elements.js"></script>'));
+      await writeFile(
+        path.join(dir, 'elements.html'),
+        page(body, '<script type="module" src="./elements.js"></script>'),
+      );
       await build({
         stdin: {
           resolveDir: root,

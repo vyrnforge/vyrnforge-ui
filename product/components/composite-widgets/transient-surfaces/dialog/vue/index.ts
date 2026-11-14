@@ -25,8 +25,12 @@ function createDismissRequest(reason: DialogDismissReason): DialogDismissRequest
   let prevented = false;
   return {
     reason,
-    get defaultPrevented() { return prevented; },
-    preventDefault() { prevented = true; },
+    get defaultPrevented() {
+      return prevented;
+    },
+    preventDefault() {
+      prevented = true;
+    },
   };
 }
 
@@ -51,7 +55,8 @@ function canRestoreFocus(element: HTMLElement | null): element is HTMLElement {
 
 function callHandler(handler: unknown, event: Event): void {
   if (typeof handler === 'function') handler(event);
-  else if (Array.isArray(handler)) for (const candidate of handler) if (typeof candidate === 'function') candidate(event);
+  else if (Array.isArray(handler))
+    for (const candidate of handler) if (typeof candidate === 'function') candidate(event);
 }
 
 export interface DialogRootProps {
@@ -112,7 +117,8 @@ export const DialogRoot = defineComponent({
       const dialog = dialogRef.value;
       if (!dialog) return;
       if (desiredOpen.value && !dialog.open) {
-        if (captureRestoreTarget) restoreTarget.value = document.activeElement instanceof HTMLElement ? document.activeElement : null;
+        if (captureRestoreTarget)
+          restoreTarget.value = document.activeElement instanceof HTMLElement ? document.activeElement : null;
         dialog.showModal();
         props.initialFocus?.()?.focus();
       } else if (!desiredOpen.value && dialog.open) {
@@ -124,49 +130,58 @@ export const DialogRoot = defineComponent({
       mounted = true;
       void syncDialog();
     });
-    watch(desiredOpen, () => { void syncDialog(); });
+    watch(desiredOpen, () => {
+      void syncDialog();
+    });
 
-    return () => h('dialog', {
-      ...attrs,
-      id: rootId,
-      ref: dialogRef,
-      'aria-labelledby': titleId,
-      'aria-describedby': props.descriptionId,
-      'data-vf-dialog-root': '',
-      'data-vf-open': desiredOpen.value ? '' : undefined,
-      'data-vf-backdrop-dismiss': props.backdropDismiss ? '' : undefined,
-      onCancel(event: Event) {
-        callHandler(attrs.onCancel, event);
-        event.preventDefault();
-        requestDismiss('escape');
-      },
-      onClose(event: Event) {
-        callHandler(attrs.onClose, event);
-        if (desiredOpen.value) {
-          if (props.modelValue === undefined) {
-            internalOpen.value = false;
-            emit('update:modelValue', false);
-            emit('openChange', false);
-          } else {
-            emit('update:modelValue', false);
-            emit('openChange', false);
-            void nextTick(() => { void syncDialog(false); });
-            return;
-          }
-        }
-        restoreFocus();
-      },
-      onPointerdown(event: PointerEvent) {
-        callHandler(attrs.onPointerdown, event);
-        backdropPointerDown = !event.defaultPrevented && event.target === event.currentTarget;
-      },
-      onClick(event: MouseEvent) {
-        callHandler(attrs.onClick, event);
-        const isBackdrop = backdropPointerDown && event.target === event.currentTarget;
-        backdropPointerDown = false;
-        if (!event.defaultPrevented && props.backdropDismiss && isBackdrop) requestDismiss('backdrop');
-      },
-    }, slots.default?.());
+    return () =>
+      h(
+        'dialog',
+        {
+          ...attrs,
+          id: rootId,
+          ref: dialogRef,
+          'aria-labelledby': titleId,
+          'aria-describedby': props.descriptionId,
+          'data-vf-dialog-root': '',
+          'data-vf-open': desiredOpen.value ? '' : undefined,
+          'data-vf-backdrop-dismiss': props.backdropDismiss ? '' : undefined,
+          onCancel(event: Event) {
+            callHandler(attrs.onCancel, event);
+            event.preventDefault();
+            requestDismiss('escape');
+          },
+          onClose(event: Event) {
+            callHandler(attrs.onClose, event);
+            if (desiredOpen.value) {
+              if (props.modelValue === undefined) {
+                internalOpen.value = false;
+                emit('update:modelValue', false);
+                emit('openChange', false);
+              } else {
+                emit('update:modelValue', false);
+                emit('openChange', false);
+                void nextTick(() => {
+                  void syncDialog(false);
+                });
+                return;
+              }
+            }
+            restoreFocus();
+          },
+          onPointerdown(event: PointerEvent) {
+            callHandler(attrs.onPointerdown, event);
+            backdropPointerDown = !event.defaultPrevented && event.target === event.currentTarget;
+          },
+          onClick(event: MouseEvent) {
+            callHandler(attrs.onClick, event);
+            const isBackdrop = backdropPointerDown && event.target === event.currentTarget;
+            backdropPointerDown = false;
+            if (!event.defaultPrevented && props.backdropDismiss && isBackdrop) requestDismiss('backdrop');
+          },
+        },
+        slots.default?.(),
+      );
   },
 });
 
@@ -184,11 +199,16 @@ export const DialogDescription = defineComponent({
   inheritAttrs: false,
   setup(_props, { attrs, slots }) {
     const context = useDialogContext();
-    return () => h('p', {
-      ...attrs,
-      id: attrs.id ?? context.descriptionId ?? `${context.rootId}-description`,
-      'data-vf-dialog-description': '',
-    }, slots.default?.());
+    return () =>
+      h(
+        'p',
+        {
+          ...attrs,
+          id: attrs.id ?? context.descriptionId ?? `${context.rootId}-description`,
+          'data-vf-dialog-description': '',
+        },
+        slots.default?.(),
+      );
   },
 });
 
@@ -206,14 +226,19 @@ export const DialogClose = defineComponent({
   inheritAttrs: false,
   setup(_props, { attrs, slots }) {
     const context = useDialogContext();
-    return () => h('button', {
-      ...attrs,
-      type: attrs.type ?? 'button',
-      'data-vf-dialog-close': '',
-      onClick(event: MouseEvent) {
-        callHandler(attrs.onClick, event);
-        if (!event.defaultPrevented) context.requestDismiss('close-control');
-      },
-    }, slots.default?.());
+    return () =>
+      h(
+        'button',
+        {
+          ...attrs,
+          type: attrs.type ?? 'button',
+          'data-vf-dialog-close': '',
+          onClick(event: MouseEvent) {
+            callHandler(attrs.onClick, event);
+            if (!event.defaultPrevented) context.requestDismiss('close-control');
+          },
+        },
+        slots.default?.(),
+      );
   },
 });

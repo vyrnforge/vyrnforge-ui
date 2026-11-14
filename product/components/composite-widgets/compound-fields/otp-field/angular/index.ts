@@ -32,10 +32,7 @@ export class VfOtpFieldRootDirective {
   }
 
   setFrom(index: number, raw: string) {
-    const inserted = Array.from(raw.replace(/\s/g, '')).slice(
-      0,
-      Math.max(0, this.length() - index),
-    );
+    const inserted = Array.from(raw.replace(/\s/g, '')).slice(0, Math.max(0, this.length() - index));
     const next = Array.from(this.current());
 
     if (inserted.length === 0) {
@@ -77,10 +74,7 @@ export class VfOtpFieldInputDirective {
     const inserted = this.root.setFrom(this.index(), inputElement.value);
     inputElement.value = this.root.charAt(this.index());
     if (inserted > 0) {
-      focusCell(
-        inputElement,
-        Math.min(this.index() + inserted, this.root.length() - 1),
-      );
+      focusCell(inputElement, Math.min(this.index() + inserted, this.root.length() - 1));
     }
   }
 
@@ -90,10 +84,7 @@ export class VfOtpFieldInputDirective {
     if (!text.replace(/\s/g, '')) return;
     event.preventDefault();
     const inserted = this.root.setFrom(this.index(), text);
-    focusCell(
-      inputElement,
-      Math.min(this.index() + inserted, this.root.length() - 1),
-    );
+    focusCell(inputElement, Math.min(this.index() + inserted, this.root.length() - 1));
   }
 
   onKeyDown(event: KeyboardEvent) {

@@ -1,8 +1,12 @@
 const HTMLElementBase = (globalThis.HTMLElement ?? class {}) as typeof HTMLElement;
 const DEFAULT_DURATION = 5000;
 type PauseReason = 'pointer' | 'focus';
-export interface ToastOpenChangeDetail { open: boolean; }
-function normalizedDuration(duration: number): number | null { return Number.isFinite(duration) && duration > 0 ? duration : null; }
+export interface ToastOpenChangeDetail {
+  open: boolean;
+}
+function normalizedDuration(duration: number): number | null {
+  return Number.isFinite(duration) && duration > 0 ? duration : null;
+}
 
 export class VfToastElement extends HTMLElementBase {
   static readonly observedAttributes = ['open', 'default-open', 'duration'];
@@ -50,15 +54,21 @@ export class VfToastElement extends HTMLElementBase {
     if (this.isConnected) this.#sync();
   }
 
-  get open(): boolean | undefined { return this.#controlledOpen; }
+  get open(): boolean | undefined {
+    return this.#controlledOpen;
+  }
   set open(value: boolean | undefined) {
     if (this.#controlledOpen === value) return;
     this.#controlledOpen = value;
     this.#sync();
   }
 
-  get defaultOpen(): boolean { return this.hasAttribute('default-open') ? this.getAttribute('default-open') !== 'false' : true; }
-  set defaultOpen(value: boolean) { this.setAttribute('default-open', String(value)); }
+  get defaultOpen(): boolean {
+    return this.hasAttribute('default-open') ? this.getAttribute('default-open') !== 'false' : true;
+  }
+  set defaultOpen(value: boolean) {
+    this.setAttribute('default-open', String(value));
+  }
 
   get duration(): number {
     if (!this.hasAttribute('duration')) return DEFAULT_DURATION;
@@ -70,14 +80,23 @@ export class VfToastElement extends HTMLElementBase {
     this.setAttribute('duration', serialized);
   }
 
-  #committedOpen(): boolean { return this.#controlledOpen ?? this.#internalOpen; }
-  #clearTimer(): void { if (this.#timer !== undefined) clearTimeout(this.#timer); this.#timer = undefined; }
+  #committedOpen(): boolean {
+    return this.#controlledOpen ?? this.#internalOpen;
+  }
+  #clearTimer(): void {
+    if (this.#timer !== undefined) clearTimeout(this.#timer);
+    this.#timer = undefined;
+  }
 
   #requestClose(): void {
     if (this.#controlledOpen === undefined) this.#internalOpen = false;
-    this.dispatchEvent(new CustomEvent<ToastOpenChangeDetail>('vf-open-change', {
-      detail: { open: false }, bubbles: true, composed: true,
-    }));
+    this.dispatchEvent(
+      new CustomEvent<ToastOpenChangeDetail>('vf-open-change', {
+        detail: { open: false },
+        bubbles: true,
+        composed: true,
+      }),
+    );
     this.#sync();
   }
 
@@ -116,7 +135,10 @@ export class VfToastElement extends HTMLElementBase {
   #armRemaining(): void {
     const remaining = this.#remaining;
     if (!this.#committedOpen() || this.#timeoutRequested || this.#pauseReasons.size > 0 || remaining === null) return;
-    if (remaining <= 0) { this.#expire(); return; }
+    if (remaining <= 0) {
+      this.#expire();
+      return;
+    }
     this.#clearTimer();
     this.#deadline = Date.now() + remaining;
     this.#timer = setTimeout(() => this.#expire(), remaining);
@@ -143,8 +165,12 @@ export class VfToastElement extends HTMLElementBase {
   };
   #onPointerEnter = (): void => this.#pause('pointer');
   #onPointerLeave = (): void => this.#resume('pointer');
-  #onFocusIn = (event: FocusEvent): void => { if (!this.contains(event.relatedTarget as Node | null)) this.#pause('focus'); };
-  #onFocusOut = (event: FocusEvent): void => { if (!this.contains(event.relatedTarget as Node | null)) this.#resume('focus'); };
+  #onFocusIn = (event: FocusEvent): void => {
+    if (!this.contains(event.relatedTarget as Node | null)) this.#pause('focus');
+  };
+  #onFocusOut = (event: FocusEvent): void => {
+    if (!this.contains(event.relatedTarget as Node | null)) this.#resume('focus');
+  };
 }
 
 export class VfToastViewportElement extends HTMLElementBase {
@@ -154,7 +180,9 @@ export class VfToastViewportElement extends HTMLElementBase {
     this.setAttribute('data-vf-toast-viewport', '');
     this.addEventListener('click', this.#onClick);
   }
-  disconnectedCallback(): void { this.removeEventListener('click', this.#onClick); }
+  disconnectedCallback(): void {
+    this.removeEventListener('click', this.#onClick);
+  }
   #onClick = (event: Event): void => {
     if (!(event.target instanceof Element) || event.defaultPrevented) return;
     const close = event.target.closest('[data-vf-toast-close]');
@@ -163,18 +191,28 @@ export class VfToastViewportElement extends HTMLElementBase {
     if (!root || root instanceof VfToastElement) return;
     root.hidden = true;
     root.removeAttribute('data-vf-open');
-    root.dispatchEvent(new CustomEvent<ToastOpenChangeDetail>('vf-open-change', {
-      detail: { open: false }, bubbles: true, composed: true,
-    }));
+    root.dispatchEvent(
+      new CustomEvent<ToastOpenChangeDetail>('vf-open-change', {
+        detail: { open: false },
+        bubbles: true,
+        composed: true,
+      }),
+    );
   };
 }
 
-export function defineToastElement(tag = 'vf-toast', registry: CustomElementRegistry | undefined = globalThis.customElements): void {
+export function defineToastElement(
+  tag = 'vf-toast',
+  registry: CustomElementRegistry | undefined = globalThis.customElements,
+): void {
   if (!registry) throw new Error('VyrnForge Toast registration requires a CustomElementRegistry.');
   if (!registry.get(tag)) registry.define(tag, VfToastElement);
 }
 
-export function defineToastViewportElement(tag = 'vf-toast-viewport', registry: CustomElementRegistry | undefined = globalThis.customElements): void {
+export function defineToastViewportElement(
+  tag = 'vf-toast-viewport',
+  registry: CustomElementRegistry | undefined = globalThis.customElements,
+): void {
   if (!registry) throw new Error('VyrnForge Toast registration requires a CustomElementRegistry.');
   if (!registry.get(tag)) registry.define(tag, VfToastViewportElement);
 }

@@ -8,7 +8,7 @@ test('search field clears with authored naming and restores focus', async ({ pag
   await page.locator('#clear').click();
   await expect(page.locator('#search')).toHaveValue('');
   await expect(page.locator('#search')).toBeFocused();
-  
+
   expect((await expectNoAxeViolations(page)).violations).toEqual([]);
 });
 
@@ -24,7 +24,9 @@ test('public SearchField CSS resolves the canonical control radius in light and 
   }
 });
 
-test('STD-08 list explorer preserves committed criteria, history, IME, stale-response, and zero-result recovery', async ({ page }) => {
+test('STD-08 list explorer preserves committed criteria, history, IME, stale-response, and zero-result recovery', async ({
+  page,
+}) => {
   test.skip(port !== 'react', 'Representative STD-08 application integration is intentionally React-only.');
 
   await page.goto('/components/search-field/data-explorer-react.html?q=forge&active=1&sort=updated');
@@ -100,6 +102,5 @@ test('STD-08 list explorer preserves committed criteria, history, IME, stale-res
   await expect(page).not.toHaveURL(/[?&](q|active|mine|sort)=/);
   await expect(page.getByRole('status')).toHaveText('6 projects');
 
-  
   expect((await expectNoAxeViolations(page)).violations).toEqual([]);
 });

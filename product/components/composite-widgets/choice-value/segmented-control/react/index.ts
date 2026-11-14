@@ -27,17 +27,18 @@ function itemDisabled(item: HTMLButtonElement): boolean {
 }
 
 function intentForKey(key: string, direction: 'ltr' | 'rtl') {
-  const arrow = key === 'ArrowLeft' ? 'left'
-    : key === 'ArrowRight' ? 'right'
-      : key === 'ArrowUp' ? 'up'
-        : key === 'ArrowDown' ? 'down'
-          : null;
+  const arrow =
+    key === 'ArrowLeft'
+      ? 'left'
+      : key === 'ArrowRight'
+        ? 'right'
+        : key === 'ArrowUp'
+          ? 'up'
+          : key === 'ArrowDown'
+            ? 'down'
+            : null;
   if (!arrow) return null;
-  return navigationIntentForArrow(
-    arrow,
-    arrow === 'left' || arrow === 'right' ? 'horizontal' : 'vertical',
-    direction,
-  );
+  return navigationIntentForArrow(arrow, arrow === 'left' || arrow === 'right' ? 'horizontal' : 'vertical', direction);
 }
 
 interface Ctx {
@@ -62,96 +63,99 @@ export interface SegmentedControlRootProps extends Omit<ComponentPropsWithoutRef
   children?: ReactNode;
 }
 
-export const SegmentedControlRoot = forwardRef<HTMLDivElement, SegmentedControlRootProps>(function SegmentedControlRoot({
-  value,
-  defaultValue = '',
-  onValueChange,
-  children,
-  onKeyDown,
-  ...props
-}, ref) {
+export const SegmentedControlRoot = forwardRef<HTMLDivElement, SegmentedControlRootProps>(function SegmentedControlRoot(
+  { value, defaultValue = '', onValueChange, children, onKeyDown, ...props },
+  ref,
+) {
   const [internalValue, setInternalValue] = useState(defaultValue);
   const [active, setActive] = useState<string | null>(null);
   const selected = value ?? internalValue;
-  const ctx = useMemo<Ctx>(() => ({
-    value: selected,
-    active,
-    set(candidate) {
-      if (value === undefined) setInternalValue(candidate);
-      onValueChange?.(candidate);
-    },
-    setActive,
-  }), [active, onValueChange, selected, value]);
+  const ctx = useMemo<Ctx>(
+    () => ({
+      value: selected,
+      active,
+      set(candidate) {
+        if (value === undefined) setInternalValue(candidate);
+        onValueChange?.(candidate);
+      },
+      setActive,
+    }),
+    [active, onValueChange, selected, value],
+  );
 
-  return createElement(C.Provider, { value: ctx }, createElement('div', {
-    ...props,
-    ref,
-    role: 'radiogroup',
-    'data-vf-segmented-control-root': '',
-    onKeyDown(event: KeyboardEvent<HTMLDivElement>) {
-      onKeyDown?.(event);
-      if (event.defaultPrevented) return;
-      const root = event.currentTarget;
-      const currentItem = itemFromTarget(root, event.target);
-      if (!currentItem) return;
-      const direction = getComputedStyle(root).direction === 'rtl' ? 'rtl' : 'ltr';
-      const intent = intentForKey(event.key, direction);
-      if (!intent) return;
-      const items = itemsFor(root);
-      const current = items.indexOf(currentItem);
-      const next = resolveNavigationIndex(
-        items.map((item) => ({ eligible: !(itemDisabled(item)) })),
-        current,
-        intent,
-      );
-      if (next == null) return;
-      event.preventDefault();
-      const candidate = items[next];
-      if (!candidate) return;
-      const candidateValue = candidate.dataset.vfValue ?? '';
-      ctx.setActive(candidateValue);
-      candidate.focus();
-      ctx.set(candidateValue);
-    },
-  }, children));
+  return createElement(
+    C.Provider,
+    { value: ctx },
+    createElement(
+      'div',
+      {
+        ...props,
+        ref,
+        role: 'radiogroup',
+        'data-vf-segmented-control-root': '',
+        onKeyDown(event: KeyboardEvent<HTMLDivElement>) {
+          onKeyDown?.(event);
+          if (event.defaultPrevented) return;
+          const root = event.currentTarget;
+          const currentItem = itemFromTarget(root, event.target);
+          if (!currentItem) return;
+          const direction = getComputedStyle(root).direction === 'rtl' ? 'rtl' : 'ltr';
+          const intent = intentForKey(event.key, direction);
+          if (!intent) return;
+          const items = itemsFor(root);
+          const current = items.indexOf(currentItem);
+          const next = resolveNavigationIndex(
+            items.map((item) => ({ eligible: !itemDisabled(item) })),
+            current,
+            intent,
+          );
+          if (next == null) return;
+          event.preventDefault();
+          const candidate = items[next];
+          if (!candidate) return;
+          const candidateValue = candidate.dataset.vfValue ?? '';
+          ctx.setActive(candidateValue);
+          candidate.focus();
+          ctx.set(candidateValue);
+        },
+      },
+      children,
+    ),
+  );
 });
 
 export interface SegmentedControlItemProps extends Omit<ComponentPropsWithoutRef<'button'>, 'value'> {
   value: string;
 }
 
-export const SegmentedControlItem = forwardRef<HTMLButtonElement, SegmentedControlItemProps>(function SegmentedControlItem({
-  value,
-  disabled,
-  onClick,
-  onFocus,
-  ...props
-}, ref) {
-  const segmented = useS();
-  const checked = segmented.value === value;
-  const focusValue = segmented.active ?? (segmented.value === '' ? null : segmented.value);
-  const tabIndex = disabled ? -1 : focusValue == null ? undefined : focusValue === value ? 0 : -1;
+export const SegmentedControlItem = forwardRef<HTMLButtonElement, SegmentedControlItemProps>(
+  function SegmentedControlItem({ value, disabled, onClick, onFocus, ...props }, ref) {
+    const segmented = useS();
+    const checked = segmented.value === value;
+    const focusValue = segmented.active ?? (segmented.value === '' ? null : segmented.value);
+    const tabIndex = disabled ? -1 : focusValue == null ? undefined : focusValue === value ? 0 : -1;
 
-  return createElement('button', {
-    ...props,
-    ref,
-    type: 'button',
-    role: 'radio',
-    tabIndex,
-    'aria-checked': checked,
-    disabled,
-    'data-vf-segmented-control-item': '',
-    'data-vf-value': value,
-    onFocus(event) {
-      onFocus?.(event);
-      if (!disabled) segmented.setActive(value);
-    },
-    onClick(event) {
-      onClick?.(event);
-      if (!event.defaultPrevented && !disabled) {
-        segmented.setActive(value);
-        segmented.set(value);
-      }
-    },
-  });
-});
+    return createElement('button', {
+      ...props,
+      ref,
+      type: 'button',
+      role: 'radio',
+      tabIndex,
+      'aria-checked': checked,
+      disabled,
+      'data-vf-segmented-control-item': '',
+      'data-vf-value': value,
+      onFocus(event) {
+        onFocus?.(event);
+        if (!disabled) segmented.setActive(value);
+      },
+      onClick(event) {
+        onClick?.(event);
+        if (!event.defaultPrevented && !disabled) {
+          segmented.setActive(value);
+          segmented.set(value);
+        }
+      },
+    });
+  },
+);

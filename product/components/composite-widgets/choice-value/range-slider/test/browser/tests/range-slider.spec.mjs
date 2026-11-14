@@ -14,7 +14,9 @@ test('range slider exposes labelled native ranges', async ({ page }) => {
   expect((await expectNoAxeViolations(page)).violations).toEqual([]);
 });
 
-test('public RangeSlider CSS resolves canonical root spacing and selected accent in light and dark themes', async ({ page }) => {
+test('public RangeSlider CSS resolves canonical root spacing and selected accent in light and dark themes', async ({
+  page,
+}) => {
   test.skip(port !== 'web', 'Public CSS resolution evidence is owned by the Web lane.');
   await page.goto('/components/range-slider/web.html');
   const root = page.locator('#root');

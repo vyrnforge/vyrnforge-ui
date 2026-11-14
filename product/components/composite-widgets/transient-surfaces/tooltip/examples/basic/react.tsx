@@ -1,1 +1,9 @@
-import{TooltipContent,TooltipRoot,TooltipTrigger}from'@vyrnforge/react/tooltip';export default()=> <TooltipRoot><TooltipTrigger><button>Info</button></TooltipTrigger><TooltipContent>More information</TooltipContent></TooltipRoot>;
+import { TooltipContent, TooltipRoot, TooltipTrigger } from '@vyrnforge/react/tooltip';
+export default () => (
+  <TooltipRoot>
+    <TooltipTrigger>
+      <button>Info</button>
+    </TooltipTrigger>
+    <TooltipContent>More information</TooltipContent>
+  </TooltipRoot>
+);

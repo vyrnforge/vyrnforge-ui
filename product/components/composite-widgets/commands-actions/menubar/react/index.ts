@@ -1,12 +1,26 @@
 import { createElement, forwardRef, type ComponentPropsWithRef, type ComponentPropsWithoutRef } from 'react';
-import { MenuContent, MenuItem, MenuRoot, MenuTrigger, type MenuContentProps, type MenuItemProps, type MenuRootProps, type MenuTriggerProps } from '../menu/index.js';
+import {
+  MenuContent,
+  MenuItem,
+  MenuRoot,
+  MenuTrigger,
+  type MenuContentProps,
+  type MenuItemProps,
+  type MenuRootProps,
+  type MenuTriggerProps,
+} from '../menu/index.js';
 export type MenubarRootProps = ComponentPropsWithoutRef<'div'>;
-export const MenubarRoot = forwardRef<HTMLDivElement, MenubarRootProps>(function MenubarRoot(props, ref) { return createElement('div', { ...props, ref, role: 'menubar', 'data-vf-menubar-root': '' }); });
+export const MenubarRoot = forwardRef<HTMLDivElement, MenubarRootProps>(function MenubarRoot(props, ref) {
+  return createElement('div', { ...props, ref, role: 'menubar', 'data-vf-menubar-root': '' });
+});
 export type MenubarMenuProps = MenuRootProps;
 export const MenubarMenu = MenuRoot;
 export type MenubarTriggerProps = MenuTriggerProps & { 'data-vf-menubar-trigger'?: string };
 type MenubarTriggerRenderProps = ComponentPropsWithRef<typeof MenuTrigger> & { 'data-vf-menubar-trigger': string };
-export const MenubarTrigger = forwardRef<HTMLButtonElement, MenubarTriggerProps>(function MenubarTrigger({ onKeyDown, ...props }, ref) {
+export const MenubarTrigger = forwardRef<HTMLButtonElement, MenubarTriggerProps>(function MenubarTrigger(
+  { onKeyDown, ...props },
+  ref,
+) {
   const triggerProps: MenubarTriggerRenderProps = {
     ...props,
     ref,

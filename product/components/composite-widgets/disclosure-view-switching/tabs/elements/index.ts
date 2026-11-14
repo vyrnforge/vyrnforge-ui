@@ -43,7 +43,8 @@ export class VfTabsElement extends HTMLElementBase {
       generatedTabsId += 1;
       this.id = `vf-tabs-${generatedTabsId}`;
     }
-    if (!this.#internalValue) this.#internalValue = this.getAttribute('default-value') ?? this.getAttribute('value') ?? '';
+    if (!this.#internalValue)
+      this.#internalValue = this.getAttribute('default-value') ?? this.getAttribute('value') ?? '';
     this.#focusValue = this.selectedValue;
     this.addEventListener('click', this.#handleClick);
     this.addEventListener('keydown', this.#handleKeyDown);
@@ -67,7 +68,8 @@ export class VfTabsElement extends HTMLElementBase {
   attributeChangedCallback(name: string, oldValue: string | null, newValue: string | null): void {
     if (oldValue === newValue || !this.isConnected) return;
     if (name === 'value') this.#focusValue = newValue ?? this.#internalValue;
-    if (name === 'default-value' && !this.hasAttribute('value') && !this.#internalValue) this.#internalValue = newValue ?? '';
+    if (name === 'default-value' && !this.hasAttribute('value') && !this.#internalValue)
+      this.#internalValue = newValue ?? '';
     this.#sync();
   }
 
@@ -112,15 +114,22 @@ export class VfTabsElement extends HTMLElementBase {
   }
 
   #tabs(): HTMLElement[] {
-    return [...this.querySelectorAll<HTMLElement>('[data-vf-tabs-tab]')].filter((element) => belongsToRoot(this, element));
+    return [...this.querySelectorAll<HTMLElement>('[data-vf-tabs-tab]')].filter((element) =>
+      belongsToRoot(this, element),
+    );
   }
 
   #panels(): HTMLElement[] {
-    return [...this.querySelectorAll<HTMLElement>('[data-vf-tabs-panel]')].filter((element) => belongsToRoot(this, element));
+    return [...this.querySelectorAll<HTMLElement>('[data-vf-tabs-panel]')].filter((element) =>
+      belongsToRoot(this, element),
+    );
   }
 
   #list(): HTMLElement | null {
-    return [...this.querySelectorAll<HTMLElement>('[data-vf-tabs-list]')].find((element) => belongsToRoot(this, element)) ?? null;
+    return (
+      [...this.querySelectorAll<HTMLElement>('[data-vf-tabs-list]')].find((element) => belongsToRoot(this, element)) ??
+      null
+    );
   }
 
   #effectiveDirection(): 'ltr' | 'rtl' {
@@ -133,11 +142,13 @@ export class VfTabsElement extends HTMLElementBase {
     this.#focusValue = value;
     if (!this.controlled) this.#internalValue = value;
     this.#sync();
-    this.dispatchEvent(new CustomEvent<TabsValueChangeDetail>('vf-value-change', {
-      detail: { value },
-      bubbles: true,
-      composed: true,
-    }));
+    this.dispatchEvent(
+      new CustomEvent<TabsValueChangeDetail>('vf-value-change', {
+        detail: { value },
+        bubbles: true,
+        composed: true,
+      }),
+    );
   }
 
   #sync(): void {
@@ -221,13 +232,19 @@ export class VfTabsElement extends HTMLElementBase {
     else if (event.key === 'End') intent = 'last';
     else if (this.orientation === 'vertical' && event.key === 'ArrowDown') intent = 'next';
     else if (this.orientation === 'vertical' && event.key === 'ArrowUp') intent = 'previous';
-    else if (this.orientation === 'horizontal' && event.key === 'ArrowRight') intent = this.#effectiveDirection() === 'rtl' ? 'previous' : 'next';
-    else if (this.orientation === 'horizontal' && event.key === 'ArrowLeft') intent = this.#effectiveDirection() === 'rtl' ? 'next' : 'previous';
+    else if (this.orientation === 'horizontal' && event.key === 'ArrowRight')
+      intent = this.#effectiveDirection() === 'rtl' ? 'previous' : 'next';
+    else if (this.orientation === 'horizontal' && event.key === 'ArrowLeft')
+      intent = this.#effectiveDirection() === 'rtl' ? 'next' : 'previous';
 
     if (intent) {
       const tabs = this.#tabs();
       const currentIndex = tabs.indexOf(current);
-      const nextIndex = resolveNavigationIndex(tabs.map((tab) => ({ eligible: !(tabDisabled(tab)) })), currentIndex, intent);
+      const nextIndex = resolveNavigationIndex(
+        tabs.map((tab) => ({ eligible: !tabDisabled(tab) })),
+        currentIndex,
+        intent,
+      );
       if (nextIndex === null) return;
       const next = tabs[nextIndex];
       const value = next ? tabValue(next) : '';

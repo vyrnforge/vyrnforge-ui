@@ -16,26 +16,47 @@ function disabled(item: HTMLElement): boolean {
 }
 function syncTabStops(root: HTMLElement, preferred?: HTMLElement | null): void {
   const items = toolbarItems(root);
-  const states = items.map((item) => ({ eligible: !(disabled(item)) }));
+  const states = items.map((item) => ({ eligible: !disabled(item) }));
   let activeIndex = preferred ? items.indexOf(preferred) : -1;
-  if (activeIndex < 0 || states[activeIndex]?.eligible === false) activeIndex = items.findIndex((item) => item.tabIndex === 0 && !disabled(item));
+  if (activeIndex < 0 || states[activeIndex]?.eligible === false)
+    activeIndex = items.findIndex((item) => item.tabIndex === 0 && !disabled(item));
   if (activeIndex < 0) activeIndex = states.findIndex((item) => item.eligible !== false);
   const resolved = activeIndex < 0 ? null : activeIndex;
-  items.forEach((item, index) => { item.tabIndex = states[index]?.eligible !== false && resolved === index ? 0 : -1; });
+  items.forEach((item, index) => {
+    item.tabIndex = states[index]?.eligible !== false && resolved === index ? 0 : -1;
+  });
 }
 function itemFromTarget(root: HTMLElement, target: EventTarget | null): HTMLElement | null {
   const element = target instanceof HTMLElement ? target.closest<HTMLElement>('[data-vf-toolbar-item]') : null;
   return element && root.contains(element) ? element : null;
 }
-function intentForKey(key: string, orientation: ToolbarOrientation, direction: 'ltr' | 'rtl'): CollectionNavigationIntent | null {
+function intentForKey(
+  key: string,
+  orientation: ToolbarOrientation,
+  direction: 'ltr' | 'rtl',
+): CollectionNavigationIntent | null {
   if (key === 'Home') return 'first';
   if (key === 'End') return 'last';
-  const arrow: CollectionNavigationArrow | null = key === 'ArrowLeft' ? 'left' : key === 'ArrowRight' ? 'right' : key === 'ArrowUp' ? 'up' : key === 'ArrowDown' ? 'down' : null;
+  const arrow: CollectionNavigationArrow | null =
+    key === 'ArrowLeft'
+      ? 'left'
+      : key === 'ArrowRight'
+        ? 'right'
+        : key === 'ArrowUp'
+          ? 'up'
+          : key === 'ArrowDown'
+            ? 'down'
+            : null;
   return arrow ? navigationIntentForArrow(arrow, orientation, direction) : null;
 }
 
-export interface ToolbarRootProps extends ComponentPropsWithoutRef<'div'> { orientation?: ToolbarOrientation; }
-export const ToolbarRoot = forwardRef<HTMLDivElement, ToolbarRootProps>(function ToolbarRoot({ orientation = 'horizontal', onKeyDown, onFocusCapture, ...props }, forwardedRef) {
+export interface ToolbarRootProps extends ComponentPropsWithoutRef<'div'> {
+  orientation?: ToolbarOrientation;
+}
+export const ToolbarRoot = forwardRef<HTMLDivElement, ToolbarRootProps>(function ToolbarRoot(
+  { orientation = 'horizontal', onKeyDown, onFocusCapture, ...props },
+  forwardedRef,
+) {
   const rootRef = useRef<HTMLDivElement | null>(null);
   useEffect(() => {
     const root = rootRef.current;
@@ -43,7 +64,12 @@ export const ToolbarRoot = forwardRef<HTMLDivElement, ToolbarRootProps>(function
     syncTabStops(root);
     if (typeof MutationObserver === 'undefined') return;
     const observer = new MutationObserver(() => syncTabStops(root));
-    observer.observe(root, { childList: true, subtree: true, attributes: true, attributeFilter: ['disabled', 'aria-disabled'] });
+    observer.observe(root, {
+      childList: true,
+      subtree: true,
+      attributes: true,
+      attributeFilter: ['disabled', 'aria-disabled'],
+    });
     return () => observer.disconnect();
   }, [orientation]);
   return createElement('div', {
@@ -67,13 +93,18 @@ export const ToolbarRoot = forwardRef<HTMLDivElement, ToolbarRootProps>(function
       onKeyDown?.(event);
       if (event.defaultPrevented) return;
       const root = event.currentTarget;
-      const direction = typeof getComputedStyle === 'function' && getComputedStyle(root).direction === 'rtl' ? 'rtl' : 'ltr';
+      const direction =
+        typeof getComputedStyle === 'function' && getComputedStyle(root).direction === 'rtl' ? 'rtl' : 'ltr';
       const intent = intentForKey(event.key, orientation, direction);
       if (!intent) return;
       const items = toolbarItems(root);
       const currentItem = itemFromTarget(root, event.target);
       const currentIndex = currentItem ? items.indexOf(currentItem) : -1;
-      const nextIndex = resolveNavigationIndex(items.map((item) => ({ eligible: !(disabled(item)) })), currentIndex, intent);
+      const nextIndex = resolveNavigationIndex(
+        items.map((item) => ({ eligible: !disabled(item) })),
+        currentIndex,
+        intent,
+      );
       if (nextIndex == null) return;
       const next = items[nextIndex];
       if (!next) return;
@@ -84,7 +115,13 @@ export const ToolbarRoot = forwardRef<HTMLDivElement, ToolbarRootProps>(function
   });
 });
 export type ToolbarButtonProps = ComponentPropsWithoutRef<'button'>;
-export const ToolbarButton = forwardRef<HTMLButtonElement, ToolbarButtonProps>(function ToolbarButton(props, ref) { return createElement('button', { ...props, ref, type: props.type ?? 'button', 'data-vf-toolbar-item': '' }); });
+export const ToolbarButton = forwardRef<HTMLButtonElement, ToolbarButtonProps>(function ToolbarButton(props, ref) {
+  return createElement('button', { ...props, ref, type: props.type ?? 'button', 'data-vf-toolbar-item': '' });
+});
 export type ToolbarLinkProps = ComponentPropsWithoutRef<'a'>;
-export const ToolbarLink = forwardRef<HTMLAnchorElement, ToolbarLinkProps>(function ToolbarLink(props, ref) { return createElement('a', { ...props, ref, 'data-vf-toolbar-item': '' }); });
-export function ToolbarSeparator(props: ComponentPropsWithoutRef<'div'>) { return createElement('div', { ...props, role: 'separator', 'data-vf-toolbar-separator': '' }); }
+export const ToolbarLink = forwardRef<HTMLAnchorElement, ToolbarLinkProps>(function ToolbarLink(props, ref) {
+  return createElement('a', { ...props, ref, 'data-vf-toolbar-item': '' });
+});
+export function ToolbarSeparator(props: ComponentPropsWithoutRef<'div'>) {
+  return createElement('div', { ...props, role: 'separator', 'data-vf-toolbar-separator': '' });
+}

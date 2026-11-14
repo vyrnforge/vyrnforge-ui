@@ -31,8 +31,12 @@ function createDismissRequest(reason: DialogDismissReason): DialogDismissRequest
   let prevented = false;
   return {
     reason,
-    get defaultPrevented() { return prevented; },
-    preventDefault() { prevented = true; },
+    get defaultPrevented() {
+      return prevented;
+    },
+    preventDefault() {
+      prevented = true;
+    },
   };
 }
 
@@ -55,7 +59,10 @@ function canRestoreFocus(element: HTMLElement | null): element is HTMLElement {
   return Boolean(element?.isConnected && !element.hasAttribute('disabled') && !element.closest('[inert]'));
 }
 
-export interface DialogRootProps extends Omit<DialogHTMLAttributes<HTMLDialogElement>, 'open' | 'onCancel' | 'onClose'> {
+export interface DialogRootProps extends Omit<
+  DialogHTMLAttributes<HTMLDialogElement>,
+  'open' | 'onCancel' | 'onClose'
+> {
   children?: ReactNode;
   open?: boolean;
   defaultOpen?: boolean;
@@ -67,21 +74,24 @@ export interface DialogRootProps extends Omit<DialogHTMLAttributes<HTMLDialogEle
   descriptionId?: string;
 }
 
-export const DialogRoot = forwardRef<HTMLDialogElement, DialogRootProps>(function DialogRoot({
-  open,
-  defaultOpen = false,
-  onOpenChange,
-  onDismissRequest,
-  backdropDismiss = false,
-  initialFocusRef,
-  titleId: titleIdProp,
-  descriptionId,
-  id,
-  children,
-  onPointerDown,
-  onClick,
-  ...props
-}, forwardedRef) {
+export const DialogRoot = forwardRef<HTMLDialogElement, DialogRootProps>(function DialogRoot(
+  {
+    open,
+    defaultOpen = false,
+    onOpenChange,
+    onDismissRequest,
+    backdropDismiss = false,
+    initialFocusRef,
+    titleId: titleIdProp,
+    descriptionId,
+    id,
+    children,
+    onPointerDown,
+    onClick,
+    ...props
+  },
+  forwardedRef,
+) {
   const generatedId = useId().replaceAll(':', '');
   const rootId = id ?? `vf-dialog-${generatedId}`;
   const titleId = titleIdProp ?? `${rootId}-title`;
@@ -96,13 +106,16 @@ export const DialogRoot = forwardRef<HTMLDialogElement, DialogRootProps>(functio
 
   useImperativeHandle(forwardedRef, () => dialogRef.current as HTMLDialogElement, []);
 
-  const requestDismiss = useCallback((reason: DialogDismissReason) => {
-    const request = createDismissRequest(reason);
-    onDismissRequest?.(request);
-    if (request.defaultPrevented) return;
-    if (!controlled) setInternalOpen(false);
-    onOpenChange?.(false);
-  }, [controlled, onDismissRequest, onOpenChange]);
+  const requestDismiss = useCallback(
+    (reason: DialogDismissReason) => {
+      const request = createDismissRequest(reason);
+      onDismissRequest?.(request);
+      if (request.defaultPrevented) return;
+      if (!controlled) setInternalOpen(false);
+      onOpenChange?.(false);
+    },
+    [controlled, onDismissRequest, onOpenChange],
+  );
 
   useEffect(() => {
     const dialog = dialogRef.current;
@@ -161,12 +174,15 @@ export const DialogRoot = forwardRef<HTMLDialogElement, DialogRootProps>(functio
     };
   }, [controlled, initialFocusRef, onOpenChange, requestDismiss]);
 
-  const context = useMemo<DialogContextValue>(() => ({
-    rootId,
-    titleId,
-    descriptionId,
-    requestDismiss,
-  }), [descriptionId, requestDismiss, rootId, titleId]);
+  const context = useMemo<DialogContextValue>(
+    () => ({
+      rootId,
+      titleId,
+      descriptionId,
+      requestDismiss,
+    }),
+    [descriptionId, requestDismiss, rootId, titleId],
+  );
 
   return createElement(
     DialogContext.Provider,

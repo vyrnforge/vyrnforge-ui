@@ -1,7 +1,16 @@
 import { createElement, type ComponentProps } from 'react';
-import { DialogBody, DialogClose, DialogDescription, DialogRoot, DialogTitle, type DialogRootProps } from '../dialog/index.js';
+import {
+  DialogBody,
+  DialogClose,
+  DialogDescription,
+  DialogRoot,
+  DialogTitle,
+  type DialogRootProps,
+} from '../dialog/index.js';
 export type DrawerPlacement = 'start' | 'end' | 'top' | 'bottom';
-export interface DrawerRootProps extends DialogRootProps { placement?: DrawerPlacement; }
+export interface DrawerRootProps extends DialogRootProps {
+  placement?: DrawerPlacement;
+}
 export function DrawerRoot({ placement = 'end', ...props }: DrawerRootProps) {
   const rootProps = { ...props, 'data-vf-drawer-root': '', 'data-vf-placement': placement };
   return createElement(DialogRoot, rootProps);

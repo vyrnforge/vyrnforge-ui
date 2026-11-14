@@ -1,1 +1,17 @@
-import{AccordionHeader,AccordionItem,AccordionPanel,AccordionRoot,AccordionTrigger}from'@vyrnforge/react/accordion';export default()=> <AccordionRoot><AccordionItem value="a"><AccordionHeader><AccordionTrigger>Section</AccordionTrigger></AccordionHeader><AccordionPanel>Content</AccordionPanel></AccordionItem></AccordionRoot>;
+import {
+  AccordionHeader,
+  AccordionItem,
+  AccordionPanel,
+  AccordionRoot,
+  AccordionTrigger,
+} from '@vyrnforge/react/accordion';
+export default () => (
+  <AccordionRoot>
+    <AccordionItem value="a">
+      <AccordionHeader>
+        <AccordionTrigger>Section</AccordionTrigger>
+      </AccordionHeader>
+      <AccordionPanel>Content</AccordionPanel>
+    </AccordionItem>
+  </AccordionRoot>
+);

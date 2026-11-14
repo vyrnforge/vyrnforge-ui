@@ -3,7 +3,9 @@ import '@vyrnforge/web/styles/dialog.css';
 
 defineDialogElement();
 
-document.querySelector('#root')!.innerHTML = `
+const mount = document.querySelector('#root');
+if (!mount) throw new Error('Example mount is missing.');
+mount.innerHTML = `
   <button type="button" id="dialog-trigger">Open dialog</button>
   <vf-dialog id="example-dialog" backdrop-dismiss>
     <dialog>
@@ -15,8 +17,9 @@ document.querySelector('#root')!.innerHTML = `
   </vf-dialog>
 `;
 
-const trigger = document.querySelector<HTMLButtonElement>('#dialog-trigger')!;
-const dialog = document.querySelector<VfDialogElement>('#example-dialog')!;
+const trigger = document.querySelector<HTMLButtonElement>('#dialog-trigger');
+const dialog = document.querySelector<VfDialogElement>('#example-dialog');
+if (!trigger || !dialog) throw new Error('Example dialog parts are missing.');
 trigger.addEventListener('click', () => {
   dialog.open = true;
 });

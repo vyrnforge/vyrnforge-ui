@@ -6,7 +6,10 @@ const showLabel = 'Visibilité du mot de passe : afficher';
 const hideLabel = 'Visibilité du mot de passe : masquer';
 
 test('password field uses authored state labels without changing credential value', async ({ page }) => {
-  test.skip(!frameworkPorts.has(port), 'Interactive PasswordField behavior is implemented by framework/Elements ports; Web owns CSS only.');
+  test.skip(
+    !frameworkPorts.has(port),
+    'Interactive PasswordField behavior is implemented by framework/Elements ports; Web owns CSS only.',
+  );
   await page.goto(`/components/password-field/${port}.html`);
 
   const password = page.getByLabel('Mot de passe', { exact: true });
@@ -64,7 +67,9 @@ test('STD-15 representative session recovery preserves task context', async ({ p
   await expect(page.getByLabel('Email address', { exact: true })).toHaveAttribute('autocomplete', 'username');
   await expect(page.getByLabel('Password', { exact: true })).toHaveAttribute('autocomplete', 'current-password');
   await page.getByRole('button', { name: 'Continue', exact: true }).click();
-  await expect(page.getByRole('alert')).toHaveText('We could not sign you in with those credentials. Check them or use another allowed method.');
+  await expect(page.getByRole('alert')).toHaveText(
+    'We could not sign you in with those credentials. Check them or use another allowed method.',
+  );
 
   await page.getByRole('button', { name: 'Continue', exact: true }).click();
   await expect(page.getByRole('heading', { name: 'Enter your verification code', exact: true })).toBeFocused();

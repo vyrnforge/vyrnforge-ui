@@ -33,9 +33,9 @@ test('context invocation and keyboard navigation skip disabled items', async ({ 
   await page.keyboard.press('b');
   await expect(page.locator(item('banana'))).toBeFocused();
 
-  expect((await expectNoAxeViolations(page, port === 'react'
-    ? { disableRules: ['region'] }
-    : undefined)).violations).toEqual([]);
+  expect(
+    (await expectNoAxeViolations(page, port === 'react' ? { disableRules: ['region'] } : undefined)).violations,
+  ).toEqual([]);
 });
 
 test('Escape dismisses and restores the invoking context', async ({ page }) => {

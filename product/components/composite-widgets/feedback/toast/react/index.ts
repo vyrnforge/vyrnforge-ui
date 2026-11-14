@@ -53,18 +53,21 @@ export interface ToastRootProps extends ComponentPropsWithoutRef<'div'> {
   children?: ReactNode;
 }
 
-export const ToastRoot = forwardRef<HTMLDivElement, ToastRootProps>(function ToastRoot({
-  open,
-  defaultOpen = true,
-  duration = DEFAULT_DURATION,
-  onOpenChange,
-  children,
-  onPointerEnter,
-  onPointerLeave,
-  onFocusCapture,
-  onBlurCapture,
-  ...props
-}, ref) {
+export const ToastRoot = forwardRef<HTMLDivElement, ToastRootProps>(function ToastRoot(
+  {
+    open,
+    defaultOpen = true,
+    duration = DEFAULT_DURATION,
+    onOpenChange,
+    children,
+    onPointerEnter,
+    onPointerLeave,
+    onFocusCapture,
+    onBlurCapture,
+    ...props
+  },
+  ref,
+) {
   const controlled = open !== undefined;
   const [internalOpen, setInternalOpen] = useState(defaultOpen);
   const committedOpen = controlled ? open : internalOpen;
@@ -108,21 +111,27 @@ export const ToastRoot = forwardRef<HTMLDivElement, ToastRootProps>(function Toa
     timerRef.current = setTimeout(expire, remaining);
   }, [clearTimer, committedOpen, expire]);
 
-  const pause = useCallback((reason: PauseReason) => {
-    const reasons = pauseReasonsRef.current;
-    if (reasons.has(reason)) return;
-    const wasRunning = reasons.size === 0 && timerRef.current !== null;
-    reasons.add(reason);
-    if (!wasRunning) return;
-    remainingRef.current = Math.max(0, deadlineRef.current - Date.now());
-    clearTimer();
-  }, [clearTimer]);
+  const pause = useCallback(
+    (reason: PauseReason) => {
+      const reasons = pauseReasonsRef.current;
+      if (reasons.has(reason)) return;
+      const wasRunning = reasons.size === 0 && timerRef.current !== null;
+      reasons.add(reason);
+      if (!wasRunning) return;
+      remainingRef.current = Math.max(0, deadlineRef.current - Date.now());
+      clearTimer();
+    },
+    [clearTimer],
+  );
 
-  const resume = useCallback((reason: PauseReason) => {
-    const reasons = pauseReasonsRef.current;
-    if (!reasons.delete(reason) || reasons.size > 0) return;
-    armRemaining();
-  }, [armRemaining]);
+  const resume = useCallback(
+    (reason: PauseReason) => {
+      const reasons = pauseReasonsRef.current;
+      if (!reasons.delete(reason) || reasons.size > 0) return;
+      armRemaining();
+    },
+    [armRemaining],
+  );
 
   useEffect(() => {
     clearTimer();
@@ -158,29 +167,33 @@ export const ToastRoot = forwardRef<HTMLDivElement, ToastRootProps>(function Toa
   return createElement(
     ToastContext.Provider,
     { value: context },
-    createElement('div', {
-      ...props,
-      ref,
-      role: props.role ?? 'status',
-      'data-vf-toast-root': '',
-      'data-vf-open': '',
-      onPointerEnter(event: ReactPointerEvent<HTMLDivElement>) {
-        onPointerEnter?.(event);
-        pause('pointer');
+    createElement(
+      'div',
+      {
+        ...props,
+        ref,
+        role: props.role ?? 'status',
+        'data-vf-toast-root': '',
+        'data-vf-open': '',
+        onPointerEnter(event: ReactPointerEvent<HTMLDivElement>) {
+          onPointerEnter?.(event);
+          pause('pointer');
+        },
+        onPointerLeave(event: ReactPointerEvent<HTMLDivElement>) {
+          onPointerLeave?.(event);
+          resume('pointer');
+        },
+        onFocusCapture(event: ReactFocusEvent<HTMLDivElement>) {
+          onFocusCapture?.(event);
+          if (!event.currentTarget.contains(event.relatedTarget as Node | null)) pause('focus');
+        },
+        onBlurCapture(event: ReactFocusEvent<HTMLDivElement>) {
+          onBlurCapture?.(event);
+          if (!event.currentTarget.contains(event.relatedTarget as Node | null)) resume('focus');
+        },
       },
-      onPointerLeave(event: ReactPointerEvent<HTMLDivElement>) {
-        onPointerLeave?.(event);
-        resume('pointer');
-      },
-      onFocusCapture(event: ReactFocusEvent<HTMLDivElement>) {
-        onFocusCapture?.(event);
-        if (!event.currentTarget.contains(event.relatedTarget as Node | null)) pause('focus');
-      },
-      onBlurCapture(event: ReactFocusEvent<HTMLDivElement>) {
-        onBlurCapture?.(event);
-        if (!event.currentTarget.contains(event.relatedTarget as Node | null)) resume('focus');
-      },
-    }, children),
+      children,
+    ),
   );
 });
 
@@ -192,21 +205,23 @@ export function ToastDescription(props: ComponentPropsWithoutRef<'div'>) {
   return createElement('div', { ...props, 'data-vf-toast-description': '' });
 }
 
-export const ToastClose = forwardRef<HTMLButtonElement, ComponentPropsWithoutRef<'button'>>(function ToastClose({
-  type = 'button',
-  onClick,
-  children,
-  ...props
-}, ref) {
+export const ToastClose = forwardRef<HTMLButtonElement, ComponentPropsWithoutRef<'button'>>(function ToastClose(
+  { type = 'button', onClick, children, ...props },
+  ref,
+) {
   const context = useToastContext();
-  return createElement('button', {
-    ...props,
-    ref,
-    type,
-    'data-vf-toast-close': '',
-    onClick(event) {
-      onClick?.(event);
-      if (!event.defaultPrevented) context.requestClose();
+  return createElement(
+    'button',
+    {
+      ...props,
+      ref,
+      type,
+      'data-vf-toast-close': '',
+      onClick(event) {
+        onClick?.(event);
+        if (!event.defaultPrevented) context.requestClose();
+      },
     },
-  }, children);
+    children,
+  );
 });

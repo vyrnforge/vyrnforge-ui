@@ -50,7 +50,7 @@ function flushFocusRequests(root: VfSelectRootDirective): void {
     return;
   }
   const options = optionsFor(surface);
-  const optionStates = options.map((option) => ({ eligible: !(optionDisabled(option)) }));
+  const optionStates = options.map((option) => ({ eligible: !optionDisabled(option) }));
   const selected = options.findIndex(
     (option, index) => optionStates[index]?.eligible !== false && option.getAttribute('aria-selected') === 'true',
   );
@@ -60,15 +60,12 @@ function flushFocusRequests(root: VfSelectRootDirective): void {
     const current = activeOption ? options.indexOf(activeOption) : -1;
     let index: number | null;
     if (request === 'first' || request === 'last') {
-      index = selected >= 0
-        ? selected
-        : resolveNavigationIndex(optionStates, request === 'first' ? -1 : options.length, request);
-    } else {
-      const base = current >= 0
-        ? current
-        : selected >= 0
+      index =
+        selected >= 0
           ? selected
-          : request === 'next' ? -1 : options.length;
+          : resolveNavigationIndex(optionStates, request === 'first' ? -1 : options.length, request);
+    } else {
+      const base = current >= 0 ? current : selected >= 0 ? selected : request === 'next' ? -1 : options.length;
       index = resolveNavigationIndex(optionStates, base, request);
     }
     if (index != null) options[index]?.focus();
@@ -198,7 +195,7 @@ export class VfSelectContentDirective {
       const options = optionsFor(element);
       const currentOption = optionFromTarget(element, event.target);
       const current = currentOption ? options.indexOf(currentOption) : -1;
-      const states = options.map((option) => ({ eligible: !(optionDisabled(option)) }));
+      const states = options.map((option) => ({ eligible: !optionDisabled(option) }));
       let intent: 'next' | 'previous' | 'first' | 'last' | null = null;
       if (event.key === 'ArrowDown') intent = 'next';
       else if (event.key === 'ArrowUp') intent = 'previous';
@@ -209,11 +206,17 @@ export class VfSelectContentDirective {
       else if (event.key.length === 1 && !event.ctrlKey && !event.metaKey && !event.altKey) {
         query += event.key;
         if (timer) clearTimeout(timer);
-        timer = setTimeout(() => { query = ''; }, 500);
-        next = findTypeaheadMatch(options.map((option) => ({
-          textValue: option.dataset.vfTextValue ?? option.textContent ?? '',
-          eligible: !optionDisabled(option),
-        })), query, { startIndex: current });
+        timer = setTimeout(() => {
+          query = '';
+        }, 500);
+        next = findTypeaheadMatch(
+          options.map((option) => ({
+            textValue: option.dataset.vfTextValue ?? option.textContent ?? '',
+            eligible: !optionDisabled(option),
+          })),
+          query,
+          { startIndex: current },
+        );
       }
       if (next == null) return;
       event.preventDefault();

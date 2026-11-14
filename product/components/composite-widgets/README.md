@@ -8,17 +8,17 @@ The canonical source directory is `product/components/composite-widgets/`. Stabl
 
 Layer 5 authoring is grouped by reusable responsibility. These folders are source-ownership categories only; they do not create runtime modules, package namespaces, public import prefixes, or shared managers.
 
-| Family | Canonical source folder | Widgets |
-| --- | --- | --- |
-| Disclosure & view switching | `disclosure-view-switching/` | `disclosure`, `accordion`, `tabs` |
-| Transient surfaces | `transient-surfaces/` | `dialog`, `alert-dialog`, `drawer`, `popover`, `tooltip`, `preview-card` |
-| Commands & actions | `commands-actions/` | `menu`, `context-menu`, `menubar`, `toolbar`, `split-button` |
-| Collection selection | `collection-selection/` | `listbox`, `select`, `combobox`, `multi-select`, `tag-group` |
-| Choice & value | `choice-value/` | `toggle-group`, `segmented-control`, `rating`, `range-slider` |
-| Compound fields | `compound-fields/` | `search-field`, `password-field`, `number-field`, `color-picker`, `otp-field`, `file-uploader` |
-| Content navigation | `content-navigation/` | `pagination`, `carousel` |
-| Interactive layout | `interactive-layout/` | `split-panel` |
-| Feedback | `feedback/` | `toast` |
+| Family                      | Canonical source folder      | Widgets                                                                                        |
+| --------------------------- | ---------------------------- | ---------------------------------------------------------------------------------------------- |
+| Disclosure & view switching | `disclosure-view-switching/` | `disclosure`, `accordion`, `tabs`                                                              |
+| Transient surfaces          | `transient-surfaces/`        | `dialog`, `alert-dialog`, `drawer`, `popover`, `tooltip`, `preview-card`                       |
+| Commands & actions          | `commands-actions/`          | `menu`, `context-menu`, `menubar`, `toolbar`, `split-button`                                   |
+| Collection selection        | `collection-selection/`      | `listbox`, `select`, `combobox`, `multi-select`, `tag-group`                                   |
+| Choice & value              | `choice-value/`              | `toggle-group`, `segmented-control`, `rating`, `range-slider`                                  |
+| Compound fields             | `compound-fields/`           | `search-field`, `password-field`, `number-field`, `color-picker`, `otp-field`, `file-uploader` |
+| Content navigation          | `content-navigation/`        | `pagination`, `carousel`                                                                       |
+| Interactive layout          | `interactive-layout/`        | `split-panel`                                                                                  |
+| Feedback                    | `feedback/`                  | `toast`                                                                                        |
 
 A family exists to make source responsibility legible. It must not become an excuse to create a family-wide runtime. Reuse continues through lower-layer contracts, private implementation sharing where justified, and idiomatic framework/Elements execution.
 

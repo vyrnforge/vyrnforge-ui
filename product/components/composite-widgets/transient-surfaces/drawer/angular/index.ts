@@ -22,8 +22,12 @@ function createDismissRequest(reason: DrawerDismissReason): DrawerDismissRequest
   let prevented = false;
   return {
     reason,
-    get defaultPrevented() { return prevented; },
-    preventDefault() { prevented = true; },
+    get defaultPrevented() {
+      return prevented;
+    },
+    preventDefault() {
+      prevented = true;
+    },
   };
 }
 
@@ -85,7 +89,8 @@ export class VfDrawerRootDirective {
 
   private syncDialog(dialog: HTMLDialogElement, desiredOpen: boolean, captureRestoreTarget: boolean): void {
     if (desiredOpen && !dialog.open) {
-      if (captureRestoreTarget) this.restoreTarget = document.activeElement instanceof HTMLElement ? document.activeElement : null;
+      if (captureRestoreTarget)
+        this.restoreTarget = document.activeElement instanceof HTMLElement ? document.activeElement : null;
       dialog.showModal();
       this.initialFocus()?.focus();
     } else if (!desiredOpen && dialog.open) {
@@ -142,14 +147,39 @@ export class VfDrawerRootDirective {
   }
 }
 
-@Directive({ selector: '[vfDrawerTitle]', standalone: true, host: { '[attr.id]': 'id() ?? root.resolvedTitleId()', 'data-vf-drawer-title': '' } })
-export class VfDrawerTitleDirective { readonly root = inject(VfDrawerRootDirective); readonly id = input<string | undefined>(undefined); }
+@Directive({
+  selector: '[vfDrawerTitle]',
+  standalone: true,
+  host: { '[attr.id]': 'id() ?? root.resolvedTitleId()', 'data-vf-drawer-title': '' },
+})
+export class VfDrawerTitleDirective {
+  readonly root = inject(VfDrawerRootDirective);
+  readonly id = input<string | undefined>(undefined);
+}
 
-@Directive({ selector: '[vfDrawerDescription]', standalone: true, host: { '[attr.id]': 'id() ?? root.descriptionId() ?? (root.id() + "-description")', 'data-vf-drawer-description': '' } })
-export class VfDrawerDescriptionDirective { readonly root = inject(VfDrawerRootDirective); readonly id = input<string | undefined>(undefined); }
+@Directive({
+  selector: '[vfDrawerDescription]',
+  standalone: true,
+  host: {
+    '[attr.id]': 'id() ?? root.descriptionId() ?? (root.id() + "-description")',
+    'data-vf-drawer-description': '',
+  },
+})
+export class VfDrawerDescriptionDirective {
+  readonly root = inject(VfDrawerRootDirective);
+  readonly id = input<string | undefined>(undefined);
+}
 
 @Directive({ selector: '[vfDrawerBody]', standalone: true, host: { 'data-vf-drawer-body': '' } })
-export class VfDrawerBodyDirective { readonly root = inject(VfDrawerRootDirective); }
+export class VfDrawerBodyDirective {
+  readonly root = inject(VfDrawerRootDirective);
+}
 
-@Directive({ selector: 'button[vfDrawerClose]', standalone: true, host: { type: 'button', 'data-vf-drawer-close': '', '(click)': 'root.requestDismiss("close-control")' } })
-export class VfDrawerCloseDirective { readonly root = inject(VfDrawerRootDirective); }
+@Directive({
+  selector: 'button[vfDrawerClose]',
+  standalone: true,
+  host: { type: 'button', 'data-vf-drawer-close': '', '(click)': 'root.requestDismiss("close-control")' },
+})
+export class VfDrawerCloseDirective {
+  readonly root = inject(VfDrawerRootDirective);
+}

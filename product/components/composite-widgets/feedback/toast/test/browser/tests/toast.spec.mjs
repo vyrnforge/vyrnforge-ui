@@ -24,7 +24,7 @@ test('uses polite real output with authored English and localized naming', async
   await expect(page.locator('#controlled-close')).toHaveAccessibleName('Tutup notifikasi');
   if (port !== 'web') await expect(page.locator('#sibling-b-close')).toHaveAccessibleName('Close notification');
   await expect(page.locator('body')).not.toContainText('Dismiss notification');
-  
+
   expect((await expectNoAxeViolations(page)).violations).toEqual([]);
 });
 

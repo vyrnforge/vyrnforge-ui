@@ -1,14 +1,4 @@
-import {
-  APP_ID,
-  Directive,
-  ElementRef,
-  InjectionToken,
-  computed,
-  inject,
-  input,
-  output,
-  signal,
-} from '@angular/core';
+import { APP_ID, Directive, ElementRef, InjectionToken, computed, inject, input, output, signal } from '@angular/core';
 import { resolveNavigationIndex, type CollectionNavigationIntent } from '@vyrnforge/core/collection-navigation';
 
 const COMBOBOX_ID_GENERATOR = new InjectionToken<() => string>('VyrnForge Combobox ID generator', {
@@ -21,7 +11,9 @@ const COMBOBOX_ID_GENERATOR = new InjectionToken<() => string>('VyrnForge Combob
 });
 
 const optionSelector = '[data-vf-combobox-option]';
-function normalizeFilterText(value: string, locale?: string): string { return locale ? value.toLocaleLowerCase(locale) : value.toLowerCase(); }
+function normalizeFilterText(value: string, locale?: string): string {
+  return locale ? value.toLocaleLowerCase(locale) : value.toLowerCase();
+}
 function visibleOptions(root: HTMLElement, query = '', locale?: string): HTMLElement[] {
   const normalizedQuery = normalizeFilterText(query.trim(), locale);
   return Array.from(root.querySelectorAll<HTMLElement>(optionSelector)).filter((option) => {
@@ -29,7 +21,9 @@ function visibleOptions(root: HTMLElement, query = '', locale?: string): HTMLEle
     return normalizeFilterText(option.textContent ?? '', locale).includes(normalizedQuery);
   });
 }
-function disabled(option: HTMLElement): boolean { return option.getAttribute('aria-disabled') === 'true' || option.hasAttribute('disabled'); }
+function disabled(option: HTMLElement): boolean {
+  return option.getAttribute('aria-disabled') === 'true' || option.hasAttribute('disabled');
+}
 
 @Directive({
   selector: '[vfComboboxRoot]',
@@ -57,9 +51,18 @@ export class VfComboboxRootDirective {
   private optionIndex = 0;
   private readonly element = inject<ElementRef<HTMLElement>>(ElementRef);
 
-  nextOptionId() { return `${this.listboxId()}-option-${++this.optionIndex}`; }
-  setOpen(value: boolean) { this.open.set(value); if (!value) this.activeId.set(null); }
-  setQuery(value: string) { this.query.set(value); this.activeId.set(null); this.setOpen(true); }
+  nextOptionId() {
+    return `${this.listboxId()}-option-${++this.optionIndex}`;
+  }
+  setOpen(value: boolean) {
+    this.open.set(value);
+    if (!value) this.activeId.set(null);
+  }
+  setQuery(value: string) {
+    this.query.set(value);
+    this.activeId.set(null);
+    this.setOpen(true);
+  }
   setValue(value: string) {
     if (this.value() === undefined) this.internalValue.set(value);
     this.query.set(value);
@@ -68,12 +71,19 @@ export class VfComboboxRootDirective {
     this.valueChange.emit(value);
     this.focusInput();
   }
-  focusInput() { this.element.nativeElement.querySelector<HTMLInputElement>('[data-vf-combobox-input]')?.focus(); }
+  focusInput() {
+    this.element.nativeElement.querySelector<HTMLInputElement>('[data-vf-combobox-input]')?.focus();
+  }
   moveActive(intent: Extract<CollectionNavigationIntent, 'next' | 'previous'>) {
     const options = visibleOptions(this.element.nativeElement, this.query(), this.locale());
     const current = options.findIndex((option) => option.id === this.activeId());
     const start = current >= 0 ? current : intent === 'previous' ? options.length : -1;
-    const next = resolveNavigationIndex(options.map((option) => ({ eligible: !(disabled(option)) })), start, intent, { loop: false });
+    const next = resolveNavigationIndex(
+      options.map((option) => ({ eligible: !disabled(option) })),
+      start,
+      intent,
+      { loop: false },
+    );
     if (next == null) return;
     const target = options[next];
     if (!target?.id) return;
@@ -83,7 +93,9 @@ export class VfComboboxRootDirective {
   activateActive() {
     const id = this.activeId();
     if (!id) return false;
-    const target = visibleOptions(this.element.nativeElement, this.query(), this.locale()).find((option) => option.id === id && !disabled(option));
+    const target = visibleOptions(this.element.nativeElement, this.query(), this.locale()).find(
+      (option) => option.id === id && !disabled(option),
+    );
     if (!target) return false;
     target.click();
     return true;
@@ -112,9 +124,15 @@ export class VfComboboxRootDirective {
 export class VfComboboxInputDirective {
   private composing = false;
   constructor(readonly root: VfComboboxRootDirective) {}
-  onInput(event: Event) { this.root.setQuery((event.target as HTMLInputElement).value); }
-  onCompositionStart() { this.composing = true; }
-  onCompositionEnd() { this.composing = false; }
+  onInput(event: Event) {
+    this.root.setQuery((event.target as HTMLInputElement).value);
+  }
+  onCompositionStart() {
+    this.composing = true;
+  }
+  onCompositionEnd() {
+    this.composing = false;
+  }
   onKeydown(event: KeyboardEvent) {
     if (event.defaultPrevented) return;
     if (this.composing || event.isComposing) return;
@@ -146,7 +164,9 @@ export class VfComboboxInputDirective {
     '[hidden]': '!root.open()',
   },
 })
-export class VfComboboxContentDirective { constructor(readonly root: VfComboboxRootDirective) {} }
+export class VfComboboxContentDirective {
+  constructor(readonly root: VfComboboxRootDirective) {}
+}
 
 @Directive({
   selector: 'button[vfComboboxOption]',
@@ -169,7 +189,20 @@ export class VfComboboxOptionDirective {
   readonly textValue = input('');
   readonly disabled = input(false);
   readonly optionId: string;
-  constructor(readonly root: VfComboboxRootDirective, element: ElementRef<HTMLElement>) { this.optionId = element.nativeElement.id || root.nextOptionId(); }
-  readonly hidden = computed(() => !!this.root.query() && !normalizeFilterText(this.textValue() || this.value(), this.root.locale()).includes(normalizeFilterText(this.root.query(), this.root.locale())));
-  select(event: MouseEvent) { if (!event.defaultPrevented && !this.disabled()) this.root.setValue(this.value()); }
+  constructor(
+    readonly root: VfComboboxRootDirective,
+    element: ElementRef<HTMLElement>,
+  ) {
+    this.optionId = element.nativeElement.id || root.nextOptionId();
+  }
+  readonly hidden = computed(
+    () =>
+      !!this.root.query() &&
+      !normalizeFilterText(this.textValue() || this.value(), this.root.locale()).includes(
+        normalizeFilterText(this.root.query(), this.root.locale()),
+      ),
+  );
+  select(event: MouseEvent) {
+    if (!event.defaultPrevented && !this.disabled()) this.root.setValue(this.value());
+  }
 }

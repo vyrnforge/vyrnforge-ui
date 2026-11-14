@@ -22,8 +22,12 @@ function createDismissRequest(reason: DialogDismissReason): DialogDismissRequest
   let prevented = false;
   return {
     reason,
-    get defaultPrevented() { return prevented; },
-    preventDefault() { prevented = true; },
+    get defaultPrevented() {
+      return prevented;
+    },
+    preventDefault() {
+      prevented = true;
+    },
   };
 }
 

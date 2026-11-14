@@ -49,7 +49,8 @@ function createDeterministicDeleteService() {
 }
 
 const deleteService = createDeterministicDeleteService();
-(globalThis as typeof globalThis & { __vfAlertDialogTestService?: typeof deleteService }).__vfAlertDialogTestService = deleteService;
+(globalThis as typeof globalThis & { __vfAlertDialogTestService?: typeof deleteService }).__vfAlertDialogTestService =
+  deleteService;
 
 function App() {
   const [open, setOpen] = React.useState(false);
@@ -105,14 +106,22 @@ function App() {
         <AlertDialogBody>
           <p>Only continue if you intend to remove this collection for everyone who has access.</p>
           {phase === 'pending' ? <p role="status">Deleting collection…</p> : null}
-          {phase === 'error' ? <p role="alert">Deletion failed. Nothing was deleted. Review the consequence and retry.</p> : null}
+          {phase === 'error' ? (
+            <p role="alert">Deletion failed. Nothing was deleted. Review the consequence and retry.</p>
+          ) : null}
         </AlertDialogBody>
-        <AlertDialogCancel autoFocus aria-disabled={pending}>Cancel</AlertDialogCancel>{' '}
-        <AlertDialogAction aria-disabled={pending} onClick={requestDelete}>Delete collection</AlertDialogAction>
+        <AlertDialogCancel autoFocus aria-disabled={pending}>
+          Cancel
+        </AlertDialogCancel>{' '}
+        <AlertDialogAction aria-disabled={pending} onClick={requestDelete}>
+          Delete collection
+        </AlertDialogAction>
       </AlertDialogRoot>
     </main>
   );
 }
 
 document.body.dataset.deleteRequests = '0';
-createRoot(document.querySelector('#root')!).render(<App />);
+const mount = document.querySelector('#root');
+if (!mount) throw new Error('Example mount is missing.');
+createRoot(mount).render(<App />);

@@ -9,7 +9,9 @@ test('toggle group exposes pressed state', async ({ page }) => {
   expect((await expectNoAxeViolations(page)).violations).toEqual([]);
 });
 
-test('public ToggleGroup CSS resolves canonical subtle surface and control radii in light, dark, and forced-colors modes', async ({ page }) => {
+test('public ToggleGroup CSS resolves canonical subtle surface and control radii in light, dark, and forced-colors modes', async ({
+  page,
+}) => {
   test.skip(port !== 'web', 'Public CSS resolution evidence is owned by the Web lane.');
   await page.goto('/components/toggle-group/web.html');
   const group = page.locator('#group');

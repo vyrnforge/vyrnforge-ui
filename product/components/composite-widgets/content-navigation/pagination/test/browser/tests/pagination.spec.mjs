@@ -6,7 +6,7 @@ test('pagination exposes a named landmark and current page', async ({ page }) =>
   await page.goto(`/components/pagination/${port}.html`);
   await expect(page.locator('#pagination')).toHaveAttribute('aria-label', 'Pagination');
   await expect(page.getByText('2')).toHaveAttribute('aria-current', 'page');
-  
+
   expect((await expectNoAxeViolations(page)).violations).toEqual([]);
 });
 
@@ -43,6 +43,5 @@ test('React public entrypoint uses semantic tokens and exposes keyboard focus', 
   expect(forcedColorStyles.backgroundColor).not.toBe('rgba(0, 0, 0, 0)');
   expect(forcedColorStyles.outlineStyle).not.toBe('none');
 
-  
   expect((await expectNoAxeViolations(page)).violations).toEqual([]);
 });

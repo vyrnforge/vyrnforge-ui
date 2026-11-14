@@ -28,7 +28,9 @@ test.describe('MultiSelect enhanced port behavior', () => {
     test(`${framework} navigates enabled options without collapsing multi-selection`, async ({ page }) => {
       test.skip(port !== framework, `Running ${port} evidence only`);
       const errors = [];
-      page.on('console', (message) => { if (message.type() === 'error') errors.push(message.text()); });
+      page.on('console', (message) => {
+        if (message.type() === 'error') errors.push(message.text());
+      });
       page.on('pageerror', (error) => errors.push(error.message));
       await page.goto(`/components/multi-select/${framework}.html`);
 
@@ -100,9 +102,7 @@ test.describe('MultiSelect enhanced port behavior', () => {
       await expect(page.locator(`#${framework}-one`)).toBeFocused();
       await expect(page.locator(`#${framework}-one`)).toHaveAttribute('aria-selected', 'true');
       await expect(page.locator(`#${framework}-three`)).toHaveAttribute('aria-selected', 'true');
-      await expectAxeClean(page, framework === 'react'
-        ? { disableRules: ['region'] }
-        : undefined);
+      await expectAxeClean(page, framework === 'react' ? { disableRules: ['region'] } : undefined);
     });
   }
 });
