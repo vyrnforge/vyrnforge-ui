@@ -48,6 +48,7 @@ export const SearchFieldInput = defineComponent({
 });
 export const SearchFieldClear = defineComponent({
   name: 'SearchFieldClear',
+  inheritAttrs: false,
   setup(_, { attrs, slots }) {
     const s = useS();
     return () =>
@@ -56,11 +57,18 @@ export const SearchFieldClear = defineComponent({
         {
           ...attrs,
           type: 'button',
-          disabled: !s.value.value,
+          disabled: (attrs.disabled !== undefined && attrs.disabled !== null && attrs.disabled !== false) || !s.value.value,
           'data-vf-search-field-clear': '',
-          onClick: () => {
-            s.set('');
-            s.inputRef.value?.focus();
+          onClick(event: MouseEvent) {
+            const handler = attrs.onClick;
+            if (typeof handler === 'function') handler(event);
+            else if (Array.isArray(handler))
+              for (const callback of handler) if (typeof callback === 'function') callback(event);
+            const input = s.inputRef.value;
+            if (!event.defaultPrevented && input && !input.readOnly && !input.matches(':disabled') && input.value) {
+              s.set('');
+              input.focus();
+            }
           },
         },
         slots.default?.() ?? '×',

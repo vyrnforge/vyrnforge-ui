@@ -19,8 +19,10 @@ export class VfSearchFieldRootDirective {
     this.inputElement = inputElement;
   }
   clear() {
+    const inputElement = this.inputElement;
+    if (!inputElement || inputElement.readOnly || inputElement.matches(':disabled') || !inputElement.value) return;
     this.set('');
-    this.inputElement?.focus();
+    inputElement.focus();
   }
 }
 @Directive({
@@ -46,7 +48,7 @@ export class VfSearchFieldInputDirective {
     type: 'button',
     'data-vf-search-field-clear': '',
     '[disabled]': '!root.current()',
-    '(click)': 'root.clear()',
+    '(click)': '!$event.defaultPrevented && root.clear()',
   },
 })
 export class VfSearchFieldClearDirective {
