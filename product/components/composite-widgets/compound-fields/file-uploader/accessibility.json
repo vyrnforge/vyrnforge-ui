@@ -1,0 +1,33 @@
+{
+  "schemaVersion": 1,
+  "component": "file-uploader",
+  "reviewStatus": "review-required",
+  "nativeBaseline": {
+    "kind": "composite",
+    "reference": "native file input with a keyboard-operable file acquisition action and file list"
+  },
+  "wcag": {
+    "target": "2.2 AA",
+    "status": "review-required",
+    "criteria": ["1.3.1", "2.1.1", "2.4.7", "2.5.7", "2.5.8", "3.3.1", "3.3.2", "4.1.2"]
+  },
+  "aria": { "status": "review-required", "apgPattern": null },
+  "interaction": { "keyboard": "native", "focus": "native", "directionality": "logical" },
+  "ownership": {
+    "library": [
+      "Preserve native file acquisition and accessible selected-file state; support a non-drag acquisition path.",
+      "Respect disabled behavior, file constraints and listener cleanup."
+    ],
+    "consumer": ["Author names, accepted-file guidance and list content; own network upload, progress and retries."]
+  },
+  "forms": { "status": "review-required" },
+  "visualAccessibility": { "status": "component-specific" },
+  "ssrHydration": { "status": "contract-required" },
+  "evidence": { "browser": "required", "assistiveTechnology": "review-required" },
+  "profileVariability": [],
+  "notes": [
+    "#1285 repaired keyboard activation and Elements input parity.",
+    "Native button semantics, disabled and drop constraints still need review.",
+    "Audit mapping is provisional; not a conformance claim."
+  ]
+}

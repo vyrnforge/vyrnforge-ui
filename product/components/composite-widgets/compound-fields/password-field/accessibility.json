@@ -1,0 +1,30 @@
+{
+  "schemaVersion": 1,
+  "component": "password-field",
+  "reviewStatus": "review-required",
+  "nativeBaseline": { "kind": "composite", "reference": "native password input with native visibility button" },
+  "wcag": {
+    "target": "2.2 AA",
+    "status": "review-required",
+    "criteria": ["1.3.1", "2.1.1", "2.4.7", "3.3.2", "3.3.8", "4.1.2"]
+  },
+  "aria": { "status": "review-required", "apgPattern": null },
+  "interaction": { "keyboard": "native", "focus": "native", "directionality": "logical" },
+  "ownership": {
+    "library": [
+      "Preserve value, selection, native autofill and form participation while changing visibility.",
+      "Use one coherent toggle naming/state policy."
+    ],
+    "consumer": ["Author show/hide labels, field label and password guidance; own authentication."]
+  },
+  "forms": { "status": "review-required" },
+  "visualAccessibility": { "status": "component-specific" },
+  "ssrHydration": { "status": "contract-required" },
+  "evidence": { "browser": "required", "assistiveTechnology": "review-required" },
+  "profileVariability": [],
+  "notes": [
+    "Authored visibility labels are already supported.",
+    "Initial visibility, changing label/pressed-state semantics and password-manager behavior need review.",
+    "Audit mapping is provisional; not a conformance claim."
+  ]
+}

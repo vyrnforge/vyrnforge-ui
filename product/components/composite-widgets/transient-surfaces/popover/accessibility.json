@@ -1,0 +1,33 @@
+{
+  "schemaVersion": 1,
+  "component": "popover",
+  "reviewStatus": "review-required",
+  "nativeBaseline": {
+    "kind": "composite",
+    "reference": "native HTML popover for a transient surface; content role depends on purpose"
+  },
+  "wcag": {
+    "target": "2.2 AA",
+    "status": "review-required",
+    "criteria": ["1.3.1", "2.1.1", "2.1.2", "2.4.3", "2.4.7", "2.4.11", "4.1.2"]
+  },
+  "aria": { "status": "review-required", "apgPattern": null },
+  "interaction": { "keyboard": "managed", "focus": "review-required", "directionality": "logical" },
+  "ownership": {
+    "library": [
+      "Own open/close intent, trigger relationships and content-specific focus/dismissal policy.",
+      "Delegate browser-owned top-layer behavior and placement to native platform where supported."
+    ],
+    "consumer": ["Author content purpose, accessible names and actions; choose semantics based on content."]
+  },
+  "forms": { "status": "not-applicable" },
+  "visualAccessibility": { "status": "component-specific" },
+  "ssrHydration": { "status": "contract-required" },
+  "evidence": { "browser": "required", "assistiveTechnology": "review-required" },
+  "profileVariability": [],
+  "notes": [
+    "Trigger/content semantics and controlled focus policy require convergence.",
+    "#1280 owns platform-first migration; do not add a generic overlay manager.",
+    "Audit mapping is provisional; not a conformance claim."
+  ]
+}

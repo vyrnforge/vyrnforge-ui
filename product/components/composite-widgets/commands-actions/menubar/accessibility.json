@@ -1,0 +1,29 @@
+{
+  "schemaVersion": 1,
+  "component": "menubar",
+  "reviewStatus": "review-required",
+  "nativeBaseline": { "kind": "composite", "reference": "menu bar containing commands with nested menus" },
+  "wcag": {
+    "target": "2.2 AA",
+    "status": "review-required",
+    "criteria": ["1.3.1", "2.1.1", "2.4.3", "2.4.7", "4.1.2"]
+  },
+  "aria": { "status": "mapped", "apgPattern": "menubar" },
+  "interaction": { "keyboard": "managed", "focus": "roving-tabindex", "directionality": "logical" },
+  "ownership": {
+    "library": [
+      "Define keyboard entry, horizontal navigation, submenu opening/closing and restoration.",
+      "Manage disabled-item focus and logical RTL navigation consistently."
+    ],
+    "consumer": ["Author command names, submenu content and action intent."]
+  },
+  "forms": { "status": "not-applicable" },
+  "visualAccessibility": { "status": "component-specific" },
+  "ssrHydration": { "status": "contract-required" },
+  "evidence": { "browser": "required", "assistiveTechnology": "review-required" },
+  "profileVariability": [],
+  "notes": [
+    "Current ports implement only partial menubar navigation; submenu and focus contracts need rebuilding.",
+    "Audit mapping is provisional; not a conformance claim."
+  ]
+}
