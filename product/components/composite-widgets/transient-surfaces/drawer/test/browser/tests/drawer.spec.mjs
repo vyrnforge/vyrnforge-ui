@@ -1,2 +1,2 @@
 import{test,expect}from'@playwright/test';
-import { expectNoAxeViolations } from '../../../../../../../tooling/testing/accessibility.mjs';const p=process.env.VF_COMPONENT_PORT||'react';test('drawer is accessible',async({page})=>{await page.goto(`/components/drawer/${p}.html`);await expect(page.getByRole('dialog')).toBeVisible();expect((await expectNoAxeViolations(page)).violations).toEqual([])});
+import { expectNoAxeViolations } from '../../../../../../../../tooling/testing/accessibility.mjs';const p=process.env.VF_COMPONENT_PORT||'react';test('drawer is accessible',async({page})=>{await page.goto(`/components/drawer/${p}.html`);await expect(page.getByRole('dialog')).toBeVisible();expect((await expectNoAxeViolations(page)).violations).toEqual([])});

@@ -1,5 +1,5 @@
 import { test, expect } from '@playwright/test';
-import { expectNoAxeViolations } from '../../../../../../../tooling/testing/accessibility.mjs';
+import { expectNoAxeViolations } from '../../../../../../../../tooling/testing/accessibility.mjs';
 const port = process.env.VF_COMPONENT_PORT || 'react';
 const frameworkPorts = new Set(['react', 'angular', 'vue', 'elements']);
 const showLabel = 'Visibilité du mot de passe : afficher';

@@ -1,5 +1,5 @@
 import { test, expect } from '@playwright/test';
-import { expectNoAxeViolations } from '../../../../../../../tooling/testing/accessibility.mjs';
+import { expectNoAxeViolations } from '../../../../../../../../tooling/testing/accessibility.mjs';
 
 const port = process.env.VF_COMPONENT_PORT || 'react';
 const fixture = `/components/file-uploader/${port}.html`;

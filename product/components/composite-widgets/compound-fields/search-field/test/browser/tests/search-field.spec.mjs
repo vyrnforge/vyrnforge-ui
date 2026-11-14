@@ -1,5 +1,5 @@
 import { test, expect } from '@playwright/test';
-import { expectNoAxeViolations } from '../../../../../../../tooling/testing/accessibility.mjs';
+import { expectNoAxeViolations } from '../../../../../../../../tooling/testing/accessibility.mjs';
 const port = process.env.VF_COMPONENT_PORT || 'react';
 
 test('search field clears with authored naming and restores focus', async ({ page }) => {
