@@ -1,0 +1,16 @@
+name: L5 preview-card cross-browser proof (temporary)
+on:
+  push:
+    branches: [fix/l5-preview-card-native]
+permissions:
+  contents: read
+jobs:
+  browser-matrix:
+    uses: ./.github/workflows/_browser-validation.yml
+    with:
+      scopes_json: '[{"port":"web","components":"preview-card"},{"port":"react","components":"preview-card"},{"port":"angular","components":"preview-card"},{"port":"vue","components":"preview-card"},{"port":"elements","components":"preview-card"}]'
+      revision: ${{ github.sha }}
+      browser_profile: cross
+      browsers: chromium firefox webkit
+      artifact_suffix: preview-card-native
+      retention_days: 14
