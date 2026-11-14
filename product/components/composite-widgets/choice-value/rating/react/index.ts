@@ -55,7 +55,7 @@ export function RatingRoot({
     createElement(
       'div',
       { role: 'radiogroup', 'aria-label': label, 'aria-labelledby': labelledBy, 'data-vf-rating-root': '', 'data-vf-max': count },
-      children ?? Array.from({ length: count }, (_, i) => createElement(RatingItem, { key: i + 1, value: i + 1, label: getItemLabel?.(i + 1) })),
+      children ?? Array.from({ length: count }, (_, i) => createElement(RatingItem, { key: i + 1, value: i + 1, label: getItemLabel?.(i + 1) ?? String(i + 1) })),
     ),
   );
 }
