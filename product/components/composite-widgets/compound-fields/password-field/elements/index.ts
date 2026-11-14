@@ -35,21 +35,26 @@ export class VfPasswordFieldElement extends HTMLElementBase {
     this.setAttribute('hide-label', value);
   }
 
+  private owned<T extends HTMLElement>(selector: string): T | null {
+    return Array.from(this.querySelectorAll<T>(selector)).find(element => element.closest('[data-vf-password-field-root]') === this) ?? null;
+  }
+
   private syncToggle() {
-    const toggle = this.querySelector<HTMLElement>('[data-vf-password-field-toggle]');
-    const input = this.querySelector<HTMLInputElement>('[data-vf-password-field-input]');
+    const toggle = this.owned<HTMLElement>('[data-vf-password-field-toggle]');
+    const input = this.owned<HTMLInputElement>('[data-vf-password-field-input]');
     if (!toggle || !input) return;
 
     const visible = input.type === 'text';
-    toggle.setAttribute('aria-pressed', String(visible));
+    toggle.removeAttribute('aria-pressed');
+    if (toggle instanceof HTMLButtonElement) toggle.type = 'button';
     const label = visible ? this.hideLabel : this.showLabel;
     if (label) toggle.setAttribute('aria-label', label);
   }
 
   private onClick = (event: Event) => {
-    const toggle = (event.target as HTMLElement).closest<HTMLElement>('[data-vf-password-field-toggle]');
-    const input = this.querySelector<HTMLInputElement>('[data-vf-password-field-input]');
-    if (!toggle || !input || !this.contains(toggle) || event.defaultPrevented) return;
+    const toggle = event.target instanceof HTMLElement ? event.target.closest<HTMLElement>('[data-vf-password-field-toggle]') : null;
+    const input = this.owned<HTMLInputElement>('[data-vf-password-field-input]');
+    if (!toggle || !input || toggle.closest('[data-vf-password-field-root]') !== this || event.defaultPrevented || toggle.matches(':disabled') || input.matches(':disabled')) return;
 
     input.type = input.type === 'password' ? 'text' : 'password';
     this.syncToggle();
