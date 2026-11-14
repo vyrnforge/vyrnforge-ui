@@ -177,7 +177,8 @@ export const PopoverContent = forwardRef<HTMLDivElement, PopoverContentProps>(fu
       if (!actual && restoreFocus.current) {
         restoreFocus.current = false;
         const active = surface.ownerDocument.activeElement;
-        if (!active || active === surface.ownerDocument.body || surface.contains(active)) context.anchorRef.current?.focus();
+        if (!active || active === surface.ownerDocument.body || surface.contains(active))
+          context.anchorRef.current?.focus();
       }
       if (actual === context.open) return;
       context.setOpen(actual);

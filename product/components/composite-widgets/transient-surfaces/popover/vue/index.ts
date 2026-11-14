@@ -127,7 +127,8 @@ export const PopoverContent = defineComponent({
             if (!actual && restoreFocus) {
               restoreFocus = false;
               const active = surface.ownerDocument.activeElement;
-              if (!active || active === surface.ownerDocument.body || surface.contains(active)) context.anchor.value?.focus();
+              if (!active || active === surface.ownerDocument.body || surface.contains(active))
+                context.anchor.value?.focus();
             }
             if (actual === context.open.value) return;
             context.setOpen(actual);

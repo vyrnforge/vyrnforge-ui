@@ -61,7 +61,7 @@ export class VfPopoverElement extends HTMLElementBase {
     const content = this.#content();
     if (this.#surface !== content) {
       this.#surface?.removeEventListener('toggle', this.#onToggle);
-    this.#surface?.removeEventListener('beforetoggle', this.#onBeforeToggle);
+      this.#surface?.removeEventListener('beforetoggle', this.#onBeforeToggle);
       if (this.#surface?.matches(':popover-open')) this.#surface.hidePopover();
       this.#surface = content;
       content?.addEventListener('toggle', this.#onToggle);
@@ -97,7 +97,8 @@ export class VfPopoverElement extends HTMLElementBase {
 
   #onBeforeToggle = (event: Event): void => {
     if (event.target !== this.#surface || !this.#surface) return;
-    this.#restoreFocus = this.#surface.matches(':popover-open') && this.#surface.contains(this.ownerDocument.activeElement);
+    this.#restoreFocus =
+      this.#surface.matches(':popover-open') && this.#surface.contains(this.ownerDocument.activeElement);
   };
 
   #onToggle = (event: Event): void => {

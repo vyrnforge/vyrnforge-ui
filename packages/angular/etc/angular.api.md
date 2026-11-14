@@ -2040,6 +2040,8 @@ export class VfPopoverContentDirective implements OnDestroy {
     // (undocumented)
     ngOnDestroy(): void;
     // (undocumented)
+    onBeforeToggle(event: Event): void;
+    // (undocumented)
     onToggle(event: Event): void;
     // (undocumented)
     readonly root: VfPopoverRootDirective;
