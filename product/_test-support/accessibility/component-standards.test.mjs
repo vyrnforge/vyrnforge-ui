@@ -22,3 +22,14 @@ test('mapped records cannot hide unresolved accessibility fields', () => {
   const standard = { schemaVersion:1, component:'fixture', reviewStatus:'mapped', nativeBaseline:{kind:'native',reference:'button'}, wcag:{target:'2.2 AA',status:'mapped',criteria:['2.1.1']}, aria:{status:'not-applicable',apgPattern:null}, interaction:{keyboard:'native',focus:'native',directionality:'native'}, ownership:{library:['review-required'],consumer:['provide an accessible name']}, forms:{status:'native'}, visualAccessibility:{status:'shared-foundation'}, ssrHydration:{status:'native'}, evidence:{browser:'required',assistiveTechnology:'not-applicable'}, profileVariability:[], notes:[] };
   assert.throws(() => validateComponentStandard(standard, 'fixture'), /cannot contain review-required/);
 });
+
+
+test('every L5 widget owns its accessibility classification, including unresolved mappings', async () => {
+  const { discovery, standards } = await loadComponentStandards();
+  const l5 = discovery.components.filter((entry) => entry.facets?.root?.startsWith('product/components/composite-widgets/'));
+  assert.equal(l5.length, 33);
+  for (const entry of l5) {
+    const standard = standards.find((item) => item.component === entry.unitId);
+    assert.equal(standard?.classificationSource, 'component-owned', entry.unitId);
+  }
+});
