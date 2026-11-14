@@ -37,7 +37,7 @@ function readPair(value: string | null): Pair | undefined {
   if (value === null) return undefined;
   try {
     const parsed: unknown = JSON.parse(value);
-    if (Array.isArray(parsed) && parsed.length === 2 && parsed.every((v) => typeof v === 'number')) {
+    if (Array.isArray(parsed) && parsed.length === 2 && typeof parsed[0] === 'number' && typeof parsed[1] === 'number') {
       return [parsed[0], parsed[1]];
     }
   } catch {
@@ -122,7 +122,7 @@ export class VfRangeSliderElement extends H {
   private onInput = (event: Event) => {
     const [start, end] = this.inputs();
     const target = event.target;
-    if (!start || !end || (target !== start && target !== end)) return;
+    if (!start || !end || !(target instanceof HTMLInputElement) || (target !== start && target !== end)) return;
     const current = this.value;
     const index = target === start ? 0 : 1;
     if (target.disabled || this.hasAttribute('disabled') || event.defaultPrevented) {
