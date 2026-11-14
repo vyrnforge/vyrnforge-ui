@@ -14,11 +14,13 @@ import {
 interface CarouselContext {
   index: number;
   count: number;
+  explicit: boolean;
   set(index: number): void;
 }
 
 const RootContext = createContext<CarouselContext | null>(null);
 const SlidePosition = createContext<number | null>(null);
+const ViewportOffset = createContext<number | null>(null);
 
 function useCarousel() {
   const context = useContext(RootContext);
@@ -39,25 +41,38 @@ function bounded(index: number, count: number): number {
 export interface CarouselRootProps extends ComponentPropsWithoutRef<'section'> {
   index?: number;
   defaultIndex?: number;
+  /** Required when viewports or slides are hidden behind opaque component wrappers. */
+  slideCount?: number;
   onIndexChange?(index: number): void;
   children?: ReactNode;
 }
 
 export const CarouselRoot = forwardRef<HTMLElement, CarouselRootProps>(function CarouselRoot(
-  { index, defaultIndex = 0, onIndexChange, children, ...props },
+  { index, defaultIndex = 0, slideCount, onIndexChange, children, ...props },
   ref,
 ) {
   const [internalIndex, setInternalIndex] = useState(defaultIndex);
-  const count = parts(children).reduce<number>((total, child) => {
-    if (!isValidElement<{ children?: ReactNode }>(child) || child.type !== CarouselViewport) return total;
-    return (
-      total + parts(child.props.children).filter((part) => isValidElement(part) && part.type === CarouselSlide).length
-    );
-  }, 0);
+  const explicit = slideCount !== undefined;
+  if (explicit && (!Number.isInteger(slideCount) || slideCount < 0)) {
+    throw new Error('Carousel slideCount must be a non-negative integer.');
+  }
+  let inferredCount = 0;
+  const content = explicit
+    ? children
+    : parts(children).map((child) => {
+        if (!isValidElement<{ children?: ReactNode }>(child) || child.type !== CarouselViewport) return child;
+        const offset = inferredCount;
+        inferredCount += parts(child.props.children).filter(
+          (part) => isValidElement(part) && part.type === CarouselSlide,
+        ).length;
+        return createElement(ViewportOffset.Provider, { key: child.key, value: offset }, child);
+      });
+  const count = slideCount ?? inferredCount;
   const current = bounded(index ?? internalIndex, count);
   const context: CarouselContext = {
     index: current,
     count,
+    explicit,
     set(value) {
       const next = bounded(value, count);
       if (count === 0 || next === current) return;
@@ -78,7 +93,7 @@ export const CarouselRoot = forwardRef<HTMLElement, CarouselRootProps>(function 
         'aria-roledescription': props['aria-roledescription'] ?? 'carousel',
         'data-vf-carousel-root': '',
       },
-      children,
+      createElement(ViewportOffset.Provider, { value: null }, createElement(SlidePosition.Provider, { value: null }, content)),
     ),
   );
 });
@@ -87,11 +102,16 @@ export const CarouselViewport = forwardRef<HTMLDivElement, ComponentPropsWithout
   { children, ...props },
   ref,
 ) {
-  let position = 0;
+  const context = useCarousel();
+  const offset = useContext(ViewportOffset);
+  if (!context.explicit && offset === null) {
+    throw new Error('Wrapped Carousel viewports require root slideCount and explicit slide positions.');
+  }
+  let position = offset ?? 0;
   return createElement(
     'div',
     { ...props, ref, 'data-vf-carousel-viewport': '' },
-    parts(children).map((child) =>
+    context.explicit ? children : parts(children).map((child) =>
       isValidElement(child) && child.type === CarouselSlide
         ? createElement(SlidePosition.Provider, { key: child.key, value: position++ }, child)
         : child,
@@ -99,10 +119,22 @@ export const CarouselViewport = forwardRef<HTMLDivElement, ComponentPropsWithout
   );
 });
 
-export const CarouselSlide = forwardRef<HTMLDivElement, ComponentPropsWithoutRef<'div'>>(
-  function CarouselSlide(props, ref) {
+export interface CarouselSlideProps extends ComponentPropsWithoutRef<'div'> {
+  /** Zero-based position in the root collection when slideCount is supplied. */
+  position?: number;
+}
+
+export const CarouselSlide = forwardRef<HTMLDivElement, CarouselSlideProps>(
+  function CarouselSlide({ position: authoredPosition, ...props }, ref) {
     const context = useCarousel();
-    const position = useContext(SlidePosition);
+    const inferredPosition = useContext(SlidePosition);
+    const position = context.explicit ? authoredPosition : inferredPosition;
+    if (position === null || position === undefined || !Number.isInteger(position) || position < 0 || position >= context.count) {
+      throw new Error('Carousel slides require a valid position in the root collection; use slideCount and position for wrapped slides.');
+    }
+    if (!context.explicit && authoredPosition !== undefined) {
+      throw new Error('Carousel slide position requires root slideCount.');
+    }
     return createElement('div', {
       ...props,
       ref,
