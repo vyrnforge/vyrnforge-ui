@@ -2106,7 +2106,11 @@ export class VfPopoverTriggerDirective {
 export class VfPreviewCardContentDirective implements OnDestroy {
     constructor(root: VfPreviewCardRootDirective);
     // (undocumented)
+    blur(event: FocusEvent): void;
+    // (undocumented)
     ngOnDestroy(): void;
+    // (undocumented)
+    pointer(event: PointerEvent, active: boolean): void;
     // (undocumented)
     readonly root: VfPreviewCardRootDirective;
     // (undocumented)
@@ -2116,23 +2120,51 @@ export class VfPreviewCardContentDirective implements OnDestroy {
 }
 
 // @public (undocumented)
-export class VfPreviewCardRootDirective {
+export class VfPreviewCardRootDirective implements OnDestroy {
+    // (undocumented)
+    activity(source: Activity, active: boolean, delay: number): void;
     // (undocumented)
     anchor: HTMLElement | null;
     // (undocumented)
+    readonly closeDelay: InputSignal<number>;
+    // (undocumented)
+    content: HTMLElement | null;
+    // (undocumented)
+    readonly contentId: InputSignal<string | undefined>;
+    // (undocumented)
     readonly defaultOpen: InputSignalWithTransform<boolean, unknown>;
     // (undocumented)
+    dismiss(event: KeyboardEvent): void;
+    // (undocumented)
     readonly expanded: Signal<boolean>;
+    // (undocumented)
+    readonly id: InputSignal<string>;
+    // (undocumented)
+    ngOnDestroy(): void;
     // (undocumented)
     readonly open: InputSignal<boolean | undefined>;
     // (undocumented)
     readonly openChange: OutputEmitterRef<boolean>;
     // (undocumented)
+    readonly openDelay: InputSignal<number>;
+    // (undocumented)
     readonly placement: InputSignal<FloatingPlacement>;
+    // (undocumented)
+    readonly resolvedContentId: Signal<string>;
     // (undocumented)
     setOpen(next: boolean): void;
     // (undocumented)
     static ɵdir: i0.ɵɵDirectiveDeclaration<VfPreviewCardRootDirective, "[vfPreviewCardRoot]", never, {
+        "id": {
+            "alias": "id";
+            "required": true;
+            "isSignal": true;
+        };
+        "contentId": {
+            "alias": "contentId";
+            "required": false;
+            "isSignal": true;
+        };
         "open": {
             "alias": "open";
             "required": false;
@@ -2148,6 +2180,16 @@ export class VfPreviewCardRootDirective {
             "required": false;
             "isSignal": true;
         };
+        "openDelay": {
+            "alias": "openDelay";
+            "required": false;
+            "isSignal": true;
+        };
+        "closeDelay": {
+            "alias": "closeDelay";
+            "required": false;
+            "isSignal": true;
+        };
     }, {
         "openChange": "openChange";
     }, never, never, true, never>;
@@ -2156,10 +2198,18 @@ export class VfPreviewCardRootDirective {
 }
 
 // @public (undocumented)
-export class VfPreviewCardTriggerDirective {
+export class VfPreviewCardTriggerDirective implements OnDestroy {
     constructor(root: VfPreviewCardRootDirective);
     // (undocumented)
+    blur(event: FocusEvent): void;
+    // (undocumented)
+    ngOnDestroy(): void;
+    // (undocumented)
+    pointer(event: PointerEvent, active: boolean): void;
+    // (undocumented)
     readonly root: VfPreviewCardRootDirective;
+    // (undocumented)
+    schedule(value: boolean, delay: number): void;
     // (undocumented)
     static ɵdir: i0.ɵɵDirectiveDeclaration<VfPreviewCardTriggerDirective, "[vfPreviewCardTrigger]", never, {}, {}, never, never, true, never>;
     // (undocumented)
