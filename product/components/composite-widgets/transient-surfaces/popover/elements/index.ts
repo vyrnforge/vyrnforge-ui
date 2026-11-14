@@ -40,7 +40,10 @@ export class VfPopoverElement extends HTMLElementBase {
   }
 
   #part(selector: string): HTMLElement | null {
-    return Array.from(this.querySelectorAll<HTMLElement>(selector)).find((node) => node.closest('vf-popover') === this) ?? null;
+    return (
+      Array.from(this.querySelectorAll<HTMLElement>(selector)).find((node) => node.closest('vf-popover') === this) ??
+      null
+    );
   }
 
   #trigger(): HTMLElement | null {
@@ -83,7 +86,9 @@ export class VfPopoverElement extends HTMLElementBase {
   }
 
   #notify(): void {
-    this.dispatchEvent(new CustomEvent('vf-open-change', { detail: { open: this.open }, bubbles: true, composed: true }));
+    this.dispatchEvent(
+      new CustomEvent('vf-open-change', { detail: { open: this.open }, bubbles: true, composed: true }),
+    );
   }
 
   #onToggle = (event: Event): void => {

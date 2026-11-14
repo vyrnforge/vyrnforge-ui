@@ -42,7 +42,9 @@ export async function createReactStory() {
   const { PopoverRoot, PopoverTrigger, PopoverContent } = await import('@vyrnforge/react/popover');
   function App() {
     const [controlled, setControlled] = useState(false);
-    useEffect(() => { document.body.dataset.popoverReady = 'true'; }, []);
+    useEffect(() => {
+      document.body.dataset.popoverReady = 'true';
+    }, []);
     return h(
       Fragment,
       null,
@@ -59,18 +61,30 @@ export async function createReactStory() {
             PopoverRoot,
             { contentId: 'nested-content' },
             h(PopoverTrigger, { id: 'nested-trigger' }, 'More'),
-            h(PopoverContent, { 'aria-label': 'Nested details' }, h('button', { id: 'nested-action' }, 'Nested action')),
+            h(
+              PopoverContent,
+              { 'aria-label': 'Nested details' },
+              h('button', { id: 'nested-action' }, 'Nested action'),
+            ),
           ),
         ),
       ),
       h(
         PopoverRoot,
-        { contentId: 'controlled-content', open: controlled, onOpenChange: (next) => {
-          document.body.dataset.popoverRequest = String(next);
-          if (next) setControlled(true);
-        } },
+        {
+          contentId: 'controlled-content',
+          open: controlled,
+          onOpenChange: (next) => {
+            document.body.dataset.popoverRequest = String(next);
+            if (next) setControlled(true);
+          },
+        },
         h(PopoverTrigger, { id: 'controlled-trigger' }, 'Controlled'),
-        h(PopoverContent, { 'aria-label': 'Controlled details' }, h('button', { id: 'controlled-action' }, 'Controlled action')),
+        h(
+          PopoverContent,
+          { 'aria-label': 'Controlled details' },
+          h('button', { id: 'controlled-action' }, 'Controlled action'),
+        ),
       ),
       h('button', { id: 'outside' }, 'Outside'),
     );
@@ -84,28 +98,43 @@ export async function createVueStory() {
   return createSSRApp({
     setup() {
       const controlled = ref(false);
-      onMounted(() => { document.body.dataset.popoverReady = 'true'; });
-      return () => h('div', [
-        h(PopoverRoot, { contentId: 'c' }, () => [
-          h(PopoverTrigger, { id: 't' }, () => 'Open'),
-          h(PopoverContent, { 'aria-labelledby': 'popover-title' }, () => [
-            h('h2', { id: 'popover-title' }, 'Popover details'),
-            h('button', { id: 'action' }, 'Inside action'),
-            h(PopoverRoot, { contentId: 'nested-content' }, () => [
-              h(PopoverTrigger, { id: 'nested-trigger' }, () => 'More'),
-              h(PopoverContent, { 'aria-label': 'Nested details' }, () => h('button', { id: 'nested-action' }, 'Nested action')),
+      onMounted(() => {
+        document.body.dataset.popoverReady = 'true';
+      });
+      return () =>
+        h('div', [
+          h(PopoverRoot, { contentId: 'c' }, () => [
+            h(PopoverTrigger, { id: 't' }, () => 'Open'),
+            h(PopoverContent, { 'aria-labelledby': 'popover-title' }, () => [
+              h('h2', { id: 'popover-title' }, 'Popover details'),
+              h('button', { id: 'action' }, 'Inside action'),
+              h(PopoverRoot, { contentId: 'nested-content' }, () => [
+                h(PopoverTrigger, { id: 'nested-trigger' }, () => 'More'),
+                h(PopoverContent, { 'aria-label': 'Nested details' }, () =>
+                  h('button', { id: 'nested-action' }, 'Nested action'),
+                ),
+              ]),
             ]),
           ]),
-        ]),
-        h(PopoverRoot, { contentId: 'controlled-content', modelValue: controlled.value, 'onUpdate:modelValue': (next) => {
-          document.body.dataset.popoverRequest = String(next);
-          if (next) controlled.value = true;
-        } }, () => [
-          h(PopoverTrigger, { id: 'controlled-trigger' }, () => 'Controlled'),
-          h(PopoverContent, { 'aria-label': 'Controlled details' }, () => h('button', { id: 'controlled-action' }, 'Controlled action')),
-        ]),
-        h('button', { id: 'outside' }, 'Outside'),
-      ]);
+          h(
+            PopoverRoot,
+            {
+              contentId: 'controlled-content',
+              modelValue: controlled.value,
+              'onUpdate:modelValue': (next) => {
+                document.body.dataset.popoverRequest = String(next);
+                if (next) controlled.value = true;
+              },
+            },
+            () => [
+              h(PopoverTrigger, { id: 'controlled-trigger' }, () => 'Controlled'),
+              h(PopoverContent, { 'aria-label': 'Controlled details' }, () =>
+                h('button', { id: 'controlled-action' }, 'Controlled action'),
+              ),
+            ],
+          ),
+          h('button', { id: 'outside' }, 'Outside'),
+        ]);
     },
   });
 }
@@ -113,10 +142,15 @@ export async function createVueStory() {
 export async function createAngularStory() {
   await import('@angular/compiler');
   const { Component, afterNextRender, signal } = await import('@angular/core');
-  const { VfPopoverRootDirective, VfPopoverTriggerDirective, VfPopoverContentDirective } = await import('@vyrnforge/angular/popover');
+  const { VfPopoverRootDirective, VfPopoverTriggerDirective, VfPopoverContentDirective } =
+    await import('@vyrnforge/angular/popover');
   class PopoverTestApp {
     controlled = signal(false);
-    constructor() { afterNextRender(() => { document.body.dataset.popoverReady = 'true'; }); }
+    constructor() {
+      afterNextRender(() => {
+        document.body.dataset.popoverReady = 'true';
+      });
+    }
     request(next) {
       document.body.dataset.popoverRequest = String(next);
       if (next) this.controlled.set(true);
@@ -150,10 +184,12 @@ export async function createAngularStory() {
 export async function createElementsStory({ client }) {
   return {
     body: elements,
-    activate: client ? async () => {
-      const { definePopoverElement } = await import('@vyrnforge/elements/popover');
-      definePopoverElement();
-      document.body.dataset.popoverReady = 'true';
-    } : undefined,
+    activate: client
+      ? async () => {
+          const { definePopoverElement } = await import('@vyrnforge/elements/popover');
+          definePopoverElement();
+          document.body.dataset.popoverReady = 'true';
+        }
+      : undefined,
   };
 }

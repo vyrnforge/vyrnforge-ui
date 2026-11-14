@@ -67,7 +67,15 @@ export function PopoverRoot({
     [controlled, current, onOpenChange],
   );
   const context = useMemo(
-    () => ({ contentId: contentId ?? `vf-popover-${generated}`, open: current, setOpen, anchorRef, contentRef, placement, role: contentRole }),
+    () => ({
+      contentId: contentId ?? `vf-popover-${generated}`,
+      open: current,
+      setOpen,
+      anchorRef,
+      contentRef,
+      placement,
+      role: contentRole,
+    }),
     [contentId, contentRole, current, generated, placement, setOpen],
   );
   return createElement(Context.Provider, { value: context }, children);
@@ -80,18 +88,21 @@ export const PopoverTrigger = forwardRef<HTMLButtonElement, PopoverTriggerProps>
 ) {
   const context = usePopover();
   const { anchorRef } = context;
-  const ref = useCallback((node: HTMLButtonElement | null) => {
-    anchorRef.current = node;
-    if (typeof forwardedRef === 'function') {
-      const cleanup: unknown = forwardedRef(node);
-      return () => {
-        anchorRef.current = null;
-        if (typeof cleanup === 'function') cleanup();
-        else forwardedRef(null);
-      };
-    }
-    if (forwardedRef) forwardedRef.current = node;
-  }, [anchorRef, forwardedRef]);
+  const ref = useCallback(
+    (node: HTMLButtonElement | null) => {
+      anchorRef.current = node;
+      if (typeof forwardedRef === 'function') {
+        const cleanup: unknown = forwardedRef(node);
+        return () => {
+          anchorRef.current = null;
+          if (typeof cleanup === 'function') cleanup();
+          else forwardedRef(null);
+        };
+      }
+      if (forwardedRef) forwardedRef.current = node;
+    },
+    [anchorRef, forwardedRef],
+  );
 
   return createElement('button', {
     ...props,
@@ -119,18 +130,21 @@ export const PopoverContent = forwardRef<HTMLDivElement, PopoverContentProps>(fu
   const context = usePopover();
   const { contentRef } = context;
   const [nativeRevision, setNativeRevision] = useState(0);
-  const ref = useCallback((node: HTMLDivElement | null) => {
-    contentRef.current = node;
-    if (typeof forwardedRef === 'function') {
-      const cleanup: unknown = forwardedRef(node);
-      return () => {
-        contentRef.current = null;
-        if (typeof cleanup === 'function') cleanup();
-        else forwardedRef(null);
-      };
-    }
-    if (forwardedRef) forwardedRef.current = node;
-  }, [contentRef, forwardedRef]);
+  const ref = useCallback(
+    (node: HTMLDivElement | null) => {
+      contentRef.current = node;
+      if (typeof forwardedRef === 'function') {
+        const cleanup: unknown = forwardedRef(node);
+        return () => {
+          contentRef.current = null;
+          if (typeof cleanup === 'function') cleanup();
+          else forwardedRef(null);
+        };
+      }
+      if (forwardedRef) forwardedRef.current = node;
+    },
+    [contentRef, forwardedRef],
+  );
   useEffect(() => {
     const surface = contentRef.current;
     const trigger = context.anchorRef.current;

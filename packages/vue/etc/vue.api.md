@@ -1408,21 +1408,9 @@ required: true;
 }>> & Readonly<{}>, {}, {}, {}, {}, string, ComponentProvideOptions, true, {}, any>;
 
 // @public (undocumented)
-export const PopoverContent: DefineComponent<ExtractPropTypes<    {
-portal: {
-type: BooleanConstructor;
-default: boolean;
-};
-}>, () => VNode<RendererNode, RendererElement, {
+export const PopoverContent: DefineComponent<    {}, () => VNode<RendererNode, RendererElement, {
 [key: string]: any;
-}> | null, {}, {}, {}, ComponentOptionsMixin, ComponentOptionsMixin, {}, string, PublicProps, Readonly<ExtractPropTypes<    {
-portal: {
-type: BooleanConstructor;
-default: boolean;
-};
-}>> & Readonly<{}>, {
-portal: boolean;
-}, {}, {}, {}, string, ComponentProvideOptions, true, {}, any>;
+}>, {}, {}, {}, ComponentOptionsMixin, ComponentOptionsMixin, {}, string, PublicProps, Readonly<{}> & Readonly<{}>, {}, {}, {}, {}, string, ComponentProvideOptions, true, {}, any>;
 
 // @public (undocumented)
 export const PopoverRoot: DefineComponent<ExtractPropTypes<    {
@@ -1436,6 +1424,11 @@ default: boolean;
 };
 placement: {
 type: PropType<FloatingPlacement>;
+default: string;
+};
+contentId: StringConstructor;
+contentRole: {
+type: PropType<"dialog" | "region">;
 default: string;
 };
 }>, () => VNode<RendererNode, RendererElement, {
@@ -1453,6 +1446,11 @@ placement: {
 type: PropType<FloatingPlacement>;
 default: string;
 };
+contentId: StringConstructor;
+contentRole: {
+type: PropType<"dialog" | "region">;
+default: string;
+};
 }>> & Readonly<{
 "onUpdate:modelValue"?: (...args: any[]) => any;
 onOpenChange?: (...args: any[]) => any;
@@ -1460,6 +1458,7 @@ onOpenChange?: (...args: any[]) => any;
 modelValue: boolean;
 defaultOpen: boolean;
 placement: FloatingPlacement;
+contentRole: "dialog" | "region";
 }, {}, {}, {}, string, ComponentProvideOptions, true, {}, any>;
 
 // @public (undocumented)
