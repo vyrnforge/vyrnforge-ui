@@ -12,6 +12,40 @@ test('search field clears with authored naming and restores focus', async ({ pag
   expect((await expectNoAxeViolations(page)).violations).toEqual([]);
 });
 
+test('clear preserves read-only and disabled inputs and respects canceled activation', async ({ page }) => {
+  test.skip(port === 'web', 'The native Web fixture is authored application behavior, not a runtime port.');
+  await page.goto(`/components/search-field/${port}.html`);
+  const input = page.locator('#search');
+  const clear = page.locator('#clear');
+  await expect(input).toHaveValue('forge');
+
+  await input.evaluate((element) => {
+    element.readOnly = true;
+  });
+  await clear.click();
+  await expect(input).toHaveValue('forge');
+
+  await input.evaluate((element) => {
+    element.readOnly = false;
+    element.disabled = true;
+  });
+  await clear.click();
+  await expect(input).toHaveValue('forge');
+
+  await input.evaluate((element) => {
+    element.disabled = false;
+  });
+  await page.evaluate(() => {
+    document.addEventListener('click', (event) => event.preventDefault(), { capture: true, once: true });
+  });
+  await clear.click();
+  await expect(input).toHaveValue('forge');
+
+  await clear.click();
+  await expect(input).toHaveValue('');
+  await expect(input).toBeFocused();
+});
+
 test('public SearchField CSS resolves the canonical control radius in light and dark themes', async ({ page }) => {
   test.skip(port !== 'react', 'Representative public CSS resolution evidence uses the React public entrypoint.');
   await page.goto('/components/search-field/react.html');

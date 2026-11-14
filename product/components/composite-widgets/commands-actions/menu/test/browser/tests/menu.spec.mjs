@@ -51,6 +51,10 @@ test('public Menu CSS resolves canonical popup surface, boundaries, and item rad
   await page.emulateMedia({ forcedColors: 'active' });
   await expect(menu).toHaveCSS('border-top-width', '1px');
   await expect(separator).toHaveCSS('height', '1px');
+  await item.focus();
+  await expect(item).toBeFocused();
+  await expect(item).toHaveCSS('outline-style', 'solid');
+  await expect(item).toHaveCSS('outline-width', '2px');
 });
 
 test.describe('enhanced menu interaction', () => {

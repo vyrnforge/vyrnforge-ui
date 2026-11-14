@@ -46,3 +46,15 @@ test('public SplitButton CSS resolves canonical accent, border, and control radi
     await expect(trigger).toHaveCSS('border-top-right-radius', '6px');
   }
 });
+
+test('SplitButton joined corners follow the document direction', async ({ page }) => {
+  test.skip(port !== 'web', 'Public CSS resolution evidence is owned by the Web lane.');
+  await page.goto('/components/split-button/web.html');
+  await page.locator('html').evaluate((element) => element.setAttribute('dir', 'rtl'));
+  const action = page.locator('#action');
+  const trigger = page.locator('#trigger');
+  await expect(action).toHaveCSS('border-top-left-radius', '0px');
+  await expect(action).toHaveCSS('border-top-right-radius', '6px');
+  await expect(trigger).toHaveCSS('border-top-left-radius', '6px');
+  await expect(trigger).toHaveCSS('border-top-right-radius', '0px');
+});

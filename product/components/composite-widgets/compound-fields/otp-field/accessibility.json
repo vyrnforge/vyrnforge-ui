@@ -1,0 +1,30 @@
+{
+  "schemaVersion": 1,
+  "component": "otp-field",
+  "reviewStatus": "review-required",
+  "nativeBaseline": {
+    "kind": "composite",
+    "reference": "native text input with one-time-code autocomplete; segmented input only if justified"
+  },
+  "wcag": {
+    "target": "2.2 AA",
+    "status": "review-required",
+    "criteria": ["1.3.1", "2.1.1", "2.4.3", "2.4.7", "3.3.2", "3.3.8", "4.1.2"]
+  },
+  "aria": { "status": "review-required", "apgPattern": null },
+  "interaction": { "keyboard": "managed", "focus": "managed-segment", "directionality": "logical" },
+  "ownership": {
+    "library": ["Preserve paste, autofill and editing without unnecessary focus changes or cognitive burden."],
+    "consumer": ["Author label, length guidance and errors; own verification and authentication workflows."]
+  },
+  "forms": { "status": "review-required" },
+  "visualAccessibility": { "status": "component-specific" },
+  "ssrHydration": { "status": "contract-required" },
+  "evidence": { "browser": "required", "assistiveTechnology": "review-required" },
+  "profileVariability": [],
+  "notes": [
+    "Reassess segmented multi-input implementation against one native input with visual segmentation.",
+    "Accessible authentication criteria apply in authentication contexts; verify with complete task evidence.",
+    "Audit mapping is provisional; not a conformance claim."
+  ]
+}

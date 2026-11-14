@@ -1,0 +1,32 @@
+{
+  "schemaVersion": 1,
+  "component": "color-picker",
+  "reviewStatus": "review-required",
+  "nativeBaseline": {
+    "kind": "composite",
+    "reference": "native color input plus separately named editable color text"
+  },
+  "wcag": {
+    "target": "2.2 AA",
+    "status": "review-required",
+    "criteria": ["1.3.1", "1.4.1", "2.1.1", "2.4.7", "3.3.1", "3.3.2", "4.1.2"]
+  },
+  "aria": { "status": "review-required", "apgPattern": null },
+  "interaction": { "keyboard": "native", "focus": "native", "directionality": "logical" },
+  "ownership": {
+    "library": [
+      "Preserve native color input; define draft editing, validation, committed value and swatch synchronization."
+    ],
+    "consumer": ["Author input names and value-format guidance; own domain color constraints."]
+  },
+  "forms": { "status": "review-required" },
+  "visualAccessibility": { "status": "component-specific" },
+  "ssrHydration": { "status": "contract-required" },
+  "evidence": { "browser": "required", "assistiveTechnology": "review-required" },
+  "profileVariability": [],
+  "notes": [
+    "#1285 removed the text input English fallback; partial text editing and commit timing differ across ports.",
+    "Use native Input color mode if no distinct compound behavior is required.",
+    "Audit mapping is provisional; not a conformance claim."
+  ]
+}

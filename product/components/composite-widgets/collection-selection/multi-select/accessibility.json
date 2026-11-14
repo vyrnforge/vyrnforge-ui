@@ -1,0 +1,29 @@
+{
+  "schemaVersion": 1,
+  "component": "multi-select",
+  "reviewStatus": "review-required",
+  "nativeBaseline": {
+    "kind": "composite",
+    "reference": "listbox with multiple selection and explicit option semantics"
+  },
+  "wcag": {
+    "target": "2.2 AA",
+    "status": "review-required",
+    "criteria": ["1.3.1", "2.1.1", "2.4.3", "2.4.7", "3.3.2", "4.1.2"]
+  },
+  "aria": { "status": "mapped", "apgPattern": "listbox" },
+  "interaction": { "keyboard": "managed", "focus": "review-required", "directionality": "logical" },
+  "ownership": {
+    "library": ["Separate focus, selected values and open state; expose selection summary and removal relationships."],
+    "consumer": ["Author names, option values and form labels; own domain filtering and data loading."]
+  },
+  "forms": { "status": "review-required" },
+  "visualAccessibility": { "status": "component-specific" },
+  "ssrHydration": { "status": "contract-required" },
+  "evidence": { "browser": "required", "assistiveTechnology": "review-required" },
+  "profileVariability": [],
+  "notes": [
+    "Open-state, form/reset, disabled options and authored selection summary need contract convergence.",
+    "Audit mapping is provisional; not a conformance claim."
+  ]
+}
