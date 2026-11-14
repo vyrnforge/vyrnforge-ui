@@ -9,14 +9,7 @@
   "wcag": {
     "target": "2.2 AA",
     "status": "review-required",
-    "criteria": [
-      "1.3.1",
-      "2.1.1",
-      "2.4.3",
-      "2.4.7",
-      "2.5.8",
-      "4.1.2"
-    ]
+    "criteria": ["1.3.1", "2.1.1", "2.4.3", "2.4.7", "2.5.8", "4.1.2"]
   },
   "aria": {
     "status": "review-required",
@@ -31,9 +24,7 @@
     "library": [
       "Expose pressed state, define exclusive versus multiple and empty selection, and keep disabled controls inert."
     ],
-    "consumer": [
-      "Author button names and group purpose; choose supported selection policy."
-    ]
+    "consumer": ["Author button names and group purpose; choose supported selection policy."]
   },
   "forms": {
     "status": "not-applicable"

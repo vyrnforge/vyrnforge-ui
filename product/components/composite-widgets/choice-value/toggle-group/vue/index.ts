@@ -74,7 +74,12 @@ export const ToggleGroupItem = defineComponent({
           'data-vf-toggle-group-item': '',
           onClick(event: MouseEvent) {
             invoke(attrs.onClick, event);
-            if (!event.defaultPrevented && !p.disabled && attrs['aria-disabled'] !== true && attrs['aria-disabled'] !== 'true')
+            if (
+              !event.defaultPrevented &&
+              !p.disabled &&
+              attrs['aria-disabled'] !== true &&
+              attrs['aria-disabled'] !== 'true'
+            )
               g.toggle(p.value);
           },
         },

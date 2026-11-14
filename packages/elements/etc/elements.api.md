@@ -190,6 +190,9 @@ export interface ToastOpenChangeDetail {
 }
 
 // @public (undocumented)
+export type ToggleGroupType = 'single' | 'multiple';
+
+// @public (undocumented)
 export type ToolbarOrientation = 'horizontal' | 'vertical';
 
 // @public (undocumented)
@@ -614,9 +617,16 @@ export class VfToastViewportElement extends HTMLElementBase_19 {
 // @public (undocumented)
 export class VfToggleGroupElement extends H_3 {
     // (undocumented)
+    attributeChangedCallback(): void;
+    // (undocumented)
     connectedCallback(): void;
     // (undocumented)
     disconnectedCallback(): void;
+    // (undocumented)
+    static readonly observedAttributes: string[];
+    // (undocumented)
+    get value(): string | string[];
+    set value(value: string | string[]);
 }
 
 // @public (undocumented)

@@ -2940,11 +2940,11 @@ export class VfToggleButtonDirective {
 export class VfToggleGroupItemDirective {
     constructor(root: VfToggleGroupRootDirective);
     // (undocumented)
-    readonly disabled: InputSignal<boolean>;
+    readonly disabled: InputSignalWithTransform<boolean, unknown>;
     // (undocumented)
     readonly root: VfToggleGroupRootDirective;
     // (undocumented)
-    toggle(): void;
+    toggle(event?: MouseEvent): void;
     // (undocumented)
     readonly value: InputSignal<string>;
     // (undocumented)
@@ -2967,7 +2967,9 @@ export class VfToggleGroupItemDirective {
 // @public (undocumented)
 export class VfToggleGroupRootDirective {
     // (undocumented)
-    toggle(v: string): void;
+    readonly defaultValue: InputSignal<string | string[] | undefined>;
+    // (undocumented)
+    toggle(value: string): void;
     // (undocumented)
     readonly type: InputSignal<ToggleGroupType>;
     // (undocumented)
@@ -2985,6 +2987,11 @@ export class VfToggleGroupRootDirective {
         };
         "value": {
             "alias": "value";
+            "required": false;
+            "isSignal": true;
+        };
+        "defaultValue": {
+            "alias": "defaultValue";
             "required": false;
             "isSignal": true;
         };

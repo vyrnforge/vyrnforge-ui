@@ -84,7 +84,8 @@ export class VfToggleGroupElement extends H {
   private sync() {
     const items = this.items();
     if (!this.internal) {
-      this.internal = readValue(this.getAttribute('default-value'), this.type()) ??
+      this.internal =
+        readValue(this.getAttribute('default-value'), this.type()) ??
         items.filter((item) => item.getAttribute('aria-pressed') === 'true').map((item) => this.itemValue(item));
     }
     const values = this.values();
@@ -99,18 +100,25 @@ export class VfToggleGroupElement extends H {
   private onClick = (event: MouseEvent) => {
     if (event.defaultPrevented || !(event.target instanceof Element)) return;
     const item = event.target.closest<HTMLButtonElement>('button[data-vf-toggle-group-item]');
-    if (!item || item.closest('[data-vf-toggle-group-root]') !== this || item.disabled ||
-        item.getAttribute('aria-disabled') === 'true') return;
+    if (
+      !item ||
+      item.closest('[data-vf-toggle-group-root]') !== this ||
+      item.disabled ||
+      item.getAttribute('aria-disabled') === 'true'
+    )
+      return;
     const value = this.itemValue(item);
     if (!value) return;
     const next = toggled(this.values(), value, this.type());
     if (!this.hasAttribute('value')) this.internal = next;
     this.sync();
-    this.dispatchEvent(new CustomEvent('vf-value-change', {
-      detail: { value: this.type() === 'single' ? (next[0] ?? '') : next },
-      bubbles: true,
-      composed: true,
-    }));
+    this.dispatchEvent(
+      new CustomEvent('vf-value-change', {
+        detail: { value: this.type() === 'single' ? (next[0] ?? '') : next },
+        bubbles: true,
+        composed: true,
+      }),
+    );
   };
 }
 

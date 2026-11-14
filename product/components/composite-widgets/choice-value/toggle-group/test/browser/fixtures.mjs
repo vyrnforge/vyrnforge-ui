@@ -24,14 +24,36 @@ export async function createReactStory({ client }) {
   const { createElement: h, Fragment } = await import('react');
   const { ToggleGroupRoot, ToggleGroupItem } = await import('@vyrnforge/react/toggle-group');
   const item = (value, text, disabled = false) => h(ToggleGroupItem, { value, disabled }, text);
-  const group = (id, options, children) => h(ToggleGroupRoot, {
-    id, 'aria-label': id, ...options,
-    onValueChange: (value) => { if (client) record(id, value); },
-  }, ...children);
-  const nested = group('nested', { defaultValue: 'inside' }, [item('inside', 'Inner choice'), item('other', 'Other inner choice')]);
-  return h(Fragment, null,
-    group('group', { defaultValue: 'bold' }, [item('bold', 'Bold'), item('italic', 'Italic'), item('disabled', 'Disabled', true), nested]),
-    group('multiple', { type: 'multiple', defaultValue: ['a,b'] }, [item('a,b', 'Comma item'), item('c', 'Other item')]),
+  const group = (id, options, children) =>
+    h(
+      ToggleGroupRoot,
+      {
+        id,
+        'aria-label': id,
+        ...options,
+        onValueChange: (value) => {
+          if (client) record(id, value);
+        },
+      },
+      ...children,
+    );
+  const nested = group('nested', { defaultValue: 'inside' }, [
+    item('inside', 'Inner choice'),
+    item('other', 'Other inner choice'),
+  ]);
+  return h(
+    Fragment,
+    null,
+    group('group', { defaultValue: 'bold' }, [
+      item('bold', 'Bold'),
+      item('italic', 'Italic'),
+      item('disabled', 'Disabled', true),
+      nested,
+    ]),
+    group('multiple', { type: 'multiple', defaultValue: ['a,b'] }, [
+      item('a,b', 'Comma item'),
+      item('c', 'Other item'),
+    ]),
     group('controlled', { value: 'bold' }, [item('bold', 'Bold'), item('italic', 'Italic')]),
   );
 }
@@ -40,16 +62,38 @@ export async function createVueStory({ client }) {
   const { createSSRApp, h } = await import('vue');
   const { ToggleGroupRoot, ToggleGroupItem } = await import('@vyrnforge/vue/toggle-group');
   const item = (value, text, disabled = false) => h(ToggleGroupItem, { value, disabled }, () => text);
-  const group = (id, options, children) => h(ToggleGroupRoot, {
-    id, 'aria-label': id, ...options,
-    'onUpdate:value': (value) => { if (client) record(id, value); },
-  }, () => children);
-  return createSSRApp({ render: () => h('div', [
-    group('group', { defaultValue: 'bold' }, [item('bold', 'Bold'), item('italic', 'Italic'), item('disabled', 'Disabled', true),
-      group('nested', { defaultValue: 'inside' }, [item('inside', 'Inner choice'), item('other', 'Other inner choice')])]),
-    group('multiple', { type: 'multiple', defaultValue: ['a,b'] }, [item('a,b', 'Comma item'), item('c', 'Other item')]),
-    group('controlled', { value: 'bold' }, [item('bold', 'Bold'), item('italic', 'Italic')]),
-  ]) });
+  const group = (id, options, children) =>
+    h(
+      ToggleGroupRoot,
+      {
+        id,
+        'aria-label': id,
+        ...options,
+        'onUpdate:value': (value) => {
+          if (client) record(id, value);
+        },
+      },
+      () => children,
+    );
+  return createSSRApp({
+    render: () =>
+      h('div', [
+        group('group', { defaultValue: 'bold' }, [
+          item('bold', 'Bold'),
+          item('italic', 'Italic'),
+          item('disabled', 'Disabled', true),
+          group('nested', { defaultValue: 'inside' }, [
+            item('inside', 'Inner choice'),
+            item('other', 'Other inner choice'),
+          ]),
+        ]),
+        group('multiple', { type: 'multiple', defaultValue: ['a,b'] }, [
+          item('a,b', 'Comma item'),
+          item('c', 'Other item'),
+        ]),
+        group('controlled', { value: 'bold' }, [item('bold', 'Bold'), item('italic', 'Italic')]),
+      ]),
+  });
 }
 
 export async function createAngularStory({ client }) {
@@ -57,7 +101,9 @@ export async function createAngularStory({ client }) {
   const { Component } = await import('@angular/core');
   const { VfToggleGroupRootDirective, VfToggleGroupItemDirective } = await import('@vyrnforge/angular/toggle-group');
   class ToggleGroupTestApp {
-    changed(id, value) { if (client) record(id, value); }
+    changed(id, value) {
+      if (client) record(id, value);
+    }
   }
   Component({
     selector: 'vf-toggle-group-test',
@@ -82,23 +128,37 @@ export async function createAngularStory({ client }) {
 }
 
 export async function createElementsStory({ client }) {
-  const item = (value, text, pressed = false, disabled = false) => `<button type="button" data-vf-toggle-group-item data-vf-value="${value}" aria-pressed="${pressed}" data-vf-state="${pressed ? 'on' : 'off'}" ${disabled ? 'disabled' : ''}>${text}</button>`;
-  const group = (id, attrs, children) => `<vf-toggle-group id="${id}" data-vf-toggle-group-root role="group" aria-label="${id}" ${attrs}>${children.join('')}</vf-toggle-group>`;
+  const item = (value, text, pressed = false, disabled = false) =>
+    `<button type="button" data-vf-toggle-group-item data-vf-value="${value}" aria-pressed="${pressed}" data-vf-state="${pressed ? 'on' : 'off'}" ${disabled ? 'disabled' : ''}>${text}</button>`;
+  const group = (id, attrs, children) =>
+    `<vf-toggle-group id="${id}" data-vf-toggle-group-root role="group" aria-label="${id}" ${attrs}>${children.join('')}</vf-toggle-group>`;
   return {
-    body: group('group', 'default-value="bold"', [
-      item('bold', 'Bold', true), item('italic', 'Italic'), item('disabled', 'Disabled', false, true),
-      group('nested', 'default-value="inside"', [item('inside', 'Inner choice', true), item('other', 'Other inner choice')]),
-    ]) + group('multiple', 'type="multiple" default-value=\'["a,b"]\'', [item('a,b', 'Comma item', true), item('c', 'Other item')]) +
+    body:
+      group('group', 'default-value="bold"', [
+        item('bold', 'Bold', true),
+        item('italic', 'Italic'),
+        item('disabled', 'Disabled', false, true),
+        group('nested', 'default-value="inside"', [
+          item('inside', 'Inner choice', true),
+          item('other', 'Other inner choice'),
+        ]),
+      ]) +
+      group('multiple', 'type="multiple" default-value=\'["a,b"]\'', [
+        item('a,b', 'Comma item', true),
+        item('c', 'Other item'),
+      ]) +
       group('controlled', 'value="bold"', [item('bold', 'Bold', true), item('italic', 'Italic')]),
-    activate: client ? async () => {
-      const { defineToggleGroupElement } = await import('@vyrnforge/elements/toggle-group');
-      defineToggleGroupElement();
-      for (const id of ['group', 'nested', 'multiple', 'controlled']) {
-        const root = document.getElementById(id);
-        root.addEventListener('vf-value-change', (event) => {
-          if (event.target === root) record(id, event.detail.value);
-        });
-      }
-    } : undefined,
+    activate: client
+      ? async () => {
+          const { defineToggleGroupElement } = await import('@vyrnforge/elements/toggle-group');
+          defineToggleGroupElement();
+          for (const id of ['group', 'nested', 'multiple', 'controlled']) {
+            const root = document.getElementById(id);
+            root.addEventListener('vf-value-change', (event) => {
+              if (event.target === root) record(id, event.detail.value);
+            });
+          }
+        }
+      : undefined,
   };
 }

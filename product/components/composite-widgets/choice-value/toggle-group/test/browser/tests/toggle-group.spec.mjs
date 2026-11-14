@@ -16,7 +16,9 @@ test('initial native toggle state is present before activation', async ({ browse
   }
 });
 
-test('single ToggleGroup is exclusive, permits empty state, and preserves native button activation', async ({ page }) => {
+test('single ToggleGroup is exclusive, permits empty state, and preserves native button activation', async ({
+  page,
+}) => {
   test.skip(port === 'web', 'Web supplies static native semantics, not coordinated runtime.');
   await page.goto(`/components/toggle-group/${port}.html`);
   const root = page.locator('#group');
@@ -32,7 +34,9 @@ test('single ToggleGroup is exclusive, permits empty state, and preserves native
   await italic.press('Enter');
   await expect(italic).toHaveAttribute('aria-pressed', 'false');
   await expect(root).toHaveAttribute('data-requested', '""');
-  await bold.evaluate((button) => button.addEventListener('click', (event) => event.preventDefault(), { capture: true }));
+  await bold.evaluate((button) =>
+    button.addEventListener('click', (event) => event.preventDefault(), { capture: true }),
+  );
   await bold.click();
   await expect(bold).toHaveAttribute('aria-pressed', 'false');
   await expect(root).toHaveAttribute('data-requested', '""');
@@ -42,7 +46,9 @@ test('single ToggleGroup is exclusive, permits empty state, and preserves native
   await expectNoAxeViolations(page);
 });
 
-test('multiple ToggleGroup retains arbitrary values and controlled rejection preserves committed state', async ({ page }) => {
+test('multiple ToggleGroup retains arbitrary values and controlled rejection preserves committed state', async ({
+  page,
+}) => {
   test.skip(port === 'web', 'Managed runtime only.');
   await page.goto(`/components/toggle-group/${port}.html`);
   const multiple = page.locator('#multiple');
