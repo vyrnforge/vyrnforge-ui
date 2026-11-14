@@ -2,24 +2,48 @@
   [data-vf-rating-root] {
     display: inline-flex;
     gap: var(--vf-space-xs);
+    flex-wrap: wrap;
   }
-  [data-vf-rating-item] {
+  label[data-vf-rating-item],
+  label:has(> input[data-vf-rating-item]) {
     position: relative;
     display: inline-grid;
     place-items: center;
+    min-inline-size: 1.5rem;
+    min-block-size: 1.5rem;
     font-size: 1.25rem;
   }
-  [data-vf-rating-item] input {
+  label[data-vf-rating-item] input,
+  label > input[data-vf-rating-item] {
     position: absolute;
     inline-size: 1px;
     block-size: 1px;
     opacity: 0;
   }
-  [data-vf-rating-item][data-vf-state='filled'] {
+  [data-vf-rating-glyph]::before {
+    content: '☆';
+  }
+  [data-vf-rating-item][data-vf-state='filled'],
+  [data-vf-rating-root] > label:has(> input:checked),
+  [data-vf-rating-root] > label:has(~ label > input:checked) {
     color: var(--vf-color-accent-background);
   }
-  [data-vf-rating-item]:has(input:focus-visible) {
+  [data-vf-rating-root] > label:has(> input:checked) > [data-vf-rating-glyph]::before,
+  [data-vf-rating-root] > label:has(~ label > input:checked) > [data-vf-rating-glyph]::before {
+    content: '★';
+  }
+  label[data-vf-rating-item]:has(input:focus-visible),
+  label:has(> input[data-vf-rating-item]:focus-visible) {
     outline: 2px solid var(--vf-color-focus-ring);
     outline-offset: 2px;
+  }
+  [data-vf-rating-root] > label:has(> input:disabled) {
+    opacity: 0.5;
+  }
+  @media (forced-colors: active) {
+    [data-vf-rating-root] > label:has(> input:disabled) {
+      color: GrayText;
+      opacity: 1;
+    }
   }
 }
