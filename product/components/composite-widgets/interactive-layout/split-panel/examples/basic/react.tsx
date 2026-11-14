@@ -2,8 +2,8 @@ import { SplitPanelPane, SplitPanelResizeHandle, SplitPanelRoot } from '@vyrnfor
 export function Example() {
   return (
     <SplitPanelRoot defaultSize={50}>
-      <SplitPanelPane>Primary</SplitPanelPane>
-      <SplitPanelResizeHandle />
+      <SplitPanelPane id="primary-pane">Primary</SplitPanelPane>
+      <SplitPanelResizeHandle aria-label="Primary" aria-controls="primary-pane" />
       <SplitPanelPane>Secondary</SplitPanelPane>
     </SplitPanelRoot>
   );

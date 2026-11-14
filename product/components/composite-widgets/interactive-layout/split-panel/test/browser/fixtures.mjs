@@ -1,26 +1,123 @@
-import { mkdir, writeFile } from 'node:fs/promises';
-import path from 'node:path';
-import { build } from 'esbuild';
+const web = `<div id="root" data-vf-split-panel-root style="--vf-split-size: 40%">
+  <section id="primary" data-vf-split-panel-pane>Primary</section>
+  <div id="handle" data-vf-split-panel-handle role="separator" tabindex="0" aria-label="Primary" aria-controls="primary" aria-orientation="vertical" aria-valuemin="20" aria-valuemax="80" aria-valuenow="40"></div>
+  <section data-vf-split-panel-pane>Secondary</section>
+</div>`;
 
 export const browserFixture = {
   component: 'split-panel',
-  prepare: async ({ port }) => {
-    const rootDir = process.cwd();
-    const dir = path.join(rootDir, 'dist/browser-fixtures/components/split-panel');
-    await mkdir(dir, { recursive: true });
-    await build({
-      stdin: {
-        contents: '@import "@vyrnforge/web/styles/tokens.css";@import "@vyrnforge/web/styles/split-panel.css";',
-        resolveDir: rootDir,
-        sourcefile: 'split-panel-public.css',
-        loader: 'css',
-      },
-      bundle: true,
-      outfile: path.join(dir, 'styles.css'),
-    });
-    await writeFile(
-      path.join(dir, `${port}.html`),
-      `<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width"><title>Split panel browser fixture</title><link rel="stylesheet" href="./styles.css"></head><body><main><h1>Split panel browser fixture</h1><div id="root" data-vf-split-panel-root><section data-vf-split-panel-pane>Primary</section><div id="handle" role="separator" tabindex="0" aria-orientation="vertical" aria-valuemin="10" aria-valuemax="90" aria-valuenow="50" data-vf-split-panel-handle></div><section data-vf-split-panel-pane>Secondary</section></div></main><script>let s=50;handle.onkeydown=e=>{if(e.key==='ArrowLeft')s--;else if(e.key==='ArrowRight')s++;else if(e.key==='Home')s=10;else if(e.key==='End')s=90;else return;e.preventDefault();s=Math.min(90,Math.max(10,s));handle.setAttribute('aria-valuenow',String(s));root.style.setProperty('--vf-split-size',s+'%')};</script></body></html>`,
-    );
+  title: 'Split panel fixture',
+  heading: 'Split panel browser fixture',
+  ports: {
+    web: { body: web },
+    react: { story: 'createReactStory' },
+    angular: { story: 'createAngularStory', selector: 'vf-split-panel-test' },
+    vue: { story: 'createVueStory' },
+    elements: { story: 'createElementsStory' },
   },
 };
+
+export async function createReactStory({ client }) {
+  const { createElement: h, Fragment } = await import('react');
+  const { SplitPanelRoot, SplitPanelPane, SplitPanelResizeHandle } = await import('@vyrnforge/react/split-panel');
+  const panel = (id, options) =>
+    h(
+      SplitPanelRoot,
+      {
+        id,
+        min: 20,
+        max: 80,
+        ...options,
+        onSizeChange: (size) => {
+          if (client) document.getElementById(id).dataset.requestedSize = String(size);
+        },
+      },
+      h(SplitPanelPane, { id: id + '-primary' }, 'Primary'),
+      h(SplitPanelResizeHandle, {
+        id: id === 'root' ? 'handle' : id + '-handle',
+        'aria-label': 'Primary',
+        'aria-controls': id + '-primary',
+      }),
+      h(SplitPanelPane, null, 'Secondary'),
+    );
+  return h(Fragment, null, panel('root', { defaultSize: 40 }), panel('controlled', { size: 60 }));
+}
+
+export async function createVueStory({ client }) {
+  const { createSSRApp, h } = await import('vue');
+  const { SplitPanelRoot, SplitPanelPane, SplitPanelResizeHandle } = await import('@vyrnforge/vue/split-panel');
+  const panel = (id, options) =>
+    h(
+      SplitPanelRoot,
+      {
+        id,
+        min: 20,
+        max: 80,
+        ...options,
+        'onUpdate:size': (size) => {
+          if (client) document.getElementById(id).dataset.requestedSize = String(size);
+        },
+      },
+      () => [
+        h(SplitPanelPane, { id: id + '-primary' }, () => 'Primary'),
+        h(SplitPanelResizeHandle, {
+          id: id === 'root' ? 'handle' : id + '-handle',
+          'aria-label': 'Primary',
+          'aria-controls': id + '-primary',
+        }),
+        h(SplitPanelPane, null, () => 'Secondary'),
+      ],
+    );
+  return createSSRApp({
+    render: () => h('div', [panel('root', { defaultSize: 40 }), panel('controlled', { size: 60 })]),
+  });
+}
+
+export async function createAngularStory({ client }) {
+  await import('@angular/compiler');
+  const { Component } = await import('@angular/core');
+  const { VfSplitPanelRootDirective, VfSplitPanelPaneDirective, VfSplitPanelResizeHandleDirective } =
+    await import('@vyrnforge/angular/split-panel');
+  class SplitPanelTestApp {
+    changed(id, size) {
+      if (client) document.getElementById(id).dataset.requestedSize = String(size);
+    }
+  }
+  Component({
+    selector: 'vf-split-panel-test',
+    standalone: true,
+    imports: [VfSplitPanelRootDirective, VfSplitPanelPaneDirective, VfSplitPanelResizeHandleDirective],
+    template: `<main><h1>Split panel browser fixture</h1>
+      <div vfSplitPanelRoot id="root" [defaultSize]="40" [min]="20" [max]="80" (sizeChange)="changed('root', $event)">
+        <div vfSplitPanelPane id="root-primary">Primary</div>
+        <div vfSplitPanelResizeHandle id="handle" aria-label="Primary" aria-controls="root-primary"></div>
+        <div vfSplitPanelPane>Secondary</div>
+      </div>
+      <div vfSplitPanelRoot id="controlled" [size]="60" [min]="20" [max]="80" (sizeChange)="changed('controlled', $event)">
+        <div vfSplitPanelPane id="controlled-primary">Primary</div>
+        <div vfSplitPanelResizeHandle id="controlled-handle" aria-label="Primary" aria-controls="controlled-primary"></div>
+        <div vfSplitPanelPane>Secondary</div>
+      </div>
+    </main>`,
+  })(SplitPanelTestApp);
+  return SplitPanelTestApp;
+}
+
+export async function createElementsStory({ client }) {
+  return {
+    body: `<vf-split-panel id="root" data-vf-split-panel-root size="40" min="20" max="80" style="--vf-split-size: 40%">
+      <div id="root-primary" data-vf-split-panel-pane>Primary</div>
+      <div id="handle" data-vf-split-panel-handle role="separator" tabindex="0" aria-label="Primary" aria-controls="root-primary" aria-orientation="vertical" aria-valuemin="20" aria-valuemax="80" aria-valuenow="40"></div>
+      <div data-vf-split-panel-pane>Secondary</div>
+    </vf-split-panel>`,
+    activate: client
+      ? async () => {
+          const { defineSplitPanelElement } = await import('@vyrnforge/elements/split-panel');
+          defineSplitPanelElement();
+          document.getElementById('root').addEventListener('vf-size-change', (event) => {
+            document.getElementById('root').dataset.requestedSize = String(event.detail.size);
+          });
+        }
+      : undefined,
+  };
+}
