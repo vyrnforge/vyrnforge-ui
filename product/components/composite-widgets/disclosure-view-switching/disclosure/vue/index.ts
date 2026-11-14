@@ -80,7 +80,8 @@ export const DisclosureTrigger = defineComponent({
             if (typeof handler === 'function') handler(event);
             else if (Array.isArray(handler))
               for (const candidate of handler) if (typeof candidate === 'function') candidate(event);
-            if (!event.defaultPrevented && !context.disabled.value && !props.disabled) context.setOpen(!context.open.value);
+            if (!event.defaultPrevented && !context.disabled.value && !props.disabled)
+              context.setOpen(!context.open.value);
           },
         },
         slots.default?.(),

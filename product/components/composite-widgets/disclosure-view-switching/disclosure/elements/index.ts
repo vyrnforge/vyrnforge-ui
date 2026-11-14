@@ -58,7 +58,9 @@ export class VfDisclosureElement extends HTMLElementBase {
   }
 
   #panel(): HTMLElement | undefined {
-    return Array.from(this.querySelectorAll<HTMLElement>('[data-vf-disclosure-panel]')).find((panel) => this.#owns(panel));
+    return Array.from(this.querySelectorAll<HTMLElement>('[data-vf-disclosure-panel]')).find((panel) =>
+      this.#owns(panel),
+    );
   }
 
   #sync(): void {
