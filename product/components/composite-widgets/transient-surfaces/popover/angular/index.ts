@@ -71,12 +71,14 @@ export class VfPopoverTriggerDirective implements OnDestroy {
     '[attr.role]': 'root.contentRole()',
     '[attr.data-vf-open]': 'root.expanded() ? "" : null',
     '[attr.data-vf-placement]': 'root.placement()',
+    '(beforetoggle)': 'onBeforeToggle($event)',
     '(toggle)': 'onToggle($event)',
   },
 })
 export class VfPopoverContentDirective implements OnDestroy {
   private readonly element = inject<ElementRef<HTMLElement>>(ElementRef);
   private readonly nativeRevision = signal(0);
+  private restoreFocus = false;
   constructor(readonly root: VfPopoverRootDirective) {
     this.root.content = this.element.nativeElement;
     afterRenderEffect(() => {
@@ -89,9 +91,20 @@ export class VfPopoverContentDirective implements OnDestroy {
       if (!open && surface.matches(':popover-open')) surface.hidePopover();
     });
   }
+  onBeforeToggle(event: Event): void {
+    const surface = this.element.nativeElement;
+    if (event.target !== surface) return;
+    this.restoreFocus = surface.matches(':popover-open') && surface.contains(surface.ownerDocument.activeElement);
+  }
   onToggle(event: Event): void {
     if (event.target !== this.element.nativeElement) return;
-    const actual = this.element.nativeElement.matches(':popover-open');
+    const surface = this.element.nativeElement;
+    const actual = surface.matches(':popover-open');
+    if (!actual && this.restoreFocus) {
+      this.restoreFocus = false;
+      const active = surface.ownerDocument.activeElement;
+      if (!active || active === surface.ownerDocument.body || surface.contains(active)) this.root.anchor?.focus();
+    }
     if (actual === this.root.expanded()) return;
     this.root.setOpen(actual);
     this.nativeRevision.update((revision) => revision + 1);

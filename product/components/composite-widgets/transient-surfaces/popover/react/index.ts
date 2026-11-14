@@ -124,12 +124,13 @@ export const PopoverTrigger = forwardRef<HTMLButtonElement, PopoverTriggerProps>
 
 export type PopoverContentProps = Omit<HTMLAttributes<HTMLDivElement>, 'id' | 'role' | 'popover'>;
 export const PopoverContent = forwardRef<HTMLDivElement, PopoverContentProps>(function PopoverContent(
-  { onToggle, ...props },
+  { onToggle, onBeforeToggle, ...props },
   forwardedRef,
 ) {
   const context = usePopover();
   const { contentRef } = context;
   const [nativeRevision, setNativeRevision] = useState(0);
+  const restoreFocus = useRef(false);
   const ref = useCallback(
     (node: HTMLDivElement | null) => {
       contentRef.current = node;
@@ -162,10 +163,22 @@ export const PopoverContent = forwardRef<HTMLDivElement, PopoverContentProps>(fu
     'data-vf-popover-content': '',
     'data-vf-open': context.open ? '' : undefined,
     'data-vf-placement': context.placement,
+    onBeforeToggle(event) {
+      onBeforeToggle?.(event);
+      if (event.target !== event.currentTarget) return;
+      const surface = event.currentTarget;
+      restoreFocus.current = surface.matches(':popover-open') && surface.contains(surface.ownerDocument.activeElement);
+    },
     onToggle(event) {
       onToggle?.(event);
       if (event.target !== event.currentTarget) return;
-      const actual = event.currentTarget.matches(':popover-open');
+      const surface = event.currentTarget;
+      const actual = surface.matches(':popover-open');
+      if (!actual && restoreFocus.current) {
+        restoreFocus.current = false;
+        const active = surface.ownerDocument.activeElement;
+        if (!active || active === surface.ownerDocument.body || surface.contains(active)) context.anchorRef.current?.focus();
+      }
       if (actual === context.open) return;
       context.setOpen(actual);
       // Reconcile native dismissal with the committed controlled value on the next render.

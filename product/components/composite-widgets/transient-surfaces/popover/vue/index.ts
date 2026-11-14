@@ -94,6 +94,7 @@ export const PopoverContent = defineComponent({
   inheritAttrs: false,
   setup(_p, { attrs, slots }) {
     const context = usePopover();
+    let restoreFocus = false;
     function sync() {
       const surface = context.content.value;
       const trigger = context.anchor.value;
@@ -114,9 +115,20 @@ export const PopoverContent = defineComponent({
           'data-vf-popover-content': '',
           'data-vf-open': context.open.value ? '' : undefined,
           'data-vf-placement': context.placement.value,
+          onBeforetoggle(event: Event) {
+            if (event.target !== event.currentTarget) return;
+            const surface = event.currentTarget as HTMLElement;
+            restoreFocus = surface.matches(':popover-open') && surface.contains(surface.ownerDocument.activeElement);
+          },
           onToggle(event: Event) {
             if (event.target !== event.currentTarget) return;
-            const actual = (event.currentTarget as HTMLElement).matches(':popover-open');
+            const surface = event.currentTarget as HTMLElement;
+            const actual = surface.matches(':popover-open');
+            if (!actual && restoreFocus) {
+              restoreFocus = false;
+              const active = surface.ownerDocument.activeElement;
+              if (!active || active === surface.ownerDocument.body || surface.contains(active)) context.anchor.value?.focus();
+            }
             if (actual === context.open.value) return;
             context.setOpen(actual);
             void nextTick(sync);
