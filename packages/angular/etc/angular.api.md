@@ -2040,6 +2040,10 @@ export class VfPopoverContentDirective implements OnDestroy {
     // (undocumented)
     ngOnDestroy(): void;
     // (undocumented)
+    onBeforeToggle(event: Event): void;
+    // (undocumented)
+    onToggle(event: Event): void;
+    // (undocumented)
     readonly root: VfPopoverRootDirective;
     // (undocumented)
     static ɵdir: i0.ɵɵDirectiveDeclaration<VfPopoverContentDirective, "[vfPopoverContent]", never, {}, {}, never, never, true, never>;
@@ -2054,9 +2058,15 @@ export class VfPopoverRootDirective {
     // (undocumented)
     content: HTMLElement | null;
     // (undocumented)
+    readonly contentId: InputSignal<string | undefined>;
+    // (undocumented)
+    readonly contentRole: InputSignal<"dialog" | "region">;
+    // (undocumented)
     readonly defaultOpen: InputSignalWithTransform<boolean, unknown>;
     // (undocumented)
     readonly expanded: Signal<boolean>;
+    // (undocumented)
+    readonly id: InputSignal<string>;
     // (undocumented)
     readonly open: InputSignal<boolean | undefined>;
     // (undocumented)
@@ -2064,9 +2074,26 @@ export class VfPopoverRootDirective {
     // (undocumented)
     readonly placement: InputSignal<FloatingPlacement>;
     // (undocumented)
+    readonly resolvedContentId: Signal<string>;
+    // (undocumented)
     setOpen(next: boolean): void;
     // (undocumented)
     static ɵdir: i0.ɵɵDirectiveDeclaration<VfPopoverRootDirective, "[vfPopoverRoot]", never, {
+        "id": {
+            "alias": "id";
+            "required": true;
+            "isSignal": true;
+        };
+        "contentId": {
+            "alias": "contentId";
+            "required": false;
+            "isSignal": true;
+        };
+        "contentRole": {
+            "alias": "contentRole";
+            "required": false;
+            "isSignal": true;
+        };
         "open": {
             "alias": "open";
             "required": false;
@@ -2090,12 +2117,14 @@ export class VfPopoverRootDirective {
 }
 
 // @public (undocumented)
-export class VfPopoverTriggerDirective {
+export class VfPopoverTriggerDirective implements OnDestroy {
     constructor(root: VfPopoverRootDirective);
+    // (undocumented)
+    ngOnDestroy(): void;
     // (undocumented)
     readonly root: VfPopoverRootDirective;
     // (undocumented)
-    toggle(): void;
+    toggle(event?: MouseEvent): void;
     // (undocumented)
     static ɵdir: i0.ɵɵDirectiveDeclaration<VfPopoverTriggerDirective, "button[vfPopoverTrigger]", never, {}, {}, never, never, true, never>;
     // (undocumented)
@@ -2122,7 +2151,7 @@ export class VfPreviewCardContentDirective implements OnDestroy {
 // @public (undocumented)
 export class VfPreviewCardRootDirective implements OnDestroy {
     // (undocumented)
-    activity(source: Activity, active: boolean, delay: number): void;
+    activity(source: Activity_2, active: boolean, delay: number): void;
     // (undocumented)
     anchor: HTMLElement | null;
     // (undocumented)
