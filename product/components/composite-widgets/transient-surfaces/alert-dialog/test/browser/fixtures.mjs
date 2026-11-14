@@ -10,7 +10,7 @@ export const browserFixture = {
     await mkdir(dir, { recursive: true });
 
     if (port === 'react') {
-      const entry = path.join(root, 'product/components/composite-widgets/alert-dialog/examples/destructive-commit/react.tsx');
+      const entry = path.join(root, 'product/components/composite-widgets/transient-surfaces/alert-dialog/examples/destructive-commit/react.tsx');
       await build({
         entryPoints: [entry],
         bundle: true,

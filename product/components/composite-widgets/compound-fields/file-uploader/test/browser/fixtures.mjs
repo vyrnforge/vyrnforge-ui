@@ -10,7 +10,7 @@ export const browserFixture = {
     await mkdir(dir, { recursive: true });
 
     if (port === 'react') {
-      const entry = path.join(root, 'product/components/composite-widgets/file-uploader/examples/import-recovery/react.tsx');
+      const entry = path.join(root, 'product/components/composite-widgets/compound-fields/file-uploader/examples/import-recovery/react.tsx');
       await build({ entryPoints: [entry], bundle: true, format: 'esm', platform: 'browser', outdir: dir, entryNames: 'react' });
       await writeFile(
         path.join(dir, 'react.html'),
