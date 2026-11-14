@@ -21,7 +21,7 @@ test('Nx follows layered sources into their package targets and documentation', 
   assert.ok(web.includes('@vyrnforge/web'));
   assert.ok(web.includes('docs'));
 
-  const react = affectedBy('product/components/composite-widgets/tabs/react/index.ts');
+  const react = affectedBy('product/components/composite-widgets/disclosure-view-switching/tabs/react/index.ts');
   assert.ok(react.includes('@vyrnforge/react'));
   assert.ok(!react.includes('@vyrnforge/vue'));
 

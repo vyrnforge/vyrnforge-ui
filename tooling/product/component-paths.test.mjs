@@ -49,3 +49,21 @@ test('nested metadata cannot silently change its published component ID', () => 
   write('product/components/interactive-controls/button/component.json', '{"id":"different"}');
   assert.throws(() => discoverComponentRoots(root), /Component ID must match its final folder/);
 });
+
+
+test('L5 responsibility-family folders are ownership categories, not component identities', () => {
+  const { root, write } = fixture();
+  write('product/components/composite-widgets/transient-surfaces/dialog/component.json');
+  write('product/components/composite-widgets/collection-selection/listbox/component.json');
+
+  const components = discoverComponentRoots(root);
+
+  assert.deepEqual(components.get('dialog'), {
+    id: 'dialog',
+    root: 'product/components/composite-widgets/transient-surfaces/dialog',
+    layer: 'composite-widgets',
+    category: 'transient-surfaces',
+    flat: false,
+  });
+  assert.equal(components.get('listbox').category, 'collection-selection');
+});
