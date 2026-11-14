@@ -1,32 +1,33 @@
 import {
   Directive,
   ElementRef,
+  afterRenderEffect,
   booleanAttribute,
   computed,
-  effect,
   inject,
   input,
   output,
   signal,
   type OnDestroy,
 } from '@angular/core';
-import { autoUpdateFloatingPosition, type FloatingPlacement } from '@vyrnforge/web/floating-positioning';
-import { createDismissalCoordinator } from '@vyrnforge/web/dismissal-coordination';
+import type { FloatingPlacement } from '@vyrnforge/web/floating-positioning';
 
 @Directive({ selector: '[vfPopoverRoot]', standalone: true })
 export class VfPopoverRootDirective {
+  readonly id = input.required<string>();
+  readonly contentId = input<string | undefined>(undefined);
+  readonly contentRole = input<'dialog' | 'region'>('dialog');
+  readonly resolvedContentId = computed(() => this.contentId() ?? `${this.id()}-content`);
   readonly open = input<boolean | undefined>(undefined);
   readonly defaultOpen = input(false, { transform: booleanAttribute });
   readonly placement = input<FloatingPlacement>('bottom-start');
   readonly openChange = output<boolean>();
-  private readonly internal = signal(false);
-  private initialized = false;
-  readonly expanded = computed(() => this.open() ?? (this.initialized ? this.internal() : this.defaultOpen()));
+  private readonly internal = signal<boolean | undefined>(undefined);
+  readonly expanded = computed(() => this.open() ?? this.internal() ?? this.defaultOpen());
   anchor: HTMLElement | null = null;
   content: HTMLElement | null = null;
   setOpen(next: boolean): void {
     if (next === this.expanded()) return;
-    this.initialized = true;
     if (this.open() === undefined) this.internal.set(next);
     this.openChange.emit(next);
   }
@@ -38,19 +39,25 @@ export class VfPopoverRootDirective {
   host: {
     type: 'button',
     'data-vf-popover-trigger': '',
+    '[attr.popovertarget]': 'root.resolvedContentId()',
+    '[attr.aria-haspopup]': 'root.contentRole() === "dialog" ? "dialog" : null',
+    '[attr.aria-controls]': 'root.resolvedContentId()',
     '[attr.aria-expanded]': 'root.expanded()',
-    '(click)': 'toggle()',
+    '(click)': 'toggle($event)',
   },
 })
-export class VfPopoverTriggerDirective {
+export class VfPopoverTriggerDirective implements OnDestroy {
   private readonly element = inject<ElementRef<HTMLButtonElement>>(ElementRef);
   constructor(readonly root: VfPopoverRootDirective) {
-    effect(() => {
-      this.root.anchor = this.element.nativeElement;
-    });
+    this.root.anchor = this.element.nativeElement;
   }
-  toggle(): void {
+  toggle(event?: MouseEvent): void {
+    if (event?.defaultPrevented || this.element.nativeElement.disabled) return;
+    event?.preventDefault();
     this.root.setOpen(!this.root.expanded());
+  }
+  ngOnDestroy(): void {
+    if (this.root.anchor === this.element.nativeElement) this.root.anchor = null;
   }
 }
 
@@ -58,44 +65,38 @@ export class VfPopoverTriggerDirective {
   selector: '[vfPopoverContent]',
   standalone: true,
   host: {
-    role: 'dialog',
-    tabindex: '-1',
+    popover: 'auto',
     'data-vf-popover-content': '',
+    '[attr.id]': 'root.resolvedContentId()',
+    '[attr.role]': 'root.contentRole()',
     '[attr.data-vf-open]': 'root.expanded() ? "" : null',
-    '[hidden]': '!root.expanded()',
+    '[attr.data-vf-placement]': 'root.placement()',
+    '(toggle)': 'onToggle($event)',
   },
 })
 export class VfPopoverContentDirective implements OnDestroy {
-  private cleanup: (() => void) | null = null;
   private readonly element = inject<ElementRef<HTMLElement>>(ElementRef);
+  private readonly nativeRevision = signal(0);
   constructor(readonly root: VfPopoverRootDirective) {
-    effect(() => {
-      this.cleanup?.();
-      this.cleanup = null;
-      if (!this.root.expanded()) return;
+    this.root.content = this.element.nativeElement;
+    afterRenderEffect(() => {
+      this.nativeRevision();
+      const open = this.root.expanded();
       const surface = this.element.nativeElement;
-      this.root.content = surface;
-      queueMicrotask(() => {
-        if (!this.root.anchor || !this.root.expanded()) return;
-        const stopPosition = autoUpdateFloatingPosition(this.root.anchor, surface, {
-          placement: this.root.placement(),
-          offset: 6,
-        });
-        const coordinator = createDismissalCoordinator(surface.ownerDocument);
-        const unregister = coordinator.register({
-          element: surface,
-          branches: [this.root.anchor],
-          onDismiss: () => this.root.setOpen(false),
-        });
-        this.cleanup = () => {
-          unregister();
-          coordinator.destroy();
-          stopPosition();
-        };
-      });
+      const trigger = this.root.anchor;
+      if (!trigger) return;
+      if (open && !surface.matches(':popover-open')) surface.showPopover({ source: trigger });
+      if (!open && surface.matches(':popover-open')) surface.hidePopover();
     });
   }
+  onToggle(event: Event): void {
+    if (event.target !== this.element.nativeElement) return;
+    const actual = this.element.nativeElement.matches(':popover-open');
+    if (actual === this.root.expanded()) return;
+    this.root.setOpen(actual);
+    this.nativeRevision.update((revision) => revision + 1);
+  }
   ngOnDestroy(): void {
-    this.cleanup?.();
+    if (this.root.content === this.element.nativeElement) this.root.content = null;
   }
 }

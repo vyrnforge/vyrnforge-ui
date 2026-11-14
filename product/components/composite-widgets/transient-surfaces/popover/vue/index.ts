@@ -1,24 +1,28 @@
 import {
-  Teleport,
   computed,
   defineComponent,
   h,
   inject,
+  mergeProps,
+  nextTick,
+  onMounted,
   provide,
   ref,
   useId,
+  watch,
   type InjectionKey,
   type PropType,
   type Ref,
 } from 'vue';
 import type { FloatingPlacement } from '@vyrnforge/web/floating-positioning';
-import { useFloatingSurface } from '../../internal/floating-surface.js';
+
 interface Context {
-  id: string;
+  id: Readonly<Ref<string>>;
   open: Readonly<Ref<boolean>>;
   anchor: Ref<HTMLElement | null>;
   content: Ref<HTMLElement | null>;
   placement: Readonly<Ref<FloatingPlacement>>;
+  role: Readonly<Ref<'dialog' | 'region'>>;
   setOpen(value: boolean): void;
 }
 const Key: InjectionKey<Context> = Symbol('VyrnForgePopover');
@@ -33,20 +37,21 @@ export const PopoverRoot = defineComponent({
     modelValue: { type: Boolean, default: undefined },
     defaultOpen: { type: Boolean, default: false },
     placement: { type: String as PropType<FloatingPlacement>, default: 'bottom-start' },
+    contentId: String,
+    contentRole: { type: String as PropType<'dialog' | 'region'>, default: 'dialog' },
   },
   emits: ['update:modelValue', 'openChange'],
   setup(props, { slots, emit }) {
     const internal = ref(props.defaultOpen);
     const open = computed(() => props.modelValue ?? internal.value);
-    const anchor = ref<HTMLElement | null>(null);
-    const content = ref<HTMLElement | null>(null);
-    const placement = computed(() => props.placement);
+    const generated = useId();
     const context: Context = {
-      id: `vf-popover-${useId().replaceAll(':', '')}`,
+      id: computed(() => props.contentId ?? `vf-popover-${generated}`),
       open,
-      anchor,
-      content,
-      placement,
+      anchor: ref(null),
+      content: ref(null),
+      placement: computed(() => props.placement),
+      role: computed(() => props.contentRole),
       setOpen(value) {
         if (value === open.value) return;
         if (props.modelValue === undefined) internal.value = value;
@@ -66,19 +71,20 @@ export const PopoverTrigger = defineComponent({
     return () =>
       h(
         'button',
-        {
-          ...attrs,
+        mergeProps(attrs, {
           ref: context.anchor,
           type: attrs.type ?? 'button',
-          'aria-haspopup': 'dialog',
+          popovertarget: context.id.value,
+          'aria-haspopup': context.role.value === 'dialog' ? 'dialog' : undefined,
           'aria-expanded': context.open.value,
-          'aria-controls': `${context.id}-content`,
+          'aria-controls': context.id.value,
           'data-vf-popover-trigger': '',
           onClick(event: MouseEvent) {
-            if (typeof attrs.onClick === 'function') attrs.onClick(event);
-            if (!event.defaultPrevented) context.setOpen(!context.open.value);
+            if (event.defaultPrevented) return;
+            event.preventDefault();
+            context.setOpen(!context.open.value);
           },
-        },
+        }),
         slots.default?.(),
       );
   },
@@ -86,34 +92,37 @@ export const PopoverTrigger = defineComponent({
 export const PopoverContent = defineComponent({
   name: 'VfPopoverContent',
   inheritAttrs: false,
-  props: { portal: { type: Boolean, default: true } },
-  setup(props, { attrs, slots }) {
+  setup(_p, { attrs, slots }) {
     const context = usePopover();
-    const floating = useFloatingSurface({
-      open: context.open as Ref<boolean>,
-      anchor: context.anchor,
-      surface: context.content,
-      placement: context.placement as Ref<FloatingPlacement>,
-      onDismiss: () => context.setOpen(false),
-    });
-    return () => {
-      if (!context.open.value) return null;
-      const content = h(
+    function sync() {
+      const surface = context.content.value;
+      const trigger = context.anchor.value;
+      if (!surface || !trigger) return;
+      if (context.open.value && !surface.matches(':popover-open')) surface.showPopover({ source: trigger });
+      if (!context.open.value && surface.matches(':popover-open')) surface.hidePopover();
+    }
+    onMounted(sync);
+    watch([context.open, context.anchor, context.content], sync, { flush: 'post' });
+    return () =>
+      h(
         'div',
-        {
-          ...attrs,
-          id: attrs.id ?? `${context.id}-content`,
+        mergeProps(attrs, {
+          id: context.id.value,
           ref: context.content,
-          role: attrs.role ?? 'dialog',
-          tabindex: -1,
+          role: context.role.value,
+          popover: 'auto',
           'data-vf-popover-content': '',
-          'data-vf-open': '',
-        },
+          'data-vf-open': context.open.value ? '' : undefined,
+          'data-vf-placement': context.placement.value,
+          onToggle(event: Event) {
+            if (event.target !== event.currentTarget) return;
+            const actual = (event.currentTarget as HTMLElement).matches(':popover-open');
+            if (actual === context.open.value) return;
+            context.setOpen(actual);
+            void nextTick(sync);
+          },
+        }),
         slots.default?.(),
       );
-      return props.portal && floating.portalTarget.value
-        ? h(Teleport, { to: floating.portalTarget.value }, { default: () => content })
-        : content;
-    };
   },
 });
