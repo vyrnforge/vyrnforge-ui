@@ -18,6 +18,12 @@ test('carousel exposes exactly the selected slide before client activation', asy
       await expect(controlled.getByText('First slide')).toBeHidden();
       await expect(controlled.getByText('Second slide')).toBeVisible();
       await expect(page.locator('#controlled-next')).toHaveAttribute('aria-disabled', 'true');
+      for (const [id, label] of [['composed', 'Composed'], ['wrapped', 'Wrapped']]) {
+        const carousel = page.locator(`#${id}`);
+        await expect(carousel.getByText(`${label} first`)).toBeHidden();
+        await expect(carousel.getByText(`${label} second`)).toBeVisible();
+        await expect(page.locator(`#${id}-next`)).toHaveAttribute('aria-disabled', 'true');
+      }
     }
   } finally {
     await context.close();
@@ -61,6 +67,27 @@ test('controlled carousel requests a change without committing rejected state', 
   await expect(root.getByText('Second slide')).toBeVisible();
   await expect(root.getByText('First slide')).toBeHidden();
   await expect(page.locator('#controlled-next')).toHaveAttribute('aria-disabled', 'true');
+});
+
+test('one ordered carousel collection navigates multiple and wrapped viewports', async ({ page }) => {
+  test.skip(port === 'web', 'No Web-owned carousel runtime.');
+  await page.goto(`/components/carousel/${port}.html`);
+  for (const [id, label] of [['composed', 'Composed'], ['wrapped', 'Wrapped']]) {
+    const root = page.locator(`#${id}`);
+    const previous = page.locator(`#${id}-prev`);
+    const next = page.locator(`#${id}-next`);
+    await previous.focus();
+    await previous.press('Enter');
+    await expect(root.getByText(`${label} first`)).toBeVisible();
+    await expect(root.getByText(`${label} second`)).toBeHidden();
+    await expect(previous).toHaveAttribute('aria-disabled', 'true');
+    await expect(previous).toBeFocused();
+    await next.focus();
+    await next.press('Space');
+    await expect(root.getByText(`${label} second`)).toBeVisible();
+    await expect(root.getByText(`${label} first`)).toBeHidden();
+    await expect(next).toHaveAttribute('aria-disabled', 'true');
+  }
 });
 
 test('public Carousel CSS resolves canonical spacing and control radius in light and dark themes', async ({ page }) => {
