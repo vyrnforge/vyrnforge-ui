@@ -64,7 +64,7 @@ test('Accordion native activation, nested focus ownership, and disabled skipping
   await first.focus();
   await first.press('Space');
   await expect(first).toHaveAttribute('aria-expanded', 'false');
-  await expect(root.getByText('First content', { exact: false })).toBeHidden();
+  await expect(root.locator(`[id="${await first.getAttribute('aria-controls')}"]`)).toBeHidden();
   await first.press('Enter');
   await expect(first).toHaveAttribute('aria-expanded', 'true');
   await first.press('End');
