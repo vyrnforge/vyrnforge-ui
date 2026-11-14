@@ -1,4 +1,5 @@
-const web = '<button id="t" aria-describedby="tip">Info</button><div id="tip" role="tooltip" data-vf-tooltip-content>More information</div>';
+const web =
+  '<button id="t" aria-describedby="tip">Info</button><div id="tip" role="tooltip" data-vf-tooltip-content>More information</div>';
 
 const elements = `<p id="additional">Additional context</p>
 <vf-tooltip id="first" open-delay="0" close-delay="100" placement="bottom">
@@ -51,29 +52,27 @@ export async function createVueStory() {
   const { createSSRApp, h } = await import('vue');
   const { TooltipRoot, TooltipTrigger, TooltipContent } = await import('@vyrnforge/vue/tooltip');
   return createSSRApp({
-    render: () => h('div', [
-      h('p', { id: 'additional' }, 'Additional context'),
-      h(TooltipRoot, { contentId: 'tip', openDelay: 0, closeDelay: 100, placement: 'bottom' }, () => [
-        h(TooltipTrigger, null, () => h('button', { id: 't', 'aria-describedby': 'additional' }, 'Info')),
-        h(TooltipContent, null, () => 'More information'),
+    render: () =>
+      h('div', [
+        h('p', { id: 'additional' }, 'Additional context'),
+        h(TooltipRoot, { contentId: 'tip', openDelay: 0, closeDelay: 100, placement: 'bottom' }, () => [
+          h(TooltipTrigger, null, () => h('button', { id: 't', 'aria-describedby': 'additional' }, 'Info')),
+          h(TooltipContent, null, () => 'More information'),
+        ]),
+        h(TooltipRoot, { openDelay: 0 }, () => [
+          h(TooltipTrigger, null, () => h('button', null, 'Second')),
+          h(TooltipContent, null, () => 'Second description'),
+        ]),
+        h('button', { id: 'outside' }, 'Outside'),
       ]),
-      h(TooltipRoot, { openDelay: 0 }, () => [
-        h(TooltipTrigger, null, () => h('button', null, 'Second')),
-        h(TooltipContent, null, () => 'Second description'),
-      ]),
-      h('button', { id: 'outside' }, 'Outside'),
-    ]),
   });
 }
 
 export async function createAngularStory() {
   await import('@angular/compiler');
   const { Component } = await import('@angular/core');
-  const {
-    VfTooltipRootDirective,
-    VfTooltipTriggerDirective,
-    VfTooltipContentDirective,
-  } = await import('@vyrnforge/angular/tooltip');
+  const { VfTooltipRootDirective, VfTooltipTriggerDirective, VfTooltipContentDirective } =
+    await import('@vyrnforge/angular/tooltip');
   class TooltipTestApp {}
   Component({
     selector: 'vf-tooltip-test',

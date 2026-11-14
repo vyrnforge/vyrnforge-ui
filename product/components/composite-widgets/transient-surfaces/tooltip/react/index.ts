@@ -96,10 +96,13 @@ export function TooltipRoot({
       if (!present) state.dismissed = false;
       const next = present && !state.dismissed;
       if (next === latest.current.current) return;
-      timer.current = setTimeout(() => {
-        timer.current = null;
-        latest.current.setOpen(next);
-      }, Math.max(0, delay));
+      timer.current = setTimeout(
+        () => {
+          timer.current = null;
+          latest.current.setOpen(next);
+        },
+        Math.max(0, delay),
+      );
     },
     [cancel],
   );
@@ -168,7 +171,8 @@ export function TooltipTrigger({ children }: TooltipTriggerProps) {
     'data-vf-tooltip-trigger': '',
     onPointerEnter: (event) => {
       props.onPointerEnter?.(event);
-      if (!event.defaultPrevented && event.pointerType !== 'touch') context.activity('trigger', true, context.openDelay);
+      if (!event.defaultPrevented && event.pointerType !== 'touch')
+        context.activity('trigger', true, context.openDelay);
     },
     onPointerLeave: (event) => {
       props.onPointerLeave?.(event);

@@ -73,10 +73,13 @@ export const TooltipRoot = defineComponent({
       if (!present) sources.dismissed = false;
       const next = present && !sources.dismissed;
       if (next === open.value) return;
-      timer = setTimeout(() => {
-        timer = null;
-        setOpen(next);
-      }, Math.max(0, delay));
+      timer = setTimeout(
+        () => {
+          timer = null;
+          setOpen(next);
+        },
+        Math.max(0, delay),
+      );
     }
     function dismiss(event: KeyboardEvent) {
       if (event.key !== 'Escape' || event.defaultPrevented || !open.value) return;
@@ -126,7 +129,11 @@ export const TooltipTrigger = defineComponent({
       const child = nodes.find((node) => typeof node.type === 'string' || typeof node.type === 'object');
       if (!child) return nodes;
       const descriptions = new Set(
-        [child.props?.['aria-describedby'], attrs['aria-describedby']].filter(Boolean).join(' ').split(/\s+/).filter(Boolean),
+        [child.props?.['aria-describedby'], attrs['aria-describedby']]
+          .filter(Boolean)
+          .join(' ')
+          .split(/\s+/)
+          .filter(Boolean),
       );
       descriptions.add(context.id.value);
       return cloneVNode(

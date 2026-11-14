@@ -54,10 +54,13 @@ export class VfTooltipRootDirective implements OnDestroy {
     if (!present) this.sources.dismissed = false;
     const next = present && !this.sources.dismissed;
     if (next === this.expanded()) return;
-    this.timer = setTimeout(() => {
-      this.timer = null;
-      this.setOpen(next);
-    }, Math.max(0, delay));
+    this.timer = setTimeout(
+      () => {
+        this.timer = null;
+        this.setOpen(next);
+      },
+      Math.max(0, delay),
+    );
   }
 
   dismiss(event: KeyboardEvent): void {

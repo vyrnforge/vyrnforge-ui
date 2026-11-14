@@ -2332,7 +2332,7 @@ export const ToolbarSeparator: DefineComponent<    {}, () => VNode<RendererNode,
 // @public (undocumented)
 export const TooltipContent: DefineComponent<    {}, () => VNode<RendererNode, RendererElement, {
 [key: string]: any;
-}> | null, {}, {}, {}, ComponentOptionsMixin, ComponentOptionsMixin, {}, string, PublicProps, Readonly<{}> & Readonly<{}>, {}, {}, {}, {}, string, ComponentProvideOptions, true, {}, any>;
+}>, {}, {}, {}, ComponentOptionsMixin, ComponentOptionsMixin, {}, string, PublicProps, Readonly<{}> & Readonly<{}>, {}, {}, {}, {}, string, ComponentProvideOptions, true, {}, any>;
 
 // @public (undocumented)
 export const TooltipRoot: DefineComponent<ExtractPropTypes<    {
@@ -2356,6 +2356,7 @@ closeDelay: {
 type: NumberConstructor;
 default: number;
 };
+contentId: StringConstructor;
 }>, () => VNode<RendererNode, RendererElement, {
 [key: string]: any;
 }>[] | undefined, {}, {}, {}, ComponentOptionsMixin, ComponentOptionsMixin, ("update:modelValue" | "openChange")[], "update:modelValue" | "openChange", PublicProps, Readonly<ExtractPropTypes<    {
@@ -2379,6 +2380,7 @@ closeDelay: {
 type: NumberConstructor;
 default: number;
 };
+contentId: StringConstructor;
 }>> & Readonly<{
 "onUpdate:modelValue"?: (...args: any[]) => any;
 onOpenChange?: (...args: any[]) => any;
@@ -2393,7 +2395,9 @@ closeDelay: number;
 // @public (undocumented)
 export const TooltipTrigger: DefineComponent<    {}, () => VNode<RendererNode, RendererElement, {
 [key: string]: any;
-}>, {}, {}, {}, ComponentOptionsMixin, ComponentOptionsMixin, {}, string, PublicProps, Readonly<{}> & Readonly<{}>, {}, {}, {}, {}, string, ComponentProvideOptions, true, {}, any>;
+}> | VNode<RendererNode, RendererElement, {
+[key: string]: any;
+}>[], {}, {}, {}, ComponentOptionsMixin, ComponentOptionsMixin, {}, string, PublicProps, Readonly<{}> & Readonly<{}>, {}, {}, {}, {}, string, ComponentProvideOptions, true, {}, any>;
 
 // (No @packageDocumentation comment for this package)
 
