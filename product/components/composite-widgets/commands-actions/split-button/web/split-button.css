@@ -1,3 +1,5 @@
+@import '../../styles/command-menu.css';
+
 @layer vyrnforge.components {
   [data-vf-split-button-root] {
     display: inline-flex;
@@ -12,11 +14,17 @@
   }
   [data-vf-split-button-action] {
     padding: 0 var(--vf-space-md);
-    border-radius: var(--vf-control-radius) 0 0 var(--vf-control-radius);
+    border-start-start-radius: var(--vf-control-radius);
+    border-start-end-radius: 0;
+    border-end-start-radius: var(--vf-control-radius);
+    border-end-end-radius: 0;
   }
   [data-vf-split-button-trigger] {
     inline-size: 2.5rem;
     border-inline-start: 0;
-    border-radius: 0 var(--vf-control-radius) var(--vf-control-radius) 0;
+    border-start-start-radius: 0;
+    border-start-end-radius: var(--vf-control-radius);
+    border-end-start-radius: 0;
+    border-end-end-radius: var(--vf-control-radius);
   }
 }

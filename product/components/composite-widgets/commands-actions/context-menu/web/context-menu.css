@@ -1,3 +1,5 @@
+@import '../../styles/command-menu.css';
+
 @layer vyrnforge.components {
   [data-vf-context-menu-trigger] {
     min-inline-size: 0;
