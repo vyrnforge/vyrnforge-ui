@@ -1,27 +1,33 @@
 import {
-  Teleport,
+  cloneVNode,
   computed,
   defineComponent,
   h,
   inject,
+  mergeProps,
+  onMounted,
+  onUnmounted,
   provide,
   ref,
   useId,
+  watch,
+  type ComponentPublicInstance,
   type InjectionKey,
   type PropType,
   type Ref,
 } from 'vue';
 import type { FloatingPlacement } from '@vyrnforge/web/floating-positioning';
-import { useFloatingSurface } from '../../internal/floating-surface.js';
+
+type Activity = 'trigger' | 'content' | 'focus';
 interface Context {
-  id: string;
+  id: Readonly<Ref<string>>;
   open: Readonly<Ref<boolean>>;
   anchor: Ref<HTMLElement | null>;
   content: Ref<HTMLElement | null>;
   placement: Readonly<Ref<FloatingPlacement>>;
-  setOpen(value: boolean): void;
-  openDelay: number;
-  closeDelay: number;
+  activity(source: Activity, active: boolean, delay: number): void;
+  openDelay: Readonly<Ref<number>>;
+  closeDelay: Readonly<Ref<number>>;
 }
 const Key: InjectionKey<Context> = Symbol('VyrnForgeTooltip');
 function useTooltip() {
@@ -29,6 +35,7 @@ function useTooltip() {
   if (!value) throw new Error('Tooltip parts must be inside TooltipRoot.');
   return value;
 }
+
 export const TooltipRoot = defineComponent({
   name: 'VfTooltipRoot',
   props: {
@@ -37,92 +44,154 @@ export const TooltipRoot = defineComponent({
     placement: { type: String as PropType<FloatingPlacement>, default: 'top' },
     openDelay: { type: Number, default: 400 },
     closeDelay: { type: Number, default: 100 },
+    contentId: String,
   },
   emits: ['update:modelValue', 'openChange'],
   setup(props, { slots, emit }) {
     const internal = ref(props.defaultOpen);
     const open = computed(() => props.modelValue ?? internal.value);
-    const context: Context = {
-      id: `vf-tooltip-${useId().replaceAll(':', '')}`,
+    const generated = useId();
+    const anchor = ref<HTMLElement | null>(null);
+    const content = ref<HTMLElement | null>(null);
+    const sources = { trigger: false, content: false, focus: false, dismissed: false };
+    let timer: ReturnType<typeof setTimeout> | null = null;
+
+    function cancel() {
+      if (timer !== null) clearTimeout(timer);
+      timer = null;
+    }
+    function setOpen(value: boolean) {
+      if (value === open.value) return;
+      if (props.modelValue === undefined) internal.value = value;
+      emit('update:modelValue', value);
+      emit('openChange', value);
+    }
+    function activity(source: Activity, active: boolean, delay: number) {
+      sources[source] = active;
+      cancel();
+      const present = sources.trigger || sources.content || sources.focus;
+      if (!present) sources.dismissed = false;
+      const next = present && !sources.dismissed;
+      if (next === open.value) return;
+      timer = setTimeout(() => {
+        timer = null;
+        setOpen(next);
+      }, Math.max(0, delay));
+    }
+    function dismiss(event: KeyboardEvent) {
+      if (event.key !== 'Escape' || event.defaultPrevented || !open.value) return;
+      sources.dismissed = true;
+      cancel();
+      setOpen(false);
+      event.preventDefault();
+    }
+
+    let ownerDocument: Document | undefined;
+    onMounted(() => {
+      ownerDocument = anchor.value?.ownerDocument;
+      ownerDocument?.addEventListener('keydown', dismiss);
+    });
+    onUnmounted(() => {
+      cancel();
+      ownerDocument?.removeEventListener('keydown', dismiss);
+    });
+    watch(open, (value) => {
+      if (!value) sources.content = false;
+    });
+
+    provide(Key, {
+      id: computed(() => props.contentId ?? `vf-tooltip-${generated}`),
       open,
-      anchor: ref(null),
-      content: ref(null),
+      anchor,
+      content,
       placement: computed(() => props.placement),
-      setOpen(value) {
-        if (value === open.value) return;
-        if (props.modelValue === undefined) internal.value = value;
-        emit('update:modelValue', value);
-        emit('openChange', value);
-      },
-      openDelay: props.openDelay,
-      closeDelay: props.closeDelay,
-    };
-    provide(Key, context);
+      activity,
+      openDelay: computed(() => props.openDelay),
+      closeDelay: computed(() => props.closeDelay),
+    });
     return () => slots.default?.();
   },
 });
+
 export const TooltipTrigger = defineComponent({
   name: 'VfTooltipTrigger',
   inheritAttrs: false,
   setup(_p, { attrs, slots }) {
     const context = useTooltip();
-    let timer: ReturnType<typeof setTimeout> | null = null;
-    const schedule = (value: boolean, delay: number) => {
-      if (timer) clearTimeout(timer);
-      timer = setTimeout(() => context.setOpen(value), delay);
-    };
-    return () =>
-      h(
-        'span',
-        {
-          ...attrs,
-          ref: context.anchor,
-          tabindex: attrs.tabindex ?? undefined,
-          'aria-describedby': context.id,
-          'data-vf-tooltip-trigger': '',
-          onPointerenter: () => schedule(true, context.openDelay),
-          onPointerleave: () => schedule(false, context.closeDelay),
-          onFocus: () => schedule(true, 0),
-          onBlur: () => schedule(false, context.closeDelay),
-        },
-        slots.default?.(),
+    function assignRef(value: Element | ComponentPublicInstance | null) {
+      context.anchor.value = value instanceof HTMLElement ? value : null;
+    }
+    return () => {
+      const nodes = slots.default?.() ?? [];
+      const child = nodes.find((node) => typeof node.type === 'string' || typeof node.type === 'object');
+      if (!child) return nodes;
+      const descriptions = new Set(
+        [child.props?.['aria-describedby'], attrs['aria-describedby']].filter(Boolean).join(' ').split(/\s+/).filter(Boolean),
       );
+      descriptions.add(context.id.value);
+      return cloneVNode(
+        child,
+        mergeProps(attrs, {
+          ref: assignRef,
+          'aria-describedby': Array.from(descriptions).join(' '),
+          'data-vf-tooltip-trigger': '',
+          onPointerenter: (event: PointerEvent) => {
+            if (!event.defaultPrevented && event.pointerType !== 'touch') {
+              context.activity('trigger', true, context.openDelay.value);
+            }
+          },
+          onPointerleave: (event: PointerEvent) => {
+            if (event.pointerType !== 'touch') context.activity('trigger', false, context.closeDelay.value);
+          },
+          onFocus: (event: FocusEvent) => {
+            if (!event.defaultPrevented) context.activity('focus', true, 0);
+          },
+          onBlur: (event: FocusEvent) => {
+            if (!(event.currentTarget as HTMLElement).contains(event.relatedTarget as Node | null)) {
+              context.activity('focus', false, context.closeDelay.value);
+            }
+          },
+        }),
+        true,
+      );
+    };
   },
 });
+
 export const TooltipContent = defineComponent({
   name: 'VfTooltipContent',
   inheritAttrs: false,
   setup(_p, { attrs, slots }) {
     const context = useTooltip();
-    const floating = useFloatingSurface({
-      open: context.open as Ref<boolean>,
-      anchor: context.anchor,
-      surface: context.content,
-      placement: context.placement as Ref<FloatingPlacement>,
-      dismissOnOutsidePointer: false,
-      onDismiss: () => context.setOpen(false),
-    });
+    function sync() {
+      const surface = context.content.value;
+      const trigger = context.anchor.value;
+      if (!surface || !trigger) return;
+      if (context.open.value && !surface.matches(':popover-open')) surface.showPopover({ source: trigger });
+      if (!context.open.value && surface.matches(':popover-open')) surface.hidePopover();
+    }
+    onMounted(sync);
+    watch([context.open, context.anchor, context.content], sync, { flush: 'post' });
     return () =>
-      context.open.value && floating.portalTarget.value
-        ? h(
-            Teleport,
-            { to: floating.portalTarget.value },
-            {
-              default: () =>
-                h(
-                  'div',
-                  {
-                    ...attrs,
-                    id: attrs.id ?? context.id,
-                    ref: context.content,
-                    role: 'tooltip',
-                    'data-vf-tooltip-content': '',
-                    'data-vf-open': '',
-                  },
-                  slots.default?.(),
-                ),
-            },
-          )
-        : null;
+      h(
+        'div',
+        mergeProps(attrs, {
+          id: context.id.value,
+          ref: context.content,
+          role: 'tooltip',
+          popover: 'manual',
+          hidden: !context.open.value,
+          'data-vf-tooltip-content': '',
+          'data-vf-open': context.open.value ? '' : undefined,
+          'data-vf-placement': context.placement.value,
+          onPointerenter: (event: PointerEvent) => {
+            if (!event.defaultPrevented && event.pointerType !== 'touch') context.activity('content', true, 0);
+          },
+          onPointerleave: (event: PointerEvent) => {
+            if (event.pointerType !== 'touch') context.activity('content', false, context.closeDelay.value);
+          },
+        }),
+        slots.default?.(),
+      );
   },
 });
