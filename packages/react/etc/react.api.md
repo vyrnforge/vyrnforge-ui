@@ -2653,11 +2653,21 @@ export interface RangeSliderRootProps extends Omit<ComponentPropsWithoutRef<'div
     // (undocumented)
     defaultValue?: readonly [number, number];
     // (undocumented)
+    disabled?: boolean;
+    // (undocumented)
+    endLabel: string;
+    // (undocumented)
+    endName?: string;
+    // (undocumented)
     max?: number;
     // (undocumented)
     min?: number;
     // (undocumented)
     onValueChange?(v: [number, number]): void;
+    // (undocumented)
+    startLabel: string;
+    // (undocumented)
+    startName?: string;
     // (undocumented)
     step?: number;
     // (undocumented)

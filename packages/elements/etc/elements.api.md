@@ -493,7 +493,16 @@ export class VfPreviewCardElement extends HTMLElementBase_8 {
 // @public (undocumented)
 export class VfRangeSliderElement extends H_7 {
     // (undocumented)
+    attributeChangedCallback(): void;
+    // (undocumented)
     connectedCallback(): void;
+    // (undocumented)
+    disconnectedCallback(): void;
+    // (undocumented)
+    static readonly observedAttributes: string[];
+    // (undocumented)
+    get value(): [number, number];
+    set value(value: readonly [number, number]);
 }
 
 // @public (undocumented)
