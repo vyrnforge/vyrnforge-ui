@@ -34,7 +34,7 @@ test('PreviewCard uses native anchored top layer and remains available across ho
   await page.waitForTimeout(150);
   await expect(surface).toBeVisible();
   await trigger.focus();
-  await page.locator('#outside').hover();
+  await page.mouse.move(1, 1);
   await page.waitForTimeout(150);
   await expect(surface).toBeVisible();
   await trigger.press('Tab');
