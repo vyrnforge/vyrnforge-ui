@@ -2037,20 +2037,12 @@ export const TagGroupItem: DefineComponent<    {}, () => VNode<RendererNode, Ren
 
 // @public (undocumented)
 export const TagGroupRemove: DefineComponent<ExtractPropTypes<    {
-label: {
-type: StringConstructor;
-default: string;
-};
+label: StringConstructor;
 }>, () => VNode<RendererNode, RendererElement, {
 [key: string]: any;
 }>, {}, {}, {}, ComponentOptionsMixin, ComponentOptionsMixin, {}, string, PublicProps, Readonly<ExtractPropTypes<    {
-label: {
-type: StringConstructor;
-default: string;
-};
-}>> & Readonly<{}>, {
-label: string;
-}, {}, {}, {}, string, ComponentProvideOptions, true, {}, any>;
+label: StringConstructor;
+}>> & Readonly<{}>, {}, {}, {}, {}, string, ComponentProvideOptions, true, {}, any>;
 
 // @public (undocumented)
 export const TagGroupRoot: DefineComponent<    {}, () => VNode<RendererNode, RendererElement, {

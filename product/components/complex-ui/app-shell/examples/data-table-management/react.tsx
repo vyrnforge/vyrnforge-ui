@@ -148,9 +148,9 @@ function App() {
           </div>
 
           <PaginationRoot aria-label="Record pages">
-            <PaginationPrevious href="#previous" aria-disabled={safePage === 1 || undefined} onClick={(event) => { event.preventDefault(); if (safePage > 1) setPage(safePage - 1); }}>Previous</PaginationPrevious>
+            <PaginationPrevious href="#previous" aria-label="Previous page" aria-disabled={safePage === 1 || undefined} onClick={(event) => { event.preventDefault(); if (safePage > 1) setPage(safePage - 1); }}>Previous</PaginationPrevious>
             <span aria-live="polite">Page {safePage} of {pageCount}</span>
-            <PaginationNext href="#next" aria-disabled={safePage === pageCount || undefined} onClick={(event) => { event.preventDefault(); if (safePage < pageCount) setPage(safePage + 1); }}>Next</PaginationNext>
+            <PaginationNext href="#next" aria-label="Next page" aria-disabled={safePage === pageCount || undefined} onClick={(event) => { event.preventDefault(); if (safePage < pageCount) setPage(safePage + 1); }}>Next</PaginationNext>
           </PaginationRoot>
 
           <aside className="grid-decision-note">
