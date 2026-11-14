@@ -2733,7 +2733,7 @@ export class VfTagGroupItemDirective {
 // @public (undocumented)
 export class VfTagGroupRemoveDirective {
     // (undocumented)
-    readonly label: InputSignal<string>;
+    readonly label: InputSignal<string | undefined>;
     // (undocumented)
     static ɵdir: i0.ɵɵDirectiveDeclaration<VfTagGroupRemoveDirective, "button[vfTagGroupRemove]", never, {
         "label": {
