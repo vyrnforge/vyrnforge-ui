@@ -127,6 +127,8 @@ export type TabsActivation = 'automatic' | 'manual';
 // @public (undocumented)
 export type TabsOrientation = 'horizontal' | 'vertical';
 
+export { TextVariant }
+
 // @public (undocumented)
 export type ToggleGroupType = 'single' | 'multiple';
 
