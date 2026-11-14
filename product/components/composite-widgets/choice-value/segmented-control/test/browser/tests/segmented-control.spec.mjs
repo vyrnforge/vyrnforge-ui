@@ -25,13 +25,44 @@ test('SegmentedControl uses native radios, one Tab entry, disabled skip, indepen
   await expect(grid).toBeChecked();
   await page.keyboard.press('ArrowRight');
   await expect(details).toBeChecked();
+  // Native radio boundary and RTL behavior can differ by engine. Prove parity
+  // with an independent, unstyled HTML radio group rather than forcing wrap.
+  await page.evaluate(() => {
+    const form = document.createElement('form');
+    form.id = 'native-reference';
+    for (const value of ['list', 'disabled', 'grid', 'details']) {
+      const input = document.createElement('input');
+      input.type = 'radio';
+      input.name = 'reference';
+      input.value = value;
+      input.disabled = value === 'disabled';
+      input.checked = value === 'details';
+      form.append(input);
+    }
+    document.body.append(form);
+  });
+  const reference = page.locator('#native-reference');
+  await reference.locator('[value="details"]').focus();
   await page.keyboard.press('ArrowRight');
-  await expect(list).toBeChecked();
+  const boundaryValue = await reference.locator(':checked').inputValue();
+  await details.focus();
+  await page.keyboard.press('ArrowRight');
+  await expect(group.locator('input:checked')).toHaveValue(boundaryValue);
+
+  await reference.evaluate((element) => element.setAttribute('dir', 'rtl'));
+  await reference.locator('[value="grid"]').focus();
+  await page.keyboard.press('Space');
+  await page.keyboard.press('ArrowRight');
+  const rtlValue = await reference.locator(':checked').inputValue();
   await group.evaluate((element) => element.setAttribute('dir', 'rtl'));
+  await grid.focus();
+  await page.keyboard.press('Space');
   await page.keyboard.press('ArrowRight');
-  await expect(details).toBeChecked();
+  await expect(group.locator('input:checked')).toHaveValue(rtlValue);
+  await expect(group.locator('input:checked')).toBeFocused();
+  await reference.evaluate((element) => element.remove());
   await expect(other.getByRole('radio', { name: 'Grid' })).toBeChecked();
-  expect(await page.locator('#form').evaluate((form) => new FormData(form).get('view'))).toBe('details');
+  expect(await page.locator('#form').evaluate((form) => new FormData(form).get('view'))).toBe(rtlValue);
   await page.keyboard.press('Tab');
   await expect(other.getByRole('radio', { name: 'Grid' })).toBeFocused();
   await page.keyboard.press('Tab');
