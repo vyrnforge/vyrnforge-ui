@@ -7,6 +7,23 @@ import {
   type ComponentPropsWithoutRef,
   type ReactNode,
 } from 'react';
+function bounds(min: number, max: number): [number, number] {
+  const lower = Math.max(0, Math.min(100, Number.isFinite(min) ? min : 10));
+  return [lower, Math.max(lower, Math.min(100, Number.isFinite(max) ? max : 90))];
+}
+
+function clamp(value: number, min: number, max: number): number {
+  return Math.min(max, Math.max(min, Number.isFinite(value) ? value : 50));
+}
+
+function requestedSize(event: KeyboardEvent, current: number, min: number, max: number, rtl: boolean): number | null {
+  if (event.key === 'Home') return min;
+  if (event.key === 'End') return max;
+  const delta = event.key === 'ArrowLeft' ? -1 : event.key === 'ArrowRight' ? 1 : 0;
+  if (!delta) return null;
+  return clamp(current + delta * (rtl ? -1 : 1) * (event.shiftKey ? 10 : 1), min, max);
+}
+
 interface Ctx {
   size: number;
   set(v: number): void;
@@ -32,15 +49,17 @@ export const SplitPanelRoot = forwardRef<HTMLDivElement, SplitPanelRootProps>(fu
   ref,
 ) {
   const [iv, setIv] = useState(defaultSize);
-  const current = size ?? iv;
+  const [lower, upper] = bounds(min, max);
+  const current = clamp(size ?? iv, lower, upper);
   const set = (v: number) => {
-    const next = Math.min(max, Math.max(min, v));
+    const next = clamp(v, lower, upper);
+    if (next === current) return;
     if (size === undefined) setIv(next);
     onSizeChange?.(next);
   };
   return createElement(
     C.Provider,
-    { value: { size: current, set, min, max } },
+    { value: { size: current, set, min: lower, max: upper } },
     createElement(
       'div',
       {
@@ -69,28 +88,21 @@ export const SplitPanelResizeHandle = forwardRef<HTMLDivElement, ComponentPropsW
       'aria-orientation': 'vertical',
       'aria-valuemin': s.min,
       'aria-valuemax': s.max,
-      'aria-valuenow': Math.round(s.size),
+      'aria-valuenow': s.size,
       'data-vf-split-panel-handle': '',
       onKeyDown: (e) => {
         props.onKeyDown?.(e);
         if (e.defaultPrevented) return;
-        let d = 0;
-        if (e.key === 'ArrowLeft') d = -1;
-        if (e.key === 'ArrowRight') d = 1;
-        if (e.key === 'Home') {
-          e.preventDefault();
-          s.set(s.min);
-          return;
-        }
-        if (e.key === 'End') {
-          e.preventDefault();
-          s.set(s.max);
-          return;
-        }
-        if (d) {
-          e.preventDefault();
-          s.set(s.size + d * (e.shiftKey ? 10 : 1));
-        }
+        const next = requestedSize(
+          e.nativeEvent,
+          s.size,
+          s.min,
+          s.max,
+          getComputedStyle(e.currentTarget).direction === 'rtl',
+        );
+        if (next === null) return;
+        e.preventDefault();
+        s.set(next);
       },
     });
   },
