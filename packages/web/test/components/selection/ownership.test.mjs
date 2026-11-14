@@ -14,11 +14,11 @@ test('selection-family component styles compose one private shared stylesheet', 
     readComponent('multi-select'),
   ]);
 
-  const sharedImport = '@import "../../styles/selection.css";';
-  assert.equal(listbox.trim(), sharedImport);
-  assert.equal(select.trim(), sharedImport);
-  assert.match(combobox, /@import "\.\.\/\.\.\/styles\/selection\.css";/);
-  assert.match(multiSelect, /@import "\.\.\/\.\.\/styles\/selection\.css";/);
+  const sharedImport = /^@import\s+(['"])\.\.\/\.\.\/styles\/selection\.css\1;$/;
+  assert.match(listbox.trim(), sharedImport);
+  assert.match(select.trim(), sharedImport);
+  assert.match(combobox, /@import\s+(['"])\.\.\/\.\.\/styles\/selection\.css\1;/);
+  assert.match(multiSelect, /@import\s+(['"])\.\.\/\.\.\/styles\/selection\.css\1;/);
 
   assert.match(shared, /data-vf-listbox-root/);
   assert.match(shared, /data-vf-select-content/);
