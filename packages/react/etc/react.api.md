@@ -248,7 +248,7 @@ export interface CarouselRootProps extends ComponentPropsWithoutRef<'section'> {
     // (undocumented)
     index?: number;
     // (undocumented)
-    onIndexChange?(index: number): void;
+    onIndexChange?(i: number): void;
 }
 
 // @public (undocumented)
@@ -1619,6 +1619,7 @@ export interface DisclosureRootProps extends Omit<HTMLAttributes<HTMLDivElement>
     onOpenChange?: (open: boolean) => void;
     // (undocumented)
     open?: boolean;
+    panelId?: string;
 }
 
 // @public (undocumented)

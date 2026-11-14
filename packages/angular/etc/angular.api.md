@@ -501,52 +501,28 @@ export class VfButtonDirective {
 
 // @public (undocumented)
 export class VfCarouselNextDirective {
-    // (undocumented)
-    activate(event: MouseEvent): void;
-    // (undocumented)
-    readonly disabled: InputSignalWithTransform<boolean, unknown>;
+    constructor(root: VfCarouselRootDirective);
     // (undocumented)
     readonly root: VfCarouselRootDirective;
     // (undocumented)
-    unavailable(): boolean;
-    // (undocumented)
-    static ɵdir: i0.ɵɵDirectiveDeclaration<VfCarouselNextDirective, "button[vfCarouselNext]", never, {
-        "disabled": {
-            "alias": "disabled";
-            "required": false;
-            "isSignal": true;
-        };
-    }, {}, never, never, true, never>;
+    static ɵdir: i0.ɵɵDirectiveDeclaration<VfCarouselNextDirective, "button[vfCarouselNext]", never, {}, {}, never, never, true, never>;
     // (undocumented)
     static ɵfac: i0.ɵɵFactoryDeclaration<VfCarouselNextDirective, never>;
 }
 
 // @public (undocumented)
 export class VfCarouselPreviousDirective {
-    // (undocumented)
-    activate(event: MouseEvent): void;
-    // (undocumented)
-    readonly disabled: InputSignalWithTransform<boolean, unknown>;
+    constructor(root: VfCarouselRootDirective);
     // (undocumented)
     readonly root: VfCarouselRootDirective;
     // (undocumented)
-    unavailable(): boolean;
-    // (undocumented)
-    static ɵdir: i0.ɵɵDirectiveDeclaration<VfCarouselPreviousDirective, "button[vfCarouselPrevious]", never, {
-        "disabled": {
-            "alias": "disabled";
-            "required": false;
-            "isSignal": true;
-        };
-    }, {}, never, never, true, never>;
+    static ɵdir: i0.ɵɵDirectiveDeclaration<VfCarouselPreviousDirective, "button[vfCarouselPrevious]", never, {}, {}, never, never, true, never>;
     // (undocumented)
     static ɵfac: i0.ɵɵFactoryDeclaration<VfCarouselPreviousDirective, never>;
 }
 
 // @public (undocumented)
 export class VfCarouselRootDirective {
-    // (undocumented)
-    count(): number;
     // (undocumented)
     current(): number;
     // (undocumented)
@@ -556,9 +532,7 @@ export class VfCarouselRootDirective {
     // (undocumented)
     readonly indexChange: OutputEmitterRef<number>;
     // (undocumented)
-    position(slide: VfCarouselSlideDirective): number;
-    // (undocumented)
-    set(value: number): void;
+    set(v: number): void;
     // (undocumented)
     static ɵdir: i0.ɵɵDirectiveDeclaration<VfCarouselRootDirective, "[vfCarouselRoot]", never, {
         "index": {
@@ -573,15 +547,13 @@ export class VfCarouselRootDirective {
         };
     }, {
         "indexChange": "indexChange";
-    }, ["slides"], never, true, never>;
+    }, never, never, true, never>;
     // (undocumented)
     static ɵfac: i0.ɵɵFactoryDeclaration<VfCarouselRootDirective, never>;
 }
 
 // @public (undocumented)
 export class VfCarouselSlideDirective {
-    // (undocumented)
-    readonly root: VfCarouselRootDirective;
     // (undocumented)
     static ɵdir: i0.ɵɵDirectiveDeclaration<VfCarouselSlideDirective, "[vfCarouselSlide]", never, {}, {}, never, never, true, never>;
     // (undocumented)
@@ -1126,6 +1098,9 @@ export class VfDisclosureRootDirective {
     readonly open: InputSignal<boolean | undefined>;
     // (undocumented)
     readonly openChange: OutputEmitterRef<boolean>;
+    readonly panelId: InputSignal<string | undefined>;
+    // (undocumented)
+    readonly resolvedPanelId: Signal<string>;
     // (undocumented)
     setOpen(next: boolean): void;
     // (undocumented)
@@ -1133,6 +1108,11 @@ export class VfDisclosureRootDirective {
         "id": {
             "alias": "id";
             "required": true;
+            "isSignal": true;
+        };
+        "panelId": {
+            "alias": "panelId";
+            "required": false;
             "isSignal": true;
         };
         "open": {
@@ -1161,11 +1141,19 @@ export class VfDisclosureRootDirective {
 export class VfDisclosureTriggerDirective {
     constructor(root: VfDisclosureRootDirective);
     // (undocumented)
+    readonly disabled: InputSignalWithTransform<boolean, unknown>;
+    // (undocumented)
     readonly root: VfDisclosureRootDirective;
     // (undocumented)
-    toggle(): void;
+    toggle(event?: MouseEvent): void;
     // (undocumented)
-    static ɵdir: i0.ɵɵDirectiveDeclaration<VfDisclosureTriggerDirective, "button[vfDisclosureTrigger]", never, {}, {}, never, never, true, never>;
+    static ɵdir: i0.ɵɵDirectiveDeclaration<VfDisclosureTriggerDirective, "button[vfDisclosureTrigger]", never, {
+        "disabled": {
+            "alias": "disabled";
+            "required": false;
+            "isSignal": true;
+        };
+    }, {}, never, never, true, never>;
     // (undocumented)
     static ɵfac: i0.ɵɵFactoryDeclaration<VfDisclosureTriggerDirective, never>;
 }
