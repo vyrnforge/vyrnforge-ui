@@ -9,13 +9,7 @@
   "wcag": {
     "target": "2.2 AA",
     "status": "mapped",
-    "criteria": [
-      "1.3.1",
-      "2.1.1",
-      "2.4.3",
-      "2.4.7",
-      "4.1.2"
-    ]
+    "criteria": ["1.3.1", "2.1.1", "2.4.3", "2.4.7", "4.1.2"]
   },
   "aria": {
     "status": "mapped",
@@ -32,10 +26,7 @@
       "roving focus and documented activation policy",
       "orientation and RTL-aware navigation"
     ],
-    "consumer": [
-      "provide tab labels and panel content",
-      "choose automatic or manual activation when exposed"
-    ]
+    "consumer": ["provide tab labels and panel content", "choose automatic or manual activation when exposed"]
   },
   "forms": {
     "status": "not-applicable"
@@ -50,10 +41,7 @@
     "browser": "required",
     "assistiveTechnology": "required"
   },
-  "profileVariability": [
-    "activation-mode",
-    "orientation"
-  ],
+  "profileVariability": ["activation-mode", "orientation"],
   "notes": [
     "Focus position and selection remain distinct in manual activation mode.",
     "Generated value tokens are injective for distinct well-formed values. The committed selection remains the automatic-mode tab stop after a rejected controlled request; manual focus is separate. Native buttons deliver Enter/Space through click."
