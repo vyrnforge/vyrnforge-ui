@@ -5,6 +5,7 @@ const port = process.env.VF_COMPONENT_PORT || 'react';
 test('tooltip relationship is accessible', async ({ page }) => {
   await page.goto(`/components/tooltip/${port}.html`);
   if (port !== 'web') {
+    await page.waitForFunction(() => document.body.dataset.tooltipReady === 'true');
     await page.getByRole('button', { name: 'Info' }).focus();
   }
   await expect(page.getByRole('tooltip')).toBeVisible();
@@ -49,7 +50,7 @@ test('public Tooltip CSS resolves canonical control radius and typography in lig
 test('Public Tooltip uses native top layer and persists across hover and focus until Escape', async ({ page }) => {
   test.skip(port === 'web', 'Native runtime behavior is owned by the runtime ports.');
   await page.goto(`/components/tooltip/${port}.html`);
-  if (port === 'elements') await page.waitForFunction(() => Boolean(customElements.get('vf-tooltip')));
+  await page.waitForFunction(() => document.body.dataset.tooltipReady === 'true');
   const trigger = page.getByRole('button', { name: 'Info' });
   const tooltip = page.locator('#tip');
   await expect(trigger).toHaveAttribute('aria-describedby', 'additional tip');
@@ -83,14 +84,14 @@ test('Elements Tooltip allocates distinct relationships and cancels pending work
   test.skip(port !== 'elements', 'Public Elements native behavior.');
   await page.goto('/components/tooltip/elements.html');
   await page.waitForFunction(() => Boolean(customElements.get('vf-tooltip')));
-  const second = page.getByRole('button', { name: 'Second' });
+  const second = page.getByRole('button', { name: 'Generated' });
   const description = await second.getAttribute('aria-describedby');
   expect(description).toBeTruthy();
   expect(description).not.toBe('tip');
-  await expect(second).toHaveAccessibleDescription('Second description');
-  await page.locator('#second').evaluate((root) => root.setAttribute('open-delay', '150'));
+  await expect(second).toHaveAccessibleDescription('Generated description');
+  await page.locator('#generated').evaluate((root) => root.setAttribute('open-delay', '150'));
   await second.hover();
-  await page.locator('#second').evaluate((root) => {
+  await page.locator('#generated').evaluate((root) => {
     window.removedTooltip = root;
     root.remove();
   });
@@ -111,4 +112,16 @@ test('Tooltip description relationships exist before activation', async ({ brows
   } finally {
     await context.close();
   }
+});
+
+test('Controlled Tooltip requests visibility without overriding the committed value', async ({ page }) => {
+  test.skip(port === 'web' || port === 'elements', 'Controlled framework contracts.');
+  await page.goto(`/components/tooltip/${port}.html`);
+  await page.waitForFunction(() => document.body.dataset.tooltipReady === 'true');
+  const trigger = page.getByRole('button', { name: 'Controlled' });
+  await trigger.focus();
+  await expect(page.locator('body')).toHaveAttribute('data-tooltip-request', 'true');
+  await expect(page.locator('#controlled-tip')).toBeHidden();
+  await expect(trigger).toBeFocused();
+  await expect(trigger).toHaveAccessibleDescription('Controlled description');
 });

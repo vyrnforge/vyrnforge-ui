@@ -1,7 +1,7 @@
 ---
-"@vyrnforge/react": minor
-"@vyrnforge/vue": minor
-"@vyrnforge/angular": minor
+"@vyrnforge/react": major
+"@vyrnforge/vue": major
+"@vyrnforge/angular": major
 "@vyrnforge/elements": patch
 "@vyrnforge/web": patch
 ---

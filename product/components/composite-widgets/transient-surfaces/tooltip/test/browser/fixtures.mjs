@@ -10,6 +10,7 @@ const elements = `<p id="additional">Additional context</p>
   <button data-vf-tooltip-trigger aria-describedby="second-tip">Second</button>
   <div id="second-tip" role="tooltip" data-vf-tooltip-content hidden>Second description</div>
 </vf-tooltip>
+<vf-tooltip id="generated" open-delay="0"><button data-vf-tooltip-trigger>Generated</button><div data-vf-tooltip-content hidden>Generated description</div></vf-tooltip>
 <button id="outside">Outside</button>`;
 
 export const browserFixture = {
@@ -26,11 +27,18 @@ export const browserFixture = {
 };
 
 export async function createReactStory() {
-  const { createElement: h, Fragment } = await import('react');
+  const { createElement: h, Fragment, useEffect } = await import('react');
   const { TooltipRoot, TooltipTrigger, TooltipContent } = await import('@vyrnforge/react/tooltip');
+  function Ready() {
+    useEffect(() => {
+      document.body.dataset.tooltipReady = 'true';
+    }, []);
+    return null;
+  }
   return h(
     Fragment,
     null,
+    h(Ready),
     h('p', { id: 'additional' }, 'Additional context'),
     h(
       TooltipRoot,
@@ -44,14 +52,23 @@ export async function createReactStory() {
       h(TooltipTrigger, null, h('button', null, 'Second')),
       h(TooltipContent, null, 'Second description'),
     ),
+    h(
+      TooltipRoot,
+      { open: false, contentId: 'controlled-tip', openDelay: 0, onOpenChange: (next) => { document.body.dataset.tooltipRequest = String(next); } },
+      h(TooltipTrigger, null, h('button', null, 'Controlled')),
+      h(TooltipContent, null, 'Controlled description'),
+    ),
     h('button', { id: 'outside' }, 'Outside'),
   );
 }
 
 export async function createVueStory() {
-  const { createSSRApp, h } = await import('vue');
+  const { createSSRApp, h, onMounted } = await import('vue');
   const { TooltipRoot, TooltipTrigger, TooltipContent } = await import('@vyrnforge/vue/tooltip');
   return createSSRApp({
+    setup() {
+      onMounted(() => { document.body.dataset.tooltipReady = 'true'; });
+    },
     render: () =>
       h('div', [
         h('p', { id: 'additional' }, 'Additional context'),
@@ -63,6 +80,10 @@ export async function createVueStory() {
           h(TooltipTrigger, null, () => h('button', null, 'Second')),
           h(TooltipContent, null, () => 'Second description'),
         ]),
+        h(TooltipRoot, { modelValue: false, contentId: 'controlled-tip', openDelay: 0, 'onUpdate:modelValue': (next) => { document.body.dataset.tooltipRequest = String(next); } }, () => [
+          h(TooltipTrigger, null, () => h('button', null, 'Controlled')),
+          h(TooltipContent, null, () => 'Controlled description'),
+        ]),
         h('button', { id: 'outside' }, 'Outside'),
       ]),
   });
@@ -70,10 +91,15 @@ export async function createVueStory() {
 
 export async function createAngularStory() {
   await import('@angular/compiler');
-  const { Component } = await import('@angular/core');
+  const { Component, afterNextRender } = await import('@angular/core');
   const { VfTooltipRootDirective, VfTooltipTriggerDirective, VfTooltipContentDirective } =
     await import('@vyrnforge/angular/tooltip');
-  class TooltipTestApp {}
+  class TooltipTestApp {
+    constructor() {
+      afterNextRender(() => { document.body.dataset.tooltipReady = 'true'; });
+    }
+    request(next) { document.body.dataset.tooltipRequest = String(next); }
+  }
   Component({
     selector: 'vf-tooltip-test',
     standalone: true,
@@ -101,6 +127,7 @@ export async function createElementsStory({ client }) {
       ? async () => {
           const { defineTooltipElement } = await import('@vyrnforge/elements/tooltip');
           defineTooltipElement();
+          document.body.dataset.tooltipReady = 'true';
         }
       : undefined,
   };
