@@ -1728,6 +1728,7 @@ defaultValue: {
 type: StringConstructor;
 default: string;
 };
+name: StringConstructor;
 }>, () => VNode<RendererNode, RendererElement, {
 [key: string]: any;
 }>, {}, {}, {}, ComponentOptionsMixin, ComponentOptionsMixin, "update:value"[], "update:value", PublicProps, Readonly<ExtractPropTypes<    {
@@ -1736,6 +1737,7 @@ defaultValue: {
 type: StringConstructor;
 default: string;
 };
+name: StringConstructor;
 }>> & Readonly<{
 "onUpdate:value"?: (...args: any[]) => any;
 }>, {

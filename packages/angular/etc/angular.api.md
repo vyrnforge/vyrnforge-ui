@@ -2122,7 +2122,7 @@ export class VfPreviewCardContentDirective implements OnDestroy {
 // @public (undocumented)
 export class VfPreviewCardRootDirective implements OnDestroy {
     // (undocumented)
-    activity(source: Activity, active: boolean, delay: number): void;
+    activity(source: Activity_2, active: boolean, delay: number): void;
     // (undocumented)
     anchor: HTMLElement | null;
     // (undocumented)
@@ -2424,7 +2424,7 @@ export class VfSearchFieldRootDirective {
 export class VfSegmentedControlItemDirective {
     constructor(root: VfSegmentedControlRootDirective);
     // (undocumented)
-    readonly disabled: InputSignal<boolean>;
+    readonly disabled: InputSignalWithTransform<boolean, unknown>;
     // (undocumented)
     readonly root: VfSegmentedControlRootDirective;
     // (undocumented)
@@ -2432,7 +2432,7 @@ export class VfSegmentedControlItemDirective {
     // (undocumented)
     readonly value: InputSignal<string>;
     // (undocumented)
-    static ɵdir: i0.ɵɵDirectiveDeclaration<VfSegmentedControlItemDirective, "button[vfSegmentedControlItem]", never, {
+    static ɵdir: i0.ɵɵDirectiveDeclaration<VfSegmentedControlItemDirective, "input[type=radio][vfSegmentedControlItem]", never, {
         "value": {
             "alias": "vfSegmentedControlItem";
             "required": true;
@@ -2453,6 +2453,8 @@ export class VfSegmentedControlRootDirective {
     // (undocumented)
     readonly defaultValue: InputSignal<string>;
     // (undocumented)
+    readonly name: InputSignal<string>;
+    // (undocumented)
     readonly selected: Signal<string>;
     // (undocumented)
     set(v: string): void;
@@ -2470,6 +2472,11 @@ export class VfSegmentedControlRootDirective {
         "defaultValue": {
             "alias": "defaultValue";
             "required": false;
+            "isSignal": true;
+        };
+        "name": {
+            "alias": "name";
+            "required": true;
             "isSignal": true;
         };
     }, {

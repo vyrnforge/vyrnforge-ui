@@ -2746,10 +2746,12 @@ export interface SearchFieldRootProps extends ComponentPropsWithoutRef<'div'> {
 }
 
 // @public (undocumented)
-export const SegmentedControlItem: ForwardRefExoticComponent<SegmentedControlItemProps & RefAttributes<HTMLButtonElement>>;
+export const SegmentedControlItem: ForwardRefExoticComponent<SegmentedControlItemProps & RefAttributes<HTMLInputElement>>;
 
 // @public (undocumented)
-export interface SegmentedControlItemProps extends Omit<ComponentPropsWithoutRef<'button'>, 'value'> {
+export interface SegmentedControlItemProps extends Omit<ComponentPropsWithoutRef<'input'>, 'type' | 'name' | 'value' | 'checked' | 'defaultChecked' | 'children'> {
+    // (undocumented)
+    children?: ReactNode;
     // (undocumented)
     value: string;
 }
@@ -2763,6 +2765,8 @@ export interface SegmentedControlRootProps extends Omit<ComponentPropsWithoutRef
     children?: ReactNode;
     // (undocumented)
     defaultValue?: string;
+    // (undocumented)
+    name?: string;
     // (undocumented)
     onValueChange?(v: string): void;
     // (undocumented)
