@@ -52,7 +52,7 @@ import { ProviderProps } from 'react';
 import { ReactElement } from 'react';
 import { ReactEventHandler } from 'react';
 import { ReactNode } from 'react';
-import type { Ref } from 'react';
+import { Ref } from 'react';
 import { RefAttributes } from 'react';
 import { RefObject } from 'react';
 import type { SelectHTMLAttributes } from 'react';
@@ -2683,6 +2683,7 @@ export interface RangeSliderRootProps extends Omit<ComponentPropsWithoutRef<'div
 // @public (undocumented)
 export function RatingItem(input: RatingItemProps): ReactElement<    {
 'data-vf-rating-item': string;
+'data-vf-state': string;
 }, string | JSXElementConstructor<any>>;
 
 // @public (undocumented)
@@ -2703,13 +2704,9 @@ export interface RatingRootProps {
     // (undocumented)
     'aria-label'?: string;
     // (undocumented)
-    'aria-labelledby'?: string;
-    // (undocumented)
     children?: ReactNode;
     // (undocumented)
     defaultValue?: number;
-    // (undocumented)
-    getItemLabel?(value: number): string;
     // (undocumented)
     max?: number;
     // (undocumented)
@@ -4832,7 +4829,7 @@ key?: Key | null | undefined;
 export function TooltipContent(props: TooltipContentProps): ReactNode;
 
 // @public (undocumented)
-export type TooltipContentProps = HTMLAttributes<HTMLDivElement>;
+export type TooltipContentProps = Omit<HTMLAttributes<HTMLDivElement>, 'id'>;
 
 // @public (undocumented)
 export function TooltipRoot(input: TooltipRootProps): FunctionComponentElement<ProviderProps<TooltipContextValue | null>>;
@@ -4843,6 +4840,7 @@ export interface TooltipRootProps {
     children?: ReactNode;
     // (undocumented)
     closeDelay?: number;
+    contentId?: string;
     // (undocumented)
     defaultOpen?: boolean;
     // (undocumented)
@@ -4856,7 +4854,9 @@ export interface TooltipRootProps {
 }
 
 // @public (undocumented)
-export function TooltipTrigger(input: TooltipTriggerProps): ReactElement<Record<string, unknown>, string | JSXElementConstructor<any>>;
+export function TooltipTrigger(input: TooltipTriggerProps): ReactElement<HTMLAttributes<HTMLElement> & {
+    ref?: Ref<HTMLElement>;
+}, string | JSXElementConstructor<any>>;
 
 // @public (undocumented)
 export interface TooltipTriggerProps {

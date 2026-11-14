@@ -9,8 +9,66 @@
     font-weight: var(--vf-control-font-weight);
     max-inline-size: 20rem;
     padding: 0.375rem 0.5rem;
-    pointer-events: none;
+    pointer-events: auto;
     z-index: 1100;
+  }
+  :where([data-vf-tooltip-content][popover]) {
+    position: fixed;
+    inset: auto;
+    margin: 0;
+    border: 0;
+    position-area: top;
+    position-try-fallbacks:
+      flip-block,
+      flip-inline,
+      flip-block flip-inline;
+    inline-size: max-content;
+    max-inline-size: min(20rem, calc(100vw - 1rem));
+  }
+  :where([data-vf-tooltip-content][popover][data-vf-placement='bottom']) {
+    position-area: bottom;
+  }
+  :where([data-vf-tooltip-content][popover][data-vf-placement='left']) {
+    position-area: left;
+  }
+  :where([data-vf-tooltip-content][popover][data-vf-placement='right']) {
+    position-area: right;
+  }
+  :where([data-vf-tooltip-content][popover][data-vf-placement='top-start']) {
+    position-area: top span-right;
+  }
+  :where([data-vf-tooltip-content][popover][data-vf-placement='top-end']) {
+    position-area: top span-left;
+  }
+  :where([data-vf-tooltip-content][popover][data-vf-placement='bottom-start']) {
+    position-area: bottom span-right;
+  }
+  :where([data-vf-tooltip-content][popover][data-vf-placement='bottom-end']) {
+    position-area: bottom span-left;
+  }
+  :where([data-vf-tooltip-content][popover][data-vf-placement='left-start']) {
+    position-area: left span-bottom;
+  }
+  :where([data-vf-tooltip-content][popover][data-vf-placement='left-end']) {
+    position-area: left span-top;
+  }
+  :where([data-vf-tooltip-content][popover][data-vf-placement='right-start']) {
+    position-area: right span-bottom;
+  }
+  :where([data-vf-tooltip-content][popover][data-vf-placement='right-end']) {
+    position-area: right span-top;
+  }
+  :where([data-vf-tooltip-content][popover][data-vf-placement='top-start']:dir(rtl)) {
+    position-area: top span-left;
+  }
+  :where([data-vf-tooltip-content][popover][data-vf-placement='top-end']:dir(rtl)) {
+    position-area: top span-right;
+  }
+  :where([data-vf-tooltip-content][popover][data-vf-placement='bottom-start']:dir(rtl)) {
+    position-area: bottom span-left;
+  }
+  :where([data-vf-tooltip-content][popover][data-vf-placement='bottom-end']:dir(rtl)) {
+    position-area: bottom span-right;
   }
   @media (forced-colors: active) {
     :where([data-vf-tooltip-content]) {

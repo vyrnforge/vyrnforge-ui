@@ -2287,8 +2287,6 @@ export class VfRatingRootDirective {
     // (undocumented)
     readonly defaultValue: InputSignal<number>;
     // (undocumented)
-    readonly name: InputSignal<string>;
-    // (undocumented)
     readonly selected: Signal<number>;
     // (undocumented)
     set(v: number): void;
@@ -2306,11 +2304,6 @@ export class VfRatingRootDirective {
         "defaultValue": {
             "alias": "defaultValue";
             "required": false;
-            "isSignal": true;
-        };
-        "name": {
-            "alias": "name";
-            "required": true;
             "isSignal": true;
         };
     }, {
@@ -3139,6 +3132,8 @@ export class VfTooltipContentDirective implements OnDestroy {
     // (undocumented)
     ngOnDestroy(): void;
     // (undocumented)
+    pointer(event: PointerEvent, active: boolean): void;
+    // (undocumented)
     readonly root: VfTooltipRootDirective;
     // (undocumented)
     static ɵdir: i0.ɵɵDirectiveDeclaration<VfTooltipContentDirective, "[vfTooltipContent]", never, {}, {}, never, never, true, never>;
@@ -3147,7 +3142,9 @@ export class VfTooltipContentDirective implements OnDestroy {
 }
 
 // @public (undocumented)
-export class VfTooltipRootDirective {
+export class VfTooltipRootDirective implements OnDestroy {
+    // (undocumented)
+    activity(source: Activity, active: boolean, delay: number): void;
     // (undocumented)
     anchor: HTMLElement | null;
     // (undocumented)
@@ -3155,9 +3152,17 @@ export class VfTooltipRootDirective {
     // (undocumented)
     content: HTMLElement | null;
     // (undocumented)
+    readonly contentId: InputSignal<string | undefined>;
+    // (undocumented)
     readonly defaultOpen: InputSignalWithTransform<boolean, unknown>;
     // (undocumented)
+    dismiss(event: KeyboardEvent): void;
+    // (undocumented)
     readonly expanded: Signal<boolean>;
+    // (undocumented)
+    readonly id: InputSignal<string>;
+    // (undocumented)
+    ngOnDestroy(): void;
     // (undocumented)
     readonly open: InputSignal<boolean | undefined>;
     // (undocumented)
@@ -3167,9 +3172,21 @@ export class VfTooltipRootDirective {
     // (undocumented)
     readonly placement: InputSignal<FloatingPlacement>;
     // (undocumented)
+    readonly resolvedContentId: Signal<string>;
+    // (undocumented)
     setOpen(next: boolean): void;
     // (undocumented)
     static ɵdir: i0.ɵɵDirectiveDeclaration<VfTooltipRootDirective, "[vfTooltipRoot]", never, {
+        "id": {
+            "alias": "id";
+            "required": true;
+            "isSignal": true;
+        };
+        "contentId": {
+            "alias": "contentId";
+            "required": false;
+            "isSignal": true;
+        };
         "open": {
             "alias": "open";
             "required": false;
@@ -3206,13 +3223,27 @@ export class VfTooltipRootDirective {
 export class VfTooltipTriggerDirective implements OnDestroy {
     constructor(root: VfTooltipRootDirective);
     // (undocumented)
+    blur(event: FocusEvent): void;
+    // (undocumented)
+    readonly describedBy: InputSignal<string | undefined>;
+    // (undocumented)
+    readonly description: Signal<string>;
+    // (undocumented)
     ngOnDestroy(): void;
+    // (undocumented)
+    pointer(event: PointerEvent, active: boolean): void;
     // (undocumented)
     readonly root: VfTooltipRootDirective;
     // (undocumented)
     schedule(value: boolean, delay: number): void;
     // (undocumented)
-    static ɵdir: i0.ɵɵDirectiveDeclaration<VfTooltipTriggerDirective, "[vfTooltipTrigger]", never, {}, {}, never, never, true, never>;
+    static ɵdir: i0.ɵɵDirectiveDeclaration<VfTooltipTriggerDirective, "[vfTooltipTrigger]", never, {
+        "describedBy": {
+            "alias": "aria-describedby";
+            "required": false;
+            "isSignal": true;
+        };
+    }, {}, never, never, true, never>;
     // (undocumented)
     static ɵfac: i0.ɵɵFactoryDeclaration<VfTooltipTriggerDirective, never>;
 }
