@@ -56,7 +56,10 @@ export class VfTooltipElement extends HTMLElementBase {
   }
 
   #part(selector: string): HTMLElement | null {
-    return Array.from(this.querySelectorAll<HTMLElement>(selector)).find((node) => node.closest('vf-tooltip') === this) ?? null;
+    return (
+      Array.from(this.querySelectorAll<HTMLElement>(selector)).find((node) => node.closest('vf-tooltip') === this) ??
+      null
+    );
   }
 
   #trigger(): HTMLElement | null {
@@ -81,16 +84,20 @@ export class VfTooltipElement extends HTMLElementBase {
     if (!this.#hover && !this.#focus) this.#dismissed = false;
     const value = !this.#dismissed && (this.#hover || this.#focus);
     if (value === this.open) return;
-    this.#timer = setTimeout(() => {
-      this.#timer = null;
-      this.open = value;
-    }, Math.max(0, delay));
+    this.#timer = setTimeout(
+      () => {
+        this.#timer = null;
+        this.open = value;
+      },
+      Math.max(0, delay),
+    );
   }
 
   #sync(): void {
     const trigger = this.#trigger();
     const content = this.#content();
-    if (this.#surface && this.#surface !== content && this.#surface.matches(':popover-open')) this.#surface.hidePopover();
+    if (this.#surface && this.#surface !== content && this.#surface.matches(':popover-open'))
+      this.#surface.hidePopover();
     this.#surface = content;
     if (!trigger || !content) return;
     if (!content.id) {

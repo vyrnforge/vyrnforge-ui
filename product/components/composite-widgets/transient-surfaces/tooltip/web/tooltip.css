@@ -18,7 +18,10 @@
     margin: 0;
     border: 0;
     position-area: top;
-    position-try-fallbacks: flip-block, flip-inline, flip-block flip-inline;
+    position-try-fallbacks:
+      flip-block,
+      flip-inline,
+      flip-block flip-inline;
     inline-size: max-content;
     max-inline-size: min(20rem, calc(100vw - 1rem));
   }
