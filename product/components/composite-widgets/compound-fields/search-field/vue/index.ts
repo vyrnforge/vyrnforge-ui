@@ -57,7 +57,8 @@ export const SearchFieldClear = defineComponent({
         {
           ...attrs,
           type: 'button',
-          disabled: (attrs.disabled !== undefined && attrs.disabled !== null && attrs.disabled !== false) || !s.value.value,
+          disabled:
+            (attrs.disabled !== undefined && attrs.disabled !== null && attrs.disabled !== false) || !s.value.value,
           'data-vf-search-field-clear': '',
           onClick(event: MouseEvent) {
             const handler = attrs.onClick;
