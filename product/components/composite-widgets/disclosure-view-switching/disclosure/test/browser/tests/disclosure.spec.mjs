@@ -8,7 +8,7 @@ test('disclosure initial markup exposes the correct state and relationship befor
   try {
     const page = await context.newPage();
     await page.goto(`/components/disclosure/${port}.html`);
-    await expect(page.locator('#root').getByText('Content', { exact: true })).toBeHidden();
+    await expect(page.locator(port === 'elements' ? '#authored-panel' : '#root-panel')).toBeHidden();
     await expect(page.locator('#initial-panel')).toBeVisible();
     if (port !== 'web') {
       const trigger = page.locator('#trigger');
@@ -59,7 +59,10 @@ test('authored disabled state is not cleared and prevents activation', async ({ 
   test.skip(port === 'web', 'Native details has no disabled contract.');
   await page.goto(`/components/disclosure/${port}.html`);
   const trigger = page.locator('#disabled-trigger');
-  if (port === 'elements') await page.locator('#disabled').evaluate((element) => (element.disabled = false));
+  if (port === 'elements') {
+    await page.evaluate(() => customElements.whenDefined('vf-disclosure'));
+    await page.locator('#disabled').evaluate((element) => (element.disabled = false));
+  }
   await expect(trigger).toBeDisabled();
   await trigger.evaluate((element) => element.click());
   await expect(page.locator('#disabled-panel')).toBeHidden();
