@@ -1,0 +1,2 @@
+import{test,expect}from'@playwright/test';
+import { expectNoAxeViolations } from '../../../../../../../../tooling/testing/accessibility.mjs';const port=process.env.VF_COMPONENT_PORT||'react';test('accordion expands accessibly',async({page})=>{await page.goto(`/components/accordion/${port}.html`);await page.locator('#a').click();await expect(page.locator('#p')).toBeVisible();expect((await expectNoAxeViolations(page)).violations).toEqual([])});

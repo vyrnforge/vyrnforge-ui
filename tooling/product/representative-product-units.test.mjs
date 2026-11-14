@@ -4,11 +4,47 @@ import { discoverProductGraph, productGraphProblems } from './discover-product-g
 
 const expectedRoots = {
   button: 'interactive-controls/button',
-  tabs: 'composite-widgets/tabs',
-  dialog: 'composite-widgets/dialog',
+  tabs: 'composite-widgets/disclosure-view-switching/tabs',
+  dialog: 'composite-widgets/transient-surfaces/dialog',
   icon: 'elemental-primitives/media/icon',
   text: 'elemental-primitives/typography/text',
 };
+
+const l5Family = Object.freeze({
+  disclosure: 'disclosure-view-switching',
+  accordion: 'disclosure-view-switching',
+  tabs: 'disclosure-view-switching',
+  dialog: 'transient-surfaces',
+  'alert-dialog': 'transient-surfaces',
+  drawer: 'transient-surfaces',
+  popover: 'transient-surfaces',
+  tooltip: 'transient-surfaces',
+  'preview-card': 'transient-surfaces',
+  menu: 'commands-actions',
+  'context-menu': 'commands-actions',
+  menubar: 'commands-actions',
+  toolbar: 'commands-actions',
+  'split-button': 'commands-actions',
+  listbox: 'collection-selection',
+  select: 'collection-selection',
+  combobox: 'collection-selection',
+  'multi-select': 'collection-selection',
+  'tag-group': 'collection-selection',
+  'toggle-group': 'choice-value',
+  'segmented-control': 'choice-value',
+  rating: 'choice-value',
+  'range-slider': 'choice-value',
+  'search-field': 'compound-fields',
+  'password-field': 'compound-fields',
+  'number-field': 'compound-fields',
+  'color-picker': 'compound-fields',
+  'otp-field': 'compound-fields',
+  'file-uploader': 'compound-fields',
+  pagination: 'content-navigation',
+  carousel: 'content-navigation',
+  'split-panel': 'interactive-layout',
+  toast: 'feedback',
+});
 
 const expectedSurfaces = {
   button: ['angular', 'react', 'vue', 'web'],
@@ -194,7 +230,8 @@ test('L5 Disclosure and Accordion are canonical composite owners with unchanged 
     assert.ok(component, id + ' must be discovered');
     assert.equal(component.id, 'component:' + id);
     assert.equal(component.layer, 'composite-widgets');
-    assert.equal(component.facets.canonicalRoot, 'product/components/composite-widgets/' + id + '/');
+    assert.equal(component.category, l5Family[id]);
+    assert.equal(component.facets.canonicalRoot, 'product/components/composite-widgets/' + l5Family[id] + '/' + id + '/');
     assert.equal(component.facets.legacyRoot, null);
     assert.equal(component.metadataSource, 'product-unit');
     assert.equal(component.migration.state, 'product-unit');
@@ -217,7 +254,7 @@ test('L5 surface composites retain stable five-port package projections after ow
     assert.ok(component, id + ' must be discovered');
     assert.equal(component.id, 'component:' + id);
     assert.equal(component.layer, 'composite-widgets');
-    assert.equal(component.facets.canonicalRoot, 'product/components/composite-widgets/' + id + '/');
+    assert.equal(component.facets.canonicalRoot, 'product/components/composite-widgets/' + l5Family[id] + '/' + id + '/');
     assert.equal(component.facets.legacyRoot, null);
     assert.equal(component.metadataSource, 'product-unit');
     assert.equal(component.migration.state, 'product-unit');
@@ -240,7 +277,7 @@ test('L5 command composites retain canonical ownership and five-port projections
     assert.ok(component, id + ' must be discovered');
     assert.equal(component.id, 'component:' + id);
     assert.equal(component.layer, 'composite-widgets');
-    assert.equal(component.facets.canonicalRoot, 'product/components/composite-widgets/' + id + '/');
+    assert.equal(component.facets.canonicalRoot, 'product/components/composite-widgets/' + l5Family[id] + '/' + id + '/');
     assert.equal(component.facets.legacyRoot, null);
     assert.equal(component.metadataSource, 'product-unit');
     assert.equal(component.migration.state, 'product-unit');
@@ -263,7 +300,7 @@ test('L5 selection and value composites retain canonical five-port projections',
     assert.ok(component, id + ' must be discovered');
     assert.equal(component.id, 'component:' + id);
     assert.equal(component.layer, 'composite-widgets');
-    assert.equal(component.facets.canonicalRoot, 'product/components/composite-widgets/' + id + '/');
+    assert.equal(component.facets.canonicalRoot, 'product/components/composite-widgets/' + l5Family[id] + '/' + id + '/');
     assert.equal(component.facets.legacyRoot, null);
     assert.equal(component.metadataSource, 'product-unit');
     assert.equal(component.migration.state, 'product-unit');
@@ -286,7 +323,7 @@ test('final L5 compound composites use canonical ownership and stable five-port 
     assert.ok(component, id + ' must be discovered');
     assert.equal(component.id, 'component:' + id);
     assert.equal(component.layer, 'composite-widgets');
-    assert.equal(component.facets.canonicalRoot, 'product/components/composite-widgets/' + id + '/');
+    assert.equal(component.facets.canonicalRoot, 'product/components/composite-widgets/' + l5Family[id] + '/' + id + '/');
     assert.equal(component.facets.legacyRoot, null);
     assert.equal(component.metadataSource, 'product-unit');
     assert.equal(component.migration.state, 'product-unit');

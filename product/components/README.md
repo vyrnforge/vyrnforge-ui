@@ -15,7 +15,7 @@ This is an ownership tree, **not** a public import hierarchy. Stable component I
 
 L5 is a widget layer, not a generic runtime layer. Widgets may compose lower layers and delegate to native browser behavior. They own their observable component-specific state, intent, keyboard, focus, selection, open/close, relationship, and accessibility policy; framework/Elements ports own lifecycle, refs, rendering, DOM effects, and browser API execution.
 
-The retained L5 inventory is organized conceptually into disclosure/view switching, transient surfaces, commands/actions, collection selection, choice/value, compound fields, content navigation, interactive layout, and feedback. See `composite-widgets/README.md`.
+The retained L5 inventory is physically organized into responsibility-family ownership folders under `composite-widgets/`: `disclosure-view-switching`, `transient-surfaces`, `commands-actions`, `collection-selection`, `choice-value`, `compound-fields`, `content-navigation`, `interactive-layout`, and `feedback`. These categories do not change component IDs, public package subpaths, or documentation routes. See `composite-widgets/README.md`.
 
 The former `temporal-field` product unit is retired. Native temporal modes (`date`, `time`, `datetime-local`, `month`, `week`) remain part of L2 `Input`. A future Calendar/DatePicker would require a separate higher-layer contract rather than preserving a wrapper around native Input modes.
 
