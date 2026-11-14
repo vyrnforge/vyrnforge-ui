@@ -41,7 +41,7 @@ test('L5 navigation and collection implementations do not fabricate English acce
     ['product/components/composite-widgets/content-navigation/pagination/angular/index.ts', /aria-label[^\n]*(?:Pagination|Previous page|Next page)/],
     ['product/components/composite-widgets/content-navigation/pagination/vue/index.ts', /aria-label[^\n]*(?:Pagination|Previous page|Next page)/],
     ['product/components/composite-widgets/content-navigation/pagination/elements/index.ts', /aria-label[^\n]*Pagination/],
-    ['product/components/composite-widgets/content-navigation/carousel/react/index.ts', /aria-label[^\n]*(?:Carousel|Previous slide|Next slide)|\`Slide \$\{/],
+    ['product/components/composite-widgets/content-navigation/carousel/react/index.ts', /aria-label[^\n]*(?:Carousel|Previous slide|Next slide)|`Slide \$\{/],
     ['product/components/composite-widgets/content-navigation/carousel/angular/index.ts', /aria-label[^\n]*(?:Previous slide|Next slide)/],
     ['product/components/composite-widgets/content-navigation/carousel/vue/index.ts', /aria-label[^\n]*(?:Carousel|Previous slide|Next slide)/],
   ];
