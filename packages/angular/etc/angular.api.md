@@ -2157,13 +2157,40 @@ export class VfRadioDirective {
 }
 
 // @public (undocumented)
+export class VfRangeSliderEndDirective {
+    constructor(root: VfRangeSliderRootDirective);
+    // (undocumented)
+    readonly root: VfRangeSliderRootDirective;
+    // (undocumented)
+    static ɵdir: i0.ɵɵDirectiveDeclaration<VfRangeSliderEndDirective, "input[vfRangeSliderEnd]", never, {}, {}, never, never, true, never>;
+    // (undocumented)
+    static ɵfac: i0.ɵɵFactoryDeclaration<VfRangeSliderEndDirective, never>;
+}
+
+// @public (undocumented)
 export class VfRangeSliderRootDirective {
     // (undocumented)
-    current(): readonly [number, number];
+    change(index: 0 | 1, event: Event): void;
+    // (undocumented)
+    current(): [number, number];
     // (undocumented)
     readonly defaultValue: InputSignal<readonly [number, number]>;
     // (undocumented)
+    readonly disabled: InputSignalWithTransform<boolean, unknown>;
+    // (undocumented)
+    increment(): number;
+    // (undocumented)
+    readonly max: InputSignal<number>;
+    // (undocumented)
+    maximum(): number;
+    // (undocumented)
+    readonly min: InputSignal<number>;
+    // (undocumented)
+    minimum(): number;
+    // (undocumented)
     set(index: 0 | 1, v: number): void;
+    // (undocumented)
+    readonly step: InputSignal<number>;
     // (undocumented)
     readonly value: InputSignal<readonly [number, number] | undefined>;
     // (undocumented)
@@ -2180,11 +2207,42 @@ export class VfRangeSliderRootDirective {
             "required": false;
             "isSignal": true;
         };
+        "min": {
+            "alias": "min";
+            "required": false;
+            "isSignal": true;
+        };
+        "max": {
+            "alias": "max";
+            "required": false;
+            "isSignal": true;
+        };
+        "step": {
+            "alias": "step";
+            "required": false;
+            "isSignal": true;
+        };
+        "disabled": {
+            "alias": "disabled";
+            "required": false;
+            "isSignal": true;
+        };
     }, {
         "valueChange": "valueChange";
     }, never, never, true, never>;
     // (undocumented)
     static ɵfac: i0.ɵɵFactoryDeclaration<VfRangeSliderRootDirective, never>;
+}
+
+// @public (undocumented)
+export class VfRangeSliderStartDirective {
+    constructor(root: VfRangeSliderRootDirective);
+    // (undocumented)
+    readonly root: VfRangeSliderRootDirective;
+    // (undocumented)
+    static ɵdir: i0.ɵɵDirectiveDeclaration<VfRangeSliderStartDirective, "input[vfRangeSliderStart]", never, {}, {}, never, never, true, never>;
+    // (undocumented)
+    static ɵfac: i0.ɵɵFactoryDeclaration<VfRangeSliderStartDirective, never>;
 }
 
 // @public (undocumented)

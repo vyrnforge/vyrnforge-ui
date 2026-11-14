@@ -2,7 +2,10 @@ import { test, expect } from '@playwright/test';
 import { expectNoAxeViolations } from '../../../../../../../../tooling/testing/accessibility.mjs';
 
 const port = process.env.VF_COMPONENT_PORT || 'react';
-const themes = [['light', 'rgb(36, 94, 219)'], ['dark', 'rgb(141, 180, 255)']];
+const themes = [
+  ['light', 'rgb(36, 94, 219)'],
+  ['dark', 'rgb(141, 180, 255)'],
+];
 
 function ranges(page, id = 'root') {
   const root = page.locator(`#${id}`);
@@ -56,7 +59,8 @@ test('native keyboard changes preserve ordered values, dynamic bounds and form s
   await expect(start).toHaveValue('75');
   await expect(end).toHaveAttribute('min', '75');
   expect(await page.locator('#range-form').evaluate((form) => Object.fromEntries(new FormData(form)))).toEqual({
-    lower: '75', upper: '80',
+    lower: '75',
+    upper: '80',
   });
   await expectNoAxeViolations(page);
 });
@@ -77,7 +81,9 @@ test('controlled RangeSlider reports native requests without committing rejected
   await expect(start).toHaveAttribute('max', '70');
 });
 
-test('disabled ranges are excluded from native submission and fractional values share one step grid', async ({ page }) => {
+test('disabled ranges are excluded from native submission and fractional values share one step grid', async ({
+  page,
+}) => {
   test.skip(port === 'web', 'Managed runtime only.');
   await page.goto(`/components/range-slider/${port}.html`);
   const disabled = ranges(page, 'disabled');
@@ -93,7 +99,9 @@ test('disabled ranges are excluded from native submission and fractional values 
   await expect(fractional.root).toHaveAttribute('data-requested', '[0.5,0.9]');
 });
 
-test('public RangeSlider CSS resolves canonical root spacing and selected accent in light and dark themes', async ({ page }) => {
+test('public RangeSlider CSS resolves canonical root spacing and selected accent in light and dark themes', async ({
+  page,
+}) => {
   test.skip(port !== 'web', 'Public CSS resolution evidence is owned by the Web lane.');
   await page.goto('/components/range-slider/web.html');
   const { root, start } = ranges(page);

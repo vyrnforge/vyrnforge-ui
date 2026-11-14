@@ -25,21 +25,24 @@ function record(id, value) {
 export async function createReactStory({ client }) {
   const { createElement: h, Fragment } = await import('react');
   const { RangeSliderRoot } = await import('@vyrnforge/react/range-slider');
-  const range = (id, options) => h(RangeSliderRoot, {
-    id,
-    min: -10,
-    max: 100,
-    step: 5,
-    startLabel: 'Minimum price',
-    endLabel: 'Maximum price',
-    startName: 'lower',
-    endName: 'upper',
-    ...options,
-    onValueChange: (value) => {
-      if (client) record(id, value);
-    },
-  });
-  return h(Fragment, null,
+  const range = (id, options) =>
+    h(RangeSliderRoot, {
+      id,
+      min: -10,
+      max: 100,
+      step: 5,
+      startLabel: 'Minimum price',
+      endLabel: 'Maximum price',
+      startName: 'lower',
+      endName: 'upper',
+      ...options,
+      onValueChange: (value) => {
+        if (client) record(id, value);
+      },
+    });
+  return h(
+    Fragment,
+    null,
     h('form', { id: 'range-form' }, range('root', { defaultValue: [20, 80] })),
     range('controlled', { value: [30, 70] }),
     h('form', { id: 'disabled-form' }, range('disabled', { defaultValue: [20, 80], disabled: true })),
@@ -50,26 +53,30 @@ export async function createReactStory({ client }) {
 export async function createVueStory({ client }) {
   const { createSSRApp, h } = await import('vue');
   const { RangeSliderRoot } = await import('@vyrnforge/vue/range-slider');
-  const range = (id, options) => h(RangeSliderRoot, {
-    id,
-    min: -10,
-    max: 100,
-    step: 5,
-    startLabel: 'Minimum price',
-    endLabel: 'Maximum price',
-    startName: 'lower',
-    endName: 'upper',
-    ...options,
-    'onUpdate:value': (value) => {
-      if (client) record(id, value);
-    },
+  const range = (id, options) =>
+    h(RangeSliderRoot, {
+      id,
+      min: -10,
+      max: 100,
+      step: 5,
+      startLabel: 'Minimum price',
+      endLabel: 'Maximum price',
+      startName: 'lower',
+      endName: 'upper',
+      ...options,
+      'onUpdate:value': (value) => {
+        if (client) record(id, value);
+      },
+    });
+  return createSSRApp({
+    render: () =>
+      h('div', [
+        h('form', { id: 'range-form' }, [range('root', { defaultValue: [20, 80] })]),
+        range('controlled', { value: [30, 70] }),
+        h('form', { id: 'disabled-form' }, [range('disabled', { defaultValue: [20, 80], disabled: true })]),
+        range('fractional', { min: 0.1, max: 1, step: 0.2, defaultValue: [0.35, 0.95] }),
+      ]),
   });
-  return createSSRApp({ render: () => h('div', [
-    h('form', { id: 'range-form' }, [range('root', { defaultValue: [20, 80] })]),
-    range('controlled', { value: [30, 70] }),
-    h('form', { id: 'disabled-form' }, [range('disabled', { defaultValue: [20, 80], disabled: true })]),
-    range('fractional', { min: 0.1, max: 1, step: 0.2, defaultValue: [0.35, 0.95] }),
-  ]) });
 }
 
 export async function createAngularStory({ client }) {
@@ -78,7 +85,8 @@ export async function createAngularStory({ client }) {
   const { VfRangeSliderRootDirective, VfRangeSliderStartDirective, VfRangeSliderEndDirective } =
     await import('@vyrnforge/angular/range-slider');
 
-  const parts = '<input vfRangeSliderStart aria-label="Minimum price" name="lower"><input vfRangeSliderEnd aria-label="Maximum price" name="upper">';
+  const parts =
+    '<input vfRangeSliderStart aria-label="Minimum price" name="lower"><input vfRangeSliderEnd aria-label="Maximum price" name="upper">';
   class RangeSliderTestApp {
     changed(id, value) {
       if (client) record(id, value);
@@ -99,7 +107,15 @@ export async function createAngularStory({ client }) {
 }
 
 export async function createElementsStory({ client }) {
-  const range = (id, min, max, step, lower, upper, attributes = '') => `<vf-range-slider id="${id}" data-vf-range-slider-root min="${min}" max="${max}" step="${step}" ${attributes}>
+  const range = (
+    id,
+    min,
+    max,
+    step,
+    lower,
+    upper,
+    attributes = '',
+  ) => `<vf-range-slider id="${id}" data-vf-range-slider-root min="${min}" max="${max}" step="${step}" ${attributes}>
     <input type="range" data-vf-range-slider-start name="lower" aria-label="Minimum price" min="${min}" max="${upper}" step="${step}" value="${lower}" ${id === 'disabled' ? 'disabled' : ''}>
     <input type="range" data-vf-range-slider-end name="upper" aria-label="Maximum price" min="${lower}" max="${max}" step="${step}" value="${upper}" ${id === 'disabled' ? 'disabled' : ''}>
   </vf-range-slider>`;
@@ -108,12 +124,14 @@ export async function createElementsStory({ client }) {
       ${range('controlled', -10, 100, 5, 30, 70, 'value="[30,70]"')}
       <form id="disabled-form">${range('disabled', -10, 100, 5, 20, 80, 'disabled')}</form>
       ${range('fractional', 0.1, 1, 0.2, 0.3, 0.9, 'default-value="[0.35,0.95]"')}`,
-    activate: client ? async () => {
-      const { defineRangeSliderElement } = await import('@vyrnforge/elements/range-slider');
-      defineRangeSliderElement();
-      for (const id of ['root', 'controlled', 'fractional']) {
-        document.getElementById(id).addEventListener('vf-value-change', (event) => record(id, event.detail.value));
-      }
-    } : undefined,
+    activate: client
+      ? async () => {
+          const { defineRangeSliderElement } = await import('@vyrnforge/elements/range-slider');
+          defineRangeSliderElement();
+          for (const id of ['root', 'controlled', 'fractional']) {
+            document.getElementById(id).addEventListener('vf-value-change', (event) => record(id, event.detail.value));
+          }
+        }
+      : undefined,
   };
 }

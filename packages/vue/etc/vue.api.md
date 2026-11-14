@@ -1498,9 +1498,9 @@ export const Radio: DefineComponent<    {}, () => VNode<RendererNode, RendererEl
 
 // @public (undocumented)
 export const RangeSliderRoot: DefineComponent<ExtractPropTypes<    {
-value: PropType<[number, number] | undefined>;
+value: PropType<readonly [number, number] | undefined>;
 defaultValue: {
-type: PropType<[number, number]>;
+type: PropType<readonly [number, number]>;
 default: () => number[];
 };
 min: {
@@ -1515,12 +1515,23 @@ step: {
 type: NumberConstructor;
 default: number;
 };
+disabled: BooleanConstructor;
+startLabel: {
+type: StringConstructor;
+required: true;
+};
+endLabel: {
+type: StringConstructor;
+required: true;
+};
+startName: StringConstructor;
+endName: StringConstructor;
 }>, () => VNode<RendererNode, RendererElement, {
 [key: string]: any;
 }>, {}, {}, {}, ComponentOptionsMixin, ComponentOptionsMixin, "update:value"[], "update:value", PublicProps, Readonly<ExtractPropTypes<    {
-value: PropType<[number, number] | undefined>;
+value: PropType<readonly [number, number] | undefined>;
 defaultValue: {
-type: PropType<[number, number]>;
+type: PropType<readonly [number, number]>;
 default: () => number[];
 };
 min: {
@@ -1535,10 +1546,22 @@ step: {
 type: NumberConstructor;
 default: number;
 };
+disabled: BooleanConstructor;
+startLabel: {
+type: StringConstructor;
+required: true;
+};
+endLabel: {
+type: StringConstructor;
+required: true;
+};
+startName: StringConstructor;
+endName: StringConstructor;
 }>> & Readonly<{
 "onUpdate:value"?: (...args: any[]) => any;
 }>, {
-defaultValue: [number, number];
+disabled: boolean;
+defaultValue: readonly [number, number];
 max: number;
 min: number;
 step: number;

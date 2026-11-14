@@ -37,7 +37,12 @@ function readPair(value: string | null): Pair | undefined {
   if (value === null) return undefined;
   try {
     const parsed: unknown = JSON.parse(value);
-    if (Array.isArray(parsed) && parsed.length === 2 && typeof parsed[0] === 'number' && typeof parsed[1] === 'number') {
+    if (
+      Array.isArray(parsed) &&
+      parsed.length === 2 &&
+      typeof parsed[0] === 'number' &&
+      typeof parsed[1] === 'number'
+    ) {
       return [parsed[0], parsed[1]];
     }
   } catch {
