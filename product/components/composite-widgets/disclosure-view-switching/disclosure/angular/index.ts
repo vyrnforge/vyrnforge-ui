@@ -16,13 +16,11 @@ export class VfDisclosureRootDirective {
   readonly defaultOpen = input(false, { transform: booleanAttribute });
   readonly disabled = input(false, { transform: booleanAttribute });
   readonly openChange = output<boolean>();
-  private readonly internalOpen = signal(false);
-  private initialized = false;
-  readonly expanded = computed(() => this.open() ?? (this.initialized ? this.internalOpen() : this.defaultOpen()));
+  private readonly internalOpen = signal<boolean | undefined>(undefined);
+  readonly expanded = computed(() => this.open() ?? this.internalOpen() ?? this.defaultOpen());
 
   setOpen(next: boolean): void {
     if (this.disabled() || next === this.expanded()) return;
-    this.initialized = true;
     if (this.open() === undefined) this.internalOpen.set(next);
     this.openChange.emit(next);
   }
@@ -36,14 +34,15 @@ export class VfDisclosureRootDirective {
     'data-vf-disclosure-trigger': '',
     '[attr.aria-expanded]': 'root.expanded()',
     '[attr.aria-controls]': 'root.id() + "-panel"',
-    '[disabled]': 'root.disabled()',
-    '(click)': 'toggle()',
+    '[disabled]': 'root.disabled() || disabled()',
+    '(click)': 'toggle($event)',
   },
 })
 export class VfDisclosureTriggerDirective {
+  readonly disabled = input(false, { transform: booleanAttribute });
   constructor(readonly root: VfDisclosureRootDirective) {}
-  toggle(): void {
-    this.root.setOpen(!this.root.expanded());
+  toggle(event?: MouseEvent): void {
+    if (!event?.defaultPrevented && !this.disabled()) this.root.setOpen(!this.root.expanded());
   }
 }
 

@@ -62,7 +62,8 @@ export const DisclosureRoot = defineComponent({
 export const DisclosureTrigger = defineComponent({
   name: 'VfDisclosureTrigger',
   inheritAttrs: false,
-  setup(_props, { attrs, slots }) {
+  props: { disabled: Boolean },
+  setup(props, { attrs, slots }) {
     const context = useDisclosure();
     return () =>
       h(
@@ -70,14 +71,16 @@ export const DisclosureTrigger = defineComponent({
         {
           ...attrs,
           type: attrs.type ?? 'button',
-          disabled: context.disabled.value || Boolean(attrs.disabled),
+          disabled: context.disabled.value || props.disabled,
           'aria-expanded': context.open.value,
           'aria-controls': `${context.id}-panel`,
           'data-vf-disclosure-trigger': '',
           onClick(event: MouseEvent) {
             const handler = attrs.onClick;
             if (typeof handler === 'function') handler(event);
-            if (!event.defaultPrevented && !context.disabled.value) context.setOpen(!context.open.value);
+            else if (Array.isArray(handler))
+              for (const candidate of handler) if (typeof candidate === 'function') candidate(event);
+            if (!event.defaultPrevented && !context.disabled.value && !props.disabled) context.setOpen(!context.open.value);
           },
         },
         slots.default?.(),
