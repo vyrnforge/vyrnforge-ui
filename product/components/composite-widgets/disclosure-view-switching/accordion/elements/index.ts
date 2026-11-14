@@ -6,15 +6,26 @@ export interface AccordionValueChangeDetail {
 }
 export class VfAccordionElement extends HTMLElementBase {
   static readonly observedAttributes = ['value', 'type', 'collapsible'];
+  #observer: MutationObserver | null = null;
+  #forcedDisabled = new WeakSet<HTMLButtonElement>();
   connectedCallback(): void {
     if (typeof HTMLElement === 'undefined') return;
     this.addEventListener('click', this.#onClick);
     this.addEventListener('keydown', this.#onKeyDown);
+    this.#observer = new MutationObserver(() => this.#sync());
+    this.#observer.observe(this, {
+      subtree: true,
+      childList: true,
+      attributes: true,
+      attributeFilter: ['disabled', 'data-vf-value'],
+    });
     this.#sync();
   }
   disconnectedCallback(): void {
     this.removeEventListener('click', this.#onClick);
     this.removeEventListener('keydown', this.#onKeyDown);
+    this.#observer?.disconnect();
+    this.#observer = null;
   }
   attributeChangedCallback(): void {
     if (this.isConnected) this.#sync();
@@ -24,14 +35,32 @@ export class VfAccordionElement extends HTMLElementBase {
   }
   get values(): string[] {
     const raw = this.getAttribute('value') ?? '';
-    return this.type === 'multiple' ? raw.split(',').filter(Boolean) : raw ? [raw] : [];
+    if (this.type === 'single') return raw ? [raw] : [];
+    if (raw.startsWith('[')) {
+      try {
+        const parsed: unknown = JSON.parse(raw);
+        if (Array.isArray(parsed))
+          return [...new Set(parsed.filter((value): value is string => typeof value === 'string' && Boolean(value)))];
+      } catch {
+        return [];
+      }
+    }
+    return [...new Set(raw.split(',').filter(Boolean))];
   }
   set values(values: string[]) {
-    this.setAttribute('value', this.type === 'multiple' ? values.join(',') : (values[0] ?? ''));
+    this.setAttribute(
+      'value',
+      this.type === 'multiple' ? JSON.stringify([...new Set(values.filter(Boolean))]) : (values[0] ?? ''),
+    );
   }
   #items(): HTMLElement[] {
     return [...this.querySelectorAll<HTMLElement>('[data-vf-accordion-item]')].filter(
       (item) => item.closest('vf-accordion') === this,
+    );
+  }
+  #part<T extends HTMLElement>(item: HTMLElement, selector: string): T | undefined {
+    return Array.from(item.querySelectorAll<T>(selector)).find(
+      (part) => part.closest('vf-accordion') === this && part.closest('[data-vf-accordion-item]') === item,
     );
   }
   #sync(): void {
@@ -41,21 +70,33 @@ export class VfAccordionElement extends HTMLElementBase {
     const open = this.values;
     for (const item of this.#items()) {
       const value = item.dataset.vfValue ?? '';
-      const trigger = item.querySelector<HTMLButtonElement>('[data-vf-accordion-trigger]');
-      const panel = item.querySelector<HTMLElement>('[data-vf-accordion-panel]');
-      const token = encodeURIComponent(value).replaceAll('%', '_');
+      const trigger = this.#part<HTMLButtonElement>(item, 'button[data-vf-accordion-trigger]');
+      const panel = this.#part<HTMLElement>(item, '[data-vf-accordion-panel]');
+      const token = encodeURIComponent(value).replaceAll('_', '_5F').replaceAll('%', '_');
       const expanded = open.includes(value);
       item.toggleAttribute('data-vf-open', expanded);
+      const disabled = item.hasAttribute('disabled');
+      item.toggleAttribute('data-vf-disabled', disabled);
       if (trigger) {
-        trigger.type ||= 'button';
+        if (!trigger.hasAttribute('type')) trigger.type = 'button';
+        if (disabled && !trigger.disabled) {
+          this.#forcedDisabled.add(trigger);
+          trigger.disabled = true;
+        } else if (!disabled && this.#forcedDisabled.has(trigger)) {
+          this.#forcedDisabled.delete(trigger);
+          trigger.disabled = false;
+        }
+        if (expanded && this.type === 'single' && !this.hasAttribute('collapsible'))
+          trigger.setAttribute('aria-disabled', 'true');
+        else trigger.removeAttribute('aria-disabled');
         trigger.id = `${this.id}-trigger-${token}`;
         trigger.setAttribute('aria-expanded', String(expanded));
         trigger.setAttribute('aria-controls', `${this.id}-panel-${token}`);
       }
       if (panel) {
         panel.id = `${this.id}-panel-${token}`;
-        panel.setAttribute('role', 'region');
-        if (trigger) panel.setAttribute('aria-labelledby', trigger.id);
+        if (panel.getAttribute('role') === 'region' && trigger) panel.setAttribute('aria-labelledby', trigger.id);
+        else panel.removeAttribute('aria-labelledby');
         panel.hidden = !expanded;
         panel.toggleAttribute('data-vf-open', expanded);
       }
@@ -67,7 +108,7 @@ export class VfAccordionElement extends HTMLElementBase {
     let next: string[];
     if (this.type === 'single') next = isOpen ? (this.hasAttribute('collapsible') ? [] : current) : [value];
     else next = isOpen ? current.filter((candidate) => candidate !== value) : [...current, value];
-    if (next.join('|') === current.join('|')) return;
+    if (next.length === current.length && next.every((value, index) => value === current[index])) return;
     this.values = next;
     this.#sync();
     this.dispatchEvent(
@@ -79,7 +120,7 @@ export class VfAccordionElement extends HTMLElementBase {
     );
   }
   #onClick = (event: Event): void => {
-    if (!(event.target instanceof Element)) return;
+    if (event.defaultPrevented || !(event.target instanceof Element)) return;
     const trigger = event.target.closest<HTMLButtonElement>('[data-vf-accordion-trigger]');
     if (!trigger || trigger.disabled || trigger.closest('vf-accordion') !== this) return;
     const item = trigger.closest<HTMLElement>('[data-vf-accordion-item]');
@@ -87,7 +128,13 @@ export class VfAccordionElement extends HTMLElementBase {
     if (value) this.#toggle(value);
   };
   #onKeyDown = (event: KeyboardEvent): void => {
-    if (!(event.target instanceof HTMLButtonElement) || !event.target.matches('[data-vf-accordion-trigger]')) return;
+    if (
+      event.defaultPrevented ||
+      !(event.target instanceof HTMLButtonElement) ||
+      !event.target.matches('[data-vf-accordion-trigger]') ||
+      event.target.closest('vf-accordion') !== this
+    )
+      return;
     let intent: CollectionNavigationIntent | null = null;
     if (event.key === 'ArrowDown') intent = 'next';
     else if (event.key === 'ArrowUp') intent = 'previous';
@@ -95,7 +142,7 @@ export class VfAccordionElement extends HTMLElementBase {
     else if (event.key === 'End') intent = 'last';
     if (!intent) return;
     const triggers = this.#items()
-      .map((item) => item.querySelector<HTMLButtonElement>('[data-vf-accordion-trigger]'))
+      .map((item) => this.#part<HTMLButtonElement>(item, 'button[data-vf-accordion-trigger]'))
       .filter((value): value is HTMLButtonElement => Boolean(value));
     const index = triggers.indexOf(event.target);
     const next = resolveNavigationIndex(

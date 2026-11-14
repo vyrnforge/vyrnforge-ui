@@ -17,6 +17,7 @@ export type AccordionValue = string | readonly string[];
 interface RootContext {
   rootId: string;
   type: AccordionType;
+  collapsible: boolean;
   openValues: readonly string[];
   toggle(value: string): void;
 }
@@ -38,13 +39,13 @@ function useItem() {
   if (!value) throw new Error('VyrnForge Accordion item parts must be inside AccordionItem.');
   return value;
 }
-function toValues(value: AccordionValue | undefined, type: AccordionType): string[] {
-  if (value === undefined) return [];
-  if (type === 'single') return typeof value === 'string' ? [value] : value.slice(0, 1);
-  return typeof value === 'string' ? [value] : [...value];
+function normalize(value: AccordionValue | undefined, type: AccordionType): string[] {
+  const values = typeof value === 'string' ? [value] : (value ?? []);
+  const unique = [...new Set(values.filter(Boolean))];
+  return type === 'single' ? unique.slice(0, 1) : unique;
 }
 function token(value: string) {
-  return encodeURIComponent(value).replaceAll('%', '_');
+  return encodeURIComponent(value).replaceAll('_', '_5F').replaceAll('%', '_');
 }
 
 export interface AccordionRootProps extends Omit<HTMLAttributes<HTMLDivElement>, 'defaultValue'> {
@@ -62,12 +63,13 @@ export const AccordionRoot = forwardRef<HTMLDivElement, AccordionRootProps>(func
   const generated = useId().replaceAll(':', '');
   const rootId = id ?? `vf-accordion-${generated}`;
   const controlled = value !== undefined;
-  const [internal, setInternal] = useState<string[]>(() => toValues(defaultValue, type));
-  const openValues = controlled ? toValues(value, type) : internal;
+  const [internal, setInternal] = useState<string[]>(() => normalize(defaultValue, type));
+  const openValues = normalize(controlled ? value : internal, type);
   const context = useMemo<RootContext>(
     () => ({
       rootId,
       type,
+      collapsible,
       openValues,
       toggle(itemValue) {
         const isOpen = openValues.includes(itemValue);
@@ -128,12 +130,15 @@ export const AccordionItem = forwardRef<HTMLDivElement, AccordionItemProps>(func
   );
 });
 
-export type AccordionHeaderProps = HTMLAttributes<HTMLHeadingElement>;
-export const AccordionHeader = forwardRef<HTMLHeadingElement, AccordionHeaderProps>(
-  function AccordionHeader(props, ref) {
-    return createElement('h3', { ...props, ref, 'data-vf-accordion-header': '' });
-  },
-);
+export interface AccordionHeaderProps extends HTMLAttributes<HTMLHeadingElement> {
+  level?: 1 | 2 | 3 | 4 | 5 | 6;
+}
+export const AccordionHeader = forwardRef<HTMLHeadingElement, AccordionHeaderProps>(function AccordionHeader(
+  { level = 3, ...props },
+  ref,
+) {
+  return createElement(`h${level}`, { ...props, ref, 'data-vf-accordion-header': '' });
+});
 
 export type AccordionTriggerProps = ButtonHTMLAttributes<HTMLButtonElement>;
 export const AccordionTrigger = forwardRef<HTMLButtonElement, AccordionTriggerProps>(function AccordionTrigger(
@@ -144,6 +149,7 @@ export const AccordionTrigger = forwardRef<HTMLButtonElement, AccordionTriggerPr
   const item = useItem();
   const open = root.openValues.includes(item.value);
   const isDisabled = item.disabled || Boolean(disabled);
+  const unavailable = open && root.type === 'single' && !root.collapsible;
   return createElement('button', {
     ...props,
     ref,
@@ -151,11 +157,12 @@ export const AccordionTrigger = forwardRef<HTMLButtonElement, AccordionTriggerPr
     type,
     disabled: isDisabled,
     'aria-expanded': open,
+    'aria-disabled': unavailable ? true : undefined,
     'aria-controls': item.panelId,
     'data-vf-accordion-trigger': '',
     onClick(event) {
       onClick?.(event);
-      if (!event.defaultPrevented && !isDisabled) root.toggle(item.value);
+      if (!event.defaultPrevented && !isDisabled && !unavailable) root.toggle(item.value);
     },
     onKeyDown(event) {
       onKeyDown?.(event);
@@ -168,7 +175,9 @@ export const AccordionTrigger = forwardRef<HTMLButtonElement, AccordionTriggerPr
       if (!intent) return;
       const container = event.currentTarget.closest<HTMLElement>('[data-vf-accordion-root]');
       if (!container) return;
-      const triggers = Array.from(container.querySelectorAll<HTMLButtonElement>('[data-vf-accordion-trigger]'));
+      const triggers = Array.from(container.querySelectorAll<HTMLButtonElement>('[data-vf-accordion-trigger]')).filter(
+        (trigger) => trigger.closest('[data-vf-accordion-root]') === container,
+      );
       const index = triggers.indexOf(event.currentTarget);
       const next = resolveNavigationIndex(
         triggers.map((candidate) => ({ eligible: !candidate.disabled })),
@@ -182,18 +191,23 @@ export const AccordionTrigger = forwardRef<HTMLButtonElement, AccordionTriggerPr
   });
 });
 
-export type AccordionPanelProps = HTMLAttributes<HTMLDivElement>;
-export const AccordionPanel = forwardRef<HTMLDivElement, AccordionPanelProps>(function AccordionPanel(props, ref) {
+export interface AccordionPanelProps extends Omit<HTMLAttributes<HTMLDivElement>, 'id' | 'role' | 'aria-labelledby'> {
+  region?: boolean;
+}
+export const AccordionPanel = forwardRef<HTMLDivElement, AccordionPanelProps>(function AccordionPanel(
+  { region = false, ...props },
+  ref,
+) {
   const root = useRoot();
   const item = useItem();
   const open = root.openValues.includes(item.value);
   return createElement('div', {
     ...props,
     ref,
-    id: props.id ?? item.panelId,
-    role: 'region',
+    id: item.panelId,
+    role: region ? 'region' : undefined,
     hidden: !open,
-    'aria-labelledby': item.triggerId,
+    'aria-labelledby': region ? item.triggerId : undefined,
     'data-vf-accordion-panel': '',
     'data-vf-open': open ? '' : undefined,
   });

@@ -184,7 +184,15 @@ export class VfAccordionPanelDirective {
     // (undocumented)
     readonly item: VfAccordionItemDirective;
     // (undocumented)
-    static ɵdir: i0.ɵɵDirectiveDeclaration<VfAccordionPanelDirective, "[vfAccordionPanel]", never, {}, {}, never, never, true, never>;
+    readonly region: InputSignalWithTransform<boolean, unknown>;
+    // (undocumented)
+    static ɵdir: i0.ɵɵDirectiveDeclaration<VfAccordionPanelDirective, "[vfAccordionPanel]", never, {
+        "region": {
+            "alias": "region";
+            "required": false;
+            "isSignal": true;
+        };
+    }, {}, never, never, true, never>;
     // (undocumented)
     static ɵfac: i0.ɵɵFactoryDeclaration<VfAccordionPanelDirective, never>;
 }
@@ -245,13 +253,23 @@ export class VfAccordionRootDirective {
 export class VfAccordionTriggerDirective {
     constructor(item: VfAccordionItemDirective);
     // (undocumented)
+    readonly disabled: InputSignalWithTransform<boolean, unknown>;
+    // (undocumented)
     readonly item: VfAccordionItemDirective;
     // (undocumented)
     onKeydown(event: KeyboardEvent): void;
     // (undocumented)
-    toggle(): void;
+    toggle(event?: MouseEvent): void;
     // (undocumented)
-    static ɵdir: i0.ɵɵDirectiveDeclaration<VfAccordionTriggerDirective, "button[vfAccordionTrigger]", never, {}, {}, never, never, true, never>;
+    unavailable(): boolean;
+    // (undocumented)
+    static ɵdir: i0.ɵɵDirectiveDeclaration<VfAccordionTriggerDirective, "button[vfAccordionTrigger]", never, {
+        "disabled": {
+            "alias": "disabled";
+            "required": false;
+            "isSignal": true;
+        };
+    }, {}, never, never, true, never>;
     // (undocumented)
     static ɵfac: i0.ɵɵFactoryDeclaration<VfAccordionTriggerDirective, never>;
 }
