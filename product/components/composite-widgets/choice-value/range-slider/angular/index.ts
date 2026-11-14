@@ -1,4 +1,4 @@
-import { Directive, booleanAttribute, input, output, signal } from '@angular/core';
+import { Directive, ElementRef, afterRenderEffect, booleanAttribute, inject, input, output, signal } from '@angular/core';
 
 type Pair = [number, number];
 type Bounds = readonly [number, number, number];
@@ -83,13 +83,20 @@ export class VfRangeSliderRootDirective {
     '[attr.min]': 'root.minimum()',
     '[attr.max]': 'root.current()[1]',
     '[attr.step]': 'root.increment()',
-    '[value]': 'root.current()[0]',
+    '[attr.value]': 'root.current()[0]',
     '[disabled]': 'root.disabled()',
     '(input)': 'root.change(0, $event)',
   },
 })
 export class VfRangeSliderStartDirective {
-  constructor(readonly root: VfRangeSliderRootDirective) {}
+  private readonly element = inject<ElementRef<HTMLInputElement>>(ElementRef);
+  constructor(readonly root: VfRangeSliderRootDirective) {
+    afterRenderEffect({
+      write: () => {
+        this.element.nativeElement.value = String(this.root.current()[0]);
+      },
+    });
+  }
 }
 
 @Directive({
@@ -101,11 +108,18 @@ export class VfRangeSliderStartDirective {
     '[attr.min]': 'root.current()[0]',
     '[attr.max]': 'root.maximum()',
     '[attr.step]': 'root.increment()',
-    '[value]': 'root.current()[1]',
+    '[attr.value]': 'root.current()[1]',
     '[disabled]': 'root.disabled()',
     '(input)': 'root.change(1, $event)',
   },
 })
 export class VfRangeSliderEndDirective {
-  constructor(readonly root: VfRangeSliderRootDirective) {}
+  private readonly element = inject<ElementRef<HTMLInputElement>>(ElementRef);
+  constructor(readonly root: VfRangeSliderRootDirective) {
+    afterRenderEffect({
+      write: () => {
+        this.element.nativeElement.value = String(this.root.current()[1]);
+      },
+    });
+  }
 }
