@@ -138,6 +138,10 @@ export async function createAngularStory() {
         <button vfTooltipTrigger>Second</button>
         <div vfTooltipContent>Second description</div>
       </div>
+      <div vfTooltipRoot id="controlled" contentId="controlled-tip" [open]="false" [openDelay]="0" (openChange)="request($event)">
+        <button vfTooltipTrigger>Controlled</button>
+        <div vfTooltipContent>Controlled description</div>
+      </div>
       <button id="outside">Outside</button>
     </main>`,
   })(TooltipTestApp);
