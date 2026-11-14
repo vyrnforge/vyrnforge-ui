@@ -4,6 +4,7 @@
   :where([data-vf-pagination-root]) {
     align-items: center;
     display: flex;
+    flex-wrap: wrap;
     gap: var(--vf-space-xs);
   }
 

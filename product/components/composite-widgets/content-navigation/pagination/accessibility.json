@@ -24,7 +24,8 @@
   "profileVariability": [],
   "notes": [
     "#1286 removed fabricated labels and updated the consuming data-table example.",
-    "Verify unavailable links, responsive wrapping, focus and distinction from in-place actions.",
+    "Destination pagination uses authored native links; omit an unavailable destination or omit its href and supply meaningful static text. Do not fake navigation or mutate application-owned current page.",
+    "Public-port fixtures exercise SSR/native navigation, keyboard focus, no-href boundaries and narrow wrapping; exact-head, cross-browser and manual evidence remain required.",
     "Audit mapping is provisional; not a conformance claim."
   ]
 }
