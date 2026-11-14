@@ -1,0 +1,16 @@
+name: L5 popover cross-browser proof (temporary)
+on:
+  push:
+    branches: [fix/l5-popover-native]
+permissions:
+  contents: read
+jobs:
+  browser-matrix:
+    uses: ./.github/workflows/_browser-validation.yml
+    with:
+      scopes_json: '[{"port":"web","components":"popover"},{"port":"react","components":"popover"},{"port":"angular","components":"popover"},{"port":"vue","components":"popover"},{"port":"elements","components":"popover"}]'
+      revision: ${{ github.sha }}
+      browser_profile: cross
+      browsers: chromium firefox webkit
+      artifact_suffix: popover-native
+      retention_days: 14
