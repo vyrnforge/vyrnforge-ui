@@ -10,9 +10,12 @@ export class VfCarouselRootDirective {
   readonly defaultIndex = input(0);
   readonly indexChange = output<number>();
   private readonly internalIndex = signal<number | undefined>(undefined);
-  private readonly slides = contentChildren<VfCarouselSlideDirective>(forwardRef(() => VfCarouselSlideDirective), {
-    descendants: true,
-  });
+  private readonly slides = contentChildren<VfCarouselSlideDirective>(
+    forwardRef(() => VfCarouselSlideDirective),
+    {
+      descendants: true,
+    },
+  );
 
   private ownedSlides() {
     return this.slides().filter((slide) => slide.root === this);

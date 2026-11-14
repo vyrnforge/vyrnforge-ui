@@ -40,7 +40,9 @@ export class VfCarouselElement extends HTMLElementBase {
   }
 
   get index() {
-    return this.bounded(this.hasAttribute('index') ? Number(this.getAttribute('index')) : this.internalIndex ?? this.defaultIndex);
+    return this.bounded(
+      this.hasAttribute('index') ? Number(this.getAttribute('index')) : (this.internalIndex ?? this.defaultIndex),
+    );
   }
 
   set index(value: number) {
@@ -56,7 +58,9 @@ export class VfCarouselElement extends HTMLElementBase {
   }
 
   private slides() {
-    return Array.from(this.querySelectorAll<HTMLElement>('[data-vf-carousel-slide]')).filter((slide) => this.owns(slide));
+    return Array.from(this.querySelectorAll<HTMLElement>('[data-vf-carousel-slide]')).filter((slide) =>
+      this.owns(slide),
+    );
   }
 
   private bounded(value: number) {
@@ -71,7 +75,9 @@ export class VfCarouselElement extends HTMLElementBase {
       if (!slide.hasAttribute('aria-roledescription')) slide.setAttribute('aria-roledescription', 'slide');
       slide.hidden = position !== index;
     });
-    for (const button of this.querySelectorAll<HTMLButtonElement>('button[data-vf-carousel-previous], button[data-vf-carousel-next]')) {
+    for (const button of this.querySelectorAll<HTMLButtonElement>(
+      'button[data-vf-carousel-previous], button[data-vf-carousel-next]',
+    )) {
       if (!this.owns(button)) continue;
       if (!button.hasAttribute('type')) button.type = 'button';
       const unavailable = button.hasAttribute('data-vf-carousel-previous') ? index === 0 : index >= slides.length - 1;
@@ -82,14 +88,20 @@ export class VfCarouselElement extends HTMLElementBase {
 
   private onClick = (event: Event) => {
     if (event.defaultPrevented || !(event.target instanceof Element)) return;
-    const button = event.target.closest<HTMLButtonElement>('button[data-vf-carousel-previous], button[data-vf-carousel-next]');
+    const button = event.target.closest<HTMLButtonElement>(
+      'button[data-vf-carousel-previous], button[data-vf-carousel-next]',
+    );
     if (!button || !this.owns(button) || button.disabled || button.getAttribute('aria-disabled') === 'true') return;
     const next = this.bounded(this.index + (button.hasAttribute('data-vf-carousel-previous') ? -1 : 1));
     if (next === this.index) return;
     if (!this.hasAttribute('index')) this.internalIndex = next;
     this.sync();
     this.dispatchEvent(
-      new CustomEvent<CarouselIndexChangeDetail>('vf-index-change', { detail: { index: next }, bubbles: true, composed: true }),
+      new CustomEvent<CarouselIndexChangeDetail>('vf-index-change', {
+        detail: { index: next },
+        bubbles: true,
+        composed: true,
+      }),
     );
   };
 }

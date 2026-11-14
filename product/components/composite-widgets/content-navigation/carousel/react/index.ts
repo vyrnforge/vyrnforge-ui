@@ -71,26 +71,33 @@ export const CarouselRoot = forwardRef<HTMLElement, CarouselRootProps>(function 
     { value: context },
     createElement(
       'section',
-      { ...props, ref, role: 'region', 'aria-roledescription': props['aria-roledescription'] ?? 'carousel', 'data-vf-carousel-root': '' },
+      {
+        ...props,
+        ref,
+        role: 'region',
+        'aria-roledescription': props['aria-roledescription'] ?? 'carousel',
+        'data-vf-carousel-root': '',
+      },
       children,
     ),
   );
 });
 
-export const CarouselViewport = forwardRef<HTMLDivElement, ComponentPropsWithoutRef<'div'>>(
-  function CarouselViewport({ children, ...props }, ref) {
-    let position = 0;
-    return createElement(
-      'div',
-      { ...props, ref, 'data-vf-carousel-viewport': '' },
-      parts(children).map((child) =>
-        isValidElement(child) && child.type === CarouselSlide
-          ? createElement(SlidePosition.Provider, { key: child.key, value: position++ }, child)
-          : child,
-      ),
-    );
-  },
-);
+export const CarouselViewport = forwardRef<HTMLDivElement, ComponentPropsWithoutRef<'div'>>(function CarouselViewport(
+  { children, ...props },
+  ref,
+) {
+  let position = 0;
+  return createElement(
+    'div',
+    { ...props, ref, 'data-vf-carousel-viewport': '' },
+    parts(children).map((child) =>
+      isValidElement(child) && child.type === CarouselSlide
+        ? createElement(SlidePosition.Provider, { key: child.key, value: position++ }, child)
+        : child,
+    ),
+  );
+});
 
 export const CarouselSlide = forwardRef<HTMLDivElement, ComponentPropsWithoutRef<'div'>>(
   function CarouselSlide(props, ref) {

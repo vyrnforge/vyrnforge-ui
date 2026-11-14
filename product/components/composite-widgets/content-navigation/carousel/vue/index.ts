@@ -1,4 +1,15 @@
-import { Fragment, computed, defineComponent, h, inject, provide, ref, type InjectionKey, type Ref, type VNode } from 'vue';
+import {
+  Fragment,
+  computed,
+  defineComponent,
+  h,
+  inject,
+  provide,
+  ref,
+  type InjectionKey,
+  type Ref,
+  type VNode,
+} from 'vue';
 
 interface CarouselContext {
   index: Readonly<Ref<number>>;
@@ -28,7 +39,10 @@ function bounded(index: number, count: number): number {
 const SlidePosition = defineComponent({
   props: { position: { type: Number, required: true } },
   setup(props, { slots }) {
-    provide(PositionKey, computed(() => props.position));
+    provide(
+      PositionKey,
+      computed(() => props.position),
+    );
     return () => slots.default?.();
   },
 });
@@ -66,7 +80,12 @@ export const CarouselRoot = defineComponent({
       count.value = slideCount;
       return h(
         'section',
-        { ...attrs, role: 'region', 'aria-roledescription': attrs['aria-roledescription'] ?? 'carousel', 'data-vf-carousel-root': '' },
+        {
+          ...attrs,
+          role: 'region',
+          'aria-roledescription': attrs['aria-roledescription'] ?? 'carousel',
+          'data-vf-carousel-root': '',
+        },
         content,
       );
     };
@@ -101,7 +120,13 @@ export const CarouselSlide = defineComponent({
     return () =>
       h(
         'div',
-        { ...attrs, role: 'group', 'aria-roledescription': attrs['aria-roledescription'] ?? 'slide', 'data-vf-carousel-slide': '', hidden: position?.value !== context.index.value },
+        {
+          ...attrs,
+          role: 'group',
+          'aria-roledescription': attrs['aria-roledescription'] ?? 'slide',
+          'data-vf-carousel-slide': '',
+          hidden: position?.value !== context.index.value,
+        },
         slots.default?.(),
       );
   },
@@ -149,7 +174,9 @@ export const CarouselNext = defineComponent({
     const context = useCarousel();
     return () => {
       const unavailable =
-        context.index.value >= context.count.value - 1 || attrs['aria-disabled'] === true || attrs['aria-disabled'] === 'true';
+        context.index.value >= context.count.value - 1 ||
+        attrs['aria-disabled'] === true ||
+        attrs['aria-disabled'] === 'true';
       return h(
         'button',
         {
