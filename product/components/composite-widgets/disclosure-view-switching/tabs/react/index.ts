@@ -38,7 +38,7 @@ function useTabsContext(): TabsContextValue {
 }
 
 function valueToken(value: string): string {
-  return encodeURIComponent(value).replaceAll('%', '_');
+  return encodeURIComponent(value).replaceAll('_', '_5F').replaceAll('%', '_');
 }
 
 function tabId(rootId: string, value: string): string {
@@ -91,6 +91,7 @@ export function TabsRoot({
       activation,
       direction: dir,
       select(nextValue) {
+        if (nextValue === selectedValue) return;
         if (!controlled) setInternalValue(nextValue);
         onValueChange?.(nextValue);
       },
@@ -123,8 +124,9 @@ export function TabsList({ onKeyDown, ...props }: TabsListProps) {
     onKeyDown?.(event);
     if (event.defaultPrevented) return;
 
-    const target = event.target as HTMLElement;
-    if (target.getAttribute('role') !== 'tab') return;
+    if (!(event.target instanceof HTMLElement)) return;
+    const target = event.target.closest<HTMLElement>('[data-vf-tabs-tab]');
+    if (!target || target.closest('[data-vf-tabs-list]') !== event.currentTarget) return;
 
     let intent: CollectionNavigationIntent | null = null;
     if (event.key === 'Home') intent = 'first';
@@ -138,7 +140,9 @@ export function TabsList({ onKeyDown, ...props }: TabsListProps) {
     }
     if (!intent) return;
 
-    const tabs = Array.from(event.currentTarget.querySelectorAll<HTMLElement>('[role="tab"]'));
+    const tabs = Array.from(event.currentTarget.querySelectorAll<HTMLElement>('[data-vf-tabs-tab]')).filter(
+      (tab) => tab.closest('[data-vf-tabs-list]') === event.currentTarget,
+    );
     const currentIndex = tabs.indexOf(target);
     const items = tabs.map((tab) => ({
       eligible: !(tab.getAttribute('aria-disabled') === 'true' || (tab as HTMLButtonElement).disabled),
@@ -181,7 +185,7 @@ export function TabsTab({
 }: TabsTabProps) {
   const context = useTabsContext();
   const selected = context.selectedValue === value;
-  const focusable = context.focusValue === value;
+  const focusable = context.activation === 'manual' ? context.focusValue === value : selected;
 
   return createElement('button', {
     ...props,
@@ -207,11 +211,7 @@ export function TabsTab({
     },
     onKeyDown(event: KeyboardEvent<HTMLButtonElement>) {
       onKeyDown?.(event);
-      if (event.defaultPrevented || disabled || context.activation !== 'manual') return;
-      if (event.key === 'Enter' || event.key === ' ') {
-        event.preventDefault();
-        context.select(value);
-      }
+      // Native button activation delivers Enter/Space through click.
     },
   });
 }

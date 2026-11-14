@@ -127,7 +127,13 @@ test.describe('Tabs port interaction and client activation', () => {
       await expect(page.locator(`#${framework}-manual-tabs-panel-overview`)).toBeVisible();
       await expect(page.locator(`#${framework}-manual-tabs-panel-security`)).toBeHidden();
 
+      await security.evaluate((button) => {
+        button.addEventListener('click', () => {
+          button.dataset.nativeClicks = String(Number(button.dataset.nativeClicks || 0) + 1);
+        });
+      });
       await page.keyboard.press('Enter');
+      await expect(security).toHaveAttribute('data-native-clicks', '1');
       await expect(security).toHaveAttribute('aria-selected', 'true');
       await expect(security).not.toHaveAttribute('data-vf-selected', '');
       await expect(page.locator(`#${framework}-manual-tabs-panel-security`)).toBeVisible();
@@ -136,11 +142,49 @@ test.describe('Tabs port interaction and client activation', () => {
       await page.keyboard.press('ArrowUp');
       await expect(overview).toBeFocused();
       await expect(security).toHaveAttribute('aria-selected', 'true');
+      await overview.evaluate((button) => {
+        button.addEventListener('click', () => {
+          button.dataset.nativeClicks = String(Number(button.dataset.nativeClicks || 0) + 1);
+        });
+      });
       await page.keyboard.press('Space');
+      await expect(overview).toHaveAttribute('data-native-clicks', '1');
       await expect(overview).toHaveAttribute('aria-selected', 'true');
       await expect(page.locator('body')).toHaveAttribute('data-manual-value', 'overview');
 
       expect(errors.filter((error) => /hydration|mismatch/i.test(error))).toEqual([]);
     });
   }
+});
+
+test('controlled automatic Tabs preserves committed selection and unique relationships', async ({ page }) => {
+  test.skip(port === 'web', 'Managed Tabs runtime only.');
+  await page.goto(`/components/tabs/${port}.html`);
+  const root = page.locator(`#${port}-controlled-tabs`);
+  const first = root.getByRole('tab', { name: 'Slash' });
+  const second = root.getByRole('tab', { name: 'Underscore' });
+  await expect(first).toHaveAttribute('aria-selected', 'true');
+  await expect(first).toHaveAttribute('tabindex', '0');
+  await expect(second).toHaveAttribute('aria-selected', 'false');
+  const firstPanel = await first.getAttribute('aria-controls');
+  const secondPanel = await second.getAttribute('aria-controls');
+  expect(firstPanel).not.toBe(secondPanel);
+  expect(await first.getAttribute('id')).not.toBe(await second.getAttribute('id'));
+  await expect(root.locator(`[id="${firstPanel}"]`)).toBeVisible();
+  await expect(root.locator(`[id="${secondPanel}"]`)).toBeHidden();
+  await first.click();
+  await expect(page.locator('body')).not.toHaveAttribute('data-controlled-count');
+  await first.press('ArrowRight');
+  await expect(second).toBeFocused();
+  await expect(page.locator('body')).toHaveAttribute('data-controlled-value', 'a_2Fb');
+  await expect(page.locator('body')).toHaveAttribute('data-controlled-count', '1');
+  await expect(first).toHaveAttribute('aria-selected', 'true');
+  await expect(first).toHaveAttribute('tabindex', '0');
+  await expect(second).toHaveAttribute('tabindex', '-1');
+  await expect(root.locator(`[id="${firstPanel}"]`)).toBeVisible();
+  await expect(root.locator(`[id="${secondPanel}"]`)).toBeHidden();
+  await second.press('Space');
+  await expect(page.locator('body')).toHaveAttribute('data-controlled-count', '2');
+  await expect(first).toHaveAttribute('aria-selected', 'true');
+  await expectNoAxeViolations(page, { include: `#${port}-controlled-tabs` });
 });

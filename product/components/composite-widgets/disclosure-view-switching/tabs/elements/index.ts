@@ -13,7 +13,7 @@ const HTMLElementBase = (globalThis.HTMLElement ?? class {}) as typeof HTMLEleme
 let generatedTabsId = 0;
 
 function valueToken(value: string): string {
-  return encodeURIComponent(value).replaceAll('%', '_');
+  return encodeURIComponent(value).replaceAll('_', '_5F').replaceAll('%', '_');
 }
 
 function belongsToRoot(root: VfTabsElement, element: Element): boolean {
@@ -48,6 +48,7 @@ export class VfTabsElement extends HTMLElementBase {
     this.#focusValue = this.selectedValue;
     this.addEventListener('click', this.#handleClick);
     this.addEventListener('keydown', this.#handleKeyDown);
+    this.addEventListener('focusin', this.#handleFocus);
     this.#observer = new MutationObserver(() => this.#sync());
     this.#observer.observe(this, {
       subtree: true,
@@ -61,6 +62,7 @@ export class VfTabsElement extends HTMLElementBase {
   disconnectedCallback(): void {
     this.removeEventListener('click', this.#handleClick);
     this.removeEventListener('keydown', this.#handleKeyDown);
+    this.removeEventListener('focusin', this.#handleFocus);
     this.#observer?.disconnect();
     this.#observer = null;
   }
@@ -208,8 +210,16 @@ export class VfTabsElement extends HTMLElementBase {
     }
   }
 
+  #handleFocus = (event: FocusEvent): void => {
+    if (this.activation !== 'manual' || !(event.target instanceof HTMLElement)) return;
+    const tab = event.target.closest<HTMLElement>('[data-vf-tabs-tab]');
+    if (!tab || !belongsToRoot(this, tab) || tabDisabled(tab)) return;
+    this.#focusValue = tabValue(tab);
+    this.#sync();
+  };
+
   #handleClick = (event: Event): void => {
-    if (!(event.target instanceof Element)) return;
+    if (event.defaultPrevented || !(event.target instanceof Element)) return;
     const tab = event.target.closest<HTMLElement>('[data-vf-tabs-tab]');
     if (!tab || !belongsToRoot(this, tab)) return;
     if (tabDisabled(tab)) {
@@ -223,7 +233,7 @@ export class VfTabsElement extends HTMLElementBase {
   };
 
   #handleKeyDown = (event: KeyboardEvent): void => {
-    if (!(event.target instanceof Element)) return;
+    if (event.defaultPrevented || !(event.target instanceof Element)) return;
     const current = event.target.closest<HTMLElement>('[data-vf-tabs-tab]');
     if (!current || !belongsToRoot(this, current) || tabDisabled(current)) return;
 
@@ -257,13 +267,7 @@ export class VfTabsElement extends HTMLElementBase {
       return;
     }
 
-    if (this.activation === 'manual' && (event.key === 'Enter' || event.key === ' ')) {
-      const value = tabValue(current);
-      if (!value) return;
-      event.preventDefault();
-      this.#focusValue = value;
-      this.#select(value);
-    }
+    // Native buttons deliver Enter and Space via click.
   };
 }
 
