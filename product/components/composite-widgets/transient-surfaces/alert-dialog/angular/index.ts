@@ -21,8 +21,12 @@ function createDismissRequest(reason: AlertDialogDismissReason): AlertDialogDism
   let prevented = false;
   return {
     reason,
-    get defaultPrevented() { return prevented; },
-    preventDefault() { prevented = true; },
+    get defaultPrevented() {
+      return prevented;
+    },
+    preventDefault() {
+      prevented = true;
+    },
   };
 }
 
@@ -79,7 +83,8 @@ export class VfAlertDialogRootDirective {
 
   private syncDialog(dialog: HTMLDialogElement, desiredOpen: boolean, captureRestoreTarget: boolean): void {
     if (desiredOpen && !dialog.open) {
-      if (captureRestoreTarget) this.restoreTarget = document.activeElement instanceof HTMLElement ? document.activeElement : null;
+      if (captureRestoreTarget)
+        this.restoreTarget = document.activeElement instanceof HTMLElement ? document.activeElement : null;
       dialog.showModal();
       this.initialFocus()?.focus();
     } else if (!desiredOpen && dialog.open) {
@@ -126,17 +131,48 @@ export class VfAlertDialogRootDirective {
   }
 }
 
-@Directive({ selector: '[vfAlertDialogTitle]', standalone: true, host: { '[attr.id]': 'id() ?? root.resolvedTitleId()', 'data-vf-alert-dialog-title': '' } })
-export class VfAlertDialogTitleDirective { readonly root = inject(VfAlertDialogRootDirective); readonly id = input<string | undefined>(undefined); }
+@Directive({
+  selector: '[vfAlertDialogTitle]',
+  standalone: true,
+  host: { '[attr.id]': 'id() ?? root.resolvedTitleId()', 'data-vf-alert-dialog-title': '' },
+})
+export class VfAlertDialogTitleDirective {
+  readonly root = inject(VfAlertDialogRootDirective);
+  readonly id = input<string | undefined>(undefined);
+}
 
-@Directive({ selector: '[vfAlertDialogDescription]', standalone: true, host: { '[attr.id]': 'id() ?? root.descriptionId() ?? (root.id() + "-description")', 'data-vf-alert-dialog-description': '' } })
-export class VfAlertDialogDescriptionDirective { readonly root = inject(VfAlertDialogRootDirective); readonly id = input<string | undefined>(undefined); }
+@Directive({
+  selector: '[vfAlertDialogDescription]',
+  standalone: true,
+  host: {
+    '[attr.id]': 'id() ?? root.descriptionId() ?? (root.id() + "-description")',
+    'data-vf-alert-dialog-description': '',
+  },
+})
+export class VfAlertDialogDescriptionDirective {
+  readonly root = inject(VfAlertDialogRootDirective);
+  readonly id = input<string | undefined>(undefined);
+}
 
 @Directive({ selector: '[vfAlertDialogBody]', standalone: true, host: { 'data-vf-alert-dialog-body': '' } })
-export class VfAlertDialogBodyDirective { readonly root = inject(VfAlertDialogRootDirective); }
+export class VfAlertDialogBodyDirective {
+  readonly root = inject(VfAlertDialogRootDirective);
+}
 
-@Directive({ selector: 'button[vfAlertDialogCancel]', standalone: true, host: { type: 'button', 'data-vf-alert-dialog-cancel': '', '(click)': 'root.requestDismiss("close-control")' } })
-export class VfAlertDialogCancelDirective { readonly root = inject(VfAlertDialogRootDirective); }
+@Directive({
+  selector: 'button[vfAlertDialogCancel]',
+  standalone: true,
+  host: { type: 'button', 'data-vf-alert-dialog-cancel': '', '(click)': 'root.requestDismiss("close-control")' },
+})
+export class VfAlertDialogCancelDirective {
+  readonly root = inject(VfAlertDialogRootDirective);
+}
 
-@Directive({ selector: 'button[vfAlertDialogAction]', standalone: true, host: { type: 'button', 'data-vf-alert-dialog-action': '', '(click)': 'root.requestDismiss("close-control")' } })
-export class VfAlertDialogActionDirective { readonly root = inject(VfAlertDialogRootDirective); }
+@Directive({
+  selector: 'button[vfAlertDialogAction]',
+  standalone: true,
+  host: { type: 'button', 'data-vf-alert-dialog-action': '', '(click)': 'root.requestDismiss("close-control")' },
+})
+export class VfAlertDialogActionDirective {
+  readonly root = inject(VfAlertDialogRootDirective);
+}

@@ -8,7 +8,9 @@ test('tooltip relationship is accessible', async ({ page }) => {
   expect((await expectNoAxeViolations(page)).violations).toEqual([]);
 });
 
-test('public Tooltip CSS resolves canonical control radius and typography in light, dark, and forced-colors modes', async ({ page }) => {
+test('public Tooltip CSS resolves canonical control radius and typography in light, dark, and forced-colors modes', async ({
+  page,
+}) => {
   test.skip(port !== 'web', 'Public CSS resolution evidence is owned by the Web lane.');
   await page.goto('/components/tooltip/web.html');
   const tooltip = page.getByRole('tooltip');

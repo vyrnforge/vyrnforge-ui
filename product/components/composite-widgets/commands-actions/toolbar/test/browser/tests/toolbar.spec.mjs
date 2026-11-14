@@ -5,7 +5,9 @@ const runtimePort = port !== 'web';
 
 async function openFixture(page) {
   const errors = [];
-  page.on('console', (message) => { if (message.type() === 'error') errors.push(message.text()); });
+  page.on('console', (message) => {
+    if (message.type() === 'error') errors.push(message.text());
+  });
   page.on('pageerror', (error) => errors.push(error.message));
   await page.goto(`/components/toolbar/${port}.html`);
   if (runtimePort) await expect.poll(() => page.locator('#bold').getAttribute('tabindex')).toBe('0');
@@ -25,7 +27,9 @@ test('Web surface preserves static toolbar semantics and shared styling', async 
   expect(errors).toEqual([]);
 });
 
-test('public Toolbar CSS resolves canonical spacing, control radius, and separator boundary in light, dark, and forced-colors modes', async ({ page }) => {
+test('public Toolbar CSS resolves canonical spacing, control radius, and separator boundary in light, dark, and forced-colors modes', async ({
+  page,
+}) => {
   test.skip(runtimePort, 'Public CSS resolution evidence is owned by the Web lane.');
   await openFixture(page);
   const toolbar = page.locator('#toolbar');

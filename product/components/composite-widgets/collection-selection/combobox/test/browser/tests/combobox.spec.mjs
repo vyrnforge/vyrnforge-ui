@@ -31,11 +31,16 @@ test('public Combobox CSS resolves the canonical control radius in light and dar
 });
 
 test.describe('enhanced combobox interaction', () => {
-  test.skip(port === 'web', 'Native Web owns semantic/style baseline; framework ports own enhanced combobox interaction.');
+  test.skip(
+    port === 'web',
+    'Native Web owns semantic/style baseline; framework ports own enhanced combobox interaction.',
+  );
 
   test('keeps DOM focus on the input and navigates options with aria-activedescendant', async ({ page }) => {
     const errors = [];
-    page.on('console', (message) => { if (message.type() === 'error') errors.push(message.text()); });
+    page.on('console', (message) => {
+      if (message.type() === 'error') errors.push(message.text());
+    });
     page.on('pageerror', (error) => errors.push(error.message));
     await page.goto(`/components/combobox/${port}.html`);
 
@@ -68,7 +73,9 @@ test.describe('enhanced combobox interaction', () => {
     expect(errors.filter((error) => /hydration|mismatch|uncaught|error/i.test(error))).toEqual([]);
   });
 
-  test('filters authored options, starts Up Arrow at the last enabled match, and dismisses with Escape', async ({ page }) => {
+  test('filters authored options, starts Up Arrow at the last enabled match, and dismisses with Escape', async ({
+    page,
+  }) => {
     await page.goto(`/components/combobox/${port}.html`);
     const input = page.getByRole('combobox', { name: 'Framework' });
     const react = page.locator(`#${port}-react`);
@@ -117,7 +124,9 @@ test.describe('enhanced combobox interaction', () => {
 
     for (const key of ['ArrowDown', 'Enter', 'Escape']) {
       await input.evaluate((node, value) => {
-        node.dispatchEvent(new KeyboardEvent('keydown', { bubbles: true, composed: true, isComposing: true, key: value, code: value }));
+        node.dispatchEvent(
+          new KeyboardEvent('keydown', { bubbles: true, composed: true, isComposing: true, key: value, code: value }),
+        );
       }, key);
     }
 

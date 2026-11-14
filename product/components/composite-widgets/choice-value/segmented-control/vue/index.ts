@@ -17,17 +17,18 @@ function itemDisabled(item: HTMLButtonElement): boolean {
 }
 
 function intentForKey(keyValue: string, direction: 'ltr' | 'rtl') {
-  const arrow = keyValue === 'ArrowLeft' ? 'left'
-    : keyValue === 'ArrowRight' ? 'right'
-      : keyValue === 'ArrowUp' ? 'up'
-        : keyValue === 'ArrowDown' ? 'down'
-          : null;
+  const arrow =
+    keyValue === 'ArrowLeft'
+      ? 'left'
+      : keyValue === 'ArrowRight'
+        ? 'right'
+        : keyValue === 'ArrowUp'
+          ? 'up'
+          : keyValue === 'ArrowDown'
+            ? 'down'
+            : null;
   if (!arrow) return null;
-  return navigationIntentForArrow(
-    arrow,
-    arrow === 'left' || arrow === 'right' ? 'horizontal' : 'vertical',
-    direction,
-  );
+  return navigationIntentForArrow(arrow, arrow === 'left' || arrow === 'right' ? 'horizontal' : 'vertical', direction);
 }
 
 function invoke(handler: unknown, event: Event): void {
@@ -68,34 +69,39 @@ export const SegmentedControlRoot = defineComponent({
     };
     provide(key, context);
 
-    return () => h('div', {
-      ...attrs,
-      role: 'radiogroup',
-      'data-vf-segmented-control-root': '',
-      onKeydown: (event: KeyboardEvent) => {
-        invoke(attrs.onKeydown, event);
-        if (event.defaultPrevented) return;
-        const root = event.currentTarget as HTMLElement;
-        const currentItem = itemFromTarget(root, event.target);
-        if (!currentItem) return;
-        const direction = getComputedStyle(root).direction === 'rtl' ? 'rtl' : 'ltr';
-        const intent = intentForKey(event.key, direction);
-        if (!intent) return;
-        const items = itemsFor(root);
-        const current = items.indexOf(currentItem);
-        const next = resolveNavigationIndex(
-          items.map((item) => ({ eligible: !(itemDisabled(item)) })),
-          current,
-          intent,
-        );
-        if (next == null) return;
-        event.preventDefault();
-        const candidate = items[next];
-        if (!candidate) return;
-        candidate.focus();
-        context.set(candidate.dataset.vfValue ?? '');
-      },
-    }, slots.default?.());
+    return () =>
+      h(
+        'div',
+        {
+          ...attrs,
+          role: 'radiogroup',
+          'data-vf-segmented-control-root': '',
+          onKeydown: (event: KeyboardEvent) => {
+            invoke(attrs.onKeydown, event);
+            if (event.defaultPrevented) return;
+            const root = event.currentTarget as HTMLElement;
+            const currentItem = itemFromTarget(root, event.target);
+            if (!currentItem) return;
+            const direction = getComputedStyle(root).direction === 'rtl' ? 'rtl' : 'ltr';
+            const intent = intentForKey(event.key, direction);
+            if (!intent) return;
+            const items = itemsFor(root);
+            const current = items.indexOf(currentItem);
+            const next = resolveNavigationIndex(
+              items.map((item) => ({ eligible: !itemDisabled(item) })),
+              current,
+              intent,
+            );
+            if (next == null) return;
+            event.preventDefault();
+            const candidate = items[next];
+            if (!candidate) return;
+            candidate.focus();
+            context.set(candidate.dataset.vfValue ?? '');
+          },
+        },
+        slots.default?.(),
+      );
   },
 });
 
@@ -111,20 +117,24 @@ export const SegmentedControlItem = defineComponent({
     return () => {
       const checked = segmented.value.value === props.value;
       const tabIndex = props.disabled ? -1 : segmented.value.value ? (checked ? 0 : -1) : undefined;
-      return h('button', {
-        ...attrs,
-        type: (attrs.type as string | undefined) ?? 'button',
-        role: 'radio',
-        tabindex: tabIndex,
-        disabled: props.disabled,
-        'aria-checked': checked,
-        'data-vf-segmented-control-item': '',
-        'data-vf-value': props.value,
-        onClick: (event: MouseEvent) => {
-          invoke(attrs.onClick, event);
-          if (!event.defaultPrevented && !props.disabled) segmented.set(props.value);
+      return h(
+        'button',
+        {
+          ...attrs,
+          type: (attrs.type as string | undefined) ?? 'button',
+          role: 'radio',
+          tabindex: tabIndex,
+          disabled: props.disabled,
+          'aria-checked': checked,
+          'data-vf-segmented-control-item': '',
+          'data-vf-value': props.value,
+          onClick: (event: MouseEvent) => {
+            invoke(attrs.onClick, event);
+            if (!event.defaultPrevented && !props.disabled) segmented.set(props.value);
+          },
         },
-      }, slots.default?.());
+        slots.default?.(),
+      );
     };
   },
 });

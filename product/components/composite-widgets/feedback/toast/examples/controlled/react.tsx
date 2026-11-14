@@ -5,7 +5,9 @@ export function Example() {
   const [open, setOpen] = useState(true);
   return (
     <>
-      <button type="button" onClick={() => setOpen(true)}>Show notification</button>
+      <button type="button" onClick={() => setOpen(true)}>
+        Show notification
+      </button>
       <ToastViewport>
         <ToastRoot open={open} onOpenChange={setOpen}>
           <ToastTitle>Saved</ToastTitle>

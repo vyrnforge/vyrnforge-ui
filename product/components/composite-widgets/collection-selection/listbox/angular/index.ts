@@ -1,4 +1,14 @@
-import { Directive, ElementRef, afterNextRender, computed, inject, input, output, signal, type OnDestroy } from '@angular/core';
+import {
+  Directive,
+  ElementRef,
+  afterNextRender,
+  computed,
+  inject,
+  input,
+  output,
+  signal,
+  type OnDestroy,
+} from '@angular/core';
 import { resolveNavigationIndex } from '@vyrnforge/core/collection-navigation';
 import { findTypeaheadMatch } from '@vyrnforge/core/typeahead-matching';
 
@@ -6,23 +16,37 @@ export type ListboxSelectionMode = 'single' | 'multiple';
 export type ListboxValue = string | string[];
 
 const optionSelector = '[data-vf-listbox-option]';
-function normalize(value: ListboxValue | undefined): string[] { return value === undefined ? [] : typeof value === 'string' ? (value ? [value] : []) : value; }
-function optionsFor(root: HTMLElement): HTMLElement[] { return Array.from(root.querySelectorAll<HTMLElement>(optionSelector)); }
-function disabled(option: HTMLElement): boolean { return option.getAttribute('aria-disabled') === 'true'; }
-function optionFromTarget(root: HTMLElement, target: EventTarget | null): HTMLElement | null { const element = target instanceof HTMLElement ? target.closest<HTMLElement>(optionSelector) : null; return element && root.contains(element) ? element : null; }
+function normalize(value: ListboxValue | undefined): string[] {
+  return value === undefined ? [] : typeof value === 'string' ? (value ? [value] : []) : value;
+}
+function optionsFor(root: HTMLElement): HTMLElement[] {
+  return Array.from(root.querySelectorAll<HTMLElement>(optionSelector));
+}
+function disabled(option: HTMLElement): boolean {
+  return option.getAttribute('aria-disabled') === 'true';
+}
+function optionFromTarget(root: HTMLElement, target: EventTarget | null): HTMLElement | null {
+  const element = target instanceof HTMLElement ? target.closest<HTMLElement>(optionSelector) : null;
+  return element && root.contains(element) ? element : null;
+}
 function syncTabStops(root: HTMLElement, preferred?: HTMLElement | null) {
   const options = optionsFor(root);
-  const states = options.map((option) => ({ eligible: !(disabled(option)) }));
+  const states = options.map((option) => ({ eligible: !disabled(option) }));
   let activeIndex = preferred ? options.indexOf(preferred) : -1;
   if (activeIndex < 0 || states[activeIndex]?.eligible === false) {
     const focused = typeof document === 'undefined' ? null : optionFromTarget(root, document.activeElement);
     activeIndex = focused ? options.indexOf(focused) : -1;
   }
-  if (activeIndex < 0 || states[activeIndex]?.eligible === false) activeIndex = options.findIndex((option, index) => states[index]?.eligible !== false && option.getAttribute('aria-selected') === 'true');
+  if (activeIndex < 0 || states[activeIndex]?.eligible === false)
+    activeIndex = options.findIndex(
+      (option, index) => states[index]?.eligible !== false && option.getAttribute('aria-selected') === 'true',
+    );
   if (activeIndex < 0) activeIndex = states.findIndex((option) => option.eligible !== false);
   const resolved = activeIndex < 0 ? null : activeIndex;
   root.tabIndex = resolved === null ? 0 : -1;
-  options.forEach((option, index) => { option.tabIndex = states[index]?.eligible !== false && resolved === index ? 0 : -1; });
+  options.forEach((option, index) => {
+    option.tabIndex = states[index]?.eligible !== false && resolved === index ? 0 : -1;
+  });
 }
 
 @Directive({
@@ -44,7 +68,13 @@ export class VfListboxRootDirective implements OnDestroy {
   readonly valueChange = output<ListboxValue>();
   private readonly internal = signal<string[]>([]);
   private readonly interacted = signal(false);
-  readonly values = computed(() => this.value() !== undefined ? normalize(this.value()) : this.interacted() ? this.internal() : normalize(this.defaultValue()));
+  readonly values = computed(() =>
+    this.value() !== undefined
+      ? normalize(this.value())
+      : this.interacted()
+        ? this.internal()
+        : normalize(this.defaultValue()),
+  );
   private readonly element = inject<ElementRef<HTMLElement>>(ElementRef);
   private query = '';
   private timer: ReturnType<typeof setTimeout> | null = null;
@@ -54,15 +84,32 @@ export class VfListboxRootDirective implements OnDestroy {
     syncTabStops(root);
     if (typeof MutationObserver !== 'undefined') {
       this.observer = new MutationObserver(() => syncTabStops(root));
-      this.observer.observe(root, { childList: true, subtree: true, attributes: true, attributeFilter: ['aria-disabled', 'aria-selected', 'data-vf-listbox-option'] });
+      this.observer.observe(root, {
+        childList: true,
+        subtree: true,
+        attributes: true,
+        attributeFilter: ['aria-disabled', 'aria-selected', 'data-vf-listbox-option'],
+      });
     }
   });
 
-  ngOnDestroy() { this.renderRef.destroy(); this.observer?.disconnect(); if (this.timer) clearTimeout(this.timer); }
+  ngOnDestroy() {
+    this.renderRef.destroy();
+    this.observer?.disconnect();
+    if (this.timer) clearTimeout(this.timer);
+  }
 
   select(candidate: string) {
-    const next = this.selectionMode() === 'single' ? [candidate] : this.values().includes(candidate) ? this.values().filter((value) => value !== candidate) : [...this.values(), candidate];
-    if (this.value() === undefined) { this.interacted.set(true); this.internal.set(next); }
+    const next =
+      this.selectionMode() === 'single'
+        ? [candidate]
+        : this.values().includes(candidate)
+          ? this.values().filter((value) => value !== candidate)
+          : [...this.values(), candidate];
+    if (this.value() === undefined) {
+      this.interacted.set(true);
+      this.internal.set(next);
+    }
     this.valueChange.emit(this.selectionMode() === 'single' ? (next[0] ?? '') : next);
   }
 
@@ -84,12 +131,23 @@ export class VfListboxRootDirective implements OnDestroy {
     else if (event.key === 'Home') intent = 'first';
     else if (event.key === 'End') intent = 'last';
     let next: number | null = null;
-    if (intent) next = resolveNavigationIndex(options.map((option) => ({ eligible: !(disabled(option)) })), current, intent);
+    if (intent)
+      next = resolveNavigationIndex(
+        options.map((option) => ({ eligible: !disabled(option) })),
+        current,
+        intent,
+      );
     else if (event.key.length === 1 && !event.ctrlKey && !event.metaKey && !event.altKey) {
       this.query += event.key;
       if (this.timer) clearTimeout(this.timer);
-      this.timer = setTimeout(() => { this.query = ''; }, 500);
-      next = findTypeaheadMatch(options.map((option) => ({ textValue: option.textContent ?? '', eligible: !disabled(option) })), this.query, { startIndex: current });
+      this.timer = setTimeout(() => {
+        this.query = '';
+      }, 500);
+      next = findTypeaheadMatch(
+        options.map((option) => ({ textValue: option.textContent ?? '', eligible: !disabled(option) })),
+        this.query,
+        { startIndex: current },
+      );
     }
     if (next == null) return;
     const target = options[next];
@@ -117,7 +175,20 @@ export class VfListboxRootDirective implements OnDestroy {
 export class VfListboxOptionDirective {
   readonly value = input.required<string>({ alias: 'vfListboxOption' });
   readonly disabled = input(false);
-  constructor(readonly root: VfListboxRootDirective, private readonly element: ElementRef<HTMLElement>) {}
-  selectFromPointer(event: MouseEvent) { if (!this.disabled() && !event.defaultPrevented) { this.element.nativeElement.focus(); this.root.select(this.value()); } }
-  selectFromKeyboard(event: Event) { if (!this.disabled() && !event.defaultPrevented) { event.preventDefault(); this.root.select(this.value()); } }
+  constructor(
+    readonly root: VfListboxRootDirective,
+    private readonly element: ElementRef<HTMLElement>,
+  ) {}
+  selectFromPointer(event: MouseEvent) {
+    if (!this.disabled() && !event.defaultPrevented) {
+      this.element.nativeElement.focus();
+      this.root.select(this.value());
+    }
+  }
+  selectFromKeyboard(event: Event) {
+    if (!this.disabled() && !event.defaultPrevented) {
+      event.preventDefault();
+      this.root.select(this.value());
+    }
+  }
 }

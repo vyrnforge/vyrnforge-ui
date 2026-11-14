@@ -1,4 +1,4 @@
-@import "../../styles/tokens.css";
+@import '../../styles/tokens.css';
 
 @layer vyrnforge.components {
   :where([data-vf-pagination-root]) {
@@ -20,7 +20,7 @@
     text-decoration: none;
   }
 
-  :where([data-vf-pagination-item][aria-current="page"]) {
+  :where([data-vf-pagination-item][aria-current='page']) {
     background: var(--vf-color-accent-background);
     border-color: var(--vf-color-accent-background);
     color: var(--vf-color-accent-foreground);
@@ -32,7 +32,7 @@
   }
 
   @media (forced-colors: active) {
-    :where([data-vf-pagination-item][aria-current="page"]) {
+    :where([data-vf-pagination-item][aria-current='page']) {
       background: Highlight;
       border-color: Highlight;
       color: HighlightText;

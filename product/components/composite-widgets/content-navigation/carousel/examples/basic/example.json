@@ -1,1 +1,7 @@
-{"id":"carousel/basic","title":"Basic Carousel","description":"Minimum accessible Carousel composition.","defaultFramework":"react","frameworks":{"react":{"label":"React","language":"tsx","source":"react.tsx"}}}
+{
+  "id": "carousel/basic",
+  "title": "Basic Carousel",
+  "description": "Minimum accessible Carousel composition.",
+  "defaultFramework": "react",
+  "frameworks": { "react": { "label": "React", "language": "tsx", "source": "react.tsx" } }
+}

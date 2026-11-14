@@ -10,7 +10,9 @@ test('split panel exposes keyboard-resizable separator semantics', async ({ page
   expect((await expectNoAxeViolations(page)).violations).toEqual([]);
 });
 
-test('public SplitPanel CSS resolves the canonical boundary and focus ring in light, dark, and forced-colors modes', async ({ page }) => {
+test('public SplitPanel CSS resolves the canonical boundary and focus ring in light, dark, and forced-colors modes', async ({
+  page,
+}) => {
   test.skip(port !== 'web', 'Public CSS resolution evidence is owned by the Web lane.');
   await page.goto('/components/split-panel/web.html');
   const handle = page.locator('#handle');

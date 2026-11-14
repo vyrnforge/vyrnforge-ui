@@ -9,7 +9,9 @@ test('color picker synchronizes accessible inputs', async ({ page }) => {
   expect((await expectNoAxeViolations(page)).violations).toEqual([]);
 });
 
-test('public ColorPicker CSS resolves canonical spacing and control radius in light and dark themes', async ({ page }) => {
+test('public ColorPicker CSS resolves canonical spacing and control radius in light and dark themes', async ({
+  page,
+}) => {
   test.skip(port !== 'web', 'Public CSS resolution evidence is owned by the Web lane.');
   await page.goto('/components/color-picker/web.html');
   const root = page.locator('#root');

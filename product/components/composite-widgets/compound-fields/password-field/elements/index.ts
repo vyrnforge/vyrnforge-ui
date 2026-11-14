@@ -1,5 +1,4 @@
-const HTMLElementBase: typeof HTMLElement =
-  globalThis.HTMLElement ?? (class {} as typeof HTMLElement);
+const HTMLElementBase: typeof HTMLElement = globalThis.HTMLElement ?? (class {} as typeof HTMLElement);
 
 export class VfPasswordFieldElement extends HTMLElementBase {
   static get observedAttributes() {
@@ -48,9 +47,7 @@ export class VfPasswordFieldElement extends HTMLElementBase {
   }
 
   private onClick = (event: Event) => {
-    const toggle = (event.target as HTMLElement).closest<HTMLElement>(
-      '[data-vf-password-field-toggle]',
-    );
+    const toggle = (event.target as HTMLElement).closest<HTMLElement>('[data-vf-password-field-toggle]');
     const input = this.querySelector<HTMLInputElement>('[data-vf-password-field-input]');
     if (!toggle || !input || !this.contains(toggle) || event.defaultPrevented) return;
 

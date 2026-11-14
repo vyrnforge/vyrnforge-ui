@@ -19,8 +19,10 @@ export const browserFixture = {
       outfile: path.join(dir, 'styles.css'),
     });
 
-    const page = (body, script = '') => `<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width"><title>Context menu browser fixture</title><link rel="stylesheet" href="./styles.css"></head><body><main><h1>Context menu browser fixture</h1><button id="before">Before</button>${body}<button id="after">After</button></main>${script}</body></html>`;
-    const items = (prefix) => `<button id="${prefix}-open" type="button" role="menuitem" tabindex="-1" data-vf-context-menu-item>Open</button><button id="${prefix}-disabled" type="button" role="menuitem" tabindex="-1" aria-disabled="true" disabled data-vf-context-menu-item>Blueberry disabled</button><button id="${prefix}-rename" type="button" role="menuitem" tabindex="-1" data-vf-context-menu-item>Rename</button><button id="${prefix}-banana" type="button" role="menuitem" tabindex="-1" data-vf-context-menu-item>Banana</button>`;
+    const page = (body, script = '') =>
+      `<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width"><title>Context menu browser fixture</title><link rel="stylesheet" href="./styles.css"></head><body><main><h1>Context menu browser fixture</h1><button id="before">Before</button>${body}<button id="after">After</button></main>${script}</body></html>`;
+    const items = (prefix) =>
+      `<button id="${prefix}-open" type="button" role="menuitem" tabindex="-1" data-vf-context-menu-item>Open</button><button id="${prefix}-disabled" type="button" role="menuitem" tabindex="-1" aria-disabled="true" disabled data-vf-context-menu-item>Blueberry disabled</button><button id="${prefix}-rename" type="button" role="menuitem" tabindex="-1" data-vf-context-menu-item>Rename</button><button id="${prefix}-banana" type="button" role="menuitem" tabindex="-1" data-vf-context-menu-item>Banana</button>`;
 
     if (port === 'web') {
       const body = `<div id="target" tabindex="0" data-vf-context-menu-trigger>Context target</div><div id="menu" role="menu" tabindex="-1" aria-label="Context commands" hidden data-vf-context-menu-content>${items('web')}</div>`;
@@ -29,7 +31,10 @@ export const browserFixture = {
     }
 
     if (port === 'react') {
-      await writeFile(path.join(dir, 'react.html'), page('<div id="app"></div>', '<script type="module" src="./react.js"></script>'));
+      await writeFile(
+        path.join(dir, 'react.html'),
+        page('<div id="app"></div>', '<script type="module" src="./react.js"></script>'),
+      );
       await build({
         stdin: {
           resolveDir: root,
@@ -44,7 +49,10 @@ export const browserFixture = {
     }
 
     if (port === 'vue') {
-      await writeFile(path.join(dir, 'vue.html'), page('<div id="app"></div>', '<script type="module" src="./vue.js"></script>'));
+      await writeFile(
+        path.join(dir, 'vue.html'),
+        page('<div id="app"></div>', '<script type="module" src="./vue.js"></script>'),
+      );
       await build({
         stdin: {
           resolveDir: root,
@@ -59,7 +67,10 @@ export const browserFixture = {
     }
 
     if (port === 'angular') {
-      await writeFile(path.join(dir, 'angular.html'), page('<vf-context-menu-test></vf-context-menu-test>', '<script type="module" src="./angular.js"></script>'));
+      await writeFile(
+        path.join(dir, 'angular.html'),
+        page('<vf-context-menu-test></vf-context-menu-test>', '<script type="module" src="./angular.js"></script>'),
+      );
       await build({
         stdin: {
           resolveDir: root,
@@ -75,7 +86,10 @@ export const browserFixture = {
 
     if (port === 'elements') {
       const body = `<vf-context-menu><div id="target" tabindex="0" data-vf-context-menu-trigger>Context target</div><div id="menu" aria-label="Context commands" data-vf-context-menu-content>${items('elements')}</div></vf-context-menu>`;
-      await writeFile(path.join(dir, 'elements.html'), page(body, '<script type="module" src="./elements.js"></script>'));
+      await writeFile(
+        path.join(dir, 'elements.html'),
+        page(body, '<script type="module" src="./elements.js"></script>'),
+      );
       await build({
         stdin: {
           resolveDir: root,

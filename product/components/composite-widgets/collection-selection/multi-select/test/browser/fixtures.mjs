@@ -19,8 +19,10 @@ export const browserFixture = {
       outfile: path.join(dir, 'styles.css'),
     });
 
-    const page = (body, script = '') => `<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width"><title>Multi-select browser fixture</title><link rel="stylesheet" href="./styles.css"></head><body><main><h1>Multi-select browser fixture</h1><button id="before">Before</button><p id="multi-select-label">Choose items</p>${body}<button id="after">After</button></main>${script}</body></html>`;
-    const options = (prefix) => `<button id="${prefix}-one" type="button" role="option" tabindex="-1" aria-selected="true" data-vf-multi-select-option data-vf-value="one">One</button><button id="${prefix}-disabled" type="button" role="option" tabindex="-1" aria-selected="false" aria-disabled="true" disabled data-vf-multi-select-option data-vf-value="disabled">Disabled</button><button id="${prefix}-three" type="button" role="option" tabindex="-1" aria-selected="false" data-vf-multi-select-option data-vf-value="three">Three</button><button id="${prefix}-banana" type="button" role="option" tabindex="-1" aria-selected="false" data-vf-multi-select-option data-vf-value="banana">Banana</button>`;
+    const page = (body, script = '') =>
+      `<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width"><title>Multi-select browser fixture</title><link rel="stylesheet" href="./styles.css"></head><body><main><h1>Multi-select browser fixture</h1><button id="before">Before</button><p id="multi-select-label">Choose items</p>${body}<button id="after">After</button></main>${script}</body></html>`;
+    const options = (prefix) =>
+      `<button id="${prefix}-one" type="button" role="option" tabindex="-1" aria-selected="true" data-vf-multi-select-option data-vf-value="one">One</button><button id="${prefix}-disabled" type="button" role="option" tabindex="-1" aria-selected="false" aria-disabled="true" disabled data-vf-multi-select-option data-vf-value="disabled">Disabled</button><button id="${prefix}-three" type="button" role="option" tabindex="-1" aria-selected="false" data-vf-multi-select-option data-vf-value="three">Three</button><button id="${prefix}-banana" type="button" role="option" tabindex="-1" aria-selected="false" data-vf-multi-select-option data-vf-value="banana">Banana</button>`;
 
     if (port === 'web') {
       const body = `<button id="trigger" type="button" aria-haspopup="listbox" aria-expanded="false" aria-controls="list" data-vf-multi-select-trigger>Choose</button><div id="list" role="listbox" tabindex="-1" aria-multiselectable="true" aria-labelledby="multi-select-label" hidden data-vf-multi-select-content>${options('web')}</div>`;
@@ -29,7 +31,10 @@ export const browserFixture = {
     }
 
     if (port === 'react') {
-      await writeFile(path.join(dir, 'react.html'), page('<div id="app"></div>', '<script type="module" src="./react.js"></script>'));
+      await writeFile(
+        path.join(dir, 'react.html'),
+        page('<div id="app"></div>', '<script type="module" src="./react.js"></script>'),
+      );
       await build({
         stdin: {
           resolveDir: root,
@@ -44,7 +49,10 @@ export const browserFixture = {
     }
 
     if (port === 'vue') {
-      await writeFile(path.join(dir, 'vue.html'), page('<div id="app"></div>', '<script type="module" src="./vue.js"></script>'));
+      await writeFile(
+        path.join(dir, 'vue.html'),
+        page('<div id="app"></div>', '<script type="module" src="./vue.js"></script>'),
+      );
       await build({
         stdin: {
           resolveDir: root,
@@ -59,7 +67,10 @@ export const browserFixture = {
     }
 
     if (port === 'angular') {
-      await writeFile(path.join(dir, 'angular.html'), page('<vf-multi-select-test></vf-multi-select-test>', '<script type="module" src="./angular.js"></script>'));
+      await writeFile(
+        path.join(dir, 'angular.html'),
+        page('<vf-multi-select-test></vf-multi-select-test>', '<script type="module" src="./angular.js"></script>'),
+      );
       await build({
         stdin: {
           resolveDir: root,
@@ -75,7 +86,10 @@ export const browserFixture = {
 
     if (port === 'elements') {
       const body = `<vf-multi-select id="elements-multi-select"><button id="trigger" type="button" aria-controls="list" data-vf-multi-select-trigger>Choose</button><div id="list" aria-labelledby="multi-select-label" data-vf-multi-select-content><button id="elements-one" type="button" aria-selected="true" data-vf-multi-select-option data-vf-value="one">One</button><button id="elements-disabled" type="button" disabled aria-selected="false" data-vf-multi-select-option data-vf-value="disabled">Disabled</button><button id="elements-three" type="button" aria-selected="false" data-vf-multi-select-option data-vf-value="three">Three</button><button id="elements-banana" type="button" aria-selected="false" data-vf-multi-select-option data-vf-value="banana">Banana</button></div></vf-multi-select>`;
-      await writeFile(path.join(dir, 'elements.html'), page(body, '<script type="module" src="./elements.js"></script>'));
+      await writeFile(
+        path.join(dir, 'elements.html'),
+        page(body, '<script type="module" src="./elements.js"></script>'),
+      );
       await build({
         stdin: {
           resolveDir: root,

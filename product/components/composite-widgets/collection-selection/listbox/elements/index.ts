@@ -1,29 +1,45 @@
 import { resolveNavigationIndex } from '@vyrnforge/core/collection-navigation';
 import { findTypeaheadMatch } from '@vyrnforge/core/typeahead-matching';
 
-const HTMLElementBase: typeof HTMLElement = globalThis.HTMLElement ?? class {} as typeof HTMLElement;
+const HTMLElementBase: typeof HTMLElement = globalThis.HTMLElement ?? (class {} as typeof HTMLElement);
 const optionSelector = '[data-vf-listbox-option]';
 
-function optionsFor(root: HTMLElement): HTMLElement[] { return Array.from(root.querySelectorAll<HTMLElement>(optionSelector)); }
-function disabled(option: HTMLElement): boolean { return option.getAttribute('aria-disabled') === 'true'; }
-function optionFromTarget(root: HTMLElement, target: EventTarget | null): HTMLElement | null { const element = target instanceof HTMLElement ? target.closest<HTMLElement>(optionSelector) : null; return element && root.contains(element) ? element : null; }
-function optionValue(option: HTMLElement): string { return option.getAttribute('value') ?? option.dataset.value ?? option.textContent?.trim() ?? ''; }
+function optionsFor(root: HTMLElement): HTMLElement[] {
+  return Array.from(root.querySelectorAll<HTMLElement>(optionSelector));
+}
+function disabled(option: HTMLElement): boolean {
+  return option.getAttribute('aria-disabled') === 'true';
+}
+function optionFromTarget(root: HTMLElement, target: EventTarget | null): HTMLElement | null {
+  const element = target instanceof HTMLElement ? target.closest<HTMLElement>(optionSelector) : null;
+  return element && root.contains(element) ? element : null;
+}
+function optionValue(option: HTMLElement): string {
+  return option.getAttribute('value') ?? option.dataset.value ?? option.textContent?.trim() ?? '';
+}
 function syncTabStops(root: HTMLElement, preferred?: HTMLElement | null) {
   const options = optionsFor(root);
-  const states = options.map((option) => ({ eligible: !(disabled(option)) }));
+  const states = options.map((option) => ({ eligible: !disabled(option) }));
   let activeIndex = preferred ? options.indexOf(preferred) : -1;
   if (activeIndex < 0 || states[activeIndex]?.eligible === false) {
     const focused = typeof document === 'undefined' ? null : optionFromTarget(root, document.activeElement);
     activeIndex = focused ? options.indexOf(focused) : -1;
   }
-  if (activeIndex < 0 || states[activeIndex]?.eligible === false) activeIndex = options.findIndex((option, index) => states[index]?.eligible !== false && option.getAttribute('aria-selected') === 'true');
+  if (activeIndex < 0 || states[activeIndex]?.eligible === false)
+    activeIndex = options.findIndex(
+      (option, index) => states[index]?.eligible !== false && option.getAttribute('aria-selected') === 'true',
+    );
   if (activeIndex < 0) activeIndex = states.findIndex((option) => option.eligible !== false);
   const resolved = activeIndex < 0 ? null : activeIndex;
-  options.forEach((option, index) => { option.tabIndex = states[index]?.eligible !== false && resolved === index ? 0 : -1; });
+  options.forEach((option, index) => {
+    option.tabIndex = states[index]?.eligible !== false && resolved === index ? 0 : -1;
+  });
 }
 
 export class VfListboxElement extends HTMLElementBase {
-  static get observedAttributes() { return ['selection-mode']; }
+  static get observedAttributes() {
+    return ['selection-mode'];
+  }
   private observer: MutationObserver | null = null;
   private query = '';
   private timer: ReturnType<typeof setTimeout> | null = null;
@@ -39,7 +55,12 @@ export class VfListboxElement extends HTMLElementBase {
     this.addEventListener('focusin', this.onFocusIn);
     if (typeof MutationObserver !== 'undefined') {
       this.observer = new MutationObserver(() => this.syncOptions());
-      this.observer.observe(this, { childList: true, subtree: true, attributes: true, attributeFilter: ['aria-disabled', 'aria-selected', 'data-vf-listbox-option'] });
+      this.observer.observe(this, {
+        childList: true,
+        subtree: true,
+        attributes: true,
+        attributeFilter: ['aria-disabled', 'aria-selected', 'data-vf-listbox-option'],
+      });
     }
   }
 
@@ -58,8 +79,13 @@ export class VfListboxElement extends HTMLElementBase {
     if (this.isConnected) this.syncOptions();
   }
 
-  private get multiple() { return this.getAttribute('selection-mode') === 'multiple'; }
-  private syncSelectionMode() { if (this.multiple) this.setAttribute('aria-multiselectable', 'true'); else this.removeAttribute('aria-multiselectable'); }
+  private get multiple() {
+    return this.getAttribute('selection-mode') === 'multiple';
+  }
+  private syncSelectionMode() {
+    if (this.multiple) this.setAttribute('aria-multiselectable', 'true');
+    else this.removeAttribute('aria-multiselectable');
+  }
   private syncOptions(preferred?: HTMLElement | null) {
     let selectedSeen = false;
     for (const option of optionsFor(this)) {
@@ -75,9 +101,15 @@ export class VfListboxElement extends HTMLElementBase {
 
   private select(option: HTMLElement) {
     if (disabled(option)) return;
-    if (this.multiple) option.setAttribute('aria-selected', option.getAttribute('aria-selected') === 'true' ? 'false' : 'true');
-    else for (const candidate of optionsFor(this)) candidate.setAttribute('aria-selected', String(candidate === option));
-    const value = this.multiple ? optionsFor(this).filter((candidate) => candidate.getAttribute('aria-selected') === 'true').map(optionValue) : optionValue(option);
+    if (this.multiple)
+      option.setAttribute('aria-selected', option.getAttribute('aria-selected') === 'true' ? 'false' : 'true');
+    else
+      for (const candidate of optionsFor(this)) candidate.setAttribute('aria-selected', String(candidate === option));
+    const value = this.multiple
+      ? optionsFor(this)
+          .filter((candidate) => candidate.getAttribute('aria-selected') === 'true')
+          .map(optionValue)
+      : optionValue(option);
     this.dispatchEvent(new CustomEvent('vf-value-change', { detail: { value }, bubbles: true }));
   }
 
@@ -111,12 +143,26 @@ export class VfListboxElement extends HTMLElementBase {
     else if (event.key === 'Home') intent = 'first';
     else if (event.key === 'End') intent = 'last';
     let next: number | null = null;
-    if (intent) next = resolveNavigationIndex(options.map((option) => ({ eligible: !(disabled(option)) })), current, intent);
+    if (intent)
+      next = resolveNavigationIndex(
+        options.map((option) => ({ eligible: !disabled(option) })),
+        current,
+        intent,
+      );
     else if (event.key.length === 1 && !event.ctrlKey && !event.metaKey && !event.altKey) {
       this.query += event.key;
       if (this.timer) clearTimeout(this.timer);
-      this.timer = setTimeout(() => { this.query = ''; }, 500);
-      next = findTypeaheadMatch(options.map((option) => ({ textValue: option.dataset.vfTextValue ?? option.textContent ?? '', eligible: !disabled(option) })), this.query, { startIndex: current });
+      this.timer = setTimeout(() => {
+        this.query = '';
+      }, 500);
+      next = findTypeaheadMatch(
+        options.map((option) => ({
+          textValue: option.dataset.vfTextValue ?? option.textContent ?? '',
+          eligible: !disabled(option),
+        })),
+        this.query,
+        { startIndex: current },
+      );
     }
     if (next == null) return;
     const target = options[next];
@@ -127,7 +173,10 @@ export class VfListboxElement extends HTMLElementBase {
   };
 }
 
-export function defineListboxElement(tagName = 'vf-listbox', registry: CustomElementRegistry | undefined = globalThis.customElements) {
+export function defineListboxElement(
+  tagName = 'vf-listbox',
+  registry: CustomElementRegistry | undefined = globalThis.customElements,
+) {
   if (!registry) throw new Error('VyrnForge Listbox registration requires a CustomElementRegistry.');
   if (!registry.get(tagName)) registry.define(tagName, VfListboxElement);
 }

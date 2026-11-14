@@ -71,7 +71,8 @@ function panelId(rootId: string, value: string): string {
 
 function callHandler(handler: unknown, event: Event): void {
   if (typeof handler === 'function') handler(event);
-  else if (Array.isArray(handler)) for (const candidate of handler) if (typeof candidate === 'function') candidate(event);
+  else if (Array.isArray(handler))
+    for (const candidate of handler) if (typeof candidate === 'function') candidate(event);
 }
 
 export const TabsRoot = defineComponent({
@@ -92,7 +93,9 @@ export const TabsRoot = defineComponent({
     const internalValue = ref(props.defaultValue ?? props.modelValue ?? '');
     const selectedValue = computed(() => props.modelValue ?? internalValue.value);
     const focusValue = ref(selectedValue.value);
-    watch(selectedValue, (value) => { focusValue.value = value; });
+    watch(selectedValue, (value) => {
+      focusValue.value = value;
+    });
     const orientation = computed(() => props.orientation);
     const activation = computed(() => props.activation);
     const direction = computed(() => props.dir);
@@ -111,14 +114,19 @@ export const TabsRoot = defineComponent({
       },
     });
 
-    return () => h('div', {
-      ...attrs,
-      id: rootId,
-      dir: props.dir,
-      'data-vf-tabs-root': '',
-      'data-vf-orientation': props.orientation,
-      'data-vf-activation': props.activation,
-    }, slots.default?.());
+    return () =>
+      h(
+        'div',
+        {
+          ...attrs,
+          id: rootId,
+          dir: props.dir,
+          'data-vf-tabs-root': '',
+          'data-vf-orientation': props.orientation,
+          'data-vf-activation': props.activation,
+        },
+        slots.default?.(),
+      );
   },
 });
 
@@ -127,43 +135,50 @@ export const TabsList = defineComponent({
   inheritAttrs: false,
   setup(_props, { attrs, slots }) {
     const context = useTabsContext();
-    return () => h('div', {
-      ...attrs,
-      role: 'tablist',
-      'aria-orientation': context.orientation.value,
-      'data-vf-tabs-list': '',
-      'data-vf-orientation': context.orientation.value,
-      onKeydown(event: KeyboardEvent) {
-        callHandler(attrs.onKeydown, event);
-        if (event.defaultPrevented) return;
-        const target = event.target as HTMLElement;
-        if (target.getAttribute('role') !== 'tab') return;
-        let intent: CollectionNavigationIntent | null = null;
-        if (event.key === 'Home') intent = 'first';
-        if (event.key === 'End') intent = 'last';
-        if (context.orientation.value === 'horizontal') {
-          if (event.key === 'ArrowRight') intent = context.direction.value === 'rtl' ? 'previous' : 'next';
-          if (event.key === 'ArrowLeft') intent = context.direction.value === 'rtl' ? 'next' : 'previous';
-        } else {
-          if (event.key === 'ArrowDown') intent = 'next';
-          if (event.key === 'ArrowUp') intent = 'previous';
-        }
-        if (!intent) return;
-        const currentTarget = event.currentTarget as HTMLElement;
-        const tabs = Array.from(currentTarget.querySelectorAll<HTMLElement>('[role="tab"]'));
-        const currentIndex = tabs.indexOf(target);
-        const items = tabs.map((tab) => ({ eligible: !(tab.getAttribute('aria-disabled') === 'true' || (tab as HTMLButtonElement).disabled) }));
-        const nextIndex = resolveNavigationIndex(items, currentIndex, intent);
-        if (nextIndex === null) return;
-        const nextTab = tabs[nextIndex];
-        const nextValue = nextTab?.dataset.vfValue;
-        if (!nextTab || nextValue === undefined) return;
-        event.preventDefault();
-        context.focusValue.value = nextValue;
-        nextTab.focus();
-        if (context.activation.value === 'automatic') context.select(nextValue);
-      },
-    }, slots.default?.());
+    return () =>
+      h(
+        'div',
+        {
+          ...attrs,
+          role: 'tablist',
+          'aria-orientation': context.orientation.value,
+          'data-vf-tabs-list': '',
+          'data-vf-orientation': context.orientation.value,
+          onKeydown(event: KeyboardEvent) {
+            callHandler(attrs.onKeydown, event);
+            if (event.defaultPrevented) return;
+            const target = event.target as HTMLElement;
+            if (target.getAttribute('role') !== 'tab') return;
+            let intent: CollectionNavigationIntent | null = null;
+            if (event.key === 'Home') intent = 'first';
+            if (event.key === 'End') intent = 'last';
+            if (context.orientation.value === 'horizontal') {
+              if (event.key === 'ArrowRight') intent = context.direction.value === 'rtl' ? 'previous' : 'next';
+              if (event.key === 'ArrowLeft') intent = context.direction.value === 'rtl' ? 'next' : 'previous';
+            } else {
+              if (event.key === 'ArrowDown') intent = 'next';
+              if (event.key === 'ArrowUp') intent = 'previous';
+            }
+            if (!intent) return;
+            const currentTarget = event.currentTarget as HTMLElement;
+            const tabs = Array.from(currentTarget.querySelectorAll<HTMLElement>('[role="tab"]'));
+            const currentIndex = tabs.indexOf(target);
+            const items = tabs.map((tab) => ({
+              eligible: !(tab.getAttribute('aria-disabled') === 'true' || (tab as HTMLButtonElement).disabled),
+            }));
+            const nextIndex = resolveNavigationIndex(items, currentIndex, intent);
+            if (nextIndex === null) return;
+            const nextTab = tabs[nextIndex];
+            const nextValue = nextTab?.dataset.vfValue;
+            if (!nextTab || nextValue === undefined) return;
+            event.preventDefault();
+            context.focusValue.value = nextValue;
+            nextTab.focus();
+            if (context.activation.value === 'automatic') context.select(nextValue);
+          },
+        },
+        slots.default?.(),
+      );
   },
 });
 
@@ -179,35 +194,39 @@ export const TabsTab = defineComponent({
     return () => {
       const selected = context.selectedValue.value === props.value;
       const focusable = context.focusValue.value === props.value;
-      return h('button', {
-        ...attrs,
-        id: tabId(context.rootId, props.value),
-        type: attrs.type ?? 'button',
-        role: 'tab',
-        disabled: props.disabled,
-        tabindex: props.disabled ? -1 : focusable ? 0 : -1,
-        'aria-selected': selected ? 'true' : 'false',
-        'aria-disabled': props.disabled ? 'true' : undefined,
-        'aria-controls': panelId(context.rootId, props.value),
-        'data-vf-tabs-tab': '',
-        'data-vf-value': props.value,
-        onFocus(event: FocusEvent) {
-          callHandler(attrs.onFocus, event);
-          if (!props.disabled) context.focusValue.value = props.value;
+      return h(
+        'button',
+        {
+          ...attrs,
+          id: tabId(context.rootId, props.value),
+          type: attrs.type ?? 'button',
+          role: 'tab',
+          disabled: props.disabled,
+          tabindex: props.disabled ? -1 : focusable ? 0 : -1,
+          'aria-selected': selected ? 'true' : 'false',
+          'aria-disabled': props.disabled ? 'true' : undefined,
+          'aria-controls': panelId(context.rootId, props.value),
+          'data-vf-tabs-tab': '',
+          'data-vf-value': props.value,
+          onFocus(event: FocusEvent) {
+            callHandler(attrs.onFocus, event);
+            if (!props.disabled) context.focusValue.value = props.value;
+          },
+          onClick(event: MouseEvent) {
+            callHandler(attrs.onClick, event);
+            if (!event.defaultPrevented && !props.disabled) context.select(props.value);
+          },
+          onKeydown(event: KeyboardEvent) {
+            callHandler(attrs.onKeydown, event);
+            if (event.defaultPrevented || props.disabled || context.activation.value !== 'manual') return;
+            if (event.key === 'Enter' || event.key === ' ') {
+              event.preventDefault();
+              context.select(props.value);
+            }
+          },
         },
-        onClick(event: MouseEvent) {
-          callHandler(attrs.onClick, event);
-          if (!event.defaultPrevented && !props.disabled) context.select(props.value);
-        },
-        onKeydown(event: KeyboardEvent) {
-          callHandler(attrs.onKeydown, event);
-          if (event.defaultPrevented || props.disabled || context.activation.value !== 'manual') return;
-          if (event.key === 'Enter' || event.key === ' ') {
-            event.preventDefault();
-            context.select(props.value);
-          }
-        },
-      }, slots.default?.());
+        slots.default?.(),
+      );
     };
   },
 });
@@ -220,15 +239,19 @@ export const TabsPanel = defineComponent({
     const context = useTabsContext();
     return () => {
       const selected = context.selectedValue.value === props.value;
-      return h('div', {
-        ...attrs,
-        id: panelId(context.rootId, props.value),
-        role: 'tabpanel',
-        tabindex: 0,
-        hidden: !selected,
-        'aria-labelledby': tabId(context.rootId, props.value),
-        'data-vf-tabs-panel': '',
-      }, slots.default?.());
+      return h(
+        'div',
+        {
+          ...attrs,
+          id: panelId(context.rootId, props.value),
+          role: 'tabpanel',
+          tabindex: 0,
+          hidden: !selected,
+          'aria-labelledby': tabId(context.rootId, props.value),
+          'data-vf-tabs-panel': '',
+        },
+        slots.default?.(),
+      );
     };
   },
 });

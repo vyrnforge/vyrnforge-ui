@@ -1,1 +1,7 @@
-{"id":"tag-group/basic","title":"Basic tag group","description":"Render removable authored tags.","defaultFramework":"react","frameworks":{"react":{"label":"React","language":"tsx","source":"react.tsx"}}}
+{
+  "id": "tag-group/basic",
+  "title": "Basic tag group",
+  "description": "Render removable authored tags.",
+  "defaultFramework": "react",
+  "frameworks": { "react": { "label": "React", "language": "tsx", "source": "react.tsx" } }
+}

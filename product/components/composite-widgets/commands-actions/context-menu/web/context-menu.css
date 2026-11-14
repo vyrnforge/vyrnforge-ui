@@ -1,1 +1,5 @@
-@layer vyrnforge.components { [data-vf-context-menu-trigger]{min-inline-size:0} }
+@layer vyrnforge.components {
+  [data-vf-context-menu-trigger] {
+    min-inline-size: 0;
+  }
+}

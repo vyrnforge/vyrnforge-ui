@@ -1,33 +1,68 @@
-import { createContext, createElement, forwardRef, useContext, useEffect, useMemo, useRef, useState, type ComponentPropsWithoutRef, type ReactNode } from 'react';
+import {
+  createContext,
+  createElement,
+  forwardRef,
+  useContext,
+  useEffect,
+  useMemo,
+  useRef,
+  useState,
+  type ComponentPropsWithoutRef,
+  type ReactNode,
+} from 'react';
 import { resolveNavigationIndex } from '@vyrnforge/core/collection-navigation';
 import { findTypeaheadMatch } from '@vyrnforge/core/typeahead-matching';
 
 export type ListboxSelectionMode = 'single' | 'multiple';
 export type ListboxValue = string | string[];
-interface Ctx { values: string[]; mode: ListboxSelectionMode; select(value: string): void; }
+interface Ctx {
+  values: string[];
+  mode: ListboxSelectionMode;
+  select(value: string): void;
+}
 const C = createContext<Ctx | null>(null);
-function useListbox() { const value = useContext(C); if (!value) throw new Error('ListboxOption must be inside ListboxRoot.'); return value; }
+function useListbox() {
+  const value = useContext(C);
+  if (!value) throw new Error('ListboxOption must be inside ListboxRoot.');
+  return value;
+}
 
 const optionSelector = '[data-vf-listbox-option]';
-function optionsFor(root: HTMLElement): HTMLElement[] { return Array.from(root.querySelectorAll<HTMLElement>(optionSelector)); }
-function disabled(option: HTMLElement): boolean { return option.getAttribute('aria-disabled') === 'true'; }
-function optionFromTarget(root: HTMLElement, target: EventTarget | null): HTMLElement | null { const element = target instanceof HTMLElement ? target.closest<HTMLElement>(optionSelector) : null; return element && root.contains(element) ? element : null; }
-function activeOption(root: HTMLElement): HTMLElement | null { return optionFromTarget(root, typeof document === 'undefined' ? null : document.activeElement); }
+function optionsFor(root: HTMLElement): HTMLElement[] {
+  return Array.from(root.querySelectorAll<HTMLElement>(optionSelector));
+}
+function disabled(option: HTMLElement): boolean {
+  return option.getAttribute('aria-disabled') === 'true';
+}
+function optionFromTarget(root: HTMLElement, target: EventTarget | null): HTMLElement | null {
+  const element = target instanceof HTMLElement ? target.closest<HTMLElement>(optionSelector) : null;
+  return element && root.contains(element) ? element : null;
+}
+function activeOption(root: HTMLElement): HTMLElement | null {
+  return optionFromTarget(root, typeof document === 'undefined' ? null : document.activeElement);
+}
 function syncTabStops(root: HTMLElement, preferred?: HTMLElement | null) {
   const options = optionsFor(root);
-  const states = options.map((option) => ({ eligible: !(disabled(option)) }));
+  const states = options.map((option) => ({ eligible: !disabled(option) }));
   let activeIndex = preferred ? options.indexOf(preferred) : -1;
   if (activeIndex < 0 || states[activeIndex]?.eligible === false) {
     const focused = activeOption(root);
     activeIndex = focused ? options.indexOf(focused) : -1;
   }
-  if (activeIndex < 0 || states[activeIndex]?.eligible === false) activeIndex = options.findIndex((option, index) => states[index]?.eligible !== false && option.getAttribute('aria-selected') === 'true');
+  if (activeIndex < 0 || states[activeIndex]?.eligible === false)
+    activeIndex = options.findIndex(
+      (option, index) => states[index]?.eligible !== false && option.getAttribute('aria-selected') === 'true',
+    );
   if (activeIndex < 0) activeIndex = states.findIndex((option) => option.eligible !== false);
   const resolved = activeIndex < 0 ? null : activeIndex;
   root.tabIndex = resolved === null ? 0 : -1;
-  options.forEach((option, index) => { option.tabIndex = states[index]?.eligible !== false && resolved === index ? 0 : -1; });
+  options.forEach((option, index) => {
+    option.tabIndex = states[index]?.eligible !== false && resolved === index ? 0 : -1;
+  });
 }
-function normalize(value: ListboxValue | undefined) { return value === undefined ? [] : typeof value === 'string' ? (value ? [value] : []) : value; }
+function normalize(value: ListboxValue | undefined) {
+  return value === undefined ? [] : typeof value === 'string' ? (value ? [value] : []) : value;
+}
 
 export interface ListboxRootProps extends Omit<ComponentPropsWithoutRef<'div'>, 'defaultValue' | 'onChange'> {
   value?: ListboxValue;
@@ -37,7 +72,10 @@ export interface ListboxRootProps extends Omit<ComponentPropsWithoutRef<'div'>, 
   children?: ReactNode;
 }
 
-export const ListboxRoot = forwardRef<HTMLDivElement, ListboxRootProps>(function ListboxRoot({ value, defaultValue, selectionMode = 'single', onValueChange, onKeyDown, onFocusCapture, children, ...props }, forwardedRef) {
+export const ListboxRoot = forwardRef<HTMLDivElement, ListboxRootProps>(function ListboxRoot(
+  { value, defaultValue, selectionMode = 'single', onValueChange, onKeyDown, onFocusCapture, children, ...props },
+  forwardedRef,
+) {
   const [internal, setInternal] = useState(() => normalize(defaultValue));
   const values = normalize(value ?? internal);
   const rootRef = useRef<HTMLDivElement | null>(null);
@@ -57,58 +95,95 @@ export const ListboxRoot = forwardRef<HTMLDivElement, ListboxRootProps>(function
     if (!root) return;
     syncTabStops(root);
     const observer = typeof MutationObserver === 'undefined' ? null : new MutationObserver(() => syncTabStops(root));
-    observer?.observe(root, { childList: true, subtree: true, attributes: true, attributeFilter: ['aria-disabled', 'aria-selected', 'data-vf-listbox-option'] });
-    return () => { observer?.disconnect(); if (timer.current) clearTimeout(timer.current); };
+    observer?.observe(root, {
+      childList: true,
+      subtree: true,
+      attributes: true,
+      attributeFilter: ['aria-disabled', 'aria-selected', 'data-vf-listbox-option'],
+    });
+    return () => {
+      observer?.disconnect();
+      if (timer.current) clearTimeout(timer.current);
+    };
   }, []);
 
-  return createElement(C.Provider, { value: context }, createElement('div', {
-    ...props,
-    ref(node: HTMLDivElement | null) {
-      rootRef.current = node;
-      if (typeof forwardedRef === 'function') forwardedRef(node);
-      else if (forwardedRef) forwardedRef.current = node;
-    },
-    role: 'listbox',
-    tabIndex: 0,
-    'aria-multiselectable': selectionMode === 'multiple' || undefined,
-    'data-vf-listbox-root': '',
-    onFocusCapture(event) {
-      onFocusCapture?.(event);
-      const option = optionFromTarget(event.currentTarget, event.target);
-      if (option && !disabled(option)) syncTabStops(event.currentTarget, option);
-    },
-    onKeyDown(event) {
-      onKeyDown?.(event);
-      if (event.defaultPrevented) return;
-      const root = event.currentTarget;
-      const options = optionsFor(root);
-      const currentOption = optionFromTarget(root, event.target);
-      const current = currentOption ? options.indexOf(currentOption) : -1;
-      let intent: 'next' | 'previous' | 'first' | 'last' | null = null;
-      if (event.key === 'ArrowDown') intent = 'next';
-      else if (event.key === 'ArrowUp') intent = 'previous';
-      else if (event.key === 'Home') intent = 'first';
-      else if (event.key === 'End') intent = 'last';
-      let next: number | null = null;
-      if (intent) next = resolveNavigationIndex(options.map((option) => ({ eligible: !(disabled(option)) })), current, intent);
-      else if (event.key.length === 1 && !event.ctrlKey && !event.metaKey && !event.altKey) {
-        query.current += event.key;
-        if (timer.current) clearTimeout(timer.current);
-        timer.current = setTimeout(() => { query.current = ''; }, 500);
-        next = findTypeaheadMatch(options.map((option) => ({ textValue: option.dataset.vfTextValue ?? option.textContent ?? '', eligible: !disabled(option) })), query.current, { startIndex: current });
-      }
-      if (next == null) return;
-      const target = options[next];
-      if (!target) return;
-      event.preventDefault();
-      syncTabStops(root, target);
-      target.focus();
-    },
-  }, children));
+  return createElement(
+    C.Provider,
+    { value: context },
+    createElement(
+      'div',
+      {
+        ...props,
+        ref(node: HTMLDivElement | null) {
+          rootRef.current = node;
+          if (typeof forwardedRef === 'function') forwardedRef(node);
+          else if (forwardedRef) forwardedRef.current = node;
+        },
+        role: 'listbox',
+        tabIndex: 0,
+        'aria-multiselectable': selectionMode === 'multiple' || undefined,
+        'data-vf-listbox-root': '',
+        onFocusCapture(event) {
+          onFocusCapture?.(event);
+          const option = optionFromTarget(event.currentTarget, event.target);
+          if (option && !disabled(option)) syncTabStops(event.currentTarget, option);
+        },
+        onKeyDown(event) {
+          onKeyDown?.(event);
+          if (event.defaultPrevented) return;
+          const root = event.currentTarget;
+          const options = optionsFor(root);
+          const currentOption = optionFromTarget(root, event.target);
+          const current = currentOption ? options.indexOf(currentOption) : -1;
+          let intent: 'next' | 'previous' | 'first' | 'last' | null = null;
+          if (event.key === 'ArrowDown') intent = 'next';
+          else if (event.key === 'ArrowUp') intent = 'previous';
+          else if (event.key === 'Home') intent = 'first';
+          else if (event.key === 'End') intent = 'last';
+          let next: number | null = null;
+          if (intent)
+            next = resolveNavigationIndex(
+              options.map((option) => ({ eligible: !disabled(option) })),
+              current,
+              intent,
+            );
+          else if (event.key.length === 1 && !event.ctrlKey && !event.metaKey && !event.altKey) {
+            query.current += event.key;
+            if (timer.current) clearTimeout(timer.current);
+            timer.current = setTimeout(() => {
+              query.current = '';
+            }, 500);
+            next = findTypeaheadMatch(
+              options.map((option) => ({
+                textValue: option.dataset.vfTextValue ?? option.textContent ?? '',
+                eligible: !disabled(option),
+              })),
+              query.current,
+              { startIndex: current },
+            );
+          }
+          if (next == null) return;
+          const target = options[next];
+          if (!target) return;
+          event.preventDefault();
+          syncTabStops(root, target);
+          target.focus();
+        },
+      },
+      children,
+    ),
+  );
 });
 
-export interface ListboxOptionProps extends Omit<ComponentPropsWithoutRef<'div'>, 'value'> { value: string; textValue?: string; disabled?: boolean; }
-export const ListboxOption = forwardRef<HTMLDivElement, ListboxOptionProps>(function ListboxOption({ value, textValue, disabled: isDisabled, onClick, onKeyDown, ...props }, ref) {
+export interface ListboxOptionProps extends Omit<ComponentPropsWithoutRef<'div'>, 'value'> {
+  value: string;
+  textValue?: string;
+  disabled?: boolean;
+}
+export const ListboxOption = forwardRef<HTMLDivElement, ListboxOptionProps>(function ListboxOption(
+  { value, textValue, disabled: isDisabled, onClick, onKeyDown, ...props },
+  ref,
+) {
   const root = useListbox();
   const selected = root.values.includes(value);
   return createElement('div', {
@@ -122,11 +197,17 @@ export const ListboxOption = forwardRef<HTMLDivElement, ListboxOptionProps>(func
     'data-vf-text-value': textValue ?? value,
     onClick(event) {
       onClick?.(event);
-      if (!event.defaultPrevented && !isDisabled) { event.currentTarget.focus(); root.select(value); }
+      if (!event.defaultPrevented && !isDisabled) {
+        event.currentTarget.focus();
+        root.select(value);
+      }
     },
     onKeyDown(event) {
       onKeyDown?.(event);
-      if (!event.defaultPrevented && !isDisabled && (event.key === 'Enter' || event.key === ' ')) { event.preventDefault(); root.select(value); }
+      if (!event.defaultPrevented && !isDisabled && (event.key === 'Enter' || event.key === ' ')) {
+        event.preventDefault();
+        root.select(value);
+      }
     },
   });
 });

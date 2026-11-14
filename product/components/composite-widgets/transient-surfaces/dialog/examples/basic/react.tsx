@@ -7,7 +7,9 @@ function App() {
   const [open, setOpen] = React.useState(false);
   return (
     <>
-      <button type="button" onClick={() => setOpen(true)}>Open dialog</button>
+      <button type="button" onClick={() => setOpen(true)}>
+        Open dialog
+      </button>
       <DialogRoot
         id="example-dialog"
         open={open}

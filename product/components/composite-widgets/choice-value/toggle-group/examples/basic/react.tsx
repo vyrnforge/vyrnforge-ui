@@ -1,1 +1,9 @@
-import{ToggleGroupItem,ToggleGroupRoot}from'@vyrnforge/react/toggle-group';export function Example(){return <ToggleGroupRoot type="multiple"><ToggleGroupItem value="bold">Bold</ToggleGroupItem><ToggleGroupItem value="italic">Italic</ToggleGroupItem></ToggleGroupRoot>;}
+import { ToggleGroupItem, ToggleGroupRoot } from '@vyrnforge/react/toggle-group';
+export function Example() {
+  return (
+    <ToggleGroupRoot type="multiple">
+      <ToggleGroupItem value="bold">Bold</ToggleGroupItem>
+      <ToggleGroupItem value="italic">Italic</ToggleGroupItem>
+    </ToggleGroupRoot>
+  );
+}

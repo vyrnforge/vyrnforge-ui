@@ -1,6 +1,6 @@
 import { navigationIntentForArrow, resolveNavigationIndex } from '@vyrnforge/core/collection-navigation';
 
-const H: typeof HTMLElement = globalThis.HTMLElement ?? class {} as typeof HTMLElement;
+const H: typeof HTMLElement = globalThis.HTMLElement ?? (class {} as typeof HTMLElement);
 const itemSelector = '[data-vf-segmented-control-item]';
 
 function itemsFor(root: HTMLElement): HTMLButtonElement[] {
@@ -17,17 +17,18 @@ function itemDisabled(item: HTMLButtonElement): boolean {
 }
 
 function intentForKey(key: string, direction: 'ltr' | 'rtl') {
-  const arrow = key === 'ArrowLeft' ? 'left'
-    : key === 'ArrowRight' ? 'right'
-      : key === 'ArrowUp' ? 'up'
-        : key === 'ArrowDown' ? 'down'
-          : null;
+  const arrow =
+    key === 'ArrowLeft'
+      ? 'left'
+      : key === 'ArrowRight'
+        ? 'right'
+        : key === 'ArrowUp'
+          ? 'up'
+          : key === 'ArrowDown'
+            ? 'down'
+            : null;
   if (!arrow) return null;
-  return navigationIntentForArrow(
-    arrow,
-    arrow === 'left' || arrow === 'right' ? 'horizontal' : 'vertical',
-    direction,
-  );
+  return navigationIntentForArrow(arrow, arrow === 'left' || arrow === 'right' ? 'horizontal' : 'vertical', direction);
 }
 
 function setAttributeIfChanged(element: HTMLElement, name: string, value: string): void {
@@ -86,7 +87,7 @@ export class VfSegmentedControlElement extends H {
     const items = itemsFor(this);
     const current = items.indexOf(currentItem);
     const next = resolveNavigationIndex(
-      items.map((item) => ({ eligible: !(itemDisabled(item)) })),
+      items.map((item) => ({ eligible: !itemDisabled(item) })),
       current,
       intent,
     );

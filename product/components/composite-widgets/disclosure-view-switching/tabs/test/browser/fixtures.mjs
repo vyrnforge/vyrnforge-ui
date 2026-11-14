@@ -27,26 +27,27 @@ export async function createReactStory({ client }) {
   const { createElement, Fragment } = await import('react');
   const { TabsList, TabsPanel, TabsRoot, TabsTab } = await import('@vyrnforge/react/tabs');
 
-  const tabs = (id, options = {}) => createElement(
-    TabsRoot,
-    { id, defaultValue: 'overview', ...options.root },
+  const tabs = (id, options = {}) =>
     createElement(
-      TabsList,
-      { 'aria-label': options.label ?? 'Account sections' },
-      createElement(TabsTab, { value: 'overview' }, 'Overview'),
-      createElement(TabsTab, { value: 'billing', disabled: true }, 'Billing'),
-      createElement(TabsTab, { value: 'security' }, 'Security'),
+      TabsRoot,
+      { id, defaultValue: 'overview', ...options.root },
+      createElement(
+        TabsList,
+        { 'aria-label': options.label ?? 'Account sections' },
+        createElement(TabsTab, { value: 'overview' }, 'Overview'),
+        createElement(TabsTab, { value: 'billing', disabled: true }, 'Billing'),
+        createElement(TabsTab, { value: 'security' }, 'Security'),
+        ...(options.activity === false
+          ? []
+          : [createElement(TabsTab, { key: 'activity', value: 'activity' }, 'Activity')]),
+      ),
+      createElement(TabsPanel, { value: 'overview' }, 'Overview panel'),
+      createElement(TabsPanel, { value: 'billing' }, 'Billing panel'),
+      createElement(TabsPanel, { value: 'security' }, 'Security panel'),
       ...(options.activity === false
         ? []
-        : [createElement(TabsTab, { key: 'activity', value: 'activity' }, 'Activity')]),
-    ),
-    createElement(TabsPanel, { value: 'overview' }, 'Overview panel'),
-    createElement(TabsPanel, { value: 'billing' }, 'Billing panel'),
-    createElement(TabsPanel, { value: 'security' }, 'Security panel'),
-    ...(options.activity === false
-      ? []
-      : [createElement(TabsPanel, { key: 'activity-panel', value: 'activity' }, 'Activity panel')]),
-  );
+        : [createElement(TabsPanel, { key: 'activity-panel', value: 'activity' }, 'Activity panel')]),
+    );
 
   return createElement(
     Fragment,
@@ -54,7 +55,11 @@ export async function createReactStory({ client }) {
     tabs('react-tabs', {
       root: {
         dir: 'rtl',
-        onValueChange: client ? (value) => { document.body.dataset.value = value; } : () => undefined,
+        onValueChange: client
+          ? (value) => {
+              document.body.dataset.value = value;
+            }
+          : () => undefined,
       },
     }),
     tabs('react-manual-tabs', {
@@ -64,7 +69,9 @@ export async function createReactStory({ client }) {
         orientation: 'vertical',
         activation: 'manual',
         onValueChange: client
-          ? (value) => { document.body.dataset.manualValue = value; }
+          ? (value) => {
+              document.body.dataset.manualValue = value;
+            }
           : () => undefined,
       },
     }),
@@ -75,60 +82,58 @@ export async function createVueStory({ client }) {
   const { createSSRApp, h } = await import('vue');
   const { TabsList, TabsPanel, TabsRoot, TabsTab } = await import('@vyrnforge/vue/tabs');
 
-  const tabs = (id, options = {}) => h(
-    TabsRoot,
-    { id, defaultValue: 'overview', ...options.root },
-    () => [
-      h(
-        TabsList,
-        { 'aria-label': options.label ?? 'Account sections' },
-        () => [
-          h(TabsTab, { value: 'overview' }, () => 'Overview'),
-          h(TabsTab, { value: 'billing', disabled: true }, () => 'Billing'),
-          h(TabsTab, { value: 'security' }, () => 'Security'),
-          ...(options.activity === false ? [] : [h(TabsTab, { value: 'activity' }, () => 'Activity')]),
-        ],
-      ),
+  const tabs = (id, options = {}) =>
+    h(TabsRoot, { id, defaultValue: 'overview', ...options.root }, () => [
+      h(TabsList, { 'aria-label': options.label ?? 'Account sections' }, () => [
+        h(TabsTab, { value: 'overview' }, () => 'Overview'),
+        h(TabsTab, { value: 'billing', disabled: true }, () => 'Billing'),
+        h(TabsTab, { value: 'security' }, () => 'Security'),
+        ...(options.activity === false ? [] : [h(TabsTab, { value: 'activity' }, () => 'Activity')]),
+      ]),
       h(TabsPanel, { value: 'overview' }, () => 'Overview panel'),
       h(TabsPanel, { value: 'billing' }, () => 'Billing panel'),
       h(TabsPanel, { value: 'security' }, () => 'Security panel'),
       ...(options.activity === false ? [] : [h(TabsPanel, { value: 'activity' }, () => 'Activity panel')]),
-    ],
-  );
+    ]);
 
   return createSSRApp({
-    render: () => h('div', [
-      tabs('vue-tabs', {
-        root: {
-          dir: 'rtl',
-          onValueChange: client ? (value) => { document.body.dataset.value = value; } : () => undefined,
-        },
-      }),
-      tabs('vue-manual-tabs', {
-        activity: false,
-        label: 'Manual vertical sections',
-        root: {
-          orientation: 'vertical',
-          activation: 'manual',
-          onValueChange: client
-            ? (value) => { document.body.dataset.manualValue = value; } : () => undefined,
-        },
-      }),
-    ]),
+    render: () =>
+      h('div', [
+        tabs('vue-tabs', {
+          root: {
+            dir: 'rtl',
+            onValueChange: client
+              ? (value) => {
+                  document.body.dataset.value = value;
+                }
+              : () => undefined,
+          },
+        }),
+        tabs('vue-manual-tabs', {
+          activity: false,
+          label: 'Manual vertical sections',
+          root: {
+            orientation: 'vertical',
+            activation: 'manual',
+            onValueChange: client
+              ? (value) => {
+                  document.body.dataset.manualValue = value;
+                }
+              : () => undefined,
+          },
+        }),
+      ]),
   });
 }
 
 export async function createAngularStory({ client }) {
   await import('@angular/compiler');
   const { Component } = await import('@angular/core');
-  const {
-    VfTabsListDirective,
-    VfTabsPanelDirective,
-    VfTabsRootDirective,
-    VfTabsTabDirective,
-  } = await import('@vyrnforge/angular/tabs');
+  const { VfTabsListDirective, VfTabsPanelDirective, VfTabsRootDirective, VfTabsTabDirective } =
+    await import('@vyrnforge/angular/tabs');
 
-  const template = '<div vfTabsRoot id="angular-tabs" defaultValue="overview" dir="rtl" (valueChange)="changed($event)"><div vfTabsList aria-label="Account sections"><button vfTabsTab="overview">Overview</button><button vfTabsTab="billing" disabled>Billing</button><button vfTabsTab="security">Security</button><button vfTabsTab="activity">Activity</button></div><div vfTabsPanel="overview">Overview panel</div><div vfTabsPanel="billing">Billing panel</div><div vfTabsPanel="security">Security panel</div><div vfTabsPanel="activity">Activity panel</div></div><div vfTabsRoot id="angular-manual-tabs" defaultValue="overview" orientation="vertical" activation="manual" (valueChange)="manualChanged($event)"><div vfTabsList aria-label="Manual vertical sections"><button vfTabsTab="overview">Overview</button><button vfTabsTab="billing" disabled>Billing</button><button vfTabsTab="security">Security</button></div><div vfTabsPanel="overview">Overview panel</div><div vfTabsPanel="billing">Billing panel</div><div vfTabsPanel="security">Security panel</div></div>';
+  const template =
+    '<div vfTabsRoot id="angular-tabs" defaultValue="overview" dir="rtl" (valueChange)="changed($event)"><div vfTabsList aria-label="Account sections"><button vfTabsTab="overview">Overview</button><button vfTabsTab="billing" disabled>Billing</button><button vfTabsTab="security">Security</button><button vfTabsTab="activity">Activity</button></div><div vfTabsPanel="overview">Overview panel</div><div vfTabsPanel="billing">Billing panel</div><div vfTabsPanel="security">Security panel</div><div vfTabsPanel="activity">Activity panel</div></div><div vfTabsRoot id="angular-manual-tabs" defaultValue="overview" orientation="vertical" activation="manual" (valueChange)="manualChanged($event)"><div vfTabsList aria-label="Manual vertical sections"><button vfTabsTab="overview">Overview</button><button vfTabsTab="billing" disabled>Billing</button><button vfTabsTab="security">Security</button></div><div vfTabsPanel="overview">Overview panel</div><div vfTabsPanel="billing">Billing panel</div><div vfTabsPanel="security">Security panel</div></div>';
 
   class TabsTestApp {
     changed(value) {

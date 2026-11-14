@@ -30,11 +30,11 @@ function optionDisabled(option: HTMLButtonElement): boolean {
 function focusOption(root: HTMLElement | null, edge: 'first' | 'last'): void {
   if (!root) return;
   const options = optionsFor(root);
-  const states = options.map((option) => ({ eligible: !(optionDisabled(option)) }));
-  const selected = options.findIndex((option, index) => states[index]?.eligible !== false && option.getAttribute('aria-selected') === 'true');
-  const index = selected >= 0
-    ? selected
-    : resolveNavigationIndex(states, edge === 'first' ? -1 : options.length, edge);
+  const states = options.map((option) => ({ eligible: !optionDisabled(option) }));
+  const selected = options.findIndex(
+    (option, index) => states[index]?.eligible !== false && option.getAttribute('aria-selected') === 'true',
+  );
+  const index = selected >= 0 ? selected : resolveNavigationIndex(states, edge === 'first' ? -1 : options.length, edge);
   if (index != null) options[index]?.focus();
 }
 
@@ -64,73 +64,94 @@ export interface SelectRootProps {
   onOpenChange?(open: boolean): void;
 }
 
-export function SelectRoot({ children, value, defaultValue = '', open, defaultOpen = false, onValueChange, onOpenChange }: SelectRootProps) {
+export function SelectRoot({
+  children,
+  value,
+  defaultValue = '',
+  open,
+  defaultOpen = false,
+  onValueChange,
+  onOpenChange,
+}: SelectRootProps) {
   const [internalValue, setInternalValue] = useState(defaultValue);
   const [internalOpen, setInternalOpen] = useState(defaultOpen);
   const selected = value ?? internalValue;
   const expanded = open ?? internalOpen;
   const anchorRef = useRef<HTMLElement | null>(null);
   const surfaceRef = useRef<HTMLElement | null>(null);
-  const context = useMemo<Ctx>(() => ({
-    open: expanded,
-    setOpen(next) {
-      if (open === undefined) setInternalOpen(next);
-      onOpenChange?.(next);
-    },
-    value: selected,
-    setValue(next) {
-      if (value === undefined) setInternalValue(next);
-      onValueChange?.(next);
-      if (open === undefined) setInternalOpen(false);
-      onOpenChange?.(false);
-    },
-    anchorRef,
-    surfaceRef,
-    focusOptions(edge) {
-      queueMicrotask(() => focusOption(surfaceRef.current, edge));
-    },
-  }), [expanded, onOpenChange, onValueChange, open, selected, value]);
+  const context = useMemo<Ctx>(
+    () => ({
+      open: expanded,
+      setOpen(next) {
+        if (open === undefined) setInternalOpen(next);
+        onOpenChange?.(next);
+      },
+      value: selected,
+      setValue(next) {
+        if (value === undefined) setInternalValue(next);
+        onValueChange?.(next);
+        if (open === undefined) setInternalOpen(false);
+        onOpenChange?.(false);
+      },
+      anchorRef,
+      surfaceRef,
+      focusOptions(edge) {
+        queueMicrotask(() => focusOption(surfaceRef.current, edge));
+      },
+    }),
+    [expanded, onOpenChange, onValueChange, open, selected, value],
+  );
   return createElement(C.Provider, { value: context }, children);
 }
 
-export const SelectTrigger = forwardRef<HTMLButtonElement, ComponentPropsWithoutRef<'button'>>(function SelectTrigger({ onClick, onKeyDown, ...props }, forwardedRef) {
+export const SelectTrigger = forwardRef<HTMLButtonElement, ComponentPropsWithoutRef<'button'>>(function SelectTrigger(
+  { onClick, onKeyDown, ...props },
+  forwardedRef,
+) {
   const select = useSelect();
   function openAndFocus(edge: 'first' | 'last') {
     select.setOpen(true);
     select.focusOptions(edge);
   }
-  return createElement('button', {
-    ...props,
-    ref(node: HTMLButtonElement | null) {
-      select.anchorRef.current = node;
-      if (typeof forwardedRef === 'function') forwardedRef(node);
-      else if (forwardedRef) forwardedRef.current = node;
+  return createElement(
+    'button',
+    {
+      ...props,
+      ref(node: HTMLButtonElement | null) {
+        select.anchorRef.current = node;
+        if (typeof forwardedRef === 'function') forwardedRef(node);
+        else if (forwardedRef) forwardedRef.current = node;
+      },
+      type: props.type ?? 'button',
+      'data-vf-select-trigger': '',
+      'aria-haspopup': 'listbox',
+      'aria-expanded': select.open,
+      onClick(event: MouseEvent<HTMLButtonElement>) {
+        onClick?.(event);
+        if (event.defaultPrevented) return;
+        if (select.open) select.setOpen(false);
+        else openAndFocus('first');
+      },
+      onKeyDown(event: KeyboardEvent<HTMLButtonElement>) {
+        onKeyDown?.(event);
+        if (event.defaultPrevented) return;
+        if (event.key === 'ArrowUp') {
+          event.preventDefault();
+          openAndFocus('last');
+        } else if (event.key === 'ArrowDown' || event.key === 'Enter' || event.key === ' ') {
+          event.preventDefault();
+          openAndFocus('first');
+        }
+      },
     },
-    type: props.type ?? 'button',
-    'data-vf-select-trigger': '',
-    'aria-haspopup': 'listbox',
-    'aria-expanded': select.open,
-    onClick(event: MouseEvent<HTMLButtonElement>) {
-      onClick?.(event);
-      if (event.defaultPrevented) return;
-      if (select.open) select.setOpen(false);
-      else openAndFocus('first');
-    },
-    onKeyDown(event: KeyboardEvent<HTMLButtonElement>) {
-      onKeyDown?.(event);
-      if (event.defaultPrevented) return;
-      if (event.key === 'ArrowUp') {
-        event.preventDefault();
-        openAndFocus('last');
-      } else if (event.key === 'ArrowDown' || event.key === 'Enter' || event.key === ' ') {
-        event.preventDefault();
-        openAndFocus('first');
-      }
-    },
-  }, props.children ?? select.value);
+    props.children ?? select.value,
+  );
 });
 
-export const SelectContent = forwardRef<HTMLDivElement, ComponentPropsWithoutRef<'div'>>(function SelectContent({ onKeyDown, ...props }, forwardedRef) {
+export const SelectContent = forwardRef<HTMLDivElement, ComponentPropsWithoutRef<'div'>>(function SelectContent(
+  { onKeyDown, ...props },
+  forwardedRef,
+) {
   const select = useSelect();
   const query = useRef('');
   const timer = useRef<ReturnType<typeof setTimeout> | null>(null);
@@ -172,7 +193,7 @@ export const SelectContent = forwardRef<HTMLDivElement, ComponentPropsWithoutRef
       const options = optionsFor(root);
       const currentOption = optionFromTarget(root, event.target);
       const current = currentOption ? options.indexOf(currentOption) : -1;
-      const states = options.map((option) => ({ eligible: !(optionDisabled(option)) }));
+      const states = options.map((option) => ({ eligible: !optionDisabled(option) }));
       let intent: 'next' | 'previous' | 'first' | 'last' | null = null;
       if (event.key === 'ArrowDown') intent = 'next';
       else if (event.key === 'ArrowUp') intent = 'previous';
@@ -183,11 +204,17 @@ export const SelectContent = forwardRef<HTMLDivElement, ComponentPropsWithoutRef
       else if (event.key.length === 1 && !event.ctrlKey && !event.metaKey && !event.altKey) {
         query.current += event.key;
         if (timer.current) clearTimeout(timer.current);
-        timer.current = setTimeout(() => { query.current = ''; }, 500);
-        next = findTypeaheadMatch(options.map((option) => ({
-          textValue: option.dataset.vfTextValue ?? option.textContent ?? '',
-          eligible: !optionDisabled(option),
-        })), query.current, { startIndex: current });
+        timer.current = setTimeout(() => {
+          query.current = '';
+        }, 500);
+        next = findTypeaheadMatch(
+          options.map((option) => ({
+            textValue: option.dataset.vfTextValue ?? option.textContent ?? '',
+            eligible: !optionDisabled(option),
+          })),
+          query.current,
+          { startIndex: current },
+        );
       }
       if (next == null) return;
       event.preventDefault();
@@ -201,7 +228,10 @@ export interface SelectOptionProps extends Omit<ComponentPropsWithoutRef<'button
   value: string;
 }
 
-export const SelectOption = forwardRef<HTMLButtonElement, SelectOptionProps>(function SelectOption({ value, disabled, onClick, ...props }, ref) {
+export const SelectOption = forwardRef<HTMLButtonElement, SelectOptionProps>(function SelectOption(
+  { value, disabled, onClick, ...props },
+  ref,
+) {
   const select = useSelect();
   return createElement('button', {
     ...props,

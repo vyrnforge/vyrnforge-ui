@@ -5,7 +5,9 @@ const port = process.env.VF_COMPONENT_PORT || 'react';
 const fixture = `/components/file-uploader/${port}.html`;
 
 async function selectFile(page) {
-  await page.locator('#input').setInputFiles({ name: 'records.csv', mimeType: 'text/csv', buffer: Buffer.from('name\nAtlas') });
+  await page
+    .locator('#input')
+    .setInputFiles({ name: 'records.csv', mimeType: 'text/csv', buffer: Buffer.from('name\nAtlas') });
 }
 
 async function emit(page, attemptId, event) {
@@ -14,26 +16,30 @@ async function emit(page, attemptId, event) {
 
 test('file uploader exposes selected files accessibly', async ({ page }) => {
   await page.goto(fixture);
-  await page.locator('#input').setInputFiles({ name: 'example.txt', mimeType: 'text/plain', buffer: Buffer.from('ok') });
+  await page
+    .locator('#input')
+    .setInputFiles({ name: 'example.txt', mimeType: 'text/plain', buffer: Buffer.from('ok') });
   await expect(page.getByText('example.txt')).toBeVisible();
   expect((await expectNoAxeViolations(page)).violations).toEqual([]);
 });
 
 test('file uploader dropzone activates the native file input from Enter and Space', async ({ page }) => {
-  for (const [key, name] of [['Enter', 'enter.txt'], [' ', 'space.txt']]) {
+  for (const [key, name] of [
+    ['Enter', 'enter.txt'],
+    [' ', 'space.txt'],
+  ]) {
     await page.goto(fixture);
     const dropzone = page.getByRole('button', { name: 'Choose or drop a file' });
     await dropzone.focus();
-    const [chooser] = await Promise.all([
-      page.waitForEvent('filechooser'),
-      dropzone.press(key),
-    ]);
+    const [chooser] = await Promise.all([page.waitForEvent('filechooser'), dropzone.press(key)]);
     await chooser.setFiles({ name, mimeType: 'text/plain', buffer: Buffer.from('ok') });
     await expect(page.getByText(name)).toBeVisible();
   }
 });
 
-test('public FileUploader CSS resolves the canonical subtle surface and focus ring in light and dark themes', async ({ page }) => {
+test('public FileUploader CSS resolves the canonical subtle surface and focus ring in light and dark themes', async ({
+  page,
+}) => {
   test.skip(port !== 'web', 'Public CSS resolution evidence is owned by the Web lane.');
   await page.goto('/components/file-uploader/web.html');
   const dropzone = page.locator('#dropzone');
@@ -52,9 +58,14 @@ test('public FileUploader CSS resolves the canonical subtle surface and focus ri
 });
 
 test.describe('STD-12 upload/import recovery workflow', () => {
-  test.skip(port !== 'react', 'The complete import workflow is intentionally bounded to the React public entrypoint and an application-owned deterministic service.');
+  test.skip(
+    port !== 'react',
+    'The complete import workflow is intentionally bounded to the React public entrypoint and an application-owned deterministic service.',
+  );
 
-  test('selection is local, progress stays truthful across transfer and processing, and routine status keeps focus stable', async ({ page }) => {
+  test('selection is local, progress stays truthful across transfer and processing, and routine status keeps focus stable', async ({
+    page,
+  }) => {
     await page.goto('/components/file-uploader/react.html');
     const input = page.getByLabel('Choose import file');
     const start = page.getByRole('button', { name: 'Import', exact: true });

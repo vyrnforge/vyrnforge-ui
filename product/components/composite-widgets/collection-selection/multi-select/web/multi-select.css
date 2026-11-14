@@ -1,4 +1,4 @@
-@import "../../styles/selection.css";
+@import '../../styles/selection.css';
 
 @layer vyrnforge.components {
   [data-vf-multi-select-content] {
