@@ -23,6 +23,11 @@ export const browserFixture = {
   },
 };
 
+function recordControlled(value) {
+  document.body.dataset.controlledValue = value;
+  document.body.dataset.controlledCount = String(Number(document.body.dataset.controlledCount || 0) + 1);
+}
+
 export async function createReactStory({ client }) {
   const { createElement, Fragment } = await import('react');
   const { TabsList, TabsPanel, TabsRoot, TabsTab } = await import('@vyrnforge/react/tabs');
@@ -75,6 +80,18 @@ export async function createReactStory({ client }) {
           : () => undefined,
       },
     }),
+    createElement(
+      TabsRoot,
+      { id: 'react-controlled-tabs', value: 'a/b', onValueChange: client ? recordControlled : () => undefined },
+      createElement(
+        TabsList,
+        { 'aria-label': 'Controlled sections' },
+        createElement(TabsTab, { value: 'a/b' }, 'Slash'),
+        createElement(TabsTab, { value: 'a_2Fb' }, 'Underscore'),
+      ),
+      createElement(TabsPanel, { value: 'a/b' }, 'Slash panel'),
+      createElement(TabsPanel, { value: 'a_2Fb' }, 'Underscore panel'),
+    ),
   );
 }
 
@@ -122,6 +139,18 @@ export async function createVueStory({ client }) {
               : () => undefined,
           },
         }),
+        h(
+          TabsRoot,
+          { id: 'vue-controlled-tabs', modelValue: 'a/b', onValueChange: client ? recordControlled : () => undefined },
+          () => [
+            h(TabsList, { 'aria-label': 'Controlled sections' }, () => [
+              h(TabsTab, { value: 'a/b' }, () => 'Slash'),
+              h(TabsTab, { value: 'a_2Fb' }, () => 'Underscore'),
+            ]),
+            h(TabsPanel, { value: 'a/b' }, () => 'Slash panel'),
+            h(TabsPanel, { value: 'a_2Fb' }, () => 'Underscore panel'),
+          ],
+        ),
       ]),
   });
 }
@@ -133,7 +162,7 @@ export async function createAngularStory({ client }) {
     await import('@vyrnforge/angular/tabs');
 
   const template =
-    '<div vfTabsRoot id="angular-tabs" defaultValue="overview" dir="rtl" (valueChange)="changed($event)"><div vfTabsList aria-label="Account sections"><button vfTabsTab="overview">Overview</button><button vfTabsTab="billing" disabled>Billing</button><button vfTabsTab="security">Security</button><button vfTabsTab="activity">Activity</button></div><div vfTabsPanel="overview">Overview panel</div><div vfTabsPanel="billing">Billing panel</div><div vfTabsPanel="security">Security panel</div><div vfTabsPanel="activity">Activity panel</div></div><div vfTabsRoot id="angular-manual-tabs" defaultValue="overview" orientation="vertical" activation="manual" (valueChange)="manualChanged($event)"><div vfTabsList aria-label="Manual vertical sections"><button vfTabsTab="overview">Overview</button><button vfTabsTab="billing" disabled>Billing</button><button vfTabsTab="security">Security</button></div><div vfTabsPanel="overview">Overview panel</div><div vfTabsPanel="billing">Billing panel</div><div vfTabsPanel="security">Security panel</div></div>';
+    '<div vfTabsRoot id="angular-tabs" defaultValue="overview" dir="rtl" (valueChange)="changed($event)"><div vfTabsList aria-label="Account sections"><button vfTabsTab="overview">Overview</button><button vfTabsTab="billing" disabled>Billing</button><button vfTabsTab="security">Security</button><button vfTabsTab="activity">Activity</button></div><div vfTabsPanel="overview">Overview panel</div><div vfTabsPanel="billing">Billing panel</div><div vfTabsPanel="security">Security panel</div><div vfTabsPanel="activity">Activity panel</div></div><div vfTabsRoot id="angular-manual-tabs" defaultValue="overview" orientation="vertical" activation="manual" (valueChange)="manualChanged($event)"><div vfTabsList aria-label="Manual vertical sections"><button vfTabsTab="overview">Overview</button><button vfTabsTab="billing" disabled>Billing</button><button vfTabsTab="security">Security</button></div><div vfTabsPanel="overview">Overview panel</div><div vfTabsPanel="billing">Billing panel</div><div vfTabsPanel="security">Security panel</div></div><div vfTabsRoot id="angular-controlled-tabs" value="a/b" (valueChange)="controlledChanged($event)"><div vfTabsList aria-label="Controlled sections"><button vfTabsTab="a/b">Slash</button><button vfTabsTab="a_2Fb">Underscore</button></div><div vfTabsPanel="a/b">Slash panel</div><div vfTabsPanel="a_2Fb">Underscore panel</div></div>';
 
   class TabsTestApp {
     changed(value) {
@@ -142,6 +171,10 @@ export async function createAngularStory({ client }) {
 
     manualChanged(value) {
       if (client) document.body.dataset.manualValue = value;
+    }
+
+    controlledChanged(value) {
+      if (client) recordControlled(value);
     }
   }
 
@@ -181,8 +214,18 @@ export async function createElementsStory({ client }) {
   <div data-vf-tabs-panel data-vf-value="security">Security panel</div>
 </vf-tabs>`;
 
+  const controlled = `
+<vf-tabs id="elements-controlled-tabs" value="a/b">
+  <div data-vf-tabs-list aria-label="Controlled sections">
+    <button data-vf-tabs-tab data-vf-value="a/b">Slash</button>
+    <button data-vf-tabs-tab data-vf-value="a_2Fb">Underscore</button>
+  </div>
+  <div data-vf-tabs-panel data-vf-value="a/b">Slash panel</div>
+  <div data-vf-tabs-panel data-vf-value="a_2Fb">Underscore panel</div>
+</vf-tabs>`;
+
   return {
-    body: `${automatic}${manual}`,
+    body: `${automatic}${manual}${controlled}`,
     activate: client
       ? async () => {
           const { defineTabsElement } = await import('@vyrnforge/elements/tabs');
@@ -192,6 +235,9 @@ export async function createElementsStory({ client }) {
           });
           document.querySelector('#elements-manual-tabs').addEventListener('vf-value-change', (event) => {
             document.body.dataset.manualValue = event.detail.value;
+          });
+          document.querySelector('#elements-controlled-tabs').addEventListener('vf-value-change', (event) => {
+            recordControlled(event.detail.value);
           });
         }
       : undefined,
