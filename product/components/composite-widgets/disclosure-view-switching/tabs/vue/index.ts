@@ -40,7 +40,7 @@ export interface TabsPanelProps {
 }
 
 interface TabsContextValue {
-  rootId: string;
+  rootId: Readonly<Ref<string>>;
   selectedValue: Readonly<Ref<string>>;
   focusValue: Ref<string>;
   orientation: Readonly<Ref<TabsOrientation>>;
@@ -58,7 +58,7 @@ function useTabsContext(): TabsContextValue {
 }
 
 function valueToken(value: string): string {
-  return encodeURIComponent(value).replaceAll('%', '_');
+  return encodeURIComponent(value).replaceAll('_', '_5F').replaceAll('%', '_');
 }
 
 function tabId(rootId: string, value: string): string {
@@ -89,7 +89,7 @@ export const TabsRoot = defineComponent({
   emits: ['update:modelValue', 'valueChange'],
   setup(props, { attrs, slots, emit }) {
     const generatedId = useId().replaceAll(':', '');
-    const rootId = props.id ?? `vf-tabs-${generatedId}`;
+    const rootId = computed(() => props.id ?? `vf-tabs-${generatedId}`);
     const internalValue = ref(props.defaultValue ?? props.modelValue ?? '');
     const selectedValue = computed(() => props.modelValue ?? internalValue.value);
     const focusValue = ref(selectedValue.value);
@@ -108,6 +108,7 @@ export const TabsRoot = defineComponent({
       activation,
       direction,
       select(value) {
+        if (value === selectedValue.value) return;
         if (props.modelValue === undefined) internalValue.value = value;
         emit('update:modelValue', value);
         emit('valueChange', value);
@@ -119,7 +120,7 @@ export const TabsRoot = defineComponent({
         'div',
         {
           ...attrs,
-          id: rootId,
+          id: rootId.value,
           dir: props.dir,
           'data-vf-tabs-root': '',
           'data-vf-orientation': props.orientation,
@@ -147,8 +148,9 @@ export const TabsList = defineComponent({
           onKeydown(event: KeyboardEvent) {
             callHandler(attrs.onKeydown, event);
             if (event.defaultPrevented) return;
-            const target = event.target as HTMLElement;
-            if (target.getAttribute('role') !== 'tab') return;
+            if (!(event.target instanceof HTMLElement)) return;
+            const target = event.target.closest<HTMLElement>('[data-vf-tabs-tab]');
+            if (!target || target.closest('[data-vf-tabs-list]') !== event.currentTarget) return;
             let intent: CollectionNavigationIntent | null = null;
             if (event.key === 'Home') intent = 'first';
             if (event.key === 'End') intent = 'last';
@@ -161,7 +163,9 @@ export const TabsList = defineComponent({
             }
             if (!intent) return;
             const currentTarget = event.currentTarget as HTMLElement;
-            const tabs = Array.from(currentTarget.querySelectorAll<HTMLElement>('[role="tab"]'));
+            const tabs = Array.from(currentTarget.querySelectorAll<HTMLElement>('[data-vf-tabs-tab]')).filter(
+              (tab) => tab.closest('[data-vf-tabs-list]') === currentTarget,
+            );
             const currentIndex = tabs.indexOf(target);
             const items = tabs.map((tab) => ({
               eligible: !(tab.getAttribute('aria-disabled') === 'true' || (tab as HTMLButtonElement).disabled),
@@ -193,19 +197,19 @@ export const TabsTab = defineComponent({
     const context = useTabsContext();
     return () => {
       const selected = context.selectedValue.value === props.value;
-      const focusable = context.focusValue.value === props.value;
+      const focusable = context.activation.value === 'manual' ? context.focusValue.value === props.value : selected;
       return h(
         'button',
         {
           ...attrs,
-          id: tabId(context.rootId, props.value),
+          id: tabId(context.rootId.value, props.value),
           type: attrs.type ?? 'button',
           role: 'tab',
           disabled: props.disabled,
           tabindex: props.disabled ? -1 : focusable ? 0 : -1,
           'aria-selected': selected ? 'true' : 'false',
           'aria-disabled': props.disabled ? 'true' : undefined,
-          'aria-controls': panelId(context.rootId, props.value),
+          'aria-controls': panelId(context.rootId.value, props.value),
           'data-vf-tabs-tab': '',
           'data-vf-value': props.value,
           onFocus(event: FocusEvent) {
@@ -218,11 +222,7 @@ export const TabsTab = defineComponent({
           },
           onKeydown(event: KeyboardEvent) {
             callHandler(attrs.onKeydown, event);
-            if (event.defaultPrevented || props.disabled || context.activation.value !== 'manual') return;
-            if (event.key === 'Enter' || event.key === ' ') {
-              event.preventDefault();
-              context.select(props.value);
-            }
+            // Native button activation delivers Enter/Space through click.
           },
         },
         slots.default?.(),
@@ -243,11 +243,11 @@ export const TabsPanel = defineComponent({
         'div',
         {
           ...attrs,
-          id: panelId(context.rootId, props.value),
+          id: panelId(context.rootId.value, props.value),
           role: 'tabpanel',
           tabindex: 0,
           hidden: !selected,
-          'aria-labelledby': tabId(context.rootId, props.value),
+          'aria-labelledby': tabId(context.rootId.value, props.value),
           'data-vf-tabs-panel': '',
         },
         slots.default?.(),

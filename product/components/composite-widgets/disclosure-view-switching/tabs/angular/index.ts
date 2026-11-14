@@ -26,7 +26,7 @@ const TABS_ID_GENERATOR = new InjectionToken<() => string>('VyrnForge Tabs ID ge
 });
 
 function valueToken(value: string): string {
-  return encodeURIComponent(value).replaceAll('%', '_');
+  return encodeURIComponent(value).replaceAll('_', '_5F').replaceAll('%', '_');
 }
 
 @Directive({
@@ -50,10 +50,10 @@ export class VfTabsRootDirective {
   readonly valueChange = output<string>();
 
   private readonly generatedId = inject(TABS_ID_GENERATOR)();
-  private readonly internalValue = signal('');
+  private readonly internalValue = signal<string | undefined>(undefined);
   readonly rootId = computed(() => this.id() ?? this.generatedId);
   readonly focusValue = signal('');
-  readonly selectedValue = computed(() => this.value() ?? (this.internalValue() || this.defaultValue()));
+  readonly selectedValue = computed(() => this.value() ?? this.internalValue() ?? this.defaultValue());
 
   constructor() {
     effect(() => {
@@ -62,6 +62,7 @@ export class VfTabsRootDirective {
   }
 
   select(value: string): void {
+    if (value === this.selectedValue()) return;
     if (this.value() === undefined) this.internalValue.set(value);
     this.valueChange.emit(value);
   }
@@ -91,8 +92,9 @@ export class VfTabsListDirective {
   private readonly element = inject<ElementRef<HTMLElement>>(ElementRef);
 
   onKeydown(event: KeyboardEvent): void {
-    const target = event.target as HTMLElement;
-    if (target.getAttribute('role') !== 'tab') return;
+    if (event.defaultPrevented || !(event.target instanceof HTMLElement)) return;
+    const target = event.target.closest<HTMLElement>('[data-vf-tabs-tab]');
+    if (!target || target.closest('[data-vf-tabs-list]') !== this.element.nativeElement) return;
 
     let intent: CollectionNavigationIntent | null = null;
     if (event.key === 'Home') intent = 'first';
@@ -106,7 +108,9 @@ export class VfTabsListDirective {
     }
     if (!intent) return;
 
-    const tabs = Array.from(this.element.nativeElement.querySelectorAll<HTMLElement>('[role="tab"]'));
+    const tabs = Array.from(this.element.nativeElement.querySelectorAll<HTMLElement>('[data-vf-tabs-tab]')).filter(
+      (tab) => tab.closest('[data-vf-tabs-list]') === this.element.nativeElement,
+    );
     const currentIndex = tabs.indexOf(target);
     const items = tabs.map((tab) => ({
       eligible: !(tab.getAttribute('aria-disabled') === 'true' || (tab as HTMLButtonElement).disabled),
@@ -139,8 +143,7 @@ export class VfTabsListDirective {
     '[attr.tabindex]': 'tabIndex()',
     '[disabled]': 'disabled()',
     '(focus)': 'onFocus()',
-    '(click)': 'onClick()',
-    '(keydown)': 'onKeydown($event)',
+    '(click)': 'onClick($event)',
   },
 })
 export class VfTabsTabDirective {
@@ -150,23 +153,16 @@ export class VfTabsTabDirective {
   readonly selected = computed(() => this.root.selectedValue() === this.value());
 
   tabIndex(): number {
-    return this.disabled() ? -1 : this.root.focusValue() === this.value() ? 0 : -1;
+    const focusable = this.root.activation() === 'manual' ? this.root.focusValue() === this.value() : this.selected();
+    return !this.disabled() && focusable ? 0 : -1;
   }
 
   onFocus(): void {
     if (!this.disabled()) this.root.focusValue.set(this.value());
   }
 
-  onClick(): void {
-    if (!this.disabled()) this.root.select(this.value());
-  }
-
-  onKeydown(event: KeyboardEvent): void {
-    if (this.disabled() || this.root.activation() !== 'manual') return;
-    if (event.key === 'Enter' || event.key === ' ') {
-      event.preventDefault();
-      this.root.select(this.value());
-    }
+  onClick(event?: MouseEvent): void {
+    if (!event?.defaultPrevented && !this.disabled()) this.root.select(this.value());
   }
 }
 

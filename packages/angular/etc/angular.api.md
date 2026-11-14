@@ -2758,11 +2758,9 @@ export class VfTabsTabDirective {
     // (undocumented)
     readonly disabled: InputSignalWithTransform<boolean, unknown>;
     // (undocumented)
-    onClick(): void;
+    onClick(event?: MouseEvent): void;
     // (undocumented)
     onFocus(): void;
-    // (undocumented)
-    onKeydown(event: KeyboardEvent): void;
     // (undocumented)
     readonly root: VfTabsRootDirective;
     // (undocumented)
