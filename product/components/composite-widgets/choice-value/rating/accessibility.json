@@ -9,16 +9,7 @@
   "wcag": {
     "target": "2.2 AA",
     "status": "review-required",
-    "criteria": [
-      "1.3.1",
-      "1.4.1",
-      "1.4.11",
-      "2.1.1",
-      "2.4.7",
-      "2.5.8",
-      "3.3.2",
-      "4.1.2"
-    ]
+    "criteria": ["1.3.1", "1.4.1", "1.4.11", "2.1.1", "2.4.7", "2.5.8", "3.3.2", "4.1.2"]
   },
   "aria": {
     "status": "mapped",
@@ -33,9 +24,7 @@
     "library": [
       "Maintain a distinct group name, one selected value, native radio semantics and non-color selected indicators."
     ],
-    "consumer": [
-      "Author the group name, item names and meaningful rating scale."
-    ]
+    "consumer": ["Author the group name, item names and meaningful rating scale."]
   },
   "forms": {
     "status": "review-required"

@@ -1597,6 +1597,7 @@ value: {
 type: NumberConstructor;
 required: true;
 };
+label: StringConstructor;
 disabled: BooleanConstructor;
 }>, () => VNode<RendererNode, RendererElement, {
 [key: string]: any;
@@ -1605,6 +1606,7 @@ value: {
 type: NumberConstructor;
 required: true;
 };
+label: StringConstructor;
 disabled: BooleanConstructor;
 }>> & Readonly<{}>, {
 disabled: boolean;
@@ -1617,14 +1619,12 @@ defaultValue: {
 type: NumberConstructor;
 default: number;
 };
-name: {
-type: StringConstructor;
-default: string;
-};
+name: StringConstructor;
 max: {
 type: NumberConstructor;
 default: number;
 };
+getItemLabel: PropType<(value: number) => string>;
 }>, () => VNode<RendererNode, RendererElement, {
 [key: string]: any;
 }>, {}, {}, {}, ComponentOptionsMixin, ComponentOptionsMixin, "update:value"[], "update:value", PublicProps, Readonly<ExtractPropTypes<    {
@@ -1633,18 +1633,15 @@ defaultValue: {
 type: NumberConstructor;
 default: number;
 };
-name: {
-type: StringConstructor;
-default: string;
-};
+name: StringConstructor;
 max: {
 type: NumberConstructor;
 default: number;
 };
+getItemLabel: PropType<(value: number) => string>;
 }>> & Readonly<{
 "onUpdate:value"?: (...args: any[]) => any;
 }>, {
-name: string;
 defaultValue: number;
 max: number;
 }, {}, {}, {}, string, ComponentProvideOptions, true, {}, any>;

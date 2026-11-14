@@ -1,4 +1,15 @@
-import { computed, defineComponent, h, inject, provide, ref, useId, type InjectionKey, type PropType, type Ref } from 'vue';
+import {
+  computed,
+  defineComponent,
+  h,
+  inject,
+  provide,
+  ref,
+  useId,
+  type InjectionKey,
+  type PropType,
+  type Ref,
+} from 'vue';
 interface Ctx {
   value: Ref<number>;
   name: Ref<string>;
@@ -39,7 +50,10 @@ export const RatingRoot = defineComponent({
       h(
         'div',
         { ...attrs, role: 'radiogroup', 'data-vf-rating-root': '' },
-        slots.default?.() ?? Array.from({ length: Number.isFinite(p.max) ? Math.max(0, Math.floor(p.max)) : 0 }, (_, i) => h(RatingItem, { value: i + 1, label: p.getItemLabel?.(i + 1) ?? String(i + 1), key: i + 1 })),
+        slots.default?.() ??
+          Array.from({ length: Number.isFinite(p.max) ? Math.max(0, Math.floor(p.max)) : 0 }, (_, i) =>
+            h(RatingItem, { value: i + 1, label: p.getItemLabel?.(i + 1) ?? String(i + 1), key: i + 1 }),
+          ),
       );
   },
 });
