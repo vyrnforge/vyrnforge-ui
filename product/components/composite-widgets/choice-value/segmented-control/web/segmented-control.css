@@ -1,3 +1,5 @@
+@import '../../styles/choice-controls.css';
+
 @layer vyrnforge.components {
   [data-vf-segmented-control-root] {
     max-inline-size: 100%;

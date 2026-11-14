@@ -1,3 +1,5 @@
+@import '../../styles/compound-fields.css';
+
 @layer vyrnforge.components {
   [data-vf-search-field-input] {
     border-start-end-radius: 0;
