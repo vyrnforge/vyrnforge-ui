@@ -27,28 +27,28 @@ export interface ToggleGroupRootProps extends Omit<ComponentPropsWithoutRef<'div
   onValueChange?(v: string | string[]): void;
   children?: ReactNode;
 }
-function norm(v: string | string[] | undefined) {
-  return v === undefined ? [] : typeof v === 'string' ? (v ? [v] : []) : v;
+function normalize(value: string | string[] | undefined, type: ToggleGroupType): string[] {
+  const values = Array.from(new Set((typeof value === 'string' ? [value] : (value ?? [])).filter(Boolean)));
+  return type === 'single' ? values.slice(0, 1) : values;
+}
+
+function toggled(values: string[], value: string, type: ToggleGroupType): string[] {
+  if (type === 'single') return values[0] === value ? [] : [value];
+  return values.includes(value) ? values.filter((candidate) => candidate !== value) : [...values, value];
 }
 export const ToggleGroupRoot = forwardRef<HTMLDivElement, ToggleGroupRootProps>(function ToggleGroupRoot(
   { type = 'single', value, defaultValue, onValueChange, children, ...props },
   ref,
 ) {
-  const [iv, setIv] = useState(() => norm(defaultValue));
-  const values = norm(value ?? iv);
+  const [iv, setIv] = useState(() => normalize(defaultValue, type));
+  const values = normalize(value ?? iv, type);
   const ctx = useMemo(
     () => ({
       type,
       values,
       toggle(v: string) {
-        const next =
-          type === 'single'
-            ? values[0] === v
-              ? []
-              : [v]
-            : values.includes(v)
-              ? values.filter((candidate) => candidate !== v)
-              : [...values, v];
+        if (!v) return;
+        const next = toggled(values, v, type);
         if (value === undefined) setIv(next);
         onValueChange?.(type === 'single' ? (next[0] ?? '') : next);
       },
@@ -73,14 +73,16 @@ export const ToggleGroupItem = forwardRef<HTMLButtonElement, ToggleGroupItemProp
   return createElement('button', {
     ...props,
     ref,
-    type: props.type ?? 'button',
+    type: 'button',
     disabled,
     'aria-pressed': pressed,
+    'data-vf-value': value,
     'data-vf-toggle-group-item': '',
     'data-vf-state': pressed ? 'on' : 'off',
     onClick: (e) => {
       props.onClick?.(e);
-      if (!e.defaultPrevented && !disabled) g.toggle(value);
+      if (!e.defaultPrevented && !disabled && props['aria-disabled'] !== true && props['aria-disabled'] !== 'true')
+        g.toggle(value);
     },
   });
 });

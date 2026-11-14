@@ -1,9 +1,7 @@
-import { mkdir, readFile, writeFile } from 'node:fs/promises';
+import { mkdir, writeFile } from 'node:fs/promises';
 import path from 'node:path';
 import { pathToFileURL } from 'node:url';
 import { build } from 'esbuild';
-
-const TOKEN_IMPORT = '@import "../../styles/tokens.css";';
 
 function moduleSpecifier(root, fixturePath) {
   const relative = path.relative(root, fixturePath).replaceAll(path.sep, '/');
@@ -37,13 +35,19 @@ function storyExport(module, exportName, fixturePath, port) {
 }
 
 async function prepareStyles({ root, outDir, component }) {
-  const componentCss = await readFile(
-    path.join(root, `packages/web/dist/components/${component}/${component}.css`),
-    'utf8',
-  );
-  const tokenCss = await readFile(path.join(root, 'packages/web/dist/styles/tokens.css'), 'utf8');
   const stylesheet = `${component}.css`;
-  await writeFile(path.join(outDir, stylesheet), `${tokenCss}\n${componentCss.replace(TOKEN_IMPORT, '')}`);
+  // Resolve imports relative to the projected Web package, including private family styles.
+  // Concatenating CSS would put component @imports after rules, making them invalid.
+  await build({
+    stdin: {
+      resolveDir: path.join(root, 'packages/web/dist'),
+      sourcefile: `${component}-fixture.css`,
+      loader: 'css',
+      contents: `@import "./styles/tokens.css";\n@import "./components/${component}/${component}.css";`,
+    },
+    bundle: true,
+    outfile: path.join(outDir, stylesheet),
+  });
   return stylesheet;
 }
 
