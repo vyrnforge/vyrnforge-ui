@@ -60,8 +60,8 @@ export async function createVueStory({ client }) {
     render: () =>
       h('div', [
         disclosure('root', 'Details', ['Content', disclosure('inner', 'Inner details', 'Inner content')], {
-      panelId: 'authored-panel',
-    }),
+          panelId: 'authored-panel',
+        }),
         disclosure('initial', 'Initially open', 'Initial content', { defaultOpen: true }),
         disclosure('disabled', 'Disabled', 'Disabled content', {}, { disabled: true }),
         disclosure('controlled', 'Controlled', 'Controlled content', {
