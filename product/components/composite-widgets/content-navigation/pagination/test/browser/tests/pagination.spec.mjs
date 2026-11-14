@@ -1,47 +1,59 @@
 import { test, expect } from '@playwright/test';
 import { expectNoAxeViolations } from '../../../../../../../../tooling/testing/accessibility.mjs';
+
 const port = process.env.VF_COMPONENT_PORT || 'react';
 
-test('pagination exposes a named landmark and current page', async ({ page }) => {
-  await page.goto(`/components/pagination/${port}.html`);
-  await expect(page.locator('#pagination')).toHaveAttribute('aria-label', 'Pagination');
-  await expect(page.getByText('2')).toHaveAttribute('aria-current', 'page');
-
-  expect((await expectNoAxeViolations(page)).violations).toEqual([]);
+test('public Pagination exposes a named landmark and authored current page before activation', async ({ browser }) => {
+  const context = await browser.newContext({ javaScriptEnabled: false });
+  try {
+    const page = await context.newPage();
+    await page.goto(`/components/pagination/${port}.html`);
+    const pagination = page.getByRole('navigation', { name: 'Pagination', exact: true });
+    await expect(pagination.getByRole('link', { name: '2', exact: true })).toHaveAttribute('aria-current', 'page');
+    await expect(pagination.getByRole('link', { name: 'Next', exact: true })).toHaveAttribute('href', '#page3');
+  } finally {
+    await context.close();
+  }
 });
 
-test('React public entrypoint uses semantic tokens and exposes keyboard focus', async ({ page }) => {
-  test.skip(port !== 'react', 'Public-entrypoint styling evidence is intentionally bounded to React for this repair.');
-
-  await page.goto('/components/pagination/public-react.html');
-  const pagination = page.locator('#public-pagination');
-  const current = pagination.getByText('2');
-
-  await expect(pagination).toHaveAttribute('aria-label', 'Pagination');
+test('native link activation preserves application-owned current page and unavailable boundary semantics', async ({
+  page,
+}) => {
+  await page.goto(`/components/pagination/${port}.html`);
+  if (port === 'elements') await page.waitForFunction(() => Boolean(customElements.get('vf-pagination')));
+  const pagination = page.getByRole('navigation', { name: 'Pagination', exact: true });
+  const current = pagination.getByRole('link', { name: '2', exact: true });
+  const next = pagination.getByRole('link', { name: 'Next', exact: true });
+  await current.focus();
+  await current.press('Tab');
+  await expect(next).toBeFocused();
+  await next.press('Enter');
+  await expect(page).toHaveURL(/#page3$/);
   await expect(current).toHaveAttribute('aria-current', 'page');
 
-  const currentStyles = await current.evaluate((element) => {
-    const style = getComputedStyle(element);
-    return { backgroundColor: style.backgroundColor, color: style.color };
-  });
-  expect(currentStyles.backgroundColor).not.toBe('rgba(0, 0, 0, 0)');
-  expect(currentStyles.color).not.toBe('rgba(0, 0, 0, 0)');
+  const boundary = page.getByRole('navigation', { name: 'First page navigation' });
+  await expect(boundary.getByRole('link', { name: 'No previous page' })).toHaveCount(0);
+  await expect(boundary.getByText('No previous page')).not.toHaveAttribute('href');
+  await next.focus();
+  await next.press('Tab');
+  await expect(boundary.getByRole('link', { name: '1', exact: true })).toBeFocused();
+  await expectNoAxeViolations(page);
+});
 
+test('public Pagination styles retain focus, current state and reflow in a narrow container', async ({ page }) => {
+  await page.goto(`/components/pagination/${port}.html`);
+  const pagination = page.getByRole('navigation', { name: 'Pagination', exact: true });
+  const current = pagination.getByRole('link', { name: '2', exact: true });
+  const background = await current.evaluate((element) => getComputedStyle(element).backgroundColor);
+  expect(background).not.toBe('rgba(0, 0, 0, 0)');
   await current.focus();
-  const focusStyles = await current.evaluate((element) => {
-    const style = getComputedStyle(element);
-    return { outlineStyle: style.outlineStyle, outlineWidth: style.outlineWidth };
-  });
-  expect(focusStyles.outlineStyle).not.toBe('none');
-  expect(focusStyles.outlineWidth).toBe('2px');
-
+  await expect(current).toHaveCSS('outline-width', '2px');
+  await pagination.evaluate((element) => (element.style.inlineSize = '120px'));
+  await expect(pagination).toHaveCSS('flex-wrap', 'wrap');
+  expect(await pagination.evaluate((element) => element.scrollWidth <= element.clientWidth)).toBe(true);
   await page.emulateMedia({ forcedColors: 'active' });
-  const forcedColorStyles = await current.evaluate((element) => {
-    const style = getComputedStyle(element);
-    return { backgroundColor: style.backgroundColor, outlineStyle: style.outlineStyle };
-  });
-  expect(forcedColorStyles.backgroundColor).not.toBe('rgba(0, 0, 0, 0)');
-  expect(forcedColorStyles.outlineStyle).not.toBe('none');
-
-  expect((await expectNoAxeViolations(page)).violations).toEqual([]);
+  await expect(current).toHaveCSS('outline-width', '2px');
+  const forcedBackground = await current.evaluate((element) => getComputedStyle(element).backgroundColor);
+  expect(forcedBackground).not.toBe('rgba(0, 0, 0, 0)');
+  await expectNoAxeViolations(page);
 });
