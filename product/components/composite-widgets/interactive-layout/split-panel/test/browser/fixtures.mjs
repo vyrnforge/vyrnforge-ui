@@ -33,7 +33,11 @@ export async function createReactStory({ client }) {
         },
       },
       h(SplitPanelPane, { id: id + '-primary' }, 'Primary'),
-      h(SplitPanelResizeHandle, { id: id === 'root' ? 'handle' : id + '-handle', 'aria-label': 'Primary', 'aria-controls': id + '-primary' }),
+      h(SplitPanelResizeHandle, {
+        id: id === 'root' ? 'handle' : id + '-handle',
+        'aria-label': 'Primary',
+        'aria-controls': id + '-primary',
+      }),
       h(SplitPanelPane, null, 'Secondary'),
     );
   return h(Fragment, null, panel('root', { defaultSize: 40 }), panel('controlled', { size: 60 }));
@@ -43,17 +47,30 @@ export async function createVueStory({ client }) {
   const { createSSRApp, h } = await import('vue');
   const { SplitPanelRoot, SplitPanelPane, SplitPanelResizeHandle } = await import('@vyrnforge/vue/split-panel');
   const panel = (id, options) =>
-    h(SplitPanelRoot, {
-      id, min: 20, max: 80, ...options,
-      'onUpdate:size': (size) => {
-        if (client) document.getElementById(id).dataset.requestedSize = String(size);
+    h(
+      SplitPanelRoot,
+      {
+        id,
+        min: 20,
+        max: 80,
+        ...options,
+        'onUpdate:size': (size) => {
+          if (client) document.getElementById(id).dataset.requestedSize = String(size);
+        },
       },
-    }, () => [
-      h(SplitPanelPane, { id: id + '-primary' }, () => 'Primary'),
-      h(SplitPanelResizeHandle, { id: id === 'root' ? 'handle' : id + '-handle', 'aria-label': 'Primary', 'aria-controls': id + '-primary' }),
-      h(SplitPanelPane, null, () => 'Secondary'),
-    ]);
-  return createSSRApp({ render: () => h('div', [panel('root', { defaultSize: 40 }), panel('controlled', { size: 60 })]) });
+      () => [
+        h(SplitPanelPane, { id: id + '-primary' }, () => 'Primary'),
+        h(SplitPanelResizeHandle, {
+          id: id === 'root' ? 'handle' : id + '-handle',
+          'aria-label': 'Primary',
+          'aria-controls': id + '-primary',
+        }),
+        h(SplitPanelPane, null, () => 'Secondary'),
+      ],
+    );
+  return createSSRApp({
+    render: () => h('div', [panel('root', { defaultSize: 40 }), panel('controlled', { size: 60 })]),
+  });
 }
 
 export async function createAngularStory({ client }) {

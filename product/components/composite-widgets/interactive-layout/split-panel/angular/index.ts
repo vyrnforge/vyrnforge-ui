@@ -17,7 +17,6 @@ function requestedSize(event: KeyboardEvent, current: number, min: number, max: 
   return clamp(current + delta * (rtl ? -1 : 1) * (event.shiftKey ? 10 : 1), min, max);
 }
 
-
 @Directive({
   selector: '[vfSplitPanelRoot]',
   standalone: true,
