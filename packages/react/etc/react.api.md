@@ -2690,7 +2690,6 @@ export interface RangeSliderRootProps extends Omit<ComponentPropsWithoutRef<'div
 // @public (undocumented)
 export function RatingItem(input: RatingItemProps): ReactElement<    {
 'data-vf-rating-item': string;
-'data-vf-state': string;
 }, string | JSXElementConstructor<any>>;
 
 // @public (undocumented)
@@ -2711,9 +2710,13 @@ export interface RatingRootProps {
     // (undocumented)
     'aria-label'?: string;
     // (undocumented)
+    'aria-labelledby'?: string;
+    // (undocumented)
     children?: ReactNode;
     // (undocumented)
     defaultValue?: number;
+    // (undocumented)
+    getItemLabel?(value: number): string;
     // (undocumented)
     max?: number;
     // (undocumented)
@@ -2746,12 +2749,10 @@ export interface SearchFieldRootProps extends ComponentPropsWithoutRef<'div'> {
 }
 
 // @public (undocumented)
-export const SegmentedControlItem: ForwardRefExoticComponent<SegmentedControlItemProps & RefAttributes<HTMLInputElement>>;
+export const SegmentedControlItem: ForwardRefExoticComponent<SegmentedControlItemProps & RefAttributes<HTMLButtonElement>>;
 
 // @public (undocumented)
-export interface SegmentedControlItemProps extends Omit<ComponentPropsWithoutRef<'input'>, 'type' | 'name' | 'value' | 'checked' | 'defaultChecked' | 'children'> {
-    // (undocumented)
-    children?: ReactNode;
+export interface SegmentedControlItemProps extends Omit<ComponentPropsWithoutRef<'button'>, 'value'> {
     // (undocumented)
     value: string;
 }
@@ -2765,8 +2766,6 @@ export interface SegmentedControlRootProps extends Omit<ComponentPropsWithoutRef
     children?: ReactNode;
     // (undocumented)
     defaultValue?: string;
-    // (undocumented)
-    name?: string;
     // (undocumented)
     onValueChange?(v: string): void;
     // (undocumented)
