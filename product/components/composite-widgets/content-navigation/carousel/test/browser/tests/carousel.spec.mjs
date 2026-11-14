@@ -18,7 +18,10 @@ test('carousel exposes exactly the selected slide before client activation', asy
       await expect(controlled.getByText('First slide')).toBeHidden();
       await expect(controlled.getByText('Second slide')).toBeVisible();
       await expect(page.locator('#controlled-next')).toHaveAttribute('aria-disabled', 'true');
-      for (const [id, label] of [['composed', 'Composed'], ['wrapped', 'Wrapped']]) {
+      for (const [id, label] of [
+        ['composed', 'Composed'],
+        ['wrapped', 'Wrapped'],
+      ]) {
         const carousel = page.locator(`#${id}`);
         await expect(carousel.getByText(`${label} first`)).toBeHidden();
         await expect(carousel.getByText(`${label} second`)).toBeVisible();
@@ -72,7 +75,10 @@ test('controlled carousel requests a change without committing rejected state', 
 test('one ordered carousel collection navigates multiple and wrapped viewports', async ({ page }) => {
   test.skip(port === 'web', 'No Web-owned carousel runtime.');
   await page.goto(`/components/carousel/${port}.html`);
-  for (const [id, label] of [['composed', 'Composed'], ['wrapped', 'Wrapped']]) {
+  for (const [id, label] of [
+    ['composed', 'Composed'],
+    ['wrapped', 'Wrapped'],
+  ]) {
     const root = page.locator(`#${id}`);
     const previous = page.locator(`#${id}-prev`);
     const next = page.locator(`#${id}-next`);

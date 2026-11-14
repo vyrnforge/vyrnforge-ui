@@ -48,19 +48,30 @@ export async function createReactStory({ client }) {
   function WrappedViewport({ position, label, children }) {
     return h('div', null, h(CarouselViewport, null, h(CarouselSlide, { position, 'aria-label': label }, children)));
   }
-  const composed = h(CarouselRoot, { id: 'composed', 'aria-label': 'Composed items', defaultIndex: 1 },
+  const composed = h(
+    CarouselRoot,
+    { id: 'composed', 'aria-label': 'Composed items', defaultIndex: 1 },
     h(CarouselViewport, null, h(CarouselSlide, { 'aria-label': '1 of 2' }, 'Composed first')),
     h(Fragment, null, h(CarouselViewport, null, h(CarouselSlide, { 'aria-label': '2 of 2' }, 'Composed second'))),
     h(CarouselPrevious, { id: 'composed-prev' }, 'Previous'),
     h(CarouselNext, { id: 'composed-next' }, 'Next'),
   );
-  const wrapped = h(CarouselRoot, { id: 'wrapped', 'aria-label': 'Wrapped items', slideCount: 2, defaultIndex: 1 },
+  const wrapped = h(
+    CarouselRoot,
+    { id: 'wrapped', 'aria-label': 'Wrapped items', slideCount: 2, defaultIndex: 1 },
     h(WrappedViewport, { position: 0, label: '1 of 2' }, 'Wrapped first'),
     h(WrappedViewport, { position: 1, label: '2 of 2' }, 'Wrapped second'),
     h(CarouselPrevious, { id: 'wrapped-prev' }, 'Previous'),
     h(CarouselNext, { id: 'wrapped-next' }, 'Next'),
   );
-  return h(Fragment, null, carousel('root', { defaultIndex: 0 }), carousel('controlled', { index: 1 }), composed, wrapped);
+  return h(
+    Fragment,
+    null,
+    carousel('root', { defaultIndex: 0 }),
+    carousel('controlled', { index: 1 }),
+    composed,
+    wrapped,
+  );
 }
 
 export async function createVueStory({ client }) {
@@ -90,25 +101,33 @@ export async function createVueStory({ client }) {
   const WrappedViewport = defineComponent({
     props: { position: Number, label: String },
     setup(props, { slots }) {
-      return () => h('div', null, [h(CarouselViewport, null, () => [
-        h(CarouselSlide, { position: props.position, 'aria-label': props.label }, slots.default),
-      ])]);
+      return () =>
+        h('div', null, [
+          h(CarouselViewport, null, () => [
+            h(CarouselSlide, { position: props.position, 'aria-label': props.label }, slots.default),
+          ]),
+        ]);
     },
   });
-  const composed = () => h(CarouselRoot, { id: 'composed', 'aria-label': 'Composed items', defaultIndex: 1 }, () => [
-    h(CarouselViewport, null, () => h(CarouselSlide, { 'aria-label': '1 of 2' }, () => 'Composed first')),
-    h(Fragment, null, [h(CarouselViewport, null, () => h(CarouselSlide, { 'aria-label': '2 of 2' }, () => 'Composed second'))]),
-    h(CarouselPrevious, { id: 'composed-prev' }, () => 'Previous'),
-    h(CarouselNext, { id: 'composed-next' }, () => 'Next'),
-  ]);
-  const wrapped = () => h(CarouselRoot, { id: 'wrapped', 'aria-label': 'Wrapped items', slideCount: 2, defaultIndex: 1 }, () => [
-    h(WrappedViewport, { position: 0, label: '1 of 2' }, () => 'Wrapped first'),
-    h(WrappedViewport, { position: 1, label: '2 of 2' }, () => 'Wrapped second'),
-    h(CarouselPrevious, { id: 'wrapped-prev' }, () => 'Previous'),
-    h(CarouselNext, { id: 'wrapped-next' }, () => 'Next'),
-  ]);
+  const composed = () =>
+    h(CarouselRoot, { id: 'composed', 'aria-label': 'Composed items', defaultIndex: 1 }, () => [
+      h(CarouselViewport, null, () => h(CarouselSlide, { 'aria-label': '1 of 2' }, () => 'Composed first')),
+      h(Fragment, null, [
+        h(CarouselViewport, null, () => h(CarouselSlide, { 'aria-label': '2 of 2' }, () => 'Composed second')),
+      ]),
+      h(CarouselPrevious, { id: 'composed-prev' }, () => 'Previous'),
+      h(CarouselNext, { id: 'composed-next' }, () => 'Next'),
+    ]);
+  const wrapped = () =>
+    h(CarouselRoot, { id: 'wrapped', 'aria-label': 'Wrapped items', slideCount: 2, defaultIndex: 1 }, () => [
+      h(WrappedViewport, { position: 0, label: '1 of 2' }, () => 'Wrapped first'),
+      h(WrappedViewport, { position: 1, label: '2 of 2' }, () => 'Wrapped second'),
+      h(CarouselPrevious, { id: 'wrapped-prev' }, () => 'Previous'),
+      h(CarouselNext, { id: 'wrapped-next' }, () => 'Next'),
+    ]);
   return createSSRApp({
-    render: () => h('div', [carousel('root', { defaultIndex: 0 }), carousel('controlled', { index: 1 }), composed(), wrapped()]),
+    render: () =>
+      h('div', [carousel('root', { defaultIndex: 0 }), carousel('controlled', { index: 1 }), composed(), wrapped()]),
   });
 }
 

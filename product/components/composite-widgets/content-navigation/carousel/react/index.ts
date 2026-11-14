@@ -93,7 +93,11 @@ export const CarouselRoot = forwardRef<HTMLElement, CarouselRootProps>(function 
         'aria-roledescription': props['aria-roledescription'] ?? 'carousel',
         'data-vf-carousel-root': '',
       },
-      createElement(ViewportOffset.Provider, { value: null }, createElement(SlidePosition.Provider, { value: null }, content)),
+      createElement(
+        ViewportOffset.Provider,
+        { value: null },
+        createElement(SlidePosition.Provider, { value: null }, content),
+      ),
     ),
   );
 });
@@ -111,11 +115,13 @@ export const CarouselViewport = forwardRef<HTMLDivElement, ComponentPropsWithout
   return createElement(
     'div',
     { ...props, ref, 'data-vf-carousel-viewport': '' },
-    context.explicit ? children : parts(children).map((child) =>
-      isValidElement(child) && child.type === CarouselSlide
-        ? createElement(SlidePosition.Provider, { key: child.key, value: position++ }, child)
-        : child,
-    ),
+    context.explicit
+      ? children
+      : parts(children).map((child) =>
+          isValidElement(child) && child.type === CarouselSlide
+            ? createElement(SlidePosition.Provider, { key: child.key, value: position++ }, child)
+            : child,
+        ),
   );
 });
 
@@ -124,27 +130,36 @@ export interface CarouselSlideProps extends ComponentPropsWithoutRef<'div'> {
   position?: number;
 }
 
-export const CarouselSlide = forwardRef<HTMLDivElement, CarouselSlideProps>(
-  function CarouselSlide({ position: authoredPosition, ...props }, ref) {
-    const context = useCarousel();
-    const inferredPosition = useContext(SlidePosition);
-    const position = context.explicit ? authoredPosition : inferredPosition;
-    if (position === null || position === undefined || !Number.isInteger(position) || position < 0 || position >= context.count) {
-      throw new Error('Carousel slides require a valid position in the root collection; use slideCount and position for wrapped slides.');
-    }
-    if (!context.explicit && authoredPosition !== undefined) {
-      throw new Error('Carousel slide position requires root slideCount.');
-    }
-    return createElement('div', {
-      ...props,
-      ref,
-      role: 'group',
-      'aria-roledescription': props['aria-roledescription'] ?? 'slide',
-      'data-vf-carousel-slide': '',
-      hidden: position !== context.index,
-    });
-  },
-);
+export const CarouselSlide = forwardRef<HTMLDivElement, CarouselSlideProps>(function CarouselSlide(
+  { position: authoredPosition, ...props },
+  ref,
+) {
+  const context = useCarousel();
+  const inferredPosition = useContext(SlidePosition);
+  const position = context.explicit ? authoredPosition : inferredPosition;
+  if (
+    position === null ||
+    position === undefined ||
+    !Number.isInteger(position) ||
+    position < 0 ||
+    position >= context.count
+  ) {
+    throw new Error(
+      'Carousel slides require a valid position in the root collection; use slideCount and position for wrapped slides.',
+    );
+  }
+  if (!context.explicit && authoredPosition !== undefined) {
+    throw new Error('Carousel slide position requires root slideCount.');
+  }
+  return createElement('div', {
+    ...props,
+    ref,
+    role: 'group',
+    'aria-roledescription': props['aria-roledescription'] ?? 'slide',
+    'data-vf-carousel-slide': '',
+    hidden: position !== context.index,
+  });
+});
 
 export const CarouselPrevious = forwardRef<HTMLButtonElement, ComponentPropsWithoutRef<'button'>>(
   function CarouselPrevious(props, ref) {

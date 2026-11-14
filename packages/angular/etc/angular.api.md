@@ -501,28 +501,52 @@ export class VfButtonDirective {
 
 // @public (undocumented)
 export class VfCarouselNextDirective {
-    constructor(root: VfCarouselRootDirective);
+    // (undocumented)
+    activate(event: MouseEvent): void;
+    // (undocumented)
+    readonly disabled: InputSignalWithTransform<boolean, unknown>;
     // (undocumented)
     readonly root: VfCarouselRootDirective;
     // (undocumented)
-    static ɵdir: i0.ɵɵDirectiveDeclaration<VfCarouselNextDirective, "button[vfCarouselNext]", never, {}, {}, never, never, true, never>;
+    unavailable(): boolean;
+    // (undocumented)
+    static ɵdir: i0.ɵɵDirectiveDeclaration<VfCarouselNextDirective, "button[vfCarouselNext]", never, {
+        "disabled": {
+            "alias": "disabled";
+            "required": false;
+            "isSignal": true;
+        };
+    }, {}, never, never, true, never>;
     // (undocumented)
     static ɵfac: i0.ɵɵFactoryDeclaration<VfCarouselNextDirective, never>;
 }
 
 // @public (undocumented)
 export class VfCarouselPreviousDirective {
-    constructor(root: VfCarouselRootDirective);
+    // (undocumented)
+    activate(event: MouseEvent): void;
+    // (undocumented)
+    readonly disabled: InputSignalWithTransform<boolean, unknown>;
     // (undocumented)
     readonly root: VfCarouselRootDirective;
     // (undocumented)
-    static ɵdir: i0.ɵɵDirectiveDeclaration<VfCarouselPreviousDirective, "button[vfCarouselPrevious]", never, {}, {}, never, never, true, never>;
+    unavailable(): boolean;
+    // (undocumented)
+    static ɵdir: i0.ɵɵDirectiveDeclaration<VfCarouselPreviousDirective, "button[vfCarouselPrevious]", never, {
+        "disabled": {
+            "alias": "disabled";
+            "required": false;
+            "isSignal": true;
+        };
+    }, {}, never, never, true, never>;
     // (undocumented)
     static ɵfac: i0.ɵɵFactoryDeclaration<VfCarouselPreviousDirective, never>;
 }
 
 // @public (undocumented)
 export class VfCarouselRootDirective {
+    // (undocumented)
+    count(): number;
     // (undocumented)
     current(): number;
     // (undocumented)
@@ -532,7 +556,9 @@ export class VfCarouselRootDirective {
     // (undocumented)
     readonly indexChange: OutputEmitterRef<number>;
     // (undocumented)
-    set(v: number): void;
+    position(slide: VfCarouselSlideDirective): number;
+    // (undocumented)
+    set(value: number): void;
     // (undocumented)
     static ɵdir: i0.ɵɵDirectiveDeclaration<VfCarouselRootDirective, "[vfCarouselRoot]", never, {
         "index": {
@@ -547,13 +573,15 @@ export class VfCarouselRootDirective {
         };
     }, {
         "indexChange": "indexChange";
-    }, never, never, true, never>;
+    }, ["slides"], never, true, never>;
     // (undocumented)
     static ɵfac: i0.ɵɵFactoryDeclaration<VfCarouselRootDirective, never>;
 }
 
 // @public (undocumented)
 export class VfCarouselSlideDirective {
+    // (undocumented)
+    readonly root: VfCarouselRootDirective;
     // (undocumented)
     static ɵdir: i0.ɵɵDirectiveDeclaration<VfCarouselSlideDirective, "[vfCarouselSlide]", never, {}, {}, never, never, true, never>;
     // (undocumented)

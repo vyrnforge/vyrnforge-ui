@@ -248,11 +248,17 @@ export interface CarouselRootProps extends ComponentPropsWithoutRef<'section'> {
     // (undocumented)
     index?: number;
     // (undocumented)
-    onIndexChange?(i: number): void;
+    onIndexChange?(index: number): void;
+    slideCount?: number;
 }
 
 // @public (undocumented)
-export const CarouselSlide: ForwardRefExoticComponent<Omit<DetailedHTMLProps<HTMLAttributes<HTMLDivElement>, HTMLDivElement>, "ref"> & RefAttributes<HTMLDivElement>>;
+export const CarouselSlide: ForwardRefExoticComponent<CarouselSlideProps & RefAttributes<HTMLDivElement>>;
+
+// @public (undocumented)
+export interface CarouselSlideProps extends ComponentPropsWithoutRef<'div'> {
+    position?: number;
+}
 
 // @public (undocumented)
 export const CarouselViewport: ForwardRefExoticComponent<Omit<DetailedHTMLProps<HTMLAttributes<HTMLDivElement>, HTMLDivElement>, "ref"> & RefAttributes<HTMLDivElement>>;

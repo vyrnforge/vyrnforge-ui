@@ -56,8 +56,14 @@ const Collection = defineComponent({
         emit('select', next);
       },
     });
-    provide(PositionKey, computed(() => null));
-    provide(OffsetKey, computed(() => null));
+    provide(
+      PositionKey,
+      computed(() => null),
+    );
+    provide(
+      OffsetKey,
+      computed(() => null),
+    );
     return () => slots.default?.();
   },
 });
@@ -65,7 +71,10 @@ const Collection = defineComponent({
 const ViewportOffset = defineComponent({
   props: { offset: { type: Number, required: true } },
   setup(props, { slots }) {
-    provide(OffsetKey, computed(() => props.offset));
+    provide(
+      OffsetKey,
+      computed(() => props.offset),
+    );
     return () => slots.default?.();
   },
 });
@@ -73,7 +82,10 @@ const ViewportOffset = defineComponent({
 const SlidePosition = defineComponent({
   props: { position: { type: Number, required: true } },
   setup(props, { slots }) {
-    provide(PositionKey, computed(() => props.position));
+    provide(
+      PositionKey,
+      computed(() => props.position),
+    );
     return () => slots.default?.();
   },
 });
@@ -100,30 +112,41 @@ export const CarouselRoot = defineComponent({
             const slides = parts(viewportSlots?.default?.() ?? []);
             const offset = inferredCount;
             inferredCount += slides.filter((slide) => slide.type === CarouselSlide).length;
-            return h(ViewportOffset, { key: node.key ?? index, offset }, {
-              default: () => h(CarouselViewport, node.props, { default: () => slides }),
-            });
+            return h(
+              ViewportOffset,
+              { key: node.key ?? index, offset },
+              {
+                default: () => h(CarouselViewport, node.props, { default: () => slides }),
+              },
+            );
           });
       const count = props.slideCount ?? inferredCount;
       const index = bounded(props.index ?? internalIndex.value, count);
-      return h(Collection, {
-        count, index, explicit,
-        onSelect(value: number) {
-          if (props.index === undefined) internalIndex.value = value;
-          emit('update:index', value);
-        },
-      }, {
-        default: () => h(
-          'section',
-          {
-            ...attrs,
-            role: 'region',
-            'aria-roledescription': attrs['aria-roledescription'] ?? 'carousel',
-            'data-vf-carousel-root': '',
+      return h(
+        Collection,
+        {
+          count,
+          index,
+          explicit,
+          onSelect(value: number) {
+            if (props.index === undefined) internalIndex.value = value;
+            emit('update:index', value);
           },
-          content,
-        ),
-      });
+        },
+        {
+          default: () =>
+            h(
+              'section',
+              {
+                ...attrs,
+                role: 'region',
+                'aria-roledescription': attrs['aria-roledescription'] ?? 'carousel',
+                'data-vf-carousel-root': '',
+              },
+              content,
+            ),
+        },
+      );
     };
   },
 });
@@ -143,11 +166,13 @@ export const CarouselViewport = defineComponent({
       return h(
         'div',
         { ...attrs, 'data-vf-carousel-viewport': '' },
-        context.explicit.value ? children : parts(children).map((node) =>
-          node.type === CarouselSlide
-            ? h(SlidePosition, { key: node.key ?? position, position: position++ }, { default: () => node })
-            : node,
-        ),
+        context.explicit.value
+          ? children
+          : parts(children).map((node) =>
+              node.type === CarouselSlide
+                ? h(SlidePosition, { key: node.key ?? position, position: position++ }, { default: () => node })
+                : node,
+            ),
       );
     };
   },
@@ -162,8 +187,16 @@ export const CarouselSlide = defineComponent({
     const inferredPosition = inject(PositionKey, null);
     return () => {
       const position = context.explicit.value ? props.position : inferredPosition?.value;
-      if (position === null || position === undefined || !Number.isInteger(position) || position < 0 || position >= context.count.value) {
-        throw new Error('Carousel slides require a valid position in the root collection; use slideCount and position for wrapped slides.');
+      if (
+        position === null ||
+        position === undefined ||
+        !Number.isInteger(position) ||
+        position < 0 ||
+        position >= context.count.value
+      ) {
+        throw new Error(
+          'Carousel slides require a valid position in the root collection; use slideCount and position for wrapped slides.',
+        );
       }
       if (!context.explicit.value && props.position !== undefined) {
         throw new Error('Carousel slide position requires root slideCount.');
