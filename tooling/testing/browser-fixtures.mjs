@@ -110,8 +110,8 @@ async function prepareVue({ root, outDir, definition, stylesheet, config, fixtur
   });
 }
 
-function angularDocument({ selector, stylesheet }) {
-  return `<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width"><link rel="stylesheet" href="./${stylesheet}"></head><body><${selector}></${selector}></body></html>`;
+function angularDocument({ selector, stylesheet, title }) {
+  return `<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width"><link rel="stylesheet" href="./${stylesheet}"><title>${title}</title></head><body><${selector}></${selector}></body></html>`;
 }
 
 async function prepareAngular({ root, outDir, definition, stylesheet, config, fixtureModule, fixturePath }) {
@@ -131,7 +131,7 @@ async function prepareAngular({ root, outDir, definition, stylesheet, config, fi
   ];
   const html = await renderApplication(
     (context) => bootstrapApplication(RootComponent, { providers }, context),
-    { document: angularDocument({ selector: config.selector, stylesheet }) },
+    { document: angularDocument({ selector: config.selector, stylesheet, title: definition.title }) },
   );
   await writeFile(
     path.join(outDir, 'angular.html'),
