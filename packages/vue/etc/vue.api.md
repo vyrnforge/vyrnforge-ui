@@ -280,14 +280,26 @@ export type ButtonSize = 'sm' | 'md' | 'lg';
 export type ButtonVariant = 'primary' | 'secondary' | 'ghost';
 
 // @public (undocumented)
-export const CarouselNext: DefineComponent<    {}, () => VNode<RendererNode, RendererElement, {
+export const CarouselNext: DefineComponent<ExtractPropTypes<    {
+disabled: BooleanConstructor;
+}>, () => VNode<RendererNode, RendererElement, {
 [key: string]: any;
-}>, {}, {}, {}, ComponentOptionsMixin, ComponentOptionsMixin, {}, string, PublicProps, Readonly<{}> & Readonly<{}>, {}, {}, {}, {}, string, ComponentProvideOptions, true, {}, any>;
+}>, {}, {}, {}, ComponentOptionsMixin, ComponentOptionsMixin, {}, string, PublicProps, Readonly<ExtractPropTypes<    {
+disabled: BooleanConstructor;
+}>> & Readonly<{}>, {
+disabled: boolean;
+}, {}, {}, {}, string, ComponentProvideOptions, true, {}, any>;
 
 // @public (undocumented)
-export const CarouselPrevious: DefineComponent<    {}, () => VNode<RendererNode, RendererElement, {
+export const CarouselPrevious: DefineComponent<ExtractPropTypes<    {
+disabled: BooleanConstructor;
+}>, () => VNode<RendererNode, RendererElement, {
 [key: string]: any;
-}>, {}, {}, {}, ComponentOptionsMixin, ComponentOptionsMixin, {}, string, PublicProps, Readonly<{}> & Readonly<{}>, {}, {}, {}, {}, string, ComponentProvideOptions, true, {}, any>;
+}>, {}, {}, {}, ComponentOptionsMixin, ComponentOptionsMixin, {}, string, PublicProps, Readonly<ExtractPropTypes<    {
+disabled: BooleanConstructor;
+}>> & Readonly<{}>, {
+disabled: boolean;
+}, {}, {}, {}, string, ComponentProvideOptions, true, {}, any>;
 
 // @public (undocumented)
 export const CarouselRoot: DefineComponent<ExtractPropTypes<    {
@@ -296,6 +308,7 @@ defaultIndex: {
 type: NumberConstructor;
 default: number;
 };
+slideCount: NumberConstructor;
 }>, () => VNode<RendererNode, RendererElement, {
 [key: string]: any;
 }>, {}, {}, {}, ComponentOptionsMixin, ComponentOptionsMixin, "update:index"[], "update:index", PublicProps, Readonly<ExtractPropTypes<    {
@@ -304,6 +317,7 @@ defaultIndex: {
 type: NumberConstructor;
 default: number;
 };
+slideCount: NumberConstructor;
 }>> & Readonly<{
 "onUpdate:index"?: (...args: any[]) => any;
 }>, {
@@ -311,9 +325,13 @@ defaultIndex: number;
 }, {}, {}, {}, string, ComponentProvideOptions, true, {}, any>;
 
 // @public (undocumented)
-export const CarouselSlide: DefineComponent<    {}, () => VNode<RendererNode, RendererElement, {
+export const CarouselSlide: DefineComponent<ExtractPropTypes<    {
+position: NumberConstructor;
+}>, () => VNode<RendererNode, RendererElement, {
 [key: string]: any;
-}>, {}, {}, {}, ComponentOptionsMixin, ComponentOptionsMixin, {}, string, PublicProps, Readonly<{}> & Readonly<{}>, {}, {}, {}, {}, string, ComponentProvideOptions, true, {}, any>;
+}>, {}, {}, {}, ComponentOptionsMixin, ComponentOptionsMixin, {}, string, PublicProps, Readonly<ExtractPropTypes<    {
+position: NumberConstructor;
+}>> & Readonly<{}>, {}, {}, {}, {}, string, ComponentProvideOptions, true, {}, any>;
 
 // @public (undocumented)
 export const CarouselViewport: DefineComponent<    {}, () => VNode<RendererNode, RendererElement, {
