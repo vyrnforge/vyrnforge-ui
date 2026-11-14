@@ -2,26 +2,55 @@
   "schemaVersion": 1,
   "component": "segmented-control",
   "reviewStatus": "review-required",
-  "nativeBaseline": { "kind": "composite", "reference": "native radio group for mutually exclusive choices" },
+  "nativeBaseline": {
+    "kind": "native",
+    "reference": "HTML radio inputs with common group name and associated labels"
+  },
   "wcag": {
     "target": "2.2 AA",
     "status": "review-required",
-    "criteria": ["1.3.1", "2.1.1", "2.4.3", "2.4.7", "2.5.8", "4.1.2"]
+    "criteria": [
+      "1.3.1",
+      "2.1.1",
+      "2.4.3",
+      "2.4.7",
+      "2.5.8",
+      "4.1.2"
+    ]
   },
-  "aria": { "status": "mapped", "apgPattern": "radio" },
-  "interaction": { "keyboard": "managed", "focus": "roving-tabindex", "directionality": "logical" },
+  "aria": {
+    "status": "mapped",
+    "apgPattern": "radio"
+  },
+  "interaction": {
+    "keyboard": "native",
+    "focus": "native",
+    "directionality": "platform"
+  },
   "ownership": {
-    "library": ["Maintain one selected value and one keyboard entry point; reconcile direction and disabled state."],
-    "consumer": ["Author choice names and group label; choose meaningful values."]
+    "library": [
+      "Compose native radio controls in framework ports; reconcile controlled checked state; expose visual focus and checked state."
+    ],
+    "consumer": [
+      "Author choice labels and group label; supply a root form name when needed, and distinct native names for Web/Elements groups."
+    ]
   },
-  "forms": { "status": "review-required" },
-  "visualAccessibility": { "status": "component-specific" },
-  "ssrHydration": { "status": "contract-required" },
-  "evidence": { "browser": "required", "assistiveTechnology": "review-required" },
+  "forms": {
+    "status": "review-required"
+  },
+  "visualAccessibility": {
+    "status": "component-specific"
+  },
+  "ssrHydration": {
+    "status": "contract-required"
+  },
+  "evidence": {
+    "browser": "required",
+    "assistiveTechnology": "review-required"
+  },
   "profileVariability": [],
   "notes": [
-    "Evaluate native radio composition before preserving custom radio behavior.",
-    "Some ports expose multiple initial tab stops.",
+    "Native radios replace synthetic keyboard navigation and roving tabindex. Browser-specific radio behavior is the platform baseline.",
     "Audit mapping is provisional; not a conformance claim."
   ]
 }
