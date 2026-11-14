@@ -1470,7 +1470,7 @@ export const PopoverTrigger: DefineComponent<    {}, () => VNode<RendererNode, R
 // @public (undocumented)
 export const PreviewCardContent: DefineComponent<    {}, () => VNode<RendererNode, RendererElement, {
 [key: string]: any;
-}> | null, {}, {}, {}, ComponentOptionsMixin, ComponentOptionsMixin, {}, string, PublicProps, Readonly<{}> & Readonly<{}>, {}, {}, {}, {}, string, ComponentProvideOptions, true, {}, any>;
+}>, {}, {}, {}, ComponentOptionsMixin, ComponentOptionsMixin, {}, string, PublicProps, Readonly<{}> & Readonly<{}>, {}, {}, {}, {}, string, ComponentProvideOptions, true, {}, any>;
 
 // @public (undocumented)
 export const PreviewCardRoot: DefineComponent<ExtractPropTypes<    {
@@ -1486,6 +1486,15 @@ placement: {
 type: PropType<FloatingPlacement>;
 default: string;
 };
+openDelay: {
+type: NumberConstructor;
+default: number;
+};
+closeDelay: {
+type: NumberConstructor;
+default: number;
+};
+contentId: StringConstructor;
 }>, () => VNode<RendererNode, RendererElement, {
 [key: string]: any;
 }>[] | undefined, {}, {}, {}, ComponentOptionsMixin, ComponentOptionsMixin, ("update:modelValue" | "openChange")[], "update:modelValue" | "openChange", PublicProps, Readonly<ExtractPropTypes<    {
@@ -1501,6 +1510,15 @@ placement: {
 type: PropType<FloatingPlacement>;
 default: string;
 };
+openDelay: {
+type: NumberConstructor;
+default: number;
+};
+closeDelay: {
+type: NumberConstructor;
+default: number;
+};
+contentId: StringConstructor;
 }>> & Readonly<{
 "onUpdate:modelValue"?: (...args: any[]) => any;
 onOpenChange?: (...args: any[]) => any;
@@ -1508,12 +1526,16 @@ onOpenChange?: (...args: any[]) => any;
 modelValue: boolean;
 defaultOpen: boolean;
 placement: FloatingPlacement;
+openDelay: number;
+closeDelay: number;
 }, {}, {}, {}, string, ComponentProvideOptions, true, {}, any>;
 
 // @public (undocumented)
 export const PreviewCardTrigger: DefineComponent<    {}, () => VNode<RendererNode, RendererElement, {
 [key: string]: any;
-}>, {}, {}, {}, ComponentOptionsMixin, ComponentOptionsMixin, {}, string, PublicProps, Readonly<{}> & Readonly<{}>, {}, {}, {}, {}, string, ComponentProvideOptions, true, {}, any>;
+}> | VNode<RendererNode, RendererElement, {
+[key: string]: any;
+}>[], {}, {}, {}, ComponentOptionsMixin, ComponentOptionsMixin, {}, string, PublicProps, Readonly<{}> & Readonly<{}>, {}, {}, {}, {}, string, ComponentProvideOptions, true, {}, any>;
 
 // @public (undocumented)
 export const Radio: DefineComponent<    {}, () => VNode<RendererNode, RendererElement, {

@@ -57,8 +57,9 @@ export class VfPreviewCardElement extends HTMLElementBase {
 
   #part(selector: string): HTMLElement | null {
     return (
-      Array.from(this.querySelectorAll<HTMLElement>(selector)).find((node) => node.closest('vf-preview-card') === this) ??
-      null
+      Array.from(this.querySelectorAll<HTMLElement>(selector)).find(
+        (node) => node.closest('vf-preview-card') === this,
+      ) ?? null
     );
   }
 
@@ -159,7 +160,9 @@ export class VfPreviewCardElement extends HTMLElementBase {
   };
 }
 
-export function definePreviewCardElement(registry: CustomElementRegistry | undefined = globalThis.customElements): void {
+export function definePreviewCardElement(
+  registry: CustomElementRegistry | undefined = globalThis.customElements,
+): void {
   if (!registry) throw new Error('VyrnForge PreviewCard registration requires a CustomElementRegistry.');
   if (!registry.get('vf-preview-card')) registry.define('vf-preview-card', VfPreviewCardElement);
 }

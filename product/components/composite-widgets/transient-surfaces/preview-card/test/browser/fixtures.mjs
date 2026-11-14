@@ -23,21 +23,35 @@ export async function createReactStory() {
   const { createElement: h, Fragment, useEffect } = await import('react');
   const { PreviewCardRoot, PreviewCardTrigger, PreviewCardContent } = await import('@vyrnforge/react/preview-card');
   function Ready() {
-    useEffect(() => { document.body.dataset.previewReady = 'true'; }, []);
+    useEffect(() => {
+      document.body.dataset.previewReady = 'true';
+    }, []);
     return null;
   }
-  return h(Fragment, null,
+  return h(
+    Fragment,
+    null,
     h(Ready),
-    h(PreviewCardRoot, { contentId: 'c' },
+    h(
+      PreviewCardRoot,
+      { contentId: 'c' },
       h(PreviewCardTrigger, null, h('a', { id: 't', href: '#profile' }, 'Profile')),
-      h(PreviewCardContent, { role: 'region', 'aria-label': 'Profile preview' },
+      h(
+        PreviewCardContent,
+        { role: 'region', 'aria-label': 'Profile preview' },
         h('p', null, 'Profile preview'),
         h('button', { id: 'action' }, 'Save preview'),
       ),
     ),
-    h(PreviewCardRoot, { contentId: 'controlled-content', open: false, onOpenChange: (next) => {
-      document.body.dataset.previewRequest = String(next);
-    } },
+    h(
+      PreviewCardRoot,
+      {
+        contentId: 'controlled-content',
+        open: false,
+        onOpenChange: (next) => {
+          document.body.dataset.previewRequest = String(next);
+        },
+      },
       h(PreviewCardTrigger, null, h('a', { href: '#controlled' }, 'Controlled preview')),
       h(PreviewCardContent, { role: 'region', 'aria-label': 'Controlled details' }, 'Controlled details'),
     ),
@@ -50,22 +64,34 @@ export async function createVueStory() {
   const { PreviewCardRoot, PreviewCardTrigger, PreviewCardContent } = await import('@vyrnforge/vue/preview-card');
   return createSSRApp({
     setup() {
-      onMounted(() => { document.body.dataset.previewReady = 'true'; });
-      return () => h('div', [
-        h(PreviewCardRoot, { contentId: 'c' }, () => [
-          h(PreviewCardTrigger, null, () => h('a', { id: 't', href: '#profile' }, 'Profile')),
-          h(PreviewCardContent, { role: 'region', 'aria-label': 'Profile preview' }, () => [
-            h('p', null, 'Profile preview'), h('button', { id: 'action' }, 'Save preview'),
+      onMounted(() => {
+        document.body.dataset.previewReady = 'true';
+      });
+      return () =>
+        h('div', [
+          h(PreviewCardRoot, { contentId: 'c' }, () => [
+            h(PreviewCardTrigger, null, () => h('a', { id: 't', href: '#profile' }, 'Profile')),
+            h(PreviewCardContent, { role: 'region', 'aria-label': 'Profile preview' }, () => [
+              h('p', null, 'Profile preview'),
+              h('button', { id: 'action' }, 'Save preview'),
+            ]),
           ]),
-        ]),
-        h(PreviewCardRoot, { contentId: 'controlled-content', modelValue: false, 'onUpdate:modelValue': (next) => {
-          document.body.dataset.previewRequest = String(next);
-        } }, () => [
-          h(PreviewCardTrigger, null, () => h('a', { href: '#controlled' }, 'Controlled preview')),
-          h(PreviewCardContent, { role: 'region', 'aria-label': 'Controlled details' }, () => 'Controlled details'),
-        ]),
-        h('button', { id: 'outside' }, 'Outside'),
-      ]);
+          h(
+            PreviewCardRoot,
+            {
+              contentId: 'controlled-content',
+              modelValue: false,
+              'onUpdate:modelValue': (next) => {
+                document.body.dataset.previewRequest = String(next);
+              },
+            },
+            () => [
+              h(PreviewCardTrigger, null, () => h('a', { href: '#controlled' }, 'Controlled preview')),
+              h(PreviewCardContent, { role: 'region', 'aria-label': 'Controlled details' }, () => 'Controlled details'),
+            ],
+          ),
+          h('button', { id: 'outside' }, 'Outside'),
+        ]);
     },
   });
 }
@@ -73,10 +99,17 @@ export async function createVueStory() {
 export async function createAngularStory() {
   await import('@angular/compiler');
   const { Component, afterNextRender } = await import('@angular/core');
-  const { VfPreviewCardRootDirective, VfPreviewCardTriggerDirective, VfPreviewCardContentDirective } = await import('@vyrnforge/angular/preview-card');
+  const { VfPreviewCardRootDirective, VfPreviewCardTriggerDirective, VfPreviewCardContentDirective } =
+    await import('@vyrnforge/angular/preview-card');
   class PreviewCardTestApp {
-    constructor() { afterNextRender(() => { document.body.dataset.previewReady = 'true'; }); }
-    request(next) { document.body.dataset.previewRequest = String(next); }
+    constructor() {
+      afterNextRender(() => {
+        document.body.dataset.previewReady = 'true';
+      });
+    }
+    request(next) {
+      document.body.dataset.previewRequest = String(next);
+    }
   }
   Component({
     selector: 'vf-preview-card-test',
@@ -100,10 +133,12 @@ export async function createAngularStory() {
 export async function createElementsStory({ client }) {
   return {
     body: elements,
-    activate: client ? async () => {
-      const { definePreviewCardElement } = await import('@vyrnforge/elements/preview-card');
-      definePreviewCardElement();
-      document.body.dataset.previewReady = 'true';
-    } : undefined,
+    activate: client
+      ? async () => {
+          const { definePreviewCardElement } = await import('@vyrnforge/elements/preview-card');
+          definePreviewCardElement();
+          document.body.dataset.previewReady = 'true';
+        }
+      : undefined,
   };
 }

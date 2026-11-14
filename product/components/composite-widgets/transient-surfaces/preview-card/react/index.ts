@@ -183,7 +183,11 @@ export function PreviewCardTrigger({ children }: PreviewCardTriggerProps) {
     },
     onBlur: (event) => {
       props.onBlur?.(event);
-      if (!event.currentTarget.contains(event.relatedTarget) && !context.contentRef.current?.contains(event.relatedTarget)) context.activity('focus', false, context.closeDelay);
+      if (
+        !event.currentTarget.contains(event.relatedTarget) &&
+        !context.contentRef.current?.contains(event.relatedTarget)
+      )
+        context.activity('focus', false, context.closeDelay);
     },
   } as HTMLAttributes<HTMLElement> & { ref: Ref<HTMLElement> });
 }
@@ -216,7 +220,10 @@ export function PreviewCardContent(props: PreviewCardContentProps): ReactNode {
     },
     onBlur(event) {
       props.onBlur?.(event);
-      if (!event.currentTarget.contains(event.relatedTarget) && !context.anchorRef.current?.contains(event.relatedTarget)) {
+      if (
+        !event.currentTarget.contains(event.relatedTarget) &&
+        !context.anchorRef.current?.contains(event.relatedTarget)
+      ) {
         context.activity('focus', false, context.closeDelay);
       }
     },

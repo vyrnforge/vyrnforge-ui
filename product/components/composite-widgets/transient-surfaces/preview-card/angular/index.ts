@@ -100,7 +100,10 @@ export class VfPreviewCardTriggerDirective implements OnDestroy {
     this.root.activity('trigger', active, active ? this.root.openDelay() : this.root.closeDelay());
   }
   blur(event: FocusEvent): void {
-    if (!this.element.nativeElement.contains(event.relatedTarget as Node | null) && !this.root.content?.contains(event.relatedTarget as Node | null)) {
+    if (
+      !this.element.nativeElement.contains(event.relatedTarget as Node | null) &&
+      !this.root.content?.contains(event.relatedTarget as Node | null)
+    ) {
       this.root.activity('focus', false, this.root.closeDelay());
     }
   }

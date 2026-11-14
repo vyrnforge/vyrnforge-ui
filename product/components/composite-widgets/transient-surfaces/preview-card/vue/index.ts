@@ -147,7 +147,10 @@ export const PreviewCardTrigger = defineComponent({
             if (!event.defaultPrevented) context.activity('focus', true, 0);
           },
           onBlur: (event: FocusEvent) => {
-            if (!(event.currentTarget as HTMLElement).contains(event.relatedTarget as Node | null) && !context.content.value?.contains(event.relatedTarget as Node | null)) {
+            if (
+              !(event.currentTarget as HTMLElement).contains(event.relatedTarget as Node | null) &&
+              !context.content.value?.contains(event.relatedTarget as Node | null)
+            ) {
               context.activity('focus', false, context.closeDelay.value);
             }
           },
