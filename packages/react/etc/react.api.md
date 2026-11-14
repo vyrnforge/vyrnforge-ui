@@ -2585,10 +2585,7 @@ export interface PasswordFieldToggleProps extends ComponentPropsWithoutRef<'butt
 export const PopoverContent: ForwardRefExoticComponent<PopoverContentProps & RefAttributes<HTMLDivElement>>;
 
 // @public (undocumented)
-export interface PopoverContentProps extends HTMLAttributes<HTMLDivElement> {
-    // (undocumented)
-    portal?: boolean;
-}
+export type PopoverContentProps = Omit<HTMLAttributes<HTMLDivElement>, 'id' | 'role' | 'popover'>;
 
 // @public (undocumented)
 export function PopoverRoot(input: PopoverRootProps): FunctionComponentElement<ProviderProps<PopoverContextValue | null>>;
@@ -2597,6 +2594,10 @@ export function PopoverRoot(input: PopoverRootProps): FunctionComponentElement<P
 export interface PopoverRootProps {
     // (undocumented)
     children?: ReactNode;
+    // (undocumented)
+    contentId?: string;
+    // (undocumented)
+    contentRole?: 'dialog' | 'region';
     // (undocumented)
     defaultOpen?: boolean;
     // (undocumented)

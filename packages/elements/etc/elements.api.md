@@ -4,7 +4,7 @@
 
 ```ts
 
-import { FloatingPlacement } from '@vyrnforge/web/floating-positioning';
+import type { FloatingPlacement } from '@vyrnforge/web/floating-positioning';
 import { IconDefinition } from '@vyrnforge/web/icon';
 import { IconShape } from '@vyrnforge/web/icon';
 import { IconSize } from '@vyrnforge/web/icon';
