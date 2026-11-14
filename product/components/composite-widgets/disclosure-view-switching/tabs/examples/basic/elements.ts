@@ -3,7 +3,9 @@ import '@vyrnforge/web/styles/tabs.css';
 
 defineTabsElement();
 
-document.querySelector('#root')!.innerHTML = `
+const mount = document.querySelector('#root');
+if (!mount) throw new Error('Example mount is missing.');
+mount.innerHTML = `
   <vf-tabs id="example-tabs" default-value="overview">
     <div data-vf-tabs-list aria-label="Account sections">
       <button data-vf-tabs-tab data-vf-value="overview">Overview</button>

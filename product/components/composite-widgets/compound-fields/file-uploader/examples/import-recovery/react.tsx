@@ -182,4 +182,6 @@ function App() {
 }
 
 document.body.dataset.importAttempts = '0';
-createRoot(document.querySelector('#root')!).render(<App />);
+const mount = document.querySelector('#root');
+if (!mount) throw new Error('Example mount is missing.');
+createRoot(mount).render(<App />);

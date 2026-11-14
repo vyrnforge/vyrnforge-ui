@@ -60,7 +60,7 @@ export default defineConfig(
     ]
   },
   {
-    files: ['**/*.js', '**/*.mjs'],
+    files: ['**/*.js', '**/*.mjs', '**/*.cjs'],
     languageOptions: {
       ecmaVersion: 'latest',
       sourceType: 'module'
@@ -87,6 +87,32 @@ export default defineConfig(
       '@typescript-eslint/consistent-type-imports': ['error', { prefer: 'type-imports' }],
       '@typescript-eslint/no-explicit-any': 'error',
       '@typescript-eslint/no-non-null-assertion': 'error'
+    }
+  },
+  {
+    // Product units own the source; their projections are checked separately by package TypeScript builds.
+    files: ['product/components/composite-widgets/**/*.{ts,tsx,mts,cts}'],
+    extends: [tseslint.configs.recommended],
+    languageOptions: {
+      parserOptions: {
+        tsconfigRootDir: import.meta.dirname,
+        onUnsupportedTypeScriptVersion: 'error'
+      }
+    },
+    linterOptions: {
+      reportUnusedDisableDirectives: 'error'
+    },
+    rules: {
+      '@typescript-eslint/consistent-type-imports': ['error', { prefer: 'type-imports' }],
+      '@typescript-eslint/no-explicit-any': 'error',
+      '@typescript-eslint/no-non-null-assertion': 'error'
+    }
+  },
+  {
+    // Type-only public entrypoint assertions intentionally use typeof import().
+    files: ['product/components/composite-widgets/**/test/conformance/public-api.types.ts'],
+    rules: {
+      '@typescript-eslint/consistent-type-imports': ['error', { prefer: 'type-imports', disallowTypeAnnotations: false }]
     }
   }
 );

@@ -122,4 +122,6 @@ function App() {
 }
 
 document.body.dataset.deleteRequests = '0';
-createRoot(document.querySelector('#root')!).render(<App />);
+const mount = document.querySelector('#root');
+if (!mount) throw new Error('Example mount is missing.');
+createRoot(mount).render(<App />);
