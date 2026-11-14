@@ -2,7 +2,10 @@
   "schemaVersion": 1,
   "component": "multi-select",
   "reviewStatus": "review-required",
-  "nativeBaseline": { "kind": "composite", "reference": "listbox with multiple selection and explicit option semantics" },
+  "nativeBaseline": {
+    "kind": "composite",
+    "reference": "listbox with multiple selection and explicit option semantics"
+  },
   "wcag": {
     "target": "2.2 AA",
     "status": "review-required",
