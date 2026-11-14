@@ -1,12 +1,49 @@
 <div data-vf-tabs-root data-vf-orientation="horizontal" data-vf-activation="automatic">
   <div data-vf-tabs-list role="tablist" aria-label="Account sections">
-    <button id="overview-tab" type="button" role="tab" data-vf-tabs-tab aria-selected="true" aria-controls="overview-panel" tabindex="0">Overview</button>
-    <button id="billing-tab" type="button" role="tab" data-vf-tabs-tab aria-selected="false" aria-controls="billing-panel" tabindex="-1" disabled>Billing</button>
-    <button id="security-tab" type="button" role="tab" data-vf-tabs-tab aria-selected="false" aria-controls="security-panel" tabindex="-1">Security</button>
+    <button
+      id="overview-tab"
+      type="button"
+      role="tab"
+      data-vf-tabs-tab
+      aria-selected="true"
+      aria-controls="overview-panel"
+      tabindex="0"
+    >
+      Overview
+    </button>
+    <button
+      id="billing-tab"
+      type="button"
+      role="tab"
+      data-vf-tabs-tab
+      aria-selected="false"
+      aria-controls="billing-panel"
+      tabindex="-1"
+      disabled
+    >
+      Billing
+    </button>
+    <button
+      id="security-tab"
+      type="button"
+      role="tab"
+      data-vf-tabs-tab
+      aria-selected="false"
+      aria-controls="security-panel"
+      tabindex="-1"
+    >
+      Security
+    </button>
   </div>
-  <div id="overview-panel" role="tabpanel" data-vf-tabs-panel aria-labelledby="overview-tab" tabindex="0">Overview content</div>
-  <div id="billing-panel" role="tabpanel" data-vf-tabs-panel aria-labelledby="billing-tab" tabindex="0" hidden>Billing content</div>
-  <div id="security-panel" role="tabpanel" data-vf-tabs-panel aria-labelledby="security-tab" tabindex="0" hidden>Security content</div>
+  <div id="overview-panel" role="tabpanel" data-vf-tabs-panel aria-labelledby="overview-tab" tabindex="0">
+    Overview content
+  </div>
+  <div id="billing-panel" role="tabpanel" data-vf-tabs-panel aria-labelledby="billing-tab" tabindex="0" hidden>
+    Billing content
+  </div>
+  <div id="security-panel" role="tabpanel" data-vf-tabs-panel aria-labelledby="security-tab" tabindex="0" hidden>
+    Security content
+  </div>
 </div>
 <script>
   const root = document.querySelector('[data-vf-tabs-root]');

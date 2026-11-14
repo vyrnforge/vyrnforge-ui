@@ -43,9 +43,7 @@ export class VfPasswordFieldToggleDirective {
   readonly showLabel = input.required<string>();
   readonly hideLabel = input.required<string>();
 
-  readonly stateLabel = computed(() =>
-    this.root.visible() ? this.hideLabel() : this.showLabel(),
-  );
+  readonly stateLabel = computed(() => (this.root.visible() ? this.hideLabel() : this.showLabel()));
 
   constructor(readonly root: VfPasswordFieldRootDirective) {}
 }

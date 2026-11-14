@@ -1,12 +1,4 @@
-import {
-  computed,
-  defineComponent,
-  h,
-  inject,
-  provide,
-  ref,
-  type InjectionKey,
-} from 'vue';
+import { computed, defineComponent, h, inject, provide, ref, type InjectionKey } from 'vue';
 
 interface OTPFieldContextValue {
   value(): string;
@@ -43,10 +35,7 @@ export const OTPFieldRoot = defineComponent({
     );
 
     const setFrom = (index: number, raw: string) => {
-      const inserted = Array.from(raw.replace(/\s/g, '')).slice(
-        0,
-        Math.max(0, props.length - index),
-      );
+      const inserted = Array.from(raw.replace(/\s/g, '')).slice(0, Math.max(0, props.length - index));
       const next = Array.from(current.value);
       if (inserted.length === 0) {
         next[index] = ' ';
@@ -67,12 +56,7 @@ export const OTPFieldRoot = defineComponent({
       setFrom,
     });
 
-    return () =>
-      h(
-        'div',
-        { ...attrs, role: 'group', 'data-vf-otp-field-root': '' },
-        slots.default?.(),
-      );
+    return () => h('div', { ...attrs, role: 'group', 'data-vf-otp-field-root': '' }, slots.default?.());
   },
 });
 
@@ -88,12 +72,8 @@ export const OTPFieldInput = defineComponent({
       return h('input', {
         ...attrs,
         inputmode: (attrs.inputmode as string | undefined) ?? 'numeric',
-        autocomplete:
-          (attrs.autocomplete as string | undefined) ??
-          (props.index === 0 ? 'one-time-code' : 'off'),
-        maxlength:
-          (attrs.maxlength as string | number | undefined) ??
-          (props.index === 0 ? otpField.length() : 1),
+        autocomplete: (attrs.autocomplete as string | undefined) ?? (props.index === 0 ? 'one-time-code' : 'off'),
+        maxlength: (attrs.maxlength as string | number | undefined) ?? (props.index === 0 ? otpField.length() : 1),
         value,
         'data-vf-otp-field-input': '',
         onInput: (event: Event) => {

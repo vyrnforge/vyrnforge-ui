@@ -24,7 +24,9 @@ test.describe('SegmentedControl enhanced port behavior', () => {
     test(`${framework} follows radio-group directional navigation and skips disabled items`, async ({ page }) => {
       test.skip(port !== framework, `Running ${port} evidence only`);
       const errors = [];
-      page.on('console', (message) => { if (message.type() === 'error') errors.push(message.text()); });
+      page.on('console', (message) => {
+        if (message.type() === 'error') errors.push(message.text());
+      });
       page.on('pageerror', (error) => errors.push(error.message));
       await page.goto(`/components/segmented-control/${framework}.html`);
 

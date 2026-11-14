@@ -42,7 +42,9 @@ export class VfDisclosureRootDirective {
 })
 export class VfDisclosureTriggerDirective {
   constructor(readonly root: VfDisclosureRootDirective) {}
-  toggle(): void { this.root.setOpen(!this.root.expanded()); }
+  toggle(): void {
+    this.root.setOpen(!this.root.expanded());
+  }
 }
 
 @Directive({

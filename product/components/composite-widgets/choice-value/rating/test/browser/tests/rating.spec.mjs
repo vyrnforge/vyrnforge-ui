@@ -16,7 +16,9 @@ test('rating uses native radio selection', async ({ page }) => {
   expect((await expectNoAxeViolations(page)).violations).toEqual([]);
 });
 
-test('public Rating CSS resolves canonical compact spacing, focus ring, and selected accent in light and dark themes', async ({ page }) => {
+test('public Rating CSS resolves canonical compact spacing, focus ring, and selected accent in light and dark themes', async ({
+  page,
+}) => {
   test.skip(port !== 'web', 'Public CSS resolution evidence is owned by the Web lane.');
   for (const [theme, focusColor, accentColor] of themes) {
     await page.goto('/components/rating/web.html');

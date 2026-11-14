@@ -19,14 +19,19 @@ test('alert dialog is labelled and accessible', async ({ page }) => {
 });
 
 test.describe('STD-11 destructive AlertDialog workflow', () => {
-  test.skip(port !== 'react', 'STD-11 commit-boundary evidence is intentionally bound to the React public entrypoint and deterministic application service.');
+  test.skip(
+    port !== 'react',
+    'STD-11 commit-boundary evidence is intentionally bound to the React public entrypoint and deterministic application service.',
+  );
 
   test('Cancel, Escape, and backdrop interaction do not commit and restore focus predictably', async ({ page }) => {
     await page.goto('/components/alert-dialog/react.html');
 
     let { trigger, dialog } = await openReactAlertDialog(page);
     await expect(page.getByRole('heading', { name: 'Delete “Quarterly planning”?' })).toBeVisible();
-    await expect(page.getByText('This permanently removes 14 shared items from the workspace. There is no self-service restore.')).toBeVisible();
+    await expect(
+      page.getByText('This permanently removes 14 shared items from the workspace. There is no self-service restore.'),
+    ).toBeVisible();
     await expect(page.getByRole('button', { name: 'Cancel' })).toBeFocused();
     await expect(page.locator('body')).toHaveAttribute('data-delete-requests', '0');
 
@@ -70,7 +75,9 @@ test.describe('STD-11 destructive AlertDialog workflow', () => {
     await expect(page.locator('body')).toHaveAttribute('data-last-dismiss-reason', 'escape');
 
     await page.evaluate(() => globalThis.__vfAlertDialogTestService.reject());
-    await expect(page.getByRole('alert')).toHaveText('Deletion failed. Nothing was deleted. Review the consequence and retry.');
+    await expect(page.getByRole('alert')).toHaveText(
+      'Deletion failed. Nothing was deleted. Review the consequence and retry.',
+    );
     await expect(dialog).toBeVisible();
     await expect(action).toBeFocused();
     await expect(page.locator('[data-collection-state]')).toHaveText('Quarterly planning is available.');

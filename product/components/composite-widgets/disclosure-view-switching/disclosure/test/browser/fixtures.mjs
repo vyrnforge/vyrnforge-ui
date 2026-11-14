@@ -7,6 +7,9 @@ export const browserFixture = {
     const root = process.cwd();
     const dir = path.join(root, 'dist/browser-fixtures/components/disclosure');
     await mkdir(dir, { recursive: true });
-    await writeFile(path.join(dir, `${port}.html`), `<!doctype html><html lang="en"><head><title>Disclosure browser fixture</title></head><body><main><h1>Disclosure browser fixture</h1><button id="trigger" aria-expanded="false" aria-controls="panel">Details</button><div id="panel" hidden>Content</div></main><script>trigger.onclick=()=>{const o=trigger.getAttribute('aria-expanded')==='true';trigger.setAttribute('aria-expanded',String(!o));panel.hidden=o}</script></body></html>`);
+    await writeFile(
+      path.join(dir, `${port}.html`),
+      `<!doctype html><html lang="en"><head><title>Disclosure browser fixture</title></head><body><main><h1>Disclosure browser fixture</h1><button id="trigger" aria-expanded="false" aria-controls="panel">Details</button><div id="panel" hidden>Content</div></main><script>trigger.onclick=()=>{const o=trigger.getAttribute('aria-expanded')==='true';trigger.setAttribute('aria-expanded',String(!o));panel.hidden=o}</script></body></html>`,
+    );
   },
 };

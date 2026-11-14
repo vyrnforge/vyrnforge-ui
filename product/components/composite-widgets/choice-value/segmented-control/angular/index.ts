@@ -17,17 +17,18 @@ function itemDisabled(item: HTMLButtonElement): boolean {
 }
 
 function intentForKey(key: string, direction: 'ltr' | 'rtl') {
-  const arrow = key === 'ArrowLeft' ? 'left'
-    : key === 'ArrowRight' ? 'right'
-      : key === 'ArrowUp' ? 'up'
-        : key === 'ArrowDown' ? 'down'
-          : null;
+  const arrow =
+    key === 'ArrowLeft'
+      ? 'left'
+      : key === 'ArrowRight'
+        ? 'right'
+        : key === 'ArrowUp'
+          ? 'up'
+          : key === 'ArrowDown'
+            ? 'down'
+            : null;
   if (!arrow) return null;
-  return navigationIntentForArrow(
-    arrow,
-    arrow === 'left' || arrow === 'right' ? 'horizontal' : 'vertical',
-    direction,
-  );
+  return navigationIntentForArrow(arrow, arrow === 'left' || arrow === 'right' ? 'horizontal' : 'vertical', direction);
 }
 
 @Directive({
@@ -63,7 +64,7 @@ export class VfSegmentedControlRootDirective {
     const items = itemsFor(root);
     const current = items.indexOf(currentItem);
     const next = resolveNavigationIndex(
-      items.map((item) => ({ eligible: !(itemDisabled(item)) })),
+      items.map((item) => ({ eligible: !itemDisabled(item) })),
       current,
       intent,
     );
@@ -85,7 +86,7 @@ export class VfSegmentedControlRootDirective {
     'data-vf-segmented-control-item': '',
     '[attr.data-vf-value]': 'value()',
     '[attr.aria-checked]': 'root.selected() === value()',
-    '[attr.tabindex]': "disabled() ? -1 : root.selected() ? (root.selected() === value() ? 0 : -1) : null",
+    '[attr.tabindex]': 'disabled() ? -1 : root.selected() ? (root.selected() === value() ? 0 : -1) : null',
     '[disabled]': 'disabled()',
     '(click)': 'select()',
   },

@@ -12,7 +12,10 @@ async function openFixture(page) {
 }
 
 test.beforeEach(() => {
-  test.skip(!frameworkPorts.has(port), 'Interactive OTPField behavior is implemented by framework/Elements ports; Web owns CSS only.');
+  test.skip(
+    !frameworkPorts.has(port),
+    'Interactive OTPField behavior is implemented by framework/Elements ports; Web owns CSS only.',
+  );
 });
 
 test('otp field keeps accessible names consumer-authored and exposes one-time-code assistance', async ({ page }) => {

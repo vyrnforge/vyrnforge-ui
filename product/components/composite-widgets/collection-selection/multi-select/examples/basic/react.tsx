@@ -1,1 +1,17 @@
-import{MultiSelectContent,MultiSelectOption,MultiSelectRoot,MultiSelectTrigger}from'@vyrnforge/react/multi-select';export function Example(){return <MultiSelectRoot><MultiSelectTrigger/><MultiSelectContent><MultiSelectOption value="React">React</MultiSelectOption><MultiSelectOption value="Vue">Vue</MultiSelectOption></MultiSelectContent></MultiSelectRoot>;}
+import {
+  MultiSelectContent,
+  MultiSelectOption,
+  MultiSelectRoot,
+  MultiSelectTrigger,
+} from '@vyrnforge/react/multi-select';
+export function Example() {
+  return (
+    <MultiSelectRoot>
+      <MultiSelectTrigger />
+      <MultiSelectContent>
+        <MultiSelectOption value="React">React</MultiSelectOption>
+        <MultiSelectOption value="Vue">Vue</MultiSelectOption>
+      </MultiSelectContent>
+    </MultiSelectRoot>
+  );
+}

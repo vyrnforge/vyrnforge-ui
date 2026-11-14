@@ -18,6 +18,9 @@ export const browserFixture = {
       bundle: true,
       outfile: path.join(dir, 'styles.css'),
     });
-    await writeFile(path.join(dir, `${port}.html`), `<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width"><title>Toggle group browser fixture</title><link rel="stylesheet" href="./styles.css"></head><body><main><h1>Toggle group browser fixture</h1><div role="group" aria-label="Formatting" id="group" data-vf-toggle-group-root><button aria-pressed="false" id="bold" data-vf-toggle-group-item>Bold</button></div></main><script>bold.onclick=()=>bold.setAttribute('aria-pressed',String(bold.getAttribute('aria-pressed')!=='true'))</script></body></html>`);
+    await writeFile(
+      path.join(dir, `${port}.html`),
+      `<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width"><title>Toggle group browser fixture</title><link rel="stylesheet" href="./styles.css"></head><body><main><h1>Toggle group browser fixture</h1><div role="group" aria-label="Formatting" id="group" data-vf-toggle-group-root><button aria-pressed="false" id="bold" data-vf-toggle-group-item>Bold</button></div></main><script>bold.onclick=()=>bold.setAttribute('aria-pressed',String(bold.getAttribute('aria-pressed')!=='true'))</script></body></html>`,
+    );
   },
 };

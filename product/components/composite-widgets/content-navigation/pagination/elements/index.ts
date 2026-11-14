@@ -1,1 +1,14 @@
-const H:typeof HTMLElement=globalThis.HTMLElement??class{}as typeof HTMLElement;export class VfPaginationElement extends H{connectedCallback(){this.setAttribute('role','navigation');this.setAttribute('data-vf-pagination-root','');}}export function definePaginationElement(tag='vf-pagination',registry:CustomElementRegistry|undefined=globalThis.customElements){if(!registry)throw new Error('VyrnForge Pagination registration requires a CustomElementRegistry.');if(!registry.get(tag))registry.define(tag,VfPaginationElement);}
+const H: typeof HTMLElement = globalThis.HTMLElement ?? (class {} as typeof HTMLElement);
+export class VfPaginationElement extends H {
+  connectedCallback() {
+    this.setAttribute('role', 'navigation');
+    this.setAttribute('data-vf-pagination-root', '');
+  }
+}
+export function definePaginationElement(
+  tag = 'vf-pagination',
+  registry: CustomElementRegistry | undefined = globalThis.customElements,
+) {
+  if (!registry) throw new Error('VyrnForge Pagination registration requires a CustomElementRegistry.');
+  if (!registry.get(tag)) registry.define(tag, VfPaginationElement);
+}

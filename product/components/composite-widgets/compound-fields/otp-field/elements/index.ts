@@ -1,5 +1,4 @@
-const HTMLElementBase: typeof HTMLElement =
-  globalThis.HTMLElement ?? (class {} as typeof HTMLElement);
+const HTMLElementBase: typeof HTMLElement = globalThis.HTMLElement ?? (class {} as typeof HTMLElement);
 
 export class VfOtpFieldElement extends HTMLElementBase {
   connectedCallback() {
@@ -32,9 +31,7 @@ export class VfOtpFieldElement extends HTMLElementBase {
   }
 
   private get cells() {
-    return Array.from(
-      this.querySelectorAll<HTMLInputElement>('[data-vf-otp-field-input]'),
-    );
+    return Array.from(this.querySelectorAll<HTMLInputElement>('[data-vf-otp-field-input]'));
   }
 
   private configureCells() {
@@ -52,10 +49,7 @@ export class VfOtpFieldElement extends HTMLElementBase {
 
   private setFrom(index: number, raw: string) {
     const cells = this.cells;
-    const inserted = Array.from(raw.replace(/\s/g, '')).slice(
-      0,
-      Math.max(0, cells.length - index),
-    );
+    const inserted = Array.from(raw.replace(/\s/g, '')).slice(0, Math.max(0, cells.length - index));
 
     if (inserted.length === 0) {
       const cell = cells[index];

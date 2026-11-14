@@ -1,32 +1,59 @@
-import { navigationIntentForArrow, resolveNavigationIndex, type CollectionNavigationArrow, type CollectionNavigationIntent } from '@vyrnforge/core/collection-navigation';
+import {
+  navigationIntentForArrow,
+  resolveNavigationIndex,
+  type CollectionNavigationArrow,
+  type CollectionNavigationIntent,
+} from '@vyrnforge/core/collection-navigation';
 
-const HTMLElementBase: typeof HTMLElement = globalThis.HTMLElement ?? class {} as typeof HTMLElement;
+const HTMLElementBase: typeof HTMLElement = globalThis.HTMLElement ?? (class {} as typeof HTMLElement);
 export type ToolbarOrientation = 'horizontal' | 'vertical';
 
-function toolbarItems(root: HTMLElement): HTMLElement[] { return Array.from(root.querySelectorAll<HTMLElement>('[data-vf-toolbar-item]')); }
-function disabled(item: HTMLElement): boolean { return item.matches(':disabled') || item.getAttribute('aria-disabled') === 'true'; }
+function toolbarItems(root: HTMLElement): HTMLElement[] {
+  return Array.from(root.querySelectorAll<HTMLElement>('[data-vf-toolbar-item]'));
+}
+function disabled(item: HTMLElement): boolean {
+  return item.matches(':disabled') || item.getAttribute('aria-disabled') === 'true';
+}
 function syncTabStops(root: HTMLElement, preferred?: HTMLElement | null): void {
   const items = toolbarItems(root);
-  const states = items.map((item) => ({ eligible: !(disabled(item)) }));
+  const states = items.map((item) => ({ eligible: !disabled(item) }));
   let activeIndex = preferred ? items.indexOf(preferred) : -1;
-  if (activeIndex < 0 || states[activeIndex]?.eligible === false) activeIndex = items.findIndex((item) => item.tabIndex === 0 && !disabled(item));
+  if (activeIndex < 0 || states[activeIndex]?.eligible === false)
+    activeIndex = items.findIndex((item) => item.tabIndex === 0 && !disabled(item));
   if (activeIndex < 0) activeIndex = states.findIndex((item) => item.eligible !== false);
   const resolved = activeIndex < 0 ? null : activeIndex;
-  items.forEach((item, index) => { item.tabIndex = states[index]?.eligible !== false && resolved === index ? 0 : -1; });
+  items.forEach((item, index) => {
+    item.tabIndex = states[index]?.eligible !== false && resolved === index ? 0 : -1;
+  });
 }
 function itemFromTarget(root: HTMLElement, target: EventTarget | null): HTMLElement | null {
   const element = target instanceof HTMLElement ? target.closest<HTMLElement>('[data-vf-toolbar-item]') : null;
   return element && root.contains(element) ? element : null;
 }
-function intentForKey(key: string, orientation: ToolbarOrientation, direction: 'ltr' | 'rtl'): CollectionNavigationIntent | null {
+function intentForKey(
+  key: string,
+  orientation: ToolbarOrientation,
+  direction: 'ltr' | 'rtl',
+): CollectionNavigationIntent | null {
   if (key === 'Home') return 'first';
   if (key === 'End') return 'last';
-  const arrow: CollectionNavigationArrow | null = key === 'ArrowLeft' ? 'left' : key === 'ArrowRight' ? 'right' : key === 'ArrowUp' ? 'up' : key === 'ArrowDown' ? 'down' : null;
+  const arrow: CollectionNavigationArrow | null =
+    key === 'ArrowLeft'
+      ? 'left'
+      : key === 'ArrowRight'
+        ? 'right'
+        : key === 'ArrowUp'
+          ? 'up'
+          : key === 'ArrowDown'
+            ? 'down'
+            : null;
   return arrow ? navigationIntentForArrow(arrow, orientation, direction) : null;
 }
 
 export class VfToolbarElement extends HTMLElementBase {
-  static get observedAttributes() { return ['orientation']; }
+  static get observedAttributes() {
+    return ['orientation'];
+  }
   private observer: MutationObserver | null = null;
   connectedCallback() {
     this.setAttribute('role', 'toolbar');
@@ -37,7 +64,12 @@ export class VfToolbarElement extends HTMLElementBase {
     queueMicrotask(() => syncTabStops(this));
     if (typeof MutationObserver !== 'undefined') {
       this.observer = new MutationObserver(() => syncTabStops(this));
-      this.observer.observe(this, { childList: true, subtree: true, attributes: true, attributeFilter: ['disabled', 'aria-disabled'] });
+      this.observer.observe(this, {
+        childList: true,
+        subtree: true,
+        attributes: true,
+        attributeFilter: ['disabled', 'aria-disabled'],
+      });
     }
   }
   disconnectedCallback() {
@@ -46,7 +78,9 @@ export class VfToolbarElement extends HTMLElementBase {
     this.observer?.disconnect();
     this.observer = null;
   }
-  attributeChangedCallback() { this.syncOrientation(); }
+  attributeChangedCallback() {
+    this.syncOrientation();
+  }
   private syncOrientation() {
     const orientation = (this.getAttribute('orientation') ?? 'horizontal') as ToolbarOrientation;
     this.setAttribute('aria-orientation', orientation);
@@ -58,13 +92,18 @@ export class VfToolbarElement extends HTMLElementBase {
   };
   private onKeydown = (event: KeyboardEvent) => {
     const orientation = (this.getAttribute('orientation') ?? 'horizontal') as ToolbarOrientation;
-    const direction = typeof getComputedStyle === 'function' && getComputedStyle(this).direction === 'rtl' ? 'rtl' : 'ltr';
+    const direction =
+      typeof getComputedStyle === 'function' && getComputedStyle(this).direction === 'rtl' ? 'rtl' : 'ltr';
     const intent = intentForKey(event.key, orientation, direction);
     if (!intent) return;
     const items = toolbarItems(this);
     const currentItem = itemFromTarget(this, event.target);
     const currentIndex = currentItem ? items.indexOf(currentItem) : -1;
-    const nextIndex = resolveNavigationIndex(items.map((item) => ({ eligible: !(disabled(item)) })), currentIndex, intent);
+    const nextIndex = resolveNavigationIndex(
+      items.map((item) => ({ eligible: !disabled(item) })),
+      currentIndex,
+      intent,
+    );
     if (nextIndex == null) return;
     const next = items[nextIndex];
     if (!next) return;
@@ -73,4 +112,10 @@ export class VfToolbarElement extends HTMLElementBase {
     next.focus();
   };
 }
-export function defineToolbarElement(tagName = 'vf-toolbar', registry: CustomElementRegistry | undefined = globalThis.customElements) { if (!registry) throw new Error('VyrnForge Toolbar registration requires a CustomElementRegistry.'); if (!registry.get(tagName)) registry.define(tagName, VfToolbarElement); }
+export function defineToolbarElement(
+  tagName = 'vf-toolbar',
+  registry: CustomElementRegistry | undefined = globalThis.customElements,
+) {
+  if (!registry) throw new Error('VyrnForge Toolbar registration requires a CustomElementRegistry.');
+  if (!registry.get(tagName)) registry.define(tagName, VfToolbarElement);
+}

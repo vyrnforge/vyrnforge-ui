@@ -8,7 +8,9 @@ function App() {
     <TabsRoot id="example-tabs" defaultValue="overview">
       <TabsList aria-label="Account sections">
         <TabsTab value="overview">Overview</TabsTab>
-        <TabsTab value="billing" disabled>Billing</TabsTab>
+        <TabsTab value="billing" disabled>
+          Billing
+        </TabsTab>
         <TabsTab value="security">Security</TabsTab>
       </TabsList>
       <TabsPanel value="overview">Overview content</TabsPanel>
@@ -18,4 +20,6 @@ function App() {
   );
 }
 
-createRoot(document.querySelector('#root')!).render(<App />);
+const mount = document.querySelector('#root');
+if (!mount) throw new Error('Example mount is missing.');
+createRoot(mount).render(<App />);

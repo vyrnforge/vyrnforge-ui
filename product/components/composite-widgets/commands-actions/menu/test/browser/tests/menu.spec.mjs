@@ -19,7 +19,9 @@ test('menu exposes menu-button and item semantics', async ({ page }) => {
   await expectAxeClean(page);
 });
 
-test('public Menu CSS resolves canonical popup surface, boundaries, and item radii in light, dark, and forced-colors modes', async ({ page }) => {
+test('public Menu CSS resolves canonical popup surface, boundaries, and item radii in light, dark, and forced-colors modes', async ({
+  page,
+}) => {
   test.skip(port !== 'web', 'Public CSS resolution evidence is owned by the Web lane.');
   await page.goto('/components/menu/web.html');
   const menu = page.locator('#web-menu');
@@ -54,9 +56,13 @@ test('public Menu CSS resolves canonical popup surface, boundaries, and item rad
 test.describe('enhanced menu interaction', () => {
   test.skip(port === 'web', 'Native Web owns semantic/style baseline; framework ports own enhanced menu behavior.');
 
-  test('opens from keyboard, includes disabled items in focus navigation, and suppresses disabled activation', async ({ page }) => {
+  test('opens from keyboard, includes disabled items in focus navigation, and suppresses disabled activation', async ({
+    page,
+  }) => {
     const errors = [];
-    page.on('console', (message) => { if (message.type() === 'error') errors.push(message.text()); });
+    page.on('console', (message) => {
+      if (message.type() === 'error') errors.push(message.text());
+    });
     page.on('pageerror', (error) => errors.push(error.message));
     await page.goto(`/components/menu/${port}.html`);
 
@@ -81,7 +87,8 @@ test.describe('enhanced menu interaction', () => {
     await expect(menu).toBeVisible();
     await expect(trigger).toHaveAttribute('aria-expanded', 'true');
     await expect(page.locator('body')).not.toHaveAttribute('data-selected', /.+/);
-    if (port === 'react' || port === 'vue') await expect(page.locator('body')).not.toHaveAttribute('data-disabled-clicked', /.+/);
+    if (port === 'react' || port === 'vue')
+      await expect(page.locator('body')).not.toHaveAttribute('data-disabled-clicked', /.+/);
 
     await page.keyboard.press('ArrowDown');
     await expect(duplicate).toBeFocused();

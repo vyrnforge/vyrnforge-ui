@@ -44,11 +44,16 @@ test('public Listbox CSS resolves canonical compact spacing, radius, and focus r
 });
 
 test.describe('enhanced listbox interaction', () => {
-  test.skip(port === 'web', 'Native Web owns semantic/style baseline; framework ports own enhanced composite focus and selection behavior.');
+  test.skip(
+    port === 'web',
+    'Native Web owns semantic/style baseline; framework ports own enhanced composite focus and selection behavior.',
+  );
 
   test('has one Tab stop and moves focus without implicitly changing selection', async ({ page }) => {
     const errors = [];
-    page.on('console', (message) => { if (message.type() === 'error') errors.push(message.text()); });
+    page.on('console', (message) => {
+      if (message.type() === 'error') errors.push(message.text());
+    });
     page.on('pageerror', (error) => errors.push(error.message));
     await page.goto(`/components/listbox/${port}.html`);
 

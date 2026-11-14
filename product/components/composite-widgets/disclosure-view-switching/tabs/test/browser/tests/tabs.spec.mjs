@@ -6,7 +6,10 @@ const port = process.env.VF_COMPONENT_PORT || 'web';
 test.describe('Tabs Web semantic and styling contract', () => {
   test.skip(port !== 'web', 'Web owns canonical Tabs CSS and semantic styling evidence.');
 
-  test('focus, disabled, accessibility, reduced motion, forced colors, and direction remain usable', async ({ page, browserName }) => {
+  test('focus, disabled, accessibility, reduced motion, forced colors, and direction remain usable', async ({
+    page,
+    browserName,
+  }) => {
     await page.goto('/components/tabs/web.html');
     const root = page.locator('#web-tabs');
     const selected = page.locator('#web-tabs-tab-overview');
@@ -25,7 +28,9 @@ test.describe('Tabs Web semantic and styling contract', () => {
 
     await expectNoAxeViolations(page);
 
-    await page.evaluate(() => { document.documentElement.dir = 'rtl'; });
+    await page.evaluate(() => {
+      document.documentElement.dir = 'rtl';
+    });
     expect(await selected.evaluate((element) => getComputedStyle(element).direction)).toBe('rtl');
     await page.emulateMedia({ reducedMotion: 'reduce' });
     expect(await selected.evaluate((element) => getComputedStyle(element).transitionDuration)).toBe('0s');
@@ -40,10 +45,14 @@ test.describe('Tabs Web semantic and styling contract', () => {
 
 test.describe('Tabs port interaction and client activation', () => {
   for (const framework of ['react', 'angular', 'vue', 'elements']) {
-    test(`${framework} supports RTL automatic navigation, wrapping, disabled skipping, Home/End, and client activation`, async ({ page }) => {
+    test(`${framework} supports RTL automatic navigation, wrapping, disabled skipping, Home/End, and client activation`, async ({
+      page,
+    }) => {
       test.skip(port !== framework, `Running ${port} evidence only`);
       const errors = [];
-      page.on('console', (message) => { if (message.type() === 'error') errors.push(message.text()); });
+      page.on('console', (message) => {
+        if (message.type() === 'error') errors.push(message.text());
+      });
       await page.goto(`/components/tabs/${framework}.html`);
 
       const root = page.locator(`#${framework}-tabs`);
@@ -92,7 +101,9 @@ test.describe('Tabs port interaction and client activation', () => {
     test(`${framework} keeps vertical manual focus separate from selection until Enter or Space`, async ({ page }) => {
       test.skip(port !== framework, `Running ${port} evidence only`);
       const errors = [];
-      page.on('console', (message) => { if (message.type() === 'error') errors.push(message.text()); });
+      page.on('console', (message) => {
+        if (message.type() === 'error') errors.push(message.text());
+      });
       await page.goto(`/components/tabs/${framework}.html`);
 
       const root = page.locator(`#${framework}-manual-tabs`);

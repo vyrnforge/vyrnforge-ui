@@ -2,7 +2,9 @@ import { test, expect } from '@playwright/test';
 
 const port = process.env.VF_COMPONENT_PORT || 'react';
 
-test('public ToggleGroup CSS uses canonical medium item inset and preserves overrides in forced colors', async ({ page }) => {
+test('public ToggleGroup CSS uses canonical medium item inset and preserves overrides in forced colors', async ({
+  page,
+}) => {
   test.skip(port !== 'web', 'Public spacing evidence is owned by the Web lane.');
   await page.goto('/components/toggle-group/web.html');
 

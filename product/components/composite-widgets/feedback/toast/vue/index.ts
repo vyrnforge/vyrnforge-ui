@@ -14,13 +14,18 @@ import {
 
 const DEFAULT_DURATION = 5000;
 type PauseReason = 'pointer' | 'focus';
-function normalizedDuration(duration: number): number | null { return Number.isFinite(duration) && duration > 0 ? duration : null; }
+function normalizedDuration(duration: number): number | null {
+  return Number.isFinite(duration) && duration > 0 ? duration : null;
+}
 function callHandler(handler: unknown, event: Event): void {
   if (typeof handler === 'function') handler(event);
-  else if (Array.isArray(handler)) for (const candidate of handler) if (typeof candidate === 'function') candidate(event);
+  else if (Array.isArray(handler))
+    for (const candidate of handler) if (typeof candidate === 'function') candidate(event);
 }
 
-interface ToastContextValue { requestClose(): void; }
+interface ToastContextValue {
+  requestClose(): void;
+}
 const ToastContextKey: InjectionKey<ToastContextValue> = Symbol('VyrnForgeToast');
 function useToastContext(): ToastContextValue {
   const context = inject(ToastContextKey);
@@ -32,12 +37,17 @@ export const ToastViewport = defineComponent({
   name: 'ToastViewport',
   inheritAttrs: false,
   setup(_props, { attrs, slots }) {
-    return () => h('div', {
-      ...attrs,
-      'aria-live': (attrs['aria-live'] as string | undefined) ?? 'polite',
-      'aria-relevant': (attrs['aria-relevant'] as string | undefined) ?? 'additions text',
-      'data-vf-toast-viewport': '',
-    }, slots.default?.());
+    return () =>
+      h(
+        'div',
+        {
+          ...attrs,
+          'aria-live': (attrs['aria-live'] as string | undefined) ?? 'polite',
+          'aria-relevant': (attrs['aria-relevant'] as string | undefined) ?? 'additions text',
+          'data-vf-toast-viewport': '',
+        },
+        slots.default?.(),
+      );
   },
 });
 
@@ -61,7 +71,10 @@ export const ToastRoot = defineComponent({
     let wasOpen = false;
     let mounted = false;
 
-    function clearTimer() { if (timer !== undefined) clearTimeout(timer); timer = undefined; }
+    function clearTimer() {
+      if (timer !== undefined) clearTimeout(timer);
+      timer = undefined;
+    }
     function requestClose() {
       if (props.open === undefined) internalOpen.value = false;
       emit('update:open', false);
@@ -76,7 +89,10 @@ export const ToastRoot = defineComponent({
     }
     function armRemaining() {
       if (!mounted || !committedOpen.value || timeoutRequested || pauseReasons.size > 0 || remaining === null) return;
-      if (remaining <= 0) { expire(); return; }
+      if (remaining <= 0) {
+        expire();
+        return;
+      }
       clearTimer();
       deadline = Date.now() + remaining;
       timer = setTimeout(expire, remaining);
@@ -117,31 +133,62 @@ export const ToastRoot = defineComponent({
     }
 
     provide(ToastContextKey, { requestClose });
-    onMounted(() => { mounted = true; resetTimer(); });
-    onBeforeUnmount(() => { mounted = false; clearTimer(); });
+    onMounted(() => {
+      mounted = true;
+      resetTimer();
+    });
+    onBeforeUnmount(() => {
+      mounted = false;
+      clearTimer();
+    });
     watch([committedOpen, () => props.duration], resetTimer);
 
-    return () => committedOpen.value ? h('div', {
-      ...attrs,
-      role: (attrs.role as string | undefined) ?? 'status',
-      'data-vf-toast-root': '',
-      'data-vf-open': '',
-      onPointerenter(event: PointerEvent) { callHandler(attrs.onPointerenter, event); pause('pointer'); },
-      onPointerleave(event: PointerEvent) { callHandler(attrs.onPointerleave, event); resume('pointer'); },
-      onFocusin(event: FocusEvent) { callHandler(attrs.onFocusin, event); if (!(event.currentTarget as Node).contains(event.relatedTarget as Node | null)) pause('focus'); },
-      onFocusout(event: FocusEvent) { callHandler(attrs.onFocusout, event); if (!(event.currentTarget as Node).contains(event.relatedTarget as Node | null)) resume('focus'); },
-    }, slots.default?.()) : null;
+    return () =>
+      committedOpen.value
+        ? h(
+            'div',
+            {
+              ...attrs,
+              role: (attrs.role as string | undefined) ?? 'status',
+              'data-vf-toast-root': '',
+              'data-vf-open': '',
+              onPointerenter(event: PointerEvent) {
+                callHandler(attrs.onPointerenter, event);
+                pause('pointer');
+              },
+              onPointerleave(event: PointerEvent) {
+                callHandler(attrs.onPointerleave, event);
+                resume('pointer');
+              },
+              onFocusin(event: FocusEvent) {
+                callHandler(attrs.onFocusin, event);
+                if (!(event.currentTarget as Node).contains(event.relatedTarget as Node | null)) pause('focus');
+              },
+              onFocusout(event: FocusEvent) {
+                callHandler(attrs.onFocusout, event);
+                if (!(event.currentTarget as Node).contains(event.relatedTarget as Node | null)) resume('focus');
+              },
+            },
+            slots.default?.(),
+          )
+        : null;
   },
 });
 
 export const ToastTitle = defineComponent({
-  name: 'ToastTitle', inheritAttrs: false,
-  setup(_props, { attrs, slots }) { return () => h('div', { ...attrs, 'data-vf-toast-title': '' }, slots.default?.()); },
+  name: 'ToastTitle',
+  inheritAttrs: false,
+  setup(_props, { attrs, slots }) {
+    return () => h('div', { ...attrs, 'data-vf-toast-title': '' }, slots.default?.());
+  },
 });
 
 export const ToastDescription = defineComponent({
-  name: 'ToastDescription', inheritAttrs: false,
-  setup(_props, { attrs, slots }) { return () => h('div', { ...attrs, 'data-vf-toast-description': '' }, slots.default?.()); },
+  name: 'ToastDescription',
+  inheritAttrs: false,
+  setup(_props, { attrs, slots }) {
+    return () => h('div', { ...attrs, 'data-vf-toast-description': '' }, slots.default?.());
+  },
 });
 
 export const ToastClose = defineComponent({
@@ -150,16 +197,21 @@ export const ToastClose = defineComponent({
   emits: ['dismiss'],
   setup(_props, { attrs, slots, emit }) {
     const context = useToastContext();
-    return () => h('button', {
-      ...attrs,
-      type: attrs.type ?? 'button',
-      'data-vf-toast-close': '',
-      onClick(event: MouseEvent) {
-        callHandler(attrs.onClick, event);
-        if (event.defaultPrevented) return;
-        context.requestClose();
-        emit('dismiss');
-      },
-    }, slots.default?.());
+    return () =>
+      h(
+        'button',
+        {
+          ...attrs,
+          type: attrs.type ?? 'button',
+          'data-vf-toast-close': '',
+          onClick(event: MouseEvent) {
+            callHandler(attrs.onClick, event);
+            if (event.defaultPrevented) return;
+            context.requestClose();
+            emit('dismiss');
+          },
+        },
+        slots.default?.(),
+      );
   },
 });

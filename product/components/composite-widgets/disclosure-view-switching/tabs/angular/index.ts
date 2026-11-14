@@ -108,7 +108,9 @@ export class VfTabsListDirective {
 
     const tabs = Array.from(this.element.nativeElement.querySelectorAll<HTMLElement>('[role="tab"]'));
     const currentIndex = tabs.indexOf(target);
-    const items = tabs.map((tab) => ({ eligible: !(tab.getAttribute('aria-disabled') === 'true' || (tab as HTMLButtonElement).disabled) }));
+    const items = tabs.map((tab) => ({
+      eligible: !(tab.getAttribute('aria-disabled') === 'true' || (tab as HTMLButtonElement).disabled),
+    }));
     const nextIndex = resolveNavigationIndex(items, currentIndex, intent);
     if (nextIndex === null) return;
     const nextTab = tabs[nextIndex];

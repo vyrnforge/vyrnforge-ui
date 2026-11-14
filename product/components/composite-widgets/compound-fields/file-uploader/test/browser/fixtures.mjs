@@ -35,8 +35,18 @@ export const browserFixture = {
     }
 
     if (port === 'react') {
-      const entry = path.join(root, 'product/components/composite-widgets/compound-fields/file-uploader/examples/import-recovery/react.tsx');
-      await build({ entryPoints: [entry], bundle: true, format: 'esm', platform: 'browser', outdir: dir, entryNames: 'react' });
+      const entry = path.join(
+        root,
+        'product/components/composite-widgets/compound-fields/file-uploader/examples/import-recovery/react.tsx',
+      );
+      await build({
+        entryPoints: [entry],
+        bundle: true,
+        format: 'esm',
+        platform: 'browser',
+        outdir: dir,
+        entryNames: 'react',
+      });
       await writeFile(
         path.join(dir, 'react.html'),
         '<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width"><title>File uploader import recovery fixture</title><link rel="stylesheet" href="./react.css"></head><body><div id="root"></div><script type="module" src="./react.js"></script></body></html>',
@@ -45,7 +55,10 @@ export const browserFixture = {
     }
 
     if (port === 'vue') {
-      await writeFile(path.join(dir, 'vue.html'), page('<div id="app"></div>', '<script type="module" src="./vue.js"></script>'));
+      await writeFile(
+        path.join(dir, 'vue.html'),
+        page('<div id="app"></div>', '<script type="module" src="./vue.js"></script>'),
+      );
       await build({
         stdin: {
           resolveDir: root,
@@ -61,7 +74,10 @@ export const browserFixture = {
     }
 
     if (port === 'angular') {
-      await writeFile(path.join(dir, 'angular.html'), page('<vf-file-uploader-test></vf-file-uploader-test>', '<script type="module" src="./angular.js"></script>'));
+      await writeFile(
+        path.join(dir, 'angular.html'),
+        page('<vf-file-uploader-test></vf-file-uploader-test>', '<script type="module" src="./angular.js"></script>'),
+      );
       await build({
         stdin: {
           resolveDir: root,

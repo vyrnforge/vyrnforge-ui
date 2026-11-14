@@ -1,4 +1,15 @@
-import { computed, defineComponent, getCurrentInstance, h, inject, nextTick, provide, ref, type InjectionKey, type Ref } from 'vue';
+import {
+  computed,
+  defineComponent,
+  getCurrentInstance,
+  h,
+  inject,
+  nextTick,
+  provide,
+  ref,
+  type InjectionKey,
+  type Ref,
+} from 'vue';
 import { resolveNavigationIndex } from '@vyrnforge/core/collection-navigation';
 import { findTypeaheadMatch } from '@vyrnforge/core/typeahead-matching';
 
@@ -39,8 +50,9 @@ export const ContextMenuRoot = defineComponent({
   setup(props, { slots, emit }) {
     const instance = getCurrentInstance();
     const internal = ref(props.defaultOpen);
-    const hasOpenProp = () => Boolean(instance?.vnode.props && Object.prototype.hasOwnProperty.call(instance.vnode.props, 'open'));
-    const expanded = computed(() => hasOpenProp() ? props.open : internal.value);
+    const hasOpenProp = () =>
+      Boolean(instance?.vnode.props && Object.prototype.hasOwnProperty.call(instance.vnode.props, 'open'));
+    const expanded = computed(() => (hasOpenProp() ? props.open : internal.value));
     const anchor = ref<HTMLElement | null>(null);
     const surface = ref<HTMLElement | null>(null);
     const openRef = computed({
@@ -54,12 +66,14 @@ export const ContextMenuRoot = defineComponent({
       open: openRef,
       anchor,
       surface,
-      setOpen(value) { openRef.value = value; },
+      setOpen(value) {
+        openRef.value = value;
+      },
       focusMenu(edge) {
         void nextTick(() => {
           if (!surface.value) return;
           const items = itemsFor(surface.value);
-          const states = items.map((item) => ({ eligible: !(itemDisabled(item)) }));
+          const states = items.map((item) => ({ eligible: !itemDisabled(item) }));
           const index = resolveNavigationIndex(states, edge === 'first' ? -1 : items.length, edge);
           if (index != null) items[index]?.focus();
         });
@@ -74,18 +88,25 @@ export const ContextMenuTrigger = defineComponent({
   inheritAttrs: false,
   setup(_, { attrs, slots }) {
     const menu = useContextMenu();
-    return () => h('div', {
-      ...attrs,
-      ref: (node: unknown) => { menu.anchor.value = node as HTMLElement | null; },
-      'data-vf-context-menu-trigger': '',
-      onContextmenu: (event: MouseEvent) => {
-        invoke(attrs.onContextmenu, event);
-        if (event.defaultPrevented) return;
-        event.preventDefault();
-        menu.setOpen(true);
-        menu.focusMenu('first');
-      },
-    }, slots.default?.());
+    return () =>
+      h(
+        'div',
+        {
+          ...attrs,
+          ref: (node: unknown) => {
+            menu.anchor.value = node as HTMLElement | null;
+          },
+          'data-vf-context-menu-trigger': '',
+          onContextmenu: (event: MouseEvent) => {
+            invoke(attrs.onContextmenu, event);
+            if (event.defaultPrevented) return;
+            event.preventDefault();
+            menu.setOpen(true);
+            menu.focusMenu('first');
+          },
+        },
+        slots.default?.(),
+      );
   },
 });
 
@@ -96,47 +117,62 @@ export const ContextMenuContent = defineComponent({
     const menu = useContextMenu();
     let query = '';
     let timer: ReturnType<typeof setTimeout> | null = null;
-    return () => menu.open.value ? h('div', {
-      ...attrs,
-      ref: (node: unknown) => { menu.surface.value = node as HTMLElement | null; },
-      role: 'menu',
-      tabindex: -1,
-      'data-vf-context-menu-content': '',
-      onKeydown: (event: KeyboardEvent) => {
-        invoke(attrs.onKeydown, event);
-        if (event.defaultPrevented) return;
-        if (event.key === 'Escape') {
-          event.preventDefault();
-          menu.setOpen(false);
-          menu.anchor.value?.focus();
-          return;
-        }
-        const root = event.currentTarget as HTMLElement;
-        const items = itemsFor(root);
-        const currentItem = itemFromTarget(root, event.target);
-        const current = currentItem ? items.indexOf(currentItem) : -1;
-        const states = items.map((item) => ({ eligible: !(itemDisabled(item)) }));
-        let intent: 'next' | 'previous' | 'first' | 'last' | null = null;
-        if (event.key === 'ArrowDown') intent = 'next';
-        else if (event.key === 'ArrowUp') intent = 'previous';
-        else if (event.key === 'Home') intent = 'first';
-        else if (event.key === 'End') intent = 'last';
-        let next: number | null = null;
-        if (intent) next = resolveNavigationIndex(states, current, intent);
-        else if (event.key.length === 1 && !event.ctrlKey && !event.metaKey && !event.altKey) {
-          query += event.key;
-          if (timer) clearTimeout(timer);
-          timer = setTimeout(() => { query = ''; }, 500);
-          next = findTypeaheadMatch(items.map((item) => ({
-            textValue: item.dataset.vfTextValue ?? item.textContent ?? '',
-            eligible: !itemDisabled(item),
-          })), query, { startIndex: current });
-        }
-        if (next == null) return;
-        event.preventDefault();
-        items[next]?.focus();
-      },
-    }, slots.default?.()) : null;
+    return () =>
+      menu.open.value
+        ? h(
+            'div',
+            {
+              ...attrs,
+              ref: (node: unknown) => {
+                menu.surface.value = node as HTMLElement | null;
+              },
+              role: 'menu',
+              tabindex: -1,
+              'data-vf-context-menu-content': '',
+              onKeydown: (event: KeyboardEvent) => {
+                invoke(attrs.onKeydown, event);
+                if (event.defaultPrevented) return;
+                if (event.key === 'Escape') {
+                  event.preventDefault();
+                  menu.setOpen(false);
+                  menu.anchor.value?.focus();
+                  return;
+                }
+                const root = event.currentTarget as HTMLElement;
+                const items = itemsFor(root);
+                const currentItem = itemFromTarget(root, event.target);
+                const current = currentItem ? items.indexOf(currentItem) : -1;
+                const states = items.map((item) => ({ eligible: !itemDisabled(item) }));
+                let intent: 'next' | 'previous' | 'first' | 'last' | null = null;
+                if (event.key === 'ArrowDown') intent = 'next';
+                else if (event.key === 'ArrowUp') intent = 'previous';
+                else if (event.key === 'Home') intent = 'first';
+                else if (event.key === 'End') intent = 'last';
+                let next: number | null = null;
+                if (intent) next = resolveNavigationIndex(states, current, intent);
+                else if (event.key.length === 1 && !event.ctrlKey && !event.metaKey && !event.altKey) {
+                  query += event.key;
+                  if (timer) clearTimeout(timer);
+                  timer = setTimeout(() => {
+                    query = '';
+                  }, 500);
+                  next = findTypeaheadMatch(
+                    items.map((item) => ({
+                      textValue: item.dataset.vfTextValue ?? item.textContent ?? '',
+                      eligible: !itemDisabled(item),
+                    })),
+                    query,
+                    { startIndex: current },
+                  );
+                }
+                if (next == null) return;
+                event.preventDefault();
+                items[next]?.focus();
+              },
+            },
+            slots.default?.(),
+          )
+        : null;
   },
 });
 
@@ -147,21 +183,26 @@ export const ContextMenuItem = defineComponent({
   inheritAttrs: false,
   setup(props, { attrs, slots, emit }) {
     const menu = useContextMenu();
-    return () => h('button', {
-      ...attrs,
-      type: (attrs.type as string | undefined) ?? 'button',
-      role: 'menuitem',
-      tabindex: -1,
-      disabled: props.disabled,
-      'aria-disabled': props.disabled || undefined,
-      'data-vf-context-menu-item': '',
-      onClick: (event: MouseEvent) => {
-        invoke(attrs.onClick, event);
-        if (event.defaultPrevented || props.disabled) return;
-        emit('select');
-        menu.setOpen(false);
-        menu.anchor.value?.focus();
-      },
-    }, slots.default?.());
+    return () =>
+      h(
+        'button',
+        {
+          ...attrs,
+          type: (attrs.type as string | undefined) ?? 'button',
+          role: 'menuitem',
+          tabindex: -1,
+          disabled: props.disabled,
+          'aria-disabled': props.disabled || undefined,
+          'data-vf-context-menu-item': '',
+          onClick: (event: MouseEvent) => {
+            invoke(attrs.onClick, event);
+            if (event.defaultPrevented || props.disabled) return;
+            emit('select');
+            menu.setOpen(false);
+            menu.anchor.value?.focus();
+          },
+        },
+        slots.default?.(),
+      );
   },
 });

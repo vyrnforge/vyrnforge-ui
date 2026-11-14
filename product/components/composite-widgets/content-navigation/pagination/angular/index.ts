@@ -1,1 +1,15 @@
-import{Directive,input}from'@angular/core';@Directive({selector:'nav[vfPaginationRoot]',standalone:true,host:{'data-vf-pagination-root':''}})export class VfPaginationRootDirective{}@Directive({selector:'a[vfPaginationItem]',standalone:true,host:{'data-vf-pagination-item':'','[attr.aria-current]':'current()?"page":null'}})export class VfPaginationItemDirective{readonly current=input(false);}@Directive({selector:'a[vfPaginationPrevious]',standalone:true,host:{'data-vf-pagination-previous':''}})export class VfPaginationPreviousDirective{}@Directive({selector:'a[vfPaginationNext]',standalone:true,host:{'data-vf-pagination-next':''}})export class VfPaginationNextDirective{}
+import { Directive, input } from '@angular/core';
+@Directive({ selector: 'nav[vfPaginationRoot]', standalone: true, host: { 'data-vf-pagination-root': '' } })
+export class VfPaginationRootDirective {}
+@Directive({
+  selector: 'a[vfPaginationItem]',
+  standalone: true,
+  host: { 'data-vf-pagination-item': '', '[attr.aria-current]': 'current()?"page":null' },
+})
+export class VfPaginationItemDirective {
+  readonly current = input(false);
+}
+@Directive({ selector: 'a[vfPaginationPrevious]', standalone: true, host: { 'data-vf-pagination-previous': '' } })
+export class VfPaginationPreviousDirective {}
+@Directive({ selector: 'a[vfPaginationNext]', standalone: true, host: { 'data-vf-pagination-next': '' } })
+export class VfPaginationNextDirective {}

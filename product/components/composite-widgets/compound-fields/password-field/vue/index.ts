@@ -1,12 +1,4 @@
-import {
-  defineComponent,
-  h,
-  inject,
-  provide,
-  ref,
-  type InjectionKey,
-  type Ref,
-} from 'vue';
+import { defineComponent, h, inject, provide, ref, type InjectionKey, type Ref } from 'vue';
 
 interface PasswordFieldContextValue {
   visible: Ref<boolean>;

@@ -1,4 +1,14 @@
-import { createContext, createElement, forwardRef, useContext, useMemo, useRef, useState, type ComponentPropsWithoutRef, type ReactNode } from 'react';
+import {
+  createContext,
+  createElement,
+  forwardRef,
+  useContext,
+  useMemo,
+  useRef,
+  useState,
+  type ComponentPropsWithoutRef,
+  type ReactNode,
+} from 'react';
 import { createPortal } from 'react-dom';
 import { resolveNavigationIndex } from '@vyrnforge/core/collection-navigation';
 import { findTypeaheadMatch } from '@vyrnforge/core/typeahead-matching';
@@ -18,7 +28,7 @@ function itemDisabled(item: HTMLElement): boolean {
 function focusItem(root: HTMLElement | null, edge: 'first' | 'last'): void {
   if (!root) return;
   const items = itemsFor(root);
-  const states = items.map((item) => ({ eligible: !(itemDisabled(item)) }));
+  const states = items.map((item) => ({ eligible: !itemDisabled(item) }));
   const index = resolveNavigationIndex(states, edge === 'first' ? -1 : items.length, edge);
   if (index != null) items[index]?.focus();
 }
@@ -52,104 +62,120 @@ export function ContextMenuRoot({ children, open, defaultOpen = false, onOpenCha
     if (open === undefined) setInternal(next);
     onOpenChange?.(next);
   };
-  const value = useMemo<ContextValue>(() => ({
-    open: expanded,
-    setOpen,
-    anchorRef,
-    surfaceRef,
-    focusMenu(edge) {
-      queueMicrotask(() => focusItem(surfaceRef.current, edge));
-    },
-  }), [expanded, open, onOpenChange]);
+  const value = useMemo<ContextValue>(
+    () => ({
+      open: expanded,
+      setOpen,
+      anchorRef,
+      surfaceRef,
+      focusMenu(edge) {
+        queueMicrotask(() => focusItem(surfaceRef.current, edge));
+      },
+    }),
+    [expanded, open, onOpenChange],
+  );
   return createElement(ContextMenuContext.Provider, { value }, children);
 }
 
-export const ContextMenuTrigger = forwardRef<HTMLDivElement, ComponentPropsWithoutRef<'div'>>(function ContextMenuTrigger({ onContextMenu, ...props }, ref) {
-  const menu = useContextMenu();
-  return createElement('div', {
-    ...props,
-    ref(node: HTMLDivElement | null) {
-      menu.anchorRef.current = node;
-      if (typeof ref === 'function') ref(node);
-      else if (ref) ref.current = node;
-    },
-    'data-vf-context-menu-trigger': '',
-    onContextMenu(event) {
-      onContextMenu?.(event);
-      if (event.defaultPrevented) return;
-      event.preventDefault();
-      menu.setOpen(true);
-      menu.focusMenu('first');
-    },
-  });
-});
-
-export const ContextMenuContent = forwardRef<HTMLDivElement, ComponentPropsWithoutRef<'div'>>(function ContextMenuContent({ onKeyDown, ...props }, ref) {
-  const menu = useContextMenu();
-  const query = useRef('');
-  const timer = useRef<ReturnType<typeof setTimeout> | null>(null);
-  const portalTarget = useFloatingSurface({
-    open: menu.open,
-    anchorRef: menu.anchorRef,
-    surfaceRef: menu.surfaceRef,
-    placement: 'bottom-start',
-    onDismiss(reason) {
-      if (reason === 'escape') menu.anchorRef.current?.focus();
-      menu.setOpen(false);
-    },
-  });
-  if (!menu.open) return null;
-  const content = createElement('div', {
-    ...props,
-    ref(node: HTMLDivElement | null) {
-      menu.surfaceRef.current = node;
-      if (typeof ref === 'function') ref(node);
-      else if (ref) ref.current = node;
-    },
-    role: 'menu',
-    tabIndex: -1,
-    'data-vf-context-menu-content': '',
-    onKeyDown(event) {
-      onKeyDown?.(event);
-      if (event.defaultPrevented) return;
-      if (event.key === 'Escape') {
+export const ContextMenuTrigger = forwardRef<HTMLDivElement, ComponentPropsWithoutRef<'div'>>(
+  function ContextMenuTrigger({ onContextMenu, ...props }, ref) {
+    const menu = useContextMenu();
+    return createElement('div', {
+      ...props,
+      ref(node: HTMLDivElement | null) {
+        menu.anchorRef.current = node;
+        if (typeof ref === 'function') ref(node);
+        else if (ref) ref.current = node;
+      },
+      'data-vf-context-menu-trigger': '',
+      onContextMenu(event) {
+        onContextMenu?.(event);
+        if (event.defaultPrevented) return;
         event.preventDefault();
+        menu.setOpen(true);
+        menu.focusMenu('first');
+      },
+    });
+  },
+);
+
+export const ContextMenuContent = forwardRef<HTMLDivElement, ComponentPropsWithoutRef<'div'>>(
+  function ContextMenuContent({ onKeyDown, ...props }, ref) {
+    const menu = useContextMenu();
+    const query = useRef('');
+    const timer = useRef<ReturnType<typeof setTimeout> | null>(null);
+    const portalTarget = useFloatingSurface({
+      open: menu.open,
+      anchorRef: menu.anchorRef,
+      surfaceRef: menu.surfaceRef,
+      placement: 'bottom-start',
+      onDismiss(reason) {
+        if (reason === 'escape') menu.anchorRef.current?.focus();
         menu.setOpen(false);
-        menu.anchorRef.current?.focus();
-        return;
-      }
-      const items = itemsFor(event.currentTarget);
-      const currentItem = itemFromTarget(event.currentTarget, event.target);
-      const current = currentItem ? items.indexOf(currentItem) : -1;
-      const states = items.map((item) => ({ eligible: !(itemDisabled(item)) }));
-      let intent: 'next' | 'previous' | 'first' | 'last' | null = null;
-      if (event.key === 'ArrowDown') intent = 'next';
-      else if (event.key === 'ArrowUp') intent = 'previous';
-      else if (event.key === 'Home') intent = 'first';
-      else if (event.key === 'End') intent = 'last';
-      let next: number | null = null;
-      if (intent) next = resolveNavigationIndex(states, current, intent);
-      else if (event.key.length === 1 && !event.ctrlKey && !event.metaKey && !event.altKey) {
-        query.current += event.key;
-        if (timer.current) clearTimeout(timer.current);
-        timer.current = setTimeout(() => { query.current = ''; }, 500);
-        next = findTypeaheadMatch(items.map((item) => ({
-          textValue: item.dataset.vfTextValue ?? item.textContent ?? '',
-          eligible: !itemDisabled(item),
-        })), query.current, { startIndex: current });
-      }
-      if (next == null) return;
-      event.preventDefault();
-      items[next]?.focus();
-    },
-  });
-  return portalTarget ? createPortal(content, portalTarget) : content;
-});
+      },
+    });
+    if (!menu.open) return null;
+    const content = createElement('div', {
+      ...props,
+      ref(node: HTMLDivElement | null) {
+        menu.surfaceRef.current = node;
+        if (typeof ref === 'function') ref(node);
+        else if (ref) ref.current = node;
+      },
+      role: 'menu',
+      tabIndex: -1,
+      'data-vf-context-menu-content': '',
+      onKeyDown(event) {
+        onKeyDown?.(event);
+        if (event.defaultPrevented) return;
+        if (event.key === 'Escape') {
+          event.preventDefault();
+          menu.setOpen(false);
+          menu.anchorRef.current?.focus();
+          return;
+        }
+        const items = itemsFor(event.currentTarget);
+        const currentItem = itemFromTarget(event.currentTarget, event.target);
+        const current = currentItem ? items.indexOf(currentItem) : -1;
+        const states = items.map((item) => ({ eligible: !itemDisabled(item) }));
+        let intent: 'next' | 'previous' | 'first' | 'last' | null = null;
+        if (event.key === 'ArrowDown') intent = 'next';
+        else if (event.key === 'ArrowUp') intent = 'previous';
+        else if (event.key === 'Home') intent = 'first';
+        else if (event.key === 'End') intent = 'last';
+        let next: number | null = null;
+        if (intent) next = resolveNavigationIndex(states, current, intent);
+        else if (event.key.length === 1 && !event.ctrlKey && !event.metaKey && !event.altKey) {
+          query.current += event.key;
+          if (timer.current) clearTimeout(timer.current);
+          timer.current = setTimeout(() => {
+            query.current = '';
+          }, 500);
+          next = findTypeaheadMatch(
+            items.map((item) => ({
+              textValue: item.dataset.vfTextValue ?? item.textContent ?? '',
+              eligible: !itemDisabled(item),
+            })),
+            query.current,
+            { startIndex: current },
+          );
+        }
+        if (next == null) return;
+        event.preventDefault();
+        items[next]?.focus();
+      },
+    });
+    return portalTarget ? createPortal(content, portalTarget) : content;
+  },
+);
 
 export interface ContextMenuItemProps extends Omit<ComponentPropsWithoutRef<'button'>, 'onSelect'> {
   onSelect?(): void;
 }
-export const ContextMenuItem = forwardRef<HTMLButtonElement, ContextMenuItemProps>(function ContextMenuItem({ onSelect, onClick, disabled, ...props }, ref) {
+export const ContextMenuItem = forwardRef<HTMLButtonElement, ContextMenuItemProps>(function ContextMenuItem(
+  { onSelect, onClick, disabled, ...props },
+  ref,
+) {
   const menu = useContextMenu();
   return createElement('button', {
     ...props,

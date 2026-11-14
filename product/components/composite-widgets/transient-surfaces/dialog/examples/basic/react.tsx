@@ -7,7 +7,9 @@ function App() {
   const [open, setOpen] = React.useState(false);
   return (
     <>
-      <button type="button" onClick={() => setOpen(true)}>Open dialog</button>
+      <button type="button" onClick={() => setOpen(true)}>
+        Open dialog
+      </button>
       <DialogRoot
         id="example-dialog"
         open={open}
@@ -24,4 +26,6 @@ function App() {
   );
 }
 
-createRoot(document.querySelector('#root')!).render(<App />);
+const mount = document.querySelector('#root');
+if (!mount) throw new Error('Example mount is missing.');
+createRoot(mount).render(<App />);

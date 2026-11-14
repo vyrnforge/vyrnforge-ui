@@ -1,4 +1,15 @@
-import { DestroyRef, Directive, ElementRef, Injector, afterNextRender, computed, inject, input, output, signal } from '@angular/core';
+import {
+  DestroyRef,
+  Directive,
+  ElementRef,
+  Injector,
+  afterNextRender,
+  computed,
+  inject,
+  input,
+  output,
+  signal,
+} from '@angular/core';
 import { resolveNavigationIndex } from '@vyrnforge/core/collection-navigation';
 import { findTypeaheadMatch } from '@vyrnforge/core/typeahead-matching';
 
@@ -31,7 +42,7 @@ function focusEdge(root: VfContextMenuRootDirective, edge: 'first' | 'last'): vo
   const surface = domFor(root).surface;
   if (!surface) return;
   const items = itemsFor(surface);
-  const states = items.map((item) => ({ eligible: !(itemDisabled(item)) }));
+  const states = items.map((item) => ({ eligible: !itemDisabled(item) }));
   const index = resolveNavigationIndex(states, edge === 'first' ? -1 : items.length, edge);
   if (index != null) items[index]?.focus();
 }
@@ -105,7 +116,7 @@ export class VfContextMenuContentDirective {
       const items = itemsFor(element);
       const currentItem = itemFromTarget(element, event.target);
       const current = currentItem ? items.indexOf(currentItem) : -1;
-      const states = items.map((item) => ({ eligible: !(itemDisabled(item)) }));
+      const states = items.map((item) => ({ eligible: !itemDisabled(item) }));
       let intent: 'next' | 'previous' | 'first' | 'last' | null = null;
       if (event.key === 'ArrowDown') intent = 'next';
       else if (event.key === 'ArrowUp') intent = 'previous';
@@ -116,11 +127,17 @@ export class VfContextMenuContentDirective {
       else if (event.key.length === 1 && !event.ctrlKey && !event.metaKey && !event.altKey) {
         query += event.key;
         if (timer) clearTimeout(timer);
-        timer = setTimeout(() => { query = ''; }, 500);
-        next = findTypeaheadMatch(items.map((item) => ({
-          textValue: item.dataset.vfTextValue ?? item.textContent ?? '',
-          eligible: !itemDisabled(item),
-        })), query, { startIndex: current });
+        timer = setTimeout(() => {
+          query = '';
+        }, 500);
+        next = findTypeaheadMatch(
+          items.map((item) => ({
+            textValue: item.dataset.vfTextValue ?? item.textContent ?? '',
+            eligible: !itemDisabled(item),
+          })),
+          query,
+          { startIndex: current },
+        );
       }
       if (next == null) return;
       event.preventDefault();

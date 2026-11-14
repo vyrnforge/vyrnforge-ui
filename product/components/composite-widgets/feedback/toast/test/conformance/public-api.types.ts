@@ -6,7 +6,9 @@ import type { VfToastElement, ToastOpenChangeDetail } from '@vyrnforge/elements/
 const reactProps: ReactToastRootProps = {
   defaultOpen: true,
   duration: 5000,
-  onOpenChange(open) { void open; },
+  onOpenChange(open) {
+    void open;
+  },
 };
 void reactProps;
 
@@ -21,8 +23,12 @@ const vueProps: VueToastRootProps = {
   open: true,
   defaultOpen: true,
   duration: 5000,
-  'onUpdate:open': (open: boolean) => { void open; },
-  onOpenChange: (open: boolean) => { void open; },
+  'onUpdate:open': (open: boolean) => {
+    void open;
+  },
+  onOpenChange: (open: boolean) => {
+    void open;
+  },
 };
 void vueProps;
 

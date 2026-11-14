@@ -1,7 +1,7 @@
 import { resolveNavigationIndex } from '@vyrnforge/core/collection-navigation';
 import { findTypeaheadMatch } from '@vyrnforge/core/typeahead-matching';
 
-const H: typeof HTMLElement = globalThis.HTMLElement ?? class {} as typeof HTMLElement;
+const H: typeof HTMLElement = globalThis.HTMLElement ?? (class {} as typeof HTMLElement);
 const optionSelector = '[data-vf-select-option]';
 function optionsFor(root: HTMLElement): HTMLElement[] {
   return Array.from(root.querySelectorAll<HTMLElement>(optionSelector));
@@ -11,9 +11,11 @@ function optionFromTarget(root: HTMLElement, target: EventTarget | null): HTMLEl
   return option && root.contains(option) ? option : null;
 }
 function optionDisabled(option: HTMLElement): boolean {
-  return (option instanceof HTMLButtonElement && option.disabled)
-    || option.hasAttribute('disabled')
-    || option.getAttribute('aria-disabled') === 'true';
+  return (
+    (option instanceof HTMLButtonElement && option.disabled) ||
+    option.hasAttribute('disabled') ||
+    option.getAttribute('aria-disabled') === 'true'
+  );
 }
 function optionValue(option: HTMLElement): string {
   return option.dataset.vfValue ?? option.getAttribute('value') ?? '';
@@ -90,13 +92,12 @@ export class VfSelectElement extends H {
       const content = this.content;
       if (!content) return;
       const options = optionsFor(content);
-      const states = options.map((option) => ({ eligible: !(optionDisabled(option)) }));
+      const states = options.map((option) => ({ eligible: !optionDisabled(option) }));
       const selected = options.findIndex(
         (option, index) => states[index]?.eligible !== false && option.getAttribute('aria-selected') === 'true',
       );
-      const index = selected >= 0
-        ? selected
-        : resolveNavigationIndex(states, edge === 'first' ? -1 : options.length, edge);
+      const index =
+        selected >= 0 ? selected : resolveNavigationIndex(states, edge === 'first' ? -1 : options.length, edge);
       if (index != null) options[index]?.focus();
     });
   }
@@ -157,7 +158,7 @@ export class VfSelectElement extends H {
     const options = optionsFor(content);
     const currentOption = optionFromTarget(content, event.target);
     const current = currentOption ? options.indexOf(currentOption) : -1;
-    const states = options.map((option) => ({ eligible: !(optionDisabled(option)) }));
+    const states = options.map((option) => ({ eligible: !optionDisabled(option) }));
     let intent: 'next' | 'previous' | 'first' | 'last' | null = null;
     if (event.key === 'ArrowDown') intent = 'next';
     else if (event.key === 'ArrowUp') intent = 'previous';
@@ -168,11 +169,17 @@ export class VfSelectElement extends H {
     else if (event.key.length === 1 && !event.ctrlKey && !event.metaKey && !event.altKey) {
       this.query += event.key;
       if (this.timer) clearTimeout(this.timer);
-      this.timer = setTimeout(() => { this.query = ''; }, 500);
-      next = findTypeaheadMatch(options.map((option) => ({
-        textValue: option.dataset.vfTextValue ?? option.textContent ?? '',
-        eligible: !optionDisabled(option),
-      })), this.query, { startIndex: current });
+      this.timer = setTimeout(() => {
+        this.query = '';
+      }, 500);
+      next = findTypeaheadMatch(
+        options.map((option) => ({
+          textValue: option.dataset.vfTextValue ?? option.textContent ?? '',
+          eligible: !optionDisabled(option),
+        })),
+        this.query,
+        { startIndex: current },
+      );
     }
     if (next == null) return;
     event.preventDefault();
@@ -180,7 +187,10 @@ export class VfSelectElement extends H {
   };
 }
 
-export function defineSelectElement(tag = 'vf-select', registry: CustomElementRegistry | undefined = globalThis.customElements): void {
+export function defineSelectElement(
+  tag = 'vf-select',
+  registry: CustomElementRegistry | undefined = globalThis.customElements,
+): void {
   if (!registry) throw new Error('VyrnForge Select registration requires a CustomElementRegistry.');
   if (!registry.get(tag)) registry.define(tag, VfSelectElement);
 }

@@ -1,5 +1,14 @@
 import { createElement, type ComponentProps } from 'react';
-import { DialogBody, DialogClose, DialogDescription, DialogRoot, DialogTitle, type DialogDismissRequest, type DialogDismissReason, type DialogRootProps } from '../dialog/index.js';
+import {
+  DialogBody,
+  DialogClose,
+  DialogDescription,
+  DialogRoot,
+  DialogTitle,
+  type DialogDismissRequest,
+  type DialogDismissReason,
+  type DialogRootProps,
+} from '../dialog/index.js';
 
 export type AlertDialogDismissReason = DialogDismissReason;
 export type AlertDialogDismissRequest = DialogDismissRequest;

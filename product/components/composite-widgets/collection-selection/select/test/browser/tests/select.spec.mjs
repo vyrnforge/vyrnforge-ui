@@ -28,7 +28,9 @@ test.describe('Select enhanced port behavior', () => {
     test(`${framework} reuses enabled navigation and typeahead without changing selection`, async ({ page }) => {
       test.skip(port !== framework, `Running ${port} evidence only`);
       const errors = [];
-      page.on('console', (message) => { if (message.type() === 'error') errors.push(message.text()); });
+      page.on('console', (message) => {
+        if (message.type() === 'error') errors.push(message.text());
+      });
       page.on('pageerror', (error) => errors.push(error.message));
       await page.goto(`/components/select/${framework}.html`);
 
@@ -93,9 +95,7 @@ test.describe('Select enhanced port behavior', () => {
       await page.keyboard.press('ArrowDown');
       await expect(page.locator(`#${framework}-three`)).toBeFocused();
       await expect(page.locator(`#${framework}-three`)).toHaveAttribute('aria-selected', 'true');
-      await expectAxeClean(page, framework === 'react'
-        ? { disableRules: ['region'] }
-        : undefined);
+      await expectAxeClean(page, framework === 'react' ? { disableRules: ['region'] } : undefined);
     });
   }
 });
