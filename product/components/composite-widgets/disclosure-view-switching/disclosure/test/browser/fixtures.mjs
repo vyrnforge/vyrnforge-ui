@@ -34,7 +34,9 @@ export async function createReactStory({ client }) {
   return h(
     Fragment,
     null,
-    disclosure('root', 'Details', ['Content', disclosure('inner', 'Inner details', 'Inner content')]),
+    disclosure('root', 'Details', ['Content', disclosure('inner', 'Inner details', 'Inner content')], {
+      panelId: 'authored-panel',
+    }),
     disclosure('initial', 'Initially open', 'Initial content', { defaultOpen: true }),
     disclosure('disabled', 'Disabled', 'Disabled content', {}, { disabled: true }),
     disclosure('controlled', 'Controlled', 'Controlled content', {
@@ -57,7 +59,9 @@ export async function createVueStory({ client }) {
   return createSSRApp({
     render: () =>
       h('div', [
-        disclosure('root', 'Details', ['Content', disclosure('inner', 'Inner details', 'Inner content')]),
+        disclosure('root', 'Details', ['Content', disclosure('inner', 'Inner details', 'Inner content')], {
+      panelId: 'authored-panel',
+    }),
         disclosure('initial', 'Initially open', 'Initial content', { defaultOpen: true }),
         disclosure('disabled', 'Disabled', 'Disabled content', {}, { disabled: true }),
         disclosure('controlled', 'Controlled', 'Controlled content', {
@@ -87,7 +91,7 @@ export async function createAngularStory({ client }) {
     standalone: true,
     imports: [VfDisclosureRootDirective, VfDisclosureTriggerDirective, VfDisclosurePanelDirective],
     template: `<main><h1>Disclosure browser fixture</h1>
-      <div vfDisclosureRoot id="root">
+      <div vfDisclosureRoot id="root" panelId="authored-panel">
         <button vfDisclosureTrigger id="trigger">Details</button>
         <div vfDisclosurePanel>Content
           <div vfDisclosureRoot id="inner">

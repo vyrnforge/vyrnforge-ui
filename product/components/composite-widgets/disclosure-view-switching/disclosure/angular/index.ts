@@ -12,6 +12,9 @@ import { Directive, booleanAttribute, computed, input, output, signal } from '@a
 })
 export class VfDisclosureRootDirective {
   readonly id = input.required<string>();
+  /** ID shared by the panel and trigger's aria-controls. Defaults to the root ID plus -panel. */
+  readonly panelId = input<string | undefined>(undefined);
+  readonly resolvedPanelId = computed(() => this.panelId() ?? `${this.id()}-panel`);
   readonly open = input<boolean | undefined>(undefined);
   readonly defaultOpen = input(false, { transform: booleanAttribute });
   readonly disabled = input(false, { transform: booleanAttribute });
@@ -33,7 +36,7 @@ export class VfDisclosureRootDirective {
     type: 'button',
     'data-vf-disclosure-trigger': '',
     '[attr.aria-expanded]': 'root.expanded()',
-    '[attr.aria-controls]': 'root.id() + "-panel"',
+    '[attr.aria-controls]': 'root.resolvedPanelId()',
     '[disabled]': 'root.disabled() || disabled()',
     '(click)': 'toggle($event)',
   },
@@ -51,7 +54,7 @@ export class VfDisclosureTriggerDirective {
   standalone: true,
   host: {
     'data-vf-disclosure-panel': '',
-    '[attr.id]': 'id() ?? (root.id() + "-panel")',
+    '[attr.id]': 'root.resolvedPanelId()',
     '[attr.data-vf-open]': 'root.expanded() ? "" : null',
     '[hidden]': '!root.expanded()',
   },

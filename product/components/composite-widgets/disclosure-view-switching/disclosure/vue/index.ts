@@ -1,7 +1,7 @@
 import { computed, defineComponent, h, inject, provide, ref, useId, type InjectionKey, type Ref } from 'vue';
 
 interface DisclosureContext {
-  id: string;
+  panelId: Readonly<Ref<string>>;
   open: Readonly<Ref<boolean>>;
   disabled: Readonly<Ref<boolean>>;
   setOpen(value: boolean): void;
@@ -14,6 +14,8 @@ function useDisclosure() {
 }
 export interface DisclosureRootProps {
   id?: string;
+  /** ID shared by the panel and trigger's aria-controls. Defaults to the root ID plus -panel. */
+  panelId?: string;
   modelValue?: boolean;
   defaultOpen?: boolean;
   disabled?: boolean;
@@ -23,6 +25,7 @@ export const DisclosureRoot = defineComponent({
   inheritAttrs: false,
   props: {
     id: String,
+    panelId: String,
     modelValue: { type: Boolean, default: undefined },
     defaultOpen: { type: Boolean, default: false },
     disabled: { type: Boolean, default: false },
@@ -30,12 +33,13 @@ export const DisclosureRoot = defineComponent({
   emits: ['update:modelValue', 'openChange'],
   setup(props, { attrs, slots, emit }) {
     const generated = useId().replaceAll(':', '');
-    const id = props.id ?? `vf-disclosure-${generated}`;
+    const id = computed(() => props.id ?? `vf-disclosure-${generated}`);
+    const panelId = computed(() => props.panelId ?? `${id.value}-panel`);
     const internal = ref(props.defaultOpen);
     const open = computed(() => props.modelValue ?? internal.value);
     const disabled = computed(() => props.disabled);
     provide(Key, {
-      id,
+      panelId,
       open,
       disabled,
       setOpen(value) {
@@ -50,7 +54,7 @@ export const DisclosureRoot = defineComponent({
         'div',
         {
           ...attrs,
-          id,
+          id: id.value,
           'data-vf-disclosure-root': '',
           'data-vf-open': open.value ? '' : undefined,
           'data-vf-disabled': props.disabled ? '' : undefined,
@@ -73,7 +77,7 @@ export const DisclosureTrigger = defineComponent({
           type: attrs.type ?? 'button',
           disabled: context.disabled.value || props.disabled,
           'aria-expanded': context.open.value,
-          'aria-controls': `${context.id}-panel`,
+          'aria-controls': context.panelId.value,
           'data-vf-disclosure-trigger': '',
           onClick(event: MouseEvent) {
             const handler = attrs.onClick;
@@ -98,7 +102,7 @@ export const DisclosurePanel = defineComponent({
         'div',
         {
           ...attrs,
-          id: attrs.id ?? `${context.id}-panel`,
+          id: context.panelId.value,
           hidden: !context.open.value,
           'data-vf-disclosure-panel': '',
           'data-vf-open': context.open.value ? '' : undefined,

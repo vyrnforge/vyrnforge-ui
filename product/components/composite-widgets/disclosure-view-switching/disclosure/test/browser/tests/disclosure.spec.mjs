@@ -8,11 +8,11 @@ test('disclosure initial markup exposes the correct state and relationship befor
   try {
     const page = await context.newPage();
     await page.goto(`/components/disclosure/${port}.html`);
-    await expect(page.locator(port === 'elements' ? '#authored-panel' : '#root-panel')).toBeHidden();
+    await expect(page.locator(port === 'web' ? '#root-panel' : '#authored-panel')).toBeHidden();
     await expect(page.locator('#initial-panel')).toBeVisible();
     if (port !== 'web') {
       const trigger = page.locator('#trigger');
-      const panelId = port === 'elements' ? 'authored-panel' : 'root-panel';
+      const panelId = 'authored-panel';
       await expect(trigger).toHaveAttribute('aria-controls', panelId);
       await expect(trigger).toHaveAttribute('aria-expanded', 'false');
       await expect(page.locator(`#${panelId}`)).toBeHidden();
@@ -26,7 +26,7 @@ test('disclosure initial markup exposes the correct state and relationship befor
 test('disclosure opens and closes using native keyboard activation without leaking nested intent', async ({ page }) => {
   await page.goto(`/components/disclosure/${port}.html`);
   const trigger = page.locator('#trigger');
-  const panel = page.locator(port === 'elements' ? '#authored-panel' : '#root-panel');
+  const panel = page.locator(port === 'web' ? '#root-panel' : '#authored-panel');
   const inner = page.locator('#inner-trigger');
   await trigger.focus();
   await trigger.press('Enter');
