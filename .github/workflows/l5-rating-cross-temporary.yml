@@ -1,0 +1,16 @@
+name: L5 rating cross-browser proof (temporary)
+on:
+  push:
+    branches: [fix/l5-rating-native]
+permissions:
+  contents: read
+jobs:
+  browser-matrix:
+    uses: ./.github/workflows/_browser-validation.yml
+    with:
+      scopes_json: '[{"port":"web","components":"rating"},{"port":"react","components":"rating"},{"port":"angular","components":"rating"},{"port":"vue","components":"rating"},{"port":"elements","components":"rating"}]'
+      revision: ${{ github.sha }}
+      browser_profile: cross
+      browsers: chromium firefox webkit
+      artifact_suffix: rating-native
+      retention_days: 14
