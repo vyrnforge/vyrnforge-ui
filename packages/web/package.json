@@ -109,7 +109,6 @@
     "./styles/password-field.css": "./dist/components/password-field/password-field.css",
     "./styles/search-field.css": "./dist/components/search-field/search-field.css",
     "./styles/split-panel.css": "./dist/components/split-panel/split-panel.css",
-    "./styles/temporal-field.css": "./dist/components/temporal-field/temporal-field.css",
     "./styles/toast.css": "./dist/components/toast/toast.css",
     "./styles/app-shell.css": "./dist/components/app-shell/app-shell.css",
     "./styles/side-nav.css": "./dist/components/side-nav/side-nav.css"

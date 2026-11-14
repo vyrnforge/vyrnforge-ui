@@ -25,7 +25,7 @@ test('nested layer and optional typography category preserve stable component ID
   assert.equal(components.size, 4);
   assert.deepEqual(componentLayerDefinitions.map((layer) => layer.id), [
     'elemental-primitives', 'interactive-controls', 'composition-primitives',
-    'behavioral-infrastructure', 'composite-components', 'complex-components',
+    'behavioral-infrastructure', 'composite-widgets', 'complex-ui',
   ]);
   assert.deepEqual(components.get('text'), {
     id: 'text', root: 'product/components/elemental-primitives/typography/text',

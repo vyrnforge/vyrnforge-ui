@@ -79,7 +79,7 @@ test('Native Web home uses the VyrnForge shell and separates documentation surfa
   expect(groupLabels).toContain('Actions');
   expect(groupLabels).toContain('Forms & Inputs');
   expect(groupLabels).toContain('Content & Media');
-  expect(groupLabels.some((label) => /\bL[1-6]\b|Elemental Primitives|Interactive Controls|Composite Components/.test(label))).toBe(false);
+  expect(groupLabels.some((label) => /\bL[1-6]\b|Elemental Primitives|Interactive Controls|Composite Widgets/.test(label))).toBe(false);
 
   const button = buttonCatalogEntry();
   const text = catalogEntry('text', 'Text');

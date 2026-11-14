@@ -246,11 +246,6 @@
       "types": "./dist/types/vyrnforge-angular-split-panel.d.ts",
       "default": "./dist/fesm2022/vyrnforge-angular-split-panel.mjs"
     },
-    "./temporal-field": {
-      "import": "./dist/fesm2022/vyrnforge-angular-temporal-field.mjs",
-      "types": "./dist/types/vyrnforge-angular-temporal-field.d.ts",
-      "default": "./dist/fesm2022/vyrnforge-angular-temporal-field.mjs"
-    },
     "./toast": {
       "import": "./dist/fesm2022/vyrnforge-angular-toast.mjs",
       "types": "./dist/types/vyrnforge-angular-toast.d.ts",

@@ -128,11 +128,6 @@ export type TabsActivation = 'automatic' | 'manual';
 export type TabsOrientation = 'horizontal' | 'vertical';
 
 // @public (undocumented)
-export type TemporalFieldInputType = 'date' | 'time' | 'datetime-local' | 'month' | 'week';
-
-export { TextVariant }
-
-// @public (undocumented)
 export type ToggleGroupType = 'single' | 'multiple';
 
 // @public (undocumented)
@@ -2755,30 +2750,6 @@ export class VfTagGroupRootDirective {
     static ɵdir: i0.ɵɵDirectiveDeclaration<VfTagGroupRootDirective, "[vfTagGroupRoot]", never, {}, {}, never, never, true, never>;
     // (undocumented)
     static ɵfac: i0.ɵɵFactoryDeclaration<VfTagGroupRootDirective, never>;
-}
-
-// @public (undocumented)
-export class VfTemporalFieldInputDirective {
-    // (undocumented)
-    readonly type: InputSignal<TemporalFieldInputType>;
-    // (undocumented)
-    static ɵdir: i0.ɵɵDirectiveDeclaration<VfTemporalFieldInputDirective, "input[vfTemporalFieldInput]", never, {
-        "type": {
-            "alias": "type";
-            "required": false;
-            "isSignal": true;
-        };
-    }, {}, never, never, true, never>;
-    // (undocumented)
-    static ɵfac: i0.ɵɵFactoryDeclaration<VfTemporalFieldInputDirective, never>;
-}
-
-// @public (undocumented)
-export class VfTemporalFieldRootDirective {
-    // (undocumented)
-    static ɵdir: i0.ɵɵDirectiveDeclaration<VfTemporalFieldRootDirective, "[vfTemporalFieldRoot]", never, {}, {}, never, never, true, never>;
-    // (undocumented)
-    static ɵfac: i0.ɵɵFactoryDeclaration<VfTemporalFieldRootDirective, never>;
 }
 
 // @public (undocumented)

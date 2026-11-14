@@ -3830,27 +3830,6 @@ export const TagGroupRoot: ForwardRefExoticComponent<Omit<DetailedHTMLProps<HTML
 export type TagGroupRootProps = ComponentPropsWithoutRef<'div'>;
 
 // @public (undocumented)
-export const TemporalFieldInput: ForwardRefExoticComponent<TemporalFieldInputProps & RefAttributes<HTMLInputElement>>;
-
-// @public (undocumented)
-export interface TemporalFieldInputProps extends Omit<InputProps, 'type'> {
-    // (undocumented)
-    type?: TemporalFieldInputType;
-}
-
-// @public (undocumented)
-export type TemporalFieldInputType = 'date' | 'time' | 'datetime-local' | 'month' | 'week';
-
-// @public (undocumented)
-export const TemporalFieldRoot: ForwardRefExoticComponent<TemporalFieldRootProps & RefAttributes<HTMLDivElement>>;
-
-// @public (undocumented)
-export interface TemporalFieldRootProps extends ComponentPropsWithoutRef<'div'> {
-    // (undocumented)
-    children?: ReactNode;
-}
-
-// @public (undocumented)
 const Text_2: <Element extends TextElement = "span">(props: TextProps<Element> & {
     ref?: ComponentPropsWithRef<Element>["ref"];
 }) => ReactElement | null;
