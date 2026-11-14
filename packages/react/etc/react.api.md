@@ -72,7 +72,10 @@ import { WheelEventHandler } from 'react';
 export const AccordionHeader: ForwardRefExoticComponent<AccordionHeaderProps & RefAttributes<HTMLHeadingElement>>;
 
 // @public (undocumented)
-export type AccordionHeaderProps = HTMLAttributes<HTMLHeadingElement>;
+export interface AccordionHeaderProps extends HTMLAttributes<HTMLHeadingElement> {
+    // (undocumented)
+    level?: 1 | 2 | 3 | 4 | 5 | 6;
+}
 
 // @public (undocumented)
 export const AccordionItem: ForwardRefExoticComponent<AccordionItemProps & RefAttributes<HTMLDivElement>>;
@@ -89,7 +92,10 @@ export interface AccordionItemProps extends HTMLAttributes<HTMLDivElement> {
 export const AccordionPanel: ForwardRefExoticComponent<AccordionPanelProps & RefAttributes<HTMLDivElement>>;
 
 // @public (undocumented)
-export type AccordionPanelProps = HTMLAttributes<HTMLDivElement>;
+export interface AccordionPanelProps extends Omit<HTMLAttributes<HTMLDivElement>, 'id' | 'role' | 'aria-labelledby'> {
+    // (undocumented)
+    region?: boolean;
+}
 
 // @public (undocumented)
 export const AccordionRoot: ForwardRefExoticComponent<AccordionRootProps & RefAttributes<HTMLDivElement>>;

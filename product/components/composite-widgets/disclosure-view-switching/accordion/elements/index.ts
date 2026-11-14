@@ -13,7 +13,12 @@ export class VfAccordionElement extends HTMLElementBase {
     this.addEventListener('click', this.#onClick);
     this.addEventListener('keydown', this.#onKeyDown);
     this.#observer = new MutationObserver(() => this.#sync());
-    this.#observer.observe(this, { subtree: true, childList: true, attributes: true, attributeFilter: ['disabled', 'data-vf-value'] });
+    this.#observer.observe(this, {
+      subtree: true,
+      childList: true,
+      attributes: true,
+      attributeFilter: ['disabled', 'data-vf-value'],
+    });
     this.#sync();
   }
   disconnectedCallback(): void {
@@ -34,7 +39,8 @@ export class VfAccordionElement extends HTMLElementBase {
     if (raw.startsWith('[')) {
       try {
         const parsed: unknown = JSON.parse(raw);
-        if (Array.isArray(parsed)) return [...new Set(parsed.filter((value): value is string => typeof value === 'string' && Boolean(value)))];
+        if (Array.isArray(parsed))
+          return [...new Set(parsed.filter((value): value is string => typeof value === 'string' && Boolean(value)))];
       } catch {
         return [];
       }
@@ -42,7 +48,10 @@ export class VfAccordionElement extends HTMLElementBase {
     return [...new Set(raw.split(',').filter(Boolean))];
   }
   set values(values: string[]) {
-    this.setAttribute('value', this.type === 'multiple' ? JSON.stringify([...new Set(values.filter(Boolean))]) : (values[0] ?? ''));
+    this.setAttribute(
+      'value',
+      this.type === 'multiple' ? JSON.stringify([...new Set(values.filter(Boolean))]) : (values[0] ?? ''),
+    );
   }
   #items(): HTMLElement[] {
     return [...this.querySelectorAll<HTMLElement>('[data-vf-accordion-item]')].filter(
@@ -77,7 +86,8 @@ export class VfAccordionElement extends HTMLElementBase {
           this.#forcedDisabled.delete(trigger);
           trigger.disabled = false;
         }
-        if (expanded && this.type === 'single' && !this.hasAttribute('collapsible')) trigger.setAttribute('aria-disabled', 'true');
+        if (expanded && this.type === 'single' && !this.hasAttribute('collapsible'))
+          trigger.setAttribute('aria-disabled', 'true');
         else trigger.removeAttribute('aria-disabled');
         trigger.id = `${this.id}-trigger-${token}`;
         trigger.setAttribute('aria-expanded', String(expanded));
@@ -118,7 +128,13 @@ export class VfAccordionElement extends HTMLElementBase {
     if (value) this.#toggle(value);
   };
   #onKeyDown = (event: KeyboardEvent): void => {
-    if (event.defaultPrevented || !(event.target instanceof HTMLButtonElement) || !event.target.matches('[data-vf-accordion-trigger]') || event.target.closest('vf-accordion') !== this) return;
+    if (
+      event.defaultPrevented ||
+      !(event.target instanceof HTMLButtonElement) ||
+      !event.target.matches('[data-vf-accordion-trigger]') ||
+      event.target.closest('vf-accordion') !== this
+    )
+      return;
     let intent: CollectionNavigationIntent | null = null;
     if (event.key === 'ArrowDown') intent = 'next';
     else if (event.key === 'ArrowUp') intent = 'previous';

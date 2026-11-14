@@ -61,9 +61,7 @@ export const AccordionRoot = defineComponent({
     const generated = useId().replaceAll(':', '');
     const id = computed(() => props.id ?? `vf-accordion-${generated}`);
     const internal = ref<string[]>(normalize(props.defaultValue, props.type));
-    const values = computed(() =>
-      normalize(props.modelValue ?? internal.value, props.type),
-    );
+    const values = computed(() => normalize(props.modelValue ?? internal.value, props.type));
     const type = computed(() => props.type);
     provide(RootKey, {
       id,
@@ -165,9 +163,9 @@ export const AccordionTrigger = defineComponent({
             if (!intent) return;
             const container = (event.currentTarget as HTMLElement).closest<HTMLElement>('[data-vf-accordion-root]');
             if (!container) return;
-            const triggers = Array.from(container.querySelectorAll<HTMLButtonElement>('[data-vf-accordion-trigger]')).filter(
-              (trigger) => trigger.closest('[data-vf-accordion-root]') === container,
-            );
+            const triggers = Array.from(
+              container.querySelectorAll<HTMLButtonElement>('[data-vf-accordion-trigger]'),
+            ).filter((trigger) => trigger.closest('[data-vf-accordion-root]') === container);
             const index = triggers.indexOf(event.currentTarget as HTMLButtonElement);
             const next = resolveNavigationIndex(
               triggers.map((candidate) => ({ eligible: !candidate.disabled })),

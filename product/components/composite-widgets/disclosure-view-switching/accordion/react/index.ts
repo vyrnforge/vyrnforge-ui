@@ -133,11 +133,12 @@ export const AccordionItem = forwardRef<HTMLDivElement, AccordionItemProps>(func
 export interface AccordionHeaderProps extends HTMLAttributes<HTMLHeadingElement> {
   level?: 1 | 2 | 3 | 4 | 5 | 6;
 }
-export const AccordionHeader = forwardRef<HTMLHeadingElement, AccordionHeaderProps>(
-  function AccordionHeader({ level = 3, ...props }, ref) {
-    return createElement(`h${level}`, { ...props, ref, 'data-vf-accordion-header': '' });
-  },
-);
+export const AccordionHeader = forwardRef<HTMLHeadingElement, AccordionHeaderProps>(function AccordionHeader(
+  { level = 3, ...props },
+  ref,
+) {
+  return createElement(`h${level}`, { ...props, ref, 'data-vf-accordion-header': '' });
+});
 
 export type AccordionTriggerProps = ButtonHTMLAttributes<HTMLButtonElement>;
 export const AccordionTrigger = forwardRef<HTMLButtonElement, AccordionTriggerProps>(function AccordionTrigger(
@@ -193,7 +194,10 @@ export const AccordionTrigger = forwardRef<HTMLButtonElement, AccordionTriggerPr
 export interface AccordionPanelProps extends Omit<HTMLAttributes<HTMLDivElement>, 'id' | 'role' | 'aria-labelledby'> {
   region?: boolean;
 }
-export const AccordionPanel = forwardRef<HTMLDivElement, AccordionPanelProps>(function AccordionPanel({ region = false, ...props }, ref) {
+export const AccordionPanel = forwardRef<HTMLDivElement, AccordionPanelProps>(function AccordionPanel(
+  { region = false, ...props },
+  ref,
+) {
   const root = useRoot();
   const item = useItem();
   const open = root.openValues.includes(item.value);

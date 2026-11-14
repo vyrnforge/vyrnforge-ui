@@ -31,9 +31,21 @@ import { TextVariant } from '@vyrnforge/web/text';
 import { VNode } from 'vue';
 
 // @public (undocumented)
-export const AccordionHeader: DefineComponent<    {}, () => VNode<RendererNode, RendererElement, {
+export const AccordionHeader: DefineComponent<ExtractPropTypes<    {
+level: {
+type: PropType<1 | 2 | 3 | 4 | 5 | 6>;
+default: number;
+};
+}>, () => VNode<RendererNode, RendererElement, {
 [key: string]: any;
-}>, {}, {}, {}, ComponentOptionsMixin, ComponentOptionsMixin, {}, string, PublicProps, Readonly<{}> & Readonly<{}>, {}, {}, {}, {}, string, ComponentProvideOptions, true, {}, any>;
+}>, {}, {}, {}, ComponentOptionsMixin, ComponentOptionsMixin, {}, string, PublicProps, Readonly<ExtractPropTypes<    {
+level: {
+type: PropType<1 | 2 | 3 | 4 | 5 | 6>;
+default: number;
+};
+}>> & Readonly<{}>, {
+level: 1 | 2 | 3 | 4 | 5 | 6;
+}, {}, {}, {}, string, ComponentProvideOptions, true, {}, any>;
 
 // @public (undocumented)
 export const AccordionItem: DefineComponent<ExtractPropTypes<    {
@@ -61,9 +73,15 @@ disabled: boolean;
 }, {}, {}, {}, string, ComponentProvideOptions, true, {}, any>;
 
 // @public (undocumented)
-export const AccordionPanel: DefineComponent<    {}, () => VNode<RendererNode, RendererElement, {
+export const AccordionPanel: DefineComponent<ExtractPropTypes<    {
+region: BooleanConstructor;
+}>, () => VNode<RendererNode, RendererElement, {
 [key: string]: any;
-}>, {}, {}, {}, ComponentOptionsMixin, ComponentOptionsMixin, {}, string, PublicProps, Readonly<{}> & Readonly<{}>, {}, {}, {}, {}, string, ComponentProvideOptions, true, {}, any>;
+}>, {}, {}, {}, ComponentOptionsMixin, ComponentOptionsMixin, {}, string, PublicProps, Readonly<ExtractPropTypes<    {
+region: BooleanConstructor;
+}>> & Readonly<{}>, {
+region: boolean;
+}, {}, {}, {}, string, ComponentProvideOptions, true, {}, any>;
 
 // @public (undocumented)
 export const AccordionRoot: DefineComponent<ExtractPropTypes<    {
@@ -101,9 +119,15 @@ collapsible: boolean;
 }, {}, {}, {}, string, ComponentProvideOptions, true, {}, any>;
 
 // @public (undocumented)
-export const AccordionTrigger: DefineComponent<    {}, () => VNode<RendererNode, RendererElement, {
+export const AccordionTrigger: DefineComponent<ExtractPropTypes<    {
+disabled: BooleanConstructor;
+}>, () => VNode<RendererNode, RendererElement, {
 [key: string]: any;
-}>, {}, {}, {}, ComponentOptionsMixin, ComponentOptionsMixin, {}, string, PublicProps, Readonly<{}> & Readonly<{}>, {}, {}, {}, {}, string, ComponentProvideOptions, true, {}, any>;
+}>, {}, {}, {}, ComponentOptionsMixin, ComponentOptionsMixin, {}, string, PublicProps, Readonly<ExtractPropTypes<    {
+disabled: BooleanConstructor;
+}>> & Readonly<{}>, {
+disabled: boolean;
+}, {}, {}, {}, string, ComponentProvideOptions, true, {}, any>;
 
 // @public (undocumented)
 export type AccordionType = 'single' | 'multiple';
