@@ -1098,6 +1098,9 @@ export class VfDisclosureRootDirective {
     readonly open: InputSignal<boolean | undefined>;
     // (undocumented)
     readonly openChange: OutputEmitterRef<boolean>;
+    readonly panelId: InputSignal<string | undefined>;
+    // (undocumented)
+    readonly resolvedPanelId: Signal<string>;
     // (undocumented)
     setOpen(next: boolean): void;
     // (undocumented)
@@ -1105,6 +1108,11 @@ export class VfDisclosureRootDirective {
         "id": {
             "alias": "id";
             "required": true;
+            "isSignal": true;
+        };
+        "panelId": {
+            "alias": "panelId";
+            "required": false;
             "isSignal": true;
         };
         "open": {
@@ -1133,11 +1141,19 @@ export class VfDisclosureRootDirective {
 export class VfDisclosureTriggerDirective {
     constructor(root: VfDisclosureRootDirective);
     // (undocumented)
+    readonly disabled: InputSignalWithTransform<boolean, unknown>;
+    // (undocumented)
     readonly root: VfDisclosureRootDirective;
     // (undocumented)
-    toggle(): void;
+    toggle(event?: MouseEvent): void;
     // (undocumented)
-    static ɵdir: i0.ɵɵDirectiveDeclaration<VfDisclosureTriggerDirective, "button[vfDisclosureTrigger]", never, {}, {}, never, never, true, never>;
+    static ɵdir: i0.ɵɵDirectiveDeclaration<VfDisclosureTriggerDirective, "button[vfDisclosureTrigger]", never, {
+        "disabled": {
+            "alias": "disabled";
+            "required": false;
+            "isSignal": true;
+        };
+    }, {}, never, never, true, never>;
     // (undocumented)
     static ɵfac: i0.ɵɵFactoryDeclaration<VfDisclosureTriggerDirective, never>;
 }
@@ -2496,10 +2512,6 @@ export class VfSplitPanelResizeHandleDirective {
     constructor(root: VfSplitPanelRootDirective);
     // (undocumented)
     key(e: KeyboardEvent): void;
-    // (undocumented)
-    maximum(): number;
-    // (undocumented)
-    minimum(): number;
     // (undocumented)
     readonly root: VfSplitPanelRootDirective;
     // (undocumented)

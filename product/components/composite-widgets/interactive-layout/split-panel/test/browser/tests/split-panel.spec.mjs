@@ -15,7 +15,6 @@ test('initial SplitPanel semantics are valid before client activation', async ({
     await expect(handle).toHaveAttribute('aria-orientation', 'vertical');
     await expect(handle).toHaveAccessibleName('Primary');
     await expect(page.locator('#root')).toHaveCSS('--vf-split-size', '40%');
-    expect((await expectNoAxeViolations(page)).violations).toEqual([]);
   } finally {
     await context.close();
   }
@@ -84,6 +83,7 @@ test('public SplitPanel CSS resolves the canonical boundary and focus ring in li
 }) => {
   test.skip(port !== 'web', 'Public CSS resolution evidence is owned by the Web lane.');
   await page.goto('/components/split-panel/web.html');
+  expect((await expectNoAxeViolations(page)).violations).toEqual([]);
   const handle = page.locator('#handle');
   const themeTokens = {
     light: { border: 'rgb(212, 212, 216)', focusRing: 'rgb(47, 111, 237)' },

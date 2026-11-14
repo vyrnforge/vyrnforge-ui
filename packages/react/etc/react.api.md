@@ -1619,6 +1619,7 @@ export interface DisclosureRootProps extends Omit<HTMLAttributes<HTMLDivElement>
     onOpenChange?: (open: boolean) => void;
     // (undocumented)
     open?: boolean;
+    panelId?: string;
 }
 
 // @public (undocumented)

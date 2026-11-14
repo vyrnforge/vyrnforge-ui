@@ -691,6 +691,7 @@ export const DisclosurePanel: DefineComponent<    {}, () => VNode<RendererNode, 
 // @public (undocumented)
 export const DisclosureRoot: DefineComponent<ExtractPropTypes<    {
 id: StringConstructor;
+panelId: StringConstructor;
 modelValue: {
 type: BooleanConstructor;
 default: undefined;
@@ -707,6 +708,7 @@ default: boolean;
 [key: string]: any;
 }>, {}, {}, {}, ComponentOptionsMixin, ComponentOptionsMixin, ("update:modelValue" | "openChange")[], "update:modelValue" | "openChange", PublicProps, Readonly<ExtractPropTypes<    {
 id: StringConstructor;
+panelId: StringConstructor;
 modelValue: {
 type: BooleanConstructor;
 default: undefined;
@@ -738,12 +740,19 @@ export interface DisclosureRootProps {
     id?: string;
     // (undocumented)
     modelValue?: boolean;
+    panelId?: string;
 }
 
 // @public (undocumented)
-export const DisclosureTrigger: DefineComponent<    {}, () => VNode<RendererNode, RendererElement, {
+export const DisclosureTrigger: DefineComponent<ExtractPropTypes<    {
+disabled: BooleanConstructor;
+}>, () => VNode<RendererNode, RendererElement, {
 [key: string]: any;
-}>, {}, {}, {}, ComponentOptionsMixin, ComponentOptionsMixin, {}, string, PublicProps, Readonly<{}> & Readonly<{}>, {}, {}, {}, {}, string, ComponentProvideOptions, true, {}, any>;
+}>, {}, {}, {}, ComponentOptionsMixin, ComponentOptionsMixin, {}, string, PublicProps, Readonly<ExtractPropTypes<    {
+disabled: BooleanConstructor;
+}>> & Readonly<{}>, {
+disabled: boolean;
+}, {}, {}, {}, string, ComponentProvideOptions, true, {}, any>;
 
 // @public (undocumented)
 export const DrawerBody: DefineComponent<    {}, () => VNode<RendererNode, RendererElement, {
