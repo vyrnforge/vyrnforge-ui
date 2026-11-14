@@ -31,6 +31,11 @@ test('RangeSlider renders named, bounded native ranges before activation', async
     await expect(start).toHaveAttribute('max', '80');
     await expect(end).toHaveAttribute('min', '20');
     await expect(start).toHaveAttribute('step', '5');
+    if (port !== 'web') {
+      const fractional = ranges(page, 'fractional');
+      await expect(fractional.start).toHaveValue('0.3');
+      await expect(fractional.end).toHaveValue('0.9');
+    }
   } finally {
     await context.close();
   }
