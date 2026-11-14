@@ -2585,7 +2585,10 @@ export interface PasswordFieldToggleProps extends ComponentPropsWithoutRef<'butt
 export const PopoverContent: ForwardRefExoticComponent<PopoverContentProps & RefAttributes<HTMLDivElement>>;
 
 // @public (undocumented)
-export type PopoverContentProps = Omit<HTMLAttributes<HTMLDivElement>, 'id' | 'role' | 'popover'>;
+export interface PopoverContentProps extends HTMLAttributes<HTMLDivElement> {
+    // (undocumented)
+    portal?: boolean;
+}
 
 // @public (undocumented)
 export function PopoverRoot(input: PopoverRootProps): FunctionComponentElement<ProviderProps<PopoverContextValue | null>>;
@@ -2594,10 +2597,6 @@ export function PopoverRoot(input: PopoverRootProps): FunctionComponentElement<P
 export interface PopoverRootProps {
     // (undocumented)
     children?: ReactNode;
-    // (undocumented)
-    contentId?: string;
-    // (undocumented)
-    contentRole?: 'dialog' | 'region';
     // (undocumented)
     defaultOpen?: boolean;
     // (undocumented)
@@ -2618,15 +2617,18 @@ export type PopoverTriggerProps = ButtonHTMLAttributes<HTMLButtonElement>;
 export function PreviewCardContent(props: PreviewCardContentProps): ReactNode;
 
 // @public (undocumented)
-export type PreviewCardContentProps = HTMLAttributes<HTMLDivElement>;
+export type PreviewCardContentProps = Omit<HTMLAttributes<HTMLDivElement>, 'id'>;
 
 // @public (undocumented)
-export function PreviewCardRoot(input: PreviewCardRootProps): FunctionComponentElement<ProviderProps<PreviewContext | null>>;
+export function PreviewCardRoot(input: PreviewCardRootProps): FunctionComponentElement<ProviderProps<PreviewCardContextValue | null>>;
 
 // @public (undocumented)
 export interface PreviewCardRootProps {
     // (undocumented)
     children?: ReactNode;
+    // (undocumented)
+    closeDelay?: number;
+    contentId?: string;
     // (undocumented)
     defaultOpen?: boolean;
     // (undocumented)
@@ -2634,11 +2636,15 @@ export interface PreviewCardRootProps {
     // (undocumented)
     open?: boolean;
     // (undocumented)
+    openDelay?: number;
+    // (undocumented)
     placement?: FloatingPlacement;
 }
 
 // @public (undocumented)
-export function PreviewCardTrigger(input: PreviewCardTriggerProps): ReactElement<Record<string, unknown>, string | JSXElementConstructor<any>>;
+export function PreviewCardTrigger(input: PreviewCardTriggerProps): ReactElement<HTMLAttributes<HTMLElement> & {
+    ref?: Ref<HTMLElement>;
+}, string | JSXElementConstructor<any>>;
 
 // @public (undocumented)
 export interface PreviewCardTriggerProps {
@@ -2684,7 +2690,6 @@ export interface RangeSliderRootProps extends Omit<ComponentPropsWithoutRef<'div
 // @public (undocumented)
 export function RatingItem(input: RatingItemProps): ReactElement<    {
 'data-vf-rating-item': string;
-'data-vf-state': string;
 }, string | JSXElementConstructor<any>>;
 
 // @public (undocumented)
@@ -2705,9 +2710,13 @@ export interface RatingRootProps {
     // (undocumented)
     'aria-label'?: string;
     // (undocumented)
+    'aria-labelledby'?: string;
+    // (undocumented)
     children?: ReactNode;
     // (undocumented)
     defaultValue?: number;
+    // (undocumented)
+    getItemLabel?(value: number): string;
     // (undocumented)
     max?: number;
     // (undocumented)

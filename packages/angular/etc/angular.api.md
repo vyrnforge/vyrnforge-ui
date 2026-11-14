@@ -2040,10 +2040,6 @@ export class VfPopoverContentDirective implements OnDestroy {
     // (undocumented)
     ngOnDestroy(): void;
     // (undocumented)
-    onBeforeToggle(event: Event): void;
-    // (undocumented)
-    onToggle(event: Event): void;
-    // (undocumented)
     readonly root: VfPopoverRootDirective;
     // (undocumented)
     static ɵdir: i0.ɵɵDirectiveDeclaration<VfPopoverContentDirective, "[vfPopoverContent]", never, {}, {}, never, never, true, never>;
@@ -2058,15 +2054,9 @@ export class VfPopoverRootDirective {
     // (undocumented)
     content: HTMLElement | null;
     // (undocumented)
-    readonly contentId: InputSignal<string | undefined>;
-    // (undocumented)
-    readonly contentRole: InputSignal<"dialog" | "region">;
-    // (undocumented)
     readonly defaultOpen: InputSignalWithTransform<boolean, unknown>;
     // (undocumented)
     readonly expanded: Signal<boolean>;
-    // (undocumented)
-    readonly id: InputSignal<string>;
     // (undocumented)
     readonly open: InputSignal<boolean | undefined>;
     // (undocumented)
@@ -2074,26 +2064,9 @@ export class VfPopoverRootDirective {
     // (undocumented)
     readonly placement: InputSignal<FloatingPlacement>;
     // (undocumented)
-    readonly resolvedContentId: Signal<string>;
-    // (undocumented)
     setOpen(next: boolean): void;
     // (undocumented)
     static ɵdir: i0.ɵɵDirectiveDeclaration<VfPopoverRootDirective, "[vfPopoverRoot]", never, {
-        "id": {
-            "alias": "id";
-            "required": true;
-            "isSignal": true;
-        };
-        "contentId": {
-            "alias": "contentId";
-            "required": false;
-            "isSignal": true;
-        };
-        "contentRole": {
-            "alias": "contentRole";
-            "required": false;
-            "isSignal": true;
-        };
         "open": {
             "alias": "open";
             "required": false;
@@ -2117,14 +2090,12 @@ export class VfPopoverRootDirective {
 }
 
 // @public (undocumented)
-export class VfPopoverTriggerDirective implements OnDestroy {
+export class VfPopoverTriggerDirective {
     constructor(root: VfPopoverRootDirective);
-    // (undocumented)
-    ngOnDestroy(): void;
     // (undocumented)
     readonly root: VfPopoverRootDirective;
     // (undocumented)
-    toggle(event?: MouseEvent): void;
+    toggle(): void;
     // (undocumented)
     static ɵdir: i0.ɵɵDirectiveDeclaration<VfPopoverTriggerDirective, "button[vfPopoverTrigger]", never, {}, {}, never, never, true, never>;
     // (undocumented)
@@ -2135,7 +2106,11 @@ export class VfPopoverTriggerDirective implements OnDestroy {
 export class VfPreviewCardContentDirective implements OnDestroy {
     constructor(root: VfPreviewCardRootDirective);
     // (undocumented)
+    blur(event: FocusEvent): void;
+    // (undocumented)
     ngOnDestroy(): void;
+    // (undocumented)
+    pointer(event: PointerEvent, active: boolean): void;
     // (undocumented)
     readonly root: VfPreviewCardRootDirective;
     // (undocumented)
@@ -2145,23 +2120,51 @@ export class VfPreviewCardContentDirective implements OnDestroy {
 }
 
 // @public (undocumented)
-export class VfPreviewCardRootDirective {
+export class VfPreviewCardRootDirective implements OnDestroy {
+    // (undocumented)
+    activity(source: Activity, active: boolean, delay: number): void;
     // (undocumented)
     anchor: HTMLElement | null;
     // (undocumented)
+    readonly closeDelay: InputSignal<number>;
+    // (undocumented)
+    content: HTMLElement | null;
+    // (undocumented)
+    readonly contentId: InputSignal<string | undefined>;
+    // (undocumented)
     readonly defaultOpen: InputSignalWithTransform<boolean, unknown>;
     // (undocumented)
+    dismiss(event: KeyboardEvent): void;
+    // (undocumented)
     readonly expanded: Signal<boolean>;
+    // (undocumented)
+    readonly id: InputSignal<string>;
+    // (undocumented)
+    ngOnDestroy(): void;
     // (undocumented)
     readonly open: InputSignal<boolean | undefined>;
     // (undocumented)
     readonly openChange: OutputEmitterRef<boolean>;
     // (undocumented)
+    readonly openDelay: InputSignal<number>;
+    // (undocumented)
     readonly placement: InputSignal<FloatingPlacement>;
+    // (undocumented)
+    readonly resolvedContentId: Signal<string>;
     // (undocumented)
     setOpen(next: boolean): void;
     // (undocumented)
     static ɵdir: i0.ɵɵDirectiveDeclaration<VfPreviewCardRootDirective, "[vfPreviewCardRoot]", never, {
+        "id": {
+            "alias": "id";
+            "required": true;
+            "isSignal": true;
+        };
+        "contentId": {
+            "alias": "contentId";
+            "required": false;
+            "isSignal": true;
+        };
         "open": {
             "alias": "open";
             "required": false;
@@ -2177,6 +2180,16 @@ export class VfPreviewCardRootDirective {
             "required": false;
             "isSignal": true;
         };
+        "openDelay": {
+            "alias": "openDelay";
+            "required": false;
+            "isSignal": true;
+        };
+        "closeDelay": {
+            "alias": "closeDelay";
+            "required": false;
+            "isSignal": true;
+        };
     }, {
         "openChange": "openChange";
     }, never, never, true, never>;
@@ -2185,10 +2198,18 @@ export class VfPreviewCardRootDirective {
 }
 
 // @public (undocumented)
-export class VfPreviewCardTriggerDirective {
+export class VfPreviewCardTriggerDirective implements OnDestroy {
     constructor(root: VfPreviewCardRootDirective);
     // (undocumented)
+    blur(event: FocusEvent): void;
+    // (undocumented)
+    ngOnDestroy(): void;
+    // (undocumented)
+    pointer(event: PointerEvent, active: boolean): void;
+    // (undocumented)
     readonly root: VfPreviewCardRootDirective;
+    // (undocumented)
+    schedule(value: boolean, delay: number): void;
     // (undocumented)
     static ɵdir: i0.ɵɵDirectiveDeclaration<VfPreviewCardTriggerDirective, "[vfPreviewCardTrigger]", never, {}, {}, never, never, true, never>;
     // (undocumented)
@@ -2316,6 +2337,8 @@ export class VfRatingRootDirective {
     // (undocumented)
     readonly defaultValue: InputSignal<number>;
     // (undocumented)
+    readonly name: InputSignal<string>;
+    // (undocumented)
     readonly selected: Signal<number>;
     // (undocumented)
     set(v: number): void;
@@ -2333,6 +2356,11 @@ export class VfRatingRootDirective {
         "defaultValue": {
             "alias": "defaultValue";
             "required": false;
+            "isSignal": true;
+        };
+        "name": {
+            "alias": "name";
+            "required": true;
             "isSignal": true;
         };
     }, {

@@ -1408,9 +1408,21 @@ required: true;
 }>> & Readonly<{}>, {}, {}, {}, {}, string, ComponentProvideOptions, true, {}, any>;
 
 // @public (undocumented)
-export const PopoverContent: DefineComponent<    {}, () => VNode<RendererNode, RendererElement, {
+export const PopoverContent: DefineComponent<ExtractPropTypes<    {
+portal: {
+type: BooleanConstructor;
+default: boolean;
+};
+}>, () => VNode<RendererNode, RendererElement, {
 [key: string]: any;
-}>, {}, {}, {}, ComponentOptionsMixin, ComponentOptionsMixin, {}, string, PublicProps, Readonly<{}> & Readonly<{}>, {}, {}, {}, {}, string, ComponentProvideOptions, true, {}, any>;
+}> | null, {}, {}, {}, ComponentOptionsMixin, ComponentOptionsMixin, {}, string, PublicProps, Readonly<ExtractPropTypes<    {
+portal: {
+type: BooleanConstructor;
+default: boolean;
+};
+}>> & Readonly<{}>, {
+portal: boolean;
+}, {}, {}, {}, string, ComponentProvideOptions, true, {}, any>;
 
 // @public (undocumented)
 export const PopoverRoot: DefineComponent<ExtractPropTypes<    {
@@ -1426,11 +1438,6 @@ placement: {
 type: PropType<FloatingPlacement>;
 default: string;
 };
-contentId: StringConstructor;
-contentRole: {
-type: PropType<"dialog" | "region">;
-default: string;
-};
 }>, () => VNode<RendererNode, RendererElement, {
 [key: string]: any;
 }>[] | undefined, {}, {}, {}, ComponentOptionsMixin, ComponentOptionsMixin, ("update:modelValue" | "openChange")[], "update:modelValue" | "openChange", PublicProps, Readonly<ExtractPropTypes<    {
@@ -1446,11 +1453,6 @@ placement: {
 type: PropType<FloatingPlacement>;
 default: string;
 };
-contentId: StringConstructor;
-contentRole: {
-type: PropType<"dialog" | "region">;
-default: string;
-};
 }>> & Readonly<{
 "onUpdate:modelValue"?: (...args: any[]) => any;
 onOpenChange?: (...args: any[]) => any;
@@ -1458,7 +1460,6 @@ onOpenChange?: (...args: any[]) => any;
 modelValue: boolean;
 defaultOpen: boolean;
 placement: FloatingPlacement;
-contentRole: "dialog" | "region";
 }, {}, {}, {}, string, ComponentProvideOptions, true, {}, any>;
 
 // @public (undocumented)
@@ -1469,7 +1470,7 @@ export const PopoverTrigger: DefineComponent<    {}, () => VNode<RendererNode, R
 // @public (undocumented)
 export const PreviewCardContent: DefineComponent<    {}, () => VNode<RendererNode, RendererElement, {
 [key: string]: any;
-}> | null, {}, {}, {}, ComponentOptionsMixin, ComponentOptionsMixin, {}, string, PublicProps, Readonly<{}> & Readonly<{}>, {}, {}, {}, {}, string, ComponentProvideOptions, true, {}, any>;
+}>, {}, {}, {}, ComponentOptionsMixin, ComponentOptionsMixin, {}, string, PublicProps, Readonly<{}> & Readonly<{}>, {}, {}, {}, {}, string, ComponentProvideOptions, true, {}, any>;
 
 // @public (undocumented)
 export const PreviewCardRoot: DefineComponent<ExtractPropTypes<    {
@@ -1485,6 +1486,15 @@ placement: {
 type: PropType<FloatingPlacement>;
 default: string;
 };
+openDelay: {
+type: NumberConstructor;
+default: number;
+};
+closeDelay: {
+type: NumberConstructor;
+default: number;
+};
+contentId: StringConstructor;
 }>, () => VNode<RendererNode, RendererElement, {
 [key: string]: any;
 }>[] | undefined, {}, {}, {}, ComponentOptionsMixin, ComponentOptionsMixin, ("update:modelValue" | "openChange")[], "update:modelValue" | "openChange", PublicProps, Readonly<ExtractPropTypes<    {
@@ -1500,6 +1510,15 @@ placement: {
 type: PropType<FloatingPlacement>;
 default: string;
 };
+openDelay: {
+type: NumberConstructor;
+default: number;
+};
+closeDelay: {
+type: NumberConstructor;
+default: number;
+};
+contentId: StringConstructor;
 }>> & Readonly<{
 "onUpdate:modelValue"?: (...args: any[]) => any;
 onOpenChange?: (...args: any[]) => any;
@@ -1507,12 +1526,16 @@ onOpenChange?: (...args: any[]) => any;
 modelValue: boolean;
 defaultOpen: boolean;
 placement: FloatingPlacement;
+openDelay: number;
+closeDelay: number;
 }, {}, {}, {}, string, ComponentProvideOptions, true, {}, any>;
 
 // @public (undocumented)
 export const PreviewCardTrigger: DefineComponent<    {}, () => VNode<RendererNode, RendererElement, {
 [key: string]: any;
-}>, {}, {}, {}, ComponentOptionsMixin, ComponentOptionsMixin, {}, string, PublicProps, Readonly<{}> & Readonly<{}>, {}, {}, {}, {}, string, ComponentProvideOptions, true, {}, any>;
+}> | VNode<RendererNode, RendererElement, {
+[key: string]: any;
+}>[], {}, {}, {}, ComponentOptionsMixin, ComponentOptionsMixin, {}, string, PublicProps, Readonly<{}> & Readonly<{}>, {}, {}, {}, {}, string, ComponentProvideOptions, true, {}, any>;
 
 // @public (undocumented)
 export const Radio: DefineComponent<    {}, () => VNode<RendererNode, RendererElement, {
@@ -1596,6 +1619,7 @@ value: {
 type: NumberConstructor;
 required: true;
 };
+label: StringConstructor;
 disabled: BooleanConstructor;
 }>, () => VNode<RendererNode, RendererElement, {
 [key: string]: any;
@@ -1604,6 +1628,7 @@ value: {
 type: NumberConstructor;
 required: true;
 };
+label: StringConstructor;
 disabled: BooleanConstructor;
 }>> & Readonly<{}>, {
 disabled: boolean;
@@ -1616,14 +1641,12 @@ defaultValue: {
 type: NumberConstructor;
 default: number;
 };
-name: {
-type: StringConstructor;
-default: string;
-};
+name: StringConstructor;
 max: {
 type: NumberConstructor;
 default: number;
 };
+getItemLabel: PropType<(value: number) => string>;
 }>, () => VNode<RendererNode, RendererElement, {
 [key: string]: any;
 }>, {}, {}, {}, ComponentOptionsMixin, ComponentOptionsMixin, "update:value"[], "update:value", PublicProps, Readonly<ExtractPropTypes<    {
@@ -1632,18 +1655,15 @@ defaultValue: {
 type: NumberConstructor;
 default: number;
 };
-name: {
-type: StringConstructor;
-default: string;
-};
+name: StringConstructor;
 max: {
 type: NumberConstructor;
 default: number;
 };
+getItemLabel: PropType<(value: number) => string>;
 }>> & Readonly<{
 "onUpdate:value"?: (...args: any[]) => any;
 }>, {
-name: string;
 defaultValue: number;
 max: number;
 }, {}, {}, {}, string, ComponentProvideOptions, true, {}, any>;
