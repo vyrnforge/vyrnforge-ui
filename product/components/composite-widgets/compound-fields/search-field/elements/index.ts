@@ -9,13 +9,16 @@ export class VfSearchFieldElement extends H {
     this.removeEventListener('click', this.onClick);
   }
   private onClick = (e: Event) => {
-    if (!(e.target as HTMLElement).closest('[data-vf-search-field-clear]')) return;
-    const i = this.querySelector<HTMLInputElement>('[data-vf-search-field-input]');
-    if (i) {
-      i.value = '';
-      i.focus();
-      i.dispatchEvent(new Event('input', { bubbles: true }));
-    }
+    if (e.defaultPrevented || !(e.target instanceof Element)) return;
+    const button = e.target.closest<HTMLButtonElement>('button[data-vf-search-field-clear]');
+    if (!button || button.closest('[data-vf-search-field-root]') !== this || button.matches(':disabled')) return;
+    const input = Array.from(this.querySelectorAll<HTMLInputElement>('input[data-vf-search-field-input]')).find(
+      (element) => element.closest('[data-vf-search-field-root]') === this,
+    );
+    if (!input || input.readOnly || input.matches(':disabled') || !input.value) return;
+    input.value = '';
+    input.focus();
+    input.dispatchEvent(new Event('input', { bubbles: true }));
   };
 }
 export function defineSearchFieldElement(

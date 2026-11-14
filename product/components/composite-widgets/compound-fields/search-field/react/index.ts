@@ -72,12 +72,13 @@ export const SearchFieldClear = forwardRef<HTMLButtonElement, ComponentPropsWith
         ref,
         type: props.type ?? 'button',
         'data-vf-search-field-clear': '',
-        disabled: props.disabled ?? !s.value,
+        disabled: props.disabled || !s.value,
         onClick: (e) => {
           props.onClick?.(e);
-          if (!e.defaultPrevented) {
+          const input = s.inputRef.current;
+          if (!e.defaultPrevented && input && !input.readOnly && !input.matches(':disabled') && input.value) {
             s.set('');
-            s.inputRef.current?.focus();
+            input.focus();
           }
         },
       },

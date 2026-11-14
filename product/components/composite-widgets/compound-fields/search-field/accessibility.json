@@ -23,7 +23,8 @@
   "ownership": {
     "library": [
       "provide search-landmark semantics while preserving native input and button behavior",
-      "clear the query and restore focus to the input when an accepted clear action runs"
+      "clear the query and restore focus to the input when an accepted clear action runs",
+      "do not mutate disabled or read-only native input state or run a canceled clear action"
     ],
     "consumer": [
       "author localized accessible names for the search input and icon-only clear control",
