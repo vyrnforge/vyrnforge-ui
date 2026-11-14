@@ -27,7 +27,7 @@ export const browserFixture = {
           return (
             <main>
               <h1>Public React Pagination fixture</h1>
-              <PaginationRoot id="public-pagination">
+              <PaginationRoot id="public-pagination" aria-label="Pagination">
                 <PaginationPrevious href="#page1">Previous</PaginationPrevious>
                 <PaginationItem href="#page2" current>2</PaginationItem>
                 <PaginationNext href="#page3">Next</PaginationNext>

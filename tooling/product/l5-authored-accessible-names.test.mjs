@@ -28,3 +28,24 @@ test('compound field implementations do not fabricate English accessible names',
     assert.doesNotMatch(implementation, /Increase value|Decrease value/);
   }
 });
+
+
+test('L5 navigation and collection implementations do not fabricate English accessible names', async () => {
+  const cases = [
+    ['product/components/composite-widgets/commands-actions/split-button/react/index.ts', /More actions/],
+    ['product/components/composite-widgets/commands-actions/split-button/vue/index.ts', /More actions/],
+    ['product/components/composite-widgets/collection-selection/tag-group/react/index.ts', /['"`]Remove['"`]/],
+    ['product/components/composite-widgets/collection-selection/tag-group/angular/index.ts', /['"`]Remove['"`]/],
+    ['product/components/composite-widgets/collection-selection/tag-group/vue/index.ts', /['"`]Remove['"`]/],
+    ['product/components/composite-widgets/content-navigation/pagination/react/index.ts', /Pagination|Previous page|Next page/],
+    ['product/components/composite-widgets/content-navigation/pagination/angular/index.ts', /Pagination|Previous page|Next page/],
+    ['product/components/composite-widgets/content-navigation/pagination/vue/index.ts', /Pagination|Previous page|Next page/],
+    ['product/components/composite-widgets/content-navigation/pagination/elements/index.ts', /Pagination/],
+    ['product/components/composite-widgets/content-navigation/carousel/react/index.ts', /Carousel|Previous slide|Next slide|Slide \$\{/],
+    ['product/components/composite-widgets/content-navigation/carousel/angular/index.ts', /Previous slide|Next slide/],
+    ['product/components/composite-widgets/content-navigation/carousel/vue/index.ts', /Carousel|Previous slide|Next slide/],
+  ];
+  for (const [path, pattern] of cases) {
+    assert.doesNotMatch(await source(path), pattern, path);
+  }
+});

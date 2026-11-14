@@ -11,7 +11,6 @@ export const SplitButtonTrigger = forwardRef<HTMLButtonElement, SplitButtonTrigg
     ...props,
     ref,
     'data-vf-split-button-trigger': '',
-    'aria-label': props['aria-label'] ?? 'More actions',
   };
   return createElement(MenuTrigger, triggerProps);
 });
