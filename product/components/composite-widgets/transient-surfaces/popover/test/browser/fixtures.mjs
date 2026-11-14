@@ -7,7 +7,7 @@ const web = `<button id="t" type="button" data-vf-popover-trigger popovertarget=
     <button id="nested-action">Nested action</button>
   </div>
 </div>
-<button id="outside">Outside</button>`;
+<button id="outside" style="position: fixed; right: 16px; bottom: 16px;">Outside</button>`;
 
 const elements = `<vf-popover id="outer" placement="bottom-start">
   <button id="t" type="button" data-vf-popover-trigger aria-controls="c" aria-expanded="false" aria-haspopup="dialog">Open</button>
@@ -22,7 +22,7 @@ const elements = `<vf-popover id="outer" placement="bottom-start">
     </vf-popover>
   </div>
 </vf-popover>
-<button id="outside">Outside</button>`;
+<button id="outside" style="position: fixed; right: 16px; bottom: 16px;">Outside</button>`;
 
 export const browserFixture = {
   component: 'popover',
@@ -86,7 +86,7 @@ export async function createReactStory() {
           h('button', { id: 'controlled-action' }, 'Controlled action'),
         ),
       ),
-      h('button', { id: 'outside' }, 'Outside'),
+      h('button', { id: 'outside', style: { position: 'fixed', right: '16px', bottom: '16px' } }, 'Outside'),
     );
   }
   return h(App);
@@ -133,7 +133,7 @@ export async function createVueStory() {
               ),
             ],
           ),
-          h('button', { id: 'outside' }, 'Outside'),
+          h('button', { id: 'outside', style: { position: 'fixed', right: '16px', bottom: '16px' } }, 'Outside'),
         ]);
     },
   });
@@ -176,7 +176,7 @@ export async function createAngularStory() {
         <button id="controlled-trigger" vfPopoverTrigger>Controlled</button>
         <div vfPopoverContent aria-label="Controlled details"><button id="controlled-action">Controlled action</button></div>
       </div>
-      <button id="outside">Outside</button></main>`,
+      <button id="outside" style="position: fixed; right: 16px; bottom: 16px;">Outside</button></main>`,
   })(PopoverTestApp);
   return PopoverTestApp;
 }

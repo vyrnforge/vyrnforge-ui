@@ -35,6 +35,7 @@ test('Popover opens accessibly using native top layer and preserves authored nam
   await expectNoAxeViolations(page);
   await page.locator('#outside').click();
   await expect(dialog).toBeHidden();
+  if (port !== 'web') await expect(page.locator('#outside')).toBeFocused();
   if (port !== 'web') await expect(trigger).toHaveAttribute('aria-expanded', 'false');
 });
 
