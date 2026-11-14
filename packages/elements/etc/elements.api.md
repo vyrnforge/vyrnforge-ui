@@ -116,9 +116,6 @@ export function defineTabsElement(registry?: CustomElementRegistry | undefined):
 export function defineTagGroupElement(tag?: string, registry?: CustomElementRegistry | undefined): void;
 
 // @public (undocumented)
-export function defineTemporalFieldElement(tag?: string, registry?: CustomElementRegistry | undefined): void;
-
-// @public (undocumented)
 export function defineToastElement(tag?: string, registry?: CustomElementRegistry | undefined): void;
 
 // @public (undocumented)
@@ -559,12 +556,6 @@ export class VfTabsElement extends HTMLElementBase_2 {
 
 // @public (undocumented)
 export class VfTagGroupElement extends H_5 {
-    // (undocumented)
-    connectedCallback(): void;
-}
-
-// @public (undocumented)
-export class VfTemporalFieldElement extends H_15 {
     // (undocumented)
     connectedCallback(): void;
 }

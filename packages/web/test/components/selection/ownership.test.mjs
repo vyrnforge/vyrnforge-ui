@@ -3,7 +3,7 @@ import assert from 'node:assert/strict';
 import { test } from 'vitest';
 
 const readPackage = (path) => readFile(new URL(`../../../src/${path}`, import.meta.url), 'utf8');
-const readComponent = (id) => readFile(new URL(`../../../../../product/components/composite-components/${id}/web/${id}.css`, import.meta.url), 'utf8');
+const readComponent = (id) => readFile(new URL(`../../../../../product/components/composite-widgets/${id}/web/${id}.css`, import.meta.url), 'utf8');
 
 test('selection-family component styles compose one private shared stylesheet', async () => {
   const [shared, listbox, select, combobox, multiSelect] = await Promise.all([

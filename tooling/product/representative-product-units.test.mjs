@@ -4,8 +4,8 @@ import { discoverProductGraph, productGraphProblems } from './discover-product-g
 
 const expectedRoots = {
   button: 'interactive-controls/button',
-  tabs: 'composite-components/tabs',
-  dialog: 'composite-components/dialog',
+  tabs: 'composite-widgets/tabs',
+  dialog: 'composite-widgets/dialog',
   icon: 'elemental-primitives/media/icon',
   text: 'elemental-primitives/typography/text',
 };
@@ -193,8 +193,8 @@ test('L5 Disclosure and Accordion are canonical composite owners with unchanged 
     const component = graph.components.find((entry) => entry.unitId === id);
     assert.ok(component, id + ' must be discovered');
     assert.equal(component.id, 'component:' + id);
-    assert.equal(component.layer, 'composite-components');
-    assert.equal(component.facets.canonicalRoot, 'product/components/composite-components/' + id + '/');
+    assert.equal(component.layer, 'composite-widgets');
+    assert.equal(component.facets.canonicalRoot, 'product/components/composite-widgets/' + id + '/');
     assert.equal(component.facets.legacyRoot, null);
     assert.equal(component.metadataSource, 'product-unit');
     assert.equal(component.migration.state, 'product-unit');
@@ -216,8 +216,8 @@ test('L5 surface composites retain stable five-port package projections after ow
     const component = graph.components.find((entry) => entry.unitId === id);
     assert.ok(component, id + ' must be discovered');
     assert.equal(component.id, 'component:' + id);
-    assert.equal(component.layer, 'composite-components');
-    assert.equal(component.facets.canonicalRoot, 'product/components/composite-components/' + id + '/');
+    assert.equal(component.layer, 'composite-widgets');
+    assert.equal(component.facets.canonicalRoot, 'product/components/composite-widgets/' + id + '/');
     assert.equal(component.facets.legacyRoot, null);
     assert.equal(component.metadataSource, 'product-unit');
     assert.equal(component.migration.state, 'product-unit');
@@ -239,8 +239,8 @@ test('L5 command composites retain canonical ownership and five-port projections
     const component = graph.components.find((entry) => entry.unitId === id);
     assert.ok(component, id + ' must be discovered');
     assert.equal(component.id, 'component:' + id);
-    assert.equal(component.layer, 'composite-components');
-    assert.equal(component.facets.canonicalRoot, 'product/components/composite-components/' + id + '/');
+    assert.equal(component.layer, 'composite-widgets');
+    assert.equal(component.facets.canonicalRoot, 'product/components/composite-widgets/' + id + '/');
     assert.equal(component.facets.legacyRoot, null);
     assert.equal(component.metadataSource, 'product-unit');
     assert.equal(component.migration.state, 'product-unit');
@@ -262,8 +262,8 @@ test('L5 selection and value composites retain canonical five-port projections',
     const component = graph.components.find((entry) => entry.unitId === id);
     assert.ok(component, id + ' must be discovered');
     assert.equal(component.id, 'component:' + id);
-    assert.equal(component.layer, 'composite-components');
-    assert.equal(component.facets.canonicalRoot, 'product/components/composite-components/' + id + '/');
+    assert.equal(component.layer, 'composite-widgets');
+    assert.equal(component.facets.canonicalRoot, 'product/components/composite-widgets/' + id + '/');
     assert.equal(component.facets.legacyRoot, null);
     assert.equal(component.metadataSource, 'product-unit');
     assert.equal(component.migration.state, 'product-unit');
@@ -281,12 +281,12 @@ test('L5 selection and value composites retain canonical five-port projections',
 
 test('final L5 compound composites use canonical ownership and stable five-port projections', () => {
   const graph = discoverProductGraph();
-  for (const id of ['carousel', 'color-picker', 'file-uploader', 'number-field', 'otp-field', 'pagination', 'password-field', 'search-field', 'split-panel', 'temporal-field', 'toast']) {
+  for (const id of ['carousel', 'color-picker', 'file-uploader', 'number-field', 'otp-field', 'pagination', 'password-field', 'search-field', 'split-panel', 'toast']) {
     const component = graph.components.find((entry) => entry.unitId === id);
     assert.ok(component, id + ' must be discovered');
     assert.equal(component.id, 'component:' + id);
-    assert.equal(component.layer, 'composite-components');
-    assert.equal(component.facets.canonicalRoot, 'product/components/composite-components/' + id + '/');
+    assert.equal(component.layer, 'composite-widgets');
+    assert.equal(component.facets.canonicalRoot, 'product/components/composite-widgets/' + id + '/');
     assert.equal(component.facets.legacyRoot, null);
     assert.equal(component.metadataSource, 'product-unit');
     assert.equal(component.migration.state, 'product-unit');
@@ -307,8 +307,8 @@ test('L6 AppShell and SideNav retain canonical five-port projections', () => {
   for (const id of ['app-shell', 'side-nav']) {
     const component = graph.components.find((entry) => entry.unitId === id);
     assert.ok(component, id + ' must be discovered');
-    assert.equal(component.layer, 'complex-components');
-    assert.equal(component.facets.canonicalRoot, 'product/components/complex-components/' + id + '/');
+    assert.equal(component.layer, 'complex-ui');
+    assert.equal(component.facets.canonicalRoot, 'product/components/complex-ui/' + id + '/');
     assert.equal(component.facets.legacyRoot, null);
     assert.equal(component.migration.state, 'product-unit');
     assert.deepEqual(Object.keys(component.surfaces).sort(), ['angular', 'elements', 'react', 'vue', 'web']);
@@ -397,6 +397,17 @@ test('retired L2 specializations stay out of the Product Graph', () => {
   const graph = discoverProductGraph();
   for (const id of ['number-input', 'color-input', 'temporal-input', 'theme-toggle']) {
     assert.equal(graph.components.some((entry) => entry.unitId === id), false, id + ' must not remain a standalone component product unit');
+  }
+  assert.deepEqual(productGraphProblems(), []);
+});
+
+
+test('retired TemporalField stays out of the Product Graph and public package surfaces', () => {
+  const graph = discoverProductGraph();
+  assert.equal(graph.components.some((entry) => entry.unitId === 'temporal-field'), false);
+  for (const pkg of graph.packages) {
+    assert.equal(Boolean(pkg.manifest.exports?.['./temporal-field']), false, pkg.name + ' must not export retired TemporalField');
+    assert.equal(Boolean(pkg.manifest.exports?.['./styles/temporal-field.css']), false, pkg.name + ' must not export retired TemporalField CSS');
   }
   assert.deepEqual(productGraphProblems(), []);
 });

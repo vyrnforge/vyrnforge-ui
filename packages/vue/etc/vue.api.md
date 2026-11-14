@@ -2058,31 +2058,6 @@ export const TagGroupRoot: DefineComponent<    {}, () => VNode<RendererNode, Ren
 }>, {}, {}, {}, ComponentOptionsMixin, ComponentOptionsMixin, {}, string, PublicProps, Readonly<{}> & Readonly<{}>, {}, {}, {}, {}, string, ComponentProvideOptions, true, {}, any>;
 
 // @public (undocumented)
-export const TemporalFieldInput: DefineComponent<ExtractPropTypes<    {
-type: {
-type: PropType<TemporalFieldInputType>;
-default: string;
-};
-}>, () => VNode<RendererNode, RendererElement, {
-[key: string]: any;
-}>, {}, {}, {}, ComponentOptionsMixin, ComponentOptionsMixin, {}, string, PublicProps, Readonly<ExtractPropTypes<    {
-type: {
-type: PropType<TemporalFieldInputType>;
-default: string;
-};
-}>> & Readonly<{}>, {
-type: TemporalFieldInputType;
-}, {}, {}, {}, string, ComponentProvideOptions, true, {}, any>;
-
-// @public (undocumented)
-export type TemporalFieldInputType = 'date' | 'time' | 'datetime-local' | 'month' | 'week';
-
-// @public (undocumented)
-export const TemporalFieldRoot: DefineComponent<    {}, () => VNode<RendererNode, RendererElement, {
-[key: string]: any;
-}>, {}, {}, {}, ComponentOptionsMixin, ComponentOptionsMixin, {}, string, PublicProps, Readonly<{}> & Readonly<{}>, {}, {}, {}, {}, string, ComponentProvideOptions, true, {}, any>;
-
-// @public (undocumented)
 const Text_2: DefineComponent<ExtractPropTypes<    {
 as: {
 type: PropType<TextElement>;

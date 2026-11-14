@@ -1,18 +1,28 @@
 # Layer-organized component units
 
-This is an ownership tree, **not** a public import hierarchy. The canonical Product Graph discovers each unit's stable ID from its `component.json` and final directory name. The optional category (for example `typography`) is a source organization aid rather than a component, runtime package or public export.
+This is an ownership tree, **not** a public import hierarchy. Stable component IDs and public package subpaths are projected independently from source taxonomy. Optional grouping below a layer is organizational only and never creates a runtime package or public namespace.
 
 | Layer | Source directory | Role |
 | --- | --- | --- |
-| L1 | `elemental-primitives/` | Deliberately accepted non-interactive responsibilities; currently Typography (`text`, `code`, `kbd`) and Media (`icon`, `image`), with remaining candidates reviewed individually |
-| L2 | `interactive-controls/` | Single independently operable controls; `button`, `toggle-button`, `link`, `input`, `textarea`, `checkbox`, `radio`, `switch`, `native-select`, `file-input`, `slider` |
-| L3 | `composition-primitives/` | Spatial, form, and control composition; grouped projection owner `layout` |
-| L4 | — | Behavioral Infrastructure is responsibility-owned shared behavior, not component-shaped runtime machinery. Current retained L4 capabilities are Core collection navigation and typeahead matching; rendering, focus execution, portal mechanics, and lifecycle remain with their actual owners. |
-| L5 | `composite-components/` | Multi-element UI; `dialog`, `tabs`, `disclosure`, `accordion`, `alert-dialog`, `drawer`, `popover`, `tooltip`, `preview-card`, `menu`, `context-menu`, `menubar`, `toolbar`, `split-button`, `listbox`, `select`, `combobox`, `multi-select`, `toggle-group`, `segmented-control`, `tag-group`, `rating`, `range-slider`, `carousel`, `color-picker`, `file-uploader`, `number-field`, `otp-field`, `pagination`, `password-field`, `search-field`, `split-panel`, `temporal-field`, `toast` |
-| L6 | `complex-components/` | Higher-level structures and complex widgets; `app-shell`, `side-nav` |
+| L1 | `elemental-primitives/` | Deliberately accepted non-interactive responsibilities; currently Typography (`text`, `code`, `kbd`) and Media (`icon`, `image`) |
+| L2 | `interactive-controls/` | Single independently operable native-first controls; `button`, `toggle-button`, `link`, `input`, `textarea`, `checkbox`, `radio`, `switch`, `native-select`, `file-input`, `slider` |
+| L3 | `composition-primitives/` | Spatial, form, and control composition |
+| L4 | — | Pure reusable behavioral capabilities rather than component-shaped runtime machinery; currently CollectionNavigation and TypeaheadMatching |
+| L5 | `composite-widgets/` | Self-contained reusable widgets with one coherent local interaction model |
+| L6 | `complex-ui/` | Larger reusable UI systems and application structures that coordinate multiple lower-layer interaction models or structural responsibilities |
 
-Patterns are **not** a seventh component layer. Reusable task/feedback patterns live under `product/patterns/` and may compose any L1–L6 responsibility. A Pattern may project a narrowly justified public artifact into an existing package without becoming a component; Loading is the first provisional example.
+## Layer 5 boundary
 
-An empty layer need not contain placeholder files. The original `product/components/<id>/` convention remains a transitional discovery fallback for tooling compatibility, but no current canonical component owner uses that flat form. Input owns native `number`, temporal, and color modes; Theme Toggle is application-owned composition over Switch/theme foundation rather than a component product unit.
+L5 is a widget layer, not a generic runtime layer. Widgets may compose lower layers and delegate to native browser behavior. They own their observable component-specific state, intent, keyboard, focus, selection, open/close, relationship, and accessibility policy; framework/Elements ports own lifecycle, refs, rendering, DOM effects, and browser API execution.
 
-Do not change `@vyrnforge/*` package entrypoints or `/components/<id>/` documentation routes when moving an owner. A layer change needs a canonical-contract decision, before/after graph evidence, package projection, docs, native browser, accessibility and clean-consumer checks.
+The retained L5 inventory is organized conceptually into disclosure/view switching, transient surfaces, commands/actions, collection selection, choice/value, compound fields, content navigation, interactive layout, and feedback. See `composite-widgets/README.md`.
+
+The former `temporal-field` product unit is retired. Native temporal modes (`date`, `time`, `datetime-local`, `month`, `week`) remain part of L2 `Input`. A future Calendar/DatePicker would require a separate higher-layer contract rather than preserving a wrapper around native Input modes.
+
+## Layer 6 boundary
+
+The accepted L6 inventory is currently only `app-shell` and `side-nav`. Future structured-data, hierarchy, advanced query/command, rich temporal, or aggregated-feedback systems require separate contracts and evidence before becoming owners. See `complex-ui/README.md`.
+
+Patterns are **not** a seventh component layer. Reusable task guidance lives under `product/patterns/` and may compose any L1–L6 responsibility. Routing engines, authentication, authorization enforcement, application data/state, and business workflows remain application-owned.
+
+Do not change stable `@vyrnforge/*` package entrypoints or documentation routes merely because an owner moves between internal taxonomy folders. A layer or ownership change needs canonical-contract alignment plus Product Graph, package, documentation, browser, accessibility, and clean-consumer evidence.
