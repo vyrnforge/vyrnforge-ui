@@ -12,7 +12,8 @@ export const browserFixture = {
   ports: {
     web: {
       body: baseline,
-      script: "document.querySelector('#inc').onclick=()=>document.querySelector('#input').stepUp();document.querySelector('#dec').onclick=()=>document.querySelector('#input').stepDown();",
+      script:
+        "document.querySelector('#inc').onclick=()=>document.querySelector('#input').stepUp();document.querySelector('#dec').onclick=()=>document.querySelector('#input').stepDown();",
     },
     react: { story: 'createReactStory' },
     vue: { story: 'createVueStory' },
@@ -59,8 +60,12 @@ export async function createVueStory() {
 export async function createAngularStory() {
   await import('@angular/compiler');
   const { Component, afterNextRender } = await import('@angular/core');
-  const { VfNumberFieldRootDirective, VfNumberFieldInputDirective, VfNumberFieldIncrementDirective, VfNumberFieldDecrementDirective } =
-    await import('@vyrnforge/angular/number-field');
+  const {
+    VfNumberFieldRootDirective,
+    VfNumberFieldInputDirective,
+    VfNumberFieldIncrementDirective,
+    VfNumberFieldDecrementDirective,
+  } = await import('@vyrnforge/angular/number-field');
   class NumberFieldTestApp {
     constructor() {
       afterNextRender(() => {
@@ -71,7 +76,12 @@ export async function createAngularStory() {
   Component({
     selector: 'vf-number-field-test',
     standalone: true,
-    imports: [VfNumberFieldRootDirective, VfNumberFieldInputDirective, VfNumberFieldIncrementDirective, VfNumberFieldDecrementDirective],
+    imports: [
+      VfNumberFieldRootDirective,
+      VfNumberFieldInputDirective,
+      VfNumberFieldIncrementDirective,
+      VfNumberFieldDecrementDirective,
+    ],
     template: `<main><h1>Number field browser fixture</h1><div vfNumberFieldRoot [defaultValue]="2" [min]="0" [max]="10" [step]="1">
     <button vfNumberFieldDecrement id="dec" aria-label="Decrease Quantity">−</button>
     <input vfNumberFieldInput id="input" name="quantity" aria-label="Quantity" min="0" max="10" step="1">

@@ -16,7 +16,8 @@ export class VfNumberFieldElement extends H {
     const input = Array.from(this.querySelectorAll<HTMLInputElement>('input[data-vf-number-field-input]')).find(
       (candidate) => candidate.closest('[data-vf-number-field-root]') === this,
     );
-    if (!input || input.type !== 'number' || input.matches(':disabled') || input.readOnly || input.step === 'any') return;
+    if (!input || input.type !== 'number' || input.matches(':disabled') || input.readOnly || input.step === 'any')
+      return;
     const before = input.value;
     if (button.hasAttribute('data-vf-number-field-increment')) input.stepUp();
     else input.stepDown();

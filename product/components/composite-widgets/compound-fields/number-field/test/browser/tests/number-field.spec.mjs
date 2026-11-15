@@ -38,19 +38,32 @@ test('Elements NumberField isolates nested ownership and ignores cancelled or un
   await expect(page.locator('#nested')).toHaveValue('5');
   await expect(input).toHaveValue('2');
   await expect(page.locator('body')).toHaveAttribute('data-input-events', '1');
-  await increment.evaluate((button) => button.addEventListener('click', (event) => event.preventDefault(), { once: true }));
+  await increment.evaluate((button) =>
+    button.addEventListener('click', (event) => event.preventDefault(), { once: true }),
+  );
   await increment.click();
   await expect(input).toHaveValue('2');
-  await input.evaluate((element) => { element.readOnly = true; });
+  await input.evaluate((element) => {
+    element.readOnly = true;
+  });
   await increment.click();
   await expect(input).toHaveValue('2');
-  await input.evaluate((element) => { element.readOnly = false; element.disabled = true; });
+  await input.evaluate((element) => {
+    element.readOnly = false;
+    element.disabled = true;
+  });
   await increment.click();
   await expect(input).toHaveValue('2');
-  await input.evaluate((element) => { element.disabled = false; element.step = 'any'; });
+  await input.evaluate((element) => {
+    element.disabled = false;
+    element.step = 'any';
+  });
   await increment.click();
   await expect(input).toHaveValue('2');
-  await input.evaluate((element) => { element.step = '1'; element.value = '10'; });
+  await input.evaluate((element) => {
+    element.step = '1';
+    element.value = '10';
+  });
   await increment.click();
   await expect(input).toHaveValue('10');
   await page.locator('#input-root').click({ position: { x: 1, y: 1 } });
