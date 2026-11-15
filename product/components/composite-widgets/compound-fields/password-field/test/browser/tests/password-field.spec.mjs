@@ -36,6 +36,7 @@ test('password field uses authored state labels without changing credential valu
   await expect(hideToggle).not.toHaveAttribute('aria-pressed', /.+/);
   await expect(hideToggle).toBeFocused();
   await expect(password).toHaveAttribute('data-identity-probe', 'original');
+  expect(await page.locator('#credential-form').evaluate((form) => new FormData(form).get('password'))).toBe('s3cret');
 
   await hideToggle.press('Space');
   await expect(password).toHaveAttribute('type', 'password');
@@ -45,6 +46,24 @@ test('password field uses authored state labels without changing credential valu
   await expect(password).toHaveAttribute('autocomplete', 'current-password');
 
   expect((await expectNoAxeViolations(page)).violations).toEqual([]);
+});
+
+test('framework visibility requests preserve committed state and default visibility', async ({ page }) => {
+  test.skip(!['react', 'angular', 'vue'].includes(port), 'Framework roots own controlled/default visibility.');
+  await page.goto(`/components/password-field/${port}.html`);
+  const controlled = page.getByLabel('Controlled password', { exact: true });
+  const show = page.getByRole('button', { name: 'Show controlled password', exact: true });
+  await expect(controlled).toHaveAttribute('type', 'password');
+  await show.press('Enter');
+  await expect(page.locator('body')).toHaveAttribute('data-requested', 'true');
+  await expect(controlled).toHaveAttribute('type', 'password');
+  await expect(show).toBeFocused();
+  const initial = page.getByLabel('Default password', { exact: true });
+  await expect(initial).toHaveAttribute('type', 'text');
+  await page.getByRole('button', { name: 'Hide default password', exact: true }).press('Space');
+  await expect(initial).toHaveAttribute('type', 'password');
+  await expect(page.getByLabel('Disabled password', { exact: true })).toBeDisabled();
+  await expect(page.getByRole('button', { name: 'Show disabled password', exact: true })).toBeDisabled();
 });
 
 test('password field respects native disabled fieldsets', async ({ page }) => {
