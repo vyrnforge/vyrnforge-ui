@@ -56,7 +56,11 @@ export async function createReactStory({ client }) {
         },
       }),
       h('button', { type: 'button', id: 'after' }, 'After'),
-      h('button', { type: 'button', id: 'set-controlled', onClick: () => setControlled('details') }, 'Set controlled view'),
+      h(
+        'button',
+        { type: 'button', id: 'set-controlled', onClick: () => setControlled('details') },
+        'Set controlled view',
+      ),
     );
   }
   return h(App);
@@ -81,7 +85,8 @@ export async function createVueStory({ client }) {
             name: 'view',
             defaultValue: 'list',
             'onUpdate:value': () => {
-              if (client) document.body.dataset.viewRequests = String(Number(document.body.dataset.viewRequests ?? 0) + 1);
+              if (client)
+                document.body.dataset.viewRequests = String(Number(document.body.dataset.viewRequests ?? 0) + 1);
             },
           }),
           g('Other view', { defaultValue: 'grid' }),
@@ -93,7 +98,11 @@ export async function createVueStory({ client }) {
             },
           }),
           h('button', { type: 'button', id: 'after' }, 'After'),
-          h('button', { type: 'button', id: 'set-controlled', onClick: () => (controlled.value = 'details') }, 'Set controlled view'),
+          h(
+            'button',
+            { type: 'button', id: 'set-controlled', onClick: () => (controlled.value = 'details') },
+            'Set controlled view',
+          ),
         ]);
     },
   });

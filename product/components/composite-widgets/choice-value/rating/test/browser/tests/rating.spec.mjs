@@ -88,7 +88,9 @@ test('Angular Rating hydrates existing server-rendered nodes without hydration w
   expect(warnings).toEqual([]);
 });
 
-test('native radio reset restores independent defaults, empty selection and committed controlled state', async ({ page }) => {
+test('native radio reset restores independent defaults, empty selection and committed controlled state', async ({
+  page,
+}) => {
   await open(page);
   const group = page.getByRole('radiogroup', { name: 'First rating', exact: true });
   const other = page.getByRole('radiogroup', { name: 'Second rating', exact: true });
@@ -104,7 +106,9 @@ test('native radio reset restores independent defaults, empty selection and comm
   await expect(empty.locator('input:checked')).toHaveCount(1);
   if (managed) {
     await page.locator('#set-controlled').click();
-    await expect(page.getByRole('radiogroup', { name: 'Controlled rating' }).getByRole('radio', { name: 'Score 2' })).toBeChecked();
+    await expect(
+      page.getByRole('radiogroup', { name: 'Controlled rating' }).getByRole('radio', { name: 'Score 2' }),
+    ).toBeChecked();
     await expect(page.locator('body')).toHaveAttribute('data-rating-requests', '1');
   }
   await form.evaluate(async (element) => {
@@ -131,7 +135,9 @@ test('native radio reset restores independent defaults, empty selection and comm
   expect(await form.evaluate((element, name) => new FormData(element).get(name), name)).toBe('1');
   await expect(page.locator('body')).not.toHaveAttribute('data-reset-change', 'unexpected');
   if (managed) {
-    await expect(page.getByRole('radiogroup', { name: 'Controlled rating' }).getByRole('radio', { name: 'Score 2' })).toBeChecked();
+    await expect(
+      page.getByRole('radiogroup', { name: 'Controlled rating' }).getByRole('radio', { name: 'Score 2' }),
+    ).toBeChecked();
     await expect(page.locator('body')).toHaveAttribute('data-rating-requests', '1');
     await expect(page.locator('body')).not.toHaveAttribute('data-requested', /.+/);
   }

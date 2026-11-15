@@ -52,9 +52,9 @@ export const SegmentedControlRoot = forwardRef<HTMLDivElement, SegmentedControlR
     const document = root.ownerDocument;
     let active = true;
     const radios = () =>
-      Array.from(root.querySelectorAll<HTMLInputElement>('[data-vf-segmented-control-item] > input[type="radio"]')).filter(
-        (radio) => radio.closest('[data-vf-segmented-control-root]') === root,
-      );
+      Array.from(
+        root.querySelectorAll<HTMLInputElement>('[data-vf-segmented-control-item] > input[type="radio"]'),
+      ).filter((radio) => radio.closest('[data-vf-segmented-control-root]') === root);
     const onReset = (event: Event) => {
       const group = radios();
       if (!group.length || !group.every((radio) => radio.form && radio.form === event.target)) return;
@@ -88,7 +88,11 @@ export const SegmentedControlRoot = forwardRef<HTMLDivElement, SegmentedControlR
   return createElement(
     C.Provider,
     { value: ctx },
-    createElement('div', { ...props, ref: rootRef, role: 'radiogroup', 'data-vf-segmented-control-root': '' }, children),
+    createElement(
+      'div',
+      { ...props, ref: rootRef, role: 'radiogroup', 'data-vf-segmented-control-root': '' },
+      children,
+    ),
   );
 });
 export interface SegmentedControlItemProps extends Omit<

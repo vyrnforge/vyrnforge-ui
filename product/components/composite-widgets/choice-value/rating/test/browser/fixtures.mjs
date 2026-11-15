@@ -36,7 +36,8 @@ export async function createReactStory({ client }) {
       group('First rating', {
         defaultValue: 1,
         onValueChange: () => {
-          if (client) document.body.dataset.ratingRequests = String(Number(document.body.dataset.ratingRequests ?? 0) + 1);
+          if (client)
+            document.body.dataset.ratingRequests = String(Number(document.body.dataset.ratingRequests ?? 0) + 1);
         },
       }),
       group('Second rating', { defaultValue: 2 }),
@@ -77,7 +78,8 @@ export async function createVueStory({ client }) {
           group('First rating', {
             defaultValue: 1,
             'onUpdate:value': () => {
-              if (client) document.body.dataset.ratingRequests = String(Number(document.body.dataset.ratingRequests ?? 0) + 1);
+              if (client)
+                document.body.dataset.ratingRequests = String(Number(document.body.dataset.ratingRequests ?? 0) + 1);
             },
           }),
           group('Second rating', { defaultValue: 2 }),
@@ -88,7 +90,11 @@ export async function createVueStory({ client }) {
               if (client) document.body.dataset.requested = String(v);
             },
           }),
-          h('button', { type: 'button', id: 'set-controlled', onClick: () => (controlled.value = 2) }, 'Set controlled rating'),
+          h(
+            'button',
+            { type: 'button', id: 'set-controlled', onClick: () => (controlled.value = 2) },
+            'Set controlled rating',
+          ),
           h(RatingRoot, {
             'aria-label': 'Generated rating',
             name: 'score',

@@ -41,9 +41,9 @@ export const SegmentedControlRoot = defineComponent({
     let document: Document | undefined;
     let active = false;
     const radios = () =>
-      Array.from(root.value?.querySelectorAll<HTMLInputElement>('[data-vf-segmented-control-item] > input[type="radio"]') ?? []).filter(
-        (radio) => radio.closest('[data-vf-segmented-control-root]') === root.value,
-      );
+      Array.from(
+        root.value?.querySelectorAll<HTMLInputElement>('[data-vf-segmented-control-item] > input[type="radio"]') ?? [],
+      ).filter((radio) => radio.closest('[data-vf-segmented-control-root]') === root.value);
     const onReset = (event: Event) => {
       const group = radios();
       if (!group.length || !group.every((radio) => radio.form && radio.form === event.target)) return;
@@ -74,7 +74,8 @@ export const SegmentedControlRoot = defineComponent({
         emit('update:value', candidate);
       },
     });
-    return () => h('div', { ...attrs, ref: root, role: 'radiogroup', 'data-vf-segmented-control-root': '' }, slots.default?.());
+    return () =>
+      h('div', { ...attrs, ref: root, role: 'radiogroup', 'data-vf-segmented-control-root': '' }, slots.default?.());
   },
 });
 export const SegmentedControlItem = defineComponent({

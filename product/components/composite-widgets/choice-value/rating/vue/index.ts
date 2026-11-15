@@ -44,9 +44,9 @@ export const RatingRoot = defineComponent({
     let document: Document | undefined;
     let active = false;
     const radios = () =>
-      Array.from(root.value?.querySelectorAll<HTMLInputElement>('[data-vf-rating-item] > input[type="radio"]') ?? []).filter(
-        (radio) => radio.closest('[data-vf-rating-root]') === root.value,
-      );
+      Array.from(
+        root.value?.querySelectorAll<HTMLInputElement>('[data-vf-rating-item] > input[type="radio"]') ?? [],
+      ).filter((radio) => radio.closest('[data-vf-rating-root]') === root.value);
     const onReset = (event: Event) => {
       const group = radios();
       if (!group.length || !group.every((radio) => radio.form && radio.form === event.target)) return;

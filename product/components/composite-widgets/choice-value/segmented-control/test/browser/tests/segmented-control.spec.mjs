@@ -107,7 +107,9 @@ test('Web CSS reflects native checked and focus state', async ({ page }) => {
   await expect(label).toHaveCSS('outline-style', 'solid');
 });
 
-test('native radio reset restores independent defaults, empty selection and committed controlled state', async ({ page }) => {
+test('native radio reset restores independent defaults, empty selection and committed controlled state', async ({
+  page,
+}) => {
   await load(page);
   const group = page.getByRole('radiogroup', { name: 'View', exact: true });
   const other = page.getByRole('radiogroup', { name: 'Other view', exact: true });
@@ -123,7 +125,9 @@ test('native radio reset restores independent defaults, empty selection and comm
   await expect(empty.locator('input:checked')).toHaveCount(1);
   if (managed) {
     await page.locator('#set-controlled').click();
-    await expect(page.getByRole('radiogroup', { name: 'Controlled view' }).getByRole('radio', { name: 'Details' })).toBeChecked();
+    await expect(
+      page.getByRole('radiogroup', { name: 'Controlled view' }).getByRole('radio', { name: 'Details' }),
+    ).toBeChecked();
     await expect(page.locator('body')).toHaveAttribute('data-view-requests', '1');
   }
   await form.evaluate(async (element) => {
@@ -150,7 +154,9 @@ test('native radio reset restores independent defaults, empty selection and comm
   expect(await form.evaluate((element, name) => new FormData(element).get(name), name)).toBe('list');
   await expect(page.locator('body')).not.toHaveAttribute('data-reset-change', 'unexpected');
   if (managed) {
-    await expect(page.getByRole('radiogroup', { name: 'Controlled view' }).getByRole('radio', { name: 'Details' })).toBeChecked();
+    await expect(
+      page.getByRole('radiogroup', { name: 'Controlled view' }).getByRole('radio', { name: 'Details' }),
+    ).toBeChecked();
     await expect(page.locator('body')).toHaveAttribute('data-view-requests', '1');
     await expect(page.locator('body')).not.toHaveAttribute('data-requested', /.+/);
   }

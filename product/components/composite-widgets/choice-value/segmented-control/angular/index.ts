@@ -37,9 +37,9 @@ export class VfSegmentedControlRootDirective {
         const document = root.ownerDocument;
         let active = true;
         const radios = () =>
-          Array.from(root.querySelectorAll<HTMLInputElement>('input[type="radio"][data-vf-segmented-control-radio]')).filter(
-            (radio) => radio.closest('[data-vf-segmented-control-root]') === root,
-          );
+          Array.from(
+            root.querySelectorAll<HTMLInputElement>('input[type="radio"][data-vf-segmented-control-radio]'),
+          ).filter((radio) => radio.closest('[data-vf-segmented-control-root]') === root);
         const onReset = (event: Event) => {
           const group = radios();
           if (!group.length || !group.every((radio) => radio.form && radio.form === event.target)) return;
