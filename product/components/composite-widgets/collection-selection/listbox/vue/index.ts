@@ -27,23 +27,26 @@ function useListbox() {
   return value;
 }
 
+const rootSelector = '[data-vf-listbox-root],vf-listbox';
 const optionSelector = '[data-vf-listbox-option]';
 function optionsFor(root: HTMLElement): HTMLElement[] {
-  return Array.from(root.querySelectorAll<HTMLElement>(optionSelector));
+  return Array.from(root.querySelectorAll<HTMLElement>(optionSelector)).filter(
+    (option) => option.closest(rootSelector) === root,
+  );
 }
 function disabled(option: HTMLElement): boolean {
-  return option.getAttribute('aria-disabled') === 'true';
+  return option.getAttribute('aria-disabled') === 'true' || option.matches(':disabled,[hidden]');
 }
 function optionFromTarget(root: HTMLElement, target: EventTarget | null): HTMLElement | null {
-  const element = target instanceof HTMLElement ? target.closest<HTMLElement>(optionSelector) : null;
-  return element && root.contains(element) ? element : null;
+  const element = target instanceof Element ? target.closest<HTMLElement>(optionSelector) : null;
+  return element && element.closest(rootSelector) === root ? element : null;
 }
 function syncTabStops(root: HTMLElement, preferred?: HTMLElement | null) {
   const options = optionsFor(root);
   const states = options.map((option) => ({ eligible: !disabled(option) }));
   let activeIndex = preferred ? options.indexOf(preferred) : -1;
   if (activeIndex < 0 || states[activeIndex]?.eligible === false) {
-    const focused = typeof document === 'undefined' ? null : optionFromTarget(root, document.activeElement);
+    const focused = optionFromTarget(root, root.ownerDocument.activeElement);
     activeIndex = focused ? options.indexOf(focused) : -1;
   }
   if (activeIndex < 0 || states[activeIndex]?.eligible === false)
@@ -52,10 +55,12 @@ function syncTabStops(root: HTMLElement, preferred?: HTMLElement | null) {
     );
   if (activeIndex < 0) activeIndex = states.findIndex((option) => option.eligible !== false);
   const resolved = activeIndex < 0 ? null : activeIndex;
+  const focused = optionFromTarget(root, root.ownerDocument.activeElement);
   root.tabIndex = resolved === null ? 0 : -1;
   options.forEach((option, index) => {
     option.tabIndex = states[index]?.eligible !== false && resolved === index ? 0 : -1;
   });
+  if (focused && disabled(focused)) (resolved === null ? root : options[resolved])?.focus();
 }
 function invoke(handler: unknown, event: Event) {
   if (typeof handler === 'function') handler(event);
@@ -64,6 +69,7 @@ function invoke(handler: unknown, event: Event) {
 
 export const ListboxRoot = defineComponent({
   name: 'ListboxRoot',
+  inheritAttrs: false,
   props: {
     value: [String, Array] as PropType<string | string[] | undefined>,
     defaultValue: [String, Array] as PropType<string | string[] | undefined>,
@@ -74,7 +80,11 @@ export const ListboxRoot = defineComponent({
     const internal = ref<string[]>(
       typeof props.defaultValue === 'string' ? [props.defaultValue] : (props.defaultValue ?? []),
     );
-    const values = computed(() => (typeof props.value === 'string' ? [props.value] : (props.value ?? internal.value)));
+    const values = computed(() => {
+      const raw = props.value ?? internal.value;
+      const values = typeof raw === 'string' ? (raw ? [raw] : []) : raw;
+      return props.selectionMode === 'single' ? values.slice(0, 1) : values;
+    });
     const mode = computed(() => props.selectionMode);
     const root = ref<HTMLElement | null>(null);
     let query = '';
@@ -104,7 +114,14 @@ export const ListboxRoot = defineComponent({
           childList: true,
           subtree: true,
           attributes: true,
-          attributeFilter: ['aria-disabled', 'aria-selected', 'data-vf-listbox-option'],
+          attributeFilter: [
+            'aria-disabled',
+            'aria-selected',
+            'data-vf-listbox-option',
+            'disabled',
+            'hidden',
+            'data-vf-listbox-root',
+          ],
         });
       }
     });
@@ -132,6 +149,12 @@ export const ListboxRoot = defineComponent({
             invoke(attrs.onKeydown, event);
             if (event.defaultPrevented) return;
             const element = event.currentTarget as HTMLElement;
+            if (
+              !(event.target instanceof Element) ||
+              event.target.closest(rootSelector) !== element ||
+              (event.target !== element && !optionFromTarget(element, event.target))
+            )
+              return;
             const options = optionsFor(element);
             const currentOption = optionFromTarget(element, event.target);
             const current = currentOption ? options.indexOf(currentOption) : -1;
@@ -147,7 +170,7 @@ export const ListboxRoot = defineComponent({
                 current,
                 intent,
               );
-            else if (event.key.length === 1 && !event.ctrlKey && !event.metaKey && !event.altKey) {
+            else if (event.key.length === 1 && event.key !== ' ' && !event.ctrlKey && !event.metaKey && !event.altKey) {
               query += event.key;
               if (timer) clearTimeout(timer);
               timer = setTimeout(() => {
@@ -177,7 +200,8 @@ export const ListboxRoot = defineComponent({
 
 export const ListboxOption = defineComponent({
   name: 'ListboxOption',
-  props: { value: { type: String, required: true }, disabled: Boolean },
+  inheritAttrs: false,
+  props: { value: { type: String, required: true }, textValue: String, disabled: Boolean },
   setup(props, { attrs, slots }) {
     const listbox = useListbox();
     return () =>
@@ -188,18 +212,23 @@ export const ListboxOption = defineComponent({
           role: 'option',
           tabindex: -1,
           'aria-selected': listbox.values.value.includes(props.value),
-          'aria-disabled': props.disabled || undefined,
+          'aria-disabled': props.disabled || attrs['aria-disabled'] || undefined,
           'data-vf-listbox-option': '',
+          'data-vf-text-value': props.textValue ?? props.value,
           onClick: (event: MouseEvent) => {
             invoke(attrs.onClick, event);
-            if (!event.defaultPrevented && !props.disabled) {
+            if (!event.defaultPrevented && !disabled(event.currentTarget as HTMLElement)) {
               (event.currentTarget as HTMLElement).focus();
               listbox.select(props.value);
             }
           },
           onKeydown: (event: KeyboardEvent) => {
             invoke(attrs.onKeydown, event);
-            if (!event.defaultPrevented && !props.disabled && (event.key === 'Enter' || event.key === ' ')) {
+            if (
+              !event.defaultPrevented &&
+              !disabled(event.currentTarget as HTMLElement) &&
+              (event.key === 'Enter' || event.key === ' ')
+            ) {
               event.preventDefault();
               listbox.select(props.value);
             }
