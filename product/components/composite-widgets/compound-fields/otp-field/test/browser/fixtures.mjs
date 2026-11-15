@@ -1,104 +1,168 @@
-import { mkdir, writeFile } from 'node:fs/promises';
-import path from 'node:path';
-import { build } from 'esbuild';
-
+const guide = '<p id="otp-guide">Entrez le code à quatre caractères.</p>';
+const fieldMarkup = (tag, id, label, attributes = '', extra = '') =>
+  `<${tag} id="${id}-root" data-vf-otp-field-root ${tag === 'vf-otp-field' ? 'length="4"' : ''}><label for="${id}">${label}</label><input id="${id}" name="${id}" type="text" data-vf-input data-vf-otp-field-input inputmode="numeric" autocomplete="one-time-code" maxlength="4" aria-describedby="otp-guide" ${attributes}>${extra}</${tag}>`;
+const web = guide + '<form id="otp-form">' + fieldMarkup('div', 'code', 'Code de vérification') + '</form>';
+const elements =
+  guide +
+  '<form id="otp-form">' +
+  fieldMarkup(
+    'vf-otp-field',
+    'code',
+    'Code de vérification',
+    '',
+    fieldMarkup('vf-otp-field', 'nested', 'Code secondaire'),
+  ) +
+  '</form>';
 export const browserFixture = {
   component: 'otp-field',
-  prepare: async ({ port }) => {
-    const root = process.cwd();
-    const dir = path.join(root, 'dist/browser-fixtures/components/otp-field');
-    await mkdir(dir, { recursive: true });
-
-    const labels = [
-      'Chiffre 1 sur 4 du code',
-      'Chiffre 2 sur 4 du code',
-      'Chiffre 3 sur 4 du code',
-      'Chiffre 4 sur 4 du code',
-    ];
-
-    const sources = {
-      web: ``,
-      react: `
-        import { createElement } from 'react';
-        import { createRoot } from 'react-dom/client';
-        import { OTPFieldInput, OTPFieldRoot } from '@vyrnforge/react/otp-field';
-        import '@vyrnforge/web/styles/tokens.css';
-        import '@vyrnforge/web/styles/otp-field.css';
-        const labels = ${JSON.stringify(labels)};
-        createRoot(document.querySelector('#root')).render(
-          createElement(OTPFieldRoot, { length: 4, 'aria-label': 'Code de vérification' },
-            ...labels.map((label, index) => createElement(OTPFieldInput, { key: index, index, 'aria-label': label }))
-          )
-        );
-      `,
-      vue: `
-        import { createApp, h } from 'vue';
-        import { OTPFieldInput, OTPFieldRoot } from '@vyrnforge/vue/otp-field';
-        const labels = ${JSON.stringify(labels)};
-        createApp({
-          render() {
-            return h(OTPFieldRoot, { length: 4, 'aria-label': 'Code de vérification' }, {
-              default: () => labels.map((label, index) => h(OTPFieldInput, { index, 'aria-label': label }))
-            });
-          }
-        }).mount('#root');
-      `,
-      angular: `
-        import '@angular/compiler';
-        import { Component } from '@angular/core';
-        import { bootstrapApplication } from '@angular/platform-browser';
-        import { VfOtpFieldInputDirective, VfOtpFieldRootDirective } from '@vyrnforge/angular/otp-field';
-
-        @Component({
-          selector: 'vf-otp-fixture',
-          standalone: true,
-          imports: [VfOtpFieldRootDirective, VfOtpFieldInputDirective],
-          template: \`<div vfOtpFieldRoot aria-label="Code de vérification" [length]="4">
-            <input [vfOtpFieldInput]="0" aria-label="Chiffre 1 sur 4 du code">
-            <input [vfOtpFieldInput]="1" aria-label="Chiffre 2 sur 4 du code">
-            <input [vfOtpFieldInput]="2" aria-label="Chiffre 3 sur 4 du code">
-            <input [vfOtpFieldInput]="3" aria-label="Chiffre 4 sur 4 du code">
-          </div>\`
-        })
-        class OTPFixture {}
-
-        bootstrapApplication(OTPFixture);
-      `,
-      elements: `
-        import { defineOtpFieldElement } from '@vyrnforge/elements/otp-field';
-        const mount = document.querySelector('#root');
-        mount.innerHTML = \`<vf-otp-field aria-label="Code de vérification">
-          <input data-vf-otp-field-input aria-label="Chiffre 1 sur 4 du code">
-          <input data-vf-otp-field-input aria-label="Chiffre 2 sur 4 du code">
-          <input data-vf-otp-field-input aria-label="Chiffre 3 sur 4 du code">
-          <input data-vf-otp-field-input aria-label="Chiffre 4 sur 4 du code">
-        </vf-otp-field>\`;
-        defineOtpFieldElement();
-      `,
-    };
-
-    const source = sources[port];
-    if (source === undefined) throw new Error(`Unsupported otp-field browser port: ${port}`);
-
-    await build({
-      stdin: {
-        contents: source,
-        resolveDir: root,
-        sourcefile: `otp-field-${port}.ts`,
-        loader: 'ts',
-      },
-      bundle: true,
-      format: 'esm',
-      platform: 'browser',
-      outfile: path.join(dir, `${port}.js`),
-      tsconfigRaw: { compilerOptions: { experimentalDecorators: true } },
-    });
-
-    const mount = port === 'angular' ? '<vf-otp-fixture></vf-otp-fixture>' : '<div id="root"></div>';
-    const stylesheet = port === 'react' ? '<link rel="stylesheet" href="./react.css">' : '';
-    await writeFile(
-      path.join(dir, `${port}.html`),
-      `<!doctype html><html lang="fr"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width"><title>OTP field browser fixture</title>${stylesheet}</head><body><main><h1>OTP field browser fixture</h1>${mount}</main><script type="module" src="./${port}.js"></script></body></html>`,
-    );
+  title: 'OTP field browser fixture',
+  heading: 'OTP field browser fixture',
+  ports: {
+    web: { body: web },
+    react: { story: 'createReactStory' },
+    vue: { story: 'createVueStory' },
+    angular: { story: 'createAngularStory', selector: 'vf-otp-test' },
+    elements: { story: 'createElementsStory' },
   },
 };
+function record(key, value) {
+  document.body.dataset[key] = value;
+  document.body.dataset[key + 'Count'] = String(Number(document.body.dataset[key + 'Count'] ?? 0) + 1);
+}
+export async function createReactStory({ client }) {
+  const { createElement: h, useEffect, useState } = await import('react');
+  const { OTPFieldRoot, OTPFieldInput } = await import('@vyrnforge/react/otp-field');
+  function App() {
+    const [controlled, setControlled] = useState('1234');
+    useEffect(() => {
+      document.body.dataset.otpReady = 'true';
+    }, []);
+    const field = (id, label, options, inputOptions = {}) =>
+      h(
+        OTPFieldRoot,
+        { id: id + '-root', length: 4, ...options },
+        h('label', { htmlFor: id }, label),
+        h(OTPFieldInput, { id, name: id, 'aria-describedby': 'otp-guide', ...inputOptions }),
+      );
+    return h(
+      'div',
+      null,
+      h('p', { id: 'otp-guide' }, 'Entrez le code à quatre caractères.'),
+      h(
+        'form',
+        { id: 'otp-form' },
+        field('code', 'Code de vérification', {
+          onValueChange: (v) => {
+            if (client) record('otpValue', v);
+          },
+        }),
+        field('controlled', 'Code contrôlé', {
+          value: controlled,
+          onValueChange: (v) => {
+            if (client) record('otpRequest', v);
+          },
+        }),
+        field('disabled', 'Code désactivé', { disabled: true }),
+        field('readonly', 'Code en lecture seule', { defaultValue: '5678' }, { readOnly: true }),
+        field('alpha', 'Code alphanumérique', {}, { inputMode: 'text' }),
+        h('button', { id: 'set-code', type: 'button', onClick: () => setControlled('7654') }, 'Mettre à jour'),
+      ),
+    );
+  }
+  return h(App);
+}
+export async function createVueStory({ client }) {
+  const { createSSRApp, h, onMounted, ref } = await import('vue');
+  const { OTPFieldRoot, OTPFieldInput } = await import('@vyrnforge/vue/otp-field');
+  return createSSRApp({
+    setup() {
+      const controlled = ref('1234');
+      onMounted(() => {
+        document.body.dataset.otpReady = 'true';
+      });
+      const field = (id, label, options, inputOptions = {}) =>
+        h(OTPFieldRoot, { id: id + '-root', length: 4, ...options }, () => [
+          h('label', { for: id }, label),
+          h(OTPFieldInput, { id, name: id, 'aria-describedby': 'otp-guide', ...inputOptions }),
+        ]);
+      return () =>
+        h('div', null, [
+          h('p', { id: 'otp-guide' }, 'Entrez le code à quatre caractères.'),
+          h('form', { id: 'otp-form' }, [
+            field('code', 'Code de vérification', {
+              'onUpdate:value': (v) => {
+                if (client) record('otpValue', v);
+              },
+            }),
+            field('controlled', 'Code contrôlé', {
+              value: controlled.value,
+              'onUpdate:value': (v) => {
+                if (client) record('otpRequest', v);
+              },
+            }),
+            field('disabled', 'Code désactivé', { disabled: true }),
+            field('readonly', 'Code en lecture seule', { defaultValue: '5678' }, { readonly: true }),
+            field('alpha', 'Code alphanumérique', {}, { inputmode: 'text' }),
+            h(
+              'button',
+              {
+                id: 'set-code',
+                type: 'button',
+                onClick: () => {
+                  controlled.value = '7654';
+                },
+              },
+              'Mettre à jour',
+            ),
+          ]),
+        ]);
+    },
+  });
+}
+export async function createAngularStory({ client }) {
+  await import('@angular/compiler');
+  const { Component, afterNextRender, signal } = await import('@angular/core');
+  const { VfOtpFieldRootDirective, VfOtpFieldInputDirective } = await import('@vyrnforge/angular/otp-field');
+  class OtpTestApp {
+    controlled = signal('1234');
+    constructor() {
+      afterNextRender(() => {
+        document.body.dataset.otpReady = 'true';
+      });
+    }
+    changed(key, value) {
+      if (client) record(key, value);
+    }
+  }
+  const field = (id, label, options = '', inputOptions = '') =>
+    `<div vfOtpFieldRoot id="${id}-root" [length]="4" ${options}><label for="${id}">${label}</label><input vfOtpFieldInput id="${id}" name="${id}" aria-describedby="otp-guide" ${inputOptions}></div>`;
+  Component({
+    selector: 'vf-otp-test',
+    standalone: true,
+    imports: [VfOtpFieldRootDirective, VfOtpFieldInputDirective],
+    template: `<main><h1>OTP field browser fixture</h1>${guide}<form id="otp-form">
+      ${field('code', 'Code de vérification', '(valueChange)="changed(\'otpValue\', $event)"')}
+      ${field('controlled', 'Code contrôlé', '[value]="controlled()" (valueChange)="changed(\'otpRequest\', $event)"')}
+      ${field('disabled', 'Code désactivé', '[disabled]="true"')}
+      ${field('readonly', 'Code en lecture seule', 'defaultValue="5678"', 'readonly')}
+      ${field('alpha', 'Code alphanumérique', '', 'inputmode="text"')}
+      <button id="set-code" type="button" (click)="controlled.set('7654')">Mettre à jour</button>
+    </form></main>`,
+  })(OtpTestApp);
+  return OtpTestApp;
+}
+export async function createElementsStory({ client }) {
+  return {
+    body: elements,
+    activate: client
+      ? async () => {
+          const { defineOtpFieldElement } = await import('@vyrnforge/elements/otp-field');
+          defineOtpFieldElement();
+          document.querySelector('#code-root').addEventListener('valuechange', (event) => {
+            if (event.target.id === 'code-root') record('otpValue', event.detail.value);
+          });
+          document.body.dataset.otpReady = 'true';
+        }
+      : undefined,
+  };
+}

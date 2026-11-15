@@ -212,6 +212,8 @@ export function Example() {
           </h2>
           <p>The example provider requires a second factor before returning to your edit.</p>
           <form onSubmit={submitOtp} noValidate>
+            <label htmlFor="identity-otp">Verification code</label>
+            <p id="identity-otp-hint">Enter or paste the four-digit code.</p>
             <OTPFieldRoot
               value={otp}
               onValueChange={(value) => {
@@ -219,11 +221,8 @@ export function Example() {
                 setProviderResult('idle');
               }}
               length={4}
-              aria-label="Verification code"
             >
-              {[0, 1, 2, 3].map((index) => (
-                <OTPFieldInput key={index} index={index} aria-label={`Verification code digit ${index + 1} of 4`} />
-              ))}
+              <OTPFieldInput id="identity-otp" name="code" aria-describedby="identity-otp-hint" />
             </OTPFieldRoot>
             {providerResult === 'otp-failed' && (
               <p role="alert">That verification code is incorrect or expired. Enter the current code and try again.</p>

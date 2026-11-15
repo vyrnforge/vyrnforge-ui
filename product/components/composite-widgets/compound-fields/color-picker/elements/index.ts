@@ -1,22 +1,41 @@
 const H: typeof HTMLElement = globalThis.HTMLElement ?? (class {} as typeof HTMLElement);
+const colorSelector = 'input[data-vf-color-picker-input]';
+const textSelector = 'input[data-vf-color-picker-text]';
 export class VfColorPickerElement extends H {
   connectedCallback() {
     this.setAttribute('data-vf-color-picker-root', '');
     this.addEventListener('input', this.onInput);
+    this.syncFromNative();
   }
   disconnectedCallback() {
     this.removeEventListener('input', this.onInput);
   }
-  private onInput = (e: Event) => {
-    const i = e.target as HTMLInputElement;
-    if (!i.matches('[data-vf-color-picker-input],[data-vf-color-picker-text]')) return;
-    const v = i.value;
-    if (!/^#[0-9a-f]{6}$/i.test(v)) return;
-    this.querySelectorAll<HTMLInputElement>('[data-vf-color-picker-input],[data-vf-color-picker-text]').forEach((x) => {
-      if (x !== i) x.value = v;
+  private owns(node: Element) {
+    return node.closest(`[data-vf-color-picker-root],${this.localName}`) === this;
+  }
+  private owned<T extends HTMLElement>(selector: string): T[] {
+    return Array.from(this.querySelectorAll<T>(selector)).filter((node) => this.owns(node));
+  }
+  private syncFromNative() {
+    const input = this.owned<HTMLInputElement>(colorSelector)[0];
+    if (input?.type === 'color') this.sync(input.value);
+  }
+  private sync(value: string) {
+    this.owned<HTMLInputElement>(colorSelector + ',' + textSelector).forEach((input) => {
+      if (input.value !== value) input.value = value;
     });
-    const s = this.querySelector<HTMLElement>('[data-vf-color-picker-swatch]');
-    if (s) s.style.backgroundColor = v;
+    this.owned<HTMLElement>('[data-vf-color-picker-swatch]').forEach((swatch) => {
+      swatch.style.backgroundColor = value;
+    });
+  }
+  private onInput = (event: Event) => {
+    const input = event.target;
+    if (!(input instanceof HTMLInputElement) || !this.owns(input) || event.defaultPrevented) return;
+    if (!input.matches(colorSelector + ',' + textSelector) || input.matches(':disabled') || input.readOnly) return;
+    const native = this.owned<HTMLInputElement>(colorSelector)[0];
+    if (!native || native.type !== 'color' || native.matches(':disabled')) return;
+    if (!/^#[0-9a-f]{6}$/i.test(input.value)) return;
+    this.sync(input.value.toLowerCase());
   };
 }
 export function defineColorPickerElement(
