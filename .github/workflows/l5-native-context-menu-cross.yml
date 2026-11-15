@@ -1,0 +1,16 @@
+name: Native ContextMenu cross-engine evidence
+on:
+  push:
+    branches: [evidence/l5-native-context-menu-cross]
+permissions:
+  contents: read
+jobs:
+  browser:
+    uses: ./.github/workflows/_browser-validation.yml
+    with:
+      scopes_json: '[{"port":"web","components":"context-menu"},{"port":"react","components":"context-menu"},{"port":"vue","components":"context-menu"},{"port":"angular","components":"context-menu"},{"port":"elements","components":"context-menu"}]'
+      revision: ${{ github.sha }}
+      browser_profile: cross
+      browsers: chromium firefox webkit
+      artifact_suffix: context-menu-cross
+      retention_days: 14
