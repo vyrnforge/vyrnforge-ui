@@ -1,0 +1,16 @@
+name: Native FileUploader cross-engine evidence
+on:
+  push:
+    branches: [evidence/l5-file-uploader-cross]
+permissions:
+  contents: read
+jobs:
+  browser:
+    uses: ./.github/workflows/_browser-validation.yml
+    with:
+      scopes_json: '[{"port":"web","components":"file-uploader"},{"port":"react","components":"file-uploader"},{"port":"vue","components":"file-uploader"},{"port":"angular","components":"file-uploader"},{"port":"elements","components":"file-uploader"}]'
+      revision: ${{ github.sha }}
+      browser_profile: cross
+      browsers: chromium firefox webkit
+      artifact_suffix: file-uploader-cross
+      retention_days: 14
