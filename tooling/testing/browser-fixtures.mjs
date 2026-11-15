@@ -126,10 +126,11 @@ async function prepareAngular({ root, outDir, definition, stylesheet, config, fi
     provideClientHydration,
     withNoIncrementalHydration,
   } = await import('@angular/platform-browser');
-  const { renderApplication } = await import('@angular/platform-server');
+  const { provideServerRendering, renderApplication } = await import('@angular/platform-server');
   const createStory = storyExport(fixtureModule, config.story, fixturePath, 'angular');
   const RootComponent = await createStory({ client: false });
   const providers = [
+    provideServerRendering(),
     provideZonelessChangeDetection(),
     provideClientHydration(withNoIncrementalHydration()),
   ];
@@ -137,6 +138,9 @@ async function prepareAngular({ root, outDir, definition, stylesheet, config, fi
     (context) => bootstrapApplication(RootComponent, { providers }, context),
     { document: angularDocument({ selector: config.selector, stylesheet, title: definition.title }) },
   );
+  if (!/\sngh=/.test(html)) {
+    throw new Error(`Angular SSR fixture ${definition.component} did not emit hydration annotations.`);
+  }
   await writeFile(
     path.join(outDir, 'angular.html'),
     html.replace('</body>', '<script type="module" src="./angular.js"></script></body>'),
@@ -147,7 +151,7 @@ async function prepareAngular({ root, outDir, definition, stylesheet, config, fi
     outDir,
     component: definition.component,
     port: 'angular',
-    contents: `import '@angular/compiler';import{provideZonelessChangeDetection}from'@angular/core';import{bootstrapApplication,provideClientHydration,withNoIncrementalHydration}from'@angular/platform-browser';import{${config.story} as createStory}from${JSON.stringify(specifier)};(async()=>{const RootComponent=await createStory({client:true});await bootstrapApplication(RootComponent,{providers:[provideZonelessChangeDetection(),provideClientHydration(withNoIncrementalHydration())]});})();`,
+    contents: `import '@angular/compiler';import{provideZonelessChangeDetection}from'@angular/core';import{bootstrapApplication,provideClientHydration,withNoIncrementalHydration}from'@angular/platform-browser';import{${config.story} as createStory}from${JSON.stringify(specifier)};(async()=>{const host=document.querySelector(${JSON.stringify(config.selector)});const serverNode=host?.firstElementChild;const serverControl=host?.querySelector('input,button,textarea,select,a[href]');if(!serverNode)throw new Error('Angular SSR fixture has no rendered root child');const RootComponent=await createStory({client:true});await bootstrapApplication(RootComponent,{providers:[provideZonelessChangeDetection(),provideClientHydration(withNoIncrementalHydration())]});if(host.firstElementChild!==serverNode||(serverControl&&!host.contains(serverControl)))throw new Error('Angular hydration replaced server-rendered nodes');document.documentElement.dataset.vfAngularHydrated='true';})();`,
   });
 }
 

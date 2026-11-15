@@ -191,3 +191,27 @@ test('validation scopes keep selected evidence separate from execution prerequis
   assert.ok(impact.executionPrerequisites.includes('build:react'));
   assert.equal(impact.executionPrerequisites.some((value) => value.startsWith('pnpm ')), false);
 });
+
+test('accepted API report changes select only the affected packed package contracts', () => {
+  const ports = ['angular', 'elements', 'react', 'vue'];
+  const impact = createSemanticImpact(ports.map((port) => `packages/${port}/etc/${port}.api.md`));
+  assert.deepEqual(impact.packageArtifactPackages, ports);
+  assert.equal(impact.selectors.packageArtifactsRequired, true);
+  assert.equal(impact.selectors.browserRequired, false);
+  assert.equal(impact.repositoryWide, false);
+  for (const port of ports) {
+    assert.ok(selectedScope(impact, 'package-public-entrypoint', port));
+    assert.ok(selectedScope(impact, 'consumer-validation', port));
+  }
+  assert.equal(createSemanticImpact(['packages/react/etc/README.md']).selectors.packageArtifactsRequired, false);
+});
+
+test('API report evidence composes with narrow component browser evidence', () => {
+  const impact = createSemanticImpact([
+    'product/components/composite-widgets/choice-value/rating/react/index.ts',
+    'packages/react/etc/react.api.md',
+  ]);
+  assert.deepEqual(impact.packageArtifactPackages, ['react']);
+  assert.deepEqual(impact.browserScopes, [{ port: 'react', components: ['rating'] }]);
+  assert.equal(impact.repositoryWide, false);
+});
