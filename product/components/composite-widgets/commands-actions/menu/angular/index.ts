@@ -8,6 +8,7 @@ import {
   output,
   signal,
   type OnDestroy,
+  type WritableSignal,
 } from '@angular/core';
 import { resolveNavigationIndex } from '@vyrnforge/core/collection-navigation';
 import { findTypeaheadMatch } from '@vyrnforge/core/typeahead-matching';
@@ -24,41 +25,39 @@ function itemFromTarget(root: HTMLElement, target: EventTarget | null): HTMLElem
   return item && item.closest('[data-vf-menu-content]') === root ? item : null;
 }
 
+interface MenuFocusRequest {
+  edge: 'first' | 'last' | null;
+  revision: WritableSignal<number>;
+}
+const focusRequests = new WeakMap<VfMenuRootDirective, MenuFocusRequest>();
+function focusRequestFor(root: VfMenuRootDirective): MenuFocusRequest {
+  let request = focusRequests.get(root);
+  if (!request) {
+    request = { edge: null, revision: signal(0) };
+    focusRequests.set(root, request);
+  }
+  return request;
+}
+
 @Directive({ selector: '[vfMenuRoot]', standalone: true })
 export class VfMenuRootDirective {
   readonly open = input<boolean | undefined>(undefined);
   readonly defaultOpen = input(false);
   readonly openChange = output<boolean>();
   readonly placement = input<FloatingPlacement>('bottom-start');
-  private readonly focusRevision = signal(0);
-  private focusRequest: 'first' | 'last' | null = null;
-  private internal = signal(false);
-  private initialized = signal(false);
-  readonly expanded = computed(() => this.open() ?? (this.initialized() ? this.internal() : this.defaultOpen()));
+  private readonly internal = signal<boolean | undefined>(undefined);
+  readonly expanded = computed(() => this.open() ?? this.internal() ?? this.defaultOpen());
   anchor: HTMLElement | null = null;
   surface: HTMLElement | null = null;
   setOpen(next: boolean) {
     if (next === this.expanded()) return;
-    this.initialized.set(true);
     if (this.open() === undefined) this.internal.set(next);
     this.openChange.emit(next);
   }
   focusMenu(edge: 'first' | 'last') {
-    this.focusRequest = edge;
-    this.focusRevision.update((revision) => revision + 1);
-  }
-  syncFocus(): void {
-    this.focusRevision();
-    const edge = this.focusRequest;
-    this.focusRequest = null;
-    if (!edge || !this.expanded() || !this.surface?.matches(':popover-open')) return;
-    const items = menuItems(this.surface);
-    const index = resolveNavigationIndex(
-      items.map(() => ({})),
-      edge === 'first' ? -1 : items.length,
-      edge,
-    );
-    if (index != null) items[index]?.focus();
+    const request = focusRequestFor(this);
+    request.edge = edge;
+    request.revision.update((revision) => revision + 1);
   }
 }
 
@@ -138,7 +137,14 @@ export class VfMenuContentDirective implements OnDestroy {
         this.timer = null;
         this.query = '';
       }
-      this.root.syncFocus();
+      const request = focusRequestFor(this.root);
+      request.revision();
+      const edge = request.edge;
+      request.edge = null;
+      if (!edge || !open || !surface.matches(':popover-open')) return;
+      const items = menuItems(surface);
+      const index = resolveNavigationIndex(items.map(() => ({})), edge === 'first' ? -1 : items.length, edge);
+      if (index != null) items[index]?.focus();
     });
   }
   onBeforeToggle(event: Event): void {

@@ -1649,16 +1649,10 @@ export class VfMenubarTriggerDirective {
 }
 
 // @public (undocumented)
-class VfMenuContentDirective implements OnDestroy {
+class VfMenuContentDirective {
     constructor(root: VfMenuRootDirective);
     // (undocumented)
-    ngOnDestroy(): void;
-    // (undocumented)
-    onBeforeToggle(event: Event): void;
-    // (undocumented)
     onKeydown(event: KeyboardEvent): void;
-    // (undocumented)
-    onToggle(event: Event): void;
     // (undocumented)
     readonly root: VfMenuRootDirective;
     // (undocumented)
@@ -1713,13 +1707,9 @@ class VfMenuRootDirective {
     // (undocumented)
     readonly openChange: OutputEmitterRef<boolean>;
     // (undocumented)
-    readonly placement: InputSignal<FloatingPlacement>;
-    // (undocumented)
     setOpen(next: boolean): void;
     // (undocumented)
     surface: HTMLElement | null;
-    // (undocumented)
-    syncFocus(): void;
     // (undocumented)
     static ɵdir: i0.ɵɵDirectiveDeclaration<VfMenuRootDirective, "[vfMenuRoot]", never, {
         "open": {
@@ -1729,11 +1719,6 @@ class VfMenuRootDirective {
         };
         "defaultOpen": {
             "alias": "defaultOpen";
-            "required": false;
-            "isSignal": true;
-        };
-        "placement": {
-            "alias": "placement";
             "required": false;
             "isSignal": true;
         };
@@ -3133,11 +3118,18 @@ export class VfTagGroupItemDirective {
 // @public (undocumented)
 export class VfTagGroupRemoveDirective {
     // (undocumented)
+    readonly ariaLabel: InputSignal<string | undefined>;
+    // (undocumented)
     readonly label: InputSignal<string | undefined>;
     // (undocumented)
     static ɵdir: i0.ɵɵDirectiveDeclaration<VfTagGroupRemoveDirective, "button[vfTagGroupRemove]", never, {
         "label": {
             "alias": "label";
+            "required": false;
+            "isSignal": true;
+        };
+        "ariaLabel": {
+            "alias": "aria-label";
             "required": false;
             "isSignal": true;
         };
@@ -3147,7 +3139,11 @@ export class VfTagGroupRemoveDirective {
 }
 
 // @public (undocumented)
-export class VfTagGroupRootDirective {
+export class VfTagGroupRootDirective implements AfterViewInit, OnDestroy {
+    // (undocumented)
+    ngAfterViewInit(): void;
+    // (undocumented)
+    ngOnDestroy(): void;
     // (undocumented)
     static ɵdir: i0.ɵɵDirectiveDeclaration<VfTagGroupRootDirective, "[vfTagGroupRoot]", never, {}, {}, never, never, true, never>;
     // (undocumented)

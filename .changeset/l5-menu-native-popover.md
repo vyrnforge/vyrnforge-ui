@@ -1,8 +1,8 @@
 ---
 '@vyrnforge/web': minor
-'@vyrnforge/react': minor
+'@vyrnforge/react': major
 '@vyrnforge/angular': minor
-'@vyrnforge/vue': minor
+'@vyrnforge/vue': major
 '@vyrnforge/elements': minor
 ---
 

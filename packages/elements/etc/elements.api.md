@@ -594,6 +594,8 @@ export class VfTabsElement extends HTMLElementBase_2 {
 export class VfTagGroupElement extends H_5 {
     // (undocumented)
     connectedCallback(): void;
+    // (undocumented)
+    disconnectedCallback(): void;
 }
 
 // @public (undocumented)
