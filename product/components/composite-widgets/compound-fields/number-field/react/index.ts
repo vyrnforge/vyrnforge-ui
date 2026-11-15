@@ -81,9 +81,7 @@ export const NumberFieldRoot = forwardRef<HTMLDivElement, NumberFieldRootProps>(
     createElement('div', { ...props, ref, 'data-vf-number-field-root': '' }, children),
   );
 });
-export interface NumberFieldInputProps extends Omit<
-  ComponentPropsWithoutRef<'input'>, 'value' | 'defaultValue' | 'type' | 'min' | 'max' | 'step'
-> {}
+export type NumberFieldInputProps = Omit<ComponentPropsWithoutRef<'input'>, 'value' | 'defaultValue' | 'type' | 'min' | 'max' | 'step'>;
 export const NumberFieldInput = forwardRef<HTMLInputElement, NumberFieldInputProps>(function NumberFieldInput(
   { disabled, readOnly, onChange, ...props },
   ref,

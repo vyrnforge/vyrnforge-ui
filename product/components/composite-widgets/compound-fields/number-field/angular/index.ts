@@ -33,6 +33,9 @@ export class VfNumberFieldRootDirective {
     const internal = this.initial();
     return internal !== undefined ? internal : this.defaultValue();
   });
+  ngOnInit() {
+    this.initial.set(this.defaultValue());
+  }
   set(next: number | null) {
     if (this.disabled() || this.readOnly() || (next !== null && !Number.isFinite(next)) || next === this.current()) return;
     if (this.value() === undefined) this.initial.set(next);

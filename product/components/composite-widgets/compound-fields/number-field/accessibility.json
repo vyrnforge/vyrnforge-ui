@@ -9,7 +9,15 @@
   "wcag": {
     "target": "2.2 AA",
     "status": "review-required",
-    "criteria": ["1.3.1", "2.1.1", "2.4.7", "2.5.8", "3.3.1", "3.3.2", "4.1.2"]
+    "criteria": [
+      "1.3.1",
+      "2.1.1",
+      "2.4.7",
+      "2.5.8",
+      "3.3.1",
+      "3.3.2",
+      "4.1.2"
+    ]
   },
   "aria": {
     "status": "mapped",
@@ -21,8 +29,13 @@
     "directionality": "logical"
   },
   "ownership": {
-    "library": ["Distinguish draft text from committed numeric value; preserve native constraints and stepping."],
-    "consumer": ["Author input and step-button names, units and validation guidance."]
+    "library": [
+      "Preserve finite numeric values or null (empty), distinguish native badInput editing from committed numeric requests, and preserve native validity rather than clamping user edits.",
+      "Framework roots own committed value and native constraints; step controls use the owned native input's stepUp/stepDown and do not act when disabled, readonly or step-any."
+    ],
+    "consumer": [
+      "Author input and step-button names, units and validation guidance."
+    ]
   },
   "forms": {
     "status": "review-required"
@@ -40,8 +53,8 @@
   "profileVariability": [],
   "notes": [
     "#1285 removed English step-button fallback names.",
-    "Empty numeric editing can become zero; min/max/step and readonly semantics need convergence.",
     "Audit mapping is provisional; not a conformance claim.",
-    "Elements step controls are restricted to their own native input; nested/cancelled/disabled/readonly/step-any/no-change actions do not emit input. Browser fixture now imports actual public ports; draft-versus-committed editing and full bounds/step parity remain open."
+    "Elements step controls are restricted to their own native input; nested/cancelled/disabled/readonly/step-any/no-change actions do not emit input. Browser fixture now imports actual public ports; draft-versus-committed editing and full bounds/step parity remain open.",
+    "Framework nullable value contract and native step parity implemented on this branch; reset and broader SSR/hydration/cross-engine/manual evidence remain open."
   ]
 }
