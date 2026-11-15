@@ -73,21 +73,22 @@ export class VfDrawerRootDirective {
 
   private readonly element = inject<ElementRef<HTMLDialogElement>>(ElementRef);
   private readonly internalOpen = signal(false);
-  private initialized = false;
+  private readonly initialized = signal(false);
   private restoreTarget: HTMLElement | null = null;
   private backdropPointerDown = false;
 
-  readonly desiredOpen = computed(() => this.open() ?? (this.initialized ? this.internalOpen() : this.defaultOpen()));
+  readonly desiredOpen = computed(() => this.open() ?? (this.initialized() ? this.internalOpen() : this.defaultOpen()));
   readonly resolvedTitleId = computed(() => this.titleId() ?? `${this.id()}-title`);
 
   constructor() {
     effect(() => {
       const controlledOpen = this.open();
       const defaultOpen = this.defaultOpen();
-      if (!this.initialized) {
-        this.initialized = true;
+      if (!this.initialized()) {
+        this.initialized.set(true);
         if (controlledOpen === undefined) this.internalOpen.set(defaultOpen);
       }
+      this.desiredOpen();
       if (typeof document === 'undefined') return;
       const dialog = this.element.nativeElement;
       queueMicrotask(() => this.syncDialog(dialog, this.desiredOpen(), true));

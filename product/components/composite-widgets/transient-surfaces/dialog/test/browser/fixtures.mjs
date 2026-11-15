@@ -38,7 +38,7 @@ export async function createReactStory({ client }) {
         {
           id: 'react-dialog',
           open,
-          onOpenChange: setOpen,
+          onOpenChange: (value) => { if (!client || document.body.dataset.rejectClose !== 'true') setOpen(value); },
           backdropDismiss: true,
           descriptionId: 'react-dialog-description',
           initialFocusRef: initialRef,
@@ -79,6 +79,7 @@ export async function createReactStory({ client }) {
             { id: 'react-child-dialog', open: childOpen, onOpenChange: setChildOpen },
             React.createElement(DialogTitle, null, 'Child dialog'),
             React.createElement(DialogBody, null, 'Child content'),
+            React.createElement(DialogClose, { id: 'react-child-close' }, 'Close child'),
           ),
         ),
       ),
@@ -116,7 +117,7 @@ export async function createVueStory({ client }) {
               id: 'vue-dialog',
               modelValue: open.value,
               'onUpdate:modelValue': (value) => {
-                open.value = value;
+                if (!client || document.body.dataset.rejectClose !== 'true') open.value = value;
               },
               backdropDismiss: true,
               descriptionId: 'vue-dialog-description',
@@ -177,7 +178,7 @@ export async function createVueStory({ client }) {
                       childOpen.value = value;
                     },
                   },
-                  () => [h(DialogTitle, {}, () => 'Child dialog'), h(DialogBody, {}, () => 'Child content')],
+                  () => [h(DialogTitle, {}, () => 'Child dialog'), h(DialogBody, {}, () => 'Child content'), h(DialogClose, {id:'vue-child-close'}, () => 'Close child')],
                 ),
               ]),
             ],
@@ -199,12 +200,14 @@ export async function createAngularStory({ client }) {
   } = await import('@vyrnforge/angular/dialog');
 
   const template =
-    '<button id="angular-open" type="button" (click)="open.set(true)">Open dialog</button><dialog vfDialogRoot id="angular-dialog" [open]="open()" (openChange)="open.set($event)" (dismissRequest)="dismissed($event)" backdropDismiss descriptionId="angular-dialog-description"><h2 vfDialogTitle>Edit profile</h2><p vfDialogDescription id="angular-dialog-description">Update your profile.</p><div vfDialogBody><input id="angular-initial" aria-label="Profile name"></div><button id="angular-close" vfDialogClose>Close</button></dialog><button id="angular-parent-open" type="button" (click)="parentOpen.set(true)">Open parent dialog</button><dialog vfDialogRoot id="angular-parent-dialog" [open]="parentOpen()" (openChange)="parentOpen.set($event)"><h2 vfDialogTitle>Parent dialog</h2><div vfDialogBody><button id="angular-child-open" type="button" (click)="childOpen.set(true)">Open child dialog</button><dialog vfDialogRoot id="angular-child-dialog" [open]="childOpen()" (openChange)="childOpen.set($event)"><h2 vfDialogTitle>Child dialog</h2><div vfDialogBody>Child content</div></dialog></div></dialog>';
+    '<button id="angular-open" type="button" (click)="open.set(true)">Open dialog</button><dialog vfDialogRoot id="angular-dialog" [open]="open()" (openChange)="changed($event)" (dismissRequest)="dismissed($event)" backdropDismiss descriptionId="angular-dialog-description"><h2 vfDialogTitle>Edit profile</h2><p vfDialogDescription id="angular-dialog-description">Update your profile.</p><div vfDialogBody><input id="angular-initial" aria-label="Profile name"></div><button id="angular-close" vfDialogClose>Close</button></dialog><button id="angular-parent-open" type="button" (click)="parentOpen.set(true)">Open parent dialog</button><dialog vfDialogRoot id="angular-parent-dialog" [open]="parentOpen()" (openChange)="parentOpen.set($event)"><h2 vfDialogTitle>Parent dialog</h2><div vfDialogBody><button id="angular-child-open" type="button" (click)="childOpen.set(true)">Open child dialog</button><dialog vfDialogRoot id="angular-child-dialog" [open]="childOpen()" (openChange)="childOpen.set($event)"><h2 vfDialogTitle>Child dialog</h2><div vfDialogBody>Child content</div><button vfDialogClose id="angular-child-close">Close child</button></dialog></div></dialog>';
 
   class DialogTestApp {
     open = signal(false);
     parentOpen = signal(false);
     childOpen = signal(false);
+
+    changed(value) { if (!client || document.body.dataset.rejectClose !== 'true') this.open.set(value); }
 
     dismissed(request) {
       if (client) document.body.dataset.dismissReason = request.reason;
@@ -247,7 +250,7 @@ export async function createElementsStory({ client }) {
           <vf-dialog id="elements-child-root">
             <dialog id="elements-child-dialog">
               <h2 data-vf-dialog-title>Child dialog</h2>
-              <div data-vf-dialog-body>Child content</div>
+              <div data-vf-dialog-body>Child content</div><button id="elements-child-close" type="button" data-vf-dialog-close>Close child</button>
             </dialog>
           </vf-dialog>
         </div>
@@ -274,6 +277,7 @@ export async function createElementsStory({ client }) {
           for (const element of [root, parent, child]) {
             element.addEventListener('vf-dismiss-request', (event) => {
               document.body.dataset.dismissReason = event.detail.reason;
+              if (event.target === root && document.body.dataset.rejectClose === 'true') event.preventDefault();
             });
           }
         }

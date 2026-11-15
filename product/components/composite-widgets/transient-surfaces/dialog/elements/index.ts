@@ -61,12 +61,18 @@ export class VfDialogElement extends HTMLElementBase {
     const title = ownedPart('[data-vf-dialog-title],[data-vf-drawer-title],[data-vf-alert-dialog-title]');
     const description = ownedPart('[data-vf-dialog-description],[data-vf-drawer-description],[data-vf-alert-dialog-description]');
     if (title) {
+      title.setAttribute('data-vf-dialog-title', '');
       title.id ||= `${this.id}-title`;
       if (!dialog.hasAttribute('aria-label') && !dialog.hasAttribute('aria-labelledby')) dialog.setAttribute('aria-labelledby', title.id);
     }
     if (description) {
+      description.setAttribute('data-vf-dialog-description', '');
       description.id ||= `${this.id}-description`;
       if (!dialog.hasAttribute('aria-describedby')) dialog.setAttribute('aria-describedby', description.id);
+    }
+    for (const part of Array.from(dialog.querySelectorAll<HTMLElement>('[data-vf-drawer-body],[data-vf-alert-dialog-body],[data-vf-drawer-close],[data-vf-alert-dialog-cancel],[data-vf-alert-dialog-action]'))) {
+      if (part.closest('dialog') !== dialog || part.closest(modalOwner) !== this) continue;
+      part.setAttribute(part.matches('[data-vf-drawer-body],[data-vf-alert-dialog-body]') ? 'data-vf-dialog-body' : 'data-vf-dialog-close', '');
     }
     if (this.open && dialog.open && !dialog.matches(':modal')) dialog.close();
     if (this.open && !dialog.open) {
