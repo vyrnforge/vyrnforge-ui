@@ -5,7 +5,9 @@ const summaryItems = [
   { value: 'three', label: 'Three', removeLabel: 'Remove Three' },
 ];
 const summaryValues = ['one', 'three'];
-function summaryRequest(next) { document.body.dataset.summaryRequest = next.join(','); }
+function summaryRequest(next) {
+  document.body.dataset.summaryRequest = next.join(',');
+}
 const formOptions = [].concat([
   { value: 'one', label: 'One' },
   { value: 'three', label: 'Three' },
@@ -49,8 +51,14 @@ export const browserFixture = {
 
 export async function createReactStory() {
   const { createElement: h, Fragment, useEffect, useState } = await import('react');
-  const { MultiSelectRoot, MultiSelectTrigger, MultiSelectContent, MultiSelectOption, MultiSelectFormControl, MultiSelectSelection } =
-    await import('@vyrnforge/react/multi-select');
+  const {
+    MultiSelectRoot,
+    MultiSelectTrigger,
+    MultiSelectContent,
+    MultiSelectOption,
+    MultiSelectFormControl,
+    MultiSelectSelection,
+  } = await import('@vyrnforge/react/multi-select');
   function App() {
     const [formDisabled, setFormDisabled] = useState(false);
     useEffect(ready, []);
@@ -106,18 +114,42 @@ export async function createReactStory() {
           'Toggle disabled',
         ),
       ),
-      h('div', { id: 'summary-example' },
-        h(MultiSelectRoot, { id: 'summary-choice', defaultValue: summaryValues, selectionSummary: true },
+      h(
+        'div',
+        { id: 'summary-example' },
+        h(
+          MultiSelectRoot,
+          { id: 'summary-choice', defaultValue: summaryValues, selectionSummary: true },
           h(MultiSelectTrigger, { 'aria-describedby': 'summary-hint' }, 'Selected items'),
           h(MultiSelectContent, { 'aria-label': 'Summary options' }, option('summary', 0), option('summary', 2)),
-          h(MultiSelectSelection, { items: summaryItems, label: 'Selected frameworks', emptyLabel: 'None selected', locale: 'en' }),
-        ), h('p', { id: 'summary-hint' }, 'Choose or remove items.'),
+          h(MultiSelectSelection, {
+            items: summaryItems,
+            label: 'Selected frameworks',
+            emptyLabel: 'None selected',
+            locale: 'en',
+          }),
+        ),
+        h('p', { id: 'summary-hint' }, 'Choose or remove items.'),
       ),
-      h('div', { id: 'summary-controlled-example' },
-        h(MultiSelectRoot, { id: 'summary-controlled', value: summaryValues, selectionSummary: true, onValueChange: summaryRequest },
+      h(
+        'div',
+        { id: 'summary-controlled-example' },
+        h(
+          MultiSelectRoot,
+          { id: 'summary-controlled', value: summaryValues, selectionSummary: true, onValueChange: summaryRequest },
           h(MultiSelectTrigger, null, 'Controlled selected items'),
-          h(MultiSelectContent, { 'aria-label': 'Controlled summary options' }, option('summary-controlled', 0), option('summary-controlled', 2)),
-          h(MultiSelectSelection, { items: summaryItems, label: 'Controlled selected frameworks', emptyLabel: 'None selected', locale: 'en' }),
+          h(
+            MultiSelectContent,
+            { 'aria-label': 'Controlled summary options' },
+            option('summary-controlled', 0),
+            option('summary-controlled', 2),
+          ),
+          h(MultiSelectSelection, {
+            items: summaryItems,
+            label: 'Controlled selected frameworks',
+            emptyLabel: 'None selected',
+            locale: 'en',
+          }),
         ),
       ),
     );
@@ -127,8 +159,14 @@ export async function createReactStory() {
 
 export async function createVueStory() {
   const { createSSRApp, h, onMounted, ref } = await import('vue');
-  const { MultiSelectRoot, MultiSelectTrigger, MultiSelectContent, MultiSelectOption, MultiSelectFormControl, MultiSelectSelection } =
-    await import('@vyrnforge/vue/multi-select');
+  const {
+    MultiSelectRoot,
+    MultiSelectTrigger,
+    MultiSelectContent,
+    MultiSelectOption,
+    MultiSelectFormControl,
+    MultiSelectSelection,
+  } = await import('@vyrnforge/vue/multi-select');
   return createSSRApp({
     setup() {
       const formDisabled = ref(false);
@@ -185,16 +223,42 @@ export async function createVueStory() {
           h('div', { id: 'summary-example' }, [
             h(MultiSelectRoot, { id: 'summary-choice', defaultValue: summaryValues, selectionSummary: true }, () => [
               h(MultiSelectTrigger, { 'aria-describedby': 'summary-hint' }, () => 'Selected items'),
-              h(MultiSelectContent, { 'aria-label': 'Summary options' }, () => [option('summary', 0), option('summary', 2)]),
-              h(MultiSelectSelection, { items: summaryItems, label: 'Selected frameworks', emptyLabel: 'None selected', locale: 'en' }),
-            ]), h('p', { id: 'summary-hint' }, 'Choose or remove items.'),
+              h(MultiSelectContent, { 'aria-label': 'Summary options' }, () => [
+                option('summary', 0),
+                option('summary', 2),
+              ]),
+              h(MultiSelectSelection, {
+                items: summaryItems,
+                label: 'Selected frameworks',
+                emptyLabel: 'None selected',
+                locale: 'en',
+              }),
+            ]),
+            h('p', { id: 'summary-hint' }, 'Choose or remove items.'),
           ]),
           h('div', { id: 'summary-controlled-example' }, [
-            h(MultiSelectRoot, { id: 'summary-controlled', value: summaryValues, selectionSummary: true, 'onUpdate:value': summaryRequest }, () => [
-              h(MultiSelectTrigger, {}, () => 'Controlled selected items'),
-              h(MultiSelectContent, { 'aria-label': 'Controlled summary options' }, () => [option('summary-controlled', 0), option('summary-controlled', 2)]),
-              h(MultiSelectSelection, { items: summaryItems, label: 'Controlled selected frameworks', emptyLabel: 'None selected', locale: 'en' }),
-            ]),
+            h(
+              MultiSelectRoot,
+              {
+                id: 'summary-controlled',
+                value: summaryValues,
+                selectionSummary: true,
+                'onUpdate:value': summaryRequest,
+              },
+              () => [
+                h(MultiSelectTrigger, {}, () => 'Controlled selected items'),
+                h(MultiSelectContent, { 'aria-label': 'Controlled summary options' }, () => [
+                  option('summary-controlled', 0),
+                  option('summary-controlled', 2),
+                ]),
+                h(MultiSelectSelection, {
+                  items: summaryItems,
+                  label: 'Controlled selected frameworks',
+                  emptyLabel: 'None selected',
+                  locale: 'en',
+                }),
+              ],
+            ),
           ]),
         ]);
     },

@@ -167,7 +167,11 @@ export const MultiSelectTrigger = defineComponent({
           disabled: Boolean(attrs.disabled === '' || attrs.disabled) || multi.disabled.value,
           'aria-invalid': multi.error.value ? true : attrs['aria-invalid'],
           'aria-describedby':
-            [attrs['aria-describedby'], multi.selectionSummary.value ? `${multi.listboxId.value}-summary` : undefined, multi.error.value ? `${multi.listboxId.value}-error` : undefined]
+            [
+              attrs['aria-describedby'],
+              multi.selectionSummary.value ? `${multi.listboxId.value}-summary` : undefined,
+              multi.error.value ? `${multi.listboxId.value}-error` : undefined,
+            ]
               .filter(Boolean)
               .join(' ') || undefined,
           id: multi.triggerId.value,
@@ -451,7 +455,10 @@ export const MultiSelectFormControl = defineComponent({
 export const MultiSelectSelection = defineComponent({
   name: 'MultiSelectSelection',
   props: {
-    items: { type: Array as PropType<readonly { value: string; label: string; removeLabel: string }[]>, required: true },
+    items: {
+      type: Array as PropType<readonly { value: string; label: string; removeLabel: string }[]>,
+      required: true,
+    },
     label: { type: String, required: true },
     emptyLabel: { type: String, required: true },
     locale: { type: String, required: true },
@@ -459,15 +466,38 @@ export const MultiSelectSelection = defineComponent({
   setup(props) {
     const root = useMulti();
     const selected = computed(() => props.items.filter((item) => root.values.value.includes(item.value)));
-    const summary = computed(() => selected.value.length ? new Intl.ListFormat(props.locale).format(selected.value.map((item) => item.label)) : props.emptyLabel);
-    return () => h('div', { 'data-vf-multi-select-selection': '' }, [
-      h('span', { id: `${root.listboxId.value}-summary`, role: 'status', 'data-vf-multi-select-summary': '' }, summary.value),
-      h(TagGroupRoot, { 'aria-label': props.label }, () => selected.value.map((item) => h(TagGroupItem, { key: item.value }, () => [
-        h('span', item.label),
-        h(TagGroupRemove, { label: item.removeLabel, disabled: root.disabled.value, type: 'button', onClick: (event: MouseEvent) => {
-          if (!event.defaultPrevented && !optionDisabled(event.currentTarget as HTMLButtonElement)) root.remove(item.value);
-        } }, () => '×'),
-      ]))),
-    ]);
+    const summary = computed(() =>
+      selected.value.length
+        ? new Intl.ListFormat(props.locale).format(selected.value.map((item) => item.label))
+        : props.emptyLabel,
+    );
+    return () =>
+      h('div', { 'data-vf-multi-select-selection': '' }, [
+        h(
+          'span',
+          { id: `${root.listboxId.value}-summary`, role: 'status', 'data-vf-multi-select-summary': '' },
+          summary.value,
+        ),
+        h(TagGroupRoot, { 'aria-label': props.label }, () =>
+          selected.value.map((item) =>
+            h(TagGroupItem, { key: item.value }, () => [
+              h('span', item.label),
+              h(
+                TagGroupRemove,
+                {
+                  label: item.removeLabel,
+                  disabled: root.disabled.value,
+                  type: 'button',
+                  onClick: (event: MouseEvent) => {
+                    if (!event.defaultPrevented && !optionDisabled(event.currentTarget as HTMLButtonElement))
+                      root.remove(item.value);
+                  },
+                },
+                () => '×',
+              ),
+            ]),
+          ),
+        ),
+      ]);
   },
 });

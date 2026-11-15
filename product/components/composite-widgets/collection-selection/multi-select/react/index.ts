@@ -181,8 +181,13 @@ export const MultiSelectTrigger = forwardRef<
       disabled: props.disabled || multi.disabled,
       'aria-invalid': multi.error ? true : props['aria-invalid'],
       'aria-describedby':
-        [props['aria-describedby'], multi.selectionSummary ? `${multi.listboxId}-summary` : undefined, multi.error ? `${multi.listboxId}-error` : undefined].filter(Boolean).join(' ') ||
-        undefined,
+        [
+          props['aria-describedby'],
+          multi.selectionSummary ? `${multi.listboxId}-summary` : undefined,
+          multi.error ? `${multi.listboxId}-error` : undefined,
+        ]
+          .filter(Boolean)
+          .join(' ') || undefined,
       'data-vf-multi-select-trigger': '',
       id: multi.triggerId,
       'aria-controls': multi.listboxId,
@@ -442,20 +447,36 @@ export function MultiSelectSelection({ items, label, emptyLabel, locale }: Multi
   const root = useMulti();
   const selected = items.filter((item) => root.values.includes(item.value));
   const summary = selected.length ? new Intl.ListFormat(locale).format(selected.map((item) => item.label)) : emptyLabel;
-  return createElement('div', { 'data-vf-multi-select-selection': '' },
-    createElement('span', { id: `${root.listboxId}-summary`, role: 'status', 'data-vf-multi-select-summary': '' }, summary),
-    createElement(TagGroupRoot, { 'aria-label': label }, selected.map((item) =>
-      createElement(TagGroupItem, { key: item.value },
-        createElement('span', null, item.label),
-        createElement(TagGroupRemove, {
-          label: item.removeLabel,
-          disabled: root.disabled,
-          type: 'button',
-          onClick(event) {
-            if (!event.defaultPrevented && !optionDisabled(event.currentTarget)) root.remove(item.value);
-          },
-        }, '×'),
+  return createElement(
+    'div',
+    { 'data-vf-multi-select-selection': '' },
+    createElement(
+      'span',
+      { id: `${root.listboxId}-summary`, role: 'status', 'data-vf-multi-select-summary': '' },
+      summary,
+    ),
+    createElement(
+      TagGroupRoot,
+      { 'aria-label': label },
+      selected.map((item) =>
+        createElement(
+          TagGroupItem,
+          { key: item.value },
+          createElement('span', null, item.label),
+          createElement(
+            TagGroupRemove,
+            {
+              label: item.removeLabel,
+              disabled: root.disabled,
+              type: 'button',
+              onClick(event) {
+                if (!event.defaultPrevented && !optionDisabled(event.currentTarget)) root.remove(item.value);
+              },
+            },
+            '×',
+          ),
+        ),
       ),
-    )),
+    ),
   );
 }

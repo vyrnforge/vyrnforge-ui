@@ -336,7 +336,6 @@ test('MultiSelect controlled rejection and reset preserve submitted owner values
   await expect.poll(data).toEqual(['one']);
 });
 
-
 test('MultiSelect summary and TagGroup removal follow committed selection and focus', async ({ page }) => {
   test.skip(port === 'web', 'Managed selection summary evidence.');
   await page.goto(`/components/multi-select/${port}.html`);
@@ -352,7 +351,9 @@ test('MultiSelect summary and TagGroup removal follow committed selection and fo
   expect(id).toBeTruthy();
   await expect(trigger).toHaveAttribute('aria-describedby', `summary-hint ${id}`);
   await expect(one).toBeVisible();
-  await one.evaluate((node) => node.addEventListener('click', (event) => event.preventDefault(), { once: true, capture: true }));
+  await one.evaluate((node) =>
+    node.addEventListener('click', (event) => event.preventDefault(), { once: true, capture: true }),
+  );
   await one.press('Enter');
   await expect(summary).toHaveText('One and Three');
   await expect(one).toBeFocused();

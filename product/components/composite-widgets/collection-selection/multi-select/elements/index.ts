@@ -165,7 +165,9 @@ export class VfMultiSelectElement extends H {
       this.selectionGroup = group;
     }
     if (trigger) {
-      const descriptions = (trigger.getAttribute('aria-describedby') ?? '').split(/\s+/).filter((id) => id && id !== this.summaryId);
+      const descriptions = (trigger.getAttribute('aria-describedby') ?? '')
+        .split(/\s+/)
+        .filter((id) => id && id !== this.summaryId);
       if (summary) {
         summary.id ||= `${this.content?.id || this.generatedListboxId}-summary`;
         this.summaryId = summary.id;
@@ -175,9 +177,9 @@ export class VfMultiSelectElement extends H {
       else trigger.removeAttribute('aria-describedby');
     }
     if (!group || !summary) return;
-    const templates = Array.from(group.querySelectorAll<HTMLTemplateElement>('template[data-vf-multi-select-item]')).filter(
-      (template) => template.closest(rootMultiSelector) === this,
-    );
+    const templates = Array.from(
+      group.querySelectorAll<HTMLTemplateElement>('template[data-vf-multi-select-item]'),
+    ).filter((template) => template.closest(rootMultiSelector) === this);
     const selected = this.selectedValues();
     const active = templates.filter((template) => selected.includes(template.dataset.vfValue ?? ''));
     const keys = new Set(active.map((template) => template.dataset.vfValue ?? ''));
@@ -196,7 +198,10 @@ export class VfMultiSelectElement extends H {
         item = source.cloneNode(true) as HTMLElement;
         item.setAttribute('data-vf-multi-select-selected-item', '');
         item.setAttribute('data-vf-value', key);
-        const next = active.slice(index + 1).map((candidate) => this.selectionItems.get(candidate.dataset.vfValue ?? '')).find((candidate) => candidate?.parentElement === group);
+        const next = active
+          .slice(index + 1)
+          .map((candidate) => this.selectionItems.get(candidate.dataset.vfValue ?? ''))
+          .find((candidate) => candidate?.parentElement === group);
         group.insertBefore(item, next ?? null);
         this.selectionItems.set(key, item);
       }
@@ -210,7 +215,7 @@ export class VfMultiSelectElement extends H {
     const labels = active.map((template) => template.dataset.vfLabel ?? '');
     const text = labels.length
       ? new Intl.ListFormat(group.lang || undefined).format(labels)
-      : summary.dataset.vfEmptyLabel ?? '';
+      : (summary.dataset.vfEmptyLabel ?? '');
     summary.setAttribute('role', 'status');
     if (summary.textContent !== text) summary.textContent = text;
   }
@@ -381,7 +386,8 @@ export class VfMultiSelectElement extends H {
     if (remove && this.selectionGroup?.contains(remove)) {
       if (this.hasAttribute('disabled') || optionDisabled(remove)) return;
       const value = remove.dataset.vfValue;
-      if (value && this.selectedValues().includes(value)) this.setSelection(this.selectedValues().filter((candidate) => candidate !== value));
+      if (value && this.selectedValues().includes(value))
+        this.setSelection(this.selectedValues().filter((candidate) => candidate !== value));
       return;
     }
     const trigger = target.closest('[data-vf-multi-select-trigger]');

@@ -1299,6 +1299,7 @@ disabled: boolean;
 // @public (undocumented)
 export const MultiSelectRoot: DefineComponent<ExtractPropTypes<    {
 id: StringConstructor;
+selectionSummary: BooleanConstructor;
 disabled: BooleanConstructor;
 value: PropType<string[] | undefined>;
 defaultValue: {
@@ -1309,6 +1310,7 @@ default: () => never[];
 [key: string]: any;
 }>[] | undefined, {}, {}, {}, ComponentOptionsMixin, ComponentOptionsMixin, "update:value"[], "update:value", PublicProps, Readonly<ExtractPropTypes<    {
 id: StringConstructor;
+selectionSummary: BooleanConstructor;
 disabled: BooleanConstructor;
 value: PropType<string[] | undefined>;
 defaultValue: {
@@ -1320,7 +1322,55 @@ default: () => never[];
 }>, {
 disabled: boolean;
 defaultValue: string[];
+selectionSummary: boolean;
 }, {}, {}, {}, string, ComponentProvideOptions, true, {}, any>;
+
+// @public (undocumented)
+export const MultiSelectSelection: DefineComponent<ExtractPropTypes<    {
+items: {
+type: PropType<readonly {
+value: string;
+label: string;
+removeLabel: string;
+}[]>;
+required: true;
+};
+label: {
+type: StringConstructor;
+required: true;
+};
+emptyLabel: {
+type: StringConstructor;
+required: true;
+};
+locale: {
+type: StringConstructor;
+required: true;
+};
+}>, () => VNode<RendererNode, RendererElement, {
+[key: string]: any;
+}>, {}, {}, {}, ComponentOptionsMixin, ComponentOptionsMixin, {}, string, PublicProps, Readonly<ExtractPropTypes<    {
+items: {
+type: PropType<readonly {
+value: string;
+label: string;
+removeLabel: string;
+}[]>;
+required: true;
+};
+label: {
+type: StringConstructor;
+required: true;
+};
+emptyLabel: {
+type: StringConstructor;
+required: true;
+};
+locale: {
+type: StringConstructor;
+required: true;
+};
+}>> & Readonly<{}>, {}, {}, {}, {}, string, ComponentProvideOptions, true, {}, any>;
 
 // @public (undocumented)
 export const MultiSelectTrigger: DefineComponent<    {}, () => VNode<RendererNode, RendererElement, {

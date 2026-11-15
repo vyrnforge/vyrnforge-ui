@@ -1917,11 +1917,15 @@ export class VfMultiSelectRootDirective {
     // (undocumented)
     readonly open: WritableSignal<boolean>;
     // (undocumented)
+    remove(value: string): void;
+    // (undocumented)
     reset(): string[];
     // (undocumented)
     readonly resetValue: Signal<string[]>;
     // (undocumented)
     readonly rootId: Signal<string>;
+    // (undocumented)
+    readonly selectionSummary: InputSignalWithTransform<boolean, unknown>;
     // (undocumented)
     toggle(v: string): void;
     // (undocumented)
@@ -1934,6 +1938,11 @@ export class VfMultiSelectRootDirective {
     readonly values: Signal<string[]>;
     // (undocumented)
     static ɵdir: i0.ɵɵDirectiveDeclaration<VfMultiSelectRootDirective, "[vfMultiSelectRoot]", never, {
+        "selectionSummary": {
+            "alias": "selectionSummary";
+            "required": false;
+            "isSignal": true;
+        };
         "disabled": {
             "alias": "disabled";
             "required": false;
@@ -1959,6 +1968,59 @@ export class VfMultiSelectRootDirective {
     }, never, never, true, never>;
     // (undocumented)
     static ɵfac: i0.ɵɵFactoryDeclaration<VfMultiSelectRootDirective, never>;
+}
+
+// @public (undocumented)
+export class VfMultiSelectSelectionComponent {
+    // (undocumented)
+    readonly emptyLabel: InputSignal<string>;
+    // (undocumented)
+    readonly items: InputSignal<readonly {
+    value: string;
+    label: string;
+    removeLabel: string;
+    }[]>;
+    // (undocumented)
+    readonly label: InputSignal<string>;
+    // (undocumented)
+    readonly locale: InputSignal<string>;
+    // (undocumented)
+    remove(event: MouseEvent, value: string): void;
+    // (undocumented)
+    readonly root: VfMultiSelectRootDirective;
+    // (undocumented)
+    readonly selected: Signal<    {
+    value: string;
+    label: string;
+    removeLabel: string;
+    }[]>;
+    // (undocumented)
+    readonly summary: Signal<string>;
+    // (undocumented)
+    static ɵcmp: i0.ɵɵComponentDeclaration<VfMultiSelectSelectionComponent, "vf-multi-select-selection", never, {
+        "items": {
+            "alias": "items";
+            "required": true;
+            "isSignal": true;
+        };
+        "label": {
+            "alias": "label";
+            "required": true;
+            "isSignal": true;
+        };
+        "emptyLabel": {
+            "alias": "emptyLabel";
+            "required": true;
+            "isSignal": true;
+        };
+        "locale": {
+            "alias": "locale";
+            "required": true;
+            "isSignal": true;
+        };
+    }, {}, never, never, true, never>;
+    // (undocumented)
+    static ɵfac: i0.ɵɵFactoryDeclaration<VfMultiSelectSelectionComponent, never>;
 }
 
 // @public (undocumented)

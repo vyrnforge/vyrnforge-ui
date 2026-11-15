@@ -19,7 +19,11 @@ import {
 } from '@angular/core';
 import { resolveNavigationIndex } from '@vyrnforge/core/collection-navigation';
 import { findTypeaheadMatch } from '@vyrnforge/core/typeahead-matching';
-import { VfTagGroupRootDirective, VfTagGroupItemDirective, VfTagGroupRemoveDirective } from '@vyrnforge/angular/tag-group';
+import {
+  VfTagGroupRootDirective,
+  VfTagGroupItemDirective,
+  VfTagGroupRemoveDirective,
+} from '@vyrnforge/angular/tag-group';
 
 const MULTI_SELECT_ID_GENERATOR = new InjectionToken<() => string>('VyrnForge MultiSelect ID generator', {
   providedIn: 'root',
@@ -175,7 +179,13 @@ export class VfMultiSelectTriggerDirective {
   readonly invalid = input<string | boolean | undefined>(undefined, { alias: 'aria-invalid' });
   readonly describedBy = input<string | undefined>(undefined, { alias: 'aria-describedby' });
   readonly description = computed(() =>
-    [this.describedBy(), this.root.selectionSummary() ? `${this.root.listboxId()}-summary` : undefined, this.root.error() ? `${this.root.listboxId()}-error` : undefined].filter(Boolean).join(' '),
+    [
+      this.describedBy(),
+      this.root.selectionSummary() ? `${this.root.listboxId()}-summary` : undefined,
+      this.root.error() ? `${this.root.listboxId()}-error` : undefined,
+    ]
+      .filter(Boolean)
+      .join(' '),
   );
   constructor(readonly root: VfMultiSelectRootDirective) {
     const element = inject<ElementRef<HTMLButtonElement>>(ElementRef).nativeElement;
@@ -449,10 +459,22 @@ export class VfMultiSelectFormControlComponent {
   standalone: true,
   imports: [VfTagGroupRootDirective, VfTagGroupItemDirective, VfTagGroupRemoveDirective],
   host: { 'data-vf-multi-select-selection': '' },
-  template: `<span [id]="root.listboxId() + '-summary'" role="status" data-vf-multi-select-summary>{{ summary() }}</span>
+  template: `<span [id]="root.listboxId() + '-summary'" role="status" data-vf-multi-select-summary>{{
+      summary()
+    }}</span>
     <div vfTagGroupRoot [attr.aria-label]="label()">
       @for (item of selected(); track item.value) {
-        <div vfTagGroupItem><span>{{ item.label }}</span><button vfTagGroupRemove [label]="item.removeLabel" [disabled]="root.disabled()" (click)="remove($event, item.value)">×</button></div>
+        <div vfTagGroupItem>
+          <span>{{ item.label }}</span
+          ><button
+            vfTagGroupRemove
+            [label]="item.removeLabel"
+            [disabled]="root.disabled()"
+            (click)="remove($event, item.value)"
+          >
+            ×
+          </button>
+        </div>
       }
     </div>`,
 })
@@ -463,9 +485,17 @@ export class VfMultiSelectSelectionComponent {
   readonly emptyLabel = input.required<string>();
   readonly locale = input.required<string>();
   readonly selected = computed(() => this.items().filter((item) => this.root.values().includes(item.value)));
-  readonly summary = computed(() => this.selected().length ? new Intl.ListFormat(this.locale()).format(this.selected().map((item) => item.label)) : this.emptyLabel());
+  readonly summary = computed(() =>
+    this.selected().length
+      ? new Intl.ListFormat(this.locale()).format(this.selected().map((item) => item.label))
+      : this.emptyLabel(),
+  );
   remove(event: MouseEvent, value: string) {
-    if (event.defaultPrevented || (event.currentTarget instanceof HTMLButtonElement && optionDisabled(event.currentTarget))) return;
+    if (
+      event.defaultPrevented ||
+      (event.currentTarget instanceof HTMLButtonElement && optionDisabled(event.currentTarget))
+    )
+      return;
     this.root.remove(value);
   }
 }
