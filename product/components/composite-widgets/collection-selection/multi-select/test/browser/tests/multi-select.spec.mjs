@@ -161,7 +161,7 @@ test('Angular Escape returns focus before the next keyboard event', async ({ pag
   await page.waitForFunction(() => document.body.dataset.multiReady === 'true');
   await page.locator('#trigger').press('ArrowDown');
   await expect(page.locator('#angular-one')).toBeFocused();
-  const focused = await page.locator('#angular-one').evaluate(node => {
+  const focused = await page.locator('#angular-one').evaluate((node) => {
     node.dispatchEvent(new KeyboardEvent('keydown', { key: 'Escape', bubbles: true, cancelable: true }));
     return document.activeElement?.id;
   });
