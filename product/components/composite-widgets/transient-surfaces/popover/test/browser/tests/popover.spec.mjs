@@ -79,3 +79,36 @@ test('Controlled Popover reconciles a rejected native close request', async ({ p
   await expect(trigger).toHaveAttribute('aria-expanded', 'true');
   expect(await surface.evaluate((element) => element.matches(':popover-open'))).toBe(true);
 });
+
+test('native Popover tracks its source through scroll, resize and RTL placement', async ({ page }) => {
+  await page.setViewportSize({ width: 1000, height: 760 });
+  await load(page);
+  await page.evaluate(() => {
+    document.body.style.minHeight = '1600px';
+    const trigger = document.querySelector('#t');
+    Object.assign(trigger.style, { position: 'absolute', top: '320px', left: '400px', width: '80px' });
+  });
+  await page.locator('#t').press('Enter');
+  await expect(page.locator('#c')).toBeVisible();
+  async function expectAlignment(rtl = false) {
+    await expect
+      .poll(() =>
+        page.evaluate((rtl) => {
+          const trigger = document.querySelector('#t').getBoundingClientRect();
+          const surface = document.querySelector('#c').getBoundingClientRect();
+          const inlineError = rtl ? surface.right - trigger.right : surface.left - trigger.left;
+          return Math.max(Math.abs(inlineError), Math.abs(surface.top - trigger.bottom));
+        }, rtl),
+      )
+      .toBeLessThan(2);
+  }
+  await expectAlignment();
+  await page.evaluate(() => window.scrollTo(0, 120));
+  await expectAlignment();
+  await page.setViewportSize({ width: 820, height: 640 });
+  await expectAlignment();
+  await page.evaluate(() => document.documentElement.setAttribute('dir', 'rtl'));
+  await expectAlignment(true);
+  await page.keyboard.press('Escape');
+  await expect(page.locator('#c')).toBeHidden();
+});
