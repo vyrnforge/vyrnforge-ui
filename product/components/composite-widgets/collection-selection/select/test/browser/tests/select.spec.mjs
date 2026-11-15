@@ -33,6 +33,7 @@ test.describe('Select enhanced port behavior', () => {
       });
       page.on('pageerror', (error) => errors.push(error.message));
       await page.goto(`/components/select/${framework}.html`);
+      await page.waitForFunction(() => document.body.dataset.selectReady === 'true');
 
       const trigger = page.locator('#trigger');
       const listbox = page.getByRole('listbox', { name: 'Choose an option' });
@@ -76,6 +77,7 @@ test.describe('Select enhanced port behavior', () => {
     test(`${framework} selects the focused option and restores the trigger`, async ({ page }) => {
       test.skip(port !== framework, `Running ${port} evidence only`);
       await page.goto(`/components/select/${framework}.html`);
+      await page.waitForFunction(() => document.body.dataset.selectReady === 'true');
 
       const trigger = page.locator('#trigger');
       await trigger.focus();
@@ -95,7 +97,57 @@ test.describe('Select enhanced port behavior', () => {
       await page.keyboard.press('ArrowDown');
       await expect(page.locator(`#${framework}-three`)).toBeFocused();
       await expect(page.locator(`#${framework}-three`)).toHaveAttribute('aria-selected', 'true');
-      await expectAxeClean(page, framework === 'react' ? { disableRules: ['region'] } : undefined);
+      await expectAxeClean(page);
     });
   }
+});
+
+
+test('native Web select remains the form-participating baseline', async ({ page }) => {
+  test.skip(port !== 'web', 'Native Web form baseline.');
+  await page.goto('/components/select/web.html');
+  await page.locator('#native-select').selectOption('three');
+  expect(await page.locator('#native-form').evaluate((form) => new FormData(form).get('choice'))).toBe('three');
+  await page.getByRole('button', { name: 'Reset' }).click();
+  await expect(page.locator('#native-select')).toHaveValue('one');
+});
+
+test('native popup stays in authored DOM and light-dismisses without committing navigation', async ({ page }) => {
+  await page.goto(`/components/select/${port}.html`);
+  if (port !== 'web') await page.waitForFunction(() => document.body.dataset.selectReady === 'true');
+  const trigger = page.locator('#trigger');
+  const list = page.locator('#list');
+  await expect(list).toBeHidden();
+  await trigger.press('Enter');
+  await expect(list).toBeVisible();
+  expect(await list.evaluate((node) => node.matches(':popover-open') && !!node.closest('main'))).toBe(true);
+  await expectAxeClean(page);
+  if (port !== 'web') {
+    await expect(page.locator(`#${port}-one`)).toBeFocused();
+    await page.keyboard.press('ArrowDown');
+    await expect(page.locator(`#${port}-three`)).toBeFocused();
+  }
+  await page.locator('#after').click();
+  await expect(list).toBeHidden();
+  await expect(page.locator('#after')).toBeFocused();
+  await expect(page.locator(`#${port}-one`)).toHaveAttribute('aria-selected', 'true');
+});
+
+test('controlled value and open requests do not replace rejected committed state', async ({ page }) => {
+  test.skip(port === 'web' || port === 'elements', 'Controlled framework contract.');
+  await page.goto(`/components/select/${port}.html`);
+  await page.waitForFunction(() => document.body.dataset.selectReady === 'true');
+  await page.locator('#controlled-trigger').press('Enter');
+  await expect(page.locator('#controlled-one')).toBeFocused();
+  await page.keyboard.press('ArrowDown');
+  await expect(page.locator('#controlled-three')).toBeFocused();
+  await page.keyboard.press('Space');
+  await expect(page.locator('body')).toHaveAttribute('data-select-request', 'three');
+  await expect(page.locator('body')).toHaveAttribute('data-open-request', 'false');
+  await expect(page.locator('#controlled-list')).toBeVisible();
+  await expect(page.locator('#controlled-one')).toHaveAttribute('aria-selected', 'true');
+  await expect(page.locator('#controlled-three')).toHaveAttribute('aria-selected', 'false');
+  await page.locator('#after').click();
+  await expect(page.locator('#controlled-list')).toBeVisible();
+  expect(await page.locator('#controlled-list').evaluate((node) => node.matches(':popover-open'))).toBe(true);
 });

@@ -19,7 +19,9 @@ function isDisabled(item: HTMLElement): boolean {
 }
 
 export class VfMenuElement extends HTMLElementBase {
-  static observedAttributes = ['open'];
+  static observedAttributes = ['open', 'placement'];
+  private surface: HTMLElement | null = null;
+  private restoreFocus = false;
   private observer: MutationObserver | null = null;
   private query = '';
   private timer: ReturnType<typeof setTimeout> | null = null;
@@ -45,6 +47,9 @@ export class VfMenuElement extends HTMLElementBase {
     this.removeEventListener('keydown', this.onKeydown);
     this.observer?.disconnect();
     this.observer = null;
+    this.surface?.removeEventListener('toggle', this.onToggle);
+    this.surface?.removeEventListener('beforetoggle', this.onBeforeToggle);
+    this.surface = null;
     if (this.timer) clearTimeout(this.timer);
     this.timer = null;
     this.query = '';
@@ -77,18 +82,50 @@ export class VfMenuElement extends HTMLElementBase {
     }
     const trigger = this.trigger;
     const content = this.content;
+    if (content !== this.surface) {
+      this.surface?.removeEventListener('toggle', this.onToggle);
+      this.surface?.removeEventListener('beforetoggle', this.onBeforeToggle);
+      if (this.surface?.matches(':popover-open')) this.surface.hidePopover();
+      this.surface = content;
+      content?.addEventListener('toggle', this.onToggle);
+      content?.addEventListener('beforetoggle', this.onBeforeToggle);
+    }
     trigger?.setAttribute('aria-haspopup', 'menu');
     trigger?.setAttribute('aria-expanded', String(open));
     if (content) {
       content.setAttribute('role', 'menu');
       content.tabIndex = -1;
-      content.hidden = !open;
+      content.setAttribute('popover', 'auto');
+      content.removeAttribute('hidden');
+      content.setAttribute('data-vf-placement', this.getAttribute('placement') ?? 'bottom-start');
+      content.toggleAttribute('data-vf-open', open);
     }
     for (const item of menuItems(this)) {
       item.setAttribute('role', 'menuitem');
       item.tabIndex = -1;
     }
+    if (!content || !trigger) return;
+    if (open && !content.matches(':popover-open')) content.showPopover({ source: trigger });
+    if (!open && content.matches(':popover-open')) content.hidePopover();
   }
+
+  private onBeforeToggle = (event: Event) => {
+    const surface = this.surface;
+    if (!surface || event.target !== surface) return;
+    this.restoreFocus = surface.matches(':popover-open') && surface.contains(this.ownerDocument.activeElement);
+  };
+
+  private onToggle = (event: Event) => {
+    const surface = this.surface;
+    if (!surface || event.target !== surface) return;
+    const actual = surface.matches(':popover-open');
+    if (!actual && this.restoreFocus) {
+      this.restoreFocus = false;
+      const active = this.ownerDocument.activeElement;
+      if (!active || active === this.ownerDocument.body || surface.contains(active)) this.trigger?.focus();
+    }
+    if (actual !== this.hasAttribute('open')) this.setOpen(actual);
+  };
 
   private setOpen(open: boolean) {
     this.toggleAttribute('open', open);
@@ -97,7 +134,7 @@ export class VfMenuElement extends HTMLElementBase {
     queueMicrotask(() => {
       if (!this.isConnected || !this.hasAttribute('open')) return;
       const content = this.content;
-      const items = content ? menuItems(content) : [];
+      const items = content?.matches(':popover-open') ? menuItems(content) : [];
       const index = resolveNavigationIndex(
         items.map((item) => ({ eligible: !item.matches(':disabled') })),
         edge === 'first' ? -1 : items.length,
@@ -131,7 +168,6 @@ export class VfMenuElement extends HTMLElementBase {
       return;
     }
     this.setOpen(false);
-    this.trigger?.focus();
     this.dispatchEvent(new CustomEvent('vf-select', { detail: { item }, bubbles: true }));
   };
 
@@ -158,7 +194,6 @@ export class VfMenuElement extends HTMLElementBase {
     if (event.key === 'Escape') {
       event.preventDefault();
       this.setOpen(false);
-      this.trigger?.focus();
       return;
     }
     if (event.key === 'Tab') {

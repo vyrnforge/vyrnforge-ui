@@ -1,106 +1,107 @@
-import { mkdir, writeFile } from 'node:fs/promises';
-import path from 'node:path';
-import { build } from 'esbuild';
+const labels = ['One', 'Disabled', 'Three', 'Banana'];
+const values = ['one', 'disabled', 'three', 'banana'];
+const before = '<button id="before" type="button">Before</button>';
+const after = '<button id="after" type="button" style="position: fixed; right: 16px; bottom: 16px">After</button>';
+const label = '<div id="select-label">Choose an option</div>';
+function options(port) {
+  return labels.map((label, index) => `<button id="${port}-${values[index]}" type="button" role="option" tabindex="-1" aria-selected="${index === 0}" data-vf-select-option data-vf-value="${values[index]}"${index === 1 ? ' disabled aria-disabled="true"' : ''}>${label}</button>`).join('');
+}
+function valueChanged(value) { document.body.dataset.value = value; }
+function ready() { document.body.dataset.selectReady = 'true'; }
+function request(value) { document.body.dataset.selectRequest = value; }
+function openRequest(value) { document.body.dataset.openRequest = String(value); }
+const web = `${before}${label}<button id="trigger" type="button" aria-haspopup="listbox" aria-controls="list" popovertarget="list" data-vf-select-trigger>Choose</button><div id="list" role="listbox" tabindex="-1" aria-labelledby="select-label" popover="auto" data-vf-select-content>${options('web')}</div><form id="native-form"><label for="native-select">Native selection</label><select id="native-select" name="choice"><option value="one">One</option><option value="three">Three</option></select><button type="reset">Reset</button></form>${after}`;
 
 export const browserFixture = {
   component: 'select',
-  prepare: async ({ port }) => {
-    const root = process.cwd();
-    const dir = path.join(root, 'dist/browser-fixtures/components/select');
-    await mkdir(dir, { recursive: true });
-    await build({
-      stdin: {
-        contents: '@import "@vyrnforge/web/styles/tokens.css";@import "@vyrnforge/web/styles/select.css";',
-        resolveDir: root,
-        sourcefile: 'select-public.css',
-        loader: 'css',
-      },
-      bundle: true,
-      outfile: path.join(dir, 'styles.css'),
-    });
-
-    const page = (body, script = '') =>
-      `<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width"><title>Select browser fixture</title><link rel="stylesheet" href="./styles.css"></head><body><main><h1>Select browser fixture</h1><button id="before">Before</button><div id="select-label">Choose an option</div>${body}<button id="after">After</button></main>${script}</body></html>`;
-    const staticOptions = (prefix) =>
-      `<button id="${prefix}-one" type="button" role="option" tabindex="-1" aria-selected="true" data-vf-select-option data-vf-value="one">One</button><button id="${prefix}-disabled" type="button" role="option" tabindex="-1" aria-selected="false" aria-disabled="true" disabled data-vf-select-option data-vf-value="disabled">Disabled</button><button id="${prefix}-three" type="button" role="option" tabindex="-1" aria-selected="false" data-vf-select-option data-vf-value="three">Three</button><button id="${prefix}-banana" type="button" role="option" tabindex="-1" aria-selected="false" data-vf-select-option data-vf-value="banana">Banana</button>`;
-
-    if (port === 'web') {
-      const body = `<button id="trigger" type="button" aria-haspopup="listbox" aria-expanded="false" aria-controls="list" data-vf-select-trigger>One</button><div id="list" role="listbox" tabindex="-1" aria-labelledby="select-label" hidden data-vf-select-content>${staticOptions('web')}</div>`;
-      const script = `<script>const trigger=document.querySelector('#trigger');const list=document.querySelector('#list');const options=[...list.querySelectorAll('[data-vf-select-option]')];trigger.onclick=()=>{list.hidden=false;trigger.setAttribute('aria-expanded','true')};options.forEach(option=>option.onclick=()=>{options.forEach(item=>item.setAttribute('aria-selected','false'));option.setAttribute('aria-selected','true');list.hidden=true;trigger.setAttribute('aria-expanded','false');trigger.focus()})</script>`;
-      await writeFile(path.join(dir, 'web.html'), page(body, script));
-    }
-
-    if (port === 'react') {
-      await writeFile(
-        path.join(dir, 'react.html'),
-        page('<div id="app"></div>', '<script type="module" src="./react.js"></script>'),
-      );
-      await build({
-        stdin: {
-          resolveDir: root,
-          sourcefile: 'react-select-client.ts',
-          contents: `import{createElement}from'react';import{createRoot}from'react-dom/client';import{SelectRoot,SelectTrigger,SelectContent,SelectOption}from'@vyrnforge/react/select';const option=(id,value,label,disabled=false)=>createElement(SelectOption,{id,value,disabled},label);createRoot(document.querySelector('#app')).render(createElement(SelectRoot,{defaultValue:'one',onValueChange:value=>{document.body.dataset.value=value}},createElement(SelectTrigger,{id:'trigger','aria-controls':'list'},'Choose'),createElement(SelectContent,{id:'list','aria-labelledby':'select-label'},option('react-one','one','One'),option('react-disabled','disabled','Disabled',true),option('react-three','three','Three'),option('react-banana','banana','Banana'))));`,
-        },
-        bundle: true,
-        format: 'esm',
-        platform: 'browser',
-        outfile: path.join(dir, 'react.js'),
-      });
-    }
-
-    if (port === 'vue') {
-      await writeFile(
-        path.join(dir, 'vue.html'),
-        page('<div id="app"></div>', '<script type="module" src="./vue.js"></script>'),
-      );
-      await build({
-        stdin: {
-          resolveDir: root,
-          sourcefile: 'vue-select-client.ts',
-          contents: `import{createApp,h}from'vue';import{SelectRoot,SelectTrigger,SelectContent,SelectOption}from'@vyrnforge/vue/select';const option=(id,value,label,disabled=false)=>h(SelectOption,{id,value,disabled},()=>label);createApp({render:()=>h(SelectRoot,{defaultValue:'one','onUpdate:value':value=>{document.body.dataset.value=value}},()=>[h(SelectTrigger,{id:'trigger','aria-controls':'list'},()=> 'Choose'),h(SelectContent,{id:'list','aria-labelledby':'select-label'},()=>[option('vue-one','one','One'),option('vue-disabled','disabled','Disabled',true),option('vue-three','three','Three'),option('vue-banana','banana','Banana')])])}).mount('#app');`,
-        },
-        bundle: true,
-        format: 'esm',
-        platform: 'browser',
-        outfile: path.join(dir, 'vue.js'),
-      });
-    }
-
-    if (port === 'angular') {
-      await writeFile(
-        path.join(dir, 'angular.html'),
-        page('<vf-select-test></vf-select-test>', '<script type="module" src="./angular.js"></script>'),
-      );
-      await build({
-        stdin: {
-          resolveDir: root,
-          sourcefile: 'angular-select-client.ts',
-          contents: `import'@angular/compiler';import{Component,provideZonelessChangeDetection}from'@angular/core';import{bootstrapApplication}from'@angular/platform-browser';import{VfSelectRootDirective,VfSelectTriggerDirective,VfSelectContentDirective,VfSelectOptionDirective}from'@vyrnforge/angular/select';class App{changed(value){document.body.dataset.value=value}}Component({selector:'vf-select-test',standalone:true,imports:[VfSelectRootDirective,VfSelectTriggerDirective,VfSelectContentDirective,VfSelectOptionDirective],template:'<div vfSelectRoot defaultValue="one" (valueChange)="changed($event)"><button id="trigger" vfSelectTrigger aria-controls="list">Choose</button><div id="list" vfSelectContent aria-labelledby="select-label"><button id="angular-one" vfSelectOption="one">One</button><button id="angular-disabled" vfSelectOption="disabled" [disabled]="true">Disabled</button><button id="angular-three" vfSelectOption="three">Three</button><button id="angular-banana" vfSelectOption="banana">Banana</button></div></div>'})(App);bootstrapApplication(App,{providers:[provideZonelessChangeDetection()]});`,
-        },
-        bundle: true,
-        format: 'esm',
-        platform: 'browser',
-        outfile: path.join(dir, 'angular.js'),
-      });
-    }
-
-    if (port === 'elements') {
-      const body = `<vf-select id="elements-select" value="one"><button id="trigger" type="button" aria-controls="list" data-vf-select-trigger>Choose</button><div id="list" aria-labelledby="select-label" data-vf-select-content><button id="elements-one" type="button" data-vf-select-option data-vf-value="one">One</button><button id="elements-disabled" type="button" disabled data-vf-select-option data-vf-value="disabled">Disabled</button><button id="elements-three" type="button" data-vf-select-option data-vf-value="three">Three</button><button id="elements-banana" type="button" data-vf-select-option data-vf-value="banana">Banana</button></div></vf-select>`;
-      await writeFile(
-        path.join(dir, 'elements.html'),
-        page(body, '<script type="module" src="./elements.js"></script>'),
-      );
-      await build({
-        stdin: {
-          resolveDir: root,
-          sourcefile: 'elements-select-client.ts',
-          contents: `import{defineSelectElement}from'@vyrnforge/elements/select';defineSelectElement();`,
-        },
-        bundle: true,
-        format: 'esm',
-        platform: 'browser',
-        outfile: path.join(dir, 'elements.js'),
-      });
-    }
+  title: 'Select browser fixture',
+  heading: 'Select browser fixture',
+  ports: {
+    web: { body: web },
+    react: { story: 'createReactStory' },
+    vue: { story: 'createVueStory' },
+    angular: { story: 'createAngularStory', selector: 'vf-select-test' },
+    elements: { story: 'createElementsStory' },
   },
 };
+
+export async function createReactStory() {
+  const { createElement: h, Fragment, useEffect, useState } = await import('react');
+  const { SelectRoot, SelectTrigger, SelectContent, SelectOption } = await import('@vyrnforge/react/select');
+  function App() {
+    const [open, setOpen] = useState(false);
+    useEffect(ready, []);
+    const option = (prefix, index) => h(SelectOption, { key: values[index], id: `${prefix}-${values[index]}`, value: values[index], disabled: index === 1 }, labels[index]);
+    return h(Fragment, null,
+      h('button', { id: 'before', type: 'button' }, 'Before'),
+      h('div', { id: 'select-label' }, 'Choose an option'),
+      h(SelectRoot, { defaultValue: 'one', onValueChange: valueChanged },
+        h(SelectTrigger, { id: 'trigger', 'aria-controls': 'list' }, 'Choose'),
+        h(SelectContent, { id: 'list', 'aria-labelledby': 'select-label' }, ...labels.map((_, index) => option('react', index))),
+      ),
+      h(SelectRoot, { value: 'one', open, onValueChange: request, onOpenChange(next) { openRequest(next); if (next) setOpen(true); } },
+        h(SelectTrigger, { id: 'controlled-trigger', tabIndex: -1, 'aria-controls': 'controlled-list' }, 'Controlled selection'),
+        h(SelectContent, { id: 'controlled-list', 'aria-label': 'Controlled options' }, option('controlled', 0), option('controlled', 2)),
+      ),
+      h('button', { id: 'after', type: 'button', style: { position: 'fixed', right: '16px', bottom: '16px' } }, 'After'),
+    );
+  }
+  return h(App);
+}
+
+export async function createVueStory() {
+  const { createSSRApp, h, onMounted, ref } = await import('vue');
+  const { SelectRoot, SelectTrigger, SelectContent, SelectOption } = await import('@vyrnforge/vue/select');
+  return createSSRApp({
+    setup() {
+      const open = ref(false);
+      onMounted(ready);
+      const option = (prefix, index) => h(SelectOption, { key: values[index], id: `${prefix}-${values[index]}`, value: values[index], disabled: index === 1 }, () => labels[index]);
+      return () => h('div', [
+        h('button', { id: 'before', type: 'button' }, 'Before'),
+        h('div', { id: 'select-label' }, 'Choose an option'),
+        h(SelectRoot, { defaultValue: 'one', 'onUpdate:value': valueChanged }, () => [
+          h(SelectTrigger, { id: 'trigger', 'aria-controls': 'list' }, () => 'Choose'),
+          h(SelectContent, { id: 'list', 'aria-labelledby': 'select-label' }, () => labels.map((_, index) => option('vue', index))),
+        ]),
+        h(SelectRoot, { value: 'one', open: open.value, 'onUpdate:value': request, 'onUpdate:open': (next) => { openRequest(next); if (next) open.value = true; } }, () => [
+          h(SelectTrigger, { id: 'controlled-trigger', tabindex: -1, 'aria-controls': 'controlled-list' }, () => 'Controlled selection'),
+          h(SelectContent, { id: 'controlled-list', 'aria-label': 'Controlled options' }, () => [option('controlled', 0), option('controlled', 2)]),
+        ]),
+        h('button', { id: 'after', type: 'button', style: { position: 'fixed', right: '16px', bottom: '16px' } }, 'After'),
+      ]);
+    },
+  });
+}
+
+export async function createAngularStory() {
+  await import('@angular/compiler');
+  const { Component, afterNextRender, signal } = await import('@angular/core');
+  const { VfSelectRootDirective, VfSelectTriggerDirective, VfSelectContentDirective, VfSelectOptionDirective } = await import('@vyrnforge/angular/select');
+  class SelectTestApp {
+    controlled = signal(false);
+    constructor() { afterNextRender(ready); }
+    valueChanged = valueChanged;
+    request = request;
+    openRequest(next) { openRequest(next); if (next) this.controlled.set(true); }
+  }
+  const angularOptions = (prefix, indexes) => indexes.map(index => `<button vfSelectOption="${values[index]}" id="${prefix}-${values[index]}" [disabled]="${index === 1}">${labels[index]}</button>`).join('');
+  Component({
+    selector: 'vf-select-test',
+    standalone: true,
+    imports: [VfSelectRootDirective, VfSelectTriggerDirective, VfSelectContentDirective, VfSelectOptionDirective],
+    template: `<main><h1>Select browser fixture</h1>${before}${label}<div vfSelectRoot defaultValue="one" (valueChange)="valueChanged($event)"><button vfSelectTrigger id="trigger" aria-controls="list">Choose</button><div vfSelectContent id="list" aria-labelledby="select-label">${angularOptions('angular', [0, 1, 2, 3])}</div></div><div vfSelectRoot value="one" [open]="controlled()" (valueChange)="request($event)" (openChange)="openRequest($event)"><button vfSelectTrigger id="controlled-trigger" tabindex="-1" aria-controls="controlled-list">Controlled selection</button><div vfSelectContent id="controlled-list" aria-label="Controlled options">${angularOptions('controlled', [0, 2])}</div></div>${after}</main>`,
+  })(SelectTestApp);
+  return SelectTestApp;
+}
+
+export async function createElementsStory({ client }) {
+  return {
+    body: `${before}${label}<vf-select id="elements-select" value="one"><button id="trigger" type="button" aria-haspopup="listbox" aria-expanded="false" aria-controls="list" data-vf-select-trigger>Choose</button><div id="list" role="listbox" tabindex="-1" aria-labelledby="select-label" data-vf-select-content hidden>${options('elements')}</div></vf-select>${after}`,
+    activate: client ? async () => {
+      const { defineSelectElement } = await import('@vyrnforge/elements/select');
+      defineSelectElement();
+      ready();
+    } : undefined,
+  };
+}

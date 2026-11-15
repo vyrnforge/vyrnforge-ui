@@ -50,10 +50,7 @@ test('runtime split button keeps primary activation independent and inherits key
   await expect(trigger).toHaveAttribute('aria-expanded', 'true');
   await expect(copy).toBeFocused();
   await expect(body).toHaveAttribute('data-primary-count', '2');
-  // React currently portals Menu to body; the full-page region finding remains tracked by #1280.
-  // Scan the opened menu itself without disabling any component accessibility rules.
-  const axe = await expectNoAxeViolations(page, port === 'react' ? { include: '#menu' } : {});
-  expect(axe.violations).toEqual([]);
+  expect((await expectNoAxeViolations(page)).violations).toEqual([]);
   await page.keyboard.press('ArrowDown');
   await expect(archive).toBeFocused();
   await page.keyboard.press('Escape');

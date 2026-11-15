@@ -1,104 +1,188 @@
-import { mkdir, writeFile } from 'node:fs/promises';
-import path from 'node:path';
-import { build } from 'esbuild';
+const labels = ['Edit', 'Locked', 'Duplicate', 'Archive'];
+const ids = ['edit', 'locked', 'duplicate', 'archive'];
+const before = '<button id="before" type="button">Before</button>';
+const after = '<button id="after" type="button" style="position: fixed; right: 16px; bottom: 16px">After</button>';
+
+function nativeItems(port, enhanced = false) {
+  return labels
+    .map(
+      (label, index) =>
+        `<button id="${port}-${ids[index]}" type="button" ${enhanced ? '' : 'role="menuitem" tabindex="-1"'} data-vf-menu-item${index === 1 ? ' aria-disabled="true"' : ''}>${label}</button>`,
+    )
+    .join('');
+}
+const web = `${before}<button id="web-trigger" type="button" data-vf-menu-trigger aria-haspopup="menu" aria-controls="web-menu" popovertarget="web-menu">Actions</button><div id="web-menu" role="menu" tabindex="-1" aria-label="Actions" data-vf-menu-content data-vf-placement="bottom-start" popover="auto">${nativeItems('web')}</div>${after}`;
+const elements = `${before}<vf-menu><button id="elements-trigger" type="button" data-vf-menu-trigger aria-haspopup="menu" aria-expanded="false">Actions</button><div id="elements-menu" data-vf-menu-content aria-label="Actions" hidden>${nativeItems('elements', true)}</div></vf-menu>${after}`;
 
 export const browserFixture = {
   component: 'menu',
-  prepare: async ({ port }) => {
-    const root = process.cwd();
-    const dir = path.join(root, 'dist/browser-fixtures/components/menu');
-    await mkdir(dir, { recursive: true });
-    await build({
-      stdin: {
-        contents: '@import "@vyrnforge/web/styles/tokens.css";@import "@vyrnforge/web/styles/menu.css";',
-        resolveDir: root,
-        sourcefile: 'menu-public.css',
-        loader: 'css',
-      },
-      bundle: true,
-      outfile: path.join(dir, 'styles.css'),
-    });
-
-    const page = (body, script = '') =>
-      `<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width"><link rel="stylesheet" href="./styles.css"><title>Menu fixture</title></head><body><main><h1>Menu browser fixture</h1><button id="before">Before</button>${body}<button id="after">After</button></main>${script}</body></html>`;
-
-    if (port === 'web') {
-      const markup = `<button id="web-trigger" type="button" data-vf-menu-trigger aria-haspopup="menu" aria-expanded="true">Actions</button><div id="web-menu" role="menu" tabindex="-1" aria-label="Actions" data-vf-menu-content><button id="web-edit" type="button" role="menuitem" tabindex="-1" data-vf-menu-item>Edit</button><button id="web-locked" type="button" role="menuitem" tabindex="-1" aria-disabled="true" data-vf-menu-item>Locked</button><button id="web-duplicate" type="button" role="menuitem" tabindex="-1" data-vf-menu-item>Duplicate</button><button id="web-archive" type="button" role="menuitem" tabindex="-1" data-vf-menu-item>Archive</button></div>`;
-      await writeFile(path.join(dir, 'web.html'), page(markup));
-    }
-
-    if (port === 'react') {
-      await writeFile(
-        path.join(dir, 'react.html'),
-        page('<div id="app"></div>', '<script type="module" src="./react.js"></script>'),
-      );
-      await build({
-        stdin: {
-          resolveDir: root,
-          sourcefile: 'react-menu-client.ts',
-          contents: `import{createElement}from'react';import{createRoot}from'react-dom/client';import{MenuRoot,MenuTrigger,MenuContent,MenuItem}from'@vyrnforge/react/menu';const item=(id,label,disabled=false)=>createElement(MenuItem,{id,disabled,onClick:disabled?()=>{document.body.dataset.disabledClicked=id}:undefined,onSelect:()=>document.body.dataset.selected=id},label);createRoot(document.querySelector('#app')).render(createElement(MenuRoot,null,createElement(MenuTrigger,{id:'react-trigger'},'Actions'),createElement(MenuContent,{id:'react-menu','aria-label':'Actions'},item('react-edit','Edit'),item('react-locked','Locked',true),item('react-duplicate','Duplicate'),item('react-archive','Archive'))));`,
-        },
-        bundle: true,
-        format: 'esm',
-        platform: 'browser',
-        outfile: path.join(dir, 'react.js'),
-      });
-    }
-
-    if (port === 'vue') {
-      await writeFile(
-        path.join(dir, 'vue.html'),
-        page('<div id="app"></div>', '<script type="module" src="./vue.js"></script>'),
-      );
-      await build({
-        stdin: {
-          resolveDir: root,
-          sourcefile: 'vue-menu-client.ts',
-          contents: `import{createApp,h}from'vue';import{MenuRoot,MenuTrigger,MenuContent,MenuItem}from'@vyrnforge/vue/menu';const item=(id,label,disabled=false)=>h(MenuItem,{id,disabled,onClick:disabled?()=>{document.body.dataset.disabledClicked=id}:undefined,onSelect:()=>document.body.dataset.selected=id},()=>label);createApp({render:()=>h(MenuRoot,null,()=>[h(MenuTrigger,{id:'vue-trigger'},()=> 'Actions'),h(MenuContent,{id:'vue-menu','aria-label':'Actions'},()=>[item('vue-edit','Edit'),item('vue-locked','Locked',true),item('vue-duplicate','Duplicate'),item('vue-archive','Archive')])])}).mount('#app');`,
-        },
-        bundle: true,
-        format: 'esm',
-        platform: 'browser',
-        outfile: path.join(dir, 'vue.js'),
-      });
-    }
-
-    if (port === 'angular') {
-      const angularTemplate = `<div vfMenuRoot><button vfMenuTrigger id="angular-trigger">Actions</button><div vfMenuContent id="angular-menu" aria-label="Actions"><button vfMenuItem id="angular-edit" (selected)="selected('angular-edit')">Edit</button><button vfMenuItem id="angular-locked" [disabled]="true" (selected)="selected('angular-locked')">Locked</button><button vfMenuItem id="angular-duplicate" (selected)="selected('angular-duplicate')">Duplicate</button><button vfMenuItem id="angular-archive" (selected)="selected('angular-archive')">Archive</button></div></div>`;
-      await writeFile(
-        path.join(dir, 'angular.html'),
-        page('<vf-menu-test></vf-menu-test>', '<script type="module" src="./angular.js"></script>'),
-      );
-      await build({
-        stdin: {
-          resolveDir: root,
-          sourcefile: 'angular-menu-client.ts',
-          contents: `import'@angular/compiler';import{Component,provideZonelessChangeDetection}from'@angular/core';import{bootstrapApplication}from'@angular/platform-browser';import{VfMenuRootDirective,VfMenuTriggerDirective,VfMenuContentDirective,VfMenuItemDirective}from'@vyrnforge/angular/menu';class App{selected(id){document.body.dataset.selected=id}}Component({selector:'vf-menu-test',standalone:true,imports:[VfMenuRootDirective,VfMenuTriggerDirective,VfMenuContentDirective,VfMenuItemDirective],template:${JSON.stringify(angularTemplate)}})(App);bootstrapApplication(App,{providers:[provideZonelessChangeDetection()]});`,
-        },
-        bundle: true,
-        format: 'esm',
-        platform: 'browser',
-        outfile: path.join(dir, 'angular.js'),
-      });
-    }
-
-    if (port === 'elements') {
-      const markup = `<vf-menu><button id="elements-trigger" type="button" data-vf-menu-trigger>Actions</button><div id="elements-menu" data-vf-menu-content aria-label="Actions"><button id="elements-edit" type="button" data-vf-menu-item>Edit</button><button id="elements-locked" type="button" data-vf-menu-item aria-disabled="true">Locked</button><button id="elements-duplicate" type="button" data-vf-menu-item>Duplicate</button><button id="elements-archive" type="button" data-vf-menu-item>Archive</button></div></vf-menu>`;
-      await writeFile(
-        path.join(dir, 'elements.html'),
-        page(markup, '<script type="module" src="./elements.js"></script>'),
-      );
-      await build({
-        stdin: {
-          resolveDir: root,
-          sourcefile: 'elements-menu-client.ts',
-          contents: `import{defineMenuElement}from'@vyrnforge/elements/menu';defineMenuElement();document.querySelector('vf-menu').addEventListener('vf-select',(event)=>{document.body.dataset.selected=event.detail.item.id});`,
-        },
-        bundle: true,
-        format: 'esm',
-        platform: 'browser',
-        outfile: path.join(dir, 'elements.js'),
-      });
-    }
+  title: 'Menu browser fixture',
+  heading: 'Menu browser fixture',
+  ports: {
+    web: { body: web },
+    react: { story: 'createReactStory' },
+    vue: { story: 'createVueStory' },
+    angular: { story: 'createAngularStory', selector: 'vf-menu-test' },
+    elements: { story: 'createElementsStory' },
   },
 };
+function selected(id) {
+  document.body.dataset.selected = id;
+}
+function disabledClicked(id) {
+  document.body.dataset.disabledClicked = id;
+}
+function ready() {
+  document.body.dataset.menuReady = 'true';
+}
+
+export async function createReactStory() {
+  const { createElement: h, Fragment, useEffect, useState } = await import('react');
+  const { MenuRoot, MenuTrigger, MenuContent, MenuItem } = await import('@vyrnforge/react/menu');
+  function App() {
+    const [open, setOpen] = useState(false);
+    useEffect(ready, []);
+    return h(
+      Fragment,
+      null,
+      h('button', { id: 'before', type: 'button' }, 'Before'),
+      h(
+        MenuRoot,
+        null,
+        h(MenuTrigger, { id: 'react-trigger', 'aria-controls': 'react-menu' }, 'Actions'),
+        h(
+          MenuContent,
+          { id: 'react-menu', 'aria-label': 'Actions' },
+          ...labels.map((label, index) =>
+            h(
+              MenuItem,
+              {
+                key: ids[index],
+                id: `react-${ids[index]}`,
+                disabled: index === 1,
+                onClick: index === 1 ? () => disabledClicked('react-locked') : undefined,
+                onSelect: () => selected(`react-${ids[index]}`),
+              },
+              label,
+            ),
+          ),
+        ),
+      ),
+      h(
+        MenuRoot,
+        {
+          open,
+          onOpenChange(next) {
+            document.body.dataset.menuRequest = String(next);
+            if (next) setOpen(true);
+          },
+        },
+        h(MenuTrigger, { id: 'controlled-trigger', 'aria-controls': 'controlled-menu' }, 'Controlled'),
+        h(
+          MenuContent,
+          { id: 'controlled-menu', 'aria-label': 'Controlled actions' },
+          h(MenuItem, { id: 'controlled-item' }, 'Action'),
+        ),
+      ),
+      h(
+        'button',
+        { id: 'after', type: 'button', style: { position: 'fixed', right: '16px', bottom: '16px' } },
+        'After',
+      ),
+    );
+  }
+  return h(App);
+}
+
+export async function createVueStory() {
+  const { createSSRApp, h, onMounted, ref } = await import('vue');
+  const { MenuRoot, MenuTrigger, MenuContent, MenuItem } = await import('@vyrnforge/vue/menu');
+  return createSSRApp({
+    setup() {
+      const open = ref(false);
+      onMounted(ready);
+      return () =>
+        h('div', [
+          h('button', { id: 'before', type: 'button' }, 'Before'),
+          h(MenuRoot, {}, () => [
+            h(MenuTrigger, { id: 'vue-trigger', 'aria-controls': 'vue-menu' }, () => 'Actions'),
+            h(MenuContent, { id: 'vue-menu', 'aria-label': 'Actions' }, () =>
+              labels.map((label, index) =>
+                h(
+                  MenuItem,
+                  {
+                    key: ids[index],
+                    id: `vue-${ids[index]}`,
+                    disabled: index === 1,
+                    onClick: index === 1 ? () => disabledClicked('vue-locked') : undefined,
+                    onSelect: () => selected(`vue-${ids[index]}`),
+                  },
+                  () => label,
+                ),
+              ),
+            ),
+          ]),
+          h(
+            MenuRoot,
+            {
+              open: open.value,
+              'onUpdate:open': (next) => {
+                document.body.dataset.menuRequest = String(next);
+                if (next) open.value = true;
+              },
+            },
+            () => [
+              h(MenuTrigger, { id: 'controlled-trigger', 'aria-controls': 'controlled-menu' }, () => 'Controlled'),
+              h(MenuContent, { id: 'controlled-menu', 'aria-label': 'Controlled actions' }, () =>
+                h(MenuItem, { id: 'controlled-item' }, () => 'Action'),
+              ),
+            ],
+          ),
+          h(
+            'button',
+            { id: 'after', type: 'button', style: { position: 'fixed', right: '16px', bottom: '16px' } },
+            'After',
+          ),
+        ]);
+    },
+  });
+}
+
+export async function createAngularStory() {
+  await import('@angular/compiler');
+  const { Component, afterNextRender, signal } = await import('@angular/core');
+  const { VfMenuRootDirective, VfMenuTriggerDirective, VfMenuContentDirective, VfMenuItemDirective } =
+    await import('@vyrnforge/angular/menu');
+  class MenuTestApp {
+    controlled = signal(false);
+    constructor() {
+      afterNextRender(ready);
+    }
+    selected = selected;
+    request(next) {
+      document.body.dataset.menuRequest = String(next);
+      if (next) this.controlled.set(true);
+    }
+  }
+  Component({
+    selector: 'vf-menu-test',
+    standalone: true,
+    imports: [VfMenuRootDirective, VfMenuTriggerDirective, VfMenuContentDirective, VfMenuItemDirective],
+    template: `<main><h1>Menu browser fixture</h1>${before}<div vfMenuRoot><button vfMenuTrigger id="angular-trigger" aria-controls="angular-menu">Actions</button><div vfMenuContent id="angular-menu" aria-label="Actions">${labels.map((label, index) => `<button vfMenuItem id="angular-${ids[index]}" [disabled]="${index === 1}" (selected)="selected('angular-${ids[index]}')">${label}</button>`).join('')}</div></div><div vfMenuRoot [open]="controlled()" (openChange)="request($event)"><button vfMenuTrigger id="controlled-trigger" aria-controls="controlled-menu">Controlled</button><div vfMenuContent id="controlled-menu" aria-label="Controlled actions"><button vfMenuItem id="controlled-item">Action</button></div></div>${after}</main>`,
+  })(MenuTestApp);
+  return MenuTestApp;
+}
+
+export async function createElementsStory({ client }) {
+  return {
+    body: elements,
+    activate: client
+      ? async () => {
+          const { defineMenuElement } = await import('@vyrnforge/elements/menu');
+          defineMenuElement();
+          document.querySelector('vf-menu').addEventListener('vf-select', (event) => selected(event.detail.item.id));
+          ready();
+        }
+      : undefined,
+  };
+}
