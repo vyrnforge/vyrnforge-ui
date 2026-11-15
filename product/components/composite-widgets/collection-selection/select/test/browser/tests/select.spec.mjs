@@ -179,3 +179,43 @@ test('Select owns coherent popup relationships across explicit and generated ide
   await expect(list).toBeVisible();
   await expect(page.locator(`#${port}-one`)).toBeFocused();
 });
+
+test('Select preserves native disabled fieldset behavior for trigger and option events', async ({ page }) => {
+  test.skip(port === 'web', 'Managed runtime evidence.');
+  await page.goto(`/components/select/${port}.html`);
+  await page.waitForFunction(() => document.body.dataset.selectReady === 'true');
+  const trigger = page.locator('[data-vf-select-trigger]').first();
+  const list = page.locator('[data-vf-select-content]').first();
+  await trigger.evaluate((node) => {
+    const fieldset = document.createElement('fieldset');
+    fieldset.id = 'selection-fieldset';
+    node.before(fieldset);
+    fieldset.append(node);
+    fieldset.disabled = true;
+  });
+  const fieldset = page.locator('#selection-fieldset');
+  await expect(trigger).toBeDisabled();
+  const prevented = await trigger.evaluate((node) => {
+    const key = new KeyboardEvent('keydown', { key: 'ArrowDown', bubbles: true, cancelable: true });
+    node.dispatchEvent(key);
+    node.dispatchEvent(new MouseEvent('click', { bubbles: true, cancelable: true }));
+    return key.defaultPrevented;
+  });
+  expect(prevented).toBe(false);
+  await expect(list).toBeHidden();
+  await expect(trigger).toHaveAttribute('aria-expanded', 'false');
+  await fieldset.evaluate((node) => (node.disabled = false));
+  await trigger.press('Enter');
+  await expect(list).toBeVisible();
+  const option = page.locator(`#${port}-three`);
+  await option.evaluate((node) => {
+    const fieldset = document.createElement('fieldset');
+    node.before(fieldset);
+    fieldset.append(node);
+    fieldset.disabled = true;
+  });
+  await expect(option).toBeDisabled();
+  await option.evaluate((node) => node.dispatchEvent(new MouseEvent('click', { bubbles: true, cancelable: true })));
+  await expect(option).toHaveAttribute('aria-selected', 'false');
+  await expect(page.locator(`#${port}-one`)).toHaveAttribute('aria-selected', 'true');
+});

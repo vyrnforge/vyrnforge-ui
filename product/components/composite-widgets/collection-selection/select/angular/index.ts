@@ -52,7 +52,7 @@ function optionFromTarget(root: HTMLElement, target: EventTarget | null): HTMLBu
   return option && option.closest('[data-vf-select-content]') === root ? option : null;
 }
 function optionDisabled(option: HTMLButtonElement): boolean {
-  return option.disabled || option.getAttribute('aria-disabled') === 'true';
+  return option.matches(':disabled,[aria-disabled="true"]');
 }
 function flushFocusRequests(root: VfSelectRootDirective): void {
   const state = domFor(root);
@@ -143,7 +143,7 @@ export class VfSelectTriggerDirective {
     domFor(root).anchor = element;
 
     const onClick = (event: MouseEvent) => {
-      if (event.defaultPrevented) return;
+      if (event.defaultPrevented || optionDisabled(element)) return;
       if (root.expanded()) root.setOpen(false);
       else {
         root.setOpen(true);
@@ -151,7 +151,7 @@ export class VfSelectTriggerDirective {
       }
     };
     const onKeydown = (event: KeyboardEvent) => {
-      if (event.defaultPrevented) return;
+      if (event.defaultPrevented || optionDisabled(element)) return;
       const wasOpen = root.expanded();
       if (event.key === 'ArrowUp') {
         event.preventDefault();
@@ -320,6 +320,7 @@ export class VfSelectOptionDirective {
 
   select(event?: MouseEvent): void {
     if (event?.defaultPrevented || this.disabled()) return;
+    if (event?.currentTarget instanceof HTMLButtonElement && optionDisabled(event.currentTarget)) return;
     this.root.setValue(this.value());
   }
 }
