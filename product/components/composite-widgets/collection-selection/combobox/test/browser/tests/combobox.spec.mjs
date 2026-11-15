@@ -280,3 +280,57 @@ test('native read-only and disabled fieldset prevent Combobox requests and prese
   await expect(popup).toBeVisible();
   await expect(input).toHaveAttribute('aria-activedescendant', `${port}-react`);
 });
+
+
+test('Combobox commits authored text while retaining the distinct semantic option key', async ({ page }) => {
+  test.skip(port === 'web', 'Managed runtime evidence.');
+  await load(page);
+  const input = page.getByRole('combobox', { name: 'Turkish city' });
+  await input.fill('i');
+  await input.press('ArrowDown');
+  await input.press('Enter');
+  await expect(input).toHaveValue('İstanbul');
+  await expect(input).toHaveAttribute('aria-expanded', 'false');
+  if (port === 'elements') await expect(page.locator('vf-combobox').nth(1)).toHaveAttribute('value', 'city-istanbul');
+  else await expect(page.locator('body')).toHaveAttribute('data-combo-value', 'city-istanbul');
+});
+
+test('Combobox controlled selection and query preserve owner rejection and distinct display text', async ({ page }) => {
+  test.skip(port === 'web' || port === 'elements', 'Framework-controlled state evidence.');
+  await load(page);
+  const input = page.getByRole('combobox', { name: 'Controlled framework' });
+  const body = page.locator('body');
+  const react = page.locator('#controlled-react');
+  const vue = page.locator('#controlled-vue');
+  await expect(input).toHaveValue('React');
+  await expect(react).toHaveAttribute('aria-selected', 'true');
+  await expect(body).not.toHaveAttribute('data-controlled-value', /.+/);
+  await expect(body).not.toHaveAttribute('data-controlled-query', /.+/);
+  await input.fill('');
+  await input.press('ArrowDown');
+  await input.press('ArrowDown');
+  await expect(input).toHaveAttribute('aria-activedescendant', 'controlled-vue');
+  await input.press('Enter');
+  await expect(body).toHaveAttribute('data-controlled-value', 'vue-key');
+  await expect(input).toHaveValue('');
+  await expect(react).toHaveAttribute('aria-selected', 'true');
+  await expect(vue).toHaveAttribute('aria-selected', 'false');
+  await expect(input).toHaveAttribute('aria-expanded', 'false');
+  await page.locator('#accept-selection').click();
+  await input.fill('v');
+  await input.press('ArrowDown');
+  await input.press('Enter');
+  await expect(input).toHaveValue('Vue');
+  await expect(body).toHaveAttribute('data-controlled-query', 'Vue');
+  await expect(vue).toHaveAttribute('aria-selected', 'true');
+  await expect(input).toBeFocused();
+  await page.locator('#external-selection').click();
+  await expect(react).toHaveAttribute('aria-selected', 'true');
+  await expect(input).toHaveValue('Vue');
+  await expect(body).toHaveAttribute('data-controlled-query', 'Vue');
+  await input.fill('blocked');
+  await expect(body).toHaveAttribute('data-controlled-query', 'blocked');
+  await expect(input).toHaveValue('Vue');
+  await expect(vue).toBeVisible();
+  await expect(react).toBeHidden();
+});
