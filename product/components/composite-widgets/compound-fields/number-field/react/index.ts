@@ -3,6 +3,7 @@ import {
   createElement,
   forwardRef,
   useContext,
+  useEffect,
   useImperativeHandle,
   useLayoutEffect,
   useRef,
@@ -15,6 +16,7 @@ interface Ctx {
   value: number | null;
   controlled: boolean;
   set(v: number | null): void;
+  reset(): number | null;
   min?: number;
   max?: number;
   step: number | 'any';
@@ -70,7 +72,8 @@ export const NumberFieldRoot = forwardRef<HTMLDivElement, NumberFieldRootProps>(
   },
   ref,
 ) {
-  const [internal, setInternal] = useState(defaultValue);
+  const initial = useRef(defaultValue);
+  const [internal, setInternal] = useState(initial.current);
   const controlled = value !== undefined;
   const current = controlled ? value : internal;
   const ctx: Ctx = {
@@ -80,6 +83,11 @@ export const NumberFieldRoot = forwardRef<HTMLDivElement, NumberFieldRootProps>(
       if (disabled || readOnly || (next !== null && !Number.isFinite(next)) || next === current) return;
       if (!controlled) setInternal(next);
       onValueChange?.(next);
+    },
+    reset() {
+      if (controlled) return value;
+      setInternal(initial.current);
+      return initial.current;
     },
     ...(min === undefined ? {} : { min }),
     ...(max === undefined ? {} : { max }),
@@ -104,6 +112,28 @@ export const NumberFieldInput = forwardRef<HTMLInputElement, NumberFieldInputPro
   const n = useN();
   const input = useRef<HTMLInputElement>(null);
   const initial = useRef(n.value);
+  const reset = useRef(n.reset);
+  useLayoutEffect(() => {
+    reset.current = n.reset;
+  });
+  useEffect(() => {
+    const element = input.current;
+    if (!element) return;
+    const document = element.ownerDocument;
+    let active = true;
+    function onReset(event: Event) {
+      if (!element!.form || element!.form !== event.target) return;
+      setTimeout(() => {
+        if (!active || event.defaultPrevented || element!.form !== event.target) return;
+        syncValue(element!, reset.current());
+      }, 0);
+    }
+    document.addEventListener('reset', onReset, true);
+    return () => {
+      active = false;
+      document.removeEventListener('reset', onReset, true);
+    };
+  }, []);
   useImperativeHandle(ref, () => input.current as HTMLInputElement, []);
   useLayoutEffect(() => {
     if (input.current) syncValue(input.current, n.value);
