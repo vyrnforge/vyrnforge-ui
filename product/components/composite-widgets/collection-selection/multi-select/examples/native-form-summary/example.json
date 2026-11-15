@@ -1,0 +1,7 @@
+{
+  "id": "multi-select/native-form-summary",
+  "title": "Native form and removable selection",
+  "description": "Submit repeated semantic values, display a localized selection summary, and remove committed selections using native buttons.",
+  "defaultFramework": "react",
+  "frameworks": { "react": { "label": "React", "language": "tsx", "source": "react.tsx" } }
+}

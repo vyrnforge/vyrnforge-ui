@@ -1,0 +1,7 @@
+{
+  "id": "select/native-form",
+  "title": "Required select with native form",
+  "description": "Submit a semantic value through native form validation, and reset the controlled value explicitly in its owner.",
+  "defaultFramework": "react",
+  "frameworks": { "react": { "label": "React", "language": "tsx", "source": "react.tsx" } }
+}
