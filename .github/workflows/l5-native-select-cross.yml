@@ -1,0 +1,16 @@
+name: Native Select cross-engine evidence
+on:
+  push:
+    branches: [evidence/l5-native-select-cross]
+permissions:
+  contents: read
+jobs:
+  browser:
+    uses: ./.github/workflows/_browser-validation.yml
+    with:
+      scopes_json: '[{"port":"web","components":"select"},{"port":"react","components":"select"},{"port":"vue","components":"select"},{"port":"angular","components":"select"},{"port":"elements","components":"select"}]'
+      revision: ${{ github.sha }}
+      browser_profile: cross
+      browsers: chromium firefox webkit
+      artifact_suffix: select-cross
+      retention_days: 14
