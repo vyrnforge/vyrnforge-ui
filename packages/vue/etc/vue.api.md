@@ -4,6 +4,7 @@
 
 ```ts
 
+import { AnchorPlacement } from '@vyrnforge/web';
 import { ClusterAlign } from '@vyrnforge/web/layout';
 import { ClusterJustify } from '@vyrnforge/web/layout';
 import { ComponentOptionsMixin } from 'vue';
@@ -12,7 +13,6 @@ import { ContainerSize } from '@vyrnforge/web/layout';
 import { ControlGroupOrientation } from '@vyrnforge/web/layout';
 import { DefineComponent } from 'vue';
 import { ExtractPropTypes } from 'vue';
-import { FloatingPlacement } from '@vyrnforge/web/floating-positioning';
 import { IconDefinition } from '@vyrnforge/web/icon';
 import { IconShape } from '@vyrnforge/web/icon';
 import { IconSize } from '@vyrnforge/web/icon';
@@ -1126,7 +1126,7 @@ type: BooleanConstructor;
 default: boolean;
 };
 placement: {
-type: PropType<FloatingPlacement>;
+type: PropType<AnchorPlacement>;
 default: string;
 };
 }>, () => VNode<RendererNode, RendererElement, {
@@ -1141,7 +1141,7 @@ type: BooleanConstructor;
 default: boolean;
 };
 placement: {
-type: PropType<FloatingPlacement>;
+type: PropType<AnchorPlacement>;
 default: string;
 };
 }>> & Readonly<{
@@ -1149,7 +1149,7 @@ default: string;
 }>, {
 defaultOpen: boolean;
 open: boolean | undefined;
-placement: FloatingPlacement;
+placement: AnchorPlacement;
 }, {}, {}, {}, string, ComponentProvideOptions, true, {}, any>;
 
 // @public (undocumented)
@@ -1191,7 +1191,7 @@ type: BooleanConstructor;
 default: boolean;
 };
 placement: {
-type: PropType<FloatingPlacement>;
+type: PropType<AnchorPlacement>;
 default: string;
 };
 }>, () => VNode<RendererNode, RendererElement, {
@@ -1206,7 +1206,7 @@ type: BooleanConstructor;
 default: boolean;
 };
 placement: {
-type: PropType<FloatingPlacement>;
+type: PropType<AnchorPlacement>;
 default: string;
 };
 }>> & Readonly<{
@@ -1214,7 +1214,7 @@ default: string;
 }>, {
 defaultOpen: boolean;
 open: boolean | undefined;
-placement: FloatingPlacement;
+placement: AnchorPlacement;
 }, {}, {}, {}, string, ComponentProvideOptions, true, {}, any>;
 
 // @public (undocumented)
@@ -1518,7 +1518,7 @@ type: BooleanConstructor;
 default: boolean;
 };
 placement: {
-type: PropType<FloatingPlacement>;
+type: PropType<AnchorPlacement>;
 default: string;
 };
 contentId: StringConstructor;
@@ -1538,7 +1538,7 @@ type: BooleanConstructor;
 default: boolean;
 };
 placement: {
-type: PropType<FloatingPlacement>;
+type: PropType<AnchorPlacement>;
 default: string;
 };
 contentId: StringConstructor;
@@ -1552,7 +1552,7 @@ onOpenChange?: (...args: any[]) => any;
 }>, {
 modelValue: boolean;
 defaultOpen: boolean;
-placement: FloatingPlacement;
+placement: AnchorPlacement;
 contentRole: "dialog" | "region";
 }, {}, {}, {}, string, ComponentProvideOptions, true, {}, any>;
 
@@ -1577,7 +1577,7 @@ type: BooleanConstructor;
 default: boolean;
 };
 placement: {
-type: PropType<FloatingPlacement>;
+type: PropType<AnchorPlacement>;
 default: string;
 };
 openDelay: {
@@ -1601,7 +1601,7 @@ type: BooleanConstructor;
 default: boolean;
 };
 placement: {
-type: PropType<FloatingPlacement>;
+type: PropType<AnchorPlacement>;
 default: string;
 };
 openDelay: {
@@ -1619,7 +1619,7 @@ onOpenChange?: (...args: any[]) => any;
 }>, {
 modelValue: boolean;
 defaultOpen: boolean;
-placement: FloatingPlacement;
+placement: AnchorPlacement;
 openDelay: number;
 closeDelay: number;
 }, {}, {}, {}, string, ComponentProvideOptions, true, {}, any>;
@@ -2466,7 +2466,7 @@ type: BooleanConstructor;
 default: boolean;
 };
 placement: {
-type: PropType<FloatingPlacement>;
+type: PropType<AnchorPlacement>;
 default: string;
 };
 openDelay: {
@@ -2490,7 +2490,7 @@ type: BooleanConstructor;
 default: boolean;
 };
 placement: {
-type: PropType<FloatingPlacement>;
+type: PropType<AnchorPlacement>;
 default: string;
 };
 openDelay: {
@@ -2508,7 +2508,7 @@ onOpenChange?: (...args: any[]) => any;
 }>, {
 modelValue: boolean;
 defaultOpen: boolean;
-placement: FloatingPlacement;
+placement: AnchorPlacement;
 openDelay: number;
 closeDelay: number;
 }, {}, {}, {}, string, ComponentProvideOptions, true, {}, any>;
