@@ -1,0 +1,16 @@
+name: NumberField L5 reset cross-engine evidence
+on:
+  push:
+    branches: [evidence/l5-number-field-reset-cross]
+permissions:
+  contents: read
+jobs:
+  browser:
+    uses: ./.github/workflows/_browser-validation.yml
+    with:
+      scopes_json: '[{"port":"web","components":"number-field"},{"port":"react","components":"number-field"},{"port":"vue","components":"number-field"},{"port":"angular","components":"number-field"},{"port":"elements","components":"number-field"}]'
+      revision: ${{ github.sha }}
+      browser_profile: cross
+      browsers: chromium firefox webkit
+      artifact_suffix: number-field-reset-cross
+      retention_days: 14
