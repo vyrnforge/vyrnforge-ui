@@ -233,6 +233,10 @@ test('Select native form control validates, submits committed values and resets 
   const native = page.locator('#form-example select');
   const error = page.locator('#form-example [role="status"]');
   const data = () => form.evaluate((node) => new FormData(node).getAll('choice'));
+  for (const button of [trigger, one, three]) {
+    await expect(button).toHaveAttribute('type', 'button');
+    expect(await button.evaluate((node) => node.form?.id)).toBe('selection-form');
+  }
   await expect(native).toBeHidden();
   expect(await native.evaluate((node) => node.form?.id)).toBe('selection-form');
   await form.evaluate((node) => {
@@ -262,6 +266,7 @@ test('Select native form control validates, submits committed values and resets 
   await three.press('Enter');
   await expect(three).toHaveAttribute('aria-selected', 'true');
   await expect.poll(data).toEqual(['three']);
+  await expect(page.locator('body')).not.toHaveAttribute('data-form-submitted', 'true');
   await form.evaluate((node) => node.requestSubmit());
   await expect(page.locator('body')).toHaveAttribute('data-form-submitted', 'true');
   await form.evaluate((node) => {

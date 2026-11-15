@@ -162,7 +162,7 @@ export class VfSelectRootDirective {
   selector: 'button[vfSelectTrigger]',
   standalone: true,
   host: {
-    type: 'button',
+    '[attr.type]': "'button'",
     '[id]': 'root.triggerId()',
     '[disabled]': 'disabled() || root.disabled()',
     '[attr.aria-invalid]': 'root.error() ? true : invalid()',
@@ -344,7 +344,7 @@ export class VfSelectContentDirective {
   selector: 'button[vfSelectOption]',
   standalone: true,
   host: {
-    type: 'button',
+    '[attr.type]': "'button'",
     role: 'option',
     tabindex: '-1',
     'data-vf-select-option': '',
