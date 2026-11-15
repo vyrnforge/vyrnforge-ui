@@ -21,7 +21,7 @@
   "profileVariability": [],
   "notes": [
     "#1286 removed the fabricated English trigger label.",
-    "Elements menu behavior is not equivalent to the framework Menu composition.",
+    "Elements now composes the existing Menu implementation, retaining legacy SplitButton hooks. Runtime public-port keyboard and primary-action evidence is required; Menu native popover migration and full controlled-state parity remain open.",
     "Audit mapping is provisional; not a conformance claim."
   ]
 }

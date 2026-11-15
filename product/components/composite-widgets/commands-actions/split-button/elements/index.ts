@@ -1,24 +1,47 @@
-const HTMLElementBase: typeof HTMLElement = globalThis.HTMLElement ?? (class {} as typeof HTMLElement);
-export class VfSplitButtonElement extends HTMLElementBase {
-  connectedCallback() {
+import { VfMenuElement } from '../menu/index.js';
+
+const ownerSelector = '[data-vf-menu-root],vf-menu,vf-split-button,[data-vf-split-button-root]';
+
+export class VfSplitButtonElement extends VfMenuElement {
+  #partsObserver: MutationObserver | null = null;
+
+  connectedCallback(): void {
     this.setAttribute('data-vf-split-button-root', '');
-    const trigger = this.querySelector<HTMLElement>('[data-vf-split-button-trigger]');
-    trigger?.setAttribute('aria-haspopup', 'menu');
-    this.addEventListener('click', this.onClick);
+    this.#syncParts();
+    super.connectedCallback();
+    if (typeof MutationObserver !== 'undefined') {
+      this.#partsObserver = new MutationObserver(() => this.#syncParts());
+      this.#partsObserver.observe(this, {
+        childList: true,
+        subtree: true,
+        attributes: true,
+        attributeFilter: ['data-vf-split-button-trigger', 'data-vf-split-button-content', 'role'],
+      });
+    }
   }
-  disconnectedCallback() {
-    this.removeEventListener('click', this.onClick);
+
+  disconnectedCallback(): void {
+    this.#partsObserver?.disconnect();
+    this.#partsObserver = null;
+    super.disconnectedCallback();
   }
-  private onClick = (event: Event) => {
-    const target = event.target as HTMLElement;
-    if (!target.closest('[data-vf-split-button-trigger]')) return;
-    const content = this.querySelector<HTMLElement>('[data-vf-split-button-content]');
-    if (!content) return;
-    const open = content.hidden;
-    content.hidden = !open;
-    target.closest<HTMLElement>('[data-vf-split-button-trigger]')?.setAttribute('aria-expanded', String(open));
-  };
+
+  #syncParts(): void {
+    const owned = (selector: string) =>
+      Array.from(this.querySelectorAll<HTMLElement>(selector)).filter((part) => part.closest(ownerSelector) === this);
+    const mark = (part: HTMLElement, attribute: string) => {
+      if (!part.hasAttribute(attribute)) part.setAttribute(attribute, '');
+    };
+    for (const trigger of owned('[data-vf-split-button-trigger]')) mark(trigger, 'data-vf-menu-trigger');
+    for (const content of owned('[data-vf-split-button-content]')) {
+      mark(content, 'data-vf-menu-content');
+      for (const item of content.querySelectorAll<HTMLElement>('[role="menuitem"]')) {
+        if (item.closest(ownerSelector) === this) mark(item, 'data-vf-menu-item');
+      }
+    }
+  }
 }
+
 export function defineSplitButtonElement(
   tagName = 'vf-split-button',
   registry: CustomElementRegistry | undefined = globalThis.customElements,
