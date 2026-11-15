@@ -96,7 +96,7 @@ export async function createAngularStory() {
       VfSplitButtonContentDirective,
       VfSplitButtonItemDirective,
     ],
-    template: `${before}<div vfMenuRoot data-vf-split-button-root><button id="action" vfSplitButtonAction (click)="primary()">Save</button><button id="trigger" vfMenuTrigger data-vf-split-button-trigger aria-label="More save options">More</button><div id="menu" vfMenuContent aria-label="Save options"><button id="copy" vfMenuItem (selected)="selected()">Save as copy</button><button id="archive" vfMenuItem (selected)="selected()">Save and archive</button></div></div>${after}`,
+    template: `<main><h1>SplitButton browser fixture</h1>${before}<div vfMenuRoot data-vf-split-button-root><button id="action" vfSplitButtonAction (click)="primary()">Save</button><button id="trigger" vfMenuTrigger data-vf-split-button-trigger aria-label="More save options">More</button><div id="menu" vfMenuContent aria-label="Save options"><button id="copy" vfMenuItem (selected)="selected()">Save as copy</button><button id="archive" vfMenuItem (selected)="selected()">Save and archive</button></div></div>${after}</main>`,
   })(SplitButtonTestApp);
   return SplitButtonTestApp;
 }
