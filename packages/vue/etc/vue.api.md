@@ -1249,52 +1249,88 @@ export const NativeSelect: DefineComponent<    {}, () => VNode<RendererNode, Ren
 }>, {}, {}, {}, ComponentOptionsMixin, ComponentOptionsMixin, {}, string, PublicProps, Readonly<{}> & Readonly<{}>, {}, {}, {}, {}, string, ComponentProvideOptions, true, {}, any>;
 
 // @public (undocumented)
-export const NumberFieldDecrement: DefineComponent<    {}, () => VNode<RendererNode, RendererElement, {
+export const NumberFieldDecrement: DefineComponent<ExtractPropTypes<    {
+disabled: BooleanConstructor;
+}>, () => VNode<RendererNode, RendererElement, {
 [key: string]: any;
-}>, {}, {}, {}, ComponentOptionsMixin, ComponentOptionsMixin, {}, string, PublicProps, Readonly<{}> & Readonly<{}>, {}, {}, {}, {}, string, ComponentProvideOptions, true, {}, any>;
+}>, {}, {}, {}, ComponentOptionsMixin, ComponentOptionsMixin, {}, string, PublicProps, Readonly<ExtractPropTypes<    {
+disabled: BooleanConstructor;
+}>> & Readonly<{}>, {
+disabled: boolean;
+}, {}, {}, {}, string, ComponentProvideOptions, true, {}, any>;
 
 // @public (undocumented)
-export const NumberFieldIncrement: DefineComponent<    {}, () => VNode<RendererNode, RendererElement, {
+export const NumberFieldIncrement: DefineComponent<ExtractPropTypes<    {
+disabled: BooleanConstructor;
+}>, () => VNode<RendererNode, RendererElement, {
 [key: string]: any;
-}>, {}, {}, {}, ComponentOptionsMixin, ComponentOptionsMixin, {}, string, PublicProps, Readonly<{}> & Readonly<{}>, {}, {}, {}, {}, string, ComponentProvideOptions, true, {}, any>;
+}>, {}, {}, {}, ComponentOptionsMixin, ComponentOptionsMixin, {}, string, PublicProps, Readonly<ExtractPropTypes<    {
+disabled: BooleanConstructor;
+}>> & Readonly<{}>, {
+disabled: boolean;
+}, {}, {}, {}, string, ComponentProvideOptions, true, {}, any>;
 
 // @public (undocumented)
-export const NumberFieldInput: DefineComponent<    {}, () => VNode<RendererNode, RendererElement, {
+export const NumberFieldInput: DefineComponent<ExtractPropTypes<    {
+disabled: BooleanConstructor;
+readOnly: BooleanConstructor;
+}>, () => VNode<RendererNode, RendererElement, {
 [key: string]: any;
-}>, {}, {}, {}, ComponentOptionsMixin, ComponentOptionsMixin, {}, string, PublicProps, Readonly<{}> & Readonly<{}>, {}, {}, {}, {}, string, ComponentProvideOptions, true, {}, any>;
+}>, {}, {}, {}, ComponentOptionsMixin, ComponentOptionsMixin, {}, string, PublicProps, Readonly<ExtractPropTypes<    {
+disabled: BooleanConstructor;
+readOnly: BooleanConstructor;
+}>> & Readonly<{}>, {
+disabled: boolean;
+readOnly: boolean;
+}, {}, {}, {}, string, ComponentProvideOptions, true, {}, any>;
 
 // @public (undocumented)
 export const NumberFieldRoot: DefineComponent<ExtractPropTypes<    {
-value: NumberConstructor;
+value: {
+type: PropType<number | null>;
+default: undefined;
+};
 defaultValue: {
-type: NumberConstructor;
+type: PropType<number | null>;
 default: number;
 };
 min: NumberConstructor;
 max: NumberConstructor;
 step: {
-type: NumberConstructor;
+type: PropType<number | "any">;
 default: number;
 };
+disabled: BooleanConstructor;
+readOnly: BooleanConstructor;
 }>, () => VNode<RendererNode, RendererElement, {
 [key: string]: any;
-}>, {}, {}, {}, ComponentOptionsMixin, ComponentOptionsMixin, "update:value"[], "update:value", PublicProps, Readonly<ExtractPropTypes<    {
-value: NumberConstructor;
+}>, {}, {}, {}, ComponentOptionsMixin, ComponentOptionsMixin, {
+'update:value': (value: number | null) => boolean;
+}, string, PublicProps, Readonly<ExtractPropTypes<    {
+value: {
+type: PropType<number | null>;
+default: undefined;
+};
 defaultValue: {
-type: NumberConstructor;
+type: PropType<number | null>;
 default: number;
 };
 min: NumberConstructor;
 max: NumberConstructor;
 step: {
-type: NumberConstructor;
+type: PropType<number | "any">;
 default: number;
 };
+disabled: BooleanConstructor;
+readOnly: BooleanConstructor;
 }>> & Readonly<{
-"onUpdate:value"?: (...args: any[]) => any;
+"onUpdate:value"?: (value: number | null) => any;
 }>, {
-defaultValue: number;
-step: number;
+value: number | null;
+disabled: boolean;
+defaultValue: number | null;
+step: number | "any";
+readOnly: boolean;
 }, {}, {}, {}, string, ComponentProvideOptions, true, {}, any>;
 
 // @public (undocumented)
@@ -1408,9 +1444,21 @@ required: true;
 }>> & Readonly<{}>, {}, {}, {}, {}, string, ComponentProvideOptions, true, {}, any>;
 
 // @public (undocumented)
-export const PopoverContent: DefineComponent<    {}, () => VNode<RendererNode, RendererElement, {
+export const PopoverContent: DefineComponent<ExtractPropTypes<    {
+portal: {
+type: BooleanConstructor;
+default: boolean;
+};
+}>, () => VNode<RendererNode, RendererElement, {
 [key: string]: any;
-}>, {}, {}, {}, ComponentOptionsMixin, ComponentOptionsMixin, {}, string, PublicProps, Readonly<{}> & Readonly<{}>, {}, {}, {}, {}, string, ComponentProvideOptions, true, {}, any>;
+}> | null, {}, {}, {}, ComponentOptionsMixin, ComponentOptionsMixin, {}, string, PublicProps, Readonly<ExtractPropTypes<    {
+portal: {
+type: BooleanConstructor;
+default: boolean;
+};
+}>> & Readonly<{}>, {
+portal: boolean;
+}, {}, {}, {}, string, ComponentProvideOptions, true, {}, any>;
 
 // @public (undocumented)
 export const PopoverRoot: DefineComponent<ExtractPropTypes<    {
@@ -1424,11 +1472,6 @@ default: boolean;
 };
 placement: {
 type: PropType<FloatingPlacement>;
-default: string;
-};
-contentId: StringConstructor;
-contentRole: {
-type: PropType<"dialog" | "region">;
 default: string;
 };
 }>, () => VNode<RendererNode, RendererElement, {
@@ -1446,11 +1489,6 @@ placement: {
 type: PropType<FloatingPlacement>;
 default: string;
 };
-contentId: StringConstructor;
-contentRole: {
-type: PropType<"dialog" | "region">;
-default: string;
-};
 }>> & Readonly<{
 "onUpdate:modelValue"?: (...args: any[]) => any;
 onOpenChange?: (...args: any[]) => any;
@@ -1458,7 +1496,6 @@ onOpenChange?: (...args: any[]) => any;
 modelValue: boolean;
 defaultOpen: boolean;
 placement: FloatingPlacement;
-contentRole: "dialog" | "region";
 }, {}, {}, {}, string, ComponentProvideOptions, true, {}, any>;
 
 // @public (undocumented)
