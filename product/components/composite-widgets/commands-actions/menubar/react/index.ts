@@ -1,4 +1,11 @@
-import { createElement, forwardRef, useEffect, useRef, type ComponentPropsWithRef, type ComponentPropsWithoutRef } from 'react';
+import {
+  createElement,
+  forwardRef,
+  useEffect,
+  useRef,
+  type ComponentPropsWithRef,
+  type ComponentPropsWithoutRef,
+} from 'react';
 import {
   MenuContent,
   MenuItem,
@@ -28,9 +35,8 @@ function triggerFromTarget(root: HTMLElement, target: EventTarget | null): HTMLB
 function syncTabStops(root: HTMLElement, preferred?: HTMLButtonElement | null): void {
   const items = triggers(root);
   const eligible = items.filter((item) => !item.matches(':disabled'));
-  const active =
-    (preferred && eligible.includes(preferred) ? preferred : eligible.find((item) => item.tabIndex === 0)) ??
-    eligible[0];
+  const remembered = eligible.find((item) => item.tabIndex === 0);
+  const active = preferred && eligible.includes(preferred) ? preferred : (remembered ?? eligible[0]);
   for (const item of items) {
     const tabIndex = item === active ? 0 : -1;
     if (item.tabIndex !== tabIndex) item.tabIndex = tabIndex;
@@ -67,7 +73,9 @@ function moveFocus(root: HTMLElement, current: HTMLButtonElement, event: Navigat
 }
 
 function observeTriggers(root: HTMLElement): MutationObserver {
-  const observer = new MutationObserver(() => syncTabStops(root, triggerFromTarget(root, root.ownerDocument.activeElement)));
+  const observer = new MutationObserver(() => {
+    syncTabStops(root, triggerFromTarget(root, root.ownerDocument.activeElement));
+  });
   observer.observe(root, {
     childList: true,
     subtree: true,
