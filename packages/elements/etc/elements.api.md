@@ -415,9 +415,13 @@ export class VfMenuElement extends HTMLElementBase_9 {
 // @public (undocumented)
 export class VfMultiSelectElement extends H_2 {
     // (undocumented)
+    attributeChangedCallback(): void;
+    // (undocumented)
     connectedCallback(): void;
     // (undocumented)
     disconnectedCallback(): void;
+    // (undocumented)
+    static observedAttributes: string[];
 }
 
 // @public (undocumented)

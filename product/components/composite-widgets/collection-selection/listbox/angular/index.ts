@@ -73,13 +73,15 @@ export class VfListboxRootDirective implements OnDestroy {
   readonly valueChange = output<ListboxValue>();
   private readonly internal = signal<string[]>([]);
   private readonly interacted = signal(false);
-  readonly values = computed(() =>
-    this.value() !== undefined
-      ? normalize(this.value())
-      : this.interacted()
-        ? this.internal()
-        : normalize(this.defaultValue()),
-  );
+  readonly values = computed(() => {
+    const values =
+      this.value() !== undefined
+        ? normalize(this.value())
+        : this.interacted()
+          ? this.internal()
+          : normalize(this.defaultValue());
+    return this.selectionMode() === 'single' ? values.slice(0, 1) : values;
+  });
   private readonly element = inject<ElementRef<HTMLElement>>(ElementRef);
   private query = '';
   private timer: ReturnType<typeof setTimeout> | null = null;

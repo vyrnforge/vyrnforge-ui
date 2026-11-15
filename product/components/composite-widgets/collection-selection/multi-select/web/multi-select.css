@@ -5,3 +5,27 @@
     min-inline-size: 12rem;
   }
 }
+
+@layer vyrnforge.components {
+  :where([data-vf-multi-select-content][popover]) {
+    position: fixed;
+    inset: auto;
+    margin: 0;
+    position-area: bottom span-right;
+    position-try-fallbacks:
+      flip-block,
+      flip-inline,
+      flip-block flip-inline;
+    inline-size: max-content;
+    min-inline-size: min(12rem, calc(100vw - 1rem));
+    max-inline-size: calc(100vw - 1rem);
+    max-block-size: calc(100vh - 1rem);
+    overflow: auto;
+  }
+  :where([data-vf-multi-select-content][popover]:dir(rtl)) {
+    position-area: bottom span-left;
+  }
+  :where([data-vf-multi-select-content][popover]:not(:popover-open)) {
+    display: none;
+  }
+}

@@ -1806,7 +1806,7 @@ export class VfMultiSelectOptionDirective {
     // (undocumented)
     readonly root: VfMultiSelectRootDirective;
     // (undocumented)
-    toggle(): void;
+    toggle(event?: MouseEvent): void;
     // (undocumented)
     readonly value: InputSignal<string>;
     // (undocumented)
