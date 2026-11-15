@@ -1,7 +1,11 @@
 const labels = ['One', 'Disabled', 'Three', 'Banana'];
 const values = ['one', 'disabled', 'three', 'banana'];
-const formOptions = [{ value: '', label: 'Choose an option' }].concat([{ value: 'one', label: 'One' }, { value: 'three', label: 'Three' }]);
-const formMarkup = '<form id="selection-form"><button type="submit">Submit choice</button></form><form id="controlled-form"></form>';
+const formOptions = [{ value: '', label: 'Choose an option' }].concat([
+  { value: 'one', label: 'One' },
+  { value: 'three', label: 'Three' },
+]);
+const formMarkup =
+  '<form id="selection-form"><button type="submit">Submit choice</button></form><form id="controlled-form"></form>';
 const before = '<button id="before" type="button">Before</button>';
 const after = '<button id="after" type="button" style="position: fixed; right: 16px; bottom: 16px">After</button>';
 const label = '<div id="select-label">Choose an option</div>';
@@ -42,7 +46,8 @@ export const browserFixture = {
 
 export async function createReactStory() {
   const { createElement: h, Fragment, useEffect, useState } = await import('react');
-  const { SelectRoot, SelectTrigger, SelectContent, SelectOption, SelectFormControl } = await import('@vyrnforge/react/select');
+  const { SelectRoot, SelectTrigger, SelectContent, SelectOption, SelectFormControl } =
+    await import('@vyrnforge/react/select');
   function App() {
     const [open, setOpen] = useState(false);
     useEffect(ready, []);
@@ -90,12 +95,17 @@ export async function createReactStory() {
       ),
       h('form', { id: 'selection-form' }, h('button', { type: 'submit' }, 'Submit choice')),
       h('form', { id: 'controlled-form' }),
-      h('div', { id: 'form-example' },
-        h(SelectRoot, { id: 'form-choice', defaultValue: '' },
+      h(
+        'div',
+        { id: 'form-example' },
+        h(
+          SelectRoot,
+          { id: 'form-choice', defaultValue: '' },
           h(SelectTrigger, { 'aria-describedby': 'form-hint' }, 'Form choice'),
           h(SelectContent, { 'aria-label': 'Form options' }, option('form', 0), option('form', 2)),
           h(SelectFormControl, { name: 'choice', form: 'selection-form', required: true, options: formOptions }),
-        ), h('p', { id: 'form-hint' }, 'Choose at least one option.'),
+        ),
+        h('p', { id: 'form-hint' }, 'Choose at least one option.'),
       ),
     );
   }
@@ -104,7 +114,8 @@ export async function createReactStory() {
 
 export async function createVueStory() {
   const { createSSRApp, h, onMounted, ref } = await import('vue');
-  const { SelectRoot, SelectTrigger, SelectContent, SelectOption, SelectFormControl } = await import('@vyrnforge/vue/select');
+  const { SelectRoot, SelectTrigger, SelectContent, SelectOption, SelectFormControl } =
+    await import('@vyrnforge/vue/select');
   return createSSRApp({
     setup() {
       const open = ref(false);
@@ -158,7 +169,8 @@ export async function createVueStory() {
               h(SelectTrigger, { 'aria-describedby': 'form-hint' }, () => 'Form choice'),
               h(SelectContent, { 'aria-label': 'Form options' }, () => [option('form', 0), option('form', 2)]),
               h(SelectFormControl, { name: 'choice', form: 'selection-form', required: true, options: formOptions }),
-            ]), h('p', { id: 'form-hint' }, 'Choose at least one option.'),
+            ]),
+            h('p', { id: 'form-hint' }, 'Choose at least one option.'),
           ]),
         ]);
     },
@@ -168,8 +180,13 @@ export async function createVueStory() {
 export async function createAngularStory() {
   await import('@angular/compiler');
   const { Component, afterNextRender, signal } = await import('@angular/core');
-  const { VfSelectRootDirective, VfSelectTriggerDirective, VfSelectContentDirective, VfSelectOptionDirective, VfSelectFormControlComponent } =
-    await import('@vyrnforge/angular/select');
+  const {
+    VfSelectRootDirective,
+    VfSelectTriggerDirective,
+    VfSelectContentDirective,
+    VfSelectOptionDirective,
+    VfSelectFormControlComponent,
+  } = await import('@vyrnforge/angular/select');
   class SelectTestApp {
     formOptions = formOptions;
     emptyValues = [];
@@ -194,7 +211,13 @@ export async function createAngularStory() {
   Component({
     selector: 'vf-select-test',
     standalone: true,
-    imports: [VfSelectRootDirective, VfSelectTriggerDirective, VfSelectContentDirective, VfSelectOptionDirective, VfSelectFormControlComponent],
+    imports: [
+      VfSelectRootDirective,
+      VfSelectTriggerDirective,
+      VfSelectContentDirective,
+      VfSelectOptionDirective,
+      VfSelectFormControlComponent,
+    ],
     template: `<main><h1>Select browser fixture</h1>${before}${label}<div vfSelectRoot defaultValue="one" (valueChange)="valueChanged($event)"><button vfSelectTrigger>Choose</button><div vfSelectContent aria-labelledby="select-label">${angularOptions('angular', [0, 1, 2, 3])}</div></div><div vfSelectRoot id="controlled" value="one" [open]="controlled()" (valueChange)="request($event)" (openChange)="openRequest($event)"><button vfSelectTrigger tabindex="-1">Controlled selection</button><div vfSelectContent aria-label="Controlled options">${angularOptions('controlled', [0, 2])}</div><vf-select-form-control name="choice" form="controlled-form" [options]="formOptions"></vf-select-form-control></div>${after}${formMarkup}<div id="form-example"><div vfSelectRoot id="form-choice" defaultValue=""><button vfSelectTrigger aria-describedby="form-hint">Form choice</button><div vfSelectContent aria-label="Form options">${angularOptions('form', [0, 2])}</div><vf-select-form-control name="choice" form="selection-form" required [options]="formOptions"></vf-select-form-control></div><p id="form-hint">Choose at least one option.</p></div></main>`,
   })(SelectTestApp);
   return SelectTestApp;

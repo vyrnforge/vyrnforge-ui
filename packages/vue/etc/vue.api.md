@@ -1247,6 +1247,37 @@ export const MultiSelectContent: DefineComponent<    {}, () => VNode<RendererNod
 }>, {}, {}, {}, ComponentOptionsMixin, ComponentOptionsMixin, {}, string, PublicProps, Readonly<{}> & Readonly<{}>, {}, {}, {}, {}, string, ComponentProvideOptions, true, {}, any>;
 
 // @public (undocumented)
+export const MultiSelectFormControl: DefineComponent<ExtractPropTypes<    {
+name: StringConstructor;
+form: StringConstructor;
+required: BooleanConstructor;
+options: {
+type: PropType<readonly {
+value: string;
+label: string;
+disabled?: boolean;
+}[]>;
+required: true;
+};
+}>, () => VNode<RendererNode, RendererElement, {
+[key: string]: any;
+}>, {}, {}, {}, ComponentOptionsMixin, ComponentOptionsMixin, {}, string, PublicProps, Readonly<ExtractPropTypes<    {
+name: StringConstructor;
+form: StringConstructor;
+required: BooleanConstructor;
+options: {
+type: PropType<readonly {
+value: string;
+label: string;
+disabled?: boolean;
+}[]>;
+required: true;
+};
+}>> & Readonly<{}>, {
+required: boolean;
+}, {}, {}, {}, string, ComponentProvideOptions, true, {}, any>;
+
+// @public (undocumented)
 export const MultiSelectOption: DefineComponent<ExtractPropTypes<    {
 value: {
 type: StringConstructor;
@@ -1268,6 +1299,7 @@ disabled: boolean;
 // @public (undocumented)
 export const MultiSelectRoot: DefineComponent<ExtractPropTypes<    {
 id: StringConstructor;
+disabled: BooleanConstructor;
 value: PropType<string[] | undefined>;
 defaultValue: {
 type: PropType<string[]>;
@@ -1277,6 +1309,7 @@ default: () => never[];
 [key: string]: any;
 }>[] | undefined, {}, {}, {}, ComponentOptionsMixin, ComponentOptionsMixin, "update:value"[], "update:value", PublicProps, Readonly<ExtractPropTypes<    {
 id: StringConstructor;
+disabled: BooleanConstructor;
 value: PropType<string[] | undefined>;
 defaultValue: {
 type: PropType<string[]>;
@@ -1285,6 +1318,7 @@ default: () => never[];
 }>> & Readonly<{
 "onUpdate:value"?: (...args: any[]) => any;
 }>, {
+disabled: boolean;
 defaultValue: string[];
 }, {}, {}, {}, string, ComponentProvideOptions, true, {}, any>;
 
@@ -1857,6 +1891,37 @@ export const SelectContent: DefineComponent<    {}, () => VNode<RendererNode, Re
 }>, {}, {}, {}, ComponentOptionsMixin, ComponentOptionsMixin, {}, string, PublicProps, Readonly<{}> & Readonly<{}>, {}, {}, {}, {}, string, ComponentProvideOptions, true, {}, any>;
 
 // @public (undocumented)
+export const SelectFormControl: DefineComponent<ExtractPropTypes<    {
+name: StringConstructor;
+form: StringConstructor;
+required: BooleanConstructor;
+options: {
+type: PropType<readonly {
+value: string;
+label: string;
+disabled?: boolean;
+}[]>;
+required: true;
+};
+}>, () => VNode<RendererNode, RendererElement, {
+[key: string]: any;
+}>, {}, {}, {}, ComponentOptionsMixin, ComponentOptionsMixin, {}, string, PublicProps, Readonly<ExtractPropTypes<    {
+name: StringConstructor;
+form: StringConstructor;
+required: BooleanConstructor;
+options: {
+type: PropType<readonly {
+value: string;
+label: string;
+disabled?: boolean;
+}[]>;
+required: true;
+};
+}>> & Readonly<{}>, {
+required: boolean;
+}, {}, {}, {}, string, ComponentProvideOptions, true, {}, any>;
+
+// @public (undocumented)
 export const SelectOption: DefineComponent<ExtractPropTypes<    {
 value: {
 type: StringConstructor;
@@ -1878,6 +1943,7 @@ disabled: boolean;
 // @public (undocumented)
 export const SelectRoot: DefineComponent<ExtractPropTypes<    {
 id: StringConstructor;
+disabled: BooleanConstructor;
 value: StringConstructor;
 defaultValue: {
 type: StringConstructor;
@@ -1892,6 +1958,7 @@ defaultOpen: BooleanConstructor;
 [key: string]: any;
 }>[] | undefined, {}, {}, {}, ComponentOptionsMixin, ComponentOptionsMixin, ("update:open" | "update:value")[], "update:open" | "update:value", PublicProps, Readonly<ExtractPropTypes<    {
 id: StringConstructor;
+disabled: BooleanConstructor;
 value: StringConstructor;
 defaultValue: {
 type: StringConstructor;
@@ -1906,6 +1973,7 @@ defaultOpen: BooleanConstructor;
 "onUpdate:open"?: (...args: any[]) => any;
 "onUpdate:value"?: (...args: any[]) => any;
 }>, {
+disabled: boolean;
 defaultOpen: boolean;
 open: boolean;
 defaultValue: string;

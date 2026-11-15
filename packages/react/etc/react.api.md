@@ -2466,6 +2466,27 @@ export type MenuTriggerProps = ComponentPropsWithoutRef<'button'>;
 export const MultiSelectContent: ForwardRefExoticComponent<Omit<Omit<DetailedHTMLProps<HTMLAttributes<HTMLDivElement>, HTMLDivElement>, "ref">, "id"> & RefAttributes<HTMLDivElement>>;
 
 // @public (undocumented)
+export function MultiSelectFormControl(input: MultiSelectFormControlProps): ReactElement<    {
+'data-vf-multi-select-form-control': string;
+}, string | JSXElementConstructor<any>>;
+
+// @public
+export interface MultiSelectFormControlProps {
+    // (undocumented)
+    form?: string;
+    // (undocumented)
+    name?: string;
+    // (undocumented)
+    options: readonly {
+        value: string;
+        label: string;
+        disabled?: boolean;
+    }[];
+    // (undocumented)
+    required?: boolean;
+}
+
+// @public (undocumented)
 export const MultiSelectOption: ForwardRefExoticComponent<MultiSelectOptionProps & RefAttributes<HTMLButtonElement>>;
 
 // @public (undocumented)
@@ -2483,6 +2504,8 @@ export interface MultiSelectRootProps {
     children?: ReactNode;
     // (undocumented)
     defaultValue?: string[];
+    // (undocumented)
+    disabled?: boolean;
     // (undocumented)
     id?: string;
     // (undocumented)
@@ -2817,6 +2840,27 @@ export interface SegmentedControlRootProps extends Omit<ComponentPropsWithoutRef
 export const SelectContent: ForwardRefExoticComponent<Omit<Omit<DetailedHTMLProps<HTMLAttributes<HTMLDivElement>, HTMLDivElement>, "ref">, "id"> & RefAttributes<HTMLDivElement>>;
 
 // @public (undocumented)
+export function SelectFormControl(input: SelectFormControlProps): ReactElement<    {
+'data-vf-select-form-control': string;
+}, string | JSXElementConstructor<any>>;
+
+// @public
+export interface SelectFormControlProps {
+    // (undocumented)
+    form?: string;
+    // (undocumented)
+    name?: string;
+    // (undocumented)
+    options: readonly {
+        value: string;
+        label: string;
+        disabled?: boolean;
+    }[];
+    // (undocumented)
+    required?: boolean;
+}
+
+// @public (undocumented)
 export const SelectOption: ForwardRefExoticComponent<SelectOptionProps & RefAttributes<HTMLButtonElement>>;
 
 // @public (undocumented)
@@ -2836,6 +2880,8 @@ export interface SelectRootProps {
     defaultOpen?: boolean;
     // (undocumented)
     defaultValue?: string;
+    // (undocumented)
+    disabled?: boolean;
     // (undocumented)
     id?: string;
     // (undocumented)

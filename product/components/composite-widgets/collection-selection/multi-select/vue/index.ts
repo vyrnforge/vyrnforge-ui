@@ -141,7 +141,10 @@ export const MultiSelectTrigger = defineComponent({
           },
           disabled: Boolean(attrs.disabled === '' || attrs.disabled) || multi.disabled.value,
           'aria-invalid': multi.error.value ? true : attrs['aria-invalid'],
-          'aria-describedby': [attrs['aria-describedby'], multi.error.value ? `${multi.listboxId.value}-error` : undefined].filter(Boolean).join(' ') || undefined,
+          'aria-describedby':
+            [attrs['aria-describedby'], multi.error.value ? `${multi.listboxId.value}-error` : undefined]
+              .filter(Boolean)
+              .join(' ') || undefined,
           id: multi.triggerId.value,
           'aria-controls': multi.listboxId.value,
           'aria-haspopup': 'listbox',
@@ -338,7 +341,10 @@ export const MultiSelectFormControl = defineComponent({
     name: String,
     form: String,
     required: Boolean,
-    options: { type: Array as PropType<readonly { value: string; label: string; disabled?: boolean }[]>, required: true },
+    options: {
+      type: Array as PropType<readonly { value: string; label: string; disabled?: boolean }[]>,
+      required: true,
+    },
   },
   setup(props) {
     const root = useMulti();
@@ -370,30 +376,49 @@ export const MultiSelectFormControl = defineComponent({
       document = control.value?.ownerDocument;
       document?.addEventListener('reset', onReset, true);
     });
-    watch([root.values, root.disabled, () => props.options, () => props.required], reconcile, { flush: 'post', deep: true });
+    watch([root.values, root.disabled, () => props.options, () => props.required], reconcile, {
+      flush: 'post',
+      deep: true,
+    });
     onBeforeUnmount(() => {
       active = false;
       document?.removeEventListener('reset', onReset, true);
     });
-    return () => h('div', { 'data-vf-multi-select-form-control': '' }, [
-      h('select', {
-        ref: control,
-        name: props.name,
-        form: props.form,
-        required: props.required,
-        disabled: root.disabled.value,
-        multiple: true,
-        hidden: true,
-        'aria-hidden': 'true',
-        tabindex: -1,
-        onChange: reconcile,
-        onInvalid: (event: Event) => {
-          event.preventDefault();
-          root.error.value = (event.currentTarget as HTMLSelectElement).validationMessage;
-          root.anchor.value?.focus();
-        },
-      }, props.options.map((option) => h('option', { key: option.value, value: option.value, disabled: option.disabled, selected: root.values.value.includes(option.value) }, option.label))),
-      h('span', { id: `${root.listboxId.value}-error`, role: 'status' }, root.error.value),
-    ]);
+    return () =>
+      h('div', { 'data-vf-multi-select-form-control': '' }, [
+        h(
+          'select',
+          {
+            ref: control,
+            name: props.name,
+            form: props.form,
+            required: props.required,
+            disabled: root.disabled.value,
+            multiple: true,
+            hidden: true,
+            'aria-hidden': 'true',
+            tabindex: -1,
+            onChange: reconcile,
+            onInvalid: (event: Event) => {
+              event.preventDefault();
+              root.error.value = (event.currentTarget as HTMLSelectElement).validationMessage;
+              root.anchor.value?.focus();
+            },
+          },
+          props.options.map((option) =>
+            h(
+              'option',
+              {
+                key: option.value,
+                value: option.value,
+                disabled: option.disabled,
+                selected: root.values.value.includes(option.value),
+              },
+              option.label,
+            ),
+          ),
+        ),
+        h('span', { id: `${root.listboxId.value}-error`, role: 'status' }, root.error.value),
+      ]);
   },
 });

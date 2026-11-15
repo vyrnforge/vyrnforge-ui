@@ -1,7 +1,11 @@
 const labels = ['One', 'Disabled', 'Three', 'Banana'];
 const values = ['one', 'disabled', 'three', 'banana'];
-const formOptions = [].concat([{ value: 'one', label: 'One' }, { value: 'three', label: 'Three' }]);
-const formMarkup = '<form id="selection-form"><button type="submit">Submit choice</button></form><form id="controlled-form"></form>';
+const formOptions = [].concat([
+  { value: 'one', label: 'One' },
+  { value: 'three', label: 'Three' },
+]);
+const formMarkup =
+  '<form id="selection-form"><button type="submit">Submit choice</button></form><form id="controlled-form"></form>';
 const before = '<button id="before" type="button">Before</button>';
 const after = '<button id="after" type="button" style="position: fixed; right: 16px; bottom: 16px">After</button>';
 const label = '<div id="multi-select-label">Choose items</div>';
@@ -78,12 +82,17 @@ export async function createReactStory() {
       ),
       h('form', { id: 'selection-form' }, h('button', { type: 'submit' }, 'Submit choice')),
       h('form', { id: 'controlled-form' }),
-      h('div', { id: 'form-example' },
-        h(MultiSelectRoot, { id: 'form-choice', defaultValue: [] },
+      h(
+        'div',
+        { id: 'form-example' },
+        h(
+          MultiSelectRoot,
+          { id: 'form-choice', defaultValue: [] },
           h(MultiSelectTrigger, { 'aria-describedby': 'form-hint' }, 'Form choice'),
           h(MultiSelectContent, { 'aria-label': 'Form options' }, option('form', 0), option('form', 2)),
           h(MultiSelectFormControl, { name: 'choice', form: 'selection-form', required: true, options: formOptions }),
-        ), h('p', { id: 'form-hint' }, 'Choose at least one option.'),
+        ),
+        h('p', { id: 'form-hint' }, 'Choose at least one option.'),
       ),
     );
   }
@@ -132,8 +141,14 @@ export async function createVueStory() {
             h(MultiSelectRoot, { id: 'form-choice', defaultValue: [] }, () => [
               h(MultiSelectTrigger, { 'aria-describedby': 'form-hint' }, () => 'Form choice'),
               h(MultiSelectContent, { 'aria-label': 'Form options' }, () => [option('form', 0), option('form', 2)]),
-              h(MultiSelectFormControl, { name: 'choice', form: 'selection-form', required: true, options: formOptions }),
-            ]), h('p', { id: 'form-hint' }, 'Choose at least one option.'),
+              h(MultiSelectFormControl, {
+                name: 'choice',
+                form: 'selection-form',
+                required: true,
+                options: formOptions,
+              }),
+            ]),
+            h('p', { id: 'form-hint' }, 'Choose at least one option.'),
           ]),
         ]);
     },

@@ -75,7 +75,14 @@ export interface MultiSelectRootProps {
   onValueChange?(value: string[]): void;
 }
 
-export function MultiSelectRoot({ children, id, value, defaultValue = [], disabled = false, onValueChange }: MultiSelectRootProps) {
+export function MultiSelectRoot({
+  children,
+  id,
+  value,
+  defaultValue = [],
+  disabled = false,
+  onValueChange,
+}: MultiSelectRootProps) {
   const initialValue = useRef([...defaultValue]);
   const [internalValue, setInternalValue] = useState(initialValue.current);
   const [error, setError] = useState('');
@@ -151,7 +158,9 @@ export const MultiSelectTrigger = forwardRef<
       type: 'button',
       disabled: props.disabled || multi.disabled,
       'aria-invalid': multi.error ? true : props['aria-invalid'],
-      'aria-describedby': [props['aria-describedby'], multi.error ? `${multi.listboxId}-error` : undefined].filter(Boolean).join(' ') || undefined,
+      'aria-describedby':
+        [props['aria-describedby'], multi.error ? `${multi.listboxId}-error` : undefined].filter(Boolean).join(' ') ||
+        undefined,
       'data-vf-multi-select-trigger': '',
       id: multi.triggerId,
       'aria-controls': multi.listboxId,
@@ -371,24 +380,30 @@ export function MultiSelectFormControl({ name, form, required, options }: MultiS
   return createElement(
     'div',
     { 'data-vf-multi-select-form-control': '' },
-    createElement('select', {
-      ref: control,
-      name,
-      form,
-      required,
-      disabled: root.disabled,
-      multiple: true,
-      hidden: true,
-      'aria-hidden': true,
-      tabIndex: -1,
-      value: root.values,
-      onChange: (event) => sync(event.currentTarget, root.values, root.resetValue),
-      onInvalid: (event) => {
-        event.preventDefault();
-        root.setError(event.currentTarget.validationMessage);
-        root.anchorRef.current?.focus();
+    createElement(
+      'select',
+      {
+        ref: control,
+        name,
+        form,
+        required,
+        disabled: root.disabled,
+        multiple: true,
+        hidden: true,
+        'aria-hidden': true,
+        tabIndex: -1,
+        value: root.values,
+        onChange: (event) => sync(event.currentTarget, root.values, root.resetValue),
+        onInvalid: (event) => {
+          event.preventDefault();
+          root.setError(event.currentTarget.validationMessage);
+          root.anchorRef.current?.focus();
+        },
       },
-    }, options.map((option) => createElement('option', { key: option.value, value: option.value, disabled: option.disabled }, option.label))),
+      options.map((option) =>
+        createElement('option', { key: option.value, value: option.value, disabled: option.disabled }, option.label),
+      ),
+    ),
     createElement('span', { id: `${root.listboxId}-error`, role: 'status' }, root.error),
   );
 }

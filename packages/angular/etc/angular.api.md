@@ -1824,6 +1824,54 @@ export class VfMultiSelectContentDirective {
 }
 
 // @public (undocumented)
+export class VfMultiSelectFormControlComponent {
+    constructor();
+    // (undocumented)
+    readonly form: InputSignal<string | undefined>;
+    // (undocumented)
+    invalid(event: Event): void;
+    // (undocumented)
+    readonly name: InputSignal<string | undefined>;
+    // (undocumented)
+    readonly options: InputSignal<readonly {
+    value: string;
+    label: string;
+    disabled?: boolean;
+    }[]>;
+    // (undocumented)
+    reconcile(): void;
+    // (undocumented)
+    readonly required: InputSignalWithTransform<boolean, unknown>;
+    // (undocumented)
+    readonly root: VfMultiSelectRootDirective;
+    // (undocumented)
+    static ɵcmp: i0.ɵɵComponentDeclaration<VfMultiSelectFormControlComponent, "vf-multi-select-form-control", never, {
+        "name": {
+            "alias": "name";
+            "required": false;
+            "isSignal": true;
+        };
+        "form": {
+            "alias": "form";
+            "required": false;
+            "isSignal": true;
+        };
+        "required": {
+            "alias": "required";
+            "required": false;
+            "isSignal": true;
+        };
+        "options": {
+            "alias": "options";
+            "required": true;
+            "isSignal": true;
+        };
+    }, {}, never, never, true, never>;
+    // (undocumented)
+    static ɵfac: i0.ɵɵFactoryDeclaration<VfMultiSelectFormControlComponent, never>;
+}
+
+// @public (undocumented)
 export class VfMultiSelectOptionDirective {
     constructor(root: VfMultiSelectRootDirective);
     // (undocumented)
@@ -1856,11 +1904,21 @@ export class VfMultiSelectRootDirective {
     // (undocumented)
     readonly defaultValue: InputSignal<string[]>;
     // (undocumented)
+    readonly disabled: InputSignalWithTransform<boolean, unknown>;
+    // (undocumented)
+    readonly error: WritableSignal<string>;
+    // (undocumented)
     readonly id: InputSignal<string | undefined>;
     // (undocumented)
     readonly listboxId: Signal<string>;
     // (undocumented)
+    ngOnInit(): void;
+    // (undocumented)
     readonly open: WritableSignal<boolean>;
+    // (undocumented)
+    reset(): string[];
+    // (undocumented)
+    readonly resetValue: Signal<string[]>;
     // (undocumented)
     readonly rootId: Signal<string>;
     // (undocumented)
@@ -1875,6 +1933,11 @@ export class VfMultiSelectRootDirective {
     readonly values: Signal<string[]>;
     // (undocumented)
     static ɵdir: i0.ɵɵDirectiveDeclaration<VfMultiSelectRootDirective, "[vfMultiSelectRoot]", never, {
+        "disabled": {
+            "alias": "disabled";
+            "required": false;
+            "isSignal": true;
+        };
         "id": {
             "alias": "id";
             "required": false;
@@ -1901,9 +1964,33 @@ export class VfMultiSelectRootDirective {
 export class VfMultiSelectTriggerDirective {
     constructor(root: VfMultiSelectRootDirective);
     // (undocumented)
+    readonly describedBy: InputSignal<string | undefined>;
+    // (undocumented)
+    readonly description: Signal<string>;
+    // (undocumented)
+    readonly disabled: InputSignalWithTransform<boolean, unknown>;
+    // (undocumented)
+    readonly invalid: InputSignal<string | boolean | undefined>;
+    // (undocumented)
     readonly root: VfMultiSelectRootDirective;
     // (undocumented)
-    static ɵdir: i0.ɵɵDirectiveDeclaration<VfMultiSelectTriggerDirective, "button[vfMultiSelectTrigger]", never, {}, {}, never, never, true, never>;
+    static ɵdir: i0.ɵɵDirectiveDeclaration<VfMultiSelectTriggerDirective, "button[vfMultiSelectTrigger]", never, {
+        "disabled": {
+            "alias": "disabled";
+            "required": false;
+            "isSignal": true;
+        };
+        "invalid": {
+            "alias": "aria-invalid";
+            "required": false;
+            "isSignal": true;
+        };
+        "describedBy": {
+            "alias": "aria-describedby";
+            "required": false;
+            "isSignal": true;
+        };
+    }, {}, never, never, true, never>;
     // (undocumented)
     static ɵfac: i0.ɵɵFactoryDeclaration<VfMultiSelectTriggerDirective, never>;
 }
@@ -2781,6 +2868,54 @@ export class VfSelectContentDirective {
 }
 
 // @public (undocumented)
+export class VfSelectFormControlComponent {
+    constructor();
+    // (undocumented)
+    readonly form: InputSignal<string | undefined>;
+    // (undocumented)
+    invalid(event: Event): void;
+    // (undocumented)
+    readonly name: InputSignal<string | undefined>;
+    // (undocumented)
+    readonly options: InputSignal<readonly {
+    value: string;
+    label: string;
+    disabled?: boolean;
+    }[]>;
+    // (undocumented)
+    reconcile(): void;
+    // (undocumented)
+    readonly required: InputSignalWithTransform<boolean, unknown>;
+    // (undocumented)
+    readonly root: VfSelectRootDirective;
+    // (undocumented)
+    static ɵcmp: i0.ɵɵComponentDeclaration<VfSelectFormControlComponent, "vf-select-form-control", never, {
+        "name": {
+            "alias": "name";
+            "required": false;
+            "isSignal": true;
+        };
+        "form": {
+            "alias": "form";
+            "required": false;
+            "isSignal": true;
+        };
+        "required": {
+            "alias": "required";
+            "required": false;
+            "isSignal": true;
+        };
+        "options": {
+            "alias": "options";
+            "required": true;
+            "isSignal": true;
+        };
+    }, {}, never, never, true, never>;
+    // (undocumented)
+    static ɵfac: i0.ɵɵFactoryDeclaration<VfSelectFormControlComponent, never>;
+}
+
+// @public (undocumented)
 export class VfSelectOptionDirective {
     constructor(root: VfSelectRootDirective);
     // (undocumented)
@@ -2815,15 +2950,25 @@ export class VfSelectRootDirective {
     // (undocumented)
     readonly defaultValue: InputSignal<string>;
     // (undocumented)
+    readonly disabled: InputSignalWithTransform<boolean, unknown>;
+    // (undocumented)
+    readonly error: WritableSignal<string>;
+    // (undocumented)
     readonly expanded: Signal<boolean>;
     // (undocumented)
     readonly id: InputSignal<string | undefined>;
     // (undocumented)
     readonly listboxId: Signal<string>;
     // (undocumented)
+    ngOnInit(): void;
+    // (undocumented)
     readonly open: InputSignal<boolean | undefined>;
     // (undocumented)
     readonly openChange: OutputEmitterRef<boolean>;
+    // (undocumented)
+    reset(): string;
+    // (undocumented)
+    readonly resetValue: Signal<string>;
     // (undocumented)
     readonly rootId: Signal<string>;
     // (undocumented)
@@ -2840,6 +2985,11 @@ export class VfSelectRootDirective {
     readonly valueChange: OutputEmitterRef<string>;
     // (undocumented)
     static ɵdir: i0.ɵɵDirectiveDeclaration<VfSelectRootDirective, "[vfSelectRoot]", never, {
+        "disabled": {
+            "alias": "disabled";
+            "required": false;
+            "isSignal": true;
+        };
         "id": {
             "alias": "id";
             "required": false;
@@ -2877,9 +3027,33 @@ export class VfSelectRootDirective {
 export class VfSelectTriggerDirective {
     constructor(root: VfSelectRootDirective);
     // (undocumented)
+    readonly describedBy: InputSignal<string | undefined>;
+    // (undocumented)
+    readonly description: Signal<string>;
+    // (undocumented)
+    readonly disabled: InputSignalWithTransform<boolean, unknown>;
+    // (undocumented)
+    readonly invalid: InputSignal<string | boolean | undefined>;
+    // (undocumented)
     readonly root: VfSelectRootDirective;
     // (undocumented)
-    static ɵdir: i0.ɵɵDirectiveDeclaration<VfSelectTriggerDirective, "button[vfSelectTrigger]", never, {}, {}, never, never, true, never>;
+    static ɵdir: i0.ɵɵDirectiveDeclaration<VfSelectTriggerDirective, "button[vfSelectTrigger]", never, {
+        "disabled": {
+            "alias": "disabled";
+            "required": false;
+            "isSignal": true;
+        };
+        "invalid": {
+            "alias": "aria-invalid";
+            "required": false;
+            "isSignal": true;
+        };
+        "describedBy": {
+            "alias": "aria-describedby";
+            "required": false;
+            "isSignal": true;
+        };
+    }, {}, never, never, true, never>;
     // (undocumented)
     static ɵfac: i0.ɵɵFactoryDeclaration<VfSelectTriggerDirective, never>;
 }

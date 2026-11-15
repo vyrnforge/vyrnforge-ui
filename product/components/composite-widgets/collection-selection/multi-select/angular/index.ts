@@ -153,7 +153,9 @@ export class VfMultiSelectTriggerDirective {
   readonly disabled = input(false, { transform: booleanAttribute });
   readonly invalid = input<string | boolean | undefined>(undefined, { alias: 'aria-invalid' });
   readonly describedBy = input<string | undefined>(undefined, { alias: 'aria-describedby' });
-  readonly description = computed(() => [this.describedBy(), this.root.error() ? `${this.root.listboxId()}-error` : undefined].filter(Boolean).join(' '));
+  readonly description = computed(() =>
+    [this.describedBy(), this.root.error() ? `${this.root.listboxId()}-error` : undefined].filter(Boolean).join(' '),
+  );
   constructor(readonly root: VfMultiSelectRootDirective) {
     const element = inject<ElementRef<HTMLButtonElement>>(ElementRef).nativeElement;
     const destroyRef = inject(DestroyRef);
@@ -349,11 +351,29 @@ export class VfMultiSelectOptionDirective {
   selector: 'vf-multi-select-form-control',
   standalone: true,
   host: { 'data-vf-multi-select-form-control': '' },
-  template: `<select #control hidden aria-hidden="true" tabindex="-1" [attr.name]="name() || null" [attr.form]="form() || null" [required]="required()" [disabled]="root.disabled()" multiple (change)="reconcile()" (invalid)="invalid($event)">
-    @for (option of options(); track option.value) {
-      <option [value]="option.value" [disabled]="option.disabled ?? false" [attr.selected]="root.values().includes(option.value) ? '' : null">{{ option.label }}</option>
-    }
-  </select><span [id]="root.listboxId() + '-error'" role="status">{{ root.error() }}</span>`,
+  template: `<select
+      #control
+      hidden
+      aria-hidden="true"
+      tabindex="-1"
+      [attr.name]="name() || null"
+      [attr.form]="form() || null"
+      [required]="required()"
+      [disabled]="root.disabled()"
+      multiple
+      (change)="reconcile()"
+      (invalid)="invalid($event)"
+    >
+      @for (option of options(); track option.value) {
+        <option
+          [value]="option.value"
+          [disabled]="option.disabled ?? false"
+          [attr.selected]="root.values().includes(option.value) ? '' : null"
+        >
+          {{ option.label }}
+        </option>
+      }</select
+    ><span [id]="root.listboxId() + '-error'" role="status">{{ root.error() }}</span>`,
 })
 export class VfMultiSelectFormControlComponent {
   readonly root = inject(VfMultiSelectRootDirective);

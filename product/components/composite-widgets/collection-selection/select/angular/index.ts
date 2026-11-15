@@ -164,7 +164,9 @@ export class VfSelectTriggerDirective {
   readonly disabled = input(false, { transform: booleanAttribute });
   readonly invalid = input<string | boolean | undefined>(undefined, { alias: 'aria-invalid' });
   readonly describedBy = input<string | undefined>(undefined, { alias: 'aria-describedby' });
-  readonly description = computed(() => [this.describedBy(), this.root.error() ? `${this.root.listboxId()}-error` : undefined].filter(Boolean).join(' '));
+  readonly description = computed(() =>
+    [this.describedBy(), this.root.error() ? `${this.root.listboxId()}-error` : undefined].filter(Boolean).join(' '),
+  );
   constructor(readonly root: VfSelectRootDirective) {
     const element = inject<ElementRef<HTMLButtonElement>>(ElementRef).nativeElement;
     const destroyRef = inject(DestroyRef);
@@ -357,11 +359,28 @@ export class VfSelectOptionDirective {
   selector: 'vf-select-form-control',
   standalone: true,
   host: { 'data-vf-select-form-control': '' },
-  template: `<select #control hidden aria-hidden="true" tabindex="-1" [attr.name]="name() || null" [attr.form]="form() || null" [required]="required()" [disabled]="root.disabled()"  (change)="reconcile()" (invalid)="invalid($event)">
-    @for (option of options(); track option.value) {
-      <option [value]="option.value" [disabled]="option.disabled ?? false" [attr.selected]="root.selected() === option.value ? '' : null">{{ option.label }}</option>
-    }
-  </select><span [id]="root.listboxId() + '-error'" role="status">{{ root.error() }}</span>`,
+  template: `<select
+      #control
+      hidden
+      aria-hidden="true"
+      tabindex="-1"
+      [attr.name]="name() || null"
+      [attr.form]="form() || null"
+      [required]="required()"
+      [disabled]="root.disabled()"
+      (change)="reconcile()"
+      (invalid)="invalid($event)"
+    >
+      @for (option of options(); track option.value) {
+        <option
+          [value]="option.value"
+          [disabled]="option.disabled ?? false"
+          [attr.selected]="root.selected() === option.value ? '' : null"
+        >
+          {{ option.label }}
+        </option>
+      }</select
+    ><span [id]="root.listboxId() + '-error'" role="status">{{ root.error() }}</span>`,
 })
 export class VfSelectFormControlComponent {
   readonly root = inject(VfSelectRootDirective);

@@ -220,8 +220,9 @@ test('Select preserves native disabled fieldset behavior for trigger and option 
   await expect(page.locator(`#${port}-one`)).toHaveAttribute('aria-selected', 'true');
 });
 
-
-test('Select native form control validates, submits committed values and resets with its associated form', async ({ page }) => {
+test('Select native form control validates, submits committed values and resets with its associated form', async ({
+  page,
+}) => {
   test.skip(port === 'web', 'Managed custom selection form evidence.');
   await page.goto(`/components/select/${port}.html`);
   await page.waitForFunction(() => document.body.dataset.selectReady === 'true');

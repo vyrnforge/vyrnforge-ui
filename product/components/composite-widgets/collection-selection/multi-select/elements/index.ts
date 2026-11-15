@@ -191,7 +191,9 @@ export class VfMultiSelectElement extends H {
     error.id ||= this.generatedErrorId;
     error.setAttribute('role', 'status');
     if (error.textContent !== this.formError) error.textContent = this.formError;
-    const descriptions = (trigger.getAttribute('aria-describedby') ?? '').split(/\\s+/).filter((id) => id && id !== error.id);
+    const descriptions = (trigger.getAttribute('aria-describedby') ?? '')
+      .split(/\\s+/)
+      .filter((id) => id && id !== error.id);
     if (this.formError) {
       if (this.priorInvalid === undefined) this.priorInvalid = trigger.getAttribute('aria-invalid');
       trigger.setAttribute('aria-invalid', 'true');
@@ -218,7 +220,14 @@ export class VfMultiSelectElement extends H {
     const control = this.formControl;
     if (!control?.form || control.form !== event.target) return;
     setTimeout(() => {
-      if (!this.isConnected || event.defaultPrevented || this.formControl !== control || control.form !== event.target || this.initialSelection === null) return;
+      if (
+        !this.isConnected ||
+        event.defaultPrevented ||
+        this.formControl !== control ||
+        control.form !== event.target ||
+        this.initialSelection === null
+      )
+        return;
       const defaults = this.initialSelection;
       for (const option of optionsFor(this)) {
         const selected = String(defaults.includes(optionValue(option)));

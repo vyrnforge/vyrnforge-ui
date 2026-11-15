@@ -141,7 +141,19 @@ export function SelectRoot({
         setFocusRevision((revision) => revision + 1);
       },
     }),
-    [expanded, onOpenChange, onValueChange, open, selected, value, focusRevision, triggerId, listboxId, disabled, error],
+    [
+      expanded,
+      onOpenChange,
+      onValueChange,
+      open,
+      selected,
+      value,
+      focusRevision,
+      triggerId,
+      listboxId,
+      disabled,
+      error,
+    ],
   );
   return createElement(C.Provider, { value: context }, children);
 }
@@ -167,7 +179,9 @@ export const SelectTrigger = forwardRef<
       type: 'button',
       disabled: props.disabled || select.disabled,
       'aria-invalid': select.error ? true : props['aria-invalid'],
-      'aria-describedby': [props['aria-describedby'], select.error ? `${select.listboxId}-error` : undefined].filter(Boolean).join(' ') || undefined,
+      'aria-describedby':
+        [props['aria-describedby'], select.error ? `${select.listboxId}-error` : undefined].filter(Boolean).join(' ') ||
+        undefined,
       'data-vf-select-trigger': '',
       id: select.triggerId,
       'aria-controls': select.listboxId,
@@ -386,24 +400,30 @@ export function SelectFormControl({ name, form, required, options }: SelectFormC
   return createElement(
     'div',
     { 'data-vf-select-form-control': '' },
-    createElement('select', {
-      ref: control,
-      name,
-      form,
-      required,
-      disabled: root.disabled,
-      multiple: false,
-      hidden: true,
-      'aria-hidden': true,
-      tabIndex: -1,
-      value: root.value,
-      onChange: (event) => sync(event.currentTarget, root.value, root.resetValue),
-      onInvalid: (event) => {
-        event.preventDefault();
-        root.setError(event.currentTarget.validationMessage);
-        root.anchorRef.current?.focus();
+    createElement(
+      'select',
+      {
+        ref: control,
+        name,
+        form,
+        required,
+        disabled: root.disabled,
+        multiple: false,
+        hidden: true,
+        'aria-hidden': true,
+        tabIndex: -1,
+        value: root.value,
+        onChange: (event) => sync(event.currentTarget, root.value, root.resetValue),
+        onInvalid: (event) => {
+          event.preventDefault();
+          root.setError(event.currentTarget.validationMessage);
+          root.anchorRef.current?.focus();
+        },
       },
-    }, options.map((option) => createElement('option', { key: option.value, value: option.value, disabled: option.disabled }, option.label))),
+      options.map((option) =>
+        createElement('option', { key: option.value, value: option.value, disabled: option.disabled }, option.label),
+      ),
+    ),
     createElement('span', { id: `${root.listboxId}-error`, role: 'status' }, root.error),
   );
 }

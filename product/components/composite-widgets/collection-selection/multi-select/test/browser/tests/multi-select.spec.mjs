@@ -236,8 +236,9 @@ test('MultiSelect preserves native disabled fieldset behavior for trigger and op
   await expect(page.locator(`#${port}-one`)).toHaveAttribute('aria-selected', 'true');
 });
 
-
-test('MultiSelect native form control validates, submits committed values and resets with its associated form', async ({ page }) => {
+test('MultiSelect native form control validates, submits committed values and resets with its associated form', async ({
+  page,
+}) => {
   test.skip(port === 'web', 'Managed custom selection form evidence.');
   await page.goto(`/components/multi-select/${port}.html`);
   await page.waitForFunction(() => document.body.dataset.multiReady === 'true');

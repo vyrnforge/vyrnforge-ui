@@ -146,7 +146,7 @@ export class VfSelectElement extends H {
     const control = candidate instanceof HTMLSelectElement ? candidate : null;
     if (control !== this.formControl) {
       this.formControl = control;
-      this.initialSelection = control ? this.getAttribute('value') ?? '' : null;
+      this.initialSelection = control ? (this.getAttribute('value') ?? '') : null;
       this.formError = '';
     }
     if (!control || this.initialSelection === null) return;
@@ -179,7 +179,9 @@ export class VfSelectElement extends H {
     error.id ||= this.generatedErrorId;
     error.setAttribute('role', 'status');
     if (error.textContent !== this.formError) error.textContent = this.formError;
-    const descriptions = (trigger.getAttribute('aria-describedby') ?? '').split(/\\s+/).filter((id) => id && id !== error.id);
+    const descriptions = (trigger.getAttribute('aria-describedby') ?? '')
+      .split(/\\s+/)
+      .filter((id) => id && id !== error.id);
     if (this.formError) {
       if (this.priorInvalid === undefined) this.priorInvalid = trigger.getAttribute('aria-invalid');
       trigger.setAttribute('aria-invalid', 'true');
@@ -206,7 +208,14 @@ export class VfSelectElement extends H {
     const control = this.formControl;
     if (!control?.form || control.form !== event.target) return;
     setTimeout(() => {
-      if (!this.isConnected || event.defaultPrevented || this.formControl !== control || control.form !== event.target || this.initialSelection === null) return;
+      if (
+        !this.isConnected ||
+        event.defaultPrevented ||
+        this.formControl !== control ||
+        control.form !== event.target ||
+        this.initialSelection === null
+      )
+        return;
       this.setAttribute('value', this.initialSelection);
       this.formError = '';
       this.sync();
