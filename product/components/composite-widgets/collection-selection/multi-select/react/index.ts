@@ -430,10 +430,7 @@ export interface MultiSelectSelectionProps {
 /** Authored selected-item labels and native removal controls. Compose outside the trigger. */
 export function MultiSelectSelection({ items, label, emptyLabel, locale }: MultiSelectSelectionProps) {
   const root = useMulti();
-  const selected = root.values.flatMap((value) => {
-    const item = items.find((item) => item.value === value);
-    return item ? [item] : [];
-  });
+  const selected = items.filter((item) => root.values.includes(item.value));
   const summary = selected.length ? new Intl.ListFormat(locale).format(selected.map((item) => item.label)) : emptyLabel;
   return createElement('div', { 'data-vf-multi-select-selection': '' },
     createElement('span', { id: `${root.listboxId}-summary`, role: 'status', 'data-vf-multi-select-summary': '' }, summary),

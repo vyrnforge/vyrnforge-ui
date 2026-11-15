@@ -444,10 +444,7 @@ export const MultiSelectSelection = defineComponent({
   },
   setup(props) {
     const root = useMulti();
-    const selected = computed(() => root.values.value.flatMap((value) => {
-      const item = props.items.find((item) => item.value === value);
-      return item ? [item] : [];
-    }));
+    const selected = computed(() => props.items.filter((item) => root.values.value.includes(item.value)));
     const summary = computed(() => selected.value.length ? new Intl.ListFormat(props.locale).format(selected.value.map((item) => item.label)) : props.emptyLabel);
     return () => h('div', { 'data-vf-multi-select-selection': '' }, [
       h('span', { id: `${root.listboxId.value}-summary`, role: 'status', 'data-vf-multi-select-summary': '' }, summary.value),

@@ -449,10 +449,7 @@ export class VfMultiSelectSelectionComponent {
   readonly label = input.required<string>();
   readonly emptyLabel = input.required<string>();
   readonly locale = input.required<string>();
-  readonly selected = computed(() => this.root.values().flatMap((value) => {
-    const item = this.items().find((item) => item.value === value);
-    return item ? [item] : [];
-  }));
+  readonly selected = computed(() => this.items().filter((item) => this.root.values().includes(item.value)));
   readonly summary = computed(() => this.selected().length ? new Intl.ListFormat(this.locale()).format(this.selected().map((item) => item.label)) : this.emptyLabel());
   remove(event: MouseEvent, value: string) {
     if (event.defaultPrevented || (event.currentTarget instanceof HTMLButtonElement && optionDisabled(event.currentTarget))) return;
