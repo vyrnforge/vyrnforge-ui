@@ -1,16 +1,20 @@
 import {
   APP_ID,
+  Component,
   DestroyRef,
   Directive,
   ElementRef,
   InjectionToken,
   afterRenderEffect,
+  afterNextRender,
+  booleanAttribute,
   computed,
   inject,
   input,
   output,
   signal,
   type WritableSignal,
+  viewChild,
 } from '@angular/core';
 import { resolveNavigationIndex } from '@vyrnforge/core/collection-navigation';
 import { findTypeaheadMatch } from '@vyrnforge/core/typeahead-matching';
@@ -95,6 +99,10 @@ function requestFocus(root: VfSelectRootDirective, request: FocusRequest): void 
   host: { '[attr.id]': 'rootId()' },
 })
 export class VfSelectRootDirective {
+  readonly disabled = input(false, { transform: booleanAttribute });
+  readonly error = signal('');
+  private initialValue = signal<string>('');
+  readonly resetValue = computed(() => this.value() ?? this.initialValue());
   readonly id = input<string | undefined>(undefined);
   private readonly generatedId = inject(SELECT_ID_GENERATOR)();
   readonly rootId = computed(() => this.id() ?? this.generatedId);
@@ -109,15 +117,28 @@ export class VfSelectRootDirective {
   private readonly internalValue = signal<string | undefined>(undefined);
   private readonly internalOpen = signal<boolean | undefined>(undefined);
   readonly selected = computed(() => this.value() ?? this.internalValue() ?? this.defaultValue());
+
+  ngOnInit() {
+    this.initialValue.set(this.defaultValue());
+    this.internalValue.set(this.initialValue());
+  }
+  reset(): string {
+    const next = this.value() ?? this.initialValue();
+    if (this.value() === undefined) this.internalValue.set(next);
+    this.error.set('');
+    return next;
+  }
   readonly expanded = computed(() => this.open() ?? this.internalOpen() ?? this.defaultOpen());
 
   setOpen(v: boolean): void {
+    if (v && this.disabled()) return;
     if (v === this.expanded()) return;
     if (this.open() === undefined) this.internalOpen.set(v);
     this.openChange.emit(v);
   }
 
   setValue(v: string): void {
+    if (this.disabled()) return;
     if (this.value() === undefined) this.internalValue.set(v);
     this.valueChange.emit(v);
     this.setOpen(false);
@@ -130,6 +151,9 @@ export class VfSelectRootDirective {
   host: {
     type: 'button',
     '[id]': 'root.triggerId()',
+    '[disabled]': 'disabled() || root.disabled()',
+    '[attr.aria-invalid]': 'root.error() ? true : invalid()',
+    '[attr.aria-describedby]': 'description() || null',
     '[attr.aria-controls]': 'root.listboxId()',
     'aria-haspopup': 'listbox',
     'data-vf-select-trigger': '',
@@ -137,6 +161,10 @@ export class VfSelectRootDirective {
   },
 })
 export class VfSelectTriggerDirective {
+  readonly disabled = input(false, { transform: booleanAttribute });
+  readonly invalid = input<string | boolean | undefined>(undefined, { alias: 'aria-invalid' });
+  readonly describedBy = input<string | undefined>(undefined, { alias: 'aria-describedby' });
+  readonly description = computed(() => [this.describedBy(), this.root.error() ? `${this.root.listboxId()}-error` : undefined].filter(Boolean).join(' '));
   constructor(readonly root: VfSelectRootDirective) {
     const element = inject<ElementRef<HTMLButtonElement>>(ElementRef).nativeElement;
     const destroyRef = inject(DestroyRef);
@@ -307,8 +335,8 @@ export class VfSelectContentDirective {
     'data-vf-select-option': '',
     '[attr.data-vf-value]': 'value()',
     '[attr.aria-selected]': 'root.selected() === value()',
-    '[attr.aria-disabled]': 'disabled() ? true : null',
-    '[disabled]': 'disabled()',
+    '[attr.aria-disabled]': 'disabled() || root.disabled() ? true : null',
+    '[disabled]': 'disabled() || root.disabled()',
     '(click)': 'select($event)',
   },
 })
@@ -319,8 +347,66 @@ export class VfSelectOptionDirective {
   constructor(readonly root: VfSelectRootDirective) {}
 
   select(event?: MouseEvent): void {
-    if (event?.defaultPrevented || this.disabled()) return;
+    if (event?.defaultPrevented || this.disabled() || this.root.disabled()) return;
     if (event?.currentTarget instanceof HTMLButtonElement && optionDisabled(event.currentTarget)) return;
     this.root.setValue(this.value());
+  }
+}
+
+@Component({
+  selector: 'vf-select-form-control',
+  standalone: true,
+  host: { 'data-vf-select-form-control': '' },
+  template: `<select #control hidden aria-hidden="true" tabindex="-1" [attr.name]="name() || null" [attr.form]="form() || null" [required]="required()" [disabled]="root.disabled()"  (change)="reconcile()" (invalid)="invalid($event)">
+    @for (option of options(); track option.value) {
+      <option [value]="option.value" [disabled]="option.disabled ?? false" [attr.selected]="root.selected() === option.value ? '' : null">{{ option.label }}</option>
+    }
+  </select><span [id]="root.listboxId() + '-error'" role="status">{{ root.error() }}</span>`,
+})
+export class VfSelectFormControlComponent {
+  readonly root = inject(VfSelectRootDirective);
+  readonly name = input<string | undefined>(undefined);
+  readonly form = input<string | undefined>(undefined);
+  readonly required = input(false, { transform: booleanAttribute });
+  readonly options = input.required<readonly { value: string; label: string; disabled?: boolean }[]>();
+  private readonly control = viewChild.required<ElementRef<HTMLSelectElement>>('control');
+  constructor() {
+    const destroyRef = inject(DestroyRef);
+    afterRenderEffect(() => this.reconcile());
+    afterNextRender(() => {
+      const element = this.control().nativeElement;
+      const document = element.ownerDocument;
+      let active = true;
+      const onReset = (event: Event) => {
+        if (!element.form || element.form !== event.target) return;
+        setTimeout(() => {
+          if (!active || event.defaultPrevented || element.form !== event.target) return;
+          const next = this.root.reset();
+          this.sync(element, next, next);
+        }, 0);
+      };
+      document.addEventListener('reset', onReset, true);
+      destroyRef.onDestroy(() => {
+        active = false;
+        document.removeEventListener('reset', onReset, true);
+      });
+    });
+  }
+  private sync(element: HTMLSelectElement, values: string, defaults: string) {
+    for (const option of element.options) option.defaultSelected = defaults === option.value;
+    element.value = values;
+  }
+  reconcile() {
+    const element = this.control().nativeElement;
+    this.options();
+    this.required();
+    this.root.disabled();
+    this.sync(element, this.root.selected(), this.root.resetValue());
+    if (this.root.error() && (element.validity.valid || element.matches(':disabled'))) this.root.error.set('');
+  }
+  invalid(event: Event) {
+    event.preventDefault();
+    this.root.error.set(this.control().nativeElement.validationMessage);
+    domFor(this.root).anchor?.focus();
   }
 }

@@ -1,16 +1,20 @@
 import {
   APP_ID,
+  Component,
   DestroyRef,
   Directive,
   ElementRef,
   InjectionToken,
   afterRenderEffect,
+  afterNextRender,
+  booleanAttribute,
   computed,
   inject,
   input,
   output,
   signal,
   type WritableSignal,
+  viewChild,
 } from '@angular/core';
 import { resolveNavigationIndex } from '@vyrnforge/core/collection-navigation';
 import { findTypeaheadMatch } from '@vyrnforge/core/typeahead-matching';
@@ -95,6 +99,10 @@ function requestFocus(root: VfMultiSelectRootDirective, request: FocusRequest): 
   host: { '[attr.id]': 'rootId()' },
 })
 export class VfMultiSelectRootDirective {
+  readonly disabled = input(false, { transform: booleanAttribute });
+  readonly error = signal('');
+  private initialValue = signal<string[]>([]);
+  readonly resetValue = computed(() => this.value() ?? this.initialValue());
   readonly id = input<string | undefined>(undefined);
   private readonly generatedId = inject(MULTI_SELECT_ID_GENERATOR)();
   readonly rootId = computed(() => this.id() ?? this.generatedId);
@@ -105,9 +113,21 @@ export class VfMultiSelectRootDirective {
   readonly valueChange = output<string[]>();
   private readonly internalValue = signal<string[] | undefined>(undefined);
   readonly values = computed(() => this.value() ?? this.internalValue() ?? this.defaultValue());
+
+  ngOnInit() {
+    this.initialValue.set([...this.defaultValue()]);
+    this.internalValue.set(this.initialValue());
+  }
+  reset(): string[] {
+    const next = this.value() ?? this.initialValue();
+    if (this.value() === undefined) this.internalValue.set(next);
+    this.error.set('');
+    return next;
+  }
   readonly open = signal(false);
 
   toggle(v: string): void {
+    if (this.disabled()) return;
     const next = this.values().includes(v) ? this.values().filter((value) => value !== v) : [...this.values(), v];
     if (this.value() === undefined) this.internalValue.set(next);
     this.valueChange.emit(next);
@@ -120,6 +140,9 @@ export class VfMultiSelectRootDirective {
   host: {
     type: 'button',
     '[id]': 'root.triggerId()',
+    '[disabled]': 'disabled() || root.disabled()',
+    '[attr.aria-invalid]': 'root.error() ? true : invalid()',
+    '[attr.aria-describedby]': 'description() || null',
     '[attr.aria-controls]': 'root.listboxId()',
     'aria-haspopup': 'listbox',
     'data-vf-multi-select-trigger': '',
@@ -127,6 +150,10 @@ export class VfMultiSelectRootDirective {
   },
 })
 export class VfMultiSelectTriggerDirective {
+  readonly disabled = input(false, { transform: booleanAttribute });
+  readonly invalid = input<string | boolean | undefined>(undefined, { alias: 'aria-invalid' });
+  readonly describedBy = input<string | undefined>(undefined, { alias: 'aria-describedby' });
+  readonly description = computed(() => [this.describedBy(), this.root.error() ? `${this.root.listboxId()}-error` : undefined].filter(Boolean).join(' '));
   constructor(readonly root: VfMultiSelectRootDirective) {
     const element = inject<ElementRef<HTMLButtonElement>>(ElementRef).nativeElement;
     const destroyRef = inject(DestroyRef);
@@ -300,8 +327,8 @@ export class VfMultiSelectContentDirective {
     'data-vf-multi-select-option': '',
     '[attr.data-vf-value]': 'value()',
     '[attr.aria-selected]': 'root.values().includes(value())',
-    '[attr.aria-disabled]': 'disabled() ? true : null',
-    '[disabled]': 'disabled()',
+    '[attr.aria-disabled]': 'disabled() || root.disabled() ? true : null',
+    '[disabled]': 'disabled() || root.disabled()',
     '(click)': 'toggle($event)',
   },
 })
@@ -312,8 +339,66 @@ export class VfMultiSelectOptionDirective {
   constructor(readonly root: VfMultiSelectRootDirective) {}
 
   toggle(event?: MouseEvent): void {
-    if (event?.defaultPrevented || this.disabled()) return;
+    if (event?.defaultPrevented || this.disabled() || this.root.disabled()) return;
     if (event?.currentTarget instanceof HTMLButtonElement && optionDisabled(event.currentTarget)) return;
     this.root.toggle(this.value());
+  }
+}
+
+@Component({
+  selector: 'vf-multi-select-form-control',
+  standalone: true,
+  host: { 'data-vf-multi-select-form-control': '' },
+  template: `<select #control hidden aria-hidden="true" tabindex="-1" [attr.name]="name() || null" [attr.form]="form() || null" [required]="required()" [disabled]="root.disabled()" multiple (change)="reconcile()" (invalid)="invalid($event)">
+    @for (option of options(); track option.value) {
+      <option [value]="option.value" [disabled]="option.disabled ?? false" [attr.selected]="root.values().includes(option.value) ? '' : null">{{ option.label }}</option>
+    }
+  </select><span [id]="root.listboxId() + '-error'" role="status">{{ root.error() }}</span>`,
+})
+export class VfMultiSelectFormControlComponent {
+  readonly root = inject(VfMultiSelectRootDirective);
+  readonly name = input<string | undefined>(undefined);
+  readonly form = input<string | undefined>(undefined);
+  readonly required = input(false, { transform: booleanAttribute });
+  readonly options = input.required<readonly { value: string; label: string; disabled?: boolean }[]>();
+  private readonly control = viewChild.required<ElementRef<HTMLSelectElement>>('control');
+  constructor() {
+    const destroyRef = inject(DestroyRef);
+    afterRenderEffect(() => this.reconcile());
+    afterNextRender(() => {
+      const element = this.control().nativeElement;
+      const document = element.ownerDocument;
+      let active = true;
+      const onReset = (event: Event) => {
+        if (!element.form || element.form !== event.target) return;
+        setTimeout(() => {
+          if (!active || event.defaultPrevented || element.form !== event.target) return;
+          const next = this.root.reset();
+          this.sync(element, next, next);
+        }, 0);
+      };
+      document.addEventListener('reset', onReset, true);
+      destroyRef.onDestroy(() => {
+        active = false;
+        document.removeEventListener('reset', onReset, true);
+      });
+    });
+  }
+  private sync(element: HTMLSelectElement, values: string[], defaults: string[]) {
+    for (const option of element.options) option.defaultSelected = defaults.includes(option.value);
+    for (const option of element.options) option.selected = values.includes(option.value);
+  }
+  reconcile() {
+    const element = this.control().nativeElement;
+    this.options();
+    this.required();
+    this.root.disabled();
+    this.sync(element, this.root.values(), this.root.resetValue());
+    if (this.root.error() && (element.validity.valid || element.matches(':disabled'))) this.root.error.set('');
+  }
+  invalid(event: Event) {
+    event.preventDefault();
+    this.root.error.set(this.control().nativeElement.validationMessage);
+    domFor(this.root).anchor?.focus();
   }
 }
