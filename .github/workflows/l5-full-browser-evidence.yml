@@ -1,0 +1,16 @@
+name: L5 Full Browser Evidence
+on:
+  push:
+    branches: [evidence/l5-full-browser-20261115]
+permissions:
+  contents: read
+jobs:
+  browser:
+    uses: ./.github/workflows/_browser-validation.yml
+    with:
+      scopes_json: '[{"port":"web","components":"accordion,alert-dialog,carousel,color-picker,combobox,context-menu,dialog,disclosure,drawer,file-uploader,listbox,menu,menubar,multi-select,number-field,otp-field,pagination,password-field,popover,preview-card,range-slider,rating,search-field,segmented-control,select,split-button,split-panel,tabs,tag-group,toast,toggle-group,toolbar,tooltip"},{"port":"react","components":"accordion,alert-dialog,carousel,color-picker,combobox,context-menu,dialog,disclosure,drawer,file-uploader,listbox,menu,menubar,multi-select,number-field,otp-field,pagination,password-field,popover,preview-card,range-slider,rating,search-field,segmented-control,select,split-button,split-panel,tabs,tag-group,toast,toggle-group,toolbar,tooltip"},{"port":"vue","components":"accordion,alert-dialog,carousel,color-picker,combobox,context-menu,dialog,disclosure,drawer,file-uploader,listbox,menu,menubar,multi-select,number-field,otp-field,pagination,password-field,popover,preview-card,range-slider,rating,search-field,segmented-control,select,split-button,split-panel,tabs,tag-group,toast,toggle-group,toolbar,tooltip"},{"port":"angular","components":"accordion,alert-dialog,carousel,color-picker,combobox,context-menu,dialog,disclosure,drawer,file-uploader,listbox,menu,menubar,multi-select,number-field,otp-field,pagination,password-field,popover,preview-card,range-slider,rating,search-field,segmented-control,select,split-button,split-panel,tabs,tag-group,toast,toggle-group,toolbar,tooltip"},{"port":"elements","components":"accordion,alert-dialog,carousel,color-picker,combobox,context-menu,dialog,disclosure,drawer,file-uploader,listbox,menu,menubar,multi-select,number-field,otp-field,pagination,password-field,popover,preview-card,range-slider,rating,search-field,segmented-control,select,split-button,split-panel,tabs,tag-group,toast,toggle-group,toolbar,tooltip"}]'
+      revision: ${{ github.sha }}
+      browser_profile: cross
+      browsers: chromium firefox webkit
+      artifact_suffix: l5-full-cross
+      retention_days: 30

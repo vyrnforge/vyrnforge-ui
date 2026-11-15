@@ -112,3 +112,40 @@ test('native Popover tracks its source through scroll, resize and RTL placement'
   await page.keyboard.press('Escape');
   await expect(page.locator('#c')).toBeHidden();
 });
+
+test('Popover constrains long content in a narrow viewport', async ({ page }) => {
+  await page.setViewportSize({ width: 320, height: 480 });
+  await load(page);
+  await page.evaluate(() => {
+    const trigger = document.querySelector('#t');
+    Object.assign(trigger.style, { position: 'fixed', top: '8px', left: '8px' });
+    const content = document.querySelector('#c');
+    const text = document.createElement('p');
+    text.textContent = 'LongUnbrokenText'.repeat(30);
+    content.append(text);
+    for (let index = 0; index < 30; index += 1) {
+      const paragraph = document.createElement('p');
+      paragraph.textContent = 'Additional authored content';
+      content.append(paragraph);
+    }
+  });
+  await page.locator('#t').press('Enter');
+  const surface = page.locator('#c');
+  await expect(surface).toBeVisible();
+  await expect
+    .poll(() =>
+      surface.evaluate((element) => ({
+        width: element.getBoundingClientRect().width <= window.innerWidth,
+        height: element.getBoundingClientRect().height <= window.innerHeight - 16,
+        scrollable: element.scrollHeight > element.clientHeight,
+        wraps: element.scrollWidth <= element.clientWidth + 1,
+      })),
+    )
+    .toEqual({ width: true, height: true, scrollable: true, wraps: true });
+  await surface.evaluate((element) => {
+    element.scrollTop = element.scrollHeight;
+  });
+  expect(await surface.evaluate((element) => element.scrollTop)).toBeGreaterThan(0);
+  await page.keyboard.press('Escape');
+  await expect(surface).toBeHidden();
+});
