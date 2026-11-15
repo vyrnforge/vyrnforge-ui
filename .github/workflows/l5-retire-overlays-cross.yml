@@ -1,0 +1,16 @@
+name: L5 retire-overlays-cross evidence
+on:
+  push:
+    branches: [evidence/l5-retire-overlays-cross]
+permissions:
+  contents: read
+jobs:
+  browser:
+    uses: ./.github/workflows/_browser-validation.yml
+    with:
+      scopes_json: '[{"port":"web","components":"popover,tooltip,preview-card,menu,context-menu,select,combobox,multi-select,menubar,split-button"},{"port":"react","components":"popover,tooltip,preview-card,menu,context-menu,select,combobox,multi-select,menubar,split-button"},{"port":"vue","components":"popover,tooltip,preview-card,menu,context-menu,select,combobox,multi-select,menubar,split-button"},{"port":"angular","components":"popover,tooltip,preview-card,menu,context-menu,select,combobox,multi-select,menubar,split-button"},{"port":"elements","components":"popover,tooltip,preview-card,menu,context-menu,select,combobox,multi-select,menubar,split-button"}]'
+      revision: ${{ github.sha }}
+      browser_profile: cross
+      browsers: chromium firefox webkit
+      artifact_suffix: retire-overlays-cross
+      retention_days: 14
