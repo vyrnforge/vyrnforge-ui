@@ -1,101 +1,97 @@
-import { mkdir, writeFile } from 'node:fs/promises';
-import path from 'node:path';
-import { build } from 'esbuild';
+const single = [
+  { key: 'one', value: 'one', label: 'One' },
+  { key: 'disabled', value: 'disabled', label: 'Disabled', disabled: true },
+  { key: 'three', value: 'three', label: 'Three' },
+  { key: 'banana', value: 'banana', label: 'Banana' },
+];
+const multiple = [single[0], single[2]];
+const before = '<button id="before" type="button">Before</button>';
+const after = '<button id="after" type="button">After</button>';
+function options(prefix, rows, enhanced = false) {
+  return rows.map(row => `<div id="${prefix}-${row.key}" ${enhanced ? '' : 'role="option" tabindex="' + (row.disabled ? -1 : 0) + '"'} data-vf-listbox-option value="${row.value}" data-vf-text-value="${row.label}" aria-selected="${row.key === 'one'}"${row.disabled ? ' aria-disabled="true"' : ''}>${row.label}</div>`).join('');
+}
+function ready() { document.body.dataset.listboxReady = 'true'; }
+function rejected(value) {
+  document.body.dataset.listboxRequest = Array.isArray(value) ? value.join(',') : value;
+  document.body.dataset.listboxCount = String(Number(document.body.dataset.listboxCount ?? 0) + 1);
+}
+const web = `${before}<div id="web-list" role="listbox" aria-label="Choose an item" data-vf-listbox-root>${options('web', single)}</div><div id="web-multi" role="listbox" aria-label="Choose several" aria-multiselectable="true" data-vf-listbox-root>${options('web-multi', multiple)}</div>${after}`;
 
 export const browserFixture = {
   component: 'listbox',
-  prepare: async ({ port }) => {
-    const root = process.cwd();
-    const outDir = path.join(root, 'dist/browser-fixtures/components/listbox');
-    await mkdir(outDir, { recursive: true });
-
-    await build({
-      stdin: {
-        contents: '@import "@vyrnforge/web/styles/tokens.css";@import "@vyrnforge/web/styles/listbox.css";',
-        resolveDir: root,
-        sourcefile: 'listbox-public.css',
-        loader: 'css',
-      },
-      bundle: true,
-      outfile: path.join(outDir, 'listbox.css'),
-    });
-    const page = (body, script = '') =>
-      `<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width"><link rel="stylesheet" href="./listbox.css"><title>Listbox fixture</title></head><body><main><h1>Listbox browser fixture</h1><button id="before">Before</button>${body}<button id="after">After</button></main>${script}</body></html>`;
-
-    const webListbox = `<div id="web-list" role="listbox" aria-label="Choose an item" data-vf-listbox-root><div id="web-one" role="option" tabindex="0" aria-selected="true" data-vf-listbox-option>One</div><div id="web-disabled" role="option" tabindex="-1" aria-selected="false" aria-disabled="true" data-vf-listbox-option>Disabled</div><div id="web-three" role="option" tabindex="0" aria-selected="false" data-vf-listbox-option>Three</div><div id="web-banana" role="option" tabindex="0" aria-selected="false" data-vf-listbox-option>Banana</div></div><div id="web-multi" role="listbox" aria-label="Choose several" aria-multiselectable="true" data-vf-listbox-root><div id="web-multi-one" role="option" tabindex="0" aria-selected="true" data-vf-listbox-option>One</div><div id="web-multi-three" role="option" tabindex="0" aria-selected="false" data-vf-listbox-option>Three</div></div>`;
-    if (port === 'web') await writeFile(path.join(outDir, 'web.html'), page(webListbox));
-
-    if (port === 'react') {
-      await writeFile(
-        path.join(outDir, 'react.html'),
-        page('<div id="app"></div>', '<script type="module" src="./react.js"></script>'),
-      );
-      await build({
-        stdin: {
-          resolveDir: root,
-          sourcefile: 'react-listbox-client.ts',
-          contents: `import{createElement,Fragment}from'react';import{createRoot}from'react-dom/client';import{ListboxRoot,ListboxOption}from'@vyrnforge/react/listbox';const option=(id,value,label,disabled=false)=>createElement(ListboxOption,{id,value,disabled},label);createRoot(document.querySelector('#app')).render(createElement(Fragment,null,createElement(ListboxRoot,{id:'react-list','aria-label':'Choose an item',defaultValue:'one'},option('react-one','one','One'),option('react-disabled','disabled','Disabled',true),option('react-three','three','Three'),option('react-banana','banana','Banana')),createElement(ListboxRoot,{id:'react-multi','aria-label':'Choose several',selectionMode:'multiple',defaultValue:['one']},option('react-multi-one','one','One'),option('react-multi-three','three','Three'))));`,
-        },
-        bundle: true,
-        format: 'esm',
-        platform: 'browser',
-        outfile: path.join(outDir, 'react.js'),
-      });
-    }
-
-    if (port === 'vue') {
-      await writeFile(
-        path.join(outDir, 'vue.html'),
-        page('<div id="app"></div>', '<script type="module" src="./vue.js"></script>'),
-      );
-      await build({
-        stdin: {
-          resolveDir: root,
-          sourcefile: 'vue-listbox-client.ts',
-          contents: `import{createApp,h}from'vue';import{ListboxRoot,ListboxOption}from'@vyrnforge/vue/listbox';const option=(id,value,label,disabled=false)=>h(ListboxOption,{id,value,disabled},()=>label);createApp({render:()=>h('div',[h(ListboxRoot,{id:'vue-list','aria-label':'Choose an item',defaultValue:'one'},()=>[option('vue-one','one','One'),option('vue-disabled','disabled','Disabled',true),option('vue-three','three','Three'),option('vue-banana','banana','Banana')]),h(ListboxRoot,{id:'vue-multi','aria-label':'Choose several',selectionMode:'multiple',defaultValue:['one']},()=>[option('vue-multi-one','one','One'),option('vue-multi-three','three','Three')])])}).mount('#app');`,
-        },
-        bundle: true,
-        format: 'esm',
-        platform: 'browser',
-        outfile: path.join(outDir, 'vue.js'),
-      });
-    }
-
-    if (port === 'angular') {
-      await writeFile(
-        path.join(outDir, 'angular.html'),
-        page('<vf-listbox-test></vf-listbox-test>', '<script type="module" src="./angular.js"></script>'),
-      );
-      await build({
-        stdin: {
-          resolveDir: root,
-          sourcefile: 'angular-listbox-client.ts',
-          contents: `import'@angular/compiler';import{Component,provideZonelessChangeDetection}from'@angular/core';import{bootstrapApplication}from'@angular/platform-browser';import{VfListboxRootDirective,VfListboxOptionDirective}from'@vyrnforge/angular/listbox';class App{}Component({selector:'vf-listbox-test',standalone:true,imports:[VfListboxRootDirective,VfListboxOptionDirective],template:'<div vfListboxRoot id="angular-list" aria-label="Choose an item" defaultValue="one"><div vfListboxOption="one" id="angular-one">One</div><div vfListboxOption="disabled" id="angular-disabled" [disabled]="true">Disabled</div><div vfListboxOption="three" id="angular-three">Three</div><div vfListboxOption="banana" id="angular-banana">Banana</div></div><div vfListboxRoot id="angular-multi" aria-label="Choose several" selectionMode="multiple" defaultValue="one"><div vfListboxOption="one" id="angular-multi-one">One</div><div vfListboxOption="three" id="angular-multi-three">Three</div></div>'})(App);bootstrapApplication(App,{providers:[provideZonelessChangeDetection()]});`,
-        },
-        bundle: true,
-        format: 'esm',
-        platform: 'browser',
-        outfile: path.join(outDir, 'angular.js'),
-      });
-    }
-
-    if (port === 'elements') {
-      const markup = `<vf-listbox id="elements-list" aria-label="Choose an item"><div id="elements-one" data-vf-listbox-option value="one" aria-selected="true">One</div><div id="elements-disabled" data-vf-listbox-option value="disabled" aria-disabled="true">Disabled</div><div id="elements-three" data-vf-listbox-option value="three">Three</div><div id="elements-banana" data-vf-listbox-option value="banana">Banana</div></vf-listbox><vf-listbox id="elements-multi" selection-mode="multiple" aria-label="Choose several"><div id="elements-multi-one" data-vf-listbox-option value="one" aria-selected="true">One</div><div id="elements-multi-three" data-vf-listbox-option value="three">Three</div></vf-listbox>`;
-      await writeFile(
-        path.join(outDir, 'elements.html'),
-        page(markup, '<script type="module" src="./elements.js"></script>'),
-      );
-      await build({
-        stdin: {
-          resolveDir: root,
-          sourcefile: 'elements-listbox-client.ts',
-          contents: `import{defineListboxElement}from'@vyrnforge/elements/listbox';defineListboxElement();`,
-        },
-        bundle: true,
-        format: 'esm',
-        platform: 'browser',
-        outfile: path.join(outDir, 'elements.js'),
-      });
-    }
+  title: 'Listbox browser fixture',
+  heading: 'Listbox browser fixture',
+  ports: {
+    web: { body: web },
+    react: { story: 'createReactStory' },
+    vue: { story: 'createVueStory' },
+    angular: { story: 'createAngularStory', selector: 'vf-listbox-test' },
+    elements: { story: 'createElementsStory' },
   },
 };
+
+export async function createReactStory() {
+  const { createElement: h, Fragment, useEffect } = await import('react');
+  const { ListboxRoot, ListboxOption } = await import('@vyrnforge/react/listbox');
+  function App() {
+    useEffect(ready, []);
+    const rows = (prefix, options) => options.map(row => h(ListboxOption, { key: row.key, id: `${prefix}-${row.key}`, value: row.value, textValue: row.label, disabled: row.disabled }, row.label));
+    return h(Fragment, null,
+      h('button', { id: 'before', type: 'button' }, 'Before'),
+      h(ListboxRoot, { id: 'react-list', 'aria-label': 'Choose an item', defaultValue: 'one' }, ...rows('react', single)),
+      h(ListboxRoot, { id: 'react-multi', 'aria-label': 'Choose several', selectionMode: 'multiple', defaultValue: ['one'] }, ...rows('react-multi', multiple)),
+      h(ListboxRoot, { id: 'controlled', 'aria-label': 'Controlled items', value: 'one', onValueChange: rejected }, ...rows('controlled', multiple)),
+      h(ListboxRoot, { id: 'empty', 'aria-label': 'Empty items' }),
+      h('button', { id: 'after', type: 'button' }, 'After'),
+    );
+  }
+  return h(App);
+}
+
+export async function createVueStory() {
+  const { createSSRApp, h, onMounted } = await import('vue');
+  const { ListboxRoot, ListboxOption } = await import('@vyrnforge/vue/listbox');
+  return createSSRApp({
+    setup() {
+      onMounted(ready);
+      const rows = (prefix, options) => options.map(row => h(ListboxOption, { key: row.key, id: `${prefix}-${row.key}`, value: row.value, textValue: row.label, disabled: row.disabled }, () => row.label));
+      return () => h('div', [
+        h('button', { id: 'before', type: 'button' }, 'Before'),
+        h(ListboxRoot, { id: 'vue-list', 'aria-label': 'Choose an item', defaultValue: 'one' }, () => rows('vue', single)),
+        h(ListboxRoot, { id: 'vue-multi', 'aria-label': 'Choose several', selectionMode: 'multiple', defaultValue: ['one'] }, () => rows('vue-multi', multiple)),
+        h(ListboxRoot, { id: 'controlled', 'aria-label': 'Controlled items', value: 'one', 'onUpdate:value': rejected }, () => rows('controlled', multiple)),
+        h(ListboxRoot, { id: 'empty', 'aria-label': 'Empty items' }),
+        h('button', { id: 'after', type: 'button' }, 'After'),
+      ]);
+    },
+  });
+}
+
+export async function createAngularStory() {
+  await import('@angular/compiler');
+  const { Component, afterNextRender } = await import('@angular/core');
+  const { VfListboxRootDirective, VfListboxOptionDirective } = await import('@vyrnforge/angular/listbox');
+  class ListboxTestApp {
+    constructor() { afterNextRender(ready); }
+    rejected = rejected;
+  }
+  const rows = (prefix, options) => options.map(row => `<div vfListboxOption="${row.value}" id="${prefix}-${row.key}" textValue="${row.label}" [disabled]="${!!row.disabled}">${row.label}</div>`).join('');
+  Component({
+    selector: 'vf-listbox-test',
+    standalone: true,
+    imports: [VfListboxRootDirective, VfListboxOptionDirective],
+    template: `<main><h1>Listbox browser fixture</h1>${before}<div vfListboxRoot id="angular-list" aria-label="Choose an item" defaultValue="one">${rows('angular', single)}</div><div vfListboxRoot id="angular-multi" aria-label="Choose several" selectionMode="multiple" defaultValue="one">${rows('angular-multi', multiple)}</div><div vfListboxRoot id="controlled" aria-label="Controlled items" value="one" (valueChange)="rejected($event)">${rows('controlled', multiple)}</div><div vfListboxRoot id="empty" aria-label="Empty items"></div>${after}</main>`,
+  })(ListboxTestApp);
+  return ListboxTestApp;
+}
+
+export async function createElementsStory({ client }) {
+  return {
+    body: `${before}<vf-listbox id="elements-list" aria-label="Choose an item">${options('elements', single, true)}</vf-listbox><vf-listbox id="elements-multi" aria-label="Choose several" selection-mode="multiple">${options('elements-multi', multiple, true)}</vf-listbox><vf-listbox id="empty" aria-label="Empty items"></vf-listbox>${after}`,
+    activate: client ? async () => {
+      const { defineListboxElement } = await import('@vyrnforge/elements/listbox');
+      defineListboxElement();
+      ready();
+    } : undefined,
+  };
+}
