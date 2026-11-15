@@ -44,7 +44,11 @@ export async function createReactStory() {
           MenubarMenu,
           { key: id },
           h(MenubarTrigger, { id, disabled }, label),
-          h(MenubarContent, { 'aria-label': label }, h(MenubarItem, null, 'Command')),
+          h(
+            MenubarContent,
+            { id: id + '-menu', 'aria-label': label },
+            h(MenubarItem, { id: id + '-command' }, 'Command'),
+          ),
         ),
       ),
     ),
@@ -64,7 +68,9 @@ export async function createVueStory() {
           entries.map(({ id, label, disabled }) =>
             h(MenubarMenu, { key: id }, () => [
               h(MenubarTrigger, { id, disabled }, () => label),
-              h(MenubarContent, { 'aria-label': label }, () => h(MenubarItem, {}, () => 'Command')),
+              h(MenubarContent, { id: id + '-menu', 'aria-label': label }, () =>
+                h(MenubarItem, { id: id + '-command' }, () => 'Command'),
+              ),
             ]),
           ),
         ),
@@ -87,7 +93,7 @@ export async function createAngularStory() {
   const template = `<main><h1>Menubar browser fixture</h1>${before}<div vfMenubarRoot id="bar" aria-label="${name}">${entries
     .map(
       ({ id, label, disabled }) =>
-        `<div vfMenuRoot role="none"><button vfMenubarTrigger vfMenuTrigger id="${id}"${disabled ? ' disabled' : ''}>${label}</button><div vfMenuContent aria-label="${label}"><button vfMenuItem>Command</button></div></div>`,
+        `<div vfMenuRoot role="none"><button vfMenubarTrigger vfMenuTrigger id="${id}"${disabled ? ' disabled' : ''}>${label}</button><div vfMenuContent id="${id}-menu" aria-label="${label}"><button vfMenuItem id="${id}-command">Command</button></div></div>`,
     )
     .join('')}</div>${after}</main>`;
   class MenubarTestApp {}
@@ -111,7 +117,7 @@ export async function createElementsStory({ client }) {
   const body = `${before}<vf-menubar id="bar" aria-label="${name}">${entries
     .map(
       (entry) =>
-        `<vf-menu role="none">${nativeTrigger(entry).replace('data-vf-menubar-trigger', 'data-vf-menubar-trigger data-vf-menu-trigger')}<div data-vf-menu-content aria-label="${entry.label}" hidden><button data-vf-menu-item type="button">Command</button></div></vf-menu>`,
+        `<vf-menu role="none">${nativeTrigger(entry).replace('data-vf-menubar-trigger', 'data-vf-menubar-trigger data-vf-menu-trigger')}<div data-vf-menu-content id="${entry.id}-menu" aria-label="${entry.label}" hidden><button data-vf-menu-item id="${entry.id}-command" type="button">Command</button></div></vf-menu>`,
     )
     .join('')}</vf-menubar>${after}`;
   return {
