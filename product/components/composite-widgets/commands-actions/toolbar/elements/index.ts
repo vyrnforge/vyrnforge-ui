@@ -8,8 +8,12 @@ import {
 const HTMLElementBase: typeof HTMLElement = globalThis.HTMLElement ?? (class {} as typeof HTMLElement);
 export type ToolbarOrientation = 'horizontal' | 'vertical';
 
+const toolbarSelector = '[data-vf-toolbar-root],vf-toolbar';
+
 function toolbarItems(root: HTMLElement): HTMLElement[] {
-  return Array.from(root.querySelectorAll<HTMLElement>('[data-vf-toolbar-item]'));
+  return Array.from(root.querySelectorAll<HTMLElement>('[data-vf-toolbar-item]')).filter(
+    (item) => item.closest(toolbarSelector) === root,
+  );
 }
 function disabled(item: HTMLElement): boolean {
   return item.matches(':disabled') || item.getAttribute('aria-disabled') === 'true';
@@ -27,8 +31,8 @@ function syncTabStops(root: HTMLElement, preferred?: HTMLElement | null): void {
   });
 }
 function itemFromTarget(root: HTMLElement, target: EventTarget | null): HTMLElement | null {
-  const element = target instanceof HTMLElement ? target.closest<HTMLElement>('[data-vf-toolbar-item]') : null;
-  return element && root.contains(element) ? element : null;
+  const element = target instanceof Element ? target.closest<HTMLElement>('[data-vf-toolbar-item]') : null;
+  return element?.closest(toolbarSelector) === root ? element : null;
 }
 function intentForKey(
   key: string,
@@ -61,14 +65,16 @@ export class VfToolbarElement extends HTMLElementBase {
     this.syncOrientation();
     this.addEventListener('keydown', this.onKeydown);
     this.addEventListener('focusin', this.onFocusin);
-    queueMicrotask(() => syncTabStops(this));
+    queueMicrotask(() => {
+      if (this.isConnected) syncTabStops(this);
+    });
     if (typeof MutationObserver !== 'undefined') {
       this.observer = new MutationObserver(() => syncTabStops(this));
       this.observer.observe(this, {
         childList: true,
         subtree: true,
         attributes: true,
-        attributeFilter: ['disabled', 'aria-disabled'],
+        attributeFilter: ['disabled', 'aria-disabled', 'data-vf-toolbar-item', 'data-vf-toolbar-root'],
       });
     }
   }
@@ -91,6 +97,7 @@ export class VfToolbarElement extends HTMLElementBase {
     if (item && !disabled(item)) syncTabStops(this, item);
   };
   private onKeydown = (event: KeyboardEvent) => {
+    if (event.defaultPrevented) return;
     const orientation = (this.getAttribute('orientation') ?? 'horizontal') as ToolbarOrientation;
     const direction =
       typeof getComputedStyle === 'function' && getComputedStyle(this).direction === 'rtl' ? 'rtl' : 'ltr';
@@ -98,7 +105,8 @@ export class VfToolbarElement extends HTMLElementBase {
     if (!intent) return;
     const items = toolbarItems(this);
     const currentItem = itemFromTarget(this, event.target);
-    const currentIndex = currentItem ? items.indexOf(currentItem) : -1;
+    if (!currentItem) return;
+    const currentIndex = items.indexOf(currentItem);
     const nextIndex = resolveNavigationIndex(
       items.map((item) => ({ eligible: !disabled(item) })),
       currentIndex,
