@@ -1688,10 +1688,16 @@ export const FileInput: ForwardRefExoticComponent<FileInputProps & RefAttributes
 export type FileInputProps = Omit<InputHTMLAttributes<HTMLInputElement>, 'type'>;
 
 // @public (undocumented)
-export const FileUploaderDropzone: ForwardRefExoticComponent<Omit<DetailedHTMLProps<HTMLAttributes<HTMLDivElement>, HTMLDivElement>, "ref"> & RefAttributes<HTMLDivElement>>;
+export const FileUploaderDropzone: ForwardRefExoticComponent<FileUploaderDropzoneProps & RefAttributes<HTMLButtonElement>>;
 
 // @public (undocumented)
-export const FileUploaderInput: ForwardRefExoticComponent<Omit<DetailedHTMLProps<InputHTMLAttributes<HTMLInputElement>, HTMLInputElement>, "ref"> & RefAttributes<HTMLInputElement>>;
+export type FileUploaderDropzoneProps = Omit<ComponentPropsWithoutRef<'button'>, 'type' | 'role'>;
+
+// @public (undocumented)
+export const FileUploaderInput: ForwardRefExoticComponent<FileUploaderInputProps & RefAttributes<HTMLInputElement>>;
+
+// @public (undocumented)
+export type FileUploaderInputProps = Omit<ComponentPropsWithoutRef<'input'>, 'type' | 'value' | 'defaultValue'>;
 
 // @public (undocumented)
 export function FileUploaderList(props: ComponentPropsWithoutRef<'ul'>): DetailedReactHTMLElement<    {

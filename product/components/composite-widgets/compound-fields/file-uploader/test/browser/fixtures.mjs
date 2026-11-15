@@ -51,7 +51,10 @@ export const browserFixture = {
         path.join(dir, 'react.html'),
         '<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width"><title>File uploader import recovery fixture</title><link rel="stylesheet" href="./react.css"></head><body><div id="root"></div><script type="module" src="./react.js"></script></body></html>',
       );
-      await writeFile(path.join(dir, 'acquisition-react.html'), page('<div id="app"></div>', '<script type="module" src="./acquisition-react.js"></script>'));
+      await writeFile(
+        path.join(dir, 'acquisition-react.html'),
+        page('<div id="app"></div>', '<script type="module" src="./acquisition-react.js"></script>'),
+      );
       await build({
         stdin: {
           resolveDir: root,

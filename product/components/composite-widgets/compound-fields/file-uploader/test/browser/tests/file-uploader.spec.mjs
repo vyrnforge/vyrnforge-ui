@@ -183,26 +183,40 @@ test('native file acquisition keeps drop, list, FormData, disabled state and res
   await expect(body).toHaveAttribute('data-files', 'one.txt');
   await expect(body).toHaveAttribute('data-count', '1');
   await expect(page.locator('#list')).toContainText('one.txt');
-  expect(await form.evaluate((element) => Array.from(new FormData(element).getAll('files'), file => file.name))).toEqual(['one.txt']);
-  await input.evaluate((element) => { element.multiple = true; });
+  expect(
+    await form.evaluate((element) => Array.from(new FormData(element).getAll('files'), (file) => file.name)),
+  ).toEqual(['one.txt']);
+  await input.evaluate((element) => {
+    element.multiple = true;
+  });
   await drop(['two.txt', 'three.txt']);
   await expect(body).toHaveAttribute('data-files', 'two.txt,three.txt');
   await expect(body).toHaveAttribute('data-count', '2');
-  expect(await form.evaluate((element) => Array.from(new FormData(element).getAll('files'), file => file.name))).toEqual(['two.txt', 'three.txt']);
-  await action.evaluate((element) => { element.addEventListener('drop', event => event.preventDefault(), { capture: true, once: true }); });
+  expect(
+    await form.evaluate((element) => Array.from(new FormData(element).getAll('files'), (file) => file.name)),
+  ).toEqual(['two.txt', 'three.txt']);
+  await action.evaluate((element) => {
+    element.addEventListener('drop', (event) => event.preventDefault(), { capture: true, once: true });
+  });
   await drop(['canceled.txt']);
   await expect(body).toHaveAttribute('data-count', '2');
-  await input.evaluate((element) => { element.disabled = true; });
+  await input.evaluate((element) => {
+    element.disabled = true;
+  });
   await expect(action).toHaveAttribute('aria-disabled', 'true');
   await drop(['disabled.txt']);
   await expect(body).toHaveAttribute('data-count', '2');
   expect(await form.evaluate((element) => new FormData(element).has('files'))).toBe(false);
-  await input.evaluate((element) => { element.disabled = false; });
+  await input.evaluate((element) => {
+    element.disabled = false;
+  });
   await expect(action).not.toHaveAttribute('aria-disabled', 'true');
   await form.evaluate(async (element) => {
-    element.addEventListener('reset', event => event.preventDefault(), { once: true });
+    element.addEventListener('reset', (event) => event.preventDefault(), { once: true });
     element.reset();
-    await new Promise(resolve => { setTimeout(resolve, 0); });
+    await new Promise((resolve) => {
+      setTimeout(resolve, 0);
+    });
   });
   await expect(body).toHaveAttribute('data-count', '2');
   await expect(page.locator('#list')).toContainText('two.txt');
@@ -210,7 +224,7 @@ test('native file acquisition keeps drop, list, FormData, disabled state and res
   await expect(body).toHaveAttribute('data-files', '');
   await expect(body).toHaveAttribute('data-count', '3');
   await expect(page.locator('#list li')).toHaveCount(0);
-  expect(await input.evaluate(element => element.files.length)).toBe(0);
+  expect(await input.evaluate((element) => element.files.length)).toBe(0);
   await drop(['one.txt']);
   await expect(body).toHaveAttribute('data-count', '4');
   await expect(body).toHaveAttribute('data-files', 'one.txt');
@@ -223,9 +237,12 @@ test('Elements nested native file events stay with their owned uploader', async 
   const root = page.locator('vf-file-uploader');
   await root.evaluate((element) => {
     const nested = document.createElement('vf-file-uploader');
-    nested.innerHTML = '<button type="button" data-vf-file-uploader-dropzone>Nested file</button><input type="file" data-vf-file-uploader-input aria-label="Nested files">';
+    nested.innerHTML =
+      '<button type="button" data-vf-file-uploader-dropzone>Nested file</button><input type="file" data-vf-file-uploader-input aria-label="Nested files">';
     element.append(nested);
-    nested.addEventListener('vf-files-change', event => { nested.dataset.files = event.detail.files.map(file => file.name).join(','); });
+    nested.addEventListener('vf-files-change', (event) => {
+      nested.dataset.files = event.detail.files.map((file) => file.name).join(',');
+    });
   });
   const nested = root.locator('vf-file-uploader');
   await nested.locator('button').evaluate((button) => {
@@ -235,9 +252,15 @@ test('Elements nested native file events stay with their owned uploader', async 
   });
   await expect(nested).toHaveAttribute('data-files', 'nested.txt');
   await expect(page.locator('body')).not.toHaveAttribute('data-count', /.+/);
-  expect(await page.locator('#input').evaluate(element => element.files.length)).toBe(0);
-  await nested.evaluate(element => { const parent = element.parentElement; element.remove(); parent.append(element); });
-  await nested.locator('input').setInputFiles({ name: 'reconnected.txt', mimeType: 'text/plain', buffer: Buffer.from('ok') });
+  expect(await page.locator('#input').evaluate((element) => element.files.length)).toBe(0);
+  await nested.evaluate((element) => {
+    const parent = element.parentElement;
+    element.remove();
+    parent.append(element);
+  });
+  await nested
+    .locator('input')
+    .setInputFiles({ name: 'reconnected.txt', mimeType: 'text/plain', buffer: Buffer.from('ok') });
   await expect(nested).toHaveAttribute('data-files', 'reconnected.txt');
   await expect(page.locator('body')).not.toHaveAttribute('data-count', /.+/);
 });

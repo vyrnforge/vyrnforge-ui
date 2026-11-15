@@ -37,14 +37,17 @@ export class VfFileUploaderInputDirective {
   constructor(readonly root: VfFileUploaderRootDirective) {
     const element = this.el.nativeElement;
     root.input = element;
-    this.destroyRef.onDestroy(() => { if (root.input === element) root.input = null; });
+    this.destroyRef.onDestroy(() => {
+      if (root.input === element) root.input = null;
+    });
     afterNextRender(() => {
       const setDisabled = (disabled: boolean) => root.inputDisabled.set(disabled);
       const sync = () => setDisabled(element.matches(':disabled'));
       const observer = new MutationObserver(sync);
       observer.observe(element, { attributes: true, attributeFilter: ['disabled'] });
       for (let ancestor = element.parentElement; ancestor; ancestor = ancestor.parentElement) {
-        if (ancestor.tagName === 'FIELDSET') observer.observe(ancestor, { attributes: true, attributeFilter: ['disabled'] });
+        if (ancestor.tagName === 'FIELDSET')
+          observer.observe(ancestor, { attributes: true, attributeFilter: ['disabled'] });
       }
       sync();
       const document = element.ownerDocument;
@@ -52,7 +55,8 @@ export class VfFileUploaderInputDirective {
       const onReset = (event: Event) => {
         if (!element.form || element.form !== event.target || !element.files?.length) return;
         setTimeout(() => {
-          if (active && !event.defaultPrevented && element.form === event.target && !element.files?.length) root.add([]);
+          if (active && !event.defaultPrevented && element.form === event.target && !element.files?.length)
+            root.add([]);
         }, 0);
       };
       document.addEventListener('reset', onReset, true);
@@ -84,7 +88,12 @@ export class VfFileUploaderInputDirective {
 export class VfFileUploaderDropzoneDirective {
   constructor(readonly root: VfFileUploaderRootDirective) {}
   private blocked(button: HTMLButtonElement): boolean {
-    return button.matches(':disabled') || button.getAttribute('aria-disabled') === 'true' || !this.root.input || this.root.input.matches(':disabled');
+    return (
+      button.matches(':disabled') ||
+      button.getAttribute('aria-disabled') === 'true' ||
+      !this.root.input ||
+      this.root.input.matches(':disabled')
+    );
   }
   activate(e: MouseEvent) {
     if (!e.defaultPrevented && !this.blocked(e.currentTarget as HTMLButtonElement)) this.root.input?.click();
@@ -98,6 +107,7 @@ export class VfFileUploaderDropzoneDirective {
     if (e.defaultPrevented) return;
     e.preventDefault();
     const input = this.root.input;
-    if (input && e.dataTransfer && !this.blocked(e.currentTarget as HTMLButtonElement)) acceptDrop(input, e.dataTransfer.files);
+    if (input && e.dataTransfer && !this.blocked(e.currentTarget as HTMLButtonElement))
+      acceptDrop(input, e.dataTransfer.files);
   }
 }

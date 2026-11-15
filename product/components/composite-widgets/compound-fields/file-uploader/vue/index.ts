@@ -59,12 +59,15 @@ export const FileUploaderInput = defineComponent({
     onMounted(() => {
       const element = f.input.value;
       if (!element) return;
-      const setDisabled = (disabled: boolean) => { f.inputDisabled.value = disabled; };
+      const setDisabled = (disabled: boolean) => {
+        f.inputDisabled.value = disabled;
+      };
       const sync = () => setDisabled(element.matches(':disabled'));
       const observer = new MutationObserver(sync);
       observer.observe(element, { attributes: true, attributeFilter: ['disabled'] });
       for (let ancestor = element.parentElement; ancestor; ancestor = ancestor.parentElement) {
-        if (ancestor.tagName === 'FIELDSET') observer.observe(ancestor, { attributes: true, attributeFilter: ['disabled'] });
+        if (ancestor.tagName === 'FIELDSET')
+          observer.observe(ancestor, { attributes: true, attributeFilter: ['disabled'] });
       }
       sync();
       const document = element.ownerDocument;
@@ -107,7 +110,11 @@ export const FileUploaderDropzone = defineComponent({
   inheritAttrs: false,
   setup(_, { attrs, slots }) {
     const f = useF();
-    const blocked = (button: HTMLButtonElement) => button.matches(':disabled') || button.getAttribute('aria-disabled') === 'true' || !f.input.value || f.input.value.matches(':disabled');
+    const blocked = (button: HTMLButtonElement) =>
+      button.matches(':disabled') ||
+      button.getAttribute('aria-disabled') === 'true' ||
+      !f.input.value ||
+      f.input.value.matches(':disabled');
     return () =>
       h(
         'button',
@@ -132,7 +139,8 @@ export const FileUploaderDropzone = defineComponent({
             if (e.defaultPrevented) return;
             e.preventDefault();
             const input = f.input.value;
-            if (input && e.dataTransfer && !blocked(e.currentTarget as HTMLButtonElement)) acceptDrop(input, e.dataTransfer.files);
+            if (input && e.dataTransfer && !blocked(e.currentTarget as HTMLButtonElement))
+              acceptDrop(input, e.dataTransfer.files);
           },
         },
         slots.default?.(),

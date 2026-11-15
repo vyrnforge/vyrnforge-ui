@@ -31,7 +31,8 @@ export class VfFileUploaderElement extends H {
     this.observer = new MutationObserver(() => this.sync());
     this.observer.observe(this, { childList: true, subtree: true, attributes: true, attributeFilter: ['disabled'] });
     for (let ancestor = this.parentElement; ancestor; ancestor = ancestor.parentElement) {
-      if (ancestor.tagName === 'FIELDSET') this.observer.observe(ancestor, { attributes: true, attributeFilter: ['disabled'] });
+      if (ancestor.tagName === 'FIELDSET')
+        this.observer.observe(ancestor, { attributes: true, attributeFilter: ['disabled'] });
     }
     this.sync();
   }
@@ -75,7 +76,12 @@ export class VfFileUploaderElement extends H {
   }
   private blocked(button: HTMLButtonElement): boolean {
     const input = this.input();
-    return button.matches(':disabled') || button.getAttribute('aria-disabled') === 'true' || !input || input.matches(':disabled');
+    return (
+      button.matches(':disabled') ||
+      button.getAttribute('aria-disabled') === 'true' ||
+      !input ||
+      input.matches(':disabled')
+    );
   }
   private onClick = (e: Event) => {
     const button = this.action(e);
@@ -86,7 +92,8 @@ export class VfFileUploaderElement extends H {
   };
   private onChange = (e: Event) => {
     const input = e.target;
-    if (!(input instanceof HTMLInputElement) || input !== this.input() || input.matches(':disabled') || !input.files) return;
+    if (!(input instanceof HTMLInputElement) || input !== this.input() || input.matches(':disabled') || !input.files)
+      return;
     this.emitFiles(input.files);
   };
   private onDragOver = (e: DragEvent) => {
@@ -106,7 +113,14 @@ export class VfFileUploaderElement extends H {
     const input = this.input();
     if (!input?.form || input.form !== event.target || !input.files?.length) return;
     setTimeout(() => {
-      if (this.active && !event.defaultPrevented && input.form === event.target && this.input() === input && !input.files?.length) this.emitFiles([]);
+      if (
+        this.active &&
+        !event.defaultPrevented &&
+        input.form === event.target &&
+        this.input() === input &&
+        !input.files?.length
+      )
+        this.emitFiles([]);
     }, 0);
   };
 }

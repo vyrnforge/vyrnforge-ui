@@ -66,7 +66,9 @@ export const FileUploaderInput = forwardRef<HTMLInputElement, FileUploaderInputP
     const f = useF();
     const add = useRef(f.add);
     const { inputRef, setInputDisabled: setDisabled } = f;
-    useLayoutEffect(() => { add.current = f.add; });
+    useLayoutEffect(() => {
+      add.current = f.add;
+    });
     useEffect(() => {
       const element = inputRef.current;
       if (!element) return;
@@ -74,7 +76,8 @@ export const FileUploaderInput = forwardRef<HTMLInputElement, FileUploaderInputP
       const observer = new MutationObserver(sync);
       observer.observe(element, { attributes: true, attributeFilter: ['disabled'] });
       for (let ancestor = element.parentElement; ancestor; ancestor = ancestor.parentElement) {
-        if (ancestor.tagName === 'FIELDSET') observer.observe(ancestor, { attributes: true, attributeFilter: ['disabled'] });
+        if (ancestor.tagName === 'FIELDSET')
+          observer.observe(ancestor, { attributes: true, attributeFilter: ['disabled'] });
       }
       sync();
       const document = element.ownerDocument;
@@ -82,7 +85,8 @@ export const FileUploaderInput = forwardRef<HTMLInputElement, FileUploaderInputP
       const onReset = (event: Event) => {
         if (!element.form || element.form !== event.target || !element.files?.length) return;
         setTimeout(() => {
-          if (active && !event.defaultPrevented && element.form === event.target && !element.files?.length) add.current([]);
+          if (active && !event.defaultPrevented && element.form === event.target && !element.files?.length)
+            add.current([]);
         }, 0);
       };
       document.addEventListener('reset', onReset, true);
@@ -113,7 +117,11 @@ export type FileUploaderDropzoneProps = Omit<ComponentPropsWithoutRef<'button'>,
 export const FileUploaderDropzone = forwardRef<HTMLButtonElement, FileUploaderDropzoneProps>(
   function FileUploaderDropzone(props, ref) {
     const f = useF();
-    const blocked = (button: HTMLButtonElement) => button.matches(':disabled') || button.getAttribute('aria-disabled') === 'true' || !f.inputRef.current || f.inputRef.current.matches(':disabled');
+    const blocked = (button: HTMLButtonElement) =>
+      button.matches(':disabled') ||
+      button.getAttribute('aria-disabled') === 'true' ||
+      !f.inputRef.current ||
+      f.inputRef.current.matches(':disabled');
     return createElement('button', {
       ...props,
       ref,

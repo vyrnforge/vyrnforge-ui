@@ -1418,13 +1418,15 @@ export class VfFileInputDirective {
 export class VfFileUploaderDropzoneDirective {
     constructor(root: VfFileUploaderRootDirective);
     // (undocumented)
-    drag(e: Event): void;
+    activate(e: MouseEvent): void;
+    // (undocumented)
+    drag(e: DragEvent): void;
     // (undocumented)
     drop(e: DragEvent): void;
     // (undocumented)
     readonly root: VfFileUploaderRootDirective;
     // (undocumented)
-    static ɵdir: i0.ɵɵDirectiveDeclaration<VfFileUploaderDropzoneDirective, "[vfFileUploaderDropzone]", never, {}, {}, never, never, true, never>;
+    static ɵdir: i0.ɵɵDirectiveDeclaration<VfFileUploaderDropzoneDirective, "button[vfFileUploaderDropzone]", never, {}, {}, never, never, true, never>;
     // (undocumented)
     static ɵfac: i0.ɵɵFactoryDeclaration<VfFileUploaderDropzoneDirective, never>;
 }
@@ -1452,6 +1454,8 @@ export class VfFileUploaderRootDirective {
     readonly filesChange: OutputEmitterRef<File[]>;
     // (undocumented)
     input: HTMLInputElement | null;
+    // (undocumented)
+    readonly inputDisabled: WritableSignal<boolean>;
     // (undocumented)
     static ɵdir: i0.ɵɵDirectiveDeclaration<VfFileUploaderRootDirective, "[vfFileUploaderRoot]", never, {}, {
         "filesChange": "filesChange";
