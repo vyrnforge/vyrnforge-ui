@@ -18,7 +18,7 @@ function optionFromTarget(root: HTMLElement, target: EventTarget | null): HTMLEl
 }
 function optionDisabled(option: HTMLElement): boolean {
   return (
-    (option instanceof HTMLButtonElement && option.disabled) ||
+    option.matches(':disabled') ||
     option.hasAttribute('disabled') ||
     option.getAttribute('aria-disabled') === 'true'
   );

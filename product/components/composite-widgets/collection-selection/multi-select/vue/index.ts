@@ -28,7 +28,7 @@ function optionFromTarget(root: HTMLElement, target: EventTarget | null): HTMLBu
   return option && option.closest('[data-vf-multi-select-content]') === root ? option : null;
 }
 function optionDisabled(option: HTMLButtonElement): boolean {
-  return option.disabled || option.getAttribute('aria-disabled') === 'true';
+  return option.matches(':disabled,[aria-disabled="true"]');
 }
 function invoke(handler: unknown, event: Event): void {
   if (typeof handler === 'function') handler(event);
@@ -128,13 +128,13 @@ export const MultiSelectTrigger = defineComponent({
           'data-vf-multi-select-trigger': '',
           onClick: (event: MouseEvent) => {
             invoke(attrs.onClick, event);
-            if (event.defaultPrevented) return;
+            if (event.defaultPrevented || optionDisabled(event.currentTarget as HTMLButtonElement)) return;
             if (multi.open.value) multi.setOpen(false);
             else openAndFocus('first');
           },
           onKeydown: (event: KeyboardEvent) => {
             invoke(attrs.onKeydown, event);
-            if (event.defaultPrevented) return;
+            if (event.defaultPrevented || optionDisabled(event.currentTarget as HTMLButtonElement)) return;
             if (event.key === 'ArrowUp') {
               event.preventDefault();
               openAndFocus('last');
