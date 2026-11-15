@@ -163,7 +163,7 @@ export class VfMultiSelectRootDirective {
   selector: 'button[vfMultiSelectTrigger]',
   standalone: true,
   host: {
-    type: 'button',
+    '[attr.type]': "'button'",
     '[id]': 'root.triggerId()',
     '[disabled]': 'disabled() || root.disabled()',
     '[attr.aria-invalid]': 'root.error() ? true : invalid()',
@@ -354,7 +354,7 @@ export class VfMultiSelectContentDirective {
   selector: 'button[vfMultiSelectOption]',
   standalone: true,
   host: {
-    type: 'button',
+    '[attr.type]': "'button'",
     role: 'option',
     tabindex: '-1',
     'data-vf-multi-select-option': '',

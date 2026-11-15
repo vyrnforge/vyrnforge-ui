@@ -4,6 +4,7 @@ const formOptions = [{ value: '', label: 'Choose an option' }].concat([
   { value: 'one', label: 'One' },
   { value: 'three', label: 'Three' },
 ]);
+const formButton = { type: 'submit', form: 'selection-form' };
 const formMarkup =
   '<form id="selection-form"><button type="submit">Submit choice</button></form><form id="controlled-form"></form>';
 const before = '<button id="before" type="button">Before</button>';
@@ -55,7 +56,13 @@ export async function createReactStory() {
     const option = (prefix, index) =>
       h(
         SelectOption,
-        { key: values[index], id: `${prefix}-${values[index]}`, value: values[index], disabled: index === 1 },
+        {
+          key: values[index],
+          id: `${prefix}-${values[index]}`,
+          value: values[index],
+          disabled: index === 1,
+          ...(prefix === 'form' ? formButton : {}),
+        },
         labels[index],
       );
     return h(
@@ -102,7 +109,7 @@ export async function createReactStory() {
         h(
           SelectRoot,
           { id: 'form-choice', defaultValue: '', disabled: formDisabled },
-          h(SelectTrigger, { 'aria-describedby': 'form-hint' }, 'Form choice'),
+          h(SelectTrigger, { ...formButton, 'aria-describedby': 'form-hint' }, 'Form choice'),
           h(SelectContent, { 'aria-label': 'Form options' }, option('form', 0), option('form', 2)),
           h(SelectFormControl, { name: 'choice', form: 'selection-form', required: true, options: formOptions }),
         ),
@@ -130,7 +137,13 @@ export async function createVueStory() {
       const option = (prefix, index) =>
         h(
           SelectOption,
-          { key: values[index], id: `${prefix}-${values[index]}`, value: values[index], disabled: index === 1 },
+          {
+            key: values[index],
+            id: `${prefix}-${values[index]}`,
+            value: values[index],
+            disabled: index === 1,
+            ...(prefix === 'form' ? formButton : {}),
+          },
           () => labels[index],
         );
       return () =>
@@ -173,7 +186,7 @@ export async function createVueStory() {
           h('form', { id: 'controlled-form' }),
           h('div', { id: 'form-example' }, [
             h(SelectRoot, { id: 'form-choice', defaultValue: '', disabled: formDisabled.value }, () => [
-              h(SelectTrigger, { 'aria-describedby': 'form-hint' }, () => 'Form choice'),
+              h(SelectTrigger, { ...formButton, 'aria-describedby': 'form-hint' }, () => 'Form choice'),
               h(SelectContent, { 'aria-label': 'Form options' }, () => [option('form', 0), option('form', 2)]),
               h(SelectFormControl, { name: 'choice', form: 'selection-form', required: true, options: formOptions }),
             ]),
@@ -218,7 +231,7 @@ export async function createAngularStory() {
     indexes
       .map(
         (index) =>
-          `<button vfSelectOption="${values[index]}" id="${prefix}-${values[index]}" [disabled]="${index === 1}">${labels[index]}</button>`,
+          `<button vfSelectOption="${values[index]}" id="${prefix}-${values[index]}"${prefix === 'form' ? ' type="submit" form="selection-form"' : ''} [disabled]="${index === 1}">${labels[index]}</button>`,
       )
       .join('');
   Component({
@@ -231,14 +244,14 @@ export async function createAngularStory() {
       VfSelectOptionDirective,
       VfSelectFormControlComponent,
     ],
-    template: `<main><h1>Select browser fixture</h1>${before}${label}<div vfSelectRoot defaultValue="one" (valueChange)="valueChanged($event)"><button vfSelectTrigger>Choose</button><div vfSelectContent aria-labelledby="select-label">${angularOptions('angular', [0, 1, 2, 3])}</div></div><div vfSelectRoot id="controlled" value="one" [open]="controlled()" (valueChange)="request($event)" (openChange)="openRequest($event)"><button vfSelectTrigger tabindex="-1">Controlled selection</button><div vfSelectContent aria-label="Controlled options">${angularOptions('controlled', [0, 2])}</div><vf-select-form-control name="choice" form="controlled-form" [options]="formOptions"></vf-select-form-control></div>${after}${formMarkup}<div id="form-example"><div vfSelectRoot id="form-choice" [disabled]="formDisabled" defaultValue=""><button vfSelectTrigger aria-describedby="form-hint">Form choice</button><div vfSelectContent aria-label="Form options">${angularOptions('form', [0, 2])}</div><vf-select-form-control name="choice" form="selection-form" required [options]="formOptions"></vf-select-form-control></div><p id="form-hint">Choose at least one option.</p><button id="form-disable" type="button" (click)="formDisabled = !formDisabled">Toggle disabled</button></div></main>`,
+    template: `<main><h1>Select browser fixture</h1>${before}${label}<div vfSelectRoot defaultValue="one" (valueChange)="valueChanged($event)"><button vfSelectTrigger>Choose</button><div vfSelectContent aria-labelledby="select-label">${angularOptions('angular', [0, 1, 2, 3])}</div></div><div vfSelectRoot id="controlled" value="one" [open]="controlled()" (valueChange)="request($event)" (openChange)="openRequest($event)"><button vfSelectTrigger tabindex="-1">Controlled selection</button><div vfSelectContent aria-label="Controlled options">${angularOptions('controlled', [0, 2])}</div><vf-select-form-control name="choice" form="controlled-form" [options]="formOptions"></vf-select-form-control></div>${after}${formMarkup}<div id="form-example"><div vfSelectRoot id="form-choice" [disabled]="formDisabled" defaultValue=""><button vfSelectTrigger type="submit" form="selection-form" aria-describedby="form-hint">Form choice</button><div vfSelectContent aria-label="Form options">${angularOptions('form', [0, 2])}</div><vf-select-form-control name="choice" form="selection-form" required [options]="formOptions"></vf-select-form-control></div><p id="form-hint">Choose at least one option.</p><button id="form-disable" type="button" (click)="formDisabled = !formDisabled">Toggle disabled</button></div></main>`,
   })(SelectTestApp);
   return SelectTestApp;
 }
 
 export async function createElementsStory({ client }) {
   return {
-    body: `${before}${label}<vf-select id="elements-select" value="one"><button id="trigger" type="button" aria-haspopup="listbox" aria-expanded="false" aria-controls="obsolete-list" data-vf-select-trigger>Choose</button><div id="list" role="listbox" tabindex="-1" aria-labelledby="select-label" data-vf-select-content hidden>${options('elements')}</div></vf-select>${after}${formMarkup}<div id="form-example"><vf-select id="form-choice"><button id="form-choice-trigger" type="button" aria-describedby="form-hint" data-vf-select-trigger>Form choice</button><div id="form-choice-listbox" role="listbox" aria-label="Form options" data-vf-select-content hidden><button id="form-one" type="button" role="option" data-vf-select-option data-vf-value="one" aria-selected="false">One</button><button id="form-three" type="button" role="option" data-vf-select-option data-vf-value="three" aria-selected="false">Three</button></div><select hidden name="choice" form="selection-form" required data-vf-select-form-control><option value="">Choose an option</option><option value="one">One</option><option value="three">Three</option></select><span data-vf-select-form-error></span></vf-select><p id="form-hint">Choose at least one option.</p><button id="form-disable" type="button">Toggle disabled</button></div>`,
+    body: `${before}${label}<vf-select id="elements-select" value="one"><button id="trigger" type="button" aria-haspopup="listbox" aria-expanded="false" aria-controls="obsolete-list" data-vf-select-trigger>Choose</button><div id="list" role="listbox" tabindex="-1" aria-labelledby="select-label" data-vf-select-content hidden>${options('elements')}</div></vf-select>${after}${formMarkup}<div id="form-example"><vf-select id="form-choice"><button id="form-choice-trigger" type="submit" form="selection-form" aria-describedby="form-hint" data-vf-select-trigger>Form choice</button><div id="form-choice-listbox" role="listbox" aria-label="Form options" data-vf-select-content hidden><button id="form-one" type="submit" form="selection-form" role="option" data-vf-select-option data-vf-value="one" aria-selected="false">One</button><button id="form-three" type="submit" form="selection-form" role="option" data-vf-select-option data-vf-value="three" aria-selected="false">Three</button></div><select hidden name="choice" form="selection-form" required data-vf-select-form-control><option value="">Choose an option</option><option value="one">One</option><option value="three">Three</option></select><span data-vf-select-form-error></span></vf-select><p id="form-hint">Choose at least one option.</p><button id="form-disable" type="button">Toggle disabled</button></div>`,
     activate: client
       ? async () => {
           const { defineSelectElement } = await import('@vyrnforge/elements/select');

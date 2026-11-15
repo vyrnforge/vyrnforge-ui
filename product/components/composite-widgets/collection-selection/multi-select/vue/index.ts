@@ -345,7 +345,7 @@ export const MultiSelectOption = defineComponent({
         'button',
         {
           ...attrs,
-          type: (attrs.type as string | undefined) ?? 'button',
+          type: 'button',
           role: 'option',
           tabindex: -1,
           disabled: props.disabled || multi.disabled.value,
