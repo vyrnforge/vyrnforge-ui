@@ -69,6 +69,7 @@ export function isPackagePublicSurface(filePath) {
   if (!match) return false;
   const relative = match[2];
   if (publicSurfaceBasenames.has(relative)) return true;
+  if (relative === `etc/${match[1]}.api.md`) return true;
   if (/^(?:src\/)?index\.(?:ts|tsx|mts|cts)$/.test(relative)) return true;
   if (/^(?:public-api|index)\.(?:ts|tsx|mts|cts)$/.test(relative)) return true;
   return false;
