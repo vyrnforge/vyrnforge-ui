@@ -1,4 +1,17 @@
-import { computed, defineComponent, h, inject, nextTick, onMounted, watch, provide, ref, useId, type InjectionKey, type Ref } from 'vue';
+import {
+  computed,
+  defineComponent,
+  h,
+  inject,
+  nextTick,
+  onMounted,
+  watch,
+  provide,
+  ref,
+  useId,
+  type InjectionKey,
+  type Ref,
+} from 'vue';
 import { resolveNavigationIndex, type CollectionNavigationIntent } from '@vyrnforge/core/collection-navigation';
 
 interface Ctx {
@@ -24,7 +37,11 @@ function useC() {
 
 const optionSelector = '[data-vf-combobox-option]';
 function visibleOptions(root: HTMLElement | null): HTMLElement[] {
-  return root ? Array.from(root.querySelectorAll<HTMLElement>(optionSelector)).filter((option) => !option.hidden && option.closest('[data-vf-combobox-content]') === root) : [];
+  return root
+    ? Array.from(root.querySelectorAll<HTMLElement>(optionSelector)).filter(
+        (option) => !option.hidden && option.closest('[data-vf-combobox-content]') === root,
+      )
+    : [];
 }
 function disabled(option: HTMLElement): boolean {
   return option.getAttribute('aria-disabled') === 'true' || option.hasAttribute('disabled');
@@ -133,7 +150,8 @@ export const ComboboxInput = defineComponent({
         },
         onBlur: (event: FocusEvent) => {
           invoke(attrs.onBlur, event);
-          if (!event.defaultPrevented && !context.contentRef.value?.contains(event.relatedTarget as Node | null)) context.setOpen(false);
+          if (!event.defaultPrevented && !context.contentRef.value?.contains(event.relatedTarget as Node | null))
+            context.setOpen(false);
         },
         onCompositionstart: (event: CompositionEvent) => {
           invoke(attrs.onCompositionstart, event);
@@ -187,26 +205,27 @@ export const ComboboxContent = defineComponent({
     }
     onMounted(sync);
     watch([context.open, context.activeId, context.contentRef, context.inputRef], sync, { flush: 'post' });
-    return () => h(
-            'div',
-            {
-              ...attrs,
-              ref: context.contentRef,
-              id: attrs.id ?? context.listboxId,
-              role: 'listbox',
-              popover: 'auto',
-              'data-vf-open': context.open.value ? '' : undefined,
-              onToggle(event: Event) {
-                invoke(attrs.onToggle, event);
-                if (event.target !== event.currentTarget) return;
-                const actual = (event.currentTarget as HTMLElement).matches(':popover-open');
-                if (actual !== context.open.value) context.setOpen(actual);
-              },
-              'aria-labelledby': attrs['aria-labelledby'] ?? context.inputId,
-              'data-vf-combobox-content': '',
-            },
-            slots.default?.(),
-          );
+    return () =>
+      h(
+        'div',
+        {
+          ...attrs,
+          ref: context.contentRef,
+          id: attrs.id ?? context.listboxId,
+          role: 'listbox',
+          popover: 'auto',
+          'data-vf-open': context.open.value ? '' : undefined,
+          onToggle(event: Event) {
+            invoke(attrs.onToggle, event);
+            if (event.target !== event.currentTarget) return;
+            const actual = (event.currentTarget as HTMLElement).matches(':popover-open');
+            if (actual !== context.open.value) context.setOpen(actual);
+          },
+          'aria-labelledby': attrs['aria-labelledby'] ?? context.inputId,
+          'data-vf-combobox-content': '',
+        },
+        slots.default?.(),
+      );
   },
 });
 

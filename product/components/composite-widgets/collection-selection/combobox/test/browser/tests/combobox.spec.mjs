@@ -18,12 +18,17 @@ test('combobox exposes the editable input/listbox relationship', async ({ page }
   await expect(input).toBeVisible();
   await expect(input).toHaveAttribute('aria-autocomplete', 'list');
   await input.focus();
-  if (port === 'web') await page.locator('#web-listbox').evaluate((node) => node.showPopover({ source: document.querySelector('#web-input') }));
+  if (port === 'web')
+    await page
+      .locator('#web-listbox')
+      .evaluate((node) => node.showPopover({ source: document.querySelector('#web-input') }));
   const controls = await input.getAttribute('aria-controls');
   expect(controls).toBeTruthy();
   await expect(page.locator(`#${controls}`)).toHaveAttribute('role', 'listbox');
   await expect(page.locator(`#${controls}`)).toBeVisible();
-  expect(await page.locator(`#${controls}`).evaluate(node => node.matches(':popover-open') && !!node.closest('main'))).toBe(true);
+  expect(
+    await page.locator(`#${controls}`).evaluate((node) => node.matches(':popover-open') && !!node.closest('main')),
+  ).toBe(true);
   await expect(page.locator(`#${port}-angular`)).toHaveAttribute('aria-disabled', 'true');
   await expectAxeClean(page);
 });
@@ -171,8 +176,9 @@ test.describe('enhanced combobox interaction', () => {
   });
 });
 
-
-test('native light dismissal clears active descendant without committing the query or stealing outside focus', async ({ page }) => {
+test('native light dismissal clears active descendant without committing the query or stealing outside focus', async ({
+  page,
+}) => {
   test.skip(port === 'web', 'Managed runtime evidence.');
   await load(page);
   const input = page.getByRole('combobox', { name: 'Framework' });

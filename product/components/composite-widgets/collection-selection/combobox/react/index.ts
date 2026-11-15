@@ -37,7 +37,11 @@ function useCombo() {
 
 const optionSelector = '[data-vf-combobox-option]';
 function visibleOptions(root: HTMLElement | null): HTMLElement[] {
-  return root ? Array.from(root.querySelectorAll<HTMLElement>(optionSelector)).filter((option) => !option.hidden && option.closest('[data-vf-combobox-content]') === root) : [];
+  return root
+    ? Array.from(root.querySelectorAll<HTMLElement>(optionSelector)).filter(
+        (option) => !option.hidden && option.closest('[data-vf-combobox-content]') === root,
+      )
+    : [];
 }
 function disabled(option: HTMLElement): boolean {
   return option.getAttribute('aria-disabled') === 'true' || option.hasAttribute('disabled');
@@ -152,7 +156,8 @@ export const ComboboxInput = forwardRef<HTMLInputElement, ComponentPropsWithoutR
       },
       onBlur(event) {
         props.onBlur?.(event);
-        if (!event.defaultPrevented && !context.surfaceRef.current?.contains(event.relatedTarget)) context.setOpen(false);
+        if (!event.defaultPrevented && !context.surfaceRef.current?.contains(event.relatedTarget))
+          context.setOpen(false);
       },
       onCompositionStart(event) {
         props.onCompositionStart?.(event);
@@ -265,7 +270,8 @@ export const ComboboxOption = forwardRef<HTMLButtonElement, ComboboxOptionProps>
     },
     onClick(event) {
       onClick?.(event);
-      if (!event.defaultPrevented && !disabled(event.currentTarget) && !event.currentTarget.hidden) context.setValue(value);
+      if (!event.defaultPrevented && !disabled(event.currentTarget) && !event.currentTarget.hidden)
+        context.setValue(value);
     },
   });
 });

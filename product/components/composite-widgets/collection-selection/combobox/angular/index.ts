@@ -1,4 +1,16 @@
-import { APP_ID, DestroyRef, Directive, ElementRef, InjectionToken, afterRenderEffect, computed, inject, input, output, signal } from '@angular/core';
+import {
+  APP_ID,
+  DestroyRef,
+  Directive,
+  ElementRef,
+  InjectionToken,
+  afterRenderEffect,
+  computed,
+  inject,
+  input,
+  output,
+  signal,
+} from '@angular/core';
 import { resolveNavigationIndex, type CollectionNavigationIntent } from '@vyrnforge/core/collection-navigation';
 
 const COMBOBOX_ID_GENERATOR = new InjectionToken<() => string>('VyrnForge Combobox ID generator', {
@@ -19,7 +31,9 @@ function visibleOptions(root: HTMLElement, query = '', locale?: string): HTMLEle
   return Array.from(root.querySelectorAll<HTMLElement>(optionSelector)).filter((option) => {
     if (option.closest('[data-vf-combobox-root]') !== root) return false;
     if (!normalizedQuery) return true;
-    return normalizeFilterText(option.dataset.vfTextValue ?? option.textContent ?? '', locale).includes(normalizedQuery);
+    return normalizeFilterText(option.dataset.vfTextValue ?? option.textContent ?? '', locale).includes(
+      normalizedQuery,
+    );
   });
 }
 function disabled(option: HTMLElement): boolean {
@@ -126,7 +140,15 @@ export class VfComboboxInputDirective {
   constructor(readonly root: VfComboboxRootDirective) {
     const element = inject<ElementRef<HTMLInputElement>>(ElementRef).nativeElement;
     const onBlur = (event: FocusEvent) => {
-      if (!event.defaultPrevented && !(event.relatedTarget instanceof Element && event.relatedTarget.closest('[data-vf-combobox-content]')?.closest('[data-vf-combobox-root]') === element.closest('[data-vf-combobox-root]'))) root.setOpen(false);
+      if (
+        !event.defaultPrevented &&
+        !(
+          event.relatedTarget instanceof Element &&
+          event.relatedTarget.closest('[data-vf-combobox-content]')?.closest('[data-vf-combobox-root]') ===
+            element.closest('[data-vf-combobox-root]')
+        )
+      )
+        root.setOpen(false);
     };
     element.addEventListener('blur', onBlur);
     inject(DestroyRef).onDestroy(() => element.removeEventListener('blur', onBlur));
@@ -185,7 +207,10 @@ export class VfComboboxContentDirective {
       if (!input) return;
       if (open && !element.matches(':popover-open')) element.showPopover({ source: input });
       if (!open && element.matches(':popover-open')) element.hidePopover();
-      if (open && activeId) Array.from(element.querySelectorAll<HTMLElement>(optionSelector)).find(option => option.id === activeId)?.scrollIntoView({ block: 'nearest' });
+      if (open && activeId)
+        Array.from(element.querySelectorAll<HTMLElement>(optionSelector))
+          .find((option) => option.id === activeId)
+          ?.scrollIntoView({ block: 'nearest' });
     });
     const onToggle = (event: Event) => {
       if (event.target !== element) return;
@@ -224,7 +249,9 @@ export class VfComboboxOptionDirective {
     element: ElementRef<HTMLElement>,
   ) {
     this.optionId = element.nativeElement.id || root.nextOptionId();
-    const onMouseDown = (event: MouseEvent) => { if (event.button === 0) event.preventDefault(); };
+    const onMouseDown = (event: MouseEvent) => {
+      if (event.button === 0) event.preventDefault();
+    };
     element.nativeElement.addEventListener('mousedown', onMouseDown);
     inject(DestroyRef).onDestroy(() => element.nativeElement.removeEventListener('mousedown', onMouseDown));
   }

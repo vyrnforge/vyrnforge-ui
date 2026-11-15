@@ -6,7 +6,9 @@ const rootSelector = '[data-vf-combobox-root],vf-combobox';
 const optionSelector = '[data-vf-combobox-option]';
 
 function visibleOptions(root: HTMLElement): HTMLElement[] {
-  return Array.from(root.querySelectorAll<HTMLElement>(optionSelector)).filter((option) => !option.hidden && option.closest(rootSelector) === root);
+  return Array.from(root.querySelectorAll<HTMLElement>(optionSelector)).filter(
+    (option) => !option.hidden && option.closest(rootSelector) === root,
+  );
 }
 function disabled(option: HTMLElement): boolean {
   return option.getAttribute('aria-disabled') === 'true' || option.hasAttribute('disabled');
@@ -78,26 +80,36 @@ export class VfComboboxElement extends HTMLElementBase {
   }
 
   private inputElement() {
-    return Array.from(this.querySelectorAll<HTMLInputElement>('[data-vf-combobox-input]')).find(node => node.closest(rootSelector) === this) ?? null;
+    return (
+      Array.from(this.querySelectorAll<HTMLInputElement>('[data-vf-combobox-input]')).find(
+        (node) => node.closest(rootSelector) === this,
+      ) ?? null
+    );
   }
   private contentElement() {
-    return Array.from(this.querySelectorAll<HTMLElement>('[data-vf-combobox-content]')).find(node => node.closest(rootSelector) === this) ?? null;
+    return (
+      Array.from(this.querySelectorAll<HTMLElement>('[data-vf-combobox-content]')).find(
+        (node) => node.closest(rootSelector) === this,
+      ) ?? null
+    );
   }
   private locale() {
     return this.getAttribute('locale') || undefined;
   }
   private syncOptions() {
     const selectedValue = this.getAttribute('value') ?? '';
-    Array.from(this.querySelectorAll<HTMLElement>(optionSelector)).filter(option => option.closest(rootSelector) === this).forEach((option, index) => {
-      option.id ||= `${this.listboxId}-option-${index + 1}`;
-      option.setAttribute('role', 'option');
-      option.tabIndex = -1;
-      if (option.hasAttribute('disabled')) option.setAttribute('aria-disabled', 'true');
-      const selected = this.activeId
-        ? option.id === this.activeId
-        : optionValue(option) === selectedValue && selectedValue !== '';
-      option.setAttribute('aria-selected', String(selected));
-    });
+    Array.from(this.querySelectorAll<HTMLElement>(optionSelector))
+      .filter((option) => option.closest(rootSelector) === this)
+      .forEach((option, index) => {
+        option.id ||= `${this.listboxId}-option-${index + 1}`;
+        option.setAttribute('role', 'option');
+        option.tabIndex = -1;
+        if (option.hasAttribute('disabled')) option.setAttribute('aria-disabled', 'true');
+        const selected = this.activeId
+          ? option.id === this.activeId
+          : optionValue(option) === selectedValue && selectedValue !== '';
+        option.setAttribute('aria-selected', String(selected));
+      });
     const input = this.inputElement();
     if (input) {
       if (this.activeId) input.setAttribute('aria-activedescendant', this.activeId);
@@ -156,7 +168,8 @@ export class VfComboboxElement extends HTMLElementBase {
   };
   private onBlur = (event: FocusEvent) => {
     if (event.target !== this.inputElement()) return;
-    if (!(event.relatedTarget instanceof Node && this.contentElement()?.contains(event.relatedTarget))) this.setOpen(false);
+    if (!(event.relatedTarget instanceof Node && this.contentElement()?.contains(event.relatedTarget)))
+      this.setOpen(false);
   };
   private onMouseDown = (event: MouseEvent) => {
     const option = event.target instanceof Element ? event.target.closest(optionSelector) : null;
@@ -168,9 +181,11 @@ export class VfComboboxElement extends HTMLElementBase {
     const locale = this.locale();
     const query = normalizeFilterText(input.value, locale);
     this.activeId = null;
-    Array.from(this.querySelectorAll<HTMLElement>(optionSelector)).filter(option => option.closest(rootSelector) === this).forEach((option) => {
-      option.hidden = !normalizeFilterText(optionLabel(option), locale).includes(query);
-    });
+    Array.from(this.querySelectorAll<HTMLElement>(optionSelector))
+      .filter((option) => option.closest(rootSelector) === this)
+      .forEach((option) => {
+        option.hidden = !normalizeFilterText(optionLabel(option), locale).includes(query);
+      });
     this.setOpen(true);
     this.syncOptions();
   };
@@ -178,7 +193,14 @@ export class VfComboboxElement extends HTMLElementBase {
   private onClick = (event: Event) => {
     if (event.defaultPrevented) return;
     const option = (event.target as HTMLElement).closest<HTMLElement>(optionSelector);
-    if (!option || option.closest(rootSelector) !== this || !this.contentElement()?.matches(':popover-open') || option.hidden || disabled(option)) return;
+    if (
+      !option ||
+      option.closest(rootSelector) !== this ||
+      !this.contentElement()?.matches(':popover-open') ||
+      option.hidden ||
+      disabled(option)
+    )
+      return;
     this.select(option);
   };
 
