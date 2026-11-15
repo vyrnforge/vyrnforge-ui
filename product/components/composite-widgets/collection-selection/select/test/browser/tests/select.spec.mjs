@@ -273,6 +273,28 @@ test('Select native form control validates, submits committed values and resets 
   await expect(one).toHaveAttribute('aria-selected', 'false');
   await expect(three).toHaveAttribute('aria-selected', 'false');
   await expect.poll(data).toEqual(['']);
+  await trigger.press('Enter');
+  await expect(page.locator('#form-choice-listbox')).toBeVisible();
+  await page.locator('#form-disable').evaluate((node) => node.click());
+  await expect(trigger).toBeDisabled();
+  await expect(native).toBeDisabled();
+  await expect(page.locator('#form-choice-listbox')).toBeHidden();
+  await expect.poll(data).toEqual([]);
+  await page.locator('#form-disable').evaluate((node) => node.click());
+  await expect(trigger).toBeEnabled();
+  await expect(native).toBeEnabled();
+  await expect(page.locator('#form-choice-listbox')).toBeHidden();
+  await form.evaluate((node) => {
+    const input = document.createElement('input');
+    input.required = true;
+    input.id = 'first-invalid';
+    input.setAttribute('aria-label', 'First invalid native field');
+    node.prepend(input);
+    node.requestSubmit();
+  });
+  await expect(page.locator('#first-invalid')).toBeFocused();
+  await expect(trigger).toHaveAttribute('aria-invalid', 'true');
+  await page.locator('#first-invalid').evaluate((node) => node.remove());
   await native.evaluate((node) => {
     const fieldset = document.createElement('fieldset');
     node.before(fieldset);
