@@ -23,6 +23,10 @@
       flip-inline,
       flip-block flip-inline;
     inline-size: max-content;
+    box-sizing: border-box;
+    overflow-wrap: anywhere;
+    max-block-size: calc(100dvh - 1rem);
+    overflow: auto;
     max-inline-size: min(20rem, calc(100vw - 1rem));
   }
   :where([data-vf-tooltip-content][popover][data-vf-placement='bottom']) {

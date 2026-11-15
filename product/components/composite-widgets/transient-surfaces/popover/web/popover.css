@@ -20,7 +20,14 @@
       flip-inline,
       flip-block flip-inline;
     inline-size: max-content;
+    box-sizing: border-box;
+    overflow-wrap: anywhere;
+    max-block-size: calc(100dvh - 1rem);
+    overflow: auto;
     max-inline-size: min(24rem, calc(100vw - 1rem));
+  }
+  :where([data-vf-popover-content][popover]:not([data-vf-placement]):dir(rtl)) {
+    position-area: bottom span-left;
   }
   :where([data-vf-popover-content][popover][data-vf-placement='bottom']) {
     position-area: bottom;
