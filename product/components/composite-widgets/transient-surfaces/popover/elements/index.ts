@@ -1,4 +1,4 @@
-import type { FloatingPlacement } from '@vyrnforge/web/floating-positioning';
+import type { AnchorPlacement } from '@vyrnforge/web';
 
 const HTMLElementBase = (globalThis.HTMLElement ?? class {}) as typeof HTMLElement;
 let nextId = 0;
@@ -37,8 +37,8 @@ export class VfPopoverElement extends HTMLElementBase {
     this.toggleAttribute('open', value);
   }
 
-  get placement(): FloatingPlacement {
-    return (this.getAttribute('placement') as FloatingPlacement | null) ?? 'bottom-start';
+  get placement(): AnchorPlacement {
+    return (this.getAttribute('placement') as AnchorPlacement | null) ?? 'bottom-start';
   }
 
   #part(selector: string): HTMLElement | null {

@@ -16,7 +16,7 @@ import {
   type PropType,
   type Ref,
 } from 'vue';
-import type { FloatingPlacement } from '@vyrnforge/web/floating-positioning';
+import type { AnchorPlacement } from '@vyrnforge/web';
 
 type Activity = 'trigger' | 'content' | 'focus';
 interface Context {
@@ -24,7 +24,7 @@ interface Context {
   open: Readonly<Ref<boolean>>;
   anchor: Ref<HTMLElement | null>;
   content: Ref<HTMLElement | null>;
-  placement: Readonly<Ref<FloatingPlacement>>;
+  placement: Readonly<Ref<AnchorPlacement>>;
   activity(source: Activity, active: boolean, delay: number): void;
   openDelay: Readonly<Ref<number>>;
   closeDelay: Readonly<Ref<number>>;
@@ -41,7 +41,7 @@ export const PreviewCardRoot = defineComponent({
   props: {
     modelValue: { type: Boolean, default: undefined },
     defaultOpen: { type: Boolean, default: false },
-    placement: { type: String as PropType<FloatingPlacement>, default: 'bottom-start' },
+    placement: { type: String as PropType<AnchorPlacement>, default: 'bottom-start' },
     openDelay: { type: Number, default: 0 },
     closeDelay: { type: Number, default: 100 },
     contentId: String,

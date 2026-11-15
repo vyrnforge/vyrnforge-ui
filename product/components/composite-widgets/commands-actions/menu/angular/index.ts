@@ -13,7 +13,7 @@ import {
 } from '@angular/core';
 import { navigationIntentForArrow, resolveNavigationIndex } from '@vyrnforge/core/collection-navigation';
 import { findTypeaheadMatch } from '@vyrnforge/core/typeahead-matching';
-import type { FloatingPlacement } from '@vyrnforge/web/floating-positioning';
+import type { AnchorPlacement } from '@vyrnforge/web';
 
 function adjacentMenubarTrigger(
   trigger: HTMLElement | null,
@@ -68,7 +68,7 @@ export class VfMenuRootDirective {
   readonly open = input<boolean | undefined>(undefined);
   readonly defaultOpen = input(false);
   readonly openChange = output<boolean>();
-  readonly placement = input<FloatingPlacement>('bottom-start');
+  readonly placement = input<AnchorPlacement>('bottom-start');
   private readonly internal = signal<boolean | undefined>(undefined);
   readonly expanded = computed(() => this.open() ?? this.internal() ?? this.defaultOpen());
   anchor: HTMLElement | null = null;

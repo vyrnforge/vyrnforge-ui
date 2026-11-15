@@ -5,13 +5,13 @@
 ```ts
 
 import { AfterViewInit } from '@angular/core';
+import { AnchorPlacement } from '@vyrnforge/web';
 import { ClusterAlign } from '@vyrnforge/web/layout';
 import { ClusterJustify } from '@vyrnforge/web/layout';
 import { CollectionNavigationIntent } from '@vyrnforge/core/collection-navigation';
 import { ContainerSize } from '@vyrnforge/web/layout';
 import { ControlGroupOrientation } from '@vyrnforge/web/layout';
 import { ElementRef } from '@angular/core';
-import { FloatingPlacement } from '@vyrnforge/web/floating-positioning';
 import * as i0 from '@angular/core';
 import { IconDefinition } from '@vyrnforge/web/icon';
 import { IconGlyphDefinition } from '@vyrnforge/web/icon';
@@ -1730,7 +1730,7 @@ class VfMenuRootDirective {
     // (undocumented)
     readonly openChange: OutputEmitterRef<boolean>;
     // (undocumented)
-    readonly placement: InputSignal<FloatingPlacement>;
+    readonly placement: InputSignal<AnchorPlacement>;
     // (undocumented)
     setOpen(next: boolean): void;
     // (undocumented)
@@ -2272,7 +2272,7 @@ export class VfPopoverRootDirective {
     // (undocumented)
     readonly openChange: OutputEmitterRef<boolean>;
     // (undocumented)
-    readonly placement: InputSignal<FloatingPlacement>;
+    readonly placement: InputSignal<AnchorPlacement>;
     // (undocumented)
     readonly resolvedContentId: Signal<string>;
     // (undocumented)
@@ -2377,7 +2377,7 @@ export class VfPreviewCardRootDirective implements OnDestroy {
     // (undocumented)
     readonly openDelay: InputSignal<number>;
     // (undocumented)
-    readonly placement: InputSignal<FloatingPlacement>;
+    readonly placement: InputSignal<AnchorPlacement>;
     // (undocumented)
     readonly resolvedContentId: Signal<string>;
     // (undocumented)
@@ -3474,7 +3474,7 @@ export class VfTooltipRootDirective implements OnDestroy {
     // (undocumented)
     readonly openDelay: InputSignal<number>;
     // (undocumented)
-    readonly placement: InputSignal<FloatingPlacement>;
+    readonly placement: InputSignal<AnchorPlacement>;
     // (undocumented)
     readonly resolvedContentId: Signal<string>;
     // (undocumented)
