@@ -44,7 +44,18 @@ export const SearchFieldRoot = forwardRef<HTMLDivElement, SearchFieldRootProps>(
   };
   return createElement(
     C.Provider,
-    { value: { value: current, set, inputRef, resetValue: value ?? initial.current, reset: () => { if (value === undefined) setIv(initial.current); return value ?? initial.current; } } },
+    {
+      value: {
+        value: current,
+        set,
+        inputRef,
+        resetValue: value ?? initial.current,
+        reset: () => {
+          if (value === undefined) setIv(initial.current);
+          return value ?? initial.current;
+        },
+      },
+    },
     createElement('div', { ...props, ref, role: 'search', 'data-vf-search-field-root': '' }, children),
   );
 });
@@ -87,7 +98,8 @@ export const SearchFieldInput = forwardRef<HTMLInputElement, SearchFieldInputPro
       'data-vf-search-field-input': '',
       onChange: (e) => {
         props.onChange?.(e);
-        if (!e.defaultPrevented && !e.currentTarget.readOnly && !e.currentTarget.matches(':disabled')) s.set(e.currentTarget.value);
+        if (!e.defaultPrevented && !e.currentTarget.readOnly && !e.currentTarget.matches(':disabled'))
+          s.set(e.currentTarget.value);
       },
     });
   },

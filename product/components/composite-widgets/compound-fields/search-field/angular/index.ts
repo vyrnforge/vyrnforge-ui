@@ -1,4 +1,16 @@
-import { Directive, DestroyRef, ElementRef, Injector, afterNextRender, afterRenderEffect, computed, inject, input, output, signal } from '@angular/core';
+import {
+  Directive,
+  DestroyRef,
+  ElementRef,
+  Injector,
+  afterNextRender,
+  afterRenderEffect,
+  computed,
+  inject,
+  input,
+  output,
+  signal,
+} from '@angular/core';
 @Directive({
   selector: '[vfSearchFieldRoot]',
   standalone: true,
@@ -18,30 +30,39 @@ export class VfSearchFieldRootDirective {
   ngOnInit() {
     this.initial = this.defaultValue();
     this.iv.set(this.initial);
-    afterRenderEffect({ write: () => {
-      const input = this.inputElement();
-      const value = this.value();
-      if (input) input.defaultValue = value ?? this.initial;
-    } }, { injector: this.injector });
-    afterNextRender(() => {
-      const document = this.element.nativeElement.ownerDocument;
-      let active = true;
-      const onReset = (event: Event) => {
-        const input = this.inputElement();
-        if (!input?.form || input.form !== event.target) return;
-        setTimeout(() => {
-          if (!active || event.defaultPrevented || input.form !== event.target || this.inputElement() !== input) return;
-          const next = this.value() ?? this.initial;
-          if (this.value() === undefined) this.iv.set(next);
-          input.value = next;
-        }, 0);
-      };
-      document.addEventListener('reset', onReset, true);
-      this.destroyRef.onDestroy(() => {
-        active = false;
-        document.removeEventListener('reset', onReset, true);
-      });
-    }, { injector: this.injector });
+    afterRenderEffect(
+      {
+        write: () => {
+          const input = this.inputElement();
+          const value = this.value();
+          if (input) input.defaultValue = value ?? this.initial;
+        },
+      },
+      { injector: this.injector },
+    );
+    afterNextRender(
+      () => {
+        const document = this.element.nativeElement.ownerDocument;
+        let active = true;
+        const onReset = (event: Event) => {
+          const input = this.inputElement();
+          if (!input?.form || input.form !== event.target) return;
+          setTimeout(() => {
+            if (!active || event.defaultPrevented || input.form !== event.target || this.inputElement() !== input)
+              return;
+            const next = this.value() ?? this.initial;
+            if (this.value() === undefined) this.iv.set(next);
+            input.value = next;
+          }, 0);
+        };
+        document.addEventListener('reset', onReset, true);
+        this.destroyRef.onDestroy(() => {
+          active = false;
+          document.removeEventListener('reset', onReset, true);
+        });
+      },
+      { injector: this.injector },
+    );
   }
   set(v: string) {
     if (v === this.current()) return;
@@ -50,7 +71,9 @@ export class VfSearchFieldRootDirective {
   }
   registerInput(inputElement: HTMLInputElement) {
     this.inputElement.set(inputElement);
-    return () => { if (this.inputElement() === inputElement) this.inputElement.set(null); };
+    return () => {
+      if (this.inputElement() === inputElement) this.inputElement.set(null);
+    };
   }
   clear() {
     const inputElement = this.inputElement();

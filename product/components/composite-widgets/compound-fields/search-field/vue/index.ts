@@ -1,4 +1,17 @@
-import { computed, defineComponent, h, inject, nextTick, onBeforeUnmount, onMounted, onUpdated, provide, ref, type InjectionKey, type Ref } from 'vue';
+import {
+  computed,
+  defineComponent,
+  h,
+  inject,
+  nextTick,
+  onBeforeUnmount,
+  onMounted,
+  onUpdated,
+  provide,
+  ref,
+  type InjectionKey,
+  type Ref,
+} from 'vue';
 interface Ctx {
   value: Ref<string>;
   inputRef: Ref<HTMLInputElement | null>;
@@ -80,7 +93,8 @@ export const SearchFieldInput = defineComponent({
         onInput: (e: Event) => {
           const handler = attrs.onInput;
           if (typeof handler === 'function') handler(e);
-          else if (Array.isArray(handler)) for (const callback of handler) if (typeof callback === 'function') callback(e);
+          else if (Array.isArray(handler))
+            for (const callback of handler) if (typeof callback === 'function') callback(e);
           const input = e.currentTarget as HTMLInputElement;
           if (!e.defaultPrevented && !input.readOnly && !input.matches(':disabled')) s.set(input.value);
           void nextTick(() => {

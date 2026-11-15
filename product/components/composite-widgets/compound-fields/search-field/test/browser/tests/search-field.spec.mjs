@@ -148,7 +148,9 @@ test('native form reset restores the initial search query without emitting a que
   await form.evaluate(async (element) => {
     element.addEventListener('reset', (event) => event.preventDefault(), { once: true });
     element.reset();
-    await new Promise((resolve) => { setTimeout(resolve, 0); });
+    await new Promise((resolve) => {
+      setTimeout(resolve, 0);
+    });
   });
   await expect(input).toHaveValue('changed');
   await page.getByRole('button', { name: 'Reset search' }).click();
@@ -178,7 +180,9 @@ test('controlled query rejection and reset preserve the consumer value', async (
   await expect(input).toHaveValue('latest');
   await page.getByRole('button', { name: 'Reset controlled' }).click();
   await expect(input).toHaveValue('latest');
-  expect(await page.locator('#controlled-form').evaluate((element) => new FormData(element).get('query'))).toBe('latest');
+  expect(await page.locator('#controlled-form').evaluate((element) => new FormData(element).get('query'))).toBe(
+    'latest',
+  );
   await expect(page.locator('body')).toHaveAttribute('data-requested', 'rejected');
   await page.locator('#controlled-clear').click();
   await expect(page.locator('body')).toHaveAttribute('data-requested', '');

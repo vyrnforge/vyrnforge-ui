@@ -2616,6 +2616,8 @@ export class VfSearchFieldClearDirective {
 export class VfSearchFieldInputDirective {
     constructor(root: VfSearchFieldRootDirective);
     // (undocumented)
+    onInput(event: Event): void;
+    // (undocumented)
     readonly root: VfSearchFieldRootDirective;
     // (undocumented)
     static ɵdir: i0.ɵɵDirectiveDeclaration<VfSearchFieldInputDirective, "input[vfSearchFieldInput]", never, {}, {}, never, never, true, never>;
@@ -2632,7 +2634,9 @@ export class VfSearchFieldRootDirective {
     // (undocumented)
     readonly defaultValue: InputSignal<string>;
     // (undocumented)
-    registerInput(inputElement: HTMLInputElement): void;
+    ngOnInit(): void;
+    // (undocumented)
+    registerInput(inputElement: HTMLInputElement): () => void;
     // (undocumented)
     set(v: string): void;
     // (undocumented)

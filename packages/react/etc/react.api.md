@@ -2749,7 +2749,10 @@ export interface RatingRootProps {
 export const SearchFieldClear: ForwardRefExoticComponent<Omit<DetailedHTMLProps<ButtonHTMLAttributes<HTMLButtonElement>, HTMLButtonElement>, "ref"> & RefAttributes<HTMLButtonElement>>;
 
 // @public (undocumented)
-export const SearchFieldInput: ForwardRefExoticComponent<Omit<DetailedHTMLProps<InputHTMLAttributes<HTMLInputElement>, HTMLInputElement>, "ref"> & RefAttributes<HTMLInputElement>>;
+export const SearchFieldInput: ForwardRefExoticComponent<SearchFieldInputProps & RefAttributes<HTMLInputElement>>;
+
+// @public (undocumented)
+export type SearchFieldInputProps = Omit<ComponentPropsWithoutRef<'input'>, 'type' | 'value' | 'defaultValue'>;
 
 // @public (undocumented)
 export const SearchFieldRoot: ForwardRefExoticComponent<SearchFieldRootProps & RefAttributes<HTMLDivElement>>;
