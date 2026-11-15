@@ -14,18 +14,26 @@ import { navigationIntentForArrow, resolveNavigationIndex } from '@vyrnforge/cor
 import { findTypeaheadMatch } from '@vyrnforge/core/typeahead-matching';
 import { type FloatingPlacement } from '@vyrnforge/web/floating-positioning';
 
-function adjacentMenubarTrigger(trigger: HTMLElement | null, event: Pick<KeyboardEvent, 'key'>): HTMLButtonElement | null {
-  if (!trigger?.matches('[data-vf-menubar-trigger]') || (event.key !== 'ArrowLeft' && event.key !== 'ArrowRight')) return null;
+function adjacentMenubarTrigger(
+  trigger: HTMLElement | null,
+  event: Pick<KeyboardEvent, 'key'>,
+): HTMLButtonElement | null {
+  if (!trigger?.matches('[data-vf-menubar-trigger]') || (event.key !== 'ArrowLeft' && event.key !== 'ArrowRight'))
+    return null;
   const bar = trigger.closest('[data-vf-menubar-root]');
   if (!bar) return null;
   const items = Array.from(bar.querySelectorAll<HTMLButtonElement>('[data-vf-menubar-trigger]')).filter(
-    item => item.closest('[data-vf-menubar-root]') === bar,
+    (item) => item.closest('[data-vf-menubar-root]') === bar,
   );
   const direction = getComputedStyle(bar).direction === 'rtl' ? 'rtl' : 'ltr';
   const intent = navigationIntentForArrow(event.key === 'ArrowLeft' ? 'left' : 'right', 'horizontal', direction);
   if (!intent) return null;
-  const next = resolveNavigationIndex(items.map(item => ({ eligible: !item.matches(':disabled') })), items.indexOf(trigger as HTMLButtonElement), intent);
-  return next == null || items[next] === trigger ? null : items[next] ?? null;
+  const next = resolveNavigationIndex(
+    items.map((item) => ({ eligible: !item.matches(':disabled') })),
+    items.indexOf(trigger as HTMLButtonElement),
+    intent,
+  );
+  return next == null || items[next] === trigger ? null : (items[next] ?? null);
 }
 
 const menuItemSelector = '[data-vf-menu-item]';
@@ -244,7 +252,7 @@ export const MenuContent = forwardRef<HTMLDivElement, MenuContentProps>(function
         event.preventDefault();
         switchTarget.current = nextTrigger;
         menu.setOpen(false);
-        setNativeRevision(revision => revision + 1);
+        setNativeRevision((revision) => revision + 1);
         return;
       }
       if (event.key === 'Escape') {

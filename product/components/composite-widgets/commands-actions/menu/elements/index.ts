@@ -3,18 +3,26 @@ import { findTypeaheadMatch } from '@vyrnforge/core/typeahead-matching';
 
 const HTMLElementBase: typeof HTMLElement = globalThis.HTMLElement ?? (class {} as typeof HTMLElement);
 const rootSelector = '[data-vf-menu-root],vf-menu,vf-split-button,[data-vf-split-button-root]';
-function adjacentMenubarTrigger(trigger: HTMLElement | null, event: Pick<KeyboardEvent, 'key'>): HTMLButtonElement | null {
-  if (!trigger?.matches('[data-vf-menubar-trigger]') || (event.key !== 'ArrowLeft' && event.key !== 'ArrowRight')) return null;
+function adjacentMenubarTrigger(
+  trigger: HTMLElement | null,
+  event: Pick<KeyboardEvent, 'key'>,
+): HTMLButtonElement | null {
+  if (!trigger?.matches('[data-vf-menubar-trigger]') || (event.key !== 'ArrowLeft' && event.key !== 'ArrowRight'))
+    return null;
   const bar = trigger.closest('[data-vf-menubar-root]');
   if (!bar) return null;
   const items = Array.from(bar.querySelectorAll<HTMLButtonElement>('[data-vf-menubar-trigger]')).filter(
-    item => item.closest('[data-vf-menubar-root]') === bar,
+    (item) => item.closest('[data-vf-menubar-root]') === bar,
   );
   const direction = getComputedStyle(bar).direction === 'rtl' ? 'rtl' : 'ltr';
   const intent = navigationIntentForArrow(event.key === 'ArrowLeft' ? 'left' : 'right', 'horizontal', direction);
   if (!intent) return null;
-  const next = resolveNavigationIndex(items.map(item => ({ eligible: !item.matches(':disabled') })), items.indexOf(trigger as HTMLButtonElement), intent);
-  return next == null || items[next] === trigger ? null : items[next] ?? null;
+  const next = resolveNavigationIndex(
+    items.map((item) => ({ eligible: !item.matches(':disabled') })),
+    items.indexOf(trigger as HTMLButtonElement),
+    intent,
+  );
+  return next == null || items[next] === trigger ? null : (items[next] ?? null);
 }
 
 const menuItemSelector = '[data-vf-menu-item]';

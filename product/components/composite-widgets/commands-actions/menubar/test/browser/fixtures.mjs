@@ -44,7 +44,11 @@ export async function createReactStory() {
           MenubarMenu,
           { key: id },
           h(MenubarTrigger, { id, disabled }, label),
-          h(MenubarContent, { id: id + '-menu', 'aria-label': label }, h(MenubarItem, { id: id + '-command' }, 'Command')),
+          h(
+            MenubarContent,
+            { id: id + '-menu', 'aria-label': label },
+            h(MenubarItem, { id: id + '-command' }, 'Command'),
+          ),
         ),
       ),
     ),
@@ -64,7 +68,9 @@ export async function createVueStory() {
           entries.map(({ id, label, disabled }) =>
             h(MenubarMenu, { key: id }, () => [
               h(MenubarTrigger, { id, disabled }, () => label),
-              h(MenubarContent, { id: id + '-menu', 'aria-label': label }, () => h(MenubarItem, { id: id + '-command' }, () => 'Command')),
+              h(MenubarContent, { id: id + '-menu', 'aria-label': label }, () =>
+                h(MenubarItem, { id: id + '-command' }, () => 'Command'),
+              ),
             ]),
           ),
         ),

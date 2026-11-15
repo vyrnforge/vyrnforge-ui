@@ -82,8 +82,9 @@ test('public Menubar CSS resolves canonical surface, border, spacing, and geomet
   await expect(bar).toHaveCSS('border-top-width', '1px');
 });
 
-
-test('open menubar switches to adjacent menu in logical direction and restores its trigger on Escape', async ({ page }) => {
+test('open menubar switches to adjacent menu in logical direction and restores its trigger on Escape', async ({
+  page,
+}) => {
   test.skip(port === 'web', 'Managed Menu composition evidence.');
   await page.goto(`/components/menubar/${port}.html`);
   const file = page.locator('#file');
@@ -97,7 +98,7 @@ test('open menubar switches to adjacent menu in logical direction and restores i
   await expect(page.locator('#edit-menu')).toBeVisible();
   await expect(page.locator('#edit-command')).toBeFocused();
   await expect(edit).toHaveAttribute('tabindex', '0');
-  await page.locator('#bar').evaluate(element => element.setAttribute('dir', 'rtl'));
+  await page.locator('#bar').evaluate((element) => element.setAttribute('dir', 'rtl'));
   await page.keyboard.press('ArrowLeft');
   await expect(page.locator('#edit-menu')).toBeHidden();
   await expect(page.locator('#view-command')).toBeFocused();
