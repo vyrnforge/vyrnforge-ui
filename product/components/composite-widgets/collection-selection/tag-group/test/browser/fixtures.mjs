@@ -22,7 +22,9 @@ export const browserFixture = {
   title: 'TagGroup fixture',
   heading: 'TagGroup browser fixture',
   ports: {
-    web: { body: `<div id="root" data-vf-tag-group-root role="list" aria-label="Selected tags" tabindex="-1">${nativeItems}</div>${outside}` },
+    web: {
+      body: `<div id="root" data-vf-tag-group-root role="list" aria-label="Selected tags" tabindex="-1">${nativeItems}</div>${outside}`,
+    },
     react: { story: 'createReactStory' },
     vue: { story: 'createVueStory' },
     angular: { story: 'createAngularStory', selector: 'vf-tag-group-test' },

@@ -3112,11 +3112,18 @@ export class VfTagGroupItemDirective {
 // @public (undocumented)
 export class VfTagGroupRemoveDirective {
     // (undocumented)
+    readonly ariaLabel: InputSignal<string | undefined>;
+    // (undocumented)
     readonly label: InputSignal<string | undefined>;
     // (undocumented)
     static ɵdir: i0.ɵɵDirectiveDeclaration<VfTagGroupRemoveDirective, "button[vfTagGroupRemove]", never, {
         "label": {
             "alias": "label";
+            "required": false;
+            "isSignal": true;
+        };
+        "ariaLabel": {
+            "alias": "aria-label";
             "required": false;
             "isSignal": true;
         };
@@ -3126,7 +3133,11 @@ export class VfTagGroupRemoveDirective {
 }
 
 // @public (undocumented)
-export class VfTagGroupRootDirective {
+export class VfTagGroupRootDirective implements AfterViewInit, OnDestroy {
+    // (undocumented)
+    ngAfterViewInit(): void;
+    // (undocumented)
+    ngOnDestroy(): void;
     // (undocumented)
     static ɵdir: i0.ɵɵDirectiveDeclaration<VfTagGroupRootDirective, "[vfTagGroupRoot]", never, {}, {}, never, never, true, never>;
     // (undocumented)
