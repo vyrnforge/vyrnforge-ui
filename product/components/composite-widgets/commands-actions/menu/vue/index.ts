@@ -39,6 +39,11 @@ function adjacentMenubarTrigger(
   return next == null || items[next] === trigger ? null : (items[next] ?? null);
 }
 
+function submenuArrow(trigger: HTMLElement, opening: boolean): 'ArrowLeft' | 'ArrowRight' {
+  const rtl = getComputedStyle(trigger).direction === 'rtl';
+  return opening === rtl ? 'ArrowLeft' : 'ArrowRight';
+}
+
 const menuItemSelector = '[data-vf-menu-item]';
 function menuItems(root: HTMLElement): HTMLElement[] {
   return Array.from(root.querySelectorAll<HTMLElement>(menuItemSelector)).filter(
@@ -55,6 +60,7 @@ function invoke(handler: unknown, event: Event) {
 }
 
 interface MenuContext {
+  parent: MenuContext | null;
   open: Ref<boolean>;
   setOpen(value: boolean): void;
   anchor: Ref<HTMLElement | null>;
@@ -65,6 +71,16 @@ interface MenuContext {
   focusRevision: Ref<number>;
 }
 const key: InjectionKey<MenuContext> = Symbol('vf-menu');
+const contentKey: InjectionKey<MenuContext> = Symbol('vf-menu-content');
+function closeMenuChain(menu: MenuContext): MenuContext {
+  let current = menu;
+  current.setOpen(false);
+  while (current.parent) {
+    current = current.parent;
+    current.setOpen(false);
+  }
+  return current;
+}
 const menusByTrigger = new WeakMap<HTMLElement, MenuContext>();
 function useMenu(): MenuContext {
   const value = inject(key);
@@ -81,6 +97,7 @@ export const MenuRoot = defineComponent({
   },
   emits: ['update:open'],
   setup(props, { slots, emit }) {
+    const parent = inject(contentKey, null);
     const internal = ref(props.defaultOpen);
     const expanded = computed(() => props.open ?? internal.value);
     const anchor = ref<HTMLElement | null>(null);
@@ -96,6 +113,7 @@ export const MenuRoot = defineComponent({
       },
     });
     provide(key, {
+      parent,
       open: openRef,
       setOpen: (value) => {
         openRef.value = value;
@@ -134,18 +152,27 @@ export const MenuTrigger = defineComponent({
             menu.anchor.value = node as HTMLElement | null;
             if (menu.anchor.value) menusByTrigger.set(menu.anchor.value, menu);
           },
+          ...(menu.parent ? { role: 'menuitem', tabindex: -1, 'data-vf-menu-item': '' } : {}),
           'data-vf-menu-trigger': '',
           'aria-haspopup': 'menu',
           'aria-expanded': menu.open.value,
           onClick: (event: MouseEvent) => {
             invoke(attrs.onClick, event);
-            if (event.defaultPrevented) return;
+            if (event.defaultPrevented || (event.currentTarget as HTMLElement).matches(':disabled,[aria-disabled="true"]')) return;
             if (menu.open.value) menu.setOpen(false);
             else openAndFocus('first');
           },
           onKeydown: (event: KeyboardEvent) => {
             invoke(attrs.onKeydown, event);
-            if (event.defaultPrevented) return;
+            const trigger = event.currentTarget as HTMLElement;
+            if (event.defaultPrevented || trigger.matches(':disabled,[aria-disabled="true"]')) return;
+            if (menu.parent) {
+              if (event.key === submenuArrow(trigger, true) || event.key === 'Enter' || event.key === ' ') {
+                event.preventDefault();
+                openAndFocus('first');
+              }
+              return;
+            }
             if (event.key === 'ArrowUp') {
               event.preventDefault();
               openAndFocus('last');
@@ -165,6 +192,7 @@ export const MenuContent = defineComponent({
   inheritAttrs: false,
   setup(_, { attrs, slots }) {
     const menu = useMenu();
+    provide(contentKey, menu);
     let query = '';
     let timer: ReturnType<typeof setTimeout> | null = null;
     let restoreFocus = false;
@@ -173,7 +201,7 @@ export const MenuContent = defineComponent({
       const surface = menu.surface.value;
       const trigger = menu.anchor.value;
       if (!surface || !trigger) return;
-      if (!menu.open.value) {
+      if (!menu.open.value || (menu.parent && !menu.parent.open.value)) {
         menu.focusRequest.value = null;
         if (timer !== null) clearTimeout(timer);
         timer = null;
@@ -196,14 +224,14 @@ export const MenuContent = defineComponent({
       if (!edge || !surface.matches(':popover-open')) return;
       const items = menuItems(surface);
       const index = resolveNavigationIndex(
-        items.map(() => ({})),
+        items.map(item => ({ eligible: !item.matches(':disabled') })),
         edge === 'first' ? -1 : items.length,
         edge,
       );
       if (index != null) items[index]?.focus();
     }
     onMounted(sync);
-    watch([menu.open, menu.focusRevision, menu.anchor, menu.surface], sync, { flush: 'post' });
+    watch([menu.open, menu.focusRevision, menu.anchor, menu.surface, () => menu.parent?.open.value], sync, { flush: 'post' });
     onBeforeUnmount(() => {
       if (timer !== null) clearTimeout(timer);
     });
@@ -219,6 +247,7 @@ export const MenuContent = defineComponent({
           tabindex: -1,
           popover: 'auto',
           'data-vf-menu-content': '',
+          'data-vf-menu-submenu': menu.parent ? '' : undefined,
           'data-vf-placement': menu.placement.value,
           'data-vf-open': menu.open.value ? '' : undefined,
           onBeforetoggle(event: Event) {
@@ -258,14 +287,13 @@ export const MenuContent = defineComponent({
               void nextTick(sync);
               return;
             }
-            if (event.key === 'Escape') {
+            if (event.key === 'Escape' || (menu.parent && menu.anchor.value && event.key === submenuArrow(menu.anchor.value, false))) {
               event.preventDefault();
               menu.setOpen(false);
               return;
             }
             if (event.key === 'Tab') {
-              menu.setOpen(false);
-              menu.anchor.value?.focus();
+              closeMenuChain(menu).anchor.value?.focus();
               return;
             }
             const root = event.currentTarget as HTMLElement;
@@ -280,18 +308,18 @@ export const MenuContent = defineComponent({
             let next: number | null = null;
             if (intent)
               next = resolveNavigationIndex(
-                items.map(() => ({})),
+                items.map(item => ({ eligible: !item.matches(':disabled') })),
                 current,
                 intent,
               );
-            else if (event.key.length === 1 && !event.ctrlKey && !event.metaKey && !event.altKey) {
+            else if (event.key.length === 1 && event.key !== ' ' && !event.ctrlKey && !event.metaKey && !event.altKey) {
               query += event.key;
               if (timer) clearTimeout(timer);
               timer = setTimeout(() => {
                 query = '';
               }, 500);
               next = findTypeaheadMatch(
-                items.map((item) => ({ textValue: item.dataset.vfTextValue ?? item.textContent ?? '' })),
+                items.map((item) => ({ textValue: item.dataset.vfTextValue ?? item.textContent ?? '', eligible: !item.matches(':disabled') })),
                 query,
                 { startIndex: current },
               );
@@ -332,7 +360,7 @@ export const MenuItem = defineComponent({
             invoke(attrs.onClick, event);
             if (event.defaultPrevented) return;
             emit('select');
-            menu.setOpen(false);
+            closeMenuChain(menu);
           },
         },
         slots.default?.(),

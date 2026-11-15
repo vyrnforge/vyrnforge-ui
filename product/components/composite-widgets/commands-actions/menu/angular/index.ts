@@ -37,6 +37,11 @@ function adjacentMenubarTrigger(
   return next == null || items[next] === trigger ? null : (items[next] ?? null);
 }
 
+function submenuArrow(trigger: HTMLElement, opening: boolean): 'ArrowLeft' | 'ArrowRight' {
+  const rtl = getComputedStyle(trigger).direction === 'rtl';
+  return opening === rtl ? 'ArrowLeft' : 'ArrowRight';
+}
+
 const menuItemSelector = '[data-vf-menu-item]';
 function menuItems(root: HTMLElement): HTMLElement[] {
   return Array.from(root.querySelectorAll<HTMLElement>(menuItemSelector)).filter(
@@ -54,6 +59,16 @@ interface MenuFocusRequest {
 }
 const focusRequests = new WeakMap<VfMenuRootDirective, MenuFocusRequest>();
 const menusByTrigger = new WeakMap<HTMLElement, VfMenuRootDirective>();
+const parentMenus = new WeakMap<VfMenuRootDirective, VfMenuRootDirective>();
+function closeMenuChain(menu: VfMenuRootDirective): VfMenuRootDirective {
+  let current = menu;
+  current.setOpen(false);
+  for (let parent = parentMenus.get(current); parent; parent = parentMenus.get(current)) {
+    current = parent;
+    current.setOpen(false);
+  }
+  return current;
+}
 function focusRequestFor(root: VfMenuRootDirective): MenuFocusRequest {
   let request = focusRequests.get(root);
   if (!request) {
@@ -73,6 +88,10 @@ export class VfMenuRootDirective {
   readonly expanded = computed(() => this.open() ?? this.internal() ?? this.defaultOpen());
   anchor: HTMLElement | null = null;
   surface: HTMLElement | null = null;
+  constructor() {
+    const parent = inject(VfMenuContentDirective, { optional: true, skipSelf: true });
+    if (parent) parentMenus.set(this, parent.root);
+  }
   setOpen(next: boolean) {
     if (next === this.expanded()) return;
     if (this.open() === undefined) this.internal.set(next);
@@ -101,6 +120,11 @@ export class VfMenuTriggerDirective {
   private readonly element = inject<ElementRef<HTMLButtonElement>>(ElementRef);
   constructor(readonly root: VfMenuRootDirective) {
     const trigger = this.element.nativeElement;
+    if (parentMenus.has(root)) {
+      trigger.setAttribute('role', 'menuitem');
+      trigger.tabIndex = -1;
+      trigger.setAttribute('data-vf-menu-item', '');
+    }
     this.root.anchor = trigger;
     menusByTrigger.set(trigger, root);
     inject(DestroyRef).onDestroy(() => {
@@ -109,7 +133,7 @@ export class VfMenuTriggerDirective {
     });
   }
   onClick(event: MouseEvent) {
-    if (event.defaultPrevented) return;
+    if (event.defaultPrevented || this.element.nativeElement.matches(':disabled,[aria-disabled="true"]')) return;
     if (this.root.expanded()) this.root.setOpen(false);
     else {
       this.root.setOpen(true);
@@ -117,7 +141,16 @@ export class VfMenuTriggerDirective {
     }
   }
   onKeydown(event: KeyboardEvent) {
-    if (event.defaultPrevented) return;
+    const trigger = this.element.nativeElement;
+    if (event.defaultPrevented || trigger.matches(':disabled,[aria-disabled="true"]')) return;
+    if (parentMenus.has(this.root)) {
+      if (event.key === submenuArrow(trigger, true) || event.key === 'Enter' || event.key === ' ') {
+        event.preventDefault();
+        this.root.setOpen(true);
+        this.root.focusMenu('first');
+      }
+      return;
+    }
     if (event.key === 'ArrowUp') {
       event.preventDefault();
       this.root.setOpen(true);
@@ -154,9 +187,11 @@ export class VfMenuContentDirective implements OnDestroy {
   private switchTarget: HTMLButtonElement | null = null;
   constructor(readonly root: VfMenuRootDirective) {
     this.root.surface = this.element.nativeElement;
+    if (parentMenus.has(root)) this.element.nativeElement.setAttribute('data-vf-menu-submenu', '');
     afterRenderEffect(() => {
       this.nativeRevision();
-      const open = this.root.expanded();
+      const parent = parentMenus.get(root);
+      const open = this.root.expanded() && (!parent || parent.expanded());
       const surface = this.element.nativeElement;
       const trigger = this.root.anchor;
       if (trigger) {
@@ -183,7 +218,7 @@ export class VfMenuContentDirective implements OnDestroy {
       if (!edge || !open || !surface.matches(':popover-open')) return;
       const items = menuItems(surface);
       const index = resolveNavigationIndex(
-        items.map(() => ({})),
+        items.map(item => ({ eligible: !item.matches(':disabled') })),
         edge === 'first' ? -1 : items.length,
         edge,
       );
@@ -227,14 +262,13 @@ export class VfMenuContentDirective implements OnDestroy {
       this.nativeRevision.update((revision) => revision + 1);
       return;
     }
-    if (event.key === 'Escape') {
+    if (event.key === 'Escape' || (parentMenus.has(this.root) && this.root.anchor && event.key === submenuArrow(this.root.anchor, false))) {
       event.preventDefault();
       this.root.setOpen(false);
       return;
     }
     if (event.key === 'Tab') {
-      this.root.setOpen(false);
-      this.root.anchor?.focus();
+      closeMenuChain(this.root).anchor?.focus();
       return;
     }
     const items = menuItems(this.element.nativeElement);
@@ -248,18 +282,18 @@ export class VfMenuContentDirective implements OnDestroy {
     let next: number | null = null;
     if (intent)
       next = resolveNavigationIndex(
-        items.map(() => ({})),
+        items.map(item => ({ eligible: !item.matches(':disabled') })),
         current,
         intent,
       );
-    else if (event.key.length === 1 && !event.ctrlKey && !event.metaKey && !event.altKey) {
+    else if (event.key.length === 1 && event.key !== ' ' && !event.ctrlKey && !event.metaKey && !event.altKey) {
       this.query += event.key;
       if (this.timer) clearTimeout(this.timer);
       this.timer = setTimeout(() => {
         this.query = '';
       }, 500);
       next = findTypeaheadMatch(
-        items.map((item) => ({ textValue: item.dataset.vfTextValue ?? item.textContent ?? '' })),
+        items.map((item) => ({ textValue: item.dataset.vfTextValue ?? item.textContent ?? '', eligible: !item.matches(':disabled') })),
         this.query,
         { startIndex: current },
       );
@@ -294,7 +328,7 @@ export class VfMenuItemDirective {
       return;
     }
     this.selected.emit();
-    this.root.setOpen(false);
+    closeMenuChain(this.root);
   }
 }
 

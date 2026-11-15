@@ -72,6 +72,13 @@
     position-area: top;
   }
 
+  :where([data-vf-menu-content][popover][data-vf-menu-submenu][data-vf-placement='bottom-start']) {
+    position-area: right span-bottom;
+  }
+  :where([data-vf-menu-content][popover][data-vf-menu-submenu][data-vf-placement='bottom-start']:dir(rtl)) {
+    position-area: left span-bottom;
+  }
+
   :where([data-vf-menu-item], [data-vf-context-menu-item]) {
     display: flex;
     inline-size: 100%;

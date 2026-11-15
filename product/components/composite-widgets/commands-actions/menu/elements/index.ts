@@ -25,16 +25,23 @@ function adjacentMenubarTrigger(
   return next == null || items[next] === trigger ? null : (items[next] ?? null);
 }
 
+function submenuArrow(trigger: HTMLElement, opening: boolean): 'ArrowLeft' | 'ArrowRight' {
+  const rtl = getComputedStyle(trigger).direction === 'rtl';
+  return opening === rtl ? 'ArrowLeft' : 'ArrowRight';
+}
+
 const menuItemSelector = '[data-vf-menu-item]';
+function ownedContent(root: HTMLElement): HTMLElement | null {
+  if (root.matches('[data-vf-menu-content]')) return root;
+  return Array.from(root.querySelectorAll<HTMLElement>('[data-vf-menu-content]')).find(node => node.closest(rootSelector) === root) ?? null;
+}
 function menuItems(root: HTMLElement): HTMLElement[] {
-  const owner = root.closest(rootSelector);
-  return Array.from(root.querySelectorAll<HTMLElement>(menuItemSelector)).filter(
-    (item) => item.closest(rootSelector) === owner,
-  );
+  const content = ownedContent(root);
+  return content ? Array.from(content.querySelectorAll<HTMLElement>(menuItemSelector)).filter(item => item.closest('[data-vf-menu-content]') === content) : [];
 }
 function itemFromTarget(root: HTMLElement, target: EventTarget | null): HTMLElement | null {
   const item = target instanceof Element ? target.closest<HTMLElement>(menuItemSelector) : null;
-  return item && root.contains(item) && item.closest(rootSelector) === root.closest(rootSelector) ? item : null;
+  return item && item.closest('[data-vf-menu-content]') === ownedContent(root) ? item : null;
 }
 function isDisabled(item: HTMLElement): boolean {
   return item.getAttribute('aria-disabled') === 'true';
@@ -95,8 +102,22 @@ export class VfMenuElement extends HTMLElementBase {
     return this.ownedPart('[data-vf-menu-content]');
   }
 
+  private parentMenu(): VfMenuElement | null {
+    const parent = this.parentElement?.closest('[data-vf-menu-content]')?.closest(rootSelector);
+    return parent instanceof VfMenuElement ? parent : null;
+  }
+  private closeChain(): VfMenuElement {
+    let current: VfMenuElement = this;
+    current.setOpen(false);
+    for (let parent = current.parentMenu(); parent; parent = current.parentMenu()) {
+      current = parent;
+      current.setOpen(false);
+    }
+    return current;
+  }
   private sync() {
-    const open = this.hasAttribute('open');
+    const parent = this.parentMenu();
+    const open = this.hasAttribute('open') && (!parent || parent.hasAttribute('open'));
     if (!open) {
       if (this.timer) clearTimeout(this.timer);
       this.timer = null;
@@ -112,6 +133,11 @@ export class VfMenuElement extends HTMLElementBase {
       content?.addEventListener('toggle', this.onToggle);
       content?.addEventListener('beforetoggle', this.onBeforeToggle);
     }
+    if (parent && trigger) {
+      trigger.setAttribute('role', 'menuitem');
+      trigger.tabIndex = -1;
+      trigger.setAttribute('data-vf-menu-item', '');
+    }
     trigger?.setAttribute('aria-haspopup', 'menu');
     trigger?.setAttribute('aria-expanded', String(open));
     if (content) {
@@ -119,6 +145,7 @@ export class VfMenuElement extends HTMLElementBase {
       content.tabIndex = -1;
       content.setAttribute('popover', 'auto');
       content.removeAttribute('hidden');
+      content.toggleAttribute('data-vf-menu-submenu', !!parent);
       content.setAttribute('data-vf-placement', this.getAttribute('placement') ?? 'bottom-start');
       content.toggleAttribute('data-vf-open', open);
     }
@@ -189,17 +216,25 @@ export class VfMenuElement extends HTMLElementBase {
       event.preventDefault();
       return;
     }
-    this.setOpen(false);
+    this.closeChain();
     this.dispatchEvent(new CustomEvent('vf-select', { detail: { item }, bubbles: true }));
   };
 
   private onKeydown = (event: KeyboardEvent) => {
     if (event.defaultPrevented) return;
     const target = event.target instanceof Element ? event.target : null;
-    if (!target || target.closest(rootSelector) !== this) return;
+    if (!target || (target.closest(rootSelector) !== this && target.closest('[data-vf-menu-content]') !== this.content)) return;
     const trigger = target.closest<HTMLElement>('[data-vf-menu-trigger]');
     if (trigger && trigger === this.trigger) {
       if (trigger.matches(':disabled,[aria-disabled="true"]')) return;
+      if (this.parentMenu()) {
+        if (event.key === submenuArrow(trigger, true) || event.key === 'Enter' || event.key === ' ') {
+          event.preventDefault();
+          this.setOpen(true);
+          this.focusMenu('first');
+        }
+        return;
+      }
       if (event.key === 'ArrowUp') {
         event.preventDefault();
         this.setOpen(true);
@@ -223,14 +258,13 @@ export class VfMenuElement extends HTMLElementBase {
       nextMenu.focusMenu('first');
       return;
     }
-    if (event.key === 'Escape') {
+    if (event.key === 'Escape' || (this.parentMenu() && this.trigger && event.key === submenuArrow(this.trigger, false))) {
       event.preventDefault();
       this.setOpen(false);
       return;
     }
     if (event.key === 'Tab') {
-      this.setOpen(false);
-      this.trigger?.focus();
+      this.closeChain().trigger?.focus();
       return;
     }
     const items = menuItems(content);
@@ -248,7 +282,7 @@ export class VfMenuElement extends HTMLElementBase {
         current,
         intent,
       );
-    else if (event.key.length === 1 && !event.ctrlKey && !event.metaKey && !event.altKey) {
+    else if (event.key.length === 1 && event.key !== ' ' && !event.ctrlKey && !event.metaKey && !event.altKey) {
       this.query += event.key;
       if (this.timer) clearTimeout(this.timer);
       this.timer = setTimeout(() => {
