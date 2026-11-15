@@ -153,8 +153,10 @@ test('Tooltip stays contained with enlarged text and narrow viewport', async ({ 
     .poll(() =>
       surface.evaluate((element) => {
         const rect = element.getBoundingClientRect();
+        const contained =
+          rect.top >= -1 && rect.bottom <= innerHeight + 1 && rect.left >= -1 && rect.right <= innerWidth + 1;
         return {
-          contained: rect.top >= -1 && rect.bottom <= innerHeight + 1 && rect.left >= -1 && rect.right <= innerWidth + 1,
+          contained,
           scrollable: element.scrollHeight > element.clientHeight,
           wraps: element.scrollWidth <= element.clientWidth + 1,
         };
