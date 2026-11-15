@@ -77,17 +77,8 @@ export async function createReactStory() {
             if (next) setOpen(true);
           },
         },
-        h(
-          SelectTrigger,
-          { tabIndex: -1 },
-          'Controlled selection',
-        ),
-        h(
-          SelectContent,
-          { 'aria-label': 'Controlled options' },
-          option('controlled', 0),
-          option('controlled', 2),
-        ),
+        h(SelectTrigger, { tabIndex: -1 }, 'Controlled selection'),
+        h(SelectContent, { 'aria-label': 'Controlled options' }, option('controlled', 0), option('controlled', 2)),
       ),
       h(
         'button',
@@ -135,11 +126,7 @@ export async function createVueStory() {
               },
             },
             () => [
-              h(
-                SelectTrigger,
-                { tabindex: -1 },
-                () => 'Controlled selection',
-              ),
+              h(SelectTrigger, { tabindex: -1 }, () => 'Controlled selection'),
               h(SelectContent, { 'aria-label': 'Controlled options' }, () => [
                 option('controlled', 0),
                 option('controlled', 2),

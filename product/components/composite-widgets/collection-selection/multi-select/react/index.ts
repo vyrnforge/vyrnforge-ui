@@ -108,50 +108,51 @@ export function MultiSelectRoot({ children, id, value, defaultValue = [], onValu
   return createElement(C.Provider, { value: context }, children);
 }
 
-export const MultiSelectTrigger = forwardRef<HTMLButtonElement, Omit<ComponentPropsWithoutRef<'button'>, 'id' | 'aria-controls'>>(
-  function MultiSelectTrigger({ onClick, onKeyDown, ...props }, forwardedRef) {
-    const multi = useMulti();
-    function openAndFocus(edge: 'first' | 'last') {
-      multi.setOpen(true);
-      multi.focusOptions(edge);
-    }
-    return createElement(
-      'button',
-      {
-        ...props,
-        ref(node: HTMLButtonElement | null) {
-          multi.anchorRef.current = node;
-          if (typeof forwardedRef === 'function') forwardedRef(node);
-          else if (forwardedRef) forwardedRef.current = node;
-        },
-        type: props.type ?? 'button',
-        'data-vf-multi-select-trigger': '',
-        id: multi.triggerId,
-        'aria-controls': multi.listboxId,
-        'aria-haspopup': 'listbox',
-        'aria-expanded': multi.open,
-        onClick(event: MouseEvent<HTMLButtonElement>) {
-          onClick?.(event);
-          if (event.defaultPrevented) return;
-          if (multi.open) multi.setOpen(false);
-          else openAndFocus('first');
-        },
-        onKeyDown(event: KeyboardEvent<HTMLButtonElement>) {
-          onKeyDown?.(event);
-          if (event.defaultPrevented) return;
-          if (event.key === 'ArrowUp') {
-            event.preventDefault();
-            openAndFocus('last');
-          } else if (event.key === 'ArrowDown' || event.key === 'Enter' || event.key === ' ') {
-            event.preventDefault();
-            openAndFocus('first');
-          }
-        },
+export const MultiSelectTrigger = forwardRef<
+  HTMLButtonElement,
+  Omit<ComponentPropsWithoutRef<'button'>, 'id' | 'aria-controls'>
+>(function MultiSelectTrigger({ onClick, onKeyDown, ...props }, forwardedRef) {
+  const multi = useMulti();
+  function openAndFocus(edge: 'first' | 'last') {
+    multi.setOpen(true);
+    multi.focusOptions(edge);
+  }
+  return createElement(
+    'button',
+    {
+      ...props,
+      ref(node: HTMLButtonElement | null) {
+        multi.anchorRef.current = node;
+        if (typeof forwardedRef === 'function') forwardedRef(node);
+        else if (forwardedRef) forwardedRef.current = node;
       },
-      props.children ?? multi.values.join(', '),
-    );
-  },
-);
+      type: props.type ?? 'button',
+      'data-vf-multi-select-trigger': '',
+      id: multi.triggerId,
+      'aria-controls': multi.listboxId,
+      'aria-haspopup': 'listbox',
+      'aria-expanded': multi.open,
+      onClick(event: MouseEvent<HTMLButtonElement>) {
+        onClick?.(event);
+        if (event.defaultPrevented) return;
+        if (multi.open) multi.setOpen(false);
+        else openAndFocus('first');
+      },
+      onKeyDown(event: KeyboardEvent<HTMLButtonElement>) {
+        onKeyDown?.(event);
+        if (event.defaultPrevented) return;
+        if (event.key === 'ArrowUp') {
+          event.preventDefault();
+          openAndFocus('last');
+        } else if (event.key === 'ArrowDown' || event.key === 'Enter' || event.key === ' ') {
+          event.preventDefault();
+          openAndFocus('first');
+        }
+      },
+    },
+    props.children ?? multi.values.join(', '),
+  );
+});
 
 export const MultiSelectContent = forwardRef<HTMLDivElement, Omit<ComponentPropsWithoutRef<'div'>, 'id'>>(
   function MultiSelectContent({ onKeyDown, onBeforeToggle, onToggle, ...props }, forwardedRef) {

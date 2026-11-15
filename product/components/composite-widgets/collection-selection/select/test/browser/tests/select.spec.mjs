@@ -11,7 +11,10 @@ test('Select Web baseline exposes authored listbox semantics and canonical styli
   await page.goto('/components/select/web.html');
   const trigger = page.locator('[data-vf-select-trigger]').first();
   await expect(trigger).toHaveAttribute('aria-haspopup', 'listbox');
-  await expect(trigger).toHaveAttribute('aria-controls', await page.locator('[data-vf-select-content]').first().getAttribute('id'));
+  await expect(trigger).toHaveAttribute(
+    'aria-controls',
+    await page.locator('[data-vf-select-content]').first().getAttribute('id'),
+  );
   await trigger.click();
   await expect(page.getByRole('listbox', { name: 'Choose an option' })).toBeVisible();
   await expect(page.locator('#web-disabled')).toBeDisabled();
@@ -44,7 +47,10 @@ test.describe('Select enhanced port behavior', () => {
 
       await expect(trigger).toHaveAttribute('aria-haspopup', 'listbox');
       await expect(trigger).toHaveAttribute('aria-expanded', 'false');
-      await expect(trigger).toHaveAttribute('aria-controls', await page.locator('[data-vf-select-content]').first().getAttribute('id'));
+      await expect(trigger).toHaveAttribute(
+        'aria-controls',
+        await page.locator('[data-vf-select-content]').first().getAttribute('id'),
+      );
       await trigger.focus();
       await page.keyboard.press('ArrowDown');
       await expect(trigger).toHaveAttribute('aria-expanded', 'true');
@@ -150,7 +156,6 @@ test('controlled value and open requests do not replace rejected committed state
   await expect(page.locator('#controlled-listbox')).toBeVisible();
   expect(await page.locator('#controlled-listbox').evaluate((node) => node.matches(':popover-open'))).toBe(true);
 });
-
 
 test('Select owns coherent popup relationships across explicit and generated identities', async ({ page }) => {
   test.skip(port === 'web', 'Native Web authors relationships directly.');

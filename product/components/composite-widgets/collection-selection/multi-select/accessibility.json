@@ -21,7 +21,9 @@
     "directionality": "vertical"
   },
   "ownership": {
-    "library": ["Separate focus, selected values and open state; expose selection summary and removal relationships; maintain trigger-to-popup identity."],
+    "library": [
+      "Separate focus, selected values and open state; expose selection summary and removal relationships; maintain trigger-to-popup identity."
+    ],
     "consumer": ["Author names, option values and form labels; own domain filtering and data loading."]
   },
   "forms": {

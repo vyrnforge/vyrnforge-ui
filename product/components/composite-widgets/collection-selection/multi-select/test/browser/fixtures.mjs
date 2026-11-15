@@ -65,17 +65,8 @@ export async function createReactStory() {
       h(
         MultiSelectRoot,
         { id: 'controlled', value: ['one'], onValueChange: request },
-        h(
-          MultiSelectTrigger,
-          { tabIndex: -1 },
-          'Controlled items',
-        ),
-        h(
-          MultiSelectContent,
-          { 'aria-label': 'Controlled options' },
-          option('controlled', 0),
-          option('controlled', 2),
-        ),
+        h(MultiSelectTrigger, { tabIndex: -1 }, 'Controlled items'),
+        h(MultiSelectContent, { 'aria-label': 'Controlled options' }, option('controlled', 0), option('controlled', 2)),
       ),
       h(
         'button',
@@ -111,11 +102,7 @@ export async function createVueStory() {
             ),
           ]),
           h(MultiSelectRoot, { id: 'controlled', value: ['one'], 'onUpdate:value': request }, () => [
-            h(
-              MultiSelectTrigger,
-              { tabindex: -1 },
-              () => 'Controlled items',
-            ),
+            h(MultiSelectTrigger, { tabindex: -1 }, () => 'Controlled items'),
             h(MultiSelectContent, { 'aria-label': 'Controlled options' }, () => [
               option('controlled', 0),
               option('controlled', 2),

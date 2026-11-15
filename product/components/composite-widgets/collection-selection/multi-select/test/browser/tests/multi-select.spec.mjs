@@ -12,7 +12,10 @@ test('MultiSelect Web baseline exposes authored semantics and canonical styling'
   const trigger = page.locator('[data-vf-multi-select-trigger]').first();
   const listbox = page.getByRole('listbox', { name: 'Choose items' });
   await expect(trigger).toHaveAttribute('aria-haspopup', 'listbox');
-  await expect(trigger).toHaveAttribute('aria-controls', await page.locator('[data-vf-multi-select-content]').first().getAttribute('id'));
+  await expect(trigger).toHaveAttribute(
+    'aria-controls',
+    await page.locator('[data-vf-multi-select-content]').first().getAttribute('id'),
+  );
   await trigger.click();
   await expect(listbox).toBeVisible();
   await expect(listbox).toHaveAttribute('aria-multiselectable', 'true');
@@ -169,7 +172,6 @@ test('Angular Escape returns focus before the next keyboard event', async ({ pag
   await page.keyboard.press('ArrowDown');
   await expect(page.locator('#angular-one')).toBeFocused();
 });
-
 
 test('MultiSelect owns coherent popup relationships across explicit and generated identities', async ({ page }) => {
   test.skip(port === 'web', 'Native Web authors relationships directly.');
