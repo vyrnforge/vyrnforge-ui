@@ -13,9 +13,31 @@ import {
   type PropType,
   type Ref,
 } from 'vue';
-import { resolveNavigationIndex } from '@vyrnforge/core/collection-navigation';
+import { navigationIntentForArrow, resolveNavigationIndex } from '@vyrnforge/core/collection-navigation';
 import { findTypeaheadMatch } from '@vyrnforge/core/typeahead-matching';
 import type { FloatingPlacement } from '@vyrnforge/web/floating-positioning';
+
+function adjacentMenubarTrigger(
+  trigger: HTMLElement | null,
+  event: Pick<KeyboardEvent, 'key'>,
+): HTMLButtonElement | null {
+  if (!trigger?.matches('[data-vf-menubar-trigger]') || (event.key !== 'ArrowLeft' && event.key !== 'ArrowRight'))
+    return null;
+  const bar = trigger.closest('[data-vf-menubar-root]');
+  if (!bar) return null;
+  const items = Array.from(bar.querySelectorAll<HTMLButtonElement>('[data-vf-menubar-trigger]')).filter(
+    (item) => item.closest('[data-vf-menubar-root]') === bar,
+  );
+  const direction = getComputedStyle(bar).direction === 'rtl' ? 'rtl' : 'ltr';
+  const intent = navigationIntentForArrow(event.key === 'ArrowLeft' ? 'left' : 'right', 'horizontal', direction);
+  if (!intent) return null;
+  const next = resolveNavigationIndex(
+    items.map((item) => ({ eligible: !item.matches(':disabled') })),
+    items.indexOf(trigger as HTMLButtonElement),
+    intent,
+  );
+  return next == null || items[next] === trigger ? null : (items[next] ?? null);
+}
 
 const menuItemSelector = '[data-vf-menu-item]';
 function menuItems(root: HTMLElement): HTMLElement[] {
@@ -43,6 +65,7 @@ interface MenuContext {
   focusRevision: Ref<number>;
 }
 const key: InjectionKey<MenuContext> = Symbol('vf-menu');
+const menusByTrigger = new WeakMap<HTMLElement, MenuContext>();
 function useMenu(): MenuContext {
   const value = inject(key);
   if (!value) throw new Error('Menu parts must be used inside MenuRoot.');
@@ -107,7 +130,9 @@ export const MenuTrigger = defineComponent({
           ...attrs,
           type: (attrs.type as string | undefined) ?? 'button',
           ref: (node: unknown) => {
+            if (menu.anchor.value) menusByTrigger.delete(menu.anchor.value);
             menu.anchor.value = node as HTMLElement | null;
+            if (menu.anchor.value) menusByTrigger.set(menu.anchor.value, menu);
           },
           'data-vf-menu-trigger': '',
           'aria-haspopup': 'menu',
@@ -143,6 +168,7 @@ export const MenuContent = defineComponent({
     let query = '';
     let timer: ReturnType<typeof setTimeout> | null = null;
     let restoreFocus = false;
+    let switchTarget: HTMLButtonElement | null = null;
     function sync() {
       const surface = menu.surface.value;
       const trigger = menu.anchor.value;
@@ -153,8 +179,17 @@ export const MenuContent = defineComponent({
         timer = null;
         query = '';
         if (surface.matches(':popover-open')) surface.hidePopover();
+        const next = switchTarget;
+        switchTarget = null;
+        const targetMenu = next ? menusByTrigger.get(next) : undefined;
+        if (next?.isConnected && targetMenu) {
+          next.focus();
+          targetMenu.setOpen(true);
+          targetMenu.focusMenu('first');
+        }
         return;
       }
+      switchTarget = null;
       if (!surface.matches(':popover-open')) surface.showPopover({ source: trigger });
       const edge = menu.focusRequest.value;
       menu.focusRequest.value = null;
@@ -215,6 +250,14 @@ export const MenuContent = defineComponent({
               event.target.closest('[data-vf-menu-content]') !== event.currentTarget
             )
               return;
+            const nextTrigger = adjacentMenubarTrigger(menu.anchor.value, event);
+            if (nextTrigger && menusByTrigger.has(nextTrigger)) {
+              event.preventDefault();
+              switchTarget = nextTrigger;
+              menu.setOpen(false);
+              void nextTick(sync);
+              return;
+            }
             if (event.key === 'Escape') {
               event.preventDefault();
               menu.setOpen(false);

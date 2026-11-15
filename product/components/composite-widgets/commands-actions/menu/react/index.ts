@@ -10,9 +10,31 @@ import {
   type ComponentPropsWithoutRef,
   type ReactNode,
 } from 'react';
-import { resolveNavigationIndex } from '@vyrnforge/core/collection-navigation';
+import { navigationIntentForArrow, resolveNavigationIndex } from '@vyrnforge/core/collection-navigation';
 import { findTypeaheadMatch } from '@vyrnforge/core/typeahead-matching';
 import { type FloatingPlacement } from '@vyrnforge/web/floating-positioning';
+
+function adjacentMenubarTrigger(
+  trigger: HTMLElement | null,
+  event: Pick<KeyboardEvent, 'key'>,
+): HTMLButtonElement | null {
+  if (!trigger?.matches('[data-vf-menubar-trigger]') || (event.key !== 'ArrowLeft' && event.key !== 'ArrowRight'))
+    return null;
+  const bar = trigger.closest('[data-vf-menubar-root]');
+  if (!bar) return null;
+  const items = Array.from(bar.querySelectorAll<HTMLButtonElement>('[data-vf-menubar-trigger]')).filter(
+    (item) => item.closest('[data-vf-menubar-root]') === bar,
+  );
+  const direction = getComputedStyle(bar).direction === 'rtl' ? 'rtl' : 'ltr';
+  const intent = navigationIntentForArrow(event.key === 'ArrowLeft' ? 'left' : 'right', 'horizontal', direction);
+  if (!intent) return null;
+  const next = resolveNavigationIndex(
+    items.map((item) => ({ eligible: !item.matches(':disabled') })),
+    items.indexOf(trigger as HTMLButtonElement),
+    intent,
+  );
+  return next == null || items[next] === trigger ? null : (items[next] ?? null);
+}
 
 const menuItemSelector = '[data-vf-menu-item]';
 function menuItems(root: HTMLElement): HTMLElement[] {
@@ -53,6 +75,7 @@ interface MenuContextValue {
   focusRevision: number;
 }
 const MenuContext = createContext<MenuContextValue | null>(null);
+const menusByTrigger = new WeakMap<HTMLElement, MenuContextValue>();
 function useMenu(): MenuContextValue {
   const value = useContext(MenuContext);
   if (!value) throw new Error('Menu parts must be used inside MenuRoot.');
@@ -110,7 +133,9 @@ export const MenuTrigger = forwardRef<HTMLButtonElement, MenuTriggerProps>(funct
     ...props,
     type: props.type ?? 'button',
     ref(node: HTMLButtonElement | null) {
+      if (menu.anchorRef.current) menusByTrigger.delete(menu.anchorRef.current);
       menu.anchorRef.current = node;
+      if (node) menusByTrigger.set(node, menu);
       if (typeof forwardedRef === 'function') forwardedRef(node);
       else if (forwardedRef) forwardedRef.current = node;
     },
@@ -147,6 +172,7 @@ export const MenuContent = forwardRef<HTMLDivElement, MenuContentProps>(function
   const timer = useRef<ReturnType<typeof setTimeout> | null>(null);
   const [nativeRevision, setNativeRevision] = useState(0);
   const restoreFocus = useRef(false);
+  const switchTarget = useRef<HTMLButtonElement | null>(null);
   useEffect(
     () => () => {
       if (timer.current !== null) clearTimeout(timer.current);
@@ -163,8 +189,17 @@ export const MenuContent = forwardRef<HTMLDivElement, MenuContentProps>(function
       timer.current = null;
       query.current = '';
       if (surface.matches(':popover-open')) surface.hidePopover();
+      const next = switchTarget.current;
+      switchTarget.current = null;
+      const targetMenu = next ? menusByTrigger.get(next) : undefined;
+      if (next?.isConnected && targetMenu) {
+        next.focus();
+        targetMenu.setOpen(true);
+        targetMenu.focusMenu('first');
+      }
       return;
     }
+    switchTarget.current = null;
     if (!surface.matches(':popover-open')) surface.showPopover({ source: trigger });
     const edge = menu.focusRequest.current;
     menu.focusRequest.current = null;
@@ -212,6 +247,14 @@ export const MenuContent = forwardRef<HTMLDivElement, MenuContentProps>(function
         event.target.closest('[data-vf-menu-content]') !== event.currentTarget
       )
         return;
+      const nextTrigger = adjacentMenubarTrigger(menu.anchorRef.current, event);
+      if (nextTrigger && menusByTrigger.has(nextTrigger)) {
+        event.preventDefault();
+        switchTarget.current = nextTrigger;
+        menu.setOpen(false);
+        setNativeRevision((revision) => revision + 1);
+        return;
+      }
       if (event.key === 'Escape') {
         event.preventDefault();
         menu.setOpen(false);
