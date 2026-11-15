@@ -25,7 +25,7 @@ interface Ctx {
   setActiveId(value: string | null): void;
   inputId: string;
   listboxId: string;
-  anchorRef: React.MutableRefObject<HTMLElement | null>;
+  anchorRef: React.MutableRefObject<HTMLInputElement | null>;
   surfaceRef: React.MutableRefObject<HTMLElement | null>;
 }
 const C = createContext<Ctx | null>(null);
@@ -42,6 +42,9 @@ function visibleOptions(root: HTMLElement | null): HTMLElement[] {
         (option) => !option.hidden && option.closest('[data-vf-combobox-content]') === root,
       )
     : [];
+}
+function inputUnavailable(input: HTMLInputElement | null): boolean {
+  return !input || input.readOnly || input.matches(':disabled');
 }
 function disabled(option: HTMLElement): boolean {
   return option.getAttribute('aria-disabled') === 'true' || option.hasAttribute('disabled');
@@ -89,18 +92,24 @@ export function ComboboxRoot({ children, id, value, defaultValue = '', locale, o
   const rootId = id ?? `vf-combobox-${uid}`;
   const inputId = `${rootId}-input`;
   const listboxId = `${rootId}-listbox`;
-  const anchorRef = useRef<HTMLElement | null>(null);
+  const anchorRef = useRef<HTMLInputElement | null>(null);
   const surfaceRef = useRef<HTMLElement | null>(null);
   const selected = value ?? internalValue;
   const context = useMemo<Ctx>(
     () => ({
       open,
       setOpen(next) {
+        next = next && !inputUnavailable(anchorRef.current);
         setOpenState(next);
         if (!next) setActiveId(null);
       },
       value: selected,
       setValue(next) {
+        if (inputUnavailable(anchorRef.current)) {
+          setActiveId(null);
+          setOpenState(false);
+          return;
+        }
         if (value === undefined) setInternalValue(next);
         onValueChange?.(next);
         setQueryState(next);
@@ -110,6 +119,7 @@ export function ComboboxRoot({ children, id, value, defaultValue = '', locale, o
       },
       query,
       setQuery(next) {
+        if (inputUnavailable(anchorRef.current)) return;
         setQueryState(next);
         setActiveId(null);
       },
@@ -178,6 +188,10 @@ export const ComboboxInput = forwardRef<
     onKeyDown(event) {
       props.onKeyDown?.(event);
       if (event.defaultPrevented) return;
+      if (inputUnavailable(event.currentTarget)) {
+        context.setOpen(false);
+        return;
+      }
       if (composingRef.current || event.nativeEvent.isComposing) return;
       if (event.key === 'ArrowDown' || event.key === 'ArrowUp') {
         event.preventDefault();

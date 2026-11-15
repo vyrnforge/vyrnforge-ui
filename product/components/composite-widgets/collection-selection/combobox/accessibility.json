@@ -26,7 +26,8 @@
       "DOM focus remains on the editable input while Up/Down Arrow moves the active enabled visible option",
       "popup options are excluded from the sequential Tab order and disabled options are skipped",
       "Enter commits the active option and Escape dismisses the popup without moving DOM focus",
-      "active options are scrolled into view when aria-activedescendant changes"
+      "active options are scrolled into view when aria-activedescendant changes",
+      "native read-only and disabled input state, including disabled fieldset ancestry, blocks popup navigation and selection without fabricating value intent"
     ],
     "consumer": [
       "provide a meaningful accessible input name and validation descriptions",
