@@ -76,7 +76,9 @@ test('Elements NumberField isolates nested ownership and ignores cancelled or un
 });
 
 const frameworkPorts = new Set(['react', 'angular', 'vue']);
-test('NumberField keeps native empty and constraint validity separate from committed numeric requests', async ({ page }) => {
+test('NumberField keeps native empty and constraint validity separate from committed numeric requests', async ({
+  page,
+}) => {
   test.skip(!frameworkPorts.has(port), 'Framework roots own committed numeric values.');
   await page.goto(`/components/number-field/${port}.html`);
   const body = page.locator('body');
@@ -110,7 +112,9 @@ test('NumberField keeps native empty and constraint validity separate from commi
   await expect(input).toHaveValue('3');
 });
 
-test('NumberField reconciles controlled rejection and programmatic changes without phantom intents', async ({ page }) => {
+test('NumberField reconciles controlled rejection and programmatic changes without phantom intents', async ({
+  page,
+}) => {
   test.skip(!frameworkPorts.has(port), 'Framework roots own controlled values.');
   await page.goto(`/components/number-field/${port}.html`);
   const body = page.locator('body');

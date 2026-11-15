@@ -34,23 +34,52 @@ export async function createReactStory({ client }) {
     useEffect(() => {
       document.body.dataset.numberFieldReady = 'true';
     }, []);
-    const field = (id, label, options, inputOptions = {}) => h(
-      NumberFieldRoot,
-      { key: id, ...options },
-      h(NumberFieldDecrement, { id: id === 'input' ? 'dec' : id + '-dec', 'aria-label': 'Decrease ' + label }, '−'),
-      h(NumberFieldInput, { id, name: id, 'aria-label': label, ...inputOptions }),
-      h(NumberFieldIncrement, { id: id === 'input' ? 'inc' : id + '-inc', 'aria-label': 'Increase ' + label }, '+'),
-    );
-    const report = (key) => (value) => { if (client) record(key, value); };
-    return h('form', { id: 'number-form' },
-      field('input', 'Quantity', { defaultValue: 2, min: 0, max: 10, step: 1, onValueChange: report('quantity') }, { required: true }),
-      field('controlled', 'Controlled quantity', { value: controlled, min: 0, max: 10, onValueChange: report('controlledRequest') }),
-      field('fractional', 'Fractional quantity', { defaultValue: 0.1, min: 0.1, max: 0.7, step: 0.2, onValueChange: report('fractional') }),
+    const field = (id, label, options, inputOptions = {}) =>
+      h(
+        NumberFieldRoot,
+        { key: id, ...options },
+        h(NumberFieldDecrement, { id: id === 'input' ? 'dec' : id + '-dec', 'aria-label': 'Decrease ' + label }, '−'),
+        h(NumberFieldInput, { id, name: id, 'aria-label': label, ...inputOptions }),
+        h(NumberFieldIncrement, { id: id === 'input' ? 'inc' : id + '-inc', 'aria-label': 'Increase ' + label }, '+'),
+      );
+    const report = (key) => (value) => {
+      if (client) record(key, value);
+    };
+    return h(
+      'form',
+      { id: 'number-form' },
+      field(
+        'input',
+        'Quantity',
+        { defaultValue: 2, min: 0, max: 10, step: 1, onValueChange: report('quantity') },
+        { required: true },
+      ),
+      field('controlled', 'Controlled quantity', {
+        value: controlled,
+        min: 0,
+        max: 10,
+        onValueChange: report('controlledRequest'),
+      }),
+      field('fractional', 'Fractional quantity', {
+        defaultValue: 0.1,
+        min: 0.1,
+        max: 0.7,
+        step: 0.2,
+        onValueChange: report('fractional'),
+      }),
       field('readonly', 'Read-only quantity', { defaultValue: 2, readOnly: true }),
       field('disabled', 'Disabled quantity', { defaultValue: 2, disabled: true }),
       field('any', 'Any quantity', { defaultValue: null, step: 'any', onValueChange: report('anyValue') }),
-      h('button', { type: 'button', id: 'set-controlled', onClick: () => setControlled(7) }, 'Set controlled value to seven'),
-      h('button', { type: 'button', id: 'clear-controlled', onClick: () => setControlled(null) }, 'Clear controlled value'),
+      h(
+        'button',
+        { type: 'button', id: 'set-controlled', onClick: () => setControlled(7) },
+        'Set controlled value to seven',
+      ),
+      h(
+        'button',
+        { type: 'button', id: 'clear-controlled', onClick: () => setControlled(null) },
+        'Clear controlled value',
+      ),
     );
   }
   return h(App);
@@ -65,22 +94,70 @@ export async function createVueStory({ client }) {
       onMounted(() => {
         document.body.dataset.numberFieldReady = 'true';
       });
-      const report = (key) => (value) => { if (client) record(key, value); };
-      const field = (id, label, options, inputOptions = {}) => h(NumberFieldRoot, { key: id, ...options }, () => [
-        h(NumberFieldDecrement, { id: id === 'input' ? 'dec' : id + '-dec', 'aria-label': 'Decrease ' + label }, () => '−'),
-        h(NumberFieldInput, { id, name: id, 'aria-label': label, ...inputOptions }),
-        h(NumberFieldIncrement, { id: id === 'input' ? 'inc' : id + '-inc', 'aria-label': 'Increase ' + label }, () => '+'),
-      ]);
-      return () => h('form', { id: 'number-form' }, [
-        field('input', 'Quantity', { defaultValue: 2, min: 0, max: 10, step: 1, 'onUpdate:value': report('quantity') }, { required: true }),
-        field('controlled', 'Controlled quantity', { value: controlled.value, min: 0, max: 10, 'onUpdate:value': report('controlledRequest') }),
-        field('fractional', 'Fractional quantity', { defaultValue: 0.1, min: 0.1, max: 0.7, step: 0.2, 'onUpdate:value': report('fractional') }),
-        field('readonly', 'Read-only quantity', { defaultValue: 2, readOnly: true }),
-        field('disabled', 'Disabled quantity', { defaultValue: 2, disabled: true }),
-        field('any', 'Any quantity', { defaultValue: null, step: 'any', 'onUpdate:value': report('anyValue') }),
-        h('button', { type: 'button', id: 'set-controlled', onClick: () => { controlled.value = 7; } }, 'Set controlled value to seven'),
-        h('button', { type: 'button', id: 'clear-controlled', onClick: () => { controlled.value = null; } }, 'Clear controlled value'),
-      ]);
+      const report = (key) => (value) => {
+        if (client) record(key, value);
+      };
+      const field = (id, label, options, inputOptions = {}) =>
+        h(NumberFieldRoot, { key: id, ...options }, () => [
+          h(
+            NumberFieldDecrement,
+            { id: id === 'input' ? 'dec' : id + '-dec', 'aria-label': 'Decrease ' + label },
+            () => '−',
+          ),
+          h(NumberFieldInput, { id, name: id, 'aria-label': label, ...inputOptions }),
+          h(
+            NumberFieldIncrement,
+            { id: id === 'input' ? 'inc' : id + '-inc', 'aria-label': 'Increase ' + label },
+            () => '+',
+          ),
+        ]);
+      return () =>
+        h('form', { id: 'number-form' }, [
+          field(
+            'input',
+            'Quantity',
+            { defaultValue: 2, min: 0, max: 10, step: 1, 'onUpdate:value': report('quantity') },
+            { required: true },
+          ),
+          field('controlled', 'Controlled quantity', {
+            value: controlled.value,
+            min: 0,
+            max: 10,
+            'onUpdate:value': report('controlledRequest'),
+          }),
+          field('fractional', 'Fractional quantity', {
+            defaultValue: 0.1,
+            min: 0.1,
+            max: 0.7,
+            step: 0.2,
+            'onUpdate:value': report('fractional'),
+          }),
+          field('readonly', 'Read-only quantity', { defaultValue: 2, readOnly: true }),
+          field('disabled', 'Disabled quantity', { defaultValue: 2, disabled: true }),
+          field('any', 'Any quantity', { defaultValue: null, step: 'any', 'onUpdate:value': report('anyValue') }),
+          h(
+            'button',
+            {
+              type: 'button',
+              id: 'set-controlled',
+              onClick: () => {
+                controlled.value = 7;
+              },
+            },
+            'Set controlled value to seven',
+          ),
+          h(
+            'button',
+            {
+              type: 'button',
+              id: 'clear-controlled',
+              onClick: () => {
+                controlled.value = null;
+              },
+            },
+            'Clear controlled value',
+          ),
+        ]);
     },
   });
 }
@@ -100,7 +177,9 @@ export async function createAngularStory({ client }) {
         document.body.dataset.numberFieldReady = 'true';
       });
     }
-    changed(key, value) { if (client) record(key, value); }
+    changed(key, value) {
+      if (client) record(key, value);
+    }
   }
   const field = (id, label, options, inputOptions = '') => `<div vfNumberFieldRoot ${options}>
     <button vfNumberFieldDecrement id="${id === 'input' ? 'dec' : id + '-dec'}" aria-label="Decrease ${label}">−</button>

@@ -1,4 +1,15 @@
-import { computed, defineComponent, h, inject, provide, ref, watch, type InjectionKey, type PropType, type Ref } from 'vue';
+import {
+  computed,
+  defineComponent,
+  h,
+  inject,
+  provide,
+  ref,
+  watch,
+  type InjectionKey,
+  type PropType,
+  type Ref,
+} from 'vue';
 
 interface Ctx {
   value: Ref<number | null>;
@@ -30,7 +41,8 @@ function stepInput(button: HTMLButtonElement, direction: 1 | -1) {
   const input = Array.from(root?.querySelectorAll<HTMLInputElement>('input[data-vf-number-field-input]') ?? []).find(
     (candidate) => candidate.closest('[data-vf-number-field-root]') === root,
   );
-  if (!input || button.matches(':disabled') || input.matches(':disabled') || input.readOnly || input.step === 'any') return;
+  if (!input || button.matches(':disabled') || input.matches(':disabled') || input.readOnly || input.step === 'any')
+    return;
   const before = input.value;
   if (direction === 1) input.stepUp();
   else input.stepDown();
@@ -52,7 +64,7 @@ export const NumberFieldRoot = defineComponent({
   setup(p, { attrs, slots, emit }) {
     const internal = ref<number | null>(p.defaultValue);
     const controlled = computed(() => p.value !== undefined);
-    const value = computed(() => p.value !== undefined ? p.value : internal.value);
+    const value = computed(() => (p.value !== undefined ? p.value : internal.value));
     provide(k, {
       value,
       controlled,
@@ -78,9 +90,13 @@ export const NumberFieldInput = defineComponent({
     const n = useN();
     const element = ref<HTMLInputElement | null>(null);
     const initial = n.value.value ?? '';
-    watch(n.value, (value) => {
-      if (element.value) syncValue(element.value, value);
-    }, { flush: 'sync' });
+    watch(
+      n.value,
+      (value) => {
+        if (element.value) syncValue(element.value, value);
+      },
+      { flush: 'sync' },
+    );
     return () =>
       h('input', {
         ...attrs,

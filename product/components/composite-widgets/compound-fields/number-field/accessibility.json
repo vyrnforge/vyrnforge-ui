@@ -9,15 +9,7 @@
   "wcag": {
     "target": "2.2 AA",
     "status": "review-required",
-    "criteria": [
-      "1.3.1",
-      "2.1.1",
-      "2.4.7",
-      "2.5.8",
-      "3.3.1",
-      "3.3.2",
-      "4.1.2"
-    ]
+    "criteria": ["1.3.1", "2.1.1", "2.4.7", "2.5.8", "3.3.1", "3.3.2", "4.1.2"]
   },
   "aria": {
     "status": "mapped",
@@ -33,9 +25,7 @@
       "Preserve finite numeric values or null (empty), distinguish native badInput editing from committed numeric requests, and preserve native validity rather than clamping user edits.",
       "Framework roots own committed value and native constraints; step controls use the owned native input's stepUp/stepDown and do not act when disabled, readonly or step-any."
     ],
-    "consumer": [
-      "Author input and step-button names, units and validation guidance."
-    ]
+    "consumer": ["Author input and step-button names, units and validation guidance."]
   },
   "forms": {
     "status": "review-required"

@@ -10,7 +10,8 @@ function stepInput(button: HTMLButtonElement, direction: 1 | -1) {
   const input = Array.from(root?.querySelectorAll<HTMLInputElement>('input[data-vf-number-field-input]') ?? []).find(
     (candidate) => candidate.closest('[data-vf-number-field-root]') === root,
   );
-  if (!input || button.matches(':disabled') || input.matches(':disabled') || input.readOnly || input.step === 'any') return;
+  if (!input || button.matches(':disabled') || input.matches(':disabled') || input.readOnly || input.step === 'any')
+    return;
   const before = input.value;
   if (direction === 1) input.stepUp();
   else input.stepDown();
@@ -37,7 +38,8 @@ export class VfNumberFieldRootDirective {
     this.initial.set(this.defaultValue());
   }
   set(next: number | null) {
-    if (this.disabled() || this.readOnly() || (next !== null && !Number.isFinite(next)) || next === this.current()) return;
+    if (this.disabled() || this.readOnly() || (next !== null && !Number.isFinite(next)) || next === this.current())
+      return;
     if (this.value() === undefined) this.initial.set(next);
     this.valueChange.emit(next);
   }

@@ -37,7 +37,8 @@ function stepInput(button: HTMLButtonElement, direction: 1 | -1) {
   const input = Array.from(root?.querySelectorAll<HTMLInputElement>('input[data-vf-number-field-input]') ?? []).find(
     (candidate) => candidate.closest('[data-vf-number-field-root]') === root,
   );
-  if (!input || button.matches(':disabled') || input.matches(':disabled') || input.readOnly || input.step === 'any') return;
+  if (!input || button.matches(':disabled') || input.matches(':disabled') || input.readOnly || input.step === 'any')
+    return;
   const before = input.value;
   if (direction === 1) input.stepUp();
   else input.stepDown();
@@ -55,7 +56,18 @@ export interface NumberFieldRootProps extends Omit<ComponentPropsWithoutRef<'div
   children?: ReactNode;
 }
 export const NumberFieldRoot = forwardRef<HTMLDivElement, NumberFieldRootProps>(function NumberFieldRoot(
-  { value, defaultValue = 0, min, max, step = 1, disabled = false, readOnly = false, onValueChange, children, ...props },
+  {
+    value,
+    defaultValue = 0,
+    min,
+    max,
+    step = 1,
+    disabled = false,
+    readOnly = false,
+    onValueChange,
+    children,
+    ...props
+  },
   ref,
 ) {
   const [internal, setInternal] = useState(defaultValue);
@@ -81,7 +93,10 @@ export const NumberFieldRoot = forwardRef<HTMLDivElement, NumberFieldRootProps>(
     createElement('div', { ...props, ref, 'data-vf-number-field-root': '' }, children),
   );
 });
-export type NumberFieldInputProps = Omit<ComponentPropsWithoutRef<'input'>, 'value' | 'defaultValue' | 'type' | 'min' | 'max' | 'step'>;
+export type NumberFieldInputProps = Omit<
+  ComponentPropsWithoutRef<'input'>,
+  'value' | 'defaultValue' | 'type' | 'min' | 'max' | 'step'
+>;
 export const NumberFieldInput = forwardRef<HTMLInputElement, NumberFieldInputProps>(function NumberFieldInput(
   { disabled, readOnly, onChange, ...props },
   ref,
