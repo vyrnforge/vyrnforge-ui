@@ -125,7 +125,10 @@ export const NumberFieldInput = forwardRef<HTMLInputElement, NumberFieldInputPro
       if (!element.form || element.form !== event.target) return;
       setTimeout(() => {
         if (!active || event.defaultPrevented || element.form !== event.target) return;
-        syncValue(element, reset.current());
+        const next = reset.current();
+        // Native reset bypasses the value setter observed by React. Write even when
+        // the DOM already matches, so re-entering the previous value is a new edit.
+        element.value = next === null ? '' : String(next);
       }, 0);
     };
     document.addEventListener('reset', onReset, true);
