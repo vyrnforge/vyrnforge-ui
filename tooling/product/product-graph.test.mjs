@@ -21,6 +21,17 @@ test('current repository is normalized into one product graph', () => {
     assert.ok(graph.components.some((component) => component.unitId === id), `${id} should exist`);
   }
 
+  for (const id of ['collection-navigation', 'typeahead-matching']) {
+    const capability = graph.units.find((unit) => unit.id === `capability:${id}`);
+    assert.ok(capability, `${id} should be a canonical capability`);
+    assert.equal(capability.authoringMode, 'product-unit');
+    assert.equal(capability.migration.state, 'product-unit');
+    assert.deepEqual(capability.packages, ['core']);
+    assert.equal(capability.legacyNodes.length, 0);
+    assert.deepEqual(Object.keys(capability.surfaces), ['core']);
+    assert.ok(capability.surfaces.core.publicEntrypoints.includes(`@vyrnforge/core/${id}`));
+  }
+
   const reactPackage = graph.packages.find((pkg) => pkg.id === 'react');
   assert.ok(reactPackage);
   assert.equal(reactPackage.manifest.name, '@vyrnforge/react');
@@ -146,7 +157,10 @@ test('component Core source fails closed until its projection is deliberately de
 
   write('packages/core/package.json', JSON.stringify({
     name: '@vyrnforge/core',
-    exports: { '.': './dist/index.js' },
+    exports: {
+      '.': './dist/index.js',
+      './collection-navigation': './dist/capabilities/collection-navigation/index.js',
+    },
   }));
   write('product/components/example/component.json', JSON.stringify({ name: 'Example' }));
   write('product/components/example/core/index.ts', 'export const value = 1;\n');
@@ -164,11 +178,15 @@ test('canonical capabilities merge legacy package ownership into one logical nod
 
   write('packages/core/package.json', JSON.stringify({
     name: '@vyrnforge/core',
-    exports: { '.': './dist/index.js' },
+    exports: {
+      '.': './dist/index.js',
+      './collection-navigation': './dist/capabilities/collection-navigation/index.js',
+    },
   }));
   write('packages/core/src/capabilities/collection-navigation/index.ts', 'export const next = () => 0;\n');
   write('packages/core/test/capabilities/collection-navigation/navigation.test.mjs', 'export {};\n');
   write('product/capabilities/collection-navigation/core/index.ts', 'export const next = () => 0;\n');
+  write('product/capabilities/collection-navigation/test/navigation.test.mjs', 'export {};\n');
 
   const graph = discoverProductGraph(root);
   const capability = graph.units.find((unit) => unit.id === 'capability:collection-navigation');
@@ -176,6 +194,11 @@ test('canonical capabilities merge legacy package ownership into one logical nod
   assert.ok(capability);
   assert.equal(capability.authoringMode, 'product-unit');
   assert.deepEqual(capability.packages, ['core']);
+  assert.deepEqual(Object.keys(capability.surfaces), ['core']);
+  assert.deepEqual(capability.surfaces.core.authoringPaths, ['product/capabilities/collection-navigation/core/']);
+  assert.equal(capability.surfaces.core.projectionPath, 'packages/core/src/capabilities/collection-navigation/');
+  assert.deepEqual(capability.surfaces.core.publicEntrypoints, ['@vyrnforge/core/collection-navigation']);
+  assert.equal(capability.testPath, 'product/capabilities/collection-navigation/test/');
   assert.equal(capability.legacyNodes.length, 1);
   assert.equal(capability.migration.state, 'mixed');
 
@@ -184,6 +207,7 @@ test('canonical capabilities merge legacy package ownership into one logical nod
   assert.ok(impactCapability.nodes.includes('capability:collection-navigation'));
   assert.ok(impactCapability.nodes.includes('unit:core:capabilities:collection-navigation'));
   assert.ok(impactCapability.paths.includes('product/capabilities/collection-navigation/'));
+  assert.ok(impactCapability.paths.includes('product/capabilities/collection-navigation/test/'));
   assert.ok(impactCapability.paths.includes('packages/core/src/capabilities/collection-navigation/'));
 });
 

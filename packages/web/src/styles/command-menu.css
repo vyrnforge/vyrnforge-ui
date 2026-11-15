@@ -1,0 +1,43 @@
+@layer vyrnforge.components {
+  :where([data-vf-menu-content], [data-vf-context-menu-content], [data-vf-split-button-content]) {
+    min-inline-size: 10rem;
+    padding: var(--vf-space-sm);
+    border: 1px solid var(--vf-color-border);
+    border-radius: var(--vf-radius-surface);
+    background: var(--vf-color-surface);
+    box-shadow: var(--vf-shadow-md);
+  }
+
+  :where([data-vf-menu-item], [data-vf-context-menu-item]) {
+    display: flex;
+    inline-size: 100%;
+    align-items: center;
+    gap: var(--vf-space-sm);
+    padding: var(--vf-space-sm) var(--vf-space-md);
+    border: 0;
+    border-radius: var(--vf-control-radius);
+    background: transparent;
+    color: inherit;
+    text-align: start;
+  }
+
+  :where([data-vf-menu-item], [data-vf-context-menu-item]):hover,
+  :where([data-vf-menu-item], [data-vf-context-menu-item]):focus-visible {
+    background: var(--vf-color-surface-hover);
+  }
+
+  :where([data-vf-menu-item], [data-vf-context-menu-item]):focus-visible {
+    outline: 2px solid var(--vf-color-focus-ring);
+    outline-offset: -2px;
+  }
+
+  @media (forced-colors: active) {
+    :where([data-vf-menu-content], [data-vf-context-menu-content], [data-vf-split-button-content]) {
+      box-shadow: none;
+    }
+
+    :where([data-vf-menu-item], [data-vf-context-menu-item]):focus-visible {
+      outline-color: Highlight;
+    }
+  }
+}

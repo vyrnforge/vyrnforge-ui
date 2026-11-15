@@ -7,8 +7,8 @@ export const componentLayerDefinitions = Object.freeze([
   { id: 'interactive-controls', label: 'L2 — Interactive Controls' },
   { id: 'composition-primitives', label: 'L3 — Composition Primitives' },
   { id: 'behavioral-infrastructure', label: 'L4 — Behavioral Infrastructure' },
-  { id: 'composite-components', label: 'L5 — Composite Components' },
-  { id: 'complex-components', label: 'L6 — Complex Components' },
+  { id: 'composite-widgets', label: 'L5 — Composite Widgets' },
+  { id: 'complex-ui', label: 'L6 — Complex UI & Application Structures' },
 ]);
 const layerNames = new Set(componentLayerDefinitions.map((layer) => layer.id));
 const validName = /^[a-z][a-z0-9-]*$/;

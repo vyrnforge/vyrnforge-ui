@@ -51,7 +51,6 @@ export * from '@vyrnforge/angular/pagination';
 export * from '@vyrnforge/angular/password-field';
 export * from '@vyrnforge/angular/search-field';
 export * from '@vyrnforge/angular/split-panel';
-export * from '@vyrnforge/angular/temporal-field';
 export * from '@vyrnforge/angular/toast';
 export * from '@vyrnforge/angular/app-shell';
 export * from '@vyrnforge/angular/side-nav';

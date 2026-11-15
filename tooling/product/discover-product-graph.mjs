@@ -13,6 +13,7 @@ const productKinds = Object.freeze({
   patterns: 'pattern',
 });
 const componentTargets = Object.freeze(['core', 'web', ...frameworkPortNames]);
+const capabilityTargets = Object.freeze(['core']);
 const reservedLegacyProductRoots = new Set(Object.keys(productKinds));
 const packageForTarget = Object.freeze(Object.fromEntries(componentTargets.map((target) => [target, target])));
 
@@ -236,12 +237,52 @@ function normalizePatternNode(root, manifests, patternId) {
   };
 }
 
-function canonicalUnitNodes(root) {
+function canonicalUnitNodes(root, manifests) {
   const nodes = [];
   for (const [directory, kind] of Object.entries(productKinds)) {
     if (kind === 'component' || kind === 'pattern') continue;
     for (const unitId of directories(root, `product/${directory}`)) {
       const unitRoot = `product/${directory}/${unitId}/`;
+      if (kind === 'capability') {
+        const surfaces = Object.fromEntries(capabilityTargets.flatMap((target) => {
+          const authoringPath = `${unitRoot}${target}/`;
+          if (!exists(root, authoringPath)) return [];
+          const packageName = packageForTarget[target];
+          const manifest = manifests.get(packageName);
+          const publicName = packagePublicName(manifests, packageName);
+          const exportName = `./${unitId}`;
+          return [[target, {
+            target,
+            package: packageName,
+            authoringMode: 'product-unit',
+            authoringPaths: [authoringPath],
+            projectionPath: `packages/${packageName}/src/capabilities/${unitId}/`,
+            legacyPaths: [],
+            publicEntrypoints: manifest?.exports?.[exportName] ? [`${publicName}/${unitId}`] : [],
+            dependencies: [],
+            browser: false,
+            types: null,
+            ssr: null,
+          }]];
+        }));
+        nodes.push({
+          id: `${kind}:${unitId}`,
+          unitId,
+          kind,
+          name: titleCase(unitId),
+          root: unitRoot,
+          authoringMode: 'product-unit',
+          surfaces,
+          packages: unique(Object.values(surfaces).map((surface) => surface.package)),
+          publicEntrypoints: unique(Object.values(surfaces).flatMap((surface) => surface.publicEntrypoints)),
+          dependencies: [],
+          testPath: exists(root, `${unitRoot}test/`) ? `${unitRoot}test/` : null,
+          metadataPath: unitRoot,
+          legacyNodes: [],
+          migration: { state: 'product-unit', canonicalRoot: unitRoot },
+        });
+        continue;
+      }
       nodes.push({
         id: `${kind}:${unitId}`,
         unitId,
@@ -282,8 +323,13 @@ function normalizeLegacyOwnedUnits(discovery, canonicalNodes) {
     };
 
     if (canonical) {
-      canonical.packages = unique([...canonical.packages, unit.package]);
+      canonical.packages = unique([...canonical.packages, ...(unit.packages ?? [unit.package])]);
       canonical.dependencies = unique([...canonical.dependencies, ...unit.dependencies]);
+      if (unit.authoringMode === 'product-unit') {
+        canonical.testPath ??= unit.testPath ?? null;
+        canonical.metadataPath ??= unit.metadataPath ?? canonical.root;
+        continue;
+      }
       canonical.legacyNodes.push(legacyProjection);
       canonical.migration = { ...canonical.migration, state: 'mixed' };
       continue;
@@ -323,7 +369,7 @@ export function discoverProductGraph(root = repoRoot) {
   const patterns = directories(root, 'product/patterns').map((patternId) =>
     normalizePatternNode(root, manifests, patternId),
   );
-  const canonicalUnits = canonicalUnitNodes(root);
+  const canonicalUnits = canonicalUnitNodes(root, manifests);
   const legacyUnits = normalizeLegacyOwnedUnits(discovery, canonicalUnits);
   const units = [...components, ...patterns, ...canonicalUnits, ...legacyUnits].sort((a, b) => a.id.localeCompare(b.id));
 
@@ -370,6 +416,17 @@ export function productGraphProblems(root = repoRoot) {
         problems.push(`${owner.id}/${surface.target} projects to unknown package ${surface.package}`);
       }
     }
+  }
+
+  for (const capability of graph.units.filter((unit) => unit.kind === 'capability' && unit.surfaces)) {
+    for (const surface of Object.values(capability.surfaces)) {
+      if (!surface.authoringPaths.length) problems.push(`${capability.id}/${surface.target} has no authoring source`);
+      if (!surface.projectionPath) problems.push(`${capability.id}/${surface.target} has no package projection destination`);
+      if (!graph.packages.some((pkg) => pkg.id === surface.package)) {
+        problems.push(`${capability.id}/${surface.target} projects to unknown package ${surface.package}`);
+      }
+    }
+    if (!capability.testPath) problems.push(`${capability.id} has no canonical product-unit test path`);
   }
 
   return problems;

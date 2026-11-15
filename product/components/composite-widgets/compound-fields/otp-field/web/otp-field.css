@@ -1,0 +1,15 @@
+@import '../input/input.css';
+
+@layer vyrnforge.components {
+  [data-vf-otp-field-root] {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--vf-space-sm);
+  }
+  [data-vf-otp-field-input] {
+    inline-size: 100%;
+    max-inline-size: 100%;
+    min-inline-size: 0;
+    font-variant-numeric: tabular-nums;
+  }
+}

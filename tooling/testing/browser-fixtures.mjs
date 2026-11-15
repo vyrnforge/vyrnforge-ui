@@ -1,9 +1,7 @@
-import { mkdir, readFile, writeFile } from 'node:fs/promises';
+import { mkdir, writeFile } from 'node:fs/promises';
 import path from 'node:path';
 import { pathToFileURL } from 'node:url';
 import { build } from 'esbuild';
-
-const TOKEN_IMPORT = '@import "../../styles/tokens.css";';
 
 function moduleSpecifier(root, fixturePath) {
   const relative = path.relative(root, fixturePath).replaceAll(path.sep, '/');
@@ -37,13 +35,19 @@ function storyExport(module, exportName, fixturePath, port) {
 }
 
 async function prepareStyles({ root, outDir, component }) {
-  const componentCss = await readFile(
-    path.join(root, `packages/web/dist/components/${component}/${component}.css`),
-    'utf8',
-  );
-  const tokenCss = await readFile(path.join(root, 'packages/web/dist/styles/tokens.css'), 'utf8');
   const stylesheet = `${component}.css`;
-  await writeFile(path.join(outDir, stylesheet), `${tokenCss}\n${componentCss.replace(TOKEN_IMPORT, '')}`);
+  // Resolve imports relative to the projected Web package, including private family styles.
+  // Concatenating CSS would put component @imports after rules, making them invalid.
+  await build({
+    stdin: {
+      resolveDir: path.join(root, 'packages/web/dist'),
+      sourcefile: `${component}-fixture.css`,
+      loader: 'css',
+      contents: `@import "./styles/tokens.css";\n@import "./components/${component}/${component}.css";`,
+    },
+    bundle: true,
+    outfile: path.join(outDir, stylesheet),
+  });
   return stylesheet;
 }
 
@@ -110,8 +114,8 @@ async function prepareVue({ root, outDir, definition, stylesheet, config, fixtur
   });
 }
 
-function angularDocument({ selector, stylesheet }) {
-  return `<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width"><link rel="stylesheet" href="./${stylesheet}"></head><body><${selector}></${selector}></body></html>`;
+function angularDocument({ selector, stylesheet, title }) {
+  return `<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width"><link rel="stylesheet" href="./${stylesheet}"><title>${title}</title></head><body><${selector}></${selector}></body></html>`;
 }
 
 async function prepareAngular({ root, outDir, definition, stylesheet, config, fixtureModule, fixturePath }) {
@@ -122,17 +126,21 @@ async function prepareAngular({ root, outDir, definition, stylesheet, config, fi
     provideClientHydration,
     withNoIncrementalHydration,
   } = await import('@angular/platform-browser');
-  const { renderApplication } = await import('@angular/platform-server');
+  const { provideServerRendering, renderApplication } = await import('@angular/platform-server');
   const createStory = storyExport(fixtureModule, config.story, fixturePath, 'angular');
   const RootComponent = await createStory({ client: false });
   const providers = [
+    provideServerRendering(),
     provideZonelessChangeDetection(),
     provideClientHydration(withNoIncrementalHydration()),
   ];
   const html = await renderApplication(
     (context) => bootstrapApplication(RootComponent, { providers }, context),
-    { document: angularDocument({ selector: config.selector, stylesheet }) },
+    { document: angularDocument({ selector: config.selector, stylesheet, title: definition.title }) },
   );
+  if (!/\sngh=/.test(html)) {
+    throw new Error(`Angular SSR fixture ${definition.component} did not emit hydration annotations.`);
+  }
   await writeFile(
     path.join(outDir, 'angular.html'),
     html.replace('</body>', '<script type="module" src="./angular.js"></script></body>'),
@@ -143,7 +151,7 @@ async function prepareAngular({ root, outDir, definition, stylesheet, config, fi
     outDir,
     component: definition.component,
     port: 'angular',
-    contents: `import '@angular/compiler';import{provideZonelessChangeDetection}from'@angular/core';import{bootstrapApplication,provideClientHydration,withNoIncrementalHydration}from'@angular/platform-browser';import{${config.story} as createStory}from${JSON.stringify(specifier)};(async()=>{const RootComponent=await createStory({client:true});await bootstrapApplication(RootComponent,{providers:[provideZonelessChangeDetection(),provideClientHydration(withNoIncrementalHydration())]});})();`,
+    contents: `import '@angular/compiler';import{provideZonelessChangeDetection}from'@angular/core';import{bootstrapApplication,provideClientHydration,withNoIncrementalHydration}from'@angular/platform-browser';import{${config.story} as createStory}from${JSON.stringify(specifier)};(async()=>{const host=document.querySelector(${JSON.stringify(config.selector)});const serverNode=host?.firstElementChild;const serverControl=host?.querySelector('input,button,textarea,select,a[href]');if(!serverNode)throw new Error('Angular SSR fixture has no rendered root child');const RootComponent=await createStory({client:true});await bootstrapApplication(RootComponent,{providers:[provideZonelessChangeDetection(),provideClientHydration(withNoIncrementalHydration())]});if(host.firstElementChild!==serverNode||(serverControl&&!host.contains(serverControl)))throw new Error('Angular hydration replaced server-rendered nodes');document.documentElement.dataset.vfAngularHydrated='true';})();`,
   });
 }
 

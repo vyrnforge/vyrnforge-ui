@@ -181,11 +181,6 @@
       "import": "./dist/components/split-panel/index.js",
       "default": "./dist/components/split-panel/index.js"
     },
-    "./temporal-field": {
-      "types": "./dist/components/temporal-field/index.d.ts",
-      "import": "./dist/components/temporal-field/index.js",
-      "default": "./dist/components/temporal-field/index.js"
-    },
     "./toast": {
       "types": "./dist/components/toast/index.d.ts",
       "import": "./dist/components/toast/index.js",

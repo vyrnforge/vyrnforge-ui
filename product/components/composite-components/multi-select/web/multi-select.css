@@ -1,7 +1,0 @@
-@import "../../styles/selection.css";
-
-@layer vyrnforge.components {
-  [data-vf-multi-select-content] {
-    min-inline-size: 12rem;
-  }
-}

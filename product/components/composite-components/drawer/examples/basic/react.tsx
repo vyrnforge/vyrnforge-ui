@@ -1,1 +1,0 @@
-import{DrawerClose,DrawerRoot,DrawerTitle}from'@vyrnforge/react/drawer';export default()=> <DrawerRoot defaultOpen placement="end"><DrawerTitle>Settings</DrawerTitle><DrawerClose>Close</DrawerClose></DrawerRoot>;

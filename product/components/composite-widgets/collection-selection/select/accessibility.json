@@ -1,0 +1,32 @@
+{
+  "schemaVersion": 1,
+  "component": "select",
+  "reviewStatus": "review-required",
+  "nativeBaseline": {
+    "kind": "composite",
+    "reference": "native select when sufficient; custom button/listbox when justified"
+  },
+  "wcag": {
+    "target": "2.2 AA",
+    "status": "review-required",
+    "criteria": ["1.3.1", "2.1.1", "2.4.3", "2.4.7", "3.3.2", "4.1.2"]
+  },
+  "aria": { "status": "mapped", "apgPattern": "listbox" },
+  "interaction": { "keyboard": "managed", "focus": "review-required", "directionality": "logical" },
+  "ownership": {
+    "library": [
+      "Maintain trigger-to-popup relationships, selection state, keyboard focus and native-equivalent form participation."
+    ],
+    "consumer": ["Author labels, options and values; prefer native Select when its behavior suffices."]
+  },
+  "forms": { "status": "review-required" },
+  "visualAccessibility": { "status": "component-specific" },
+  "ssrHydration": { "status": "contract-required" },
+  "evidence": { "browser": "required", "assistiveTechnology": "review-required" },
+  "profileVariability": [],
+  "notes": [
+    "Custom Select requires an explicit native-first justification and required/invalid/reset contract.",
+    "Anchored positioning migration belongs to #1280.",
+    "Audit mapping is provisional; not a conformance claim."
+  ]
+}

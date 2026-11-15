@@ -1,0 +1,113 @@
+import { computed, defineComponent, h, inject, provide, ref, useId, type InjectionKey, type Ref } from 'vue';
+
+interface DisclosureContext {
+  panelId: Readonly<Ref<string>>;
+  open: Readonly<Ref<boolean>>;
+  disabled: Readonly<Ref<boolean>>;
+  setOpen(value: boolean): void;
+}
+const Key: InjectionKey<DisclosureContext> = Symbol('VyrnForgeDisclosure');
+function useDisclosure() {
+  const value = inject(Key);
+  if (!value) throw new Error('VyrnForge Disclosure parts must be inside DisclosureRoot.');
+  return value;
+}
+export interface DisclosureRootProps {
+  id?: string;
+  /** ID shared by the panel and trigger's aria-controls. Defaults to the root ID plus -panel. */
+  panelId?: string;
+  modelValue?: boolean;
+  defaultOpen?: boolean;
+  disabled?: boolean;
+}
+export const DisclosureRoot = defineComponent({
+  name: 'VfDisclosureRoot',
+  inheritAttrs: false,
+  props: {
+    id: String,
+    panelId: String,
+    modelValue: { type: Boolean, default: undefined },
+    defaultOpen: { type: Boolean, default: false },
+    disabled: { type: Boolean, default: false },
+  },
+  emits: ['update:modelValue', 'openChange'],
+  setup(props, { attrs, slots, emit }) {
+    const generated = useId().replaceAll(':', '');
+    const id = computed(() => props.id ?? `vf-disclosure-${generated}`);
+    const panelId = computed(() => props.panelId ?? `${id.value}-panel`);
+    const internal = ref(props.defaultOpen);
+    const open = computed(() => props.modelValue ?? internal.value);
+    const disabled = computed(() => props.disabled);
+    provide(Key, {
+      panelId,
+      open,
+      disabled,
+      setOpen(value) {
+        if (props.disabled || value === open.value) return;
+        if (props.modelValue === undefined) internal.value = value;
+        emit('update:modelValue', value);
+        emit('openChange', value);
+      },
+    });
+    return () =>
+      h(
+        'div',
+        {
+          ...attrs,
+          id: id.value,
+          'data-vf-disclosure-root': '',
+          'data-vf-open': open.value ? '' : undefined,
+          'data-vf-disabled': props.disabled ? '' : undefined,
+        },
+        slots.default?.(),
+      );
+  },
+});
+export const DisclosureTrigger = defineComponent({
+  name: 'VfDisclosureTrigger',
+  inheritAttrs: false,
+  props: { disabled: Boolean },
+  setup(props, { attrs, slots }) {
+    const context = useDisclosure();
+    return () =>
+      h(
+        'button',
+        {
+          ...attrs,
+          type: attrs.type ?? 'button',
+          disabled: context.disabled.value || props.disabled,
+          'aria-expanded': context.open.value,
+          'aria-controls': context.panelId.value,
+          'data-vf-disclosure-trigger': '',
+          onClick(event: MouseEvent) {
+            const handler = attrs.onClick;
+            if (typeof handler === 'function') handler(event);
+            else if (Array.isArray(handler))
+              for (const candidate of handler) if (typeof candidate === 'function') candidate(event);
+            if (!event.defaultPrevented && !context.disabled.value && !props.disabled)
+              context.setOpen(!context.open.value);
+          },
+        },
+        slots.default?.(),
+      );
+  },
+});
+export const DisclosurePanel = defineComponent({
+  name: 'VfDisclosurePanel',
+  inheritAttrs: false,
+  setup(_props, { attrs, slots }) {
+    const context = useDisclosure();
+    return () =>
+      h(
+        'div',
+        {
+          ...attrs,
+          id: context.panelId.value,
+          hidden: !context.open.value,
+          'data-vf-disclosure-panel': '',
+          'data-vf-open': context.open.value ? '' : undefined,
+        },
+        slots.default?.(),
+      );
+  },
+});

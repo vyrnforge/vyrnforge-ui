@@ -1,0 +1,9 @@
+@import '../../styles/command-menu.css';
+
+@layer vyrnforge.components {
+  [data-vf-menu-separator] {
+    block-size: 1px;
+    margin: var(--vf-space-sm) 0;
+    background: var(--vf-color-border);
+  }
+}

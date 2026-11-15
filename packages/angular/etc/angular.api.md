@@ -127,9 +127,6 @@ export type TabsActivation = 'automatic' | 'manual';
 // @public (undocumented)
 export type TabsOrientation = 'horizontal' | 'vertical';
 
-// @public (undocumented)
-export type TemporalFieldInputType = 'date' | 'time' | 'datetime-local' | 'month' | 'week';
-
 export { TextVariant }
 
 // @public (undocumented)
@@ -187,7 +184,15 @@ export class VfAccordionPanelDirective {
     // (undocumented)
     readonly item: VfAccordionItemDirective;
     // (undocumented)
-    static ɵdir: i0.ɵɵDirectiveDeclaration<VfAccordionPanelDirective, "[vfAccordionPanel]", never, {}, {}, never, never, true, never>;
+    readonly region: InputSignalWithTransform<boolean, unknown>;
+    // (undocumented)
+    static ɵdir: i0.ɵɵDirectiveDeclaration<VfAccordionPanelDirective, "[vfAccordionPanel]", never, {
+        "region": {
+            "alias": "region";
+            "required": false;
+            "isSignal": true;
+        };
+    }, {}, never, never, true, never>;
     // (undocumented)
     static ɵfac: i0.ɵɵFactoryDeclaration<VfAccordionPanelDirective, never>;
 }
@@ -248,13 +253,23 @@ export class VfAccordionRootDirective {
 export class VfAccordionTriggerDirective {
     constructor(item: VfAccordionItemDirective);
     // (undocumented)
+    readonly disabled: InputSignalWithTransform<boolean, unknown>;
+    // (undocumented)
     readonly item: VfAccordionItemDirective;
     // (undocumented)
     onKeydown(event: KeyboardEvent): void;
     // (undocumented)
-    toggle(): void;
+    toggle(event?: MouseEvent): void;
     // (undocumented)
-    static ɵdir: i0.ɵɵDirectiveDeclaration<VfAccordionTriggerDirective, "button[vfAccordionTrigger]", never, {}, {}, never, never, true, never>;
+    unavailable(): boolean;
+    // (undocumented)
+    static ɵdir: i0.ɵɵDirectiveDeclaration<VfAccordionTriggerDirective, "button[vfAccordionTrigger]", never, {
+        "disabled": {
+            "alias": "disabled";
+            "required": false;
+            "isSignal": true;
+        };
+    }, {}, never, never, true, never>;
     // (undocumented)
     static ɵfac: i0.ɵɵFactoryDeclaration<VfAccordionTriggerDirective, never>;
 }
@@ -504,28 +519,52 @@ export class VfButtonDirective {
 
 // @public (undocumented)
 export class VfCarouselNextDirective {
-    constructor(root: VfCarouselRootDirective);
+    // (undocumented)
+    activate(event: MouseEvent): void;
+    // (undocumented)
+    readonly disabled: InputSignalWithTransform<boolean, unknown>;
     // (undocumented)
     readonly root: VfCarouselRootDirective;
     // (undocumented)
-    static ɵdir: i0.ɵɵDirectiveDeclaration<VfCarouselNextDirective, "button[vfCarouselNext]", never, {}, {}, never, never, true, never>;
+    unavailable(): boolean;
+    // (undocumented)
+    static ɵdir: i0.ɵɵDirectiveDeclaration<VfCarouselNextDirective, "button[vfCarouselNext]", never, {
+        "disabled": {
+            "alias": "disabled";
+            "required": false;
+            "isSignal": true;
+        };
+    }, {}, never, never, true, never>;
     // (undocumented)
     static ɵfac: i0.ɵɵFactoryDeclaration<VfCarouselNextDirective, never>;
 }
 
 // @public (undocumented)
 export class VfCarouselPreviousDirective {
-    constructor(root: VfCarouselRootDirective);
+    // (undocumented)
+    activate(event: MouseEvent): void;
+    // (undocumented)
+    readonly disabled: InputSignalWithTransform<boolean, unknown>;
     // (undocumented)
     readonly root: VfCarouselRootDirective;
     // (undocumented)
-    static ɵdir: i0.ɵɵDirectiveDeclaration<VfCarouselPreviousDirective, "button[vfCarouselPrevious]", never, {}, {}, never, never, true, never>;
+    unavailable(): boolean;
+    // (undocumented)
+    static ɵdir: i0.ɵɵDirectiveDeclaration<VfCarouselPreviousDirective, "button[vfCarouselPrevious]", never, {
+        "disabled": {
+            "alias": "disabled";
+            "required": false;
+            "isSignal": true;
+        };
+    }, {}, never, never, true, never>;
     // (undocumented)
     static ɵfac: i0.ɵɵFactoryDeclaration<VfCarouselPreviousDirective, never>;
 }
 
 // @public (undocumented)
 export class VfCarouselRootDirective {
+    // (undocumented)
+    count(): number;
     // (undocumented)
     current(): number;
     // (undocumented)
@@ -535,7 +574,9 @@ export class VfCarouselRootDirective {
     // (undocumented)
     readonly indexChange: OutputEmitterRef<number>;
     // (undocumented)
-    set(v: number): void;
+    position(slide: VfCarouselSlideDirective): number;
+    // (undocumented)
+    set(value: number): void;
     // (undocumented)
     static ɵdir: i0.ɵɵDirectiveDeclaration<VfCarouselRootDirective, "[vfCarouselRoot]", never, {
         "index": {
@@ -550,13 +591,15 @@ export class VfCarouselRootDirective {
         };
     }, {
         "indexChange": "indexChange";
-    }, never, never, true, never>;
+    }, ["slides"], never, true, never>;
     // (undocumented)
     static ɵfac: i0.ɵɵFactoryDeclaration<VfCarouselRootDirective, never>;
 }
 
 // @public (undocumented)
 export class VfCarouselSlideDirective {
+    // (undocumented)
+    readonly root: VfCarouselRootDirective;
     // (undocumented)
     static ɵdir: i0.ɵɵDirectiveDeclaration<VfCarouselSlideDirective, "[vfCarouselSlide]", never, {}, {}, never, never, true, never>;
     // (undocumented)
@@ -622,9 +665,19 @@ export class VfClusterDirective {
 export class VfColorPickerInputDirective {
     constructor(root: VfColorPickerRootDirective);
     // (undocumented)
+    change(event: Event): void;
+    // (undocumented)
+    readonly disabled: InputSignalWithTransform<boolean, unknown>;
+    // (undocumented)
     readonly root: VfColorPickerRootDirective;
     // (undocumented)
-    static ɵdir: i0.ɵɵDirectiveDeclaration<VfColorPickerInputDirective, "input[vfColorPickerInput]", never, {}, {}, never, never, true, never>;
+    static ɵdir: i0.ɵɵDirectiveDeclaration<VfColorPickerInputDirective, "input[vfColorPickerInput]", never, {
+        "disabled": {
+            "alias": "disabled";
+            "required": false;
+            "isSignal": true;
+        };
+    }, {}, never, never, true, never>;
     // (undocumented)
     static ɵfac: i0.ɵɵFactoryDeclaration<VfColorPickerInputDirective, never>;
 }
@@ -635,6 +688,10 @@ export class VfColorPickerRootDirective {
     readonly current: Signal<string>;
     // (undocumented)
     readonly defaultValue: InputSignal<string>;
+    // (undocumented)
+    readonly disabled: InputSignalWithTransform<boolean, unknown>;
+    // (undocumented)
+    ngOnInit(): void;
     // (undocumented)
     set(v: string): void;
     // (undocumented)
@@ -653,6 +710,11 @@ export class VfColorPickerRootDirective {
             "required": false;
             "isSignal": true;
         };
+        "disabled": {
+            "alias": "disabled";
+            "required": false;
+            "isSignal": true;
+        };
     }, {
         "valueChange": "valueChange";
     }, never, never, true, never>;
@@ -661,14 +723,40 @@ export class VfColorPickerRootDirective {
 }
 
 // @public (undocumented)
-export class VfColorPickerTextDirective {
+export class VfColorPickerSwatchDirective {
     constructor(root: VfColorPickerRootDirective);
-    // (undocumented)
-    change(e: Event): void;
     // (undocumented)
     readonly root: VfColorPickerRootDirective;
     // (undocumented)
-    static ɵdir: i0.ɵɵDirectiveDeclaration<VfColorPickerTextDirective, "input[vfColorPickerText]", never, {}, {}, never, never, true, never>;
+    static ɵdir: i0.ɵɵDirectiveDeclaration<VfColorPickerSwatchDirective, "[vfColorPickerSwatch]", never, {}, {}, never, never, true, never>;
+    // (undocumented)
+    static ɵfac: i0.ɵɵFactoryDeclaration<VfColorPickerSwatchDirective, never>;
+}
+
+// @public (undocumented)
+export class VfColorPickerTextDirective {
+    constructor(root: VfColorPickerRootDirective);
+    // (undocumented)
+    change(event: Event): void;
+    // (undocumented)
+    readonly disabled: InputSignalWithTransform<boolean, unknown>;
+    // (undocumented)
+    readonly readOnly: InputSignalWithTransform<boolean, unknown>;
+    // (undocumented)
+    readonly root: VfColorPickerRootDirective;
+    // (undocumented)
+    static ɵdir: i0.ɵɵDirectiveDeclaration<VfColorPickerTextDirective, "input[vfColorPickerText]", never, {
+        "disabled": {
+            "alias": "disabled";
+            "required": false;
+            "isSignal": true;
+        };
+        "readOnly": {
+            "alias": "readonly";
+            "required": false;
+            "isSignal": true;
+        };
+    }, {}, never, never, true, never>;
     // (undocumented)
     static ɵfac: i0.ɵɵFactoryDeclaration<VfColorPickerTextDirective, never>;
 }
@@ -943,7 +1031,7 @@ export class VfDialogBodyDirective {
 // @public (undocumented)
 export class VfDialogCloseDirective {
     // (undocumented)
-    onClick(): void;
+    onClick(event?: MouseEvent): void;
     // (undocumented)
     readonly root: VfDialogRootDirective;
     // (undocumented)
@@ -993,6 +1081,8 @@ export class VfDialogRootDirective {
     onClick(event: MouseEvent): void;
     // (undocumented)
     onClose(): void;
+    // (undocumented)
+    onPointerCancel(): void;
     // (undocumented)
     onPointerDown(event: PointerEvent): void;
     // (undocumented)
@@ -1101,6 +1191,9 @@ export class VfDisclosureRootDirective {
     readonly open: InputSignal<boolean | undefined>;
     // (undocumented)
     readonly openChange: OutputEmitterRef<boolean>;
+    readonly panelId: InputSignal<string | undefined>;
+    // (undocumented)
+    readonly resolvedPanelId: Signal<string>;
     // (undocumented)
     setOpen(next: boolean): void;
     // (undocumented)
@@ -1108,6 +1201,11 @@ export class VfDisclosureRootDirective {
         "id": {
             "alias": "id";
             "required": true;
+            "isSignal": true;
+        };
+        "panelId": {
+            "alias": "panelId";
+            "required": false;
             "isSignal": true;
         };
         "open": {
@@ -1136,11 +1234,19 @@ export class VfDisclosureRootDirective {
 export class VfDisclosureTriggerDirective {
     constructor(root: VfDisclosureRootDirective);
     // (undocumented)
+    readonly disabled: InputSignalWithTransform<boolean, unknown>;
+    // (undocumented)
     readonly root: VfDisclosureRootDirective;
     // (undocumented)
-    toggle(): void;
+    toggle(event?: MouseEvent): void;
     // (undocumented)
-    static ɵdir: i0.ɵɵDirectiveDeclaration<VfDisclosureTriggerDirective, "button[vfDisclosureTrigger]", never, {}, {}, never, never, true, never>;
+    static ɵdir: i0.ɵɵDirectiveDeclaration<VfDisclosureTriggerDirective, "button[vfDisclosureTrigger]", never, {
+        "disabled": {
+            "alias": "disabled";
+            "required": false;
+            "isSignal": true;
+        };
+    }, {}, never, never, true, never>;
     // (undocumented)
     static ɵfac: i0.ɵɵFactoryDeclaration<VfDisclosureTriggerDirective, never>;
 }
@@ -1206,6 +1312,8 @@ export class VfDrawerRootDirective {
     onClick(event: MouseEvent): void;
     // (undocumented)
     onClose(): void;
+    // (undocumented)
+    onPointerCancel(): void;
     // (undocumented)
     onPointerDown(event: PointerEvent): void;
     // (undocumented)
@@ -1517,7 +1625,13 @@ export class VfListboxRootDirective implements OnDestroy {
 }
 
 // @public (undocumented)
-export class VfMenubarRootDirective {
+export class VfMenubarRootDirective implements AfterViewInit, OnDestroy {
+    // (undocumented)
+    ngAfterViewInit(): void;
+    // (undocumented)
+    ngOnDestroy(): void;
+    // (undocumented)
+    onFocusin(event: FocusEvent): void;
     // (undocumented)
     static ɵdir: i0.ɵɵDirectiveDeclaration<VfMenubarRootDirective, "[vfMenubarRoot]", never, {}, {}, never, never, true, never>;
     // (undocumented)
@@ -1738,9 +1852,19 @@ export class VfNativeSelectDirective {
 export class VfNumberFieldDecrementDirective {
     constructor(root: VfNumberFieldRootDirective);
     // (undocumented)
+    activate(event: MouseEvent): void;
+    // (undocumented)
+    readonly disabled: InputSignalWithTransform<boolean, unknown>;
+    // (undocumented)
     readonly root: VfNumberFieldRootDirective;
     // (undocumented)
-    static ɵdir: i0.ɵɵDirectiveDeclaration<VfNumberFieldDecrementDirective, "button[vfNumberFieldDecrement]", never, {}, {}, never, never, true, never>;
+    static ɵdir: i0.ɵɵDirectiveDeclaration<VfNumberFieldDecrementDirective, "button[vfNumberFieldDecrement]", never, {
+        "disabled": {
+            "alias": "disabled";
+            "required": false;
+            "isSignal": true;
+        };
+    }, {}, never, never, true, never>;
     // (undocumented)
     static ɵfac: i0.ɵɵFactoryDeclaration<VfNumberFieldDecrementDirective, never>;
 }
@@ -1749,9 +1873,19 @@ export class VfNumberFieldDecrementDirective {
 export class VfNumberFieldIncrementDirective {
     constructor(root: VfNumberFieldRootDirective);
     // (undocumented)
+    activate(event: MouseEvent): void;
+    // (undocumented)
+    readonly disabled: InputSignalWithTransform<boolean, unknown>;
+    // (undocumented)
     readonly root: VfNumberFieldRootDirective;
     // (undocumented)
-    static ɵdir: i0.ɵɵDirectiveDeclaration<VfNumberFieldIncrementDirective, "button[vfNumberFieldIncrement]", never, {}, {}, never, never, true, never>;
+    static ɵdir: i0.ɵɵDirectiveDeclaration<VfNumberFieldIncrementDirective, "button[vfNumberFieldIncrement]", never, {
+        "disabled": {
+            "alias": "disabled";
+            "required": false;
+            "isSignal": true;
+        };
+    }, {}, never, never, true, never>;
     // (undocumented)
     static ɵfac: i0.ɵɵFactoryDeclaration<VfNumberFieldIncrementDirective, never>;
 }
@@ -1760,9 +1894,26 @@ export class VfNumberFieldIncrementDirective {
 export class VfNumberFieldInputDirective {
     constructor(root: VfNumberFieldRootDirective);
     // (undocumented)
+    change(event: Event): void;
+    // (undocumented)
+    readonly disabled: InputSignalWithTransform<boolean, unknown>;
+    // (undocumented)
+    readonly readOnly: InputSignalWithTransform<boolean, unknown>;
+    // (undocumented)
     readonly root: VfNumberFieldRootDirective;
     // (undocumented)
-    static ɵdir: i0.ɵɵDirectiveDeclaration<VfNumberFieldInputDirective, "input[vfNumberFieldInput]", never, {}, {}, never, never, true, never>;
+    static ɵdir: i0.ɵɵDirectiveDeclaration<VfNumberFieldInputDirective, "input[vfNumberFieldInput]", never, {
+        "disabled": {
+            "alias": "disabled";
+            "required": false;
+            "isSignal": true;
+        };
+        "readOnly": {
+            "alias": "readonly";
+            "required": false;
+            "isSignal": true;
+        };
+    }, {}, never, never, true, never>;
     // (undocumented)
     static ɵfac: i0.ɵɵFactoryDeclaration<VfNumberFieldInputDirective, never>;
 }
@@ -1770,21 +1921,27 @@ export class VfNumberFieldInputDirective {
 // @public (undocumented)
 export class VfNumberFieldRootDirective {
     // (undocumented)
-    readonly current: Signal<number>;
+    readonly current: Signal<number | null>;
     // (undocumented)
-    readonly defaultValue: InputSignal<number>;
+    readonly defaultValue: InputSignal<number | null>;
+    // (undocumented)
+    readonly disabled: InputSignalWithTransform<boolean, unknown>;
     // (undocumented)
     readonly max: InputSignal<number | undefined>;
     // (undocumented)
     readonly min: InputSignal<number | undefined>;
     // (undocumented)
-    set(v: number): void;
+    ngOnInit(): void;
     // (undocumented)
-    readonly step: InputSignal<number>;
+    readonly readOnly: InputSignalWithTransform<boolean, unknown>;
     // (undocumented)
-    readonly value: InputSignal<number | undefined>;
+    set(next: number | null): void;
     // (undocumented)
-    readonly valueChange: OutputEmitterRef<number>;
+    readonly step: InputSignal<number | "any">;
+    // (undocumented)
+    readonly value: InputSignal<number | null | undefined>;
+    // (undocumented)
+    readonly valueChange: OutputEmitterRef<number | null>;
     // (undocumented)
     static ɵdir: i0.ɵɵDirectiveDeclaration<VfNumberFieldRootDirective, "[vfNumberFieldRoot]", never, {
         "value": {
@@ -1812,6 +1969,16 @@ export class VfNumberFieldRootDirective {
             "required": false;
             "isSignal": true;
         };
+        "disabled": {
+            "alias": "disabled";
+            "required": false;
+            "isSignal": true;
+        };
+        "readOnly": {
+            "alias": "readOnly";
+            "required": false;
+            "isSignal": true;
+        };
     }, {
         "valueChange": "valueChange";
     }, never, never, true, never>;
@@ -1823,20 +1990,30 @@ export class VfNumberFieldRootDirective {
 export class VfOtpFieldInputDirective {
     constructor(root: VfOtpFieldRootDirective);
     // (undocumented)
-    readonly index: InputSignal<number>;
+    readonly autoComplete: InputSignal<string>;
+    // (undocumented)
+    readonly disabled: InputSignalWithTransform<boolean, unknown>;
+    // (undocumented)
+    readonly inputMode: InputSignal<string>;
     // (undocumented)
     onInput(event: Event): void;
-    // (undocumented)
-    onKeyDown(event: KeyboardEvent): void;
-    // (undocumented)
-    onPaste(event: ClipboardEvent): void;
     // (undocumented)
     readonly root: VfOtpFieldRootDirective;
     // (undocumented)
     static ɵdir: i0.ɵɵDirectiveDeclaration<VfOtpFieldInputDirective, "input[vfOtpFieldInput]", never, {
-        "index": {
-            "alias": "vfOtpFieldInput";
-            "required": true;
+        "disabled": {
+            "alias": "disabled";
+            "required": false;
+            "isSignal": true;
+        };
+        "inputMode": {
+            "alias": "inputmode";
+            "required": false;
+            "isSignal": true;
+        };
+        "autoComplete": {
+            "alias": "autocomplete";
+            "required": false;
             "isSignal": true;
         };
     }, {}, never, never, true, never>;
@@ -1847,15 +2024,19 @@ export class VfOtpFieldInputDirective {
 // @public (undocumented)
 export class VfOtpFieldRootDirective {
     // (undocumented)
-    charAt(index: number): string;
-    // (undocumented)
-    current(): string;
+    readonly current: Signal<string>;
     // (undocumented)
     readonly defaultValue: InputSignal<string>;
     // (undocumented)
+    readonly disabled: InputSignalWithTransform<boolean, unknown>;
+    // (undocumented)
     readonly length: InputSignal<number>;
     // (undocumented)
-    setFrom(index: number, raw: string): number;
+    readonly maxLength: Signal<number>;
+    // (undocumented)
+    ngOnInit(): void;
+    // (undocumented)
+    set(next: string): void;
     // (undocumented)
     readonly value: InputSignal<string | undefined>;
     // (undocumented)
@@ -1874,6 +2055,11 @@ export class VfOtpFieldRootDirective {
         };
         "length": {
             "alias": "length";
+            "required": false;
+            "isSignal": true;
+        };
+        "disabled": {
+            "alias": "disabled";
             "required": false;
             "isSignal": true;
         };
@@ -1928,9 +2114,17 @@ export class VfPaginationRootDirective {
 export class VfPasswordFieldInputDirective {
     constructor(root: VfPasswordFieldRootDirective);
     // (undocumented)
+    readonly disabled: InputSignalWithTransform<boolean, unknown>;
+    // (undocumented)
     readonly root: VfPasswordFieldRootDirective;
     // (undocumented)
-    static ɵdir: i0.ɵɵDirectiveDeclaration<VfPasswordFieldInputDirective, "input[vfPasswordFieldInput]", never, {}, {}, never, never, true, never>;
+    static ɵdir: i0.ɵɵDirectiveDeclaration<VfPasswordFieldInputDirective, "input[vfPasswordFieldInput]", never, {
+        "disabled": {
+            "alias": "disabled";
+            "required": false;
+            "isSignal": true;
+        };
+    }, {}, never, never, true, never>;
     // (undocumented)
     static ɵfac: i0.ɵɵFactoryDeclaration<VfPasswordFieldInputDirective, never>;
 }
@@ -1938,11 +2132,37 @@ export class VfPasswordFieldInputDirective {
 // @public (undocumented)
 export class VfPasswordFieldRootDirective {
     // (undocumented)
+    readonly defaultVisible: InputSignalWithTransform<boolean, unknown>;
+    // (undocumented)
+    readonly disabled: InputSignalWithTransform<boolean, unknown>;
+    // (undocumented)
+    readonly isVisible: Signal<boolean>;
+    // (undocumented)
     toggle(): void;
     // (undocumented)
-    readonly visible: WritableSignal<boolean>;
+    readonly visible: InputSignal<boolean | undefined>;
     // (undocumented)
-    static ɵdir: i0.ɵɵDirectiveDeclaration<VfPasswordFieldRootDirective, "[vfPasswordFieldRoot]", ["vfPasswordFieldRoot"], {}, {}, never, never, true, never>;
+    readonly visibleChange: OutputEmitterRef<boolean>;
+    // (undocumented)
+    static ɵdir: i0.ɵɵDirectiveDeclaration<VfPasswordFieldRootDirective, "[vfPasswordFieldRoot]", ["vfPasswordFieldRoot"], {
+        "visible": {
+            "alias": "visible";
+            "required": false;
+            "isSignal": true;
+        };
+        "defaultVisible": {
+            "alias": "defaultVisible";
+            "required": false;
+            "isSignal": true;
+        };
+        "disabled": {
+            "alias": "disabled";
+            "required": false;
+            "isSignal": true;
+        };
+    }, {
+        "visibleChange": "visibleChange";
+    }, never, never, true, never>;
     // (undocumented)
     static ɵfac: i0.ɵɵFactoryDeclaration<VfPasswordFieldRootDirective, never>;
 }
@@ -1951,6 +2171,8 @@ export class VfPasswordFieldRootDirective {
 export class VfPasswordFieldToggleDirective {
     constructor(root: VfPasswordFieldRootDirective);
     // (undocumented)
+    readonly disabled: InputSignalWithTransform<boolean, unknown>;
+    // (undocumented)
     readonly hideLabel: InputSignal<string>;
     // (undocumented)
     readonly root: VfPasswordFieldRootDirective;
@@ -1958,6 +2180,8 @@ export class VfPasswordFieldToggleDirective {
     readonly showLabel: InputSignal<string>;
     // (undocumented)
     readonly stateLabel: Signal<string>;
+    // (undocumented)
+    toggle(event: MouseEvent): void;
     // (undocumented)
     static ɵdir: i0.ɵɵDirectiveDeclaration<VfPasswordFieldToggleDirective, "button[vfPasswordFieldToggle]", never, {
         "showLabel": {
@@ -1970,6 +2194,11 @@ export class VfPasswordFieldToggleDirective {
             "required": true;
             "isSignal": true;
         };
+        "disabled": {
+            "alias": "disabled";
+            "required": false;
+            "isSignal": true;
+        };
     }, {}, never, never, true, never>;
     // (undocumented)
     static ɵfac: i0.ɵɵFactoryDeclaration<VfPasswordFieldToggleDirective, never>;
@@ -1980,6 +2209,10 @@ export class VfPopoverContentDirective implements OnDestroy {
     constructor(root: VfPopoverRootDirective);
     // (undocumented)
     ngOnDestroy(): void;
+    // (undocumented)
+    onBeforeToggle(event: Event): void;
+    // (undocumented)
+    onToggle(event: Event): void;
     // (undocumented)
     readonly root: VfPopoverRootDirective;
     // (undocumented)
@@ -1995,9 +2228,15 @@ export class VfPopoverRootDirective {
     // (undocumented)
     content: HTMLElement | null;
     // (undocumented)
+    readonly contentId: InputSignal<string | undefined>;
+    // (undocumented)
+    readonly contentRole: InputSignal<"dialog" | "region">;
+    // (undocumented)
     readonly defaultOpen: InputSignalWithTransform<boolean, unknown>;
     // (undocumented)
     readonly expanded: Signal<boolean>;
+    // (undocumented)
+    readonly id: InputSignal<string>;
     // (undocumented)
     readonly open: InputSignal<boolean | undefined>;
     // (undocumented)
@@ -2005,9 +2244,26 @@ export class VfPopoverRootDirective {
     // (undocumented)
     readonly placement: InputSignal<FloatingPlacement>;
     // (undocumented)
+    readonly resolvedContentId: Signal<string>;
+    // (undocumented)
     setOpen(next: boolean): void;
     // (undocumented)
     static ɵdir: i0.ɵɵDirectiveDeclaration<VfPopoverRootDirective, "[vfPopoverRoot]", never, {
+        "id": {
+            "alias": "id";
+            "required": true;
+            "isSignal": true;
+        };
+        "contentId": {
+            "alias": "contentId";
+            "required": false;
+            "isSignal": true;
+        };
+        "contentRole": {
+            "alias": "contentRole";
+            "required": false;
+            "isSignal": true;
+        };
         "open": {
             "alias": "open";
             "required": false;
@@ -2031,12 +2287,14 @@ export class VfPopoverRootDirective {
 }
 
 // @public (undocumented)
-export class VfPopoverTriggerDirective {
+export class VfPopoverTriggerDirective implements OnDestroy {
     constructor(root: VfPopoverRootDirective);
+    // (undocumented)
+    ngOnDestroy(): void;
     // (undocumented)
     readonly root: VfPopoverRootDirective;
     // (undocumented)
-    toggle(): void;
+    toggle(event?: MouseEvent): void;
     // (undocumented)
     static ɵdir: i0.ɵɵDirectiveDeclaration<VfPopoverTriggerDirective, "button[vfPopoverTrigger]", never, {}, {}, never, never, true, never>;
     // (undocumented)
@@ -2047,7 +2305,11 @@ export class VfPopoverTriggerDirective {
 export class VfPreviewCardContentDirective implements OnDestroy {
     constructor(root: VfPreviewCardRootDirective);
     // (undocumented)
+    blur(event: FocusEvent): void;
+    // (undocumented)
     ngOnDestroy(): void;
+    // (undocumented)
+    pointer(event: PointerEvent, active: boolean): void;
     // (undocumented)
     readonly root: VfPreviewCardRootDirective;
     // (undocumented)
@@ -2057,23 +2319,51 @@ export class VfPreviewCardContentDirective implements OnDestroy {
 }
 
 // @public (undocumented)
-export class VfPreviewCardRootDirective {
+export class VfPreviewCardRootDirective implements OnDestroy {
+    // (undocumented)
+    activity(source: Activity_2, active: boolean, delay: number): void;
     // (undocumented)
     anchor: HTMLElement | null;
     // (undocumented)
+    readonly closeDelay: InputSignal<number>;
+    // (undocumented)
+    content: HTMLElement | null;
+    // (undocumented)
+    readonly contentId: InputSignal<string | undefined>;
+    // (undocumented)
     readonly defaultOpen: InputSignalWithTransform<boolean, unknown>;
     // (undocumented)
+    dismiss(event: KeyboardEvent): void;
+    // (undocumented)
     readonly expanded: Signal<boolean>;
+    // (undocumented)
+    readonly id: InputSignal<string>;
+    // (undocumented)
+    ngOnDestroy(): void;
     // (undocumented)
     readonly open: InputSignal<boolean | undefined>;
     // (undocumented)
     readonly openChange: OutputEmitterRef<boolean>;
     // (undocumented)
+    readonly openDelay: InputSignal<number>;
+    // (undocumented)
     readonly placement: InputSignal<FloatingPlacement>;
+    // (undocumented)
+    readonly resolvedContentId: Signal<string>;
     // (undocumented)
     setOpen(next: boolean): void;
     // (undocumented)
     static ɵdir: i0.ɵɵDirectiveDeclaration<VfPreviewCardRootDirective, "[vfPreviewCardRoot]", never, {
+        "id": {
+            "alias": "id";
+            "required": true;
+            "isSignal": true;
+        };
+        "contentId": {
+            "alias": "contentId";
+            "required": false;
+            "isSignal": true;
+        };
         "open": {
             "alias": "open";
             "required": false;
@@ -2089,6 +2379,16 @@ export class VfPreviewCardRootDirective {
             "required": false;
             "isSignal": true;
         };
+        "openDelay": {
+            "alias": "openDelay";
+            "required": false;
+            "isSignal": true;
+        };
+        "closeDelay": {
+            "alias": "closeDelay";
+            "required": false;
+            "isSignal": true;
+        };
     }, {
         "openChange": "openChange";
     }, never, never, true, never>;
@@ -2097,10 +2397,18 @@ export class VfPreviewCardRootDirective {
 }
 
 // @public (undocumented)
-export class VfPreviewCardTriggerDirective {
+export class VfPreviewCardTriggerDirective implements OnDestroy {
     constructor(root: VfPreviewCardRootDirective);
     // (undocumented)
+    blur(event: FocusEvent): void;
+    // (undocumented)
+    ngOnDestroy(): void;
+    // (undocumented)
+    pointer(event: PointerEvent, active: boolean): void;
+    // (undocumented)
     readonly root: VfPreviewCardRootDirective;
+    // (undocumented)
+    schedule(value: boolean, delay: number): void;
     // (undocumented)
     static ɵdir: i0.ɵɵDirectiveDeclaration<VfPreviewCardTriggerDirective, "[vfPreviewCardTrigger]", never, {}, {}, never, never, true, never>;
     // (undocumented)
@@ -2116,13 +2424,40 @@ export class VfRadioDirective {
 }
 
 // @public (undocumented)
+export class VfRangeSliderEndDirective {
+    constructor(root: VfRangeSliderRootDirective);
+    // (undocumented)
+    readonly root: VfRangeSliderRootDirective;
+    // (undocumented)
+    static ɵdir: i0.ɵɵDirectiveDeclaration<VfRangeSliderEndDirective, "input[vfRangeSliderEnd]", never, {}, {}, never, never, true, never>;
+    // (undocumented)
+    static ɵfac: i0.ɵɵFactoryDeclaration<VfRangeSliderEndDirective, never>;
+}
+
+// @public (undocumented)
 export class VfRangeSliderRootDirective {
     // (undocumented)
-    current(): readonly [number, number];
+    change(index: 0 | 1, event: Event): void;
+    // (undocumented)
+    current(): [number, number];
     // (undocumented)
     readonly defaultValue: InputSignal<readonly [number, number]>;
     // (undocumented)
+    readonly disabled: InputSignalWithTransform<boolean, unknown>;
+    // (undocumented)
+    increment(): number;
+    // (undocumented)
+    readonly max: InputSignal<number>;
+    // (undocumented)
+    maximum(): number;
+    // (undocumented)
+    readonly min: InputSignal<number>;
+    // (undocumented)
+    minimum(): number;
+    // (undocumented)
     set(index: 0 | 1, v: number): void;
+    // (undocumented)
+    readonly step: InputSignal<number>;
     // (undocumented)
     readonly value: InputSignal<readonly [number, number] | undefined>;
     // (undocumented)
@@ -2139,11 +2474,42 @@ export class VfRangeSliderRootDirective {
             "required": false;
             "isSignal": true;
         };
+        "min": {
+            "alias": "min";
+            "required": false;
+            "isSignal": true;
+        };
+        "max": {
+            "alias": "max";
+            "required": false;
+            "isSignal": true;
+        };
+        "step": {
+            "alias": "step";
+            "required": false;
+            "isSignal": true;
+        };
+        "disabled": {
+            "alias": "disabled";
+            "required": false;
+            "isSignal": true;
+        };
     }, {
         "valueChange": "valueChange";
     }, never, never, true, never>;
     // (undocumented)
     static ɵfac: i0.ɵɵFactoryDeclaration<VfRangeSliderRootDirective, never>;
+}
+
+// @public (undocumented)
+export class VfRangeSliderStartDirective {
+    constructor(root: VfRangeSliderRootDirective);
+    // (undocumented)
+    readonly root: VfRangeSliderRootDirective;
+    // (undocumented)
+    static ɵdir: i0.ɵɵDirectiveDeclaration<VfRangeSliderStartDirective, "input[vfRangeSliderStart]", never, {}, {}, never, never, true, never>;
+    // (undocumented)
+    static ɵfac: i0.ɵɵFactoryDeclaration<VfRangeSliderStartDirective, never>;
 }
 
 // @public (undocumented)
@@ -2170,6 +2536,8 @@ export class VfRatingRootDirective {
     // (undocumented)
     readonly defaultValue: InputSignal<number>;
     // (undocumented)
+    readonly name: InputSignal<string>;
+    // (undocumented)
     readonly selected: Signal<number>;
     // (undocumented)
     set(v: number): void;
@@ -2187,6 +2555,11 @@ export class VfRatingRootDirective {
         "defaultValue": {
             "alias": "defaultValue";
             "required": false;
+            "isSignal": true;
+        };
+        "name": {
+            "alias": "name";
+            "required": true;
             "isSignal": true;
         };
     }, {
@@ -2257,7 +2630,7 @@ export class VfSearchFieldRootDirective {
 export class VfSegmentedControlItemDirective {
     constructor(root: VfSegmentedControlRootDirective);
     // (undocumented)
-    readonly disabled: InputSignal<boolean>;
+    readonly disabled: InputSignalWithTransform<boolean, unknown>;
     // (undocumented)
     readonly root: VfSegmentedControlRootDirective;
     // (undocumented)
@@ -2265,7 +2638,7 @@ export class VfSegmentedControlItemDirective {
     // (undocumented)
     readonly value: InputSignal<string>;
     // (undocumented)
-    static ɵdir: i0.ɵɵDirectiveDeclaration<VfSegmentedControlItemDirective, "button[vfSegmentedControlItem]", never, {
+    static ɵdir: i0.ɵɵDirectiveDeclaration<VfSegmentedControlItemDirective, "input[type=radio][vfSegmentedControlItem]", never, {
         "value": {
             "alias": "vfSegmentedControlItem";
             "required": true;
@@ -2286,6 +2659,8 @@ export class VfSegmentedControlRootDirective {
     // (undocumented)
     readonly defaultValue: InputSignal<string>;
     // (undocumented)
+    readonly name: InputSignal<string>;
+    // (undocumented)
     readonly selected: Signal<string>;
     // (undocumented)
     set(v: string): void;
@@ -2303,6 +2678,11 @@ export class VfSegmentedControlRootDirective {
         "defaultValue": {
             "alias": "defaultValue";
             "required": false;
+            "isSignal": true;
+        };
+        "name": {
+            "alias": "name";
+            "required": true;
             "isSignal": true;
         };
     }, {
@@ -2500,6 +2880,10 @@ export class VfSplitPanelResizeHandleDirective {
     // (undocumented)
     key(e: KeyboardEvent): void;
     // (undocumented)
+    maximum(): number;
+    // (undocumented)
+    minimum(): number;
+    // (undocumented)
     readonly root: VfSplitPanelRootDirective;
     // (undocumented)
     static ɵdir: i0.ɵɵDirectiveDeclaration<VfSplitPanelResizeHandleDirective, "[vfSplitPanelResizeHandle]", never, {}, {}, never, never, true, never>;
@@ -2695,11 +3079,9 @@ export class VfTabsTabDirective {
     // (undocumented)
     readonly disabled: InputSignalWithTransform<boolean, unknown>;
     // (undocumented)
-    onClick(): void;
+    onClick(event?: MouseEvent): void;
     // (undocumented)
     onFocus(): void;
-    // (undocumented)
-    onKeydown(event: KeyboardEvent): void;
     // (undocumented)
     readonly root: VfTabsRootDirective;
     // (undocumented)
@@ -2736,11 +3118,18 @@ export class VfTagGroupItemDirective {
 // @public (undocumented)
 export class VfTagGroupRemoveDirective {
     // (undocumented)
-    readonly label: InputSignal<string>;
+    readonly ariaLabel: InputSignal<string | undefined>;
+    // (undocumented)
+    readonly label: InputSignal<string | undefined>;
     // (undocumented)
     static ɵdir: i0.ɵɵDirectiveDeclaration<VfTagGroupRemoveDirective, "button[vfTagGroupRemove]", never, {
         "label": {
             "alias": "label";
+            "required": false;
+            "isSignal": true;
+        };
+        "ariaLabel": {
+            "alias": "aria-label";
             "required": false;
             "isSignal": true;
         };
@@ -2750,35 +3139,15 @@ export class VfTagGroupRemoveDirective {
 }
 
 // @public (undocumented)
-export class VfTagGroupRootDirective {
+export class VfTagGroupRootDirective implements AfterViewInit, OnDestroy {
+    // (undocumented)
+    ngAfterViewInit(): void;
+    // (undocumented)
+    ngOnDestroy(): void;
     // (undocumented)
     static ɵdir: i0.ɵɵDirectiveDeclaration<VfTagGroupRootDirective, "[vfTagGroupRoot]", never, {}, {}, never, never, true, never>;
     // (undocumented)
     static ɵfac: i0.ɵɵFactoryDeclaration<VfTagGroupRootDirective, never>;
-}
-
-// @public (undocumented)
-export class VfTemporalFieldInputDirective {
-    // (undocumented)
-    readonly type: InputSignal<TemporalFieldInputType>;
-    // (undocumented)
-    static ɵdir: i0.ɵɵDirectiveDeclaration<VfTemporalFieldInputDirective, "input[vfTemporalFieldInput]", never, {
-        "type": {
-            "alias": "type";
-            "required": false;
-            "isSignal": true;
-        };
-    }, {}, never, never, true, never>;
-    // (undocumented)
-    static ɵfac: i0.ɵɵFactoryDeclaration<VfTemporalFieldInputDirective, never>;
-}
-
-// @public (undocumented)
-export class VfTemporalFieldRootDirective {
-    // (undocumented)
-    static ɵdir: i0.ɵɵDirectiveDeclaration<VfTemporalFieldRootDirective, "[vfTemporalFieldRoot]", never, {}, {}, never, never, true, never>;
-    // (undocumented)
-    static ɵfac: i0.ɵɵFactoryDeclaration<VfTemporalFieldRootDirective, never>;
 }
 
 // @public (undocumented)
@@ -2921,11 +3290,11 @@ export class VfToggleButtonDirective {
 export class VfToggleGroupItemDirective {
     constructor(root: VfToggleGroupRootDirective);
     // (undocumented)
-    readonly disabled: InputSignal<boolean>;
+    readonly disabled: InputSignalWithTransform<boolean, unknown>;
     // (undocumented)
     readonly root: VfToggleGroupRootDirective;
     // (undocumented)
-    toggle(): void;
+    toggle(event?: MouseEvent): void;
     // (undocumented)
     readonly value: InputSignal<string>;
     // (undocumented)
@@ -2948,7 +3317,9 @@ export class VfToggleGroupItemDirective {
 // @public (undocumented)
 export class VfToggleGroupRootDirective {
     // (undocumented)
-    toggle(v: string): void;
+    readonly defaultValue: InputSignal<string | string[] | undefined>;
+    // (undocumented)
+    toggle(value: string): void;
     // (undocumented)
     readonly type: InputSignal<ToggleGroupType>;
     // (undocumented)
@@ -2966,6 +3337,11 @@ export class VfToggleGroupRootDirective {
         };
         "value": {
             "alias": "value";
+            "required": false;
+            "isSignal": true;
+        };
+        "defaultValue": {
+            "alias": "defaultValue";
             "required": false;
             "isSignal": true;
         };
@@ -3030,6 +3406,8 @@ export class VfTooltipContentDirective implements OnDestroy {
     // (undocumented)
     ngOnDestroy(): void;
     // (undocumented)
+    pointer(event: PointerEvent, active: boolean): void;
+    // (undocumented)
     readonly root: VfTooltipRootDirective;
     // (undocumented)
     static ɵdir: i0.ɵɵDirectiveDeclaration<VfTooltipContentDirective, "[vfTooltipContent]", never, {}, {}, never, never, true, never>;
@@ -3038,7 +3416,9 @@ export class VfTooltipContentDirective implements OnDestroy {
 }
 
 // @public (undocumented)
-export class VfTooltipRootDirective {
+export class VfTooltipRootDirective implements OnDestroy {
+    // (undocumented)
+    activity(source: Activity, active: boolean, delay: number): void;
     // (undocumented)
     anchor: HTMLElement | null;
     // (undocumented)
@@ -3046,9 +3426,17 @@ export class VfTooltipRootDirective {
     // (undocumented)
     content: HTMLElement | null;
     // (undocumented)
+    readonly contentId: InputSignal<string | undefined>;
+    // (undocumented)
     readonly defaultOpen: InputSignalWithTransform<boolean, unknown>;
     // (undocumented)
+    dismiss(event: KeyboardEvent): void;
+    // (undocumented)
     readonly expanded: Signal<boolean>;
+    // (undocumented)
+    readonly id: InputSignal<string>;
+    // (undocumented)
+    ngOnDestroy(): void;
     // (undocumented)
     readonly open: InputSignal<boolean | undefined>;
     // (undocumented)
@@ -3058,9 +3446,21 @@ export class VfTooltipRootDirective {
     // (undocumented)
     readonly placement: InputSignal<FloatingPlacement>;
     // (undocumented)
+    readonly resolvedContentId: Signal<string>;
+    // (undocumented)
     setOpen(next: boolean): void;
     // (undocumented)
     static ɵdir: i0.ɵɵDirectiveDeclaration<VfTooltipRootDirective, "[vfTooltipRoot]", never, {
+        "id": {
+            "alias": "id";
+            "required": true;
+            "isSignal": true;
+        };
+        "contentId": {
+            "alias": "contentId";
+            "required": false;
+            "isSignal": true;
+        };
         "open": {
             "alias": "open";
             "required": false;
@@ -3097,13 +3497,27 @@ export class VfTooltipRootDirective {
 export class VfTooltipTriggerDirective implements OnDestroy {
     constructor(root: VfTooltipRootDirective);
     // (undocumented)
+    blur(event: FocusEvent): void;
+    // (undocumented)
+    readonly describedBy: InputSignal<string | undefined>;
+    // (undocumented)
+    readonly description: Signal<string>;
+    // (undocumented)
     ngOnDestroy(): void;
+    // (undocumented)
+    pointer(event: PointerEvent, active: boolean): void;
     // (undocumented)
     readonly root: VfTooltipRootDirective;
     // (undocumented)
     schedule(value: boolean, delay: number): void;
     // (undocumented)
-    static ɵdir: i0.ɵɵDirectiveDeclaration<VfTooltipTriggerDirective, "[vfTooltipTrigger]", never, {}, {}, never, never, true, never>;
+    static ɵdir: i0.ɵɵDirectiveDeclaration<VfTooltipTriggerDirective, "[vfTooltipTrigger]", never, {
+        "describedBy": {
+            "alias": "aria-describedby";
+            "required": false;
+            "isSignal": true;
+        };
+    }, {}, never, never, true, never>;
     // (undocumented)
     static ɵfac: i0.ɵɵFactoryDeclaration<VfTooltipTriggerDirective, never>;
 }

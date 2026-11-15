@@ -1,0 +1,32 @@
+{
+  "schemaVersion": 1,
+  "component": "preview-card",
+  "reviewStatus": "review-required",
+  "nativeBaseline": {
+    "kind": "composite",
+    "reference": "transient informational or interactive preview; choose semantics according to content"
+  },
+  "wcag": {
+    "target": "2.2 AA",
+    "status": "review-required",
+    "criteria": ["1.3.1", "1.4.13", "2.1.1", "2.1.2", "2.4.3", "2.4.7", "4.1.2"]
+  },
+  "aria": { "status": "review-required", "apgPattern": null },
+  "interaction": { "keyboard": "managed", "focus": "review-required", "directionality": "logical" },
+  "ownership": {
+    "library": [
+      "Preserve keyboard/pointer access, hover persistence and dismissal; define interactive content focus policy."
+    ],
+    "consumer": ["Author meaningful preview and trigger content; choose informational or interactive use."]
+  },
+  "forms": { "status": "not-applicable" },
+  "visualAccessibility": { "status": "component-specific" },
+  "ssrHydration": { "status": "contract-required" },
+  "evidence": { "browser": "required", "assistiveTechnology": "review-required" },
+  "profileVariability": [],
+  "notes": [
+    "Native manual popover preserves pointer and focus access across the trigger and preview, dismisses on Escape, and restores trigger focus only when closing from content. Preserve native trigger navigation.",
+    "Informational previews have no interactive controls. Interactive previews must expose authored semantics and keyboard access; do not autofocus on hover or trap focus. Use Popover/Dialog for explicit activation or focus-transfer intent.",
+    "Audit mapping is provisional; not a conformance claim."
+  ]
+}

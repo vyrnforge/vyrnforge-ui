@@ -1,1 +1,0 @@
-import{PreviewCardContent,PreviewCardRoot,PreviewCardTrigger}from'@vyrnforge/react/preview-card';export default()=> <PreviewCardRoot><PreviewCardTrigger><a href="#profile">Profile</a></PreviewCardTrigger><PreviewCardContent>Profile preview</PreviewCardContent></PreviewCardRoot>;

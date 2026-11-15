@@ -1,1 +1,0 @@
-import{PopoverContent,PopoverRoot,PopoverTrigger}from'@vyrnforge/react/popover';export default()=> <PopoverRoot><PopoverTrigger>Open</PopoverTrigger><PopoverContent>Content</PopoverContent></PopoverRoot>;

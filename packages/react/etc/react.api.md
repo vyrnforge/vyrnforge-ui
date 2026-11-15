@@ -52,7 +52,7 @@ import { ProviderProps } from 'react';
 import { ReactElement } from 'react';
 import { ReactEventHandler } from 'react';
 import { ReactNode } from 'react';
-import type { Ref } from 'react';
+import { Ref } from 'react';
 import { RefAttributes } from 'react';
 import { RefObject } from 'react';
 import type { SelectHTMLAttributes } from 'react';
@@ -72,7 +72,10 @@ import { WheelEventHandler } from 'react';
 export const AccordionHeader: ForwardRefExoticComponent<AccordionHeaderProps & RefAttributes<HTMLHeadingElement>>;
 
 // @public (undocumented)
-export type AccordionHeaderProps = HTMLAttributes<HTMLHeadingElement>;
+export interface AccordionHeaderProps extends HTMLAttributes<HTMLHeadingElement> {
+    // (undocumented)
+    level?: 1 | 2 | 3 | 4 | 5 | 6;
+}
 
 // @public (undocumented)
 export const AccordionItem: ForwardRefExoticComponent<AccordionItemProps & RefAttributes<HTMLDivElement>>;
@@ -89,7 +92,10 @@ export interface AccordionItemProps extends HTMLAttributes<HTMLDivElement> {
 export const AccordionPanel: ForwardRefExoticComponent<AccordionPanelProps & RefAttributes<HTMLDivElement>>;
 
 // @public (undocumented)
-export type AccordionPanelProps = HTMLAttributes<HTMLDivElement>;
+export interface AccordionPanelProps extends Omit<HTMLAttributes<HTMLDivElement>, 'id' | 'role' | 'aria-labelledby'> {
+    // (undocumented)
+    region?: boolean;
+}
 
 // @public (undocumented)
 export const AccordionRoot: ForwardRefExoticComponent<AccordionRootProps & RefAttributes<HTMLDivElement>>;
@@ -248,11 +254,17 @@ export interface CarouselRootProps extends ComponentPropsWithoutRef<'section'> {
     // (undocumented)
     index?: number;
     // (undocumented)
-    onIndexChange?(i: number): void;
+    onIndexChange?(index: number): void;
+    slideCount?: number;
 }
 
 // @public (undocumented)
-export const CarouselSlide: ForwardRefExoticComponent<Omit<DetailedHTMLProps<HTMLAttributes<HTMLDivElement>, HTMLDivElement>, "ref"> & RefAttributes<HTMLDivElement>>;
+export const CarouselSlide: ForwardRefExoticComponent<CarouselSlideProps & RefAttributes<HTMLDivElement>>;
+
+// @public (undocumented)
+export interface CarouselSlideProps extends ComponentPropsWithoutRef<'div'> {
+    position?: number;
+}
 
 // @public (undocumented)
 export const CarouselViewport: ForwardRefExoticComponent<Omit<DetailedHTMLProps<HTMLAttributes<HTMLDivElement>, HTMLDivElement>, "ref"> & RefAttributes<HTMLDivElement>>;
@@ -284,7 +296,10 @@ export type ClusterProps<Element extends LayoutElement = 'div'> = {
 } & Omit<ComponentPropsWithoutRef<Element>, 'as' | 'gap' | 'align' | 'justify'>;
 
 // @public (undocumented)
-export const ColorPickerInput: ForwardRefExoticComponent<Omit<DetailedHTMLProps<InputHTMLAttributes<HTMLInputElement>, HTMLInputElement>, "ref"> & RefAttributes<HTMLInputElement>>;
+export const ColorPickerInput: ForwardRefExoticComponent<ColorPickerInputProps & RefAttributes<HTMLInputElement>>;
+
+// @public (undocumented)
+export type ColorPickerInputProps = Omit<ComponentPropsWithoutRef<'input'>, 'type' | 'value' | 'defaultValue'>;
 
 // @public (undocumented)
 export const ColorPickerRoot: ForwardRefExoticComponent<ColorPickerRootProps & RefAttributes<HTMLDivElement>>;
@@ -296,6 +311,8 @@ export interface ColorPickerRootProps extends ComponentPropsWithoutRef<'div'> {
     // (undocumented)
     defaultValue?: string;
     // (undocumented)
+    disabled?: boolean;
+    // (undocumented)
     onValueChange?(v: string): void;
     // (undocumented)
     value?: string;
@@ -305,7 +322,7 @@ export interface ColorPickerRootProps extends ComponentPropsWithoutRef<'div'> {
 export function ColorPickerSwatch(props: ComponentPropsWithoutRef<'span'>): ReactElement;
 
 // @public (undocumented)
-export const ColorPickerTextInput: ForwardRefExoticComponent<Omit<DetailedHTMLProps<InputHTMLAttributes<HTMLInputElement>, HTMLInputElement>, "ref"> & RefAttributes<HTMLInputElement>>;
+export const ColorPickerTextInput: ForwardRefExoticComponent<ColorPickerInputProps & RefAttributes<HTMLInputElement>>;
 
 // @public (undocumented)
 export const ComboboxContent: ForwardRefExoticComponent<Omit<DetailedHTMLProps<HTMLAttributes<HTMLDivElement>, HTMLDivElement>, "ref"> & RefAttributes<HTMLDivElement>>;
@@ -1619,6 +1636,7 @@ export interface DisclosureRootProps extends Omit<HTMLAttributes<HTMLDivElement>
     onOpenChange?: (open: boolean) => void;
     // (undocumented)
     open?: boolean;
+    panelId?: string;
 }
 
 // @public (undocumented)
@@ -2473,37 +2491,41 @@ export const NumberFieldDecrement: ForwardRefExoticComponent<Omit<DetailedHTMLPr
 export const NumberFieldIncrement: ForwardRefExoticComponent<Omit<DetailedHTMLProps<ButtonHTMLAttributes<HTMLButtonElement>, HTMLButtonElement>, "ref"> & RefAttributes<HTMLButtonElement>>;
 
 // @public (undocumented)
-export const NumberFieldInput: ForwardRefExoticComponent<Omit<DetailedHTMLProps<InputHTMLAttributes<HTMLInputElement>, HTMLInputElement>, "ref"> & RefAttributes<HTMLInputElement>>;
+export const NumberFieldInput: ForwardRefExoticComponent<NumberFieldInputProps & RefAttributes<HTMLInputElement>>;
+
+// @public (undocumented)
+export type NumberFieldInputProps = Omit<ComponentPropsWithoutRef<'input'>, 'value' | 'defaultValue' | 'type' | 'min' | 'max' | 'step'>;
 
 // @public (undocumented)
 export const NumberFieldRoot: ForwardRefExoticComponent<NumberFieldRootProps & RefAttributes<HTMLDivElement>>;
 
 // @public (undocumented)
-export interface NumberFieldRootProps extends ComponentPropsWithoutRef<'div'> {
+export interface NumberFieldRootProps extends Omit<ComponentPropsWithoutRef<'div'>, 'defaultValue'> {
     // (undocumented)
     children?: ReactNode;
     // (undocumented)
-    defaultValue?: number;
+    defaultValue?: number | null;
+    // (undocumented)
+    disabled?: boolean;
     // (undocumented)
     max?: number;
     // (undocumented)
     min?: number;
     // (undocumented)
-    onValueChange?(v: number): void;
+    onValueChange?(v: number | null): void;
     // (undocumented)
-    step?: number;
+    readOnly?: boolean;
     // (undocumented)
-    value?: number;
+    step?: number | 'any';
+    // (undocumented)
+    value?: number | null;
 }
 
 // @public (undocumented)
 export const OTPFieldInput: ForwardRefExoticComponent<OTPFieldInputProps & RefAttributes<HTMLInputElement>>;
 
 // @public (undocumented)
-export interface OTPFieldInputProps extends Omit<ComponentPropsWithoutRef<'input'>, 'value'> {
-    // (undocumented)
-    index: number;
-}
+export type OTPFieldInputProps = Omit<ComponentPropsWithoutRef<'input'>, 'value' | 'defaultValue' | 'type' | 'maxLength'>;
 
 // @public (undocumented)
 export const OTPFieldRoot: ForwardRefExoticComponent<OTPFieldRootProps & RefAttributes<HTMLDivElement>>;
@@ -2514,6 +2536,8 @@ export interface OTPFieldRootProps extends ComponentPropsWithoutRef<'div'> {
     children?: ReactNode;
     // (undocumented)
     defaultValue?: string;
+    // (undocumented)
+    disabled?: boolean;
     // (undocumented)
     length?: number;
     // (undocumented)
@@ -2555,13 +2579,19 @@ export interface PasswordFieldRootProps extends ComponentPropsWithoutRef<'div'> 
     children?: ReactNode;
     // (undocumented)
     defaultVisible?: boolean;
+    // (undocumented)
+    disabled?: boolean;
+    // (undocumented)
+    onVisibleChange?(visible: boolean): void;
+    // (undocumented)
+    visible?: boolean;
 }
 
 // @public (undocumented)
 export const PasswordFieldToggle: ForwardRefExoticComponent<PasswordFieldToggleProps & RefAttributes<HTMLButtonElement>>;
 
 // @public (undocumented)
-export interface PasswordFieldToggleProps extends ComponentPropsWithoutRef<'button'> {
+export interface PasswordFieldToggleProps extends Omit<ComponentPropsWithoutRef<'button'>, 'type' | 'aria-pressed'> {
     // (undocumented)
     hideLabel: string;
     // (undocumented)
@@ -2572,10 +2602,7 @@ export interface PasswordFieldToggleProps extends ComponentPropsWithoutRef<'butt
 export const PopoverContent: ForwardRefExoticComponent<PopoverContentProps & RefAttributes<HTMLDivElement>>;
 
 // @public (undocumented)
-export interface PopoverContentProps extends HTMLAttributes<HTMLDivElement> {
-    // (undocumented)
-    portal?: boolean;
-}
+export type PopoverContentProps = Omit<HTMLAttributes<HTMLDivElement>, 'id' | 'role' | 'popover'>;
 
 // @public (undocumented)
 export function PopoverRoot(input: PopoverRootProps): FunctionComponentElement<ProviderProps<PopoverContextValue | null>>;
@@ -2584,6 +2611,10 @@ export function PopoverRoot(input: PopoverRootProps): FunctionComponentElement<P
 export interface PopoverRootProps {
     // (undocumented)
     children?: ReactNode;
+    // (undocumented)
+    contentId?: string;
+    // (undocumented)
+    contentRole?: 'dialog' | 'region';
     // (undocumented)
     defaultOpen?: boolean;
     // (undocumented)
@@ -2604,15 +2635,18 @@ export type PopoverTriggerProps = ButtonHTMLAttributes<HTMLButtonElement>;
 export function PreviewCardContent(props: PreviewCardContentProps): ReactNode;
 
 // @public (undocumented)
-export type PreviewCardContentProps = HTMLAttributes<HTMLDivElement>;
+export type PreviewCardContentProps = Omit<HTMLAttributes<HTMLDivElement>, 'id'>;
 
 // @public (undocumented)
-export function PreviewCardRoot(input: PreviewCardRootProps): FunctionComponentElement<ProviderProps<PreviewContext | null>>;
+export function PreviewCardRoot(input: PreviewCardRootProps): FunctionComponentElement<ProviderProps<PreviewCardContextValue | null>>;
 
 // @public (undocumented)
 export interface PreviewCardRootProps {
     // (undocumented)
     children?: ReactNode;
+    // (undocumented)
+    closeDelay?: number;
+    contentId?: string;
     // (undocumented)
     defaultOpen?: boolean;
     // (undocumented)
@@ -2620,11 +2654,15 @@ export interface PreviewCardRootProps {
     // (undocumented)
     open?: boolean;
     // (undocumented)
+    openDelay?: number;
+    // (undocumented)
     placement?: FloatingPlacement;
 }
 
 // @public (undocumented)
-export function PreviewCardTrigger(input: PreviewCardTriggerProps): ReactElement<Record<string, unknown>, string | JSXElementConstructor<any>>;
+export function PreviewCardTrigger(input: PreviewCardTriggerProps): ReactElement<HTMLAttributes<HTMLElement> & {
+    ref?: Ref<HTMLElement>;
+}, string | JSXElementConstructor<any>>;
 
 // @public (undocumented)
 export interface PreviewCardTriggerProps {
@@ -2646,11 +2684,21 @@ export interface RangeSliderRootProps extends Omit<ComponentPropsWithoutRef<'div
     // (undocumented)
     defaultValue?: readonly [number, number];
     // (undocumented)
+    disabled?: boolean;
+    // (undocumented)
+    endLabel: string;
+    // (undocumented)
+    endName?: string;
+    // (undocumented)
     max?: number;
     // (undocumented)
     min?: number;
     // (undocumented)
     onValueChange?(v: [number, number]): void;
+    // (undocumented)
+    startLabel: string;
+    // (undocumented)
+    startName?: string;
     // (undocumented)
     step?: number;
     // (undocumented)
@@ -2660,7 +2708,6 @@ export interface RangeSliderRootProps extends Omit<ComponentPropsWithoutRef<'div
 // @public (undocumented)
 export function RatingItem(input: RatingItemProps): ReactElement<    {
 'data-vf-rating-item': string;
-'data-vf-state': string;
 }, string | JSXElementConstructor<any>>;
 
 // @public (undocumented)
@@ -2681,9 +2728,13 @@ export interface RatingRootProps {
     // (undocumented)
     'aria-label'?: string;
     // (undocumented)
+    'aria-labelledby'?: string;
+    // (undocumented)
     children?: ReactNode;
     // (undocumented)
     defaultValue?: number;
+    // (undocumented)
+    getItemLabel?(value: number): string;
     // (undocumented)
     max?: number;
     // (undocumented)
@@ -2716,10 +2767,12 @@ export interface SearchFieldRootProps extends ComponentPropsWithoutRef<'div'> {
 }
 
 // @public (undocumented)
-export const SegmentedControlItem: ForwardRefExoticComponent<SegmentedControlItemProps & RefAttributes<HTMLButtonElement>>;
+export const SegmentedControlItem: ForwardRefExoticComponent<SegmentedControlItemProps & RefAttributes<HTMLInputElement>>;
 
 // @public (undocumented)
-export interface SegmentedControlItemProps extends Omit<ComponentPropsWithoutRef<'button'>, 'value'> {
+export interface SegmentedControlItemProps extends Omit<ComponentPropsWithoutRef<'input'>, 'type' | 'name' | 'value' | 'checked' | 'defaultChecked' | 'children'> {
+    // (undocumented)
+    children?: ReactNode;
     // (undocumented)
     value: string;
 }
@@ -2733,6 +2786,8 @@ export interface SegmentedControlRootProps extends Omit<ComponentPropsWithoutRef
     children?: ReactNode;
     // (undocumented)
     defaultValue?: string;
+    // (undocumented)
+    name?: string;
     // (undocumented)
     onValueChange?(v: string): void;
     // (undocumented)
@@ -3830,27 +3885,6 @@ export const TagGroupRoot: ForwardRefExoticComponent<Omit<DetailedHTMLProps<HTML
 export type TagGroupRootProps = ComponentPropsWithoutRef<'div'>;
 
 // @public (undocumented)
-export const TemporalFieldInput: ForwardRefExoticComponent<TemporalFieldInputProps & RefAttributes<HTMLInputElement>>;
-
-// @public (undocumented)
-export interface TemporalFieldInputProps extends Omit<InputProps, 'type'> {
-    // (undocumented)
-    type?: TemporalFieldInputType;
-}
-
-// @public (undocumented)
-export type TemporalFieldInputType = 'date' | 'time' | 'datetime-local' | 'month' | 'week';
-
-// @public (undocumented)
-export const TemporalFieldRoot: ForwardRefExoticComponent<TemporalFieldRootProps & RefAttributes<HTMLDivElement>>;
-
-// @public (undocumented)
-export interface TemporalFieldRootProps extends ComponentPropsWithoutRef<'div'> {
-    // (undocumented)
-    children?: ReactNode;
-}
-
-// @public (undocumented)
 const Text_2: <Element extends TextElement = "span">(props: TextProps<Element> & {
     ref?: ComponentPropsWithRef<Element>["ref"];
 }) => ReactElement | null;
@@ -4827,7 +4861,7 @@ key?: Key | null | undefined;
 export function TooltipContent(props: TooltipContentProps): ReactNode;
 
 // @public (undocumented)
-export type TooltipContentProps = HTMLAttributes<HTMLDivElement>;
+export type TooltipContentProps = Omit<HTMLAttributes<HTMLDivElement>, 'id'>;
 
 // @public (undocumented)
 export function TooltipRoot(input: TooltipRootProps): FunctionComponentElement<ProviderProps<TooltipContextValue | null>>;
@@ -4838,6 +4872,7 @@ export interface TooltipRootProps {
     children?: ReactNode;
     // (undocumented)
     closeDelay?: number;
+    contentId?: string;
     // (undocumented)
     defaultOpen?: boolean;
     // (undocumented)
@@ -4851,7 +4886,9 @@ export interface TooltipRootProps {
 }
 
 // @public (undocumented)
-export function TooltipTrigger(input: TooltipTriggerProps): ReactElement<Record<string, unknown>, string | JSXElementConstructor<any>>;
+export function TooltipTrigger(input: TooltipTriggerProps): ReactElement<HTMLAttributes<HTMLElement> & {
+    ref?: Ref<HTMLElement>;
+}, string | JSXElementConstructor<any>>;
 
 // @public (undocumented)
 export interface TooltipTriggerProps {

@@ -28,7 +28,6 @@
         "slider",
         "range-slider",
         "number-field",
-        "temporal-field",
         "password-field",
         "otp-field",
         "search-field",

@@ -1,2 +1,0 @@
-import { CarouselNext, CarouselPrevious, CarouselRoot, CarouselSlide, CarouselViewport } from '@vyrnforge/react/carousel';
-export function Example() { return <CarouselRoot aria-label="Featured items"><CarouselViewport><CarouselSlide>First slide</CarouselSlide><CarouselSlide>Second slide</CarouselSlide></CarouselViewport><CarouselPrevious>Previous</CarouselPrevious><CarouselNext>Next</CarouselNext></CarouselRoot>; }

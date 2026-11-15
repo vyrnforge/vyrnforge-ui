@@ -11,17 +11,17 @@ function selectedScope(plan, scope, owner = null) {
 }
 
 test('Core collection navigation fans to discovered component/conformance consumers without unrelated Native docs evidence', () => {
-  const impact = createSemanticImpact(['packages/core/src/capabilities/collection-navigation/index.ts']);
-  assert.ok(impact.ownedUnits.includes('unit:core:capabilities:collection-navigation'));
+  const impact = createSemanticImpact(['product/capabilities/collection-navigation/core/index.ts']);
+  assert.ok(impact.ownedUnits.includes('capability:collection-navigation'));
   assert.ok(impact.packages.includes('core'));
   assert.ok(impact.components.includes('tabs'));
   for (const port of ['react', 'angular', 'vue', 'elements']) assert.ok(impact.browserPorts.includes(port));
   assert.equal(impact.selectors.browserRequired, true);
   assert.equal(impact.selectors.docsRequired, false);
   assert.equal(impact.orchestration, 'nx');
-  assert.ok(hasReason(impact, 'unit:unit:core:capabilities:collection-navigation'));
+  assert.ok(hasReason(impact, 'unit:capability:collection-navigation'));
   assert.equal(hasReason(impact, 'evidence:docs'), false);
-  assert.ok(selectedScope(impact, 'pure-core', 'unit:core:capabilities:collection-navigation'));
+  assert.ok(selectedScope(impact, 'pure-core', 'capability:collection-navigation'));
   assert.ok(impact.executionPrerequisites.includes('browser-runtime'));
 });
 
@@ -54,7 +54,7 @@ test('generic React package fallback classification does not select Native docs 
 });
 
 test('canonical Tabs evidence fans across every implemented Tabs surface', () => {
-  const impact = createSemanticImpact(['product/components/composite-components/tabs/accessibility.json']);
+  const impact = createSemanticImpact(['product/components/composite-widgets/disclosure-view-switching/tabs/accessibility.json']);
   assert.deepEqual(impact.components, ['tabs']);
   for (const port of ['web', 'react', 'angular', 'vue', 'elements']) assert.ok(impact.browserPorts.includes(port));
   for (const scope of impact.browserScopes) assert.deepEqual(scope.components, ['tabs']);
@@ -190,4 +190,28 @@ test('validation scopes keep selected evidence separate from execution prerequis
   assert.ok(impact.executionPrerequisites.includes('dependencies'));
   assert.ok(impact.executionPrerequisites.includes('build:react'));
   assert.equal(impact.executionPrerequisites.some((value) => value.startsWith('pnpm ')), false);
+});
+
+test('accepted API report changes select only the affected packed package contracts', () => {
+  const ports = ['angular', 'elements', 'react', 'vue'];
+  const impact = createSemanticImpact(ports.map((port) => `packages/${port}/etc/${port}.api.md`));
+  assert.deepEqual(impact.packageArtifactPackages, ports);
+  assert.equal(impact.selectors.packageArtifactsRequired, true);
+  assert.equal(impact.selectors.browserRequired, false);
+  assert.equal(impact.repositoryWide, false);
+  for (const port of ports) {
+    assert.ok(selectedScope(impact, 'package-public-entrypoint', port));
+    assert.ok(selectedScope(impact, 'consumer-validation', port));
+  }
+  assert.equal(createSemanticImpact(['packages/react/etc/README.md']).selectors.packageArtifactsRequired, false);
+});
+
+test('API report evidence composes with narrow component browser evidence', () => {
+  const impact = createSemanticImpact([
+    'product/components/composite-widgets/choice-value/rating/react/index.ts',
+    'packages/react/etc/react.api.md',
+  ]);
+  assert.deepEqual(impact.packageArtifactPackages, ['react']);
+  assert.deepEqual(impact.browserScopes, [{ port: 'react', components: ['rating'] }]);
+  assert.equal(impact.repositoryWide, false);
 });

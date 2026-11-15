@@ -16,9 +16,10 @@ async function fixtureRoot() {
   await mkdir(path.join(root, 'packages/web/dist/components/example'), { recursive: true });
   await mkdir(path.join(root, 'packages/web/dist/styles'), { recursive: true });
   await writeFile(path.join(root, 'packages/web/dist/styles/tokens.css'), ':root{--vf-test:1;}');
+  await writeFile(path.join(root, 'packages/web/dist/styles/family.css'), '[data-example]{padding:16px;}');
   await writeFile(
     path.join(root, 'packages/web/dist/components/example/example.css'),
-    '@import "../../styles/tokens.css";\n[data-example]{display:block;}',
+    '@import "../../styles/tokens.css";\n@import "../../styles/family.css";\n[data-example]{display:block;}',
   );
   return root;
 }
@@ -53,9 +54,10 @@ describe('browser fixture infrastructure', () => {
     expect(html).toContain('<h1>Example browser fixture</h1>');
     expect(html).toContain('<button data-example>Example</button>');
     expect(html).toContain("<script>document.body.dataset.ready='true';</script>");
-    expect(css).toContain(':root{--vf-test:1;}');
-    expect(css).toContain('[data-example]{display:block;}');
-    expect(css).not.toContain('@import "../../styles/tokens.css";');
+    expect(css).toMatch(/--vf-test:\s*1;/);
+    expect(css).toMatch(/display:\s*block;/);
+    expect(css).toMatch(/padding:\s*16px;/);
+    expect(css).not.toContain('@import');
   });
 
   test('reports an unsupported port without creating framework-specific output', async () => {

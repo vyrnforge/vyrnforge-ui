@@ -31,7 +31,6 @@ export * from './components/pagination/index.js';
 export * from './components/password-field/index.js';
 export * from './components/search-field/index.js';
 export * from './components/split-panel/index.js';
-export * from './components/temporal-field/index.js';
 export * from './components/toast/index.js';
 export * from './components/app-shell/index.js';
 export * from './components/side-nav/index.js';
