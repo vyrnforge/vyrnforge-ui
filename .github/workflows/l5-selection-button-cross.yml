@@ -1,0 +1,16 @@
+name: L5 Selection Button Cross Evidence
+on:
+  push:
+    branches: [evidence/l5-selection-button-cross-20261115]
+permissions:
+  contents: read
+jobs:
+  browser:
+    uses: ./.github/workflows/_browser-validation.yml
+    with:
+      scopes_json: '[{"port":"web","components":"select,multi-select"},{"port":"react","components":"select,multi-select"},{"port":"vue","components":"select,multi-select"},{"port":"angular","components":"select,multi-select"},{"port":"elements","components":"select,multi-select"}]'
+      revision: ${{ github.sha }}
+      browser_profile: cross
+      browsers: chromium firefox webkit
+      artifact_suffix: l5-selection-button
+      retention_days: 30
