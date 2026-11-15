@@ -14,7 +14,7 @@ async function expectAxeClean(page) {
 
 test('combobox exposes the editable input/listbox relationship', async ({ page }) => {
   await load(page);
-  const input = page.getByRole('combobox', { name: 'Framework' });
+  const input = page.getByRole('combobox', { name: 'Framework', exact: true });
   await expect(input).toBeVisible();
   await expect(input).toHaveAttribute('aria-autocomplete', 'list');
   await input.focus();
@@ -36,7 +36,7 @@ test('combobox exposes the editable input/listbox relationship', async ({ page }
 test('public Combobox CSS resolves the canonical control radius in light and dark themes', async ({ page }) => {
   test.skip(port !== 'web', 'Public CSS resolution evidence is owned by the Web lane.');
   await page.goto('/components/combobox/web.html');
-  const input = page.getByRole('combobox', { name: 'Framework' });
+  const input = page.getByRole('combobox', { name: 'Framework', exact: true });
   for (const theme of ['light', 'dark']) {
     await page.locator('html').evaluate((element, value) => element.setAttribute('data-vf-theme', value), theme);
     await expect(input).toHaveCSS('border-radius', '6px');
@@ -57,7 +57,7 @@ test.describe('enhanced combobox interaction', () => {
     page.on('pageerror', (error) => errors.push(error.message));
     await load(page);
 
-    const input = page.getByRole('combobox', { name: 'Framework' });
+    const input = page.getByRole('combobox', { name: 'Framework', exact: true });
     const first = page.locator(`#${port}-react`);
     const disabled = page.locator(`#${port}-angular`);
     const next = page.locator(`#${port}-vue`);
@@ -90,7 +90,7 @@ test.describe('enhanced combobox interaction', () => {
     page,
   }) => {
     await load(page);
-    const input = page.getByRole('combobox', { name: 'Framework' });
+    const input = page.getByRole('combobox', { name: 'Framework', exact: true });
     const react = page.locator(`#${port}-react`);
     const vue = page.locator(`#${port}-vue`);
 
@@ -124,7 +124,7 @@ test.describe('enhanced combobox interaction', () => {
 
   test('does not run navigation, selection, or dismissal commands during composition', async ({ page }) => {
     await load(page);
-    const input = page.getByRole('combobox', { name: 'Framework' });
+    const input = page.getByRole('combobox', { name: 'Framework', exact: true });
     const vue = page.locator(`#${port}-vue`);
 
     await input.focus();
@@ -160,7 +160,7 @@ test.describe('enhanced combobox interaction', () => {
   test('keeps popup options out of the page Tab sequence', async ({ page }) => {
     await load(page);
     const before = page.locator('#before');
-    const input = page.getByRole('combobox', { name: 'Framework' });
+    const input = page.getByRole('combobox', { name: 'Framework', exact: true });
     const localeInput = page.getByRole('combobox', { name: 'Turkish city' });
     const after = page.locator('#after');
 
@@ -181,7 +181,7 @@ test('native light dismissal clears active descendant without committing the que
 }) => {
   test.skip(port === 'web', 'Managed runtime evidence.');
   await load(page);
-  const input = page.getByRole('combobox', { name: 'Framework' });
+  const input = page.getByRole('combobox', { name: 'Framework', exact: true });
   await input.fill('re');
   await input.press('ArrowDown');
   await expect(input).toHaveAttribute('aria-activedescendant', `${port}-react`);
@@ -200,7 +200,7 @@ test('native light dismissal clears active descendant without committing the que
 test('pointer selection keeps the editable input focused and commits once without reopening', async ({ page }) => {
   test.skip(port === 'web', 'Managed runtime evidence.');
   await load(page);
-  const input = page.getByRole('combobox', { name: 'Framework' });
+  const input = page.getByRole('combobox', { name: 'Framework', exact: true });
   await input.focus();
   const option = page.locator(`#${port}-vue`);
   await expect(option).toBeVisible();
@@ -238,7 +238,7 @@ test('root-owned Combobox relationships stay coherent with an explicit identity'
 test('native read-only and disabled fieldset prevent Combobox requests and preserve native keys', async ({ page }) => {
   test.skip(port === 'web', 'Managed runtime evidence.');
   await load(page);
-  const input = page.getByRole('combobox', { name: 'Framework' });
+  const input = page.getByRole('combobox', { name: 'Framework', exact: true });
   const controls = await input.getAttribute('aria-controls');
   const popup = page.locator(`#${controls}`);
   const fieldset = page.locator('#combo-fieldset');
@@ -279,4 +279,65 @@ test('native read-only and disabled fieldset prevent Combobox requests and prese
   await input.press('ArrowDown');
   await expect(popup).toBeVisible();
   await expect(input).toHaveAttribute('aria-activedescendant', `${port}-react`);
+});
+
+test('Combobox commits authored text while retaining the distinct semantic option key', async ({ page }) => {
+  test.skip(port === 'web', 'Managed runtime evidence.');
+  await load(page);
+  const input = page.getByRole('combobox', { name: 'Turkish city' });
+  await input.fill('i');
+  await input.press('ArrowDown');
+  await input.press('Enter');
+  await expect(input).toHaveValue('İstanbul');
+  await expect(input).toHaveAttribute('aria-expanded', 'false');
+  if (port === 'elements') await expect(page.locator('vf-combobox').nth(1)).toHaveAttribute('value', 'city-istanbul');
+  else await expect(page.locator('body')).toHaveAttribute('data-combo-value', 'city-istanbul');
+});
+
+test('Combobox controlled selection and query preserve owner rejection and distinct display text', async ({ page }) => {
+  test.skip(port === 'web' || port === 'elements', 'Framework-controlled state evidence.');
+  await load(page);
+  const input = page.getByRole('combobox', { name: 'Controlled framework' });
+  const body = page.locator('body');
+  const react = page.locator('#controlled-react');
+  const vue = page.locator('#controlled-vue');
+  await expect(input).toHaveValue('React');
+  await expect(react).toHaveAttribute('aria-selected', 'true');
+  await expect(body).not.toHaveAttribute('data-controlled-value', /.+/);
+  await expect(body).not.toHaveAttribute('data-controlled-query', /.+/);
+  await input.fill('');
+  // Navigation must observe the owner-committed query, not speculative native input.
+  await expect(input).toHaveValue('');
+  await expect(vue).toBeVisible();
+  await input.press('ArrowDown');
+  await expect(input).toHaveAttribute('aria-activedescendant', 'controlled-react');
+  await input.press('ArrowDown');
+  await expect(input).toHaveAttribute('aria-activedescendant', 'controlled-vue');
+  await input.press('Enter');
+  await expect(body).toHaveAttribute('data-controlled-value', 'vue-key');
+  await expect(input).toHaveValue('');
+  await expect(react).toHaveAttribute('aria-selected', 'true');
+  await expect(vue).toHaveAttribute('aria-selected', 'false');
+  await expect(input).toHaveAttribute('aria-expanded', 'false');
+  await page.locator('#accept-selection').click();
+  await input.fill('v');
+  await expect(input).toHaveValue('v');
+  await expect(react).toBeHidden();
+  await expect(vue).toBeVisible();
+  await input.press('ArrowDown');
+  await expect(input).toHaveAttribute('aria-activedescendant', 'controlled-vue');
+  await input.press('Enter');
+  await expect(input).toHaveValue('Vue');
+  await expect(body).toHaveAttribute('data-controlled-query', 'Vue');
+  await expect(vue).toHaveAttribute('aria-selected', 'true');
+  await expect(input).toBeFocused();
+  await page.locator('#external-selection').click();
+  await expect(react).toHaveAttribute('aria-selected', 'true');
+  await expect(input).toHaveValue('Vue');
+  await expect(body).toHaveAttribute('data-controlled-query', 'Vue');
+  await input.fill('blocked');
+  await expect(body).toHaveAttribute('data-controlled-query', 'blocked');
+  await expect(input).toHaveValue('Vue');
+  await expect(vue).toBeVisible();
+  await expect(react).toBeHidden();
 });

@@ -5,8 +5,12 @@ const items = [
   { key: 'svelte', value: 'Svelte', label: 'Svelte' },
 ];
 const cities = [
-  { key: 'istanbul', value: 'İstanbul', label: 'İstanbul' },
-  { key: 'isparta', value: 'Isparta', label: 'Isparta' },
+  { key: 'istanbul', value: 'city-istanbul', label: 'İstanbul' },
+  { key: 'isparta', value: 'city-isparta', label: 'Isparta' },
+];
+const controlledItems = [
+  { key: 'react', value: 'react-key', label: 'React' },
+  { key: 'vue', value: 'vue-key', label: 'Vue' },
 ];
 const before = '<button id="before" type="button">Before</button>';
 const after = '<button id="after" type="button" style="position: fixed; right: 16px; bottom: 16px">After</button>';
@@ -40,9 +44,12 @@ export const browserFixture = {
 };
 
 export async function createReactStory() {
-  const { createElement: h, Fragment, useEffect } = await import('react');
+  const { createElement: h, Fragment, useEffect, useState } = await import('react');
   const { ComboboxRoot, ComboboxInput, ComboboxContent, ComboboxOption } = await import('@vyrnforge/react/combobox');
   function App() {
+    const [controlledValue, setControlledValue] = useState('react-key');
+    const [controlledQuery, setControlledQuery] = useState('React');
+    const [accept, setAccept] = useState(false);
     useEffect(ready, []);
     const combo = (prefix, rows, label, locale) =>
       h(
@@ -86,16 +93,53 @@ export async function createReactStory() {
         { id: 'after', type: 'button', style: { position: 'fixed', right: '16px', bottom: '16px' } },
         'After',
       ),
+      h('button', { id: 'accept-selection', type: 'button', onClick: () => setAccept(true) }, 'Accept selection'),
+      h(
+        'button',
+        { id: 'external-selection', type: 'button', onClick: () => setControlledValue('react-key') },
+        'External selection',
+      ),
+      h(
+        ComboboxRoot,
+        {
+          id: 'controlled-combo',
+          value: controlledValue,
+          query: controlledQuery,
+          onValueChange(next) {
+            document.body.dataset.controlledValue = next;
+            if (accept) setControlledValue(next);
+          },
+          onQueryChange(next) {
+            document.body.dataset.controlledQuery = next;
+            if (next !== 'blocked') setControlledQuery(next);
+          },
+        },
+        h(ComboboxInput, { 'aria-label': 'Controlled framework', name: 'query' }),
+        h(
+          ComboboxContent,
+          { 'aria-label': 'Controlled framework options' },
+          ...controlledItems.map((row) =>
+            h(
+              ComboboxOption,
+              { key: row.key, id: 'controlled-' + row.key, value: row.value, textValue: row.label },
+              row.label,
+            ),
+          ),
+        ),
+      ),
     );
   }
   return h(App);
 }
 
 export async function createVueStory() {
-  const { createSSRApp, h, onMounted } = await import('vue');
+  const { createSSRApp, h, onMounted, ref } = await import('vue');
   const { ComboboxRoot, ComboboxInput, ComboboxContent, ComboboxOption } = await import('@vyrnforge/vue/combobox');
   return createSSRApp({
     setup() {
+      const controlledValue = ref('react-key');
+      const controlledQuery = ref('React');
+      const accept = ref(false);
       onMounted(ready);
       const combo = (prefix, rows, label, locale) =>
         h(ComboboxRoot, { id: locale ? `${prefix}-root` : undefined, locale, 'onUpdate:value': changed }, () => [
@@ -135,6 +179,44 @@ export async function createVueStory() {
             { id: 'after', type: 'button', style: { position: 'fixed', right: '16px', bottom: '16px' } },
             'After',
           ),
+          h(
+            'button',
+            { id: 'accept-selection', type: 'button', onClick: () => (accept.value = true) },
+            'Accept selection',
+          ),
+          h(
+            'button',
+            { id: 'external-selection', type: 'button', onClick: () => (controlledValue.value = 'react-key') },
+            'External selection',
+          ),
+          h(
+            ComboboxRoot,
+            {
+              id: 'controlled-combo',
+              value: controlledValue.value,
+              query: controlledQuery.value,
+              'onUpdate:value': (next) => {
+                document.body.dataset.controlledValue = next;
+                if (accept.value) controlledValue.value = next;
+              },
+              'onUpdate:query': (next) => {
+                document.body.dataset.controlledQuery = next;
+                if (next !== 'blocked') controlledQuery.value = next;
+              },
+            },
+            () => [
+              h(ComboboxInput, { 'aria-label': 'Controlled framework', name: 'query' }),
+              h(ComboboxContent, { 'aria-label': 'Controlled framework options' }, () =>
+                controlledItems.map((row) =>
+                  h(
+                    ComboboxOption,
+                    { key: row.key, id: 'controlled-' + row.key, value: row.value, textValue: row.label },
+                    () => row.label,
+                  ),
+                ),
+              ),
+            ],
+          ),
         ]);
     },
   });
@@ -142,10 +224,21 @@ export async function createVueStory() {
 
 export async function createAngularStory() {
   await import('@angular/compiler');
-  const { Component, afterNextRender } = await import('@angular/core');
+  const { Component, afterNextRender, signal } = await import('@angular/core');
   const { VfComboboxRootDirective, VfComboboxInputDirective, VfComboboxContentDirective, VfComboboxOptionDirective } =
     await import('@vyrnforge/angular/combobox');
   class ComboboxTestApp {
+    controlledValue = signal('react-key');
+    controlledQuery = signal('React');
+    accept = false;
+    valueRequested(next) {
+      document.body.dataset.controlledValue = next;
+      if (this.accept) this.controlledValue.set(next);
+    }
+    queryRequested(next) {
+      document.body.dataset.controlledQuery = next;
+      if (next !== 'blocked') this.controlledQuery.set(next);
+    }
     constructor() {
       afterNextRender(ready);
     }
@@ -158,7 +251,7 @@ export async function createAngularStory() {
     selector: 'vf-combobox-test',
     standalone: true,
     imports: [VfComboboxRootDirective, VfComboboxInputDirective, VfComboboxContentDirective, VfComboboxOptionDirective],
-    template: `<main><h1>Combobox browser fixture</h1>${before}<fieldset id="combo-fieldset"><legend>Framework selection</legend>${combo('angular', items, 'Framework')}</fieldset>${combo('angular-locale', cities, 'Turkish city', 'tr')}${after}</main>`,
+    template: `<main><h1>Combobox browser fixture</h1>${before}<fieldset id="combo-fieldset"><legend>Framework selection</legend>${combo('angular', items, 'Framework')}</fieldset>${combo('angular-locale', cities, 'Turkish city', 'tr')}${after}<button id="accept-selection" type="button" (click)="accept = true">Accept selection</button><button id="external-selection" type="button" (click)="controlledValue.set('react-key')">External selection</button><div vfComboboxRoot id="controlled-combo" [value]="controlledValue()" [query]="controlledQuery()" (valueChange)="valueRequested($event)" (queryChange)="queryRequested($event)"><input vfComboboxInput aria-label="Controlled framework" name="query"><div vfComboboxContent aria-label="Controlled framework options">${controlledItems.map((row) => `<button vfComboboxOption="${row.value}" id="controlled-${row.key}" textValue="${row.label}">${row.label}</button>`).join('')}</div></div></main>`,
   })(ComboboxTestApp);
   return ComboboxTestApp;
 }
