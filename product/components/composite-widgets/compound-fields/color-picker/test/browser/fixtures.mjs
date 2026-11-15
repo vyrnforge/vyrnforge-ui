@@ -99,7 +99,7 @@ export async function createAngularStory({ client }) {
     ${field('controlled', 'controlled-', '[value]="controlled()" (valueChange)="changed(\'colorRequest\', $event)"')}
     ${field('disabled', 'disabled-', 'defaultValue="#112233" [disabled]="true"')}
     ${field('readonly', 'readonly-', 'defaultValue="#112233"', 'readonly')}
-    <button id="set-color" type="button" (click)="controlled.set(\'#abcdef\')">Set controlled color</button>
+    <button id="set-color" type="button" (click)="controlled.set('#abcdef')">Set controlled color</button>
     </form></main>`,
   })(ColorPickerTestApp);
   return ColorPickerTestApp;
