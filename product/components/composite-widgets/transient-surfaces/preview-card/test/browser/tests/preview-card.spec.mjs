@@ -119,3 +119,47 @@ test('PreviewCard tracks its focused source through scroll, resize, RTL and bloc
   await expect(surface).toBeHidden();
   await expect(trigger).toBeFocused();
 });
+
+test('PreviewCard stays contained with enlarged text and narrow viewport', async ({ page }) => {
+  test.skip(port === 'web', 'Runtime popover geometry is owned by the runtime ports.');
+  await page.setViewportSize({ width: 320, height: 480 });
+  await page.goto(`/components/preview-card/${port}.html`);
+  await page.waitForFunction(() => document.body.dataset.previewReady === 'true');
+  await page.evaluate(() => {
+    document.documentElement.style.fontSize = '200%';
+    const trigger = document.querySelector('#t');
+    Object.assign(trigger.style, { position: 'fixed', top: '8px', left: '8px' });
+    const content = document.querySelector('#c');
+    const text = document.createElement('p');
+    text.textContent = 'LongUnbrokenText'.repeat(30);
+    content.append(text);
+    for (let index = 0; index < 30; index += 1) {
+      const paragraph = document.createElement('p');
+      paragraph.textContent = 'Additional authored content';
+      content.append(paragraph);
+    }
+  });
+  const trigger = page.locator('#t');
+  const surface = page.locator('#c');
+  await trigger.focus();
+  await expect(surface).toBeVisible();
+  await expect
+    .poll(() =>
+      surface.evaluate((element) => {
+        const rect = element.getBoundingClientRect();
+        return {
+          contained: rect.top >= -1 && rect.bottom <= innerHeight + 1 && rect.left >= -1 && rect.right <= innerWidth + 1,
+          scrollable: element.scrollHeight > element.clientHeight,
+          wraps: element.scrollWidth <= element.clientWidth + 1,
+        };
+      }),
+    )
+    .toEqual({ contained: true, scrollable: true, wraps: true });
+  await surface.evaluate((element) => {
+    element.scrollTop = element.scrollHeight;
+  });
+  expect(await surface.evaluate((element) => element.scrollTop)).toBeGreaterThan(0);
+  await page.keyboard.press('Escape');
+  await expect(surface).toBeHidden();
+  await expect(trigger).toBeFocused();
+});
