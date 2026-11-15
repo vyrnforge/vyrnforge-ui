@@ -539,9 +539,13 @@ export class VfSegmentedControlElement extends H_4 {
 // @public (undocumented)
 export class VfSelectElement extends H {
     // (undocumented)
+    attributeChangedCallback(): void;
+    // (undocumented)
     connectedCallback(): void;
     // (undocumented)
     disconnectedCallback(): void;
+    // (undocumented)
+    static observedAttributes: string[];
 }
 
 // @public (undocumented)
