@@ -5,6 +5,7 @@ import {
   useContext,
   useEffect,
   useId,
+  useLayoutEffect,
   useMemo,
   useRef,
   useState,
@@ -41,6 +42,11 @@ function focusOption(root: HTMLElement | null, edge: 'first' | 'last'): void {
 }
 
 interface Ctx {
+  disabled: boolean;
+  error: string;
+  setError(message: string): void;
+  resetValue: string;
+  reset(): string;
   triggerId: string;
   listboxId: string;
   open: boolean;
@@ -61,6 +67,7 @@ function useSelect(): Ctx {
 }
 
 export interface SelectRootProps {
+  disabled?: boolean;
   children?: ReactNode;
   id?: string;
   value?: string;
@@ -76,12 +83,15 @@ export function SelectRoot({
   id,
   value,
   defaultValue = '',
+  disabled = false,
   open,
   defaultOpen = false,
   onValueChange,
   onOpenChange,
 }: SelectRootProps) {
-  const [internalValue, setInternalValue] = useState(defaultValue);
+  const initialValue = useRef(defaultValue);
+  const [internalValue, setInternalValue] = useState(initialValue.current);
+  const [error, setError] = useState('');
   const [internalOpen, setInternalOpen] = useState(defaultOpen);
   const selected = value ?? internalValue;
   const expanded = open ?? internalOpen;
@@ -95,16 +105,28 @@ export function SelectRoot({
   const [focusRevision, setFocusRevision] = useState(0);
   const context = useMemo<Ctx>(
     () => ({
+      disabled,
+      error,
+      setError,
+      resetValue: value ?? initialValue.current,
+      reset() {
+        const next = value ?? initialValue.current;
+        if (value === undefined) setInternalValue(next);
+        setError('');
+        return next;
+      },
       triggerId,
       listboxId,
       open: expanded,
       setOpen(next) {
+        if (next && disabled) return;
         if (next === expanded) return;
         if (open === undefined) setInternalOpen(next);
         onOpenChange?.(next);
       },
       value: selected,
       setValue(next) {
+        if (disabled) return;
         if (value === undefined) setInternalValue(next);
         onValueChange?.(next);
         if (open === undefined) setInternalOpen(false);
@@ -119,7 +141,7 @@ export function SelectRoot({
         setFocusRevision((revision) => revision + 1);
       },
     }),
-    [expanded, onOpenChange, onValueChange, open, selected, value, focusRevision, triggerId, listboxId],
+    [expanded, onOpenChange, onValueChange, open, selected, value, focusRevision, triggerId, listboxId, disabled, error],
   );
   return createElement(C.Provider, { value: context }, children);
 }
@@ -142,7 +164,10 @@ export const SelectTrigger = forwardRef<
         if (typeof forwardedRef === 'function') forwardedRef(node);
         else if (forwardedRef) forwardedRef.current = node;
       },
-      type: props.type ?? 'button',
+      type: 'button',
+      disabled: props.disabled || select.disabled,
+      'aria-invalid': select.error ? true : props['aria-invalid'],
+      'aria-describedby': [props['aria-describedby'], select.error ? `${select.listboxId}-error` : undefined].filter(Boolean).join(' ') || undefined,
       'data-vf-select-trigger': '',
       id: select.triggerId,
       'aria-controls': select.listboxId,
@@ -304,9 +329,9 @@ export const SelectOption = forwardRef<HTMLButtonElement, SelectOptionProps>(fun
     type: 'button',
     role: 'option',
     tabIndex: -1,
-    disabled,
+    disabled: disabled || select.disabled,
     'aria-selected': select.value === value,
-    'aria-disabled': disabled || undefined,
+    'aria-disabled': disabled || select.disabled || undefined,
     'data-vf-select-option': '',
     'data-vf-value': value,
     onClick(event) {
@@ -315,3 +340,70 @@ export const SelectOption = forwardRef<HTMLButtonElement, SelectOptionProps>(fun
     },
   });
 });
+
+/** Native form participation for the custom Select popup. Supply the same option keys and labels. */
+export interface SelectFormControlProps {
+  name?: string;
+  form?: string;
+  required?: boolean;
+  options: readonly { value: string; label: string; disabled?: boolean }[];
+}
+
+export function SelectFormControl({ name, form, required, options }: SelectFormControlProps) {
+  const root = useSelect();
+  const control = useRef<HTMLSelectElement | null>(null);
+  const reset = useRef(root.reset);
+  function sync(element: HTMLSelectElement, values: string, defaults: string) {
+    for (const option of element.options) option.defaultSelected = defaults === option.value;
+    element.value = values;
+  }
+  useLayoutEffect(() => {
+    reset.current = root.reset;
+    const element = control.current;
+    if (!element) return;
+    sync(element, root.value, root.resetValue);
+    if (root.error && (element.validity.valid || element.matches(':disabled'))) root.setError('');
+  });
+  useEffect(() => {
+    const element = control.current;
+    if (!element) return;
+    const document = element.ownerDocument;
+    let active = true;
+    const onReset = (event: Event) => {
+      if (!element.form || element.form !== event.target) return;
+      setTimeout(() => {
+        if (!active || event.defaultPrevented || element.form !== event.target) return;
+        const next = reset.current();
+        sync(element, next, next);
+      }, 0);
+    };
+    document.addEventListener('reset', onReset, true);
+    return () => {
+      active = false;
+      document.removeEventListener('reset', onReset, true);
+    };
+  }, []);
+  return createElement(
+    'div',
+    { 'data-vf-select-form-control': '' },
+    createElement('select', {
+      ref: control,
+      name,
+      form,
+      required,
+      disabled: root.disabled,
+      multiple: false,
+      hidden: true,
+      'aria-hidden': true,
+      tabIndex: -1,
+      value: root.value,
+      onChange: (event) => sync(event.currentTarget, root.value, root.resetValue),
+      onInvalid: (event) => {
+        event.preventDefault();
+        root.setError(event.currentTarget.validationMessage);
+        root.anchorRef.current?.focus();
+      },
+    }, options.map((option) => createElement('option', { key: option.value, value: option.value, disabled: option.disabled }, option.label))),
+    createElement('span', { id: `${root.listboxId}-error`, role: 'status' }, root.error),
+  );
+}
