@@ -1,0 +1,16 @@
+name: L5 form and selection cross-engine evidence
+on:
+  push:
+    branches: [evidence/l5-form-selection-cross-20261115]
+permissions:
+  contents: read
+jobs:
+  browser:
+    uses: ./.github/workflows/_browser-validation.yml
+    with:
+      scopes_json: '[{"port":"web","components":"otp-field,color-picker,search-field,file-uploader,combobox,select,multi-select"},{"port":"react","components":"otp-field,color-picker,search-field,file-uploader,combobox,select,multi-select"},{"port":"vue","components":"otp-field,color-picker,search-field,file-uploader,combobox,select,multi-select"},{"port":"angular","components":"otp-field,color-picker,search-field,file-uploader,combobox,select,multi-select"},{"port":"elements","components":"otp-field,color-picker,search-field,file-uploader,combobox,select,multi-select"}]'
+      revision: ${{ github.sha }}
+      browser_profile: cross
+      browsers: chromium firefox webkit
+      artifact_suffix: l5-form-selection-cross
+      retention_days: 14
