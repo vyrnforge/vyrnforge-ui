@@ -1,0 +1,16 @@
+name: MultiSelect final escape cross-engine evidence
+on:
+  push:
+    branches: [evidence/l5-multi-select-escape-cross]
+permissions:
+  contents: read
+jobs:
+  browser:
+    uses: ./.github/workflows/_browser-validation.yml
+    with:
+      scopes_json: '[{"port":"web","components":"multi-select"},{"port":"react","components":"multi-select"},{"port":"vue","components":"multi-select"},{"port":"angular","components":"multi-select"},{"port":"elements","components":"multi-select"}]'
+      revision: ${{ github.sha }}
+      browser_profile: cross
+      browsers: chromium firefox webkit
+      artifact_suffix: multi-select-escape-cross
+      retention_days: 14
