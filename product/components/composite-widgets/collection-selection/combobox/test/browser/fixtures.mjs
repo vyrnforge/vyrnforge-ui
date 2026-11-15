@@ -47,11 +47,14 @@ export async function createReactStory() {
     const combo = (prefix, rows, label, locale) =>
       h(
         ComboboxRoot,
-        { locale, onValueChange: changed },
-        h(ComboboxInput, { 'aria-label': label }),
+        { id: locale ? `${prefix}-root` : undefined, locale, onValueChange: changed },
+        h(ComboboxInput, {
+          'aria-label': label,
+          ...(locale ? { id: `${prefix}-obsolete-input`, 'aria-controls': `${prefix}-obsolete-listbox` } : {}),
+        }),
         h(
           ComboboxContent,
-          { 'aria-label': label + ' options' },
+          { 'aria-label': label + ' options', ...(locale ? { id: `${prefix}-obsolete-listbox` } : {}) },
           ...rows.map((row) =>
             h(
               ComboboxOption,
@@ -90,9 +93,12 @@ export async function createVueStory() {
     setup() {
       onMounted(ready);
       const combo = (prefix, rows, label, locale) =>
-        h(ComboboxRoot, { locale, 'onUpdate:value': changed }, () => [
-          h(ComboboxInput, { 'aria-label': label }),
-          h(ComboboxContent, { 'aria-label': label + ' options' }, () =>
+        h(ComboboxRoot, { id: locale ? `${prefix}-root` : undefined, locale, 'onUpdate:value': changed }, () => [
+          h(ComboboxInput, {
+            'aria-label': label,
+            ...(locale ? { id: `${prefix}-obsolete-input`, 'aria-controls': `${prefix}-obsolete-listbox` } : {}),
+          }),
+          h(ComboboxContent, { 'aria-label': label + ' options', ...(locale ? { id: `${prefix}-obsolete-listbox` } : {}) }, () =>
             rows.map((row) =>
               h(
                 ComboboxOption,
@@ -135,7 +141,7 @@ export async function createAngularStory() {
     changed = changed;
   }
   function combo(prefix, rows, label, locale = '') {
-    return `<div vfComboboxRoot${locale ? ' locale="' + locale + '"' : ''} (valueChange)="changed($event)"><input vfComboboxInput aria-label="${label}"><div vfComboboxContent aria-label="${label} options">${rows.map((row) => `<button vfComboboxOption="${row.value}" id="${prefix}-${row.key}" textValue="${row.label}" [disabled]="${!!row.disabled}">${row.label}</button>`).join('')}</div></div>`;
+    return `<div vfComboboxRoot${locale ? ' id="' + prefix + '-root" locale="' + locale + '"' : ''} (valueChange)="changed($event)"><input vfComboboxInput aria-label="${label}"><div vfComboboxContent aria-label="${label} options">${rows.map((row) => `<button vfComboboxOption="${row.value}" id="${prefix}-${row.key}" textValue="${row.label}" [disabled]="${!!row.disabled}">${row.label}</button>`).join('')}</div></div>`;
   }
   Component({
     selector: 'vf-combobox-test',
@@ -148,7 +154,7 @@ export async function createAngularStory() {
 
 export async function createElementsStory({ client }) {
   function combo(prefix, rows, label, locale = '') {
-    return `<vf-combobox${locale ? ' locale="' + locale + '"' : ''}><input id="${prefix}-input" aria-label="${label}" data-vf-combobox-input><div id="${prefix}-listbox" aria-label="${label} options" data-vf-combobox-content hidden>${options(prefix, rows)}</div></vf-combobox>`;
+    return `<vf-combobox${locale ? ' id="' + prefix + '-root" locale="' + locale + '"' : ''}><input id="${prefix}${locale ? '-root' : ''}-input" aria-label="${label}" data-vf-combobox-input><div id="${prefix}${locale ? '-root' : ''}-listbox" aria-label="${label} options" data-vf-combobox-content hidden>${options(prefix, rows)}</div></vf-combobox>`;
   }
   return {
     body: `${before}${combo('elements', items, 'Framework')}${combo('elements-locale', cities, 'Turkish city', 'tr')}${after}`,

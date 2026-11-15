@@ -216,3 +216,22 @@ test('pointer selection keeps the editable input focused and commits once withou
   if (port === 'elements') await expect(page.locator('vf-combobox').first()).toHaveAttribute('value', 'Vue');
   else await expect(page.locator('body')).toHaveAttribute('data-combo-value', 'Vue');
 });
+
+
+test('root-owned Combobox relationships stay coherent with an explicit identity', async ({ page }) => {
+  test.skip(port === 'web', 'Web authors the input and popup relationships directly.');
+  await load(page);
+  const prefix = `${port}-locale-root`;
+  const input = page.getByRole('combobox', { name: 'Turkish city' });
+  const content = page.locator(`#${prefix}-listbox`);
+  await expect(input).toHaveAttribute('id', `${prefix}-input`);
+  await expect(input).toHaveAttribute('aria-controls', `${prefix}-listbox`);
+  await expect(content).toHaveAttribute('aria-labelledby', `${prefix}-input`);
+  await expect(page.locator(`#${port}-locale-obsolete-input, #${port}-locale-obsolete-listbox`)).toHaveCount(0);
+  await input.focus();
+  await expect(content).toBeVisible();
+  await input.press('ArrowDown');
+  await expect(input).toHaveAttribute('aria-activedescendant', `${port}-locale-istanbul`);
+  await expect(content.locator(`#${port}-locale-istanbul`)).toHaveAttribute('aria-selected', 'true');
+  await expect(input).toBeFocused();
+});

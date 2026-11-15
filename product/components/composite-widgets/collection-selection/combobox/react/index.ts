@@ -74,19 +74,21 @@ function moveActive(context: Ctx, intent: Extract<CollectionNavigationIntent, 'n
 
 export interface ComboboxRootProps {
   children?: ReactNode;
+  id?: string;
   value?: string;
   defaultValue?: string;
   locale?: string;
   onValueChange?(value: string): void;
 }
-export function ComboboxRoot({ children, value, defaultValue = '', locale, onValueChange }: ComboboxRootProps) {
+export function ComboboxRoot({ children, id, value, defaultValue = '', locale, onValueChange }: ComboboxRootProps) {
   const [internalValue, setInternalValue] = useState(defaultValue);
   const [open, setOpenState] = useState(false);
   const [query, setQueryState] = useState('');
   const [activeId, setActiveId] = useState<string | null>(null);
   const uid = useId();
-  const inputId = `vf-combobox-${uid}-input`;
-  const listboxId = `vf-combobox-${uid}-listbox`;
+  const rootId = id ?? `vf-combobox-${uid}`;
+  const inputId = `${rootId}-input`;
+  const listboxId = `${rootId}-listbox`;
   const anchorRef = useRef<HTMLElement | null>(null);
   const surfaceRef = useRef<HTMLElement | null>(null);
   const selected = value ?? internalValue;
@@ -124,13 +126,13 @@ export function ComboboxRoot({ children, value, defaultValue = '', locale, onVal
   return createElement(C.Provider, { value: context }, children);
 }
 
-export const ComboboxInput = forwardRef<HTMLInputElement, ComponentPropsWithoutRef<'input'>>(
+export const ComboboxInput = forwardRef<HTMLInputElement, Omit<ComponentPropsWithoutRef<'input'>, 'id' | 'aria-controls'>>(
   function ComboboxInput(props, ref) {
     const context = useCombo();
     const composingRef = useRef(false);
     return createElement('input', {
       ...props,
-      id: props.id ?? context.inputId,
+      id: context.inputId,
       ref(node: HTMLInputElement | null) {
         context.anchorRef.current = node;
         if (typeof ref === 'function') ref(node);
@@ -139,7 +141,7 @@ export const ComboboxInput = forwardRef<HTMLInputElement, ComponentPropsWithoutR
       role: 'combobox',
       'aria-autocomplete': 'list',
       'aria-expanded': context.open,
-      'aria-controls': props['aria-controls'] ?? context.listboxId,
+      'aria-controls': context.listboxId,
       'aria-activedescendant': context.activeId ?? undefined,
       'data-vf-combobox-input': '',
       value: props.value ?? context.query,
@@ -201,7 +203,7 @@ export const ComboboxInput = forwardRef<HTMLInputElement, ComponentPropsWithoutR
   },
 );
 
-export const ComboboxContent = forwardRef<HTMLDivElement, ComponentPropsWithoutRef<'div'>>(
+export const ComboboxContent = forwardRef<HTMLDivElement, Omit<ComponentPropsWithoutRef<'div'>, 'id'>>(
   function ComboboxContent(props, ref) {
     const context = useCombo();
     useEffect(() => {
@@ -214,7 +216,7 @@ export const ComboboxContent = forwardRef<HTMLDivElement, ComponentPropsWithoutR
     }, [context.open, context.activeId, context.anchorRef, context.surfaceRef]);
     const node = createElement('div', {
       ...props,
-      id: props.id ?? context.listboxId,
+      id: context.listboxId,
       ref(element: HTMLDivElement | null) {
         context.surfaceRef.current = element;
         if (typeof ref === 'function') ref(element);

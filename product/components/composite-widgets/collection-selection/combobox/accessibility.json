@@ -52,7 +52,8 @@
     "Combobox uses the APG editable listbox-popup active-descendant model: DOM focus stays on the native text input while assistive-technology focus moves through listbox options.",
     "Home, End, printable characters, and other native text-editing keys are not intercepted by Combobox navigation.",
     "The active option uses aria-selected while navigating suggestions; committing with Enter updates the selected value and closes the popup.",
-    "Manual assistive-technology evidence remains owned by #633 and is not manufactured by this mapping.",
-    "Native auto popover owns top-layer presentation and light dismissal; runtime maintains input DOM focus and clears active descendant on close. React/Vue content stays mounted while closed. Controlled value/query and full generated relationship edge cases remain separate audit work."
+    "Manual assistive-technology evidence remains owned by #1157 and is not manufactured by this mapping.",
+    "React, Vue, and Angular derive input and popup IDs from a root identity; React/Vue root id is an optional namespace, not a DOM wrapper. Input aria-controls is library-owned. Native Web and Elements retain authored markup IDs. Consumers may supply an external accessible naming relationship.",
+    "Native auto popover owns top-layer presentation and light dismissal; runtime maintains input DOM focus and clears active descendant on close. React/Vue content stays mounted while closed. Controlled value/query and dynamic option relationship edge cases remain separate audit work."
   ]
 }
