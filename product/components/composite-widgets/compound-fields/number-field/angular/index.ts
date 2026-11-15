@@ -1,4 +1,16 @@
-import { Directive, booleanAttribute, computed, input, output, signal } from '@angular/core';
+import {
+  Directive,
+  DestroyRef,
+  ElementRef,
+  Injector,
+  afterNextRender,
+  booleanAttribute,
+  computed,
+  inject,
+  input,
+  output,
+  signal,
+} from '@angular/core';
 
 function syncValue(input: HTMLInputElement, value: number | null) {
   if (input.validity.badInput || (value === null ? input.value !== '' : input.valueAsNumber !== value)) {
@@ -28,6 +40,10 @@ export class VfNumberFieldRootDirective {
   readonly readOnly = input(false, { transform: booleanAttribute });
   readonly valueChange = output<number | null>();
   private readonly initial = signal<number | null | undefined>(undefined);
+  private resetDefault: number | null = 0;
+  private readonly element = inject<ElementRef<HTMLElement>>(ElementRef);
+  private readonly injector = inject(Injector);
+  private readonly destroyRef = inject(DestroyRef);
   readonly current = computed(() => {
     const value = this.value();
     if (value !== undefined) return value;
@@ -35,7 +51,33 @@ export class VfNumberFieldRootDirective {
     return internal !== undefined ? internal : this.defaultValue();
   });
   ngOnInit() {
-    this.initial.set(this.defaultValue());
+    this.resetDefault = this.defaultValue();
+    this.initial.set(this.resetDefault);
+    afterNextRender(
+      () => {
+        const root = this.element.nativeElement;
+        const document = root.ownerDocument;
+        let active = true;
+        const onReset = (event: Event) => {
+          const input = Array.from(root.querySelectorAll<HTMLInputElement>('input[data-vf-number-field-input]')).find(
+            (candidate) => candidate.closest('[data-vf-number-field-root]') === root,
+          );
+          if (!input?.form || input.form !== event.target) return;
+          setTimeout(() => {
+            if (!active || event.defaultPrevented || input.form !== event.target) return;
+            const value = this.value();
+            if (value === undefined) this.initial.set(this.resetDefault);
+            syncValue(input, value === undefined ? this.resetDefault : value);
+          }, 0);
+        };
+        document.addEventListener('reset', onReset, true);
+        this.destroyRef.onDestroy(() => {
+          active = false;
+          document.removeEventListener('reset', onReset, true);
+        });
+      },
+      { injector: this.injector },
+    );
   }
   set(next: number | null) {
     if (this.disabled() || this.readOnly() || (next !== null && !Number.isFinite(next)) || next === this.current())

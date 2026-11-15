@@ -160,3 +160,77 @@ test('NumberField delegates fractional stepping and unavailable actions to nativ
   await page.locator('#any').fill('0.125');
   await expect(body).toHaveAttribute('data-any-value', '0.125');
 });
+
+test('native NumberField reset restores defaults without fabricating input events', async ({ page }) => {
+  await page.goto(`/components/number-field/${port}.html`);
+  if (port !== 'web') await expect(page.locator('body')).toHaveAttribute('data-number-field-ready', 'true');
+  const input = page.locator('#input');
+  const form = page.locator('#number-form');
+  await input.fill('5');
+  await form.evaluate(async (element) => {
+    element.addEventListener('reset', (event) => event.preventDefault(), { once: true });
+    element.reset();
+    await new Promise((resolve) => {
+      setTimeout(resolve, 0);
+    });
+  });
+  await expect(input).toHaveValue('5');
+  await form.evaluate((element) => {
+    element.addEventListener('input', () => {
+      document.body.dataset.resetInput = 'unexpected';
+    });
+    const button = document.createElement('button');
+    button.type = 'reset';
+    button.textContent = 'Reset numbers';
+    element.append(button);
+  });
+  await page.getByRole('button', { name: 'Reset numbers' }).click();
+  await expect(input).toHaveValue('2');
+  expect(await form.evaluate((element) => new FormData(element).get('input'))).toBe('2');
+  await expect(page.locator('body')).not.toHaveAttribute('data-reset-input', 'unexpected');
+  if (frameworkPorts.has(port)) {
+    await expect(page.locator('body')).toHaveAttribute('data-quantity', '5');
+    await expect(page.locator('body')).toHaveAttribute('data-quantity-count', '1');
+  }
+  await page.locator('#inc').click();
+  await expect(input).toHaveValue('3');
+  if (frameworkPorts.has(port)) await expect(page.locator('body')).toHaveAttribute('data-quantity', '3');
+});
+
+test('NumberField reset preserves controlled values and restores a nullable initial value', async ({ page }) => {
+  test.skip(!frameworkPorts.has(port), 'Framework roots own committed numeric values.');
+  await page.goto(`/components/number-field/${port}.html`);
+  const body = page.locator('body');
+  await expect(body).toHaveAttribute('data-number-field-ready', 'true');
+  const controlled = page.locator('#controlled');
+  const any = page.locator('#any');
+  await page.locator('#set-controlled').click();
+  await expect(controlled).toHaveValue('7');
+  await any.fill('0.125');
+  await expect(body).toHaveAttribute('data-any-value', '0.125');
+  const form = page.locator('#number-form');
+  await form.evaluate(async (element) => {
+    element.reset();
+    await new Promise((resolve) => {
+      setTimeout(resolve, 0);
+    });
+  });
+  await expect(controlled).toHaveValue('7');
+  await expect(any).toHaveValue('');
+  await expect(body).toHaveAttribute('data-any-value-count', '1');
+  await expect(body).not.toHaveAttribute('data-controlled-request-count', /.+/);
+  expect(await form.evaluate((element) => new FormData(element).get('controlled'))).toBe('7');
+  expect(await form.evaluate((element) => new FormData(element).get('any'))).toBe('');
+  await any.fill('0.125');
+  await expect(body).toHaveAttribute('data-any-value-count', '2');
+  await page.locator('#clear-controlled').click();
+  await expect(controlled).toHaveValue('');
+  await form.evaluate(async (element) => {
+    element.reset();
+    await new Promise((resolve) => {
+      setTimeout(resolve, 0);
+    });
+  });
+  await expect(controlled).toHaveValue('');
+  await expect(body).not.toHaveAttribute('data-controlled-request-count', /.+/);
+});
