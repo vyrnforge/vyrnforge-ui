@@ -60,6 +60,7 @@ export class VfContextMenuRootDirective {
   standalone: true,
   host: {
     'data-vf-context-menu-trigger': '',
+    tabindex: '0',
     '(contextmenu)': 'openMenu($event)',
     '(keydown)': 'onKeydown($event)',
   },
