@@ -1,5 +1,5 @@
 @import '../../styles/selection.css';
-@import '../../tag-group/web/tag-group.css';
+@import '../tag-group/tag-group.css';
 
 @layer vyrnforge.components {
   [data-vf-multi-select-content] {
