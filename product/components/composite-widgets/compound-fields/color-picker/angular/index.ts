@@ -1,4 +1,16 @@
-import { Directive, booleanAttribute, computed, input, output, signal } from '@angular/core';
+import {
+  Directive,
+  DestroyRef,
+  ElementRef,
+  Injector,
+  afterNextRender,
+  booleanAttribute,
+  computed,
+  inject,
+  input,
+  output,
+  signal,
+} from '@angular/core';
 
 function hex(value: string): string | null {
   return /^#[0-9a-f]{6}$/i.test(value) ? value.toLowerCase() : null;
@@ -15,9 +27,43 @@ export class VfColorPickerRootDirective {
   readonly disabled = input(false, { transform: booleanAttribute });
   readonly valueChange = output<string>();
   private readonly internal = signal<string | undefined>(undefined);
+  private initial = '#000000';
+  private readonly element = inject<ElementRef<HTMLElement>>(ElementRef);
+  private readonly injector = inject(Injector);
+  private readonly destroyRef = inject(DestroyRef);
   readonly current = computed(() => requiredHex(this.value() ?? this.internal() ?? this.defaultValue()));
   ngOnInit() {
-    this.internal.set(requiredHex(this.defaultValue()));
+    this.initial = requiredHex(this.defaultValue());
+    this.internal.set(this.initial);
+    afterNextRender(
+      () => {
+        const root = this.element.nativeElement;
+        const document = root.ownerDocument;
+        let active = true;
+        const inputs = () =>
+          Array.from(
+            root.querySelectorAll<HTMLInputElement>('input[data-vf-color-picker-input], input[data-vf-color-picker-text]'),
+          ).filter((input) => input.closest('[data-vf-color-picker-root]') === root);
+        const onReset = (event: Event) => {
+          const group = inputs();
+          if (!group.length || !group.every((input) => input.form && input.form === event.target)) return;
+          setTimeout(() => {
+            if (!active || event.defaultPrevented) return;
+            const group = inputs();
+            if (!group.length || !group.every((input) => input.form === event.target)) return;
+            const next = requiredHex(this.value() ?? this.initial);
+            if (this.value() === undefined) this.internal.set(next);
+            for (const input of group) input.value = next;
+          }, 0);
+        };
+        document.addEventListener('reset', onReset, true);
+        this.destroyRef.onDestroy(() => {
+          active = false;
+          document.removeEventListener('reset', onReset, true);
+        });
+      },
+      { injector: this.injector },
+    );
   }
   set(v: string) {
     const next = hex(v);

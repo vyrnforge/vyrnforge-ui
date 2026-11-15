@@ -88,3 +88,45 @@ test('public CSS uses canonical gap and input radius in both themes', async ({ p
     await expect(input).toHaveCSS('border-top-left-radius', '6px');
   }
 });
+
+test('native OTPField reset restores initial text and preserves the latest controlled code', async ({ page }) => {
+  const input = await openFixture(page);
+  const body = page.locator('body');
+  const form = page.locator('#otp-form');
+  await input.fill('0472');
+  if (frameworkPorts.has(port)) {
+    await page.locator('#set-code').click();
+    await expect(page.locator('#controlled')).toHaveValue('7654');
+  }
+  await form.evaluate(async (element) => {
+    element.addEventListener('reset', (event) => event.preventDefault(), { once: true });
+    element.reset();
+    await new Promise((resolve) => {
+      setTimeout(resolve, 0);
+    });
+  });
+  await expect(input).toHaveValue('0472');
+  const values = await form.evaluate(async (element) => {
+    element.reset();
+    const immediate = Object.fromEntries(new FormData(element));
+    await new Promise((resolve) => {
+      setTimeout(resolve, 0);
+    });
+    return immediate;
+  });
+  expect(values.code).toBe('');
+  await expect(input).toHaveValue('');
+  if (frameworkPorts.has(port)) {
+    expect(values.controlled).toBe('7654');
+    expect(values.readonly).toBe('5678');
+    expect(values.disabled).toBeUndefined();
+    await expect(page.locator('#controlled')).toHaveValue('7654');
+    await expect(page.locator('#readonly')).toHaveValue('5678');
+    await expect(body).not.toHaveAttribute('data-otp-request-count', /.+/);
+  }
+  if (port !== 'web') await expect(body).toHaveAttribute('data-otp-value-count', '1');
+  await input.fill('0472');
+  await expect(input).toHaveValue('0472');
+  if (port !== 'web') await expect(body).toHaveAttribute('data-otp-value-count', '2');
+  expect(await form.evaluate((element) => new FormData(element).get('code'))).toBe('0472');
+});

@@ -3,6 +3,10 @@ import {
   createElement,
   forwardRef,
   useContext,
+  useEffect,
+  useImperativeHandle,
+  useLayoutEffect,
+  useRef,
   useState,
   type ComponentPropsWithoutRef,
   type ReactNode,
@@ -13,6 +17,8 @@ interface OTPFieldContextValue {
   length: number;
   disabled: boolean;
   set(value: string): void;
+  resetValue: string;
+  reset(): string;
 }
 const OTPFieldContext = createContext<OTPFieldContextValue | null>(null);
 function useOTPField() {
@@ -33,16 +39,22 @@ export const OTPFieldRoot = forwardRef<HTMLDivElement, OTPFieldRootProps>(functi
   ref,
 ) {
   if (!Number.isInteger(length) || length < 1) throw new RangeError('OTPField length must be a positive integer.');
-  const [internalValue, setInternalValue] = useState(defaultValue);
+  const initial = useRef(defaultValue);
+  const [internalValue, setInternalValue] = useState(initial.current);
   const current = value ?? internalValue;
   const set = (next: string) => {
     if (disabled || next === current) return;
     if (value === undefined) setInternalValue(next);
     onValueChange?.(next);
   };
+  const resetValue = value ?? initial.current;
+  const reset = () => {
+    if (value === undefined) setInternalValue(initial.current);
+    return resetValue;
+  };
   return createElement(
     OTPFieldContext.Provider,
-    { value: { value: current, length, disabled, set } },
+    { value: { value: current, length, disabled, set, resetValue, reset } },
     createElement('div', { ...props, ref, 'data-vf-otp-field-root': '' }, children),
   );
 });
@@ -55,9 +67,35 @@ export const OTPFieldInput = forwardRef<HTMLInputElement, OTPFieldInputProps>(fu
   ref,
 ) {
   const field = useOTPField();
+  const input = useRef<HTMLInputElement>(null);
+  const reset = useRef(field.reset);
+  useImperativeHandle(ref, () => input.current as HTMLInputElement, []);
+  useLayoutEffect(() => {
+    reset.current = field.reset;
+    if (input.current) input.current.defaultValue = field.resetValue;
+  });
+  useEffect(() => {
+    const element = input.current;
+    if (!element) return;
+    const document = element.ownerDocument;
+    let active = true;
+    const onReset = (event: Event) => {
+      if (!element.form || element.form !== event.target) return;
+      setTimeout(() => {
+        if (!active || event.defaultPrevented || element.form !== event.target) return;
+        // A native reset can bypass the value setter observed by React.
+        element.value = reset.current();
+      }, 0);
+    };
+    document.addEventListener('reset', onReset, true);
+    return () => {
+      active = false;
+      document.removeEventListener('reset', onReset, true);
+    };
+  }, []);
   return createElement('input', {
     ...props,
-    ref,
+    ref: input,
     type: 'text',
     inputMode: inputMode ?? 'numeric',
     autoComplete: autoComplete ?? 'one-time-code',

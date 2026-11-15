@@ -1,4 +1,16 @@
-import { computed, defineComponent, h, inject, provide, ref, watch, type InjectionKey, type Ref } from 'vue';
+import {
+  computed,
+  defineComponent,
+  h,
+  inject,
+  onBeforeUnmount,
+  onMounted,
+  provide,
+  ref,
+  watch,
+  type InjectionKey,
+  type Ref,
+} from 'vue';
 
 function hex(value: string): string | null {
   return /^#[0-9a-f]{6}$/i.test(value) ? value.toLowerCase() : null;
@@ -16,6 +28,7 @@ interface Ctx {
   value: Ref<string>;
   controlled: Ref<boolean>;
   disabled: Ref<boolean>;
+  resetRevision: Ref<number>;
   set(v: string): void;
 }
 const k: InjectionKey<Ctx> = Symbol('cp');
@@ -30,13 +43,45 @@ export const ColorPickerRoot = defineComponent({
   props: { value: String, defaultValue: { type: String, default: '#000000' }, disabled: Boolean },
   emits: { 'update:value': (value: string) => hex(value) !== null },
   setup(p, { attrs, slots, emit }) {
-    const internal = ref(requiredHex(p.defaultValue));
+    const initial = requiredHex(p.defaultValue);
+    const internal = ref(initial);
+    const resetRevision = ref(0);
     const controlled = computed(() => p.value !== undefined);
     const value = computed(() => (p.value === undefined ? internal.value : requiredHex(p.value)));
+    const root = ref<HTMLDivElement | null>(null);
+    let document: Document | undefined;
+    let active = false;
+    const inputs = () =>
+      Array.from(
+        root.value?.querySelectorAll<HTMLInputElement>('input[data-vf-color-picker-input], input[data-vf-color-picker-text]') ?? [],
+      ).filter((input) => input.closest('[data-vf-color-picker-root]') === root.value);
+    const onReset = (event: Event) => {
+      const group = inputs();
+      if (!group.length || !group.every((input) => input.form && input.form === event.target)) return;
+      setTimeout(() => {
+        if (!active || event.defaultPrevented) return;
+        const group = inputs();
+        if (!group.length || !group.every((input) => input.form === event.target)) return;
+        const next = p.value === undefined ? initial : requiredHex(p.value);
+        if (p.value === undefined) internal.value = next;
+        resetRevision.value++;
+        for (const input of group) input.value = next;
+      }, 0);
+    };
+    onMounted(() => {
+      active = true;
+      document = root.value?.ownerDocument;
+      document?.addEventListener('reset', onReset, true);
+    });
+    onBeforeUnmount(() => {
+      active = false;
+      document?.removeEventListener('reset', onReset, true);
+    });
     provide(k, {
       value,
       controlled,
       disabled: computed(() => p.disabled),
+      resetRevision,
       set(v) {
         const next = hex(v);
         if (p.disabled || next === null || next === value.value) return;
@@ -44,7 +89,7 @@ export const ColorPickerRoot = defineComponent({
         emit('update:value', next);
       },
     });
-    return () => h('div', { ...attrs, 'data-vf-color-picker-root': '' }, slots.default?.());
+    return () => h('div', { ...attrs, ref: root, 'data-vf-color-picker-root': '' }, slots.default?.());
   },
 });
 export const ColorPickerInput = defineComponent({
@@ -77,8 +122,8 @@ export const ColorPickerTextInput = defineComponent({
     const c = useC();
     const draft = ref(c.value.value);
     watch(
-      c.value,
-      (value) => {
+      [c.value, c.resetRevision],
+      ([value]) => {
         draft.value = value;
       },
       { flush: 'sync' },

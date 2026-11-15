@@ -9,7 +9,15 @@
   "wcag": {
     "target": "2.2 AA",
     "status": "review-required",
-    "criteria": ["1.3.1", "2.1.1", "2.4.3", "2.4.7", "3.3.2", "3.3.8", "4.1.2"]
+    "criteria": [
+      "1.3.1",
+      "2.1.1",
+      "2.4.3",
+      "2.4.7",
+      "3.3.2",
+      "3.3.8",
+      "4.1.2"
+    ]
   },
   "aria": {
     "status": "review-required",
@@ -22,7 +30,8 @@
   },
   "ownership": {
     "library": [
-      "Preserve one native code input and native selection, editing, paste, autofill assistance, max length and form value. No forced focus movement, filtering or automatic verification."
+      "Preserve one native code input and native selection, editing, paste, autofill assistance, max length and form value. No forced focus movement, filtering or automatic verification.",
+      "Preserve the native text reset default and reconcile committed state without fabricating value-change intent."
     ],
     "consumer": [
       "Author a label, length/format guidance, optional pattern and errors; own verification, delivery, expiry, retry and authentication workflows."
@@ -45,6 +54,7 @@
   "notes": [
     "Native one-input contract replaces segmented multi-input focus/distribution; the public subpath remains.",
     "Input mode is a hint, not a verification rule. Native one-time-code autofill/real authenticator interoperability and manual AT remain required evidence.",
-    "Audit mapping is provisional; not a conformance claim."
+    "Audit mapping is provisional; not a conformance claim.",
+    "Native reset regressions cover leading-zero text, canceled reset, immediate native FormData and silent committed reconciliation; broader manual evidence remains open."
   ]
 }

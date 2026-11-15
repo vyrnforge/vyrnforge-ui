@@ -96,3 +96,58 @@ test('Elements ColorPicker isolates nested native acquisition and text synchroni
   await expect(page.locator('#color')).toHaveValue('#ff0000');
   await expect(page.locator('#nested-color')).toHaveValue('#abcdef');
 });
+
+test('ColorPicker reset restores native color, clears invalid draft, and reconciles controlled state', async ({ page }) => {
+  await page.goto(`/components/color-picker/${port}.html`);
+  const body = page.locator('body');
+  if (port !== 'web') await expect(body).toHaveAttribute('data-color-ready', 'true');
+  const managed = ['react', 'angular', 'vue'].includes(port);
+  const form = page.locator('#color-form');
+  const color = page.locator('#color');
+  const text = page.locator('#text');
+  await text.fill('#aabbcc');
+  await expect(color).toHaveValue('#aabbcc');
+  await text.fill('#ab');
+  await expect(text).toHaveValue('#ab');
+  if (managed) {
+    await page.locator('#set-color').click();
+    await page.locator('#controlled-text').fill('#ab');
+    await expect(page.locator('#controlled-color')).toHaveValue('#abcdef');
+  }
+  if (port === 'elements') await page.locator('#nested-text').fill('#abcdef');
+  await form.evaluate(async (element) => {
+    element.addEventListener('reset', (event) => event.preventDefault(), { once: true });
+    element.reset();
+    await new Promise((resolve) => {
+      setTimeout(resolve, 0);
+    });
+  });
+  await expect(text).toHaveValue('#ab');
+  await expect(color).toHaveValue('#aabbcc');
+  await form.evaluate((element) => {
+    const button = document.createElement('button');
+    button.type = 'reset';
+    button.textContent = 'Reset colors';
+    element.append(button);
+  });
+  await page.getByRole('button', { name: 'Reset colors' }).click();
+  await expect(color).toHaveValue('#3366ff');
+  await expect(text).toHaveValue('#3366ff');
+  if (port !== 'web') await expect(page.locator('#swatch')).toHaveCSS('background-color', 'rgb(51, 102, 255)');
+  if (managed) {
+    await expect(page.locator('#controlled-color')).toHaveValue('#abcdef');
+    await expect(page.locator('#controlled-text')).toHaveValue('#abcdef');
+    await expect(page.locator('#controlled-swatch')).toHaveCSS('background-color', 'rgb(171, 205, 239)');
+    await expect(body).toHaveAttribute('data-color-value-count', '1');
+    await expect(body).not.toHaveAttribute('data-color-request-count', /.+/);
+  }
+  if (port === 'elements') {
+    await expect(page.locator('#nested-color')).toHaveValue('#112233');
+    await expect(page.locator('#nested-text')).toHaveValue('#112233');
+    await expect(page.locator('#nested-swatch')).toHaveCSS('background-color', 'rgb(17, 34, 51)');
+  }
+  expect(await form.evaluate((element) => new FormData(element).get('color'))).toBe('#3366ff');
+  await text.fill('#aabbcc');
+  await expect(color).toHaveValue('#aabbcc');
+  if (managed) await expect(body).toHaveAttribute('data-color-value-count', '2');
+});
