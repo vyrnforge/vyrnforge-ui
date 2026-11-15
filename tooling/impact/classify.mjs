@@ -176,11 +176,11 @@ function classifyPath(state, discovery, filePath) {
   }
   if (packageName && isPackagePublicSurface(filePath)) {
     state.packages.add(packageName);
-    addReason(state.reasons, `package:${packageName}`, 'package manifest/public entrypoint/build contract changed', filePath);
+    addReason(state.reasons, `package:${packageName}`, 'package manifest/public entrypoint/build contract or API report changed', filePath);
     addPackageArtifactEvidence(
       state,
       [packageName],
-      'package manifest/public entrypoint/build contract changed',
+      'package manifest/public entrypoint/build contract or API report changed',
       filePath,
     );
     classified = true;
