@@ -1,106 +1,103 @@
-import { mkdir, writeFile } from 'node:fs/promises';
-import path from 'node:path';
-import { build } from 'esbuild';
+const labels = ['One', 'Disabled', 'Three', 'Banana'];
+const values = ['one', 'disabled', 'three', 'banana'];
+const before = '<button id="before" type="button">Before</button>';
+const after = '<button id="after" type="button" style="position: fixed; right: 16px; bottom: 16px">After</button>';
+const label = '<div id="multi-select-label">Choose items</div>';
+function options(port) {
+  return labels.map((label, index) => `<button id="${port}-${values[index]}" type="button" role="option" tabindex="-1" aria-selected="${index === 0}" data-vf-multi-select-option data-vf-value="${values[index]}"${index === 1 ? ' disabled aria-disabled="true"' : ''}>${label}</button>`).join('');
+}
+function changed(values) { document.body.dataset.values = values.join(','); }
+function ready() { document.body.dataset.multiReady = 'true'; }
+function request(values) { document.body.dataset.multiRequest = values.join(','); }
+const web = `${before}${label}<button id="trigger" type="button" aria-haspopup="listbox" aria-controls="list" popovertarget="list" data-vf-multi-select-trigger>Choose</button><div id="list" role="listbox" aria-multiselectable="true" tabindex="-1" aria-labelledby="multi-select-label" popover="auto" data-vf-multi-select-content>${options('web')}</div>${after}`;
 
 export const browserFixture = {
   component: 'multi-select',
-  prepare: async ({ port }) => {
-    const root = process.cwd();
-    const dir = path.join(root, 'dist/browser-fixtures/components/multi-select');
-    await mkdir(dir, { recursive: true });
-    await build({
-      stdin: {
-        contents: '@import "@vyrnforge/web/styles/tokens.css";@import "@vyrnforge/web/styles/multi-select.css";',
-        resolveDir: root,
-        sourcefile: 'multi-select-public.css',
-        loader: 'css',
-      },
-      bundle: true,
-      outfile: path.join(dir, 'styles.css'),
-    });
-
-    const page = (body, script = '') =>
-      `<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width"><title>Multi-select browser fixture</title><link rel="stylesheet" href="./styles.css"></head><body><main><h1>Multi-select browser fixture</h1><button id="before">Before</button><p id="multi-select-label">Choose items</p>${body}<button id="after">After</button></main>${script}</body></html>`;
-    const options = (prefix) =>
-      `<button id="${prefix}-one" type="button" role="option" tabindex="-1" aria-selected="true" data-vf-multi-select-option data-vf-value="one">One</button><button id="${prefix}-disabled" type="button" role="option" tabindex="-1" aria-selected="false" aria-disabled="true" disabled data-vf-multi-select-option data-vf-value="disabled">Disabled</button><button id="${prefix}-three" type="button" role="option" tabindex="-1" aria-selected="false" data-vf-multi-select-option data-vf-value="three">Three</button><button id="${prefix}-banana" type="button" role="option" tabindex="-1" aria-selected="false" data-vf-multi-select-option data-vf-value="banana">Banana</button>`;
-
-    if (port === 'web') {
-      const body = `<button id="trigger" type="button" aria-haspopup="listbox" aria-expanded="false" aria-controls="list" data-vf-multi-select-trigger>Choose</button><div id="list" role="listbox" tabindex="-1" aria-multiselectable="true" aria-labelledby="multi-select-label" hidden data-vf-multi-select-content>${options('web')}</div>`;
-      const script = `<script>const trigger=document.querySelector('#trigger');const list=document.querySelector('#list');trigger.onclick=()=>{const open=list.hidden;list.hidden=!open;trigger.setAttribute('aria-expanded',String(open))};list.querySelectorAll('[data-vf-multi-select-option]').forEach(option=>option.onclick=()=>option.setAttribute('aria-selected',String(option.getAttribute('aria-selected')!=='true')))</script>`;
-      await writeFile(path.join(dir, 'web.html'), page(body, script));
-    }
-
-    if (port === 'react') {
-      await writeFile(
-        path.join(dir, 'react.html'),
-        page('<div id="app"></div>', '<script type="module" src="./react.js"></script>'),
-      );
-      await build({
-        stdin: {
-          resolveDir: root,
-          sourcefile: 'react-multi-select-client.ts',
-          contents: `import{createElement}from'react';import{createRoot}from'react-dom/client';import{MultiSelectRoot,MultiSelectTrigger,MultiSelectContent,MultiSelectOption}from'@vyrnforge/react/multi-select';const option=(id,value,label,disabled=false)=>createElement(MultiSelectOption,{id,value,disabled},label);createRoot(document.querySelector('#app')).render(createElement(MultiSelectRoot,{defaultValue:['one'],onValueChange:values=>{document.body.dataset.values=values.join(',')}},createElement(MultiSelectTrigger,{id:'trigger','aria-controls':'list'},'Choose'),createElement(MultiSelectContent,{id:'list','aria-labelledby':'multi-select-label'},option('react-one','one','One'),option('react-disabled','disabled','Disabled',true),option('react-three','three','Three'),option('react-banana','banana','Banana'))));`,
-        },
-        bundle: true,
-        format: 'esm',
-        platform: 'browser',
-        outfile: path.join(dir, 'react.js'),
-      });
-    }
-
-    if (port === 'vue') {
-      await writeFile(
-        path.join(dir, 'vue.html'),
-        page('<div id="app"></div>', '<script type="module" src="./vue.js"></script>'),
-      );
-      await build({
-        stdin: {
-          resolveDir: root,
-          sourcefile: 'vue-multi-select-client.ts',
-          contents: `import{createApp,h}from'vue';import{MultiSelectRoot,MultiSelectTrigger,MultiSelectContent,MultiSelectOption}from'@vyrnforge/vue/multi-select';const option=(id,value,label,disabled=false)=>h(MultiSelectOption,{id,value,disabled},()=>label);createApp({render:()=>h(MultiSelectRoot,{defaultValue:['one'],'onUpdate:value':values=>{document.body.dataset.values=values.join(',')}},()=>[h(MultiSelectTrigger,{id:'trigger','aria-controls':'list'},()=> 'Choose'),h(MultiSelectContent,{id:'list','aria-labelledby':'multi-select-label'},()=>[option('vue-one','one','One'),option('vue-disabled','disabled','Disabled',true),option('vue-three','three','Three'),option('vue-banana','banana','Banana')])])}).mount('#app');`,
-        },
-        bundle: true,
-        format: 'esm',
-        platform: 'browser',
-        outfile: path.join(dir, 'vue.js'),
-      });
-    }
-
-    if (port === 'angular') {
-      await writeFile(
-        path.join(dir, 'angular.html'),
-        page('<vf-multi-select-test></vf-multi-select-test>', '<script type="module" src="./angular.js"></script>'),
-      );
-      await build({
-        stdin: {
-          resolveDir: root,
-          sourcefile: 'angular-multi-select-client.ts',
-          contents: `import'@angular/compiler';import{Component,provideZonelessChangeDetection}from'@angular/core';import{bootstrapApplication}from'@angular/platform-browser';import{VfMultiSelectRootDirective,VfMultiSelectTriggerDirective,VfMultiSelectContentDirective,VfMultiSelectOptionDirective}from'@vyrnforge/angular/multi-select';class App{values=['one'];changed(values){document.body.dataset.values=values.join(',')}}Component({selector:'vf-multi-select-test',standalone:true,imports:[VfMultiSelectRootDirective,VfMultiSelectTriggerDirective,VfMultiSelectContentDirective,VfMultiSelectOptionDirective],template:'<div vfMultiSelectRoot [defaultValue]="values" (valueChange)="changed($event)"><button id="trigger" vfMultiSelectTrigger aria-controls="list">Choose</button><div id="list" vfMultiSelectContent aria-labelledby="multi-select-label"><button id="angular-one" vfMultiSelectOption="one">One</button><button id="angular-disabled" vfMultiSelectOption="disabled" [disabled]="true">Disabled</button><button id="angular-three" vfMultiSelectOption="three">Three</button><button id="angular-banana" vfMultiSelectOption="banana">Banana</button></div></div>'})(App);bootstrapApplication(App,{providers:[provideZonelessChangeDetection()]});`,
-        },
-        bundle: true,
-        format: 'esm',
-        platform: 'browser',
-        outfile: path.join(dir, 'angular.js'),
-      });
-    }
-
-    if (port === 'elements') {
-      const body = `<vf-multi-select id="elements-multi-select"><button id="trigger" type="button" aria-controls="list" data-vf-multi-select-trigger>Choose</button><div id="list" aria-labelledby="multi-select-label" data-vf-multi-select-content><button id="elements-one" type="button" aria-selected="true" data-vf-multi-select-option data-vf-value="one">One</button><button id="elements-disabled" type="button" disabled aria-selected="false" data-vf-multi-select-option data-vf-value="disabled">Disabled</button><button id="elements-three" type="button" aria-selected="false" data-vf-multi-select-option data-vf-value="three">Three</button><button id="elements-banana" type="button" aria-selected="false" data-vf-multi-select-option data-vf-value="banana">Banana</button></div></vf-multi-select>`;
-      await writeFile(
-        path.join(dir, 'elements.html'),
-        page(body, '<script type="module" src="./elements.js"></script>'),
-      );
-      await build({
-        stdin: {
-          resolveDir: root,
-          sourcefile: 'elements-multi-select-client.ts',
-          contents: `import{defineMultiSelectElement}from'@vyrnforge/elements/multi-select';defineMultiSelectElement();`,
-        },
-        bundle: true,
-        format: 'esm',
-        platform: 'browser',
-        outfile: path.join(dir, 'elements.js'),
-      });
-    }
+  title: 'MultiSelect browser fixture',
+  heading: 'MultiSelect browser fixture',
+  ports: {
+    web: { body: web },
+    react: { story: 'createReactStory' },
+    vue: { story: 'createVueStory' },
+    angular: { story: 'createAngularStory', selector: 'vf-multi-select-test' },
+    elements: { story: 'createElementsStory' },
   },
 };
+
+export async function createReactStory() {
+  const { createElement: h, Fragment, useEffect } = await import('react');
+  const { MultiSelectRoot, MultiSelectTrigger, MultiSelectContent, MultiSelectOption } = await import('@vyrnforge/react/multi-select');
+  function App() {
+    useEffect(ready, []);
+    const option = (prefix, index) => h(MultiSelectOption, { key: values[index], id: `${prefix}-${values[index]}`, value: values[index], disabled: index === 1 }, labels[index]);
+    return h(Fragment, null,
+      h('button', { id: 'before', type: 'button' }, 'Before'),
+      h('div', { id: 'multi-select-label' }, 'Choose items'),
+      h(MultiSelectRoot, { defaultValue: ['one'], onValueChange: changed },
+        h(MultiSelectTrigger, { id: 'trigger', 'aria-controls': 'list' }, 'Choose'),
+        h(MultiSelectContent, { id: 'list', 'aria-labelledby': 'multi-select-label' }, ...labels.map((_, index) => option('react', index))),
+      ),
+      h(MultiSelectRoot, { value: ['one'], onValueChange: request },
+        h(MultiSelectTrigger, { id: 'controlled-trigger', tabIndex: -1, 'aria-controls': 'controlled-list' }, 'Controlled items'),
+        h(MultiSelectContent, { id: 'controlled-list', 'aria-label': 'Controlled options' }, option('controlled', 0), option('controlled', 2)),
+      ),
+      h('button', { id: 'after', type: 'button', style: { position: 'fixed', right: '16px', bottom: '16px' } }, 'After'),
+    );
+  }
+  return h(App);
+}
+
+export async function createVueStory() {
+  const { createSSRApp, h, onMounted } = await import('vue');
+  const { MultiSelectRoot, MultiSelectTrigger, MultiSelectContent, MultiSelectOption } = await import('@vyrnforge/vue/multi-select');
+  return createSSRApp({
+    setup() {
+      onMounted(ready);
+      const option = (prefix, index) => h(MultiSelectOption, { key: values[index], id: `${prefix}-${values[index]}`, value: values[index], disabled: index === 1 }, () => labels[index]);
+      return () => h('div', [
+        h('button', { id: 'before', type: 'button' }, 'Before'),
+        h('div', { id: 'multi-select-label' }, 'Choose items'),
+        h(MultiSelectRoot, { defaultValue: ['one'], 'onUpdate:value': changed }, () => [
+          h(MultiSelectTrigger, { id: 'trigger', 'aria-controls': 'list' }, () => 'Choose'),
+          h(MultiSelectContent, { id: 'list', 'aria-labelledby': 'multi-select-label' }, () => labels.map((_, index) => option('vue', index))),
+        ]),
+        h(MultiSelectRoot, { value: ['one'], 'onUpdate:value': request }, () => [
+          h(MultiSelectTrigger, { id: 'controlled-trigger', tabindex: -1, 'aria-controls': 'controlled-list' }, () => 'Controlled items'),
+          h(MultiSelectContent, { id: 'controlled-list', 'aria-label': 'Controlled options' }, () => [option('controlled', 0), option('controlled', 2)]),
+        ]),
+        h('button', { id: 'after', type: 'button', style: { position: 'fixed', right: '16px', bottom: '16px' } }, 'After'),
+      ]);
+    },
+  });
+}
+
+export async function createAngularStory() {
+  await import('@angular/compiler');
+  const { Component, afterNextRender } = await import('@angular/core');
+  const { VfMultiSelectRootDirective, VfMultiSelectTriggerDirective, VfMultiSelectContentDirective, VfMultiSelectOptionDirective } = await import('@vyrnforge/angular/multi-select');
+  class MultiSelectTestApp {
+    values = ['one'];
+    constructor() { afterNextRender(ready); }
+    changed = changed;
+    request = request;
+  }
+  const angularOptions = (prefix, indexes) => indexes.map(index => `<button vfMultiSelectOption="${values[index]}" id="${prefix}-${values[index]}" [disabled]="${index === 1}">${labels[index]}</button>`).join('');
+  Component({
+    selector: 'vf-multi-select-test',
+    standalone: true,
+    imports: [VfMultiSelectRootDirective, VfMultiSelectTriggerDirective, VfMultiSelectContentDirective, VfMultiSelectOptionDirective],
+    template: `<main><h1>MultiSelect browser fixture</h1>${before}${label}<div vfMultiSelectRoot [defaultValue]="values" (valueChange)="changed($event)"><button vfMultiSelectTrigger id="trigger" aria-controls="list">Choose</button><div vfMultiSelectContent id="list" aria-labelledby="multi-select-label">${angularOptions('angular', [0, 1, 2, 3])}</div></div><div vfMultiSelectRoot [value]="values" (valueChange)="request($event)"><button vfMultiSelectTrigger id="controlled-trigger" tabindex="-1" aria-controls="controlled-list">Controlled items</button><div vfMultiSelectContent id="controlled-list" aria-label="Controlled options">${angularOptions('controlled', [0, 2])}</div></div>${after}</main>`,
+  })(MultiSelectTestApp);
+  return MultiSelectTestApp;
+}
+
+export async function createElementsStory({ client }) {
+  return {
+    body: `${before}${label}<vf-multi-select id="elements-multi-select"><button id="trigger" type="button" aria-haspopup="listbox" aria-expanded="false" aria-controls="list" data-vf-multi-select-trigger>Choose</button><div id="list" role="listbox" aria-multiselectable="true" tabindex="-1" aria-labelledby="multi-select-label" data-vf-multi-select-content hidden>${options('elements')}</div></vf-multi-select>${after}`,
+    activate: client ? async () => {
+      const { defineMultiSelectElement } = await import('@vyrnforge/elements/multi-select');
+      defineMultiSelectElement();
+      ready();
+    } : undefined,
+  };
+}
