@@ -80,7 +80,6 @@ test('Controlled Popover reconciles a rejected native close request', async ({ p
   expect(await surface.evaluate((element) => element.matches(':popover-open'))).toBe(true);
 });
 
-
 test('native Popover tracks its source through scroll, resize and RTL placement', async ({ page }) => {
   await page.setViewportSize({ width: 1000, height: 760 });
   await load(page);
