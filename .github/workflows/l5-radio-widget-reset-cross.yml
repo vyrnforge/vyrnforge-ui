@@ -1,0 +1,16 @@
+name: Native radio widget L5 reset cross-engine evidence
+on:
+  push:
+    branches: [evidence/l5-radio-widget-reset-cross]
+permissions:
+  contents: read
+jobs:
+  browser:
+    uses: ./.github/workflows/_browser-validation.yml
+    with:
+      scopes_json: '[{"port":"web","components":"rating,segmented-control"},{"port":"react","components":"rating,segmented-control"},{"port":"vue","components":"rating,segmented-control"},{"port":"angular","components":"rating,segmented-control"},{"port":"elements","components":"rating,segmented-control"}]'
+      revision: ${{ github.sha }}
+      browser_profile: cross
+      browsers: chromium firefox webkit
+      artifact_suffix: radio-widget-reset-cross
+      retention_days: 14
