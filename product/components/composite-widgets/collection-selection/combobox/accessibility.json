@@ -32,7 +32,7 @@
     "consumer": [
       "provide a meaningful accessible input name and validation descriptions",
       "provide concise option names, stable values, application data, and any remote-search/loading behavior",
-      "own form serialization, required/validation policy, and server-side interpretation of the selected value"
+      "own selected-key serialization, required/validation policy, and server-side interpretation of the selected value; a named native text input submits the query, not the selected key"
     ]
   },
   "forms": {
@@ -55,6 +55,6 @@
     "The active option uses aria-selected while navigating suggestions; committing with Enter updates the selected value and closes the popup.",
     "Manual assistive-technology evidence remains owned by #1157 and is not manufactured by this mapping.",
     "React, Vue, and Angular derive input and popup IDs from a root identity; React/Vue root id is an optional namespace, not a DOM wrapper. Input aria-controls is library-owned. Native Web and Elements retain authored markup IDs. Consumers may supply an external accessible naming relationship.",
-    "Native auto popover owns top-layer presentation and light dismissal; runtime maintains input DOM focus and clears active descendant on close. React/Vue content stays mounted while closed. Controlled value/query and dynamic option relationship edge cases remain separate audit work."
+    "Native auto popover owns top-layer presentation and light dismissal; runtime maintains input DOM focus and clears active descendant on close. React/Vue content stays mounted while closed. The root owns independent committed selection and editable query. Controlled requests preserve owner state; accepted option commits use authored textValue (or value when textValue is absent) rather than an opaque key. Framework root query/defaultQuery is the input text contract; dynamic option relationships remain separate audit work."
   ]
 }

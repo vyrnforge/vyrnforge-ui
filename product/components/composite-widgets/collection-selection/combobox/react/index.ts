@@ -2,6 +2,7 @@ import {
   createContext,
   createElement,
   forwardRef,
+  useCallback,
   useContext,
   useEffect,
   useId,
@@ -17,7 +18,7 @@ interface Ctx {
   open: boolean;
   setOpen(value: boolean): void;
   value: string;
-  setValue(value: string): void;
+  setValue(value: string, label: string): void;
   query: string;
   setQuery(value: string): void;
   locale: string | undefined;
@@ -80,13 +81,20 @@ export interface ComboboxRootProps {
   id?: string;
   value?: string;
   defaultValue?: string;
+  query?: string;
+  defaultQuery?: string;
   locale?: string;
   onValueChange?(value: string): void;
+  onQueryChange?(query: string): void;
 }
-export function ComboboxRoot({ children, id, value, defaultValue = '', locale, onValueChange }: ComboboxRootProps) {
+export function ComboboxRoot({
+  children, id, value, defaultValue = '', query: controlledQuery, defaultQuery = '', locale, onValueChange, onQueryChange,
+}: ComboboxRootProps) {
   const [internalValue, setInternalValue] = useState(defaultValue);
   const [open, setOpenState] = useState(false);
-  const [query, setQueryState] = useState('');
+  const [internalQuery, setInternalQuery] = useState(defaultQuery);
+  const query = controlledQuery ?? internalQuery;
+  const pending = useRef<{ previous: string; value: string; label: string } | null>(null);
   const [activeId, setActiveId] = useState<string | null>(null);
   const uid = useId();
   const rootId = id ?? `vf-combobox-${uid}`;
@@ -95,6 +103,17 @@ export function ComboboxRoot({ children, id, value, defaultValue = '', locale, o
   const anchorRef = useRef<HTMLInputElement | null>(null);
   const surfaceRef = useRef<HTMLElement | null>(null);
   const selected = value ?? internalValue;
+  const requestQuery = useCallback((next: string) => {
+    if (next === query) return;
+    if (controlledQuery === undefined) setInternalQuery(next);
+    onQueryChange?.(next);
+  }, [controlledQuery, onQueryChange, query]);
+  useEffect(() => {
+    const request = pending.current;
+    if (!request || value === request.previous) return;
+    pending.current = null;
+    if (value === request.value) requestQuery(request.label);
+  }, [value, requestQuery]);
   const context = useMemo<Ctx>(
     () => ({
       open,
@@ -104,15 +123,18 @@ export function ComboboxRoot({ children, id, value, defaultValue = '', locale, o
         if (!next) setActiveId(null);
       },
       value: selected,
-      setValue(next) {
+      setValue(next, label) {
         if (inputUnavailable(anchorRef.current)) {
           setActiveId(null);
           setOpenState(false);
           return;
         }
-        if (value === undefined) setInternalValue(next);
-        onValueChange?.(next);
-        setQueryState(next);
+        pending.current = null;
+        if (value === undefined || value === next) {
+          if (value === undefined) setInternalValue(next);
+          requestQuery(label);
+        } else pending.current = { previous: value, value: next, label };
+        if (next !== selected) onValueChange?.(next);
         setActiveId(null);
         anchorRef.current?.focus();
         setOpenState(false);
@@ -120,7 +142,8 @@ export function ComboboxRoot({ children, id, value, defaultValue = '', locale, o
       query,
       setQuery(next) {
         if (inputUnavailable(anchorRef.current)) return;
-        setQueryState(next);
+        pending.current = null;
+        requestQuery(next);
         setActiveId(null);
       },
       locale,
@@ -131,14 +154,14 @@ export function ComboboxRoot({ children, id, value, defaultValue = '', locale, o
       anchorRef,
       surfaceRef,
     }),
-    [activeId, inputId, listboxId, locale, onValueChange, open, query, selected, value],
+    [activeId, inputId, listboxId, locale, onValueChange, open, query, requestQuery, selected, value],
   );
   return createElement(C.Provider, { value: context }, children);
 }
 
 export const ComboboxInput = forwardRef<
   HTMLInputElement,
-  Omit<ComponentPropsWithoutRef<'input'>, 'id' | 'aria-controls'>
+  Omit<ComponentPropsWithoutRef<'input'>, 'id' | 'aria-controls' | 'value' | 'defaultValue'>
 >(function ComboboxInput(props, ref) {
   const context = useCombo();
   const composingRef = useRef(false);
@@ -156,7 +179,7 @@ export const ComboboxInput = forwardRef<
     'aria-controls': context.listboxId,
     'aria-activedescendant': context.activeId ?? undefined,
     'data-vf-combobox-input': '',
-    value: props.value ?? context.query,
+    value: context.query,
     onChange(event) {
       props.onChange?.(event);
       if (!event.defaultPrevented) {
@@ -287,7 +310,7 @@ export const ComboboxOption = forwardRef<HTMLButtonElement, ComboboxOptionProps>
     onClick(event) {
       onClick?.(event);
       if (!event.defaultPrevented && !disabled(event.currentTarget) && !event.currentTarget.hidden)
-        context.setValue(value);
+        context.setValue(value, label);
     },
   });
 });

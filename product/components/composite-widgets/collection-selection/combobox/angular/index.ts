@@ -6,10 +6,12 @@ import {
   InjectionToken,
   afterRenderEffect,
   computed,
+  effect,
   inject,
   input,
   output,
   signal,
+  untracked,
 } from '@angular/core';
 import { resolveNavigationIndex, type CollectionNavigationIntent } from '@vyrnforge/core/collection-navigation';
 
@@ -55,6 +57,9 @@ export class VfComboboxRootDirective {
   readonly id = input<string | undefined>(undefined);
   readonly value = input<string | undefined>(undefined);
   readonly defaultValue = input('');
+  readonly query = input<string | undefined>(undefined);
+  readonly defaultQuery = input('');
+  readonly queryChange = output<string>();
   readonly locale = input<string | undefined>(undefined);
   readonly valueChange = output<string>();
   private readonly internalValue = signal<string | undefined>(undefined);
@@ -63,12 +68,32 @@ export class VfComboboxRootDirective {
   readonly inputId = computed(() => `${this.rootId()}-input`);
   readonly listboxId = computed(() => `${this.rootId()}-listbox`);
   readonly selected = computed(() => this.value() ?? this.internalValue() ?? this.defaultValue());
-  readonly query = signal('');
+  private readonly internalQuery = signal('');
+  readonly queryText = computed(() => this.query() ?? this.internalQuery());
+  private pending: { previous: string; value: string; label: string } | null = null;
   readonly open = signal(false);
   readonly activeId = signal<string | null>(null);
   private optionIndex = 0;
   private readonly element = inject<ElementRef<HTMLElement>>(ElementRef);
 
+  constructor() {
+    effect(() => {
+      const value = this.value();
+      const request = this.pending;
+      if (!request || value === request.previous) return;
+      this.pending = null;
+      if (value === request.value) untracked(() => this.requestQuery(request.label));
+    });
+  }
+  ngOnInit() {
+    this.internalQuery.set(this.defaultQuery());
+    this.internalValue.set(this.defaultValue());
+  }
+  private requestQuery(next: string) {
+    if (next === this.queryText()) return;
+    if (this.query() === undefined) this.internalQuery.set(next);
+    this.queryChange.emit(next);
+  }
   nextOptionId() {
     return `${this.listboxId()}-option-${++this.optionIndex}`;
   }
@@ -82,19 +107,25 @@ export class VfComboboxRootDirective {
       this.setOpen(false);
       return;
     }
-    this.query.set(value);
+    this.pending = null;
+    this.requestQuery(value);
     this.activeId.set(null);
     this.setOpen(true);
   }
-  setValue(value: string) {
+  setValue(value: string, label = value) {
     if (inputUnavailable(this.ownedInput())) {
       this.setOpen(false);
       return;
     }
-    if (this.value() === undefined) this.internalValue.set(value);
-    this.query.set(value);
+    this.pending = null;
+    const previous = this.selected();
+    const controlled = this.value();
+    if (controlled === undefined || controlled === value) {
+      if (controlled === undefined) this.internalValue.set(value);
+      this.requestQuery(label);
+    } else this.pending = { previous: controlled, value, label };
     this.activeId.set(null);
-    this.valueChange.emit(value);
+    if (value !== previous) this.valueChange.emit(value);
     this.focusInput();
     this.open.set(false);
   }
@@ -110,7 +141,7 @@ export class VfComboboxRootDirective {
     this.ownedInput()?.focus();
   }
   moveActive(intent: Extract<CollectionNavigationIntent, 'next' | 'previous'>) {
-    const options = visibleOptions(this.element.nativeElement, this.query(), this.locale());
+    const options = visibleOptions(this.element.nativeElement, this.queryText(), this.locale());
     const current = options.findIndex((option) => option.id === this.activeId());
     const start = current >= 0 ? current : intent === 'previous' ? options.length : -1;
     const next = resolveNavigationIndex(
@@ -127,7 +158,7 @@ export class VfComboboxRootDirective {
   activateActive() {
     const id = this.activeId();
     if (!id) return false;
-    const target = visibleOptions(this.element.nativeElement, this.query(), this.locale()).find(
+    const target = visibleOptions(this.element.nativeElement, this.queryText(), this.locale()).find(
       (option) => option.id === id && !disabled(option),
     );
     if (!target) return false;
@@ -144,7 +175,7 @@ export class VfComboboxRootDirective {
     'aria-autocomplete': 'list',
     'data-vf-combobox-input': '',
     '[id]': 'root.inputId()',
-    '[value]': 'root.query()',
+    '[value]': 'root.queryText()',
     '[attr.aria-expanded]': 'root.open()',
     '[attr.aria-controls]': 'root.listboxId()',
     '[attr.aria-activedescendant]': 'root.activeId()',
@@ -174,7 +205,9 @@ export class VfComboboxInputDirective {
     inject(DestroyRef).onDestroy(() => element.removeEventListener('blur', onBlur));
   }
   onInput(event: Event) {
-    if (!event.defaultPrevented) this.root.setQuery((event.target as HTMLInputElement).value);
+    const input = event.target as HTMLInputElement;
+    if (!event.defaultPrevented) this.root.setQuery(input.value);
+    if (input.value !== this.root.queryText()) input.value = this.root.queryText();
   }
   onCompositionStart() {
     this.composing = true;
@@ -283,12 +316,12 @@ export class VfComboboxOptionDirective {
   }
   readonly hidden = computed(
     () =>
-      !!this.root.query() &&
+      !!this.root.queryText() &&
       !normalizeFilterText(this.textValue() || this.value(), this.root.locale()).includes(
-        normalizeFilterText(this.root.query(), this.root.locale()),
+        normalizeFilterText(this.root.queryText(), this.root.locale()),
       ),
   );
   select(event: MouseEvent) {
-    if (!event.defaultPrevented && !this.disabled() && !this.hidden()) this.root.setValue(this.value());
+    if (!event.defaultPrevented && !this.disabled() && !this.hidden()) this.root.setValue(this.value(), this.textValue() || this.value());
   }
 }
