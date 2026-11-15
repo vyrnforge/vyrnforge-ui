@@ -26,8 +26,8 @@ export const browserFixture = {
       await writeFile(
         path.join(dir, 'web.html'),
         page(
-          '<div data-vf-file-uploader-root><div id="dropzone" role="button" tabindex="0" data-vf-file-uploader-dropzone>Choose or drop a file</div><input id="input" type="file" aria-label="Choose files"><ul id="list"></ul></div>',
-          '<script>function openPicker(){input.click()}function render(){list.innerHTML="";for(const f of input.files){const li=document.createElement("li");li.textContent=f.name;list.append(li)}}input.addEventListener("change",render);dropzone.addEventListener("click",openPicker);dropzone.addEventListener("keydown",e=>{if(e.key==="Enter"||e.key===" "){e.preventDefault();openPicker()}});</script>',
+          '<form id="acquisition-form"><div data-vf-file-uploader-root><button id="dropzone" type="button" data-vf-file-uploader-dropzone>Choose or drop a file</button><input id="input" name="files" type="file" aria-label="Choose files"><ul id="list"></ul></div><button type="reset">Reset files</button></form>',
+          '<script>function openPicker(){input.click()}function render(){list.innerHTML="";for(const f of input.files){const li=document.createElement("li");li.textContent=f.name;list.append(li)}}input.addEventListener("change",render);dropzone.addEventListener("click",openPicker);</script>',
           '<link rel="stylesheet" href="./styles.css">',
         ),
       );
@@ -51,6 +51,18 @@ export const browserFixture = {
         path.join(dir, 'react.html'),
         '<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width"><title>File uploader import recovery fixture</title><link rel="stylesheet" href="./react.css"></head><body><div id="root"></div><script type="module" src="./react.js"></script></body></html>',
       );
+      await writeFile(path.join(dir, 'acquisition-react.html'), page('<div id="app"></div>', '<script type="module" src="./acquisition-react.js"></script>'));
+      await build({
+        stdin: {
+          resolveDir: root,
+          sourcefile: 'react-file-acquisition.ts',
+          contents: `import{createElement as h}from'react';import{createRoot}from'react-dom/client';import{FileUploaderRoot,FileUploaderDropzone,FileUploaderInput,FileUploaderList}from'@vyrnforge/react/file-uploader';const record=files=>{document.body.dataset.files=files.map(f=>f.name).join(',');document.body.dataset.count=String(Number(document.body.dataset.count||0)+1)};createRoot(document.querySelector('#app')).render(h('form',{id:'acquisition-form'},h(FileUploaderRoot,{onFilesChange:record},h(FileUploaderDropzone,{id:'dropzone'},'Choose or drop a file'),h(FileUploaderInput,{id:'input',name:'files','aria-label':'Choose files'}),h(FileUploaderList,{id:'list'})),h('button',{type:'reset'},'Reset files')));`,
+        },
+        bundle: true,
+        format: 'esm',
+        platform: 'browser',
+        outfile: path.join(dir, 'acquisition-react.js'),
+      });
       return;
     }
 
@@ -63,7 +75,7 @@ export const browserFixture = {
         stdin: {
           resolveDir: root,
           sourcefile: 'vue-file-uploader-client.ts',
-          contents: `import{createApp,h}from'vue';import{FileUploaderRoot,FileUploaderDropzone,FileUploaderInput,FileUploaderList}from'@vyrnforge/vue/file-uploader';createApp({render:()=>h(FileUploaderRoot,null,()=>[h(FileUploaderDropzone,{id:'dropzone'},()=> 'Choose or drop a file'),h(FileUploaderInput,{id:'input','aria-label':'Choose files'}),h(FileUploaderList,{id:'list'})])}).mount('#app');`,
+          contents: `import{createApp,h}from'vue';import{FileUploaderRoot,FileUploaderDropzone,FileUploaderInput,FileUploaderList}from'@vyrnforge/vue/file-uploader';const record=files=>{document.body.dataset.files=files.map(f=>f.name).join(',');document.body.dataset.count=String(Number(document.body.dataset.count||0)+1)};createApp({render:()=>h('form',{id:'acquisition-form'},[h(FileUploaderRoot,{onFilesChange:record},()=>[h(FileUploaderDropzone,{id:'dropzone'},()=> 'Choose or drop a file'),h(FileUploaderInput,{id:'input',name:'files','aria-label':'Choose files'}),h(FileUploaderList,{id:'list'})]),h('button',{type:'reset'},'Reset files')])}).mount('#app');`,
         },
         bundle: true,
         format: 'esm',
@@ -82,7 +94,7 @@ export const browserFixture = {
         stdin: {
           resolveDir: root,
           sourcefile: 'angular-file-uploader-client.ts',
-          contents: `import'@angular/compiler';import{Component,provideZonelessChangeDetection}from'@angular/core';import{bootstrapApplication}from'@angular/platform-browser';import{VfFileUploaderRootDirective,VfFileUploaderInputDirective,VfFileUploaderDropzoneDirective}from'@vyrnforge/angular/file-uploader';class App{files=[];}Component({selector:'vf-file-uploader-test',standalone:true,imports:[VfFileUploaderRootDirective,VfFileUploaderInputDirective,VfFileUploaderDropzoneDirective],template:'<div vfFileUploaderRoot (filesChange)="files=$event"><div id="dropzone" vfFileUploaderDropzone>Choose or drop a file</div><input id="input" vfFileUploaderInput aria-label="Choose files"><ul id="list">@for (file of files; track $index) {<li>{{file.name}}</li>}</ul></div>'})(App);bootstrapApplication(App,{providers:[provideZonelessChangeDetection()]});`,
+          contents: `import'@angular/compiler';import{Component,provideZonelessChangeDetection}from'@angular/core';import{bootstrapApplication}from'@angular/platform-browser';import{VfFileUploaderRootDirective,VfFileUploaderInputDirective,VfFileUploaderDropzoneDirective}from'@vyrnforge/angular/file-uploader';class App{files=[];record(files){this.files=files;document.body.dataset.files=files.map(f=>f.name).join(',');document.body.dataset.count=String(Number(document.body.dataset.count||0)+1)}}Component({selector:'vf-file-uploader-test',standalone:true,imports:[VfFileUploaderRootDirective,VfFileUploaderInputDirective,VfFileUploaderDropzoneDirective],template:'<form id="acquisition-form"><div vfFileUploaderRoot (filesChange)="record($event)"><button id="dropzone" vfFileUploaderDropzone>Choose or drop a file</button><input id="input" name="files" vfFileUploaderInput aria-label="Choose files"><ul id="list">@for (file of files; track $index) {<li>{{file.name}}</li>}</ul></div><button type="reset">Reset files</button></form>'})(App);bootstrapApplication(App,{providers:[provideZonelessChangeDetection()]});`,
         },
         bundle: true,
         format: 'esm',
@@ -96,7 +108,7 @@ export const browserFixture = {
       await writeFile(
         path.join(dir, 'elements.html'),
         page(
-          '<vf-file-uploader><div id="dropzone" data-vf-file-uploader-dropzone>Choose or drop a file</div><input id="input" type="file" aria-label="Choose files" data-vf-file-uploader-input><ul id="list"></ul></vf-file-uploader>',
+          '<form id="acquisition-form"><vf-file-uploader><button id="dropzone" type="button" data-vf-file-uploader-dropzone>Choose or drop a file</button><input id="input" name="files" type="file" aria-label="Choose files" data-vf-file-uploader-input><ul id="list"></ul></vf-file-uploader><button type="reset">Reset files</button></form>',
           '<script type="module" src="./elements.js"></script>',
         ),
       );
@@ -104,7 +116,7 @@ export const browserFixture = {
         stdin: {
           resolveDir: root,
           sourcefile: 'elements-file-uploader-client.ts',
-          contents: `import{defineFileUploaderElement}from'@vyrnforge/elements/file-uploader';defineFileUploaderElement();document.querySelector('vf-file-uploader').addEventListener('vf-files-change',event=>{const list=document.querySelector('#list');list.innerHTML='';for(const file of event.detail.files){const item=document.createElement('li');item.textContent=file.name;list.append(item);}});`,
+          contents: `import{defineFileUploaderElement}from'@vyrnforge/elements/file-uploader';defineFileUploaderElement();document.querySelector('vf-file-uploader').addEventListener('vf-files-change',event=>{if(event.target!==event.currentTarget)return;document.body.dataset.files=event.detail.files.map(f=>f.name).join(',');document.body.dataset.count=String(Number(document.body.dataset.count||0)+1);const list=document.querySelector('#list');list.innerHTML='';for(const file of event.detail.files){const item=document.createElement('li');item.textContent=file.name;list.append(item);}});`,
         },
         bundle: true,
         format: 'esm',

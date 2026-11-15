@@ -1,7 +1,25 @@
-import { defineComponent, h, inject, provide, ref, type InjectionKey, type Ref } from 'vue';
+import { defineComponent, h, inject, onBeforeUnmount, onMounted, provide, ref, type InjectionKey, type Ref } from 'vue';
+
+function acceptDrop(input: HTMLInputElement, files: FileList): void {
+  if (files.length === 0 || input.matches(':disabled')) return;
+  if (input.multiple || files.length === 1) input.files = files;
+  else {
+    const transfer = new DataTransfer();
+    transfer.items.add(files[0]);
+    input.files = transfer.files;
+  }
+  // A drop is a native file acquisition request, not an independent file store.
+  input.dispatchEvent(new Event('input', { bubbles: true, composed: true }));
+  input.dispatchEvent(new Event('change', { bubbles: true }));
+}
+function invoke(handler: unknown, event: Event) {
+  if (typeof handler === 'function') handler(event);
+  else if (Array.isArray(handler)) for (const listener of handler) if (typeof listener === 'function') listener(event);
+}
 interface Ctx {
   files: Ref<File[]>;
   input: Ref<HTMLInputElement | null>;
+  inputDisabled: Ref<boolean>;
   add(v: FileList | File[]): void;
 }
 const k: InjectionKey<Ctx> = Symbol('fu');
@@ -12,13 +30,16 @@ function useF() {
 }
 export const FileUploaderRoot = defineComponent({
   name: 'FileUploaderRoot',
+  inheritAttrs: false,
   emits: ['files-change'],
   setup(_, { attrs, slots, emit }) {
     const files = ref<File[]>([]),
-      input = ref<HTMLInputElement | null>(null);
+      input = ref<HTMLInputElement | null>(null),
+      inputDisabled = ref(false);
     provide(k, {
       files,
       input,
+      inputDisabled,
       add(v) {
         files.value = Array.from(v);
         emit('files-change', files.value);
@@ -29,8 +50,38 @@ export const FileUploaderRoot = defineComponent({
 });
 export const FileUploaderInput = defineComponent({
   name: 'FileUploaderInput',
+  inheritAttrs: false,
   setup(_, { attrs }) {
     const f = useF();
+    let cleanup: (() => void) | undefined;
+    onMounted(() => {
+      const element = f.input.value;
+      if (!element) return;
+      const setDisabled = (disabled: boolean) => { f.inputDisabled.value = disabled; };
+      const sync = () => setDisabled(element.matches(':disabled'));
+      const observer = new MutationObserver(sync);
+      observer.observe(element, { attributes: true, attributeFilter: ['disabled'] });
+      for (let ancestor = element.parentElement; ancestor; ancestor = ancestor.parentElement) {
+        if (ancestor.tagName === 'FIELDSET') observer.observe(ancestor, { attributes: true, attributeFilter: ['disabled'] });
+      }
+      sync();
+      const document = element.ownerDocument;
+      let active = true;
+      const onReset = (event: Event) => {
+        if (!element.form || element.form !== event.target || !element.files?.length) return;
+        setTimeout(() => {
+          if (active && !event.defaultPrevented && element.form === event.target && !element.files?.length) f.add([]);
+        }, 0);
+      };
+      document.addEventListener('reset', onReset, true);
+      cleanup = () => {
+        active = false;
+        observer.disconnect();
+        document.removeEventListener('reset', onReset, true);
+        setDisabled(false);
+      };
+    });
+    onBeforeUnmount(() => cleanup?.());
     return () =>
       h('input', {
         ...attrs,
@@ -38,37 +89,48 @@ export const FileUploaderInput = defineComponent({
           f.input.value = n as HTMLInputElement | null;
         },
         type: 'file',
+        value: undefined,
+        defaultValue: undefined,
         'data-vf-file-uploader-input': '',
         onChange: (e: Event) => {
-          const files = (e.target as HTMLInputElement).files;
-          if (files) f.add(files);
+          invoke(attrs.onChange, e);
+          const element = e.currentTarget as HTMLInputElement;
+          if (!element.matches(':disabled') && element.files) f.add(element.files);
         },
       });
   },
 });
 export const FileUploaderDropzone = defineComponent({
   name: 'FileUploaderDropzone',
+  inheritAttrs: false,
   setup(_, { attrs, slots }) {
     const f = useF();
+    const blocked = (button: HTMLButtonElement) => button.matches(':disabled') || button.getAttribute('aria-disabled') === 'true' || !f.input.value || f.input.value.matches(':disabled');
     return () =>
       h(
-        'div',
+        'button',
         {
           ...attrs,
-          role: 'button',
-          tabindex: 0,
+          type: 'button',
+          'aria-disabled': f.inputDisabled.value || attrs['aria-disabled'],
           'data-vf-file-uploader-dropzone': '',
-          onClick: () => f.input.value?.click(),
-          onKeydown: (e: KeyboardEvent) => {
-            if (e.key === 'Enter' || e.key === ' ') {
+          onClick: (e: MouseEvent) => {
+            invoke(attrs.onClick, e);
+            if (!e.defaultPrevented && !blocked(e.currentTarget as HTMLButtonElement)) f.input.value?.click();
+          },
+          onDragover: (e: DragEvent) => {
+            invoke(attrs.onDragover, e);
+            if (!e.defaultPrevented && e.dataTransfer?.types.includes('Files')) {
               e.preventDefault();
-              f.input.value?.click();
+              e.dataTransfer.dropEffect = blocked(e.currentTarget as HTMLButtonElement) ? 'none' : 'copy';
             }
           },
-          onDragover: (e: DragEvent) => e.preventDefault(),
           onDrop: (e: DragEvent) => {
+            invoke(attrs.onDrop, e);
+            if (e.defaultPrevented) return;
             e.preventDefault();
-            if (e.dataTransfer?.files) f.add(e.dataTransfer.files);
+            const input = f.input.value;
+            if (input && e.dataTransfer && !blocked(e.currentTarget as HTMLButtonElement)) acceptDrop(input, e.dataTransfer.files);
           },
         },
         slots.default?.(),
@@ -77,13 +139,14 @@ export const FileUploaderDropzone = defineComponent({
 });
 export const FileUploaderList = defineComponent({
   name: 'FileUploaderList',
+  inheritAttrs: false,
   setup(_, { attrs }) {
     const f = useF();
     return () =>
       h(
         'ul',
         { ...attrs, 'data-vf-file-uploader-list': '' },
-        f.files.value.map((x) => h('li', { key: x.name }, x.name)),
+        f.files.value.map((x, i) => h('li', { key: `${x.name}-${i}` }, x.name)),
       );
   },
 });
