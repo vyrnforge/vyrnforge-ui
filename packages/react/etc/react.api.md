@@ -328,7 +328,7 @@ export const ColorPickerTextInput: ForwardRefExoticComponent<ColorPickerInputPro
 export const ComboboxContent: ForwardRefExoticComponent<Omit<Omit<DetailedHTMLProps<HTMLAttributes<HTMLDivElement>, HTMLDivElement>, "ref">, "id"> & RefAttributes<HTMLDivElement>>;
 
 // @public (undocumented)
-export const ComboboxInput: ForwardRefExoticComponent<Omit<Omit<DetailedHTMLProps<InputHTMLAttributes<HTMLInputElement>, HTMLInputElement>, "ref">, "id" | "aria-controls"> & RefAttributes<HTMLInputElement>>;
+export const ComboboxInput: ForwardRefExoticComponent<Omit<Omit<DetailedHTMLProps<InputHTMLAttributes<HTMLInputElement>, HTMLInputElement>, "ref">, "value" | "defaultValue" | "id" | "aria-controls"> & RefAttributes<HTMLInputElement>>;
 
 // @public (undocumented)
 export const ComboboxOption: ForwardRefExoticComponent<ComboboxOptionProps & RefAttributes<HTMLButtonElement>>;
@@ -349,13 +349,19 @@ export interface ComboboxRootProps {
     // (undocumented)
     children?: ReactNode;
     // (undocumented)
+    defaultQuery?: string;
+    // (undocumented)
     defaultValue?: string;
     // (undocumented)
     id?: string;
     // (undocumented)
     locale?: string;
     // (undocumented)
+    onQueryChange?(query: string): void;
+    // (undocumented)
     onValueChange?(value: string): void;
+    // (undocumented)
+    query?: string;
     // (undocumented)
     value?: string;
 }

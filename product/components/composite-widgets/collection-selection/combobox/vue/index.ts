@@ -26,7 +26,7 @@ interface Ctx {
   contentRef: Ref<HTMLElement | null>;
   setOpen(value: boolean): void;
   setQuery(value: string): void;
-  setValue(value: string): void;
+  setValue(value: string, label: string): void;
 }
 const key: InjectionKey<Ctx> = Symbol('vf-combo');
 function useC() {
@@ -80,11 +80,20 @@ function moveActive(context: Ctx, intent: Extract<CollectionNavigationIntent, 'n
 
 export const ComboboxRoot = defineComponent({
   name: 'ComboboxRoot',
-  props: { id: String, value: String, defaultValue: { type: String, default: '' }, locale: String },
-  emits: ['update:value'],
+  props: {
+    id: String,
+    value: String,
+    defaultValue: { type: String, default: '' },
+    query: String,
+    defaultQuery: { type: String, default: '' },
+    locale: String,
+  },
+  emits: ['update:value', 'update:query'],
   setup(props, { slots, emit }) {
     const internalValue = ref(props.defaultValue);
-    const query = ref('');
+    const internalQuery = ref(props.defaultQuery);
+    const query = computed(() => props.query ?? internalQuery.value);
+    let pending: { previous: string; value: string; label: string } | null = null;
     const open = ref(false);
     const activeId = ref<string | null>(null);
     const inputRef = ref<HTMLInputElement | null>(null);
@@ -94,6 +103,20 @@ export const ComboboxRoot = defineComponent({
     const inputId = computed(() => `${rootId.value}-input`);
     const listboxId = computed(() => `${rootId.value}-listbox`);
     const value = computed(() => props.value ?? internalValue.value);
+    function requestQuery(next: string) {
+      if (next === query.value) return;
+      if (props.query === undefined) internalQuery.value = next;
+      emit('update:query', next);
+    }
+    watch(
+      () => props.value,
+      (next) => {
+        if (!pending || next === pending.previous) return;
+        const request = pending;
+        pending = null;
+        if (next === request.value) requestQuery(request.label);
+      },
+    );
     const context: Ctx = {
       query,
       value,
@@ -114,19 +137,24 @@ export const ComboboxRoot = defineComponent({
           context.setOpen(false);
           return;
         }
-        query.value = next;
+        pending = null;
+        requestQuery(next);
         activeId.value = null;
         open.value = true;
       },
-      setValue(next) {
+      setValue(next, label) {
         if (inputUnavailable(inputRef.value)) {
           context.setOpen(false);
           return;
         }
-        if (props.value === undefined) internalValue.value = next;
-        query.value = next;
+        pending = null;
+        const previous = value.value;
+        if (props.value === undefined || props.value === next) {
+          if (props.value === undefined) internalValue.value = next;
+          requestQuery(label);
+        } else pending = { previous: props.value, value: next, label };
         activeId.value = null;
-        emit('update:value', next);
+        if (next !== previous) emit('update:value', next);
         inputRef.value?.focus();
         open.value = false;
       },
@@ -156,7 +184,12 @@ export const ComboboxInput = defineComponent({
         value: context.query.value,
         onInput: (event: Event) => {
           invoke(attrs.onInput, event);
-          if (!event.defaultPrevented) context.setQuery((event.target as HTMLInputElement).value);
+          const input = event.target as HTMLInputElement;
+          if (!event.defaultPrevented) context.setQuery(input.value);
+          void nextTick(() => {
+            if (context.inputRef.value === input && input.value !== context.query.value)
+              input.value = context.query.value;
+          });
         },
         onFocus: (event: FocusEvent) => {
           invoke(attrs.onFocus, event);
@@ -282,7 +315,7 @@ export const ComboboxOption = defineComponent({
           onClick: (event: MouseEvent) => {
             invoke(attrs.onClick, event);
             const option = event.currentTarget as HTMLElement;
-            if (!event.defaultPrevented && !disabled(option) && !option.hidden) context.setValue(props.value);
+            if (!event.defaultPrevented && !disabled(option) && !option.hidden) context.setValue(props.value, label);
           },
         },
         slots.default?.(),
