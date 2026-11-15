@@ -24,6 +24,7 @@
   "profileVariability": ["orientation"],
   "notes": [
     "Server markup remains progressively usable before client activation; the enhanced client contract establishes one roving Tab stop and retains the last-focused enabled item for re-entry.",
-    "Disabled and aria-disabled toolbar items are excluded from directional focus in the current VyrnForge policy."
+    "Disabled and aria-disabled toolbar items are excluded from directional focus in the current VyrnForge policy.",
+    "Managed focus is scoped to the nearest authored toolbar boundary; canceled key events and unowned controls retain their own behavior. Disabled command activation policy requires separate evidence."
   ]
 }
