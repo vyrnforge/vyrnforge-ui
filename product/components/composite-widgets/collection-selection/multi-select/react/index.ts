@@ -28,6 +28,12 @@ function optionFromTarget(root: HTMLElement, target: EventTarget | null): HTMLBu
   const option = target instanceof Element ? target.closest<HTMLButtonElement>(optionMultiSelector) : null;
   return option && option.closest('[data-vf-multi-select-content]') === root ? option : null;
 }
+function firstInvalid(control: HTMLSelectElement): boolean {
+  const first = Array.from(control.form?.elements ?? []).find(
+    (candidate) => candidate.matches(':invalid') && !candidate.matches('fieldset'),
+  );
+  return !first || first === control;
+}
 function optionDisabled(option: HTMLButtonElement): boolean {
   return option.matches(':disabled,[aria-disabled="true"]');
 }
@@ -91,7 +97,11 @@ export function MultiSelectRoot({
   const initialValue = useRef([...defaultValue]);
   const [internalValue, setInternalValue] = useState(initialValue.current);
   const [error, setError] = useState('');
-  const [open, setOpen] = useState(false);
+  const [internalOpen, setOpen] = useState(false);
+  const open = !disabled && internalOpen;
+  useEffect(() => {
+    if (disabled) setOpen(false);
+  }, [disabled]);
   const values = value ?? internalValue;
   const uid = useId();
   const rootId = id ?? `vf-multi-select-${uid}`;
@@ -151,7 +161,7 @@ export function MultiSelectRoot({
 
 export const MultiSelectTrigger = forwardRef<
   HTMLButtonElement,
-  Omit<ComponentPropsWithoutRef<'button'>, 'id' | 'aria-controls'>
+  Omit<ComponentPropsWithoutRef<'button'>, 'id' | 'aria-controls' | 'type'>
 >(function MultiSelectTrigger({ onClick, onKeyDown, ...props }, forwardedRef) {
   const multi = useMulti();
   function openAndFocus(edge: 'first' | 'last') {
@@ -409,7 +419,7 @@ export function MultiSelectFormControl({ name, form, required, options }: MultiS
         onInvalid: (event) => {
           event.preventDefault();
           root.setError(event.currentTarget.validationMessage);
-          root.anchorRef.current?.focus();
+          if (firstInvalid(event.currentTarget)) root.anchorRef.current?.focus();
         },
       },
       options.map((option) =>

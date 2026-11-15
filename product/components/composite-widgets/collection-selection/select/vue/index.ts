@@ -27,6 +27,12 @@ function optionFromTarget(root: HTMLElement, target: EventTarget | null): HTMLBu
   const option = target instanceof Element ? target.closest<HTMLButtonElement>(optionSelector) : null;
   return option && option.closest('[data-vf-select-content]') === root ? option : null;
 }
+function firstInvalid(control: HTMLSelectElement): boolean {
+  const first = Array.from(control.form?.elements ?? []).find(
+    (candidate) => candidate.matches(':invalid') && !candidate.matches('fieldset'),
+  );
+  return !first || first === control;
+}
 function optionDisabled(option: HTMLButtonElement): boolean {
   return option.matches(':disabled,[aria-disabled="true"]');
 }
@@ -77,7 +83,14 @@ export const SelectRoot = defineComponent({
     const error = ref('');
     const internalOpen = ref(props.defaultOpen);
     const value = computed(() => props.value ?? internalValue.value);
-    const expanded = computed(() => props.open ?? internalOpen.value);
+    const expanded = computed(() => !disabled.value && (props.open ?? internalOpen.value));
+    watch(
+      disabled,
+      (next) => {
+        if (next && props.open === undefined) internalOpen.value = false;
+      },
+      { flush: 'sync' },
+    );
     const uid = useId();
     const rootId = computed(() => props.id ?? `vf-select-${uid}`);
     const triggerId = computed(() => `${rootId.value}-trigger`);
@@ -410,7 +423,7 @@ export const SelectFormControl = defineComponent({
             onInvalid: (event: Event) => {
               event.preventDefault();
               root.error.value = (event.currentTarget as HTMLSelectElement).validationMessage;
-              root.anchor.value?.focus();
+              if (firstInvalid(event.currentTarget as HTMLSelectElement)) root.anchor.value?.focus();
             },
           },
           props.options.map((option) =>

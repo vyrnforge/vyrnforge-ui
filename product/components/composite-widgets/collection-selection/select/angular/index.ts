@@ -9,6 +9,7 @@ import {
   afterNextRender,
   booleanAttribute,
   computed,
+  effect,
   inject,
   input,
   output,
@@ -54,6 +55,12 @@ function optionsFor(root: HTMLElement): HTMLButtonElement[] {
 function optionFromTarget(root: HTMLElement, target: EventTarget | null): HTMLButtonElement | null {
   const option = target instanceof Element ? target.closest<HTMLButtonElement>(optionSelector) : null;
   return option && option.closest('[data-vf-select-content]') === root ? option : null;
+}
+function firstInvalid(control: HTMLSelectElement): boolean {
+  const first = Array.from(control.form?.elements ?? []).find(
+    (candidate) => candidate.matches(':invalid') && !candidate.matches('fieldset'),
+  );
+  return !first || first === control;
 }
 function optionDisabled(option: HTMLButtonElement): boolean {
   return option.matches(':disabled,[aria-disabled="true"]');
@@ -128,7 +135,13 @@ export class VfSelectRootDirective {
     this.error.set('');
     return next;
   }
-  readonly expanded = computed(() => this.open() ?? this.internalOpen() ?? this.defaultOpen());
+  readonly expanded = computed(() => !this.disabled() && (this.open() ?? this.internalOpen() ?? this.defaultOpen()));
+
+  constructor() {
+    effect(() => {
+      if (this.disabled() && this.open() === undefined) this.internalOpen.set(false);
+    });
+  }
 
   setOpen(v: boolean): void {
     if (v && this.disabled()) return;
@@ -173,7 +186,7 @@ export class VfSelectTriggerDirective {
     domFor(root).anchor = element;
 
     const onClick = (event: MouseEvent) => {
-      if (event.defaultPrevented || optionDisabled(element)) return;
+      if (event.defaultPrevented || root.disabled() || optionDisabled(element)) return;
       if (root.expanded()) root.setOpen(false);
       else {
         root.setOpen(true);
@@ -181,7 +194,7 @@ export class VfSelectTriggerDirective {
       }
     };
     const onKeydown = (event: KeyboardEvent) => {
-      if (event.defaultPrevented || optionDisabled(element)) return;
+      if (event.defaultPrevented || root.disabled() || optionDisabled(element)) return;
       const wasOpen = root.expanded();
       if (event.key === 'ArrowUp') {
         event.preventDefault();
@@ -426,6 +439,6 @@ export class VfSelectFormControlComponent {
   invalid(event: Event) {
     event.preventDefault();
     this.root.error.set(this.control().nativeElement.validationMessage);
-    domFor(this.root).anchor?.focus();
+    if (firstInvalid(this.control().nativeElement)) domFor(this.root).anchor?.focus();
   }
 }

@@ -16,6 +16,12 @@ function optionFromTarget(root: HTMLElement, target: EventTarget | null): HTMLEl
     ? option
     : null;
 }
+function firstInvalid(control: HTMLSelectElement): boolean {
+  const first = Array.from(control.form?.elements ?? []).find(
+    (candidate) => candidate.matches(':invalid') && !candidate.matches('fieldset'),
+  );
+  return !first || first === control;
+}
 function optionDisabled(option: HTMLElement): boolean {
   return option.matches(':disabled,[disabled],[aria-disabled="true"]');
 }
@@ -107,6 +113,7 @@ export class VfMultiSelectElement extends H {
   }
 
   private sync(): void {
+    if (this.hasAttribute('disabled') && this.hasAttribute('open')) this.removeAttribute('open');
     const open = this.hasAttribute('open') && !this.hasAttribute('disabled');
     if (!open) {
       if (this.timer) clearTimeout(this.timer);
@@ -114,6 +121,7 @@ export class VfMultiSelectElement extends H {
       this.query = '';
     }
     const trigger = this.trigger;
+    if (trigger instanceof HTMLButtonElement) trigger.type = 'button';
     const content = this.content;
     if (content !== this.surface) {
       this.surface?.removeEventListener('toggle', this.onToggle);
@@ -136,6 +144,7 @@ export class VfMultiSelectElement extends H {
       content.toggleAttribute('data-vf-open', open);
     } else trigger?.removeAttribute('aria-controls');
     for (const option of optionsFor(this)) {
+      if (option instanceof HTMLButtonElement) option.type = 'button';
       option.setAttribute('role', 'option');
       option.tabIndex = -1;
       if (!option.hasAttribute('aria-selected')) option.setAttribute('aria-selected', 'false');
@@ -230,7 +239,7 @@ export class VfMultiSelectElement extends H {
     control.tabIndex = -1;
     control.setAttribute('aria-hidden', 'true');
     control.multiple = true;
-    const disabled = this.hasAttribute('disabled') || (trigger instanceof HTMLButtonElement && trigger.disabled);
+    const disabled = this.hasAttribute('disabled');
     if (control.disabled !== disabled) control.disabled = disabled;
     const values = this.selectedValues();
     const defaults = this.initialSelection;
@@ -256,7 +265,7 @@ export class VfMultiSelectElement extends H {
     error.setAttribute('role', 'status');
     if (error.textContent !== this.formError) error.textContent = this.formError;
     const descriptions = (trigger.getAttribute('aria-describedby') ?? '')
-      .split(/\\s+/)
+      .split(/\s+/)
       .filter((id) => id && id !== error.id);
     if (this.formError) {
       if (this.priorInvalid === undefined) this.priorInvalid = trigger.getAttribute('aria-invalid');
@@ -278,7 +287,7 @@ export class VfMultiSelectElement extends H {
     event.preventDefault();
     this.formError = this.formControl.validationMessage;
     this.syncFormError();
-    this.trigger?.focus();
+    if (firstInvalid(this.formControl)) this.trigger?.focus();
   };
   private onReset = (event: Event): void => {
     const control = this.formControl;

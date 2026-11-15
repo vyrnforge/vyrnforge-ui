@@ -1901,6 +1901,7 @@ export class VfMultiSelectOptionDirective {
 
 // @public (undocumented)
 export class VfMultiSelectRootDirective {
+    constructor();
     // (undocumented)
     readonly defaultValue: InputSignal<string[]>;
     // (undocumented)
@@ -2945,6 +2946,7 @@ export class VfSelectOptionDirective {
 
 // @public (undocumented)
 export class VfSelectRootDirective {
+    constructor();
     // (undocumented)
     readonly defaultOpen: InputSignal<boolean>;
     // (undocumented)
