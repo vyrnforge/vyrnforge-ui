@@ -5,7 +5,7 @@ const H: typeof HTMLElement = globalThis.HTMLElement ?? (class {} as typeof HTML
 const rootMultiSelector = '[data-vf-multi-select-root],vf-multi-select';
 const optionMultiSelector = '[data-vf-multi-select-option]';
 function optionsFor(root: HTMLElement): HTMLElement[] {
-  return Array.from(root.queryMultiSelectorAll<HTMLElement>(optionMultiSelector)).filter(
+  return Array.from(root.querySelectorAll<HTMLElement>(optionMultiSelector)).filter(
     (option) => option.closest(rootMultiSelector) === root.closest(rootMultiSelector),
   );
 }
@@ -67,7 +67,7 @@ export class VfMultiSelectElement extends H {
 
   private ownedPart(selector: string): HTMLElement | null {
     return (
-      Array.from(this.queryMultiSelectorAll<HTMLElement>(selector)).find((node) => node.closest(rootMultiSelector) === this) ??
+      Array.from(this.querySelectorAll<HTMLElement>(selector)).find((node) => node.closest(rootMultiSelector) === this) ??
       null
     );
   }

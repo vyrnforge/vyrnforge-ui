@@ -17,7 +17,7 @@ import { findTypeaheadMatch } from '@vyrnforge/core/typeahead-matching';
 
 const optionMultiSelector = '[data-vf-multi-select-option]';
 function optionsFor(root: HTMLElement): HTMLButtonElement[] {
-  return Array.from(root.queryMultiSelectorAll<HTMLButtonElement>(optionMultiSelector)).filter(
+  return Array.from(root.querySelectorAll<HTMLButtonElement>(optionMultiSelector)).filter(
     (option) => option.closest('[data-vf-multi-select-content]') === root,
   );
 }
