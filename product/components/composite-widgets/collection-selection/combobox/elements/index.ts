@@ -10,6 +10,9 @@ function visibleOptions(root: HTMLElement): HTMLElement[] {
     (option) => !option.hidden && option.closest(rootSelector) === root,
   );
 }
+function inputUnavailable(input: HTMLInputElement | null): boolean {
+  return !input || input.readOnly || input.matches(':disabled');
+}
 function disabled(option: HTMLElement): boolean {
   return option.getAttribute('aria-disabled') === 'true' || option.hasAttribute('disabled');
 }
@@ -118,6 +121,7 @@ export class VfComboboxElement extends HTMLElementBase {
   }
   private setOpen(open: boolean) {
     const input = this.inputElement();
+    open = open && !inputUnavailable(input);
     const content = this.contentElement();
     if (content && input) {
       if (open && !content.matches(':popover-open')) content.showPopover({ source: input });
@@ -150,6 +154,10 @@ export class VfComboboxElement extends HTMLElementBase {
     if (target) this.setActive(target);
   }
   private select(option: HTMLElement) {
+    if (inputUnavailable(this.inputElement())) {
+      this.setOpen(false);
+      return;
+    }
     if (disabled(option)) return;
     const value = optionValue(option);
     this.setAttribute('value', value);
@@ -176,8 +184,13 @@ export class VfComboboxElement extends HTMLElementBase {
     if (event.button === 0 && option?.closest(rootSelector) === this) event.preventDefault();
   };
   private onInput = (event: Event) => {
+    if (event.defaultPrevented) return;
     const input = (event.target as HTMLElement).closest<HTMLInputElement>('[data-vf-combobox-input]');
     if (!input || input !== this.inputElement()) return;
+    if (inputUnavailable(input)) {
+      this.setOpen(false);
+      return;
+    }
     const locale = this.locale();
     const query = normalizeFilterText(input.value, locale);
     this.activeId = null;
@@ -218,6 +231,10 @@ export class VfComboboxElement extends HTMLElementBase {
     if (event.defaultPrevented) return;
     const input = (event.target as HTMLElement).closest<HTMLInputElement>('[data-vf-combobox-input]');
     if (!input || input !== this.inputElement()) return;
+    if (inputUnavailable(input)) {
+      this.setOpen(false);
+      return;
+    }
     if (this.composing || event.isComposing) return;
     if (event.key === 'ArrowDown' || event.key === 'ArrowUp') {
       event.preventDefault();

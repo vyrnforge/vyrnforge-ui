@@ -43,6 +43,9 @@ function visibleOptions(root: HTMLElement | null): HTMLElement[] {
       )
     : [];
 }
+function inputUnavailable(input: HTMLInputElement | null): boolean {
+  return !input || input.readOnly || input.matches(':disabled');
+}
 function disabled(option: HTMLElement): boolean {
   return option.getAttribute('aria-disabled') === 'true' || option.hasAttribute('disabled');
 }
@@ -59,6 +62,7 @@ function activeOption(context: Ctx): HTMLElement | null {
   return visibleOptions(context.contentRef.value).find((option) => option.id === id && !disabled(option)) ?? null;
 }
 function moveActive(context: Ctx, intent: Extract<CollectionNavigationIntent, 'next' | 'previous'>) {
+  if (inputUnavailable(context.inputRef.value)) return;
   const options = visibleOptions(context.contentRef.value);
   const current = options.findIndex((option) => option.id === context.activeId.value);
   const start = current >= 0 ? current : intent === 'previous' ? options.length : -1;
@@ -101,15 +105,24 @@ export const ComboboxRoot = defineComponent({
       inputRef,
       contentRef,
       setOpen(next) {
+        next = next && !inputUnavailable(inputRef.value);
         open.value = next;
         if (!next) activeId.value = null;
       },
       setQuery(next) {
+        if (inputUnavailable(inputRef.value)) {
+          context.setOpen(false);
+          return;
+        }
         query.value = next;
         activeId.value = null;
         open.value = true;
       },
       setValue(next) {
+        if (inputUnavailable(inputRef.value)) {
+          context.setOpen(false);
+          return;
+        }
         if (props.value === undefined) internalValue.value = next;
         query.value = next;
         activeId.value = null;
@@ -165,6 +178,10 @@ export const ComboboxInput = defineComponent({
         onKeydown: (event: KeyboardEvent) => {
           invoke(attrs.onKeydown, event);
           if (event.defaultPrevented) return;
+          if (inputUnavailable(context.inputRef.value)) {
+            context.setOpen(false);
+            return;
+          }
           if (composing.value || event.isComposing) return;
           if (event.key === 'ArrowDown' || event.key === 'ArrowUp') {
             event.preventDefault();

@@ -1367,8 +1367,8 @@ readOnly: BooleanConstructor;
 value: number | null;
 disabled: boolean;
 defaultValue: number | null;
-step: number | "any";
 readOnly: boolean;
+step: number | "any";
 }, {}, {}, {}, string, ComponentProvideOptions, true, {}, any>;
 
 // @public (undocumented)
