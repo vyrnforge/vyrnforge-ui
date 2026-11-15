@@ -130,6 +130,8 @@ test('native form reset restores the initial pair and its coordinated bounds wit
   await page.goto(`/components/range-slider/${port}.html`);
   const { root, start, end } = ranges(page);
   await end.press('End');
+  await expect(end).toHaveValue('100');
+  await expect(start).toHaveAttribute('max', '100');
   await start.press('End');
   await expect(start).toHaveValue('100');
   await expect(end).toHaveValue('100');
@@ -193,4 +195,22 @@ test('form reset preserves the latest controlled pair and does not affect anothe
     lower: '40',
     upper: '65',
   });
+});
+
+test('Angular synchronizes the pair bounds in the native input event turn', async ({ page }) => {
+  test.skip(port !== 'angular', 'Angular native event reconciliation regression.');
+  await page.goto('/components/range-slider/angular.html');
+  const { root, start, end } = ranges(page);
+  await start.press('ArrowRight');
+  await expect(root).toHaveAttribute('data-requested', '[25,80]');
+  expect(
+    await end.evaluate((element) => {
+      element.value = '100';
+      element.dispatchEvent(new Event('input', { bubbles: true }));
+      const start = element.closest('[data-vf-range-slider-root]').querySelector('[data-vf-range-slider-start]');
+      return { maximum: start.max, upper: element.value };
+    }),
+  ).toEqual({ maximum: '100', upper: '100' });
+  await start.press('End');
+  await expect(root).toHaveAttribute('data-requested', '[100,100]');
 });
