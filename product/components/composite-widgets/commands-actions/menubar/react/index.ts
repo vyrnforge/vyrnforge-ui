@@ -39,7 +39,7 @@ function syncTabStops(root: HTMLElement, preferred?: HTMLButtonElement | null): 
   const active = preferred && eligible.includes(preferred) ? preferred : (remembered ?? eligible[0]);
   for (const item of items) {
     const tabIndex = item === active ? 0 : -1;
-    if (item.tabIndex !== tabIndex) item.tabIndex = tabIndex;
+    if (!item.hasAttribute('tabindex') || item.tabIndex !== tabIndex) item.tabIndex = tabIndex;
   }
 }
 
