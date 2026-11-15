@@ -72,3 +72,47 @@ test('Web PreviewCard exposes authored content and canonical styles', async ({ p
   await expect(surface).toHaveCSS('padding-top', '14px');
   await expectNoAxeViolations(page);
 });
+
+test('PreviewCard tracks its focused source through scroll, resize, RTL and block collision', async ({ page }) => {
+  test.skip(port === 'web', 'Static Web PreviewCard does not own a native popup lifecycle.');
+  await page.setViewportSize({ width: 1000, height: 760 });
+  await load(page);
+  await page.evaluate(() => {
+    document.body.style.minHeight = '1600px';
+    const trigger = document.querySelector('#t');
+    Object.assign(trigger.style, { position: 'absolute', top: '320px', left: '400px', width: '80px' });
+  });
+  const trigger = page.locator('#t');
+  const surface = page.locator('#c');
+  await trigger.focus();
+  await expect(surface).toBeVisible();
+  async function expectAlignment(rtl = false, above = false) {
+    await expect
+      .poll(() =>
+        page.evaluate(({ rtl, above }) => {
+          const trigger = document.querySelector('#t').getBoundingClientRect();
+          const surface = document.querySelector('#c').getBoundingClientRect();
+          const inlineError = rtl ? surface.right - trigger.right : surface.left - trigger.left;
+          const blockError = above ? surface.bottom - trigger.top : surface.top - trigger.bottom;
+          return Math.max(Math.abs(inlineError), Math.abs(blockError));
+        }, { rtl, above }),
+      )
+      .toBeLessThan(2);
+  }
+  await expectAlignment();
+  await page.evaluate(() => window.scrollTo(0, 120));
+  await expectAlignment();
+  await page.setViewportSize({ width: 820, height: 640 });
+  await expectAlignment();
+  await page.evaluate(() => document.documentElement.setAttribute('dir', 'rtl'));
+  await expectAlignment(true);
+  await page.evaluate(() => {
+    window.scrollTo(0, 0);
+    document.querySelector('#t').style.top = '610px';
+  });
+  await expectAlignment(true, true);
+  await expect(trigger).toBeFocused();
+  await page.keyboard.press('Escape');
+  await expect(surface).toBeHidden();
+  await expect(trigger).toBeFocused();
+});
