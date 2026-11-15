@@ -416,9 +416,15 @@ export interface ClusterProps {
 }
 
 // @public (undocumented)
-export const ColorPickerInput: DefineComponent<    {}, () => VNode<RendererNode, RendererElement, {
+export const ColorPickerInput: DefineComponent<ExtractPropTypes<    {
+disabled: BooleanConstructor;
+}>, () => VNode<RendererNode, RendererElement, {
 [key: string]: any;
-}>, {}, {}, {}, ComponentOptionsMixin, ComponentOptionsMixin, {}, string, PublicProps, Readonly<{}> & Readonly<{}>, {}, {}, {}, {}, string, ComponentProvideOptions, true, {}, any>;
+}>, {}, {}, {}, ComponentOptionsMixin, ComponentOptionsMixin, {}, string, PublicProps, Readonly<ExtractPropTypes<    {
+disabled: BooleanConstructor;
+}>> & Readonly<{}>, {
+disabled: boolean;
+}, {}, {}, {}, string, ComponentProvideOptions, true, {}, any>;
 
 // @public (undocumented)
 export const ColorPickerRoot: DefineComponent<ExtractPropTypes<    {
@@ -427,17 +433,22 @@ defaultValue: {
 type: StringConstructor;
 default: string;
 };
+disabled: BooleanConstructor;
 }>, () => VNode<RendererNode, RendererElement, {
 [key: string]: any;
-}>, {}, {}, {}, ComponentOptionsMixin, ComponentOptionsMixin, "update:value"[], "update:value", PublicProps, Readonly<ExtractPropTypes<    {
+}>, {}, {}, {}, ComponentOptionsMixin, ComponentOptionsMixin, {
+'update:value': (value: string) => boolean;
+}, string, PublicProps, Readonly<ExtractPropTypes<    {
 value: StringConstructor;
 defaultValue: {
 type: StringConstructor;
 default: string;
 };
+disabled: BooleanConstructor;
 }>> & Readonly<{
-"onUpdate:value"?: (...args: any[]) => any;
+"onUpdate:value"?: (value: string) => any;
 }>, {
+disabled: boolean;
 defaultValue: string;
 }, {}, {}, {}, string, ComponentProvideOptions, true, {}, any>;
 
@@ -447,9 +458,18 @@ export const ColorPickerSwatch: DefineComponent<    {}, () => VNode<RendererNode
 }>, {}, {}, {}, ComponentOptionsMixin, ComponentOptionsMixin, {}, string, PublicProps, Readonly<{}> & Readonly<{}>, {}, {}, {}, {}, string, ComponentProvideOptions, true, {}, any>;
 
 // @public (undocumented)
-export const ColorPickerTextInput: DefineComponent<    {}, () => VNode<RendererNode, RendererElement, {
+export const ColorPickerTextInput: DefineComponent<ExtractPropTypes<    {
+disabled: BooleanConstructor;
+readOnly: BooleanConstructor;
+}>, () => VNode<RendererNode, RendererElement, {
 [key: string]: any;
-}>, {}, {}, {}, ComponentOptionsMixin, ComponentOptionsMixin, {}, string, PublicProps, Readonly<{}> & Readonly<{}>, {}, {}, {}, {}, string, ComponentProvideOptions, true, {}, any>;
+}>, {}, {}, {}, ComponentOptionsMixin, ComponentOptionsMixin, {}, string, PublicProps, Readonly<ExtractPropTypes<    {
+disabled: BooleanConstructor;
+readOnly: BooleanConstructor;
+}>> & Readonly<{}>, {
+disabled: boolean;
+readOnly: boolean;
+}, {}, {}, {}, string, ComponentProvideOptions, true, {}, any>;
 
 // @public (undocumented)
 export const ComboboxContent: DefineComponent<    {}, () => VNode<RendererNode, RendererElement, {
@@ -1335,18 +1355,14 @@ readOnly: boolean;
 
 // @public (undocumented)
 export const OTPFieldInput: DefineComponent<ExtractPropTypes<    {
-index: {
-type: NumberConstructor;
-required: true;
-};
+disabled: BooleanConstructor;
 }>, () => VNode<RendererNode, RendererElement, {
 [key: string]: any;
 }>, {}, {}, {}, ComponentOptionsMixin, ComponentOptionsMixin, {}, string, PublicProps, Readonly<ExtractPropTypes<    {
-index: {
-type: NumberConstructor;
-required: true;
-};
-}>> & Readonly<{}>, {}, {}, {}, {}, string, ComponentProvideOptions, true, {}, any>;
+disabled: BooleanConstructor;
+}>> & Readonly<{}>, {
+disabled: boolean;
+}, {}, {}, {}, string, ComponentProvideOptions, true, {}, any>;
 
 // @public (undocumented)
 export const OTPFieldRoot: DefineComponent<ExtractPropTypes<    {
@@ -1359,9 +1375,12 @@ length: {
 type: NumberConstructor;
 default: number;
 };
+disabled: BooleanConstructor;
 }>, () => VNode<RendererNode, RendererElement, {
 [key: string]: any;
-}>, {}, {}, {}, ComponentOptionsMixin, ComponentOptionsMixin, "update:value"[], "update:value", PublicProps, Readonly<ExtractPropTypes<    {
+}>, {}, {}, {}, ComponentOptionsMixin, ComponentOptionsMixin, {
+'update:value': (value: string) => boolean;
+}, string, PublicProps, Readonly<ExtractPropTypes<    {
 value: StringConstructor;
 defaultValue: {
 type: StringConstructor;
@@ -1371,10 +1390,12 @@ length: {
 type: NumberConstructor;
 default: number;
 };
+disabled: BooleanConstructor;
 }>> & Readonly<{
-"onUpdate:value"?: (...args: any[]) => any;
+"onUpdate:value"?: (value: string) => any;
 }>, {
 length: number;
+disabled: boolean;
 defaultValue: string;
 }, {}, {}, {}, string, ComponentProvideOptions, true, {}, any>;
 
@@ -1405,19 +1426,39 @@ export const PaginationRoot: DefineComponent<    {}, () => VNode<RendererNode, R
 }>, {}, {}, {}, ComponentOptionsMixin, ComponentOptionsMixin, {}, string, PublicProps, Readonly<{}> & Readonly<{}>, {}, {}, {}, {}, string, ComponentProvideOptions, true, {}, any>;
 
 // @public (undocumented)
-export const PasswordFieldInput: DefineComponent<    {}, () => VNode<RendererNode, RendererElement, {
-[key: string]: any;
-}>, {}, {}, {}, ComponentOptionsMixin, ComponentOptionsMixin, {}, string, PublicProps, Readonly<{}> & Readonly<{}>, {}, {}, {}, {}, string, ComponentProvideOptions, true, {}, any>;
-
-// @public (undocumented)
-export const PasswordFieldRoot: DefineComponent<ExtractPropTypes<    {
-defaultVisible: BooleanConstructor;
+export const PasswordFieldInput: DefineComponent<ExtractPropTypes<    {
+disabled: BooleanConstructor;
 }>, () => VNode<RendererNode, RendererElement, {
 [key: string]: any;
 }>, {}, {}, {}, ComponentOptionsMixin, ComponentOptionsMixin, {}, string, PublicProps, Readonly<ExtractPropTypes<    {
-defaultVisible: BooleanConstructor;
+disabled: BooleanConstructor;
 }>> & Readonly<{}>, {
+disabled: boolean;
+}, {}, {}, {}, string, ComponentProvideOptions, true, {}, any>;
+
+// @public (undocumented)
+export const PasswordFieldRoot: DefineComponent<ExtractPropTypes<    {
+visible: {
+type: BooleanConstructor;
+default: undefined;
+};
+defaultVisible: BooleanConstructor;
+disabled: BooleanConstructor;
+}>, () => VNode<RendererNode, RendererElement, {
+[key: string]: any;
+}>, {}, {}, {}, ComponentOptionsMixin, ComponentOptionsMixin, "update:visible"[], "update:visible", PublicProps, Readonly<ExtractPropTypes<    {
+visible: {
+type: BooleanConstructor;
+default: undefined;
+};
+defaultVisible: BooleanConstructor;
+disabled: BooleanConstructor;
+}>> & Readonly<{
+"onUpdate:visible"?: (...args: any[]) => any;
+}>, {
+disabled: boolean;
 defaultVisible: boolean;
+visible: boolean;
 }, {}, {}, {}, string, ComponentProvideOptions, true, {}, any>;
 
 // @public (undocumented)
@@ -1430,6 +1471,7 @@ hideLabel: {
 type: StringConstructor;
 required: true;
 };
+disabled: BooleanConstructor;
 }>, () => VNode<RendererNode, RendererElement, {
 [key: string]: any;
 }>, {}, {}, {}, ComponentOptionsMixin, ComponentOptionsMixin, {}, string, PublicProps, Readonly<ExtractPropTypes<    {
@@ -1441,7 +1483,10 @@ hideLabel: {
 type: StringConstructor;
 required: true;
 };
-}>> & Readonly<{}>, {}, {}, {}, {}, string, ComponentProvideOptions, true, {}, any>;
+disabled: BooleanConstructor;
+}>> & Readonly<{}>, {
+disabled: boolean;
+}, {}, {}, {}, string, ComponentProvideOptions, true, {}, any>;
 
 // @public (undocumented)
 export const PopoverContent: DefineComponent<    {}, () => VNode<RendererNode, RendererElement, {
@@ -1760,6 +1805,7 @@ defaultValue: {
 type: StringConstructor;
 default: string;
 };
+name: StringConstructor;
 }>, () => VNode<RendererNode, RendererElement, {
 [key: string]: any;
 }>, {}, {}, {}, ComponentOptionsMixin, ComponentOptionsMixin, "update:value"[], "update:value", PublicProps, Readonly<ExtractPropTypes<    {
@@ -1768,6 +1814,7 @@ defaultValue: {
 type: StringConstructor;
 default: string;
 };
+name: StringConstructor;
 }>> & Readonly<{
 "onUpdate:value"?: (...args: any[]) => any;
 }>, {
