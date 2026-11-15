@@ -229,3 +229,22 @@ test('teardown clears an old timer and reconnect or remount gets one fresh cycle
   await page.clock.fastForward(200);
   await expect.poll(() => requests(page, 'teardownRequests')).toBe(1);
 });
+
+test('reconnecting the same Elements toast clears stale interaction pauses', async ({ page }) => {
+  test.skip(port !== 'elements', 'Same-node reconnect is owned by the Elements lifecycle.');
+  await page.clock.install();
+  await page.goto(fixture);
+  await waitForClient(page);
+  await page.evaluate(() => {
+    const toast = document.querySelector('#teardown-toast');
+    toast.dispatchEvent(new Event('pointerenter'));
+    document.querySelector('#teardown-close').focus();
+    const host = toast.parentElement;
+    toast.remove();
+    host.append(toast);
+    document.querySelector('#outside-focus').focus();
+  });
+  await page.clock.fastForward(550);
+  await expect.poll(() => requests(page, 'teardownRequests')).toBe(1);
+  await expect(page.locator('#teardown-toast')).toBeHidden();
+});

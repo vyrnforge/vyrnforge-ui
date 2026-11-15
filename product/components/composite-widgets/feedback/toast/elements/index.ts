@@ -45,6 +45,10 @@ export class VfToastElement extends HTMLElementBase {
     this.removeEventListener('focusin', this.#onFocusIn);
     this.removeEventListener('focusout', this.#onFocusOut);
     this.#clearTimer();
+    this.#pauseReasons.clear();
+    this.#remaining = null;
+    this.#wasOpen = false;
+    this.#timeoutRequested = false;
   }
 
   attributeChangedCallback(name: string, oldValue: string | null, newValue: string | null): void {
