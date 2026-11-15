@@ -76,7 +76,8 @@ export class VfRangeSliderRootDirective {
         if (!start || !end || !start.form || start.form !== event.target || end.form !== event.target) return;
         setTimeout(() => {
           if (!active || event.defaultPrevented || start.form !== event.target || end.form !== event.target) return;
-          const initial = this.initial!;
+          const initial = this.initial;
+          if (!initial) return;
           const next = normalize(this.value() ?? initial, this.range());
           if (this.value() === undefined) this.internal.set([...initial]);
           start.max = String(next[1]);

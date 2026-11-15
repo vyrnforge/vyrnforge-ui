@@ -133,7 +133,9 @@ test('native form reset restores the initial pair and its coordinated bounds wit
   await form.evaluate(async (element) => {
     element.addEventListener('reset', (event) => event.preventDefault(), { once: true });
     element.reset();
-    await new Promise((resolve) => setTimeout(resolve, 0));
+    await new Promise((resolve) => {
+      setTimeout(resolve, 0);
+    });
   });
   await expect(start).toHaveValue('100');
   await expect(end).toHaveValue('100');
@@ -172,7 +174,9 @@ test('form reset preserves the latest controlled pair and does not affect anothe
   await expect(root).toHaveAttribute('data-requested', '[45,65]');
   await page.locator('#controlled-form').evaluate(async (form) => {
     form.reset();
-    await new Promise((resolve) => setTimeout(resolve, 0));
+    await new Promise((resolve) => {
+      setTimeout(resolve, 0);
+    });
   });
   await expect(start).toHaveValue('40');
   await expect(end).toHaveValue('65');
