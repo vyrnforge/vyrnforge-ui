@@ -14,14 +14,14 @@ import {
   type PropType,
   type Ref,
 } from 'vue';
-import type { FloatingPlacement } from '@vyrnforge/web/floating-positioning';
+import type { AnchorPlacement } from '@vyrnforge/web';
 
 interface Context {
   id: Readonly<Ref<string>>;
   open: Readonly<Ref<boolean>>;
   anchor: Ref<HTMLElement | null>;
   content: Ref<HTMLElement | null>;
-  placement: Readonly<Ref<FloatingPlacement>>;
+  placement: Readonly<Ref<AnchorPlacement>>;
   role: Readonly<Ref<'dialog' | 'region'>>;
   setOpen(value: boolean): void;
 }
@@ -36,7 +36,7 @@ export const PopoverRoot = defineComponent({
   props: {
     modelValue: { type: Boolean, default: undefined },
     defaultOpen: { type: Boolean, default: false },
-    placement: { type: String as PropType<FloatingPlacement>, default: 'bottom-start' },
+    placement: { type: String as PropType<AnchorPlacement>, default: 'bottom-start' },
     contentId: String,
     contentRole: { type: String as PropType<'dialog' | 'region'>, default: 'dialog' },
   },

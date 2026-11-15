@@ -5,6 +5,7 @@
 ```ts
 
 import { AnchorHTMLAttributes } from 'react';
+import { AnchorPlacement } from '@vyrnforge/web';
 import { AnimationEventHandler } from 'react';
 import { AriaRole } from 'react';
 import { ButtonHTMLAttributes } from 'react';
@@ -24,7 +25,6 @@ import { DetailedReactHTMLElement } from 'react';
 import { DialogHTMLAttributes } from 'react';
 import { DO_NOT_USE_OR_YOU_WILL_BE_FIRED_EXPERIMENTAL_FORM_ACTIONS } from 'react';
 import { DragEventHandler } from 'react';
-import { FloatingPlacement } from '@vyrnforge/web/floating-positioning';
 import { FocusEvent as FocusEvent_2 } from 'react';
 import { FocusEventHandler } from 'react';
 import { ForwardRefExoticComponent } from 'react';
@@ -2153,7 +2153,7 @@ export interface MenuRootProps {
     // (undocumented)
     open?: boolean;
     // (undocumented)
-    placement?: FloatingPlacement;
+    placement?: AnchorPlacement;
 }
 
 // @public (undocumented)
@@ -2622,7 +2622,7 @@ export interface PopoverRootProps {
     // (undocumented)
     open?: boolean;
     // (undocumented)
-    placement?: FloatingPlacement;
+    placement?: AnchorPlacement;
 }
 
 // @public (undocumented)
@@ -2656,7 +2656,7 @@ export interface PreviewCardRootProps {
     // (undocumented)
     openDelay?: number;
     // (undocumented)
-    placement?: FloatingPlacement;
+    placement?: AnchorPlacement;
 }
 
 // @public (undocumented)
@@ -4882,7 +4882,7 @@ export interface TooltipRootProps {
     // (undocumented)
     openDelay?: number;
     // (undocumented)
-    placement?: FloatingPlacement;
+    placement?: AnchorPlacement;
 }
 
 // @public (undocumented)

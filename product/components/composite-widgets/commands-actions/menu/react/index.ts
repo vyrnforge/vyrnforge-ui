@@ -12,7 +12,7 @@ import {
 } from 'react';
 import { navigationIntentForArrow, resolveNavigationIndex } from '@vyrnforge/core/collection-navigation';
 import { findTypeaheadMatch } from '@vyrnforge/core/typeahead-matching';
-import { type FloatingPlacement } from '@vyrnforge/web/floating-positioning';
+import { type AnchorPlacement } from '@vyrnforge/web';
 
 function adjacentMenubarTrigger(
   trigger: HTMLElement | null,
@@ -66,14 +66,14 @@ export interface MenuRootProps {
   children?: ReactNode;
   open?: boolean;
   defaultOpen?: boolean;
-  placement?: FloatingPlacement;
+  placement?: AnchorPlacement;
   onOpenChange?(open: boolean): void;
 }
 interface MenuContextValue {
   parent: MenuContextValue | null;
   open: boolean;
   setOpen(open: boolean): void;
-  placement: FloatingPlacement;
+  placement: AnchorPlacement;
   anchorRef: React.MutableRefObject<HTMLElement | null>;
   surfaceRef: React.MutableRefObject<HTMLElement | null>;
   focusMenu(edge: 'first' | 'last'): void;

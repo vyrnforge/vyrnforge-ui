@@ -4,7 +4,7 @@
 
 ```ts
 
-import type { FloatingPlacement } from '@vyrnforge/web/floating-positioning';
+import type { AnchorPlacement } from '@vyrnforge/web';
 import { IconDefinition } from '@vyrnforge/web/icon';
 import { IconShape } from '@vyrnforge/web/icon';
 import { IconSize } from '@vyrnforge/web/icon';
@@ -485,7 +485,7 @@ export class VfPopoverElement extends HTMLElementBase_6 {
     get open(): boolean;
     set open(value: boolean);
     // (undocumented)
-    get placement(): FloatingPlacement;
+    get placement(): AnchorPlacement;
 }
 
 // @public (undocumented)
@@ -502,7 +502,7 @@ export class VfPreviewCardElement extends HTMLElementBase_8 {
     get open(): boolean;
     set open(value: boolean);
     // (undocumented)
-    get placement(): FloatingPlacement;
+    get placement(): AnchorPlacement;
 }
 
 // @public (undocumented)
@@ -680,7 +680,7 @@ export class VfTooltipElement extends HTMLElementBase_7 {
     get open(): boolean;
     set open(value: boolean);
     // (undocumented)
-    get placement(): FloatingPlacement;
+    get placement(): AnchorPlacement;
 }
 
 // (No @packageDocumentation comment for this package)

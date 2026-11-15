@@ -15,7 +15,7 @@ import {
 } from 'vue';
 import { navigationIntentForArrow, resolveNavigationIndex } from '@vyrnforge/core/collection-navigation';
 import { findTypeaheadMatch } from '@vyrnforge/core/typeahead-matching';
-import type { FloatingPlacement } from '@vyrnforge/web/floating-positioning';
+import type { AnchorPlacement } from '@vyrnforge/web';
 
 function adjacentMenubarTrigger(
   trigger: HTMLElement | null,
@@ -65,7 +65,7 @@ interface MenuContext {
   setOpen(value: boolean): void;
   anchor: Ref<HTMLElement | null>;
   surface: Ref<HTMLElement | null>;
-  placement: Ref<FloatingPlacement>;
+  placement: Ref<AnchorPlacement>;
   focusMenu(edge: 'first' | 'last'): void;
   focusRequest: Ref<'first' | 'last' | null>;
   focusRevision: Ref<number>;
@@ -93,7 +93,7 @@ export const MenuRoot = defineComponent({
   props: {
     open: { type: Boolean as PropType<boolean | undefined>, default: undefined },
     defaultOpen: { type: Boolean, default: false },
-    placement: { type: String as PropType<FloatingPlacement>, default: 'bottom-start' },
+    placement: { type: String as PropType<AnchorPlacement>, default: 'bottom-start' },
   },
   emits: ['update:open'],
   setup(props, { slots, emit }) {

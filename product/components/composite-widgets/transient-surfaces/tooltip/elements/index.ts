@@ -1,4 +1,4 @@
-import type { FloatingPlacement } from '@vyrnforge/web/floating-positioning';
+import type { AnchorPlacement } from '@vyrnforge/web';
 
 const HTMLElementBase = (globalThis.HTMLElement ?? class {}) as typeof HTMLElement;
 let nextId = 0;
@@ -51,8 +51,8 @@ export class VfTooltipElement extends HTMLElementBase {
     this.toggleAttribute('open', value);
   }
 
-  get placement(): FloatingPlacement {
-    return (this.getAttribute('placement') as FloatingPlacement | null) ?? 'top';
+  get placement(): AnchorPlacement {
+    return (this.getAttribute('placement') as AnchorPlacement | null) ?? 'top';
   }
 
   #part(selector: string): HTMLElement | null {

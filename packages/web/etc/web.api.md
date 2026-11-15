@@ -4,6 +4,9 @@
 
 ```ts
 
+// @public
+export type AnchorPlacement = 'top' | 'bottom' | 'left' | 'right' | `${'top' | 'bottom' | 'left' | 'right'}-${'start' | 'end'}`;
+
 // (No @packageDocumentation comment for this package)
 
 ```
