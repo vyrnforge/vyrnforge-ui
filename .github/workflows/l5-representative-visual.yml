@@ -1,0 +1,17 @@
+name: L5 Representative Visual Evidence
+on:
+  push:
+    branches: [evidence/l5-visual-main-20261115]
+permissions:
+  contents: read
+jobs:
+  visual:
+    uses: ./.github/workflows/_browser-validation.yml
+    with:
+      scopes_json: '[{"port":"web","components":"tabs,popover,menu,multi-select,rating,number-field,pagination,split-panel,toast"},{"port":"react","components":"tabs,multi-select"}]'
+      revision: ${{ github.sha }}
+      browser_profile: cross
+      browsers: chromium firefox webkit
+      playwright_project: chromium
+      artifact_suffix: l5-visual-main
+      retention_days: 30
