@@ -8,6 +8,70 @@
     box-shadow: var(--vf-shadow-md);
   }
 
+  :where([data-vf-menu-content][popover]) {
+    position: fixed;
+    inset: auto;
+    margin: 0;
+    position-area: bottom span-right;
+    position-try-fallbacks:
+      flip-block,
+      flip-inline,
+      flip-block flip-inline;
+    inline-size: max-content;
+    min-inline-size: min(10rem, calc(100vw - 1rem));
+    max-block-size: calc(100vh - 1rem);
+    overflow: auto;
+    max-inline-size: min(24rem, calc(100vw - 1rem));
+  }
+  :where([data-vf-menu-content][popover][data-vf-placement='bottom']) {
+    position-area: bottom;
+  }
+  :where([data-vf-menu-content][popover][data-vf-placement='left']) {
+    position-area: left;
+  }
+  :where([data-vf-menu-content][popover][data-vf-placement='right']) {
+    position-area: right;
+  }
+  :where([data-vf-menu-content][popover][data-vf-placement='top-start']) {
+    position-area: top span-right;
+  }
+  :where([data-vf-menu-content][popover][data-vf-placement='top-end']) {
+    position-area: top span-left;
+  }
+  :where([data-vf-menu-content][popover][data-vf-placement='bottom-start']) {
+    position-area: bottom span-right;
+  }
+  :where([data-vf-menu-content][popover][data-vf-placement='bottom-end']) {
+    position-area: bottom span-left;
+  }
+  :where([data-vf-menu-content][popover][data-vf-placement='left-start']) {
+    position-area: left span-bottom;
+  }
+  :where([data-vf-menu-content][popover][data-vf-placement='left-end']) {
+    position-area: left span-top;
+  }
+  :where([data-vf-menu-content][popover][data-vf-placement='right-start']) {
+    position-area: right span-bottom;
+  }
+  :where([data-vf-menu-content][popover][data-vf-placement='right-end']) {
+    position-area: right span-top;
+  }
+  :where([data-vf-menu-content][popover][data-vf-placement='top-start']:dir(rtl)) {
+    position-area: top span-left;
+  }
+  :where([data-vf-menu-content][popover][data-vf-placement='top-end']:dir(rtl)) {
+    position-area: top span-right;
+  }
+  :where([data-vf-menu-content][popover][data-vf-placement='bottom-start']:dir(rtl)) {
+    position-area: bottom span-left;
+  }
+  :where([data-vf-menu-content][popover][data-vf-placement='bottom-end']:dir(rtl)) {
+    position-area: bottom span-right;
+  }
+  :where([data-vf-menu-content][popover][data-vf-placement='top']) {
+    position-area: top;
+  }
+
   :where([data-vf-menu-item], [data-vf-context-menu-item]) {
     display: flex;
     inline-size: 100%;

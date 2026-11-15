@@ -87,8 +87,28 @@ export function ContextMenuRoot({ children, open, defaultOpen = false, onOpenCha
 }
 
 export const ContextMenuTrigger = forwardRef<HTMLDivElement, ComponentPropsWithoutRef<'div'>>(
-  function ContextMenuTrigger({ onContextMenu, onKeyDown, ...props }, ref) {
+  function ContextMenuTrigger({ onContextMenu, onKeyDown, onPointerDown, onPointerUp, onPointerCancel, onPointerLeave, ...props }, ref) {
     const menu = useContextMenu();
+    const gesture = useRef({ pressed: false, pending: false, timer: null as ReturnType<typeof setTimeout> | null });
+    const openRef = useRef(() => {});
+    openRef.current = () => {
+      menu.anchorRef.current?.focus();
+      menu.setOpen(true);
+      menu.focusMenu('first');
+    };
+    const clear = () => {
+      if (gesture.current.timer !== null) clearTimeout(gesture.current.timer);
+      gesture.current = { pressed: false, pending: false, timer: null };
+    };
+    useEffect(() => clear, []);
+    function schedule() {
+      gesture.current.pending = false;
+      if (gesture.current.timer !== null) clearTimeout(gesture.current.timer);
+      gesture.current.timer = setTimeout(() => {
+        gesture.current.timer = null;
+        openRef.current();
+      }, 0);
+    }
     function invoke(event: React.SyntheticEvent<HTMLDivElement>) {
       if (
         event.defaultPrevented ||
@@ -97,9 +117,13 @@ export const ContextMenuTrigger = forwardRef<HTMLDivElement, ComponentPropsWitho
       )
         return;
       event.preventDefault();
-      event.currentTarget.focus();
-      menu.setOpen(true);
-      menu.focusMenu('first');
+      if (event.type === 'contextmenu') {
+        if (gesture.current.pressed) gesture.current.pending = true;
+        else schedule();
+      } else {
+        clear();
+        openRef.current();
+      }
     }
     return createElement('div', {
       ...props,
@@ -110,6 +134,20 @@ export const ContextMenuTrigger = forwardRef<HTMLDivElement, ComponentPropsWitho
         else if (ref) ref.current = node;
       },
       'data-vf-context-menu-trigger': '',
+      onPointerDown(event) {
+        onPointerDown?.(event);
+        if (event.button !== 2 || event.target instanceof Element && event.target.closest('[data-vf-context-menu-trigger]') !== event.currentTarget) return;
+        clear();
+        gesture.current.pressed = !event.defaultPrevented;
+      },
+      onPointerUp(event) {
+        onPointerUp?.(event);
+        if (event.button !== 2) return;
+        gesture.current.pressed = false;
+        if (gesture.current.pending) schedule();
+      },
+      onPointerCancel(event) { onPointerCancel?.(event); clear(); },
+      onPointerLeave(event) { onPointerLeave?.(event); if (gesture.current.pressed) clear(); },
       onContextMenu(event) {
         onContextMenu?.(event);
         invoke(event);

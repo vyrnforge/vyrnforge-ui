@@ -90,3 +90,16 @@ test('controlled framework ContextMenu reconciles rejected light dismissal', asy
   await expect(page.locator('#controlled-menu')).toBeVisible();
   expect(await page.locator('#controlled-menu').evaluate((node) => node.matches(':popover-open'))).toBe(true);
 });
+
+ test('secondary-button gesture opens after release without self-dismissal', async ({ page }) => {
+  test.skip(port === 'web', 'Managed runtime evidence.');
+  const target = page.locator('#target');
+  const box = await target.boundingBox();
+  if (!box) throw new Error('Missing context target.');
+  await page.mouse.move(box.x + box.width / 2, box.y + box.height / 2);
+  await page.mouse.down({ button: 'right' });
+  await expect(page.locator('#menu')).toBeHidden();
+  await page.mouse.up({ button: 'right' });
+  await expect(page.locator('#menu')).toBeVisible();
+  await expect(page.locator(item('open'))).toBeFocused();
+});

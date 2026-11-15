@@ -91,6 +91,26 @@ export const ContextMenuTrigger = defineComponent({
   inheritAttrs: false,
   setup(_, { attrs, slots }) {
     const menu = useContextMenu();
+    let pressed = false;
+    let pending = false;
+    let timer: ReturnType<typeof setTimeout> | null = null;
+    function clear() {
+      if (timer !== null) clearTimeout(timer);
+      timer = null;
+      pressed = false;
+      pending = false;
+    }
+    function open() {
+      menu.anchor.value?.focus();
+      menu.setOpen(true);
+      menu.focusMenu('first');
+    }
+    function schedule() {
+      pending = false;
+      if (timer !== null) clearTimeout(timer);
+      timer = setTimeout(() => { timer = null; open(); }, 0);
+    }
+    onBeforeUnmount(clear);
     function openMenu(event: Event) {
       const target = event.target;
       const trigger = event.currentTarget as HTMLElement;
@@ -101,9 +121,13 @@ export const ContextMenuTrigger = defineComponent({
       )
         return;
       event.preventDefault();
-      trigger.focus();
-      menu.setOpen(true);
-      menu.focusMenu('first');
+      if (event.type === 'contextmenu') {
+        if (pressed) pending = true;
+        else schedule();
+      } else {
+        clear();
+        open();
+      }
     }
     return () =>
       h(
@@ -115,6 +139,20 @@ export const ContextMenuTrigger = defineComponent({
             menu.anchor.value = node as HTMLElement | null;
           },
           'data-vf-context-menu-trigger': '',
+          onPointerdown(event: PointerEvent) {
+            invoke(attrs.onPointerdown, event);
+            if (event.button !== 2 || event.target instanceof Element && event.target.closest('[data-vf-context-menu-trigger]') !== event.currentTarget) return;
+            clear();
+            pressed = !event.defaultPrevented;
+          },
+          onPointerup(event: PointerEvent) {
+            invoke(attrs.onPointerup, event);
+            if (event.button !== 2) return;
+            pressed = false;
+            if (pending) schedule();
+          },
+          onPointercancel(event: PointerEvent) { invoke(attrs.onPointercancel, event); clear(); },
+          onPointerleave(event: PointerEvent) { invoke(attrs.onPointerleave, event); if (pressed) clear(); },
           onContextmenu(event: MouseEvent) {
             invoke(attrs.onContextmenu, event);
             openMenu(event);

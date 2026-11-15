@@ -25,11 +25,18 @@ export class VfContextMenuElement extends HTMLElementBase {
   private observer: MutationObserver | null = null;
   private query = '';
   private timer: ReturnType<typeof setTimeout> | null = null;
+  private pressed = false;
+  private pending = false;
+  private invocationTimer: ReturnType<typeof setTimeout> | null = null;
 
   connectedCallback() {
     this.setAttribute('data-vf-context-menu-root', '');
     this.sync();
     this.addEventListener('contextmenu', this.onContextMenu);
+    this.addEventListener('pointerdown', this.onPointerDown);
+    this.addEventListener('pointerup', this.onPointerUp);
+    this.addEventListener('pointercancel', this.clearInvocation);
+    this.addEventListener('pointerleave', this.onPointerLeave);
     this.addEventListener('click', this.onClick);
     this.addEventListener('keydown', this.onKeydown);
     if (typeof MutationObserver !== 'undefined') {
@@ -50,6 +57,11 @@ export class VfContextMenuElement extends HTMLElementBase {
 
   disconnectedCallback() {
     this.removeEventListener('contextmenu', this.onContextMenu);
+    this.removeEventListener('pointerdown', this.onPointerDown);
+    this.removeEventListener('pointerup', this.onPointerUp);
+    this.removeEventListener('pointercancel', this.clearInvocation);
+    this.removeEventListener('pointerleave', this.onPointerLeave);
+    this.clearInvocation();
     this.removeEventListener('click', this.onClick);
     this.removeEventListener('keydown', this.onKeydown);
     this.observer?.disconnect();
@@ -150,6 +162,34 @@ export class VfContextMenuElement extends HTMLElementBase {
     });
   }
 
+  private clearInvocation = (): void => {
+    if (this.invocationTimer !== null) clearTimeout(this.invocationTimer);
+    this.invocationTimer = null;
+    this.pressed = false;
+    this.pending = false;
+  };
+  private onPointerDown = (event: PointerEvent): void => {
+    if (event.button !== 2 || !(event.target instanceof Element) || event.target.closest(rootSelector) !== this || event.target.closest('[data-vf-context-menu-trigger]') !== this.trigger) return;
+    this.clearInvocation();
+    this.pressed = !event.defaultPrevented;
+  };
+  private onPointerUp = (event: PointerEvent): void => {
+    if (event.button !== 2) return;
+    this.pressed = false;
+    if (this.pending) this.scheduleInvocation();
+  };
+  private onPointerLeave = (): void => { if (this.pressed) this.clearInvocation(); };
+  private scheduleInvocation(): void {
+    this.pending = false;
+    if (this.invocationTimer !== null) clearTimeout(this.invocationTimer);
+    this.invocationTimer = setTimeout(() => { this.invocationTimer = null; this.openFromTrigger(); }, 0);
+  }
+  private openFromTrigger(): void {
+    if (!this.isConnected) return;
+    this.trigger?.focus();
+    this.setOpen(true);
+    this.focusMenu('first');
+  }
   private onContextMenu = (event: Event): void => {
     if (event.defaultPrevented || !(event.target instanceof Element)) return;
     const trigger = this.trigger;
@@ -160,9 +200,13 @@ export class VfContextMenuElement extends HTMLElementBase {
     )
       return;
     event.preventDefault();
-    trigger.focus();
-    this.setOpen(true);
-    this.focusMenu('first');
+    if (event.type === 'contextmenu') {
+      if (this.pressed) this.pending = true;
+      else this.scheduleInvocation();
+    } else {
+      this.clearInvocation();
+      this.openFromTrigger();
+    }
   };
 
   private onClick = (event: Event) => {

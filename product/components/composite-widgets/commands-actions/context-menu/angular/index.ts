@@ -67,10 +67,34 @@ export class VfContextMenuRootDirective {
 })
 export class VfContextMenuTriggerDirective {
   private readonly element = inject<ElementRef<HTMLElement>>(ElementRef).nativeElement;
+  private pressed = false;
+  private pending = false;
+  private timer: ReturnType<typeof setTimeout> | null = null;
   constructor(readonly root: VfContextMenuRootDirective) {
     const state = focusRequestFor(root);
     state.anchor = this.element;
+    const onDown = (event: PointerEvent) => {
+      if (event.button !== 2 || event.target instanceof Element && event.target.closest('[data-vf-context-menu-trigger]') !== this.element) return;
+      this.clear();
+      this.pressed = !event.defaultPrevented;
+    };
+    const onUp = (event: PointerEvent) => {
+      if (event.button !== 2) return;
+      this.pressed = false;
+      if (this.pending) this.schedule();
+    };
+    const onCancel = () => this.clear();
+    const onLeave = () => { if (this.pressed) this.clear(); };
+    this.element.addEventListener('pointerdown', onDown);
+    this.element.addEventListener('pointerup', onUp);
+    this.element.addEventListener('pointercancel', onCancel);
+    this.element.addEventListener('pointerleave', onLeave);
     inject(DestroyRef).onDestroy(() => {
+      this.clear();
+      this.element.removeEventListener('pointerdown', onDown);
+      this.element.removeEventListener('pointerup', onUp);
+      this.element.removeEventListener('pointercancel', onCancel);
+      this.element.removeEventListener('pointerleave', onLeave);
       if (state.anchor === this.element) state.anchor = null;
     });
   }
@@ -82,6 +106,27 @@ export class VfContextMenuTriggerDirective {
     )
       return;
     event.preventDefault();
+    if (event.type === 'contextmenu') {
+      if (this.pressed) this.pending = true;
+      else this.schedule();
+    } else {
+      this.clear();
+      this.open();
+    }
+  }
+  private clear(): void {
+    if (this.timer !== null) clearTimeout(this.timer);
+    this.timer = null;
+    this.pressed = false;
+    this.pending = false;
+  }
+  private schedule(): void {
+    this.pending = false;
+    if (this.timer !== null) clearTimeout(this.timer);
+    this.timer = setTimeout(() => { this.timer = null; this.open(); }, 0);
+  }
+  private open(): void {
+    if (!this.element.isConnected) return;
     this.element.focus();
     this.root.setOpen(true);
     const state = focusRequestFor(this.root);
