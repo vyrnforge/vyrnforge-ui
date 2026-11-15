@@ -1,0 +1,16 @@
+name: toast L5 cross-engine evidence
+on:
+  push:
+    branches: [evidence/l5-toast-reconnect-cross]
+permissions:
+  contents: read
+jobs:
+  browser:
+    uses: ./.github/workflows/_browser-validation.yml
+    with:
+      scopes_json: '[{"port":"elements","components":"toast"}]'
+      revision: ${{ github.sha }}
+      browser_profile: cross
+      browsers: chromium firefox webkit
+      artifact_suffix: toast-final-cross
+      retention_days: 14
