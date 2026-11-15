@@ -16,7 +16,9 @@ import { type FloatingPlacement } from '@vyrnforge/web/floating-positioning';
 
 const menuItemSelector = '[data-vf-menu-item]';
 function menuItems(root: HTMLElement): HTMLElement[] {
-  return Array.from(root.querySelectorAll<HTMLElement>(menuItemSelector)).filter((item) => item.closest('[data-vf-menu-content]') === root);
+  return Array.from(root.querySelectorAll<HTMLElement>(menuItemSelector)).filter(
+    (item) => item.closest('[data-vf-menu-content]') === root,
+  );
 }
 function itemFromTarget(root: HTMLElement, target: EventTarget | null): HTMLElement | null {
   const item = target instanceof HTMLElement ? target.closest<HTMLElement>(menuItemSelector) : null;
@@ -145,9 +147,12 @@ export const MenuContent = forwardRef<HTMLDivElement, MenuContentProps>(function
   const timer = useRef<ReturnType<typeof setTimeout> | null>(null);
   const [nativeRevision, setNativeRevision] = useState(0);
   const restoreFocus = useRef(false);
-  useEffect(() => () => {
-    if (timer.current !== null) clearTimeout(timer.current);
-  }, []);
+  useEffect(
+    () => () => {
+      if (timer.current !== null) clearTimeout(timer.current);
+    },
+    [],
+  );
   useEffect(() => {
     const surface = menu.surfaceRef.current;
     const trigger = menu.anchorRef.current;
@@ -192,7 +197,8 @@ export const MenuContent = forwardRef<HTMLDivElement, MenuContentProps>(function
       if (!actual && restoreFocus.current) {
         restoreFocus.current = false;
         const active = surface.ownerDocument.activeElement;
-        if (!active || active === surface.ownerDocument.body || surface.contains(active)) menu.anchorRef.current?.focus();
+        if (!active || active === surface.ownerDocument.body || surface.contains(active))
+          menu.anchorRef.current?.focus();
       }
       if (actual === menu.open) return;
       menu.setOpen(actual);
@@ -200,7 +206,12 @@ export const MenuContent = forwardRef<HTMLDivElement, MenuContentProps>(function
     },
     onKeyDown(event) {
       onKeyDown?.(event);
-      if (event.defaultPrevented || !(event.target instanceof HTMLElement) || event.target.closest('[data-vf-menu-content]') !== event.currentTarget) return;
+      if (
+        event.defaultPrevented ||
+        !(event.target instanceof HTMLElement) ||
+        event.target.closest('[data-vf-menu-content]') !== event.currentTarget
+      )
+        return;
       if (event.key === 'Escape') {
         event.preventDefault();
         menu.setOpen(false);

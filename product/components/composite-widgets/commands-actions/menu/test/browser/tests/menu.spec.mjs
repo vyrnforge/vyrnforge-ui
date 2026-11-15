@@ -125,7 +125,9 @@ test.describe('enhanced menu interaction', () => {
     const before = page.locator('#before');
     const after = page.locator('#after');
     // The controlled fixture is a separate example; remove it from sequential navigation for this assertion.
-    await page.locator('#controlled-trigger').evaluateAll((nodes) => nodes.forEach((node) => node.setAttribute('tabindex', '-1')));
+    await page
+      .locator('#controlled-trigger')
+      .evaluateAll((nodes) => nodes.forEach((node) => node.setAttribute('tabindex', '-1')));
     const trigger = page.locator(`#${port}-trigger`);
     const menu = page.locator(`#${port}-menu`);
     const edit = page.locator(`#${port}-edit`);
@@ -182,8 +184,9 @@ test('Elements menu events remain scoped to the owning nested menu', async ({ pa
   await expect(page.locator('#nested-trigger')).toBeFocused();
 });
 
-
-test('native Menu surface stays in its authored DOM and light-dismisses without stealing outside focus', async ({ page }) => {
+test('native Menu surface stays in its authored DOM and light-dismisses without stealing outside focus', async ({
+  page,
+}) => {
   await load(page);
   const trigger = page.locator(`#${port}-trigger`);
   const menu = page.locator(`#${port}-menu`);

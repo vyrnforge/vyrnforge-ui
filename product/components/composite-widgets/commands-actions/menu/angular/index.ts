@@ -15,7 +15,9 @@ import type { FloatingPlacement } from '@vyrnforge/web/floating-positioning';
 
 const menuItemSelector = '[data-vf-menu-item]';
 function menuItems(root: HTMLElement): HTMLElement[] {
-  return Array.from(root.querySelectorAll<HTMLElement>(menuItemSelector)).filter((item) => item.closest('[data-vf-menu-content]') === root);
+  return Array.from(root.querySelectorAll<HTMLElement>(menuItemSelector)).filter(
+    (item) => item.closest('[data-vf-menu-content]') === root,
+  );
 }
 function itemFromTarget(root: HTMLElement, target: EventTarget | null): HTMLElement | null {
   const item = target instanceof HTMLElement ? target.closest<HTMLElement>(menuItemSelector) : null;
@@ -51,7 +53,11 @@ export class VfMenuRootDirective {
     this.focusRequest = null;
     if (!edge || !this.expanded() || !this.surface?.matches(':popover-open')) return;
     const items = menuItems(this.surface);
-    const index = resolveNavigationIndex(items.map(() => ({})), edge === 'first' ? -1 : items.length, edge);
+    const index = resolveNavigationIndex(
+      items.map(() => ({})),
+      edge === 'first' ? -1 : items.length,
+      edge,
+    );
     if (index != null) items[index]?.focus();
   }
 }
@@ -158,7 +164,12 @@ export class VfMenuContentDirective implements OnDestroy {
     if (this.root.surface === this.element.nativeElement) this.root.surface = null;
   }
   onKeydown(event: KeyboardEvent) {
-    if (event.defaultPrevented || !(event.target instanceof HTMLElement) || event.target.closest('[data-vf-menu-content]') !== this.element.nativeElement) return;
+    if (
+      event.defaultPrevented ||
+      !(event.target instanceof HTMLElement) ||
+      event.target.closest('[data-vf-menu-content]') !== this.element.nativeElement
+    )
+      return;
     if (event.key === 'Escape') {
       event.preventDefault();
       this.root.setOpen(false);

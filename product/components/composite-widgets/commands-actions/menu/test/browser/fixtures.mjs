@@ -4,7 +4,12 @@ const before = '<button id="before" type="button">Before</button>';
 const after = '<button id="after" type="button" style="position: fixed; right: 16px; bottom: 16px">After</button>';
 
 function nativeItems(port, enhanced = false) {
-  return labels.map((label, index) => `<button id="${port}-${ids[index]}" type="button" ${enhanced ? '' : 'role="menuitem" tabindex="-1"'} data-vf-menu-item${index === 1 ? ' aria-disabled="true"' : ''}>${label}</button>`).join('');
+  return labels
+    .map(
+      (label, index) =>
+        `<button id="${port}-${ids[index]}" type="button" ${enhanced ? '' : 'role="menuitem" tabindex="-1"'} data-vf-menu-item${index === 1 ? ' aria-disabled="true"' : ''}>${label}</button>`,
+    )
+    .join('');
 }
 const web = `${before}<button id="web-trigger" type="button" data-vf-menu-trigger aria-haspopup="menu" aria-controls="web-menu" popovertarget="web-menu">Actions</button><div id="web-menu" role="menu" tabindex="-1" aria-label="Actions" data-vf-menu-content data-vf-placement="bottom-start" popover="auto">${nativeItems('web')}</div>${after}`;
 const elements = `${before}<vf-menu><button id="elements-trigger" type="button" data-vf-menu-trigger aria-haspopup="menu" aria-expanded="false">Actions</button><div id="elements-menu" data-vf-menu-content aria-label="Actions" hidden>${nativeItems('elements', true)}</div></vf-menu>${after}`;
@@ -21,9 +26,15 @@ export const browserFixture = {
     elements: { story: 'createElementsStory' },
   },
 };
-function selected(id) { document.body.dataset.selected = id; }
-function disabledClicked(id) { document.body.dataset.disabledClicked = id; }
-function ready() { document.body.dataset.menuReady = 'true'; }
+function selected(id) {
+  document.body.dataset.selected = id;
+}
+function disabledClicked(id) {
+  document.body.dataset.disabledClicked = id;
+}
+function ready() {
+  document.body.dataset.menuReady = 'true';
+}
 
 export async function createReactStory() {
   const { createElement: h, Fragment, useEffect, useState } = await import('react');
@@ -31,23 +42,53 @@ export async function createReactStory() {
   function App() {
     const [open, setOpen] = useState(false);
     useEffect(ready, []);
-    return h(Fragment, null,
+    return h(
+      Fragment,
+      null,
       h('button', { id: 'before', type: 'button' }, 'Before'),
-      h(MenuRoot, null,
+      h(
+        MenuRoot,
+        null,
         h(MenuTrigger, { id: 'react-trigger', 'aria-controls': 'react-menu' }, 'Actions'),
-        h(MenuContent, { id: 'react-menu', 'aria-label': 'Actions' }, ...labels.map((label, index) => h(MenuItem, {
-          key: ids[index], id: `react-${ids[index]}`, disabled: index === 1,
-          onClick: index === 1 ? () => disabledClicked('react-locked') : undefined,
-          onSelect: () => selected(`react-${ids[index]}`),
-        }, label))),
+        h(
+          MenuContent,
+          { id: 'react-menu', 'aria-label': 'Actions' },
+          ...labels.map((label, index) =>
+            h(
+              MenuItem,
+              {
+                key: ids[index],
+                id: `react-${ids[index]}`,
+                disabled: index === 1,
+                onClick: index === 1 ? () => disabledClicked('react-locked') : undefined,
+                onSelect: () => selected(`react-${ids[index]}`),
+              },
+              label,
+            ),
+          ),
+        ),
       ),
-      h(MenuRoot, { open, onOpenChange(next) { document.body.dataset.menuRequest = String(next); if (next) setOpen(true); } },
+      h(
+        MenuRoot,
+        {
+          open,
+          onOpenChange(next) {
+            document.body.dataset.menuRequest = String(next);
+            if (next) setOpen(true);
+          },
+        },
         h(MenuTrigger, { id: 'controlled-trigger', 'aria-controls': 'controlled-menu' }, 'Controlled'),
-        h(MenuContent, { id: 'controlled-menu', 'aria-label': 'Controlled actions' },
+        h(
+          MenuContent,
+          { id: 'controlled-menu', 'aria-label': 'Controlled actions' },
           h(MenuItem, { id: 'controlled-item' }, 'Action'),
         ),
       ),
-      h('button', { id: 'after', type: 'button', style: { position: 'fixed', right: '16px', bottom: '16px' } }, 'After'),
+      h(
+        'button',
+        { id: 'after', type: 'button', style: { position: 'fixed', right: '16px', bottom: '16px' } },
+        'After',
+      ),
     );
   }
   return h(App);
@@ -60,22 +101,49 @@ export async function createVueStory() {
     setup() {
       const open = ref(false);
       onMounted(ready);
-      return () => h('div', [
-        h('button', { id: 'before', type: 'button' }, 'Before'),
-        h(MenuRoot, {}, () => [
-          h(MenuTrigger, { id: 'vue-trigger', 'aria-controls': 'vue-menu' }, () => 'Actions'),
-          h(MenuContent, { id: 'vue-menu', 'aria-label': 'Actions' }, () => labels.map((label, index) => h(MenuItem, {
-            key: ids[index], id: `vue-${ids[index]}`, disabled: index === 1,
-            onClick: index === 1 ? () => disabledClicked('vue-locked') : undefined,
-            onSelect: () => selected(`vue-${ids[index]}`),
-          }, () => label))),
-        ]),
-        h(MenuRoot, { open: open.value, 'onUpdate:open': (next) => { document.body.dataset.menuRequest = String(next); if (next) open.value = true; } }, () => [
-          h(MenuTrigger, { id: 'controlled-trigger', 'aria-controls': 'controlled-menu' }, () => 'Controlled'),
-          h(MenuContent, { id: 'controlled-menu', 'aria-label': 'Controlled actions' }, () => h(MenuItem, { id: 'controlled-item' }, () => 'Action')),
-        ]),
-        h('button', { id: 'after', type: 'button', style: { position: 'fixed', right: '16px', bottom: '16px' } }, 'After'),
-      ]);
+      return () =>
+        h('div', [
+          h('button', { id: 'before', type: 'button' }, 'Before'),
+          h(MenuRoot, {}, () => [
+            h(MenuTrigger, { id: 'vue-trigger', 'aria-controls': 'vue-menu' }, () => 'Actions'),
+            h(MenuContent, { id: 'vue-menu', 'aria-label': 'Actions' }, () =>
+              labels.map((label, index) =>
+                h(
+                  MenuItem,
+                  {
+                    key: ids[index],
+                    id: `vue-${ids[index]}`,
+                    disabled: index === 1,
+                    onClick: index === 1 ? () => disabledClicked('vue-locked') : undefined,
+                    onSelect: () => selected(`vue-${ids[index]}`),
+                  },
+                  () => label,
+                ),
+              ),
+            ),
+          ]),
+          h(
+            MenuRoot,
+            {
+              open: open.value,
+              'onUpdate:open': (next) => {
+                document.body.dataset.menuRequest = String(next);
+                if (next) open.value = true;
+              },
+            },
+            () => [
+              h(MenuTrigger, { id: 'controlled-trigger', 'aria-controls': 'controlled-menu' }, () => 'Controlled'),
+              h(MenuContent, { id: 'controlled-menu', 'aria-label': 'Controlled actions' }, () =>
+                h(MenuItem, { id: 'controlled-item' }, () => 'Action'),
+              ),
+            ],
+          ),
+          h(
+            'button',
+            { id: 'after', type: 'button', style: { position: 'fixed', right: '16px', bottom: '16px' } },
+            'After',
+          ),
+        ]);
     },
   });
 }
@@ -83,12 +151,18 @@ export async function createVueStory() {
 export async function createAngularStory() {
   await import('@angular/compiler');
   const { Component, afterNextRender, signal } = await import('@angular/core');
-  const { VfMenuRootDirective, VfMenuTriggerDirective, VfMenuContentDirective, VfMenuItemDirective } = await import('@vyrnforge/angular/menu');
+  const { VfMenuRootDirective, VfMenuTriggerDirective, VfMenuContentDirective, VfMenuItemDirective } =
+    await import('@vyrnforge/angular/menu');
   class MenuTestApp {
     controlled = signal(false);
-    constructor() { afterNextRender(ready); }
+    constructor() {
+      afterNextRender(ready);
+    }
     selected = selected;
-    request(next) { document.body.dataset.menuRequest = String(next); if (next) this.controlled.set(true); }
+    request(next) {
+      document.body.dataset.menuRequest = String(next);
+      if (next) this.controlled.set(true);
+    }
   }
   Component({
     selector: 'vf-menu-test',
@@ -102,11 +176,13 @@ export async function createAngularStory() {
 export async function createElementsStory({ client }) {
   return {
     body: elements,
-    activate: client ? async () => {
-      const { defineMenuElement } = await import('@vyrnforge/elements/menu');
-      defineMenuElement();
-      document.querySelector('vf-menu').addEventListener('vf-select', (event) => selected(event.detail.item.id));
-      ready();
-    } : undefined,
+    activate: client
+      ? async () => {
+          const { defineMenuElement } = await import('@vyrnforge/elements/menu');
+          defineMenuElement();
+          document.querySelector('vf-menu').addEventListener('vf-select', (event) => selected(event.detail.item.id));
+          ready();
+        }
+      : undefined,
   };
 }
