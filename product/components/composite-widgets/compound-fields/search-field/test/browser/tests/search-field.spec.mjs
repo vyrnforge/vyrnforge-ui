@@ -138,3 +138,50 @@ test('STD-08 list explorer preserves committed criteria, history, IME, stale-res
 
   expect((await expectNoAxeViolations(page)).violations).toEqual([]);
 });
+
+test('native form reset restores the initial search query without emitting a query intent', async ({ page }) => {
+  await page.goto(`/components/search-field/${port}.html`);
+  const input = page.locator('#search');
+  const form = page.locator('#search-form');
+  await input.fill('changed');
+  await expect(input).toHaveValue('changed');
+  await form.evaluate(async (element) => {
+    element.addEventListener('reset', (event) => event.preventDefault(), { once: true });
+    element.reset();
+    await new Promise((resolve) => { setTimeout(resolve, 0); });
+  });
+  await expect(input).toHaveValue('changed');
+  await page.getByRole('button', { name: 'Reset search' }).click();
+  await expect(input).toHaveValue('forge');
+  expect(await form.evaluate((element) => new FormData(element).get('query'))).toBe('forge');
+  if (['react', 'vue', 'angular'].includes(port)) {
+    await expect(page.locator('body')).toHaveAttribute('data-requested', 'changed');
+  }
+  await page.locator('#clear').click();
+  await expect(input).toHaveValue('');
+  await expect(input).toBeFocused();
+  await input.fill('changed');
+  if (['react', 'vue', 'angular'].includes(port)) {
+    await expect(page.locator('body')).toHaveAttribute('data-requested', 'changed');
+  }
+});
+
+test('controlled query rejection and reset preserve the consumer value', async ({ page }) => {
+  test.skip(!['react', 'vue', 'angular'].includes(port), 'Managed query contract.');
+  await page.goto(`/components/search-field/${port}.html`);
+  const input = page.locator('#controlled');
+  await expect(input).toHaveValue('committed');
+  await input.fill('rejected');
+  await expect(page.locator('body')).toHaveAttribute('data-requested', 'rejected');
+  await expect(input).toHaveValue('committed');
+  await page.locator('#update-controlled').click();
+  await expect(input).toHaveValue('latest');
+  await page.getByRole('button', { name: 'Reset controlled' }).click();
+  await expect(input).toHaveValue('latest');
+  expect(await page.locator('#controlled-form').evaluate((element) => new FormData(element).get('query'))).toBe('latest');
+  await expect(page.locator('body')).toHaveAttribute('data-requested', 'rejected');
+  await page.locator('#controlled-clear').click();
+  await expect(page.locator('body')).toHaveAttribute('data-requested', '');
+  await expect(input).toHaveValue('latest');
+  await expect(input).toBeFocused();
+});

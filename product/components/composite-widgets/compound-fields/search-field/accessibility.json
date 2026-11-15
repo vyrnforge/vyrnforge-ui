@@ -9,7 +9,15 @@
   "wcag": {
     "target": "2.2 AA",
     "status": "mapped",
-    "criteria": ["1.3.1", "2.1.1", "2.4.3", "2.4.7", "2.5.3", "3.3.2", "4.1.2"]
+    "criteria": [
+      "1.3.1",
+      "2.1.1",
+      "2.4.3",
+      "2.4.7",
+      "2.5.3",
+      "3.3.2",
+      "4.1.2"
+    ]
   },
   "aria": {
     "status": "mapped",
@@ -24,23 +32,34 @@
     "library": [
       "provide search-landmark semantics while preserving native input and button behavior",
       "clear the query and restore focus to the input when an accepted clear action runs",
-      "do not mutate disabled or read-only native input state or run a canceled clear action"
+      "do not mutate disabled or read-only native input state or run a canceled clear action",
+      "keep the root query authoritative; reconcile rejected, canceled, disabled and read-only native edits",
+      "restore the initial uncontrolled query or latest controlled query on native form reset without emitting a query change intent"
     ],
     "consumer": [
       "author localized accessible names for the search input and icon-only clear control",
       "own submit/immediate query policy, routing, results, filtering, sorting, persistence, and data services"
     ]
   },
-  "forms": { "status": "native" },
-  "visualAccessibility": { "status": "component-specific" },
-  "ssrHydration": { "status": "contract-required" },
+  "forms": {
+    "status": "native"
+  },
+  "visualAccessibility": {
+    "status": "component-specific"
+  },
+  "ssrHydration": {
+    "status": "contract-required"
+  },
   "evidence": {
     "browser": "required",
     "assistiveTechnology": "not-applicable"
   },
-  "profileVariability": ["controlled-or-uncontrolled-query"],
+  "profileVariability": [
+    "controlled-or-uncontrolled-query"
+  ],
   "notes": [
     "SearchField does not define an APG combobox/autocomplete interaction; suggestions and selection remain separate patterns.",
-    "Authored naming, native semantics, IME handling at the consuming workflow, and clear-focus restoration are covered by structural/browser evidence rather than a component-specific spoken-announcement claim."
+    "Authored naming, native semantics, IME handling at the consuming workflow, and clear-focus restoration are covered by structural/browser evidence rather than a component-specific spoken-announcement claim.",
+    "Managed ports own query value and initial value on SearchFieldRoot; SearchFieldInput is the native editing surface, not a second query owner."
   ]
 }

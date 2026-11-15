@@ -3,6 +3,8 @@ import {
   createElement,
   forwardRef,
   useContext,
+  useEffect,
+  useLayoutEffect,
   useRef,
   useState,
   type ComponentPropsWithoutRef,
@@ -11,6 +13,8 @@ import {
 interface Ctx {
   value: string;
   set(v: string): void;
+  resetValue: string;
+  reset(): string;
   inputRef: React.MutableRefObject<HTMLInputElement | null>;
 }
 const C = createContext<Ctx | null>(null);
@@ -29,22 +33,48 @@ export const SearchFieldRoot = forwardRef<HTMLDivElement, SearchFieldRootProps>(
   { value, defaultValue = '', onValueChange, children, ...props },
   ref,
 ) {
-  const [iv, setIv] = useState(defaultValue);
+  const initial = useRef(defaultValue);
+  const [iv, setIv] = useState(initial.current);
   const inputRef = useRef<HTMLInputElement | null>(null);
   const current = value ?? iv;
   const set = (v: string) => {
+    if (v === current) return;
     if (value === undefined) setIv(v);
     onValueChange?.(v);
   };
   return createElement(
     C.Provider,
-    { value: { value: current, set, inputRef } },
+    { value: { value: current, set, inputRef, resetValue: value ?? initial.current, reset: () => { if (value === undefined) setIv(initial.current); return value ?? initial.current; } } },
     createElement('div', { ...props, ref, role: 'search', 'data-vf-search-field-root': '' }, children),
   );
 });
-export const SearchFieldInput = forwardRef<HTMLInputElement, ComponentPropsWithoutRef<'input'>>(
+export type SearchFieldInputProps = Omit<ComponentPropsWithoutRef<'input'>, 'type' | 'value' | 'defaultValue'>;
+export const SearchFieldInput = forwardRef<HTMLInputElement, SearchFieldInputProps>(
   function SearchFieldInput(props, ref) {
     const s = useS();
+    const reset = useRef(s.reset);
+    useLayoutEffect(() => {
+      reset.current = s.reset;
+      if (s.inputRef.current) s.inputRef.current.defaultValue = s.resetValue;
+    });
+    useEffect(() => {
+      const element = s.inputRef.current;
+      if (!element) return;
+      const document = element.ownerDocument;
+      let active = true;
+      const onReset = (event: Event) => {
+        if (!element.form || element.form !== event.target) return;
+        setTimeout(() => {
+          if (!active || event.defaultPrevented || element.form !== event.target) return;
+          element.value = reset.current();
+        }, 0);
+      };
+      document.addEventListener('reset', onReset, true);
+      return () => {
+        active = false;
+        document.removeEventListener('reset', onReset, true);
+      };
+    }, [s.inputRef]);
     return createElement('input', {
       ...props,
       ref(n) {
@@ -53,11 +83,11 @@ export const SearchFieldInput = forwardRef<HTMLInputElement, ComponentPropsWitho
         else if (ref) ref.current = n;
       },
       type: 'search',
-      value: props.value ?? s.value,
+      value: s.value,
       'data-vf-search-field-input': '',
       onChange: (e) => {
         props.onChange?.(e);
-        if (!e.defaultPrevented) s.set(e.currentTarget.value);
+        if (!e.defaultPrevented && !e.currentTarget.readOnly && !e.currentTarget.matches(':disabled')) s.set(e.currentTarget.value);
       },
     });
   },
