@@ -21,22 +21,34 @@ export const browserFixture = {
         import '@vyrnforge/web/styles/tokens.css';
         import '@vyrnforge/web/styles/password-field.css';
         const mount = document.querySelector('#root');
-        createRoot(mount).render(createElement(PasswordFieldRoot, null,
-          createElement(PasswordFieldInput, { id: 'password', 'aria-label': 'Mot de passe', defaultValue: 's3cret', autoComplete: 'current-password' }),
-          createElement(PasswordFieldToggle, { id: 'toggle', showLabel: 'Visibilité du mot de passe : afficher', hideLabel: 'Visibilité du mot de passe : masquer' })
+        const field = (id, options, label, showLabel, hideLabel, name) => createElement(PasswordFieldRoot, { ...options, id: id + '-root' },
+          createElement(PasswordFieldInput, { id, name, 'aria-label': label, defaultValue: 's3cret', autoComplete: 'current-password' }),
+          createElement(PasswordFieldToggle, { id: id + '-toggle', showLabel, hideLabel })
+        );
+        createRoot(mount).render(createElement('div', null,
+          field('password', {}, 'Mot de passe', '${showLabel}', '${hideLabel}', 'password'),
+          field('controlled-password', { visible: false, onVisibleChange: (v) => { document.body.dataset.requested = String(v); } }, 'Controlled password', 'Show controlled password', 'Hide controlled password'),
+          field('default-password', { defaultVisible: true }, 'Default password', 'Show default password', 'Hide default password'),
+          field('disabled-password', { disabled: true }, 'Disabled password', 'Show disabled password', 'Hide disabled password')
         ));
       `,
       vue: `
         import { createApp, h } from 'vue';
         import { PasswordFieldInput, PasswordFieldRoot, PasswordFieldToggle } from '@vyrnforge/vue/password-field';
+        const field = (id, options, label, showLabel, hideLabel, name) => h(PasswordFieldRoot, { ...options, id: id + '-root' }, {
+          default: () => [
+            h(PasswordFieldInput, { id, name, 'aria-label': label, value: 's3cret', autocomplete: 'current-password' }),
+            h(PasswordFieldToggle, { id: id + '-toggle', showLabel, hideLabel })
+          ]
+        });
         createApp({
           render() {
-            return h(PasswordFieldRoot, null, {
-              default: () => [
-                h(PasswordFieldInput, { id: 'password', 'aria-label': 'Mot de passe', value: 's3cret', autocomplete: 'current-password' }),
-                h(PasswordFieldToggle, { id: 'toggle', showLabel: 'Visibilité du mot de passe : afficher', hideLabel: 'Visibilité du mot de passe : masquer' })
-              ]
-            });
+            return h('div', null, [
+              field('password', {}, 'Mot de passe', '${showLabel}', '${hideLabel}', 'password'),
+              field('controlled-password', { visible: false, 'onUpdate:visible': (v) => { document.body.dataset.requested = String(v); } }, 'Controlled password', 'Show controlled password', 'Hide controlled password'),
+              field('default-password', { defaultVisible: true }, 'Default password', 'Show default password', 'Hide default password'),
+              field('disabled-password', { disabled: true }, 'Disabled password', 'Show disabled password', 'Hide disabled password')
+            ]);
           }
         }).mount('#root');
       `,
@@ -51,11 +63,25 @@ export const browserFixture = {
           standalone: true,
           imports: [VfPasswordFieldRootDirective, VfPasswordFieldInputDirective, VfPasswordFieldToggleDirective],
           template: \`<div vfPasswordFieldRoot>
-            <input id="password" vfPasswordFieldInput aria-label="Mot de passe" value="s3cret" autocomplete="current-password">
+            <input id="password" name="password" vfPasswordFieldInput aria-label="Mot de passe" value="s3cret" autocomplete="current-password">
             <button id="toggle" vfPasswordFieldToggle showLabel="${showLabel}" hideLabel="${hideLabel}">Visibilité du mot de passe</button>
+          </div>
+          <div vfPasswordFieldRoot [visible]="false" (visibleChange)="request($event)">
+            <input vfPasswordFieldInput aria-label="Controlled password" value="s3cret" autocomplete="current-password">
+            <button vfPasswordFieldToggle showLabel="Show controlled password" hideLabel="Hide controlled password">Controlled password visibility</button>
+          </div>
+          <div vfPasswordFieldRoot [defaultVisible]="true">
+            <input vfPasswordFieldInput aria-label="Default password" value="s3cret" autocomplete="current-password">
+            <button vfPasswordFieldToggle showLabel="Show default password" hideLabel="Hide default password">Default password visibility</button>
+          </div>
+          <div vfPasswordFieldRoot [disabled]="true">
+            <input vfPasswordFieldInput aria-label="Disabled password" value="s3cret" autocomplete="current-password">
+            <button vfPasswordFieldToggle showLabel="Show disabled password" hideLabel="Hide disabled password">Disabled password visibility</button>
           </div>\`
         })
-        class PasswordFixture {}
+        class PasswordFixture {
+          request(value) { document.body.dataset.requested = String(value); }
+        }
 
         bootstrapApplication(PasswordFixture);
       `,
@@ -63,7 +89,7 @@ export const browserFixture = {
         import { definePasswordFieldElement } from '@vyrnforge/elements/password-field';
         const mount = document.querySelector('#root');
         mount.innerHTML = \`<vf-password-field show-label="${showLabel}" hide-label="${hideLabel}">
-          <input id="password" data-vf-password-field-input type="password" aria-label="Mot de passe" value="s3cret" autocomplete="current-password">
+          <input id="password" name="password" data-vf-password-field-input type="password" aria-label="Mot de passe" value="s3cret" autocomplete="current-password">
           <button id="toggle" data-vf-password-field-toggle type="button">Visibilité du mot de passe</button>
         </vf-password-field>\`;
         definePasswordFieldElement();
@@ -91,7 +117,7 @@ export const browserFixture = {
     const stylesheet = port === 'react' ? '<link rel="stylesheet" href="./react.css">' : '';
     await writeFile(
       path.join(dir, `${port}.html`),
-      `<!doctype html><html lang="fr"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width"><title>Password field browser fixture</title>${stylesheet}</head><body><main><h1>Password field browser fixture</h1>${mount}</main><script type="module" src="./${port}.js"></script></body></html>`,
+      `<!doctype html><html lang="fr"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width"><title>Password field browser fixture</title>${stylesheet}</head><body><main><h1>Password field browser fixture</h1><form id="credential-form">${mount}</form></main><script type="module" src="./${port}.js"></script></body></html>`,
     );
 
     if (port === 'react') {
