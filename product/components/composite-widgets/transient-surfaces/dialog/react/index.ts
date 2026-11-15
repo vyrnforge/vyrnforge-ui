@@ -59,10 +59,18 @@ function canRestoreFocus(element: HTMLElement | null): element is HTMLElement {
   return Boolean(element?.isConnected && !element.hasAttribute('disabled') && !element.closest('[inert]'));
 }
 
-function isBackdropHit(event: { target: EventTarget | null; currentTarget: EventTarget | null; button: number; clientX: number; clientY: number }): boolean {
+function isBackdropHit(event: {
+  target: EventTarget | null;
+  currentTarget: EventTarget | null;
+  button: number;
+  clientX: number;
+  clientY: number;
+}): boolean {
   if (event.target !== event.currentTarget || event.button !== 0) return false;
   const rect = (event.currentTarget as HTMLDialogElement).getBoundingClientRect();
-  return event.clientX < rect.left || event.clientX > rect.right || event.clientY < rect.top || event.clientY > rect.bottom;
+  return (
+    event.clientX < rect.left || event.clientX > rect.right || event.clientY < rect.top || event.clientY > rect.bottom
+  );
 }
 
 export interface DialogRootProps extends Omit<
@@ -147,7 +155,11 @@ export const DialogRoot = forwardRef<HTMLDialogElement, DialogRootProps>(functio
       const restoreTarget = restoreTargetRef.current;
       restoreTargetRef.current = null;
       const focused = activeDialog.ownerDocument.activeElement;
-      if (canRestoreFocus(restoreTarget) && (!focused || focused === activeDialog.ownerDocument.body || activeDialog.contains(focused))) restoreTarget.focus();
+      if (
+        canRestoreFocus(restoreTarget) &&
+        (!focused || focused === activeDialog.ownerDocument.body || activeDialog.contains(focused))
+      )
+        restoreTarget.focus();
     }
 
     function handleCancel(event: Event) {

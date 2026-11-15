@@ -38,7 +38,9 @@ export async function createReactStory({ client }) {
         {
           id: 'react-dialog',
           open,
-          onOpenChange: (value) => { if (!client || document.body.dataset.rejectClose !== 'true') setOpen(value); },
+          onOpenChange: (value) => {
+            if (!client || document.body.dataset.rejectClose !== 'true') setOpen(value);
+          },
           backdropDismiss: true,
           descriptionId: 'react-dialog-description',
           initialFocusRef: initialRef,
@@ -178,7 +180,11 @@ export async function createVueStory({ client }) {
                       childOpen.value = value;
                     },
                   },
-                  () => [h(DialogTitle, {}, () => 'Child dialog'), h(DialogBody, {}, () => 'Child content'), h(DialogClose, {id:'vue-child-close'}, () => 'Close child')],
+                  () => [
+                    h(DialogTitle, {}, () => 'Child dialog'),
+                    h(DialogBody, {}, () => 'Child content'),
+                    h(DialogClose, { id: 'vue-child-close' }, () => 'Close child'),
+                  ],
                 ),
               ]),
             ],
@@ -207,7 +213,9 @@ export async function createAngularStory({ client }) {
     parentOpen = signal(false);
     childOpen = signal(false);
 
-    changed(value) { if (!client || document.body.dataset.rejectClose !== 'true') this.open.set(value); }
+    changed(value) {
+      if (!client || document.body.dataset.rejectClose !== 'true') this.open.set(value);
+    }
 
     dismissed(request) {
       if (client) document.body.dataset.dismissReason = request.reason;

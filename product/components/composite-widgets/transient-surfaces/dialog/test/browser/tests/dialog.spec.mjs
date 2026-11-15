@@ -128,15 +128,23 @@ test('modal interior padding is not backdrop and rejected dismissal retains the 
   await page.mouse.click(box.x + 3, box.y + 3);
   await expect(dialog).toHaveAttribute('open', '');
   await expect(page.locator('body')).not.toHaveAttribute('data-dismiss-reason', /.+/);
-  await page.locator('body').evaluate(body => { body.dataset.rejectClose = 'true'; });
+  await page.locator('body').evaluate((body) => {
+    body.dataset.rejectClose = 'true';
+  });
   await page.keyboard.press('Escape');
   await expect(dialog).toHaveAttribute('open', '');
   await expect(page.locator('body')).toHaveAttribute('data-dismiss-reason', 'escape');
   await page.locator(`#${port}-close`).click();
   await expect(dialog).toHaveAttribute('open', '');
   await expect(page.locator('body')).toHaveAttribute('data-dismiss-reason', 'close-control');
-  await page.locator('body').evaluate(body => { delete body.dataset.rejectClose; });
-  await page.locator(`#${port}-close`).evaluate(button => button.addEventListener('click', event => event.preventDefault(), { once: true, capture: true }));
+  await page.locator('body').evaluate((body) => {
+    delete body.dataset.rejectClose;
+  });
+  await page
+    .locator(`#${port}-close`)
+    .evaluate((button) =>
+      button.addEventListener('click', (event) => event.preventDefault(), { once: true, capture: true }),
+    );
   await page.locator(`#${port}-close`).click();
   await expect(dialog).toHaveAttribute('open', '');
   await page.locator(`#${port}-close`).click();

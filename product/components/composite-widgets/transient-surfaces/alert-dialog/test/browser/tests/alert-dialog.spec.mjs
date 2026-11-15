@@ -4,55 +4,61 @@ const port = process.env.VF_COMPONENT_PORT || 'react';
 
 async function openFixture(page) {
   await page.goto(`/components/alert-dialog/${port}.html`);
-  if(port==='elements')await expect(page.locator('body')).toHaveAttribute('data-modal-ready','true');
-  const trigger=page.locator('#trigger');
-  const modal=page.locator('#modal');
-  await expect(modal).not.toHaveAttribute('open','');
+  if (port === 'elements') await expect(page.locator('body')).toHaveAttribute('data-modal-ready', 'true');
+  const trigger = page.locator('#trigger');
+  const modal = page.locator('#modal');
+  await expect(modal).not.toHaveAttribute('open', '');
   await trigger.click();
-  await expect(modal).toHaveAttribute('open','');
-  expect(await modal.evaluate(el=>el.matches(':modal'))).toBe(true);
-  await expect(page.getByRole('alertdialog',{name:'Confirm changes',exact:true})).toBeVisible();
+  await expect(modal).toHaveAttribute('open', '');
+  expect(await modal.evaluate((el) => el.matches(':modal'))).toBe(true);
+  await expect(page.getByRole('alertdialog', { name: 'Confirm changes', exact: true })).toBeVisible();
   await expect(page.locator('#close')).toBeFocused();
-  return {modal,trigger};
+  return { modal, trigger };
 }
 
-test('alert-dialog public ports preserve native modality, naming, dismissal and focus',async({page})=>{
-  const {modal,trigger}=await openFixture(page);
-  expect(await modal.evaluate(el=>!!el.ownerDocument.getElementById(el.getAttribute('aria-describedby')))).toBe(true);
+test('alert-dialog public ports preserve native modality, naming, dismissal and focus', async ({ page }) => {
+  const { modal, trigger } = await openFixture(page);
+  expect(await modal.evaluate((el) => !!el.ownerDocument.getElementById(el.getAttribute('aria-describedby')))).toBe(
+    true,
+  );
   expect((await expectNoAxeViolations(page)).violations).toEqual([]);
   await page.keyboard.press('Escape');
-  await expect(modal).not.toHaveAttribute('open','');
+  await expect(modal).not.toHaveAttribute('open', '');
   await expect(trigger).toBeFocused();
-  if(port!=='web')await expect(page.locator('body')).toHaveAttribute('data-dismiss-reason','escape');
+  if (port !== 'web') await expect(page.locator('body')).toHaveAttribute('data-dismiss-reason', 'escape');
   await trigger.click();
   await page.locator('#close').click();
-  await expect(modal).not.toHaveAttribute('open','');
+  await expect(modal).not.toHaveAttribute('open', '');
   await expect(trigger).toBeFocused();
 });
 
-test('alert-dialog controlled rejection keeps committed native modality',async({page})=>{
-  test.skip(port==='web','Native authored baseline has no framework owner.');
-  const {modal}=await openFixture(page);
-  await page.locator('body').evaluate(body=>{body.dataset.rejectClose='true';});
+test('alert-dialog controlled rejection keeps committed native modality', async ({ page }) => {
+  test.skip(port === 'web', 'Native authored baseline has no framework owner.');
+  const { modal } = await openFixture(page);
+  await page.locator('body').evaluate((body) => {
+    body.dataset.rejectClose = 'true';
+  });
   await page.keyboard.press('Escape');
-  await expect(modal).toHaveAttribute('open','');
-  await expect(page.locator('body')).toHaveAttribute('data-dismiss-reason','escape');
+  await expect(modal).toHaveAttribute('open', '');
+  await expect(page.locator('body')).toHaveAttribute('data-dismiss-reason', 'escape');
   await page.locator('#close').click();
-  await expect(modal).toHaveAttribute('open','');
-  await page.locator('body').evaluate(body=>{delete body.dataset.rejectClose;});
+  await expect(modal).toHaveAttribute('open', '');
+  await page.locator('body').evaluate((body) => {
+    delete body.dataset.rejectClose;
+  });
   await page.locator('#close').click();
-  await expect(modal).not.toHaveAttribute('open','');
+  await expect(modal).not.toHaveAttribute('open', '');
 });
 
-test('AlertDialog backdrop never dismisses or commits a decision',async({page})=>{
-  const {modal}=await openFixture(page);
-  await page.mouse.click(3,3);
-  await expect(modal).toHaveAttribute('open','');
-  await expect(page.locator('body')).not.toHaveAttribute('data-dismiss-reason',/.+/);
-  if(port==='elements'){
-    await page.locator('#owner').evaluate(el=>el.setAttribute('backdrop-dismiss',''));
-    await page.mouse.click(3,3);
-    await expect(modal).toHaveAttribute('open','');
+test('AlertDialog backdrop never dismisses or commits a decision', async ({ page }) => {
+  const { modal } = await openFixture(page);
+  await page.mouse.click(3, 3);
+  await expect(modal).toHaveAttribute('open', '');
+  await expect(page.locator('body')).not.toHaveAttribute('data-dismiss-reason', /.+/);
+  if (port === 'elements') {
+    await page.locator('#owner').evaluate((el) => el.setAttribute('backdrop-dismiss', ''));
+    await page.mouse.click(3, 3);
+    await expect(modal).toHaveAttribute('open', '');
   }
 });
 

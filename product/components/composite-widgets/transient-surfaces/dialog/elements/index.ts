@@ -12,7 +12,9 @@ function canRestoreFocus(element: HTMLElement | null): element is HTMLElement {
 function isBackdropHit(event: MouseEvent | PointerEvent): boolean {
   if (event.target !== event.currentTarget || event.button !== 0) return false;
   const rect = (event.currentTarget as HTMLDialogElement).getBoundingClientRect();
-  return event.clientX < rect.left || event.clientX > rect.right || event.clientY < rect.top || event.clientY > rect.bottom;
+  return (
+    event.clientX < rect.left || event.clientX > rect.right || event.clientY < rect.top || event.clientY > rect.bottom
+  );
 }
 
 const modalOwner = 'vf-dialog,vf-drawer,vf-alert-dialog';
@@ -43,7 +45,11 @@ export class VfDialogElement extends HTMLElementBase {
     if (this.isConnected) this.#sync();
   }
   get dialog(): HTMLDialogElement | null {
-    return Array.from(this.querySelectorAll<HTMLDialogElement>('dialog')).find(dialog => dialog.closest(modalOwner) === this) ?? null;
+    return (
+      Array.from(this.querySelectorAll<HTMLDialogElement>('dialog')).find(
+        (dialog) => dialog.closest(modalOwner) === this,
+      ) ?? null
+    );
   }
   get open(): boolean {
     return this.hasAttribute('open');
@@ -56,23 +62,41 @@ export class VfDialogElement extends HTMLElementBase {
     if (!dialog) return;
     if (!this.id) this.id = `vf-dialog-${Math.random().toString(36).slice(2)}`;
     dialog.setAttribute('data-vf-dialog-root', '');
-    dialog.toggleAttribute('data-vf-backdrop-dismiss', this.hasAttribute('backdrop-dismiss') && this.localName !== 'vf-alert-dialog');
-    const ownedPart = (selector: string) => Array.from(dialog.querySelectorAll<HTMLElement>(selector)).find(part => part.closest('dialog') === dialog && part.closest(modalOwner) === this);
+    dialog.toggleAttribute(
+      'data-vf-backdrop-dismiss',
+      this.hasAttribute('backdrop-dismiss') && this.localName !== 'vf-alert-dialog',
+    );
+    const ownedPart = (selector: string) =>
+      Array.from(dialog.querySelectorAll<HTMLElement>(selector)).find(
+        (part) => part.closest('dialog') === dialog && part.closest(modalOwner) === this,
+      );
     const title = ownedPart('[data-vf-dialog-title],[data-vf-drawer-title],[data-vf-alert-dialog-title]');
-    const description = ownedPart('[data-vf-dialog-description],[data-vf-drawer-description],[data-vf-alert-dialog-description]');
+    const description = ownedPart(
+      '[data-vf-dialog-description],[data-vf-drawer-description],[data-vf-alert-dialog-description]',
+    );
     if (title) {
       title.setAttribute('data-vf-dialog-title', '');
       title.id ||= `${this.id}-title`;
-      if (!dialog.hasAttribute('aria-label') && !dialog.hasAttribute('aria-labelledby')) dialog.setAttribute('aria-labelledby', title.id);
+      if (!dialog.hasAttribute('aria-label') && !dialog.hasAttribute('aria-labelledby'))
+        dialog.setAttribute('aria-labelledby', title.id);
     }
     if (description) {
       description.setAttribute('data-vf-dialog-description', '');
       description.id ||= `${this.id}-description`;
       if (!dialog.hasAttribute('aria-describedby')) dialog.setAttribute('aria-describedby', description.id);
     }
-    for (const part of Array.from(dialog.querySelectorAll<HTMLElement>('[data-vf-drawer-body],[data-vf-alert-dialog-body],[data-vf-drawer-close],[data-vf-alert-dialog-cancel],[data-vf-alert-dialog-action]'))) {
+    for (const part of Array.from(
+      dialog.querySelectorAll<HTMLElement>(
+        '[data-vf-drawer-body],[data-vf-alert-dialog-body],[data-vf-drawer-close],[data-vf-alert-dialog-cancel],[data-vf-alert-dialog-action]',
+      ),
+    )) {
       if (part.closest('dialog') !== dialog || part.closest(modalOwner) !== this) continue;
-      part.setAttribute(part.matches('[data-vf-drawer-body],[data-vf-alert-dialog-body]') ? 'data-vf-dialog-body' : 'data-vf-dialog-close', '');
+      part.setAttribute(
+        part.matches('[data-vf-drawer-body],[data-vf-alert-dialog-body]')
+          ? 'data-vf-dialog-body'
+          : 'data-vf-dialog-close',
+        '',
+      );
     }
     if (this.open && dialog.open && !dialog.matches(':modal')) dialog.close();
     if (this.open && !dialog.open) {
@@ -106,30 +130,51 @@ export class VfDialogElement extends HTMLElementBase {
   #onPointerDown = (event: PointerEvent): void => {
     this.#backdropPointerDown = !event.defaultPrevented && isBackdropHit(event);
   };
-  #onPointerCancel = (): void => { this.#backdropPointerDown = false; };
+  #onPointerCancel = (): void => {
+    this.#backdropPointerDown = false;
+  };
   #onClose = (): void => {
     if (this.dialog?.open) return;
     if (this.open) {
-      queueMicrotask(() => { if (this.isConnected) this.#sync(); });
+      queueMicrotask(() => {
+        if (this.isConnected) this.#sync();
+      });
       return;
     }
     const target = this.#restoreTarget;
     this.#restoreTarget = null;
     const dialog = this.dialog;
     const focused = dialog?.ownerDocument.activeElement;
-    if (canRestoreFocus(target) && (!focused || focused === dialog?.ownerDocument.body || dialog?.contains(focused))) target.focus();
+    if (canRestoreFocus(target) && (!focused || focused === dialog?.ownerDocument.body || dialog?.contains(focused)))
+      target.focus();
   };
   #onClick = (event: MouseEvent): void => {
-    if (!(event.target instanceof Element) || event.target.closest(modalOwner) !== this || event.defaultPrevented) return;
-    const close = event.target.closest('[data-vf-dialog-close],[data-vf-drawer-close],[data-vf-alert-dialog-cancel],[data-vf-alert-dialog-action]');
+    if (!(event.target instanceof Element) || event.target.closest(modalOwner) !== this || event.defaultPrevented)
+      return;
+    const close = event.target.closest(
+      '[data-vf-dialog-close],[data-vf-drawer-close],[data-vf-alert-dialog-cancel],[data-vf-alert-dialog-action]',
+    );
     if (close && close.closest('dialog') === this.dialog && !close.matches(':disabled')) {
       this.#requestDismiss('close-control');
       return;
     }
     const dialog = this.dialog;
-    if (dialog && this.localName !== 'vf-alert-dialog' && this.hasAttribute('backdrop-dismiss') && this.#backdropPointerDown && event.target === dialog) {
+    if (
+      dialog &&
+      this.localName !== 'vf-alert-dialog' &&
+      this.hasAttribute('backdrop-dismiss') &&
+      this.#backdropPointerDown &&
+      event.target === dialog
+    ) {
       const rect = dialog.getBoundingClientRect();
-      if (event.button === 0 && (event.clientX < rect.left || event.clientX > rect.right || event.clientY < rect.top || event.clientY > rect.bottom)) this.#requestDismiss('backdrop');
+      if (
+        event.button === 0 &&
+        (event.clientX < rect.left ||
+          event.clientX > rect.right ||
+          event.clientY < rect.top ||
+          event.clientY > rect.bottom)
+      )
+        this.#requestDismiss('backdrop');
     }
     this.#backdropPointerDown = false;
   };

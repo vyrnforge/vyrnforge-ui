@@ -986,7 +986,7 @@ export class VfDialogBodyDirective {
 // @public (undocumented)
 export class VfDialogCloseDirective {
     // (undocumented)
-    onClick(): void;
+    onClick(event?: MouseEvent): void;
     // (undocumented)
     readonly root: VfDialogRootDirective;
     // (undocumented)
@@ -1036,6 +1036,8 @@ export class VfDialogRootDirective {
     onClick(event: MouseEvent): void;
     // (undocumented)
     onClose(): void;
+    // (undocumented)
+    onPointerCancel(): void;
     // (undocumented)
     onPointerDown(event: PointerEvent): void;
     // (undocumented)
@@ -1265,6 +1267,8 @@ export class VfDrawerRootDirective {
     onClick(event: MouseEvent): void;
     // (undocumented)
     onClose(): void;
+    // (undocumented)
+    onPointerCancel(): void;
     // (undocumented)
     onPointerDown(event: PointerEvent): void;
     // (undocumented)

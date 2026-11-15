@@ -38,7 +38,9 @@ function canRestoreFocus(element: HTMLElement | null): element is HTMLElement {
 function isBackdropHit(event: MouseEvent | PointerEvent): boolean {
   if (event.target !== event.currentTarget || event.button !== 0) return false;
   const rect = (event.currentTarget as HTMLDialogElement).getBoundingClientRect();
-  return event.clientX < rect.left || event.clientX > rect.right || event.clientY < rect.top || event.clientY > rect.bottom;
+  return (
+    event.clientX < rect.left || event.clientX > rect.right || event.clientY < rect.top || event.clientY > rect.bottom
+  );
 }
 
 @Directive({
@@ -112,7 +114,11 @@ export class VfDialogRootDirective {
     this.restoreTarget = null;
     const dialog = this.element.nativeElement;
     const focused = dialog.ownerDocument.activeElement;
-    if (canRestoreFocus(restoreTarget) && (!focused || focused === dialog.ownerDocument.body || dialog.contains(focused))) restoreTarget.focus();
+    if (
+      canRestoreFocus(restoreTarget) &&
+      (!focused || focused === dialog.ownerDocument.body || dialog.contains(focused))
+    )
+      restoreTarget.focus();
   }
 
   requestDismiss(reason: DialogDismissReason): void {
@@ -155,7 +161,9 @@ export class VfDialogRootDirective {
     this.backdropPointerDown = !event.defaultPrevented && isBackdropHit(event);
   }
 
-  onPointerCancel(): void { this.backdropPointerDown = false; }
+  onPointerCancel(): void {
+    this.backdropPointerDown = false;
+  }
 
   onClick(event: MouseEvent): void {
     const isBackdrop = this.backdropPointerDown && isBackdropHit(event);

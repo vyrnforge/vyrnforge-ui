@@ -56,7 +56,9 @@ function canRestoreFocus(element: HTMLElement | null): element is HTMLElement {
 function isBackdropHit(event: MouseEvent | PointerEvent): boolean {
   if (event.target !== event.currentTarget || event.button !== 0) return false;
   const rect = (event.currentTarget as HTMLDialogElement).getBoundingClientRect();
-  return event.clientX < rect.left || event.clientX > rect.right || event.clientY < rect.top || event.clientY > rect.bottom;
+  return (
+    event.clientX < rect.left || event.clientX > rect.right || event.clientY < rect.top || event.clientY > rect.bottom
+  );
 }
 
 function callHandler(handler: unknown, event: Event): void {
@@ -104,7 +106,8 @@ export const DialogRoot = defineComponent({
       restoreTarget.value = null;
       const dialog = dialogRef.value;
       const focused = dialog?.ownerDocument.activeElement;
-      if (canRestoreFocus(target) && (!focused || focused === dialog?.ownerDocument.body || dialog?.contains(focused))) target.focus();
+      if (canRestoreFocus(target) && (!focused || focused === dialog?.ownerDocument.body || dialog?.contains(focused)))
+        target.focus();
     }
 
     function requestDismiss(reason: DialogDismissReason) {

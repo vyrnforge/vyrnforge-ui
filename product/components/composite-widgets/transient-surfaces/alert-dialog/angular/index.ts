@@ -99,7 +99,8 @@ export class VfAlertDialogRootDirective {
     this.restoreTarget = null;
     const dialog = this.element.nativeElement;
     const focused = dialog.ownerDocument.activeElement;
-    if (canRestoreFocus(target) && (!focused || focused === dialog.ownerDocument.body || dialog.contains(focused))) target.focus();
+    if (canRestoreFocus(target) && (!focused || focused === dialog.ownerDocument.body || dialog.contains(focused)))
+      target.focus();
   }
 
   requestDismiss(reason: AlertDialogDismissReason): void {
@@ -152,7 +153,8 @@ export class VfAlertDialogTitleDirective {
   standalone: true,
   host: {
     '[attr.id]': 'id() ?? root.descriptionId() ?? (root.id() + "-description")',
-    'data-vf-alert-dialog-description': '', 'data-vf-dialog-description': '',
+    'data-vf-alert-dialog-description': '',
+    'data-vf-dialog-description': '',
   },
 })
 export class VfAlertDialogDescriptionDirective {
@@ -160,7 +162,11 @@ export class VfAlertDialogDescriptionDirective {
   readonly id = input<string | undefined>(undefined);
 }
 
-@Directive({ selector: '[vfAlertDialogBody]', standalone: true, host: { 'data-vf-alert-dialog-body': '', 'data-vf-dialog-body': '' } })
+@Directive({
+  selector: '[vfAlertDialogBody]',
+  standalone: true,
+  host: { 'data-vf-alert-dialog-body': '', 'data-vf-dialog-body': '' },
+})
 export class VfAlertDialogBodyDirective {
   readonly root = inject(VfAlertDialogRootDirective);
 }
@@ -168,7 +174,12 @@ export class VfAlertDialogBodyDirective {
 @Directive({
   selector: 'button[vfAlertDialogCancel]',
   standalone: true,
-  host: { type: 'button', 'data-vf-alert-dialog-cancel': '', 'data-vf-dialog-close': '', '(click)': '$event.defaultPrevented ? null : root.requestDismiss("close-control")' },
+  host: {
+    type: 'button',
+    'data-vf-alert-dialog-cancel': '',
+    'data-vf-dialog-close': '',
+    '(click)': '$event.defaultPrevented ? null : root.requestDismiss("close-control")',
+  },
 })
 export class VfAlertDialogCancelDirective {
   readonly root = inject(VfAlertDialogRootDirective);
@@ -177,7 +188,12 @@ export class VfAlertDialogCancelDirective {
 @Directive({
   selector: 'button[vfAlertDialogAction]',
   standalone: true,
-  host: { type: 'button', 'data-vf-alert-dialog-action': '', 'data-vf-dialog-close': '', '(click)': '$event.defaultPrevented ? null : root.requestDismiss("close-control")' },
+  host: {
+    type: 'button',
+    'data-vf-alert-dialog-action': '',
+    'data-vf-dialog-close': '',
+    '(click)': '$event.defaultPrevented ? null : root.requestDismiss("close-control")',
+  },
 })
 export class VfAlertDialogActionDirective {
   readonly root = inject(VfAlertDialogRootDirective);
