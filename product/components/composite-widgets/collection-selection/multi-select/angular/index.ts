@@ -134,7 +134,9 @@ export class VfMultiSelectRootDirective {
   readonly open = signal(false);
 
   constructor() {
-    effect(() => { if (this.disabled()) this.open.set(false); });
+    effect(() => {
+      if (this.disabled()) this.open.set(false);
+    });
   }
 
   toggle(v: string): void {

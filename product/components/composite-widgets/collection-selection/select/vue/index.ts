@@ -84,7 +84,13 @@ export const SelectRoot = defineComponent({
     const internalOpen = ref(props.defaultOpen);
     const value = computed(() => props.value ?? internalValue.value);
     const expanded = computed(() => !disabled.value && (props.open ?? internalOpen.value));
-    watch(disabled, (next) => { if (next && props.open === undefined) internalOpen.value = false; }, { flush: 'sync' });
+    watch(
+      disabled,
+      (next) => {
+        if (next && props.open === undefined) internalOpen.value = false;
+      },
+      { flush: 'sync' },
+    );
     const uid = useId();
     const rootId = computed(() => props.id ?? `vf-select-${uid}`);
     const triggerId = computed(() => `${rootId.value}-trigger`);

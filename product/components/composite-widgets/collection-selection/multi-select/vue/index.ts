@@ -81,7 +81,13 @@ export const MultiSelectRoot = defineComponent({
     const error = ref('');
     const internalOpen = ref(false);
     const open = computed(() => !disabled.value && internalOpen.value);
-    watch(disabled, (next) => { if (next) internalOpen.value = false; }, { flush: 'sync' });
+    watch(
+      disabled,
+      (next) => {
+        if (next) internalOpen.value = false;
+      },
+      { flush: 'sync' },
+    );
     const values = computed(() => props.value ?? internalValue.value);
     const uid = useId();
     const rootId = computed(() => props.id ?? `vf-multi-select-${uid}`);

@@ -138,7 +138,9 @@ export class VfSelectRootDirective {
   readonly expanded = computed(() => !this.disabled() && (this.open() ?? this.internalOpen() ?? this.defaultOpen()));
 
   constructor() {
-    effect(() => { if (this.disabled() && this.open() === undefined) this.internalOpen.set(false); });
+    effect(() => {
+      if (this.disabled() && this.open() === undefined) this.internalOpen.set(false);
+    });
   }
 
   setOpen(v: boolean): void {

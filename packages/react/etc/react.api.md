@@ -2515,7 +2515,7 @@ export interface MultiSelectRootProps {
 }
 
 // @public (undocumented)
-export const MultiSelectTrigger: ForwardRefExoticComponent<Omit<Omit<DetailedHTMLProps<ButtonHTMLAttributes<HTMLButtonElement>, HTMLButtonElement>, "ref">, "id" | "aria-controls"> & RefAttributes<HTMLButtonElement>>;
+export const MultiSelectTrigger: ForwardRefExoticComponent<Omit<Omit<DetailedHTMLProps<ButtonHTMLAttributes<HTMLButtonElement>, HTMLButtonElement>, "ref">, "type" | "id" | "aria-controls"> & RefAttributes<HTMLButtonElement>>;
 
 // @public (undocumented)
 export const NativeSelect: ForwardRefExoticComponent<NativeSelectProps & RefAttributes<HTMLSelectElement>>;
@@ -2895,7 +2895,7 @@ export interface SelectRootProps {
 }
 
 // @public (undocumented)
-export const SelectTrigger: ForwardRefExoticComponent<Omit<Omit<DetailedHTMLProps<ButtonHTMLAttributes<HTMLButtonElement>, HTMLButtonElement>, "ref">, "id" | "aria-controls"> & RefAttributes<HTMLButtonElement>>;
+export const SelectTrigger: ForwardRefExoticComponent<Omit<Omit<DetailedHTMLProps<ButtonHTMLAttributes<HTMLButtonElement>, HTMLButtonElement>, "ref">, "type" | "id" | "aria-controls"> & RefAttributes<HTMLButtonElement>>;
 
 // @public (undocumented)
 export const SideNav: ForwardRefExoticComponent<Omit<DetailedHTMLProps<HTMLAttributes<HTMLElement>, HTMLElement>, "ref"> & RefAttributes<HTMLElement>>;

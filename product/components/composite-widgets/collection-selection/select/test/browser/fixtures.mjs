@@ -107,7 +107,11 @@ export async function createReactStory() {
           h(SelectFormControl, { name: 'choice', form: 'selection-form', required: true, options: formOptions }),
         ),
         h('p', { id: 'form-hint' }, 'Choose at least one option.'),
-        h('button', { id: 'form-disable', type: 'button', onClick: () => setFormDisabled((value) => !value) }, 'Toggle disabled'),
+        h(
+          'button',
+          { id: 'form-disable', type: 'button', onClick: () => setFormDisabled((value) => !value) },
+          'Toggle disabled',
+        ),
       ),
     );
   }
@@ -174,7 +178,11 @@ export async function createVueStory() {
               h(SelectFormControl, { name: 'choice', form: 'selection-form', required: true, options: formOptions }),
             ]),
             h('p', { id: 'form-hint' }, 'Choose at least one option.'),
-            h('button', { id: 'form-disable', type: 'button', onClick: () => (formDisabled.value = !formDisabled.value) }, 'Toggle disabled'),
+            h(
+              'button',
+              { id: 'form-disable', type: 'button', onClick: () => (formDisabled.value = !formDisabled.value) },
+              'Toggle disabled',
+            ),
           ]),
         ]);
     },
@@ -235,7 +243,9 @@ export async function createElementsStory({ client }) {
       ? async () => {
           const { defineSelectElement } = await import('@vyrnforge/elements/select');
           defineSelectElement();
-          document.querySelector('#form-disable').addEventListener('click', () => document.querySelector('#form-choice').toggleAttribute('disabled'));
+          document
+            .querySelector('#form-disable')
+            .addEventListener('click', () => document.querySelector('#form-choice').toggleAttribute('disabled'));
           ready();
         }
       : undefined,
