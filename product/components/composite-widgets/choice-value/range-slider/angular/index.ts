@@ -1,6 +1,8 @@
 import {
   Directive,
+  DestroyRef,
   ElementRef,
+  afterNextRender,
   afterRenderEffect,
   booleanAttribute,
   inject,
@@ -52,6 +54,45 @@ export class VfRangeSliderRootDirective {
   readonly disabled = input(false, { transform: booleanAttribute });
   readonly valueChange = output<[number, number]>();
   private internal = signal<Pair | undefined>(undefined);
+  private initial: Pair | undefined;
+  private readonly element = inject<ElementRef<HTMLElement>>(ElementRef);
+  private readonly destroyRef = inject(DestroyRef);
+
+  constructor() {
+    afterNextRender(() => {
+      const initial = this.defaultValue();
+      this.initial = [initial[0], initial[1]];
+      if (this.value() === undefined && this.internal() === undefined) this.internal.set([...this.initial]);
+      const root = this.element.nativeElement;
+      const document = root.ownerDocument;
+      let active = true;
+      const onReset = (event: Event) => {
+        const owned = (selector: string) =>
+          Array.from(root.querySelectorAll<HTMLInputElement>(selector)).find(
+            (element) => element.closest('[data-vf-range-slider-root]') === root,
+          );
+        const start = owned('input[data-vf-range-slider-start]');
+        const end = owned('input[data-vf-range-slider-end]');
+        if (!start || !end || !start.form || start.form !== event.target || end.form !== event.target) return;
+        setTimeout(() => {
+          if (!active || event.defaultPrevented || start.form !== event.target || end.form !== event.target) return;
+          const initial = this.initial;
+          if (!initial) return;
+          const next = normalize(this.value() ?? initial, this.range());
+          if (this.value() === undefined) this.internal.set([...initial]);
+          start.max = String(next[1]);
+          end.min = String(next[0]);
+          start.value = String(next[0]);
+          end.value = String(next[1]);
+        }, 0);
+      };
+      document.addEventListener('reset', onReset, true);
+      this.destroyRef.onDestroy(() => {
+        active = false;
+        document.removeEventListener('reset', onReset, true);
+      });
+    });
+  }
 
   private range(): Bounds {
     return bounds(this.min(), this.max(), this.step());
@@ -66,7 +107,7 @@ export class VfRangeSliderRootDirective {
     return this.range()[2];
   }
   current(): [number, number] {
-    return normalize(this.value() ?? this.internal() ?? this.defaultValue(), this.range());
+    return normalize(this.value() ?? this.internal() ?? this.initial ?? this.defaultValue(), this.range());
   }
   set(index: 0 | 1, v: number) {
     if (this.disabled()) return;
