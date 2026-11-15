@@ -4,6 +4,10 @@ import {
   h,
   inject,
   nextTick,
+  onMounted,
+  onBeforeUnmount,
+  watch,
+  useId,
   provide,
   ref,
   type InjectionKey,
@@ -16,11 +20,17 @@ import type { FloatingPlacement } from '@vyrnforge/web/floating-positioning';
 
 const menuItemSelector = '[data-vf-menu-item]';
 function menuItems(root: HTMLElement): HTMLElement[] {
-  return Array.from(root.querySelectorAll<HTMLElement>(menuItemSelector));
+  return Array.from(root.querySelectorAll<HTMLElement>(menuItemSelector)).filter(item => item.closest('[data-vf-menu-content]') === root);
 }
 function itemFromTarget(root: HTMLElement, target: EventTarget | null): HTMLElement | null {
   const item = target instanceof HTMLElement ? target.closest<HTMLElement>(menuItemSelector) : null;
-  return item && root.contains(item) ? item : null;
+  return item && item.closest('[data-vf-menu-content]') === root ? item : null;
+}
+function focusItem(root: HTMLElement, edge: 'first' | 'last') {
+  const items = menuItems(root);
+  const index = resolveNavigationIndex(items.map(item => ({ eligible: !item.matches(':disabled') })), edge === 'first' ? -1 : items.length, edge);
+  if (index != null) items[index]?.focus();
+  else root.focus();
 }
 function invoke(handler: unknown, event: Event) {
   if (typeof handler === 'function') handler(event);
@@ -33,6 +43,8 @@ interface MenuContext {
   anchor: Ref<HTMLElement | null>;
   surface: Ref<HTMLElement | null>;
   placement: Ref<FloatingPlacement>;
+  contentId: Ref<string>;
+  edge: Ref<'first' | 'last'>;
   focusMenu(edge: 'first' | 'last'): void;
 }
 const key: InjectionKey<MenuContext> = Symbol('vf-menu');
@@ -48,9 +60,12 @@ export const MenuRoot = defineComponent({
     open: { type: Boolean as PropType<boolean | undefined>, default: undefined },
     defaultOpen: { type: Boolean, default: false },
     placement: { type: String as PropType<FloatingPlacement>, default: 'bottom-start' },
+    contentId: String,
   },
   emits: ['update:open'],
   setup(props, { slots, emit }) {
+    const generated = useId();
+    const edge = ref<'first' | 'last'>('first');
     const internal = ref(props.defaultOpen);
     const expanded = computed(() => props.open ?? internal.value);
     const anchor = ref<HTMLElement | null>(null);
@@ -58,6 +73,7 @@ export const MenuRoot = defineComponent({
     const openRef = computed({
       get: () => expanded.value,
       set: (value) => {
+        if (value === expanded.value) return;
         if (props.open === undefined) internal.value = value;
         emit('update:open', value);
       },
@@ -70,16 +86,11 @@ export const MenuRoot = defineComponent({
       anchor,
       surface,
       placement: computed(() => props.placement),
-      focusMenu(edge) {
-        void nextTick(() => {
-          const items = surface.value ? menuItems(surface.value) : [];
-          const index = resolveNavigationIndex(
-            items.map(() => ({})),
-            edge === 'first' ? -1 : items.length,
-            edge,
-          );
-          if (index != null) items[index]?.focus();
-        });
+      contentId: computed(() => props.contentId ?? `vf-menu-${generated}`),
+      edge,
+      focusMenu(next) {
+        edge.value = next;
+        if (surface.value?.matches(':popover-open')) focusItem(surface.value, next);
       },
     });
     return () => slots.default?.();
@@ -107,9 +118,12 @@ export const MenuTrigger = defineComponent({
           'data-vf-menu-trigger': '',
           'aria-haspopup': 'menu',
           'aria-expanded': menu.open.value,
+          'aria-controls': menu.contentId.value,
+          popovertarget: menu.contentId.value,
           onClick: (event: MouseEvent) => {
             invoke(attrs.onClick, event);
             if (event.defaultPrevented) return;
+            event.preventDefault();
             if (menu.open.value) menu.setOpen(false);
             else openAndFocus('first');
           },
@@ -137,9 +151,33 @@ export const MenuContent = defineComponent({
     const menu = useMenu();
     let query = '';
     let timer: ReturnType<typeof setTimeout> | null = null;
-    return () =>
-      menu.open.value
-        ? h(
+    let previousFocus: HTMLElement | null = null;
+    function sync() {
+      const surface = menu.surface.value;
+      const anchor = menu.anchor.value;
+      if (!surface || !anchor) return;
+      if (menu.open.value && !surface.matches(':popover-open')) {
+        surface.showPopover({ source: anchor });
+        const previous = previousFocus;
+        previousFocus = null;
+        if (previous && surface.contains(previous)) previous.focus();
+        else focusItem(surface, menu.edge.value);
+        menu.edge.value = 'first';
+      } else if (!menu.open.value) {
+        if (surface.matches(':popover-open')) surface.hidePopover();
+        if (previousFocus) {
+          previousFocus = null;
+          const active = surface.ownerDocument.activeElement;
+          if (!active || active === surface.ownerDocument.body || surface.contains(active)) anchor.focus();
+        }
+        query = '';
+        if (timer) clearTimeout(timer);
+      }
+    }
+    onMounted(sync);
+    watch([menu.open, menu.anchor, menu.surface], sync, { flush: 'post' });
+    onBeforeUnmount(() => { if (timer) clearTimeout(timer); });
+    return () => h(
             'div',
             {
               ...attrs,
@@ -147,15 +185,31 @@ export const MenuContent = defineComponent({
                 menu.surface.value = node as HTMLElement | null;
               },
               role: 'menu',
+              id: menu.contentId.value,
+              popover: 'auto',
+              'data-vf-placement': menu.placement.value,
               tabindex: -1,
               'data-vf-menu-content': '',
+              onBeforetoggle(event: Event) {
+                invoke(attrs.onBeforetoggle,event);
+                const surface = event.currentTarget as HTMLElement;
+                if (event.target === surface && surface.matches(':popover-open')) {
+                  const focused = surface.ownerDocument.activeElement;
+                  previousFocus = focused instanceof HTMLElement && surface.contains(focused) ? focused : null;
+                }
+              },
+              onToggle(event: Event) {
+                invoke(attrs.onToggle,event);
+                if (event.target !== event.currentTarget) return;
+                const actual = (event.currentTarget as HTMLElement).matches(':popover-open');
+                if (actual !== menu.open.value) { menu.setOpen(actual); void nextTick(sync); }
+              },
               onKeydown: (event: KeyboardEvent) => {
                 invoke(attrs.onKeydown, event);
-                if (event.defaultPrevented) return;
+                if (event.defaultPrevented || (event.target instanceof Element && event.target.closest('[data-vf-menu-content]') !== event.currentTarget)) return;
                 if (event.key === 'Escape') {
                   event.preventDefault();
                   menu.setOpen(false);
-                  menu.anchor.value?.focus();
                   return;
                 }
                 if (event.key === 'Tab') {
@@ -175,7 +229,7 @@ export const MenuContent = defineComponent({
                 let next: number | null = null;
                 if (intent)
                   next = resolveNavigationIndex(
-                    items.map(() => ({})),
+                    items.map(item => ({ eligible: !item.matches(':disabled') })),
                     current,
                     intent,
                   );
@@ -186,7 +240,7 @@ export const MenuContent = defineComponent({
                     query = '';
                   }, 500);
                   next = findTypeaheadMatch(
-                    items.map((item) => ({ textValue: item.dataset.vfTextValue ?? item.textContent ?? '' })),
+                    items.map((item) => ({ textValue: item.dataset.vfTextValue ?? item.textContent ?? '', eligible: !item.matches(':disabled') })),
                     query,
                     { startIndex: current },
                   );
@@ -197,8 +251,7 @@ export const MenuContent = defineComponent({
               },
             },
             slots.default?.(),
-          )
-        : null;
+          );
   },
 });
 
@@ -229,7 +282,6 @@ export const MenuItem = defineComponent({
             if (event.defaultPrevented) return;
             emit('select');
             menu.setOpen(false);
-            menu.anchor.value?.focus();
           },
         },
         slots.default?.(),
