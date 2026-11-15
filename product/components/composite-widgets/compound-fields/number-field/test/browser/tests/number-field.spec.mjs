@@ -170,7 +170,9 @@ test('native NumberField reset restores defaults without fabricating input event
   await form.evaluate(async (element) => {
     element.addEventListener('reset', (event) => event.preventDefault(), { once: true });
     element.reset();
-    await new Promise((resolve) => setTimeout(resolve, 0));
+    await new Promise((resolve) => {
+      setTimeout(resolve, 0);
+    });
   });
   await expect(input).toHaveValue('5');
   await form.evaluate((element) => {
@@ -209,7 +211,9 @@ test('NumberField reset preserves controlled values and restores a nullable init
   const form = page.locator('#number-form');
   await form.evaluate(async (element) => {
     element.reset();
-    await new Promise((resolve) => setTimeout(resolve, 0));
+    await new Promise((resolve) => {
+      setTimeout(resolve, 0);
+    });
   });
   await expect(controlled).toHaveValue('7');
   await expect(any).toHaveValue('');
@@ -223,7 +227,9 @@ test('NumberField reset preserves controlled values and restores a nullable init
   await expect(controlled).toHaveValue('');
   await form.evaluate(async (element) => {
     element.reset();
-    await new Promise((resolve) => setTimeout(resolve, 0));
+    await new Promise((resolve) => {
+      setTimeout(resolve, 0);
+    });
   });
   await expect(controlled).toHaveValue('');
   await expect(body).not.toHaveAttribute('data-controlled-request-count', /.+/);
