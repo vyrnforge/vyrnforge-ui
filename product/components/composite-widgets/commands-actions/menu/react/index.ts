@@ -36,6 +36,11 @@ function adjacentMenubarTrigger(
   return next == null || items[next] === trigger ? null : (items[next] ?? null);
 }
 
+function submenuArrow(trigger: HTMLElement, opening: boolean): 'ArrowLeft' | 'ArrowRight' {
+  const rtl = getComputedStyle(trigger).direction === 'rtl';
+  return opening === rtl ? 'ArrowLeft' : 'ArrowRight';
+}
+
 const menuItemSelector = '[data-vf-menu-item]';
 function menuItems(root: HTMLElement): HTMLElement[] {
   return Array.from(root.querySelectorAll<HTMLElement>(menuItemSelector)).filter(
@@ -50,7 +55,7 @@ function focusItem(root: HTMLElement | null, edge: 'first' | 'last') {
   if (!root) return;
   const items = menuItems(root);
   const index = resolveNavigationIndex(
-    items.map(() => ({})),
+    items.map((item) => ({ eligible: !item.matches(':disabled') })),
     edge === 'first' ? -1 : items.length,
     edge,
   );
@@ -65,6 +70,7 @@ export interface MenuRootProps {
   onOpenChange?(open: boolean): void;
 }
 interface MenuContextValue {
+  parent: MenuContextValue | null;
   open: boolean;
   setOpen(open: boolean): void;
   placement: AnchorPlacement;
@@ -75,6 +81,16 @@ interface MenuContextValue {
   focusRevision: number;
 }
 const MenuContext = createContext<MenuContextValue | null>(null);
+const MenuContentContext = createContext<MenuContextValue | null>(null);
+function closeMenuChain(menu: MenuContextValue): MenuContextValue {
+  let current = menu;
+  current.setOpen(false);
+  while (current.parent) {
+    current = current.parent;
+    current.setOpen(false);
+  }
+  return current;
+}
 const menusByTrigger = new WeakMap<HTMLElement, MenuContextValue>();
 function useMenu(): MenuContextValue {
   const value = useContext(MenuContext);
@@ -89,6 +105,7 @@ export function MenuRoot({
   placement = 'bottom-start',
   onOpenChange,
 }: MenuRootProps) {
+  const parent = useContext(MenuContentContext);
   const [internal, setInternal] = useState(defaultOpen);
   const expanded = open ?? internal;
   const anchorRef = useRef<HTMLElement | null>(null);
@@ -102,6 +119,7 @@ export function MenuRoot({
   };
   const value = useMemo<MenuContextValue>(
     () => ({
+      parent,
       open: expanded,
       setOpen,
       placement,
@@ -114,7 +132,7 @@ export function MenuRoot({
         setFocusRevision((revision) => revision + 1);
       },
     }),
-    [expanded, placement, open, onOpenChange, focusRevision],
+    [parent, expanded, placement, open, onOpenChange, focusRevision],
   );
   return createElement(MenuContext.Provider, { value }, children);
 }
@@ -139,18 +157,26 @@ export const MenuTrigger = forwardRef<HTMLButtonElement, MenuTriggerProps>(funct
       if (typeof forwardedRef === 'function') forwardedRef(node);
       else if (forwardedRef) forwardedRef.current = node;
     },
+    ...(menu.parent ? { role: 'menuitem', tabIndex: -1, 'data-vf-menu-item': '' } : {}),
     'data-vf-menu-trigger': '',
     'aria-haspopup': 'menu',
     'aria-expanded': menu.open,
     onClick(event) {
       onClick?.(event);
-      if (event.defaultPrevented) return;
+      if (event.defaultPrevented || event.currentTarget.matches(':disabled,[aria-disabled="true"]')) return;
       if (menu.open) menu.setOpen(false);
       else openAndFocus('first');
     },
     onKeyDown(event) {
       onKeyDown?.(event);
-      if (event.defaultPrevented) return;
+      if (event.defaultPrevented || event.currentTarget.matches(':disabled,[aria-disabled="true"]')) return;
+      if (menu.parent) {
+        if (event.key === submenuArrow(event.currentTarget, true) || event.key === 'Enter' || event.key === ' ') {
+          event.preventDefault();
+          openAndFocus('first');
+        }
+        return;
+      }
       if (event.key === 'ArrowUp') {
         event.preventDefault();
         openAndFocus('last');
@@ -183,7 +209,7 @@ export const MenuContent = forwardRef<HTMLDivElement, MenuContentProps>(function
     const surface = menu.surfaceRef.current;
     const trigger = menu.anchorRef.current;
     if (!surface || !trigger) return;
-    if (!menu.open) {
+    if (!menu.open || (menu.parent && !menu.parent.open)) {
       menu.focusRequest.current = null;
       if (timer.current !== null) clearTimeout(timer.current);
       timer.current = null;
@@ -204,99 +230,118 @@ export const MenuContent = forwardRef<HTMLDivElement, MenuContentProps>(function
     const edge = menu.focusRequest.current;
     menu.focusRequest.current = null;
     if (edge && surface.matches(':popover-open')) focusItem(surface, edge);
-  }, [menu.open, menu.focusRevision, menu.focusRequest, menu.anchorRef, menu.surfaceRef, nativeRevision]);
-  const content = createElement('div', {
-    ...props,
-    role: 'menu',
-    tabIndex: -1,
-    ref(node: HTMLDivElement | null) {
-      menu.surfaceRef.current = node;
-      if (typeof forwardedRef === 'function') forwardedRef(node);
-      else if (forwardedRef) forwardedRef.current = node;
-    },
-    popover: 'auto',
-    'data-vf-menu-content': '',
-    'data-vf-placement': menu.placement,
-    'data-vf-open': menu.open ? '' : undefined,
-    onBeforeToggle(event) {
-      onBeforeToggle?.(event);
-      if (event.target !== event.currentTarget) return;
-      const surface = event.currentTarget;
-      restoreFocus.current = surface.matches(':popover-open') && surface.contains(surface.ownerDocument.activeElement);
-    },
-    onToggle(event) {
-      onToggle?.(event);
-      if (event.target !== event.currentTarget) return;
-      const surface = event.currentTarget;
-      const actual = surface.matches(':popover-open');
-      if (!actual && restoreFocus.current) {
-        restoreFocus.current = false;
-        const active = surface.ownerDocument.activeElement;
-        if (!active || active === surface.ownerDocument.body || surface.contains(active))
-          menu.anchorRef.current?.focus();
-      }
-      if (actual === menu.open) return;
-      menu.setOpen(actual);
-      setNativeRevision((revision) => revision + 1);
-    },
-    onKeyDown(event) {
-      onKeyDown?.(event);
-      if (
-        event.defaultPrevented ||
-        !(event.target instanceof HTMLElement) ||
-        event.target.closest('[data-vf-menu-content]') !== event.currentTarget
-      )
-        return;
-      const nextTrigger = adjacentMenubarTrigger(menu.anchorRef.current, event);
-      if (nextTrigger && menusByTrigger.has(nextTrigger)) {
-        event.preventDefault();
-        switchTarget.current = nextTrigger;
-        menu.setOpen(false);
+  }, [
+    menu.open,
+    menu.parent?.open,
+    menu.focusRevision,
+    menu.focusRequest,
+    menu.anchorRef,
+    menu.surfaceRef,
+    nativeRevision,
+  ]);
+  const content = createElement(
+    'div',
+    {
+      ...props,
+      role: 'menu',
+      tabIndex: -1,
+      ref(node: HTMLDivElement | null) {
+        menu.surfaceRef.current = node;
+        if (typeof forwardedRef === 'function') forwardedRef(node);
+        else if (forwardedRef) forwardedRef.current = node;
+      },
+      popover: 'auto',
+      'data-vf-menu-content': '',
+      'data-vf-menu-submenu': menu.parent ? '' : undefined,
+      'data-vf-placement': menu.placement,
+      'data-vf-open': menu.open ? '' : undefined,
+      onBeforeToggle(event) {
+        onBeforeToggle?.(event);
+        if (event.target !== event.currentTarget) return;
+        const surface = event.currentTarget;
+        restoreFocus.current =
+          surface.matches(':popover-open') && surface.contains(surface.ownerDocument.activeElement);
+      },
+      onToggle(event) {
+        onToggle?.(event);
+        if (event.target !== event.currentTarget) return;
+        const surface = event.currentTarget;
+        const actual = surface.matches(':popover-open');
+        if (!actual && restoreFocus.current) {
+          restoreFocus.current = false;
+          const active = surface.ownerDocument.activeElement;
+          if (!active || active === surface.ownerDocument.body || surface.contains(active))
+            menu.anchorRef.current?.focus();
+        }
+        if (actual === menu.open) return;
+        menu.setOpen(actual);
         setNativeRevision((revision) => revision + 1);
-        return;
-      }
-      if (event.key === 'Escape') {
+      },
+      onKeyDown(event) {
+        onKeyDown?.(event);
+        if (
+          event.defaultPrevented ||
+          !(event.target instanceof HTMLElement) ||
+          event.target.closest('[data-vf-menu-content]') !== event.currentTarget
+        )
+          return;
+        const nextTrigger = adjacentMenubarTrigger(menu.anchorRef.current, event);
+        if (nextTrigger && menusByTrigger.has(nextTrigger)) {
+          event.preventDefault();
+          switchTarget.current = nextTrigger;
+          menu.setOpen(false);
+          setNativeRevision((revision) => revision + 1);
+          return;
+        }
+        if (
+          event.key === 'Escape' ||
+          (menu.parent && menu.anchorRef.current && event.key === submenuArrow(menu.anchorRef.current, false))
+        ) {
+          event.preventDefault();
+          menu.setOpen(false);
+          return;
+        }
+        if (event.key === 'Tab') {
+          closeMenuChain(menu).anchorRef.current?.focus();
+          return;
+        }
+        const items = menuItems(event.currentTarget);
+        const currentItem = itemFromTarget(event.currentTarget, event.target);
+        const current = currentItem ? items.indexOf(currentItem) : -1;
+        let intent: 'next' | 'previous' | 'first' | 'last' | null = null;
+        if (event.key === 'ArrowDown') intent = 'next';
+        else if (event.key === 'ArrowUp') intent = 'previous';
+        else if (event.key === 'Home') intent = 'first';
+        else if (event.key === 'End') intent = 'last';
+        let next: number | null = null;
+        if (intent)
+          next = resolveNavigationIndex(
+            items.map((item) => ({ eligible: !item.matches(':disabled') })),
+            current,
+            intent,
+          );
+        else if (event.key.length === 1 && event.key !== ' ' && !event.ctrlKey && !event.metaKey && !event.altKey) {
+          query.current += event.key;
+          if (timer.current) clearTimeout(timer.current);
+          timer.current = setTimeout(() => {
+            query.current = '';
+          }, 500);
+          next = findTypeaheadMatch(
+            items.map((item) => ({
+              textValue: item.dataset.vfTextValue ?? item.textContent ?? '',
+              eligible: !item.matches(':disabled'),
+            })),
+            query.current,
+            { startIndex: current },
+          );
+        }
+        if (next == null) return;
         event.preventDefault();
-        menu.setOpen(false);
-        return;
-      }
-      if (event.key === 'Tab') {
-        menu.setOpen(false);
-        menu.anchorRef.current?.focus();
-        return;
-      }
-      const items = menuItems(event.currentTarget);
-      const currentItem = itemFromTarget(event.currentTarget, event.target);
-      const current = currentItem ? items.indexOf(currentItem) : -1;
-      let intent: 'next' | 'previous' | 'first' | 'last' | null = null;
-      if (event.key === 'ArrowDown') intent = 'next';
-      else if (event.key === 'ArrowUp') intent = 'previous';
-      else if (event.key === 'Home') intent = 'first';
-      else if (event.key === 'End') intent = 'last';
-      let next: number | null = null;
-      if (intent)
-        next = resolveNavigationIndex(
-          items.map(() => ({})),
-          current,
-          intent,
-        );
-      else if (event.key.length === 1 && !event.ctrlKey && !event.metaKey && !event.altKey) {
-        query.current += event.key;
-        if (timer.current) clearTimeout(timer.current);
-        timer.current = setTimeout(() => {
-          query.current = '';
-        }, 500);
-        next = findTypeaheadMatch(
-          items.map((item) => ({ textValue: item.dataset.vfTextValue ?? item.textContent ?? '' })),
-          query.current,
-          { startIndex: current },
-        );
-      }
-      if (next == null) return;
-      event.preventDefault();
-      items[next]?.focus();
+        items[next]?.focus();
+      },
     },
-  });
+    createElement(MenuContentContext.Provider, { value: menu }, props.children),
+  );
   return content;
 });
 
@@ -324,7 +369,7 @@ export const MenuItem = forwardRef<HTMLButtonElement, MenuItemProps>(function Me
       onClick?.(event);
       if (!event.defaultPrevented) {
         onSelect?.();
-        menu.setOpen(false);
+        closeMenuChain(menu);
       }
     },
   });

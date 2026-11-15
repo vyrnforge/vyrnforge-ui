@@ -109,3 +109,66 @@ test('open menubar switches to adjacent menu in logical direction and restores i
   await page.keyboard.press('Tab');
   await expect(page.locator('#after')).toBeFocused();
 });
+
+test('nested submenu is part of the parent navigation and closes one level on logical back or Escape', async ({
+  page,
+}) => {
+  test.skip(port === 'web', 'Managed nested menu composition.');
+  await page.goto(`/components/menubar/${port}.html`);
+  const file = page.locator('#file');
+  const parent = page.locator('#file-menu');
+  const trigger = page.locator('#submenu-trigger');
+  const child = page.locator('#submenu');
+  await expect(file).toHaveAttribute('tabindex', '0');
+  await file.press('ArrowDown');
+  await expect(page.locator('#file-command')).toBeFocused();
+  await page.keyboard.press('ArrowDown');
+  await expect(trigger).toBeFocused();
+  await expect(trigger).toHaveAttribute('role', 'menuitem');
+  await page.keyboard.press('ArrowRight');
+  await expect(child).toBeVisible();
+  await expect(parent).toBeVisible();
+  await expect(page.locator('#submenu-command')).toBeFocused();
+  await page.keyboard.press('ArrowLeft');
+  await expect(child).toBeHidden();
+  await expect(parent).toBeVisible();
+  await expect(trigger).toBeFocused();
+  await page.locator('#bar').evaluate((node) => node.setAttribute('dir', 'rtl'));
+  await page.keyboard.press('ArrowLeft');
+  await expect(page.locator('#submenu-command')).toBeFocused();
+  await page.keyboard.press('Escape');
+  await expect(child).toBeHidden();
+  await expect(trigger).toBeFocused();
+  await expect(parent).toBeVisible();
+  await page.keyboard.press('Escape');
+  await expect(parent).toBeHidden();
+  await expect(file).toBeFocused();
+});
+
+test('nested command activation and Tab exit close the whole menu chain', async ({ page }) => {
+  test.skip(port === 'web', 'Managed nested menu composition.');
+  await page.goto(`/components/menubar/${port}.html`);
+  const file = page.locator('#file');
+  const parent = page.locator('#file-menu');
+  const child = page.locator('#submenu');
+  const command = page.locator('#submenu-command');
+  await expect(file).toHaveAttribute('tabindex', '0');
+  async function openNested() {
+    await file.press('ArrowDown');
+    await expect(page.locator('#file-command')).toBeFocused();
+    await page.keyboard.press('ArrowDown');
+    await expect(page.locator('#submenu-trigger')).toBeFocused();
+    await page.keyboard.press('ArrowRight');
+    await expect(command).toBeFocused();
+  }
+  await openNested();
+  await page.keyboard.press('Enter');
+  await expect(child).toBeHidden();
+  await expect(parent).toBeHidden();
+  await expect(file).toBeFocused();
+  await openNested();
+  await page.keyboard.press('Tab');
+  await expect(child).toBeHidden();
+  await expect(parent).toBeHidden();
+  await expect(page.locator('#after')).toBeFocused();
+});

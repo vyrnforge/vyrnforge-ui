@@ -42,7 +42,7 @@
   },
   "profileVariability": [],
   "notes": [
-    "Top-level roving focus, logical horizontal navigation, edges and native-disabled reconciliation are implemented. Open menu horizontal switching requests closure before opening the adjacent eligible menu; nested submenu coordination and aria-disabled command policy remain open.",
+    "Top-level roving focus, logical horizontal navigation, native-disabled reconciliation, adjacent open switching and nested Menu composition. Nested inline-end opens, inline-start/Escape closes one level, command selection/Tab closes the chain. Full controlled nested rejection, pointer hover policy and aria-disabled command parity remain review-required.",
     "Audit mapping is provisional; not a conformance claim."
   ]
 }
