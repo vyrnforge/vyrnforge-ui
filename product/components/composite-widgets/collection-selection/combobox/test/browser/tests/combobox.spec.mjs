@@ -250,20 +250,20 @@ test('native read-only and disabled fieldset prevent Combobox requests and prese
   await expect(popup).toBeHidden();
   await expect(input).toHaveAttribute('aria-expanded', 'false');
   await expect(input).not.toHaveAttribute('aria-activedescendant', /.+/);
-  await input.evaluate((node) => {
-    node.readOnly = false;
-    node.dispatchEvent(new Event('input', { bubbles: true }));
-  });
+  await input.evaluate((node) => (node.readOnly = false));
+  await input.fill('re');
   await expect(popup).toBeVisible();
   await input.press('ArrowDown');
   await expect(input).toHaveAttribute('aria-activedescendant', `${port}-react`);
   await input.evaluate((node) => (node.readOnly = true));
   await input.press('Enter');
   await expect(popup).toBeHidden();
-  await expect(input).toHaveValue('');
+  await expect(input).toHaveValue('re');
   await expect(input).not.toHaveAttribute('aria-activedescendant', /.+/);
   await expect(page.locator('body')).not.toHaveAttribute('data-combo-value', /.+/);
   await input.evaluate((node) => (node.readOnly = false));
+  await input.fill('');
+  await input.press('Escape');
   await fieldset.evaluate((node) => (node.disabled = true));
   await expect(input).toBeDisabled();
   const prevented = await input.evaluate((node) => {
