@@ -11,103 +11,62 @@ import {
 interface OTPFieldContextValue {
   value: string;
   length: number;
-  setFrom(index: number, raw: string): number;
+  disabled: boolean;
+  set(value: string): void;
 }
-
 const OTPFieldContext = createContext<OTPFieldContextValue | null>(null);
-
 function useOTPField() {
   const value = useContext(OTPFieldContext);
   if (!value) throw new Error('OTPFieldInput must be inside root.');
   return value;
 }
-
-function focusCell(input: HTMLInputElement, index: number) {
-  const root = input.closest('[data-vf-otp-field-root]');
-  const cells = root?.querySelectorAll<HTMLInputElement>('[data-vf-otp-field-input]');
-  cells?.item(index).focus();
-}
-
 export interface OTPFieldRootProps extends ComponentPropsWithoutRef<'div'> {
   value?: string;
   defaultValue?: string;
   length?: number;
+  disabled?: boolean;
   onValueChange?(value: string): void;
   children?: ReactNode;
 }
-
 export const OTPFieldRoot = forwardRef<HTMLDivElement, OTPFieldRootProps>(function OTPFieldRoot(
-  { value, defaultValue = '', length = 6, onValueChange, children, ...props },
+  { value, defaultValue = '', length = 6, disabled = false, onValueChange, children, ...props },
   ref,
 ) {
+  if (!Number.isInteger(length) || length < 1) throw new RangeError('OTPField length must be a positive integer.');
   const [internalValue, setInternalValue] = useState(defaultValue);
-  const current = (value ?? internalValue).slice(0, length).padEnd(length, ' ');
-
-  const setFrom = (index: number, raw: string) => {
-    const inserted = Array.from(raw.replace(/\s/g, '')).slice(0, Math.max(0, length - index));
-    const next = Array.from(current);
-
-    if (inserted.length === 0) {
-      next[index] = ' ';
-    } else {
-      inserted.forEach((character, offset) => {
-        next[index + offset] = character;
-      });
-    }
-
-    const nextValue = next.join('').trimEnd();
-    if (value === undefined) setInternalValue(nextValue);
-    onValueChange?.(nextValue);
-    return inserted.length;
+  const current = value ?? internalValue;
+  const set = (next: string) => {
+    if (disabled || next === current) return;
+    if (value === undefined) setInternalValue(next);
+    onValueChange?.(next);
   };
-
   return createElement(
     OTPFieldContext.Provider,
-    { value: { value: current, length, setFrom } },
-    createElement('div', { ...props, ref, role: 'group', 'data-vf-otp-field-root': '' }, children),
+    { value: { value: current, length, disabled, set } },
+    createElement('div', { ...props, ref, 'data-vf-otp-field-root': '' }, children),
   );
 });
-
-export interface OTPFieldInputProps extends Omit<ComponentPropsWithoutRef<'input'>, 'value'> {
-  index: number;
-}
-
+export type OTPFieldInputProps = Omit<ComponentPropsWithoutRef<'input'>, 'value' | 'defaultValue' | 'type' | 'maxLength'>;
 export const OTPFieldInput = forwardRef<HTMLInputElement, OTPFieldInputProps>(function OTPFieldInput(
-  { index, onChange, onKeyDown, onPaste, inputMode, autoComplete, maxLength, ...props },
+  { onChange, inputMode, autoComplete, disabled, ...props },
   ref,
 ) {
-  const otpField = useOTPField();
-  const value = otpField.value[index]?.trim() ?? '';
-
+  const field = useOTPField();
   return createElement('input', {
     ...props,
     ref,
+    type: 'text',
     inputMode: inputMode ?? 'numeric',
-    autoComplete: autoComplete ?? (index === 0 ? 'one-time-code' : 'off'),
-    maxLength: maxLength ?? (index === 0 ? otpField.length : 1),
-    value,
+    autoComplete: autoComplete ?? 'one-time-code',
+    maxLength: field.length,
+    value: field.value,
+    disabled: field.disabled || disabled,
+    'data-vf-input': '',
     'data-vf-otp-field-input': '',
     onChange: (event) => {
       onChange?.(event);
-      if (event.defaultPrevented) return;
-      const inserted = otpField.setFrom(index, event.currentTarget.value);
-      if (inserted > 0) {
-        focusCell(event.currentTarget, Math.min(index + inserted, otpField.length - 1));
-      }
-    },
-    onPaste: (event) => {
-      onPaste?.(event);
-      if (event.defaultPrevented) return;
-      const text = event.clipboardData.getData('text');
-      if (!text.replace(/\s/g, '')) return;
-      event.preventDefault();
-      const inserted = otpField.setFrom(index, text);
-      focusCell(event.currentTarget, Math.min(index + inserted, otpField.length - 1));
-    },
-    onKeyDown: (event) => {
-      onKeyDown?.(event);
-      if (!event.defaultPrevented && event.key === 'Backspace' && !event.currentTarget.value && index > 0) {
-        focusCell(event.currentTarget, index - 1);
+      if (!event.defaultPrevented && !event.currentTarget.matches(':disabled') && !event.currentTarget.readOnly) {
+        field.set(event.currentTarget.value);
       }
     },
   });

@@ -73,14 +73,14 @@ test('STD-15 representative session recovery preserves task context', async ({ p
 
   await page.getByRole('button', { name: 'Continue', exact: true }).click();
   await expect(page.getByRole('heading', { name: 'Enter your verification code', exact: true })).toBeFocused();
-  const otpCells = page.getByRole('group', { name: 'Verification code', exact: true }).locator('input');
-  await expect(otpCells).toHaveCount(4);
-  await otpCells.nth(0).fill('1');
-  await otpCells.nth(1).fill('2');
-  await otpCells.nth(2).fill('3');
-  await otpCells.nth(3).fill('4');
+  const otp = page.getByRole('textbox', { name: 'Verification code', exact: true });
+  await expect(otp).toHaveAttribute('autocomplete', 'one-time-code');
+  await expect(otp).toHaveAttribute('maxlength', '4');
+  await otp.fill('1234');
+  await expect(otp).toHaveValue('1234');
   await page.getByRole('button', { name: 'Verify and return to edit', exact: true }).click();
   await expect(page.getByRole('alert')).toContainText('incorrect or expired');
+  await expect(otp).toHaveValue('1234');
   await expect(page.getByTestId('draft-value')).toHaveText('Unsaved identity workflow draft');
 
   await page.getByRole('button', { name: 'Verify and return to edit', exact: true }).click();
