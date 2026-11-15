@@ -23,7 +23,8 @@
   "ownership": {
     "library": [
       "Preserve finite numeric values or null (empty), distinguish native badInput editing from committed numeric requests, and preserve native validity rather than clamping user edits.",
-      "Framework roots own committed value and native constraints; step controls use the owned native input's stepUp/stepDown and do not act when disabled, readonly or step-any."
+      "Framework roots own committed value and native constraints; step controls use the owned native input's stepUp/stepDown and do not act when disabled, readonly or step-any.",
+      "Native reset restores the initial uncontrolled value or preserves the latest controlled value; reset is not a synthetic input/value-change event."
     ],
     "consumer": ["Author input and step-button names, units and validation guidance."]
   },
@@ -45,6 +46,6 @@
     "#1285 removed English step-button fallback names.",
     "Audit mapping is provisional; not a conformance claim.",
     "Elements step controls are restricted to their own native input; nested/cancelled/disabled/readonly/step-any/no-change actions do not emit input. Browser fixture now imports actual public ports; draft-versus-committed editing and full bounds/step parity remain open.",
-    "Framework nullable value contract and native step parity implemented on this branch; reset and broader SSR/hydration/cross-engine/manual evidence remain open."
+    "Framework nullable value contract and native step parity implemented on this branch; native reset regressions added; broader SSR/hydration/cross-engine/manual evidence remains open."
   ]
 }
