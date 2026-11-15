@@ -91,7 +91,7 @@ test('controlled framework ContextMenu reconciles rejected light dismissal', asy
   expect(await page.locator('#controlled-menu').evaluate((node) => node.matches(':popover-open'))).toBe(true);
 });
 
- test('secondary-button gesture opens after release without self-dismissal', async ({ page }) => {
+test('secondary-button gesture opens after release without self-dismissal', async ({ page }) => {
   test.skip(port === 'web', 'Managed runtime evidence.');
   const target = page.locator('#target');
   const box = await target.boundingBox();

@@ -108,7 +108,10 @@ export const ContextMenuTrigger = defineComponent({
     function schedule() {
       pending = false;
       if (timer !== null) clearTimeout(timer);
-      timer = setTimeout(() => { timer = null; open(); }, 0);
+      timer = setTimeout(() => {
+        timer = null;
+        open();
+      }, 0);
     }
     onBeforeUnmount(clear);
     function openMenu(event: Event) {
@@ -141,7 +144,12 @@ export const ContextMenuTrigger = defineComponent({
           'data-vf-context-menu-trigger': '',
           onPointerdown(event: PointerEvent) {
             invoke(attrs.onPointerdown, event);
-            if (event.button !== 2 || event.target instanceof Element && event.target.closest('[data-vf-context-menu-trigger]') !== event.currentTarget) return;
+            if (
+              event.button !== 2 ||
+              (event.target instanceof Element &&
+                event.target.closest('[data-vf-context-menu-trigger]') !== event.currentTarget)
+            )
+              return;
             clear();
             pressed = !event.defaultPrevented;
           },
@@ -151,8 +159,14 @@ export const ContextMenuTrigger = defineComponent({
             pressed = false;
             if (pending) schedule();
           },
-          onPointercancel(event: PointerEvent) { invoke(attrs.onPointercancel, event); clear(); },
-          onPointerleave(event: PointerEvent) { invoke(attrs.onPointerleave, event); if (pressed) clear(); },
+          onPointercancel(event: PointerEvent) {
+            invoke(attrs.onPointercancel, event);
+            clear();
+          },
+          onPointerleave(event: PointerEvent) {
+            invoke(attrs.onPointerleave, event);
+            if (pressed) clear();
+          },
           onContextmenu(event: MouseEvent) {
             invoke(attrs.onContextmenu, event);
             openMenu(event);

@@ -74,7 +74,11 @@ export class VfContextMenuTriggerDirective {
     const state = focusRequestFor(root);
     state.anchor = this.element;
     const onDown = (event: PointerEvent) => {
-      if (event.button !== 2 || event.target instanceof Element && event.target.closest('[data-vf-context-menu-trigger]') !== this.element) return;
+      if (
+        event.button !== 2 ||
+        (event.target instanceof Element && event.target.closest('[data-vf-context-menu-trigger]') !== this.element)
+      )
+        return;
       this.clear();
       this.pressed = !event.defaultPrevented;
     };
@@ -84,7 +88,9 @@ export class VfContextMenuTriggerDirective {
       if (this.pending) this.schedule();
     };
     const onCancel = () => this.clear();
-    const onLeave = () => { if (this.pressed) this.clear(); };
+    const onLeave = () => {
+      if (this.pressed) this.clear();
+    };
     this.element.addEventListener('pointerdown', onDown);
     this.element.addEventListener('pointerup', onUp);
     this.element.addEventListener('pointercancel', onCancel);
@@ -123,7 +129,10 @@ export class VfContextMenuTriggerDirective {
   private schedule(): void {
     this.pending = false;
     if (this.timer !== null) clearTimeout(this.timer);
-    this.timer = setTimeout(() => { this.timer = null; this.open(); }, 0);
+    this.timer = setTimeout(() => {
+      this.timer = null;
+      this.open();
+    }, 0);
   }
   private open(): void {
     if (!this.element.isConnected) return;

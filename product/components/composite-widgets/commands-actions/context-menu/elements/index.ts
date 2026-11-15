@@ -169,7 +169,13 @@ export class VfContextMenuElement extends HTMLElementBase {
     this.pending = false;
   };
   private onPointerDown = (event: PointerEvent): void => {
-    if (event.button !== 2 || !(event.target instanceof Element) || event.target.closest(rootSelector) !== this || event.target.closest('[data-vf-context-menu-trigger]') !== this.trigger) return;
+    if (
+      event.button !== 2 ||
+      !(event.target instanceof Element) ||
+      event.target.closest(rootSelector) !== this ||
+      event.target.closest('[data-vf-context-menu-trigger]') !== this.trigger
+    )
+      return;
     this.clearInvocation();
     this.pressed = !event.defaultPrevented;
   };
@@ -178,11 +184,16 @@ export class VfContextMenuElement extends HTMLElementBase {
     this.pressed = false;
     if (this.pending) this.scheduleInvocation();
   };
-  private onPointerLeave = (): void => { if (this.pressed) this.clearInvocation(); };
+  private onPointerLeave = (): void => {
+    if (this.pressed) this.clearInvocation();
+  };
   private scheduleInvocation(): void {
     this.pending = false;
     if (this.invocationTimer !== null) clearTimeout(this.invocationTimer);
-    this.invocationTimer = setTimeout(() => { this.invocationTimer = null; this.openFromTrigger(); }, 0);
+    this.invocationTimer = setTimeout(() => {
+      this.invocationTimer = null;
+      this.openFromTrigger();
+    }, 0);
   }
   private openFromTrigger(): void {
     if (!this.isConnected) return;

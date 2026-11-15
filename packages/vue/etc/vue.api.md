@@ -575,7 +575,7 @@ export { ContainerSize }
 // @public (undocumented)
 export const ContextMenuContent: DefineComponent<    {}, () => VNode<RendererNode, RendererElement, {
 [key: string]: any;
-}> | null, {}, {}, {}, ComponentOptionsMixin, ComponentOptionsMixin, {}, string, PublicProps, Readonly<{}> & Readonly<{}>, {}, {}, {}, {}, string, ComponentProvideOptions, true, {}, any>;
+}>, {}, {}, {}, ComponentOptionsMixin, ComponentOptionsMixin, {}, string, PublicProps, Readonly<{}> & Readonly<{}>, {}, {}, {}, {}, string, ComponentProvideOptions, true, {}, any>;
 
 // @public (undocumented)
 export const ContextMenuItem: DefineComponent<ExtractPropTypes<    {
@@ -592,13 +592,25 @@ disabled: boolean;
 
 // @public (undocumented)
 export const ContextMenuRoot: DefineComponent<ExtractPropTypes<    {
-open: BooleanConstructor;
-defaultOpen: BooleanConstructor;
+open: {
+type: BooleanConstructor;
+default: undefined;
+};
+defaultOpen: {
+type: BooleanConstructor;
+default: boolean;
+};
 }>, () => VNode<RendererNode, RendererElement, {
 [key: string]: any;
 }>[] | undefined, {}, {}, {}, ComponentOptionsMixin, ComponentOptionsMixin, "update:open"[], "update:open", PublicProps, Readonly<ExtractPropTypes<    {
-open: BooleanConstructor;
-defaultOpen: BooleanConstructor;
+open: {
+type: BooleanConstructor;
+default: undefined;
+};
+defaultOpen: {
+type: BooleanConstructor;
+default: boolean;
+};
 }>> & Readonly<{
 "onUpdate:open"?: (...args: any[]) => any;
 }>, {

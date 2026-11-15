@@ -87,7 +87,10 @@ export function ContextMenuRoot({ children, open, defaultOpen = false, onOpenCha
 }
 
 export const ContextMenuTrigger = forwardRef<HTMLDivElement, ComponentPropsWithoutRef<'div'>>(
-  function ContextMenuTrigger({ onContextMenu, onKeyDown, onPointerDown, onPointerUp, onPointerCancel, onPointerLeave, ...props }, ref) {
+  function ContextMenuTrigger(
+    { onContextMenu, onKeyDown, onPointerDown, onPointerUp, onPointerCancel, onPointerLeave, ...props },
+    ref,
+  ) {
     const menu = useContextMenu();
     const gesture = useRef({ pressed: false, pending: false, timer: null as ReturnType<typeof setTimeout> | null });
     const openRef = useRef(() => {});
@@ -136,7 +139,12 @@ export const ContextMenuTrigger = forwardRef<HTMLDivElement, ComponentPropsWitho
       'data-vf-context-menu-trigger': '',
       onPointerDown(event) {
         onPointerDown?.(event);
-        if (event.button !== 2 || event.target instanceof Element && event.target.closest('[data-vf-context-menu-trigger]') !== event.currentTarget) return;
+        if (
+          event.button !== 2 ||
+          (event.target instanceof Element &&
+            event.target.closest('[data-vf-context-menu-trigger]') !== event.currentTarget)
+        )
+          return;
         clear();
         gesture.current.pressed = !event.defaultPrevented;
       },
@@ -146,8 +154,14 @@ export const ContextMenuTrigger = forwardRef<HTMLDivElement, ComponentPropsWitho
         gesture.current.pressed = false;
         if (gesture.current.pending) schedule();
       },
-      onPointerCancel(event) { onPointerCancel?.(event); clear(); },
-      onPointerLeave(event) { onPointerLeave?.(event); if (gesture.current.pressed) clear(); },
+      onPointerCancel(event) {
+        onPointerCancel?.(event);
+        clear();
+      },
+      onPointerLeave(event) {
+        onPointerLeave?.(event);
+        if (gesture.current.pressed) clear();
+      },
       onContextMenu(event) {
         onContextMenu?.(event);
         invoke(event);
