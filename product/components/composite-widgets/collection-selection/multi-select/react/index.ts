@@ -5,6 +5,7 @@ import {
   useContext,
   useEffect,
   useId,
+  useLayoutEffect,
   useMemo,
   useRef,
   useState,
@@ -26,6 +27,12 @@ function optionFromTarget(root: HTMLElement, target: EventTarget | null): HTMLBu
   const option = target instanceof Element ? target.closest<HTMLButtonElement>(optionMultiSelector) : null;
   return option && option.closest('[data-vf-multi-select-content]') === root ? option : null;
 }
+function firstInvalid(control: HTMLSelectElement): boolean {
+  const first = Array.from(control.form?.elements ?? []).find(
+    (candidate) => candidate.matches(':invalid') && !candidate.matches('fieldset'),
+  );
+  return !first || first === control;
+}
 function optionDisabled(option: HTMLButtonElement): boolean {
   return option.matches(':disabled,[aria-disabled="true"]');
 }
@@ -41,6 +48,11 @@ function focusOption(root: HTMLElement | null, edge: 'first' | 'last'): void {
 }
 
 interface Ctx {
+  disabled: boolean;
+  error: string;
+  setError(message: string): void;
+  resetValue: string[];
+  reset(): string[];
   triggerId: string;
   listboxId: string;
   open: boolean;
@@ -61,6 +73,7 @@ function useMulti(): Ctx {
 }
 
 export interface MultiSelectRootProps {
+  disabled?: boolean;
   children?: ReactNode;
   id?: string;
   value?: string[];
@@ -68,9 +81,22 @@ export interface MultiSelectRootProps {
   onValueChange?(value: string[]): void;
 }
 
-export function MultiSelectRoot({ children, id, value, defaultValue = [], onValueChange }: MultiSelectRootProps) {
-  const [internalValue, setInternalValue] = useState(defaultValue);
-  const [open, setOpen] = useState(false);
+export function MultiSelectRoot({
+  children,
+  id,
+  value,
+  defaultValue = [],
+  disabled = false,
+  onValueChange,
+}: MultiSelectRootProps) {
+  const initialValue = useRef([...defaultValue]);
+  const [internalValue, setInternalValue] = useState(initialValue.current);
+  const [error, setError] = useState('');
+  const [internalOpen, setOpen] = useState(false);
+  const open = !disabled && internalOpen;
+  useEffect(() => {
+    if (disabled) setOpen(false);
+  }, [disabled]);
   const values = value ?? internalValue;
   const uid = useId();
   const rootId = id ?? `vf-multi-select-${uid}`;
@@ -82,12 +108,25 @@ export function MultiSelectRoot({ children, id, value, defaultValue = [], onValu
   const [focusRevision, setFocusRevision] = useState(0);
   const context = useMemo<Ctx>(
     () => ({
+      disabled,
+      error,
+      setError,
+      resetValue: value ?? initialValue.current,
+      reset() {
+        const next = value ?? initialValue.current;
+        if (value === undefined) setInternalValue(next);
+        setError('');
+        return next;
+      },
       triggerId,
       listboxId,
       open,
-      setOpen,
+      setOpen(next) {
+        if (!next || !disabled) setOpen(next);
+      },
       values,
       toggle(candidate) {
+        if (disabled) return;
         const next = values.includes(candidate)
           ? values.filter((value) => value !== candidate)
           : [...values, candidate];
@@ -103,14 +142,14 @@ export function MultiSelectRoot({ children, id, value, defaultValue = [], onValu
         setFocusRevision((revision) => revision + 1);
       },
     }),
-    [open, onValueChange, values, value, focusRevision, triggerId, listboxId],
+    [open, onValueChange, values, value, focusRevision, triggerId, listboxId, disabled, error],
   );
   return createElement(C.Provider, { value: context }, children);
 }
 
 export const MultiSelectTrigger = forwardRef<
   HTMLButtonElement,
-  Omit<ComponentPropsWithoutRef<'button'>, 'id' | 'aria-controls'>
+  Omit<ComponentPropsWithoutRef<'button'>, 'id' | 'aria-controls' | 'type'>
 >(function MultiSelectTrigger({ onClick, onKeyDown, ...props }, forwardedRef) {
   const multi = useMulti();
   function openAndFocus(edge: 'first' | 'last') {
@@ -126,7 +165,12 @@ export const MultiSelectTrigger = forwardRef<
         if (typeof forwardedRef === 'function') forwardedRef(node);
         else if (forwardedRef) forwardedRef.current = node;
       },
-      type: props.type ?? 'button',
+      type: 'button',
+      disabled: props.disabled || multi.disabled,
+      'aria-invalid': multi.error ? true : props['aria-invalid'],
+      'aria-describedby':
+        [props['aria-describedby'], multi.error ? `${multi.listboxId}-error` : undefined].filter(Boolean).join(' ') ||
+        undefined,
       'data-vf-multi-select-trigger': '',
       id: multi.triggerId,
       'aria-controls': multi.listboxId,
@@ -289,9 +333,9 @@ export const MultiSelectOption = forwardRef<HTMLButtonElement, MultiSelectOption
     type: 'button',
     role: 'option',
     tabIndex: -1,
-    disabled,
+    disabled: disabled || multi.disabled,
     'aria-selected': multi.values.includes(value),
-    'aria-disabled': disabled || undefined,
+    'aria-disabled': disabled || multi.disabled || undefined,
     'data-vf-multi-select-option': '',
     'data-vf-value': value,
     onClick(event) {
@@ -300,3 +344,76 @@ export const MultiSelectOption = forwardRef<HTMLButtonElement, MultiSelectOption
     },
   });
 });
+
+/** Native form participation for the custom MultiSelect popup. Supply the same option keys and labels. */
+export interface MultiSelectFormControlProps {
+  name?: string;
+  form?: string;
+  required?: boolean;
+  options: readonly { value: string; label: string; disabled?: boolean }[];
+}
+
+export function MultiSelectFormControl({ name, form, required, options }: MultiSelectFormControlProps) {
+  const root = useMulti();
+  const control = useRef<HTMLSelectElement | null>(null);
+  const reset = useRef(root.reset);
+  function sync(element: HTMLSelectElement, values: string[], defaults: string[]) {
+    for (const option of element.options) option.defaultSelected = defaults.includes(option.value);
+    for (const option of element.options) option.selected = values.includes(option.value);
+  }
+  useLayoutEffect(() => {
+    reset.current = root.reset;
+    const element = control.current;
+    if (!element) return;
+    sync(element, root.values, root.resetValue);
+    if (root.error && (element.validity.valid || element.matches(':disabled'))) root.setError('');
+  });
+  useEffect(() => {
+    const element = control.current;
+    if (!element) return;
+    const document = element.ownerDocument;
+    let active = true;
+    const onReset = (event: Event) => {
+      if (!element.form || element.form !== event.target) return;
+      setTimeout(() => {
+        if (!active || event.defaultPrevented || element.form !== event.target) return;
+        const next = reset.current();
+        sync(element, next, next);
+      }, 0);
+    };
+    document.addEventListener('reset', onReset, true);
+    return () => {
+      active = false;
+      document.removeEventListener('reset', onReset, true);
+    };
+  }, []);
+  return createElement(
+    'div',
+    { 'data-vf-multi-select-form-control': '' },
+    createElement(
+      'select',
+      {
+        ref: control,
+        name,
+        form,
+        required,
+        disabled: root.disabled,
+        multiple: true,
+        hidden: true,
+        'aria-hidden': true,
+        tabIndex: -1,
+        value: root.values,
+        onChange: (event) => sync(event.currentTarget, root.values, root.resetValue),
+        onInvalid: (event) => {
+          event.preventDefault();
+          root.setError(event.currentTarget.validationMessage);
+          if (firstInvalid(event.currentTarget)) root.anchorRef.current?.focus();
+        },
+      },
+      options.map((option) =>
+        createElement('option', { key: option.value, value: option.value, disabled: option.disabled }, option.label),
+      ),
+    ),
+    createElement('span', { id: `${root.listboxId}-error`, role: 'status' }, root.error),
+  );
+}

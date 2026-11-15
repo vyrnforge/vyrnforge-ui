@@ -2466,6 +2466,27 @@ export type MenuTriggerProps = ComponentPropsWithoutRef<'button'>;
 export const MultiSelectContent: ForwardRefExoticComponent<Omit<Omit<DetailedHTMLProps<HTMLAttributes<HTMLDivElement>, HTMLDivElement>, "ref">, "id"> & RefAttributes<HTMLDivElement>>;
 
 // @public (undocumented)
+export function MultiSelectFormControl(input: MultiSelectFormControlProps): ReactElement<    {
+'data-vf-multi-select-form-control': string;
+}, string | JSXElementConstructor<any>>;
+
+// @public
+export interface MultiSelectFormControlProps {
+    // (undocumented)
+    form?: string;
+    // (undocumented)
+    name?: string;
+    // (undocumented)
+    options: readonly {
+        value: string;
+        label: string;
+        disabled?: boolean;
+    }[];
+    // (undocumented)
+    required?: boolean;
+}
+
+// @public (undocumented)
 export const MultiSelectOption: ForwardRefExoticComponent<MultiSelectOptionProps & RefAttributes<HTMLButtonElement>>;
 
 // @public (undocumented)
@@ -2484,6 +2505,8 @@ export interface MultiSelectRootProps {
     // (undocumented)
     defaultValue?: string[];
     // (undocumented)
+    disabled?: boolean;
+    // (undocumented)
     id?: string;
     // (undocumented)
     onValueChange?(value: string[]): void;
@@ -2492,7 +2515,7 @@ export interface MultiSelectRootProps {
 }
 
 // @public (undocumented)
-export const MultiSelectTrigger: ForwardRefExoticComponent<Omit<Omit<DetailedHTMLProps<ButtonHTMLAttributes<HTMLButtonElement>, HTMLButtonElement>, "ref">, "id" | "aria-controls"> & RefAttributes<HTMLButtonElement>>;
+export const MultiSelectTrigger: ForwardRefExoticComponent<Omit<Omit<DetailedHTMLProps<ButtonHTMLAttributes<HTMLButtonElement>, HTMLButtonElement>, "ref">, "type" | "id" | "aria-controls"> & RefAttributes<HTMLButtonElement>>;
 
 // @public (undocumented)
 export const NativeSelect: ForwardRefExoticComponent<NativeSelectProps & RefAttributes<HTMLSelectElement>>;
@@ -2817,6 +2840,27 @@ export interface SegmentedControlRootProps extends Omit<ComponentPropsWithoutRef
 export const SelectContent: ForwardRefExoticComponent<Omit<Omit<DetailedHTMLProps<HTMLAttributes<HTMLDivElement>, HTMLDivElement>, "ref">, "id"> & RefAttributes<HTMLDivElement>>;
 
 // @public (undocumented)
+export function SelectFormControl(input: SelectFormControlProps): ReactElement<    {
+'data-vf-select-form-control': string;
+}, string | JSXElementConstructor<any>>;
+
+// @public
+export interface SelectFormControlProps {
+    // (undocumented)
+    form?: string;
+    // (undocumented)
+    name?: string;
+    // (undocumented)
+    options: readonly {
+        value: string;
+        label: string;
+        disabled?: boolean;
+    }[];
+    // (undocumented)
+    required?: boolean;
+}
+
+// @public (undocumented)
 export const SelectOption: ForwardRefExoticComponent<SelectOptionProps & RefAttributes<HTMLButtonElement>>;
 
 // @public (undocumented)
@@ -2837,6 +2881,8 @@ export interface SelectRootProps {
     // (undocumented)
     defaultValue?: string;
     // (undocumented)
+    disabled?: boolean;
+    // (undocumented)
     id?: string;
     // (undocumented)
     onOpenChange?(open: boolean): void;
@@ -2849,7 +2895,7 @@ export interface SelectRootProps {
 }
 
 // @public (undocumented)
-export const SelectTrigger: ForwardRefExoticComponent<Omit<Omit<DetailedHTMLProps<ButtonHTMLAttributes<HTMLButtonElement>, HTMLButtonElement>, "ref">, "id" | "aria-controls"> & RefAttributes<HTMLButtonElement>>;
+export const SelectTrigger: ForwardRefExoticComponent<Omit<Omit<DetailedHTMLProps<ButtonHTMLAttributes<HTMLButtonElement>, HTMLButtonElement>, "ref">, "type" | "id" | "aria-controls"> & RefAttributes<HTMLButtonElement>>;
 
 // @public (undocumented)
 export const SideNav: ForwardRefExoticComponent<Omit<DetailedHTMLProps<HTMLAttributes<HTMLElement>, HTMLElement>, "ref"> & RefAttributes<HTMLElement>>;

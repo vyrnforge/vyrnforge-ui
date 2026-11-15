@@ -27,6 +27,12 @@ function optionFromTarget(root: HTMLElement, target: EventTarget | null): HTMLBu
   const option = target instanceof Element ? target.closest<HTMLButtonElement>(optionMultiSelector) : null;
   return option && option.closest('[data-vf-multi-select-content]') === root ? option : null;
 }
+function firstInvalid(control: HTMLSelectElement): boolean {
+  const first = Array.from(control.form?.elements ?? []).find(
+    (candidate) => candidate.matches(':invalid') && !candidate.matches('fieldset'),
+  );
+  return !first || first === control;
+}
 function optionDisabled(option: HTMLButtonElement): boolean {
   return option.matches(':disabled,[aria-disabled="true"]');
 }
@@ -36,6 +42,10 @@ function invoke(handler: unknown, event: Event): void {
 }
 
 interface MultiSelectContext {
+  disabled: Readonly<Ref<boolean>>;
+  error: Ref<string>;
+  resetValue(): string[];
+  reset(): string[];
   triggerId: Readonly<Ref<string>>;
   listboxId: Readonly<Ref<string>>;
   open: Ref<boolean>;
@@ -59,13 +69,25 @@ export const MultiSelectRoot = defineComponent({
   name: 'MultiSelectRoot',
   props: {
     id: String,
+    disabled: Boolean,
     value: Array as PropType<string[] | undefined>,
     defaultValue: { type: Array as PropType<string[]>, default: () => [] },
   },
   emits: ['update:value'],
   setup(props, { slots, emit }) {
-    const internalValue = ref([...props.defaultValue]);
-    const open = ref(false);
+    const initialValue = [...props.defaultValue];
+    const internalValue = ref(initialValue);
+    const disabled = computed(() => props.disabled);
+    const error = ref('');
+    const internalOpen = ref(false);
+    const open = computed(() => !disabled.value && internalOpen.value);
+    watch(
+      disabled,
+      (next) => {
+        if (next) internalOpen.value = false;
+      },
+      { flush: 'sync' },
+    );
     const values = computed(() => props.value ?? internalValue.value);
     const uid = useId();
     const rootId = computed(() => props.id ?? `vf-multi-select-${uid}`);
@@ -76,6 +98,15 @@ export const MultiSelectRoot = defineComponent({
     const focusRequest = ref<'first' | 'last' | null>(null);
     const focusRevision = ref(0);
     provide(key, {
+      disabled,
+      error,
+      resetValue: () => props.value ?? initialValue,
+      reset() {
+        const next = props.value ?? initialValue;
+        if (props.value === undefined) internalValue.value = next;
+        error.value = '';
+        return next;
+      },
       triggerId,
       listboxId,
       open,
@@ -83,9 +114,10 @@ export const MultiSelectRoot = defineComponent({
       anchor,
       surface,
       setOpen(next) {
-        open.value = next;
+        if (!next || !disabled.value) internalOpen.value = next;
       },
       toggle(candidate) {
+        if (disabled.value) return;
         const next = values.value.includes(candidate)
           ? values.value.filter((value) => value !== candidate)
           : [...values.value, candidate];
@@ -117,10 +149,16 @@ export const MultiSelectTrigger = defineComponent({
         'button',
         {
           ...attrs,
-          type: (attrs.type as string | undefined) ?? 'button',
+          type: 'button',
           ref: (node: unknown) => {
             multi.anchor.value = node as HTMLElement | null;
           },
+          disabled: Boolean(attrs.disabled === '' || attrs.disabled) || multi.disabled.value,
+          'aria-invalid': multi.error.value ? true : attrs['aria-invalid'],
+          'aria-describedby':
+            [attrs['aria-describedby'], multi.error.value ? `${multi.listboxId.value}-error` : undefined]
+              .filter(Boolean)
+              .join(' ') || undefined,
           id: multi.triggerId.value,
           'aria-controls': multi.listboxId.value,
           'aria-haspopup': 'listbox',
@@ -295,9 +333,9 @@ export const MultiSelectOption = defineComponent({
           type: (attrs.type as string | undefined) ?? 'button',
           role: 'option',
           tabindex: -1,
-          disabled: props.disabled,
+          disabled: props.disabled || multi.disabled.value,
           'aria-selected': multi.values.value.includes(props.value),
-          'aria-disabled': props.disabled || undefined,
+          'aria-disabled': props.disabled || multi.disabled.value || undefined,
           'data-vf-multi-select-option': '',
           'data-vf-value': props.value,
           onClick: (event: MouseEvent) => {
@@ -308,5 +346,93 @@ export const MultiSelectOption = defineComponent({
         },
         slots.default?.(),
       );
+  },
+});
+
+export const MultiSelectFormControl = defineComponent({
+  name: 'MultiSelectFormControl',
+  props: {
+    name: String,
+    form: String,
+    required: Boolean,
+    options: {
+      type: Array as PropType<readonly { value: string; label: string; disabled?: boolean }[]>,
+      required: true,
+    },
+  },
+  setup(props) {
+    const root = useMulti();
+    const control = ref<HTMLSelectElement | null>(null);
+    let document: Document | undefined;
+    let active = false;
+    function sync(element: HTMLSelectElement, values: string[], defaults: string[]) {
+      for (const option of element.options) option.defaultSelected = defaults.includes(option.value);
+      for (const option of element.options) option.selected = values.includes(option.value);
+    }
+    function reconcile() {
+      const element = control.value;
+      if (!element) return;
+      sync(element, root.values.value, root.resetValue());
+      if (root.error.value && (element.validity.valid || element.matches(':disabled'))) root.error.value = '';
+    }
+    const onReset = (event: Event) => {
+      const element = control.value;
+      if (!element?.form || element.form !== event.target) return;
+      setTimeout(() => {
+        if (!active || event.defaultPrevented || control.value !== element || element.form !== event.target) return;
+        const next = root.reset();
+        sync(element, next, next);
+      }, 0);
+    };
+    onMounted(() => {
+      active = true;
+      reconcile();
+      document = control.value?.ownerDocument;
+      document?.addEventListener('reset', onReset, true);
+    });
+    watch([root.values, root.disabled, () => props.options, () => props.required], reconcile, {
+      flush: 'post',
+      deep: true,
+    });
+    onBeforeUnmount(() => {
+      active = false;
+      document?.removeEventListener('reset', onReset, true);
+    });
+    return () =>
+      h('div', { 'data-vf-multi-select-form-control': '' }, [
+        h(
+          'select',
+          {
+            ref: control,
+            name: props.name,
+            form: props.form,
+            required: props.required,
+            disabled: root.disabled.value,
+            multiple: true,
+            hidden: true,
+            'aria-hidden': 'true',
+            tabindex: -1,
+            onChange: reconcile,
+            onInvalid: (event: Event) => {
+              event.preventDefault();
+              root.error.value = (event.currentTarget as HTMLSelectElement).validationMessage;
+              if (firstInvalid(event.currentTarget as HTMLSelectElement)) root.anchor.value?.focus();
+            },
+          },
+          props.options.map((option) =>
+            h(
+              'option',
+              {
+                key: option.value,
+                value: option.value,
+                disabled: option.disabled,
+                selected: root.values.value.includes(option.value),
+              },
+              option.label,
+            ),
+          ),
+        ),
+        h('span', { id: `${root.listboxId.value}-error`, role: 'status' }, root.error.value),
+      ]);
   },
 });

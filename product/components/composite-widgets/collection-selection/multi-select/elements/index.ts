@@ -16,6 +16,12 @@ function optionFromTarget(root: HTMLElement, target: EventTarget | null): HTMLEl
     ? option
     : null;
 }
+function firstInvalid(control: HTMLSelectElement): boolean {
+  const first = Array.from(control.form?.elements ?? []).find(
+    (candidate) => candidate.matches(':invalid') && !candidate.matches('fieldset'),
+  );
+  return !first || first === control;
+}
 function optionDisabled(option: HTMLElement): boolean {
   return option.matches(':disabled,[disabled],[aria-disabled="true"]');
 }
@@ -24,8 +30,15 @@ function optionValue(option: HTMLElement): string {
 }
 
 export class VfMultiSelectElement extends H {
-  static observedAttributes = ['open'];
+  static observedAttributes = ['open', 'disabled'];
   private readonly generatedListboxId = `vf-multi-select-${++nextMultiSelectId}-listbox`;
+  private formControl: HTMLSelectElement | null = null;
+  private initialSelection: string[] | null = null;
+  private formError = '';
+  private generatedErrorId = `${this.generatedListboxId}-error`;
+  private disabledTrigger: HTMLButtonElement | null = null;
+  private priorTriggerDisabled = false;
+  private priorInvalid: string | null | undefined;
   private surface: HTMLElement | null = null;
   private restoreFocus = false;
   private observer: MutationObserver | null = null;
@@ -36,6 +49,9 @@ export class VfMultiSelectElement extends H {
     this.setAttribute('data-vf-multi-select-root', '');
     this.addEventListener('click', this.onClick);
     this.addEventListener('keydown', this.onKeydown);
+    this.ownerDocument.addEventListener('reset', this.onReset, true);
+    this.addEventListener('invalid', this.onInvalid, true);
+    this.addEventListener('change', this.onFormChange);
     if (typeof MutationObserver !== 'undefined') {
       this.observer = new MutationObserver(() => this.sync());
       this.observer.observe(this, {
@@ -60,6 +76,9 @@ export class VfMultiSelectElement extends H {
   disconnectedCallback(): void {
     this.removeEventListener('click', this.onClick);
     this.removeEventListener('keydown', this.onKeydown);
+    this.ownerDocument.removeEventListener('reset', this.onReset, true);
+    this.removeEventListener('invalid', this.onInvalid, true);
+    this.removeEventListener('change', this.onFormChange);
     this.observer?.disconnect();
     this.observer = null;
     if (this.timer) clearTimeout(this.timer);
@@ -91,13 +110,15 @@ export class VfMultiSelectElement extends H {
   }
 
   private sync(): void {
-    const open = this.hasAttribute('open');
+    if (this.hasAttribute('disabled') && this.hasAttribute('open')) this.removeAttribute('open');
+    const open = this.hasAttribute('open') && !this.hasAttribute('disabled');
     if (!open) {
       if (this.timer) clearTimeout(this.timer);
       this.timer = null;
       this.query = '';
     }
     const trigger = this.trigger;
+    if (trigger instanceof HTMLButtonElement) trigger.type = 'button';
     const content = this.content;
     if (content !== this.surface) {
       this.surface?.removeEventListener('toggle', this.onToggle);
@@ -120,14 +141,111 @@ export class VfMultiSelectElement extends H {
       content.toggleAttribute('data-vf-open', open);
     } else trigger?.removeAttribute('aria-controls');
     for (const option of optionsFor(this)) {
+      if (option instanceof HTMLButtonElement) option.type = 'button';
       option.setAttribute('role', 'option');
       option.tabIndex = -1;
       if (!option.hasAttribute('aria-selected')) option.setAttribute('aria-selected', 'false');
     }
+    this.syncFormControl();
     if (!content || !trigger) return;
     if (open && !content.matches(':popover-open')) content.showPopover({ source: trigger });
     if (!open && content.matches(':popover-open')) content.hidePopover();
   }
+
+  private syncFormControl(): void {
+    const trigger = this.trigger;
+    if (this.disabledTrigger && (this.disabledTrigger !== trigger || !this.hasAttribute('disabled'))) {
+      this.disabledTrigger.disabled = this.priorTriggerDisabled;
+      this.disabledTrigger = null;
+    }
+    if (trigger instanceof HTMLButtonElement && this.hasAttribute('disabled') && !this.disabledTrigger) {
+      this.disabledTrigger = trigger;
+      this.priorTriggerDisabled = trigger.disabled;
+      trigger.disabled = true;
+    }
+    const candidate = this.ownedPart('select[data-vf-multi-select-form-control]');
+    const control = candidate instanceof HTMLSelectElement ? candidate : null;
+    if (control !== this.formControl) {
+      this.formControl = control;
+      this.initialSelection = control ? this.selectedValues() : null;
+      this.formError = '';
+    }
+    if (!control || this.initialSelection === null) return;
+    control.hidden = true;
+    control.tabIndex = -1;
+    control.setAttribute('aria-hidden', 'true');
+    control.multiple = true;
+    const disabled = this.hasAttribute('disabled');
+    if (control.disabled !== disabled) control.disabled = disabled;
+    const values = this.selectedValues();
+    const defaults = this.initialSelection;
+    for (const option of control.options) {
+      const selected = defaults.includes(option.value);
+      if (option.defaultSelected !== selected) option.defaultSelected = selected;
+    }
+    for (const option of control.options) option.selected = values.includes(option.value);
+    if (control.validity.valid || control.matches(':disabled')) this.formError = '';
+    this.syncFormError();
+  }
+  private syncFormError(): void {
+    const trigger = this.trigger;
+    const control = this.formControl;
+    if (!trigger || !control) return;
+    let error = this.ownedPart('[data-vf-multi-select-form-error]');
+    if (!error) {
+      error = this.ownerDocument.createElement('span');
+      error.setAttribute('data-vf-multi-select-form-error', '');
+      control.after(error);
+    }
+    error.id ||= this.generatedErrorId;
+    error.setAttribute('role', 'status');
+    if (error.textContent !== this.formError) error.textContent = this.formError;
+    const descriptions = (trigger.getAttribute('aria-describedby') ?? '')
+      .split(/\s+/)
+      .filter((id) => id && id !== error.id);
+    if (this.formError) {
+      if (this.priorInvalid === undefined) this.priorInvalid = trigger.getAttribute('aria-invalid');
+      trigger.setAttribute('aria-invalid', 'true');
+      descriptions.push(error.id);
+    } else if (this.priorInvalid !== undefined) {
+      if (this.priorInvalid === null) trigger.removeAttribute('aria-invalid');
+      else trigger.setAttribute('aria-invalid', this.priorInvalid);
+      this.priorInvalid = undefined;
+    }
+    if (descriptions.length) trigger.setAttribute('aria-describedby', descriptions.join(' '));
+    else trigger.removeAttribute('aria-describedby');
+  }
+  private onFormChange = (event: Event): void => {
+    if (event.target === this.formControl) this.syncFormControl();
+  };
+  private onInvalid = (event: Event): void => {
+    if (event.target !== this.formControl || !this.formControl) return;
+    event.preventDefault();
+    this.formError = this.formControl.validationMessage;
+    this.syncFormError();
+    if (firstInvalid(this.formControl)) this.trigger?.focus();
+  };
+  private onReset = (event: Event): void => {
+    const control = this.formControl;
+    if (!control?.form || control.form !== event.target) return;
+    setTimeout(() => {
+      if (
+        !this.isConnected ||
+        event.defaultPrevented ||
+        this.formControl !== control ||
+        control.form !== event.target ||
+        this.initialSelection === null
+      )
+        return;
+      const defaults = this.initialSelection;
+      for (const option of optionsFor(this)) {
+        const selected = String(defaults.includes(optionValue(option)));
+        if (option.getAttribute('aria-selected') !== selected) option.setAttribute('aria-selected', selected);
+      }
+      this.formError = '';
+      this.sync();
+    }, 0);
+  };
 
   private onBeforeToggle = (event: Event): void => {
     const surface = this.surface;
@@ -148,7 +266,7 @@ export class VfMultiSelectElement extends H {
   };
 
   private setOpen(open: boolean): void {
-    this.toggleAttribute('open', open);
+    this.toggleAttribute('open', open && !this.hasAttribute('disabled'));
   }
 
   private focusOptions(edge: 'first' | 'last'): void {
@@ -184,6 +302,7 @@ export class VfMultiSelectElement extends H {
       const selected = String(next.includes(optionValue(candidate)));
       if (candidate.getAttribute('aria-selected') !== selected) candidate.setAttribute('aria-selected', selected);
     }
+    this.syncFormControl();
   }
 
   private onClick = (event: Event): void => {
@@ -192,7 +311,7 @@ export class VfMultiSelectElement extends H {
     if (!target || target.closest(rootMultiSelector) !== this) return;
     const trigger = target.closest('[data-vf-multi-select-trigger]');
     if (trigger && trigger === this.trigger) {
-      if (trigger.matches(':disabled,[aria-disabled="true"]')) return;
+      if (this.hasAttribute('disabled') || trigger.matches(':disabled,[aria-disabled="true"]')) return;
       if (this.hasAttribute('open')) this.setOpen(false);
       else {
         this.setOpen(true);
@@ -202,7 +321,7 @@ export class VfMultiSelectElement extends H {
     }
     const option = optionFromTarget(this, target);
     if (!option || !this.hasAttribute('open') || !this.content?.contains(option)) return;
-    if (optionDisabled(option)) {
+    if (this.hasAttribute('disabled') || optionDisabled(option)) {
       event.preventDefault();
       return;
     }
@@ -215,7 +334,7 @@ export class VfMultiSelectElement extends H {
     if (!target || target.closest(rootMultiSelector) !== this) return;
     const trigger = target.closest('[data-vf-multi-select-trigger]');
     if (trigger && trigger === this.trigger) {
-      if (trigger.matches(':disabled,[aria-disabled="true"]')) return;
+      if (this.hasAttribute('disabled') || trigger.matches(':disabled,[aria-disabled="true"]')) return;
       if (event.key === 'ArrowUp') {
         event.preventDefault();
         this.setOpen(true);
@@ -229,7 +348,7 @@ export class VfMultiSelectElement extends H {
     }
 
     const content = this.content;
-    if (!this.hasAttribute('open') || !content || !content.contains(target)) return;
+    if (this.hasAttribute('disabled') || !this.hasAttribute('open') || !content || !content.contains(target)) return;
     if (event.key === 'Escape') {
       event.preventDefault();
       this.setOpen(false);

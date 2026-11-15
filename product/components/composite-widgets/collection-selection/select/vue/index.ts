@@ -11,6 +11,7 @@ import {
   ref,
   useId,
   type InjectionKey,
+  type PropType,
   type Ref,
 } from 'vue';
 import { resolveNavigationIndex } from '@vyrnforge/core/collection-navigation';
@@ -26,6 +27,12 @@ function optionFromTarget(root: HTMLElement, target: EventTarget | null): HTMLBu
   const option = target instanceof Element ? target.closest<HTMLButtonElement>(optionSelector) : null;
   return option && option.closest('[data-vf-select-content]') === root ? option : null;
 }
+function firstInvalid(control: HTMLSelectElement): boolean {
+  const first = Array.from(control.form?.elements ?? []).find(
+    (candidate) => candidate.matches(':invalid') && !candidate.matches('fieldset'),
+  );
+  return !first || first === control;
+}
 function optionDisabled(option: HTMLButtonElement): boolean {
   return option.matches(':disabled,[aria-disabled="true"]');
 }
@@ -35,6 +42,10 @@ function invoke(handler: unknown, event: Event): void {
 }
 
 interface SelectContext {
+  disabled: Readonly<Ref<boolean>>;
+  error: Ref<string>;
+  resetValue(): string;
+  reset(): string;
   triggerId: Readonly<Ref<string>>;
   listboxId: Readonly<Ref<string>>;
   open: Ref<boolean>;
@@ -58,6 +69,7 @@ export const SelectRoot = defineComponent({
   name: 'SelectRoot',
   props: {
     id: String,
+    disabled: Boolean,
     value: String,
     defaultValue: { type: String, default: '' },
     open: { type: Boolean, default: undefined },
@@ -65,10 +77,20 @@ export const SelectRoot = defineComponent({
   },
   emits: ['update:value', 'update:open'],
   setup(props, { slots, emit }) {
-    const internalValue = ref(props.defaultValue);
+    const initialValue = props.defaultValue;
+    const internalValue = ref(initialValue);
+    const disabled = computed(() => props.disabled);
+    const error = ref('');
     const internalOpen = ref(props.defaultOpen);
     const value = computed(() => props.value ?? internalValue.value);
-    const expanded = computed(() => props.open ?? internalOpen.value);
+    const expanded = computed(() => !disabled.value && (props.open ?? internalOpen.value));
+    watch(
+      disabled,
+      (next) => {
+        if (next && props.open === undefined) internalOpen.value = false;
+      },
+      { flush: 'sync' },
+    );
     const uid = useId();
     const rootId = computed(() => props.id ?? `vf-select-${uid}`);
     const triggerId = computed(() => `${rootId.value}-trigger`);
@@ -86,6 +108,15 @@ export const SelectRoot = defineComponent({
       },
     });
     provide(key, {
+      disabled,
+      error,
+      resetValue: () => props.value ?? initialValue,
+      reset() {
+        const next = props.value ?? initialValue;
+        if (props.value === undefined) internalValue.value = next;
+        error.value = '';
+        return next;
+      },
       triggerId,
       listboxId,
       open: openRef,
@@ -93,9 +124,10 @@ export const SelectRoot = defineComponent({
       anchor,
       surface,
       setOpen(next) {
-        openRef.value = next;
+        if (!next || !disabled.value) openRef.value = next;
       },
       setValue(next) {
+        if (disabled.value) return;
         if (props.value === undefined) internalValue.value = next;
         emit('update:value', next);
         openRef.value = false;
@@ -125,10 +157,16 @@ export const SelectTrigger = defineComponent({
         'button',
         {
           ...attrs,
-          type: (attrs.type as string | undefined) ?? 'button',
+          type: 'button',
           ref: (node: unknown) => {
             select.anchor.value = node as HTMLElement | null;
           },
+          disabled: Boolean(attrs.disabled === '' || attrs.disabled) || select.disabled.value,
+          'aria-invalid': select.error.value ? true : attrs['aria-invalid'],
+          'aria-describedby':
+            [attrs['aria-describedby'], select.error.value ? `${select.listboxId.value}-error` : undefined]
+              .filter(Boolean)
+              .join(' ') || undefined,
           id: select.triggerId.value,
           'aria-controls': select.listboxId.value,
           'aria-haspopup': 'listbox',
@@ -302,9 +340,9 @@ export const SelectOption = defineComponent({
           type: (attrs.type as string | undefined) ?? 'button',
           role: 'option',
           tabindex: -1,
-          disabled: props.disabled,
+          disabled: props.disabled || select.disabled.value,
           'aria-selected': select.value.value === props.value,
-          'aria-disabled': props.disabled || undefined,
+          'aria-disabled': props.disabled || select.disabled.value || undefined,
           'data-vf-select-option': '',
           'data-vf-value': props.value,
           onClick: (event: MouseEvent) => {
@@ -315,5 +353,93 @@ export const SelectOption = defineComponent({
         },
         slots.default?.(),
       );
+  },
+});
+
+export const SelectFormControl = defineComponent({
+  name: 'SelectFormControl',
+  props: {
+    name: String,
+    form: String,
+    required: Boolean,
+    options: {
+      type: Array as PropType<readonly { value: string; label: string; disabled?: boolean }[]>,
+      required: true,
+    },
+  },
+  setup(props) {
+    const root = useSelect();
+    const control = ref<HTMLSelectElement | null>(null);
+    let document: Document | undefined;
+    let active = false;
+    function sync(element: HTMLSelectElement, values: string, defaults: string) {
+      for (const option of element.options) option.defaultSelected = defaults === option.value;
+      element.value = values;
+    }
+    function reconcile() {
+      const element = control.value;
+      if (!element) return;
+      sync(element, root.value.value, root.resetValue());
+      if (root.error.value && (element.validity.valid || element.matches(':disabled'))) root.error.value = '';
+    }
+    const onReset = (event: Event) => {
+      const element = control.value;
+      if (!element?.form || element.form !== event.target) return;
+      setTimeout(() => {
+        if (!active || event.defaultPrevented || control.value !== element || element.form !== event.target) return;
+        const next = root.reset();
+        sync(element, next, next);
+      }, 0);
+    };
+    onMounted(() => {
+      active = true;
+      reconcile();
+      document = control.value?.ownerDocument;
+      document?.addEventListener('reset', onReset, true);
+    });
+    watch([root.value, root.disabled, () => props.options, () => props.required], reconcile, {
+      flush: 'post',
+      deep: true,
+    });
+    onBeforeUnmount(() => {
+      active = false;
+      document?.removeEventListener('reset', onReset, true);
+    });
+    return () =>
+      h('div', { 'data-vf-select-form-control': '' }, [
+        h(
+          'select',
+          {
+            ref: control,
+            name: props.name,
+            form: props.form,
+            required: props.required,
+            disabled: root.disabled.value,
+            multiple: false,
+            hidden: true,
+            'aria-hidden': 'true',
+            tabindex: -1,
+            onChange: reconcile,
+            onInvalid: (event: Event) => {
+              event.preventDefault();
+              root.error.value = (event.currentTarget as HTMLSelectElement).validationMessage;
+              if (firstInvalid(event.currentTarget as HTMLSelectElement)) root.anchor.value?.focus();
+            },
+          },
+          props.options.map((option) =>
+            h(
+              'option',
+              {
+                key: option.value,
+                value: option.value,
+                disabled: option.disabled,
+                selected: root.value.value === option.value,
+              },
+              option.label,
+            ),
+          ),
+        ),
+        h('span', { id: `${root.listboxId.value}-error`, role: 'status' }, root.error.value),
+      ]);
   },
 });

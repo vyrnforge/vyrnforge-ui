@@ -1,5 +1,11 @@
 const labels = ['One', 'Disabled', 'Three', 'Banana'];
 const values = ['one', 'disabled', 'three', 'banana'];
+const formOptions = [].concat([
+  { value: 'one', label: 'One' },
+  { value: 'three', label: 'Three' },
+]);
+const formMarkup =
+  '<form id="selection-form"><button type="submit">Submit choice</button></form><form id="controlled-form"></form>';
 const before = '<button id="before" type="button">Before</button>';
 const after = '<button id="after" type="button" style="position: fixed; right: 16px; bottom: 16px">After</button>';
 const label = '<div id="multi-select-label">Choose items</div>';
@@ -36,10 +42,11 @@ export const browserFixture = {
 };
 
 export async function createReactStory() {
-  const { createElement: h, Fragment, useEffect } = await import('react');
-  const { MultiSelectRoot, MultiSelectTrigger, MultiSelectContent, MultiSelectOption } =
+  const { createElement: h, Fragment, useEffect, useState } = await import('react');
+  const { MultiSelectRoot, MultiSelectTrigger, MultiSelectContent, MultiSelectOption, MultiSelectFormControl } =
     await import('@vyrnforge/react/multi-select');
   function App() {
+    const [formDisabled, setFormDisabled] = useState(false);
     useEffect(ready, []);
     const option = (prefix, index) =>
       h(
@@ -67,11 +74,31 @@ export async function createReactStory() {
         { id: 'controlled', value: ['one'], onValueChange: request },
         h(MultiSelectTrigger, { tabIndex: -1 }, 'Controlled items'),
         h(MultiSelectContent, { 'aria-label': 'Controlled options' }, option('controlled', 0), option('controlled', 2)),
+        h(MultiSelectFormControl, { name: 'choice', form: 'controlled-form', options: formOptions }),
       ),
       h(
         'button',
         { id: 'after', type: 'button', style: { position: 'fixed', right: '16px', bottom: '16px' } },
         'After',
+      ),
+      h('form', { id: 'selection-form' }, h('button', { type: 'submit' }, 'Submit choice')),
+      h('form', { id: 'controlled-form' }),
+      h(
+        'div',
+        { id: 'form-example' },
+        h(
+          MultiSelectRoot,
+          { id: 'form-choice', defaultValue: [], disabled: formDisabled },
+          h(MultiSelectTrigger, { 'aria-describedby': 'form-hint' }, 'Form choice'),
+          h(MultiSelectContent, { 'aria-label': 'Form options' }, option('form', 0), option('form', 2)),
+          h(MultiSelectFormControl, { name: 'choice', form: 'selection-form', required: true, options: formOptions }),
+        ),
+        h('p', { id: 'form-hint' }, 'Choose at least one option.'),
+        h(
+          'button',
+          { id: 'form-disable', type: 'button', onClick: () => setFormDisabled((value) => !value) },
+          'Toggle disabled',
+        ),
       ),
     );
   }
@@ -79,11 +106,12 @@ export async function createReactStory() {
 }
 
 export async function createVueStory() {
-  const { createSSRApp, h, onMounted } = await import('vue');
-  const { MultiSelectRoot, MultiSelectTrigger, MultiSelectContent, MultiSelectOption } =
+  const { createSSRApp, h, onMounted, ref } = await import('vue');
+  const { MultiSelectRoot, MultiSelectTrigger, MultiSelectContent, MultiSelectOption, MultiSelectFormControl } =
     await import('@vyrnforge/vue/multi-select');
   return createSSRApp({
     setup() {
+      const formDisabled = ref(false);
       onMounted(ready);
       const option = (prefix, index) =>
         h(
@@ -107,12 +135,33 @@ export async function createVueStory() {
               option('controlled', 0),
               option('controlled', 2),
             ]),
+            h(MultiSelectFormControl, { name: 'choice', form: 'controlled-form', options: formOptions }),
           ]),
           h(
             'button',
             { id: 'after', type: 'button', style: { position: 'fixed', right: '16px', bottom: '16px' } },
             'After',
           ),
+          h('form', { id: 'selection-form' }, [h('button', { type: 'submit' }, 'Submit choice')]),
+          h('form', { id: 'controlled-form' }),
+          h('div', { id: 'form-example' }, [
+            h(MultiSelectRoot, { id: 'form-choice', defaultValue: [], disabled: formDisabled.value }, () => [
+              h(MultiSelectTrigger, { 'aria-describedby': 'form-hint' }, () => 'Form choice'),
+              h(MultiSelectContent, { 'aria-label': 'Form options' }, () => [option('form', 0), option('form', 2)]),
+              h(MultiSelectFormControl, {
+                name: 'choice',
+                form: 'selection-form',
+                required: true,
+                options: formOptions,
+              }),
+            ]),
+            h('p', { id: 'form-hint' }, 'Choose at least one option.'),
+            h(
+              'button',
+              { id: 'form-disable', type: 'button', onClick: () => (formDisabled.value = !formDisabled.value) },
+              'Toggle disabled',
+            ),
+          ]),
         ]);
     },
   });
@@ -126,8 +175,12 @@ export async function createAngularStory() {
     VfMultiSelectTriggerDirective,
     VfMultiSelectContentDirective,
     VfMultiSelectOptionDirective,
+    VfMultiSelectFormControlComponent,
   } = await import('@vyrnforge/angular/multi-select');
   class MultiSelectTestApp {
+    formDisabled = false;
+    formOptions = formOptions;
+    emptyValues = [];
     values = ['one'];
     constructor() {
       afterNextRender(ready);
@@ -150,19 +203,23 @@ export async function createAngularStory() {
       VfMultiSelectTriggerDirective,
       VfMultiSelectContentDirective,
       VfMultiSelectOptionDirective,
+      VfMultiSelectFormControlComponent,
     ],
-    template: `<main><h1>MultiSelect browser fixture</h1>${before}${label}<div vfMultiSelectRoot [defaultValue]="values" (valueChange)="changed($event)"><button vfMultiSelectTrigger>Choose</button><div vfMultiSelectContent aria-labelledby="multi-select-label">${angularOptions('angular', [0, 1, 2, 3])}</div></div><div vfMultiSelectRoot id="controlled" [value]="values" (valueChange)="request($event)"><button vfMultiSelectTrigger tabindex="-1">Controlled items</button><div vfMultiSelectContent aria-label="Controlled options">${angularOptions('controlled', [0, 2])}</div></div>${after}</main>`,
+    template: `<main><h1>MultiSelect browser fixture</h1>${before}${label}<div vfMultiSelectRoot [defaultValue]="values" (valueChange)="changed($event)"><button vfMultiSelectTrigger>Choose</button><div vfMultiSelectContent aria-labelledby="multi-select-label">${angularOptions('angular', [0, 1, 2, 3])}</div></div><div vfMultiSelectRoot id="controlled" [value]="values" (valueChange)="request($event)"><button vfMultiSelectTrigger tabindex="-1">Controlled items</button><div vfMultiSelectContent aria-label="Controlled options">${angularOptions('controlled', [0, 2])}</div><vf-multi-select-form-control name="choice" form="controlled-form" [options]="formOptions"></vf-multi-select-form-control></div>${after}${formMarkup}<div id="form-example"><div vfMultiSelectRoot id="form-choice" [disabled]="formDisabled" [defaultValue]="emptyValues"><button vfMultiSelectTrigger aria-describedby="form-hint">Form choice</button><div vfMultiSelectContent aria-label="Form options">${angularOptions('form', [0, 2])}</div><vf-multi-select-form-control name="choice" form="selection-form" required [options]="formOptions"></vf-multi-select-form-control></div><p id="form-hint">Choose at least one option.</p><button id="form-disable" type="button" (click)="formDisabled = !formDisabled">Toggle disabled</button></div></main>`,
   })(MultiSelectTestApp);
   return MultiSelectTestApp;
 }
 
 export async function createElementsStory({ client }) {
   return {
-    body: `${before}${label}<vf-multi-select id="elements-multi-select"><button id="trigger" type="button" aria-haspopup="listbox" aria-expanded="false" aria-controls="obsolete-list" data-vf-multi-select-trigger>Choose</button><div id="list" role="listbox" aria-multiselectable="true" tabindex="-1" aria-labelledby="multi-select-label" data-vf-multi-select-content hidden>${options('elements')}</div></vf-multi-select>${after}`,
+    body: `${before}${label}<vf-multi-select id="elements-multi-select"><button id="trigger" type="button" aria-haspopup="listbox" aria-expanded="false" aria-controls="obsolete-list" data-vf-multi-select-trigger>Choose</button><div id="list" role="listbox" aria-multiselectable="true" tabindex="-1" aria-labelledby="multi-select-label" data-vf-multi-select-content hidden>${options('elements')}</div></vf-multi-select>${after}${formMarkup}<div id="form-example"><vf-multi-select id="form-choice"><button id="form-choice-trigger" type="button" aria-describedby="form-hint" data-vf-multi-select-trigger>Form choice</button><div id="form-choice-listbox" role="listbox" aria-label="Form options" data-vf-multi-select-content hidden><button id="form-one" type="button" role="option" data-vf-multi-select-option data-vf-value="one" aria-selected="false">One</button><button id="form-three" type="button" role="option" data-vf-multi-select-option data-vf-value="three" aria-selected="false">Three</button></div><select hidden name="choice" form="selection-form" required multiple data-vf-multi-select-form-control><option value="one">One</option><option value="three">Three</option></select><span data-vf-multi-select-form-error></span></vf-multi-select><p id="form-hint">Choose at least one option.</p><button id="form-disable" type="button">Toggle disabled</button></div>`,
     activate: client
       ? async () => {
           const { defineMultiSelectElement } = await import('@vyrnforge/elements/multi-select');
           defineMultiSelectElement();
+          document
+            .querySelector('#form-disable')
+            .addEventListener('click', () => document.querySelector('#form-choice').toggleAttribute('disabled'));
           ready();
         }
       : undefined,

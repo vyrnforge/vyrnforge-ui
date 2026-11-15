@@ -235,3 +235,103 @@ test('MultiSelect preserves native disabled fieldset behavior for trigger and op
   await expect(option).toHaveAttribute('aria-selected', 'false');
   await expect(page.locator(`#${port}-one`)).toHaveAttribute('aria-selected', 'true');
 });
+
+test('MultiSelect native form control validates, submits committed values and resets with its associated form', async ({
+  page,
+}) => {
+  test.skip(port === 'web', 'Managed custom selection form evidence.');
+  await page.goto(`/components/multi-select/${port}.html`);
+  await page.waitForFunction(() => document.body.dataset.multiReady === 'true');
+  const form = page.locator('#selection-form');
+  const trigger = page.locator('#form-choice-trigger');
+  const one = page.locator('#form-one');
+  const three = page.locator('#form-three');
+  const native = page.locator('#form-example select');
+  const error = page.locator('#form-example [role="status"]');
+  const data = () => form.evaluate((node) => new FormData(node).getAll('choice'));
+  await expect(native).toBeHidden();
+  expect(await native.evaluate((node) => node.form?.id)).toBe('selection-form');
+  await form.evaluate((node) => {
+    node.addEventListener('submit', (event) => {
+      event.preventDefault();
+      document.body.dataset.formSubmitted = 'true';
+    });
+    node.requestSubmit();
+  });
+  await expect(trigger).toBeFocused();
+  await expect(trigger).toHaveAttribute('aria-invalid', 'true');
+  await expect(error).not.toBeEmpty();
+  await expect(trigger).toHaveAttribute('aria-describedby', /form-hint.*error/);
+  await expect(page.locator('body')).not.toHaveAttribute('data-form-submitted', 'true');
+  await trigger.press('Enter');
+  await expect(one).toBeFocused();
+  await one.press('Enter');
+  await expect(one).toHaveAttribute('aria-selected', 'true');
+  await expect.poll(data).toEqual(['one']);
+  await expect(error).toBeEmpty();
+  await expect(trigger).not.toHaveAttribute('aria-invalid', 'true');
+  await expect(trigger).toHaveAttribute('aria-describedby', 'form-hint');
+  await three.press('Enter');
+  await expect(three).toHaveAttribute('aria-selected', 'true');
+  await expect.poll(data).toEqual(['one', 'three']);
+  await form.evaluate((node) => node.requestSubmit());
+  await expect(page.locator('body')).toHaveAttribute('data-form-submitted', 'true');
+  await form.evaluate((node) => {
+    node.addEventListener('reset', (event) => event.preventDefault(), { once: true });
+    node.reset();
+  });
+  await expect.poll(data).toEqual(['one', 'three']);
+  await form.evaluate((node) => node.reset());
+  await expect(one).toHaveAttribute('aria-selected', 'false');
+  await expect(three).toHaveAttribute('aria-selected', 'false');
+  await expect.poll(data).toEqual([]);
+  await trigger.press('Enter');
+  await expect(page.locator('#form-choice-listbox')).toBeVisible();
+  await page.locator('#form-disable').evaluate((node) => node.click());
+  await expect(trigger).toBeDisabled();
+  await expect(native).toBeDisabled();
+  await expect(page.locator('#form-choice-listbox')).toBeHidden();
+  await expect.poll(data).toEqual([]);
+  await page.locator('#form-disable').evaluate((node) => node.click());
+  await expect(trigger).toBeEnabled();
+  await expect(native).toBeEnabled();
+  await expect(page.locator('#form-choice-listbox')).toBeHidden();
+  await form.evaluate((node) => {
+    const input = document.createElement('input');
+    input.required = true;
+    input.id = 'first-invalid';
+    input.setAttribute('aria-label', 'First invalid native field');
+    node.prepend(input);
+    node.requestSubmit();
+  });
+  await expect(page.locator('#first-invalid')).toBeFocused();
+  await expect(trigger).toHaveAttribute('aria-invalid', 'true');
+  await page.locator('#first-invalid').evaluate((node) => node.remove());
+  await native.evaluate((node) => {
+    const fieldset = document.createElement('fieldset');
+    node.before(fieldset);
+    fieldset.append(node);
+    fieldset.disabled = true;
+  });
+  expect(await native.evaluate((node) => node.willValidate)).toBe(false);
+  expect(await data()).toEqual([]);
+});
+
+test('MultiSelect controlled rejection and reset preserve submitted owner values', async ({ page }) => {
+  test.skip(port === 'web' || port === 'elements', 'Framework controlled contract.');
+  await page.goto(`/components/multi-select/${port}.html`);
+  await page.waitForFunction(() => document.body.dataset.multiReady === 'true');
+  const form = page.locator('#controlled-form');
+  const data = () => form.evaluate((node) => new FormData(node).getAll('choice'));
+  await expect.poll(data).toEqual(['one']);
+  await page.locator('#controlled-trigger').press('Enter');
+  await expect(page.locator('#controlled-one')).toBeFocused();
+  await page.keyboard.press('ArrowDown');
+  await expect(page.locator('#controlled-three')).toBeFocused();
+  await page.keyboard.press('Enter');
+  await expect(page.locator('#controlled-three')).toHaveAttribute('aria-selected', 'false');
+  await expect.poll(data).toEqual(['one']);
+  await form.evaluate((node) => node.reset());
+  await expect(page.locator('#controlled-one')).toHaveAttribute('aria-selected', 'true');
+  await expect.poll(data).toEqual(['one']);
+});
