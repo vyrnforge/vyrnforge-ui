@@ -54,15 +54,15 @@ export class VfMenuElement extends HTMLElementBase {
     if (this.isConnected) this.sync();
   }
 
-  private part(selector: string): HTMLElement | null {
+  private ownedPart(selector: string): HTMLElement | null {
     return Array.from(this.querySelectorAll<HTMLElement>(selector)).find((node) => node.closest(rootSelector) === this) ?? null;
   }
 
   private get trigger(): HTMLElement | null {
-    return this.part('[data-vf-menu-trigger]');
+    return this.ownedPart('[data-vf-menu-trigger]');
   }
   private get content(): HTMLElement | null {
-    return this.part('[data-vf-menu-content]');
+    return this.ownedPart('[data-vf-menu-content]');
   }
 
   private sync() {
