@@ -43,7 +43,7 @@ for (const [component, ready, surfaceSelector, activation] of cases) {
           await chrome.tabs.setZoom(tab.id, factor);
           return chrome.tabs.getZoom(tab.id);
         }, { url: page.url(), factor });
-        expect(actual).toBe(factor);
+        expect(actual).toBeCloseTo(factor, 10);
       };
       await zoom(1);
       const base = await page.evaluate(() => ({ width: innerWidth, dpr: devicePixelRatio }));
