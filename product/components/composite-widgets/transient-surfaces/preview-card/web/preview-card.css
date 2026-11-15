@@ -18,7 +18,9 @@
     position-try-fallbacks:
       flip-block,
       flip-inline,
-      flip-block flip-inline;
+      flip-block flip-inline,
+      --vf-preview-card-fit,
+      --vf-preview-card-fit flip-block;
     inline-size: max-content;
     box-sizing: border-box;
     overflow-wrap: anywhere;
@@ -80,6 +82,11 @@
   :where([data-vf-preview-card-content]:focus-within) {
     outline: 2px solid var(--vf-color-focus-ring);
     outline-offset: 2px;
+  }
+  @position-try --vf-preview-card-fit {
+    position-area: bottom span-all;
+    max-block-size: min(100%, calc(100dvh - 1rem));
+    max-inline-size: min(28rem, calc(100vw - 1rem), 100%);
   }
   @media (forced-colors: active) {
     :where([data-vf-preview-card-content]) {

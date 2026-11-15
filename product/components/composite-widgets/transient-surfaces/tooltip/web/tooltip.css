@@ -21,7 +21,9 @@
     position-try-fallbacks:
       flip-block,
       flip-inline,
-      flip-block flip-inline;
+      flip-block flip-inline,
+      --vf-tooltip-fit,
+      --vf-tooltip-fit flip-block;
     inline-size: max-content;
     box-sizing: border-box;
     overflow-wrap: anywhere;
@@ -73,6 +75,11 @@
   }
   :where([data-vf-tooltip-content][popover][data-vf-placement='bottom-end']:dir(rtl)) {
     position-area: bottom span-right;
+  }
+  @position-try --vf-tooltip-fit {
+    position-area: top span-all;
+    max-block-size: min(100%, calc(100dvh - 1rem));
+    max-inline-size: min(20rem, calc(100vw - 1rem), 100%);
   }
   @media (forced-colors: active) {
     :where([data-vf-tooltip-content]) {

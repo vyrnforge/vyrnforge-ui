@@ -18,7 +18,9 @@
     position-try-fallbacks:
       flip-block,
       flip-inline,
-      flip-block flip-inline;
+      flip-block flip-inline,
+      --vf-popover-fit,
+      --vf-popover-fit flip-block;
     inline-size: max-content;
     box-sizing: border-box;
     overflow-wrap: anywhere;
@@ -80,6 +82,11 @@
   :where([data-vf-popover-content]:focus-visible) {
     outline: 3px solid var(--vf-color-focus-ring);
     outline-offset: 2px;
+  }
+  @position-try --vf-popover-fit {
+    position-area: bottom span-all;
+    max-block-size: min(100%, calc(100dvh - 1rem));
+    max-inline-size: min(24rem, calc(100vw - 1rem), 100%);
   }
   @media (forced-colors: active) {
     :where([data-vf-popover-content]) {

@@ -136,12 +136,17 @@ test('Popover constrains long content in a narrow viewport', async ({ page }) =>
     .poll(() =>
       surface.evaluate((element) => ({
         width: element.getBoundingClientRect().width <= window.innerWidth,
+        contained:
+          element.getBoundingClientRect().top >= 0 &&
+          element.getBoundingClientRect().bottom <= window.innerHeight + 1 &&
+          element.getBoundingClientRect().left >= 0 &&
+          element.getBoundingClientRect().right <= window.innerWidth + 1,
         height: element.getBoundingClientRect().height <= window.innerHeight - 16,
         scrollable: element.scrollHeight > element.clientHeight,
         wraps: element.scrollWidth <= element.clientWidth + 1,
       })),
     )
-    .toEqual({ width: true, height: true, scrollable: true, wraps: true });
+    .toEqual({ width: true, contained: true, height: true, scrollable: true, wraps: true });
   await surface.evaluate((element) => {
     element.scrollTop = element.scrollHeight;
   });
