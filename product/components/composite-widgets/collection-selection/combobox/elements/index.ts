@@ -2,10 +2,13 @@ import { resolveNavigationIndex, type CollectionNavigationIntent } from '@vyrnfo
 
 const HTMLElementBase: typeof HTMLElement = globalThis.HTMLElement ?? (class {} as typeof HTMLElement);
 let comboboxId = 0;
+const rootSelector = '[data-vf-combobox-root],vf-combobox';
 const optionSelector = '[data-vf-combobox-option]';
 
 function visibleOptions(root: HTMLElement): HTMLElement[] {
-  return Array.from(root.querySelectorAll<HTMLElement>(optionSelector)).filter((option) => !option.hidden);
+  return Array.from(root.querySelectorAll<HTMLElement>(optionSelector)).filter(
+    (option) => !option.hidden && option.closest(rootSelector) === root,
+  );
 }
 function disabled(option: HTMLElement): boolean {
   return option.getAttribute('aria-disabled') === 'true' || option.hasAttribute('disabled');
@@ -25,6 +28,7 @@ export class VfComboboxElement extends HTMLElementBase {
   private listboxId = '';
   private activeId: string | null = null;
   private composing = false;
+  private surface: HTMLElement | null = null;
 
   connectedCallback() {
     this.setAttribute('data-vf-combobox-root', '');
@@ -38,14 +42,21 @@ export class VfComboboxElement extends HTMLElementBase {
       input.setAttribute('role', 'combobox');
       input.setAttribute('aria-autocomplete', 'list');
       input.setAttribute('aria-controls', this.listboxId);
-      input.setAttribute('aria-expanded', String(!content?.hidden));
+      input.setAttribute('aria-expanded', 'false');
     }
     if (content) {
       content.id = this.listboxId;
       content.setAttribute('role', 'listbox');
-      content.setAttribute('aria-labelledby', this.inputId);
+      if (!content.hasAttribute('aria-labelledby')) content.setAttribute('aria-labelledby', this.inputId);
+      content.setAttribute('popover', 'auto');
+      content.removeAttribute('hidden');
+      this.surface = content;
+      content.addEventListener('toggle', this.onToggle);
     }
     this.syncOptions();
+    this.addEventListener('focusin', this.onFocus);
+    this.addEventListener('focusout', this.onBlur);
+    this.addEventListener('mousedown', this.onMouseDown);
     this.addEventListener('input', this.onInput);
     this.addEventListener('click', this.onClick);
     this.addEventListener('compositionstart', this.onCompositionStart);
@@ -54,6 +65,13 @@ export class VfComboboxElement extends HTMLElementBase {
   }
 
   disconnectedCallback() {
+    this.removeEventListener('focusin', this.onFocus);
+    this.removeEventListener('focusout', this.onBlur);
+    this.removeEventListener('mousedown', this.onMouseDown);
+    this.surface?.removeEventListener('toggle', this.onToggle);
+    this.surface = null;
+    this.activeId = null;
+    this.composing = false;
     this.removeEventListener('input', this.onInput);
     this.removeEventListener('click', this.onClick);
     this.removeEventListener('compositionstart', this.onCompositionStart);
@@ -62,26 +80,36 @@ export class VfComboboxElement extends HTMLElementBase {
   }
 
   private inputElement() {
-    return this.querySelector<HTMLInputElement>('[data-vf-combobox-input]');
+    return (
+      Array.from(this.querySelectorAll<HTMLInputElement>('[data-vf-combobox-input]')).find(
+        (node) => node.closest(rootSelector) === this,
+      ) ?? null
+    );
   }
   private contentElement() {
-    return this.querySelector<HTMLElement>('[data-vf-combobox-content]');
+    return (
+      Array.from(this.querySelectorAll<HTMLElement>('[data-vf-combobox-content]')).find(
+        (node) => node.closest(rootSelector) === this,
+      ) ?? null
+    );
   }
   private locale() {
     return this.getAttribute('locale') || undefined;
   }
   private syncOptions() {
     const selectedValue = this.getAttribute('value') ?? '';
-    this.querySelectorAll<HTMLElement>(optionSelector).forEach((option, index) => {
-      option.id ||= `${this.listboxId}-option-${index + 1}`;
-      option.setAttribute('role', 'option');
-      option.tabIndex = -1;
-      if (option.hasAttribute('disabled')) option.setAttribute('aria-disabled', 'true');
-      const selected = this.activeId
-        ? option.id === this.activeId
-        : optionValue(option) === selectedValue && selectedValue !== '';
-      option.setAttribute('aria-selected', String(selected));
-    });
+    Array.from(this.querySelectorAll<HTMLElement>(optionSelector))
+      .filter((option) => option.closest(rootSelector) === this)
+      .forEach((option, index) => {
+        option.id ||= `${this.listboxId}-option-${index + 1}`;
+        option.setAttribute('role', 'option');
+        option.tabIndex = -1;
+        if (option.hasAttribute('disabled')) option.setAttribute('aria-disabled', 'true');
+        const selected = this.activeId
+          ? option.id === this.activeId
+          : optionValue(option) === selectedValue && selectedValue !== '';
+        option.setAttribute('aria-selected', String(selected));
+      });
     const input = this.inputElement();
     if (input) {
       if (this.activeId) input.setAttribute('aria-activedescendant', this.activeId);
@@ -91,7 +119,11 @@ export class VfComboboxElement extends HTMLElementBase {
   private setOpen(open: boolean) {
     const input = this.inputElement();
     const content = this.contentElement();
-    if (content) content.hidden = !open;
+    if (content && input) {
+      if (open && !content.matches(':popover-open')) content.showPopover({ source: input });
+      if (!open && content.matches(':popover-open')) content.hidePopover();
+      content.toggleAttribute('data-vf-open', open);
+    }
     input?.setAttribute('aria-expanded', String(open));
     if (!open) {
       this.activeId = null;
@@ -123,19 +155,37 @@ export class VfComboboxElement extends HTMLElementBase {
     this.setAttribute('value', value);
     const input = this.inputElement();
     if (input) input.value = optionLabel(option);
-    this.setOpen(false);
     input?.focus();
+    this.setOpen(false);
   }
 
+  private onToggle = (event: Event) => {
+    const content = this.surface;
+    if (content && event.target === content) this.setOpen(content.matches(':popover-open'));
+  };
+  private onFocus = (event: FocusEvent) => {
+    if (event.target === this.inputElement()) this.setOpen(true);
+  };
+  private onBlur = (event: FocusEvent) => {
+    if (event.target !== this.inputElement()) return;
+    if (!(event.relatedTarget instanceof Node && this.contentElement()?.contains(event.relatedTarget)))
+      this.setOpen(false);
+  };
+  private onMouseDown = (event: MouseEvent) => {
+    const option = event.target instanceof Element ? event.target.closest(optionSelector) : null;
+    if (event.button === 0 && option?.closest(rootSelector) === this) event.preventDefault();
+  };
   private onInput = (event: Event) => {
     const input = (event.target as HTMLElement).closest<HTMLInputElement>('[data-vf-combobox-input]');
-    if (!input || !this.contains(input)) return;
+    if (!input || input !== this.inputElement()) return;
     const locale = this.locale();
     const query = normalizeFilterText(input.value, locale);
     this.activeId = null;
-    this.querySelectorAll<HTMLElement>(optionSelector).forEach((option) => {
-      option.hidden = !normalizeFilterText(optionLabel(option), locale).includes(query);
-    });
+    Array.from(this.querySelectorAll<HTMLElement>(optionSelector))
+      .filter((option) => option.closest(rootSelector) === this)
+      .forEach((option) => {
+        option.hidden = !normalizeFilterText(optionLabel(option), locale).includes(query);
+      });
     this.setOpen(true);
     this.syncOptions();
   };
@@ -143,24 +193,31 @@ export class VfComboboxElement extends HTMLElementBase {
   private onClick = (event: Event) => {
     if (event.defaultPrevented) return;
     const option = (event.target as HTMLElement).closest<HTMLElement>(optionSelector);
-    if (!option || !this.contains(option) || disabled(option)) return;
+    if (
+      !option ||
+      option.closest(rootSelector) !== this ||
+      !this.contentElement()?.matches(':popover-open') ||
+      option.hidden ||
+      disabled(option)
+    )
+      return;
     this.select(option);
   };
 
   private onCompositionStart = (event: Event) => {
     const input = (event.target as HTMLElement).closest<HTMLInputElement>('[data-vf-combobox-input]');
-    if (input && this.contains(input)) this.composing = true;
+    if (input === this.inputElement()) this.composing = true;
   };
 
   private onCompositionEnd = (event: Event) => {
     const input = (event.target as HTMLElement).closest<HTMLInputElement>('[data-vf-combobox-input]');
-    if (input && this.contains(input)) this.composing = false;
+    if (input === this.inputElement()) this.composing = false;
   };
 
   private onKeydown = (event: KeyboardEvent) => {
     if (event.defaultPrevented) return;
     const input = (event.target as HTMLElement).closest<HTMLInputElement>('[data-vf-combobox-input]');
-    if (!input || !this.contains(input)) return;
+    if (!input || input !== this.inputElement()) return;
     if (this.composing || event.isComposing) return;
     if (event.key === 'ArrowDown' || event.key === 'ArrowUp') {
       event.preventDefault();
@@ -177,7 +234,8 @@ export class VfComboboxElement extends HTMLElementBase {
       return;
     }
     const content = this.contentElement();
-    if (event.key === 'Escape' && content && !content.hidden) {
+    if (event.key === 'Tab') this.setOpen(false);
+    if (event.key === 'Escape' && content?.matches(':popover-open')) {
       event.preventDefault();
       this.setOpen(false);
     }

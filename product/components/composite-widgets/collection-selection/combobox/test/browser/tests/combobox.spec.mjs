@@ -2,20 +2,33 @@ import { test, expect } from '@playwright/test';
 import { expectNoAxeViolations } from '../../../../../../../../tooling/testing/accessibility.mjs';
 const port = process.env.VF_COMPONENT_PORT || 'web';
 
+async function load(page) {
+  await page.goto(`/components/combobox/${port}.html`);
+  if (port !== 'web') await page.waitForFunction(() => document.body.dataset.comboReady === 'true');
+}
+
 async function expectAxeClean(page) {
-  const results = await expectNoAxeViolations(page, { disableRules: ['region'] });
+  const results = await expectNoAxeViolations(page);
   expect(results.violations).toEqual([]);
 }
 
 test('combobox exposes the editable input/listbox relationship', async ({ page }) => {
-  await page.goto(`/components/combobox/${port}.html`);
+  await load(page);
   const input = page.getByRole('combobox', { name: 'Framework' });
   await expect(input).toBeVisible();
   await expect(input).toHaveAttribute('aria-autocomplete', 'list');
   await input.focus();
+  if (port === 'web')
+    await page
+      .locator('#web-listbox')
+      .evaluate((node) => node.showPopover({ source: document.querySelector('#web-input') }));
   const controls = await input.getAttribute('aria-controls');
   expect(controls).toBeTruthy();
   await expect(page.locator(`#${controls}`)).toHaveAttribute('role', 'listbox');
+  await expect(page.locator(`#${controls}`)).toBeVisible();
+  expect(
+    await page.locator(`#${controls}`).evaluate((node) => node.matches(':popover-open') && !!node.closest('main')),
+  ).toBe(true);
   await expect(page.locator(`#${port}-angular`)).toHaveAttribute('aria-disabled', 'true');
   await expectAxeClean(page);
 });
@@ -42,7 +55,7 @@ test.describe('enhanced combobox interaction', () => {
       if (message.type() === 'error') errors.push(message.text());
     });
     page.on('pageerror', (error) => errors.push(error.message));
-    await page.goto(`/components/combobox/${port}.html`);
+    await load(page);
 
     const input = page.getByRole('combobox', { name: 'Framework' });
     const first = page.locator(`#${port}-react`);
@@ -76,7 +89,7 @@ test.describe('enhanced combobox interaction', () => {
   test('filters authored options, starts Up Arrow at the last enabled match, and dismisses with Escape', async ({
     page,
   }) => {
-    await page.goto(`/components/combobox/${port}.html`);
+    await load(page);
     const input = page.getByRole('combobox', { name: 'Framework' });
     const react = page.locator(`#${port}-react`);
     const vue = page.locator(`#${port}-vue`);
@@ -99,7 +112,7 @@ test.describe('enhanced combobox interaction', () => {
   });
 
   test('uses the declared locale for case-sensitive language rules', async ({ page }) => {
-    await page.goto(`/components/combobox/${port}.html`);
+    await load(page);
     const input = page.getByRole('combobox', { name: 'Turkish city' });
     const istanbul = page.locator(`#${port}-locale-istanbul`);
     const isparta = page.locator(`#${port}-locale-isparta`);
@@ -110,7 +123,7 @@ test.describe('enhanced combobox interaction', () => {
   });
 
   test('does not run navigation, selection, or dismissal commands during composition', async ({ page }) => {
-    await page.goto(`/components/combobox/${port}.html`);
+    await load(page);
     const input = page.getByRole('combobox', { name: 'Framework' });
     const vue = page.locator(`#${port}-vue`);
 
@@ -145,7 +158,7 @@ test.describe('enhanced combobox interaction', () => {
   });
 
   test('keeps popup options out of the page Tab sequence', async ({ page }) => {
-    await page.goto(`/components/combobox/${port}.html`);
+    await load(page);
     const before = page.locator('#before');
     const input = page.getByRole('combobox', { name: 'Framework' });
     const localeInput = page.getByRole('combobox', { name: 'Turkish city' });
@@ -156,7 +169,50 @@ test.describe('enhanced combobox interaction', () => {
     await expect(input).toBeFocused();
     await page.keyboard.press('Tab');
     await expect(localeInput).toBeFocused();
+    await expect(input).toHaveAttribute('aria-expanded', 'false');
     await page.keyboard.press('Tab');
     await expect(after).toBeFocused();
+    await expect(localeInput).toHaveAttribute('aria-expanded', 'false');
   });
+});
+
+test('native light dismissal clears active descendant without committing the query or stealing outside focus', async ({
+  page,
+}) => {
+  test.skip(port === 'web', 'Managed runtime evidence.');
+  await load(page);
+  const input = page.getByRole('combobox', { name: 'Framework' });
+  await input.fill('re');
+  await input.press('ArrowDown');
+  await expect(input).toHaveAttribute('aria-activedescendant', `${port}-react`);
+  const controls = await input.getAttribute('aria-controls');
+  const popup = page.locator(`#${controls}`);
+  await expect(popup).toBeVisible();
+  await page.locator('#after').click();
+  await expect(popup).toBeHidden();
+  await expect(input).toHaveAttribute('aria-expanded', 'false');
+  await expect(input).not.toHaveAttribute('aria-activedescendant', /.+/);
+  await expect(input).toHaveValue('re');
+  await expect(page.locator('#after')).toBeFocused();
+  await expect(page.locator('body')).not.toHaveAttribute('data-combo-value', /.+/);
+});
+
+test('pointer selection keeps the editable input focused and commits once without reopening', async ({ page }) => {
+  test.skip(port === 'web', 'Managed runtime evidence.');
+  await load(page);
+  const input = page.getByRole('combobox', { name: 'Framework' });
+  await input.focus();
+  const option = page.locator(`#${port}-vue`);
+  await expect(option).toBeVisible();
+  const box = await option.boundingBox();
+  if (!box) throw new Error('Missing option.');
+  await page.mouse.move(box.x + box.width / 2, box.y + box.height / 2);
+  await page.mouse.down();
+  await expect(input).toBeFocused();
+  await page.mouse.up();
+  await expect(input).toHaveValue('Vue');
+  await expect(input).toBeFocused();
+  await expect(input).toHaveAttribute('aria-expanded', 'false');
+  if (port === 'elements') await expect(page.locator('vf-combobox').first()).toHaveAttribute('value', 'Vue');
+  else await expect(page.locator('body')).toHaveAttribute('data-combo-value', 'Vue');
 });
