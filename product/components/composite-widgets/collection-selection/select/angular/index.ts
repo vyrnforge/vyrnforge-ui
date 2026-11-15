@@ -32,7 +32,9 @@ function domFor(root: VfSelectRootDirective): SelectDomState {
   return state;
 }
 function optionsFor(root: HTMLElement): HTMLButtonElement[] {
-  return Array.from(root.querySelectorAll<HTMLButtonElement>(optionSelector)).filter((option) => option.closest('[data-vf-select-content]') === root);
+  return Array.from(root.querySelectorAll<HTMLButtonElement>(optionSelector)).filter(
+    (option) => option.closest('[data-vf-select-content]') === root,
+  );
 }
 function optionFromTarget(root: HTMLElement, target: EventTarget | null): HTMLButtonElement | null {
   const option = target instanceof Element ? target.closest<HTMLButtonElement>(optionSelector) : null;
@@ -212,7 +214,12 @@ export class VfSelectContentDirective {
     element.addEventListener('toggle', onToggle);
 
     const onKeydown = (event: KeyboardEvent) => {
-      if (event.defaultPrevented || !(event.target instanceof Element) || event.target.closest('[data-vf-select-content]') !== element) return;
+      if (
+        event.defaultPrevented ||
+        !(event.target instanceof Element) ||
+        event.target.closest('[data-vf-select-content]') !== element
+      )
+        return;
       if (event.key === 'Escape') {
         event.preventDefault();
         root.setOpen(false);

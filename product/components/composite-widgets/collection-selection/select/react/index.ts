@@ -17,7 +17,9 @@ import { findTypeaheadMatch } from '@vyrnforge/core/typeahead-matching';
 
 const optionSelector = '[data-vf-select-option]';
 function optionsFor(root: HTMLElement): HTMLButtonElement[] {
-  return Array.from(root.querySelectorAll<HTMLButtonElement>(optionSelector)).filter((option) => option.closest('[data-vf-select-content]') === root);
+  return Array.from(root.querySelectorAll<HTMLButtonElement>(optionSelector)).filter(
+    (option) => option.closest('[data-vf-select-content]') === root,
+  );
 }
 function optionFromTarget(root: HTMLElement, target: EventTarget | null): HTMLButtonElement | null {
   const option = target instanceof Element ? target.closest<HTMLButtonElement>(optionSelector) : null;
@@ -164,9 +166,12 @@ export const SelectContent = forwardRef<HTMLDivElement, ComponentPropsWithoutRef
   const timer = useRef<ReturnType<typeof setTimeout> | null>(null);
   const [nativeRevision, setNativeRevision] = useState(0);
   const restoreFocus = useRef(false);
-  useEffect(() => () => {
-    if (timer.current !== null) clearTimeout(timer.current);
-  }, []);
+  useEffect(
+    () => () => {
+      if (timer.current !== null) clearTimeout(timer.current);
+    },
+    [],
+  );
   useEffect(() => {
     const surface = select.surfaceRef.current;
     const trigger = select.anchorRef.current;
@@ -210,7 +215,8 @@ export const SelectContent = forwardRef<HTMLDivElement, ComponentPropsWithoutRef
       if (!actual && restoreFocus.current) {
         restoreFocus.current = false;
         const active = surface.ownerDocument.activeElement;
-        if (!active || active === surface.ownerDocument.body || surface.contains(active)) select.anchorRef.current?.focus();
+        if (!active || active === surface.ownerDocument.body || surface.contains(active))
+          select.anchorRef.current?.focus();
       }
       if (actual === select.open) return;
       select.setOpen(actual);
@@ -218,7 +224,12 @@ export const SelectContent = forwardRef<HTMLDivElement, ComponentPropsWithoutRef
     },
     onKeyDown(event: KeyboardEvent<HTMLDivElement>) {
       onKeyDown?.(event);
-      if (event.defaultPrevented || !(event.target instanceof Element) || event.target.closest('[data-vf-select-content]') !== event.currentTarget) return;
+      if (
+        event.defaultPrevented ||
+        !(event.target instanceof Element) ||
+        event.target.closest('[data-vf-select-content]') !== event.currentTarget
+      )
+        return;
       if (event.key === 'Escape') {
         event.preventDefault();
         select.setOpen(false);

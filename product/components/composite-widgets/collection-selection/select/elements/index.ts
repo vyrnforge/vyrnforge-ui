@@ -5,7 +5,9 @@ const H: typeof HTMLElement = globalThis.HTMLElement ?? (class {} as typeof HTML
 const rootSelector = '[data-vf-select-root],vf-select';
 const optionSelector = '[data-vf-select-option]';
 function optionsFor(root: HTMLElement): HTMLElement[] {
-  return Array.from(root.querySelectorAll<HTMLElement>(optionSelector)).filter((option) => option.closest(rootSelector) === root.closest(rootSelector));
+  return Array.from(root.querySelectorAll<HTMLElement>(optionSelector)).filter(
+    (option) => option.closest(rootSelector) === root.closest(rootSelector),
+  );
 }
 function optionFromTarget(root: HTMLElement, target: EventTarget | null): HTMLElement | null {
   const option = target instanceof Element ? target.closest<HTMLElement>(optionSelector) : null;
@@ -64,7 +66,10 @@ export class VfSelectElement extends H {
   }
 
   private ownedPart(selector: string): HTMLElement | null {
-    return Array.from(this.querySelectorAll<HTMLElement>(selector)).find((node) => node.closest(rootSelector) === this) ?? null;
+    return (
+      Array.from(this.querySelectorAll<HTMLElement>(selector)).find((node) => node.closest(rootSelector) === this) ??
+      null
+    );
   }
 
   private get trigger(): HTMLElement | null {

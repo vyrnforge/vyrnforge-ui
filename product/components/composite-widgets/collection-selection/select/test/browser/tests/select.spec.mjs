@@ -102,7 +102,6 @@ test.describe('Select enhanced port behavior', () => {
   }
 });
 
-
 test('native Web select remains the form-participating baseline', async ({ page }) => {
   test.skip(port !== 'web', 'Native Web form baseline.');
   await page.goto('/components/select/web.html');

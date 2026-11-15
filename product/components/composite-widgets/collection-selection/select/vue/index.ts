@@ -17,7 +17,9 @@ import { findTypeaheadMatch } from '@vyrnforge/core/typeahead-matching';
 
 const optionSelector = '[data-vf-select-option]';
 function optionsFor(root: HTMLElement): HTMLButtonElement[] {
-  return Array.from(root.querySelectorAll<HTMLButtonElement>(optionSelector)).filter((option) => option.closest('[data-vf-select-content]') === root);
+  return Array.from(root.querySelectorAll<HTMLButtonElement>(optionSelector)).filter(
+    (option) => option.closest('[data-vf-select-content]') === root,
+  );
 }
 function optionFromTarget(root: HTMLElement, target: EventTarget | null): HTMLButtonElement | null {
   const option = target instanceof Element ? target.closest<HTMLButtonElement>(optionSelector) : null;
@@ -169,93 +171,104 @@ export const SelectContent = defineComponent({
       if (!edge || !surface.matches(':popover-open')) return;
       const options = optionsFor(surface);
       const states = options.map((option) => ({ eligible: !optionDisabled(option) }));
-      const selected = options.findIndex((option, index) => states[index]?.eligible !== false && option.getAttribute('aria-selected') === 'true');
-      const index = selected >= 0 ? selected : resolveNavigationIndex(states, edge === 'first' ? -1 : options.length, edge);
+      const selected = options.findIndex(
+        (option, index) => states[index]?.eligible !== false && option.getAttribute('aria-selected') === 'true',
+      );
+      const index =
+        selected >= 0 ? selected : resolveNavigationIndex(states, edge === 'first' ? -1 : options.length, edge);
       if (index != null) options[index]?.focus();
     }
     onMounted(sync);
     watch([select.open, select.focusRevision, select.anchor, select.surface], sync, { flush: 'post' });
-    onBeforeUnmount(() => { if (timer !== null) clearTimeout(timer); });
+    onBeforeUnmount(() => {
+      if (timer !== null) clearTimeout(timer);
+    });
     return () =>
       h(
-            'div',
-            {
-              ...attrs,
-              ref: (node: unknown) => {
-                select.surface.value = node as HTMLElement | null;
-              },
-              role: 'listbox',
-              tabindex: -1,
-              popover: 'auto',
-              'data-vf-select-content': '',
-              'data-vf-open': select.open.value ? '' : undefined,
-              onBeforetoggle(event: Event) {
-                invoke(attrs.onBeforetoggle, event);
-                if (event.target !== event.currentTarget) return;
-                const surface = event.currentTarget as HTMLElement;
-                restoreFocus = surface.matches(':popover-open') && surface.contains(surface.ownerDocument.activeElement);
-              },
-              onToggle(event: Event) {
-                invoke(attrs.onToggle, event);
-                if (event.target !== event.currentTarget) return;
-                const surface = event.currentTarget as HTMLElement;
-                const actual = surface.matches(':popover-open');
-                if (!actual && restoreFocus) {
-                  restoreFocus = false;
-                  const active = surface.ownerDocument.activeElement;
-                  if (!active || active === surface.ownerDocument.body || surface.contains(active)) select.anchor.value?.focus();
-                }
-                if (actual === select.open.value) return;
-                select.setOpen(actual);
-                void nextTick(sync);
-              },
-              onKeydown: (event: KeyboardEvent) => {
-                invoke(attrs.onKeydown, event);
-                if (event.defaultPrevented || !(event.target instanceof Element) || event.target.closest('[data-vf-select-content]') !== event.currentTarget) return;
-                if (event.key === 'Escape') {
-                  event.preventDefault();
-                  select.setOpen(false);
-                  return;
-                }
-                if (event.key === 'Tab') {
-                  select.setOpen(false);
-                  select.anchor.value?.focus();
-                  return;
-                }
-                const root = event.currentTarget as HTMLElement;
-                const options = optionsFor(root);
-                const currentOption = optionFromTarget(root, event.target);
-                const current = currentOption ? options.indexOf(currentOption) : -1;
-                const states = options.map((option) => ({ eligible: !optionDisabled(option) }));
-                let intent: 'next' | 'previous' | 'first' | 'last' | null = null;
-                if (event.key === 'ArrowDown') intent = 'next';
-                else if (event.key === 'ArrowUp') intent = 'previous';
-                else if (event.key === 'Home') intent = 'first';
-                else if (event.key === 'End') intent = 'last';
-                let next: number | null = null;
-                if (intent) next = resolveNavigationIndex(states, current, intent);
-                else if (event.key.length === 1 && event.key !== ' ' && !event.ctrlKey && !event.metaKey && !event.altKey) {
-                  query += event.key;
-                  if (timer) clearTimeout(timer);
-                  timer = setTimeout(() => {
-                    query = '';
-                  }, 500);
-                  next = findTypeaheadMatch(
-                    options.map((option) => ({
-                      textValue: option.dataset.vfTextValue ?? option.textContent ?? '',
-                      eligible: !optionDisabled(option),
-                    })),
-                    query,
-                    { startIndex: current },
-                  );
-                }
-                if (next == null) return;
-                event.preventDefault();
-                options[next]?.focus();
-              },
-            },
-            slots.default?.(),
-          );
+        'div',
+        {
+          ...attrs,
+          ref: (node: unknown) => {
+            select.surface.value = node as HTMLElement | null;
+          },
+          role: 'listbox',
+          tabindex: -1,
+          popover: 'auto',
+          'data-vf-select-content': '',
+          'data-vf-open': select.open.value ? '' : undefined,
+          onBeforetoggle(event: Event) {
+            invoke(attrs.onBeforetoggle, event);
+            if (event.target !== event.currentTarget) return;
+            const surface = event.currentTarget as HTMLElement;
+            restoreFocus = surface.matches(':popover-open') && surface.contains(surface.ownerDocument.activeElement);
+          },
+          onToggle(event: Event) {
+            invoke(attrs.onToggle, event);
+            if (event.target !== event.currentTarget) return;
+            const surface = event.currentTarget as HTMLElement;
+            const actual = surface.matches(':popover-open');
+            if (!actual && restoreFocus) {
+              restoreFocus = false;
+              const active = surface.ownerDocument.activeElement;
+              if (!active || active === surface.ownerDocument.body || surface.contains(active))
+                select.anchor.value?.focus();
+            }
+            if (actual === select.open.value) return;
+            select.setOpen(actual);
+            void nextTick(sync);
+          },
+          onKeydown: (event: KeyboardEvent) => {
+            invoke(attrs.onKeydown, event);
+            if (
+              event.defaultPrevented ||
+              !(event.target instanceof Element) ||
+              event.target.closest('[data-vf-select-content]') !== event.currentTarget
+            )
+              return;
+            if (event.key === 'Escape') {
+              event.preventDefault();
+              select.setOpen(false);
+              return;
+            }
+            if (event.key === 'Tab') {
+              select.setOpen(false);
+              select.anchor.value?.focus();
+              return;
+            }
+            const root = event.currentTarget as HTMLElement;
+            const options = optionsFor(root);
+            const currentOption = optionFromTarget(root, event.target);
+            const current = currentOption ? options.indexOf(currentOption) : -1;
+            const states = options.map((option) => ({ eligible: !optionDisabled(option) }));
+            let intent: 'next' | 'previous' | 'first' | 'last' | null = null;
+            if (event.key === 'ArrowDown') intent = 'next';
+            else if (event.key === 'ArrowUp') intent = 'previous';
+            else if (event.key === 'Home') intent = 'first';
+            else if (event.key === 'End') intent = 'last';
+            let next: number | null = null;
+            if (intent) next = resolveNavigationIndex(states, current, intent);
+            else if (event.key.length === 1 && event.key !== ' ' && !event.ctrlKey && !event.metaKey && !event.altKey) {
+              query += event.key;
+              if (timer) clearTimeout(timer);
+              timer = setTimeout(() => {
+                query = '';
+              }, 500);
+              next = findTypeaheadMatch(
+                options.map((option) => ({
+                  textValue: option.dataset.vfTextValue ?? option.textContent ?? '',
+                  eligible: !optionDisabled(option),
+                })),
+                query,
+                { startIndex: current },
+              );
+            }
+            if (next == null) return;
+            event.preventDefault();
+            options[next]?.focus();
+          },
+        },
+        slots.default?.(),
+      );
   },
 });
 
@@ -283,7 +296,8 @@ export const SelectOption = defineComponent({
           'data-vf-value': props.value,
           onClick: (event: MouseEvent) => {
             invoke(attrs.onClick, event);
-            if (!event.defaultPrevented && !optionDisabled(event.currentTarget as HTMLButtonElement)) select.setValue(props.value);
+            if (!event.defaultPrevented && !optionDisabled(event.currentTarget as HTMLButtonElement))
+              select.setValue(props.value);
           },
         },
         slots.default?.(),

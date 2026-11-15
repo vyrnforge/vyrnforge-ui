@@ -2724,7 +2724,7 @@ export class VfSelectOptionDirective {
     // (undocumented)
     readonly root: VfSelectRootDirective;
     // (undocumented)
-    select(): void;
+    select(event?: MouseEvent): void;
     // (undocumented)
     readonly value: InputSignal<string>;
     // (undocumented)

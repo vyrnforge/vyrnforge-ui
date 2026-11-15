@@ -1824,7 +1824,7 @@ defaultValue: string;
 // @public (undocumented)
 export const SelectContent: DefineComponent<    {}, () => VNode<RendererNode, RendererElement, {
 [key: string]: any;
-}> | null, {}, {}, {}, ComponentOptionsMixin, ComponentOptionsMixin, {}, string, PublicProps, Readonly<{}> & Readonly<{}>, {}, {}, {}, {}, string, ComponentProvideOptions, true, {}, any>;
+}>, {}, {}, {}, ComponentOptionsMixin, ComponentOptionsMixin, {}, string, PublicProps, Readonly<{}> & Readonly<{}>, {}, {}, {}, {}, string, ComponentProvideOptions, true, {}, any>;
 
 // @public (undocumented)
 export const SelectOption: DefineComponent<ExtractPropTypes<    {
@@ -1852,7 +1852,10 @@ defaultValue: {
 type: StringConstructor;
 default: string;
 };
-open: BooleanConstructor;
+open: {
+type: BooleanConstructor;
+default: undefined;
+};
 defaultOpen: BooleanConstructor;
 }>, () => VNode<RendererNode, RendererElement, {
 [key: string]: any;
@@ -1862,7 +1865,10 @@ defaultValue: {
 type: StringConstructor;
 default: string;
 };
-open: BooleanConstructor;
+open: {
+type: BooleanConstructor;
+default: undefined;
+};
 defaultOpen: BooleanConstructor;
 }>> & Readonly<{
 "onUpdate:open"?: (...args: any[]) => any;

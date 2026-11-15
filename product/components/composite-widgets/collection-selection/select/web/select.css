@@ -6,7 +6,10 @@
     inset: auto;
     margin: 0;
     position-area: bottom span-right;
-    position-try-fallbacks: flip-block, flip-inline, flip-block flip-inline;
+    position-try-fallbacks:
+      flip-block,
+      flip-inline,
+      flip-block flip-inline;
     inline-size: max-content;
     min-inline-size: min(10rem, calc(100vw - 1rem));
     max-inline-size: calc(100vw - 1rem);
