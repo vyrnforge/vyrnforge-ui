@@ -4,6 +4,9 @@ import {
   h,
   inject,
   nextTick,
+  onMounted,
+  onBeforeUnmount,
+  watch,
   provide,
   ref,
   type InjectionKey,
@@ -13,13 +16,15 @@ import {
 import { resolveNavigationIndex } from '@vyrnforge/core/collection-navigation';
 import { findTypeaheadMatch } from '@vyrnforge/core/typeahead-matching';
 
-const optionSelector = '[data-vf-multi-select-option]';
+const optionMultiSelector = '[data-vf-multi-select-option]';
 function optionsFor(root: HTMLElement): HTMLButtonElement[] {
-  return Array.from(root.querySelectorAll<HTMLButtonElement>(optionSelector));
+  return Array.from(root.querySelectorAll<HTMLButtonElement>(optionMultiSelector)).filter(
+    (option) => option.closest('[data-vf-multi-select-content]') === root,
+  );
 }
 function optionFromTarget(root: HTMLElement, target: EventTarget | null): HTMLButtonElement | null {
-  const option = target instanceof HTMLElement ? target.closest<HTMLButtonElement>(optionSelector) : null;
-  return option && root.contains(option) ? option : null;
+  const option = target instanceof Element ? target.closest<HTMLButtonElement>(optionMultiSelector) : null;
+  return option && option.closest('[data-vf-multi-select-content]') === root ? option : null;
 }
 function optionDisabled(option: HTMLButtonElement): boolean {
   return option.disabled || option.getAttribute('aria-disabled') === 'true';
@@ -29,16 +34,19 @@ function invoke(handler: unknown, event: Event): void {
   else if (Array.isArray(handler)) for (const item of handler) if (typeof item === 'function') item(event);
 }
 
-interface Ctx {
-  values: Ref<string[]>;
+interface MultiSelectContext {
   open: Ref<boolean>;
+  values: Ref<string[]>;
   anchor: Ref<HTMLElement | null>;
   surface: Ref<HTMLElement | null>;
+  setOpen(value: boolean): void;
   toggle(value: string): void;
   focusOptions(edge: 'first' | 'last'): void;
+  focusRequest: Ref<'first' | 'last' | null>;
+  focusRevision: Ref<number>;
 }
-const key: InjectionKey<Ctx> = Symbol('vf-multi');
-function useMulti(): Ctx {
+const key: InjectionKey<MultiSelectContext> = Symbol('vf-multi-select');
+function useMulti(): MultiSelectContext {
   const value = inject(key);
   if (!value) throw new Error('MultiSelect parts must be inside root.');
   return value;
@@ -57,11 +65,16 @@ export const MultiSelectRoot = defineComponent({
     const values = computed(() => props.value ?? internalValue.value);
     const anchor = ref<HTMLElement | null>(null);
     const surface = ref<HTMLElement | null>(null);
+    const focusRequest = ref<'first' | 'last' | null>(null);
+    const focusRevision = ref(0);
     provide(key, {
-      values,
       open,
+      values,
       anchor,
       surface,
+      setOpen(next) {
+        open.value = next;
+      },
       toggle(candidate) {
         const next = values.value.includes(candidate)
           ? values.value.filter((value) => value !== candidate)
@@ -69,18 +82,11 @@ export const MultiSelectRoot = defineComponent({
         if (props.value === undefined) internalValue.value = next;
         emit('update:value', next);
       },
+      focusRequest,
+      focusRevision,
       focusOptions(edge) {
-        void nextTick(() => {
-          if (!surface.value) return;
-          const options = optionsFor(surface.value);
-          const states = options.map((option) => ({ eligible: !optionDisabled(option) }));
-          const selected = options.findIndex(
-            (option, index) => states[index]?.eligible !== false && option.getAttribute('aria-selected') === 'true',
-          );
-          const index =
-            selected >= 0 ? selected : resolveNavigationIndex(states, edge === 'first' ? -1 : options.length, edge);
-          if (index != null) options[index]?.focus();
-        });
+        focusRequest.value = edge;
+        focusRevision.value += 1;
       },
     });
     return () => slots.default?.();
@@ -93,7 +99,7 @@ export const MultiSelectTrigger = defineComponent({
   setup(_, { attrs, slots }) {
     const multi = useMulti();
     const openAndFocus = (edge: 'first' | 'last') => {
-      multi.open.value = true;
+      multi.setOpen(true);
       multi.focusOptions(edge);
     };
     return () =>
@@ -101,17 +107,17 @@ export const MultiSelectTrigger = defineComponent({
         'button',
         {
           ...attrs,
+          type: (attrs.type as string | undefined) ?? 'button',
           ref: (node: unknown) => {
             multi.anchor.value = node as HTMLElement | null;
           },
-          type: (attrs.type as string | undefined) ?? 'button',
           'aria-haspopup': 'listbox',
           'aria-expanded': multi.open.value,
           'data-vf-multi-select-trigger': '',
           onClick: (event: MouseEvent) => {
             invoke(attrs.onClick, event);
             if (event.defaultPrevented) return;
-            if (multi.open.value) multi.open.value = false;
+            if (multi.open.value) multi.setOpen(false);
             else openAndFocus('first');
           },
           onKeydown: (event: KeyboardEvent) => {
@@ -138,68 +144,124 @@ export const MultiSelectContent = defineComponent({
     const multi = useMulti();
     let query = '';
     let timer: ReturnType<typeof setTimeout> | null = null;
+    let restoreFocus = false;
+    function sync() {
+      const surface = multi.surface.value;
+      const trigger = multi.anchor.value;
+      if (!surface || !trigger) return;
+      if (!multi.open.value) {
+        multi.focusRequest.value = null;
+        if (timer !== null) clearTimeout(timer);
+        timer = null;
+        query = '';
+        if (surface.matches(':popover-open')) surface.hidePopover();
+        return;
+      }
+      if (!surface.matches(':popover-open')) surface.showPopover({ source: trigger });
+      const edge = multi.focusRequest.value;
+      multi.focusRequest.value = null;
+      if (!edge || !surface.matches(':popover-open')) return;
+      const options = optionsFor(surface);
+      const states = options.map((option) => ({ eligible: !optionDisabled(option) }));
+      const selected = options.findIndex(
+        (option, index) => states[index]?.eligible !== false && option.getAttribute('aria-selected') === 'true',
+      );
+      const index =
+        selected >= 0 ? selected : resolveNavigationIndex(states, edge === 'first' ? -1 : options.length, edge);
+      if (index != null) options[index]?.focus();
+    }
+    onMounted(sync);
+    watch([multi.open, multi.focusRevision, multi.anchor, multi.surface], sync, { flush: 'post' });
+    onBeforeUnmount(() => {
+      if (timer !== null) clearTimeout(timer);
+    });
     return () =>
-      multi.open.value
-        ? h(
-            'div',
-            {
-              ...attrs,
-              ref: (node: unknown) => {
-                multi.surface.value = node as HTMLElement | null;
-              },
-              role: 'listbox',
-              tabindex: -1,
-              'aria-multiselectable': 'true',
-              'data-vf-multi-select-content': '',
-              onKeydown: (event: KeyboardEvent) => {
-                invoke(attrs.onKeydown, event);
-                if (event.defaultPrevented) return;
-                if (event.key === 'Escape') {
-                  event.preventDefault();
-                  multi.open.value = false;
-                  multi.anchor.value?.focus();
-                  return;
-                }
-                if (event.key === 'Tab') {
-                  multi.open.value = false;
-                  multi.anchor.value?.focus();
-                  return;
-                }
-                const root = event.currentTarget as HTMLElement;
-                const options = optionsFor(root);
-                const currentOption = optionFromTarget(root, event.target);
-                const current = currentOption ? options.indexOf(currentOption) : -1;
-                const states = options.map((option) => ({ eligible: !optionDisabled(option) }));
-                let intent: 'next' | 'previous' | 'first' | 'last' | null = null;
-                if (event.key === 'ArrowDown') intent = 'next';
-                else if (event.key === 'ArrowUp') intent = 'previous';
-                else if (event.key === 'Home') intent = 'first';
-                else if (event.key === 'End') intent = 'last';
-                let next: number | null = null;
-                if (intent) next = resolveNavigationIndex(states, current, intent);
-                else if (event.key.length === 1 && !event.ctrlKey && !event.metaKey && !event.altKey) {
-                  query += event.key;
-                  if (timer) clearTimeout(timer);
-                  timer = setTimeout(() => {
-                    query = '';
-                  }, 500);
-                  next = findTypeaheadMatch(
-                    options.map((option) => ({
-                      textValue: option.dataset.vfTextValue ?? option.textContent ?? '',
-                      eligible: !optionDisabled(option),
-                    })),
-                    query,
-                    { startIndex: current },
-                  );
-                }
-                if (next == null) return;
-                event.preventDefault();
-                options[next]?.focus();
-              },
-            },
-            slots.default?.(),
-          )
-        : null;
+      h(
+        'div',
+        {
+          ...attrs,
+          ref: (node: unknown) => {
+            multi.surface.value = node as HTMLElement | null;
+          },
+          role: 'listbox',
+          'aria-multiselectable': 'true',
+          tabindex: -1,
+          popover: 'auto',
+          'data-vf-multi-select-content': '',
+          'data-vf-open': multi.open.value ? '' : undefined,
+          onBeforetoggle(event: Event) {
+            invoke(attrs.onBeforetoggle, event);
+            if (event.target !== event.currentTarget) return;
+            const surface = event.currentTarget as HTMLElement;
+            restoreFocus = surface.matches(':popover-open') && surface.contains(surface.ownerDocument.activeElement);
+          },
+          onToggle(event: Event) {
+            invoke(attrs.onToggle, event);
+            if (event.target !== event.currentTarget) return;
+            const surface = event.currentTarget as HTMLElement;
+            const actual = surface.matches(':popover-open');
+            if (!actual && restoreFocus) {
+              restoreFocus = false;
+              const active = surface.ownerDocument.activeElement;
+              if (!active || active === surface.ownerDocument.body || surface.contains(active))
+                multi.anchor.value?.focus();
+            }
+            if (actual === multi.open.value) return;
+            multi.setOpen(actual);
+            void nextTick(sync);
+          },
+          onKeydown: (event: KeyboardEvent) => {
+            invoke(attrs.onKeydown, event);
+            if (
+              event.defaultPrevented ||
+              !(event.target instanceof Element) ||
+              event.target.closest('[data-vf-multi-select-content]') !== event.currentTarget
+            )
+              return;
+            if (event.key === 'Escape') {
+              event.preventDefault();
+              multi.setOpen(false);
+              return;
+            }
+            if (event.key === 'Tab') {
+              multi.setOpen(false);
+              multi.anchor.value?.focus();
+              return;
+            }
+            const root = event.currentTarget as HTMLElement;
+            const options = optionsFor(root);
+            const currentOption = optionFromTarget(root, event.target);
+            const current = currentOption ? options.indexOf(currentOption) : -1;
+            const states = options.map((option) => ({ eligible: !optionDisabled(option) }));
+            let intent: 'next' | 'previous' | 'first' | 'last' | null = null;
+            if (event.key === 'ArrowDown') intent = 'next';
+            else if (event.key === 'ArrowUp') intent = 'previous';
+            else if (event.key === 'Home') intent = 'first';
+            else if (event.key === 'End') intent = 'last';
+            let next: number | null = null;
+            if (intent) next = resolveNavigationIndex(states, current, intent);
+            else if (event.key.length === 1 && event.key !== ' ' && !event.ctrlKey && !event.metaKey && !event.altKey) {
+              query += event.key;
+              if (timer) clearTimeout(timer);
+              timer = setTimeout(() => {
+                query = '';
+              }, 500);
+              next = findTypeaheadMatch(
+                options.map((option) => ({
+                  textValue: option.dataset.vfTextValue ?? option.textContent ?? '',
+                  eligible: !optionDisabled(option),
+                })),
+                query,
+                { startIndex: current },
+              );
+            }
+            if (next == null) return;
+            event.preventDefault();
+            options[next]?.focus();
+          },
+        },
+        slots.default?.(),
+      );
   },
 });
 
@@ -227,7 +289,8 @@ export const MultiSelectOption = defineComponent({
           'data-vf-value': props.value,
           onClick: (event: MouseEvent) => {
             invoke(attrs.onClick, event);
-            if (!event.defaultPrevented && !props.disabled) multi.toggle(props.value);
+            if (!event.defaultPrevented && !optionDisabled(event.currentTarget as HTMLButtonElement))
+              multi.toggle(props.value);
           },
         },
         slots.default?.(),

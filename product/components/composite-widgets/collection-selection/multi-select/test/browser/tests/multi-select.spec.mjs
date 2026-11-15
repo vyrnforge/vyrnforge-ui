@@ -33,6 +33,7 @@ test.describe('MultiSelect enhanced port behavior', () => {
       });
       page.on('pageerror', (error) => errors.push(error.message));
       await page.goto(`/components/multi-select/${framework}.html`);
+      await page.waitForFunction(() => document.body.dataset.multiReady === 'true');
 
       const trigger = page.locator('#trigger');
       const listbox = page.getByRole('listbox', { name: 'Choose items' });
@@ -89,6 +90,7 @@ test.describe('MultiSelect enhanced port behavior', () => {
     test(`${framework} reopens on a selected option and preserves accessible option state`, async ({ page }) => {
       test.skip(port !== framework, `Running ${port} evidence only`);
       await page.goto(`/components/multi-select/${framework}.html`);
+      await page.waitForFunction(() => document.body.dataset.multiReady === 'true');
 
       const trigger = page.locator('#trigger');
       await trigger.focus();
@@ -96,13 +98,74 @@ test.describe('MultiSelect enhanced port behavior', () => {
       await expect(page.locator(`#${framework}-one`)).toBeFocused();
       await page.keyboard.press('ArrowDown');
       await page.keyboard.press('Space');
+      await expect(page.locator(`#${framework}-three`)).toHaveAttribute('aria-selected', 'true');
       await page.keyboard.press('Escape');
+      await expect(trigger).toBeFocused();
+      await expect(page.locator('#list')).toBeHidden();
       await page.keyboard.press('ArrowDown');
 
       await expect(page.locator(`#${framework}-one`)).toBeFocused();
       await expect(page.locator(`#${framework}-one`)).toHaveAttribute('aria-selected', 'true');
       await expect(page.locator(`#${framework}-three`)).toHaveAttribute('aria-selected', 'true');
-      await expectAxeClean(page, framework === 'react' ? { disableRules: ['region'] } : undefined);
+      await expectAxeClean(page);
     });
   }
+});
+
+test('native popup light dismissal preserves committed multiple values and outside focus', async ({ page }) => {
+  await page.goto(`/components/multi-select/${port}.html`);
+  if (port !== 'web') await page.waitForFunction(() => document.body.dataset.multiReady === 'true');
+  const trigger = page.locator('#trigger');
+  const list = page.locator('#list');
+  await expect(list).toBeHidden();
+  await trigger.press('Enter');
+  await expect(list).toBeVisible();
+  expect(await list.evaluate((node) => node.matches(':popover-open') && !!node.closest('main'))).toBe(true);
+  if (port !== 'web') {
+    await expect(page.locator(`#${port}-one`)).toBeFocused();
+    await page.keyboard.press('ArrowDown');
+    await page.keyboard.press('Enter');
+    await expect(page.locator(`#${port}-three`)).toHaveAttribute('aria-selected', 'true');
+    await expect(list).toBeVisible();
+  }
+  await expectAxeClean(page);
+  await page.locator('#after').click();
+  await expect(list).toBeHidden();
+  await expect(page.locator('#after')).toBeFocused();
+  await expect(page.locator(`#${port}-one`)).toHaveAttribute('aria-selected', 'true');
+  if (port !== 'web') await expect(page.locator(`#${port}-three`)).toHaveAttribute('aria-selected', 'true');
+});
+
+test('controlled value rejection retains committed collection and popup focus', async ({ page }) => {
+  test.skip(port === 'web' || port === 'elements', 'Controlled framework contract.');
+  await page.goto(`/components/multi-select/${port}.html`);
+  await page.waitForFunction(() => document.body.dataset.multiReady === 'true');
+  await page.locator('#controlled-trigger').press('Enter');
+  await expect(page.locator('#controlled-one')).toBeFocused();
+  await page.keyboard.press('ArrowDown');
+  await expect(page.locator('#controlled-three')).toBeFocused();
+  await page.keyboard.press('Space');
+  await expect(page.locator('body')).toHaveAttribute('data-multi-request', 'one,three');
+  await expect(page.locator('#controlled-list')).toBeVisible();
+  await expect(page.locator('#controlled-one')).toHaveAttribute('aria-selected', 'true');
+  await expect(page.locator('#controlled-three')).toHaveAttribute('aria-selected', 'false');
+  await expect(page.locator('#controlled-three')).toBeFocused();
+  await page.keyboard.press('Tab');
+  await expect(page.locator('#controlled-list')).toBeHidden();
+  await expect(page.locator('#after')).toBeFocused();
+});
+
+test('Angular Escape returns focus before the next keyboard event', async ({ page }) => {
+  test.skip(port !== 'angular', 'Angular render scheduling regression.');
+  await page.goto('/components/multi-select/angular.html');
+  await page.waitForFunction(() => document.body.dataset.multiReady === 'true');
+  await page.locator('#trigger').press('ArrowDown');
+  await expect(page.locator('#angular-one')).toBeFocused();
+  const focused = await page.locator('#angular-one').evaluate((node) => {
+    node.dispatchEvent(new KeyboardEvent('keydown', { key: 'Escape', bubbles: true, cancelable: true }));
+    return document.activeElement?.id;
+  });
+  expect(focused).toBe('trigger');
+  await page.keyboard.press('ArrowDown');
+  await expect(page.locator('#angular-one')).toBeFocused();
 });
