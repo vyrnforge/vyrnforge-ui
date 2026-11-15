@@ -89,13 +89,16 @@ test('PreviewCard tracks its focused source through scroll, resize, RTL and bloc
   async function expectAlignment(rtl = false, above = false) {
     await expect
       .poll(() =>
-        page.evaluate(({ rtl, above }) => {
-          const trigger = document.querySelector('#t').getBoundingClientRect();
-          const surface = document.querySelector('#c').getBoundingClientRect();
-          const inlineError = rtl ? surface.right - trigger.right : surface.left - trigger.left;
-          const blockError = above ? surface.bottom - trigger.top : surface.top - trigger.bottom;
-          return Math.max(Math.abs(inlineError), Math.abs(blockError));
-        }, { rtl, above }),
+        page.evaluate(
+          ({ rtl, above }) => {
+            const trigger = document.querySelector('#t').getBoundingClientRect();
+            const surface = document.querySelector('#c').getBoundingClientRect();
+            const inlineError = rtl ? surface.right - trigger.right : surface.left - trigger.left;
+            const blockError = above ? surface.bottom - trigger.top : surface.top - trigger.bottom;
+            return Math.max(Math.abs(inlineError), Math.abs(blockError));
+          },
+          { rtl, above },
+        ),
       )
       .toBeLessThan(2);
   }
