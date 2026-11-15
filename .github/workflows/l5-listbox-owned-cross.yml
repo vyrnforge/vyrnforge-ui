@@ -1,0 +1,16 @@
+name: L5 listbox-owned-cross evidence
+on:
+  push:
+    branches: [evidence/l5-listbox-owned-cross]
+permissions:
+  contents: read
+jobs:
+  browser:
+    uses: ./.github/workflows/_browser-validation.yml
+    with:
+      scopes_json: '[{"port":"web","components":"listbox"},{"port":"react","components":"listbox"},{"port":"vue","components":"listbox"},{"port":"angular","components":"listbox"},{"port":"elements","components":"listbox"}]'
+      revision: ${{ github.sha }}
+      browser_profile: cross
+      browsers: chromium firefox webkit
+      artifact_suffix: listbox-owned-cross
+      retention_days: 14
