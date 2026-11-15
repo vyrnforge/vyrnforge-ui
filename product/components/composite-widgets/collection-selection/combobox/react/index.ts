@@ -126,82 +126,82 @@ export function ComboboxRoot({ children, id, value, defaultValue = '', locale, o
   return createElement(C.Provider, { value: context }, children);
 }
 
-export const ComboboxInput = forwardRef<HTMLInputElement, Omit<ComponentPropsWithoutRef<'input'>, 'id' | 'aria-controls'>>(
-  function ComboboxInput(props, ref) {
-    const context = useCombo();
-    const composingRef = useRef(false);
-    return createElement('input', {
-      ...props,
-      id: context.inputId,
-      ref(node: HTMLInputElement | null) {
-        context.anchorRef.current = node;
-        if (typeof ref === 'function') ref(node);
-        else if (ref) ref.current = node;
-      },
-      role: 'combobox',
-      'aria-autocomplete': 'list',
-      'aria-expanded': context.open,
-      'aria-controls': context.listboxId,
-      'aria-activedescendant': context.activeId ?? undefined,
-      'data-vf-combobox-input': '',
-      value: props.value ?? context.query,
-      onChange(event) {
-        props.onChange?.(event);
-        if (!event.defaultPrevented) {
-          context.setQuery(event.currentTarget.value);
-          context.setOpen(true);
-        }
-      },
-      onFocus(event) {
-        props.onFocus?.(event);
-        if (!event.defaultPrevented) context.setOpen(true);
-      },
-      onBlur(event) {
-        props.onBlur?.(event);
-        if (!event.defaultPrevented && !context.surfaceRef.current?.contains(event.relatedTarget))
-          context.setOpen(false);
-      },
-      onCompositionStart(event) {
-        props.onCompositionStart?.(event);
-        composingRef.current = true;
-        if (!event.defaultPrevented) context.setOpen(true);
-      },
-      onCompositionEnd(event) {
-        props.onCompositionEnd?.(event);
-        composingRef.current = false;
-        if (!event.defaultPrevented) {
-          context.setQuery(event.currentTarget.value);
-          context.setOpen(true);
-        }
-      },
-      onKeyDown(event) {
-        props.onKeyDown?.(event);
-        if (event.defaultPrevented) return;
-        if (composingRef.current || event.nativeEvent.isComposing) return;
-        if (event.key === 'ArrowDown' || event.key === 'ArrowUp') {
+export const ComboboxInput = forwardRef<
+  HTMLInputElement,
+  Omit<ComponentPropsWithoutRef<'input'>, 'id' | 'aria-controls'>
+>(function ComboboxInput(props, ref) {
+  const context = useCombo();
+  const composingRef = useRef(false);
+  return createElement('input', {
+    ...props,
+    id: context.inputId,
+    ref(node: HTMLInputElement | null) {
+      context.anchorRef.current = node;
+      if (typeof ref === 'function') ref(node);
+      else if (ref) ref.current = node;
+    },
+    role: 'combobox',
+    'aria-autocomplete': 'list',
+    'aria-expanded': context.open,
+    'aria-controls': context.listboxId,
+    'aria-activedescendant': context.activeId ?? undefined,
+    'data-vf-combobox-input': '',
+    value: props.value ?? context.query,
+    onChange(event) {
+      props.onChange?.(event);
+      if (!event.defaultPrevented) {
+        context.setQuery(event.currentTarget.value);
+        context.setOpen(true);
+      }
+    },
+    onFocus(event) {
+      props.onFocus?.(event);
+      if (!event.defaultPrevented) context.setOpen(true);
+    },
+    onBlur(event) {
+      props.onBlur?.(event);
+      if (!event.defaultPrevented && !context.surfaceRef.current?.contains(event.relatedTarget)) context.setOpen(false);
+    },
+    onCompositionStart(event) {
+      props.onCompositionStart?.(event);
+      composingRef.current = true;
+      if (!event.defaultPrevented) context.setOpen(true);
+    },
+    onCompositionEnd(event) {
+      props.onCompositionEnd?.(event);
+      composingRef.current = false;
+      if (!event.defaultPrevented) {
+        context.setQuery(event.currentTarget.value);
+        context.setOpen(true);
+      }
+    },
+    onKeyDown(event) {
+      props.onKeyDown?.(event);
+      if (event.defaultPrevented) return;
+      if (composingRef.current || event.nativeEvent.isComposing) return;
+      if (event.key === 'ArrowDown' || event.key === 'ArrowUp') {
+        event.preventDefault();
+        context.setOpen(true);
+        const intent = event.key === 'ArrowDown' ? 'next' : 'previous';
+        moveActive(context, intent);
+        return;
+      }
+      if (event.key === 'Enter' && context.open) {
+        const target = activeOption(context);
+        if (target) {
           event.preventDefault();
-          context.setOpen(true);
-          const intent = event.key === 'ArrowDown' ? 'next' : 'previous';
-          moveActive(context, intent);
-          return;
+          target.click();
         }
-        if (event.key === 'Enter' && context.open) {
-          const target = activeOption(context);
-          if (target) {
-            event.preventDefault();
-            target.click();
-          }
-          return;
-        }
-        if (event.key === 'Tab' && context.open) context.setOpen(false);
-        if (event.key === 'Escape' && context.open) {
-          event.preventDefault();
-          context.setOpen(false);
-        }
-      },
-    });
-  },
-);
+        return;
+      }
+      if (event.key === 'Tab' && context.open) context.setOpen(false);
+      if (event.key === 'Escape' && context.open) {
+        event.preventDefault();
+        context.setOpen(false);
+      }
+    },
+  });
+});
 
 export const ComboboxContent = forwardRef<HTMLDivElement, Omit<ComponentPropsWithoutRef<'div'>, 'id'>>(
   function ComboboxContent(props, ref) {

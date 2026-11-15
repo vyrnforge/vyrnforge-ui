@@ -98,20 +98,23 @@ export async function createVueStory() {
             'aria-label': label,
             ...(locale ? { id: `${prefix}-obsolete-input`, 'aria-controls': `${prefix}-obsolete-listbox` } : {}),
           }),
-          h(ComboboxContent, { 'aria-label': label + ' options', ...(locale ? { id: `${prefix}-obsolete-listbox` } : {}) }, () =>
-            rows.map((row) =>
-              h(
-                ComboboxOption,
-                {
-                  key: row.key,
-                  id: `${prefix}-${row.key}`,
-                  value: row.value,
-                  textValue: row.label,
-                  disabled: row.disabled,
-                },
-                () => row.label,
+          h(
+            ComboboxContent,
+            { 'aria-label': label + ' options', ...(locale ? { id: `${prefix}-obsolete-listbox` } : {}) },
+            () =>
+              rows.map((row) =>
+                h(
+                  ComboboxOption,
+                  {
+                    key: row.key,
+                    id: `${prefix}-${row.key}`,
+                    value: row.value,
+                    textValue: row.label,
+                    disabled: row.disabled,
+                  },
+                  () => row.label,
+                ),
               ),
-            ),
           ),
         ]);
       return () =>

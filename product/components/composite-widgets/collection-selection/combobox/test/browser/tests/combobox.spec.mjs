@@ -217,7 +217,6 @@ test('pointer selection keeps the editable input focused and commits once withou
   else await expect(page.locator('body')).toHaveAttribute('data-combo-value', 'Vue');
 });
 
-
 test('root-owned Combobox relationships stay coherent with an explicit identity', async ({ page }) => {
   test.skip(port === 'web', 'Web authors the input and popup relationships directly.');
   await load(page);

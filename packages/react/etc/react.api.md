@@ -325,10 +325,10 @@ export function ColorPickerSwatch(props: ComponentPropsWithoutRef<'span'>): Reac
 export const ColorPickerTextInput: ForwardRefExoticComponent<ColorPickerInputProps & RefAttributes<HTMLInputElement>>;
 
 // @public (undocumented)
-export const ComboboxContent: ForwardRefExoticComponent<Omit<DetailedHTMLProps<HTMLAttributes<HTMLDivElement>, HTMLDivElement>, "ref"> & RefAttributes<HTMLDivElement>>;
+export const ComboboxContent: ForwardRefExoticComponent<Omit<Omit<DetailedHTMLProps<HTMLAttributes<HTMLDivElement>, HTMLDivElement>, "ref">, "id"> & RefAttributes<HTMLDivElement>>;
 
 // @public (undocumented)
-export const ComboboxInput: ForwardRefExoticComponent<Omit<DetailedHTMLProps<InputHTMLAttributes<HTMLInputElement>, HTMLInputElement>, "ref"> & RefAttributes<HTMLInputElement>>;
+export const ComboboxInput: ForwardRefExoticComponent<Omit<Omit<DetailedHTMLProps<InputHTMLAttributes<HTMLInputElement>, HTMLInputElement>, "ref">, "id" | "aria-controls"> & RefAttributes<HTMLInputElement>>;
 
 // @public (undocumented)
 export const ComboboxOption: ForwardRefExoticComponent<ComboboxOptionProps & RefAttributes<HTMLButtonElement>>;
@@ -350,6 +350,8 @@ export interface ComboboxRootProps {
     children?: ReactNode;
     // (undocumented)
     defaultValue?: string;
+    // (undocumented)
+    id?: string;
     // (undocumented)
     locale?: string;
     // (undocumented)
