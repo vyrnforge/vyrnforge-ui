@@ -1,0 +1,17 @@
+name: L5 Actual Browser Zoom Evidence
+on:
+  push:
+    branches: [evidence/l5-browser-zoom-main-20261115]
+permissions:
+  contents: read
+jobs:
+  zoom:
+    uses: ./.github/workflows/_browser-validation.yml
+    with:
+      scopes_json: '[{"port":"react","components":"tooltip,preview-card,popover"},{"port":"angular","components":"tooltip,preview-card,popover"},{"port":"vue","components":"tooltip,preview-card,popover"},{"port":"elements","components":"tooltip,preview-card,popover"}]'
+      revision: ${{ github.sha }}
+      browser_profile: cross
+      browsers: chromium firefox webkit
+      playwright_project: chromium
+      artifact_suffix: l5-browser-zoom
+      retention_days: 30
