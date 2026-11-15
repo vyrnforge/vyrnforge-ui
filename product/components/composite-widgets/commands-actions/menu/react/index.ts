@@ -23,6 +23,7 @@ function adjacentMenubarTrigger(trigger: HTMLElement | null, event: Pick<Keyboar
   );
   const direction = getComputedStyle(bar).direction === 'rtl' ? 'rtl' : 'ltr';
   const intent = navigationIntentForArrow(event.key === 'ArrowLeft' ? 'left' : 'right', 'horizontal', direction);
+  if (!intent) return null;
   const next = resolveNavigationIndex(items.map(item => ({ eligible: !item.matches(':disabled') })), items.indexOf(trigger as HTMLButtonElement), intent);
   return next == null || items[next] === trigger ? null : items[next] ?? null;
 }
