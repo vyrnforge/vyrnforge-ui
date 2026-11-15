@@ -10,7 +10,7 @@ import {
   signal,
   type OnDestroy,
 } from '@angular/core';
-import type { FloatingPlacement } from '@vyrnforge/web/floating-positioning';
+import type { AnchorPlacement } from '@vyrnforge/web';
 
 type Activity = 'trigger' | 'content' | 'focus';
 
@@ -25,7 +25,7 @@ export class VfPreviewCardRootDirective implements OnDestroy {
   readonly resolvedContentId = computed(() => this.contentId() ?? `${this.id()}-content`);
   readonly open = input<boolean | undefined>(undefined);
   readonly defaultOpen = input(false, { transform: booleanAttribute });
-  readonly placement = input<FloatingPlacement>('bottom-start');
+  readonly placement = input<AnchorPlacement>('bottom-start');
   readonly openDelay = input(0);
   readonly closeDelay = input(100);
   readonly openChange = output<boolean>();

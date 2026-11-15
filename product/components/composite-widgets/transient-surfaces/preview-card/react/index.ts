@@ -15,7 +15,7 @@ import {
   type ReactNode,
   type Ref,
 } from 'react';
-import type { FloatingPlacement } from '@vyrnforge/web/floating-positioning';
+import type { AnchorPlacement } from '@vyrnforge/web';
 
 type Activity = 'trigger' | 'content' | 'focus';
 
@@ -25,7 +25,7 @@ interface PreviewCardContextValue {
   anchorRef: React.RefObject<HTMLElement | null>;
   contentRef: React.RefObject<HTMLDivElement | null>;
   activity(source: Activity, active: boolean, delay: number): void;
-  placement: FloatingPlacement;
+  placement: AnchorPlacement;
   openDelay: number;
   closeDelay: number;
 }
@@ -41,7 +41,7 @@ export interface PreviewCardRootProps {
   open?: boolean;
   defaultOpen?: boolean;
   onOpenChange?: (open: boolean) => void;
-  placement?: FloatingPlacement;
+  placement?: AnchorPlacement;
   openDelay?: number;
   closeDelay?: number;
   /** Stable ID for the preview; defaults to a framework-generated ID. */

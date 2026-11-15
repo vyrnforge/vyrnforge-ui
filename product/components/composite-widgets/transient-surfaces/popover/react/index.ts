@@ -14,7 +14,7 @@ import {
   type ReactNode,
   type RefObject,
 } from 'react';
-import type { FloatingPlacement } from '@vyrnforge/web/floating-positioning';
+import type { AnchorPlacement } from '@vyrnforge/web';
 
 interface PopoverContextValue {
   contentId: string;
@@ -22,7 +22,7 @@ interface PopoverContextValue {
   setOpen(next: boolean): void;
   anchorRef: RefObject<HTMLElement | null>;
   contentRef: RefObject<HTMLDivElement | null>;
-  placement: FloatingPlacement;
+  placement: AnchorPlacement;
   role: 'dialog' | 'region';
 }
 
@@ -38,7 +38,7 @@ export interface PopoverRootProps {
   open?: boolean;
   defaultOpen?: boolean;
   onOpenChange?: (open: boolean) => void;
-  placement?: FloatingPlacement;
+  placement?: AnchorPlacement;
   contentId?: string;
   contentRole?: 'dialog' | 'region';
 }
