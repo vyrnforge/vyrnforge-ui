@@ -110,12 +110,17 @@ test('public RangeSlider CSS resolves canonical root spacing and selected accent
   test.skip(port !== 'web', 'Public CSS resolution evidence is owned by the Web lane.');
   await page.goto('/components/range-slider/web.html');
   const { root, start } = ranges(page);
+  // The fixture owns its page surface; the standalone component CSS does not.
+  await page.locator('body').evaluate((element) => {
+    element.style.backgroundColor = 'var(--vf-color-surface)';
+    element.style.color = 'var(--vf-color-text)';
+  });
   for (const [theme, accentColor] of themes) {
     await page.locator('html').evaluate((element, value) => element.setAttribute('data-vf-theme', value), theme);
     await expect(root).toHaveCSS('gap', '8px');
     await expect(start).toHaveCSS('accent-color', accentColor);
+    await expectNoAxeViolations(page);
   }
-  await expectNoAxeViolations(page);
 });
 
 test('native form reset restores the initial pair and its coordinated bounds without value intent', async ({
@@ -133,7 +138,9 @@ test('native form reset restores the initial pair and its coordinated bounds wit
   await form.evaluate(async (element) => {
     element.addEventListener('reset', (event) => event.preventDefault(), { once: true });
     element.reset();
-    await new Promise((resolve) => setTimeout(resolve, 0));
+    await new Promise((resolve) => {
+      setTimeout(resolve, 0);
+    });
   });
   await expect(start).toHaveValue('100');
   await expect(end).toHaveValue('100');
@@ -172,7 +179,9 @@ test('form reset preserves the latest controlled pair and does not affect anothe
   await expect(root).toHaveAttribute('data-requested', '[45,65]');
   await page.locator('#controlled-form').evaluate(async (form) => {
     form.reset();
-    await new Promise((resolve) => setTimeout(resolve, 0));
+    await new Promise((resolve) => {
+      setTimeout(resolve, 0);
+    });
   });
   await expect(start).toHaveValue('40');
   await expect(end).toHaveValue('65');

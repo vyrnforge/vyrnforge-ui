@@ -78,7 +78,7 @@ export const RangeSliderRoot = forwardRef<HTMLDivElement, RangeSliderRootProps>(
   const current = normalize(value ?? internal, range);
   const rootRef = useRef<HTMLDivElement>(null);
   const latest = useRef({ value, range });
-  useImperativeHandle(ref, () => rootRef.current!, []);
+  useImperativeHandle(ref, () => rootRef.current as HTMLDivElement, []);
   useEffect(() => {
     latest.current = { value, range };
   });
@@ -87,9 +87,9 @@ export const RangeSliderRoot = forwardRef<HTMLDivElement, RangeSliderRootProps>(
     if (!root) return;
     const document = root.ownerDocument;
     let active = true;
-    function onReset(event: Event) {
-      const start = root!.querySelector<HTMLInputElement>('input[data-vf-range-slider-start]');
-      const end = root!.querySelector<HTMLInputElement>('input[data-vf-range-slider-end]');
+    const onReset = (event: Event) => {
+      const start = root.querySelector<HTMLInputElement>('input[data-vf-range-slider-start]');
+      const end = root.querySelector<HTMLInputElement>('input[data-vf-range-slider-end]');
       if (!start || !end || !start.form || start.form !== event.target || end.form !== event.target) return;
       // Native reset may be canceled by another listener; reconcile after its default action.
       setTimeout(() => {
@@ -102,7 +102,7 @@ export const RangeSliderRoot = forwardRef<HTMLDivElement, RangeSliderRootProps>(
         start.value = String(next[0]);
         end.value = String(next[1]);
       }, 0);
-    }
+    };
     document.addEventListener('reset', onReset, true);
     return () => {
       active = false;
