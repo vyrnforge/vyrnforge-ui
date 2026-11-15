@@ -104,7 +104,6 @@ export class VfContextMenuElement extends HTMLElementBase {
     for (const item of menuItems(this)) {
       item.setAttribute('role', 'menuitem');
       item.tabIndex = -1;
-      if (item.matches(':disabled')) item.setAttribute('aria-disabled', 'true');
     }
     if (!content || !trigger) return;
     if (open && !content.matches(':popover-open')) content.showPopover({ source: trigger });
