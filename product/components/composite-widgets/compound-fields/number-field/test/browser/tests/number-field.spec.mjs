@@ -66,7 +66,9 @@ test('Elements NumberField isolates nested ownership and ignores cancelled or un
   });
   await increment.click();
   await expect(input).toHaveValue('10');
-  await page.locator('#input-root').click({ position: { x: 1, y: 1 } });
+  await expect(page.locator('body')).toHaveAttribute('data-input-events', '1');
+  await page.locator('#input-root').dispatchEvent('click');
+  await expect(input).toHaveValue('10');
   await expect(page.locator('body')).toHaveAttribute('data-input-events', '1');
   await page.locator('#dec').click();
   await expect(input).toHaveValue('9');
