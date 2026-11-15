@@ -2,13 +2,14 @@ import { resolveNavigationIndex } from '@vyrnforge/core/collection-navigation';
 import { findTypeaheadMatch } from '@vyrnforge/core/typeahead-matching';
 
 const H: typeof HTMLElement = globalThis.HTMLElement ?? (class {} as typeof HTMLElement);
+const rootSelector = '[data-vf-select-root],vf-select';
 const optionSelector = '[data-vf-select-option]';
 function optionsFor(root: HTMLElement): HTMLElement[] {
-  return Array.from(root.querySelectorAll<HTMLElement>(optionSelector));
+  return Array.from(root.querySelectorAll<HTMLElement>(optionSelector)).filter((option) => option.closest(rootSelector) === root.closest(rootSelector));
 }
 function optionFromTarget(root: HTMLElement, target: EventTarget | null): HTMLElement | null {
-  const option = target instanceof HTMLElement ? target.closest<HTMLElement>(optionSelector) : null;
-  return option && root.contains(option) ? option : null;
+  const option = target instanceof Element ? target.closest<HTMLElement>(optionSelector) : null;
+  return option && root.contains(option) && option.closest(rootSelector) === root.closest(rootSelector) ? option : null;
 }
 function optionDisabled(option: HTMLElement): boolean {
   return (
@@ -22,6 +23,9 @@ function optionValue(option: HTMLElement): string {
 }
 
 export class VfSelectElement extends H {
+  static observedAttributes = ['open', 'value'];
+  private surface: HTMLElement | null = null;
+  private restoreFocus = false;
   private observer: MutationObserver | null = null;
   private query = '';
   private timer: ReturnType<typeof setTimeout> | null = null;
@@ -48,40 +52,83 @@ export class VfSelectElement extends H {
     this.observer?.disconnect();
     this.observer = null;
     if (this.timer) clearTimeout(this.timer);
+    this.timer = null;
+    this.query = '';
+    this.surface?.removeEventListener('toggle', this.onToggle);
+    this.surface?.removeEventListener('beforetoggle', this.onBeforeToggle);
+    this.surface = null;
+  }
+
+  attributeChangedCallback(): void {
+    if (this.isConnected) this.sync();
+  }
+
+  private ownedPart(selector: string): HTMLElement | null {
+    return Array.from(this.querySelectorAll<HTMLElement>(selector)).find((node) => node.closest(rootSelector) === this) ?? null;
   }
 
   private get trigger(): HTMLElement | null {
-    return this.querySelector<HTMLElement>('[data-vf-select-trigger]');
+    return this.ownedPart('[data-vf-select-trigger]');
   }
 
   private get content(): HTMLElement | null {
-    return this.querySelector<HTMLElement>('[data-vf-select-content]');
+    return this.ownedPart('[data-vf-select-content]');
   }
 
   private sync(): void {
     const open = this.hasAttribute('open');
+    if (!open) {
+      if (this.timer) clearTimeout(this.timer);
+      this.timer = null;
+      this.query = '';
+    }
     const selectedValue = this.getAttribute('value') ?? '';
     const trigger = this.trigger;
     const content = this.content;
+    if (content !== this.surface) {
+      this.surface?.removeEventListener('toggle', this.onToggle);
+      this.surface?.removeEventListener('beforetoggle', this.onBeforeToggle);
+      if (this.surface?.matches(':popover-open')) this.surface.hidePopover();
+      this.surface = content;
+      content?.addEventListener('toggle', this.onToggle);
+      content?.addEventListener('beforetoggle', this.onBeforeToggle);
+    }
     trigger?.setAttribute('aria-haspopup', 'listbox');
     trigger?.setAttribute('aria-expanded', String(open));
     if (content) {
       content.setAttribute('role', 'listbox');
       content.tabIndex = -1;
-      content.hidden = !open;
+      content.setAttribute('popover', 'auto');
+      content.removeAttribute('hidden');
+      content.toggleAttribute('data-vf-open', open);
     }
     for (const option of optionsFor(this)) {
-      const disabled = optionDisabled(option);
       option.setAttribute('role', 'option');
       option.tabIndex = -1;
       option.setAttribute('aria-selected', String(optionValue(option) === selectedValue));
-      if (disabled) {
-        if (option.getAttribute('aria-disabled') !== 'true') option.setAttribute('aria-disabled', 'true');
-      } else if (option.hasAttribute('aria-disabled')) {
-        option.removeAttribute('aria-disabled');
-      }
     }
+    if (!content || !trigger) return;
+    if (open && !content.matches(':popover-open')) content.showPopover({ source: trigger });
+    if (!open && content.matches(':popover-open')) content.hidePopover();
   }
+
+  private onBeforeToggle = (event: Event): void => {
+    const surface = this.surface;
+    if (!surface || event.target !== surface) return;
+    this.restoreFocus = surface.matches(':popover-open') && surface.contains(this.ownerDocument.activeElement);
+  };
+
+  private onToggle = (event: Event): void => {
+    const surface = this.surface;
+    if (!surface || event.target !== surface) return;
+    const actual = surface.matches(':popover-open');
+    if (!actual && this.restoreFocus) {
+      this.restoreFocus = false;
+      const active = this.ownerDocument.activeElement;
+      if (!active || active === this.ownerDocument.body || surface.contains(active)) this.trigger?.focus();
+    }
+    if (actual !== this.hasAttribute('open')) this.setOpen(actual);
+  };
 
   private setOpen(open: boolean): void {
     this.toggleAttribute('open', open);
@@ -90,7 +137,7 @@ export class VfSelectElement extends H {
   private focusOptions(edge: 'first' | 'last'): void {
     queueMicrotask(() => {
       const content = this.content;
-      if (!content) return;
+      if (!this.isConnected || !content?.matches(':popover-open')) return;
       const options = optionsFor(content);
       const states = options.map((option) => ({ eligible: !optionDisabled(option) }));
       const selected = options.findIndex(
@@ -104,8 +151,11 @@ export class VfSelectElement extends H {
 
   private onClick = (event: Event): void => {
     if (event.defaultPrevented) return;
-    const target = event.target instanceof HTMLElement ? event.target : null;
-    if (target?.closest('[data-vf-select-trigger]')) {
+    const target = event.target instanceof Element ? event.target : null;
+    if (!target || target.closest(rootSelector) !== this) return;
+    const trigger = target.closest('[data-vf-select-trigger]');
+    if (trigger && trigger === this.trigger) {
+      if (trigger.matches(':disabled,[aria-disabled="true"]')) return;
       if (this.hasAttribute('open')) this.setOpen(false);
       else {
         this.setOpen(true);
@@ -114,7 +164,7 @@ export class VfSelectElement extends H {
       return;
     }
     const option = optionFromTarget(this, target);
-    if (!option) return;
+    if (!option || !this.hasAttribute('open') || !this.content?.contains(option)) return;
     if (optionDisabled(option)) {
       event.preventDefault();
       return;
@@ -122,13 +172,15 @@ export class VfSelectElement extends H {
     this.setAttribute('value', optionValue(option));
     this.setOpen(false);
     this.sync();
-    this.trigger?.focus();
   };
 
   private onKeydown = (event: KeyboardEvent): void => {
     if (event.defaultPrevented) return;
-    const target = event.target instanceof HTMLElement ? event.target : null;
-    if (target?.closest('[data-vf-select-trigger]')) {
+    const target = event.target instanceof Element ? event.target : null;
+    if (!target || target.closest(rootSelector) !== this) return;
+    const trigger = target.closest('[data-vf-select-trigger]');
+    if (trigger && trigger === this.trigger) {
+      if (trigger.matches(':disabled,[aria-disabled="true"]')) return;
       if (event.key === 'ArrowUp') {
         event.preventDefault();
         this.setOpen(true);
@@ -142,11 +194,10 @@ export class VfSelectElement extends H {
     }
 
     const content = this.content;
-    if (!content || !content.contains(event.target as Node)) return;
+    if (!this.hasAttribute('open') || !content || !content.contains(target)) return;
     if (event.key === 'Escape') {
       event.preventDefault();
       this.setOpen(false);
-      this.trigger?.focus();
       return;
     }
     if (event.key === 'Tab') {
@@ -166,7 +217,7 @@ export class VfSelectElement extends H {
     else if (event.key === 'End') intent = 'last';
     let next: number | null = null;
     if (intent) next = resolveNavigationIndex(states, current, intent);
-    else if (event.key.length === 1 && !event.ctrlKey && !event.metaKey && !event.altKey) {
+    else if (event.key.length === 1 && event.key !== ' ' && !event.ctrlKey && !event.metaKey && !event.altKey) {
       this.query += event.key;
       if (this.timer) clearTimeout(this.timer);
       this.timer = setTimeout(() => {

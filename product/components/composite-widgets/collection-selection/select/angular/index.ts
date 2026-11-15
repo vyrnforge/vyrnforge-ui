@@ -2,13 +2,13 @@ import {
   DestroyRef,
   Directive,
   ElementRef,
-  Injector,
-  afterNextRender,
+  afterRenderEffect,
   computed,
   inject,
   input,
   output,
   signal,
+  type WritableSignal,
 } from '@angular/core';
 import { resolveNavigationIndex } from '@vyrnforge/core/collection-navigation';
 import { findTypeaheadMatch } from '@vyrnforge/core/typeahead-matching';
@@ -19,33 +19,32 @@ interface SelectDomState {
   anchor: HTMLButtonElement | null;
   surface: HTMLElement | null;
   focusRequests: FocusRequest[];
-  focusScheduled: boolean;
+  focusRevision: WritableSignal<number>;
 }
 const selectDom = new WeakMap<VfSelectRootDirective, SelectDomState>();
 
 function domFor(root: VfSelectRootDirective): SelectDomState {
   let state = selectDom.get(root);
   if (!state) {
-    state = { anchor: null, surface: null, focusRequests: [], focusScheduled: false };
+    state = { anchor: null, surface: null, focusRequests: [], focusRevision: signal(0) };
     selectDom.set(root, state);
   }
   return state;
 }
 function optionsFor(root: HTMLElement): HTMLButtonElement[] {
-  return Array.from(root.querySelectorAll<HTMLButtonElement>(optionSelector));
+  return Array.from(root.querySelectorAll<HTMLButtonElement>(optionSelector)).filter((option) => option.closest('[data-vf-select-content]') === root);
 }
 function optionFromTarget(root: HTMLElement, target: EventTarget | null): HTMLButtonElement | null {
-  const option = target instanceof HTMLElement ? target.closest<HTMLButtonElement>(optionSelector) : null;
-  return option && root.contains(option) ? option : null;
+  const option = target instanceof Element ? target.closest<HTMLButtonElement>(optionSelector) : null;
+  return option && option.closest('[data-vf-select-content]') === root ? option : null;
 }
 function optionDisabled(option: HTMLButtonElement): boolean {
   return option.disabled || option.getAttribute('aria-disabled') === 'true';
 }
 function flushFocusRequests(root: VfSelectRootDirective): void {
   const state = domFor(root);
-  state.focusScheduled = false;
   const surface = state.surface;
-  if (!surface) {
+  if (!root.expanded() || !surface?.matches(':popover-open')) {
     state.focusRequests.length = 0;
     return;
   }
@@ -71,14 +70,10 @@ function flushFocusRequests(root: VfSelectRootDirective): void {
     if (index != null) options[index]?.focus();
   }
 }
-function requestFocus(root: VfSelectRootDirective, request: FocusRequest, injector: Injector): void {
+function requestFocus(root: VfSelectRootDirective, request: FocusRequest): void {
   const state = domFor(root);
   state.focusRequests.push(request);
-  if (state.focusScheduled) return;
-  state.focusScheduled = true;
-  const flush = () => flushFocusRequests(root);
-  if (state.surface && !state.surface.hidden) queueMicrotask(flush);
-  else afterNextRender(flush, { injector });
+  state.focusRevision.update((revision) => revision + 1);
 }
 
 @Directive({ selector: '[vfSelectRoot]', standalone: true })
@@ -95,6 +90,7 @@ export class VfSelectRootDirective {
   readonly expanded = computed(() => this.open() ?? this.internalOpen() ?? this.defaultOpen());
 
   setOpen(v: boolean): void {
+    if (v === this.expanded()) return;
     if (this.open() === undefined) this.internalOpen.set(v);
     this.openChange.emit(v);
   }
@@ -119,7 +115,6 @@ export class VfSelectRootDirective {
 export class VfSelectTriggerDirective {
   constructor(readonly root: VfSelectRootDirective) {
     const element = inject<ElementRef<HTMLButtonElement>>(ElementRef).nativeElement;
-    const injector = inject(Injector);
     const destroyRef = inject(DestroyRef);
     domFor(root).anchor = element;
 
@@ -128,7 +123,7 @@ export class VfSelectTriggerDirective {
       if (root.expanded()) root.setOpen(false);
       else {
         root.setOpen(true);
-        requestFocus(root, 'first', injector);
+        requestFocus(root, 'first');
       }
     };
     const onKeydown = (event: KeyboardEvent) => {
@@ -137,15 +132,15 @@ export class VfSelectTriggerDirective {
       if (event.key === 'ArrowUp') {
         event.preventDefault();
         if (!wasOpen) root.setOpen(true);
-        requestFocus(root, wasOpen ? 'previous' : 'last', injector);
+        requestFocus(root, wasOpen ? 'previous' : 'last');
       } else if (event.key === 'ArrowDown') {
         event.preventDefault();
         if (!wasOpen) root.setOpen(true);
-        requestFocus(root, wasOpen ? 'next' : 'first', injector);
+        requestFocus(root, wasOpen ? 'next' : 'first');
       } else if (event.key === 'Enter' || event.key === ' ') {
         event.preventDefault();
         if (!wasOpen) root.setOpen(true);
-        requestFocus(root, 'first', injector);
+        requestFocus(root, 'first');
       }
     };
 
@@ -168,7 +163,8 @@ export class VfSelectTriggerDirective {
     role: 'listbox',
     tabindex: '-1',
     'data-vf-select-content': '',
-    '[hidden]': '!root.expanded()',
+    popover: 'auto',
+    '[attr.data-vf-open]': 'root.expanded() ? "" : null',
   },
 })
 export class VfSelectContentDirective {
@@ -178,13 +174,48 @@ export class VfSelectContentDirective {
     domFor(root).surface = element;
     let query = '';
     let timer: ReturnType<typeof setTimeout> | null = null;
+    let restoreFocus = false;
+    const nativeRevision = signal(0);
+    afterRenderEffect(() => {
+      nativeRevision();
+      const state = domFor(root);
+      state.focusRevision();
+      const open = root.expanded();
+      if (state.anchor) {
+        if (open && !element.matches(':popover-open')) element.showPopover({ source: state.anchor });
+        if (!open && element.matches(':popover-open')) element.hidePopover();
+      }
+      if (!open) {
+        if (timer !== null) clearTimeout(timer);
+        timer = null;
+        query = '';
+      }
+      flushFocusRequests(root);
+    });
+    const onBeforeToggle = (event: Event) => {
+      if (event.target !== element) return;
+      restoreFocus = element.matches(':popover-open') && element.contains(element.ownerDocument.activeElement);
+    };
+    const onToggle = (event: Event) => {
+      if (event.target !== element) return;
+      const actual = element.matches(':popover-open');
+      if (!actual && restoreFocus) {
+        restoreFocus = false;
+        const active = element.ownerDocument.activeElement;
+        if (!active || active === element.ownerDocument.body || element.contains(active)) domFor(root).anchor?.focus();
+      }
+      if (actual === root.expanded()) return;
+      root.setOpen(actual);
+      nativeRevision.update((revision) => revision + 1);
+    };
+    element.addEventListener('beforetoggle', onBeforeToggle);
+    element.addEventListener('toggle', onToggle);
 
     const onKeydown = (event: KeyboardEvent) => {
-      if (event.defaultPrevented) return;
+      if (event.defaultPrevented || !(event.target instanceof Element) || event.target.closest('[data-vf-select-content]') !== element) return;
       if (event.key === 'Escape') {
         event.preventDefault();
         root.setOpen(false);
-        domFor(root).anchor?.focus();
         return;
       }
       if (event.key === 'Tab') {
@@ -203,7 +234,7 @@ export class VfSelectContentDirective {
       else if (event.key === 'End') intent = 'last';
       let next: number | null = null;
       if (intent) next = resolveNavigationIndex(states, current, intent);
-      else if (event.key.length === 1 && !event.ctrlKey && !event.metaKey && !event.altKey) {
+      else if (event.key.length === 1 && event.key !== ' ' && !event.ctrlKey && !event.metaKey && !event.altKey) {
         query += event.key;
         if (timer) clearTimeout(timer);
         timer = setTimeout(() => {
@@ -230,7 +261,8 @@ export class VfSelectContentDirective {
       const state = domFor(root);
       if (state.surface === element) state.surface = null;
       state.focusRequests.length = 0;
-      state.focusScheduled = false;
+      element.removeEventListener('beforetoggle', onBeforeToggle);
+      element.removeEventListener('toggle', onToggle);
     });
   }
 }
@@ -247,7 +279,7 @@ export class VfSelectContentDirective {
     '[attr.aria-selected]': 'root.selected() === value()',
     '[attr.aria-disabled]': 'disabled() ? true : null',
     '[disabled]': 'disabled()',
-    '(click)': 'select()',
+    '(click)': 'select($event)',
   },
 })
 export class VfSelectOptionDirective {
@@ -256,9 +288,8 @@ export class VfSelectOptionDirective {
 
   constructor(readonly root: VfSelectRootDirective) {}
 
-  select(): void {
-    if (this.disabled()) return;
+  select(event?: MouseEvent): void {
+    if (event?.defaultPrevented || this.disabled()) return;
     this.root.setValue(this.value());
-    domFor(this.root).anchor?.focus();
   }
 }

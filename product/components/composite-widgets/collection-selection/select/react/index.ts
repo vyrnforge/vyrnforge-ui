@@ -3,6 +3,7 @@ import {
   createElement,
   forwardRef,
   useContext,
+  useEffect,
   useMemo,
   useRef,
   useState,
@@ -11,18 +12,16 @@ import {
   type MouseEvent,
   type ReactNode,
 } from 'react';
-import { createPortal } from 'react-dom';
 import { resolveNavigationIndex } from '@vyrnforge/core/collection-navigation';
 import { findTypeaheadMatch } from '@vyrnforge/core/typeahead-matching';
-import { useFloatingSurface } from '../../internal/floating-surface.js';
 
 const optionSelector = '[data-vf-select-option]';
 function optionsFor(root: HTMLElement): HTMLButtonElement[] {
-  return Array.from(root.querySelectorAll<HTMLButtonElement>(optionSelector));
+  return Array.from(root.querySelectorAll<HTMLButtonElement>(optionSelector)).filter((option) => option.closest('[data-vf-select-content]') === root);
 }
 function optionFromTarget(root: HTMLElement, target: EventTarget | null): HTMLButtonElement | null {
-  const option = target instanceof HTMLElement ? target.closest<HTMLButtonElement>(optionSelector) : null;
-  return option && root.contains(option) ? option : null;
+  const option = target instanceof Element ? target.closest<HTMLButtonElement>(optionSelector) : null;
+  return option && option.closest('[data-vf-select-content]') === root ? option : null;
 }
 function optionDisabled(option: HTMLButtonElement): boolean {
   return option.disabled || option.getAttribute('aria-disabled') === 'true';
@@ -46,6 +45,8 @@ interface Ctx {
   anchorRef: React.MutableRefObject<HTMLElement | null>;
   surfaceRef: React.MutableRefObject<HTMLElement | null>;
   focusOptions(edge: 'first' | 'last'): void;
+  focusRequest: React.MutableRefObject<'first' | 'last' | null>;
+  focusRevision: number;
 }
 const C = createContext<Ctx | null>(null);
 function useSelect(): Ctx {
@@ -79,10 +80,13 @@ export function SelectRoot({
   const expanded = open ?? internalOpen;
   const anchorRef = useRef<HTMLElement | null>(null);
   const surfaceRef = useRef<HTMLElement | null>(null);
+  const focusRequest = useRef<'first' | 'last' | null>(null);
+  const [focusRevision, setFocusRevision] = useState(0);
   const context = useMemo<Ctx>(
     () => ({
       open: expanded,
       setOpen(next) {
+        if (next === expanded) return;
         if (open === undefined) setInternalOpen(next);
         onOpenChange?.(next);
       },
@@ -95,11 +99,14 @@ export function SelectRoot({
       },
       anchorRef,
       surfaceRef,
+      focusRequest,
+      focusRevision,
       focusOptions(edge) {
-        queueMicrotask(() => focusOption(surfaceRef.current, edge));
+        focusRequest.current = edge;
+        setFocusRevision((revision) => revision + 1);
       },
     }),
-    [expanded, onOpenChange, onValueChange, open, selected, value],
+    [expanded, onOpenChange, onValueChange, open, selected, value, focusRevision],
   );
   return createElement(C.Provider, { value: context }, children);
 }
@@ -149,22 +156,34 @@ export const SelectTrigger = forwardRef<HTMLButtonElement, ComponentPropsWithout
 });
 
 export const SelectContent = forwardRef<HTMLDivElement, ComponentPropsWithoutRef<'div'>>(function SelectContent(
-  { onKeyDown, ...props },
+  { onKeyDown, onBeforeToggle, onToggle, ...props },
   forwardedRef,
 ) {
   const select = useSelect();
   const query = useRef('');
   const timer = useRef<ReturnType<typeof setTimeout> | null>(null);
-  const portalTarget = useFloatingSurface({
-    open: select.open,
-    anchorRef: select.anchorRef,
-    surfaceRef: select.surfaceRef,
-    onDismiss(reason) {
-      if (reason === 'escape') select.anchorRef.current?.focus();
-      select.setOpen(false);
-    },
-  });
-  if (!select.open) return null;
+  const [nativeRevision, setNativeRevision] = useState(0);
+  const restoreFocus = useRef(false);
+  useEffect(() => () => {
+    if (timer.current !== null) clearTimeout(timer.current);
+  }, []);
+  useEffect(() => {
+    const surface = select.surfaceRef.current;
+    const trigger = select.anchorRef.current;
+    if (!surface || !trigger) return;
+    if (!select.open) {
+      select.focusRequest.current = null;
+      if (timer.current !== null) clearTimeout(timer.current);
+      timer.current = null;
+      query.current = '';
+      if (surface.matches(':popover-open')) surface.hidePopover();
+      return;
+    }
+    if (!surface.matches(':popover-open')) surface.showPopover({ source: trigger });
+    const edge = select.focusRequest.current;
+    select.focusRequest.current = null;
+    if (edge && surface.matches(':popover-open')) focusOption(surface, edge);
+  }, [select.open, select.focusRevision, select.focusRequest, select.anchorRef, select.surfaceRef, nativeRevision]);
   const content = createElement('div', {
     ...props,
     ref(node: HTMLDivElement | null) {
@@ -174,14 +193,35 @@ export const SelectContent = forwardRef<HTMLDivElement, ComponentPropsWithoutRef
     },
     role: 'listbox',
     tabIndex: -1,
+    popover: 'auto',
     'data-vf-select-content': '',
+    'data-vf-open': select.open ? '' : undefined,
+    onBeforeToggle(event) {
+      onBeforeToggle?.(event);
+      if (event.target !== event.currentTarget) return;
+      const surface = event.currentTarget;
+      restoreFocus.current = surface.matches(':popover-open') && surface.contains(surface.ownerDocument.activeElement);
+    },
+    onToggle(event) {
+      onToggle?.(event);
+      if (event.target !== event.currentTarget) return;
+      const surface = event.currentTarget;
+      const actual = surface.matches(':popover-open');
+      if (!actual && restoreFocus.current) {
+        restoreFocus.current = false;
+        const active = surface.ownerDocument.activeElement;
+        if (!active || active === surface.ownerDocument.body || surface.contains(active)) select.anchorRef.current?.focus();
+      }
+      if (actual === select.open) return;
+      select.setOpen(actual);
+      setNativeRevision((revision) => revision + 1);
+    },
     onKeyDown(event: KeyboardEvent<HTMLDivElement>) {
       onKeyDown?.(event);
-      if (event.defaultPrevented) return;
+      if (event.defaultPrevented || !(event.target instanceof Element) || event.target.closest('[data-vf-select-content]') !== event.currentTarget) return;
       if (event.key === 'Escape') {
         event.preventDefault();
         select.setOpen(false);
-        select.anchorRef.current?.focus();
         return;
       }
       if (event.key === 'Tab') {
@@ -201,7 +241,7 @@ export const SelectContent = forwardRef<HTMLDivElement, ComponentPropsWithoutRef
       else if (event.key === 'End') intent = 'last';
       let next: number | null = null;
       if (intent) next = resolveNavigationIndex(states, current, intent);
-      else if (event.key.length === 1 && !event.ctrlKey && !event.metaKey && !event.altKey) {
+      else if (event.key.length === 1 && event.key !== ' ' && !event.ctrlKey && !event.metaKey && !event.altKey) {
         query.current += event.key;
         if (timer.current) clearTimeout(timer.current);
         timer.current = setTimeout(() => {
@@ -221,7 +261,7 @@ export const SelectContent = forwardRef<HTMLDivElement, ComponentPropsWithoutRef
       options[next]?.focus();
     },
   });
-  return portalTarget ? createPortal(content, portalTarget) : content;
+  return content;
 });
 
 export interface SelectOptionProps extends Omit<ComponentPropsWithoutRef<'button'>, 'value'> {
@@ -246,10 +286,7 @@ export const SelectOption = forwardRef<HTMLButtonElement, SelectOptionProps>(fun
     'data-vf-value': value,
     onClick(event) {
       onClick?.(event);
-      if (!event.defaultPrevented && !disabled) {
-        select.setValue(value);
-        select.anchorRef.current?.focus();
-      }
+      if (!event.defaultPrevented && !optionDisabled(event.currentTarget)) select.setValue(value);
     },
   });
 });
