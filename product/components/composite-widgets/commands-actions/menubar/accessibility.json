@@ -23,7 +23,7 @@
   "evidence": { "browser": "required", "assistiveTechnology": "review-required" },
   "profileVariability": [],
   "notes": [
-    "Current ports implement only partial menubar navigation; submenu and focus contracts need rebuilding.",
+    "Top-level roving focus, logical horizontal navigation, edges and native-disabled reconciliation are implemented in the runtime ports; submenu coordination and aria-disabled command policy remain open.",
     "Audit mapping is provisional; not a conformance claim."
   ]
 }
