@@ -67,12 +67,8 @@ export class VfRangeSliderRootDirective {
       const document = root.ownerDocument;
       let active = true;
       const onReset = (event: Event) => {
-        const owned = (selector: string) =>
-          Array.from(root.querySelectorAll<HTMLInputElement>(selector)).find(
-            (element) => element.closest('[data-vf-range-slider-root]') === root,
-          );
-        const start = owned('input[data-vf-range-slider-start]');
-        const end = owned('input[data-vf-range-slider-end]');
+        const start = this.owned('input[data-vf-range-slider-start]');
+        const end = this.owned('input[data-vf-range-slider-end]');
         if (!start || !end || !start.form || start.form !== event.target || end.form !== event.target) return;
         setTimeout(() => {
           if (!active || event.defaultPrevented || start.form !== event.target || end.form !== event.target) return;
@@ -80,10 +76,7 @@ export class VfRangeSliderRootDirective {
           if (!initial) return;
           const next = normalize(this.value() ?? initial, this.range());
           if (this.value() === undefined) this.internal.set([...initial]);
-          start.max = String(next[1]);
-          end.min = String(next[0]);
-          start.value = String(next[0]);
-          end.value = String(next[1]);
+          this.syncInputs(next);
         }, 0);
       };
       document.addEventListener('reset', onReset, true);
@@ -92,6 +85,22 @@ export class VfRangeSliderRootDirective {
         document.removeEventListener('reset', onReset, true);
       });
     });
+  }
+
+  private owned(selector: string): HTMLInputElement | undefined {
+    const root = this.element.nativeElement;
+    return Array.from(root.querySelectorAll<HTMLInputElement>(selector)).find(
+      (element) => element.closest('[data-vf-range-slider-root]') === root,
+    );
+  }
+
+  private syncInputs(next: Pair): void {
+    const start = this.owned('input[data-vf-range-slider-start]');
+    const end = this.owned('input[data-vf-range-slider-end]');
+    if (start) start.max = String(next[1]);
+    if (end) end.min = String(next[0]);
+    if (start) start.value = String(next[0]);
+    if (end) end.value = String(next[1]);
   }
 
   private range(): Bounds {
@@ -119,8 +128,10 @@ export class VfRangeSliderRootDirective {
   }
   change(index: 0 | 1, event: Event) {
     const target = event.currentTarget as HTMLInputElement;
-    if (!target.disabled) this.set(index, target.valueAsNumber);
-    target.value = String(this.current()[index]);
+    if (!event.defaultPrevented && !target.matches(':disabled')) this.set(index, target.valueAsNumber);
+    // Native keyboard events can arrive before Angular's next render. Commit
+    // the pair's native constraints together so neither range uses stale bounds.
+    this.syncInputs(this.current());
   }
 }
 

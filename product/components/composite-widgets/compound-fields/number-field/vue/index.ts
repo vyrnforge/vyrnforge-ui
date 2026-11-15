@@ -3,6 +3,8 @@ import {
   defineComponent,
   h,
   inject,
+  onBeforeUnmount,
+  onMounted,
   provide,
   ref,
   watch,
@@ -20,6 +22,7 @@ interface Ctx {
   disabled: Ref<boolean>;
   readOnly: Ref<boolean>;
   set(v: number | null): void;
+  reset(): number | null;
 }
 const k: InjectionKey<Ctx> = Symbol('nf');
 function useN() {
@@ -62,7 +65,8 @@ export const NumberFieldRoot = defineComponent({
   },
   emits: { 'update:value': (value: number | null) => value === null || Number.isFinite(value) },
   setup(p, { attrs, slots, emit }) {
-    const internal = ref<number | null>(p.defaultValue);
+    const initial = p.defaultValue;
+    const internal = ref<number | null>(initial);
     const controlled = computed(() => p.value !== undefined);
     const value = computed(() => (p.value !== undefined ? p.value : internal.value));
     provide(k, {
@@ -78,6 +82,11 @@ export const NumberFieldRoot = defineComponent({
         if (!controlled.value) internal.value = next;
         emit('update:value', next);
       },
+      reset() {
+        if (p.value !== undefined) return p.value;
+        internal.value = initial;
+        return initial;
+      },
     });
     return () => h('div', { ...attrs, 'data-vf-number-field-root': '' }, slots.default?.());
   },
@@ -90,6 +99,25 @@ export const NumberFieldInput = defineComponent({
     const n = useN();
     const element = ref<HTMLInputElement | null>(null);
     const initial = n.value.value ?? '';
+    let document: Document | undefined;
+    let active = false;
+    function onReset(event: Event) {
+      const input = element.value;
+      if (!input?.form || input.form !== event.target) return;
+      setTimeout(() => {
+        if (!active || event.defaultPrevented || input.form !== event.target) return;
+        syncValue(input, n.reset());
+      }, 0);
+    }
+    onMounted(() => {
+      active = true;
+      document = element.value?.ownerDocument;
+      document?.addEventListener('reset', onReset, true);
+    });
+    onBeforeUnmount(() => {
+      active = false;
+      document?.removeEventListener('reset', onReset, true);
+    });
     watch(
       n.value,
       (value) => {
