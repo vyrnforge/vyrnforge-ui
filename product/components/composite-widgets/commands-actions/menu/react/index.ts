@@ -3,25 +3,26 @@ import {
   createElement,
   forwardRef,
   useContext,
+  useEffect,
   useMemo,
   useRef,
   useState,
   type ComponentPropsWithoutRef,
   type ReactNode,
 } from 'react';
-import { createPortal } from 'react-dom';
 import { resolveNavigationIndex } from '@vyrnforge/core/collection-navigation';
 import { findTypeaheadMatch } from '@vyrnforge/core/typeahead-matching';
 import { type FloatingPlacement } from '@vyrnforge/web/floating-positioning';
-import { useFloatingSurface } from '../../internal/floating-surface.js';
 
 const menuItemSelector = '[data-vf-menu-item]';
 function menuItems(root: HTMLElement): HTMLElement[] {
-  return Array.from(root.querySelectorAll<HTMLElement>(menuItemSelector));
+  return Array.from(root.querySelectorAll<HTMLElement>(menuItemSelector)).filter(
+    (item) => item.closest('[data-vf-menu-content]') === root,
+  );
 }
 function itemFromTarget(root: HTMLElement, target: EventTarget | null): HTMLElement | null {
   const item = target instanceof HTMLElement ? target.closest<HTMLElement>(menuItemSelector) : null;
-  return item && root.contains(item) ? item : null;
+  return item && item.closest('[data-vf-menu-content]') === root ? item : null;
 }
 function focusItem(root: HTMLElement | null, edge: 'first' | 'last') {
   if (!root) return;
@@ -48,6 +49,8 @@ interface MenuContextValue {
   anchorRef: React.MutableRefObject<HTMLElement | null>;
   surfaceRef: React.MutableRefObject<HTMLElement | null>;
   focusMenu(edge: 'first' | 'last'): void;
+  focusRequest: React.MutableRefObject<'first' | 'last' | null>;
+  focusRevision: number;
 }
 const MenuContext = createContext<MenuContextValue | null>(null);
 function useMenu(): MenuContextValue {
@@ -67,7 +70,10 @@ export function MenuRoot({
   const expanded = open ?? internal;
   const anchorRef = useRef<HTMLElement | null>(null);
   const surfaceRef = useRef<HTMLElement | null>(null);
+  const focusRequest = useRef<'first' | 'last' | null>(null);
+  const [focusRevision, setFocusRevision] = useState(0);
   const setOpen = (next: boolean) => {
+    if (next === expanded) return;
     if (open === undefined) setInternal(next);
     onOpenChange?.(next);
   };
@@ -78,11 +84,14 @@ export function MenuRoot({
       placement,
       anchorRef,
       surfaceRef,
+      focusRequest,
+      focusRevision,
       focusMenu(edge) {
-        queueMicrotask(() => focusItem(surfaceRef.current, edge));
+        focusRequest.current = edge;
+        setFocusRevision((revision) => revision + 1);
       },
     }),
-    [expanded, placement, open, onOpenChange],
+    [expanded, placement, open, onOpenChange, focusRevision],
   );
   return createElement(MenuContext.Provider, { value }, children);
 }
@@ -130,23 +139,37 @@ export const MenuTrigger = forwardRef<HTMLButtonElement, MenuTriggerProps>(funct
 
 export type MenuContentProps = ComponentPropsWithoutRef<'div'>;
 export const MenuContent = forwardRef<HTMLDivElement, MenuContentProps>(function MenuContent(
-  { onKeyDown, ...props },
+  { onKeyDown, onBeforeToggle, onToggle, ...props },
   forwardedRef,
 ) {
   const menu = useMenu();
   const query = useRef('');
   const timer = useRef<ReturnType<typeof setTimeout> | null>(null);
-  const portalTarget = useFloatingSurface({
-    open: menu.open,
-    anchorRef: menu.anchorRef,
-    surfaceRef: menu.surfaceRef,
-    placement: menu.placement,
-    onDismiss(reason) {
-      if (reason === 'escape') menu.anchorRef.current?.focus();
-      menu.setOpen(false);
+  const [nativeRevision, setNativeRevision] = useState(0);
+  const restoreFocus = useRef(false);
+  useEffect(
+    () => () => {
+      if (timer.current !== null) clearTimeout(timer.current);
     },
-  });
-  if (!menu.open) return null;
+    [],
+  );
+  useEffect(() => {
+    const surface = menu.surfaceRef.current;
+    const trigger = menu.anchorRef.current;
+    if (!surface || !trigger) return;
+    if (!menu.open) {
+      menu.focusRequest.current = null;
+      if (timer.current !== null) clearTimeout(timer.current);
+      timer.current = null;
+      query.current = '';
+      if (surface.matches(':popover-open')) surface.hidePopover();
+      return;
+    }
+    if (!surface.matches(':popover-open')) surface.showPopover({ source: trigger });
+    const edge = menu.focusRequest.current;
+    menu.focusRequest.current = null;
+    if (edge && surface.matches(':popover-open')) focusItem(surface, edge);
+  }, [menu.open, menu.focusRevision, menu.focusRequest, menu.anchorRef, menu.surfaceRef, nativeRevision]);
   const content = createElement('div', {
     ...props,
     role: 'menu',
@@ -156,14 +179,42 @@ export const MenuContent = forwardRef<HTMLDivElement, MenuContentProps>(function
       if (typeof forwardedRef === 'function') forwardedRef(node);
       else if (forwardedRef) forwardedRef.current = node;
     },
+    popover: 'auto',
     'data-vf-menu-content': '',
+    'data-vf-placement': menu.placement,
+    'data-vf-open': menu.open ? '' : undefined,
+    onBeforeToggle(event) {
+      onBeforeToggle?.(event);
+      if (event.target !== event.currentTarget) return;
+      const surface = event.currentTarget;
+      restoreFocus.current = surface.matches(':popover-open') && surface.contains(surface.ownerDocument.activeElement);
+    },
+    onToggle(event) {
+      onToggle?.(event);
+      if (event.target !== event.currentTarget) return;
+      const surface = event.currentTarget;
+      const actual = surface.matches(':popover-open');
+      if (!actual && restoreFocus.current) {
+        restoreFocus.current = false;
+        const active = surface.ownerDocument.activeElement;
+        if (!active || active === surface.ownerDocument.body || surface.contains(active))
+          menu.anchorRef.current?.focus();
+      }
+      if (actual === menu.open) return;
+      menu.setOpen(actual);
+      setNativeRevision((revision) => revision + 1);
+    },
     onKeyDown(event) {
       onKeyDown?.(event);
-      if (event.defaultPrevented) return;
+      if (
+        event.defaultPrevented ||
+        !(event.target instanceof HTMLElement) ||
+        event.target.closest('[data-vf-menu-content]') !== event.currentTarget
+      )
+        return;
       if (event.key === 'Escape') {
         event.preventDefault();
         menu.setOpen(false);
-        menu.anchorRef.current?.focus();
         return;
       }
       if (event.key === 'Tab') {
@@ -203,7 +254,7 @@ export const MenuContent = forwardRef<HTMLDivElement, MenuContentProps>(function
       items[next]?.focus();
     },
   });
-  return portalTarget ? createPortal(content, portalTarget) : content;
+  return content;
 });
 
 export interface MenuItemProps extends Omit<ComponentPropsWithoutRef<'button'>, 'onSelect'> {
@@ -231,7 +282,6 @@ export const MenuItem = forwardRef<HTMLButtonElement, MenuItemProps>(function Me
       if (!event.defaultPrevented) {
         onSelect?.();
         menu.setOpen(false);
-        menu.anchorRef.current?.focus();
       }
     },
   });
