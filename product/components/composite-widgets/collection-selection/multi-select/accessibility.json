@@ -42,7 +42,7 @@
   "profileVariability": [],
   "notes": [
     "Native auto popover and CSS anchor placement preserve selection and focus independence. Space/Enter toggle eligible options without closing the popup; outside dismissal does not change selection.",
-    "React/Vue popup remains mounted while closed. React, Vue and Angular derive trigger/listbox IDs from an optional root id. Elements preserves authored content identity and derives aria-controls; Native Web remains authored markup. Custom form participation, selection summaries and removal relationships remain separate work.",
+    "React/Vue popup remains mounted while closed. React, Vue and Angular derive trigger/listbox IDs from an optional root id. Elements preserves authored content identity and derives aria-controls; Native Web remains authored markup. Opt-in native FormControl owns form submission, required validation and reset; selection summaries and removal relationships remain separate work.",
     "Audit mapping is provisional; not a conformance claim."
   ]
 }

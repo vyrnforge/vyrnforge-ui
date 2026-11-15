@@ -1,0 +1,26 @@
+name: L5 selection form preparation
+on:
+  push:
+    branches: [fix/l5-selection-form-contract]
+permissions:
+  contents: read
+jobs:
+  prepare:
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1
+        with:
+          node-version-file: .node-version
+          package-manager-cache: false
+      - run: corepack enable
+      - run: pnpm install --frozen-lockfile --ignore-scripts
+      - run: pnpm exec prettier --write "product/components/composite-widgets/collection-selection/{select,multi-select}/**/*.{ts,tsx,mjs,json,md}"
+      - run: pnpm lint:l5
+      - run: pnpm exec nx run-many -t build --projects=@vyrnforge/react,@vyrnforge/vue,@vyrnforge/angular,@vyrnforge/elements
+      - run: pnpm verify:api:update --packages react,vue,angular,elements
+      - name: Record generated diff
+        run: git diff --no-color -- product/components/composite-widgets/collection-selection/select product/components/composite-widgets/collection-selection/multi-select packages/react/etc/react.api.md packages/vue/etc/vue.api.md packages/angular/etc/angular.api.md packages/elements/etc/elements.api.md
