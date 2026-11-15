@@ -43,16 +43,6 @@
       "import": "./dist/components/toggle-button/index.js",
       "default": "./dist/components/toggle-button/index.js"
     },
-    "./floating-positioning": {
-      "types": "./dist/transitional/anchored-surface/floating-positioning/index.d.ts",
-      "import": "./dist/transitional/anchored-surface/floating-positioning/index.js",
-      "default": "./dist/transitional/anchored-surface/floating-positioning/index.js"
-    },
-    "./dismissal-coordination": {
-      "types": "./dist/transitional/anchored-surface/dismissal-coordination/index.d.ts",
-      "import": "./dist/transitional/anchored-surface/dismissal-coordination/index.js",
-      "default": "./dist/transitional/anchored-surface/dismissal-coordination/index.js"
-    },
     "./styles.css": "./dist/styles.css",
     "./styles/tokens.css": "./dist/styles/tokens.css",
     "./styles/foundation.css": "./dist/styles/foundation.css",

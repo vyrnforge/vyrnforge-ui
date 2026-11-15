@@ -10,7 +10,7 @@ import {
   signal,
   type OnDestroy,
 } from '@angular/core';
-import type { FloatingPlacement } from '@vyrnforge/web/floating-positioning';
+import type { AnchorPlacement } from '@vyrnforge/web';
 
 @Directive({ selector: '[vfPopoverRoot]', standalone: true })
 export class VfPopoverRootDirective {
@@ -20,7 +20,7 @@ export class VfPopoverRootDirective {
   readonly resolvedContentId = computed(() => this.contentId() ?? `${this.id()}-content`);
   readonly open = input<boolean | undefined>(undefined);
   readonly defaultOpen = input(false, { transform: booleanAttribute });
-  readonly placement = input<FloatingPlacement>('bottom-start');
+  readonly placement = input<AnchorPlacement>('bottom-start');
   readonly openChange = output<boolean>();
   private readonly internal = signal<boolean | undefined>(undefined);
   readonly expanded = computed(() => this.open() ?? this.internal() ?? this.defaultOpen());
