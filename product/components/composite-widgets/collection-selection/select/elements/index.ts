@@ -180,7 +180,7 @@ export class VfSelectElement extends H {
     error.setAttribute('role', 'status');
     if (error.textContent !== this.formError) error.textContent = this.formError;
     const descriptions = (trigger.getAttribute('aria-describedby') ?? '')
-      .split(/\\s+/)
+      .split(/\s+/)
       .filter((id) => id && id !== error.id);
     if (this.formError) {
       if (this.priorInvalid === undefined) this.priorInvalid = trigger.getAttribute('aria-invalid');
