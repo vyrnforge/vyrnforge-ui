@@ -9,7 +9,13 @@
   "wcag": {
     "target": "2.2 AA",
     "status": "review-required",
-    "criteria": ["1.3.1", "2.1.1", "2.4.3", "2.4.7", "4.1.2"]
+    "criteria": [
+      "1.3.1",
+      "2.1.1",
+      "2.4.3",
+      "2.4.7",
+      "4.1.2"
+    ]
   },
   "aria": {
     "status": "mapped",
@@ -25,7 +31,9 @@
       "Define keyboard entry, horizontal navigation, submenu opening/closing and restoration.",
       "Manage disabled-item focus and logical RTL navigation consistently."
     ],
-    "consumer": ["Author command names, submenu content and action intent."]
+    "consumer": [
+      "Author command names, submenu content and action intent."
+    ]
   },
   "forms": {
     "status": "not-applicable"
@@ -42,7 +50,7 @@
   },
   "profileVariability": [],
   "notes": [
-    "Top-level roving focus, logical horizontal navigation, edges and native-disabled reconciliation are implemented. Open menu horizontal switching requests closure before opening the adjacent eligible menu; nested submenu coordination and aria-disabled command policy remain open.",
+    "Top-level roving focus, logical horizontal navigation, native-disabled reconciliation, adjacent open switching and nested Menu composition. Nested inline-end opens, inline-start/Escape closes one level, command selection/Tab closes the chain. Full controlled nested rejection, pointer hover policy and aria-disabled command parity remain review-required.",
     "Audit mapping is provisional; not a conformance claim."
   ]
 }
