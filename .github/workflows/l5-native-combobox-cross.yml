@@ -1,0 +1,16 @@
+name: Native Combobox cross-engine evidence
+on:
+  push:
+    branches: [evidence/l5-native-combobox-cross]
+permissions:
+  contents: read
+jobs:
+  browser:
+    uses: ./.github/workflows/_browser-validation.yml
+    with:
+      scopes_json: '[{"port":"web","components":"combobox"},{"port":"react","components":"combobox"},{"port":"vue","components":"combobox"},{"port":"angular","components":"combobox"},{"port":"elements","components":"combobox"}]'
+      revision: ${{ github.sha }}
+      browser_profile: cross
+      browsers: chromium firefox webkit
+      artifact_suffix: combobox-cross
+      retention_days: 14
