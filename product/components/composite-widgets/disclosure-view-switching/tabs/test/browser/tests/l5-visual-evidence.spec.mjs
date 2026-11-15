@@ -6,7 +6,7 @@ const cases = [
   ['popover', '#c', '#action', '#t'],
   ['menu', '#web-menu', '#web-edit', '#web-trigger'],
   ['multi-select', '[data-vf-multi-select-content]', '#web-one', '[data-vf-multi-select-trigger]'],
-  ['rating', '[role="radiogroup"]', '[role="radio"]'],
+  ['rating', '[role="radiogroup"]', 'input[type="radio"]'],
   ['number-field', '#input-root', '#input'],
   ['pagination', 'nav[aria-label="Pagination"]', 'nav[aria-label="Pagination"] [aria-current="page"]'],
   ['split-panel', '#root', '#handle'],
