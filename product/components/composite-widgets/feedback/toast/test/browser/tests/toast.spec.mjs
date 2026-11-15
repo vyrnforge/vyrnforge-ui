@@ -230,7 +230,6 @@ test('teardown clears an old timer and reconnect or remount gets one fresh cycle
   await expect.poll(() => requests(page, 'teardownRequests')).toBe(1);
 });
 
-
 test('reconnecting the same Elements toast clears stale interaction pauses', async ({ page }) => {
   test.skip(port !== 'elements', 'Same-node reconnect is owned by the Elements lifecycle.');
   await page.clock.install();
