@@ -9,14 +9,7 @@
   "wcag": {
     "target": "2.2 AA",
     "status": "review-required",
-    "criteria": [
-      "1.3.1",
-      "2.1.1",
-      "2.4.3",
-      "2.4.7",
-      "3.3.2",
-      "4.1.2"
-    ]
+    "criteria": ["1.3.1", "2.1.1", "2.4.3", "2.4.7", "3.3.2", "4.1.2"]
   },
   "aria": {
     "status": "mapped",
@@ -28,12 +21,8 @@
     "directionality": "vertical"
   },
   "ownership": {
-    "library": [
-      "Separate focus, selected values and open state; expose selection summary and removal relationships."
-    ],
-    "consumer": [
-      "Author names, option values and form labels; own domain filtering and data loading."
-    ]
+    "library": ["Separate focus, selected values and open state; expose selection summary and removal relationships."],
+    "consumer": ["Author names, option values and form labels; own domain filtering and data loading."]
   },
   "forms": {
     "status": "review-required"

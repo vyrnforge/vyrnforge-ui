@@ -72,9 +72,13 @@ export const MultiSelectRoot = defineComponent({
       values,
       anchor,
       surface,
-      setOpen(next) { open.value = next; },
+      setOpen(next) {
+        open.value = next;
+      },
       toggle(candidate) {
-        const next = values.value.includes(candidate) ? values.value.filter(value => value !== candidate) : [...values.value, candidate];
+        const next = values.value.includes(candidate)
+          ? values.value.filter((value) => value !== candidate)
+          : [...values.value, candidate];
         if (props.value === undefined) internalValue.value = next;
         emit('update:value', next);
       },

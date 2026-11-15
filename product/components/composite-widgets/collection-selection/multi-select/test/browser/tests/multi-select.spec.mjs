@@ -109,7 +109,6 @@ test.describe('MultiSelect enhanced port behavior', () => {
   }
 });
 
-
 test('native popup light dismissal preserves committed multiple values and outside focus', async ({ page }) => {
   await page.goto(`/components/multi-select/${port}.html`);
   if (port !== 'web') await page.waitForFunction(() => document.body.dataset.multiReady === 'true');
@@ -118,7 +117,7 @@ test('native popup light dismissal preserves committed multiple values and outsi
   await expect(list).toBeHidden();
   await trigger.press('Enter');
   await expect(list).toBeVisible();
-  expect(await list.evaluate(node => node.matches(':popover-open') && !!node.closest('main'))).toBe(true);
+  expect(await list.evaluate((node) => node.matches(':popover-open') && !!node.closest('main'))).toBe(true);
   if (port !== 'web') {
     await expect(page.locator(`#${port}-one`)).toBeFocused();
     await page.keyboard.press('ArrowDown');

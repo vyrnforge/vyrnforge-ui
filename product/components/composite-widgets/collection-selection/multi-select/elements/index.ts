@@ -11,7 +11,9 @@ function optionsFor(root: HTMLElement): HTMLElement[] {
 }
 function optionFromTarget(root: HTMLElement, target: EventTarget | null): HTMLElement | null {
   const option = target instanceof Element ? target.closest<HTMLElement>(optionMultiSelector) : null;
-  return option && root.contains(option) && option.closest(rootMultiSelector) === root.closest(rootMultiSelector) ? option : null;
+  return option && root.contains(option) && option.closest(rootMultiSelector) === root.closest(rootMultiSelector)
+    ? option
+    : null;
 }
 function optionDisabled(option: HTMLElement): boolean {
   return (
@@ -42,7 +44,15 @@ export class VfMultiSelectElement extends H {
         childList: true,
         subtree: true,
         attributes: true,
-        attributeFilter: ['open', 'disabled', 'aria-disabled', 'data-vf-multi-select-option', 'data-vf-value', 'value', 'aria-selected'],
+        attributeFilter: [
+          'open',
+          'disabled',
+          'aria-disabled',
+          'data-vf-multi-select-option',
+          'data-vf-value',
+          'value',
+          'aria-selected',
+        ],
       });
     }
     this.sync();
@@ -67,8 +77,9 @@ export class VfMultiSelectElement extends H {
 
   private ownedPart(selector: string): HTMLElement | null {
     return (
-      Array.from(this.querySelectorAll<HTMLElement>(selector)).find((node) => node.closest(rootMultiSelector) === this) ??
-      null
+      Array.from(this.querySelectorAll<HTMLElement>(selector)).find(
+        (node) => node.closest(rootMultiSelector) === this,
+      ) ?? null
     );
   }
 
