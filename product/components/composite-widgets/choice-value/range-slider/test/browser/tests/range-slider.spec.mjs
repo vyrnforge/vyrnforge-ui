@@ -118,7 +118,9 @@ test('public RangeSlider CSS resolves canonical root spacing and selected accent
   await expectNoAxeViolations(page);
 });
 
-test('native form reset restores the initial pair and its coordinated bounds without value intent', async ({ page }) => {
+test('native form reset restores the initial pair and its coordinated bounds without value intent', async ({
+  page,
+}) => {
   test.skip(port === 'web', 'Web supplies uncoordinated native markup.');
   await page.goto(`/components/range-slider/${port}.html`);
   const { root, start, end } = ranges(page);
