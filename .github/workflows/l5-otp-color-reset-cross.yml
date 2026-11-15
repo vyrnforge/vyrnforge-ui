@@ -1,0 +1,16 @@
+name: OTP and color reset cross-engine evidence
+on:
+  push:
+    branches: [evidence/l5-otp-color-reset-cross]
+permissions:
+  contents: read
+jobs:
+  browser:
+    uses: ./.github/workflows/_browser-validation.yml
+    with:
+      scopes_json: '[{"port":"web","components":"otp-field,color-picker"},{"port":"react","components":"otp-field,color-picker"},{"port":"vue","components":"otp-field,color-picker"},{"port":"angular","components":"otp-field,color-picker"},{"port":"elements","components":"otp-field,color-picker"}]'
+      revision: ${{ github.sha }}
+      browser_profile: cross
+      browsers: chromium firefox webkit
+      artifact_suffix: otp-color-reset-cross
+      retention_days: 14
