@@ -48,10 +48,11 @@ export const browserFixture = {
 };
 
 export async function createReactStory() {
-  const { createElement: h, Fragment, useEffect } = await import('react');
+  const { createElement: h, Fragment, useEffect, useState } = await import('react');
   const { MultiSelectRoot, MultiSelectTrigger, MultiSelectContent, MultiSelectOption, MultiSelectFormControl, MultiSelectSelection } =
     await import('@vyrnforge/react/multi-select');
   function App() {
+    const [formDisabled, setFormDisabled] = useState(false);
     useEffect(ready, []);
     const option = (prefix, index) =>
       h(
@@ -93,12 +94,17 @@ export async function createReactStory() {
         { id: 'form-example' },
         h(
           MultiSelectRoot,
-          { id: 'form-choice', defaultValue: [] },
+          { id: 'form-choice', defaultValue: [], disabled: formDisabled },
           h(MultiSelectTrigger, { 'aria-describedby': 'form-hint' }, 'Form choice'),
           h(MultiSelectContent, { 'aria-label': 'Form options' }, option('form', 0), option('form', 2)),
           h(MultiSelectFormControl, { name: 'choice', form: 'selection-form', required: true, options: formOptions }),
         ),
         h('p', { id: 'form-hint' }, 'Choose at least one option.'),
+        h(
+          'button',
+          { id: 'form-disable', type: 'button', onClick: () => setFormDisabled((value) => !value) },
+          'Toggle disabled',
+        ),
       ),
       h('div', { id: 'summary-example' },
         h(MultiSelectRoot, { id: 'summary-choice', defaultValue: summaryValues, selectionSummary: true },
@@ -120,11 +126,12 @@ export async function createReactStory() {
 }
 
 export async function createVueStory() {
-  const { createSSRApp, h, onMounted } = await import('vue');
+  const { createSSRApp, h, onMounted, ref } = await import('vue');
   const { MultiSelectRoot, MultiSelectTrigger, MultiSelectContent, MultiSelectOption, MultiSelectFormControl, MultiSelectSelection } =
     await import('@vyrnforge/vue/multi-select');
   return createSSRApp({
     setup() {
+      const formDisabled = ref(false);
       onMounted(ready);
       const option = (prefix, index) =>
         h(
@@ -158,7 +165,7 @@ export async function createVueStory() {
           h('form', { id: 'selection-form' }, [h('button', { type: 'submit' }, 'Submit choice')]),
           h('form', { id: 'controlled-form' }),
           h('div', { id: 'form-example' }, [
-            h(MultiSelectRoot, { id: 'form-choice', defaultValue: [] }, () => [
+            h(MultiSelectRoot, { id: 'form-choice', defaultValue: [], disabled: formDisabled.value }, () => [
               h(MultiSelectTrigger, { 'aria-describedby': 'form-hint' }, () => 'Form choice'),
               h(MultiSelectContent, { 'aria-label': 'Form options' }, () => [option('form', 0), option('form', 2)]),
               h(MultiSelectFormControl, {
@@ -169,6 +176,11 @@ export async function createVueStory() {
               }),
             ]),
             h('p', { id: 'form-hint' }, 'Choose at least one option.'),
+            h(
+              'button',
+              { id: 'form-disable', type: 'button', onClick: () => (formDisabled.value = !formDisabled.value) },
+              'Toggle disabled',
+            ),
           ]),
           h('div', { id: 'summary-example' }, [
             h(MultiSelectRoot, { id: 'summary-choice', defaultValue: summaryValues, selectionSummary: true }, () => [
@@ -201,6 +213,7 @@ export async function createAngularStory() {
     VfMultiSelectSelectionComponent,
   } = await import('@vyrnforge/angular/multi-select');
   class MultiSelectTestApp {
+    formDisabled = false;
     summaryItems = summaryItems;
     summaryValues = summaryValues;
     summaryRequest = summaryRequest;
@@ -231,20 +244,23 @@ export async function createAngularStory() {
       VfMultiSelectFormControlComponent,
       VfMultiSelectSelectionComponent,
     ],
-    template: `<main><h1>MultiSelect browser fixture</h1>${before}${label}<div vfMultiSelectRoot [defaultValue]="values" (valueChange)="changed($event)"><button vfMultiSelectTrigger>Choose</button><div vfMultiSelectContent aria-labelledby="multi-select-label">${angularOptions('angular', [0, 1, 2, 3])}</div></div><div vfMultiSelectRoot id="controlled" [value]="values" (valueChange)="request($event)"><button vfMultiSelectTrigger tabindex="-1">Controlled items</button><div vfMultiSelectContent aria-label="Controlled options">${angularOptions('controlled', [0, 2])}</div><vf-multi-select-form-control name="choice" form="controlled-form" [options]="formOptions"></vf-multi-select-form-control></div>${after}${formMarkup}<div id="form-example"><div vfMultiSelectRoot id="form-choice" [defaultValue]="emptyValues"><button vfMultiSelectTrigger aria-describedby="form-hint">Form choice</button><div vfMultiSelectContent aria-label="Form options">${angularOptions('form', [0, 2])}</div><vf-multi-select-form-control name="choice" form="selection-form" required [options]="formOptions"></vf-multi-select-form-control></div><p id="form-hint">Choose at least one option.</p></div><div id="summary-example"><div vfMultiSelectRoot id="summary-choice" [defaultValue]="summaryValues" selectionSummary><button vfMultiSelectTrigger aria-describedby="summary-hint">Selected items</button><div vfMultiSelectContent aria-label="Summary options">${angularOptions('summary', [0, 2])}</div><vf-multi-select-selection [items]="summaryItems" label="Selected frameworks" emptyLabel="None selected" locale="en"></vf-multi-select-selection></div><p id="summary-hint">Choose or remove items.</p></div><div id="summary-controlled-example"><div vfMultiSelectRoot id="summary-controlled" [value]="summaryValues" selectionSummary (valueChange)="summaryRequest($event)"><button vfMultiSelectTrigger>Controlled selected items</button><div vfMultiSelectContent aria-label="Controlled summary options">${angularOptions('summary-controlled', [0, 2])}</div><vf-multi-select-selection [items]="summaryItems" label="Controlled selected frameworks" emptyLabel="None selected" locale="en"></vf-multi-select-selection></div></div></main>`,
+    template: `<main><h1>MultiSelect browser fixture</h1>${before}${label}<div vfMultiSelectRoot [defaultValue]="values" (valueChange)="changed($event)"><button vfMultiSelectTrigger>Choose</button><div vfMultiSelectContent aria-labelledby="multi-select-label">${angularOptions('angular', [0, 1, 2, 3])}</div></div><div vfMultiSelectRoot id="controlled" [value]="values" (valueChange)="request($event)"><button vfMultiSelectTrigger tabindex="-1">Controlled items</button><div vfMultiSelectContent aria-label="Controlled options">${angularOptions('controlled', [0, 2])}</div><vf-multi-select-form-control name="choice" form="controlled-form" [options]="formOptions"></vf-multi-select-form-control></div>${after}${formMarkup}<div id="form-example"><div vfMultiSelectRoot id="form-choice" [disabled]="formDisabled" [defaultValue]="emptyValues"><button vfMultiSelectTrigger aria-describedby="form-hint">Form choice</button><div vfMultiSelectContent aria-label="Form options">${angularOptions('form', [0, 2])}</div><vf-multi-select-form-control name="choice" form="selection-form" required [options]="formOptions"></vf-multi-select-form-control></div><p id="form-hint">Choose at least one option.</p><button id="form-disable" type="button" (click)="formDisabled = !formDisabled">Toggle disabled</button></div><div id="summary-example"><div vfMultiSelectRoot id="summary-choice" [defaultValue]="summaryValues" selectionSummary><button vfMultiSelectTrigger aria-describedby="summary-hint">Selected items</button><div vfMultiSelectContent aria-label="Summary options">${angularOptions('summary', [0, 2])}</div><vf-multi-select-selection [items]="summaryItems" label="Selected frameworks" emptyLabel="None selected" locale="en"></vf-multi-select-selection></div><p id="summary-hint">Choose or remove items.</p></div><div id="summary-controlled-example"><div vfMultiSelectRoot id="summary-controlled" [value]="summaryValues" selectionSummary (valueChange)="summaryRequest($event)"><button vfMultiSelectTrigger>Controlled selected items</button><div vfMultiSelectContent aria-label="Controlled summary options">${angularOptions('summary-controlled', [0, 2])}</div><vf-multi-select-selection [items]="summaryItems" label="Controlled selected frameworks" emptyLabel="None selected" locale="en"></vf-multi-select-selection></div></div></main>`,
   })(MultiSelectTestApp);
   return MultiSelectTestApp;
 }
 
 export async function createElementsStory({ client }) {
   return {
-    body: `${before}${label}<vf-multi-select id="elements-multi-select"><button id="trigger" type="button" aria-haspopup="listbox" aria-expanded="false" aria-controls="obsolete-list" data-vf-multi-select-trigger>Choose</button><div id="list" role="listbox" aria-multiselectable="true" tabindex="-1" aria-labelledby="multi-select-label" data-vf-multi-select-content hidden>${options('elements')}</div></vf-multi-select>${after}${formMarkup}<div id="form-example"><vf-multi-select id="form-choice"><button id="form-choice-trigger" type="button" aria-describedby="form-hint" data-vf-multi-select-trigger>Form choice</button><div id="form-choice-listbox" role="listbox" aria-label="Form options" data-vf-multi-select-content hidden><button id="form-one" type="button" role="option" data-vf-multi-select-option data-vf-value="one" aria-selected="false">One</button><button id="form-three" type="button" role="option" data-vf-multi-select-option data-vf-value="three" aria-selected="false">Three</button></div><select hidden name="choice" form="selection-form" required multiple data-vf-multi-select-form-control><option value="one">One</option><option value="three">Three</option></select><span data-vf-multi-select-form-error></span></vf-multi-select><p id="form-hint">Choose at least one option.</p></div><div id="summary-example"><vf-multi-select id="summary-choice"><button id="summary-choice-trigger" type="button" aria-describedby="summary-hint" data-vf-multi-select-trigger>Selected items</button><div id="summary-choice-listbox" role="listbox" aria-label="Summary options" data-vf-multi-select-content hidden><button id="summary-one" type="button" data-vf-multi-select-option data-vf-value="one" aria-selected="true">One</button><button id="summary-three" type="button" data-vf-multi-select-option data-vf-value="three" aria-selected="true">Three</button></div><span data-vf-multi-select-summary data-vf-empty-label="None selected"></span><vf-tag-group data-vf-multi-select-selection lang="en" aria-label="Selected frameworks"><template data-vf-multi-select-item data-vf-value="one" data-vf-label="One"><div data-vf-tag-group-item><span>One</span><button data-vf-tag-group-remove data-vf-multi-select-remove aria-label="Remove One" type="button">×</button></div></template><template data-vf-multi-select-item data-vf-value="three" data-vf-label="Three"><div data-vf-tag-group-item><span>Three</span><button data-vf-tag-group-remove data-vf-multi-select-remove aria-label="Remove Three" type="button">×</button></div></template></vf-tag-group></vf-multi-select><p id="summary-hint">Choose or remove items.</p></div>`,
+    body: `${before}${label}<vf-multi-select id="elements-multi-select"><button id="trigger" type="button" aria-haspopup="listbox" aria-expanded="false" aria-controls="obsolete-list" data-vf-multi-select-trigger>Choose</button><div id="list" role="listbox" aria-multiselectable="true" tabindex="-1" aria-labelledby="multi-select-label" data-vf-multi-select-content hidden>${options('elements')}</div></vf-multi-select>${after}${formMarkup}<div id="form-example"><vf-multi-select id="form-choice"><button id="form-choice-trigger" type="button" aria-describedby="form-hint" data-vf-multi-select-trigger>Form choice</button><div id="form-choice-listbox" role="listbox" aria-label="Form options" data-vf-multi-select-content hidden><button id="form-one" type="button" role="option" data-vf-multi-select-option data-vf-value="one" aria-selected="false">One</button><button id="form-three" type="button" role="option" data-vf-multi-select-option data-vf-value="three" aria-selected="false">Three</button></div><select hidden name="choice" form="selection-form" required multiple data-vf-multi-select-form-control><option value="one">One</option><option value="three">Three</option></select><span data-vf-multi-select-form-error></span></vf-multi-select><p id="form-hint">Choose at least one option.</p><button id="form-disable" type="button">Toggle disabled</button></div><div id="summary-example"><vf-multi-select id="summary-choice"><button id="summary-choice-trigger" type="button" aria-describedby="summary-hint" data-vf-multi-select-trigger>Selected items</button><div id="summary-choice-listbox" role="listbox" aria-label="Summary options" data-vf-multi-select-content hidden><button id="summary-one" type="button" data-vf-multi-select-option data-vf-value="one" aria-selected="true">One</button><button id="summary-three" type="button" data-vf-multi-select-option data-vf-value="three" aria-selected="true">Three</button></div><span data-vf-multi-select-summary data-vf-empty-label="None selected"></span><vf-tag-group data-vf-multi-select-selection lang="en" aria-label="Selected frameworks"><template data-vf-multi-select-item data-vf-value="one" data-vf-label="One"><div data-vf-tag-group-item><span>One</span><button data-vf-tag-group-remove data-vf-multi-select-remove aria-label="Remove One" type="button">×</button></div></template><template data-vf-multi-select-item data-vf-value="three" data-vf-label="Three"><div data-vf-tag-group-item><span>Three</span><button data-vf-tag-group-remove data-vf-multi-select-remove aria-label="Remove Three" type="button">×</button></div></template></vf-tag-group></vf-multi-select><p id="summary-hint">Choose or remove items.</p></div>`,
     activate: client
       ? async () => {
           const { defineMultiSelectElement } = await import('@vyrnforge/elements/multi-select');
           const { defineTagGroupElement } = await import('@vyrnforge/elements/tag-group');
           defineTagGroupElement();
           defineMultiSelectElement();
+          document
+            .querySelector('#form-disable')
+            .addEventListener('click', () => document.querySelector('#form-choice').toggleAttribute('disabled'));
           ready();
         }
       : undefined,
