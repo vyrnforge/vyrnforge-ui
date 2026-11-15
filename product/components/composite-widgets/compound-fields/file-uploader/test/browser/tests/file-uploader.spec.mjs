@@ -162,3 +162,105 @@ test.describe('STD-12 upload/import recovery workflow', () => {
     expect((await expectNoAxeViolations(page)).violations).toEqual([]);
   });
 });
+
+test('native file acquisition keeps drop, list, FormData, disabled state and reset consistent', async ({ page }) => {
+  test.skip(port === 'web', 'Native Web requires authored drop and list policy.');
+  await page.goto(port === 'react' ? '/components/file-uploader/acquisition-react.html' : fixture);
+  const input = page.locator('#input');
+  const action = page.locator('#dropzone');
+  const form = page.locator('#acquisition-form');
+  const body = page.locator('body');
+  await expect(action).toHaveJSProperty('tagName', 'BUTTON');
+  await expect(action).toHaveAttribute('type', 'button');
+  async function drop(names) {
+    await action.evaluate((button, names) => {
+      const transfer = new DataTransfer();
+      for (const name of names) transfer.items.add(new File(['content'], name, { type: 'text/plain' }));
+      button.dispatchEvent(new DragEvent('drop', { bubbles: true, cancelable: true, dataTransfer: transfer }));
+    }, names);
+  }
+  await drop(['one.txt', 'two.txt']);
+  await expect(body).toHaveAttribute('data-files', 'one.txt');
+  await expect(body).toHaveAttribute('data-count', '1');
+  await expect(page.locator('#list')).toContainText('one.txt');
+  expect(
+    await form.evaluate((element) => Array.from(new FormData(element).getAll('files'), (file) => file.name)),
+  ).toEqual(['one.txt']);
+  await input.evaluate((element) => {
+    element.multiple = true;
+  });
+  await drop(['two.txt', 'three.txt']);
+  await expect(body).toHaveAttribute('data-files', 'two.txt,three.txt');
+  await expect(body).toHaveAttribute('data-count', '2');
+  expect(
+    await form.evaluate((element) => Array.from(new FormData(element).getAll('files'), (file) => file.name)),
+  ).toEqual(['two.txt', 'three.txt']);
+  await action.evaluate((element) => {
+    element.addEventListener('drop', (event) => event.preventDefault(), { capture: true, once: true });
+  });
+  await drop(['canceled.txt']);
+  await expect(body).toHaveAttribute('data-count', '2');
+  await input.evaluate((element) => {
+    element.disabled = true;
+  });
+  await expect(action).toHaveAttribute('aria-disabled', 'true');
+  await drop(['disabled.txt']);
+  await expect(body).toHaveAttribute('data-count', '2');
+  expect(await form.evaluate((element) => new FormData(element).has('files'))).toBe(false);
+  await input.evaluate((element) => {
+    element.disabled = false;
+  });
+  await expect(action).not.toHaveAttribute('aria-disabled', 'true');
+  await form.evaluate(async (element) => {
+    element.addEventListener('reset', (event) => event.preventDefault(), { once: true });
+    element.reset();
+    await new Promise((resolve) => {
+      setTimeout(resolve, 0);
+    });
+  });
+  await expect(body).toHaveAttribute('data-count', '2');
+  await expect(page.locator('#list')).toContainText('two.txt');
+  await page.getByRole('button', { name: 'Reset files' }).click();
+  await expect(body).toHaveAttribute('data-files', '');
+  await expect(body).toHaveAttribute('data-count', '3');
+  await expect(page.locator('#list li')).toHaveCount(0);
+  expect(await input.evaluate((element) => element.files.length)).toBe(0);
+  await drop(['one.txt']);
+  await expect(body).toHaveAttribute('data-count', '4');
+  await expect(body).toHaveAttribute('data-files', 'one.txt');
+  await expectNoAxeViolations(page);
+});
+
+test('Elements nested native file events stay with their owned uploader', async ({ page }) => {
+  test.skip(port !== 'elements', 'Elements ownership regression.');
+  await page.goto(fixture);
+  const root = page.locator('vf-file-uploader');
+  await root.evaluate((element) => {
+    const nested = document.createElement('vf-file-uploader');
+    nested.innerHTML =
+      '<button type="button" data-vf-file-uploader-dropzone>Nested file</button><input type="file" data-vf-file-uploader-input aria-label="Nested files">';
+    element.append(nested);
+    nested.addEventListener('vf-files-change', (event) => {
+      nested.dataset.files = event.detail.files.map((file) => file.name).join(',');
+    });
+  });
+  const nested = root.locator('vf-file-uploader');
+  await nested.locator('button').evaluate((button) => {
+    const transfer = new DataTransfer();
+    transfer.items.add(new File(['nested'], 'nested.txt'));
+    button.dispatchEvent(new DragEvent('drop', { bubbles: true, cancelable: true, dataTransfer: transfer }));
+  });
+  await expect(nested).toHaveAttribute('data-files', 'nested.txt');
+  await expect(page.locator('body')).not.toHaveAttribute('data-count', /.+/);
+  expect(await page.locator('#input').evaluate((element) => element.files.length)).toBe(0);
+  await nested.evaluate((element) => {
+    const parent = element.parentElement;
+    element.remove();
+    parent.append(element);
+  });
+  await nested
+    .locator('input')
+    .setInputFiles({ name: 'reconnected.txt', mimeType: 'text/plain', buffer: Buffer.from('ok') });
+  await expect(nested).toHaveAttribute('data-files', 'reconnected.txt');
+  await expect(page.locator('body')).not.toHaveAttribute('data-count', /.+/);
+});

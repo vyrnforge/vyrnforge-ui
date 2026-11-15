@@ -325,10 +325,10 @@ export function ColorPickerSwatch(props: ComponentPropsWithoutRef<'span'>): Reac
 export const ColorPickerTextInput: ForwardRefExoticComponent<ColorPickerInputProps & RefAttributes<HTMLInputElement>>;
 
 // @public (undocumented)
-export const ComboboxContent: ForwardRefExoticComponent<Omit<DetailedHTMLProps<HTMLAttributes<HTMLDivElement>, HTMLDivElement>, "ref"> & RefAttributes<HTMLDivElement>>;
+export const ComboboxContent: ForwardRefExoticComponent<Omit<Omit<DetailedHTMLProps<HTMLAttributes<HTMLDivElement>, HTMLDivElement>, "ref">, "id"> & RefAttributes<HTMLDivElement>>;
 
 // @public (undocumented)
-export const ComboboxInput: ForwardRefExoticComponent<Omit<DetailedHTMLProps<InputHTMLAttributes<HTMLInputElement>, HTMLInputElement>, "ref"> & RefAttributes<HTMLInputElement>>;
+export const ComboboxInput: ForwardRefExoticComponent<Omit<Omit<DetailedHTMLProps<InputHTMLAttributes<HTMLInputElement>, HTMLInputElement>, "ref">, "id" | "aria-controls"> & RefAttributes<HTMLInputElement>>;
 
 // @public (undocumented)
 export const ComboboxOption: ForwardRefExoticComponent<ComboboxOptionProps & RefAttributes<HTMLButtonElement>>;
@@ -350,6 +350,8 @@ export interface ComboboxRootProps {
     children?: ReactNode;
     // (undocumented)
     defaultValue?: string;
+    // (undocumented)
+    id?: string;
     // (undocumented)
     locale?: string;
     // (undocumented)
@@ -1688,10 +1690,16 @@ export const FileInput: ForwardRefExoticComponent<FileInputProps & RefAttributes
 export type FileInputProps = Omit<InputHTMLAttributes<HTMLInputElement>, 'type'>;
 
 // @public (undocumented)
-export const FileUploaderDropzone: ForwardRefExoticComponent<Omit<DetailedHTMLProps<HTMLAttributes<HTMLDivElement>, HTMLDivElement>, "ref"> & RefAttributes<HTMLDivElement>>;
+export const FileUploaderDropzone: ForwardRefExoticComponent<FileUploaderDropzoneProps & RefAttributes<HTMLButtonElement>>;
 
 // @public (undocumented)
-export const FileUploaderInput: ForwardRefExoticComponent<Omit<DetailedHTMLProps<InputHTMLAttributes<HTMLInputElement>, HTMLInputElement>, "ref"> & RefAttributes<HTMLInputElement>>;
+export type FileUploaderDropzoneProps = Omit<ComponentPropsWithoutRef<'button'>, 'type' | 'role'>;
+
+// @public (undocumented)
+export const FileUploaderInput: ForwardRefExoticComponent<FileUploaderInputProps & RefAttributes<HTMLInputElement>>;
+
+// @public (undocumented)
+export type FileUploaderInputProps = Omit<ComponentPropsWithoutRef<'input'>, 'type' | 'value' | 'defaultValue'>;
 
 // @public (undocumented)
 export function FileUploaderList(props: ComponentPropsWithoutRef<'ul'>): DetailedReactHTMLElement<    {
@@ -2749,7 +2757,10 @@ export interface RatingRootProps {
 export const SearchFieldClear: ForwardRefExoticComponent<Omit<DetailedHTMLProps<ButtonHTMLAttributes<HTMLButtonElement>, HTMLButtonElement>, "ref"> & RefAttributes<HTMLButtonElement>>;
 
 // @public (undocumented)
-export const SearchFieldInput: ForwardRefExoticComponent<Omit<DetailedHTMLProps<InputHTMLAttributes<HTMLInputElement>, HTMLInputElement>, "ref"> & RefAttributes<HTMLInputElement>>;
+export const SearchFieldInput: ForwardRefExoticComponent<SearchFieldInputProps & RefAttributes<HTMLInputElement>>;
+
+// @public (undocumented)
+export type SearchFieldInputProps = Omit<ComponentPropsWithoutRef<'input'>, 'type' | 'value' | 'defaultValue'>;
 
 // @public (undocumented)
 export const SearchFieldRoot: ForwardRefExoticComponent<SearchFieldRootProps & RefAttributes<HTMLDivElement>>;

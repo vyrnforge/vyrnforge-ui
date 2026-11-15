@@ -2,13 +2,21 @@ const H: typeof HTMLElement = globalThis.HTMLElement ?? (class {} as typeof HTML
 const colorSelector = 'input[data-vf-color-picker-input]';
 const textSelector = 'input[data-vf-color-picker-text]';
 export class VfColorPickerElement extends H {
+  private resetDocument: Document | null = null;
+  private connectionRevision = 0;
   connectedCallback() {
     this.setAttribute('data-vf-color-picker-root', '');
     this.addEventListener('input', this.onInput);
+    this.connectionRevision++;
+    this.resetDocument = this.ownerDocument;
+    this.resetDocument.addEventListener('reset', this.onReset, true);
     this.syncFromNative();
   }
   disconnectedCallback() {
     this.removeEventListener('input', this.onInput);
+    this.connectionRevision++;
+    this.resetDocument?.removeEventListener('reset', this.onReset, true);
+    this.resetDocument = null;
   }
   private owns(node: Element) {
     return node.closest(`[data-vf-color-picker-root],${this.localName}`) === this;
@@ -28,6 +36,17 @@ export class VfColorPickerElement extends H {
       swatch.style.backgroundColor = value;
     });
   }
+  private onReset = (event: Event) => {
+    const group = this.owned<HTMLInputElement>(colorSelector + ',' + textSelector);
+    if (!group.length || !group.every((input) => input.form && input.form === event.target)) return;
+    const revision = this.connectionRevision;
+    setTimeout(() => {
+      if (!this.isConnected || revision !== this.connectionRevision || event.defaultPrevented) return;
+      const group = this.owned<HTMLInputElement>(colorSelector + ',' + textSelector);
+      if (!group.length || !group.every((input) => input.form === event.target)) return;
+      this.syncFromNative();
+    }, 0);
+  };
   private onInput = (event: Event) => {
     const input = event.target;
     if (!(input instanceof HTMLInputElement) || !this.owns(input) || event.defaultPrevented) return;

@@ -5,6 +5,8 @@
   }
   [data-vf-file-uploader-dropzone] {
     display: grid;
+    font: inherit;
+    color: var(--vf-color-text);
     min-block-size: 6rem;
     place-items: center;
     padding: var(--vf-space-md);
