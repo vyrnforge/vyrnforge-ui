@@ -33,11 +33,19 @@ function submenuArrow(trigger: HTMLElement, opening: boolean): 'ArrowLeft' | 'Ar
 const menuItemSelector = '[data-vf-menu-item]';
 function ownedContent(root: HTMLElement): HTMLElement | null {
   if (root.matches('[data-vf-menu-content]')) return root;
-  return Array.from(root.querySelectorAll<HTMLElement>('[data-vf-menu-content]')).find(node => node.closest(rootSelector) === root) ?? null;
+  return (
+    Array.from(root.querySelectorAll<HTMLElement>('[data-vf-menu-content]')).find(
+      (node) => node.closest(rootSelector) === root,
+    ) ?? null
+  );
 }
 function menuItems(root: HTMLElement): HTMLElement[] {
   const content = ownedContent(root);
-  return content ? Array.from(content.querySelectorAll<HTMLElement>(menuItemSelector)).filter(item => item.closest('[data-vf-menu-content]') === content) : [];
+  return content
+    ? Array.from(content.querySelectorAll<HTMLElement>(menuItemSelector)).filter(
+        (item) => item.closest('[data-vf-menu-content]') === content,
+      )
+    : [];
 }
 function itemFromTarget(root: HTMLElement, target: EventTarget | null): HTMLElement | null {
   const item = target instanceof Element ? target.closest<HTMLElement>(menuItemSelector) : null;
@@ -223,7 +231,8 @@ export class VfMenuElement extends HTMLElementBase {
   private onKeydown = (event: KeyboardEvent) => {
     if (event.defaultPrevented) return;
     const target = event.target instanceof Element ? event.target : null;
-    if (!target || (target.closest(rootSelector) !== this && target.closest('[data-vf-menu-content]') !== this.content)) return;
+    if (!target || (target.closest(rootSelector) !== this && target.closest('[data-vf-menu-content]') !== this.content))
+      return;
     const trigger = target.closest<HTMLElement>('[data-vf-menu-trigger]');
     if (trigger && trigger === this.trigger) {
       if (trigger.matches(':disabled,[aria-disabled="true"]')) return;
@@ -258,7 +267,10 @@ export class VfMenuElement extends HTMLElementBase {
       nextMenu.focusMenu('first');
       return;
     }
-    if (event.key === 'Escape' || (this.parentMenu() && this.trigger && event.key === submenuArrow(this.trigger, false))) {
+    if (
+      event.key === 'Escape' ||
+      (this.parentMenu() && this.trigger && event.key === submenuArrow(this.trigger, false))
+    ) {
       event.preventDefault();
       this.setOpen(false);
       return;

@@ -158,7 +158,11 @@ export const MenuTrigger = defineComponent({
           'aria-expanded': menu.open.value,
           onClick: (event: MouseEvent) => {
             invoke(attrs.onClick, event);
-            if (event.defaultPrevented || (event.currentTarget as HTMLElement).matches(':disabled,[aria-disabled="true"]')) return;
+            if (
+              event.defaultPrevented ||
+              (event.currentTarget as HTMLElement).matches(':disabled,[aria-disabled="true"]')
+            )
+              return;
             if (menu.open.value) menu.setOpen(false);
             else openAndFocus('first');
           },
@@ -224,14 +228,16 @@ export const MenuContent = defineComponent({
       if (!edge || !surface.matches(':popover-open')) return;
       const items = menuItems(surface);
       const index = resolveNavigationIndex(
-        items.map(item => ({ eligible: !item.matches(':disabled') })),
+        items.map((item) => ({ eligible: !item.matches(':disabled') })),
         edge === 'first' ? -1 : items.length,
         edge,
       );
       if (index != null) items[index]?.focus();
     }
     onMounted(sync);
-    watch([menu.open, menu.focusRevision, menu.anchor, menu.surface, () => menu.parent?.open.value], sync, { flush: 'post' });
+    watch([menu.open, menu.focusRevision, menu.anchor, menu.surface, () => menu.parent?.open.value], sync, {
+      flush: 'post',
+    });
     onBeforeUnmount(() => {
       if (timer !== null) clearTimeout(timer);
     });
@@ -287,7 +293,10 @@ export const MenuContent = defineComponent({
               void nextTick(sync);
               return;
             }
-            if (event.key === 'Escape' || (menu.parent && menu.anchor.value && event.key === submenuArrow(menu.anchor.value, false))) {
+            if (
+              event.key === 'Escape' ||
+              (menu.parent && menu.anchor.value && event.key === submenuArrow(menu.anchor.value, false))
+            ) {
               event.preventDefault();
               menu.setOpen(false);
               return;
@@ -308,7 +317,7 @@ export const MenuContent = defineComponent({
             let next: number | null = null;
             if (intent)
               next = resolveNavigationIndex(
-                items.map(item => ({ eligible: !item.matches(':disabled') })),
+                items.map((item) => ({ eligible: !item.matches(':disabled') })),
                 current,
                 intent,
               );
@@ -319,7 +328,10 @@ export const MenuContent = defineComponent({
                 query = '';
               }, 500);
               next = findTypeaheadMatch(
-                items.map((item) => ({ textValue: item.dataset.vfTextValue ?? item.textContent ?? '', eligible: !item.matches(':disabled') })),
+                items.map((item) => ({
+                  textValue: item.dataset.vfTextValue ?? item.textContent ?? '',
+                  eligible: !item.matches(':disabled'),
+                })),
                 query,
                 { startIndex: current },
               );

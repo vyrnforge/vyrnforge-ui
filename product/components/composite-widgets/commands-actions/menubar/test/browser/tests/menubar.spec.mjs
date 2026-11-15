@@ -110,8 +110,9 @@ test('open menubar switches to adjacent menu in logical direction and restores i
   await expect(page.locator('#after')).toBeFocused();
 });
 
-
-test('nested submenu is part of the parent navigation and closes one level on logical back or Escape', async ({ page }) => {
+test('nested submenu is part of the parent navigation and closes one level on logical back or Escape', async ({
+  page,
+}) => {
   test.skip(port === 'web', 'Managed nested menu composition.');
   await page.goto(`/components/menubar/${port}.html`);
   const file = page.locator('#file');

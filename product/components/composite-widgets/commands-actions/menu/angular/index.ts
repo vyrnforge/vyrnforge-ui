@@ -218,7 +218,7 @@ export class VfMenuContentDirective implements OnDestroy {
       if (!edge || !open || !surface.matches(':popover-open')) return;
       const items = menuItems(surface);
       const index = resolveNavigationIndex(
-        items.map(item => ({ eligible: !item.matches(':disabled') })),
+        items.map((item) => ({ eligible: !item.matches(':disabled') })),
         edge === 'first' ? -1 : items.length,
         edge,
       );
@@ -262,7 +262,10 @@ export class VfMenuContentDirective implements OnDestroy {
       this.nativeRevision.update((revision) => revision + 1);
       return;
     }
-    if (event.key === 'Escape' || (parentMenus.has(this.root) && this.root.anchor && event.key === submenuArrow(this.root.anchor, false))) {
+    if (
+      event.key === 'Escape' ||
+      (parentMenus.has(this.root) && this.root.anchor && event.key === submenuArrow(this.root.anchor, false))
+    ) {
       event.preventDefault();
       this.root.setOpen(false);
       return;
@@ -282,7 +285,7 @@ export class VfMenuContentDirective implements OnDestroy {
     let next: number | null = null;
     if (intent)
       next = resolveNavigationIndex(
-        items.map(item => ({ eligible: !item.matches(':disabled') })),
+        items.map((item) => ({ eligible: !item.matches(':disabled') })),
         current,
         intent,
       );
@@ -293,7 +296,10 @@ export class VfMenuContentDirective implements OnDestroy {
         this.query = '';
       }, 500);
       next = findTypeaheadMatch(
-        items.map((item) => ({ textValue: item.dataset.vfTextValue ?? item.textContent ?? '', eligible: !item.matches(':disabled') })),
+        items.map((item) => ({
+          textValue: item.dataset.vfTextValue ?? item.textContent ?? '',
+          eligible: !item.matches(':disabled'),
+        })),
         this.query,
         { startIndex: current },
       );

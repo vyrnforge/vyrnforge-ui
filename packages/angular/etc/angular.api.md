@@ -1710,6 +1710,7 @@ export { VfMenuItemDirective as VfSplitButtonItemDirective }
 
 // @public (undocumented)
 class VfMenuRootDirective {
+    constructor();
     // (undocumented)
     anchor: HTMLElement | null;
     // (undocumented)

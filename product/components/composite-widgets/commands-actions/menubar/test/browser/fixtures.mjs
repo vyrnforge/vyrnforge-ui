@@ -49,7 +49,18 @@ export async function createReactStory() {
             MenubarContent,
             { id: id + '-menu', 'aria-label': label },
             h(MenubarItem, { id: id + '-command' }, 'Command'),
-            id === 'file' ? h(MenuRoot, null, h(MenuTrigger, { id: 'submenu-trigger', 'aria-controls': 'submenu' }, 'Export'), h(MenuContent, { id: 'submenu', 'aria-label': 'Export' }, h(MenuItem, { id: 'submenu-command' }, 'PDF'))) : null,
+            id === 'file'
+              ? h(
+                  MenuRoot,
+                  null,
+                  h(MenuTrigger, { id: 'submenu-trigger', 'aria-controls': 'submenu' }, 'Export'),
+                  h(
+                    MenuContent,
+                    { id: 'submenu', 'aria-label': 'Export' },
+                    h(MenuItem, { id: 'submenu-command' }, 'PDF'),
+                  ),
+                )
+              : null,
           ),
         ),
       ),
@@ -73,7 +84,14 @@ export async function createVueStory() {
               h(MenubarTrigger, { id, disabled }, () => label),
               h(MenubarContent, { id: id + '-menu', 'aria-label': label }, () => [
                 h(MenubarItem, { id: id + '-command' }, () => 'Command'),
-                id === 'file' ? h(MenuRoot, {}, () => [h(MenuTrigger, { id: 'submenu-trigger', 'aria-controls': 'submenu' }, () => 'Export'), h(MenuContent, { id: 'submenu', 'aria-label': 'Export' }, () => h(MenuItem, { id: 'submenu-command' }, () => 'PDF'))]) : null,
+                id === 'file'
+                  ? h(MenuRoot, {}, () => [
+                      h(MenuTrigger, { id: 'submenu-trigger', 'aria-controls': 'submenu' }, () => 'Export'),
+                      h(MenuContent, { id: 'submenu', 'aria-label': 'Export' }, () =>
+                        h(MenuItem, { id: 'submenu-command' }, () => 'PDF'),
+                      ),
+                    ])
+                  : null,
               ]),
             ]),
           ),
@@ -97,7 +115,7 @@ export async function createAngularStory() {
   const template = `<main><h1>Menubar browser fixture</h1>${before}<div vfMenubarRoot id="bar" aria-label="${name}">${entries
     .map(
       ({ id, label, disabled }) =>
-        `<div vfMenuRoot role="none"><button vfMenubarTrigger vfMenuTrigger id="${id}"${disabled ? ' disabled' : ''}>${label}</button><div vfMenuContent id="${id}-menu" aria-label="${label}"><button vfMenuItem id="${id}-command">Command</button>${id === "file" ? '<div vfMenuRoot role="none"><button vfMenuTrigger id="submenu-trigger" aria-controls="submenu">Export</button><div vfMenuContent id="submenu" aria-label="Export"><button vfMenuItem id="submenu-command">PDF</button></div></div>' : ""}</div></div>`,
+        `<div vfMenuRoot role="none"><button vfMenubarTrigger vfMenuTrigger id="${id}"${disabled ? ' disabled' : ''}>${label}</button><div vfMenuContent id="${id}-menu" aria-label="${label}"><button vfMenuItem id="${id}-command">Command</button>${id === 'file' ? '<div vfMenuRoot role="none"><button vfMenuTrigger id="submenu-trigger" aria-controls="submenu">Export</button><div vfMenuContent id="submenu" aria-label="Export"><button vfMenuItem id="submenu-command">PDF</button></div></div>' : ''}</div></div>`,
     )
     .join('')}</div>${after}</main>`;
   class MenubarTestApp {}
@@ -121,7 +139,7 @@ export async function createElementsStory({ client }) {
   const body = `${before}<vf-menubar id="bar" aria-label="${name}">${entries
     .map(
       (entry) =>
-        `<vf-menu role="none">${nativeTrigger(entry).replace('data-vf-menubar-trigger', 'data-vf-menubar-trigger data-vf-menu-trigger')}<div data-vf-menu-content id="${entry.id}-menu" aria-label="${entry.label}" hidden><button data-vf-menu-item id="${entry.id}-command" type="button">Command</button>${entry.id === "file" ? '<vf-menu role="none"><button data-vf-menu-trigger id="submenu-trigger" aria-controls="submenu" type="button">Export</button><div data-vf-menu-content id="submenu" aria-label="Export" hidden><button data-vf-menu-item id="submenu-command" type="button">PDF</button></div></vf-menu>' : ""}</div></vf-menu>`,
+        `<vf-menu role="none">${nativeTrigger(entry).replace('data-vf-menubar-trigger', 'data-vf-menubar-trigger data-vf-menu-trigger')}<div data-vf-menu-content id="${entry.id}-menu" aria-label="${entry.label}" hidden><button data-vf-menu-item id="${entry.id}-command" type="button">Command</button>${entry.id === 'file' ? '<vf-menu role="none"><button data-vf-menu-trigger id="submenu-trigger" aria-controls="submenu" type="button">Export</button><div data-vf-menu-content id="submenu" aria-label="Export" hidden><button data-vf-menu-item id="submenu-command" type="button">PDF</button></div></vf-menu>' : ''}</div></vf-menu>`,
     )
     .join('')}</vf-menubar>${after}`;
   return {
