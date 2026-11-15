@@ -923,8 +923,16 @@ export class VfContainerDirective {
 }
 
 // @public (undocumented)
-export class VfContextMenuContentDirective {
+export class VfContextMenuContentDirective implements OnDestroy {
     constructor(root: VfContextMenuRootDirective);
+    // (undocumented)
+    ngOnDestroy(): void;
+    // (undocumented)
+    onBeforeToggle(event: Event): void;
+    // (undocumented)
+    onKeydown(event: KeyboardEvent): void;
+    // (undocumented)
+    onToggle(event: Event): void;
     // (undocumented)
     readonly root: VfContextMenuRootDirective;
     // (undocumented)
@@ -941,7 +949,7 @@ export class VfContextMenuItemDirective {
     // (undocumented)
     readonly root: VfContextMenuRootDirective;
     // (undocumented)
-    select(): void;
+    select(event?: MouseEvent): void;
     // (undocumented)
     readonly selected: OutputEmitterRef<void>;
     // (undocumented)
@@ -992,6 +1000,8 @@ export class VfContextMenuRootDirective {
 // @public (undocumented)
 export class VfContextMenuTriggerDirective {
     constructor(root: VfContextMenuRootDirective);
+    // (undocumented)
+    onKeydown(event: KeyboardEvent): void;
     // (undocumented)
     openMenu(event: Event): void;
     // (undocumented)

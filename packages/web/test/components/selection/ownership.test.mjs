@@ -16,7 +16,9 @@ test('selection-family component styles compose one private shared stylesheet', 
 
   const sharedImport = /^@import\s+(['"])\.\.\/\.\.\/styles\/selection\.css\1;$/;
   assert.match(listbox.trim(), sharedImport);
-  assert.match(select.trim(), sharedImport);
+  assert.match(select, /@import\s+(['"])\.\.\/\.\.\/styles\/selection\.css\1;/);
+  assert.match(select, /\[data-vf-select-content\]\[popover\]/);
+  assert.match(select, /:not\(:popover-open\)/);
   assert.match(combobox, /@import\s+(['"])\.\.\/\.\.\/styles\/selection\.css\1;/);
   assert.match(multiSelect, /@import\s+(['"])\.\.\/\.\.\/styles\/selection\.css\1;/);
 

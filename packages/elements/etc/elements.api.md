@@ -291,9 +291,13 @@ export class VfComboboxElement extends HTMLElementBase_14 {
 // @public (undocumented)
 export class VfContextMenuElement extends HTMLElementBase_10 {
     // (undocumented)
+    attributeChangedCallback(): void;
+    // (undocumented)
     connectedCallback(): void;
     // (undocumented)
     disconnectedCallback(): void;
+    // (undocumented)
+    static observedAttributes: string[];
 }
 
 // @public (undocumented)

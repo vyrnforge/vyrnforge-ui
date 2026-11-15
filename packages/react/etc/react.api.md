@@ -385,7 +385,7 @@ export interface ContextMenuItemProps extends Omit<ComponentPropsWithoutRef<'but
 }
 
 // @public (undocumented)
-export function ContextMenuRoot(input: ContextMenuRootProps): FunctionComponentElement<ProviderProps<ContextValue | null>>;
+export function ContextMenuRoot(input: ContextMenuRootProps): FunctionComponentElement<ProviderProps<ContextMenuContextValue | null>>;
 
 // @public (undocumented)
 export interface ContextMenuRootProps {
