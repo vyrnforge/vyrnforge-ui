@@ -16,7 +16,7 @@ export const browserFixture = {
       await writeFile(
         path.join(dir, 'web.html'),
         page(
-          '<div role="search" data-vf-search-field-root><input id="search" type="search" aria-label="Search" value="forge" data-vf-search-field-input><button id="clear" type="button" data-vf-search-field-clear>Clear query</button></div>',
+          '<form id="search-form"><div role="search" data-vf-search-field-root><input id="search" name="query" type="search" aria-label="Search" value="forge" data-vf-search-field-input><button id="clear" type="button" data-vf-search-field-clear>Clear query</button></div><button type="reset">Reset search</button></form>',
           '<script>clear.onclick=()=>{search.value="";search.focus();search.dispatchEvent(new Event("input",{bubbles:true}))};</script>',
         ),
       );
@@ -35,7 +35,7 @@ export const browserFixture = {
         stdin: {
           resolveDir: root,
           sourcefile: 'react-search-field-client.ts',
-          contents: `import{createElement}from'react';import{createRoot}from'react-dom/client';import{SearchFieldRoot,SearchFieldInput,SearchFieldClear}from'@vyrnforge/react/search-field';import'@vyrnforge/web/styles/tokens.css';import'@vyrnforge/web/styles/search-field.css';createRoot(document.querySelector('#app')).render(createElement(SearchFieldRoot,{defaultValue:'forge'},createElement(SearchFieldInput,{id:'search','aria-label':'Search'}),createElement(SearchFieldClear,{id:'clear'},'Clear query')));`,
+          contents: `import{createElement,useState}from'react';import{createRoot}from'react-dom/client';import{SearchFieldRoot,SearchFieldInput,SearchFieldClear}from'@vyrnforge/react/search-field';import'@vyrnforge/web/styles/tokens.css';import'@vyrnforge/web/styles/search-field.css';const h=createElement;function App(){const [controlled,setControlled]=useState('committed');const record=(v)=>document.body.setAttribute('data-requested',v);return h('div',null,h('form',{id:'search-form'},h(SearchFieldRoot,{'aria-label':'Uncontrolled search',defaultValue:'forge',onValueChange:record},h(SearchFieldInput,{id:'search',name:'query','aria-label':'Search'}),h(SearchFieldClear,{id:'clear'},'Clear query')),h('button',{type:'reset'},'Reset search')),h('form',{id:'controlled-form'},h(SearchFieldRoot,{'aria-label':'Controlled search',value:controlled,onValueChange:record},h(SearchFieldInput,{id:'controlled',name:'query','aria-label':'Controlled search'}),h(SearchFieldClear,{id:'controlled-clear'},'Clear controlled query')),h('button',{type:'button',id:'update-controlled',onClick:()=>setControlled('latest')},'Update'),h('button',{type:'reset'},'Reset controlled')))}createRoot(document.querySelector('#app')).render(h(App));`,
         },
         bundle: true,
         format: 'esm',
@@ -69,7 +69,7 @@ export const browserFixture = {
         stdin: {
           resolveDir: root,
           sourcefile: 'vue-search-field-client.ts',
-          contents: `import{createApp,h}from'vue';import{SearchFieldRoot,SearchFieldInput,SearchFieldClear}from'@vyrnforge/vue/search-field';createApp({render:()=>h(SearchFieldRoot,{defaultValue:'forge'},()=>[h(SearchFieldInput,{id:'search','aria-label':'Search'}),h(SearchFieldClear,{id:'clear'},()=> 'Clear query')])}).mount('#app');`,
+          contents: `import{createApp,h,ref}from'vue';import{SearchFieldRoot,SearchFieldInput,SearchFieldClear}from'@vyrnforge/vue/search-field';createApp({setup(){const controlled=ref('committed');const record=(v)=>document.body.setAttribute('data-requested',v);return()=>h('div',null,[h('form',{id:'search-form'},[h(SearchFieldRoot,{'aria-label':'Uncontrolled search',defaultValue:'forge','onUpdate:value':record},()=>[h(SearchFieldInput,{id:'search',name:'query','aria-label':'Search'}),h(SearchFieldClear,{id:'clear'},()=> 'Clear query')]),h('button',{type:'reset'},'Reset search')]),h('form',{id:'controlled-form'},[h(SearchFieldRoot,{'aria-label':'Controlled search',value:controlled.value,'onUpdate:value':record},()=>[h(SearchFieldInput,{id:'controlled',name:'query','aria-label':'Controlled search'}),h(SearchFieldClear,{id:'controlled-clear'},()=> 'Clear controlled query')]),h('button',{type:'button',id:'update-controlled',onClick:()=>controlled.value='latest'},'Update'),h('button',{type:'reset'},'Reset controlled')])])}}).mount('#app');`,
         },
         bundle: true,
         format: 'esm',
@@ -87,7 +87,7 @@ export const browserFixture = {
         stdin: {
           resolveDir: root,
           sourcefile: 'angular-search-field-client.ts',
-          contents: `import'@angular/compiler';import{Component,provideZonelessChangeDetection}from'@angular/core';import{bootstrapApplication}from'@angular/platform-browser';import{VfSearchFieldRootDirective,VfSearchFieldInputDirective,VfSearchFieldClearDirective}from'@vyrnforge/angular/search-field';class App{}Component({selector:'vf-search-field-test',standalone:true,imports:[VfSearchFieldRootDirective,VfSearchFieldInputDirective,VfSearchFieldClearDirective],template:'<div vfSearchFieldRoot defaultValue="forge"><input id="search" vfSearchFieldInput aria-label="Search"><button id="clear" vfSearchFieldClear>Clear query</button></div>'})(App);bootstrapApplication(App,{providers:[provideZonelessChangeDetection()]});`,
+          contents: `import'@angular/compiler';import{Component,provideZonelessChangeDetection}from'@angular/core';import{bootstrapApplication}from'@angular/platform-browser';import{VfSearchFieldRootDirective,VfSearchFieldInputDirective,VfSearchFieldClearDirective}from'@vyrnforge/angular/search-field';class App{controlled='committed';update(){this.controlled='latest'}record(v){document.body.setAttribute('data-requested',v)}}Component({selector:'vf-search-field-test',standalone:true,imports:[VfSearchFieldRootDirective,VfSearchFieldInputDirective,VfSearchFieldClearDirective],template:'<form id="search-form"><div vfSearchFieldRoot aria-label="Uncontrolled search" defaultValue="forge" (valueChange)="record($event)"><input id="search" name="query" vfSearchFieldInput aria-label="Search"><button id="clear" vfSearchFieldClear>Clear query</button></div><button type="reset">Reset search</button></form><form id="controlled-form"><div vfSearchFieldRoot aria-label="Controlled search" [value]="controlled" (valueChange)="record($event)"><input id="controlled" name="query" vfSearchFieldInput aria-label="Controlled search"><button id="controlled-clear" vfSearchFieldClear>Clear controlled query</button></div><button type="button" id="update-controlled" (click)="update()">Update</button><button type="reset">Reset controlled</button></form>'})(App);bootstrapApplication(App,{providers:[provideZonelessChangeDetection()]});`,
         },
         bundle: true,
         format: 'esm',
@@ -100,7 +100,7 @@ export const browserFixture = {
       await writeFile(
         path.join(dir, 'elements.html'),
         page(
-          '<vf-search-field><input id="search" type="search" aria-label="Search" value="forge" data-vf-search-field-input><button id="clear" type="button" data-vf-search-field-clear>Clear query</button></vf-search-field>',
+          '<form id="search-form"><vf-search-field><input id="search" name="query" type="search" aria-label="Search" value="forge" data-vf-search-field-input><button id="clear" type="button" data-vf-search-field-clear>Clear query</button></vf-search-field><button type="reset">Reset search</button></form>',
           '<script type="module" src="./elements.js"></script>',
         ),
       );

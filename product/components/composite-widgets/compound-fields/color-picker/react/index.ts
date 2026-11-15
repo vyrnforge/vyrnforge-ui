@@ -3,7 +3,10 @@ import {
   createElement,
   forwardRef,
   useContext,
+  useEffect,
+  useImperativeHandle,
   useLayoutEffect,
+  useRef,
   useState,
   type ComponentPropsWithoutRef,
   type ReactElement,
@@ -22,6 +25,7 @@ interface Ctx {
   value: string;
   controlled: boolean;
   disabled: boolean;
+  resetRevision: number;
   set(v: string): void;
 }
 const C = createContext<Ctx | null>(null);
@@ -41,9 +45,46 @@ export const ColorPickerRoot = forwardRef<HTMLDivElement, ColorPickerRootProps>(
   { value, defaultValue = '#000000', disabled = false, onValueChange, children, ...props },
   ref,
 ) {
-  const [internal, setInternal] = useState(() => requiredHex(defaultValue));
+  const [initial] = useState(() => requiredHex(defaultValue));
+  const [internal, setInternal] = useState(initial);
+  const [resetRevision, setResetRevision] = useState(0);
   const controlled = value !== undefined;
   const current = controlled ? requiredHex(value) : internal;
+  const rootRef = useRef<HTMLDivElement>(null);
+  const committed = useRef({ controlled, current });
+  useImperativeHandle(ref, () => rootRef.current as HTMLDivElement, []);
+  useLayoutEffect(() => {
+    committed.current = { controlled, current };
+  }, [controlled, current]);
+  useEffect(() => {
+    const root = rootRef.current;
+    if (!root) return;
+    const document = root.ownerDocument;
+    let active = true;
+    const inputs = () =>
+      Array.from(
+        root.querySelectorAll<HTMLInputElement>('input[data-vf-color-picker-input], input[data-vf-color-picker-text]'),
+      ).filter((input) => input.closest('[data-vf-color-picker-root]') === root);
+    const onReset = (event: Event) => {
+      const group = inputs();
+      if (!group.length || !group.every((input) => input.form && input.form === event.target)) return;
+      setTimeout(() => {
+        if (!active || event.defaultPrevented) return;
+        const group = inputs();
+        if (!group.length || !group.every((input) => input.form === event.target)) return;
+        const latest = committed.current;
+        const next = latest.controlled ? latest.current : initial;
+        if (!latest.controlled) setInternal(next);
+        setResetRevision((revision) => revision + 1);
+        for (const input of group) input.value = next;
+      }, 0);
+    };
+    document.addEventListener('reset', onReset, true);
+    return () => {
+      active = false;
+      document.removeEventListener('reset', onReset, true);
+    };
+  }, [initial]);
   const set = (v: string) => {
     const next = hex(v);
     if (disabled || next === null || next === current) return;
@@ -52,8 +93,8 @@ export const ColorPickerRoot = forwardRef<HTMLDivElement, ColorPickerRootProps>(
   };
   return createElement(
     C.Provider,
-    { value: { value: current, controlled, disabled, set } },
-    createElement('div', { ...props, ref, 'data-vf-color-picker-root': '' }, children),
+    { value: { value: current, controlled, disabled, resetRevision, set } },
+    createElement('div', { ...props, ref: rootRef, 'data-vf-color-picker-root': '' }, children),
   );
 });
 export type ColorPickerInputProps = Omit<ComponentPropsWithoutRef<'input'>, 'type' | 'value' | 'defaultValue'>;
@@ -81,7 +122,7 @@ export const ColorPickerTextInput = forwardRef<HTMLInputElement, ColorPickerInpu
 ) {
   const c = useC();
   const [draft, setDraft] = useState(c.value);
-  useLayoutEffect(() => setDraft(c.value), [c.value]);
+  useLayoutEffect(() => setDraft(c.value), [c.value, c.resetRevision]);
   return createElement('input', {
     ...props,
     ref,

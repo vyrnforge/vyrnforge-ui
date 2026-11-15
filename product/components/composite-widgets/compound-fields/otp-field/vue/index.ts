@@ -1,10 +1,23 @@
-import { computed, defineComponent, h, inject, provide, ref, type InjectionKey } from 'vue';
+import {
+  computed,
+  defineComponent,
+  h,
+  inject,
+  onBeforeUnmount,
+  onMounted,
+  onUpdated,
+  provide,
+  ref,
+  type InjectionKey,
+} from 'vue';
 
 interface OTPFieldContextValue {
   value(): string;
   length(): number;
   disabled(): boolean;
   set(value: string): void;
+  resetValue(): string;
+  reset(): string;
 }
 const otpFieldKey: InjectionKey<OTPFieldContextValue> = Symbol('otp-field');
 function useOTPField() {
@@ -27,7 +40,8 @@ export const OTPFieldRoot = defineComponent({
   },
   emits: { 'update:value': (value: string) => typeof value === 'string' },
   setup(props, { attrs, emit, slots }) {
-    const internalValue = ref(props.defaultValue);
+    const initial = props.defaultValue;
+    const internalValue = ref(initial);
     const current = computed(() => props.value ?? internalValue.value);
     const length = computed(() => {
       if (!Number.isInteger(props.length) || props.length < 1)
@@ -38,6 +52,11 @@ export const OTPFieldRoot = defineComponent({
       value: () => current.value,
       length: () => length.value,
       disabled: () => props.disabled,
+      resetValue: () => props.value ?? initial,
+      reset() {
+        if (props.value === undefined) internalValue.value = initial;
+        return props.value ?? initial;
+      },
       set(next) {
         if (props.disabled || next === current.value) return;
         if (props.value === undefined) internalValue.value = next;
@@ -53,9 +72,35 @@ export const OTPFieldInput = defineComponent({
   props: { disabled: Boolean },
   setup(props, { attrs }) {
     const field = useOTPField();
+    const element = ref<HTMLInputElement | null>(null);
+    let document: Document | undefined;
+    let active = false;
+    const syncDefault = () => {
+      if (element.value) element.value.defaultValue = field.resetValue();
+    };
+    const onReset = (event: Event) => {
+      const input = element.value;
+      if (!input?.form || input.form !== event.target) return;
+      setTimeout(() => {
+        if (!active || event.defaultPrevented || input.form !== event.target) return;
+        input.value = field.reset();
+      }, 0);
+    };
+    onMounted(() => {
+      active = true;
+      syncDefault();
+      document = element.value?.ownerDocument;
+      document?.addEventListener('reset', onReset, true);
+    });
+    onUpdated(syncDefault);
+    onBeforeUnmount(() => {
+      active = false;
+      document?.removeEventListener('reset', onReset, true);
+    });
     return () =>
       h('input', {
         ...attrs,
+        ref: element,
         type: 'text',
         inputmode: (attrs.inputmode ?? attrs.inputMode ?? 'numeric') as string,
         autocomplete: (attrs.autocomplete ?? attrs.autoComplete ?? 'one-time-code') as string,

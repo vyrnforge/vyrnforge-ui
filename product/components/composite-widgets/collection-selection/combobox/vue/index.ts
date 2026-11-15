@@ -20,8 +20,8 @@ interface Ctx {
   open: Ref<boolean>;
   activeId: Ref<string | null>;
   locale(): string | undefined;
-  inputId: string;
-  listboxId: string;
+  inputId: Readonly<Ref<string>>;
+  listboxId: Readonly<Ref<string>>;
   inputRef: Ref<HTMLInputElement | null>;
   contentRef: Ref<HTMLElement | null>;
   setOpen(value: boolean): void;
@@ -76,7 +76,7 @@ function moveActive(context: Ctx, intent: Extract<CollectionNavigationIntent, 'n
 
 export const ComboboxRoot = defineComponent({
   name: 'ComboboxRoot',
-  props: { value: String, defaultValue: { type: String, default: '' }, locale: String },
+  props: { id: String, value: String, defaultValue: { type: String, default: '' }, locale: String },
   emits: ['update:value'],
   setup(props, { slots, emit }) {
     const internalValue = ref(props.defaultValue);
@@ -86,8 +86,9 @@ export const ComboboxRoot = defineComponent({
     const inputRef = ref<HTMLInputElement | null>(null);
     const contentRef = ref<HTMLElement | null>(null);
     const uid = useId();
-    const inputId = `vf-combobox-${uid}-input`;
-    const listboxId = `vf-combobox-${uid}-listbox`;
+    const rootId = computed(() => props.id ?? `vf-combobox-${uid}`);
+    const inputId = computed(() => `${rootId.value}-input`);
+    const listboxId = computed(() => `${rootId.value}-listbox`);
     const value = computed(() => props.value ?? internalValue.value);
     const context: Ctx = {
       query,
@@ -132,11 +133,11 @@ export const ComboboxInput = defineComponent({
       h('input', {
         ...attrs,
         ref: context.inputRef,
-        id: attrs.id ?? context.inputId,
+        id: context.inputId.value,
         role: 'combobox',
         'aria-autocomplete': 'list',
         'aria-expanded': context.open.value,
-        'aria-controls': attrs['aria-controls'] ?? context.listboxId,
+        'aria-controls': context.listboxId.value,
         'aria-activedescendant': context.activeId.value ?? undefined,
         'data-vf-combobox-input': '',
         value: context.query.value,
@@ -211,7 +212,7 @@ export const ComboboxContent = defineComponent({
         {
           ...attrs,
           ref: context.contentRef,
-          id: attrs.id ?? context.listboxId,
+          id: context.listboxId.value,
           role: 'listbox',
           popover: 'auto',
           'data-vf-open': context.open.value ? '' : undefined,
@@ -221,7 +222,7 @@ export const ComboboxContent = defineComponent({
             const actual = (event.currentTarget as HTMLElement).matches(':popover-open');
             if (actual !== context.open.value) context.setOpen(actual);
           },
-          'aria-labelledby': attrs['aria-labelledby'] ?? context.inputId,
+          'aria-labelledby': attrs['aria-labelledby'] ?? context.inputId.value,
           'data-vf-combobox-content': '',
         },
         slots.default?.(),

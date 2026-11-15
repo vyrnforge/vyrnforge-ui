@@ -504,6 +504,7 @@ disabled: boolean;
 
 // @public (undocumented)
 export const ComboboxRoot: DefineComponent<ExtractPropTypes<    {
+id: StringConstructor;
 value: StringConstructor;
 defaultValue: {
 type: StringConstructor;
@@ -513,6 +514,7 @@ locale: StringConstructor;
 }>, () => VNode<RendererNode, RendererElement, {
 [key: string]: any;
 }>[] | undefined, {}, {}, {}, ComponentOptionsMixin, ComponentOptionsMixin, "update:value"[], "update:value", PublicProps, Readonly<ExtractPropTypes<    {
+id: StringConstructor;
 value: StringConstructor;
 defaultValue: {
 type: StringConstructor;
