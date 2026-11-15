@@ -66,17 +66,17 @@ export const browserFixture = {
             <input id="password" name="password" vfPasswordFieldInput aria-label="Mot de passe" value="s3cret" autocomplete="current-password">
             <button id="toggle" vfPasswordFieldToggle showLabel="${showLabel}" hideLabel="${hideLabel}">Visibilité du mot de passe</button>
           </div>
-          <div vfPasswordFieldRoot [visible]="false" (visibleChange)="request($event)">
+          <div vfPasswordFieldRoot #controlledRoot="vfPasswordFieldRoot" [visible]="false" (visibleChange)="request($event)">
             <input vfPasswordFieldInput aria-label="Controlled password" value="s3cret" autocomplete="current-password">
-            <button vfPasswordFieldToggle showLabel="Show controlled password" hideLabel="Hide controlled password">Controlled password visibility</button>
+            <button vfPasswordFieldToggle showLabel="Show controlled password" hideLabel="Hide controlled password">{{ controlledRoot.isVisible() ? 'Hide controlled password' : 'Show controlled password' }}</button>
           </div>
-          <div vfPasswordFieldRoot [defaultVisible]="true">
+          <div vfPasswordFieldRoot #defaultRoot="vfPasswordFieldRoot" [defaultVisible]="true">
             <input vfPasswordFieldInput aria-label="Default password" value="s3cret" autocomplete="current-password">
-            <button vfPasswordFieldToggle showLabel="Show default password" hideLabel="Hide default password">Default password visibility</button>
+            <button vfPasswordFieldToggle showLabel="Show default password" hideLabel="Hide default password">{{ defaultRoot.isVisible() ? 'Hide default password' : 'Show default password' }}</button>
           </div>
-          <div vfPasswordFieldRoot [disabled]="true">
+          <div vfPasswordFieldRoot #disabledRoot="vfPasswordFieldRoot" [disabled]="true">
             <input vfPasswordFieldInput aria-label="Disabled password" value="s3cret" autocomplete="current-password">
-            <button vfPasswordFieldToggle showLabel="Show disabled password" hideLabel="Hide disabled password">Disabled password visibility</button>
+            <button vfPasswordFieldToggle showLabel="Show disabled password" hideLabel="Hide disabled password">{{ disabledRoot.isVisible() ? 'Hide disabled password' : 'Show disabled password' }}</button>
           </div>\`
         })
         class PasswordFixture {
