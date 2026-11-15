@@ -21,7 +21,7 @@
     "directionality": "vertical"
   },
   "ownership": {
-    "library": ["Separate focus, selected values and open state; expose selection summary and removal relationships."],
+    "library": ["Separate focus, selected values and open state; expose selection summary and removal relationships; maintain trigger-to-popup identity."],
     "consumer": ["Author names, option values and form labels; own domain filtering and data loading."]
   },
   "forms": {
@@ -40,7 +40,7 @@
   "profileVariability": [],
   "notes": [
     "Native auto popover and CSS anchor placement preserve selection and focus independence. Space/Enter toggle eligible options without closing the popup; outside dismissal does not change selection.",
-    "React/Vue popup remains mounted while closed. Custom form participation, deterministic generated relationships, selection summaries and removal relationships remain separate work.",
+    "React/Vue popup remains mounted while closed. React, Vue and Angular derive trigger/listbox IDs from an optional root id. Elements preserves authored content identity and derives aria-controls; Native Web remains authored markup. Custom form participation, selection summaries and removal relationships remain separate work.",
     "Audit mapping is provisional; not a conformance claim."
   ]
 }

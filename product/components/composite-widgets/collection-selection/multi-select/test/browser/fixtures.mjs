@@ -55,24 +55,24 @@ export async function createReactStory() {
       h(
         MultiSelectRoot,
         { defaultValue: ['one'], onValueChange: changed },
-        h(MultiSelectTrigger, { id: 'trigger', 'aria-controls': 'list' }, 'Choose'),
+        h(MultiSelectTrigger, { id: 'obsolete-trigger', 'aria-controls': 'obsolete-list' }, 'Choose'),
         h(
           MultiSelectContent,
-          { id: 'list', 'aria-labelledby': 'multi-select-label' },
+          { id: 'obsolete-list', 'aria-labelledby': 'multi-select-label' },
           ...labels.map((_, index) => option('react', index)),
         ),
       ),
       h(
         MultiSelectRoot,
-        { value: ['one'], onValueChange: request },
+        { id: 'controlled', value: ['one'], onValueChange: request },
         h(
           MultiSelectTrigger,
-          { id: 'controlled-trigger', tabIndex: -1, 'aria-controls': 'controlled-list' },
+          { tabIndex: -1 },
           'Controlled items',
         ),
         h(
           MultiSelectContent,
-          { id: 'controlled-list', 'aria-label': 'Controlled options' },
+          { 'aria-label': 'Controlled options' },
           option('controlled', 0),
           option('controlled', 2),
         ),
@@ -105,18 +105,18 @@ export async function createVueStory() {
           h('button', { id: 'before', type: 'button' }, 'Before'),
           h('div', { id: 'multi-select-label' }, 'Choose items'),
           h(MultiSelectRoot, { defaultValue: ['one'], 'onUpdate:value': changed }, () => [
-            h(MultiSelectTrigger, { id: 'trigger', 'aria-controls': 'list' }, () => 'Choose'),
-            h(MultiSelectContent, { id: 'list', 'aria-labelledby': 'multi-select-label' }, () =>
+            h(MultiSelectTrigger, { id: 'obsolete-trigger', 'aria-controls': 'obsolete-list' }, () => 'Choose'),
+            h(MultiSelectContent, { id: 'obsolete-list', 'aria-labelledby': 'multi-select-label' }, () =>
               labels.map((_, index) => option('vue', index)),
             ),
           ]),
-          h(MultiSelectRoot, { value: ['one'], 'onUpdate:value': request }, () => [
+          h(MultiSelectRoot, { id: 'controlled', value: ['one'], 'onUpdate:value': request }, () => [
             h(
               MultiSelectTrigger,
-              { id: 'controlled-trigger', tabindex: -1, 'aria-controls': 'controlled-list' },
+              { tabindex: -1 },
               () => 'Controlled items',
             ),
-            h(MultiSelectContent, { id: 'controlled-list', 'aria-label': 'Controlled options' }, () => [
+            h(MultiSelectContent, { 'aria-label': 'Controlled options' }, () => [
               option('controlled', 0),
               option('controlled', 2),
             ]),
@@ -164,14 +164,14 @@ export async function createAngularStory() {
       VfMultiSelectContentDirective,
       VfMultiSelectOptionDirective,
     ],
-    template: `<main><h1>MultiSelect browser fixture</h1>${before}${label}<div vfMultiSelectRoot [defaultValue]="values" (valueChange)="changed($event)"><button vfMultiSelectTrigger id="trigger" aria-controls="list">Choose</button><div vfMultiSelectContent id="list" aria-labelledby="multi-select-label">${angularOptions('angular', [0, 1, 2, 3])}</div></div><div vfMultiSelectRoot [value]="values" (valueChange)="request($event)"><button vfMultiSelectTrigger id="controlled-trigger" tabindex="-1" aria-controls="controlled-list">Controlled items</button><div vfMultiSelectContent id="controlled-list" aria-label="Controlled options">${angularOptions('controlled', [0, 2])}</div></div>${after}</main>`,
+    template: `<main><h1>MultiSelect browser fixture</h1>${before}${label}<div vfMultiSelectRoot [defaultValue]="values" (valueChange)="changed($event)"><button vfMultiSelectTrigger>Choose</button><div vfMultiSelectContent aria-labelledby="multi-select-label">${angularOptions('angular', [0, 1, 2, 3])}</div></div><div vfMultiSelectRoot id="controlled" [value]="values" (valueChange)="request($event)"><button vfMultiSelectTrigger tabindex="-1">Controlled items</button><div vfMultiSelectContent aria-label="Controlled options">${angularOptions('controlled', [0, 2])}</div></div>${after}</main>`,
   })(MultiSelectTestApp);
   return MultiSelectTestApp;
 }
 
 export async function createElementsStory({ client }) {
   return {
-    body: `${before}${label}<vf-multi-select id="elements-multi-select"><button id="trigger" type="button" aria-haspopup="listbox" aria-expanded="false" aria-controls="list" data-vf-multi-select-trigger>Choose</button><div id="list" role="listbox" aria-multiselectable="true" tabindex="-1" aria-labelledby="multi-select-label" data-vf-multi-select-content hidden>${options('elements')}</div></vf-multi-select>${after}`,
+    body: `${before}${label}<vf-multi-select id="elements-multi-select"><button id="trigger" type="button" aria-haspopup="listbox" aria-expanded="false" aria-controls="obsolete-list" data-vf-multi-select-trigger>Choose</button><div id="list" role="listbox" aria-multiselectable="true" tabindex="-1" aria-labelledby="multi-select-label" data-vf-multi-select-content hidden>${options('elements')}</div></vf-multi-select>${after}`,
     activate: client
       ? async () => {
           const { defineMultiSelectElement } = await import('@vyrnforge/elements/multi-select');

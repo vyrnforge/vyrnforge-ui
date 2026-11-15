@@ -9,10 +9,10 @@ async function expectAxeClean(page, options = {}) {
 test('MultiSelect Web baseline exposes authored semantics and canonical styling', async ({ page }) => {
   test.skip(port !== 'web', 'Web owns the static semantic and canonical styling baseline.');
   await page.goto('/components/multi-select/web.html');
-  const trigger = page.locator('#trigger');
+  const trigger = page.locator('[data-vf-multi-select-trigger]').first();
   const listbox = page.getByRole('listbox', { name: 'Choose items' });
   await expect(trigger).toHaveAttribute('aria-haspopup', 'listbox');
-  await expect(trigger).toHaveAttribute('aria-controls', 'list');
+  await expect(trigger).toHaveAttribute('aria-controls', await page.locator('[data-vf-multi-select-content]').first().getAttribute('id'));
   await trigger.click();
   await expect(listbox).toBeVisible();
   await expect(listbox).toHaveAttribute('aria-multiselectable', 'true');
@@ -35,7 +35,7 @@ test.describe('MultiSelect enhanced port behavior', () => {
       await page.goto(`/components/multi-select/${framework}.html`);
       await page.waitForFunction(() => document.body.dataset.multiReady === 'true');
 
-      const trigger = page.locator('#trigger');
+      const trigger = page.locator('[data-vf-multi-select-trigger]').first();
       const listbox = page.getByRole('listbox', { name: 'Choose items' });
       const one = page.locator(`#${framework}-one`);
       const disabled = page.locator(`#${framework}-disabled`);
@@ -92,7 +92,7 @@ test.describe('MultiSelect enhanced port behavior', () => {
       await page.goto(`/components/multi-select/${framework}.html`);
       await page.waitForFunction(() => document.body.dataset.multiReady === 'true');
 
-      const trigger = page.locator('#trigger');
+      const trigger = page.locator('[data-vf-multi-select-trigger]').first();
       await trigger.focus();
       await page.keyboard.press('ArrowDown');
       await expect(page.locator(`#${framework}-one`)).toBeFocused();
@@ -101,7 +101,7 @@ test.describe('MultiSelect enhanced port behavior', () => {
       await expect(page.locator(`#${framework}-three`)).toHaveAttribute('aria-selected', 'true');
       await page.keyboard.press('Escape');
       await expect(trigger).toBeFocused();
-      await expect(page.locator('#list')).toBeHidden();
+      await expect(page.locator('[data-vf-multi-select-content]').first()).toBeHidden();
       await page.keyboard.press('ArrowDown');
 
       await expect(page.locator(`#${framework}-one`)).toBeFocused();
@@ -115,8 +115,8 @@ test.describe('MultiSelect enhanced port behavior', () => {
 test('native popup light dismissal preserves committed multiple values and outside focus', async ({ page }) => {
   await page.goto(`/components/multi-select/${port}.html`);
   if (port !== 'web') await page.waitForFunction(() => document.body.dataset.multiReady === 'true');
-  const trigger = page.locator('#trigger');
-  const list = page.locator('#list');
+  const trigger = page.locator('[data-vf-multi-select-trigger]').first();
+  const list = page.locator('[data-vf-multi-select-content]').first();
   await expect(list).toBeHidden();
   await trigger.press('Enter');
   await expect(list).toBeVisible();
@@ -146,12 +146,12 @@ test('controlled value rejection retains committed collection and popup focus', 
   await expect(page.locator('#controlled-three')).toBeFocused();
   await page.keyboard.press('Space');
   await expect(page.locator('body')).toHaveAttribute('data-multi-request', 'one,three');
-  await expect(page.locator('#controlled-list')).toBeVisible();
+  await expect(page.locator('#controlled-listbox')).toBeVisible();
   await expect(page.locator('#controlled-one')).toHaveAttribute('aria-selected', 'true');
   await expect(page.locator('#controlled-three')).toHaveAttribute('aria-selected', 'false');
   await expect(page.locator('#controlled-three')).toBeFocused();
   await page.keyboard.press('Tab');
-  await expect(page.locator('#controlled-list')).toBeHidden();
+  await expect(page.locator('#controlled-listbox')).toBeHidden();
   await expect(page.locator('#after')).toBeFocused();
 });
 
@@ -159,13 +159,37 @@ test('Angular Escape returns focus before the next keyboard event', async ({ pag
   test.skip(port !== 'angular', 'Angular render scheduling regression.');
   await page.goto('/components/multi-select/angular.html');
   await page.waitForFunction(() => document.body.dataset.multiReady === 'true');
-  await page.locator('#trigger').press('ArrowDown');
+  await page.locator('[data-vf-multi-select-trigger]').first().press('ArrowDown');
   await expect(page.locator('#angular-one')).toBeFocused();
   const focused = await page.locator('#angular-one').evaluate((node) => {
     node.dispatchEvent(new KeyboardEvent('keydown', { key: 'Escape', bubbles: true, cancelable: true }));
     return document.activeElement?.id;
   });
-  expect(focused).toBe('trigger');
+  expect(focused).toBe(await page.locator('[data-vf-multi-select-trigger]').first().getAttribute('id'));
   await page.keyboard.press('ArrowDown');
   await expect(page.locator('#angular-one')).toBeFocused();
+});
+
+
+test('MultiSelect owns coherent popup relationships across explicit and generated identities', async ({ page }) => {
+  test.skip(port === 'web', 'Native Web authors relationships directly.');
+  await page.goto(`/components/multi-select/${port}.html`);
+  await page.waitForFunction(() => document.body.dataset.multiReady === 'true');
+  const trigger = page.locator('[data-vf-multi-select-trigger]').first();
+  const list = page.locator('[data-vf-multi-select-content]').first();
+  const listId = await list.getAttribute('id');
+  expect(listId).toBeTruthy();
+  await expect(trigger).toHaveAttribute('aria-controls', listId);
+  await expect(page.locator('#obsolete-trigger, #obsolete-list')).toHaveCount(0);
+  if (port === 'elements') {
+    await list.evaluate((node) => (node.id = 'updated-list'));
+    await expect(trigger).toHaveAttribute('aria-controls', 'updated-list');
+  } else {
+    expect(listId).toMatch(/^vf-multi-select-/);
+    await expect(page.locator('#controlled-trigger')).toHaveAttribute('aria-controls', 'controlled-listbox');
+    await expect(page.locator('#controlled-listbox')).toHaveCount(1);
+  }
+  await trigger.press('Enter');
+  await expect(list).toBeVisible();
+  await expect(page.locator(`#${port}-one`)).toBeFocused();
 });

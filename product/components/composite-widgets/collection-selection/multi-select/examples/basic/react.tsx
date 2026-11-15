@@ -7,8 +7,8 @@ import {
 export function Example() {
   return (
     <MultiSelectRoot>
-      <MultiSelectTrigger />
-      <MultiSelectContent>
+      <MultiSelectTrigger>Choose frameworks</MultiSelectTrigger>
+      <MultiSelectContent aria-label="Frameworks">
         <MultiSelectOption value="React">React</MultiSelectOption>
         <MultiSelectOption value="Vue">Vue</MultiSelectOption>
       </MultiSelectContent>
