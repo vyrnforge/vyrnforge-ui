@@ -15,7 +15,7 @@ function optionFromTarget(root: HTMLElement, target: EventTarget | null): HTMLEl
   return option && root.contains(option) && option.closest(rootSelector) === root.closest(rootSelector) ? option : null;
 }
 function optionDisabled(option: HTMLElement): boolean {
-  return option.matches(':disabled') || option.hasAttribute('disabled') || option.getAttribute('aria-disabled') === 'true';
+  return option.matches(':disabled,[disabled],[aria-disabled="true"]');
 }
 function optionValue(option: HTMLElement): string {
   return option.dataset.vfValue ?? option.getAttribute('value') ?? '';
