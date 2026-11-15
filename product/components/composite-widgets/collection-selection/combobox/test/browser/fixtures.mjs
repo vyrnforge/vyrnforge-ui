@@ -74,7 +74,12 @@ export async function createReactStory() {
       Fragment,
       null,
       h('button', { id: 'before', type: 'button' }, 'Before'),
-      h('fieldset', { id: 'combo-fieldset' }, h('legend', null, 'Framework selection'), combo('react', items, 'Framework')),
+      h(
+        'fieldset',
+        { id: 'combo-fieldset' },
+        h('legend', null, 'Framework selection'),
+        combo('react', items, 'Framework'),
+      ),
       combo('react-locale', cities, 'Turkish city', 'tr'),
       h(
         'button',
@@ -120,7 +125,10 @@ export async function createVueStory() {
       return () =>
         h('div', [
           h('button', { id: 'before', type: 'button' }, 'Before'),
-          h('fieldset', { id: 'combo-fieldset' }, [h('legend', 'Framework selection'), combo('vue', items, 'Framework')]),
+          h('fieldset', { id: 'combo-fieldset' }, [
+            h('legend', 'Framework selection'),
+            combo('vue', items, 'Framework'),
+          ]),
           combo('vue-locale', cities, 'Turkish city', 'tr'),
           h(
             'button',
