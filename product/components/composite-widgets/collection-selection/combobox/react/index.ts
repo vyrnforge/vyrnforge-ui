@@ -3,6 +3,7 @@ import {
   createElement,
   forwardRef,
   useContext,
+  useEffect,
   useId,
   useMemo,
   useRef,
@@ -10,9 +11,7 @@ import {
   type ComponentPropsWithoutRef,
   type ReactNode,
 } from 'react';
-import { createPortal } from 'react-dom';
 import { resolveNavigationIndex, type CollectionNavigationIntent } from '@vyrnforge/core/collection-navigation';
-import { useFloatingSurface } from '../../internal/floating-surface.js';
 
 interface Ctx {
   open: boolean;
@@ -38,7 +37,7 @@ function useCombo() {
 
 const optionSelector = '[data-vf-combobox-option]';
 function visibleOptions(root: HTMLElement | null): HTMLElement[] {
-  return root ? Array.from(root.querySelectorAll<HTMLElement>(optionSelector)).filter((option) => !option.hidden) : [];
+  return root ? Array.from(root.querySelectorAll<HTMLElement>(optionSelector)).filter((option) => !option.hidden && option.closest('[data-vf-combobox-content]') === root) : [];
 }
 function disabled(option: HTMLElement): boolean {
   return option.getAttribute('aria-disabled') === 'true' || option.hasAttribute('disabled');
@@ -67,7 +66,6 @@ function moveActive(context: Ctx, intent: Extract<CollectionNavigationIntent, 'n
   const target = options[next];
   if (!target?.id) return;
   context.setActiveId(target.id);
-  target.scrollIntoView?.({ block: 'nearest' });
 }
 
 export interface ComboboxRootProps {
@@ -101,8 +99,8 @@ export function ComboboxRoot({ children, value, defaultValue = '', locale, onVal
         onValueChange?.(next);
         setQueryState(next);
         setActiveId(null);
+        anchorRef.current?.focus();
         setOpenState(false);
-        queueMicrotask(() => anchorRef.current?.focus());
       },
       query,
       setQuery(next) {
@@ -152,6 +150,10 @@ export const ComboboxInput = forwardRef<HTMLInputElement, ComponentPropsWithoutR
         props.onFocus?.(event);
         if (!event.defaultPrevented) context.setOpen(true);
       },
+      onBlur(event) {
+        props.onBlur?.(event);
+        if (!event.defaultPrevented && !context.surfaceRef.current?.contains(event.relatedTarget)) context.setOpen(false);
+      },
       onCompositionStart(event) {
         props.onCompositionStart?.(event);
         composingRef.current = true;
@@ -173,7 +175,7 @@ export const ComboboxInput = forwardRef<HTMLInputElement, ComponentPropsWithoutR
           event.preventDefault();
           context.setOpen(true);
           const intent = event.key === 'ArrowDown' ? 'next' : 'previous';
-          queueMicrotask(() => moveActive(context, intent));
+          moveActive(context, intent);
           return;
         }
         if (event.key === 'Enter' && context.open) {
@@ -184,6 +186,7 @@ export const ComboboxInput = forwardRef<HTMLInputElement, ComponentPropsWithoutR
           }
           return;
         }
+        if (event.key === 'Tab' && context.open) context.setOpen(false);
         if (event.key === 'Escape' && context.open) {
           event.preventDefault();
           context.setOpen(false);
@@ -196,14 +199,14 @@ export const ComboboxInput = forwardRef<HTMLInputElement, ComponentPropsWithoutR
 export const ComboboxContent = forwardRef<HTMLDivElement, ComponentPropsWithoutRef<'div'>>(
   function ComboboxContent(props, ref) {
     const context = useCombo();
-    const target = useFloatingSurface({
-      open: context.open,
-      anchorRef: context.anchorRef,
-      surfaceRef: context.surfaceRef,
-      dismissOnEscape: false,
-      onDismiss: () => context.setOpen(false),
-    });
-    if (!context.open) return null;
+    useEffect(() => {
+      const surface = context.surfaceRef.current;
+      const input = context.anchorRef.current;
+      if (!surface || !input) return;
+      if (context.open && !surface.matches(':popover-open')) surface.showPopover({ source: input });
+      if (!context.open && surface.matches(':popover-open')) surface.hidePopover();
+      if (context.open) activeOption(context)?.scrollIntoView({ block: 'nearest' });
+    }, [context.open, context.activeId, context.anchorRef, context.surfaceRef]);
     const node = createElement('div', {
       ...props,
       id: props.id ?? context.listboxId,
@@ -213,10 +216,18 @@ export const ComboboxContent = forwardRef<HTMLDivElement, ComponentPropsWithoutR
         else if (ref) ref.current = element;
       },
       role: 'listbox',
+      popover: 'auto',
+      'data-vf-open': context.open ? '' : undefined,
+      onToggle(event) {
+        props.onToggle?.(event);
+        if (event.target !== event.currentTarget) return;
+        const actual = event.currentTarget.matches(':popover-open');
+        if (actual !== context.open) context.setOpen(actual);
+      },
       'aria-labelledby': props['aria-labelledby'] ?? context.inputId,
       'data-vf-combobox-content': '',
     });
-    return target ? createPortal(node, target) : node;
+    return node;
   },
 );
 
@@ -248,9 +259,13 @@ export const ComboboxOption = forwardRef<HTMLButtonElement, ComboboxOptionProps>
     'aria-selected': context.activeId ? context.activeId === id : context.value === value,
     'data-vf-combobox-option': '',
     'data-vf-text-value': label,
+    onMouseDown(event) {
+      props.onMouseDown?.(event);
+      if (!event.defaultPrevented && event.button === 0) event.preventDefault();
+    },
     onClick(event) {
       onClick?.(event);
-      if (!event.defaultPrevented && !isDisabled) context.setValue(value);
+      if (!event.defaultPrevented && !disabled(event.currentTarget) && !event.currentTarget.hidden) context.setValue(value);
     },
   });
 });

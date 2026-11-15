@@ -1,4 +1,4 @@
-import { computed, defineComponent, h, inject, nextTick, provide, ref, useId, type InjectionKey, type Ref } from 'vue';
+import { computed, defineComponent, h, inject, nextTick, onMounted, watch, provide, ref, useId, type InjectionKey, type Ref } from 'vue';
 import { resolveNavigationIndex, type CollectionNavigationIntent } from '@vyrnforge/core/collection-navigation';
 
 interface Ctx {
@@ -24,7 +24,7 @@ function useC() {
 
 const optionSelector = '[data-vf-combobox-option]';
 function visibleOptions(root: HTMLElement | null): HTMLElement[] {
-  return root ? Array.from(root.querySelectorAll<HTMLElement>(optionSelector)).filter((option) => !option.hidden) : [];
+  return root ? Array.from(root.querySelectorAll<HTMLElement>(optionSelector)).filter((option) => !option.hidden && option.closest('[data-vf-combobox-content]') === root) : [];
 }
 function disabled(option: HTMLElement): boolean {
   return option.getAttribute('aria-disabled') === 'true' || option.hasAttribute('disabled');
@@ -55,7 +55,6 @@ function moveActive(context: Ctx, intent: Extract<CollectionNavigationIntent, 'n
   const target = options[next];
   if (!target?.id) return;
   context.activeId.value = target.id;
-  target.scrollIntoView?.({ block: 'nearest' });
 }
 
 export const ComboboxRoot = defineComponent({
@@ -96,9 +95,9 @@ export const ComboboxRoot = defineComponent({
         if (props.value === undefined) internalValue.value = next;
         query.value = next;
         activeId.value = null;
-        open.value = false;
         emit('update:value', next);
-        nextTick(() => inputRef.value?.focus());
+        inputRef.value?.focus();
+        open.value = false;
       },
     };
     provide(key, context);
@@ -131,6 +130,10 @@ export const ComboboxInput = defineComponent({
           invoke(attrs.onFocus, event);
           if (!event.defaultPrevented) context.setOpen(true);
         },
+        onBlur: (event: FocusEvent) => {
+          invoke(attrs.onBlur, event);
+          if (!event.defaultPrevented && !context.contentRef.value?.contains(event.relatedTarget as Node | null)) context.setOpen(false);
+        },
         onCompositionstart: (event: CompositionEvent) => {
           invoke(attrs.onCompositionstart, event);
           composing.value = true;
@@ -158,6 +161,7 @@ export const ComboboxInput = defineComponent({
             }
             return;
           }
+          if (event.key === 'Tab' && context.open.value) context.setOpen(false);
           if (event.key === 'Escape' && context.open.value) {
             event.preventDefault();
             context.setOpen(false);
@@ -171,21 +175,36 @@ export const ComboboxContent = defineComponent({
   name: 'ComboboxContent',
   setup(_, { attrs, slots }) {
     const context = useC();
-    return () =>
-      context.open.value
-        ? h(
+    function sync() {
+      const surface = context.contentRef.value;
+      const input = context.inputRef.value;
+      if (!surface || !input) return;
+      if (context.open.value && !surface.matches(':popover-open')) surface.showPopover({ source: input });
+      if (!context.open.value && surface.matches(':popover-open')) surface.hidePopover();
+      if (context.open.value) activeOption(context)?.scrollIntoView({ block: 'nearest' });
+    }
+    onMounted(sync);
+    watch([context.open, context.activeId, context.contentRef, context.inputRef], sync, { flush: 'post' });
+    return () => h(
             'div',
             {
               ...attrs,
               ref: context.contentRef,
               id: attrs.id ?? context.listboxId,
               role: 'listbox',
+              popover: 'auto',
+              'data-vf-open': context.open.value ? '' : undefined,
+              onToggle(event: Event) {
+                invoke(attrs.onToggle, event);
+                if (event.target !== event.currentTarget) return;
+                const actual = (event.currentTarget as HTMLElement).matches(':popover-open');
+                if (actual !== context.open.value) context.setOpen(actual);
+              },
               'aria-labelledby': attrs['aria-labelledby'] ?? context.inputId,
               'data-vf-combobox-content': '',
             },
             slots.default?.(),
-          )
-        : null;
+          );
   },
 });
 
@@ -216,9 +235,14 @@ export const ComboboxOption = defineComponent({
           'aria-selected': context.activeId.value ? context.activeId.value === id : context.value.value === props.value,
           'data-vf-combobox-option': '',
           'data-vf-text-value': label,
+          onMousedown: (event: MouseEvent) => {
+            invoke(attrs.onMousedown, event);
+            if (!event.defaultPrevented && event.button === 0) event.preventDefault();
+          },
           onClick: (event: MouseEvent) => {
             invoke(attrs.onClick, event);
-            if (!event.defaultPrevented && !props.disabled) context.setValue(props.value);
+            const option = event.currentTarget as HTMLElement;
+            if (!event.defaultPrevented && !disabled(option) && !option.hidden) context.setValue(props.value);
           },
         },
         slots.default?.(),

@@ -1,4 +1,4 @@
-import { APP_ID, Directive, ElementRef, InjectionToken, computed, inject, input, output, signal } from '@angular/core';
+import { APP_ID, DestroyRef, Directive, ElementRef, InjectionToken, afterRenderEffect, computed, inject, input, output, signal } from '@angular/core';
 import { resolveNavigationIndex, type CollectionNavigationIntent } from '@vyrnforge/core/collection-navigation';
 
 const COMBOBOX_ID_GENERATOR = new InjectionToken<() => string>('VyrnForge Combobox ID generator', {
@@ -15,10 +15,11 @@ function normalizeFilterText(value: string, locale?: string): string {
   return locale ? value.toLocaleLowerCase(locale) : value.toLowerCase();
 }
 function visibleOptions(root: HTMLElement, query = '', locale?: string): HTMLElement[] {
-  const normalizedQuery = normalizeFilterText(query.trim(), locale);
+  const normalizedQuery = normalizeFilterText(query, locale);
   return Array.from(root.querySelectorAll<HTMLElement>(optionSelector)).filter((option) => {
+    if (option.closest('[data-vf-combobox-root]') !== root) return false;
     if (!normalizedQuery) return true;
-    return normalizeFilterText(option.textContent ?? '', locale).includes(normalizedQuery);
+    return normalizeFilterText(option.dataset.vfTextValue ?? option.textContent ?? '', locale).includes(normalizedQuery);
   });
 }
 function disabled(option: HTMLElement): boolean {
@@ -67,9 +68,9 @@ export class VfComboboxRootDirective {
     if (this.value() === undefined) this.internalValue.set(value);
     this.query.set(value);
     this.activeId.set(null);
-    this.open.set(false);
     this.valueChange.emit(value);
     this.focusInput();
+    this.open.set(false);
   }
   focusInput() {
     this.element.nativeElement.querySelector<HTMLInputElement>('[data-vf-combobox-input]')?.focus();
@@ -88,7 +89,6 @@ export class VfComboboxRootDirective {
     const target = options[next];
     if (!target?.id) return;
     this.activeId.set(target.id);
-    target.scrollIntoView?.({ block: 'nearest' });
   }
   activateActive() {
     const id = this.activeId();
@@ -123,7 +123,14 @@ export class VfComboboxRootDirective {
 })
 export class VfComboboxInputDirective {
   private composing = false;
-  constructor(readonly root: VfComboboxRootDirective) {}
+  constructor(readonly root: VfComboboxRootDirective) {
+    const element = inject<ElementRef<HTMLInputElement>>(ElementRef).nativeElement;
+    const onBlur = (event: FocusEvent) => {
+      if (!event.defaultPrevented && !(event.relatedTarget instanceof Element && event.relatedTarget.closest('[data-vf-combobox-content]')?.closest('[data-vf-combobox-root]') === element.closest('[data-vf-combobox-root]'))) root.setOpen(false);
+    };
+    element.addEventListener('blur', onBlur);
+    inject(DestroyRef).onDestroy(() => element.removeEventListener('blur', onBlur));
+  }
   onInput(event: Event) {
     this.root.setQuery((event.target as HTMLInputElement).value);
   }
@@ -146,6 +153,7 @@ export class VfComboboxInputDirective {
       if (this.root.activateActive()) event.preventDefault();
       return;
     }
+    if (event.key === 'Tab' && this.root.open()) this.root.setOpen(false);
     if (event.key === 'Escape' && this.root.open()) {
       event.preventDefault();
       this.root.setOpen(false);
@@ -161,11 +169,32 @@ export class VfComboboxInputDirective {
     'data-vf-combobox-content': '',
     '[id]': 'root.listboxId()',
     '[attr.aria-labelledby]': 'root.inputId()',
-    '[hidden]': '!root.open()',
+    popover: 'auto',
+    '[attr.data-vf-open]': 'root.open() ? "" : null',
   },
 })
 export class VfComboboxContentDirective {
-  constructor(readonly root: VfComboboxRootDirective) {}
+  constructor(readonly root: VfComboboxRootDirective) {
+    const element = inject<ElementRef<HTMLElement>>(ElementRef).nativeElement;
+    const destroyRef = inject(DestroyRef);
+    afterRenderEffect(() => {
+      const open = root.open();
+      const activeId = root.activeId();
+      const container = element.closest('[data-vf-combobox-root]');
+      const input = container?.querySelector<HTMLElement>('[data-vf-combobox-input]');
+      if (!input) return;
+      if (open && !element.matches(':popover-open')) element.showPopover({ source: input });
+      if (!open && element.matches(':popover-open')) element.hidePopover();
+      if (open && activeId) Array.from(element.querySelectorAll<HTMLElement>(optionSelector)).find(option => option.id === activeId)?.scrollIntoView({ block: 'nearest' });
+    });
+    const onToggle = (event: Event) => {
+      if (event.target !== element) return;
+      const actual = element.matches(':popover-open');
+      if (actual !== root.open()) root.setOpen(actual);
+    };
+    element.addEventListener('toggle', onToggle);
+    destroyRef.onDestroy(() => element.removeEventListener('toggle', onToggle));
+  }
 }
 
 @Directive({
@@ -181,6 +210,7 @@ export class VfComboboxContentDirective {
     '[attr.aria-disabled]': 'disabled() || null',
     '[attr.aria-selected]': 'root.activeId() ? root.activeId() === optionId : root.selected() === value()',
     '[hidden]': 'hidden()',
+    '[attr.data-vf-text-value]': 'textValue() || value()',
     '(click)': 'select($event)',
   },
 })
@@ -194,6 +224,9 @@ export class VfComboboxOptionDirective {
     element: ElementRef<HTMLElement>,
   ) {
     this.optionId = element.nativeElement.id || root.nextOptionId();
+    const onMouseDown = (event: MouseEvent) => { if (event.button === 0) event.preventDefault(); };
+    element.nativeElement.addEventListener('mousedown', onMouseDown);
+    inject(DestroyRef).onDestroy(() => element.nativeElement.removeEventListener('mousedown', onMouseDown));
   }
   readonly hidden = computed(
     () =>
@@ -203,6 +236,6 @@ export class VfComboboxOptionDirective {
       ),
   );
   select(event: MouseEvent) {
-    if (!event.defaultPrevented && !this.disabled()) this.root.setValue(this.value());
+    if (!event.defaultPrevented && !this.disabled() && !this.hidden()) this.root.setValue(this.value());
   }
 }
