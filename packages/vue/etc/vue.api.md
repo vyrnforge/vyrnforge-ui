@@ -1267,6 +1267,7 @@ disabled: boolean;
 
 // @public (undocumented)
 export const MultiSelectRoot: DefineComponent<ExtractPropTypes<    {
+id: StringConstructor;
 value: PropType<string[] | undefined>;
 defaultValue: {
 type: PropType<string[]>;
@@ -1275,6 +1276,7 @@ default: () => never[];
 }>, () => VNode<RendererNode, RendererElement, {
 [key: string]: any;
 }>[] | undefined, {}, {}, {}, ComponentOptionsMixin, ComponentOptionsMixin, "update:value"[], "update:value", PublicProps, Readonly<ExtractPropTypes<    {
+id: StringConstructor;
 value: PropType<string[] | undefined>;
 defaultValue: {
 type: PropType<string[]>;
@@ -1875,6 +1877,7 @@ disabled: boolean;
 
 // @public (undocumented)
 export const SelectRoot: DefineComponent<ExtractPropTypes<    {
+id: StringConstructor;
 value: StringConstructor;
 defaultValue: {
 type: StringConstructor;
@@ -1888,6 +1891,7 @@ defaultOpen: BooleanConstructor;
 }>, () => VNode<RendererNode, RendererElement, {
 [key: string]: any;
 }>[] | undefined, {}, {}, {}, ComponentOptionsMixin, ComponentOptionsMixin, ("update:open" | "update:value")[], "update:open" | "update:value", PublicProps, Readonly<ExtractPropTypes<    {
+id: StringConstructor;
 value: StringConstructor;
 defaultValue: {
 type: StringConstructor;

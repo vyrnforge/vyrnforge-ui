@@ -9,6 +9,7 @@ import {
   watch,
   provide,
   ref,
+  useId,
   type InjectionKey,
   type Ref,
 } from 'vue';
@@ -34,6 +35,8 @@ function invoke(handler: unknown, event: Event): void {
 }
 
 interface SelectContext {
+  triggerId: Readonly<Ref<string>>;
+  listboxId: Readonly<Ref<string>>;
   open: Ref<boolean>;
   value: Ref<string>;
   anchor: Ref<HTMLElement | null>;
@@ -54,6 +57,7 @@ function useSelect(): SelectContext {
 export const SelectRoot = defineComponent({
   name: 'SelectRoot',
   props: {
+    id: String,
     value: String,
     defaultValue: { type: String, default: '' },
     open: { type: Boolean, default: undefined },
@@ -65,6 +69,10 @@ export const SelectRoot = defineComponent({
     const internalOpen = ref(props.defaultOpen);
     const value = computed(() => props.value ?? internalValue.value);
     const expanded = computed(() => props.open ?? internalOpen.value);
+    const uid = useId();
+    const rootId = computed(() => props.id ?? `vf-select-${uid}`);
+    const triggerId = computed(() => `${rootId.value}-trigger`);
+    const listboxId = computed(() => `${rootId.value}-listbox`);
     const anchor = ref<HTMLElement | null>(null);
     const surface = ref<HTMLElement | null>(null);
     const focusRequest = ref<'first' | 'last' | null>(null);
@@ -78,6 +86,8 @@ export const SelectRoot = defineComponent({
       },
     });
     provide(key, {
+      triggerId,
+      listboxId,
       open: openRef,
       value,
       anchor,
@@ -119,6 +129,8 @@ export const SelectTrigger = defineComponent({
           ref: (node: unknown) => {
             select.anchor.value = node as HTMLElement | null;
           },
+          id: select.triggerId.value,
+          'aria-controls': select.listboxId.value,
           'aria-haspopup': 'listbox',
           'aria-expanded': select.open.value,
           'data-vf-select-trigger': '',
@@ -191,6 +203,7 @@ export const SelectContent = defineComponent({
           ref: (node: unknown) => {
             select.surface.value = node as HTMLElement | null;
           },
+          id: select.listboxId.value,
           role: 'listbox',
           tabindex: -1,
           popover: 'auto',

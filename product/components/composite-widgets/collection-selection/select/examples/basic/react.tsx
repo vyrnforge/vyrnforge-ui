@@ -3,7 +3,7 @@ export function Example() {
   return (
     <SelectRoot defaultValue="one">
       <SelectTrigger>Choose</SelectTrigger>
-      <SelectContent>
+      <SelectContent aria-label="Choose an option">
         <SelectOption value="one">One</SelectOption>
         <SelectOption value="two">Two</SelectOption>
       </SelectContent>

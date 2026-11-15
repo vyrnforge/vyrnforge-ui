@@ -9,6 +9,7 @@ import {
   watch,
   provide,
   ref,
+  useId,
   type InjectionKey,
   type PropType,
   type Ref,
@@ -35,6 +36,8 @@ function invoke(handler: unknown, event: Event): void {
 }
 
 interface MultiSelectContext {
+  triggerId: Readonly<Ref<string>>;
+  listboxId: Readonly<Ref<string>>;
   open: Ref<boolean>;
   values: Ref<string[]>;
   anchor: Ref<HTMLElement | null>;
@@ -55,6 +58,7 @@ function useMulti(): MultiSelectContext {
 export const MultiSelectRoot = defineComponent({
   name: 'MultiSelectRoot',
   props: {
+    id: String,
     value: Array as PropType<string[] | undefined>,
     defaultValue: { type: Array as PropType<string[]>, default: () => [] },
   },
@@ -63,11 +67,17 @@ export const MultiSelectRoot = defineComponent({
     const internalValue = ref([...props.defaultValue]);
     const open = ref(false);
     const values = computed(() => props.value ?? internalValue.value);
+    const uid = useId();
+    const rootId = computed(() => props.id ?? `vf-multi-select-${uid}`);
+    const triggerId = computed(() => `${rootId.value}-trigger`);
+    const listboxId = computed(() => `${rootId.value}-listbox`);
     const anchor = ref<HTMLElement | null>(null);
     const surface = ref<HTMLElement | null>(null);
     const focusRequest = ref<'first' | 'last' | null>(null);
     const focusRevision = ref(0);
     provide(key, {
+      triggerId,
+      listboxId,
       open,
       values,
       anchor,
@@ -111,6 +121,8 @@ export const MultiSelectTrigger = defineComponent({
           ref: (node: unknown) => {
             multi.anchor.value = node as HTMLElement | null;
           },
+          id: multi.triggerId.value,
+          'aria-controls': multi.listboxId.value,
           'aria-haspopup': 'listbox',
           'aria-expanded': multi.open.value,
           'data-vf-multi-select-trigger': '',
@@ -132,7 +144,7 @@ export const MultiSelectTrigger = defineComponent({
             }
           },
         },
-        slots.default?.() ?? (multi.values.value.join(', ') || 'Select'),
+        slots.default?.() ?? multi.values.value.join(', '),
       );
   },
 });
@@ -183,6 +195,7 @@ export const MultiSelectContent = defineComponent({
           ref: (node: unknown) => {
             multi.surface.value = node as HTMLElement | null;
           },
+          id: multi.listboxId.value,
           role: 'listbox',
           'aria-multiselectable': 'true',
           tabindex: -1,

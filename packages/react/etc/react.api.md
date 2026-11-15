@@ -2463,7 +2463,7 @@ export const MenuTrigger: ForwardRefExoticComponent<Omit<DetailedHTMLProps<Butto
 export type MenuTriggerProps = ComponentPropsWithoutRef<'button'>;
 
 // @public (undocumented)
-export const MultiSelectContent: ForwardRefExoticComponent<Omit<DetailedHTMLProps<HTMLAttributes<HTMLDivElement>, HTMLDivElement>, "ref"> & RefAttributes<HTMLDivElement>>;
+export const MultiSelectContent: ForwardRefExoticComponent<Omit<Omit<DetailedHTMLProps<HTMLAttributes<HTMLDivElement>, HTMLDivElement>, "ref">, "id"> & RefAttributes<HTMLDivElement>>;
 
 // @public (undocumented)
 export const MultiSelectOption: ForwardRefExoticComponent<MultiSelectOptionProps & RefAttributes<HTMLButtonElement>>;
@@ -2484,13 +2484,15 @@ export interface MultiSelectRootProps {
     // (undocumented)
     defaultValue?: string[];
     // (undocumented)
+    id?: string;
+    // (undocumented)
     onValueChange?(value: string[]): void;
     // (undocumented)
     value?: string[];
 }
 
 // @public (undocumented)
-export const MultiSelectTrigger: ForwardRefExoticComponent<Omit<DetailedHTMLProps<ButtonHTMLAttributes<HTMLButtonElement>, HTMLButtonElement>, "ref"> & RefAttributes<HTMLButtonElement>>;
+export const MultiSelectTrigger: ForwardRefExoticComponent<Omit<Omit<DetailedHTMLProps<ButtonHTMLAttributes<HTMLButtonElement>, HTMLButtonElement>, "ref">, "id" | "aria-controls"> & RefAttributes<HTMLButtonElement>>;
 
 // @public (undocumented)
 export const NativeSelect: ForwardRefExoticComponent<NativeSelectProps & RefAttributes<HTMLSelectElement>>;
@@ -2812,7 +2814,7 @@ export interface SegmentedControlRootProps extends Omit<ComponentPropsWithoutRef
 }
 
 // @public (undocumented)
-export const SelectContent: ForwardRefExoticComponent<Omit<DetailedHTMLProps<HTMLAttributes<HTMLDivElement>, HTMLDivElement>, "ref"> & RefAttributes<HTMLDivElement>>;
+export const SelectContent: ForwardRefExoticComponent<Omit<Omit<DetailedHTMLProps<HTMLAttributes<HTMLDivElement>, HTMLDivElement>, "ref">, "id"> & RefAttributes<HTMLDivElement>>;
 
 // @public (undocumented)
 export const SelectOption: ForwardRefExoticComponent<SelectOptionProps & RefAttributes<HTMLButtonElement>>;
@@ -2835,6 +2837,8 @@ export interface SelectRootProps {
     // (undocumented)
     defaultValue?: string;
     // (undocumented)
+    id?: string;
+    // (undocumented)
     onOpenChange?(open: boolean): void;
     // (undocumented)
     onValueChange?(value: string): void;
@@ -2845,7 +2849,7 @@ export interface SelectRootProps {
 }
 
 // @public (undocumented)
-export const SelectTrigger: ForwardRefExoticComponent<Omit<DetailedHTMLProps<ButtonHTMLAttributes<HTMLButtonElement>, HTMLButtonElement>, "ref"> & RefAttributes<HTMLButtonElement>>;
+export const SelectTrigger: ForwardRefExoticComponent<Omit<Omit<DetailedHTMLProps<ButtonHTMLAttributes<HTMLButtonElement>, HTMLButtonElement>, "ref">, "id" | "aria-controls"> & RefAttributes<HTMLButtonElement>>;
 
 // @public (undocumented)
 export const SideNav: ForwardRefExoticComponent<Omit<DetailedHTMLProps<HTMLAttributes<HTMLElement>, HTMLElement>, "ref"> & RefAttributes<HTMLElement>>;

@@ -3,6 +3,7 @@ import { findTypeaheadMatch } from '@vyrnforge/core/typeahead-matching';
 
 const H: typeof HTMLElement = globalThis.HTMLElement ?? (class {} as typeof HTMLElement);
 const rootSelector = '[data-vf-select-root],vf-select';
+let nextSelectId = 0;
 const optionSelector = '[data-vf-select-option]';
 function optionsFor(root: HTMLElement): HTMLElement[] {
   return Array.from(root.querySelectorAll<HTMLElement>(optionSelector)).filter(
@@ -26,6 +27,7 @@ function optionValue(option: HTMLElement): string {
 
 export class VfSelectElement extends H {
   static observedAttributes = ['open', 'value'];
+  private readonly generatedListboxId = `vf-select-${++nextSelectId}-listbox`;
   private surface: HTMLElement | null = null;
   private restoreFocus = false;
   private observer: MutationObserver | null = null;
@@ -42,7 +44,7 @@ export class VfSelectElement extends H {
         childList: true,
         subtree: true,
         attributes: true,
-        attributeFilter: ['open', 'disabled', 'aria-disabled', 'data-vf-select-option', 'data-vf-value', 'value'],
+        attributeFilter: ['id', 'open', 'disabled', 'aria-disabled', 'data-vf-select-option', 'data-vf-value', 'value'],
       });
     }
     this.sync();
@@ -101,12 +103,14 @@ export class VfSelectElement extends H {
     trigger?.setAttribute('aria-haspopup', 'listbox');
     trigger?.setAttribute('aria-expanded', String(open));
     if (content) {
+      content.id ||= this.id ? `${this.id}-listbox` : this.generatedListboxId;
+      trigger?.setAttribute('aria-controls', content.id);
       content.setAttribute('role', 'listbox');
       content.tabIndex = -1;
       content.setAttribute('popover', 'auto');
       content.removeAttribute('hidden');
       content.toggleAttribute('data-vf-open', open);
-    }
+    } else trigger?.removeAttribute('aria-controls');
     for (const option of optionsFor(this)) {
       option.setAttribute('role', 'option');
       option.tabIndex = -1;

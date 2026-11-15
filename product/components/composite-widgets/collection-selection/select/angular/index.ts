@@ -1,7 +1,9 @@
 import {
+  APP_ID,
   DestroyRef,
   Directive,
   ElementRef,
+  InjectionToken,
   afterRenderEffect,
   computed,
   inject,
@@ -12,6 +14,15 @@ import {
 } from '@angular/core';
 import { resolveNavigationIndex } from '@vyrnforge/core/collection-navigation';
 import { findTypeaheadMatch } from '@vyrnforge/core/typeahead-matching';
+
+const SELECT_ID_GENERATOR = new InjectionToken<() => string>('VyrnForge Select ID generator', {
+  providedIn: 'root',
+  factory: () => {
+    const appId = inject(APP_ID);
+    let nextId = 0;
+    return () => `vf-select-${appId}-${nextId++}`;
+  },
+});
 
 const optionSelector = '[data-vf-select-option]';
 type FocusRequest = 'first' | 'last' | 'next' | 'previous';
@@ -78,8 +89,17 @@ function requestFocus(root: VfSelectRootDirective, request: FocusRequest): void 
   state.focusRevision.update((revision) => revision + 1);
 }
 
-@Directive({ selector: '[vfSelectRoot]', standalone: true })
+@Directive({
+  selector: '[vfSelectRoot]',
+  standalone: true,
+  host: { '[attr.id]': 'rootId()' },
+})
 export class VfSelectRootDirective {
+  readonly id = input<string | undefined>(undefined);
+  private readonly generatedId = inject(SELECT_ID_GENERATOR)();
+  readonly rootId = computed(() => this.id() ?? this.generatedId);
+  readonly triggerId = computed(() => `${this.rootId()}-trigger`);
+  readonly listboxId = computed(() => `${this.rootId()}-listbox`);
   readonly value = input<string | undefined>(undefined);
   readonly defaultValue = input('');
   readonly open = input<boolean | undefined>(undefined);
@@ -109,6 +129,8 @@ export class VfSelectRootDirective {
   standalone: true,
   host: {
     type: 'button',
+    '[id]': 'root.triggerId()',
+    '[attr.aria-controls]': 'root.listboxId()',
     'aria-haspopup': 'listbox',
     'data-vf-select-trigger': '',
     '[attr.aria-expanded]': 'root.expanded()',
@@ -162,6 +184,7 @@ export class VfSelectTriggerDirective {
   selector: '[vfSelectContent]',
   standalone: true,
   host: {
+    '[id]': 'root.listboxId()',
     role: 'listbox',
     tabindex: '-1',
     'data-vf-select-content': '',

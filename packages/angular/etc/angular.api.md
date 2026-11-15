@@ -1856,9 +1856,17 @@ export class VfMultiSelectRootDirective {
     // (undocumented)
     readonly defaultValue: InputSignal<string[]>;
     // (undocumented)
+    readonly id: InputSignal<string | undefined>;
+    // (undocumented)
+    readonly listboxId: Signal<string>;
+    // (undocumented)
     readonly open: WritableSignal<boolean>;
     // (undocumented)
+    readonly rootId: Signal<string>;
+    // (undocumented)
     toggle(v: string): void;
+    // (undocumented)
+    readonly triggerId: Signal<string>;
     // (undocumented)
     readonly value: InputSignal<string[] | undefined>;
     // (undocumented)
@@ -1867,6 +1875,11 @@ export class VfMultiSelectRootDirective {
     readonly values: Signal<string[]>;
     // (undocumented)
     static ɵdir: i0.ɵɵDirectiveDeclaration<VfMultiSelectRootDirective, "[vfMultiSelectRoot]", never, {
+        "id": {
+            "alias": "id";
+            "required": false;
+            "isSignal": true;
+        };
         "value": {
             "alias": "value";
             "required": false;
@@ -2804,9 +2817,15 @@ export class VfSelectRootDirective {
     // (undocumented)
     readonly expanded: Signal<boolean>;
     // (undocumented)
+    readonly id: InputSignal<string | undefined>;
+    // (undocumented)
+    readonly listboxId: Signal<string>;
+    // (undocumented)
     readonly open: InputSignal<boolean | undefined>;
     // (undocumented)
     readonly openChange: OutputEmitterRef<boolean>;
+    // (undocumented)
+    readonly rootId: Signal<string>;
     // (undocumented)
     readonly selected: Signal<string>;
     // (undocumented)
@@ -2814,11 +2833,18 @@ export class VfSelectRootDirective {
     // (undocumented)
     setValue(v: string): void;
     // (undocumented)
+    readonly triggerId: Signal<string>;
+    // (undocumented)
     readonly value: InputSignal<string | undefined>;
     // (undocumented)
     readonly valueChange: OutputEmitterRef<string>;
     // (undocumented)
     static ɵdir: i0.ɵɵDirectiveDeclaration<VfSelectRootDirective, "[vfSelectRoot]", never, {
+        "id": {
+            "alias": "id";
+            "required": false;
+            "isSignal": true;
+        };
         "value": {
             "alias": "value";
             "required": false;

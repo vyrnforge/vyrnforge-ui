@@ -3,6 +3,7 @@ import { findTypeaheadMatch } from '@vyrnforge/core/typeahead-matching';
 
 const H: typeof HTMLElement = globalThis.HTMLElement ?? (class {} as typeof HTMLElement);
 const rootMultiSelector = '[data-vf-multi-select-root],vf-multi-select';
+let nextMultiSelectId = 0;
 const optionMultiSelector = '[data-vf-multi-select-option]';
 function optionsFor(root: HTMLElement): HTMLElement[] {
   return Array.from(root.querySelectorAll<HTMLElement>(optionMultiSelector)).filter(
@@ -28,6 +29,7 @@ function optionValue(option: HTMLElement): string {
 
 export class VfMultiSelectElement extends H {
   static observedAttributes = ['open'];
+  private readonly generatedListboxId = `vf-multi-select-${++nextMultiSelectId}-listbox`;
   private surface: HTMLElement | null = null;
   private restoreFocus = false;
   private observer: MutationObserver | null = null;
@@ -45,6 +47,7 @@ export class VfMultiSelectElement extends H {
         subtree: true,
         attributes: true,
         attributeFilter: [
+          'id',
           'open',
           'disabled',
           'aria-disabled',
@@ -111,13 +114,15 @@ export class VfMultiSelectElement extends H {
     trigger?.setAttribute('aria-haspopup', 'listbox');
     trigger?.setAttribute('aria-expanded', String(open));
     if (content) {
+      content.id ||= this.id ? `${this.id}-listbox` : this.generatedListboxId;
+      trigger?.setAttribute('aria-controls', content.id);
       content.setAttribute('role', 'listbox');
       content.setAttribute('aria-multiselectable', 'true');
       content.tabIndex = -1;
       content.setAttribute('popover', 'auto');
       content.removeAttribute('hidden');
       content.toggleAttribute('data-vf-open', open);
-    }
+    } else trigger?.removeAttribute('aria-controls');
     for (const option of optionsFor(this)) {
       option.setAttribute('role', 'option');
       option.tabIndex = -1;
