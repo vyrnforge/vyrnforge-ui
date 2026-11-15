@@ -1,0 +1,16 @@
+name: L5 native controls cross-browser proof (temporary)
+on:
+  push:
+    branches: [evidence/l5-native-controls-cross]
+permissions:
+  contents: read
+jobs:
+  browser-matrix:
+    uses: ./.github/workflows/_browser-validation.yml
+    with:
+      scopes_json: '[{"port":"web","components":"segmented-control,password-field,color-picker,otp-field,number-field"},{"port":"react","components":"segmented-control,password-field,color-picker,otp-field,number-field"},{"port":"angular","components":"segmented-control,password-field,color-picker,otp-field,number-field"},{"port":"vue","components":"segmented-control,password-field,color-picker,otp-field,number-field"},{"port":"elements","components":"segmented-control,password-field,color-picker,otp-field,number-field"}]'
+      revision: ${{ github.sha }}
+      browser_profile: cross
+      browsers: chromium firefox webkit
+      artifact_suffix: l5-native-controls
+      retention_days: 14
