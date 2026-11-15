@@ -152,7 +152,8 @@ test('Elements menu events remain scoped to the owning nested menu', async ({ pa
     const outer = trigger.closest('vf-menu');
     const nested = document.createElement('vf-menu');
     nested.id = 'nested-menu';
-    nested.innerHTML = '<button id="nested-trigger" type="button" data-vf-menu-trigger>Nested actions</button><div id="nested-content" data-vf-menu-content aria-label="Nested actions"><button id="nested-item" type="button" data-vf-menu-item>Nested command</button></div>';
+    nested.innerHTML =
+      '<button id="nested-trigger" type="button" data-vf-menu-trigger>Nested actions</button><div id="nested-content" data-vf-menu-content aria-label="Nested actions"><button id="nested-item" type="button" data-vf-menu-item>Nested command</button></div>';
     outer.append(nested);
     outer.addEventListener('vf-select', (event) => {
       if (event.target === outer) document.body.dataset.outerSelected = 'true';

@@ -25,7 +25,9 @@ test('split button has independently authored primary and menu-trigger names', a
   expect((await expectNoAxeViolations(page)).violations).toEqual([]);
 });
 
-test('runtime split button keeps primary activation independent and inherits keyboard menu behavior', async ({ page }) => {
+test('runtime split button keeps primary activation independent and inherits keyboard menu behavior', async ({
+  page,
+}) => {
   test.skip(port === 'web', 'Web owns authored native button and CSS semantics.');
   await page.goto(`/components/split-button/${port}.html`);
   if (port === 'elements') await expect(page.locator('body')).toHaveAttribute('data-split-ready', 'true');

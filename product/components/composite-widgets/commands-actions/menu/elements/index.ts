@@ -55,7 +55,10 @@ export class VfMenuElement extends HTMLElementBase {
   }
 
   private ownedPart(selector: string): HTMLElement | null {
-    return Array.from(this.querySelectorAll<HTMLElement>(selector)).find((node) => node.closest(rootSelector) === this) ?? null;
+    return (
+      Array.from(this.querySelectorAll<HTMLElement>(selector)).find((node) => node.closest(rootSelector) === this) ??
+      null
+    );
   }
 
   private get trigger(): HTMLElement | null {
@@ -185,7 +188,10 @@ export class VfMenuElement extends HTMLElementBase {
         this.query = '';
       }, 500);
       next = findTypeaheadMatch(
-        items.map((item) => ({ textValue: item.dataset.vfTextValue ?? item.textContent ?? '', eligible: !item.matches(':disabled') })),
+        items.map((item) => ({
+          textValue: item.dataset.vfTextValue ?? item.textContent ?? '',
+          eligible: !item.matches(':disabled'),
+        })),
         this.query,
         { startIndex: current },
       );

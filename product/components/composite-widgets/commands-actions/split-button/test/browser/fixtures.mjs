@@ -1,6 +1,8 @@
 const action = '<button id="action" type="button" data-vf-split-button-action>Save</button>';
-const trigger = '<button id="trigger" type="button" aria-haspopup="menu" aria-expanded="false" aria-label="More save options" data-vf-split-button-trigger>More</button>';
-const content = '<div id="menu" role="menu" aria-label="Save options" data-vf-split-button-content hidden><button id="copy" type="button" role="menuitem">Save as copy</button><button id="archive" type="button" role="menuitem">Save and archive</button></div>';
+const trigger =
+  '<button id="trigger" type="button" aria-haspopup="menu" aria-expanded="false" aria-label="More save options" data-vf-split-button-trigger>More</button>';
+const content =
+  '<div id="menu" role="menu" aria-label="Save options" data-vf-split-button-content hidden><button id="copy" type="button" role="menuitem">Save as copy</button><button id="archive" type="button" role="menuitem">Save and archive</button></div>';
 const before = '<button id="before" type="button">Before</button>';
 const after = '<button id="after" type="button">After</button>';
 
