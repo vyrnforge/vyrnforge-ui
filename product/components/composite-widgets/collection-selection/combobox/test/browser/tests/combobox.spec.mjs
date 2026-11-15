@@ -281,7 +281,6 @@ test('native read-only and disabled fieldset prevent Combobox requests and prese
   await expect(input).toHaveAttribute('aria-activedescendant', `${port}-react`);
 });
 
-
 test('Combobox commits authored text while retaining the distinct semantic option key', async ({ page }) => {
   test.skip(port === 'web', 'Managed runtime evidence.');
   await load(page);

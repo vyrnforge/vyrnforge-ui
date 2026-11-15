@@ -510,21 +510,33 @@ defaultValue: {
 type: StringConstructor;
 default: string;
 };
+query: StringConstructor;
+defaultQuery: {
+type: StringConstructor;
+default: string;
+};
 locale: StringConstructor;
 }>, () => VNode<RendererNode, RendererElement, {
 [key: string]: any;
-}>[] | undefined, {}, {}, {}, ComponentOptionsMixin, ComponentOptionsMixin, "update:value"[], "update:value", PublicProps, Readonly<ExtractPropTypes<    {
+}>[] | undefined, {}, {}, {}, ComponentOptionsMixin, ComponentOptionsMixin, ("update:value" | "update:query")[], "update:value" | "update:query", PublicProps, Readonly<ExtractPropTypes<    {
 id: StringConstructor;
 value: StringConstructor;
 defaultValue: {
 type: StringConstructor;
 default: string;
 };
+query: StringConstructor;
+defaultQuery: {
+type: StringConstructor;
+default: string;
+};
 locale: StringConstructor;
 }>> & Readonly<{
 "onUpdate:value"?: (...args: any[]) => any;
+"onUpdate:query"?: (...args: any[]) => any;
 }>, {
 defaultValue: string;
+defaultQuery: string;
 }, {}, {}, {}, string, ComponentProvideOptions, true, {}, any>;
 
 // @public (undocumented)

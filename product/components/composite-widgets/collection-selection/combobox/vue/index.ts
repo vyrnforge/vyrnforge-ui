@@ -80,7 +80,14 @@ function moveActive(context: Ctx, intent: Extract<CollectionNavigationIntent, 'n
 
 export const ComboboxRoot = defineComponent({
   name: 'ComboboxRoot',
-  props: { id: String, value: String, defaultValue: { type: String, default: '' }, query: String, defaultQuery: { type: String, default: '' }, locale: String },
+  props: {
+    id: String,
+    value: String,
+    defaultValue: { type: String, default: '' },
+    query: String,
+    defaultQuery: { type: String, default: '' },
+    locale: String,
+  },
   emits: ['update:value', 'update:query'],
   setup(props, { slots, emit }) {
     const internalValue = ref(props.defaultValue);
@@ -101,12 +108,15 @@ export const ComboboxRoot = defineComponent({
       if (props.query === undefined) internalQuery.value = next;
       emit('update:query', next);
     }
-    watch(() => props.value, (next) => {
-      if (!pending || next === pending.previous) return;
-      const request = pending;
-      pending = null;
-      if (next === request.value) requestQuery(request.label);
-    });
+    watch(
+      () => props.value,
+      (next) => {
+        if (!pending || next === pending.previous) return;
+        const request = pending;
+        pending = null;
+        if (next === request.value) requestQuery(request.label);
+      },
+    );
     const context: Ctx = {
       query,
       value,
@@ -177,7 +187,8 @@ export const ComboboxInput = defineComponent({
           const input = event.target as HTMLInputElement;
           if (!event.defaultPrevented) context.setQuery(input.value);
           void nextTick(() => {
-            if (context.inputRef.value === input && input.value !== context.query.value) input.value = context.query.value;
+            if (context.inputRef.value === input && input.value !== context.query.value)
+              input.value = context.query.value;
           });
         },
         onFocus: (event: FocusEvent) => {

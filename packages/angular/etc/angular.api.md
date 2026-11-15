@@ -832,10 +832,13 @@ export class VfComboboxOptionDirective {
 
 // @public (undocumented)
 export class VfComboboxRootDirective {
+    constructor();
     // (undocumented)
     activateActive(): boolean;
     // (undocumented)
     readonly activeId: WritableSignal<string | null>;
+    // (undocumented)
+    readonly defaultQuery: InputSignal<string>;
     // (undocumented)
     readonly defaultValue: InputSignal<string>;
     // (undocumented)
@@ -853,9 +856,15 @@ export class VfComboboxRootDirective {
     // (undocumented)
     nextOptionId(): string;
     // (undocumented)
+    ngOnInit(): void;
+    // (undocumented)
     readonly open: WritableSignal<boolean>;
     // (undocumented)
-    readonly query: WritableSignal<string>;
+    readonly query: InputSignal<string | undefined>;
+    // (undocumented)
+    readonly queryChange: OutputEmitterRef<string>;
+    // (undocumented)
+    readonly queryText: Signal<string>;
     // (undocumented)
     readonly rootId: Signal<string>;
     // (undocumented)
@@ -865,7 +874,7 @@ export class VfComboboxRootDirective {
     // (undocumented)
     setQuery(value: string): void;
     // (undocumented)
-    setValue(value: string): void;
+    setValue(value: string, label?: string): void;
     // (undocumented)
     readonly value: InputSignal<string | undefined>;
     // (undocumented)
@@ -887,12 +896,23 @@ export class VfComboboxRootDirective {
             "required": false;
             "isSignal": true;
         };
+        "query": {
+            "alias": "query";
+            "required": false;
+            "isSignal": true;
+        };
+        "defaultQuery": {
+            "alias": "defaultQuery";
+            "required": false;
+            "isSignal": true;
+        };
         "locale": {
             "alias": "locale";
             "required": false;
             "isSignal": true;
         };
     }, {
+        "queryChange": "queryChange";
         "valueChange": "valueChange";
     }, never, never, true, never>;
     // (undocumented)

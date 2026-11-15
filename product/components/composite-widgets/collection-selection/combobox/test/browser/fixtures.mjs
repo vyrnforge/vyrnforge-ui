@@ -94,7 +94,11 @@ export async function createReactStory() {
         'After',
       ),
       h('button', { id: 'accept-selection', type: 'button', onClick: () => setAccept(true) }, 'Accept selection'),
-      h('button', { id: 'external-selection', type: 'button', onClick: () => setControlledValue('react-key') }, 'External selection'),
+      h(
+        'button',
+        { id: 'external-selection', type: 'button', onClick: () => setControlledValue('react-key') },
+        'External selection',
+      ),
       h(
         ComboboxRoot,
         {
@@ -111,8 +115,17 @@ export async function createReactStory() {
           },
         },
         h(ComboboxInput, { 'aria-label': 'Controlled framework', name: 'query' }),
-        h(ComboboxContent, { 'aria-label': 'Controlled framework options' },
-          ...controlledItems.map((row) => h(ComboboxOption, { key: row.key, id: 'controlled-' + row.key, value: row.value, textValue: row.label }, row.label))),
+        h(
+          ComboboxContent,
+          { 'aria-label': 'Controlled framework options' },
+          ...controlledItems.map((row) =>
+            h(
+              ComboboxOption,
+              { key: row.key, id: 'controlled-' + row.key, value: row.value, textValue: row.label },
+              row.label,
+            ),
+          ),
+        ),
       ),
     );
   }
@@ -166,25 +179,44 @@ export async function createVueStory() {
             { id: 'after', type: 'button', style: { position: 'fixed', right: '16px', bottom: '16px' } },
             'After',
           ),
-          h('button', { id: 'accept-selection', type: 'button', onClick: () => (accept.value = true) }, 'Accept selection'),
-          h('button', { id: 'external-selection', type: 'button', onClick: () => (controlledValue.value = 'react-key') }, 'External selection'),
-          h(ComboboxRoot, {
-            id: 'controlled-combo',
-            value: controlledValue.value,
-            query: controlledQuery.value,
-            'onUpdate:value': (next) => {
-              document.body.dataset.controlledValue = next;
-              if (accept.value) controlledValue.value = next;
+          h(
+            'button',
+            { id: 'accept-selection', type: 'button', onClick: () => (accept.value = true) },
+            'Accept selection',
+          ),
+          h(
+            'button',
+            { id: 'external-selection', type: 'button', onClick: () => (controlledValue.value = 'react-key') },
+            'External selection',
+          ),
+          h(
+            ComboboxRoot,
+            {
+              id: 'controlled-combo',
+              value: controlledValue.value,
+              query: controlledQuery.value,
+              'onUpdate:value': (next) => {
+                document.body.dataset.controlledValue = next;
+                if (accept.value) controlledValue.value = next;
+              },
+              'onUpdate:query': (next) => {
+                document.body.dataset.controlledQuery = next;
+                if (next !== 'blocked') controlledQuery.value = next;
+              },
             },
-            'onUpdate:query': (next) => {
-              document.body.dataset.controlledQuery = next;
-              if (next !== 'blocked') controlledQuery.value = next;
-            },
-          }, () => [
-            h(ComboboxInput, { 'aria-label': 'Controlled framework', name: 'query' }),
-            h(ComboboxContent, { 'aria-label': 'Controlled framework options' }, () => controlledItems.map((row) =>
-              h(ComboboxOption, { key: row.key, id: 'controlled-' + row.key, value: row.value, textValue: row.label }, () => row.label))),
-          ]),
+            () => [
+              h(ComboboxInput, { 'aria-label': 'Controlled framework', name: 'query' }),
+              h(ComboboxContent, { 'aria-label': 'Controlled framework options' }, () =>
+                controlledItems.map((row) =>
+                  h(
+                    ComboboxOption,
+                    { key: row.key, id: 'controlled-' + row.key, value: row.value, textValue: row.label },
+                    () => row.label,
+                  ),
+                ),
+              ),
+            ],
+          ),
         ]);
     },
   });

@@ -322,6 +322,7 @@ export class VfComboboxOptionDirective {
       ),
   );
   select(event: MouseEvent) {
-    if (!event.defaultPrevented && !this.disabled() && !this.hidden()) this.root.setValue(this.value(), this.textValue() || this.value());
+    if (!event.defaultPrevented && !this.disabled() && !this.hidden())
+      this.root.setValue(this.value(), this.textValue() || this.value());
   }
 }

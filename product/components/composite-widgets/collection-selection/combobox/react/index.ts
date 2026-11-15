@@ -88,7 +88,15 @@ export interface ComboboxRootProps {
   onQueryChange?(query: string): void;
 }
 export function ComboboxRoot({
-  children, id, value, defaultValue = '', query: controlledQuery, defaultQuery = '', locale, onValueChange, onQueryChange,
+  children,
+  id,
+  value,
+  defaultValue = '',
+  query: controlledQuery,
+  defaultQuery = '',
+  locale,
+  onValueChange,
+  onQueryChange,
 }: ComboboxRootProps) {
   const [internalValue, setInternalValue] = useState(defaultValue);
   const [open, setOpenState] = useState(false);
@@ -103,11 +111,14 @@ export function ComboboxRoot({
   const anchorRef = useRef<HTMLInputElement | null>(null);
   const surfaceRef = useRef<HTMLElement | null>(null);
   const selected = value ?? internalValue;
-  const requestQuery = useCallback((next: string) => {
-    if (next === query) return;
-    if (controlledQuery === undefined) setInternalQuery(next);
-    onQueryChange?.(next);
-  }, [controlledQuery, onQueryChange, query]);
+  const requestQuery = useCallback(
+    (next: string) => {
+      if (next === query) return;
+      if (controlledQuery === undefined) setInternalQuery(next);
+      onQueryChange?.(next);
+    },
+    [controlledQuery, onQueryChange, query],
+  );
   useEffect(() => {
     const request = pending.current;
     if (!request || value === request.previous) return;
