@@ -1,0 +1,16 @@
+name: popover L5 cross-engine evidence
+on:
+  push:
+    branches: [evidence/l5-popover-geometry-cross]
+permissions:
+  contents: read
+jobs:
+  browser:
+    uses: ./.github/workflows/_browser-validation.yml
+    with:
+      scopes_json: '[{"port":"web","components":"popover"},{"port":"react","components":"popover"},{"port":"vue","components":"popover"},{"port":"angular","components":"popover"},{"port":"elements","components":"popover"}]'
+      revision: ${{ github.sha }}
+      browser_profile: cross
+      browsers: chromium firefox webkit
+      artifact_suffix: popover-final-cross
+      retention_days: 14
