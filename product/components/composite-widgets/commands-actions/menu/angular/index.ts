@@ -1,24 +1,25 @@
 import {
   Directive,
   ElementRef,
-  Injector,
-  afterNextRender,
+  afterRenderEffect,
   computed,
   inject,
   input,
   output,
   signal,
+  type OnDestroy,
 } from '@angular/core';
 import { resolveNavigationIndex } from '@vyrnforge/core/collection-navigation';
 import { findTypeaheadMatch } from '@vyrnforge/core/typeahead-matching';
+import type { FloatingPlacement } from '@vyrnforge/web/floating-positioning';
 
 const menuItemSelector = '[data-vf-menu-item]';
 function menuItems(root: HTMLElement): HTMLElement[] {
-  return Array.from(root.querySelectorAll<HTMLElement>(menuItemSelector));
+  return Array.from(root.querySelectorAll<HTMLElement>(menuItemSelector)).filter((item) => item.closest('[data-vf-menu-content]') === root);
 }
 function itemFromTarget(root: HTMLElement, target: EventTarget | null): HTMLElement | null {
   const item = target instanceof HTMLElement ? target.closest<HTMLElement>(menuItemSelector) : null;
-  return item && root.contains(item) ? item : null;
+  return item && item.closest('[data-vf-menu-content]') === root ? item : null;
 }
 
 @Directive({ selector: '[vfMenuRoot]', standalone: true })
@@ -26,30 +27,32 @@ export class VfMenuRootDirective {
   readonly open = input<boolean | undefined>(undefined);
   readonly defaultOpen = input(false);
   readonly openChange = output<boolean>();
-  private readonly injector = inject(Injector);
+  readonly placement = input<FloatingPlacement>('bottom-start');
+  private readonly focusRevision = signal(0);
+  private focusRequest: 'first' | 'last' | null = null;
   private internal = signal(false);
   private initialized = signal(false);
   readonly expanded = computed(() => this.open() ?? (this.initialized() ? this.internal() : this.defaultOpen()));
   anchor: HTMLElement | null = null;
   surface: HTMLElement | null = null;
   setOpen(next: boolean) {
+    if (next === this.expanded()) return;
     this.initialized.set(true);
     if (this.open() === undefined) this.internal.set(next);
     this.openChange.emit(next);
   }
   focusMenu(edge: 'first' | 'last') {
-    afterNextRender(
-      () => {
-        const items = this.surface ? menuItems(this.surface) : [];
-        const index = resolveNavigationIndex(
-          items.map(() => ({})),
-          edge === 'first' ? -1 : items.length,
-          edge,
-        );
-        if (index != null) items[index]?.focus();
-      },
-      { injector: this.injector },
-    );
+    this.focusRequest = edge;
+    this.focusRevision.update((revision) => revision + 1);
+  }
+  syncFocus(): void {
+    this.focusRevision();
+    const edge = this.focusRequest;
+    this.focusRequest = null;
+    if (!edge || !this.expanded() || !this.surface?.matches(':popover-open')) return;
+    const items = menuItems(this.surface);
+    const index = resolveNavigationIndex(items.map(() => ({})), edge === 'first' ? -1 : items.length, edge);
+    if (index != null) items[index]?.focus();
   }
 }
 
@@ -99,23 +102,66 @@ export class VfMenuTriggerDirective {
     role: 'menu',
     tabindex: '-1',
     'data-vf-menu-content': '',
-    '[hidden]': '!root.expanded()',
+    popover: 'auto',
+    '[attr.data-vf-open]': 'root.expanded() ? "" : null',
+    '[attr.data-vf-placement]': 'root.placement()',
+    '(beforetoggle)': 'onBeforeToggle($event)',
+    '(toggle)': 'onToggle($event)',
     '(keydown)': 'onKeydown($event)',
   },
 })
-export class VfMenuContentDirective {
+export class VfMenuContentDirective implements OnDestroy {
   private readonly element = inject<ElementRef<HTMLElement>>(ElementRef);
   private query = '';
   private timer: ReturnType<typeof setTimeout> | null = null;
+  private readonly nativeRevision = signal(0);
+  private restoreFocus = false;
   constructor(readonly root: VfMenuRootDirective) {
     this.root.surface = this.element.nativeElement;
+    afterRenderEffect(() => {
+      this.nativeRevision();
+      const open = this.root.expanded();
+      const surface = this.element.nativeElement;
+      const trigger = this.root.anchor;
+      if (trigger) {
+        if (open && !surface.matches(':popover-open')) surface.showPopover({ source: trigger });
+        if (!open && surface.matches(':popover-open')) surface.hidePopover();
+      }
+      if (!open) {
+        if (this.timer !== null) clearTimeout(this.timer);
+        this.timer = null;
+        this.query = '';
+      }
+      this.root.syncFocus();
+    });
+  }
+  onBeforeToggle(event: Event): void {
+    const surface = this.element.nativeElement;
+    if (event.target !== surface) return;
+    this.restoreFocus = surface.matches(':popover-open') && surface.contains(surface.ownerDocument.activeElement);
+  }
+  onToggle(event: Event): void {
+    const surface = this.element.nativeElement;
+    if (event.target !== surface) return;
+    const actual = surface.matches(':popover-open');
+    if (!actual && this.restoreFocus) {
+      this.restoreFocus = false;
+      const active = surface.ownerDocument.activeElement;
+      if (!active || active === surface.ownerDocument.body || surface.contains(active)) this.root.anchor?.focus();
+    }
+    if (actual === this.root.expanded()) return;
+    this.root.setOpen(actual);
+    this.nativeRevision.update((revision) => revision + 1);
+  }
+  ngOnDestroy(): void {
+    if (this.timer !== null) clearTimeout(this.timer);
+    if (this.root.surface === this.element.nativeElement) this.root.surface = null;
   }
   onKeydown(event: KeyboardEvent) {
-    if (event.defaultPrevented) return;
+    if (event.defaultPrevented || !(event.target instanceof HTMLElement) || event.target.closest('[data-vf-menu-content]') !== this.element.nativeElement) return;
     if (event.key === 'Escape') {
       event.preventDefault();
       this.root.setOpen(false);
-      this.root.anchor?.focus();
       return;
     }
     if (event.key === 'Tab') {
@@ -181,7 +227,6 @@ export class VfMenuItemDirective {
     }
     this.selected.emit();
     this.root.setOpen(false);
-    this.root.anchor?.focus();
   }
 }
 
