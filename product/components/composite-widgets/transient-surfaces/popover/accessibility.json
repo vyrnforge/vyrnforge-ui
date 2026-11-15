@@ -26,7 +26,7 @@
   "evidence": { "browser": "required", "assistiveTechnology": "review-required" },
   "profileVariability": [],
   "notes": [
-    "Trigger/content semantics and controlled focus policy require convergence.",
+    "Native auto popover owns top-layer, light-dismiss and nested Escape. Root owns content ID and role; controlled owners receive native close requests and rejected requests reconcile to committed state. Real public-port evidence is required.",
     "#1280 owns platform-first migration; do not add a generic overlay manager.",
     "Audit mapping is provisional; not a conformance claim."
   ]
