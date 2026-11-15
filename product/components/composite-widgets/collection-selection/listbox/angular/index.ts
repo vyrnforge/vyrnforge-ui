@@ -21,7 +21,9 @@ function normalize(value: ListboxValue | undefined): string[] {
   return value === undefined ? [] : typeof value === 'string' ? (value ? [value] : []) : value;
 }
 function optionsFor(root: HTMLElement): HTMLElement[] {
-  return Array.from(root.querySelectorAll<HTMLElement>(optionSelector)).filter(option => option.closest(rootSelector) === root);
+  return Array.from(root.querySelectorAll<HTMLElement>(optionSelector)).filter(
+    (option) => option.closest(rootSelector) === root,
+  );
 }
 function disabled(option: HTMLElement): boolean {
   return option.getAttribute('aria-disabled') === 'true' || option.matches(':disabled,[hidden]');
@@ -91,7 +93,14 @@ export class VfListboxRootDirective implements OnDestroy {
         childList: true,
         subtree: true,
         attributes: true,
-        attributeFilter: ['aria-disabled', 'aria-selected', 'data-vf-listbox-option', 'disabled', 'hidden', 'data-vf-listbox-root'],
+        attributeFilter: [
+          'aria-disabled',
+          'aria-selected',
+          'data-vf-listbox-option',
+          'disabled',
+          'hidden',
+          'data-vf-listbox-root',
+        ],
       });
     }
   });
@@ -125,7 +134,12 @@ export class VfListboxRootDirective implements OnDestroy {
   onKeydown(event: KeyboardEvent) {
     if (event.defaultPrevented) return;
     const root = this.element.nativeElement;
-    if (!(event.target instanceof Element) || event.target.closest(rootSelector) !== root || (event.target !== root && !optionFromTarget(root, event.target))) return;
+    if (
+      !(event.target instanceof Element) ||
+      event.target.closest(rootSelector) !== root ||
+      (event.target !== root && !optionFromTarget(root, event.target))
+    )
+      return;
     const options = optionsFor(root);
     const currentOption = optionFromTarget(root, event.target);
     const current = currentOption ? options.indexOf(currentOption) : -1;
@@ -148,7 +162,10 @@ export class VfListboxRootDirective implements OnDestroy {
         this.query = '';
       }, 500);
       next = findTypeaheadMatch(
-        options.map((option) => ({ textValue: option.dataset.vfTextValue ?? option.textContent ?? '', eligible: !disabled(option) })),
+        options.map((option) => ({
+          textValue: option.dataset.vfTextValue ?? option.textContent ?? '',
+          eligible: !disabled(option),
+        })),
         this.query,
         { startIndex: current },
       );

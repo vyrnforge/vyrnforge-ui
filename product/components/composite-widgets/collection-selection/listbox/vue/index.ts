@@ -30,7 +30,9 @@ function useListbox() {
 const rootSelector = '[data-vf-listbox-root],vf-listbox';
 const optionSelector = '[data-vf-listbox-option]';
 function optionsFor(root: HTMLElement): HTMLElement[] {
-  return Array.from(root.querySelectorAll<HTMLElement>(optionSelector)).filter(option => option.closest(rootSelector) === root);
+  return Array.from(root.querySelectorAll<HTMLElement>(optionSelector)).filter(
+    (option) => option.closest(rootSelector) === root,
+  );
 }
 function disabled(option: HTMLElement): boolean {
   return option.getAttribute('aria-disabled') === 'true' || option.matches(':disabled,[hidden]');
@@ -112,7 +114,14 @@ export const ListboxRoot = defineComponent({
           childList: true,
           subtree: true,
           attributes: true,
-          attributeFilter: ['aria-disabled', 'aria-selected', 'data-vf-listbox-option', 'disabled', 'hidden', 'data-vf-listbox-root'],
+          attributeFilter: [
+            'aria-disabled',
+            'aria-selected',
+            'data-vf-listbox-option',
+            'disabled',
+            'hidden',
+            'data-vf-listbox-root',
+          ],
         });
       }
     });
@@ -140,7 +149,12 @@ export const ListboxRoot = defineComponent({
             invoke(attrs.onKeydown, event);
             if (event.defaultPrevented) return;
             const element = event.currentTarget as HTMLElement;
-            if (!(event.target instanceof Element) || event.target.closest(rootSelector) !== element || (event.target !== element && !optionFromTarget(element, event.target))) return;
+            if (
+              !(event.target instanceof Element) ||
+              event.target.closest(rootSelector) !== element ||
+              (event.target !== element && !optionFromTarget(element, event.target))
+            )
+              return;
             const options = optionsFor(element);
             const currentOption = optionFromTarget(element, event.target);
             const current = currentOption ? options.indexOf(currentOption) : -1;
@@ -210,7 +224,11 @@ export const ListboxOption = defineComponent({
           },
           onKeydown: (event: KeyboardEvent) => {
             invoke(attrs.onKeydown, event);
-            if (!event.defaultPrevented && !disabled(event.currentTarget as HTMLElement) && (event.key === 'Enter' || event.key === ' ')) {
+            if (
+              !event.defaultPrevented &&
+              !disabled(event.currentTarget as HTMLElement) &&
+              (event.key === 'Enter' || event.key === ' ')
+            ) {
               event.preventDefault();
               listbox.select(props.value);
             }

@@ -30,7 +30,9 @@ function useListbox() {
 const rootSelector = '[data-vf-listbox-root],vf-listbox';
 const optionSelector = '[data-vf-listbox-option]';
 function optionsFor(root: HTMLElement): HTMLElement[] {
-  return Array.from(root.querySelectorAll<HTMLElement>(optionSelector)).filter(option => option.closest(rootSelector) === root);
+  return Array.from(root.querySelectorAll<HTMLElement>(optionSelector)).filter(
+    (option) => option.closest(rootSelector) === root,
+  );
 }
 function disabled(option: HTMLElement): boolean {
   return option.getAttribute('aria-disabled') === 'true' || option.matches(':disabled,[hidden]');
@@ -92,7 +94,10 @@ export const ListboxRoot = forwardRef<HTMLDivElement, ListboxRootProps>(function
     if (value === undefined) setInternal(next);
     onValueChange?.(selectionMode === 'single' ? (next[0] ?? '') : next);
   };
-  const context = useMemo(() => ({ values, mode: selectionMode, select }), [values, selectionMode, onValueChange, value]);
+  const context = useMemo(
+    () => ({ values, mode: selectionMode, select }),
+    [values, selectionMode, onValueChange, value],
+  );
 
   useEffect(() => {
     const root = rootRef.current;
@@ -103,7 +108,14 @@ export const ListboxRoot = forwardRef<HTMLDivElement, ListboxRootProps>(function
       childList: true,
       subtree: true,
       attributes: true,
-      attributeFilter: ['aria-disabled', 'aria-selected', 'data-vf-listbox-option', 'disabled', 'hidden', 'data-vf-listbox-root'],
+      attributeFilter: [
+        'aria-disabled',
+        'aria-selected',
+        'data-vf-listbox-option',
+        'disabled',
+        'hidden',
+        'data-vf-listbox-root',
+      ],
     });
     return () => {
       observer?.disconnect();
@@ -136,7 +148,12 @@ export const ListboxRoot = forwardRef<HTMLDivElement, ListboxRootProps>(function
           onKeyDown?.(event);
           if (event.defaultPrevented) return;
           const root = event.currentTarget;
-          if (!(event.target instanceof Element) || event.target.closest(rootSelector) !== root || (event.target !== root && !optionFromTarget(root, event.target))) return;
+          if (
+            !(event.target instanceof Element) ||
+            event.target.closest(rootSelector) !== root ||
+            (event.target !== root && !optionFromTarget(root, event.target))
+          )
+            return;
           const options = optionsFor(root);
           const currentOption = optionFromTarget(root, event.target);
           const current = currentOption ? options.indexOf(currentOption) : -1;

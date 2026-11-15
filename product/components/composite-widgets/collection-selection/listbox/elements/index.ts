@@ -6,7 +6,9 @@ const rootSelector = '[data-vf-listbox-root],vf-listbox';
 const optionSelector = '[data-vf-listbox-option]';
 
 function optionsFor(root: HTMLElement): HTMLElement[] {
-  return Array.from(root.querySelectorAll<HTMLElement>(optionSelector)).filter(option => option.closest(rootSelector) === root);
+  return Array.from(root.querySelectorAll<HTMLElement>(optionSelector)).filter(
+    (option) => option.closest(rootSelector) === root,
+  );
 }
 function disabled(option: HTMLElement): boolean {
   return option.getAttribute('aria-disabled') === 'true' || option.matches(':disabled,[hidden]');
@@ -63,7 +65,14 @@ export class VfListboxElement extends HTMLElementBase {
         childList: true,
         subtree: true,
         attributes: true,
-        attributeFilter: ['aria-disabled', 'aria-selected', 'data-vf-listbox-option', 'disabled', 'hidden', 'data-vf-listbox-root'],
+        attributeFilter: [
+          'aria-disabled',
+          'aria-selected',
+          'data-vf-listbox-option',
+          'disabled',
+          'hidden',
+          'data-vf-listbox-root',
+        ],
       });
     }
   }
@@ -134,7 +143,13 @@ export class VfListboxElement extends HTMLElementBase {
   };
 
   private onKeydown = (event: KeyboardEvent) => {
-    if (event.defaultPrevented || !(event.target instanceof Element) || event.target.closest(rootSelector) !== this || (event.target !== this && !optionFromTarget(this, event.target))) return;
+    if (
+      event.defaultPrevented ||
+      !(event.target instanceof Element) ||
+      event.target.closest(rootSelector) !== this ||
+      (event.target !== this && !optionFromTarget(this, event.target))
+    )
+      return;
     const options = optionsFor(this);
     const currentOption = optionFromTarget(this, event.target);
     const current = currentOption ? options.indexOf(currentOption) : -1;
