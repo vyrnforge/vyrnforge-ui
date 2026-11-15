@@ -121,13 +121,13 @@ export const NumberFieldInput = forwardRef<HTMLInputElement, NumberFieldInputPro
     if (!element) return;
     const document = element.ownerDocument;
     let active = true;
-    function onReset(event: Event) {
-      if (!element!.form || element!.form !== event.target) return;
+    const onReset = (event: Event) => {
+      if (!element.form || element.form !== event.target) return;
       setTimeout(() => {
-        if (!active || event.defaultPrevented || element!.form !== event.target) return;
-        syncValue(element!, reset.current());
+        if (!active || event.defaultPrevented || element.form !== event.target) return;
+        syncValue(element, reset.current());
       }, 0);
-    }
+    };
     document.addEventListener('reset', onReset, true);
     return () => {
       active = false;
