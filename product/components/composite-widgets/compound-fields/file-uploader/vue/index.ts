@@ -5,7 +5,9 @@ function acceptDrop(input: HTMLInputElement, files: FileList): void {
   if (input.multiple || files.length === 1) input.files = files;
   else {
     const transfer = new DataTransfer();
-    transfer.items.add(files[0]);
+    const first = files.item(0);
+    if (!first) return;
+    transfer.items.add(first);
     input.files = transfer.files;
   }
   // A drop is a native file acquisition request, not an independent file store.
