@@ -115,13 +115,9 @@ export class VfMenuElement extends HTMLElementBase {
     return parent instanceof VfMenuElement ? parent : null;
   }
   private closeChain(): VfMenuElement {
-    let current: VfMenuElement = this;
-    current.setOpen(false);
-    for (let parent = current.parentMenu(); parent; parent = current.parentMenu()) {
-      current = parent;
-      current.setOpen(false);
-    }
-    return current;
+    this.setOpen(false);
+    const parent = this.parentMenu();
+    return parent ? parent.closeChain() : this;
   }
   private sync() {
     const parent = this.parentMenu();
@@ -144,7 +140,7 @@ export class VfMenuElement extends HTMLElementBase {
     if (parent && trigger) {
       trigger.setAttribute('role', 'menuitem');
       trigger.tabIndex = -1;
-      trigger.setAttribute('data-vf-menu-item', '');
+      if (!trigger.hasAttribute('data-vf-menu-item')) trigger.setAttribute('data-vf-menu-item', '');
     }
     trigger?.setAttribute('aria-haspopup', 'menu');
     trigger?.setAttribute('aria-expanded', String(open));
