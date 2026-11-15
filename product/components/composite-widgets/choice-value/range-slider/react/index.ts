@@ -1,4 +1,12 @@
-import { createElement, forwardRef, useState, type ComponentPropsWithoutRef } from 'react';
+import {
+  createElement,
+  forwardRef,
+  useEffect,
+  useImperativeHandle,
+  useRef,
+  useState,
+  type ComponentPropsWithoutRef,
+} from 'react';
 
 type Pair = [number, number];
 type Bounds = readonly [number, number, number];
@@ -64,9 +72,43 @@ export const RangeSliderRoot = forwardRef<HTMLDivElement, RangeSliderRootProps>(
   },
   ref,
 ) {
-  const [internal, setInternal] = useState<Pair>([defaultValue[0], defaultValue[1]]);
+  const initial = useRef<Pair>([defaultValue[0], defaultValue[1]]);
+  const [internal, setInternal] = useState<Pair>(() => initial.current);
   const range = bounds(min, max, step);
   const current = normalize(value ?? internal, range);
+  const rootRef = useRef<HTMLDivElement>(null);
+  const latest = useRef({ value, range });
+  useImperativeHandle(ref, () => rootRef.current!, []);
+  useEffect(() => {
+    latest.current = { value, range };
+  });
+  useEffect(() => {
+    const root = rootRef.current;
+    if (!root) return;
+    const document = root.ownerDocument;
+    let active = true;
+    function onReset(event: Event) {
+      const start = root!.querySelector<HTMLInputElement>('input[data-vf-range-slider-start]');
+      const end = root!.querySelector<HTMLInputElement>('input[data-vf-range-slider-end]');
+      if (!start || !end || !start.form || start.form !== event.target || end.form !== event.target) return;
+      // Native reset may be canceled by another listener; reconcile after its default action.
+      setTimeout(() => {
+        if (!active || event.defaultPrevented || start.form !== event.target || end.form !== event.target) return;
+        const { value, range } = latest.current;
+        const next = normalize(value ?? initial.current, range);
+        if (value === undefined) setInternal([...initial.current]);
+        start.max = String(next[1]);
+        end.min = String(next[0]);
+        start.value = String(next[0]);
+        end.value = String(next[1]);
+      }, 0);
+    }
+    document.addEventListener('reset', onReset, true);
+    return () => {
+      active = false;
+      document.removeEventListener('reset', onReset, true);
+    };
+  }, []);
   function change(index: 0 | 1, input: HTMLInputElement) {
     if (disabled || input.disabled) {
       input.value = String(current[index]);
@@ -80,7 +122,7 @@ export const RangeSliderRoot = forwardRef<HTMLDivElement, RangeSliderRootProps>(
   }
   return createElement(
     'div',
-    { ...props, ref, 'data-vf-range-slider-root': '' },
+    { ...props, ref: rootRef, 'data-vf-range-slider-root': '' },
     createElement('input', {
       type: 'range',
       min: range[0],
