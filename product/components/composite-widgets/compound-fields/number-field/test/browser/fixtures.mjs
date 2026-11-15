@@ -11,7 +11,7 @@ export const browserFixture = {
   heading: 'Number field browser fixture',
   ports: {
     web: {
-      body: baseline,
+      body: `<form id="number-form">${baseline}</form>`,
       script:
         "document.querySelector('#inc').onclick=()=>document.querySelector('#input').stepUp();document.querySelector('#dec').onclick=()=>document.querySelector('#input').stepDown();",
     },
@@ -210,7 +210,7 @@ export async function createAngularStory({ client }) {
 }
 export async function createElementsStory({ client }) {
   return {
-    body: elementsMarkup,
+    body: `<form id="number-form">${elementsMarkup}</form>`,
     activate: client
       ? async () => {
           const { defineNumberFieldElement } = await import('@vyrnforge/elements/number-field');

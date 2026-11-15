@@ -1,4 +1,4 @@
-import { defineComponent, h, ref, type PropType } from 'vue';
+import { defineComponent, h, onBeforeUnmount, onMounted, ref, type PropType } from 'vue';
 
 type Pair = [number, number];
 type Bounds = readonly [number, number, number];
@@ -50,9 +50,36 @@ export const RangeSliderRoot = defineComponent({
   },
   emits: ['update:value'],
   setup(p, { attrs, emit }) {
-    const internal = ref<Pair>([p.defaultValue[0], p.defaultValue[1]]);
+    const initial: Pair = [p.defaultValue[0], p.defaultValue[1]];
+    const internal = ref<Pair>([...initial]);
     const range = () => bounds(p.min, p.max, p.step);
     const current = () => normalize(p.value ?? internal.value, range());
+    const root = ref<HTMLDivElement | null>(null);
+    let document: Document | undefined;
+    let active = false;
+    function onReset(event: Event) {
+      const start = root.value?.querySelector<HTMLInputElement>('input[data-vf-range-slider-start]');
+      const end = root.value?.querySelector<HTMLInputElement>('input[data-vf-range-slider-end]');
+      if (!start || !end || !start.form || start.form !== event.target || end.form !== event.target) return;
+      setTimeout(() => {
+        if (!active || event.defaultPrevented || start.form !== event.target || end.form !== event.target) return;
+        const next = normalize(p.value ?? initial, range());
+        if (p.value === undefined) internal.value = [...initial];
+        start.max = String(next[1]);
+        end.min = String(next[0]);
+        start.value = String(next[0]);
+        end.value = String(next[1]);
+      }, 0);
+    }
+    onMounted(() => {
+      active = true;
+      document = root.value?.ownerDocument;
+      document?.addEventListener('reset', onReset, true);
+    });
+    onBeforeUnmount(() => {
+      active = false;
+      document?.removeEventListener('reset', onReset, true);
+    });
     function change(index: 0 | 1, event: Event) {
       const input = event.currentTarget as HTMLInputElement;
       const committed = current();
@@ -67,7 +94,7 @@ export const RangeSliderRoot = defineComponent({
       emit('update:value', next);
     }
     return () =>
-      h('div', { ...attrs, 'data-vf-range-slider-root': '' }, [
+      h('div', { ...attrs, ref: root, 'data-vf-range-slider-root': '' }, [
         h('input', {
           type: 'range',
           min: range()[0],
