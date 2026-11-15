@@ -1,0 +1,16 @@
+name: RangeSlider L5 reset cross-engine evidence
+on:
+  push:
+    branches: [evidence/l5-range-slider-reset-cross]
+permissions:
+  contents: read
+jobs:
+  browser:
+    uses: ./.github/workflows/_browser-validation.yml
+    with:
+      scopes_json: '[{"port":"web","components":"range-slider"},{"port":"react","components":"range-slider"},{"port":"vue","components":"range-slider"},{"port":"angular","components":"range-slider"},{"port":"elements","components":"range-slider"}]'
+      revision: ${{ github.sha }}
+      browser_profile: cross
+      browsers: chromium firefox webkit
+      artifact_suffix: range-slider-reset-cross
+      retention_days: 14
