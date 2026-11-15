@@ -107,6 +107,7 @@ export const ComboboxRoot = defineComponent({
 
 export const ComboboxInput = defineComponent({
   name: 'ComboboxInput',
+  inheritAttrs: false,
   setup(_, { attrs }) {
     const context = useC();
     const composing = ref(false);
@@ -173,6 +174,7 @@ export const ComboboxInput = defineComponent({
 
 export const ComboboxContent = defineComponent({
   name: 'ComboboxContent',
+  inheritAttrs: false,
   setup(_, { attrs, slots }) {
     const context = useC();
     function sync() {
@@ -210,6 +212,7 @@ export const ComboboxContent = defineComponent({
 
 export const ComboboxOption = defineComponent({
   name: 'ComboboxOption',
+  inheritAttrs: false,
   props: { value: { type: String, required: true }, textValue: String, disabled: Boolean },
   setup(props, { attrs, slots }) {
     const context = useC();

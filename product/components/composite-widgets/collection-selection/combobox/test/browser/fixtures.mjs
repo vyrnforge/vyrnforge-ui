@@ -1,121 +1,104 @@
-import { mkdir, writeFile } from 'node:fs/promises';
-import path from 'node:path';
-import { build } from 'esbuild';
+const items = [
+  { key: 'react', value: 'React', label: 'React' },
+  { key: 'angular', value: 'Angular', label: 'Angular', disabled: true },
+  { key: 'vue', value: 'Vue', label: 'Vue' },
+  { key: 'svelte', value: 'Svelte', label: 'Svelte' },
+];
+const cities = [
+  { key: 'istanbul', value: 'İstanbul', label: 'İstanbul' },
+  { key: 'isparta', value: 'Isparta', label: 'Isparta' },
+];
+const before = '<button id="before" type="button">Before</button>';
+const after = '<button id="after" type="button" style="position: fixed; right: 16px; bottom: 16px">After</button>';
+function options(prefix, rows) {
+  return rows.map(row => `<button id="${prefix}-${row.key}" type="button" role="option" tabindex="-1" aria-selected="false" data-vf-combobox-option data-value="${row.value}" data-vf-text-value="${row.label}"${row.disabled ? ' disabled aria-disabled="true"' : ''}>${row.label}</button>`).join('');
+}
+function ready() { document.body.dataset.comboReady = 'true'; }
+function changed(value) { document.body.dataset.comboValue = value; }
+const web = `${before}<input id="web-input" aria-label="Framework" role="combobox" aria-autocomplete="list" aria-expanded="false" aria-controls="web-listbox" data-vf-combobox-input><div id="web-listbox" role="listbox" aria-labelledby="web-input" data-vf-combobox-content popover="auto">${options('web', items)}</div>${after}`;
 
 export const browserFixture = {
   component: 'combobox',
-  prepare: async ({ port }) => {
-    const root = process.cwd();
-    const outDir = path.join(root, 'dist/browser-fixtures/components/combobox');
-    await mkdir(outDir, { recursive: true });
-
-    await build({
-      stdin: {
-        contents: '@import "@vyrnforge/web/styles/tokens.css";@import "@vyrnforge/web/styles/combobox.css";',
-        resolveDir: root,
-        sourcefile: 'combobox-public.css',
-        loader: 'css',
-      },
-      bundle: true,
-      outfile: path.join(outDir, 'combobox.css'),
-    });
-    const page = (body, script = '') =>
-      `<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width"><link rel="stylesheet" href="./combobox.css"><title>Combobox fixture</title></head><body><main><h1>Combobox browser fixture</h1><button id="before">Before</button>${body}<button id="after">After</button></main>${script}</body></html>`;
-
-    const options = (prefix) => [
-      { id: `${prefix}-react`, value: 'React', label: 'React' },
-      { id: `${prefix}-angular`, value: 'Angular', label: 'Angular', disabled: true },
-      { id: `${prefix}-vue`, value: 'Vue', label: 'Vue' },
-      { id: `${prefix}-svelte`, value: 'Svelte', label: 'Svelte' },
-    ];
-    const localeOptions = (prefix) => [
-      { id: `${prefix}-istanbul`, value: 'İstanbul', label: 'İstanbul' },
-      { id: `${prefix}-isparta`, value: 'Isparta', label: 'Isparta' },
-    ];
-
-    if (port === 'web') {
-      const markup = `<input id="web-input" aria-label="Framework" role="combobox" aria-autocomplete="list" aria-expanded="true" aria-controls="web-listbox" data-vf-combobox-input><div id="web-listbox" role="listbox" aria-labelledby="web-input" aria-label="Framework options" data-vf-combobox-content>${options(
-        'web',
-      )
-        .map(
-          (option) =>
-            `<button id="${option.id}" type="button" role="option" tabindex="-1" aria-selected="false"${option.disabled ? ' disabled aria-disabled="true"' : ''} data-vf-combobox-option data-vf-text-value="${option.label}">${option.label}</button>`,
-        )
-        .join('')}</div>`;
-      await writeFile(path.join(outDir, 'web.html'), page(markup));
-    }
-
-    if (port === 'react') {
-      await writeFile(
-        path.join(outDir, 'react.html'),
-        page('<div id="app"></div>', '<script type="module" src="./react.js"></script>'),
-      );
-      await build({
-        stdin: {
-          resolveDir: root,
-          sourcefile: 'react-combobox-client.ts',
-          contents: `import{createElement}from'react';import{createRoot}from'react-dom/client';import{ComboboxRoot,ComboboxInput,ComboboxContent,ComboboxOption}from'@vyrnforge/react/combobox';const items=${JSON.stringify(options('react'))};const localeItems=${JSON.stringify(localeOptions('react-locale'))};const combo=(props,items,label)=>createElement(ComboboxRoot,props,createElement(ComboboxInput,{'aria-label':label}),createElement(ComboboxContent,{'aria-label':label+' options'},items.map(item=>createElement(ComboboxOption,{key:item.id,id:item.id,value:item.value,textValue:item.label,disabled:item.disabled},item.label))));createRoot(document.querySelector('#app')).render(createElement('div',null,combo({},items,'Framework'),combo({locale:'tr'},localeItems,'Turkish city')));`,
-        },
-        bundle: true,
-        format: 'esm',
-        platform: 'browser',
-        outfile: path.join(outDir, 'react.js'),
-      });
-    }
-
-    if (port === 'vue') {
-      await writeFile(
-        path.join(outDir, 'vue.html'),
-        page('<div id="app"></div>', '<script type="module" src="./vue.js"></script>'),
-      );
-      await build({
-        stdin: {
-          resolveDir: root,
-          sourcefile: 'vue-combobox-client.ts',
-          contents: `import{createApp,h}from'vue';import{ComboboxRoot,ComboboxInput,ComboboxContent,ComboboxOption}from'@vyrnforge/vue/combobox';const items=${JSON.stringify(options('vue'))};const localeItems=${JSON.stringify(localeOptions('vue-locale'))};const combo=(props,items,label)=>h(ComboboxRoot,props,()=>[h(ComboboxInput,{'aria-label':label}),h(ComboboxContent,{'aria-label':label+' options'},()=>items.map(item=>h(ComboboxOption,{id:item.id,value:item.value,textValue:item.label,disabled:item.disabled},()=>item.label)))]);createApp({render:()=>h('div',null,[combo({},items,'Framework'),combo({locale:'tr'},localeItems,'Turkish city')])}).mount('#app');`,
-        },
-        bundle: true,
-        format: 'esm',
-        platform: 'browser',
-        outfile: path.join(outDir, 'vue.js'),
-      });
-    }
-
-    if (port === 'angular') {
-      await writeFile(
-        path.join(outDir, 'angular.html'),
-        page('<vf-combobox-test></vf-combobox-test>', '<script type="module" src="./angular.js"></script>'),
-      );
-      await build({
-        stdin: {
-          resolveDir: root,
-          sourcefile: 'angular-combobox-client.ts',
-          contents: `import'@angular/compiler';import{Component,provideZonelessChangeDetection}from'@angular/core';import{bootstrapApplication}from'@angular/platform-browser';import{VfComboboxRootDirective,VfComboboxInputDirective,VfComboboxContentDirective,VfComboboxOptionDirective}from'@vyrnforge/angular/combobox';class App{}Component({selector:'vf-combobox-test',standalone:true,imports:[VfComboboxRootDirective,VfComboboxInputDirective,VfComboboxContentDirective,VfComboboxOptionDirective],template:'<div vfComboboxRoot><input vfComboboxInput aria-label="Framework"><div vfComboboxContent aria-label="Framework options"><button vfComboboxOption="React" id="angular-react" textValue="React">React</button><button vfComboboxOption="Angular" id="angular-angular" textValue="Angular" [disabled]="true">Angular</button><button vfComboboxOption="Vue" id="angular-vue" textValue="Vue">Vue</button><button vfComboboxOption="Svelte" id="angular-svelte" textValue="Svelte">Svelte</button></div></div><div vfComboboxRoot locale="tr"><input vfComboboxInput aria-label="Turkish city"><div vfComboboxContent aria-label="Turkish city options"><button vfComboboxOption="İstanbul" id="angular-locale-istanbul" textValue="İstanbul">İstanbul</button><button vfComboboxOption="Isparta" id="angular-locale-isparta" textValue="Isparta">Isparta</button></div></div>'})(App);bootstrapApplication(App,{providers:[provideZonelessChangeDetection()]});`,
-        },
-        bundle: true,
-        format: 'esm',
-        platform: 'browser',
-        outfile: path.join(outDir, 'angular.js'),
-      });
-    }
-
-    if (port === 'elements') {
-      const markup = `<vf-combobox><input id="elements-input" aria-label="Framework" data-vf-combobox-input><div id="elements-listbox" aria-label="Framework options" data-vf-combobox-content><button id="elements-react" type="button" data-vf-combobox-option data-value="React" data-vf-text-value="React">React</button><button id="elements-angular" type="button" data-vf-combobox-option data-value="Angular" data-vf-text-value="Angular" disabled>Angular</button><button id="elements-vue" type="button" data-vf-combobox-option data-value="Vue" data-vf-text-value="Vue">Vue</button><button id="elements-svelte" type="button" data-vf-combobox-option data-value="Svelte" data-vf-text-value="Svelte">Svelte</button></div></vf-combobox><vf-combobox locale="tr"><input aria-label="Turkish city" data-vf-combobox-input><div aria-label="Turkish city options" data-vf-combobox-content><button id="elements-locale-istanbul" type="button" data-vf-combobox-option data-value="İstanbul" data-vf-text-value="İstanbul">İstanbul</button><button id="elements-locale-isparta" type="button" data-vf-combobox-option data-value="Isparta" data-vf-text-value="Isparta">Isparta</button></div></vf-combobox>`;
-      await writeFile(
-        path.join(outDir, 'elements.html'),
-        page(markup, '<script type="module" src="./elements.js"></script>'),
-      );
-      await build({
-        stdin: {
-          resolveDir: root,
-          sourcefile: 'elements-combobox-client.ts',
-          contents: `import{defineComboboxElement}from'@vyrnforge/elements/combobox';defineComboboxElement();`,
-        },
-        bundle: true,
-        format: 'esm',
-        platform: 'browser',
-        outfile: path.join(outDir, 'elements.js'),
-      });
-    }
+  title: 'Combobox browser fixture',
+  heading: 'Combobox browser fixture',
+  ports: {
+    web: { body: web },
+    react: { story: 'createReactStory' },
+    vue: { story: 'createVueStory' },
+    angular: { story: 'createAngularStory', selector: 'vf-combobox-test' },
+    elements: { story: 'createElementsStory' },
   },
 };
+
+export async function createReactStory() {
+  const { createElement: h, Fragment, useEffect } = await import('react');
+  const { ComboboxRoot, ComboboxInput, ComboboxContent, ComboboxOption } = await import('@vyrnforge/react/combobox');
+  function App() {
+    useEffect(ready, []);
+    const combo = (prefix, rows, label, locale) => h(ComboboxRoot, { locale, onValueChange: changed },
+      h(ComboboxInput, { 'aria-label': label }),
+      h(ComboboxContent, { 'aria-label': label + ' options' }, ...rows.map(row => h(ComboboxOption, { key: row.key, id: `${prefix}-${row.key}`, value: row.value, textValue: row.label, disabled: row.disabled }, row.label))),
+    );
+    return h(Fragment, null,
+      h('button', { id: 'before', type: 'button' }, 'Before'),
+      combo('react', items, 'Framework'),
+      combo('react-locale', cities, 'Turkish city', 'tr'),
+      h('button', { id: 'after', type: 'button', style: { position: 'fixed', right: '16px', bottom: '16px' } }, 'After'),
+    );
+  }
+  return h(App);
+}
+
+export async function createVueStory() {
+  const { createSSRApp, h, onMounted } = await import('vue');
+  const { ComboboxRoot, ComboboxInput, ComboboxContent, ComboboxOption } = await import('@vyrnforge/vue/combobox');
+  return createSSRApp({
+    setup() {
+      onMounted(ready);
+      const combo = (prefix, rows, label, locale) => h(ComboboxRoot, { locale, 'onUpdate:value': changed }, () => [
+        h(ComboboxInput, { 'aria-label': label }),
+        h(ComboboxContent, { 'aria-label': label + ' options' }, () => rows.map(row => h(ComboboxOption, { key: row.key, id: `${prefix}-${row.key}`, value: row.value, textValue: row.label, disabled: row.disabled }, () => row.label))),
+      ]);
+      return () => h('div', [
+        h('button', { id: 'before', type: 'button' }, 'Before'),
+        combo('vue', items, 'Framework'),
+        combo('vue-locale', cities, 'Turkish city', 'tr'),
+        h('button', { id: 'after', type: 'button', style: { position: 'fixed', right: '16px', bottom: '16px' } }, 'After'),
+      ]);
+    },
+  });
+}
+
+export async function createAngularStory() {
+  await import('@angular/compiler');
+  const { Component, afterNextRender } = await import('@angular/core');
+  const { VfComboboxRootDirective, VfComboboxInputDirective, VfComboboxContentDirective, VfComboboxOptionDirective } = await import('@vyrnforge/angular/combobox');
+  class ComboboxTestApp {
+    constructor() { afterNextRender(ready); }
+    changed = changed;
+  }
+  function combo(prefix, rows, label, locale = '') {
+    return `<div vfComboboxRoot${locale ? ' locale="' + locale + '"' : ''} (valueChange)="changed($event)"><input vfComboboxInput aria-label="${label}"><div vfComboboxContent aria-label="${label} options">${rows.map(row => `<button vfComboboxOption="${row.value}" id="${prefix}-${row.key}" textValue="${row.label}" [disabled]="${!!row.disabled}">${row.label}</button>`).join('')}</div></div>`;
+  }
+  Component({
+    selector: 'vf-combobox-test',
+    standalone: true,
+    imports: [VfComboboxRootDirective, VfComboboxInputDirective, VfComboboxContentDirective, VfComboboxOptionDirective],
+    template: `<main><h1>Combobox browser fixture</h1>${before}${combo('angular', items, 'Framework')}${combo('angular-locale', cities, 'Turkish city', 'tr')}${after}</main>`,
+  })(ComboboxTestApp);
+  return ComboboxTestApp;
+}
+
+export async function createElementsStory({ client }) {
+  function combo(prefix, rows, label, locale = '') {
+    return `<vf-combobox${locale ? ' locale="' + locale + '"' : ''}><input id="${prefix}-input" aria-label="${label}" data-vf-combobox-input><div id="${prefix}-listbox" aria-label="${label} options" data-vf-combobox-content hidden>${options(prefix, rows)}</div></vf-combobox>`;
+  }
+  return {
+    body: `${before}${combo('elements', items, 'Framework')}${combo('elements-locale', cities, 'Turkish city', 'tr')}${after}`,
+    activate: client ? async () => {
+      const { defineComboboxElement } = await import('@vyrnforge/elements/combobox');
+      defineComboboxElement();
+      ready();
+    } : undefined,
+  };
+}
