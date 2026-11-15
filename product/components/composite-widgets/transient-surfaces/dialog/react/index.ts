@@ -59,6 +59,20 @@ function canRestoreFocus(element: HTMLElement | null): element is HTMLElement {
   return Boolean(element?.isConnected && !element.hasAttribute('disabled') && !element.closest('[inert]'));
 }
 
+function isBackdropHit(event: {
+  target: EventTarget | null;
+  currentTarget: EventTarget | null;
+  button: number;
+  clientX: number;
+  clientY: number;
+}): boolean {
+  if (event.target !== event.currentTarget || event.button !== 0) return false;
+  const rect = (event.currentTarget as HTMLDialogElement).getBoundingClientRect();
+  return (
+    event.clientX < rect.left || event.clientX > rect.right || event.clientY < rect.top || event.clientY > rect.bottom
+  );
+}
+
 export interface DialogRootProps extends Omit<
   DialogHTMLAttributes<HTMLDialogElement>,
   'open' | 'onCancel' | 'onClose'
@@ -87,6 +101,7 @@ export const DialogRoot = forwardRef<HTMLDialogElement, DialogRootProps>(functio
     id,
     children,
     onPointerDown,
+    onPointerCancel,
     onClick,
     ...props
   },
@@ -139,21 +154,28 @@ export const DialogRoot = forwardRef<HTMLDialogElement, DialogRootProps>(functio
     function restoreFocus() {
       const restoreTarget = restoreTargetRef.current;
       restoreTargetRef.current = null;
-      if (canRestoreFocus(restoreTarget)) restoreTarget.focus();
+      const focused = activeDialog.ownerDocument.activeElement;
+      if (
+        canRestoreFocus(restoreTarget) &&
+        (!focused || focused === activeDialog.ownerDocument.body || activeDialog.contains(focused))
+      )
+        restoreTarget.focus();
     }
 
     function handleCancel(event: Event) {
+      if (event.defaultPrevented) return;
       event.preventDefault();
       requestDismiss('escape');
     }
 
     function handleClose() {
+      if (activeDialog.open) return;
       if (desiredOpenRef.current) {
         if (!controlled) setInternalOpen(false);
         onOpenChange?.(false);
         if (controlled) {
           queueMicrotask(() => {
-            if (desiredOpenRef.current && !activeDialog.open) {
+            if (desiredOpenRef.current && activeDialog.isConnected && !activeDialog.open) {
               activeDialog.showModal();
               initialFocusRef?.current?.focus();
             } else if (!desiredOpenRef.current) {
@@ -191,18 +213,22 @@ export const DialogRoot = forwardRef<HTMLDialogElement, DialogRootProps>(functio
       ...props,
       id: rootId,
       ref: dialogRef,
-      'aria-labelledby': titleId,
-      'aria-describedby': descriptionId,
+      'aria-labelledby': props['aria-labelledby'] ?? (props['aria-label'] ? undefined : titleId),
+      'aria-describedby': props['aria-describedby'] ?? descriptionId,
       'data-vf-dialog-root': '',
       'data-vf-open': desiredOpen ? '' : undefined,
       'data-vf-backdrop-dismiss': backdropDismiss ? '' : undefined,
       onPointerDown(event: ReactPointerEvent<HTMLDialogElement>) {
         onPointerDown?.(event);
-        backdropPointerDownRef.current = !event.defaultPrevented && event.target === event.currentTarget;
+        backdropPointerDownRef.current = !event.defaultPrevented && isBackdropHit(event);
+      },
+      onPointerCancel(event: ReactPointerEvent<HTMLDialogElement>) {
+        onPointerCancel?.(event);
+        backdropPointerDownRef.current = false;
       },
       onClick(event: ReactMouseEvent<HTMLDialogElement>) {
         onClick?.(event);
-        const isBackdrop = backdropPointerDownRef.current && event.target === event.currentTarget;
+        const isBackdrop = backdropPointerDownRef.current && isBackdropHit(event);
         backdropPointerDownRef.current = false;
         if (!event.defaultPrevented && backdropDismiss && isBackdrop) requestDismiss('backdrop');
       },

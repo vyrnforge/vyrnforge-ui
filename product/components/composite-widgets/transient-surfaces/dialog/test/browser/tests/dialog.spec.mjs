@@ -98,6 +98,12 @@ test.describe('Dialog framework native modality and hydration', () => {
       await expect(child).toHaveAttribute('open', '');
       await expect(parent).toHaveAttribute('open', '');
 
+      await page.locator(`#${framework}-child-close`).click();
+      await expect(child).not.toHaveAttribute('open', '');
+      await expect(parent).toHaveAttribute('open', '');
+      await expect(childTrigger).toBeFocused();
+      await childTrigger.click();
+      await expect(child).toHaveAttribute('open', '');
       await page.keyboard.press('Escape');
       await expect(child).not.toHaveAttribute('open', '');
       await expect(parent).toHaveAttribute('open', '');
@@ -108,4 +114,39 @@ test.describe('Dialog framework native modality and hydration', () => {
       await expect(parentTrigger).toBeFocused();
     });
   }
+});
+
+test('modal interior padding is not backdrop and rejected dismissal retains the committed modal', async ({ page }) => {
+  test.skip(port === 'web', 'Runtime modal state owns dismissal requests.');
+  await page.goto(`/components/dialog/${port}.html`);
+  const trigger = page.locator(`#${port}-open`);
+  const dialog = page.locator(`#${port}-dialog`);
+  await trigger.click();
+  await expect(dialog).toHaveAttribute('open', '');
+  const box = await dialog.boundingBox();
+  if (!box) throw new Error('Missing dialog geometry');
+  await page.mouse.click(box.x + 3, box.y + 3);
+  await expect(dialog).toHaveAttribute('open', '');
+  await expect(page.locator('body')).not.toHaveAttribute('data-dismiss-reason', /.+/);
+  await page.locator('body').evaluate((body) => {
+    body.dataset.rejectClose = 'true';
+  });
+  await page.keyboard.press('Escape');
+  await expect(dialog).toHaveAttribute('open', '');
+  await expect(page.locator('body')).toHaveAttribute('data-dismiss-reason', 'escape');
+  await page.locator(`#${port}-close`).click();
+  await expect(dialog).toHaveAttribute('open', '');
+  await expect(page.locator('body')).toHaveAttribute('data-dismiss-reason', 'close-control');
+  await page.locator('body').evaluate((body) => {
+    delete body.dataset.rejectClose;
+  });
+  await page
+    .locator(`#${port}-close`)
+    .evaluate((button) =>
+      button.addEventListener('click', (event) => event.preventDefault(), { once: true, capture: true }),
+    );
+  await page.locator(`#${port}-close`).click();
+  await expect(dialog).toHaveAttribute('open', '');
+  await page.locator(`#${port}-close`).click();
+  await expect(dialog).not.toHaveAttribute('open', '');
 });

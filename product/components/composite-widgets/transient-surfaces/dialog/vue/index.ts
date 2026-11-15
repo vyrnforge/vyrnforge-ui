@@ -53,6 +53,14 @@ function canRestoreFocus(element: HTMLElement | null): element is HTMLElement {
   return Boolean(element?.isConnected && !element.hasAttribute('disabled') && !element.closest('[inert]'));
 }
 
+function isBackdropHit(event: MouseEvent | PointerEvent): boolean {
+  if (event.target !== event.currentTarget || event.button !== 0) return false;
+  const rect = (event.currentTarget as HTMLDialogElement).getBoundingClientRect();
+  return (
+    event.clientX < rect.left || event.clientX > rect.right || event.clientY < rect.top || event.clientY > rect.bottom
+  );
+}
+
 function callHandler(handler: unknown, event: Event): void {
   if (typeof handler === 'function') handler(event);
   else if (Array.isArray(handler))
@@ -96,7 +104,10 @@ export const DialogRoot = defineComponent({
     function restoreFocus() {
       const target = restoreTarget.value;
       restoreTarget.value = null;
-      if (canRestoreFocus(target)) target.focus();
+      const dialog = dialogRef.value;
+      const focused = dialog?.ownerDocument.activeElement;
+      if (canRestoreFocus(target) && (!focused || focused === dialog?.ownerDocument.body || dialog?.contains(focused)))
+        target.focus();
     }
 
     function requestDismiss(reason: DialogDismissReason) {
@@ -115,7 +126,7 @@ export const DialogRoot = defineComponent({
       if (!mounted) return;
       await nextTick();
       const dialog = dialogRef.value;
-      if (!dialog) return;
+      if (!dialog?.isConnected) return;
       if (desiredOpen.value && !dialog.open) {
         if (captureRestoreTarget)
           restoreTarget.value = document.activeElement instanceof HTMLElement ? document.activeElement : null;
@@ -141,18 +152,20 @@ export const DialogRoot = defineComponent({
           ...attrs,
           id: rootId,
           ref: dialogRef,
-          'aria-labelledby': titleId,
-          'aria-describedby': props.descriptionId,
+          'aria-labelledby': attrs['aria-labelledby'] ?? (attrs['aria-label'] ? undefined : titleId),
+          'aria-describedby': attrs['aria-describedby'] ?? props.descriptionId,
           'data-vf-dialog-root': '',
           'data-vf-open': desiredOpen.value ? '' : undefined,
           'data-vf-backdrop-dismiss': props.backdropDismiss ? '' : undefined,
           onCancel(event: Event) {
             callHandler(attrs.onCancel, event);
+            if (event.defaultPrevented) return;
             event.preventDefault();
             requestDismiss('escape');
           },
           onClose(event: Event) {
             callHandler(attrs.onClose, event);
+            if (dialogRef.value?.open) return;
             if (desiredOpen.value) {
               if (props.modelValue === undefined) {
                 internalOpen.value = false;
@@ -171,11 +184,15 @@ export const DialogRoot = defineComponent({
           },
           onPointerdown(event: PointerEvent) {
             callHandler(attrs.onPointerdown, event);
-            backdropPointerDown = !event.defaultPrevented && event.target === event.currentTarget;
+            backdropPointerDown = !event.defaultPrevented && isBackdropHit(event);
+          },
+          onPointercancel(event: PointerEvent) {
+            callHandler(attrs.onPointercancel, event);
+            backdropPointerDown = false;
           },
           onClick(event: MouseEvent) {
             callHandler(attrs.onClick, event);
-            const isBackdrop = backdropPointerDown && event.target === event.currentTarget;
+            const isBackdrop = backdropPointerDown && isBackdropHit(event);
             backdropPointerDown = false;
             if (!event.defaultPrevented && props.backdropDismiss && isBackdrop) requestDismiss('backdrop');
           },

@@ -1,15 +1,21 @@
-import { mkdir, writeFile } from 'node:fs/promises';
+import { writeFile } from 'node:fs/promises';
 import path from 'node:path';
 import { build } from 'esbuild';
+import { prepareBrowserFixture } from '../../../../../../../tooling/testing/browser-fixtures.mjs';
+import * as stories from './stories.mjs';
 
 export const browserFixture = {
-  component: 'alert-dialog',
-  prepare: async ({ port }) => {
-    const root = process.cwd();
-    const dir = path.join(root, 'dist/browser-fixtures/components/alert-dialog');
-    await mkdir(dir, { recursive: true });
-
+  ...stories.browserFixture,
+  prepare: async ({ root, fixturePath, port }) => {
+    await prepareBrowserFixture({
+      root,
+      fixturePath: path.join(path.dirname(fixturePath), 'stories.mjs'),
+      port,
+      component: 'alert-dialog',
+      fixtureModule: stories,
+    });
     if (port === 'react') {
+      const dir = path.join(root, 'dist/browser-fixtures/components/alert-dialog');
       const entry = path.join(
         root,
         'product/components/composite-widgets/transient-surfaces/alert-dialog/examples/destructive-commit/react.tsx',
@@ -20,16 +26,11 @@ export const browserFixture = {
         format: 'esm',
         platform: 'browser',
         outdir: dir,
-        entryNames: 'react',
+        entryNames: 'destructive-react',
       });
       await writeFile(
-        path.join(dir, 'react.html'),
-        '<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width"><title>Alert dialog destructive workflow fixture</title><link rel="stylesheet" href="./react.css"></head><body><div id="root"></div><script type="module" src="./react.js"></script></body></html>',
-      );
-    } else {
-      await writeFile(
-        path.join(dir, `${port}.html`),
-        '<!doctype html><html lang="en"><head><meta charset="utf-8"><title>Alert dialog browser fixture</title></head><body><dialog open role="alertdialog" aria-labelledby="t"><h2 id="t">Delete item?</h2><button>Cancel</button><button>Delete</button></dialog></body></html>',
+        path.join(dir, 'destructive-react.html'),
+        '<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width"><title>Alert dialog destructive workflow fixture</title><link rel="stylesheet" href="./destructive-react.css"></head><body><div id="root"></div><script type="module" src="./destructive-react.js"></script></body></html>',
       );
     }
   },
