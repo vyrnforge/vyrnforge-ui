@@ -1,0 +1,16 @@
+name: Native MultiSelect cross-engine evidence
+on:
+  push:
+    branches: [evidence/l5-native-multi-select-cross]
+permissions:
+  contents: read
+jobs:
+  browser:
+    uses: ./.github/workflows/_browser-validation.yml
+    with:
+      scopes_json: '[{"port":"web","components":"multi-select"},{"port":"react","components":"multi-select"},{"port":"vue","components":"multi-select"},{"port":"angular","components":"multi-select"},{"port":"elements","components":"multi-select"}]'
+      revision: ${{ github.sha }}
+      browser_profile: cross
+      browsers: chromium firefox webkit
+      artifact_suffix: multi-select-cross
+      retention_days: 14
