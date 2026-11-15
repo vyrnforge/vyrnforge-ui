@@ -53,7 +53,9 @@ export const ColorPickerRoot = defineComponent({
     let active = false;
     const inputs = () =>
       Array.from(
-        root.value?.querySelectorAll<HTMLInputElement>('input[data-vf-color-picker-input], input[data-vf-color-picker-text]') ?? [],
+        root.value?.querySelectorAll<HTMLInputElement>(
+          'input[data-vf-color-picker-input], input[data-vf-color-picker-text]',
+        ) ?? [],
       ).filter((input) => input.closest('[data-vf-color-picker-root]') === root.value);
     const onReset = (event: Event) => {
       const group = inputs();

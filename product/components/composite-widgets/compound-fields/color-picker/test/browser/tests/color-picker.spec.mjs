@@ -97,7 +97,9 @@ test('Elements ColorPicker isolates nested native acquisition and text synchroni
   await expect(page.locator('#nested-color')).toHaveValue('#abcdef');
 });
 
-test('ColorPicker reset restores native color, clears invalid draft, and reconciles controlled state', async ({ page }) => {
+test('ColorPicker reset restores native color, clears invalid draft, and reconciles controlled state', async ({
+  page,
+}) => {
   await page.goto(`/components/color-picker/${port}.html`);
   const body = page.locator('body');
   if (port !== 'web') await expect(body).toHaveAttribute('data-color-ready', 'true');

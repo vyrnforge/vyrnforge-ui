@@ -42,7 +42,9 @@ export class VfColorPickerRootDirective {
         let active = true;
         const inputs = () =>
           Array.from(
-            root.querySelectorAll<HTMLInputElement>('input[data-vf-color-picker-input], input[data-vf-color-picker-text]'),
+            root.querySelectorAll<HTMLInputElement>(
+              'input[data-vf-color-picker-input], input[data-vf-color-picker-text]',
+            ),
           ).filter((input) => input.closest('[data-vf-color-picker-root]') === root);
         const onReset = (event: Event) => {
           const group = inputs();
