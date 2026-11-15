@@ -1369,19 +1369,39 @@ export const PaginationRoot: DefineComponent<    {}, () => VNode<RendererNode, R
 }>, {}, {}, {}, ComponentOptionsMixin, ComponentOptionsMixin, {}, string, PublicProps, Readonly<{}> & Readonly<{}>, {}, {}, {}, {}, string, ComponentProvideOptions, true, {}, any>;
 
 // @public (undocumented)
-export const PasswordFieldInput: DefineComponent<    {}, () => VNode<RendererNode, RendererElement, {
-[key: string]: any;
-}>, {}, {}, {}, ComponentOptionsMixin, ComponentOptionsMixin, {}, string, PublicProps, Readonly<{}> & Readonly<{}>, {}, {}, {}, {}, string, ComponentProvideOptions, true, {}, any>;
-
-// @public (undocumented)
-export const PasswordFieldRoot: DefineComponent<ExtractPropTypes<    {
-defaultVisible: BooleanConstructor;
+export const PasswordFieldInput: DefineComponent<ExtractPropTypes<    {
+disabled: BooleanConstructor;
 }>, () => VNode<RendererNode, RendererElement, {
 [key: string]: any;
 }>, {}, {}, {}, ComponentOptionsMixin, ComponentOptionsMixin, {}, string, PublicProps, Readonly<ExtractPropTypes<    {
-defaultVisible: BooleanConstructor;
+disabled: BooleanConstructor;
 }>> & Readonly<{}>, {
+disabled: boolean;
+}, {}, {}, {}, string, ComponentProvideOptions, true, {}, any>;
+
+// @public (undocumented)
+export const PasswordFieldRoot: DefineComponent<ExtractPropTypes<    {
+visible: {
+type: BooleanConstructor;
+default: undefined;
+};
+defaultVisible: BooleanConstructor;
+disabled: BooleanConstructor;
+}>, () => VNode<RendererNode, RendererElement, {
+[key: string]: any;
+}>, {}, {}, {}, ComponentOptionsMixin, ComponentOptionsMixin, "update:visible"[], "update:visible", PublicProps, Readonly<ExtractPropTypes<    {
+visible: {
+type: BooleanConstructor;
+default: undefined;
+};
+defaultVisible: BooleanConstructor;
+disabled: BooleanConstructor;
+}>> & Readonly<{
+"onUpdate:visible"?: (...args: any[]) => any;
+}>, {
+disabled: boolean;
 defaultVisible: boolean;
+visible: boolean;
 }, {}, {}, {}, string, ComponentProvideOptions, true, {}, any>;
 
 // @public (undocumented)
@@ -1394,6 +1414,7 @@ hideLabel: {
 type: StringConstructor;
 required: true;
 };
+disabled: BooleanConstructor;
 }>, () => VNode<RendererNode, RendererElement, {
 [key: string]: any;
 }>, {}, {}, {}, ComponentOptionsMixin, ComponentOptionsMixin, {}, string, PublicProps, Readonly<ExtractPropTypes<    {
@@ -1405,7 +1426,10 @@ hideLabel: {
 type: StringConstructor;
 required: true;
 };
-}>> & Readonly<{}>, {}, {}, {}, {}, string, ComponentProvideOptions, true, {}, any>;
+disabled: BooleanConstructor;
+}>> & Readonly<{}>, {
+disabled: boolean;
+}, {}, {}, {}, string, ComponentProvideOptions, true, {}, any>;
 
 // @public (undocumented)
 export const PopoverContent: DefineComponent<ExtractPropTypes<    {

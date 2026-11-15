@@ -36,7 +36,11 @@ export class VfPasswordFieldElement extends HTMLElementBase {
   }
 
   private owned<T extends HTMLElement>(selector: string): T | null {
-    return Array.from(this.querySelectorAll<T>(selector)).find(element => element.closest('[data-vf-password-field-root]') === this) ?? null;
+    return (
+      Array.from(this.querySelectorAll<T>(selector)).find(
+        (element) => element.closest('[data-vf-password-field-root]') === this,
+      ) ?? null
+    );
   }
 
   private syncToggle() {
@@ -52,9 +56,18 @@ export class VfPasswordFieldElement extends HTMLElementBase {
   }
 
   private onClick = (event: Event) => {
-    const toggle = event.target instanceof HTMLElement ? event.target.closest<HTMLElement>('[data-vf-password-field-toggle]') : null;
+    const toggle =
+      event.target instanceof HTMLElement ? event.target.closest<HTMLElement>('[data-vf-password-field-toggle]') : null;
     const input = this.owned<HTMLInputElement>('[data-vf-password-field-input]');
-    if (!toggle || !input || toggle.closest('[data-vf-password-field-root]') !== this || event.defaultPrevented || toggle.matches(':disabled') || input.matches(':disabled')) return;
+    if (
+      !toggle ||
+      !input ||
+      toggle.closest('[data-vf-password-field-root]') !== this ||
+      event.defaultPrevented ||
+      toggle.matches(':disabled') ||
+      input.matches(':disabled')
+    )
+      return;
 
     input.type = input.type === 'password' ? 'text' : 'password';
     this.syncToggle();

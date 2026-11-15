@@ -2568,13 +2568,19 @@ export interface PasswordFieldRootProps extends ComponentPropsWithoutRef<'div'> 
     children?: ReactNode;
     // (undocumented)
     defaultVisible?: boolean;
+    // (undocumented)
+    disabled?: boolean;
+    // (undocumented)
+    onVisibleChange?(visible: boolean): void;
+    // (undocumented)
+    visible?: boolean;
 }
 
 // @public (undocumented)
 export const PasswordFieldToggle: ForwardRefExoticComponent<PasswordFieldToggleProps & RefAttributes<HTMLButtonElement>>;
 
 // @public (undocumented)
-export interface PasswordFieldToggleProps extends ComponentPropsWithoutRef<'button'> {
+export interface PasswordFieldToggleProps extends Omit<ComponentPropsWithoutRef<'button'>, 'type' | 'aria-pressed'> {
     // (undocumented)
     hideLabel: string;
     // (undocumented)

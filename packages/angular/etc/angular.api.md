@@ -1987,9 +1987,17 @@ export class VfPaginationRootDirective {
 export class VfPasswordFieldInputDirective {
     constructor(root: VfPasswordFieldRootDirective);
     // (undocumented)
+    readonly disabled: InputSignalWithTransform<boolean, unknown>;
+    // (undocumented)
     readonly root: VfPasswordFieldRootDirective;
     // (undocumented)
-    static ɵdir: i0.ɵɵDirectiveDeclaration<VfPasswordFieldInputDirective, "input[vfPasswordFieldInput]", never, {}, {}, never, never, true, never>;
+    static ɵdir: i0.ɵɵDirectiveDeclaration<VfPasswordFieldInputDirective, "input[vfPasswordFieldInput]", never, {
+        "disabled": {
+            "alias": "disabled";
+            "required": false;
+            "isSignal": true;
+        };
+    }, {}, never, never, true, never>;
     // (undocumented)
     static ɵfac: i0.ɵɵFactoryDeclaration<VfPasswordFieldInputDirective, never>;
 }
@@ -1997,11 +2005,37 @@ export class VfPasswordFieldInputDirective {
 // @public (undocumented)
 export class VfPasswordFieldRootDirective {
     // (undocumented)
+    readonly defaultVisible: InputSignalWithTransform<boolean, unknown>;
+    // (undocumented)
+    readonly disabled: InputSignalWithTransform<boolean, unknown>;
+    // (undocumented)
+    readonly isVisible: Signal<boolean>;
+    // (undocumented)
     toggle(): void;
     // (undocumented)
-    readonly visible: WritableSignal<boolean>;
+    readonly visible: InputSignal<boolean | undefined>;
     // (undocumented)
-    static ɵdir: i0.ɵɵDirectiveDeclaration<VfPasswordFieldRootDirective, "[vfPasswordFieldRoot]", ["vfPasswordFieldRoot"], {}, {}, never, never, true, never>;
+    readonly visibleChange: OutputEmitterRef<boolean>;
+    // (undocumented)
+    static ɵdir: i0.ɵɵDirectiveDeclaration<VfPasswordFieldRootDirective, "[vfPasswordFieldRoot]", ["vfPasswordFieldRoot"], {
+        "visible": {
+            "alias": "visible";
+            "required": false;
+            "isSignal": true;
+        };
+        "defaultVisible": {
+            "alias": "defaultVisible";
+            "required": false;
+            "isSignal": true;
+        };
+        "disabled": {
+            "alias": "disabled";
+            "required": false;
+            "isSignal": true;
+        };
+    }, {
+        "visibleChange": "visibleChange";
+    }, never, never, true, never>;
     // (undocumented)
     static ɵfac: i0.ɵɵFactoryDeclaration<VfPasswordFieldRootDirective, never>;
 }
@@ -2010,6 +2044,8 @@ export class VfPasswordFieldRootDirective {
 export class VfPasswordFieldToggleDirective {
     constructor(root: VfPasswordFieldRootDirective);
     // (undocumented)
+    readonly disabled: InputSignalWithTransform<boolean, unknown>;
+    // (undocumented)
     readonly hideLabel: InputSignal<string>;
     // (undocumented)
     readonly root: VfPasswordFieldRootDirective;
@@ -2017,6 +2053,8 @@ export class VfPasswordFieldToggleDirective {
     readonly showLabel: InputSignal<string>;
     // (undocumented)
     readonly stateLabel: Signal<string>;
+    // (undocumented)
+    toggle(event: MouseEvent): void;
     // (undocumented)
     static ɵdir: i0.ɵɵDirectiveDeclaration<VfPasswordFieldToggleDirective, "button[vfPasswordFieldToggle]", never, {
         "showLabel": {
@@ -2027,6 +2065,11 @@ export class VfPasswordFieldToggleDirective {
         "hideLabel": {
             "alias": "hideLabel";
             "required": true;
+            "isSignal": true;
+        };
+        "disabled": {
+            "alias": "disabled";
+            "required": false;
             "isSignal": true;
         };
     }, {}, never, never, true, never>;
@@ -2122,7 +2165,7 @@ export class VfPreviewCardContentDirective implements OnDestroy {
 // @public (undocumented)
 export class VfPreviewCardRootDirective implements OnDestroy {
     // (undocumented)
-    activity(source: Activity, active: boolean, delay: number): void;
+    activity(source: Activity_2, active: boolean, delay: number): void;
     // (undocumented)
     anchor: HTMLElement | null;
     // (undocumented)
