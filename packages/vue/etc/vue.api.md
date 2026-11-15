@@ -1335,18 +1335,14 @@ readOnly: boolean;
 
 // @public (undocumented)
 export const OTPFieldInput: DefineComponent<ExtractPropTypes<    {
-index: {
-type: NumberConstructor;
-required: true;
-};
+disabled: BooleanConstructor;
 }>, () => VNode<RendererNode, RendererElement, {
 [key: string]: any;
 }>, {}, {}, {}, ComponentOptionsMixin, ComponentOptionsMixin, {}, string, PublicProps, Readonly<ExtractPropTypes<    {
-index: {
-type: NumberConstructor;
-required: true;
-};
-}>> & Readonly<{}>, {}, {}, {}, {}, string, ComponentProvideOptions, true, {}, any>;
+disabled: BooleanConstructor;
+}>> & Readonly<{}>, {
+disabled: boolean;
+}, {}, {}, {}, string, ComponentProvideOptions, true, {}, any>;
 
 // @public (undocumented)
 export const OTPFieldRoot: DefineComponent<ExtractPropTypes<    {
@@ -1359,9 +1355,12 @@ length: {
 type: NumberConstructor;
 default: number;
 };
+disabled: BooleanConstructor;
 }>, () => VNode<RendererNode, RendererElement, {
 [key: string]: any;
-}>, {}, {}, {}, ComponentOptionsMixin, ComponentOptionsMixin, "update:value"[], "update:value", PublicProps, Readonly<ExtractPropTypes<    {
+}>, {}, {}, {}, ComponentOptionsMixin, ComponentOptionsMixin, {
+'update:value': (value: string) => boolean;
+}, string, PublicProps, Readonly<ExtractPropTypes<    {
 value: StringConstructor;
 defaultValue: {
 type: StringConstructor;
@@ -1371,10 +1370,12 @@ length: {
 type: NumberConstructor;
 default: number;
 };
+disabled: BooleanConstructor;
 }>> & Readonly<{
-"onUpdate:value"?: (...args: any[]) => any;
+"onUpdate:value"?: (value: string) => any;
 }>, {
 length: number;
+disabled: boolean;
 defaultValue: string;
 }, {}, {}, {}, string, ComponentProvideOptions, true, {}, any>;
 

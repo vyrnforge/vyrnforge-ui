@@ -46,7 +46,10 @@ export const OTPFieldRoot = forwardRef<HTMLDivElement, OTPFieldRootProps>(functi
     createElement('div', { ...props, ref, 'data-vf-otp-field-root': '' }, children),
   );
 });
-export type OTPFieldInputProps = Omit<ComponentPropsWithoutRef<'input'>, 'value' | 'defaultValue' | 'type' | 'maxLength'>;
+export type OTPFieldInputProps = Omit<
+  ComponentPropsWithoutRef<'input'>,
+  'value' | 'defaultValue' | 'type' | 'maxLength'
+>;
 export const OTPFieldInput = forwardRef<HTMLInputElement, OTPFieldInputProps>(function OTPFieldInput(
   { onChange, inputMode, autoComplete, disabled, ...props },
   ref,

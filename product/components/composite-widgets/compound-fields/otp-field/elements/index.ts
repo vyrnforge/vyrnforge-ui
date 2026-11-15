@@ -26,8 +26,8 @@ export class VfOtpFieldElement extends HTMLElementBase {
     return node.closest(`[data-vf-otp-field-root],${this.localName}`) === this;
   }
   private get input() {
-    return Array.from(this.querySelectorAll<HTMLInputElement>('input[data-vf-otp-field-input]')).find(
-      (input) => this.owns(input),
+    return Array.from(this.querySelectorAll<HTMLInputElement>('input[data-vf-otp-field-input]')).find((input) =>
+      this.owns(input),
     );
   }
   private configureInput() {
@@ -43,7 +43,8 @@ export class VfOtpFieldElement extends HTMLElementBase {
   }
   private onInput = (event: Event) => {
     const input = this.input;
-    if (!input || event.target !== input || event.defaultPrevented || input.matches(':disabled') || input.readOnly) return;
+    if (!input || event.target !== input || event.defaultPrevented || input.matches(':disabled') || input.readOnly)
+      return;
     this.dispatchEvent(new CustomEvent('valuechange', { detail: { value: input.value }, bubbles: true }));
   };
 }

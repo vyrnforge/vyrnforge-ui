@@ -1935,20 +1935,30 @@ export class VfNumberFieldRootDirective {
 export class VfOtpFieldInputDirective {
     constructor(root: VfOtpFieldRootDirective);
     // (undocumented)
-    readonly index: InputSignal<number>;
+    readonly autoComplete: InputSignal<string>;
+    // (undocumented)
+    readonly disabled: InputSignalWithTransform<boolean, unknown>;
+    // (undocumented)
+    readonly inputMode: InputSignal<string>;
     // (undocumented)
     onInput(event: Event): void;
-    // (undocumented)
-    onKeyDown(event: KeyboardEvent): void;
-    // (undocumented)
-    onPaste(event: ClipboardEvent): void;
     // (undocumented)
     readonly root: VfOtpFieldRootDirective;
     // (undocumented)
     static ɵdir: i0.ɵɵDirectiveDeclaration<VfOtpFieldInputDirective, "input[vfOtpFieldInput]", never, {
-        "index": {
-            "alias": "vfOtpFieldInput";
-            "required": true;
+        "disabled": {
+            "alias": "disabled";
+            "required": false;
+            "isSignal": true;
+        };
+        "inputMode": {
+            "alias": "inputmode";
+            "required": false;
+            "isSignal": true;
+        };
+        "autoComplete": {
+            "alias": "autocomplete";
+            "required": false;
             "isSignal": true;
         };
     }, {}, never, never, true, never>;
@@ -1959,15 +1969,19 @@ export class VfOtpFieldInputDirective {
 // @public (undocumented)
 export class VfOtpFieldRootDirective {
     // (undocumented)
-    charAt(index: number): string;
-    // (undocumented)
-    current(): string;
+    readonly current: Signal<string>;
     // (undocumented)
     readonly defaultValue: InputSignal<string>;
     // (undocumented)
+    readonly disabled: InputSignalWithTransform<boolean, unknown>;
+    // (undocumented)
     readonly length: InputSignal<number>;
     // (undocumented)
-    setFrom(index: number, raw: string): number;
+    readonly maxLength: Signal<number>;
+    // (undocumented)
+    ngOnInit(): void;
+    // (undocumented)
+    set(next: string): void;
     // (undocumented)
     readonly value: InputSignal<string | undefined>;
     // (undocumented)
@@ -1986,6 +2000,11 @@ export class VfOtpFieldRootDirective {
         };
         "length": {
             "alias": "length";
+            "required": false;
+            "isSignal": true;
+        };
+        "disabled": {
+            "alias": "disabled";
             "required": false;
             "isSignal": true;
         };

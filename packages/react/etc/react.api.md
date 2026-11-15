@@ -2520,10 +2520,7 @@ export interface NumberFieldRootProps extends Omit<ComponentPropsWithoutRef<'div
 export const OTPFieldInput: ForwardRefExoticComponent<OTPFieldInputProps & RefAttributes<HTMLInputElement>>;
 
 // @public (undocumented)
-export interface OTPFieldInputProps extends Omit<ComponentPropsWithoutRef<'input'>, 'value'> {
-    // (undocumented)
-    index: number;
-}
+export type OTPFieldInputProps = Omit<ComponentPropsWithoutRef<'input'>, 'value' | 'defaultValue' | 'type' | 'maxLength'>;
 
 // @public (undocumented)
 export const OTPFieldRoot: ForwardRefExoticComponent<OTPFieldRootProps & RefAttributes<HTMLDivElement>>;
@@ -2534,6 +2531,8 @@ export interface OTPFieldRootProps extends ComponentPropsWithoutRef<'div'> {
     children?: ReactNode;
     // (undocumented)
     defaultValue?: string;
+    // (undocumented)
+    disabled?: boolean;
     // (undocumented)
     length?: number;
     // (undocumented)

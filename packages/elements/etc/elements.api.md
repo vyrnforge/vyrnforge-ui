@@ -427,9 +427,13 @@ export class VfNumberFieldElement extends H_10 {
 // @public (undocumented)
 export class VfOtpFieldElement extends HTMLElementBase_17 {
     // (undocumented)
+    attributeChangedCallback(): void;
+    // (undocumented)
     connectedCallback(): void;
     // (undocumented)
     disconnectedCallback(): void;
+    // (undocumented)
+    static get observedAttributes(): string[];
     // (undocumented)
     get value(): string;
     set value(value: string);

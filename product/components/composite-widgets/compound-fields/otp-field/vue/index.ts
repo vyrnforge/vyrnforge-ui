@@ -30,7 +30,8 @@ export const OTPFieldRoot = defineComponent({
     const internalValue = ref(props.defaultValue);
     const current = computed(() => props.value ?? internalValue.value);
     const length = computed(() => {
-      if (!Number.isInteger(props.length) || props.length < 1) throw new RangeError('OTPField length must be a positive integer.');
+      if (!Number.isInteger(props.length) || props.length < 1)
+        throw new RangeError('OTPField length must be a positive integer.');
       return props.length;
     });
     provide(otpFieldKey, {
