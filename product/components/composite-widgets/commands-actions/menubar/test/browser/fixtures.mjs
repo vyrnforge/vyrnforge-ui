@@ -84,12 +84,12 @@ export async function createAngularStory() {
     VfMenubarItemDirective,
   } = await import('@vyrnforge/angular/menubar');
   const { VfMenuTriggerDirective } = await import('@vyrnforge/angular/menu');
-  const template = `${before}<div vfMenubarRoot id="bar" aria-label="${name}">${entries
+  const template = `<main><h1>Menubar browser fixture</h1>${before}<div vfMenubarRoot id="bar" aria-label="${name}">${entries
     .map(
       ({ id, label, disabled }) =>
         `<div vfMenuRoot role="none"><button vfMenubarTrigger vfMenuTrigger id="${id}"${disabled ? ' disabled' : ''}>${label}</button><div vfMenuContent aria-label="${label}"><button vfMenuItem>Command</button></div></div>`,
     )
-    .join('')}</div>${after}`;
+    .join('')}</div>${after}</main>`;
   class MenubarTestApp {}
   Component({
     selector: 'vf-menubar-test',
