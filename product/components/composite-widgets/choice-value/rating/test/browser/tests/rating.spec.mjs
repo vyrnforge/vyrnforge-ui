@@ -74,3 +74,16 @@ test('public Rating CSS exposes focus and non-color filled and empty glyphs', as
     ).toBeGreaterThanOrEqual(24);
   }
 });
+
+test('Angular Rating hydrates existing server-rendered nodes without hydration warnings', async ({ page }) => {
+  test.skip(port !== 'angular', 'Angular hydration contract.');
+  const warnings = [];
+  page.on('console', (message) => {
+    if (/NG050[0-9]/.test(message.text())) warnings.push(message.text());
+  });
+  const response = await page.request.get('/components/rating/angular.html');
+  expect(await response.text()).toMatch(/\sngh=/);
+  await open(page);
+  await expect(page.locator('html')).toHaveAttribute('data-vf-angular-hydrated', 'true');
+  expect(warnings).toEqual([]);
+});
