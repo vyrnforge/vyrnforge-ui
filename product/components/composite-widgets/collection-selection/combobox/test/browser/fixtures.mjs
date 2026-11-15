@@ -74,7 +74,7 @@ export async function createReactStory() {
       Fragment,
       null,
       h('button', { id: 'before', type: 'button' }, 'Before'),
-      combo('react', items, 'Framework'),
+      h('fieldset', { id: 'combo-fieldset' }, h('legend', null, 'Framework selection'), combo('react', items, 'Framework')),
       combo('react-locale', cities, 'Turkish city', 'tr'),
       h(
         'button',
@@ -120,7 +120,7 @@ export async function createVueStory() {
       return () =>
         h('div', [
           h('button', { id: 'before', type: 'button' }, 'Before'),
-          combo('vue', items, 'Framework'),
+          h('fieldset', { id: 'combo-fieldset' }, [h('legend', 'Framework selection'), combo('vue', items, 'Framework')]),
           combo('vue-locale', cities, 'Turkish city', 'tr'),
           h(
             'button',
@@ -150,7 +150,7 @@ export async function createAngularStory() {
     selector: 'vf-combobox-test',
     standalone: true,
     imports: [VfComboboxRootDirective, VfComboboxInputDirective, VfComboboxContentDirective, VfComboboxOptionDirective],
-    template: `<main><h1>Combobox browser fixture</h1>${before}${combo('angular', items, 'Framework')}${combo('angular-locale', cities, 'Turkish city', 'tr')}${after}</main>`,
+    template: `<main><h1>Combobox browser fixture</h1>${before}<fieldset id="combo-fieldset"><legend>Framework selection</legend>${combo('angular', items, 'Framework')}</fieldset>${combo('angular-locale', cities, 'Turkish city', 'tr')}${after}</main>`,
   })(ComboboxTestApp);
   return ComboboxTestApp;
 }
@@ -160,7 +160,7 @@ export async function createElementsStory({ client }) {
     return `<vf-combobox${locale ? ' id="' + prefix + '-root" locale="' + locale + '"' : ''}><input id="${prefix}${locale ? '-root' : ''}-input" aria-label="${label}" data-vf-combobox-input><div id="${prefix}${locale ? '-root' : ''}-listbox" aria-label="${label} options" data-vf-combobox-content hidden>${options(prefix, rows)}</div></vf-combobox>`;
   }
   return {
-    body: `${before}${combo('elements', items, 'Framework')}${combo('elements-locale', cities, 'Turkish city', 'tr')}${after}`,
+    body: `${before}<fieldset id="combo-fieldset"><legend>Framework selection</legend>${combo('elements', items, 'Framework')}</fieldset>${combo('elements-locale', cities, 'Turkish city', 'tr')}${after}`,
     activate: client
       ? async () => {
           const { defineComboboxElement } = await import('@vyrnforge/elements/combobox');
