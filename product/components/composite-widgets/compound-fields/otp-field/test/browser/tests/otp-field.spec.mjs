@@ -1,89 +1,90 @@
 import { test, expect } from '@playwright/test';
 import { expectNoAxeViolations } from '../../../../../../../../tooling/testing/accessibility.mjs';
 const port = process.env.VF_COMPONENT_PORT || 'react';
-const frameworkPorts = new Set(['react', 'angular', 'vue', 'elements']);
-
+const frameworkPorts = new Set(['react', 'angular', 'vue']);
 async function openFixture(page) {
   await page.goto(`/components/otp-field/${port}.html`);
-  const group = page.getByRole('group', { name: 'Code de vérification', exact: true });
-  const cells = group.locator('input');
-  await expect(cells).toHaveCount(4);
-  return { group, cells };
+  if (port !== 'web') await expect(page.locator('body')).toHaveAttribute('data-otp-ready', 'true');
+  return page.getByRole('textbox', { name: 'Code de vérification', exact: true });
 }
-
-test.beforeEach(() => {
-  test.skip(
-    !frameworkPorts.has(port),
-    'Interactive OTPField behavior is implemented by framework/Elements ports; Web owns CSS only.',
-  );
-});
-
-test('otp field keeps accessible names consumer-authored and exposes one-time-code assistance', async ({ page }) => {
-  const { cells } = await openFixture(page);
-
-  await expect(page.getByLabel('Chiffre 1 sur 4 du code', { exact: true })).toBeVisible();
-  await expect(page.getByLabel('Chiffre 4 sur 4 du code', { exact: true })).toBeVisible();
-  await expect(page.getByRole('group', { name: 'One-time code', exact: true })).toHaveCount(0);
-  await expect(cells.nth(0)).toHaveAttribute('autocomplete', 'one-time-code');
-  await expect(cells.nth(0)).toHaveAttribute('maxlength', '4');
-  await expect(cells.nth(1)).toHaveAttribute('autocomplete', 'off');
-  await expect(cells.nth(1)).toHaveAttribute('maxlength', '1');
-
+test('one native labelled input preserves full-code editing and form value', async ({ page }) => {
+  const input = await openFixture(page);
+  await expect(input).toHaveCount(1);
+  await expect(input).toHaveAttribute('type', 'text');
+  await expect(input).toHaveAttribute('autocomplete', 'one-time-code');
+  await expect(input).toHaveAttribute('inputmode', 'numeric');
+  await expect(input).toHaveAttribute('maxlength', '4');
+  await expect(input).toHaveAttribute('aria-describedby', 'otp-guide');
+  await expect(page.locator('body')).not.toHaveAttribute('data-otp-value-count', /.+/);
+  await input.fill('0472');
+  await expect(input).toHaveValue('0472');
+  await expect(input).toBeFocused();
+  expect(await page.locator('#otp-form').evaluate((form) => new FormData(form).get('code'))).toBe('0472');
+  await input.press('End');
+  await input.press('Backspace');
+  await expect(input).toHaveValue('047');
+  await expect(input).toBeFocused();
+  await input.fill('5931');
+  await expect(input).toHaveValue('5931');
+  if (port !== 'web') await expect(page.locator('body')).toHaveAttribute('data-otp-value', '5931');
   expect((await expectNoAxeViolations(page)).violations).toEqual([]);
 });
-
-test('public OTPField CSS resolves canonical spacing and control radius in light and dark themes', async ({ page }) => {
-  test.skip(port !== 'react', 'Representative public CSS resolution evidence uses the React public entrypoint.');
-  const { group, cells } = await openFixture(page);
-
-  for (const theme of ['light', 'dark']) {
-    await page.locator('html').evaluate((element, value) => element.setAttribute('data-vf-theme', value), theme);
-    await expect(group).toHaveCSS('gap', '8px');
-    await expect(cells.nth(0)).toHaveCSS('border-top-left-radius', '6px');
-    await expect(cells.nth(0)).toHaveCSS('border-top-right-radius', '6px');
-  }
+test('native clipboard paste enters the whole code without focus redistribution', async ({
+  page,
+  context,
+  browserName,
+}) => {
+  test.skip(browserName !== 'chromium', 'Clipboard permissions are exercised in Chromium.');
+  const input = await openFixture(page);
+  await context.grantPermissions(['clipboard-read', 'clipboard-write']);
+  await page.evaluate(() => navigator.clipboard.writeText('5931'));
+  await input.focus();
+  await page.keyboard.press('Control+V');
+  await expect(input).toHaveValue('5931');
+  await expect(input).toBeFocused();
 });
-
-test('otp field advances on entry and empty backspace returns focus', async ({ page }) => {
-  const { cells } = await openFixture(page);
-
-  await cells.nth(0).fill('4');
-  await expect(cells.nth(0)).toHaveValue('4');
-  await expect(cells.nth(1)).toBeFocused();
-
-  await page.keyboard.press('Backspace');
-  await expect(cells.nth(0)).toBeFocused();
+test('controlled owner rejects requests, external updates are silent, and native states are preserved', async ({
+  page,
+}) => {
+  test.skip(!frameworkPorts.has(port), 'Framework controlled value contract.');
+  await openFixture(page);
+  const input = page.locator('#controlled');
+  await expect(input).toHaveValue('1234');
+  await expect(page.locator('body')).not.toHaveAttribute('data-otp-request-count', /.+/);
+  await input.fill('9876');
+  await expect(page.locator('body')).toHaveAttribute('data-otp-request', '9876');
+  await expect(input).toHaveValue('1234');
+  await expect(page.locator('body')).toHaveAttribute('data-otp-request-count', '1');
+  await page.locator('#set-code').click();
+  await expect(input).toHaveValue('7654');
+  await expect(page.locator('body')).toHaveAttribute('data-otp-request-count', '1');
+  await expect(page.locator('#disabled')).toBeDisabled();
+  await expect(page.locator('#readonly')).toHaveAttribute('readonly', '');
+  await expect(page.locator('#readonly')).toHaveValue('5678');
+  await expect(page.locator('#alpha')).toHaveAttribute('inputmode', 'text');
+  await page.locator('#alpha').fill('A2b4');
+  await expect(page.locator('#alpha')).toHaveValue('A2b4');
 });
-
-test('otp field distributes paste across cells', async ({ page }) => {
-  const { cells } = await openFixture(page);
-
-  await cells.nth(0).evaluate((element) => {
-    const data = new DataTransfer();
-    data.setData('text/plain', '5931');
-    const event = new ClipboardEvent('paste', { bubbles: true, cancelable: true });
-    Object.defineProperty(event, 'clipboardData', { value: data });
-    element.dispatchEvent(event);
+test('Elements property updates and nested roots are isolated', async ({ page }) => {
+  test.skip(port !== 'elements', 'Elements ownership contract.');
+  const input = await openFixture(page);
+  await page.locator('#code-root').evaluate((root) => {
+    root.value = '1234';
   });
-
-  await expect(cells.nth(0)).toHaveValue('5');
-  await expect(cells.nth(1)).toHaveValue('9');
-  await expect(cells.nth(2)).toHaveValue('3');
-  await expect(cells.nth(3)).toHaveValue('1');
-  await expect(cells.nth(3)).toBeFocused();
+  await expect(input).toHaveValue('1234');
+  await expect(page.locator('body')).not.toHaveAttribute('data-otp-value-count', /.+/);
+  await page.locator('#nested').fill('5678');
+  await expect(input).toHaveValue('1234');
+  await expect(page.locator('body')).not.toHaveAttribute('data-otp-value-count', /.+/);
+  await input.fill('9012');
+  await expect(page.locator('body')).toHaveAttribute('data-otp-value-count', '1');
+  await expect(page.locator('#nested')).toHaveValue('5678');
 });
-
-test('otp field distributes multi-character platform input from the one-time-code cell', async ({ page }) => {
-  const { cells } = await openFixture(page);
-
-  // Use the browser/framework input path rather than mutating the DOM value behind
-  // React's value tracker; this represents the multi-character replacement the
-  // component must accept from one-time-code assistance.
-  await cells.nth(0).fill('8472');
-
-  await expect(cells.nth(0)).toHaveValue('8');
-  await expect(cells.nth(1)).toHaveValue('4');
-  await expect(cells.nth(2)).toHaveValue('7');
-  await expect(cells.nth(3)).toHaveValue('2');
-  await expect(cells.nth(3)).toBeFocused();
+test('public CSS uses canonical gap and input radius in both themes', async ({ page }) => {
+  const input = await openFixture(page);
+  for (const theme of ['light', 'dark']) {
+    await page.locator('html').evaluate((el, value) => el.setAttribute('data-vf-theme', value), theme);
+    await expect(page.locator('#code-root')).toHaveCSS('gap', '8px');
+    await expect(input).toHaveCSS('border-top-left-radius', '6px');
+  }
 });
