@@ -2122,7 +2122,7 @@ export class VfPreviewCardContentDirective implements OnDestroy {
 // @public (undocumented)
 export class VfPreviewCardRootDirective implements OnDestroy {
     // (undocumented)
-    activity(source: Activity, active: boolean, delay: number): void;
+    activity(source: Activity_2, active: boolean, delay: number): void;
     // (undocumented)
     anchor: HTMLElement | null;
     // (undocumented)
