@@ -6,9 +6,20 @@
     "kind": "composite",
     "reference": "native editable text input controlling a custom listbox popup"
   },
-  "wcag": { "target": "2.2 AA", "status": "mapped", "criteria": ["1.3.1", "2.1.1", "2.4.3", "2.4.7", "4.1.2"] },
-  "aria": { "status": "mapped", "apgPattern": "combobox" },
-  "interaction": { "keyboard": "managed", "focus": "active-descendant", "directionality": "vertical" },
+  "wcag": {
+    "target": "2.2 AA",
+    "status": "mapped",
+    "criteria": ["1.3.1", "2.1.1", "2.4.3", "2.4.7", "4.1.2"]
+  },
+  "aria": {
+    "status": "mapped",
+    "apgPattern": "combobox"
+  },
+  "interaction": {
+    "keyboard": "managed",
+    "focus": "active-descendant",
+    "directionality": "vertical"
+  },
   "ownership": {
     "library": [
       "combobox/listbox roles and aria-expanded, aria-controls, and aria-activedescendant relationships",
@@ -23,15 +34,25 @@
       "own form serialization, required/validation policy, and server-side interpretation of the selected value"
     ]
   },
-  "forms": { "status": "not-applicable" },
-  "visualAccessibility": { "status": "component-specific" },
-  "ssrHydration": { "status": "contract-required" },
-  "evidence": { "browser": "required", "assistiveTechnology": "required" },
+  "forms": {
+    "status": "not-applicable"
+  },
+  "visualAccessibility": {
+    "status": "component-specific"
+  },
+  "ssrHydration": {
+    "status": "contract-required"
+  },
+  "evidence": {
+    "browser": "required",
+    "assistiveTechnology": "required"
+  },
   "profileVariability": [],
   "notes": [
     "Combobox uses the APG editable listbox-popup active-descendant model: DOM focus stays on the native text input while assistive-technology focus moves through listbox options.",
     "Home, End, printable characters, and other native text-editing keys are not intercepted by Combobox navigation.",
     "The active option uses aria-selected while navigating suggestions; committing with Enter updates the selected value and closes the popup.",
-    "Manual assistive-technology evidence remains owned by #633 and is not manufactured by this mapping."
+    "Manual assistive-technology evidence remains owned by #633 and is not manufactured by this mapping.",
+    "Native auto popover owns top-layer presentation and light dismissal; runtime maintains input DOM focus and clears active descendant on close. React/Vue content stays mounted while closed. Controlled value/query and full generated relationship edge cases remain separate audit work."
   ]
 }
