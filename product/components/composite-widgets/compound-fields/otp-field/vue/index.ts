@@ -67,7 +67,7 @@ export const OTPFieldInput = defineComponent({
           invoke(attrs.onInput, event);
           const input = event.currentTarget as HTMLInputElement;
           if (!event.defaultPrevented && !input.matches(':disabled') && !input.readOnly) field.set(input.value);
-          input.value = field.value();
+          if (input.value !== field.value()) input.value = field.value();
         },
       });
   },

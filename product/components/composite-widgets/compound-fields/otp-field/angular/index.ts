@@ -50,6 +50,6 @@ export class VfOtpFieldInputDirective {
   onInput(event: Event) {
     const input = event.currentTarget as HTMLInputElement;
     if (!event.defaultPrevented && !input.matches(':disabled') && !input.readOnly) this.root.set(input.value);
-    input.value = this.root.current();
+    if (input.value !== this.root.current()) input.value = this.root.current();
   }
 }
