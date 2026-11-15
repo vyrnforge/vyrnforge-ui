@@ -1,5 +1,6 @@
 import {
   Directive,
+  DestroyRef,
   ElementRef,
   afterRenderEffect,
   computed,
@@ -10,9 +11,31 @@ import {
   type OnDestroy,
   type WritableSignal,
 } from '@angular/core';
-import { resolveNavigationIndex } from '@vyrnforge/core/collection-navigation';
+import { navigationIntentForArrow, resolveNavigationIndex } from '@vyrnforge/core/collection-navigation';
 import { findTypeaheadMatch } from '@vyrnforge/core/typeahead-matching';
 import type { FloatingPlacement } from '@vyrnforge/web/floating-positioning';
+
+function adjacentMenubarTrigger(
+  trigger: HTMLElement | null,
+  event: Pick<KeyboardEvent, 'key'>,
+): HTMLButtonElement | null {
+  if (!trigger?.matches('[data-vf-menubar-trigger]') || (event.key !== 'ArrowLeft' && event.key !== 'ArrowRight'))
+    return null;
+  const bar = trigger.closest('[data-vf-menubar-root]');
+  if (!bar) return null;
+  const items = Array.from(bar.querySelectorAll<HTMLButtonElement>('[data-vf-menubar-trigger]')).filter(
+    (item) => item.closest('[data-vf-menubar-root]') === bar,
+  );
+  const direction = getComputedStyle(bar).direction === 'rtl' ? 'rtl' : 'ltr';
+  const intent = navigationIntentForArrow(event.key === 'ArrowLeft' ? 'left' : 'right', 'horizontal', direction);
+  if (!intent) return null;
+  const next = resolveNavigationIndex(
+    items.map((item) => ({ eligible: !item.matches(':disabled') })),
+    items.indexOf(trigger as HTMLButtonElement),
+    intent,
+  );
+  return next == null || items[next] === trigger ? null : (items[next] ?? null);
+}
 
 const menuItemSelector = '[data-vf-menu-item]';
 function menuItems(root: HTMLElement): HTMLElement[] {
@@ -30,6 +53,7 @@ interface MenuFocusRequest {
   revision: WritableSignal<number>;
 }
 const focusRequests = new WeakMap<VfMenuRootDirective, MenuFocusRequest>();
+const menusByTrigger = new WeakMap<HTMLElement, VfMenuRootDirective>();
 function focusRequestFor(root: VfMenuRootDirective): MenuFocusRequest {
   let request = focusRequests.get(root);
   if (!request) {
@@ -76,7 +100,13 @@ export class VfMenuRootDirective {
 export class VfMenuTriggerDirective {
   private readonly element = inject<ElementRef<HTMLButtonElement>>(ElementRef);
   constructor(readonly root: VfMenuRootDirective) {
-    this.root.anchor = this.element.nativeElement;
+    const trigger = this.element.nativeElement;
+    this.root.anchor = trigger;
+    menusByTrigger.set(trigger, root);
+    inject(DestroyRef).onDestroy(() => {
+      menusByTrigger.delete(trigger);
+      if (root.anchor === trigger) root.anchor = null;
+    });
   }
   onClick(event: MouseEvent) {
     if (event.defaultPrevented) return;
@@ -121,6 +151,7 @@ export class VfMenuContentDirective implements OnDestroy {
   private timer: ReturnType<typeof setTimeout> | null = null;
   private readonly nativeRevision = signal(0);
   private restoreFocus = false;
+  private switchTarget: HTMLButtonElement | null = null;
   constructor(readonly root: VfMenuRootDirective) {
     this.root.surface = this.element.nativeElement;
     afterRenderEffect(() => {
@@ -136,7 +167,15 @@ export class VfMenuContentDirective implements OnDestroy {
         if (this.timer !== null) clearTimeout(this.timer);
         this.timer = null;
         this.query = '';
-      }
+        const next = this.switchTarget;
+        this.switchTarget = null;
+        const targetMenu = next ? menusByTrigger.get(next) : undefined;
+        if (next?.isConnected && targetMenu) {
+          next.focus();
+          targetMenu.setOpen(true);
+          targetMenu.focusMenu('first');
+        }
+      } else this.switchTarget = null;
       const request = focusRequestFor(this.root);
       request.revision();
       const edge = request.edge;
@@ -180,6 +219,14 @@ export class VfMenuContentDirective implements OnDestroy {
       event.target.closest('[data-vf-menu-content]') !== this.element.nativeElement
     )
       return;
+    const nextTrigger = adjacentMenubarTrigger(this.root.anchor, event);
+    if (nextTrigger && menusByTrigger.has(nextTrigger)) {
+      event.preventDefault();
+      this.switchTarget = nextTrigger;
+      this.root.setOpen(false);
+      this.nativeRevision.update((revision) => revision + 1);
+      return;
+    }
     if (event.key === 'Escape') {
       event.preventDefault();
       this.root.setOpen(false);
