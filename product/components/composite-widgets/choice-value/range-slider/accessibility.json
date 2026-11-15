@@ -23,7 +23,8 @@
   "ownership": {
     "library": [
       "Coordinate two native ranges with one ordered value pair and a shared min/max/step grid; preserve thumb identity at bounds.",
-      "Expose valid dynamic native bounds and controlled change requests; preserve native range focus and keyboard behavior."
+      "Expose valid dynamic native bounds and controlled change requests; preserve native range focus and keyboard behavior.",
+      "After a non-canceled native form reset, reconcile both inputs to the initial uncontrolled pair or latest controlled pair without emitting input intent."
     ],
     "consumer": [
       "Author separately localized accessible names for both inputs, their units/value text, and any form names.",
@@ -46,7 +47,7 @@
   "profileVariability": [],
   "notes": [
     "The chosen contract is two coordinated native range inputs, not an overlaid custom multi-thumb slider.",
-    "React/Vue require startLabel/endLabel; Angular and Elements use authored native input labels. Native form submission and disabled exclusion are tested; reset, external form integration, touch target/visual, cross-browser and manual AT evidence remain open.",
+    "React/Vue require startLabel/endLabel; Angular and Elements use authored native input labels. Native form submission, disabled exclusion and same-form reset have browser regressions; external form integration, touch target/visual, cross-browser and manual AT evidence remain open.",
     "Audit mapping remains provisional; not a conformance claim."
   ]
 }

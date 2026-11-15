@@ -54,12 +54,18 @@ function readPair(value: string | null): Pair | undefined {
 export class VfRangeSliderElement extends H {
   static readonly observedAttributes = ['min', 'max', 'step', 'value', 'default-value', 'disabled'];
   private internal: Pair | undefined;
+  private initial: Pair | undefined;
+  private resetDocument: Document | null = null;
+  private connectionRevision = 0;
   private observer: MutationObserver | null = null;
   private authoredDisabled = new WeakMap<HTMLInputElement, boolean>();
 
   connectedCallback() {
     this.setAttribute('data-vf-range-slider-root', '');
     this.addEventListener('input', this.onInput);
+    this.connectionRevision++;
+    this.resetDocument = this.ownerDocument;
+    this.resetDocument.addEventListener('reset', this.onReset, true);
     this.observer = new MutationObserver(() => this.sync());
     this.observer.observe(this, { childList: true, subtree: true });
     this.sync();
@@ -67,6 +73,9 @@ export class VfRangeSliderElement extends H {
 
   disconnectedCallback() {
     this.removeEventListener('input', this.onInput);
+    this.connectionRevision++;
+    this.resetDocument?.removeEventListener('reset', this.onReset, true);
+    this.resetDocument = null;
     this.observer?.disconnect();
     this.observer = null;
   }
@@ -102,11 +111,12 @@ export class VfRangeSliderElement extends H {
   private sync() {
     const [start, end] = this.inputs();
     if (!start || !end) return;
-    if (!this.internal) {
-      this.internal = readPair(this.getAttribute('default-value')) ?? [
+    if (!this.initial) {
+      this.initial = readPair(this.getAttribute('default-value')) ?? [
         Number(start.getAttribute('value') ?? 25),
         Number(end.getAttribute('value') ?? 75),
       ];
+      this.internal = [...this.initial];
     }
     const [min, max, step] = this.range();
     const [lower, upper] = this.value;
@@ -123,6 +133,25 @@ export class VfRangeSliderElement extends H {
     start.value = String(lower);
     end.value = String(upper);
   }
+
+  private onReset = (event: Event) => {
+    const [start, end] = this.inputs();
+    if (!start || !end || !start.form || start.form !== event.target || end.form !== event.target) return;
+    const revision = this.connectionRevision;
+    setTimeout(() => {
+      if (
+        !this.isConnected ||
+        revision !== this.connectionRevision ||
+        event.defaultPrevented ||
+        start.form !== event.target ||
+        end.form !== event.target
+      ) {
+        return;
+      }
+      if (!this.hasAttribute('value') && this.initial) this.internal = [...this.initial];
+      this.sync();
+    }, 0);
+  };
 
   private onInput = (event: Event) => {
     const [start, end] = this.inputs();

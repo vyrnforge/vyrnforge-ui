@@ -2467,6 +2467,7 @@ export class VfRangeSliderEndDirective {
 
 // @public (undocumented)
 export class VfRangeSliderRootDirective {
+    constructor();
     // (undocumented)
     change(index: 0 | 1, event: Event): void;
     // (undocumented)
