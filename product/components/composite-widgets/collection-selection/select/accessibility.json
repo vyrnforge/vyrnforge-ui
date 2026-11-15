@@ -41,7 +41,7 @@
   },
   "profileVariability": [],
   "notes": [
-    "Custom Select remains a button/listbox composition; prefer native select for ordinary form selection. Form participation, required/invalid/reset and a fully deterministic relationship API remain unresolved.",
+    "Custom Select remains a button/listbox composition; prefer native select for ordinary form selection. Form participation and required/invalid/reset remain unresolved. React, Vue and Angular own generated trigger/listbox IDs from an optional root id; Elements preserves authored content identity and derives aria-controls from the actual content. Native Web authors the relationship directly.",
     "Native auto popover owns stacking and light dismissal; CSS anchor positioning owns placement. The runtime owns committed value/open state, eligible navigation and focus restoration.",
     "React/Vue content remains mounted while closed. Automated evidence does not establish full accessibility or native form equivalence."
   ]

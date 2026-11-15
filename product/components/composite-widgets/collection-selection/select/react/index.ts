@@ -4,6 +4,7 @@ import {
   forwardRef,
   useContext,
   useEffect,
+  useId,
   useMemo,
   useRef,
   useState,
@@ -40,6 +41,8 @@ function focusOption(root: HTMLElement | null, edge: 'first' | 'last'): void {
 }
 
 interface Ctx {
+  triggerId: string;
+  listboxId: string;
   open: boolean;
   setOpen(value: boolean): void;
   value: string;
@@ -59,6 +62,7 @@ function useSelect(): Ctx {
 
 export interface SelectRootProps {
   children?: ReactNode;
+  id?: string;
   value?: string;
   defaultValue?: string;
   open?: boolean;
@@ -69,6 +73,7 @@ export interface SelectRootProps {
 
 export function SelectRoot({
   children,
+  id,
   value,
   defaultValue = '',
   open,
@@ -80,12 +85,18 @@ export function SelectRoot({
   const [internalOpen, setInternalOpen] = useState(defaultOpen);
   const selected = value ?? internalValue;
   const expanded = open ?? internalOpen;
+  const uid = useId();
+  const rootId = id ?? `vf-select-${uid}`;
+  const triggerId = `${rootId}-trigger`;
+  const listboxId = `${rootId}-listbox`;
   const anchorRef = useRef<HTMLElement | null>(null);
   const surfaceRef = useRef<HTMLElement | null>(null);
   const focusRequest = useRef<'first' | 'last' | null>(null);
   const [focusRevision, setFocusRevision] = useState(0);
   const context = useMemo<Ctx>(
     () => ({
+      triggerId,
+      listboxId,
       open: expanded,
       setOpen(next) {
         if (next === expanded) return;
@@ -108,12 +119,12 @@ export function SelectRoot({
         setFocusRevision((revision) => revision + 1);
       },
     }),
-    [expanded, onOpenChange, onValueChange, open, selected, value, focusRevision],
+    [expanded, onOpenChange, onValueChange, open, selected, value, focusRevision, triggerId, listboxId],
   );
   return createElement(C.Provider, { value: context }, children);
 }
 
-export const SelectTrigger = forwardRef<HTMLButtonElement, ComponentPropsWithoutRef<'button'>>(function SelectTrigger(
+export const SelectTrigger = forwardRef<HTMLButtonElement, Omit<ComponentPropsWithoutRef<'button'>, 'id' | 'aria-controls'>>(function SelectTrigger(
   { onClick, onKeyDown, ...props },
   forwardedRef,
 ) {
@@ -133,6 +144,8 @@ export const SelectTrigger = forwardRef<HTMLButtonElement, ComponentPropsWithout
       },
       type: props.type ?? 'button',
       'data-vf-select-trigger': '',
+      id: select.triggerId,
+      'aria-controls': select.listboxId,
       'aria-haspopup': 'listbox',
       'aria-expanded': select.open,
       onClick(event: MouseEvent<HTMLButtonElement>) {
@@ -157,7 +170,7 @@ export const SelectTrigger = forwardRef<HTMLButtonElement, ComponentPropsWithout
   );
 });
 
-export const SelectContent = forwardRef<HTMLDivElement, ComponentPropsWithoutRef<'div'>>(function SelectContent(
+export const SelectContent = forwardRef<HTMLDivElement, Omit<ComponentPropsWithoutRef<'div'>, 'id'>>(function SelectContent(
   { onKeyDown, onBeforeToggle, onToggle, ...props },
   forwardedRef,
 ) {
@@ -196,6 +209,7 @@ export const SelectContent = forwardRef<HTMLDivElement, ComponentPropsWithoutRef
       if (typeof forwardedRef === 'function') forwardedRef(node);
       else if (forwardedRef) forwardedRef.current = node;
     },
+    id: select.listboxId,
     role: 'listbox',
     tabIndex: -1,
     popover: 'auto',

@@ -58,16 +58,17 @@ export async function createReactStory() {
       h(
         SelectRoot,
         { defaultValue: 'one', onValueChange: valueChanged },
-        h(SelectTrigger, { id: 'trigger', 'aria-controls': 'list' }, 'Choose'),
+        h(SelectTrigger, { id: 'obsolete-trigger', 'aria-controls': 'obsolete-list' }, 'Choose'),
         h(
           SelectContent,
-          { id: 'list', 'aria-labelledby': 'select-label' },
+          { id: 'obsolete-list', 'aria-labelledby': 'select-label' },
           ...labels.map((_, index) => option('react', index)),
         ),
       ),
       h(
         SelectRoot,
         {
+          id: 'controlled',
           value: 'one',
           open,
           onValueChange: request,
@@ -78,12 +79,12 @@ export async function createReactStory() {
         },
         h(
           SelectTrigger,
-          { id: 'controlled-trigger', tabIndex: -1, 'aria-controls': 'controlled-list' },
+          { tabIndex: -1 },
           'Controlled selection',
         ),
         h(
           SelectContent,
-          { id: 'controlled-list', 'aria-label': 'Controlled options' },
+          { 'aria-label': 'Controlled options' },
           option('controlled', 0),
           option('controlled', 2),
         ),
@@ -116,14 +117,15 @@ export async function createVueStory() {
           h('button', { id: 'before', type: 'button' }, 'Before'),
           h('div', { id: 'select-label' }, 'Choose an option'),
           h(SelectRoot, { defaultValue: 'one', 'onUpdate:value': valueChanged }, () => [
-            h(SelectTrigger, { id: 'trigger', 'aria-controls': 'list' }, () => 'Choose'),
-            h(SelectContent, { id: 'list', 'aria-labelledby': 'select-label' }, () =>
+            h(SelectTrigger, { id: 'obsolete-trigger', 'aria-controls': 'obsolete-list' }, () => 'Choose'),
+            h(SelectContent, { id: 'obsolete-list', 'aria-labelledby': 'select-label' }, () =>
               labels.map((_, index) => option('vue', index)),
             ),
           ]),
           h(
             SelectRoot,
             {
+              id: 'controlled',
               value: 'one',
               open: open.value,
               'onUpdate:value': request,
@@ -135,10 +137,10 @@ export async function createVueStory() {
             () => [
               h(
                 SelectTrigger,
-                { id: 'controlled-trigger', tabindex: -1, 'aria-controls': 'controlled-list' },
+                { tabindex: -1 },
                 () => 'Controlled selection',
               ),
-              h(SelectContent, { id: 'controlled-list', 'aria-label': 'Controlled options' }, () => [
+              h(SelectContent, { 'aria-label': 'Controlled options' }, () => [
                 option('controlled', 0),
                 option('controlled', 2),
               ]),
@@ -182,14 +184,14 @@ export async function createAngularStory() {
     selector: 'vf-select-test',
     standalone: true,
     imports: [VfSelectRootDirective, VfSelectTriggerDirective, VfSelectContentDirective, VfSelectOptionDirective],
-    template: `<main><h1>Select browser fixture</h1>${before}${label}<div vfSelectRoot defaultValue="one" (valueChange)="valueChanged($event)"><button vfSelectTrigger id="trigger" aria-controls="list">Choose</button><div vfSelectContent id="list" aria-labelledby="select-label">${angularOptions('angular', [0, 1, 2, 3])}</div></div><div vfSelectRoot value="one" [open]="controlled()" (valueChange)="request($event)" (openChange)="openRequest($event)"><button vfSelectTrigger id="controlled-trigger" tabindex="-1" aria-controls="controlled-list">Controlled selection</button><div vfSelectContent id="controlled-list" aria-label="Controlled options">${angularOptions('controlled', [0, 2])}</div></div>${after}</main>`,
+    template: `<main><h1>Select browser fixture</h1>${before}${label}<div vfSelectRoot defaultValue="one" (valueChange)="valueChanged($event)"><button vfSelectTrigger>Choose</button><div vfSelectContent aria-labelledby="select-label">${angularOptions('angular', [0, 1, 2, 3])}</div></div><div vfSelectRoot id="controlled" value="one" [open]="controlled()" (valueChange)="request($event)" (openChange)="openRequest($event)"><button vfSelectTrigger tabindex="-1">Controlled selection</button><div vfSelectContent aria-label="Controlled options">${angularOptions('controlled', [0, 2])}</div></div>${after}</main>`,
   })(SelectTestApp);
   return SelectTestApp;
 }
 
 export async function createElementsStory({ client }) {
   return {
-    body: `${before}${label}<vf-select id="elements-select" value="one"><button id="trigger" type="button" aria-haspopup="listbox" aria-expanded="false" aria-controls="list" data-vf-select-trigger>Choose</button><div id="list" role="listbox" tabindex="-1" aria-labelledby="select-label" data-vf-select-content hidden>${options('elements')}</div></vf-select>${after}`,
+    body: `${before}${label}<vf-select id="elements-select" value="one"><button id="trigger" type="button" aria-haspopup="listbox" aria-expanded="false" aria-controls="obsolete-list" data-vf-select-trigger>Choose</button><div id="list" role="listbox" tabindex="-1" aria-labelledby="select-label" data-vf-select-content hidden>${options('elements')}</div></vf-select>${after}`,
     activate: client
       ? async () => {
           const { defineSelectElement } = await import('@vyrnforge/elements/select');
