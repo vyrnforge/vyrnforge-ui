@@ -9,6 +9,13 @@ export interface DialogOpenChangeDetail {
 function canRestoreFocus(element: HTMLElement | null): element is HTMLElement {
   return Boolean(element?.isConnected && !element.hasAttribute('disabled') && !element.closest('[inert]'));
 }
+function isBackdropHit(event: MouseEvent | PointerEvent): boolean {
+  if (event.target !== event.currentTarget || event.button !== 0) return false;
+  const rect = (event.currentTarget as HTMLDialogElement).getBoundingClientRect();
+  return event.clientX < rect.left || event.clientX > rect.right || event.clientY < rect.top || event.clientY > rect.bottom;
+}
+
+const modalOwner = 'vf-dialog,vf-drawer,vf-alert-dialog';
 export class VfDialogElement extends HTMLElementBase {
   static readonly observedAttributes = ['open', 'backdrop-dismiss'];
   #restoreTarget: HTMLElement | null = null;
@@ -20,6 +27,7 @@ export class VfDialogElement extends HTMLElementBase {
     dialog?.addEventListener('cancel', this.#onCancel);
     dialog?.addEventListener('close', this.#onClose);
     dialog?.addEventListener('pointerdown', this.#onPointerDown);
+    dialog?.addEventListener('pointercancel', this.#onPointerCancel);
     this.#sync();
   }
   disconnectedCallback(): void {
@@ -28,12 +36,14 @@ export class VfDialogElement extends HTMLElementBase {
     dialog?.removeEventListener('cancel', this.#onCancel);
     dialog?.removeEventListener('close', this.#onClose);
     dialog?.removeEventListener('pointerdown', this.#onPointerDown);
+    dialog?.removeEventListener('pointercancel', this.#onPointerCancel);
+    if (dialog?.open) dialog.close();
   }
   attributeChangedCallback(): void {
     if (this.isConnected) this.#sync();
   }
   get dialog(): HTMLDialogElement | null {
-    return this.querySelector<HTMLDialogElement>('dialog[data-vf-dialog-root], dialog');
+    return Array.from(this.querySelectorAll<HTMLDialogElement>('dialog')).find(dialog => dialog.closest(modalOwner) === this) ?? null;
   }
   get open(): boolean {
     return this.hasAttribute('open');
@@ -46,17 +56,19 @@ export class VfDialogElement extends HTMLElementBase {
     if (!dialog) return;
     if (!this.id) this.id = `vf-dialog-${Math.random().toString(36).slice(2)}`;
     dialog.setAttribute('data-vf-dialog-root', '');
-    dialog.toggleAttribute('data-vf-backdrop-dismiss', this.hasAttribute('backdrop-dismiss'));
-    const title = this.querySelector<HTMLElement>('[data-vf-dialog-title]');
-    const description = this.querySelector<HTMLElement>('[data-vf-dialog-description]');
+    dialog.toggleAttribute('data-vf-backdrop-dismiss', this.hasAttribute('backdrop-dismiss') && this.localName !== 'vf-alert-dialog');
+    const ownedPart = (selector: string) => Array.from(dialog.querySelectorAll<HTMLElement>(selector)).find(part => part.closest('dialog') === dialog && part.closest(modalOwner) === this);
+    const title = ownedPart('[data-vf-dialog-title],[data-vf-drawer-title],[data-vf-alert-dialog-title]');
+    const description = ownedPart('[data-vf-dialog-description],[data-vf-drawer-description],[data-vf-alert-dialog-description]');
     if (title) {
       title.id ||= `${this.id}-title`;
-      dialog.setAttribute('aria-labelledby', title.id);
+      if (!dialog.hasAttribute('aria-label') && !dialog.hasAttribute('aria-labelledby')) dialog.setAttribute('aria-labelledby', title.id);
     }
     if (description) {
       description.id ||= `${this.id}-description`;
-      dialog.setAttribute('aria-describedby', description.id);
+      if (!dialog.hasAttribute('aria-describedby')) dialog.setAttribute('aria-describedby', description.id);
     }
+    if (this.open && dialog.open && !dialog.matches(':modal')) dialog.close();
     if (this.open && !dialog.open) {
       this.#restoreTarget = document.activeElement instanceof HTMLElement ? document.activeElement : null;
       dialog.showModal();
@@ -81,31 +93,38 @@ export class VfDialogElement extends HTMLElementBase {
     );
   }
   #onCancel = (event: Event): void => {
+    if (event.defaultPrevented) return;
     event.preventDefault();
     this.#requestDismiss('escape');
   };
   #onPointerDown = (event: PointerEvent): void => {
-    this.#backdropPointerDown = event.target === event.currentTarget;
+    this.#backdropPointerDown = !event.defaultPrevented && isBackdropHit(event);
   };
+  #onPointerCancel = (): void => { this.#backdropPointerDown = false; };
   #onClose = (): void => {
+    if (this.dialog?.open) return;
     if (this.open) {
-      queueMicrotask(() => this.#sync());
+      queueMicrotask(() => { if (this.isConnected) this.#sync(); });
       return;
     }
     const target = this.#restoreTarget;
     this.#restoreTarget = null;
-    if (canRestoreFocus(target)) target.focus();
+    const dialog = this.dialog;
+    const focused = dialog?.ownerDocument.activeElement;
+    if (canRestoreFocus(target) && (!focused || focused === dialog?.ownerDocument.body || dialog?.contains(focused))) target.focus();
   };
-  #onClick = (event: Event): void => {
-    if (!(event.target instanceof Element)) return;
-    const close = event.target.closest('[data-vf-dialog-close]');
-    if (close && this.contains(close)) {
+  #onClick = (event: MouseEvent): void => {
+    if (!(event.target instanceof Element) || event.target.closest(modalOwner) !== this || event.defaultPrevented) return;
+    const close = event.target.closest('[data-vf-dialog-close],[data-vf-drawer-close],[data-vf-alert-dialog-cancel],[data-vf-alert-dialog-action]');
+    if (close && close.closest('dialog') === this.dialog && !close.matches(':disabled')) {
       this.#requestDismiss('close-control');
       return;
     }
     const dialog = this.dialog;
-    if (dialog && this.hasAttribute('backdrop-dismiss') && this.#backdropPointerDown && event.target === dialog)
-      this.#requestDismiss('backdrop');
+    if (dialog && this.localName !== 'vf-alert-dialog' && this.hasAttribute('backdrop-dismiss') && this.#backdropPointerDown && event.target === dialog) {
+      const rect = dialog.getBoundingClientRect();
+      if (event.button === 0 && (event.clientX < rect.left || event.clientX > rect.right || event.clientY < rect.top || event.clientY > rect.bottom)) this.#requestDismiss('backdrop');
+    }
     this.#backdropPointerDown = false;
   };
 }

@@ -35,6 +35,12 @@ function canRestoreFocus(element: HTMLElement | null): element is HTMLElement {
   return Boolean(element?.isConnected && !element.hasAttribute('disabled') && !element.closest('[inert]'));
 }
 
+function isBackdropHit(event: MouseEvent | PointerEvent): boolean {
+  if (event.target !== event.currentTarget || event.button !== 0) return false;
+  const rect = (event.currentTarget as HTMLDialogElement).getBoundingClientRect();
+  return event.clientX < rect.left || event.clientX > rect.right || event.clientY < rect.top || event.clientY > rect.bottom;
+}
+
 @Directive({
   selector: 'dialog[vfDrawerRoot]',
   standalone: true,
@@ -43,11 +49,13 @@ function canRestoreFocus(element: HTMLElement | null): element is HTMLElement {
     '[attr.aria-labelledby]': 'resolvedTitleId()',
     '[attr.aria-describedby]': 'descriptionId() ?? null',
     'data-vf-drawer-root': '',
+    'data-vf-dialog-root': '',
     '[attr.data-vf-placement]': 'placement()',
     '[attr.data-vf-open]': 'desiredOpen() ? "" : null',
     '(cancel)': 'onCancel($event)',
     '(close)': 'onClose()',
     '(pointerdown)': 'onPointerDown($event)',
+    '(pointercancel)': 'onPointerCancel()',
     '(click)': 'onClick($event)',
   },
 })
@@ -80,14 +88,14 @@ export class VfDrawerRootDirective {
         this.initialized = true;
         if (controlledOpen === undefined) this.internalOpen.set(defaultOpen);
       }
-      const desiredOpen = controlledOpen ?? this.internalOpen();
       if (typeof document === 'undefined') return;
       const dialog = this.element.nativeElement;
-      queueMicrotask(() => this.syncDialog(dialog, desiredOpen, true));
+      queueMicrotask(() => this.syncDialog(dialog, this.desiredOpen(), true));
     });
   }
 
   private syncDialog(dialog: HTMLDialogElement, desiredOpen: boolean, captureRestoreTarget: boolean): void {
+    if (!dialog.isConnected) return;
     if (desiredOpen && !dialog.open) {
       if (captureRestoreTarget)
         this.restoreTarget = document.activeElement instanceof HTMLElement ? document.activeElement : null;
@@ -101,7 +109,9 @@ export class VfDrawerRootDirective {
   private restoreFocus(): void {
     const target = this.restoreTarget;
     this.restoreTarget = null;
-    if (canRestoreFocus(target)) target.focus();
+    const dialog = this.element.nativeElement;
+    const focused = dialog.ownerDocument.activeElement;
+    if (canRestoreFocus(target) && (!focused || focused === dialog.ownerDocument.body || dialog.contains(focused))) target.focus();
   }
 
   requestDismiss(reason: DrawerDismissReason): void {
@@ -113,11 +123,13 @@ export class VfDrawerRootDirective {
   }
 
   onCancel(event: Event): void {
+    if (event.defaultPrevented) return;
     event.preventDefault();
     this.requestDismiss('escape');
   }
 
   onClose(): void {
+    if (this.element.nativeElement.open) return;
     if (this.desiredOpen()) {
       if (this.open() === undefined) {
         this.internalOpen.set(false);
@@ -137,20 +149,22 @@ export class VfDrawerRootDirective {
   }
 
   onPointerDown(event: PointerEvent): void {
-    this.backdropPointerDown = event.target === event.currentTarget;
+    this.backdropPointerDown = !event.defaultPrevented && isBackdropHit(event);
   }
 
+  onPointerCancel(): void { this.backdropPointerDown = false; }
+
   onClick(event: MouseEvent): void {
-    const isBackdrop = this.backdropPointerDown && event.target === event.currentTarget;
+    const isBackdrop = this.backdropPointerDown && isBackdropHit(event);
     this.backdropPointerDown = false;
-    if (this.backdropDismiss() && isBackdrop) this.requestDismiss('backdrop');
+    if (!event.defaultPrevented && this.backdropDismiss() && isBackdrop) this.requestDismiss('backdrop');
   }
 }
 
 @Directive({
   selector: '[vfDrawerTitle]',
   standalone: true,
-  host: { '[attr.id]': 'id() ?? root.resolvedTitleId()', 'data-vf-drawer-title': '' },
+  host: { '[attr.id]': 'id() ?? root.resolvedTitleId()', 'data-vf-drawer-title': '', 'data-vf-dialog-title': '' },
 })
 export class VfDrawerTitleDirective {
   readonly root = inject(VfDrawerRootDirective);
@@ -162,7 +176,7 @@ export class VfDrawerTitleDirective {
   standalone: true,
   host: {
     '[attr.id]': 'id() ?? root.descriptionId() ?? (root.id() + "-description")',
-    'data-vf-drawer-description': '',
+    'data-vf-drawer-description': '', 'data-vf-dialog-description': '',
   },
 })
 export class VfDrawerDescriptionDirective {
@@ -170,7 +184,7 @@ export class VfDrawerDescriptionDirective {
   readonly id = input<string | undefined>(undefined);
 }
 
-@Directive({ selector: '[vfDrawerBody]', standalone: true, host: { 'data-vf-drawer-body': '' } })
+@Directive({ selector: '[vfDrawerBody]', standalone: true, host: { 'data-vf-drawer-body': '', 'data-vf-dialog-body': '' } })
 export class VfDrawerBodyDirective {
   readonly root = inject(VfDrawerRootDirective);
 }
@@ -178,7 +192,7 @@ export class VfDrawerBodyDirective {
 @Directive({
   selector: 'button[vfDrawerClose]',
   standalone: true,
-  host: { type: 'button', 'data-vf-drawer-close': '', '(click)': 'root.requestDismiss("close-control")' },
+  host: { type: 'button', 'data-vf-drawer-close': '', 'data-vf-dialog-close': '', '(click)': '$event.defaultPrevented ? null : root.requestDismiss("close-control")' },
 })
 export class VfDrawerCloseDirective {
   readonly root = inject(VfDrawerRootDirective);
