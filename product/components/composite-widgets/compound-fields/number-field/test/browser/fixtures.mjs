@@ -21,45 +21,149 @@ export const browserFixture = {
     elements: { story: 'createElementsStory' },
   },
 };
-export async function createReactStory() {
-  const { createElement: h, useEffect } = await import('react');
+function record(key, value) {
+  document.body.dataset[key] = String(value);
+  document.body.dataset[key + 'Count'] = String(Number(document.body.dataset[key + 'Count'] ?? 0) + 1);
+}
+export async function createReactStory({ client }) {
+  const { createElement: h, useEffect, useState } = await import('react');
   const { NumberFieldRoot, NumberFieldInput, NumberFieldIncrement, NumberFieldDecrement } =
     await import('@vyrnforge/react/number-field');
   function App() {
+    const [controlled, setControlled] = useState(2);
     useEffect(() => {
       document.body.dataset.numberFieldReady = 'true';
     }, []);
+    const field = (id, label, options, inputOptions = {}) =>
+      h(
+        NumberFieldRoot,
+        { key: id, ...options },
+        h(NumberFieldDecrement, { id: id === 'input' ? 'dec' : id + '-dec', 'aria-label': 'Decrease ' + label }, '−'),
+        h(NumberFieldInput, { id, name: id, 'aria-label': label, ...inputOptions }),
+        h(NumberFieldIncrement, { id: id === 'input' ? 'inc' : id + '-inc', 'aria-label': 'Increase ' + label }, '+'),
+      );
+    const report = (key) => (value) => {
+      if (client) record(key, value);
+    };
     return h(
-      NumberFieldRoot,
-      { defaultValue: 2, min: 0, max: 10, step: 1 },
-      h(NumberFieldDecrement, { id: 'dec', 'aria-label': 'Decrease Quantity' }, '−'),
-      h(NumberFieldInput, { id: 'input', name: 'quantity', 'aria-label': 'Quantity' }),
-      h(NumberFieldIncrement, { id: 'inc', 'aria-label': 'Increase Quantity' }, '+'),
+      'form',
+      { id: 'number-form' },
+      field(
+        'input',
+        'Quantity',
+        { defaultValue: 2, min: 0, max: 10, step: 1, onValueChange: report('quantity') },
+        { required: true },
+      ),
+      field('controlled', 'Controlled quantity', {
+        value: controlled,
+        min: 0,
+        max: 10,
+        onValueChange: report('controlledRequest'),
+      }),
+      field('fractional', 'Fractional quantity', {
+        defaultValue: 0.1,
+        min: 0.1,
+        max: 0.7,
+        step: 0.2,
+        onValueChange: report('fractional'),
+      }),
+      field('readonly', 'Read-only quantity', { defaultValue: 2, readOnly: true }),
+      field('disabled', 'Disabled quantity', { defaultValue: 2, disabled: true }),
+      field('any', 'Any quantity', { defaultValue: null, step: 'any', onValueChange: report('anyValue') }),
+      h(
+        'button',
+        { type: 'button', id: 'set-controlled', onClick: () => setControlled(7) },
+        'Set controlled value to seven',
+      ),
+      h(
+        'button',
+        { type: 'button', id: 'clear-controlled', onClick: () => setControlled(null) },
+        'Clear controlled value',
+      ),
     );
   }
   return h(App);
 }
-export async function createVueStory() {
-  const { createSSRApp, h, onMounted } = await import('vue');
+export async function createVueStory({ client }) {
+  const { createSSRApp, h, onMounted, ref } = await import('vue');
   const { NumberFieldRoot, NumberFieldInput, NumberFieldIncrement, NumberFieldDecrement } =
     await import('@vyrnforge/vue/number-field');
   return createSSRApp({
     setup() {
+      const controlled = ref(2);
       onMounted(() => {
         document.body.dataset.numberFieldReady = 'true';
       });
+      const report = (key) => (value) => {
+        if (client) record(key, value);
+      };
+      const field = (id, label, options, inputOptions = {}) =>
+        h(NumberFieldRoot, { key: id, ...options }, () => [
+          h(
+            NumberFieldDecrement,
+            { id: id === 'input' ? 'dec' : id + '-dec', 'aria-label': 'Decrease ' + label },
+            () => '−',
+          ),
+          h(NumberFieldInput, { id, name: id, 'aria-label': label, ...inputOptions }),
+          h(
+            NumberFieldIncrement,
+            { id: id === 'input' ? 'inc' : id + '-inc', 'aria-label': 'Increase ' + label },
+            () => '+',
+          ),
+        ]);
       return () =>
-        h(NumberFieldRoot, { defaultValue: 2, min: 0, max: 10, step: 1 }, () => [
-          h(NumberFieldDecrement, { id: 'dec', 'aria-label': 'Decrease Quantity' }, () => '−'),
-          h(NumberFieldInput, { id: 'input', name: 'quantity', 'aria-label': 'Quantity', min: 0, max: 10, step: 1 }),
-          h(NumberFieldIncrement, { id: 'inc', 'aria-label': 'Increase Quantity' }, () => '+'),
+        h('form', { id: 'number-form' }, [
+          field(
+            'input',
+            'Quantity',
+            { defaultValue: 2, min: 0, max: 10, step: 1, 'onUpdate:value': report('quantity') },
+            { required: true },
+          ),
+          field('controlled', 'Controlled quantity', {
+            value: controlled.value,
+            min: 0,
+            max: 10,
+            'onUpdate:value': report('controlledRequest'),
+          }),
+          field('fractional', 'Fractional quantity', {
+            defaultValue: 0.1,
+            min: 0.1,
+            max: 0.7,
+            step: 0.2,
+            'onUpdate:value': report('fractional'),
+          }),
+          field('readonly', 'Read-only quantity', { defaultValue: 2, readOnly: true }),
+          field('disabled', 'Disabled quantity', { defaultValue: 2, disabled: true }),
+          field('any', 'Any quantity', { defaultValue: null, step: 'any', 'onUpdate:value': report('anyValue') }),
+          h(
+            'button',
+            {
+              type: 'button',
+              id: 'set-controlled',
+              onClick: () => {
+                controlled.value = 7;
+              },
+            },
+            'Set controlled value to seven',
+          ),
+          h(
+            'button',
+            {
+              type: 'button',
+              id: 'clear-controlled',
+              onClick: () => {
+                controlled.value = null;
+              },
+            },
+            'Clear controlled value',
+          ),
         ]);
     },
   });
 }
-export async function createAngularStory() {
+export async function createAngularStory({ client }) {
   await import('@angular/compiler');
-  const { Component, afterNextRender } = await import('@angular/core');
+  const { Component, afterNextRender, signal } = await import('@angular/core');
   const {
     VfNumberFieldRootDirective,
     VfNumberFieldInputDirective,
@@ -67,12 +171,21 @@ export async function createAngularStory() {
     VfNumberFieldDecrementDirective,
   } = await import('@vyrnforge/angular/number-field');
   class NumberFieldTestApp {
+    controlled = signal(2);
     constructor() {
       afterNextRender(() => {
         document.body.dataset.numberFieldReady = 'true';
       });
     }
+    changed(key, value) {
+      if (client) record(key, value);
+    }
   }
+  const field = (id, label, options, inputOptions = '') => `<div vfNumberFieldRoot ${options}>
+    <button vfNumberFieldDecrement id="${id === 'input' ? 'dec' : id + '-dec'}" aria-label="Decrease ${label}">−</button>
+    <input vfNumberFieldInput id="${id}" name="${id}" aria-label="${label}" ${inputOptions}>
+    <button vfNumberFieldIncrement id="${id === 'input' ? 'inc' : id + '-inc'}" aria-label="Increase ${label}">+</button>
+    </div>`;
   Component({
     selector: 'vf-number-field-test',
     standalone: true,
@@ -82,11 +195,16 @@ export async function createAngularStory() {
       VfNumberFieldIncrementDirective,
       VfNumberFieldDecrementDirective,
     ],
-    template: `<main><h1>Number field browser fixture</h1><div vfNumberFieldRoot [defaultValue]="2" [min]="0" [max]="10" [step]="1">
-    <button vfNumberFieldDecrement id="dec" aria-label="Decrease Quantity">−</button>
-    <input vfNumberFieldInput id="input" name="quantity" aria-label="Quantity" min="0" max="10" step="1">
-    <button vfNumberFieldIncrement id="inc" aria-label="Increase Quantity">+</button>
-    </div></main>`,
+    template: `<main><h1>Number field browser fixture</h1><form id="number-form">
+    ${field('input', 'Quantity', '[defaultValue]="2" [min]="0" [max]="10" [step]="1" (valueChange)="changed(\'quantity\', $event)"', 'required')}
+    ${field('controlled', 'Controlled quantity', '[value]="controlled()" [min]="0" [max]="10" (valueChange)="changed(\'controlledRequest\', $event)"')}
+    ${field('fractional', 'Fractional quantity', '[defaultValue]="0.1" [min]="0.1" [max]="0.7" [step]="0.2" (valueChange)="changed(\'fractional\', $event)"')}
+    ${field('readonly', 'Read-only quantity', '[defaultValue]="2" [readOnly]="true"')}
+    ${field('disabled', 'Disabled quantity', '[defaultValue]="2" [disabled]="true"')}
+    ${field('any', 'Any quantity', '[defaultValue]="null" step="any" (valueChange)="changed(\'anyValue\', $event)"')}
+    <button type="button" id="set-controlled" (click)="controlled.set(7)">Set controlled value to seven</button>
+    <button type="button" id="clear-controlled" (click)="controlled.set(null)">Clear controlled value</button>
+    </form></main>`,
   })(NumberFieldTestApp);
   return NumberFieldTestApp;
 }

@@ -2486,27 +2486,34 @@ export const NumberFieldDecrement: ForwardRefExoticComponent<Omit<DetailedHTMLPr
 export const NumberFieldIncrement: ForwardRefExoticComponent<Omit<DetailedHTMLProps<ButtonHTMLAttributes<HTMLButtonElement>, HTMLButtonElement>, "ref"> & RefAttributes<HTMLButtonElement>>;
 
 // @public (undocumented)
-export const NumberFieldInput: ForwardRefExoticComponent<Omit<DetailedHTMLProps<InputHTMLAttributes<HTMLInputElement>, HTMLInputElement>, "ref"> & RefAttributes<HTMLInputElement>>;
+export const NumberFieldInput: ForwardRefExoticComponent<NumberFieldInputProps & RefAttributes<HTMLInputElement>>;
+
+// @public (undocumented)
+export type NumberFieldInputProps = Omit<ComponentPropsWithoutRef<'input'>, 'value' | 'defaultValue' | 'type' | 'min' | 'max' | 'step'>;
 
 // @public (undocumented)
 export const NumberFieldRoot: ForwardRefExoticComponent<NumberFieldRootProps & RefAttributes<HTMLDivElement>>;
 
 // @public (undocumented)
-export interface NumberFieldRootProps extends ComponentPropsWithoutRef<'div'> {
+export interface NumberFieldRootProps extends Omit<ComponentPropsWithoutRef<'div'>, 'defaultValue'> {
     // (undocumented)
     children?: ReactNode;
     // (undocumented)
-    defaultValue?: number;
+    defaultValue?: number | null;
+    // (undocumented)
+    disabled?: boolean;
     // (undocumented)
     max?: number;
     // (undocumented)
     min?: number;
     // (undocumented)
-    onValueChange?(v: number): void;
+    onValueChange?(v: number | null): void;
     // (undocumented)
-    step?: number;
+    readOnly?: boolean;
     // (undocumented)
-    value?: number;
+    step?: number | 'any';
+    // (undocumented)
+    value?: number | null;
 }
 
 // @public (undocumented)

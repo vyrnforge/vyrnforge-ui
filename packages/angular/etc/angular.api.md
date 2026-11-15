@@ -1797,9 +1797,19 @@ export class VfNativeSelectDirective {
 export class VfNumberFieldDecrementDirective {
     constructor(root: VfNumberFieldRootDirective);
     // (undocumented)
+    activate(event: MouseEvent): void;
+    // (undocumented)
+    readonly disabled: InputSignalWithTransform<boolean, unknown>;
+    // (undocumented)
     readonly root: VfNumberFieldRootDirective;
     // (undocumented)
-    static ɵdir: i0.ɵɵDirectiveDeclaration<VfNumberFieldDecrementDirective, "button[vfNumberFieldDecrement]", never, {}, {}, never, never, true, never>;
+    static ɵdir: i0.ɵɵDirectiveDeclaration<VfNumberFieldDecrementDirective, "button[vfNumberFieldDecrement]", never, {
+        "disabled": {
+            "alias": "disabled";
+            "required": false;
+            "isSignal": true;
+        };
+    }, {}, never, never, true, never>;
     // (undocumented)
     static ɵfac: i0.ɵɵFactoryDeclaration<VfNumberFieldDecrementDirective, never>;
 }
@@ -1808,9 +1818,19 @@ export class VfNumberFieldDecrementDirective {
 export class VfNumberFieldIncrementDirective {
     constructor(root: VfNumberFieldRootDirective);
     // (undocumented)
+    activate(event: MouseEvent): void;
+    // (undocumented)
+    readonly disabled: InputSignalWithTransform<boolean, unknown>;
+    // (undocumented)
     readonly root: VfNumberFieldRootDirective;
     // (undocumented)
-    static ɵdir: i0.ɵɵDirectiveDeclaration<VfNumberFieldIncrementDirective, "button[vfNumberFieldIncrement]", never, {}, {}, never, never, true, never>;
+    static ɵdir: i0.ɵɵDirectiveDeclaration<VfNumberFieldIncrementDirective, "button[vfNumberFieldIncrement]", never, {
+        "disabled": {
+            "alias": "disabled";
+            "required": false;
+            "isSignal": true;
+        };
+    }, {}, never, never, true, never>;
     // (undocumented)
     static ɵfac: i0.ɵɵFactoryDeclaration<VfNumberFieldIncrementDirective, never>;
 }
@@ -1819,9 +1839,26 @@ export class VfNumberFieldIncrementDirective {
 export class VfNumberFieldInputDirective {
     constructor(root: VfNumberFieldRootDirective);
     // (undocumented)
+    change(event: Event): void;
+    // (undocumented)
+    readonly disabled: InputSignalWithTransform<boolean, unknown>;
+    // (undocumented)
+    readonly readOnly: InputSignalWithTransform<boolean, unknown>;
+    // (undocumented)
     readonly root: VfNumberFieldRootDirective;
     // (undocumented)
-    static ɵdir: i0.ɵɵDirectiveDeclaration<VfNumberFieldInputDirective, "input[vfNumberFieldInput]", never, {}, {}, never, never, true, never>;
+    static ɵdir: i0.ɵɵDirectiveDeclaration<VfNumberFieldInputDirective, "input[vfNumberFieldInput]", never, {
+        "disabled": {
+            "alias": "disabled";
+            "required": false;
+            "isSignal": true;
+        };
+        "readOnly": {
+            "alias": "readonly";
+            "required": false;
+            "isSignal": true;
+        };
+    }, {}, never, never, true, never>;
     // (undocumented)
     static ɵfac: i0.ɵɵFactoryDeclaration<VfNumberFieldInputDirective, never>;
 }
@@ -1829,21 +1866,27 @@ export class VfNumberFieldInputDirective {
 // @public (undocumented)
 export class VfNumberFieldRootDirective {
     // (undocumented)
-    readonly current: Signal<number>;
+    readonly current: Signal<number | null>;
     // (undocumented)
-    readonly defaultValue: InputSignal<number>;
+    readonly defaultValue: InputSignal<number | null>;
+    // (undocumented)
+    readonly disabled: InputSignalWithTransform<boolean, unknown>;
     // (undocumented)
     readonly max: InputSignal<number | undefined>;
     // (undocumented)
     readonly min: InputSignal<number | undefined>;
     // (undocumented)
-    set(v: number): void;
+    ngOnInit(): void;
     // (undocumented)
-    readonly step: InputSignal<number>;
+    readonly readOnly: InputSignalWithTransform<boolean, unknown>;
     // (undocumented)
-    readonly value: InputSignal<number | undefined>;
+    set(next: number | null): void;
     // (undocumented)
-    readonly valueChange: OutputEmitterRef<number>;
+    readonly step: InputSignal<number | "any">;
+    // (undocumented)
+    readonly value: InputSignal<number | null | undefined>;
+    // (undocumented)
+    readonly valueChange: OutputEmitterRef<number | null>;
     // (undocumented)
     static ɵdir: i0.ɵɵDirectiveDeclaration<VfNumberFieldRootDirective, "[vfNumberFieldRoot]", never, {
         "value": {
@@ -1868,6 +1911,16 @@ export class VfNumberFieldRootDirective {
         };
         "step": {
             "alias": "step";
+            "required": false;
+            "isSignal": true;
+        };
+        "disabled": {
+            "alias": "disabled";
+            "required": false;
+            "isSignal": true;
+        };
+        "readOnly": {
+            "alias": "readOnly";
             "required": false;
             "isSignal": true;
         };
