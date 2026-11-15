@@ -16,6 +16,7 @@ import {
 } from 'vue';
 import { resolveNavigationIndex } from '@vyrnforge/core/collection-navigation';
 import { findTypeaheadMatch } from '@vyrnforge/core/typeahead-matching';
+import { TagGroupRoot, TagGroupItem, TagGroupRemove } from '../tag-group/index.js';
 
 const optionMultiSelector = '[data-vf-multi-select-option]';
 function optionsFor(root: HTMLElement): HTMLButtonElement[] {
@@ -36,6 +37,8 @@ function invoke(handler: unknown, event: Event): void {
 }
 
 interface MultiSelectContext {
+  selectionSummary: Readonly<Ref<boolean>>;
+  remove(value: string): void;
   disabled: Readonly<Ref<boolean>>;
   error: Ref<string>;
   resetValue(): string[];
@@ -63,6 +66,7 @@ export const MultiSelectRoot = defineComponent({
   name: 'MultiSelectRoot',
   props: {
     id: String,
+    selectionSummary: Boolean,
     disabled: Boolean,
     value: Array as PropType<string[] | undefined>,
     defaultValue: { type: Array as PropType<string[]>, default: () => [] },
@@ -84,6 +88,13 @@ export const MultiSelectRoot = defineComponent({
     const focusRequest = ref<'first' | 'last' | null>(null);
     const focusRevision = ref(0);
     provide(key, {
+      selectionSummary: computed(() => props.selectionSummary),
+      remove(candidate) {
+        if (disabled.value || !values.value.includes(candidate)) return;
+        const next = values.value.filter((value) => value !== candidate);
+        if (props.value === undefined) internalValue.value = next;
+        emit('update:value', next);
+      },
       disabled,
       error,
       resetValue: () => props.value ?? initialValue,
@@ -142,7 +153,7 @@ export const MultiSelectTrigger = defineComponent({
           disabled: Boolean(attrs.disabled === '' || attrs.disabled) || multi.disabled.value,
           'aria-invalid': multi.error.value ? true : attrs['aria-invalid'],
           'aria-describedby':
-            [attrs['aria-describedby'], multi.error.value ? `${multi.listboxId.value}-error` : undefined]
+            [attrs['aria-describedby'], multi.selectionSummary.value ? `${multi.listboxId.value}-summary` : undefined, multi.error.value ? `${multi.listboxId.value}-error` : undefined]
               .filter(Boolean)
               .join(' ') || undefined,
           id: multi.triggerId.value,
@@ -420,5 +431,32 @@ export const MultiSelectFormControl = defineComponent({
         ),
         h('span', { id: `${root.listboxId.value}-error`, role: 'status' }, root.error.value),
       ]);
+  },
+});
+
+export const MultiSelectSelection = defineComponent({
+  name: 'MultiSelectSelection',
+  props: {
+    items: { type: Array as PropType<readonly { value: string; label: string; removeLabel: string }[]>, required: true },
+    label: { type: String, required: true },
+    emptyLabel: { type: String, required: true },
+    locale: { type: String, required: true },
+  },
+  setup(props) {
+    const root = useMulti();
+    const selected = computed(() => root.values.value.flatMap((value) => {
+      const item = props.items.find((item) => item.value === value);
+      return item ? [item] : [];
+    }));
+    const summary = computed(() => selected.value.length ? new Intl.ListFormat(props.locale).format(selected.value.map((item) => item.label)) : props.emptyLabel);
+    return () => h('div', { 'data-vf-multi-select-selection': '' }, [
+      h('span', { id: `${root.listboxId.value}-summary`, role: 'status', 'data-vf-multi-select-summary': '' }, summary.value),
+      h(TagGroupRoot, { 'aria-label': props.label }, () => selected.value.map((item) => h(TagGroupItem, { key: item.value }, () => [
+        h('span', item.label),
+        h(TagGroupRemove, { label: item.removeLabel, disabled: root.disabled.value, type: 'button', onClick: (event: MouseEvent) => {
+          if (!event.defaultPrevented && !optionDisabled(event.currentTarget as HTMLButtonElement)) root.remove(item.value);
+        } }, () => '×'),
+      ]))),
+    ]);
   },
 });
