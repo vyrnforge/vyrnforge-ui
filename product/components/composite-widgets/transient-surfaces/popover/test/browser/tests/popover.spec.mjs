@@ -132,13 +132,19 @@ test('Popover constrains long content in a narrow viewport', async ({ page }) =>
   await page.locator('#t').press('Enter');
   const surface = page.locator('#c');
   await expect(surface).toBeVisible();
-  await expect.poll(() => surface.evaluate((element) => ({
-    width: element.getBoundingClientRect().width <= window.innerWidth,
-    height: element.getBoundingClientRect().height <= window.innerHeight - 16,
-    scrollable: element.scrollHeight > element.clientHeight,
-    wraps: element.scrollWidth <= element.clientWidth + 1,
-  }))).toEqual({ width: true, height: true, scrollable: true, wraps: true });
-  await surface.evaluate((element) => { element.scrollTop = element.scrollHeight; });
+  await expect
+    .poll(() =>
+      surface.evaluate((element) => ({
+        width: element.getBoundingClientRect().width <= window.innerWidth,
+        height: element.getBoundingClientRect().height <= window.innerHeight - 16,
+        scrollable: element.scrollHeight > element.clientHeight,
+        wraps: element.scrollWidth <= element.clientWidth + 1,
+      })),
+    )
+    .toEqual({ width: true, height: true, scrollable: true, wraps: true });
+  await surface.evaluate((element) => {
+    element.scrollTop = element.scrollHeight;
+  });
   expect(await surface.evaluate((element) => element.scrollTop)).toBeGreaterThan(0);
   await page.keyboard.press('Escape');
   await expect(surface).toBeHidden();
