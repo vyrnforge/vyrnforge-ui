@@ -142,7 +142,8 @@ test('toolbar leaves independently owned descendant toolbar controls alone', asy
     nested.setAttribute('data-vf-toolbar-root', '');
     nested.setAttribute('role', 'toolbar');
     nested.setAttribute('aria-label', 'Independent tools');
-    nested.innerHTML = '<button id="nested-one" data-vf-toolbar-item tabindex="0">One</button><button id="nested-two" data-vf-toolbar-item tabindex="-1">Two</button>';
+    nested.innerHTML =
+      '<button id="nested-one" data-vf-toolbar-item tabindex="0">One</button><button id="nested-two" data-vf-toolbar-item tabindex="-1">Two</button>';
     root.append(nested);
   });
   await expect(page.locator('#nested-one')).toHaveAttribute('tabindex', '0');
