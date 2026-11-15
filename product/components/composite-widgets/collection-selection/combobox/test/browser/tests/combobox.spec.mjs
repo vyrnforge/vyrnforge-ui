@@ -306,7 +306,11 @@ test('Combobox controlled selection and query preserve owner rejection and disti
   await expect(body).not.toHaveAttribute('data-controlled-value', /.+/);
   await expect(body).not.toHaveAttribute('data-controlled-query', /.+/);
   await input.fill('');
+  // Navigation must observe the owner-committed query, not speculative native input.
+  await expect(input).toHaveValue('');
+  await expect(vue).toBeVisible();
   await input.press('ArrowDown');
+  await expect(input).toHaveAttribute('aria-activedescendant', 'controlled-react');
   await input.press('ArrowDown');
   await expect(input).toHaveAttribute('aria-activedescendant', 'controlled-vue');
   await input.press('Enter');
@@ -317,7 +321,11 @@ test('Combobox controlled selection and query preserve owner rejection and disti
   await expect(input).toHaveAttribute('aria-expanded', 'false');
   await page.locator('#accept-selection').click();
   await input.fill('v');
+  await expect(input).toHaveValue('v');
+  await expect(react).toBeHidden();
+  await expect(vue).toBeVisible();
   await input.press('ArrowDown');
+  await expect(input).toHaveAttribute('aria-activedescendant', 'controlled-vue');
   await input.press('Enter');
   await expect(input).toHaveValue('Vue');
   await expect(body).toHaveAttribute('data-controlled-query', 'Vue');
