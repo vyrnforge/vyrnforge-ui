@@ -1,4 +1,16 @@
-import { Directive, ElementRef, computed, inject, input, output, signal, booleanAttribute } from '@angular/core';
+import {
+  Directive,
+  DestroyRef,
+  ElementRef,
+  Injector,
+  afterNextRender,
+  booleanAttribute,
+  computed,
+  inject,
+  input,
+  output,
+  signal,
+} from '@angular/core';
 @Directive({
   selector: '[vfSegmentedControlRoot]',
   standalone: true,
@@ -11,7 +23,44 @@ export class VfSegmentedControlRootDirective {
   readonly valueChange = output<string>();
   private iv = signal<string | undefined>(undefined);
   private readonly element = inject<ElementRef<HTMLElement>>(ElementRef);
+  private readonly injector = inject(Injector);
+  private readonly destroyRef = inject(DestroyRef);
+  private initial: string = '';
   readonly selected = computed(() => this.value() ?? this.iv() ?? this.defaultValue());
+
+  ngOnInit() {
+    this.initial = this.defaultValue();
+    this.iv.set(this.initial);
+    afterNextRender(
+      () => {
+        const root = this.element.nativeElement;
+        const document = root.ownerDocument;
+        let active = true;
+        const radios = () =>
+          Array.from(
+            root.querySelectorAll<HTMLInputElement>('input[type="radio"][data-vf-segmented-control-radio]'),
+          ).filter((radio) => radio.closest('[data-vf-segmented-control-root]') === root);
+        const onReset = (event: Event) => {
+          const group = radios();
+          if (!group.length || !group.every((radio) => radio.form && radio.form === event.target)) return;
+          setTimeout(() => {
+            if (!active || event.defaultPrevented) return;
+            const group = radios();
+            if (!group.length || !group.every((radio) => radio.form === event.target)) return;
+            const next = this.value() ?? this.initial;
+            if (this.value() === undefined) this.iv.set(next);
+            for (const radio of group) radio.checked = radio.value === next;
+          }, 0);
+        };
+        document.addEventListener('reset', onReset, true);
+        this.destroyRef.onDestroy(() => {
+          active = false;
+          document.removeEventListener('reset', onReset, true);
+        });
+      },
+      { injector: this.injector },
+    );
+  }
   set(v: string): void {
     if (v === this.selected()) return;
     if (this.value() === undefined) this.iv.set(v);

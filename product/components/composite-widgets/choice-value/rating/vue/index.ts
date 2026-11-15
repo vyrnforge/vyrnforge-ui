@@ -3,6 +3,8 @@ import {
   defineComponent,
   h,
   inject,
+  onBeforeUnmount,
+  onMounted,
   provide,
   ref,
   useId,
@@ -34,9 +36,38 @@ export const RatingRoot = defineComponent({
   emits: ['update:value'],
   setup(p, { attrs, slots, emit }) {
     const id = useId();
-    const iv = ref(p.defaultValue);
+    const initial = p.defaultValue;
+    const iv = ref(initial);
     const value = computed(() => p.value ?? iv.value);
     const name = computed(() => p.name ?? `vf-rating-${id}`);
+    const root = ref<HTMLDivElement | null>(null);
+    let document: Document | undefined;
+    let active = false;
+    const radios = () =>
+      Array.from(
+        root.value?.querySelectorAll<HTMLInputElement>('[data-vf-rating-item] > input[type="radio"]') ?? [],
+      ).filter((radio) => radio.closest('[data-vf-rating-root]') === root.value);
+    const onReset = (event: Event) => {
+      const group = radios();
+      if (!group.length || !group.every((radio) => radio.form && radio.form === event.target)) return;
+      setTimeout(() => {
+        if (!active || event.defaultPrevented) return;
+        const group = radios();
+        if (!group.length || !group.every((radio) => radio.form === event.target)) return;
+        const next = p.value ?? initial;
+        if (p.value === undefined) iv.value = next;
+        for (const radio of group) radio.checked = Number(radio.value) === next;
+      }, 0);
+    };
+    onMounted(() => {
+      active = true;
+      document = root.value?.ownerDocument;
+      document?.addEventListener('reset', onReset, true);
+    });
+    onBeforeUnmount(() => {
+      active = false;
+      document?.removeEventListener('reset', onReset, true);
+    });
     provide(key, {
       value,
       name,
@@ -49,7 +80,7 @@ export const RatingRoot = defineComponent({
     return () =>
       h(
         'div',
-        { ...attrs, role: 'radiogroup', 'data-vf-rating-root': '' },
+        { ...attrs, ref: root, role: 'radiogroup', 'data-vf-rating-root': '' },
         slots.default?.() ??
           Array.from({ length: Number.isFinite(p.max) ? Math.max(0, Math.floor(p.max)) : 0 }, (_, i) =>
             h(RatingItem, { value: i + 1, label: p.getItemLabel?.(i + 1) ?? String(i + 1), key: i + 1 }),

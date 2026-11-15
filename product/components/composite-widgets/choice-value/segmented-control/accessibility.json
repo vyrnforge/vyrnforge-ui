@@ -22,7 +22,8 @@
   },
   "ownership": {
     "library": [
-      "Compose native radio controls in framework ports; reconcile controlled checked state; expose visual focus and checked state."
+      "Compose native radio controls in framework ports; reconcile controlled checked state; expose visual focus and checked state.",
+      "A non-canceled native same-form reset restores initial uncontrolled selection (including no selection) or retains the latest controlled selection without a synthetic change intent."
     ],
     "consumer": [
       "Author choice labels and group label; supply a root form name when needed, and distinct native names for Web/Elements groups."
@@ -44,6 +45,7 @@
   "profileVariability": [],
   "notes": [
     "Native radios replace synthetic keyboard navigation and roving tabindex. Browser-specific radio behavior is the platform baseline.",
-    "Audit mapping is provisional; not a conformance claim."
+    "Audit mapping is provisional; not a conformance claim.",
+    "Native same-form reset browser regressions cover canceled reset, independent groups, no selection and controlled value preservation; wider form, visual and manual acceptance remain open."
   ]
 }

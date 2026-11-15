@@ -23,9 +23,10 @@ export const browserFixture = {
   },
 };
 export async function createReactStory({ client }) {
-  const { createElement: h, useEffect } = await import('react');
+  const { createElement: h, useEffect, useState } = await import('react');
   const { SegmentedControlRoot, SegmentedControlItem } = await import('@vyrnforge/react/segmented-control');
   function App() {
+    const [controlled, setControlled] = useState('list');
     useEffect(() => {
       document.body.dataset.segmentedReady = 'true';
     }, []);
@@ -39,25 +40,37 @@ export async function createReactStory({ client }) {
       'form',
       { id: 'form' },
       h('button', { type: 'button', id: 'before' }, 'Before'),
-      g('View', { name: 'view', defaultValue: 'list' }),
+      g('View', {
+        name: 'view',
+        defaultValue: 'list',
+        onValueChange: () => {
+          if (client) document.body.dataset.viewRequests = String(Number(document.body.dataset.viewRequests ?? 0) + 1);
+        },
+      }),
       g('Other view', { defaultValue: 'grid' }),
       g('Empty view', {}),
       g('Controlled view', {
-        value: 'list',
+        value: controlled,
         onValueChange: (v) => {
           if (client) document.body.dataset.requested = v;
         },
       }),
       h('button', { type: 'button', id: 'after' }, 'After'),
+      h(
+        'button',
+        { type: 'button', id: 'set-controlled', onClick: () => setControlled('details') },
+        'Set controlled view',
+      ),
     );
   }
   return h(App);
 }
 export async function createVueStory({ client }) {
-  const { createSSRApp, h, onMounted } = await import('vue');
+  const { createSSRApp, h, onMounted, ref } = await import('vue');
   const { SegmentedControlRoot, SegmentedControlItem } = await import('@vyrnforge/vue/segmented-control');
   return createSSRApp({
     setup() {
+      const controlled = ref('list');
       onMounted(() => {
         document.body.dataset.segmentedReady = 'true';
       });
@@ -68,26 +81,42 @@ export async function createVueStory({ client }) {
       return () =>
         h('form', { id: 'form' }, [
           h('button', { type: 'button', id: 'before' }, 'Before'),
-          g('View', { name: 'view', defaultValue: 'list' }),
+          g('View', {
+            name: 'view',
+            defaultValue: 'list',
+            'onUpdate:value': () => {
+              if (client)
+                document.body.dataset.viewRequests = String(Number(document.body.dataset.viewRequests ?? 0) + 1);
+            },
+          }),
           g('Other view', { defaultValue: 'grid' }),
           g('Empty view', {}),
           g('Controlled view', {
-            value: 'list',
+            value: controlled.value,
             'onUpdate:value': (v) => {
               if (client) document.body.dataset.requested = v;
             },
           }),
           h('button', { type: 'button', id: 'after' }, 'After'),
+          h(
+            'button',
+            { type: 'button', id: 'set-controlled', onClick: () => (controlled.value = 'details') },
+            'Set controlled view',
+          ),
         ]);
     },
   });
 }
 export async function createAngularStory({ client }) {
   await import('@angular/compiler');
-  const { Component, afterNextRender } = await import('@angular/core');
+  const { Component, afterNextRender, signal } = await import('@angular/core');
   const { VfSegmentedControlRootDirective, VfSegmentedControlItemDirective } =
     await import('@vyrnforge/angular/segmented-control');
   class SegmentedTestApp {
+    controlled = signal('list');
+    viewChanged() {
+      if (client) document.body.dataset.viewRequests = String(Number(document.body.dataset.viewRequests ?? 0) + 1);
+    }
     constructor() {
       afterNextRender(() => {
         document.body.dataset.segmentedReady = 'true';
@@ -107,7 +136,7 @@ export async function createAngularStory({ client }) {
     selector: 'vf-segmented-control-test',
     standalone: true,
     imports: [VfSegmentedControlRootDirective, VfSegmentedControlItemDirective],
-    template: `<main><h1>SegmentedControl fixture</h1><form id="form"><button id="before" type="button">Before</button><div vfSegmentedControlRoot name="view" aria-label="View" defaultValue="list">${items}</div><div vfSegmentedControlRoot name="other" aria-label="Other view" defaultValue="grid">${items}</div><div vfSegmentedControlRoot name="empty" aria-label="Empty view">${items}</div><div vfSegmentedControlRoot name="controlled" aria-label="Controlled view" value="list" (valueChange)="changed($event)">${items}</div><button id="after" type="button">After</button></form></main>`,
+    template: `<main><h1>SegmentedControl fixture</h1><form id="form"><button id="before" type="button">Before</button><div vfSegmentedControlRoot name="view" aria-label="View" defaultValue="list" (valueChange)="viewChanged()">${items}</div><div vfSegmentedControlRoot name="other" aria-label="Other view" defaultValue="grid">${items}</div><div vfSegmentedControlRoot name="empty" aria-label="Empty view">${items}</div><div vfSegmentedControlRoot name="controlled" aria-label="Controlled view" [value]="controlled()" (valueChange)="changed($event)">${items}</div><button id="after" type="button">After</button><button id="set-controlled" type="button" (click)="controlled.set('details')">Set controlled view</button></form></main>`,
   })(SegmentedTestApp);
   return SegmentedTestApp;
 }

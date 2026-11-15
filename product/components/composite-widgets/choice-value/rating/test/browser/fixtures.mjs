@@ -3,7 +3,7 @@ const item = (name, value, checked = false, disabled = false) =>
 const group = (tag, id, name, selected) =>
   `<${tag} data-vf-rating-root role="radiogroup" id="${id}" aria-label="${id}">${[1, 2, 3].map((v) => item(name, v, v === selected, v === 3)).join('')}</${tag}>`;
 const markup = (tag) =>
-  `<form id="form">${group(tag, 'First rating', 'first', 1)}${group(tag, 'Second rating', 'second', 2)}</form>`;
+  `<form id="form">${group(tag, 'First rating', 'first', 1)}${group(tag, 'Second rating', 'second', 2)}${group(tag, 'Empty rating', 'empty', 0)}</form>`;
 export const browserFixture = {
   component: 'rating',
   title: 'Rating fixture',
@@ -17,9 +17,10 @@ export const browserFixture = {
   },
 };
 export async function createReactStory({ client }) {
-  const { createElement: h, useEffect } = await import('react');
+  const { createElement: h, useEffect, useState } = await import('react');
   const { RatingRoot, RatingItem } = await import('@vyrnforge/react/rating');
   function App() {
+    const [controlled, setControlled] = useState(1);
     useEffect(() => {
       document.body.dataset.ratingReady = 'true';
     }, []);
@@ -32,14 +33,22 @@ export async function createReactStory({ client }) {
     return h(
       'form',
       { id: 'form' },
-      group('First rating', { defaultValue: 1 }),
+      group('First rating', {
+        defaultValue: 1,
+        onValueChange: () => {
+          if (client)
+            document.body.dataset.ratingRequests = String(Number(document.body.dataset.ratingRequests ?? 0) + 1);
+        },
+      }),
       group('Second rating', { defaultValue: 2 }),
+      group('Empty rating', { defaultValue: 0 }),
       group('Controlled rating', {
-        value: 1,
+        value: controlled,
         onValueChange: (v) => {
           if (client) document.body.dataset.requested = String(v);
         },
       }),
+      h('button', { type: 'button', id: 'set-controlled', onClick: () => setControlled(2) }, 'Set controlled rating'),
       h(RatingRoot, {
         'aria-label': 'Generated rating',
         name: 'score',
@@ -52,10 +61,11 @@ export async function createReactStory({ client }) {
   return h(App);
 }
 export async function createVueStory({ client }) {
-  const { createSSRApp, h, onMounted } = await import('vue');
+  const { createSSRApp, h, onMounted, ref } = await import('vue');
   const { RatingRoot, RatingItem } = await import('@vyrnforge/vue/rating');
   return createSSRApp({
     setup() {
+      const controlled = ref(1);
       onMounted(() => {
         document.body.dataset.ratingReady = 'true';
       });
@@ -65,14 +75,26 @@ export async function createVueStory({ client }) {
         );
       return () =>
         h('form', { id: 'form' }, [
-          group('First rating', { defaultValue: 1 }),
+          group('First rating', {
+            defaultValue: 1,
+            'onUpdate:value': () => {
+              if (client)
+                document.body.dataset.ratingRequests = String(Number(document.body.dataset.ratingRequests ?? 0) + 1);
+            },
+          }),
           group('Second rating', { defaultValue: 2 }),
+          group('Empty rating', { defaultValue: 0 }),
           group('Controlled rating', {
-            value: 1,
+            value: controlled.value,
             'onUpdate:value': (v) => {
               if (client) document.body.dataset.requested = String(v);
             },
           }),
+          h(
+            'button',
+            { type: 'button', id: 'set-controlled', onClick: () => (controlled.value = 2) },
+            'Set controlled rating',
+          ),
           h(RatingRoot, {
             'aria-label': 'Generated rating',
             name: 'score',
@@ -86,9 +108,13 @@ export async function createVueStory({ client }) {
 }
 export async function createAngularStory({ client }) {
   await import('@angular/compiler');
-  const { Component, afterNextRender } = await import('@angular/core');
+  const { Component, afterNextRender, signal } = await import('@angular/core');
   const { VfRatingRootDirective, VfRatingItemDirective } = await import('@vyrnforge/angular/rating');
   class RatingTestApp {
+    controlled = signal(1);
+    ratingChanged() {
+      if (client) document.body.dataset.ratingRequests = String(Number(document.body.dataset.ratingRequests ?? 0) + 1);
+    }
     constructor() {
       afterNextRender(() => {
         document.body.dataset.ratingReady = 'true';
@@ -109,9 +135,11 @@ export async function createAngularStory({ client }) {
     standalone: true,
     imports: [VfRatingRootDirective, VfRatingItemDirective],
     template: `<main><h1>Rating fixture</h1><form id="form">
-    <div vfRatingRoot name="first" aria-label="First rating" [defaultValue]="1">${items}</div>
+    <div vfRatingRoot name="first" aria-label="First rating" [defaultValue]="1" (valueChange)="ratingChanged()">${items}</div>
     <div vfRatingRoot name="second" aria-label="Second rating" [defaultValue]="2">${items}</div>
-    <div vfRatingRoot name="controlled" aria-label="Controlled rating" [value]="1" (valueChange)="changed($event)">${items}</div>
+    <div vfRatingRoot name="empty" aria-label="Empty rating" [defaultValue]="0">${items}</div>
+    <div vfRatingRoot name="controlled" aria-label="Controlled rating" [value]="controlled()" (valueChange)="changed($event)">${items}</div>
+    <button id="set-controlled" type="button" (click)="controlled.set(2)">Set controlled rating</button>
     </form></main>`,
   })(RatingTestApp);
   return RatingTestApp;

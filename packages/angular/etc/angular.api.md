@@ -2570,6 +2570,8 @@ export class VfRatingRootDirective {
     // (undocumented)
     readonly name: InputSignal<string>;
     // (undocumented)
+    ngOnInit(): void;
+    // (undocumented)
     readonly selected: Signal<number>;
     // (undocumented)
     set(v: number): void;
@@ -2692,6 +2694,8 @@ export class VfSegmentedControlRootDirective {
     readonly defaultValue: InputSignal<string>;
     // (undocumented)
     readonly name: InputSignal<string>;
+    // (undocumented)
+    ngOnInit(): void;
     // (undocumented)
     readonly selected: Signal<string>;
     // (undocumented)

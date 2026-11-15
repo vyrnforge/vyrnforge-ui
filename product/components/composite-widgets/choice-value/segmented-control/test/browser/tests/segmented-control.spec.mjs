@@ -106,3 +106,62 @@ test('Web CSS reflects native checked and focus state', async ({ page }) => {
   await group.getByRole('radio', { name: 'List' }).focus();
   await expect(label).toHaveCSS('outline-style', 'solid');
 });
+
+test('native radio reset restores independent defaults, empty selection and committed controlled state', async ({
+  page,
+}) => {
+  await load(page);
+  const group = page.getByRole('radiogroup', { name: 'View', exact: true });
+  const other = page.getByRole('radiogroup', { name: 'Other view', exact: true });
+  const empty = page.getByRole('radiogroup', { name: 'Empty view', exact: true });
+  const form = page.locator('#form');
+  const managed = port !== 'web' && port !== 'elements';
+  const initial = group.getByRole('radio', { name: 'List' });
+  const changed = group.getByRole('radio', { name: 'Grid' });
+  const name = await changed.getAttribute('name');
+  await changed.press('Space');
+  await empty.getByRole('radio', { name: 'List' }).press('Space');
+  await expect(changed).toBeChecked();
+  await expect(empty.locator('input:checked')).toHaveCount(1);
+  if (managed) {
+    await page.locator('#set-controlled').click();
+    await expect(
+      page.getByRole('radiogroup', { name: 'Controlled view' }).getByRole('radio', { name: 'Details' }),
+    ).toBeChecked();
+    await expect(page.locator('body')).toHaveAttribute('data-view-requests', '1');
+  }
+  await form.evaluate(async (element) => {
+    element.addEventListener('reset', (event) => event.preventDefault(), { once: true });
+    element.reset();
+    await new Promise((resolve) => {
+      setTimeout(resolve, 0);
+    });
+  });
+  await expect(changed).toBeChecked();
+  await form.evaluate((element) => {
+    element.addEventListener('change', () => {
+      document.body.dataset.resetChange = 'unexpected';
+    });
+    const button = document.createElement('button');
+    button.type = 'reset';
+    button.textContent = 'Reset choices';
+    element.append(button);
+  });
+  await page.getByRole('button', { name: 'Reset choices' }).click();
+  await expect(initial).toBeChecked();
+  await expect(other.getByRole('radio', { name: 'Grid' })).toBeChecked();
+  await expect(empty.locator('input:checked')).toHaveCount(0);
+  expect(await form.evaluate((element, name) => new FormData(element).get(name), name)).toBe('list');
+  await expect(page.locator('body')).not.toHaveAttribute('data-reset-change', 'unexpected');
+  if (managed) {
+    await expect(
+      page.getByRole('radiogroup', { name: 'Controlled view' }).getByRole('radio', { name: 'Details' }),
+    ).toBeChecked();
+    await expect(page.locator('body')).toHaveAttribute('data-view-requests', '1');
+    await expect(page.locator('body')).not.toHaveAttribute('data-requested', /.+/);
+  }
+  await changed.press('Space');
+  await expect(changed).toBeChecked();
+  expect(await form.evaluate((element, name) => new FormData(element).get(name), name)).toBe('grid');
+  if (managed) await expect(page.locator('body')).toHaveAttribute('data-view-requests', '2');
+});
