@@ -16,20 +16,74 @@ test('password field uses authored state labels without changing credential valu
   const showToggle = page.getByRole('button', { name: showLabel, exact: true });
   await expect(password).toHaveAttribute('type', 'password');
   await expect(password).toHaveValue('s3cret');
-  await expect(showToggle).toHaveAttribute('aria-pressed', 'false');
+  await expect(showToggle).not.toHaveAttribute('aria-pressed', /.+/);
+  await expect(showToggle).toHaveAttribute('type', 'button');
+  await expect(password).toHaveAttribute('autocomplete', 'current-password');
+  await password.evaluate((input) => input.setAttribute('data-identity-probe', 'original'));
 
+  await showToggle.evaluate((button) => {
+    button.addEventListener('click', (event) => event.preventDefault(), { once: true, capture: true });
+  });
   await showToggle.click();
+  await expect(password).toHaveAttribute('type', 'password');
+  await expect(showToggle).toBeVisible();
+
+  await showToggle.focus();
+  await showToggle.press('Enter');
   await expect(password).toHaveAttribute('type', 'text');
   await expect(password).toHaveValue('s3cret');
   const hideToggle = page.getByRole('button', { name: hideLabel, exact: true });
-  await expect(hideToggle).toHaveAttribute('aria-pressed', 'true');
+  await expect(hideToggle).not.toHaveAttribute('aria-pressed', /.+/);
+  await expect(hideToggle).toBeFocused();
+  await expect(password).toHaveAttribute('data-identity-probe', 'original');
+  expect(await page.locator('#credential-form').evaluate((form) => new FormData(form).get('password'))).toBe('s3cret');
 
-  await hideToggle.click();
+  await hideToggle.press('Space');
   await expect(password).toHaveAttribute('type', 'password');
   await expect(password).toHaveValue('s3cret');
-  await expect(page.getByRole('button', { name: showLabel, exact: true })).toBeVisible();
+  await expect(page.getByRole('button', { name: showLabel, exact: true })).toBeFocused();
+  await expect(password).toHaveAttribute('data-identity-probe', 'original');
+  await expect(password).toHaveAttribute('autocomplete', 'current-password');
 
   expect((await expectNoAxeViolations(page)).violations).toEqual([]);
+});
+
+test('framework visibility requests preserve committed state and default visibility', async ({ page }) => {
+  test.skip(!['react', 'angular', 'vue'].includes(port), 'Framework roots own controlled/default visibility.');
+  await page.goto(`/components/password-field/${port}.html`);
+  const controlled = page.getByLabel('Controlled password', { exact: true });
+  const show = page.getByRole('button', { name: 'Show controlled password', exact: true });
+  await expect(controlled).toHaveAttribute('type', 'password');
+  await show.press('Enter');
+  await expect(page.locator('body')).toHaveAttribute('data-requested', 'true');
+  await expect(controlled).toHaveAttribute('type', 'password');
+  await expect(show).toBeFocused();
+  const initial = page.getByLabel('Default password', { exact: true });
+  await expect(initial).toHaveAttribute('type', 'text');
+  await page.getByRole('button', { name: 'Hide default password', exact: true }).press('Space');
+  await expect(initial).toHaveAttribute('type', 'password');
+  await expect(page.getByLabel('Disabled password', { exact: true })).toBeDisabled();
+  await expect(page.getByRole('button', { name: 'Show disabled password', exact: true })).toBeDisabled();
+});
+
+test('password field respects native disabled fieldsets', async ({ page }) => {
+  test.skip(!frameworkPorts.has(port), 'Interactive behavior is implemented by the runtime ports.');
+  await page.goto(`/components/password-field/${port}.html`);
+  const password = page.getByLabel('Mot de passe', { exact: true });
+  const toggle = page.getByRole('button', { name: showLabel, exact: true });
+  await password.evaluate((input) => {
+    const root = input.closest('[data-vf-password-field-root]');
+    if (!root || !root.parentNode) throw new Error('Missing PasswordField root');
+    const fieldset = document.createElement('fieldset');
+    fieldset.disabled = true;
+    root.parentNode.insertBefore(fieldset, root);
+    fieldset.append(root);
+  });
+  await expect(password).toBeDisabled();
+  await expect(toggle).toBeDisabled();
+  await toggle.evaluate((button) => button.click());
+  await expect(password).toHaveAttribute('type', 'password');
+  await expect(password).toHaveValue('s3cret');
 });
 
 test('public PasswordField CSS resolves the canonical control radius in light and dark themes', async ({ page }) => {
@@ -73,14 +127,14 @@ test('STD-15 representative session recovery preserves task context', async ({ p
 
   await page.getByRole('button', { name: 'Continue', exact: true }).click();
   await expect(page.getByRole('heading', { name: 'Enter your verification code', exact: true })).toBeFocused();
-  const otpCells = page.getByRole('group', { name: 'Verification code', exact: true }).locator('input');
-  await expect(otpCells).toHaveCount(4);
-  await otpCells.nth(0).fill('1');
-  await otpCells.nth(1).fill('2');
-  await otpCells.nth(2).fill('3');
-  await otpCells.nth(3).fill('4');
+  const otp = page.getByRole('textbox', { name: 'Verification code', exact: true });
+  await expect(otp).toHaveAttribute('autocomplete', 'one-time-code');
+  await expect(otp).toHaveAttribute('maxlength', '4');
+  await otp.fill('1234');
+  await expect(otp).toHaveValue('1234');
   await page.getByRole('button', { name: 'Verify and return to edit', exact: true }).click();
   await expect(page.getByRole('alert')).toContainText('incorrect or expired');
+  await expect(otp).toHaveValue('1234');
   await expect(page.getByTestId('draft-value')).toHaveText('Unsaved identity workflow draft');
 
   await page.getByRole('button', { name: 'Verify and return to edit', exact: true }).click();

@@ -296,7 +296,10 @@ export type ClusterProps<Element extends LayoutElement = 'div'> = {
 } & Omit<ComponentPropsWithoutRef<Element>, 'as' | 'gap' | 'align' | 'justify'>;
 
 // @public (undocumented)
-export const ColorPickerInput: ForwardRefExoticComponent<Omit<DetailedHTMLProps<InputHTMLAttributes<HTMLInputElement>, HTMLInputElement>, "ref"> & RefAttributes<HTMLInputElement>>;
+export const ColorPickerInput: ForwardRefExoticComponent<ColorPickerInputProps & RefAttributes<HTMLInputElement>>;
+
+// @public (undocumented)
+export type ColorPickerInputProps = Omit<ComponentPropsWithoutRef<'input'>, 'type' | 'value' | 'defaultValue'>;
 
 // @public (undocumented)
 export const ColorPickerRoot: ForwardRefExoticComponent<ColorPickerRootProps & RefAttributes<HTMLDivElement>>;
@@ -308,6 +311,8 @@ export interface ColorPickerRootProps extends ComponentPropsWithoutRef<'div'> {
     // (undocumented)
     defaultValue?: string;
     // (undocumented)
+    disabled?: boolean;
+    // (undocumented)
     onValueChange?(v: string): void;
     // (undocumented)
     value?: string;
@@ -317,7 +322,7 @@ export interface ColorPickerRootProps extends ComponentPropsWithoutRef<'div'> {
 export function ColorPickerSwatch(props: ComponentPropsWithoutRef<'span'>): ReactElement;
 
 // @public (undocumented)
-export const ColorPickerTextInput: ForwardRefExoticComponent<Omit<DetailedHTMLProps<InputHTMLAttributes<HTMLInputElement>, HTMLInputElement>, "ref"> & RefAttributes<HTMLInputElement>>;
+export const ColorPickerTextInput: ForwardRefExoticComponent<ColorPickerInputProps & RefAttributes<HTMLInputElement>>;
 
 // @public (undocumented)
 export const ComboboxContent: ForwardRefExoticComponent<Omit<DetailedHTMLProps<HTMLAttributes<HTMLDivElement>, HTMLDivElement>, "ref"> & RefAttributes<HTMLDivElement>>;
@@ -2520,10 +2525,7 @@ export interface NumberFieldRootProps extends Omit<ComponentPropsWithoutRef<'div
 export const OTPFieldInput: ForwardRefExoticComponent<OTPFieldInputProps & RefAttributes<HTMLInputElement>>;
 
 // @public (undocumented)
-export interface OTPFieldInputProps extends Omit<ComponentPropsWithoutRef<'input'>, 'value'> {
-    // (undocumented)
-    index: number;
-}
+export type OTPFieldInputProps = Omit<ComponentPropsWithoutRef<'input'>, 'value' | 'defaultValue' | 'type' | 'maxLength'>;
 
 // @public (undocumented)
 export const OTPFieldRoot: ForwardRefExoticComponent<OTPFieldRootProps & RefAttributes<HTMLDivElement>>;
@@ -2534,6 +2536,8 @@ export interface OTPFieldRootProps extends ComponentPropsWithoutRef<'div'> {
     children?: ReactNode;
     // (undocumented)
     defaultValue?: string;
+    // (undocumented)
+    disabled?: boolean;
     // (undocumented)
     length?: number;
     // (undocumented)
@@ -2575,13 +2579,19 @@ export interface PasswordFieldRootProps extends ComponentPropsWithoutRef<'div'> 
     children?: ReactNode;
     // (undocumented)
     defaultVisible?: boolean;
+    // (undocumented)
+    disabled?: boolean;
+    // (undocumented)
+    onVisibleChange?(visible: boolean): void;
+    // (undocumented)
+    visible?: boolean;
 }
 
 // @public (undocumented)
 export const PasswordFieldToggle: ForwardRefExoticComponent<PasswordFieldToggleProps & RefAttributes<HTMLButtonElement>>;
 
 // @public (undocumented)
-export interface PasswordFieldToggleProps extends ComponentPropsWithoutRef<'button'> {
+export interface PasswordFieldToggleProps extends Omit<ComponentPropsWithoutRef<'button'>, 'type' | 'aria-pressed'> {
     // (undocumented)
     hideLabel: string;
     // (undocumented)
@@ -2757,10 +2767,12 @@ export interface SearchFieldRootProps extends ComponentPropsWithoutRef<'div'> {
 }
 
 // @public (undocumented)
-export const SegmentedControlItem: ForwardRefExoticComponent<SegmentedControlItemProps & RefAttributes<HTMLButtonElement>>;
+export const SegmentedControlItem: ForwardRefExoticComponent<SegmentedControlItemProps & RefAttributes<HTMLInputElement>>;
 
 // @public (undocumented)
-export interface SegmentedControlItemProps extends Omit<ComponentPropsWithoutRef<'button'>, 'value'> {
+export interface SegmentedControlItemProps extends Omit<ComponentPropsWithoutRef<'input'>, 'type' | 'name' | 'value' | 'checked' | 'defaultChecked' | 'children'> {
+    // (undocumented)
+    children?: ReactNode;
     // (undocumented)
     value: string;
 }
@@ -2774,6 +2786,8 @@ export interface SegmentedControlRootProps extends Omit<ComponentPropsWithoutRef
     children?: ReactNode;
     // (undocumented)
     defaultValue?: string;
+    // (undocumented)
+    name?: string;
     // (undocumented)
     onValueChange?(v: string): void;
     // (undocumented)

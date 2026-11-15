@@ -1,7 +1,45 @@
 @import '../../styles/choice-controls.css';
-
 @layer vyrnforge.components {
   [data-vf-segmented-control-root] {
     max-inline-size: 100%;
+    flex-wrap: wrap;
+  }
+  [data-vf-segmented-control-item] {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+  }
+  [data-vf-segmented-control-item] > input[type='radio'] {
+    position: absolute;
+    inline-size: 1px;
+    block-size: 1px;
+    opacity: 0;
+  }
+  [data-vf-segmented-control-item]:has(> input:checked) {
+    background: var(--vf-color-surface);
+    box-shadow: 0 0 0 1px var(--vf-color-border);
+    font-weight: 600;
+  }
+  [data-vf-segmented-control-item]:has(> input:focus-visible) {
+    outline: 2px solid var(--vf-color-focus-ring);
+    outline-offset: 1px;
+  }
+  [data-vf-segmented-control-item]:has(> input:disabled) {
+    opacity: 0.5;
+  }
+  @media (forced-colors: active) {
+    [data-vf-segmented-control-item]:has(> input:checked) {
+      outline: 1px solid Highlight;
+      outline-offset: -1px;
+    }
+    [data-vf-segmented-control-item]:has(> input:focus-visible) {
+      outline: 2px solid Highlight;
+      outline-offset: 1px;
+    }
+    [data-vf-segmented-control-item]:has(> input:disabled) {
+      opacity: 1;
+      color: GrayText;
+    }
   }
 }
