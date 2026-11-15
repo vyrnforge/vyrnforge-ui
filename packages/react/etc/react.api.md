@@ -2511,7 +2511,30 @@ export interface MultiSelectRootProps {
     // (undocumented)
     onValueChange?(value: string[]): void;
     // (undocumented)
+    selectionSummary?: boolean;
+    // (undocumented)
     value?: string[];
+}
+
+// @public
+export function MultiSelectSelection(input: MultiSelectSelectionProps): ReactElement<    {
+'data-vf-multi-select-selection': string;
+}, string | JSXElementConstructor<any>>;
+
+// @public (undocumented)
+export interface MultiSelectSelectionProps {
+    // (undocumented)
+    emptyLabel: string;
+    // (undocumented)
+    items: readonly {
+        value: string;
+        label: string;
+        removeLabel: string;
+    }[];
+    // (undocumented)
+    label: string;
+    // (undocumented)
+    locale: string;
 }
 
 // @public (undocumented)

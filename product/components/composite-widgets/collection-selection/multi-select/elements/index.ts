@@ -33,6 +33,9 @@ export class VfMultiSelectElement extends H {
   static observedAttributes = ['open', 'disabled'];
   private readonly generatedListboxId = `vf-multi-select-${++nextMultiSelectId}-listbox`;
   private formControl: HTMLSelectElement | null = null;
+  private summaryId: string | undefined;
+  private selectionItems = new Map<string, HTMLElement>();
+  private selectionGroup: HTMLElement | null = null;
   private initialSelection: string[] | null = null;
   private formError = '';
   private generatedErrorId = `${this.generatedListboxId}-error`;
@@ -147,9 +150,74 @@ export class VfMultiSelectElement extends H {
       if (!option.hasAttribute('aria-selected')) option.setAttribute('aria-selected', 'false');
     }
     this.syncFormControl();
+    this.syncSelection();
     if (!content || !trigger) return;
     if (open && !content.matches(':popover-open')) content.showPopover({ source: trigger });
     if (!open && content.matches(':popover-open')) content.hidePopover();
+  }
+
+  private syncSelection(): void {
+    const group = this.ownedPart('[data-vf-multi-select-selection]');
+    const summary = this.ownedPart('[data-vf-multi-select-summary]');
+    const trigger = this.trigger;
+    if (this.selectionGroup !== group) {
+      this.selectionItems.clear();
+      this.selectionGroup = group;
+    }
+    if (trigger) {
+      const descriptions = (trigger.getAttribute('aria-describedby') ?? '')
+        .split(/\s+/)
+        .filter((id) => id && id !== this.summaryId);
+      if (summary) {
+        summary.id ||= `${this.content?.id || this.generatedListboxId}-summary`;
+        this.summaryId = summary.id;
+        if (!descriptions.includes(summary.id)) descriptions.push(summary.id);
+      } else this.summaryId = undefined;
+      if (descriptions.length) trigger.setAttribute('aria-describedby', descriptions.join(' '));
+      else trigger.removeAttribute('aria-describedby');
+    }
+    if (!group || !summary) return;
+    const templates = Array.from(
+      group.querySelectorAll<HTMLTemplateElement>('template[data-vf-multi-select-item]'),
+    ).filter((template) => template.closest(rootMultiSelector) === this);
+    const selected = this.selectedValues();
+    const active = templates.filter((template) => selected.includes(template.dataset.vfValue ?? ''));
+    const keys = new Set(active.map((template) => template.dataset.vfValue ?? ''));
+    for (const [key, item] of this.selectionItems) {
+      if (!keys.has(key) || item.parentElement !== group) {
+        item.remove();
+        this.selectionItems.delete(key);
+      }
+    }
+    for (const [index, template] of active.entries()) {
+      const key = template.dataset.vfValue ?? '';
+      let item = this.selectionItems.get(key);
+      if (!item) {
+        const source = template.content.firstElementChild;
+        if (!(source instanceof HTMLElement)) continue;
+        item = source.cloneNode(true) as HTMLElement;
+        item.setAttribute('data-vf-multi-select-selected-item', '');
+        item.setAttribute('data-vf-value', key);
+        const next = active
+          .slice(index + 1)
+          .map((candidate) => this.selectionItems.get(candidate.dataset.vfValue ?? ''))
+          .find((candidate) => candidate?.parentElement === group);
+        group.insertBefore(item, next ?? null);
+        this.selectionItems.set(key, item);
+      }
+      const remove = item.querySelector<HTMLButtonElement>('button[data-vf-multi-select-remove]');
+      if (remove) {
+        remove.type = 'button';
+        if (remove.getAttribute('data-vf-value') !== key) remove.setAttribute('data-vf-value', key);
+        if (remove.disabled !== this.hasAttribute('disabled')) remove.disabled = this.hasAttribute('disabled');
+      }
+    }
+    const labels = active.map((template) => template.dataset.vfLabel ?? '');
+    const text = labels.length
+      ? new Intl.ListFormat(group.lang || undefined).format(labels)
+      : (summary.dataset.vfEmptyLabel ?? '');
+    summary.setAttribute('role', 'status');
+    if (summary.textContent !== text) summary.textContent = text;
   }
 
   private syncFormControl(): void {
@@ -298,17 +366,30 @@ export class VfMultiSelectElement extends H {
     const next = this.selectedValues().includes(value)
       ? this.selectedValues().filter((candidate) => candidate !== value)
       : [...this.selectedValues(), value];
+    this.setSelection(next);
+  }
+
+  private setSelection(next: string[]): void {
     for (const candidate of optionsFor(this)) {
       const selected = String(next.includes(optionValue(candidate)));
       if (candidate.getAttribute('aria-selected') !== selected) candidate.setAttribute('aria-selected', selected);
     }
     this.syncFormControl();
+    this.syncSelection();
   }
 
   private onClick = (event: Event): void => {
     if (event.defaultPrevented) return;
     const target = event.target instanceof Element ? event.target : null;
     if (!target || target.closest(rootMultiSelector) !== this) return;
+    const remove = target.closest<HTMLButtonElement>('button[data-vf-multi-select-remove]');
+    if (remove && this.selectionGroup?.contains(remove)) {
+      if (this.hasAttribute('disabled') || optionDisabled(remove)) return;
+      const value = remove.dataset.vfValue;
+      if (value && this.selectedValues().includes(value))
+        this.setSelection(this.selectedValues().filter((candidate) => candidate !== value));
+      return;
+    }
     const trigger = target.closest('[data-vf-multi-select-trigger]');
     if (trigger && trigger === this.trigger) {
       if (this.hasAttribute('disabled') || trigger.matches(':disabled,[aria-disabled="true"]')) return;

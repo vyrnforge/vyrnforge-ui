@@ -335,3 +335,60 @@ test('MultiSelect controlled rejection and reset preserve submitted owner values
   await expect(page.locator('#controlled-one')).toHaveAttribute('aria-selected', 'true');
   await expect.poll(data).toEqual(['one']);
 });
+
+test('MultiSelect summary and TagGroup removal follow committed selection and focus', async ({ page }) => {
+  test.skip(port === 'web', 'Managed selection summary evidence.');
+  await page.goto(`/components/multi-select/${port}.html`);
+  await page.waitForFunction(() => document.body.dataset.multiReady === 'true');
+  const example = page.locator('#summary-example');
+  const trigger = example.locator('#summary-choice-trigger');
+  const summary = example.locator('[data-vf-multi-select-summary]');
+  const group = example.getByRole('list', { name: 'Selected frameworks' });
+  const one = group.getByRole('button', { name: 'Remove One' });
+  const three = group.getByRole('button', { name: 'Remove Three' });
+  await expect(summary).toHaveText('One and Three');
+  const id = await summary.getAttribute('id');
+  expect(id).toBeTruthy();
+  await expect(trigger).toHaveAttribute('aria-describedby', `summary-hint ${id}`);
+  await expect(one).toBeVisible();
+  await one.evaluate((node) =>
+    node.addEventListener('click', (event) => event.preventDefault(), { once: true, capture: true }),
+  );
+  await one.press('Enter');
+  await expect(summary).toHaveText('One and Three');
+  await expect(one).toBeFocused();
+  await one.press('Enter');
+  await expect(one).toHaveCount(0);
+  await expect(three).toBeFocused();
+  await expect(summary).toHaveText('Three');
+  await expect(page.locator('#summary-one')).toHaveAttribute('aria-selected', 'false');
+  await three.press('Space');
+  await expect(three).toHaveCount(0);
+  await expect(group).toBeFocused();
+  await expect(summary).toHaveText('None selected');
+  await trigger.press('Enter');
+  await expect(page.locator('#summary-one')).toBeFocused();
+  await page.locator('#summary-three').press('Enter');
+  await expect(summary).toHaveText('Three');
+  await page.locator('#summary-one').press('Enter');
+  await expect(summary).toHaveText('One and Three');
+  await page.keyboard.press('Escape');
+  await expect(group.getByRole('button')).toHaveCount(2);
+  await expect(group.getByRole('button').first()).toHaveAccessibleName('Remove One');
+  await expectAxeClean(page);
+});
+
+test('MultiSelect rejected controlled removal preserves summary and focus', async ({ page }) => {
+  test.skip(port === 'web' || port === 'elements', 'Framework-controlled selection evidence.');
+  await page.goto(`/components/multi-select/${port}.html`);
+  await page.waitForFunction(() => document.body.dataset.multiReady === 'true');
+  const example = page.locator('#summary-controlled-example');
+  const summary = example.locator('[data-vf-multi-select-summary]');
+  const one = example.getByRole('button', { name: 'Remove One' });
+  await expect(summary).toHaveText('One and Three');
+  await one.press('Enter');
+  await expect(page.locator('body')).toHaveAttribute('data-summary-request', 'three');
+  await expect(one).toBeFocused();
+  await expect(summary).toHaveText('One and Three');
+  await expect(example.getByRole('listitem')).toHaveCount(2);
+});

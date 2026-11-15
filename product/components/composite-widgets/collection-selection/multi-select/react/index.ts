@@ -16,6 +16,7 @@ import {
 } from 'react';
 import { resolveNavigationIndex } from '@vyrnforge/core/collection-navigation';
 import { findTypeaheadMatch } from '@vyrnforge/core/typeahead-matching';
+import { TagGroupRoot, TagGroupItem, TagGroupRemove } from '../tag-group/index.js';
 
 const optionMultiSelector = '[data-vf-multi-select-option]';
 function optionsFor(root: HTMLElement): HTMLButtonElement[] {
@@ -48,6 +49,8 @@ function focusOption(root: HTMLElement | null, edge: 'first' | 'last'): void {
 }
 
 interface Ctx {
+  selectionSummary: boolean;
+  remove(value: string): void;
   disabled: boolean;
   error: string;
   setError(message: string): void;
@@ -73,6 +76,7 @@ function useMulti(): Ctx {
 }
 
 export interface MultiSelectRootProps {
+  selectionSummary?: boolean;
   disabled?: boolean;
   children?: ReactNode;
   id?: string;
@@ -87,6 +91,7 @@ export function MultiSelectRoot({
   value,
   defaultValue = [],
   disabled = false,
+  selectionSummary = false,
   onValueChange,
 }: MultiSelectRootProps) {
   const initialValue = useRef([...defaultValue]);
@@ -108,6 +113,13 @@ export function MultiSelectRoot({
   const [focusRevision, setFocusRevision] = useState(0);
   const context = useMemo<Ctx>(
     () => ({
+      selectionSummary,
+      remove(candidate) {
+        if (disabled || !values.includes(candidate)) return;
+        const next = values.filter((value) => value !== candidate);
+        if (value === undefined) setInternalValue(next);
+        onValueChange?.(next);
+      },
       disabled,
       error,
       setError,
@@ -142,7 +154,7 @@ export function MultiSelectRoot({
         setFocusRevision((revision) => revision + 1);
       },
     }),
-    [open, onValueChange, values, value, focusRevision, triggerId, listboxId, disabled, error],
+    [open, onValueChange, values, value, focusRevision, triggerId, listboxId, disabled, error, selectionSummary],
   );
   return createElement(C.Provider, { value: context }, children);
 }
@@ -169,8 +181,13 @@ export const MultiSelectTrigger = forwardRef<
       disabled: props.disabled || multi.disabled,
       'aria-invalid': multi.error ? true : props['aria-invalid'],
       'aria-describedby':
-        [props['aria-describedby'], multi.error ? `${multi.listboxId}-error` : undefined].filter(Boolean).join(' ') ||
-        undefined,
+        [
+          props['aria-describedby'],
+          multi.selectionSummary ? `${multi.listboxId}-summary` : undefined,
+          multi.error ? `${multi.listboxId}-error` : undefined,
+        ]
+          .filter(Boolean)
+          .join(' ') || undefined,
       'data-vf-multi-select-trigger': '',
       id: multi.triggerId,
       'aria-controls': multi.listboxId,
@@ -415,5 +432,51 @@ export function MultiSelectFormControl({ name, form, required, options }: MultiS
       ),
     ),
     createElement('span', { id: `${root.listboxId}-error`, role: 'status' }, root.error),
+  );
+}
+
+export interface MultiSelectSelectionProps {
+  items: readonly { value: string; label: string; removeLabel: string }[];
+  label: string;
+  emptyLabel: string;
+  locale: string;
+}
+
+/** Authored selected-item labels and native removal controls. Compose outside the trigger. */
+export function MultiSelectSelection({ items, label, emptyLabel, locale }: MultiSelectSelectionProps) {
+  const root = useMulti();
+  const selected = items.filter((item) => root.values.includes(item.value));
+  const summary = selected.length ? new Intl.ListFormat(locale).format(selected.map((item) => item.label)) : emptyLabel;
+  return createElement(
+    'div',
+    { 'data-vf-multi-select-selection': '' },
+    createElement(
+      'span',
+      { id: `${root.listboxId}-summary`, role: 'status', 'data-vf-multi-select-summary': '' },
+      summary,
+    ),
+    createElement(
+      TagGroupRoot,
+      { 'aria-label': label },
+      selected.map((item) =>
+        createElement(
+          TagGroupItem,
+          { key: item.value },
+          createElement('span', null, item.label),
+          createElement(
+            TagGroupRemove,
+            {
+              label: item.removeLabel,
+              disabled: root.disabled,
+              type: 'button',
+              onClick(event) {
+                if (!event.defaultPrevented && !optionDisabled(event.currentTarget)) root.remove(item.value);
+              },
+            },
+            '×',
+          ),
+        ),
+      ),
+    ),
   );
 }
