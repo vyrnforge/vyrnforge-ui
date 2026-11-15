@@ -22,6 +22,9 @@ for (const [component, ready, surfaceSelector, activation] of cases) {
         channel: 'chromium',
         headless: true,
         viewport: null,
+        deviceScaleFactor: undefined,
+        screen: undefined,
+        ignoreDefaultArgs: ['--disable-extensions'],
         args: [
           '--window-size=1280,1000',
           '--disable-extensions-except=' + extension,
