@@ -178,7 +178,8 @@ export class VfMultiSelectElement extends H {
         this.selectionItems.delete(key);
       }
     }
-    for (const template of active) {
+    for (let index = 0; index < active.length; index += 1) {
+      const template = active[index]!;
       const key = template.dataset.vfValue ?? '';
       let item = this.selectionItems.get(key);
       if (!item) {
@@ -187,13 +188,14 @@ export class VfMultiSelectElement extends H {
         item = source.cloneNode(true) as HTMLElement;
         item.setAttribute('data-vf-multi-select-selected-item', '');
         item.setAttribute('data-vf-value', key);
-        group.append(item);
+        const next = active.slice(index + 1).map((candidate) => this.selectionItems.get(candidate.dataset.vfValue ?? '')).find((candidate) => candidate?.parentElement === group);
+        group.insertBefore(item, next ?? null);
         this.selectionItems.set(key, item);
       }
       const remove = item.querySelector<HTMLButtonElement>('button[data-vf-multi-select-remove]');
       if (remove) {
         remove.type = 'button';
-        remove.setAttribute('data-vf-value', key);
+        if (remove.getAttribute('data-vf-value') !== key) remove.setAttribute('data-vf-value', key);
         if (remove.disabled !== this.hasAttribute('disabled')) remove.disabled = this.hasAttribute('disabled');
       }
     }
