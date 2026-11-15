@@ -20,7 +20,7 @@
   "evidence": { "browser": "required", "assistiveTechnology": "review-required" },
   "profileVariability": [],
   "notes": [
-    "#1286 removed generic English labels; actual removal focus and per-port parity remain to verify.",
+    "Runtime ports preserve authored item names and move focus only after the focused removal control actually disappears. Next surviving eligible removal control, then previous, then the programmatically focusable group is the fallback; an external consumer-selected focus target wins. Consumer owns item identity and accepted removal. Manual evidence remains open.",
     "Audit mapping is provisional; not a conformance claim."
   ]
 }
