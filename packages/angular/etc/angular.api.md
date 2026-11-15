@@ -1625,7 +1625,10 @@ export class VfListboxRootDirective implements OnDestroy {
 }
 
 // @public (undocumented)
-export class VfMenubarRootDirective {
+export class VfMenubarRootDirective implements AfterViewInit, OnDestroy {
+    ngAfterViewInit(): void;
+    ngOnDestroy(): void;
+    onFocusin(event: FocusEvent): void;
     // (undocumented)
     static ɵdir: i0.ɵɵDirectiveDeclaration<VfMenubarRootDirective, "[vfMenubarRoot]", never, {}, {}, never, never, true, never>;
     // (undocumented)
