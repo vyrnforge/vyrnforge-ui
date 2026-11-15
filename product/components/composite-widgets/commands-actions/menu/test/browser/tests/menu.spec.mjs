@@ -8,6 +8,7 @@ async function expectAxeClean(page) {
 
 test('menu exposes menu-button and item semantics', async ({ page }) => {
   await page.goto(`/components/menu/${port}.html`);
+  if(port !== 'web') await expect(page.locator('body')).toHaveAttribute('data-menu-ready','true');
   const trigger = page.locator(`#${port}-trigger`);
   await expect(trigger).toHaveAttribute('aria-haspopup', 'menu');
   if (port === 'web') {
@@ -69,6 +70,7 @@ test.describe('enhanced menu interaction', () => {
     });
     page.on('pageerror', (error) => errors.push(error.message));
     await page.goto(`/components/menu/${port}.html`);
+  if(port !== 'web') await expect(page.locator('body')).toHaveAttribute('data-menu-ready','true');
 
     const trigger = page.locator(`#${port}-trigger`);
     const menu = page.locator(`#${port}-menu`);
@@ -115,6 +117,7 @@ test.describe('enhanced menu interaction', () => {
 
   test('activates enabled items, restores focus, and Tab exits instead of traversing menu items', async ({ page }) => {
     await page.goto(`/components/menu/${port}.html`);
+  if(port !== 'web') await expect(page.locator('body')).toHaveAttribute('data-menu-ready','true');
     const before = page.locator('#before');
     const after = page.locator('#after');
     const trigger = page.locator(`#${port}-trigger`);
@@ -143,4 +146,33 @@ test.describe('enhanced menu interaction', () => {
     await expect(before).toBeFocused();
     await expect(menu).toBeHidden();
   });
+});
+
+test('native top layer, committed close and outside focus', async ({page})=>{
+  test.skip(port === 'web', 'Runtime port evidence');
+  await page.goto(`/components/menu/${port}.html`);
+  await expect(page.locator('body')).toHaveAttribute('data-menu-ready','true');
+  const trigger=page.locator(`#${port}-trigger`);
+  const menu=page.locator(`#${port}-menu`);
+  const edit=page.locator(`#${port}-edit`);
+  await expect(trigger).toHaveAttribute('aria-controls',`${port}-menu`);
+  await expect(menu).toHaveAttribute('popover','auto');
+  await trigger.click();
+  await expect(menu).toHaveJSProperty('popover','auto');
+  await expect.poll(()=>menu.evaluate(el=>el.matches(':popover-open'))).toBe(true);
+  await expect(edit).toBeFocused();
+  if(port!=='elements'){
+    await page.locator('body').evaluate(el=>{el.dataset.rejectClose='true';});
+    await page.keyboard.press('Escape');
+    await expect(menu).toBeVisible();
+    await expect(edit).toBeFocused();
+    await menu.evaluate(el=>el.hidePopover());
+    await expect.poll(()=>menu.evaluate(el=>el.matches(':popover-open'))).toBe(true);
+    await expect(edit).toBeFocused();
+    await page.locator('body').evaluate(el=>{delete el.dataset.rejectClose;});
+  }
+  await page.locator('#after').click();
+  await expect(menu).toBeHidden();
+  await expect(trigger).toHaveAttribute('aria-expanded','false');
+  await expect(page.locator('#after')).toBeFocused();
 });
