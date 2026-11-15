@@ -144,3 +144,31 @@ test.describe('enhanced menu interaction', () => {
     await expect(menu).toBeHidden();
   });
 });
+
+test('Elements menu events remain scoped to the owning nested menu', async ({ page }) => {
+  test.skip(port !== 'elements', 'Elements ownership regression.');
+  await page.goto('/components/menu/elements.html');
+  await page.locator('#elements-trigger').evaluate((trigger) => {
+    const outer = trigger.closest('vf-menu');
+    const nested = document.createElement('vf-menu');
+    nested.id = 'nested-menu';
+    nested.innerHTML =
+      '<button id="nested-trigger" type="button" data-vf-menu-trigger>Nested actions</button><div id="nested-content" data-vf-menu-content aria-label="Nested actions"><button id="nested-item" type="button" data-vf-menu-item>Nested command</button></div>';
+    outer.append(nested);
+    outer.addEventListener('vf-select', (event) => {
+      if (event.target === outer) document.body.dataset.outerSelected = 'true';
+    });
+  });
+  const outer = page.locator('vf-menu').first();
+  const nested = page.locator('#nested-menu');
+  await page.locator('#nested-trigger').focus();
+  await page.keyboard.press('ArrowDown');
+  await expect(nested).toHaveAttribute('open', '');
+  await expect(outer).not.toHaveAttribute('open', '');
+  await expect(page.locator('#nested-item')).toBeFocused();
+  await page.keyboard.press('Enter');
+  await expect(nested).not.toHaveAttribute('open', '');
+  await expect(outer).not.toHaveAttribute('open', '');
+  await expect(page.locator('body')).not.toHaveAttribute('data-outer-selected', 'true');
+  await expect(page.locator('#nested-trigger')).toBeFocused();
+});

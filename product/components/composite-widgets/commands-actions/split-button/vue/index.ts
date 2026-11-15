@@ -2,6 +2,7 @@ import { defineComponent, h } from 'vue';
 import { MenuContent, MenuItem, MenuRoot, MenuTrigger } from '../menu/index.js';
 export const SplitButtonRoot = defineComponent({
   name: 'SplitButtonRoot',
+  inheritAttrs: false,
   setup(_, { attrs, slots }) {
     return () =>
       h(MenuRoot, null, { default: () => h('div', { ...attrs, 'data-vf-split-button-root': '' }, slots.default?.()) });
@@ -9,6 +10,7 @@ export const SplitButtonRoot = defineComponent({
 });
 export const SplitButtonAction = defineComponent({
   name: 'SplitButtonAction',
+  inheritAttrs: false,
   setup(_, { attrs, slots }) {
     return () =>
       h(
@@ -20,6 +22,7 @@ export const SplitButtonAction = defineComponent({
 });
 export const SplitButtonTrigger = defineComponent({
   name: 'SplitButtonTrigger',
+  inheritAttrs: false,
   setup(_, { attrs, slots }) {
     return () => h(MenuTrigger, { ...attrs, 'data-vf-split-button-trigger': '' }, slots);
   },
