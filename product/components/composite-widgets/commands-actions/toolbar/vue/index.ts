@@ -8,8 +8,12 @@ import { defineComponent, h, onBeforeUnmount, onMounted, ref, type PropType } fr
 
 export type ToolbarOrientation = 'horizontal' | 'vertical';
 
+const toolbarSelector = '[data-vf-toolbar-root],vf-toolbar';
+
 function toolbarItems(root: HTMLElement): HTMLElement[] {
-  return Array.from(root.querySelectorAll<HTMLElement>('[data-vf-toolbar-item]'));
+  return Array.from(root.querySelectorAll<HTMLElement>('[data-vf-toolbar-item]')).filter(
+    (item) => item.closest(toolbarSelector) === root,
+  );
 }
 function disabled(item: HTMLElement): boolean {
   return item.matches(':disabled') || item.getAttribute('aria-disabled') === 'true';
@@ -27,8 +31,8 @@ function syncTabStops(root: HTMLElement, preferred?: HTMLElement | null): void {
   });
 }
 function itemFromTarget(root: HTMLElement, target: EventTarget | null): HTMLElement | null {
-  const element = target instanceof HTMLElement ? target.closest<HTMLElement>('[data-vf-toolbar-item]') : null;
-  return element && root.contains(element) ? element : null;
+  const element = target instanceof Element ? target.closest<HTMLElement>('[data-vf-toolbar-item]') : null;
+  return element?.closest(toolbarSelector) === root ? element : null;
 }
 function intentForKey(
   key: string,
@@ -56,6 +60,7 @@ function invoke(handler: unknown, event: Event): void {
 
 export const ToolbarRoot = defineComponent({
   name: 'ToolbarRoot',
+  inheritAttrs: false,
   props: { orientation: { type: String as PropType<ToolbarOrientation>, default: 'horizontal' } },
   setup(props, { attrs, slots }) {
     const root = ref<HTMLElement | null>(null);
@@ -71,7 +76,7 @@ export const ToolbarRoot = defineComponent({
           childList: true,
           subtree: true,
           attributes: true,
-          attributeFilter: ['disabled', 'aria-disabled'],
+          attributeFilter: ['disabled', 'aria-disabled', 'data-vf-toolbar-item', 'data-vf-toolbar-root'],
         });
       }
     });
@@ -103,7 +108,8 @@ export const ToolbarRoot = defineComponent({
             if (!intent) return;
             const items = toolbarItems(root.value);
             const currentItem = itemFromTarget(root.value, event.target);
-            const currentIndex = currentItem ? items.indexOf(currentItem) : -1;
+            if (!currentItem) return;
+            const currentIndex = items.indexOf(currentItem);
             const nextIndex = resolveNavigationIndex(
               items.map((item) => ({ eligible: !disabled(item) })),
               currentIndex,
@@ -123,6 +129,7 @@ export const ToolbarRoot = defineComponent({
 });
 export const ToolbarButton = defineComponent({
   name: 'ToolbarButton',
+  inheritAttrs: false,
   setup(_, { attrs, slots }) {
     return () =>
       h(
@@ -134,12 +141,14 @@ export const ToolbarButton = defineComponent({
 });
 export const ToolbarLink = defineComponent({
   name: 'ToolbarLink',
+  inheritAttrs: false,
   setup(_, { attrs, slots }) {
     return () => h('a', { ...attrs, 'data-vf-toolbar-item': '' }, slots.default?.());
   },
 });
 export const ToolbarSeparator = defineComponent({
   name: 'ToolbarSeparator',
+  inheritAttrs: false,
   setup(_, { attrs }) {
     return () => h('div', { ...attrs, role: 'separator', 'data-vf-toolbar-separator': '' });
   },

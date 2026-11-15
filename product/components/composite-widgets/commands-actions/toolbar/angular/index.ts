@@ -8,8 +8,12 @@ import {
 
 export type ToolbarOrientation = 'horizontal' | 'vertical';
 
+const toolbarSelector = '[data-vf-toolbar-root],vf-toolbar';
+
 function toolbarItems(root: HTMLElement): HTMLElement[] {
-  return Array.from(root.querySelectorAll<HTMLElement>('[data-vf-toolbar-item]'));
+  return Array.from(root.querySelectorAll<HTMLElement>('[data-vf-toolbar-item]')).filter(
+    (item) => item.closest(toolbarSelector) === root,
+  );
 }
 function disabled(item: HTMLElement): boolean {
   return item.matches(':disabled') || item.getAttribute('aria-disabled') === 'true';
@@ -27,8 +31,8 @@ function syncTabStops(root: HTMLElement, preferred?: HTMLElement | null): void {
   });
 }
 function itemFromTarget(root: HTMLElement, target: EventTarget | null): HTMLElement | null {
-  const element = target instanceof HTMLElement ? target.closest<HTMLElement>('[data-vf-toolbar-item]') : null;
-  return element && root.contains(element) ? element : null;
+  const element = target instanceof Element ? target.closest<HTMLElement>('[data-vf-toolbar-item]') : null;
+  return element?.closest(toolbarSelector) === root ? element : null;
 }
 function intentForKey(
   key: string,
@@ -76,7 +80,7 @@ export class VfToolbarRootDirective implements AfterViewInit, OnDestroy {
         childList: true,
         subtree: true,
         attributes: true,
-        attributeFilter: ['disabled', 'aria-disabled'],
+        attributeFilter: ['disabled', 'aria-disabled', 'data-vf-toolbar-item', 'data-vf-toolbar-root'],
       });
     }
   }
@@ -90,7 +94,7 @@ export class VfToolbarRootDirective implements AfterViewInit, OnDestroy {
     if (item && !disabled(item)) syncTabStops(root, item);
   }
   onKeydown(event: KeyboardEvent) {
-    if (typeof window === 'undefined') return;
+    if (event.defaultPrevented || typeof window === 'undefined') return;
     const root = this.element.nativeElement;
     const direction =
       typeof getComputedStyle === 'function' && getComputedStyle(root).direction === 'rtl' ? 'rtl' : 'ltr';
@@ -98,7 +102,8 @@ export class VfToolbarRootDirective implements AfterViewInit, OnDestroy {
     if (!intent) return;
     const items = toolbarItems(root);
     const currentItem = itemFromTarget(root, event.target);
-    const currentIndex = currentItem ? items.indexOf(currentItem) : -1;
+    if (!currentItem) return;
+    const currentIndex = items.indexOf(currentItem);
     const nextIndex = resolveNavigationIndex(
       items.map((item) => ({ eligible: !disabled(item) })),
       currentIndex,
