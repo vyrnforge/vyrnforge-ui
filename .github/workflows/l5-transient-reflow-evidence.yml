@@ -1,0 +1,16 @@
+name: L5 Transient Reflow Evidence
+on:
+  push:
+    branches: [fix/l5-transient-reflow-evidence]
+permissions:
+  contents: read
+jobs:
+  browser:
+    uses: ./.github/workflows/_browser-validation.yml
+    with:
+      scopes_json: '[{"port":"web","components":"popover,tooltip,preview-card"},{"port":"react","components":"popover,tooltip,preview-card"},{"port":"vue","components":"popover,tooltip,preview-card"},{"port":"angular","components":"popover,tooltip,preview-card"},{"port":"elements","components":"popover,tooltip,preview-card"}]'
+      revision: ${{ github.sha }}
+      browser_profile: cross
+      browsers: chromium firefox webkit
+      artifact_suffix: l5-transient-reflow
+      retention_days: 30
