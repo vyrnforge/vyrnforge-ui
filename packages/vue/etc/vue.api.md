@@ -416,9 +416,15 @@ export interface ClusterProps {
 }
 
 // @public (undocumented)
-export const ColorPickerInput: DefineComponent<    {}, () => VNode<RendererNode, RendererElement, {
+export const ColorPickerInput: DefineComponent<ExtractPropTypes<    {
+disabled: BooleanConstructor;
+}>, () => VNode<RendererNode, RendererElement, {
 [key: string]: any;
-}>, {}, {}, {}, ComponentOptionsMixin, ComponentOptionsMixin, {}, string, PublicProps, Readonly<{}> & Readonly<{}>, {}, {}, {}, {}, string, ComponentProvideOptions, true, {}, any>;
+}>, {}, {}, {}, ComponentOptionsMixin, ComponentOptionsMixin, {}, string, PublicProps, Readonly<ExtractPropTypes<    {
+disabled: BooleanConstructor;
+}>> & Readonly<{}>, {
+disabled: boolean;
+}, {}, {}, {}, string, ComponentProvideOptions, true, {}, any>;
 
 // @public (undocumented)
 export const ColorPickerRoot: DefineComponent<ExtractPropTypes<    {
@@ -427,17 +433,22 @@ defaultValue: {
 type: StringConstructor;
 default: string;
 };
+disabled: BooleanConstructor;
 }>, () => VNode<RendererNode, RendererElement, {
 [key: string]: any;
-}>, {}, {}, {}, ComponentOptionsMixin, ComponentOptionsMixin, "update:value"[], "update:value", PublicProps, Readonly<ExtractPropTypes<    {
+}>, {}, {}, {}, ComponentOptionsMixin, ComponentOptionsMixin, {
+'update:value': (value: string) => boolean;
+}, string, PublicProps, Readonly<ExtractPropTypes<    {
 value: StringConstructor;
 defaultValue: {
 type: StringConstructor;
 default: string;
 };
+disabled: BooleanConstructor;
 }>> & Readonly<{
-"onUpdate:value"?: (...args: any[]) => any;
+"onUpdate:value"?: (value: string) => any;
 }>, {
+disabled: boolean;
 defaultValue: string;
 }, {}, {}, {}, string, ComponentProvideOptions, true, {}, any>;
 
@@ -447,9 +458,18 @@ export const ColorPickerSwatch: DefineComponent<    {}, () => VNode<RendererNode
 }>, {}, {}, {}, ComponentOptionsMixin, ComponentOptionsMixin, {}, string, PublicProps, Readonly<{}> & Readonly<{}>, {}, {}, {}, {}, string, ComponentProvideOptions, true, {}, any>;
 
 // @public (undocumented)
-export const ColorPickerTextInput: DefineComponent<    {}, () => VNode<RendererNode, RendererElement, {
+export const ColorPickerTextInput: DefineComponent<ExtractPropTypes<    {
+disabled: BooleanConstructor;
+readOnly: BooleanConstructor;
+}>, () => VNode<RendererNode, RendererElement, {
 [key: string]: any;
-}>, {}, {}, {}, ComponentOptionsMixin, ComponentOptionsMixin, {}, string, PublicProps, Readonly<{}> & Readonly<{}>, {}, {}, {}, {}, string, ComponentProvideOptions, true, {}, any>;
+}>, {}, {}, {}, ComponentOptionsMixin, ComponentOptionsMixin, {}, string, PublicProps, Readonly<ExtractPropTypes<    {
+disabled: BooleanConstructor;
+readOnly: BooleanConstructor;
+}>> & Readonly<{}>, {
+disabled: boolean;
+readOnly: boolean;
+}, {}, {}, {}, string, ComponentProvideOptions, true, {}, any>;
 
 // @public (undocumented)
 export const ComboboxContent: DefineComponent<    {}, () => VNode<RendererNode, RendererElement, {

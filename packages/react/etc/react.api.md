@@ -296,7 +296,10 @@ export type ClusterProps<Element extends LayoutElement = 'div'> = {
 } & Omit<ComponentPropsWithoutRef<Element>, 'as' | 'gap' | 'align' | 'justify'>;
 
 // @public (undocumented)
-export const ColorPickerInput: ForwardRefExoticComponent<Omit<DetailedHTMLProps<InputHTMLAttributes<HTMLInputElement>, HTMLInputElement>, "ref"> & RefAttributes<HTMLInputElement>>;
+export const ColorPickerInput: ForwardRefExoticComponent<ColorPickerInputProps & RefAttributes<HTMLInputElement>>;
+
+// @public (undocumented)
+export type ColorPickerInputProps = Omit<ComponentPropsWithoutRef<'input'>, 'type' | 'value' | 'defaultValue'>;
 
 // @public (undocumented)
 export const ColorPickerRoot: ForwardRefExoticComponent<ColorPickerRootProps & RefAttributes<HTMLDivElement>>;
@@ -308,6 +311,8 @@ export interface ColorPickerRootProps extends ComponentPropsWithoutRef<'div'> {
     // (undocumented)
     defaultValue?: string;
     // (undocumented)
+    disabled?: boolean;
+    // (undocumented)
     onValueChange?(v: string): void;
     // (undocumented)
     value?: string;
@@ -317,7 +322,7 @@ export interface ColorPickerRootProps extends ComponentPropsWithoutRef<'div'> {
 export function ColorPickerSwatch(props: ComponentPropsWithoutRef<'span'>): ReactElement;
 
 // @public (undocumented)
-export const ColorPickerTextInput: ForwardRefExoticComponent<Omit<DetailedHTMLProps<InputHTMLAttributes<HTMLInputElement>, HTMLInputElement>, "ref"> & RefAttributes<HTMLInputElement>>;
+export const ColorPickerTextInput: ForwardRefExoticComponent<ColorPickerInputProps & RefAttributes<HTMLInputElement>>;
 
 // @public (undocumented)
 export const ComboboxContent: ForwardRefExoticComponent<Omit<DetailedHTMLProps<HTMLAttributes<HTMLDivElement>, HTMLDivElement>, "ref"> & RefAttributes<HTMLDivElement>>;

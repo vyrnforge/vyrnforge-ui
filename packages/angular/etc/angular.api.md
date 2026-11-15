@@ -665,9 +665,19 @@ export class VfClusterDirective {
 export class VfColorPickerInputDirective {
     constructor(root: VfColorPickerRootDirective);
     // (undocumented)
+    change(event: Event): void;
+    // (undocumented)
+    readonly disabled: InputSignalWithTransform<boolean, unknown>;
+    // (undocumented)
     readonly root: VfColorPickerRootDirective;
     // (undocumented)
-    static ɵdir: i0.ɵɵDirectiveDeclaration<VfColorPickerInputDirective, "input[vfColorPickerInput]", never, {}, {}, never, never, true, never>;
+    static ɵdir: i0.ɵɵDirectiveDeclaration<VfColorPickerInputDirective, "input[vfColorPickerInput]", never, {
+        "disabled": {
+            "alias": "disabled";
+            "required": false;
+            "isSignal": true;
+        };
+    }, {}, never, never, true, never>;
     // (undocumented)
     static ɵfac: i0.ɵɵFactoryDeclaration<VfColorPickerInputDirective, never>;
 }
@@ -678,6 +688,10 @@ export class VfColorPickerRootDirective {
     readonly current: Signal<string>;
     // (undocumented)
     readonly defaultValue: InputSignal<string>;
+    // (undocumented)
+    readonly disabled: InputSignalWithTransform<boolean, unknown>;
+    // (undocumented)
+    ngOnInit(): void;
     // (undocumented)
     set(v: string): void;
     // (undocumented)
@@ -696,6 +710,11 @@ export class VfColorPickerRootDirective {
             "required": false;
             "isSignal": true;
         };
+        "disabled": {
+            "alias": "disabled";
+            "required": false;
+            "isSignal": true;
+        };
     }, {
         "valueChange": "valueChange";
     }, never, never, true, never>;
@@ -704,14 +723,40 @@ export class VfColorPickerRootDirective {
 }
 
 // @public (undocumented)
-export class VfColorPickerTextDirective {
+export class VfColorPickerSwatchDirective {
     constructor(root: VfColorPickerRootDirective);
-    // (undocumented)
-    change(e: Event): void;
     // (undocumented)
     readonly root: VfColorPickerRootDirective;
     // (undocumented)
-    static ɵdir: i0.ɵɵDirectiveDeclaration<VfColorPickerTextDirective, "input[vfColorPickerText]", never, {}, {}, never, never, true, never>;
+    static ɵdir: i0.ɵɵDirectiveDeclaration<VfColorPickerSwatchDirective, "[vfColorPickerSwatch]", never, {}, {}, never, never, true, never>;
+    // (undocumented)
+    static ɵfac: i0.ɵɵFactoryDeclaration<VfColorPickerSwatchDirective, never>;
+}
+
+// @public (undocumented)
+export class VfColorPickerTextDirective {
+    constructor(root: VfColorPickerRootDirective);
+    // (undocumented)
+    change(event: Event): void;
+    // (undocumented)
+    readonly disabled: InputSignalWithTransform<boolean, unknown>;
+    // (undocumented)
+    readonly readOnly: InputSignalWithTransform<boolean, unknown>;
+    // (undocumented)
+    readonly root: VfColorPickerRootDirective;
+    // (undocumented)
+    static ɵdir: i0.ɵɵDirectiveDeclaration<VfColorPickerTextDirective, "input[vfColorPickerText]", never, {
+        "disabled": {
+            "alias": "disabled";
+            "required": false;
+            "isSignal": true;
+        };
+        "readOnly": {
+            "alias": "readonly";
+            "required": false;
+            "isSignal": true;
+        };
+    }, {}, never, never, true, never>;
     // (undocumented)
     static ɵfac: i0.ɵɵFactoryDeclaration<VfColorPickerTextDirective, never>;
 }

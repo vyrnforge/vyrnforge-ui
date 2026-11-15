@@ -32,7 +32,7 @@ export const ColorPickerRoot = defineComponent({
   setup(p, { attrs, slots, emit }) {
     const internal = ref(requiredHex(p.defaultValue));
     const controlled = computed(() => p.value !== undefined);
-    const value = computed(() => p.value === undefined ? internal.value : requiredHex(p.value));
+    const value = computed(() => (p.value === undefined ? internal.value : requiredHex(p.value)));
     provide(k, {
       value,
       controlled,
@@ -76,7 +76,13 @@ export const ColorPickerTextInput = defineComponent({
   setup(p, { attrs }) {
     const c = useC();
     const draft = ref(c.value.value);
-    watch(c.value, (value) => { draft.value = value; }, { flush: 'sync' });
+    watch(
+      c.value,
+      (value) => {
+        draft.value = value;
+      },
+      { flush: 'sync' },
+    );
     return () =>
       h('input', {
         ...attrs,
