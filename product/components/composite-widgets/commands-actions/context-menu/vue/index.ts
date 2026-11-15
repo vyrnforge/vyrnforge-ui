@@ -94,26 +94,38 @@ export const ContextMenuTrigger = defineComponent({
     function openMenu(event: Event) {
       const target = event.target;
       const trigger = event.currentTarget as HTMLElement;
-      if (event.defaultPrevented || !(target instanceof Element) || target.closest('[data-vf-context-menu-trigger]') !== trigger) return;
+      if (
+        event.defaultPrevented ||
+        !(target instanceof Element) ||
+        target.closest('[data-vf-context-menu-trigger]') !== trigger
+      )
+        return;
       event.preventDefault();
       trigger.focus();
       menu.setOpen(true);
       menu.focusMenu('first');
     }
-    return () => h('div', {
-      ...attrs,
-      tabindex: attrs.tabindex ?? attrs.tabIndex ?? 0,
-      ref: (node: unknown) => { menu.anchor.value = node as HTMLElement | null; },
-      'data-vf-context-menu-trigger': '',
-      onContextmenu(event: MouseEvent) {
-        invoke(attrs.onContextmenu, event);
-        openMenu(event);
-      },
-      onKeydown(event: KeyboardEvent) {
-        invoke(attrs.onKeydown, event);
-        if (event.key === 'ContextMenu' || (event.shiftKey && event.key === 'F10')) openMenu(event);
-      },
-    }, slots.default?.());
+    return () =>
+      h(
+        'div',
+        {
+          ...attrs,
+          tabindex: attrs.tabindex ?? attrs.tabIndex ?? 0,
+          ref: (node: unknown) => {
+            menu.anchor.value = node as HTMLElement | null;
+          },
+          'data-vf-context-menu-trigger': '',
+          onContextmenu(event: MouseEvent) {
+            invoke(attrs.onContextmenu, event);
+            openMenu(event);
+          },
+          onKeydown(event: KeyboardEvent) {
+            invoke(attrs.onKeydown, event);
+            if (event.key === 'ContextMenu' || (event.shiftKey && event.key === 'F10')) openMenu(event);
+          },
+        },
+        slots.default?.(),
+      );
   },
 });
 
@@ -278,4 +290,3 @@ export const ContextMenuItem = defineComponent({
       );
   },
 });
-

@@ -38,7 +38,12 @@ export class VfContextMenuElement extends HTMLElementBase {
         childList: true,
         subtree: true,
         attributes: true,
-        attributeFilter: ['aria-disabled', 'data-vf-context-menu-item', 'data-vf-context-menu-trigger', 'data-vf-context-menu-content'],
+        attributeFilter: [
+          'aria-disabled',
+          'data-vf-context-menu-item',
+          'data-vf-context-menu-trigger',
+          'data-vf-context-menu-content',
+        ],
       });
     }
   }
@@ -148,7 +153,12 @@ export class VfContextMenuElement extends HTMLElementBase {
   private onContextMenu = (event: Event): void => {
     if (event.defaultPrevented || !(event.target instanceof Element)) return;
     const trigger = this.trigger;
-    if (!trigger || event.target.closest(rootSelector) !== this || event.target.closest('[data-vf-context-menu-trigger]') !== trigger) return;
+    if (
+      !trigger ||
+      event.target.closest(rootSelector) !== this ||
+      event.target.closest('[data-vf-context-menu-trigger]') !== trigger
+    )
+      return;
     event.preventDefault();
     trigger.focus();
     this.setOpen(true);

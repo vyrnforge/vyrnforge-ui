@@ -53,7 +53,6 @@ export class VfContextMenuRootDirective {
     if (this.open() === undefined) this.internal.set(next);
     this.openChange.emit(next);
   }
-
 }
 
 @Directive({
@@ -75,7 +74,12 @@ export class VfContextMenuTriggerDirective {
     });
   }
   openMenu(event: Event): void {
-    if (event.defaultPrevented || !(event.target instanceof Element) || event.target.closest('[data-vf-context-menu-trigger]') !== this.element) return;
+    if (
+      event.defaultPrevented ||
+      !(event.target instanceof Element) ||
+      event.target.closest('[data-vf-context-menu-trigger]') !== this.element
+    )
+      return;
     event.preventDefault();
     this.element.focus();
     this.root.setOpen(true);
@@ -151,7 +155,8 @@ export class VfContextMenuContentDirective implements OnDestroy {
     if (!actual && this.restoreFocus) {
       this.restoreFocus = false;
       const active = surface.ownerDocument.activeElement;
-      if (!active || active === surface.ownerDocument.body || surface.contains(active)) focusRequestFor(this.root).anchor?.focus();
+      if (!active || active === surface.ownerDocument.body || surface.contains(active))
+        focusRequestFor(this.root).anchor?.focus();
     }
     if (actual === this.root.expanded()) return;
     this.root.setOpen(actual);
@@ -238,4 +243,3 @@ export class VfContextMenuItemDirective {
     this.root.setOpen(false);
   }
 }
-

@@ -44,7 +44,9 @@ test('context invocation navigates focusable disabled commands without activatio
   await expect(page.locator(item('open'))).toBeFocused();
   await page.keyboard.press('b');
   await expect(page.locator(item('disabled'))).toBeFocused();
-  expect(await page.locator('#menu').evaluate((node) => node.matches(':popover-open') && !!node.closest('main'))).toBe(true);
+  expect(await page.locator('#menu').evaluate((node) => node.matches(':popover-open') && !!node.closest('main'))).toBe(
+    true,
+  );
   await expectNoAxeViolations(page);
 });
 
