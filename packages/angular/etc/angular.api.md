@@ -1649,10 +1649,16 @@ export class VfMenubarTriggerDirective {
 }
 
 // @public (undocumented)
-class VfMenuContentDirective {
+class VfMenuContentDirective implements OnDestroy {
     constructor(root: VfMenuRootDirective);
     // (undocumented)
+    ngOnDestroy(): void;
+    // (undocumented)
+    onBeforeToggle(event: Event): void;
+    // (undocumented)
     onKeydown(event: KeyboardEvent): void;
+    // (undocumented)
+    onToggle(event: Event): void;
     // (undocumented)
     readonly root: VfMenuRootDirective;
     // (undocumented)
@@ -1707,6 +1713,8 @@ class VfMenuRootDirective {
     // (undocumented)
     readonly openChange: OutputEmitterRef<boolean>;
     // (undocumented)
+    readonly placement: InputSignal<FloatingPlacement>;
+    // (undocumented)
     setOpen(next: boolean): void;
     // (undocumented)
     surface: HTMLElement | null;
@@ -1719,6 +1727,11 @@ class VfMenuRootDirective {
         };
         "defaultOpen": {
             "alias": "defaultOpen";
+            "required": false;
+            "isSignal": true;
+        };
+        "placement": {
+            "alias": "placement";
             "required": false;
             "isSignal": true;
         };

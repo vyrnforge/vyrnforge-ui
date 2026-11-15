@@ -143,7 +143,11 @@ export class VfMenuContentDirective implements OnDestroy {
       request.edge = null;
       if (!edge || !open || !surface.matches(':popover-open')) return;
       const items = menuItems(surface);
-      const index = resolveNavigationIndex(items.map(() => ({})), edge === 'first' ? -1 : items.length, edge);
+      const index = resolveNavigationIndex(
+        items.map(() => ({})),
+        edge === 'first' ? -1 : items.length,
+        edge,
+      );
       if (index != null) items[index]?.focus();
     });
   }
