@@ -98,7 +98,10 @@ test.describe('MultiSelect enhanced port behavior', () => {
       await expect(page.locator(`#${framework}-one`)).toBeFocused();
       await page.keyboard.press('ArrowDown');
       await page.keyboard.press('Space');
+      await expect(page.locator(`#${framework}-three`)).toHaveAttribute('aria-selected', 'true');
       await page.keyboard.press('Escape');
+      await expect(trigger).toBeFocused();
+      await expect(page.locator('#list')).toBeHidden();
       await page.keyboard.press('ArrowDown');
 
       await expect(page.locator(`#${framework}-one`)).toBeFocused();
@@ -150,4 +153,19 @@ test('controlled value rejection retains committed collection and popup focus', 
   await page.keyboard.press('Tab');
   await expect(page.locator('#controlled-list')).toBeHidden();
   await expect(page.locator('#after')).toBeFocused();
+});
+
+test('Angular Escape returns focus before the next keyboard event', async ({ page }) => {
+  test.skip(port !== 'angular', 'Angular render scheduling regression.');
+  await page.goto('/components/multi-select/angular.html');
+  await page.waitForFunction(() => document.body.dataset.multiReady === 'true');
+  await page.locator('#trigger').press('ArrowDown');
+  await expect(page.locator('#angular-one')).toBeFocused();
+  const focused = await page.locator('#angular-one').evaluate(node => {
+    node.dispatchEvent(new KeyboardEvent('keydown', { key: 'Escape', bubbles: true, cancelable: true }));
+    return document.activeElement?.id;
+  });
+  expect(focused).toBe('trigger');
+  await page.keyboard.press('ArrowDown');
+  await expect(page.locator('#angular-one')).toBeFocused();
 });

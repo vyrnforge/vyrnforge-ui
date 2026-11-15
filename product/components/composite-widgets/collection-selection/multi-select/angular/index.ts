@@ -214,6 +214,8 @@ export class VfMultiSelectContentDirective {
       if (event.key === 'Escape') {
         event.preventDefault();
         root.open.set(false);
+        if (element.matches(':popover-open')) element.hidePopover();
+        domFor(root).anchor?.focus();
         return;
       }
       if (event.key === 'Tab') {
