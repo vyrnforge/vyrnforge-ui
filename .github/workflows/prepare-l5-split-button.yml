@@ -1,0 +1,29 @@
+name: Prepare SplitButton evidence
+on:
+  push:
+    branches: [fix/l5-split-button-menu-parity]
+permissions:
+  contents: write
+jobs:
+  prepare:
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
+      - uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1
+        with:
+          node-version-file: .node-version
+          package-manager-cache: false
+      - run: corepack enable
+      - run: pnpm install --frozen-lockfile --ignore-scripts
+      - run: pnpm exec prettier --write "product/components/composite-widgets/commands-actions/{menu,split-button}/**/*.{ts,mjs,json,md}"
+      - run: pnpm exec nx run-many -t build -p @vyrnforge/core @vyrnforge/web @vyrnforge/elements @vyrnforge/vue
+      - run: pnpm verify:api:update -- --packages elements,vue
+      - name: Commit generated formatting and API reports
+        run: |
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add product/components/composite-widgets/commands-actions/menu product/components/composite-widgets/commands-actions/split-button packages/elements/etc/elements.api.md packages/vue/etc/vue.api.md
+          if git diff --cached --quiet; then exit 0; fi
+          git commit -m "chore: format command repairs and regenerate API reports"
+          git push origin HEAD:fix/l5-split-button-menu-parity

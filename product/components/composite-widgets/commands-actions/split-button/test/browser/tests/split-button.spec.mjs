@@ -15,14 +15,58 @@ const expectedThemeColors = {
   },
 };
 
-test('split button keeps primary action independent', async ({ page }) => {
+test('split button has independently authored primary and menu-trigger names', async ({ page }) => {
   await page.goto(`/components/split-button/${port}.html`);
-  await page.locator('#action').click();
-  expect(await page.evaluate(() => window.primary())).toBe(1);
+  if (port === 'elements') await expect(page.locator('body')).toHaveAttribute('data-split-ready', 'true');
+  await expect(page.getByRole('button', { name: 'Save', exact: true })).toBeVisible();
+  await expect(page.getByRole('button', { name: 'More save options' })).toHaveAttribute('aria-haspopup', 'menu');
+  await expect(page.locator('#trigger')).toHaveAttribute('aria-expanded', 'false');
   await expect(page.locator('#menu')).toBeHidden();
-  await page.locator('#trigger').click();
-  await expect(page.locator('#menu')).toBeVisible();
   expect((await expectNoAxeViolations(page)).violations).toEqual([]);
+});
+
+test('runtime split button keeps primary activation independent and inherits keyboard menu behavior', async ({ page }) => {
+  test.skip(port === 'web', 'Web owns authored native button and CSS semantics.');
+  await page.goto(`/components/split-button/${port}.html`);
+  if (port === 'elements') await expect(page.locator('body')).toHaveAttribute('data-split-ready', 'true');
+  const body = page.locator('body');
+  const action = page.locator('#action');
+  const trigger = page.locator('#trigger');
+  const menu = page.locator('#menu');
+  const copy = page.locator('#copy');
+  const archive = page.locator('#archive');
+  await action.click();
+  await expect(body).toHaveAttribute('data-primary-count', '1');
+  await expect(menu).toBeHidden();
+  await action.focus();
+  await page.keyboard.press('Space');
+  await expect(body).toHaveAttribute('data-primary-count', '2');
+  await expect(menu).toBeHidden();
+  await trigger.focus();
+  await page.keyboard.press('ArrowDown');
+  await expect(menu).toBeVisible();
+  await expect(trigger).toHaveAttribute('aria-expanded', 'true');
+  await expect(copy).toBeFocused();
+  await expect(body).toHaveAttribute('data-primary-count', '2');
+  expect((await expectNoAxeViolations(page)).violations).toEqual([]);
+  await page.keyboard.press('ArrowDown');
+  await expect(archive).toBeFocused();
+  await page.keyboard.press('Escape');
+  await expect(menu).toBeHidden();
+  await expect(trigger).toBeFocused();
+  await expect(body).not.toHaveAttribute('data-selected-count', /.+/);
+  await page.keyboard.press('Enter');
+  await expect(copy).toBeFocused();
+  await page.keyboard.press('Enter');
+  await expect(body).toHaveAttribute('data-selected-count', '1');
+  await expect(body).toHaveAttribute('data-primary-count', '2');
+  await expect(menu).toBeHidden();
+  await expect(trigger).toBeFocused();
+  await page.keyboard.press('ArrowUp');
+  await expect(archive).toBeFocused();
+  await page.keyboard.press('Tab');
+  await expect(menu).toBeHidden();
+  await expect(page.locator('#after')).toBeFocused();
 });
 
 test('public SplitButton CSS resolves canonical accent, border, and control radius in light and dark themes', async ({
