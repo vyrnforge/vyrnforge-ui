@@ -7,15 +7,21 @@ export class VfNumberFieldElement extends H {
   disconnectedCallback() {
     this.removeEventListener('click', this.onClick);
   }
-  private onClick = (e: Event) => {
-    const i = this.querySelector<HTMLInputElement>('[data-vf-number-field-input]');
-    if (!i) return;
-    const t = e.target as HTMLElement,
-      step = Number(i.step) || 1;
-    void step;
-    if (t.closest('[data-vf-number-field-increment]')) i.stepUp();
-    if (t.closest('[data-vf-number-field-decrement]')) i.stepDown();
-    i.dispatchEvent(new Event('input', { bubbles: true }));
+  private onClick = (event: Event) => {
+    if (event.defaultPrevented || !(event.target instanceof Element)) return;
+    const button = event.target.closest<HTMLButtonElement>(
+      'button[data-vf-number-field-increment], button[data-vf-number-field-decrement]',
+    );
+    if (!button || button.closest('[data-vf-number-field-root]') !== this || button.matches(':disabled')) return;
+    const input = Array.from(this.querySelectorAll<HTMLInputElement>('input[data-vf-number-field-input]')).find(
+      (candidate) => candidate.closest('[data-vf-number-field-root]') === this,
+    );
+    if (!input || input.type !== 'number' || input.matches(':disabled') || input.readOnly || input.step === 'any')
+      return;
+    const before = input.value;
+    if (button.hasAttribute('data-vf-number-field-increment')) input.stepUp();
+    else input.stepDown();
+    if (input.value !== before) input.dispatchEvent(new Event('input', { bubbles: true }));
   };
 }
 export function defineNumberFieldElement(
