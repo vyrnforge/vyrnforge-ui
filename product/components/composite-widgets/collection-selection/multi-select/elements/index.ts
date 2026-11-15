@@ -187,8 +187,7 @@ export class VfMultiSelectElement extends H {
         this.selectionItems.delete(key);
       }
     }
-    for (let index = 0; index < active.length; index += 1) {
-      const template = active[index]!;
+    for (const [index, template] of active.entries()) {
       const key = template.dataset.vfValue ?? '';
       let item = this.selectionItems.get(key);
       if (!item) {
