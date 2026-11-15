@@ -27,6 +27,12 @@ function optionFromTarget(root: HTMLElement, target: EventTarget | null): HTMLBu
   const option = target instanceof Element ? target.closest<HTMLButtonElement>(optionMultiSelector) : null;
   return option && option.closest('[data-vf-multi-select-content]') === root ? option : null;
 }
+function firstInvalid(control: HTMLSelectElement): boolean {
+  const first = Array.from(control.form?.elements ?? []).find(
+    (candidate) => candidate.matches(':invalid') && !candidate.matches('fieldset'),
+  );
+  return !first || first === control;
+}
 function optionDisabled(option: HTMLButtonElement): boolean {
   return option.matches(':disabled,[aria-disabled="true"]');
 }
@@ -73,7 +79,9 @@ export const MultiSelectRoot = defineComponent({
     const internalValue = ref(initialValue);
     const disabled = computed(() => props.disabled);
     const error = ref('');
-    const open = ref(false);
+    const internalOpen = ref(false);
+    const open = computed(() => !disabled.value && internalOpen.value);
+    watch(disabled, (next) => { if (next) internalOpen.value = false; }, { flush: 'sync' });
     const values = computed(() => props.value ?? internalValue.value);
     const uid = useId();
     const rootId = computed(() => props.id ?? `vf-multi-select-${uid}`);
@@ -100,7 +108,7 @@ export const MultiSelectRoot = defineComponent({
       anchor,
       surface,
       setOpen(next) {
-        if (!next || !disabled.value) open.value = next;
+        if (!next || !disabled.value) internalOpen.value = next;
       },
       toggle(candidate) {
         if (disabled.value) return;
@@ -402,7 +410,7 @@ export const MultiSelectFormControl = defineComponent({
             onInvalid: (event: Event) => {
               event.preventDefault();
               root.error.value = (event.currentTarget as HTMLSelectElement).validationMessage;
-              root.anchor.value?.focus();
+              if (firstInvalid(event.currentTarget as HTMLSelectElement)) root.anchor.value?.focus();
             },
           },
           props.options.map((option) =>

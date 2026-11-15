@@ -9,6 +9,7 @@ import {
   afterNextRender,
   booleanAttribute,
   computed,
+  effect,
   inject,
   input,
   output,
@@ -54,6 +55,12 @@ function optionsFor(root: HTMLElement): HTMLButtonElement[] {
 function optionFromTarget(root: HTMLElement, target: EventTarget | null): HTMLButtonElement | null {
   const option = target instanceof Element ? target.closest<HTMLButtonElement>(optionMultiSelector) : null;
   return option && option.closest('[data-vf-multi-select-content]') === root ? option : null;
+}
+function firstInvalid(control: HTMLSelectElement): boolean {
+  const first = Array.from(control.form?.elements ?? []).find(
+    (candidate) => candidate.matches(':invalid') && !candidate.matches('fieldset'),
+  );
+  return !first || first === control;
 }
 function optionDisabled(option: HTMLButtonElement): boolean {
   return option.matches(':disabled,[aria-disabled="true"]');
@@ -126,6 +133,10 @@ export class VfMultiSelectRootDirective {
   }
   readonly open = signal(false);
 
+  constructor() {
+    effect(() => { if (this.disabled()) this.open.set(false); });
+  }
+
   toggle(v: string): void {
     if (this.disabled()) return;
     const next = this.values().includes(v) ? this.values().filter((value) => value !== v) : [...this.values(), v];
@@ -162,7 +173,7 @@ export class VfMultiSelectTriggerDirective {
     domFor(root).anchor = element;
 
     const onClick = (event: MouseEvent) => {
-      if (event.defaultPrevented || optionDisabled(element)) return;
+      if (event.defaultPrevented || root.disabled() || optionDisabled(element)) return;
       if (root.open()) root.open.set(false);
       else {
         root.open.set(true);
@@ -170,7 +181,7 @@ export class VfMultiSelectTriggerDirective {
       }
     };
     const onKeydown = (event: KeyboardEvent) => {
-      if (event.defaultPrevented || optionDisabled(element)) return;
+      if (event.defaultPrevented || root.disabled() || optionDisabled(element)) return;
       const wasOpen = root.open();
       if (event.key === 'ArrowUp') {
         event.preventDefault();
@@ -419,6 +430,6 @@ export class VfMultiSelectFormControlComponent {
   invalid(event: Event) {
     event.preventDefault();
     this.root.error.set(this.control().nativeElement.validationMessage);
-    domFor(this.root).anchor?.focus();
+    if (firstInvalid(this.control().nativeElement)) domFor(this.root).anchor?.focus();
   }
 }
