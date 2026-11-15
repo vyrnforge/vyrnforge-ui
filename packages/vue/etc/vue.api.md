@@ -1056,6 +1056,7 @@ value: {
 type: StringConstructor;
 required: true;
 };
+textValue: StringConstructor;
 disabled: BooleanConstructor;
 }>, () => VNode<RendererNode, RendererElement, {
 [key: string]: any;
@@ -1064,6 +1065,7 @@ value: {
 type: StringConstructor;
 required: true;
 };
+textValue: StringConstructor;
 disabled: BooleanConstructor;
 }>> & Readonly<{}>, {
 disabled: boolean;

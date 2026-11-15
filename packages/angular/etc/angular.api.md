@@ -1572,6 +1572,8 @@ export class VfListboxOptionDirective {
     // (undocumented)
     selectFromPointer(event: MouseEvent): void;
     // (undocumented)
+    readonly textValue: InputSignal<string | undefined>;
+    // (undocumented)
     readonly value: InputSignal<string>;
     // (undocumented)
     static ɵdir: i0.ɵɵDirectiveDeclaration<VfListboxOptionDirective, "[vfListboxOption]", never, {
@@ -1582,6 +1584,11 @@ export class VfListboxOptionDirective {
         };
         "disabled": {
             "alias": "disabled";
+            "required": false;
+            "isSignal": true;
+        };
+        "textValue": {
+            "alias": "textValue";
             "required": false;
             "isSignal": true;
         };
