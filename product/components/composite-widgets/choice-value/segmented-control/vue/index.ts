@@ -1,4 +1,16 @@
-import { computed, defineComponent, h, inject, provide, ref, useId, type InjectionKey, type Ref } from 'vue';
+import {
+  computed,
+  defineComponent,
+  h,
+  inject,
+  onBeforeUnmount,
+  onMounted,
+  provide,
+  ref,
+  useId,
+  type InjectionKey,
+  type Ref,
+} from 'vue';
 interface Ctx {
   value: Ref<string>;
   name: Ref<string>;
@@ -21,9 +33,38 @@ export const SegmentedControlRoot = defineComponent({
   emits: ['update:value'],
   setup(props, { attrs, slots, emit }) {
     const generated = useId();
-    const internalValue = ref(props.defaultValue);
+    const initial = props.defaultValue;
+    const internalValue = ref(initial);
     const value = computed(() => props.value ?? internalValue.value);
     const name = computed(() => props.name ?? `vf-segmented-${generated}`);
+    const root = ref<HTMLDivElement | null>(null);
+    let document: Document | undefined;
+    let active = false;
+    const radios = () =>
+      Array.from(root.value?.querySelectorAll<HTMLInputElement>('[data-vf-segmented-control-item] > input[type="radio"]') ?? []).filter(
+        (radio) => radio.closest('[data-vf-segmented-control-root]') === root.value,
+      );
+    const onReset = (event: Event) => {
+      const group = radios();
+      if (!group.length || !group.every((radio) => radio.form && radio.form === event.target)) return;
+      setTimeout(() => {
+        if (!active || event.defaultPrevented) return;
+        const group = radios();
+        if (!group.length || !group.every((radio) => radio.form === event.target)) return;
+        const next = props.value ?? initial;
+        if (props.value === undefined) internalValue.value = next;
+        for (const radio of group) radio.checked = radio.value === next;
+      }, 0);
+    };
+    onMounted(() => {
+      active = true;
+      document = root.value?.ownerDocument;
+      document?.addEventListener('reset', onReset, true);
+    });
+    onBeforeUnmount(() => {
+      active = false;
+      document?.removeEventListener('reset', onReset, true);
+    });
     provide(key, {
       value,
       name,
@@ -33,7 +74,7 @@ export const SegmentedControlRoot = defineComponent({
         emit('update:value', candidate);
       },
     });
-    return () => h('div', { ...attrs, role: 'radiogroup', 'data-vf-segmented-control-root': '' }, slots.default?.());
+    return () => h('div', { ...attrs, ref: root, role: 'radiogroup', 'data-vf-segmented-control-root': '' }, slots.default?.());
   },
 });
 export const SegmentedControlItem = defineComponent({

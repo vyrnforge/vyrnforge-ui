@@ -3,8 +3,12 @@ import {
   createElement,
   forwardRef,
   useContext,
+  useEffect,
   useId,
+  useImperativeHandle,
+  useLayoutEffect,
   useMemo,
+  useRef,
   useState,
   type ComponentPropsWithoutRef,
   type ReactNode,
@@ -32,9 +36,43 @@ export const SegmentedControlRoot = forwardRef<HTMLDivElement, SegmentedControlR
   ref,
 ) {
   const generated = useId();
-  const [internalValue, setInternalValue] = useState(defaultValue);
+  const initial = useRef(defaultValue);
+  const [internalValue, setInternalValue] = useState(initial.current);
   const selected = value ?? internalValue;
   const groupName = name ?? `vf-segmented-${generated}`;
+  const rootRef = useRef<HTMLDivElement>(null);
+  const committed = useRef(value);
+  useLayoutEffect(() => {
+    committed.current = value;
+  }, [value]);
+  useImperativeHandle(ref, () => rootRef.current as HTMLDivElement, []);
+  useEffect(() => {
+    const root = rootRef.current;
+    if (!root) return;
+    const document = root.ownerDocument;
+    let active = true;
+    const radios = () =>
+      Array.from(root.querySelectorAll<HTMLInputElement>('[data-vf-segmented-control-item] > input[type="radio"]')).filter(
+        (radio) => radio.closest('[data-vf-segmented-control-root]') === root,
+      );
+    const onReset = (event: Event) => {
+      const group = radios();
+      if (!group.length || !group.every((radio) => radio.form && radio.form === event.target)) return;
+      setTimeout(() => {
+        if (!active || event.defaultPrevented) return;
+        const group = radios();
+        if (!group.length || !group.every((radio) => radio.form === event.target)) return;
+        const next = committed.current ?? initial.current;
+        if (committed.current === undefined) setInternalValue(next);
+        for (const radio of group) radio.checked = radio.value === next;
+      }, 0);
+    };
+    document.addEventListener('reset', onReset, true);
+    return () => {
+      active = false;
+      document.removeEventListener('reset', onReset, true);
+    };
+  }, []);
   const ctx = useMemo<Ctx>(
     () => ({
       value: selected,
@@ -50,7 +88,7 @@ export const SegmentedControlRoot = forwardRef<HTMLDivElement, SegmentedControlR
   return createElement(
     C.Provider,
     { value: ctx },
-    createElement('div', { ...props, ref, role: 'radiogroup', 'data-vf-segmented-control-root': '' }, children),
+    createElement('div', { ...props, ref: rootRef, role: 'radiogroup', 'data-vf-segmented-control-root': '' }, children),
   );
 });
 export interface SegmentedControlItemProps extends Omit<

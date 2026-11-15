@@ -87,3 +87,56 @@ test('Angular Rating hydrates existing server-rendered nodes without hydration w
   await expect(page.locator('html')).toHaveAttribute('data-vf-angular-hydrated', 'true');
   expect(warnings).toEqual([]);
 });
+
+test('native radio reset restores independent defaults, empty selection and committed controlled state', async ({ page }) => {
+  await open(page);
+  const group = page.getByRole('radiogroup', { name: 'First rating', exact: true });
+  const other = page.getByRole('radiogroup', { name: 'Second rating', exact: true });
+  const empty = page.getByRole('radiogroup', { name: 'Empty rating', exact: true });
+  const form = page.locator('#form');
+  const managed = port !== 'web' && port !== 'elements';
+  const initial = group.getByRole('radio', { name: 'Score 1' });
+  const changed = group.getByRole('radio', { name: 'Score 2' });
+  const name = await changed.getAttribute('name');
+  await changed.press('Space');
+  await empty.getByRole('radio', { name: 'Score 1' }).press('Space');
+  await expect(changed).toBeChecked();
+  await expect(empty.locator('input:checked')).toHaveCount(1);
+  if (managed) {
+    await page.locator('#set-controlled').click();
+    await expect(page.getByRole('radiogroup', { name: 'Controlled rating' }).getByRole('radio', { name: 'Score 2' })).toBeChecked();
+    await expect(page.locator('body')).toHaveAttribute('data-rating-requests', '1');
+  }
+  await form.evaluate(async (element) => {
+    element.addEventListener('reset', (event) => event.preventDefault(), { once: true });
+    element.reset();
+    await new Promise((resolve) => {
+      setTimeout(resolve, 0);
+    });
+  });
+  await expect(changed).toBeChecked();
+  await form.evaluate((element) => {
+    element.addEventListener('change', () => {
+      document.body.dataset.resetChange = 'unexpected';
+    });
+    const button = document.createElement('button');
+    button.type = 'reset';
+    button.textContent = 'Reset choices';
+    element.append(button);
+  });
+  await page.getByRole('button', { name: 'Reset choices' }).click();
+  await expect(initial).toBeChecked();
+  await expect(other.getByRole('radio', { name: 'Score 2' })).toBeChecked();
+  await expect(empty.locator('input:checked')).toHaveCount(0);
+  expect(await form.evaluate((element, name) => new FormData(element).get(name), name)).toBe('1');
+  await expect(page.locator('body')).not.toHaveAttribute('data-reset-change', 'unexpected');
+  if (managed) {
+    await expect(page.getByRole('radiogroup', { name: 'Controlled rating' }).getByRole('radio', { name: 'Score 2' })).toBeChecked();
+    await expect(page.locator('body')).toHaveAttribute('data-rating-requests', '1');
+    await expect(page.locator('body')).not.toHaveAttribute('data-requested', /.+/);
+  }
+  await changed.press('Space');
+  await expect(changed).toBeChecked();
+  expect(await form.evaluate((element, name) => new FormData(element).get(name), name)).toBe('2');
+  if (managed) await expect(page.locator('body')).toHaveAttribute('data-rating-requests', '2');
+});

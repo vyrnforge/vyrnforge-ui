@@ -1,4 +1,15 @@
-import { createContext, createElement, useContext, useId, useMemo, useState, type ReactNode } from 'react';
+import {
+  createContext,
+  createElement,
+  useContext,
+  useEffect,
+  useId,
+  useLayoutEffect,
+  useMemo,
+  useRef,
+  useState,
+  type ReactNode,
+} from 'react';
 interface Ctx {
   value: number;
   name: string;
@@ -33,9 +44,42 @@ export function RatingRoot({
   'aria-labelledby': labelledBy,
 }: RatingRootProps) {
   const id = useId();
-  const [iv, setIv] = useState(defaultValue);
+  const initial = useRef(defaultValue);
+  const [iv, setIv] = useState(initial.current);
   const selected = value ?? iv;
   const groupName = name ?? `vf-rating-${id}`;
+  const rootRef = useRef<HTMLDivElement>(null);
+  const committed = useRef(value);
+  useLayoutEffect(() => {
+    committed.current = value;
+  }, [value]);
+  useEffect(() => {
+    const root = rootRef.current;
+    if (!root) return;
+    const document = root.ownerDocument;
+    let active = true;
+    const radios = () =>
+      Array.from(root.querySelectorAll<HTMLInputElement>('[data-vf-rating-item] > input[type="radio"]')).filter(
+        (radio) => radio.closest('[data-vf-rating-root]') === root,
+      );
+    const onReset = (event: Event) => {
+      const group = radios();
+      if (!group.length || !group.every((radio) => radio.form && radio.form === event.target)) return;
+      setTimeout(() => {
+        if (!active || event.defaultPrevented) return;
+        const group = radios();
+        if (!group.length || !group.every((radio) => radio.form === event.target)) return;
+        const next = committed.current ?? initial.current;
+        if (committed.current === undefined) setIv(next);
+        for (const radio of group) radio.checked = Number(radio.value) === next;
+      }, 0);
+    };
+    document.addEventListener('reset', onReset, true);
+    return () => {
+      active = false;
+      document.removeEventListener('reset', onReset, true);
+    };
+  }, []);
   const ctx = useMemo(
     () => ({
       value: selected,
@@ -55,6 +99,7 @@ export function RatingRoot({
     createElement(
       'div',
       {
+        ref: rootRef,
         role: 'radiogroup',
         'aria-label': label,
         'aria-labelledby': labelledBy,
