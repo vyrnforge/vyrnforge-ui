@@ -4,6 +4,7 @@ import {
   forwardRef,
   useContext,
   useEffect,
+  useId,
   useMemo,
   useRef,
   useState,
@@ -40,6 +41,8 @@ function focusOption(root: HTMLElement | null, edge: 'first' | 'last'): void {
 }
 
 interface Ctx {
+  triggerId: string;
+  listboxId: string;
   open: boolean;
   setOpen(value: boolean): void;
   values: string[];
@@ -59,21 +62,28 @@ function useMulti(): Ctx {
 
 export interface MultiSelectRootProps {
   children?: ReactNode;
+  id?: string;
   value?: string[];
   defaultValue?: string[];
   onValueChange?(value: string[]): void;
 }
 
-export function MultiSelectRoot({ children, value, defaultValue = [], onValueChange }: MultiSelectRootProps) {
+export function MultiSelectRoot({ children, id, value, defaultValue = [], onValueChange }: MultiSelectRootProps) {
   const [internalValue, setInternalValue] = useState(defaultValue);
   const [open, setOpen] = useState(false);
   const values = value ?? internalValue;
+  const uid = useId();
+  const rootId = id ?? `vf-multi-select-${uid}`;
+  const triggerId = `${rootId}-trigger`;
+  const listboxId = `${rootId}-listbox`;
   const anchorRef = useRef<HTMLElement | null>(null);
   const surfaceRef = useRef<HTMLElement | null>(null);
   const focusRequest = useRef<'first' | 'last' | null>(null);
   const [focusRevision, setFocusRevision] = useState(0);
   const context = useMemo<Ctx>(
     () => ({
+      triggerId,
+      listboxId,
       open,
       setOpen,
       values,
@@ -93,55 +103,58 @@ export function MultiSelectRoot({ children, value, defaultValue = [], onValueCha
         setFocusRevision((revision) => revision + 1);
       },
     }),
-    [open, onValueChange, values, value, focusRevision],
+    [open, onValueChange, values, value, focusRevision, triggerId, listboxId],
   );
   return createElement(C.Provider, { value: context }, children);
 }
 
-export const MultiSelectTrigger = forwardRef<HTMLButtonElement, ComponentPropsWithoutRef<'button'>>(
-  function MultiSelectTrigger({ onClick, onKeyDown, ...props }, forwardedRef) {
-    const multi = useMulti();
-    function openAndFocus(edge: 'first' | 'last') {
-      multi.setOpen(true);
-      multi.focusOptions(edge);
-    }
-    return createElement(
-      'button',
-      {
-        ...props,
-        ref(node: HTMLButtonElement | null) {
-          multi.anchorRef.current = node;
-          if (typeof forwardedRef === 'function') forwardedRef(node);
-          else if (forwardedRef) forwardedRef.current = node;
-        },
-        type: props.type ?? 'button',
-        'data-vf-multi-select-trigger': '',
-        'aria-haspopup': 'listbox',
-        'aria-expanded': multi.open,
-        onClick(event: MouseEvent<HTMLButtonElement>) {
-          onClick?.(event);
-          if (event.defaultPrevented) return;
-          if (multi.open) multi.setOpen(false);
-          else openAndFocus('first');
-        },
-        onKeyDown(event: KeyboardEvent<HTMLButtonElement>) {
-          onKeyDown?.(event);
-          if (event.defaultPrevented) return;
-          if (event.key === 'ArrowUp') {
-            event.preventDefault();
-            openAndFocus('last');
-          } else if (event.key === 'ArrowDown' || event.key === 'Enter' || event.key === ' ') {
-            event.preventDefault();
-            openAndFocus('first');
-          }
-        },
+export const MultiSelectTrigger = forwardRef<
+  HTMLButtonElement,
+  Omit<ComponentPropsWithoutRef<'button'>, 'id' | 'aria-controls'>
+>(function MultiSelectTrigger({ onClick, onKeyDown, ...props }, forwardedRef) {
+  const multi = useMulti();
+  function openAndFocus(edge: 'first' | 'last') {
+    multi.setOpen(true);
+    multi.focusOptions(edge);
+  }
+  return createElement(
+    'button',
+    {
+      ...props,
+      ref(node: HTMLButtonElement | null) {
+        multi.anchorRef.current = node;
+        if (typeof forwardedRef === 'function') forwardedRef(node);
+        else if (forwardedRef) forwardedRef.current = node;
       },
-      props.children ?? (multi.values.length ? multi.values.join(', ') : 'Select'),
-    );
-  },
-);
+      type: props.type ?? 'button',
+      'data-vf-multi-select-trigger': '',
+      id: multi.triggerId,
+      'aria-controls': multi.listboxId,
+      'aria-haspopup': 'listbox',
+      'aria-expanded': multi.open,
+      onClick(event: MouseEvent<HTMLButtonElement>) {
+        onClick?.(event);
+        if (event.defaultPrevented) return;
+        if (multi.open) multi.setOpen(false);
+        else openAndFocus('first');
+      },
+      onKeyDown(event: KeyboardEvent<HTMLButtonElement>) {
+        onKeyDown?.(event);
+        if (event.defaultPrevented) return;
+        if (event.key === 'ArrowUp') {
+          event.preventDefault();
+          openAndFocus('last');
+        } else if (event.key === 'ArrowDown' || event.key === 'Enter' || event.key === ' ') {
+          event.preventDefault();
+          openAndFocus('first');
+        }
+      },
+    },
+    props.children ?? multi.values.join(', '),
+  );
+});
 
-export const MultiSelectContent = forwardRef<HTMLDivElement, ComponentPropsWithoutRef<'div'>>(
+export const MultiSelectContent = forwardRef<HTMLDivElement, Omit<ComponentPropsWithoutRef<'div'>, 'id'>>(
   function MultiSelectContent({ onKeyDown, onBeforeToggle, onToggle, ...props }, forwardedRef) {
     const multi = useMulti();
     const query = useRef('');
@@ -178,6 +191,7 @@ export const MultiSelectContent = forwardRef<HTMLDivElement, ComponentPropsWitho
         if (typeof forwardedRef === 'function') forwardedRef(node);
         else if (forwardedRef) forwardedRef.current = node;
       },
+      id: multi.listboxId,
       role: 'listbox',
       'aria-multiselectable': true,
       tabIndex: -1,

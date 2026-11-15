@@ -9,9 +9,12 @@ async function expectAxeClean(page, options = {}) {
 test('Select Web baseline exposes authored listbox semantics and canonical styling', async ({ page }) => {
   test.skip(port !== 'web', 'Web owns the static semantic and canonical styling baseline.');
   await page.goto('/components/select/web.html');
-  const trigger = page.locator('#trigger');
+  const trigger = page.locator('[data-vf-select-trigger]').first();
   await expect(trigger).toHaveAttribute('aria-haspopup', 'listbox');
-  await expect(trigger).toHaveAttribute('aria-controls', 'list');
+  await expect(trigger).toHaveAttribute(
+    'aria-controls',
+    await page.locator('[data-vf-select-content]').first().getAttribute('id'),
+  );
   await trigger.click();
   await expect(page.getByRole('listbox', { name: 'Choose an option' })).toBeVisible();
   await expect(page.locator('#web-disabled')).toBeDisabled();
@@ -35,7 +38,7 @@ test.describe('Select enhanced port behavior', () => {
       await page.goto(`/components/select/${framework}.html`);
       await page.waitForFunction(() => document.body.dataset.selectReady === 'true');
 
-      const trigger = page.locator('#trigger');
+      const trigger = page.locator('[data-vf-select-trigger]').first();
       const listbox = page.getByRole('listbox', { name: 'Choose an option' });
       const one = page.locator(`#${framework}-one`);
       const disabled = page.locator(`#${framework}-disabled`);
@@ -44,7 +47,10 @@ test.describe('Select enhanced port behavior', () => {
 
       await expect(trigger).toHaveAttribute('aria-haspopup', 'listbox');
       await expect(trigger).toHaveAttribute('aria-expanded', 'false');
-      await expect(trigger).toHaveAttribute('aria-controls', 'list');
+      await expect(trigger).toHaveAttribute(
+        'aria-controls',
+        await page.locator('[data-vf-select-content]').first().getAttribute('id'),
+      );
       await trigger.focus();
       await page.keyboard.press('ArrowDown');
       await expect(trigger).toHaveAttribute('aria-expanded', 'true');
@@ -79,7 +85,7 @@ test.describe('Select enhanced port behavior', () => {
       await page.goto(`/components/select/${framework}.html`);
       await page.waitForFunction(() => document.body.dataset.selectReady === 'true');
 
-      const trigger = page.locator('#trigger');
+      const trigger = page.locator('[data-vf-select-trigger]').first();
       await trigger.focus();
       await page.keyboard.press('ArrowDown');
       await page.keyboard.press('ArrowDown');
@@ -114,8 +120,8 @@ test('native Web select remains the form-participating baseline', async ({ page 
 test('native popup stays in authored DOM and light-dismisses without committing navigation', async ({ page }) => {
   await page.goto(`/components/select/${port}.html`);
   if (port !== 'web') await page.waitForFunction(() => document.body.dataset.selectReady === 'true');
-  const trigger = page.locator('#trigger');
-  const list = page.locator('#list');
+  const trigger = page.locator('[data-vf-select-trigger]').first();
+  const list = page.locator('[data-vf-select-content]').first();
   await expect(list).toBeHidden();
   await trigger.press('Enter');
   await expect(list).toBeVisible();
@@ -143,10 +149,33 @@ test('controlled value and open requests do not replace rejected committed state
   await page.keyboard.press('Space');
   await expect(page.locator('body')).toHaveAttribute('data-select-request', 'three');
   await expect(page.locator('body')).toHaveAttribute('data-open-request', 'false');
-  await expect(page.locator('#controlled-list')).toBeVisible();
+  await expect(page.locator('#controlled-listbox')).toBeVisible();
   await expect(page.locator('#controlled-one')).toHaveAttribute('aria-selected', 'true');
   await expect(page.locator('#controlled-three')).toHaveAttribute('aria-selected', 'false');
   await page.locator('#after').click();
-  await expect(page.locator('#controlled-list')).toBeVisible();
-  expect(await page.locator('#controlled-list').evaluate((node) => node.matches(':popover-open'))).toBe(true);
+  await expect(page.locator('#controlled-listbox')).toBeVisible();
+  expect(await page.locator('#controlled-listbox').evaluate((node) => node.matches(':popover-open'))).toBe(true);
+});
+
+test('Select owns coherent popup relationships across explicit and generated identities', async ({ page }) => {
+  test.skip(port === 'web', 'Native Web authors relationships directly.');
+  await page.goto(`/components/select/${port}.html`);
+  await page.waitForFunction(() => document.body.dataset.selectReady === 'true');
+  const trigger = page.locator('[data-vf-select-trigger]').first();
+  const list = page.locator('[data-vf-select-content]').first();
+  const listId = await list.getAttribute('id');
+  expect(listId).toBeTruthy();
+  await expect(trigger).toHaveAttribute('aria-controls', listId);
+  await expect(page.locator('#obsolete-trigger, #obsolete-list')).toHaveCount(0);
+  if (port === 'elements') {
+    await list.evaluate((node) => (node.id = 'updated-list'));
+    await expect(trigger).toHaveAttribute('aria-controls', 'updated-list');
+  } else {
+    expect(listId).toMatch(/^vf-select-/);
+    await expect(page.locator('#controlled-trigger')).toHaveAttribute('aria-controls', 'controlled-listbox');
+    await expect(page.locator('#controlled-listbox')).toHaveCount(1);
+  }
+  await trigger.press('Enter');
+  await expect(list).toBeVisible();
+  await expect(page.locator(`#${port}-one`)).toBeFocused();
 });

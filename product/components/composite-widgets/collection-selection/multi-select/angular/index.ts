@@ -1,7 +1,9 @@
 import {
+  APP_ID,
   DestroyRef,
   Directive,
   ElementRef,
+  InjectionToken,
   afterRenderEffect,
   computed,
   inject,
@@ -12,6 +14,15 @@ import {
 } from '@angular/core';
 import { resolveNavigationIndex } from '@vyrnforge/core/collection-navigation';
 import { findTypeaheadMatch } from '@vyrnforge/core/typeahead-matching';
+
+const MULTI_SELECT_ID_GENERATOR = new InjectionToken<() => string>('VyrnForge MultiSelect ID generator', {
+  providedIn: 'root',
+  factory: () => {
+    const appId = inject(APP_ID);
+    let nextId = 0;
+    return () => `vf-multi-select-${appId}-${nextId++}`;
+  },
+});
 
 const optionMultiSelector = '[data-vf-multi-select-option]';
 type FocusRequest = 'first' | 'last' | 'next' | 'previous';
@@ -78,8 +89,17 @@ function requestFocus(root: VfMultiSelectRootDirective, request: FocusRequest): 
   state.focusRevision.update((revision) => revision + 1);
 }
 
-@Directive({ selector: '[vfMultiSelectRoot]', standalone: true })
+@Directive({
+  selector: '[vfMultiSelectRoot]',
+  standalone: true,
+  host: { '[attr.id]': 'rootId()' },
+})
 export class VfMultiSelectRootDirective {
+  readonly id = input<string | undefined>(undefined);
+  private readonly generatedId = inject(MULTI_SELECT_ID_GENERATOR)();
+  readonly rootId = computed(() => this.id() ?? this.generatedId);
+  readonly triggerId = computed(() => `${this.rootId()}-trigger`);
+  readonly listboxId = computed(() => `${this.rootId()}-listbox`);
   readonly value = input<string[] | undefined>(undefined);
   readonly defaultValue = input<string[]>([]);
   readonly valueChange = output<string[]>();
@@ -99,6 +119,8 @@ export class VfMultiSelectRootDirective {
   standalone: true,
   host: {
     type: 'button',
+    '[id]': 'root.triggerId()',
+    '[attr.aria-controls]': 'root.listboxId()',
     'aria-haspopup': 'listbox',
     'data-vf-multi-select-trigger': '',
     '[attr.aria-expanded]': 'root.open()',
@@ -152,6 +174,7 @@ export class VfMultiSelectTriggerDirective {
   selector: '[vfMultiSelectContent]',
   standalone: true,
   host: {
+    '[id]': 'root.listboxId()',
     role: 'listbox',
     'aria-multiselectable': 'true',
     tabindex: '-1',
