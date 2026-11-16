@@ -72,6 +72,11 @@ jobs:
             { name: 'button-target-1920-dark', width: 1920, height: 1000, mode: 'target', dark: true },
             { name: 'button-target-320-200pct', width: 320, height: 720, mode: 'target', scale: true },
             { name: 'button-target-320-rtl-long', width: 320, height: 720, mode: 'target', rtl: true },
+            { name: 'button-target-320-rtl-long-open', width: 320, height: 720, mode: 'target', rtl: true, openNav: true },
+            { name: 'button-target-320-forced-colors', width: 320, height: 720, mode: 'target', forced: true },
+            { name: 'button-target-1920-forced-colors', width: 1920, height: 1000, mode: 'target', forced: true },
+            { name: 'button-target-320-reduced-motion', width: 320, height: 720, mode: 'target', reduced: true },
+            { name: 'button-target-320-200pct-open', width: 320, height: 720, mode: 'target', scale: true, openNav: true },
           ];
           let browser;
           try {
@@ -84,12 +89,18 @@ jobs:
               await page.evaluate(() => document.fonts.ready);
               if (item.mode === 'target') await page.addStyleTag({ content: targetCss });
               if (item.dark) await page.evaluate(() => { document.documentElement.dataset.vfTheme = 'dark'; });
+              if (item.forced) await page.emulateMedia({ forcedColors: 'active' });
+              if (item.reduced) await page.emulateMedia({ reducedMotion: 'reduce' });
               if (item.scale) await page.evaluate(() => { document.documentElement.style.fontSize = '200%'; });
               if (item.rtl) await page.evaluate(() => {
                 document.documentElement.dir = 'rtl';
                 const label = document.querySelector('[data-vf-side-nav-group-label]');
                 if (label) label.textContent = 'Documentation navigation with an intentionally long translated label';
               });
+              if (item.openNav) {
+                await page.getByRole('button', {name: 'Menu'}).click();
+                await page.locator('#vf-docs-navigation').evaluate(node => node.scrollIntoView({ block: 'start' }));
+              }
               await page.waitForTimeout(180);
               const dimensions = await page.evaluate(measure);
               assert.ok(dimensions.scrollWidth <= dimensions.contentWidth + 1, item.name + ' horizontal overflow');
