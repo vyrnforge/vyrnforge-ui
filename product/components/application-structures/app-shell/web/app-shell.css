@@ -29,10 +29,20 @@
     inline-size: min(100%, var(--vf-app-shell-max-inline-size));
     margin-inline: auto;
     display: grid;
-    grid-template-columns: minmax(0, var(--vf-app-shell-navigation-inline-size)) minmax(0, 1fr);
+    grid-template-columns: minmax(0, 1fr);
     gap: var(--vf-app-shell-gap);
     padding: var(--vf-app-shell-block-padding) var(--vf-app-shell-gutter);
     min-inline-size: 0;
+  }
+
+  :where([data-vf-app-shell-body], vf-app-shell-body):where(
+    :has(> :is([data-vf-app-shell-navigation], vf-app-shell-navigation):not([hidden]:not([hidden="until-found" i])))
+  ) {
+    grid-template-columns: minmax(0, var(--vf-app-shell-navigation-inline-size)) minmax(0, 1fr);
+  }
+
+  :where([data-vf-app-shell-navigation], vf-app-shell-navigation):where([hidden]:not([hidden="until-found" i])) {
+    display: none;
   }
 
   :where([data-vf-app-shell-navigation], vf-app-shell-navigation) {
