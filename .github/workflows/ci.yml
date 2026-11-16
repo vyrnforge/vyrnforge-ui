@@ -1,4 +1,4 @@
-name: QA C1 exact-revision documentation engines
+name: QA C1 320px screenshot-limit diagnosis
 
 on:
   pull_request:
@@ -7,21 +7,26 @@ permissions:
   contents: read
 
 jobs:
-  c1-docs-engine:
-    name: C1 docs ${{ matrix.engine }}
+  diagnose:
+    name: C1 320px ${{ matrix.revision.name }} ${{ matrix.engine }}
     runs-on: ubuntu-latest
     timeout-minutes: 40
     strategy:
       fail-fast: false
       matrix:
         engine: [firefox, webkit]
+        revision:
+          - name: baseline
+            sha: 0154a173df8835ee98727de81db093dd3842ecac
+          - name: candidate
+            sha: d0451a2a9f624c51418c9e6a24ab06552c2bcafb
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
         with:
-          ref: d0451a2a9f624c51418c9e6a24ab06552c2bcafb
-      - name: Verify exact candidate
+          ref: ${{ matrix.revision.sha }}
+      - name: Verify exact checkout
         run: |
-          test "$(git rev-parse HEAD)" = "d0451a2a9f624c51418c9e6a24ab06552c2bcafb"
+          test "$(git rev-parse HEAD)" = "${{ matrix.revision.sha }}"
           git log -1 --format='%H %s'
           test -z "$(git status --porcelain)"
       - uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1
@@ -31,11 +36,29 @@ jobs:
       - run: corepack enable
       - run: pnpm install --frozen-lockfile --ignore-scripts
       - run: pnpm build:docs
-      - run: node apps/docs/run-browser.mjs ${{ matrix.engine }}
+      - run: pnpm exec playwright install --with-deps ${{ matrix.engine }}
+      - name: Baseline original capture
+        if: matrix.revision.name == 'baseline'
+        continue-on-error: true
+        run: pnpm exec playwright test --config apps/docs/playwright.config.mjs --project ${{ matrix.engine }} --grep 'Native shell reflows at 320 CSS pixels'
+      - name: Diagnostic capture only — preserve all behavioral assertions
+        run: |
+          node --input-type=module <<'JS'
+          import { readFileSync, writeFileSync } from 'node:fs';
+          const file = 'apps/docs/test/browser/native-docs.spec.mjs';
+          const before = readFileSync(file, 'utf8');
+          const old = "  await page.screenshot({ path: testInfo.outputPath('native-responsive-200.png'), fullPage: true });";
+          if (before.split(old).length !== 2) throw new Error('unexpected original test');
+          const replacement = "  console.log('QA 320px 200% document dimensions', await page.evaluate(() => ({ width: document.documentElement.scrollWidth, height: document.documentElement.scrollHeight, clientWidth: document.documentElement.clientWidth })));\n  await page.screenshot({ path: testInfo.outputPath('native-responsive-200.png'), fullPage: false });";
+          writeFileSync(file, before.replace(old, replacement));
+          JS
+          git diff -- apps/docs/test/browser/native-docs.spec.mjs
+      - name: Run identical 320px behavior and accessibility assertions with bounded viewport capture
+        run: pnpm exec playwright test --config apps/docs/playwright.config.mjs --project ${{ matrix.engine }} --grep 'Native shell reflows at 320 CSS pixels'
       - uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9
         if: always()
         with:
-          name: c1-${{ matrix.engine }}-d0451a2a9f624c51418c9e6a24ab06552c2bcafb
+          name: c1-320-${{ matrix.revision.name }}-${{ matrix.engine }}
           path: |
             test-results/docs-playwright-results
             test-results/docs-playwright-report
