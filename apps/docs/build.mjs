@@ -265,7 +265,7 @@ ${styleLinks(currentPageDirectory, componentStyle)}
     <header data-vf-app-shell-header class="vf-docs-header">
       <div class="vf-docs-header-inner">
         <div class="vf-docs-brand-row">
-          <button type="button" data-vf-button data-vf-variant="ghost" data-vf-size="sm" class="vf-docs-menu-toggle" data-vf-docs-nav-toggle aria-controls="vf-docs-navigation" aria-expanded="true">Menu</button>
+          <button type="button" data-vf-button data-vf-variant="ghost" data-vf-size="sm" class="vf-docs-menu-toggle" data-vf-docs-nav-toggle hidden aria-controls="vf-docs-navigation" aria-expanded="true">Menu</button>
           <a class="vf-docs-brand" href="${artifactHref(currentPageDirectory, nativeSitePath)}">VyrnForge <span>Docs</span></a>
           <span class="vf-docs-surface" aria-label="Documentation surface">Native Web · ${escapeHtml(channel)}</span>
         </div>
@@ -286,7 +286,7 @@ ${styleLinks(currentPageDirectory, componentStyle)}
       <aside id="vf-docs-navigation" data-vf-app-shell-navigation class="vf-docs-navigation-region">
         <div class="vf-docs-navigation-scroll">${documentationNavigation(currentPageDirectory, route)}</div>
       </aside>
-      <main id="main" data-vf-app-shell-main class="vf-docs-main">${content}</main>
+      <main id="main" tabindex="-1" data-vf-app-shell-main class="vf-docs-main">${content}</main>
     </div>
     <footer data-vf-app-shell-footer class="vf-docs-footer">
       <span>VyrnForge Native Web documentation</span>
@@ -604,6 +604,7 @@ function renderComponent(page) {
     componentStyle: page.styleAssetPath,
     content: `${renderBreadcrumbs(page, currentPageDirectory, page.kind === 'pattern' ? 'Patterns' : 'Components')}
     <div class="vf-docs-content-grid">
+      ${renderTableOfContents(toc)}
       <article class="vf-docs-article" ${page.kind === 'pattern' ? 'data-vf-docs-pattern' : 'data-vf-docs-component'}="${escapeHtml(page.id)}">
         <header class="vf-docs-component-header">
           <div class="vf-docs-page-meta" aria-label="Page metadata">
@@ -645,7 +646,6 @@ function renderComponent(page) {
           </ul>
         </section>
       </article>
-      ${renderTableOfContents(toc)}
     </div>`,
   });
 }
