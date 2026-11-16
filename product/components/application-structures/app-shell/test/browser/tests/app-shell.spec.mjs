@@ -210,3 +210,68 @@ test('item management preserves transaction truth and retries only unresolved bu
   
   expect((await expectNoAxeViolations(page)).violations).toEqual([]);
 });
+
+
+test('settings navigation preserves responsive focus and unsaved drafts across rail and Drawer transitions', async ({ page }) => {
+  test.skip(port !== 'react', 'Settings navigation pattern references the existing React fixture; other ports are not claimed.');
+  await page.setViewportSize({ width: 1200, height: 800 });
+  await page.goto('/components/app-shell/settings-navigation-react.html?route=%2Fsettings%2Fprofile&tab=details');
+
+  const rail = page.locator('.settings-persistent-navigation');
+  const trigger = page.getByRole('button', { name: 'Settings navigation', exact: true });
+  const profile = rail.getByRole('link', { name: 'Profile', exact: true });
+  const security = rail.getByRole('link', { name: 'Security', exact: true });
+  const drawer = page.getByRole('dialog', { name: 'Settings navigation' });
+  const draft = page.getByRole('textbox', { name: 'Display name' });
+
+  await draft.fill('Unsaved responsive draft');
+  await page.setViewportSize({ width: 640, height: 800 });
+  await expect(draft).toBeFocused();
+  await expect(draft).toHaveValue('Unsaved responsive draft');
+  await page.setViewportSize({ width: 1200, height: 800 });
+  await expect(draft).toBeFocused();
+
+  await profile.focus();
+  await page.setViewportSize({ width: 640, height: 800 });
+  await expect(rail).toBeHidden();
+  await expect(trigger).toBeFocused();
+  await trigger.press('Enter');
+  await expect(drawer).toBeVisible();
+  await page.keyboard.press('Escape');
+  await expect(drawer).toBeHidden();
+  await expect(trigger).toBeFocused();
+
+  await trigger.press('Enter');
+  await expect(drawer).toBeVisible();
+  await page.setViewportSize({ width: 1200, height: 800 });
+  await expect(drawer).toBeHidden();
+  await expect(profile).toBeFocused();
+  await expect(trigger).toBeHidden();
+
+  await security.click();
+  await expect(page).toHaveTitle('Security settings');
+  await expect(security).toHaveAttribute('aria-current', 'page');
+  await page.goBack();
+  await expect(page).toHaveTitle('Profile settings');
+  await expect(draft).toHaveValue('Unsaved responsive draft');
+  await page.getByRole('button', { name: 'Cancel edits', exact: true }).click();
+  await expect(draft).toHaveValue('Avery Example');
+
+  await profile.focus();
+  await page.setViewportSize({ width: 640, height: 800 });
+  await expect(trigger).toBeFocused();
+  await expect(drawer).toBeHidden();
+  await page.setViewportSize({ width: 1200, height: 800 });
+  await expect(profile).toBeFocused();
+
+  await page.goto('/components/app-shell/settings-navigation-react.html?route=unknown');
+  await expect(page.getByRole('heading', { level: 1, name: 'Settings page not found' })).toBeVisible();
+  await expect(rail.locator('a[aria-current="page"]')).toHaveCount(0);
+  await rail.getByRole('link', { name: 'Profile', exact: true }).focus();
+  await page.setViewportSize({ width: 640, height: 800 });
+  await expect(trigger).toBeFocused();
+  await page.setViewportSize({ width: 1200, height: 800 });
+  await expect(rail.getByRole('link', { name: 'Profile', exact: true })).toBeFocused();
+  await page.getByRole('link', { name: 'Return to profile settings' }).click();
+  await expect(page).toHaveTitle('Profile settings');
+});
