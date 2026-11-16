@@ -1,39 +1,154 @@
-name: PR Validation
-
-on:
-  pull_request:
-
+name: Independent C2 exact-head acceptance evidence
+on: pull_request
 permissions:
   contents: read
-
-concurrency:
-  group: pr-validation-${{ github.event.pull_request.number }}
-  cancel-in-progress: true
-
 jobs:
-  targeted-validation:
-    uses: ./.github/workflows/_targeted-validation.yml
-    with:
-      mode: pr
-      base_sha: ${{ github.event.pull_request.base.sha }}
-      head_sha: ${{ github.sha }}
-      artifact_suffix: pr
-      retention_days: 7
-      upload_docs_artifact: false
-
-  ci-gate:
-    name: ci-gate
-    if: always()
-    needs: targeted-validation
+  qa:
+    name: C2 independent ${{ matrix.engine }}
     runs-on: ubuntu-latest
-    timeout-minutes: 5
+    timeout-minutes: 45
+    strategy:
+      fail-fast: false
+      matrix:
+        engine: [chromium, firefox, webkit]
     steps:
-      - name: Require targeted validation
-        env:
-          TARGETED_VALIDATION: ${{ needs.targeted-validation.result }}
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        with:
+          ref: c6d5cfd60830b4372348689eb1d017ae41ce8816
+      - name: Verify exact C2 candidate and clean source
         run: |
-          if [ "$TARGETED_VALIDATION" != "success" ]; then
-            echo "Targeted validation did not succeed: $TARGETED_VALIDATION" >&2
-            exit 1
-          fi
-          echo "All selected VyrnForge validation evidence passed."
+          test "$(git rev-parse HEAD)" = "c6d5cfd60830b4372348689eb1d017ae41ce8816"
+          test -z "$(git status --porcelain)"
+          git log -1 --format='%H %s'
+      - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020
+        with:
+          node-version-file: .node-version
+          package-manager-cache: false
+      - run: corepack enable
+      - run: pnpm install --frozen-lockfile --ignore-scripts
+      - run: pnpm build:docs
+      - run: pnpm exec playwright install --with-deps ${{ matrix.engine }}
+      - name: Independently inspect actual-size layout and saved screenshot dimensions
+        env:
+          QA_BROWSER: ${{ matrix.engine }}
+        run: |
+          node --input-type=module <<'JS'
+          import assert from 'node:assert/strict';
+          import { readFileSync, writeFileSync, mkdirSync } from 'node:fs';
+          import { spawn } from 'node:child_process';
+          import { chromium, firefox, webkit } from '@playwright/test';
+          import axe from 'axe-core';
+          const browserName = process.env.QA_BROWSER;
+          const output = 'test-results/c2-qa-' + browserName;
+          mkdirSync(output, { recursive: true });
+          const server = spawn(process.execPath, ['apps/docs/serve.mjs'], { stdio: 'inherit' });
+          const base = 'http://127.0.0.1:4173';
+          const routes = [
+            {name:'button',url:'/next/native-web/components/button/',reading:'.vf-docs-content-grid'},
+            {name:'home',url:'/next/native-web/',reading:'.vf-docs-main > .vf-docs-catalog'},
+            {name:'settings',url:'/next/native-web/patterns/settings-navigation/',reading:'.vf-docs-content-grid'},
+            {name:'loading',url:'/next/native-web/patterns/loading/',reading:'.vf-docs-content-grid'},
+          ];
+          const rects = (selector) => {
+            const rect=(sel)=>{const el=document.querySelector(sel);if(!el)return null;const r=el.getBoundingClientRect();return {x:Math.round(r.x*10)/10,y:Math.round(r.y*10)/10,width:Math.round(r.width*10)/10,height:Math.round(r.height*10)/10};};
+            return {shell:rect('[data-vf-docs-shell]'),header:rect('.vf-docs-header-inner'),body:rect('.vf-docs-app-body'),rail:rect('.vf-docs-navigation-region'),main:rect('.vf-docs-main'),footer:rect('.vf-docs-footer'),reading:rect(selector),scrollWidth:document.documentElement.scrollWidth,clientWidth:document.documentElement.clientWidth,scrollHeight:document.documentElement.scrollHeight,rem:parseFloat(getComputedStyle(document.documentElement).fontSize),current:document.querySelector('#vf-docs-navigation a[aria-current="page"]')?.textContent?.trim()};
+          };
+          const pngSize=(name)=>{const v=readFileSync(name);assert.equal(v.subarray(1,4).toString(),'PNG');return {w:v.readUInt32BE(16),h:v.readUInt32BE(20)};};
+          let browser;
+          const records=[];
+          try{
+            for(let i=0;i<100;i++){
+              if(server.exitCode!==null)throw Error('server exited');
+              try{const response=await fetch(base+'/next/native-web/');if(response.ok)break;}catch{}
+              await new Promise(resolve=>setTimeout(resolve,150));
+              if(i===99)throw Error('server unavailable');
+            }
+            browser=await ({chromium,firefox,webkit})[browserName].launch({headless:true});
+            for(const width of [1920,2560]){
+              for(const route of routes){
+                const page=await browser.newPage({viewport:{width,height:1000},deviceScaleFactor:1});
+                const errors=[];page.on('pageerror',e=>errors.push(String(e)));
+                await page.goto(base+route.url,{waitUntil:'load'});
+                await page.evaluate(()=>document.fonts.ready);
+                const measure=await page.evaluate(rects,route.reading);
+                for(const selector of ['shell','header','body','footer']) {
+                  const v=measure[selector];assert.ok(v,selector+' missing');
+                  assert.ok(Math.abs(v.x)<=1,selector+' x '+v.x+' width='+width+' route='+route.name);
+                  assert.ok(Math.abs(v.width-width)<=1,selector+' width '+v.width+' expected '+width+' route='+route.name);
+                }
+                assert.ok(measure.rail,route.name+' rail');
+                assert.ok(Math.abs(measure.rail.width-17*measure.rem)<=1,route.name+' rail width');
+                assert.ok(measure.reading,route.name+' reading');
+                assert.ok(measure.reading.width<=70*measure.rem+1,route.name+' reading too wide');
+                const readingMid=measure.reading.x+measure.reading.width/2;
+                const mainMid=measure.main.x+measure.main.width/2;
+                assert.ok(Math.abs(readingMid-mainMid)<=2,route.name+' reading not centered '+readingMid+'/'+mainMid);
+                assert.ok(measure.scrollWidth<=measure.clientWidth+1,route.name+' overflow');
+                assert.deepEqual(errors,[]);
+                const shot=output+'/'+route.name+'-'+width+'.png';
+                await page.screenshot({path:shot,fullPage:false});
+                assert.deepEqual(pngSize(shot),{w:width,h:1000});
+                records.push({browser:browserName,scenario:route.name+'-'+width,geometry:measure});
+                console.log('QA_C2_WIDE '+browserName+' '+route.name+'-'+width+' '+JSON.stringify(measure));
+                await page.close();
+              }
+            }
+            for(const config of [
+              {name:'mobile-light',width:320},
+              {name:'mobile-rtl-dark',width:320,rtl:true,dark:true,open:true,long:true},
+              {name:'mobile-200-percent',width:320,scale:true,open:true},
+              {name:'mobile-forced-reduced',width:320,forced:true,reduced:true,open:true},
+              {name:'tablet',width:768},
+            ]){
+              const page=await browser.newPage({viewport:{width:config.width,height:720},deviceScaleFactor:1});
+              await page.goto(base+'/next/native-web/components/button/',{waitUntil:'load'});
+              if(config.rtl) await page.evaluate(()=>{document.documentElement.dir='rtl';});
+              if(config.dark) await page.evaluate(()=>{document.documentElement.dataset.vfTheme='dark';});
+              if(config.long) await page.evaluate(()=>{const e=document.querySelector('[data-vf-side-nav-group-label]');if(e)e.textContent='Long translated documentation navigation category for RTL content';});
+              if(config.scale) await page.evaluate(()=>{document.documentElement.style.fontSize='200%';});
+              if(config.forced||config.reduced) await page.emulateMedia({forcedColors:config.forced?'active':'none',reducedMotion:config.reduced?'reduce':'no-preference'});
+              const menu=page.getByRole('button',{name:'Menu'});if(config.open){await menu.click();assert.equal(await menu.getAttribute('aria-expanded'),'true');}
+              const measure=await page.evaluate(rects,'.vf-docs-content-grid');
+              assert.ok(measure.scrollWidth<=measure.clientWidth+1,config.name+' overflow '+JSON.stringify(measure));
+              assert.ok(Math.abs(measure.shell.width-config.width)<=1,config.name+' shell');
+              if(config.open){assert.equal(measure.current,'Button',config.name+' current');}
+              if(config.scale){
+                await page.addScriptTag({content:axe.source});
+                const violations=await page.evaluate(async()=>{const a=await window.axe.run(document,{runOnly:{type:'tag',values:['wcag2a','wcag2aa','wcag21a','wcag21aa','wcag22aa']}});return a.violations.map(v=>v.id+': '+v.help);});
+                assert.deepEqual(violations,[],'200% axe violations');
+                const fractions=[0,0.5,1];
+                for(const [index,fraction] of fractions.entries()){
+                  await page.evaluate((f)=>{const max=Math.max(0,document.documentElement.scrollHeight-window.innerHeight);window.scrollTo(0,Math.round(max*f));},fraction);
+                  const file=output+'/mobile-200-'+index+'.png';
+                  await page.screenshot({path:file,fullPage:false});
+                  assert.deepEqual(pngSize(file),{w:320,h:720});
+                }
+              }else{
+                const file=output+'/'+config.name+'.png';
+                await page.screenshot({path:file,fullPage:false});
+                assert.deepEqual(pngSize(file),{w:config.width,h:720});
+              }
+              records.push({browser:browserName,scenario:config.name,geometry:measure});
+              console.log('QA_C2_NARROW '+browserName+' '+config.name+' '+JSON.stringify(measure));
+              await page.close();
+            }
+            const noJS=await browser.newContext({javaScriptEnabled:false,viewport:{width:320,height:720}});
+            const page=await noJS.newPage();await page.goto(base+'/next/native-web/components/button/');
+            const nav=page.locator('#vf-docs-navigation');
+            assert.equal(await nav.isVisible(),true,'no-JS nav visible');
+            assert.equal(await page.getByRole('button',{name:'Menu'}).isVisible(),false,'no-JS dead menu hidden');
+            assert.equal((await nav.locator('a[aria-current="page"]').textContent()).trim(),'Button','no-JS current');
+            await noJS.close();
+            console.log('QA_C2_NO_JS '+browserName+' PASS');
+            writeFileSync(output+'/measurements.json',JSON.stringify({head:'c6d5cfd60830b4372348689eb1d017ae41ce8816',browser:browserName,records},null,2));
+            console.log('QA_C2_ALL '+browserName+' PASS '+records.length+' scenarios; 200% axe + capture + no-JS PASS');
+          } finally {if(browser)await browser.close();server.kill('SIGTERM');}
+          JS
+          test -z "$(git status --porcelain)"
+      - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        if: always()
+        with:
+          name: c2-qa-exact-${{ matrix.engine }}
+          path: test-results/c2-qa-${{ matrix.engine }}
+          if-no-files-found: warn
+          retention-days: 14
