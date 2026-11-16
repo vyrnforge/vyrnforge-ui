@@ -1,13 +1,14 @@
 import{test,expect}from'@playwright/test';
-import { expectNoAxeViolations } from '../../../../../../../tooling/testing/accessibility.mjs';const port=process.env.VF_COMPONENT_PORT||'react';test('side nav keeps native links, shared visual states, and current-page semantics',async({page})=>{await page.goto(`/components/side-nav/${port}.html`);const home=page.getByRole('link',{name:'Home'});const projects=page.getByRole('link',{name:'Projects'});await expect(home).toHaveAttribute('aria-current','page');await expect(page.getByRole('navigation',{name:'Primary'})).toHaveCount(1);const defaultStyles=await page.evaluate(()=>{const current=document.querySelector('[data-vf-side-nav-link][aria-current="page"]');const other=document.querySelector('[data-vf-side-nav-link]:not([aria-current])');const currentStyle=getComputedStyle(current);const otherStyle=getComputedStyle(other);return{currentBackground:currentStyle.backgroundColor,otherBackground:otherStyle.backgroundColor,currentWeight:currentStyle.fontWeight,otherWeight:otherStyle.fontWeight,currentInlineStart:currentStyle.borderInlineStartWidth};});expect(defaultStyles.currentBackground).not.toBe(defaultStyles.otherBackground);expect(Number(defaultStyles.currentWeight)).toBeGreaterThan(Number(defaultStyles.otherWeight));expect(defaultStyles.currentInlineStart).toBe('3px');await projects.hover();await expect.poll(()=>projects.evaluate((node)=>getComputedStyle(node).backgroundColor)).not.toBe(defaultStyles.otherBackground);await expect.poll(()=>projects.evaluate((node)=>getComputedStyle(node).borderColor)).not.toBe('rgba(0, 0, 0, 0)');await home.focus();await expect(home).toBeFocused();const outline=await home.evaluate((node)=>getComputedStyle(node).outlineStyle);expect(outline).not.toBe('none');await page.evaluate(()=>{document.documentElement.dir='rtl';});const rtlBorders=await home.evaluate((node)=>{const style=getComputedStyle(node);return{left:style.borderLeftWidth,right:style.borderRightWidth};});expect(rtlBorders.right).toBe('3px');expect(rtlBorders.left).toBe('1px');expect((await expectNoAxeViolations(page)).violations).toEqual([]);});
+import { expectNoAxeViolations } from '../../../../../../../tooling/testing/accessibility.mjs';const port=process.env.VF_COMPONENT_PORT||'react';test('side nav keeps native links, shared visual states, and current-page semantics',async({page})=>{await page.goto(`/components/side-nav/${port}.html`);if(port==='angular')await expect(page.locator('html')).toHaveAttribute('data-vf-angular-hydrated','true');const home=page.getByRole('link',{name:'Home'});const projects=page.getByRole('link',{name:'Projects'});await expect(home).toHaveAttribute('aria-current','page');await expect(page.getByRole('navigation',{name:'Primary'})).toHaveCount(1);const defaultStyles=await page.evaluate(()=>{const current=document.querySelector('[data-vf-side-nav-link][aria-current="page"]');const other=document.querySelector('[data-vf-side-nav-link]:not([aria-current])');const currentStyle=getComputedStyle(current);const otherStyle=getComputedStyle(other);return{currentBackground:currentStyle.backgroundColor,otherBackground:otherStyle.backgroundColor,currentWeight:currentStyle.fontWeight,otherWeight:otherStyle.fontWeight,currentInlineStart:currentStyle.borderInlineStartWidth};});expect(defaultStyles.currentBackground).not.toBe(defaultStyles.otherBackground);expect(Number(defaultStyles.currentWeight)).toBeGreaterThan(Number(defaultStyles.otherWeight));expect(defaultStyles.currentInlineStart).toBe('3px');await projects.hover();await expect.poll(()=>projects.evaluate((node)=>getComputedStyle(node).backgroundColor)).not.toBe(defaultStyles.otherBackground);await expect.poll(()=>projects.evaluate((node)=>getComputedStyle(node).borderColor)).not.toBe('rgba(0, 0, 0, 0)');await home.focus();await expect(home).toBeFocused();const outline=await home.evaluate((node)=>getComputedStyle(node).outlineStyle);expect(outline).not.toBe('none');await page.evaluate(()=>{document.documentElement.dir='rtl';});const rtlBorders=await home.evaluate((node)=>{const style=getComputedStyle(node);return{left:style.borderLeftWidth,right:style.borderRightWidth};});expect(rtlBorders.right).toBe('3px');expect(rtlBorders.left).toBe('1px');expect((await expectNoAxeViolations(page)).violations).toEqual([]);});
 
 
 test('Angular SideNav preserves authored state through hydration and convenience transitions', async ({ page }) => {
   test.skip(port !== 'angular', 'Angular public directive regression');
   const errors = [];
   page.on('pageerror', error => errors.push(error.message));
+  page.on('console', message => { if (/NG05\d+/.test(message.text())) errors.push(message.text()); });
   await page.goto('/components/side-nav/angular.html');
-  await expect(page.locator('html')).toHaveAttribute('data-vf-side-nav-hydrated', 'true');
+  await expect(page.locator('html')).toHaveAttribute('data-vf-angular-hydrated', 'true');
   const soft = expect.configure({ soft: true, timeout: 1000 });
   const state = async (id, expected) => {
     const link = page.locator('#' + id);
@@ -67,7 +68,7 @@ test('Angular SideNav preserves authored state through hydration and convenience
 test('Angular SideNav remains an authored native link after hydration', async ({ page }) => {
   test.skip(port !== 'angular', 'Angular public directive regression');
   await page.goto('/components/side-nav/angular.html');
-  await expect(page.locator('html')).toHaveAttribute('data-vf-side-nav-hydrated', 'true');
+  await expect(page.locator('html')).toHaveAttribute('data-vf-angular-hydrated', 'true');
   const link = page.locator('#bound');
   await expect(link).toHaveAttribute('href', '#destination');
   expect(await link.evaluate(node => node.tagName)).toBe('A');
@@ -80,7 +81,7 @@ test('Angular SideNav remains an authored native link after hydration', async ({
 test('Angular SideNav native modifier and middle clicks are not cancelled', async ({ page }) => {
   test.skip(port !== 'angular', 'Angular public directive regression');
   await page.goto('/components/side-nav/angular.html');
-  await expect(page.locator('html')).toHaveAttribute('data-vf-side-nav-hydrated', 'true');
+  await expect(page.locator('html')).toHaveAttribute('data-vf-angular-hydrated', 'true');
   const link = page.locator('#bound');
   await page.evaluate(() => {
     window.sideNavLinkEvents = [];
@@ -102,4 +103,39 @@ test('Angular SideNav native modifier and middle clicks are not cancelled', asyn
   const events = await page.evaluate(() => window.sideNavLinkEvents);
   expect(events.some(event => event.name === 'click' && (event.ctrl || event.meta) && !event.cancelled)).toBe(true);
   expect(events.some(event => event.name === 'auxclick' && event.button === 1 && !event.cancelled)).toBe(true);
+});
+
+
+test('SideNav sibling and native ports agree on effective current semantics', async ({ page }) => {
+  test.skip(port === 'angular', 'Angular has its own full public directive matrix');
+  await page.goto(`/components/side-nav/${port}.html`);
+  const modes = port === 'react' || port === 'vue' ? ['omitted', 'false', 'true'] : ['omitted'];
+  for (const value of ['step', 'page', 'location', 'false', 'date', 'time', 'true', null]) {
+    for (const mode of modes) {
+      const link = page.locator(`#peer-${value ?? 'absent'}-${mode}`);
+      const expected = mode === 'true' ? 'page' : value;
+      await expect(link).toHaveAttribute('href', '#peer-destination');
+      expect(await link.evaluate(node => node.tagName)).toBe('A');
+      if (expected === null) await expect.poll(() => link.getAttribute('aria-current')).toBeNull();
+      else await expect(link).toHaveAttribute('aria-current', expected);
+      await expect.poll(() => link.evaluate(node => getComputedStyle(node).borderInlineStartWidth)).toBe(expected === 'page' ? '3px' : '1px');
+    }
+  }
+});
+
+test('Angular SideNav opens real browser tabs with native modifier and middle click', async ({ page, context, browserName }) => {
+  test.skip(port !== 'angular' || browserName !== 'chromium', 'Chromium native tab behavior evidence');
+  await page.goto('/components/side-nav/angular.html');
+  await expect(page.locator('html')).toHaveAttribute('data-vf-angular-hydrated', 'true');
+  const link = page.locator('#bound');
+  for (const options of [{ modifiers: ['ControlOrMeta'] }, { button: 'middle' }]) {
+    const [tab] = await Promise.all([context.waitForEvent('page'), link.click(options)]);
+    try {
+      await expect(tab).toHaveURL(/#destination$/);
+      await expect(tab.locator('#destination')).toHaveText('Destination');
+    } finally {
+      await tab.close();
+    }
+    await expect(page).not.toHaveURL(/#destination$/);
+  }
 });
