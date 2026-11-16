@@ -75,21 +75,49 @@ function initializeTheme() {
 function initializeNavigation() {
   const shell = document.querySelector('[data-vf-docs-shell]');
   const toggle = document.querySelector('[data-vf-docs-nav-toggle]');
-  if (!shell || !toggle) return;
+  const navigation = document.getElementById('vf-docs-navigation');
+  const main = document.getElementById('main');
+  if (!shell || !toggle || !navigation || !main || !window.matchMedia) return;
 
   const mobile = window.matchMedia('(max-width: 48rem)');
   const setCollapsed = (collapsed) => {
     shell.dataset.vfDocsNavCollapsed = collapsed ? 'true' : 'false';
     toggle.setAttribute('aria-expanded', collapsed ? 'false' : 'true');
+    navigation.hidden = collapsed;
   };
-  const syncViewport = () => setCollapsed(mobile.matches);
 
-  syncViewport();
+  const focusDestination = () => {
+    const links = [...navigation.querySelectorAll('a[href]')].filter(
+      (link) => link.getClientRects().length && getComputedStyle(link).visibility === 'visible',
+    );
+    const destination = links.find((link) => link.getAttribute('aria-current') === 'page') ?? links[0] ?? main;
+    destination.focus();
+    if (document.activeElement !== destination) main.focus();
+  };
+
+  const syncViewport = () => {
+    // Visibility is owned here, not by a media-query display rule: move focus
+    // while the departing control still exists in the focusable tree.
+    const active = document.activeElement;
+    if (mobile.matches) {
+      toggle.hidden = false;
+      if (navigation.contains(active)) toggle.focus();
+      setCollapsed(true);
+    } else {
+      setCollapsed(false);
+      if (active === toggle) focusDestination();
+      toggle.hidden = true;
+    }
+  };
+
   toggle.addEventListener('click', () => {
     if (!mobile.matches) return;
-    setCollapsed(shell.dataset.vfDocsNavCollapsed !== 'true');
+    const collapsed = shell.dataset.vfDocsNavCollapsed !== 'true';
+    if (collapsed) toggle.focus();
+    setCollapsed(collapsed);
   });
   mobile.addEventListener('change', syncViewport);
+  syncViewport();
 }
 
 function initializeSearch() {
