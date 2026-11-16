@@ -1,0 +1,43 @@
+name: ALIGN-05 Application Structure Review
+on:
+  push:
+    branches:
+      - 'evidence/align05-shell-review-2322046'
+permissions:
+  contents: read
+jobs:
+  review:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
+        with:
+          ref: '2322046b7d6ce05f1fcdc6a943dc215a10a1fa81'
+          path: library
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
+        with:
+          path: evidence
+      - uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1
+        with:
+          node-version-file: library/.node-version
+          package-manager-cache: false
+      - name: Inspect real adapters and docs, no library changes
+        working-directory: library
+        run: |
+          test "$(git rev-parse HEAD)" = "2322046b7d6ce05f1fcdc6a943dc215a10a1fa81"
+          corepack enable
+          pnpm install --frozen-lockfile --ignore-scripts
+          pnpm build
+          pnpm build:docs
+          pnpm exec playwright install --with-deps chromium
+          node apps/docs/serve.mjs > /tmp/vf-align05-docs.log 2>&1 &
+          trap 'kill $! 2>/dev/null || true' EXIT
+          cp ../evidence/.qa-evidence/align05-review.mjs ./qa-shell-check.mjs
+          node qa-shell-check.mjs
+      - uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9
+        if: always()
+        with:
+          name: align05-review
+          path: library/.qa-shell-output/
+          include-hidden-files: true
+          retention-days: 14
