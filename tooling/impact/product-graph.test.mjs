@@ -56,6 +56,12 @@ test('settings evidence follows actual referenced example dependencies, not unre
   assert.ok(!graph.browserScopes.some((scope) => scope.components.includes('app-shell')));
   const drawer = createSemanticImpact(['product/components/composite-widgets/transient-surfaces/drawer/react/index.tsx']);
   assert.ok(drawer.browserScopes.some((scope) => scope.port === 'react' && scope.components.includes('app-shell')));
+  assert.equal(drawer.selectors.docsRequired, false);
+  const source = createSemanticImpact(['product/components/application-structures/app-shell/examples/settings-navigation/react.tsx']);
+  assert.ok(source.browserScopes.some((scope) => scope.port === 'react' && scope.components.includes('app-shell')));
+  assert.ok(source.selectors.docsRequired);
+  const shared = createSemanticImpact(['product/capabilities/collection-navigation/core/index.ts']);
+  assert.ok(shared.browserScopes.some((scope) => scope.port === 'react' && scope.components.includes('app-shell')));
   const unrelated = createSemanticImpact(['product/components/interactive-controls/button/vue/index.ts']);
   assert.ok(!unrelated.browserScopes.some((scope) => scope.port === 'react' && scope.components.includes('app-shell')));
 });

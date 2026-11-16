@@ -32,7 +32,7 @@ export function impactProductView(graph = discoverProductGraph()) {
         documentationGroup: component.documentationGroup,
       };
     }),
-    patternReferences: graph.patterns.flatMap((pattern) => (pattern.exampleReferences ?? []).map((reference) => ({ pattern: pattern.unitId, ...reference }))),
+    patternReferences: graph.patterns.flatMap((pattern) => (pattern.exampleReferences ?? []).map((reference) => ({ pattern: pattern.unitId, metadataPath: pattern.metadataPath, ...reference }))),
     ownedUnits: graph.units
       .filter((unit) => unit.kind !== 'component' && unit.kind !== 'pattern')
       .map((unit) => {
