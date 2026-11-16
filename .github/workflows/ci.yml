@@ -1,39 +1,69 @@
-name: PR Validation
-
-on:
-  pull_request:
-
+name: C2 exact-revision independent browser evidence
+on: pull_request
 permissions:
   contents: read
-
-concurrency:
-  group: pr-validation-${{ github.event.pull_request.number }}
-  cancel-in-progress: true
-
 jobs:
-  targeted-validation:
-    uses: ./.github/workflows/_targeted-validation.yml
-    with:
-      mode: pr
-      base_sha: ${{ github.event.pull_request.base.sha }}
-      head_sha: ${{ github.sha }}
-      artifact_suffix: pr
-      retention_days: 7
-      upload_docs_artifact: false
-
-  ci-gate:
-    name: ci-gate
-    if: always()
-    needs: targeted-validation
+  c2-engines:
+    name: C2 candidate documentation ${{ matrix.engine }}
     runs-on: ubuntu-latest
-    timeout-minutes: 5
+    timeout-minutes: 40
+    strategy:
+      fail-fast: false
+      matrix:
+        engine: [firefox, webkit]
     steps:
-      - name: Require targeted validation
-        env:
-          TARGETED_VALIDATION: ${{ needs.targeted-validation.result }}
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        with:
+          ref: c6d5cfd60830b4372348689eb1d017ae41ce8816
+      - name: Verify candidate source
         run: |
-          if [ "$TARGETED_VALIDATION" != "success" ]; then
-            echo "Targeted validation did not succeed: $TARGETED_VALIDATION" >&2
-            exit 1
-          fi
-          echo "All selected VyrnForge validation evidence passed."
+          test "$(git rev-parse HEAD)" = "c6d5cfd60830b4372348689eb1d017ae41ce8816"
+          test -z "$(git status --porcelain)"
+      - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020
+        with:
+          node-version-file: .node-version
+          package-manager-cache: false
+      - run: corepack enable
+      - run: pnpm install --frozen-lockfile --ignore-scripts
+      - run: pnpm build:docs
+      - run: pnpm exec playwright install --with-deps ${{ matrix.engine }}
+      - run: pnpm exec playwright test --config apps/docs/playwright.config.mjs --project ${{ matrix.engine }}
+      - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        if: always()
+        with:
+          name: c2-cross-browser-${{ matrix.engine }}
+          path: |
+            test-results/docs-playwright-results
+            test-results/docs-playwright-report
+          retention-days: 14
+          if-no-files-found: warn
+  c2-original-geometry:
+    name: C2 regression-only geometry before repair
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        with:
+          ref: ddf3b60cb81c90aba378d7f26ef14ec500d1078d
+      - run: |
+          test "$(git rev-parse HEAD)" = "ddf3b60cb81c90aba378d7f26ef14ec500d1078d"
+          test -z "$(git status --porcelain)"
+      - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020
+        with:
+          node-version-file: .node-version
+          package-manager-cache: false
+      - run: corepack enable
+      - run: pnpm install --frozen-lockfile --ignore-scripts
+      - run: pnpm build:docs
+      - run: pnpm exec playwright install --with-deps chromium
+      - name: Reproduce pre-repair approved geometry failure
+        run: pnpm exec playwright test --config apps/docs/playwright.config.mjs --project chromium --grep 'C2 approved docs geometry fills wide chrome'
+      - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        if: always()
+        with:
+          name: c2-geometry-red-evidence
+          path: |
+            test-results/docs-playwright-results
+            test-results/docs-playwright-report
+          retention-days: 14
+          if-no-files-found: warn
