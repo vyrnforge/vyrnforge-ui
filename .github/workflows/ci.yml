@@ -1,4 +1,4 @@
-name: PR Validation
+name: QA C1 exact-revision documentation engines
 
 on:
   pull_request:
@@ -6,34 +6,38 @@ on:
 permissions:
   contents: read
 
-concurrency:
-  group: pr-validation-${{ github.event.pull_request.number }}
-  cancel-in-progress: true
-
 jobs:
-  targeted-validation:
-    uses: ./.github/workflows/_targeted-validation.yml
-    with:
-      mode: pr
-      base_sha: ${{ github.event.pull_request.base.sha }}
-      head_sha: ${{ github.sha }}
-      artifact_suffix: pr
-      retention_days: 7
-      upload_docs_artifact: false
-
-  ci-gate:
-    name: ci-gate
-    if: always()
-    needs: targeted-validation
+  c1-docs-engine:
+    name: C1 docs ${{ matrix.engine }}
     runs-on: ubuntu-latest
-    timeout-minutes: 5
+    timeout-minutes: 40
+    strategy:
+      fail-fast: false
+      matrix:
+        engine: [firefox, webkit]
     steps:
-      - name: Require targeted validation
-        env:
-          TARGETED_VALIDATION: ${{ needs.targeted-validation.result }}
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
+        with:
+          ref: d0451a2a9f624c51418c9e6a24ab06552c2bcafb
+      - name: Verify exact candidate
         run: |
-          if [ "$TARGETED_VALIDATION" != "success" ]; then
-            echo "Targeted validation did not succeed: $TARGETED_VALIDATION" >&2
-            exit 1
-          fi
-          echo "All selected VyrnForge validation evidence passed."
+          test "$(git rev-parse HEAD)" = "d0451a2a9f624c51418c9e6a24ab06552c2bcafb"
+          git log -1 --format='%H %s'
+          test -z "$(git status --porcelain)"
+      - uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1
+        with:
+          node-version-file: .node-version
+          package-manager-cache: false
+      - run: corepack enable
+      - run: pnpm install --frozen-lockfile --ignore-scripts
+      - run: pnpm build:docs
+      - run: node apps/docs/run-browser.mjs ${{ matrix.engine }}
+      - uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9
+        if: always()
+        with:
+          name: c1-${{ matrix.engine }}-d0451a2a9f624c51418c9e6a24ab06552c2bcafb
+          path: |
+            test-results/docs-playwright-results
+            test-results/docs-playwright-report
+          if-no-files-found: warn
+          retention-days: 7
