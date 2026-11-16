@@ -169,7 +169,87 @@ function isFile(root, relativePath) {
   return exists(root, relativePath) && statSync(path.join(root, relativePath)).isFile();
 }
 
-function resolvePatternReferences(root, metadata, components) {
+// Imports in canonical component sources resolve in their existing projected
+// package layout (e.g. Drawer -> ../dialog/index.js), not in product folders.
+// Walk only the surfaces reached by the real example; keep usage separate
+// from package projection and the existing owned-unit dependency model.
+function patternUsageClosure(root, components, manifests, directUsage) {
+  const surfaces = components.flatMap((component) => Object.values(component.surfaces)
+    .filter((surface) => surface.projectionPath && surface.authoringPaths.length)
+    .map((surface) => ({ component: component.unitId, port: surface.target, surface })));
+  const visited = new Set();
+  const result = new Map();
+  const queue = [...directUsage];
+
+  const projectedOwner = (projected) => surfaces.find(({ surface }) => projected.startsWith(surface.projectionPath));
+  const publicTarget = (specifier) => {
+    const match = /^@vyrnforge\/([^/]+)(?:\/(.+))?$/.exec(specifier);
+    if (!match) return null;
+    const manifest = manifests.get(match[1]);
+    const entry = manifest?.exports?.[match[2] ? './' + match[2] : '.'];
+    const target = typeof entry === 'string' ? entry : entry?.import ?? entry?.default ?? entry?.types;
+    if (typeof target !== 'string') throw new Error('Unresolved pattern usage import: ' + specifier);
+    return 'packages/' + match[1] + '/' + target.replace(/^\.\//, '').replace(/^dist\//, 'src/');
+  };
+
+  const walkSource = (directory) => {
+    const files = [];
+    for (const entry of readdirSync(path.join(root, directory), { withFileTypes: true })) {
+      const file = directory + entry.name;
+      if (entry.isDirectory()) files.push(...walkSource(file + '/'));
+      else if (/\.(?:[cm]?[jt]sx?|css)$/.test(entry.name)) files.push(file);
+    }
+    return files.sort();
+  };
+
+  const sourceExists = (file) => [file, file.replace(/\.m?js$/, '.ts'), file.replace(/\.js$/, '.tsx'), file + '/index.ts']
+    .some((candidate) => isFile(root, candidate));
+
+  while (queue.length) {
+    const edge = queue.shift();
+    const key = edge.component + ':' + edge.port;
+    if (visited.has(key)) continue;
+    visited.add(key);
+    const current = surfaces.find((entry) => entry.component === edge.component && entry.port === edge.port);
+    if (!current) throw new Error('Unresolved pattern usage surface: ' + key);
+    result.set(key, { component: edge.component, port: edge.port });
+    for (const authoring of current.surface.authoringPaths) {
+      for (const file of walkSource(authoring)) {
+        const source = readFileSync(path.join(root, file), 'utf8');
+        const projectedFile = current.surface.projectionPath + file.slice(authoring.length);
+        const imports = file.endsWith('.css')
+          ? source.matchAll(/@import\s+(?:url\(\s*)?['"]([^'"]+)['"]/g)
+          : source.matchAll(/(?:\bfrom\s+|\bimport\s*)['"]([^'"]+)['"]/g);
+        for (const [, specifier] of imports) {
+          let projected;
+          if (specifier.startsWith('.')) projected = path.posix.normalize(path.posix.join(path.posix.dirname(projectedFile), specifier));
+          else if (specifier.startsWith('@vyrnforge/')) projected = publicTarget(specifier);
+          else continue;
+          const dependency = projectedOwner(projected);
+          if (dependency) {
+            const suffix = projected.slice(dependency.surface.projectionPath.length);
+            if (!dependency.surface.authoringPaths.some((directory) => sourceExists(directory + suffix))) {
+              throw new Error('Unresolved pattern usage source: ' + specifier + ' from ' + file);
+            }
+            queue.push({ component: dependency.component, port: dependency.port });
+          } else {
+            // Shared package files and Core capabilities remain covered by
+            // existing package/owned-unit fanout; an unknown internal import
+            // must not silently narrow the task evidence.
+            const sharedCapability = specifier.startsWith('@vyrnforge/core/') &&
+              current.surface.dependencies.some((id) => id.endsWith(':' + specifier.split('/').at(-1)));
+            if (!sharedCapability && !sourceExists(projected)) {
+              throw new Error('Unresolved pattern usage import: ' + specifier + ' from ' + file);
+            }
+          }
+        }
+      }
+    }
+  }
+  return [...result.values()].sort((a, b) => (a.component + ':' + a.port).localeCompare(b.component + ':' + b.port));
+}
+
+function resolvePatternReferences(root, metadata, components, manifests) {
   const refs = metadata.exampleReferences ?? [];
   if (!Array.isArray(refs)) throw new Error('Pattern exampleReferences must be an array');
   const seen = new Set();
@@ -201,7 +281,7 @@ function resolvePatternReferences(root, metadata, components) {
         const surface = Object.values(component.surfaces).find((candidate) => candidate.publicEntrypoints.includes(specifier));
         return { component: component.unitId, port: surface.target, specifier };
       });
-      return { framework, port, sourcePath, usage };
+      return { framework, port, sourcePath, usage, usageClosure: patternUsageClosure(root, components, manifests, usage) };
     });
     const evidence = ref.evidence;
     const testRoot = owner.facets.test;
@@ -228,7 +308,7 @@ function normalizePatternNode(root, manifests, patternId, components) {
   const metadata = exists(root, metadataPath) ? readJson(root, metadataPath) : null;
   if (metadata?.id !== patternId) throw new Error('Pattern metadata identity mismatch: ' + patternId);
   const facets = patternFacets(root, patternId);
-  const exampleReferences = resolvePatternReferences(root, metadata, components);
+  const exampleReferences = resolvePatternReferences(root, metadata, components, manifests);
   const webRoot = `${canonicalRoot}/web/`;
   const publicEntrypoints = exists(root, webRoot) ? componentPublicEntrypoints(manifests, 'web', patternId) : [];
   const surfaces = exists(root, webRoot)

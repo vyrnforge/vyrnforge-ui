@@ -286,6 +286,10 @@ test('settings pattern is documentation-only and references existing React evide
   assert.equal(reference.evidence.testName, 'settings navigation preserves deep links, route history, title and focus while local state remains local');
   assert.deepEqual([...new Set(reference.frameworks[0].usage.map((entry) => entry.component))].sort(), ['app-shell', 'button', 'drawer', 'input', 'side-nav', 'tabs']);
   assert.ok(graph.patterns.find((entry) => entry.id === 'pattern:loading').publicEntrypoints.includes('@vyrnforge/web/styles/loading.css'));
+  const closure = reference.frameworks[0].usageClosure;
+  assert.ok(closure.some((edge) => edge.component === 'dialog' && edge.port === 'react'));
+  assert.ok(closure.some((edge) => edge.component === 'dialog' && edge.port === 'web'));
+  assert.ok(!closure.some((edge) => edge.port === 'vue'));
 });
 
 test('pattern metadata identity mismatch fails closed', () => {
@@ -365,4 +369,30 @@ test('pattern references reject missing, duplicate, cyclic or unsupported source
     metadata([{ ...ref, evidence: { ...ref.evidence, testName: 'nonexistent test' } }]);
     assert.throws(() => discoverProductGraph(root), /Unresolved pattern fixture or test identity/);
   }
+});
+
+
+test('pattern usage follows projected sibling imports recursively and rejects a missing target', () => {
+  const { root, write } = referenceFixture();
+  const button = 'product/components/interactive-controls/button/';
+  const drawer = 'product/components/composite-widgets/transient-surfaces/drawer/';
+  const dialog = 'product/components/composite-widgets/transient-surfaces/dialog/';
+  write('packages/react/package.json', JSON.stringify({ name: '@vyrnforge/react', exports: {
+    './button': './dist/components/button/index.js',
+    './drawer': './dist/components/drawer/index.js',
+    './dialog': './dist/components/dialog/index.js',
+  } }));
+  write(drawer + 'component.json', '{"id":"drawer","name":"Drawer"}');
+  write(dialog + 'component.json', '{"id":"dialog","name":"Dialog"}');
+  write(button + 'react/index.ts', "export { Drawer as Button } from '../drawer/index.js';");
+  write(drawer + 'react/index.ts', "export { Dialog as Drawer } from '../dialog/index.js';");
+  write(dialog + 'react/index.ts', 'export const Dialog = null;');
+  const graph = discoverProductGraph(root);
+  assert.deepEqual(graph.patterns[0].exampleReferences[0].frameworks[0].usageClosure, [
+    { component: 'button', port: 'react' },
+    { component: 'dialog', port: 'react' },
+    { component: 'drawer', port: 'react' },
+  ]);
+  write(drawer + 'react/index.ts', "export { Dialog as Drawer } from '../dialog/missing.js';");
+  assert.throws(() => discoverProductGraph(root), /Unresolved pattern usage source/);
 });

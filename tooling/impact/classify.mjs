@@ -68,7 +68,7 @@ function selectReferencedPatternEvidence(state, discovery, paths) {
     const owner = discovery.components.find((candidate) => 'component:' + candidate.component === reference.owner);
     const directPath = paths.find((filePath) => filePath.startsWith(reference.directory) ||
       filePath === reference.evidence.fixture || filePath === reference.evidence.spec || filePath === reference.metadataPath);
-    const dependencySelected = reference.frameworks.some((framework) => framework.usage.some((dependency) =>
+    const dependencySelected = reference.frameworks.some((framework) => (framework.usageClosure ?? framework.usage).some((dependency) =>
       selected.get(dependency.port)?.has(dependency.component)));
     if (directPath || dependencySelected) {
       addComponent(state, owner, [reference.evidence.port], 'referenced pattern example evidence: ' + reference.id, directPath ?? null);
