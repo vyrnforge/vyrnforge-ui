@@ -25,11 +25,11 @@ test('Core collection navigation fans to discovered component/conformance consum
   assert.ok(impact.executionPrerequisites.includes('browser-runtime'));
 });
 
-test('React-only component implementation stays component and port local without selecting Native docs evidence', () => {
+test('React-only referenced component selects its settings task evidence without selecting Native docs', () => {
   const impact = createSemanticImpact(['product/components/interactive-controls/button/react/index.ts']);
-  assert.deepEqual(impact.components, ['button']);
+  assert.deepEqual(impact.components, ['app-shell', 'button']);
   assert.deepEqual(impact.browserPorts, ['react']);
-  assert.deepEqual(impact.browserScopes, [{ port: 'react', components: ['button'] }]);
+  assert.deepEqual(impact.browserScopes, [{ port: 'react', components: ['app-shell', 'button'] }]);
   assert.ok(impact.packages.includes('react'));
   assert.equal(impact.browserPorts.includes('angular'), false);
   assert.equal(impact.browserPorts.includes('vue'), false);
@@ -55,23 +55,23 @@ test('generic React package fallback classification does not select Native docs 
 
 test('canonical Tabs evidence fans across every implemented Tabs surface', () => {
   const impact = createSemanticImpact(['product/components/composite-widgets/disclosure-view-switching/tabs/accessibility.json']);
-  assert.deepEqual(impact.components, ['tabs']);
+  assert.deepEqual(impact.components, ['app-shell', 'tabs']);
   for (const port of ['web', 'react', 'angular', 'vue', 'elements']) assert.ok(impact.browserPorts.includes(port));
-  for (const scope of impact.browserScopes) assert.deepEqual(scope.components, ['tabs']);
+  for (const scope of impact.browserScopes) assert.deepEqual(scope.components, scope.port === 'react' ? ['app-shell', 'tabs'] : ['tabs']);
   assert.equal(impact.selectors.browserRequired, true);
   assert.ok(selectedScope(impact, 'cross-port-conformance', 'tabs'));
 });
 
-test('Web component CSS selects only the component real ports plus visual and Native docs evidence', () => {
+test('Web component CSS selects its real ports, referenced React task, visual and Native docs evidence', () => {
   const impact = createSemanticImpact(['product/components/interactive-controls/button/web/button.css']);
-  assert.deepEqual(impact.components, ['button']);
+  assert.deepEqual(impact.components, ['app-shell', 'button']);
   assert.ok(impact.semanticEvidence.includes('visual'));
   assert.equal(impact.selectors.browserRequired, true);
   assert.equal(impact.selectors.docsRequired, true);
   assert.equal(impact.selectors.packageArtifactsRequired, false);
   assert.deepEqual(impact.browserPorts, ['web', 'react', 'angular', 'vue']);
   assert.equal(impact.browserPorts.includes('elements'), false);
-  for (const scope of impact.browserScopes) assert.deepEqual(scope.components, ['button']);
+  for (const scope of impact.browserScopes) assert.deepEqual(scope.components, scope.port === 'react' ? ['app-shell', 'button'] : ['button']);
   assert.ok(selectedScope(impact, 'visual-regression'));
 });
 

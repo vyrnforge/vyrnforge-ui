@@ -56,7 +56,27 @@ export function createSemanticImpact(paths, options = {}) {
   }
 
   for (const filePath of paths) classifyPath(state, discovery, filePath);
+  selectReferencedPatternEvidence(state, discovery, paths);
   return finishImpact(paths, mode, discovery, state);
+}
+
+function selectReferencedPatternEvidence(state, discovery, paths) {
+  // Resolve against the existing component/port closure, including capability
+  // and package fanout. A pattern guide is not a runtime browser fixture.
+  const selected = new Map([...state.browserScopes].map(([port, components]) => [port, new Set(components)]));
+  for (const reference of discovery.patternReferences ?? []) {
+    const owner = discovery.components.find((candidate) => 'component:' + candidate.component === reference.owner);
+    const directPath = paths.find((filePath) => filePath.startsWith(reference.directory) ||
+      filePath === reference.evidence.fixture || filePath === reference.evidence.spec || filePath === reference.metadataPath);
+    const dependencySelected = reference.frameworks.some((framework) => (framework.usageClosure ?? framework.usage).some((dependency) =>
+      selected.get(dependency.port)?.has(dependency.component)));
+    if (directPath || dependencySelected) {
+      addComponent(state, owner, [reference.evidence.port], 'referenced pattern example evidence: ' + reference.id, directPath ?? null);
+      // React implementation changes need its executable evidence, not an
+      // unrelated Native Web renderer check. Changes to the reference do need docs.
+      if (directPath) addEvidence(state, 'docs', 'referenced pattern example changed', directPath);
+    }
+  }
 }
 
 function classifyPath(state, discovery, filePath) {

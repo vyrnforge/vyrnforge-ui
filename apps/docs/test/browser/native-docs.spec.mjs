@@ -1,4 +1,4 @@
-import { readFileSync } from 'node:fs';
+import { existsSync, readFileSync } from 'node:fs';
 import axeCore from 'axe-core';
 import { test, expect } from '@playwright/test';
 
@@ -209,6 +209,21 @@ test('agreed Layer 1 Typography and Media members publish complete Native Web gu
   expect(errors, errors.join('\n')).toEqual([]);
 });
 
+test('settings navigation guide is discoverable without a synthetic public API', async ({ page }) => {
+  const pattern = manifest.patternCatalog.find((entry) => entry.slug === 'settings-navigation');
+  expect(pattern).toMatchObject({ showcase: true, api: false, publicEntrypoints: [], guideOnly: true, exampleFrameworks: ['react'] });
+  expect(existsSync('dist/docs/next/native-web/api/patterns/settings-navigation/index.html')).toBe(false);
+  expect(manifest.patternApi.some((entry) => entry.slug === 'api/patterns/settings-navigation/')).toBe(false);
+  await page.goto('/next/native-web/patterns/');
+  await page.getByRole('link', { name: /Settings navigation/ }).first().click();
+  await expect(page.getByRole('heading', { level: 1, name: 'Settings navigation' })).toBeVisible();
+  await expect(page.getByText('Guide only.', { exact: false })).toBeVisible();
+  await expect(page.getByRole('link', { name: 'app-shell/settings-navigation' })).toHaveAttribute('href', /examples\/settings-navigation\/react.tsx$/);
+  await expect(page.getByRole('link', { name: /Settings navigation API/ })).toHaveCount(0);
+  await page.locator('[data-vf-docs-search]').fill('settings navigation');
+  await expect(page.locator('[data-vf-docs-search-results]').getByRole('link', { name: /Settings navigation/ })).toBeVisible();
+});
+
 test('Loading is documented as a Pattern rather than a component while preserving its public Web stylesheet', async ({ page }) => {
   const errors = collectPageErrors(page);
   const loading = loadingPatternEntry();
@@ -391,7 +406,6 @@ test('Native shell reflows at 320 CSS pixels and exposes responsive navigation',
   await expectNoAccessibilityViolations(page);
   expect(errors, errors.join('\n')).toEqual([]);
 });
-
 
 test('C1 responsive navigation transfers only disappearing focus and resets disclosure', async ({ page }) => {
   await page.setViewportSize({ width: 1280, height: 800 });

@@ -85,11 +85,65 @@ function App() {
   const [route, setRoute] = React.useState<Route | 'not-found'>(initial.route);
   const [profileTab, setProfileTab] = React.useState<ProfileTab>(initial.profileTab);
   const [navigationOpen, setNavigationOpen] = React.useState(false);
+  const [narrow, setNarrow] = React.useState(() => window.matchMedia('(max-width: 48rem)').matches);
   const [displayNameDraft, setDisplayNameDraft] = React.useState('Avery Example');
   const [savedDisplayName, setSavedDisplayName] = React.useState('Avery Example');
   const [profileMessage, setProfileMessage] = React.useState('No unsaved profile changes.');
   const mainRef = React.useRef<HTMLElement>(null);
+  const railRef = React.useRef<HTMLElement>(null);
+  const triggerRef = React.useRef<HTMLButtonElement>(null);
+  const responsiveFocus = React.useRef<'trigger' | 'destination' | null>(null);
   const focusAfterRoute = React.useRef(false);
+
+  const focusDestination = React.useCallback(() => {
+    const rail = railRef.current;
+    const links = [...(rail?.querySelectorAll<HTMLAnchorElement>('a[href]') ?? [])];
+    const destination = links.find(link => link.getAttribute('aria-current') === 'page') ?? links[0] ?? mainRef.current;
+    destination?.focus();
+    if (document.activeElement !== destination) mainRef.current?.focus();
+  }, []);
+
+  React.useLayoutEffect(() => {
+    const media = window.matchMedia('(max-width: 48rem)');
+    const drawer = document.getElementById('settings-navigation-drawer') as HTMLDialogElement;
+    const syncViewport = () => {
+      const active = document.activeElement;
+      if (media.matches) {
+        responsiveFocus.current = railRef.current?.contains(active) ? 'trigger' : null;
+      } else {
+        responsiveFocus.current = drawer.open || active === triggerRef.current ? 'destination' : null;
+        setNavigationOpen(false);
+      }
+      setNarrow(media.matches);
+    };
+    const afterDrawerClose = () => {
+      if (!media.matches && responsiveFocus.current === 'destination') {
+        responsiveFocus.current = null;
+        focusDestination();
+      }
+    };
+    media.addEventListener('change', syncViewport);
+    drawer.addEventListener('close', afterDrawerClose);
+    return () => {
+      media.removeEventListener('change', syncViewport);
+      drawer.removeEventListener('close', afterDrawerClose);
+    };
+  }, [focusDestination]);
+
+  React.useLayoutEffect(() => {
+    if (responsiveFocus.current === 'trigger' && narrow) {
+      responsiveFocus.current = null;
+      triggerRef.current?.focus();
+    } else if (responsiveFocus.current === 'destination' && !narrow) {
+      const drawer = document.getElementById('settings-navigation-drawer') as HTMLDialogElement;
+      // A modal makes the rail inert until native close. The close listener
+      // completes the transfer rather than fighting the Drawer focus contract.
+      if (!drawer.open) {
+        responsiveFocus.current = null;
+        focusDestination();
+      }
+    }
+  }, [narrow, focusDestination]);
 
   React.useEffect(() => {
     const onPopState = () => {
@@ -152,6 +206,8 @@ function App() {
         <strong>Account settings</strong>
         <Button
           className="settings-nav-trigger"
+          ref={triggerRef}
+          hidden={!narrow}
           type="button"
           variant="secondary"
           aria-controls="settings-navigation-drawer"
@@ -162,7 +218,7 @@ function App() {
         </Button>
       </AppShellHeader>
       <AppShellBody>
-        <AppShellNavigation className="settings-persistent-navigation">
+        <AppShellNavigation ref={railRef} hidden={narrow} className="settings-persistent-navigation">
           <SettingsNavigation route={route} profileTab={profileTab} onNavigate={navigate} />
         </AppShellNavigation>
         <AppShellMain ref={mainRef} tabIndex={-1}>

@@ -48,3 +48,35 @@ test('Product Graph infrastructure changes fail closed to broad evidence', () =>
   assert.equal(impact.selectors.docsRequired, true);
   assert.equal(impact.selectors.releaseRequired, true);
 });
+
+
+test('settings evidence follows actual referenced example dependencies, not unrelated ports', () => {
+  const graph = createSemanticImpact(['product/patterns/settings-navigation/docs/index.md']);
+  assert.ok(graph.selectors.docsRequired);
+  assert.ok(!graph.browserScopes.some((scope) => scope.components.includes('app-shell')));
+  const drawer = createSemanticImpact(['product/components/composite-widgets/transient-surfaces/drawer/react/index.ts']);
+  assert.ok(drawer.browserScopes.some((scope) => scope.port === 'react' && scope.components.includes('app-shell')));
+  assert.equal(drawer.selectors.docsRequired, false);
+  const source = createSemanticImpact(['product/components/application-structures/app-shell/examples/settings-navigation/react.tsx']);
+  assert.ok(source.browserScopes.some((scope) => scope.port === 'react' && scope.components.includes('app-shell')));
+  assert.ok(source.selectors.docsRequired);
+  const shared = createSemanticImpact(['product/capabilities/collection-navigation/core/index.ts']);
+  assert.ok(shared.browserScopes.some((scope) => scope.port === 'react' && scope.components.includes('app-shell')));
+  const unrelated = createSemanticImpact(['product/components/interactive-controls/button/vue/index.ts']);
+  assert.ok(!unrelated.browserScopes.some((scope) => scope.port === 'react' && scope.components.includes('app-shell')));
+});
+
+
+test('settings task selects transitive Dialog React and Web CSS changes without unrelated port fanout', () => {
+  for (const path of [
+    'product/components/composite-widgets/transient-surfaces/dialog/react/index.ts',
+    'product/components/composite-widgets/transient-surfaces/dialog/web/dialog.css',
+  ]) {
+    const impact = createSemanticImpact([path]);
+    assert.ok(impact.browserScopes.some((scope) => scope.port === 'react' && scope.components.includes('app-shell')), path);
+    assert.equal(impact.repositoryWide, false);
+    assert.deepEqual(impact.unknownPaths, []);
+  }
+  const unrelated = createSemanticImpact(['product/components/composite-widgets/transient-surfaces/dialog/vue/index.ts']);
+  assert.ok(!unrelated.browserScopes.some((scope) => scope.port === 'react' && scope.components.includes('app-shell')));
+});

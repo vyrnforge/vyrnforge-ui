@@ -2,6 +2,7 @@ import { cp, mkdir, readFile, rm, stat, writeFile } from 'node:fs/promises';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { compileNativeDocumentation } from '../../tooling/docs/native-documentation.mjs';
+import { documentationFrameworks } from '../../tooling/docs/framework-documentation.mjs';
 
 const root = path.resolve(fileURLToPath(new URL('../../', import.meta.url)));
 const outRoot = path.join(root, 'dist/docs');
@@ -357,7 +358,7 @@ function renderHome() {
         <p>Reusable task and feedback guidance composed from foundations and components.</p>
       </div>
       ${cardList([
-        { title: 'Browse patterns', route: 'patterns/', meta: `${model.patternCatalog.length} public pattern${model.patternCatalog.length === 1 ? '' : 's'}` },
+        { title: 'Browse patterns', route: 'patterns/', meta: `${model.patternCatalog.length} pattern${model.patternCatalog.length === 1 ? '' : 's'}` },
         { title: 'Patterns API', route: 'api/patterns/', meta: `${model.patternApiPages.length} public pattern entr${model.patternApiPages.length === 1 ? 'y' : 'ies'}` },
       ], currentPageDirectory)}
     </section>` : ''}`,
@@ -422,7 +423,7 @@ function renderPatternsIndex() {
       ${cardList(model.patternCatalog.map((pattern) => ({
         title: pattern.title,
         route: componentDestination(pattern),
-        meta: pattern.showcaseAvailable ? 'Guide + API' : 'API reference',
+        meta: pattern.guideOnly ? 'Guide only' : pattern.showcaseAvailable ? 'Guide + API' : 'API reference',
       })), currentPageDirectory)}
     </section>`,
   });
@@ -562,6 +563,7 @@ function renderFrameworkContent(content, uniqueId) {
 }
 
 function renderComponent(page) {
+  if (page.guideOnly) return renderPatternGuide(page);
   const currentPageDirectory = pageDirectory(page.route);
   const usedIds = new Set();
   const uniqueId = (heading) => {
@@ -645,6 +647,25 @@ function renderComponent(page) {
         </section>
       </article>
     </div>`,
+  });
+}
+
+function renderPatternGuide(page) {
+  const currentPageDirectory = pageDirectory(page.route);
+  const sections = page.content.sections.map((section) =>
+    '<section><h2>' + escapeHtml(section.heading) + '</h2>' + renderBlocks(section.blocks) + '</section>').join('');
+  const examples = page.exampleReferences.flatMap((reference) => reference.frameworks.map((adaptation) =>
+    '<li>' + escapeHtml(reference.title) + ' — ' + escapeHtml(documentationFrameworks[adaptation.framework].label) +
+    ' example (repository source): <a data-vf-link href="https://github.com/vyrnforge/vyrnforge-ui/blob/main/' +
+    escapeHtml(adaptation.sourcePath) + '">' + escapeHtml(reference.id) + '</a></li>')).join('');
+  return shell({
+    route: page.route,
+    title: page.title,
+    description: page.title + ' task composition guide',
+    content: renderBreadcrumbs(page, currentPageDirectory, 'Patterns') +
+      '<article class="vf-docs-article" data-vf-docs-pattern="' + escapeHtml(page.id) + '">' +
+      '<h1>' + escapeHtml(page.content.title) + '</h1>' + renderBlocks(page.content.intro) + sections +
+      '<section><h2>Referenced examples</h2><p>Guide only. Referenced examples run in repository browser fixtures in the indicated framework; this Native Web page does not execute them or provide a pattern API.</p><ul>' + examples + '</ul></section></article>',
   });
 }
 
@@ -746,6 +767,7 @@ const manifest = {
     showcase: pattern.showcaseAvailable,
     api: pattern.apiAvailable,
     publicEntrypoints: pattern.publicEntrypoints,
+    ...(pattern.guideOnly ? { guideOnly: true, exampleFrameworks: [...new Set(pattern.exampleReferences.flatMap((reference) => reference.frameworks.map((adaptation) => adaptation.framework)))] } : {}),
   })),
   pages: model.showcasePages.map((page) => ({
     slug: page.route,

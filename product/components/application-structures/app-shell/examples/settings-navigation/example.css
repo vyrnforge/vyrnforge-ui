@@ -6,8 +6,9 @@
   flex-wrap: wrap;
 }
 
-.settings-nav-trigger {
-  display: none;
+.settings-nav-trigger[hidden],
+.settings-persistent-navigation[hidden] {
+  display: none !important;
 }
 
 .settings-profile-form {
@@ -23,12 +24,3 @@
   flex-wrap: wrap;
 }
 
-@media (max-width: 48rem) {
-  .settings-persistent-navigation {
-    display: none;
-  }
-
-  .settings-nav-trigger {
-    display: inline-flex;
-  }
-}

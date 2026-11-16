@@ -268,3 +268,131 @@ test('Elemental-primitives responsibility families preserve deliberate Native We
 
   assert.deepEqual(productGraphProblems(), []);
 });
+
+
+test('settings pattern is documentation-only and references existing React evidence', () => {
+  const graph = discoverProductGraph();
+  const pattern = graph.patterns.find((entry) => entry.id === 'pattern:settings-navigation');
+  assert.ok(pattern.documentationAvailable);
+  assert.deepEqual(pattern.surfaces, {});
+  assert.deepEqual(pattern.publicEntrypoints, []);
+  assert.deepEqual(pattern.packages, []);
+  const reference = pattern.exampleReferences[0];
+  assert.equal(reference.id, 'app-shell/settings-navigation');
+  assert.equal(reference.owner, 'component:app-shell');
+  assert.deepEqual(reference.frameworks.map((entry) => entry.framework), ['react']);
+  assert.equal(reference.evidence.port, 'react');
+  assert.equal(reference.evidence.fixtureUrl, '/components/app-shell/settings-navigation-react.html');
+  assert.equal(reference.evidence.testName, 'settings navigation preserves deep links, route history, title and focus while local state remains local');
+  assert.deepEqual([...new Set(reference.frameworks[0].usage.map((entry) => entry.component))].sort(), ['app-shell', 'button', 'drawer', 'input', 'side-nav', 'tabs']);
+  assert.ok(graph.patterns.find((entry) => entry.id === 'pattern:loading').publicEntrypoints.includes('@vyrnforge/web/styles/loading.css'));
+  const closure = reference.frameworks[0].usageClosure;
+  assert.ok(closure.some((edge) => edge.component === 'dialog' && edge.port === 'react'));
+  assert.ok(closure.some((edge) => edge.component === 'dialog' && edge.port === 'web'));
+  assert.ok(!closure.some((edge) => edge.port === 'vue'));
+});
+
+test('pattern metadata identity mismatch fails closed', () => {
+  const root = mkdtempSync(path.join(os.tmpdir(), 'vf-pattern-id-'));
+  writer(root)('product/patterns/other/pattern.json', '{"id":"loading"}');
+  assert.throws(() => discoverProductGraph(root), /Pattern metadata identity mismatch/);
+});
+
+
+function referenceFixture() {
+  const root = mkdtempSync(path.join(os.tmpdir(), 'vf-pattern-reference-'));
+  const write = writer(root);
+  const component = 'product/components/interactive-controls/button/';
+  const example = component + 'examples/task/';
+  const pattern = 'product/patterns/button/';
+  write('packages/react/package.json', JSON.stringify({ name: '@vyrnforge/react', exports: { './button': './dist/components/button/index.js' } }));
+  write('packages/web/package.json', JSON.stringify({ name: '@vyrnforge/web', exports: { './styles/button.css': './dist/components/button/button.css' } }));
+  write(component + 'component.json', '{"id":"button","name":"Button"}');
+  write(component + 'react/index.ts', 'export const Button = null;');
+  write(component + 'web/button.css', '[data-vf-button] {}');
+  write(example + 'example.json', '{"id":"button/task","title":"Task","frameworks":{"react":{"source":"react.tsx"}}}');
+  write(example + 'react.tsx', "import { Button } from '@vyrnforge/react/button';");
+  write(component + 'test/browser/fixtures.mjs', "const examples = ['task'];");
+  write(component + 'test/browser/tests/task.spec.mjs', "test('existing task', () => { const url = '/components/button/task-react.html'; });");
+  const ref = { id: 'button/task', owner: 'component:button', evidence: {
+    port: 'react', fixture: component + 'test/browser/fixtures.mjs', spec: component + 'test/browser/tests/task.spec.mjs',
+    fixtureUrl: '/components/button/task-react.html', testName: 'existing task',
+  } };
+  const metadata = (refs = [ref]) => write(pattern + 'pattern.json', JSON.stringify({ id: 'button', exampleReferences: refs }));
+  metadata();
+  write(pattern + 'docs/index.md', '# Button task\n');
+  return { root, write, metadata, ref, example };
+}
+
+test('documentation-only pattern cannot inherit same-named component exports', () => {
+  const { root } = referenceFixture();
+  const graph = discoverProductGraph(root);
+  assert.deepEqual(graph.patterns[0].publicEntrypoints, []);
+  assert.deepEqual(graph.patterns[0].surfaces, {});
+  assert.equal(graph.patterns[0].documentationAvailable, true);
+  assert.deepEqual(graph.components[0].surfaces.web.publicEntrypoints, ['@vyrnforge/web/styles/button.css']);
+});
+
+test('pattern references reject missing, duplicate, cyclic or unsupported source and evidence declarations', () => {
+  {
+    const { root, metadata, ref } = referenceFixture();
+    metadata([ref, ref]);
+    assert.throws(() => discoverProductGraph(root), /duplicate pattern example/);
+  }
+  {
+    const { root, metadata, ref } = referenceFixture();
+    metadata([{ ...ref, id: 'button/missing' }]);
+    assert.throws(() => discoverProductGraph(root), /Missing pattern example manifest/);
+  }
+  {
+    const { root, metadata, ref } = referenceFixture();
+    metadata([{ ...ref, owner: 'pattern:button' }]);
+    assert.throws(() => discoverProductGraph(root), /Invalid pattern example owner/);
+  }
+  {
+    const { root, write, example } = referenceFixture();
+    write(example + 'example.json', '{"id":"button/task","frameworks":{"other":{"source":"react.tsx"}}}');
+    assert.throws(() => discoverProductGraph(root), /Unsupported example framework/);
+  }
+  {
+    const { root, write, example } = referenceFixture();
+    write(example + 'example.json', '{"id":"button/task","frameworks":{"react":{"source":"missing.tsx"}}}');
+    assert.throws(() => discoverProductGraph(root), /Missing or invalid example source/);
+  }
+  {
+    const { root, write, example } = referenceFixture();
+    write(example + 'react.tsx', "import { Missing } from '@vyrnforge/react/missing';");
+    assert.throws(() => discoverProductGraph(root), /Unresolved pattern example dependency/);
+  }
+  {
+    const { root, metadata, ref } = referenceFixture();
+    metadata([{ ...ref, evidence: { ...ref.evidence, testName: 'nonexistent test' } }]);
+    assert.throws(() => discoverProductGraph(root), /Unresolved pattern fixture or test identity/);
+  }
+});
+
+
+test('pattern usage follows projected sibling imports recursively and rejects a missing target', () => {
+  const { root, write } = referenceFixture();
+  const button = 'product/components/interactive-controls/button/';
+  const drawer = 'product/components/composite-widgets/transient-surfaces/drawer/';
+  const dialog = 'product/components/composite-widgets/transient-surfaces/dialog/';
+  write('packages/react/package.json', JSON.stringify({ name: '@vyrnforge/react', exports: {
+    './button': './dist/components/button/index.js',
+    './drawer': './dist/components/drawer/index.js',
+    './dialog': './dist/components/dialog/index.js',
+  } }));
+  write(drawer + 'component.json', '{"id":"drawer","name":"Drawer"}');
+  write(dialog + 'component.json', '{"id":"dialog","name":"Dialog"}');
+  write(button + 'react/index.ts', "export { Drawer as Button } from '../drawer/index.js';");
+  write(drawer + 'react/index.ts', "export { Dialog as Drawer } from '../dialog/index.js';");
+  write(dialog + 'react/index.ts', 'export const Dialog = null;');
+  const graph = discoverProductGraph(root);
+  assert.deepEqual(graph.patterns[0].exampleReferences[0].frameworks[0].usageClosure, [
+    { component: 'button', port: 'react' },
+    { component: 'dialog', port: 'react' },
+    { component: 'drawer', port: 'react' },
+  ]);
+  write(drawer + 'react/index.ts', "export { Dialog as Drawer } from '../dialog/missing.js';");
+  assert.throws(() => discoverProductGraph(root), /Unresolved pattern usage source/);
+});

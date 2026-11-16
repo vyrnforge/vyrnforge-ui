@@ -51,6 +51,7 @@ export function compileNativeDocumentation(root) {
 
   const shellStyles = nativeShellStyleSpecifiers.map((specifier) => resolvePublicStyleAsset(webPackage, specifier));
   const showcasePages = shared.showcasePages.map((page) => {
+    if (page.guideOnly) return { ...page, content: page.sharedContent, sourcePath: page.sharedSourcePath, styleSpecifier: null, styleAssetPath: null };
     const styleSpecifier = `${shared.packageName}/styles/${page.id}.css`;
     if (!page.publicEntrypoints.includes(styleSpecifier)) {
       throw new Error(`${page.id} Native Web showcase requires public entrypoint ${styleSpecifier}`);
