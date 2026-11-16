@@ -8,12 +8,13 @@ test('Angular SideNav preserves authored state through hydration and convenience
   page.on('pageerror', error => errors.push(error.message));
   await page.goto('/components/side-nav/angular.html');
   await expect(page.locator('html')).toHaveAttribute('data-vf-side-nav-hydrated', 'true');
+  const soft = expect.configure({ soft: true, timeout: 1000 });
   const state = async (id, expected) => {
     const link = page.locator('#' + id);
-    if (expected === null) await expect.poll(() => link.getAttribute('aria-current')).toBeNull();
-    else await expect.soft(link).toHaveAttribute('aria-current', expected);
-    await expect.poll(() => link.evaluate(node => getComputedStyle(node).borderInlineStartWidth)).toBe(expected === 'page' ? '3px' : '1px');
-    await expect.soft(link).toHaveAttribute('href', '#destination');
+    if (expected === null) await soft.poll(() => link.getAttribute('aria-current')).toBeNull();
+    else await soft(link).toHaveAttribute('aria-current', expected);
+    await soft.poll(() => link.evaluate(node => getComputedStyle(node).borderInlineStartWidth)).toBe(expected === 'page' ? '3px' : '1px');
+    await soft(link).toHaveAttribute('href', '#destination');
   };
   const press = name => page.getByRole('button', { name, exact: true }).click();
   for (const [id, value] of [
@@ -64,4 +65,31 @@ test('Angular SideNav remains an authored native link after hydration', async ({
   await expect(link).toBeFocused();
   await page.keyboard.press('Enter');
   await expect(page).toHaveURL(/#destination$/);
+});
+
+test('Angular SideNav native modifier and middle clicks are not cancelled', async ({ page }) => {
+  test.skip(port !== 'angular', 'Angular public directive regression');
+  await page.goto('/components/side-nav/angular.html');
+  await expect(page.locator('html')).toHaveAttribute('data-vf-side-nav-hydrated', 'true');
+  const link = page.locator('#bound');
+  await page.evaluate(() => {
+    window.sideNavLinkEvents = [];
+    for (const name of ['click', 'auxclick']) {
+      document.addEventListener(name, event => {
+        if (event.target.closest?.('#bound')) {
+          window.sideNavLinkEvents.push({
+            name, button: event.button, ctrl: event.ctrlKey, meta: event.metaKey,
+            cancelled: event.defaultPrevented,
+          });
+          // Prevent the test harness itself from opening uncontrolled tabs.
+          event.preventDefault();
+        }
+      });
+    }
+  });
+  await link.click({ modifiers: ['ControlOrMeta'] });
+  await link.click({ button: 'middle' });
+  const events = await page.evaluate(() => window.sideNavLinkEvents);
+  expect(events.some(event => event.name === 'click' && (event.ctrl || event.meta) && !event.cancelled)).toBe(true);
+  expect(events.some(event => event.name === 'auxclick' && event.button === 1 && !event.cancelled)).toBe(true);
 });
