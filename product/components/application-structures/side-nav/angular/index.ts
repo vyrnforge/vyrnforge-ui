@@ -4,4 +4,4 @@ import { Directive, input } from '@angular/core';
 @Directive({selector:'[vfSideNavGroupLabel]',standalone:true,host:{'data-vf-side-nav-group-label':''}}) export class VfSideNavGroupLabelDirective {}
 @Directive({selector:'ul[vfSideNavList]',standalone:true,host:{'data-vf-side-nav-list':''}}) export class VfSideNavListDirective {}
 @Directive({selector:'li[vfSideNavItem]',standalone:true,host:{'data-vf-side-nav-item':''}}) export class VfSideNavItemDirective {}
-@Directive({selector:'a[vfSideNavLink]',standalone:true,host:{'data-vf-side-nav-link':'','[attr.data-vf-current]':'vfSideNavCurrent() ? "true" : null','[attr.aria-current]':'vfSideNavCurrent() ? "page" : null'}}) export class VfSideNavLinkDirective { readonly vfSideNavCurrent=input(false); }
+@Directive({selector:'a[vfSideNavLink]',standalone:true,host:{'data-vf-side-nav-link':'','[attr.data-vf-current]':'vfSideNavCurrent() ? "true" : null','[attr.aria-current]':'vfSideNavCurrent() ? "page" : (authoredCurrent() ?? null)'}}) export class VfSideNavLinkDirective { readonly authoredCurrent=input<string | null | undefined>(null, { alias: 'aria-current' }); readonly vfSideNavCurrent=input(false); }

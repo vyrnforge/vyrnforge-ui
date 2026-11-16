@@ -3157,9 +3157,16 @@ export class VfSideNavItemDirective {
 // @public (undocumented)
 export class VfSideNavLinkDirective {
     // (undocumented)
+    readonly authoredCurrent: InputSignal<string | null | undefined>;
+    // (undocumented)
     readonly vfSideNavCurrent: InputSignal<boolean>;
     // (undocumented)
     static ɵdir: i0.ɵɵDirectiveDeclaration<VfSideNavLinkDirective, "a[vfSideNavLink]", never, {
+        "authoredCurrent": {
+            "alias": "aria-current";
+            "required": false;
+            "isSignal": true;
+        };
         "vfSideNavCurrent": {
             "alias": "vfSideNavCurrent";
             "required": false;
