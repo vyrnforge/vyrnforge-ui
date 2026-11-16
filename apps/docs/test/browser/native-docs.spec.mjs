@@ -378,6 +378,48 @@ test('Button showcase composes shared guidance, Native adaptation, examples, ref
   expect(errors, errors.join('\n')).toEqual([]);
 });
 
+test('C2 approved docs geometry fills wide chrome without stretching reading content', async ({ page }) => {
+  for (const width of [1920, 2560]) {
+    await page.setViewportSize({ width, height: 1000 });
+    for (const [route, readableSelector] of [
+      ['/next/native-web/components/button/', '.vf-docs-content-grid'],
+      ['/next/native-web/', '.vf-docs-main > .vf-docs-catalog'],
+    ]) {
+      await gotoWithCleanDocsState(page, route);
+      const layout = await page.evaluate((selector) => {
+        const rect = (element) => {
+          const bounds = document.querySelector(element)?.getBoundingClientRect();
+          return bounds ? { x: bounds.x, width: bounds.width } : null;
+        };
+        return {
+          header: rect('.vf-docs-header-inner'),
+          body: rect('.vf-docs-app-body'),
+          rail: rect('.vf-docs-navigation-region'),
+          main: rect('.vf-docs-main'),
+          footer: rect('.vf-docs-footer'),
+          reading: rect(selector),
+          rem: parseFloat(getComputedStyle(document.documentElement).fontSize),
+          scrollWidth: document.documentElement.scrollWidth,
+          clientWidth: document.documentElement.clientWidth,
+        };
+      }, readableSelector);
+      for (const selector of ['header', 'body', 'footer']) {
+        expect(layout[selector], selector + ' missing').toBeTruthy();
+        expect(Math.abs(layout[selector].x), selector + ' must start at the viewport edge').toBeLessThanOrEqual(1);
+        expect(Math.abs(layout[selector].width - width), selector + ' must fill the viewport').toBeLessThanOrEqual(1);
+      }
+      expect(Math.abs(layout.rail.width - 17 * layout.rem)).toBeLessThanOrEqual(1);
+      expect(layout.reading).toBeTruthy();
+      expect(layout.reading.width).toBeLessThanOrEqual(70 * layout.rem + 1);
+      expect(Math.abs(
+        layout.reading.x + layout.reading.width / 2 -
+        (layout.main.x + layout.main.width / 2)
+      ), 'reading measure must be centered inside main, not the shell').toBeLessThanOrEqual(2);
+      expect(layout.scrollWidth).toBeLessThanOrEqual(layout.clientWidth + 1);
+    }
+  }
+});
+
 test('Native shell reflows at 320 CSS pixels and exposes responsive navigation', async ({ page }, testInfo) => {
   const errors = collectPageErrors(page);
   await page.setViewportSize({ width: 320, height: 720 });
