@@ -7,6 +7,8 @@ import { build } from 'esbuild';
 
 export const browserFixture = {
   component: 'app-shell',
+  // The existing React recovery workflow opens Input's profile form fixture.
+  dependencies: { react: ['input'] },
   prepare: async ({ port }) => {
     const root = process.cwd();
     const dir = path.join(root, 'dist/browser-fixtures/components/app-shell');

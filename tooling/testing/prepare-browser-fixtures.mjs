@@ -3,7 +3,8 @@ import path from 'node:path';
 import process from 'node:process';
 import { browserPortNames } from '../package-model.mjs';
 import { discoverProductGraph } from '../product/discover-product-graph.mjs';
-import { loadBrowserFixtureModule, prepareBrowserFixture } from './browser-fixtures.mjs';
+import { loadBrowserFixtureModule, prepareBrowserFixture, validateBrowserFixtureModule } from './browser-fixtures.mjs';
+import { resolveBrowserFixtureScope } from './browser-fixture-scope.mjs';
 
 const port = process.env.VF_COMPONENT_PORT ?? process.argv[2] ?? 'web';
 const selectedComponents = new Set(
@@ -33,26 +34,46 @@ let generatedPages = 0;
 let skippedUnsupported = 0;
 let skippedUnselected = 0;
 
+const entries = new Map();
+const roots = [];
 for (const component of components) {
-  if (selectedComponents.size > 0 && !selectedComponents.has(component.unitId)) {
-    skippedUnselected += 1;
-    continue;
-  }
-
   const fixtureRelativePath = component.facets.test
     ? `${component.facets.test}browser/fixtures.mjs`
     : null;
   if (!fixtureRelativePath) continue;
   const fixturePath = path.join(root, fixtureRelativePath);
   if (!existsSync(fixturePath)) continue;
+  if (component.surfaces[port]) entries.set(component.unitId, { component, fixturePath });
 
-  fixtureModules += 1;
+  if (selectedComponents.size > 0 && !selectedComponents.has(component.unitId)) {
+    skippedUnselected += 1;
+    continue;
+  }
   if (!component.surfaces[port]) {
     skippedUnsupported += 1;
     continue;
   }
+  roots.push(component.unitId);
+}
 
-  const fixtureModule = await loadBrowserFixtureModule(fixturePath);
+const scope = await resolveBrowserFixtureScope({
+  roots,
+  port,
+  load: async (id) => {
+    const entry = entries.get(id);
+    if (!entry) return undefined;
+    const fixtureModule = await loadBrowserFixtureModule(entry.fixturePath);
+    const definition = validateBrowserFixtureModule({
+      fixturePath: entry.fixturePath,
+      fixtureModule,
+      component: id,
+    });
+    return { ...entry, fixtureModule, definition };
+  },
+});
+
+for (const { component, fixturePath, fixtureModule } of scope) {
+  fixtureModules += 1;
   const generated = await prepareBrowserFixture({
     root,
     fixturePath,
@@ -60,7 +81,6 @@ for (const component of components) {
     port,
     component: component.unitId,
   });
-
   if (generated) generatedPages += 1;
   else skippedUnsupported += 1;
 }
@@ -74,6 +94,6 @@ if (fixtureModules === 0 || generatedPages === 0) {
 }
 
 console.log(
-  `Prepared ${generatedPages} "${port}" browser fixture page(s) from ${fixtureModules} selected product fixture module(s); ` +
-    `skipped ${skippedUnsupported} unsupported and ${skippedUnselected} unselected fixture(s).`,
+  `Prepared ${generatedPages} "${port}" browser fixture page(s) from ${fixtureModules} product fixture module(s) (including dependencies); ` +
+    `skipped ${skippedUnsupported} unsupported and ${skippedUnselected} unselected root fixture(s).`,
 );
