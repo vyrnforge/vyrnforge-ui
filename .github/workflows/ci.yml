@@ -12,7 +12,7 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 20
     steps:
-      - uses: actions/checkout@3d3c42e5aac5ba805825825da76410c181273ba90b1
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
         with:
           ref: c4b6f7ef9196ed79c67a0fa432d3329643cf7c39
           fetch-depth: 0
@@ -21,7 +21,7 @@ jobs:
           test "$(git rev-parse HEAD)" = "c4b6f7ef9196ed79c67a0fa432d3329643cf7c39"
           test -z "$(git status --porcelain)"
           git log -1 --format='%H %s'
-      - uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1
+      - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020
         with:
           node-version-file: .node-version
           package-manager-cache: false
@@ -88,7 +88,7 @@ jobs:
       VF_COMPONENT_PORT: react
       VF_COMPONENTS: app-shell
     steps:
-      - uses: actions/checkout@3d3c42e5aac5ba805825825da76410c181273ba90b1
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
         with:
           ref: ce611ac031528d007e0063aa3ada63e0d3f8c7ce
       - name: Verify original regression-only revision
@@ -96,7 +96,7 @@ jobs:
           test "$(git rev-parse HEAD)" = "ce611ac031528d007e0063aa3ada63e0d3f8c7ce"
           test -z "$(git status --porcelain)"
           git log -1 --format='%H %s'
-      - uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1
+      - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020
         with:
           node-version-file: .node-version
           package-manager-cache: false
@@ -106,7 +106,7 @@ jobs:
       - run: pnpm exec playwright install --with-deps chromium
       - name: Execute original responsive regression
         run: pnpm exec playwright test --project=chromium --grep 'settings navigation preserves responsive focus and unsaved drafts'
-      - uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9
+      - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
         if: always()
         with:
           name: d2-original-responsive-regression
