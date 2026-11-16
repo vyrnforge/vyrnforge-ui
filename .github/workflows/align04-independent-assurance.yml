@@ -1,0 +1,142 @@
+name: ALIGN-04 Corrected Candidate Retest
+
+on:
+  push:
+    branches:
+      - 'evidence/align04-db3cf25-retest-20261116'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: align04-independent-db3cf25
+  cancel-in-progress: true
+
+jobs:
+  plan:
+    name: semantic-impact
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    outputs:
+      browser_ports: ${{ steps.impact.outputs.browser_ports }}
+      browser_scopes: ${{ steps.impact.outputs.browser_scopes }}
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
+        with:
+          ref: 'db3cf25c8a69667121544eaed695e54a93e49e9d'
+          fetch-depth: 0
+      - name: Verify exact candidate checkout
+        run: test "$(git rev-parse HEAD)" = "db3cf25c8a69667121544eaed695e54a93e49e9d"
+      - uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7
+        with:
+          node-version-file: .node-version
+          package-manager-cache: false
+      - name: Independent red-green ownership reproduction and actual graph consumers
+        run: |
+          node --input-type=module <<'QA'
+          import assert from 'node:assert/strict';
+          import { mkdtempSync, mkdirSync, writeFileSync, rmSync, existsSync } from 'node:fs';
+          import { execFileSync } from 'node:child_process';
+          import { tmpdir } from 'node:os';
+          import path from 'node:path';
+          import { pathToFileURL } from 'node:url';
+          import { discoverComponentRoots as fixed } from './tooling/product/component-paths.mjs';
+          import { discoverProductGraph } from './tooling/product/discover-product-graph.mjs';
+          import { discoverProductUnits } from './tooling/testing/discover-product-units-base.mjs';
+          const old = '8740bf60b7e9c13ad7829cf42f45381658eb8d1b';
+          const root = mkdtempSync(path.join(tmpdir(), 'vf-qa-ac06-'));
+          const oldFile = path.join(root, 'old-discovery.mjs');
+          const sourcePath = 'tooling/product/component-paths.mjs';
+          const actualRoot = process.cwd();
+          const invalid = path.join(actualRoot, 'product/components/component.json');
+          const diagnostic = (r) => ({message: 'Ownership grouping must not be a component: ' + path.join(r, 'product/components')});
+          const write = (r, p, v) => { const f = path.join(r,p); mkdirSync(path.dirname(f), {recursive:true}); writeFileSync(f,v); };
+          try {
+            writeFileSync(oldFile, execFileSync('git',['show',old+':'+sourcePath]));
+            const {discoverComponentRoots: previous} = await import(pathToFileURL(oldFile));
+            const ids = (f,r) => [...f(r).keys()];
+            assert.deepEqual(ids(fixed,root),[]);
+            write(root,'product/components/interactive-controls/button/component.json','{"id":"button"}');
+            write(root,'product/components/elemental-primitives/typography/text/component.json','{"id":"text"}');
+            assert.deepEqual(ids(fixed,root),['text','button']);
+            write(root,'product/components/component.json','{"id":"button"}');
+            assert.deepEqual(ids(previous,root),['text','button']);
+            console.log('RED confirmed: previously rejected revision silently accepts collection-root metadata alongside valid owners');
+            assert.throws(()=>fixed(root),diagnostic(root));
+            console.log('GREEN: corrected revision rejects collection-root metadata, exact grouping diagnostic');
+            write(root,'product/components/component.json','{bad json');
+            assert.throws(()=>fixed(root),diagnostic(root));
+            rmSync(path.join(root,'product/components/component.json'));
+            assert.deepEqual(ids(fixed,root),['text','button']);
+            const rootOnly=path.join(root,'root-only');
+            write(rootOnly,'product/components/component.json','{"id":"button"}');
+            assert.throws(()=>fixed(rootOnly),diagnostic(rootOnly));
+            write(root,'product/components/interactive-controls/component.json','{}');
+            assert.throws(()=>fixed(root),/Ownership grouping must not be a component/);
+            rmSync(path.join(root,'product/components/interactive-controls/component.json'));
+            write(root,'product/components/elemental-primitives/typography/component.json','{}');
+            assert.throws(()=>fixed(root),/Ownership grouping must not be a component/);
+            rmSync(path.join(root,'product/components/elemental-primitives/typography/component.json'));
+            assert.equal(fixed(actualRoot).size,52);
+            const beforeGraph=discoverProductGraph(actualRoot);
+            const beforeUnits=discoverProductUnits(actualRoot);
+            assert.equal(beforeGraph.units.filter(u=>u.kind==='component').length,52);
+            assert.ok(!existsSync(invalid),'unexpected tracked metadata');
+            try {
+              writeFileSync(invalid,'{"id":"button"}',{flag:'wx'});
+              assert.throws(()=>discoverProductGraph(actualRoot),diagnostic(actualRoot));
+              assert.throws(()=>discoverProductUnits(actualRoot),diagnostic(actualRoot));
+              console.log('GREEN: actual Product Graph and test/build unit discovery reject invalid collection metadata');
+            } finally { rmSync(invalid,{force:true}); }
+            assert.deepEqual(discoverProductGraph(actualRoot),beforeGraph);
+            assert.deepEqual(discoverProductUnits(actualRoot),beforeUnits);
+            console.log('GREEN: absent root, valid direct/family owners, invalid-only/malformed root, existing responsibility/family checks, recovery and real 52-owner graph all verified');
+            console.log('AC06 independent red-green retest PASS; Node '+process.version);
+          } finally { rmSync(root,{recursive:true,force:true}); }
+          QA
+          test -z "$(git status --porcelain)"
+      - name: Record scheduled broad semantic impact
+        id: impact
+        run: |
+          mkdir -p test-results
+          node tooling/impact/plan.mjs --mode scheduled --output test-results/semantic-impact.json --github-output "$GITHUB_OUTPUT"
+      - uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7
+        with:
+          name: semantic-impact-align04-${{ github.run_id }}
+          path: test-results/semantic-impact.json
+          if-no-files-found: error
+          retention-days: 14
+
+  full-validation:
+    needs: plan
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
+        with:
+          ref: 'db3cf25c8a69667121544eaed695e54a93e49e9d'
+          fetch-depth: 0
+      - name: Verify exact candidate checkout
+        run: test "$(git rev-parse HEAD)" = "db3cf25c8a69667121544eaed695e54a93e49e9d"
+      - uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7
+        with:
+          node-version-file: .node-version
+          package-manager-cache: false
+      - run: corepack enable
+      - run: pnpm install --frozen-lockfile --ignore-scripts
+      - run: pnpm check
+      - run: pnpm verify:release
+      - run: pnpm verify:packages
+      - run: pnpm build:docs
+
+  browser-matrix:
+    needs: plan
+    uses: ./.github/workflows/_align04-browser-evidence.yml
+    with:
+      scopes_json: ${{ needs.plan.outputs.browser_scopes }}
+      revision: 'db3cf25c8a69667121544eaed695e54a93e49e9d'
+      browser_profile: cross
+      browsers: chromium firefox webkit
+      artifact_suffix: align04-independent
+      retention_days: 14
