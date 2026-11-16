@@ -7,6 +7,8 @@ import { build } from 'esbuild';
 
 export const browserFixture = {
   component: 'app-shell',
+  // The existing React recovery workflow opens Input's profile form fixture.
+  dependencies: { react: ['input'] },
   prepare: async ({ port }) => {
     const root = process.cwd();
     const dir = path.join(root, 'dist/browser-fixtures/components/app-shell');
@@ -26,6 +28,26 @@ export const browserFixture = {
     await writeFile(
       path.join(dir, `${port}.html`),
       `<!doctype html><html lang="en"><head><meta charset="utf-8"><title>App shell browser fixture</title><link rel="stylesheet" href="./app-shell-fixture.css"><style>html,body{margin:0;min-block-size:100%;}</style></head><body><div data-vf-app-shell><header data-vf-app-shell-header>Header</header><div data-vf-app-shell-body><aside data-vf-app-shell-navigation><nav aria-label="Primary"><a href="#main">Home</a></nav></aside><main id="main" data-vf-app-shell-main tabindex="-1"><h1>Home</h1></main></div><footer data-vf-app-shell-footer>Footer</footer></div></body></html>`,
+    );
+
+    // Preserve the historical fixture and application examples. This separate page
+    // exercises the real public AppShell adapter for the selected port.
+    const mount = { web: 'mountWeb', react: 'mountReact', angular: 'mountAngular', vue: 'mountVue', elements: 'mountElements' }[port];
+    await build({
+      stdin: {
+        contents: 'import { ' + mount + ' } from "./optional-navigation.mjs"; await ' + mount + '();',
+        resolveDir: fileURLToPath(new URL('.', import.meta.url)),
+        sourcefile: 'optional-navigation-client.mjs',
+      },
+      bundle: true,
+      format: 'esm',
+      platform: 'browser',
+      outfile: path.join(dir, 'optional-navigation.js'),
+    });
+    const rootTag = port === 'angular' ? 'vf-optional-shell-test' : 'div';
+    await writeFile(
+      path.join(dir, 'optional-navigation.html'),
+      '<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width"><title>Optional AppShell navigation</title><link rel="stylesheet" href="./app-shell-fixture.css"><style>html,body{margin:0;min-block-size:100%}#root{display:block;max-inline-size:100%;margin-inline:auto}</style></head><body><' + rootTag + ' id="root"></' + rootTag + '><script type="module" src="./optional-navigation.js"></script></body></html>',
     );
 
     if (port === 'react') {

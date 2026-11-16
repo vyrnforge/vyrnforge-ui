@@ -195,6 +195,20 @@ export function validateBrowserFixtureModule({ fixturePath, fixtureModule, compo
     throw new Error(`${fixturePath} must declare browserFixture.component as ${component ?? 'its product owner'}.`);
   }
 
+  if (definition.dependencies !== undefined) {
+    const dependencies = definition.dependencies;
+    if (!dependencies || typeof dependencies !== 'object' || Array.isArray(dependencies)) {
+      throw new Error(`${fixturePath} browserFixture.dependencies must be a port-to-owner-list object.`);
+    }
+    for (const [port, owners] of Object.entries(dependencies)) {
+      if (!preparers[port] || !Array.isArray(owners) ||
+          owners.some((id) => typeof id !== 'string' || !id.trim() || id === definition.component) ||
+          new Set(owners).size !== owners.length) {
+        throw new Error(`${fixturePath} has invalid browserFixture.dependencies for ${port}.`);
+      }
+    }
+  }
+
   if (definition.prepare !== undefined) {
     if (typeof definition.prepare !== 'function') {
       throw new Error(`${fixturePath} browserFixture.prepare must be a function when provided.`);
