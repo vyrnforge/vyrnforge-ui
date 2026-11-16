@@ -37,7 +37,8 @@ const browser=await chromium.launch();
 const results=[];
 try {
  for(const port of ports) {
-  const page=await browser.newPage({viewport:{width:1440,height:900},colorScheme:'light',reducedMotion:'reduce'});
+  const context=await browser.newContext({viewport:{width:1440,height:900},colorScheme:'light',reducedMotion:'reduce'});
+  const page=await context.newPage();
   const errors=[]; page.on('pageerror',error=>errors.push(error.message));
   try {
    await page.goto('http://127.0.0.1:'+server.address().port+'/'+port+'.html');
@@ -59,7 +60,7 @@ try {
    assert.deepEqual(errors,[]);
    results.push({port,status:'PASS',styles,mobile,axe,visualSha});
   }catch(error){results.push({port,status:'FAIL',error:String(error),errors});}
-  finally{await page.close();}
+  finally{await context.close();}
  }
 }finally{await browser.close();await new Promise(resolve=>server.close(resolve));}
 await writeFile(path.join(out,'results.json'),JSON.stringify(results,null,2)+'\n');
