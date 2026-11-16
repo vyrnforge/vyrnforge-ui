@@ -123,6 +123,6 @@ A new composition primitive must own a distinct, reusable structural composition
 2. ordinary CSS;
 3. the six existing composition primitives;
 4. a native or interactive control;
-5. a higher-layer composite or pattern.
+5. a composite widget or pattern.
 
 Composition primitives do not own routing, application state, validation engines, form state, selection controllers, toolbar navigation, overlays, application shells, or product workflows.

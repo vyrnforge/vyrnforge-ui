@@ -61,7 +61,7 @@ test('current repository is normalized into one product graph', () => {
 });
 
 test('nested component location drives package authoring but not public exports', () => {
-  const root = mkdtempSync(path.join(os.tmpdir(), 'vf-product-graph-layered-'));
+  const root = mkdtempSync(path.join(os.tmpdir(), 'vf-product-graph-responsibility-'));
   const write = writer(root);
   write('packages/web/package.json', JSON.stringify({
     name: '@vyrnforge/web',
@@ -210,7 +210,7 @@ test('canonical capabilities merge legacy package ownership into one logical nod
   assert.ok(impactCapability.paths.includes('packages/core/src/capabilities/collection-navigation/'));
 });
 
-test('L1 responsibility families preserve deliberate Native Web product ownership', () => {
+test('Elemental-primitives responsibility families preserve deliberate Native Web product ownership', () => {
   const graph = discoverProductGraph();
   assert.equal(graph.components.some((entry) => entry.unitId === 'elemental-primitives'), false);
   assert.equal(graph.components.some((entry) => entry.unitId === 'mark'), false);
@@ -254,7 +254,7 @@ test('L1 responsibility families preserve deliberate Native Web product ownershi
   assert.equal(graph.components.some((entry) => entry.unitId === 'loading'), false);
 
   const loading = graph.patterns.find((entry) => entry.unitId === 'loading');
-  assert.ok(loading, 'loading must own async feedback as a Pattern outside L1-L6');
+  assert.ok(loading, 'loading must own async feedback as a Pattern outside component ownership');
   assert.equal(loading.id, 'pattern:loading');
   assert.equal(loading.kind, 'pattern');
   assert.equal(loading.responsibility, null);

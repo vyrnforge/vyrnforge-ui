@@ -2,7 +2,7 @@
 
 This directory owns repository-internal discovery for VyrnForge product units and their projection into public packages.
 
-The Product Graph discovers component owners under `product/components/<responsibility>/<optional-family>/<id>/` and projects their supported surfaces into public packages. Internal schema v3 exposes `responsibility` and `family`; invalid responsibility/family paths, missing metadata, duplicate IDs and manifest-only orphan components fail closed. Flat canonical component discovery is retired; package-owned evidence and non-component discovery remain.
+The Product Graph discovers component owners under `product/components/<responsibility>/<optional-family>/<id>/` and projects their supported surfaces into public packages. Internal schema v3 exposes `responsibility` and `family`; invalid responsibility/family paths, missing metadata, duplicate IDs and manifest-only orphan components fail closed. Flat canonical component discovery is retired; package-owned evidence and non-component discovery remain. Grouping-level `changes/` may contain Markdown provenance only; it is not an owner or a location for component metadata.
 
 ## Rules
 
