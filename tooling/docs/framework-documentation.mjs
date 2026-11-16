@@ -156,11 +156,11 @@ function accessibilityEvidence(root, component) {
 
 function normalizeOwner(root, component, framework) {
   const surface = component.surfaces[framework.surface];
-  const shared = sharedContent(root, component);
   const apiAvailable = Boolean(surface?.publicEntrypoints.length);
   const guideOnly = component.kind === 'pattern' && !Object.keys(component.surfaces).length &&
     component.documentationAvailable && framework.id === 'native-web';
   if (!apiAvailable && !guideOnly) return null;
+  const shared = sharedContent(root, component);
   const adaptation = frameworkContent(root, component, surface);
   const examples = frameworkExamples(root, component, framework);
   const accessibility = accessibilityEvidence(root, component);

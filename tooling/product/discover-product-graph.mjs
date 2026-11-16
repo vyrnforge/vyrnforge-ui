@@ -1,4 +1,4 @@
-import { existsSync, readFileSync, readdirSync } from 'node:fs';
+import { existsSync, readFileSync, readdirSync, statSync } from 'node:fs';
 import path from 'node:path';
 import { frameworkPortNames } from '../package-model.mjs';
 import { discoverProductUnits, repoRoot } from '../testing/discover-product-units.mjs';
@@ -165,20 +165,25 @@ function patternFacets(root, patternId) {
   };
 }
 
+function isFile(root, relativePath) {
+  return exists(root, relativePath) && statSync(path.join(root, relativePath)).isFile();
+}
+
 function resolvePatternReferences(root, metadata, components) {
   const refs = metadata.exampleReferences ?? [];
   if (!Array.isArray(refs)) throw new Error('Pattern exampleReferences must be an array');
   const seen = new Set();
   return refs.map((ref) => {
-    const owner = components.find((component) => component.id === ref.owner);
-    if (!owner?.facets.examples || !ref.id?.startsWith(owner.unitId + '/')) {
-      throw new Error('Invalid pattern example owner: ' + ref.id);
+    const owner = components.find((component) => component.id === ref?.owner);
+    if (!owner?.facets.examples || typeof ref.id !== 'string' || !ref.id.startsWith(owner.unitId + '/')) {
+      throw new Error('Invalid pattern example owner: ' + ref?.id);
     }
     const slug = ref.id.slice(owner.unitId.length + 1);
     if (!/^[a-z][a-z0-9-]*$/.test(slug) || seen.has(ref.id)) throw new Error('Invalid or duplicate pattern example: ' + ref.id);
     seen.add(ref.id);
     const directory = owner.facets.examples + slug + '/';
     const manifestPath = directory + 'example.json';
+    if (!isFile(root, manifestPath)) throw new Error('Missing pattern example manifest: ' + ref.id);
     const manifest = readJson(root, manifestPath);
     if (manifest.id !== ref.id) throw new Error('Pattern example identity mismatch: ' + ref.id);
     const adaptations = Object.entries(manifest.frameworks ?? {});
@@ -186,10 +191,10 @@ function resolvePatternReferences(root, metadata, components) {
     const frameworks = adaptations.map(([framework, adaptation]) => {
       const port = framework === 'native-web' ? 'web' : framework;
       if (!['web', ...frameworkPortNames].includes(port) || framework === 'web') throw new Error('Unsupported example framework: ' + framework);
-      if (!adaptation.source || !/^[a-zA-Z0-9_.-]+$/.test(adaptation.source) || !exists(root, directory + adaptation.source)) throw new Error('Missing or invalid example source: ' + ref.id);
+      if (!adaptation?.source || !/^[a-zA-Z0-9][a-zA-Z0-9_.-]*$/.test(adaptation.source) || !isFile(root, directory + adaptation.source)) throw new Error('Missing or invalid example source: ' + ref.id);
       const sourcePath = directory + adaptation.source;
       const source = readFileSync(path.join(root, sourcePath), 'utf8');
-      const dependencies = unique([...source.matchAll(/['"](@vyrnforge\/[^'"]+)['"]/g)].map((match) => match[1]));
+      const dependencies = unique([...source.matchAll(/(?:from\s+|import\s*)['"](@vyrnforge\/[^'"]+)['"]/g)].map((match) => match[1]));
       const usage = dependencies.map((specifier) => {
         const component = components.find((candidate) => candidate.publicEntrypoints.includes(specifier));
         if (!component) throw new Error('Unresolved pattern example dependency: ' + specifier);
@@ -202,8 +207,16 @@ function resolvePatternReferences(root, metadata, components) {
     const testRoot = owner.facets.test;
     if (!testRoot || !evidence || !frameworks.some((entry) => entry.port === evidence.port) ||
         !owner.surfaces[evidence.port]?.browser || ![evidence.fixture, evidence.spec].every((file) =>
-          typeof file === 'string' && file.startsWith(testRoot) && !file.includes('..') && exists(root, file))) {
+          typeof file === 'string' && file.startsWith(testRoot) && !file.includes('..') && isFile(root, file))) {
       throw new Error('Invalid pattern evidence reference: ' + ref.id);
+    }
+    const specSource = readFileSync(path.join(root, evidence.spec), 'utf8');
+    const fixtureSource = readFileSync(path.join(root, evidence.fixture), 'utf8');
+    if (typeof evidence.fixtureUrl !== 'string' || typeof evidence.testName !== 'string' ||
+        !evidence.testName || !evidence.fixtureUrl.startsWith('/components/' + owner.unitId + '/') ||
+        !evidence.fixtureUrl.endsWith('-' + evidence.port + '.html') ||
+        !specSource.includes(evidence.fixtureUrl) || !specSource.includes(evidence.testName) || !fixtureSource.includes(slug)) {
+      throw new Error('Unresolved pattern fixture or test identity: ' + ref.id);
     }
     return { id: ref.id, title: manifest.title, owner: owner.id, directory, manifestPath, frameworks, evidence };
   });
