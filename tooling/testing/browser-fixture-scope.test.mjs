@@ -1,5 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import { resolveBrowserFixtureScope } from './browser-fixture-scope.mjs';
+import { validateBrowserFixtureModule } from './browser-fixtures.mjs';
 
 const entries = {
   'app-shell': { definition: { component: 'app-shell', dependencies: { react: ['input'] } } },
@@ -29,4 +30,20 @@ describe('browser fixture dependency scope', () => {
       definition: { component: id, dependencies: { react: [id === 'app-shell' ? 'input' : 'app-shell'] } },
     }))).rejects.toThrow('app-shell -> input -> app-shell');
   });
+});
+
+
+describe('browser fixture dependency declarations', () => {
+  const validate = (dependencies) => validateBrowserFixtureModule({
+    fixturePath: 'app-shell/fixtures.mjs',
+    component: 'app-shell',
+    fixtureModule: { browserFixture: { component: 'app-shell', dependencies, prepare() {} } },
+  });
+  it('accepts an owner-local port map', () => {
+    expect(validate({ react: ['input'] }).dependencies).toEqual({ react: ['input'] });
+  });
+  it.each([null, [], { react: 'input' }, { unknown: ['input'] }, { react: ['app-shell'] }, { react: ['input', 'input'] }])(
+    'rejects malformed dependency declarations: %j',
+    (dependencies) => expect(() => validate(dependencies)).toThrow('browserFixture.dependencies'),
+  );
 });

@@ -72,6 +72,7 @@ const scope = await resolveBrowserFixtureScope({
   },
 });
 
+const requiredDependencies = new Set(scope.flatMap(({ definition }) => definition.dependencies?.[port] ?? []));
 for (const { component, fixturePath, fixtureModule } of scope) {
   fixtureModules += 1;
   const generated = await prepareBrowserFixture({
@@ -82,7 +83,9 @@ for (const { component, fixturePath, fixtureModule } of scope) {
     component: component.unitId,
   });
   if (generated) generatedPages += 1;
-  else skippedUnsupported += 1;
+  else if (requiredDependencies.has(component.unitId)) {
+    throw new Error(`Required ${port} browser fixture dependency ${component.unitId} did not prepare a fixture.`);
+  } else skippedUnsupported += 1;
 }
 
 if (fixtureModules === 0 || generatedPages === 0) {
