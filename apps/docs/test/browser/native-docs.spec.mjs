@@ -391,3 +391,101 @@ test('Native shell reflows at 320 CSS pixels and exposes responsive navigation',
   await expectNoAccessibilityViolations(page);
   expect(errors, errors.join('\n')).toEqual([]);
 });
+
+
+test('C1 responsive navigation transfers only disappearing focus and resets disclosure', async ({ page }) => {
+  await page.setViewportSize({ width: 1280, height: 800 });
+  await page.goto('/next/native-web/components/button/');
+  const nav = page.locator('#vf-docs-navigation');
+  const menu = page.locator('[data-vf-docs-nav-toggle]');
+  const current = nav.locator('a[aria-current="page"]');
+  const first = nav.locator('a[href]').first();
+  const main = page.locator('#main');
+  const search = page.locator('[data-vf-docs-search]');
+  await expect(menu).toBeHidden();
+  await current.focus();
+  await page.setViewportSize({ width: 480, height: 800 });
+  await expect(menu).toBeFocused();
+  await expect(nav).toBeHidden();
+  await expect(menu).toHaveAttribute('aria-expanded', 'false');
+  await page.keyboard.press('Enter');
+  await expect(nav).toBeVisible();
+  await expect(menu).toHaveAttribute('aria-expanded', 'true');
+  await current.focus();
+  await page.setViewportSize({ width: 1280, height: 800 });
+  await expect(current).toBeFocused();
+  await expect(menu).toBeHidden();
+  await page.setViewportSize({ width: 480, height: 800 });
+  await expect(menu).toBeFocused();
+  await expect(nav).toBeHidden();
+  await page.setViewportSize({ width: 1280, height: 800 });
+  await expect(current).toBeFocused();
+  await expect(nav).toBeVisible();
+  await page.setViewportSize({ width: 480, height: 800 });
+  await expect(menu).toBeFocused();
+  await page.keyboard.press('Enter');
+  await page.keyboard.press('Enter');
+  await expect(menu).toBeFocused();
+  await expect(nav).toBeHidden();
+  await current.evaluate(node => node.removeAttribute('aria-current'));
+  await page.setViewportSize({ width: 1280, height: 800 });
+  await expect(first).toBeFocused();
+  await page.setViewportSize({ width: 480, height: 800 });
+  await expect(menu).toBeFocused();
+  await nav.evaluate(node => node.querySelectorAll('a').forEach(link => link.remove()));
+  await page.setViewportSize({ width: 1280, height: 800 });
+  await expect(main).toBeFocused();
+  await search.focus();
+  await page.setViewportSize({ width: 480, height: 800 });
+  await expect(search).toBeFocused();
+  await page.setViewportSize({ width: 1280, height: 800 });
+  await expect(search).toBeFocused();
+  await main.focus();
+  await page.setViewportSize({ width: 480, height: 800 });
+  await expect(main).toBeFocused();
+});
+
+test('C1 narrow keyboard order, skip link and table of contents stay meaningful', async ({ page }) => {
+  await page.setViewportSize({ width: 480, height: 800 });
+  await page.goto('/next/native-web/components/button/');
+  const skip = page.getByRole('link', { name: 'Skip to content' });
+  const menu = page.getByRole('button', { name: 'Menu' });
+  const main = page.locator('#main');
+  await page.keyboard.press('Tab');
+  await expect(skip).toBeFocused();
+  await page.keyboard.press('Tab');
+  await expect(menu).toBeFocused();
+  await page.keyboard.press('Shift+Tab');
+  await expect(skip).toBeFocused();
+  await page.keyboard.press('Enter');
+  await expect(main).toBeFocused();
+  const toc = page.getByRole('navigation', { name: 'On this page' });
+  const article = page.locator('.vf-docs-article');
+  expect(await toc.evaluate(node => !!(node.compareDocumentPosition(document.querySelector('.vf-docs-article')) & Node.DOCUMENT_POSITION_FOLLOWING))).toBe(true);
+  const tocBox = await toc.boundingBox();
+  const articleBox = await article.boundingBox();
+  expect(tocBox.y).toBeLessThan(articleBox.y);
+  await toc.getByRole('link', { name: 'Native Web setup' }).click();
+  await expect(page).toHaveURL(/#native-web-setup$/);
+});
+
+test.describe('C1 without JavaScript', () => {
+  test.use({ javaScriptEnabled: false, viewport: { width: 480, height: 800 } });
+  test('native rail stays available without a dead Menu', async ({ page }) => {
+    await page.goto('/next/native-web/components/button/');
+    await expect(page.locator('[data-vf-docs-nav-toggle]')).toBeHidden();
+    const nav = page.locator('#vf-docs-navigation');
+    await expect(nav).toBeVisible();
+    await expect(nav.locator('a[aria-current="page"]')).toHaveText('Button');
+    await nav.getByRole('link', { name: 'Input', exact: true }).click();
+    await expect(page).toHaveURL(/components\/input\//);
+  });
+});
+
+test('C1 failed script load leaves native navigation usable', async ({ page }) => {
+  await page.setViewportSize({ width: 480, height: 800 });
+  await page.route('**/assets/docs.js', route => route.abort());
+  await page.goto('/next/native-web/components/button/');
+  await expect(page.locator('[data-vf-docs-nav-toggle]')).toBeHidden();
+  await expect(page.locator('#vf-docs-navigation')).toBeVisible();
+});
