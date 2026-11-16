@@ -391,3 +391,16 @@ test('Native shell reflows at 320 CSS pixels and exposes responsive navigation',
   await expectNoAccessibilityViolations(page);
   expect(errors, errors.join('\n')).toEqual([]);
 });
+
+
+test('settings navigation guide is discoverable without a synthetic public API', async ({ page }) => {
+  const pattern = manifest.patternCatalog.find((entry) => entry.slug === 'settings-navigation');
+  expect(pattern).toMatchObject({ showcase: true, api: false, publicEntrypoints: [] });
+  expect(manifest.patternApi.some((entry) => entry.slug === 'api/patterns/settings-navigation/')).toBe(false);
+  await page.goto('/next/native-web/patterns/');
+  await page.getByRole('link', { name: /Settings navigation/ }).first().click();
+  await expect(page.getByRole('heading', { level: 1, name: 'Settings navigation' })).toBeVisible();
+  await expect(page.getByText('Guide only.', { exact: false })).toBeVisible();
+  await expect(page.getByRole('link', { name: 'app-shell/settings-navigation' })).toHaveAttribute('href', /examples\/settings-navigation\/react.tsx$/);
+  await expect(page.getByRole('link', { name: /Settings navigation API/ })).toHaveCount(0);
+});

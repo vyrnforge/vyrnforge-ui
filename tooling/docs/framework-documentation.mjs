@@ -156,9 +156,11 @@ function accessibilityEvidence(root, component) {
 
 function normalizeOwner(root, component, framework) {
   const surface = component.surfaces[framework.surface];
-  if (!surface || !surface.publicEntrypoints.length) return null;
-
   const shared = sharedContent(root, component);
+  const apiAvailable = Boolean(surface?.publicEntrypoints.length);
+  const guideOnly = component.kind === 'pattern' && !Object.keys(component.surfaces).length &&
+    component.documentationAvailable && framework.id === 'native-web';
+  if (!apiAvailable && !guideOnly) return null;
   const adaptation = frameworkContent(root, component, surface);
   const examples = frameworkExamples(root, component, framework);
   const accessibility = accessibilityEvidence(root, component);
@@ -175,8 +177,10 @@ function normalizeOwner(root, component, framework) {
     frameworkLabel: framework.label,
     surface: framework.surface,
     status: component.status,
-    publicEntrypoints: surface.publicEntrypoints,
-    authoringMode: surface.authoringMode,
+    publicEntrypoints: surface?.publicEntrypoints ?? [],
+    authoringMode: surface?.authoringMode ?? 'product-unit',
+    guideOnly,
+    exampleReferences: component.exampleReferences ?? [],
     sharedSourcePath: shared.sourcePath,
     sharedContent: shared.content,
     frameworkSourcePath: adaptation.sourcePath,
@@ -184,14 +188,14 @@ function normalizeOwner(root, component, framework) {
     examples,
     accessibilityPath: accessibility.sourcePath,
     accessibility: accessibility.value,
-    showcaseAvailable: Boolean(shared.content && examples.length),
-    apiAvailable: true,
+    showcaseAvailable: Boolean(shared.content && (guideOnly || examples.length)),
+    apiAvailable,
     showcaseRoute: component.kind === 'pattern'
       ? `patterns/${component.unitId}/`
       : `components/${component.unitId}/`,
-    apiRoute: component.kind === 'pattern'
+    apiRoute: apiAvailable ? (component.kind === 'pattern'
       ? `api/patterns/${component.unitId}/`
-      : `api/components/${component.unitId}/`,
+      : `api/components/${component.unitId}/`) : null,
   };
 }
 
@@ -217,7 +221,7 @@ export function compileFrameworkDocumentation(frameworkId, root = repoRoot) {
     .filter((owner) => owner.showcaseAvailable)
     .map((owner) => ({ ...owner, route: owner.showcaseRoute, pageKind: 'showcase' }));
 
-  const apiPages = publicCatalog.map((owner) => ({
+  const apiPages = publicCatalog.filter((owner) => owner.apiAvailable).map((owner) => ({
     ...owner,
     route: owner.apiRoute,
     pageKind: 'api',

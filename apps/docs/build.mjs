@@ -422,7 +422,7 @@ function renderPatternsIndex() {
       ${cardList(model.patternCatalog.map((pattern) => ({
         title: pattern.title,
         route: componentDestination(pattern),
-        meta: pattern.showcaseAvailable ? 'Guide + API' : 'API reference',
+        meta: pattern.guideOnly ? 'Guide only' : pattern.showcaseAvailable ? 'Guide + API' : 'API reference',
       })), currentPageDirectory)}
     </section>`,
   });
@@ -562,6 +562,7 @@ function renderFrameworkContent(content, uniqueId) {
 }
 
 function renderComponent(page) {
+  if (page.guideOnly) return renderPatternGuide(page);
   const currentPageDirectory = pageDirectory(page.route);
   const usedIds = new Set();
   const uniqueId = (heading) => {
@@ -645,6 +646,25 @@ function renderComponent(page) {
       </article>
       ${renderTableOfContents(toc)}
     </div>`,
+  });
+}
+
+function renderPatternGuide(page) {
+  const currentPageDirectory = pageDirectory(page.route);
+  const sections = page.content.sections.map((section) =>
+    '<section><h2>' + escapeHtml(section.heading) + '</h2>' + renderBlocks(section.blocks) + '</section>').join('');
+  const examples = page.exampleReferences.flatMap((reference) => reference.frameworks.map((adaptation) =>
+    '<li>' + escapeHtml(reference.title) + ' — ' + escapeHtml(adaptation.framework === 'react' ? 'React' : adaptation.framework) +
+    ' example (repository source): <a data-vf-link href="https://github.com/vyrnforge/vyrnforge-ui/blob/main/' +
+    escapeHtml(adaptation.sourcePath) + '">' + escapeHtml(reference.id) + '</a></li>')).join('');
+  return shell({
+    route: page.route,
+    title: page.title,
+    description: page.title + ' task composition guide',
+    content: renderBreadcrumbs(page, currentPageDirectory, 'Patterns') +
+      '<article class="vf-docs-article" data-vf-docs-pattern="' + escapeHtml(page.id) + '">' +
+      '<h1>' + escapeHtml(page.content.title) + '</h1>' + renderBlocks(page.content.intro) + sections +
+      '<section><h2>Referenced examples</h2><p>Guide only. The existing React example is runnable in the repository browser fixture; this Native Web page does not execute it or provide a pattern API.</p><ul>' + examples + '</ul></section></article>',
   });
 }
 
