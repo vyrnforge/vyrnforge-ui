@@ -1,39 +1,128 @@
-name: PR Validation
-
-on:
-  pull_request:
-
+name: C2 design-only actual-size visual evidence
+on: pull_request
 permissions:
   contents: read
-
-concurrency:
-  group: pr-validation-${{ github.event.pull_request.number }}
-  cancel-in-progress: true
-
 jobs:
-  targeted-validation:
-    uses: ./.github/workflows/_targeted-validation.yml
-    with:
-      mode: pr
-      base_sha: ${{ github.event.pull_request.base.sha }}
-      head_sha: ${{ github.sha }}
-      artifact_suffix: pr
-      retention_days: 7
-      upload_docs_artifact: false
-
-  ci-gate:
-    name: ci-gate
-    if: always()
-    needs: targeted-validation
+  render:
+    name: C2 actual-site visual captures — never merge
     runs-on: ubuntu-latest
-    timeout-minutes: 5
+    timeout-minutes: 30
     steps:
-      - name: Require targeted validation
-        env:
-          TARGETED_VALIDATION: ${{ needs.targeted-validation.result }}
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        with:
+          ref: 5a799289d703531054378106088b89c9561c1434
+      - name: Verify exact main snapshot and no product changes
         run: |
-          if [ "$TARGETED_VALIDATION" != "success" ]; then
-            echo "Targeted validation did not succeed: $TARGETED_VALIDATION" >&2
-            exit 1
-          fi
-          echo "All selected VyrnForge validation evidence passed."
+          test "$(git rev-parse HEAD)" = "5a799289d703531054378106088b89c9561c1434"
+          test -z "$(git status --porcelain)"
+      - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020
+        with:
+          node-version-file: .node-version
+      - run: corepack enable
+      - run: pnpm install --frozen-lockfile --ignore-scripts
+      - run: pnpm build:docs
+      - run: pnpm exec playwright install --with-deps chromium
+      - name: Capture baseline and proposed CSS-only targets at actual CSS-pixel sizes
+        run: |
+          node --input-type=module <<'JS'
+          import { chromium } from '@playwright/test';
+          import { spawn } from 'node:child_process';
+          import { mkdirSync, writeFileSync } from 'node:fs';
+          import assert from 'node:assert/strict';
+          const root = 'test-results/c2-visual';
+          mkdirSync(root, { recursive: true });
+          const server = spawn(process.execPath, ['apps/docs/serve.mjs'], { stdio: 'inherit' });
+          const baseUrl = 'http://127.0.0.1:4173';
+          const waitUntilReady = async () => {
+            for (let i = 0; i < 100; i++) {
+              if (server.exitCode !== null) throw new Error('docs server exited');
+              try {
+                const response = await fetch(baseUrl + '/next/native-web/components/button/');
+                if (response.ok) return;
+              } catch {}
+              await new Promise(resolve => setTimeout(resolve, 150));
+            }
+            throw new Error('docs server not ready');
+          };
+          const targetCss = "\n[data-vf-docs-shell] { --vf-app-shell-max-inline-size: 100%; }\n.vf-docs-header-inner, .vf-docs-footer { max-inline-size: none; }\n.vf-docs-content-grid, .vf-docs-main > .vf-docs-breadcrumbs,\n.vf-docs-main > .vf-docs-catalog, .vf-docs-main > .vf-docs-article {\n  margin-inline: auto;\n}\n.vf-docs-main > .vf-docs-catalog, .vf-docs-main > .vf-docs-breadcrumbs,\n.vf-docs-main > .vf-docs-article { max-inline-size: 70rem; }\n.vf-docs-main > .vf-docs-hero { margin-inline: auto; }\n";
+          const measure = () => {
+            const rect = (selector) => {
+              const el = document.querySelector(selector);
+              if (!el) return null;
+              const r = el.getBoundingClientRect();
+              return { x: Math.round(r.x), y: Math.round(r.y), width: Math.round(r.width), height: Math.round(r.height) };
+            };
+            return {
+              viewport: innerWidth, scrollWidth: document.documentElement.scrollWidth,
+              contentWidth: document.documentElement.clientWidth, scrollHeight: document.documentElement.scrollHeight,
+              header: rect('.vf-docs-header-inner'), shell: rect('[data-vf-docs-shell]'),
+              body: rect('.vf-docs-app-body'), rail: rect('.vf-docs-navigation-region'),
+              main: rect('.vf-docs-main'), content: rect('.vf-docs-content-grid'),
+              toc: rect('.vf-docs-toc-region'), footer: rect('.vf-docs-footer')
+            };
+          };
+          const cases = [
+            { name: 'button-current-1920', width: 1920, height: 1000, mode: 'current' },
+            { name: 'button-target-1920', width: 1920, height: 1000, mode: 'target' },
+            { name: 'button-current-2560', width: 2560, height: 1100, mode: 'current' },
+            { name: 'button-target-2560', width: 2560, height: 1100, mode: 'target' },
+            { name: 'home-target-2560', width: 2560, height: 1100, mode: 'target', path: '/next/native-web/' },
+            { name: 'button-target-320', width: 320, height: 720, mode: 'target' },
+            { name: 'button-target-320-dark', width: 320, height: 720, mode: 'target', dark: true },
+            { name: 'button-target-1920-dark', width: 1920, height: 1000, mode: 'target', dark: true },
+            { name: 'button-target-320-200pct', width: 320, height: 720, mode: 'target', scale: true },
+            { name: 'button-target-320-rtl-long', width: 320, height: 720, mode: 'target', rtl: true },
+          ];
+          let browser;
+          try {
+            await waitUntilReady();
+            browser = await chromium.launch({ headless: true });
+            const results = [];
+            for (const item of cases) {
+              const page = await browser.newPage({ viewport: { width: item.width, height: item.height }, deviceScaleFactor: 1 });
+              await page.goto(baseUrl + (item.path ?? '/next/native-web/components/button/'), { waitUntil: 'load' });
+              await page.evaluate(() => document.fonts.ready);
+              if (item.mode === 'target') await page.addStyleTag({ content: targetCss });
+              if (item.dark) await page.evaluate(() => { document.documentElement.dataset.vfTheme = 'dark'; });
+              if (item.scale) await page.evaluate(() => { document.documentElement.style.fontSize = '200%'; });
+              if (item.rtl) await page.evaluate(() => {
+                document.documentElement.dir = 'rtl';
+                const label = document.querySelector('[data-vf-side-nav-group-label]');
+                if (label) label.textContent = 'Documentation navigation with an intentionally long translated label';
+              });
+              await page.waitForTimeout(180);
+              const dimensions = await page.evaluate(measure);
+              assert.ok(dimensions.scrollWidth <= dimensions.contentWidth + 1, item.name + ' horizontal overflow');
+              if (item.width >= 1920 && item.mode === 'current') assert.equal(dimensions.body.width, 1536, 'current cap');
+              if (item.width >= 1920 && item.mode === 'target') {
+                assert.ok(Math.abs(dimensions.body.width - item.width) <= 1, 'target full width');
+                assert.ok(Math.abs(dimensions.body.x) <= 1, 'target flush to start');
+                if (dimensions.content) assert.ok(dimensions.content.width <= 1121, 'inner reading measure');
+              }
+              if (item.width === 320) assert.equal(dimensions.contentWidth, 320);
+              await page.screenshot({ path: root + '/' + item.name + '.png', fullPage: false });
+              results.push({ name: item.name, mode: item.mode, width: item.width, height: item.height, dimensions });
+              console.log('C2 capture', item.name, JSON.stringify(dimensions));
+              if (item.scale) {
+                await page.locator('h1').first().scrollIntoViewIfNeeded();
+                await page.screenshot({ path: root + '/button-target-320-200pct-article.png', fullPage: false });
+              }
+              await page.close();
+            }
+            writeFileSync(root + '/measurements.json', JSON.stringify({
+              provenance: { sourceMain: '5a799289d703531054378106088b89c9561c1434', runner: 'Chromium', cssOnlyNoProductEdit: true },
+              proposedCss: targetCss.trim(), results
+            }, null, 2));
+          } finally {
+            if (browser) await browser.close();
+            server.kill('SIGTERM');
+          }
+          JS
+          test -z "$(git status --porcelain)"
+      - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        if: always()
+        with:
+          name: c2-design-evidence-main-5a799289d703531054378106088b89c9561c1434
+          path: test-results/c2-visual
+          if-no-files-found: error
+          retention-days: 14
