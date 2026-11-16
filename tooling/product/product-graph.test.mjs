@@ -268,3 +268,26 @@ test('Elemental-primitives responsibility families preserve deliberate Native We
 
   assert.deepEqual(productGraphProblems(), []);
 });
+
+
+test('settings pattern is documentation-only and references existing React evidence', () => {
+  const graph = discoverProductGraph();
+  const pattern = graph.patterns.find((entry) => entry.id === 'pattern:settings-navigation');
+  assert.ok(pattern.documentationAvailable);
+  assert.deepEqual(pattern.surfaces, {});
+  assert.deepEqual(pattern.publicEntrypoints, []);
+  assert.deepEqual(pattern.packages, []);
+  const reference = pattern.exampleReferences[0];
+  assert.equal(reference.id, 'app-shell/settings-navigation');
+  assert.equal(reference.owner, 'component:app-shell');
+  assert.deepEqual(reference.frameworks.map((entry) => entry.framework), ['react']);
+  assert.equal(reference.evidence.port, 'react');
+  assert.deepEqual([...new Set(reference.frameworks[0].usage.map((entry) => entry.component))].sort(), ['app-shell', 'button', 'drawer', 'input', 'side-nav', 'tabs']);
+  assert.ok(graph.patterns.find((entry) => entry.id === 'pattern:loading').publicEntrypoints.includes('@vyrnforge/web/styles/loading.css'));
+});
+
+test('pattern metadata identity mismatch fails closed', () => {
+  const root = mkdtempSync(path.join(os.tmpdir(), 'vf-pattern-id-'));
+  writer(root)('product/patterns/other/pattern.json', '{"id":"loading"}');
+  assert.throws(() => discoverProductGraph(root), /Pattern metadata identity mismatch/);
+});

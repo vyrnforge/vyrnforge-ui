@@ -165,13 +165,59 @@ function patternFacets(root, patternId) {
   };
 }
 
-function normalizePatternNode(root, manifests, patternId) {
+function resolvePatternReferences(root, metadata, components) {
+  const refs = metadata.exampleReferences ?? [];
+  if (!Array.isArray(refs)) throw new Error('Pattern exampleReferences must be an array');
+  const seen = new Set();
+  return refs.map((ref) => {
+    const owner = components.find((component) => component.id === ref.owner);
+    if (!owner?.facets.examples || !ref.id?.startsWith(owner.unitId + '/')) {
+      throw new Error('Invalid pattern example owner: ' + ref.id);
+    }
+    const slug = ref.id.slice(owner.unitId.length + 1);
+    if (!/^[a-z][a-z0-9-]*$/.test(slug) || seen.has(ref.id)) throw new Error('Invalid or duplicate pattern example: ' + ref.id);
+    seen.add(ref.id);
+    const directory = owner.facets.examples + slug + '/';
+    const manifestPath = directory + 'example.json';
+    const manifest = readJson(root, manifestPath);
+    if (manifest.id !== ref.id) throw new Error('Pattern example identity mismatch: ' + ref.id);
+    const adaptations = Object.entries(manifest.frameworks ?? {});
+    if (!adaptations.length) throw new Error('Pattern example has no framework source: ' + ref.id);
+    const frameworks = adaptations.map(([framework, adaptation]) => {
+      const port = framework === 'native-web' ? 'web' : framework;
+      if (!['web', ...frameworkPortNames].includes(port) || framework === 'web') throw new Error('Unsupported example framework: ' + framework);
+      if (!adaptation.source || !/^[a-zA-Z0-9_.-]+$/.test(adaptation.source) || !exists(root, directory + adaptation.source)) throw new Error('Missing or invalid example source: ' + ref.id);
+      const sourcePath = directory + adaptation.source;
+      const source = readFileSync(path.join(root, sourcePath), 'utf8');
+      const dependencies = unique([...source.matchAll(/['"](@vyrnforge\/[^'"]+)['"]/g)].map((match) => match[1]));
+      const usage = dependencies.map((specifier) => {
+        const component = components.find((candidate) => candidate.publicEntrypoints.includes(specifier));
+        if (!component) throw new Error('Unresolved pattern example dependency: ' + specifier);
+        const surface = Object.values(component.surfaces).find((candidate) => candidate.publicEntrypoints.includes(specifier));
+        return { component: component.unitId, port: surface.target, specifier };
+      });
+      return { framework, port, sourcePath, usage };
+    });
+    const evidence = ref.evidence;
+    const testRoot = owner.facets.test;
+    if (!testRoot || !evidence || !frameworks.some((entry) => entry.port === evidence.port) ||
+        !owner.surfaces[evidence.port]?.browser || ![evidence.fixture, evidence.spec].every((file) =>
+          typeof file === 'string' && file.startsWith(testRoot) && !file.includes('..') && exists(root, file))) {
+      throw new Error('Invalid pattern evidence reference: ' + ref.id);
+    }
+    return { id: ref.id, title: manifest.title, owner: owner.id, directory, manifestPath, frameworks, evidence };
+  });
+}
+
+function normalizePatternNode(root, manifests, patternId, components) {
   const canonicalRoot = `product/patterns/${patternId}`;
   const metadataPath = `${canonicalRoot}/pattern.json`;
   const metadata = exists(root, metadataPath) ? readJson(root, metadataPath) : null;
+  if (metadata?.id !== patternId) throw new Error('Pattern metadata identity mismatch: ' + patternId);
   const facets = patternFacets(root, patternId);
+  const exampleReferences = resolvePatternReferences(root, metadata, components);
   const webRoot = `${canonicalRoot}/web/`;
-  const publicEntrypoints = componentPublicEntrypoints(manifests, 'web', patternId);
+  const publicEntrypoints = exists(root, webRoot) ? componentPublicEntrypoints(manifests, 'web', patternId) : [];
   const surfaces = exists(root, webRoot)
     ? {
         web: {
@@ -199,6 +245,8 @@ function normalizePatternNode(root, manifests, patternId) {
     status: publicEntrypoints.length ? 'implemented' : 'unprojected',
     metadataPath,
     metadataSource: metadata ? 'product-unit' : 'missing',
+    exampleReferences,
+    documentationAvailable: Boolean(facets.docs && exists(root, facets.docs + 'index.md')),
     documentationGroup: metadata?.documentation?.group ?? metadata?.group ?? null,
     facets,
     surfaces,
@@ -339,7 +387,7 @@ export function discoverProductGraph(root = repoRoot) {
     normalizeComponentNode(root, manifests, componentId, discoveredComponents.get(componentId), componentRoots),
   );
   const patterns = directories(root, 'product/patterns').map((patternId) =>
-    normalizePatternNode(root, manifests, patternId),
+    normalizePatternNode(root, manifests, patternId, components),
   );
   const canonicalUnits = canonicalUnitNodes(root, manifests);
   const legacyUnits = normalizeLegacyOwnedUnits(discovery, canonicalUnits);

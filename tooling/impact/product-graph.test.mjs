@@ -48,3 +48,14 @@ test('Product Graph infrastructure changes fail closed to broad evidence', () =>
   assert.equal(impact.selectors.docsRequired, true);
   assert.equal(impact.selectors.releaseRequired, true);
 });
+
+
+test('settings evidence follows actual referenced example dependencies, not unrelated ports', () => {
+  const graph = createSemanticImpact(['product/patterns/settings-navigation/docs/index.md']);
+  assert.ok(graph.selectors.docsRequired);
+  assert.ok(!graph.browserScopes.some((scope) => scope.components.includes('app-shell')));
+  const drawer = createSemanticImpact(['product/components/composite-widgets/transient-surfaces/drawer/react/index.tsx']);
+  assert.ok(drawer.browserScopes.some((scope) => scope.port === 'react' && scope.components.includes('app-shell')));
+  const unrelated = createSemanticImpact(['product/components/interactive-controls/button/vue/index.ts']);
+  assert.ok(!unrelated.browserScopes.some((scope) => scope.port === 'react' && scope.components.includes('app-shell')));
+});

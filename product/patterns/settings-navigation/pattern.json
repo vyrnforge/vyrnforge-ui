@@ -1,0 +1,18 @@
+{
+  "id": "settings-navigation",
+  "name": "Settings navigation",
+  "documentation": {
+    "group": "application-structures"
+  },
+  "exampleReferences": [
+    {
+      "id": "app-shell/settings-navigation",
+      "owner": "component:app-shell",
+      "evidence": {
+        "port": "react",
+        "fixture": "product/components/application-structures/app-shell/test/browser/fixtures.mjs",
+        "spec": "product/components/application-structures/app-shell/test/browser/tests/app-shell.spec.mjs"
+      }
+    }
+  ]
+}

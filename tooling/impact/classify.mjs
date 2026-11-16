@@ -150,6 +150,20 @@ function classifyPath(state, discovery, filePath) {
     classified = true;
   }
 
+  for (const reference of discovery.patternReferences ?? []) {
+    const owner = discovery.components.find((candidate) => 'component:' + candidate.component === reference.owner);
+    const sourceChanged = filePath.startsWith(reference.directory) || filePath === reference.evidence.fixture || filePath === reference.evidence.spec;
+    const dependencyChanged = reference.frameworks.some((framework) => framework.usage.some((dependency) => {
+      const component = discovery.components.find((candidate) => candidate.component === dependency.component);
+      return component?.ports[dependency.port]?.paths.some((prefix) => filePath.startsWith(prefix));
+    }));
+    if (sourceChanged || dependencyChanged) {
+      addComponent(state, owner, [reference.evidence.port], 'referenced pattern example evidence: ' + reference.id, filePath);
+      addEvidence(state, 'docs', 'referenced pattern example changed', filePath);
+      classified = true;
+    }
+  }
+
   const unit = ownedUnitForPath(discovery, filePath);
   if (unit) {
     state.ownedUnits.add(unit.node);
