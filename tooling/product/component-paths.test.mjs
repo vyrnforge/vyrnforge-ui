@@ -75,3 +75,12 @@ test('a valid owner cannot conceal an additional nested component owner', () => 
   write('product/components/interactive-controls/button/nested/component.json');
   assert.throws(() => discoverComponentRoots(root), /Nested component ownership is not allowed/);
 });
+
+test('grouping-level Markdown change records remain historical provenance, not owners', () => {
+  const { root, write } = fixture();
+  write('product/components/elemental-primitives/media/image/component.json');
+  write('product/components/elemental-primitives/media/changes/2026-11-10-establish-media-family.md', '# Historical record');
+  assert.deepEqual([...discoverComponentRoots(root).keys()], ['image']);
+  write('product/components/elemental-primitives/media/changes/component.json');
+  assert.throws(() => discoverComponentRoots(root), /Invalid grouping change record/);
+});

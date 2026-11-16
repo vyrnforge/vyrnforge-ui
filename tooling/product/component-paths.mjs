@@ -29,6 +29,21 @@ function childDirectories(absolute) {
     .sort();
 }
 
+// Grouping-level change records are provenance, not canonical owners.
+// Accept only Markdown files here; never silently skip nested ownership.
+function groupingDirectories(absolute) {
+  return childDirectories(absolute).filter((name) => {
+    if (name !== 'changes') return true;
+    const changes = path.join(absolute, name);
+    for (const entry of readdirSync(changes, { withFileTypes: true })) {
+      if (!entry.isFile() || !entry.name.endsWith('.md')) {
+        throw new Error('Invalid grouping change record: ' + path.join(changes, entry.name));
+      }
+    }
+    return false;
+  });
+}
+
 function assertNoNestedOwners(absolute) {
   for (const entry of readdirSync(absolute, { withFileTypes: true })) {
     if (!entry.isDirectory()) continue;
@@ -77,11 +92,11 @@ export function discoverComponentRoots(root) {
     if (!definition) throw new Error('Unknown component responsibility: ' + responsibility);
     const responsibilityRoot = path.join(absoluteRoot, responsibility);
     assertGrouping(responsibilityRoot);
-    for (const name of childDirectories(responsibilityRoot)) {
+    for (const name of groupingDirectories(responsibilityRoot)) {
       const candidate = path.join(responsibilityRoot, name);
       if (definition.families.includes(name)) {
         assertGrouping(candidate);
-        for (const id of childDirectories(candidate)) add(responsibility, name, id);
+        for (const id of groupingDirectories(candidate)) add(responsibility, name, id);
       } else {
         // Only declared families may introduce an additional ownership level.
         // A direct component must declare its own metadata.

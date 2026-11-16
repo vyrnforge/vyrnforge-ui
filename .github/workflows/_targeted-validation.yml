@@ -53,6 +53,19 @@ jobs:
         with:
           node-version-file: .node-version
           package-manager-cache: false
+      - name: Compare approved responsibility migration against baseline
+        env:
+          BASE_SHA: ${{ inputs.base_sha }}
+        run: |
+          # Evidence only for the AD-16 v2 -> v3 transition; no runtime alias.
+          if git cat-file -e "$BASE_SHA:product/components/complex-ui/README.md" 2>/dev/null && test -f product/components/application-structures/README.md; then
+            baseline="$RUNNER_TEMP/vf-ownership-baseline"
+            git worktree add --detach "$baseline" "$BASE_SHA"
+            trap 'git worktree remove --force "$baseline"' EXIT
+            node tooling/product/compare-ownership-baseline.mjs "$baseline" "$PWD"
+          else
+            echo "No AD-16 ownership transition in this revision comparison."
+          fi
       - name: Record semantic impact
         id: plan
         env:
