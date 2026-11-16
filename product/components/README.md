@@ -1,28 +1,23 @@
-# Layer-organized component units
+# Responsibility-based component units
 
-This is an ownership tree, **not** a public import hierarchy. Stable component IDs and public package subpaths are projected independently from source taxonomy. Optional grouping below a layer is organizational only and never creates a runtime package or public namespace.
+This is a source-ownership tree, **not** a public import hierarchy. Use `product/components/<responsibility>/<optional-family>/<id>/` and one `component.json` per logical owner. Product Graph schema v3 derives responsibility and family from the path, rejects invalid or duplicate owners, and projects stable component IDs into existing packages. Flat owners are not supported.
 
-| Layer | Source directory | Role |
+| Responsibility | Source directory | Role |
 | --- | --- | --- |
-| L1 | `elemental-primitives/` | Deliberately accepted non-interactive responsibilities; currently Typography (`text`, `code`, `kbd`) and Media (`icon`, `image`) |
-| L2 | `interactive-controls/` | Single independently operable native-first controls; `button`, `toggle-button`, `link`, `input`, `textarea`, `checkbox`, `radio`, `switch`, `native-select`, `file-input`, `slider` |
-| L3 | `composition-primitives/` | Spatial, form, and control composition |
-| L4 | — | Pure reusable behavioral capabilities rather than component-shaped runtime machinery; currently CollectionNavigation and TypeaheadMatching |
-| L5 | `composite-widgets/` | Self-contained reusable widgets with one coherent local interaction model |
-| L6 | `complex-ui/` | Larger reusable UI systems and application structures that coordinate multiple lower-layer interaction models or structural responsibilities |
+| Elemental primitives | `elemental-primitives/` | Non-interactive Typography and Media responsibilities |
+| Interactive controls | `interactive-controls/` | Independently operable native-first controls |
+| Composition primitives | `composition-primitives/` | Reusable spatial, form and control composition |
+| Composite widgets | `composite-widgets/` | Self-contained widgets with coherent local interaction models |
+| Application structures | `application-structures/` | Reusable application-region and navigation structure |
 
-## Layer 5 boundary
+## Boundaries
 
-L5 is a widget layer, not a generic runtime layer. Widgets may compose lower layers and delegate to native browser behavior. They own their observable component-specific state, intent, keyboard, focus, selection, open/close, relationship, and accessibility policy; framework/Elements ports own lifecycle, refs, rendering, DOM effects, and browser API execution.
+Composite widgets own their component-specific state, intent, keyboard, focus, selection, open/close, relationships and accessibility policy. They may reuse existing components, pure capabilities and browser-native behavior. Framework/Elements ports own lifecycle, refs, rendering, DOM effects and browser API execution; no universal runtime is implied.
 
-The retained L5 inventory is physically organized into responsibility-family ownership folders under `composite-widgets/`: `disclosure-view-switching`, `transient-surfaces`, `commands-actions`, `collection-selection`, `choice-value`, `compound-fields`, `content-navigation`, `interactive-layout`, and `feedback`. These categories do not change component IDs, public package subpaths, or documentation routes. See `composite-widgets/README.md`.
+The existing composite responsibility families are disclosure-view-switching, transient-surfaces, commands-actions, collection-selection, choice-value, compound-fields, content-navigation, interactive-layout and feedback. See [Composite widgets](composite-widgets/README.md). The retired `temporal-field` remains retired; native temporal modes belong to Input. A distinct Calendar/DatePicker requires a separate product and contract decision.
 
-The former `temporal-field` product unit is retired. Native temporal modes (`date`, `time`, `datetime-local`, `month`, `week`) remain part of L2 `Input`. A future Calendar/DatePicker would require a separate higher-layer contract rather than preserving a wrapper around native Input modes.
+Application structures currently own only AppShell and SideNav. See [Application structures](application-structures/README.md). Optional advanced products such as structured-data systems and editors require separate admission; size or complexity is not a source classification.
 
-## Layer 6 boundary
+Shared foundations, CollectionNavigation and TypeaheadMatching, catalogs and patterns are distinct product-unit kinds. Reusable task guidance belongs under `product/patterns/`; routing engines, authentication, authorization enforcement, application data/state and business workflows remain consumer-owned.
 
-The accepted L6 inventory is currently only `app-shell` and `side-nav`. Future structured-data, hierarchy, advanced query/command, rich temporal, or aggregated-feedback systems require separate contracts and evidence before becoming owners. See `complex-ui/README.md`.
-
-Patterns are **not** a seventh component layer. Reusable task guidance lives under `product/patterns/` and may compose any L1–L6 responsibility. Routing engines, authentication, authorization enforcement, application data/state, and business workflows remain application-owned.
-
-Do not change stable `@vyrnforge/*` package entrypoints or documentation routes merely because an owner moves between internal taxonomy folders. A layer or ownership change needs canonical-contract alignment plus Product Graph, package, documentation, browser, accessibility, and clean-consumer evidence.
+Do not change stable `@vyrnforge/*` package entrypoints or consumer documentation routes merely because an internal owner moves. Ownership changes require canonical-contract alignment and Product Graph, package, documentation, browser, accessibility and clean-consumer evidence. Historical records retain original paths and terminology.

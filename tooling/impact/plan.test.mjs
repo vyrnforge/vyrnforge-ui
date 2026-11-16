@@ -215,3 +215,23 @@ test('API report evidence composes with narrow component browser evidence', () =
   assert.deepEqual(impact.browserScopes, [{ port: 'react', components: ['rating'] }]);
   assert.equal(impact.repositoryWide, false);
 });
+
+test('application structure source ownership selects the same component and public surfaces', () => {
+  const impact = createSemanticImpact(['product/components/application-structures/app-shell/web/app-shell.css']);
+  assert.deepEqual(impact.components, ['app-shell']);
+  assert.deepEqual(impact.browserPorts, ['web', 'react', 'angular', 'vue', 'elements']);
+  assert.ok(impact.semanticEvidence.includes('visual'));
+  assert.equal(impact.selectors.docsRequired, true);
+  assert.equal(impact.unknownPaths.length, 0);
+});
+
+test('a retired source deletion and its new destination never underselect evidence', () => {
+  const oldPath = 'product/components/complex-ui/app-shell/web/app-shell.css';
+  const newPath = 'product/components/application-structures/app-shell/web/app-shell.css';
+  const impact = createSemanticImpact([oldPath, newPath]);
+  assert.ok(impact.components.includes('app-shell'));
+  assert.ok(impact.unknownPaths.includes(oldPath));
+  assert.ok(impact.selectors.browserRequired);
+  assert.ok(impact.selectors.docsRequired);
+  assert.ok(impact.selectors.packageArtifactsRequired);
+});

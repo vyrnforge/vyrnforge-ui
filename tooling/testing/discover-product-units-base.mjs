@@ -46,27 +46,14 @@ function componentIdFromWebExport(exportName) {
   const componentId = /^\.\/styles\/([a-z][a-z0-9-]*)\.css$/.exec(exportName)?.[1] ?? null;
   return componentId && !webNonComponentStyleIds.has(componentId) ? componentId : null;
 }
-function frameworkComponentSourcePath(port, componentId) {
-  return port === 'angular'
-    ? `packages/angular/${componentId}/src/`
-    : `packages/${port}/src/components/${componentId}/`;
+function componentSourcePath(canonicalRoot, port) {
+  return `${canonicalRoot}/${port}/`;
 }
-function canonicalComponentSourcePath(root, canonicalRoot, port) {
-  const candidate = `${canonicalRoot}/${port}/`;
-  return existingPath(root, candidate.replace(/\/$/, '')) ? candidate : null;
+function componentFacetPath(canonicalRoot, facet, { file = false } = {}) {
+  return `${canonicalRoot}/${file ? facet : `${facet}/`}`;
 }
-function componentSourcePath(root, canonicalRoot, componentId, port) {
-  return canonicalComponentSourcePath(root, canonicalRoot, port)
-    ?? (port === 'web' ? `packages/web/src/components/${componentId}/` : frameworkComponentSourcePath(port, componentId));
-}
-function componentFacetPath(root, canonicalRoot, componentId, facet, { file = false } = {}) {
-  const suffix = file ? facet : `${facet}/`;
-  const canonical = `${canonicalRoot}/${suffix}`;
-  if (existingPath(root, canonical.replace(/\/$/, ''))) return canonical;
-  return `product/${componentId}/${suffix}`;
-}
-function findExampleManifests(root, canonicalRoot, componentId) {
-  const examplesRoot = componentFacetPath(root, canonicalRoot, componentId, 'examples');
+function findExampleManifests(root, canonicalRoot) {
+  const examplesRoot = componentFacetPath(canonicalRoot, 'examples');
   return walkFiles(root, examplesRoot).filter((file) => file.endsWith('/example.json'));
 }
 function frameworkTopLevelModules(root, port) {
@@ -177,46 +164,51 @@ export function discoverProductUnits(root = repoRoot) {
   const ownedUnits = [...discoverCanonicalCapabilities(root, packageNames, packageManifests), ...discoverLegacyOwnedUnits(root, packageNames, packageManifests)];
   const frameworkExports = new Map();
   const legacyProductIds = directories(root, 'product').filter((id) => !reservedProductRoots.has(id));
+  if (legacyProductIds.length) {
+    throw new Error('Retired flat product ownership: ' + legacyProductIds.join(', '));
+  }
   const componentRoots = discoverComponentRoots(root);
-  const discoveredIds = new Set([...legacyProductIds, ...componentRoots.keys()]);
+  const discoveredIds = new Set(componentRoots.keys());
   for (const port of frameworkPorts) {
     const exports = new Set(Object.keys(packageManifests.get(port)?.exports ?? {}).map(componentIdFromFrameworkExport).filter(Boolean));
     frameworkExports.set(port, exports);
-    for (const id of exports) discoveredIds.add(id);
+    for (const id of exports) {
+      if (!componentRoots.has(id)) throw new Error(`Public component ${port}/${id} is missing canonical ownership`);
+    }
   }
   const webExports = new Set(Object.keys(packageManifests.get('web')?.exports ?? {}).map(componentIdFromWebExport).filter(Boolean));
-  for (const id of webExports) discoveredIds.add(id);
+  for (const id of webExports) {
+    if (!componentRoots.has(id)) throw new Error(`Public component web/${id} is missing canonical ownership`);
+  }
   const components = [...discoveredIds].sort().map((componentId) => {
-    const canonicalRoot = componentRoots.get(componentId)?.root ?? `product/components/${componentId}`;
+    const canonicalRoot = componentRoots.get(componentId).root;
     const ports = {};
     if (webExports.has(componentId)) {
-      const sourcePath = componentSourcePath(root, canonicalRoot, componentId, 'web');
+      const sourcePath = componentSourcePath(canonicalRoot, 'web');
       const stylePaths = walkFiles(root, sourcePath).filter((file) => file.endsWith('.css'));
       ports.web = { paths: [sourcePath], stylePaths, browser: true, dependencies: scanUnitDependencies(root, sourcePath, ownedUnits, packageManifests) };
     }
     for (const port of frameworkPorts) {
       if (!frameworkExports.get(port)?.has(componentId)) continue;
-      const sourcePath = componentSourcePath(root, canonicalRoot, componentId, port);
+      const sourcePath = componentSourcePath(canonicalRoot, port);
       ports[port] = { paths: [sourcePath, `packages/${port}/test/components/${componentId}/`], types: `packages/${port}/test/components/${componentId}/api.types.ts`, ...(ssrPorts.has(port) ? { ssr: `packages/${port}/test/components/${componentId}/ssr.test.mjs` } : {}), browser: true, dependencies: scanUnitDependencies(root, sourcePath, ownedUnits, packageManifests) };
     }
     const frameworkPortNamesForComponent = Object.keys(ports).filter((port) => port !== 'web');
-    const legacyRoot = `product/${componentId}`;
-    const componentRoot = existingPath(root, canonicalRoot) ? canonicalRoot : legacyRoot;
-    const metadataPath = componentFacetPath(root, canonicalRoot, componentId, 'component.json', { file: true });
+    const metadataPath = componentFacetPath(canonicalRoot, 'component.json', { file: true });
     const metadata = existingPath(root, metadataPath) ? readJson(root, metadataPath) : null;
-    const docsRoot = componentFacetPath(root, canonicalRoot, componentId, 'docs');
+    const docsRoot = componentFacetPath(canonicalRoot, 'docs');
     const documentationCandidates = [`${docsRoot}index.json`, `${docsRoot}index.html`];
     const documentationSources = documentationCandidates.filter((candidate) => existingPath(root, candidate));
-    const examplesRoot = componentFacetPath(root, canonicalRoot, componentId, 'examples');
-    const testRoot = componentFacetPath(root, canonicalRoot, componentId, 'test');
+    const examplesRoot = componentFacetPath(canonicalRoot, 'examples');
+    const testRoot = componentFacetPath(canonicalRoot, 'test');
     const browserRoot = `${testRoot}browser`;
-    const accessibilityPath = componentFacetPath(root, canonicalRoot, componentId, 'accessibility.json', { file: true });
-    const changesRoot = componentFacetPath(root, canonicalRoot, componentId, 'changes');
+    const accessibilityPath = componentFacetPath(canonicalRoot, 'accessibility.json', { file: true });
+    const changesRoot = componentFacetPath(canonicalRoot, 'changes');
     const conformanceRoot = `${testRoot}conformance`;
     return {
       component: componentId,
       status: 'implemented',
-      root: `${componentRoot}/`,
+      root: `${canonicalRoot}/`,
       ports,
       metadataPath,
       documentationGroup: metadata?.group ?? metadata?.documentation?.group ?? null,
@@ -224,13 +216,13 @@ export function discoverProductUnits(root = repoRoot) {
       documentationSources,
       documentationCandidates,
       documentationPaths: [docsRoot, examplesRoot],
-      exampleManifests: findExampleManifests(root, canonicalRoot, componentId),
+      exampleManifests: findExampleManifests(root, canonicalRoot),
       conformanceTypes: frameworkPortNamesForComponent.length > 1 ? `${conformanceRoot}/public-api.types.ts` : null,
       browser: { fixture: `${browserRoot}/fixtures.mjs`, tests: `${browserRoot}/tests/`, paths: [`${browserRoot}/`, accessibilityPath] },
       accessibilityPath,
       changesPath: changesRoot,
       changeFragments: walkFiles(root, changesRoot).filter((file) => file.endsWith('.md')),
-      discovery: { webExport: webExports.has(componentId), frameworkExports: frameworkPortNamesForComponent, componentSlice: existingPath(root, canonicalRoot) || existingPath(root, legacyRoot) },
+      discovery: { webExport: webExports.has(componentId), frameworkExports: frameworkPortNamesForComponent, componentSlice: true },
     };
   });
   return { packages: packageNames.map((name) => ({ name, manifest: packageManifests.get(name) })), components, ownedUnits, frameworkExports, webExports };

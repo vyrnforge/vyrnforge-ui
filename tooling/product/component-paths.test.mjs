@@ -3,67 +3,94 @@ import assert from 'node:assert/strict';
 import { mkdtempSync, mkdirSync, writeFileSync } from 'node:fs';
 import os from 'node:os';
 import path from 'node:path';
-import { componentLayerDefinitions, discoverComponentRoots } from './component-paths.mjs';
+import { componentResponsibilityDefinitions, discoverComponentRoots } from './component-paths.mjs';
 
 function fixture() {
-  const root = mkdtempSync(path.join(os.tmpdir(), 'vf-component-layers-'));
-  const write = (name, content = '{}') => {
-    const file = path.join(root, name);
-    mkdirSync(path.dirname(file), { recursive: true });
-    writeFileSync(file, content);
-  };
-  return { root, write };
+  const root = mkdtempSync(path.join(os.tmpdir(), 'vf-component-ownership-'));
+  return { root, write(relativePath, content = '{}') {
+    const target = path.join(root, relativePath);
+    mkdirSync(path.dirname(target), { recursive: true });
+    writeFileSync(target, content);
+  } };
 }
 
-test('nested layer and optional typography category preserve stable component IDs', () => {
+test('responsibility and optional family preserve logical component IDs', () => {
   const { root, write } = fixture();
   write('product/components/elemental-primitives/typography/text/component.json');
-  write('product/components/elemental-primitives/icon/component.json');
+  write('product/components/elemental-primitives/media/icon/component.json');
   write('product/components/interactive-controls/button/component.json', '{"id":"button"}');
-  write('product/components/legacy-flat/component.json');
+  write('product/components/application-structures/app-shell/component.json');
+  write('product/components/composite-widgets/transient-surfaces/dialog/component.json');
   const components = discoverComponentRoots(root);
-  assert.equal(components.size, 4);
-  assert.deepEqual(componentLayerDefinitions.map((layer) => layer.id), [
+  assert.equal(components.size, 5);
+  assert.deepEqual(componentResponsibilityDefinitions.map(({ id }) => id), [
     'elemental-primitives', 'interactive-controls', 'composition-primitives',
-    'behavioral-infrastructure', 'composite-widgets', 'complex-ui',
+    'composite-widgets', 'application-structures',
   ]);
   assert.deepEqual(components.get('text'), {
     id: 'text', root: 'product/components/elemental-primitives/typography/text',
-    layer: 'elemental-primitives', category: 'typography', flat: false,
+    responsibility: 'elemental-primitives', family: 'typography',
   });
-  assert.equal(components.get('icon').category, null);
-  assert.equal(components.get('button').layer, 'interactive-controls');
-  assert.equal(components.get('legacy-flat').layer, null);
-  assert.equal(components.get('legacy-flat').flat, true);
+  assert.equal(components.get('button').family, null);
+  assert.equal(components.get('dialog').family, 'transient-surfaces');
+  assert.equal(components.get('app-shell').responsibility, 'application-structures');
+  assert.equal(Object.hasOwn(components.get('button'), 'layer'), false);
 });
 
-test('duplicate flat/nested component identities fail instead of silently selecting a source', () => {
+test('duplicate canonical identities fail closed', () => {
   const { root, write } = fixture();
-  write('product/components/button/component.json');
+  write('product/components/elemental-primitives/button/component.json');
   write('product/components/interactive-controls/button/component.json');
   assert.throws(() => discoverComponentRoots(root), /Duplicate component owner for button/);
 });
 
-test('nested metadata cannot silently change its published component ID', () => {
+test('metadata IDs must match the final folder', () => {
   const { root, write } = fixture();
   write('product/components/interactive-controls/button/component.json', '{"id":"different"}');
   assert.throws(() => discoverComponentRoots(root), /Component ID must match its final folder/);
 });
 
-
-test('L5 responsibility-family folders are ownership categories, not component identities', () => {
-  const { root, write } = fixture();
-  write('product/components/composite-widgets/transient-surfaces/dialog/component.json');
-  write('product/components/composite-widgets/collection-selection/listbox/component.json');
-
-  const components = discoverComponentRoots(root);
-
-  assert.deepEqual(components.get('dialog'), {
-    id: 'dialog',
-    root: 'product/components/composite-widgets/transient-surfaces/dialog',
-    layer: 'composite-widgets',
-    category: 'transient-surfaces',
-    flat: false,
+for (const [name, owner, error] of [
+  ['flat', 'button/component.json', /Unknown component responsibility/],
+  ['retired complex-ui', 'complex-ui/app-shell/component.json', /Unknown component responsibility/],
+  ['retired behavioral infrastructure', 'behavioral-infrastructure/navigation/component.json', /Unknown component responsibility/],
+  ['unknown root', 'unknown/button/component.json', /Unknown component responsibility/],
+  ['invalid name', 'interactive-controls/BadName/component.json', /Invalid component ownership directory/],
+  ['missing metadata', 'interactive-controls/button/web/index.css', /Missing component metadata/],
+  ['unknown family', 'composite-widgets/unknown/dialog/component.json', /Missing component metadata/],
+  ['excess depth', 'composite-widgets/transient-surfaces/group/dialog/component.json', /Missing component metadata/],
+  ['responsibility as component', 'interactive-controls/component.json', /Ownership grouping must not be a component/],
+  ['family as component', 'elemental-primitives/typography/component.json', /Ownership grouping must not be a component/],
+]) {
+  test('rejects ' + name + ' ownership', () => {
+    const { root, write } = fixture();
+    write('product/components/' + owner);
+    assert.throws(() => discoverComponentRoots(root), error);
   });
-  assert.equal(components.get('listbox').category, 'collection-selection');
+}
+
+test('a valid owner cannot conceal an additional nested component owner', () => {
+  const { root, write } = fixture();
+  write('product/components/interactive-controls/button/component.json');
+  write('product/components/interactive-controls/button/nested/component.json');
+  assert.throws(() => discoverComponentRoots(root), /Nested component ownership is not allowed/);
+});
+
+test('grouping-level Markdown change records remain historical provenance, not owners', () => {
+  const { root, write } = fixture();
+  write('product/components/elemental-primitives/media/image/component.json');
+  write('product/components/elemental-primitives/media/changes/2026-11-10-establish-media-family.md', '# Historical record');
+  assert.deepEqual([...discoverComponentRoots(root).keys()], ['image']);
+  write('product/components/elemental-primitives/media/changes/component.json');
+  assert.throws(() => discoverComponentRoots(root), /Invalid grouping change record/);
+});
+
+test('rejects collection-root metadata even when a valid component owner exists', () => {
+  const { root, write } = fixture();
+  write('product/components/interactive-controls/button/component.json', '{"id":"button"}');
+  assert.deepEqual([...discoverComponentRoots(root).keys()], ['button']);
+  write('product/components/component.json', '{"id":"button"}');
+  assert.throws(() => discoverComponentRoots(root), {
+    message: 'Ownership grouping must not be a component: ' + path.join(root, 'product/components'),
+  });
 });

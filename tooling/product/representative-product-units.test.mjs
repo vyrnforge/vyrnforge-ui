@@ -10,7 +10,7 @@ const expectedRoots = {
   text: 'elemental-primitives/typography/text',
 };
 
-const l5Family = Object.freeze({
+const compositeFamily = Object.freeze({
   disclosure: 'disclosure-view-switching',
   accordion: 'disclosure-view-switching',
   tabs: 'disclosure-view-switching',
@@ -62,7 +62,7 @@ test('canonical component migrations have one product owner', () => {
     assert.ok(component, `${id} should exist in the Product Graph`);
     const canonicalRoot = `product/components/${expectedRoots[id]}/`;
     assert.equal(component.facets.canonicalRoot, canonicalRoot);
-    assert.ok(component.layer, `${id} must have an approved source layer`);
+    assert.ok(component.responsibility, `${id} must have an approved source responsibility`);
     assert.equal(component.facets.legacyRoot, null);
     assert.equal(component.metadataSource, 'product-unit');
     assert.equal(component.migration.state, 'product-unit');
@@ -92,7 +92,7 @@ test('Icon component projections remain separate from the icon catalog package',
   assert.ok(graph.packages.some((pkg) => pkg.id === 'icons'));
 });
 
-test('retired inherited L1 candidates stay out of the Product Graph and public package surfaces', () => {
+test('retired inherited elemental-primitive candidates stay out of the Product Graph and public package surfaces', () => {
   const graph = discoverProductGraph();
   for (const id of ['surface', 'separator', 'visually-hidden', 'color-swatch']) {
     assert.equal(graph.components.some((entry) => entry.unitId === id), false, id + ' must not be a standalone component product unit');
@@ -107,13 +107,13 @@ test('retired inherited L1 candidates stay out of the Product Graph and public p
   assert.deepEqual(productGraphProblems(), []);
 });
 
-test('Native-first L2 controls retain stable package projections after source migration', () => {
+test('Native-first interactive controls retain stable package projections after source migration', () => {
   const graph = discoverProductGraph();
   for (const id of ['link', 'checkbox', 'switch']) {
     const component = graph.components.find((entry) => entry.unitId === id);
     assert.ok(component, id + ' must remain discoverable');
     assert.equal(component.id, 'component:' + id);
-    assert.equal(component.layer, 'interactive-controls');
+    assert.equal(component.responsibility, 'interactive-controls');
     assert.equal(component.facets.canonicalRoot, 'product/components/interactive-controls/' + id + '/');
     assert.equal(component.facets.legacyRoot, null);
     assert.equal(component.metadataSource, 'product-unit');
@@ -131,12 +131,12 @@ test('Native-first L2 controls retain stable package projections after source mi
 });
 
 
-test('L2 native selection and range controls project through unchanged ports', () => {
+test('Native selection and range controls project through unchanged ports', () => {
   const graph = discoverProductGraph();
   for (const id of ['native-select', 'slider']) {
     const component = graph.components.find((entry) => entry.unitId === id);
     assert.ok(component, id + ' exists in the normalized Product Graph');
-    assert.equal(component.layer, 'interactive-controls');
+    assert.equal(component.responsibility, 'interactive-controls');
     assert.equal(component.id, 'component:' + id);
     assert.equal(component.facets.canonicalRoot, 'product/components/interactive-controls/' + id + '/');
     assert.equal(component.facets.legacyRoot, null);
@@ -154,12 +154,12 @@ test('L2 native selection and range controls project through unchanged ports', (
   assert.deepEqual(productGraphProblems(), []);
 });
 
-test('L2 FileInput remains independently owned for native file selection', () => {
+test('FileInput remains independently owned for native file selection', () => {
   const graph = discoverProductGraph();
   for (const id of ['file-input']) {
     const component = graph.components.find((entry) => entry.unitId === id);
     assert.ok(component, id + ' remains discoverable');
-    assert.equal(component.layer, 'interactive-controls');
+    assert.equal(component.responsibility, 'interactive-controls');
     assert.equal(component.id, 'component:' + id);
     assert.equal(component.facets.canonicalRoot, 'product/components/interactive-controls/' + id + '/');
     assert.equal(component.facets.legacyRoot, null);
@@ -177,13 +177,13 @@ test('L2 FileInput remains independently owned for native file selection', () =>
   assert.deepEqual(productGraphProblems(), []);
 });
 
-test('L2 native text-entry components retain package identities and profiles', () => {
+test('Native text-entry components retain package identities and profiles', () => {
   const graph = discoverProductGraph();
   for (const id of ['input', 'textarea']) {
     const component = graph.components.find((entry) => entry.unitId === id);
     assert.ok(component, id + ' remains discoverable');
     assert.equal(component.id, 'component:' + id);
-    assert.equal(component.layer, 'interactive-controls');
+    assert.equal(component.responsibility, 'interactive-controls');
     assert.equal(component.facets.canonicalRoot, 'product/components/interactive-controls/' + id + '/');
     assert.equal(component.facets.legacyRoot, null);
     assert.equal(component.metadataSource, 'product-unit');
@@ -200,12 +200,12 @@ test('L2 native text-entry components retain package identities and profiles', (
   assert.deepEqual(productGraphProblems(), []);
 });
 
-test('L2 Radio and ToggleButton remain native single-focus controls with stable projections', () => {
+test('Radio and ToggleButton remain native single-focus controls with stable projections', () => {
   const graph = discoverProductGraph();
   for (const id of ['radio', 'toggle-button']) {
     const component = graph.components.find((entry) => entry.unitId === id);
     assert.ok(component, id + ' must remain discoverable');
-    assert.equal(component.layer, 'interactive-controls');
+    assert.equal(component.responsibility, 'interactive-controls');
     assert.equal(component.id, 'component:' + id);
     assert.equal(component.facets.canonicalRoot, 'product/components/interactive-controls/' + id + '/');
     assert.equal(component.facets.legacyRoot, null);
@@ -223,15 +223,15 @@ test('L2 Radio and ToggleButton remain native single-focus controls with stable 
   assert.deepEqual(productGraphProblems(), []);
 });
 
-test('L5 Disclosure and Accordion are canonical composite owners with unchanged public projections', () => {
+test('Disclosure and Accordion are canonical composite owners with unchanged public projections', () => {
   const graph = discoverProductGraph();
   for (const id of ['disclosure', 'accordion']) {
     const component = graph.components.find((entry) => entry.unitId === id);
     assert.ok(component, id + ' must be discovered');
     assert.equal(component.id, 'component:' + id);
-    assert.equal(component.layer, 'composite-widgets');
-    assert.equal(component.category, l5Family[id]);
-    assert.equal(component.facets.canonicalRoot, 'product/components/composite-widgets/' + l5Family[id] + '/' + id + '/');
+    assert.equal(component.responsibility, 'composite-widgets');
+    assert.equal(component.family, compositeFamily[id]);
+    assert.equal(component.facets.canonicalRoot, 'product/components/composite-widgets/' + compositeFamily[id] + '/' + id + '/');
     assert.equal(component.facets.legacyRoot, null);
     assert.equal(component.metadataSource, 'product-unit');
     assert.equal(component.migration.state, 'product-unit');
@@ -247,14 +247,14 @@ test('L5 Disclosure and Accordion are canonical composite owners with unchanged 
   assert.deepEqual(productGraphProblems(), []);
 });
 
-test('L5 surface composites retain stable five-port package projections after ownership migration', () => {
+test('Transient-surface composites retain stable five-port package projections after ownership migration', () => {
   const graph = discoverProductGraph();
   for (const id of ['alert-dialog', 'drawer', 'popover', 'tooltip', 'preview-card']) {
     const component = graph.components.find((entry) => entry.unitId === id);
     assert.ok(component, id + ' must be discovered');
     assert.equal(component.id, 'component:' + id);
-    assert.equal(component.layer, 'composite-widgets');
-    assert.equal(component.facets.canonicalRoot, 'product/components/composite-widgets/' + l5Family[id] + '/' + id + '/');
+    assert.equal(component.responsibility, 'composite-widgets');
+    assert.equal(component.facets.canonicalRoot, 'product/components/composite-widgets/' + compositeFamily[id] + '/' + id + '/');
     assert.equal(component.facets.legacyRoot, null);
     assert.equal(component.metadataSource, 'product-unit');
     assert.equal(component.migration.state, 'product-unit');
@@ -270,14 +270,14 @@ test('L5 surface composites retain stable five-port package projections after ow
   assert.deepEqual(productGraphProblems(), []);
 });
 
-test('L5 command composites retain canonical ownership and five-port projections', () => {
+test('Command composites retain canonical ownership and five-port projections', () => {
   const graph = discoverProductGraph();
   for (const id of ['menu', 'context-menu', 'menubar', 'toolbar', 'split-button']) {
     const component = graph.components.find((entry) => entry.unitId === id);
     assert.ok(component, id + ' must be discovered');
     assert.equal(component.id, 'component:' + id);
-    assert.equal(component.layer, 'composite-widgets');
-    assert.equal(component.facets.canonicalRoot, 'product/components/composite-widgets/' + l5Family[id] + '/' + id + '/');
+    assert.equal(component.responsibility, 'composite-widgets');
+    assert.equal(component.facets.canonicalRoot, 'product/components/composite-widgets/' + compositeFamily[id] + '/' + id + '/');
     assert.equal(component.facets.legacyRoot, null);
     assert.equal(component.metadataSource, 'product-unit');
     assert.equal(component.migration.state, 'product-unit');
@@ -293,14 +293,14 @@ test('L5 command composites retain canonical ownership and five-port projections
   assert.deepEqual(productGraphProblems(), []);
 });
 
-test('L5 selection and value composites retain canonical five-port projections', () => {
+test('Selection and value composites retain canonical five-port projections', () => {
   const graph = discoverProductGraph();
   for (const id of ['listbox', 'select', 'combobox', 'multi-select', 'toggle-group', 'segmented-control', 'tag-group', 'rating', 'range-slider']) {
     const component = graph.components.find((entry) => entry.unitId === id);
     assert.ok(component, id + ' must be discovered');
     assert.equal(component.id, 'component:' + id);
-    assert.equal(component.layer, 'composite-widgets');
-    assert.equal(component.facets.canonicalRoot, 'product/components/composite-widgets/' + l5Family[id] + '/' + id + '/');
+    assert.equal(component.responsibility, 'composite-widgets');
+    assert.equal(component.facets.canonicalRoot, 'product/components/composite-widgets/' + compositeFamily[id] + '/' + id + '/');
     assert.equal(component.facets.legacyRoot, null);
     assert.equal(component.metadataSource, 'product-unit');
     assert.equal(component.migration.state, 'product-unit');
@@ -316,14 +316,14 @@ test('L5 selection and value composites retain canonical five-port projections',
   assert.deepEqual(productGraphProblems(), []);
 });
 
-test('final L5 compound composites use canonical ownership and stable five-port projections', () => {
+test('Compound composites use canonical ownership and stable five-port projections', () => {
   const graph = discoverProductGraph();
   for (const id of ['carousel', 'color-picker', 'file-uploader', 'number-field', 'otp-field', 'pagination', 'password-field', 'search-field', 'split-panel', 'toast']) {
     const component = graph.components.find((entry) => entry.unitId === id);
     assert.ok(component, id + ' must be discovered');
     assert.equal(component.id, 'component:' + id);
-    assert.equal(component.layer, 'composite-widgets');
-    assert.equal(component.facets.canonicalRoot, 'product/components/composite-widgets/' + l5Family[id] + '/' + id + '/');
+    assert.equal(component.responsibility, 'composite-widgets');
+    assert.equal(component.facets.canonicalRoot, 'product/components/composite-widgets/' + compositeFamily[id] + '/' + id + '/');
     assert.equal(component.facets.legacyRoot, null);
     assert.equal(component.metadataSource, 'product-unit');
     assert.equal(component.migration.state, 'product-unit');
@@ -339,13 +339,13 @@ test('final L5 compound composites use canonical ownership and stable five-port 
   assert.deepEqual(productGraphProblems(), []);
 });
 
-test('L6 AppShell and SideNav retain canonical five-port projections', () => {
+test('AppShell and SideNav retain canonical five-port projections', () => {
   const graph = discoverProductGraph();
   for (const id of ['app-shell', 'side-nav']) {
     const component = graph.components.find((entry) => entry.unitId === id);
     assert.ok(component, id + ' must be discovered');
-    assert.equal(component.layer, 'complex-ui');
-    assert.equal(component.facets.canonicalRoot, 'product/components/complex-ui/' + id + '/');
+    assert.equal(component.responsibility, 'application-structures');
+    assert.equal(component.facets.canonicalRoot, 'product/components/application-structures/' + id + '/');
     assert.equal(component.facets.legacyRoot, null);
     assert.equal(component.migration.state, 'product-unit');
     assert.deepEqual(Object.keys(component.surfaces).sort(), ['angular', 'elements', 'react', 'vue', 'web']);
@@ -353,11 +353,11 @@ test('L6 AppShell and SideNav retain canonical five-port projections', () => {
   assert.deepEqual(productGraphProblems(), []);
 });
 
-test('L3 aggregate layout projection owns only the six accepted composition primitives', () => {
+test('Aggregate layout projection owns only the six accepted composition primitives', () => {
   const graph = discoverProductGraph();
   const component = graph.components.find((entry) => entry.unitId === 'layout');
   assert.ok(component);
-  assert.equal(component.layer, 'composition-primitives');
+  assert.equal(component.responsibility, 'composition-primitives');
   assert.equal(component.facets.canonicalRoot, 'product/components/composition-primitives/layout/');
   assert.equal(component.facets.legacyRoot, null);
   assert.equal(component.migration.state, 'product-unit');
@@ -365,17 +365,17 @@ test('L3 aggregate layout projection owns only the six accepted composition prim
 
   const elements = graph.packages.find((pkg) => pkg.id === 'elements');
   assert.ok(elements);
-  assert.equal(Boolean(elements.manifest.exports?.['./layout']), false, 'Elements must use native HTML plus Web layout hooks instead of an L3 runtime entrypoint');
+  assert.equal(Boolean(elements.manifest.exports?.['./layout']), false, 'Elements must use native HTML plus Web layout hooks instead of a layout runtime entrypoint');
 
   assert.deepEqual(productGraphProblems(), []);
 });
 
-test('L4 uses canonical Core capability ownership without component-shaped runtime units', () => {
+test('Shared behavior uses canonical Core capability ownership without component-shaped runtime units', () => {
   const graph = discoverProductGraph();
 
   for (const id of ['collection-navigation', 'typeahead-matching']) {
     const capability = graph.units.find((entry) => entry.id === `capability:${id}`);
-    assert.ok(capability, id + ' must be a canonical L4 capability');
+    assert.ok(capability, id + ' must be a canonical Core capability');
     assert.equal(capability.kind, 'capability');
     assert.equal(capability.authoringMode, 'product-unit');
     assert.equal(capability.migration.state, 'product-unit');
@@ -393,7 +393,7 @@ test('L4 uses canonical Core capability ownership without component-shaped runti
   assert.deepEqual(productGraphProblems(), []);
 });
 
-test('L1 aggregate stylesheet is not a component owner and responsibility families own their product units', () => {
+test('Elemental-primitives aggregate stylesheet is not a component owner and responsibility families own their product units', () => {
   const graph = discoverProductGraph();
   assert.equal(graph.components.some((entry) => entry.unitId === 'elemental-primitives'), false);
   assert.equal(graph.components.some((entry) => entry.unitId === 'media'), false);
@@ -402,7 +402,7 @@ test('L1 aggregate stylesheet is not a component owner and responsibility famili
   for (const id of ['code', 'kbd']) {
     const component = graph.components.find((entry) => entry.unitId === id);
     assert.ok(component, id + ' is independently owned inside Typography');
-    assert.equal(component.layer, 'elemental-primitives');
+    assert.equal(component.responsibility, 'elemental-primitives');
     assert.equal(component.facets.canonicalRoot, 'product/components/elemental-primitives/typography/' + id + '/');
     assert.deepEqual(Object.keys(component.surfaces), ['web']);
   }
@@ -421,16 +421,16 @@ test('L1 aggregate stylesheet is not a component owner and responsibility famili
   assert.equal(graph.components.some((entry) => entry.unitId === 'loading'), false);
 
   const loading = graph.patterns.find((entry) => entry.unitId === 'loading');
-  assert.ok(loading, 'loading owns async feedback as a Pattern outside L1-L6');
+  assert.ok(loading, 'loading owns async feedback as a Pattern outside component ownership');
   assert.equal(loading.id, 'pattern:loading');
-  assert.equal(loading.layer, null);
+  assert.equal(loading.responsibility, null);
   assert.equal(loading.facets.canonicalRoot, 'product/patterns/loading/');
   assert.deepEqual(Object.keys(loading.surfaces), ['web']);
 
   assert.deepEqual(productGraphProblems(), []);
 });
 
-test('retired L2 specializations stay out of the Product Graph', () => {
+test('retired native-control specializations stay out of the Product Graph', () => {
   const graph = discoverProductGraph();
   for (const id of ['number-input', 'color-input', 'temporal-input', 'theme-toggle']) {
     assert.equal(graph.components.some((entry) => entry.unitId === id), false, id + ' must not remain a standalone component product unit');

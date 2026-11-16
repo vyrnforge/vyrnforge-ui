@@ -1,6 +1,6 @@
-# Layer 3 — Composition primitive source ownership
+# Composition primitive source ownership
 
-The `layout` product unit is the aggregate package projection for six accepted Layer 3 composition primitives:
+The `layout` product unit is the aggregate package projection for six accepted composition primitives:
 
 - Stack
 - Inline
@@ -9,7 +9,7 @@ The `layout` product unit is the aggregate package projection for six accepted L
 - Container
 - ControlGroup
 
-It is an aggregate distribution surface, not evidence that every layout-related noun belongs in L3.
+It is an aggregate distribution surface, not evidence that every layout-related noun belongs in this responsibility.
 
 The retired concepts have explicit owners:
 

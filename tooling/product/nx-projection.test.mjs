@@ -16,7 +16,7 @@ function affectedBy(file) {
   return JSON.parse(result);
 }
 
-test('Nx follows layered sources into their package targets and documentation', () => {
+test('Nx follows responsibility-based sources into their package targets and documentation', () => {
   const web = affectedBy('product/components/interactive-controls/button/web/button.css');
   assert.ok(web.includes('@vyrnforge/web'));
   assert.ok(web.includes('docs'));

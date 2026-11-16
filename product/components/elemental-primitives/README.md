@@ -1,10 +1,10 @@
-# Layer 1 — Elemental primitive source ownership
+# Elemental primitive source ownership
 
-Layer 1 is organized by reusable responsibility families rather than by every inventory noun.
+Elemental primitive ownership is organized by reusable responsibility families rather than by every inventory noun.
 
 ## Typography
 
-Typography is a first-class L1 family.
+Typography is a first-class elemental primitive family.
 
 - `typography/text` owns general semantic-host × visual-role text treatment.
 - `typography/code` owns specialized native code/pre presentation while reusing the shared typography scale.
@@ -15,16 +15,16 @@ Typography is a first-class L1 family.
 
 ## Media
 
-Media is a first-class L1 ownership family, not a runtime component or public package.
+Media is a first-class elemental primitive ownership family, not a runtime component or public package.
 
 - `media/icon` is the genuine visual primitive. It owns reusable glyph definitions/rendering, sizing, variants, canonical styling, and decorative-versus-meaningful accessibility treatment.
 - `media/image` is a native-backed presentation treatment over `img`. Native HTML owns alternative text, loading, decoding, source selection, fetch priority, intrinsic sizing, and browser image behavior.
 - Image does not own asset loading, failure recovery, fallback composition, galleries, zooming, cropping workflows, or another higher-level media experience.
-- Framework-specific Image wrappers are not required merely for symmetry; Native Web styling is currently the smallest correct reusable layer.
+- Framework-specific Image wrappers are not required merely for symmetry; Native Web styling is currently the smallest correct reusable surface.
 - The official glyph catalog remains independently distributed through `@vyrnforge/icons`; Media is source ownership, not a package boundary.
 
-Surface, Separator, ColorSwatch, and VisuallyHidden are not standalone L1 product units. Surface remains foundation visual vocabulary; native `<hr>` and context-owned parts cover separator semantics; `data-vf-visually-hidden` remains an accessibility-foundation hook in `foundation.css`; contextual swatches belong to their owning component such as ColorPicker. Structured loading placeholders are not an L1 primitive; they are one presentation inside the Loading Pattern under `product/patterns/loading/`. Future L1 additions are proposed fresh rather than inherited from the original inventory.
+Surface, Separator, ColorSwatch, and VisuallyHidden are not standalone elemental primitive product units. Surface remains foundation visual vocabulary; native `<hr>` and context-owned parts cover separator semantics; `data-vf-visually-hidden` remains an accessibility-foundation hook in `foundation.css`; contextual swatches belong to their owning component such as ColorPicker. Structured loading placeholders are not an elemental primitive; they are one presentation inside the Loading Pattern under `product/patterns/loading/`. Future elemental primitives are proposed fresh rather than inherited from the original inventory.
 
-Figure/List/Table/form/interactive semantics remain owned by their native structure or higher-layer contracts.
+Figure/List/Table/form/interactive semantics remain owned by their native structure or other owning contracts.
 
 Private selection-mark recipes live in internal Web styling and are not public product units. The existing `@vyrnforge/web/styles/elemental-primitives.css` entrypoint is an aggregate convenience stylesheet only; it is not a component identity or Product Graph owner.

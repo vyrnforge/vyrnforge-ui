@@ -1,69 +1,109 @@
 import { existsSync, readFileSync, readdirSync } from 'node:fs';
 import path from 'node:path';
 
-// A path taxonomy for source ownership; component IDs and public exports remain stable.
-export const componentLayerDefinitions = Object.freeze([
-  { id: 'elemental-primitives', label: 'L1 — Elemental Primitives' },
-  { id: 'interactive-controls', label: 'L2 — Interactive Controls' },
-  { id: 'composition-primitives', label: 'L3 — Composition Primitives' },
-  { id: 'behavioral-infrastructure', label: 'L4 — Behavioral Infrastructure' },
-  { id: 'composite-widgets', label: 'L5 — Composite Widgets' },
-  { id: 'complex-ui', label: 'L6 — Complex UI & Application Structures' },
-]);
-const layerNames = new Set(componentLayerDefinitions.map((layer) => layer.id));
+// Internal source ownership; neither component IDs nor public exports depend on it.
+export const componentResponsibilityDefinitions = Object.freeze([
+  { id: 'elemental-primitives', families: Object.freeze(['typography', 'media']) },
+  { id: 'interactive-controls', families: Object.freeze([]) },
+  { id: 'composition-primitives', families: Object.freeze([]) },
+  { id: 'composite-widgets', families: Object.freeze([
+    'disclosure-view-switching', 'transient-surfaces', 'commands-actions',
+    'collection-selection', 'choice-value', 'compound-fields',
+    'content-navigation', 'interactive-layout', 'feedback',
+  ]) },
+  { id: 'application-structures', families: Object.freeze([]) },
+].map(Object.freeze));
+const responsibilities = new Map(componentResponsibilityDefinitions.map((entry) => [entry.id, entry]));
 const validName = /^[a-z][a-z0-9-]*$/;
 
 function childDirectories(absolute) {
   if (!existsSync(absolute)) return [];
   return readdirSync(absolute, { withFileTypes: true })
-    .filter((entry) => entry.isDirectory() && validName.test(entry.name))
-    .map((entry) => entry.name)
+    .filter((entry) => entry.isDirectory() || entry.isSymbolicLink())
+    .map((entry) => {
+      if (!entry.isDirectory() || !validName.test(entry.name)) {
+        throw new Error('Invalid component ownership directory: ' + path.join(absolute, entry.name));
+      }
+      return entry.name;
+    })
     .sort();
 }
 
-// Descend layer/category folders until finding the unit metadata. Old flat units
-// are still discovered during migration, but duplicate stable IDs fail closed.
+// Grouping-level change records are provenance, not canonical owners.
+// Accept only Markdown files here; never silently skip nested ownership.
+function groupingDirectories(absolute) {
+  return childDirectories(absolute).filter((name) => {
+    if (name !== 'changes') return true;
+    const changes = path.join(absolute, name);
+    for (const entry of readdirSync(changes, { withFileTypes: true })) {
+      if (!entry.isFile() || !entry.name.endsWith('.md')) {
+        throw new Error('Invalid grouping change record: ' + path.join(changes, entry.name));
+      }
+    }
+    return false;
+  });
+}
+
+function assertNoNestedOwners(absolute) {
+  for (const entry of readdirSync(absolute, { withFileTypes: true })) {
+    if (!entry.isDirectory()) continue;
+    const child = path.join(absolute, entry.name);
+    if (existsSync(path.join(child, 'component.json'))) {
+      throw new Error('Nested component ownership is not allowed: ' + child);
+    }
+    assertNoNestedOwners(child);
+  }
+}
+
 export function discoverComponentRoots(root) {
   const relativeRoot = 'product/components';
   const absoluteRoot = path.join(root, relativeRoot);
   const components = new Map();
 
-  const walk = (segments) => {
-    const absolute = path.join(absoluteRoot, ...segments);
+  const add = (responsibility, family, id) => {
+    const canonicalRoot = [relativeRoot, responsibility, family, id].filter(Boolean).join('/');
+    const absolute = path.join(root, canonicalRoot);
     const metadataPath = path.join(absolute, 'component.json');
-    const isLayerDirectory = segments.length === 1 && layerNames.has(segments[0]);
-    const isFlatUnit = segments.length === 1 && !isLayerDirectory;
-    const hasMetadata = existsSync(metadataPath);
-
-    if (hasMetadata || isFlatUnit) {
-      if (isLayerDirectory) {
-        throw new Error('Layer folder must not be a component: ' + relativeRoot + '/' + segments[0]);
-      }
-      const id = segments[segments.length - 1];
-      const metadata = hasMetadata ? JSON.parse(readFileSync(metadataPath, 'utf8')) : null;
-      if (metadata?.id && metadata.id !== id) {
-        throw new Error('Component ID must match its final folder: ' + metadata.id + ' != ' + id);
-      }
-      const canonicalRoot = relativeRoot + '/' + segments.join('/');
-      if (components.has(id)) {
-        throw new Error('Duplicate component owner for ' + id + ': ' + components.get(id).root + ' and ' + canonicalRoot);
-      }
-      const isLayered = layerNames.has(segments[0]);
-      components.set(id, {
-        id,
-        root: canonicalRoot,
-        layer: isLayered ? segments[0] : null,
-        category: isLayered && segments.length > 2 ? segments.slice(1, -1).join('/') : null,
-        flat: isFlatUnit,
-      });
-      return;
+    if (!existsSync(metadataPath)) {
+      throw new Error('Missing component metadata: ' + canonicalRoot + '/component.json');
     }
-    if (segments.length >= 5) {
-      throw new Error('Component grouping is too deep: ' + relativeRoot + '/' + segments.join('/'));
+    const metadata = JSON.parse(readFileSync(metadataPath, 'utf8'));
+    if (!metadata || typeof metadata !== 'object' || Array.isArray(metadata)) {
+      throw new Error('Invalid component metadata: ' + canonicalRoot);
     }
-    for (const name of childDirectories(absolute)) walk([...segments, name]);
+    if (Object.hasOwn(metadata, 'id') && metadata.id !== id) {
+      throw new Error('Component ID must match its final folder: ' + metadata.id + ' != ' + id);
+    }
+    if (components.has(id)) {
+      throw new Error('Duplicate component owner for ' + id + ': ' + components.get(id).root + ' and ' + canonicalRoot);
+    }
+    assertNoNestedOwners(absolute);
+    components.set(id, { id, root: canonicalRoot, responsibility, family });
   };
 
-  for (const name of childDirectories(absoluteRoot)) walk([name]);
+  const assertGrouping = (absolute) => {
+    if (existsSync(path.join(absolute, 'component.json'))) {
+      throw new Error('Ownership grouping must not be a component: ' + absolute);
+    }
+  };
+
+  assertGrouping(absoluteRoot);
+  for (const responsibility of childDirectories(absoluteRoot)) {
+    const definition = responsibilities.get(responsibility);
+    if (!definition) throw new Error('Unknown component responsibility: ' + responsibility);
+    const responsibilityRoot = path.join(absoluteRoot, responsibility);
+    assertGrouping(responsibilityRoot);
+    for (const name of groupingDirectories(responsibilityRoot)) {
+      const candidate = path.join(responsibilityRoot, name);
+      if (definition.families.includes(name)) {
+        assertGrouping(candidate);
+        for (const id of groupingDirectories(candidate)) add(responsibility, name, id);
+      } else {
+        // Only declared families may introduce an additional ownership level.
+        // A direct component must declare its own metadata.
+        add(responsibility, null, name);
+      }
+    }
+  }
   return components;
 }

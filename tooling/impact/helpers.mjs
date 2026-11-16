@@ -46,7 +46,7 @@ export function componentPorts(component) {
 export function componentForOwnedPath(discovery, filePath) {
   for (const component of discovery.components) {
     // Target-specific ownership must win over the enclosing product root. This is
-    // what keeps product/components/button/react/** React-local during migration.
+    // what keeps product/components/interactive-controls/button/react/** React-local during migration.
     for (const [port, config] of Object.entries(component.ports)) {
       const ownedPath = (config.paths ?? []).find((candidate) => pathWithin(filePath, candidate));
       if (ownedPath) return { component, port, area: 'implementation', root: ownedPath };

@@ -1,6 +1,6 @@
-# Layer 1 Media
+# Media — elemental primitives
 
-Media is a Layer 1 ownership family for the smallest reusable non-interactive visual/media responsibilities. It is not a runtime component, package, or public namespace.
+Media is an elemental primitive ownership family for the smallest reusable non-interactive visual/media responsibilities. It is not a runtime component, package, or public namespace.
 
 ## Members
 
@@ -9,6 +9,6 @@ Media is a Layer 1 ownership family for the smallest reusable non-interactive vi
 
 ## Boundaries
 
-Media does not own loading placeholders, status semantics, color-sample semantics, Avatar fallback, galleries, image editors, zoom/crop workflows, or application asset pipelines. Structured loading placeholders belong to the Loading Pattern outside L1. ColorSwatch remains outside Media and is still pending its own L1 ownership review.
+Media does not own loading placeholders, status semantics, color-sample semantics, Avatar fallback, galleries, image editors, zoom/crop workflows, or application asset pipelines. Structured loading placeholders belong to the Loading Pattern outside elemental primitives. Contextual color swatches belong to their owning component, such as ColorPicker. A standalone ColorSwatch is not an admitted product unit.
 
-Stable logical component IDs and package entrypoints remain unchanged by this source-ownership category.
+Stable logical component IDs and package entrypoints remain unchanged by this source-ownership family.
