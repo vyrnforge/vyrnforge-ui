@@ -54,22 +54,23 @@ test('a newly exposed component automatically requires its owned evidence', () =
   write('packages/core/package.json', JSON.stringify({ name: '@vyrnforge/core', exports: { '.': './dist/index.js' } }));
   write('packages/web/package.json', JSON.stringify({ name: '@vyrnforge/web', exports: { '.': './dist/index.js', './styles/tabs.css': './dist/components/tabs/tabs.css' } }));
   write('packages/react/package.json', JSON.stringify({ name: '@vyrnforge/react', exports: { '.': './dist/index.js', './tabs': './dist/components/tabs/index.js' } }));
-  write('packages/react/src/components/tabs/index.ts', 'export const Tabs = null;\n');
-  write('packages/web/src/components/tabs/tabs.css', '[data-vf-tabs] {}\n');
-  write('product/tabs/docs/index.html', '<h2>Overview</h2>');
-  write('product/tabs/examples/basic/example.json', JSON.stringify({ id: 'tabs/basic' }));
-  write('product/tabs/changes/add-tabs.md', '---\ntype: minor\n---\n\nAdd Tabs.\n');
+  write('product/components/composite-widgets/disclosure-view-switching/tabs/component.json', JSON.stringify({ group: 'controls' }));
+  write('product/components/composite-widgets/disclosure-view-switching/tabs/react/index.ts', 'export const Tabs = null;\n');
+  write('product/components/composite-widgets/disclosure-view-switching/tabs/web/tabs.css', '[data-vf-tabs] {}\n');
+  write('product/components/composite-widgets/disclosure-view-switching/tabs/docs/index.html', '<h2>Overview</h2>');
+  write('product/components/composite-widgets/disclosure-view-switching/tabs/examples/basic/example.json', JSON.stringify({ id: 'tabs/basic' }));
+  write('product/components/composite-widgets/disclosure-view-switching/tabs/changes/add-tabs.md', '---\ntype: minor\n---\n\nAdd Tabs.\n');
   const tabs = discoverProductUnits(root).components.find((entry) => entry.component === 'tabs');
   assert.ok(tabs);
   assert.deepEqual(Object.keys(tabs.ports).sort(), ['react', 'web']);
-  assert.equal(tabs.documentationSource, 'product/tabs/docs/index.html');
-  assert.deepEqual(tabs.documentationSources, ['product/tabs/docs/index.html']);
-  assert.equal(tabs.accessibilityPath, 'product/tabs/accessibility.json');
+  assert.equal(tabs.documentationSource, 'product/components/composite-widgets/disclosure-view-switching/tabs/docs/index.html');
+  assert.deepEqual(tabs.documentationSources, ['product/components/composite-widgets/disclosure-view-switching/tabs/docs/index.html']);
+  assert.equal(tabs.accessibilityPath, 'product/components/composite-widgets/disclosure-view-switching/tabs/accessibility.json');
   assert.ok(tabs.browser.paths.includes(tabs.accessibilityPath));
   const problems = productPreparationProblems(root);
   assert.ok(problems.some((problem) => problem.includes('packages/react/test/components/tabs/api.types.ts')));
   assert.ok(problems.some((problem) => problem.includes('packages/react/test/components/tabs/ssr.test.mjs')));
-  assert.ok(problems.some((problem) => problem.includes('product/tabs/test/browser/fixtures.mjs')));
+  assert.ok(problems.some((problem) => problem.includes('product/components/composite-widgets/disclosure-view-switching/tabs/test/browser/fixtures.mjs')));
 });
 
 test('component discovery rejects competing model and HTML primary documentation sources', () => {
@@ -77,14 +78,14 @@ test('component discovery rejects competing model and HTML primary documentation
   const write = writer(root);
   write('package.json', JSON.stringify({ workspaces: ['packages/web'] }));
   write('packages/web/package.json', JSON.stringify({ name: '@vyrnforge/web', exports: { '.': './dist/index.js', './styles/button.css': './dist/components/button/button.css' } }));
-  write('packages/web/src/components/button/button.css', '[data-vf-button] {}\n');
-  write('product/button/component.json', JSON.stringify({ documentation: { group: 'Actions' } }));
-  write('product/button/docs/index.json', JSON.stringify({ format: 'vyrnforge.docs.content.v1', lede: 'Button', sections: [] }));
-  write('product/button/docs/index.html', '<h2>Button</h2>');
-  write('product/button/examples/basic/example.json', JSON.stringify({ id: 'button/basic' }));
+  write('product/components/interactive-controls/button/web/button.css', '[data-vf-button] {}\n');
+  write('product/components/interactive-controls/button/component.json', JSON.stringify({ documentation: { group: 'Actions' } }));
+  write('product/components/interactive-controls/button/docs/index.json', JSON.stringify({ format: 'vyrnforge.docs.content.v1', lede: 'Button', sections: [] }));
+  write('product/components/interactive-controls/button/docs/index.html', '<h2>Button</h2>');
+  write('product/components/interactive-controls/button/examples/basic/example.json', JSON.stringify({ id: 'button/basic' }));
   const button = discoverProductUnits(root).components.find((entry) => entry.component === 'button');
   assert.ok(button);
-  assert.deepEqual(button.documentationSources, ['product/button/docs/index.json', 'product/button/docs/index.html']);
+  assert.deepEqual(button.documentationSources, ['product/components/interactive-controls/button/docs/index.json', 'product/components/interactive-controls/button/docs/index.html']);
   const problems = productPreparationProblems(root);
   assert.ok(problems.some((problem) => problem.includes('competing primary component documentation sources')));
 });
@@ -103,15 +104,15 @@ test('native-html-first discovers Markdown docs without requiring placeholder pa
     },
   }));
   for (const component of ['button', 'checkbox']) {
-    write(`packages/web/src/components/${component}/${component}.css`, `[data-vf-${component}] {}\n`);
-    write(`product/${component}/component.json`, JSON.stringify({ group: 'controls' }));
-    write(`product/${component}/examples/basic/example.json`, JSON.stringify({ id: `${component}/basic` }));
+    write(`product/components/interactive-controls/${component}/web/${component}.css`, `[data-vf-${component}] {}\n`);
+    write(`product/components/interactive-controls/${component}/component.json`, JSON.stringify({ group: 'controls' }));
+    write(`product/components/interactive-controls/${component}/examples/basic/example.json`, JSON.stringify({ id: `${component}/basic` }));
   }
-  write('product/button/docs/index.md', '# Button\n\nNative Button guidance.\n');
+  write('product/components/interactive-controls/button/docs/index.md', '# Button\n\nNative Button guidance.\n');
   const discovery = discoverProductUnits(root);
   const button = discovery.components.find((entry) => entry.component === 'button');
   const checkbox = discovery.components.find((entry) => entry.component === 'checkbox');
-  assert.equal(button.documentationSource, 'product/button/docs/index.md');
+  assert.equal(button.documentationSource, 'product/components/interactive-controls/button/docs/index.md');
   assert.equal(checkbox.documentationSource, null);
   const problems = productPreparationProblems(root);
   assert.ok(!problems.some((problem) => problem.includes('missing component documentation')));
@@ -150,7 +151,8 @@ test('component ports infer owned-unit dependencies from workspace public subpat
   write('packages/react/package.json', JSON.stringify({ name: '@vyrnforge/react', exports: { '.': './dist/index.js', './tabs': './dist/components/tabs/index.js' } }));
   write('product/capabilities/collection-navigation/core/index.ts', 'export const next = () => 0;\n');
   write('product/capabilities/collection-navigation/test/navigation.test.mjs', 'export {};\n');
-  write('packages/react/src/components/tabs/index.ts', "import { next } from '@vyrnforge/core/collection-navigation';\nexport const Tabs = next;\n");
+  write('product/components/composite-widgets/disclosure-view-switching/tabs/component.json', JSON.stringify({ group: 'controls' }));
+  write('product/components/composite-widgets/disclosure-view-switching/tabs/react/index.ts', "import { next } from '@vyrnforge/core/collection-navigation';\nexport const Tabs = next;\n");
   const tabs = discoverProductUnits(root).components.find((entry) => entry.component === 'tabs');
   assert.ok(tabs);
   assert.deepEqual(tabs.ports.react.dependencies, ['capability:collection-navigation']);

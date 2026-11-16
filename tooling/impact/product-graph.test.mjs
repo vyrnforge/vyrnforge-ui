@@ -8,25 +8,25 @@ test('canonical product-unit framework source remains port-local without unrelat
     components: [{
       component: 'button',
       status: 'implemented',
-      root: 'product/components/button/',
-      roots: ['product/components/button/'],
+      root: 'product/components/interactive-controls/button/',
+      roots: ['product/components/interactive-controls/button/'],
       ports: {
         react: {
-          paths: ['product/components/button/react/'],
+          paths: ['product/components/interactive-controls/button/react/'],
           browser: true,
           dependencies: [],
           types: null,
           ssr: null,
         },
       },
-      metadataPath: 'product/components/button/component.json',
+      metadataPath: 'product/components/interactive-controls/button/component.json',
       documentationGroup: 'actions',
     }],
     ownedUnits: [],
   };
 
   const impact = createSemanticImpact(
-    ['product/components/button/react/index.ts'],
+    ['product/components/interactive-controls/button/react/index.ts'],
     { discovery },
   );
 

@@ -44,12 +44,12 @@ test('standard package projection overlays product-owned source onto the package
   write('packages/react/src/components/button/index.ts', 'export const Button = "legacy";\n');
   write('packages/react/src/components/checkbox/index.ts', 'export const Checkbox = true;\n');
   write('packages/react/tsconfig.json', JSON.stringify({ compilerOptions: { rootDir: 'src', outDir: 'dist' }, include: ['src/**/*.ts'] }));
-  write('product/components/button/react/index.ts', 'export const Button = "product";\n');
+  write('product/components/interactive-controls/button/react/index.ts', 'export const Button = "product";\n');
 
   const graph = graphFor('react', [{
     component: 'button',
     target: 'react',
-    sourcePath: 'product/components/button/react/',
+    sourcePath: 'product/components/interactive-controls/button/react/',
     projectionPath: 'packages/react/src/components/button/',
   }]);
 
@@ -116,12 +116,12 @@ test('unprojected product drafts are excluded from distributable package project
   write('packages/react/package.json', JSON.stringify({ name: '@vyrnforge/react', type: 'module' }));
   write('packages/react/src/index.ts', 'export {};\n');
   write('packages/react/tsconfig.json', '{}\n');
-  write('product/components/draft/react/index.ts', 'export const Draft = true;\n');
+  write('product/components/interactive-controls/draft/react/index.ts', 'export const Draft = true;\n');
 
   const graph = graphFor('react', [{
     component: 'draft',
     target: 'react',
-    sourcePath: 'product/components/draft/react/',
+    sourcePath: 'product/components/interactive-controls/draft/react/',
     projectionPath: 'packages/react/src/components/draft/',
     publicEntrypoints: [],
   }]);
@@ -141,12 +141,12 @@ test('Angular projection preserves secondary-entrypoint shape while overlaying p
   write('packages/angular/src/index.ts', "export * from '@vyrnforge/angular/button';\n");
   write('packages/angular/button/ng-package.json', JSON.stringify({ lib: { entryFile: 'src/index.ts' } }));
   write('packages/angular/button/src/index.ts', 'export const Button = "legacy";\n');
-  write('product/components/button/angular/index.ts', 'export const Button = "product";\n');
+  write('product/components/interactive-controls/button/angular/index.ts', 'export const Button = "product";\n');
 
   const graph = graphFor('angular', [{
     component: 'button',
     target: 'angular',
-    sourcePath: 'product/components/button/angular/',
+    sourcePath: 'product/components/interactive-controls/button/angular/',
     projectionPath: 'packages/angular/button/src/',
   }]);
 
@@ -162,7 +162,7 @@ test('projection refuses destinations outside the selected package', () => {
   const graph = graphFor('react', [{
     component: 'button',
     target: 'react',
-    sourcePath: 'product/components/button/react/',
+    sourcePath: 'product/components/interactive-controls/button/react/',
     projectionPath: 'packages/vue/src/components/button/',
   }]);
 

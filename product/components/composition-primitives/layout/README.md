@@ -1,8 +1,8 @@
-# L3 Composition Primitives
+# Layout — composition primitives
 
-Layer 3 owns reusable **structural composition**: arrangements and adjacency relationships that are broader than one control but do not own semantic state, native form behavior, composite keyboard models, or application workflow.
+Composition primitives own reusable **structural composition**: arrangements and adjacency relationships that are broader than one control but do not own semantic state, native form behavior, composite keyboard models, or application workflow.
 
-The accepted L3 public inventory is deliberately small:
+The accepted public inventory is deliberately small:
 
 - **Stack**
 - **Inline**
@@ -62,13 +62,13 @@ Each child retains its own:
 
 ControlGroup adds no `role="group"`, shared value, roving focus, selection controller, child cloning, framework context, or inherited control configuration.
 
-Button-only adjacency is valid and does not justify a ButtonGroup primitive. If the controls share one-of-many selection, pressed-state selection, or managed command navigation, use the semantic owner of that behavior instead: native radio grouping, ToggleGroup, Toolbar, SegmentedControl, or another appropriate higher-layer component.
+Button-only adjacency is valid and does not justify a ButtonGroup primitive. If the controls share one-of-many selection, pressed-state selection, or managed command navigation, use the semantic owner of that behavior instead: native radio grouping, ToggleGroup, Toolbar, SegmentedControl, or another appropriate composite widget.
 
-## Explicit non-L3 dispositions
+## Explicit non-ownership dispositions
 
 ### AspectRatio
 
-AspectRatio is **not an L3 primitive**. Modern CSS `aspect-ratio` already owns this responsibility directly.
+AspectRatio is **not an composition primitive**. Modern CSS `aspect-ratio` already owns this responsibility directly.
 
 Use ordinary CSS, for example:
 
@@ -82,21 +82,21 @@ VyrnForge does not wrap a single native CSS property merely to create framework/
 
 ### Field
 
-Field is **not a public L3 primitive** at this baseline. The retired implementation owned only grid spacing and did not own label/control/help/error relationships.
+Field is **not a public composition primitive** at this baseline. The retired implementation owned only grid spacing and did not own label/control/help/error relationships.
 
 Use semantic labeling/description markup plus Stack for spacing. The Forms & Submission Patterns contract owns form-field UX relationships. A future Field component requires a separate contract proving a relationship responsibility that Stack plus native HTML cannot express cleanly.
 
 ### Fieldset
 
-Fieldset remains **native HTML**, not a VyrnForge L3 component. Use real `<fieldset>` and `<legend>` so grouping, legend semantics, descendant disabled propagation, and native form behavior remain platform-owned.
+Fieldset remains **native HTML**, not a VyrnForge composition component. Use real `<fieldset>` and `<legend>` so grouping, legend semantics, descendant disabled propagation, and native form behavior remain platform-owned.
 
-VyrnForge does not expose `Fieldset`, `vfFieldset`, `vf-fieldset`, or `data-vf-fieldset` as L3 APIs.
+VyrnForge does not expose `Fieldset`, `vfFieldset`, `vf-fieldset`, or `data-vf-fieldset` as composition APIs.
 
 ### RadioGroup
 
 Native radios already obtain selection and keyboard behavior from the browser through their shared `name`. Semantic grouping uses native `<fieldset>/<legend>`; layout uses Stack or Cluster.
 
-Therefore the former L3 RadioGroup wrapper is retired. A future custom radio-group component would need to own real selection/interaction behavior and would be reviewed as a higher-layer composite rather than reintroduced as a layout alias.
+Therefore the former RadioGroup wrapper is retired. A future custom radio-group component would need to own real selection/interaction behavior and would be reviewed as a composite widget rather than reintroduced as a layout alias.
 
 ## Framework surfaces
 
@@ -117,12 +117,12 @@ There is intentionally **no `@vyrnforge/elements/layout` runtime entrypoint**. A
 
 Do not add Box, Flex, Row, Column, Wrap, Spacer, Center, ButtonGroup, or another familiar design-system noun merely for catalog completeness.
 
-A new L3 primitive must own a distinct, reusable structural composition responsibility that cannot be expressed cleanly by:
+A new composition primitive must own a distinct, reusable structural composition responsibility that cannot be expressed cleanly by:
 
 1. native HTML semantics;
 2. ordinary CSS;
-3. the six existing L3 primitives;
-4. a lower-layer control;
+3. the six existing composition primitives;
+4. a native or interactive control;
 5. a higher-layer composite or pattern.
 
-L3 does not own routing, application state, validation engines, form state, selection controllers, toolbar navigation, overlays, application shells, or product workflows.
+Composition primitives do not own routing, application state, validation engines, form state, selection controllers, toolbar navigation, overlays, application shells, or product workflows.

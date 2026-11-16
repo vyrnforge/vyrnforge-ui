@@ -2,7 +2,7 @@
 
 This directory owns repository-internal discovery for VyrnForge product units and their projection into public packages.
 
-The Product Graph discovers component owners under `product/components/<layer>/<optional-category>/<id>/` and projects their supported surfaces into public packages. Discovery also recognizes legacy flat owners for compatibility and rejects duplicate component IDs across layouts.
+The Product Graph discovers component owners under `product/components/<responsibility>/<optional-family>/<id>/` and projects their supported surfaces into public packages. Internal schema v3 exposes `responsibility` and `family`; invalid responsibility/family paths, missing metadata, duplicate IDs and manifest-only orphan components fail closed. Flat canonical component discovery is retired; package-owned evidence and non-component discovery remain.
 
 ## Rules
 
@@ -10,12 +10,12 @@ The Product Graph discovers component owners under `product/components/<layer>/<
 - Public packages remain versioning, compatibility, and distribution boundaries.
 - The graph is repository-only tooling and must never become a runtime dependency of published packages.
 - Public exports remain authoritative consumer contracts.
-- Author component implementations in their layered product unit. Package shells own package metadata, entrypoints, and distribution verification.
+- Author component implementations in their responsibility-based product unit. Package shells own package metadata, entrypoints, and distribution verification.
 - Package projection destinations are derived from package shape rather than from component-specific registries.
 - Product-owned surfaces without an intentional package projection fail closed; Core is not inferred from component symmetry.
 - Unprojected product drafts are excluded from distributable package projection.
 - Independent hand-maintained inventories should be replaced only after the graph proves equivalent discovery and validation.
-- `tooling/testing/discover-product-units.mjs` is transitional discovery plumbing beneath this boundary; repository consumers should depend on the Product Graph rather than import that scanner directly.
+- `tooling/testing/discover-product-units.mjs` is shared discovery plumbing beneath this boundary; repository consumers should depend on the Product Graph rather than import that scanner directly.
 
 ## Package builds
 
@@ -24,3 +24,13 @@ Each public package build creates an ignored `.vf-projection/<package>/` staging
 Component IDs and public package subpaths remain stable when an accepted concept changes source ownership. Retired abstractions are removed deliberately rather than preserved through projection.
 
 Nx includes product metadata and each package’s component source directories in its inputs so affected selection and cached tasks follow the projection.
+
+## Ownership migration comparison
+
+For an ownership-only migration, run the explicit baseline comparison before candidate acceptance. Use clean checkouts of the approved baseline and candidate; this does not build or modify either checkout:
+
+```sh
+node tooling/product/compare-ownership-baseline.mjs /path/to/baseline /path/to/candidate
+```
+
+The comparison normalizes only the approved AD-16 v2-to-v3 ownership fields and AppShell/SideNav paths; it compares the full graph, package projections, five documentation catalogs, and per-path semantic impact for the moved subtree. This is a migration evidence tool, not a compatibility adapter, public API or permanent baseline registry. Verify exact candidate builds, packed consumers and browser/visual behavior separately. The existing `format:l5` and `lint:l5` command IDs remain technical compatibility names for the composite-widget tooling scope, not product taxonomy.

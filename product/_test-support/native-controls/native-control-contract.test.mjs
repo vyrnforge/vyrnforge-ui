@@ -25,10 +25,14 @@ test('native-control contract validation rejects invalid shared metadata', () =>
   assert.throws(() => validateNativeControlContract({ id: 'example', semantics: { tag: 'INPUT' }, reducedMotion: 'yes' }, 'example'), /reducedMotion must be a boolean/);
 });
 
-test('native control contract resolves layered unit metadata rather than a hard-coded legacy path', async () => {
+test('native control contract resolves responsibility-based unit metadata rather than a hard-coded legacy path', async () => {
   for (const id of ['link', 'checkbox', 'switch']) {
     const contract = await loadNativeControlContract(id);
     assert.equal(contract.id, id);
     assert.ok(contract.semantics.tag);
   }
+});
+
+test('native control contract cannot fall back to a retired flat owner', async () => {
+  await assert.rejects(loadNativeControlContract('unknown-native-control'), /Unknown canonical component owner/);
 });

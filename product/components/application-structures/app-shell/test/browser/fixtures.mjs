@@ -1,5 +1,8 @@
 import { mkdir, writeFile } from 'node:fs/promises';
 import path from 'node:path';
+import { fileURLToPath } from 'node:url';
+
+const examplesRoot = fileURLToPath(new URL('../../examples/', import.meta.url));
 import { build } from 'esbuild';
 
 export const browserFixture = {
@@ -41,7 +44,7 @@ export const browserFixture = {
       ];
 
       for (const [name, title] of examples) {
-        const entry = path.join(root, `product/components/complex-ui/app-shell/examples/${name}/react.tsx`);
+        const entry = path.join(examplesRoot, name, 'react.tsx');
         await build({ entryPoints: [entry], bundle: true, format: 'esm', platform: 'browser', outdir: dir, entryNames: `${name}-react` });
         await writeFile(
           path.join(dir, `${name}-react.html`),
@@ -49,7 +52,7 @@ export const browserFixture = {
         );
       }
 
-      const performanceEntry = path.join(root, 'product/components/complex-ui/app-shell/examples/performance-feedback/react.tsx');
+      const performanceEntry = path.join(examplesRoot, 'performance-feedback', 'react.tsx');
       await build({
         entryPoints: [performanceEntry],
         bundle: true,

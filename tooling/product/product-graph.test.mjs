@@ -16,6 +16,7 @@ function writer(root) {
 
 test('current repository is normalized into one product graph', () => {
   const graph = discoverProductGraph();
+  assert.equal(graph.schemaVersion, 3);
 
   for (const id of ['button', 'tabs', 'dialog', 'icon']) {
     assert.ok(graph.components.some((component) => component.unitId === id), `${id} should exist`);
@@ -40,8 +41,8 @@ test('current repository is normalized into one product graph', () => {
   const button = graph.components.find((component) => component.unitId === 'button');
   assert.ok(button);
   assert.equal(button.id, 'component:button');
-  assert.equal(button.layer, 'interactive-controls');
-  assert.equal(button.category, null);
+  assert.equal(button.responsibility, 'interactive-controls');
+  assert.equal(button.family, null);
   assert.equal(button.facets.legacyRoot, null);
   assert.equal(button.facets.canonicalRoot, 'product/components/interactive-controls/button/');
   assert.equal(button.metadataSource, 'product-unit');
@@ -71,7 +72,7 @@ test('nested component location drives package authoring but not public exports'
   const graph = discoverProductGraph(root);
   const button = graph.components.find((component) => component.unitId === 'button');
   assert.equal(button.facets.canonicalRoot, 'product/components/interactive-controls/button/');
-  assert.equal(button.layer, 'interactive-controls');
+  assert.equal(button.responsibility, 'interactive-controls');
   assert.deepEqual(button.surfaces.web.authoringPaths, ['product/components/interactive-controls/button/web/']);
   assert.equal(button.surfaces.web.projectionPath, 'packages/web/src/components/button/');
   assert.deepEqual(button.surfaces.web.publicEntrypoints, ['@vyrnforge/web/styles/button.css']);
@@ -90,24 +91,24 @@ test('canonical product-unit source overrides package-local authoring without ch
       './button': './dist/components/button/index.js',
     },
   }));
-  write('product/components/button/component.json', JSON.stringify({
+  write('product/components/interactive-controls/button/component.json', JSON.stringify({
     id: 'button',
     name: 'Button',
     group: 'actions',
   }));
-  write('product/components/button/react/index.ts', 'export const Button = null;\n');
-  write('product/components/button/docs/overview.md', '# Button\n');
+  write('product/components/interactive-controls/button/react/index.ts', 'export const Button = null;\n');
+  write('product/components/interactive-controls/button/docs/overview.md', '# Button\n');
 
   const graph = discoverProductGraph(root);
   const button = graph.components.find((component) => component.unitId === 'button');
 
   assert.ok(button);
-  assert.equal(button.facets.canonicalRoot, 'product/components/button/');
+  assert.equal(button.facets.canonicalRoot, 'product/components/interactive-controls/button/');
   assert.equal(button.facets.legacyRoot, null);
   assert.equal(button.metadataSource, 'product-unit');
   assert.equal(button.documentationGroup, 'actions');
   assert.equal(button.surfaces.react.authoringMode, 'product-unit');
-  assert.deepEqual(button.surfaces.react.authoringPaths, ['product/components/button/react/']);
+  assert.deepEqual(button.surfaces.react.authoringPaths, ['product/components/interactive-controls/button/react/']);
   assert.equal(button.surfaces.react.projectionPath, 'packages/react/src/components/button/');
   assert.deepEqual(button.surfaces.react.legacyPaths, []);
   assert.deepEqual(button.surfaces.react.publicEntrypoints, ['@vyrnforge/react/button']);
@@ -116,39 +117,37 @@ test('canonical product-unit source overrides package-local authoring without ch
   const impactView = impactProductView(graph);
   const impactButton = impactView.components.find((component) => component.component === 'button');
   assert.ok(impactButton);
-  assert.equal(impactButton.root, 'product/components/button/');
-  assert.deepEqual(impactButton.ports.react.paths, ['product/components/button/react/']);
+  assert.equal(impactButton.root, 'product/components/interactive-controls/button/');
+  assert.deepEqual(impactButton.ports.react.paths, ['product/components/interactive-controls/button/react/']);
   assert.deepEqual(productGraphProblems(root), []);
 });
 
-test('legacy and canonical ownership can coexist as one mixed component during migration', () => {
-  const root = mkdtempSync(path.join(os.tmpdir(), 'vf-product-graph-mixed-'));
+test('retired top-level component slices cannot supply canonical ownership or facets', () => {
+  const root = mkdtempSync(path.join(os.tmpdir(), 'vf-product-graph-retired-'));
   const write = writer(root);
+  write('product/button/component.json', '{}');
+  write('product/components/interactive-controls/button/component.json', '{}');
+  assert.throws(() => discoverProductGraph(root), /Retired flat product ownership/);
+});
 
-  write('packages/web/package.json', JSON.stringify({
-    name: '@vyrnforge/web',
-    exports: {
-      '.': './dist/index.js',
-      './styles/button.css': './dist/components/button/button.css',
-    },
+test('manifest-only component exports fail closed without synthesizing owners', () => {
+  const root = mkdtempSync(path.join(os.tmpdir(), 'vf-product-graph-orphan-'));
+  const write = writer(root);
+  write('packages/react/package.json', JSON.stringify({
+    name: '@vyrnforge/react', exports: { './button': './dist/components/button/index.js' },
   }));
-  write('packages/web/src/components/button/button.css', '[data-vf-button] {}\n');
-  write('product/button/component.json', JSON.stringify({ documentation: { group: 'actions' } }));
-  write('product/button/docs/index.html', '<h2>Button</h2>\n');
-  write('product/components/button/web/button.css', '[data-vf-button] {}\n');
+  assert.throws(() => discoverProductGraph(root), /Public component react\/button is missing canonical ownership/);
+});
 
-  const graph = discoverProductGraph(root);
-  const button = graph.components.find((component) => component.unitId === 'button');
-
-  assert.ok(button);
-  assert.equal(button.migration.state, 'mixed');
-  assert.equal(button.facets.canonicalRoot, 'product/components/button/');
-  assert.equal(button.facets.legacyRoot, 'product/button/');
-  assert.equal(button.surfaces.web.authoringMode, 'product-unit');
-  assert.deepEqual(button.surfaces.web.authoringPaths, ['product/components/button/web/']);
-  assert.equal(button.surfaces.web.projectionPath, 'packages/web/src/components/button/');
-  assert.deepEqual(button.surfaces.web.legacyPaths, []);
-  assert.deepEqual(button.surfaces.web.publicEntrypoints, ['@vyrnforge/web/styles/button.css']);
+test('public component authoring cannot fall back to package-local source', () => {
+  const root = mkdtempSync(path.join(os.tmpdir(), 'vf-product-graph-missing-source-'));
+  const write = writer(root);
+  write('packages/react/package.json', JSON.stringify({
+    name: '@vyrnforge/react', exports: { './button': './dist/components/button/index.js' },
+  }));
+  write('product/components/interactive-controls/button/component.json', '{}');
+  write('packages/react/src/components/button/index.ts', 'export {};');
+  assert.ok(productGraphProblems(root).includes('component:button/react has no authoring source'));
 });
 
 test('component Core source fails closed until its projection is deliberately defined', () => {
@@ -162,8 +161,8 @@ test('component Core source fails closed until its projection is deliberately de
       './collection-navigation': './dist/capabilities/collection-navigation/index.js',
     },
   }));
-  write('product/components/example/component.json', JSON.stringify({ name: 'Example' }));
-  write('product/components/example/core/index.ts', 'export const value = 1;\n');
+  write('product/components/elemental-primitives/example/component.json', JSON.stringify({ name: 'Example' }));
+  write('product/components/elemental-primitives/example/core/index.ts', 'export const value = 1;\n');
 
   const graph = discoverProductGraph(root);
   const example = graph.components.find((component) => component.unitId === 'example');
@@ -220,7 +219,7 @@ test('L1 responsibility families preserve deliberate Native Web product ownershi
     const component = graph.components.find((entry) => entry.unitId === id);
     assert.ok(component, id + ' must be discovered as specialized Typography');
     assert.equal(component.id, 'component:' + id);
-    assert.equal(component.layer, 'elemental-primitives');
+    assert.equal(component.responsibility, 'elemental-primitives');
     assert.equal(component.facets.canonicalRoot, 'product/components/elemental-primitives/typography/' + id + '/');
     assert.equal(component.facets.legacyRoot, null);
     assert.equal(component.metadataSource, 'product-unit');
@@ -234,7 +233,7 @@ test('L1 responsibility families preserve deliberate Native Web product ownershi
   const image = graph.components.find((entry) => entry.unitId === 'image');
   assert.ok(image, 'image must be discovered as native-backed Media');
   assert.equal(image.id, 'component:image');
-  assert.equal(image.layer, 'elemental-primitives');
+  assert.equal(image.responsibility, 'elemental-primitives');
   assert.equal(image.facets.canonicalRoot, 'product/components/elemental-primitives/media/image/');
   assert.equal(image.facets.legacyRoot, null);
   assert.equal(image.metadataSource, 'product-unit');
@@ -246,7 +245,7 @@ test('L1 responsibility families preserve deliberate Native Web product ownershi
 
   const icon = graph.components.find((entry) => entry.unitId === 'icon');
   assert.ok(icon, 'icon must be discovered as genuine Media primitive');
-  assert.equal(icon.layer, 'elemental-primitives');
+  assert.equal(icon.responsibility, 'elemental-primitives');
   assert.equal(icon.facets.canonicalRoot, 'product/components/elemental-primitives/media/icon/');
 
   assert.equal(graph.components.some((entry) => entry.unitId === 'color-swatch'), false);
@@ -258,7 +257,7 @@ test('L1 responsibility families preserve deliberate Native Web product ownershi
   assert.ok(loading, 'loading must own async feedback as a Pattern outside L1-L6');
   assert.equal(loading.id, 'pattern:loading');
   assert.equal(loading.kind, 'pattern');
-  assert.equal(loading.layer, null);
+  assert.equal(loading.responsibility, null);
   assert.equal(loading.facets.canonicalRoot, 'product/patterns/loading/');
   assert.equal(loading.facets.legacyRoot, null);
   assert.equal(loading.metadataPath, 'product/patterns/loading/pattern.json');
