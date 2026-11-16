@@ -42,8 +42,9 @@ describe('browser fixture dependency declarations', () => {
   it('accepts an owner-local port map', () => {
     expect(validate({ react: ['input'] }).dependencies).toEqual({ react: ['input'] });
   });
-  it.each([null, [], { react: 'input' }, { unknown: ['input'] }, { react: ['app-shell'] }, { react: ['input', 'input'] }])(
-    'rejects malformed dependency declarations: %j',
-    (dependencies) => expect(() => validate(dependencies)).toThrow('browserFixture.dependencies'),
-  );
+  it('rejects malformed dependency declarations', () => {
+    for (const dependencies of [null, [], { react: 'input' }, { unknown: ['input'] }, { react: ['app-shell'] }, { react: ['input', 'input'] }]) {
+      expect(() => validate(dependencies)).toThrow('browserFixture.dependencies');
+    }
+  });
 });
