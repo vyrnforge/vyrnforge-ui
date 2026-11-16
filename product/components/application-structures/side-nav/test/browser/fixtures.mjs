@@ -39,7 +39,7 @@ export const browserFixture = {
             <li vfSideNavItem><a vfSideNavLink aria-current="false" href="#destination" id="static-false">Static false</a></li>
             <li vfSideNavItem><a vfSideNavLink href="#destination" id="static-absent">Static absent</a></li>
             <li vfSideNavItem><a vfSideNavLink aria-current="step" [vfSideNavCurrent]="override()" href="#destination" id="static-toggle">Static toggle</a></li>
-            <li vfSideNavItem><a vfSideNavLink [attr.aria-current]="authored()" [vfSideNavCurrent]="override()" href="#destination" id="bound">Bound link</a></li>
+            <li vfSideNavItem><a vfSideNavLink [aria-current]="authored()" [vfSideNavCurrent]="override()" href="#destination" id="bound">Bound link</a></li>
           </ul>
         </nav>
         <button (click)="override.set(!override())">Toggle override</button>
@@ -48,6 +48,9 @@ export const browserFixture = {
         <button (click)="authored.set('step')">Author step</button>
         <button (click)="authored.set('false')">Author false</button>
         <button (click)="authored.set(null)">Remove authored</button>
+        <button (click)="authored.set(undefined)">Unset authored</button>
+        <button (click)="authored.set('location'); override.set(false)">Set location and clear override</button>
+        <a data-vf-side-nav-link [attr.aria-current]="authored()" href="#destination" id="native-bound">Native bound</a>
         <div id="destination">Destination</div>
       `;
       class App {
@@ -65,7 +68,7 @@ export const browserFixture = {
         stdin: {
           resolveDir: root,
           sourcefile: 'angular-side-nav-client.ts',
-          contents: `import '@angular/compiler'; import { Component, provideZonelessChangeDetection, signal } from '@angular/core'; import { bootstrapApplication, provideClientHydration } from '@angular/platform-browser'; import { VfSideNavDirective, VfSideNavGroupDirective, VfSideNavGroupLabelDirective, VfSideNavListDirective, VfSideNavItemDirective, VfSideNavLinkDirective } from '@vyrnforge/angular/side-nav'; class App { authored = signal<string | null>('step'); override = signal(false); } Component({selector:'vf-side-nav-test',standalone:true,imports:[VfSideNavDirective,VfSideNavGroupDirective,VfSideNavGroupLabelDirective,VfSideNavListDirective,VfSideNavItemDirective,VfSideNavLinkDirective],template:${JSON.stringify(template)}})(App); bootstrapApplication(App,{providers:[provideZonelessChangeDetection(),provideClientHydration()]}).then(async app=>{await app.whenStable();document.documentElement.dataset.vfSideNavHydrated='true';});`,
+          contents: `import '@angular/compiler'; import { Component, provideZonelessChangeDetection, signal } from '@angular/core'; import { bootstrapApplication, provideClientHydration } from '@angular/platform-browser'; import { VfSideNavDirective, VfSideNavGroupDirective, VfSideNavGroupLabelDirective, VfSideNavListDirective, VfSideNavItemDirective, VfSideNavLinkDirective } from '@vyrnforge/angular/side-nav'; class App { authored = signal<string | null | undefined>('step'); override = signal(false); } Component({selector:'vf-side-nav-test',standalone:true,imports:[VfSideNavDirective,VfSideNavGroupDirective,VfSideNavGroupLabelDirective,VfSideNavListDirective,VfSideNavItemDirective,VfSideNavLinkDirective],template:${JSON.stringify(template)}})(App); bootstrapApplication(App,{providers:[provideZonelessChangeDetection(),provideClientHydration()]}).then(async app=>{await app.whenStable();document.documentElement.dataset.vfSideNavHydrated='true';});`,
         },
         bundle: true,
         format: 'esm',

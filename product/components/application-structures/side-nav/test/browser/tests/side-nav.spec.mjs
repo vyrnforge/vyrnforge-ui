@@ -51,6 +51,16 @@ test('Angular SideNav preserves authored state through hydration and convenience
   await state('bound', 'location');
   await press('Remove authored');
   await state('bound', null);
+  await press('Author page');
+  await press('Unset authored');
+  await state('bound', null);
+  await state('native-bound', null);
+  await press('Toggle override');
+  await press('Set location and clear override');
+  await state('bound', 'location');
+  await state('native-bound', 'location');
+  await state('static-toggle', 'step');
+  await state('static-page', 'page');
   expect(errors).toEqual([]);
 });
 

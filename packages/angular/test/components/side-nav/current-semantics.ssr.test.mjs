@@ -6,7 +6,7 @@ import { bootstrapApplication } from '@angular/platform-browser';
 import { renderApplication } from '@angular/platform-server';
 import { VfSideNavLinkDirective } from '@vyrnforge/angular/side-nav';
 
-const values = ['step', 'page', 'location', 'false', null];
+const values = ['step', 'page', 'location', 'false', 'date', 'time', 'true', null];
 const overrides = ['omitted', 'false', 'true'];
 
 for (const authored of values) {
@@ -14,7 +14,7 @@ for (const authored of values) {
     for (const kind of ['static', 'bound']) {
       test(`Angular SideNav SSR: ${kind} ${authored} / convenience ${override}`, async () => {
         const attribute = kind === 'bound'
-          ? '[attr.aria-current]="authored"'
+          ? '[aria-current]="authored"'
           : authored === null ? '' : `aria-current="${authored}"`;
         const convenience = override === 'omitted' ? '' : `[vfSideNavCurrent]="${override}"`;
         class App { authored = authored; }
@@ -40,3 +40,17 @@ for (const authored of values) {
     }
   }
 }
+
+test('native Web hook in Angular leaves explicit attribute binding consumer-owned', async () => {
+  class App { authored = 'location'; }
+  Component({
+    selector: 'vf-side-nav-native-ssr',
+    standalone: true,
+    template: '<a data-vf-side-nav-link [attr.aria-current]="authored" href="/destination">Destination</a>',
+  })(App);
+  const html = await renderApplication(
+    context => bootstrapApplication(App, { providers: [provideZonelessChangeDetection()] }, context),
+    { document: '<!doctype html><html><body><vf-side-nav-native-ssr></vf-side-nav-native-ssr></body></html>' },
+  );
+  assert.match(html, /<a\b[^>]*aria-current="location"/);
+});
