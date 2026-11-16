@@ -1,0 +1,54 @@
+name: ALIGN-04 Actual Shell Ports
+on:
+  push:
+    branches:
+      - 'evidence/align04-shell-8740bf6-20261116'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  shell:
+    runs-on: ubuntu-latest
+    timeout-minutes: 35
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - label: baseline
+            revision: '964d5e4968c6bda2bab23ffe2f3a202fc35568ee'
+          - label: candidate
+            revision: '8740bf60b7e9c13ad7829cf42f45381658eb8d1b'
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
+        with:
+          ref: ${{ matrix.revision }}
+          path: library
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
+        with:
+          path: evidence
+      - uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7
+        with:
+          node-version-file: library/.node-version
+          package-manager-cache: false
+      - name: Build and exercise actual public shell adapters
+        working-directory: library
+        env:
+          VF_EXPECTED_SHA: ${{ matrix.revision }}
+        run: |
+          test "$(git rev-parse HEAD)" = "$VF_EXPECTED_SHA"
+          corepack enable
+          pnpm install --frozen-lockfile --ignore-scripts
+          pnpm build
+          pnpm exec playwright install --with-deps chromium
+          cp ../evidence/.qa-evidence/align04-shell-check.mjs ./qa-shell-check.mjs
+          node qa-shell-check.mjs
+      - uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7
+        if: always()
+        with:
+          name: align04-actual-shell-${{ matrix.label }}
+          path: |
+            library/.qa-shell-output/results.json
+            library/.qa-shell-output/*.png
+          if-no-files-found: warn
+          retention-days: 14
+          include-hidden-files: true
