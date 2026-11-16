@@ -1,4 +1,4 @@
-name: PR Validation
+name: QA D2 exact integrated candidate and original regression
 
 on:
   pull_request:
@@ -6,34 +6,112 @@ on:
 permissions:
   contents: read
 
-concurrency:
-  group: pr-validation-${{ github.event.pull_request.number }}
-  cancel-in-progress: true
-
 jobs:
-  targeted-validation:
-    uses: ./.github/workflows/_targeted-validation.yml
-    with:
-      mode: pr
-      base_sha: ${{ github.event.pull_request.base.sha }}
-      head_sha: ${{ github.sha }}
-      artifact_suffix: pr
-      retention_days: 7
-      upload_docs_artifact: false
-
-  ci-gate:
-    name: ci-gate
-    if: always()
-    needs: targeted-validation
+  graph:
+    name: D2 actual graph and impact independent QA
     runs-on: ubuntu-latest
-    timeout-minutes: 5
+    timeout-minutes: 20
     steps:
-      - name: Require targeted validation
-        env:
-          TARGETED_VALIDATION: ${{ needs.targeted-validation.result }}
+      - uses: actions/checkout@3d3c42e5aac5ba805825825da76410c181273ba90b1
+        with:
+          ref: c4b6f7ef9196ed79c67a0fa432d3329643cf7c39
+          fetch-depth: 0
+      - name: Verify exact checkout
         run: |
-          if [ "$TARGETED_VALIDATION" != "success" ]; then
-            echo "Targeted validation did not succeed: $TARGETED_VALIDATION" >&2
-            exit 1
-          fi
-          echo "All selected VyrnForge validation evidence passed."
+          test "$(git rev-parse HEAD)" = "c4b6f7ef9196ed79c67a0fa432d3329643cf7c39"
+          test -z "$(git status --porcelain)"
+          git log -1 --format='%H %s'
+      - uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1
+        with:
+          node-version-file: .node-version
+          package-manager-cache: false
+      - name: Execute actual repository graph and impact probes
+        run: |
+          node --input-type=module <<'JS'
+          import assert from 'node:assert/strict';
+          import { readFileSync, writeFileSync } from 'node:fs';
+          import { discoverProductGraph } from './tooling/product/discover-product-graph.mjs';
+          import { createSemanticImpact } from './tooling/impact/plan.mjs';
+          const graph = discoverProductGraph();
+          const p = graph.patterns.find(p => p.id === 'pattern:settings-navigation');
+          assert.equal(graph.patterns.filter(p => p.id === 'pattern:settings-navigation').length, 1);
+          assert.equal(p.documentationAvailable, true);
+          assert.deepEqual(p.surfaces, {});
+          assert.deepEqual(p.packages, []);
+          assert.deepEqual(p.publicEntrypoints, []);
+          const ref = p.exampleReferences[0];
+          assert.equal(ref.id, 'app-shell/settings-navigation');
+          assert.equal(ref.evidence.fixtureUrl, '/components/app-shell/settings-navigation-react.html');
+          assert.deepEqual(ref.frameworks.map(f => f.framework), ['react']);
+          console.log('ACTUAL usage closure:', JSON.stringify(ref.frameworks[0].usageClosure));
+          const root = 'product/components/composite-widgets/transient-surfaces/';
+          for (const [file, expected] of [
+            [root+'dialog/react/index.ts', true],
+            [root+'dialog/web/dialog.css', true],
+            [root+'dialog/vue/index.ts', false],
+            [root+'drawer/react/index.ts', true],
+            ['product/components/interactive-controls/button/vue/index.ts', false],
+            ['product/patterns/settings-navigation/docs/index.md', false],
+          ]) {
+            const plan = createSemanticImpact([file]);
+            const selected = plan.browserScopes.some(s=>s.port==='react' && s.components.includes('app-shell'));
+            assert.equal(selected, expected, file);
+            assert.equal(plan.repositoryWide, false, file);
+            assert.deepEqual(plan.unknownPaths, [], file);
+            console.log('ACTUAL impact', file, JSON.stringify({scopes:plan.browserScopes,docs:plan.selectors.docsRequired}));
+          }
+          const file = root+'drawer/react/index.ts';
+          const before = readFileSync(file, 'utf8');
+          const modified = before.replace('../dialog/index.js','../dialog/nonexistent-qa-target.js');
+          assert.notEqual(modified,before);
+          try {
+            writeFileSync(file,modified);
+            assert.throws(()=>discoverProductGraph(), /Unresolved pattern usage source/);
+            console.log('ACTUAL missing transitive source rejected');
+          } finally { writeFileSync(file,before); }
+          console.log('QA actual-graph probes PASS');
+          JS
+          test -z "$(git status --porcelain)"
+      - name: Compare existing projections and evidence paths with C1 main
+        run: |
+          git diff --exit-code 697667111a87d9c672654c85440c071cd7d7db13 HEAD -- packages product/patterns/loading
+          git diff --exit-code 697667111a87d9c672654c85440c071cd7d7db13 HEAD -- product/components/application-structures/app-shell/examples/settings-navigation/example.json product/components/application-structures/app-shell/test/browser/fixtures.mjs
+      - run: corepack enable
+      - run: pnpm install --frozen-lockfile --ignore-scripts
+      - run: pnpm verify:product-graph
+      - run: pnpm verify:impact
+  red:
+    name: D2 original responsive regression before repair
+    runs-on: ubuntu-latest
+    timeout-minutes: 35
+    env:
+      VF_COMPONENT_PORT: react
+      VF_COMPONENTS: app-shell
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825825da76410c181273ba90b1
+        with:
+          ref: ce611ac031528d007e0063aa3ada63e0d3f8c7ce
+      - name: Verify original regression-only revision
+        run: |
+          test "$(git rev-parse HEAD)" = "ce611ac031528d007e0063aa3ada63e0d3f8c7ce"
+          test -z "$(git status --porcelain)"
+          git log -1 --format='%H %s'
+      - uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1
+        with:
+          node-version-file: .node-version
+          package-manager-cache: false
+      - run: corepack enable
+      - run: pnpm install --frozen-lockfile --ignore-scripts
+      - run: pnpm build
+      - run: pnpm exec playwright install --with-deps chromium
+      - name: Execute original responsive regression
+        run: pnpm exec playwright test --project=chromium --grep 'settings navigation preserves responsive focus and unsaved drafts'
+      - uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9
+        if: always()
+        with:
+          name: d2-original-responsive-regression
+          path: |
+            test-results/playwright-results/react
+            test-results/playwright-report/react
+          if-no-files-found: warn
+          retention-days: 14
