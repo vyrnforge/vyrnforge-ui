@@ -46,7 +46,7 @@ jobs:
           const routes = [
             {name:'button',url:'/next/native-web/components/button/',reading:'.vf-docs-content-grid'},
             {name:'home',url:'/next/native-web/',reading:'.vf-docs-main > .vf-docs-catalog'},
-            {name:'settings',url:'/next/native-web/patterns/settings-navigation/',reading:'.vf-docs-content-grid'},
+            {name:'settings',url:'/next/native-web/patterns/settings-navigation/',reading:'.vf-docs-content-grid, .vf-docs-main > .vf-docs-article'},
             {name:'loading',url:'/next/native-web/patterns/loading/',reading:'.vf-docs-content-grid'},
           ];
           const rects = (selector) => {
