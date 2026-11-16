@@ -87,6 +87,7 @@ export function discoverComponentRoots(root) {
     }
   };
 
+  assertGrouping(absoluteRoot);
   for (const responsibility of childDirectories(absoluteRoot)) {
     const definition = responsibilities.get(responsibility);
     if (!definition) throw new Error('Unknown component responsibility: ' + responsibility);

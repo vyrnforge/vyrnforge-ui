@@ -84,3 +84,13 @@ test('grouping-level Markdown change records remain historical provenance, not o
   write('product/components/elemental-primitives/media/changes/component.json');
   assert.throws(() => discoverComponentRoots(root), /Invalid grouping change record/);
 });
+
+test('rejects collection-root metadata even when a valid component owner exists', () => {
+  const { root, write } = fixture();
+  write('product/components/interactive-controls/button/component.json', '{"id":"button"}');
+  assert.deepEqual([...discoverComponentRoots(root).keys()], ['button']);
+  write('product/components/component.json', '{"id":"button"}');
+  assert.throws(() => discoverComponentRoots(root), {
+    message: 'Ownership grouping must not be a component: ' + path.join(root, 'product/components'),
+  });
+});
