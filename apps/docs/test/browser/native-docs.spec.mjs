@@ -420,6 +420,30 @@ test('C2 approved docs geometry fills wide chrome without stretching reading con
   }
 });
 
+test('C2 narrow RTL and long labels reflow in dark and forced-colors modes', async ({ page }) => {
+  await page.setViewportSize({ width: 320, height: 720 });
+  await gotoWithCleanDocsState(page, '/next/native-web/components/button/');
+  await page.evaluate(() => {
+    document.documentElement.dir = 'rtl';
+    document.documentElement.dataset.vfTheme = 'dark';
+    const groupLabel = document.querySelector('[data-vf-side-nav-group-label]');
+    if (groupLabel) groupLabel.textContent = 'Documentation navigation with an intentionally long translated label';
+  });
+  await page.getByRole('button', { name: 'Menu' }).click();
+  await expect(page.locator('#vf-docs-navigation')).toBeVisible();
+  await expect(page.locator('#vf-docs-navigation a[aria-current="page"]')).toHaveText('Button');
+  for (const style of [{ forcedColors: 'none', reducedMotion: 'reduce' }, { forcedColors: 'active', reducedMotion: 'reduce' }]) {
+    await page.emulateMedia(style);
+    const widths = await page.evaluate(() => ({
+      scrollWidth: document.documentElement.scrollWidth,
+      clientWidth: document.documentElement.clientWidth,
+      shellWidth: document.querySelector('[data-vf-docs-shell]').getBoundingClientRect().width,
+    }));
+    expect(widths.scrollWidth).toBeLessThanOrEqual(widths.clientWidth + 1);
+    expect(Math.abs(widths.shellWidth - 320)).toBeLessThanOrEqual(1);
+  }
+});
+
 test('Native shell reflows at 320 CSS pixels and exposes responsive navigation', async ({ page }, testInfo) => {
   const errors = collectPageErrors(page);
   await page.setViewportSize({ width: 320, height: 720 });
@@ -444,7 +468,21 @@ test('Native shell reflows at 320 CSS pixels and exposes responsive navigation',
   }));
   expect(dimensions.scrollWidth).toBeLessThanOrEqual(dimensions.clientWidth + 1);
 
-  await page.screenshot({ path: testInfo.outputPath('native-responsive-200.png'), fullPage: true });
+  // The 200%-text page can be over 47,000px tall. A single full-page
+  // screenshot exceeds Firefox/WebKit's 32,767px capture limit. Retain
+  // representative top/middle/bottom viewport images without dropping any
+  // reflow, current-link, accessibility or console-error assertions.
+  for (const [filename, position] of [
+    ['native-responsive-200.png', 0],
+    ['native-responsive-200-middle.png', 0.5],
+    ['native-responsive-200-bottom.png', 1],
+  ]) {
+    await page.evaluate((fraction) => {
+      const maxScroll = Math.max(0, document.documentElement.scrollHeight - window.innerHeight);
+      window.scrollTo(0, Math.round(maxScroll * fraction));
+    }, position);
+    await page.screenshot({ path: testInfo.outputPath(filename), fullPage: false });
+  }
   await expectNoAccessibilityViolations(page);
   expect(errors, errors.join('\n')).toEqual([]);
 });
