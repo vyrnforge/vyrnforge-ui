@@ -27,9 +27,9 @@ test('Core collection navigation fans to discovered component/conformance consum
 
 test('React-only referenced component selects its settings task evidence without selecting Native docs', () => {
   const impact = createSemanticImpact(['product/components/interactive-controls/button/react/index.ts']);
-  assert.deepEqual(impact.components, ['app-shell', 'button']);
+  assert.deepEqual(impact.components, ['button', 'settings-navigation']);
   assert.deepEqual(impact.browserPorts, ['react']);
-  assert.deepEqual(impact.browserScopes, [{ port: 'react', components: ['app-shell', 'button'] }]);
+  assert.deepEqual(impact.browserScopes, [{ port: 'react', components: ['button', 'settings-navigation'] }]);
   assert.ok(impact.packages.includes('react'));
   assert.equal(impact.browserPorts.includes('angular'), false);
   assert.equal(impact.browserPorts.includes('vue'), false);
@@ -55,23 +55,23 @@ test('generic React package fallback classification does not select Native docs 
 
 test('canonical Tabs evidence fans across every implemented Tabs surface', () => {
   const impact = createSemanticImpact(['product/components/composite-widgets/disclosure-view-switching/tabs/accessibility.json']);
-  assert.deepEqual(impact.components, ['app-shell', 'tabs']);
+  assert.deepEqual(impact.components, ['settings-navigation', 'tabs']);
   for (const port of ['web', 'react', 'angular', 'vue', 'elements']) assert.ok(impact.browserPorts.includes(port));
-  for (const scope of impact.browserScopes) assert.deepEqual(scope.components, scope.port === 'react' ? ['app-shell', 'tabs'] : ['tabs']);
+  for (const scope of impact.browserScopes) assert.deepEqual(scope.components, scope.port === 'react' ? ['settings-navigation', 'tabs'] : ['tabs']);
   assert.equal(impact.selectors.browserRequired, true);
   assert.ok(selectedScope(impact, 'cross-port-conformance', 'tabs'));
 });
 
 test('Web component CSS selects its real ports, referenced React task, visual and Native docs evidence', () => {
   const impact = createSemanticImpact(['product/components/interactive-controls/button/web/button.css']);
-  assert.deepEqual(impact.components, ['app-shell', 'button']);
+  assert.deepEqual(impact.components, ['button', 'settings-navigation']);
   assert.ok(impact.semanticEvidence.includes('visual'));
   assert.equal(impact.selectors.browserRequired, true);
   assert.equal(impact.selectors.docsRequired, true);
   assert.equal(impact.selectors.packageArtifactsRequired, false);
   assert.deepEqual(impact.browserPorts, ['web', 'react', 'angular', 'vue']);
   assert.equal(impact.browserPorts.includes('elements'), false);
-  for (const scope of impact.browserScopes) assert.deepEqual(scope.components, scope.port === 'react' ? ['app-shell', 'button'] : ['button']);
+  for (const scope of impact.browserScopes) assert.deepEqual(scope.components, scope.port === 'react' ? ['button', 'settings-navigation'] : ['button']);
   assert.ok(selectedScope(impact, 'visual-regression'));
 });
 
@@ -218,7 +218,7 @@ test('API report evidence composes with narrow component browser evidence', () =
 
 test('application structure source ownership selects the same component and public surfaces', () => {
   const impact = createSemanticImpact(['product/components/application-structures/app-shell/web/app-shell.css']);
-  assert.deepEqual(impact.components, ['app-shell']);
+  assert.deepEqual(impact.components, ['app-shell', 'settings-navigation']);
   assert.deepEqual(impact.browserPorts, ['web', 'react', 'angular', 'vue', 'elements']);
   assert.ok(impact.semanticEvidence.includes('visual'));
   assert.equal(impact.selectors.docsRequired, true);
@@ -234,4 +234,37 @@ test('a retired source deletion and its new destination never underselect eviden
   assert.ok(impact.selectors.browserRequired);
   assert.ok(impact.selectors.docsRequired);
   assert.ok(impact.selectors.packageArtifactsRequired);
+});
+
+test('pattern evidence changes select only its React browser owner', () => {
+  for (const file of [
+    'product/patterns/settings-navigation/pattern.json',
+    'product/patterns/settings-navigation/test/browser/tests/settings-navigation.spec.mjs',
+  ]) {
+    const impact = createSemanticImpact([file]);
+    assert.deepEqual(impact.browserScopes, [{ port: 'react', components: ['settings-navigation'] }]);
+    assert.deepEqual(impact.unknownPaths, []);
+  }
+});
+
+test('real React AppShell dependency selects pattern, unrelated evidence and Angular source do not', () => {
+  const react = createSemanticImpact(['product/components/application-structures/app-shell/react/index.ts']);
+  assert.ok(react.browserScopes.some((scope) =>
+    scope.port === 'react' && scope.components.includes('settings-navigation')));
+  const unrelated = createSemanticImpact(['product/components/application-structures/app-shell/test/browser/tests/optional-navigation.spec.mjs']);
+  assert.ok(unrelated.components.includes('app-shell'));
+  assert.equal(unrelated.components.includes('settings-navigation'), false);
+  const angular = createSemanticImpact(['product/components/application-structures/app-shell/angular/index.ts']);
+  assert.equal(angular.components.includes('settings-navigation'), false);
+});
+
+test('unknown and broad safety nets include pattern-owned browser evidence', () => {
+  for (const impact of [
+    createSemanticImpact(['mystery/new-root.txt']),
+    createSemanticImpact([], { mode: 'scheduled' }),
+    createSemanticImpact([], { mode: 'release' }),
+  ]) {
+    assert.ok(impact.browserScopes.some((scope) =>
+      scope.port === 'react' && scope.components.includes('settings-navigation')));
+  }
 });
