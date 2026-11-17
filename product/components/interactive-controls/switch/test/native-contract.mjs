@@ -40,8 +40,13 @@ export default {
     if (enabledChecked.supportsForcedColorAdjust) {
       expect(enabledChecked.forcedColorAdjust).toBe('none');
     }
-    expect(enabledChecked.background).toBe(enabledChecked.systemHighlight);
-    expect(enabledChecked.thumb).toBe(enabledChecked.systemHighlightText);
+    // Switching on forced colors also transitions the checked track from
+    // its previous color. Wait for the actual system-color presentation rather
+    // than sampling an intermediate animation frame.
+    await expect.poll(() => control.evaluate((element) => getComputedStyle(element).backgroundColor))
+      .toBe(enabledChecked.systemHighlight);
+    await expect.poll(() => control.evaluate((element) => getComputedStyle(element, '::before').backgroundColor))
+      .toBe(enabledChecked.systemHighlightText);
     await control.evaluate((element) => { element.disabled = true; });
     await expect(control).toBeDisabled();
     expect(await control.isChecked()).toBe(true);
