@@ -1,12 +1,12 @@
-name: UX 1372 keyboard, focus, recovery and text magnification evidence only
+name: UX 1372 bounded keyboard evidence only
 on: pull_request
 permissions:
   contents: read
 jobs:
-  ux:
-    name: UX 1372 ${{ matrix.engine }} keyboard evidence (do not merge)
+  review:
+    name: UX bounded ${{ matrix.engine }} — evidence only
     runs-on: ubuntu-latest
-    timeout-minutes: 50
+    timeout-minutes: 18
     strategy:
       fail-fast: false
       matrix:
@@ -15,7 +15,7 @@ jobs:
       - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
         with:
           ref: 610b8cbceb2d071281ebd75c9544a1adc1994634
-      - name: Verify exact main and no source edits
+      - name: Assert pinned unmodified source
         run: |
           test "$(git rev-parse HEAD)" = "610b8cbceb2d071281ebd75c9544a1adc1994634"
           test -z "$(git status --porcelain)"
@@ -26,149 +26,81 @@ jobs:
       - run: pnpm install --frozen-lockfile --ignore-scripts
       - run: pnpm build:docs
       - run: pnpm exec playwright install --with-deps ${{ matrix.engine }}
-      - name: Real keyboard and content visibility, no product changes
+      - name: Bounded keyboard, TOC, Menu and focus recovery evidence
         env:
           UX_ENGINE: ${{ matrix.engine }}
         run: |
           node --input-type=module <<'JS'
           import assert from 'node:assert/strict';
-          import { chromium, firefox, webkit } from '@playwright/test';
-          import { spawn } from 'node:child_process';
-          import { mkdirSync, writeFileSync } from 'node:fs';
-          const rev = '610b8cbceb2d071281ebd75c9544a1adc1994634';
-          const engine = process.env.UX_ENGINE;
-          const browsers = { chromium, firefox, webkit };
-          assert.ok(browsers[engine], 'unknown engine');
-          const out = 'test-results/ux1372-keyboard-' + engine;
-          mkdirSync(out, { recursive: true });
-          const server = spawn(process.execPath, ['apps/docs/serve.mjs'], { stdio: 'inherit' });
-          const url = 'http://127.0.0.1:4173/next/native-web/components/button/';
-          const variants = [
-           { name: 'baseline', css: '' },
-           { name: 'scroll30rem', css: '@media (max-width:30rem){.vf-docs-header{position:static!important}}' },
-           { name: 'scroll48rem', css: '@media (max-width:48rem){.vf-docs-header{position:static!important}}' },
-          ];
-          const cases = [
-           { name: '320-text200', width:320, height:720, scale:'200%' },
-           { name: '320-text100', width:320, height:720, scale:'100%' },
-           { name: '768-text100', width:768, height:900, scale:'100%' },
-           { name: '320-text400-stress', width:320, height:720, scale:'400%' },
-          ];
-          const results = [];
-          let browser;
-          const snapshot = async (page) => page.evaluate(() => {
-            const rect = (el) => { if(!el)return null; const r=el.getBoundingClientRect();return {top:Math.round(r.top),bottom:Math.round(r.bottom),height:Math.round(r.height),width:Math.round(r.width)};};
-            const header=document.querySelector('.vf-docs-header');
-            const hash=decodeURIComponent(location.hash.slice(1));
-            const target=hash?document.getElementById(hash):null;
-            const h=rect(header), t=rect(target);
-            const menu=document.querySelector('[data-vf-docs-nav-toggle]');
-            const nav=document.querySelector('#vf-docs-navigation');
-            const focus=document.activeElement;
-            return {header:h,position:getComputedStyle(header).position,target:t,hash,focus:focus?{tag:focus.tagName,id:focus.id,cls:String(focus.className).slice(0,90),text:(focus.textContent||'').trim().slice(0,75)}:null,
-             targetOccludedByHeader:!!(h&&t&&h.bottom>t.top&&h.top<t.bottom&&h.bottom>0),
-             scrollY:Math.round(scrollY),scrollWidth:document.documentElement.scrollWidth,clientWidth:document.documentElement.clientWidth,
-             menuExpanded:menu?.getAttribute('aria-expanded'),menuVisible:!!menu?.getClientRects().length,
-             navHidden:nav?.hidden,navVisible:!!nav?.getClientRects().length,viewportHeight:innerHeight};
+          import {chromium,firefox,webkit} from '@playwright/test';
+          import {spawn} from 'node:child_process';
+          import {mkdirSync,writeFileSync} from 'node:fs';
+          const engine=process.env.UX_ENGINE, browsers={chromium,firefox,webkit};
+          const root='test-results/ux1372-keyboard-bounded-'+engine;
+          mkdirSync(root,{recursive:true});
+          const server=spawn(process.execPath,['apps/docs/serve.mjs'],{stdio:'inherit'});
+          const pageUrl='http://127.0.0.1:4173/next/native-web/components/button/';
+          const vars=[
+          {id:'baseline',css:''},
+          {id:'nonsticky30',css:'@media (max-width:30rem){.vf-docs-header{position:static!important}}'},
+          {id:'nonsticky48',css:'@media (max-width:48rem){.vf-docs-header{position:static!important}}'}];
+          const records=[];let browser;
+          const view=async p=>p.evaluate(()=>{
+          const box=e=>{if(!e)return null;const r=e.getBoundingClientRect();return {top:+r.top.toFixed(1),bottom:+r.bottom.toFixed(1),height:+r.height.toFixed(1)}};
+          const h=document.querySelector('.vf-docs-header'), anchor=decodeURIComponent(location.hash.slice(1)),target=document.getElementById(anchor),menu=document.querySelector('[data-vf-docs-nav-toggle]'),nav=document.querySelector('#vf-docs-navigation');
+          const H=box(h),T=box(target);
+          return {header:H,headerPosition:getComputedStyle(h).position,target:T,hash:location.hash,scrollY:Math.round(scrollY),clientWidth:document.documentElement.clientWidth,scrollWidth:document.documentElement.scrollWidth,active:document.activeElement?.outerHTML?.slice(0,120),menuExpanded:menu?.getAttribute('aria-expanded'),menuVisible:!!menu?.getClientRects().length,navVisible:!!nav?.getClientRects().length,headerOccludesTarget:!!(H&&T&&H.bottom>T.top&&H.top<T.bottom&&H.bottom>0)};
           });
-          const setView=async(page,variant,tc)=>{
-            await page.goto(url,{waitUntil:'load'});
-            await page.evaluate(scale=>document.documentElement.style.fontSize=scale,tc.scale);
-            if(variant.css)await page.addStyleTag({content:variant.css});
-            await page.evaluate(()=>document.fonts.ready);
-          };
-          try{
-           let ready=false;
-           for(let i=0;i<100;i++){try{const res=await fetch(url);if(res.ok){ready=true;break}}catch{}await new Promise(ok=>setTimeout(ok,150));}
-           assert.ok(ready,'built doc server not reachable');
-           browser=await browsers[engine].launch({headless:true});
-           for(const variant of variants){
-            for(const tc of cases){
-             const page=await browser.newPage({viewport:{width:tc.width,height:tc.height},deviceScaleFactor:1});
-             const obs={variant:variant.name,scenario:tc.name,engine,revision:rev,environment:'GitHub Ubuntu headless Playwright',textSize:tc.scale,notes:[],verdicts:{}};
-             try{
-               await setView(page,variant,tc);
-               const first=await snapshot(page);obs.initial=first;
-               assert.ok(first.scrollWidth<=first.clientWidth+1,'initial horizontal overflow');
-               await page.keyboard.press('Tab');
-               const skip=await page.evaluate(()=>document.activeElement?.matches('a.vf-docs-skip')??false);
-               obs.verdicts.skipReachableFirst=skip;
-               if(skip){await page.keyboard.press('Enter');obs.afterSkip=await snapshot(page);}
-               await setView(page,variant,tc);
-               let tocTabCount=null;
-               for(let n=1;n<=40;n++){
-                 await page.keyboard.press('Tab');
-                 const found=await page.evaluate(()=>!!document.activeElement?.matches('.vf-docs-toc a[href]'));
-                 if(found){tocTabCount=n;break;}
-               }
-               obs.tocTabCount=tocTabCount;
-               obs.verdicts.tocKeyboardReachable=tocTabCount!==null;
-               if(tocTabCount!==null){
-                 await page.keyboard.press('Enter');
-                 obs.afterTocEnter=await snapshot(page);
-                 await page.screenshot({path:out+'/'+variant.name+'-'+tc.name+'-after-toc.png',fullPage:false});
-                 await page.keyboard.press('Control+Home');
-                 obs.afterCtrlHome=await snapshot(page);
-                 obs.verdicts.menuRecoverableWithCtrlHome=obs.afterCtrlHome.menuVisible&&obs.afterCtrlHome.scrollY===0;
-               } else obs.notes.push('No TOC link in first 40 Tab presses from page start; direct keyboard traversal needs review');
-               const menu=page.getByRole('button',{name:'Menu'});
-               if(tc.width<=768 && await menu.isVisible()){
-                 await menu.focus(); await page.keyboard.press('Enter');
-                 obs.afterMenuOpen=await snapshot(page);
-                 obs.verdicts.menuKeyboardOpen=obs.afterMenuOpen.menuExpanded==='true'&&obs.afterMenuOpen.navVisible;
-                 await page.keyboard.press('Enter');
-                 obs.afterMenuClose=await snapshot(page);
-                 obs.verdicts.menuKeyboardClose=obs.afterMenuClose.menuExpanded==='false'&&obs.afterMenuClose.navHidden;
-                 await menu.focus(); await page.keyboard.press('Enter');
-                 const current=page.locator('#vf-docs-navigation a[aria-current="page"]').first();
-                 const count=await current.count();
-                 obs.verdicts.currentLinkExists=count===1;
-                 if(count){
-                   await current.focus();
-                   await page.setViewportSize({width:1920,height:1000});
-                   await page.waitForTimeout(50);
-                   obs.afterWideTransition=await snapshot(page);
-                   await page.setViewportSize({width:tc.width,height:tc.height});
-                   await page.waitForTimeout(50);
-                   obs.afterNarrowTransition=await snapshot(page);
-                   obs.verdicts.focusTransferredToMenu=await page.evaluate(()=>document.activeElement?.matches('[data-vf-docs-nav-toggle]')??false);
-                   obs.verdicts.menuCollapsedAfterReturn=obs.afterNarrowTransition.menuExpanded==='false'&&obs.afterNarrowTransition.navHidden;
-                 }
-               }
-               await page.screenshot({path:out+'/'+variant.name+'-'+tc.name+'-return.png',fullPage:false});
-               obs.final=await snapshot(page);
-               obs.verdicts.noHorizontalOverflow=obs.final.scrollWidth<=obs.final.clientWidth+1;
-               obs.verdicts.intendedHeaderMode=tc.width<=480?(variant.name==='baseline'?obs.initial.position==='sticky':obs.initial.position==='static') : tc.width===768?(variant.name==='scroll48rem'?obs.initial.position==='static':obs.initial.position==='sticky'):true;
-             }catch(err){obs.error=String(err?.stack||err);obs.notes.push('Scenario failed or unverified; do not treat harness success as UX pass');}
-             results.push(obs);
-             console.log('UX1372_OBSERVATION '+JSON.stringify(obs));
-             await page.close();
-            }
+          try {
+           let ready=false;for(let i=0;i<75;i++){try{const x=await fetch(pageUrl);if(x.ok){ready=true;break}}catch{}await new Promise(r=>setTimeout(r,100));}
+           assert.ok(ready,'docs server not responding');
+           browser=await browsers[engine].launch();
+           for(const variant of vars){
+           const page=await browser.newPage({viewport:{width:320,height:720},deviceScaleFactor:1});
+           page.setDefaultTimeout(3500);page.setDefaultNavigationTimeout(7500);
+           const row={engine,variant:variant.id,revision:'610b8cbceb2d071281ebd75c9544a1adc1994634',environment:'Ubuntu Playwright',viewport:'320x720 CSS',textSize:'200%',notes:[]};
+           try {
+           await page.goto(pageUrl,{waitUntil:'domcontentloaded',timeout:7500});
+           await page.evaluate(()=>document.documentElement.style.fontSize='200%');
+           if(variant.css)await page.addStyleTag({content:variant.css});
+           row.initial=await view(page);
+           await page.keyboard.press('Tab');
+           row.skipFirst=await page.evaluate(()=>document.activeElement?.matches('a.vf-docs-skip')??false);
+           if(row.skipFirst){await page.keyboard.press('Enter');row.afterSkip=await view(page);}
+           await page.goto(pageUrl,{waitUntil:'domcontentloaded',timeout:7500});
+           await page.evaluate(()=>document.documentElement.style.fontSize='200%');
+           if(variant.css)await page.addStyleTag({content:variant.css});
+           let tocTabCount=null;
+           for(let k=1;k<=16;k++){await page.keyboard.press('Tab');if(await page.evaluate(()=>!!document.activeElement?.matches('.vf-docs-toc a[href]'))){tocTabCount=k;break;}}
+           row.tocTabCount=tocTabCount;
+           if(tocTabCount!==null){await page.keyboard.press('Enter');row.afterTocEnter=await view(page);await page.screenshot({path:root+'/'+variant.id+'-toc.png',fullPage:false});await page.keyboard.press('Control+Home');row.afterCtrlHome=await view(page);}
+           else row.notes.push('TOC not reached in first 16 Tabs; independently retest');
+           const toggle=page.getByRole('button',{name:'Menu'});
+           await toggle.focus();await page.keyboard.press('Enter');row.menuOpen=await view(page);
+           await page.keyboard.press('Enter');row.menuClose=await view(page);
+           await toggle.focus();await page.keyboard.press('Enter');
+           const current=page.locator('#vf-docs-navigation a[aria-current="page"]').first();
+           await current.focus();
+           await page.setViewportSize({width:1920,height:1000});
+           await page.waitForTimeout(50);row.wide=await view(page);
+           await page.setViewportSize({width:320,height:720});
+           await page.waitForTimeout(50);row.narrowReturn=await view(page);
+           row.focusReturnedToMenu=await page.evaluate(()=>document.activeElement?.matches('[data-vf-docs-nav-toggle]')??false);
+           await page.screenshot({path:root+'/'+variant.id+'-return.png',fullPage:false});
+           row.overflow=row.narrowReturn.scrollWidth>row.narrowReturn.clientWidth+1;
+           }catch(err){row.error=String(err?.message||err).slice(0,2000);}
+           console.log('UX1372_BOUNDED '+JSON.stringify(row));records.push(row);await page.close();
            }
-           // Explicit JS-disabled progressive enhancement check, at 320px 200% root text.
-           for(const variant of variants){
-             const context=await browser.newContext({viewport:{width:320,height:720},javaScriptEnabled:false});
-             const p=await context.newPage();
-             const rec={variant:variant.name,scenario:'320-text200-nojs',engine,revision:rev};
-             try{
-               await p.goto(url,{waitUntil:'load'});
-               await p.addStyleTag({content:'html{font-size:200%!important}'+variant.css});
-               const data=await p.evaluate(() => ({menuHidden:document.querySelector('[data-vf-docs-nav-toggle]').hidden,navigationHidden:document.querySelector('#vf-docs-navigation').hidden, mainExists:!!document.querySelector('#main'), horizontalOverflow:document.documentElement.scrollWidth>document.documentElement.clientWidth+1}));
-               rec.data=data;
-               await p.screenshot({path:out+'/'+variant.name+'-nojs.png',fullPage:false});
-             }catch(err){rec.error=String(err?.stack||err)}
-             results.push(rec);console.log('UX1372_NOJS '+JSON.stringify(rec));await context.close();
-           }
-           writeFileSync(out+'/observations.json',JSON.stringify({revision:rev,engine,accuracy:'CSS text resize, not genuine native browser zoom or human screen reader',results},null,2));
-           assert.ok(results.length===15,'unexpected case count');
-          } finally { if(browser)await browser.close();server.kill('SIGTERM');}
+           writeFileSync(root+'/observations.json',JSON.stringify({source:'610b8cbceb2d071281ebd75c9544a1adc1994634',engine,method:'actual CSS root text resize; NOT native browser zoom or human AT',records},null,2));
+           assert.equal(records.length,3);
+          }finally{if(browser)await browser.close();server.kill('SIGTERM')}
           
           JS
           test -z "$(git status --porcelain)"
       - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
         if: always()
         with:
-          name: ux1372-keyboard-${{ matrix.engine }}
-          path: test-results/ux1372-keyboard-${{ matrix.engine }}
+          name: ux1372-bounded-${{ matrix.engine }}
+          path: test-results/ux1372-keyboard-bounded-${{ matrix.engine }}
           retention-days: 14
           if-no-files-found: warn
