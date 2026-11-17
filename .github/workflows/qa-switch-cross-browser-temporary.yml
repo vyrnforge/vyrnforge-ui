@@ -1,0 +1,21 @@
+name: QA Switch cross-browser temporary verification
+
+on:
+  pull_request:
+    paths:
+      - 'product/components/interactive-controls/switch/test/native-contract.mjs'
+      - '.github/workflows/qa-switch-cross-browser-temporary.yml'
+
+permissions:
+  contents: read
+
+jobs:
+  switch-cross-browser:
+    uses: ./.github/workflows/_browser-validation.yml
+    with:
+      scopes_json: '[{"port":"web","components":["switch"]},{"port":"react","components":["switch"]},{"port":"angular","components":["switch"]},{"port":"vue","components":["switch"]}]'
+      revision: ${{ github.event.pull_request.head.sha }}
+      browser_profile: cross
+      browsers: chromium firefox webkit
+      artifact_suffix: qa-switch-cross-${{ github.run_id }}
+      retention_days: 7
