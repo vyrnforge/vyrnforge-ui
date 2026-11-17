@@ -6,6 +6,19 @@ import { createSemanticImpact } from '../impact/plan.mjs';
 
 for (const file of ['tooling/testing/README.md', 'tooling/impact/README.md', 'tooling/impact/plan.mjs', 'tooling/README.md']) await access(file);
 
+// The full check runs tooling Vitest once through Nx; guard suites that the
+// previous standalone verify:* commands also required to be non-empty.
+for (const owner of ['product', 'impact', 'validation']) {
+  const entries = await readdir(path.join('tooling', owner), { withFileTypes: true });
+  if (!entries.some((entry) => entry.isFile() && entry.name.endsWith('.test.mjs'))) {
+    throw new Error(`repository-tooling tests missing for ${owner}; full check must not silently omit this verification owner`);
+  }
+}
+const toolingProject = JSON.parse(await readFile('tooling/project.json', 'utf8'));
+if (!toolingProject.targets?.test?.options?.command?.includes('vitest run --project repository-tooling')) {
+  throw new Error('repository-tooling:test must run the shared Vitest tooling project through Nx');
+}
+
 const impact = createSemanticImpact(['nx.json', 'tooling/verify/package-artifacts.mjs']);
 if (impact.orchestration !== 'nx') throw new Error('Nx must remain the only task orchestrator');
 if (!impact.repositoryWide || !impact.semanticEvidence.includes('package-artifacts') || !impact.semanticEvidence.includes('browser')) {
