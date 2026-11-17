@@ -70,3 +70,25 @@ test('settings navigation preserves deep links, route history, title and focus w
   
   expect((await expectNoAxeViolations(page)).violations).toEqual([]);
 });
+
+test('saved display name commits before later Cancel restores that saved value', async ({ page }) => {
+  test.skip(port !== 'react', 'The reference settings form is intentionally a React-only consumer task.');
+
+  await page.goto('/components/app-shell/settings-navigation-react.html?route=%2Fsettings%2Fprofile&tab=details');
+
+  const name = page.getByRole('textbox', { name: 'Display name' });
+  const status = page.getByRole('status');
+  await expect(name).toHaveValue('Avery Example');
+
+  await name.fill('New Visible Name');
+  await expect(status).toHaveText('Display name has unsaved changes.');
+  await page.getByRole('button', { name: 'Save profile' }).click();
+  await expect(name).toHaveValue('New Visible Name');
+  await expect(status).toHaveText('Saved display name New Visible Name.');
+
+  await name.fill('Uncommitted Draft');
+  await expect(status).toHaveText('Display name has unsaved changes.');
+  await page.getByRole('button', { name: 'Cancel edits' }).click();
+  await expect(name).toHaveValue('New Visible Name');
+  await expect(status).toHaveText('Unsaved profile changes discarded.');
+});
