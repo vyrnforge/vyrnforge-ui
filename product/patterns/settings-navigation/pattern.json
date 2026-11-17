@@ -11,7 +11,7 @@
       "evidence": {
         "port": "react",
         "fixture": "product/components/application-structures/app-shell/test/browser/fixtures.mjs",
-        "spec": "product/components/application-structures/app-shell/test/browser/tests/app-shell.spec.mjs",
+        "spec": "product/patterns/settings-navigation/test/browser/tests/settings-navigation.spec.mjs",
         "fixtureUrl": "/components/app-shell/settings-navigation-react.html",
         "testName": "settings navigation preserves deep links, route history, title and focus while local state remains local"
       }
