@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { resolveBrowserFixtureScope } from './browser-fixture-scope.mjs';
+import { resolveBrowserFixtureScope, selectedBrowserFixtureOwners } from './browser-fixture-scope.mjs';
 import { validateBrowserFixtureModule } from './browser-fixtures.mjs';
 
 const entries = {
@@ -46,5 +46,33 @@ describe('browser fixture dependency declarations', () => {
     for (const dependencies of [null, [], { react: 'input' }, { unknown: ['input'] }, { react: ['app-shell'] }, { react: ['input', 'input'] }]) {
       expect(() => validate(dependencies)).toThrow('browserFixture.dependencies');
     }
+  });
+});
+
+
+describe('pattern-owned browser evidence fixture selection', () => {
+  const patterns = [{
+    unitId: 'settings-navigation',
+    exampleReferences: [{ owner: 'component:app-shell', evidence: { port: 'react' } }],
+  }];
+
+  it('prepares AppShell for a pattern-only React scope without selecting AppShell specs', async () => {
+    const selectedComponents = new Set(['settings-navigation']);
+    const fixtureOwners = selectedBrowserFixtureOwners({ selectedComponents, patterns, port: 'react' });
+    expect([...fixtureOwners]).toEqual(['settings-navigation', 'app-shell']);
+    expect([...selectedComponents]).toEqual(['settings-navigation']);
+    expect(await resolve([...fixtureOwners].filter((id) => id in entries))).toEqual(['input', 'app-shell']);
+  });
+
+  it('does not add a React-only pattern fixture to Angular or unrelated selections', () => {
+    expect([...selectedBrowserFixtureOwners({
+      selectedComponents: new Set(['settings-navigation']), patterns, port: 'angular',
+    })]).toEqual(['settings-navigation']);
+    expect([...selectedBrowserFixtureOwners({
+      selectedComponents: new Set(['unrelated']), patterns, port: 'react',
+    })]).toEqual(['unrelated']);
+    expect([...selectedBrowserFixtureOwners({
+      selectedComponents: new Set(), patterns, port: 'react',
+    })]).toEqual([]);
   });
 });

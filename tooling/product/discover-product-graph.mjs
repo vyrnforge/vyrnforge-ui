@@ -249,7 +249,7 @@ function patternUsageClosure(root, components, manifests, directUsage) {
   return [...result.values()].sort((a, b) => (a.component + ':' + a.port).localeCompare(b.component + ':' + b.port));
 }
 
-function resolvePatternReferences(root, metadata, components, manifests) {
+function resolvePatternReferences(root, metadata, components, manifests, patternId) {
   const refs = metadata.exampleReferences ?? [];
   if (!Array.isArray(refs)) throw new Error('Pattern exampleReferences must be an array');
   const seen = new Set();
@@ -285,9 +285,14 @@ function resolvePatternReferences(root, metadata, components, manifests) {
     });
     const evidence = ref.evidence;
     const testRoot = owner.facets.test;
+    const patternTestRoot = `product/patterns/${patternId}/test/`;
+    const isScopedFile = (file, roots) =>
+      typeof file === 'string' && !file.includes('..') &&
+      roots.some((allowedRoot) => allowedRoot && file.startsWith(allowedRoot)) && isFile(root, file);
     if (!testRoot || !evidence || !frameworks.some((entry) => entry.port === evidence.port) ||
-        !owner.surfaces[evidence.port]?.browser || ![evidence.fixture, evidence.spec].every((file) =>
-          typeof file === 'string' && file.startsWith(testRoot) && !file.includes('..') && isFile(root, file))) {
+        !owner.surfaces[evidence.port]?.browser ||
+        !isScopedFile(evidence.fixture, [testRoot]) ||
+        !isScopedFile(evidence.spec, [testRoot, patternTestRoot])) {
       throw new Error('Invalid pattern evidence reference: ' + ref.id);
     }
     const specSource = readFileSync(path.join(root, evidence.spec), 'utf8');
@@ -308,7 +313,7 @@ function normalizePatternNode(root, manifests, patternId, components) {
   const metadata = exists(root, metadataPath) ? readJson(root, metadataPath) : null;
   if (metadata?.id !== patternId) throw new Error('Pattern metadata identity mismatch: ' + patternId);
   const facets = patternFacets(root, patternId);
-  const exampleReferences = resolvePatternReferences(root, metadata, components, manifests);
+  const exampleReferences = resolvePatternReferences(root, metadata, components, manifests, patternId);
   const webRoot = `${canonicalRoot}/web/`;
   const publicEntrypoints = exists(root, webRoot) ? componentPublicEntrypoints(manifests, 'web', patternId) : [];
   const surfaces = exists(root, webRoot)

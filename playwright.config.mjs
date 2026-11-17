@@ -16,8 +16,9 @@ const browserDeviceNames = {
 
 const graph = discoverProductGraph();
 const browserOwners = [...graph.components, ...graph.patterns];
+const patternHasPort = (owner) => owner.exampleReferences?.some((ref) => ref.evidence.port === port);
 const unsupportedComponentSpecs = browserOwners
-  .filter((owner) => !owner.surfaces[port])
+  .filter((owner) => !owner.surfaces[port] && !patternHasPort(owner))
   .map((owner) => `**/${owner.unitId}/test/browser/tests/**/*.spec.mjs`);
 const unselectedComponentSpecs =
   selectedComponents.size > 0
