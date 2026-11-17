@@ -485,6 +485,53 @@ test('Native shell reflows at 320 CSS pixels and exposes responsive navigation',
   }
   await expectNoAccessibilityViolations(page);
   expect(errors, errors.join('\n')).toEqual([]);
+
+  // C2-QA-01: supplement the unchanged authentic 320×720 viewport captures.
+  // At 200% text, the existing sticky header occupies ~620 of 720 CSS px,
+  // obscuring the article even when the page scrolls. Only for the diagnostic
+  // content screenshots below, turn off that stickiness. This does NOT modify
+  // production CSS or affect the reflow/ARIA/axe/error assertions above.
+  await page.addStyleTag({ content: '.vf-docs-header { position: static !important; }' });
+  await expect(page.locator('.vf-docs-header')).toHaveCSS('position', 'static');
+
+  const tocLinks = page.locator('.vf-docs-toc a[href]');
+  const sectionHeadings = page.locator('.vf-docs-article > section h2');
+  const tocCount = await tocLinks.count();
+  const sectionCount = await sectionHeadings.count();
+  expect(tocCount, 'TOC must have content to capture').toBeGreaterThanOrEqual(3);
+  expect(sectionCount, 'Article must have top, middle and bottom sections').toBeGreaterThanOrEqual(3);
+
+  const captures = [
+    ['native-responsive-200-diagnostic-toc-top.png', tocLinks.first()],
+    ['native-responsive-200-diagnostic-toc-bottom.png', tocLinks.last()],
+    ['native-responsive-200-diagnostic-article-top.png', sectionHeadings.first()],
+    ['native-responsive-200-diagnostic-article-middle.png', sectionHeadings.nth(Math.floor(sectionCount / 2))],
+    ['native-responsive-200-diagnostic-article-bottom.png', sectionHeadings.last()],
+  ];
+  for (const [filename, target] of captures) {
+    await target.evaluate((element) => element.scrollIntoView({ block: 'start', inline: 'nearest', behavior: 'instant' }));
+    const visibleContent = await target.evaluate((element) => {
+      const bounds = element.getBoundingClientRect();
+      const header = document.querySelector('.vf-docs-header').getBoundingClientRect();
+      return {
+        top: bounds.top,
+        bottom: bounds.bottom,
+        headerBottom: header.bottom,
+        text: element.textContent.trim(),
+        viewportHeight: window.innerHeight,
+        scrollY: window.scrollY,
+      };
+    });
+    expect(visibleContent.text, filename + ' requires real authored text').not.toBe('');
+    expect(visibleContent.scrollY, filename + ' must be away from the page top').toBeGreaterThan(0);
+    expect(visibleContent.headerBottom, filename + ' must not be occluded by the former sticky header').toBeLessThanOrEqual(1);
+    expect(visibleContent.top, filename + ' content starts after the viewport').toBeLessThan(visibleContent.viewportHeight);
+    expect(visibleContent.bottom, filename + ' content ends before the viewport').toBeGreaterThan(0);
+    // Capture the real rendered content at its normal 320×720 viewport size.
+    // "diagnostic" distinguishes the screenshot-only non-sticky presentation
+    // from the unchanged authentic screenshots captured earlier in this test.
+    await page.screenshot({ path: testInfo.outputPath(filename), fullPage: false });
+  }
 });
 
 test('C1 responsive navigation transfers only disappearing focus and resets disclosure', async ({ page }) => {
