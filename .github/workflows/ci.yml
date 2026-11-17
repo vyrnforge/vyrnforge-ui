@@ -1,39 +1,92 @@
-name: PR Validation
-
-on:
-  pull_request:
-
+name: UX header actual-size alternatives (evidence only)
+on: pull_request
 permissions:
   contents: read
-
-concurrency:
-  group: pr-validation-${{ github.event.pull_request.number }}
-  cancel-in-progress: true
-
 jobs:
-  targeted-validation:
-    uses: ./.github/workflows/_targeted-validation.yml
-    with:
-      mode: pr
-      base_sha: ${{ github.event.pull_request.base.sha }}
-      head_sha: ${{ github.sha }}
-      artifact_suffix: pr
-      retention_days: 7
-      upload_docs_artifact: false
-
-  ci-gate:
-    name: ci-gate
-    if: always()
-    needs: targeted-validation
+  render:
+    name: UX 200pct header alternatives — never merge
     runs-on: ubuntu-latest
-    timeout-minutes: 5
+    timeout-minutes: 35
     steps:
-      - name: Require targeted validation
-        env:
-          TARGETED_VALIDATION: ${{ needs.targeted-validation.result }}
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        with:
+          ref: 610b8cbceb2d071281ebd75c9544a1adc1994634
+      - name: Verify pinned main, no product changes
         run: |
-          if [ "$TARGETED_VALIDATION" != "success" ]; then
-            echo "Targeted validation did not succeed: $TARGETED_VALIDATION" >&2
-            exit 1
-          fi
-          echo "All selected VyrnForge validation evidence passed."
+          test "$(git rev-parse HEAD)" = "610b8cbceb2d071281ebd75c9544a1adc1994634"
+          test -z "$(git status --porcelain)"
+      - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020
+        with:
+          node-version-file: .node-version
+      - run: corepack enable
+      - run: pnpm install --frozen-lockfile --ignore-scripts
+      - run: pnpm build:docs
+      - run: pnpm exec playwright install --with-deps chromium
+      - name: Capture baseline, narrow-static, compact-static prototype targets
+        run: |
+          node --input-type=module <<'JS'
+          import assert from 'node:assert/strict';
+          import {chromium} from '@playwright/test';
+          import {spawn} from 'node:child_process';
+          import {mkdirSync,writeFileSync} from 'node:fs';
+          const root='test-results/ux-1372';mkdirSync(root,{recursive:true});
+          const server=spawn(process.execPath,['apps/docs/serve.mjs'],{stdio:'inherit'});
+          const baseUrl='http://127.0.0.1:4173';
+          let browser;
+          const variants=[
+            {id:'baseline',label:'Unmodified main; sticky header',css:''},
+            {id:'static-narrow',label:'Header scrolls away at <=48rem',css:'@media (max-width:48rem){.vf-docs-header{position:static!important}}'},
+            {id:'static-very-narrow',label:'Header scrolls away at <=30rem',css:'@media (max-width:30rem){.vf-docs-header{position:static!important}}'},
+          ];
+          const cases=[
+            {id:'zoom320',width:320,height:720,font:'200%'},
+            {id:'normal320',width:320,height:720,font:'100%'},
+            {id:'tablet768',width:768,height:900,font:'100%'},
+            {id:'desktop1920',width:1920,height:1000,font:'100%'},
+          ];
+          try{
+            let ready=false;
+            for(let i=0;i<100;i++){try{const r=await fetch(baseUrl+'/next/native-web/components/button/');if(r.ok){ready=true;break}}catch{}await new Promise(ok=>setTimeout(ok,150))}
+            assert.ok(ready,'docs server unavailable');
+            browser=await chromium.launch({headless:true});
+            const output=[];
+            for(const variant of variants){
+              for(const testCase of cases){
+                const page=await browser.newPage({viewport:{width:testCase.width,height:testCase.height},deviceScaleFactor:1});
+                await page.goto(baseUrl+'/next/native-web/components/button/',{waitUntil:'load'});
+                await page.evaluate(()=>document.fonts.ready);
+                await page.evaluate(font=>{document.documentElement.style.fontSize=font},testCase.font);
+                if(variant.css)await page.addStyleTag({content:variant.css});
+                const menu=page.getByRole('button',{name:'Menu'});
+                if(testCase.width<=768){
+                  await menu.click();
+                  assert.equal(await menu.getAttribute('aria-expanded'),'true','Menu aria-expanded');
+                }
+                await page.locator('.vf-docs-article > section h2').first().evaluate(el=>el.scrollIntoView({block:'start',behavior:'instant'}));
+                const measure=await page.evaluate(()=>{
+                  const rect=(sel)=>{const e=document.querySelector(sel);if(!e)return null;const r=e.getBoundingClientRect();return {top:Math.round(r.top),bottom:Math.round(r.bottom),height:Math.round(r.height),width:Math.round(r.width)}};
+                  const header=rect('.vf-docs-header');
+                  const target=rect('.vf-docs-article > section h2');
+                  return {header,headerPosition:getComputedStyle(document.querySelector('.vf-docs-header')).position,target,viewportHeight:innerHeight,availableBelowHeader:Math.max(0,innerHeight-Math.max(0,header?.bottom??0)),scrollY:Math.round(scrollY),scrollWidth:document.documentElement.scrollWidth,clientWidth:document.documentElement.clientWidth,main:rect('.vf-docs-main'),menuExpanded:document.querySelector('[data-vf-docs-nav-toggle]')?.getAttribute('aria-expanded')};
+                });
+                assert.ok(measure.scrollWidth<=measure.clientWidth+1,'horizontal overflow '+variant.id+testCase.id);
+                if(variant.id==='baseline'&&testCase.id==='zoom320')assert.ok(measure.header.height>=600,'original 620px source evidence');
+                const name=variant.id+'-'+testCase.id;
+                const screenshot=root+'/'+name+'.png';
+                await page.screenshot({path:screenshot,fullPage:false});
+                console.log('UX_1372 '+name+' '+JSON.stringify(measure));
+                output.push({name,variant:variant.label,viewport:testCase,measure});
+                await page.close();
+              }
+            }
+            writeFileSync(root+'/measurements.json',JSON.stringify({revision:'610b8cbceb2d071281ebd75c9544a1adc1994634',actualSite:true,ownerApproval:false,variants,scenarios:output},null,2));
+          }finally{if(browser)await browser.close();server.kill('SIGTERM')}
+          JS
+          test -z "$(git status --porcelain)"
+      - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        if: always()
+        with:
+          name: ux-header-actual-size-1372-610b8cbceb2d
+          path: test-results/ux-1372
+          retention-days: 14
+          if-no-files-found: warn
