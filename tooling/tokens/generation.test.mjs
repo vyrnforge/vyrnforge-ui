@@ -40,8 +40,12 @@ test('token CLI rejects drift without writes, writes deterministically, and reje
         copyFile(join(localTooling, name), join(fixtureTooling, name)),
       ),
     );
+    // Exercise the actual pnpm scripts in an isolated copy of the root package.
+    // This leaves tracked CSS in the repository untouched.
+    await copyFile(new URL('../../package.json', import.meta.url), join(fixtureRoot, 'package.json'));
     const cli = join(fixtureTooling, 'generate.mjs');
     const run = (...args) => spawnSync(process.execPath, [cli, ...args], { encoding: 'utf8', timeout: 15000 });
+    const runRootCommand = (command) => spawnSync('pnpm', ['run', command], { cwd: fixtureRoot, encoding: 'utf8', timeout: 15000 });
     const stale = '/* intentionally stale token fixture */\n';
     await writeFile(outputPath, stale);
 
@@ -54,6 +58,20 @@ test('token CLI rejects drift without writes, writes deterministically, and reje
     assert.notEqual(defaultCheck.status, 0, 'direct invocation defaults to a read-only check');
     assert.equal(await readFile(outputPath, 'utf8'), stale);
 
+    const stalePnpmCheck = runRootCommand('verify:tokens');
+    assert.ifError(stalePnpmCheck.error);
+    assert.notEqual(stalePnpmCheck.status, 0, 'actual pnpm verification must reject stale CSS');
+    assert.equal(await readFile(outputPath, 'utf8'), stale, 'pnpm verification must not write');
+
+    const generatedPnpm = runRootCommand('generate:tokens');
+    assert.ifError(generatedPnpm.error);
+    assert.equal(generatedPnpm.status, 0, generatedPnpm.stderr);
+    assert.equal(await readFile(outputPath, 'utf8'), renderRuntimeTokens());
+    const verifiedPnpm = runRootCommand('verify:tokens');
+    assert.ifError(verifiedPnpm.error);
+    assert.equal(verifiedPnpm.status, 0, verifiedPnpm.stderr);
+
+    await writeFile(outputPath, stale);
     const generated = run('--write');
     assert.equal(generated.status, 0, generated.stderr);
     assert.match(generated.stdout, /runtime tokens generated/);
