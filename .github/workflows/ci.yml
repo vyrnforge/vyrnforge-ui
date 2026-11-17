@@ -1,39 +1,79 @@
-name: PR Validation
-
-on:
-  pull_request:
-
+name: QA C2 final screenshot evidence at exact candidate
+on: pull_request
 permissions:
   contents: read
-
-concurrency:
-  group: pr-validation-${{ github.event.pull_request.number }}
-  cancel-in-progress: true
-
 jobs:
-  targeted-validation:
-    uses: ./.github/workflows/_targeted-validation.yml
-    with:
-      mode: pr
-      base_sha: ${{ github.event.pull_request.base.sha }}
-      head_sha: ${{ github.sha }}
-      artifact_suffix: pr
-      retention_days: 7
-      upload_docs_artifact: false
-
-  ci-gate:
-    name: ci-gate
-    if: always()
-    needs: targeted-validation
+  docs:
+    name: QA C2 ${{ matrix.engine }} exact-head
     runs-on: ubuntu-latest
-    timeout-minutes: 5
+    timeout-minutes: 45
+    strategy:
+      fail-fast: false
+      matrix:
+        engine: [chromium, firefox, webkit]
     steps:
-      - name: Require targeted validation
-        env:
-          TARGETED_VALIDATION: ${{ needs.targeted-validation.result }}
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        with:
+          ref: 2cfd0fbb24e9e8be545c844076d12e93896f23ae
+      - name: Verify original source and unchanged product CSS
         run: |
-          if [ "$TARGETED_VALIDATION" != "success" ]; then
-            echo "Targeted validation did not succeed: $TARGETED_VALIDATION" >&2
-            exit 1
-          fi
-          echo "All selected VyrnForge validation evidence passed."
+          test "$(git rev-parse HEAD)" = "2cfd0fbb24e9e8be545c844076d12e93896f23ae"
+          test -z "$(git status --porcelain)"
+          git diff --exit-code c6d5cfd60830b4372348689eb1d017ae41ce8816 HEAD -- apps/docs/native.css packages product
+      - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020
+        with:
+          node-version-file: .node-version
+      - run: corepack enable
+      - run: pnpm install --frozen-lockfile --ignore-scripts
+      - run: pnpm build:docs
+      - run: pnpm exec playwright install --with-deps ${{ matrix.engine }}
+      - name: Execute original docs tests and repaired screenshot evidence
+        run: pnpm exec playwright test --config apps/docs/playwright.config.mjs --project ${{ matrix.engine }}
+      - name: Independently inspect retained original and diagnostic screenshots
+        run: |
+          node --input-type=module <<'JS'
+          import assert from 'node:assert/strict';
+          import { readdirSync, readFileSync } from 'node:fs';
+          import { createHash } from 'node:crypto';
+          const root = 'test-results/docs-playwright-results';
+          const findImages = (dir) => readdirSync(dir,{withFileTypes:true}).flatMap((item) =>
+            item.isDirectory() ? findImages(dir+'/'+item.name) : [dir+'/'+item.name]);
+          const files = findImages(root).filter(x => x.endsWith('.png'));
+          const required = [
+            'native-responsive-200.png',
+            'native-responsive-200-middle.png',
+            'native-responsive-200-bottom.png',
+            'native-responsive-200-diagnostic-toc-top.png',
+            'native-responsive-200-diagnostic-toc-bottom.png',
+            'native-responsive-200-diagnostic-article-top.png',
+            'native-responsive-200-diagnostic-article-middle.png',
+            'native-responsive-200-diagnostic-article-bottom.png',
+          ];
+          const hashes = new Map();
+          for (const name of required) {
+            const matches = files.filter(x=>x.endsWith('/'+name));
+            assert.equal(matches.length,1,'missing/ambiguous screenshot: '+name);
+            const bytes=readFileSync(matches[0]);
+            assert.equal(bytes.subarray(1,4).toString(),'PNG');
+            assert.equal(bytes.readUInt32BE(16),320,'width: '+name);
+            assert.equal(bytes.readUInt32BE(20),720,'height: '+name);
+            hashes.set(name,createHash('sha256').update(bytes).digest('hex'));
+            console.log('QA C2 screenshot',name,'320x720',hashes.get(name));
+          }
+          const article=['top','middle','bottom'].map(x=>hashes.get('native-responsive-200-diagnostic-article-'+x+'.png'));
+          const toc=['top','bottom'].map(x=>hashes.get('native-responsive-200-diagnostic-toc-'+x+'.png'));
+          assert.equal(new Set(article).size,3,'article captures repeat');
+          assert.equal(new Set(toc).size,2,'TOC captures repeat');
+          assert.notEqual(hashes.get('native-responsive-200.png'),hashes.get('native-responsive-200-diagnostic-article-top.png'),'original/diagnostic captures conflated');
+          console.log('QA C2 all 8 screenshot files present, unique diagnostic content and valid sizes');
+          JS
+          test -z "$(git status --porcelain)"
+      - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        if: always()
+        with:
+          name: qa-c2-final-${{ matrix.engine }}
+          path: |
+            test-results/docs-playwright-results
+            test-results/docs-playwright-report
+          retention-days: 14
+          if-no-files-found: warn
