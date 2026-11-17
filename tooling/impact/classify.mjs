@@ -74,7 +74,7 @@ function selectReferencedPatternEvidence(state, discovery, paths) {
   for (const reference of discovery.patternReferences ?? []) {
     const directPath = paths.find((filePath) =>
       filePath.startsWith(reference.directory) ||
-      filePath.startsWith(`product/patterns/${reference.pattern}/`) ||
+      filePath.startsWith(`product/patterns/${reference.pattern}/test/`) ||
       filePath === reference.evidence.fixture || filePath === reference.evidence.spec ||
       filePath === reference.metadataPath);
     const dependencySelected = !onlyComponentEvidenceChanges && reference.frameworks.some((framework) =>
