@@ -73,7 +73,7 @@ jobs:
            let tocTabCount=null;
            for(let k=1;k<=16;k++){await page.keyboard.press('Tab');if(await page.evaluate(()=>!!document.activeElement?.matches('.vf-docs-toc a[href]'))){tocTabCount=k;break;}}
            row.tocTabCount=tocTabCount;
-           if(tocTabCount!==null){await page.keyboard.press('Enter');row.afterTocEnter=await view(page);await page.screenshot({path:root+'/'+variant.id+'-toc.png',fullPage:false});await page.keyboard.press('Control+Home');row.afterCtrlHome=await view(page);}
+           if(tocTabCount!==null){await page.keyboard.press('Enter');row.afterTocEnter=await view(page);await page.screenshot({path:root+'/'+variant.id+'-toc.png',fullPage:false});await page.keyboard.press('Control+Home');await page.waitForFunction(()=>window.scrollY<=2,null,{timeout:1500}).catch(()=>{});row.afterCtrlHome=await view(page);if(row.afterCtrlHome.scrollY>2){await page.keyboard.press('Home');await page.waitForTimeout(200);row.afterHomeFallback=await view(page);}}
            else row.notes.push('TOC not reached in first 16 Tabs; independently retest');
            const toggle=page.getByRole('button',{name:'Menu'});
            await toggle.focus();await page.keyboard.press('Enter');row.menuOpen=await view(page);
@@ -82,9 +82,9 @@ jobs:
            const current=page.locator('#vf-docs-navigation a[aria-current="page"]').first();
            await current.focus();
            await page.setViewportSize({width:1920,height:1000});
-           await page.waitForTimeout(50);row.wide=await view(page);
+           await page.waitForFunction(()=>{const m=document.querySelector('[data-vf-docs-nav-toggle]'),n=document.getElementById('vf-docs-navigation');return !!m?.hidden&&!!n&&!n.hidden;},null,{timeout:3000}).catch(()=>{});row.wide=await view(page);
            await page.setViewportSize({width:320,height:720});
-           await page.waitForTimeout(50);row.narrowReturn=await view(page);
+           await page.waitForFunction(()=>{const m=document.querySelector('[data-vf-docs-nav-toggle]'),n=document.getElementById('vf-docs-navigation');return !!m&&!m.hidden&&m.getAttribute('aria-expanded')==='false'&&!!n?.hidden&&document.activeElement===m;},null,{timeout:3000}).catch(()=>{});row.narrowReturn=await view(page);
            row.focusReturnedToMenu=await page.evaluate(()=>document.activeElement?.matches('[data-vf-docs-nav-toggle]')??false);
            await page.screenshot({path:root+'/'+variant.id+'-return.png',fullPage:false});
            row.overflow=row.narrowReturn.scrollWidth>row.narrowReturn.clientWidth+1;
