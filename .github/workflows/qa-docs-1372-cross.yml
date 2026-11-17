@@ -1,0 +1,39 @@
+name: QA docs header cross-browser verification
+
+on:
+  pull_request:
+    paths:
+      - .github/workflows/qa-docs-1372-cross.yml
+
+permissions:
+  contents: read
+
+jobs:
+  docs-cross:
+    name: docs-${{ matrix.browser }}
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    strategy:
+      fail-fast: false
+      matrix:
+        browser: [chromium, firefox, webkit]
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
+      - uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7
+        with:
+          node-version-file: .node-version
+          package-manager-cache: false
+      - run: corepack enable
+      - run: pnpm install --frozen-lockfile --ignore-scripts
+      - run: pnpm build:docs
+      - name: Run real built documentation browser tests
+        run: node apps/docs/run-browser.mjs ${{ matrix.browser }}
+      - uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7
+        if: always()
+        with:
+          name: docs-header-1372-${{ matrix.browser }}-${{ github.run_id }}
+          path: |
+            test-results/docs-playwright-results
+            test-results/docs-playwright-report
+          if-no-files-found: warn
+          retention-days: 7
