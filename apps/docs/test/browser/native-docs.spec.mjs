@@ -488,7 +488,7 @@ test('Native shell reflows at 320 CSS pixels and exposes responsive navigation',
 
   // DOCUX-01: narrow reading is now production CSS rather than a
   // screenshot-only override. Preserve actual-size captures.
-  await expect(page.locator('.vf-docs-header')).toHaveCSS('position', 'static');
+  await expect(page.locator('.vf-docs-header')).toHaveCSS('position', 'relative');
 
   const tocLinks = page.locator('.vf-docs-toc a[href]');
   const sectionHeadings = page.locator('.vf-docs-article > section h2');
@@ -529,16 +529,16 @@ test('Native shell reflows at 320 CSS pixels and exposes responsive navigation',
   }
 });
 
-test('docs header scrolls away under 200% text without obscuring article targets', async ({ page }) => {
+test('docs header scrolls away across viewports under 200% text without occluding article targets', async ({ page }) => {
   const errors = collectPageErrors(page);
 
-  for (const width of [320, 375, 768]) {
+  for (const width of [320, 375, 768, 1024, 1440]) {
     await page.setViewportSize({ width, height: 720 });
     await gotoWithCleanDocsState(page, '/next/native-web/components/button/');
     await page.evaluate(() => { document.documentElement.style.fontSize = '200%'; });
 
     const header = page.locator('.vf-docs-header');
-    await expect(header).toHaveCSS('position', 'static');
+    await expect(header).toHaveCSS('position', 'relative');
 
     const target = page.locator('#native-web-setup');
     await target.evaluate((element) => element.scrollIntoView({ block: 'start', inline: 'nearest', behavior: 'instant' }));
@@ -566,19 +566,21 @@ test('docs header scrolls away under 200% text without obscuring article targets
     const searchBounds = await search.boundingBox();
     expect(searchBounds?.y ?? -1, width + 'px header controls should be recoverable by focus').toBeGreaterThanOrEqual(0);
 
-    const menu = page.locator('[data-vf-docs-nav-toggle]');
-    await expect(menu).toBeVisible();
-    await menu.click();
-    await expect(menu).toHaveAttribute('aria-expanded', 'true');
-    await menu.click();
-    await expect(menu).toHaveAttribute('aria-expanded', 'false');
-    await expect(menu).toBeFocused();
+    if (width <= 768) {
+      const menu = page.locator('[data-vf-docs-nav-toggle]');
+      await expect(menu).toBeVisible();
+      await menu.click();
+      await expect(menu).toHaveAttribute('aria-expanded', 'true');
+      await menu.click();
+      await expect(menu).toHaveAttribute('aria-expanded', 'false');
+      await expect(menu).toBeFocused();
+    }
   }
 
-  await page.setViewportSize({ width: 1024, height: 720 });
+  // The same scroll-away behavior applies to default text at desktop size.
+  await page.setViewportSize({ width: 1280, height: 720 });
   await gotoWithCleanDocsState(page, '/next/native-web/components/button/');
-  await page.evaluate(() => { document.documentElement.style.fontSize = '200%'; });
-  await expect(page.locator('.vf-docs-header')).toHaveCSS('position', 'sticky');
+  await expect(page.locator('.vf-docs-header')).toHaveCSS('position', 'relative');
   expect(errors, errors.join('\n')).toEqual([]);
 });
 
