@@ -1,0 +1,72 @@
+name: TEST-04 exact-candidate machine verification
+
+on:
+  push:
+    branches:
+      - qa/test04-exact-candidate-20261117
+
+permissions:
+  contents: read
+
+jobs:
+  exact-candidate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    steps:
+      - name: Check out exact PR candidate, not QA workflow branch
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
+        with:
+          ref: a0798f637a080b026bed9a2448516e649bd48457
+      - name: Assert exact candidate revision
+        shell: bash
+        run: |
+          set -euo pipefail
+          test "$(git rev-parse HEAD)" = "a0798f637a080b026bed9a2448516e649bd48457"
+          echo "TEST-04 exact candidate: $(git rev-parse HEAD)"
+      - uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7
+        with:
+          node-version-file: .node-version
+          package-manager-cache: false
+      - run: corepack enable
+      - run: pnpm install --frozen-lockfile --ignore-scripts
+      - name: Run full root validation on exact candidate
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p test-results/test04-qa
+          pnpm check 2>&1 | tee test-results/test04-qa/root-check.log
+      - name: Install Chromium and OS dependencies
+        run: pnpm exec playwright install --with-deps chromium
+      - name: Prove isolated pattern-only spec selection
+        shell: bash
+        env:
+          VF_COMPONENT_PORT: react
+          VF_COMPONENTS: settings-navigation
+        run: |
+          set -euo pipefail
+          pnpm exec playwright test --project=chromium --list | tee test-results/test04-qa/isolated-list.log
+          grep -F "product/patterns/settings-navigation/test/browser/tests/settings-navigation.spec.mjs" test-results/test04-qa/isolated-list.log
+          if grep -F "product/components/application-structures/app-shell/test/browser/tests" test-results/test04-qa/isolated-list.log; then
+            echo "ERROR: pattern-only scope selected AppShell specs" >&2
+            exit 1
+          fi
+          grep -F "Total: 1 test in 1 file" test-results/test04-qa/isolated-list.log
+      - name: Execute isolated pattern-only React Chromium and accessibility case
+        shell: bash
+        env:
+          VF_COMPONENT_PORT: react
+          VF_COMPONENTS: settings-navigation
+        run: |
+          set -euo pipefail
+          pnpm exec playwright test --project=chromium 2>&1 | tee test-results/test04-qa/isolated-browser.log
+      - name: Upload exact-candidate QA machine evidence
+        if: always()
+        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7
+        with:
+          name: test04-exact-candidate-qa
+          path: |
+            test-results/test04-qa
+            test-results/playwright-results/react
+            test-results/playwright-report/react
+          if-no-files-found: warn
+          retention-days: 7
