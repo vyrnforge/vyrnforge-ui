@@ -17,7 +17,7 @@
   }
 
   [data-vf-docs-shell] {
-    --vf-app-shell-max-inline-size: 96rem;
+    /* AppShell stays full-bleed; limit documentation reading content inside main. */
     --vf-app-shell-navigation-inline-size: 17rem;
     --vf-app-shell-gap: 0;
     --vf-app-shell-gutter: 0;
@@ -55,7 +55,6 @@
     gap: var(--vf-space-lg);
     grid-template-columns: minmax(0, 1fr) minmax(22rem, 38rem);
     margin-inline: auto;
-    max-inline-size: 96rem;
     padding: var(--vf-space-sm) clamp(var(--vf-space-md), 3vw, var(--vf-space-xl));
   }
 
@@ -228,13 +227,20 @@
     gap: var(--vf-space-md);
     justify-content: space-between;
     margin-inline: auto;
-    max-inline-size: 96rem;
     padding: var(--vf-space-md) clamp(var(--vf-space-md), 3vw, var(--vf-space-xl));
     width: 100%;
   }
 
   .vf-docs-breadcrumbs {
     margin-block-end: var(--vf-space-xl);
+  }
+
+  /* Docs-specific reading measures, not a cap on shared shell chrome. */
+  .vf-docs-main > .vf-docs-catalog,
+  .vf-docs-main > .vf-docs-breadcrumbs,
+  .vf-docs-main > .vf-docs-article {
+    margin-inline: auto;
+    max-inline-size: 70rem;
   }
 
   .vf-docs-breadcrumbs ol {
@@ -255,6 +261,7 @@
     gap: clamp(var(--vf-space-xl), 4vw, var(--vf-space-3xl));
     grid-template-columns: minmax(0, 48rem) minmax(11rem, 15rem);
     grid-template-areas: 'article toc';
+    margin-inline: auto;
     max-inline-size: 70rem;
   }
 
@@ -400,6 +407,7 @@
   }
 
   .vf-docs-hero {
+    margin-inline: auto;
     max-inline-size: 54rem;
     padding-block: clamp(var(--vf-space-2xl), 8vw, var(--vf-space-3xl));
   }

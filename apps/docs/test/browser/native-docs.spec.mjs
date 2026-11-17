@@ -378,6 +378,72 @@ test('Button showcase composes shared guidance, Native adaptation, examples, ref
   expect(errors, errors.join('\n')).toEqual([]);
 });
 
+test('C2 approved docs geometry fills wide chrome without stretching reading content', async ({ page }) => {
+  for (const width of [1920, 2560]) {
+    await page.setViewportSize({ width, height: 1000 });
+    for (const [route, readableSelector] of [
+      ['/next/native-web/components/button/', '.vf-docs-content-grid'],
+      ['/next/native-web/', '.vf-docs-main > .vf-docs-catalog'],
+    ]) {
+      await gotoWithCleanDocsState(page, route);
+      const layout = await page.evaluate((selector) => {
+        const rect = (element) => {
+          const bounds = document.querySelector(element)?.getBoundingClientRect();
+          return bounds ? { x: bounds.x, width: bounds.width } : null;
+        };
+        return {
+          header: rect('.vf-docs-header-inner'),
+          body: rect('.vf-docs-app-body'),
+          rail: rect('.vf-docs-navigation-region'),
+          main: rect('.vf-docs-main'),
+          footer: rect('.vf-docs-footer'),
+          reading: rect(selector),
+          rem: parseFloat(getComputedStyle(document.documentElement).fontSize),
+          scrollWidth: document.documentElement.scrollWidth,
+          clientWidth: document.documentElement.clientWidth,
+        };
+      }, readableSelector);
+      for (const selector of ['header', 'body', 'footer']) {
+        expect(layout[selector], selector + ' missing').toBeTruthy();
+        expect(Math.abs(layout[selector].x), selector + ' must start at the viewport edge').toBeLessThanOrEqual(1);
+        expect(Math.abs(layout[selector].width - width), selector + ' must fill the viewport').toBeLessThanOrEqual(1);
+      }
+      expect(Math.abs(layout.rail.width - 17 * layout.rem)).toBeLessThanOrEqual(1);
+      expect(layout.reading).toBeTruthy();
+      expect(layout.reading.width).toBeLessThanOrEqual(70 * layout.rem + 1);
+      expect(Math.abs(
+        layout.reading.x + layout.reading.width / 2 -
+        (layout.main.x + layout.main.width / 2)
+      ), 'reading measure must be centered inside main, not the shell').toBeLessThanOrEqual(2);
+      expect(layout.scrollWidth).toBeLessThanOrEqual(layout.clientWidth + 1);
+    }
+  }
+});
+
+test('C2 narrow RTL and long labels reflow in dark and forced-colors modes', async ({ page }) => {
+  await page.setViewportSize({ width: 320, height: 720 });
+  await gotoWithCleanDocsState(page, '/next/native-web/components/button/');
+  await page.evaluate(() => {
+    document.documentElement.dir = 'rtl';
+    document.documentElement.dataset.vfTheme = 'dark';
+    const groupLabel = document.querySelector('[data-vf-side-nav-group-label]');
+    if (groupLabel) groupLabel.textContent = 'Documentation navigation with an intentionally long translated label';
+  });
+  await page.getByRole('button', { name: 'Menu' }).click();
+  await expect(page.locator('#vf-docs-navigation')).toBeVisible();
+  await expect(page.locator('#vf-docs-navigation a[aria-current="page"]')).toHaveText('Button');
+  for (const style of [{ forcedColors: 'none', reducedMotion: 'reduce' }, { forcedColors: 'active', reducedMotion: 'reduce' }]) {
+    await page.emulateMedia(style);
+    const widths = await page.evaluate(() => ({
+      scrollWidth: document.documentElement.scrollWidth,
+      clientWidth: document.documentElement.clientWidth,
+      shellWidth: document.querySelector('[data-vf-docs-shell]').getBoundingClientRect().width,
+    }));
+    expect(widths.scrollWidth).toBeLessThanOrEqual(widths.clientWidth + 1);
+    expect(Math.abs(widths.shellWidth - 320)).toBeLessThanOrEqual(1);
+  }
+});
+
 test('Native shell reflows at 320 CSS pixels and exposes responsive navigation', async ({ page }, testInfo) => {
   const errors = collectPageErrors(page);
   await page.setViewportSize({ width: 320, height: 720 });
@@ -402,9 +468,70 @@ test('Native shell reflows at 320 CSS pixels and exposes responsive navigation',
   }));
   expect(dimensions.scrollWidth).toBeLessThanOrEqual(dimensions.clientWidth + 1);
 
-  await page.screenshot({ path: testInfo.outputPath('native-responsive-200.png'), fullPage: true });
+  // The 200%-text page can be over 47,000px tall. A single full-page
+  // screenshot exceeds Firefox/WebKit's 32,767px capture limit. Retain
+  // representative top/middle/bottom viewport images without dropping any
+  // reflow, current-link, accessibility or console-error assertions.
+  for (const [filename, position] of [
+    ['native-responsive-200.png', 0],
+    ['native-responsive-200-middle.png', 0.5],
+    ['native-responsive-200-bottom.png', 1],
+  ]) {
+    await page.evaluate((fraction) => {
+      const maxScroll = Math.max(0, document.documentElement.scrollHeight - window.innerHeight);
+      window.scrollTo(0, Math.round(maxScroll * fraction));
+    }, position);
+    await page.screenshot({ path: testInfo.outputPath(filename), fullPage: false });
+  }
   await expectNoAccessibilityViolations(page);
   expect(errors, errors.join('\n')).toEqual([]);
+
+  // C2-QA-01: supplement the unchanged authentic 320×720 viewport captures.
+  // At 200% text, the existing sticky header occupies ~620 of 720 CSS px,
+  // obscuring the article even when the page scrolls. Only for the diagnostic
+  // content screenshots below, turn off that stickiness. This does NOT modify
+  // production CSS or affect the reflow/ARIA/axe/error assertions above.
+  await page.addStyleTag({ content: '.vf-docs-header { position: static !important; }' });
+  await expect(page.locator('.vf-docs-header')).toHaveCSS('position', 'static');
+
+  const tocLinks = page.locator('.vf-docs-toc a[href]');
+  const sectionHeadings = page.locator('.vf-docs-article > section h2');
+  const tocCount = await tocLinks.count();
+  const sectionCount = await sectionHeadings.count();
+  expect(tocCount, 'TOC must have content to capture').toBeGreaterThanOrEqual(3);
+  expect(sectionCount, 'Article must have top, middle and bottom sections').toBeGreaterThanOrEqual(3);
+
+  const captures = [
+    ['native-responsive-200-diagnostic-toc-top.png', tocLinks.first()],
+    ['native-responsive-200-diagnostic-toc-bottom.png', tocLinks.last()],
+    ['native-responsive-200-diagnostic-article-top.png', sectionHeadings.first()],
+    ['native-responsive-200-diagnostic-article-middle.png', sectionHeadings.nth(Math.floor(sectionCount / 2))],
+    ['native-responsive-200-diagnostic-article-bottom.png', sectionHeadings.last()],
+  ];
+  for (const [filename, target] of captures) {
+    await target.evaluate((element) => element.scrollIntoView({ block: 'start', inline: 'nearest', behavior: 'instant' }));
+    const visibleContent = await target.evaluate((element) => {
+      const bounds = element.getBoundingClientRect();
+      const header = document.querySelector('.vf-docs-header').getBoundingClientRect();
+      return {
+        top: bounds.top,
+        bottom: bounds.bottom,
+        headerBottom: header.bottom,
+        text: element.textContent.trim(),
+        viewportHeight: window.innerHeight,
+        scrollY: window.scrollY,
+      };
+    });
+    expect(visibleContent.text, filename + ' requires real authored text').not.toBe('');
+    expect(visibleContent.scrollY, filename + ' must be away from the page top').toBeGreaterThan(0);
+    expect(visibleContent.headerBottom, filename + ' must not be occluded by the former sticky header').toBeLessThanOrEqual(1);
+    expect(visibleContent.top, filename + ' content starts after the viewport').toBeLessThan(visibleContent.viewportHeight);
+    expect(visibleContent.bottom, filename + ' content ends before the viewport').toBeGreaterThan(0);
+    // Capture the real rendered content at its normal 320×720 viewport size.
+    // "diagnostic" distinguishes the screenshot-only non-sticky presentation
+    // from the unchanged authentic screenshots captured earlier in this test.
+    await page.screenshot({ path: testInfo.outputPath(filename), fullPage: false });
+  }
 });
 
 test('C1 responsive navigation transfers only disappearing focus and resets disclosure', async ({ page }) => {
