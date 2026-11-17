@@ -4,7 +4,7 @@ import process from 'node:process';
 import { browserPortNames } from '../package-model.mjs';
 import { discoverProductGraph } from '../product/discover-product-graph.mjs';
 import { loadBrowserFixtureModule, prepareBrowserFixture, validateBrowserFixtureModule } from './browser-fixtures.mjs';
-import { resolveBrowserFixtureScope } from './browser-fixture-scope.mjs';
+import { resolveBrowserFixtureScope, selectedBrowserFixtureOwners } from './browser-fixture-scope.mjs';
 
 const port = process.env.VF_COMPONENT_PORT ?? process.argv[2] ?? 'web';
 const selectedComponents = new Set(
@@ -22,6 +22,9 @@ rmSync(outputRoot, { recursive: true, force: true });
 
 const graph = discoverProductGraph(root);
 const components = [...graph.components, ...graph.patterns];
+// Pattern specs retain their own selection owner; referenced AppShell remains
+// a fixture dependency, not an additional Playwright spec selection.
+const fixtureSelection = selectedBrowserFixtureOwners({ selectedComponents, patterns: graph.patterns, port });
 const unknownComponents = [...selectedComponents].filter(
   (componentId) => !components.some((component) => component.unitId === componentId),
 );
@@ -45,7 +48,7 @@ for (const component of components) {
   if (!existsSync(fixturePath)) continue;
   if (component.surfaces[port]) entries.set(component.unitId, { component, fixturePath });
 
-  if (selectedComponents.size > 0 && !selectedComponents.has(component.unitId)) {
+  if (selectedComponents.size > 0 && !fixtureSelection.has(component.unitId)) {
     skippedUnselected += 1;
     continue;
   }
