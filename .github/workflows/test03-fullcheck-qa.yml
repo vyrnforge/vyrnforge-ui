@@ -1,0 +1,114 @@
+name: TEST-03 Exact-Candidate Full Check Evidence
+
+on:
+  push:
+    branches:
+      - qa/test03-fullcheck-25e188be
+
+permissions:
+  contents: read
+
+jobs:
+  full-check-and-negative-oracles:
+    name: full-check-and-negative-oracles
+    runs-on: ubuntu-latest
+    timeout-minutes: 55
+    steps:
+      - name: Check out exact PR candidate (not QA branch code)
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
+        with:
+          ref: 25e188be63751a2e2fe1ceccb8cfbbf1f026625b
+          persist-credentials: false
+      - name: Set up required Node
+        uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7
+        with:
+          node-version-file: .node-version
+          package-manager-cache: false
+      - run: corepack enable
+      - run: pnpm install --frozen-lockfile --ignore-scripts
+
+      - name: Execute full root check and prove single invocation
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p test-results/test03-qa
+          echo "candidate=$(git rev-parse HEAD)" | tee test-results/test03-qa/identity.log
+          node --version | tee -a test-results/test03-qa/identity.log
+          pnpm --version | tee -a test-results/test03-qa/identity.log
+          test "$(git rev-parse HEAD)" = "25e188be63751a2e2fe1ceccb8cfbbf1f026625b"
+          pnpm check 2>&1 | tee test-results/test03-qa/full-check.log
+          grep -F 'repository-tooling:test' test-results/test03-qa/full-check.log
+          grep -F 'product graph:' test-results/test03-qa/full-check.log
+          if grep -Eq 'vitest run tooling/(product|impact|validation)/' test-results/test03-qa/full-check.log; then
+            echo 'ERROR: full check repeated a standalone tooling suite after Nx' >&2
+            exit 1
+          fi
+          echo "TEST-03 FULL CHECK PASS; no standalone duplicated tooling suites" | tee -a test-results/test03-qa/identity.log
+
+      - name: Exercise retained direct verifier entrypoints
+        shell: bash
+        run: |
+          set -euo pipefail
+          { pnpm verify:product-graph && pnpm verify:impact && pnpm verify:validation; } 2>&1 | tee test-results/test03-qa/direct-verifiers.log
+
+      - name: Prove absent owner suites fail closed
+        shell: bash
+        run: |
+          set -euo pipefail
+          for owner in product impact validation; do
+            stash="$RUNNER_TEMP/test03-suite-$owner"
+            mkdir -p "$stash"
+            for f in tooling/$owner/*.test.mjs; do
+              test -f "$f" && mv "$f" "$stash/"
+            done
+            set +e
+            pnpm verify:testing-structure > "test-results/test03-qa/negative-$owner.log" 2>&1
+            status=$?
+            set -e
+            for f in "$stash"/*.test.mjs; do
+              test -f "$f" && mv "$f" "tooling/$owner/"
+            done
+            if [ "$status" -eq 0 ]; then
+              echo "ERROR: missing $owner tests were not rejected" >&2
+              exit 1
+            fi
+            if ! grep -F "repository-tooling tests missing for $owner" "test-results/test03-qa/negative-$owner.log"; then
+              echo "ERROR: $owner guard failed for a reason other than missing suite" >&2
+              cat "test-results/test03-qa/negative-$owner.log"
+              exit 1
+            fi
+            echo "PASS: absent tooling/$owner test owner fails closed"
+          done
+
+      - name: Prove failing tooling assertion makes Nx test fail
+        shell: bash
+        run: |
+          set -euo pipefail
+          cat > tooling/impact/zz-test03-intentional-failure.test.mjs <<'EOF'
+          import { test, expect } from 'vitest';
+          test('TEST-03 intentional failing oracle', () => expect(true).toBe(false));
+          EOF
+          set +e
+          pnpm exec nx run repository-tooling:test --skip-nx-cache > test-results/test03-qa/negative-nx.log 2>&1
+          status=$?
+          set -e
+          rm tooling/impact/zz-test03-intentional-failure.test.mjs
+          if [ "$status" -eq 0 ]; then
+            echo 'ERROR: intentionally failing tooling test was ignored by Nx' >&2
+            exit 1
+          fi
+          grep -F 'TEST-03 intentional failing oracle' test-results/test03-qa/negative-nx.log || {
+            echo 'ERROR: Nx failed without demonstrating injected test failure' >&2
+            tail -n 100 test-results/test03-qa/negative-nx.log
+            exit 1
+          }
+          echo "PASS: failing tooling test makes Nx test fail"
+
+      - name: Upload exact-candidate QA machine evidence
+        if: always()
+        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7
+        with:
+          name: test03-fullcheck-qa-25e188be
+          path: test-results/test03-qa/
+          if-no-files-found: warn
+          retention-days: 14
