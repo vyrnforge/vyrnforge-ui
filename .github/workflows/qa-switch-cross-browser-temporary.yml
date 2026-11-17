@@ -13,7 +13,7 @@ jobs:
   switch-cross-browser:
     uses: ./.github/workflows/_browser-validation.yml
     with:
-      scopes_json: '[{"port":"web","components":["switch"]},{"port":"react","components":["switch"]},{"port":"angular","components":["switch"]},{"port":"vue","components":["switch"]}]'
+      scopes_json: '[{"port":"web","components":"switch"},{"port":"react","components":"switch"},{"port":"angular","components":"switch"},{"port":"vue","components":"switch"}]'
       revision: ${{ github.event.pull_request.head.sha }}
       browser_profile: cross
       browsers: chromium firefox webkit
