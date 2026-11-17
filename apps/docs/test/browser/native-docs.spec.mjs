@@ -486,13 +486,9 @@ test('Native shell reflows at 320 CSS pixels and exposes responsive navigation',
   await expectNoAccessibilityViolations(page);
   expect(errors, errors.join('\n')).toEqual([]);
 
-  // C2-QA-01: supplement the unchanged authentic 320×720 viewport captures.
-  // At 200% text, the existing sticky header occupies ~620 of 720 CSS px,
-  // obscuring the article even when the page scrolls. Only for the diagnostic
-  // content screenshots below, turn off that stickiness. This does NOT modify
-  // production CSS or affect the reflow/ARIA/axe/error assertions above.
-  await page.addStyleTag({ content: '.vf-docs-header { position: static !important; }' });
-  await expect(page.locator('.vf-docs-header')).toHaveCSS('position', 'static');
+  // DOCUX-01: narrow reading is now production CSS rather than a
+  // screenshot-only override. Preserve actual-size captures.
+  await expect(page.locator('.vf-docs-header')).toHaveCSS('position', 'relative');
 
   const tocLinks = page.locator('.vf-docs-toc a[href]');
   const sectionHeadings = page.locator('.vf-docs-article > section h2');
@@ -502,11 +498,11 @@ test('Native shell reflows at 320 CSS pixels and exposes responsive navigation',
   expect(sectionCount, 'Article must have top, middle and bottom sections').toBeGreaterThanOrEqual(3);
 
   const captures = [
-    ['native-responsive-200-diagnostic-toc-top.png', tocLinks.first()],
-    ['native-responsive-200-diagnostic-toc-bottom.png', tocLinks.last()],
-    ['native-responsive-200-diagnostic-article-top.png', sectionHeadings.first()],
-    ['native-responsive-200-diagnostic-article-middle.png', sectionHeadings.nth(Math.floor(sectionCount / 2))],
-    ['native-responsive-200-diagnostic-article-bottom.png', sectionHeadings.last()],
+    ['native-responsive-200-toc-top.png', tocLinks.first()],
+    ['native-responsive-200-toc-bottom.png', tocLinks.last()],
+    ['native-responsive-200-article-top.png', sectionHeadings.first()],
+    ['native-responsive-200-article-middle.png', sectionHeadings.nth(Math.floor(sectionCount / 2))],
+    ['native-responsive-200-article-bottom.png', sectionHeadings.last()],
   ];
   for (const [filename, target] of captures) {
     await target.evaluate((element) => element.scrollIntoView({ block: 'start', inline: 'nearest', behavior: 'instant' }));
@@ -528,10 +524,86 @@ test('Native shell reflows at 320 CSS pixels and exposes responsive navigation',
     expect(visibleContent.top, filename + ' content starts after the viewport').toBeLessThan(visibleContent.viewportHeight);
     expect(visibleContent.bottom, filename + ' content ends before the viewport').toBeGreaterThan(0);
     // Capture the real rendered content at its normal 320×720 viewport size.
-    // "diagnostic" distinguishes the screenshot-only non-sticky presentation
-    // from the unchanged authentic screenshots captured earlier in this test.
+    // Product CSS controls the responsive header here; no injected style override.
     await page.screenshot({ path: testInfo.outputPath(filename), fullPage: false });
   }
+});
+
+test('docs header scrolls away across viewports under 200% text without occluding article targets', async ({ page }, testInfo) => {
+  const errors = collectPageErrors(page);
+
+  for (const width of [320, 375, 768, 1024, 1440]) {
+    await page.setViewportSize({ width, height: 720 });
+    await gotoWithCleanDocsState(page, '/next/native-web/components/button/');
+    await page.evaluate(() => { document.documentElement.style.fontSize = '200%'; });
+
+    const header = page.locator('.vf-docs-header');
+    await expect(header).toHaveCSS('position', 'relative');
+
+    // Intrinsic layout must not overlap brand and tools when text grows.
+    const regions = await page.evaluate(() => {
+      const brand = document.querySelector('.vf-docs-brand-row').getBoundingClientRect();
+      const tools = document.querySelector('.vf-docs-header-tools').getBoundingClientRect();
+      return {
+        overlap: brand.top < tools.bottom && tools.top < brand.bottom
+          && brand.left < tools.right && tools.left < brand.right,
+        brandRight: brand.right,
+        toolsRight: tools.right,
+        clientWidth: document.documentElement.clientWidth,
+      };
+    });
+    expect(regions.overlap, width + 'px header regions must not overlap').toBe(false);
+    expect(regions.brandRight, width + 'px brand must remain within viewport').toBeLessThanOrEqual(regions.clientWidth + 1);
+    expect(regions.toolsRight, width + 'px tools must remain within viewport').toBeLessThanOrEqual(regions.clientWidth + 1);
+    if ([320, 1024, 1440].includes(width)) {
+      await page.screenshot({ path: testInfo.outputPath('docs-header-' + width + '-text200-top.png'), fullPage: false });
+    }
+
+    const target = page.locator('#native-web-setup');
+    await target.evaluate((element) => element.scrollIntoView({ block: 'start', inline: 'nearest', behavior: 'instant' }));
+    const geometry = await page.evaluate(() => {
+      const headerBounds = document.querySelector('.vf-docs-header').getBoundingClientRect();
+      const targetBounds = document.querySelector('#native-web-setup').getBoundingClientRect();
+      return {
+        headerBottom: headerBounds.bottom,
+        targetTop: targetBounds.top,
+        targetBottom: targetBounds.bottom,
+        scrollY: window.scrollY,
+        scrollWidth: document.documentElement.scrollWidth,
+        clientWidth: document.documentElement.clientWidth,
+      };
+    });
+    expect(geometry.scrollY, width + 'px needs a real scrolled article target').toBeGreaterThan(0);
+    expect(geometry.headerBottom, width + 'px header must scroll away').toBeLessThanOrEqual(1);
+    expect(geometry.targetTop, width + 'px target must begin inside viewport').toBeLessThan(720);
+    expect(geometry.targetBottom, width + 'px target must remain visible').toBeGreaterThan(0);
+    expect(geometry.scrollWidth, width + 'px must not overflow horizontally').toBeLessThanOrEqual(geometry.clientWidth + 1);
+    if ([320, 1024, 1440].includes(width)) {
+      await page.screenshot({ path: testInfo.outputPath('docs-header-' + width + '-text200-reading.png'), fullPage: false });
+    }
+
+    const search = page.locator('[data-vf-docs-search]');
+    await search.focus();
+    await expect(search).toBeFocused();
+    const searchBounds = await search.boundingBox();
+    expect(searchBounds?.y ?? -1, width + 'px header controls should be recoverable by focus').toBeGreaterThanOrEqual(0);
+
+    if (width <= 768) {
+      const menu = page.locator('[data-vf-docs-nav-toggle]');
+      await expect(menu).toBeVisible();
+      await menu.click();
+      await expect(menu).toHaveAttribute('aria-expanded', 'true');
+      await menu.click();
+      await expect(menu).toHaveAttribute('aria-expanded', 'false');
+      await expect(menu).toBeFocused();
+    }
+  }
+
+  // The same scroll-away behavior applies to default text at desktop size.
+  await page.setViewportSize({ width: 1280, height: 720 });
+  await gotoWithCleanDocsState(page, '/next/native-web/components/button/');
+  await expect(page.locator('.vf-docs-header')).toHaveCSS('position', 'relative');
+  expect(errors, errors.join('\n')).toEqual([]);
 });
 
 test('C1 responsive navigation transfers only disappearing focus and resets disclosure', async ({ page }) => {
