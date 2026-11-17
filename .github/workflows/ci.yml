@@ -31,11 +31,19 @@ jobs:
       - name: Execute original docs tests and repaired screenshot evidence
         run: pnpm exec playwright test --config apps/docs/playwright.config.mjs --project ${{ matrix.engine }}
       - name: Independently inspect retained original and diagnostic screenshots
+        env:
+          QA_ENGINE: ${{ matrix.engine }}
         run: |
           node --input-type=module <<'JS'
           import assert from 'node:assert/strict';
           import { readdirSync, readFileSync } from 'node:fs';
           import { createHash } from 'node:crypto';
+          import { devices } from '@playwright/test';
+          const profile = {chromium:'Desktop Chrome',firefox:'Desktop Firefox',webkit:'Desktop Safari'}[process.env.QA_ENGINE];
+          assert.ok(profile,'unexpected engine');
+          const dpr = devices[profile].deviceScaleFactor ?? 1;
+          const expectedWidth = 320 * dpr;
+          const expectedHeight = 720 * dpr;
           const root = 'test-results/docs-playwright-results';
           const findImages = (dir) => readdirSync(dir,{withFileTypes:true}).flatMap((item) =>
             item.isDirectory() ? findImages(dir+'/'+item.name) : [dir+'/'+item.name]);
@@ -56,10 +64,10 @@ jobs:
             assert.equal(matches.length,1,'missing/ambiguous screenshot: '+name);
             const bytes=readFileSync(matches[0]);
             assert.equal(bytes.subarray(1,4).toString(),'PNG');
-            assert.equal(bytes.readUInt32BE(16),320,'width: '+name);
-            assert.equal(bytes.readUInt32BE(20),720,'height: '+name);
+            assert.equal(bytes.readUInt32BE(16),expectedWidth,'width: '+name);
+            assert.equal(bytes.readUInt32BE(20),expectedHeight,'height: '+name);
             hashes.set(name,createHash('sha256').update(bytes).digest('hex'));
-            console.log('QA C2 screenshot',name,'320x720',hashes.get(name));
+            console.log('QA C2 screenshot',name,'320x720 CSS pixels, DPR',dpr,'physical',expectedWidth+'x'+expectedHeight,hashes.get(name));
           }
           const article=['top','middle','bottom'].map(x=>hashes.get('native-responsive-200-diagnostic-article-'+x+'.png'));
           const toc=['top','bottom'].map(x=>hashes.get('native-responsive-200-diagnostic-toc-'+x+'.png'));
