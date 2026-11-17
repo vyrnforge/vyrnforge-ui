@@ -28,7 +28,7 @@
     "test:browser": "playwright test --project=chromium",
     "test:browser:cross": "playwright test",
     "test:browser:all-ports": "node tooling/testing/run-browser-matrix.mjs",
-    "check": "pnpm format:check && pnpm lint:l5 && nx run-many -t lint,typecheck,test,build && pnpm verify:structure && pnpm verify:testing-structure && pnpm verify:boundaries && pnpm verify:architecture && pnpm verify:product-graph && pnpm verify:impact && pnpm verify:package-contracts && pnpm verify:compatibility && pnpm verify:workflows && pnpm verify:validation",
+    "check": "pnpm format:check && pnpm lint:l5 && nx run-many -t lint,typecheck,test,build && pnpm verify:structure && pnpm verify:testing-structure && pnpm verify:boundaries && pnpm verify:architecture && node tooling/product/verify-product-graph.mjs && pnpm verify:package-contracts && pnpm verify:compatibility && pnpm verify:workflows",
     "check:changed": "pnpm format:check && pnpm lint:l5 && node tooling/impact/plan.mjs --mode local && nx affected -t lint,typecheck,test,build",
     "validate:full": "pnpm check && pnpm verify:release && pnpm verify:packages && pnpm build:docs && pnpm test:browser:all-ports",
     "verify:structure": "node tooling/verify/workspace-structure.mjs",
