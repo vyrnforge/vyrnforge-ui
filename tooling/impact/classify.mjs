@@ -52,6 +52,7 @@ export function createSemanticImpact(paths, options = {}) {
 
   if (broadModes.has(mode)) {
     broaden(state, discovery, `${mode} is an explicit broad safety-net tier`);
+    selectReferencedPatternEvidence(state, discovery, paths);
     return finishImpact(paths, mode, discovery, state);
   }
 
@@ -61,24 +62,33 @@ export function createSemanticImpact(paths, options = {}) {
 }
 
 function selectReferencedPatternEvidence(state, discovery, paths) {
-  // Resolve against the existing component/port closure, including capability
-  // and package fanout. A pattern guide is not a runtime browser fixture.
+  // Pattern browser evidence has its own owner. Components used by the pattern
+  // remain fixture dependencies; selecting the pattern must not run every
+  // AppShell spec merely because its fixture hosts the representative task.
   const selected = new Map([...state.browserScopes].map(([port, components]) => [port, new Set(components)]));
+  const onlyComponentEvidenceChanges = paths.length > 0 && paths.every((filePath) => {
+    const owned = componentForOwnedPath(discovery, filePath);
+    return owned?.area === 'product' &&
+      /^(?:test\/|changes\/|docs\/|examples\/)/.test(filePath.slice(owned.root.length));
+  });
   for (const reference of discovery.patternReferences ?? []) {
-    const owner = discovery.components.find((candidate) => 'component:' + candidate.component === reference.owner);
-    const directPath = paths.find((filePath) => filePath.startsWith(reference.directory) ||
-      filePath === reference.evidence.fixture || filePath === reference.evidence.spec || filePath === reference.metadataPath);
-    const dependencySelected = reference.frameworks.some((framework) => (framework.usageClosure ?? framework.usage).some((dependency) =>
-      selected.get(dependency.port)?.has(dependency.component)));
-    if (directPath || dependencySelected) {
-      addComponent(state, owner, [reference.evidence.port], 'referenced pattern example evidence: ' + reference.id, directPath ?? null);
-      // React implementation changes need its executable evidence, not an
-      // unrelated Native Web renderer check. Changes to the reference do need docs.
+    const directPath = paths.find((filePath) =>
+      filePath.startsWith(reference.directory) ||
+      filePath.startsWith(`product/patterns/${reference.pattern}/`) ||
+      filePath === reference.evidence.fixture || filePath === reference.evidence.spec ||
+      filePath === reference.metadataPath);
+    const dependencySelected = !onlyComponentEvidenceChanges && reference.frameworks.some((framework) =>
+      (framework.usageClosure ?? framework.usage).some((dependency) =>
+        selected.get(dependency.port)?.has(dependency.component)));
+    if (state.repositoryWide || directPath || dependencySelected) {
+      const pattern = discovery.components.find((candidate) => candidate.component === reference.pattern);
+      if (!pattern) throw new Error('Missing referenced pattern owner: ' + reference.pattern);
+      addComponent(state, pattern, [reference.evidence.port],
+        'referenced pattern browser evidence: ' + reference.id, directPath ?? null);
       if (directPath) addEvidence(state, 'docs', 'referenced pattern example changed', directPath);
     }
   }
 }
-
 function classifyPath(state, discovery, filePath) {
   let classified = false;
 
