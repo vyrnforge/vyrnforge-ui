@@ -1,4 +1,16 @@
 // Resolve fixture preparation only. Spec selection continues to use VF_COMPONENTS.
+export function selectedBrowserFixtureOwners({ selectedComponents, patterns, port }) {
+  const selected = new Set(selectedComponents);
+  if (!selectedComponents.size) return selected;
+  for (const pattern of patterns) {
+    if (!selectedComponents.has(pattern.unitId)) continue;
+    for (const reference of pattern.exampleReferences ?? []) {
+      if (reference.evidence.port === port) selected.add(reference.owner.replace(/^component:/, ''));
+    }
+  }
+  return selected;
+}
+
 export async function resolveBrowserFixtureScope({ roots, port, load }) {
   const ordered = [];
   const complete = new Set();
