@@ -45,7 +45,7 @@ jobs:
         run: |
           set -euo pipefail
           pnpm exec playwright test --project=chromium --list | tee test-results/test04-qa/isolated-list.log
-          grep -F "product/patterns/settings-navigation/test/browser/tests/settings-navigation.spec.mjs" test-results/test04-qa/isolated-list.log
+          grep -F "patterns/settings-navigation/test/browser/tests/settings-navigation.spec.mjs" test-results/test04-qa/isolated-list.log
           if grep -F "product/components/application-structures/app-shell/test/browser/tests" test-results/test04-qa/isolated-list.log; then
             echo "ERROR: pattern-only scope selected AppShell specs" >&2
             exit 1
