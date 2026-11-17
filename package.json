@@ -17,7 +17,7 @@
     "format:l5": "prettier --write \"product/components/composite-widgets/**/*.{ts,tsx,mts,cts,js,mjs,cjs,css,json,md,html}\"",
     "format:l5:check": "prettier --check \"product/components/composite-widgets/**/*.{ts,tsx,mts,cts,js,mjs,cjs,css,json,md,html}\"",
     "lint:l5": "eslint \"product/components/composite-widgets/**/*.{ts,tsx,mts,cts,js,mjs,cjs}\" --max-warnings=0",
-    "generate:tokens": "node tooling/tokens/generate.mjs",
+    "generate:tokens": "node tooling/tokens/generate.mjs --write",
     "verify:tokens": "node tooling/tokens/generate.mjs --check",
     "build": "nx run-many -t build",
     "build:docs": "nx run docs:build",
