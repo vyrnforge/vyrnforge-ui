@@ -15,11 +15,38 @@ export default {
 
     await page.emulateMedia({ forcedColors: 'active' });
     expect(await page.evaluate(() => matchMedia('(forced-colors: active)').matches)).toBe(true);
-    const enabledChecked = await control.evaluate((element) => ({
-      background: getComputedStyle(element).backgroundColor,
-      forcedColorAdjust: getComputedStyle(element).forcedColorAdjust,
-    }));
-    expect(enabledChecked.forcedColorAdjust).toBe('none');
+    const enabledChecked = await control.evaluate((element) => {
+      const style = getComputedStyle(element);
+      const thumbStyle = getComputedStyle(element, '::before');
+      // WebKit may match forced-colors without exposing forced-color-adjust.
+      // Compare actual rendered system colors rather than making a CSSOM
+      // property binding a requirement for native Switch accessibility.
+      const reference = document.createElement('span');
+      reference.style.backgroundColor = 'Highlight';
+      reference.style.color = 'HighlightText';
+      document.body.append(reference);
+      const referenceStyle = getComputedStyle(reference);
+      const result = {
+        background: style.backgroundColor,
+        thumb: thumbStyle.backgroundColor,
+        systemHighlight: referenceStyle.backgroundColor,
+        systemHighlightText: referenceStyle.color,
+        supportsForcedColorAdjust: CSS.supports('forced-color-adjust', 'none'),
+        forcedColorAdjust: style.getPropertyValue('forced-color-adjust').trim(),
+      };
+      reference.remove();
+      return result;
+    });
+    if (enabledChecked.supportsForcedColorAdjust) {
+      expect(enabledChecked.forcedColorAdjust).toBe('none');
+    }
+    // Switching on forced colors also transitions the checked track from
+    // its previous color. Wait for the actual system-color presentation rather
+    // than sampling an intermediate animation frame.
+    await expect.poll(() => control.evaluate((element) => getComputedStyle(element).backgroundColor))
+      .toBe(enabledChecked.systemHighlight);
+    await expect.poll(() => control.evaluate((element) => getComputedStyle(element, '::before').backgroundColor))
+      .toBe(enabledChecked.systemHighlightText);
     await control.evaluate((element) => { element.disabled = true; });
     await expect(control).toBeDisabled();
     expect(await control.isChecked()).toBe(true);
