@@ -662,6 +662,11 @@
   }
 
   @media (max-width: 48rem) {
+    /* A tall sticky header can conceal heading and skip targets at enlarged text. */
+    .vf-docs-header {
+      position: static;
+    }
+
     .vf-docs-header-inner {
       gap: var(--vf-space-sm);
       grid-template-columns: minmax(0, 1fr);
