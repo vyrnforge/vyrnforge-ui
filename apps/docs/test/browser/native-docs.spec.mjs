@@ -529,7 +529,7 @@ test('Native shell reflows at 320 CSS pixels and exposes responsive navigation',
   }
 });
 
-test('docs header scrolls away across viewports under 200% text without occluding article targets', async ({ page }) => {
+test('docs header scrolls away across viewports under 200% text without occluding article targets', async ({ page }, testInfo) => {
   const errors = collectPageErrors(page);
 
   for (const width of [320, 375, 768, 1024, 1440]) {
@@ -539,6 +539,25 @@ test('docs header scrolls away across viewports under 200% text without occludin
 
     const header = page.locator('.vf-docs-header');
     await expect(header).toHaveCSS('position', 'relative');
+
+    // Intrinsic layout must not overlap brand and tools when text grows.
+    const regions = await page.evaluate(() => {
+      const brand = document.querySelector('.vf-docs-brand-row').getBoundingClientRect();
+      const tools = document.querySelector('.vf-docs-header-tools').getBoundingClientRect();
+      return {
+        overlap: brand.top < tools.bottom && tools.top < brand.bottom
+          && brand.left < tools.right && tools.left < brand.right,
+        brandRight: brand.right,
+        toolsRight: tools.right,
+        clientWidth: document.documentElement.clientWidth,
+      };
+    });
+    expect(regions.overlap, width + 'px header regions must not overlap').toBe(false);
+    expect(regions.brandRight, width + 'px brand must remain within viewport').toBeLessThanOrEqual(regions.clientWidth + 1);
+    expect(regions.toolsRight, width + 'px tools must remain within viewport').toBeLessThanOrEqual(regions.clientWidth + 1);
+    if ([320, 1024, 1440].includes(width)) {
+      await page.screenshot({ path: testInfo.outputPath('docs-header-' + width + '-text200-top.png'), fullPage: false });
+    }
 
     const target = page.locator('#native-web-setup');
     await target.evaluate((element) => element.scrollIntoView({ block: 'start', inline: 'nearest', behavior: 'instant' }));
@@ -559,6 +578,9 @@ test('docs header scrolls away across viewports under 200% text without occludin
     expect(geometry.targetTop, width + 'px target must begin inside viewport').toBeLessThan(720);
     expect(geometry.targetBottom, width + 'px target must remain visible').toBeGreaterThan(0);
     expect(geometry.scrollWidth, width + 'px must not overflow horizontally').toBeLessThanOrEqual(geometry.clientWidth + 1);
+    if ([320, 1024, 1440].includes(width)) {
+      await page.screenshot({ path: testInfo.outputPath('docs-header-' + width + '-text200-reading.png'), fullPage: false });
+    }
 
     const search = page.locator('[data-vf-docs-search]');
     await search.focus();
