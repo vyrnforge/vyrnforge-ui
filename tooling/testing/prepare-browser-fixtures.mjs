@@ -4,7 +4,7 @@ import process from 'node:process';
 import { browserPortNames } from '../package-model.mjs';
 import { discoverProductGraph } from '../product/discover-product-graph.mjs';
 import { loadBrowserFixtureModule, prepareBrowserFixture, validateBrowserFixtureModule } from './browser-fixtures.mjs';
-import { resolveBrowserFixtureScope } from './browser-fixture-scope.mjs';
+import { resolveBrowserFixtureScope, selectedBrowserFixtureOwners } from './browser-fixture-scope.mjs';
 
 const port = process.env.VF_COMPONENT_PORT ?? process.argv[2] ?? 'web';
 const selectedComponents = new Set(
@@ -22,17 +22,9 @@ rmSync(outputRoot, { recursive: true, force: true });
 
 const graph = discoverProductGraph(root);
 const components = [...graph.components, ...graph.patterns];
-// A selected pattern can own its spec while its referenced component owns
-// the fixture. Prepare the component dependency without selecting its specs.
-const fixtureSelection = new Set(selectedComponents);
-if (selectedComponents.size > 0) {
-  for (const pattern of graph.patterns) {
-    if (!selectedComponents.has(pattern.unitId)) continue;
-    for (const reference of pattern.exampleReferences ?? []) {
-      if (reference.evidence.port === port) fixtureSelection.add(reference.owner.replace(/^component:/, ''));
-    }
-  }
-}
+// Pattern specs retain their own selection owner; referenced AppShell remains
+// a fixture dependency, not an additional Playwright spec selection.
+const fixtureSelection = selectedBrowserFixtureOwners({ selectedComponents, patterns: graph.patterns, port });
 const unknownComponents = [...selectedComponents].filter(
   (componentId) => !components.some((component) => component.unitId === componentId),
 );
