@@ -22,6 +22,17 @@ rmSync(outputRoot, { recursive: true, force: true });
 
 const graph = discoverProductGraph(root);
 const components = [...graph.components, ...graph.patterns];
+// A selected pattern can own its spec while its referenced component owns
+// the fixture. Prepare the component dependency without selecting its specs.
+const fixtureSelection = new Set(selectedComponents);
+if (selectedComponents.size > 0) {
+  for (const pattern of graph.patterns) {
+    if (!selectedComponents.has(pattern.unitId)) continue;
+    for (const reference of pattern.exampleReferences ?? []) {
+      if (reference.evidence.port === port) fixtureSelection.add(reference.owner.replace(/^component:/, ''));
+    }
+  }
+}
 const unknownComponents = [...selectedComponents].filter(
   (componentId) => !components.some((component) => component.unitId === componentId),
 );
@@ -45,7 +56,7 @@ for (const component of components) {
   if (!existsSync(fixturePath)) continue;
   if (component.surfaces[port]) entries.set(component.unitId, { component, fixturePath });
 
-  if (selectedComponents.size > 0 && !selectedComponents.has(component.unitId)) {
+  if (selectedComponents.size > 0 && !fixtureSelection.has(component.unitId)) {
     skippedUnselected += 1;
     continue;
   }
