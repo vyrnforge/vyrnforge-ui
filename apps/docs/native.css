@@ -60,9 +60,7 @@
 
   .vf-docs-brand-row,
   .vf-docs-header-tools,
-  .vf-docs-theme-control,
-  .vf-docs-hero-actions,
-  .vf-docs-page-meta {
+  .vf-docs-theme-control {
     align-items: center;
     display: flex;
   }
@@ -245,12 +243,8 @@
   }
 
   .vf-docs-breadcrumbs ol {
-    align-items: center;
     color: var(--vf-color-text-muted);
-    display: flex;
-    flex-wrap: wrap;
     font-size: var(--vf-font-size-sm);
-    gap: var(--vf-space-xs);
     list-style: none;
     margin: 0;
     padding: 0;
@@ -281,8 +275,6 @@
   }
 
   .vf-docs-page-meta {
-    flex-wrap: wrap;
-    gap: var(--vf-space-xs);
     margin-block-end: var(--vf-space-md);
   }
 
@@ -541,8 +533,6 @@
   }
 
   .vf-docs-hero-actions {
-    flex-wrap: wrap;
-    gap: var(--vf-space-md);
     margin-block-start: var(--vf-space-xl);
   }
 
@@ -607,11 +597,6 @@
     max-inline-size: 34rem;
   }
 
-  .vf-docs-component-groups {
-    display: grid;
-    gap: var(--vf-space-3xl);
-  }
-
   .vf-docs-component-group {
     min-inline-size: 0;
   }
@@ -646,9 +631,6 @@
   }
 
   .vf-docs-card-list {
-    display: grid;
-    gap: var(--vf-space-md);
-    grid-template-columns: repeat(auto-fit, minmax(min(100%, 16rem), 1fr));
     list-style: none;
     margin: 0;
     padding: 0;
@@ -659,11 +641,7 @@
   }
 
   .vf-docs-card-link {
-    align-items: center;
     color: var(--vf-color-text);
-    display: flex;
-    gap: var(--vf-space-lg);
-    justify-content: space-between;
     min-block-size: 7rem;
     padding: var(--vf-space-lg);
     text-decoration: none;
@@ -681,11 +659,6 @@
   .vf-docs-card-link small {
     color: var(--vf-color-text-muted);
     font-size: var(--vf-font-size-sm);
-  }
-
-  .vf-docs-examples {
-    display: grid;
-    gap: var(--vf-space-xl);
   }
 
   .vf-docs-example {
@@ -713,12 +686,8 @@
   }
 
   .vf-docs-preview {
-    align-items: center;
     background: var(--vf-color-surface-subtle);
     border-block: 1px solid var(--vf-color-border);
-    display: flex;
-    flex-wrap: wrap;
-    gap: var(--vf-space-md);
     min-block-size: 10rem;
     overflow: auto;
     padding: var(--vf-space-xl);
