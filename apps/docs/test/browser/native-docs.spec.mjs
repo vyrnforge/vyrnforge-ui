@@ -326,7 +326,16 @@ test('Button showcase composes shared guidance, Native adaptation, examples, ref
   await expect(page.getByRole('navigation', { name: 'Breadcrumb' })).toContainText('Native Web');
   const toc = page.getByRole('navigation', { name: 'On this page' });
   await expect(toc.getByRole('link', { name: 'Native Web setup' })).toHaveAttribute('href', '#native-web-setup');
-  await expect(toc.getByRole('link', { name: 'Examples' })).toHaveAttribute('href', '#examples');
+  await expect(toc.getByRole('link', { name: 'Usage preview' })).toHaveAttribute('href', '#usage-preview');
+  await expect(toc.getByRole('link', { name: 'More examples' })).toHaveAttribute('href', '#more-examples');
+  const sectionOrder = await page.locator('article[data-vf-docs-component="button"] > section[aria-labelledby]')
+    .evaluateAll((sections) => sections.map((section) => section.getAttribute('aria-labelledby')));
+  expect(sectionOrder.slice(0, 3)).toEqual(['native-web-setup', 'usage-preview', 'when-to-use']);
+  const featured = page.locator('[aria-labelledby="usage-preview"] [data-vf-docs-example]');
+  await expect(featured).toHaveCount(1);
+  const exampleIds = await page.locator('[data-vf-docs-example]').evaluateAll((nodes) =>
+    nodes.map((node) => node.getAttribute('data-vf-docs-example')));
+  expect(new Set(exampleIds).size).toBe(exampleIds.length);
   await expect(toc.getByRole('link', { name: 'Reference' })).toHaveAttribute('href', '#reference');
   await expect(page.getByText('@vyrnforge/web/styles/button.css', { exact: false }).first()).toBeVisible();
   await expect(page.locator('article[data-vf-docs-component="button"]')).toHaveCount(1);
