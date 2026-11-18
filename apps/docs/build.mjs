@@ -54,9 +54,69 @@ function routeTarget(route = '') {
   return `${nativeSitePath}${route}`;
 }
 
+
+// References describe external standards, not VyrnForge implementation or compliance.
+const ariaAttributeReferences = Object.freeze({
+  'aria-busy': 'https://www.w3.org/TR/wai-aria-1.2/#aria-busy',
+  'aria-label': 'https://www.w3.org/TR/wai-aria-1.2/#aria-label',
+  'aria-labelledby': 'https://www.w3.org/TR/wai-aria-1.2/#aria-labelledby',
+  'aria-disabled': 'https://www.w3.org/TR/wai-aria-1.2/#aria-disabled',
+  'aria-pressed': 'https://www.w3.org/TR/wai-aria-1.2/#aria-pressed',
+  'aria-expanded': 'https://www.w3.org/TR/wai-aria-1.2/#aria-expanded',
+  'aria-controls': 'https://www.w3.org/TR/wai-aria-1.2/#aria-controls',
+  'aria-live': 'https://www.w3.org/TR/wai-aria-1.2/#aria-live',
+  'aria-current': 'https://www.w3.org/TR/wai-aria-1.2/#aria-current',
+});
+
+const wcagUnderstandingReferences = Object.freeze({
+  '1.3.1': ['Info and Relationships', 'info-and-relationships'],
+  '1.4.11': ['Non-text Contrast', 'non-text-contrast'],
+  '2.1.1': ['Keyboard', 'keyboard'],
+  '2.4.7': ['Focus Visible', 'focus-visible'],
+  '2.5.3': ['Label in Name', 'label-in-name'],
+  '2.5.8': ['Target Size (Minimum)', 'target-size-minimum'],
+  '4.1.2': ['Name, Role, Value', 'name-role-value'],
+});
+
+const htmlNativeReferences = Object.freeze({
+  button: ['HTML button element', 'https://html.spec.whatwg.org/multipage/form-elements.html#the-button-element'],
+});
+
+function standardLink(label, url) {
+  return `<a data-vf-link href="${escapeHtml(url)}">${label}</a>`;
+}
+
+function renderWcagCriterion(criterion) {
+  const reference = wcagUnderstandingReferences[criterion];
+  const label = `<code>${escapeHtml(criterion)}</code>`;
+  if (!reference) return label;
+  return standardLink(`${label} ${escapeHtml(reference[0])}`,
+    `https://www.w3.org/WAI/WCAG22/Understanding/${reference[1]}`);
+}
+
+function renderNativeBaseline(reference) {
+  if (!reference) return 'not recorded';
+  const specification = htmlNativeReferences[reference];
+  return specification
+    ? standardLink(`<code>${escapeHtml(reference)}</code> — ${escapeHtml(specification[0])}`, specification[1])
+    : `<code>${escapeHtml(reference)}</code>`;
+}
+
+function renderWcagTarget(target) {
+  if (!target) return 'not recorded';
+  return /^2\\.2(?:\\s|$)/.test(target)
+    ? standardLink(escapeHtml(target), 'https://www.w3.org/TR/WCAG22/')
+    : escapeHtml(target);
+}
+
 function renderInline(value) {
   return String(value).split(/(`[^`]+`)/g).map((part) => {
-    if (part.startsWith('`') && part.endsWith('`')) return `<code>${escapeHtml(part.slice(1, -1))}</code>`;
+    if (part.startsWith('`') && part.endsWith('`')) {
+      const token = part.slice(1, -1);
+      const code = `<code>${escapeHtml(token)}</code>`;
+      const url = ariaAttributeReferences[token];
+      return url ? standardLink(code, url) : code;
+    }
     return escapeHtml(part);
   }).join('');
 }
@@ -652,9 +712,10 @@ function renderComponent(page) {
         <aside class="vf-docs-evidence" aria-labelledby="${escapeHtml(evidenceId)}">
           <p class="vf-docs-eyebrow">Evidence boundary</p>
           <h2 id="${escapeHtml(evidenceId)}">Accessibility evidence</h2>
-          <p>Native baseline: <code>${escapeHtml(page.accessibility.nativeBaseline?.reference ?? 'not recorded')}</code>. WCAG target: ${escapeHtml(page.accessibility.wcag?.target ?? 'not recorded')}. Mapping status: ${escapeHtml(page.accessibility.wcag?.status ?? 'not recorded')}.</p>
-          ${criteria.length ? `<p>Mapped criteria: ${criteria.map((criterion) => `<code>${escapeHtml(criterion)}</code>`).join(', ')}.</p>` : ''}
-          <p>This is repository evidence metadata, not a blanket compliance claim.</p>
+          <p>Native baseline: ${renderNativeBaseline(page.accessibility.nativeBaseline?.reference)}. WCAG target: ${renderWcagTarget(page.accessibility.wcag?.target)}. Mapping status: ${escapeHtml(page.accessibility.wcag?.status ?? 'not recorded')}.</p>
+          ${criteria.length ? `<p>Mapped WCAG criteria: ${criteria.map(renderWcagCriterion).join(', ')}.</p>` : ''}
+          <p>ARIA reference: ${standardLink('ARIA in HTML (W3C)', 'https://www.w3.org/TR/html-aria/')} and ${standardLink('WAI-ARIA 1.2', 'https://www.w3.org/TR/wai-aria-1.2/')}.</p>
+          <p>These are linked standards and repository evidence mappings, not a blanket compliance claim.</p>
         </aside>
         <section aria-labelledby="${escapeHtml(referenceId)}">
           <h2 id="${escapeHtml(referenceId)}">Reference</h2>
