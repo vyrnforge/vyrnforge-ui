@@ -1111,7 +1111,7 @@ test('Text, Code and Layout reuse retains navigation, source reading and narrow 
       await expect(lede).toBeVisible();
     }
     if (['foundation', 'showcase', 'api'].includes(name)) {
-      await expect(page.locator('code[data-vf-code]').first()).toBeVisible();
+      await expect(page.locator('code[data-vf-code]:visible').first()).toBeVisible();
     }
     if (['home', 'catalog'].includes(name)) {
       const cards = page.locator('ul[data-vf-auto-grid]').first();
