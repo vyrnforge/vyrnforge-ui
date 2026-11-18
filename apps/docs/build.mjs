@@ -67,63 +67,45 @@ const ariaAttributeReferences = Object.freeze({
   'aria-current': 'https://www.w3.org/TR/wai-aria-1.2/#aria-current',
 });
 
-const wcagUnderstandingReferences = Object.freeze({
-  '1.3.1': ['Info and Relationships', 'info-and-relationships'],
-  '1.4.11': ['Non-text Contrast', 'non-text-contrast'],
-  '2.1.1': ['Keyboard', 'keyboard'],
-  '2.4.7': ['Focus Visible', 'focus-visible'],
-  '2.5.3': ['Label in Name', 'label-in-name'],
-  '2.5.8': ['Target Size (Minimum)', 'target-size-minimum'],
-  '4.1.2': ['Name, Role, Value', 'name-role-value'],
-});
-
-const htmlNativeReferences = Object.freeze({
-  button: ['HTML button element', 'https://html.spec.whatwg.org/multipage/form-elements.html#the-button-element'],
-});
-
 function standardLink(label, url) {
   return `<a data-vf-link href="${escapeHtml(url)}">${label}</a>`;
 }
 
-function renderWcagCriterion(criterion) {
-  const reference = wcagUnderstandingReferences[criterion];
-  const label = `<code>${escapeHtml(criterion)}</code>`;
-  if (!reference) return label;
-  return standardLink(`${label} ${escapeHtml(reference[0])}`,
-    `https://www.w3.org/WAI/WCAG22/Understanding/${reference[1]}`);
+function renderStandardLink(reference) {
+  const label = escapeHtml(reference.label);
+  return reference.url ? standardLink(label, reference.url) : `<span>${label}</span>`;
 }
 
-function renderAccessibilityStandards(accessibility, headingId) {
-  if (!accessibility) return '';
-  const baseline = accessibility.nativeBaseline?.reference ?? null;
-  const nativeStandard = htmlNativeReferences[baseline];
-  const wcagTarget = accessibility.wcag?.target ?? null;
-  const wcagStatus = accessibility.wcag?.status ?? 'not recorded';
-  const criteria = accessibility.wcag?.criteria ?? [];
+function renderCriterionLink(criterion) {
+  const label = `<code>${escapeHtml(criterion.id)}</code>`;
+  return criterion.url
+    ? standardLink(`${label} ${escapeHtml(criterion.label)}`, criterion.url)
+    : `<span>${label}</span>`;
+}
 
-  const references = [];
-  if (nativeStandard) {
-    references.push(standardLink(`HTML ${escapeHtml(baseline)}`, nativeStandard[1]));
-  } else if (baseline) {
-    references.push(`<span>Native baseline: <code>${escapeHtml(baseline)}</code></span>`);
-  }
-  if (wcagTarget) {
-    references.push(/^2\.2(?:\s|$)/.test(wcagTarget)
-      ? standardLink(`WCAG ${escapeHtml(wcagTarget)} (target)`, 'https://www.w3.org/TR/WCAG22/')
-      : `<span>WCAG ${escapeHtml(wcagTarget)} (target)</span>`);
-  }
-  // Documentation links are references, never a claim of ARIA usage or conformance.
-  references.push(standardLink('ARIA in HTML', 'https://www.w3.org/TR/html-aria/'));
-  references.push(standardLink('WAI-ARIA 1.2', 'https://www.w3.org/TR/wai-aria-1.2/'));
+function renderAccessibilityStandards(references, headingId = 'accessibility-evidence') {
+  if (!references) return '';
+  const criteria = references.criteria ?? [];
+  const nativeBaseline = references.nativeBaseline;
+  const hasNativeLink = references.standards.some((item) =>
+    /^(?:HTML|SVG)\b/.test(item.label) && item.url);
+  const baselineNote = nativeBaseline && !hasNativeLink
+    ? `<p class="vf-docs-standards-baseline">Semantic baseline: ${escapeHtml(nativeBaseline)}</p>` : '';
+  const showDetails = criteria.length || baselineNote;
+  const summary = criteria.length
+    ? `${criteria.length} WCAG ${criteria.length === 1 ? 'criterion' : 'criteria'}`
+    : 'Semantic baseline';
+  const reviewNote = references.reviewStatus === 'review-required' ? ' Accessibility review required.' : '';
 
-  return `<section class="vf-docs-standards" aria-labelledby="${escapeHtml(headingId)}">
+  return `<section class="vf-docs-standards" data-vf-docs-accessibility aria-labelledby="${escapeHtml(headingId)}">
     <h2 id="${escapeHtml(headingId)}">Accessibility evidence</h2>
-    <ul class="vf-docs-standards-primary" aria-label="Standards">${references.map((reference) => `<li>${reference}</li>`).join('')}</ul>
-    ${criteria.length ? `<details class="vf-docs-standards-details">
-      <summary>${criteria.length} WCAG criteria</summary>
-      <ul aria-label="Mapped WCAG criteria">${criteria.map((criterion) => `<li>${renderWcagCriterion(criterion)}</li>`).join('')}</ul>
+    <ul class="vf-docs-standards-primary" aria-label="Standards">${references.standards.map((item) => `<li>${renderStandardLink(item)}</li>`).join('')}</ul>
+    ${showDetails ? `<details class="vf-docs-standards-details">
+      <summary>${escapeHtml(summary)}</summary>
+      ${criteria.length ? `<ul aria-label="Mapped WCAG criteria">${criteria.map((item) => `<li>${renderCriterionLink(item)}</li>`).join('')}</ul>` : ''}
+      ${baselineNote}
     </details>` : ''}
-    <p class="vf-docs-standards-note">Mapping status: <strong>${escapeHtml(wcagStatus)}</strong>. References and evidence mappings only; not a blanket compliance claim.</p>
+    <p class="vf-docs-standards-note">Mapping status: <strong>${escapeHtml(references.mappingStatus)}</strong>.${reviewNote} References and evidence mappings only; not a blanket compliance claim.</p>
   </section>`;
 }
 
@@ -703,7 +685,7 @@ function renderComponent(page) {
           </div>
           <h1>${escapeHtml(page.content.title)}</h1>
           <div class="vf-docs-lede">${renderBlocks(page.content.intro)}</div>
-          ${renderAccessibilityStandards(page.accessibility, evidenceId)}
+          ${renderAccessibilityStandards(page.standardReferences, evidenceId)}
         </header>
         <section aria-labelledby="${escapeHtml(setupId)}">
           <h2 id="${escapeHtml(setupId)}">Native Web setup</h2>
