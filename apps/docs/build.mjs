@@ -120,7 +120,7 @@ function renderAccessibilityStandards(accessibility, headingId) {
     <h2 id="${escapeHtml(headingId)}">Accessibility evidence</h2>
     <ul class="vf-docs-standards-primary" aria-label="Standards">${references.map((reference) => `<li>${reference}</li>`).join('')}</ul>
     ${criteria.length ? `<details class="vf-docs-standards-details">
-      <summary>View ${criteria.length} mapped WCAG criteria</summary>
+      <summary>${criteria.length} WCAG criteria</summary>
       <ul aria-label="Mapped WCAG criteria">${criteria.map((criterion) => `<li>${renderWcagCriterion(criterion)}</li>`).join('')}</ul>
     </details>` : ''}
     <p class="vf-docs-standards-note">Mapping status: <strong>${escapeHtml(wcagStatus)}</strong>. References and evidence mappings only; not a blanket compliance claim.</p>
