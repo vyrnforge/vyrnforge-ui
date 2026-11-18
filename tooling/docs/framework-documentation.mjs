@@ -133,6 +133,14 @@ function frameworkExamples(root, component, framework) {
     const manifest = readJson(root, manifestPath);
     const adaptation = manifest.frameworks?.[framework.exampleKey];
     if (!adaptation?.source) return [];
+    const documentationSection = manifest.documentationSection ?? null;
+    if (documentationSection !== null && (
+      typeof documentationSection !== 'string' ||
+      !documentationSection.trim() ||
+      documentationSection.trim() !== documentationSection
+    )) {
+      throw new Error(`${component.unitId} example ${manifest.id} has an invalid documentationSection`);
+    }
     const sourcePath = path.posix.join(path.posix.dirname(manifestPath), adaptation.source);
     if (!exists(root, sourcePath)) {
       throw new Error(`${component.unitId} ${framework.label} example ${manifest.id} points to missing source ${sourcePath}`);
@@ -141,6 +149,7 @@ function frameworkExamples(root, component, framework) {
       id: manifest.id,
       title: manifest.title,
       description: manifest.description ?? '',
+      documentationSection,
       language: adaptation.language ?? 'text',
       sourcePath,
       source: readFileSync(path.join(root, sourcePath), 'utf8').trim(),
@@ -163,6 +172,12 @@ function normalizeOwner(root, component, framework) {
   const shared = sharedContent(root, component);
   const adaptation = frameworkContent(root, component, surface);
   const examples = frameworkExamples(root, component, framework);
+  const headings = new Set(shared.content?.sections.map((section) => section.heading) ?? []);
+  for (const example of examples) {
+    if (example.documentationSection && !headings.has(example.documentationSection)) {
+      throw new Error(`${component.unitId} example ${example.id} references missing shared documentation section ${example.documentationSection}`);
+    }
+  }
   const accessibility = accessibilityEvidence(root, component);
   const group = component.documentationGroup ?? 'components';
 
