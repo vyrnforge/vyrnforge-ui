@@ -635,6 +635,49 @@ test('Native shell reflows at 320 CSS pixels and exposes responsive navigation',
   }
 });
 
+test('narrow TOC stays compact while every section link remains keyboard accessible at enlarged text', async ({ page }, testInfo) => {
+  for (const width of [320, 375, 768]) {
+    for (const textPercent of [100, 200, 400]) {
+      await page.setViewportSize({ width, height: 720 });
+      await gotoWithCleanDocsState(page, '/next/native-web/components/button/');
+      await page.evaluate((percent) => {
+        document.documentElement.style.fontSize = `${percent}%`;
+      }, textPercent);
+
+      const toc = page.getByRole('navigation', { name: 'On this page' });
+      const list = toc.locator('ol');
+      await expect(list).toHaveCSS('overflow-y', 'auto');
+      const dimensions = await list.evaluate((element) => ({
+        height: element.getBoundingClientRect().height,
+        scrollHeight: element.scrollHeight,
+        clientHeight: element.clientHeight,
+        limit: Math.min(8 * parseFloat(getComputedStyle(document.documentElement).fontSize), window.innerHeight * .2),
+      }));
+      expect(dimensions.height, `${width}px / ${textPercent}% TOC must remain short`).toBeLessThanOrEqual(dimensions.limit + 2);
+      expect(dimensions.scrollHeight, 'TOC should retain overflowed links rather than remove them').toBeGreaterThan(dimensions.clientHeight);
+      await expect(toc.getByRole('link', { name: 'Usage preview' })).toHaveAttribute('href', '#usage-preview');
+
+      if (textPercent <= 200 || width === 320) {
+        await page.screenshot({ path: testInfo.outputPath(`docs-toc-${width}-text${textPercent}-top.png`), fullPage: false });
+      }
+
+      const finalLink = toc.getByRole('link', { name: 'Reference', exact: true });
+      await finalLink.focus();
+      await expect(finalLink).toBeFocused();
+      const scrollTop = await list.evaluate((element) => element.scrollTop);
+      expect(scrollTop, `${width}px / ${textPercent}% TOC focus must scroll to last link`).toBeGreaterThan(0);
+      await finalLink.click();
+      await expect(page).toHaveURL(/#reference$/);
+      const pageWidth = await page.evaluate(() => ({
+        scrollWidth: document.documentElement.scrollWidth,
+        clientWidth: document.documentElement.clientWidth,
+      }));
+      expect(pageWidth.scrollWidth, `${width}px / ${textPercent}% must not create page-wide horizontal overflow`)
+        .toBeLessThanOrEqual(pageWidth.clientWidth + 1);
+    }
+  }
+});
+
 test('docs header scrolls away across viewports under 200% text without occluding article targets', async ({ page }, testInfo) => {
   const errors = collectPageErrors(page);
 
