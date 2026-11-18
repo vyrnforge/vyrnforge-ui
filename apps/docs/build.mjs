@@ -380,7 +380,7 @@ function renderHome() {
     content: `<section class="vf-docs-hero">
       <p data-vf-text data-vf-text-variant="overline" class="vf-docs-eyebrow">Native Web documentation</p>
       <h1>VyrnForge Native Web</h1>
-      <p class="vf-docs-lede">Start with the interface you need to build, browse components by familiar UI purpose, then open practical guidance, examples, or the exact public API.</p>
+      <p data-vf-text data-vf-text-variant="body-lg" class="vf-docs-lede">Start with the interface you need to build, browse components by familiar UI purpose, then open practical guidance, examples, or the exact public API.</p>
       <div class="vf-docs-hero-actions">
         <a href="${artifactHref(currentPageDirectory, routeTarget('components/'))}" data-vf-link class="vf-docs-hero-cta">Browse components</a>
         <a href="${artifactHref(currentPageDirectory, routeTarget('api/components/'))}" data-vf-link>Browse API reference</a>
@@ -458,7 +458,7 @@ function renderComponentsIndex() {
     content: `<section class="vf-docs-hero">
       <p data-vf-text data-vf-text-variant="overline" class="vf-docs-eyebrow">Components</p>
       <h1>Components</h1>
-      <p class="vf-docs-lede">Browse by what you are building: forms and inputs, actions, navigation, layout, content, feedback, overlays, collections, and supporting utilities.</p>
+      <p data-vf-text data-vf-text-variant="body-lg" class="vf-docs-lede">Browse by what you are building: forms and inputs, actions, navigation, layout, content, feedback, overlays, collections, and supporting utilities.</p>
     </section>
     <section class="vf-docs-catalog" aria-labelledby="component-catalog-heading">
       <div class="vf-docs-section-heading"><div><h2 id="component-catalog-heading">Browse by UI purpose</h2></div><p>${model.componentCatalog.length} public Native Web components</p></div>
@@ -477,7 +477,7 @@ function renderPatternsIndex() {
     content: `<section class="vf-docs-hero">
       <p data-vf-text data-vf-text-variant="overline" class="vf-docs-eyebrow">Patterns & Workflows</p>
       <h1>Patterns</h1>
-      <p class="vf-docs-lede">Patterns compose foundations and components into reusable task and feedback guidance without becoming another component layer.</p>
+      <p data-vf-text data-vf-text-variant="body-lg" class="vf-docs-lede">Patterns compose foundations and components into reusable task and feedback guidance without becoming another component layer.</p>
     </section>
     <section class="vf-docs-catalog" aria-labelledby="pattern-catalog-heading">
       <div class="vf-docs-section-heading"><div><h2 id="pattern-catalog-heading">Available patterns</h2></div><p>${model.patternCatalog.length} Native Web pattern${model.patternCatalog.length === 1 ? '' : 's'}</p></div>
@@ -500,7 +500,7 @@ function renderPatternApiIndex() {
     content: `<section class="vf-docs-hero">
       <p data-vf-text data-vf-text-variant="overline" class="vf-docs-eyebrow">API Reference</p>
       <h1>Patterns API</h1>
-      <p class="vf-docs-lede">Public package entrypoints owned by reusable Pattern product units.</p>
+      <p data-vf-text data-vf-text-variant="body-lg" class="vf-docs-lede">Public package entrypoints owned by reusable Pattern product units.</p>
     </section>
     <section class="vf-docs-catalog" aria-labelledby="pattern-api-catalog-heading">
       <div class="vf-docs-section-heading"><div><h2 id="pattern-api-catalog-heading">Public pattern entrypoints</h2></div><p>${model.patternApiPages.length} pattern${model.patternApiPages.length === 1 ? '' : 's'}</p></div>
@@ -523,7 +523,7 @@ function renderApiIndex() {
     content: `<section class="vf-docs-hero">
       <p data-vf-text data-vf-text-variant="overline" class="vf-docs-eyebrow">API Reference</p>
       <h1>Components API</h1>
-      <p class="vf-docs-lede">Use this reference when you need exact public entrypoints. Components are grouped with the same consumer-facing categories used by the main catalog; availability still comes from the real Native Web package surface.</p>
+      <p data-vf-text data-vf-text-variant="body-lg" class="vf-docs-lede">Use this reference when you need exact public entrypoints. Components are grouped with the same consumer-facing categories used by the main catalog; availability still comes from the real Native Web package surface.</p>
     </section>
     <section class="vf-docs-catalog" aria-labelledby="api-catalog-heading">
       <div class="vf-docs-section-heading"><div><h2 id="api-catalog-heading">Public component entrypoints</h2></div><p>${model.componentApiPages.length} components</p></div>
@@ -546,7 +546,7 @@ function renderFoundation(page) {
       <header class="vf-docs-component-header">
         <p data-vf-text data-vf-text-variant="overline" class="vf-docs-eyebrow">Foundation</p>
         <h1>${escapeHtml(page.title)}</h1>
-        <p class="vf-docs-lede">${escapeHtml(page.description)}</p>
+        <p data-vf-text data-vf-text-variant="body-lg" class="vf-docs-lede">${escapeHtml(page.description)}</p>
         ${renderAccessibilityStandards(page.standardReferences)}
       </header>
       <section>
@@ -684,7 +684,7 @@ function renderComponent(page) {
             <span>Guide</span>
           </div>
           <h1>${escapeHtml(page.content.title)}</h1>
-          <div class="vf-docs-lede">${renderBlocks(page.content.intro)}</div>
+          <div data-vf-text data-vf-text-variant="body-lg" class="vf-docs-lede">${renderBlocks(page.content.intro)}</div>
           ${renderAccessibilityStandards(page.standardReferences, evidenceId)}
         </header>
         <section aria-labelledby="${escapeHtml(setupId)}">
@@ -736,7 +736,7 @@ function renderPatternGuide(page) {
     content: renderBreadcrumbs(page, currentPageDirectory, 'Patterns') +
       '<article class="vf-docs-article" data-vf-docs-pattern="' + escapeHtml(page.id) + '">' +
       '<header class="vf-docs-component-header"><h1>' + escapeHtml(page.content.title) + '</h1>' +
-      '<div class="vf-docs-lede">' + renderBlocks(page.content.intro) + '</div>' +
+      '<div data-vf-text data-vf-text-variant="body-lg" class="vf-docs-lede">' + renderBlocks(page.content.intro) + '</div>' +
       renderAccessibilityStandards(page.standardReferences) + '</header>' + sections +
       '<section><h2>Referenced examples</h2><p>Guide only. Referenced examples run in repository browser fixtures in the indicated framework; this Native Web page does not execute them or provide a pattern API.</p><ul>' + examples + '</ul></section></article>',
   });
@@ -754,7 +754,7 @@ function renderApiPage(page) {
       <header class="vf-docs-component-header">
         <div class="vf-docs-page-meta"><span>Native Web</span><span>${escapeHtml(page.kind === 'pattern' ? 'Pattern' : componentCategory(page).label)}</span><span>API Reference</span></div>
         <h1>${escapeHtml(page.title)} API</h1>
-        <p class="vf-docs-lede">Verified from the public Native Web package surface. Use the corresponding guide for design and usage guidance when one is available.</p>
+        <p data-vf-text data-vf-text-variant="body-lg" class="vf-docs-lede">Verified from the public Native Web package surface. Use the corresponding guide for design and usage guidance when one is available.</p>
         ${renderAccessibilityStandards(page.standardReferences)}
       </header>
       <section>
