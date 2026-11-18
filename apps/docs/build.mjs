@@ -118,15 +118,12 @@ function renderAccessibilityStandards(accessibility, headingId) {
 
   return `<section class="vf-docs-standards" aria-labelledby="${escapeHtml(headingId)}">
     <h2 id="${escapeHtml(headingId)}">Accessibility evidence</h2>
-    <div class="vf-docs-standards-group">
-      <span class="vf-docs-standards-label">Standards</span>
-      <ul aria-label="Standards">${references.map((reference) => `<li>${reference}</li>`).join('')}</ul>
-    </div>
-    ${criteria.length ? `<div class="vf-docs-standards-group">
-      <span class="vf-docs-standards-label">Mapped WCAG criteria</span>
+    <ul class="vf-docs-standards-primary" aria-label="Standards">${references.map((reference) => `<li>${reference}</li>`).join('')}</ul>
+    ${criteria.length ? `<details class="vf-docs-standards-details">
+      <summary>${criteria.length} WCAG criteria</summary>
       <ul aria-label="Mapped WCAG criteria">${criteria.map((criterion) => `<li>${renderWcagCriterion(criterion)}</li>`).join('')}</ul>
-    </div>` : ''}
-    <p class="vf-docs-standards-note">Mapping status: <strong>${escapeHtml(wcagStatus)}</strong>. These are linked standards and repository evidence mappings, not a blanket compliance claim.</p>
+    </details>` : ''}
+    <p class="vf-docs-standards-note">Mapping status: <strong>${escapeHtml(wcagStatus)}</strong>. References and evidence mappings only; not a blanket compliance claim.</p>
   </section>`;
 }
 
