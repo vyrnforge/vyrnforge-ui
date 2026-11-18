@@ -663,6 +663,16 @@
   }
 
   @media (max-width: 48rem) {
+    /* Keep all real section links available, but stop the TOC from pushing
+       the first example far below narrow-screen reading content. */
+    .vf-docs-toc ol {
+      max-block-size: min(8rem, 20vh);
+      overflow-y: auto;
+      overflow-x: hidden;
+      overflow-wrap: anywhere;
+      padding-block-end: var(--vf-space-xs);
+    }
+
     .vf-docs-header-inner {
       gap: var(--vf-space-sm);
       grid-template-columns: minmax(0, 1fr);
