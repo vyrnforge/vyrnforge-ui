@@ -28,6 +28,14 @@ It sits between the Product Graph and presentation applications. Documentation t
 
 Framework-specific authored adaptations may live with the corresponding product-unit framework surface as `docs/index.md` or `docs.md`. They supplement shared component guidance; they do not copy or fork it.
 
+## Product-owned example placement
+
+An executable example's `example.json` may declare an optional `documentationSection` matching an exact shared `##` heading in that product unit's `docs/index.md`. This is a framework-neutral **content association**, not a second component inventory, a framework runtime contract or a new API surface. The documentation compiler exposes the association with the existing verified framework-specific example and rejects targets that are missing from the shared authored guidance.
+
+The Native renderer uses a first unassigned example as a quick-start usage preview, places examples with an associated section alongside that section's explanation, and keeps any additional unassigned examples in the remaining examples gallery. Each example is rendered once, from its checked-in framework-specific source. Product units without placement metadata keep their existing behavior. Do not infer or hardcode a section from a component name or filename, and do not fabricate a preview when the selected port has no executable source.
+
+This metadata describes **where** a verified example is shown, not the example's behavior or which framework ports are supported. Those remain owned by product-unit guidance, framework adapters and public package evidence.
+
 ## Current Phase
 
 The rollout remains Native HTML-first. Native Web is the first renderer and consumes semantic HTML plus public `@vyrnforge/web` AppShell, SideNav, control hooks, and canonical CSS. The underlying compiler model is now framework-scoped rather than Native-owned so future React, Angular, Vue, and Elements renderers can consume the same Product Graph catalog and standardized content slots while rendering through their own VyrnForge ports.

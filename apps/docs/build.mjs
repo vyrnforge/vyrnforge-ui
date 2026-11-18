@@ -54,9 +54,68 @@ function routeTarget(route = '') {
   return `${nativeSitePath}${route}`;
 }
 
+// References describe external standards, not VyrnForge implementation or compliance.
+const ariaAttributeReferences = Object.freeze({
+  'aria-busy': 'https://www.w3.org/TR/wai-aria-1.2/#aria-busy',
+  'aria-label': 'https://www.w3.org/TR/wai-aria-1.2/#aria-label',
+  'aria-labelledby': 'https://www.w3.org/TR/wai-aria-1.2/#aria-labelledby',
+  'aria-disabled': 'https://www.w3.org/TR/wai-aria-1.2/#aria-disabled',
+  'aria-pressed': 'https://www.w3.org/TR/wai-aria-1.2/#aria-pressed',
+  'aria-expanded': 'https://www.w3.org/TR/wai-aria-1.2/#aria-expanded',
+  'aria-controls': 'https://www.w3.org/TR/wai-aria-1.2/#aria-controls',
+  'aria-live': 'https://www.w3.org/TR/wai-aria-1.2/#aria-live',
+  'aria-current': 'https://www.w3.org/TR/wai-aria-1.2/#aria-current',
+});
+
+const wcagUnderstandingReferences = Object.freeze({
+  '1.3.1': ['Info and Relationships', 'info-and-relationships'],
+  '1.4.11': ['Non-text Contrast', 'non-text-contrast'],
+  '2.1.1': ['Keyboard', 'keyboard'],
+  '2.4.7': ['Focus Visible', 'focus-visible'],
+  '2.5.3': ['Label in Name', 'label-in-name'],
+  '2.5.8': ['Target Size (Minimum)', 'target-size-minimum'],
+  '4.1.2': ['Name, Role, Value', 'name-role-value'],
+});
+
+const htmlNativeReferences = Object.freeze({
+  button: ['HTML button element', 'https://html.spec.whatwg.org/multipage/form-elements.html#the-button-element'],
+});
+
+function standardLink(label, url) {
+  return `<a data-vf-link href="${escapeHtml(url)}">${label}</a>`;
+}
+
+function renderWcagCriterion(criterion) {
+  const reference = wcagUnderstandingReferences[criterion];
+  const label = `<code>${escapeHtml(criterion)}</code>`;
+  if (!reference) return label;
+  return standardLink(`${label} ${escapeHtml(reference[0])}`,
+    `https://www.w3.org/WAI/WCAG22/Understanding/${reference[1]}`);
+}
+
+function renderNativeBaseline(reference) {
+  if (!reference) return 'not recorded';
+  const specification = htmlNativeReferences[reference];
+  return specification
+    ? standardLink(`<code>${escapeHtml(reference)}</code> — ${escapeHtml(specification[0])}`, specification[1])
+    : `<code>${escapeHtml(reference)}</code>`;
+}
+
+function renderWcagTarget(target) {
+  if (!target) return 'not recorded';
+  return /^2\.2(?:\s|$)/.test(target)
+    ? standardLink(escapeHtml(target), 'https://www.w3.org/TR/WCAG22/')
+    : escapeHtml(target);
+}
+
 function renderInline(value) {
   return String(value).split(/(`[^`]+`)/g).map((part) => {
-    if (part.startsWith('`') && part.endsWith('`')) return `<code>${escapeHtml(part.slice(1, -1))}</code>`;
+    if (part.startsWith('`') && part.endsWith('`')) {
+      const token = part.slice(1, -1);
+      const code = `<code>${escapeHtml(token)}</code>`;
+      const url = ariaAttributeReferences[token.split('=', 1)[0]];
+      return url ? standardLink(code, url) : code;
+    }
     return escapeHtml(part);
   }).join('');
 }
@@ -313,6 +372,7 @@ function renderHome() {
   const route = '';
   const currentPageDirectory = pageDirectory(route);
   const foundationCards = model.foundationPages.map((page) => ({ ...page, meta: 'Foundation' }));
+  const buttonGuide = model.componentCatalog.find((page) => page.id === 'button' && page.showcaseAvailable);
   return shell({
     route,
     title: 'Native Web documentation',
@@ -324,6 +384,7 @@ function renderHome() {
       <div class="vf-docs-hero-actions">
         <a href="${artifactHref(currentPageDirectory, routeTarget('components/'))}" data-vf-link class="vf-docs-hero-cta">Browse components</a>
         <a href="${artifactHref(currentPageDirectory, routeTarget('api/components/'))}" data-vf-link>Browse API reference</a>
+        ${buttonGuide ? `<a href="${artifactHref(currentPageDirectory, routeTarget(buttonGuide.showcaseRoute))}" data-vf-link>Start with Button</a>` : ''}
       </div>
     </section>
     <section class="vf-docs-catalog" aria-labelledby="foundations-heading">
@@ -532,8 +593,8 @@ function renderBreadcrumbs(page, currentPageDirectory, family = 'Components') {
   return `<nav class="vf-docs-breadcrumbs" aria-label="Breadcrumb">
     <ol>
       <li><a data-vf-link href="${artifactHref(currentPageDirectory, nativeSitePath)}">Native Web</a></li>
-      <li><span aria-hidden="true">/</span> ${escapeHtml(familyRoute === 'foundations/' ? 'Foundations' : family)}</li>
-      ${category ? `<li><span aria-hidden="true">/</span> ${escapeHtml(category.label)}</li>` : ''}
+      <li><span aria-hidden="true">/</span> ${family === 'Foundations' ? 'Foundations' : `<a data-vf-link href="${artifactHref(currentPageDirectory, routeTarget(familyRoute))}">${escapeHtml(family)}</a>`}</li>
+      ${category ? `<li><span aria-hidden="true">/</span> <a data-vf-link href="${artifactHref(currentPageDirectory, routeTarget('components/'))}#component-group-${escapeHtml(category.id)}">${escapeHtml(category.label)}</a></li>` : ''}
       <li><span aria-hidden="true">/</span> <span aria-current="page">${escapeHtml(page.title)}</span></li>
     </ol>
   </nav>`;
@@ -578,23 +639,33 @@ function renderComponent(page) {
   const setupId = uniqueId('Native Web setup');
   const sectionModels = page.content.sections.map((section) => ({ ...section, id: uniqueId(section.heading) }));
   const framework = renderFrameworkContent(page.frameworkContent, uniqueId);
-  const examplesId = uniqueId('Examples');
+  const featuredExample = page.examples.find((example) => !example.documentationSection) ?? page.examples[0];
+  const remainingExamples = page.examples.filter((example) =>
+    example.id !== featuredExample.id && !example.documentationSection);
+  const usageId = uniqueId('Usage preview');
+  const examplesId = remainingExamples.length ? uniqueId('More examples') : null;
   const evidenceId = uniqueId('Accessibility evidence');
   const referenceId = uniqueId('Reference');
   const toc = [
     { id: setupId, label: 'Native Web setup' },
+    { id: usageId, label: 'Usage preview' },
     ...sectionModels.map((section) => ({ id: section.id, label: section.heading })),
     ...framework.toc,
-    { id: examplesId, label: 'Examples' },
+    ...(examplesId ? [{ id: examplesId, label: 'More examples' }] : []),
     { id: evidenceId, label: 'Accessibility evidence' },
     { id: referenceId, label: 'Reference' },
   ];
 
-  const sections = sectionModels.map((section) => `<section aria-labelledby="${escapeHtml(section.id)}">
+  const sections = sectionModels.map((section) => {
+    const examplesForSection = page.examples.filter((example) =>
+      example.id !== featuredExample.id && example.documentationSection === section.heading);
+    return `<section aria-labelledby="${escapeHtml(section.id)}">
     <h2 id="${escapeHtml(section.id)}">${escapeHtml(section.heading)}</h2>
     ${renderBlocks(section.blocks)}
-  </section>`).join('\n');
-  const examples = page.examples.map(renderExample).join('\n');
+    ${examplesForSection.length ? `<div class="vf-docs-examples">${examplesForSection.map(renderExample).join('\n')}</div>` : ''}
+  </section>`;
+  }).join('\n');
+  const examples = remainingExamples.map(renderExample).join('\n');
   const criteria = page.accessibility.wcag?.criteria ?? [];
 
   return shell({
@@ -621,21 +692,29 @@ function renderComponent(page) {
           <p>Load the public stylesheet and author the appropriate native semantics/composition directly.</p>
           <pre tabindex="0"><code class="language-css">@import &quot;${escapeHtml(page.styleSpecifier)}&quot;;</code></pre>
         </section>
+        <section aria-labelledby="${escapeHtml(usageId)}">
+          <div class="vf-docs-section-heading">
+            <div><p class="vf-docs-eyebrow">Executable Native HTML</p><h2 id="${escapeHtml(usageId)}">Usage preview</h2></div>
+            <p>This example comes from the checked-in product unit and renders with public VyrnForge Web CSS.</p>
+          </div>
+          <div class="vf-docs-examples">${renderExample(featuredExample)}</div>
+        </section>
         ${sections}
         ${framework.markup}
-        <section aria-labelledby="${escapeHtml(examplesId)}">
+        ${examplesId ? `<section aria-labelledby="${escapeHtml(examplesId)}">
           <div class="vf-docs-section-heading">
-            <div><p class="vf-docs-eyebrow">Executable Native HTML</p><h2 id="${escapeHtml(examplesId)}">Examples</h2></div>
-            <p>Examples are checked-in product-unit sources rendered against public Web CSS.</p>
+            <div><p class="vf-docs-eyebrow">Executable Native HTML</p><h2 id="${escapeHtml(examplesId)}">More examples</h2></div>
+            <p>Additional checked-in sources demonstrate supported behavior.</p>
           </div>
           <div class="vf-docs-examples">${examples}</div>
-        </section>
+        </section>` : ''}
         <aside class="vf-docs-evidence" aria-labelledby="${escapeHtml(evidenceId)}">
           <p class="vf-docs-eyebrow">Evidence boundary</p>
           <h2 id="${escapeHtml(evidenceId)}">Accessibility evidence</h2>
-          <p>Native baseline: <code>${escapeHtml(page.accessibility.nativeBaseline?.reference ?? 'not recorded')}</code>. WCAG target: ${escapeHtml(page.accessibility.wcag?.target ?? 'not recorded')}. Mapping status: ${escapeHtml(page.accessibility.wcag?.status ?? 'not recorded')}.</p>
-          ${criteria.length ? `<p>Mapped criteria: ${criteria.map((criterion) => `<code>${escapeHtml(criterion)}</code>`).join(', ')}.</p>` : ''}
-          <p>This is repository evidence metadata, not a blanket compliance claim.</p>
+          <p>Native baseline: ${renderNativeBaseline(page.accessibility.nativeBaseline?.reference)}. WCAG target: ${renderWcagTarget(page.accessibility.wcag?.target)}. Mapping status: ${escapeHtml(page.accessibility.wcag?.status ?? 'not recorded')}.</p>
+          ${criteria.length ? `<p>Mapped WCAG criteria: ${criteria.map(renderWcagCriterion).join(', ')}.</p>` : ''}
+          <p>ARIA reference: ${standardLink('ARIA in HTML (W3C)', 'https://www.w3.org/TR/html-aria/')} and ${standardLink('WAI-ARIA 1.2', 'https://www.w3.org/TR/wai-aria-1.2/')}.</p>
+          <p>These are linked standards and repository evidence mappings, not a blanket compliance claim.</p>
         </aside>
         <section aria-labelledby="${escapeHtml(referenceId)}">
           <h2 id="${escapeHtml(referenceId)}">Reference</h2>

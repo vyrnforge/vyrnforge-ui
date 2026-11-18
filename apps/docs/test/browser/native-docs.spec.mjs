@@ -143,6 +143,35 @@ test('Native Web home uses the VyrnForge shell and separates documentation surfa
   expect(errors, errors.join('\n')).toEqual([]);
 });
 
+test('Native Web quick start links the component guide, catalog category, and verified API', async ({ page }) => {
+  const button = buttonCatalogEntry();
+  expect(button.showcase, 'Button quick start must be grounded in a real showcase').toBe(true);
+  expect(button.api).toBe(true);
+
+  await gotoWithCleanDocsState(page, '/next/native-web/');
+  const quickStart = page.getByRole('link', { name: 'Start with Button' });
+  await expect(quickStart).toHaveAttribute('href', 'components/button/');
+  await quickStart.click();
+  await expect(page.getByRole('heading', { level: 1, name: 'Button' })).toBeVisible();
+  await expect(page.locator('[data-vf-docs-component="button"] [data-vf-docs-example]').first()).toBeVisible();
+
+  const breadcrumbs = page.getByRole('navigation', { name: 'Breadcrumb' });
+  await expect(breadcrumbs.getByRole('link', { name: 'Components' })).toHaveAttribute('href', '../');
+  await expect(breadcrumbs.getByRole('link', { name: 'Actions' })).toHaveAttribute('href', '../#component-group-actions');
+
+  await page.getByRole('link', { name: 'Button API reference' }).click();
+  await expect(page.getByRole('heading', { level: 1, name: 'Button API' })).toBeVisible();
+  const apiBreadcrumbs = page.getByRole('navigation', { name: 'Breadcrumb' });
+  await expect(apiBreadcrumbs.getByRole('link', { name: 'API Reference' })).toHaveAttribute('href', '../');
+  await apiBreadcrumbs.getByRole('link', { name: 'API Reference' }).click();
+  await expect(page.getByRole('heading', { level: 1, name: 'Components API' })).toBeVisible();
+
+  await page.goto('/next/native-web/components/button/');
+  await page.getByRole('navigation', { name: 'Breadcrumb' }).getByRole('link', { name: 'Actions' }).click();
+  await expect(page).toHaveURL(/\/next\/native-web\/components\/#component-group-actions$/);
+  await expect(page.locator('#component-group-actions')).toBeVisible();
+});
+
 test('Native component catalog is Product Graph scoped and API reference is independent of showcase readiness', async ({ page }, testInfo) => {
   const errors = collectPageErrors(page);
   const button = buttonCatalogEntry();
@@ -297,7 +326,40 @@ test('Button showcase composes shared guidance, Native adaptation, examples, ref
   await expect(page.getByRole('navigation', { name: 'Breadcrumb' })).toContainText('Native Web');
   const toc = page.getByRole('navigation', { name: 'On this page' });
   await expect(toc.getByRole('link', { name: 'Native Web setup' })).toHaveAttribute('href', '#native-web-setup');
-  await expect(toc.getByRole('link', { name: 'Examples' })).toHaveAttribute('href', '#examples');
+  await expect(toc.getByRole('link', { name: 'Usage preview' })).toHaveAttribute('href', '#usage-preview');
+  await expect(toc.getByRole('link', { name: 'More examples' })).toHaveCount(0);
+  const sectionOrder = await page.locator('article[data-vf-docs-component="button"] > section[aria-labelledby]')
+    .evaluateAll((sections) => sections.map((section) => section.getAttribute('aria-labelledby')));
+  expect(sectionOrder.slice(0, 8)).toEqual([
+    'native-web-setup', 'usage-preview', 'when-to-use', 'native-baseline',
+    'variants', 'sizes', 'states-and-async-work', 'forms',
+  ]);
+  const featured = page.locator('article[data-vf-docs-component="button"] > section[aria-labelledby="usage-preview"] [data-vf-docs-example]');
+  await expect(featured).toHaveAttribute('data-vf-docs-example', 'button/basic');
+  for (const [heading, sectionId, exampleId] of [
+    ['Variants', 'variants', 'button/variants'],
+    ['Sizes', 'sizes', 'button/sizes'],
+    ['States and async work', 'states-and-async-work', 'button/states'],
+    ['Forms', 'forms', 'button/forms'],
+  ]) {
+    const section = page.locator(`article[data-vf-docs-component="button"] > section[aria-labelledby="${sectionId}"]`);
+    await expect(toc.getByRole('link', { name: heading })).toHaveAttribute('href', `#${sectionId}`);
+    await expect(section.getByRole('heading', { level: 2, name: heading })).toBeVisible();
+    await expect(section.locator('[data-vf-docs-example]')).toHaveAttribute('data-vf-docs-example', exampleId);
+    await expect(section.locator('[data-vf-docs-preview]')).toBeVisible();
+    await expect(section.locator('[data-vf-docs-source]')).not.toBeEmpty();
+  }
+  const variants = page.locator('article[data-vf-docs-component="button"] > section[aria-labelledby="variants"]');
+  for (const variant of ['primary', 'secondary', 'ghost']) {
+    await expect(variants.locator(`[data-vf-docs-preview] button[data-vf-variant="${variant}"]`)).toHaveCount(1);
+  }
+  const sizes = page.locator('article[data-vf-docs-component="button"] > section[aria-labelledby="sizes"]');
+  for (const size of ['sm', 'md', 'lg']) {
+    await expect(sizes.locator(`[data-vf-docs-preview] button[data-vf-size="${size}"]`)).toHaveCount(1);
+  }
+  const exampleIds = await page.locator('[data-vf-docs-example]').evaluateAll((nodes) =>
+    nodes.map((node) => node.getAttribute('data-vf-docs-example')));
+  expect(new Set(exampleIds).size).toBe(exampleIds.length);
   await expect(toc.getByRole('link', { name: 'Reference' })).toHaveAttribute('href', '#reference');
   await expect(page.getByText('@vyrnforge/web/styles/button.css', { exact: false }).first()).toBeVisible();
   await expect(page.locator('article[data-vf-docs-component="button"]')).toHaveCount(1);
@@ -373,9 +435,53 @@ test('Button showcase composes shared guidance, Native adaptation, examples, ref
   await expect(copy).toHaveText('Copied');
   await expect(firstExample.getByRole('status')).toHaveText('HTML copied to clipboard.');
 
-  await expect(page.getByText('This is repository evidence metadata, not a blanket compliance claim.')).toBeVisible();
+  const evidence = page.locator('article[data-vf-docs-component="button"] .vf-docs-evidence');
+  await expect(evidence.getByRole('link', { name: 'button — HTML button element' }))
+    .toHaveAttribute('href', 'https://html.spec.whatwg.org/multipage/form-elements.html#the-button-element');
+  await expect(evidence.getByRole('link', { name: '2.2 AA' }))
+    .toHaveAttribute('href', 'https://www.w3.org/TR/WCAG22/');
+  for (const [criterion, title, slug] of [
+    ['1.3.1', 'Info and Relationships', 'info-and-relationships'],
+    ['1.4.11', 'Non-text Contrast', 'non-text-contrast'],
+    ['2.1.1', 'Keyboard', 'keyboard'],
+    ['2.4.7', 'Focus Visible', 'focus-visible'],
+    ['2.5.3', 'Label in Name', 'label-in-name'],
+    ['2.5.8', 'Target Size (Minimum)', 'target-size-minimum'],
+    ['4.1.2', 'Name, Role, Value', 'name-role-value'],
+  ]) {
+    await expect(evidence.getByRole('link', { name: `${criterion} ${title}`, exact: true }))
+      .toHaveAttribute('href', `https://www.w3.org/WAI/WCAG22/Understanding/${slug}`);
+  }
+  await expect(evidence.getByRole('link', { name: 'ARIA in HTML (W3C)' }))
+    .toHaveAttribute('href', 'https://www.w3.org/TR/html-aria/');
+  await expect(evidence.getByRole('link', { name: 'WAI-ARIA 1.2' }))
+    .toHaveAttribute('href', 'https://www.w3.org/TR/wai-aria-1.2/');
+  await expect(page.locator('article[data-vf-docs-component="button"] > section[aria-labelledby="states-and-async-work"] a[href="https://www.w3.org/TR/wai-aria-1.2/#aria-busy"]'))
+    .toHaveText('aria-busy="true"');
+  await expect(evidence).toContainText('not a blanket compliance claim.');
   await expectNoAccessibilityViolations(page);
   expect(errors, errors.join('\n')).toEqual([]);
+});
+
+test('featured Native usage preview reflows and stays reachable at reference widths', async ({ page }, testInfo) => {
+  for (const width of [320, 375, 768, 1440]) {
+    await page.setViewportSize({ width, height: 720 });
+    await gotoWithCleanDocsState(page, '/next/native-web/components/button/');
+
+    const preview = page.locator('article[data-vf-docs-component="button"] > section[aria-labelledby="usage-preview"]');
+    await expect(preview.getByRole('heading', { level: 2, name: 'Usage preview' })).toBeVisible();
+    await expect(preview.locator('[data-vf-docs-example]')).toHaveCount(1);
+    const metrics = await page.evaluate(() => ({
+      scrollWidth: document.documentElement.scrollWidth,
+      clientWidth: document.documentElement.clientWidth,
+    }));
+    expect(metrics.scrollWidth, `${width}px usage preview must not create page-level horizontal overflow`)
+      .toBeLessThanOrEqual(metrics.clientWidth + 1);
+
+    await page.screenshot({ path: testInfo.outputPath(`native-usage-${width}-top.png`), fullPage: false });
+    await preview.scrollIntoViewIfNeeded();
+    await page.screenshot({ path: testInfo.outputPath(`native-usage-${width}-preview.png`), fullPage: false });
+  }
 });
 
 test('C2 approved docs geometry fills wide chrome without stretching reading content', async ({ page }) => {

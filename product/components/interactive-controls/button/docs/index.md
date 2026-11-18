@@ -14,17 +14,33 @@ A VyrnForge Button remains a native `<button>`. Add `data-vf-button` and the doc
 
 VyrnForge does not add JavaScript to reproduce native button activation, focus, disabled behavior, or form participation.
 
-## Variants and sizes
+## Variants
 
-The baseline variants are `primary`, `secondary`, and `ghost`. The baseline sizes are `sm`, `md`, and `lg`.
+Choose visual emphasis by the action's role, not by its keyboard or form behavior.
 
-Use `primary` for the principal action in a local decision area. Use `secondary` for an alternative action and `ghost` when lower visual emphasis is appropriate. Visual emphasis does not change the semantic meaning of the native button.
+- `primary`: the principal action in the current decision area.
+- `secondary`: an alternative action alongside the principal one.
+- `ghost`: a lower-emphasis action.
+
+Visual emphasis does not change the semantic meaning of the native button.
+
+## Sizes
+
+The baseline sizes are `sm`, `md`, and `lg`. Pick a size that fits the surrounding layout and remains accessible; size changes presentation, not native activation or form behavior.
 
 ## States and async work
 
 Use the native `disabled` attribute when the action must not be available. Loading is a separate state: add `data-vf-loading` and `aria-busy="true"` while work associated with the action is in progress.
 
 Loading does not disable the control. If repeat activation must be prevented, set `disabled` explicitly in addition to the loading state. Application async orchestration, mutation completion, debouncing, and confirmation policy remain application responsibilities.
+
+## Forms
+
+Button preserves native form behavior. VyrnForge does not override the platform default `type`.
+
+Inside a form, omitting `type` invokes the browser's default **submit** behavior. Use `type="submit"` for an intentional submit action, `type="reset"` for native reset, and `type="button"` for non-submit commands. Preserve native `name`, `value`, and `form` behavior; application code owns submission, validation and persistence.
+
+The **Native form actions** example demonstrates all three button types with a labeled Input and explicit submitter `name`/`value`. The Native Web documentation page loads both `@vyrnforge/web/styles/button.css` and `@vyrnforge/web/styles/input.css` for that composition; consumers using the Input styling hook must load its public stylesheet too. In the **documentation preview only**, the docs application prevents navigation and shows a local submit, reset, or “Inspect value” result. These demonstration handlers are application code, not part of VyrnForge Button. Copying this HTML to a consuming application requires its own submit and non-submit action handlers.
 
 ## Interaction and focus
 
@@ -37,14 +53,6 @@ Do not add custom keyboard handlers to recreate native button behavior.
 Keep a real `<button>` and provide an accessible name through visible content or an appropriate naming mechanism such as `aria-label` or `aria-labelledby`.
 
 Do not add an explicit button role to a native button. Use native `disabled` rather than substituting `aria-disabled`. The loading indicator is decorative; `aria-busy="true"` communicates the busy state without replacing the button's accessible name.
-
-## Forms
-
-Button preserves native form behavior. VyrnForge does not override the platform default `type`.
-
-Inside a form, omitting `type` invokes the browser's default **submit** behavior. Use `type="submit"` for an intentional submit action, `type="reset"` for native reset, and `type="button"` for non-submit commands. Preserve native `name`, `value`, and `form` behavior; application code owns submission, validation and persistence.
-
-The **Native form actions** example demonstrates all three button types with a labeled Input and explicit submitter `name`/`value`. The Native Web documentation page loads both `@vyrnforge/web/styles/button.css` and `@vyrnforge/web/styles/input.css` for that composition; consumers using the Input styling hook must load its public stylesheet too. In the **documentation preview only**, the docs application prevents navigation and shows a local submit, reset, or “Inspect value” result. These demonstration handlers are application code, not part of VyrnForge Button. Copying this HTML to a consuming application requires its own submit and non-submit action handlers.
 
 ## Styling and adaptation
 
