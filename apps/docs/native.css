@@ -378,8 +378,7 @@
     border: 1px solid transparent;
     border-radius: var(--vf-control-radius);
     color: var(--vf-color-text);
-    display: flex;
-    gap: var(--vf-space-xs);
+    display: block;
     min-inline-size: 0;
     overflow-wrap: anywhere;
     padding: var(--vf-space-xs) var(--vf-space-sm);
@@ -392,7 +391,7 @@
   }
 
   .vf-docs-standards-details code {
-    flex: 0 0 auto;
+    margin-inline-end: var(--vf-space-xs);
   }
 
   .vf-docs-standards a:focus-visible,
