@@ -1001,3 +1001,37 @@ test('non-Button API pages expose the same accessible standards disclosure', asy
     }
   }
 });
+
+
+test('shared standards remain readable on Native API pages at mobile and 400% text', async ({ page }, testInfo) => {
+  const scenarios = [
+    ['input', 1280, 100],
+    ['input', 320, 400],
+    ['app-shell', 1280, 100],
+    ['app-shell', 320, 400],
+  ];
+  for (const [id, width, textPercent] of scenarios) {
+    await page.setViewportSize({ width, height: 720 });
+    await gotoWithCleanDocsState(page, `/next/native-web/api/components/${id}/`);
+    await page.evaluate((percent) => {
+      document.documentElement.style.fontSize = `${percent}%`;
+    }, textPercent);
+
+    const section = page.locator(`[data-vf-docs-api-component="${id}"] [data-vf-docs-accessibility]`);
+    await expect(section).toBeVisible();
+    await expect(section.locator('details')).not.toHaveAttribute('open', '');
+    await section.locator('summary').click();
+    await expect(section.locator('details')).toHaveAttribute('open', '');
+    const metrics = await page.evaluate(() => ({
+      scrollWidth: document.documentElement.scrollWidth,
+      clientWidth: document.documentElement.clientWidth,
+    }));
+    expect(metrics.scrollWidth, `${id} ${width}px / ${textPercent}% must reflow`)
+      .toBeLessThanOrEqual(metrics.clientWidth + 1);
+    await section.scrollIntoViewIfNeeded();
+    await page.screenshot({
+      path: testInfo.outputPath(`standardized-standards-${id}-${width}-text${textPercent}.png`),
+      fullPage: false,
+    });
+  }
+});
