@@ -313,6 +313,7 @@ function renderHome() {
   const route = '';
   const currentPageDirectory = pageDirectory(route);
   const foundationCards = model.foundationPages.map((page) => ({ ...page, meta: 'Foundation' }));
+  const buttonGuide = model.componentCatalog.find((page) => page.id === 'button' && page.showcaseAvailable);
   return shell({
     route,
     title: 'Native Web documentation',
@@ -324,6 +325,7 @@ function renderHome() {
       <div class="vf-docs-hero-actions">
         <a href="${artifactHref(currentPageDirectory, routeTarget('components/'))}" data-vf-link class="vf-docs-hero-cta">Browse components</a>
         <a href="${artifactHref(currentPageDirectory, routeTarget('api/components/'))}" data-vf-link>Browse API reference</a>
+        ${buttonGuide ? `<a href="${artifactHref(currentPageDirectory, routeTarget(buttonGuide.showcaseRoute))}" data-vf-link>Start with Button</a>` : ''}
       </div>
     </section>
     <section class="vf-docs-catalog" aria-labelledby="foundations-heading">
@@ -532,8 +534,8 @@ function renderBreadcrumbs(page, currentPageDirectory, family = 'Components') {
   return `<nav class="vf-docs-breadcrumbs" aria-label="Breadcrumb">
     <ol>
       <li><a data-vf-link href="${artifactHref(currentPageDirectory, nativeSitePath)}">Native Web</a></li>
-      <li><span aria-hidden="true">/</span> ${escapeHtml(familyRoute === 'foundations/' ? 'Foundations' : family)}</li>
-      ${category ? `<li><span aria-hidden="true">/</span> ${escapeHtml(category.label)}</li>` : ''}
+      <li><span aria-hidden="true">/</span> ${family === 'Foundations' ? 'Foundations' : `<a data-vf-link href="${artifactHref(currentPageDirectory, routeTarget(familyRoute))}">${escapeHtml(family)}</a>`}</li>
+      ${category ? `<li><span aria-hidden="true">/</span> <a data-vf-link href="${artifactHref(currentPageDirectory, routeTarget('components/'))}#component-group-${escapeHtml(category.id)}">${escapeHtml(category.label)}</a></li>` : ''}
       <li><span aria-hidden="true">/</span> <span aria-current="page">${escapeHtml(page.title)}</span></li>
     </ol>
   </nav>`;
