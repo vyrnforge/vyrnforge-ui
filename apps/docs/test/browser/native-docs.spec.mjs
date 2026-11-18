@@ -1037,7 +1037,7 @@ test('shared standards remain readable on Native API pages at mobile and 400% te
 });
 
 
-test('every Native documentation page family loads the public Text and Code foundations', () => {
+test('every Native documentation page family loads public Text, Code and Layout foundations', () => {
   const routes = [
     '', 'components/', 'patterns/', 'api/components/', 'api/patterns/',
     'foundations/styling/', 'foundations/tokens/',
@@ -1049,7 +1049,7 @@ test('every Native documentation page family loads the public Text and Code foun
     const path = `dist/docs/next/native-web/${route}index.html`;
     expect(existsSync(path), path).toBe(true);
     const html = readFileSync(path, 'utf8');
-    for (const asset of ['text.css', 'code.css']) {
+    for (const asset of ['text.css', 'code.css', 'layout.css']) {
       expect(html, `${route}: public Text/Code CSS must be loaded`).toMatch(
         new RegExp('href="[^"]*assets/vyrnforge-web/styles/' + asset.replace('.', '\\.') + '"'),
       );
@@ -1061,6 +1061,9 @@ test('every Native documentation page family loads the public Text and Code foun
   expect(button).toContain('<code data-vf-code>');
   expect(button).toContain('data-vf-text-variant="overline"');
   expect(button).toContain('data-vf-text-variant="body-lg"');
+  expect(button).toContain('data-vf-cluster');
+  expect(button).toContain('data-vf-stack data-vf-stack-gap="xl"');
+  expect(button).toContain('data-vf-inline data-vf-inline-gap="lg"');
 
   const foundation = readFileSync('dist/docs/next/native-web/foundations/styling/index.html', 'utf8');
   expect(foundation).toContain('<code data-vf-code>');
@@ -1068,7 +1071,7 @@ test('every Native documentation page family loads the public Text and Code foun
   expect(api).toContain('<code data-vf-code>');
 });
 
-test('Text/Code reuse retains navigation, source reading and narrow reflow', async ({ page }, testInfo) => {
+test('Text, Code and Layout reuse retains navigation, source reading and narrow reflow', async ({ page }, testInfo) => {
   const routes = [
     ['home', '/next/native-web/'],
     ['catalog', '/next/native-web/components/'],
@@ -1086,6 +1089,7 @@ test('Text/Code reuse retains navigation, source reading and narrow reflow', asy
     const links = await page.locator('link[rel="stylesheet"]').evaluateAll((nodes) => nodes.map((node) => node.getAttribute('href')));
     expect(links.some((href) => href.includes('styles/text.css'))).toBe(true);
     expect(links.some((href) => href.includes('styles/code.css'))).toBe(true);
+    expect(links.some((href) => href.includes('styles/layout.css'))).toBe(true);
 
     if (['home', 'catalog', 'foundation', 'showcase', 'pattern'].includes(name)) {
       const overline = page.locator('[data-vf-text][data-vf-text-variant="overline"]').first();
@@ -1098,7 +1102,16 @@ test('Text/Code reuse retains navigation, source reading and narrow reflow', asy
     if (['foundation', 'showcase', 'api'].includes(name)) {
       await expect(page.locator('code[data-vf-code]').first()).toBeVisible();
     }
+    if (['home', 'catalog', 'foundation'].includes(name)) {
+      const cards = page.locator('ul[data-vf-auto-grid]').first();
+      await expect(cards).toBeVisible();
+      await expect(cards).toHaveCSS('display', 'grid');
+      await expect(page.locator('a[data-vf-inline]').first()).toBeVisible();
+    }
     if (name === 'showcase') {
+      const preview = page.locator('[data-vf-docs-preview][data-vf-cluster]').first();
+      await expect(preview).toBeVisible();
+      await expect(preview).toHaveCSS('flex-wrap', 'wrap');
       const block = page.locator('pre[data-vf-code-block]').first();
       await expect(block).toBeVisible();
       await expect(block).toHaveCSS('overflow-x', 'auto');
@@ -1106,7 +1119,7 @@ test('Text/Code reuse retains navigation, source reading and narrow reflow', asy
       await expect(block).toBeFocused();
     }
 
-    if (['foundation', 'showcase', 'api'].includes(name)) {
+    if (['home', 'catalog', 'foundation', 'showcase', 'api'].includes(name)) {
       await page.setViewportSize({ width: 320, height: 720 });
       await page.evaluate(() => { document.documentElement.style.fontSize = '200%'; });
       const bounds = await page.evaluate(() => ({
