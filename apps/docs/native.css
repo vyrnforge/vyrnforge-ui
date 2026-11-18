@@ -400,6 +400,14 @@
     outline-offset: 2px;
   }
 
+  .vf-docs-standards-baseline {
+    color: var(--vf-color-text-muted);
+    font-size: var(--vf-font-size-sm);
+    line-height: var(--vf-line-height-relaxed);
+    margin-block-start: var(--vf-space-sm);
+    overflow-wrap: anywhere;
+  }
+
   .vf-docs-standards-note {
     color: var(--vf-color-text-muted);
     font-size: var(--vf-font-size-xs);
