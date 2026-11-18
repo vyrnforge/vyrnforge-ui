@@ -36,7 +36,8 @@
             "@vyrnforge/react",
             "@vyrnforge/angular",
             "@vyrnforge/vue",
-            "@vyrnforge/elements"
+            "@vyrnforge/elements",
+            "@vyrnforge/icons"
           ],
           "target": "build"
         }
