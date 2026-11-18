@@ -1045,14 +1045,19 @@ test('every Native documentation page family loads public Text, Code and Layout 
     'patterns/loading/', 'api/patterns/loading/',
     'patterns/settings-navigation/',
   ];
+  const sharedStyles = compileNativeDocumentation().shellStyles;
+  const publicStyles = ['text.css', 'code.css', 'layout.css'].map((asset) => {
+    const style = sharedStyles.find((entry) => entry.specifier === `@vyrnforge/web/styles/${asset}`);
+    expect(style, `${asset} should resolve from the public Web package export map`).toBeDefined();
+    return style;
+  });
   for (const route of routes) {
     const path = `dist/docs/next/native-web/${route}index.html`;
     expect(existsSync(path), path).toBe(true);
     const html = readFileSync(path, 'utf8');
-    for (const asset of ['text.css', 'code.css', 'layout.css']) {
-      expect(html, `${route}: public Text/Code CSS must be loaded`).toMatch(
-        new RegExp('href="[^"]*assets/vyrnforge-web/styles/' + asset.replace('.', '\\.') + '"'),
-      );
+    for (const style of publicStyles) {
+      expect(html, `${route}: ${style.specifier} must be loaded`)
+        .toContain(style.assetPath.replace(/^\//, ''));
     }
   }
 
@@ -1088,9 +1093,14 @@ test('Text, Code and Layout reuse retains navigation, source reading and narrow 
     await expectDeploymentRelativeStyles(page);
 
     const links = await page.locator('link[rel="stylesheet"]').evaluateAll((nodes) => nodes.map((node) => node.getAttribute('href')));
-    expect(links.some((href) => href.includes('styles/text.css'))).toBe(true);
-    expect(links.some((href) => href.includes('styles/code.css'))).toBe(true);
-    expect(links.some((href) => href.includes('styles/layout.css'))).toBe(true);
+    const publicStyles = compileNativeDocumentation().shellStyles
+      .filter((style) => ['text.css', 'code.css', 'layout.css'].some((asset) =>
+        style.specifier === `@vyrnforge/web/styles/${asset}`));
+    expect(publicStyles).toHaveLength(3);
+    for (const style of publicStyles) {
+      expect(links.some((href) => href.includes(style.assetPath.replace(/^\//, ''))),
+        `${name}: ${style.specifier} must load through the published export target`).toBe(true);
+    }
 
     if (['home', 'catalog', 'foundation', 'showcase', 'pattern'].includes(name)) {
       const overline = page.locator('[data-vf-text][data-vf-text-variant="overline"]').first();
