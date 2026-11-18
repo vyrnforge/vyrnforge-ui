@@ -1035,3 +1035,87 @@ test('shared standards remain readable on Native API pages at mobile and 400% te
     });
   }
 });
+
+
+test('every Native documentation page family loads the public Text and Code foundations', () => {
+  const routes = [
+    '', 'components/', 'patterns/', 'api/components/', 'api/patterns/',
+    'foundations/styling/', 'foundations/tokens/',
+    'components/button/', 'api/components/button/',
+    'patterns/loading/', 'api/patterns/loading/',
+    'patterns/settings-navigation/',
+  ];
+  for (const route of routes) {
+    const path = `dist/docs/next/native-web/${route}index.html`;
+    expect(existsSync(path), path).toBe(true);
+    const html = readFileSync(path, 'utf8');
+    for (const asset of ['text.css', 'code.css']) {
+      expect(html, `${route}: public Text/Code CSS must be loaded`).toMatch(
+        new RegExp('href="[^"]*assets/vyrnforge-web/styles/' + asset.replace('.', '\\.') + '"'),
+      );
+    }
+  }
+
+  const button = readFileSync('dist/docs/next/native-web/components/button/index.html', 'utf8');
+  expect((button.match(/<pre data-vf-code-block/g) ?? []).length).toBeGreaterThanOrEqual(2);
+  expect(button).toContain('<code data-vf-code>');
+  expect(button).toContain('data-vf-text-variant="overline"');
+  expect(button).toContain('data-vf-text-variant="body-lg"');
+
+  const foundation = readFileSync('dist/docs/next/native-web/foundations/styling/index.html', 'utf8');
+  expect(foundation).toContain('<code data-vf-code>');
+  const api = readFileSync('dist/docs/next/native-web/api/components/button/index.html', 'utf8');
+  expect(api).toContain('<code data-vf-code>');
+});
+
+test('Text/Code reuse retains navigation, source reading and narrow reflow', async ({ page }, testInfo) => {
+  const routes = [
+    ['home', '/next/native-web/'],
+    ['catalog', '/next/native-web/components/'],
+    ['foundation', '/next/native-web/foundations/styling/'],
+    ['showcase', '/next/native-web/components/button/'],
+    ['api', '/next/native-web/api/components/button/'],
+    ['pattern', '/next/native-web/patterns/loading/'],
+  ];
+  for (const [name, route] of routes) {
+    await page.setViewportSize({ width: 1280, height: 720 });
+    await gotoWithCleanDocsState(page, route);
+    await expect(page.locator('[data-vf-app-shell]')).toHaveCount(1);
+    await expectDeploymentRelativeStyles(page);
+
+    const links = await page.locator('link[rel="stylesheet"]').evaluateAll((nodes) => nodes.map((node) => node.getAttribute('href')));
+    expect(links.some((href) => href.includes('styles/text.css'))).toBe(true);
+    expect(links.some((href) => href.includes('styles/code.css'))).toBe(true);
+
+    if (['home', 'catalog', 'foundation', 'showcase', 'pattern'].includes(name)) {
+      const overline = page.locator('[data-vf-text][data-vf-text-variant="overline"]').first();
+      await expect(overline).toBeVisible();
+    }
+    if (['home', 'catalog', 'foundation', 'showcase', 'api'].includes(name)) {
+      const lede = page.locator('[data-vf-text][data-vf-text-variant="body-lg"]').first();
+      await expect(lede).toBeVisible();
+    }
+    if (['foundation', 'showcase', 'api'].includes(name)) {
+      await expect(page.locator('code[data-vf-code]').first()).toBeVisible();
+    }
+    if (name === 'showcase') {
+      const block = page.locator('pre[data-vf-code-block]').first();
+      await expect(block).toBeVisible();
+      await expect(block).toHaveCSS('overflow-x', 'auto');
+      await block.focus();
+      await expect(block).toBeFocused();
+    }
+
+    if (['foundation', 'showcase', 'api'].includes(name)) {
+      await page.setViewportSize({ width: 320, height: 720 });
+      await page.evaluate(() => { document.documentElement.style.fontSize = '200%'; });
+      const bounds = await page.evaluate(() => ({
+        scrollWidth: document.documentElement.scrollWidth,
+        clientWidth: document.documentElement.clientWidth,
+      }));
+      expect(bounds.scrollWidth, `${name}: 320px/200% should not introduce document-wide horizontal overflow`)
+        .toBeLessThanOrEqual(bounds.clientWidth + 1);
+      await page.screenshot({ path: testInfo.outputPath(`docs-reuse-${name}-320-text200.png`), fullPage: false });
+    }
+  }
+});
