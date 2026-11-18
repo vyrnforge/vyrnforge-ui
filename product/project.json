@@ -27,6 +27,24 @@
       "options": {
         "command": "pnpm exec playwright test --project=chromium"
       }
+    },
+    "typecheck": {
+      "executor": "nx:run-commands",
+      "dependsOn": [
+        {
+          "projects": [
+            "@vyrnforge/react",
+            "@vyrnforge/angular",
+            "@vyrnforge/vue",
+            "@vyrnforge/elements",
+            "@vyrnforge/icons"
+          ],
+          "target": "build"
+        }
+      ],
+      "options": {
+        "command": "pnpm exec tsc -p product/tsconfig.conformance.json"
+      }
     }
   }
 }

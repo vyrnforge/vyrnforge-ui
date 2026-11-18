@@ -1,0 +1,16 @@
+{
+  "extends": "../tsconfig.base.json",
+  "compilerOptions": {
+    "noEmit": true,
+    "declaration": false,
+    "declarationMap": false,
+    "sourceMap": false,
+    "types": [],
+    "module": "ESNext",
+    "moduleResolution": "Bundler",
+    "moduleDetection": "force"
+  },
+  "include": [
+    "components/**/test/conformance/public-api.types.ts"
+  ]
+}
