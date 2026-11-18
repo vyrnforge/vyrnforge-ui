@@ -548,6 +548,7 @@ function renderFoundation(page) {
         <p class="vf-docs-eyebrow">Foundation</p>
         <h1>${escapeHtml(page.title)}</h1>
         <p class="vf-docs-lede">${escapeHtml(page.description)}</p>
+        ${renderAccessibilityStandards(page.standardReferences)}
       </header>
       <section>
         <h2>Public entrypoints</h2>
@@ -735,7 +736,9 @@ function renderPatternGuide(page) {
     description: page.title + ' task composition guide',
     content: renderBreadcrumbs(page, currentPageDirectory, 'Patterns') +
       '<article class="vf-docs-article" data-vf-docs-pattern="' + escapeHtml(page.id) + '">' +
-      '<h1>' + escapeHtml(page.content.title) + '</h1>' + renderBlocks(page.content.intro) + sections +
+      '<header class="vf-docs-component-header"><h1>' + escapeHtml(page.content.title) + '</h1>' +
+      '<div class="vf-docs-lede">' + renderBlocks(page.content.intro) + '</div>' +
+      renderAccessibilityStandards(page.standardReferences) + '</header>' + sections +
       '<section><h2>Referenced examples</h2><p>Guide only. Referenced examples run in repository browser fixtures in the indicated framework; this Native Web page does not execute them or provide a pattern API.</p><ul>' + examples + '</ul></section></article>',
   });
 }
@@ -753,6 +756,7 @@ function renderApiPage(page) {
         <div class="vf-docs-page-meta"><span>Native Web</span><span>${escapeHtml(page.kind === 'pattern' ? 'Pattern' : componentCategory(page).label)}</span><span>API Reference</span></div>
         <h1>${escapeHtml(page.title)} API</h1>
         <p class="vf-docs-lede">Verified from the public Native Web package surface. Use the corresponding guide for design and usage guidance when one is available.</p>
+        ${renderAccessibilityStandards(page.standardReferences)}
       </header>
       <section>
         <h2>Public entrypoints</h2>
