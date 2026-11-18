@@ -453,7 +453,7 @@ test('Button showcase composes shared guidance, Native adaptation, examples, ref
   const disclosure = evidence.locator('details.vf-docs-standards-details');
   const summary = disclosure.locator('summary');
   await expect(disclosure).not.toHaveAttribute('open', '');
-  await expect(summary).toHaveText('View 7 mapped WCAG criteria');
+  await expect(summary).toHaveText('7 WCAG criteria');
   const criteria = evidence.getByRole('list', { name: 'Mapped WCAG criteria', exact: true });
   await expect(criteria.getByRole('link')).toHaveCount(0);
   await summary.click();
@@ -495,7 +495,7 @@ test('Button header holds all mapped accessibility standards and criterion links
       const disclosure = labels.locator('details.vf-docs-standards-details');
       const summary = disclosure.locator('summary');
       await expect(disclosure).not.toHaveAttribute('open', '');
-      await expect(summary).toHaveText('View 7 mapped WCAG criteria');
+      await expect(summary).toHaveText('7 WCAG criteria');
       const criteria = labels.getByRole('list', { name: 'Mapped WCAG criteria' });
       await expect(criteria.getByRole('link')).toHaveCount(0);
       await expect(summary).toBeVisible();
