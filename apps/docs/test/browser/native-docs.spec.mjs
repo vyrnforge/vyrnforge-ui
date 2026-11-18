@@ -325,6 +325,9 @@ test('Button showcase composes shared guidance, Native adaptation, examples, ref
   await expect(page.getByRole('heading', { level: 1, name: 'Button' })).toBeVisible();
   await expect(page.getByRole('navigation', { name: 'Breadcrumb' })).toContainText('Native Web');
   const toc = page.getByRole('navigation', { name: 'On this page' });
+  await expect(toc.getByRole('link').first()).toHaveText('Accessibility evidence');
+  await expect(toc.getByRole('link', { name: 'Accessibility evidence' })).toHaveAttribute('href', '#accessibility-evidence');
+  await expect(page.locator('article[data-vf-docs-component="button"] > header #accessibility-evidence')).toBeVisible();
   await expect(toc.getByRole('link', { name: 'Native Web setup' })).toHaveAttribute('href', '#native-web-setup');
   await expect(toc.getByRole('link', { name: 'Usage preview' })).toHaveAttribute('href', '#usage-preview');
   await expect(toc.getByRole('link', { name: 'More examples' })).toHaveCount(0);
@@ -435,11 +438,20 @@ test('Button showcase composes shared guidance, Native adaptation, examples, ref
   await expect(copy).toHaveText('Copied');
   await expect(firstExample.getByRole('status')).toHaveText('HTML copied to clipboard.');
 
-  const evidence = page.locator('article[data-vf-docs-component="button"] .vf-docs-evidence');
-  await expect(evidence.getByRole('link', { name: 'button — HTML button element' }))
-    .toHaveAttribute('href', 'https://html.spec.whatwg.org/multipage/form-elements.html#the-button-element');
-  await expect(evidence.getByRole('link', { name: '2.2 AA' }))
-    .toHaveAttribute('href', 'https://www.w3.org/TR/WCAG22/');
+  const evidence = page.locator('article[data-vf-docs-component="button"] > header .vf-docs-standards');
+  await expect(evidence).toHaveCount(1);
+  await expect(evidence.getByRole('heading', { name: 'Accessibility evidence' })).toBeVisible();
+  const standards = evidence.getByRole('list', { name: 'Standards', exact: true });
+  for (const [name, source] of [
+    ['HTML button', 'https://html.spec.whatwg.org/multipage/form-elements.html#the-button-element'],
+    ['WCAG 2.2 AA (target)', 'https://www.w3.org/TR/WCAG22/'],
+    ['ARIA in HTML', 'https://www.w3.org/TR/html-aria/'],
+    ['WAI-ARIA 1.2', 'https://www.w3.org/TR/wai-aria-1.2/'],
+  ]) {
+    await expect(standards.getByRole('link', { name, exact: true })).toHaveAttribute('href', source);
+  }
+  const criteria = evidence.getByRole('list', { name: 'Mapped WCAG criteria', exact: true });
+  await expect(criteria.getByRole('link')).toHaveCount(7);
   for (const [criterion, title, slug] of [
     ['1.3.1', 'Info and Relationships', 'info-and-relationships'],
     ['1.4.11', 'Non-text Contrast', 'non-text-contrast'],
@@ -449,21 +461,19 @@ test('Button showcase composes shared guidance, Native adaptation, examples, ref
     ['2.5.8', 'Target Size (Minimum)', 'target-size-minimum'],
     ['4.1.2', 'Name, Role, Value', 'name-role-value'],
   ]) {
-    await expect(evidence.getByRole('link', { name: `${criterion} ${title}`, exact: true }))
+    await expect(criteria.getByRole('link', { name: `${criterion} ${title}`, exact: true }))
       .toHaveAttribute('href', `https://www.w3.org/WAI/WCAG22/Understanding/${slug}`);
   }
-  await expect(evidence.getByRole('link', { name: 'ARIA in HTML (W3C)' }))
-    .toHaveAttribute('href', 'https://www.w3.org/TR/html-aria/');
-  await expect(evidence.getByRole('link', { name: 'WAI-ARIA 1.2' }))
-    .toHaveAttribute('href', 'https://www.w3.org/TR/wai-aria-1.2/');
   await expect(page.locator('article[data-vf-docs-component="button"] > section[aria-labelledby="states-and-async-work"] a[href="https://www.w3.org/TR/wai-aria-1.2/#aria-busy"]'))
     .toHaveText('aria-busy="true"');
+  await expect(evidence).toContainText('Mapping status: mapped');
   await expect(evidence).toContainText('not a blanket compliance claim.');
+  await expect(page.locator('article[data-vf-docs-component="button"] .vf-docs-evidence')).toHaveCount(0);
   await expectNoAccessibilityViolations(page);
   expect(errors, errors.join('\n')).toEqual([]);
 });
 
-test('Button top standards labels open official source references without implying compliance', async ({ page }, testInfo) => {
+test('Button header holds all mapped accessibility standards and criterion links', async ({ page }, testInfo) => {
   for (const width of [320, 375, 768]) {
     for (const textPercent of [100, 200, 400]) {
       await page.setViewportSize({ width, height: 720 });
@@ -474,11 +484,16 @@ test('Button top standards labels open official source references without implyi
       const labels = header.locator('.vf-docs-standards');
       const standardsList = labels.getByRole('list', { name: 'Standards' });
       await expect(labels).toBeVisible();
-      await expect(standardsList.getByRole('link')).toHaveCount(3);
+      await expect(standardsList.getByRole('link')).toHaveCount(4);
+      const criteria = labels.getByRole('list', { name: 'Mapped WCAG criteria' });
+      await expect(criteria.getByRole('link')).toHaveCount(7);
+      await expect(labels).toContainText('Mapping status: mapped');
+      await expect(labels).toContainText('not a blanket compliance claim.');
       const sources = [
         ['HTML button', 'https://html.spec.whatwg.org/multipage/form-elements.html#the-button-element'],
         ['WCAG 2.2 AA (target)', 'https://www.w3.org/TR/WCAG22/'],
         ['ARIA in HTML', 'https://www.w3.org/TR/html-aria/'],
+        ['WAI-ARIA 1.2', 'https://www.w3.org/TR/wai-aria-1.2/'],
       ];
       for (const [name, source] of sources) {
         const link = standardsList.getByRole('link', { name, exact: true });
