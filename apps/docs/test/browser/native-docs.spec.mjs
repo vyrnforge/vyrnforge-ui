@@ -327,12 +327,36 @@ test('Button showcase composes shared guidance, Native adaptation, examples, ref
   const toc = page.getByRole('navigation', { name: 'On this page' });
   await expect(toc.getByRole('link', { name: 'Native Web setup' })).toHaveAttribute('href', '#native-web-setup');
   await expect(toc.getByRole('link', { name: 'Usage preview' })).toHaveAttribute('href', '#usage-preview');
-  await expect(toc.getByRole('link', { name: 'More examples' })).toHaveAttribute('href', '#more-examples');
+  await expect(toc.getByRole('link', { name: 'More examples' })).toHaveCount(0);
   const sectionOrder = await page.locator('article[data-vf-docs-component="button"] > section[aria-labelledby]')
     .evaluateAll((sections) => sections.map((section) => section.getAttribute('aria-labelledby')));
-  expect(sectionOrder.slice(0, 3)).toEqual(['native-web-setup', 'usage-preview', 'when-to-use']);
-  const featured = page.locator('[aria-labelledby="usage-preview"] [data-vf-docs-example]');
-  await expect(featured).toHaveCount(1);
+  expect(sectionOrder.slice(0, 8)).toEqual([
+    'native-web-setup', 'usage-preview', 'when-to-use', 'native-baseline',
+    'variants', 'sizes', 'states-and-async-work', 'forms',
+  ]);
+  const featured = page.locator('article[data-vf-docs-component="button"] > section[aria-labelledby="usage-preview"] [data-vf-docs-example]');
+  await expect(featured).toHaveAttribute('data-vf-docs-example', 'button/basic');
+  for (const [heading, sectionId, exampleId] of [
+    ['Variants', 'variants', 'button/variants'],
+    ['Sizes', 'sizes', 'button/sizes'],
+    ['States and async work', 'states-and-async-work', 'button/states'],
+    ['Forms', 'forms', 'button/forms'],
+  ]) {
+    const section = page.locator(`article[data-vf-docs-component="button"] > section[aria-labelledby="${sectionId}"]`);
+    await expect(toc.getByRole('link', { name: heading })).toHaveAttribute('href', `#${sectionId}`);
+    await expect(section.getByRole('heading', { level: 2, name: heading })).toBeVisible();
+    await expect(section.locator('[data-vf-docs-example]')).toHaveAttribute('data-vf-docs-example', exampleId);
+    await expect(section.locator('[data-vf-docs-preview]')).toBeVisible();
+    await expect(section.locator('[data-vf-docs-source]')).not.toBeEmpty();
+  }
+  const variants = page.locator('article[data-vf-docs-component="button"] > section[aria-labelledby="variants"]');
+  for (const variant of ['primary', 'secondary', 'ghost']) {
+    await expect(variants.locator(`button[data-vf-variant="${variant}"]`)).toHaveCount(1);
+  }
+  const sizes = page.locator('article[data-vf-docs-component="button"] > section[aria-labelledby="sizes"]');
+  for (const size of ['sm', 'md', 'lg']) {
+    await expect(sizes.locator(`button[data-vf-size="${size}"]`)).toHaveCount(1);
+  }
   const exampleIds = await page.locator('[data-vf-docs-example]').evaluateAll((nodes) =>
     nodes.map((node) => node.getAttribute('data-vf-docs-example')));
   expect(new Set(exampleIds).size).toBe(exampleIds.length);
