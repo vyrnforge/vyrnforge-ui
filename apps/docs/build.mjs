@@ -580,8 +580,11 @@ function renderComponent(page) {
   const setupId = uniqueId('Native Web setup');
   const sectionModels = page.content.sections.map((section) => ({ ...section, id: uniqueId(section.heading) }));
   const framework = renderFrameworkContent(page.frameworkContent, uniqueId);
+  const featuredExample = page.examples.find((example) => !example.documentationSection) ?? page.examples[0];
+  const remainingExamples = page.examples.filter((example) =>
+    example.id !== featuredExample.id && !example.documentationSection);
   const usageId = uniqueId('Usage preview');
-  const examplesId = page.examples.length > 1 ? uniqueId('More examples') : null;
+  const examplesId = remainingExamples.length ? uniqueId('More examples') : null;
   const evidenceId = uniqueId('Accessibility evidence');
   const referenceId = uniqueId('Reference');
   const toc = [
@@ -594,11 +597,15 @@ function renderComponent(page) {
     { id: referenceId, label: 'Reference' },
   ];
 
-  const sections = sectionModels.map((section) => `<section aria-labelledby="${escapeHtml(section.id)}">
+  const sections = sectionModels.map((section) => {
+    const examplesForSection = page.examples.filter((example) =>
+      example.id !== featuredExample.id && example.documentationSection === section.heading);
+    return `<section aria-labelledby="${escapeHtml(section.id)}">
     <h2 id="${escapeHtml(section.id)}">${escapeHtml(section.heading)}</h2>
     ${renderBlocks(section.blocks)}
-  </section>`).join('\n');
-  const [featuredExample, ...remainingExamples] = page.examples;
+    ${examplesForSection.length ? `<div class="vf-docs-examples">${examplesForSection.map(renderExample).join('\n')}</div>` : ''}
+  </section>`;
+  }).join('\n');
   const examples = remainingExamples.map(renderExample).join('\n');
   const criteria = page.accessibility.wcag?.criteria ?? [];
 
@@ -638,7 +645,7 @@ function renderComponent(page) {
         ${examplesId ? `<section aria-labelledby="${escapeHtml(examplesId)}">
           <div class="vf-docs-section-heading">
             <div><p class="vf-docs-eyebrow">Executable Native HTML</p><h2 id="${escapeHtml(examplesId)}">More examples</h2></div>
-            <p>Additional checked-in sources demonstrate variants and states.</p>
+            <p>Additional checked-in sources demonstrate supported behavior.</p>
           </div>
           <div class="vf-docs-examples">${examples}</div>
         </section>` : ''}
