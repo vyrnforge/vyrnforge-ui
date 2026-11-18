@@ -924,7 +924,10 @@ test('all metadata-backed guides and API references use one shared accessibility
     backedPages += 1;
     expect(markup).toContain('not a blanket compliance claim');
     expect(markup).toContain('Mapping status: <strong>' + references.mappingStatus + '</strong>');
-    expect(markup).toContain('<summary>' + references.criteria.length + ' WCAG criteria</summary>');
+    if (references.criteria.length) {
+      const countLabel = references.criteria.length === 1 ? 'criterion' : 'criteria';
+      expect(markup).toContain('<summary>' + references.criteria.length + ' WCAG ' + countLabel + '</summary>');
+    }
     for (const standard of references.standards) {
       if (standard.url) expect(markup, `${productPage.route} missing ${standard.label}`).toContain('href="' + standard.url + '"');
     }
