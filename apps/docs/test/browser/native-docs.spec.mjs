@@ -450,7 +450,14 @@ test('Button showcase composes shared guidance, Native adaptation, examples, ref
   ]) {
     await expect(standards.getByRole('link', { name, exact: true })).toHaveAttribute('href', source);
   }
+  const disclosure = evidence.locator('details.vf-docs-standards-details');
+  const summary = disclosure.locator('summary');
+  await expect(disclosure).not.toHaveAttribute('open', '');
+  await expect(summary).toHaveText('View 7 mapped WCAG criteria');
   const criteria = evidence.getByRole('list', { name: 'Mapped WCAG criteria', exact: true });
+  await expect(criteria.getByRole('link')).toHaveCount(0);
+  await summary.click();
+  await expect(disclosure).toHaveAttribute('open', '');
   await expect(criteria.getByRole('link')).toHaveCount(7);
   for (const [criterion, title, slug] of [
     ['1.3.1', 'Info and Relationships', 'info-and-relationships'],
@@ -485,8 +492,13 @@ test('Button header holds all mapped accessibility standards and criterion links
       const standardsList = labels.getByRole('list', { name: 'Standards' });
       await expect(labels).toBeVisible();
       await expect(standardsList.getByRole('link')).toHaveCount(4);
+      const disclosure = labels.locator('details.vf-docs-standards-details');
+      const summary = disclosure.locator('summary');
+      await expect(disclosure).not.toHaveAttribute('open', '');
+      await expect(summary).toHaveText('View 7 mapped WCAG criteria');
       const criteria = labels.getByRole('list', { name: 'Mapped WCAG criteria' });
-      await expect(criteria.getByRole('link')).toHaveCount(7);
+      await expect(criteria.getByRole('link')).toHaveCount(0);
+      await expect(summary).toBeVisible();
       await expect(labels).toContainText('Mapping status: mapped');
       await expect(labels).toContainText('not a blanket compliance claim.');
       const sources = [
@@ -507,17 +519,33 @@ test('Button header holds all mapped accessibility standards and criterion links
       await expect(wcagLink).toBeFocused();
       await expect(wcagLink).toHaveCSS('text-decoration-line', 'underline');
 
-      const dimensions = await page.evaluate(() => ({
+      const documentWidth = () => page.evaluate(() => ({
         scrollWidth: document.documentElement.scrollWidth,
         clientWidth: document.documentElement.clientWidth,
       }));
-      expect(dimensions.scrollWidth, `${width}px/${textPercent}% standards labels must not overflow the document`)
-        .toBeLessThanOrEqual(dimensions.clientWidth + 1);
-
+      const closedWidth = await documentWidth();
+      expect(closedWidth.scrollWidth, `${width}px/${textPercent}% closed standards must not overflow the document`)
+        .toBeLessThanOrEqual(closedWidth.clientWidth + 1);
       if (width === 320 && [100, 400].includes(textPercent)) {
         await header.scrollIntoViewIfNeeded();
         await page.screenshot({ path: testInfo.outputPath(`button-standards-${width}-text${textPercent}.png`), fullPage: false });
       }
+
+      await summary.focus();
+      await expect(summary).toBeFocused();
+      await page.keyboard.press('Enter');
+      await expect(disclosure).toHaveAttribute('open', '');
+      await expect(criteria.getByRole('link')).toHaveCount(7);
+      const expandedWidth = await documentWidth();
+      expect(expandedWidth.scrollWidth, `${width}px/${textPercent}% expanded criteria must not overflow the document`)
+        .toBeLessThanOrEqual(expandedWidth.clientWidth + 1);
+      if (width === 320 && [100, 400].includes(textPercent)) {
+        await summary.scrollIntoViewIfNeeded();
+        await page.screenshot({ path: testInfo.outputPath(`button-criteria-open-${width}-text${textPercent}.png`), fullPage: false });
+      }
+      await page.keyboard.press('Space');
+      await expect(disclosure).not.toHaveAttribute('open', '');
+      await expect(criteria.getByRole('link')).toHaveCount(0);
     }
   }
 });
@@ -855,6 +883,13 @@ test.describe('C1 without JavaScript', () => {
     const nav = page.locator('#vf-docs-navigation');
     await expect(nav).toBeVisible();
     await expect(nav.locator('a[aria-current="page"]')).toHaveText('Button');
+    const standards = page.locator('article[data-vf-docs-component="button"] .vf-docs-standards');
+    const criteria = standards.getByRole('list', { name: 'Mapped WCAG criteria' });
+    const disclosure = standards.locator('details');
+    await expect(disclosure).not.toHaveAttribute('open', '');
+    await disclosure.locator('summary').click();
+    await expect(disclosure).toHaveAttribute('open', '');
+    await expect(criteria.getByRole('link')).toHaveCount(7);
     await nav.getByRole('link', { name: 'Input', exact: true }).click();
     await expect(page).toHaveURL(/components\/input\//);
   });
