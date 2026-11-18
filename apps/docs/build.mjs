@@ -93,54 +93,41 @@ function renderWcagCriterion(criterion) {
     `https://www.w3.org/WAI/WCAG22/Understanding/${reference[1]}`);
 }
 
-function renderNativeBaseline(reference) {
-  if (!reference) return 'not recorded';
-  const specification = htmlNativeReferences[reference];
-  return specification
-    ? standardLink(`<code>${escapeHtml(reference)}</code> — ${escapeHtml(specification[0])}`, specification[1])
-    : `<code>${escapeHtml(reference)}</code>`;
-}
-
-function renderStandardQuickLinks(accessibility) {
-  const links = [];
-  const baseline = accessibility?.nativeBaseline?.reference;
+function renderAccessibilityStandards(accessibility, headingId) {
+  if (!accessibility) return '';
+  const baseline = accessibility.nativeBaseline?.reference ?? null;
   const nativeStandard = htmlNativeReferences[baseline];
+  const wcagTarget = accessibility.wcag?.target ?? null;
+  const wcagStatus = accessibility.wcag?.status ?? 'not recorded';
+  const criteria = accessibility.wcag?.criteria ?? [];
+
+  const references = [];
   if (nativeStandard) {
-    links.push({
-      label: `HTML ${baseline}`,
-      url: nativeStandard[1],
-    });
+    references.push(standardLink(`HTML ${escapeHtml(baseline)}`, nativeStandard[1]));
+  } else if (baseline) {
+    references.push(`<span>Native baseline: <code>${escapeHtml(baseline)}</code></span>`);
   }
-
-  const wcagTarget = accessibility?.wcag?.target;
-  if (wcagTarget && /^2\.2(?:\s|$)/.test(wcagTarget)) {
-    links.push({
-      label: `WCAG ${wcagTarget} (target)`,
-      url: 'https://www.w3.org/TR/WCAG22/',
-    });
+  if (wcagTarget) {
+    references.push(/^2\.2(?:\s|$)/.test(wcagTarget)
+      ? standardLink(`WCAG ${escapeHtml(wcagTarget)} (target)`, 'https://www.w3.org/TR/WCAG22/')
+      : `<span>WCAG ${escapeHtml(wcagTarget)} (target)</span>`);
   }
+  // Documentation links are references, never a claim of ARIA usage or conformance.
+  references.push(standardLink('ARIA in HTML', 'https://www.w3.org/TR/html-aria/'));
+  references.push(standardLink('WAI-ARIA 1.2', 'https://www.w3.org/TR/wai-aria-1.2/'));
 
-  // ARIA in HTML explains how ARIA complements native semantics; it is not
-  // an assertion that a native button requires custom ARIA behavior.
-  if (nativeStandard && accessibility?.aria) {
-    links.push({ label: 'ARIA in HTML', url: 'https://www.w3.org/TR/html-aria/' });
-  }
-
-  if (!links.length) return '';
-  return `<div class="vf-docs-standards">
-    <span id="vf-docs-standards-label" class="vf-docs-standards-label">Standards</span>
-    <ul aria-labelledby="vf-docs-standards-label">
-      ${links.map(({ label, url }) =>
-        `<li><a data-vf-link href="${escapeHtml(url)}">${escapeHtml(label)}</a></li>`).join('')}
-    </ul>
-  </div>`;
-}
-
-function renderWcagTarget(target) {
-  if (!target) return 'not recorded';
-  return /^2\.2(?:\s|$)/.test(target)
-    ? standardLink(escapeHtml(target), 'https://www.w3.org/TR/WCAG22/')
-    : escapeHtml(target);
+  return `<section class="vf-docs-standards" aria-labelledby="${escapeHtml(headingId)}">
+    <h2 id="${escapeHtml(headingId)}">Accessibility evidence</h2>
+    <div class="vf-docs-standards-group">
+      <span class="vf-docs-standards-label">Standards</span>
+      <ul aria-label="Standards">${references.map((reference) => `<li>${reference}</li>`).join('')}</ul>
+    </div>
+    ${criteria.length ? `<div class="vf-docs-standards-group">
+      <span class="vf-docs-standards-label">Mapped WCAG criteria</span>
+      <ul aria-label="Mapped WCAG criteria">${criteria.map((criterion) => `<li>${renderWcagCriterion(criterion)}</li>`).join('')}</ul>
+    </div>` : ''}
+    <p class="vf-docs-standards-note">Mapping status: <strong>${escapeHtml(wcagStatus)}</strong>. These are linked standards and repository evidence mappings, not a blanket compliance claim.</p>
+  </section>`;
 }
 
 function renderInline(value) {
@@ -682,12 +669,12 @@ function renderComponent(page) {
   const evidenceId = uniqueId('Accessibility evidence');
   const referenceId = uniqueId('Reference');
   const toc = [
+    { id: evidenceId, label: 'Accessibility evidence' },
     { id: setupId, label: 'Native Web setup' },
     { id: usageId, label: 'Usage preview' },
     ...sectionModels.map((section) => ({ id: section.id, label: section.heading })),
     ...framework.toc,
     ...(examplesId ? [{ id: examplesId, label: 'More examples' }] : []),
-    { id: evidenceId, label: 'Accessibility evidence' },
     { id: referenceId, label: 'Reference' },
   ];
 
@@ -701,8 +688,6 @@ function renderComponent(page) {
   </section>`;
   }).join('\n');
   const examples = remainingExamples.map(renderExample).join('\n');
-  const criteria = page.accessibility.wcag?.criteria ?? [];
-
   return shell({
     route: page.route,
     title: page.title,
@@ -721,7 +706,7 @@ function renderComponent(page) {
           </div>
           <h1>${escapeHtml(page.content.title)}</h1>
           <div class="vf-docs-lede">${renderBlocks(page.content.intro)}</div>
-          ${renderStandardQuickLinks(page.accessibility)}
+          ${renderAccessibilityStandards(page.accessibility, evidenceId)}
         </header>
         <section aria-labelledby="${escapeHtml(setupId)}">
           <h2 id="${escapeHtml(setupId)}">Native Web setup</h2>
@@ -744,14 +729,6 @@ function renderComponent(page) {
           </div>
           <div class="vf-docs-examples">${examples}</div>
         </section>` : ''}
-        <aside class="vf-docs-evidence" aria-labelledby="${escapeHtml(evidenceId)}">
-          <p class="vf-docs-eyebrow">Evidence boundary</p>
-          <h2 id="${escapeHtml(evidenceId)}">Accessibility evidence</h2>
-          <p>Native baseline: ${renderNativeBaseline(page.accessibility.nativeBaseline?.reference)}. WCAG target: ${renderWcagTarget(page.accessibility.wcag?.target)}. Mapping status: ${escapeHtml(page.accessibility.wcag?.status ?? 'not recorded')}.</p>
-          ${criteria.length ? `<p>Mapped WCAG criteria: ${criteria.map(renderWcagCriterion).join(', ')}.</p>` : ''}
-          <p>ARIA reference: ${standardLink('ARIA in HTML (W3C)', 'https://www.w3.org/TR/html-aria/')} and ${standardLink('WAI-ARIA 1.2', 'https://www.w3.org/TR/wai-aria-1.2/')}.</p>
-          <p>These are linked standards and repository evidence mappings, not a blanket compliance claim.</p>
-        </aside>
         <section aria-labelledby="${escapeHtml(referenceId)}">
           <h2 id="${escapeHtml(referenceId)}">Reference</h2>
           <ul>
