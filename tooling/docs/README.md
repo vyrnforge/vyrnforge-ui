@@ -36,6 +36,16 @@ The Native renderer uses a first unassigned example as a quick-start usage previ
 
 This metadata describes **where** a verified example is shown, not the example's behavior or which framework ports are supported. Those remain owned by product-unit guidance, framework adapters and public package evidence.
 
+## Metadata-driven accessibility standards
+
+Product units own their existing `accessibility.json` beside their implementation and shared guide. No Button-specific documentation markup, per-route standards list, or separate visual metadata file is required. `framework-documentation.mjs` compiles the product evidence into `standardReferences` via the pure, framework-neutral `standard-references.mjs` projection.
+
+The Native docs application renders **one shared accessibility evidence section** automatically on every product-backed showcase, guide-only pattern, and individual API page when that page carries accessibility metadata. The compact header keeps authoritative W3C/WHATWG standards visible and uses native `details/summary` to reveal mapped criterion links. These remain operable without JavaScript and are styled with VyrnForge Web tokens/CSS. Catalogs, gateway pages, and foundations have no product-unit accessibility evidence by default, so they do not fabricate an equivalent component claim.
+
+The projection recognizes the HTML/native baselines and WCAG 2.2 criterion IDs currently present in repository metadata. Known references open precise official standards or informative WCAG Understanding pages. Unrecognized references remain readable metadata with no invented deep link; the shared reference catalog can be extended independently of individual pages. A `review-required` metadata status appears explicitly as review pending. Metadata represents an **intent/evidence mapping**, never a certification, maturity promotion, or proof that the user-facing product passes WCAG. Adding a new product unit's metadata automatically participates in this layout wherever an actual public documentation page exists.
+
+Future React/Angular/Vue/Elements renderers should consume the **same `standardReferences` model** while using their own idiomatic rendering and the common styling contract; do not copy the native HTML renderer into other framework runtimes.
+
 ## Current Phase
 
 The rollout remains Native HTML-first. Native Web is the first renderer and consumes semantic HTML plus public `@vyrnforge/web` AppShell, SideNav, control hooks, and canonical CSS. The underlying compiler model is now framework-scoped rather than Native-owned so future React, Angular, Vue, and Elements renderers can consume the same Product Graph catalog and standardized content slots while rendering through their own VyrnForge ports.
