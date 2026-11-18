@@ -12,6 +12,7 @@ const nativeShellStyleSpecifiers = [
   '@vyrnforge/web/styles/button.css',
   '@vyrnforge/web/styles/text.css',
   '@vyrnforge/web/styles/code.css',
+  '@vyrnforge/web/styles/layout.css',
 ];
 
 function resolvePublicStyleAsset(webPackage, specifier) {
