@@ -30,13 +30,15 @@ if (conformanceTarget?.options?.command !== 'pnpm exec tsc -p product/tsconfig.c
 const builtConformanceDependencies = new Set((conformanceTarget.dependsOn ?? [])
   .filter((dependency) => dependency.target === 'build')
   .flatMap((dependency) => dependency.projects ?? []));
-for (const port of frameworkPortNames) {
+for (const port of [...frameworkPortNames, 'icons']) {
   if (!builtConformanceDependencies.has(`@vyrnforge/${port}`)) {
     throw new Error(`product conformance typecheck must build its public ${port} dependency first`);
   }
 }
 const conformanceConfig = JSON.parse(await readFile('product/tsconfig.conformance.json', 'utf8'));
 if (conformanceConfig.compilerOptions?.noEmit !== true ||
+    conformanceConfig.compilerOptions?.module !== 'ESNext' ||
+    conformanceConfig.compilerOptions?.moduleResolution !== 'Bundler' ||
     !conformanceConfig.include?.includes('components/**/test/conformance/public-api.types.ts')) {
   throw new Error('cross-port conformance must typecheck all component-owned public API type assertions');
 }
