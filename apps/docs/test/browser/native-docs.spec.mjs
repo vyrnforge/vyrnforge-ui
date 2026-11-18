@@ -457,7 +457,7 @@ test('Button showcase composes shared guidance, Native adaptation, examples, ref
   await expect(evidence.getByRole('link', { name: 'WAI-ARIA 1.2' }))
     .toHaveAttribute('href', 'https://www.w3.org/TR/wai-aria-1.2/');
   await expect(page.locator('article[data-vf-docs-component="button"] > section[aria-labelledby="states-and-async-work"] a[href="https://www.w3.org/TR/wai-aria-1.2/#aria-busy"]'))
-    .toHaveText('aria-busy');
+    .toHaveText('aria-busy="true"');
   await expect(evidence).toContainText('not a blanket compliance claim.');
   await expectNoAccessibilityViolations(page);
   expect(errors, errors.join('\n')).toEqual([]);
