@@ -54,7 +54,6 @@ function routeTarget(route = '') {
   return `${nativeSitePath}${route}`;
 }
 
-
 // References describe external standards, not VyrnForge implementation or compliance.
 const ariaAttributeReferences = Object.freeze({
   'aria-busy': 'https://www.w3.org/TR/wai-aria-1.2/#aria-busy',
@@ -104,7 +103,7 @@ function renderNativeBaseline(reference) {
 
 function renderWcagTarget(target) {
   if (!target) return 'not recorded';
-  return /^2\\.2(?:\\s|$)/.test(target)
+  return /^2\.2(?:\s|$)/.test(target)
     ? standardLink(escapeHtml(target), 'https://www.w3.org/TR/WCAG22/')
     : escapeHtml(target);
 }
