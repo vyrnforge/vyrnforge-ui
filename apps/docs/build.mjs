@@ -101,6 +101,41 @@ function renderNativeBaseline(reference) {
     : `<code>${escapeHtml(reference)}</code>`;
 }
 
+function renderStandardQuickLinks(accessibility) {
+  const links = [];
+  const baseline = accessibility?.nativeBaseline?.reference;
+  const nativeStandard = htmlNativeReferences[baseline];
+  if (nativeStandard) {
+    links.push({
+      label: `HTML ${baseline}`,
+      url: nativeStandard[1],
+    });
+  }
+
+  const wcagTarget = accessibility?.wcag?.target;
+  if (wcagTarget && /^2\\.2(?:\\s|$)/.test(wcagTarget)) {
+    links.push({
+      label: `WCAG ${wcagTarget} (target)`,
+      url: 'https://www.w3.org/TR/WCAG22/',
+    });
+  }
+
+  // ARIA in HTML explains how ARIA complements native semantics; it is not
+  // an assertion that a native button requires custom ARIA behavior.
+  if (nativeStandard && accessibility?.aria) {
+    links.push({ label: 'ARIA in HTML', url: 'https://www.w3.org/TR/html-aria/' });
+  }
+
+  if (!links.length) return '';
+  return `<div class="vf-docs-standards">
+    <span id="vf-docs-standards-label" class="vf-docs-standards-label">Standards</span>
+    <ul aria-labelledby="vf-docs-standards-label">
+      ${links.map(({ label, url }) =>
+        `<li><a data-vf-link href="${escapeHtml(url)}">${escapeHtml(label)}</a></li>`).join('')}
+    </ul>
+  </div>`;
+}
+
 function renderWcagTarget(target) {
   if (!target) return 'not recorded';
   return /^2\.2(?:\s|$)/.test(target)
@@ -686,6 +721,7 @@ function renderComponent(page) {
           </div>
           <h1>${escapeHtml(page.content.title)}</h1>
           <div class="vf-docs-lede">${renderBlocks(page.content.intro)}</div>
+          ${renderStandardQuickLinks(page.accessibility)}
         </header>
         <section aria-labelledby="${escapeHtml(setupId)}">
           <h2 id="${escapeHtml(setupId)}">Native Web setup</h2>
