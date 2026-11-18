@@ -73,7 +73,8 @@ function criteriaForTarget(target, criteria) {
 export function deriveAccessibilityReferences(accessibility) {
   if (!accessibility) return null;
   const target = accessibility.wcag?.target ?? null;
-  const standards = nativeReferenceLinks(accessibility.nativeBaseline);
+  const nativeReferences = nativeReferenceLinks(accessibility.nativeBaseline);
+  const standards = [...nativeReferences];
   if (target) {
     standards.push({
       label: 'WCAG ' + target + ' (target)',
@@ -88,6 +89,7 @@ export function deriveAccessibilityReferences(accessibility) {
   );
   return {
     standards,
+    hasNativeReference: nativeReferences.length > 0,
     criteria: criteriaForTarget(target, accessibility.wcag?.criteria),
     nativeBaseline: accessibility.nativeBaseline?.reference ?? null,
     mappingStatus: accessibility.wcag?.status ?? 'not recorded',
