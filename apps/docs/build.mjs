@@ -87,8 +87,7 @@ function renderAccessibilityStandards(references, headingId = 'accessibility-evi
   if (!references) return '';
   const criteria = references.criteria ?? [];
   const nativeBaseline = references.nativeBaseline;
-  const hasNativeLink = references.standards.some((item) =>
-    /^(?:HTML|SVG)\b/.test(item.label) && item.url);
+  const hasNativeLink = references.hasNativeReference;
   const baselineNote = nativeBaseline && !hasNativeLink
     ? `<p class="vf-docs-standards-baseline">Semantic baseline: ${escapeHtml(nativeBaseline)}</p>` : '';
   const showDetails = criteria.length || baselineNote;
