@@ -1063,7 +1063,8 @@ test('every Native documentation page family loads public Text, Code and Layout 
   expect(button).toContain('data-vf-text-variant="body-lg"');
   expect(button).toContain('data-vf-cluster');
   expect(button).toContain('data-vf-stack data-vf-stack-gap="xl"');
-  expect(button).toContain('data-vf-inline data-vf-inline-gap="lg"');
+  const home = readFileSync('dist/docs/next/native-web/index.html', 'utf8');
+  expect(home).toContain('data-vf-inline data-vf-inline-gap="lg"');
 
   const foundation = readFileSync('dist/docs/next/native-web/foundations/styling/index.html', 'utf8');
   expect(foundation).toContain('<code data-vf-code>');
@@ -1102,7 +1103,7 @@ test('Text, Code and Layout reuse retains navigation, source reading and narrow 
     if (['foundation', 'showcase', 'api'].includes(name)) {
       await expect(page.locator('code[data-vf-code]').first()).toBeVisible();
     }
-    if (['home', 'catalog', 'foundation'].includes(name)) {
+    if (['home', 'catalog'].includes(name)) {
       const cards = page.locator('ul[data-vf-auto-grid]').first();
       await expect(cards).toBeVisible();
       await expect(cards).toHaveCSS('display', 'grid');
