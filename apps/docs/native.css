@@ -326,6 +326,9 @@
   .vf-docs-standards li,
   .vf-docs-main .vf-docs-standards li + li {
     margin: 0;
+    max-inline-size: 100%;
+    min-inline-size: 0;
+    overflow-wrap: anywhere;
     padding: 0;
   }
 
