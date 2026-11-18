@@ -3,6 +3,7 @@ import path from 'node:path';
 import { assertProductPreparation } from '../testing/discover-product-units.mjs';
 import { loadBrowserFixtureModule, validateBrowserFixtureModule } from '../testing/browser-fixtures.mjs';
 import { createSemanticImpact } from '../impact/plan.mjs';
+import { frameworkPortNames } from '../package-model.mjs';
 
 for (const file of ['tooling/testing/README.md', 'tooling/impact/README.md', 'tooling/impact/plan.mjs', 'tooling/README.md']) await access(file);
 
@@ -17,6 +18,27 @@ for (const owner of ['product', 'impact', 'validation']) {
 const toolingProject = JSON.parse(await readFile('tooling/project.json', 'utf8'));
 if (!toolingProject.targets?.test?.options?.command?.includes('vitest run --project repository-tooling')) {
   throw new Error('repository-tooling:test must run the shared Vitest tooling project through Nx');
+}
+
+// Cross-port public-api.types.ts files are product-owned type evidence. Their
+// existence or ESLint coverage alone must not be mistaken for a TypeScript pass.
+const conformanceProject = JSON.parse(await readFile('product/project.json', 'utf8'));
+const conformanceTarget = conformanceProject.targets?.typecheck;
+if (conformanceTarget?.options?.command !== 'pnpm exec tsc -p product/tsconfig.conformance.json') {
+  throw new Error('product-conformance:typecheck must compile the cross-port API conformance files');
+}
+const builtConformanceDependencies = new Set((conformanceTarget.dependsOn ?? [])
+  .filter((dependency) => dependency.target === 'build')
+  .flatMap((dependency) => dependency.projects ?? []));
+for (const port of frameworkPortNames) {
+  if (!builtConformanceDependencies.has(`@vyrnforge/${port}`)) {
+    throw new Error(`product conformance typecheck must build its public ${port} dependency first`);
+  }
+}
+const conformanceConfig = JSON.parse(await readFile('product/tsconfig.conformance.json', 'utf8'));
+if (conformanceConfig.compilerOptions?.noEmit !== true ||
+    !conformanceConfig.include?.includes('components/**/test/conformance/public-api.types.ts')) {
+  throw new Error('cross-port conformance must typecheck all component-owned public API type assertions');
 }
 
 const impact = createSemanticImpact(['nx.json', 'tooling/verify/package-artifacts.mjs']);
