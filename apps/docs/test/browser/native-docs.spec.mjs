@@ -416,6 +416,27 @@ test('Button showcase composes shared guidance, Native adaptation, examples, ref
   expect(errors, errors.join('\n')).toEqual([]);
 });
 
+test('featured Native usage preview reflows and stays reachable at reference widths', async ({ page }, testInfo) => {
+  for (const width of [320, 375, 768, 1440]) {
+    await page.setViewportSize({ width, height: 720 });
+    await gotoWithCleanDocsState(page, '/next/native-web/components/button/');
+
+    const preview = page.locator('article[data-vf-docs-component="button"] > section[aria-labelledby="usage-preview"]');
+    await expect(preview.getByRole('heading', { level: 2, name: 'Usage preview' })).toBeVisible();
+    await expect(preview.locator('[data-vf-docs-example]')).toHaveCount(1);
+    const metrics = await page.evaluate(() => ({
+      scrollWidth: document.documentElement.scrollWidth,
+      clientWidth: document.documentElement.clientWidth,
+    }));
+    expect(metrics.scrollWidth, `${width}px usage preview must not create page-level horizontal overflow`)
+      .toBeLessThanOrEqual(metrics.clientWidth + 1);
+
+    await page.screenshot({ path: testInfo.outputPath(`native-usage-${width}-top.png`), fullPage: false });
+    await preview.scrollIntoViewIfNeeded();
+    await page.screenshot({ path: testInfo.outputPath(`native-usage-${width}-preview.png`), fullPage: false });
+  }
+});
+
 test('C2 approved docs geometry fills wide chrome without stretching reading content', async ({ page }) => {
   for (const width of [1920, 2560]) {
     await page.setViewportSize({ width, height: 1000 });
