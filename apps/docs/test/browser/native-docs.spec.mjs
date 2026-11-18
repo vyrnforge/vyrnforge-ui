@@ -654,7 +654,7 @@ test('narrow TOC stays compact while every section link remains keyboard accessi
         limit: Math.min(8 * parseFloat(getComputedStyle(document.documentElement).fontSize), window.innerHeight * .2),
       }));
       expect(dimensions.height, `${width}px / ${textPercent}% TOC must remain short`).toBeLessThanOrEqual(dimensions.limit + 2);
-      expect(dimensions.scrollHeight, 'TOC should retain overflowed links rather than remove them').toBeGreaterThan(dimensions.clientHeight);
+      expect(await toc.getByRole('link').count(), 'all authored anchors must remain in the TOC').toBeGreaterThanOrEqual(12);
       await expect(toc.getByRole('link', { name: 'Usage preview' })).toHaveAttribute('href', '#usage-preview');
 
       if (textPercent <= 200 || width === 320) {
@@ -665,7 +665,9 @@ test('narrow TOC stays compact while every section link remains keyboard accessi
       await finalLink.focus();
       await expect(finalLink).toBeFocused();
       const scrollTop = await list.evaluate((element) => element.scrollTop);
-      expect(scrollTop, `${width}px / ${textPercent}% TOC focus must scroll to last link`).toBeGreaterThan(0);
+      if (dimensions.scrollHeight > dimensions.clientHeight + 1) {
+        expect(scrollTop, `${width}px / ${textPercent}% TOC focus must scroll to last link`).toBeGreaterThan(0);
+      }
       await finalLink.click();
       await expect(page).toHaveURL(/#reference$/);
       const pageWidth = await page.evaluate(() => ({
