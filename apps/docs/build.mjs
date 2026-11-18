@@ -580,14 +580,16 @@ function renderComponent(page) {
   const setupId = uniqueId('Native Web setup');
   const sectionModels = page.content.sections.map((section) => ({ ...section, id: uniqueId(section.heading) }));
   const framework = renderFrameworkContent(page.frameworkContent, uniqueId);
-  const examplesId = uniqueId('Examples');
+  const usageId = uniqueId('Usage preview');
+  const examplesId = page.examples.length > 1 ? uniqueId('More examples') : null;
   const evidenceId = uniqueId('Accessibility evidence');
   const referenceId = uniqueId('Reference');
   const toc = [
     { id: setupId, label: 'Native Web setup' },
+    { id: usageId, label: 'Usage preview' },
     ...sectionModels.map((section) => ({ id: section.id, label: section.heading })),
     ...framework.toc,
-    { id: examplesId, label: 'Examples' },
+    ...(examplesId ? [{ id: examplesId, label: 'More examples' }] : []),
     { id: evidenceId, label: 'Accessibility evidence' },
     { id: referenceId, label: 'Reference' },
   ];
@@ -596,7 +598,8 @@ function renderComponent(page) {
     <h2 id="${escapeHtml(section.id)}">${escapeHtml(section.heading)}</h2>
     ${renderBlocks(section.blocks)}
   </section>`).join('\n');
-  const examples = page.examples.map(renderExample).join('\n');
+  const [featuredExample, ...remainingExamples] = page.examples;
+  const examples = remainingExamples.map(renderExample).join('\n');
   const criteria = page.accessibility.wcag?.criteria ?? [];
 
   return shell({
@@ -623,15 +626,22 @@ function renderComponent(page) {
           <p>Load the public stylesheet and author the appropriate native semantics/composition directly.</p>
           <pre tabindex="0"><code class="language-css">@import &quot;${escapeHtml(page.styleSpecifier)}&quot;;</code></pre>
         </section>
+        <section aria-labelledby="${escapeHtml(usageId)}">
+          <div class="vf-docs-section-heading">
+            <div><p class="vf-docs-eyebrow">Executable Native HTML</p><h2 id="${escapeHtml(usageId)}">Usage preview</h2></div>
+            <p>This example comes from the checked-in product unit and renders with public VyrnForge Web CSS.</p>
+          </div>
+          <div class="vf-docs-examples">${renderExample(featuredExample)}</div>
+        </section>
         ${sections}
         ${framework.markup}
-        <section aria-labelledby="${escapeHtml(examplesId)}">
+        ${examplesId ? `<section aria-labelledby="${escapeHtml(examplesId)}">
           <div class="vf-docs-section-heading">
-            <div><p class="vf-docs-eyebrow">Executable Native HTML</p><h2 id="${escapeHtml(examplesId)}">Examples</h2></div>
-            <p>Examples are checked-in product-unit sources rendered against public Web CSS.</p>
+            <div><p class="vf-docs-eyebrow">Executable Native HTML</p><h2 id="${escapeHtml(examplesId)}">More examples</h2></div>
+            <p>Additional checked-in sources demonstrate variants and states.</p>
           </div>
           <div class="vf-docs-examples">${examples}</div>
-        </section>
+        </section>` : ''}
         <aside class="vf-docs-evidence" aria-labelledby="${escapeHtml(evidenceId)}">
           <p class="vf-docs-eyebrow">Evidence boundary</p>
           <h2 id="${escapeHtml(evidenceId)}">Accessibility evidence</h2>
