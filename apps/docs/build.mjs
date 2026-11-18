@@ -113,7 +113,7 @@ function renderStandardQuickLinks(accessibility) {
   }
 
   const wcagTarget = accessibility?.wcag?.target;
-  if (wcagTarget && /^2\\.2(?:\\s|$)/.test(wcagTarget)) {
+  if (wcagTarget && /^2\.2(?:\s|$)/.test(wcagTarget)) {
     links.push({
       label: `WCAG ${wcagTarget} (target)`,
       url: 'https://www.w3.org/TR/WCAG22/',
