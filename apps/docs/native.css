@@ -313,7 +313,7 @@
   }
 
   .vf-docs-standards li,
-  .vf-docs-standards li + li {
+  .vf-docs-main .vf-docs-standards li + li {
     margin: 0;
     padding: 0;
   }
