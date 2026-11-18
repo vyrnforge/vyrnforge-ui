@@ -143,6 +143,35 @@ test('Native Web home uses the VyrnForge shell and separates documentation surfa
   expect(errors, errors.join('\n')).toEqual([]);
 });
 
+test('Native Web quick start links the component guide, catalog category, and verified API', async ({ page }) => {
+  const button = buttonCatalogEntry();
+  expect(button.showcase, 'Button quick start must be grounded in a real showcase').toBe(true);
+  expect(button.api).toBe(true);
+
+  await gotoWithCleanDocsState(page, '/next/native-web/');
+  const quickStart = page.getByRole('link', { name: 'Start with Button' });
+  await expect(quickStart).toHaveAttribute('href', 'components/button/');
+  await quickStart.click();
+  await expect(page.getByRole('heading', { level: 1, name: 'Button' })).toBeVisible();
+  await expect(page.locator('[data-vf-docs-component="button"] [data-vf-docs-example]').first()).toBeVisible();
+
+  const breadcrumbs = page.getByRole('navigation', { name: 'Breadcrumb' });
+  await expect(breadcrumbs.getByRole('link', { name: 'Components' })).toHaveAttribute('href', '../');
+  await expect(breadcrumbs.getByRole('link', { name: 'Actions' })).toHaveAttribute('href', '../#component-group-actions');
+
+  await page.getByRole('link', { name: 'Button API reference' }).click();
+  await expect(page.getByRole('heading', { level: 1, name: 'Button API' })).toBeVisible();
+  const apiBreadcrumbs = page.getByRole('navigation', { name: 'Breadcrumb' });
+  await expect(apiBreadcrumbs.getByRole('link', { name: 'API Reference' })).toHaveAttribute('href', '../');
+  await apiBreadcrumbs.getByRole('link', { name: 'API Reference' }).click();
+  await expect(page.getByRole('heading', { level: 1, name: 'Components API' })).toBeVisible();
+
+  await page.goto('/next/native-web/components/button/');
+  await page.getByRole('navigation', { name: 'Breadcrumb' }).getByRole('link', { name: 'Actions' }).click();
+  await expect(page).toHaveURL(/\/next\/native-web\/components\/#component-group-actions$/);
+  await expect(page.locator('#component-group-actions')).toBeVisible();
+});
+
 test('Native component catalog is Product Graph scoped and API reference is independent of showcase readiness', async ({ page }, testInfo) => {
   const errors = collectPageErrors(page);
   const button = buttonCatalogEntry();
