@@ -113,7 +113,7 @@ function renderInline(value) {
     if (part.startsWith('`') && part.endsWith('`')) {
       const token = part.slice(1, -1);
       const code = `<code>${escapeHtml(token)}</code>`;
-      const url = ariaAttributeReferences[token];
+      const url = ariaAttributeReferences[token.split('=', 1)[0]];
       return url ? standardLink(code, url) : code;
     }
     return escapeHtml(part);
