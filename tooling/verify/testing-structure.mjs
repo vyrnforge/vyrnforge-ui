@@ -39,6 +39,7 @@ const conformanceConfig = JSON.parse(await readFile('product/tsconfig.conformanc
 if (conformanceConfig.compilerOptions?.noEmit !== true ||
     conformanceConfig.compilerOptions?.module !== 'ESNext' ||
     conformanceConfig.compilerOptions?.moduleResolution !== 'Bundler' ||
+    conformanceConfig.compilerOptions?.moduleDetection !== 'force' ||
     !conformanceConfig.include?.includes('components/**/test/conformance/public-api.types.ts')) {
   throw new Error('cross-port conformance must typecheck all component-owned public API type assertions');
 }
