@@ -464,39 +464,21 @@
   .vf-docs-lede,
   .vf-docs-lede p {
     color: var(--vf-color-text-muted);
-    font-size: var(--vf-font-size-lg);
-    line-height: var(--vf-line-height-relaxed);
   }
 
   .vf-docs-lede p {
     margin-block: var(--vf-space-md) 0;
   }
 
-  code,
-  pre {
-    font-family: var(--vf-font-family-mono);
-  }
-
-  :not(pre) > code {
-    background: var(--vf-color-accent-subtle);
-    border-radius: 0.25rem;
-    color: var(--vf-color-text);
-    font-size: 0.9em;
-    padding: 0.08em 0.28em;
-  }
-
-  pre {
-    background: var(--vf-color-surface-subtle);
-    border: 1px solid var(--vf-color-border-required);
-    border-radius: var(--vf-radius-surface);
+  /* Code visuals and scrolling come from public @vyrnforge/web Code styles.
+     Only reading density and the focus indication remain docs-owned. */
+  pre[data-vf-code-block] {
     font-size: var(--vf-font-size-sm);
     line-height: var(--vf-line-height-relaxed);
     max-inline-size: 100%;
-    overflow: auto;
-    padding: var(--vf-space-md);
   }
 
-  pre:focus-visible {
+  pre[data-vf-code-block]:focus-visible {
     outline: 2px solid var(--vf-color-focus-ring);
     outline-offset: 2px;
   }
@@ -551,14 +533,11 @@
     margin-block-start: var(--vf-space-sm);
   }
 
+  /* Overline typography is supplied by shared VyrnForge Text roles. */
   .vf-docs-eyebrow,
   .vf-docs-example-label {
     color: var(--vf-color-text-subtle);
-    font-size: var(--vf-font-size-xs);
-    font-weight: var(--vf-font-weight-bold);
-    letter-spacing: var(--vf-letter-spacing-wider);
     margin: 0;
-    text-transform: uppercase;
   }
 
   .vf-docs-hero-actions {
