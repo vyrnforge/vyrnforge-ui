@@ -463,6 +463,50 @@ test('Button showcase composes shared guidance, Native adaptation, examples, ref
   expect(errors, errors.join('\n')).toEqual([]);
 });
 
+test('Button top standards labels open official source references without implying compliance', async ({ page }, testInfo) => {
+  for (const width of [320, 375, 768]) {
+    for (const textPercent of [100, 200, 400]) {
+      await page.setViewportSize({ width, height: 720 });
+      await gotoWithCleanDocsState(page, '/next/native-web/components/button/');
+      await page.evaluate((percent) => { document.documentElement.style.fontSize = `${percent}%`; }, textPercent);
+
+      const header = page.locator('article[data-vf-docs-component="button"] > header');
+      const labels = header.locator('.vf-docs-standards');
+      const standardsList = labels.getByRole('list', { name: 'Standards' });
+      await expect(labels).toBeVisible();
+      await expect(standardsList.getByRole('link')).toHaveCount(3);
+      const sources = [
+        ['HTML button', 'https://html.spec.whatwg.org/multipage/form-elements.html#the-button-element'],
+        ['WCAG 2.2 AA (target)', 'https://www.w3.org/TR/WCAG22/'],
+        ['ARIA in HTML', 'https://www.w3.org/TR/html-aria/'],
+      ];
+      for (const [name, source] of sources) {
+        const link = standardsList.getByRole('link', { name, exact: true });
+        await expect(link).toHaveAttribute('data-vf-link', '');
+        await expect(link).toHaveAttribute('href', source);
+        await expect(link).not.toHaveAttribute('target', '_blank');
+      }
+
+      const wcagLink = standardsList.getByRole('link', { name: 'WCAG 2.2 AA (target)' });
+      await wcagLink.focus();
+      await expect(wcagLink).toBeFocused();
+      await expect(wcagLink).toHaveCSS('text-decoration-line', 'underline');
+
+      const dimensions = await page.evaluate(() => ({
+        scrollWidth: document.documentElement.scrollWidth,
+        clientWidth: document.documentElement.clientWidth,
+      }));
+      expect(dimensions.scrollWidth, `${width}px/${textPercent}% standards labels must not overflow the document`)
+        .toBeLessThanOrEqual(dimensions.clientWidth + 1);
+
+      if (width === 320 && [100, 400].includes(textPercent)) {
+        await header.scrollIntoViewIfNeeded();
+        await page.screenshot({ path: testInfo.outputPath(`button-standards-${width}-text${textPercent}.png`), fullPage: false });
+      }
+    }
+  }
+});
+
 test('featured Native usage preview reflows and stays reachable at reference widths', async ({ page }, testInfo) => {
   for (const width of [320, 375, 768, 1440]) {
     await page.setViewportSize({ width, height: 720 });
