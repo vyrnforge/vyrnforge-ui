@@ -351,11 +351,11 @@ test('Button showcase composes shared guidance, Native adaptation, examples, ref
   }
   const variants = page.locator('article[data-vf-docs-component="button"] > section[aria-labelledby="variants"]');
   for (const variant of ['primary', 'secondary', 'ghost']) {
-    await expect(variants.locator(`button[data-vf-variant="${variant}"]`)).toHaveCount(1);
+    await expect(variants.locator(`[data-vf-docs-preview] button[data-vf-variant="${variant}"]`)).toHaveCount(1);
   }
   const sizes = page.locator('article[data-vf-docs-component="button"] > section[aria-labelledby="sizes"]');
   for (const size of ['sm', 'md', 'lg']) {
-    await expect(sizes.locator(`button[data-vf-size="${size}"]`)).toHaveCount(1);
+    await expect(sizes.locator(`[data-vf-docs-preview] button[data-vf-size="${size}"]`)).toHaveCount(1);
   }
   const exampleIds = await page.locator('[data-vf-docs-example]').evaluateAll((nodes) =>
     nodes.map((node) => node.getAttribute('data-vf-docs-example')));
