@@ -2,6 +2,7 @@ import { existsSync, readFileSync, readdirSync } from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { discoverProductGraph } from '../product/discover-product-graph.mjs';
+import { deriveAccessibilityReferences } from './standard-references.mjs';
 
 const repoRoot = path.resolve(fileURLToPath(new URL('../../', import.meta.url)));
 
@@ -203,6 +204,7 @@ function normalizeOwner(root, component, framework) {
     examples,
     accessibilityPath: accessibility.sourcePath,
     accessibility: accessibility.value,
+    standardReferences: deriveAccessibilityReferences(accessibility.value),
     showcaseAvailable: Boolean(shared.content && (guideOnly || examples.length)),
     apiAvailable,
     showcaseRoute: component.kind === 'pattern'

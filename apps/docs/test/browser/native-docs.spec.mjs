@@ -1,6 +1,8 @@
 import { existsSync, readFileSync } from 'node:fs';
 import axeCore from 'axe-core';
 import { test, expect } from '@playwright/test';
+import { compileNativeDocumentation } from '../../../../tooling/docs/native-documentation.mjs';
+import { deriveAccessibilityReferences } from '../../../../tooling/docs/standard-references.mjs';
 
 const manifest = JSON.parse(readFileSync('dist/docs/next/site-manifest.json', 'utf8'));
 
@@ -901,4 +903,135 @@ test('C1 failed script load leaves native navigation usable', async ({ page }) =
   await page.goto('/next/native-web/components/button/');
   await expect(page.locator('[data-vf-docs-nav-toggle]')).toBeHidden();
   await expect(page.locator('#vf-docs-navigation')).toBeVisible();
+});
+
+
+test('all metadata-backed guides and API references use one shared accessibility section', () => {
+  const catalog = compileNativeDocumentation();
+  const pages = [...catalog.showcasePages, ...catalog.apiPages];
+  let backedPages = 0;
+
+  for (const productPage of pages) {
+    const filepath = `dist/docs/next/native-web/${productPage.route}index.html`;
+    expect(existsSync(filepath), filepath).toBe(true);
+    const markup = readFileSync(filepath, 'utf8');
+    const count = [...markup.matchAll(/data-vf-docs-accessibility\b/g)].length;
+    const references = productPage.standardReferences;
+
+    expect(count, `${productPage.route}: evidence block must follow product metadata`)
+      .toBe(references ? 1 : 0);
+    if (!references) continue;
+    backedPages += 1;
+    expect(markup).toContain('not a blanket compliance claim');
+    expect(markup).toContain('Mapping status: <strong>' + references.mappingStatus + '</strong>');
+    if (references.criteria.length) {
+      const countLabel = references.criteria.length === 1 ? 'criterion' : 'criteria';
+      expect(markup).toContain('<summary>' + references.criteria.length + ' WCAG ' + countLabel + '</summary>');
+    }
+    for (const standard of references.standards) {
+      if (standard.url) expect(markup, `${productPage.route} missing ${standard.label}`).toContain('href="' + standard.url + '"');
+    }
+    for (const criterion of references.criteria) {
+      if (criterion.url) expect(markup, `${productPage.route} missing WCAG ${criterion.id}`).toContain('href="' + criterion.url + '"');
+    }
+    if (references.reviewStatus === 'review-required') {
+      expect(markup).toContain('Accessibility review required.');
+    }
+  }
+
+  expect(backedPages, 'product-owned metadata must reach multiple page families').toBeGreaterThan(10);
+  for (const route of ['', 'components/', 'patterns/', 'api/components/', 'api/patterns/',
+    'foundations/styling/', 'foundations/tokens/']) {
+    const markup = readFileSync(`dist/docs/next/native-web/${route}index.html`, 'utf8');
+    expect(markup, `${route}: catalog/foundation must not invent product-unit evidence`)
+      .not.toContain('data-vf-docs-accessibility');
+  }
+});
+
+test('metadata-only additions preserve official references, review status, and unknown fallbacks', () => {
+  const catalog = compileNativeDocumentation();
+  const input = catalog.componentApiPages.find((item) => item.id === 'input');
+  const appShell = catalog.componentApiPages.find((item) => item.id === 'app-shell');
+  const reviewRequired = catalog.componentApiPages.find((item) => item.standardReferences?.reviewStatus === 'review-required');
+
+  expect(input.standardReferences.standards).toContainEqual({
+    label: 'HTML input',
+    url: 'https://html.spec.whatwg.org/multipage/input.html#the-input-element',
+  });
+  expect(input.standardReferences.criteria).toContainEqual({
+    id: '3.3.2',
+    label: 'Labels or Instructions',
+    url: 'https://www.w3.org/WAI/WCAG22/Understanding/labels-or-instructions',
+  });
+  expect(appShell.standardReferences.nativeBaseline).toContain('authored header');
+  expect(appShell.standardReferences.standards.some((item) => item.label.startsWith('HTML'))).toBe(false);
+  expect(reviewRequired).toBeDefined();
+
+  const unknown = deriveAccessibilityReferences({
+    nativeBaseline: { kind: 'structural', reference: 'consumer-specific landmarks' },
+    wcag: { target: '2.3 AA', status: 'review-required', criteria: ['9.9.9'] },
+    reviewStatus: 'review-required',
+  });
+  expect(unknown.criteria).toEqual([{ id: '9.9.9', label: null, url: null }]);
+  expect(unknown.standards.some((item) => item.label === 'WCAG 2.3 AA (target)' && item.url === null)).toBe(true);
+  expect(unknown.reviewStatus).toBe('review-required');
+  expect(deriveAccessibilityReferences(null)).toBeNull();
+});
+
+test('non-Button API pages expose the same accessible standards disclosure', async ({ page }) => {
+  const catalog = compileNativeDocumentation();
+  const cases = ['input', 'app-shell'];
+  const reviewRequired = catalog.componentApiPages.find((item) => item.standardReferences?.reviewStatus === 'review-required');
+  if (reviewRequired && !cases.includes(reviewRequired.id)) cases.push(reviewRequired.id);
+
+  for (const id of cases) {
+    await gotoWithCleanDocsState(page, `/next/native-web/api/components/${id}/`);
+    const product = catalog.componentApiPages.find((item) => item.id === id);
+    const section = page.locator(`[data-vf-docs-api-component="${id}"] [data-vf-docs-accessibility]`);
+    await expect(section).toHaveCount(1);
+    await expect(section.getByRole('heading', { name: 'Accessibility evidence' })).toBeVisible();
+    const details = section.locator('details');
+    await expect(details).not.toHaveAttribute('open', '');
+    await details.locator('summary').click();
+    await expect(details).toHaveAttribute('open', '');
+    await expect(details.getByRole('link')).toHaveCount(product.standardReferences.criteria.filter((item) => item.url).length);
+    if (id === 'app-shell') await expect(details).toContainText('Semantic baseline: authored header');
+    if (product.standardReferences.reviewStatus === 'review-required') {
+      await expect(section).toContainText('Accessibility review required.');
+    }
+  }
+});
+
+
+test('shared standards remain readable on Native API pages at mobile and 400% text', async ({ page }, testInfo) => {
+  const scenarios = [
+    ['input', 1280, 100],
+    ['input', 320, 400],
+    ['app-shell', 1280, 100],
+    ['app-shell', 320, 400],
+  ];
+  for (const [id, width, textPercent] of scenarios) {
+    await page.setViewportSize({ width, height: 720 });
+    await gotoWithCleanDocsState(page, `/next/native-web/api/components/${id}/`);
+    await page.evaluate((percent) => {
+      document.documentElement.style.fontSize = `${percent}%`;
+    }, textPercent);
+
+    const section = page.locator(`[data-vf-docs-api-component="${id}"] [data-vf-docs-accessibility]`);
+    await expect(section).toBeVisible();
+    await expect(section.locator('details')).not.toHaveAttribute('open', '');
+    await section.locator('summary').click();
+    await expect(section.locator('details')).toHaveAttribute('open', '');
+    const metrics = await page.evaluate(() => ({
+      scrollWidth: document.documentElement.scrollWidth,
+      clientWidth: document.documentElement.clientWidth,
+    }));
+    expect(metrics.scrollWidth, `${id} ${width}px / ${textPercent}% must reflow`)
+      .toBeLessThanOrEqual(metrics.clientWidth + 1);
+    await section.scrollIntoViewIfNeeded();
+    await page.screenshot({
+      path: testInfo.outputPath(`standardized-standards-${id}-${width}-text${textPercent}.png`),
+      fullPage: false,
+    });
+  }
 });
