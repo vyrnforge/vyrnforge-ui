@@ -130,6 +130,22 @@ test('React mobile navigation closes on Escape and returns focus to Menu', async
   await expect(menu).toBeFocused();
 });
 
+test('framework navigation remains available without JavaScript', async ({ browser }) => {
+  const context = await browser.newContext({ javaScriptEnabled: false });
+  try {
+    const page = await context.newPage();
+    await page.goto('/next/native-web/components/button/');
+    await page.getByRole('link', { name: 'Open this topic in React documentation' }).click();
+    await expect(page).toHaveURL(/\/next\/react\/components\/button\/$/);
+    await expect(page.getByRole('heading', { name: 'Button', level: 1 })).toBeVisible();
+    await page.getByRole('navigation', { name: 'Documentation framework' })
+      .getByRole('link', { name: 'Native Web' }).click();
+    await expect(page).toHaveURL(/\/next\/native-web\/components\/button\/$/);
+  } finally {
+    await context.close();
+  }
+});
+
 test('React docs remain navigable at 320px/400% text, RTL and forced colors', async ({ page }, testInfo) => {
   await page.setViewportSize({ width: 320, height: 720 });
   await page.goto('/next/react/components/button/');
