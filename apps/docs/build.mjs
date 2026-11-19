@@ -286,15 +286,17 @@ function searchMarkup(currentPageDirectory) {
         </a>
       </li>`).join('');
 
-  return `<div class="vf-docs-search" data-vf-docs-search-container>
+  return `<search class="vf-docs-search" data-vf-search-field-root data-vf-docs-search-container aria-label="Documentation search">
     <label for="vf-docs-search" data-vf-visually-hidden>Search documentation</label>
-    <input id="vf-docs-search" type="search" data-vf-input data-vf-docs-search placeholder="Search documentation" autocomplete="off" aria-controls="vf-docs-search-results">
+    <input id="vf-docs-search" type="search" data-vf-input data-vf-search-field-input data-vf-docs-search placeholder="Search documentation" autocomplete="off" aria-controls="vf-docs-search-results">
+    <button type="button" data-vf-search-field-clear data-vf-docs-search-clear disabled>Clear</button>
+    <span data-vf-visually-hidden data-vf-docs-search-status role="status" aria-live="polite"></span>
     <div id="vf-docs-search-results" class="vf-docs-search-panel" data-vf-docs-search-results hidden>
       <p class="vf-docs-search-label">Documentation results</p>
       <ul>${results}</ul>
       <p data-vf-docs-search-empty hidden>No matching documentation.</p>
     </div>
-  </div>`;
+  </search>`;
 }
 
 function styleLinks(currentPageDirectory, componentStyle = null) {
