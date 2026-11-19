@@ -125,6 +125,13 @@ function initializeNavigation() {
     setCollapsed(collapsed);
   });
   mobile.addEventListener('change', syncViewport);
+  document.addEventListener('keydown', (event) => {
+    if (event.key === 'Escape' && mobile.matches &&
+      shell.dataset.vfDocsNavCollapsed !== 'true' && navigation.contains(document.activeElement)) {
+      setCollapsed(true);
+      toggle.focus();
+    }
+  });
   syncViewport();
 }
 
