@@ -15,8 +15,6 @@ export { VfSliderDirective } from '@vyrnforge/angular/slider';
 export { VfSwitchDirective } from '@vyrnforge/angular/switch';
 export { VfTextareaDirective } from '@vyrnforge/angular/textarea';
 export { VfToggleButtonDirective } from '@vyrnforge/angular/toggle-button';
-export { VfAutoGridDirective, VfClusterDirective, VfContainerDirective, VfControlGroupDirective, VfInlineDirective, VfStackDirective } from '@vyrnforge/angular/layout';
-export type { ClusterAlign, ClusterJustify, ContainerSize, ControlGroupOrientation, InlineAlign, InlineJustify, LayoutSpace, StackAlign, StackJustify } from '@vyrnforge/angular/layout';
 export { VfTabsListDirective, VfTabsPanelDirective, VfTabsRootDirective, VfTabsTabDirective } from '@vyrnforge/angular/tabs';
 export type { TabsActivation, TabsOrientation } from '@vyrnforge/angular/tabs';
 export { VfTextDirective } from '@vyrnforge/angular/text';

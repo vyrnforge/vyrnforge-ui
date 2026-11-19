@@ -1,128 +1,49 @@
-# Layout — composition primitives
+# Layout — canonical Web CSS composition recipes
 
-Composition primitives own reusable **structural composition**: arrangements and adjacency relationships that are broader than one control but do not own semantic state, native form behavior, composite keyboard models, or application workflow.
+The approved layout inventory is **Flow** and **AutoGrid** as CSS recipes, not UI components or framework runtime abstractions. Decision and execution: [#1418](https://github.com/vyrnforge/vyrnforge-ui/issues/1418). Native semantic HTML owns roles, relationships, keyboard/focus behavior and form participation; Web CSS owns presentation.
 
-The accepted public inventory is deliberately small:
+Import `@vyrnforge/web/styles/layout.css` explicitly from a Native Web, React, Angular, Vue, or Elements-consuming application. The stylesheet is token-driven and works without the optional global reset.
 
-- **Stack**
-- **Inline**
-- **Cluster**
-- **AutoGrid**
-- **Container**
-- **ControlGroup**
+## Flow
 
-The inventory is derived from responsibility, not preserved from the historical catalog.
+A single flex recipe. Authored semantic HTML, not a VyrnForge wrapper:
 
-## Spatial composition
-
-### Stack
-
-Stack arranges related children in block flow with shared spacing, cross-axis alignment, and main-axis justification.
-
-It owns layout only. Consumers choose the semantic host.
-
-### Inline
-
-Inline arranges related children in one non-wrapping inline row.
-
-Use Cluster when wrapping is part of the required composition.
-
-### Cluster
-
-Cluster arranges related children in inline flow and wraps them as available space changes.
-
-It is appropriate for groups such as actions, metadata, tags, or other peer content where wrapping is structural rather than behavioral.
-
-### AutoGrid
-
-AutoGrid lays out repeated peers in equal flexible tracks using an intrinsic `auto-fit/minmax` algorithm.
-
-The name is intentionally **AutoGrid**, not generic `Grid`: it does not model arbitrary CSS Grid track systems. The public `--vf-auto-grid-min-item-size` component token controls the intrinsic minimum item size; specialized grid templates remain ordinary CSS Grid owned by the consumer.
-
-### Container
-
-Container constrains content width, centers it, and applies logical inline gutters.
-
-It does not own page-shell semantics or routing/application structure.
-
-## Control adjacency
-
-### ControlGroup
-
-ControlGroup visually joins adjacent **independently operable** controls in horizontal or vertical orientation.
-
-Each child retains its own:
-
-- semantics and accessible name;
-- value/state;
-- disabled/read-only/validation behavior;
-- focus and activation;
-- size/variant contract;
-- native form participation.
-
-ControlGroup adds no `role="group"`, shared value, roving focus, selection controller, child cloning, framework context, or inherited control configuration.
-
-Button-only adjacency is valid and does not justify a ButtonGroup primitive. If the controls share one-of-many selection, pressed-state selection, or managed command navigation, use the semantic owner of that behavior instead: native radio grouping, ToggleGroup, Toolbar, SegmentedControl, or another appropriate composite widget.
-
-## Explicit non-ownership dispositions
-
-### AspectRatio
-
-AspectRatio is **not an composition primitive**. Modern CSS `aspect-ratio` already owns this responsibility directly.
-
-Use ordinary CSS, for example:
-
-```css
-.media-frame {
-  aspect-ratio: 16 / 9;
-}
+```html
+<section data-vf-flow data-vf-flow-gap="lg">...</section>
+<nav aria-label="Actions" data-vf-flow data-vf-flow-direction="inline" data-vf-flow-wrap="wrap" data-vf-flow-gap="sm">...</nav>
 ```
 
-VyrnForge does not wrap a single native CSS property merely to create framework/catalog symmetry.
+- `data-vf-flow` — activates flex flow; default direction block (column)
+- `data-vf-flow-direction="block|inline"` — block default, inline row
+- `data-vf-flow-wrap="nowrap|wrap"` — inline-only wrapping, nowrap default
+- `data-vf-flow-gap` — none, xs, sm, md, lg, xl, 2xl, 3xl; md default
+- `data-vf-flow-align` — start, center, end, stretch, baseline; stretch block default, center inline default
+- `data-vf-flow-justify` — start, center, end, space-between; start default
 
-### Field
+## AutoGrid
 
-Field is **not a public composition primitive** at this baseline. The retired implementation owned only grid spacing and did not own label/control/help/error relationships.
+An intrinsic equal repeated-item track recipe: `repeat(auto-fit, minmax(min(100%, var(--vf-auto-grid-min-item-size, 16rem)), 1fr))`. The public `--vf-auto-grid-min-item-size` defaults to 16rem; `data-vf-auto-grid-gap` has the same spacing vocabulary as Flow. Arbitrary grid templates, spans and breakpoints are ordinary application CSS.
 
-Use semantic labeling/description markup plus Stack for spacing. The Forms & Submission Patterns contract owns form-field UX relationships. A future Field component requires a separate contract proving a relationship responsibility that Stack plus native HTML cannot express cleanly.
+```html
+<ul data-vf-auto-grid data-vf-auto-grid-gap="md" style="--vf-auto-grid-min-item-size: 12rem">
+  <li>First</li><li>Second</li>
+</ul>
+```
 
-### Fieldset
+## Migration from the former six-concept layout API
 
-Fieldset remains **native HTML**, not a VyrnForge composition component. Use real `<fieldset>` and `<legend>` so grouping, legend semantics, descendant disabled propagation, and native form behavior remain platform-owned.
+| Retired API | Replacement |
+| --- | --- |
+| React/Vue Stack, Angular vfStack, Web data-vf-stack | Native semantic host + block Flow |
+| Inline / vfInline / data-vf-inline | Native semantic host + inline Flow (nowrap) |
+| Cluster / vfCluster / data-vf-cluster | Native semantic host + inline Flow with wrap |
+| React/Vue AutoGrid, Angular vfAutoGrid | Native semantic host + unchanged data-vf-auto-grid |
+| Container / vfContainer / data-vf-container | Native semantic host + application max-inline-size, margin-inline:auto and padding-inline |
+| ControlGroup / vfControlGroup / data-vf-control-group | Native independent controls; any justified joining belongs in a component/pattern CSS recipe. Keep native fieldset/legend when grouping is semantically required |
+| Surface | Already retired; semantic HTML plus public surface tokens |
 
-VyrnForge does not expose `Fieldset`, `vfFieldset`, `vf-fieldset`, or `data-vf-fieldset` as composition APIs.
+No runtime `@vyrnforge/web/layout`, `@vyrnforge/react/layout`, `@vyrnforge/vue/layout`, `@vyrnforge/angular/layout` or Elements layout entrypoint remains. No Box, Flex, Card, Row or Column alias is added. Historical component and change records are provenance only.
 
-### RadioGroup
+## Correctness
 
-Native radios already obtain selection and keyboard behavior from the browser through their shared `name`. Semantic grouping uses native `<fieldset>/<legend>`; layout uses Stack or Cluster.
-
-Therefore the former RadioGroup wrapper is retired. A future custom radio-group component would need to own real selection/interaction behavior and would be reviewed as a composite widget rather than reintroduced as a layout alias.
-
-## Framework surfaces
-
-Canonical Web hooks are the shared styling contract:
-
-- `data-vf-stack`
-- `data-vf-inline`
-- `data-vf-cluster`
-- `data-vf-auto-grid`
-- `data-vf-container`
-- `data-vf-control-group`
-
-React and Vue expose semantic-host-capable convenience components. Angular exposes host directives so authored semantic HTML remains the DOM owner.
-
-There is intentionally **no `@vyrnforge/elements/layout` runtime entrypoint**. An application that otherwise uses VyrnForge Custom Elements composes layout with semantic/native HTML plus the canonical Web hooks. Adding `vf-stack`, `vf-container`, or similar wrapper elements would add DOM structure without adding semantics or behavior.
-
-## Admission rule
-
-Do not add Box, Flex, Row, Column, Wrap, Spacer, Center, ButtonGroup, or another familiar design-system noun merely for catalog completeness.
-
-A new composition primitive must own a distinct, reusable structural composition responsibility that cannot be expressed cleanly by:
-
-1. native HTML semantics;
-2. ordinary CSS;
-3. the six existing composition primitives;
-4. a native or interactive control;
-5. a composite widget or pattern.
-
-Composition primitives do not own routing, application state, validation engines, form state, selection controllers, toolbar navigation, overlays, application shells, or product workflows.
+Flow and AutoGrid introduce no ARIA roles, state, roving focus, validation or owned browser behavior. Responsive styling uses intrinsic behavior before component queries and true viewport policy. Preserve source/focus order in LTR and RTL; explicit gap tokens are not automatically density remapped. Required verification: CSS import/reset/layer boundaries, narrow width and text enlargement, nested theme and density, forced colors, focus, all consuming framework SSR, package exports and visual acceptance.
