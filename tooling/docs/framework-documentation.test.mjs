@@ -126,7 +126,7 @@ describe('Layout example ergonomics', () => {
       const layout = model.componentCatalog.find((component) => component.id === 'layout');
       expect(layout.examples).toHaveLength(6);
       for (const example of layout.examples) {
-        expect(example.source, example.sourcePath).not.toMatch(/\\bstyle\\s*=\\s*(?:\\{|["'])/);
+        expect(example.source, example.sourcePath).not.toMatch(/\bstyle\s*=\s*(?:\{|["'])/);
       }
     }
   });
@@ -137,7 +137,7 @@ describe('Layout example ergonomics', () => {
       const grid = layout.examples.find((example) => example.id === 'layout/auto-grid');
       expect(grid.source).toMatch(framework === 'react' ? /<AutoGrid as="ul">/ : /<ul data-vf-auto-grid>/);
       expect(grid.source).toContain('<li');
-      expect(grid.source).not.toMatch(/list-style\\s*:\\s*none|listStyle/);
+      expect(grid.source).not.toMatch(/list-style\s*:\s*none|listStyle/);
     }
   });
 });
