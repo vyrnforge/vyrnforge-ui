@@ -46,7 +46,7 @@ test('React Button guide SSR hydrates and uses public Button, AppShell, SideNav 
   await source.click();
   await expect(page.locator('article[data-vf-docs-react-component] pre').last()).toContainText("from '@vyrnforge/react/button'");
   await expect(page.getByRole('navigation', { name: 'Documentation framework' })
-    .getByRole('link', { name: 'Native Web' })).toHaveAttribute('href', '../../native-web/components/button/');
+    .getByRole('link', { name: 'Native Web' })).toHaveAttribute('href', '../../../native-web/components/button/');
   expect(errors).toEqual([]);
 });
 
