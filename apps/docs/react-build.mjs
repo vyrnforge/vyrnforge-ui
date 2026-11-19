@@ -25,10 +25,23 @@ if (!basicExample?.sourcePath.endsWith('/react.tsx')) {
   throw new Error('React documentation requires the checked-in executable Button example');
 }
 const layout = reactModel.componentCatalog.find((entry) => entry.id === 'layout');
-if (!layout?.guideOnly || layout.apiAvailable || layout.cssRecipeStyle !== '@vyrnforge/web/styles/layout.css' ||
-    !layout.sharedContent || layout.examples.length !== 6) {
-  throw new Error('React Layout guide requires the canonical Web CSS recipe and six checked-in React examples; no React layout API');
+const layoutStylesheet = '@vyrnforge/web/styles/layout.css';
+if (!layout?.apiAvailable || layout.guideOnly ||
+    !layout.publicEntrypoints.includes('@vyrnforge/react/layout') ||
+    !webModel.packageManifest.exports?.['./styles/layout.css'] ||
+    !layout.sharedContent || !layout.frameworkContent || layout.examples.length !== 6) {
+  throw new Error('React Layout guide requires real Flow/AutoGrid React exports, their shared stylesheet, and six checked-in React examples');
 }
+const layoutPublicSource = await readFile(
+  path.join(root, path.dirname(path.dirname(layout.frameworkSourcePath)), 'index.ts'), 'utf8');
+const layoutTypesStart = layoutPublicSource.indexOf('export type LayoutElement');
+const layoutTypesEnd = layoutPublicSource.indexOf('// Mirrors VyrnForge Text', layoutTypesStart);
+if (layoutTypesStart < 0 || layoutTypesEnd < 0 ||
+    !layoutPublicSource.includes('export const Flow = FlowImpl') ||
+    !layoutPublicSource.includes('export const AutoGrid = AutoGridImpl')) {
+  throw new Error('React Layout type contract changed; review the generated reference');
+}
+const publicLayoutTypes = layoutPublicSource.slice(layoutTypesStart, layoutTypesEnd).trim();
 const layoutExamples = layout.examples.sort((a, b) => a.id.localeCompare(b.id));
 const layoutSlugs = layoutExamples.map((example) => example.id.split('/')[1]);
 if (new Set(layoutSlugs).size !== 6 || !layoutSlugs.includes('basic')) {
@@ -73,6 +86,7 @@ function linksFor(route) {
     api: relative(dir, react + 'api/components/button/', true),
     example: relative(dir, react + 'examples/button-basic/', true),
     layout: relative(dir, react + layout.showcaseRoute, true),
+    layoutApi: relative(dir, react + layout.apiRoute, true),
     layoutExampleBase: relative(dir, react + 'examples/layout/', true),
     native: relative(dir, native + (route === '' ? '' : route), true),
   };
@@ -141,6 +155,7 @@ const pageViews = [
   { route: button.showcaseRoute, view: 'guide', title: 'React Button guide', description: 'Shared Button semantics and React usage' },
   { route: button.apiRoute, view: 'api', title: 'React Button API', description: 'Verified public React Button API' },
   { route: layout.showcaseRoute, view: 'layout', title: 'React Layout guide', description: 'Flow and AutoGrid usage in React with shared Web CSS' },
+  { route: layout.apiRoute, view: 'layout-api', title: 'React Layout API', description: 'Public React Flow and AutoGrid props and stylesheet' },
 ];
 // All Native destinations have a React-context response, even when a React guide
 // has not been implemented. Never disguise an unavailable view as another port.
@@ -173,14 +188,18 @@ const pageData = {
 const layoutData = {
   id: layout.id,
   sharedContent: layout.sharedContent,
+  frameworkContent: layout.frameworkContent,
+  frameworkSourcePath: layout.frameworkSourcePath,
   standardReferences: layout.standardReferences,
-  cssRecipeStyle: layout.cssRecipeStyle,
+  publicEntrypoints: layout.publicEntrypoints,
+  publicLayoutTypes,
+  cssRecipeStyle: layoutStylesheet,
   examples: layoutExamples,
 };
 for (const page of pageViews) {
   const dir = directory(page.route);
   const props = { view: page.view, links: linksFor(page.route), button: pageData,
-    layout: page.view === 'layout' ? layoutData : null,
+    layout: (page.view === 'layout' || page.view === 'layout-api') ? layoutData : null,
     requestedTopic: page.requestedTopic ?? null };
   const initialHtml = renderToString(createElement(ReactReferencePage, props));
   const serialized = JSON.stringify(props).replaceAll('<', '\\u003c');
@@ -208,7 +227,8 @@ await writeFile(path.join(reactRoot, 'site-manifest.json'), JSON.stringify({
     guideOnly: layout.guideOnly,
     api: layout.apiAvailable,
     publicEntrypoints: layout.publicEntrypoints,
-    cssRecipeStyle: layout.cssRecipeStyle,
+    cssRecipeStyle: layoutStylesheet,
+    frameworkSourcePath: layout.frameworkSourcePath,
     sharedSourcePath: layout.sharedSourcePath,
     examples: layoutExamples.map((example) => ({ id: example.id, sourcePath: example.sourcePath })),
   },
