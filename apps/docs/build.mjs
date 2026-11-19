@@ -307,6 +307,9 @@ function styleLinks(currentPageDirectory, componentStyle = null) {
 
 function shell({ route = '', title, description, content, componentStyle = null }) {
   const currentPageDirectory = pageDirectory(route);
+  const nativeDestination = artifactHref(currentPageDirectory, routeTarget(route));
+  // A React page is generated for every Native route: supported pilot view or explicit unavailability.
+  const reactDestination = artifactHref(currentPageDirectory, channel + '/react/' + route);
   return `<!doctype html>
 <html lang="en" data-vf-theme="light" data-vf-density="comfortable">
 <head>
@@ -332,6 +335,19 @@ ${styleLinks(currentPageDirectory, componentStyle)}
         </div>
         <div class="vf-docs-header-tools">
           ${searchMarkup(currentPageDirectory)}
+          <div class="vf-docs-framework-control">
+            <label for="vf-docs-framework">Framework</label>
+            <select id="vf-docs-framework" data-vf-native-select data-vf-docs-framework>
+              <option value="${escapeHtml(nativeDestination)}" selected>Native Web</option>
+              <option value="${escapeHtml(reactDestination)}">React (Button pilot)</option>
+            </select>
+          </div>
+          <div class="vf-docs-version-control">
+            <label for="vf-docs-version">Version</label>
+            <select id="vf-docs-version" data-vf-native-select aria-label="Version">
+              <option value="${escapeHtml(channel)}">${escapeHtml(channel)}</option>
+            </select>
+          </div>
           <div class="vf-docs-theme-control">
             <label for="vf-docs-theme">Theme</label>
             <select id="vf-docs-theme" data-vf-native-select data-vf-docs-theme>
