@@ -12,7 +12,7 @@ export const browserFixture = {
       .replace(/^@import\s+["'][^"']+["'];\s*$/gm, '');
     const foundation = (await readFile(path.join(root, 'packages/web/dist/styles/foundation.css'), 'utf8'))
       .replace(/^@import\s+["'][^"']+["'];\s*$/gm, '');
-    const stripImports = css => css.replace(/^@import\\s+["'][^"']+["'];\\s*$/gm, '');
+    const stripImports = css => css.replace(/^@import\s+["'][^"']+["'];\s*$/gm, '');
     const input = stripImports(await readFile(path.join(root, 'packages/web/dist/components/input/input.css'), 'utf8'));
     const text = stripImports(await readFile(path.join(root, 'packages/web/dist/components/text/text.css'), 'utf8'));
     const typography = stripImports(await readFile(path.join(root, 'packages/web/dist/styles/internal/typography-roles.css'), 'utf8'));
