@@ -8,10 +8,20 @@ import { NativeSelect } from '@vyrnforge/react/native-select';
 function slug(value) {
   return String(value).toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-+|-+$/g, '');
 }
+function renderInline(value) {
+  // The compiler owns authored content; React renders its inline semantics without injecting HTML.
+  return String(value).split(/(`[^`]+`|\*\*[^*]+\*\*)/g).filter(Boolean).map((token, index) => {
+    if (token.startsWith('`') && token.endsWith('`'))
+      return h('code', { key: index, 'data-vf-code': '' }, token.slice(1, -1));
+    if (token.startsWith('**') && token.endsWith('**'))
+      return h('strong', { key: index }, token.slice(2, -2));
+    return token;
+  });
+}
 function renderBlocks(blocks = []) {
   return blocks.map((block, i) => block.type === 'list'
-    ? h('ul', { key: i }, block.items.map((item, j) => h('li', { key: j }, item)))
-    : h('p', { key: i }, block.text));
+    ? h('ul', { key: i }, block.items.map((item, j) => h('li', { key: j }, ...renderInline(item))))
+    : h('p', { key: i }, ...renderInline(block.text)));
 }
 function renderSections(content, prefix) {
   if (!content) return null;
@@ -104,6 +114,18 @@ function useNavigation() {
     media.addEventListener('change', sync);
     return () => media.removeEventListener('change', sync);
   }, []);
+  useEffect(() => {
+    if (!mobile || !expanded) return;
+    const dismiss = (event) => {
+      if (event.key !== 'Escape') return;
+      if (navRef.current?.contains(document.activeElement) || document.activeElement === menuRef.current) {
+        setExpanded(false);
+        menuRef.current?.focus();
+      }
+    };
+    document.addEventListener('keydown', dismiss);
+    return () => document.removeEventListener('keydown', dismiss);
+  }, [mobile, expanded]);
   return { mobile, expanded, setExpanded, navRef, menuRef, mainRef, visible: !mobile || expanded };
 }
 function navigation(view, links) {
@@ -169,6 +191,12 @@ function body(view, links, button, message, setMessage, requestedTopic) {
       h('section', null, h('h2', null, 'Public entrypoints'),
         h('ul', null, ...button.publicEntrypoints.map((name) =>
           h('li', { key: name }, h('code', { 'data-vf-code': '' }, name))))),
+      h('section', { 'aria-labelledby': 'react-public-types' },
+        h('h2', { id: 'react-public-types' }, 'Public TypeScript types'),
+        h('p', null, 'The following declarations are read from the checked-in React Button source. ',
+          'ButtonProps extends React native button attributes, and its ref targets HTMLButtonElement.'),
+        h('pre', { 'data-vf-code-block': '', tabIndex: 0 },
+          h('code', null, button.publicButtonTypes))),
       renderSections(button.frameworkContent, 'React integration'),
       h('p', null, h('a', { 'data-vf-link': '', href: links.guide }, 'Open Button guide')));
   }
@@ -228,7 +256,10 @@ export function ReactReferencePage({ view, links, button, requestedTopic }) {
             'aria-label': 'React documentation search', value: search, onValueChange: setSearch },
             h('label', { htmlFor: 'vf-react-search', 'data-vf-visually-hidden': '' }, 'Search React documentation'),
             h(SearchFieldInput, { id: 'vf-react-search', 'data-vf-input': '',
-              placeholder: 'Search React documentation', 'aria-controls': 'vf-react-results' }),
+              placeholder: 'Search React documentation', 'aria-controls': 'vf-react-results',
+              onKeyDown: (event) => {
+                if (event.key === 'Escape' && search) setSearch('');
+              } }),
             h(SearchFieldClear, { 'aria-label': 'Clear search' }, '×'),
             h('span', { 'data-vf-visually-hidden': '', role: 'status', 'aria-live': 'polite' },
               search ? matches.length + ' React documentation results' : ''),
