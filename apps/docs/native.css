@@ -148,6 +148,9 @@
   }
 
   .vf-docs-search-panel {
+    background: var(--vf-color-surface);
+    border: 1px solid var(--vf-color-border);
+    border-radius: var(--vf-radius-surface);
     box-shadow: var(--vf-shadow-md);
     inset-block-start: calc(100% + var(--vf-space-xs));
     inset-inline: 0;
