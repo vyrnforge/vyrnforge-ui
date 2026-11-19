@@ -1,0 +1,14 @@
+{
+  "id": "layout/flow-wrap",
+  "title": "Wrapped RTL metadata",
+  "description": "A direction-aware inline Flow wraps tag-like metadata without changing the authored source or focus order.",
+  "documentationSection": "Flow: wrapping peers",
+  "defaultFramework": "native-web",
+  "frameworks": {
+    "native-web": {
+      "label": "Native Web",
+      "language": "html",
+      "source": "native-web.html"
+    }
+  }
+}

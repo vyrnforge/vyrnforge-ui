@@ -1,0 +1,59 @@
+{
+  "schemaVersion": 1,
+  "component": "layout",
+  "reviewStatus": "review-required",
+  "nativeBaseline": {
+    "kind": "structural",
+    "reference": "authored semantic HTML with CSS-only Flow and AutoGrid arrangement recipes"
+  },
+  "wcag": {
+    "target": "2.2 AA",
+    "status": "review-required",
+    "criteria": [
+      "1.3.1",
+      "1.3.2",
+      "1.4.10",
+      "2.1.1",
+      "2.4.3",
+      "2.4.7"
+    ]
+  },
+  "aria": {
+    "status": "not-applicable",
+    "apgPattern": null
+  },
+  "interaction": {
+    "keyboard": "native",
+    "focus": "native",
+    "directionality": "logical"
+  },
+  "ownership": {
+    "library": [
+      "apply a stable layout algorithm without changing authored semantic elements, roles, or DOM order",
+      "preserve token-based spacing, intrinsic reflow and logical layout in LTR and RTL"
+    ],
+    "consumer": [
+      "author meaningful landmarks, headings, names and native form-field relationships",
+      "prevent inaccessible overflow, control grouping confusion and focus order changes in application composition"
+    ]
+  },
+  "forms": {
+    "status": "native"
+  },
+  "visualAccessibility": {
+    "status": "shared-foundation"
+  },
+  "ssrHydration": {
+    "status": "native"
+  },
+  "evidence": {
+    "browser": "required",
+    "assistiveTechnology": "not-applicable"
+  },
+  "profileVariability": [],
+  "notes": [
+    "This is an accessibility obligation mapping for CSS-only layout recipes, not a conformance or independent review sign-off.",
+    "Layout creates no role, group, selection, keyboard model, or focus manager; interactive children retain their own accessibility contracts.",
+    "Independent visual/QA acceptance for the 2026-11-19 layout migration is tracked in GitHub issue #1418."
+  ]
+}

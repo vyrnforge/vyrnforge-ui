@@ -1,0 +1,14 @@
+{
+  "id": "layout/auto-grid",
+  "title": "Intrinsic card collection",
+  "description": "Equal-width tracks fill available space; change the preferred minimum with the public AutoGrid token, not breakpoint props.",
+  "documentationSection": "AutoGrid: intrinsic equal tracks",
+  "defaultFramework": "native-web",
+  "frameworks": {
+    "native-web": {
+      "label": "Native Web",
+      "language": "html",
+      "source": "native-web.html"
+    }
+  }
+}
