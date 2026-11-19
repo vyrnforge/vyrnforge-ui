@@ -57,6 +57,17 @@ test('React Button guide SSR hydrates and uses public Button, AppShell, SideNav 
   expect(errors).toEqual([]);
 });
 
+test('React API reference renders public source-derived types and inline semantic code', async ({ page }) => {
+  await page.goto('/next/react/api/components/button/');
+  await expect(page.getByRole('heading', { name: 'Public TypeScript types' })).toBeVisible();
+  const types = page.locator('[data-vf-docs-react-api] pre code');
+  await expect(types).toContainText('export interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement>');
+  await expect(types).toContainText('variant?: ButtonVariant');
+  await expect(types).toContainText('size?: ButtonSize');
+  await expect(types).toContainText('loading?: boolean');
+  await expect(page.locator('[data-vf-docs-react-api] code[data-vf-code]').first()).toBeVisible();
+});
+
 test('React URL context and framework-scoped search/theme work without inventing unsupported routes', async ({ page }) => {
   await page.goto('/next/react/');
   await expect(page.locator('html')).toHaveAttribute('data-vf-react-hydrated', 'true');
@@ -106,6 +117,17 @@ test('switching an undocumented React topic reports unavailability with recovery
   await expect(page.locator('[data-vf-docs-react-unavailable]')).toContainText('Input');
   await page.getByRole('link', { name: 'Return to Native Web topic' }).click();
   await expect(page).toHaveURL(/\/next\/native-web\/components\/input\/$/);
+});
+
+test('React mobile navigation closes on Escape and returns focus to Menu', async ({ page }) => {
+  await page.setViewportSize({ width: 320, height: 720 });
+  await page.goto('/next/react/components/button/');
+  const menu = page.getByRole('button', { name: 'Menu' });
+  await menu.click();
+  await page.getByRole('navigation', { name: 'Documentation' }).getByRole('link', { name: 'Button API' }).focus();
+  await page.keyboard.press('Escape');
+  await expect(menu).toHaveAttribute('aria-expanded', 'false');
+  await expect(menu).toBeFocused();
 });
 
 test('React docs remain navigable at 320px/400% text, RTL and forced colors', async ({ page }, testInfo) => {
