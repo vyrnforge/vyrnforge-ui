@@ -249,9 +249,10 @@ export function ReactReferencePage({ view, links, button, requestedTopic }) {
               nav.setExpanded(!nav.expanded);
             },
           }, 'Menu'),
-          h('a', { className: 'vf-docs-brand', href: links.home, 'aria-label': 'VyrnForge Docs (VF Docs)' },
-            h('span', { className: 'vf-docs-brand-full', 'aria-hidden': 'true' }, 'VyrnForge ', h('span', null, 'Docs')),
-            h('span', { className: 'vf-docs-brand-compact', 'aria-hidden': 'true' }, 'VF Docs')),
+          h('a', { className: 'vf-docs-brand', href: links.home },
+            h('span', { className: 'vf-docs-brand-full' }, 'VyrnForge ', h('span', null, 'Docs')),
+            h('span', { className: 'vf-docs-brand-compact' }, 'VF Docs ',
+              h('span', { 'data-vf-visually-hidden': '' }, 'VyrnForge'))),
           h('span', { className: 'vf-docs-surface' }, 'React · ' + links.channel)),
         h('div', { className: 'vf-docs-header-tools' },
           h(SearchFieldRoot, { className: 'vf-docs-search',
