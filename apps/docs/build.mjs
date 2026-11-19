@@ -341,6 +341,7 @@ ${styleLinks(currentPageDirectory, componentStyle)}
               <option value="${escapeHtml(nativeDestination)}" selected>Native Web</option>
               <option value="${escapeHtml(reactDestination)}">React (Button pilot)</option>
             </select>
+            <noscript><a data-vf-link href="${escapeHtml(reactDestination)}">Open this topic in React documentation</a></noscript>
           </div>
           <div class="vf-docs-version-control">
             <label for="vf-docs-version">Version</label>
