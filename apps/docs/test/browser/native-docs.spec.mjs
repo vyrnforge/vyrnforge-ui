@@ -97,7 +97,7 @@ test('Native Web home uses the VyrnForge shell and separates documentation surfa
   await expect(forms.getByRole('link', { name: 'Input', exact: true })).toHaveAttribute('href', input.showcase ? 'components/input/' : 'api/components/input/');
   await expect(page.getByRole('link', { name: 'Styling', exact: true })).toHaveAttribute('href', 'foundations/styling/');
   await expect(page.getByRole('link', { name: 'Design tokens', exact: true })).toHaveAttribute('href', 'foundations/tokens/');
-  await expect(page.getByRole('combobox', { name: 'Framework' })).toHaveValue('next/native-web/');
+  await expect(page.getByRole('combobox', { name: 'Framework' })).toHaveValue('./');
   await expect(page.getByRole('combobox', { name: 'Framework' }).locator('option')).toHaveCount(2);
   await expect(page.getByRole('combobox', { name: 'Version' })).toHaveValue('next');
   await expect(page.getByRole('searchbox', { name: 'Search documentation' })).toHaveAttribute('data-vf-input', '');
