@@ -22,6 +22,7 @@ function emitGithubOutputs(plan, outputPath) {
     components: scope.components.join(','),
   }));
   const lines = [
+    `components_required=${plan.selectors.componentsRequired}`,
     `package_artifacts_required=${plan.selectors.packageArtifactsRequired}`,
     `package_artifact_packages=${plan.packageArtifactPackages.join(',')}`,
     `browser_required=${plan.selectors.browserRequired}`,
