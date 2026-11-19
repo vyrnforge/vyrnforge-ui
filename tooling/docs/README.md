@@ -44,7 +44,7 @@ The Native docs application renders **one shared accessibility evidence section*
 
 The projection recognizes the HTML/native baselines and WCAG 2.2 criterion IDs currently present in repository metadata. Known references open precise official standards or informative WCAG Understanding pages. Unrecognized references remain readable metadata with no invented deep link; the shared reference catalog can be extended independently of individual pages. A `review-required` metadata status appears explicitly as review pending. Metadata represents an **intent/evidence mapping**, never a certification, maturity promotion, or proof that the user-facing product passes WCAG. Adding a new product unit's metadata automatically participates in this layout wherever an actual public documentation page exists.
 
-The first React Button documentation pilot consumes the same shared component and adaptation source model through a real React renderer. Its initial guide/API pages do not yet render every `standardReferences` detail in the Native evidence section; that parity remains an explicit DOC-04 follow-on, not implied acceptance. Angular/Vue/Elements renderers must consume the same model if implemented and must not copy Native HTML as their runtime.
+The first React Button documentation pilot consumes the same shared component and adaptation source model through a real React renderer. Its guide and API pages render the same `standardReferences` evidence projection as Native, including standards, WCAG criteria, baseline/review status and native disclosure, without claiming compliance. Angular/Vue/Elements renderers must consume the same model if implemented and must not copy Native HTML as their runtime.
 
 ## Current Phase
 
