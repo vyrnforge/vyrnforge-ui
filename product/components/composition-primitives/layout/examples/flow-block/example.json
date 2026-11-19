@@ -1,7 +1,7 @@
 {
   "id": "layout/flow-block",
   "title": "Vertical form rhythm",
-  "description": "Block Flow gives a native label, control, and description consistent token spacing without creating a Field component.",
+  "description": "Block Flow, Input, and Text use sensible styling defaults without inline geometry or per-instance gap props. Inherited comfortable/compact density controls eligible rhythm; label and help relationships remain native.",
   "documentationSection": "Flow: vertical rhythm",
   "defaultFramework": "native-web",
   "frameworks": {

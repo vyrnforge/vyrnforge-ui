@@ -8,7 +8,7 @@ import { AutoGridExample } from '../../product/components/composition-primitives
 import { SemanticGroupsExample } from '../../product/components/composition-primitives/layout/examples/semantic-groups/react.tsx';
 
 // Documentation-only adapter: live TSX demos are owned by the Layout product unit.
-// No React layout component or public layout runtime is introduced.
+// Uses the real public React Flow, Input and Text components and canonical Web styles.
 const examples = {
   basic: AccountOverview,
   'flow-block': FlowBlockExample,

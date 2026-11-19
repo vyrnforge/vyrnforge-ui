@@ -26,7 +26,7 @@ function App() {
         </section>
 
         <section className="consumer-space" aria-label="Consumer spacing override">
-          <div data-vf-flow data-vf-flow-direction="block">
+          <div data-vf-flow data-vf-flow-direction="block" data-vf-flow-gap="md">
             <Button type="button">Spacing action one</Button>
             <Button type="button">Spacing action two</Button>
           </div>

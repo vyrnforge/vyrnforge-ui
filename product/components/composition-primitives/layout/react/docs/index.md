@@ -4,6 +4,22 @@
 
 Load `@vyrnforge/web/styles/layout.css` once from your React app's entrypoint, then import `Flow` and `AutoGrid` from `@vyrnforge/react/layout` or the root `@vyrnforge/react` export. Both are components, not JSX examples for raw data-attribute configuration. No other layout package or provider is needed.
 
+## Default-first React example
+
+```tsx
+import { Flow } from '@vyrnforge/react/layout';
+import { Input } from '@vyrnforge/react/input';
+import { Text } from '@vyrnforge/react/text';
+
+<Flow>
+  <label htmlFor="contact-email">Contact email</label>
+  <Input id="contact-email" type="email" aria-describedby="contact-email-help" />
+  <Text as="p" id="contact-email-help">Used for account notifications.</Text>
+</Flow>
+```
+
+There is no inline width, margin, gap, font or input-size styling here. Import the canonical Web `foundation.css`, `layout.css`, `input.css` and `text.css` at app startup (or the documented aggregate stylesheet). The default Flow gap is comfortable md; an inherited `data-vf-density="compact"` scope changes the omitted Flow/AutoGrid gap to sm and the eligible Input geometry to the compact control profile. Style only genuine consuming-application needs; explicit `gap` and `minItemSize` remain deliberate overrides. The label/help IDs remain necessary accessibility relationships, not styling props.
+
 ## React Flow props
 
 `Flow` accepts `direction="block|inline"` (default block), `wrap="nowrap|wrap"` (nowrap default; wraps only inline flows), `gap` (token spacing), `align="start|center|end|stretch|baseline"`, `justify="start|center|end|space-between"`, `as` (native structural element; div default), `className`, `style`, children, native props, and a forwarded ref. The component emits the canonical Web `data-vf-flow` hooks and never introduces roles or managed keyboard interactions.

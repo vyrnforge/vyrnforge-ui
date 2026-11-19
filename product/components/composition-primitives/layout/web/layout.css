@@ -8,7 +8,7 @@
     display: flex;
     flex-direction: column;
     flex-wrap: nowrap;
-    gap: var(--vf-space-md);
+    gap: var(--_vf-density-layout-gap, var(--vf-space-md));
     justify-content: flex-start;
     min-inline-size: 0;
   }
@@ -34,7 +34,7 @@
 
   :where([data-vf-auto-grid]) {
     display: grid;
-    gap: var(--vf-space-md);
+    gap: var(--_vf-density-layout-gap, var(--vf-space-md));
     grid-template-columns: repeat(auto-fit, minmax(min(100%, var(--vf-auto-grid-min-item-size, 16rem)), 1fr));
     min-inline-size: 0;
   }

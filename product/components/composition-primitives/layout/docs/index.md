@@ -10,7 +10,7 @@ Build responsive arrangements with two shared CSS recipes on the semantic HTML y
 
 ## Flow: vertical rhythm
 
-A `data-vf-flow` host defaults to a column with a medium token gap, stretched children, and no wrapping. Set `data-vf-flow-gap="sm"` for a compact label/input/help relationship; the label, control, and description still need their normal native relationships. Use the semantic form, section, header, or list element that makes sense to the content.
+A `data-vf-flow` host defaults to a column with a density-aware token gap, stretched children, and no wrapping. With public foundation.css loaded, the comfortable default is md and compact default is sm; explicit gap attributes are deliberate overrides. This means the basic label/Input/help example needs no per-instance inline width, margins or spacing. The label, control, and description still need their normal native relationships. Use the semantic form, section, header, or list element that makes sense to the content.
 
 ## Flow: one inline row
 
@@ -33,10 +33,14 @@ Flow is presentation, not a form-field relationship or an accessible group. Use 
 - `data-vf-flow`: activate the shared flex recipe, with block direction by default.
 - `data-vf-flow-direction`: `block` (column) or `inline` (row).
 - `data-vf-flow-wrap`: `nowrap` by default; `wrap` applies only when direction is inline.
-- `data-vf-flow-gap` and `data-vf-auto-grid-gap`: `none`, `xs`, `sm`, `md`, `lg`, `xl`, `2xl`, or `3xl`; both default to `md`.
+- `data-vf-flow-gap` and `data-vf-auto-grid-gap`: optional overrides `none`, `xs`, `sm`, `md`, `lg`, `xl`, `2xl`, or `3xl`. Omitted gaps inherit comfortable md or compact sm from public foundation.css; with granular Layout CSS alone the fallback is md. Explicit values never get silently remapped.
 - `data-vf-flow-align`: `start`, `center`, `end`, `stretch`, or `baseline`. Default is stretch for block and center for inline.
 - `data-vf-flow-justify`: `start`, `center`, `end`, or `space-between`; default is start.
 - `--vf-auto-grid-min-item-size`: minimum preferred AutoGrid track size; `16rem` fallback. Complex named tracks, spans, and dense layouts remain ordinary CSS.
+
+## Density and centralized defaults
+
+For eligible shared composition and form controls, one inherited `data-vf-density="compact"` scope (on the root or a subtree) remaps only omitted Flow/AutoGrid rhythm and Input height/padding through private CSS aliases. Comfortable is the default; theme and component size remain separate axes. Public foundation.css supplies that inherited mapping, while each granular component stylesheet keeps a safe comfortable fallback. Existing Button and NativeSelect use the same foundation control-height mechanism. No JavaScript config provider or per-instance density props are needed; a future app config may set the existing DOM scope. Preserve explicit spacing choices when an actual layout calls for them.
 
 ## Width, surfaces, and other non-layout responsibilities
 

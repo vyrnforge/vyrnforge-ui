@@ -10,19 +10,19 @@ Import `@vyrnforge/web/styles/layout.css` once from the consuming app. React app
 import { Flow, AutoGrid } from '@vyrnforge/react/layout';
 import '@vyrnforge/web/styles/layout.css';
 
-<Flow as="section" gap="lg" aria-labelledby="summary-title">
+<Flow as="section" aria-labelledby="summary-title">
   <h2 id="summary-title">Workspace summary</h2>
-  <AutoGrid as="ul" gap="md" minItemSize="14rem">
+  <AutoGrid as="ul">
     <li>Projects</li><li>Members</li><li>Activity</li>
   </AutoGrid>
-  <Flow direction="inline" wrap="wrap" gap="sm">
+  <Flow direction="inline" wrap="wrap">
     <button type="button">Save</button>
     <button type="button">Cancel</button>
   </Flow>
 </Flow>
 ```
 
-Both components accept `as` (native structural element, default `div`), native attributes, `style`, `className`, and a forwarded host ref. `Flow` accepts `direction`, `wrap`, `gap`, `align`, `justify`; `AutoGrid` accepts `gap` and `minItemSize` (a CSS length, default `16rem`). There are no focus/ARIA controllers, custom DOM wrappers, application state, or React CSS forks.
+The example deliberately omits style, gap and minItemSize overrides: the parent density scope and canonical CSS supply ordinary defaults. Both components accept `as` (native structural element, default `div`), native attributes, `style`, `className`, and a forwarded host ref. `Flow` accepts `direction`, `wrap`, `gap`, `align`, `justify`; `AutoGrid` accepts `gap` and `minItemSize` (a CSS length, default `16rem`). There are no focus/ARIA controllers, custom DOM wrappers, application state, or React CSS forks.
 
 ## Native Web Flow
 
@@ -36,13 +36,13 @@ A single shared flex recipe on authored semantic HTML:
 - `data-vf-flow` — activates flex flow; default direction block (column)
 - `data-vf-flow-direction="block|inline"` — block default, inline row
 - `data-vf-flow-wrap="nowrap|wrap"` — inline-only wrapping, nowrap default
-- `data-vf-flow-gap` — none, xs, sm, md, lg, xl, 2xl, 3xl; md default
+- `data-vf-flow-gap` — optional override: none, xs, sm, md, lg, xl, 2xl, 3xl; omitted defaults follow inherited comfortable/compact density (md/sm respectively) when foundation.css is loaded, otherwise md fallback
 - `data-vf-flow-align` — start, center, end, stretch, baseline; stretch block default, center inline default
 - `data-vf-flow-justify` — start, center, end, space-between; start default
 
 ## AutoGrid
 
-An intrinsic equal repeated-item track recipe: `repeat(auto-fit, minmax(min(100%, var(--vf-auto-grid-min-item-size, 16rem)), 1fr))`. The public `--vf-auto-grid-min-item-size` defaults to 16rem; `data-vf-auto-grid-gap` has the same spacing vocabulary as Flow. React's `minItemSize` prop sets this same CSS variable on the host. Arbitrary grid templates, spans and breakpoints are ordinary application CSS.
+An intrinsic equal repeated-item track recipe: `repeat(auto-fit, minmax(min(100%, var(--vf-auto-grid-min-item-size, 16rem)), 1fr))`. The public `--vf-auto-grid-min-item-size` defaults to 16rem; omitted `data-vf-auto-grid-gap` follows the same inherited density-sensitive default as Flow, while an explicit gap remains unchanged. `data-vf-auto-grid-gap` supports the same spacing vocabulary as Flow. React's `minItemSize` prop sets this same CSS variable on the host. Arbitrary grid templates, spans and breakpoints are ordinary application CSS.
 
 ```html
 <ul data-vf-auto-grid data-vf-auto-grid-gap="md" style="--vf-auto-grid-min-item-size: 12rem">
@@ -63,6 +63,10 @@ An intrinsic equal repeated-item track recipe: `repeat(auto-fit, minmax(min(100%
 | Surface | Already retired; semantic HTML plus public surface tokens |
 
 `@vyrnforge/react/layout` is the **only new framework component entrypoint** for this bounded React authoring use case. `@vyrnforge/web/layout`, `@vyrnforge/vue/layout`, `@vyrnforge/angular/layout` and Elements layout runtime remain absent. No Stack, Inline, Cluster, Container, ControlGroup, Surface, Box, Flex, Card, Row or Column alias is added. Historical implementations are provenance, not public compatibility promises.
+
+## Centralized density defaults
+
+Set `data-vf-density="comfortable"` (default) or `data-vf-density="compact"` on the application root or any subtree and load the public `@vyrnforge/web/styles/foundation.css` once. Comfortable omits gaps as md; compact omits gaps as sm. The same CSS scope drives eligible Input height/padding alongside existing Button/NativeSelect control-height aliases. No React props/provider, JS theme manager, new public density token or per-instance styling is required. Nested scopes work, and explicit `gap` remains authoritative. Granular `layout.css` alone retains md fallback when foundation.css is not loaded.
 
 ## Correctness
 
