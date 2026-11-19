@@ -1189,6 +1189,12 @@ test('docs SearchField clear, results, and keyboard behavior remain accessible',
 
     await input.fill('input');
     await expect(panel).toBeVisible();
+    // The result overlay must obscure the document, not blend its text into
+    // the underlying page at desktop, mobile, or enlarged text sizes.
+    const panelBackground = await panel.evaluate((element) => getComputedStyle(element).backgroundColor);
+    expect(panelBackground).not.toBe('rgba(0, 0, 0, 0)');
+    expect(panelBackground).not.toBe('transparent');
+    await expect(panel).toHaveCSS('border-top-style', 'solid');
     await expect(clear).toBeEnabled();
     await expect(status).toContainText(/documentation results?\./);
     await expect(panel.getByRole('link', { name: /Input/ }).first()).toBeVisible();
