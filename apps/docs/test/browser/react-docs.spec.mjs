@@ -104,6 +104,7 @@ test('React header keeps an accessible brand and readable context controls at 40
   await expect(brand.locator('.vf-docs-brand-full')).toBeHidden();
   await expect(page.locator('.vf-docs-surface')).toBeHidden();
   await expect(page.getByRole('button', { name: 'Menu' })).toHaveCSS('white-space', 'nowrap');
+  await expect(page.getByRole('searchbox', { name: 'Search React documentation' })).toHaveAttribute('placeholder', 'Search docs');
   const framework = page.getByRole('combobox', { name: 'Framework' });
   await expect(framework.locator('option:checked')).toHaveText('React (Button pilot)');
   const widths = await page.evaluate(() => {
