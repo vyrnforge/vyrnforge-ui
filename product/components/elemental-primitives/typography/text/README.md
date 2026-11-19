@@ -1,6 +1,6 @@
 # Typography / Text
 
-Typography is VyrnForge's Layer 1 textual presentation family. Text is the general-purpose semantic-host × visual-role primitive. Code and Kbd are specialized members of the same family.
+Typography is VyrnForge's elemental textual presentation family. Text is the general-purpose semantic-host × visual-role primitive. Code and Kbd are specialized members of the same family.
 
 ## Text contract
 
