@@ -772,6 +772,13 @@
 
     .vf-docs-search {
       flex: 1 1 12rem;
+      flex-wrap: wrap;
+    }
+
+    /* At 400% text the public Clear target and input cannot share a narrow
+       row; wrap them rather than clip either native control. */
+    .vf-docs-search > input {
+      flex: 1 1 12rem;
     }
 
     .vf-docs-navigation-region {
