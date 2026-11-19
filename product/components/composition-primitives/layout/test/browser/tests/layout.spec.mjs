@@ -103,3 +103,59 @@ test('L3 composition primitives preserve the six structural responsibilities acr
   expect(results.violations).toEqual([]);
   await page.screenshot({ path: testInfo.outputPath(`l3-composition-${port}.png`), fullPage: true });
 });
+
+test('ControlGroup joins only consecutive eligible direct controls, including mixed and wrapped children', async ({ page }) => {
+  await page.goto(`/components/layout/${port}.html`);
+  await page.evaluate(() => {
+    const group = document.createElement('div');
+    group.id = 'mixed-control-group';
+    group.setAttribute('data-vf-control-group', '');
+    group.setAttribute('data-vf-control-group-orientation', 'horizontal');
+    group.innerHTML = [
+      '<button id="mixed-first" type="button">First</button>',
+      '<span aria-hidden="true">|</span>',
+      '<button id="mixed-second" type="button">Second</button>',
+      '<button id="mixed-third" type="button">Third</button>',
+      '<span><button id="mixed-wrapped" type="button">Wrapped</button></span>',
+      '<button id="mixed-fourth" type="button">Fourth</button>',
+    ].join('');
+    document.body.append(group);
+  });
+
+  const group = page.locator('#mixed-control-group');
+  const first = page.locator('#mixed-first');
+  const second = page.locator('#mixed-second');
+  const third = page.locator('#mixed-third');
+  const fourth = page.locator('#mixed-fourth');
+  const leadingBorder = (selector) => group.locator(selector).evaluate((element) => {
+    const style = getComputedStyle(element);
+    return {
+      inline: style.borderInlineStartWidth,
+      block: style.borderBlockStartWidth,
+    };
+  });
+
+  for (const direction of ['ltr', 'rtl']) {
+    await group.evaluate((element, value) => element.setAttribute('dir', value), direction);
+    expect((await leadingBorder('#mixed-second')).inline).not.toBe('0px');
+    expect((await leadingBorder('#mixed-third')).inline).toBe('0px');
+    expect((await leadingBorder('#mixed-fourth')).inline).not.toBe('0px');
+  }
+
+  await group.evaluate((element) => element.setAttribute('data-vf-control-group-orientation', 'vertical'));
+  expect((await leadingBorder('#mixed-second')).block).not.toBe('0px');
+  expect((await leadingBorder('#mixed-third')).block).toBe('0px');
+  expect((await leadingBorder('#mixed-fourth')).block).not.toBe('0px');
+
+  await first.focus();
+  await expect(first).toBeFocused();
+  await first.press('Tab');
+  await expect(second).toBeFocused();
+  await second.press('Tab');
+  await expect(third).toBeFocused();
+  await third.press('Tab');
+  await expect(page.locator('#mixed-wrapped')).toBeFocused();
+  await page.locator('#mixed-wrapped').press('Tab');
+  await expect(fourth).toBeFocused();
+  await expect(group).not.toHaveAttribute('role');
+});
