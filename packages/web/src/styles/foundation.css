@@ -7,12 +7,17 @@
     --_vf-density-control-height-sm: var(--vf-control-height-sm);
     --_vf-density-control-height-md: var(--vf-control-height-md);
     --_vf-density-control-height-lg: var(--vf-control-height-lg);
+    /* Inherited composition and input defaults. No new public density tokens. */
+    --_vf-density-layout-gap: var(--vf-space-md);
+    --_vf-density-input-padding-block: 0.4375rem;
   }
 
   :where([data-vf-density="compact"]) {
     --_vf-density-control-height-sm: var(--vf-control-height-sm);
     --_vf-density-control-height-md: var(--vf-control-height-sm);
     --_vf-density-control-height-lg: var(--vf-control-height-md);
+    --_vf-density-layout-gap: var(--vf-space-sm);
+    --_vf-density-input-padding-block: var(--vf-space-2xs);
   }
 
   :where([data-vf-visually-hidden]) {

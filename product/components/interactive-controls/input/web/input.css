@@ -11,9 +11,9 @@
     font-size: var(--vf-control-font-size);
     font-weight: var(--vf-font-weight-regular);
     line-height: var(--vf-line-height-normal);
-    min-block-size: var(--vf-control-height-md);
+    min-block-size: var(--_vf-density-control-height-md, var(--vf-control-height-md));
     min-inline-size: 0;
-    padding-block: 0.4375rem;
+    padding-block: var(--_vf-density-input-padding-block, 0.4375rem);
     padding-inline: 0.75rem;
     transition:
       background-color var(--vf-control-motion-duration) var(--vf-motion-easing-standard),
@@ -23,7 +23,7 @@
   :where(input[data-vf-input][type="color"]) {
     --_vf-input-color-inline-size: 3.5rem;
 
-    block-size: var(--vf-control-height-md);
+    block-size: var(--_vf-density-control-height-md, var(--vf-control-height-md));
     cursor: pointer;
     inline-size: var(--_vf-input-color-inline-size);
     padding: var(--vf-space-xs);
