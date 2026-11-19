@@ -1,4 +1,4 @@
-import { createElement as h, useEffect, useRef, useState } from 'react';
+import { createElement as h, Fragment, useEffect, useRef, useState } from 'react';
 import { AppShell, AppShellHeader, AppShellBody, AppShellNavigation, AppShellMain, AppShellFooter } from '@vyrnforge/react/app-shell';
 import { SideNav, SideNavGroup, SideNavGroupLabel, SideNavList, SideNavItem, SideNavLink } from '@vyrnforge/react/side-nav';
 import { Button } from '@vyrnforge/react/button';
@@ -164,8 +164,9 @@ export function ReactReferencePage({ view, links, button }) {
   ];
   const matches = search.trim() ? pages.filter((item) =>
     (item.title + ' ' + item.keywords).toLowerCase().includes(search.toLowerCase().trim())) : [];
-  return h(AppShell, { 'data-vf-docs-shell': '', 'data-vf-docs-react': view },
+  return h(Fragment, null,
     h('a', { className: 'vf-docs-skip', href: '#main' }, 'Skip to content'),
+    h(AppShell, { 'data-vf-docs-shell': '', 'data-vf-docs-react': view },
     h(AppShellHeader, { className: 'vf-docs-header' },
       h('div', { className: 'vf-docs-header-inner' },
         h('div', { className: 'vf-docs-brand-row' },
@@ -219,5 +220,5 @@ export function ReactReferencePage({ view, links, button }) {
         body(view, links, button, message, setMessage))),
     h(AppShellFooter, { className: 'vf-docs-footer' },
       h('span', null, 'VyrnForge React documentation'),
-      h('span', null, links.channel + ' channel')));
+      h('span', null, links.channel + ' channel'))));
 }
