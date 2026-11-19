@@ -2,7 +2,7 @@ import { strict as assert } from 'node:assert';
 import { test } from 'vitest';
 import { createSemanticImpact } from './plan.mjs';
 
-test('canonical product-unit framework source remains port-local without unrelated Native docs evidence', () => {
+test('canonical React source stays port-local while selecting its actual docs consumer', () => {
   const discovery = {
     packages: [{ name: 'react', manifest: {} }],
     components: [{
@@ -35,7 +35,7 @@ test('canonical product-unit framework source remains port-local without unrelat
   assert.deepEqual(impact.browserPorts, ['react']);
   assert.deepEqual(impact.browserScopes, [{ port: 'react', components: ['button'] }]);
   assert.equal(impact.repositoryWide, false);
-  assert.equal(impact.selectors.docsRequired, false);
+  assert.equal(impact.selectors.docsRequired, true);
   assert.equal(impact.selectors.packageArtifactsRequired, false);
 });
 
@@ -56,7 +56,7 @@ test('pattern-owned settings evidence follows actual example dependencies, not u
   assert.ok(!graph.browserScopes.some((scope) => scope.components.includes('settings-navigation')));
   const drawer = createSemanticImpact(['product/components/composite-widgets/transient-surfaces/drawer/react/index.ts']);
   assert.ok(drawer.browserScopes.some((scope) => scope.port === 'react' && scope.components.includes('settings-navigation')));
-  assert.equal(drawer.selectors.docsRequired, false);
+  assert.equal(drawer.selectors.docsRequired, true);
   const source = createSemanticImpact(['product/components/application-structures/app-shell/examples/settings-navigation/react.tsx']);
   assert.ok(source.browserScopes.some((scope) => scope.port === 'react' && scope.components.includes('settings-navigation')));
   assert.ok(source.selectors.docsRequired);
