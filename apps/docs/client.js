@@ -125,16 +125,20 @@ function initializeSearch() {
   const input = document.querySelector('[data-vf-docs-search]');
   const panel = document.querySelector('[data-vf-docs-search-results]');
   const empty = document.querySelector('[data-vf-docs-search-empty]');
+  const clear = container?.querySelector('[data-vf-docs-search-clear]');
+  const status = container?.querySelector('[data-vf-docs-search-status]');
   const items = [...document.querySelectorAll('[data-vf-docs-search-item]')];
-  if (!container || !input || !panel || !empty) return;
+  if (!container || !input || !panel || !empty || !clear || !status) return;
 
   const close = () => {
     panel.hidden = true;
     for (const item of items) item.hidden = true;
     empty.hidden = true;
+    status.textContent = '';
   };
 
   const update = () => {
+    clear.disabled = !input.value || input.disabled || input.readOnly;
     const query = input.value.trim().toLocaleLowerCase();
     if (!query) {
       close();
@@ -149,7 +153,15 @@ function initializeSearch() {
     }
     empty.hidden = visible !== 0;
     panel.hidden = false;
+    status.textContent = visible === 1 ? '1 documentation result.' : `${visible} documentation results.`;
   };
+
+  clear.addEventListener('click', (event) => {
+    if (event.defaultPrevented || clear.disabled || input.disabled || input.readOnly) return;
+    input.value = '';
+    update();
+    input.focus();
+  });
 
   input.addEventListener('input', update);
   input.addEventListener('keydown', (event) => {
@@ -160,6 +172,8 @@ function initializeSearch() {
   document.addEventListener('pointerdown', (event) => {
     if (!container.contains(event.target)) close();
   });
+  // Native input restoration/autofill can occur before this enhancement attaches.
+  update();
 }
 
 function initializeCopyButtons() {

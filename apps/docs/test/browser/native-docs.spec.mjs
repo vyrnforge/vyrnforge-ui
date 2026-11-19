@@ -110,6 +110,7 @@ test('Native Web home uses the VyrnForge shell and separates documentation surfa
     '/components/app-shell/app-shell.css',
     '/components/side-nav/side-nav.css',
     '/components/input/input.css',
+    '/components/search-field/search-field.css',
     '/components/native-select/native-select.css',
     '/components/link/link.css',
     '/components/button/button.css'
@@ -1142,4 +1143,109 @@ test('Text, Code and Layout reuse retains navigation, source reading and narrow 
       await page.screenshot({ path: testInfo.outputPath(`docs-reuse-${name}-320-text200.png`), fullPage: false });
     }
   }
+});
+
+
+test('SearchField composition comes from one public entrypoint on every Native page family', () => {
+  const model = compileNativeDocumentation();
+  const entry = model.shellStyles.find((item) => item.specifier === '@vyrnforge/web/styles/search-field.css');
+  expect(entry, 'SearchField must resolve through the public Web package').toBeDefined();
+  expect(entry.assetPath).toBe('/assets/vyrnforge-web/components/search-field/search-field.css');
+
+  for (const route of [
+    '', 'components/', 'patterns/', 'foundations/styling/', 'foundations/tokens/',
+    'components/button/', 'api/components/button/', 'patterns/loading/', 'api/patterns/loading/',
+  ]) {
+    const html = readFileSync(`dist/docs/next/native-web/${route}index.html`, 'utf8');
+    expect(html).toContain('vyrnforge-web/components/search-field/search-field.css');
+    expect(html).toContain('<search class="vf-docs-search" data-vf-search-field-root');
+    expect(html).toContain('data-vf-input data-vf-search-field-input data-vf-docs-search');
+    expect(html).toContain('data-vf-search-field-clear data-vf-docs-search-clear');
+    expect(html).toContain('data-vf-docs-search-status role="status"');
+    expect(html).not.toContain('role="combobox"');
+  }
+});
+
+test('docs SearchField clear, results, and keyboard behavior remain accessible', async ({ page }, testInfo) => {
+  const scenarios = [
+    ['/next/native-web/', 1280, 100],
+    ['/next/native-web/components/button/', 320, 400],
+  ];
+  for (const [route, width, textPercent] of scenarios) {
+    await page.setViewportSize({ width, height: 720 });
+    await gotoWithCleanDocsState(page, route);
+    await page.evaluate((percent) => { document.documentElement.style.fontSize = `${percent}%`; }, textPercent);
+
+    const search = page.getByRole('search', { name: 'Documentation search' });
+    const input = search.getByRole('searchbox', { name: 'Search documentation' });
+    const clear = search.getByRole('button', { name: 'Clear search' });
+    const panel = search.locator('[data-vf-docs-search-results]');
+    const status = search.getByRole('status');
+    await expect(search).toHaveAttribute('data-vf-search-field-root', '');
+    await expect(input).toHaveAttribute('data-vf-search-field-input', '');
+    await expect(input).not.toHaveAttribute('role', 'combobox');
+    await expect(clear).toBeDisabled();
+    await expect(panel).toBeHidden();
+
+    await input.fill('input');
+    await expect(panel).toBeVisible();
+    // The result overlay must obscure the document, not blend its text into
+    // the underlying page at desktop, mobile, or enlarged text sizes.
+    const panelBackground = await panel.evaluate((element) => getComputedStyle(element).backgroundColor);
+    expect(panelBackground).not.toBe('rgba(0, 0, 0, 0)');
+    expect(panelBackground).not.toBe('transparent');
+    await expect(panel).toHaveCSS('border-top-style', 'solid');
+    await expect(clear).toBeEnabled();
+    await expect(status).toContainText(/documentation results?\./);
+    await expect(panel.getByRole('link', { name: /Input/ }).first()).toBeVisible();
+
+    await clear.focus();
+    await expect(clear).toBeFocused();
+    await page.keyboard.press('Enter');
+    await expect(input).toHaveValue('');
+    await expect(input).toBeFocused();
+    await expect(clear).toBeDisabled();
+    await expect(panel).toBeHidden();
+    await expect(status).toBeEmpty();
+
+    await input.fill('unlikely-no-matching-documents-1234');
+    await expect(panel).toBeVisible();
+    await expect(panel).toContainText('No matching documentation.');
+    await expect(status).toContainText('0 documentation results.');
+    await page.keyboard.press('Escape');
+    await expect(panel).toBeHidden();
+    await expect(input).toBeFocused();
+    // Native type=search may also clear itself on Escape in Chromium. Preserve
+    // the platform behavior and assert the Clear affordance reflects its value.
+    await expect(clear).toHaveJSProperty('disabled', !(await input.inputValue()));
+
+    const metrics = await page.evaluate(() => ({
+      scrollWidth: document.documentElement.scrollWidth,
+      clientWidth: document.documentElement.clientWidth,
+    }));
+    expect(metrics.scrollWidth, `${route} ${width}px/${textPercent}% search must not cause page overflow`)
+      .toBeLessThanOrEqual(metrics.clientWidth + 1);
+
+    await input.fill('button');
+    await input.scrollIntoViewIfNeeded();
+    await page.screenshot({
+      path: testInfo.outputPath(`docs-search-field-${width}-text${textPercent}.png`),
+      fullPage: false,
+    });
+    await expectNoAccessibilityViolations(page);
+  }
+});
+
+test('SearchField remains a labeled native search input when docs JavaScript fails', async ({ page }) => {
+  await page.route('**/assets/docs.js', route => route.abort());
+  await page.goto('/next/native-web/');
+  const search = page.getByRole('search', { name: 'Documentation search' });
+  const input = search.getByRole('searchbox', { name: 'Search documentation' });
+  const clear = search.getByRole('button', { name: 'Clear search' });
+  await expect(input).toHaveAttribute('type', 'search');
+  await expect(clear).toBeDisabled();
+  await input.fill('button');
+  await expect(input).toHaveValue('button');
+  await expect(clear).toBeDisabled();
+  await expect(search.locator('[data-vf-docs-search-results]')).toBeHidden();
 });

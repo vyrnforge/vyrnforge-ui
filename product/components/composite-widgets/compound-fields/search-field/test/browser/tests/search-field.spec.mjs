@@ -46,6 +46,29 @@ test('clear preserves read-only and disabled inputs and respects canceled activa
   await expect(input).toBeFocused();
 });
 
+test('public SearchField styles avoid duplicate native and authored clear controls', async ({ page }, testInfo) => {
+  test.skip(port !== 'react', 'Representative public SearchField CSS is bundled in the React fixture.');
+  await page.goto('/components/search-field/react.html');
+  const input = page.locator('#search');
+  const clear = page.locator('#clear');
+  await expect(input).toHaveAttribute('type', 'search');
+  await expect(clear).toHaveCount(1);
+  await expect(clear).toHaveAccessibleName('Clear query');
+
+  const response = await page.request.get('/components/search-field/react.css');
+  expect(response.ok()).toBe(true);
+  const css = await response.text();
+  expect(css).toContain('::-webkit-search-cancel-button');
+  expect(css).toContain('[data-vf-search-field-clear]');
+  expect(css).toMatch(/display:\s*none/);
+
+  await input.fill('canonical');
+  await page.screenshot({ path: testInfo.outputPath('search-field-single-clear.png'), fullPage: false });
+  await clear.click();
+  await expect(input).toHaveValue('');
+  await expect(input).toBeFocused();
+});
+
 test('public SearchField CSS resolves the canonical control radius in light and dark themes', async ({ page }) => {
   test.skip(port !== 'react', 'Representative public CSS resolution evidence uses the React public entrypoint.');
   await page.goto('/components/search-field/react.html');
