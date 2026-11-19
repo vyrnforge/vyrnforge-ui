@@ -716,6 +716,7 @@ function renderComponent(page) {
             <li><a data-vf-link href="${artifactHref(currentPageDirectory, routeTarget(page.apiRoute))}">${escapeHtml(page.title)} API reference</a></li>
             <li><a data-vf-link href="${artifactHref(currentPageDirectory, routeTarget('foundations/styling/'))}">Styling foundation</a></li>
             <li><a data-vf-link href="${artifactHref(currentPageDirectory, routeTarget('foundations/tokens/'))}">Design tokens</a></li>
+            ${page.id === 'button' ? `<li><a data-vf-link href="${artifactHref(currentPageDirectory, channel + '/react/components/button/')}">React Button documentation</a></li>` : ''}
           </ul>
         </section>
       </article>
@@ -773,6 +774,7 @@ function renderApiPage(page) {
         <ul>
           <li><a data-vf-link href="${artifactHref(currentPageDirectory, routeTarget('foundations/styling/'))}">Styling foundation</a></li>
           <li><a data-vf-link href="${artifactHref(currentPageDirectory, routeTarget('foundations/tokens/'))}">Design tokens</a></li>
+          ${page.id === 'button' ? `<li><a data-vf-link href="${artifactHref(currentPageDirectory, channel + '/react/api/components/button/')}">React Button API</a></li>` : ''}
         </ul>
       </section>
     </article>`,
@@ -862,5 +864,7 @@ const manifest = {
 await writeFile(path.join(channelRoot, 'site-manifest.json'), `${JSON.stringify(manifest, null, 2)}\n`);
 await writeFile(path.join(channelRoot, 'index.html'), '<!doctype html><html lang="en"><head><meta charset="utf-8"><meta http-equiv="refresh" content="0;url=./native-web/"><title>VyrnForge documentation</title></head><body><a href="./native-web/">Open Native Web documentation</a></body></html>');
 await writeFile(path.join(outRoot, 'index.html'), `<!doctype html><html lang="en"><head><meta charset="utf-8"><meta http-equiv="refresh" content="0;url=./${channel}/native-web/"><title>VyrnForge documentation</title></head><body><a href="./${channel}/native-web/">Open VyrnForge documentation</a></body></html>`);
+
+await import('./react-build.mjs');
 
 process.stdout.write(`native documentation build -> ${path.relative(root, nativeRoot)} (${model.componentCatalog.length} public component${model.componentCatalog.length === 1 ? '' : 's'}, ${model.patternCatalog.length} pattern${model.patternCatalog.length === 1 ? '' : 's'}, ${model.showcasePages.length} showcase${model.showcasePages.length === 1 ? '' : 's'})\n`);
