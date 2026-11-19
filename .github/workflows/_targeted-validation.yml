@@ -171,6 +171,8 @@ jobs:
       - run: corepack enable
       - run: pnpm install --frozen-lockfile --ignore-scripts
       - run: pnpm build:docs
+      - name: Verify framework documentation source preflight
+        run: pnpm exec vitest run --project repository-tooling tooling/docs/framework-documentation.test.mjs
       - name: Run documentation browser evidence
         run: node apps/docs/run-browser.mjs chromium
       - uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7
