@@ -22,6 +22,8 @@ export const browserFixture = {
       button { min-inline-size: 6rem; }
     `;
     await writeFile(path.join(outDir, 'layout.css'), `${tokens}\n${layout}\n${fixtureCss}`);
+    await writeFile(path.join(outDir, 'tokens-only.css'), tokens);
+    await writeFile(path.join(outDir, 'layout-only.css'), `${layout}\n${fixtureCss}`);
     const page = (body) => `<!doctype html><html lang="en"><head><meta charset="utf-8"><link rel="stylesheet" href="./layout.css"><title>Layout CSS recipe fixture</title></head><body>${body}</body></html>`;
     const cards = ['A', 'B', 'C', 'D'];
     const native = `<main id="container"><section id="stack" data-vf-flow data-vf-flow-gap="lg" data-vf-flow-align="start" aria-labelledby="heading">

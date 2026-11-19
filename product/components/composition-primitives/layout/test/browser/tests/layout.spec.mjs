@@ -85,3 +85,39 @@ test('theme, consumer overrides, density and forced-colors do not change structu
   await page.locator('#search').focus();
   await expect(page.locator('#search')).toBeFocused();
 });
+
+test('granular CSS loads without reset in both import orders and permits consumer overrides', async ({ page }) => {
+  await page.goto(`/components/layout/${port}.html`);
+  const block = page.locator('#stack');
+  for (const order of [['tokens-only.css', 'layout-only.css'], ['layout-only.css', 'tokens-only.css']]) {
+    await page.evaluate((files) => {
+      for (const node of Array.from(document.querySelectorAll('link[rel="stylesheet"]'))) node.remove();
+      for (const file of files) {
+        const link = document.createElement('link');
+        link.rel = 'stylesheet';
+        link.href = file;
+        document.head.append(link);
+      }
+    }, order);
+    await page.waitForFunction(() => document.styleSheets.length >= 2 && Array.from(document.querySelectorAll('link[rel="stylesheet"]')).every(node => node.sheet));
+    await expect(block).toHaveCSS('gap', '24px');
+    await expect(page.locator('#auto-grid')).toHaveCSS('display', 'grid');
+    await block.evaluate(node => { node.style.setProperty('--vf-space-lg', '2.5rem'); });
+    await expect(block).toHaveCSS('gap', '40px');
+    await block.evaluate(node => node.style.removeProperty('--vf-space-lg'));
+  }
+});
+
+test('200 percent root text scaling preserves responsive Flow and AutoGrid access at 320 CSS px', async ({ page }) => {
+  await page.setViewportSize({ width: 320, height: 800 });
+  await page.goto(`/components/layout/${port}.html`);
+  await page.evaluate(() => { document.documentElement.style.fontSize = '32px'; });
+  await expect(page.locator('#auto-grid')).toHaveCSS('display', 'grid');
+  const dimensions = await page.evaluate(() => ({
+    scrollWidth: document.documentElement.scrollWidth,
+    clientWidth: document.documentElement.clientWidth,
+  }));
+  expect(dimensions.scrollWidth).toBeLessThanOrEqual(dimensions.clientWidth);
+  await expect(page.locator('#controls button')).toBeVisible();
+  await expect(page.locator('#first')).toBeVisible();
+});
