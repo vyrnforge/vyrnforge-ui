@@ -1,7 +1,7 @@
 {
   "id": "layout/auto-grid",
-  "title": "Intrinsic card collection",
-  "description": "Equal-width tracks fill available space; change the preferred minimum with the public AutoGrid token, not breakpoint props.",
+  "title": "Intrinsic semantic list",
+  "description": "Native list markers and semantics remain intact; shared AutoGrid CSS supplies responsive tracks, list-host spacing and a density-aware gap without inline style.",
   "documentationSection": "AutoGrid: intrinsic equal tracks",
   "defaultFramework": "native-web",
   "frameworks": {
