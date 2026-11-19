@@ -33,7 +33,8 @@ if (mismatchedMetrics.length) {
   throw new Error(`validation metrics revision mismatch: expected ${revision}; got ${mismatchedMetrics.map((record) => `${record.scope}:${record.revision}`).join(', ')}`);
 }
 const evidence = [
-  { id: 'affected', label: 'Nx affected + repository contracts', required: true, result: process.env.VF_RESULT_AFFECTED ?? 'unknown' },
+  { id: 'repository-contracts', label: 'Repository invariants / workflow contracts', required: true, result: process.env.VF_RESULT_REPOSITORY ?? 'unknown' },
+  { id: 'components', label: 'Affected library components (Nx)', required: plan.selectors.componentsRequired, result: process.env.VF_RESULT_COMPONENTS ?? 'skipped' },
   { id: 'package-artifacts', label: 'Packed packages / public consumers', required: plan.selectors.packageArtifactsRequired, result: process.env.VF_RESULT_PACKAGES ?? 'skipped' },
   { id: 'release-intent', label: 'Release intent', required: plan.selectors.releaseRequired, result: process.env.VF_RESULT_RELEASE ?? 'skipped' },
   { id: 'documentation', label: 'Documentation build', required: plan.selectors.docsRequired, result: process.env.VF_RESULT_DOCS ?? 'skipped' },
