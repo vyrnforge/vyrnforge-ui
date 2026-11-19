@@ -88,3 +88,24 @@ describe('Layout guide discovery and CSS-only responsibility', () => {
     }
   });
 });
+
+describe('CSS-only layout guidance across framework sources', () => {
+  it('discovers React TSX Layout guidance without inventing a React package layout API', async () => {
+    const react = compileFrameworkDocumentation('react');
+    const layout = react.componentCatalog.find((component) => component.id === 'layout');
+    expect(layout).toMatchObject({
+      kind: 'component', guideOnly: true, apiAvailable: false,
+      cssRecipeStyle: '@vyrnforge/web/styles/layout.css', publicEntrypoints: [],
+    });
+    expect(layout.showcaseAvailable).toBe(true);
+    expect(react.componentApiPages.some((component) => component.id === 'layout')).toBe(false);
+    expect(layout.examples).toHaveLength(6);
+    for (const example of layout.examples) {
+      expect(example.sourcePath.endsWith('/react.tsx')).toBe(true);
+      const compiled = await transform(example.source, { loader: 'tsx', jsx: 'automatic', target: 'es2022', format: 'esm' });
+      expect(compiled.code).toContain('data-vf-');
+    }
+    const web = compileFrameworkDocumentation('native-web');
+    expect(web.componentCatalog.find((component) => component.id === 'layout')?.apiAvailable).toBe(true);
+  });
+});

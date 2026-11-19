@@ -339,7 +339,7 @@ ${styleLinks(currentPageDirectory, componentStyle)}
             <label for="vf-docs-framework">Framework</label>
             <select id="vf-docs-framework" data-vf-native-select data-vf-docs-framework>
               <option value="${escapeHtml(nativeDestination)}" selected>Native Web</option>
-              <option value="${escapeHtml(reactDestination)}">React (Button pilot)</option>
+              <option value="${escapeHtml(reactDestination)}">React (pilot)</option>
             </select>
             <noscript><a data-vf-link href="${escapeHtml(reactDestination)}">Open this topic in React documentation</a></noscript>
           </div>

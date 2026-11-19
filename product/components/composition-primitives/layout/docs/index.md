@@ -44,7 +44,7 @@ The Page layout example uses application-authored `max-inline-size`, logical inl
 
 ## Framework integration
 
-Import `@vyrnforge/web/styles/layout.css` in the consuming app. Native Web and Elements-using apps author semantic HTML with the same data attributes. React uses these attributes on ordinary JSX elements, Angular on its authored template elements, and Vue on its authored elements. The checked-in Page layout example includes Native Web, React, Angular, Vue, and Elements-app source variants. No `@vyrnforge/web/layout`, `@vyrnforge/react/layout`, `@vyrnforge/angular/layout`, `@vyrnforge/vue/layout`, or Elements layout runtime is part of the current public API. Framework documentation rendering currently remains Native Web-first; the presence of source examples is not evidence of complete framework documentation views.
+Import `@vyrnforge/web/styles/layout.css` in the consuming app. Native Web and Elements-using apps author semantic HTML with the same data attributes. React uses these attributes on ordinary JSX elements, Angular on its authored template elements, and Vue on its authored elements. The checked-in Page layout example includes Native Web, React, Angular, Vue, and Elements-app source variants. No `@vyrnforge/web/layout`, `@vyrnforge/react/layout`, `@vyrnforge/angular/layout`, `@vyrnforge/vue/layout`, or Elements layout runtime is part of the current public API. The React documentation app also has a dedicated Layout guide at `/next/react/components/layout/` using product-owned TSX examples. Other framework documentation renderers remain separate delivery scopes; example sources do not imply full Angular, Vue, or Elements documentation sites.
 
 ## Migration from older layout names
 
