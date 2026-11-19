@@ -99,6 +99,7 @@ const pageData = {
   publicEntrypoints: button.publicEntrypoints,
   sharedContent: button.sharedContent,
   frameworkContent: button.frameworkContent,
+  standardReferences: button.standardReferences,
   examples: button.examples.filter((example) => example.id === 'button/basic'),
 };
 for (const page of pageViews) {
