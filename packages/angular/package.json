@@ -81,11 +81,6 @@
       "types": "./dist/types/vyrnforge-angular-toggle-button.d.ts",
       "default": "./dist/fesm2022/vyrnforge-angular-toggle-button.mjs"
     },
-    "./layout": {
-      "import": "./dist/fesm2022/vyrnforge-angular-layout.mjs",
-      "types": "./dist/types/vyrnforge-angular-layout.d.ts",
-      "default": "./dist/fesm2022/vyrnforge-angular-layout.mjs"
-    },
     "./tabs": {
       "import": "./dist/fesm2022/vyrnforge-angular-tabs.mjs",
       "types": "./dist/types/vyrnforge-angular-tabs.d.ts",
