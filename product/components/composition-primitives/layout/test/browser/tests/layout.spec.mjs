@@ -121,3 +121,73 @@ test('200 percent root text scaling preserves responsive Flow and AutoGrid acces
   await expect(page.locator('#controls button')).toBeVisible();
   await expect(page.locator('#first')).toBeVisible();
 });
+
+test('default Flow and AutoGrid rhythm follows inherited density, explicit gaps stay authoritative', async ({ page }) => {
+  await page.goto(`/components/layout/${port}.html`);
+  await page.evaluate(() => {
+    const root = document.querySelector('#container');
+    const fixture = document.createElement('section');
+    fixture.id = 'density-fixture';
+    fixture.innerHTML = `
+      <div id="default-flow" data-vf-flow><span>Label</span><span>Control</span></div>
+      <div id="default-grid" data-vf-auto-grid><span>One</span><span>Two</span></div>
+      <div id="explicit-flow" data-vf-flow data-vf-flow-gap="lg"><span>One</span><span>Two</span></div>
+      <div id="explicit-grid" data-vf-auto-grid data-vf-auto-grid-gap="xs"><span>One</span><span>Two</span></div>
+      <section data-vf-density="comfortable">
+        <div id="nested-comfortable" data-vf-flow><span>One</span><span>Two</span></div>
+        <section data-vf-density="compact">
+          <div id="nested-compact" data-vf-flow><span>One</span><span>Two</span></div>
+        </section>
+      </section>`;
+    root.append(fixture);
+  });
+  const flow = page.locator('#default-flow');
+  const grid = page.locator('#default-grid');
+  await expect(flow).toHaveCSS('gap', '16px');
+  await expect(grid).toHaveCSS('gap', '16px');
+  await expect(page.locator('#explicit-flow')).toHaveCSS('gap', '24px');
+  await expect(page.locator('#explicit-grid')).toHaveCSS('gap', '4px');
+
+  await page.locator('html').evaluate((node) => node.setAttribute('data-vf-density', 'compact'));
+  await expect(flow).toHaveCSS('gap', '8px');
+  await expect(grid).toHaveCSS('gap', '8px');
+  await expect(page.locator('#nested-comfortable')).toHaveCSS('gap', '16px');
+  await expect(page.locator('#nested-compact')).toHaveCSS('gap', '8px');
+  await expect(page.locator('#explicit-flow')).toHaveCSS('gap', '24px');
+  await expect(page.locator('#explicit-grid')).toHaveCSS('gap', '4px');
+
+  await page.locator('#density-fixture').evaluate((node) => node.style.setProperty('--vf-space-sm', '0.75rem'));
+  await expect(flow).toHaveCSS('gap', '12px');
+  await expect(grid).toHaveCSS('gap', '12px');
+  await expect(page.locator('#nested-comfortable')).toHaveCSS('gap', '16px');
+  await expect(page.locator('#explicit-flow')).toHaveCSS('gap', '24px');
+
+  await page.locator('html').evaluate((node) => node.setAttribute('data-vf-density', 'comfortable'));
+  await expect(flow).toHaveCSS('gap', '16px');
+  await expect(grid).toHaveCSS('gap', '16px');
+  await expect(page.locator('#nested-compact')).toHaveCSS('gap', '12px');
+  await expect(page.locator('#stack')).toHaveCSS('gap', '24px');
+});
+
+test('default density rhythm works without reset at 320 CSS pixels and preserves source focus order', async ({ page }) => {
+  await page.setViewportSize({ width: 320, height: 800 });
+  await page.goto(`/components/layout/${port}.html`);
+  await page.locator('html').evaluate((node) => {
+    node.setAttribute('data-vf-density', 'compact');
+    node.style.fontSize = '200%';
+    node.dir = 'rtl';
+  });
+  const actions = page.locator('#actions');
+  await expect(actions).toHaveCSS('gap', '16px');
+  await expect(actions).toHaveCSS('flex-wrap', 'wrap');
+  const size = await page.evaluate(() => ({
+    scroll: document.documentElement.scrollWidth,
+    width: document.documentElement.clientWidth,
+  }));
+  expect(size.scroll).toBeLessThanOrEqual(size.width);
+  await page.locator('#search').focus();
+  await page.keyboard.press('Tab');
+  await expect(page.locator('#controls button')).toBeFocused();
+  await page.emulateMedia({ forcedColors: 'active' });
+  await expect(page.locator('#search')).toBeVisible();
+});

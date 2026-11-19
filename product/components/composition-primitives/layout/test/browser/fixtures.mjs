@@ -10,6 +10,8 @@ export const browserFixture = {
     const tokens = await readFile(path.join(root, 'packages/web/dist/styles/tokens.css'), 'utf8');
     const layout = (await readFile(path.join(root, 'packages/web/dist/components/layout/layout.css'), 'utf8'))
       .replace(/^@import\s+["'][^"']+["'];\s*$/gm, '');
+    const foundation = (await readFile(path.join(root, 'packages/web/dist/styles/foundation.css'), 'utf8'))
+      .replace(/^@import\s+["'][^"']+["'];\s*$/gm, '');
     const fixtureCss = `
       html { font-size: 16px; }
       body { margin: 0; padding: 24px; --vf-auto-grid-min-item-size: 9rem; font-family: sans-serif; }
@@ -21,7 +23,7 @@ export const browserFixture = {
       #controls > input { min-inline-size: 0; flex: 1 1 auto; }
       button { min-inline-size: 6rem; }
     `;
-    await writeFile(path.join(outDir, 'layout.css'), `${tokens}\n${layout}\n${fixtureCss}`);
+    await writeFile(path.join(outDir, 'layout.css'), `${tokens}\n${foundation}\n${layout}\n${fixtureCss}`);
     await writeFile(path.join(outDir, 'tokens-only.css'), tokens);
     await writeFile(path.join(outDir, 'layout-only.css'), `${layout}\n${fixtureCss}`);
     const page = (body) => `<!doctype html><html lang="en"><head><meta charset="utf-8"><link rel="stylesheet" href="./layout.css"><title>Layout CSS recipe fixture</title></head><body>${body}</body></html>`;

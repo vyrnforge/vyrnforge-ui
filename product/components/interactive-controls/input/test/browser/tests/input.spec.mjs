@@ -77,3 +77,55 @@ test('Input preserves native form semantics and shared styling across ports', as
   const results = await new AxeBuilder({ page }).analyze();
   expect(results.violations).toEqual([]);
 });
+
+test('Input and native color subtype inherit comfortable/compact control rhythm without per-instance sizing', async ({ page }, testInfo) => {
+  await page.goto(`/components/input/${port}.html`);
+  const editable = page.locator('#editable');
+  const color = page.locator('#accent');
+  await expect(editable).toHaveCSS('min-height', '40px');
+  await expect(editable).toHaveCSS('padding-top', '7px');
+  await expect(color).toHaveCSS('height', '40px');
+
+  await page.locator('html').evaluate((node) => node.setAttribute('data-vf-density', 'compact'));
+  await expect(editable).toHaveCSS('min-height', '32px');
+  await expect(editable).toHaveCSS('padding-top', '2px');
+  await expect(color).toHaveCSS('height', '32px');
+  expect((await editable.boundingBox())?.height).toBeGreaterThanOrEqual(32);
+
+  await page.locator('#form').evaluate((node) => node.setAttribute('data-vf-density', 'comfortable'));
+  await expect(editable).toHaveCSS('min-height', '40px');
+  await expect(color).toHaveCSS('height', '40px');
+  await page.locator('#form').evaluate((node) => node.removeAttribute('data-vf-density'));
+  await expect(editable).toHaveCSS('min-height', '32px');
+
+  await editable.focus();
+  await expect(editable).toBeFocused();
+  expect(await editable.evaluate((el) => getComputedStyle(el).outlineStyle)).not.toBe('none');
+  await page.locator('html').evaluate((node) => node.setAttribute('data-vf-theme', 'dark'));
+  await expect(editable).toHaveCSS('min-height', '32px');
+  await page.emulateMedia({ forcedColors: 'active' });
+  await expect(editable).toBeVisible();
+  await page.screenshot({ path: testInfo.outputPath(`input-density-${port}.png`), fullPage: true });
+});
+
+test('compact Input preserves width and access at 320px with 200% text', async ({ page }) => {
+  await page.setViewportSize({ width: 320, height: 760 });
+  await page.goto(`/components/input/${port}.html`);
+  await page.locator('html').evaluate((el) => {
+    el.setAttribute('data-vf-density', 'compact');
+    el.style.fontSize = '200%';
+    el.dir = 'rtl';
+  });
+  const input = page.locator('#editable');
+  await input.focus();
+  await expect(input).toBeFocused();
+  await expect(input).toHaveValue('alpha');
+  const bounds = await input.boundingBox();
+  expect(bounds.height).toBeGreaterThanOrEqual(32);
+  const width = await page.evaluate(() => ({
+    scroll: document.documentElement.scrollWidth, client: document.documentElement.clientWidth,
+  }));
+  expect(width.scroll).toBeLessThanOrEqual(width.client);
+  await page.keyboard.press('Tab');
+  await expect(page.locator('#readonly')).toBeFocused();
+});
