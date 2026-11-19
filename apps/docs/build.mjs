@@ -330,7 +330,7 @@ ${styleLinks(currentPageDirectory, componentStyle)}
       <div class="vf-docs-header-inner">
         <div class="vf-docs-brand-row">
           <button type="button" data-vf-button data-vf-variant="ghost" data-vf-size="sm" class="vf-docs-menu-toggle" data-vf-docs-nav-toggle hidden aria-controls="vf-docs-navigation" aria-expanded="true">Menu</button>
-          <a class="vf-docs-brand" href="${artifactHref(currentPageDirectory, nativeSitePath)}">VyrnForge <span>Docs</span></a>
+          <a class="vf-docs-brand" aria-label="VyrnForge Docs" href="${artifactHref(currentPageDirectory, nativeSitePath)}"><span class="vf-docs-brand-full" aria-hidden="true">VyrnForge <span>Docs</span></span><span class="vf-docs-brand-compact" aria-hidden="true">VF Docs</span></a>
           <span class="vf-docs-surface" aria-label="Documentation surface">Native Web · ${escapeHtml(channel)}</span>
         </div>
         <div class="vf-docs-header-tools">
