@@ -107,6 +107,7 @@ await build({
 await build({
   entryPoints: [path.join(root, 'apps/docs/react-layout-examples.tsx')],
   bundle: true, platform: 'browser', format: 'iife', target: 'es2022',
+  jsx: 'automatic',
   outfile: path.join(outRoot, 'assets/react-layout-examples.js'), logLevel: 'silent',
 });
 
