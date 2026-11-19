@@ -198,6 +198,18 @@ export type AppShellNavigationProps = ComponentPropsWithoutRef<'aside'>;
 export type AppShellRootProps = ComponentPropsWithoutRef<'div'>;
 
 // @public (undocumented)
+export const AutoGrid: <Element extends LayoutElement = "div">(props: AutoGridProps<Element> & {
+    ref?: ComponentPropsWithRef<Element>["ref"];
+}) => ReactElement | null;
+
+// @public (undocumented)
+export type AutoGridProps<Element extends LayoutElement = LayoutElement> = Element extends LayoutElement ? {
+    as?: Element;
+    gap?: LayoutGap;
+    minItemSize?: string;
+} & NativeLayoutProps<Element> : never;
+
+// @public (undocumented)
 export const Button: ForwardRefExoticComponent<ButtonProps & RefAttributes<HTMLButtonElement>>;
 
 // @public (undocumented)
@@ -291,7 +303,7 @@ export const ColorPickerTextInput: ForwardRefExoticComponent<ColorPickerInputPro
 export const ComboboxContent: ForwardRefExoticComponent<Omit<Omit<DetailedHTMLProps<HTMLAttributes<HTMLDivElement>, HTMLDivElement>, "ref">, "id"> & RefAttributes<HTMLDivElement>>;
 
 // @public (undocumented)
-export const ComboboxInput: ForwardRefExoticComponent<Omit<Omit<DetailedHTMLProps<InputHTMLAttributes<HTMLInputElement>, HTMLInputElement>, "ref">, "value" | "defaultValue" | "id" | "aria-controls"> & RefAttributes<HTMLInputElement>>;
+export const ComboboxInput: ForwardRefExoticComponent<Omit<Omit<DetailedHTMLProps<InputHTMLAttributes<HTMLInputElement>, HTMLInputElement>, "ref">, "defaultValue" | "id" | "aria-controls" | "value"> & RefAttributes<HTMLInputElement>>;
 
 // @public (undocumented)
 export const ComboboxOption: ForwardRefExoticComponent<ComboboxOptionProps & RefAttributes<HTMLButtonElement>>;
@@ -649,7 +661,7 @@ export type DialogBodyProps = HTMLAttributes<HTMLDivElement>;
 
 // @public (undocumented)
 export function DialogClose(input: DialogCloseProps): DetailedReactHTMLElement<    {
-type: "button" | "submit" | "reset";
+type: "button" | "reset" | "submit";
 'data-vf-dialog-close': string;
 onClick(event: MouseEvent_2<HTMLButtonElement>): void;
 disabled?: boolean | undefined;
@@ -1646,6 +1658,10 @@ export type FileUploaderInputProps = Omit<ComponentPropsWithoutRef<'input'>, 'ty
 // @public (undocumented)
 export function FileUploaderList(props: ComponentPropsWithoutRef<'ul'>): DetailedReactHTMLElement<    {
 'data-vf-file-uploader-list': string;
+slot?: string | undefined | undefined;
+style?: CSSProperties | undefined;
+title?: string | undefined | undefined;
+key?: Key | null | undefined;
 defaultChecked?: boolean | undefined | undefined;
 defaultValue?: string | number | readonly string[] | undefined;
 suppressContentEditableWarning?: boolean | undefined | undefined;
@@ -1663,11 +1679,8 @@ hidden?: boolean | undefined | undefined;
 id?: string | undefined | undefined;
 lang?: string | undefined | undefined;
 nonce?: string | undefined | undefined;
-slot?: string | undefined | undefined;
 spellCheck?: (boolean | "true" | "false") | undefined;
-style?: CSSProperties | undefined;
 tabIndex?: number | undefined | undefined;
-title?: string | undefined | undefined;
 translate?: "yes" | "no" | undefined | undefined;
 radioGroup?: string | undefined | undefined;
 role?: AriaRole | undefined;
@@ -1926,7 +1939,6 @@ onTransitionRun?: TransitionEventHandler<HTMLUListElement> | undefined;
 onTransitionRunCapture?: TransitionEventHandler<HTMLUListElement> | undefined;
 onTransitionStart?: TransitionEventHandler<HTMLUListElement> | undefined;
 onTransitionStartCapture?: TransitionEventHandler<HTMLUListElement> | undefined;
-key?: Key | null | undefined;
 }, HTMLElement>;
 
 // @public (undocumented)
@@ -1939,6 +1951,28 @@ export interface FileUploaderRootProps extends ComponentPropsWithoutRef<'div'> {
     // (undocumented)
     onFilesChange?(files: File[]): void;
 }
+
+// @public (undocumented)
+export const Flow: <Element extends LayoutElement = "div">(props: FlowProps<Element> & {
+    ref?: ComponentPropsWithRef<Element>["ref"];
+}) => ReactElement | null;
+
+// @public (undocumented)
+export type FlowAlign = 'start' | 'center' | 'end' | 'stretch' | 'baseline';
+
+// @public (undocumented)
+export type FlowDirection = 'block' | 'inline';
+
+// @public (undocumented)
+export type FlowJustify = 'start' | 'center' | 'end' | 'space-between';
+
+// @public (undocumented)
+export type FlowProps<Element extends LayoutElement = LayoutElement> = Element extends LayoutElement ? Omit<FlowOptions, 'as'> & {
+    as?: Element;
+} & NativeLayoutProps<Element> : never;
+
+// @public (undocumented)
+export type FlowWrap = 'nowrap' | 'wrap';
 
 // @public (undocumented)
 export const Icon: ForwardRefExoticComponent<IconProps & RefAttributes<SVGSVGElement>>;
@@ -1975,6 +2009,12 @@ export interface InputProps extends Omit<InputHTMLAttributes<HTMLInputElement>, 
 }
 
 export { InputType }
+
+// @public
+export type LayoutElement = 'div' | 'section' | 'header' | 'footer' | 'main' | 'aside' | 'article' | 'nav' | 'ul' | 'ol' | 'form' | 'fieldset' | 'label';
+
+// @public (undocumented)
+export type LayoutGap = 'none' | 'xs' | 'sm' | 'md' | 'lg' | 'xl' | '2xl' | '3xl';
 
 // @public (undocumented)
 export const Link: ForwardRefExoticComponent<LinkProps & RefAttributes<HTMLAnchorElement>>;
@@ -2088,6 +2128,10 @@ export interface MenuRootProps {
 export function MenuSeparator(props: ComponentPropsWithoutRef<'div'>): DetailedReactHTMLElement<    {
 role: "separator";
 'data-vf-menu-separator': string;
+slot?: string | undefined | undefined;
+style?: CSSProperties | undefined;
+title?: string | undefined | undefined;
+key?: Key | null | undefined;
 defaultChecked?: boolean | undefined | undefined;
 defaultValue?: string | number | readonly string[] | undefined;
 suppressContentEditableWarning?: boolean | undefined | undefined;
@@ -2105,11 +2149,8 @@ hidden?: boolean | undefined | undefined;
 id?: string | undefined | undefined;
 lang?: string | undefined | undefined;
 nonce?: string | undefined | undefined;
-slot?: string | undefined | undefined;
 spellCheck?: (boolean | "true" | "false") | undefined;
-style?: CSSProperties | undefined;
 tabIndex?: number | undefined | undefined;
-title?: string | undefined | undefined;
 translate?: "yes" | "no" | undefined | undefined;
 radioGroup?: string | undefined | undefined;
 about?: string | undefined | undefined;
@@ -2367,7 +2408,6 @@ onTransitionRun?: TransitionEventHandler<HTMLDivElement> | undefined;
 onTransitionRunCapture?: TransitionEventHandler<HTMLDivElement> | undefined;
 onTransitionStart?: TransitionEventHandler<HTMLDivElement> | undefined;
 onTransitionStartCapture?: TransitionEventHandler<HTMLDivElement> | undefined;
-key?: Key | null | undefined;
 }, HTMLElement>;
 
 // @public (undocumented)
@@ -2452,7 +2492,7 @@ export interface MultiSelectSelectionProps {
 }
 
 // @public (undocumented)
-export const MultiSelectTrigger: ForwardRefExoticComponent<Omit<Omit<DetailedHTMLProps<ButtonHTMLAttributes<HTMLButtonElement>, HTMLButtonElement>, "ref">, "type" | "id" | "aria-controls"> & RefAttributes<HTMLButtonElement>>;
+export const MultiSelectTrigger: ForwardRefExoticComponent<Omit<Omit<DetailedHTMLProps<ButtonHTMLAttributes<HTMLButtonElement>, HTMLButtonElement>, "ref">, "id" | "aria-controls" | "type"> & RefAttributes<HTMLButtonElement>>;
 
 // @public (undocumented)
 export const NativeSelect: ForwardRefExoticComponent<NativeSelectProps & RefAttributes<HTMLSelectElement>>;
@@ -2832,7 +2872,7 @@ export interface SelectRootProps {
 }
 
 // @public (undocumented)
-export const SelectTrigger: ForwardRefExoticComponent<Omit<Omit<DetailedHTMLProps<ButtonHTMLAttributes<HTMLButtonElement>, HTMLButtonElement>, "ref">, "type" | "id" | "aria-controls"> & RefAttributes<HTMLButtonElement>>;
+export const SelectTrigger: ForwardRefExoticComponent<Omit<Omit<DetailedHTMLProps<ButtonHTMLAttributes<HTMLButtonElement>, HTMLButtonElement>, "ref">, "id" | "aria-controls" | "type"> & RefAttributes<HTMLButtonElement>>;
 
 // @public (undocumented)
 export const SideNav: ForwardRefExoticComponent<Omit<DetailedHTMLProps<HTMLAttributes<HTMLElement>, HTMLElement>, "ref"> & RefAttributes<HTMLElement>>;
@@ -3250,6 +3290,9 @@ tabIndex: number;
 hidden: boolean;
 'aria-labelledby': string;
 'data-vf-tabs-panel': string;
+slot?: string | undefined | undefined;
+style?: CSSProperties | undefined;
+title?: string | undefined | undefined;
 defaultChecked?: boolean | undefined | undefined;
 defaultValue?: string | number | readonly string[] | undefined;
 suppressContentEditableWarning?: boolean | undefined | undefined;
@@ -3265,10 +3308,7 @@ draggable?: (boolean | "true" | "false") | undefined;
 enterKeyHint?: "enter" | "done" | "go" | "next" | "previous" | "search" | "send" | undefined | undefined;
 lang?: string | undefined | undefined;
 nonce?: string | undefined | undefined;
-slot?: string | undefined | undefined;
 spellCheck?: (boolean | "true" | "false") | undefined;
-style?: CSSProperties | undefined;
-title?: string | undefined | undefined;
 translate?: "yes" | "no" | undefined | undefined;
 radioGroup?: string | undefined | undefined;
 about?: string | undefined | undefined;
@@ -3548,7 +3588,7 @@ export type TabsRootProps = TabsRootBaseProps & ({
 // @public (undocumented)
 export function TabsTab(input: TabsTabProps): DetailedReactHTMLElement<    {
 id: string;
-type: "button" | "submit" | "reset";
+type: "button" | "reset" | "submit";
 role: "tab";
 disabled: boolean;
 tabIndex: number;
@@ -3562,12 +3602,9 @@ onFocus(event: FocusEvent_2<HTMLButtonElement>): void;
 onClick(event: MouseEvent_2<HTMLButtonElement>): void;
 onKeyDown(event: KeyboardEvent_2<HTMLButtonElement>): void;
 form?: string | undefined | undefined;
-formAction?: string | ((formData: FormData) => void | Promise<void>) | undefined;
-formEncType?: string | undefined | undefined;
-formMethod?: string | undefined | undefined;
-formNoValidate?: boolean | undefined | undefined;
-formTarget?: string | undefined | undefined;
-name?: string | undefined | undefined;
+slot?: string | undefined | undefined;
+style?: CSSProperties | undefined;
+title?: string | undefined | undefined;
 defaultChecked?: boolean | undefined | undefined;
 defaultValue?: string | number | readonly string[] | undefined;
 suppressContentEditableWarning?: boolean | undefined | undefined;
@@ -3584,10 +3621,7 @@ enterKeyHint?: "enter" | "done" | "go" | "next" | "previous" | "search" | "send"
 hidden?: boolean | undefined | undefined;
 lang?: string | undefined | undefined;
 nonce?: string | undefined | undefined;
-slot?: string | undefined | undefined;
 spellCheck?: (boolean | "true" | "false") | undefined;
-style?: CSSProperties | undefined;
-title?: string | undefined | undefined;
 translate?: "yes" | "no" | undefined | undefined;
 radioGroup?: string | undefined | undefined;
 about?: string | undefined | undefined;
@@ -3839,6 +3873,12 @@ onTransitionRun?: TransitionEventHandler<HTMLButtonElement> | undefined;
 onTransitionRunCapture?: TransitionEventHandler<HTMLButtonElement> | undefined;
 onTransitionStart?: TransitionEventHandler<HTMLButtonElement> | undefined;
 onTransitionStartCapture?: TransitionEventHandler<HTMLButtonElement> | undefined;
+name?: string | undefined | undefined;
+formAction?: string | ((formData: FormData) => void | Promise<void>) | undefined;
+formEncType?: string | undefined | undefined;
+formMethod?: string | undefined | undefined;
+formNoValidate?: boolean | undefined | undefined;
+formTarget?: string | undefined | undefined;
 }, HTMLElement>;
 
 // @public (undocumented)
@@ -3900,6 +3940,10 @@ export const ToastClose: ForwardRefExoticComponent<Omit<DetailedHTMLProps<Button
 // @public (undocumented)
 export function ToastDescription(props: ComponentPropsWithoutRef<'div'>): DetailedReactHTMLElement<    {
 'data-vf-toast-description': string;
+slot?: string | undefined | undefined;
+style?: CSSProperties | undefined;
+title?: string | undefined | undefined;
+key?: Key | null | undefined;
 defaultChecked?: boolean | undefined | undefined;
 defaultValue?: string | number | readonly string[] | undefined;
 suppressContentEditableWarning?: boolean | undefined | undefined;
@@ -3917,11 +3961,8 @@ hidden?: boolean | undefined | undefined;
 id?: string | undefined | undefined;
 lang?: string | undefined | undefined;
 nonce?: string | undefined | undefined;
-slot?: string | undefined | undefined;
 spellCheck?: (boolean | "true" | "false") | undefined;
-style?: CSSProperties | undefined;
 tabIndex?: number | undefined | undefined;
-title?: string | undefined | undefined;
 translate?: "yes" | "no" | undefined | undefined;
 radioGroup?: string | undefined | undefined;
 role?: AriaRole | undefined;
@@ -4180,7 +4221,6 @@ onTransitionRun?: TransitionEventHandler<HTMLDivElement> | undefined;
 onTransitionRunCapture?: TransitionEventHandler<HTMLDivElement> | undefined;
 onTransitionStart?: TransitionEventHandler<HTMLDivElement> | undefined;
 onTransitionStartCapture?: TransitionEventHandler<HTMLDivElement> | undefined;
-key?: Key | null | undefined;
 }, HTMLElement>;
 
 // @public (undocumented)
@@ -4203,6 +4243,10 @@ export interface ToastRootProps extends ComponentPropsWithoutRef<'div'> {
 // @public (undocumented)
 export function ToastTitle(props: ComponentPropsWithoutRef<'div'>): DetailedReactHTMLElement<    {
 'data-vf-toast-title': string;
+slot?: string | undefined | undefined;
+style?: CSSProperties | undefined;
+title?: string | undefined | undefined;
+key?: Key | null | undefined;
 defaultChecked?: boolean | undefined | undefined;
 defaultValue?: string | number | readonly string[] | undefined;
 suppressContentEditableWarning?: boolean | undefined | undefined;
@@ -4220,11 +4264,8 @@ hidden?: boolean | undefined | undefined;
 id?: string | undefined | undefined;
 lang?: string | undefined | undefined;
 nonce?: string | undefined | undefined;
-slot?: string | undefined | undefined;
 spellCheck?: (boolean | "true" | "false") | undefined;
-style?: CSSProperties | undefined;
 tabIndex?: number | undefined | undefined;
-title?: string | undefined | undefined;
 translate?: "yes" | "no" | undefined | undefined;
 radioGroup?: string | undefined | undefined;
 role?: AriaRole | undefined;
@@ -4483,7 +4524,6 @@ onTransitionRun?: TransitionEventHandler<HTMLDivElement> | undefined;
 onTransitionRunCapture?: TransitionEventHandler<HTMLDivElement> | undefined;
 onTransitionStart?: TransitionEventHandler<HTMLDivElement> | undefined;
 onTransitionStartCapture?: TransitionEventHandler<HTMLDivElement> | undefined;
-key?: Key | null | undefined;
 }, HTMLElement>;
 
 // @public (undocumented)
@@ -4562,6 +4602,10 @@ export interface ToolbarRootProps extends ComponentPropsWithoutRef<'div'> {
 export function ToolbarSeparator(props: ComponentPropsWithoutRef<'div'>): DetailedReactHTMLElement<    {
 role: "separator";
 'data-vf-toolbar-separator': string;
+slot?: string | undefined | undefined;
+style?: CSSProperties | undefined;
+title?: string | undefined | undefined;
+key?: Key | null | undefined;
 defaultChecked?: boolean | undefined | undefined;
 defaultValue?: string | number | readonly string[] | undefined;
 suppressContentEditableWarning?: boolean | undefined | undefined;
@@ -4579,11 +4623,8 @@ hidden?: boolean | undefined | undefined;
 id?: string | undefined | undefined;
 lang?: string | undefined | undefined;
 nonce?: string | undefined | undefined;
-slot?: string | undefined | undefined;
 spellCheck?: (boolean | "true" | "false") | undefined;
-style?: CSSProperties | undefined;
 tabIndex?: number | undefined | undefined;
-title?: string | undefined | undefined;
 translate?: "yes" | "no" | undefined | undefined;
 radioGroup?: string | undefined | undefined;
 about?: string | undefined | undefined;
@@ -4841,7 +4882,6 @@ onTransitionRun?: TransitionEventHandler<HTMLDivElement> | undefined;
 onTransitionRunCapture?: TransitionEventHandler<HTMLDivElement> | undefined;
 onTransitionStart?: TransitionEventHandler<HTMLDivElement> | undefined;
 onTransitionStartCapture?: TransitionEventHandler<HTMLDivElement> | undefined;
-key?: Key | null | undefined;
 }, HTMLElement>;
 
 // @public (undocumented)
