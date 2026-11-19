@@ -1,9 +1,9 @@
 # Pattern product units
 
-Patterns sit outside the six component layers. They compose foundations, components, behavior contracts, and authored semantics into reusable UX/task guidance without creating a seventh component layer.
+Patterns are a distinct product responsibility from reusable UI components. They compose foundations, components, behavior contracts, and authored semantics into reusable UX/task guidance without creating a new component tier or runtime.
 
 A Pattern may own documentation, executable examples, evidence, and narrowly justified reusable presentation artifacts when those artifacts belong to the pattern rather than to one atomic component.
 
-`loading` is the first provisional Pattern product unit. Its canonical source owner is `product/patterns/loading/`, while the existing public consumer entrypoint remains `@vyrnforge/web/styles/loading.css`.
+The retained Pattern product units are `loading` and `settings-navigation`. Loading is owned by `product/patterns/loading/` and retains its existing public `@vyrnforge/web/styles/loading.css` entrypoint. Settings navigation is owned by `product/patterns/settings-navigation/` as guidance only; its authored guide is not an additional public runtime API.
 
-Pattern ownership is intentionally provisional while the broader Pattern product architecture is being defined. Do not copy Loading's Web surface to every future pattern automatically.
+Pattern ownership follows the approved responsibility-based product architecture. Do not copy Loading's Web surface to every future pattern automatically; task guidance may be documentation-only when no reusable runtime is justified.

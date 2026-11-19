@@ -1,6 +1,6 @@
 # Text
 
-Text is the general Layer 1 Typography primitive for applying a visual typography role without replacing authored semantics.
+Text is the general elemental primitive in the Typography responsibility family for applying a visual typography role without replacing authored semantics.
 
 ## Native baseline
 

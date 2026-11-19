@@ -1,6 +1,6 @@
 # Image
 
-Image is the native-backed treatment inside the Layer 1 Media family.
+Image is the native-backed elemental primitive in the Media responsibility family.
 
 The canonical semantic owner is native `<img>`. VyrnForge contributes only a small reusable responsive presentation hook through `@vyrnforge/web/styles/image.css`.
 

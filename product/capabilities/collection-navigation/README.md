@@ -1,6 +1,6 @@
 # Collection Navigation
 
-Canonical Layer 4 Core capability for ordered one-dimensional collection movement.
+Retained framework-neutral Core capability for ordered one-dimensional collection movement.
 
 ## Owns
 

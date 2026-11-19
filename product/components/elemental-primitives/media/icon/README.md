@@ -1,6 +1,6 @@
 # Icon
 
-Icon is the genuine visual primitive inside the Layer 1 Media family.
+Icon is a retained elemental primitive in the Media responsibility family.
 
 It owns reusable SVG glyph definitions/rendering, sizing, variant/shape treatment, canonical styling, and decorative-versus-meaningful accessibility behavior. It remains non-interactive: Button, Link, or another semantic interactive owner owns interaction and the accessible name when Icon appears inside a control.
 

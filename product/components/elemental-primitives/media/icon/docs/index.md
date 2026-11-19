@@ -1,6 +1,6 @@
 # Icon
 
-Icon is the genuine visual primitive in the Layer 1 Media family. It renders reusable SVG artwork but does not own interaction.
+Icon is a retained elemental primitive in the Media responsibility family. It renders reusable SVG artwork but does not own interaction.
 
 ## Artwork contract
 
