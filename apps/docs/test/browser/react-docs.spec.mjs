@@ -16,7 +16,7 @@ test('React pilot artifact is Product Graph-backed and SSR-rendered with public 
   expect(manifest.routes.filter((entry) => entry.view !== 'unavailable').map((entry) => entry.route)).toEqual([
     '', 'components/button/', 'api/components/button/',
   ]);
-  expect(manifest.routes).toContainEqual({ route: 'components/input/', view: 'unavailable' });
+  expect(manifest.routes).toContainEqual({ route: 'components/code/', view: 'unavailable' });
   for (const route of manifest.routes) {
     const html = readFileSync('dist/docs/next/react/' + route.route + 'index.html', 'utf8');
     expect(html).toContain('data-vf-app-shell');
@@ -65,7 +65,7 @@ test('React API reference renders public source-derived types and inline semanti
   await expect(types).toContainText('variant?: ButtonVariant');
   await expect(types).toContainText('size?: ButtonSize');
   await expect(types).toContainText('loading?: boolean');
-  await expect(page.locator('[data-vf-docs-react-api] code[data-vf-code]').first()).toBeVisible();
+  await expect(page.locator('[data-vf-docs-react-api] section[aria-label="React integration"] code[data-vf-code]').first()).toBeVisible();
 });
 
 test('React URL context and framework-scoped search/theme work without inventing unsupported routes', async ({ page }) => {
@@ -110,13 +110,13 @@ test('framework selector preserves Native/React guide and API context with brows
 });
 
 test('switching an undocumented React topic reports unavailability with recovery', async ({ page }) => {
-  await page.goto('/next/native-web/components/input/');
+  await page.goto('/next/native-web/components/code/');
   await page.getByRole('combobox', { name: 'Framework' }).selectOption({ label: 'React (Button pilot)' });
-  await expect(page).toHaveURL(/\/next\/react\/components\/input\/$/);
+  await expect(page).toHaveURL(/\/next\/react\/components\/code\/$/);
   await expect(page.getByRole('heading', { name: 'React documentation unavailable' })).toBeVisible();
-  await expect(page.locator('[data-vf-docs-react-unavailable]')).toContainText('Input');
+  await expect(page.locator('[data-vf-docs-react-unavailable]')).toContainText('Code');
   await page.getByRole('link', { name: 'Return to Native Web topic' }).click();
-  await expect(page).toHaveURL(/\/next\/native-web\/components\/input\/$/);
+  await expect(page).toHaveURL(/\/next\/native-web\/components\/code\/$/);
 });
 
 test('React mobile navigation closes on Escape and returns focus to Menu', async ({ page }) => {
