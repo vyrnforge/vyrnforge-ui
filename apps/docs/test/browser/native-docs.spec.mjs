@@ -727,6 +727,108 @@ test('Native shell reflows at 320 CSS pixels and exposes responsive navigation',
   }
 });
 
+test('mobile TOC keeps links keyboard reachable across narrow/zoom/RTL/forced-colors layouts', async ({ page }, testInfo) => {
+  const errors = collectPageErrors(page);
+  for (const width of [320, 375, 768]) {
+    for (const textPercent of [100, 200, 400]) {
+      await page.setViewportSize({ width, height: 720 });
+      await gotoWithCleanDocsState(page, '/next/native-web/components/button/');
+      await page.evaluate((percent) => {
+        document.documentElement.style.fontSize = `${percent}%`;
+      }, textPercent);
+
+      const toc = page.getByRole('navigation', { name: 'On this page' });
+      const list = toc.locator('ol');
+      await expect(list).toHaveCSS('overflow-y', 'auto');
+      const dimensions = await list.evaluate((element) => ({
+        height: element.getBoundingClientRect().height,
+        scrollHeight: element.scrollHeight,
+        clientHeight: element.clientHeight,
+        limit: Math.min(8 * parseFloat(getComputedStyle(document.documentElement).fontSize), window.innerHeight * 0.2),
+      }));
+      expect(dimensions.height, `${width}px / ${textPercent}% TOC height`).toBeLessThanOrEqual(dimensions.limit + 2);
+      expect(await toc.getByRole('link').count()).toBeGreaterThanOrEqual(12);
+      await expect(toc.getByRole('link', { name: 'Usage preview' })).toHaveAttribute('href', '#usage-preview');
+
+      const lastLink = toc.getByRole('link', { name: 'Reference', exact: true });
+      await lastLink.focus();
+      await expect(lastLink).toBeFocused();
+      if (dimensions.scrollHeight > dimensions.clientHeight + 1) {
+        expect(await list.evaluate((element) => element.scrollTop), 'TOC focus scrolls its own container').toBeGreaterThan(0);
+      }
+      await lastLink.click();
+      await expect(page).toHaveURL(/#reference$/);
+      const widths = await page.evaluate(() => ({
+        document: document.documentElement.scrollWidth,
+        viewport: document.documentElement.clientWidth,
+      }));
+      expect(widths.document, `${width}px / ${textPercent}% reflow`).toBeLessThanOrEqual(widths.viewport + 1);
+      if (width === 320 && (textPercent === 100 || textPercent === 400)) {
+        await page.screenshot({
+          path: testInfo.outputPath(`mobile-toc-${width}-text${textPercent}.png`),
+          fullPage: false,
+        });
+      }
+    }
+  }
+
+  await page.setViewportSize({ width: 320, height: 720 });
+  await gotoWithCleanDocsState(page, '/next/native-web/components/button/');
+  await page.evaluate(() => {
+    document.documentElement.dir = 'rtl';
+    document.documentElement.style.fontSize = '200%';
+  });
+  await page.emulateMedia({ forcedColors: 'active' });
+  const toc = page.getByRole('navigation', { name: 'On this page' });
+  const finalLink = toc.getByRole('link', { name: 'Reference', exact: true });
+  await finalLink.focus();
+  await expect(finalLink).toBeFocused();
+  await finalLink.click();
+  await expect(page).toHaveURL(/#reference$/);
+  const widths = await page.evaluate(() => ({
+    document: document.documentElement.scrollWidth,
+    viewport: document.documentElement.clientWidth,
+  }));
+  expect(widths.document, 'RTL + forced colors must not create overflow').toBeLessThanOrEqual(widths.viewport + 1);
+  await expectNoAccessibilityViolations(page);
+  expect(errors, errors.join('\n')).toEqual([]);
+});
+
+test('Native header uses a compact named brand and full-width context controls at high text zoom', async ({ page }, testInfo) => {
+  for (const [width, textPercent] of [[320, 200], [320, 400], [768, 400]]) {
+    await page.setViewportSize({ width, height: 720 });
+    await gotoWithCleanDocsState(page, '/next/native-web/components/button/');
+    await page.evaluate((percent) => {
+      document.documentElement.style.fontSize = `${percent}%`;
+    }, textPercent);
+
+    const brand = page.getByRole('link', { name: 'VyrnForge Docs' });
+    await expect(brand).toBeVisible();
+    await expect(brand.locator('.vf-docs-brand-compact')).toBeVisible();
+    await expect(brand.locator('.vf-docs-brand-full')).toBeHidden();
+    await expect(page.locator('.vf-docs-surface')).toBeHidden();
+    await expect(page.getByRole('button', { name: 'Menu' })).toHaveCSS('white-space', 'nowrap');
+    const framework = page.getByRole('combobox', { name: 'Framework' });
+    await expect(framework).toHaveValue(/native-web|\.\//);
+    const widths = await page.evaluate(() => {
+      const select = document.querySelector('[data-vf-docs-framework]').getBoundingClientRect();
+      const control = document.querySelector('.vf-docs-framework-control').getBoundingClientRect();
+      return {
+        select: select.width,
+        control: control.width,
+        scroll: document.documentElement.scrollWidth,
+        viewport: document.documentElement.clientWidth,
+      };
+    });
+    expect(widths.select, 'Framework select should receive entire available row').toBeGreaterThanOrEqual(widths.control - 2);
+    expect(widths.scroll, 'Header should not cause document-wide overflow').toBeLessThanOrEqual(widths.viewport + 1);
+    await page.screenshot({
+      path: testInfo.outputPath(`native-compact-header-${width}-text${textPercent}.png`),
+      fullPage: false,
+    });
+  }
+});
+
 test('docs header scrolls away across viewports under 200% text without occluding article targets', async ({ page }, testInfo) => {
   const errors = collectPageErrors(page);
 
