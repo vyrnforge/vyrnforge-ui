@@ -11,14 +11,10 @@ import { AriaRole } from 'react';
 import { ButtonHTMLAttributes } from 'react';
 import { ChangeEventHandler } from 'react';
 import { ClipboardEventHandler } from 'react';
-import { ClusterAlign } from '@vyrnforge/web/layout';
-import { ClusterJustify } from '@vyrnforge/web/layout';
 import { ComponentProps } from 'react';
 import { ComponentPropsWithoutRef } from 'react';
 import type { ComponentPropsWithRef } from 'react';
 import { CompositionEventHandler } from 'react';
-import { ContainerSize } from '@vyrnforge/web/layout';
-import { ControlGroupOrientation } from '@vyrnforge/web/layout';
 import { CSSProperties } from 'react';
 import { DetailedHTMLProps } from 'react';
 import { DetailedReactHTMLElement } from 'react';
@@ -34,8 +30,6 @@ import { IconDefinition } from '@vyrnforge/web/icon';
 import { IconShape } from '@vyrnforge/web/icon';
 import { IconSize } from '@vyrnforge/web/icon';
 import { IconVariant } from '@vyrnforge/web/icon';
-import { InlineAlign } from '@vyrnforge/web/layout';
-import { InlineJustify } from '@vyrnforge/web/layout';
 import { InputEventHandler } from 'react';
 import { InputHTMLAttributes } from 'react';
 import { InputType } from '@vyrnforge/web/input';
@@ -43,7 +37,6 @@ import { JSXElementConstructor } from 'react';
 import { Key } from 'react';
 import { KeyboardEvent as KeyboardEvent_2 } from 'react';
 import { KeyboardEventHandler } from 'react';
-import { LayoutSpace } from '@vyrnforge/web/layout';
 import { LiHTMLAttributes } from 'react';
 import { MouseEvent as MouseEvent_2 } from 'react';
 import { MouseEventHandler } from 'react';
@@ -56,8 +49,6 @@ import { Ref } from 'react';
 import { RefAttributes } from 'react';
 import { RefObject } from 'react';
 import type { SelectHTMLAttributes } from 'react';
-import { StackAlign } from '@vyrnforge/web/layout';
-import { StackJustify } from '@vyrnforge/web/layout';
 import { SubmitEventHandler } from 'react';
 import type { SVGAttributes } from 'react';
 import type { TextareaHTMLAttributes } from 'react';
@@ -207,17 +198,6 @@ export type AppShellNavigationProps = ComponentPropsWithoutRef<'aside'>;
 export type AppShellRootProps = ComponentPropsWithoutRef<'div'>;
 
 // @public (undocumented)
-export const AutoGrid: <Element extends LayoutElement = "div">(props: AutoGridProps<Element> & {
-    ref?: Ref<HTMLElementTagNameMap[Element]>;
-}) => ReactElement | null;
-
-// @public (undocumented)
-export type AutoGridProps<Element extends LayoutElement = 'div'> = {
-    as?: Element;
-    gap?: LayoutSpace;
-} & Omit<ComponentPropsWithoutRef<Element>, 'as' | 'gap'>;
-
-// @public (undocumented)
 export const Button: ForwardRefExoticComponent<ButtonProps & RefAttributes<HTMLButtonElement>>;
 
 // @public (undocumented)
@@ -277,23 +257,6 @@ export interface CheckboxProps extends Omit<InputHTMLAttributes<HTMLInputElement
     // (undocumented)
     indeterminate?: boolean;
 }
-
-// @public (undocumented)
-export const Cluster: <Element extends LayoutElement = "div">(props: ClusterProps<Element> & {
-    ref?: Ref<HTMLElementTagNameMap[Element]>;
-}) => ReactElement | null;
-
-export { ClusterAlign }
-
-export { ClusterJustify }
-
-// @public (undocumented)
-export type ClusterProps<Element extends LayoutElement = 'div'> = {
-    as?: Element;
-    gap?: LayoutSpace;
-    align?: ClusterAlign;
-    justify?: ClusterJustify;
-} & Omit<ComponentPropsWithoutRef<Element>, 'as' | 'gap' | 'align' | 'justify'>;
 
 // @public (undocumented)
 export const ColorPickerInput: ForwardRefExoticComponent<ColorPickerInputProps & RefAttributes<HTMLInputElement>>;
@@ -367,20 +330,6 @@ export interface ComboboxRootProps {
 }
 
 // @public (undocumented)
-export const Container: <Element extends LayoutElement = "div">(props: ContainerProps<Element> & {
-    ref?: Ref<HTMLElementTagNameMap[Element]>;
-}) => ReactElement | null;
-
-// @public (undocumented)
-export type ContainerProps<Element extends LayoutElement = 'div'> = {
-    as?: Element;
-    size?: ContainerSize;
-    gutter?: LayoutSpace;
-} & Omit<ComponentPropsWithoutRef<Element>, 'as' | 'size' | 'gutter'>;
-
-export { ContainerSize }
-
-// @public (undocumented)
 export const ContextMenuContent: ForwardRefExoticComponent<Omit<DetailedHTMLProps<HTMLAttributes<HTMLDivElement>, HTMLDivElement>, "ref"> & RefAttributes<HTMLDivElement>>;
 
 // @public (undocumented)
@@ -409,19 +358,6 @@ export interface ContextMenuRootProps {
 
 // @public (undocumented)
 export const ContextMenuTrigger: ForwardRefExoticComponent<Omit<DetailedHTMLProps<HTMLAttributes<HTMLDivElement>, HTMLDivElement>, "ref"> & RefAttributes<HTMLDivElement>>;
-
-// @public (undocumented)
-export const ControlGroup: <Element extends LayoutElement = "div">(props: ControlGroupProps<Element> & {
-    ref?: Ref<HTMLElementTagNameMap[Element]>;
-}) => ReactElement | null;
-
-export { ControlGroupOrientation }
-
-// @public (undocumented)
-export type ControlGroupProps<Element extends LayoutElement = 'div'> = {
-    as?: Element;
-    orientation?: ControlGroupOrientation;
-} & Omit<ComponentPropsWithoutRef<Element>, 'as' | 'orientation'>;
 
 // @public (undocumented)
 export function DialogBody(props: DialogBodyProps): DetailedReactHTMLElement<    {
@@ -2030,23 +1966,6 @@ export { IconSize }
 export { IconVariant }
 
 // @public (undocumented)
-export const Inline: <Element extends LayoutElement = "div">(props: InlineProps<Element> & {
-    ref?: Ref<HTMLElementTagNameMap[Element]>;
-}) => ReactElement | null;
-
-export { InlineAlign }
-
-export { InlineJustify }
-
-// @public (undocumented)
-export type InlineProps<Element extends LayoutElement = 'div'> = {
-    as?: Element;
-    gap?: LayoutSpace;
-    align?: InlineAlign;
-    justify?: InlineJustify;
-} & Omit<ComponentPropsWithoutRef<Element>, 'as' | 'gap' | 'align' | 'justify'>;
-
-// @public (undocumented)
 export const Input: ForwardRefExoticComponent<InputProps & RefAttributes<HTMLInputElement>>;
 
 // @public (undocumented)
@@ -2056,11 +1975,6 @@ export interface InputProps extends Omit<InputHTMLAttributes<HTMLInputElement>, 
 }
 
 export { InputType }
-
-// @public (undocumented)
-export type LayoutElement = 'div' | 'span' | 'section' | 'main' | 'article' | 'aside' | 'nav' | 'header' | 'footer' | 'form' | 'fieldset' | 'ul' | 'ol';
-
-export { LayoutSpace }
 
 // @public (undocumented)
 export const Link: ForwardRefExoticComponent<LinkProps & RefAttributes<HTMLAnchorElement>>;
@@ -3026,23 +2940,6 @@ export interface SplitPanelRootProps extends ComponentPropsWithoutRef<'div'> {
     // (undocumented)
     size?: number;
 }
-
-// @public (undocumented)
-export const Stack: <Element extends LayoutElement = "div">(props: StackProps<Element> & {
-    ref?: Ref<HTMLElementTagNameMap[Element]>;
-}) => ReactElement | null;
-
-export { StackAlign }
-
-export { StackJustify }
-
-// @public (undocumented)
-export type StackProps<Element extends LayoutElement = 'div'> = {
-    as?: Element;
-    gap?: LayoutSpace;
-    align?: StackAlign;
-    justify?: StackJustify;
-} & Omit<ComponentPropsWithoutRef<Element>, 'as' | 'gap' | 'align' | 'justify'>;
 
 // @public (undocumented)
 export const Switch: ForwardRefExoticComponent<SwitchProps & RefAttributes<HTMLInputElement>>;

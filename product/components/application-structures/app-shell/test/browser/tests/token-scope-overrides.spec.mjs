@@ -23,9 +23,9 @@ test.describe('STD-03 nested theme and consumer token overrides', () => {
     await expect(rootAction).toHaveCSS('background-color', 'rgb(36, 94, 219)');
     await expect(brandAction).toHaveCSS('background-color', 'rgb(15, 118, 110)');
 
-    await expect(root.locator(':scope > [data-vf-stack]')).toHaveCSS('gap', '16px');
-    await expect(darkScope.locator('[data-vf-stack]')).toHaveCSS('gap', '16px');
-    await expect(spacingScope.locator('[data-vf-stack]')).toHaveCSS('gap', '32px');
+    await expect(root.locator(':scope > [data-vf-flow]')).toHaveCSS('gap', '16px');
+    await expect(darkScope.locator('[data-vf-flow]')).toHaveCSS('gap', '16px');
+    await expect(spacingScope.locator('[data-vf-flow]')).toHaveCSS('gap', '32px');
 
     expect(await darkScope.evaluate((element) => getComputedStyle(element).getPropertyValue('--vf-space-md').trim())).toBe('1rem');
     expect(await brandScope.evaluate((element) => getComputedStyle(element).getPropertyValue('--vf-color-surface').trim())).toBe('#f0fdfa');

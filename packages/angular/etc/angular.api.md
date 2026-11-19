@@ -6,11 +6,7 @@
 
 import { AfterViewInit } from '@angular/core';
 import { AnchorPlacement } from '@vyrnforge/web';
-import { ClusterAlign } from '@vyrnforge/web/layout';
-import { ClusterJustify } from '@vyrnforge/web/layout';
 import { CollectionNavigationIntent } from '@vyrnforge/core/collection-navigation';
-import { ContainerSize } from '@vyrnforge/web/layout';
-import { ControlGroupOrientation } from '@vyrnforge/web/layout';
 import { ElementRef } from '@angular/core';
 import * as i0 from '@angular/core';
 import { IconDefinition } from '@vyrnforge/web/icon';
@@ -18,18 +14,13 @@ import { IconGlyphDefinition } from '@vyrnforge/web/icon';
 import { IconShape } from '@vyrnforge/web/icon';
 import { IconSize } from '@vyrnforge/web/icon';
 import { IconVariant } from '@vyrnforge/web/icon';
-import { InlineAlign } from '@vyrnforge/web/layout';
-import { InlineJustify } from '@vyrnforge/web/layout';
 import { InputSignal } from '@angular/core';
 import { InputSignalWithTransform } from '@angular/core';
 import { InputType } from '@vyrnforge/web/input';
-import { LayoutSpace } from '@vyrnforge/web/layout';
 import { ModelSignal } from '@angular/core';
 import { OnDestroy } from '@angular/core';
 import { OutputEmitterRef } from '@angular/core';
 import { Signal } from '@angular/core';
-import { StackAlign } from '@vyrnforge/web/layout';
-import { StackJustify } from '@vyrnforge/web/layout';
 import { TextVariant } from '@vyrnforge/web/text';
 import { WritableSignal } from '@angular/core';
 
@@ -57,14 +48,6 @@ export type ButtonSize = 'sm' | 'md' | 'lg';
 
 // @public (undocumented)
 export type ButtonVariant = 'primary' | 'secondary' | 'ghost';
-
-export { ClusterAlign }
-
-export { ClusterJustify }
-
-export { ContainerSize }
-
-export { ControlGroupOrientation }
 
 // @public (undocumented)
 export type DialogDismissReason = 'escape' | 'backdrop' | 'close-control';
@@ -103,23 +86,13 @@ export { IconSize }
 
 export { IconVariant }
 
-export { InlineAlign }
-
-export { InlineJustify }
-
 export { InputType }
-
-export { LayoutSpace }
 
 // @public (undocumented)
 export type ListboxSelectionMode = 'single' | 'multiple';
 
 // @public (undocumented)
 export type ListboxValue = string | string[];
-
-export { StackAlign }
-
-export { StackJustify }
 
 // @public (undocumented)
 export type TabsActivation = 'automatic' | 'manual';
@@ -458,22 +431,6 @@ export class VfAppShellNavigationDirective {
 }
 
 // @public (undocumented)
-export class VfAutoGridDirective {
-    // (undocumented)
-    readonly vfAutoGridGap: InputSignal<"none" | "xs" | "sm" | "md" | "lg" | "xl" | "2xl" | "3xl">;
-    // (undocumented)
-    static ɵdir: i0.ɵɵDirectiveDeclaration<VfAutoGridDirective, "[vfAutoGrid]", never, {
-        "vfAutoGridGap": {
-            "alias": "vfAutoGridGap";
-            "required": false;
-            "isSignal": true;
-        };
-    }, {}, never, never, true, never>;
-    // (undocumented)
-    static ɵfac: i0.ɵɵFactoryDeclaration<VfAutoGridDirective, never>;
-}
-
-// @public (undocumented)
 export class VfButtonDirective {
     // (undocumented)
     readonly ariaBusy: InputSignal<string | boolean | null>;
@@ -629,36 +586,6 @@ export class VfCheckboxDirective {
     }, {}, never, never, true, never>;
     // (undocumented)
     static ɵfac: i0.ɵɵFactoryDeclaration<VfCheckboxDirective, never>;
-}
-
-// @public (undocumented)
-export class VfClusterDirective {
-    // (undocumented)
-    readonly vfClusterAlign: InputSignal<"start" | "center" | "end" | "stretch" | "baseline">;
-    // (undocumented)
-    readonly vfClusterGap: InputSignal<"none" | "xs" | "sm" | "md" | "lg" | "xl" | "2xl" | "3xl">;
-    // (undocumented)
-    readonly vfClusterJustify: InputSignal<"start" | "center" | "end" | "space-between">;
-    // (undocumented)
-    static ɵdir: i0.ɵɵDirectiveDeclaration<VfClusterDirective, "[vfCluster]", never, {
-        "vfClusterGap": {
-            "alias": "vfClusterGap";
-            "required": false;
-            "isSignal": true;
-        };
-        "vfClusterAlign": {
-            "alias": "vfClusterAlign";
-            "required": false;
-            "isSignal": true;
-        };
-        "vfClusterJustify": {
-            "alias": "vfClusterJustify";
-            "required": false;
-            "isSignal": true;
-        };
-    }, {}, never, never, true, never>;
-    // (undocumented)
-    static ɵfac: i0.ɵɵFactoryDeclaration<VfClusterDirective, never>;
 }
 
 // @public (undocumented)
@@ -920,29 +847,6 @@ export class VfComboboxRootDirective {
 }
 
 // @public (undocumented)
-export class VfContainerDirective {
-    // (undocumented)
-    readonly vfContainerGutter: InputSignal<"none" | "xs" | "sm" | "md" | "lg" | "xl" | "2xl" | "3xl">;
-    // (undocumented)
-    readonly vfContainerSize: InputSignal<"sm" | "md" | "lg" | "xl" | "2xl" | "full">;
-    // (undocumented)
-    static ɵdir: i0.ɵɵDirectiveDeclaration<VfContainerDirective, "[vfContainer]", never, {
-        "vfContainerSize": {
-            "alias": "vfContainerSize";
-            "required": false;
-            "isSignal": true;
-        };
-        "vfContainerGutter": {
-            "alias": "vfContainerGutter";
-            "required": false;
-            "isSignal": true;
-        };
-    }, {}, never, never, true, never>;
-    // (undocumented)
-    static ɵfac: i0.ɵɵFactoryDeclaration<VfContainerDirective, never>;
-}
-
-// @public (undocumented)
 export class VfContextMenuContentDirective implements OnDestroy {
     constructor(root: VfContextMenuRootDirective);
     // (undocumented)
@@ -1030,22 +934,6 @@ export class VfContextMenuTriggerDirective {
     static ɵdir: i0.ɵɵDirectiveDeclaration<VfContextMenuTriggerDirective, "[vfContextMenuTrigger]", never, {}, {}, never, never, true, never>;
     // (undocumented)
     static ɵfac: i0.ɵɵFactoryDeclaration<VfContextMenuTriggerDirective, never>;
-}
-
-// @public (undocumented)
-export class VfControlGroupDirective {
-    // (undocumented)
-    readonly vfControlGroupOrientation: InputSignal<"horizontal" | "vertical">;
-    // (undocumented)
-    static ɵdir: i0.ɵɵDirectiveDeclaration<VfControlGroupDirective, "[vfControlGroup]", never, {
-        "vfControlGroupOrientation": {
-            "alias": "vfControlGroupOrientation";
-            "required": false;
-            "isSignal": true;
-        };
-    }, {}, never, never, true, never>;
-    // (undocumented)
-    static ɵfac: i0.ɵɵFactoryDeclaration<VfControlGroupDirective, never>;
 }
 
 // @public (undocumented)
@@ -1528,36 +1416,6 @@ export class VfIconComponent {
     }, {}, never, never, true, never>;
     // (undocumented)
     static ɵfac: i0.ɵɵFactoryDeclaration<VfIconComponent, never>;
-}
-
-// @public (undocumented)
-export class VfInlineDirective {
-    // (undocumented)
-    readonly vfInlineAlign: InputSignal<"start" | "center" | "end" | "stretch" | "baseline">;
-    // (undocumented)
-    readonly vfInlineGap: InputSignal<"none" | "xs" | "sm" | "md" | "lg" | "xl" | "2xl" | "3xl">;
-    // (undocumented)
-    readonly vfInlineJustify: InputSignal<"start" | "center" | "end" | "space-between">;
-    // (undocumented)
-    static ɵdir: i0.ɵɵDirectiveDeclaration<VfInlineDirective, "[vfInline]", never, {
-        "vfInlineGap": {
-            "alias": "vfInlineGap";
-            "required": false;
-            "isSignal": true;
-        };
-        "vfInlineAlign": {
-            "alias": "vfInlineAlign";
-            "required": false;
-            "isSignal": true;
-        };
-        "vfInlineJustify": {
-            "alias": "vfInlineJustify";
-            "required": false;
-            "isSignal": true;
-        };
-    }, {}, never, never, true, never>;
-    // (undocumented)
-    static ɵfac: i0.ɵɵFactoryDeclaration<VfInlineDirective, never>;
 }
 
 // @public (undocumented)
@@ -3269,36 +3127,6 @@ export class VfSplitPanelRootDirective {
     }, never, never, true, never>;
     // (undocumented)
     static ɵfac: i0.ɵɵFactoryDeclaration<VfSplitPanelRootDirective, never>;
-}
-
-// @public (undocumented)
-export class VfStackDirective {
-    // (undocumented)
-    readonly vfStackAlign: InputSignal<"start" | "center" | "end" | "stretch" | "baseline">;
-    // (undocumented)
-    readonly vfStackGap: InputSignal<"none" | "xs" | "sm" | "md" | "lg" | "xl" | "2xl" | "3xl">;
-    // (undocumented)
-    readonly vfStackJustify: InputSignal<"start" | "center" | "end" | "space-between">;
-    // (undocumented)
-    static ɵdir: i0.ɵɵDirectiveDeclaration<VfStackDirective, "[vfStack]", never, {
-        "vfStackGap": {
-            "alias": "vfStackGap";
-            "required": false;
-            "isSignal": true;
-        };
-        "vfStackAlign": {
-            "alias": "vfStackAlign";
-            "required": false;
-            "isSignal": true;
-        };
-        "vfStackJustify": {
-            "alias": "vfStackJustify";
-            "required": false;
-            "isSignal": true;
-        };
-    }, {}, never, never, true, never>;
-    // (undocumented)
-    static ɵfac: i0.ɵɵFactoryDeclaration<VfStackDirective, never>;
 }
 
 // @public (undocumented)

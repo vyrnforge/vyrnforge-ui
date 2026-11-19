@@ -1,27 +1,18 @@
 import { test } from 'vitest';
 import assert from 'node:assert/strict';
-import { createElement } from 'react';
+import { createElement as h } from 'react';
 import { renderToStaticMarkup } from 'react-dom/server';
-import { AutoGrid, Cluster, Container, ControlGroup, Inline, Stack } from '@vyrnforge/react/layout';
 
-test('React SSR preserves the six L3 composition contracts without manufacturing semantics', () => {
-  const html = renderToStaticMarkup(
-    createElement(Container, { as: 'main', id: 'container', size: 'lg', gutter: 'md' },
-      createElement(Stack, { as: 'section', id: 'stack', gap: 'lg', align: 'start' },
-        createElement(AutoGrid, { as: 'section', id: 'auto-grid', gap: 'md' }, 'Cards'),
-        createElement(Inline, { id: 'inline', gap: 'sm' }, 'Inline'),
-        createElement(Cluster, { id: 'cluster', gap: 'sm', align: 'center' }, 'Actions'),
-        createElement(ControlGroup, { as: 'div', id: 'control-group', orientation: 'vertical' }, createElement('button', { type: 'button' }, 'Previous'), createElement('button', { type: 'button' }, 'Next')),
-      )
-    )
-  );
-
-  for (const hook of ['container', 'stack', 'auto-grid', 'inline', 'cluster', 'control-group']) {
-    assert.match(html, new RegExp(`data-vf-${hook}`));
-  }
-  for (const retired of ['grid', 'aspect-ratio', 'field', 'fieldset', 'radio-group']) {
-    assert.doesNotMatch(html, new RegExp(`data-vf-${retired}(?:\\s|=)`));
-  }
-  assert.doesNotMatch(html, /id="control-group"[^>]*role=/);
-  assert.match(html, /data-vf-control-group-orientation="vertical"/);
+test('React native semantic hosts can consume both layout CSS recipes without a layout runtime', () => {
+  const html = renderToStaticMarkup(h('main', null,
+    h('section', { 'data-vf-flow': '', 'data-vf-flow-gap': 'lg', 'aria-label': 'Settings' },
+      h('ul', { 'data-vf-auto-grid': '', 'data-vf-auto-grid-gap': 'sm' },
+        h('li', null, 'One'), h('li', null, 'Two')),
+      h('nav', { 'data-vf-flow': '', 'data-vf-flow-direction': 'inline', 'data-vf-flow-wrap': 'wrap', 'aria-label': 'Actions' },
+        h('a', { href: '#one' }, 'One'), h('a', { href: '#two' }, 'Two')))));
+  assert.match(html, /<main>/);
+  assert.match(html, /<ul data-vf-auto-grid/);
+  assert.match(html, /<nav data-vf-flow/);
+  assert.match(html, /aria-label="Actions"/);
+  assert.doesNotMatch(html, /data-vf-(stack|inline|cluster|container|control-group)(?:\s|=)/);
 });

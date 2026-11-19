@@ -1172,10 +1172,10 @@ test('every Native documentation page family loads public Text, Code and Layout 
   expect(button).toContain('<code data-vf-code>');
   expect(button).toContain('data-vf-text-variant="overline"');
   expect(button).toContain('data-vf-text-variant="body-lg"');
-  expect(button).toContain('data-vf-cluster');
-  expect(button).toContain('data-vf-stack data-vf-stack-gap="xl"');
+  expect(button).toContain('data-vf-flow');
+  expect(button).toContain('data-vf-flow data-vf-flow-direction="block" data-vf-flow-gap="xl"');
   const home = readFileSync('dist/docs/next/native-web/index.html', 'utf8');
-  expect(home).toContain('data-vf-inline data-vf-inline-gap="lg"');
+  expect(home).toContain('data-vf-flow data-vf-flow-direction="inline" data-vf-flow-gap="lg"');
 
   const foundation = readFileSync('dist/docs/next/native-web/foundations/styling/index.html', 'utf8');
   expect(foundation).toContain('<code data-vf-code>');
@@ -1223,10 +1223,10 @@ test('Text, Code and Layout reuse retains navigation, source reading and narrow 
       const cards = page.locator('ul[data-vf-auto-grid]').first();
       await expect(cards).toBeVisible();
       await expect(cards).toHaveCSS('display', 'grid');
-      await expect(page.locator('a[data-vf-inline]').first()).toBeVisible();
+      await expect(page.locator('a[data-vf-flow][data-vf-flow-direction="inline"]').first()).toBeVisible();
     }
     if (name === 'showcase') {
-      const preview = page.locator('[data-vf-docs-preview][data-vf-cluster]').first();
+      const preview = page.locator('[data-vf-docs-preview][data-vf-flow]').first();
       await expect(preview).toBeVisible();
       await expect(preview).toHaveCSS('flex-wrap', 'wrap');
       const block = page.locator('pre[data-vf-code-block]').first();

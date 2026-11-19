@@ -1,10 +1,10 @@
 <section
   aria-labelledby="loading-heading"
-  data-vf-stack
-  data-vf-stack-gap="2xl"
+  data-vf-flow data-vf-flow-direction="block"
+  data-vf-flow-gap="2xl"
   style="max-inline-size: 56rem"
 >
-  <header data-vf-stack data-vf-stack-gap="xs">
+  <header data-vf-flow data-vf-flow-direction="block" data-vf-flow-gap="xs">
     <h2 id="loading-heading">Loading presentations</h2>
     <p>
       Built-ins are only starting points. Color, size, stroke, speed, placeholder paint,
@@ -12,7 +12,7 @@
     </p>
   </header>
 
-  <section aria-labelledby="loading-indicators-heading" data-vf-stack data-vf-stack-gap="md">
+  <section aria-labelledby="loading-indicators-heading" data-vf-flow data-vf-flow-direction="block" data-vf-flow-gap="md">
     <div>
       <h3 id="loading-indicators-heading">Indeterminate indicators</h3>
       <p>Use a built-in variant, then tune its presentation without creating a new component.</p>
@@ -24,9 +24,9 @@
       style="--vf-auto-grid-min-item-size: 9rem"
     >
       <div
-        data-vf-stack
-        data-vf-stack-align="center"
-        data-vf-stack-gap="sm"
+        data-vf-flow data-vf-flow-direction="block"
+        data-vf-flow-align="center"
+        data-vf-flow-gap="sm"
         style="background: var(--vf-color-surface); border: 1px solid var(--vf-color-border-required); border-radius: var(--vf-radius-surface); color: var(--vf-color-text); padding: var(--vf-space-lg)"
       >
         <span
@@ -44,9 +44,9 @@
       </div>
 
       <div
-        data-vf-stack
-        data-vf-stack-align="center"
-        data-vf-stack-gap="sm"
+        data-vf-flow data-vf-flow-direction="block"
+        data-vf-flow-align="center"
+        data-vf-flow-gap="sm"
         style="background: var(--vf-color-surface); border: 1px solid var(--vf-color-border-required); border-radius: var(--vf-radius-surface); color: var(--vf-color-text); padding: var(--vf-space-lg)"
       >
         <span
@@ -63,9 +63,9 @@
       </div>
 
       <div
-        data-vf-stack
-        data-vf-stack-align="center"
-        data-vf-stack-gap="sm"
+        data-vf-flow data-vf-flow-direction="block"
+        data-vf-flow-align="center"
+        data-vf-flow-gap="sm"
         style="background: var(--vf-color-surface); border: 1px solid var(--vf-color-border-required); border-radius: var(--vf-radius-surface); color: var(--vf-color-text); padding: var(--vf-space-lg)"
       >
         <span
@@ -82,9 +82,9 @@
       </div>
 
       <div
-        data-vf-stack
-        data-vf-stack-align="center"
-        data-vf-stack-gap="sm"
+        data-vf-flow data-vf-flow-direction="block"
+        data-vf-flow-align="center"
+        data-vf-flow-gap="sm"
         style="background: var(--vf-color-surface); border: 1px solid var(--vf-color-border-required); border-radius: var(--vf-radius-surface); color: var(--vf-color-text); padding: var(--vf-space-lg)"
       >
         <span
@@ -102,7 +102,7 @@
     </div>
   </section>
 
-  <section aria-labelledby="loading-placeholder-heading" data-vf-stack data-vf-stack-gap="md">
+  <section aria-labelledby="loading-placeholder-heading" data-vf-flow data-vf-flow-direction="block" data-vf-flow-gap="md">
     <div>
       <h3 id="loading-placeholder-heading">Structured placeholder</h3>
       <p>Use placeholder paint only when the pending layout is actually predictable.</p>
@@ -124,14 +124,14 @@
         padding: var(--vf-space-lg);
       "
     >
-      <div data-vf-stack data-vf-stack-gap="md">
+      <div data-vf-flow data-vf-flow-direction="block" data-vf-flow-gap="md">
         <div
           data-vf-loading-placeholder
           aria-hidden="true"
           style="aspect-ratio: 16 / 9"
         ></div>
 
-        <div data-vf-inline data-vf-inline-gap="md">
+        <div data-vf-flow data-vf-flow-direction="inline" data-vf-flow-gap="md">
           <div
             data-vf-loading-placeholder
             data-vf-loading-placeholder-shape="circle"
@@ -139,7 +139,7 @@
             style="aspect-ratio: 1 / 1; inline-size: 3rem"
           ></div>
 
-          <div data-vf-stack data-vf-stack-gap="sm" style="flex: 1 1 auto">
+          <div data-vf-flow data-vf-flow-direction="block" data-vf-flow-gap="sm" style="flex: 1 1 auto">
             <div
               data-vf-loading-placeholder
               data-vf-loading-placeholder-shape="line"
@@ -158,14 +158,14 @@
     </article>
   </section>
 
-  <section aria-labelledby="loading-progress-heading" data-vf-stack data-vf-stack-gap="md">
+  <section aria-labelledby="loading-progress-heading" data-vf-flow data-vf-flow-direction="block" data-vf-flow-gap="md">
     <div>
       <h3 id="loading-progress-heading">Progress</h3>
       <p>Keep the native progress semantics; customize only the presentation.</p>
     </div>
 
-    <div data-vf-stack data-vf-stack-gap="xs" style="max-inline-size: 34rem">
-      <div data-vf-inline data-vf-inline-justify="space-between">
+    <div data-vf-flow data-vf-flow-direction="block" data-vf-flow-gap="xs" style="max-inline-size: 34rem">
+      <div data-vf-flow data-vf-flow-direction="inline" data-vf-flow-justify="space-between">
         <label for="loading-progress">Importing records</label>
         <output for="loading-progress">48%</output>
       </div>
@@ -183,7 +183,7 @@
     </div>
   </section>
 
-  <section aria-labelledby="loading-custom-heading" data-vf-stack data-vf-stack-gap="md">
+  <section aria-labelledby="loading-custom-heading" data-vf-flow data-vf-flow-direction="block" data-vf-flow-gap="md">
     <div>
       <h3 id="loading-custom-heading">Custom authored loading artwork</h3>
       <p>Custom artwork stays first-class instead of forcing every brand treatment into a variant enum.</p>

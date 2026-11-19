@@ -1,25 +1,18 @@
 import { Component } from '@angular/core';
-import { VfAutoGridDirective, VfClusterDirective, VfContainerDirective, VfStackDirective } from '@vyrnforge/angular/layout';
+import '@vyrnforge/web/styles/layout.css';
 
 @Component({
   selector: 'account-overview',
   standalone: true,
-  imports: [VfAutoGridDirective, VfClusterDirective, VfContainerDirective, VfStackDirective],
   template: `
-    <main vfContainer vfContainerSize="lg" vfContainerGutter="md">
-      <section vfStack vfStackGap="lg" aria-labelledby="account-heading">
-        <header vfStack vfStackGap="xs">
-          <h2 id="account-heading">Account overview</h2>
-          <p>Review workspace details and recent activity.</p>
-        </header>
-        <div vfAutoGrid vfAutoGridGap="md">
-          <article>Profile settings</article>
-          <article>Team access</article>
-          <article>Recent activity</article>
+    <main style="max-inline-size: 64rem; margin-inline: auto; padding-inline: var(--vf-space-md)">
+      <section data-vf-flow data-vf-flow-direction="block" data-vf-flow-gap="lg" aria-labelledby="account-heading">
+        <header data-vf-flow data-vf-flow-gap="xs"><h2 id="account-heading">Account overview</h2><p>Review workspace details and recent activity.</p></header>
+        <div data-vf-auto-grid data-vf-auto-grid-gap="md">
+          <article>Profile settings</article><article>Team access</article><article>Recent activity</article>
         </div>
-        <div vfCluster vfClusterGap="sm" vfClusterAlign="center">
-          <button type="button">Edit profile</button>
-          <button type="button">Manage team</button>
+        <div data-vf-flow data-vf-flow-direction="inline" data-vf-flow-wrap="wrap" data-vf-flow-gap="sm">
+          <button type="button">Edit profile</button><button type="button">Manage team</button>
         </div>
       </section>
     </main>

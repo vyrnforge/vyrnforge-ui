@@ -5,28 +5,19 @@
 ```ts
 
 import { AnchorPlacement } from '@vyrnforge/web';
-import { ClusterAlign } from '@vyrnforge/web/layout';
-import { ClusterJustify } from '@vyrnforge/web/layout';
 import { ComponentOptionsMixin } from 'vue';
 import { ComponentProvideOptions } from 'vue';
-import { ContainerSize } from '@vyrnforge/web/layout';
-import { ControlGroupOrientation } from '@vyrnforge/web/layout';
 import { DefineComponent } from 'vue';
 import { ExtractPropTypes } from 'vue';
 import { IconDefinition } from '@vyrnforge/web/icon';
 import { IconShape } from '@vyrnforge/web/icon';
 import { IconSize } from '@vyrnforge/web/icon';
 import { IconVariant } from '@vyrnforge/web/icon';
-import { InlineAlign } from '@vyrnforge/web/layout';
-import { InlineJustify } from '@vyrnforge/web/layout';
 import { InputType } from '@vyrnforge/web/input';
-import { LayoutSpace } from '@vyrnforge/web/layout';
 import { PropType } from 'vue';
 import { PublicProps } from 'vue';
 import { RendererElement } from 'vue';
 import { RendererNode } from 'vue';
-import { StackAlign } from '@vyrnforge/web/layout';
-import { StackJustify } from '@vyrnforge/web/layout';
 import { TextVariant } from '@vyrnforge/web/text';
 import { VNode } from 'vue';
 
@@ -205,40 +196,6 @@ export const AppShellNavigation: DefineComponent<    {}, () => VNode<RendererNod
 }>, {}, {}, {}, ComponentOptionsMixin, ComponentOptionsMixin, {}, string, PublicProps, Readonly<{}> & Readonly<{}>, {}, {}, {}, {}, string, ComponentProvideOptions, true, {}, any>;
 
 // @public (undocumented)
-export const AutoGrid: DefineComponent<ExtractPropTypes<    {
-as: {
-type: PropType<LayoutElement>;
-default: string;
-};
-gap: {
-type: PropType<LayoutSpace>;
-default: string;
-};
-}>, () => VNode<RendererNode, RendererElement, {
-[key: string]: any;
-}>, {}, {}, {}, ComponentOptionsMixin, ComponentOptionsMixin, {}, string, PublicProps, Readonly<ExtractPropTypes<    {
-as: {
-type: PropType<LayoutElement>;
-default: string;
-};
-gap: {
-type: PropType<LayoutSpace>;
-default: string;
-};
-}>> & Readonly<{}>, {
-as: LayoutElement;
-gap: "sm" | "md" | "lg" | "none" | "xs" | "xl" | "2xl" | "3xl";
-}, {}, {}, {}, string, ComponentProvideOptions, true, {}, any>;
-
-// @public (undocumented)
-export interface AutoGridProps {
-    // (undocumented)
-    as?: LayoutElement;
-    // (undocumented)
-    gap?: LayoutSpace;
-}
-
-// @public (undocumented)
 export const Button: DefineComponent<ExtractPropTypes<    {
 variant: {
 type: PropType<ButtonVariant>;
@@ -354,66 +311,6 @@ default: boolean;
 }>> & Readonly<{}>, {
 indeterminate: boolean;
 }, {}, {}, {}, string, ComponentProvideOptions, true, {}, any>;
-
-// @public (undocumented)
-export const Cluster: DefineComponent<ExtractPropTypes<    {
-as: {
-type: PropType<LayoutElement>;
-default: string;
-};
-gap: {
-type: PropType<LayoutSpace>;
-default: string;
-};
-align: {
-type: PropType<ClusterAlign>;
-default: string;
-};
-justify: {
-type: PropType<ClusterJustify>;
-default: string;
-};
-}>, () => VNode<RendererNode, RendererElement, {
-[key: string]: any;
-}>, {}, {}, {}, ComponentOptionsMixin, ComponentOptionsMixin, {}, string, PublicProps, Readonly<ExtractPropTypes<    {
-as: {
-type: PropType<LayoutElement>;
-default: string;
-};
-gap: {
-type: PropType<LayoutSpace>;
-default: string;
-};
-align: {
-type: PropType<ClusterAlign>;
-default: string;
-};
-justify: {
-type: PropType<ClusterJustify>;
-default: string;
-};
-}>> & Readonly<{}>, {
-as: LayoutElement;
-gap: "sm" | "md" | "lg" | "none" | "xs" | "xl" | "2xl" | "3xl";
-align: "start" | "center" | "end" | "stretch" | "baseline";
-justify: "start" | "center" | "end" | "space-between";
-}, {}, {}, {}, string, ComponentProvideOptions, true, {}, any>;
-
-export { ClusterAlign }
-
-export { ClusterJustify }
-
-// @public (undocumented)
-export interface ClusterProps {
-    // (undocumented)
-    align?: ClusterAlign;
-    // (undocumented)
-    as?: LayoutElement;
-    // (undocumented)
-    gap?: LayoutSpace;
-    // (undocumented)
-    justify?: ClusterJustify;
-}
 
 // @public (undocumented)
 export const ColorPickerInput: DefineComponent<ExtractPropTypes<    {
@@ -540,53 +437,6 @@ defaultQuery: string;
 }, {}, {}, {}, string, ComponentProvideOptions, true, {}, any>;
 
 // @public (undocumented)
-export const Container: DefineComponent<ExtractPropTypes<    {
-as: {
-type: PropType<LayoutElement>;
-default: string;
-};
-size: {
-type: PropType<ContainerSize>;
-default: string;
-};
-gutter: {
-type: PropType<LayoutSpace>;
-default: string;
-};
-}>, () => VNode<RendererNode, RendererElement, {
-[key: string]: any;
-}>, {}, {}, {}, ComponentOptionsMixin, ComponentOptionsMixin, {}, string, PublicProps, Readonly<ExtractPropTypes<    {
-as: {
-type: PropType<LayoutElement>;
-default: string;
-};
-size: {
-type: PropType<ContainerSize>;
-default: string;
-};
-gutter: {
-type: PropType<LayoutSpace>;
-default: string;
-};
-}>> & Readonly<{}>, {
-size: "sm" | "md" | "lg" | "xl" | "2xl" | "full";
-as: LayoutElement;
-gutter: "sm" | "md" | "lg" | "none" | "xs" | "xl" | "2xl" | "3xl";
-}, {}, {}, {}, string, ComponentProvideOptions, true, {}, any>;
-
-// @public (undocumented)
-export interface ContainerProps {
-    // (undocumented)
-    as?: LayoutElement;
-    // (undocumented)
-    gutter?: LayoutSpace;
-    // (undocumented)
-    size?: ContainerSize;
-}
-
-export { ContainerSize }
-
-// @public (undocumented)
 export const ContextMenuContent: DefineComponent<    {}, () => VNode<RendererNode, RendererElement, {
 [key: string]: any;
 }>, {}, {}, {}, ComponentOptionsMixin, ComponentOptionsMixin, {}, string, PublicProps, Readonly<{}> & Readonly<{}>, {}, {}, {}, {}, string, ComponentProvideOptions, true, {}, any>;
@@ -636,42 +486,6 @@ open: boolean;
 export const ContextMenuTrigger: DefineComponent<    {}, () => VNode<RendererNode, RendererElement, {
 [key: string]: any;
 }>, {}, {}, {}, ComponentOptionsMixin, ComponentOptionsMixin, {}, string, PublicProps, Readonly<{}> & Readonly<{}>, {}, {}, {}, {}, string, ComponentProvideOptions, true, {}, any>;
-
-// @public (undocumented)
-export const ControlGroup: DefineComponent<ExtractPropTypes<    {
-as: {
-type: PropType<LayoutElement>;
-default: string;
-};
-orientation: {
-type: PropType<ControlGroupOrientation>;
-default: string;
-};
-}>, () => VNode<RendererNode, RendererElement, {
-[key: string]: any;
-}>, {}, {}, {}, ComponentOptionsMixin, ComponentOptionsMixin, {}, string, PublicProps, Readonly<ExtractPropTypes<    {
-as: {
-type: PropType<LayoutElement>;
-default: string;
-};
-orientation: {
-type: PropType<ControlGroupOrientation>;
-default: string;
-};
-}>> & Readonly<{}>, {
-as: LayoutElement;
-orientation: "horizontal" | "vertical";
-}, {}, {}, {}, string, ComponentProvideOptions, true, {}, any>;
-
-export { ControlGroupOrientation }
-
-// @public (undocumented)
-export interface ControlGroupProps {
-    // (undocumented)
-    as?: LayoutElement;
-    // (undocumented)
-    orientation?: ControlGroupOrientation;
-}
 
 // @public (undocumented)
 export const DialogBody: DefineComponent<    {}, () => VNode<RendererNode, RendererElement, {
@@ -976,66 +790,6 @@ export { IconSize }
 export { IconVariant }
 
 // @public (undocumented)
-export const Inline: DefineComponent<ExtractPropTypes<    {
-as: {
-type: PropType<LayoutElement>;
-default: string;
-};
-gap: {
-type: PropType<LayoutSpace>;
-default: string;
-};
-align: {
-type: PropType<InlineAlign>;
-default: string;
-};
-justify: {
-type: PropType<InlineJustify>;
-default: string;
-};
-}>, () => VNode<RendererNode, RendererElement, {
-[key: string]: any;
-}>, {}, {}, {}, ComponentOptionsMixin, ComponentOptionsMixin, {}, string, PublicProps, Readonly<ExtractPropTypes<    {
-as: {
-type: PropType<LayoutElement>;
-default: string;
-};
-gap: {
-type: PropType<LayoutSpace>;
-default: string;
-};
-align: {
-type: PropType<InlineAlign>;
-default: string;
-};
-justify: {
-type: PropType<InlineJustify>;
-default: string;
-};
-}>> & Readonly<{}>, {
-as: LayoutElement;
-gap: "sm" | "md" | "lg" | "none" | "xs" | "xl" | "2xl" | "3xl";
-align: "start" | "center" | "end" | "stretch" | "baseline";
-justify: "start" | "center" | "end" | "space-between";
-}, {}, {}, {}, string, ComponentProvideOptions, true, {}, any>;
-
-export { InlineAlign }
-
-export { InlineJustify }
-
-// @public (undocumented)
-export interface InlineProps {
-    // (undocumented)
-    align?: InlineAlign;
-    // (undocumented)
-    as?: LayoutElement;
-    // (undocumented)
-    gap?: LayoutSpace;
-    // (undocumented)
-    justify?: InlineJustify;
-}
-
-// @public (undocumented)
 export const Input: DefineComponent<ExtractPropTypes<    {
 type: {
 type: PropType<InputType>;
@@ -1053,11 +807,6 @@ type: InputType;
 }, {}, {}, {}, string, ComponentProvideOptions, true, {}, any>;
 
 export { InputType }
-
-// @public (undocumented)
-export type LayoutElement = 'div' | 'span' | 'section' | 'main' | 'article' | 'aside' | 'nav' | 'header' | 'footer' | 'form' | 'fieldset' | 'ul' | 'ol';
-
-export { LayoutSpace }
 
 // @public (undocumented)
 export const Link: DefineComponent<    {}, () => VNode<RendererNode, RendererElement, {
@@ -2162,66 +1911,6 @@ max: number;
 min: number;
 defaultSize: number;
 }, {}, {}, {}, string, ComponentProvideOptions, true, {}, any>;
-
-// @public (undocumented)
-export const Stack: DefineComponent<ExtractPropTypes<    {
-as: {
-type: PropType<LayoutElement>;
-default: string;
-};
-gap: {
-type: PropType<LayoutSpace>;
-default: string;
-};
-align: {
-type: PropType<StackAlign>;
-default: string;
-};
-justify: {
-type: PropType<StackJustify>;
-default: string;
-};
-}>, () => VNode<RendererNode, RendererElement, {
-[key: string]: any;
-}>, {}, {}, {}, ComponentOptionsMixin, ComponentOptionsMixin, {}, string, PublicProps, Readonly<ExtractPropTypes<    {
-as: {
-type: PropType<LayoutElement>;
-default: string;
-};
-gap: {
-type: PropType<LayoutSpace>;
-default: string;
-};
-align: {
-type: PropType<StackAlign>;
-default: string;
-};
-justify: {
-type: PropType<StackJustify>;
-default: string;
-};
-}>> & Readonly<{}>, {
-as: LayoutElement;
-gap: "sm" | "md" | "lg" | "none" | "xs" | "xl" | "2xl" | "3xl";
-align: "start" | "center" | "end" | "stretch" | "baseline";
-justify: "start" | "center" | "end" | "space-between";
-}, {}, {}, {}, string, ComponentProvideOptions, true, {}, any>;
-
-export { StackAlign }
-
-export { StackJustify }
-
-// @public (undocumented)
-export interface StackProps {
-    // (undocumented)
-    align?: StackAlign;
-    // (undocumented)
-    as?: LayoutElement;
-    // (undocumented)
-    gap?: LayoutSpace;
-    // (undocumented)
-    justify?: StackJustify;
-}
 
 // @public (undocumented)
 export const Switch: DefineComponent<    {}, () => VNode<RendererNode, RendererElement, {

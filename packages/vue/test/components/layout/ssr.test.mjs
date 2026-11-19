@@ -2,26 +2,17 @@ import { test } from 'vitest';
 import assert from 'node:assert/strict';
 import { createSSRApp, h } from 'vue';
 import { renderToString } from '@vue/server-renderer';
-import { AutoGrid, Cluster, Container, ControlGroup, Inline, Stack } from '@vyrnforge/vue/layout';
 
-test('Vue SSR preserves the six L3 composition contracts without manufacturing semantics', async () => {
-  const html = await renderToString(createSSRApp({
-    render: () => h(Container, { as: 'main', id: 'container', size: 'lg', gutter: 'md' }, () => [
-      h(Stack, { as: 'section', id: 'stack', gap: 'lg', align: 'start' }, () => [
-        h(AutoGrid, { as: 'section', id: 'auto-grid', gap: 'md' }, () => 'Cards'),
-        h(Inline, { id: 'inline', gap: 'sm' }, () => 'Inline'),
-        h(Cluster, { id: 'cluster', gap: 'sm', align: 'center' }, () => 'Actions'),
-        h(ControlGroup, { id: 'control-group', orientation: 'vertical' }, () => [h('button', { type: 'button' }, 'Previous'), h('button', { type: 'button' }, 'Next')]),
-      ]),
+test('Vue native semantic hosts can consume layout CSS recipes without a layout runtime', async () => {
+  const html = await renderToString(createSSRApp({ render: () => h('main', null, [
+    h('section', { 'data-vf-flow': '', 'data-vf-flow-gap': 'lg', 'aria-label': 'Settings' }, [
+      h('ul', { 'data-vf-auto-grid': '' }, [h('li', 'One'), h('li', 'Two')]),
+      h('nav', { 'data-vf-flow': '', 'data-vf-flow-direction': 'inline', 'data-vf-flow-wrap': 'wrap', 'aria-label': 'Actions' }, [h('a', { href: '#one' }, 'One')]),
     ]),
-  }));
-
-  for (const hook of ['container', 'stack', 'auto-grid', 'inline', 'cluster', 'control-group']) {
-    assert.match(html, new RegExp(`data-vf-${hook}`));
-  }
-  for (const retired of ['grid', 'aspect-ratio', 'field', 'fieldset', 'radio-group']) {
-    assert.doesNotMatch(html, new RegExp(`data-vf-${retired}(?:\\s|=)`));
-  }
-  assert.doesNotMatch(html, /id="control-group"[^>]*role=/);
-  assert.match(html, /data-vf-control-group-orientation="vertical"/);
+  ]) }));
+  assert.match(html, /<main/);
+  assert.match(html, /data-vf-auto-grid/);
+  assert.match(html, /data-vf-flow-direction="inline"/);
+  assert.match(html, /aria-label="Actions"/);
+  assert.doesNotMatch(html, /data-vf-(stack|inline|cluster|container|control-group)(?:\s|=)/);
 });

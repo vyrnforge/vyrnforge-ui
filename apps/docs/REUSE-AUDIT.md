@@ -1,5 +1,10 @@
 # Reference app — reusable UI adoption inventory
 
+## Current layout-recipe migration — decision #1418
+
+This original 18 November source-inspection inventory predates the approved 19 November layout simplification. Its historical Stack/Inline/Cluster wording is **not** the active target. The current layout public contract is canonical `@vyrnforge/web/styles/layout.css` with `data-vf-flow` (configurable block/inline/wrap) and `data-vf-auto-grid` (intrinsic equal tracks), on semantic native hosts. React/Vue layout wrappers, Angular layout directives, Container and ControlGroup are removed as overlapping APIs. See [#1418](https://github.com/vyrnforge/vyrnforge-ui/issues/1418) and the [canonical Composition Contract](https://docs.google.com/document/d/1z5wOQFQ4aPD1pCTU48wGgUp8njpSo7Y_a40WKYrpP_o/edit). Current implementation remains subject to exact-head CI, independent QA and visual review.
+
+
 Status: source-inspected implementation inventory; **not** cross-page visual acceptance or library product approval.
 Checkpoint: `main@c220009670b08d43b0f4ac1f6346cb1ba32678ea` (18 November 2026).
 Scope: Native Web Reference renderer `apps/docs/`; product evidence is the actual public package and Product Graph, not merely the presence of a CSS file.
