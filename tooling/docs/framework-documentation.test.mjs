@@ -118,3 +118,26 @@ describe('React Layout components and shared CSS fallback across framework sourc
     expect(web.componentCatalog.find((component) => component.id === 'layout')?.apiAvailable).toBe(true);
   });
 });
+
+describe('Layout example ergonomics', () => {
+  it('keeps all published Native Web and React layout examples free of per-instance inline CSS', () => {
+    for (const framework of ['native-web', 'react']) {
+      const model = compileFrameworkDocumentation(framework);
+      const layout = model.componentCatalog.find((component) => component.id === 'layout');
+      expect(layout.examples).toHaveLength(6);
+      for (const example of layout.examples) {
+        expect(example.source, example.sourcePath).not.toMatch(/\\bstyle\\s*=\\s*(?:\\{|["'])/);
+      }
+    }
+  });
+
+  it('documents semantic, undecorated lists rather than an invented card component', () => {
+    for (const framework of ['native-web', 'react']) {
+      const layout = compileFrameworkDocumentation(framework).componentCatalog.find((component) => component.id === 'layout');
+      const grid = layout.examples.find((example) => example.id === 'layout/auto-grid');
+      expect(grid.source).toMatch(framework === 'react' ? /<AutoGrid as="ul">/ : /<ul data-vf-auto-grid>/);
+      expect(grid.source).toContain('<li');
+      expect(grid.source).not.toMatch(/list-style\\s*:\\s*none|listStyle/);
+    }
+  });
+});
