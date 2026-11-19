@@ -1387,8 +1387,8 @@ test('Layout guide is discoverable in the Layout & Structure submenu and renders
     await example.getByText('View HTML source').click();
     await expect(example.locator('code[data-vf-docs-source]')).toBeVisible();
   }
-  await expect(article.locator('[data-vf-docs-example="layout/flow-block"] [data-vf-flow]')).toHaveCSS('flex-direction', 'column');
-  await expect(article.locator('[data-vf-docs-example="layout/flow-inline"] [data-vf-flow]')).toHaveCSS('flex-wrap', 'nowrap');
+  await expect(article.locator('[data-vf-docs-example="layout/flow-block"] [data-vf-docs-preview] > [data-vf-flow]')).toHaveCSS('flex-direction', 'column');
+  await expect(article.locator('[data-vf-docs-example="layout/flow-inline"] [data-vf-docs-preview] > [data-vf-flow]')).toHaveCSS('flex-wrap', 'nowrap');
   const rtl = article.locator('[data-vf-docs-example="layout/flow-wrap"] [dir="rtl"]');
   await expect(rtl).toHaveCSS('direction', 'rtl');
   await expect(rtl).toHaveCSS('flex-wrap', 'wrap');
