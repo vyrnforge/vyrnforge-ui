@@ -808,6 +808,7 @@ test('Native header uses a compact named brand and full-width context controls a
     await expect(brand.locator('.vf-docs-brand-full')).toBeHidden();
     await expect(page.locator('.vf-docs-surface')).toBeHidden();
     await expect(page.getByRole('button', { name: 'Menu' })).toHaveCSS('white-space', 'nowrap');
+    await expect(page.getByRole('searchbox', { name: 'Search documentation' })).toHaveAttribute('placeholder', 'Search docs');
     const framework = page.getByRole('combobox', { name: 'Framework' });
     await expect(framework.locator('option:checked')).toHaveText('Native Web');
     const widths = await page.evaluate(() => {
