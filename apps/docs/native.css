@@ -775,6 +775,16 @@
   }
 
   @media (max-width: 48rem) {
+    /* Native TOC links stay in normal reading order, but the list stops
+       occupying the entire first screen when text is enlarged. */
+    .vf-docs-toc ol {
+      max-block-size: min(8rem, 20vh);
+      overflow-x: hidden;
+      overflow-y: auto;
+      overflow-wrap: anywhere;
+      padding-block-end: var(--vf-space-xs);
+    }
+
     .vf-docs-header-inner {
       gap: var(--vf-space-sm);
       grid-template-columns: minmax(0, 1fr);
@@ -830,6 +840,22 @@
 
     .vf-docs-menu-toggle {
       justify-self: start;
+      max-inline-size: 100%;
+      white-space: nowrap;
+    }
+
+    /* Stack native select labels over full-width controls so the active
+       framework is not squeezed beside its label at 200% text. */
+    .vf-docs-framework-control,
+    .vf-docs-version-control {
+      align-items: stretch;
+      display: grid;
+      grid-template-columns: minmax(0, 1fr);
+    }
+
+    .vf-docs-framework-control select,
+    .vf-docs-version-control select {
+      inline-size: 100%;
     }
 
     .vf-docs-brand {
@@ -867,6 +893,23 @@
     .vf-docs-example-header,
     .vf-docs-source-disclosure {
       padding-inline: var(--vf-space-md);
+    }
+  }
+
+  /* A very narrow *effective* viewport (including 200–400% text zoom)
+     cannot hold the long wordmark. Keep its full accessible link name. */
+  .vf-docs-brand-compact {
+    display: none;
+  }
+
+  @media (max-width: 18rem) {
+    .vf-docs-brand-full,
+    .vf-docs-surface {
+      display: none;
+    }
+
+    .vf-docs-brand-compact {
+      display: inline;
     }
   }
 
