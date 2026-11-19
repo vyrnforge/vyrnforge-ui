@@ -212,7 +212,7 @@ function body(view, links, button, message, setMessage, requestedTopic) {
         h('code', null, "import { Button } from '@vyrnforge/react/button';"))),
     h('section', { 'aria-labelledby': 'react-usage' },
       h('h2', { id: 'react-usage' }, 'Usage preview'),
-      h('div', { className: 'vf-docs-preview', 'data-vf-cluster': '', 'data-vf-cluster-gap': 'md' },
+      h('div', { className: 'vf-docs-preview', 'data-vf-flow': '', 'data-vf-flow-direction': 'inline', 'data-vf-flow-wrap': 'wrap', 'data-vf-flow-gap': 'md' },
         h(Button, { type: 'button', onClick: () => setMessage('Save changes activated') }, 'Save changes'),
         h('span', { role: 'status', 'aria-live': 'polite', 'data-vf-docs-react-feedback': '' }, message))),
     example(button, links),

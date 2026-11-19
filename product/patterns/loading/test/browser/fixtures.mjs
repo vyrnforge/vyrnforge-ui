@@ -35,10 +35,10 @@ export const browserFixture = {
     );
 
     const body = `
-      <section id="examples" data-vf-stack data-vf-stack-gap="lg" aria-labelledby="heading">
+      <section id="examples" data-vf-flow data-vf-flow-direction="block" data-vf-flow-gap="lg" aria-labelledby="heading">
         <h1 id="heading">Loading fixture</h1>
 
-        <div id="indicator-row" data-vf-inline data-vf-inline-gap="md">
+        <div id="indicator-row" data-vf-flow data-vf-flow-direction="inline" data-vf-flow-gap="md">
           <span
             id="scope-sm"
             data-vf-loading
@@ -84,11 +84,11 @@ export const browserFixture = {
               --vf-loading-placeholder-duration: 1.8s;
             "
           >
-            <div data-vf-stack data-vf-stack-gap="sm">
+            <div data-vf-flow data-vf-flow-direction="block" data-vf-flow-gap="sm">
               <div id="media" data-vf-loading-placeholder aria-hidden="true" style="aspect-ratio: 16 / 9"></div>
-              <div data-vf-inline data-vf-inline-gap="sm">
+              <div data-vf-flow data-vf-flow-direction="inline" data-vf-flow-gap="sm">
                 <div id="avatar" data-vf-loading-placeholder data-vf-loading-placeholder-shape="circle" aria-hidden="true" style="aspect-ratio: 1 / 1"></div>
-                <div id="placeholder-copy" data-vf-stack data-vf-stack-gap="xs">
+                <div id="placeholder-copy" data-vf-flow data-vf-flow-direction="block" data-vf-flow-gap="xs">
                   <div id="line-a" data-vf-loading-placeholder data-vf-loading-placeholder-shape="line" aria-hidden="true"></div>
                   <div id="line-b" data-vf-loading-placeholder data-vf-loading-placeholder-shape="line" aria-hidden="true"></div>
                 </div>
