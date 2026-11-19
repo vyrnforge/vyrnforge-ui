@@ -195,3 +195,66 @@ test('default density rhythm works without reset at 320 CSS pixels and preserves
   await page.emulateMedia({ forcedColors: 'active' });
   await expect(page.locator('#search')).toBeVisible();
 });
+
+test('default-first React form retains accessible relationships across actual-size density and theme states', async ({ page }, testInfo) => {
+  test.skip(port !== 'react', 'Only React ships the typed Flow/Input/Text form composition');
+
+  for (const viewport of [{ name: 'wide', width: 1024, height: 768 }, { name: '320', width: 320, height: 768 }]) {
+    await page.setViewportSize({ width: viewport.width, height: viewport.height });
+    for (const theme of ['light', 'dark']) {
+      for (const density of ['comfortable', 'compact']) {
+        await page.goto('/components/layout/react-form.html');
+        await page.locator('html').evaluate((node, config) => {
+          node.setAttribute('data-vf-theme', config.theme);
+          node.setAttribute('data-vf-density', config.density);
+        }, { theme, density });
+        const flow = page.locator('#react-flow-block');
+        const input = page.getByRole('textbox', { name: 'Contact email' });
+        const help = page.locator('#layout-react-email-help');
+        await expect(flow).toHaveCSS('gap', density === 'comfortable' ? '16px' : '8px');
+        await expect(input).toHaveCSS('min-height', density === 'comfortable' ? '40px' : '32px');
+        await expect(input).toHaveAttribute('aria-describedby', 'layout-react-email-help');
+        await expect(help).toHaveCSS('margin-top', '0px');
+        await expect(help).toHaveCSS('margin-bottom', '0px');
+        await expect(input).toBeVisible();
+        const widths = await page.evaluate(() => ({
+          scroll: document.documentElement.scrollWidth,
+          client: document.documentElement.clientWidth,
+        }));
+        expect(widths.scroll).toBeLessThanOrEqual(widths.client);
+        await input.focus();
+        await expect(input).toBeFocused();
+        expect(await input.evaluate(node => getComputedStyle(node).outlineStyle)).not.toBe('none');
+        await page.screenshot({
+          path: testInfo.outputPath(`react-default-form-${theme}-${density}-${viewport.name}.png`),
+          fullPage: true,
+        });
+      }
+    }
+  }
+
+  await page.setViewportSize({ width: 320, height: 768 });
+  await page.goto('/components/layout/react-form.html');
+  await page.locator('html').evaluate(node => {
+    node.setAttribute('data-vf-theme', 'dark');
+    node.setAttribute('data-vf-density', 'comfortable');
+    node.style.fontSize = '200%';
+    node.dir = 'rtl';
+  });
+  const flow = page.locator('#react-flow-block');
+  await expect(flow).toHaveCSS('gap', '32px');
+  await page.locator('#form-example').evaluate(node => node.setAttribute('data-vf-density', 'compact'));
+  await expect(flow).toHaveCSS('gap', '16px');
+  const nestedInput = page.getByRole('textbox', { name: 'Contact email' });
+  await nestedInput.focus();
+  await page.emulateMedia({ forcedColors: 'active' });
+  await expect(nestedInput).toBeFocused();
+  const dimensions = await page.evaluate(() => ({
+    scroll: document.documentElement.scrollWidth,
+    client: document.documentElement.clientWidth,
+  }));
+  expect(dimensions.scroll).toBeLessThanOrEqual(dimensions.client);
+  const audit = await new AxeBuilder({ page }).analyze();
+  expect(audit.violations).toEqual([]);
+  await page.screenshot({ path: testInfo.outputPath('react-default-form-rtl-320-200pct-forced-colors.png'), fullPage: true });
+});
