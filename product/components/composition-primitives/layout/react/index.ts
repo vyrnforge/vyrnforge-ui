@@ -20,32 +20,28 @@ export type FlowWrap = 'nowrap' | 'wrap';
 export type FlowAlign = 'start' | 'center' | 'end' | 'stretch' | 'baseline';
 export type FlowJustify = 'start' | 'center' | 'end' | 'space-between';
 
-type NativeLayoutProps<Element extends LayoutElement> =
-  Omit<ComponentPropsWithoutRef<Element>, 'as' | 'direction'>;
-
-type FlowOptions = {
-  /** Author a native semantic host; defaults to div. */
-  as?: LayoutElement;
-  direction?: FlowDirection;
-  wrap?: FlowWrap;
-  gap?: LayoutGap;
-  align?: FlowAlign;
-  justify?: FlowJustify;
-};
-
 export type FlowProps<Element extends LayoutElement = LayoutElement> =
   Element extends LayoutElement
-    ? Omit<FlowOptions, 'as'> & { as?: Element } & NativeLayoutProps<Element>
+    ? {
+        /** A native semantic host; defaults to div. */
+        as?: Element;
+        direction?: FlowDirection;
+        wrap?: FlowWrap;
+        gap?: LayoutGap;
+        align?: FlowAlign;
+        justify?: FlowJustify;
+      } & Omit<ComponentPropsWithoutRef<Element>, 'as' | 'direction'>
     : never;
 
 export type AutoGridProps<Element extends LayoutElement = LayoutElement> =
   Element extends LayoutElement
     ? {
+        /** A native semantic host; defaults to div. */
         as?: Element;
         gap?: LayoutGap;
-        /** A valid CSS track length such as 12rem or 200px. Defaults to 16rem. */
+        /** A CSS track length such as 12rem or 200px; falls back to 16rem. */
         minItemSize?: string;
-      } & NativeLayoutProps<Element>
+      } & Omit<ComponentPropsWithoutRef<Element>, 'as' | 'direction'>
     : never;
 
 // Mirrors VyrnForge Text's polymorphic React port: the public signature
