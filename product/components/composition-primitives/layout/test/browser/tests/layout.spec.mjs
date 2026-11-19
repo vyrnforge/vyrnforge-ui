@@ -108,6 +108,47 @@ test('granular CSS loads without reset in both import orders and permits consume
   }
 });
 
+
+test('semantic AutoGrid ul/ol hosts use shared list spacing while preserving markers and list semantics', async ({ page }) => {
+  await page.setViewportSize({ width: 320, height: 800 });
+  await page.goto(`/components/layout/${port}.html`);
+  await page.locator('#container').evaluate((host) => {
+    for (const tag of ['ul', 'ol']) {
+      const list = document.createElement(tag);
+      list.id = `semantic-${tag}-grid`;
+      list.setAttribute('data-vf-auto-grid', '');
+      for (let i = 0; i < 3; i++) {
+        const item = document.createElement('li');
+        item.textContent = `Item ${i + 1}`;
+        list.append(item);
+      }
+      host.append(list);
+    }
+  });
+  for (const [tag, marker] of [['ul', 'disc'], ['ol', 'decimal']]) {
+    const list = page.locator(`#semantic-${tag}-grid`);
+    await expect(list).toHaveCSS('display', 'grid');
+    await expect(list).toHaveCSS('margin-block-start', '0px');
+    await expect(list).toHaveCSS('margin-block-end', '0px');
+    await expect(list).toHaveCSS('padding-inline-start', '0px');
+    await expect(list).toHaveCSS('list-style-type', marker);
+    await expect(list).toHaveCSS('list-style-position', 'inside');
+    await expect(list).not.toHaveAttribute('style');
+    await expect(list.locator('li')).toHaveCount(3);
+    await expect(list.getByRole('listitem')).toHaveCount(3);
+  }
+  await expect(page.locator('#semantic-ul-grid')).toHaveCSS('gap', '16px');
+  await page.locator('#container').evaluate((node) => { node.setAttribute('data-vf-density', 'compact'); });
+  await expect(page.locator('#semantic-ul-grid')).toHaveCSS('gap', '8px');
+  await page.evaluate(() => { document.documentElement.style.fontSize = '32px'; });
+  await page.locator('html').evaluate((node) => { node.setAttribute('dir', 'rtl'); });
+  const size = await page.evaluate(() => ({
+    scrollWidth: document.documentElement.scrollWidth,
+    clientWidth: document.documentElement.clientWidth,
+  }));
+  expect(size.scrollWidth).toBeLessThanOrEqual(size.clientWidth);
+});
+
 test('200 percent root text scaling preserves responsive Flow and AutoGrid access at 320 CSS px', async ({ page }) => {
   await page.setViewportSize({ width: 320, height: 800 });
   await page.goto(`/components/layout/${port}.html`);
