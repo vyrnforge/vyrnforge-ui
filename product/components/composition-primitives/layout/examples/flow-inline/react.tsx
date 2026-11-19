@@ -1,9 +1,11 @@
+import { Flow } from '@vyrnforge/react/layout';
+
 export function FlowInlineExample() {
   return (
-    <div data-vf-flow data-vf-flow-direction="inline" data-vf-flow-gap="md"
-      data-vf-flow-align="baseline" data-vf-flow-justify="space-between"
+    <Flow direction="inline" gap="md" align="baseline" justify="space-between"
       style={{ inlineSize: 'min(100%, 26rem)' }}>
-      <span>Storage used</span><strong>18 of 50 GB</strong>
-    </div>
+      <span>Storage used</span>
+      <strong>18 of 50 GB</strong>
+    </Flow>
   );
 }

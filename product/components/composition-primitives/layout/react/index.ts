@@ -12,7 +12,7 @@ import type {
  */
 export type LayoutElement =
   | 'div' | 'section' | 'header' | 'footer' | 'main' | 'aside'
-  | 'article' | 'nav' | 'ul' | 'ol' | 'form' | 'fieldset';
+  | 'article' | 'nav' | 'ul' | 'ol' | 'form' | 'fieldset' | 'label';
 
 export type LayoutGap = 'none' | 'xs' | 'sm' | 'md' | 'lg' | 'xl' | '2xl' | '3xl';
 export type FlowDirection = 'block' | 'inline';
