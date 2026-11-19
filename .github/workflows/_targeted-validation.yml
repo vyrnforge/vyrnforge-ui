@@ -38,6 +38,7 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 10
     outputs:
+      components_required: ${{ steps.plan.outputs.components_required }}
       package_artifacts_required: ${{ steps.plan.outputs.package_artifacts_required }}
       package_artifact_packages: ${{ steps.plan.outputs.package_artifact_packages }}
       browser_required: ${{ steps.plan.outputs.browser_required }}
@@ -82,11 +83,11 @@ jobs:
           if-no-files-found: error
           retention-days: ${{ inputs.retention_days }}
 
-  affected:
-    name: affected
+  repository-contracts:
+    name: repository-contracts
     needs: plan
     runs-on: ubuntu-latest
-    timeout-minutes: 40
+    timeout-minutes: 25
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
         with:
@@ -99,19 +100,36 @@ jobs:
       - run: pnpm install --frozen-lockfile --ignore-scripts
       - name: Verify configuration formatting
         run: pnpm format:configs:check
-      - name: Verify canonical L5 source quality
+      - name: Verify repository contracts without component behavior suites
+        run: pnpm verify:structure && pnpm verify:testing-structure && pnpm verify:boundaries && pnpm verify:architecture && pnpm verify:impact && pnpm verify:package-contracts && pnpm verify:compatibility && pnpm verify:workflows && pnpm verify:validation
+
+  components:
+    name: components
+    needs: [plan, repository-contracts]
+    if: needs.plan.outputs.components_required == 'true'
+    runs-on: ubuntu-latest
+    timeout-minutes: 40
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7
+        with:
+          node-version-file: .node-version
+          package-manager-cache: false
+      - run: corepack enable
+      - run: pnpm install --frozen-lockfile --ignore-scripts
+      - name: Verify canonical L5 component source quality
         run: pnpm format:l5:check && pnpm lint:l5
-      - name: Run Nx affected validation
+      - name: Run Nx affected component and library validation, excluding Pages
         env:
           NX_BASE: ${{ inputs.base_sha }}
           NX_HEAD: ${{ inputs.head_sha }}
-        run: pnpm exec nx affected -t lint,typecheck,test,build --base="$NX_BASE" --head="$NX_HEAD"
-      - name: Verify repository contracts
-        run: pnpm verify:structure && pnpm verify:testing-structure && pnpm verify:boundaries && pnpm verify:architecture && pnpm verify:impact && pnpm verify:package-contracts && pnpm verify:compatibility && pnpm verify:workflows && pnpm verify:validation
+        run: pnpm exec nx affected -t lint,typecheck,test,build --exclude=docs --base="$NX_BASE" --head="$NX_HEAD"
 
   package-artifacts:
     name: package-artifacts
-    needs: [plan, affected]
+    needs: [plan, repository-contracts]
     if: needs.plan.outputs.package_artifacts_required == 'true'
     runs-on: ubuntu-latest
     timeout-minutes: 40
@@ -140,7 +158,7 @@ jobs:
 
   release-intent:
     name: release-intent
-    needs: [plan, affected]
+    needs: [plan, repository-contracts]
     if: needs.plan.outputs.release_required == 'true'
     runs-on: ubuntu-latest
     timeout-minutes: 20
@@ -156,9 +174,9 @@ jobs:
       - run: pnpm install --frozen-lockfile --ignore-scripts
       - run: pnpm verify:release
 
-  documentation:
-    name: documentation
-    needs: [plan, affected]
+  pages:
+    name: pages
+    needs: [plan, repository-contracts]
     if: needs.plan.outputs.docs_required == 'true'
     runs-on: ubuntu-latest
     timeout-minutes: 40
@@ -170,6 +188,8 @@ jobs:
           package-manager-cache: false
       - run: corepack enable
       - run: pnpm install --frozen-lockfile --ignore-scripts
+      - name: Lint and test the Reference Pages application
+        run: pnpm exec nx run docs:lint && pnpm exec nx run docs:test
       - run: pnpm build:docs
       - name: Verify framework documentation source preflight
         run: pnpm exec vitest run --project repository-tooling tooling/docs/framework-documentation.test.mjs
@@ -193,7 +213,7 @@ jobs:
           retention-days: ${{ inputs.retention_days }}
 
   browser-chromium:
-    needs: [plan, affected]
+    needs: [plan, repository-contracts]
     if: needs.plan.outputs.browser_required == 'true'
     uses: ./.github/workflows/_browser-validation.yml
     with:
@@ -208,7 +228,7 @@ jobs:
   selected-evidence:
     name: selected-evidence
     if: always()
-    needs: [plan, affected, package-artifacts, release-intent, documentation, browser-chromium]
+    needs: [plan, repository-contracts, components, package-artifacts, release-intent, pages, browser-chromium]
     runs-on: ubuntu-latest
     timeout-minutes: 10
     steps:
@@ -227,10 +247,11 @@ jobs:
       - name: Summarize and require selected evidence
         env:
           VF_HEAD_SHA: ${{ inputs.head_sha }}
-          VF_RESULT_AFFECTED: ${{ needs.affected.result }}
+          VF_RESULT_REPOSITORY: ${{ needs.repository-contracts.result }}
+          VF_RESULT_COMPONENTS: ${{ needs.components.result }}
           VF_RESULT_PACKAGES: ${{ needs.package-artifacts.result }}
           VF_RESULT_RELEASE: ${{ needs.release-intent.result }}
-          VF_RESULT_DOCS: ${{ needs.documentation.result }}
+          VF_RESULT_DOCS: ${{ needs.pages.result }}
           VF_RESULT_BROWSER: ${{ needs.browser-chromium.result }}
         run: node tooling/validation/summarize.mjs --plan test-results/semantic-impact.json --metrics-dir test-results/validation-metrics --output-dir test-results/validation-summary
       - uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7
