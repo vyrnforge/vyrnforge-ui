@@ -23,6 +23,37 @@ function renderSections(content, prefix) {
         h('h2', { id }, section.heading), ...renderBlocks(section.blocks));
     }));
 }
+function accessibilityEvidence(references) {
+  if (!references) return null;
+  const criteria = references.criteria ?? [];
+  const hasBaselineNote = Boolean(references.nativeBaseline && !references.hasNativeReference);
+  return h('section', { className: 'vf-docs-standards',
+    'data-vf-docs-accessibility': '', 'aria-labelledby': 'react-accessibility-heading' },
+    h('h2', { id: 'react-accessibility-heading' }, 'Accessibility evidence'),
+    h('ul', { className: 'vf-docs-standards-primary', 'aria-label': 'Standards' },
+      ...references.standards.map((standard, i) => h('li', { key: i },
+        standard.url
+          ? h('a', { href: standard.url, 'data-vf-link': '' }, standard.label)
+          : h('span', null, standard.label)))),
+    (criteria.length || hasBaselineNote)
+      ? h('details', { className: 'vf-docs-standards-details' },
+          h('summary', null, criteria.length
+            ? criteria.length + ' WCAG ' + (criteria.length === 1 ? 'criterion' : 'criteria')
+            : 'Semantic baseline'),
+          criteria.length ? h('ul', { 'aria-label': 'Mapped WCAG criteria' },
+            ...criteria.map((criterion, i) =>
+              h('li', { key: i }, criterion.url
+                ? h('a', { href: criterion.url, 'data-vf-link': '' },
+                    h('code', { 'data-vf-code': '' }, criterion.id), ' ', criterion.label)
+                : h('span', null, criterion.id)))) : null,
+          hasBaselineNote ? h('p', { className: 'vf-docs-standards-baseline' },
+            'Semantic baseline: ' + references.nativeBaseline) : null)
+      : null,
+    h('p', { className: 'vf-docs-standards-note' },
+      'Mapping status: ', h('strong', null, references.mappingStatus), '.',
+      references.reviewStatus === 'review-required' ? ' Accessibility review required.' : '',
+      ' References and evidence mappings only; not a blanket compliance claim.'));
+}
 function useTheme() {
   const [theme, setTheme] = useState('light');
   useEffect(() => {
@@ -123,7 +154,8 @@ function body(view, links, button, message, setMessage) {
       h('header', { className: 'vf-docs-component-header' },
         h('h1', null, 'Button API'),
         h('p', { className: 'vf-docs-lede', 'data-vf-text': '', 'data-vf-text-variant': 'body-lg' },
-          'Public React entrypoints are derived from the Product Graph; other APIs are not inferred.')),
+          'Public React entrypoints are derived from the Product Graph; other APIs are not inferred.'),
+        accessibilityEvidence(button.standardReferences)),
       h('section', null, h('h2', null, 'Public entrypoints'),
         h('ul', null, ...button.publicEntrypoints.map((name) =>
           h('li', { key: name }, h('code', { 'data-vf-code': '' }, name))))),
@@ -134,7 +166,8 @@ function body(view, links, button, message, setMessage) {
     h('header', { className: 'vf-docs-component-header' },
       h('h1', null, button.sharedContent?.title || 'Button'),
       h('div', { className: 'vf-docs-lede', 'data-vf-text': '', 'data-vf-text-variant': 'body-lg' },
-        ...renderBlocks(button.sharedContent?.intro))),
+        ...renderBlocks(button.sharedContent?.intro)),
+      accessibilityEvidence(button.standardReferences)),
     h('section', { 'aria-labelledby': 'react-setup' },
       h('h2', { id: 'react-setup' }, 'React setup'),
       h('pre', { 'data-vf-code-block': '', tabIndex: 0 },
