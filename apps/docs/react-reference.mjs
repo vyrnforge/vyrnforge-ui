@@ -2,7 +2,8 @@ import { createElement as h, Fragment, useEffect, useRef, useState } from 'react
 import { AppShell, AppShellHeader, AppShellBody, AppShellNavigation, AppShellMain, AppShellFooter } from '@vyrnforge/react/app-shell';
 import { SideNav, SideNavGroup, SideNavGroupLabel, SideNavList, SideNavItem, SideNavLink } from '@vyrnforge/react/side-nav';
 import { Button } from '@vyrnforge/react/button';
-import { Input } from '@vyrnforge/react/input';
+import { SearchFieldRoot, SearchFieldInput, SearchFieldClear } from '@vyrnforge/react/search-field';
+import { NativeSelect } from '@vyrnforge/react/native-select';
 
 function slug(value) {
   return String(value).toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-+|-+$/g, '');
@@ -155,7 +156,6 @@ export function ReactReferencePage({ view, links, button }) {
   const { theme, change } = useTheme();
   const [search, setSearch] = useState('');
   const [message, setMessage] = useState('');
-  const searchRef = useRef(null);
   useEffect(() => { document.documentElement.dataset.vfReactHydrated = 'true'; }, []);
   const pages = [
     { title: 'React overview', href: links.home, keywords: 'getting started setup' },
@@ -181,17 +181,12 @@ export function ReactReferencePage({ view, links, button }) {
           h('a', { className: 'vf-docs-brand', href: links.home }, 'VyrnForge ', h('span', null, 'Docs')),
           h('span', { className: 'vf-docs-surface' }, 'React · ' + links.channel)),
         h('div', { className: 'vf-docs-header-tools' },
-          h('search', { className: 'vf-docs-search', 'data-vf-search-field-root': '',
-            'aria-label': 'React documentation search' },
+          h(SearchFieldRoot, { className: 'vf-docs-search',
+            'aria-label': 'React documentation search', value: search, onValueChange: setSearch },
             h('label', { htmlFor: 'vf-react-search', 'data-vf-visually-hidden': '' }, 'Search React documentation'),
-            h(Input, { id: 'vf-react-search', ref: searchRef, type: 'search',
-              'data-vf-search-field-input': '', value: search,
-              onChange: (event) => setSearch(event.target.value),
+            h(SearchFieldInput, { id: 'vf-react-search', 'data-vf-input': '',
               placeholder: 'Search React documentation', 'aria-controls': 'vf-react-results' }),
-            h(Button, { type: 'button', size: 'sm', variant: 'ghost',
-              'data-vf-search-field-clear': '', 'aria-label': 'Clear search',
-              disabled: !search, onClick: () => { setSearch(''); searchRef.current?.focus(); },
-            }, '×'),
+            h(SearchFieldClear, { 'aria-label': 'Clear search' }, '×'),
             h('span', { 'data-vf-visually-hidden': '', role: 'status', 'aria-live': 'polite' },
               search ? matches.length + ' React documentation results' : ''),
             h('div', { id: 'vf-react-results', className: 'vf-docs-search-panel',
@@ -203,7 +198,7 @@ export function ReactReferencePage({ view, links, button }) {
                 : h('p', null, 'No matching React documentation.'))),
           h('div', { className: 'vf-docs-theme-control' },
             h('label', { htmlFor: 'vf-react-theme' }, 'Theme'),
-            h('select', { id: 'vf-react-theme', 'data-vf-native-select': '', value: theme,
+            h(NativeSelect, { id: 'vf-react-theme', value: theme,
               onChange: (event) => change(event.target.value) },
               h('option', { value: 'light' }, 'Light'),
               h('option', { value: 'dark' }, 'Dark'),
