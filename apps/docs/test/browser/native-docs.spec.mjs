@@ -802,7 +802,7 @@ test('Native header uses a compact named brand and full-width context controls a
       document.documentElement.style.fontSize = `${percent}%`;
     }, textPercent);
 
-    const brand = page.getByRole('link', { name: 'VyrnForge Docs' });
+    const brand = page.getByRole('link', { name: /VF Docs.*VyrnForge/ });
     await expect(brand).toBeVisible();
     await expect(brand.locator('.vf-docs-brand-compact')).toBeVisible();
     await expect(brand.locator('.vf-docs-brand-full')).toBeHidden();
