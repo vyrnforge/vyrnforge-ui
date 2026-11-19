@@ -72,6 +72,14 @@ function initializeTheme() {
   });
 }
 
+function initializeFrameworkContext() {
+  const picker = document.querySelector('select[data-vf-docs-framework]');
+  picker?.addEventListener('change', () => {
+    const destination = picker.value;
+    if (destination) window.location.assign(destination);
+  });
+}
+
 function initializeNavigation() {
   const shell = document.querySelector('[data-vf-docs-shell]');
   const toggle = document.querySelector('[data-vf-docs-nav-toggle]');
@@ -224,6 +232,7 @@ function initializeExampleForms() {
 }
 
 initializeTheme();
+initializeFrameworkContext();
 initializeNavigation();
 initializeSearch();
 initializeCopyButtons();
