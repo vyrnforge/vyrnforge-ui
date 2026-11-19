@@ -98,7 +98,7 @@ test('React header keeps an accessible brand and readable context controls at 40
   await expect(page.locator('html')).toHaveAttribute('data-vf-react-hydrated', 'true');
   await page.evaluate(() => { document.documentElement.style.fontSize = '400%'; });
 
-  const brand = page.getByRole('link', { name: 'VyrnForge Docs' });
+  const brand = page.getByRole('link', { name: /VF Docs.*VyrnForge/ });
   await expect(brand).toBeVisible();
   await expect(brand.locator('.vf-docs-brand-compact')).toBeVisible();
   await expect(brand.locator('.vf-docs-brand-full')).toBeHidden();
