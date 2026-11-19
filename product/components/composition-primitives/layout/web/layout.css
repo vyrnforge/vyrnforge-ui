@@ -147,6 +147,8 @@
     min-inline-size: 0;
     position: relative;
   }
+  /* Only controls in the same uninterrupted run share joined edges.
+     An intervening wrapper or non-control remains a visual boundary. */
   :where([data-vf-control-group]:not([data-vf-control-group-orientation="vertical"])) > :where(
     button,
     select,
@@ -156,7 +158,16 @@
     [data-vf-input],
     [data-vf-native-select],
     [data-vf-file-input]
-  ):not(:first-child) {
+  ) + :where(
+    button,
+    select,
+    textarea,
+    input:not([type="checkbox"]):not([type="radio"]):not([type="range"]):not([type="hidden"]),
+    [data-vf-button],
+    [data-vf-input],
+    [data-vf-native-select],
+    [data-vf-file-input]
+  ) {
     border-start-start-radius: 0;
     border-end-start-radius: 0;
     border-inline-start-width: 0;
@@ -170,7 +181,16 @@
     [data-vf-input],
     [data-vf-native-select],
     [data-vf-file-input]
-  ):not(:last-child) {
+  ):has(+ :where(
+    button,
+    select,
+    textarea,
+    input:not([type="checkbox"]):not([type="radio"]):not([type="range"]):not([type="hidden"]),
+    [data-vf-button],
+    [data-vf-input],
+    [data-vf-native-select],
+    [data-vf-file-input]
+  )) {
     border-start-end-radius: 0;
     border-end-end-radius: 0;
   }
@@ -183,7 +203,16 @@
     [data-vf-input],
     [data-vf-native-select],
     [data-vf-file-input]
-  ):not(:first-child) {
+  ) + :where(
+    button,
+    select,
+    textarea,
+    input:not([type="checkbox"]):not([type="radio"]):not([type="range"]):not([type="hidden"]),
+    [data-vf-button],
+    [data-vf-input],
+    [data-vf-native-select],
+    [data-vf-file-input]
+  ) {
     border-start-start-radius: 0;
     border-start-end-radius: 0;
     border-block-start-width: 0;
@@ -197,7 +226,16 @@
     [data-vf-input],
     [data-vf-native-select],
     [data-vf-file-input]
-  ):not(:last-child) {
+  ):has(+ :where(
+    button,
+    select,
+    textarea,
+    input:not([type="checkbox"]):not([type="radio"]):not([type="range"]):not([type="hidden"]),
+    [data-vf-button],
+    [data-vf-input],
+    [data-vf-native-select],
+    [data-vf-file-input]
+  )) {
     border-end-start-radius: 0;
     border-end-end-radius: 0;
   }
