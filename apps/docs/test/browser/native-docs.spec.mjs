@@ -809,7 +809,7 @@ test('Native header uses a compact named brand and full-width context controls a
     await expect(page.locator('.vf-docs-surface')).toBeHidden();
     await expect(page.getByRole('button', { name: 'Menu' })).toHaveCSS('white-space', 'nowrap');
     const framework = page.getByRole('combobox', { name: 'Framework' });
-    await expect(framework).toHaveValue(/native-web|\.\//);
+    await expect(framework.locator('option:checked')).toHaveText('Native Web');
     const widths = await page.evaluate(() => {
       const select = document.querySelector('[data-vf-docs-framework]').getBoundingClientRect();
       const control = document.querySelector('.vf-docs-framework-control').getBoundingClientRect();
