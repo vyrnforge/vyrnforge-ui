@@ -84,7 +84,13 @@ describe('Layout guide discovery and CSS-only responsibility', () => {
     });
     for (const framework of ['react', 'angular', 'vue', 'elements']) {
       const model = compileFrameworkDocumentation(framework);
-      expect(model.componentCatalog.some((component) => component.id === 'layout')).toBe(false);
+      const cssGuide = model.componentCatalog.find((component) => component.id === 'layout');
+      expect(cssGuide).toMatchObject({
+        guideOnly: true, apiAvailable: false,
+        cssRecipeStyle: '@vyrnforge/web/styles/layout.css',
+        publicEntrypoints: [],
+      });
+      expect(model.componentApiPages.some((component) => component.id === 'layout')).toBe(false);
     }
   });
 });
