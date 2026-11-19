@@ -13,9 +13,10 @@ test('React pilot artifact is Product Graph-backed and SSR-rendered with public 
   expect(manifest.button.sharedSourcePath).toBe(button.sharedSourcePath);
   expect(manifest.button.frameworkSourcePath).toBe(button.frameworkSourcePath);
   expect(manifest.button.publicEntrypoints).toContain('@vyrnforge/react/button');
-  expect(manifest.routes.map((entry) => entry.route)).toEqual([
+  expect(manifest.routes.filter((entry) => entry.view !== 'unavailable').map((entry) => entry.route)).toEqual([
     '', 'components/button/', 'api/components/button/',
   ]);
+  expect(manifest.routes).toContainEqual({ route: 'components/input/', view: 'unavailable' });
   for (const route of manifest.routes) {
     const html = readFileSync('dist/docs/next/react/' + route.route + 'index.html', 'utf8');
     expect(html).toContain('data-vf-app-shell');
@@ -78,6 +79,33 @@ test('React URL context and framework-scoped search/theme work without inventing
   await page.getByRole('navigation', { name: 'Documentation framework' })
     .getByRole('link', { name: 'Native Web' }).click();
   await expect(page).toHaveURL(/\/next\/native-web\/api\/components\/button\/$/);
+});
+
+test('framework selector preserves Native/React guide and API context with browser history', async ({ page }) => {
+  await page.goto('/next/native-web/components/button/');
+  await expect(page.getByRole('combobox', { name: 'Version' })).toHaveValue('next');
+  await page.getByRole('combobox', { name: 'Framework' }).selectOption({ label: 'React (Button pilot)' });
+  await expect(page).toHaveURL(/\/next\/react\/components\/button\/$/);
+  await expect(page.getByRole('heading', { name: 'Button', level: 1 })).toBeVisible();
+  await expect(page.getByRole('combobox', { name: 'Version' })).toHaveValue('next');
+  await page.getByRole('combobox', { name: 'Framework' }).selectOption({ label: 'Native Web' });
+  await expect(page).toHaveURL(/\/next\/native-web\/components\/button\/$/);
+  await page.goBack();
+  await expect(page).toHaveURL(/\/next\/react\/components\/button\/$/);
+
+  await page.goto('/next/react/api/components/button/');
+  await page.getByRole('combobox', { name: 'Framework' }).selectOption({ label: 'Native Web' });
+  await expect(page).toHaveURL(/\/next\/native-web\/api\/components\/button\/$/);
+});
+
+test('switching an undocumented React topic reports unavailability with recovery', async ({ page }) => {
+  await page.goto('/next/native-web/components/input/');
+  await page.getByRole('combobox', { name: 'Framework' }).selectOption({ label: 'React (Button pilot)' });
+  await expect(page).toHaveURL(/\/next\/react\/components\/input\/$/);
+  await expect(page.getByRole('heading', { name: 'React documentation unavailable' })).toBeVisible();
+  await expect(page.locator('[data-vf-docs-react-unavailable]')).toContainText('Input');
+  await page.getByRole('link', { name: 'Return to Native Web topic' }).click();
+  await expect(page).toHaveURL(/\/next\/native-web\/components\/input\/$/);
 });
 
 test('React docs remain navigable at 320px/400% text, RTL and forced colors', async ({ page }, testInfo) => {
