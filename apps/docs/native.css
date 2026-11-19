@@ -60,7 +60,9 @@
 
   .vf-docs-brand-row,
   .vf-docs-header-tools,
-  .vf-docs-theme-control {
+  .vf-docs-theme-control,
+  .vf-docs-framework-control,
+  .vf-docs-version-control {
     align-items: center;
     display: flex;
   }
@@ -74,6 +76,20 @@
 
   .vf-docs-header-tools {
     justify-content: flex-end;
+  }
+
+  .vf-docs-framework-control,
+  .vf-docs-version-control {
+    flex: 1 1 7rem;
+    flex-wrap: wrap;
+    gap: var(--vf-space-xs);
+    min-inline-size: 0;
+  }
+
+  .vf-docs-framework-control select,
+  .vf-docs-version-control select {
+    max-inline-size: 100%;
+    min-inline-size: 0;
   }
 
   .vf-docs-brand {

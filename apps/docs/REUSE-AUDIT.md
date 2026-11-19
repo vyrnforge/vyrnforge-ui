@@ -35,6 +35,14 @@ Scope: Native Web Reference renderer `apps/docs/`; product evidence is the actua
 
 **Validation for this candidate:** Playwright verifies the common SearchField public entrypoint across generated page families; native searchbox and clear semantics, status/empty results, clear keyboard activation and focus restoration; no arbitrary `aria-expanded`/combobox; 320px/400% responsive reflow; no-JavaScript input fallback; and existing docs keyboard, axe, forced-colors and route tests. Exact-head CI and visual/AT acceptance remain distinct.
 
+## DOC-04 — React reference pilot source/reuse review (19 November 2026)
+
+The first genuine React documentation application is built from the existing Product Graph framework-neutral model and public React port. Candidate [#1414](https://github.com/vyrnforge/vyrnforge-ui/pull/1414) exposes React overview, Button guide and Button API routes only, with SSR and hydration; product-owned shared Button guidance, React adaptation, shared accessibility standards projection and the actual checked-in TSX example remain the content source. No parallel component inventory is created. The React app consumes the public React `AppShell`, `SideNav`, `Button`, `SearchField` and `NativeSelect` rather than maintaining surrogate port component implementations. Both renderers load public Web CSS via the same export resolver.
+
+Documentation-specific search index/results, React hydration entrypoint, local theme persistence, responsive Menu coordination, route mapping and sandboxed example framing remain app-owned. The framework-neutral compiler has no React runtime dependency. A React pilot is not a complete React Reference catalog or proof of production SSR, all-framework parity or assistive-technology sign-off. The selected React guide/API coverage is narrower than all current Native component page families; #1403/#1401/#774 acceptance remains open.
+
+The stale #1405 mobile TOC was closed unmerged and replaced by latest-main draft #1413 with green CI, still awaiting actual-size UX/AT visual approval. The merged React Button preflight #1407 is integrated source history, not an open candidate.
+
 ## Existing public foundations needing bounded review (not missing components)
 
 | Candidate | Existing library truth | Decision/test needed |

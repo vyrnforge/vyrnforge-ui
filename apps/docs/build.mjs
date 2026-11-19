@@ -307,6 +307,9 @@ function styleLinks(currentPageDirectory, componentStyle = null) {
 
 function shell({ route = '', title, description, content, componentStyle = null }) {
   const currentPageDirectory = pageDirectory(route);
+  const nativeDestination = artifactHref(currentPageDirectory, routeTarget(route));
+  // A React page is generated for every Native route: supported pilot view or explicit unavailability.
+  const reactDestination = artifactHref(currentPageDirectory, channel + '/react/' + route);
   return `<!doctype html>
 <html lang="en" data-vf-theme="light" data-vf-density="comfortable">
 <head>
@@ -332,6 +335,20 @@ ${styleLinks(currentPageDirectory, componentStyle)}
         </div>
         <div class="vf-docs-header-tools">
           ${searchMarkup(currentPageDirectory)}
+          <div class="vf-docs-framework-control">
+            <label for="vf-docs-framework">Framework</label>
+            <select id="vf-docs-framework" data-vf-native-select data-vf-docs-framework>
+              <option value="${escapeHtml(nativeDestination)}" selected>Native Web</option>
+              <option value="${escapeHtml(reactDestination)}">React (Button pilot)</option>
+            </select>
+            <noscript><a data-vf-link href="${escapeHtml(reactDestination)}">Open this topic in React documentation</a></noscript>
+          </div>
+          <div class="vf-docs-version-control">
+            <label for="vf-docs-version">Version</label>
+            <select id="vf-docs-version" data-vf-native-select aria-label="Version">
+              <option value="${escapeHtml(channel)}">${escapeHtml(channel)}</option>
+            </select>
+          </div>
           <div class="vf-docs-theme-control">
             <label for="vf-docs-theme">Theme</label>
             <select id="vf-docs-theme" data-vf-native-select data-vf-docs-theme>
@@ -716,6 +733,7 @@ function renderComponent(page) {
             <li><a data-vf-link href="${artifactHref(currentPageDirectory, routeTarget(page.apiRoute))}">${escapeHtml(page.title)} API reference</a></li>
             <li><a data-vf-link href="${artifactHref(currentPageDirectory, routeTarget('foundations/styling/'))}">Styling foundation</a></li>
             <li><a data-vf-link href="${artifactHref(currentPageDirectory, routeTarget('foundations/tokens/'))}">Design tokens</a></li>
+            ${page.id === 'button' ? `<li><a data-vf-link href="${artifactHref(currentPageDirectory, channel + '/react/components/button/')}">React Button documentation</a></li>` : ''}
           </ul>
         </section>
       </article>
@@ -773,6 +791,7 @@ function renderApiPage(page) {
         <ul>
           <li><a data-vf-link href="${artifactHref(currentPageDirectory, routeTarget('foundations/styling/'))}">Styling foundation</a></li>
           <li><a data-vf-link href="${artifactHref(currentPageDirectory, routeTarget('foundations/tokens/'))}">Design tokens</a></li>
+          ${page.id === 'button' ? `<li><a data-vf-link href="${artifactHref(currentPageDirectory, channel + '/react/api/components/button/')}">React Button API</a></li>` : ''}
         </ul>
       </section>
     </article>`,
@@ -862,5 +881,7 @@ const manifest = {
 await writeFile(path.join(channelRoot, 'site-manifest.json'), `${JSON.stringify(manifest, null, 2)}\n`);
 await writeFile(path.join(channelRoot, 'index.html'), '<!doctype html><html lang="en"><head><meta charset="utf-8"><meta http-equiv="refresh" content="0;url=./native-web/"><title>VyrnForge documentation</title></head><body><a href="./native-web/">Open Native Web documentation</a></body></html>');
 await writeFile(path.join(outRoot, 'index.html'), `<!doctype html><html lang="en"><head><meta charset="utf-8"><meta http-equiv="refresh" content="0;url=./${channel}/native-web/"><title>VyrnForge documentation</title></head><body><a href="./${channel}/native-web/">Open VyrnForge documentation</a></body></html>`);
+
+await import('./react-build.mjs');
 
 process.stdout.write(`native documentation build -> ${path.relative(root, nativeRoot)} (${model.componentCatalog.length} public component${model.componentCatalog.length === 1 ? '' : 's'}, ${model.patternCatalog.length} pattern${model.patternCatalog.length === 1 ? '' : 's'}, ${model.showcasePages.length} showcase${model.showcasePages.length === 1 ? '' : 's'})\n`);
