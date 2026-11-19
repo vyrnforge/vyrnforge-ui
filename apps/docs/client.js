@@ -165,7 +165,7 @@ function initializeSearch() {
     const rank = (title) => {
       if (title === query) return 0;
       if (title.startsWith(query)) return 1;
-      if (title.split(/[^\\p{L}\\p{N}]+/u).some((word) => word.startsWith(query))) return 2;
+      if (title.split(/[^a-z0-9]+/i).some((word) => word.startsWith(query))) return 2;
       if (title.includes(query)) return 3;
       return 4;
     };
