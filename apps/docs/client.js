@@ -160,15 +160,28 @@ function initializeSearch() {
       return;
     }
 
-    let visible = 0;
-    for (const item of items) {
-      const matches = item.dataset.vfDocsSearchText?.includes(query) && visible < 8;
-      item.hidden = !matches;
-      if (matches) visible += 1;
-    }
-    empty.hidden = visible !== 0;
+    // Rank direct topic matches ahead of incidental words in long guides.
+    // Keep source order for equally relevant results and avoid a second search index.
+    const rank = (title) => {
+      if (title === query) return 0;
+      if (title.startsWith(query)) return 1;
+      if (title.split(/[^a-z0-9]+/i).some((word) => word.startsWith(query))) return 2;
+      if (title.includes(query)) return 3;
+      return 4;
+    };
+    const matches = items
+      .map((item, index) => ({ item, index, title: item.dataset.vfDocsSearchTitle ?? '' }))
+      .filter(({ item }) => item.dataset.vfDocsSearchText?.includes(query))
+      .sort((a, b) => rank(a.title) - rank(b.title) || a.index - b.index)
+      .slice(0, 8);
+    const visible = new Set(matches.map(({ item }) => item));
+    for (const item of items) item.hidden = !visible.has(item);
+    // Move selected links into ranked reading/tab order; hidden items remain inert.
+    const list = panel.querySelector('ul');
+    for (const { item } of matches) list?.append(item);
+    empty.hidden = matches.length !== 0;
     panel.hidden = false;
-    status.textContent = visible === 1 ? '1 documentation result.' : `${visible} documentation results.`;
+    status.textContent = matches.length === 1 ? '1 documentation result.' : `${matches.length} documentation results.`;
   };
 
   clear.addEventListener('click', (event) => {

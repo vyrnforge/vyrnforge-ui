@@ -279,7 +279,7 @@ function searchablePages() {
 }
 
 function searchMarkup(currentPageDirectory) {
-  const results = searchablePages().map((page) => `<li data-vf-docs-search-item data-vf-docs-search-text="${escapeHtml(pageSearchText(page))}" hidden>
+  const results = searchablePages().map((page) => `<li data-vf-docs-search-item data-vf-docs-search-title="${escapeHtml(page.title.toLocaleLowerCase())}" data-vf-docs-search-text="${escapeHtml(pageSearchText(page))}" hidden>
         <a href="${artifactHref(currentPageDirectory, routeTarget(page.route))}">
           <strong>${escapeHtml(page.title)}</strong>
           <span>${escapeHtml(page.searchKind)} · Native Web</span>

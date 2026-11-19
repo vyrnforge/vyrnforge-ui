@@ -50,3 +50,41 @@ describe('React documentation compiler preflight', () => {
     expect(elements.componentCatalog.some((component) => component.id === 'button')).toBe(false);
   });
 });
+
+describe('Layout guide discovery and CSS-only responsibility', () => {
+  it('builds one Native Web Flow/AutoGrid guide and does not invent framework layout entrypoints', () => {
+    const native = compileFrameworkDocumentation('native-web');
+    const layout = native.componentCatalog.find((owner) => owner.id === 'layout');
+    expect(layout).toBeDefined();
+    expect(layout.title).toBe('Layout');
+    expect(layout.showcaseAvailable).toBe(true);
+    expect(layout.apiAvailable).toBe(true);
+    expect(layout.publicEntrypoints).toEqual(['@vyrnforge/web/styles/layout.css']);
+    expect(layout.sharedSourcePath).toBe('product/components/composition-primitives/layout/docs/index.md');
+    expect(layout.sharedContent.title).toBe('Layout: Flow & AutoGrid');
+    const sections = new Set(layout.sharedContent.sections.map((section) => section.heading));
+    for (const heading of [
+      'Flow: vertical rhythm', 'Flow: one inline row', 'Flow: wrapping peers',
+      'AutoGrid: intrinsic equal tracks', 'Semantic groups and forms',
+      'Migration from older layout names', 'Accessibility, responsive behavior, and evidence',
+    ]) expect(sections.has(heading)).toBe(true);
+    expect(layout.examples.map((example) => example.id)).toEqual(expect.arrayContaining([
+      'layout/basic', 'layout/flow-block', 'layout/flow-inline',
+      'layout/flow-wrap', 'layout/auto-grid', 'layout/semantic-groups',
+    ]));
+    for (const example of layout.examples) {
+      expect(example.language).toBe('html');
+      expect(example.sourcePath).toMatch(/\/native-web\.html$/);
+      if (example.documentationSection) expect(sections.has(example.documentationSection)).toBe(true);
+    }
+    expect(layout.accessibility).toMatchObject({
+      component: 'layout',
+      reviewStatus: 'review-required',
+      aria: { status: 'not-applicable' },
+    });
+    for (const framework of ['react', 'angular', 'vue', 'elements']) {
+      const model = compileFrameworkDocumentation(framework);
+      expect(model.componentCatalog.some((component) => component.id === 'layout')).toBe(false);
+    }
+  });
+});

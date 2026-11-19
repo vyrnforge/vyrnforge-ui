@@ -1,0 +1,14 @@
+{
+  "id": "layout/flow-block",
+  "title": "Vertical form rhythm",
+  "description": "Block Flow gives a native label, control, and description consistent token spacing without creating a Field component.",
+  "documentationSection": "Flow: vertical rhythm",
+  "defaultFramework": "native-web",
+  "frameworks": {
+    "native-web": {
+      "label": "Native Web",
+      "language": "html",
+      "source": "native-web.html"
+    }
+  }
+}

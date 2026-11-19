@@ -1354,3 +1354,92 @@ test('SearchField remains a labeled native search input when docs JavaScript fai
   await expect(clear).toBeDisabled();
   await expect(search.locator('[data-vf-docs-search-results]')).toBeHidden();
 });
+
+test('Layout guide is discoverable in the Layout & Structure submenu and renders every CSS recipe', async ({ page }, testInfo) => {
+  const errors = collectPageErrors(page);
+  const layout = catalogEntry('layout', 'Layout');
+  expect(layout).toMatchObject({ category: 'Layout & Structure', showcase: true, api: true });
+  expect(layout.publicEntrypoints).toContain('@vyrnforge/web/styles/layout.css');
+  expect(manifest.pages.some(entry => entry.slug === 'components/layout/')).toBe(true);
+
+  await gotoWithCleanDocsState(page, '/next/native-web/');
+  const layoutGroup = page.locator('[data-vf-side-nav-group]').filter({
+    has: page.locator('[data-vf-side-nav-group-label]').getByText('Layout & Structure', { exact: true }),
+  });
+  const layoutLink = layoutGroup.getByRole('link', { name: 'Layout', exact: true });
+  await expect(layoutLink).toHaveAttribute('href', 'components/layout/');
+  await layoutLink.click();
+  await expect(page).toHaveURL(/\/next\/native-web\/components\/layout\/$/);
+  await expect(layoutGroup.getByRole('link', { name: 'Layout', exact: true })).toHaveAttribute('aria-current', 'page');
+
+  const article = page.locator('[data-vf-docs-component="layout"]');
+  await expect(page.getByRole('heading', { level: 1, name: 'Layout: Flow & AutoGrid' })).toBeVisible();
+  await expect(page.getByRole('heading', { level: 2, name: 'Flow: vertical rhythm' })).toBeVisible();
+  await expect(page.getByRole('heading', { level: 2, name: 'Flow: wrapping peers' })).toBeVisible();
+  await expect(page.getByRole('heading', { level: 2, name: 'AutoGrid: intrinsic equal tracks' })).toBeVisible();
+  await expect(page.getByRole('heading', { level: 2, name: 'Migration from older layout names' })).toBeVisible();
+  await expect(article.getByText('review required', { exact: false }).first()).toBeVisible();
+
+  for (const id of ['basic', 'flow-block', 'flow-inline', 'flow-wrap', 'auto-grid', 'semantic-groups']) {
+    const example = article.locator('[data-vf-docs-example="layout/' + id + '"]');
+    await expect(example).toHaveCount(1);
+    await expect(example.getByRole('button', { name: 'Copy HTML' })).toBeVisible();
+    await example.getByText('View HTML source').click();
+    await expect(example.locator('code[data-vf-docs-source]')).toBeVisible();
+  }
+  await expect(article.locator('[data-vf-docs-example="layout/flow-block"] [data-vf-docs-preview] > [data-vf-flow]')).toHaveCSS('flex-direction', 'column');
+  await expect(article.locator('[data-vf-docs-example="layout/flow-inline"] [data-vf-docs-preview] > [data-vf-flow]')).toHaveCSS('flex-wrap', 'nowrap');
+  const rtl = article.locator('[data-vf-docs-example="layout/flow-wrap"] [dir="rtl"]');
+  await expect(rtl).toHaveCSS('direction', 'rtl');
+  await expect(rtl).toHaveCSS('flex-wrap', 'wrap');
+  await expect(article.locator('[data-vf-docs-example="layout/auto-grid"] [data-vf-auto-grid]')).toHaveCSS('display', 'grid');
+  const fieldset = article.locator('[data-vf-docs-example="layout/semantic-groups"] fieldset');
+  await expect(fieldset.getByText('Reminder frequency')).toBeVisible();
+  await expect(fieldset.getByRole('radio')).toHaveCount(2);
+  await fieldset.getByRole('radio', { name: 'Weekly' }).check();
+  await expect(fieldset.getByRole('radio', { name: 'Weekly' })).toBeChecked();
+  await expect(fieldset.getByRole('radio', { name: 'Daily' })).not.toBeChecked();
+  await expect(article.locator('[data-vf-stack], [data-vf-inline], [data-vf-cluster], [data-vf-container], [data-vf-control-group]')).toHaveCount(0);
+
+  await expectDeploymentRelativeStyles(page);
+  await expectNoAccessibilityViolations(page);
+  await page.screenshot({ path: testInfo.outputPath('native-layout-guide-wide.png'), fullPage: true });
+  expect(errors, errors.join('\n')).toEqual([]);
+});
+
+test('Layout guide remains navigable at 320 CSS px with enlarged text and RTL previews', async ({ page }, testInfo) => {
+  await page.setViewportSize({ width: 320, height: 740 });
+  await gotoWithCleanDocsState(page, '/next/native-web/components/layout/');
+  await page.evaluate(() => { document.documentElement.style.fontSize = '200%'; });
+
+  const article = page.locator('[data-vf-docs-component="layout"]');
+  await expect(article).toBeVisible();
+  await expect(article.locator('[data-vf-docs-example="layout/auto-grid"] [data-vf-auto-grid]')).toHaveCSS('display', 'grid');
+  await expect(article.locator('[data-vf-docs-example="layout/flow-wrap"] [dir="rtl"]')).toHaveCSS('flex-wrap', 'wrap');
+  const documentWidth = await page.evaluate(() => ({
+    scrollWidth: document.documentElement.scrollWidth,
+    clientWidth: document.documentElement.clientWidth,
+  }));
+  expect(documentWidth.scrollWidth).toBeLessThanOrEqual(documentWidth.clientWidth);
+
+  const toc = page.getByRole('navigation', { name: 'On this page' });
+  await toc.getByRole('link', { name: 'AutoGrid: intrinsic equal tracks' }).click();
+  await expect(page).toHaveURL(/#autogrid-intrinsic-equal-tracks$/);
+  await expect(article.locator('[data-vf-docs-example="layout/auto-grid"]')).toBeVisible();
+  await expectNoAccessibilityViolations(page);
+  await page.screenshot({ path: testInfo.outputPath('native-layout-guide-narrow-200percent.png'), fullPage: true });
+});
+
+test('documentation search prioritizes exact topics over incidental guide mentions', async ({ page }) => {
+  await gotoWithCleanDocsState(page, '/next/native-web/');
+  const search = page.getByRole('searchbox', { name: 'Search documentation' });
+  const visibleResults = page.locator('[data-vf-docs-search-item]:not([hidden])');
+  await search.fill('input');
+  await expect(visibleResults.first().getByRole('link', { name: /Input/ })).toBeVisible();
+  await search.fill('layout');
+  await expect(visibleResults.first().getByRole('link', { name: /Layout/ })).toBeVisible();
+  await search.fill('no-results-layout-123456');
+  await expect(visibleResults).toHaveCount(0);
+  await search.fill('input');
+  await expect(visibleResults.first().getByRole('link', { name: /Input/ })).toBeVisible();
+});

@@ -1,0 +1,14 @@
+{
+  "id": "layout/semantic-groups",
+  "title": "Native radio group with Flow spacing",
+  "description": "Fieldset and legend provide group semantics; Flow only spaces the native labeled choices.",
+  "documentationSection": "Semantic groups and forms",
+  "defaultFramework": "native-web",
+  "frameworks": {
+    "native-web": {
+      "label": "Native Web",
+      "language": "html",
+      "source": "native-web.html"
+    }
+  }
+}

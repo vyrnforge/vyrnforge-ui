@@ -353,7 +353,7 @@ test('AppShell and SideNav retain canonical five-port projections', () => {
   assert.deepEqual(productGraphProblems(), []);
 });
 
-test('Aggregate layout projection owns only the six accepted composition primitives', () => {
+test('Layout projects only the canonical Web CSS recipes, not framework layout runtimes', () => {
   const graph = discoverProductGraph();
   const component = graph.components.find((entry) => entry.unitId === 'layout');
   assert.ok(component);
@@ -361,12 +361,12 @@ test('Aggregate layout projection owns only the six accepted composition primiti
   assert.equal(component.facets.canonicalRoot, 'product/components/composition-primitives/layout/');
   assert.equal(component.facets.legacyRoot, null);
   assert.equal(component.migration.state, 'product-unit');
-  assert.deepEqual(Object.keys(component.surfaces).sort(), ['angular', 'react', 'vue', 'web']);
+  assert.deepEqual(Object.keys(component.surfaces), ['web']);
+  assert.deepEqual(component.surfaces.web.publicEntrypoints, ['@vyrnforge/web/styles/layout.css']);
 
-  const elements = graph.packages.find((pkg) => pkg.id === 'elements');
-  assert.ok(elements);
-  assert.equal(Boolean(elements.manifest.exports?.['./layout']), false, 'Elements must use native HTML plus Web layout hooks instead of a layout runtime entrypoint');
-
+  for (const pkg of graph.packages) {
+    assert.equal(Boolean(pkg.manifest.exports?.['./layout']), false, pkg.name + ' must not reintroduce a layout JavaScript runtime');
+  }
   assert.deepEqual(productGraphProblems(), []);
 });
 

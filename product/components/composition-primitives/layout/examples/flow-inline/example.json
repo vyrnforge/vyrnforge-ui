@@ -1,0 +1,14 @@
+{
+  "id": "layout/flow-inline",
+  "title": "One-line summary",
+  "description": "Nonwrapping inline Flow aligns peer text by baseline and places summary values at opposite ends when room allows.",
+  "documentationSection": "Flow: one inline row",
+  "defaultFramework": "native-web",
+  "frameworks": {
+    "native-web": {
+      "label": "Native Web",
+      "language": "html",
+      "source": "native-web.html"
+    }
+  }
+}
