@@ -86,8 +86,16 @@ requireText(sources.main, 'main-gate:', 'Main validation must preserve the main-
 
 requireText(sources.targeted, 'workflow_call:', 'shared targeted validation must be reusable from PR/Main wrappers');
 requireText(sources.targeted, 'pnpm format:configs:check', 'targeted PR/Main validation must reject configuration-format drift before merge');
-requireText(sources.targeted, 'pnpm format:l5:check && pnpm lint:l5', 'targeted PR/Main validation must check canonical L5 source quality');
-requireText(sources.targeted, 'nx affected -t lint,typecheck,test,build', 'generic affected execution must remain owned by Nx');
+requireText(sources.targeted, 'repository-contracts:', 'targeted validation must retain shared repository invariants');
+requireText(sources.targeted, 'components:', 'targeted validation must isolate component validation');
+requireText(sources.targeted, "needs.plan.outputs.components_required == 'true'", 'component execution must require a semantic impact selector');
+requireText(sources.targeted, 'pages:', 'targeted validation must have a distinct Reference Pages lane');
+requireText(sources.targeted, "needs.plan.outputs.docs_required == 'true'", 'Pages execution must require a docs impact selector');
+requireText(sources.targeted, 'pnpm exec nx run docs:lint && pnpm exec nx run docs:test', 'Pages lane must run documentation-owned lint/unit checks');
+requireText(sources.targeted, 'pnpm format:l5:check && pnpm lint:l5', 'component lane must check canonical L5 source quality');
+requireText(sources.targeted, 'nx affected -t lint,typecheck,test,build --exclude=docs', 'component affected execution must exclude the Pages application');
+requireText(sources.targeted, 'VF_RESULT_REPOSITORY:', 'shared repository evidence must have an independent status');
+requireText(sources.targeted, 'VF_RESULT_COMPONENTS:', 'component evidence must have an independent status');
 requireText(sources.targeted, 'pnpm verify:package-contracts', 'repository contracts must enforce private package/public-entrypoint invariants');
 requireText(sources.targeted, 'pnpm verify:compatibility', 'repository contracts must enforce compatibility metadata alignment');
 requireText(sources.targeted, 'pnpm verify:validation', 'repository contracts must test validation-summary reporting');
