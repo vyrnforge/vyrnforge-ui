@@ -43,6 +43,12 @@
     transform: translateY(0);
   }
 
+  /* Constrain only the demonstration canvas so the RTL wrapping example
+     actually wraps; this is not a library component style or public API. */
+  [data-vf-docs-example="layout/flow-wrap"] [data-vf-flow] {
+    max-inline-size: 16rem;
+  }
+
   .vf-docs-header {
     /* Keep overlays layered, but let enlarged chrome scroll with the document. */
     position: relative;
