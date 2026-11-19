@@ -24,6 +24,17 @@ const basicExample = button.examples.find((entry) => entry.id === 'button/basic'
 if (!basicExample?.sourcePath.endsWith('/react.tsx')) {
   throw new Error('React documentation requires the checked-in executable Button example');
 }
+const layout = reactModel.componentCatalog.find((entry) => entry.id === 'layout');
+if (!layout?.guideOnly || layout.apiAvailable || layout.cssRecipeStyle !== '@vyrnforge/web/styles/layout.css' ||
+    !layout.sharedContent || layout.examples.length !== 6) {
+  throw new Error('React Layout guide requires the canonical Web CSS recipe and six checked-in React examples; no React layout API');
+}
+const layoutExamples = layout.examples.sort((a, b) => a.id.localeCompare(b.id));
+const layoutSlugs = layoutExamples.map((example) => example.id.split('/')[1]);
+if (new Set(layoutSlugs).size !== 6 || !layoutSlugs.includes('basic')) {
+  throw new Error('React Layout examples must have six unique product-owned example ids');
+}
+
 // Verify reference types against the product-owned public React source, not a hand-maintained API table.
 const reactButtonTypePath = path.join(root, path.dirname(path.dirname(button.frameworkSourcePath)), 'index.ts');
 const reactButtonSource = await readFile(reactButtonTypePath, 'utf8');
@@ -61,6 +72,8 @@ function linksFor(route) {
     guide: relative(dir, react + 'components/button/', true),
     api: relative(dir, react + 'api/components/button/', true),
     example: relative(dir, react + 'examples/button-basic/', true),
+    layout: relative(dir, react + layout.showcaseRoute, true),
+    layoutExampleBase: relative(dir, react + 'examples/layout/', true),
     native: relative(dir, native + (route === '' ? '' : route), true),
   };
 }
@@ -91,6 +104,11 @@ await build({
   bundle: true, platform: 'browser', format: 'iife', target: 'es2022',
   outfile: path.join(outRoot, 'assets/react-button-basic.js'), logLevel: 'silent',
 });
+await build({
+  entryPoints: [path.join(root, 'apps/docs/react-layout-examples.tsx')],
+  bundle: true, platform: 'browser', format: 'iife', target: 'es2022',
+  outfile: path.join(outRoot, 'assets/react-layout-examples.js'), logLevel: 'silent',
+});
 
 const exampleDir = directory('examples/button-basic/');
 const exampleStyles = shellStyles.map((asset) =>
@@ -102,10 +120,26 @@ await writePage('examples/button-basic/', '<!doctype html><html lang="en" data-v
   '</head><body><div id="root"></div><script src="' +
   escapeHtml(relative(exampleDir, 'assets/react-button-basic.js')) + '"></script></body></html>');
 
+// One checked-in React example component per iframe; the application adapter
+// composes the product-owned examples without adding public React layout wrappers.
+for (const slug of layoutSlugs) {
+  const exampleRoute = 'examples/layout/' + slug + '/';
+  const demoDir = directory(exampleRoute);
+  const demoStyles = shellStyles.map((asset) =>
+    '  <link rel="stylesheet" href="' + escapeHtml(relative(demoDir, asset)) + '">').join('\n');
+  await writePage(exampleRoute, '<!doctype html><html lang="en"><head>' +
+    '<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">' +
+    '<title>React Layout example · VyrnForge</title>\n' + demoStyles +
+    '\n<style>body{margin:0;padding:1rem;min-width:0;overflow-wrap:anywhere}#root{min-width:0}input{max-width:100%;box-sizing:border-box}</style>' +
+    '</head><body data-vf-layout-example="' + escapeHtml(slug) + '"><div id="root"></div><script src="' +
+    escapeHtml(relative(demoDir, 'assets/react-layout-examples.js')) + '"></script></body></html>');
+}
+
 const pageViews = [
   { route: '', view: 'home', title: 'React overview', description: 'VyrnForge React documentation pilot' },
-  { route: 'components/button/', view: 'guide', title: 'React Button guide', description: 'Shared Button semantics and React usage' },
-  { route: 'api/components/button/', view: 'api', title: 'React Button API', description: 'Verified public React Button API' },
+  { route: button.showcaseRoute, view: 'guide', title: 'React Button guide', description: 'Shared Button semantics and React usage' },
+  { route: button.apiRoute, view: 'api', title: 'React Button API', description: 'Verified public React Button API' },
+  { route: layout.showcaseRoute, view: 'layout', title: 'React Layout guide', description: 'Flow and AutoGrid usage in React with shared Web CSS' },
 ];
 // All Native destinations have a React-context response, even when a React guide
 // has not been implemented. Never disguise an unavailable view as another port.
@@ -135,9 +169,17 @@ const pageData = {
   publicButtonTypes,
   examples: button.examples.filter((example) => example.id === 'button/basic'),
 };
+const layoutData = {
+  id: layout.id,
+  sharedContent: layout.sharedContent,
+  standardReferences: layout.standardReferences,
+  cssRecipeStyle: layout.cssRecipeStyle,
+  examples: layoutExamples,
+};
 for (const page of pageViews) {
   const dir = directory(page.route);
   const props = { view: page.view, links: linksFor(page.route), button: pageData,
+    layout: page.view === 'layout' ? layoutData : null,
     requestedTopic: page.requestedTopic ?? null };
   const initialHtml = renderToString(createElement(ReactReferencePage, props));
   const serialized = JSON.stringify(props).replaceAll('<', '\\u003c');
@@ -158,9 +200,17 @@ for (const page of pageViews) {
   await writePage(page.route, pageHtml);
 }
 await writeFile(path.join(reactRoot, 'site-manifest.json'), JSON.stringify({
-  channel, framework: 'react', status: 'button-pilot',
+  channel, framework: 'react', status: 'button-and-layout-pilot',
   source: 'Product Graph public React surface',
   routes: pageViews.map(({ route, view }) => ({ route, view })),
+  layout: {
+    guideOnly: layout.guideOnly,
+    api: layout.apiAvailable,
+    publicEntrypoints: layout.publicEntrypoints,
+    cssRecipeStyle: layout.cssRecipeStyle,
+    sharedSourcePath: layout.sharedSourcePath,
+    examples: layoutExamples.map((example) => ({ id: example.id, sourcePath: example.sourcePath })),
+  },
   button: {
     publicEntrypoints: button.publicEntrypoints,
     sharedSourcePath: button.sharedSourcePath,
@@ -168,4 +218,4 @@ await writeFile(path.join(reactRoot, 'site-manifest.json'), JSON.stringify({
     executableExampleSource: basicExample.sourcePath,
   },
 }, null, 2) + '\n');
-process.stdout.write('React Button documentation pilot -> ' + path.relative(root, reactRoot) + '\n');
+process.stdout.write('React Button and Layout documentation pilot -> ' + path.relative(root, reactRoot) + '\n');
