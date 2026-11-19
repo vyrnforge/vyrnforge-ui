@@ -1,4 +1,4 @@
-import { mkdir, stat, writeFile } from 'node:fs/promises';
+import { mkdir, readFile, stat, writeFile } from 'node:fs/promises';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { build } from 'esbuild';
@@ -24,6 +24,17 @@ const basicExample = button.examples.find((entry) => entry.id === 'button/basic'
 if (!basicExample?.sourcePath.endsWith('/react.tsx')) {
   throw new Error('React documentation requires the checked-in executable Button example');
 }
+// Verify reference types against the product-owned public React source, not a hand-maintained API table.
+const reactButtonTypePath = path.join(root, path.dirname(path.dirname(button.frameworkSourcePath)), 'index.ts');
+const reactButtonSource = await readFile(reactButtonTypePath, 'utf8');
+const publicTypesStart = reactButtonSource.indexOf('export type ButtonVariant');
+const publicTypesEnd = reactButtonSource.indexOf('export const Button =', publicTypesStart);
+if (publicTypesStart < 0 || publicTypesEnd < 0 ||
+  !reactButtonSource.slice(publicTypesStart, publicTypesEnd).includes('interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement>') ||
+  !reactButtonSource.includes('forwardRef<HTMLButtonElement, ButtonProps>')) {
+  throw new Error('React Button type contract changed; review the public documentation reference');
+}
+const publicButtonTypes = reactButtonSource.slice(publicTypesStart, publicTypesEnd).trim();
 const shellStyles = documentationShellStyleSpecifiers.map((specifier) =>
   resolvePublicWebStyleAsset(webModel.packageManifest, specifier).assetPath);
 
@@ -121,6 +132,7 @@ const pageData = {
   sharedContent: button.sharedContent,
   frameworkContent: button.frameworkContent,
   standardReferences: button.standardReferences,
+  publicButtonTypes,
   examples: button.examples.filter((example) => example.id === 'button/basic'),
 };
 for (const page of pageViews) {
