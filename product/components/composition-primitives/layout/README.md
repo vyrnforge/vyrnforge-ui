@@ -62,6 +62,8 @@ Each child retains its own:
 
 ControlGroup adds no `role="group"`, shared value, roving focus, selection controller, child cloning, framework context, or inherited control configuration.
 
+Joining applies only to consecutive, eligible direct-child controls. An authored label, wrapper, or other non-control child interrupts the visual run; controls on either side keep their own boundary. Wrapped controls keep their native semantics and focus behavior but are not automatically joined with adjacent direct children. Use semantic grouping markup when the task requires an accessible group name; ControlGroup does not generate one.
+
 Button-only adjacency is valid and does not justify a ButtonGroup primitive. If the controls share one-of-many selection, pressed-state selection, or managed command navigation, use the semantic owner of that behavior instead: native radio grouping, ToggleGroup, Toolbar, SegmentedControl, or another appropriate composite widget.
 
 ## Explicit non-ownership dispositions
