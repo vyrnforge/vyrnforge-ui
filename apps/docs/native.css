@@ -931,6 +931,12 @@
       min-inline-size: 0;
     }
 
+    /* A small token step makes the selected framework text readable at
+       320px/200%, while the surrounding form labels keep their scale. */
+    .vf-docs-framework-control select {
+      font-size: var(--vf-font-size-sm);
+    }
+
     .vf-docs-menu-toggle {
       max-inline-size: 100%;
       white-space: nowrap;
