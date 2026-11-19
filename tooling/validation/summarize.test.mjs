@@ -25,6 +25,7 @@ function plan(overrides = {}) {
     ],
     executionPrerequisites: ['dependencies', 'browser-runtime:chromium', 'build:react', 'fixture:react:button'],
     selectors: {
+      componentsRequired: true,
       packageArtifactsRequired: false,
       browserRequired: true,
       docsRequired: false,
@@ -44,7 +45,8 @@ function passingEnvironment(head = 'abc123') {
   return {
     ...process.env,
     VF_HEAD_SHA: head,
-    VF_RESULT_AFFECTED: 'success',
+    VF_RESULT_REPOSITORY: 'success',
+    VF_RESULT_COMPONENTS: 'success',
     VF_RESULT_PACKAGES: 'skipped',
     VF_RESULT_RELEASE: 'skipped',
     VF_RESULT_DOCS: 'skipped',
@@ -150,4 +152,52 @@ test('summary is still written and exits non-zero when required evidence fails',
   const report = JSON.parse(readFileSync(path.join(outputDir, 'validation-summary.json'), 'utf8'));
   assert.equal(report.result, 'fail');
   assert.equal(report.validation.evidence.find((item) => item.id === 'browser').disposition, 'fail');
+}));
+
+
+test('Pages-only plan passes while component suites are deliberately skipped', () => withTemp((directory) => {
+  const planPath = path.join(directory, 'plan.json');
+  const outputDir = path.join(directory, 'out');
+  const pagesPlan = plan({
+    changedPaths: ['apps/docs/native.css'],
+    components: [],
+    packages: [],
+    browserScopes: [],
+    selectors: {
+      componentsRequired: false,
+      packageArtifactsRequired: false,
+      browserRequired: false,
+      docsRequired: true,
+      releaseRequired: false,
+    },
+  });
+  writeFileSync(planPath, `${JSON.stringify(pagesPlan, null, 2)}\n`);
+  execFileSync(process.execPath, [script, '--plan', planPath, '--output-dir', outputDir], {
+    env: {
+      ...passingEnvironment(),
+      VF_RESULT_COMPONENTS: 'skipped',
+      VF_RESULT_DOCS: 'success',
+      VF_RESULT_BROWSER: 'skipped',
+    },
+    stdio: 'pipe',
+  });
+  const report = JSON.parse(readFileSync(path.join(outputDir, 'validation-summary.json'), 'utf8'));
+  assert.equal(report.result, 'pass');
+  assert.equal(report.validation.evidence.find((entry) => entry.id === 'repository-contracts').disposition, 'pass');
+  assert.equal(report.validation.evidence.find((entry) => entry.id === 'components').disposition, 'not-selected');
+  assert.equal(report.validation.evidence.find((entry) => entry.id === 'documentation').disposition, 'pass');
+}));
+
+test('required component lane failure is never mistaken for an allowed Pages-only skip', () => withTemp((directory) => {
+  const planPath = path.join(directory, 'plan.json');
+  const outputDir = path.join(directory, 'out');
+  writeFileSync(planPath, `${JSON.stringify(plan(), null, 2)}\n`);
+  const result = spawnSync(process.execPath, [script, '--plan', planPath, '--output-dir', outputDir], {
+    env: { ...passingEnvironment(), VF_RESULT_COMPONENTS: 'failure' },
+    encoding: 'utf8',
+  });
+  assert.notEqual(result.status, 0);
+  const report = JSON.parse(readFileSync(path.join(outputDir, 'validation-summary.json'), 'utf8'));
+  assert.equal(report.result, 'fail');
+  assert.equal(report.validation.evidence.find((entry) => entry.id === 'components').disposition, 'fail');
 }));

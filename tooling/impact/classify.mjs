@@ -148,6 +148,9 @@ function classifyPath(state, discovery, filePath) {
   } else if (filePath.startsWith('tooling/validation/')) {
     addEvidence(state, 'architecture', 'validation reporting infrastructure changed', filePath);
     classified = true;
+  } else if (filePath.startsWith('tooling/docs/')) {
+    addEvidence(state, 'docs', 'Reference documentation tooling changed', filePath);
+    classified = true;
   } else if (filePath.startsWith('tooling/build/')) {
     broaden(state, discovery, 'shared build infrastructure can affect repository execution', filePath);
     classified = true;
@@ -334,6 +337,15 @@ function finishImpact(paths, mode, discovery, state) {
     validationScopes: logicalValidationScopes(state, discovery, browserScopes, packageArtifactPackages),
     executionPrerequisites: executionPrerequisites(state, browserScopes, packageArtifactPackages),
     selectors: {
+      // Component execution is independent of Reference page evidence. In
+      // particular owner-local docs/examples may name a component without
+      // changing its implementation or requiring its unit/browser suite.
+      componentsRequired: state.repositoryWide
+        || state.packages.size > 0
+        || state.ownedUnits.size > 0
+        || state.evidence.has('browser')
+        || state.evidence.has('visual')
+        || state.evidence.has('package-artifacts'),
       packageArtifactsRequired: state.evidence.has('package-artifacts'),
       browserRequired: state.evidence.has('browser') || state.evidence.has('visual'),
       docsRequired: state.evidence.has('docs'),

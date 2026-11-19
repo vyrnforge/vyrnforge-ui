@@ -268,3 +268,48 @@ test('unknown and broad safety nets include pattern-owned browser evidence', () 
       scope.port === 'react' && scope.components.includes('settings-navigation')));
   }
 });
+
+test('Reference page and docs tooling edits do not select component execution', () => {
+  for (const changedPath of [
+    'apps/docs/native.css',
+    'documentation/README.md',
+    'tooling/docs/framework-documentation.mjs',
+    'product/components/interactive-controls/button/docs/README.md',
+    'product/components/interactive-controls/button/examples/button-react.tsx',
+  ]) {
+    const impact = createSemanticImpact([changedPath]);
+    assert.equal(impact.selectors.docsRequired, true, changedPath);
+    assert.equal(impact.selectors.componentsRequired, false, changedPath);
+    assert.equal(impact.selectors.browserRequired, false, changedPath);
+    assert.equal(impact.selectors.packageArtifactsRequired, false, changedPath);
+    assert.equal(impact.repositoryWide, false, changedPath);
+    assert.deepEqual(impact.unknownPaths, [], changedPath);
+  }
+});
+
+test('component, mixed, shared and unknown changes select the correct independently gated lanes', () => {
+  const component = createSemanticImpact([
+    'product/components/interactive-controls/button/angular/index.ts',
+  ]);
+  assert.equal(component.selectors.componentsRequired, true);
+  assert.equal(component.selectors.docsRequired, false);
+
+  const mixed = createSemanticImpact([
+    'apps/docs/native.css',
+    'product/components/interactive-controls/button/angular/index.ts',
+  ]);
+  assert.equal(mixed.selectors.componentsRequired, true);
+  assert.equal(mixed.selectors.docsRequired, true);
+
+  for (const changedPath of ['pnpm-lock.yaml', 'tooling/impact/classify.mjs', 'unclassified/new-path.txt']) {
+    const impact = createSemanticImpact([changedPath]);
+    assert.equal(impact.selectors.componentsRequired, true, changedPath);
+    assert.equal(impact.selectors.docsRequired, true, changedPath);
+    assert.equal(impact.repositoryWide, true, changedPath);
+  }
+
+  const releaseOnly = createSemanticImpact(['.changeset/docs-only-example.md']);
+  assert.equal(releaseOnly.selectors.componentsRequired, false);
+  assert.equal(releaseOnly.selectors.docsRequired, false);
+  assert.equal(releaseOnly.selectors.releaseRequired, true);
+});
