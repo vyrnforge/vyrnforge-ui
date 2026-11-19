@@ -54,6 +54,9 @@
     display: grid;
     gap: var(--vf-space-lg);
     grid-template-columns: repeat(auto-fit, minmax(min(100%, 22rem), 1fr));
+    /* Container em queries track enlarged root text; viewport rem media queries
+       alone cannot detect a 400% text setting in browser tests. */
+    container-type: inline-size;
     margin-inline: auto;
     padding: var(--vf-space-sm) clamp(var(--vf-space-md), 3vw, var(--vf-space-xl));
   }
@@ -896,13 +899,13 @@
     }
   }
 
-  /* A very narrow *effective* viewport (including 200–400% text zoom)
-     cannot hold the long wordmark. Keep its full accessible link name. */
+  /* Keep the complete link name in markup/ARIA. At cramped *effective*
+     widths the compact wordmark removes decorative chrome, not navigation. */
   .vf-docs-brand-compact {
     display: none;
   }
 
-  @media (max-width: 18rem) {
+  @container (max-width: 18em) {
     .vf-docs-brand-full,
     .vf-docs-surface {
       display: none;
@@ -910,6 +913,27 @@
 
     .vf-docs-brand-compact {
       display: inline;
+    }
+
+    .vf-docs-header-tools,
+    .vf-docs-framework-control,
+    .vf-docs-version-control,
+    .vf-docs-theme-control {
+      align-items: stretch;
+      display: grid;
+      grid-template-columns: minmax(0, 1fr);
+    }
+
+    .vf-docs-framework-control select,
+    .vf-docs-version-control select,
+    .vf-docs-theme-control select {
+      inline-size: 100%;
+      min-inline-size: 0;
+    }
+
+    .vf-docs-menu-toggle {
+      max-inline-size: 100%;
+      white-space: nowrap;
     }
   }
 
