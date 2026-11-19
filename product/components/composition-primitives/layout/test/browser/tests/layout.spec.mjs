@@ -166,6 +166,7 @@ test('default Flow and AutoGrid rhythm follows inherited density, explicit gaps 
   await expect(page.locator('#explicit-flow')).toHaveCSS('gap', '24px');
 
   await page.locator('html').evaluate((node) => node.setAttribute('data-vf-density', 'comfortable'));
+  await page.locator('#density-fixture').evaluate((node) => node.setAttribute('data-vf-density', 'comfortable'));
   await expect(flow).toHaveCSS('gap', '16px');
   await expect(grid).toHaveCSS('gap', '16px');
   await expect(page.locator('#nested-compact')).toHaveCSS('gap', '12px');
