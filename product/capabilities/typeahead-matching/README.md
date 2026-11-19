@@ -1,6 +1,6 @@
 # Typeahead Matching
 
-Canonical Layer 4 Core capability for matching an already-accumulated typeahead query against an ordered collection.
+Retained framework-neutral Core capability for matching an already-accumulated typeahead query against an ordered collection.
 
 ## Owns
 
