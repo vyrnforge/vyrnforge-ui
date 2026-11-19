@@ -207,7 +207,7 @@ export type AutoGridProps<Element extends LayoutElement = LayoutElement> = Eleme
     as?: Element;
     gap?: LayoutGap;
     minItemSize?: string;
-} & NativeLayoutProps<Element> : never;
+} & Omit<ComponentPropsWithoutRef<Element>, 'as' | 'direction'> : never;
 
 // @public (undocumented)
 export const Button: ForwardRefExoticComponent<ButtonProps & RefAttributes<HTMLButtonElement>>;
@@ -1967,9 +1967,14 @@ export type FlowDirection = 'block' | 'inline';
 export type FlowJustify = 'start' | 'center' | 'end' | 'space-between';
 
 // @public (undocumented)
-export type FlowProps<Element extends LayoutElement = LayoutElement> = Element extends LayoutElement ? Omit<FlowOptions, 'as'> & {
+export type FlowProps<Element extends LayoutElement = LayoutElement> = Element extends LayoutElement ? {
     as?: Element;
-} & NativeLayoutProps<Element> : never;
+    direction?: FlowDirection;
+    wrap?: FlowWrap;
+    gap?: LayoutGap;
+    align?: FlowAlign;
+    justify?: FlowJustify;
+} & Omit<ComponentPropsWithoutRef<Element>, 'as' | 'direction'> : never;
 
 // @public (undocumented)
 export type FlowWrap = 'nowrap' | 'wrap';
