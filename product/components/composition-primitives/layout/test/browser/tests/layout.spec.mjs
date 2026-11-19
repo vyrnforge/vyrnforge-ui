@@ -247,14 +247,17 @@ test('default-first React form retains accessible relationships across actual-si
   await expect(flow).toHaveCSS('gap', '16px');
   const nestedInput = page.getByRole('textbox', { name: 'Contact email' });
   await nestedInput.focus();
+  // Run axe against normal rendered colors: Chromium forced-colors emulation paints
+  // system colors that axe's computed-style contrast calculation does not observe.
+  const audit = await new AxeBuilder({ page }).analyze();
+  expect(audit.violations).toEqual([]);
   await page.emulateMedia({ forcedColors: 'active' });
   await expect(nestedInput).toBeFocused();
+  expect(await nestedInput.evaluate(node => getComputedStyle(node).outlineStyle)).not.toBe('none');
   const dimensions = await page.evaluate(() => ({
     scroll: document.documentElement.scrollWidth,
     client: document.documentElement.clientWidth,
   }));
   expect(dimensions.scroll).toBeLessThanOrEqual(dimensions.client);
-  const audit = await new AxeBuilder({ page }).analyze();
-  expect(audit.violations).toEqual([]);
   await page.screenshot({ path: testInfo.outputPath('react-default-form-rtl-320-200pct-forced-colors.png'), fullPage: true });
 });
