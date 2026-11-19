@@ -132,7 +132,17 @@ function example(button, links) {
       h('summary', null, 'View checked-in React source'),
       h('pre', { 'data-vf-code-block': '', tabIndex: 0 }, h('code', null, basic.source))));
 }
-function body(view, links, button, message, setMessage) {
+function body(view, links, button, message, setMessage, requestedTopic) {
+  if (view === 'unavailable') {
+    return h('article', { className: 'vf-docs-article', 'data-vf-docs-react-unavailable': '' },
+      h('header', { className: 'vf-docs-component-header' },
+        h('h1', null, 'React documentation unavailable'),
+        h('p', { className: 'vf-docs-lede' },
+          'The React documentation view for ', h('strong', null, requestedTopic ?? 'this topic'),
+          ' is not part of the current React Button pilot. This does not claim the React package lacks that capability.')),
+      h('p', null, h('a', { href: links.native, 'data-vf-link': '' }, 'Return to Native Web topic')),
+      h('p', null, h('a', { href: links.guide, 'data-vf-link': '' }, 'Browse available React Button guide')));
+  }
   if (view === 'home') {
     return h('article', { className: 'vf-docs-article' },
       h('header', { className: 'vf-docs-component-header' },
@@ -184,7 +194,7 @@ function body(view, links, button, message, setMessage) {
       h('h2', { id: 'react-reference' }, 'Reference'),
       h('a', { 'data-vf-link': '', href: links.api }, 'Button API reference')));
 }
-export function ReactReferencePage({ view, links, button }) {
+export function ReactReferencePage({ view, links, button, requestedTopic }) {
   const nav = useNavigation();
   const { theme, change } = useTheme();
   const [search, setSearch] = useState('');
@@ -229,6 +239,19 @@ export function ReactReferencePage({ view, links, button }) {
                 ? h('ul', null, ...matches.map((item) =>
                     h('li', { key: item.title }, h('a', { href: item.href }, item.title))))
                 : h('p', null, 'No matching React documentation.'))),
+          h('div', { className: 'vf-docs-framework-control' },
+            h('label', { htmlFor: 'vf-react-framework' }, 'Framework'),
+            h(NativeSelect, { id: 'vf-react-framework', value: links.self,
+              onChange: (event) => {
+                const destination = event.currentTarget.value;
+                if (destination !== links.self) window.location.assign(destination);
+              } },
+              h('option', { value: links.native }, 'Native Web'),
+              h('option', { value: links.self }, 'React (Button pilot)'))),
+          h('div', { className: 'vf-docs-version-control' },
+            h('label', { htmlFor: 'vf-react-version' }, 'Version'),
+            h(NativeSelect, { id: 'vf-react-version', defaultValue: links.channel },
+              h('option', { value: links.channel }, links.channel))),
           h('div', { className: 'vf-docs-theme-control' },
             h('label', { htmlFor: 'vf-react-theme' }, 'Theme'),
             h(NativeSelect, { id: 'vf-react-theme', value: theme,
@@ -245,7 +268,7 @@ export function ReactReferencePage({ view, links, button }) {
           h('a', { 'data-vf-link': '', href: links.native }, 'Native Web'),
           h('span', { 'aria-hidden': 'true' }, ' / '),
           h('span', { 'aria-current': 'page' }, 'React')),
-        body(view, links, button, message, setMessage))),
+        body(view, links, button, message, setMessage, requestedTopic))),
     h(AppShellFooter, { className: 'vf-docs-footer' },
       h('span', null, 'VyrnForge React documentation'),
       h('span', null, links.channel + ' channel'))));
