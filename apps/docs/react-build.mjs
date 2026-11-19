@@ -5,6 +5,7 @@ import { build } from 'esbuild';
 import { createElement } from 'react';
 import { renderToString } from 'react-dom/server';
 import { compileFrameworkDocumentation } from '../../tooling/docs/framework-documentation.mjs';
+import { compileNativeDocumentation } from '../../tooling/docs/native-documentation.mjs';
 import { documentationShellStyleSpecifiers, resolvePublicWebStyleAsset } from '../../tooling/docs/public-shell-styles.mjs';
 import { ReactReferencePage } from './react-reference.mjs';
 
@@ -14,6 +15,7 @@ const channel = process.env.VYRNFORGE_DOCS_CHANNEL || 'next';
 const reactRoot = path.join(outRoot, channel, 'react');
 const reactModel = compileFrameworkDocumentation('react', root);
 const webModel = compileFrameworkDocumentation('native-web', root);
+const nativeModel = compileNativeDocumentation(root);
 const button = reactModel.componentCatalog.find((entry) => entry.id === 'button');
 if (!button?.showcaseAvailable || !button.apiAvailable || !button.frameworkContent) {
   throw new Error('React documentation pilot requires real public Button API, shared and React-authored content');
@@ -44,6 +46,7 @@ function linksFor(route) {
   return {
     channel,
     home: relative(dir, react, true),
+    self: relative(dir, react + route, true),
     guide: relative(dir, react + 'components/button/', true),
     api: relative(dir, react + 'api/components/button/', true),
     example: relative(dir, react + 'examples/button-basic/', true),
@@ -93,6 +96,24 @@ const pageViews = [
   { route: 'components/button/', view: 'guide', title: 'React Button guide', description: 'Shared Button semantics and React usage' },
   { route: 'api/components/button/', view: 'api', title: 'React Button API', description: 'Verified public React Button API' },
 ];
+// All Native destinations have a React-context response, even when a React guide
+// has not been implemented. Never disguise an unavailable view as another port.
+const renderedRoutes = new Set(pageViews.map((page) => page.route));
+const nativeRoutes = new Set([
+  'components/', 'patterns/', 'api/components/', 'api/patterns/',
+  ...nativeModel.foundationPages.map((page) => page.route),
+  ...nativeModel.showcasePages.map((page) => page.route),
+  ...nativeModel.apiPages.map((page) => page.route),
+]);
+const namedNativePages = [...nativeModel.foundationPages, ...nativeModel.showcasePages, ...nativeModel.apiPages];
+for (const route of nativeRoutes) {
+  if (renderedRoutes.has(route)) continue;
+  const nativePage = namedNativePages.find((page) => page.route === route);
+  pageViews.push({
+    route, view: 'unavailable', requestedTopic: nativePage?.title ?? route.replace(/\/$/, ''),
+    title: 'React documentation unavailable', description: 'React documentation is not available for this topic',
+  });
+}
 const pageData = {
   id: button.id,
   title: button.title,
@@ -104,7 +125,8 @@ const pageData = {
 };
 for (const page of pageViews) {
   const dir = directory(page.route);
-  const props = { view: page.view, links: linksFor(page.route), button: pageData };
+  const props = { view: page.view, links: linksFor(page.route), button: pageData,
+    requestedTopic: page.requestedTopic ?? null };
   const initialHtml = renderToString(createElement(ReactReferencePage, props));
   const serialized = JSON.stringify(props).replaceAll('<', '\\u003c');
   const styles = shellStyles.map((asset) =>
