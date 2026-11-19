@@ -5,6 +5,12 @@
     border-start-end-radius: 0;
     border-end-end-radius: 0;
   }
+  /* When a separate native Clear button is authored, hide WebKit's
+     duplicate inline cancel affordance. A lone input keeps its native UI. */
+  :where([data-vf-search-field-root]:has([data-vf-search-field-clear]))
+    [data-vf-search-field-input]::-webkit-search-cancel-button {
+    display: none;
+  }
   [data-vf-search-field-clear] {
     border-inline-start: 0;
     border-start-end-radius: var(--vf-control-radius);
