@@ -1429,3 +1429,17 @@ test('Layout guide remains navigable at 320 CSS px with enlarged text and RTL pr
   await expectNoAccessibilityViolations(page);
   await page.screenshot({ path: testInfo.outputPath('native-layout-guide-narrow-200percent.png'), fullPage: true });
 });
+
+test('documentation search prioritizes exact topics over incidental guide mentions', async ({ page }) => {
+  await gotoWithCleanDocsState(page, '/next/native-web/');
+  const search = page.getByRole('searchbox', { name: 'Search documentation' });
+  const visibleResults = page.locator('[data-vf-docs-search-item]:not([hidden])');
+  await search.fill('input');
+  await expect(visibleResults.first().getByRole('link', { name: /Input/ })).toBeVisible();
+  await search.fill('layout');
+  await expect(visibleResults.first().getByRole('link', { name: /Layout/ })).toBeVisible();
+  await search.fill('no-results-layout-123456');
+  await expect(visibleResults).toHaveCount(0);
+  await search.fill('input');
+  await expect(visibleResults.first().getByRole('link', { name: /Input/ })).toBeVisible();
+});
