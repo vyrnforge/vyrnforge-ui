@@ -12,6 +12,10 @@ export const browserFixture = {
       .replace(/^@import\s+["'][^"']+["'];\s*$/gm, '');
     const foundation = (await readFile(path.join(root, 'packages/web/dist/styles/foundation.css'), 'utf8'))
       .replace(/^@import\s+["'][^"']+["'];\s*$/gm, '');
+    const stripImports = css => css.replace(/^@import\\s+["'][^"']+["'];\\s*$/gm, '');
+    const input = stripImports(await readFile(path.join(root, 'packages/web/dist/components/input/input.css'), 'utf8'));
+    const text = stripImports(await readFile(path.join(root, 'packages/web/dist/components/text/text.css'), 'utf8'));
+    const typography = stripImports(await readFile(path.join(root, 'packages/web/dist/styles/internal/typography-roles.css'), 'utf8'));
     const fixtureCss = `
       html { font-size: 16px; }
       body { margin: 0; padding: 24px; --vf-auto-grid-min-item-size: 9rem; font-family: sans-serif; }
@@ -58,6 +62,20 @@ export const browserFixture = {
             h('button', { type: 'button' }, 'Search'))
         )));
       await writeFile(path.join(outDir, 'react.html'), page(markup));
+      // The default-first example is tested as a real public React composition,
+      // without assigning gap, width, padding, margin or control-size props.
+      const { Input } = await import('@vyrnforge/react/input');
+      const { Text } = await import('@vyrnforge/react/text');
+      const formMarkup = renderToString(h('main', { id: 'container' },
+        h('h1', null, 'Default-first React form'),
+        h('form', { id: 'form-example' },
+          h(Flow, { id: 'react-flow-block' },
+            h('label', { htmlFor: 'layout-react-email' }, 'Contact email'),
+            h(Input, { id: 'layout-react-email', name: 'email', type: 'email', 'aria-describedby': 'layout-react-email-help' }),
+            h(Text, { as: 'p', id: 'layout-react-email-help' }, 'Used for account notifications.')))));
+      await writeFile(path.join(outDir, 'react-form.css'), `${tokens}\n${typography}\n${foundation}\n${layout}\n${input}\n${text}\n${fixtureCss}\nbody { background: var(--vf-color-surface); color: var(--vf-color-text); }`);
+      await writeFile(path.join(outDir, 'react-form.html'),
+        '<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width"><link rel="stylesheet" href="./react-form.css"><title>Default-first React form</title></head><body>' + formMarkup + '</body></html>');
     }
     if (port === 'vue') {
       const { createSSRApp, h } = await import('vue');
