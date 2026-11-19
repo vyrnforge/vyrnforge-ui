@@ -25,7 +25,7 @@ test('Core collection navigation fans to discovered component/conformance consum
   assert.ok(impact.executionPrerequisites.includes('browser-runtime'));
 });
 
-test('React-only referenced component selects its settings task evidence without selecting Native docs', () => {
+test('React-only referenced component selects React port and its actual documentation consumer', () => {
   const impact = createSemanticImpact(['product/components/interactive-controls/button/react/index.ts']);
   assert.deepEqual(impact.components, ['button', 'settings-navigation']);
   assert.deepEqual(impact.browserPorts, ['react']);
@@ -35,21 +35,21 @@ test('React-only referenced component selects its settings task evidence without
   assert.equal(impact.browserPorts.includes('vue'), false);
   assert.equal(impact.selectors.packageArtifactsRequired, false);
   assert.deepEqual(impact.packageArtifactPackages, []);
-  assert.equal(impact.selectors.docsRequired, false);
-  assert.equal(hasReason(impact, 'evidence:docs'), false);
+  assert.equal(impact.selectors.docsRequired, true);
+  assert.equal(hasReason(impact, 'evidence:docs'), true);
   assert.ok(selectedScope(impact, 'port-integration', 'react'));
   assert.ok(selectedScope(impact, 'type-level', 'react'));
   assert.ok(selectedScope(impact, 'browser-behavior', 'react'));
   assert.ok(impact.executionPrerequisites.includes('fixture:react:button'));
 });
 
-test('generic React package fallback classification does not select Native docs evidence', () => {
+test('generic React package fallback selects its genuine documentation consumer', () => {
   const impact = createSemanticImpact(['packages/react/src/internal/example.ts']);
   assert.ok(impact.packages.includes('react'));
-  assert.equal(impact.selectors.docsRequired, false);
+  assert.equal(impact.selectors.docsRequired, true);
   assert.equal(impact.selectors.browserRequired, true);
   assert.ok(impact.browserPorts.includes('react'));
-  assert.equal(hasReason(impact, 'evidence:docs'), false);
+  assert.equal(hasReason(impact, 'evidence:docs'), true);
   assert.ok(hasReason(impact, 'port:react'));
 });
 
@@ -75,15 +75,15 @@ test('Web component CSS selects its real ports, referenced React task, visual an
   assert.ok(selectedScope(impact, 'visual-regression'));
 });
 
-test('package manifest changes select only the package root for packed API and consumer verification', () => {
+test('React package manifest changes select packed contract plus its genuine documentation consumer', () => {
   const impact = createSemanticImpact(['packages/react/package.json']);
   assert.deepEqual(impact.packages, ['react']);
   assert.equal(impact.selectors.packageArtifactsRequired, true);
   assert.deepEqual(impact.packageArtifactPackages, ['react']);
   assert.equal(impact.selectors.browserRequired, false);
-  assert.equal(impact.selectors.docsRequired, false);
+  assert.equal(impact.selectors.docsRequired, true);
   assert.ok(hasReason(impact, 'package:react'));
-  assert.equal(hasReason(impact, 'evidence:docs'), false);
+  assert.equal(hasReason(impact, 'evidence:docs'), true);
   assert.ok(selectedScope(impact, 'package-public-entrypoint', 'react'));
   assert.ok(selectedScope(impact, 'consumer-validation', 'react'));
 });
