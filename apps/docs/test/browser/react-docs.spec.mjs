@@ -33,6 +33,12 @@ test('React Button guide SSR hydrates and uses public Button, AppShell, SideNav 
   await page.goto('/next/react/components/button/');
   await expect(page.getByRole('heading', { name: 'Button', level: 1 })).toBeVisible();
   await expect(page.locator('[data-vf-docs-react-component="button"]')).toHaveCount(1);
+  const standards = page.locator('[data-vf-docs-react-component="button"] [data-vf-docs-accessibility]');
+  await expect(standards.getByRole('heading', { name: 'Accessibility evidence' })).toBeVisible();
+  await expect(standards.getByRole('link', { name: /WCAG 2\.2/ })).toHaveAttribute('href', 'https://www.w3.org/TR/WCAG22/');
+  await expect(standards.locator('details')).not.toHaveAttribute('open', '');
+  await standards.locator('summary').click();
+  await expect(standards.locator('details')).toHaveAttribute('open', '');
   await expect(page.locator('[data-vf-app-shell]')).toHaveCount(1);
   await expect(page.locator('[data-vf-side-nav]')).toHaveCount(1);
   await expect(page.getByRole('navigation', { name: 'Documentation' })
@@ -67,6 +73,7 @@ test('React URL context and framework-scoped search/theme work without inventing
     .getByRole('link', { name: 'Button API' }).click();
   await expect(page).toHaveURL(/\/next\/react\/api\/components\/button\/$/);
   await expect(page.getByRole('heading', { level: 1, name: 'Button API' })).toBeVisible();
+  await expect(page.locator('[data-vf-docs-react-api="button"] [data-vf-docs-accessibility]')).toBeVisible();
   await expect(page.locator('html')).toHaveAttribute('data-vf-theme', 'dark');
   await page.getByRole('navigation', { name: 'Documentation framework' })
     .getByRole('link', { name: 'Native Web' }).click();
