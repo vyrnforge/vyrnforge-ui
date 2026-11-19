@@ -944,6 +944,19 @@
   }
 
   @media (forced-colors: active) {
+    /* The docs shell must use system colors even when an authored dark
+       theme is selected. Keep this scoped to docs presentation, not Web tokens. */
+    html[data-vf-theme] {
+      --vf-color-text: CanvasText;
+      --vf-color-text-muted: CanvasText;
+      --vf-color-text-subtle: CanvasText;
+      --vf-color-surface: Canvas;
+      --vf-color-surface-subtle: Canvas;
+      --vf-color-surface-hover: Canvas;
+      --vf-color-border: CanvasText;
+      --vf-color-border-required: CanvasText;
+    }
+
     .vf-docs-skip,
     .vf-docs-surface,
     .vf-docs-page-meta span,

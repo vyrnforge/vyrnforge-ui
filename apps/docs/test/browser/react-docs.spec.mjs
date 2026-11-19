@@ -241,8 +241,10 @@ test('React Layout lives under Layout & Structure and runs checked-in React JSX 
   for (const id of ['basic', 'flow-block', 'flow-inline', 'flow-wrap', 'auto-grid', 'semantic-groups']) {
     const demo = page.locator('[data-vf-docs-react-layout-example="layout/' + id + '"]');
     await expect(demo).toHaveCount(1);
-    const frame = page.frameLocator('iframe[title="React ' + (await demo.locator('h3').innerText()) + ' example"]');
-    await expect(frame.locator('#root')).toBeVisible();
+    const iframe = demo.locator('iframe');
+    await iframe.scrollIntoViewIfNeeded();
+    const frame = iframe.contentFrame();
+    await expect(frame.locator('#root > *').first()).toBeVisible();
     await demo.getByText('View React TSX source').click();
     await expect(demo.locator('pre code')).toContainText('data-vf-');
   }
