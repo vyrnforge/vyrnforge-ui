@@ -1035,3 +1035,111 @@ test('shared standards remain readable on Native API pages at mobile and 400% te
     });
   }
 });
+
+
+test('every Native documentation page family loads public Text, Code and Layout foundations', () => {
+  const routes = [
+    '', 'components/', 'patterns/', 'api/components/', 'api/patterns/',
+    'foundations/styling/', 'foundations/tokens/',
+    'components/button/', 'api/components/button/',
+    'patterns/loading/', 'api/patterns/loading/',
+    'patterns/settings-navigation/',
+  ];
+  const sharedStyles = compileNativeDocumentation().shellStyles;
+  const publicStyles = ['text.css', 'code.css', 'layout.css'].map((asset) => {
+    const style = sharedStyles.find((entry) => entry.specifier === `@vyrnforge/web/styles/${asset}`);
+    expect(style, `${asset} should resolve from the public Web package export map`).toBeDefined();
+    return style;
+  });
+  for (const route of routes) {
+    const path = `dist/docs/next/native-web/${route}index.html`;
+    expect(existsSync(path), path).toBe(true);
+    const html = readFileSync(path, 'utf8');
+    for (const style of publicStyles) {
+      expect(html, `${route}: ${style.specifier} must be loaded`)
+        .toContain(style.assetPath.replace(/^\//, ''));
+    }
+  }
+
+  const button = readFileSync('dist/docs/next/native-web/components/button/index.html', 'utf8');
+  expect((button.match(/<pre data-vf-code-block/g) ?? []).length).toBeGreaterThanOrEqual(2);
+  expect(button).toContain('<code data-vf-code>');
+  expect(button).toContain('data-vf-text-variant="overline"');
+  expect(button).toContain('data-vf-text-variant="body-lg"');
+  expect(button).toContain('data-vf-cluster');
+  expect(button).toContain('data-vf-stack data-vf-stack-gap="xl"');
+  const home = readFileSync('dist/docs/next/native-web/index.html', 'utf8');
+  expect(home).toContain('data-vf-inline data-vf-inline-gap="lg"');
+
+  const foundation = readFileSync('dist/docs/next/native-web/foundations/styling/index.html', 'utf8');
+  expect(foundation).toContain('<code data-vf-code>');
+  const api = readFileSync('dist/docs/next/native-web/api/components/button/index.html', 'utf8');
+  expect(api).toContain('<code data-vf-code>');
+});
+
+test('Text, Code and Layout reuse retains navigation, source reading and narrow reflow', async ({ page }, testInfo) => {
+  const routes = [
+    ['home', '/next/native-web/'],
+    ['catalog', '/next/native-web/components/'],
+    ['foundation', '/next/native-web/foundations/styling/'],
+    ['showcase', '/next/native-web/components/button/'],
+    ['api', '/next/native-web/api/components/button/'],
+    ['pattern', '/next/native-web/patterns/loading/'],
+  ];
+  for (const [name, route] of routes) {
+    await page.setViewportSize({ width: 1280, height: 720 });
+    await gotoWithCleanDocsState(page, route);
+    await expect(page.locator('[data-vf-app-shell]')).toHaveCount(1);
+    await expectDeploymentRelativeStyles(page);
+
+    const links = await page.locator('link[rel="stylesheet"]').evaluateAll((nodes) => nodes.map((node) => node.getAttribute('href')));
+    const publicStyles = compileNativeDocumentation().shellStyles
+      .filter((style) => ['text.css', 'code.css', 'layout.css'].some((asset) =>
+        style.specifier === `@vyrnforge/web/styles/${asset}`));
+    expect(publicStyles).toHaveLength(3);
+    for (const style of publicStyles) {
+      expect(links.some((href) => href.includes(style.assetPath.replace(/^\//, ''))),
+        `${name}: ${style.specifier} must load through the published export target`).toBe(true);
+    }
+
+    if (['home', 'catalog', 'foundation', 'showcase', 'pattern'].includes(name)) {
+      const overline = page.locator('[data-vf-text][data-vf-text-variant="overline"]').first();
+      await expect(overline).toBeVisible();
+    }
+    if (['home', 'catalog', 'foundation', 'showcase', 'api'].includes(name)) {
+      const lede = page.locator('[data-vf-text][data-vf-text-variant="body-lg"]').first();
+      await expect(lede).toBeVisible();
+    }
+    if (['foundation', 'showcase', 'api'].includes(name)) {
+      await expect(page.locator('code[data-vf-code]:visible').first()).toBeVisible();
+    }
+    if (['home', 'catalog'].includes(name)) {
+      const cards = page.locator('ul[data-vf-auto-grid]').first();
+      await expect(cards).toBeVisible();
+      await expect(cards).toHaveCSS('display', 'grid');
+      await expect(page.locator('a[data-vf-inline]').first()).toBeVisible();
+    }
+    if (name === 'showcase') {
+      const preview = page.locator('[data-vf-docs-preview][data-vf-cluster]').first();
+      await expect(preview).toBeVisible();
+      await expect(preview).toHaveCSS('flex-wrap', 'wrap');
+      const block = page.locator('pre[data-vf-code-block]').first();
+      await expect(block).toBeVisible();
+      await expect(block).toHaveCSS('overflow-x', 'auto');
+      await block.focus();
+      await expect(block).toBeFocused();
+    }
+
+    if (['home', 'catalog', 'foundation', 'showcase', 'api'].includes(name)) {
+      await page.setViewportSize({ width: 320, height: 720 });
+      await page.evaluate(() => { document.documentElement.style.fontSize = '200%'; });
+      const bounds = await page.evaluate(() => ({
+        scrollWidth: document.documentElement.scrollWidth,
+        clientWidth: document.documentElement.clientWidth,
+      }));
+      expect(bounds.scrollWidth, `${name}: 320px/200% should not introduce document-wide horizontal overflow`)
+        .toBeLessThanOrEqual(bounds.clientWidth + 1);
+      await page.screenshot({ path: testInfo.outputPath(`docs-reuse-${name}-320-text200.png`), fullPage: false });
+    }
+  }
+});

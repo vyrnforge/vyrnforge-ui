@@ -77,7 +77,7 @@ function renderStandardLink(reference) {
 }
 
 function renderCriterionLink(criterion) {
-  const label = `<code>${escapeHtml(criterion.id)}</code>`;
+  const label = `<code data-vf-code>${escapeHtml(criterion.id)}</code>`;
   return criterion.url
     ? standardLink(`${label} ${escapeHtml(criterion.label)}`, criterion.url)
     : `<span>${label}</span>`;
@@ -112,7 +112,7 @@ function renderInline(value) {
   return String(value).split(/(`[^`]+`)/g).map((part) => {
     if (part.startsWith('`') && part.endsWith('`')) {
       const token = part.slice(1, -1);
-      const code = `<code>${escapeHtml(token)}</code>`;
+      const code = `<code data-vf-code>${escapeHtml(token)}</code>`;
       const url = ariaAttributeReferences[token.split('=', 1)[0]];
       return url ? standardLink(code, url) : code;
     }
@@ -357,8 +357,8 @@ ${styleLinks(currentPageDirectory, componentStyle)}
 }
 
 function cardList(entries, currentPageDirectory) {
-  return `<ul class="vf-docs-card-list">${entries.map((entry) => `<li>
-      <a class="vf-docs-card-link" href="${artifactHref(currentPageDirectory, routeTarget(entry.route))}">
+  return `<ul class="vf-docs-card-list" data-vf-auto-grid data-vf-auto-grid-gap="md">${entries.map((entry) => `<li>
+      <a class="vf-docs-card-link" data-vf-inline data-vf-inline-gap="lg" data-vf-inline-justify="space-between" href="${artifactHref(currentPageDirectory, routeTarget(entry.route))}">
         <span>
           <strong>${escapeHtml(entry.title)}</strong>
           <small>${escapeHtml(entry.meta ?? '')}</small>
@@ -378,10 +378,10 @@ function renderHome() {
     title: 'Native Web documentation',
     description: 'VyrnForge Native Web documentation',
     content: `<section class="vf-docs-hero">
-      <p class="vf-docs-eyebrow">Native Web documentation</p>
+      <p data-vf-text data-vf-text-variant="overline" class="vf-docs-eyebrow">Native Web documentation</p>
       <h1>VyrnForge Native Web</h1>
-      <p class="vf-docs-lede">Start with the interface you need to build, browse components by familiar UI purpose, then open practical guidance, examples, or the exact public API.</p>
-      <div class="vf-docs-hero-actions">
+      <p data-vf-text data-vf-text-variant="body-lg" class="vf-docs-lede">Start with the interface you need to build, browse components by familiar UI purpose, then open practical guidance, examples, or the exact public API.</p>
+      <div class="vf-docs-hero-actions" data-vf-cluster data-vf-cluster-gap="md">
         <a href="${artifactHref(currentPageDirectory, routeTarget('components/'))}" data-vf-link class="vf-docs-hero-cta">Browse components</a>
         <a href="${artifactHref(currentPageDirectory, routeTarget('api/components/'))}" data-vf-link>Browse API reference</a>
         ${buttonGuide ? `<a href="${artifactHref(currentPageDirectory, routeTarget(buttonGuide.showcaseRoute))}" data-vf-link>Start with Button</a>` : ''}
@@ -390,7 +390,7 @@ function renderHome() {
     <section class="vf-docs-catalog" aria-labelledby="foundations-heading">
       <div class="vf-docs-section-heading">
         <div>
-          <p class="vf-docs-eyebrow">Shared foundation</p>
+          <p data-vf-text data-vf-text-variant="overline" class="vf-docs-eyebrow">Shared foundation</p>
           <h2 id="foundations-heading">Foundations</h2>
         </div>
         <p>Styling and tokens are documented independently from component usage.</p>
@@ -400,7 +400,7 @@ function renderHome() {
     <section class="vf-docs-catalog" aria-labelledby="catalog-heading">
       <div class="vf-docs-section-heading">
         <div>
-          <p class="vf-docs-eyebrow">Components</p>
+          <p data-vf-text data-vf-text-variant="overline" class="vf-docs-eyebrow">Components</p>
           <h2 id="catalog-heading">Browse components</h2>
         </div>
         <p>${model.componentCatalog.length} public Native Web components, organized by familiar UI categories. ${model.componentShowcasePages.length} currently include complete usage guidance and examples.</p>
@@ -413,7 +413,7 @@ function renderHome() {
     ${model.patternCatalog.length ? `<section class="vf-docs-catalog" aria-labelledby="patterns-heading">
       <div class="vf-docs-section-heading">
         <div>
-          <p class="vf-docs-eyebrow">Patterns</p>
+          <p data-vf-text data-vf-text-variant="overline" class="vf-docs-eyebrow">Patterns</p>
           <h2 id="patterns-heading">Patterns & workflows</h2>
         </div>
         <p>Reusable task and feedback guidance composed from foundations and components.</p>
@@ -427,7 +427,7 @@ function renderHome() {
 }
 
 function renderComponentGroupSections(pages, currentPageDirectory, { apiOnly = false } = {}) {
-  return '<div class="vf-docs-component-groups">' + consumerComponentGroups(pages).map((group) => {
+  return '<div class="vf-docs-component-groups" data-vf-stack data-vf-stack-gap="3xl">' + consumerComponentGroups(pages).map((group) => {
     const cards = group.members.map((component) => ({
       title: component.title,
       route: apiOnly ? component.apiRoute : componentDestination(component),
@@ -456,9 +456,9 @@ function renderComponentsIndex() {
     title: 'Components',
     description: 'Browse Native Web components by familiar interface purpose',
     content: `<section class="vf-docs-hero">
-      <p class="vf-docs-eyebrow">Components</p>
+      <p data-vf-text data-vf-text-variant="overline" class="vf-docs-eyebrow">Components</p>
       <h1>Components</h1>
-      <p class="vf-docs-lede">Browse by what you are building: forms and inputs, actions, navigation, layout, content, feedback, overlays, collections, and supporting utilities.</p>
+      <p data-vf-text data-vf-text-variant="body-lg" class="vf-docs-lede">Browse by what you are building: forms and inputs, actions, navigation, layout, content, feedback, overlays, collections, and supporting utilities.</p>
     </section>
     <section class="vf-docs-catalog" aria-labelledby="component-catalog-heading">
       <div class="vf-docs-section-heading"><div><h2 id="component-catalog-heading">Browse by UI purpose</h2></div><p>${model.componentCatalog.length} public Native Web components</p></div>
@@ -475,9 +475,9 @@ function renderPatternsIndex() {
     title: 'Patterns',
     description: 'Browse reusable VyrnForge patterns and workflows',
     content: `<section class="vf-docs-hero">
-      <p class="vf-docs-eyebrow">Patterns & Workflows</p>
+      <p data-vf-text data-vf-text-variant="overline" class="vf-docs-eyebrow">Patterns & Workflows</p>
       <h1>Patterns</h1>
-      <p class="vf-docs-lede">Patterns compose foundations and components into reusable task and feedback guidance without becoming another component layer.</p>
+      <p data-vf-text data-vf-text-variant="body-lg" class="vf-docs-lede">Patterns compose foundations and components into reusable task and feedback guidance without becoming another component layer.</p>
     </section>
     <section class="vf-docs-catalog" aria-labelledby="pattern-catalog-heading">
       <div class="vf-docs-section-heading"><div><h2 id="pattern-catalog-heading">Available patterns</h2></div><p>${model.patternCatalog.length} Native Web pattern${model.patternCatalog.length === 1 ? '' : 's'}</p></div>
@@ -498,9 +498,9 @@ function renderPatternApiIndex() {
     title: 'Patterns API',
     description: 'Verified Native Web pattern API reference',
     content: `<section class="vf-docs-hero">
-      <p class="vf-docs-eyebrow">API Reference</p>
+      <p data-vf-text data-vf-text-variant="overline" class="vf-docs-eyebrow">API Reference</p>
       <h1>Patterns API</h1>
-      <p class="vf-docs-lede">Public package entrypoints owned by reusable Pattern product units.</p>
+      <p data-vf-text data-vf-text-variant="body-lg" class="vf-docs-lede">Public package entrypoints owned by reusable Pattern product units.</p>
     </section>
     <section class="vf-docs-catalog" aria-labelledby="pattern-api-catalog-heading">
       <div class="vf-docs-section-heading"><div><h2 id="pattern-api-catalog-heading">Public pattern entrypoints</h2></div><p>${model.patternApiPages.length} pattern${model.patternApiPages.length === 1 ? '' : 's'}</p></div>
@@ -521,9 +521,9 @@ function renderApiIndex() {
     title: 'Components API',
     description: 'Verified Native Web component API reference',
     content: `<section class="vf-docs-hero">
-      <p class="vf-docs-eyebrow">API Reference</p>
+      <p data-vf-text data-vf-text-variant="overline" class="vf-docs-eyebrow">API Reference</p>
       <h1>Components API</h1>
-      <p class="vf-docs-lede">Use this reference when you need exact public entrypoints. Components are grouped with the same consumer-facing categories used by the main catalog; availability still comes from the real Native Web package surface.</p>
+      <p data-vf-text data-vf-text-variant="body-lg" class="vf-docs-lede">Use this reference when you need exact public entrypoints. Components are grouped with the same consumer-facing categories used by the main catalog; availability still comes from the real Native Web package surface.</p>
     </section>
     <section class="vf-docs-catalog" aria-labelledby="api-catalog-heading">
       <div class="vf-docs-section-heading"><div><h2 id="api-catalog-heading">Public component entrypoints</h2></div><p>${model.componentApiPages.length} components</p></div>
@@ -533,7 +533,7 @@ function renderApiIndex() {
 }
 
 function renderFoundation(page) {
-  const entrypoints = page.entrypoints.map((entrypoint) => `<li><code>${escapeHtml(entrypoint)}</code></li>`).join('');
+  const entrypoints = page.entrypoints.map((entrypoint) => `<li><code data-vf-code>${escapeHtml(entrypoint)}</code></li>`).join('');
   const extra = page.id === 'tokens'
     ? '<p>Tokens are the shared visual contract. Component and documentation CSS should consume token values rather than introduce hard-coded design decisions.</p>'
     : '<p>Load the foundation once, then load component styles through their public entrypoints as needed. Documentation-specific CSS may style the docs product, but it does not replace VyrnForge component CSS.</p>';
@@ -544,9 +544,9 @@ function renderFoundation(page) {
     content: `${renderBreadcrumbs(page, pageDirectory(page.route), 'Foundations')}
     <article class="vf-docs-article">
       <header class="vf-docs-component-header">
-        <p class="vf-docs-eyebrow">Foundation</p>
+        <p data-vf-text data-vf-text-variant="overline" class="vf-docs-eyebrow">Foundation</p>
         <h1>${escapeHtml(page.title)}</h1>
-        <p class="vf-docs-lede">${escapeHtml(page.description)}</p>
+        <p data-vf-text data-vf-text-variant="body-lg" class="vf-docs-lede">${escapeHtml(page.description)}</p>
         ${renderAccessibilityStandards(page.standardReferences)}
       </header>
       <section>
@@ -565,16 +565,16 @@ function renderExample(example) {
   return `<article class="vf-docs-example" data-vf-docs-example="${escapeHtml(example.id)}">
     <header class="vf-docs-example-header">
       <div>
-        <p class="vf-docs-example-label">Example</p>
+        <p data-vf-text data-vf-text-variant="overline" class="vf-docs-example-label">Example</p>
         <h3>${escapeHtml(example.title)}</h3>
         ${example.description ? `<p>${escapeHtml(example.description)}</p>` : ''}
       </div>
       <button type="button" data-vf-button data-vf-variant="ghost" data-vf-size="sm" data-vf-docs-copy>Copy HTML</button>
     </header>
-    <div class="vf-docs-preview" data-vf-docs-preview>${example.source}</div>
+    <div class="vf-docs-preview" data-vf-cluster data-vf-cluster-gap="md" data-vf-docs-preview>${example.source}</div>
     <details class="vf-docs-source-disclosure">
       <summary>View HTML source</summary>
-      <pre tabindex="0"><code class="language-${escapeHtml(example.language)}" data-vf-docs-source>${escapeHtml(example.source)}</code></pre>
+      <pre data-vf-code-block tabindex="0"><code class="language-${escapeHtml(example.language)}" data-vf-docs-source>${escapeHtml(example.source)}</code></pre>
     </details>
     <span data-vf-visually-hidden role="status" aria-live="polite" data-vf-docs-copy-status></span>
   </article>`;
@@ -592,7 +592,7 @@ function renderBreadcrumbs(page, currentPageDirectory, family = 'Components') {
           : 'components/';
   const category = family === 'Components' ? componentCategoryForId(page.id) : null;
   return `<nav class="vf-docs-breadcrumbs" aria-label="Breadcrumb">
-    <ol>
+    <ol data-vf-cluster data-vf-cluster-gap="xs">
       <li><a data-vf-link href="${artifactHref(currentPageDirectory, nativeSitePath)}">Native Web</a></li>
       <li><span aria-hidden="true">/</span> ${family === 'Foundations' ? 'Foundations' : `<a data-vf-link href="${artifactHref(currentPageDirectory, routeTarget(familyRoute))}">${escapeHtml(family)}</a>`}</li>
       ${category ? `<li><span aria-hidden="true">/</span> <a data-vf-link href="${artifactHref(currentPageDirectory, routeTarget('components/'))}#component-group-${escapeHtml(category.id)}">${escapeHtml(category.label)}</a></li>` : ''}
@@ -663,7 +663,7 @@ function renderComponent(page) {
     return `<section aria-labelledby="${escapeHtml(section.id)}">
     <h2 id="${escapeHtml(section.id)}">${escapeHtml(section.heading)}</h2>
     ${renderBlocks(section.blocks)}
-    ${examplesForSection.length ? `<div class="vf-docs-examples">${examplesForSection.map(renderExample).join('\n')}</div>` : ''}
+    ${examplesForSection.length ? `<div class="vf-docs-examples" data-vf-stack data-vf-stack-gap="xl">${examplesForSection.map(renderExample).join('\n')}</div>` : ''}
   </section>`;
   }).join('\n');
   const examples = remainingExamples.map(renderExample).join('\n');
@@ -677,36 +677,36 @@ function renderComponent(page) {
       ${renderTableOfContents(toc)}
       <article class="vf-docs-article" ${page.kind === 'pattern' ? 'data-vf-docs-pattern' : 'data-vf-docs-component'}="${escapeHtml(page.id)}">
         <header class="vf-docs-component-header">
-          <div class="vf-docs-page-meta" aria-label="Page metadata">
+          <div class="vf-docs-page-meta" data-vf-cluster data-vf-cluster-gap="xs" aria-label="Page metadata">
             <span>Native Web</span>
             <span>${escapeHtml(channel)}</span>
             <span>${escapeHtml(page.kind === 'pattern' ? 'Pattern' : componentCategory(page).label)}</span>
             <span>Guide</span>
           </div>
           <h1>${escapeHtml(page.content.title)}</h1>
-          <div class="vf-docs-lede">${renderBlocks(page.content.intro)}</div>
+          <div data-vf-text data-vf-text-variant="body-lg" class="vf-docs-lede">${renderBlocks(page.content.intro)}</div>
           ${renderAccessibilityStandards(page.standardReferences, evidenceId)}
         </header>
         <section aria-labelledby="${escapeHtml(setupId)}">
           <h2 id="${escapeHtml(setupId)}">Native Web setup</h2>
           <p>Load the public stylesheet and author the appropriate native semantics/composition directly.</p>
-          <pre tabindex="0"><code class="language-css">@import &quot;${escapeHtml(page.styleSpecifier)}&quot;;</code></pre>
+          <pre data-vf-code-block tabindex="0"><code class="language-css">@import &quot;${escapeHtml(page.styleSpecifier)}&quot;;</code></pre>
         </section>
         <section aria-labelledby="${escapeHtml(usageId)}">
           <div class="vf-docs-section-heading">
-            <div><p class="vf-docs-eyebrow">Executable Native HTML</p><h2 id="${escapeHtml(usageId)}">Usage preview</h2></div>
+            <div><p data-vf-text data-vf-text-variant="overline" class="vf-docs-eyebrow">Executable Native HTML</p><h2 id="${escapeHtml(usageId)}">Usage preview</h2></div>
             <p>This example comes from the checked-in product unit and renders with public VyrnForge Web CSS.</p>
           </div>
-          <div class="vf-docs-examples">${renderExample(featuredExample)}</div>
+          <div class="vf-docs-examples" data-vf-stack data-vf-stack-gap="xl">${renderExample(featuredExample)}</div>
         </section>
         ${sections}
         ${framework.markup}
         ${examplesId ? `<section aria-labelledby="${escapeHtml(examplesId)}">
           <div class="vf-docs-section-heading">
-            <div><p class="vf-docs-eyebrow">Executable Native HTML</p><h2 id="${escapeHtml(examplesId)}">More examples</h2></div>
+            <div><p data-vf-text data-vf-text-variant="overline" class="vf-docs-eyebrow">Executable Native HTML</p><h2 id="${escapeHtml(examplesId)}">More examples</h2></div>
             <p>Additional checked-in sources demonstrate supported behavior.</p>
           </div>
-          <div class="vf-docs-examples">${examples}</div>
+          <div class="vf-docs-examples" data-vf-stack data-vf-stack-gap="xl">${examples}</div>
         </section>` : ''}
         <section aria-labelledby="${escapeHtml(referenceId)}">
           <h2 id="${escapeHtml(referenceId)}">Reference</h2>
@@ -736,7 +736,7 @@ function renderPatternGuide(page) {
     content: renderBreadcrumbs(page, currentPageDirectory, 'Patterns') +
       '<article class="vf-docs-article" data-vf-docs-pattern="' + escapeHtml(page.id) + '">' +
       '<header class="vf-docs-component-header"><h1>' + escapeHtml(page.content.title) + '</h1>' +
-      '<div class="vf-docs-lede">' + renderBlocks(page.content.intro) + '</div>' +
+      '<div data-vf-text data-vf-text-variant="body-lg" class="vf-docs-lede">' + renderBlocks(page.content.intro) + '</div>' +
       renderAccessibilityStandards(page.standardReferences) + '</header>' + sections +
       '<section><h2>Referenced examples</h2><p>Guide only. Referenced examples run in repository browser fixtures in the indicated framework; this Native Web page does not execute them or provide a pattern API.</p><ul>' + examples + '</ul></section></article>',
   });
@@ -744,7 +744,7 @@ function renderPatternGuide(page) {
 
 function renderApiPage(page) {
   const currentPageDirectory = pageDirectory(page.route);
-  const entrypoints = page.publicEntrypoints.map((entrypoint) => `<li><code>${escapeHtml(entrypoint)}</code></li>`).join('');
+  const entrypoints = page.publicEntrypoints.map((entrypoint) => `<li><code data-vf-code>${escapeHtml(entrypoint)}</code></li>`).join('');
   return shell({
     route: page.route,
     title: `${page.title} API`,
@@ -752,9 +752,9 @@ function renderApiPage(page) {
     content: `${renderBreadcrumbs(page, currentPageDirectory, page.kind === 'pattern' ? 'Pattern API' : 'API Reference')}
     <article class="vf-docs-article" ${page.kind === 'pattern' ? 'data-vf-docs-api-pattern' : 'data-vf-docs-api-component'}="${escapeHtml(page.id)}">
       <header class="vf-docs-component-header">
-        <div class="vf-docs-page-meta"><span>Native Web</span><span>${escapeHtml(page.kind === 'pattern' ? 'Pattern' : componentCategory(page).label)}</span><span>API Reference</span></div>
+        <div class="vf-docs-page-meta" data-vf-cluster data-vf-cluster-gap="xs"><span>Native Web</span><span>${escapeHtml(page.kind === 'pattern' ? 'Pattern' : componentCategory(page).label)}</span><span>API Reference</span></div>
         <h1>${escapeHtml(page.title)} API</h1>
-        <p class="vf-docs-lede">Verified from the public Native Web package surface. Use the corresponding guide for design and usage guidance when one is available.</p>
+        <p data-vf-text data-vf-text-variant="body-lg" class="vf-docs-lede">Verified from the public Native Web package surface. Use the corresponding guide for design and usage guidance when one is available.</p>
         ${renderAccessibilityStandards(page.standardReferences)}
       </header>
       <section>

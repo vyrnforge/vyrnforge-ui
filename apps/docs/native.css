@@ -60,9 +60,7 @@
 
   .vf-docs-brand-row,
   .vf-docs-header-tools,
-  .vf-docs-theme-control,
-  .vf-docs-hero-actions,
-  .vf-docs-page-meta {
+  .vf-docs-theme-control {
     align-items: center;
     display: flex;
   }
@@ -245,12 +243,8 @@
   }
 
   .vf-docs-breadcrumbs ol {
-    align-items: center;
     color: var(--vf-color-text-muted);
-    display: flex;
-    flex-wrap: wrap;
     font-size: var(--vf-font-size-sm);
-    gap: var(--vf-space-xs);
     list-style: none;
     margin: 0;
     padding: 0;
@@ -281,8 +275,6 @@
   }
 
   .vf-docs-page-meta {
-    flex-wrap: wrap;
-    gap: var(--vf-space-xs);
     margin-block-end: var(--vf-space-md);
   }
 
@@ -464,39 +456,21 @@
   .vf-docs-lede,
   .vf-docs-lede p {
     color: var(--vf-color-text-muted);
-    font-size: var(--vf-font-size-lg);
-    line-height: var(--vf-line-height-relaxed);
   }
 
   .vf-docs-lede p {
     margin-block: var(--vf-space-md) 0;
   }
 
-  code,
-  pre {
-    font-family: var(--vf-font-family-mono);
-  }
-
-  :not(pre) > code {
-    background: var(--vf-color-accent-subtle);
-    border-radius: 0.25rem;
-    color: var(--vf-color-text);
-    font-size: 0.9em;
-    padding: 0.08em 0.28em;
-  }
-
-  pre {
-    background: var(--vf-color-surface-subtle);
-    border: 1px solid var(--vf-color-border-required);
-    border-radius: var(--vf-radius-surface);
+  /* Code visuals and scrolling come from public @vyrnforge/web Code styles.
+     Only reading density and the focus indication remain docs-owned. */
+  pre[data-vf-code-block] {
     font-size: var(--vf-font-size-sm);
     line-height: var(--vf-line-height-relaxed);
     max-inline-size: 100%;
-    overflow: auto;
-    padding: var(--vf-space-md);
   }
 
-  pre:focus-visible {
+  pre[data-vf-code-block]:focus-visible {
     outline: 2px solid var(--vf-color-focus-ring);
     outline-offset: 2px;
   }
@@ -551,19 +525,14 @@
     margin-block-start: var(--vf-space-sm);
   }
 
+  /* Overline typography is supplied by shared VyrnForge Text roles. */
   .vf-docs-eyebrow,
   .vf-docs-example-label {
     color: var(--vf-color-text-subtle);
-    font-size: var(--vf-font-size-xs);
-    font-weight: var(--vf-font-weight-bold);
-    letter-spacing: var(--vf-letter-spacing-wider);
     margin: 0;
-    text-transform: uppercase;
   }
 
   .vf-docs-hero-actions {
-    flex-wrap: wrap;
-    gap: var(--vf-space-md);
     margin-block-start: var(--vf-space-xl);
   }
 
@@ -628,11 +597,6 @@
     max-inline-size: 34rem;
   }
 
-  .vf-docs-component-groups {
-    display: grid;
-    gap: var(--vf-space-3xl);
-  }
-
   .vf-docs-component-group {
     min-inline-size: 0;
   }
@@ -667,9 +631,6 @@
   }
 
   .vf-docs-card-list {
-    display: grid;
-    gap: var(--vf-space-md);
-    grid-template-columns: repeat(auto-fit, minmax(min(100%, 16rem), 1fr));
     list-style: none;
     margin: 0;
     padding: 0;
@@ -680,11 +641,7 @@
   }
 
   .vf-docs-card-link {
-    align-items: center;
     color: var(--vf-color-text);
-    display: flex;
-    gap: var(--vf-space-lg);
-    justify-content: space-between;
     min-block-size: 7rem;
     padding: var(--vf-space-lg);
     text-decoration: none;
@@ -702,11 +659,6 @@
   .vf-docs-card-link small {
     color: var(--vf-color-text-muted);
     font-size: var(--vf-font-size-sm);
-  }
-
-  .vf-docs-examples {
-    display: grid;
-    gap: var(--vf-space-xl);
   }
 
   .vf-docs-example {
@@ -734,12 +686,8 @@
   }
 
   .vf-docs-preview {
-    align-items: center;
     background: var(--vf-color-surface-subtle);
     border-block: 1px solid var(--vf-color-border);
-    display: flex;
-    flex-wrap: wrap;
-    gap: var(--vf-space-md);
     min-block-size: 10rem;
     overflow: auto;
     padding: var(--vf-space-xl);

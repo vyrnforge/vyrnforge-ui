@@ -1,4 +1,9 @@
-@import "../tokens.css";
+/* Internal role variables are consumed only after public tokens.css.
+ * Both native-elements.css and Text CSS import tokens explicitly; a second
+ * nested import is redundant and causes accessibility stylesheet scanners
+ * to resolve the relative CSS path against the document instead of the CSS asset.
+ * Keep the internal role file independent from application/public entrypoints.
+ */
 
 @layer vyrnforge.foundation {
   :root {

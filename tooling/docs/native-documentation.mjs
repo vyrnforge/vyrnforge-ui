@@ -10,6 +10,9 @@ const nativeShellStyleSpecifiers = [
   '@vyrnforge/web/styles/native-select.css',
   '@vyrnforge/web/styles/link.css',
   '@vyrnforge/web/styles/button.css',
+  '@vyrnforge/web/styles/text.css',
+  '@vyrnforge/web/styles/code.css',
+  '@vyrnforge/web/styles/layout.css',
 ];
 
 function resolvePublicStyleAsset(webPackage, specifier) {
