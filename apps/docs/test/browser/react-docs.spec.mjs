@@ -9,12 +9,15 @@ test('React pilot artifact is Product Graph-backed and SSR-rendered with public 
   const manifest = JSON.parse(readFileSync(manifestPath, 'utf8'));
   const button = compileFrameworkDocumentation('react').componentCatalog.find((entry) => entry.id === 'button');
   expect(manifest.framework).toBe('react');
-  expect(manifest.status).toBe('button-pilot');
+  expect(manifest.status).toBe('button-and-layout-pilot');
   expect(manifest.button.sharedSourcePath).toBe(button.sharedSourcePath);
   expect(manifest.button.frameworkSourcePath).toBe(button.frameworkSourcePath);
   expect(manifest.button.publicEntrypoints).toContain('@vyrnforge/react/button');
+  expect(manifest.layout).toMatchObject({ guideOnly: true, api: false,
+    publicEntrypoints: [], cssRecipeStyle: '@vyrnforge/web/styles/layout.css' });
+  expect(manifest.layout.examples).toHaveLength(6);
   expect(manifest.routes.filter((entry) => entry.view !== 'unavailable').map((entry) => entry.route)).toEqual([
-    '', 'components/button/', 'api/components/button/',
+    '', 'components/button/', 'api/components/button/', 'components/layout/',
   ]);
   expect(manifest.routes).toContainEqual({ route: 'components/code/', view: 'unavailable' });
   for (const route of manifest.routes) {
@@ -106,7 +109,7 @@ test('React header keeps an accessible brand and readable context controls at 40
   await expect(page.getByRole('button', { name: 'Menu' })).toHaveCSS('white-space', 'nowrap');
   await expect(page.getByRole('searchbox', { name: 'Search React documentation' })).toHaveAttribute('placeholder', 'Search docs');
   const framework = page.getByRole('combobox', { name: 'Framework' });
-  await expect(framework.locator('option:checked')).toHaveText('React (Button pilot)');
+  await expect(framework.locator('option:checked')).toHaveText('React (pilot)');
   const widths = await page.evaluate(() => {
     const select = document.querySelector('#vf-react-framework').getBoundingClientRect();
     const control = document.querySelector('.vf-docs-framework-control').getBoundingClientRect();
@@ -128,7 +131,7 @@ test('React header keeps an accessible brand and readable context controls at 40
 test('framework selector preserves Native/React guide and API context with browser history', async ({ page }) => {
   await page.goto('/next/native-web/components/button/');
   await expect(page.getByRole('combobox', { name: 'Version' })).toHaveValue('next');
-  await page.getByRole('combobox', { name: 'Framework' }).selectOption({ label: 'React (Button pilot)' });
+  await page.getByRole('combobox', { name: 'Framework' }).selectOption({ label: 'React (pilot)' });
   await expect(page).toHaveURL(/\/next\/react\/components\/button\/$/);
   await expect(page.getByRole('heading', { name: 'Button', level: 1 })).toBeVisible();
   await expect(page.getByRole('combobox', { name: 'Version' })).toHaveValue('next');
@@ -144,7 +147,7 @@ test('framework selector preserves Native/React guide and API context with brows
 
 test('switching an undocumented React topic reports unavailability with recovery', async ({ page }) => {
   await page.goto('/next/native-web/components/code/');
-  await page.getByRole('combobox', { name: 'Framework' }).selectOption({ label: 'React (Button pilot)' });
+  await page.getByRole('combobox', { name: 'Framework' }).selectOption({ label: 'React (pilot)' });
   await expect(page).toHaveURL(/\/next\/react\/components\/code\/$/);
   await expect(page.getByRole('heading', { name: 'React documentation unavailable' })).toBeVisible();
   await expect(page.locator('[data-vf-docs-react-unavailable]')).toContainText('Code');
@@ -218,6 +221,96 @@ test('without JavaScript, React SSR content and native links remain readable', a
     await expect(page.locator('html')).not.toHaveAttribute('data-vf-react-hydrated', 'true');
     await page.getByRole('navigation', { name: 'Documentation' }).getByRole('link', { name: 'Button API' }).click();
     await expect(page).toHaveURL(/\/next\/react\/api\/components\/button\/$/);
+  } finally {
+    await context.close();
+  }
+});
+
+test('React Layout lives under Layout & Structure and runs checked-in React JSX demos', async ({ page }, testInfo) => {
+  const errors = [];
+  page.on('pageerror', (error) => errors.push(String(error)));
+  await page.goto('/next/react/components/layout/');
+  await expect(page.getByRole('heading', { level: 1, name: 'Layout: Flow & AutoGrid' })).toBeVisible();
+  await expect(page.locator('html')).toHaveAttribute('data-vf-react-hydrated', 'true');
+  const nav = page.getByRole('navigation', { name: 'Documentation' });
+  await expect(nav.getByText('Layout & Structure', { exact: true })).toBeVisible();
+  await expect(nav.getByRole('link', { name: 'Layout guide' })).toHaveAttribute('aria-current', 'page');
+  await expect(page.locator('[data-vf-docs-react-layout] [data-vf-docs-accessibility]')).toContainText('Accessibility review required');
+  await expect(page.locator('[data-vf-docs-react-layout]')).toContainText('There is no @vyrnforge/react/layout export');
+
+  for (const id of ['basic', 'flow-block', 'flow-inline', 'flow-wrap', 'auto-grid', 'semantic-groups']) {
+    const demo = page.locator('[data-vf-docs-react-layout-example="layout/' + id + '"]');
+    await expect(demo).toHaveCount(1);
+    const iframe = demo.locator('iframe');
+    await iframe.scrollIntoViewIfNeeded();
+    const frame = iframe.contentFrame();
+    await expect(frame.locator('#root > *').first()).toBeVisible();
+    await demo.getByText('View React TSX source').click();
+    await expect(demo.locator('pre code')).toContainText('data-vf-');
+  }
+  await expect(page.frameLocator('iframe[title="React Intrinsic card collection example"]')
+    .locator('[data-vf-auto-grid]')).toHaveCSS('display', 'grid');
+  await expect(page.frameLocator('iframe[title="React Wrapped RTL metadata example"]')
+    .locator('[dir="rtl"][data-vf-flow]')).toHaveCSS('flex-wrap', 'wrap');
+  const radios = page.frameLocator('iframe[title="React Native radio group with Flow spacing example"]');
+  await radios.getByRole('radio', { name: 'Weekly' }).check();
+  await expect(radios.getByRole('radio', { name: 'Weekly' })).toBeChecked();
+  await expect(radios.getByRole('radio', { name: 'Daily' })).not.toBeChecked();
+
+  await page.getByRole('searchbox', { name: 'Search React documentation' }).fill('autogrid');
+  await expect(page.locator('[data-vf-docs-react-results]').getByRole('link', { name: 'Layout guide' })).toBeVisible();
+  await page.getByRole('button', { name: 'Clear search' }).click();
+  await expect(page.locator('[data-vf-docs-react-results]')).toBeHidden();
+  await page.getByRole('navigation', { name: 'On this page' })
+    .getByRole('link', { name: 'AutoGrid: intrinsic equal tracks' }).click();
+  await expect(page).toHaveURL(/#react-layout-autogrid-intrinsic-equal-tracks$/);
+  await page.screenshot({ path: testInfo.outputPath('react-layout-wide.png'), fullPage: true });
+  expect(errors).toEqual([]);
+});
+
+test('React Layout at 320px / 200% text is readable in RTL, dark theme and forced colors', async ({ page }, testInfo) => {
+  await page.setViewportSize({ width: 320, height: 720 });
+  await page.goto('/next/react/components/layout/');
+  await expect(page.locator('html')).toHaveAttribute('data-vf-react-hydrated', 'true');
+  await page.getByLabel('Theme').selectOption('dark');
+  await expect(page.locator('html')).toHaveAttribute('data-vf-theme', 'dark');
+  await page.evaluate(() => { document.documentElement.style.fontSize = '200%'; document.documentElement.dir = 'rtl'; });
+  await page.emulateMedia({ forcedColors: 'active' });
+  await expect(page.getByRole('heading', { level: 1, name: 'Layout: Flow & AutoGrid' })).toBeVisible();
+  const width = await page.evaluate(() => ({ content: document.documentElement.scrollWidth, viewport: document.documentElement.clientWidth }));
+  expect(width.content).toBeLessThanOrEqual(width.viewport + 1);
+  const menu = page.getByRole('button', { name: 'Menu' });
+  await menu.click();
+  await expect(page.getByRole('navigation', { name: 'Documentation' })
+    .getByRole('link', { name: 'Layout guide' })).toBeVisible();
+  await page.keyboard.press('Escape');
+  await expect(menu).toBeFocused();
+  await page.screenshot({ path: testInfo.outputPath('react-layout-320-rtl-forced-colors.png'), fullPage: true });
+  await page.addScriptTag({ content: axeCore.source });
+  const a11y = await page.evaluate(async () => window.axe.run(document, {
+    runOnly: { type: 'tag', values: ['wcag2a', 'wcag2aa', 'wcag21a', 'wcag21aa', 'wcag22aa'] },
+  }));
+  expect(a11y.violations, a11y.violations.map((entry) => entry.id + ': ' + entry.help).join('\n')).toEqual([]);
+});
+
+test('Native Layout framework selector preserves the React Layout route; SSR works without scripts', async ({ page, browser }) => {
+  await page.goto('/next/native-web/components/layout/');
+  await page.getByRole('combobox', { name: 'Framework' }).selectOption({ label: 'React (pilot)' });
+  await expect(page).toHaveURL(/\/next\/react\/components\/layout\/$/);
+  await expect(page.getByRole('heading', { level: 1, name: 'Layout: Flow & AutoGrid' })).toBeVisible();
+  await page.getByRole('navigation', { name: 'Documentation framework' }).getByRole('link', { name: 'Native Web' }).click();
+  await expect(page).toHaveURL(/\/next\/native-web\/components\/layout\/$/);
+
+  const context = await browser.newContext({ javaScriptEnabled: false });
+  try {
+    const noJs = await context.newPage();
+    await noJs.goto('/next/react/components/layout/');
+    await expect(noJs.getByRole('heading', { level: 1, name: 'Layout: Flow & AutoGrid' })).toBeVisible();
+    await expect(noJs.getByRole('navigation', { name: 'Documentation' })
+      .getByRole('link', { name: 'Layout guide' })).toHaveAttribute('aria-current', 'page');
+    await expect(noJs.locator('html')).not.toHaveAttribute('data-vf-react-hydrated', 'true');
+    await noJs.getByText('View React TSX source').first().click();
+    await expect(noJs.locator('[data-vf-docs-react-layout-example] pre code').first()).toContainText('data-vf-flow');
   } finally {
     await context.close();
   }

@@ -129,16 +129,22 @@ function useNavigation() {
   return { mobile, expanded, setExpanded, navRef, menuRef, mainRef, visible: !mobile || expanded };
 }
 function navigation(view, links) {
-  const entries = [
-    { id: 'home', title: 'React overview', href: links.home },
-    { id: 'guide', title: 'Button guide', href: links.guide },
-    { id: 'api', title: 'Button API', href: links.api },
+  const groups = [
+    { label: 'React', items: [{ id: 'home', title: 'React overview', href: links.home }] },
+    { label: 'Components', items: [
+      { id: 'guide', title: 'Button guide', href: links.guide },
+      { id: 'api', title: 'Button API', href: links.api },
+    ] },
+    { label: 'Layout & Structure', items: [
+      { id: 'layout', title: 'Layout guide', href: links.layout },
+    ] },
   ];
   return h(SideNav, { 'aria-label': 'Documentation' },
-    h(SideNavGroup, null, h(SideNavGroupLabel, null, 'React'),
-      h(SideNavList, null, ...entries.map((entry) =>
+    ...groups.map((group) => h(SideNavGroup, { key: group.label },
+      h(SideNavGroupLabel, null, group.label),
+      h(SideNavList, null, ...group.items.map((entry) =>
         h(SideNavItem, { key: entry.id },
-          h(SideNavLink, { current: entry.id === view, href: entry.href }, entry.title))))));
+          h(SideNavLink, { current: entry.id === view, href: entry.href }, entry.title)))))));
 }
 function example(button, links) {
   const basic = button.examples.find((entry) => entry.id === 'button/basic');
@@ -154,23 +160,86 @@ function example(button, links) {
       h('summary', null, 'View checked-in React source'),
       h('pre', { 'data-vf-code-block': '', tabIndex: 0 }, h('code', null, basic.source))));
 }
-function body(view, links, button, message, setMessage, requestedTopic) {
+function layoutExample(example, links) {
+  const id = example.id.split('/')[1];
+  return h('article', { className: 'vf-docs-example', key: example.id,
+    'data-vf-docs-react-layout-example': example.id },
+    h('header', { className: 'vf-docs-example-header' },
+      h('div', null, h('h3', null, example.title), h('p', null, example.description))),
+    h('iframe', { className: 'vf-docs-react-example-frame',
+      title: 'React ' + example.title + ' example',
+      src: links.layoutExampleBase + id + '/',
+      sandbox: 'allow-scripts', loading: 'lazy', style: { minBlockSize: '15rem' } }),
+    h('details', { className: 'vf-docs-source-disclosure' },
+      h('summary', null, 'View React TSX source'),
+      h('pre', { 'data-vf-code-block': '', tabIndex: 0 }, h('code', null, example.source))));
+}
+function layoutGuide(layout, links) {
+  if (!layout?.sharedContent || !layout.cssRecipeStyle) return null;
+  const sections = layout.sharedContent.sections;
+  const contentSections = [
+    { id: 'react-layout-setup', heading: 'React setup' },
+    { id: 'react-layout-page-composition', heading: 'Page composition' },
+    ...sections.map((section) => ({ id: 'react-layout-' + slug(section.heading), heading: section.heading })),
+  ];
+  const introExample = layout.examples.find((entry) => entry.id === 'layout/basic');
+  return h('div', { className: 'vf-docs-content-grid' },
+    h('aside', { className: 'vf-docs-toc-region' },
+      h('nav', { className: 'vf-docs-toc', 'aria-label': 'On this page' },
+        h('p', null, 'On this page'),
+        h('ol', null, ...contentSections.map(({ id, heading }) =>
+          h('li', { key: id }, h('a', { href: '#' + id }, heading)))))),
+    h('article', { className: 'vf-docs-article', 'data-vf-docs-react-layout': '' },
+      h('header', { className: 'vf-docs-component-header' },
+        h('p', { className: 'vf-docs-eyebrow', 'data-vf-text': '', 'data-vf-text-variant': 'overline' },
+          'React · Layout & Structure · Guide only'),
+        h('h1', null, layout.sharedContent.title),
+        h('div', { className: 'vf-docs-lede', 'data-vf-text': '', 'data-vf-text-variant': 'body-lg' },
+          ...renderBlocks(layout.sharedContent.intro)),
+        accessibilityEvidence(layout.standardReferences)),
+      h('section', { 'aria-labelledby': 'react-layout-setup' },
+        h('h2', { id: 'react-layout-setup' }, 'React setup'),
+        h('p', null, 'Use semantic JSX elements and the canonical shared Web layout stylesheet. ',
+          'There is no @vyrnforge/react/layout export or runtime wrapper.'),
+        h('pre', { 'data-vf-code-block': '', tabIndex: 0 },
+          h('code', null, "import '@vyrnforge/web/styles/layout.css';")),
+        h('p', null, 'Load the stylesheet once in your application entrypoint. ',
+          'Flow and AutoGrid only style the authored elements; React owns events and application state.')),
+      h('section', { 'aria-labelledby': 'react-layout-page-composition' },
+        h('h2', { id: 'react-layout-page-composition' }, 'Page composition'),
+        h('p', null, 'A complete semantic JSX example uses block Flow, wrapping actions and intrinsic AutoGrid together.'),
+        introExample ? layoutExample(introExample, links) : null),
+      ...sections.map((section) => {
+        const id = 'react-layout-' + slug(section.heading);
+        const examples = layout.examples.filter((example) => example.documentationSection === section.heading);
+        return h('section', { key: id, 'aria-labelledby': id },
+          h('h2', { id }, section.heading),
+          ...renderBlocks(section.blocks),
+          ...examples.map((example) => layoutExample(example, links)));
+      }),
+      h('section', { 'aria-label': 'Reference' },
+        h('h2', null, 'Public CSS reference'),
+        h('p', null, 'The stylesheet is the public Web entrypoint; no React Layout JavaScript API exists.'),
+        h('code', { 'data-vf-code': '' }, layout.cssRecipeStyle))));
+}
+function body(view, links, button, layout, message, setMessage, requestedTopic) {
   if (view === 'unavailable') {
     return h('article', { className: 'vf-docs-article', 'data-vf-docs-react-unavailable': '' },
       h('header', { className: 'vf-docs-component-header' },
         h('h1', null, 'React documentation unavailable'),
         h('p', { className: 'vf-docs-lede' },
           'The React documentation view for ', h('strong', null, requestedTopic ?? 'this topic'),
-          ' is not part of the current React Button pilot. This does not claim the React package lacks that capability.')),
+          ' is not part of the currently documented React routes. This does not claim the React package lacks that capability.')),
       h('p', null, h('a', { href: links.native, 'data-vf-link': '' }, 'Return to Native Web topic')),
-      h('p', null, h('a', { href: links.guide, 'data-vf-link': '' }, 'Browse available React Button guide')));
+      h('p', null, h('a', { href: links.guide, 'data-vf-link': '' }, 'Browse available React Button guide')),
+      h('p', null, h('a', { href: links.layout, 'data-vf-link': '' }, 'Browse React Layout guide')));
   }
   if (view === 'home') {
     return h('article', { className: 'vf-docs-article' },
       h('header', { className: 'vf-docs-component-header' },
         h('h1', null, 'VyrnForge React'),
         h('p', { className: 'vf-docs-lede', 'data-vf-text': '', 'data-vf-text-variant': 'body-lg' },
-          'A real React documentation view for the verified Button pilot. Other framework and component documentation routes are not yet claimed.')),
+          'React guides for Button and CSS-only Flow / AutoGrid Layout. Other framework or component documentation routes are not yet claimed.')),
       h('section', null, h('h2', null, 'Getting started'),
         h('p', null, 'Install the React port and load the shared Web tokens, foundation and Button stylesheet in your application.'),
         h('pre', { 'data-vf-code-block': '', tabIndex: 0 },
@@ -179,8 +248,10 @@ function body(view, links, button, message, setMessage, requestedTopic) {
       h('section', null, h('h2', null, 'Verified routes'),
         h('ul', null,
           h('li', null, h('a', { 'data-vf-link': '', href: links.guide }, 'React Button guide')),
-          h('li', null, h('a', { 'data-vf-link': '', href: links.api }, 'React Button API')))));
+          h('li', null, h('a', { 'data-vf-link': '', href: links.api }, 'React Button API')),
+          h('li', null, h('a', { 'data-vf-link': '', href: links.layout }, 'React Layout guide')))));
   }
+  if (view === 'layout') return layoutGuide(layout, links);
   if (view === 'api') {
     return h('article', { className: 'vf-docs-article', 'data-vf-docs-react-api': 'button' },
       h('header', { className: 'vf-docs-component-header' },
@@ -222,7 +293,7 @@ function body(view, links, button, message, setMessage, requestedTopic) {
       h('h2', { id: 'react-reference' }, 'Reference'),
       h('a', { 'data-vf-link': '', href: links.api }, 'Button API reference')));
 }
-export function ReactReferencePage({ view, links, button, requestedTopic }) {
+export function ReactReferencePage({ view, links, button, layout, requestedTopic }) {
   const nav = useNavigation();
   const { theme, change } = useTheme();
   const [search, setSearch] = useState('');
@@ -232,6 +303,7 @@ export function ReactReferencePage({ view, links, button, requestedTopic }) {
     { title: 'React overview', href: links.home, keywords: 'getting started setup' },
     { title: 'Button guide', href: links.guide, keywords: 'button usage accessibility examples state' },
     { title: 'Button API', href: links.api, keywords: 'button props reference public' },
+    { title: 'Layout guide', href: links.layout, keywords: 'flow autogrid grid responsive spacing layout wrap inline block JSX' },
   ];
   const matches = search.trim() ? pages.filter((item) =>
     (item.title + ' ' + item.keywords).toLowerCase().includes(search.toLowerCase().trim())) : [];
@@ -281,7 +353,7 @@ export function ReactReferencePage({ view, links, button, requestedTopic }) {
                 if (destination !== links.self) window.location.assign(destination);
               } },
               h('option', { value: links.native }, 'Native Web'),
-              h('option', { value: links.self }, 'React (Button pilot)'))),
+              h('option', { value: links.self }, 'React (pilot)'))),
           h('div', { className: 'vf-docs-version-control' },
             h('label', { htmlFor: 'vf-react-version' }, 'Version'),
             h(NativeSelect, { id: 'vf-react-version', defaultValue: links.channel },
@@ -302,7 +374,7 @@ export function ReactReferencePage({ view, links, button, requestedTopic }) {
           h('a', { 'data-vf-link': '', href: links.native }, 'Native Web'),
           h('span', { 'aria-hidden': 'true' }, ' / '),
           h('span', { 'aria-current': 'page' }, 'React')),
-        body(view, links, button, message, setMessage, requestedTopic))),
+        body(view, links, button, layout, message, setMessage, requestedTopic))),
     h(AppShellFooter, { className: 'vf-docs-footer' },
       h('span', null, 'VyrnForge React documentation'),
       h('span', null, links.channel + ' channel'))));

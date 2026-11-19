@@ -167,12 +167,21 @@ function accessibilityEvidence(root, component) {
 function normalizeOwner(root, component, framework) {
   const surface = component.surfaces[framework.surface];
   const apiAvailable = Boolean(surface?.publicEntrypoints.length);
-  const guideOnly = component.kind === 'pattern' && !Object.keys(component.surfaces).length &&
-    component.documentationAvailable && framework.id === 'native-web';
-  if (!apiAvailable && !guideOnly) return null;
+  // A canonical Web CSS recipe can have idiomatic authored examples in a
+  // framework without creating a nonexistent framework layout JS API.
+  const cssEntrypoint = `@vyrnforge/web/styles/${component.unitId}.css`;
+  const cssRecipeStyle = component.kind === 'component' &&
+    Object.keys(component.surfaces).length === 1 &&
+    component.surfaces.web?.publicEntrypoints.includes(cssEntrypoint)
+      ? cssEntrypoint : null;
   const shared = sharedContent(root, component);
   const adaptation = frameworkContent(root, component, surface);
   const examples = frameworkExamples(root, component, framework);
+  const patternGuide = component.kind === 'pattern' && !Object.keys(component.surfaces).length &&
+    component.documentationAvailable && framework.id === 'native-web';
+  const cssOnlyGuide = !apiAvailable && Boolean(cssRecipeStyle && shared.content && examples.length);
+  const guideOnly = patternGuide || cssOnlyGuide;
+  if (!apiAvailable && !guideOnly) return null;
   const headings = new Set(shared.content?.sections.map((section) => section.heading) ?? []);
   for (const example of examples) {
     if (example.documentationSection && !headings.has(example.documentationSection)) {
@@ -196,6 +205,7 @@ function normalizeOwner(root, component, framework) {
     publicEntrypoints: surface?.publicEntrypoints ?? [],
     authoringMode: surface?.authoringMode ?? 'product-unit',
     guideOnly,
+    cssRecipeStyle: cssOnlyGuide ? cssRecipeStyle : null,
     exampleReferences: component.exampleReferences ?? [],
     sharedSourcePath: shared.sourcePath,
     sharedContent: shared.content,
