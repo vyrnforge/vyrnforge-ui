@@ -54,6 +54,9 @@
     display: grid;
     gap: var(--vf-space-lg);
     grid-template-columns: repeat(auto-fit, minmax(min(100%, 22rem), 1fr));
+    /* Container em queries track enlarged root text; viewport rem media queries
+       alone cannot detect a 400% text setting in browser tests. */
+    container-type: inline-size;
     margin-inline: auto;
     padding: var(--vf-space-sm) clamp(var(--vf-space-md), 3vw, var(--vf-space-xl));
   }
@@ -775,6 +778,16 @@
   }
 
   @media (max-width: 48rem) {
+    /* Native TOC links stay in normal reading order, but the list stops
+       occupying the entire first screen when text is enlarged. */
+    .vf-docs-toc ol {
+      max-block-size: min(8rem, 20vh);
+      overflow-x: hidden;
+      overflow-y: auto;
+      overflow-wrap: anywhere;
+      padding-block-end: var(--vf-space-xs);
+    }
+
     .vf-docs-header-inner {
       gap: var(--vf-space-sm);
       grid-template-columns: minmax(0, 1fr);
@@ -830,6 +843,22 @@
 
     .vf-docs-menu-toggle {
       justify-self: start;
+      max-inline-size: 100%;
+      white-space: nowrap;
+    }
+
+    /* Stack native select labels over full-width controls so the active
+       framework is not squeezed beside its label at 200% text. */
+    .vf-docs-framework-control,
+    .vf-docs-version-control {
+      align-items: stretch;
+      display: grid;
+      grid-template-columns: minmax(0, 1fr);
+    }
+
+    .vf-docs-framework-control select,
+    .vf-docs-version-control select {
+      inline-size: 100%;
     }
 
     .vf-docs-brand {
@@ -867,6 +896,50 @@
     .vf-docs-example-header,
     .vf-docs-source-disclosure {
       padding-inline: var(--vf-space-md);
+    }
+  }
+
+  /* Keep the complete link name in markup/ARIA. At cramped *effective*
+     widths the compact wordmark removes decorative chrome, not navigation. */
+  .vf-docs-brand-compact {
+    display: none;
+  }
+
+  @container (max-width: 18em) {
+    .vf-docs-brand-full,
+    .vf-docs-surface {
+      display: none;
+    }
+
+    .vf-docs-brand-compact {
+      display: inline;
+    }
+
+    .vf-docs-header-tools,
+    .vf-docs-framework-control,
+    .vf-docs-version-control,
+    .vf-docs-theme-control {
+      align-items: stretch;
+      display: grid;
+      grid-template-columns: minmax(0, 1fr);
+    }
+
+    .vf-docs-framework-control select,
+    .vf-docs-version-control select,
+    .vf-docs-theme-control select {
+      inline-size: 100%;
+      min-inline-size: 0;
+    }
+
+    /* A small token step makes the selected framework text readable at
+       320px/200%, while the surrounding form labels keep their scale. */
+    .vf-docs-framework-control select {
+      font-size: var(--vf-font-size-sm);
+    }
+
+    .vf-docs-menu-toggle {
+      max-inline-size: 100%;
+      white-space: nowrap;
     }
   }
 

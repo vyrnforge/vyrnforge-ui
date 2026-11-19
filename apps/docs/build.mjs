@@ -288,7 +288,7 @@ function searchMarkup(currentPageDirectory) {
 
   return `<search class="vf-docs-search" data-vf-search-field-root data-vf-docs-search-container aria-label="Documentation search">
     <label for="vf-docs-search" data-vf-visually-hidden>Search documentation</label>
-    <input id="vf-docs-search" type="search" data-vf-input data-vf-search-field-input data-vf-docs-search placeholder="Search documentation" autocomplete="off" aria-controls="vf-docs-search-results">
+    <input id="vf-docs-search" type="search" data-vf-input data-vf-search-field-input data-vf-docs-search placeholder="Search docs" autocomplete="off" aria-controls="vf-docs-search-results">
     <button type="button" data-vf-search-field-clear data-vf-docs-search-clear aria-label="Clear search" disabled>×</button>
     <span data-vf-visually-hidden data-vf-docs-search-status role="status" aria-live="polite"></span>
     <div id="vf-docs-search-results" class="vf-docs-search-panel" data-vf-docs-search-results hidden>
@@ -330,7 +330,7 @@ ${styleLinks(currentPageDirectory, componentStyle)}
       <div class="vf-docs-header-inner">
         <div class="vf-docs-brand-row">
           <button type="button" data-vf-button data-vf-variant="ghost" data-vf-size="sm" class="vf-docs-menu-toggle" data-vf-docs-nav-toggle hidden aria-controls="vf-docs-navigation" aria-expanded="true">Menu</button>
-          <a class="vf-docs-brand" href="${artifactHref(currentPageDirectory, nativeSitePath)}">VyrnForge <span>Docs</span></a>
+          <a class="vf-docs-brand" href="${artifactHref(currentPageDirectory, nativeSitePath)}"><span class="vf-docs-brand-full">VyrnForge <span>Docs</span></span><span class="vf-docs-brand-compact">VF Docs <span data-vf-visually-hidden>VyrnForge</span></span></a>
           <span class="vf-docs-surface" aria-label="Documentation surface">Native Web · ${escapeHtml(channel)}</span>
         </div>
         <div class="vf-docs-header-tools">

@@ -92,6 +92,39 @@ test('React URL context and framework-scoped search/theme work without inventing
   await expect(page).toHaveURL(/\/next\/native-web\/api\/components\/button\/$/);
 });
 
+test('React header keeps an accessible brand and readable context controls at 400% text', async ({ page }, testInfo) => {
+  await page.setViewportSize({ width: 320, height: 720 });
+  await page.goto('/next/react/components/button/');
+  await expect(page.locator('html')).toHaveAttribute('data-vf-react-hydrated', 'true');
+  await page.evaluate(() => { document.documentElement.style.fontSize = '400%'; });
+
+  const brand = page.getByRole('link', { name: /VF Docs.*VyrnForge/ });
+  await expect(brand).toBeVisible();
+  await expect(brand.locator('.vf-docs-brand-compact')).toBeVisible();
+  await expect(brand.locator('.vf-docs-brand-full')).toBeHidden();
+  await expect(page.locator('.vf-docs-surface')).toBeHidden();
+  await expect(page.getByRole('button', { name: 'Menu' })).toHaveCSS('white-space', 'nowrap');
+  await expect(page.getByRole('searchbox', { name: 'Search React documentation' })).toHaveAttribute('placeholder', 'Search docs');
+  const framework = page.getByRole('combobox', { name: 'Framework' });
+  await expect(framework.locator('option:checked')).toHaveText('React (Button pilot)');
+  const widths = await page.evaluate(() => {
+    const select = document.querySelector('#vf-react-framework').getBoundingClientRect();
+    const control = document.querySelector('.vf-docs-framework-control').getBoundingClientRect();
+    return {
+      select: select.width,
+      control: control.width,
+      document: document.documentElement.scrollWidth,
+      viewport: document.documentElement.clientWidth,
+    };
+  });
+  expect(widths.select, 'Framework select occupies full context row').toBeGreaterThanOrEqual(widths.control - 2);
+  expect(widths.document, 'React header must not introduce horizontal overflow').toBeLessThanOrEqual(widths.viewport + 1);
+  await page.screenshot({
+    path: testInfo.outputPath('react-header-320-text400-compact.png'),
+    fullPage: false,
+  });
+});
+
 test('framework selector preserves Native/React guide and API context with browser history', async ({ page }) => {
   await page.goto('/next/native-web/components/button/');
   await expect(page.getByRole('combobox', { name: 'Version' })).toHaveValue('next');
