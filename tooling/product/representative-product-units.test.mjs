@@ -448,3 +448,17 @@ test('retired TemporalField stays out of the Product Graph and public package su
   }
   assert.deepEqual(productGraphProblems(), []);
 });
+
+test('Layout uses one shared Web recipe and one React authoring adapter, not six wrapper systems', () => {
+  const graph = discoverProductGraph();
+  const layout = graph.components.find((entry) => entry.unitId === 'layout');
+  assert.ok(layout);
+  assert.deepEqual(Object.keys(layout.surfaces).sort(), ['react', 'web']);
+  assert.deepEqual(layout.surfaces.react.publicEntrypoints, ['@vyrnforge/react/layout']);
+  assert.deepEqual(layout.surfaces.web.publicEntrypoints, ['@vyrnforge/web/styles/layout.css']);
+  for (const name of ['angular', 'vue', 'elements', 'web']) {
+    const manifest = graph.packages.find((pkg) => pkg.id === name)?.manifest;
+    assert.equal(Boolean(manifest?.exports?.['./layout']), false, name + ' must not clone React layout wrappers');
+  }
+  assert.deepEqual(productGraphProblems(), []);
+});

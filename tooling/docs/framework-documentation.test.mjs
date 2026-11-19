@@ -82,7 +82,7 @@ describe('Layout guide discovery and CSS-only responsibility', () => {
       reviewStatus: 'review-required',
       aria: { status: 'not-applicable' },
     });
-    for (const framework of ['react', 'angular', 'vue', 'elements']) {
+    for (const framework of ['angular', 'vue', 'elements']) {
       const model = compileFrameworkDocumentation(framework);
       const cssGuide = model.componentCatalog.find((component) => component.id === 'layout');
       expect(cssGuide).toMatchObject({
@@ -95,21 +95,24 @@ describe('Layout guide discovery and CSS-only responsibility', () => {
   });
 });
 
-describe('CSS-only layout guidance across framework sources', () => {
-  it('discovers React TSX Layout guidance without inventing a React package layout API', async () => {
+describe('React Layout components and shared CSS fallback across framework sources', () => {
+  it('discovers actual public React Flow/AutoGrid components and product-owned use-case examples', async () => {
     const react = compileFrameworkDocumentation('react');
     const layout = react.componentCatalog.find((component) => component.id === 'layout');
     expect(layout).toMatchObject({
-      kind: 'component', guideOnly: true, apiAvailable: false,
-      cssRecipeStyle: '@vyrnforge/web/styles/layout.css', publicEntrypoints: [],
+      kind: 'component', guideOnly: false, apiAvailable: true,
+      cssRecipeStyle: null, publicEntrypoints: ['@vyrnforge/react/layout'],
     });
+    expect(layout.frameworkSourcePath).toBe('product/components/composition-primitives/layout/react/docs/index.md');
+    expect(layout.frameworkContent.title).toBe('React Layout');
     expect(layout.showcaseAvailable).toBe(true);
-    expect(react.componentApiPages.some((component) => component.id === 'layout')).toBe(false);
+    expect(react.componentApiPages.some((component) => component.id === 'layout')).toBe(true);
     expect(layout.examples).toHaveLength(6);
     for (const example of layout.examples) {
       expect(example.sourcePath.endsWith('/react.tsx')).toBe(true);
       const compiled = await transform(example.source, { loader: 'tsx', jsx: 'automatic', target: 'es2022', format: 'esm' });
-      expect(compiled.code).toContain('data-vf-');
+      expect(example.source).toContain("from '@vyrnforge/react/layout'");
+      expect(compiled.code).toContain('@vyrnforge/react/layout');
     }
     const web = compileFrameworkDocumentation('native-web');
     expect(web.componentCatalog.find((component) => component.id === 'layout')?.apiAvailable).toBe(true);
