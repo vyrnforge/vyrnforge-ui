@@ -2,6 +2,7 @@ import { createElement as h, Fragment, useEffect, useRef, useState } from 'react
 import { AppShell, AppShellHeader, AppShellBody, AppShellNavigation, AppShellMain, AppShellFooter } from '@vyrnforge/react/app-shell';
 import { SideNav, SideNavGroup, SideNavGroupLabel, SideNavList, SideNavItem, SideNavLink } from '@vyrnforge/react/side-nav';
 import { Button } from '@vyrnforge/react/button';
+import { Flow } from '@vyrnforge/react/layout';
 import { SearchFieldRoot, SearchFieldInput, SearchFieldClear } from '@vyrnforge/react/search-field';
 import { NativeSelect } from '@vyrnforge/react/native-select';
 
@@ -137,6 +138,7 @@ function navigation(view, links) {
     ] },
     { label: 'Layout & Structure', items: [
       { id: 'layout', title: 'Layout guide', href: links.layout },
+      { id: 'layout-api', title: 'Layout API', href: links.layoutApi },
     ] },
   ];
   return h(SideNav, { 'aria-label': 'Documentation' },
@@ -192,19 +194,18 @@ function layoutGuide(layout, links) {
     h('article', { className: 'vf-docs-article', 'data-vf-docs-react-layout': '' },
       h('header', { className: 'vf-docs-component-header' },
         h('p', { className: 'vf-docs-eyebrow', 'data-vf-text': '', 'data-vf-text-variant': 'overline' },
-          'React · Layout & Structure · Guide only'),
+          'React · Layout & Structure · Flow & AutoGrid'),
         h('h1', null, layout.sharedContent.title),
         h('div', { className: 'vf-docs-lede', 'data-vf-text': '', 'data-vf-text-variant': 'body-lg' },
           ...renderBlocks(layout.sharedContent.intro)),
         accessibilityEvidence(layout.standardReferences)),
       h('section', { 'aria-labelledby': 'react-layout-setup' },
         h('h2', { id: 'react-layout-setup' }, 'React setup'),
-        h('p', null, 'Use semantic JSX elements and the canonical shared Web layout stylesheet. ',
-          'There is no @vyrnforge/react/layout export or runtime wrapper.'),
+        h('p', null, 'Import the real React Flow and AutoGrid components, and load the canonical Web stylesheet once in your app entrypoint.'),
         h('pre', { 'data-vf-code-block': '', tabIndex: 0 },
-          h('code', null, "import '@vyrnforge/web/styles/layout.css';")),
-        h('p', null, 'Load the stylesheet once in your application entrypoint. ',
-          'Flow and AutoGrid only style the authored elements; React owns events and application state.')),
+          h('code', null, "import { Flow, AutoGrid } from '@vyrnforge/react/layout';\nimport '@vyrnforge/web/styles/layout.css';")),
+        h('p', null, 'Use direction, wrap, gap, align and justify as Flow props, or minItemSize as an AutoGrid prop. ',
+          'Choose a native semantic element with as. React renders these hosts; all styling stays with Web CSS.')),
       h('section', { 'aria-labelledby': 'react-layout-page-composition' },
         h('h2', { id: 'react-layout-page-composition' }, 'Page composition'),
         h('p', null, 'A complete semantic JSX example uses block Flow, wrapping actions and intrinsic AutoGrid together.'),
@@ -218,9 +219,11 @@ function layoutGuide(layout, links) {
           ...examples.map((example) => layoutExample(example, links)));
       }),
       h('section', { 'aria-label': 'Reference' },
-        h('h2', null, 'Public CSS reference'),
-        h('p', null, 'The stylesheet is the public Web entrypoint; no React Layout JavaScript API exists.'),
-        h('code', { 'data-vf-code': '' }, layout.cssRecipeStyle))));
+        h('h2', null, 'React public API and stylesheet'),
+        h('p', null, 'React components come from the real public package; the canonical Web CSS supplies their visuals.'),
+        h('p', null, h('code', { 'data-vf-code': '' }, layout.publicEntrypoints[0])),
+        h('p', null, h('code', { 'data-vf-code': '' }, layout.cssRecipeStyle)),
+        h('p', null, h('a', { 'data-vf-link': '', href: links.layoutApi }, 'View Flow and AutoGrid props')))));
 }
 function body(view, links, button, layout, message, setMessage, requestedTopic) {
   if (view === 'unavailable') {
@@ -239,7 +242,7 @@ function body(view, links, button, layout, message, setMessage, requestedTopic) 
       h('header', { className: 'vf-docs-component-header' },
         h('h1', null, 'VyrnForge React'),
         h('p', { className: 'vf-docs-lede', 'data-vf-text': '', 'data-vf-text-variant': 'body-lg' },
-          'React guides for Button and CSS-only Flow / AutoGrid Layout. Other framework or component documentation routes are not yet claimed.')),
+          'React guides and runnable examples for Button, Flow and AutoGrid. Their shared design language and styling come from the Web foundation.')),
       h('section', null, h('h2', null, 'Getting started'),
         h('p', null, 'Install the React port and load the shared Web tokens, foundation and Button stylesheet in your application.'),
         h('pre', { 'data-vf-code-block': '', tabIndex: 0 },
@@ -249,9 +252,30 @@ function body(view, links, button, layout, message, setMessage, requestedTopic) 
         h('ul', null,
           h('li', null, h('a', { 'data-vf-link': '', href: links.guide }, 'React Button guide')),
           h('li', null, h('a', { 'data-vf-link': '', href: links.api }, 'React Button API')),
-          h('li', null, h('a', { 'data-vf-link': '', href: links.layout }, 'React Layout guide')))));
+          h('li', null, h('a', { 'data-vf-link': '', href: links.layout }, 'React Layout guide')),
+          h('li', null, h('a', { 'data-vf-link': '', href: links.layoutApi }, 'React Layout API')))));
   }
   if (view === 'layout') return layoutGuide(layout, links);
+  if (view === 'layout-api') {
+    return h('article', { className: 'vf-docs-article', 'data-vf-docs-react-api': 'layout' },
+      h('header', { className: 'vf-docs-component-header' },
+        h('h1', null, 'Flow & AutoGrid API'),
+        h('p', { className: 'vf-docs-lede' },
+          'Real React components using the canonical Web CSS, with native semantic hosts and forwarded refs.'),
+        accessibilityEvidence(layout.standardReferences)),
+      h('section', { 'aria-labelledby': 'react-layout-api-exports' },
+        h('h2', { id: 'react-layout-api-exports' }, 'Public entrypoint and CSS'),
+        h('ul', null,
+          ...layout.publicEntrypoints.map((name) => h('li', { key: name }, h('code', { 'data-vf-code': '' }, name))),
+          h('li', null, h('code', { 'data-vf-code': '' }, layout.cssRecipeStyle)))),
+      h('section', { 'aria-labelledby': 'react-layout-api-types' },
+        h('h2', { id: 'react-layout-api-types' }, 'Public TypeScript props'),
+        h('p', null, 'These declarations are derived from the checked-in React Layout implementation. ',
+          'Flow and AutoGrid accept as for native semantic HTML, ordinary attributes and host refs.'),
+        h('pre', { 'data-vf-code-block': '', tabIndex: 0 }, h('code', null, layout.publicLayoutTypes))),
+      renderSections(layout.frameworkContent, 'React Layout integration'),
+      h('p', null, h('a', { href: links.layout, 'data-vf-link': '' }, 'Open runnable React Layout examples')));
+  }
   if (view === 'api') {
     return h('article', { className: 'vf-docs-article', 'data-vf-docs-react-api': 'button' },
       h('header', { className: 'vf-docs-component-header' },
@@ -283,7 +307,7 @@ function body(view, links, button, layout, message, setMessage, requestedTopic) 
         h('code', null, "import { Button } from '@vyrnforge/react/button';"))),
     h('section', { 'aria-labelledby': 'react-usage' },
       h('h2', { id: 'react-usage' }, 'Usage preview'),
-      h('div', { className: 'vf-docs-preview', 'data-vf-flow': '', 'data-vf-flow-direction': 'inline', 'data-vf-flow-wrap': 'wrap', 'data-vf-flow-gap': 'md' },
+      h(Flow, { className: 'vf-docs-preview', direction: 'inline', wrap: 'wrap', gap: 'md' },
         h(Button, { type: 'button', onClick: () => setMessage('Save changes activated') }, 'Save changes'),
         h('span', { role: 'status', 'aria-live': 'polite', 'data-vf-docs-react-feedback': '' }, message))),
     example(button, links),
@@ -304,6 +328,7 @@ export function ReactReferencePage({ view, links, button, layout, requestedTopic
     { title: 'Button guide', href: links.guide, keywords: 'button usage accessibility examples state' },
     { title: 'Button API', href: links.api, keywords: 'button props reference public' },
     { title: 'Layout guide', href: links.layout, keywords: 'flow autogrid grid responsive spacing layout wrap inline block JSX' },
+    { title: 'Layout API', href: links.layoutApi, keywords: 'flowprops autogridprops as minitemsize ref gap' },
   ];
   const matches = search.trim() ? pages.filter((item) =>
     (item.title + ' ' + item.keywords).toLowerCase().includes(search.toLowerCase().trim())) : [];

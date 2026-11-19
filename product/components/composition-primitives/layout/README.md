@@ -1,12 +1,32 @@
 # Layout — canonical Web CSS composition recipes
 
-The approved layout inventory is **Flow** and **AutoGrid** as CSS recipes, not UI components or framework runtime abstractions. Decision and execution: [#1418](https://github.com/vyrnforge/vyrnforge-ui/issues/1418). Native semantic HTML owns roles, relationships, keyboard/focus behavior and form participation; Web CSS owns presentation.
+The **shared layout foundation** remains two visual CSS recipes, **Flow** and **AutoGrid**. React additionally exposes lightweight typed authoring components for these same recipes: [#1422](https://github.com/vyrnforge/vyrnforge-ui/issues/1422) deliberately amends the prior CSS-only React decision [#1418](https://github.com/vyrnforge/vyrnforge-ui/issues/1418). Native HTML owns semantics and browser interaction; Web CSS owns all presentation.
 
-Import `@vyrnforge/web/styles/layout.css` explicitly from a Native Web, React, Angular, Vue, or Elements-consuming application. The stylesheet is token-driven and works without the optional global reset.
+Import `@vyrnforge/web/styles/layout.css` once from the consuming app. React apps additionally import `Flow` and `AutoGrid` from `@vyrnforge/react/layout` (or package root). The stylesheet is token-driven and works without the optional reset. Angular, Vue, Native Web and Elements apps may use the same CSS hooks on semantic hosts; React's API does not create a dependency for other ports.
 
-## Flow
+## React quick start
 
-A single flex recipe. Authored semantic HTML, not a VyrnForge wrapper:
+```tsx
+import { Flow, AutoGrid } from '@vyrnforge/react/layout';
+import '@vyrnforge/web/styles/layout.css';
+
+<Flow as="section" gap="lg" aria-labelledby="summary-title">
+  <h2 id="summary-title">Workspace summary</h2>
+  <AutoGrid as="ul" gap="md" minItemSize="14rem">
+    <li>Projects</li><li>Members</li><li>Activity</li>
+  </AutoGrid>
+  <Flow direction="inline" wrap="wrap" gap="sm">
+    <button type="button">Save</button>
+    <button type="button">Cancel</button>
+  </Flow>
+</Flow>
+```
+
+Both components accept `as` (native structural element, default `div`), native attributes, `style`, `className`, and a forwarded host ref. `Flow` accepts `direction`, `wrap`, `gap`, `align`, `justify`; `AutoGrid` accepts `gap` and `minItemSize` (a CSS length, default `16rem`). There are no focus/ARIA controllers, custom DOM wrappers, application state, or React CSS forks.
+
+## Native Web Flow
+
+A single shared flex recipe on authored semantic HTML:
 
 ```html
 <section data-vf-flow data-vf-flow-gap="lg">...</section>
@@ -22,7 +42,7 @@ A single flex recipe. Authored semantic HTML, not a VyrnForge wrapper:
 
 ## AutoGrid
 
-An intrinsic equal repeated-item track recipe: `repeat(auto-fit, minmax(min(100%, var(--vf-auto-grid-min-item-size, 16rem)), 1fr))`. The public `--vf-auto-grid-min-item-size` defaults to 16rem; `data-vf-auto-grid-gap` has the same spacing vocabulary as Flow. Arbitrary grid templates, spans and breakpoints are ordinary application CSS.
+An intrinsic equal repeated-item track recipe: `repeat(auto-fit, minmax(min(100%, var(--vf-auto-grid-min-item-size, 16rem)), 1fr))`. The public `--vf-auto-grid-min-item-size` defaults to 16rem; `data-vf-auto-grid-gap` has the same spacing vocabulary as Flow. React's `minItemSize` prop sets this same CSS variable on the host. Arbitrary grid templates, spans and breakpoints are ordinary application CSS.
 
 ```html
 <ul data-vf-auto-grid data-vf-auto-grid-gap="md" style="--vf-auto-grid-min-item-size: 12rem">
@@ -34,15 +54,15 @@ An intrinsic equal repeated-item track recipe: `repeat(auto-fit, minmax(min(100%
 
 | Retired API | Replacement |
 | --- | --- |
-| React/Vue Stack, Angular vfStack, Web data-vf-stack | Native semantic host + block Flow |
-| Inline / vfInline / data-vf-inline | Native semantic host + inline Flow (nowrap) |
-| Cluster / vfCluster / data-vf-cluster | Native semantic host + inline Flow with wrap |
-| React/Vue AutoGrid, Angular vfAutoGrid | Native semantic host + unchanged data-vf-auto-grid |
+| Old Stack / vfStack / data-vf-stack | React `Flow` (block default); other ports use a semantic host with `data-vf-flow` |
+| Old Inline / vfInline / data-vf-inline | React `Flow direction="inline"` (nowrap); other ports use an inline Flow CSS hook |
+| Old Cluster / vfCluster / data-vf-cluster | React `Flow direction="inline" wrap="wrap"`; other ports use an inline wrapped Flow CSS hook |
+| Old AutoGrid wrappers/directive | React `AutoGrid` (new reduced API); other ports use the shared `data-vf-auto-grid` hook |
 | Container / vfContainer / data-vf-container | Native semantic host + application max-inline-size, margin-inline:auto and padding-inline |
 | ControlGroup / vfControlGroup / data-vf-control-group | Native independent controls; any justified joining belongs in a component/pattern CSS recipe. Keep native fieldset/legend when grouping is semantically required |
 | Surface | Already retired; semantic HTML plus public surface tokens |
 
-No runtime `@vyrnforge/web/layout`, `@vyrnforge/react/layout`, `@vyrnforge/vue/layout`, `@vyrnforge/angular/layout` or Elements layout entrypoint remains. No Box, Flex, Card, Row or Column alias is added. Historical component and change records are provenance only.
+`@vyrnforge/react/layout` is the **only new framework component entrypoint** for this bounded React authoring use case. `@vyrnforge/web/layout`, `@vyrnforge/vue/layout`, `@vyrnforge/angular/layout` and Elements layout runtime remain absent. No Stack, Inline, Cluster, Container, ControlGroup, Surface, Box, Flex, Card, Row or Column alias is added. Historical implementations are provenance, not public compatibility promises.
 
 ## Correctness
 

@@ -1,6 +1,6 @@
 # Layout: Flow & AutoGrid
 
-Build responsive arrangements with two shared CSS recipes on the semantic HTML you already need. Flow covers vertical rhythm, one-line rows, and wrapped peers; AutoGrid distributes repeated items in equal intrinsic tracks. These are styling recipes, not a family of React, Angular, Vue, or Custom Element layout components.
+Build responsive arrangements with two shared CSS recipes on the semantic HTML you already need. Flow covers vertical rhythm, one-line rows, and wrapped peers; AutoGrid distributes repeated items in equal intrinsic tracks. These are styling recipes at the shared foundation. React additionally provides simple `Flow` and `AutoGrid` components mapping typed props to those same CSS hooks; Angular, Vue and Elements do not require a framework layout runtime.
 
 ## Choose a layout
 
@@ -44,14 +44,14 @@ The Page layout example uses application-authored `max-inline-size`, logical inl
 
 ## Framework integration
 
-Import `@vyrnforge/web/styles/layout.css` in the consuming app. Native Web and Elements-using apps author semantic HTML with the same data attributes. React uses these attributes on ordinary JSX elements, Angular on its authored template elements, and Vue on its authored elements. The checked-in Page layout example includes Native Web, React, Angular, Vue, and Elements-app source variants. No `@vyrnforge/web/layout`, `@vyrnforge/react/layout`, `@vyrnforge/angular/layout`, `@vyrnforge/vue/layout`, or Elements layout runtime is part of the current public API. The React documentation app also has a dedicated Layout guide at `/next/react/components/layout/` using product-owned TSX examples. Other framework documentation renderers remain separate delivery scopes; example sources do not imply full Angular, Vue, or Elements documentation sites.
+Import `@vyrnforge/web/styles/layout.css` in the consuming app. Native Web and Elements-using apps author semantic HTML with the same data attributes. React apps can use `Flow` and `AutoGrid` from `@vyrnforge/react/layout` with typed props and semantic `as` hosts; Angular and Vue apps use the canonical CSS attributes on authored native elements. The checked-in Page layout example includes Native Web, React, Angular, Vue, and Elements-app source variants. `@vyrnforge/react/layout` provides only the two React authoring components; `@vyrnforge/web/layout`, `@vyrnforge/angular/layout`, `@vyrnforge/vue/layout`, and Elements layout runtime do not exist. The React documentation app also has a dedicated Layout guide at `/next/react/components/layout/` using product-owned TSX examples. Other framework documentation renderers remain separate delivery scopes; example sources do not imply full Angular, Vue, or Elements documentation sites.
 
 ## Migration from older layout names
 
-- Former Stack and `data-vf-stack`: use a semantic element with block `data-vf-flow`; transfer gap, align, and justify to `data-vf-flow-*`.
-- Former Inline and `data-vf-inline`: use inline `data-vf-flow`, which is nonwrapping by default.
-- Former Cluster and `data-vf-cluster`: use inline Flow with `data-vf-flow-wrap="wrap"`.
-- Former AutoGrid React/Vue wrappers and Angular directive: use the existing `data-vf-auto-grid` hook on a native host; its CSS-only recipe remains.
+- Former Stack and `data-vf-stack`: use React `Flow` in block mode (default), or a native element with `data-vf-flow` in other frameworks. Transfer gap/align/justify to matching React props or CSS hooks.
+- Former Inline and `data-vf-inline`: use React `Flow direction="inline"`, or an inline `data-vf-flow` hook in other frameworks; neither wraps by default.
+- Former Cluster and `data-vf-cluster`: use React `Flow direction="inline" wrap="wrap"`, or the corresponding inline/wrap CSS hooks in other frameworks.
+- Former AutoGrid React/Vue wrappers and Angular directive: use the new minimal React `AutoGrid` API, or `data-vf-auto-grid` directly in other frameworks. Canonical Web CSS continues to implement the grid.
 - Former Container: use an authored semantic host with application CSS for max-width, logical gutters, and centering.
 - Former ControlGroup: keep independent control semantics and use component/application-owned CSS where visual joining is actually needed. For semantic groups use native fieldset/legend or the correct composite widget.
 - Former Surface: remains retired; use semantic HTML and shared surface tokens, not a wrapper.

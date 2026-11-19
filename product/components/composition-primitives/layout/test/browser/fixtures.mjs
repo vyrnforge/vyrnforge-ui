@@ -39,14 +39,21 @@ export const browserFixture = {
     if (port === 'react') {
       const { createElement: h } = await import('react');
       const { renderToString } = await import('react-dom/server');
+      const { Flow, AutoGrid } = await import('@vyrnforge/react/layout');
       const markup = renderToString(h('main', { id: 'container' },
-        h('section', { id: 'stack', 'data-vf-flow': '', 'data-vf-flow-gap': 'lg', 'data-vf-flow-align': 'start', 'aria-labelledby': 'heading' },
+        h(Flow, { as: 'section', id: 'stack', gap: 'lg', align: 'start', 'aria-labelledby': 'heading' },
           h('h1', { id: 'heading' }, 'Layout CSS fixture'),
-          h('section', { id: 'auto-grid', 'data-vf-auto-grid': '', 'data-vf-auto-grid-gap': 'sm' }, ...cards.map((label, i) => h('article', { id: `card-${String.fromCharCode(97+i)}`, key: label }, label))),
-          h('div', { id: 'actions', dir: 'rtl', 'data-vf-flow': '', 'data-vf-flow-direction': 'inline', 'data-vf-flow-wrap': 'wrap', 'data-vf-flow-gap': 'sm', 'data-vf-flow-align': 'center', 'data-vf-flow-justify': 'space-between' },
-            ...['First','Second','Third'].map(s => h('button', { id: s.toLowerCase(), type: 'button', key: s }, s))),
-          h('div', { id: 'inline', 'data-vf-flow': '', 'data-vf-flow-direction': 'inline', 'data-vf-flow-gap': 'sm', 'data-vf-flow-align': 'baseline', 'data-vf-flow-justify': 'space-between' }, h('span', null, 'Alpha'), h('strong', null, 'Beta')),
-          h('div', { id: 'controls', 'data-vf-flow': '', 'data-vf-flow-direction': 'inline', 'data-vf-flow-gap': 'xs' }, h('input', { id: 'search', 'aria-label': 'Search query' }), h('button', { type: 'button' }, 'Search'))
+          h(AutoGrid, { as: 'section', id: 'auto-grid', gap: 'sm' },
+            ...cards.map((label, i) => h('article', { id: `card-${String.fromCharCode(97 + i)}`, key: label }, label))),
+          h(Flow, { id: 'actions', dir: 'rtl', direction: 'inline', wrap: 'wrap', gap: 'sm',
+              align: 'center', justify: 'space-between' },
+            ...['First', 'Second', 'Third'].map(label =>
+              h('button', { id: label.toLowerCase(), type: 'button', key: label }, label))),
+          h(Flow, { id: 'inline', direction: 'inline', gap: 'sm', align: 'baseline', justify: 'space-between' },
+            h('span', null, 'Alpha'), h('strong', null, 'Beta')),
+          h(Flow, { id: 'controls', direction: 'inline', gap: 'xs' },
+            h('input', { id: 'search', 'aria-label': 'Search query' }),
+            h('button', { type: 'button' }, 'Search'))
         )));
       await writeFile(path.join(outDir, 'react.html'), page(markup));
     }

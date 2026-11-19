@@ -353,7 +353,7 @@ test('AppShell and SideNav retain canonical five-port projections', () => {
   assert.deepEqual(productGraphProblems(), []);
 });
 
-test('Layout projects only the canonical Web CSS recipes, not framework layout runtimes', () => {
+test('Layout keeps Web as styling authority and projects only thin React authoring components', () => {
   const graph = discoverProductGraph();
   const component = graph.components.find((entry) => entry.unitId === 'layout');
   assert.ok(component);
@@ -361,11 +361,13 @@ test('Layout projects only the canonical Web CSS recipes, not framework layout r
   assert.equal(component.facets.canonicalRoot, 'product/components/composition-primitives/layout/');
   assert.equal(component.facets.legacyRoot, null);
   assert.equal(component.migration.state, 'product-unit');
-  assert.deepEqual(Object.keys(component.surfaces), ['web']);
+  assert.deepEqual(Object.keys(component.surfaces).sort(), ['react', 'web']);
   assert.deepEqual(component.surfaces.web.publicEntrypoints, ['@vyrnforge/web/styles/layout.css']);
+  assert.deepEqual(component.surfaces.react.publicEntrypoints, ['@vyrnforge/react/layout']);
 
   for (const pkg of graph.packages) {
-    assert.equal(Boolean(pkg.manifest.exports?.['./layout']), false, pkg.name + ' must not reintroduce a layout JavaScript runtime');
+    assert.equal(Boolean(pkg.manifest.exports?.['./layout']), pkg.id === 'react',
+      pkg.name + ' must not clone React layout adapters in other ports');
   }
   assert.deepEqual(productGraphProblems(), []);
 });
@@ -445,6 +447,20 @@ test('retired TemporalField stays out of the Product Graph and public package su
   for (const pkg of graph.packages) {
     assert.equal(Boolean(pkg.manifest.exports?.['./temporal-field']), false, pkg.name + ' must not export retired TemporalField');
     assert.equal(Boolean(pkg.manifest.exports?.['./styles/temporal-field.css']), false, pkg.name + ' must not export retired TemporalField CSS');
+  }
+  assert.deepEqual(productGraphProblems(), []);
+});
+
+test('Layout uses one shared Web recipe and one React authoring adapter, not six wrapper systems', () => {
+  const graph = discoverProductGraph();
+  const layout = graph.components.find((entry) => entry.unitId === 'layout');
+  assert.ok(layout);
+  assert.deepEqual(Object.keys(layout.surfaces).sort(), ['react', 'web']);
+  assert.deepEqual(layout.surfaces.react.publicEntrypoints, ['@vyrnforge/react/layout']);
+  assert.deepEqual(layout.surfaces.web.publicEntrypoints, ['@vyrnforge/web/styles/layout.css']);
+  for (const name of ['angular', 'vue', 'elements', 'web']) {
+    const manifest = graph.packages.find((pkg) => pkg.id === name)?.manifest;
+    assert.equal(Boolean(manifest?.exports?.['./layout']), false, name + ' must not clone React layout wrappers');
   }
   assert.deepEqual(productGraphProblems(), []);
 });

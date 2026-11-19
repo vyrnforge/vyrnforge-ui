@@ -167,11 +167,11 @@ function accessibilityEvidence(root, component) {
 function normalizeOwner(root, component, framework) {
   const surface = component.surfaces[framework.surface];
   const apiAvailable = Boolean(surface?.publicEntrypoints.length);
-  // A canonical Web CSS recipe can have idiomatic authored examples in a
-  // framework without creating a nonexistent framework layout JS API.
+  // Framework-authored examples may consume shared Web CSS directly even
+  // when another framework also offers a thin authoring component adapter.
+  // Never invent a package API in a framework that has no real public export.
   const cssEntrypoint = `@vyrnforge/web/styles/${component.unitId}.css`;
   const cssRecipeStyle = component.kind === 'component' &&
-    Object.keys(component.surfaces).length === 1 &&
     component.surfaces.web?.publicEntrypoints.includes(cssEntrypoint)
       ? cssEntrypoint : null;
   const shared = sharedContent(root, component);

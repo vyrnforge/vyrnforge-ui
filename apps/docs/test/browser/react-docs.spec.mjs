@@ -13,11 +13,11 @@ test('React pilot artifact is Product Graph-backed and SSR-rendered with public 
   expect(manifest.button.sharedSourcePath).toBe(button.sharedSourcePath);
   expect(manifest.button.frameworkSourcePath).toBe(button.frameworkSourcePath);
   expect(manifest.button.publicEntrypoints).toContain('@vyrnforge/react/button');
-  expect(manifest.layout).toMatchObject({ guideOnly: true, api: false,
-    publicEntrypoints: [], cssRecipeStyle: '@vyrnforge/web/styles/layout.css' });
+  expect(manifest.layout).toMatchObject({ guideOnly: false, api: true,
+    publicEntrypoints: ['@vyrnforge/react/layout'], cssRecipeStyle: '@vyrnforge/web/styles/layout.css' });
   expect(manifest.layout.examples).toHaveLength(6);
   expect(manifest.routes.filter((entry) => entry.view !== 'unavailable').map((entry) => entry.route)).toEqual([
-    '', 'components/button/', 'api/components/button/', 'components/layout/',
+    '', 'components/button/', 'api/components/button/', 'components/layout/', 'api/components/layout/',
   ]);
   expect(manifest.routes).toContainEqual({ route: 'components/code/', view: 'unavailable' });
   for (const route of manifest.routes) {
@@ -236,7 +236,7 @@ test('React Layout lives under Layout & Structure and runs checked-in React JSX 
   await expect(nav.getByText('Layout & Structure', { exact: true })).toBeVisible();
   await expect(nav.getByRole('link', { name: 'Layout guide' })).toHaveAttribute('aria-current', 'page');
   await expect(page.locator('[data-vf-docs-react-layout] [data-vf-docs-accessibility]')).toContainText('Accessibility review required');
-  await expect(page.locator('[data-vf-docs-react-layout]')).toContainText('There is no @vyrnforge/react/layout export');
+  await expect(page.locator('[data-vf-docs-react-layout]')).toContainText('Import the real React Flow and AutoGrid components');
 
   for (const id of ['basic', 'flow-block', 'flow-inline', 'flow-wrap', 'auto-grid', 'semantic-groups']) {
     const demo = page.locator('[data-vf-docs-react-layout-example="layout/' + id + '"]');
@@ -246,7 +246,8 @@ test('React Layout lives under Layout & Structure and runs checked-in React JSX 
     const frame = iframe.contentFrame();
     await expect(frame.locator('#root > *').first()).toBeVisible();
     await demo.getByText('View React TSX source').click();
-    await expect(demo.locator('pre code')).toContainText('data-vf-');
+    await expect(demo.locator('pre code')).toContainText("from '@vyrnforge/react/layout'");
+    await expect(demo.locator('pre code')).toContainText(/<Flow|<AutoGrid/);
   }
   await expect(page.frameLocator('iframe[title="React Intrinsic card collection example"]')
     .locator('[data-vf-auto-grid]')).toHaveCSS('display', 'grid');
@@ -310,8 +311,22 @@ test('Native Layout framework selector preserves the React Layout route; SSR wor
       .getByRole('link', { name: 'Layout guide' })).toHaveAttribute('aria-current', 'page');
     await expect(noJs.locator('html')).not.toHaveAttribute('data-vf-react-hydrated', 'true');
     await noJs.getByText('View React TSX source').first().click();
-    await expect(noJs.locator('[data-vf-docs-react-layout-example] pre code').first()).toContainText('data-vf-flow');
+    await expect(noJs.locator('[data-vf-docs-react-layout-example] pre code').first()).toContainText('<Flow');
   } finally {
     await context.close();
   }
+});
+
+test('React Layout API reference exposes actual package entrypoint and typed props', async ({ page }) => {
+  await page.goto('/next/react/api/components/layout/');
+  await expect(page.getByRole('heading', { level: 1, name: 'Flow & AutoGrid API' })).toBeVisible();
+  await expect(page.locator('[data-vf-docs-react-api="layout"]')).toContainText('@vyrnforge/react/layout');
+  const types = page.locator('[data-vf-docs-react-api="layout"] pre code').first();
+  await expect(types).toContainText('export type FlowProps');
+  await expect(types).toContainText('export type AutoGridProps');
+  await expect(types).toContainText('LayoutGap');
+  await expect(page.getByRole('navigation', { name: 'Documentation' })
+    .getByRole('link', { name: 'Layout API' })).toHaveAttribute('aria-current', 'page');
+  await page.getByRole('link', { name: 'Open runnable React Layout examples' }).click();
+  await expect(page).toHaveURL(/\/next\/react\/components\/layout\/$/);
 });
