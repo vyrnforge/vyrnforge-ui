@@ -1,8 +1,8 @@
 import '@vyrnforge/web/styles/layout.css';
 
 document.querySelector('#root')!.innerHTML = `
-  <main data-vf-container data-vf-container-size="lg" data-vf-container-gutter="md">
-    <section data-vf-stack data-vf-stack-gap="lg">
+  <main style="max-inline-size: 64rem; margin-inline: auto; padding-inline: var(--vf-space-md)">
+    <section data-vf-flow data-vf-flow-direction="block" data-vf-flow-gap="lg">
       <header>
         <h2>Account overview</h2>
         <p>Review workspace details and recent activity.</p>
@@ -12,7 +12,7 @@ document.querySelector('#root')!.innerHTML = `
         <article>Team access</article>
         <article>Recent activity</article>
       </div>
-      <div data-vf-cluster data-vf-cluster-gap="sm" data-vf-cluster-align="center">
+      <div data-vf-flow data-vf-flow-direction="inline" data-vf-flow-wrap="wrap" data-vf-flow-gap="sm" data-vf-flow-align="center">
         <button type="button">Edit profile</button>
         <button type="button">Manage team</button>
       </div>
