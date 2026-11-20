@@ -42,6 +42,7 @@ try {
         env: { VF_PACKAGE_SOURCE_ROOT: projection.sourceRoot },
       });
     }
+    if (packageId === 'react') run(process.execPath, ['tooling/product/react-browser-css.mjs']);
   }
 } finally {
   cleanupPackageProjection(root, packageId, 'build');
