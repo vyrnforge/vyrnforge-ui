@@ -21,7 +21,7 @@ export const browserFixture = {
     const compositionComponents = port === 'web'
       ? ['button', 'link', 'code', 'kbd']
       : port === 'react'
-        ? ['button', 'link']
+        ? ['button', 'link', 'code', 'kbd']
         : [];
     const compositionCss = await Promise.all(compositionComponents.map(async (component) =>
       stripFoundationImports(await readFile(path.join(root, `packages/web/dist/components/${component}/${component}.css`), 'utf8'))
@@ -70,6 +70,8 @@ export const browserFixture = {
       const { createElement } = await import('react');
       const { renderToString } = await import('react-dom/server');
       const { Text } = await import('@vyrnforge/react/text');
+      const { Code, CodeBlock } = await import('@vyrnforge/react/code');
+      const { Kbd } = await import('@vyrnforge/react/kbd');
       const markup = renderToString(createElement('div', null,
         createElement(Text, { id: 'heading', as: 'h2', variant: 'heading-md' }, 'Typography'),
         createElement(Text, { id: 'body', as: 'p', variant: 'body-md' }, 'Readable body copy'),
@@ -78,7 +80,14 @@ export const browserFixture = {
         createElement(Text, { id: 'poster', as: 'p', variant: 'poster' }, 'Custom poster'),
         createElement(Text, { id: 'quote', as: 'blockquote', variant: 'body-lg', cite: 'https://example.com/source' }, 'Quotation'),
         createElement(Text, { id: 'mark', as: 'mark', variant: 'body-md' }, 'Highlighted'),
-        createElement(Text, { id: 'time', as: 'time', variant: 'caption', dateTime: '2026-11-10' }, 'November 10, 2026')
+        createElement(Text, { id: 'time', as: 'time', variant: 'caption', dateTime: '2026-11-10' }, 'November 10, 2026'),
+        createElement('section', { 'aria-label': 'React native typography composition' },
+          createElement(Code, { id: 'default-code' }, 'default code'),
+          createElement(Code, { id: 'composed-code', variant: 'body-lg' }, 'composed code'),
+          createElement(CodeBlock, { id: 'composed-code-block' }, 'pnpm build'),
+          createElement(Kbd, { id: 'default-kbd' }, 'Ctrl'),
+          createElement(Kbd, { id: 'composed-kbd', variant: 'body-sm' }, 'Shift')
+        )
       ));
       await writeFile(path.join(outDir, 'react.html'), page(markup));
     }
