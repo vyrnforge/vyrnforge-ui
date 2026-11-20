@@ -1,0 +1,14 @@
+{
+  "id": "text/semantic-composition",
+  "title": "Semantics and visual roles",
+  "description": "A document excerpt demonstrating headings, paragraphs, meaningful emphasis, quotation and machine-readable time without confusing visual roles with semantics.",
+  "documentationSection": "Native baseline",
+  "defaultFramework": "react",
+  "frameworks": {
+    "react": {
+      "label": "React",
+      "language": "tsx",
+      "source": "react.tsx"
+    }
+  }
+}
