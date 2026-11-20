@@ -470,7 +470,7 @@ function body(view, links, button, layout, typography, message, setMessage, requ
         h('p', null, 'Import React components from their public entrypoints. Supported CSS-aware browser builds automatically include canonical Web component styles; server-rendered apps must also deliver extracted client CSS.'),
         h('pre', { 'data-vf-code-block': '', tabIndex: 0 },
           h('code', null, "import { Button } from '@vyrnforge/react/button';")),
-        h('p', null, 'React owns component state, rendering, event handlers, and hydration; VyrnForge supplies shared semantics and presentation.')),
+        h('p', null, 'Use the public React components with meaningful native HTML elements.')),
       h('section', null, h('h2', null, 'Styling, SSR and hydration'),
         h('p', null, 'React components share the canonical Web tokens and styles; they do not have a separate React theme. CSS-aware browser builds that resolve supported browser entrypoints can extract component CSS. The consuming app must ensure those styles reach the client HTML.'),
         h('p', null, 'If your build does not extract component styles, load the public Web aggregate once at app startup:'),
