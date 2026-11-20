@@ -192,7 +192,6 @@ function layoutGuide(layout, links) {
     { id: 'react-layout-examples', heading: 'Examples' },
     { id: 'react-layout-guidelines', heading: 'Usage guidelines' },
     { id: 'react-layout-accessibility', heading: 'Accessibility' },
-    { id: 'react-layout-integration', heading: 'React integration' },
     { id: 'react-layout-reference', heading: 'Related components and API' },
   ];
   return h('div', { className: 'vf-docs-content-grid vf-docs-usage-guide-layout' },
@@ -201,12 +200,9 @@ function layoutGuide(layout, links) {
       'data-vf-docs-react-layout': '' },
       guideHeader(content, 'React · Layout & Structure · Flow & AutoGrid'),
       guidePart(sections[0], [
-        h('p', { key: 'intro' },
-          'Import the real React Flow and AutoGrid components, and load the canonical Web stylesheet once in your app entrypoint.'),
-        h('pre', { key: 'import', 'data-vf-code-block': '', tabIndex: 0 },
-          h('code', null, "import { Flow, AutoGrid } from '@vyrnforge/react/layout';\nimport '@vyrnforge/web/styles/layout.css';")),
         ...guideBlocks(layout.frameworkContent, 'React installation and first use'),
-        ...guideBlocks(layout.frameworkContent, 'Default-first React example'),
+        h('p', { key: 'shared-setup' }, 'For shared styling and server-rendering setup, see ',
+          h('a', { href: links.home, 'data-vf-link': '' }, 'React overview'), '.'),
       ]),
       guidePart(sections[1], [
         h('p', { key: 'intro' }, 'These six examples run product-owned React TSX. Each preview keeps its source available.'),
@@ -227,15 +223,6 @@ function layoutGuide(layout, links) {
         evidenceDisclosure(layout.standardReferences),
       ]),
       guidePart(sections[4], [
-        ...renderBlocks(layout.frameworkContent.intro),
-        ...guideSubsections(layout.frameworkContent,
-          ['Migration for React consumers', 'SSR, hydration and package boundary'],
-          'react-layout-integration'),
-        h('details', { key: 'equivalent', className: 'vf-docs-reference-details' },
-          h('summary', null, 'Native Web and other framework equivalents'),
-          ...guideBlocks(content, 'Framework integration')),
-      ]),
-      guidePart(sections[5], [
         h('p', { key: 'intro' }, 'Find Flow and AutoGrid props, CSS attributes, spacing values and public types in the API reference.'),
         h('ul', { key: 'related', className: 'vf-docs-related-links' },
           h('li', null, h('a', { href: links.layoutApi, 'data-vf-link': '' }, 'View Flow and AutoGrid React API')),
@@ -323,21 +310,21 @@ function typographyUsageGuide(unit, links) {
     { id: 'react-typography-preview', heading: 'Examples' },
     { id: 'react-typography-guidelines', heading: 'Usage guidelines' },
     { id: 'react-typography-accessibility', heading: 'Accessibility' },
-    { id: 'react-typography-integration', heading: 'React integration' },
     { id: 'react-typography-reference', heading: 'Related components and API' },
   ];
   const guidance = id === 'text'
     ? ['When to use', 'When not to use', 'Native baseline', 'Visual roles']
     : ['When to use', 'When not to use', 'Native baseline', 'Visual styling'];
-  const integration = id === 'text'
-    ? ['Choosing a semantic host', 'Styling and server rendering', 'Specialized typography']
-    : ['Semantic authoring', 'Styling and server rendering'];
   return h('div', { className: 'vf-docs-content-grid vf-docs-usage-guide-layout' },
     guideToc(sections),
     h('article', { className: 'vf-docs-article vf-docs-usage-guide',
       'data-vf-docs-react-typography': id },
       guideHeader(unit.sharedContent, 'React · Typography'),
-      guidePart(sections[0], guideBlocks(unit.frameworkContent, 'React setup')),
+      guidePart(sections[0], [
+        ...guideBlocks(unit.frameworkContent, 'React setup'),
+        h('p', { key: 'shared-setup' }, 'For shared styling and server-rendering setup, see ',
+          h('a', { href: links.home, 'data-vf-link': '' }, 'React overview'), '.'),
+      ]),
       guidePart(sections[1], [
         h('p', { key: 'intro' },
           'Each preview runs checked-in React TSX. Open the source beneath an example to see how it is built.'),
@@ -345,21 +332,17 @@ function typographyUsageGuide(unit, links) {
           'react-typography-' + id + '-' + example.id.slice(id.length + 1)),
         ...unit.examples.map((example) => typographyExample(unit, example, links)),
       ], { 'data-vf-docs-react-usage-gallery': id }),
-      guidePart(sections[2], guideSubsections(unit.sharedContent, guidance,
-        'react-' + id + '-guidance')),
+      guidePart(sections[2], [
+        ...guideSubsections(unit.sharedContent, guidance, 'react-' + id + '-guidance'),
+        ...guideSubsections(unit.frameworkContent,
+          id === 'text' ? ['Choosing a semantic host'] : id === 'code' ? ['Semantic authoring'] : [],
+          'react-' + id + '-authoring'),
+      ]),
       guidePart(sections[3], [
         ...guideBlocks(unit.sharedContent, 'Accessibility'),
         evidenceDisclosure(unit.standardReferences),
       ]),
       guidePart(sections[4], [
-        ...renderBlocks(unit.frameworkContent.intro),
-        ...guideSubsections(unit.frameworkContent, integration,
-          'react-' + id + '-integration'),
-        h('details', { key: 'native', className: 'vf-docs-reference-details' },
-          h('summary', null, 'Native Web equivalent'),
-          ...guideBlocks(unit.sharedContent, 'Native Web')),
-      ]),
-      guidePart(sections[5], [
         h('p', { key: 'intro' },
           'Public React props and types belong in the API reference; use the adjacent typography guides for related semantics.'),
         h('ul', { key: 'related', className: 'vf-docs-related-links' },
@@ -388,13 +371,13 @@ function typographyApi(unit, links) {
       h('h2', { id: 'react-typography-api-entrypoints' }, 'Public entrypoint'),
       h('ul', null, ...unit.publicEntrypoints.map((entry) =>
         h('li', { key: entry }, h('code', { 'data-vf-code': '' }, entry)))),
-      h('p', null, 'In supported CSS-aware browser bundles, canonical Web CSS is automatically delivered with the component. Direct server imports remain CSS-free.')),
+      h('p', null, 'See ', h('a', { href: links.home, 'data-vf-link': '' }, 'React overview'),
+        ' for shared stylesheet and server-rendering setup.')),
     h('section', { 'aria-labelledby': 'react-typography-api-types' },
       h('h2', { id: 'react-typography-api-types' }, 'Source-backed React types and exports'),
       h('p', null, 'The following source comes from the component-owned React public implementation.'),
       h('pre', { 'data-vf-code-block': '', tabIndex: 0 },
         h('code', null, unit.publicSource))),
-    renderSections(unit.frameworkContent, 'React ' + unit.title + ' integration'),
     h('a', { href: links.typography[unit.id].guide, 'data-vf-link': '' },
       'Open ' + unit.title + ' React guide and live example'));
 }
@@ -420,7 +403,6 @@ function buttonUsageGuide(button, links, message, setMessage) {
     { id: 'react-usage', heading: 'Examples' },
     { id: 'react-button-guidelines', heading: 'Usage guidelines' },
     { id: 'react-button-accessibility', heading: 'Accessibility' },
-    { id: 'react-button-integration', heading: 'React integration' },
     { id: 'react-reference', heading: 'Related components and API' },
   ];
   return h('div', { className: 'vf-docs-content-grid vf-docs-usage-guide-layout' },
@@ -429,11 +411,9 @@ function buttonUsageGuide(button, links, message, setMessage) {
       'data-vf-docs-react-component': 'button' },
       guideHeader(button.sharedContent, 'React · Components · Actions'),
       guidePart(sections[0], [
-        h('p', { key: 'intro' },
-          'Import Button from the public React entrypoint. Use a native button type appropriate to the action.'),
-        h('pre', { key: 'import', 'data-vf-code-block': '', tabIndex: 0 },
-          h('code', null, "import { Button } from '@vyrnforge/react/button';\n\n<Button type=\"button\">Save changes</Button>")),
         ...guideBlocks(button.frameworkContent, 'React setup'),
+        h('p', { key: 'shared-setup' }, 'For shared styling and server-rendering setup, see ',
+          h('a', { href: links.home, 'data-vf-link': '' }, 'React overview'), '.'),
       ]),
       guidePart(sections[1], [
         h('p', { key: 'intro' },
@@ -455,19 +435,9 @@ function buttonUsageGuide(button, links, message, setMessage) {
       guidePart(sections[3], [
         ...guideBlocks(button.sharedContent, 'Interaction and focus'),
         ...guideBlocks(button.sharedContent, 'Accessibility'),
-        ...guideBlocks(button.frameworkContent, 'React forms and accessibility'),
         evidenceDisclosure(button.standardReferences),
       ]),
       guidePart(sections[4], [
-        ...renderBlocks(button.frameworkContent.intro),
-        ...guideSubsections(button.frameworkContent,
-          ['React rendering boundary'], 'react-button-integration'),
-        h('details', { key: 'other-frameworks', className: 'vf-docs-reference-details' },
-          h('summary', null, 'Framework availability'),
-          ...guideBlocks(button.sharedContent, 'Framework availability')),
-        ...guideBlocks(button.sharedContent, 'Contract and evidence boundaries'),
-      ]),
-      guidePart(sections[5], [
         h('p', { key: 'intro' },
           'Find public props, types, and entrypoints in the API reference, separate from this usage guide.'),
         h('ul', { key: 'related', className: 'vf-docs-related-links' },
@@ -501,6 +471,14 @@ function body(view, links, button, layout, typography, message, setMessage, requ
         h('pre', { 'data-vf-code-block': '', tabIndex: 0 },
           h('code', null, "import { Button } from '@vyrnforge/react/button';")),
         h('p', null, 'React owns component state, rendering, event handlers, and hydration; VyrnForge supplies shared semantics and presentation.')),
+      h('section', null, h('h2', null, 'Styling, SSR and hydration'),
+        h('p', null, 'React components share the canonical Web tokens and styles; they do not have a separate React theme. CSS-aware browser builds that resolve supported browser entrypoints can extract component CSS. The consuming app must ensure those styles reach the client HTML.'),
+        h('p', null, 'If your build does not extract component styles, load the public Web aggregate once at app startup:'),
+        h('pre', { 'data-vf-code-block': '', tabIndex: 0 },
+          h('code', null, "import '@vyrnforge/web/styles.css';")),
+        h('p', null, 'Node/SSR imports do not install client styles. Deliver the extracted or explicitly imported CSS alongside the server-rendered HTML before hydration. The optional Web reset is not loaded automatically.')),
+      h('section', null, h('h2', null, 'React state and native semantics'),
+        h('p', null, 'React owns component state, event handlers, refs, effects and hydration. VyrnForge components preserve native HTML semantics and shared interaction contracts; consuming applications own data, actions, async feedback and routing. Avoid adding custom keyboard handlers for behavior native elements already provide.')),
       h('section', null, h('h2', null, 'Verified routes'),
         h('ul', null,
           h('li', null, h('a', { 'data-vf-link': '', href: links.guide }, 'React Button guide')),
@@ -537,11 +515,6 @@ function body(view, links, button, layout, typography, message, setMessage, requ
       h('section', { 'aria-labelledby': 'react-layout-api-css' },
         h('h2', { id: 'react-layout-api-css' }, 'CSS attributes and spacing'),
         ...guideBlocks(layout.sharedContent, 'Attributes and spacing')),
-      h('section', { 'aria-labelledby': 'react-layout-api-react-props' },
-        h('h2', { id: 'react-layout-api-react-props' }, 'React authoring props'),
-        ...guideSubsections(layout.frameworkContent,
-          ['React Flow props', 'React AutoGrid props'], 'react-layout-api')),
-      renderSections(layout.frameworkContent, 'React Layout integration'),
       h('p', null, h('a', { href: links.layout, 'data-vf-link': '' }, 'Open runnable React Layout examples')));
   }
   if (view === 'api') {
@@ -560,7 +533,6 @@ function body(view, links, button, layout, typography, message, setMessage, requ
           'ButtonProps extends React native button attributes, and its ref targets HTMLButtonElement.'),
         h('pre', { 'data-vf-code-block': '', tabIndex: 0 },
           h('code', null, button.publicButtonTypes))),
-      renderSections(button.frameworkContent, 'React integration'),
       h('p', null, h('a', { 'data-vf-link': '', href: links.guide }, 'Open Button guide')));
   }
   return buttonUsageGuide(button, links, message, setMessage);
