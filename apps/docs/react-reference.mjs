@@ -251,7 +251,7 @@ function typographyExample(unit, example, links) {
       className: 'vf-docs-react-example-frame',
       'data-vf-docs-example-id': example.id,
       src: links.typography[unit.id].examples[slug],
-      sandbox: 'allow-scripts', loading: 'lazy',
+      sandbox: 'allow-scripts', loading: slug === 'basic' ? 'eager' : 'lazy',
     }),
     h('details', { className: 'vf-docs-source-disclosure' },
       h('summary', null, 'View React TSX source'),
