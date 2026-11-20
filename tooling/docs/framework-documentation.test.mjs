@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import { transform } from 'esbuild';
-import { compileFrameworkDocumentation } from './framework-documentation.mjs';
+import { compileFrameworkDocumentation, parseMarkdownDocument } from './framework-documentation.mjs';
 
 describe('React documentation compiler preflight', () => {
   it('uses actual public React package exports and product-owned Button content', () => {
@@ -234,5 +234,31 @@ describe('React Text consumer-first guide examples', () => {
     for (const host of ['h2', 'p', 'strong', 'blockquote', 'time']) {
       expect(semantic.source).toContain('<Text as="' + host + '"');
     }
+  });
+});
+
+describe('Authored documentation code readability', () => {
+  it('preserves fenced TSX as source-backed code blocks instead of inline paragraphs', () => {
+    const model = compileFrameworkDocumentation('react');
+    const text = model.componentCatalog.find((unit) => unit.id === 'text');
+    const setup = text.frameworkContent.sections.find((section) => section.heading === 'React setup');
+    const code = setup.blocks.find((block) => block.type === 'code');
+    expect(code).toMatchObject({ language: 'tsx' });
+    expect(code.text).toContain("import { Text } from '@vyrnforge/react/text';\n");
+    expect(code.text).toContain('<Text as="h2"');
+    expect(setup.blocks.filter((block) => block.type === 'paragraph')
+      .every((block) => !block.text.includes('```'))).toBe(true);
+  });
+
+  it('preserves intentional newlines and rejects malformed fenced source', () => {
+    const parsed = parseMarkdownDocument(
+      '# Guide\n\n## Setup\n\nBefore.\n\n```tsx\nconst x = 1;\nconst y = 2;\n```\n\nAfter.');
+    expect(parsed.sections[0].blocks).toEqual([
+      { type: 'paragraph', text: 'Before.' },
+      { type: 'code', language: 'tsx', text: 'const x = 1;\nconst y = 2;' },
+      { type: 'paragraph', text: 'After.' },
+    ]);
+    expect(() => parseMarkdownDocument('# Guide\n```tsx\nconst x = 1;'))
+      .toThrow(/Unclosed documentation code fence/);
   });
 });
