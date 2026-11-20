@@ -20,9 +20,13 @@ function renderInline(value) {
   });
 }
 function renderBlocks(blocks = []) {
-  return blocks.map((block, i) => block.type === 'list'
-    ? h('ul', { key: i }, block.items.map((item, j) => h('li', { key: j }, ...renderInline(item))))
-    : h('p', { key: i }, ...renderInline(block.text)));
+  return blocks.map((block, i) => {
+    if (block.type === 'list') return h('ul', { key: i },
+      block.items.map((item, j) => h('li', { key: j }, ...renderInline(item))));
+    if (block.type === 'code') return h('pre', { key: i, 'data-vf-code-block': '', tabIndex: 0 },
+      h('code', null, block.text));
+    return h('p', { key: i }, ...renderInline(block.text));
+  });
 }
 function renderSections(content, prefix, includeIntro = true) {
   if (!content) return null;
@@ -34,13 +38,13 @@ function renderSections(content, prefix, includeIntro = true) {
         h('h2', { id }, section.heading), ...renderBlocks(section.blocks));
     }));
 }
-function accessibilityEvidence(references) {
+function accessibilityEvidence(references, headingTag = 'h2') {
   if (!references) return null;
   const criteria = references.criteria ?? [];
   const hasBaselineNote = Boolean(references.nativeBaseline && !references.hasNativeReference);
   return h('section', { className: 'vf-docs-standards',
     'data-vf-docs-accessibility': '', 'aria-labelledby': 'react-accessibility-heading' },
-    h('h2', { id: 'react-accessibility-heading' }, 'Accessibility evidence'),
+    h(headingTag, { id: 'react-accessibility-heading' }, 'Accessibility evidence'),
     h('ul', { className: 'vf-docs-standards-primary', 'aria-label': 'Standards' },
       ...references.standards.map((standard, i) => h('li', { key: i },
         standard.url
@@ -258,10 +262,96 @@ function typographyExample(unit, example, links) {
       h('pre', { 'data-vf-code-block': '', tabIndex: 0 },
         h('code', null, example.source))));
 }
+// These presentation slots select existing Product Graph Markdown sections; they
+// never copy component guidance into a docs-owned registry or change its owner.
+function guideSection(content, heading) {
+  return content?.sections.find((section) => section.heading === heading);
+}
+function guideBlocks(content, heading) {
+  return renderBlocks(guideSection(content, heading)?.blocks);
+}
+function guideSubsections(content, headings, prefix) {
+  return headings.flatMap((heading) => {
+    const section = guideSection(content, heading);
+    if (!section) return [];
+    const id = prefix + '-' + slug(heading);
+    return [h('section', { key: id, className: 'vf-docs-guide-subsection', 'aria-labelledby': id },
+      h('h3', { id }, heading), ...renderBlocks(section.blocks))];
+  });
+}
+function textUsageGuide(unit, links) {
+  const pageSections = [
+    { id: 'react-typography-setup', heading: 'Get started' },
+    { id: 'react-typography-preview', heading: 'Examples' },
+    { id: 'react-typography-guidelines', heading: 'Usage guidelines' },
+    { id: 'react-typography-accessibility', heading: 'Accessibility' },
+    { id: 'react-typography-integration', heading: 'React integration' },
+    { id: 'react-typography-reference', heading: 'Related components and API' },
+  ];
+  return h('div', { className: 'vf-docs-content-grid vf-docs-usage-guide-layout' },
+    h('aside', { className: 'vf-docs-toc-region' },
+      h('nav', { className: 'vf-docs-toc', 'aria-label': 'On this page' },
+        h('p', null, 'On this page'),
+        h('ol', null, ...pageSections.map(({ id, heading }) =>
+          h('li', { key: id }, h('a', { href: '#' + id }, heading)))))),
+    h('article', { className: 'vf-docs-article vf-docs-usage-guide',
+      'data-vf-docs-react-typography': unit.id },
+      h('header', { className: 'vf-docs-component-header' },
+        h('p', { className: 'vf-docs-eyebrow', 'data-vf-text': '',
+          'data-vf-text-variant': 'overline' }, 'React · Typography'),
+        h('h1', null, unit.sharedContent.title),
+        h('div', { className: 'vf-docs-lede', 'data-vf-text': '',
+          'data-vf-text-variant': 'body-lg' }, ...renderBlocks(unit.sharedContent.intro))),
+      h('section', { 'aria-labelledby': 'react-typography-setup' },
+        h('h2', { id: 'react-typography-setup' }, 'Get started'),
+        ...guideBlocks(unit.frameworkContent, 'React setup')),
+      h('section', { 'aria-labelledby': 'react-typography-preview',
+        'data-vf-docs-react-usage-gallery': unit.id },
+        h('h2', { id: 'react-typography-preview' }, 'Examples'),
+        h('p', null, 'Each preview runs checked-in React TSX. Open the source beneath an example to see how it is built.'),
+        h('nav', { className: 'vf-docs-example-links', 'aria-label': unit.title + ' examples' },
+          h('ul', null, ...unit.examples.map((example) => {
+            const exampleSlug = example.id.slice(unit.id.length + 1);
+            return h('li', { key: example.id }, h('a', {
+              href: '#react-typography-' + unit.id + '-' + exampleSlug }, example.title));
+          }))),
+        ...unit.examples.map((example) => typographyExample(unit, example, links))),
+      h('section', { 'aria-labelledby': 'react-typography-guidelines' },
+        h('h2', { id: 'react-typography-guidelines' }, 'Usage guidelines'),
+        ...guideSubsections(unit.sharedContent,
+          ['When to use', 'When not to use', 'Native baseline', 'Visual roles'],
+          'react-text-guidance')),
+      h('section', { 'aria-labelledby': 'react-typography-accessibility' },
+        h('h2', { id: 'react-typography-accessibility' }, 'Accessibility'),
+        ...guideBlocks(unit.sharedContent, 'Accessibility'),
+        h('details', { className: 'vf-docs-reference-details' },
+          h('summary', null, 'Standards and evidence mapping'),
+          accessibilityEvidence(unit.standardReferences, 'h3'))),
+      h('section', { 'aria-labelledby': 'react-typography-integration' },
+        h('h2', { id: 'react-typography-integration' }, 'React integration'),
+        ...renderBlocks(unit.frameworkContent.intro),
+        ...guideSubsections(unit.frameworkContent,
+          ['Choosing a semantic host', 'Styling and server rendering', 'Specialized typography'],
+          'react-text-integration'),
+        h('details', { className: 'vf-docs-reference-details' },
+          h('summary', null, 'Native Web equivalent'),
+          ...guideBlocks(unit.sharedContent, 'Native Web'))),
+      h('section', { 'aria-labelledby': 'react-typography-reference' },
+        h('h2', { id: 'react-typography-reference' }, 'Related components and API'),
+        h('p', null, 'Find public React props and types in the API reference. For specialized text, use Code or Kbd.'),
+        h('ul', { className: 'vf-docs-related-links' },
+          h('li', null, h('a', { 'data-vf-link': '', href: links.typography.text.api },
+            'View Text public React API')),
+          h('li', null, h('a', { 'data-vf-link': '', href: links.typography.code.guide },
+            'Code usage guide')),
+          h('li', null, h('a', { 'data-vf-link': '', href: links.typography.kbd.guide },
+            'Kbd usage guide'))))));
+}
 function typographyGuide(unit, links) {
   if (!unit?.sharedContent || !unit?.frameworkContent ||
       !unit?.examples?.length) return null;
   const id = unit.id;
+  if (id === 'text') return textUsageGuide(unit, links);
   return h('article', { className: 'vf-docs-article',
     'data-vf-docs-react-typography': id },
     h('header', { className: 'vf-docs-component-header' },
