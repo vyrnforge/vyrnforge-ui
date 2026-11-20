@@ -59,7 +59,7 @@
     align-items: center;
     display: grid;
     gap: var(--vf-space-lg);
-    grid-template-columns: repeat(auto-fit, minmax(min(100%, 22rem), 1fr));
+    grid-template-columns: max-content minmax(0, 1fr);
     /* Container em queries track enlarged root text; viewport rem media queries
        alone cannot detect a 400% text setting in browser tests. */
     container-type: inline-size;
@@ -881,6 +881,14 @@
   }
 
   @media (max-width: 64rem) {
+    .vf-docs-header-inner {
+      grid-template-columns: minmax(0, 1fr);
+    }
+
+    .vf-docs-header-tools {
+      justify-content: flex-start;
+    }
+
     .vf-docs-content-grid {
       grid-template-columns: minmax(0, 1fr);
       grid-template-areas: 'toc' 'article';
