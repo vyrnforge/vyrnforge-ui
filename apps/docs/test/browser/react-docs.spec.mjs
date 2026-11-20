@@ -371,8 +371,16 @@ test('React Text, Code and Kbd guides run checked-in JSX and link real public AP
     await expect(guide.getByRole('heading', { level: 1, name: label })).toBeVisible();
     await expect(page.getByRole('navigation', { name: 'Documentation' })
       .getByRole('link', { name: label + ' guide' })).toHaveAttribute('aria-current', 'page');
-    await expect(guide.locator('[data-vf-docs-accessibility]')).toBeVisible();
-    await expect(guide).toContainText('React setup');
+    if (id === 'text') {
+      const standards = guide.getByText('Standards and evidence mapping', { exact: true });
+      await standards.click();
+      await expect(guide.locator('[data-vf-docs-accessibility]')).toBeVisible();
+      await standards.click();
+      await expect(guide).toContainText('Get started');
+    } else {
+      await expect(guide.locator('[data-vf-docs-accessibility]')).toBeVisible();
+      await expect(guide).toContainText('React setup');
+    }
     const iframe = guide.locator('iframe[title="React ' + label + ' example"]');
     await iframe.scrollIntoViewIfNeeded();
     const frame = iframe.contentFrame();
@@ -471,6 +479,33 @@ test('React Text guide teaches every public type role with real TSX previews and
   await page.goto('/next/react/components/text/');
   await expect(page.locator('html')).toHaveAttribute('data-vf-react-hydrated', 'true');
   const guide = page.locator('[data-vf-docs-react-typography="text"]');
+  const searchWidth = await page.getByRole('searchbox', { name: 'Search React documentation' })
+    .evaluate((input) => input.getBoundingClientRect().width);
+  expect(searchWidth, 'Desktop docs search must remain readable alongside framework and theme controls')
+    .toBeGreaterThan(150);
+  expect(await guide.locator(':scope > section > h2').allTextContents()).toEqual([
+    'Get started', 'Examples', 'Usage guidelines', 'Accessibility',
+    'React integration', 'Related components and API',
+  ]);
+  const toc = page.getByRole('navigation', { name: 'On this page' });
+  await expect(toc.getByRole('link')).toHaveCount(6);
+  await expect(toc.getByRole('link', { name: 'Usage guidelines' }))
+    .toHaveAttribute('href', '#react-typography-guidelines');
+  await expect(guide.getByRole('heading', { name: 'When to use' })).toHaveCount(1);
+  await expect(guide.getByRole('heading', { name: 'When not to use' })).toHaveCount(1);
+  await expect(guide.getByRole('heading', { name: 'Shared Text semantics' })).toHaveCount(0);
+  await expect(guide.getByRole('heading', { name: 'React Text integration' })).toHaveCount(0);
+  await expect(guide.locator('header [data-vf-docs-accessibility]')).toHaveCount(0);
+  const startCode = guide.locator('section[aria-labelledby="react-typography-setup"] pre code');
+  await expect(startCode).toContainText("import { Text } from '@vyrnforge/react/text'");
+  await expect(startCode).toContainText('<Text as="h2" variant="heading-md">');
+  await expect(guide.getByText('`' + '`' + '`tsx')).toHaveCount(0);
+  await expect(guide.getByRole('heading', { name: 'Styling and server rendering' })).toBeVisible();
+  const standardDisclosure = guide.getByText('Standards and evidence mapping', { exact: true });
+  await standardDisclosure.click();
+  await expect(guide.getByRole('heading', { name: 'Accessibility evidence' })).toBeVisible();
+  await expect(guide.getByRole('link', { name: /WCAG 2\.2/ })).toHaveAttribute('href', 'https://www.w3.org/TR/WCAG22/');
+  await standardDisclosure.click();
   const gallery = guide.locator('[data-vf-docs-react-usage-gallery="text"]');
   const cards = gallery.locator('[data-vf-docs-react-typography-example]');
   await expect(cards).toHaveCount(3);
@@ -536,6 +571,9 @@ test('React Text guide teaches every public type role with real TSX previews and
   await expect(guide).toContainText('When not to use');
   await typeScale.getByText('View React TSX source').click();
   await article.getByText('View React TSX source').click();
+  // Capture the document from the beginning so sticky navigation and header
+  // appear in owner visual evidence after exercising lazy example iframes.
+  await page.evaluate(() => window.scrollTo(0, 0));
   await page.screenshot({
     path: testInfo.outputPath('react-text-usage-guide-wide.png'), fullPage: true,
   });

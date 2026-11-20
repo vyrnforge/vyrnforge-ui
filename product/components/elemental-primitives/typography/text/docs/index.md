@@ -1,37 +1,37 @@
 # Text
 
-Text is the general elemental primitive in the Typography responsibility family for applying a visual typography role without replacing authored semantics.
+Text applies VyrnForge's consistent typography styles while preserving the meaning of the HTML element that contains the content. Visual appearance and document semantics are separate choices.
 
 ## When to use
 
-Use Text when an authored piece of text needs one of VyrnForge's consistent visual roles, such as a page heading, section title, introductory paragraph, supporting caption, or overline. Choose the native element for the content's actual meaning; `variant` only chooses its appearance.
+Use Text when a heading, paragraph, label-like description, caption, or other authored text needs a deliberate visual role from the shared type scale. Choose a meaningful HTML element first, then select its visual treatment.
 
-In ordinary prose, prefer the scoped native `data-vf-prose` recipe when you want automatic document typography without wrapping every paragraph. Use explicit Text treatment for deliberate emphasis of a visual role within that content.
+For long-form prose that needs automatic document typography, prefer the scoped native `data-vf-prose` recipe. Use explicit Text styling where a particular visual role is needed.
 
 ## When not to use
 
-Do not use a large-looking `span` to fake a heading, a `div` to fake a form label, or a visual caption to replace a real `time` element. Text does not implement truncation, copying, editing, navigation, validation, focus, or keyboard interaction. Use the dedicated Code, Kbd, Link, Button, and form-label contracts for those responsibilities.
+Do not use large text to imitate a heading without a heading element, or styled text to replace a real form label. Text does not handle editing, navigation, validation, copying, focus, or keyboard interaction. Use Code and Kbd for their specialized meanings, and the relevant Link, Button, or form-label contract for interactive content.
 
 ## Native baseline
 
-Choose the correct native textual element first, then opt it into VyrnForge typography. A heading remains a heading, a paragraph remains a paragraph, and visual role names never create document semantics.
+The native element supplies meaning. A heading stays a heading, a paragraph stays a paragraph, and a visual role never changes the document outline.
 
-Approved Text hosts include `span`, `p`, `div`, `h1`–`h6`, `blockquote`, `q`, `cite`, `strong`, `em`, `small`, `mark`, `abbr`, `sub`, `sup`, `del`, `ins`, `time`, and `figcaption`. Code and Kbd remain specialized Typography members rather than Text hosts.
+Supported Text hosts are `span`, `p`, `div`, `h1`–`h6`, `blockquote`, `q`, `cite`, `strong`, `em`, `small`, `mark`, `abbr`, `sub`, `sup`, `del`, `ins`, `time`, and `figcaption`. Use Code and Kbd for code and keyboard notation.
 
 ## Visual roles
 
-The built-in roles are display-lg/md/sm, heading-lg/md/sm/xs, title-lg/md/sm, body-lg/md/sm, label-lg/md/sm, caption, and overline. The default role is body-md. These names describe presentation only, not heading hierarchy or document structure.
+The 18 built-in roles are display-lg/md/sm, heading-lg/md/sm/xs, title-lg/md/sm, body-lg/md/sm, label-lg/md/sm, caption, and overline. The default is body-md.
 
-Use display roles for intentionally prominent short titles; heading and title roles for text hierarchy; body roles for long-form and supporting content; label roles for compact UI text; and caption/overline for metadata and small contextual identifiers. The Text scale is fluid and token-driven where the role requires it; avoid overriding font sizes per usage instance.
+Use display roles for prominent short titles, heading and title roles for hierarchy, body roles for readable copy, label roles for compact interface text, and caption/overline for supporting information. The token-driven type scale handles responsive typography without individual font-size overrides.
 
-The visual role gallery is illustrative. Always select the semantic host independently: a paragraph with `variant="heading-lg"` remains a paragraph, while `as="h2" variant="title-md"` remains a second-level heading.
+A `p` with a heading-like visual role is still a paragraph. A genuine `h2` styled as a title remains a second-level heading.
 
 ## Native Web
 
-Load `@vyrnforge/web/styles/text.css`, apply `data-vf-text`, and set `data-vf-text-variant` to the requested visual role. The same element may also participate in another VyrnForge contract when that owner retains its semantic and behavioral responsibility.
+Load `@vyrnforge/web/styles/text.css`, apply `data-vf-text`, and set `data-vf-text-variant` for the desired visual role. Native elements retain their own semantic responsibility.
 
-Scoped `data-vf-prose` provides automatic native document typography. Explicit Text treatment remains the opt-in override when a specific visual role is required.
+The scoped `data-vf-prose` recipe provides automatic document typography. Explicit Text styling remains available when a specific visual role is required.
 
 ## Accessibility
 
-Text adds no role, focus behavior, keyboard interaction, ARIA state, or accessible-name behavior. Consumers remain responsible for choosing semantic HTML appropriate to the content. Typography must not be used to fake headings, labels, emphasis, or other semantics.
+Text adds no ARIA role, focus behavior, keyboard interaction, or accessible-name behavior. Choose the correct HTML element and ensure typography does not stand in for headings, labels, or meaningful emphasis. The component does not make nonsemantic markup semantic.

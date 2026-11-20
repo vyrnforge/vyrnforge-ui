@@ -1,6 +1,32 @@
 import { describe, expect, it } from 'vitest';
 import { transform } from 'esbuild';
-import { compileFrameworkDocumentation } from './framework-documentation.mjs';
+import { compileFrameworkDocumentation, parseMarkdownDocument } from './framework-documentation.mjs';
+
+describe('Portable Markdown code examples', () => {
+  it('compiles fenced TSX and import blocks as source, not visible backtick paragraphs', () => {
+    const parsed = parseMarkdownDocument([
+      '# React example',
+      '',
+      'A short introduction.',
+      '',
+      '## Setup',
+      '',
+      '\x60\x60\x60tsx',
+      "import { Text } from '@vyrnforge/react/text';",
+      '<Text as="h2" variant="heading-md">Heading</Text>',
+      '\x60\x60\x60',
+      '',
+      'Use the semantic host.',
+    ].join('\n'));
+    expect(parsed.intro).toEqual([{ type: 'paragraph', text: 'A short introduction.' }]);
+    expect(parsed.sections[0].blocks).toEqual([
+      { type: 'code', language: 'tsx', text: "import { Text } from '@vyrnforge/react/text';\n<Text as=\"h2\" variant=\"heading-md\">Heading</Text>" },
+      { type: 'paragraph', text: 'Use the semantic host.' },
+    ]);
+    expect(() => parseMarkdownDocument('# Example\n\n\x60\x60\x60tsx\nunterminated'))
+      .toThrow('Unclosed fenced code block');
+  });
+});
 
 describe('React documentation compiler preflight', () => {
   it('uses actual public React package exports and product-owned Button content', () => {
@@ -213,6 +239,15 @@ describe('React Text consumer-first guide examples', () => {
     ]);
     expect(text.sharedContent.sections.map((section) => section.heading)).toContain('When to use');
     expect(text.sharedContent.sections.map((section) => section.heading)).toContain('When not to use');
+    expect(text.frameworkContent.sections.map((section) => section.heading)).toEqual([
+      'React setup', 'Choosing a semantic host', 'Styling and server rendering', 'Specialized typography',
+    ]);
+    expect(text.frameworkContent.sections.find((section) => section.heading === 'React setup')?.blocks
+      .some((block) => block.type === 'code' && block.language === 'tsx' &&
+        block.text.includes('<Text as="h2" variant="heading-md">'))).toBe(true);
+    expect(text.frameworkContent.sections.find((section) => section.heading === 'Styling and server rendering')?.blocks
+      .some((block) => block.type === 'code' && block.language === 'ts' &&
+        block.text.includes("import '@vyrnforge/web/styles.css';"))).toBe(true);
     for (const example of examples) {
       expect(example.sourcePath.endsWith('/react.tsx')).toBe(true);
       expect(example.source).toContain("from '@vyrnforge/react/text'");

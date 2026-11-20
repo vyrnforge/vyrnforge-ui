@@ -1,33 +1,36 @@
 # React Text
 
-React uses the same framework-neutral typography roles and canonical Web stylesheet as Native Web. `Text` is a thin typed native-host authoring convenience; it is not a React-specific styling system.
+React Text uses the same visual roles and Web styling as other VyrnForge surfaces. Its `as` prop selects the native element and `variant` controls presentation.
 
 ## React setup
 
-In a CSS-aware browser build that honors the package's `browser` export condition (validated with esbuild), importing `@vyrnforge/react/text` automatically includes **the canonical Native Web Text CSS**. No per-component stylesheet import is required. The root `@vyrnforge/react` entry selects the full Web aggregate, whereas granular component imports select just their component's CSS and declared styling dependencies.
+Import Text from its public React entrypoint. Choose the HTML element for meaning and the variant for appearance.
 
-For plain Node/SSR imports, the JS entry stays CSS-free. The consuming SSR framework must include the stylesheet emitted by its client build in the HTML; SSR alone does not install browser CSS. For bundlers that do not resolve `browser` conditions or cannot extract CSS, the supported fallback remains one explicit app-entrypoint import:
+```tsx
+import { Text } from '@vyrnforge/react/text';
+
+<Text as="h2" variant="heading-md">Account settings</Text>
+<Text as="p">Your settings apply to this workspace.</Text>
+```
+
+## Choosing a semantic host
+
+Use `as="h2"` for a real second-level heading and `as="p"` for a paragraph. For example, `<Text as="h2" variant="title-lg">` is a second-level heading with title styling. A `span` that looks like a heading does not enter the heading outline.
+
+The examples show the complete type scale and a semantic article using the public Flow primitive. Flow handles layout spacing; Text handles visual typography.
+
+## Styling and server rendering
+
+In supported CSS-aware browser builds that honor the package's `browser` export condition (verified with esbuild), importing `@vyrnforge/react/text` automatically includes the canonical Web Text CSS. You do not need a separate CSS import for each component. The aggregate `@vyrnforge/react` entry selects the full Web stylesheet; granular imports select the relevant component CSS and its styling dependencies.
+
+Node/SSR imports do not load CSS. Server-rendered applications must deliver the stylesheet extracted by the client build. If a bundler does not honor browser conditions or extract CSS, load the supported fallback once in the application's entrypoint:
 
 ```ts
 import '@vyrnforge/web/styles.css';
 ```
 
-The optional reset is never auto-loaded. This is not a React styling fork.
-
-```tsx
-import { Text } from '@vyrnforge/react/text';
-<Text as="h2" variant="heading-md">Account settings</Text>
-<Text as="p">Your settings apply to this workspace.</Text>
-```
-
-Use `as` for the actual document semantics. `variant` only selects a visual role and defaults to `body-md`. A `span` styled like a heading does not become a heading.
-
-## Choosing a semantic host
-
-React's `as` selects the native host and `variant` selects the canonical appearance. For example, use `<Text as="h2" variant="title-lg">` for a genuine second-level heading that visually resembles a title, and `<Text as="p" variant="body-md">` for a paragraph. The visual Text variant never changes the heading outline.
-
-Examples below are executable from checked-in React sources. They demonstrate the full built-in type scale and a semantic article composed with the public Flow primitive; Flow owns spacing, not font styling.
+The optional reset is not loaded automatically. Text does not introduce a React-only theme or styling layer.
 
 ## Specialized typography
 
-Use `@vyrnforge/react/code` and `@vyrnforge/react/kbd` for code and keyboard-input notation. Their native elements and CSS hooks remain separate; neither becomes another Text host. Code and Kbd automatically import their canonical Web styles through the same browser condition. The Code/Kbd subpaths also include Text styles for the optional shared typography variant. No provider or React-only theme is required.
+Use `@vyrnforge/react/code` for inline or block code and `@vyrnforge/react/kbd` for keyboard notation. These components use native semantics and the canonical Web styles; neither is an alternative Text host. Their browser entrypoints also include the Text styles needed for the optional shared typography variant.

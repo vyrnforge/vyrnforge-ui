@@ -59,6 +59,7 @@ export function parseMarkdownDocument(source) {
   let currentBlocks = intro;
   const paragraph = [];
   let list = null;
+  let codeFence = null;
 
   const flushList = () => {
     if (!list) return;
@@ -72,6 +73,21 @@ export function parseMarkdownDocument(source) {
 
   for (const rawLine of lines) {
     const line = rawLine.trim();
+    const fence = /^\x60\x60\x60([a-zA-Z0-9+#-]*)\s*$/.exec(line);
+    if (codeFence) {
+      if (fence) {
+        currentBlocks.push({ type: 'code', language: codeFence.language, text: codeFence.lines.join('\n') });
+        codeFence = null;
+      } else {
+        codeFence.lines.push(rawLine);
+      }
+      continue;
+    }
+    if (fence) {
+      flush();
+      codeFence = { language: fence[1], lines: [] };
+      continue;
+    }
     const titleMatch = /^#\s+(.+)$/.exec(line);
     if (titleMatch) {
       flush();
@@ -100,6 +116,7 @@ export function parseMarkdownDocument(source) {
     flushList();
     paragraph.push(line);
   }
+  if (codeFence) throw new Error('Unclosed fenced code block in documentation');
   flush();
 
   if (!title) throw new Error('Documentation content must start with a level-one Markdown heading');
