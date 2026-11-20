@@ -8,7 +8,7 @@ Flow and AutoGrid are lightweight React authoring components over the canonical 
 import { Flow, AutoGrid } from '@vyrnforge/react/layout';
 ```
 
-The first checked-in example demonstrates default Flow spacing with a labeled form control. Follow React overview for shared stylesheet and SSR/hydration setup; no layout provider is required.
+The first checked-in example demonstrates default Flow spacing with a labeled form control. No layout provider is required.
 
 ## Semantic layout and accessibility
 
