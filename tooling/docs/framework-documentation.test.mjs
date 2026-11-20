@@ -198,7 +198,7 @@ describe('React Typography uses Native Web contracts for Text, Code and Kbd', ()
     for (const id of ['text', 'code', 'kbd']) {
       const component = react.componentCatalog.find((entry) => entry.id === id);
       expect(component.frameworkContent.sections.find((section) => section.heading === 'React setup')).toBeDefined();
-      expect(component.frameworkContent.sections.some((section) => section.body?.includes("@vyrnforge/web/styles.css")) || component.frameworkContent.title).toBeTruthy();
+      expect(JSON.stringify(component.frameworkContent)).toContain('@vyrnforge/web/styles.css');
     }
   });
 });
