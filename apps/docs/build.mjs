@@ -124,6 +124,7 @@ function renderBlocks(blocks = []) {
   return blocks.map((block) => {
     if (block.type === 'paragraph') return `<p>${renderInline(block.text)}</p>`;
     if (block.type === 'list') return `<ul>${block.items.map((item) => `<li>${renderInline(item)}</li>`).join('')}</ul>`;
+    if (block.type === 'code') return `<pre data-vf-code-block tabindex="0"><code>${escapeHtml(block.text)}</code></pre>`;
     throw new Error(`Unsupported documentation block type: ${block.type}`);
   }).join('\n');
 }
