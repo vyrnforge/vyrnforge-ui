@@ -129,13 +129,20 @@ function useNavigation() {
   }, [mobile, expanded]);
   return { mobile, expanded, setExpanded, navRef, menuRef, mainRef, visible: !mobile || expanded };
 }
-function navigation(view, links) {
+function navigation(view, links, topic) {
+  const selected = topic ? view + ':' + topic : view;
   const groups = [
     { label: 'React', items: [{ id: 'home', title: 'React overview', href: links.home }] },
     { label: 'Components', items: [
       { id: 'guide', title: 'Button guide', href: links.guide },
       { id: 'api', title: 'Button API', href: links.api },
     ] },
+    { label: 'Typography', items: ['text', 'code', 'kbd'].flatMap((id) => [
+      { id: 'typography:' + id, title: id === 'kbd' ? 'Kbd guide' : id[0].toUpperCase() + id.slice(1) + ' guide',
+        href: links.typography[id].guide },
+      { id: 'typography-api:' + id, title: id === 'kbd' ? 'Kbd API' : id[0].toUpperCase() + id.slice(1) + ' API',
+        href: links.typography[id].api },
+    ]) },
     { label: 'Layout & Structure', items: [
       { id: 'layout', title: 'Layout guide', href: links.layout },
       { id: 'layout-api', title: 'Layout API', href: links.layoutApi },
@@ -146,7 +153,7 @@ function navigation(view, links) {
       h(SideNavGroupLabel, null, group.label),
       h(SideNavList, null, ...group.items.map((entry) =>
         h(SideNavItem, { key: entry.id },
-          h(SideNavLink, { current: entry.id === view, href: entry.href }, entry.title)))))));
+          h(SideNavLink, { current: entry.id === selected, href: entry.href }, entry.title)))))));
 }
 function example(button, links) {
   const basic = button.examples.find((entry) => entry.id === 'button/basic');
@@ -225,7 +232,68 @@ function layoutGuide(layout, links) {
         h('p', null, h('code', { 'data-vf-code': '' }, layout.cssRecipeStyle)),
         h('p', null, h('a', { 'data-vf-link': '', href: links.layoutApi }, 'View Flow and AutoGrid props')))));
 }
-function body(view, links, button, layout, message, setMessage, requestedTopic) {
+function typographyGuide(unit, links) {
+  if (!unit?.sharedContent || !unit?.frameworkContent || !unit.example) return null;
+  const id = unit.id;
+  return h('article', { className: 'vf-docs-article',
+    'data-vf-docs-react-typography': id },
+    h('header', { className: 'vf-docs-component-header' },
+      h('p', { className: 'vf-docs-eyebrow', 'data-vf-text': '',
+        'data-vf-text-variant': 'overline' }, 'React · Typography'),
+      h('h1', null, unit.sharedContent.title),
+      h('div', { className: 'vf-docs-lede', 'data-vf-text': '',
+        'data-vf-text-variant': 'body-lg' }, ...renderBlocks(unit.sharedContent.intro)),
+      accessibilityEvidence(unit.standardReferences)),
+    h('section', { 'aria-labelledby': 'react-typography-setup' },
+      h('h2', { id: 'react-typography-setup' }, 'React setup'),
+      h('p', null, 'Import the public React component; CSS-aware browser builds use the canonical Web styling automatically. Node/SSR apps must deliver their client-extracted CSS.'),
+      h('pre', { 'data-vf-code-block': '', tabIndex: 0 },
+        h('code', null, unit.id === 'code'
+          ? "import { Code, CodeBlock } from '@vyrnforge/react/code';"
+          : unit.id === 'kbd'
+            ? "import { Kbd } from '@vyrnforge/react/kbd';"
+            : "import { Text } from '@vyrnforge/react/text';"))),
+    h('section', { 'aria-labelledby': 'react-typography-preview' },
+      h('h2', { id: 'react-typography-preview' }, 'Live React example'),
+      h('p', null, 'This sandbox executes the checked-in product-owned React TSX example against public package entrypoints.'),
+      h('iframe', { title: 'React ' + unit.title + ' example',
+        className: 'vf-docs-react-example-frame',
+        src: links.typography[id].example, sandbox: 'allow-scripts', loading: 'lazy' }),
+      h('details', { className: 'vf-docs-source-disclosure' },
+        h('summary', null, 'View React TSX source'),
+        h('pre', { 'data-vf-code-block': '', tabIndex: 0 },
+          h('code', null, unit.example.source)))),
+    renderSections(unit.sharedContent, 'Shared ' + unit.title + ' semantics'),
+    renderSections(unit.frameworkContent, 'React ' + unit.title + ' integration'),
+    h('section', { 'aria-labelledby': 'react-typography-reference' },
+      h('h2', { id: 'react-typography-reference' }, 'Reference'),
+      h('a', { href: links.typography[id].api, 'data-vf-link': '' },
+        'View ' + unit.title + ' public React API')));
+}
+function typographyApi(unit, links) {
+  if (!unit?.publicSource || !unit?.publicEntrypoints?.length) return null;
+  return h('article', { className: 'vf-docs-article',
+    'data-vf-docs-react-api': unit.id },
+    h('header', { className: 'vf-docs-component-header' },
+      h('h1', null, unit.title + ' API'),
+      h('p', { className: 'vf-docs-lede' },
+        'Public React entrypoints and real product-owned TypeScript source, not an invented prop table.'),
+      accessibilityEvidence(unit.standardReferences)),
+    h('section', { 'aria-labelledby': 'react-typography-api-entrypoints' },
+      h('h2', { id: 'react-typography-api-entrypoints' }, 'Public entrypoint'),
+      h('ul', null, ...unit.publicEntrypoints.map((entry) =>
+        h('li', { key: entry }, h('code', { 'data-vf-code': '' }, entry)))),
+      h('p', null, 'In supported CSS-aware browser bundles, canonical Web CSS is automatically delivered with the component. Direct server imports remain CSS-free.')),
+    h('section', { 'aria-labelledby': 'react-typography-api-types' },
+      h('h2', { id: 'react-typography-api-types' }, 'Source-backed React types and exports'),
+      h('p', null, 'The following source comes from the component-owned React public implementation.'),
+      h('pre', { 'data-vf-code-block': '', tabIndex: 0 },
+        h('code', null, unit.publicSource))),
+    renderSections(unit.frameworkContent, 'React ' + unit.title + ' integration'),
+    h('a', { href: links.typography[unit.id].guide, 'data-vf-link': '' },
+      'Open ' + unit.title + ' React guide and live example'));
+}
+function body(view, links, button, layout, typography, message, setMessage, requestedTopic) {
   if (view === 'unavailable') {
     return h('article', { className: 'vf-docs-article', 'data-vf-docs-react-unavailable': '' },
       h('header', { className: 'vf-docs-component-header' },
@@ -242,9 +310,9 @@ function body(view, links, button, layout, message, setMessage, requestedTopic) 
       h('header', { className: 'vf-docs-component-header' },
         h('h1', null, 'VyrnForge React'),
         h('p', { className: 'vf-docs-lede', 'data-vf-text': '', 'data-vf-text-variant': 'body-lg' },
-          'React guides and runnable examples for Button, Flow and AutoGrid. Their shared design language and styling come from the Web foundation.')),
+          'React guides and runnable examples for Button, Flow, AutoGrid, Text, Code and Kbd. Their shared design language and styling come from the Web foundation.')),
       h('section', null, h('h2', null, 'Getting started'),
-        h('p', null, 'Install the React port and load the shared Web tokens, foundation and Button stylesheet in your application.'),
+        h('p', null, 'Import React components from their public entrypoints. Supported CSS-aware browser builds automatically include canonical Web component styles; server-rendered apps must also deliver extracted client CSS.'),
         h('pre', { 'data-vf-code-block': '', tabIndex: 0 },
           h('code', null, "import { Button } from '@vyrnforge/react/button';")),
         h('p', null, 'React owns component state, rendering, event handlers, and hydration; VyrnForge supplies shared semantics and presentation.')),
@@ -253,8 +321,16 @@ function body(view, links, button, layout, message, setMessage, requestedTopic) 
           h('li', null, h('a', { 'data-vf-link': '', href: links.guide }, 'React Button guide')),
           h('li', null, h('a', { 'data-vf-link': '', href: links.api }, 'React Button API')),
           h('li', null, h('a', { 'data-vf-link': '', href: links.layout }, 'React Layout guide')),
-          h('li', null, h('a', { 'data-vf-link': '', href: links.layoutApi }, 'React Layout API')))));
+          h('li', null, h('a', { 'data-vf-link': '', href: links.layoutApi }, 'React Layout API')),
+          ...['text', 'code', 'kbd'].flatMap((id) => [
+            h('li', { key: id + '-guide' }, h('a', { 'data-vf-link': '',
+              href: links.typography[id].guide }, 'React ' + id + ' guide')),
+            h('li', { key: id + '-api' }, h('a', { 'data-vf-link': '',
+              href: links.typography[id].api }, 'React ' + id + ' API')),
+          ]))));
   }
+  if (view === 'typography') return typographyGuide(typography, links);
+  if (view === 'typography-api') return typographyApi(typography, links);
   if (view === 'layout') return layoutGuide(layout, links);
   if (view === 'layout-api') {
     return h('article', { className: 'vf-docs-article', 'data-vf-docs-react-api': 'layout' },
@@ -317,7 +393,7 @@ function body(view, links, button, layout, message, setMessage, requestedTopic) 
       h('h2', { id: 'react-reference' }, 'Reference'),
       h('a', { 'data-vf-link': '', href: links.api }, 'Button API reference')));
 }
-export function ReactReferencePage({ view, links, button, layout, requestedTopic }) {
+export function ReactReferencePage({ view, links, button, layout, typography, requestedTopic }) {
   const nav = useNavigation();
   const { theme, change } = useTheme();
   const [search, setSearch] = useState('');
@@ -329,6 +405,13 @@ export function ReactReferencePage({ view, links, button, layout, requestedTopic
     { title: 'Button API', href: links.api, keywords: 'button props reference public' },
     { title: 'Layout guide', href: links.layout, keywords: 'flow autogrid grid responsive spacing layout wrap inline block JSX' },
     { title: 'Layout API', href: links.layoutApi, keywords: 'flowprops autogridprops as minitemsize ref gap' },
+    ...['text', 'code', 'kbd'].flatMap((id) => [
+      { title: (id === 'kbd' ? 'Kbd' : id[0].toUpperCase() + id.slice(1)) + ' guide',
+        href: links.typography[id].guide,
+        keywords: 'react typography ' + id + ' live JSX preview example semantics' },
+      { title: (id === 'kbd' ? 'Kbd' : id[0].toUpperCase() + id.slice(1)) + ' API',
+        href: links.typography[id].api, keywords: 'react ' + id + ' props types public entrypoint' },
+    ]),
   ];
   const matches = search.trim() ? pages.filter((item) =>
     (item.title + ' ' + item.keywords).toLowerCase().includes(search.toLowerCase().trim())) : [];
@@ -393,13 +476,13 @@ export function ReactReferencePage({ view, links, button, layout, requestedTopic
     h(AppShellBody, { className: 'vf-docs-app-body' },
       h(AppShellNavigation, { id: 'vf-docs-navigation', ref: nav.navRef,
         hidden: !nav.visible, className: 'vf-docs-navigation-region' },
-        h('div', { className: 'vf-docs-navigation-scroll' }, navigation(view, links))),
+        h('div', { className: 'vf-docs-navigation-scroll' }, navigation(view, links, typography?.id))),
       h(AppShellMain, { id: 'main', ref: nav.mainRef, tabIndex: -1, className: 'vf-docs-main' },
         h('nav', { className: 'vf-docs-breadcrumbs', 'aria-label': 'Documentation framework' },
           h('a', { 'data-vf-link': '', href: links.native }, 'Native Web'),
           h('span', { 'aria-hidden': 'true' }, ' / '),
           h('span', { 'aria-current': 'page' }, 'React')),
-        body(view, links, button, layout, message, setMessage, requestedTopic))),
+        body(view, links, button, layout, typography, message, setMessage, requestedTopic))),
     h(AppShellFooter, { className: 'vf-docs-footer' },
       h('span', null, 'VyrnForge React documentation'),
       h('span', null, links.channel + ' channel'))));
