@@ -475,6 +475,9 @@ test('React Text guide teaches every public type role with real TSX previews and
   const cards = gallery.locator('[data-vf-docs-react-typography-example]');
   await expect(cards).toHaveCount(3);
   await expect(gallery.getByRole('navigation', { name: 'Text examples' }).getByRole('link')).toHaveCount(3);
+  await cards.first().locator('iframe').scrollIntoViewIfNeeded();
+  await expect(cards.first().locator('iframe').contentFrame()
+    .getByRole('heading', { name: 'Typography foundation', level: 2 })).toBeVisible();
   const typeScale = cards.filter({ has: page.locator('[data-vf-docs-example-id="text/type-scale"]') });
   const scale = typeScale.locator('iframe').contentFrame();
   const expected = [
@@ -486,6 +489,10 @@ test('React Text guide teaches every public type role with real TSX previews and
   ];
   await typeScale.locator('iframe').scrollIntoViewIfNeeded();
   await expect(scale.locator('[data-vf-docs-specimen]')).toHaveCount(expected.length);
+  const escapedHtml = await scale.locator('body').evaluate((body) =>
+    [...body.childNodes].filter((node) => node.nodeType === 3)
+      .map((node) => node.textContent).join(''));
+  expect(escapedHtml).not.toContain('\\n');
   for (const variant of expected) {
     const specimen = scale.locator('[data-vf-docs-specimen="' + variant + '"]');
     await expect(specimen.locator('p[data-vf-text-variant="' + variant + '"]')).toHaveCount(1);
