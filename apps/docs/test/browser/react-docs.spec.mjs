@@ -86,7 +86,7 @@ test('React API reference renders public source-derived types and inline semanti
   await expect(types).toContainText('variant?: ButtonVariant');
   await expect(types).toContainText('size?: ButtonSize');
   await expect(types).toContainText('loading?: boolean');
-  await expect(page.locator('[data-vf-docs-react-api] section[aria-label="React integration"] code[data-vf-code]').first()).toBeVisible();
+  await expect(page.locator('[data-vf-docs-react-api] section[aria-label="React integration"]')).toHaveCount(0);
 });
 
 test('React URL context and framework-scoped search/theme work without inventing unsupported routes', async ({ page }) => {
@@ -477,7 +477,7 @@ test('React Typography remains readable at 320px, 200 percent text, RTL and forc
 test('Button, Layout, Code and Kbd use one task-first guide hierarchy and separate API navigation', async ({ page }) => {
   const expected = [
     'Get started', 'Examples', 'Usage guidelines',
-    'Accessibility', 'React integration', 'Related components and API',
+    'Accessibility', 'Related components and API',
   ];
   for (const id of ['button', 'layout', 'code', 'kbd']) {
     await page.goto('/next/react/components/' + id + '/');
@@ -488,7 +488,7 @@ test('Button, Layout, Code and Kbd use one task-first guide hierarchy and separa
     await expect(guide).toHaveCount(1);
     expect(await guide.locator(':scope > section > h2').allTextContents()).toEqual(expected);
     const toc = page.getByRole('navigation', { name: 'On this page' });
-    await expect(toc.getByRole('link')).toHaveCount(6);
+    await expect(toc.getByRole('link')).toHaveCount(5);
     await expect(toc.getByRole('link', { name: 'Examples' })).toBeVisible();
     await expect(guide.locator('header [data-vf-docs-accessibility]')).toHaveCount(0);
     await expect(guide.getByRole('heading', { name: /^Shared .* semantics$/ })).toHaveCount(0);
@@ -501,6 +501,30 @@ test('Button, Layout, Code and Kbd use one task-first guide hierarchy and separa
     // Components, Typography or Layout & Structure navigation groups.
     await expect(nav.getByRole('link', { name: 'Button API' })).toBeVisible();
     await expect(nav.getByRole('link', { name: 'Layout API' })).toBeVisible();
+  }
+});
+
+test('React setup has one shared home and component APIs do not reprint integration guides', async ({ page }) => {
+  await page.goto('/next/react/');
+  await expect(page.getByRole('heading', { name: 'Styling, SSR and hydration' })).toBeVisible();
+  await expect(page.getByRole('heading', { name: 'React state and native semantics' })).toBeVisible();
+  await expect(page.locator('main pre code')).toContainText("import '@vyrnforge/web/styles.css';");
+
+  for (const id of ['button', 'layout', 'text', 'code', 'kbd']) {
+    await page.goto('/next/react/components/' + id + '/');
+    const selector = id === 'button' ? '[data-vf-docs-react-component="button"]'
+      : id === 'layout' ? '[data-vf-docs-react-layout]'
+      : '[data-vf-docs-react-typography="' + id + '"]';
+    const guide = page.locator(selector);
+    await expect(guide.getByRole('heading', { name: 'React integration' })).toHaveCount(0);
+    await expect(guide.getByRole('heading', { name: 'Styling and server rendering' })).toHaveCount(0);
+    await expect(guide.getByRole('link', { name: 'React overview' })).toHaveAttribute(
+      'href', /\\/next\\/react\\/$|(?:\\.\\.\\/)+$/);
+    await page.goto('/next/react/api/components/' + id + '/');
+    const api = page.locator('[data-vf-docs-react-api="' + id + '"]');
+    await expect(api).toBeVisible();
+    await expect(api.locator('section[aria-label*="integration"]')).toHaveCount(0);
+    await expect(api.getByRole('heading', { name: 'React rendering boundary' })).toHaveCount(0);
   }
 });
 
@@ -565,10 +589,10 @@ test('React Text guide teaches every public type role with real TSX previews and
     .toBeGreaterThan(150);
   expect(await guide.locator(':scope > section > h2').allTextContents()).toEqual([
     'Get started', 'Examples', 'Usage guidelines', 'Accessibility',
-    'React integration', 'Related components and API',
+    'Related components and API',
   ]);
   const toc = page.getByRole('navigation', { name: 'On this page' });
-  await expect(toc.getByRole('link')).toHaveCount(6);
+  await expect(toc.getByRole('link')).toHaveCount(5);
   await expect(toc.getByRole('link', { name: 'Usage guidelines' }))
     .toHaveAttribute('href', '#react-typography-guidelines');
   await expect(guide.getByRole('heading', { name: 'When to use' })).toHaveCount(1);
@@ -580,7 +604,7 @@ test('React Text guide teaches every public type role with real TSX previews and
   await expect(startCode).toContainText("import { Text } from '@vyrnforge/react/text'");
   await expect(startCode).toContainText('<Text as="h2" variant="heading-md">');
   await expect(guide.getByText('`' + '`' + '`tsx')).toHaveCount(0);
-  await expect(guide.getByRole('heading', { name: 'Styling and server rendering' })).toBeVisible();
+  await expect(guide.getByRole('heading', { name: 'Choosing a semantic host' })).toBeVisible();
   const standardDisclosure = guide.getByText('Standards and evidence mapping', { exact: true });
   await standardDisclosure.click();
   await expect(guide.getByRole('heading', { name: 'Accessibility evidence' })).toBeVisible();
