@@ -235,7 +235,18 @@ test('React Layout lives under Layout & Structure and runs checked-in React JSX 
   const nav = page.getByRole('navigation', { name: 'Documentation' });
   await expect(nav.getByText('Layout & Structure', { exact: true })).toBeVisible();
   await expect(nav.getByRole('link', { name: 'Layout guide' })).toHaveAttribute('aria-current', 'page');
-  await expect(page.locator('[data-vf-docs-react-layout] [data-vf-docs-accessibility]')).toContainText('Accessibility review required');
+  const accessibility = page.locator('[data-vf-docs-react-layout] [data-vf-docs-accessibility]');
+  await expect(accessibility).toContainText('Accessibility review required');
+  await accessibility.locator('summary').click();
+  const mappedCriteria = accessibility.getByRole('list', { name: 'Mapped WCAG criteria' });
+  await expect(mappedCriteria.getByRole('link')).toHaveCount(6);
+  for (const [id, label, slug] of [
+    ['1.3.2', 'Meaningful Sequence', 'meaningful-sequence'],
+    ['1.4.10', 'Reflow', 'reflow'],
+  ]) {
+    await expect(mappedCriteria.getByRole('link', { name: `${id} ${label}`, exact: true }))
+      .toHaveAttribute('href', `https://www.w3.org/WAI/WCAG22/Understanding/${slug}`);
+  }
   await expect(page.locator('[data-vf-docs-react-layout]')).toContainText('Import the real React Flow and AutoGrid components');
 
   for (const id of ['basic', 'flow-block', 'flow-inline', 'flow-wrap', 'auto-grid', 'semantic-groups']) {
