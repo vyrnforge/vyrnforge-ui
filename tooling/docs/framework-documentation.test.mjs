@@ -1,6 +1,32 @@
 import { describe, expect, it } from 'vitest';
 import { transform } from 'esbuild';
-import { compileFrameworkDocumentation } from './framework-documentation.mjs';
+import { compileFrameworkDocumentation, parseMarkdownDocument } from './framework-documentation.mjs';
+
+describe('Portable Markdown code examples', () => {
+  it('compiles fenced TSX and import blocks as source, not visible backtick paragraphs', () => {
+    const parsed = parseMarkdownDocument([
+      '# React example',
+      '',
+      'A short introduction.',
+      '',
+      '## Setup',
+      '',
+      '\x60\x60\x60tsx',
+      "import { Text } from '@vyrnforge/react/text';",
+      '<Text as="h2" variant="heading-md">Heading</Text>',
+      '\x60\x60\x60',
+      '',
+      'Use the semantic host.',
+    ].join('\n'));
+    expect(parsed.intro).toEqual([{ type: 'paragraph', text: 'A short introduction.' }]);
+    expect(parsed.sections[0].blocks).toEqual([
+      { type: 'code', language: 'tsx', text: "import { Text } from '@vyrnforge/react/text';\n<Text as=\"h2\" variant=\"heading-md\">Heading</Text>" },
+      { type: 'paragraph', text: 'Use the semantic host.' },
+    ]);
+    expect(() => parseMarkdownDocument('# Example\n\n\x60\x60\x60tsx\nunterminated'))
+      .toThrow('Unclosed fenced code block');
+  });
+});
 
 describe('React documentation compiler preflight', () => {
   it('uses actual public React package exports and product-owned Button content', () => {
