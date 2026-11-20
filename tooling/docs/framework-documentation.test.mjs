@@ -141,3 +141,26 @@ describe('Layout example ergonomics', () => {
     }
   });
 });
+
+describe('Layout accessibility reference links', () => {
+  it('maps every Layout WCAG 2.2 criterion to a named official reference for Native and React', () => {
+    const expected = [
+      ['1.3.1', 'Info and Relationships', 'info-and-relationships'],
+      ['1.3.2', 'Meaningful Sequence', 'meaningful-sequence'],
+      ['1.4.10', 'Reflow', 'reflow'],
+      ['2.1.1', 'Keyboard', 'keyboard'],
+      ['2.4.3', 'Focus Order', 'focus-order'],
+      ['2.4.7', 'Focus Visible', 'focus-visible'],
+    ].map(([id, label, slug]) => ({
+      id,
+      label,
+      url: `https://www.w3.org/WAI/WCAG22/Understanding/${slug}`,
+    }));
+    for (const framework of ['native-web', 'react']) {
+      const layout = compileFrameworkDocumentation(framework).componentCatalog
+        .find((component) => component.id === 'layout');
+      expect(layout.standardReferences.criteria).toEqual(expected);
+      expect(layout.standardReferences.reviewStatus).toBe('review-required');
+    }
+  });
+});
