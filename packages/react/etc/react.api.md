@@ -274,7 +274,7 @@ export interface CheckboxProps extends Omit<InputHTMLAttributes<HTMLInputElement
 export const Code: ForwardRefExoticComponent<CodeProps & RefAttributes<HTMLElement>>;
 
 // @public (undocumented)
-export const CodeBlock: ForwardRefExoticComponent<Omit<DetailedHTMLProps<HTMLAttributes<HTMLPreElement>, HTMLPreElement>, "ref"> & RefAttributes<HTMLElement>>;
+export const CodeBlock: ForwardRefExoticComponent<Omit<DetailedHTMLProps<HTMLAttributes<HTMLPreElement>, HTMLPreElement>, "ref"> & RefAttributes<HTMLPreElement>>;
 
 // @public
 export type CodeBlockProps = ComponentPropsWithoutRef<'pre'>;
