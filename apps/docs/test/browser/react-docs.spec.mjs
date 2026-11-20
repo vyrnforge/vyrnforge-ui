@@ -504,6 +504,36 @@ test('Button, Layout, Code and Kbd use one task-first guide hierarchy and separa
   }
 });
 
+test('Code and Kbd task-first guides preserve reflow, RTL, forced colors and baseline accessibility', async ({ page }, testInfo) => {
+  await page.setViewportSize({ width: 320, height: 720 });
+  for (const id of ['code', 'kbd']) {
+    await page.goto('/next/react/components/' + id + '/');
+    await expect(page.locator('html')).toHaveAttribute('data-vf-react-hydrated', 'true');
+    await page.evaluate(() => {
+      document.documentElement.dir = 'rtl';
+      document.documentElement.style.fontSize = '200%';
+    });
+    await page.emulateMedia({ forcedColors: 'active' });
+    const guide = page.locator('[data-vf-docs-react-typography="' + id + '"]');
+    await expect(guide.getByRole('heading', { name: 'Accessibility', level: 2 })).toBeVisible();
+    await expect(page.getByRole('navigation', { name: 'On this page' }).getByRole('link')).toHaveCount(6);
+    const width = await page.evaluate(() => ({
+      scroll: document.documentElement.scrollWidth,
+      viewport: document.documentElement.clientWidth,
+    }));
+    expect(width.scroll, id + ' guide must not overflow viewport').toBeLessThanOrEqual(width.viewport + 1);
+    await page.addScriptTag({ content: axeCore.source });
+    const a11y = await page.evaluate(async () => window.axe.run(document, {
+      runOnly: { type: 'tag', values: ['wcag2a', 'wcag2aa', 'wcag21a', 'wcag21aa', 'wcag22aa'] },
+    }));
+    expect(a11y.violations, a11y.violations.map((issue) => issue.id + ': ' + issue.help).join('\n')).toEqual([]);
+    await page.screenshot({
+      path: testInfo.outputPath('react-' + id + '-guide-320-rtl-forced-colors.png'),
+      fullPage: false,
+    });
+  }
+});
+
 test('React Button guide renders all five source-backed variants and links the independent API', async ({ page }) => {
   await page.goto('/next/react/components/button/');
   const guide = page.locator('[data-vf-docs-react-component="button"]');
