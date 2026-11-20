@@ -488,7 +488,7 @@ test('React Text guide teaches every public type role with real TSX previews and
   await expect(scale.locator('[data-vf-docs-specimen]')).toHaveCount(expected.length);
   for (const variant of expected) {
     const specimen = scale.locator('[data-vf-docs-specimen="' + variant + '"]');
-    await expect(specimen.locator('[data-vf-text-variant="' + variant + '"]')).toHaveCount(1);
+    await expect(specimen.locator('p[data-vf-text-variant="' + variant + '"]')).toHaveCount(1);
     await expect(specimen.locator('p[data-vf-text-variant="' + variant + '"]')).toBeVisible();
     await expect(specimen.locator('small[data-vf-text-variant="caption"]')).toHaveText(variant);
   }
