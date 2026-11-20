@@ -783,7 +783,7 @@
   .vf-docs-guide-subsection h3 {
     color: var(--vf-color-text);
     font-size: var(--vf-font-size-lg);
-    line-height: var(--vf-line-height-snug);
+    line-height: var(--vf-line-height-normal);
   }
 
   .vf-docs-guide-subsection p:first-of-type {
