@@ -145,7 +145,7 @@ for (const slug of layoutSlugs) {
   await writePage(exampleRoute, '<!doctype html><html lang="en"><head>' +
     '<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">' +
     '<title>React Layout example · VyrnForge</title>\n' + demoStyles +
-    '\n<style>body{margin:0;padding:1rem;min-width:0;overflow-wrap:anywhere}#root{min-width:0}input{max-width:100%;box-sizing:border-box}</style>' +
+    '\n<style>body{margin:0;padding:1rem;min-width:0;overflow-wrap:anywhere}#root{min-width:0}input{max-width:100%;box-sizing:border-box}body[data-vf-layout-example="flow-wrap"] #root{max-inline-size:16rem}</style>' +
     '</head><body data-vf-layout-example="' + escapeHtml(slug) + '"><div id="root"></div><script src="' +
     escapeHtml(relative(demoDir, 'assets/react-layout-examples.js')) + '"></script></body></html>');
 }

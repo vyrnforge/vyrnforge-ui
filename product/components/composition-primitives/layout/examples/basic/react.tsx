@@ -3,7 +3,7 @@ import '@vyrnforge/web/styles/layout.css';
 
 export function AccountOverview() {
   return (
-    <main style={{ maxInlineSize: '64rem', marginInline: 'auto', paddingInline: 'var(--vf-space-md)' }}>
+    <main>
       <Flow as="section" gap="lg" aria-labelledby="account-heading">
         <Flow as="header" gap="xs">
           <h2 id="account-heading">Account overview</h2>

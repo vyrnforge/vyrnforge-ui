@@ -249,7 +249,7 @@ test('React Layout lives under Layout & Structure and runs checked-in React JSX 
     await expect(demo.locator('pre code')).toContainText("from '@vyrnforge/react/layout'");
     await expect(demo.locator('pre code')).toContainText(/<Flow|<AutoGrid/);
   }
-  await expect(page.frameLocator('iframe[title="React Intrinsic card collection example"]')
+  await expect(page.frameLocator('iframe[title="React Intrinsic semantic list example"]')
     .locator('[data-vf-auto-grid]')).toHaveCSS('display', 'grid');
   await expect(page.frameLocator('iframe[title="React Wrapped RTL metadata example"]')
     .locator('[dir="rtl"][data-vf-flow]')).toHaveCSS('flex-wrap', 'wrap');

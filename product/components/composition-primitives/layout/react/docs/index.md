@@ -26,7 +26,7 @@ There is no inline width, margin, gap, font or input-size styling here. Import t
 
 ## React AutoGrid props
 
-`AutoGrid` accepts `gap` and `minItemSize` (CSS length such as `12rem` or `240px`, 16rem default), `as` (div by default), semantic HTML props and a forwarded ref. `minItemSize` maps to `--vf-auto-grid-min-item-size`; it does not add JavaScript breakpoints or duplicate the Web algorithm.
+`AutoGrid` accepts `gap` and `minItemSize` (CSS length such as `12rem` or `240px`, 16rem default), `as` (div by default), semantic HTML props and a forwarded ref. `minItemSize` maps to `--vf-auto-grid-min-item-size`; it does not add JavaScript breakpoints or duplicate the Web algorithm. A semantic `<AutoGrid as="ul">` example requires no inline width, padding, margin, gap or item styling. Shared CSS normalizes opted-in list-host spacing **without hiding list markers**; the items remain native `<li>` elements. Decorative cards/tiles, constrained page width and markerless presentation are consumer-owned decisions, not excuses to invent Card/Container components.
 
 ## Semantic layout and accessibility
 

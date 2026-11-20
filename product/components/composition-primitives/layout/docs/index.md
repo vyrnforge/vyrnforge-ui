@@ -22,7 +22,7 @@ Add `data-vf-flow-wrap="wrap"` to an inline Flow when tags, metadata, filters, o
 
 ## AutoGrid: intrinsic equal tracks
 
-`data-vf-auto-grid` makes equal flexible tracks using `repeat(auto-fit, minmax(...))`. Its public `--vf-auto-grid-min-item-size` token defaults to `16rem` and may be overridden on the host (the example uses `10rem`). At a narrow width, the CSS algorithm reduces the number of tracks; it does not require a viewport breakpoint or script. Use `data-vf-auto-grid-gap` for spacing. Keep list semantics when repeated items form a list.
+`data-vf-auto-grid` makes equal flexible tracks using `repeat(auto-fit, minmax(...))`. Its public `--vf-auto-grid-min-item-size` token defaults to `16rem` and may be overridden on the host when the application truly needs another track minimum (the checked-in examples now use the default). At a narrow width, the CSS algorithm reduces the number of tracks; it does not require a viewport breakpoint or script. Use `data-vf-auto-grid-gap` for spacing. Keep list semantics when repeated items form a list. On `ul`/`ol` hosts that explicitly opt into AutoGrid, shared Web CSS removes user-agent margin/indent and places native markers inside each grid item; it does not set `list-style: none` or suppress native list accessibility. Ordinary content paint, bounded reading measures and any deliberately markerless list treatment remain the consuming application’s responsibility.
 
 ## Semantic groups and forms
 
@@ -44,7 +44,7 @@ For eligible shared composition and form controls, one inherited `data-vf-densit
 
 ## Width, surfaces, and other non-layout responsibilities
 
-The Page layout example uses application-authored `max-inline-size`, logical inline margins, and token-based padding for a constrained measure; no Container component is required. Its panels can use public surface color, border, and radius tokens without a Surface wrapper. An independently operable search input and button can remain native peers inside inline Flow; any specialized joined-border styling belongs to the control or application that owns it, not a generic ControlGroup API.
+Page-specific `max-inline-size`, logical inline margins and gutters remain application CSS, not a Container component API. Layout examples intentionally avoid repetitive inline styles; the documentation preview may constrain its own demonstration canvas. Surfaces can use public color, border and radius tokens in application/owning CSS without a Surface wrapper. An independently operable search input and button can remain native peers inside inline Flow; any specialized joined-border styling belongs to the control or application that owns it, not a generic ControlGroup API.
 
 ## Framework integration
 

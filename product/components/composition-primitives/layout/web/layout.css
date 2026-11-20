@@ -39,6 +39,14 @@
     min-inline-size: 0;
   }
 
+  /* Opted-in semantic list hosts should not inherit UA page-level indents.
+     Keep their markers, so ul/ol list semantics stay native (including Safari). */
+  :where(ul[data-vf-auto-grid], ol[data-vf-auto-grid]) {
+    list-style-position: inside;
+    margin-block: 0;
+    padding-inline-start: 0;
+  }
+
   :where([data-vf-flow][data-vf-flow-gap="none"], [data-vf-auto-grid][data-vf-auto-grid-gap="none"]) { gap: var(--vf-space-none); }
   :where([data-vf-flow][data-vf-flow-gap="xs"], [data-vf-auto-grid][data-vf-auto-grid-gap="xs"]) { gap: var(--vf-space-xs); }
   :where([data-vf-flow][data-vf-flow-gap="sm"], [data-vf-auto-grid][data-vf-auto-grid-gap="sm"]) { gap: var(--vf-space-sm); }

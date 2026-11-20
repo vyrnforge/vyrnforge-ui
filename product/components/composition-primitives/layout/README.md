@@ -42,10 +42,10 @@ A single shared flex recipe on authored semantic HTML:
 
 ## AutoGrid
 
-An intrinsic equal repeated-item track recipe: `repeat(auto-fit, minmax(min(100%, var(--vf-auto-grid-min-item-size, 16rem)), 1fr))`. The public `--vf-auto-grid-min-item-size` defaults to 16rem; omitted `data-vf-auto-grid-gap` follows the same inherited density-sensitive default as Flow, while an explicit gap remains unchanged. `data-vf-auto-grid-gap` supports the same spacing vocabulary as Flow. React's `minItemSize` prop sets this same CSS variable on the host. Arbitrary grid templates, spans and breakpoints are ordinary application CSS.
+An intrinsic equal repeated-item track recipe: `repeat(auto-fit, minmax(min(100%, var(--vf-auto-grid-min-item-size, 16rem)), 1fr))`. The public `--vf-auto-grid-min-item-size` defaults to 16rem; omitted `data-vf-auto-grid-gap` follows the same inherited density-sensitive default as Flow, while an explicit gap remains unchanged. `data-vf-auto-grid-gap` supports the same spacing vocabulary as Flow. React's `minItemSize` prop sets this same CSS variable on the host. Arbitrary grid templates, spans and breakpoints are ordinary application CSS. List hosts (`ul`, `ol`) opted into this recipe receive zero UA list margin/indent and inside markers from shared Web CSS, while retaining native bullet/number semantics. No inline `listStyle: 'none'`, width, padding or margin is required for normal grid lists.
 
 ```html
-<ul data-vf-auto-grid data-vf-auto-grid-gap="md" style="--vf-auto-grid-min-item-size: 12rem">
+<ul data-vf-auto-grid>
   <li>First</li><li>Second</li>
 </ul>
 ```
