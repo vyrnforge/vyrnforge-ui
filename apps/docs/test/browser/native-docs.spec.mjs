@@ -1380,6 +1380,18 @@ test('Layout guide is discoverable in the Layout & Structure submenu and renders
   await expect(page.getByRole('heading', { level: 2, name: 'Migration from older layout names' })).toBeVisible();
   await expect(article.getByText('review required', { exact: false }).first()).toBeVisible();
 
+  const accessibility = article.locator('[data-vf-docs-accessibility]');
+  await accessibility.locator('summary').click();
+  const mappedCriteria = accessibility.getByRole('list', { name: 'Mapped WCAG criteria' });
+  await expect(mappedCriteria.getByRole('link')).toHaveCount(6);
+  for (const [id, label, slug] of [
+    ['1.3.2', 'Meaningful Sequence', 'meaningful-sequence'],
+    ['1.4.10', 'Reflow', 'reflow'],
+  ]) {
+    await expect(mappedCriteria.getByRole('link', { name: `${id} ${label}`, exact: true }))
+      .toHaveAttribute('href', `https://www.w3.org/WAI/WCAG22/Understanding/${slug}`);
+  }
+
   for (const id of ['basic', 'flow-block', 'flow-inline', 'flow-wrap', 'auto-grid', 'semantic-groups']) {
     const example = article.locator('[data-vf-docs-example="layout/' + id + '"]');
     await expect(example).toHaveCount(1);
