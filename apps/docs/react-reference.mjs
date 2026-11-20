@@ -24,10 +24,10 @@ function renderBlocks(blocks = []) {
     ? h('ul', { key: i }, block.items.map((item, j) => h('li', { key: j }, ...renderInline(item))))
     : h('p', { key: i }, ...renderInline(block.text)));
 }
-function renderSections(content, prefix) {
+function renderSections(content, prefix, includeIntro = true) {
   if (!content) return null;
   return h('section', { 'aria-label': prefix },
-    ...renderBlocks(content.intro),
+    ...(includeIntro ? renderBlocks(content.intro) : []),
     ...content.sections.map((section, index) => {
       const id = slug(prefix + '-' + section.heading + '-' + index);
       return h('section', { key: id, 'aria-labelledby': id },
@@ -232,8 +232,35 @@ function layoutGuide(layout, links) {
         h('p', null, h('code', { 'data-vf-code': '' }, layout.cssRecipeStyle)),
         h('p', null, h('a', { 'data-vf-link': '', href: links.layoutApi }, 'View Flow and AutoGrid props')))));
 }
+// Reusable framework-native usage gallery: all examples and source snippets come
+// from the Product Graph/compiler. Rendering owns presentation, not example truth.
+function typographyExample(unit, example, links) {
+  const slug = example.id.slice(unit.id.length + 1);
+  const headingId = 'react-typography-' + unit.id + '-' + slug;
+  return h('section', { key: example.id, id: headingId,
+    'aria-labelledby': headingId + '-heading',
+    className: 'vf-docs-example',
+    'data-vf-docs-react-typography-example': example.id },
+    h('header', { className: 'vf-docs-example-header' },
+      h('div', null,
+        h('h3', { id: headingId + '-heading' }, example.title),
+        h('p', null, example.description))),
+    h('iframe', {
+      title: slug === 'basic' ? 'React ' + unit.title + ' example' :
+        'React ' + example.title + ' example',
+      className: 'vf-docs-react-example-frame',
+      'data-vf-docs-example-id': example.id,
+      src: links.typography[unit.id].examples[slug],
+      sandbox: 'allow-scripts', loading: slug === 'basic' ? 'eager' : 'lazy',
+    }),
+    h('details', { className: 'vf-docs-source-disclosure' },
+      h('summary', null, 'View React TSX source'),
+      h('pre', { 'data-vf-code-block': '', tabIndex: 0 },
+        h('code', null, example.source))));
+}
 function typographyGuide(unit, links) {
-  if (!unit?.sharedContent || !unit?.frameworkContent || !unit.example) return null;
+  if (!unit?.sharedContent || !unit?.frameworkContent ||
+      !unit?.examples?.length) return null;
   const id = unit.id;
   return h('article', { className: 'vf-docs-article',
     'data-vf-docs-react-typography': id },
@@ -245,25 +272,26 @@ function typographyGuide(unit, links) {
         'data-vf-text-variant': 'body-lg' }, ...renderBlocks(unit.sharedContent.intro)),
       accessibilityEvidence(unit.standardReferences)),
     h('section', { 'aria-labelledby': 'react-typography-setup' },
-      h('h2', { id: 'react-typography-setup' }, 'React setup'),
-      h('p', null, 'Import the public React component; CSS-aware browser builds use the canonical Web styling automatically. Node/SSR apps must deliver their client-extracted CSS.'),
+      h('h2', { id: 'react-typography-setup' }, 'Get started'),
+      h('p', null, 'Import the public React component. Supported CSS-aware browser builds automatically deliver canonical Web CSS; Node/SSR apps must include extracted client styles.'),
       h('pre', { 'data-vf-code-block': '', tabIndex: 0 },
         h('code', null, unit.id === 'code'
           ? "import { Code, CodeBlock } from '@vyrnforge/react/code';"
           : unit.id === 'kbd'
             ? "import { Kbd } from '@vyrnforge/react/kbd';"
             : "import { Text } from '@vyrnforge/react/text';"))),
-    h('section', { 'aria-labelledby': 'react-typography-preview' },
-      h('h2', { id: 'react-typography-preview' }, 'Live React example'),
-      h('p', null, 'This sandbox executes the checked-in product-owned React TSX example against public package entrypoints.'),
-      h('iframe', { title: 'React ' + unit.title + ' example',
-        className: 'vf-docs-react-example-frame',
-        src: links.typography[id].example, sandbox: 'allow-scripts', loading: 'lazy' }),
-      h('details', { className: 'vf-docs-source-disclosure' },
-        h('summary', null, 'View React TSX source'),
-        h('pre', { 'data-vf-code-block': '', tabIndex: 0 },
-          h('code', null, unit.example.source)))),
-    renderSections(unit.sharedContent, 'Shared ' + unit.title + ' semantics'),
+    h('section', { 'aria-labelledby': 'react-typography-preview',
+      'data-vf-docs-react-usage-gallery': id },
+      h('h2', { id: 'react-typography-preview' }, 'Examples'),
+      h('p', null, 'Every preview is built from the exact checked-in React TSX source shown beneath it. Each example can be viewed independently.'),
+      h('nav', { 'aria-label': unit.title + ' examples' },
+        h('ul', null, ...unit.examples.map((example) => {
+          const slug = example.id.slice(unit.id.length + 1);
+          return h('li', { key: example.id },
+            h('a', { href: '#react-typography-' + id + '-' + slug }, example.title));
+        }))),
+      ...unit.examples.map((example) => typographyExample(unit, example, links))),
+    renderSections(unit.sharedContent, 'Shared ' + unit.title + ' semantics', false),
     renderSections(unit.frameworkContent, 'React ' + unit.title + ' integration'),
     h('section', { 'aria-labelledby': 'react-typography-reference' },
       h('h2', { id: 'react-typography-reference' }, 'Reference'),

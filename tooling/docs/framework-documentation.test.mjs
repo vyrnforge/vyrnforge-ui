@@ -202,3 +202,37 @@ describe('React Typography uses Native Web contracts for Text, Code and Kbd', ()
     }
   });
 });
+
+describe('React Text consumer-first guide examples', () => {
+  it('discovers three real product-owned examples without duplicating the supported type scale', async () => {
+    const model = compileFrameworkDocumentation('react');
+    const text = model.componentCatalog.find((component) => component.id === 'text');
+    const examples = text.examples.slice().sort((a, b) => a.id.localeCompare(b.id));
+    expect(examples.map((example) => example.id)).toEqual([
+      'text/basic', 'text/semantic-composition', 'text/type-scale',
+    ]);
+    expect(text.sharedContent.sections.map((section) => section.heading)).toContain('When to use');
+    expect(text.sharedContent.sections.map((section) => section.heading)).toContain('When not to use');
+    for (const example of examples) {
+      expect(example.sourcePath.endsWith('/react.tsx')).toBe(true);
+      expect(example.source).toContain("from '@vyrnforge/react/text'");
+      expect(example.source).not.toMatch(/\\bstyle\\s*=\\s*(?:\\{|["'])/);
+      await expect(transform(example.source, {
+        loader: 'tsx', format: 'esm', jsx: 'automatic', target: 'es2022',
+      })).resolves.toHaveProperty('code');
+    }
+    const scale = examples.find((example) => example.id === 'text/type-scale');
+    const roles = [
+      'display-lg', 'display-md', 'display-sm',
+      'heading-lg', 'heading-md', 'heading-sm', 'heading-xs',
+      'title-lg', 'title-md', 'title-sm', 'body-lg', 'body-md', 'body-sm',
+      'label-lg', 'label-md', 'label-sm', 'caption', 'overline',
+    ];
+    for (const role of roles) expect(scale.source).toContain("variant: '" + role + "'");
+    expect(new Set(roles).size).toBe(18);
+    const semantic = examples.find((example) => example.id === 'text/semantic-composition');
+    for (const host of ['h2', 'p', 'strong', 'blockquote', 'time']) {
+      expect(semantic.source).toContain('<Text as="' + host + '"');
+    }
+  });
+});

@@ -1,0 +1,14 @@
+{
+  "id": "text/type-scale",
+  "title": "Visual type scale",
+  "description": "Compare all 18 built-in Text roles using the real React component. The native element remains a paragraph even when its visual role resembles a heading.",
+  "documentationSection": "Visual roles",
+  "defaultFramework": "react",
+  "frameworks": {
+    "react": {
+      "label": "React",
+      "language": "tsx",
+      "source": "react.tsx"
+    }
+  }
+}
