@@ -471,6 +471,29 @@ test('React Text guide teaches every public type role with real TSX previews and
   await page.goto('/next/react/components/text/');
   await expect(page.locator('html')).toHaveAttribute('data-vf-react-hydrated', 'true');
   const guide = page.locator('[data-vf-docs-react-typography="text"]');
+  expect(await guide.locator(':scope > section > h2').allTextContents()).toEqual([
+    'Get started', 'Examples', 'Usage guidelines', 'Accessibility',
+    'React integration', 'Related components and API',
+  ]);
+  const toc = page.getByRole('navigation', { name: 'On this page' });
+  await expect(toc.getByRole('link')).toHaveCount(6);
+  await expect(toc.getByRole('link', { name: 'Usage guidelines' }))
+    .toHaveAttribute('href', '#react-typography-guidelines');
+  await expect(guide.getByRole('heading', { name: 'When to use' })).toHaveCount(1);
+  await expect(guide.getByRole('heading', { name: 'When not to use' })).toHaveCount(1);
+  await expect(guide.getByRole('heading', { name: 'Shared Text semantics' })).toHaveCount(0);
+  await expect(guide.getByRole('heading', { name: 'React Text integration' })).toHaveCount(0);
+  await expect(guide.locator('header [data-vf-docs-accessibility]')).toHaveCount(0);
+  const startCode = guide.locator('section[aria-labelledby="react-typography-setup"] pre code');
+  await expect(startCode).toContainText("import { Text } from '@vyrnforge/react/text'");
+  await expect(startCode).toContainText('<Text as="h2" variant="heading-md">');
+  await expect(guide.getByText('`' + '`' + '`tsx')).toHaveCount(0);
+  await expect(guide.getByRole('heading', { name: 'Styling and server rendering' })).toBeVisible();
+  const standardDisclosure = guide.getByText('Standards and evidence mapping', { exact: true });
+  await standardDisclosure.click();
+  await expect(guide.getByRole('heading', { name: 'Accessibility evidence' })).toBeVisible();
+  await expect(guide.getByRole('link', { name: /WCAG 2\\.2/ })).toHaveAttribute('href', 'https://www.w3.org/TR/WCAG22/');
+  await standardDisclosure.click();
   const gallery = guide.locator('[data-vf-docs-react-usage-gallery="text"]');
   const cards = gallery.locator('[data-vf-docs-react-typography-example]');
   await expect(cards).toHaveCount(3);
