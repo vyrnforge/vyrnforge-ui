@@ -371,8 +371,16 @@ test('React Text, Code and Kbd guides run checked-in JSX and link real public AP
     await expect(guide.getByRole('heading', { level: 1, name: label })).toBeVisible();
     await expect(page.getByRole('navigation', { name: 'Documentation' })
       .getByRole('link', { name: label + ' guide' })).toHaveAttribute('aria-current', 'page');
-    await expect(guide.locator('[data-vf-docs-accessibility]')).toBeVisible();
-    await expect(guide).toContainText('React setup');
+    if (id === 'text') {
+      const standards = guide.getByText('Standards and evidence mapping', { exact: true });
+      await standards.click();
+      await expect(guide.locator('[data-vf-docs-accessibility]')).toBeVisible();
+      await standards.click();
+      await expect(guide).toContainText('Get started');
+    } else {
+      await expect(guide.locator('[data-vf-docs-accessibility]')).toBeVisible();
+      await expect(guide).toContainText('React setup');
+    }
     const iframe = guide.locator('iframe[title="React ' + label + ' example"]');
     await iframe.scrollIntoViewIfNeeded();
     const frame = iframe.contentFrame();
@@ -492,7 +500,7 @@ test('React Text guide teaches every public type role with real TSX previews and
   const standardDisclosure = guide.getByText('Standards and evidence mapping', { exact: true });
   await standardDisclosure.click();
   await expect(guide.getByRole('heading', { name: 'Accessibility evidence' })).toBeVisible();
-  await expect(guide.getByRole('link', { name: /WCAG 2\\.2/ })).toHaveAttribute('href', 'https://www.w3.org/TR/WCAG22/');
+  await expect(guide.getByRole('link', { name: /WCAG 2\.2/ })).toHaveAttribute('href', 'https://www.w3.org/TR/WCAG22/');
   await standardDisclosure.click();
   const gallery = guide.locator('[data-vf-docs-react-usage-gallery="text"]');
   const cards = gallery.locator('[data-vf-docs-react-typography-example]');
