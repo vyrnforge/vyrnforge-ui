@@ -4,7 +4,7 @@ import type { TextVariant } from '@vyrnforge/web/text';
 
 /** Native inline code with the canonical Web code styling hook. */
 export interface CodeProps extends ComponentPropsWithoutRef<'code'> {
-  /** Optional shared Text role. Load text.css as well when using this. */
+  /** Optional shared Text role; browser CSS delivery includes the dependency. */
   variant?: TextVariant;
 }
 
