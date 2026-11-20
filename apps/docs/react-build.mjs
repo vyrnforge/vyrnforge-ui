@@ -25,6 +25,33 @@ if (!basicExample?.sourcePath.endsWith('/react.tsx')) {
   throw new Error('React documentation requires the checked-in executable Button example');
 }
 const layout = reactModel.componentCatalog.find((entry) => entry.id === 'layout');
+// Extend the existing bounded React pilot from real Product Graph owners.
+const typographyIds = ['text', 'code', 'kbd'];
+const typography = Object.fromEntries(await Promise.all(typographyIds.map(async (id) => {
+  const owner = reactModel.componentCatalog.find((entry) => entry.id === id);
+  const basic = owner?.examples.find((example) => example.id === id + '/basic');
+  if (!owner?.showcaseAvailable || !owner.apiAvailable || !owner.sharedContent ||
+      !owner.frameworkContent || !basic?.sourcePath.endsWith('/react.tsx') ||
+      !basic.source.includes("'@vyrnforge/react/" + id + "'") ||
+      !owner.publicEntrypoints.includes('@vyrnforge/react/' + id) ||
+      !webModel.packageManifest.exports?.['./styles/' + id + '.css']) {
+    throw new Error('React Typography guide needs real ' + id + ' source, CSS and authored React example');
+  }
+  const publicSourcePath = path.join(
+    path.dirname(path.dirname(owner.frameworkSourcePath)), 'index.ts');
+  const publicSource = await readFile(path.join(root, publicSourcePath), 'utf8');
+  if (!publicSource.includes('export ')) {
+    throw new Error('React Typography ' + id + ' has no public TypeScript source');
+  }
+  return [id, {
+    id, title: owner.title, sharedContent: owner.sharedContent,
+    frameworkContent: owner.frameworkContent, standardReferences: owner.standardReferences,
+    publicEntrypoints: owner.publicEntrypoints, showcaseRoute: owner.showcaseRoute,
+    apiRoute: owner.apiRoute, sharedSourcePath: owner.sharedSourcePath,
+    frameworkSourcePath: owner.frameworkSourcePath, publicSourcePath,
+    publicSource, example: basic,
+  }];
+})));
 const layoutStylesheet = '@vyrnforge/web/styles/layout.css';
 if (!layout?.apiAvailable || layout.guideOnly ||
     !layout.publicEntrypoints.includes('@vyrnforge/react/layout') ||
@@ -88,6 +115,11 @@ function linksFor(route) {
     layout: relative(dir, react + layout.showcaseRoute, true),
     layoutApi: relative(dir, react + layout.apiRoute, true),
     layoutExampleBase: relative(dir, react + 'examples/layout/', true),
+    typography: Object.fromEntries(typographyIds.map((id) => [id, {
+      guide: relative(dir, react + typography[id].showcaseRoute, true),
+      api: relative(dir, react + typography[id].apiRoute, true),
+      example: relative(dir, react + 'examples/typography/' + id + '/', true),
+    }])),
     native: relative(dir, native + (route === '' ? '' : route), true),
   };
 }
@@ -125,6 +157,35 @@ await build({
   outfile: path.join(outRoot, 'assets/react-layout-examples.js'), logLevel: 'silent',
 });
 
+// The standalone frames execute exactly the product-owned React TSX examples.
+for (const id of typographyIds) {
+  const unit = typography[id];
+  const asset = 'react-typography-' + id;
+  await build({
+    entryPoints: [path.join(root, unit.example.sourcePath)],
+    bundle: true, platform: 'browser', format: 'iife', target: 'es2022',
+    jsx: 'automatic', logLevel: 'silent',
+    outfile: path.join(outRoot, 'assets', asset + '.js'),
+  });
+  const cssFile = path.join(outRoot, 'assets', asset + '.css');
+  if (!(await stat(cssFile).catch(() => null))?.isFile()) {
+    throw new Error('React ' + id + ' example must extract canonical browser CSS');
+  }
+  const route = 'examples/typography/' + id + '/';
+  const dir = directory(route);
+  const styles = shellStyles.map((file) =>
+    '<link rel="stylesheet" href="' + escapeHtml(relative(dir, file)) + '">').join('\n');
+  const extracted = relative(dir, 'assets/' + asset + '.css');
+  await writePage(route, '<!doctype html><html lang="en" data-vf-theme="light"><head>' +
+    '<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">' +
+    '<title>React ' + escapeHtml(unit.title) + ' example · VyrnForge</title>' +
+    styles + '<link rel="stylesheet" href="' + escapeHtml(extracted) + '">' +
+    '<style>body{margin:0;padding:1rem;min-width:0;overflow-wrap:anywhere}' +
+    '#root{min-width:0}.vf-example-stack{display:flex;flex-direction:column;gap:var(--vf-space-md)}</style>' +
+    '</head><body><div id="root"></div><script src="' +
+    escapeHtml(relative(dir, 'assets/' + asset + '.js')) + '"></script></body></html>');
+}
+
 const exampleDir = directory('examples/button-basic/');
 const exampleStyles = shellStyles.map((asset) =>
   '  <link rel="stylesheet" href="' + escapeHtml(relative(exampleDir, asset)) + '">').join('\n');
@@ -156,6 +217,14 @@ const pageViews = [
   { route: button.apiRoute, view: 'api', title: 'React Button API', description: 'Verified public React Button API' },
   { route: layout.showcaseRoute, view: 'layout', title: 'React Layout guide', description: 'Flow and AutoGrid usage in React with shared Web CSS' },
   { route: layout.apiRoute, view: 'layout-api', title: 'React Layout API', description: 'Public React Flow and AutoGrid props and stylesheet' },
+  ...typographyIds.flatMap((id) => [
+    { route: typography[id].showcaseRoute, view: 'typography', topic: id,
+      title: 'React ' + typography[id].title + ' guide',
+      description: 'Live checked-in React ' + typography[id].title + ' example and shared typography semantics' },
+    { route: typography[id].apiRoute, view: 'typography-api', topic: id,
+      title: 'React ' + typography[id].title + ' API',
+      description: 'Source-backed React ' + typography[id].title + ' API reference' },
+  ]),
 ];
 // All Native destinations have a React-context response, even when a React guide
 // has not been implemented. Never disguise an unavailable view as another port.
@@ -200,6 +269,7 @@ for (const page of pageViews) {
   const dir = directory(page.route);
   const props = { view: page.view, links: linksFor(page.route), button: pageData,
     layout: (page.view === 'layout' || page.view === 'layout-api') ? layoutData : null,
+    typography: page.topic ? typography[page.topic] : null,
     requestedTopic: page.requestedTopic ?? null };
   const initialHtml = renderToString(createElement(ReactReferencePage, props));
   const serialized = JSON.stringify(props).replaceAll('<', '\\u003c');
@@ -220,7 +290,7 @@ for (const page of pageViews) {
   await writePage(page.route, pageHtml);
 }
 await writeFile(path.join(reactRoot, 'site-manifest.json'), JSON.stringify({
-  channel, framework: 'react', status: 'button-and-layout-pilot',
+  channel, framework: 'react', status: 'button-layout-typography-pilot',
   source: 'Product Graph public React surface',
   routes: pageViews.map(({ route, view }) => ({ route, view })),
   layout: {
@@ -232,6 +302,15 @@ await writeFile(path.join(reactRoot, 'site-manifest.json'), JSON.stringify({
     sharedSourcePath: layout.sharedSourcePath,
     examples: layoutExamples.map((example) => ({ id: example.id, sourcePath: example.sourcePath })),
   },
+  typography: Object.fromEntries(typographyIds.map((id) => [id, {
+    guideRoute: typography[id].showcaseRoute,
+    apiRoute: typography[id].apiRoute,
+    publicEntrypoints: typography[id].publicEntrypoints,
+    sharedSourcePath: typography[id].sharedSourcePath,
+    frameworkSourcePath: typography[id].frameworkSourcePath,
+    publicSourcePath: typography[id].publicSourcePath,
+    exampleSourcePath: typography[id].example.sourcePath,
+  }])),
   button: {
     publicEntrypoints: button.publicEntrypoints,
     sharedSourcePath: button.sharedSourcePath,
@@ -239,4 +318,4 @@ await writeFile(path.join(reactRoot, 'site-manifest.json'), JSON.stringify({
     executableExampleSource: basicExample.sourcePath,
   },
 }, null, 2) + '\n');
-process.stdout.write('React Button and Layout documentation pilot -> ' + path.relative(root, reactRoot) + '\n');
+process.stdout.write('React Button, Layout and Typography documentation pilot -> ' + path.relative(root, reactRoot) + '\n');

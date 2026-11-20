@@ -9,7 +9,7 @@ test('React pilot artifact is Product Graph-backed and SSR-rendered with public 
   const manifest = JSON.parse(readFileSync(manifestPath, 'utf8'));
   const button = compileFrameworkDocumentation('react').componentCatalog.find((entry) => entry.id === 'button');
   expect(manifest.framework).toBe('react');
-  expect(manifest.status).toBe('button-and-layout-pilot');
+  expect(manifest.status).toBe('button-layout-typography-pilot');
   expect(manifest.button.sharedSourcePath).toBe(button.sharedSourcePath);
   expect(manifest.button.frameworkSourcePath).toBe(button.frameworkSourcePath);
   expect(manifest.button.publicEntrypoints).toContain('@vyrnforge/react/button');
@@ -18,8 +18,23 @@ test('React pilot artifact is Product Graph-backed and SSR-rendered with public 
   expect(manifest.layout.examples).toHaveLength(6);
   expect(manifest.routes.filter((entry) => entry.view !== 'unavailable').map((entry) => entry.route)).toEqual([
     '', 'components/button/', 'api/components/button/', 'components/layout/', 'api/components/layout/',
+    ...['text', 'code', 'kbd'].flatMap((id) => [
+      'components/' + id + '/', 'api/components/' + id + '/',
+    ]),
   ]);
-  expect(manifest.routes).toContainEqual({ route: 'components/code/', view: 'unavailable' });
+  for (const id of ['text', 'code', 'kbd']) {
+    const entry = manifest.typography[id];
+    expect(entry.publicEntrypoints).toContain('@vyrnforge/react/' + id);
+    expect(entry.exampleSourcePath).toBe(
+      'product/components/elemental-primitives/typography/' + id + '/examples/basic/react.tsx');
+    expect(entry.frameworkSourcePath).toBe(
+      'product/components/elemental-primitives/typography/' + id + '/react/docs/index.md');
+    expect(manifest.routes).toContainEqual({ route: 'components/' + id + '/', view: 'typography' });
+    expect(manifest.routes).toContainEqual({ route: 'api/components/' + id + '/', view: 'typography-api' });
+    const frame = 'dist/docs/next/react/examples/typography/' + id + '/index.html';
+    expect(readFileSync(frame, 'utf8')).toContain('react-typography-' + id + '.js');
+    expect(readFileSync(frame, 'utf8')).toContain('react-typography-' + id + '.css');
+  }
   for (const route of manifest.routes) {
     const html = readFileSync('dist/docs/next/react/' + route.route + 'index.html', 'utf8');
     expect(html).toContain('data-vf-app-shell');
@@ -146,13 +161,13 @@ test('framework selector preserves Native/React guide and API context with brows
 });
 
 test('switching an undocumented React topic reports unavailability with recovery', async ({ page }) => {
-  await page.goto('/next/native-web/components/code/');
+  await page.goto('/next/native-web/components/image/');
   await page.getByRole('combobox', { name: 'Framework' }).selectOption({ label: 'React (pilot)' });
-  await expect(page).toHaveURL(/\/next\/react\/components\/code\/$/);
+  await expect(page).toHaveURL(/\/next\/react\/components\/image\/$/);
   await expect(page.getByRole('heading', { name: 'React documentation unavailable' })).toBeVisible();
-  await expect(page.locator('[data-vf-docs-react-unavailable]')).toContainText('Code');
+  await expect(page.locator('[data-vf-docs-react-unavailable]')).toContainText('Image');
   await page.getByRole('link', { name: 'Return to Native Web topic' }).click();
-  await expect(page).toHaveURL(/\/next\/native-web\/components\/code\/$/);
+  await expect(page).toHaveURL(/\/next\/native-web\/components\/image\/$/);
 });
 
 test('React mobile navigation closes on Escape and returns focus to Menu', async ({ page }) => {
@@ -340,4 +355,112 @@ test('React Layout API reference exposes actual package entrypoint and typed pro
     .getByRole('link', { name: 'Layout API' })).toHaveAttribute('aria-current', 'page');
   await page.getByRole('link', { name: 'Open runnable React Layout examples' }).click();
   await expect(page).toHaveURL(/\/next\/react\/components\/layout\/$/);
+});
+
+test('React Text, Code and Kbd guides run checked-in JSX and link real public API sources', async ({ page }, testInfo) => {
+  const errors = [];
+  page.on('pageerror', (error) => errors.push(String(error)));
+  for (const [id, label, selectors] of [
+    ['text', 'Text', { css: '[data-vf-text]', source: '<Text' }],
+    ['code', 'Code', { css: '[data-vf-code]', source: '<Code' }],
+    ['kbd', 'Kbd', { css: '[data-vf-kbd]', source: '<Kbd' }],
+  ]) {
+    await page.goto('/next/react/components/' + id + '/');
+    await expect(page.locator('html')).toHaveAttribute('data-vf-react-hydrated', 'true');
+    const guide = page.locator('[data-vf-docs-react-typography="' + id + '"]');
+    await expect(guide.getByRole('heading', { level: 1, name: label })).toBeVisible();
+    await expect(page.getByRole('navigation', { name: 'Documentation' })
+      .getByRole('link', { name: label + ' guide' })).toHaveAttribute('aria-current', 'page');
+    await expect(guide.locator('[data-vf-docs-accessibility]')).toBeVisible();
+    await expect(guide).toContainText('React setup');
+    const iframe = guide.locator('iframe[title="React ' + label + ' example"]');
+    await iframe.scrollIntoViewIfNeeded();
+    const frame = iframe.contentFrame();
+    await expect(frame.locator('#root ' + selectors.css).first()).toBeVisible();
+    if (id === 'text') {
+      await expect(frame.getByRole('heading', { name: 'Typography foundation', level: 2 })).toBeVisible();
+    } else if (id === 'code') {
+      await expect(frame.locator('[data-vf-code-block] code')).toContainText('pnpm exec vitest run');
+      await expect(frame.locator('[data-vf-code]').first()).toContainText('pnpm test');
+    } else {
+      await expect(frame.locator('kbd')).toHaveCount(2);
+      await expect(frame.locator('kbd').first()).toHaveText('Ctrl');
+    }
+    await guide.getByText('View React TSX source').click();
+    await expect(guide.locator('.vf-docs-source-disclosure pre code')).toContainText(
+      "from '@vyrnforge/react/" + id + "'");
+    await expect(guide.locator('.vf-docs-source-disclosure pre code')).toContainText(selectors.source);
+    await guide.getByRole('link', { name: 'View ' + label + ' public React API' }).click();
+    await expect(page).toHaveURL(new RegExp('/next/react/api/components/' + id + '/$'));
+    const api = page.locator('[data-vf-docs-react-api="' + id + '"]');
+    await expect(api.getByRole('heading', { level: 1, name: label + ' API' })).toBeVisible();
+    await expect(api).toContainText('@vyrnforge/react/' + id);
+    await expect(api.locator('pre code').first()).toContainText('export ');
+    await expect(page.getByRole('navigation', { name: 'Documentation' })
+      .getByRole('link', { name: label + ' API' })).toHaveAttribute('aria-current', 'page');
+  }
+  expect(errors).toEqual([]);
+  await page.screenshot({
+    path: testInfo.outputPath('react-kbd-api-wide.png'), fullPage: true,
+  });
+});
+
+test('React Typography routes preserve SSR with no client JavaScript and framework context', async ({ page, browser }) => {
+  await page.goto('/next/native-web/components/text/');
+  await page.getByRole('combobox', { name: 'Framework' }).selectOption({ label: 'React (pilot)' });
+  await expect(page).toHaveURL(/\/next\/react\/components\/text\/$/);
+  await page.getByRole('searchbox', { name: 'Search React documentation' }).fill('keyboard');
+  await page.getByRole('button', { name: 'Clear search' }).click();
+  await page.getByRole('searchbox', { name: 'Search React documentation' }).fill('kbd');
+  await expect(page.locator('[data-vf-docs-react-results]')
+    .getByRole('link', { name: 'Kbd guide' })).toBeVisible();
+  await page.locator('[data-vf-docs-react-results]')
+    .getByRole('link', { name: 'Kbd guide' }).click();
+  await expect(page).toHaveURL(/\/next\/react\/components\/kbd\/$/);
+
+  const context = await browser.newContext({ javaScriptEnabled: false });
+  try {
+    const noJs = await context.newPage();
+    for (const id of ['text', 'code', 'kbd']) {
+      await noJs.goto('/next/react/components/' + id + '/');
+      await expect(noJs.locator('[data-vf-docs-react-typography="' + id + '"]')).toBeVisible();
+      await expect(noJs.locator('html')).not.toHaveAttribute('data-vf-react-hydrated', 'true');
+      await noJs.getByText('View React TSX source').click();
+      await expect(noJs.locator('.vf-docs-source-disclosure pre code')).toContainText(
+        "'@vyrnforge/react/" + id + "'");
+      await noJs.getByRole('link', { name: /public React API/ }).click();
+      await expect(noJs).toHaveURL(new RegExp('/api/components/' + id + '/$'));
+      await expect(noJs.locator('[data-vf-docs-react-api="' + id + '"]')).toContainText(
+        '@vyrnforge/react/' + id);
+    }
+  } finally { await context.close(); }
+});
+
+test('React Typography remains readable at 320px, 200 percent text, RTL and forced colors', async ({ page }, testInfo) => {
+  await page.setViewportSize({ width: 320, height: 720 });
+  await page.goto('/next/react/components/text/');
+  await expect(page.locator('html')).toHaveAttribute('data-vf-react-hydrated', 'true');
+  await page.getByLabel('Theme').selectOption('dark');
+  await page.evaluate(() => {
+    document.documentElement.dir = 'rtl';
+    document.documentElement.style.fontSize = '200%';
+  });
+  const menu = page.getByRole('button', { name: 'Menu' });
+  await menu.click();
+  await expect(page.getByRole('navigation', { name: 'Documentation' })
+    .getByRole('link', { name: 'Text guide' })).toBeVisible();
+  await page.keyboard.press('Escape');
+  await expect(menu).toBeFocused();
+  const widths = await page.evaluate(() => ({
+    scroll: document.documentElement.scrollWidth,
+    client: document.documentElement.clientWidth,
+  }));
+  expect(widths.scroll).toBeLessThanOrEqual(widths.client + 1);
+  await page.addScriptTag({ content: axeCore.source });
+  const a11y = await page.evaluate(async () => window.axe.run(document, {
+    runOnly: { type: 'tag', values: ['wcag2a', 'wcag2aa', 'wcag21a', 'wcag21aa', 'wcag22aa'] },
+  }));
+  expect(a11y.violations, a11y.violations.map((entry) => entry.id + ': ' + entry.help).join('\n')).toEqual([]);
+  await page.emulateMedia({ forcedColors: 'active' });
+  await page.screenshot({ path: testInfo.outputPath('react-text-320-rtl-forced-colors.png'), fullPage: true });
 });
