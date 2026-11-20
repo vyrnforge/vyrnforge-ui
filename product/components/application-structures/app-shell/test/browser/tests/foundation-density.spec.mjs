@@ -17,6 +17,12 @@ test.describe('STD-02 inherited density foundation', () => {
     const nested = page.getByRole('button', { name: 'Nested comfortable action' });
     const updates = page.getByRole('switch', { name: 'Product updates' });
 
+    // Demo-owned CSS stays separate from the reusable component and its JSX.
+    await expect(form).toHaveClass('vf-foundation-settings-demo');
+    await expect(form).not.toHaveAttribute('style');
+    await expect(form).toHaveCSS('box-sizing', 'border-box');
+    await expect(form).toHaveCSS('padding-inline-start', '16px');
+    await expect(form).toHaveCSS('border-top-width', '1px');
     await expect(form).toHaveAttribute('data-vf-density', 'comfortable');
     await expect(save).toHaveCSS('min-height', '40px');
     await expect(density).toHaveCSS('min-height', '40px');
