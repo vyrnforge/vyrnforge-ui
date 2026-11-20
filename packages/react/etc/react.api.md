@@ -271,6 +271,20 @@ export interface CheckboxProps extends Omit<InputHTMLAttributes<HTMLInputElement
 }
 
 // @public (undocumented)
+export const Code: ForwardRefExoticComponent<CodeProps & RefAttributes<HTMLElement>>;
+
+// @public (undocumented)
+export const CodeBlock: ForwardRefExoticComponent<Omit<DetailedHTMLProps<HTMLAttributes<HTMLPreElement>, HTMLPreElement>, "ref"> & RefAttributes<HTMLElement>>;
+
+// @public
+export type CodeBlockProps = ComponentPropsWithoutRef<'pre'>;
+
+// @public
+export interface CodeProps extends ComponentPropsWithoutRef<'code'> {
+    variant?: TextVariant;
+}
+
+// @public (undocumented)
 export const ColorPickerInput: ForwardRefExoticComponent<ColorPickerInputProps & RefAttributes<HTMLInputElement>>;
 
 // @public (undocumented)
@@ -2014,6 +2028,14 @@ export interface InputProps extends Omit<InputHTMLAttributes<HTMLInputElement>, 
 }
 
 export { InputType }
+
+// @public (undocumented)
+export const Kbd: ForwardRefExoticComponent<KbdProps & RefAttributes<HTMLElement>>;
+
+// @public
+export interface KbdProps extends ComponentPropsWithoutRef<'kbd'> {
+    variant?: TextVariant;
+}
 
 // @public
 export type LayoutElement = 'div' | 'section' | 'header' | 'footer' | 'main' | 'aside' | 'article' | 'nav' | 'ul' | 'ol' | 'form' | 'fieldset' | 'label';
