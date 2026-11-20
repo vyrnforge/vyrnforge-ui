@@ -26,7 +26,7 @@ export const Code = forwardRef<HTMLElement, CodeProps>(function Code(
 /** Native pre > code presentation, with no editor or syntax runtime. */
 export type CodeBlockProps = ComponentPropsWithoutRef<'pre'>;
 
-export const CodeBlock = forwardRef<HTMLElement, CodeBlockProps>(function CodeBlock(
+export const CodeBlock = forwardRef<HTMLPreElement, CodeBlockProps>(function CodeBlock(
   { children, ...nativeProps },
   ref
 ) {
