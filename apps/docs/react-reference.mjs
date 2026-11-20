@@ -41,13 +41,14 @@ function renderSections(content, prefix, includeIntro = true) {
         h('h2', { id }, section.heading), ...renderBlocks(section.blocks));
     }));
 }
-function accessibilityEvidence(references) {
+function accessibilityEvidence(references, { compact = false } = {}) {
   if (!references) return null;
   const criteria = references.criteria ?? [];
   const hasBaselineNote = Boolean(references.nativeBaseline && !references.hasNativeReference);
   return h('section', { className: 'vf-docs-standards',
     'data-vf-docs-accessibility': '', 'aria-labelledby': 'react-accessibility-heading' },
-    h('h2', { id: 'react-accessibility-heading' }, 'Accessibility evidence'),
+    h(compact ? 'h3' : 'h2', { id: 'react-accessibility-heading' },
+      compact ? 'Standards and evidence' : 'Accessibility evidence'),
     h('ul', { className: 'vf-docs-standards-primary', 'aria-label': 'Standards' },
       ...references.standards.map((standard, i) => h('li', { key: i },
         standard.url
@@ -265,45 +266,114 @@ function typographyExample(unit, example, links) {
       h('pre', { 'data-vf-code-block': '', tabIndex: 0 },
         h('code', null, example.source))));
 }
+function authoredGuideSection(section, prefix) {
+  const id = slug(prefix + '-' + section.heading);
+  return h('section', { key: id, id,
+    className: 'vf-docs-guidance-item', 'aria-labelledby': id + '-heading' },
+    h('h3', { id: id + '-heading' }, section.heading),
+    ...renderBlocks(section.blocks));
+}
 function typographyGuide(unit, links) {
   if (!unit?.sharedContent || !unit?.frameworkContent ||
       !unit?.examples?.length) return null;
   const id = unit.id;
-  return h('article', { className: 'vf-docs-article',
-    'data-vf-docs-react-typography': id },
-    h('header', { className: 'vf-docs-component-header' },
-      h('p', { className: 'vf-docs-eyebrow', 'data-vf-text': '',
-        'data-vf-text-variant': 'overline' }, 'React · Typography'),
-      h('h1', null, unit.sharedContent.title),
-      h('div', { className: 'vf-docs-lede', 'data-vf-text': '',
-        'data-vf-text-variant': 'body-lg' }, ...renderBlocks(unit.sharedContent.intro)),
-      accessibilityEvidence(unit.standardReferences)),
-    h('section', { 'aria-labelledby': 'react-typography-setup' },
-      h('h2', { id: 'react-typography-setup' }, 'Get started'),
-      h('p', null, 'Import the public React component. Supported CSS-aware browser builds automatically deliver canonical Web CSS; Node/SSR apps must include extracted client styles.'),
-      h('pre', { 'data-vf-code-block': '', tabIndex: 0 },
-        h('code', null, unit.id === 'code'
-          ? "import { Code, CodeBlock } from '@vyrnforge/react/code';"
-          : unit.id === 'kbd'
-            ? "import { Kbd } from '@vyrnforge/react/kbd';"
-            : "import { Text } from '@vyrnforge/react/text';"))),
-    h('section', { 'aria-labelledby': 'react-typography-preview',
-      'data-vf-docs-react-usage-gallery': id },
-      h('h2', { id: 'react-typography-preview' }, 'Examples'),
-      h('p', null, 'Every preview is built from the exact checked-in React TSX source shown beneath it. Each example can be viewed independently.'),
-      h('nav', { 'aria-label': unit.title + ' examples' },
-        h('ul', null, ...unit.examples.map((example) => {
-          const slug = example.id.slice(unit.id.length + 1);
-          return h('li', { key: example.id },
-            h('a', { href: '#react-typography-' + id + '-' + slug }, example.title));
-        }))),
-      ...unit.examples.map((example) => typographyExample(unit, example, links))),
-    renderSections(unit.sharedContent, 'Shared ' + unit.title + ' semantics', false),
-    renderSections(unit.frameworkContent, 'React ' + unit.title + ' integration'),
-    h('section', { 'aria-labelledby': 'react-typography-reference' },
-      h('h2', { id: 'react-typography-reference' }, 'Reference'),
-      h('a', { href: links.typography[id].api, 'data-vf-link': '' },
-        'View ' + unit.title + ' public React API')));
+  const shared = unit.sharedContent.sections;
+  const native = shared.find((section) => section.heading === 'Native Web');
+  const a11y = shared.find((section) => section.heading === 'Accessibility');
+  const guidance = shared.filter((section) =>
+    !['Native Web', 'Accessibility'].includes(section.heading));
+  const framework = unit.frameworkContent.sections;
+  const setup = framework.find((section) => section.heading === 'React setup');
+  const integration = framework.filter((section) => section !== setup);
+  const outline = [
+    { id: 'react-typography-setup', label: 'Quick start' },
+    { id: 'react-typography-preview', label: 'Examples' },
+    { id: 'react-typography-guidelines', label: 'Usage guidelines' },
+    { id: 'react-typography-accessibility', label: 'Accessibility' },
+    { id: 'react-typography-platform', label: 'Framework details' },
+    { id: 'react-typography-reference', label: 'API reference' },
+  ];
+  return h('div', { className: 'vf-docs-content-grid vf-docs-usage-grid' },
+    h('aside', { className: 'vf-docs-toc-region' },
+      h('nav', { className: 'vf-docs-toc', 'aria-label': 'On this page' },
+        h('p', null, 'On this page'),
+        h('ol', null, ...outline.map((item) =>
+          h('li', { key: item.id },
+            h('a', { href: '#' + item.id }, item.label)))))),
+    h('article', { className: 'vf-docs-article vf-docs-usage-page',
+      'data-vf-docs-react-typography': id },
+      h('header', { className: 'vf-docs-component-header' },
+        h('p', { className: 'vf-docs-eyebrow', 'data-vf-text': '',
+          'data-vf-text-variant': 'overline' }, 'React / Typography'),
+        h('h1', null, unit.sharedContent.title),
+        h('div', { className: 'vf-docs-lede', 'data-vf-text': '',
+          'data-vf-text-variant': 'body-lg' }, ...renderBlocks(unit.sharedContent.intro))),
+      h('section', { id: 'react-typography-setup',
+        'aria-labelledby': 'react-typography-setup-title',
+        className: 'vf-docs-guide-section' },
+        h('h2', { id: 'react-typography-setup-title' }, 'Quick start'),
+        h('p', null, 'Import the public React component and choose the semantic HTML element. In supported browser builds, VyrnForge includes the matching Web CSS automatically.'),
+        h('pre', { 'data-vf-code-block': '', tabIndex: 0 },
+          h('code', null, unit.id === 'code'
+            ? "import { Code, CodeBlock } from '@vyrnforge/react/code';"
+            : unit.id === 'kbd'
+              ? "import { Kbd } from '@vyrnforge/react/kbd';"
+              : "import { Text } from '@vyrnforge/react/text';"))),
+      h('section', { id: 'react-typography-preview',
+        className: 'vf-docs-guide-section',
+        'aria-labelledby': 'react-typography-preview-title',
+        'data-vf-docs-react-usage-gallery': id },
+        h('h2', { id: 'react-typography-preview-title' }, 'Examples'),
+        h('p', { className: 'vf-docs-section-intro' },
+          'Explore the live components. Open the source beneath any preview to use the same React example in your project.'),
+        h('nav', { className: 'vf-docs-example-jump', 'aria-label': unit.title + ' examples' },
+          h('ul', null, ...unit.examples.map((example) => {
+            const slug = example.id.slice(unit.id.length + 1);
+            return h('li', { key: example.id },
+              h('a', { href: '#react-typography-' + id + '-' + slug }, example.title));
+          }))),
+        ...unit.examples.map((example) => typographyExample(unit, example, links))),
+      h('section', { id: 'react-typography-guidelines',
+        className: 'vf-docs-guide-section',
+        'aria-labelledby': 'react-typography-guidelines-title' },
+        h('h2', { id: 'react-typography-guidelines-title' }, 'Usage guidelines'),
+        h('p', { className: 'vf-docs-section-intro' },
+          'Choose the component and native element based on what the content means. Visual roles control appearance, not semantics.'),
+        h('div', { className: 'vf-docs-guidance-grid' },
+          ...guidance.map((section) => authoredGuideSection(section, id + '-shared')))),
+      h('section', { id: 'react-typography-accessibility',
+        className: 'vf-docs-guide-section',
+        'aria-labelledby': 'react-typography-accessibility-title' },
+        h('h2', { id: 'react-typography-accessibility-title' }, 'Accessibility'),
+        ...(a11y ? renderBlocks(a11y.blocks) : []),
+        accessibilityEvidence(unit.standardReferences, { compact: true })),
+      h('section', { id: 'react-typography-platform',
+        className: 'vf-docs-guide-section',
+        'aria-labelledby': 'react-typography-platform-title' },
+        h('h2', { id: 'react-typography-platform-title' }, 'Framework details'),
+        h('p', { className: 'vf-docs-section-intro' },
+          'Implementation details for React and the shared Native Web styling foundation.'),
+        ...integration.map((section) => authoredGuideSection(section, id + '-react')),
+        setup ? h('details', { className: 'vf-docs-guide-disclosure' },
+          h('summary', null, 'CSS delivery and server rendering'),
+          ...renderBlocks(setup.blocks)) : null,
+        native ? h('details', { className: 'vf-docs-guide-disclosure' },
+          h('summary', null, 'Native Web equivalent'),
+          ...renderBlocks(native.blocks)) : null,
+        unit.id === 'text' ? h('div', { className: 'vf-docs-related-components' },
+          h('h3', null, 'Related components'),
+          h('ul', null,
+            h('li', null, h('a', { href: links.typography.code.guide }, 'Code'),
+              ' — code snippets and read-only blocks'),
+            h('li', null, h('a', { href: links.typography.kbd.guide }, 'Kbd'),
+              ' — keyboard-input notation'))) : null),
+      h('section', { id: 'react-typography-reference',
+        className: 'vf-docs-guide-section vf-docs-reference-panel',
+        'aria-labelledby': 'react-typography-reference-title' },
+        h('h2', { id: 'react-typography-reference-title' }, 'API reference'),
+        h('p', null, 'Review the public React entrypoint, component props, and TypeScript definitions.'),
+        h('a', { href: links.typography[id].api, 'data-vf-link': '' },
+          'Open ' + unit.title + ' API reference'))));
 }
 function typographyApi(unit, links) {
   if (!unit?.publicSource || !unit?.publicEntrypoints?.length) return null;
