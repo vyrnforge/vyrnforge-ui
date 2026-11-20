@@ -164,3 +164,31 @@ describe('Layout accessibility reference links', () => {
     }
   });
 });
+
+describe('React Typography uses Native Web contracts for Text, Code and Kbd', () => {
+  it('publishes Code and Kbd as real React public surfaces with authored React examples', async () => {
+    const react = compileFrameworkDocumentation('react');
+    const native = compileFrameworkDocumentation('native-web');
+    for (const [id, imports] of [
+      ['code', ['Code', 'CodeBlock']],
+      ['kbd', ['Kbd']],
+    ]) {
+      const product = react.componentCatalog.find((component) => component.id === id);
+      const baseline = native.componentCatalog.find((component) => component.id === id);
+      expect(product).toBeDefined();
+      expect(product.publicEntrypoints).toContain(`@vyrnforge/react/${id}`);
+      expect(product.sharedContent).toEqual(baseline.sharedContent);
+      expect(product.frameworkSourcePath).toBe(`product/components/elemental-primitives/typography/${id}/react/docs/index.md`);
+      expect(product.examples).toHaveLength(1);
+      const example = product.examples[0];
+      expect(example.sourcePath).toBe(`product/components/elemental-primitives/typography/${id}/examples/basic/react.tsx`);
+      expect(example.source).toContain(`from '@vyrnforge/react/${id}'`);
+      for (const name of imports) expect(example.source).toContain(`<${name}`);
+      const transformed = await transform(example.source, { loader: 'tsx', format: 'esm', jsx: 'automatic', target: 'es2022' });
+      expect(transformed.code).toContain(`@vyrnforge/react/${id}`);
+    }
+    const text = react.componentCatalog.find((component) => component.id === 'text');
+    expect(text.publicEntrypoints).toContain('@vyrnforge/react/text');
+    expect(text.frameworkSourcePath).toBe('product/components/elemental-primitives/typography/text/react/docs/index.md');
+  });
+});
