@@ -1,0 +1,13 @@
+/* This application's demonstration form owns its surface and reading measure.
+   VyrnForge library-wide presentation remains in the canonical Web styles. */
+.vf-foundation-settings-demo {
+  background: var(--vf-color-surface);
+  border: 1px solid var(--vf-color-border-required);
+  border-radius: var(--vf-radius-surface);
+  box-sizing: border-box;
+  color: var(--vf-color-text);
+  inline-size: min(100%, 36rem);
+  margin-block: var(--vf-space-md);
+  margin-inline: auto;
+  padding: var(--vf-space-md);
+}
