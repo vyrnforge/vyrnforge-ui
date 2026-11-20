@@ -386,10 +386,10 @@ test('React Text, Code and Kbd guides run checked-in JSX and link real public AP
       await expect(frame.locator('kbd')).toHaveCount(2);
       await expect(frame.locator('kbd').first()).toHaveText('Ctrl');
     }
-    await guide.getByText('View React TSX source').click();
-    await expect(guide.locator('.vf-docs-source-disclosure pre code')).toContainText(
+    await guide.getByText('View React TSX source').first().click();
+    await expect(guide.locator('.vf-docs-source-disclosure pre code').first()).toContainText(
       "from '@vyrnforge/react/" + id + "'");
-    await expect(guide.locator('.vf-docs-source-disclosure pre code')).toContainText(selectors.source);
+    await expect(guide.locator('.vf-docs-source-disclosure pre code').first()).toContainText(selectors.source);
     await guide.getByRole('link', { name: 'View ' + label + ' public React API' }).click();
     await expect(page).toHaveURL(new RegExp('/next/react/api/components/' + id + '/$'));
     const api = page.locator('[data-vf-docs-react-api="' + id + '"]');
@@ -425,8 +425,8 @@ test('React Typography routes preserve SSR with no client JavaScript and framewo
       await noJs.goto('/next/react/components/' + id + '/');
       await expect(noJs.locator('[data-vf-docs-react-typography="' + id + '"]')).toBeVisible();
       await expect(noJs.locator('html')).not.toHaveAttribute('data-vf-react-hydrated', 'true');
-      await noJs.getByText('View React TSX source').click();
-      await expect(noJs.locator('.vf-docs-source-disclosure pre code')).toContainText(
+      await noJs.getByText('View React TSX source').first().click();
+      await expect(noJs.locator('.vf-docs-source-disclosure pre code').first()).toContainText(
         "'@vyrnforge/react/" + id + "'");
       await noJs.getByRole('link', { name: /public React API/ }).click();
       await expect(noJs).toHaveURL(new RegExp('/api/components/' + id + '/$'));
@@ -463,4 +463,91 @@ test('React Typography remains readable at 320px, 200 percent text, RTL and forc
   expect(a11y.violations, a11y.violations.map((entry) => entry.id + ': ' + entry.help).join('\n')).toEqual([]);
   await page.emulateMedia({ forcedColors: 'active' });
   await page.screenshot({ path: testInfo.outputPath('react-text-320-rtl-forced-colors.png'), fullPage: true });
+});
+
+test('React Text guide teaches every public type role with real TSX previews and semantic composition', async ({ page }, testInfo) => {
+  const errors = [];
+  page.on('pageerror', (error) => errors.push(String(error)));
+  await page.goto('/next/react/components/text/');
+  await expect(page.locator('html')).toHaveAttribute('data-vf-react-hydrated', 'true');
+  const guide = page.locator('[data-vf-docs-react-typography="text"]');
+  const gallery = guide.locator('[data-vf-docs-react-usage-gallery="text"]');
+  const cards = gallery.locator('[data-vf-docs-react-typography-example]');
+  await expect(cards).toHaveCount(3);
+  await expect(gallery.getByRole('navigation', { name: 'Text examples' }).getByRole('link')).toHaveCount(3);
+  const typeScale = cards.filter({ has: page.locator('[data-vf-docs-example-id="text/type-scale"]') });
+  const scale = typeScale.locator('iframe').contentFrame();
+  const expected = [
+    'display-lg', 'display-md', 'display-sm',
+    'heading-lg', 'heading-md', 'heading-sm', 'heading-xs',
+    'title-lg', 'title-md', 'title-sm',
+    'body-lg', 'body-md', 'body-sm',
+    'label-lg', 'label-md', 'label-sm', 'caption', 'overline',
+  ];
+  await typeScale.locator('iframe').scrollIntoViewIfNeeded();
+  await expect(scale.locator('[data-vf-docs-specimen]')).toHaveCount(expected.length);
+  for (const variant of expected) {
+    const specimen = scale.locator('[data-vf-docs-specimen="' + variant + '"]');
+    await expect(specimen.locator('[data-vf-text-variant="' + variant + '"]')).toHaveCount(1);
+    await expect(specimen.locator('p[data-vf-text-variant="' + variant + '"]')).toBeVisible();
+    await expect(specimen.locator('small[data-vf-text-variant="caption"]')).toHaveText(variant);
+  }
+  await expect(scale.getByRole('heading', { name: 'Display', level: 2 })).toBeVisible();
+  await typeScale.getByText('View React TSX source').click();
+  const source = typeScale.locator('pre code');
+  await expect(source).toContainText('BuiltInTextVariant');
+  await expect(source).toContainText("from '@vyrnforge/react/text'");
+  await expect(source).toContainText("from '@vyrnforge/react/layout'");
+  await expect(source).not.toContainText('style={{');
+
+  const article = cards.filter({ has: page.locator('[data-vf-docs-example-id="text/semantic-composition"]') });
+  await article.locator('iframe').scrollIntoViewIfNeeded();
+  const frame = article.locator('iframe').contentFrame();
+  await expect(frame.getByRole('article')).toHaveCount(1);
+  await expect(frame.getByRole('heading', { level: 2, name: 'Meaning before appearance' })).toBeVisible();
+  await expect(frame.locator('strong[data-vf-text]')).toHaveText('real emphasis');
+  await expect(frame.locator('blockquote[data-vf-text]')).toContainText('Typography');
+  await expect(frame.locator('time[datetime="2026-11-20"]')).toHaveText('20 November 2026');
+  await article.getByText('View React TSX source').click();
+  await expect(article.locator('pre code')).toContainText('<Text as="h2"');
+  await expect(article.locator('pre code')).not.toContainText('style={{');
+
+  await expect(guide).toContainText('When to use');
+  await expect(guide).toContainText('When not to use');
+  await guide.getByRole('link', { name: 'View Text public React API' }).click();
+  await expect(page).toHaveURL(/\/next\/react\/api\/components\/text\/$/);
+  expect(errors).toEqual([]);
+  await page.screenshot({ path: testInfo.outputPath('react-text-api-source-backed.png'), fullPage: false });
+});
+
+test('Text specimen examples retain semantics and reflow at narrow width with dark and forced colors', async ({ page }, testInfo) => {
+  await page.setViewportSize({ width: 320, height: 760 });
+  await page.goto('/next/react/components/text/');
+  await expect(page.locator('html')).toHaveAttribute('data-vf-react-hydrated', 'true');
+  await page.getByLabel('Theme').selectOption('dark');
+  await page.evaluate(() => {
+    document.documentElement.dir = 'rtl';
+    document.documentElement.style.fontSize = '200%';
+  });
+  const gallery = page.locator('[data-vf-docs-react-usage-gallery="text"]');
+  await expect(gallery.getByRole('link', { name: 'Visual type scale' })).toHaveAttribute(
+    'href', '#react-typography-text-type-scale');
+  await gallery.getByRole('link', { name: 'Visual type scale' }).click();
+  await expect(page).toHaveURL(/#react-typography-text-type-scale$/);
+  const scale = page.locator('iframe[data-vf-docs-example-id="text/type-scale"]').contentFrame();
+  await expect(scale.locator('[data-vf-docs-specimen]')).toHaveCount(18);
+  const docWidths = await page.evaluate(() => ({
+    client: document.documentElement.clientWidth,
+    scroll: document.documentElement.scrollWidth,
+  }));
+  expect(docWidths.scroll).toBeLessThanOrEqual(docWidths.client + 1);
+  const iframeWidths = await scale.locator('html').evaluate((root) => ({
+    client: root.clientWidth, scroll: root.scrollWidth,
+  }));
+  expect(iframeWidths.scroll).toBeLessThanOrEqual(iframeWidths.client + 1);
+  await page.emulateMedia({ forcedColors: 'active' });
+  await expect(scale.locator('[data-vf-docs-specimen="body-md"] p')).toBeVisible();
+  await page.screenshot({
+    path: testInfo.outputPath('react-text-guide-320-rtl-dark-forced-colors.png'), fullPage: false,
+  });
 });
