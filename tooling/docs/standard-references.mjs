@@ -3,7 +3,9 @@
 const wcag22 = Object.freeze({
   '1.1.1': ['Non-text Content', 'non-text-content'],
   '1.3.1': ['Info and Relationships', 'info-and-relationships'],
+  '1.3.2': ['Meaningful Sequence', 'meaningful-sequence'],
   '1.4.1': ['Use of Color', 'use-of-color'],
+  '1.4.10': ['Reflow', 'reflow'],
   '1.4.3': ['Contrast (Minimum)', 'contrast-minimum'],
   '1.4.11': ['Non-text Contrast', 'non-text-contrast'],
   '1.4.13': ['Content on Hover or Focus', 'content-on-hover-or-focus'],
