@@ -50,7 +50,8 @@ describe('React documentation compiler preflight', () => {
     expect(button.frameworkSourcePath).toBe('product/components/interactive-controls/button/react/docs/index.md');
     expect(button.frameworkContent?.title).toBe('React Button');
     expect(button.frameworkContent?.sections.map((section) => section.heading))
-      .toEqual(['React setup', 'React props and ownership', 'React forms and accessibility', 'React rendering boundary']);
+      .toEqual(['React setup']);
+    expect(JSON.stringify(button.frameworkContent)).toContain("@vyrnforge/react/button");
     expect(nativeButton.frameworkSourcePath).not.toBe(button.frameworkSourcePath);
   });
 
@@ -224,7 +225,7 @@ describe('React Typography uses Native Web contracts for Text, Code and Kbd', ()
     for (const id of ['text', 'code', 'kbd']) {
       const component = react.componentCatalog.find((entry) => entry.id === id);
       expect(component.frameworkContent.sections.find((section) => section.heading === 'React setup')).toBeDefined();
-      expect(JSON.stringify(component.frameworkContent)).toContain('@vyrnforge/web/styles.css');
+      expect(JSON.stringify(component.frameworkContent)).not.toContain('@vyrnforge/web/styles.css');
     }
   });
 });
@@ -240,14 +241,13 @@ describe('React Text consumer-first guide examples', () => {
     expect(text.sharedContent.sections.map((section) => section.heading)).toContain('When to use');
     expect(text.sharedContent.sections.map((section) => section.heading)).toContain('When not to use');
     expect(text.frameworkContent.sections.map((section) => section.heading)).toEqual([
-      'React setup', 'Choosing a semantic host', 'Styling and server rendering', 'Specialized typography',
+      'React setup', 'Choosing a semantic host',
     ]);
     expect(text.frameworkContent.sections.find((section) => section.heading === 'React setup')?.blocks
       .some((block) => block.type === 'code' && block.language === 'tsx' &&
         block.text.includes('<Text as="h2" variant="heading-md">'))).toBe(true);
-    expect(text.frameworkContent.sections.find((section) => section.heading === 'Styling and server rendering')?.blocks
-      .some((block) => block.type === 'code' && block.language === 'ts' &&
-        block.text.includes("import '@vyrnforge/web/styles.css';"))).toBe(true);
+    expect(text.frameworkContent.sections.find((section) => section.heading === 'Choosing a semantic host')?.blocks
+      .some((block) => block.type === 'paragraph' && block.text.includes('as="h2"'))).toBe(true);
     for (const example of examples) {
       expect(example.sourcePath.endsWith('/react.tsx')).toBe(true);
       expect(example.source).toContain("from '@vyrnforge/react/text'");
