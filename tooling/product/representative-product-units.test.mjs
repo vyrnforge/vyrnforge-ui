@@ -406,7 +406,8 @@ test('Elemental-primitives aggregate stylesheet is not a component owner and res
     assert.ok(component, id + ' is independently owned inside Typography');
     assert.equal(component.responsibility, 'elemental-primitives');
     assert.equal(component.facets.canonicalRoot, 'product/components/elemental-primitives/typography/' + id + '/');
-    assert.deepEqual(Object.keys(component.surfaces), ['web']);
+    assert.deepEqual(Object.keys(component.surfaces), ['web', 'react']);
+    assert.ok(component.surfaces.react.publicEntrypoints.includes('@vyrnforge/react/' + id));
   }
 
   const icon = graph.components.find((entry) => entry.unitId === 'icon');
