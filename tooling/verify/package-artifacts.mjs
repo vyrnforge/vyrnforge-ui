@@ -199,6 +199,26 @@ try {
   run('npm', ['install', '--ignore-scripts', '--no-audit', '--no-fund'], { cwd: consumerRoot });
   run('npm', ['exec', '--', 'tsc', '-p', 'tsconfig.json'], { cwd: consumerRoot });
   run(process.execPath, ['smoke.mjs'], { cwd: consumerRoot });
+
+  // In addition to Node's CSS-free direct import, verify a real browser
+  // bundler consumes CSS from the INSTALLED React tarball without app imports.
+  if (validationPackages.includes('react')) {
+    const clientSource = path.join(consumerRoot, 'browser-consumer.mjs');
+    const output = path.join(consumerRoot, 'browser-output');
+    writeFileSync(clientSource,
+      "import { Code } from '@vyrnforge/react/code';\nconsole.log(Code);\n");
+    run('pnpm', [
+      'exec', 'esbuild', clientSource, '--bundle', '--platform=browser',
+      '--format=esm', `--outdir=${output}`, '--external:react', '--external:react-dom',
+    ]);
+    const css = path.join(output, 'browser-consumer.css');
+    if (!existsSync(css)) throw new Error('Packed React browser entry did not emit automatic CSS');
+    const source = readFileSync(css, 'utf8');
+    if (!source.includes('data-vf-code') || !source.includes('data-vf-text') ||
+        source.includes('data-vf-button') || source.includes('data-vf-kbd')) {
+      throw new Error('Packed React CSS must include Code + Text, but not unrelated component styles');
+    }
+  }
 } finally {
   rmSync(consumerRoot, { recursive: true, force: true });
 }

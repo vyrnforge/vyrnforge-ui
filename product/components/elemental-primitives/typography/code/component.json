@@ -3,5 +3,10 @@
   "name": "Code",
   "documentation": {
     "group": "content-disclosure"
+  },
+  "styling": {
+    "dependencies": [
+      "text"
+    ]
   }
 }

@@ -3,5 +3,10 @@
   "name": "Kbd",
   "documentation": {
     "group": "content-disclosure"
+  },
+  "styling": {
+    "dependencies": [
+      "text"
+    ]
   }
 }

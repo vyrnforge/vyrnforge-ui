@@ -92,7 +92,12 @@ for (const name of publicPackageNames) {
   ) {
     throw new Error(`${manifest.name} must not depend on repository-only browser tooling`);
   }
-  if (name !== 'web' && manifest.sideEffects !== false) {
+  if (name === 'react') {
+    const approved = ['./dist/browser.js', './dist/components/*/browser.js'];
+    if (JSON.stringify(manifest.sideEffects) !== JSON.stringify(approved)) {
+      throw new Error('@vyrnforge/react may preserve only generated browser CSS wrappers as side effects');
+    }
+  } else if (name !== 'web' && manifest.sideEffects !== false) {
     throw new Error(`${manifest.name} must remain side-effect-free by default`);
   }
 }

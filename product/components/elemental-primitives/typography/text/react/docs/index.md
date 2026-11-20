@@ -4,13 +4,15 @@ React uses the same framework-neutral typography roles and canonical Web stylesh
 
 ## React setup
 
-Load the canonical stylesheet **once in the application entrypoint**, not inside every component or example:
+In a CSS-aware browser build that honors the package's `browser` export condition (validated with esbuild), importing `@vyrnforge/react/text` automatically includes **the canonical Native Web Text CSS**. No per-component stylesheet import is required. The root `@vyrnforge/react` entry selects the full Web aggregate, whereas granular component imports select just their component's CSS and declared styling dependencies.
+
+For plain Node/SSR imports, the JS entry stays CSS-free. The consuming SSR framework must include the stylesheet emitted by its client build in the HTML; SSR alone does not install browser CSS. For bundlers that do not resolve `browser` conditions or cannot extract CSS, the supported fallback remains one explicit app-entrypoint import:
 
 ```ts
 import '@vyrnforge/web/styles.css';
 ```
 
-This is the **current explicit loading model**; importing a React component does not automatically load its CSS. Applications optimizing their CSS payload can instead import selected granular Web styles at their entrypoint.
+The optional reset is never auto-loaded. This is not a React styling fork.
 
 ```tsx
 import { Text } from '@vyrnforge/react/text';
@@ -22,4 +24,4 @@ Use `as` for the actual document semantics. `variant` only selects a visual role
 
 ## Specialized typography
 
-Use `@vyrnforge/react/code` and `@vyrnforge/react/kbd` for code and keyboard-input notation. Their native elements and CSS hooks remain separate; neither becomes another Text host. When the application loads the single aggregate Web stylesheet above, Code and Kbd receive their canonical styling too; no additional component-level stylesheet imports are needed. No provider or React-only theme is required.
+Use `@vyrnforge/react/code` and `@vyrnforge/react/kbd` for code and keyboard-input notation. Their native elements and CSS hooks remain separate; neither becomes another Text host. Code and Kbd automatically import their canonical Web styles through the same browser condition. The Code/Kbd subpaths also include Text styles for the optional shared typography variant. No provider or React-only theme is required.

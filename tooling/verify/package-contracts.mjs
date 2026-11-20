@@ -70,6 +70,14 @@ if (web.exports?.['./styles.css'] !== './dist/styles.css') {
   throw new Error('@vyrnforge/web must expose the canonical stylesheet explicitly');
 }
 
+const react = packageManifests.get('react');
+if (JSON.stringify(react.sideEffects) !== JSON.stringify(['./dist/browser.js', './dist/components/*/browser.js'])) {
+  throw new Error('@vyrnforge/react browser CSS wrappers must be preserved by tree shaking');
+}
+if (react.exports?.['.']?.browser !== './dist/browser.js' || react.exports?.['.']?.import !== './dist/index.js') {
+  throw new Error('@vyrnforge/react root browser styles must not break Node SSR imports');
+}
+
 const icons = packageManifests.get('icons');
 if (icons.sideEffects !== false) throw new Error('@vyrnforge/icons must remain side-effect-free');
 
@@ -114,6 +122,15 @@ for (const component of productGraph.components) {
     }
     if (targets.some((target) => !target.startsWith(`./dist/components/${componentId}/`))) {
       throw new Error(`@vyrnforge/${port}/${componentId} must build from its component-owned output directory`);
+    }
+    if (port === 'react') {
+      if (entry.browser !== `./dist/components/${componentId}/browser.js` ||
+          entry.import !== `./dist/components/${componentId}/index.js`) {
+        throw new Error(`@vyrnforge/react/${componentId} browser styling must preserve Node SSR imports`);
+      }
+      if (!component.surfaces.web?.publicEntrypoints.length) {
+        throw new Error(`@vyrnforge/react/${componentId} is missing a canonical Web stylesheet`);
+      }
     }
   }
 }
