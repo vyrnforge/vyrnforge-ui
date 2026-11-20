@@ -24,10 +24,10 @@ function renderBlocks(blocks = []) {
     ? h('ul', { key: i }, block.items.map((item, j) => h('li', { key: j }, ...renderInline(item))))
     : h('p', { key: i }, ...renderInline(block.text)));
 }
-function renderSections(content, prefix) {
+function renderSections(content, prefix, includeIntro = true) {
   if (!content) return null;
   return h('section', { 'aria-label': prefix },
-    ...renderBlocks(content.intro),
+    ...(includeIntro ? renderBlocks(content.intro) : []),
     ...content.sections.map((section, index) => {
       const id = slug(prefix + '-' + section.heading + '-' + index);
       return h('section', { key: id, 'aria-labelledby': id },
@@ -291,7 +291,7 @@ function typographyGuide(unit, links) {
             h('a', { href: '#react-typography-' + id + '-' + slug }, example.title));
         }))),
       ...unit.examples.map((example) => typographyExample(unit, example, links))),
-    renderSections(unit.sharedContent, 'Shared ' + unit.title + ' semantics'),
+    renderSections(unit.sharedContent, 'Shared ' + unit.title + ' semantics', false),
     renderSections(unit.frameworkContent, 'React ' + unit.title + ' integration'),
     h('section', { 'aria-labelledby': 'react-typography-reference' },
       h('h2', { id: 'react-typography-reference' }, 'Reference'),
