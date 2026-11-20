@@ -479,6 +479,10 @@ test('React Text guide teaches every public type role with real TSX previews and
   await page.goto('/next/react/components/text/');
   await expect(page.locator('html')).toHaveAttribute('data-vf-react-hydrated', 'true');
   const guide = page.locator('[data-vf-docs-react-typography="text"]');
+  const searchWidth = await page.getByRole('searchbox', { name: 'Search React documentation' })
+    .evaluate((input) => input.getBoundingClientRect().width);
+  expect(searchWidth, 'Desktop docs search must remain readable alongside framework and theme controls')
+    .toBeGreaterThan(150);
   expect(await guide.locator(':scope > section > h2').allTextContents()).toEqual([
     'Get started', 'Examples', 'Usage guidelines', 'Accessibility',
     'React integration', 'Related components and API',
