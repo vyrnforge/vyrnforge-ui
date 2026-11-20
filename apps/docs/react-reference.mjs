@@ -20,9 +20,16 @@ function renderInline(value) {
   });
 }
 function renderBlocks(blocks = []) {
-  return blocks.map((block, i) => block.type === 'list'
-    ? h('ul', { key: i }, block.items.map((item, j) => h('li', { key: j }, ...renderInline(item))))
-    : h('p', { key: i }, ...renderInline(block.text)));
+  return blocks.map((block, i) => {
+    if (block.type === 'list') return h('ul', { key: i },
+      ...block.items.map((item, j) => h('li', { key: j }, ...renderInline(item))));
+    if (block.type === 'code') return h('pre', {
+      key: i, 'data-vf-code-block': '', tabIndex: 0,
+      'data-vf-docs-code-language': block.language ?? undefined,
+    }, h('code', null, block.text));
+    if (block.type === 'paragraph') return h('p', { key: i }, ...renderInline(block.text));
+    throw new Error('Unsupported documentation block type: ' + block.type);
+  });
 }
 function renderSections(content, prefix, includeIntro = true) {
   if (!content) return null;
