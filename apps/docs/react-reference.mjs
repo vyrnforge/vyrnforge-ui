@@ -163,20 +163,6 @@ function navigation(view, links, topic) {
         h(SideNavItem, { key: entry.id },
           h(SideNavLink, { current: entry.id === selected, href: entry.href }, entry.title)))))));
 }
-function example(button, links) {
-  const basic = button.examples.find((entry) => entry.id === 'button/basic');
-  if (!basic) return null;
-  return h('section', { 'aria-labelledby': 'react-example' },
-    h('h2', { id: 'react-example' }, 'Checked-in React example'),
-    h('p', null, 'The sandbox runs the original product-owned React example, bundled against the public package.'),
-    h('iframe', {
-      title: 'Checked-in React Button example', className: 'vf-docs-react-example-frame',
-      src: links.example, sandbox: 'allow-scripts', loading: 'lazy',
-    }),
-    h('details', { className: 'vf-docs-source-disclosure' },
-      h('summary', null, 'View checked-in React source'),
-      h('pre', { 'data-vf-code-block': '', tabIndex: 0 }, h('code', null, basic.source))));
-}
 function layoutExample(example, links) {
   const id = example.id.split('/')[1];
   return h('article', { className: 'vf-docs-example', key: example.id,
@@ -195,6 +181,12 @@ function layoutExample(example, links) {
 function layoutGuide(layout, links) {
   if (!layout?.sharedContent || !layout?.frameworkContent || !layout.examples?.length) return null;
   const content = layout.sharedContent;
+  // The introductory composition must precede the specialized recipes in
+  // reading order, anchor navigation and no-JavaScript source inspection.
+  const examples = [
+    ...layout.examples.filter((example) => example.id === 'layout/basic'),
+    ...layout.examples.filter((example) => example.id !== 'layout/basic'),
+  ];
   const sections = [
     { id: 'react-layout-setup', heading: 'Get started' },
     { id: 'react-layout-examples', heading: 'Examples' },
@@ -218,9 +210,9 @@ function layoutGuide(layout, links) {
       ]),
       guidePart(sections[1], [
         h('p', { key: 'intro' }, 'These six examples run product-owned React TSX. Each preview keeps its source available.'),
-        exampleJumpLinks('Layout', layout.examples,
+        exampleJumpLinks('Layout', examples,
           (example) => 'react-layout-example-' + example.id.split('/')[1]),
-        ...layout.examples.map((example) => layoutExample(example, links)),
+        ...examples.map((example) => layoutExample(example, links)),
       ]),
       guidePart(sections[2], guideSubsections(content, [
         'Choose a layout', 'Flow: vertical rhythm', 'Flow: one inline row',
