@@ -571,6 +571,9 @@ test('React Text guide teaches every public type role with real TSX previews and
   await expect(guide).toContainText('When not to use');
   await typeScale.getByText('View React TSX source').click();
   await article.getByText('View React TSX source').click();
+  // Capture the document from the beginning so sticky navigation and header
+  // appear in owner visual evidence after exercising lazy example iframes.
+  await page.evaluate(() => window.scrollTo(0, 0));
   await page.screenshot({
     path: testInfo.outputPath('react-text-usage-guide-wide.png'), fullPage: true,
   });
