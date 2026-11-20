@@ -30,6 +30,10 @@ export { TabsList, TabsPanel, TabsRoot, TabsTab } from './components/tabs/index.
 export type { TabsActivation, TabsListProps, TabsOrientation, TabsPanelProps, TabsRootProps, TabsTabProps } from './components/tabs/index.js';
 export { Text } from './components/text/index.js';
 export type { TextElement, TextProps, TextVariant } from './components/text/index.js';
+export { Code, CodeBlock } from './components/code/index.js';
+export type { CodeProps, CodeBlockProps } from './components/code/index.js';
+export { Kbd } from './components/kbd/index.js';
+export type { KbdProps } from './components/kbd/index.js';
 export * from './components/disclosure/index.js';
 export * from './components/accordion/index.js';
 export * from './components/alert-dialog/index.js';

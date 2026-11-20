@@ -108,3 +108,30 @@ test('Native Web composes Text typography with semantic and component hooks on o
     });
   }
 });
+
+test('React Code/Kbd reuse native component CSS and optional Text typography roles without losing semantics', async ({ page, browserName }) => {
+  test.skip(port !== 'react', 'React composition integration evidence');
+  await page.goto('/components/text/react.html');
+  const defaultCode = page.locator('#default-code');
+  const composedCode = page.locator('#composed-code');
+  const block = page.locator('#composed-code-block');
+  const defaultKbd = page.locator('#default-kbd');
+  const composedKbd = page.locator('#composed-kbd');
+  await expect(defaultCode).toHaveJSProperty('tagName', 'CODE');
+  await expect(composedCode).toHaveAttribute('data-vf-code', '');
+  await expect(composedCode).toHaveAttribute('data-vf-text-variant', 'body-lg');
+  await expect(block).toHaveJSProperty('tagName', 'PRE');
+  await expect(block.locator('code')).toHaveText('pnpm build');
+  await expect(defaultKbd).toHaveJSProperty('tagName', 'KBD');
+  await expect(composedKbd).toHaveAttribute('data-vf-kbd', '');
+  await expect(composedKbd).toHaveAttribute('data-vf-text-variant', 'body-sm');
+  expect(await defaultCode.evaluate(el => getComputedStyle(el).fontSize)).toBe('14px');
+  expect(await composedCode.evaluate(el => getComputedStyle(el).fontSize)).toBe('20px');
+  expect(await composedCode.evaluate(el => getComputedStyle(el).fontFamily)).toMatch(/mono/i);
+  expect(await defaultKbd.evaluate(el => getComputedStyle(el).fontSize)).toBe('14px');
+  expect(await composedKbd.evaluate(el => getComputedStyle(el).fontSize)).toBe('14px');
+  expect(await composedKbd.evaluate(el => getComputedStyle(el).fontFamily)).toMatch(/mono/i);
+  if (browserName === 'chromium') {
+    await page.screenshot({ path: test.info().outputPath('text-react-code-kbd-parity.png'), fullPage: false });
+  }
+});
