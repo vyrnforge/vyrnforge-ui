@@ -478,6 +478,9 @@ test('React Text guide teaches every public type role with real TSX previews and
   await cards.first().locator('iframe').scrollIntoViewIfNeeded();
   await expect(cards.first().locator('iframe').contentFrame()
     .getByRole('heading', { name: 'Typography foundation', level: 2 })).toBeVisible();
+  await cards.first().locator('iframe').contentFrame().locator('body').screenshot({
+    path: testInfo.outputPath('react-text-basic-example-actual-size.png'),
+  });
   const typeScale = cards.filter({ has: page.locator('[data-vf-docs-example-id="text/type-scale"]') });
   const scale = typeScale.locator('iframe').contentFrame();
   const expected = [
