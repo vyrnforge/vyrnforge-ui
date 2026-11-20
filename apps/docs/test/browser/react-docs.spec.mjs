@@ -53,6 +53,9 @@ test('React Button guide SSR hydrates and uses public Button, AppShell, SideNav 
   await expect(page.getByRole('heading', { name: 'Button', level: 1 })).toBeVisible();
   await expect(page.locator('[data-vf-docs-react-component="button"]')).toHaveCount(1);
   const standards = page.locator('[data-vf-docs-react-component="button"] [data-vf-docs-accessibility]');
+  const disclosure = page.locator('[data-vf-docs-react-component="button"]')
+    .getByText('Standards and evidence mapping', { exact: true });
+  await disclosure.click();
   await expect(standards.getByRole('heading', { name: 'Accessibility evidence' })).toBeVisible();
   await expect(standards.getByRole('link', { name: /WCAG 2\.2/ })).toHaveAttribute('href', 'https://www.w3.org/TR/WCAG22/');
   await expect(standards.locator('details')).not.toHaveAttribute('open', '');
@@ -250,7 +253,9 @@ test('React Layout lives under Layout & Structure and runs checked-in React JSX 
   const nav = page.getByRole('navigation', { name: 'Documentation' });
   await expect(nav.getByText('Layout & Structure', { exact: true })).toBeVisible();
   await expect(nav.getByRole('link', { name: 'Layout guide' })).toHaveAttribute('aria-current', 'page');
-  const accessibility = page.locator('[data-vf-docs-react-layout] [data-vf-docs-accessibility]');
+  const layoutGuide = page.locator('[data-vf-docs-react-layout]');
+  await layoutGuide.getByText('Standards and evidence mapping', { exact: true }).click();
+  const accessibility = layoutGuide.locator('[data-vf-docs-accessibility]');
   await expect(accessibility).toContainText('Accessibility review required');
   await accessibility.locator('summary').click();
   const mappedCriteria = accessibility.getByRole('list', { name: 'Mapped WCAG criteria' });
@@ -289,8 +294,9 @@ test('React Layout lives under Layout & Structure and runs checked-in React JSX 
   await page.getByRole('button', { name: 'Clear search' }).click();
   await expect(page.locator('[data-vf-docs-react-results]')).toBeHidden();
   await page.getByRole('navigation', { name: 'On this page' })
-    .getByRole('link', { name: 'AutoGrid: intrinsic equal tracks' }).click();
-  await expect(page).toHaveURL(/#react-layout-autogrid-intrinsic-equal-tracks$/);
+    .getByRole('link', { name: 'Usage guidelines' }).click();
+  await expect(page).toHaveURL(/#react-layout-guidelines$/);
+  await expect(layoutGuide.getByRole('heading', { name: 'AutoGrid: intrinsic equal tracks' })).toBeVisible();
   await page.screenshot({ path: testInfo.outputPath('react-layout-wide.png'), fullPage: true });
   expect(errors).toEqual([]);
 });
@@ -371,16 +377,11 @@ test('React Text, Code and Kbd guides run checked-in JSX and link real public AP
     await expect(guide.getByRole('heading', { level: 1, name: label })).toBeVisible();
     await expect(page.getByRole('navigation', { name: 'Documentation' })
       .getByRole('link', { name: label + ' guide' })).toHaveAttribute('aria-current', 'page');
-    if (id === 'text') {
-      const standards = guide.getByText('Standards and evidence mapping', { exact: true });
-      await standards.click();
-      await expect(guide.locator('[data-vf-docs-accessibility]')).toBeVisible();
-      await standards.click();
-      await expect(guide).toContainText('Get started');
-    } else {
-      await expect(guide.locator('[data-vf-docs-accessibility]')).toBeVisible();
-      await expect(guide).toContainText('React setup');
-    }
+    const standards = guide.getByText('Standards and evidence mapping', { exact: true });
+    await standards.click();
+    await expect(guide.locator('[data-vf-docs-accessibility]')).toBeVisible();
+    await standards.click();
+    await expect(guide).toContainText('Get started');
     const iframe = guide.locator('iframe[title="React ' + label + ' example"]');
     await iframe.scrollIntoViewIfNeeded();
     const frame = iframe.contentFrame();
@@ -471,6 +472,55 @@ test('React Typography remains readable at 320px, 200 percent text, RTL and forc
   expect(a11y.violations, a11y.violations.map((entry) => entry.id + ': ' + entry.help).join('\n')).toEqual([]);
   await page.emulateMedia({ forcedColors: 'active' });
   await page.screenshot({ path: testInfo.outputPath('react-text-320-rtl-forced-colors.png'), fullPage: true });
+});
+
+test('Button, Layout, Code and Kbd use one task-first guide hierarchy and separate API navigation', async ({ page }) => {
+  const expected = [
+    'Get started', 'Examples', 'Usage guidelines',
+    'Accessibility', 'React integration', 'Related components and API',
+  ];
+  for (const id of ['button', 'layout', 'code', 'kbd']) {
+    await page.goto('/next/react/components/' + id + '/');
+    const selector = id === 'button' ? '[data-vf-docs-react-component="button"]'
+      : id === 'layout' ? '[data-vf-docs-react-layout]'
+      : '[data-vf-docs-react-typography="' + id + '"]';
+    const guide = page.locator(selector);
+    await expect(guide).toHaveCount(1);
+    expect(await guide.locator(':scope > section > h2').allTextContents()).toEqual(expected);
+    const toc = page.getByRole('navigation', { name: 'On this page' });
+    await expect(toc.getByRole('link')).toHaveCount(6);
+    await expect(toc.getByRole('link', { name: 'Examples' })).toBeVisible();
+    await expect(guide.locator('header [data-vf-docs-accessibility]')).toHaveCount(0);
+    await expect(guide.getByRole('heading', { name: /^Shared .* semantics$/ })).toHaveCount(0);
+    await expect(guide.getByText('Standards and evidence mapping')).toBeVisible();
+    await expect(guide.getByRole('link', { name: /public React API|React API/ })).toHaveAttribute(
+      'href', /api\/components\//);
+    const nav = page.getByRole('navigation', { name: 'Documentation' });
+    await expect(nav.getByText('API Reference', { exact: true })).toBeVisible();
+    // API links remain routed and searchable, but are not embedded in the
+    // Components, Typography or Layout & Structure navigation groups.
+    await expect(nav.getByRole('link', { name: 'Button API' })).toBeVisible();
+    await expect(nav.getByRole('link', { name: 'Layout API' })).toBeVisible();
+  }
+});
+
+test('React Button guide renders all five source-backed variants and links the independent API', async ({ page }) => {
+  await page.goto('/next/react/components/button/');
+  const guide = page.locator('[data-vf-docs-react-component="button"]');
+  const cards = guide.locator('[data-vf-docs-react-button-example]');
+  await expect(cards).toHaveCount(5);
+  await expect(guide.getByRole('navigation', { name: 'Button examples' }).getByRole('link')).toHaveCount(5);
+  for (const id of ['basic', 'variants', 'sizes', 'states', 'forms']) {
+    const card = guide.locator('[data-vf-docs-react-button-example="button/' + id + '"]');
+    await expect(card).toHaveCount(1);
+    await expect(card.locator('iframe')).toHaveAttribute('src', /examples\/button/);
+    await card.locator('iframe').scrollIntoViewIfNeeded();
+    await expect(card.locator('iframe').contentFrame().locator('#root button').first()).toBeVisible();
+    await card.locator('summary').click();
+    await expect(card.locator('pre code')).toContainText("from '@vyrnforge/react/button'");
+  }
+  await guide.getByRole('link', { name: 'View Button public React API' }).click();
+  await expect(page).toHaveURL(/\/next\/react\/api\/components\/button\/$/);
 });
 
 test('React Text guide teaches every public type role with real TSX previews and semantic composition', async ({ page }, testInfo) => {
