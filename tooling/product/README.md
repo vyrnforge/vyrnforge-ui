@@ -34,3 +34,9 @@ node tooling/product/compare-ownership-baseline.mjs /path/to/baseline /path/to/c
 ```
 
 The comparison normalizes only the approved AD-16 v2-to-v3 ownership fields and AppShell/SideNav paths; it compares the full graph, package projections, five documentation catalogs, and per-path semantic impact for the moved subtree. This is a migration evidence tool, not a compatibility adapter, public API or permanent baseline registry. Verify exact candidate builds, packed consumers and browser/visual behavior separately. The existing `format:l5` and `lint:l5` command IDs remain technical compatibility names for the composite-widget tooling scope, not product taxonomy.
+
+## React browser CSS delivery
+
+The React package preserves the canonical Web CSS rather than copying or forking it. A browser build condition on each React public subpath selects a generated JS wrapper that imports the corresponding `@vyrnforge/web/styles/<id>.css` asset and re-exports the SSR-safe native component module. Package subpaths and their styles are derived from Product Graph exports; special composition dependencies are declared in the component owner's `component.json` under `styling.dependencies`. The root browser entry deliberately imports the Web aggregate and is less tree-shaking friendly than granular subpaths. Node/SSR selects the ordinary CSS-free ESM `import` export.
+
+`tooling/product/react-browser-css.mjs` runs after React's projected TypeScript build and emits browser-only wrappers into `packages/react/dist`. These wrappers are marked as side effects while ordinary component source stays tree-shakeable; the opt-in reset is never auto-loaded. Standard package validation exercises Node and browser bundling separately. Consumer bundlers that do not honor the `browser` package export condition still need the explicit one-time Web stylesheet.
