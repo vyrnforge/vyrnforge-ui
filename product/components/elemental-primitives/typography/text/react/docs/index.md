@@ -13,4 +13,4 @@ import { Text } from '@vyrnforge/react/text';
 
 ## Choosing a semantic host
 
-Choose a real heading element such as `as="h2"` when the content is a heading. The `variant` changes its appearance, not its document-outline level. For example, `<Text as="h2" variant="title-lg">` remains a second-level heading. See React overview for common styling and server-rendering setup.
+Choose a real heading element such as `as="h2"` when the content is a heading. The `variant` changes its appearance, not its document-outline level. For example, `<Text as="h2" variant="title-lg">` remains a second-level heading.
