@@ -20,7 +20,13 @@ const button = reactModel.componentCatalog.find((entry) => entry.id === 'button'
 if (!button?.showcaseAvailable || !button.apiAvailable || !button.frameworkContent) {
   throw new Error('React documentation pilot requires real public Button API, shared and React-authored content');
 }
-const basicExample = button.examples.find((entry) => entry.id === 'button/basic');
+const buttonExamples = button.examples.slice().sort((a, b) => a.id.localeCompare(b.id));
+const basicExample = buttonExamples.find((entry) => entry.id === 'button/basic');
+if (buttonExamples.length !== 5 ||
+    !buttonExamples.every((entry) => entry.sourcePath.endsWith('/react.tsx') &&
+      entry.source.includes("'@vyrnforge/react/button'"))) {
+  throw new Error('React Button guide needs five real product-owned runnable examples');
+}
 if (!basicExample?.sourcePath.endsWith('/react.tsx')) {
   throw new Error('React documentation requires the checked-in executable Button example');
 }
@@ -114,6 +120,11 @@ function linksFor(route) {
     guide: relative(dir, react + 'components/button/', true),
     api: relative(dir, react + 'api/components/button/', true),
     example: relative(dir, react + 'examples/button-basic/', true),
+    buttonExamples: Object.fromEntries(buttonExamples.map((entry) => {
+      const slug = entry.id.slice('button/'.length);
+      return [slug, relative(dir, react + (slug === 'basic'
+        ? 'examples/button-basic/' : 'examples/button/' + slug + '/'), true)];
+    })),
     layout: relative(dir, react + layout.showcaseRoute, true),
     layoutApi: relative(dir, react + layout.apiRoute, true),
     layoutExampleBase: relative(dir, react + 'examples/layout/', true),
@@ -208,6 +219,36 @@ await writePage('examples/button-basic/', '<!doctype html><html lang="en" data-v
   '</head><body><div id="root"></div><script src="' +
   escapeHtml(relative(exampleDir, 'assets/react-button-basic.js')) + '"></script></body></html>');
 
+// Keep the original Button basic route, then bundle remaining checked-in
+// examples through the same public React entrypoint and extracted Web CSS.
+for (const entry of buttonExamples.filter((example) => example.id !== 'button/basic')) {
+  const slug = entry.id.slice('button/'.length);
+  const asset = 'react-button-' + slug;
+  await build({
+    entryPoints: [path.join(root, entry.sourcePath)],
+    bundle: true, platform: 'browser', format: 'iife', target: 'es2022',
+    jsx: 'automatic', logLevel: 'silent',
+    outfile: path.join(outRoot, 'assets', asset + '.js'),
+  });
+  if (!(await stat(path.join(outRoot, 'assets', asset + '.css')).catch(() => null))?.isFile()) {
+    throw new Error('React ' + entry.id + ' must extract canonical browser CSS');
+  }
+  const route = 'examples/button/' + slug + '/';
+  const dir = directory(route);
+  const styles = shellStyles.map((file) =>
+    '<link rel="stylesheet" href="' + escapeHtml(relative(dir, file)) + '">').join('\\n');
+  await writePage(route, '<!doctype html><html lang="en" data-vf-theme="light"><head>' +
+    '<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">' +
+    '<title>React ' + escapeHtml(entry.title) + ' example · VyrnForge</title>' +
+    styles + '<link rel="stylesheet" href="' +
+    escapeHtml(relative(dir, 'assets/' + asset + '.css')) + '">' +
+    '<style>body{margin:0;padding:1rem;min-width:0;overflow-wrap:anywhere}' +
+    '#root{min-width:0}.vf-example-stack{display:flex;flex-wrap:wrap;align-items:center;gap:var(--vf-space-md)}' +
+    'input{max-width:100%;box-sizing:border-box}</style>' +
+    '</head><body><div id="root"></div><script src="' +
+    escapeHtml(relative(dir, 'assets/' + asset + '.js')) + '"></script></body></html>');
+}
+
 // One checked-in React example component per iframe; the application adapter
 // composes the product-owned examples without adding public React layout wrappers.
 for (const slug of layoutSlugs) {
@@ -264,7 +305,7 @@ const pageData = {
   frameworkContent: button.frameworkContent,
   standardReferences: button.standardReferences,
   publicButtonTypes,
-  examples: button.examples.filter((example) => example.id === 'button/basic'),
+  examples: buttonExamples,
 };
 const layoutData = {
   id: layout.id,
@@ -335,6 +376,7 @@ await writeFile(path.join(reactRoot, 'site-manifest.json'), JSON.stringify({
     sharedSourcePath: button.sharedSourcePath,
     frameworkSourcePath: button.frameworkSourcePath,
     executableExampleSource: basicExample.sourcePath,
+    examples: buttonExamples.map((example) => ({ id: example.id, sourcePath: example.sourcePath })),
   },
 }, null, 2) + '\n');
 process.stdout.write('React Button, Layout and Typography documentation pilot -> ' + path.relative(root, reactRoot) + '\n');
