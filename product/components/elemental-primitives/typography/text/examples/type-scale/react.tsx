@@ -41,8 +41,8 @@ export function TypeScaleExample() {
   return (
     <Flow gap="lg">
       {groups.map((group) => (
-        <Flow key={group.label} gap="sm" aria-label={group.label}>
-          <Text as="p" variant="heading-xs">{group.label}</Text>
+        <Flow key={group.label} gap="sm">
+          <Text as="h2" variant="heading-xs">{group.label}</Text>
           {group.specimens.map(({ variant, sample }) => (
             <Flow key={variant} gap="none" data-vf-docs-specimen={variant}>
               <Text as="small" variant="caption">{variant}</Text>
