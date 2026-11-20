@@ -10,6 +10,7 @@ import '@vyrnforge/web/styles/layout.css';
 import '@vyrnforge/web/styles/native-select.css';
 import '@vyrnforge/web/styles/switch.css';
 import '@vyrnforge/web/styles/text.css';
+import './example.css';
 
 function App() {
   const [appearance, setAppearance] = React.useState<'light' | 'dark'>('light');
@@ -22,7 +23,7 @@ function App() {
       data-vf-theme={appearance}
       data-vf-density={density}
       onSubmit={(event) => event.preventDefault()}
-      style={{ background: 'var(--vf-color-surface)', border: '1px solid var(--vf-color-border-required)', borderRadius: 'var(--vf-radius-surface)', boxSizing: 'border-box', color: 'var(--vf-color-text)', inlineSize: 'min(100%, 36rem)', margin: '1rem auto', padding: '1rem' }}
+      className="vf-foundation-settings-demo"
     >
       <div data-vf-flow data-vf-flow-direction="block" id="foundation-settings-stack">
         <Text as="h1" variant="heading-sm">Interface settings</Text>
