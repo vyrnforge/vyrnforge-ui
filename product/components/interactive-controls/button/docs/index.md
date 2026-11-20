@@ -62,9 +62,9 @@ Prefer the public VyrnForge tokens and supported hooks. Private custom propertie
 
 ## Framework availability
 
-The current documentation rollout is **Native Web first**. This shared guidance describes the component concept once; Native Web usage examples and public CSS are the current documentation focus. Framework-specific usage and source belong in their own future framework-scoped documentation views.
+Native Web uses a native `<button data-vf-button>`. React provides the public `Button` component and a framework-scoped React documentation guide; Angular provides `VfButtonDirective` on a native button; Vue provides `Button` with native attributes and slot content. All available ports preserve the shared button semantics with idiomatic authoring. Elements Button is intentionally not shipped; do not create a custom element to reproduce native button activation.
 
-Native Web uses a native `<button data-vf-button>`. React provides `Button` with native button props/ref; Angular provides `VfButtonDirective` on a native button; Vue provides `Button` with native attributes and slot content. Each port preserves the same Button semantics with idiomatic framework syntax. The Elements Button surface is intentionally not shipped; do not use a custom element to imitate a native button.
+Documentation completeness and rollout may differ across frameworks. An implementation export does not by itself establish a fully reviewed guide, independent assistive-technology acceptance, or release readiness.
 
 ## Contract and evidence boundaries
 
