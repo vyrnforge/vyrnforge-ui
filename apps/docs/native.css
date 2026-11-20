@@ -758,6 +758,155 @@
     margin-block-start: var(--vf-space-md);
   }
 
+  /* The product-owned React usage-guide presenter, not reusable library CSS.
+     All colors, spacing and type values reuse the shared foundation tokens. */
+  .vf-docs-usage-grid {
+    grid-template-columns: minmax(0, 48rem) minmax(11rem, 15rem);
+  }
+
+  .vf-docs-usage-page {
+    min-inline-size: 0;
+  }
+
+  .vf-docs-usage-page .vf-docs-component-header {
+    margin-block-end: var(--vf-space-xl);
+    padding-block-end: var(--vf-space-xl);
+  }
+
+  .vf-docs-usage-page > .vf-docs-guide-section {
+    border-block-start: 1px solid var(--vf-color-border);
+    margin-block-start: var(--vf-space-3xl);
+    padding-block-start: var(--vf-space-xl);
+    scroll-margin-block-start: var(--vf-space-2xl);
+  }
+
+  .vf-docs-usage-page .vf-docs-section-intro {
+    color: var(--vf-color-text-muted);
+    margin-block-end: var(--vf-space-lg);
+  }
+
+  .vf-docs-example-jump ul {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--vf-space-xs) var(--vf-space-md);
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+
+  .vf-docs-main .vf-docs-example-jump li {
+    margin: 0;
+  }
+
+  .vf-docs-example-jump a {
+    border: 1px solid var(--vf-color-border);
+    border-radius: var(--vf-control-radius);
+    color: var(--vf-color-text);
+    display: inline-block;
+    font-size: var(--vf-font-size-sm);
+    padding: var(--vf-space-xs) var(--vf-space-sm);
+    text-decoration: none;
+  }
+
+  .vf-docs-example-jump a:hover,
+  .vf-docs-example-jump a:focus-visible {
+    background: var(--vf-color-surface-hover);
+  }
+
+  .vf-docs-example-jump a:focus-visible,
+  .vf-docs-guide-disclosure summary:focus-visible {
+    outline: 2px solid var(--vf-color-focus-ring);
+    outline-offset: 2px;
+  }
+
+  .vf-docs-usage-page .vf-docs-example {
+    background: var(--vf-color-surface);
+    border: 1px solid var(--vf-color-border);
+    border-radius: var(--vf-control-radius);
+    margin-block-start: var(--vf-space-lg);
+    min-inline-size: 0;
+    scroll-margin-block-start: var(--vf-space-lg);
+  }
+
+  .vf-docs-usage-page .vf-docs-example-header {
+    background: var(--vf-color-surface-subtle);
+    border-block-end: 1px solid var(--vf-color-border);
+    padding: var(--vf-space-lg);
+  }
+
+  .vf-docs-usage-page .vf-docs-example-header h3 {
+    color: var(--vf-color-text);
+    margin-block: 0 var(--vf-space-xs);
+  }
+
+  .vf-docs-usage-page .vf-docs-source-disclosure {
+    background: var(--vf-color-surface-subtle);
+    border-block-start: 1px solid var(--vf-color-border);
+  }
+
+  .vf-docs-guidance-grid {
+    align-items: start;
+    display: grid;
+    gap: var(--vf-space-lg);
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 20rem), 1fr));
+  }
+
+  .vf-docs-guidance-item {
+    border-block-start: 1px solid var(--vf-color-border);
+    min-inline-size: 0;
+    padding-block-start: var(--vf-space-md);
+  }
+
+  .vf-docs-usage-page .vf-docs-guidance-item h3 {
+    color: var(--vf-color-text);
+    margin-block-end: var(--vf-space-sm);
+  }
+
+  .vf-docs-guidance-item p:last-child,
+  .vf-docs-guide-disclosure p:last-child {
+    margin-block-end: 0;
+  }
+
+  .vf-docs-usage-page .vf-docs-standards {
+    margin-block-start: var(--vf-space-xl);
+    padding-block-start: var(--vf-space-lg);
+  }
+
+  .vf-docs-usage-page .vf-docs-standards h3 {
+    color: var(--vf-color-text);
+    font-size: var(--vf-font-size-sm);
+    margin-block-end: var(--vf-space-sm);
+  }
+
+  .vf-docs-guide-disclosure {
+    border-block-start: 1px solid var(--vf-color-border);
+    margin-block-start: var(--vf-space-lg);
+    padding-block-start: var(--vf-space-md);
+  }
+
+  .vf-docs-guide-disclosure summary {
+    color: var(--vf-color-text);
+    cursor: pointer;
+    font-size: var(--vf-font-size-sm);
+    font-weight: var(--vf-font-weight-semibold);
+  }
+
+  .vf-docs-guide-disclosure[open] summary {
+    margin-block-end: var(--vf-space-md);
+  }
+
+  .vf-docs-related-components {
+    margin-block-start: var(--vf-space-xl);
+  }
+
+  .vf-docs-related-components h3 {
+    margin-block-end: var(--vf-space-sm);
+  }
+
+  .vf-docs-usage-page .vf-docs-reference-panel {
+    margin-block-end: var(--vf-space-2xl);
+  }
+
   @media (max-width: 64rem) {
     .vf-docs-content-grid {
       grid-template-columns: minmax(0, 1fr);

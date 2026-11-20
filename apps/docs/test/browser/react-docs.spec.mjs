@@ -372,7 +372,9 @@ test('React Text, Code and Kbd guides run checked-in JSX and link real public AP
     await expect(page.getByRole('navigation', { name: 'Documentation' })
       .getByRole('link', { name: label + ' guide' })).toHaveAttribute('aria-current', 'page');
     await expect(guide.locator('[data-vf-docs-accessibility]')).toBeVisible();
-    await expect(guide).toContainText('React setup');
+    await expect(guide.getByRole('heading', { level: 2, name: 'Quick start' })).toBeVisible();
+    await expect(guide.getByRole('heading', { level: 2, name: 'Usage guidelines' })).toBeVisible();
+    await expect(guide.getByRole('heading', { level: 2, name: 'Accessibility' })).toBeVisible();
     const iframe = guide.locator('iframe[title="React ' + label + ' example"]');
     await iframe.scrollIntoViewIfNeeded();
     const frame = iframe.contentFrame();
@@ -390,7 +392,7 @@ test('React Text, Code and Kbd guides run checked-in JSX and link real public AP
     await expect(guide.locator('.vf-docs-source-disclosure pre code').first()).toContainText(
       "from '@vyrnforge/react/" + id + "'");
     await expect(guide.locator('.vf-docs-source-disclosure pre code').first()).toContainText(selectors.source);
-    await guide.getByRole('link', { name: 'View ' + label + ' public React API' }).click();
+    await guide.getByRole('link', { name: 'Open ' + label + ' API reference' }).click();
     await expect(page).toHaveURL(new RegExp('/next/react/api/components/' + id + '/$'));
     const api = page.locator('[data-vf-docs-react-api="' + id + '"]');
     await expect(api.getByRole('heading', { level: 1, name: label + ' API' })).toBeVisible();
@@ -428,7 +430,7 @@ test('React Typography routes preserve SSR with no client JavaScript and framewo
       await noJs.getByText('View React TSX source').first().click();
       await expect(noJs.locator('.vf-docs-source-disclosure pre code').first()).toContainText(
         "'@vyrnforge/react/" + id + "'");
-      await noJs.getByRole('link', { name: /public React API/ }).click();
+      await noJs.getByRole('link', { name: /API reference/ }).click();
       await expect(noJs).toHaveURL(new RegExp('/api/components/' + id + '/$'));
       await expect(noJs.locator('[data-vf-docs-react-api="' + id + '"]')).toContainText(
         '@vyrnforge/react/' + id);
@@ -539,7 +541,7 @@ test('React Text guide teaches every public type role with real TSX previews and
   await page.screenshot({
     path: testInfo.outputPath('react-text-usage-guide-wide.png'), fullPage: true,
   });
-  await guide.getByRole('link', { name: 'View Text public React API' }).click();
+  await guide.getByRole('link', { name: 'Open Text API reference' }).click();
   await expect(page).toHaveURL(/\/next\/react\/api\/components\/text\/$/);
   expect(errors).toEqual([]);
   await page.screenshot({ path: testInfo.outputPath('react-text-api-source-backed.png'), fullPage: false });
@@ -575,4 +577,89 @@ test('Text specimen examples retain semantics and reflow at narrow width with da
   await page.screenshot({
     path: testInfo.outputPath('react-text-guide-320-rtl-dark-forced-colors.png'), fullPage: false,
   });
+});
+
+test('React Text guide follows a readable consumer hierarchy with native source-backed sections', async ({ page }, testInfo) => {
+  await page.goto('/next/react/components/text/');
+  const guide = page.locator('[data-vf-docs-react-typography="text"]');
+  const outline = page.getByRole('navigation', { name: 'On this page' });
+  const sections = [
+    ['react-typography-setup', 'Quick start'],
+    ['react-typography-preview', 'Examples'],
+    ['react-typography-guidelines', 'Usage guidelines'],
+    ['react-typography-accessibility', 'Accessibility'],
+    ['react-typography-platform', 'Framework details'],
+    ['react-typography-reference', 'API reference'],
+  ];
+  await expect(outline.getByRole('link')).toHaveCount(sections.length);
+  for (const [id, label] of sections) {
+    await expect(outline.getByRole('link', { name: label, exact: true }))
+      .toHaveAttribute('href', '#' + id);
+    await expect(guide.locator('section#' + id).getByRole('heading', {
+      level: 2, name: label, exact: true,
+    })).toBeVisible();
+  }
+  const visualOrder = await guide.locator(':scope > section.vf-docs-guide-section').evaluateAll(
+    (items) => items.map((el) => el.id));
+  expect(visualOrder).toEqual(sections.map(([id]) => id));
+  await expect(guide).not.toContainText('Shared Text semantics');
+  await expect(guide).not.toContainText('React Text integration');
+  await expect(guide.getByRole('heading', { name: 'When to use', level: 3 })).toBeVisible();
+  await expect(guide.getByRole('heading', { name: 'When not to use', level: 3 })).toBeVisible();
+  await expect(guide.getByRole('heading', { name: 'Visual roles', level: 3 })).toBeVisible();
+  await expect(guide.getByRole('heading', { name: 'Standards and evidence', level: 3 })).toBeVisible();
+  await expect(guide.locator('[data-vf-docs-accessibility]')).toContainText('Mapping status');
+  const css = guide.getByText('CSS delivery and server rendering');
+  const native = guide.getByText('Native Web equivalent');
+  await expect(css).toBeVisible();
+  await expect(native).toBeVisible();
+  await css.click();
+  const code = guide.locator('details[open] pre[data-vf-code-block] code').first();
+  await expect(code).toContainText("import { Text } from '@vyrnforge/react/text';");
+  await expect(code).toContainText('<Text as="h2"');
+  await expect(code).not.toContainText('```');
+  await expect(guide.locator('details[open] [data-vf-docs-code-language="tsx"]')).toHaveCount(1);
+  await outline.getByRole('link', { name: 'API reference' }).click();
+  await expect(page).toHaveURL(/#react-typography-reference$/);
+  await page.screenshot({
+    path: testInfo.outputPath('react-text-guide-consumer-hierarchy-wide.png'), fullPage: true,
+  });
+});
+
+test('Text guide keeps TOC and guidance readable with keyboard, no JS and high-contrast zoom', async ({ page, browser }, testInfo) => {
+  await page.setViewportSize({ width: 320, height: 760 });
+  await page.goto('/next/react/components/text/');
+  await page.getByLabel('Theme').selectOption('dark');
+  await page.evaluate(() => {
+    document.documentElement.dir = 'rtl';
+    document.documentElement.style.fontSize = '200%';
+  });
+  const outline = page.getByRole('navigation', { name: 'On this page' });
+  await outline.getByRole('link', { name: 'Usage guidelines' }).click();
+  await expect(page).toHaveURL(/#react-typography-guidelines$/);
+  const sizes = await page.evaluate(() => ({
+    client: document.documentElement.clientWidth,
+    scroll: document.documentElement.scrollWidth,
+  }));
+  expect(sizes.scroll).toBeLessThanOrEqual(sizes.client + 1);
+  const details = page.locator('details.vf-docs-guide-disclosure').first();
+  await details.locator('summary').focus();
+  await page.keyboard.press('Enter');
+  await expect(details).toHaveAttribute('open', '');
+  await page.emulateMedia({ forcedColors: 'active' });
+  await expect(page.locator('#react-typography-accessibility')).toBeVisible();
+  await page.screenshot({
+    path: testInfo.outputPath('react-text-guide-320-rtl-zoom-forced-colors.png'), fullPage: false,
+  });
+  const noJs = await browser.newContext({ javaScriptEnabled: false });
+  try {
+    const staticPage = await noJs.newPage();
+    await staticPage.goto('/next/react/components/text/');
+    const staticOutline = staticPage.getByRole('navigation', { name: 'On this page' });
+    await staticOutline.getByRole('link', { name: 'Accessibility' }).click();
+    await expect(staticPage).toHaveURL(/#react-typography-accessibility$/);
+    await expect(staticPage.getByRole('heading', { name: 'Standards and evidence' })).toBeVisible();
+    await staticPage.getByText('CSS delivery and server rendering').click();
+    await expect(staticPage.locator('details[open] [data-vf-docs-code-language="tsx"]')).toHaveCount(1);
+  } finally { await noJs.close(); }
 });
