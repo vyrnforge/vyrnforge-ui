@@ -10,4 +10,4 @@ import { Button } from '@vyrnforge/react/button';
 <Button type="button">Save changes</Button>
 ```
 
-See React overview for shared CSS delivery and SSR/hydration setup. Application code supplies the action handler; the Button itself remains a native HTML button.
+Application code supplies the action handler; the Button itself remains a native HTML button.
