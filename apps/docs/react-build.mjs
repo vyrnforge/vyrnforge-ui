@@ -29,10 +29,12 @@ const layout = reactModel.componentCatalog.find((entry) => entry.id === 'layout'
 const typographyIds = ['text', 'code', 'kbd'];
 const typography = Object.fromEntries(await Promise.all(typographyIds.map(async (id) => {
   const owner = reactModel.componentCatalog.find((entry) => entry.id === id);
-  const basic = owner?.examples.find((example) => example.id === id + '/basic');
+  const examples = owner?.examples.slice().sort((a, b) => a.id.localeCompare(b.id)) ?? [];
+  const basic = examples.find((example) => example.id === id + '/basic');
   if (!owner?.showcaseAvailable || !owner.apiAvailable || !owner.sharedContent ||
       !owner.frameworkContent || !basic?.sourcePath.endsWith('/react.tsx') ||
-      !basic.source.includes("'@vyrnforge/react/" + id + "'") ||
+      !examples.every((example) => example.sourcePath.endsWith('/react.tsx') &&
+        example.source.includes("'@vyrnforge/react/" + id + "'")) ||
       !owner.publicEntrypoints.includes('@vyrnforge/react/' + id) ||
       !webModel.packageManifest.exports?.['./styles/' + id + '.css']) {
     throw new Error('React Typography guide needs real ' + id + ' source, CSS and authored React example');
@@ -49,7 +51,7 @@ const typography = Object.fromEntries(await Promise.all(typographyIds.map(async 
     publicEntrypoints: owner.publicEntrypoints, showcaseRoute: owner.showcaseRoute,
     apiRoute: owner.apiRoute, sharedSourcePath: owner.sharedSourcePath,
     frameworkSourcePath: owner.frameworkSourcePath, publicSourcePath,
-    publicSource, example: basic,
+    publicSource, example: basic, examples,
   }];
 })));
 const layoutStylesheet = '@vyrnforge/web/styles/layout.css';
@@ -119,6 +121,11 @@ function linksFor(route) {
       guide: relative(dir, react + typography[id].showcaseRoute, true),
       api: relative(dir, react + typography[id].apiRoute, true),
       example: relative(dir, react + 'examples/typography/' + id + '/', true),
+      examples: Object.fromEntries(typography[id].examples.map((example) => {
+        const slug = example.id.slice(id.length + 1);
+        return [slug, relative(dir, react + 'examples/typography/' + id +
+          (slug === 'basic' ? '/' : '/' + slug + '/'), true)];
+      })),
     }])),
     native: relative(dir, native + (route === '' ? '' : route), true),
   };
@@ -157,33 +164,38 @@ await build({
   outfile: path.join(outRoot, 'assets/react-layout-examples.js'), logLevel: 'silent',
 });
 
-// The standalone frames execute exactly the product-owned React TSX examples.
+// Each runnable example is discovered from its product-owned manifest and
+// bundled directly from the checked-in React TSX. This presentation pattern
+// serves later components without adding a second example registry.
 for (const id of typographyIds) {
   const unit = typography[id];
-  const asset = 'react-typography-' + id;
-  await build({
-    entryPoints: [path.join(root, unit.example.sourcePath)],
-    bundle: true, platform: 'browser', format: 'iife', target: 'es2022',
-    jsx: 'automatic', logLevel: 'silent',
-    outfile: path.join(outRoot, 'assets', asset + '.js'),
-  });
-  const cssFile = path.join(outRoot, 'assets', asset + '.css');
-  if (!(await stat(cssFile).catch(() => null))?.isFile()) {
-    throw new Error('React ' + id + ' example must extract canonical browser CSS');
+  for (const example of unit.examples) {
+    const slug = example.id.slice(id.length + 1);
+    const asset = 'react-typography-' + id + (slug === 'basic' ? '' : '-' + slug);
+    await build({
+      entryPoints: [path.join(root, example.sourcePath)],
+      bundle: true, platform: 'browser', format: 'iife', target: 'es2022',
+      jsx: 'automatic', logLevel: 'silent',
+      outfile: path.join(outRoot, 'assets', asset + '.js'),
+    });
+    const cssFile = path.join(outRoot, 'assets', asset + '.css');
+    if (!(await stat(cssFile).catch(() => null))?.isFile()) {
+      throw new Error('React ' + example.id + ' must extract canonical browser CSS');
+    }
+    const route = 'examples/typography/' + id + (slug === 'basic' ? '/' : '/' + slug + '/');
+    const dir = directory(route);
+    const styles = shellStyles.map((file) =>
+      '<link rel="stylesheet" href="' + escapeHtml(relative(dir, file)) + '">').join('\\n');
+    const extracted = relative(dir, 'assets/' + asset + '.css');
+    await writePage(route, '<!doctype html><html lang="en" data-vf-theme="light"><head>' +
+      '<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">' +
+      '<title>React ' + escapeHtml(example.title) + ' example · VyrnForge</title>' +
+      styles + '<link rel="stylesheet" href="' + escapeHtml(extracted) + '">' +
+      '<style>body{margin:0;padding:1rem;min-width:0;overflow-wrap:anywhere}' +
+      '#root{min-width:0}.vf-example-stack{display:flex;flex-direction:column;gap:var(--vf-space-md)}</style>' +
+      '</head><body><div id="root"></div><script src="' +
+      escapeHtml(relative(dir, 'assets/' + asset + '.js')) + '"></script></body></html>');
   }
-  const route = 'examples/typography/' + id + '/';
-  const dir = directory(route);
-  const styles = shellStyles.map((file) =>
-    '<link rel="stylesheet" href="' + escapeHtml(relative(dir, file)) + '">').join('\n');
-  const extracted = relative(dir, 'assets/' + asset + '.css');
-  await writePage(route, '<!doctype html><html lang="en" data-vf-theme="light"><head>' +
-    '<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">' +
-    '<title>React ' + escapeHtml(unit.title) + ' example · VyrnForge</title>' +
-    styles + '<link rel="stylesheet" href="' + escapeHtml(extracted) + '">' +
-    '<style>body{margin:0;padding:1rem;min-width:0;overflow-wrap:anywhere}' +
-    '#root{min-width:0}.vf-example-stack{display:flex;flex-direction:column;gap:var(--vf-space-md)}</style>' +
-    '</head><body><div id="root"></div><script src="' +
-    escapeHtml(relative(dir, 'assets/' + asset + '.js')) + '"></script></body></html>');
 }
 
 const exampleDir = directory('examples/button-basic/');
@@ -310,6 +322,10 @@ await writeFile(path.join(reactRoot, 'site-manifest.json'), JSON.stringify({
     frameworkSourcePath: typography[id].frameworkSourcePath,
     publicSourcePath: typography[id].publicSourcePath,
     exampleSourcePath: typography[id].example.sourcePath,
+    examples: typography[id].examples.map((example) => ({
+      id: example.id, title: example.title, description: example.description,
+      documentationSection: example.documentationSection, sourcePath: example.sourcePath,
+    })),
   }])),
   button: {
     publicEntrypoints: button.publicEntrypoints,
