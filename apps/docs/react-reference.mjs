@@ -28,16 +28,6 @@ function renderBlocks(blocks = []) {
     return h('p', { key: i }, ...renderInline(block.text));
   });
 }
-function renderSections(content, prefix, includeIntro = true) {
-  if (!content) return null;
-  return h('section', { 'aria-label': prefix },
-    ...(includeIntro ? renderBlocks(content.intro) : []),
-    ...content.sections.map((section, index) => {
-      const id = slug(prefix + '-' + section.heading + '-' + index);
-      return h('section', { key: id, 'aria-labelledby': id },
-        h('h2', { id }, section.heading), ...renderBlocks(section.blocks));
-    }));
-}
 function accessibilityEvidence(references, headingTag = 'h2') {
   if (!references) return null;
   const criteria = references.criteria ?? [];
