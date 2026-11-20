@@ -758,6 +758,128 @@
     margin-block-start: var(--vf-space-md);
   }
 
+  /* Text is the bounded consumer-guide pilot. Reuse the existing reading grid,
+     typography tokens and TOC instead of adding a parallel documentation shell. */
+  .vf-docs-usage-guide > .vf-docs-component-header {
+    margin-block-end: var(--vf-space-2xl);
+    padding-block-end: var(--vf-space-xl);
+  }
+
+  .vf-docs-usage-guide > section {
+    margin-block-start: var(--vf-space-2xl);
+  }
+
+  .vf-docs-usage-guide > section > h2 {
+    font-size: var(--vf-font-size-2xl);
+    margin-block-end: var(--vf-space-md);
+  }
+
+  .vf-docs-guide-subsection + .vf-docs-guide-subsection {
+    border-block-start: 1px solid var(--vf-color-border);
+    margin-block-start: var(--vf-space-xl);
+    padding-block-start: var(--vf-space-lg);
+  }
+
+  .vf-docs-guide-subsection h3 {
+    color: var(--vf-color-text);
+    font-size: var(--vf-font-size-lg);
+    line-height: var(--vf-line-height-snug);
+  }
+
+  .vf-docs-guide-subsection p:first-of-type {
+    margin-block-start: var(--vf-space-sm);
+  }
+
+  .vf-docs-example-links ul {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--vf-space-xs) var(--vf-space-md);
+    list-style: none;
+    margin: var(--vf-space-md) 0 var(--vf-space-lg);
+    padding: 0;
+  }
+
+  .vf-docs-example-links li,
+  .vf-docs-main .vf-docs-example-links li + li {
+    margin: 0;
+  }
+
+  .vf-docs-example-links a {
+    border-radius: var(--vf-control-radius);
+    color: var(--vf-color-text);
+    display: inline-block;
+    font-size: var(--vf-font-size-sm);
+    padding: var(--vf-space-xs) 0;
+    text-decoration: underline;
+    text-underline-offset: 0.2em;
+  }
+
+  .vf-docs-example-links a:focus-visible,
+  .vf-docs-reference-details summary:focus-visible {
+    outline: 2px solid var(--vf-color-focus-ring);
+    outline-offset: 2px;
+  }
+
+  .vf-docs-usage-guide [data-vf-docs-react-typography-example] {
+    border: 1px solid var(--vf-color-border);
+    border-radius: var(--vf-radius-surface);
+    margin-block-start: var(--vf-space-lg);
+  }
+
+  .vf-docs-usage-guide .vf-docs-example-header {
+    padding: var(--vf-space-lg);
+  }
+
+  .vf-docs-usage-guide .vf-docs-example-header h3 {
+    color: var(--vf-color-text);
+  }
+
+  .vf-docs-usage-guide .vf-docs-react-example-frame {
+    border: 0;
+    border-block: 1px solid var(--vf-color-border);
+    border-radius: 0;
+  }
+
+  .vf-docs-usage-guide .vf-docs-source-disclosure {
+    padding: var(--vf-space-md) var(--vf-space-lg);
+  }
+
+  .vf-docs-reference-details {
+    border-block-start: 1px solid var(--vf-color-border);
+    margin-block-start: var(--vf-space-lg);
+    padding-block-start: var(--vf-space-md);
+  }
+
+  .vf-docs-reference-details > summary {
+    color: var(--vf-color-text);
+    cursor: pointer;
+    font-size: var(--vf-font-size-sm);
+    font-weight: var(--vf-font-weight-semibold);
+    padding-block: var(--vf-space-xs);
+  }
+
+  .vf-docs-reference-details .vf-docs-standards {
+    margin-block-start: var(--vf-space-md);
+  }
+
+  .vf-docs-main .vf-docs-reference-details .vf-docs-standards h3 {
+    font-size: var(--vf-font-size-sm);
+    font-weight: var(--vf-font-weight-semibold);
+    margin: 0;
+  }
+
+  .vf-docs-related-links {
+    display: grid;
+    gap: var(--vf-space-sm);
+    list-style: none;
+    padding-inline-start: 0;
+  }
+
+  .vf-docs-related-links li,
+  .vf-docs-main .vf-docs-related-links li + li {
+    margin: 0;
+  }
+
   @media (max-width: 64rem) {
     .vf-docs-content-grid {
       grid-template-columns: minmax(0, 1fr);
