@@ -267,7 +267,8 @@ test('React Layout lives under Layout & Structure and runs checked-in React JSX 
     await expect(mappedCriteria.getByRole('link', { name: `${id} ${label}`, exact: true }))
       .toHaveAttribute('href', `https://www.w3.org/WAI/WCAG22/Understanding/${slug}`);
   }
-  await expect(page.locator('[data-vf-docs-react-layout]')).toContainText('Import the real React Flow and AutoGrid components');
+  await expect(page.locator('[data-vf-docs-react-layout] section[aria-labelledby="react-layout-setup"] pre code'))
+    .toContainText("import { Flow, AutoGrid } from '@vyrnforge/react/layout';");
 
   for (const id of ['basic', 'flow-block', 'flow-inline', 'flow-wrap', 'auto-grid', 'semantic-groups']) {
     const demo = page.locator('[data-vf-docs-react-layout-example="layout/' + id + '"]');
