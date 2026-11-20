@@ -4,7 +4,7 @@ import type { TextVariant } from '@vyrnforge/web/text';
 
 /** Native keyboard-input notation; this is not an interactive key control. */
 export interface KbdProps extends ComponentPropsWithoutRef<'kbd'> {
-  /** Optional shared Text role. Load text.css as well when using this. */
+  /** Optional shared Text role; browser CSS delivery includes the dependency. */
   variant?: TextVariant;
 }
 
