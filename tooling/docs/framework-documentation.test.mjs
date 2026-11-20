@@ -239,6 +239,15 @@ describe('React Text consumer-first guide examples', () => {
     ]);
     expect(text.sharedContent.sections.map((section) => section.heading)).toContain('When to use');
     expect(text.sharedContent.sections.map((section) => section.heading)).toContain('When not to use');
+    expect(text.frameworkContent.sections.map((section) => section.heading)).toEqual([
+      'React setup', 'Choosing a semantic host', 'Styling and server rendering', 'Specialized typography',
+    ]);
+    expect(text.frameworkContent.sections.find((section) => section.heading === 'React setup')?.blocks
+      .some((block) => block.type === 'code' && block.language === 'tsx' &&
+        block.text.includes('<Text as="h2" variant="heading-md">'))).toBe(true);
+    expect(text.frameworkContent.sections.find((section) => section.heading === 'Styling and server rendering')?.blocks
+      .some((block) => block.type === 'code' && block.language === 'ts' &&
+        block.text.includes("import '@vyrnforge/web/styles.css';"))).toBe(true);
     for (const example of examples) {
       expect(example.sourcePath.endsWith('/react.tsx')).toBe(true);
       expect(example.source).toContain("from '@vyrnforge/react/text'");
