@@ -236,7 +236,7 @@ for (const entry of buttonExamples.filter((example) => example.id !== 'button/ba
   const route = 'examples/button/' + slug + '/';
   const dir = directory(route);
   const styles = shellStyles.map((file) =>
-    '<link rel="stylesheet" href="' + escapeHtml(relative(dir, file)) + '">').join('\\n');
+    '<link rel="stylesheet" href="' + escapeHtml(relative(dir, file)) + '">').join('\n');
   await writePage(route, '<!doctype html><html lang="en" data-vf-theme="light"><head>' +
     '<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">' +
     '<title>React ' + escapeHtml(entry.title) + ' example · VyrnForge</title>' +
