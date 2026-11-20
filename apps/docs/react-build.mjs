@@ -295,7 +295,7 @@ for (const page of pageViews) {
     '<script>try{const v=localStorage.getItem("vf-docs-theme");if(v==="light"||v==="dark")document.documentElement.dataset.vfTheme=v}catch{}</script>\n' +
     styles + '\n<link rel="stylesheet" href="' + escapeHtml(relative(dir, 'assets/docs.css')) + '">' +
     '<style>.vf-docs-react-example-frame{box-sizing:border-box;display:block;inline-size:100%;min-block-size:10rem;border:1px solid var(--vf-color-border);border-radius:var(--vf-control-radius)}' +
-    '.vf-docs-react-example-frame[data-vf-docs-example-id="text/type-scale"]{min-block-size:95rem}' +
+    '.vf-docs-react-example-frame[data-vf-docs-example-id="text/type-scale"]{min-block-size:86rem}' +
     '.vf-docs-react-example-frame[data-vf-docs-example-id="text/semantic-composition"]{min-block-size:24rem}</style>' +
     '</head><body><div id="vf-react-root">' + initialHtml + '</div>' +
     '<script type="application/json" id="vf-react-page-data">' + serialized + '</script>' +
