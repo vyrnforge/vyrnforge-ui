@@ -96,6 +96,16 @@
       "import": "./dist/components/text/index.js",
       "default": "./dist/components/text/index.js"
     },
+    "./code": {
+      "types": "./dist/components/code/index.d.ts",
+      "import": "./dist/components/code/index.js",
+      "default": "./dist/components/code/index.js"
+    },
+    "./kbd": {
+      "types": "./dist/components/kbd/index.d.ts",
+      "import": "./dist/components/kbd/index.js",
+      "default": "./dist/components/kbd/index.js"
+    },
     "./disclosure": {
       "types": "./dist/components/disclosure/index.d.ts",
       "import": "./dist/components/disclosure/index.js",
