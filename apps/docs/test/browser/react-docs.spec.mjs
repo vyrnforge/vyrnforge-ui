@@ -493,6 +493,9 @@ test('React Text guide teaches every public type role with real TSX previews and
     await expect(specimen.locator('small[data-vf-text-variant="caption"]')).toHaveText(variant);
   }
   await expect(scale.getByRole('heading', { name: 'Display', level: 2 })).toBeVisible();
+  await scale.locator('body').screenshot({
+    path: testInfo.outputPath('react-text-type-scale-actual-size.png'),
+  });
   await typeScale.getByText('View React TSX source').click();
   const source = typeScale.locator('pre code');
   await expect(source).toContainText('BuiltInTextVariant');
@@ -514,6 +517,11 @@ test('React Text guide teaches every public type role with real TSX previews and
 
   await expect(guide).toContainText('When to use');
   await expect(guide).toContainText('When not to use');
+  await typeScale.getByText('View React TSX source').click();
+  await article.getByText('View React TSX source').click();
+  await page.screenshot({
+    path: testInfo.outputPath('react-text-usage-guide-wide.png'), fullPage: true,
+  });
   await guide.getByRole('link', { name: 'View Text public React API' }).click();
   await expect(page).toHaveURL(/\/next\/react\/api\/components\/text\/$/);
   expect(errors).toEqual([]);
