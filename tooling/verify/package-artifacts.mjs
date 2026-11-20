@@ -206,7 +206,7 @@ try {
     const clientSource = path.join(consumerRoot, 'browser-consumer.mjs');
     const output = path.join(consumerRoot, 'browser-output');
     writeFileSync(clientSource,
-      "import { Code } from '@vyrnforge/react/code';\\nconsole.log(Code);\\n");
+      "import { Code } from '@vyrnforge/react/code';\nconsole.log(Code);\n");
     run('pnpm', [
       'exec', 'esbuild', clientSource, '--bundle', '--platform=browser',
       '--format=esm', `--outdir=${output}`, '--external:react', '--external:react-dom',
