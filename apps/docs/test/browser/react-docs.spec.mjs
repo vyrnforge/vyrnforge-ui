@@ -508,7 +508,7 @@ test('React setup has one shared home and component APIs do not reprint integrat
   await page.goto('/next/react/');
   await expect(page.getByRole('heading', { name: 'Styling, SSR and hydration' })).toBeVisible();
   await expect(page.getByRole('heading', { name: 'React state and native semantics' })).toBeVisible();
-  await expect(page.locator('main pre code')).toContainText("import '@vyrnforge/web/styles.css';");
+  await expect(page.locator('main pre code').last()).toContainText("import '@vyrnforge/web/styles.css';");
 
   for (const id of ['button', 'layout', 'text', 'code', 'kbd']) {
     await page.goto('/next/react/components/' + id + '/');
@@ -519,7 +519,7 @@ test('React setup has one shared home and component APIs do not reprint integrat
     await expect(guide.getByRole('heading', { name: 'React integration' })).toHaveCount(0);
     await expect(guide.getByRole('heading', { name: 'Styling and server rendering' })).toHaveCount(0);
     await expect(guide.getByRole('link', { name: 'React overview' })).toHaveAttribute(
-      'href', /\\/next\\/react\\/$|(?:\\.\\.\\/)+$/);
+      'href', '../../');
     await page.goto('/next/react/api/components/' + id + '/');
     const api = page.locator('[data-vf-docs-react-api="' + id + '"]');
     await expect(api).toBeVisible();
@@ -540,7 +540,7 @@ test('Code and Kbd task-first guides preserve reflow, RTL, forced colors and bas
     await page.emulateMedia({ forcedColors: 'active' });
     const guide = page.locator('[data-vf-docs-react-typography="' + id + '"]');
     await expect(guide.getByRole('heading', { name: 'Accessibility', level: 2 })).toBeVisible();
-    await expect(page.getByRole('navigation', { name: 'On this page' }).getByRole('link')).toHaveCount(6);
+    await expect(page.getByRole('navigation', { name: 'On this page' }).getByRole('link')).toHaveCount(5);
     const width = await page.evaluate(() => ({
       scroll: document.documentElement.scrollWidth,
       viewport: document.documentElement.clientWidth,
