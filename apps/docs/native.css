@@ -820,7 +820,7 @@
     outline-offset: 2px;
   }
 
-  .vf-docs-usage-guide [data-vf-docs-react-typography-example] {
+  .vf-docs-usage-guide .vf-docs-example {
     border: 1px solid var(--vf-color-border);
     border-radius: var(--vf-radius-surface);
     margin-block-start: var(--vf-space-lg);

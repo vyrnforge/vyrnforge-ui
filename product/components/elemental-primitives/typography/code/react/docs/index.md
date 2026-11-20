@@ -1,23 +1,28 @@
 # React Code
 
-Use `Code` for inline native `code` and `CodeBlock` for read-only native `pre > code`. These components only expose ergonomic React props/refs and the shared Web styling hooks. They do not add a syntax highlighter, editor, clipboard action, or custom keyboard behavior.
+Use the public React `Code` and `CodeBlock` wrappers for read-only inline and preformatted content. Shared Code guidance owns the semantic and accessibility expectations.
 
 ## React setup
 
-In a CSS-aware browser build that honors the package's `browser` export condition (validated with esbuild), importing `@vyrnforge/react/code` automatically includes **the canonical Native Web Code CSS**. No per-component stylesheet import is required. The root `@vyrnforge/react` entry selects the full Web aggregate, whereas granular component imports select just their component's CSS and declared styling dependencies.
+```tsx
+import { Code, CodeBlock } from '@vyrnforge/react/code';
 
-For plain Node/SSR imports, the JS entry stays CSS-free. The consuming SSR framework must include the stylesheet emitted by its client build in the HTML; SSR alone does not install browser CSS. For bundlers that do not resolve `browser` conditions or cannot extract CSS, the supported fallback remains one explicit app-entrypoint import:
+<p>Run <Code>pnpm test</Code> before committing.</p>
+<CodeBlock aria-label="Build and test commands">{'pnpm build\npnpm test'}</CodeBlock>
+```
+
+Inline Code renders `<code>`; CodeBlock renders `<pre><code>`. Neither needs a React provider, clipboard controller, or syntax-highlighting dependency.
+
+## Semantic authoring
+
+Use one CodeBlock for one read-only excerpt; do not pass a nested `<Code>` into `<CodeBlock>`. For a custom preformatted structure, author semantic native elements instead. Provide surrounding text for purpose, language, direction, and steps the application owns. Both components pass native attributes and refs through; neither implements editing, selection logic, or actions.
+
+## Styling and server rendering
+
+CSS-aware browser builds resolving the package `browser` export condition include canonical Web Code CSS through the component entrypoint. Plain Node/SSR imports stay CSS-free; consuming apps must deliver the extracted stylesheet in the client HTML. For bundlers without the required CSS extraction behavior, explicitly load the public Web aggregate once from the app entrypoint:
 
 ```ts
 import '@vyrnforge/web/styles.css';
 ```
 
-The optional reset is never auto-loaded. This is not a React styling fork.
-
-```tsx
-import { Code, CodeBlock } from '@vyrnforge/react/code';
-<p>Run <Code>pnpm test</Code>.</p>
-<CodeBlock aria-label="Build and test commands">{'pnpm build\npnpm test'}</CodeBlock>
-```
-
-Both wrappers pass native HTML attributes through. The block is one `pre` containing one `code` in DOM order; long lines use the existing Web Code overflow behavior. Consumers own accessible surrounding instructions and language/direction where needed. `Code` may take a shared `variant` in browser builds using automatic component CSS, or when the application explicitly loads Text CSS through its SSR/legacy bundler setup; this adds the same `data-vf-text` hooks as native markup, while Code retains its monospace identity. Default Code has no redundant Text treatment. Do not supply nested `<Code>` to `<CodeBlock>`; use a native `pre` with authored `code` instead for more complex structures.
+The optional reset is not automatically loaded. The optional shared `variant` reuses Text hooks when Text CSS is available, while the Code monospace identity remains unchanged. The React wrappers do not create a styling fork or claim independent assistive-technology certification.
