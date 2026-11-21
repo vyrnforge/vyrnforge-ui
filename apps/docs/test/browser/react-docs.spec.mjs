@@ -630,7 +630,7 @@ test('SvgIcon accepts JSX shapes with defaults and theme-aware styling', async (
   page.on('pageerror', (error) => errors.push(String(error)));
   await page.goto('/next/react/components/icon/');
   const guide = page.locator('[data-vf-docs-react-icon]');
-  await expect(guide).toContainText('Simple custom SVG');
+  await expect(guide).toContainText('If you already have an SVG path, use');
   const sample = guide.locator('[data-vf-docs-react-icon-example="icon/svg-wrapper"]');
   await sample.locator('iframe').scrollIntoViewIfNeeded();
   const frame = sample.locator('iframe').contentFrame();
