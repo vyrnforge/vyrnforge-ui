@@ -4,7 +4,7 @@ import { Button } from '@vyrnforge/vue/button';
 const App = {
   setup() {
     return () => h('form', {
-      class: 'vf-example-stack',
+      'data-vf-flow': '', 'data-vf-flow-gap': 'md',
       onSubmit: (event: Event) => event.preventDefault()
     }, [
       h('label', { for: 'vf-button-form-value' }, 'Example value'),
