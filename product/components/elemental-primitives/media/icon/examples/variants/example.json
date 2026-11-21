@@ -1,0 +1,13 @@
+{
+  "id": "icon/variants",
+  "title": "Variants and shapes",
+  "description": "Four authored Bookmark treatments: outlined or filled, rounded or sharp. Each sample is decorative; its visible label describes the choice.",
+  "defaultFramework": "react",
+  "frameworks": {
+    "react": {
+      "label": "React",
+      "language": "tsx",
+      "source": "react.tsx"
+    }
+  }
+}
