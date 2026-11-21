@@ -13,7 +13,7 @@ export const browserFixture = {
       .replace(/^@import\s+["'][^"']+["'];\s*$/gm, '');
     const fixtureCss = [
       'body { padding: 24px; font-family: sans-serif; }',
-      '#horizontal-container { inline-size: 16rem; }',
+      '#horizontal-container { inline-size: min(100%,16rem); }',
       '#vertical-container { display:flex; align-items:center; gap:1rem; min-block-size:3rem; }',
       '#labeled-horizontal { display:flex; flex-direction:column; gap:1rem; inline-size:min(100%,20rem); }',
       '#labeled-vertical { display:flex; align-items:center; gap:2rem; min-block-size:12rem; }',
