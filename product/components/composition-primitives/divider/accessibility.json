@@ -28,6 +28,7 @@
     "library": [
       "Preserve original decorative aria-hidden on unlabeled Divider with the original 1px CSS geometry",
       "Expose an optional text label as native readable content, not as an ARIA separator role",
+      "Allow presentational text orientation for vertical labels without changing semantic reading order",
       "Provide start/center/end logical positioning on either line axis and visible forced-colors segments"
     ],
     "consumer": [
@@ -53,6 +54,6 @@
   "notes": [
     "An unlabeled Divider is decorative and aria-hidden; a labeled Divider exposes its text to assistive technology, with no role=separator.",
     "Visual Divider remains a composition primitive distinct from native thematic hr and context-owned interactive separators.",
-    "Native writing-mode vertical-rl renders vertical label text; human visual and assistive-technology acceptance remains separate."
+    "Native writing-mode vertical-rl remains the default; CSS can present labels horizontally or bottom-to-top without reordering the text; human visual and assistive-technology acceptance remains separate."
   ]
 }
