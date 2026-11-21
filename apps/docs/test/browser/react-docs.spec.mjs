@@ -9,7 +9,7 @@ test('React pilot artifact is Product Graph-backed and SSR-rendered with public 
   const manifest = JSON.parse(readFileSync(manifestPath, 'utf8'));
   const button = compileFrameworkDocumentation('react').componentCatalog.find((entry) => entry.id === 'button');
   expect(manifest.framework).toBe('react');
-  expect(manifest.status).toBe('button-layout-typography-icon-image-pilot');
+  expect(manifest.status).toBe('button-layout-typography-icon-image-divider-pilot');
   expect(manifest.button.sharedSourcePath).toBe(button.sharedSourcePath);
   expect(manifest.button.frameworkSourcePath).toBe(button.frameworkSourcePath);
   expect(manifest.button.publicEntrypoints).toContain('@vyrnforge/react/button');
@@ -19,12 +19,25 @@ test('React pilot artifact is Product Graph-backed and SSR-rendered with public 
   expect(manifest.layout.examples.map((example) => example.id)).toContain('layout/dividers');
   expect(manifest.routes.filter((entry) => entry.view !== 'unavailable').map((entry) => entry.route)).toEqual([
     '', 'components/button/', 'api/components/button/', 'components/layout/', 'api/components/layout/',
+    'components/divider/', 'api/components/divider/', 
     ...['text', 'code', 'kbd'].flatMap((id) => [
       'components/' + id + '/', 'api/components/' + id + '/',
     ]),
     'components/icon/', 'api/components/icon/',
     'components/image/', 'api/components/image/',
   ]);
+  expect(manifest.divider).toMatchObject({
+    guideRoute: 'components/divider/', apiRoute: 'api/components/divider/',
+    publicEntrypoints: ['@vyrnforge/react/divider'],
+    frameworkSourcePath: 'product/components/composition-primitives/divider/react/docs/index.md',
+  });
+  expect(manifest.divider.examples.map((entry) => entry.id)).toEqual(['divider/basic', 'divider/vertical']);
+  for (const example of manifest.divider.examples) {
+    const slug = example.id.split('/')[1];
+    const html = readFileSync('dist/docs/next/react/examples/divider/' + slug + '/index.html', 'utf8');
+    expect(html).toContain('react-divider-' + slug + '.js');
+    expect(html).toContain('react-divider-' + slug + '.css');
+  }
   expect(manifest.icon).toMatchObject({
     guideRoute: 'components/icon/', apiRoute: 'api/components/icon/',
     publicEntrypoints: ['@vyrnforge/react/icon'],
@@ -274,6 +287,80 @@ test('without JavaScript, React SSR content and native links remain readable', a
   } finally {
     await context.close();
   }
+});
+
+test('React Divider renders visible horizontal and vertical lines with no extra semantics', async ({ page }) => {
+  const errors = [];
+  page.on('pageerror', (error) => errors.push(String(error)));
+  await page.goto('/next/react/components/divider/');
+  await expect(page.locator('html')).toHaveAttribute('data-vf-react-hydrated', 'true');
+  await expect(page.getByRole('heading', { level: 1, name: 'Divider' })).toBeVisible();
+  const guide = page.locator('[data-vf-docs-react-divider]');
+  await expect(guide.getByRole('navigation', { name: 'Divider examples' }).getByRole('link')).toHaveCount(2);
+  await expect(guide.getByRole('heading', { name: 'Horizontal and vertical' })).toBeVisible();
+  const basic = guide.locator('[data-vf-docs-react-divider-example="divider/basic"]');
+  await basic.locator('iframe').scrollIntoViewIfNeeded();
+  const hline = basic.locator('iframe').contentFrame().locator('[data-vf-divider]');
+  await expect(hline).toHaveAttribute('data-vf-divider-orientation', 'horizontal');
+  await expect(hline).toHaveAttribute('aria-hidden', 'true');
+  const horizontal = await hline.boundingBox();
+  expect(horizontal.width).toBeGreaterThan(100);
+  expect(horizontal.height).toBeGreaterThanOrEqual(1);
+  expect(horizontal.height).toBeLessThanOrEqual(2);
+  await expect(basic.locator('iframe').contentFrame().getByRole('separator')).toHaveCount(0);
+
+  const verticalExample = guide.locator('[data-vf-docs-react-divider-example="divider/vertical"]');
+  await verticalExample.locator('iframe').scrollIntoViewIfNeeded();
+  const vline = verticalExample.locator('iframe').contentFrame().locator('[data-vf-divider]');
+  await expect(vline).toHaveAttribute('data-vf-divider-orientation', 'vertical');
+  await expect(vline).toHaveAttribute('aria-hidden', 'true');
+  const vertical = await vline.boundingBox();
+  expect(vertical.width).toBeGreaterThanOrEqual(1);
+  expect(vertical.width).toBeLessThanOrEqual(2);
+  expect(vertical.height).toBeGreaterThan(10);
+  await expect(verticalExample.locator('iframe').contentFrame().getByRole('separator')).toHaveCount(0);
+  await verticalExample.getByText('View React TSX source').click();
+  await expect(verticalExample.locator('pre code')).toContainText('orientation="vertical"');
+
+  await page.getByRole('searchbox', { name: 'Search React documentation' }).fill('vertical divider');
+  await expect(page.locator('[data-vf-docs-react-results]').getByRole('link', { name: 'Divider', exact: true })).toBeVisible();
+  await page.getByRole('button', { name: 'Clear search' }).click();
+  await page.getByRole('navigation', { name: 'Documentation' }).getByRole('link', { name: 'Divider API' }).click();
+  await expect(page).toHaveURL(/\/next\/react\/api\/components\/divider\/$/);
+  await expect(page.locator('[data-vf-docs-react-api="divider"]')).toContainText('@vyrnforge/react/divider');
+  await expect(page.locator('[data-vf-docs-react-api="divider"] pre code')).toContainText('export type DividerOrientation');
+  await expect(page.locator('[data-vf-docs-react-api="divider"] pre code')).toContainText('export interface DividerProps');
+  expect(errors).toEqual([]);
+});
+
+test('Divider works in dark theme, forced colors, narrow RTL layout and SSR without JS', async ({ page, browser }) => {
+  await page.setViewportSize({ width: 320, height: 720 });
+  await page.goto('/next/react/components/divider/');
+  await page.getByLabel('Theme').selectOption('dark');
+  await page.evaluate(() => { document.documentElement.dir = 'rtl'; });
+  await page.emulateMedia({ forcedColors: 'active' });
+  await expect(page.getByRole('heading', { level: 1, name: 'Divider' })).toBeVisible();
+  const widths = await page.evaluate(() => ({
+    content: document.documentElement.scrollWidth,
+    viewport: document.documentElement.clientWidth,
+  }));
+  expect(widths.content).toBeLessThanOrEqual(widths.viewport + 1);
+  await page.addScriptTag({ content: axeCore.source });
+  const a11y = await page.evaluate(async () => window.axe.run(document, {
+    runOnly: { type: 'tag', values: ['wcag2a', 'wcag2aa', 'wcag21a', 'wcag21aa', 'wcag22aa'] },
+  }));
+  expect(a11y.violations, a11y.violations.map((item) => item.id + ': ' + item.help).join('\n')).toEqual([]);
+
+  const context = await browser.newContext({ javaScriptEnabled: false });
+  try {
+    const noJs = await context.newPage();
+    await noJs.goto('/next/react/components/divider/');
+    await expect(noJs.getByRole('heading', { level: 1, name: 'Divider' })).toBeVisible();
+    await expect(noJs.locator('[data-vf-docs-react-divider-example]')).toHaveCount(2);
+    await noJs.getByRole('navigation', { name: 'Documentation framework' })
+      .getByRole('link', { name: 'Native Web' }).click();
+    await expect(noJs).toHaveURL(/\/next\/native-web\/components\/divider\/$/);
+  } finally { await context.close(); }
 });
 
 test('React Layout lives under Layout & Structure and runs checked-in React JSX demos', async ({ page }, testInfo) => {
