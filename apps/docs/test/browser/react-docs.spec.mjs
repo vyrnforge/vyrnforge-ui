@@ -330,8 +330,8 @@ test('React Divider renders visible horizontal and vertical lines with no extra 
   await page.getByRole('navigation', { name: 'Documentation' }).getByRole('link', { name: 'Divider API' }).click();
   await expect(page).toHaveURL(/\/next\/react\/api\/components\/divider\/$/);
   await expect(page.locator('[data-vf-docs-react-api="divider"]')).toContainText('@vyrnforge/react/divider');
-  await expect(page.locator('[data-vf-docs-react-api="divider"] pre code')).toContainText('export type DividerOrientation');
-  await expect(page.locator('[data-vf-docs-react-api="divider"] pre code')).toContainText('export interface DividerProps');
+  await expect(page.locator('[data-vf-docs-react-api="divider"] section[aria-labelledby="react-divider-api-types"] pre code')).toContainText('export type DividerOrientation');
+  await expect(page.locator('[data-vf-docs-react-api="divider"] section[aria-labelledby="react-divider-api-types"] pre code')).toContainText('export interface DividerProps');
   expect(errors).toEqual([]);
 });
 
@@ -369,8 +369,8 @@ test('React Divider supports readable labels aligned in either orientation', asy
   await page.getByRole('button', { name: 'Clear search' }).click();
   await page.getByRole('navigation', { name: 'Documentation' }).getByRole('link', { name: 'Divider API' }).click();
   const api = page.locator('[data-vf-docs-react-api="divider"]');
-  await expect(api.locator('pre code')).toContainText('export type DividerTextAlign');
-  await expect(api.locator('pre code')).toContainText('children?: string | number');
+  await expect(api.locator('section[aria-labelledby="react-divider-api-types"] pre code')).toContainText('export type DividerTextAlign');
+  await expect(api.locator('section[aria-labelledby="react-divider-api-types"] pre code')).toContainText('children?: string | number');
   expect(errors).toEqual([]);
 });
 
@@ -575,7 +575,7 @@ test('React Text, Code and Kbd guides run checked-in JSX and link real public AP
     const api = page.locator('[data-vf-docs-react-api="' + id + '"]');
     await expect(api.getByRole('heading', { level: 1, name: label + ' API' })).toBeVisible();
     await expect(api).toContainText('@vyrnforge/react/' + id);
-    await expect(api.locator('pre code').first()).toContainText('export ');
+    await expect(api.locator('section[aria-labelledby="react-divider-api-types"] pre code').first()).toContainText('export ');
     await expect(page.getByRole('navigation', { name: 'Documentation' })
       .getByRole('link', { name: label + ' API' })).toHaveAttribute('aria-current', 'page');
   }
@@ -730,8 +730,8 @@ test('React Icon uses product-owned SVG examples and public source-backed API', 
   await guide.getByRole('link', { name: 'View Icon public React API' }).click();
   await expect(page).toHaveURL(/\/next\/react\/api\/components\/icon\/$/);
   const api = page.locator('[data-vf-docs-react-api="icon"]');
-  await expect(api.locator('pre code')).toContainText('export interface IconProps');
-  await expect(api.locator('pre code')).toContainText('label?: string');
+  await expect(api.locator('section[aria-labelledby="react-divider-api-types"] pre code')).toContainText('export interface IconProps');
+  await expect(api.locator('section[aria-labelledby="react-divider-api-types"] pre code')).toContainText('label?: string');
   await expect(api).toContainText('@vyrnforge/react/icon');
   await expect(api).toContainText('@vyrnforge/web/styles/icon.css');
 
@@ -1116,7 +1116,7 @@ test('React Image guide uses shared native CSS, source-backed examples and a dis
   await guide.getByRole('link', { name: 'View Image public React API' }).click();
   await expect(page).toHaveURL(/\/next\/react\/api\/components\/image\/$/);
   const api = page.locator('[data-vf-docs-react-api="image"]');
-  await expect(api.locator('pre code')).toContainText("ComponentPropsWithoutRef<'img'>");
+  await expect(api.locator('section[aria-labelledby="react-divider-api-types"] pre code')).toContainText("ComponentPropsWithoutRef<'img'>");
   await expect(api).toContainText('@vyrnforge/react/image');
   await expect(api).toContainText('@vyrnforge/web/styles/image.css');
 
