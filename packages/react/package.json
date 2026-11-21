@@ -20,6 +20,12 @@
       "import": "./dist/components/layout/index.js",
       "default": "./dist/components/layout/index.js"
     },
+    "./divider": {
+      "types": "./dist/components/divider/index.d.ts",
+      "browser": "./dist/components/divider/browser.js",
+      "import": "./dist/components/divider/index.js",
+      "default": "./dist/components/divider/index.js"
+    },
     ".": {
       "types": "./dist/index.d.ts",
       "browser": "./dist/browser.js",
