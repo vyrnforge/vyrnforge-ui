@@ -1,0 +1,14 @@
+{
+  "id": "image/decorative",
+  "title": "Decorative image",
+  "description": "Use empty alt text for artwork that conveys no additional information.",
+  "documentationSection": "Informative and decorative content",
+  "defaultFramework": "native-web",
+  "frameworks": {
+    "native-web": {
+      "label": "Native Web",
+      "language": "html",
+      "source": "native-web.html"
+    }
+  }
+}
