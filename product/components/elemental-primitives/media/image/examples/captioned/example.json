@@ -1,0 +1,14 @@
+{
+  "id": "image/captioned",
+  "title": "Image with native caption",
+  "description": "Compose figure and figcaption around an informative native image.",
+  "documentationSection": "Captions and context",
+  "defaultFramework": "native-web",
+  "frameworks": {
+    "native-web": {
+      "label": "Native Web",
+      "language": "html",
+      "source": "native-web.html"
+    }
+  }
+}
