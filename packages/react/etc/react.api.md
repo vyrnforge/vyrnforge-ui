@@ -3015,6 +3015,19 @@ export interface SplitPanelRootProps extends ComponentPropsWithoutRef<'div'> {
     size?: number;
 }
 
+// @public
+export const SvgIcon: ForwardRefExoticComponent<SvgIconProps & RefAttributes<SVGSVGElement>>;
+
+// @public
+export interface SvgIconProps extends Omit<SVGAttributes<SVGSVGElement>, 'role' | 'aria-label' | 'aria-hidden' | 'focusable' | 'tabIndex' | 'width' | 'height' | 'children'> {
+    // (undocumented)
+    children?: ReactNode;
+    // (undocumented)
+    label?: string;
+    // (undocumented)
+    size?: IconSize;
+}
+
 // @public (undocumented)
 export const Switch: ForwardRefExoticComponent<SwitchProps & RefAttributes<HTMLInputElement>>;
 

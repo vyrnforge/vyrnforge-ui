@@ -31,7 +31,7 @@ test('React pilot artifact is Product Graph-backed and SSR-rendered with public 
   });
   expect(manifest.icon.examples.map((example) => example.id)).toEqual([
     'icon/accessibility', 'icon/basic', 'icon/colors', 'icon/custom', 'icon/inline-svg',
-    'icon/sizes', 'icon/variants',
+    'icon/sizes', 'icon/svg-wrapper', 'icon/variants',
   ]);
   for (const example of manifest.icon.examples) {
     const slug = example.id.slice('icon/'.length);
@@ -549,7 +549,7 @@ test('React Icon uses product-owned SVG examples and public source-backed API', 
   ]);
   await expect(page.getByRole('navigation', { name: 'On this page' }).getByRole('link')).toHaveCount(5);
   await expect(guide.getByText('Standards and evidence mapping')).toBeVisible();
-  await expect(guide.getByRole('navigation', { name: 'Icon examples' }).getByRole('link')).toHaveCount(7);
+  await expect(guide.getByRole('navigation', { name: 'Icon examples' }).getByRole('link')).toHaveCount(8);
 
   const basic = guide.locator('[data-vf-docs-react-icon-example="icon/basic"]');
   await expect(basic.locator('iframe').contentFrame().getByRole('img', { name: 'Bookmark' })).toBeVisible();
@@ -622,6 +622,43 @@ test('React Icon uses product-owned SVG examples and public source-backed API', 
   }));
   expect(report.violations).toEqual([]);
   await page.screenshot({ path: testInfo.outputPath('react-icon-320-rtl-forced-colors.png'), fullPage: false });
+  expect(errors).toEqual([]);
+});
+
+test('SvgIcon accepts JSX shapes with defaults and theme-aware styling', async ({ page }) => {
+  const errors = [];
+  page.on('pageerror', (error) => errors.push(String(error)));
+  await page.goto('/next/react/components/icon/');
+  const guide = page.locator('[data-vf-docs-react-icon]');
+  await expect(guide).toContainText('If you already have an SVG path, use');
+  const sample = guide.locator('[data-vf-docs-react-icon-example="icon/svg-wrapper"]');
+  await sample.locator('iframe').scrollIntoViewIfNeeded();
+  const frame = sample.locator('iframe').contentFrame();
+  const svgs = frame.locator('svg[data-vf-icon]');
+  await expect(svgs).toHaveCount(3);
+  const plain = svgs.first();
+  await expect(plain).toHaveAttribute('viewBox', '0 0 24 24');
+  await expect(plain).toHaveAttribute('data-vf-size', 'md');
+  await expect(plain).toHaveAttribute('aria-hidden', 'true');
+  await expect(plain).toHaveAttribute('focusable', 'false');
+  await expect(plain.locator('path')).toHaveCount(1);
+  await expect(plain).not.toHaveAttribute('tabindex', '0');
+  const custom = svgs.nth(1);
+  await expect(custom).toHaveAttribute('data-vf-size', 'lg');
+  const color = await custom.evaluate((element) => ({
+    own: getComputedStyle(element).color,
+    parent: getComputedStyle(element.parentElement).color,
+  }));
+  expect(color.own).toBe(color.parent);
+  const named = frame.getByRole('img', { name: 'Sparkle' });
+  await expect(named).toBeVisible();
+  await expect(named).not.toHaveAttribute('aria-hidden', 'true');
+  await sample.getByText('View React TSX source').click();
+  await expect(sample.locator('pre code')).toContainText('function SparkleIcon(props: SvgIconProps)');
+  await expect(sample.locator('pre code')).toContainText('<SvgIcon {...props}>');
+  await guide.getByRole('link', { name: 'View Icon public React API' }).click();
+  await expect(page.locator('[data-vf-docs-react-api="icon"] pre code'))
+    .toContainText('export interface SvgIconProps');
   expect(errors).toEqual([]);
 });
 
