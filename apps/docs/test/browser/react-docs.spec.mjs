@@ -723,12 +723,12 @@ test('React Icon uses product-owned SVG examples and public source-backed API', 
   expect(errors).toEqual([]);
 });
 
-test('SvgIcon accepts JSX shapes with defaults and theme-aware styling', async ({ page }) => {
+test('One-import createSvgIcon produces reusable JSX shapes with defaults and themes', async ({ page }) => {
   const errors = [];
   page.on('pageerror', (error) => errors.push(String(error)));
   await page.goto('/next/react/components/icon/');
   const guide = page.locator('[data-vf-docs-react-icon]');
-  await expect(guide).toContainText('If you already have an SVG path, use');
+  await expect(guide).toContainText('one VyrnForge import and one function call is enough');
   const sample = guide.locator('[data-vf-docs-react-icon-example="icon/svg-wrapper"]');
   await sample.locator('iframe').scrollIntoViewIfNeeded();
   const frame = sample.locator('iframe').contentFrame();
@@ -752,11 +752,12 @@ test('SvgIcon accepts JSX shapes with defaults and theme-aware styling', async (
   await expect(named).toBeVisible();
   await expect(named).not.toHaveAttribute('aria-hidden', 'true');
   await sample.getByText('View React TSX source').click();
-  await expect(sample.locator('pre code')).toContainText('function SparkleIcon(props: SvgIconProps)');
-  await expect(sample.locator('pre code')).toContainText('<SvgIcon {...props}>');
+  await expect(sample.locator('pre code')).toContainText("import { createSvgIcon } from '@vyrnforge/react/icon'");
+  await expect(sample.locator('pre code')).toContainText('const SparkleIcon = createSvgIcon(');
+  await expect(sample.locator('pre code')).not.toContainText('@vyrnforge/react/layout');
   await guide.getByRole('link', { name: 'View Icon public React API' }).click();
   await expect(page.locator('[data-vf-docs-react-api="icon"] pre code'))
-    .toContainText('export interface SvgIconProps');
+    .toContainText('export function createSvgIcon(content: ReactNode)');
   expect(errors).toEqual([]);
 });
 
