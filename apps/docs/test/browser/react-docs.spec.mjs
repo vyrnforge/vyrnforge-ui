@@ -29,7 +29,8 @@ test('React pilot artifact is Product Graph-backed and SSR-rendered with public 
     frameworkSourcePath: 'product/components/elemental-primitives/media/icon/react/docs/index.md',
   });
   expect(manifest.icon.examples.map((example) => example.id)).toEqual([
-    'icon/accessibility', 'icon/basic', 'icon/custom', 'icon/sizes', 'icon/variants',
+    'icon/accessibility', 'icon/basic', 'icon/colors', 'icon/custom', 'icon/inline-svg',
+    'icon/sizes', 'icon/variants',
   ]);
   for (const example of manifest.icon.examples) {
     const slug = example.id.slice('icon/'.length);
@@ -533,7 +534,7 @@ test('React Icon uses product-owned SVG examples and public source-backed API', 
   ]);
   await expect(page.getByRole('navigation', { name: 'On this page' }).getByRole('link')).toHaveCount(5);
   await expect(guide.getByText('Standards and evidence mapping')).toBeVisible();
-  await expect(guide.getByRole('navigation', { name: 'Icon examples' }).getByRole('link')).toHaveCount(5);
+  await expect(guide.getByRole('navigation', { name: 'Icon examples' }).getByRole('link')).toHaveCount(7);
 
   const basic = guide.locator('[data-vf-docs-react-icon-example="icon/basic"]');
   await expect(basic.locator('iframe').contentFrame().getByRole('img', { name: 'Bookmark' })).toBeVisible();
@@ -607,6 +608,55 @@ test('React Icon uses product-owned SVG examples and public source-backed API', 
   expect(report.violations).toEqual([]);
   await page.screenshot({ path: testInfo.outputPath('react-icon-320-rtl-forced-colors.png'), fullPage: false });
   expect(errors).toEqual([]);
+});
+
+test('React Icon colors use inherited semantic tokens and raw SVG JSX remains native', async ({ page }) => {
+  await page.goto('/next/react/components/icon/');
+  const guide = page.locator('[data-vf-docs-react-icon]');
+  await expect(guide.getByRole('heading', { name: 'React color and theming' })).toBeVisible();
+  await expect(guide.getByRole('heading', { name: 'Inline SVG tags' })).toBeVisible();
+  await expect(guide).toContainText('<Icon><path /></Icon>');
+
+  const colorPreview = guide.locator('[data-vf-docs-react-icon-example="icon/colors"] iframe');
+  await colorPreview.scrollIntoViewIfNeeded();
+  const swatches = colorPreview.contentFrame().locator('svg[data-vf-icon]');
+  await expect(swatches).toHaveCount(4);
+  for (const svg of await swatches.all()) {
+    const actual = await svg.evaluate((element) => ({
+      color: getComputedStyle(element).color,
+      parentColor: getComputedStyle(element.parentElement).color,
+    }));
+    expect(actual.color).toBe(actual.parentColor);
+  }
+  const accent = colorPreview.contentFrame().locator('svg[data-vf-icon]').nth(1);
+  const light = await accent.evaluate((element) => getComputedStyle(element).color);
+  await colorPreview.contentFrame().locator('html').evaluate((element) => {
+    element.dataset.vfTheme = 'dark';
+  });
+  const dark = await accent.evaluate((element) => getComputedStyle(element).color);
+  expect(dark).not.toBe(light);
+
+  const inlinePreview = guide.locator('[data-vf-docs-react-icon-example="icon/inline-svg"] iframe');
+  await inlinePreview.scrollIntoViewIfNeeded();
+  const frame = inlinePreview.contentFrame();
+  const named = frame.getByRole('img', { name: 'Sparkle' });
+  await expect(named).toBeVisible();
+  await expect(named).toHaveAttribute('data-vf-icon', '');
+  await expect(named).toHaveAttribute('focusable', 'false');
+  await expect(named.locator('path')).toHaveCount(1);
+  await expect(named.locator('circle')).toHaveCount(1);
+  expect(await named.evaluate((element) => getComputedStyle(element).inlineSize)).toBe('24px');
+  const decorative = frame.locator('svg[aria-hidden="true"]');
+  await expect(decorative).toHaveCount(1);
+  await expect(decorative).toHaveAttribute('focusable', 'false');
+  await expect(decorative.locator('rect')).toHaveCount(1);
+  await expect(decorative.locator('path')).toHaveCount(1);
+  await expect(frame.getByRole('img')).toHaveCount(1);
+  const source = guide.locator('[data-vf-docs-react-icon-example="icon/inline-svg"]');
+  await source.getByText('View React TSX source').click();
+  await expect(source.locator('pre code')).toContainText("import '@vyrnforge/web/styles/icon.css';");
+  await expect(source.locator('pre code')).toContainText('<svg data-vf-icon=""');
+  await expect(source.locator('pre code')).toContainText('<circle');
 });
 
 test('React setup has one shared home and component APIs do not reprint integration guides', async ({ page }) => {
