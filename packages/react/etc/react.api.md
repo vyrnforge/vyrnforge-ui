@@ -1626,10 +1626,10 @@ export type DividerOrientation = 'horizontal' | 'vertical';
 
 // @public
 export interface DividerProps extends Omit<ComponentPropsWithoutRef<'span'>, 'children' | 'role' | 'aria-hidden' | 'aria-label' | 'tabIndex'> {
+    children?: string | number;
     // (undocumented)
     orientation?: DividerOrientation;
     textAlign?: DividerTextAlign;
-    children?: string | number;
 }
 
 // @public
