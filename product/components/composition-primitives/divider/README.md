@@ -1,9 +1,18 @@
-# Divider — visual content boundary
+# Divider — visible line, optionally with text
 
-A small, noninteractive visual-only composition primitive. Unlike the retired generic semantic `Separator`, Divider intentionally **does not** introduce `role=separator` or thematic-break meaning; use native `hr` for that. The reusable need is a visible 1px horizontal/vertical rule with shared theme colors and no app-authored geometry boilerplate.
+Divider is a token-driven, noninteractive visual composition primitive, distinct from a semantic thematic break or the retired generic Separator. The canonical Web CSS provides 1px horizontal/vertical lines; the React component forwards a native span ref and maps authoring props onto the same hooks.
 
-Native Web: `<span data-vf-divider data-vf-divider-orientation="horizontal" aria-hidden="true"></span>` and `@vyrnforge/web/styles/divider.css`.
+```tsx
+import { Divider } from '@vyrnforge/react/divider';
+import '@vyrnforge/web/styles/divider.css';
 
-React: `<Divider />` or `<Divider orientation="vertical" />` from `@vyrnforge/react/divider`. Render a native `span` with a forwarded ref. Orientation is **visual configuration**, not ARIA orientation. The CSS rule inherits theme border color from the canonical Web token and uses 1px thickness. Vertical divider needs a row/grid/flex parent with measurable height to stretch.
+<Divider />                             // decorative horizontal rule
+<Divider orientation="vertical" />      // decorative vertical rule
+<Divider>OR</Divider>                    // centered text, accessible by default
+<Divider textAlign="start">Before</Divider>
+<Divider orientation="vertical" textAlign="end">Then</Divider>
+```
 
-This scoped admission is a new **visual composition** capability responding to a specific consumer need, not reinstatement of the removed generic `Separator` semantics, styling hooks, or framework clones. See issue #1458.
+Native Web is the same CSS recipe: an unlabeled span has `data-vf-divider`, orientation and `aria-hidden="true"`; a labeled host has `data-vf-divider-labeled` and a `data-vf-divider-label` child span. Without a label, original full-width/thickness rules remain unchanged. A labeled line is two CSS-painted segments separated by readable native text, with `start | center | end` logical alignment. Vertical text uses native `writing-mode: vertical-rl`, while the segments extend above and below. The parent must supply usable cross-axis height for a vertical divider.
+
+Text remains visible to assistive technology; decorative unlabeled lines are hidden. Divider never creates `role="separator"`, an ARIA orientation, focus, or interaction. For meaningful thematic breaks use native `hr`; context-owned Menu/Toolbar separator and resizer contracts are unchanged. No additional JS runtime, token registry, framework dependency, or application-specific layout policy is introduced. See #1458 and #1461.
