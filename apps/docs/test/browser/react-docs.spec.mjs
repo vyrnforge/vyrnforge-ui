@@ -335,6 +335,45 @@ test('React Divider renders visible horizontal and vertical lines with no extra 
   expect(errors).toEqual([]);
 });
 
+test('React Divider supports readable labels aligned in either orientation', async ({ page }) => {
+  const errors = [];
+  page.on('pageerror', (error) => errors.push(String(error)));
+  await page.goto('/next/react/components/divider/');
+  const guide = page.locator('[data-vf-docs-react-divider]');
+  await expect(guide.getByRole('heading', { name: 'Text and alignment' })).toBeVisible();
+  for (const [slug, orientation] of [
+    ['labeled-horizontal', 'horizontal'],
+    ['labeled-vertical', 'vertical'],
+  ]) {
+    const example = guide.locator('[data-vf-docs-react-divider-example="divider/' + slug + '"]');
+    await example.locator('iframe').scrollIntoViewIfNeeded();
+    const frame = example.locator('iframe').contentFrame();
+    await expect(frame.locator('[data-vf-divider-labeled]')).toHaveCount(3);
+    for (const align of ['start', 'center', 'end']) {
+      const line = frame.locator('[data-vf-divider-align="' + align + '"]');
+      await expect(line).toHaveAttribute('data-vf-divider-orientation', orientation);
+      await expect(line).not.toHaveAttribute('aria-hidden');
+      await expect(line).not.toHaveAttribute('role');
+      const label = line.locator('[data-vf-divider-label]');
+      await expect(label).toBeVisible();
+      await expect(label).toHaveText(align === 'start' ? 'Start' : align === 'center' ? 'OR' : 'End');
+      if (orientation === 'vertical') await expect(label).toHaveCSS('writing-mode', 'vertical-rl');
+    }
+    await expect(frame.getByRole('separator')).toHaveCount(0);
+    await example.getByText('View React TSX source').click();
+    await expect(example.locator('pre code')).toContainText('textAlign="start"');
+    await expect(example.locator('pre code')).toContainText('textAlign="end"');
+  }
+  await page.getByRole('searchbox', { name: 'Search React documentation' }).fill('divider text alignment');
+  await expect(page.locator('[data-vf-docs-react-results]').getByRole('link', { name: 'Divider', exact: true })).toBeVisible();
+  await page.getByRole('button', { name: 'Clear search' }).click();
+  await page.getByRole('navigation', { name: 'Documentation' }).getByRole('link', { name: 'Divider API' }).click();
+  const api = page.locator('[data-vf-docs-react-api="divider"]');
+  await expect(api.locator('pre code')).toContainText('export type DividerTextAlign');
+  await expect(api.locator('pre code')).toContainText('children?: string | number');
+  expect(errors).toEqual([]);
+});
+
 test('Divider works in dark theme, forced colors, narrow RTL layout and SSR without JS', async ({ page, browser }) => {
   await page.setViewportSize({ width: 320, height: 720 });
   await page.goto('/next/react/components/divider/');
