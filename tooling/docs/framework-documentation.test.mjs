@@ -92,12 +92,12 @@ describe('Layout guide discovery and CSS-only responsibility', () => {
     const sections = new Set(layout.sharedContent.sections.map((section) => section.heading));
     for (const heading of [
       'Flow: vertical rhythm', 'Flow: one inline row', 'Flow: wrapping peers',
-      'AutoGrid: intrinsic equal tracks', 'Semantic groups and forms',
+      'AutoGrid: intrinsic equal tracks', 'Semantic groups and forms', 'Dividers and thematic breaks',
       'Migration from older layout names', 'Accessibility, responsive behavior, and evidence',
     ]) expect(sections.has(heading)).toBe(true);
     expect(layout.examples.map((example) => example.id)).toEqual(expect.arrayContaining([
       'layout/basic', 'layout/flow-block', 'layout/flow-inline',
-      'layout/flow-wrap', 'layout/auto-grid', 'layout/semantic-groups',
+      'layout/flow-wrap', 'layout/auto-grid', 'layout/semantic-groups', 'layout/dividers',
     ]));
     for (const example of layout.examples) {
       expect(example.language).toBe('html');
@@ -134,7 +134,7 @@ describe('React Layout components and shared CSS fallback across framework sourc
     expect(layout.frameworkContent.title).toBe('React Layout');
     expect(layout.showcaseAvailable).toBe(true);
     expect(react.componentApiPages.some((component) => component.id === 'layout')).toBe(true);
-    expect(layout.examples).toHaveLength(6);
+    expect(layout.examples).toHaveLength(7);
     for (const example of layout.examples) {
       expect(example.sourcePath.endsWith('/react.tsx')).toBe(true);
       const compiled = await transform(example.source, { loader: 'tsx', jsx: 'automatic', target: 'es2022', format: 'esm' });
@@ -151,7 +151,7 @@ describe('Layout example ergonomics', () => {
     for (const framework of ['native-web', 'react']) {
       const model = compileFrameworkDocumentation(framework);
       const layout = model.componentCatalog.find((component) => component.id === 'layout');
-      expect(layout.examples).toHaveLength(6);
+      expect(layout.examples).toHaveLength(7);
       for (const example of layout.examples) {
         expect(example.source, example.sourcePath).not.toMatch(/\bstyle\s*=\s*(?:\{|["'])/);
       }
