@@ -1,8 +1,12 @@
 import { test, expect } from '@playwright/test';
 import AxeBuilder from '@axe-core/playwright';
 
+const imagePort = process.env.VF_COMPONENT_PORT === 'react' ? 'react' : 'web';
+const imageFixtureUrl = '/components/image/' + imagePort + '.html';
+
+
 test('Image preserves native img semantics and responsive presentation', async ({ page }) => {
-  await page.goto('/components/image/web.html');
+  await page.goto(imageFixtureUrl);
   const image = page.locator('#image');
 
   await expect(image).toHaveJSProperty('tagName', 'IMG');
@@ -24,7 +28,7 @@ test('Image preserves native img semantics and responsive presentation', async (
 });
 
 test('Image shrinks inside a narrow container without distorting intrinsic ratio', async ({ page }) => {
-  await page.goto('/components/image/web.html');
+  await page.goto(imageFixtureUrl);
 
   const image = page.locator('#responsive-image');
   await expect(image).toHaveAttribute('width', '640');
@@ -41,7 +45,7 @@ test('Image shrinks inside a narrow container without distorting intrinsic ratio
 });
 
 test('Image keeps decorative alt and native figure caption semantics', async ({ page }) => {
-  await page.goto('/components/image/web.html');
+  await page.goto(imageFixtureUrl);
 
   const decorative = page.locator('#decorative-image');
   await expect(decorative).toHaveAttribute('alt', '');
@@ -53,4 +57,12 @@ test('Image keeps decorative alt and native figure caption semantics', async ({ 
   await expect(figure).toHaveJSProperty('tagName', 'FIGURE');
   await expect(figure.locator('img')).toHaveAttribute('alt', 'Blue circle on a light background');
   await expect(figure.locator('figcaption')).toHaveText('Simple geometric study');
+});
+
+test('React Image keeps a real image DOM ref after hydration', async ({ page }) => {
+  test.skip(imagePort !== 'react', 'This ref integration applies to the React port only');
+  await page.goto(imageFixtureUrl);
+  await expect(page.locator('body')).toHaveAttribute('data-image-ref-attached', 'true');
+  await expect(page.locator('#image')).toHaveJSProperty('tagName', 'IMG');
+  await expect(page.locator('img[data-vf-image]')).toHaveCount(4);
 });
