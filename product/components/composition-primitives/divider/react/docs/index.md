@@ -1,6 +1,6 @@
 # React Divider
 
-Use the `Divider` component for visual horizontal or vertical lines. React only authors the native decorative span and orientation hook; canonical Web CSS owns its appearance.
+Render a straight horizontal or vertical line with optional readable text. The React wrapper uses the same native span semantics and shared CSS as Native Web.
 
 ## React setup
 
@@ -10,14 +10,18 @@ import '@vyrnforge/web/styles/divider.css';
 
 <Divider />
 <Divider orientation="vertical" />
+<Divider>OR</Divider>
+<Divider textAlign="start">Before</Divider>
+<Divider textAlign="end">After</Divider>
+<Divider orientation="vertical" textAlign="center">Next</Divider>
 ```
 
-No provider, wrapper div, CSS-in-JS system or browser runtime is needed. For a thematic break, author `<hr />` directly instead.
+No provider, wrapper div, CSS-in-JS system or extra runtime is required. Use `<hr />` directly for a semantic thematic break.
 
 ## React authoring
 
-The default orientation is `horizontal`. The vertical variant stretches in a row whose height is established by content. The component forwards a native `HTMLSpanElement` ref and accepts ordinary nonsemantic span attributes such as `className`, `style`, `id` and `data-*`. Role, focusability and accessible-name overrides are intentionally not part of this decorative API. The shared stylesheet gives both variants the same light/dark border token.
+Provide simple text or a number between the Divider tags. Text alignment is `textAlign="start" | "center" | "end"`; center is the default for both orientations. Without text, Divider keeps the existing full 1px rule. With text, the host renders two CSS-painted line segments and an inner `span` for the text. The vertical variant renders the text in vertical writing mode along its line and needs a parent with sufficient height. Keep labels concise and let application layout determine actual space. The component forwards an `HTMLSpanElement` ref and ordinary nonsemantic native attributes (e.g. `className`, `style`, `id`, `data-*`). Interactive children are deliberately unsupported.
 
 ## React accessibility
 
-Divider has no keyboard or focus behavior. It is always `aria-hidden="true"`. Do not use a visual Divider when a real separator role, structural heading, or user-resizable handle is required.
+Without a label, the line is `aria-hidden="true"`. With text (including numeric `0`), the host is **not** `aria-hidden`, so assistive technology can read the label. Neither variant introduces `role="separator"`, `aria-orientation`, focus, or keyboard behavior. A labeled Divider is not a substitute for a structural heading or a labeled form group.
