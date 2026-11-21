@@ -475,6 +475,8 @@ function iconUsage(icon, links) {
       guidePart(sections[2], [
         ...guideBlocks(icon.sharedContent, 'Artwork contract'),
         ...guideBlocks(icon.frameworkContent, 'React authoring'),
+        ...guideSubsections(icon.frameworkContent,
+          ['React color and theming', 'Inline SVG tags'], 'react-icon-authoring'),
       ]),
       guidePart(sections[3], [
         ...guideBlocks(icon.sharedContent, 'Accessibility'),
@@ -612,7 +614,7 @@ export function ReactReferencePage({ view, links, button, layout, typography, ic
     { title: 'Button API', href: links.api, keywords: 'button props reference public' },
     { title: 'Layout', href: links.layout, keywords: 'flow autogrid grid responsive spacing layout wrap inline block JSX' },
     { title: 'Layout API', href: links.layoutApi, keywords: 'flowprops autogridprops as minitemsize ref gap' },
-    { title: 'Icon', href: links.icon.guide, keywords: 'icon svg glyph bookmark outlined filled shape size custom accessible examples' },
+    { title: 'Icon', href: links.icon.guide, keywords: 'icon svg glyph bookmark outlined filled shape size custom accessible examples colors currentColor JSX tags inline svg' },
     { title: 'Icon API', href: links.icon.api, keywords: 'iconprops SVGAttributes definition variant shape size label types' },
     ...['text', 'code', 'kbd'].flatMap((id) => [
       { title: (id === 'kbd' ? 'Kbd' : id[0].toUpperCase() + id.slice(1)),
