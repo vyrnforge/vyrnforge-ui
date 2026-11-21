@@ -1,0 +1,18 @@
+{
+  "id": "divider/vertical",
+  "title": "Vertical divider",
+  "description": "A 1px vertical line stretches between adjacent controls in an inline Flow, without adding ARIA separator semantics.",
+  "defaultFramework": "react",
+  "frameworks": {
+    "native-web": {
+      "label": "Native Web",
+      "language": "html",
+      "source": "native-web.html"
+    },
+    "react": {
+      "label": "React",
+      "language": "tsx",
+      "source": "react.tsx"
+    }
+  }
+}
