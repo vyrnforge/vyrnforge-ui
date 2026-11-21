@@ -1630,10 +1630,14 @@ export interface DividerProps extends Omit<ComponentPropsWithoutRef<'span'>, 'ch
     // (undocumented)
     orientation?: DividerOrientation;
     textAlign?: DividerTextAlign;
+    textDirection?: DividerTextDirection;
 }
 
 // @public
 export type DividerTextAlign = 'start' | 'center' | 'end';
+
+// @public
+export type DividerTextDirection = 'horizontal' | 'top-to-bottom' | 'bottom-to-top';
 
 // @public (undocumented)
 export const DrawerBody: typeof DialogBody;
