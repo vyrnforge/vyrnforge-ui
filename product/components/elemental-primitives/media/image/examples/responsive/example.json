@@ -1,0 +1,14 @@
+{
+  "id": "image/responsive",
+  "title": "Responsive sizing",
+  "description": "A 640 by 320 native image automatically shrinks within a narrower React container, preserving its aspect ratio.",
+  "documentationSection": "Responsive images",
+  "defaultFramework": "react",
+  "frameworks": {
+    "react": {
+      "label": "React",
+      "language": "tsx",
+      "source": "react.tsx"
+    }
+  }
+}

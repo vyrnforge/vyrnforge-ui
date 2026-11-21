@@ -1455,3 +1455,36 @@ test('documentation search prioritizes exact topics over incidental guide mentio
   await search.fill('input');
   await expect(visibleResults.first().getByRole('link', { name: /Input/ })).toBeVisible();
 });
+
+test('Native Image guide renders source-backed meaningful, decorative and captioned examples', async ({ page }) => {
+  const image = catalogEntry('image', 'Image');
+  expect(image.showcase).toBe(true);
+
+  await page.goto('/next/native-web/components/image/');
+  await expect(page.getByRole('heading', { level: 1, name: 'Image' })).toBeVisible();
+
+  const article = page.locator('article[data-vf-docs-component="image"]');
+  await expect(article).toHaveCount(1);
+  await expect(article.locator('[data-vf-docs-example]')).toHaveCount(3);
+  await expect(article.locator('[data-vf-docs-example="image/basic"] [data-vf-docs-preview] img[data-vf-image]')).toHaveAttribute(
+    'alt', 'Illustration of green hills beneath a yellow sun'
+  );
+
+  for (const [sectionId, exampleId] of [
+    ['informative-and-decorative-content', 'image/decorative'],
+    ['captions-and-context', 'image/captioned'],
+  ]) {
+    const section = article.locator(`section[aria-labelledby="${sectionId}"]`);
+    await expect(section.locator('[data-vf-docs-example]')).toHaveAttribute('data-vf-docs-example', exampleId);
+    await expect(section.locator('[data-vf-docs-source]')).not.toBeEmpty();
+  }
+
+  const decorative = article.locator('[data-vf-docs-example="image/decorative"] [data-vf-docs-preview] img[data-vf-image]');
+  await expect(decorative).toHaveAttribute('alt', '');
+
+  const captioned = article.locator('[data-vf-docs-example="image/captioned"] [data-vf-docs-preview] figure');
+  await expect(captioned.locator('figcaption')).toHaveText('Study of shape and contrast');
+  await expect(captioned.locator('img')).toHaveAttribute('alt', 'A blue circle centered on a pale background');
+
+  await expectNoAccessibilityViolations(page);
+});

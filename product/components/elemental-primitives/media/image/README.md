@@ -12,4 +12,6 @@ Image preserves consumer/browser ownership of:
 - `loading`, `decoding`, `fetchpriority`, CORS/referrer policy, and other native attributes;
 - loading/error events and application-specific recovery.
 
-Image does not own asset fetching, fallback content, image failure policy, Avatar behavior, galleries, zoom/crop workflows, or another higher-level media experience. No Core runtime is introduced, and framework-specific wrappers are not required merely for symmetry.
+Image does not own asset fetching, fallback content, image failure policy, Avatar behavior, galleries, zoom/crop workflows, or another higher-level media experience. No Core runtime is introduced.
+
+React offers a narrowly scoped convenience component at `@vyrnforge/react/image`: a typed, ref-forwarding native `img` with the same `data-vf-image` hook. Native Web still uses `img[data-vf-image]` directly, and `@vyrnforge/web/styles/image.css` remains the only styling implementation. The React component does not redefine image semantics or require other framework wrappers.

@@ -9,7 +9,7 @@ test('React pilot artifact is Product Graph-backed and SSR-rendered with public 
   const manifest = JSON.parse(readFileSync(manifestPath, 'utf8'));
   const button = compileFrameworkDocumentation('react').componentCatalog.find((entry) => entry.id === 'button');
   expect(manifest.framework).toBe('react');
-  expect(manifest.status).toBe('button-layout-typography-icon-pilot');
+  expect(manifest.status).toBe('button-layout-typography-icon-image-pilot');
   expect(manifest.button.sharedSourcePath).toBe(button.sharedSourcePath);
   expect(manifest.button.frameworkSourcePath).toBe(button.frameworkSourcePath);
   expect(manifest.button.publicEntrypoints).toContain('@vyrnforge/react/button');
@@ -22,6 +22,7 @@ test('React pilot artifact is Product Graph-backed and SSR-rendered with public 
       'components/' + id + '/', 'api/components/' + id + '/',
     ]),
     'components/icon/', 'api/components/icon/',
+    'components/image/', 'api/components/image/',
   ]);
   expect(manifest.icon).toMatchObject({
     guideRoute: 'components/icon/', apiRoute: 'api/components/icon/',
@@ -37,6 +38,20 @@ test('React pilot artifact is Product Graph-backed and SSR-rendered with public 
     const frame = 'dist/docs/next/react/examples/icon/' + slug + '/index.html';
     expect(readFileSync(frame, 'utf8')).toContain('react-icon-' + slug + '.js');
     expect(readFileSync(frame, 'utf8')).toContain('react-icon-' + slug + '.css');
+  }
+  expect(manifest.image).toMatchObject({
+    guideRoute: 'components/image/', apiRoute: 'api/components/image/',
+    publicEntrypoints: ['@vyrnforge/react/image'],
+    frameworkSourcePath: 'product/components/elemental-primitives/media/image/react/docs/index.md',
+  });
+  expect(manifest.image.examples.map((example) => example.id)).toEqual([
+    'image/basic', 'image/captioned', 'image/decorative', 'image/responsive',
+  ]);
+  for (const example of manifest.image.examples) {
+    const slug = example.id.slice('image/'.length);
+    const frame = 'dist/docs/next/react/examples/image/' + slug + '/index.html';
+    expect(readFileSync(frame, 'utf8')).toContain('react-image-' + slug + '.js');
+    expect(readFileSync(frame, 'utf8')).toContain('react-image-' + slug + '.css');
   }
   for (const id of ['text', 'code', 'kbd']) {
     const entry = manifest.typography[id];
@@ -179,13 +194,13 @@ test('framework selector preserves Native/React guide and API context with brows
   await expect(page).toHaveURL(/\/next\/native-web\/api\/components\/button\/$/);
 });
 
-test('switching an undocumented React topic reports unavailability with recovery', async ({ page }) => {
+test('Native Web Image switches to the actual React Image guide with context preserved', async ({ page }) => {
   await page.goto('/next/native-web/components/image/');
   await page.getByRole('combobox', { name: 'Framework' }).selectOption({ label: 'React (pilot)' });
   await expect(page).toHaveURL(/\/next\/react\/components\/image\/$/);
-  await expect(page.getByRole('heading', { name: 'React documentation unavailable' })).toBeVisible();
-  await expect(page.locator('[data-vf-docs-react-unavailable]')).toContainText('Image');
-  await page.getByRole('link', { name: 'Return to Native Web topic' }).click();
+  await expect(page.getByRole('heading', { name: 'Image', level: 1 })).toBeVisible();
+  await expect(page.locator('[data-vf-docs-react-image]')).toBeVisible();
+  await page.getByRole('combobox', { name: 'Framework' }).selectOption({ label: 'Native Web' });
   await expect(page).toHaveURL(/\/next\/native-web\/components\/image\/$/);
 });
 
@@ -872,4 +887,87 @@ test('Text specimen examples retain semantics and reflow at narrow width with da
   await page.screenshot({
     path: testInfo.outputPath('react-text-guide-320-rtl-dark-forced-colors.png'), fullPage: false,
   });
+});
+
+test('React Image guide uses shared native CSS, source-backed examples and a distinct API', async ({ page, browser }, testInfo) => {
+  const errors = [];
+  page.on('pageerror', (error) => errors.push(String(error)));
+  await page.goto('/next/react/components/image/');
+  const guide = page.locator('[data-vf-docs-react-image]');
+  await expect(guide.getByRole('heading', { name: 'Image', level: 1 })).toBeVisible();
+  await expect(page.getByRole('navigation', { name: 'Documentation' })
+    .getByRole('link', { name: 'Image', exact: true })).toHaveAttribute('aria-current', 'page');
+  expect(await guide.locator(':scope > section > h2').allTextContents()).toEqual([
+    'Get started', 'Examples', 'Usage guidelines', 'Accessibility', 'Related components and API',
+  ]);
+  await expect(page.getByRole('navigation', { name: 'On this page' }).getByRole('link')).toHaveCount(5);
+  await expect(guide.getByRole('navigation', { name: 'Image examples' }).getByRole('link')).toHaveCount(4);
+  await expect(guide.getByText('Standards and evidence mapping')).toBeVisible();
+
+  const basic = guide.locator('[data-vf-docs-react-image-example="image/basic"] iframe');
+  await expect(basic.contentFrame().locator('img[data-vf-image]'))
+    .toHaveAttribute('alt', 'Illustration of green hills beneath a yellow sun');
+
+  const decorative = guide.locator('[data-vf-docs-react-image-example="image/decorative"] iframe');
+  await decorative.scrollIntoViewIfNeeded();
+  await expect(decorative.contentFrame().locator('img[data-vf-image]')).toHaveAttribute('alt', '');
+  await expect(decorative.contentFrame().locator('img[data-vf-image]')).toHaveCount(1);
+
+  const caption = guide.locator('[data-vf-docs-react-image-example="image/captioned"] iframe');
+  await caption.scrollIntoViewIfNeeded();
+  await expect(caption.contentFrame().locator('figure figcaption')).toHaveText('Study of shape and contrast');
+  await expect(caption.contentFrame().locator('figure img[data-vf-image]'))
+    .toHaveAttribute('alt', 'A blue circle centered on a pale background');
+
+  const responsive = guide.locator('[data-vf-docs-react-image-example="image/responsive"] iframe');
+  await responsive.scrollIntoViewIfNeeded();
+  const measured = await responsive.contentFrame().locator('img[data-vf-image]').evaluate((element) => {
+    const img = element.getBoundingClientRect();
+    const box = element.parentElement.getBoundingClientRect();
+    return { inline: img.width, block: img.height, container: box.width,
+      max: getComputedStyle(element).maxInlineSize };
+  });
+  expect(measured.max).toBe('100%');
+  expect(measured.inline).toBeLessThanOrEqual(measured.container + 1);
+  expect(Math.abs(measured.block - measured.inline / 2)).toBeLessThan(1);
+
+  const sourceCard = guide.locator('[data-vf-docs-react-image-example="image/responsive"]');
+  await sourceCard.getByText('View React TSX source').click();
+  await expect(sourceCard.locator('pre code')).toContainText("from '@vyrnforge/react/image'");
+  await expect(sourceCard.locator('pre code')).toContainText("import '@vyrnforge/web/styles/image.css'");
+
+  await guide.getByRole('link', { name: 'View Image public React API' }).click();
+  await expect(page).toHaveURL(/\/next\/react\/api\/components\/image\/$/);
+  const api = page.locator('[data-vf-docs-react-api="image"]');
+  await expect(api.locator('pre code')).toContainText("ComponentPropsWithoutRef<'img'>");
+  await expect(api).toContainText('@vyrnforge/react/image');
+  await expect(api).toContainText('@vyrnforge/web/styles/image.css');
+
+  const noJsContext = await browser.newContext({ javaScriptEnabled: false });
+  try {
+    const noJs = await noJsContext.newPage();
+    await noJs.goto('/next/react/components/image/');
+    await expect(noJs.locator('[data-vf-docs-react-image]')).toBeVisible();
+    await expect(noJs.getByRole('heading', { name: 'Image', level: 1 })).toBeVisible();
+  } finally { await noJsContext.close(); }
+
+  await page.goto('/next/react/components/image/');
+  await page.setViewportSize({ width: 320, height: 720 });
+  await page.evaluate(() => {
+    document.documentElement.dir = 'rtl';
+    document.documentElement.style.fontSize = '200%';
+  });
+  await page.emulateMedia({ forcedColors: 'active' });
+  const extent = await page.evaluate(() => ({
+    scroll: document.documentElement.scrollWidth,
+    client: document.documentElement.clientWidth,
+  }));
+  expect(extent.scroll).toBeLessThanOrEqual(extent.client + 1);
+  await page.addScriptTag({ content: axeCore.source });
+  const report = await page.evaluate(async () => window.axe.run(document, {
+    runOnly: { type: 'tag', values: ['wcag2a', 'wcag2aa', 'wcag21a', 'wcag21aa', 'wcag22aa'] },
+  }));
+  expect(report.violations).toEqual([]);
+  await page.screenshot({ path: testInfo.outputPath('react-image-320-rtl-forced-colors.png'), fullPage: false });
+  expect(errors).toEqual([]);
 });
