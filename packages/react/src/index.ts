@@ -8,7 +8,7 @@ export { DialogBody, DialogClose, DialogDescription, DialogRoot, DialogTitle } f
 export type { DialogBodyProps, DialogCloseProps, DialogDescriptionProps, DialogDismissReason, DialogDismissRequest, DialogRootProps, DialogTitleProps } from './components/dialog/index.js';
 export { FileInput } from './components/file-input/index.js';
 export type { FileInputProps } from './components/file-input/index.js';
-export { Icon, SvgIcon } from './components/icon/index.js';
+export { Icon, SvgIcon, createSvgIcon } from './components/icon/index.js';
 export type { IconDefinition, IconProps, IconShape, IconSize, IconVariant, SvgIconProps } from './components/icon/index.js';
 export { Image } from './components/image/index.js';
 export type { ImageProps } from './components/image/index.js';

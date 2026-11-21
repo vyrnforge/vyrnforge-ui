@@ -2,8 +2,8 @@ import { test } from 'vitest';
 import assert from 'node:assert/strict';
 import { createElement } from 'react';
 import { renderToStaticMarkup } from 'react-dom/server';
-import { Icon, SvgIcon } from '@vyrnforge/react/icon';
-import { SvgIcon as RootSvgIcon } from '@vyrnforge/react';
+import { Icon, SvgIcon, createSvgIcon } from '@vyrnforge/react/icon';
+import { SvgIcon as RootSvgIcon, createSvgIcon as rootCreateSvgIcon } from '@vyrnforge/react';
 import { bookmarkIcon } from '@vyrnforge/icons/bookmark';
 
 test('React Icon SSR preserves decorative and meaningful accessibility contracts', () => {
@@ -40,4 +40,34 @@ test('SvgIcon keeps a custom native SVG simple, decorative and token-ready', () 
   assert.match(named, /role="img"/);
   assert.doesNotMatch(named, /aria-hidden/);
   assert.match(named, /<circle/);
+});
+
+test('createSvgIcon defines reusable native artwork in one call with forwarded props', () => {
+  const SparkleIcon = createSvgIcon(createElement('path', {
+    d: 'M12 2 22 12 12 22 2 12Z', stroke: 'currentColor', fill: 'none',
+  }));
+  const defaultMarkup = renderToStaticMarkup(createElement(SparkleIcon));
+  assert.match(defaultMarkup, /viewBox="0 0 24 24"/);
+  assert.match(defaultMarkup, /data-vf-icon=""/);
+  assert.match(defaultMarkup, /data-vf-size="md"/);
+  assert.match(defaultMarkup, /aria-hidden="true"/);
+  assert.match(defaultMarkup, /<path/);
+
+  const configuredMarkup = renderToStaticMarkup(createElement(SparkleIcon, {
+    size: 'lg',
+    label: 'Sparkle',
+    className: 'feature-icon',
+    style: { color: 'var(--vf-color-accent-background)' },
+  }));
+  assert.match(configuredMarkup, /data-vf-size="lg"/);
+  assert.match(configuredMarkup, /role="img"/);
+  assert.match(configuredMarkup, /aria-label="Sparkle"/);
+  assert.doesNotMatch(configuredMarkup, /aria-hidden/);
+  assert.match(configuredMarkup, /class="feature-icon"/);
+  assert.match(configuredMarkup, /var\(--vf-color-accent-background\)/);
+
+  const RootIcon = rootCreateSvgIcon(createElement('circle', { cx: 16, cy: 16, r: 8 }));
+  const rootMarkup = renderToStaticMarkup(createElement(RootIcon, { viewBox: '0 0 32 32' }));
+  assert.match(rootMarkup, /viewBox="0 0 32 32"/);
+  assert.match(rootMarkup, /<circle/);
 });

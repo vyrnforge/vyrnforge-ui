@@ -15,20 +15,22 @@ The explicit `label` is appropriate only when an icon independently conveys mean
 
 ## Simple custom SVG
 
-If you already have an SVG path, use `SvgIcon` and write the shape directly. It supplies a default `viewBox="0 0 24 24"`, medium size, shared Icon CSS hooks, and decorative accessibility without extra setup:
+For a reusable icon in React, one VyrnForge import and one function call is enough:
 
 ```tsx
-import { SvgIcon } from '@vyrnforge/react/icon';
+import { createSvgIcon } from '@vyrnforge/react/icon';
 
-<SvgIcon>
+export const SparkleIcon = createSvgIcon(
   <path d="M12 2 15 9 22 12 15 15 12 22 9 15 2 12 9 9Z"
     fill="none" stroke="currentColor" strokeWidth="1.75" />
-</SvgIcon>
+);
 ```
 
-Set `size="sm" | "md" | "lg"` only when needed; pass `label` if the SVG itself conveys standalone meaning. Set `viewBox` only for artwork that is not drawn on a 24×24 canvas. Other ordinary SVG attributes, `className`, `style`, and an SVG ref remain available. A custom application component can simply return `<SvgIcon {...props}><path ... /></SvgIcon>` and reuse it anywhere. For theme-aware colors, use `currentColor` inside the artwork and a public VyrnForge CSS token on the enclosing text context or `style`.
+Use `<SparkleIcon />` anywhere. `<SparkleIcon size="lg" />` and `<SparkleIcon label="Sparkle" />` work without custom prop types or an extra wrapper component. Once defined, consuming files only need `import { SparkleIcon } from './icons'`. The full runnable example includes `createRoot` only to mount its standalone preview; application components do not need that setup.
 
-This wrapper is a React authoring convenience, not a different visual system or an alternative framework-neutral definition format. For reusable authored variant/shape artwork across frameworks, continue using `defineIcon` with `Icon`.
+For a one-off shape, import only `SvgIcon` and write `<SvgIcon><path d="..." fill="currentColor" /></SvgIcon>` directly. Both choices supply a default 24×24 viewBox, medium sizing, the canonical Icon CSS hooks, and decorative accessibility by default. Override `viewBox` for other canvas sizes, use `label` only when artwork conveys standalone meaning, and keep `stroke="currentColor"` or `fill="currentColor"` for inherited theme color. The public `size` choices are `sm`, `md`, and `lg`.
+
+For existing catalog glyphs or cross-framework reusable outlined/filled and rounded/sharp artwork, use `Icon` plus `defineIcon`. The React-only `createSvgIcon` does not generate those authored variants or introduce a second styling system.
 
 ## React authoring
 

@@ -118,10 +118,17 @@ if (iconTypeStart < 0 || iconTypeEnd < 0 ||
     !iconPublicSource.includes('export interface IconProps extends') ||
     !iconPublicSource.includes('forwardRef<SVGSVGElement, IconProps>') ||
     !iconPublicSource.includes('export interface SvgIconProps extends') ||
-    !iconPublicSource.includes('forwardRef<SVGSVGElement, SvgIconProps>')) {
+    !iconPublicSource.includes('forwardRef<SVGSVGElement, SvgIconProps>') ||
+    !iconPublicSource.includes('export function createSvgIcon(content: ReactNode): ForwardRefExoticComponent<')) {
   throw new Error('React Icon public type contract changed; review the Icon API reference');
 }
-const publicIconTypes = iconPublicSource.slice(iconTypeStart, iconTypeEnd).trim();
+const createSvgIconStart = iconPublicSource.indexOf('export function createSvgIcon(');
+const createSvgIconSignatureEnd = iconPublicSource.indexOf('> {', createSvgIconStart);
+if (createSvgIconSignatureEnd < 0) {
+  throw new Error('React createSvgIcon signature changed; review the public Icon API');
+}
+const publicIconTypes = iconPublicSource.slice(iconTypeStart, iconTypeEnd).trim() +
+  '\n\n' + iconPublicSource.slice(createSvgIconStart, createSvgIconSignatureEnd + 1).trim() + ';';
 // Preserve Image's native HTML semantics and canonical Web CSS.
 const image = reactModel.componentCatalog.find((entry) => entry.id === 'image');
 const imageExamples = image?.examples.slice().sort((a, b) => a.id.localeCompare(b.id)) ?? [];
