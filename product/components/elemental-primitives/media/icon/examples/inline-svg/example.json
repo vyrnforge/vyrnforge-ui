@@ -1,0 +1,13 @@
+{
+  "id": "icon/inline-svg",
+  "title": "Author SVG tags",
+  "description": "Use ordinary SVG, path and circle JSX tags for one-off artwork, with the canonical CSS hook and explicit accessible or decorative semantics.",
+  "defaultFramework": "react",
+  "frameworks": {
+    "react": {
+      "label": "React",
+      "language": "tsx",
+      "source": "react.tsx"
+    }
+  }
+}

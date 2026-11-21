@@ -1,0 +1,13 @@
+{
+  "id": "icon/colors",
+  "title": "Theme-aware colors",
+  "description": "Apply canonical public color tokens to the owning context; the same IconDefinition picks up each color through currentColor.",
+  "defaultFramework": "react",
+  "frameworks": {
+    "react": {
+      "label": "React",
+      "language": "tsx",
+      "source": "react.tsx"
+    }
+  }
+}
