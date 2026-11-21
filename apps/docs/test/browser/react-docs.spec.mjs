@@ -9,7 +9,7 @@ test('React pilot artifact is Product Graph-backed and SSR-rendered with public 
   const manifest = JSON.parse(readFileSync(manifestPath, 'utf8'));
   const button = compileFrameworkDocumentation('react').componentCatalog.find((entry) => entry.id === 'button');
   expect(manifest.framework).toBe('react');
-  expect(manifest.status).toBe('button-layout-typography-pilot');
+  expect(manifest.status).toBe('button-layout-typography-icon-pilot');
   expect(manifest.button.sharedSourcePath).toBe(button.sharedSourcePath);
   expect(manifest.button.frameworkSourcePath).toBe(button.frameworkSourcePath);
   expect(manifest.button.publicEntrypoints).toContain('@vyrnforge/react/button');
@@ -21,7 +21,22 @@ test('React pilot artifact is Product Graph-backed and SSR-rendered with public 
     ...['text', 'code', 'kbd'].flatMap((id) => [
       'components/' + id + '/', 'api/components/' + id + '/',
     ]),
+    'components/icon/', 'api/components/icon/',
   ]);
+  expect(manifest.icon).toMatchObject({
+    guideRoute: 'components/icon/', apiRoute: 'api/components/icon/',
+    publicEntrypoints: ['@vyrnforge/react/icon'],
+    frameworkSourcePath: 'product/components/elemental-primitives/media/icon/react/docs/index.md',
+  });
+  expect(manifest.icon.examples.map((example) => example.id)).toEqual([
+    'icon/accessibility', 'icon/basic', 'icon/custom', 'icon/sizes', 'icon/variants',
+  ]);
+  for (const example of manifest.icon.examples) {
+    const slug = example.id.slice('icon/'.length);
+    const frame = 'dist/docs/next/react/examples/icon/' + slug + '/index.html';
+    expect(readFileSync(frame, 'utf8')).toContain('react-icon-' + slug + '.js');
+    expect(readFileSync(frame, 'utf8')).toContain('react-icon-' + slug + '.css');
+  }
   for (const id of ['text', 'code', 'kbd']) {
     const entry = manifest.typography[id];
     expect(entry.publicEntrypoints).toContain('@vyrnforge/react/' + id);
@@ -64,7 +79,7 @@ test('React Button guide SSR hydrates and uses public Button, AppShell, SideNav 
   await expect(page.locator('[data-vf-app-shell]')).toHaveCount(1);
   await expect(page.locator('[data-vf-side-nav]')).toHaveCount(1);
   await expect(page.getByRole('navigation', { name: 'Documentation' })
-    .getByRole('link', { name: 'Button guide' })).toHaveAttribute('aria-current', 'page');
+    .getByRole('link', { name: 'Button', exact: true })).toHaveAttribute('aria-current', 'page');
   await expect(page.locator('html')).toHaveAttribute('data-vf-react-hydrated', 'true');
   await page.getByRole('button', { name: 'Save changes', exact: true }).click();
   await expect(page.locator('[data-vf-docs-react-feedback]')).toHaveText('Save changes activated');
@@ -252,7 +267,7 @@ test('React Layout lives under Layout & Structure and runs checked-in React JSX 
   await expect(page.locator('html')).toHaveAttribute('data-vf-react-hydrated', 'true');
   const nav = page.getByRole('navigation', { name: 'Documentation' });
   await expect(nav.getByText('Layout & Structure', { exact: true })).toBeVisible();
-  await expect(nav.getByRole('link', { name: 'Layout guide' })).toHaveAttribute('aria-current', 'page');
+  await expect(nav.getByRole('link', { name: 'Layout', exact: true })).toHaveAttribute('aria-current', 'page');
   const layoutGuide = page.locator('[data-vf-docs-react-layout]');
   await layoutGuide.getByText('Standards and evidence mapping', { exact: true }).click();
   const accessibility = layoutGuide.locator('[data-vf-docs-accessibility]');
@@ -291,7 +306,7 @@ test('React Layout lives under Layout & Structure and runs checked-in React JSX 
   await expect(radios.getByRole('radio', { name: 'Daily' })).not.toBeChecked();
 
   await page.getByRole('searchbox', { name: 'Search React documentation' }).fill('autogrid');
-  await expect(page.locator('[data-vf-docs-react-results]').getByRole('link', { name: 'Layout guide' })).toBeVisible();
+  await expect(page.locator('[data-vf-docs-react-results]').getByRole('link', { name: 'Layout', exact: true })).toBeVisible();
   await page.getByRole('button', { name: 'Clear search' }).click();
   await expect(page.locator('[data-vf-docs-react-results]')).toBeHidden();
   await page.getByRole('navigation', { name: 'On this page' })
@@ -316,7 +331,7 @@ test('React Layout at 320px / 200% text is readable in RTL, dark theme and force
   const menu = page.getByRole('button', { name: 'Menu' });
   await menu.click();
   await expect(page.getByRole('navigation', { name: 'Documentation' })
-    .getByRole('link', { name: 'Layout guide' })).toBeVisible();
+    .getByRole('link', { name: 'Layout', exact: true })).toBeVisible();
   await page.keyboard.press('Escape');
   await expect(menu).toBeFocused();
   await page.screenshot({ path: testInfo.outputPath('react-layout-320-rtl-forced-colors.png'), fullPage: true });
@@ -341,7 +356,7 @@ test('Native Layout framework selector preserves the React Layout route; SSR wor
     await noJs.goto('/next/react/components/layout/');
     await expect(noJs.getByRole('heading', { level: 1, name: 'Layout: Flow & AutoGrid' })).toBeVisible();
     await expect(noJs.getByRole('navigation', { name: 'Documentation' })
-      .getByRole('link', { name: 'Layout guide' })).toHaveAttribute('aria-current', 'page');
+      .getByRole('link', { name: 'Layout', exact: true })).toHaveAttribute('aria-current', 'page');
     await expect(noJs.locator('html')).not.toHaveAttribute('data-vf-react-hydrated', 'true');
     await noJs.getByText('View React TSX source').first().click();
     await expect(noJs.locator('[data-vf-docs-react-layout-example] pre code').first()).toContainText('<Flow');
@@ -360,7 +375,7 @@ test('React Layout API reference exposes actual package entrypoint and typed pro
   await expect(types).toContainText('LayoutGap');
   await expect(page.getByRole('navigation', { name: 'Documentation' })
     .getByRole('link', { name: 'Layout API' })).toHaveAttribute('aria-current', 'page');
-  await page.getByRole('link', { name: 'Open runnable React Layout examples' }).click();
+  await page.getByRole('link', { name: 'View Layout examples' }).click();
   await expect(page).toHaveURL(/\/next\/react\/components\/layout\/$/);
 });
 
@@ -377,7 +392,7 @@ test('React Text, Code and Kbd guides run checked-in JSX and link real public AP
     const guide = page.locator('[data-vf-docs-react-typography="' + id + '"]');
     await expect(guide.getByRole('heading', { level: 1, name: label })).toBeVisible();
     await expect(page.getByRole('navigation', { name: 'Documentation' })
-      .getByRole('link', { name: label + ' guide' })).toHaveAttribute('aria-current', 'page');
+      .getByRole('link', { name: label, exact: true })).toHaveAttribute('aria-current', 'page');
     const standards = guide.getByText('Standards and evidence mapping', { exact: true });
     await standards.click();
     await expect(guide.locator('[data-vf-docs-accessibility]')).toBeVisible();
@@ -423,9 +438,9 @@ test('React Typography routes preserve SSR with no client JavaScript and framewo
   await page.getByRole('button', { name: 'Clear search' }).click();
   await page.getByRole('searchbox', { name: 'Search React documentation' }).fill('kbd');
   await expect(page.locator('[data-vf-docs-react-results]')
-    .getByRole('link', { name: 'Kbd guide' })).toBeVisible();
+    .getByRole('link', { name: 'Kbd', exact: true })).toBeVisible();
   await page.locator('[data-vf-docs-react-results]')
-    .getByRole('link', { name: 'Kbd guide' }).click();
+    .getByRole('link', { name: 'Kbd', exact: true }).click();
   await expect(page).toHaveURL(/\/next\/react\/components\/kbd\/$/);
 
   const context = await browser.newContext({ javaScriptEnabled: false });
@@ -458,7 +473,7 @@ test('React Typography remains readable at 320px, 200 percent text, RTL and forc
   const menu = page.getByRole('button', { name: 'Menu' });
   await menu.click();
   await expect(page.getByRole('navigation', { name: 'Documentation' })
-    .getByRole('link', { name: 'Text guide' })).toBeVisible();
+    .getByRole('link', { name: 'Text', exact: true })).toBeVisible();
   await page.keyboard.press('Escape');
   await expect(menu).toBeFocused();
   const widths = await page.evaluate(() => ({
@@ -503,6 +518,95 @@ test('Button, Layout, Code and Kbd use one task-first guide hierarchy and separa
     await expect(nav.getByRole('link', { name: 'Button API' })).toBeVisible();
     await expect(nav.getByRole('link', { name: 'Layout API' })).toBeVisible();
   }
+});
+
+test('React Icon uses product-owned SVG examples and public source-backed API', async ({ page, browser }, testInfo) => {
+  const errors = [];
+  page.on('pageerror', (error) => errors.push(String(error)));
+  await page.goto('/next/react/components/icon/');
+  const guide = page.locator('[data-vf-docs-react-icon]');
+  await expect(guide.getByRole('heading', { name: 'Icon', level: 1 })).toBeVisible();
+  await expect(page.getByRole('navigation', { name: 'Documentation' })
+    .getByRole('link', { name: 'Icon', exact: true })).toHaveAttribute('aria-current', 'page');
+  expect(await guide.locator(':scope > section > h2').allTextContents()).toEqual([
+    'Get started', 'Examples', 'Usage guidelines', 'Accessibility', 'Related components and API',
+  ]);
+  await expect(page.getByRole('navigation', { name: 'On this page' }).getByRole('link')).toHaveCount(5);
+  await expect(guide.getByText('Standards and evidence mapping')).toBeVisible();
+  await expect(guide.getByRole('navigation', { name: 'Icon examples' }).getByRole('link')).toHaveCount(5);
+
+  const basic = guide.locator('[data-vf-docs-react-icon-example="icon/basic"]');
+  await expect(basic.locator('iframe').contentFrame().getByRole('img', { name: 'Bookmark' })).toBeVisible();
+
+  const variants = guide.locator('[data-vf-docs-react-icon-example="icon/variants"] iframe');
+  await variants.scrollIntoViewIfNeeded();
+  const variantSvgs = variants.contentFrame().locator('svg[data-vf-icon]');
+  await expect(variantSvgs).toHaveCount(4);
+  for (const [variant, shape] of [['outlined', 'rounded'], ['outlined', 'sharp'], ['filled', 'rounded'], ['filled', 'sharp']]) {
+    await expect(variants.contentFrame().locator(
+      'svg[data-vf-variant="' + variant + '"][data-vf-shape="' + shape + '"]')).toHaveAttribute('aria-hidden', 'true');
+  }
+
+  const sizes = guide.locator('[data-vf-docs-react-icon-example="icon/sizes"] iframe');
+  await sizes.scrollIntoViewIfNeeded();
+  await expect(sizes.contentFrame().locator('svg[data-vf-icon]')).toHaveCount(3);
+  for (const size of ['sm', 'md', 'lg']) {
+    await expect(sizes.contentFrame().locator('svg[data-vf-size="' + size + '"]')).toBeVisible();
+  }
+
+  const a11y = guide.locator('[data-vf-docs-react-icon-example="icon/accessibility"] iframe');
+  await a11y.scrollIntoViewIfNeeded();
+  const a11yFrame = a11y.contentFrame();
+  await expect(a11yFrame.getByRole('button', { name: 'Save bookmark' })).toBeVisible();
+  await expect(a11yFrame.getByRole('button', { name: 'Save bookmark' })
+    .locator('svg')).toHaveAttribute('aria-hidden', 'true');
+  await a11yFrame.getByRole('button', { name: 'Save bookmark' }).click();
+  await expect(a11yFrame.getByRole('button', { name: 'Remove bookmark' })).toBeVisible();
+  await expect(a11yFrame.getByRole('status')).toHaveText('Saved');
+  await expect(a11yFrame.getByRole('img', { name: 'Bookmark status' })).toBeVisible();
+
+  const custom = guide.locator('[data-vf-docs-react-icon-example="icon/custom"] iframe');
+  await custom.scrollIntoViewIfNeeded();
+  await expect(custom.contentFrame().getByRole('img', { name: 'Product mark' }))
+    .toHaveAttribute('data-vf-icon-name', 'product-mark');
+  await custom.locator('..').getByText('View React TSX source').click();
+  await expect(custom.locator('..').locator('pre code')).toContainText("from '@vyrnforge/web/icon'");
+
+  await guide.getByRole('link', { name: 'View Icon public React API' }).click();
+  await expect(page).toHaveURL(/\/next\/react\/api\/components\/icon\/$/);
+  const api = page.locator('[data-vf-docs-react-api="icon"]');
+  await expect(api.locator('pre code')).toContainText('export interface IconProps');
+  await expect(api.locator('pre code')).toContainText('label?: string');
+  await expect(api).toContainText('@vyrnforge/react/icon');
+  await expect(api).toContainText('@vyrnforge/web/styles/icon.css');
+
+  const context = await browser.newContext({ javaScriptEnabled: false });
+  try {
+    const noJs = await context.newPage();
+    await noJs.goto('/next/react/components/icon/');
+    await expect(noJs.locator('[data-vf-docs-react-icon]')).toBeVisible();
+    await expect(noJs.getByRole('navigation', { name: 'Documentation' }).getByRole('link', { name: 'Icon', exact: true }))
+      .toHaveAttribute('aria-current', 'page');
+  } finally { await context.close(); }
+  await page.goto('/next/react/components/icon/');
+  await page.setViewportSize({ width: 320, height: 720 });
+  await page.evaluate(() => {
+    document.documentElement.dir = 'rtl';
+    document.documentElement.style.fontSize = '200%';
+  });
+  await page.emulateMedia({ forcedColors: 'active' });
+  const width = await page.evaluate(() => ({
+    scroll: document.documentElement.scrollWidth,
+    client: document.documentElement.clientWidth,
+  }));
+  expect(width.scroll).toBeLessThanOrEqual(width.client + 1);
+  await page.addScriptTag({ content: axeCore.source });
+  const report = await page.evaluate(async () => window.axe.run(document, {
+    runOnly: { type: 'tag', values: ['wcag2a', 'wcag2aa', 'wcag21a', 'wcag21aa', 'wcag22aa'] },
+  }));
+  expect(report.violations).toEqual([]);
+  await page.screenshot({ path: testInfo.outputPath('react-icon-320-rtl-forced-colors.png'), fullPage: false });
+  expect(errors).toEqual([]);
 });
 
 test('React setup has one shared home and component APIs do not reprint integration guides', async ({ page }) => {

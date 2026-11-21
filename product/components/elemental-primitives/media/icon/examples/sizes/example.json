@@ -1,0 +1,13 @@
+{
+  "id": "icon/sizes",
+  "title": "Token sizes",
+  "description": "Compare the three public Icon sizes without changing the underlying glyph or semantic behavior.",
+  "defaultFramework": "react",
+  "frameworks": {
+    "react": {
+      "label": "React",
+      "language": "tsx",
+      "source": "react.tsx"
+    }
+  }
+}

@@ -18,7 +18,8 @@
   },
   "implicitDependencies": [
     "@vyrnforge/web",
-    "@vyrnforge/react"
+    "@vyrnforge/react",
+    "@vyrnforge/icons"
   ],
   "targets": {
     "build": {

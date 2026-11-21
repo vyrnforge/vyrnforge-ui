@@ -127,18 +127,20 @@ function navigation(view, links, topic) {
   const selected = topic ? view + ':' + topic : view;
   const groups = [
     { label: 'React', items: [{ id: 'home', title: 'React overview', href: links.home }] },
-    { label: 'Components', items: [{ id: 'guide', title: 'Button guide', href: links.guide }] },
+    { label: 'Components', items: [{ id: 'guide', title: 'Button', href: links.guide }] },
     { label: 'Typography', items: ['text', 'code', 'kbd'].map((id) => ({
       id: 'typography:' + id,
-      title: id === 'kbd' ? 'Kbd guide' : id[0].toUpperCase() + id.slice(1) + ' guide',
+      title: id === 'kbd' ? 'Kbd' : id[0].toUpperCase() + id.slice(1),
       href: links.typography[id].guide,
     })) },
-    { label: 'Layout & Structure', items: [{ id: 'layout', title: 'Layout guide', href: links.layout }] },
+    { label: 'Layout & Structure', items: [{ id: 'layout', title: 'Layout', href: links.layout }] },
+    { label: 'Media', items: [{ id: 'icon', title: 'Icon', href: links.icon.guide }] },
     // API destinations remain working, but reference material is no longer
     // interleaved with consumer guides. A dedicated API catalog can follow.
     { label: 'API Reference', items: [
       { id: 'api', title: 'Button API', href: links.api },
       { id: 'layout-api', title: 'Layout API', href: links.layoutApi },
+      { id: 'icon-api', title: 'Icon API', href: links.icon.api },
       ...['text', 'code', 'kbd'].map((id) => ({
         id: 'typography-api:' + id,
         title: id === 'kbd' ? 'Kbd API' : id[0].toUpperCase() + id.slice(1) + ' API',
@@ -195,7 +197,6 @@ function layoutGuide(layout, links) {
           h('a', { href: links.home, 'data-vf-link': '' }, 'React overview'), '.'),
       ]),
       guidePart(sections[1], [
-        h('p', { key: 'intro' }, 'These six examples run product-owned React TSX. Each preview keeps its source available.'),
         exampleJumpLinks('Layout', examples,
           (example) => 'react-layout-example-' + example.id.split('/')[1]),
         ...examples.map((example) => layoutExample(example, links)),
@@ -213,10 +214,9 @@ function layoutGuide(layout, links) {
         evidenceDisclosure(layout.standardReferences),
       ]),
       guidePart(sections[4], [
-        h('p', { key: 'intro' }, 'Find Flow and AutoGrid props, CSS attributes, spacing values and public types in the API reference.'),
         h('ul', { key: 'related', className: 'vf-docs-related-links' },
           h('li', null, h('a', { href: links.layoutApi, 'data-vf-link': '' }, 'View Flow and AutoGrid React API')),
-          h('li', null, h('a', { href: links.guide, 'data-vf-link': '' }, 'Button usage guide'))),
+          h('li', null, h('a', { href: links.guide, 'data-vf-link': '' }, 'Button'))),
       ])));
 }
 // Reusable framework-native usage gallery: all examples and source snippets come
@@ -316,8 +316,6 @@ function typographyUsageGuide(unit, links) {
           h('a', { href: links.home, 'data-vf-link': '' }, 'React overview'), '.'),
       ]),
       guidePart(sections[1], [
-        h('p', { key: 'intro' },
-          'Each preview runs checked-in React TSX. Open the source beneath an example to see how it is built.'),
         exampleJumpLinks(unit.title, unit.examples, (example) =>
           'react-typography-' + id + '-' + example.id.slice(id.length + 1)),
         ...unit.examples.map((example) => typographyExample(unit, example, links)),
@@ -333,15 +331,13 @@ function typographyUsageGuide(unit, links) {
         evidenceDisclosure(unit.standardReferences),
       ]),
       guidePart(sections[4], [
-        h('p', { key: 'intro' },
-          'Public React props and types belong in the API reference; use the adjacent typography guides for related semantics.'),
         h('ul', { key: 'related', className: 'vf-docs-related-links' },
           h('li', null, h('a', { 'data-vf-link': '', href: links.typography[id].api },
             'View ' + unit.title + ' public React API')),
           ...['text', 'code', 'kbd'].filter((other) => other !== id).map((other) =>
             h('li', { key: other },
               h('a', { 'data-vf-link': '', href: links.typography[other].guide },
-                (other === 'kbd' ? 'Kbd' : other[0].toUpperCase() + other.slice(1)) + ' usage guide')))),
+                (other === 'kbd' ? 'Kbd' : other[0].toUpperCase() + other.slice(1)))))),
       ])));
 }
 function typographyGuide(unit, links) {
@@ -369,7 +365,7 @@ function typographyApi(unit, links) {
       h('pre', { 'data-vf-code-block': '', tabIndex: 0 },
         h('code', null, unit.publicSource))),
     h('a', { href: links.typography[unit.id].guide, 'data-vf-link': '' },
-      'Open ' + unit.title + ' React guide and live example'));
+      'View ' + unit.title + ' examples'));
 }
 function buttonExample(example, links) {
   const id = example.id.slice('button/'.length);
@@ -406,8 +402,6 @@ function buttonUsageGuide(button, links, message, setMessage) {
           h('a', { href: links.home, 'data-vf-link': '' }, 'React overview'), '.'),
       ]),
       guidePart(sections[1], [
-        h('p', { key: 'intro' },
-          'Try the hydrated Button below, then explore the runnable, checked-in React examples and their source.'),
         h(Flow, { key: 'live', className: 'vf-docs-preview',
           direction: 'inline', wrap: 'wrap', gap: 'md' },
           h(Button, { type: 'button', onClick: () => setMessage('Save changes activated') },
@@ -428,17 +422,92 @@ function buttonUsageGuide(button, links, message, setMessage) {
         evidenceDisclosure(button.standardReferences),
       ]),
       guidePart(sections[4], [
-        h('p', { key: 'intro' },
-          'Find public props, types, and entrypoints in the API reference, separate from this usage guide.'),
         h('ul', { key: 'related', className: 'vf-docs-related-links' },
           h('li', null, h('a', { 'data-vf-link': '', href: links.api },
             'View Button public React API')),
           h('li', null, h('a', { 'data-vf-link': '', href: links.layout },
-            'Layout usage guide'))),
+            'Layout'))),
       ])));
 }
 
-function body(view, links, button, layout, typography, message, setMessage, requestedTopic) {
+function iconExample(example, links) {
+  const slug = example.id.slice('icon/'.length);
+  return h('article', { key: example.id, id: 'react-icon-example-' + slug,
+    className: 'vf-docs-example', 'data-vf-docs-react-icon-example': example.id },
+    h('header', { className: 'vf-docs-example-header' },
+      h('div', null, h('h3', null, example.title), h('p', null, example.description))),
+    h('iframe', { className: 'vf-docs-react-example-frame',
+      title: 'React ' + example.title + ' example',
+      src: links.icon.exampleBase + slug + '/',
+      sandbox: 'allow-scripts', loading: slug === 'basic' ? 'eager' : 'lazy' }),
+    h('details', { className: 'vf-docs-source-disclosure' },
+      h('summary', null, 'View React TSX source'),
+      h('pre', { 'data-vf-code-block': '', tabIndex: 0 }, h('code', null, example.source))));
+}
+function iconUsage(icon, links) {
+  if (!icon?.sharedContent || !icon?.frameworkContent || !icon?.examples?.length) return null;
+  const examples = [
+    ...icon.examples.filter((example) => example.id === 'icon/basic'),
+    ...icon.examples.filter((example) => example.id !== 'icon/basic'),
+  ];
+  const sections = [
+    { id: 'react-icon-setup', heading: 'Get started' },
+    { id: 'react-icon-examples', heading: 'Examples' },
+    { id: 'react-icon-guidelines', heading: 'Usage guidelines' },
+    { id: 'react-icon-accessibility', heading: 'Accessibility' },
+    { id: 'react-icon-related', heading: 'Related components and API' },
+  ];
+  return h('div', { className: 'vf-docs-content-grid vf-docs-usage-guide-layout' },
+    guideToc(sections),
+    h('article', { className: 'vf-docs-article vf-docs-usage-guide',
+      'data-vf-docs-react-icon': '' },
+      guideHeader(icon.sharedContent, 'React · Media'),
+      guidePart(sections[0], [
+        ...guideBlocks(icon.frameworkContent, 'React setup'),
+        h('p', { key: 'setup' }, 'See ', h('a', { href: links.home, 'data-vf-link': '' },
+          'React overview'), ' for shared CSS and server-rendering setup.'),
+      ]),
+      guidePart(sections[1], [
+        exampleJumpLinks('Icon', examples,
+          (example) => 'react-icon-example-' + example.id.slice('icon/'.length)),
+        ...examples.map((example) => iconExample(example, links)),
+      ]),
+      guidePart(sections[2], [
+        ...guideBlocks(icon.sharedContent, 'Artwork contract'),
+        ...guideBlocks(icon.frameworkContent, 'React authoring'),
+      ]),
+      guidePart(sections[3], [
+        ...guideBlocks(icon.sharedContent, 'Accessibility'),
+        evidenceDisclosure(icon.standardReferences),
+      ]),
+      guidePart(sections[4], [
+        h('ul', { className: 'vf-docs-related-links' },
+          h('li', null, h('a', { href: links.icon.api, 'data-vf-link': '' }, 'View Icon public React API')),
+          h('li', null, h('a', { href: links.guide, 'data-vf-link': '' }, 'Button')),
+          h('li', null, h('a', { href: links.typography.text.guide, 'data-vf-link': '' }, 'Text'))),
+      ])));
+}
+function iconApi(icon, links) {
+  if (!icon?.publicIconTypes || !icon?.publicEntrypoints?.length) return null;
+  return h('article', { className: 'vf-docs-article', 'data-vf-docs-react-api': 'icon' },
+    h('header', { className: 'vf-docs-component-header' },
+      h('h1', null, 'Icon API'),
+      h('p', { className: 'vf-docs-lede' }, 'Public SVG props and types from the checked-in React Icon source.'),
+      accessibilityEvidence(icon.standardReferences)),
+    h('section', { 'aria-labelledby': 'react-icon-api-entrypoints' },
+      h('h2', { id: 'react-icon-api-entrypoints' }, 'Public entrypoint'),
+      h('ul', null, ...icon.publicEntrypoints.map((entry) =>
+        h('li', { key: entry }, h('code', { 'data-vf-code': '' }, entry)))),
+      h('p', null, 'Load the canonical Web stylesheet through your consuming application build.')),
+    h('section', { 'aria-labelledby': 'react-icon-api-types' },
+      h('h2', { id: 'react-icon-api-types' }, 'Source-backed React types and props'),
+      h('pre', { 'data-vf-code-block': '', tabIndex: 0 }, h('code', null, icon.publicIconTypes))),
+    h('section', { 'aria-labelledby': 'react-icon-api-css' },
+      h('h2', { id: 'react-icon-api-css' }, 'Shared CSS'),
+      h('code', { 'data-vf-code': '' }, '@vyrnforge/web/styles/icon.css')),
+    h('p', null, h('a', { href: links.icon.guide, 'data-vf-link': '' }, 'View Icon examples')));
+}
+function body(view, links, button, layout, typography, icon, message, setMessage, requestedTopic) {
   if (view === 'unavailable') {
     return h('article', { className: 'vf-docs-article', 'data-vf-docs-react-unavailable': '' },
       h('header', { className: 'vf-docs-component-header' },
@@ -447,15 +516,15 @@ function body(view, links, button, layout, typography, message, setMessage, requ
           'The React documentation view for ', h('strong', null, requestedTopic ?? 'this topic'),
           ' is not part of the currently documented React routes. This does not claim the React package lacks that capability.')),
       h('p', null, h('a', { href: links.native, 'data-vf-link': '' }, 'Return to Native Web topic')),
-      h('p', null, h('a', { href: links.guide, 'data-vf-link': '' }, 'Browse available React Button guide')),
-      h('p', null, h('a', { href: links.layout, 'data-vf-link': '' }, 'Browse React Layout guide')));
+      h('p', null, h('a', { href: links.guide, 'data-vf-link': '' }, 'Browse React Button')),
+      h('p', null, h('a', { href: links.layout, 'data-vf-link': '' }, 'Browse React Layout')));
   }
   if (view === 'home') {
     return h('article', { className: 'vf-docs-article' },
       h('header', { className: 'vf-docs-component-header' },
         h('h1', null, 'VyrnForge React'),
         h('p', { className: 'vf-docs-lede', 'data-vf-text': '', 'data-vf-text-variant': 'body-lg' },
-          'React guides and runnable examples for Button, Flow, AutoGrid, Text, Code and Kbd. Their shared design language and styling come from the Web foundation.')),
+          'Runnable React examples for Button, Layout, Text, Code, Kbd and Icon. All use the shared VyrnForge Web design foundation.')),
       h('section', null, h('h2', null, 'Getting started'),
         h('p', null, 'Import React components from their public entrypoints. Supported CSS-aware browser builds automatically include canonical Web component styles; server-rendered apps must also deliver extracted client CSS.'),
         h('pre', { 'data-vf-code-block': '', tabIndex: 0 },
@@ -469,19 +538,23 @@ function body(view, links, button, layout, typography, message, setMessage, requ
         h('p', null, 'Node/SSR imports do not install client styles. Deliver the extracted or explicitly imported CSS alongside the server-rendered HTML before hydration. The optional Web reset is not loaded automatically.')),
       h('section', null, h('h2', null, 'React state and native semantics'),
         h('p', null, 'React owns component state, event handlers, refs, effects and hydration. VyrnForge components preserve native HTML semantics and shared interaction contracts; consuming applications own data, actions, async feedback and routing. Avoid adding custom keyboard handlers for behavior native elements already provide.')),
-      h('section', null, h('h2', null, 'Verified routes'),
+      h('section', null, h('h2', null, 'Components and APIs'),
         h('ul', null,
-          h('li', null, h('a', { 'data-vf-link': '', href: links.guide }, 'React Button guide')),
+          h('li', null, h('a', { 'data-vf-link': '', href: links.guide }, 'React Button')),
           h('li', null, h('a', { 'data-vf-link': '', href: links.api }, 'React Button API')),
-          h('li', null, h('a', { 'data-vf-link': '', href: links.layout }, 'React Layout guide')),
+          h('li', null, h('a', { 'data-vf-link': '', href: links.layout }, 'React Layout')),
           h('li', null, h('a', { 'data-vf-link': '', href: links.layoutApi }, 'React Layout API')),
+          h('li', null, h('a', { 'data-vf-link': '', href: links.icon.guide }, 'React Icon')),
+          h('li', null, h('a', { 'data-vf-link': '', href: links.icon.api }, 'React Icon API')),
           ...['text', 'code', 'kbd'].flatMap((id) => [
             h('li', { key: id + '-guide' }, h('a', { 'data-vf-link': '',
-              href: links.typography[id].guide }, 'React ' + id + ' guide')),
+              href: links.typography[id].guide }, 'React ' + (id === 'kbd' ? 'Kbd' : id[0].toUpperCase() + id.slice(1)))),
             h('li', { key: id + '-api' }, h('a', { 'data-vf-link': '',
               href: links.typography[id].api }, 'React ' + id + ' API')),
           ]))));
   }
+  if (view === 'icon') return iconUsage(icon, links);
+  if (view === 'icon-api') return iconApi(icon, links);
   if (view === 'typography') return typographyGuide(typography, links);
   if (view === 'typography-api') return typographyApi(typography, links);
   if (view === 'layout') return layoutGuide(layout, links);
@@ -505,7 +578,7 @@ function body(view, links, button, layout, typography, message, setMessage, requ
       h('section', { 'aria-labelledby': 'react-layout-api-css' },
         h('h2', { id: 'react-layout-api-css' }, 'CSS attributes and spacing'),
         ...guideBlocks(layout.sharedContent, 'Attributes and spacing')),
-      h('p', null, h('a', { href: links.layout, 'data-vf-link': '' }, 'Open runnable React Layout examples')));
+      h('p', null, h('a', { href: links.layout, 'data-vf-link': '' }, 'View Layout examples')));
   }
   if (view === 'api') {
     return h('article', { className: 'vf-docs-article', 'data-vf-docs-react-api': 'button' },
@@ -523,11 +596,11 @@ function body(view, links, button, layout, typography, message, setMessage, requ
           'ButtonProps extends React native button attributes, and its ref targets HTMLButtonElement.'),
         h('pre', { 'data-vf-code-block': '', tabIndex: 0 },
           h('code', null, button.publicButtonTypes))),
-      h('p', null, h('a', { 'data-vf-link': '', href: links.guide }, 'Open Button guide')));
+      h('p', null, h('a', { 'data-vf-link': '', href: links.guide }, 'View Button examples')));
   }
   return buttonUsageGuide(button, links, message, setMessage);
 }
-export function ReactReferencePage({ view, links, button, layout, typography, requestedTopic }) {
+export function ReactReferencePage({ view, links, button, layout, typography, icon, requestedTopic }) {
   const nav = useNavigation();
   const { theme, change } = useTheme();
   const [search, setSearch] = useState('');
@@ -535,12 +608,14 @@ export function ReactReferencePage({ view, links, button, layout, typography, re
   useEffect(() => { document.documentElement.dataset.vfReactHydrated = 'true'; }, []);
   const pages = [
     { title: 'React overview', href: links.home, keywords: 'getting started setup' },
-    { title: 'Button guide', href: links.guide, keywords: 'button usage accessibility examples state' },
+    { title: 'Button', href: links.guide, keywords: 'button usage accessibility examples state' },
     { title: 'Button API', href: links.api, keywords: 'button props reference public' },
-    { title: 'Layout guide', href: links.layout, keywords: 'flow autogrid grid responsive spacing layout wrap inline block JSX' },
+    { title: 'Layout', href: links.layout, keywords: 'flow autogrid grid responsive spacing layout wrap inline block JSX' },
     { title: 'Layout API', href: links.layoutApi, keywords: 'flowprops autogridprops as minitemsize ref gap' },
+    { title: 'Icon', href: links.icon.guide, keywords: 'icon svg glyph bookmark outlined filled shape size custom accessible examples' },
+    { title: 'Icon API', href: links.icon.api, keywords: 'iconprops SVGAttributes definition variant shape size label types' },
     ...['text', 'code', 'kbd'].flatMap((id) => [
-      { title: (id === 'kbd' ? 'Kbd' : id[0].toUpperCase() + id.slice(1)) + ' guide',
+      { title: (id === 'kbd' ? 'Kbd' : id[0].toUpperCase() + id.slice(1)),
         href: links.typography[id].guide,
         keywords: 'react typography ' + id + ' live JSX preview example semantics' },
       { title: (id === 'kbd' ? 'Kbd' : id[0].toUpperCase() + id.slice(1)) + ' API',
@@ -616,7 +691,7 @@ export function ReactReferencePage({ view, links, button, layout, typography, re
           h('a', { 'data-vf-link': '', href: links.native }, 'Native Web'),
           h('span', { 'aria-hidden': 'true' }, ' / '),
           h('span', { 'aria-current': 'page' }, 'React')),
-        body(view, links, button, layout, typography, message, setMessage, requestedTopic))),
+        body(view, links, button, layout, typography, icon, message, setMessage, requestedTopic))),
     h(AppShellFooter, { className: 'vf-docs-footer' },
       h('span', null, 'VyrnForge React documentation'),
       h('span', null, links.channel + ' channel'))));

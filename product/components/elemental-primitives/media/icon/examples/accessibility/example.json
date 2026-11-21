@@ -1,0 +1,13 @@
+{
+  "id": "icon/accessibility",
+  "title": "Accessible composition",
+  "description": "Keep a decorative icon hidden inside a named action, and label a standalone icon only when it communicates meaning on its own.",
+  "defaultFramework": "react",
+  "frameworks": {
+    "react": {
+      "label": "React",
+      "language": "tsx",
+      "source": "react.tsx"
+    }
+  }
+}
