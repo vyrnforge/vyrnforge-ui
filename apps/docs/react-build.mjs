@@ -160,13 +160,15 @@ if (!divider?.showcaseAvailable || !divider.apiAvailable ||
     !divider.sharedContent || !divider.frameworkContent ||
     !divider.publicEntrypoints.includes('@vyrnforge/react/divider') ||
     !webModel.packageManifest.exports?.['./styles/divider.css'] ||
-    dividerExamples.length !== 2 ||
+    dividerExamples.length !== 4 ||
     !dividerExamples.some((example) => example.id === 'divider/basic') ||
     !dividerExamples.some((example) => example.id === 'divider/vertical') ||
+    !dividerExamples.some((example) => example.id === 'divider/labeled-horizontal') ||
+    !dividerExamples.some((example) => example.id === 'divider/labeled-vertical') ||
     !dividerExamples.every((example) => example.sourcePath.endsWith('/react.tsx') &&
       example.source.includes("'@vyrnforge/react/divider'") &&
       example.source.includes("'@vyrnforge/web/styles/divider.css'"))) {
-  throw new Error('React Divider requires two source-backed horizontal/vertical examples and shared CSS');
+  throw new Error('React Divider requires plain and labeled horizontal/vertical examples and shared CSS');
 }
 const dividerPublicSourcePath = path.join(root,
   path.dirname(path.dirname(divider.frameworkSourcePath)), 'index.ts');
