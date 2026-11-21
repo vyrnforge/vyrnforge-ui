@@ -102,12 +102,12 @@ if (!icon?.showcaseAvailable || !icon.apiAvailable ||
     !icon.publicEntrypoints.includes('@vyrnforge/react/icon') ||
     !webModel.packageManifest.exports?.['./styles/icon.css'] ||
     !iconExamples.some((example) => example.id === 'icon/basic') ||
-    iconExamples.length !== 7 ||
+    iconExamples.length !== 8 ||
     !iconExamples.every((example) => example.sourcePath.endsWith('/react.tsx') &&
       (example.id === 'icon/inline-svg'
         ? example.source.includes("'@vyrnforge/web/styles/icon.css'")
         : example.source.includes("'@vyrnforge/react/icon'")))) {
-  throw new Error('React Icon documentation requires public renderer, shared CSS, adaptation and seven owned examples');
+  throw new Error('React Icon documentation requires public renderer, shared CSS, adaptation and eight owned examples');
 }
 const iconPublicSourcePath = path.join(root,
   path.dirname(path.dirname(icon.frameworkSourcePath)), 'index.ts');
@@ -116,7 +116,9 @@ const iconTypeStart = iconPublicSource.indexOf('export type { IconDefinition');
 const iconTypeEnd = iconPublicSource.indexOf('export const Icon =', iconTypeStart);
 if (iconTypeStart < 0 || iconTypeEnd < 0 ||
     !iconPublicSource.includes('export interface IconProps extends') ||
-    !iconPublicSource.includes('forwardRef<SVGSVGElement, IconProps>')) {
+    !iconPublicSource.includes('forwardRef<SVGSVGElement, IconProps>') ||
+    !iconPublicSource.includes('export interface SvgIconProps extends') ||
+    !iconPublicSource.includes('forwardRef<SVGSVGElement, SvgIconProps>')) {
   throw new Error('React Icon public type contract changed; review the Icon API reference');
 }
 const publicIconTypes = iconPublicSource.slice(iconTypeStart, iconTypeEnd).trim();
