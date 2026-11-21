@@ -294,7 +294,7 @@ function searchMarkup(currentPageDirectory) {
     <span data-vf-visually-hidden data-vf-docs-search-status role="status" aria-live="polite"></span>
     <div id="vf-docs-search-results" class="vf-docs-search-panel" data-vf-docs-search-results hidden>
       <p class="vf-docs-search-label">Documentation results</p>
-      <ul>${results}</ul>
+      <ul data-vf-flow data-vf-flow-gap="xs">${results}</ul>
       <p data-vf-docs-search-empty hidden>No matching documentation.</p>
     </div>
   </search>`;
