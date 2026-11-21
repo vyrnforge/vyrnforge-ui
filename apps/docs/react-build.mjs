@@ -94,6 +94,30 @@ if (publicTypesStart < 0 || publicTypesEnd < 0 ||
   throw new Error('React Button type contract changed; review the public documentation reference');
 }
 const publicButtonTypes = reactButtonSource.slice(publicTypesStart, publicTypesEnd).trim();
+// Product Graph-derived Icon surface: no second catalog or parallel semantic contract.
+const icon = reactModel.componentCatalog.find((entry) => entry.id === 'icon');
+const iconExamples = icon?.examples.slice().sort((a, b) => a.id.localeCompare(b.id)) ?? [];
+if (!icon?.showcaseAvailable || !icon.apiAvailable ||
+    !icon.sharedContent || !icon.frameworkContent ||
+    !icon.publicEntrypoints.includes('@vyrnforge/react/icon') ||
+    !webModel.packageManifest.exports?.['./styles/icon.css'] ||
+    !iconExamples.some((example) => example.id === 'icon/basic') ||
+    iconExamples.length !== 5 ||
+    !iconExamples.every((example) => example.sourcePath.endsWith('/react.tsx') &&
+      example.source.includes("'@vyrnforge/react/icon'"))) {
+  throw new Error('React Icon documentation requires public renderer, shared CSS, adaptation and five owned examples');
+}
+const iconPublicSourcePath = path.join(root,
+  path.dirname(path.dirname(icon.frameworkSourcePath)), 'index.ts');
+const iconPublicSource = await readFile(iconPublicSourcePath, 'utf8');
+const iconTypeStart = iconPublicSource.indexOf('export type { IconDefinition');
+const iconTypeEnd = iconPublicSource.indexOf('export const Icon =', iconTypeStart);
+if (iconTypeStart < 0 || iconTypeEnd < 0 ||
+    !iconPublicSource.includes('export interface IconProps extends') ||
+    !iconPublicSource.includes('forwardRef<SVGSVGElement, IconProps>')) {
+  throw new Error('React Icon public type contract changed; review the Icon API reference');
+}
+const publicIconTypes = iconPublicSource.slice(iconTypeStart, iconTypeEnd).trim();
 const shellStyles = documentationShellStyleSpecifiers.map((specifier) =>
   resolvePublicWebStyleAsset(webModel.packageManifest, specifier).assetPath);
 
@@ -128,6 +152,11 @@ function linksFor(route) {
     layout: relative(dir, react + layout.showcaseRoute, true),
     layoutApi: relative(dir, react + layout.apiRoute, true),
     layoutExampleBase: relative(dir, react + 'examples/layout/', true),
+    icon: {
+      guide: relative(dir, react + icon.showcaseRoute, true),
+      api: relative(dir, react + icon.apiRoute, true),
+      exampleBase: relative(dir, react + 'examples/icon/', true),
+    },
     typography: Object.fromEntries(typographyIds.map((id) => [id, {
       guide: relative(dir, react + typography[id].showcaseRoute, true),
       api: relative(dir, react + typography[id].apiRoute, true),
@@ -209,6 +238,33 @@ for (const id of typographyIds) {
   }
 }
 
+// Compile the checked-in React icon TSX with its canonical extracted CSS.
+for (const example of iconExamples) {
+  const slug = example.id.slice('icon/'.length);
+  const asset = 'react-icon-' + slug;
+  await build({
+    entryPoints: [path.join(root, example.sourcePath)],
+    bundle: true, platform: 'browser', format: 'iife', target: 'es2022',
+    jsx: 'automatic', logLevel: 'silent',
+    outfile: path.join(outRoot, 'assets', asset + '.js'),
+  });
+  if (!(await stat(path.join(outRoot, 'assets', asset + '.css')).catch(() => null))?.isFile()) {
+    throw new Error('React ' + example.id + ' must extract canonical browser CSS');
+  }
+  const route = 'examples/icon/' + slug + '/';
+  const dir = directory(route);
+  const styles = shellStyles.map((file) =>
+    '<link rel="stylesheet" href="' + escapeHtml(relative(dir, file)) + '">').join('\n');
+  await writePage(route, '<!doctype html><html lang="en" data-vf-theme="light"><head>' +
+    '<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">' +
+    '<title>React ' + escapeHtml(example.title) + ' · VyrnForge</title>' +
+    styles + '<link rel="stylesheet" href="' +
+    escapeHtml(relative(dir, 'assets/' + asset + '.css')) + '">' +
+    '<style>body{margin:0;padding:1rem;min-width:0;overflow-wrap:anywhere}' +
+    '#root{min-width:0}</style></head><body><div id="root"></div><script src="' +
+    escapeHtml(relative(dir, 'assets/' + asset + '.js')) + '"></script></body></html>');
+}
+
 const exampleDir = directory('examples/button-basic/');
 const exampleStyles = shellStyles.map((asset) =>
   '  <link rel="stylesheet" href="' + escapeHtml(relative(exampleDir, asset)) + '">').join('\n');
@@ -266,18 +322,22 @@ for (const slug of layoutSlugs) {
 
 const pageViews = [
   { route: '', view: 'home', title: 'React overview', description: 'VyrnForge React documentation pilot' },
-  { route: button.showcaseRoute, view: 'guide', title: 'React Button guide', description: 'Shared Button semantics and React usage' },
+  { route: button.showcaseRoute, view: 'guide', title: 'React Button', description: 'Shared Button semantics and React usage' },
   { route: button.apiRoute, view: 'api', title: 'React Button API', description: 'Verified public React Button API' },
-  { route: layout.showcaseRoute, view: 'layout', title: 'React Layout guide', description: 'Flow and AutoGrid usage in React with shared Web CSS' },
+  { route: layout.showcaseRoute, view: 'layout', title: 'React Layout', description: 'Flow and AutoGrid usage in React with shared Web CSS' },
   { route: layout.apiRoute, view: 'layout-api', title: 'React Layout API', description: 'Public React Flow and AutoGrid props and stylesheet' },
   ...typographyIds.flatMap((id) => [
     { route: typography[id].showcaseRoute, view: 'typography', topic: id,
-      title: 'React ' + typography[id].title + ' guide',
+      title: 'React ' + typography[id].title,
       description: 'Live checked-in React ' + typography[id].title + ' example and shared typography semantics' },
     { route: typography[id].apiRoute, view: 'typography-api', topic: id,
       title: 'React ' + typography[id].title + ' API',
       description: 'Source-backed React ' + typography[id].title + ' API reference' },
   ]),
+  { route: icon.showcaseRoute, view: 'icon', title: 'React Icon',
+    description: 'React SVG icon examples and shared artwork semantics' },
+  { route: icon.apiRoute, view: 'icon-api', title: 'React Icon API',
+    description: 'Source-backed React Icon props and public entrypoints' },
 ];
 // All Native destinations have a React-context response, even when a React guide
 // has not been implemented. Never disguise an unavailable view as another port.
@@ -318,11 +378,19 @@ const layoutData = {
   cssRecipeStyle: layoutStylesheet,
   examples: layoutExamples,
 };
+const iconData = {
+  id: icon.id, title: icon.title,
+  sharedContent: icon.sharedContent, frameworkContent: icon.frameworkContent,
+  standardReferences: icon.standardReferences,
+  publicEntrypoints: icon.publicEntrypoints,
+  publicIconTypes, examples: iconExamples,
+};
 for (const page of pageViews) {
   const dir = directory(page.route);
   const props = { view: page.view, links: linksFor(page.route), button: pageData,
     layout: (page.view === 'layout' || page.view === 'layout-api') ? layoutData : null,
     typography: page.topic ? typography[page.topic] : null,
+    icon: page.view === 'icon' || page.view === 'icon-api' ? iconData : null,
     requestedTopic: page.requestedTopic ?? null };
   const initialHtml = renderToString(createElement(ReactReferencePage, props));
   const serialized = JSON.stringify(props).replaceAll('<', '\\u003c');
@@ -346,7 +414,7 @@ for (const page of pageViews) {
   await writePage(page.route, pageHtml);
 }
 await writeFile(path.join(reactRoot, 'site-manifest.json'), JSON.stringify({
-  channel, framework: 'react', status: 'button-layout-typography-pilot',
+  channel, framework: 'react', status: 'button-layout-typography-icon-pilot',
   source: 'Product Graph public React surface',
   routes: pageViews.map(({ route, view }) => ({ route, view })),
   layout: {
@@ -357,6 +425,15 @@ await writeFile(path.join(reactRoot, 'site-manifest.json'), JSON.stringify({
     frameworkSourcePath: layout.frameworkSourcePath,
     sharedSourcePath: layout.sharedSourcePath,
     examples: layoutExamples.map((example) => ({ id: example.id, sourcePath: example.sourcePath })),
+  },
+  icon: {
+    guideRoute: icon.showcaseRoute, apiRoute: icon.apiRoute,
+    publicEntrypoints: icon.publicEntrypoints,
+    sharedSourcePath: icon.sharedSourcePath,
+    frameworkSourcePath: icon.frameworkSourcePath,
+    publicSourcePath: path.relative(root, iconPublicSourcePath).replaceAll('\\', '/'),
+    examples: iconExamples.map((example) => ({ id: example.id,
+      sourcePath: example.sourcePath, title: example.title })),
   },
   typography: Object.fromEntries(typographyIds.map((id) => [id, {
     guideRoute: typography[id].showcaseRoute,
@@ -379,4 +456,4 @@ await writeFile(path.join(reactRoot, 'site-manifest.json'), JSON.stringify({
     examples: buttonExamples.map((example) => ({ id: example.id, sourcePath: example.sourcePath })),
   },
 }, null, 2) + '\n');
-process.stdout.write('React Button, Layout and Typography documentation pilot -> ' + path.relative(root, reactRoot) + '\n');
+process.stdout.write('React Button, Layout, Typography and Icon documentation pilot -> ' + path.relative(root, reactRoot) + '\n');
