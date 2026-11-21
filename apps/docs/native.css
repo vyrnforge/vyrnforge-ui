@@ -329,8 +329,6 @@
 
   .vf-docs-standards {
     border-block-start: 1px solid var(--vf-color-border);
-    display: grid;
-    gap: var(--vf-space-sm);
     margin-block-start: var(--vf-space-xl);
     min-inline-size: 0;
     padding-block-start: var(--vf-space-md);
@@ -350,12 +348,6 @@
     max-inline-size: none;
     min-inline-size: 0;
     padding: 0;
-  }
-
-  .vf-docs-main .vf-docs-standards .vf-docs-standards-primary {
-    display: flex;
-    flex-wrap: wrap;
-    gap: var(--vf-space-xs);
   }
 
   .vf-docs-standards li,
@@ -409,9 +401,6 @@
   }
 
   .vf-docs-main .vf-docs-standards-details ul {
-    display: grid;
-    gap: var(--vf-space-2xs) var(--vf-space-sm);
-    grid-template-columns: repeat(auto-fit, minmax(min(100%, 15rem), 1fr));
     margin-block-start: var(--vf-space-sm);
   }
 
@@ -498,8 +487,13 @@
     margin-block-start: var(--vf-space-sm);
   }
 
-  .vf-docs-article > section {
+  /* API pages retain their own section rhythm; guides use public Flow. */
+  .vf-docs-article:not([data-vf-flow]) > section {
     margin-block-start: var(--vf-space-3xl);
+  }
+
+  .vf-docs-article[data-vf-flow] > .vf-docs-component-header {
+    margin-block-end: 0;
   }
 
   .vf-docs-lede,
@@ -543,11 +537,13 @@
   }
 
   .vf-docs-toc ol {
-    display: grid;
-    gap: var(--vf-space-2xs);
     list-style: none;
     margin: 0;
     padding: 0;
+  }
+
+  .vf-docs-toc li + li {
+    margin-block-start: 0;
   }
 
   .vf-docs-toc a {
@@ -629,11 +625,6 @@
   }
 
   .vf-docs-section-heading {
-    align-items: end;
-    display: flex;
-    flex-wrap: wrap;
-    gap: var(--vf-space-lg);
-    justify-content: space-between;
     margin-block-end: var(--vf-space-lg);
   }
 
@@ -656,11 +647,6 @@
   }
 
   .vf-docs-component-group-header {
-    align-items: end;
-    display: flex;
-    flex-wrap: wrap;
-    gap: var(--vf-space-md) var(--vf-space-xl);
-    justify-content: space-between;
     margin-block-end: var(--vf-space-lg);
   }
 
@@ -700,11 +686,6 @@
     background: var(--vf-color-surface-hover);
   }
 
-  .vf-docs-card-link > span:first-child {
-    display: grid;
-    gap: var(--vf-space-xs);
-  }
-
   .vf-docs-card-link small {
     color: var(--vf-color-text-muted);
     font-size: var(--vf-font-size-sm);
@@ -715,10 +696,6 @@
   }
 
   .vf-docs-example-header {
-    align-items: start;
-    display: flex;
-    gap: var(--vf-space-lg);
-    justify-content: space-between;
     padding: var(--vf-space-lg);
   }
 
@@ -761,22 +738,16 @@
   /* Text is the bounded consumer-guide pilot. Reuse the existing reading grid,
      typography tokens and TOC instead of adding a parallel documentation shell. */
   .vf-docs-usage-guide > .vf-docs-component-header {
-    margin-block-end: var(--vf-space-2xl);
     padding-block-end: var(--vf-space-xl);
-  }
-
-  .vf-docs-usage-guide > section {
-    margin-block-start: var(--vf-space-2xl);
   }
 
   .vf-docs-usage-guide > section > h2 {
     font-size: var(--vf-font-size-2xl);
-    margin-block-end: var(--vf-space-md);
+    margin-block-end: 0;
   }
 
   .vf-docs-guide-subsection + .vf-docs-guide-subsection {
     border-block-start: 1px solid var(--vf-color-border);
-    margin-block-start: var(--vf-space-xl);
     padding-block-start: var(--vf-space-lg);
   }
 
@@ -786,16 +757,9 @@
     line-height: var(--vf-line-height-normal);
   }
 
-  .vf-docs-guide-subsection p:first-of-type {
-    margin-block-start: var(--vf-space-sm);
-  }
-
   .vf-docs-example-links ul {
-    display: flex;
-    flex-wrap: wrap;
-    gap: var(--vf-space-xs) var(--vf-space-md);
     list-style: none;
-    margin: var(--vf-space-md) 0 var(--vf-space-lg);
+    margin: 0;
     padding: 0;
   }
 
@@ -823,7 +787,6 @@
   .vf-docs-usage-guide .vf-docs-example {
     border: 1px solid var(--vf-color-border);
     border-radius: var(--vf-radius-surface);
-    margin-block-start: var(--vf-space-lg);
   }
 
   .vf-docs-usage-guide .vf-docs-example-header {
@@ -869,9 +832,8 @@
   }
 
   .vf-docs-related-links {
-    display: grid;
-    gap: var(--vf-space-sm);
     list-style: none;
+    margin: 0;
     padding-inline-start: 0;
   }
 
@@ -907,9 +869,9 @@
     }
 
     .vf-docs-toc ol {
-      display: flex;
+      /* Responsive orientation is docs-owned; Flow owns its flex algorithm. */
+      flex-direction: row;
       flex-wrap: wrap;
-      gap: var(--vf-space-xs) var(--vf-space-sm);
     }
   }
 
