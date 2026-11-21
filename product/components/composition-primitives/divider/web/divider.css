@@ -1,0 +1,27 @@
+@import "../../styles/tokens.css";
+
+@layer vyrnforge.components {
+  /* Visual-only line: the native span has no separator semantics or interaction. */
+  :where([data-vf-divider]) {
+    background-color: var(--vf-color-border);
+    display: block;
+    flex: none;
+    pointer-events: none;
+  }
+
+  :where([data-vf-divider][data-vf-divider-orientation="horizontal"]) {
+    block-size: 1px;
+    inline-size: 100%;
+  }
+
+  :where([data-vf-divider][data-vf-divider-orientation="vertical"]) {
+    align-self: stretch;
+    block-size: auto;
+    inline-size: 1px;
+    min-block-size: 1em;
+  }
+
+  @media (forced-colors: active) {
+    :where([data-vf-divider]) { background-color: CanvasText; }
+  }
+}
