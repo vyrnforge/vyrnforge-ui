@@ -2019,6 +2019,13 @@ export { IconSize }
 export { IconVariant }
 
 // @public (undocumented)
+const Image_2: ForwardRefExoticComponent<ImageProps & RefAttributes<HTMLImageElement>>;
+export { Image_2 as Image }
+
+// @public
+export type ImageProps = Omit<ComponentPropsWithoutRef<'img'>, 'children'>;
+
+// @public (undocumented)
 export const Input: ForwardRefExoticComponent<InputProps & RefAttributes<HTMLInputElement>>;
 
 // @public (undocumented)
