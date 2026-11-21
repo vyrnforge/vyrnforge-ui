@@ -8,7 +8,7 @@ import { VfTextDirective } from '@vyrnforge/angular/text';
   standalone: true,
   imports: [VfTextDirective],
   template: `
-    <div class="vf-example-stack">
+    <div data-vf-flow data-vf-flow-gap="md">
       <h2 vfText variant="heading-md">Typography foundation</h2>
       <p vfText variant="body-md">Native elements keep their semantics while VyrnForge supplies the visual typography contract.</p>
       <blockquote vfText variant="body-lg">Semantic quotation with an independent visual role.</blockquote>
