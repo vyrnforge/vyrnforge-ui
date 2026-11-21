@@ -27,6 +27,7 @@
     background-color: transparent;
     display: flex;
     gap: var(--vf-space-sm);
+    pointer-events: auto;
   }
 
   :where([data-vf-divider][data-vf-divider-labeled])::before,
@@ -61,7 +62,7 @@
 
   :where([data-vf-divider-label]) {
     color: inherit;
-    flex: none;
+    flex: 0 1 auto;
     min-inline-size: 0;
     overflow-wrap: anywhere;
   }
