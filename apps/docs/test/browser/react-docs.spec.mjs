@@ -30,7 +30,8 @@ test('React pilot artifact is Product Graph-backed and SSR-rendered with public 
     frameworkSourcePath: 'product/components/elemental-primitives/media/icon/react/docs/index.md',
   });
   expect(manifest.icon.examples.map((example) => example.id)).toEqual([
-    'icon/accessibility', 'icon/basic', 'icon/custom', 'icon/sizes', 'icon/variants',
+    'icon/accessibility', 'icon/basic', 'icon/colors', 'icon/custom', 'icon/inline-svg',
+    'icon/sizes', 'icon/variants',
   ]);
   for (const example of manifest.icon.examples) {
     const slug = example.id.slice('icon/'.length);
@@ -548,7 +549,7 @@ test('React Icon uses product-owned SVG examples and public source-backed API', 
   ]);
   await expect(page.getByRole('navigation', { name: 'On this page' }).getByRole('link')).toHaveCount(5);
   await expect(guide.getByText('Standards and evidence mapping')).toBeVisible();
-  await expect(guide.getByRole('navigation', { name: 'Icon examples' }).getByRole('link')).toHaveCount(5);
+  await expect(guide.getByRole('navigation', { name: 'Icon examples' }).getByRole('link')).toHaveCount(7);
 
   const basic = guide.locator('[data-vf-docs-react-icon-example="icon/basic"]');
   await expect(basic.locator('iframe').contentFrame().getByRole('img', { name: 'Bookmark' })).toBeVisible();
