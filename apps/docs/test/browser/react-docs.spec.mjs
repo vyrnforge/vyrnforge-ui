@@ -375,7 +375,7 @@ test('React Layout API reference exposes actual package entrypoint and typed pro
   await expect(types).toContainText('LayoutGap');
   await expect(page.getByRole('navigation', { name: 'Documentation' })
     .getByRole('link', { name: 'Layout API' })).toHaveAttribute('aria-current', 'page');
-  await page.getByRole('link', { name: 'Open runnable React Layout examples' }).click();
+  await page.getByRole('link', { name: 'View Layout examples' }).click();
   await expect(page).toHaveURL(/\/next\/react\/components\/layout\/$/);
 });
 
