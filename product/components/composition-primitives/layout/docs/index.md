@@ -43,7 +43,7 @@ For appearance-only division, put a `border-block-start` or `border-inline-start
 
 In ordinary menus and toolbars, use the owning `MenuSeparator` or `ToolbarSeparator` instead of a generic separator or an `hr` unrelated to the composite's anatomy. Never substitute a static separator for a focusable SplitPanel resize handle.
 
-The generic `Separator`, `data-vf-separator`, and `@vyrnforge/react/separator` APIs were intentionally retired. No orientation, thickness, decorative, or vertical-divider component API is implied by these examples.
+The generic semantic `Separator`, `data-vf-separator`, and `@vyrnforge/react/separator` APIs remain retired. The **new visual-only `Divider`** is a separate composition capability with horizontal/vertical presentation; it does not imply semantic separator roles, generic sizing/variant APIs, or changes to Menu/Toolbar separators.
 
 ## Attributes and spacing
 
