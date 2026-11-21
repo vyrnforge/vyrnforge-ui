@@ -1628,7 +1628,12 @@ export type DividerOrientation = 'horizontal' | 'vertical';
 export interface DividerProps extends Omit<ComponentPropsWithoutRef<'span'>, 'children' | 'role' | 'aria-hidden' | 'aria-label' | 'tabIndex'> {
     // (undocumented)
     orientation?: DividerOrientation;
+    textAlign?: DividerTextAlign;
+    children?: string | number;
 }
+
+// @public
+export type DividerTextAlign = 'start' | 'center' | 'end';
 
 // @public (undocumented)
 export const DrawerBody: typeof DialogBody;
