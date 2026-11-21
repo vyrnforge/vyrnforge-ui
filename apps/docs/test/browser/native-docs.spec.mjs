@@ -1479,6 +1479,36 @@ test('Native Web Divider labels are readable in horizontal and vertical previews
   expect(errors).toEqual([]);
 });
 
+test('Native Web Divider guide previews vertical text direction options', async ({ page }) => {
+  const errors = collectPageErrors(page);
+  await gotoWithCleanDocsState(page, '/next/native-web/components/divider/');
+  const guide = page.locator('[data-vf-docs-component="divider"]');
+  await expect(guide.getByRole('heading', { name: 'Vertical label direction' })).toBeVisible();
+  const preview = guide.locator('[data-vf-docs-example="divider/text-direction"] [data-vf-docs-preview]');
+  await expect(preview.locator('[data-vf-divider-labeled]')).toHaveCount(3);
+  for (const [index, text, direction, mode] of [
+    [0, 'OR', 'horizontal', 'horizontal-tb'],
+    [1, 'Next', null, 'vertical-rl'],
+    [2, 'Previous', 'bottom-to-top', 'vertical-rl'],
+  ]) {
+    const line = preview.locator('[data-vf-divider-labeled]').nth(index);
+    await expect(line).not.toHaveAttribute('aria-hidden');
+    if (direction) {
+      await expect(line).toHaveAttribute('data-vf-divider-text-direction', direction);
+    } else {
+      await expect(line).not.toHaveAttribute('data-vf-divider-text-direction');
+    }
+    const label = line.locator('[data-vf-divider-label]');
+    await expect(label).toHaveText(text);
+    await expect(label).toHaveCSS('writing-mode', mode);
+  }
+  await expect(preview.locator('[data-vf-divider-labeled]').nth(2)
+    .locator('[data-vf-divider-label]')).toHaveCSS('transform', 'matrix(-1, 0, 0, -1, 0, 0)');
+  await expect(preview.getByRole('separator')).toHaveCount(0);
+  await expectNoAccessibilityViolations(page);
+  expect(errors).toEqual([]);
+});
+
 test('Layout guide remains navigable at 320 CSS px with enlarged text and RTL previews', async ({ page }, testInfo) => {
   await page.setViewportSize({ width: 320, height: 740 });
   await gotoWithCleanDocsState(page, '/next/native-web/components/layout/');
