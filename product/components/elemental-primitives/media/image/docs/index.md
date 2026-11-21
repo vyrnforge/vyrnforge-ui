@@ -34,7 +34,7 @@ Image does not change native `img` semantics, focusability, keyboard interaction
 
 ## Native Web
 
-The public styling entrypoint is `@vyrnforge/web/styles/image.css`. The only VyrnForge markup hook is `data-vf-image` on a native `img`. Framework applications can author the same native element idiomatically; this does not introduce a framework-specific `Image` component or a new React package export.
+The public styling entrypoint is `@vyrnforge/web/styles/image.css`. The only VyrnForge markup hook is `data-vf-image` on a native `img`. Native Web needs no Image runtime. React consumers can also use the thin `@vyrnforge/react/image` convenience component, which renders the same native `img` and applies the same CSS hook without changing browser semantics.
 
 ## Boundaries
 
