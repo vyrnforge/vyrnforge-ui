@@ -379,10 +379,10 @@ ${styleLinks(currentPageDirectory, componentStyle)}
 function cardList(entries, currentPageDirectory) {
   return `<ul class="vf-docs-card-list" data-vf-auto-grid data-vf-auto-grid-gap="md">${entries.map((entry) => `<li>
       <a class="vf-docs-card-link" data-vf-flow data-vf-flow-direction="inline" data-vf-flow-gap="lg" data-vf-flow-justify="space-between" href="${artifactHref(currentPageDirectory, routeTarget(entry.route))}">
-        <span data-vf-flow data-vf-flow-gap="xs">
+        <div data-vf-flow data-vf-flow-gap="xs">
           <strong>${escapeHtml(entry.title)}</strong>
           <small>${escapeHtml(entry.meta ?? '')}</small>
-        </span>
+        </div>
         <span aria-hidden="true">→</span>
       </a>
     </li>`).join('')}</ul>`;
