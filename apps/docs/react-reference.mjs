@@ -197,7 +197,6 @@ function layoutGuide(layout, links) {
           h('a', { href: links.home, 'data-vf-link': '' }, 'React overview'), '.'),
       ]),
       guidePart(sections[1], [
-        h('p', { key: 'intro' }, 'These six examples run product-owned React TSX. Each preview keeps its source available.'),
         exampleJumpLinks('Layout', examples,
           (example) => 'react-layout-example-' + example.id.split('/')[1]),
         ...examples.map((example) => layoutExample(example, links)),
@@ -215,7 +214,6 @@ function layoutGuide(layout, links) {
         evidenceDisclosure(layout.standardReferences),
       ]),
       guidePart(sections[4], [
-        h('p', { key: 'intro' }, 'Find Flow and AutoGrid props, CSS attributes, spacing values and public types in the API reference.'),
         h('ul', { key: 'related', className: 'vf-docs-related-links' },
           h('li', null, h('a', { href: links.layoutApi, 'data-vf-link': '' }, 'View Flow and AutoGrid React API')),
           h('li', null, h('a', { href: links.guide, 'data-vf-link': '' }, 'Button'))),
@@ -318,8 +316,6 @@ function typographyUsageGuide(unit, links) {
           h('a', { href: links.home, 'data-vf-link': '' }, 'React overview'), '.'),
       ]),
       guidePart(sections[1], [
-        h('p', { key: 'intro' },
-          'Each preview runs checked-in React TSX. Open the source beneath an example to see how it is built.'),
         exampleJumpLinks(unit.title, unit.examples, (example) =>
           'react-typography-' + id + '-' + example.id.slice(id.length + 1)),
         ...unit.examples.map((example) => typographyExample(unit, example, links)),
@@ -335,8 +331,6 @@ function typographyUsageGuide(unit, links) {
         evidenceDisclosure(unit.standardReferences),
       ]),
       guidePart(sections[4], [
-        h('p', { key: 'intro' },
-          'See the React API reference for props and types, and related components for specialized typography.'),
         h('ul', { key: 'related', className: 'vf-docs-related-links' },
           h('li', null, h('a', { 'data-vf-link': '', href: links.typography[id].api },
             'View ' + unit.title + ' public React API')),
@@ -408,8 +402,6 @@ function buttonUsageGuide(button, links, message, setMessage) {
           h('a', { href: links.home, 'data-vf-link': '' }, 'React overview'), '.'),
       ]),
       guidePart(sections[1], [
-        h('p', { key: 'intro' },
-          'Try the hydrated Button below, then explore the runnable, checked-in React examples and their source.'),
         h(Flow, { key: 'live', className: 'vf-docs-preview',
           direction: 'inline', wrap: 'wrap', gap: 'md' },
           h(Button, { type: 'button', onClick: () => setMessage('Save changes activated') },
@@ -430,13 +422,11 @@ function buttonUsageGuide(button, links, message, setMessage) {
         evidenceDisclosure(button.standardReferences),
       ]),
       guidePart(sections[4], [
-        h('p', { key: 'intro' },
-          'Find public props, types, and entrypoints in the API reference, separate from this usage guide.'),
         h('ul', { key: 'related', className: 'vf-docs-related-links' },
           h('li', null, h('a', { 'data-vf-link': '', href: links.api },
             'View Button public React API')),
           h('li', null, h('a', { 'data-vf-link': '', href: links.layout },
-            'Layout usage guide'))),
+            'Layout'))),
       ])));
 }
 
@@ -548,7 +538,7 @@ function body(view, links, button, layout, typography, icon, message, setMessage
         h('p', null, 'Node/SSR imports do not install client styles. Deliver the extracted or explicitly imported CSS alongside the server-rendered HTML before hydration. The optional Web reset is not loaded automatically.')),
       h('section', null, h('h2', null, 'React state and native semantics'),
         h('p', null, 'React owns component state, event handlers, refs, effects and hydration. VyrnForge components preserve native HTML semantics and shared interaction contracts; consuming applications own data, actions, async feedback and routing. Avoid adding custom keyboard handlers for behavior native elements already provide.')),
-      h('section', null, h('h2', null, 'Verified routes'),
+      h('section', null, h('h2', null, 'Components and APIs'),
         h('ul', null,
           h('li', null, h('a', { 'data-vf-link': '', href: links.guide }, 'React Button')),
           h('li', null, h('a', { 'data-vf-link': '', href: links.api }, 'React Button API')),
