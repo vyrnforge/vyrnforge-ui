@@ -61,6 +61,31 @@ function loadingPatternEntry() {
   return entry;
 }
 
+test('Every emitted Native Web guide uses canonical Flow and AutoGrid layout hooks', () => {
+  expect(manifest.pages.length).toBeGreaterThan(0);
+  for (const guide of manifest.pages) {
+    const html = readFileSync('dist/docs/next/native-web/' + guide.slug + 'index.html', 'utf8');
+    expect(html, guide.slug + ' must compose native semantic article with Flow')
+      .toContain('class="vf-docs-article" data-vf-flow data-vf-flow-gap="3xl"');
+    if (html.includes('data-vf-docs-accessibility')) {
+      expect(html, guide.slug + ' must use Flow for evidence rhythm')
+        .toContain('class="vf-docs-standards" data-vf-flow data-vf-flow-gap="sm"');
+      expect(html, guide.slug + ' must use Flow for standards links')
+        .toContain('class="vf-docs-standards-primary" data-vf-flow');
+    }
+    if (guide.kind !== 'pattern') {
+      expect(html, guide.slug + ' must use Flow for example headers')
+        .toContain('class="vf-docs-example-header" data-vf-flow');
+      expect(html, guide.slug + ' must use Flow for its TOC')
+        .toContain('<ol data-vf-flow data-vf-flow-gap="xs">');
+    }
+  }
+  for (const foundation of manifest.foundations) {
+    const html = readFileSync('dist/docs/next/native-web/' + foundation.slug + 'index.html', 'utf8');
+    expect(html).toContain('class="vf-docs-article" data-vf-flow data-vf-flow-gap="3xl"');
+  }
+});
+
 test('Native Web home uses the VyrnForge shell and separates documentation surfaces', async ({ page }, testInfo) => {
   const errors = collectPageErrors(page);
   await gotoWithCleanDocsState(page, '/next/native-web/');

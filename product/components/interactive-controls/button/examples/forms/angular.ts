@@ -8,7 +8,7 @@ import { VfButtonDirective } from '@vyrnforge/angular/button';
   standalone: true,
   imports: [VfButtonDirective],
   template: `
-    <form class="vf-example-stack" (submit)="$event.preventDefault()">
+    <form data-vf-flow data-vf-flow-gap="md" (submit)="$event.preventDefault()">
       <label for="vf-button-form-value">Example value</label>
       <input id="vf-button-form-value" name="example" value="Original">
       <button vfButton type="submit" variant="primary">Submit form</button>

@@ -3,7 +3,7 @@ import { Text } from '@vyrnforge/vue/text';
 
 const App = {
   setup() {
-    return () => h('div', { class: 'vf-example-stack' }, [
+    return () => h('div', { 'data-vf-flow': '', 'data-vf-flow-gap': 'md' }, [
       h(Text, { as: 'h2', variant: 'heading-md' }, () => 'Typography foundation'),
       h(Text, { as: 'p', variant: 'body-md' }, () => 'Native elements keep their semantics while VyrnForge supplies the visual typography contract.'),
       h(Text, { as: 'blockquote', variant: 'body-lg' }, () => 'Semantic quotation with an independent visual role.'),

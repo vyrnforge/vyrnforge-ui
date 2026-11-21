@@ -8,7 +8,7 @@ import { VfButtonDirective } from '@vyrnforge/angular/button';
   standalone: true,
   imports: [VfButtonDirective],
   template: `
-    <div class="vf-example-stack">
+    <div data-vf-flow data-vf-flow-direction="inline" data-vf-flow-wrap="wrap" data-vf-flow-gap="md" data-vf-flow-align="center">
       <button vfButton variant="primary" type="button">Save changes</button>
       <button vfButton variant="secondary" type="button">Preview</button>
       <button vfButton variant="ghost" type="button">Cancel</button>

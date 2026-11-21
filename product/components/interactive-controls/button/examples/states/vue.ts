@@ -3,7 +3,7 @@ import { Button } from '@vyrnforge/vue/button';
 
 const App = {
   setup() {
-    return () => h('div', { class: 'vf-example-stack' }, [
+    return () => h('div', { 'data-vf-flow': '', 'data-vf-flow-direction': 'inline', 'data-vf-flow-wrap': 'wrap', 'data-vf-flow-gap': 'md', 'data-vf-flow-align': 'center' }, [
       h(Button, { type: 'button' }, () => 'Ready'),
       h(Button, { variant: 'secondary', disabled: true, type: 'button' }, () => 'Disabled'),
       h(Button, { loading: true, type: 'button' }, () => 'Loading'),

@@ -93,6 +93,52 @@ test('React pilot artifact is Product Graph-backed and SSR-rendered with public 
   }
 });
 
+test('All React guide pages compose with canonical Flow and AutoGrid, not local layout algorithms', async ({ page }) => {
+  for (const id of ['button', 'layout', 'divider', 'text', 'code', 'kbd', 'icon', 'image']) {
+    await page.goto('/next/react/components/' + id + '/');
+    const guide = page.locator('article.vf-docs-usage-guide');
+    await expect(guide, id + ' guide must use the public Flow article').toHaveAttribute('data-vf-flow', '');
+    await expect(guide).toHaveAttribute('data-vf-flow-gap', '2xl');
+    const sections = guide.locator(':scope > section[data-vf-flow][data-vf-flow-gap="md"]');
+    await expect(sections, id + ' must preserve five semantic guide sections').toHaveCount(5);
+    const toc = page.locator('nav.vf-docs-toc ol[data-vf-flow]');
+    await expect(toc).toHaveCount(1);
+    const jumpLinks = guide.locator('nav.vf-docs-example-links ul[data-vf-flow-direction="inline"][data-vf-flow-wrap="wrap"]');
+    await expect(jumpLinks, id + ' example navigation must use Flow inline wrapping').toHaveCount(1);
+    const related = guide.locator('ul.vf-docs-related-links[data-vf-flow][data-vf-flow-gap="sm"]');
+    await expect(related).toHaveCount(1);
+    const headers = guide.locator('.vf-docs-example-header[data-vf-flow-direction="inline"]');
+    expect(await headers.count(), id + ' examples must use Flow headers').toBeGreaterThan(0);
+    expect(await guide.evaluate((element) => getComputedStyle(element).display)).toBe('flex');
+    expect(await jumpLinks.evaluate((element) => getComputedStyle(element).display)).toBe('flex');
+    const standards = guide.locator('.vf-docs-standards[data-vf-flow]');
+    await expect(standards).toHaveCount(1);
+    const mapped = standards.locator('ul[aria-label="Mapped WCAG criteria"]');
+    if (await mapped.count()) {
+      await expect(mapped).toHaveAttribute('data-vf-auto-grid', '');
+      await expect(mapped).toHaveAttribute('data-vf-auto-grid-gap', 'sm');
+    }
+  }
+});
+
+test('React Button and Text preview examples use public Flow, not a docs-only stack CSS', async ({ page }) => {
+  const urls = [
+    ['/next/react/examples/button-basic/', 'div', 'inline'],
+    ['/next/react/examples/button/forms/', 'form', 'block'],
+    ['/next/react/examples/button/sizes/', 'div', 'inline'],
+    ['/next/react/examples/typography/text/', 'div', 'block'],
+  ];
+  for (const [url, host, direction] of urls) {
+    await page.goto(url);
+    const layout = page.locator('#root > ' + host + '[data-vf-flow]');
+    await expect(layout).toHaveCount(1);
+    await expect(layout).toHaveAttribute('data-vf-flow-direction', direction);
+    await expect(layout).toHaveAttribute('data-vf-flow-gap', 'md');
+    expect(await layout.evaluate((element) => getComputedStyle(element).display)).toBe('flex');
+    await expect(layout).not.toHaveClass(/vf-example-stack/);
+  }
+});
+
 test('React Button guide SSR hydrates and uses public Button, AppShell, SideNav and live product example', async ({ page }) => {
   const errors = [];
   page.on('pageerror', (error) => errors.push(String(error)));

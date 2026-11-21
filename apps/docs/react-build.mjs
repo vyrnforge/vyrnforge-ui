@@ -306,7 +306,7 @@ for (const id of typographyIds) {
       '<title>React ' + escapeHtml(example.title) + ' example · VyrnForge</title>' +
       styles + '<link rel="stylesheet" href="' + escapeHtml(extracted) + '">' +
       '<style>body{margin:0;padding:1rem;min-width:0;overflow-wrap:anywhere}' +
-      '#root{min-width:0}.vf-example-stack{display:flex;flex-direction:column;gap:var(--vf-space-md)}</style>' +
+      '#root{min-width:0}</style>' +
       '</head><body><div id="root"></div><script src="' +
       escapeHtml(relative(dir, 'assets/' + asset + '.js')) + '"></script></body></html>');
   }
@@ -398,7 +398,7 @@ const exampleStyles = shellStyles.map((asset) =>
 await writePage('examples/button-basic/', '<!doctype html><html lang="en" data-vf-theme="light"><head>' +
   '<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">' +
   '<title>React Button example · VyrnForge</title>\n' + exampleStyles +
-  '\n<style>body{margin:0;padding:1rem;min-width:0}.vf-example-stack{display:flex;flex-wrap:wrap;gap:1rem}</style>' +
+  '\n<style>body{margin:0;padding:1rem;min-width:0}</style>' +
   '</head><body><div id="root"></div><script src="' +
   escapeHtml(relative(exampleDir, 'assets/react-button-basic.js')) + '"></script></body></html>');
 
@@ -426,8 +426,7 @@ for (const entry of buttonExamples.filter((example) => example.id !== 'button/ba
     styles + '<link rel="stylesheet" href="' +
     escapeHtml(relative(dir, 'assets/' + asset + '.css')) + '">' +
     '<style>body{margin:0;padding:1rem;min-width:0;overflow-wrap:anywhere}' +
-    '#root{min-width:0}.vf-example-stack{display:flex;flex-wrap:wrap;align-items:center;gap:var(--vf-space-md)}' +
-    'input{max-width:100%;box-sizing:border-box}</style>' +
+    '#root{min-width:0}input{max-width:100%;box-sizing:border-box}</style>' +
     '</head><body><div id="root"></div><script src="' +
     escapeHtml(relative(dir, 'assets/' + asset + '.js')) + '"></script></body></html>');
 }

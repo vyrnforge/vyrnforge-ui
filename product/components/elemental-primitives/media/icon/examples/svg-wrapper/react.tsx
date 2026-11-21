@@ -12,13 +12,12 @@ const SparkleIcon = createSvgIcon(
 
 function App() {
   return (
-    <div style={{ display: 'flex', flexWrap: 'wrap', alignItems: 'center',
-      gap: 'var(--vf-space-lg)' }}>
-      <span><SparkleIcon /> Default</span>
-      <span style={{ color: 'var(--vf-color-accent-background)' }}>
+    <div>
+      <p><SparkleIcon /> Default</p>
+      <p style={{ color: 'var(--vf-color-accent-background)' }}>
         <SparkleIcon size="lg" /> Accent
-      </span>
-      <span><SparkleIcon size="lg" label="Sparkle" /> Named</span>
+      </p>
+      <p><SparkleIcon size="lg" label="Sparkle" /> Named</p>
     </div>
   );
 }
