@@ -12,7 +12,7 @@ The first checked-in example demonstrates default Flow spacing with a labeled fo
 
 ## Native separators in JSX
 
-Use `<hr />` directly when two sections are thematically distinct. Style the native rule through ordinary CSS and shared border tokens; it does not need `role="separator"`, a keyboard handler, or a VyrnForge wrapper. For a merely decorative divider, apply a token-driven logical border to the owning element instead of inventing separator semantics. The checked-in **Native thematic break and visual divider** example shows both.
+Use `<hr />` directly when two sections are thematically distinct. Style the native rule through ordinary CSS and shared border tokens; it does not need `role="separator"`, a keyboard handler, or a VyrnForge wrapper. For a merely decorative divider, use the token-driven visual `Divider` from `@vyrnforge/react/divider` (or an application-owned logical border) without inventing separator semantics. The checked-in **Native thematic break and visual divider** example shows both.
 
 The generic React `Separator` component was retired. Do not import `@vyrnforge/react/separator`. For composition inside a real Menu or Toolbar, use `MenuSeparator` or `ToolbarSeparator` from the owning component's React entrypoint. These belong to those widgets, not to Layout.
 
