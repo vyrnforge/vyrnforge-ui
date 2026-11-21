@@ -18,12 +18,13 @@ export const browserFixture = {
 
     const web = '<div id="horizontal-container"><span id="horizontal" aria-hidden="true" data-vf-divider data-vf-divider-orientation="horizontal"></span></div>' +
       '<div id="vertical-container"><span>Start</span><span id="vertical" aria-hidden="true" data-vf-divider data-vf-divider-orientation="vertical"></span><span>End</span></div>';
-    let body = web;
+    let body = '<main><h1>Visual divider fixture</h1>' + web + '</main>';
     if (port === 'react') {
       const { createElement: h } = await import('react');
       const { renderToString } = await import('react-dom/server');
       const { Divider } = await import('@vyrnforge/react/divider');
       body = renderToString(h('main', null,
+        h('h1', null, 'Visual divider fixture'),
         h('div', { id: 'horizontal-container' },
           h(Divider, { id: 'horizontal' })),
         h('div', { id: 'vertical-container' },
@@ -31,6 +32,6 @@ export const browserFixture = {
           h(Divider, { id: 'vertical', orientation: 'vertical' }),
           h('span', null, 'End'))));
     }
-    await writeFile(path.join(output, port + '.html'), '<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width"><link rel="stylesheet" href="./divider.css"></head><body>' + body + '</body></html>');
+    await writeFile(path.join(output, port + '.html'), '<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width"><title>Visual Divider fixture</title><link rel="stylesheet" href="./divider.css"></head><body>' + body + '</body></html>');
   },
 };
