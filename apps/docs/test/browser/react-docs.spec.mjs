@@ -32,7 +32,7 @@ test('React pilot artifact is Product Graph-backed and SSR-rendered with public 
     frameworkSourcePath: 'product/components/composition-primitives/divider/react/docs/index.md',
   });
   expect(manifest.divider.examples.map((entry) => entry.id)).toEqual([
-    'divider/basic', 'divider/labeled-horizontal', 'divider/labeled-vertical', 'divider/vertical',
+    'divider/basic', 'divider/labeled-horizontal', 'divider/labeled-vertical', 'divider/text-direction', 'divider/vertical',
   ]);
   for (const example of manifest.divider.examples) {
     const slug = example.id.split('/')[1];
@@ -298,7 +298,7 @@ test('React Divider renders visible horizontal and vertical lines with no extra 
   await expect(page.locator('html')).toHaveAttribute('data-vf-react-hydrated', 'true');
   await expect(page.getByRole('heading', { level: 1, name: 'Divider' })).toBeVisible();
   const guide = page.locator('[data-vf-docs-react-divider]');
-  await expect(guide.getByRole('navigation', { name: 'Divider examples' }).getByRole('link')).toHaveCount(4);
+  await expect(guide.getByRole('navigation', { name: 'Divider examples' }).getByRole('link')).toHaveCount(5);
   await expect(guide.getByRole('heading', { name: 'Horizontal and vertical' })).toBeVisible();
   const basic = guide.locator('[data-vf-docs-react-divider-example="divider/basic"]');
   await basic.locator('iframe').scrollIntoViewIfNeeded();
@@ -397,7 +397,7 @@ test('Divider works in dark theme, forced colors, narrow RTL layout and SSR with
     const noJs = await context.newPage();
     await noJs.goto('/next/react/components/divider/');
     await expect(noJs.getByRole('heading', { level: 1, name: 'Divider' })).toBeVisible();
-    await expect(noJs.locator('[data-vf-docs-react-divider-example]')).toHaveCount(4);
+    await expect(noJs.locator('[data-vf-docs-react-divider-example]')).toHaveCount(5);
     await noJs.getByRole('navigation', { name: 'Documentation framework' })
       .getByRole('link', { name: 'Native Web' }).click();
     await expect(noJs).toHaveURL(/\/next\/native-web\/components\/divider\/$/);
