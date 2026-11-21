@@ -656,8 +656,8 @@ function dividerUsage(divider, links) {
       ]),
       guidePart(sections[2], [
         ...guideSubsections(divider.sharedContent, [
-          'When to use', 'Horizontal and vertical', 'Appearance and tokens',
-          'When not to use', 'Framework consumption',
+          'When to use', 'Horizontal and vertical', 'Text and alignment',
+          'Appearance and tokens', 'When not to use', 'Framework consumption',
         ], 'react-divider-guide'),
         ...guideSubsections(divider.frameworkContent,
           ['React authoring'], 'react-divider-react'),
@@ -681,7 +681,7 @@ function dividerApi(divider, links) {
     h('header', { className: 'vf-docs-component-header' },
       h('h1', null, 'Divider API'),
       h('p', { className: 'vf-docs-lede' },
-        'A thin decorative native span: horizontal or vertical, with shared Web CSS.'),
+        'A visual horizontal or vertical line, with optional readable text and logical alignment.'),
       accessibilityEvidence(divider.standardReferences)),
     h('section', { 'aria-labelledby': 'react-divider-api-exports' },
       h('h2', { id: 'react-divider-api-exports' }, 'Public entrypoint'),
@@ -695,7 +695,8 @@ function dividerApi(divider, links) {
     h('section', { 'aria-labelledby': 'react-divider-api-css' },
       h('h2', { id: 'react-divider-api-css' }, 'Shared CSS and hooks'),
       h('code', { 'data-vf-code': '' }, '@vyrnforge/web/styles/divider.css'),
-      ...guideBlocks(divider.sharedContent, 'Horizontal and vertical')),
+      ...guideBlocks(divider.sharedContent, 'Horizontal and vertical'),
+      ...guideBlocks(divider.sharedContent, 'Text and alignment')),
     h('p', null, h('a', { href: links.divider.guide, 'data-vf-link': '' },
       'View Divider examples')));
 }
@@ -812,7 +813,7 @@ export function ReactReferencePage({ view, links, button, layout, typography, ic
     { title: 'Button API', href: links.api, keywords: 'button props reference public' },
     { title: 'Layout', href: links.layout, keywords: 'flow autogrid grid responsive spacing layout wrap inline block JSX divider separator thematic hr css border' },
     { title: 'Layout API', href: links.layoutApi, keywords: 'flowprops autogridprops as minitemsize ref gap' },
-    { title: 'Divider', href: links.divider.guide, keywords: 'divider separator straight horizontal divider vertical divider line visual border' },
+    { title: 'Divider', href: links.divider.guide, keywords: 'divider separator straight horizontal divider vertical divider divider text alignment horizontal divider with text vertical divider with text line visual border label text content start center end align alignment' },
     { title: 'Divider API', href: links.divider.api, keywords: 'dividerprops dividerorientation span visual css ref' },
     { title: 'Icon', href: links.icon.guide, keywords: 'icon svg glyph bookmark outlined filled shape size custom accessible examples colors currentColor JSX tags inline svg SvgIcon quick custom wrapper' },
     { title: 'Icon API', href: links.icon.api, keywords: 'iconprops SVGAttributes definition variant shape size label types' },

@@ -1,7 +1,7 @@
 @import "../../styles/tokens.css";
 
 @layer vyrnforge.components {
-  /* Visual-only line: the native span has no separator semantics or interaction. */
+  /* Plain Divider retains its original 1px geometry and decorative semantics. */
   :where([data-vf-divider]) {
     background-color: var(--vf-color-border);
     display: block;
@@ -21,7 +21,68 @@
     min-block-size: 1em;
   }
 
+  /* Optional readable content sits between CSS-painted line segments. */
+  :where([data-vf-divider][data-vf-divider-labeled]) {
+    align-items: center;
+    background-color: transparent;
+    display: flex;
+    gap: var(--vf-space-sm);
+    pointer-events: auto;
+  }
+
+  :where([data-vf-divider][data-vf-divider-labeled])::before,
+  :where([data-vf-divider][data-vf-divider-labeled])::after {
+    background-color: var(--vf-color-border);
+    content: "";
+    flex: 1 1 0;
+  }
+
+  :where([data-vf-divider][data-vf-divider-labeled][data-vf-divider-orientation="horizontal"]) {
+    block-size: auto;
+    min-block-size: 1em;
+  }
+
+  :where([data-vf-divider][data-vf-divider-labeled][data-vf-divider-orientation="horizontal"])::before,
+  :where([data-vf-divider][data-vf-divider-labeled][data-vf-divider-orientation="horizontal"])::after {
+    block-size: 1px;
+    min-inline-size: 0;
+  }
+
+  :where([data-vf-divider][data-vf-divider-labeled][data-vf-divider-orientation="vertical"]) {
+    flex-direction: column;
+    inline-size: auto;
+    min-inline-size: 1em;
+  }
+
+  :where([data-vf-divider][data-vf-divider-labeled][data-vf-divider-orientation="vertical"])::before,
+  :where([data-vf-divider][data-vf-divider-labeled][data-vf-divider-orientation="vertical"])::after {
+    inline-size: 1px;
+    min-block-size: 0;
+  }
+
+  :where([data-vf-divider-label]) {
+    color: inherit;
+    flex: 0 1 auto;
+    min-inline-size: 0;
+    overflow-wrap: anywhere;
+  }
+
+  :where([data-vf-divider][data-vf-divider-labeled][data-vf-divider-orientation="vertical"]) > :where([data-vf-divider-label]) {
+    text-orientation: mixed;
+    white-space: nowrap;
+    writing-mode: vertical-rl;
+  }
+
+  /* Start and end are logical: they follow inline direction and writing mode. */
+  :where([data-vf-divider][data-vf-divider-labeled][data-vf-divider-align="start"])::before,
+  :where([data-vf-divider][data-vf-divider-labeled][data-vf-divider-align="end"])::after {
+    display: none;
+  }
+
   @media (forced-colors: active) {
     :where([data-vf-divider]) { background-color: CanvasText; }
+    :where([data-vf-divider][data-vf-divider-labeled]) { background-color: transparent; }
+    :where([data-vf-divider][data-vf-divider-labeled])::before,
+    :where([data-vf-divider][data-vf-divider-labeled])::after { background-color: CanvasText; }
   }
 }

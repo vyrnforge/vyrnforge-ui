@@ -11,6 +11,7 @@
     "status": "review-required",
     "criteria": [
       "1.3.1",
+      "1.4.3",
       "1.4.11"
     ]
   },
@@ -25,12 +26,14 @@
   },
   "ownership": {
     "library": [
-      "decorate the native span with stable orientation and token-based visual line",
-      "hide the purely visual boundary from assistive technology and remove interactive behavior"
+      "Preserve original decorative aria-hidden on unlabeled Divider with the original 1px CSS geometry",
+      "Expose an optional text label as native readable content, not as an ARIA separator role",
+      "Provide start/center/end logical positioning on either line axis and visible forced-colors segments"
     ],
     "consumer": [
-      "provide semantic headings/group structure independently of visual lines",
-      "establish a measurable row height for vertical line stretching and preserve sufficient contrast"
+      "Provide short, localized text that conveys useful context; do not insert interactive children",
+      "Provide independent headings/fieldset relationships where semantic grouping is required",
+      "Ensure vertical-line parent has measurable block height; maintain readable contrast and adequate room for label expansion"
     ]
   },
   "forms": {
@@ -48,6 +51,8 @@
   },
   "profileVariability": [],
   "notes": [
-    "Visual Divider is a distinct composition primitive; semantic Separator remains retired. Human visual/high contrast acceptance remains separate."
+    "An unlabeled Divider is decorative and aria-hidden; a labeled Divider exposes its text to assistive technology, with no role=separator.",
+    "Visual Divider remains a composition primitive distinct from native thematic hr and context-owned interactive separators.",
+    "Native writing-mode vertical-rl renders vertical label text; human visual and assistive-technology acceptance remains separate."
   ]
 }

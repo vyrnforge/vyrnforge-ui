@@ -1451,6 +1451,34 @@ test('Native Web Divider shows horizontal and vertical visual lines without sepa
   expect(errors).toEqual([]);
 });
 
+test('Native Web Divider labels are readable in horizontal and vertical previews', async ({ page }) => {
+  const errors = collectPageErrors(page);
+  await gotoWithCleanDocsState(page, '/next/native-web/components/divider/');
+  const guide = page.locator('[data-vf-docs-component="divider"]');
+  await expect(guide.getByRole('heading', { name: 'Text and alignment' })).toBeVisible();
+  for (const [slug, orientation] of [
+    ['labeled-horizontal', 'horizontal'],
+    ['labeled-vertical', 'vertical'],
+  ]) {
+    const preview = guide.locator('[data-vf-docs-example="divider/' + slug + '"] [data-vf-docs-preview]');
+    await expect(preview.locator('[data-vf-divider-labeled]')).toHaveCount(3);
+    for (const align of ['start', 'center', 'end']) {
+      const line = preview.locator('[data-vf-divider-align="' + align + '"]');
+      await expect(line).toHaveAttribute('data-vf-divider-orientation', orientation);
+      await expect(line).not.toHaveAttribute('aria-hidden');
+      await expect(line.locator('[data-vf-divider-label]')).toBeVisible();
+      await expect(line.locator('[data-vf-divider-label]')).toHaveText(
+        align === 'start' ? 'Start' : align === 'center' ? 'OR' : 'End');
+      if (orientation === 'vertical') {
+        await expect(line.locator('[data-vf-divider-label]')).toHaveCSS('writing-mode', 'vertical-rl');
+      }
+    }
+    await expect(preview.getByRole('separator')).toHaveCount(0);
+  }
+  await expectNoAccessibilityViolations(page);
+  expect(errors).toEqual([]);
+});
+
 test('Layout guide remains navigable at 320 CSS px with enlarged text and RTL previews', async ({ page }, testInfo) => {
   await page.setViewportSize({ width: 320, height: 740 });
   await gotoWithCleanDocsState(page, '/next/native-web/components/layout/');
