@@ -1615,7 +1615,7 @@ export const DisclosureTrigger: ForwardRefExoticComponent<DisclosureTriggerProps
 // @public (undocumented)
 export type DisclosureTriggerProps = ButtonHTMLAttributes<HTMLButtonElement>;
 
-// @public (undocumented)
+// @public
 export const Divider: ForwardRefExoticComponent<DividerProps & RefAttributes<HTMLSpanElement>>;
 
 // @public
