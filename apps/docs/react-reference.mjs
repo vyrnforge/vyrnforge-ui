@@ -2,7 +2,7 @@ import { createElement as h, Fragment, useEffect, useRef, useState } from 'react
 import { AppShell, AppShellHeader, AppShellBody, AppShellNavigation, AppShellMain, AppShellFooter } from '@vyrnforge/react/app-shell';
 import { SideNav, SideNavGroup, SideNavGroupLabel, SideNavList, SideNavItem, SideNavLink } from '@vyrnforge/react/side-nav';
 import { Button } from '@vyrnforge/react/button';
-import { Flow } from '@vyrnforge/react/layout';
+import { Flow, AutoGrid } from '@vyrnforge/react/layout';
 import { SearchFieldRoot, SearchFieldInput, SearchFieldClear } from '@vyrnforge/react/search-field';
 import { NativeSelect } from '@vyrnforge/react/native-select';
 
@@ -32,10 +32,11 @@ function accessibilityEvidence(references, headingTag = 'h2') {
   if (!references) return null;
   const criteria = references.criteria ?? [];
   const hasBaselineNote = Boolean(references.nativeBaseline && !references.hasNativeReference);
-  return h('section', { className: 'vf-docs-standards',
+  return h(Flow, { as: 'section', gap: 'sm', className: 'vf-docs-standards',
     'data-vf-docs-accessibility': '', 'aria-labelledby': 'react-accessibility-heading' },
     h(headingTag, { id: 'react-accessibility-heading' }, 'Accessibility evidence'),
-    h('ul', { className: 'vf-docs-standards-primary', 'aria-label': 'Standards' },
+    h(Flow, { as: 'ul', direction: 'inline', wrap: 'wrap', gap: 'xs',
+      className: 'vf-docs-standards-primary', 'aria-label': 'Standards' },
       ...references.standards.map((standard, i) => h('li', { key: i },
         standard.url
           ? h('a', { href: standard.url, 'data-vf-link': '' }, standard.label)
@@ -45,7 +46,8 @@ function accessibilityEvidence(references, headingTag = 'h2') {
           h('summary', null, criteria.length
             ? criteria.length + ' WCAG ' + (criteria.length === 1 ? 'criterion' : 'criteria')
             : 'Semantic baseline'),
-          criteria.length ? h('ul', { 'aria-label': 'Mapped WCAG criteria' },
+          criteria.length ? h(AutoGrid, { as: 'ul', minItemSize: '15rem', gap: 'sm',
+             'aria-label': 'Mapped WCAG criteria' },
             ...criteria.map((criterion, i) =>
               h('li', { key: i }, criterion.url
                 ? h('a', { href: criterion.url, 'data-vf-link': '' },
@@ -168,7 +170,8 @@ function layoutExample(example, links) {
   return h('article', { className: 'vf-docs-example', key: example.id,
     id: 'react-layout-example-' + id,
     'data-vf-docs-react-layout-example': example.id },
-    h('header', { className: 'vf-docs-example-header' },
+    h(Flow, { as: 'header', direction: 'inline', wrap: 'wrap', gap: 'lg',
+      align: 'start', justify: 'space-between', className: 'vf-docs-example-header' },
       h('div', null, h('h3', null, example.title), h('p', null, example.description))),
     h('iframe', { className: 'vf-docs-react-example-frame',
       title: 'React ' + example.title + ' example',
@@ -196,7 +199,7 @@ function layoutGuide(layout, links) {
   ];
   return h('div', { className: 'vf-docs-content-grid vf-docs-usage-guide-layout' },
     guideToc(sections),
-    h('article', { className: 'vf-docs-article vf-docs-usage-guide',
+    h(Flow, { as: 'article', gap: '2xl', className: 'vf-docs-article vf-docs-usage-guide',
       'data-vf-docs-react-layout': '' },
       guideHeader(content, 'React · Layout & Structure · Flow & AutoGrid'),
       guidePart(sections[0], [
@@ -227,7 +230,7 @@ function layoutGuide(layout, links) {
         evidenceDisclosure(layout.standardReferences),
       ]),
       guidePart(sections[4], [
-        h('ul', { key: 'related', className: 'vf-docs-related-links' },
+        h(Flow, { as: 'ul', gap: 'sm', key: 'related', className: 'vf-docs-related-links' },
           h('li', null, h('a', { href: links.layoutApi, 'data-vf-link': '' }, 'View Flow and AutoGrid React API')),
           h('li', null, h('a', { href: links.guide, 'data-vf-link': '' }, 'Button'))),
       ])));
@@ -241,7 +244,8 @@ function typographyExample(unit, example, links) {
     'aria-labelledby': headingId + '-heading',
     className: 'vf-docs-example',
     'data-vf-docs-react-typography-example': example.id },
-    h('header', { className: 'vf-docs-example-header' },
+    h(Flow, { as: 'header', direction: 'inline', wrap: 'wrap', gap: 'lg',
+      align: 'start', justify: 'space-between', className: 'vf-docs-example-header' },
       h('div', null,
         h('h3', { id: headingId + '-heading' }, example.title),
         h('p', null, example.description))),
@@ -271,7 +275,8 @@ function guideSubsections(content, headings, prefix) {
     const section = guideSection(content, heading);
     if (!section) return [];
     const id = prefix + '-' + slug(heading);
-    return [h('section', { key: id, className: 'vf-docs-guide-subsection', 'aria-labelledby': id },
+    return [h(Flow, { as: 'section', gap: 'sm', key: id,
+      className: 'vf-docs-guide-subsection', 'aria-labelledby': id },
       h('h3', { id }, heading), ...renderBlocks(section.blocks))];
   });
 }
@@ -279,7 +284,7 @@ function guideToc(sections) {
   return h('aside', { className: 'vf-docs-toc-region' },
     h('nav', { className: 'vf-docs-toc', 'aria-label': 'On this page' },
       h('p', null, 'On this page'),
-      h('ol', null, ...sections.map(({ id, heading }) =>
+      h(Flow, { as: 'ol', gap: 'xs' }, ...sections.map(({ id, heading }) =>
         h('li', { key: id }, h('a', { href: '#' + id }, heading))))));
 }
 function guideHeader(content, eyebrow) {
@@ -291,7 +296,7 @@ function guideHeader(content, eyebrow) {
       'data-vf-text-variant': 'body-lg' }, ...renderBlocks(content.intro)));
 }
 function guidePart(section, children, extra = {}) {
-  return h('section', { key: section.id, 'aria-labelledby': section.id, ...extra },
+  return h(Flow, { as: 'section', gap: 'md', key: section.id, 'aria-labelledby': section.id, ...extra },
     h('h2', { id: section.id }, section.heading), ...children);
 }
 function evidenceDisclosure(references) {
@@ -302,7 +307,8 @@ function evidenceDisclosure(references) {
 function exampleJumpLinks(label, examples, getId) {
   return h('nav', { key: 'jump-links', className: 'vf-docs-example-links',
     'aria-label': label + ' examples' },
-    h('ul', null, ...examples.map((example) =>
+    h(Flow, { as: 'ul', direction: 'inline', wrap: 'wrap', gap: 'sm' },
+      ...examples.map((example) =>
       h('li', { key: example.id },
         h('a', { href: '#' + getId(example) }, example.title)))));
 }
@@ -320,7 +326,7 @@ function typographyUsageGuide(unit, links) {
     : ['When to use', 'When not to use', 'Native baseline', 'Visual styling'];
   return h('div', { className: 'vf-docs-content-grid vf-docs-usage-guide-layout' },
     guideToc(sections),
-    h('article', { className: 'vf-docs-article vf-docs-usage-guide',
+    h(Flow, { as: 'article', gap: '2xl', className: 'vf-docs-article vf-docs-usage-guide',
       'data-vf-docs-react-typography': id },
       guideHeader(unit.sharedContent, 'React · Typography'),
       guidePart(sections[0], [
@@ -344,7 +350,7 @@ function typographyUsageGuide(unit, links) {
         evidenceDisclosure(unit.standardReferences),
       ]),
       guidePart(sections[4], [
-        h('ul', { key: 'related', className: 'vf-docs-related-links' },
+        h(Flow, { as: 'ul', gap: 'sm', key: 'related', className: 'vf-docs-related-links' },
           h('li', null, h('a', { 'data-vf-link': '', href: links.typography[id].api },
             'View ' + unit.title + ' public React API')),
           ...['text', 'code', 'kbd'].filter((other) => other !== id).map((other) =>
@@ -384,7 +390,8 @@ function buttonExample(example, links) {
   const id = example.id.slice('button/'.length);
   return h('article', { key: example.id, id: 'react-button-example-' + id,
     className: 'vf-docs-example', 'data-vf-docs-react-button-example': example.id },
-    h('header', { className: 'vf-docs-example-header' },
+    h(Flow, { as: 'header', direction: 'inline', wrap: 'wrap', gap: 'lg',
+      align: 'start', justify: 'space-between', className: 'vf-docs-example-header' },
       h('div', null, h('h3', null, example.title), h('p', null, example.description))),
     h('iframe', { className: 'vf-docs-react-example-frame',
       title: id === 'basic' ? 'Checked-in React Button example' : 'React ' + example.title + ' example',
@@ -406,7 +413,7 @@ function buttonUsageGuide(button, links, message, setMessage) {
   ];
   return h('div', { className: 'vf-docs-content-grid vf-docs-usage-guide-layout' },
     guideToc(sections),
-    h('article', { className: 'vf-docs-article vf-docs-usage-guide',
+    h(Flow, { as: 'article', gap: '2xl', className: 'vf-docs-article vf-docs-usage-guide',
       'data-vf-docs-react-component': 'button' },
       guideHeader(button.sharedContent, 'React · Components · Actions'),
       guidePart(sections[0], [
@@ -435,7 +442,7 @@ function buttonUsageGuide(button, links, message, setMessage) {
         evidenceDisclosure(button.standardReferences),
       ]),
       guidePart(sections[4], [
-        h('ul', { key: 'related', className: 'vf-docs-related-links' },
+        h(Flow, { as: 'ul', gap: 'sm', key: 'related', className: 'vf-docs-related-links' },
           h('li', null, h('a', { 'data-vf-link': '', href: links.api },
             'View Button public React API')),
           h('li', null, h('a', { 'data-vf-link': '', href: links.layout },
@@ -447,7 +454,8 @@ function iconExample(example, links) {
   const slug = example.id.slice('icon/'.length);
   return h('article', { key: example.id, id: 'react-icon-example-' + slug,
     className: 'vf-docs-example', 'data-vf-docs-react-icon-example': example.id },
-    h('header', { className: 'vf-docs-example-header' },
+    h(Flow, { as: 'header', direction: 'inline', wrap: 'wrap', gap: 'lg',
+      align: 'start', justify: 'space-between', className: 'vf-docs-example-header' },
       h('div', null, h('h3', null, example.title), h('p', null, example.description))),
     h('iframe', { className: 'vf-docs-react-example-frame',
       title: 'React ' + example.title + ' example',
@@ -474,7 +482,7 @@ function iconUsage(icon, links) {
   ];
   return h('div', { className: 'vf-docs-content-grid vf-docs-usage-guide-layout' },
     guideToc(sections),
-    h('article', { className: 'vf-docs-article vf-docs-usage-guide',
+    h(Flow, { as: 'article', gap: '2xl', className: 'vf-docs-article vf-docs-usage-guide',
       'data-vf-docs-react-icon': '' },
       guideHeader(icon.sharedContent, 'React · Media'),
       guidePart(sections[0], [
@@ -499,7 +507,7 @@ function iconUsage(icon, links) {
         evidenceDisclosure(icon.standardReferences),
       ]),
       guidePart(sections[4], [
-        h('ul', { className: 'vf-docs-related-links' },
+        h(Flow, { as: 'ul', gap: 'sm', className: 'vf-docs-related-links' },
           h('li', null, h('a', { href: links.icon.api, 'data-vf-link': '' }, 'View Icon public React API')),
           h('li', null, h('a', { href: links.guide, 'data-vf-link': '' }, 'Button')),
           h('li', null, h('a', { href: links.typography.text.guide, 'data-vf-link': '' }, 'Text'))),
@@ -529,7 +537,8 @@ function imageExample(example, links) {
   const slug = example.id.slice('image/'.length);
   return h('article', { key: example.id, id: 'react-image-example-' + slug,
     className: 'vf-docs-example', 'data-vf-docs-react-image-example': example.id },
-    h('header', { className: 'vf-docs-example-header' },
+    h(Flow, { as: 'header', direction: 'inline', wrap: 'wrap', gap: 'lg',
+      align: 'start', justify: 'space-between', className: 'vf-docs-example-header' },
       h('div', null, h('h3', null, example.title), h('p', null, example.description))),
     h('iframe', { className: 'vf-docs-react-example-frame',
       title: 'React ' + example.title + ' image example',
@@ -554,7 +563,7 @@ function imageUsage(image, links) {
   ];
   return h('div', { className: 'vf-docs-content-grid vf-docs-usage-guide-layout' },
     guideToc(sections),
-    h('article', { className: 'vf-docs-article vf-docs-usage-guide',
+    h(Flow, { as: 'article', gap: '2xl', className: 'vf-docs-article vf-docs-usage-guide',
       'data-vf-docs-react-image': '' },
       guideHeader(image.sharedContent, 'React · Media'),
       guidePart(sections[0], [
@@ -581,7 +590,7 @@ function imageUsage(image, links) {
         evidenceDisclosure(image.standardReferences),
       ]),
       guidePart(sections[4], [
-        h('ul', { className: 'vf-docs-related-links' },
+        h(Flow, { as: 'ul', gap: 'sm', className: 'vf-docs-related-links' },
           h('li', null, h('a', { href: links.image.api, 'data-vf-link': '' },
             'View Image public React API')),
           h('li', null, h('a', { href: links.icon.guide, 'data-vf-link': '' }, 'Icon')),
@@ -616,7 +625,8 @@ function dividerExample(example, links) {
   const slug = example.id.slice('divider/'.length);
   return h('article', { key: example.id, id: 'react-divider-example-' + slug,
     className: 'vf-docs-example', 'data-vf-docs-react-divider-example': example.id },
-    h('header', { className: 'vf-docs-example-header' },
+    h(Flow, { as: 'header', direction: 'inline', wrap: 'wrap', gap: 'lg',
+      align: 'start', justify: 'space-between', className: 'vf-docs-example-header' },
       h('div', null, h('h3', null, example.title), h('p', null, example.description))),
     h('iframe', { className: 'vf-docs-react-example-frame',
       title: 'React ' + example.title + ' example',
@@ -641,7 +651,7 @@ function dividerUsage(divider, links) {
   ];
   return h('div', { className: 'vf-docs-content-grid vf-docs-usage-guide-layout' },
     guideToc(sections),
-    h('article', { className: 'vf-docs-article vf-docs-usage-guide',
+    h(Flow, { as: 'article', gap: '2xl', className: 'vf-docs-article vf-docs-usage-guide',
       'data-vf-docs-react-divider': '' },
       guideHeader(divider.sharedContent, 'React · Layout & Structure'),
       guidePart(sections[0], [
@@ -668,7 +678,7 @@ function dividerUsage(divider, links) {
         evidenceDisclosure(divider.standardReferences),
       ]),
       guidePart(sections[4], [
-        h('ul', { className: 'vf-docs-related-links' },
+        h(Flow, { as: 'ul', gap: 'sm', className: 'vf-docs-related-links' },
           h('li', null, h('a', { href: links.divider.api, 'data-vf-link': '' },
             'View Divider public React API')),
           h('li', null, h('a', { href: links.layout, 'data-vf-link': '' }, 'Layout')),
