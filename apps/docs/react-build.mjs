@@ -153,6 +153,32 @@ if (imageTypeStart < 0 || imageTypeEnd < 0 ||
   throw new Error('React Image public type contract changed; review its API reference');
 }
 const publicImageTypes = imagePublicSource.slice(imageTypeStart, imageTypeEnd).trim();
+// A distinct, nonsemantic visual Divider; the retired Separator API stays absent.
+const divider = reactModel.componentCatalog.find((entry) => entry.id === 'divider');
+const dividerExamples = divider?.examples.slice().sort((a, b) => a.id.localeCompare(b.id)) ?? [];
+if (!divider?.showcaseAvailable || !divider.apiAvailable ||
+    !divider.sharedContent || !divider.frameworkContent ||
+    !divider.publicEntrypoints.includes('@vyrnforge/react/divider') ||
+    !webModel.packageManifest.exports?.['./styles/divider.css'] ||
+    dividerExamples.length !== 2 ||
+    !dividerExamples.some((example) => example.id === 'divider/basic') ||
+    !dividerExamples.some((example) => example.id === 'divider/vertical') ||
+    !dividerExamples.every((example) => example.sourcePath.endsWith('/react.tsx') &&
+      example.source.includes("'@vyrnforge/react/divider'") &&
+      example.source.includes("'@vyrnforge/web/styles/divider.css'"))) {
+  throw new Error('React Divider requires two source-backed horizontal/vertical examples and shared CSS');
+}
+const dividerPublicSourcePath = path.join(root,
+  path.dirname(path.dirname(divider.frameworkSourcePath)), 'index.ts');
+const dividerPublicSource = await readFile(dividerPublicSourcePath, 'utf8');
+const dividerTypeStart = dividerPublicSource.indexOf('export type DividerOrientation');
+const dividerTypeEnd = dividerPublicSource.indexOf('export const Divider =', dividerTypeStart);
+if (dividerTypeStart < 0 || dividerTypeEnd < 0 ||
+    !dividerPublicSource.includes('forwardRef<HTMLSpanElement, DividerProps>')) {
+  throw new Error('React Divider source does not match the expected native span public contract');
+}
+const publicDividerTypes = dividerPublicSource.slice(dividerTypeStart, dividerTypeEnd).trim();
+
 const shellStyles = documentationShellStyleSpecifiers.map((specifier) =>
   resolvePublicWebStyleAsset(webModel.packageManifest, specifier).assetPath);
 
@@ -196,6 +222,11 @@ function linksFor(route) {
       guide: relative(dir, react + image.showcaseRoute, true),
       api: relative(dir, react + image.apiRoute, true),
       exampleBase: relative(dir, react + 'examples/image/', true),
+    },
+    divider: {
+      guide: relative(dir, react + divider.showcaseRoute, true),
+      api: relative(dir, react + divider.apiRoute, true),
+      exampleBase: relative(dir, react + 'examples/divider/', true),
     },
     typography: Object.fromEntries(typographyIds.map((id) => [id, {
       guide: relative(dir, react + typography[id].showcaseRoute, true),
@@ -332,6 +363,32 @@ for (const example of imageExamples) {
     escapeHtml(relative(dir, 'assets/' + asset + '.js')) + '"></script></body></html>');
 }
 
+for (const example of dividerExamples) {
+  const slug = example.id.slice('divider/'.length);
+  const asset = 'react-divider-' + slug;
+  await build({
+    entryPoints: [path.join(root, example.sourcePath)],
+    bundle: true, platform: 'browser', format: 'iife', target: 'es2022',
+    jsx: 'automatic', logLevel: 'silent',
+    outfile: path.join(outRoot, 'assets', asset + '.js'),
+  });
+  if (!(await stat(path.join(outRoot, 'assets', asset + '.css')).catch(() => null))?.isFile()) {
+    throw new Error('React ' + example.id + ' must extract canonical browser CSS');
+  }
+  const route = 'examples/divider/' + slug + '/';
+  const dir = directory(route);
+  const styles = shellStyles.map((file) =>
+    '<link rel="stylesheet" href="' + escapeHtml(relative(dir, file)) + '">').join('\n');
+  await writePage(route, '<!doctype html><html lang="en" data-vf-theme="light"><head>' +
+    '<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">' +
+    '<title>React ' + escapeHtml(example.title) + ' · VyrnForge</title>' +
+    styles + '<link rel="stylesheet" href="' +
+    escapeHtml(relative(dir, 'assets/' + asset + '.css')) + '">' +
+    '<style>body{margin:0;padding:1rem;min-width:0;overflow-wrap:anywhere}' +
+    '#root{min-width:0}</style></head><body><div id="root"></div><script src="' +
+    escapeHtml(relative(dir, 'assets/' + asset + '.js')) + '"></script></body></html>');
+}
+
 const exampleDir = directory('examples/button-basic/');
 const exampleStyles = shellStyles.map((asset) =>
   '  <link rel="stylesheet" href="' + escapeHtml(relative(exampleDir, asset)) + '">').join('\n');
@@ -393,6 +450,8 @@ const pageViews = [
   { route: button.apiRoute, view: 'api', title: 'React Button API', description: 'Verified public React Button API' },
   { route: layout.showcaseRoute, view: 'layout', title: 'React Layout', description: 'Flow and AutoGrid usage in React with shared Web CSS' },
   { route: layout.apiRoute, view: 'layout-api', title: 'React Layout API', description: 'Public React Flow and AutoGrid props and stylesheet' },
+  { route: divider.showcaseRoute, view: 'divider', title: 'React Divider', description: 'Horizontal and vertical visual-only lines in React' },
+  { route: divider.apiRoute, view: 'divider-api', title: 'React Divider API', description: 'Source-backed React Divider props and orientation' },
   ...typographyIds.flatMap((id) => [
     { route: typography[id].showcaseRoute, view: 'typography', topic: id,
       title: 'React ' + typography[id].title,
@@ -456,6 +515,13 @@ const iconData = {
   publicEntrypoints: icon.publicEntrypoints,
   publicIconTypes, examples: iconExamples,
 };
+const dividerData = {
+  id: divider.id, title: divider.title,
+  sharedContent: divider.sharedContent, frameworkContent: divider.frameworkContent,
+  standardReferences: divider.standardReferences,
+  publicEntrypoints: divider.publicEntrypoints,
+  publicDividerTypes, examples: dividerExamples,
+};
 const imageData = {
   id: image.id, title: image.title,
   sharedContent: image.sharedContent, frameworkContent: image.frameworkContent,
@@ -470,6 +536,7 @@ for (const page of pageViews) {
     typography: page.topic ? typography[page.topic] : null,
     icon: page.view === 'icon' || page.view === 'icon-api' ? iconData : null,
     image: page.view === 'image' || page.view === 'image-api' ? imageData : null,
+    divider: page.view === 'divider' || page.view === 'divider-api' ? dividerData : null,
     requestedTopic: page.requestedTopic ?? null };
   const initialHtml = renderToString(createElement(ReactReferencePage, props));
   const serialized = JSON.stringify(props).replaceAll('<', '\\u003c');
@@ -493,7 +560,7 @@ for (const page of pageViews) {
   await writePage(page.route, pageHtml);
 }
 await writeFile(path.join(reactRoot, 'site-manifest.json'), JSON.stringify({
-  channel, framework: 'react', status: 'button-layout-typography-icon-image-pilot',
+  channel, framework: 'react', status: 'button-layout-typography-icon-image-divider-pilot',
   source: 'Product Graph public React surface',
   routes: pageViews.map(({ route, view }) => ({ route, view })),
   layout: {
@@ -512,6 +579,15 @@ await writeFile(path.join(reactRoot, 'site-manifest.json'), JSON.stringify({
     frameworkSourcePath: icon.frameworkSourcePath,
     publicSourcePath: path.relative(root, iconPublicSourcePath).replaceAll('\\', '/'),
     examples: iconExamples.map((example) => ({ id: example.id,
+      sourcePath: example.sourcePath, title: example.title })),
+  },
+  divider: {
+    guideRoute: divider.showcaseRoute, apiRoute: divider.apiRoute,
+    publicEntrypoints: divider.publicEntrypoints,
+    sharedSourcePath: divider.sharedSourcePath,
+    frameworkSourcePath: divider.frameworkSourcePath,
+    publicSourcePath: path.relative(root, dividerPublicSourcePath).replaceAll('\\', '/'),
+    examples: dividerExamples.map((example) => ({ id: example.id,
       sourcePath: example.sourcePath, title: example.title })),
   },
   image: {
@@ -544,4 +620,4 @@ await writeFile(path.join(reactRoot, 'site-manifest.json'), JSON.stringify({
     examples: buttonExamples.map((example) => ({ id: example.id, sourcePath: example.sourcePath })),
   },
 }, null, 2) + '\n');
-process.stdout.write('React Button, Layout, Typography, Icon and Image documentation pilot -> ' + path.relative(root, reactRoot) + '\n');
+process.stdout.write('React Button, Layout, Typography, Icon, Image and Divider documentation pilot -> ' + path.relative(root, reactRoot) + '\n');

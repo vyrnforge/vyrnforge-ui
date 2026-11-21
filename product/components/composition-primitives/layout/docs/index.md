@@ -30,7 +30,7 @@ Flow is presentation, not a form-field relationship or an accessible group. Use 
 
 ## Dividers and thematic breaks
 
-A separator is not a standalone VyrnForge elemental primitive. Use native `<hr>` when the content has a real thematic break; its native separator semantics require no extra role, focus handling, or React-specific runtime. On a Flow layout, a semantic `hr` remains an ordinary child. Its visual border can use `var(--vf-color-border)` with CSS logical properties for RTL/writing-mode support.
+A semantic Separator is not a standalone VyrnForge elemental primitive. For a visual-only straight horizontal or vertical line, use the separate **Divider** composition primitive with `@vyrnforge/web/styles/divider.css` (or React `@vyrnforge/react/divider`). Use native `<hr>` when the content has a real thematic break; its native separator semantics require no extra role, focus handling, or React-specific runtime. On a Flow layout, a semantic `hr` remains an ordinary child. Its visual border can use `var(--vf-color-border)` with CSS logical properties for RTL/writing-mode support.
 
 For appearance-only division, put a `border-block-start` or `border-inline-start` on the owning element using shared border/spacing tokens. A purely visual line does not create a new accessibility role or thematic break. For example, in application-owned CSS:
 
@@ -43,7 +43,7 @@ For appearance-only division, put a `border-block-start` or `border-inline-start
 
 In ordinary menus and toolbars, use the owning `MenuSeparator` or `ToolbarSeparator` instead of a generic separator or an `hr` unrelated to the composite's anatomy. Never substitute a static separator for a focusable SplitPanel resize handle.
 
-The generic `Separator`, `data-vf-separator`, and `@vyrnforge/react/separator` APIs were intentionally retired. No orientation, thickness, decorative, or vertical-divider component API is implied by these examples.
+The generic semantic `Separator`, `data-vf-separator`, and `@vyrnforge/react/separator` APIs remain retired. The **new visual-only `Divider`** is a separate composition capability with horizontal/vertical presentation; it does not imply semantic separator roles, generic sizing/variant APIs, or changes to Menu/Toolbar separators.
 
 ## Attributes and spacing
 

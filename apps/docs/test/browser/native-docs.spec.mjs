@@ -1423,6 +1423,34 @@ test('Layout guide is discoverable in the Layout & Structure submenu and renders
   expect(errors, errors.join('\n')).toEqual([]);
 });
 
+test('Native Web Divider shows horizontal and vertical visual lines without separator semantics', async ({ page }) => {
+  const errors = collectPageErrors(page);
+  await gotoWithCleanDocsState(page, '/next/native-web/components/divider/');
+  const article = page.locator('[data-vf-docs-component="divider"]');
+  await expect(article.getByRole('heading', { name: 'Divider', level: 1 })).toBeVisible();
+  for (const orientation of ['horizontal', 'vertical']) {
+    const slug = orientation === 'horizontal' ? 'basic' : 'vertical';
+    const example = article.locator('[data-vf-docs-example="divider/' + slug + '"] [data-vf-docs-preview]');
+    const line = example.locator('[data-vf-divider]');
+    await expect(line).toHaveAttribute('data-vf-divider-orientation', orientation);
+    await expect(line).toHaveAttribute('aria-hidden', 'true');
+    await expect(example.getByRole('separator')).toHaveCount(0);
+    await expect(line).not.toHaveAttribute('tabindex');
+    const rect = await line.boundingBox();
+    if (orientation === 'horizontal') {
+      expect(rect.width).toBeGreaterThan(100);
+      expect(rect.height).toBeGreaterThanOrEqual(1);
+      expect(rect.height).toBeLessThanOrEqual(2);
+    } else {
+      expect(rect.width).toBeGreaterThanOrEqual(1);
+      expect(rect.width).toBeLessThanOrEqual(2);
+      expect(rect.height).toBeGreaterThan(10);
+    }
+  }
+  await expectNoAccessibilityViolations(page);
+  expect(errors).toEqual([]);
+});
+
 test('Layout guide remains navigable at 320 CSS px with enlarged text and RTL previews', async ({ page }, testInfo) => {
   await page.setViewportSize({ width: 320, height: 740 });
   await gotoWithCleanDocsState(page, '/next/native-web/components/layout/');
