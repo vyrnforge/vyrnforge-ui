@@ -28,6 +28,23 @@ Add `data-vf-flow-wrap="wrap"` to an inline Flow when tags, metadata, filters, o
 
 Flow is presentation, not a form-field relationship or an accessible group. Use native `fieldset` and `legend` to name related radios, then put Flow on an inner element for spacing. Keep a shared radio `name` for selection behavior, label every input, and preserve normal Tab, arrow-key, and focus behavior. A visually joined control row does not create a ToggleGroup or Toolbar.
 
+## Dividers and thematic breaks
+
+A separator is not a standalone VyrnForge elemental primitive. Use native `<hr>` when the content has a real thematic break; its native separator semantics require no extra role, focus handling, or React-specific runtime. On a Flow layout, a semantic `hr` remains an ordinary child. Its visual border can use `var(--vf-color-border)` with CSS logical properties for RTL/writing-mode support.
+
+For appearance-only division, put a `border-block-start` or `border-inline-start` on the owning element using shared border/spacing tokens. A purely visual line does not create a new accessibility role or thematic break. For example, in application-owned CSS:
+
+```css
+.settings-group + .settings-group {
+  border-block-start: 1px solid var(--vf-color-border);
+  padding-block-start: var(--vf-space-md);
+}
+```
+
+In ordinary menus and toolbars, use the owning `MenuSeparator` or `ToolbarSeparator` instead of a generic separator or an `hr` unrelated to the composite's anatomy. Never substitute a static separator for a focusable SplitPanel resize handle.
+
+The generic `Separator`, `data-vf-separator`, and `@vyrnforge/react/separator` APIs were intentionally retired. No orientation, thickness, decorative, or vertical-divider component API is implied by these examples.
+
 ## Attributes and spacing
 
 - `data-vf-flow`: activate the shared flex recipe, with block direction by default.
@@ -59,6 +76,7 @@ Import `@vyrnforge/web/styles/layout.css` in the consuming app. Native Web and E
 - Former Container: use an authored semantic host with application CSS for max-width, logical gutters, and centering.
 - Former ControlGroup: keep independent control semantics and use component/application-owned CSS where visual joining is actually needed. For semantic groups use native fieldset/legend or the correct composite widget.
 - Former Surface: remains retired; use semantic HTML and shared surface tokens, not a wrapper.
+- Former standalone Separator: use native `hr` for thematic breaks, token-driven CSS borders for visual division, and context-owned separators in Menu/Toolbar.
 
 ## Accessibility, responsive behavior, and evidence
 

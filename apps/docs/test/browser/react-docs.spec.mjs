@@ -15,7 +15,8 @@ test('React pilot artifact is Product Graph-backed and SSR-rendered with public 
   expect(manifest.button.publicEntrypoints).toContain('@vyrnforge/react/button');
   expect(manifest.layout).toMatchObject({ guideOnly: false, api: true,
     publicEntrypoints: ['@vyrnforge/react/layout'], cssRecipeStyle: '@vyrnforge/web/styles/layout.css' });
-  expect(manifest.layout.examples).toHaveLength(6);
+  expect(manifest.layout.examples).toHaveLength(7);
+  expect(manifest.layout.examples.map((example) => example.id)).toContain('layout/dividers');
   expect(manifest.routes.filter((entry) => entry.view !== 'unavailable').map((entry) => entry.route)).toEqual([
     '', 'components/button/', 'api/components/button/', 'components/layout/', 'api/components/layout/',
     ...['text', 'code', 'kbd'].flatMap((id) => [
@@ -301,7 +302,7 @@ test('React Layout lives under Layout & Structure and runs checked-in React JSX 
   await expect(page.locator('[data-vf-docs-react-layout] section[aria-labelledby="react-layout-setup"] pre code'))
     .toContainText("import { Flow, AutoGrid } from '@vyrnforge/react/layout';");
 
-  for (const id of ['basic', 'flow-block', 'flow-inline', 'flow-wrap', 'auto-grid', 'semantic-groups']) {
+  for (const id of ['basic', 'flow-block', 'flow-inline', 'flow-wrap', 'auto-grid', 'semantic-groups', 'dividers']) {
     const demo = page.locator('[data-vf-docs-react-layout-example="layout/' + id + '"]');
     await expect(demo).toHaveCount(1);
     const iframe = demo.locator('iframe');
@@ -321,7 +322,17 @@ test('React Layout lives under Layout & Structure and runs checked-in React JSX 
   await expect(radios.getByRole('radio', { name: 'Weekly' })).toBeChecked();
   await expect(radios.getByRole('radio', { name: 'Daily' })).not.toBeChecked();
 
+  await expect(layoutGuide.getByRole('heading', { name: 'Dividers and thematic breaks' })).toBeVisible();
+  await expect(layoutGuide.getByRole('heading', { name: 'Native separators in JSX' })).toBeVisible();
+  const dividers = page.frameLocator('iframe[title="React Native thematic break example"]');
+  await expect(dividers.getByRole('separator')).toHaveCount(1);
+  await expect(dividers.locator('hr')).toHaveCount(1);
+  await expect(dividers.locator('hr')).not.toHaveAttribute('tabindex');
+
   await page.getByRole('searchbox', { name: 'Search React documentation' }).fill('autogrid');
+  await expect(page.locator('[data-vf-docs-react-results]').getByRole('link', { name: 'Layout', exact: true })).toBeVisible();
+  await page.getByRole('button', { name: 'Clear search' }).click();
+  await page.getByRole('searchbox', { name: 'Search React documentation' }).fill('separator');
   await expect(page.locator('[data-vf-docs-react-results]').getByRole('link', { name: 'Layout', exact: true })).toBeVisible();
   await page.getByRole('button', { name: 'Clear search' }).click();
   await expect(page.locator('[data-vf-docs-react-results]')).toBeHidden();

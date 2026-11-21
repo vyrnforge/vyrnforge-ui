@@ -241,7 +241,7 @@ test('Elemental-primitives responsibility families preserve deliberate Native We
   assert.equal(image.facets.legacyRoot, null);
   assert.equal(image.metadataSource, 'product-unit');
   assert.equal(image.migration.state, 'product-unit');
-  assert.deepEqual(Object.keys(image.surfaces), ['web']);
+  assert.deepEqual(Object.keys(image.surfaces).sort(), ['react', 'web']);
   assert.deepEqual(image.surfaces.web.authoringPaths, ['product/components/elemental-primitives/media/image/web/']);
   assert.equal(image.surfaces.web.projectionPath, 'packages/web/src/components/image/');
   assert.ok(image.surfaces.web.publicEntrypoints.includes('@vyrnforge/web/styles/image.css'));

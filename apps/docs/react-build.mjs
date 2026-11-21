@@ -64,8 +64,8 @@ const layoutStylesheet = '@vyrnforge/web/styles/layout.css';
 if (!layout?.apiAvailable || layout.guideOnly ||
     !layout.publicEntrypoints.includes('@vyrnforge/react/layout') ||
     !webModel.packageManifest.exports?.['./styles/layout.css'] ||
-    !layout.sharedContent || !layout.frameworkContent || layout.examples.length !== 6) {
-  throw new Error('React Layout guide requires real Flow/AutoGrid React exports, their shared stylesheet, and six checked-in React examples');
+    !layout.sharedContent || !layout.frameworkContent || layout.examples.length !== 7) {
+  throw new Error('React Layout guide requires real Flow/AutoGrid React exports, their shared stylesheet, and seven checked-in React examples');
 }
 const layoutPublicSource = await readFile(
   path.join(root, path.dirname(path.dirname(layout.frameworkSourcePath)), 'index.ts'), 'utf8');
@@ -79,8 +79,8 @@ if (layoutTypesStart < 0 || layoutTypesEnd < 0 ||
 const publicLayoutTypes = layoutPublicSource.slice(layoutTypesStart, layoutTypesEnd).trim();
 const layoutExamples = layout.examples.sort((a, b) => a.id.localeCompare(b.id));
 const layoutSlugs = layoutExamples.map((example) => example.id.split('/')[1]);
-if (new Set(layoutSlugs).size !== 6 || !layoutSlugs.includes('basic')) {
-  throw new Error('React Layout examples must have six unique product-owned example ids');
+if (new Set(layoutSlugs).size !== 7 || !layoutSlugs.includes('basic')) {
+  throw new Error('React Layout examples must have seven unique product-owned example ids');
 }
 
 // Verify reference types against the product-owned public React source, not a hand-maintained API table.
