@@ -118,6 +118,30 @@ if (iconTypeStart < 0 || iconTypeEnd < 0 ||
   throw new Error('React Icon public type contract changed; review the Icon API reference');
 }
 const publicIconTypes = iconPublicSource.slice(iconTypeStart, iconTypeEnd).trim();
+// Preserve Image's native HTML semantics and canonical Web CSS.
+const image = reactModel.componentCatalog.find((entry) => entry.id === 'image');
+const imageExamples = image?.examples.slice().sort((a, b) => a.id.localeCompare(b.id)) ?? [];
+if (!image?.showcaseAvailable || !image.apiAvailable ||
+    !image.sharedContent || !image.frameworkContent ||
+    !image.publicEntrypoints.includes('@vyrnforge/react/image') ||
+    !webModel.packageManifest.exports?.['./styles/image.css'] ||
+    imageExamples.length !== 4 ||
+    !imageExamples.some((example) => example.id === 'image/basic') ||
+    !imageExamples.every((example) => example.sourcePath.endsWith('/react.tsx') &&
+      example.source.includes("'@vyrnforge/react/image'") &&
+      example.source.includes("'@vyrnforge/web/styles/image.css'"))) {
+  throw new Error('React Image requires a public component, canonical Web CSS and four owned examples');
+}
+const imagePublicSourcePath = path.join(root,
+  path.dirname(path.dirname(image.frameworkSourcePath)), 'index.ts');
+const imagePublicSource = await readFile(imagePublicSourcePath, 'utf8');
+const imageTypeStart = imagePublicSource.indexOf('export type ImageProps');
+const imageTypeEnd = imagePublicSource.indexOf('export const Image =', imageTypeStart);
+if (imageTypeStart < 0 || imageTypeEnd < 0 ||
+    !imagePublicSource.includes('forwardRef<HTMLImageElement, ImageProps>')) {
+  throw new Error('React Image public type contract changed; review its API reference');
+}
+const publicImageTypes = imagePublicSource.slice(imageTypeStart, imageTypeEnd).trim();
 const shellStyles = documentationShellStyleSpecifiers.map((specifier) =>
   resolvePublicWebStyleAsset(webModel.packageManifest, specifier).assetPath);
 
@@ -156,6 +180,11 @@ function linksFor(route) {
       guide: relative(dir, react + icon.showcaseRoute, true),
       api: relative(dir, react + icon.apiRoute, true),
       exampleBase: relative(dir, react + 'examples/icon/', true),
+    },
+    image: {
+      guide: relative(dir, react + image.showcaseRoute, true),
+      api: relative(dir, react + image.apiRoute, true),
+      exampleBase: relative(dir, react + 'examples/image/', true),
     },
     typography: Object.fromEntries(typographyIds.map((id) => [id, {
       guide: relative(dir, react + typography[id].showcaseRoute, true),
@@ -265,6 +294,33 @@ for (const example of iconExamples) {
     escapeHtml(relative(dir, 'assets/' + asset + '.js')) + '"></script></body></html>');
 }
 
+// Product Graph-owned Image TSX examples extract the shared Web stylesheet.
+for (const example of imageExamples) {
+  const slug = example.id.slice('image/'.length);
+  const asset = 'react-image-' + slug;
+  await build({
+    entryPoints: [path.join(root, example.sourcePath)],
+    bundle: true, platform: 'browser', format: 'iife', target: 'es2022',
+    jsx: 'automatic', logLevel: 'silent',
+    outfile: path.join(outRoot, 'assets', asset + '.js'),
+  });
+  if (!(await stat(path.join(outRoot, 'assets', asset + '.css')).catch(() => null))?.isFile()) {
+    throw new Error('React ' + example.id + ' must extract canonical browser CSS');
+  }
+  const route = 'examples/image/' + slug + '/';
+  const dir = directory(route);
+  const styles = shellStyles.map((file) =>
+    '<link rel="stylesheet" href="' + escapeHtml(relative(dir, file)) + '">').join('\n');
+  await writePage(route, '<!doctype html><html lang="en" data-vf-theme="light"><head>' +
+    '<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">' +
+    '<title>React ' + escapeHtml(example.title) + ' · VyrnForge</title>' +
+    styles + '<link rel="stylesheet" href="' +
+    escapeHtml(relative(dir, 'assets/' + asset + '.css')) + '">' +
+    '<style>body{margin:0;padding:1rem;min-width:0;overflow-wrap:anywhere}' +
+    '#root{min-width:0}</style></head><body><div id="root"></div><script src="' +
+    escapeHtml(relative(dir, 'assets/' + asset + '.js')) + '"></script></body></html>');
+}
+
 const exampleDir = directory('examples/button-basic/');
 const exampleStyles = shellStyles.map((asset) =>
   '  <link rel="stylesheet" href="' + escapeHtml(relative(exampleDir, asset)) + '">').join('\n');
@@ -338,6 +394,10 @@ const pageViews = [
     description: 'React SVG icon examples and shared artwork semantics' },
   { route: icon.apiRoute, view: 'icon-api', title: 'React Icon API',
     description: 'Source-backed React Icon props and public entrypoints' },
+  { route: image.showcaseRoute, view: 'image', title: 'React Image',
+    description: 'Native image semantics and source-backed React examples' },
+  { route: image.apiRoute, view: 'image-api', title: 'React Image API',
+    description: 'Source-backed React Image props and public entrypoints' },
 ];
 // All Native destinations have a React-context response, even when a React guide
 // has not been implemented. Never disguise an unavailable view as another port.
@@ -385,12 +445,20 @@ const iconData = {
   publicEntrypoints: icon.publicEntrypoints,
   publicIconTypes, examples: iconExamples,
 };
+const imageData = {
+  id: image.id, title: image.title,
+  sharedContent: image.sharedContent, frameworkContent: image.frameworkContent,
+  standardReferences: image.standardReferences,
+  publicEntrypoints: image.publicEntrypoints,
+  publicImageTypes, examples: imageExamples,
+};
 for (const page of pageViews) {
   const dir = directory(page.route);
   const props = { view: page.view, links: linksFor(page.route), button: pageData,
     layout: (page.view === 'layout' || page.view === 'layout-api') ? layoutData : null,
     typography: page.topic ? typography[page.topic] : null,
     icon: page.view === 'icon' || page.view === 'icon-api' ? iconData : null,
+    image: page.view === 'image' || page.view === 'image-api' ? imageData : null,
     requestedTopic: page.requestedTopic ?? null };
   const initialHtml = renderToString(createElement(ReactReferencePage, props));
   const serialized = JSON.stringify(props).replaceAll('<', '\\u003c');
@@ -414,7 +482,7 @@ for (const page of pageViews) {
   await writePage(page.route, pageHtml);
 }
 await writeFile(path.join(reactRoot, 'site-manifest.json'), JSON.stringify({
-  channel, framework: 'react', status: 'button-layout-typography-icon-pilot',
+  channel, framework: 'react', status: 'button-layout-typography-icon-image-pilot',
   source: 'Product Graph public React surface',
   routes: pageViews.map(({ route, view }) => ({ route, view })),
   layout: {
@@ -433,6 +501,15 @@ await writeFile(path.join(reactRoot, 'site-manifest.json'), JSON.stringify({
     frameworkSourcePath: icon.frameworkSourcePath,
     publicSourcePath: path.relative(root, iconPublicSourcePath).replaceAll('\\', '/'),
     examples: iconExamples.map((example) => ({ id: example.id,
+      sourcePath: example.sourcePath, title: example.title })),
+  },
+  image: {
+    guideRoute: image.showcaseRoute, apiRoute: image.apiRoute,
+    publicEntrypoints: image.publicEntrypoints,
+    sharedSourcePath: image.sharedSourcePath,
+    frameworkSourcePath: image.frameworkSourcePath,
+    publicSourcePath: path.relative(root, imagePublicSourcePath).replaceAll('\\', '/'),
+    examples: imageExamples.map((example) => ({ id: example.id,
       sourcePath: example.sourcePath, title: example.title })),
   },
   typography: Object.fromEntries(typographyIds.map((id) => [id, {
@@ -456,4 +533,4 @@ await writeFile(path.join(reactRoot, 'site-manifest.json'), JSON.stringify({
     examples: buttonExamples.map((example) => ({ id: example.id, sourcePath: example.sourcePath })),
   },
 }, null, 2) + '\n');
-process.stdout.write('React Button, Layout, Typography and Icon documentation pilot -> ' + path.relative(root, reactRoot) + '\n');
+process.stdout.write('React Button, Layout, Typography, Icon and Image documentation pilot -> ' + path.relative(root, reactRoot) + '\n');
