@@ -418,7 +418,7 @@ test('Elemental-primitives aggregate stylesheet is not a component owner and res
   const image = graph.components.find((entry) => entry.unitId === 'image');
   assert.ok(image, 'image is independently owned inside Media');
   assert.equal(image.facets.canonicalRoot, 'product/components/elemental-primitives/media/image/');
-  assert.deepEqual(Object.keys(image.surfaces), ['web']);
+  assert.deepEqual(Object.keys(image.surfaces).sort(), ['react', 'web']);
 
   assert.equal(graph.components.some((entry) => entry.unitId === 'skeleton'), false);
   assert.equal(graph.components.some((entry) => entry.unitId === 'loading'), false);
