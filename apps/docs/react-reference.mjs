@@ -875,7 +875,7 @@ export function ReactReferencePage({ view, links, button, layout, typography, ic
               'data-vf-docs-react-results': '', hidden: !search },
               h('p', { className: 'vf-docs-search-label' }, 'React documentation results'),
               matches.length
-                ? h('ul', null, ...matches.map((item) =>
+                ? h(Flow, { as: 'ul', gap: 'xs' }, ...matches.map((item) =>
                     h('li', { key: item.title }, h('a', { href: item.href }, item.title))))
                 : h('p', null, 'No matching React documentation.'))),
           h('div', { className: 'vf-docs-framework-control' },
