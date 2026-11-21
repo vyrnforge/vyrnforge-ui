@@ -79,7 +79,7 @@ test('React Button guide SSR hydrates and uses public Button, AppShell, SideNav 
   await expect(page.locator('[data-vf-app-shell]')).toHaveCount(1);
   await expect(page.locator('[data-vf-side-nav]')).toHaveCount(1);
   await expect(page.getByRole('navigation', { name: 'Documentation' })
-    .getByRole('link', { name: 'Button' })).toHaveAttribute('aria-current', 'page');
+    .getByRole('link', { name: 'Button', exact: true })).toHaveAttribute('aria-current', 'page');
   await expect(page.locator('html')).toHaveAttribute('data-vf-react-hydrated', 'true');
   await page.getByRole('button', { name: 'Save changes', exact: true }).click();
   await expect(page.locator('[data-vf-docs-react-feedback]')).toHaveText('Save changes activated');
@@ -267,7 +267,7 @@ test('React Layout lives under Layout & Structure and runs checked-in React JSX 
   await expect(page.locator('html')).toHaveAttribute('data-vf-react-hydrated', 'true');
   const nav = page.getByRole('navigation', { name: 'Documentation' });
   await expect(nav.getByText('Layout & Structure', { exact: true })).toBeVisible();
-  await expect(nav.getByRole('link', { name: 'Layout' })).toHaveAttribute('aria-current', 'page');
+  await expect(nav.getByRole('link', { name: 'Layout', exact: true })).toHaveAttribute('aria-current', 'page');
   const layoutGuide = page.locator('[data-vf-docs-react-layout]');
   await layoutGuide.getByText('Standards and evidence mapping', { exact: true }).click();
   const accessibility = layoutGuide.locator('[data-vf-docs-accessibility]');
@@ -306,7 +306,7 @@ test('React Layout lives under Layout & Structure and runs checked-in React JSX 
   await expect(radios.getByRole('radio', { name: 'Daily' })).not.toBeChecked();
 
   await page.getByRole('searchbox', { name: 'Search React documentation' }).fill('autogrid');
-  await expect(page.locator('[data-vf-docs-react-results]').getByRole('link', { name: 'Layout' })).toBeVisible();
+  await expect(page.locator('[data-vf-docs-react-results]').getByRole('link', { name: 'Layout', exact: true })).toBeVisible();
   await page.getByRole('button', { name: 'Clear search' }).click();
   await expect(page.locator('[data-vf-docs-react-results]')).toBeHidden();
   await page.getByRole('navigation', { name: 'On this page' })
@@ -331,7 +331,7 @@ test('React Layout at 320px / 200% text is readable in RTL, dark theme and force
   const menu = page.getByRole('button', { name: 'Menu' });
   await menu.click();
   await expect(page.getByRole('navigation', { name: 'Documentation' })
-    .getByRole('link', { name: 'Layout' })).toBeVisible();
+    .getByRole('link', { name: 'Layout', exact: true })).toBeVisible();
   await page.keyboard.press('Escape');
   await expect(menu).toBeFocused();
   await page.screenshot({ path: testInfo.outputPath('react-layout-320-rtl-forced-colors.png'), fullPage: true });
@@ -356,7 +356,7 @@ test('Native Layout framework selector preserves the React Layout route; SSR wor
     await noJs.goto('/next/react/components/layout/');
     await expect(noJs.getByRole('heading', { level: 1, name: 'Layout: Flow & AutoGrid' })).toBeVisible();
     await expect(noJs.getByRole('navigation', { name: 'Documentation' })
-      .getByRole('link', { name: 'Layout' })).toHaveAttribute('aria-current', 'page');
+      .getByRole('link', { name: 'Layout', exact: true })).toHaveAttribute('aria-current', 'page');
     await expect(noJs.locator('html')).not.toHaveAttribute('data-vf-react-hydrated', 'true');
     await noJs.getByText('View React TSX source').first().click();
     await expect(noJs.locator('[data-vf-docs-react-layout-example] pre code').first()).toContainText('<Flow');
@@ -392,7 +392,7 @@ test('React Text, Code and Kbd guides run checked-in JSX and link real public AP
     const guide = page.locator('[data-vf-docs-react-typography="' + id + '"]');
     await expect(guide.getByRole('heading', { level: 1, name: label })).toBeVisible();
     await expect(page.getByRole('navigation', { name: 'Documentation' })
-      .getByRole('link', { name: label })).toHaveAttribute('aria-current', 'page');
+      .getByRole('link', { name: label, exact: true })).toHaveAttribute('aria-current', 'page');
     const standards = guide.getByText('Standards and evidence mapping', { exact: true });
     await standards.click();
     await expect(guide.locator('[data-vf-docs-accessibility]')).toBeVisible();
@@ -438,9 +438,9 @@ test('React Typography routes preserve SSR with no client JavaScript and framewo
   await page.getByRole('button', { name: 'Clear search' }).click();
   await page.getByRole('searchbox', { name: 'Search React documentation' }).fill('kbd');
   await expect(page.locator('[data-vf-docs-react-results]')
-    .getByRole('link', { name: 'Kbd' })).toBeVisible();
+    .getByRole('link', { name: 'Kbd', exact: true })).toBeVisible();
   await page.locator('[data-vf-docs-react-results]')
-    .getByRole('link', { name: 'Kbd' }).click();
+    .getByRole('link', { name: 'Kbd', exact: true }).click();
   await expect(page).toHaveURL(/\/next\/react\/components\/kbd\/$/);
 
   const context = await browser.newContext({ javaScriptEnabled: false });
@@ -473,7 +473,7 @@ test('React Typography remains readable at 320px, 200 percent text, RTL and forc
   const menu = page.getByRole('button', { name: 'Menu' });
   await menu.click();
   await expect(page.getByRole('navigation', { name: 'Documentation' })
-    .getByRole('link', { name: 'Text' })).toBeVisible();
+    .getByRole('link', { name: 'Text', exact: true })).toBeVisible();
   await page.keyboard.press('Escape');
   await expect(menu).toBeFocused();
   const widths = await page.evaluate(() => ({
@@ -527,7 +527,7 @@ test('React Icon uses product-owned SVG examples and public source-backed API', 
   const guide = page.locator('[data-vf-docs-react-icon]');
   await expect(guide.getByRole('heading', { name: 'Icon', level: 1 })).toBeVisible();
   await expect(page.getByRole('navigation', { name: 'Documentation' })
-    .getByRole('link', { name: 'Icon' })).toHaveAttribute('aria-current', 'page');
+    .getByRole('link', { name: 'Icon', exact: true })).toHaveAttribute('aria-current', 'page');
   expect(await guide.locator(':scope > section > h2').allTextContents()).toEqual([
     'Get started', 'Examples', 'Usage guidelines', 'Accessibility', 'Related components and API',
   ]);
@@ -585,7 +585,7 @@ test('React Icon uses product-owned SVG examples and public source-backed API', 
     const noJs = await context.newPage();
     await noJs.goto('/next/react/components/icon/');
     await expect(noJs.locator('[data-vf-docs-react-icon]')).toBeVisible();
-    await expect(noJs.getByRole('navigation', { name: 'Documentation' }).getByRole('link', { name: 'Icon' }))
+    await expect(noJs.getByRole('navigation', { name: 'Documentation' }).getByRole('link', { name: 'Icon', exact: true }))
       .toHaveAttribute('aria-current', 'page');
   } finally { await context.close(); }
   await page.goto('/next/react/components/icon/');
