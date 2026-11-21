@@ -884,7 +884,7 @@ test('React Image guide uses shared native CSS, source-backed examples and a dis
   const sourceCard = guide.locator('[data-vf-docs-react-image-example="image/responsive"]');
   await sourceCard.getByText('View React TSX source').click();
   await expect(sourceCard.locator('pre code')).toContainText("from '@vyrnforge/react/image'");
-  await expect(sourceCard.locator('pre code')).toContainText("from '@vyrnforge/web/styles/image.css'");
+  await expect(sourceCard.locator('pre code')).toContainText("import '@vyrnforge/web/styles/image.css'");
 
   await guide.getByRole('link', { name: 'View Image public React API' }).click();
   await expect(page).toHaveURL(/\/next\/react\/api\/components\/image\/$/);
