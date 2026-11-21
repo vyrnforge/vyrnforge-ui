@@ -2,7 +2,7 @@ import type { Ref } from 'react';
 import { Divider, type DividerOrientation, type DividerProps } from '@vyrnforge/react/divider';
 import { Divider as RootDivider } from '@vyrnforge/react';
 
-const defaultProps: DividerProps = { id: 'visual-rule', className: 'rule', 'data-testid': 'line' };
+const defaultProps: DividerProps = { id: 'visual-rule', className: 'rule', title: 'decorative' };
 const verticalProps: DividerProps = { orientation: 'vertical' };
 const horizontal: DividerOrientation = 'horizontal';
 const ref: Ref<HTMLSpanElement> | undefined = undefined;
