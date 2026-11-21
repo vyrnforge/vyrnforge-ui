@@ -573,7 +573,7 @@ test('React Icon uses product-owned SVG examples and public source-backed API', 
   await expect(custom.locator('..').locator('pre code')).toContainText("from '@vyrnforge/web/icon'");
 
   await guide.getByRole('link', { name: 'View Icon public React API' }).click();
-  await expect(page).toHaveURL(/\\/next\\/react\\/api\\/components\\/icon\\/$/);
+  await expect(page).toHaveURL(/\/next\/react\/api\/components\/icon\/$/);
   const api = page.locator('[data-vf-docs-react-api="icon"]');
   await expect(api.locator('pre code')).toContainText('export interface IconProps');
   await expect(api.locator('pre code')).toContainText('label?: string');
