@@ -1,0 +1,13 @@
+{
+  "id": "icon/custom",
+  "title": "Custom artwork",
+  "description": "Create a compatible definition through the public Web helper, then reuse it with the React Icon renderer.",
+  "defaultFramework": "react",
+  "frameworks": {
+    "react": {
+      "label": "React",
+      "language": "tsx",
+      "source": "react.tsx"
+    }
+  }
+}
