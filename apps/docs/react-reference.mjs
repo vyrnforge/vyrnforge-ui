@@ -657,7 +657,7 @@ function dividerUsage(divider, links) {
       guidePart(sections[2], [
         ...guideSubsections(divider.sharedContent, [
           'When to use', 'Horizontal and vertical', 'Text and alignment',
-          'Appearance and tokens', 'When not to use', 'Framework consumption',
+          'Vertical label direction', 'Appearance and tokens', 'When not to use', 'Framework consumption',
         ], 'react-divider-guide'),
         ...guideSubsections(divider.frameworkContent,
           ['React authoring'], 'react-divider-react'),
@@ -696,7 +696,8 @@ function dividerApi(divider, links) {
       h('h2', { id: 'react-divider-api-css' }, 'Shared CSS and hooks'),
       h('code', { 'data-vf-code': '' }, '@vyrnforge/web/styles/divider.css'),
       ...guideBlocks(divider.sharedContent, 'Horizontal and vertical'),
-      ...guideBlocks(divider.sharedContent, 'Text and alignment')),
+      ...guideBlocks(divider.sharedContent, 'Text and alignment'),
+      ...guideBlocks(divider.sharedContent, 'Vertical label direction')),
     h('p', null, h('a', { href: links.divider.guide, 'data-vf-link': '' },
       'View Divider examples')));
 }
@@ -813,7 +814,7 @@ export function ReactReferencePage({ view, links, button, layout, typography, ic
     { title: 'Button API', href: links.api, keywords: 'button props reference public' },
     { title: 'Layout', href: links.layout, keywords: 'flow autogrid grid responsive spacing layout wrap inline block JSX divider separator thematic hr css border' },
     { title: 'Layout API', href: links.layoutApi, keywords: 'flowprops autogridprops as minitemsize ref gap' },
-    { title: 'Divider', href: links.divider.guide, keywords: 'divider separator straight horizontal divider vertical divider divider text alignment horizontal divider with text vertical divider with text line visual border label text content start center end align alignment' },
+    { title: 'Divider', href: links.divider.guide, keywords: 'divider separator straight horizontal divider vertical divider divider text alignment horizontal divider with text vertical divider with text line visual border label text content start center end align alignment horizontal text vertical-rl top-to-bottom bottom-to-top textDirection rotate' },
     { title: 'Divider API', href: links.divider.api, keywords: 'dividerprops dividerorientation span visual css ref' },
     { title: 'Icon', href: links.icon.guide, keywords: 'icon svg glyph bookmark outlined filled shape size custom accessible examples colors currentColor JSX tags inline svg SvgIcon quick custom wrapper' },
     { title: 'Icon API', href: links.icon.api, keywords: 'iconprops SVGAttributes definition variant shape size label types' },
