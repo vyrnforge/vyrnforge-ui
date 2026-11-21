@@ -102,10 +102,12 @@ if (!icon?.showcaseAvailable || !icon.apiAvailable ||
     !icon.publicEntrypoints.includes('@vyrnforge/react/icon') ||
     !webModel.packageManifest.exports?.['./styles/icon.css'] ||
     !iconExamples.some((example) => example.id === 'icon/basic') ||
-    iconExamples.length !== 5 ||
+    iconExamples.length !== 7 ||
     !iconExamples.every((example) => example.sourcePath.endsWith('/react.tsx') &&
-      example.source.includes("'@vyrnforge/react/icon'"))) {
-  throw new Error('React Icon documentation requires public renderer, shared CSS, adaptation and five owned examples');
+      (example.id === 'icon/inline-svg'
+        ? example.source.includes("'@vyrnforge/web/styles/icon.css'")
+        : example.source.includes("'@vyrnforge/react/icon'")))) {
+  throw new Error('React Icon documentation requires public renderer, shared CSS, adaptation and seven owned examples');
 }
 const iconPublicSourcePath = path.join(root,
   path.dirname(path.dirname(icon.frameworkSourcePath)), 'index.ts');
