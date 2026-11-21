@@ -1,5 +1,5 @@
 import { createElement, forwardRef } from 'react';
-import type { ReactNode, SVGAttributes } from 'react';
+import type { ForwardRefExoticComponent, ReactNode, RefAttributes, SVGAttributes } from 'react';
 import {
   resolveIconGlyph,
   type IconDefinition,
@@ -83,6 +83,21 @@ export const SvgIcon = forwardRef<SVGSVGElement, SvgIconProps>(function SvgIcon(
   );
 });
 
+
+/**
+ * Create a reusable React custom icon from JSX artwork in one call.
+ * Uses SvgIcon's native SVG, canonical CSS sizing and accessibility contract.
+ * For cross-framework and variant-aware artwork, use defineIcon instead.
+ */
+export function createSvgIcon(content: ReactNode): ForwardRefExoticComponent<
+  Omit<SvgIconProps, 'children'> & RefAttributes<SVGSVGElement>
+> {
+  return forwardRef<SVGSVGElement, Omit<SvgIconProps, 'children'>>(
+    function CreatedSvgIcon(props, ref) {
+      return createElement(SvgIcon, { ...props, ref }, content);
+    }
+  );
+}
 
 /** Shared React mapping of the canonical Icon accessibility contract. */
 function iconAccessibility(label?: string) {
