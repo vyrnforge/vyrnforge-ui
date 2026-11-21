@@ -73,6 +73,16 @@
     writing-mode: vertical-rl;
   }
 
+  /* The default vertical-rl writing mode remains unchanged for existing consumers.
+     Direction controls only how text is drawn, not line geometry or DOM order. */
+  :where([data-vf-divider][data-vf-divider-labeled][data-vf-divider-orientation="vertical"][data-vf-divider-text-direction="horizontal"]) > :where([data-vf-divider-label]) {
+    writing-mode: horizontal-tb;
+  }
+
+  :where([data-vf-divider][data-vf-divider-labeled][data-vf-divider-orientation="vertical"][data-vf-divider-text-direction="bottom-to-top"]) > :where([data-vf-divider-label]) {
+    transform: rotate(180deg);
+  }
+
   /* Start and end are logical: they follow inline direction and writing mode. */
   :where([data-vf-divider][data-vf-divider-labeled][data-vf-divider-align="start"])::before,
   :where([data-vf-divider][data-vf-divider-labeled][data-vf-divider-align="end"])::after {
