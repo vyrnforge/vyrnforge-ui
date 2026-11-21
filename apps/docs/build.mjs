@@ -96,12 +96,12 @@ function renderAccessibilityStandards(references, headingId = 'accessibility-evi
     : 'Semantic baseline';
   const reviewNote = references.reviewStatus === 'review-required' ? ' Accessibility review required.' : '';
 
-  return `<section class="vf-docs-standards" data-vf-docs-accessibility aria-labelledby="${escapeHtml(headingId)}">
+  return `<section class="vf-docs-standards" data-vf-flow data-vf-flow-gap="sm" data-vf-docs-accessibility aria-labelledby="${escapeHtml(headingId)}">
     <h2 id="${escapeHtml(headingId)}">Accessibility evidence</h2>
-    <ul class="vf-docs-standards-primary" aria-label="Standards">${references.standards.map((item) => `<li>${renderStandardLink(item)}</li>`).join('')}</ul>
+    <ul class="vf-docs-standards-primary" data-vf-flow data-vf-flow-direction="inline" data-vf-flow-wrap="wrap" data-vf-flow-gap="xs" aria-label="Standards">${references.standards.map((item) => `<li>${renderStandardLink(item)}</li>`).join('')}</ul>
     ${showDetails ? `<details class="vf-docs-standards-details">
       <summary>${escapeHtml(summary)}</summary>
-      ${criteria.length ? `<ul aria-label="Mapped WCAG criteria">${criteria.map((item) => `<li>${renderCriterionLink(item)}</li>`).join('')}</ul>` : ''}
+      ${criteria.length ? `<ul data-vf-auto-grid data-vf-auto-grid-gap="sm" style="--vf-auto-grid-min-item-size:15rem" aria-label="Mapped WCAG criteria">${criteria.map((item) => `<li>${renderCriterionLink(item)}</li>`).join('')}</ul>` : ''}
       ${baselineNote}
     </details>` : ''}
     <p class="vf-docs-standards-note">Mapping status: <strong>${escapeHtml(references.mappingStatus)}</strong>.${reviewNote} References and evidence mappings only; not a blanket compliance claim.</p>
@@ -379,7 +379,7 @@ ${styleLinks(currentPageDirectory, componentStyle)}
 function cardList(entries, currentPageDirectory) {
   return `<ul class="vf-docs-card-list" data-vf-auto-grid data-vf-auto-grid-gap="md">${entries.map((entry) => `<li>
       <a class="vf-docs-card-link" data-vf-flow data-vf-flow-direction="inline" data-vf-flow-gap="lg" data-vf-flow-justify="space-between" href="${artifactHref(currentPageDirectory, routeTarget(entry.route))}">
-        <span>
+        <span data-vf-flow data-vf-flow-gap="xs">
           <strong>${escapeHtml(entry.title)}</strong>
           <small>${escapeHtml(entry.meta ?? '')}</small>
         </span>
@@ -408,7 +408,7 @@ function renderHome() {
       </div>
     </section>
     <section class="vf-docs-catalog" aria-labelledby="foundations-heading">
-      <div class="vf-docs-section-heading">
+      <div class="vf-docs-section-heading" data-vf-flow data-vf-flow-direction="inline" data-vf-flow-wrap="wrap" data-vf-flow-gap="lg" data-vf-flow-align="end" data-vf-flow-justify="space-between">
         <div>
           <p data-vf-text data-vf-text-variant="overline" class="vf-docs-eyebrow">Shared foundation</p>
           <h2 id="foundations-heading">Foundations</h2>
@@ -418,7 +418,7 @@ function renderHome() {
       ${cardList(foundationCards, currentPageDirectory)}
     </section>
     <section class="vf-docs-catalog" aria-labelledby="catalog-heading">
-      <div class="vf-docs-section-heading">
+      <div class="vf-docs-section-heading" data-vf-flow data-vf-flow-direction="inline" data-vf-flow-wrap="wrap" data-vf-flow-gap="lg" data-vf-flow-align="end" data-vf-flow-justify="space-between">
         <div>
           <p data-vf-text data-vf-text-variant="overline" class="vf-docs-eyebrow">Components</p>
           <h2 id="catalog-heading">Browse components</h2>
@@ -431,7 +431,7 @@ function renderHome() {
       ], currentPageDirectory)}
     </section>
     ${model.patternCatalog.length ? `<section class="vf-docs-catalog" aria-labelledby="patterns-heading">
-      <div class="vf-docs-section-heading">
+      <div class="vf-docs-section-heading" data-vf-flow data-vf-flow-direction="inline" data-vf-flow-wrap="wrap" data-vf-flow-gap="lg" data-vf-flow-align="end" data-vf-flow-justify="space-between">
         <div>
           <p data-vf-text data-vf-text-variant="overline" class="vf-docs-eyebrow">Patterns</p>
           <h2 id="patterns-heading">Patterns & workflows</h2>
@@ -456,7 +456,7 @@ function renderComponentGroupSections(pages, currentPageDirectory, { apiOnly = f
         : component.showcaseAvailable ? 'Guide + API' : 'API reference',
     }));
     return `<section class="vf-docs-component-group" data-vf-docs-component-group="${escapeHtml(group.id)}" aria-labelledby="component-group-${escapeHtml(group.id)}">
-      <div class="vf-docs-component-group-header">
+      <div class="vf-docs-component-group-header" data-vf-flow data-vf-flow-direction="inline" data-vf-flow-wrap="wrap" data-vf-flow-gap="lg" data-vf-flow-align="end" data-vf-flow-justify="space-between">
         <div>
           <h2 id="component-group-${escapeHtml(group.id)}">${escapeHtml(group.label)}</h2>
           <p>${escapeHtml(group.description)}</p>
@@ -481,7 +481,7 @@ function renderComponentsIndex() {
       <p data-vf-text data-vf-text-variant="body-lg" class="vf-docs-lede">Browse by what you are building: forms and inputs, actions, navigation, layout, content, feedback, overlays, collections, and supporting utilities.</p>
     </section>
     <section class="vf-docs-catalog" aria-labelledby="component-catalog-heading">
-      <div class="vf-docs-section-heading"><div><h2 id="component-catalog-heading">Browse by UI purpose</h2></div><p>${model.componentCatalog.length} public Native Web components</p></div>
+      <div class="vf-docs-section-heading" data-vf-flow data-vf-flow-direction="inline" data-vf-flow-wrap="wrap" data-vf-flow-gap="lg" data-vf-flow-align="end" data-vf-flow-justify="space-between"><div><h2 id="component-catalog-heading">Browse by UI purpose</h2></div><p>${model.componentCatalog.length} public Native Web components</p></div>
       ${renderComponentGroupSections(model.componentCatalog, currentPageDirectory)}
     </section>`,
   });
@@ -500,7 +500,7 @@ function renderPatternsIndex() {
       <p data-vf-text data-vf-text-variant="body-lg" class="vf-docs-lede">Patterns compose foundations and components into reusable task and feedback guidance without becoming another component layer.</p>
     </section>
     <section class="vf-docs-catalog" aria-labelledby="pattern-catalog-heading">
-      <div class="vf-docs-section-heading"><div><h2 id="pattern-catalog-heading">Available patterns</h2></div><p>${model.patternCatalog.length} Native Web pattern${model.patternCatalog.length === 1 ? '' : 's'}</p></div>
+      <div class="vf-docs-section-heading" data-vf-flow data-vf-flow-direction="inline" data-vf-flow-wrap="wrap" data-vf-flow-gap="lg" data-vf-flow-align="end" data-vf-flow-justify="space-between"><div><h2 id="pattern-catalog-heading">Available patterns</h2></div><p>${model.patternCatalog.length} Native Web pattern${model.patternCatalog.length === 1 ? '' : 's'}</p></div>
       ${cardList(model.patternCatalog.map((pattern) => ({
         title: pattern.title,
         route: componentDestination(pattern),
@@ -523,7 +523,7 @@ function renderPatternApiIndex() {
       <p data-vf-text data-vf-text-variant="body-lg" class="vf-docs-lede">Public package entrypoints owned by reusable Pattern product units.</p>
     </section>
     <section class="vf-docs-catalog" aria-labelledby="pattern-api-catalog-heading">
-      <div class="vf-docs-section-heading"><div><h2 id="pattern-api-catalog-heading">Public pattern entrypoints</h2></div><p>${model.patternApiPages.length} pattern${model.patternApiPages.length === 1 ? '' : 's'}</p></div>
+      <div class="vf-docs-section-heading" data-vf-flow data-vf-flow-direction="inline" data-vf-flow-wrap="wrap" data-vf-flow-gap="lg" data-vf-flow-align="end" data-vf-flow-justify="space-between"><div><h2 id="pattern-api-catalog-heading">Public pattern entrypoints</h2></div><p>${model.patternApiPages.length} pattern${model.patternApiPages.length === 1 ? '' : 's'}</p></div>
       ${cardList(model.patternApiPages.map((pattern) => ({
         title: pattern.title,
         route: pattern.apiRoute,
@@ -546,7 +546,7 @@ function renderApiIndex() {
       <p data-vf-text data-vf-text-variant="body-lg" class="vf-docs-lede">Use this reference when you need exact public entrypoints. Components are grouped with the same consumer-facing categories used by the main catalog; availability still comes from the real Native Web package surface.</p>
     </section>
     <section class="vf-docs-catalog" aria-labelledby="api-catalog-heading">
-      <div class="vf-docs-section-heading"><div><h2 id="api-catalog-heading">Public component entrypoints</h2></div><p>${model.componentApiPages.length} components</p></div>
+      <div class="vf-docs-section-heading" data-vf-flow data-vf-flow-direction="inline" data-vf-flow-wrap="wrap" data-vf-flow-gap="lg" data-vf-flow-align="end" data-vf-flow-justify="space-between"><div><h2 id="api-catalog-heading">Public component entrypoints</h2></div><p>${model.componentApiPages.length} components</p></div>
       ${renderComponentGroupSections(model.componentApiPages, currentPageDirectory, { apiOnly: true })}
     </section>`,
   });
@@ -583,7 +583,7 @@ function renderFoundation(page) {
 
 function renderExample(example) {
   return `<article class="vf-docs-example" data-vf-docs-example="${escapeHtml(example.id)}">
-    <header class="vf-docs-example-header">
+    <header class="vf-docs-example-header" data-vf-flow data-vf-flow-direction="inline" data-vf-flow-wrap="wrap" data-vf-flow-gap="lg" data-vf-flow-align="start" data-vf-flow-justify="space-between">
       <div>
         <p data-vf-text data-vf-text-variant="overline" class="vf-docs-example-label">Example</p>
         <h3>${escapeHtml(example.title)}</h3>
@@ -625,7 +625,7 @@ function renderTableOfContents(entries) {
   return `<aside class="vf-docs-toc-region">
     <nav class="vf-docs-toc" aria-label="On this page">
       <p>On this page</p>
-      <ol>${entries.map((entry) => `<li><a href="#${escapeHtml(entry.id)}">${escapeHtml(entry.label)}</a></li>`).join('')}</ol>
+      <ol data-vf-flow data-vf-flow-gap="xs">${entries.map((entry) => `<li><a href="#${escapeHtml(entry.id)}">${escapeHtml(entry.label)}</a></li>`).join('')}</ol>
     </nav>
   </aside>`;
 }
@@ -695,7 +695,7 @@ function renderComponent(page) {
     content: `${renderBreadcrumbs(page, currentPageDirectory, page.kind === 'pattern' ? 'Patterns' : 'Components')}
     <div class="vf-docs-content-grid">
       ${renderTableOfContents(toc)}
-      <article class="vf-docs-article" ${page.kind === 'pattern' ? 'data-vf-docs-pattern' : 'data-vf-docs-component'}="${escapeHtml(page.id)}">
+      <article class="vf-docs-article" data-vf-flow data-vf-flow-gap="3xl" ${page.kind === 'pattern' ? 'data-vf-docs-pattern' : 'data-vf-docs-component'}="${escapeHtml(page.id)}">
         <header class="vf-docs-component-header">
           <div class="vf-docs-page-meta" data-vf-flow data-vf-flow-direction="inline" data-vf-flow-wrap="wrap" data-vf-flow-gap="xs" aria-label="Page metadata">
             <span>Native Web</span>
@@ -713,7 +713,7 @@ function renderComponent(page) {
           <pre data-vf-code-block tabindex="0"><code class="language-css">@import &quot;${escapeHtml(page.styleSpecifier)}&quot;;</code></pre>
         </section>
         <section aria-labelledby="${escapeHtml(usageId)}">
-          <div class="vf-docs-section-heading">
+          <div class="vf-docs-section-heading" data-vf-flow data-vf-flow-direction="inline" data-vf-flow-wrap="wrap" data-vf-flow-gap="lg" data-vf-flow-align="end" data-vf-flow-justify="space-between">
             <div><p data-vf-text data-vf-text-variant="overline" class="vf-docs-eyebrow">Executable Native HTML</p><h2 id="${escapeHtml(usageId)}">Usage preview</h2></div>
             <p>This example comes from the checked-in product unit and renders with public VyrnForge Web CSS.</p>
           </div>
@@ -722,7 +722,7 @@ function renderComponent(page) {
         ${sections}
         ${framework.markup}
         ${examplesId ? `<section aria-labelledby="${escapeHtml(examplesId)}">
-          <div class="vf-docs-section-heading">
+          <div class="vf-docs-section-heading" data-vf-flow data-vf-flow-direction="inline" data-vf-flow-wrap="wrap" data-vf-flow-gap="lg" data-vf-flow-align="end" data-vf-flow-justify="space-between">
             <div><p data-vf-text data-vf-text-variant="overline" class="vf-docs-eyebrow">Executable Native HTML</p><h2 id="${escapeHtml(examplesId)}">More examples</h2></div>
             <p>Additional checked-in sources demonstrate supported behavior.</p>
           </div>
@@ -755,7 +755,7 @@ function renderPatternGuide(page) {
     title: page.title,
     description: page.title + ' task composition guide',
     content: renderBreadcrumbs(page, currentPageDirectory, 'Patterns') +
-      '<article class="vf-docs-article" data-vf-docs-pattern="' + escapeHtml(page.id) + '">' +
+      '<article class="vf-docs-article" data-vf-flow data-vf-flow-gap="3xl" data-vf-docs-pattern="' + escapeHtml(page.id) + '">' +
       '<header class="vf-docs-component-header"><h1>' + escapeHtml(page.content.title) + '</h1>' +
       '<div data-vf-text data-vf-text-variant="body-lg" class="vf-docs-lede">' + renderBlocks(page.content.intro) + '</div>' +
       renderAccessibilityStandards(page.standardReferences) + '</header>' + sections +
