@@ -385,6 +385,9 @@ export interface ContextMenuRootProps {
 // @public (undocumented)
 export const ContextMenuTrigger: ForwardRefExoticComponent<Omit<DetailedHTMLProps<HTMLAttributes<HTMLDivElement>, HTMLDivElement>, "ref"> & RefAttributes<HTMLDivElement>>;
 
+// @public
+export function createSvgIcon(content: ReactNode): ForwardRefExoticComponent<Omit<SvgIconProps, 'children'> & RefAttributes<SVGSVGElement>>;
+
 // @public (undocumented)
 export function DialogBody(props: DialogBodyProps): DetailedReactHTMLElement<    {
 'data-vf-dialog-body': string;
