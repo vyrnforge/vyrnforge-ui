@@ -131,3 +131,61 @@ test('labeled Divider keeps contrast, layout and readable text at zoom and in fo
   }));
   expect(overflow.scroll).toBeLessThanOrEqual(overflow.client);
 });
+
+test('vertical Divider label directions preserve native readable text and CSS geometry', async ({ page }) => {
+  await page.goto('/components/divider/' + port + '.html');
+  const directions = [
+    ['horizontal', 'horizontal-tb', 'none', 'OR'],
+    ['top-to-bottom', 'vertical-rl', 'none', 'Next'],
+    ['bottom-to-top', 'vertical-rl', 'matrix(-1, 0, 0, -1, 0, 0)', 'Previous'],
+  ];
+  for (const [direction, writingMode, transform, expectedLabel] of directions) {
+    const line = page.locator('#text-direction-' + direction);
+    const label = line.locator('[data-vf-divider-label]');
+    await expect(line).toHaveAttribute('data-vf-divider-orientation', 'vertical');
+    await expect(line).not.toHaveAttribute('role');
+    await expect(line).not.toHaveAttribute('aria-hidden');
+    await expect(line).not.toHaveAttribute('tabindex');
+    if (direction === 'top-to-bottom') {
+      await expect(line).not.toHaveAttribute('data-vf-divider-text-direction');
+    } else {
+      await expect(line).toHaveAttribute('data-vf-divider-text-direction', direction);
+    }
+    await expect(label).toHaveText(expectedLabel);
+    await expect(label).toHaveCSS('writing-mode', writingMode);
+    await expect(label).toHaveCSS('transform', transform);
+    const rect = await line.boundingBox();
+    expect(rect.height).toBeGreaterThan(130);
+    expect(rect.width).toBeGreaterThanOrEqual(16);
+    expect(rect.width).toBeLessThan(100);
+    // The line segments remain CSS pseudo-elements instead of extra accessible children.
+    await expect(line).toHaveCSS('display', 'flex');
+  }
+  await expect(page.getByRole('separator')).toHaveCount(0);
+  const a11y = await new AxeBuilder({ page }).analyze();
+  expect(a11y.violations).toEqual([]);
+});
+
+test('vertical text direction keeps labels visible with RTL, zoom and forced-colors settings', async ({ page }) => {
+  await page.setViewportSize({ width: 320, height: 720 });
+  await page.goto('/components/divider/' + port + '.html');
+  await page.locator('html').evaluate(el => {
+    el.dir = 'rtl';
+    el.style.fontSize = '200%';
+    el.dataset.vfTheme = 'dark';
+  });
+  await page.emulateMedia({ forcedColors: 'active' });
+  for (const direction of ['horizontal', 'top-to-bottom', 'bottom-to-top']) {
+    const line = page.locator('#text-direction-' + direction);
+    const label = line.locator('[data-vf-divider-label]');
+    await expect(label).toBeVisible();
+    await expect(line).not.toHaveAttribute('aria-hidden');
+    const segmentColor = await line.evaluate(node => getComputedStyle(node, '::before').backgroundColor);
+    expect(segmentColor).not.toBe('rgba(0, 0, 0, 0)');
+  }
+  const width = await page.evaluate(() => ({
+    scroll: document.documentElement.scrollWidth,
+    client: document.documentElement.clientWidth,
+  }));
+  expect(width.scroll).toBeLessThanOrEqual(width.client);
+});
