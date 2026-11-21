@@ -1,0 +1,13 @@
+{
+  "id": "icon/svg-wrapper",
+  "title": "Quick custom SVG",
+  "description": "Write the shape once inside SvgIcon. The wrapper supplies default size, viewBox, accessible semantics and the shared theme-aware Icon CSS.",
+  "defaultFramework": "react",
+  "frameworks": {
+    "react": {
+      "label": "React",
+      "language": "tsx",
+      "source": "react.tsx"
+    }
+  }
+}
