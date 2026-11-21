@@ -121,6 +121,24 @@ test('All React guide pages compose with canonical Flow and AutoGrid, not local 
   }
 });
 
+test('React Button and Text preview examples use public Flow, not a docs-only stack CSS', async ({ page }) => {
+  const urls = [
+    ['/next/react/examples/button-basic/', 'div', 'inline'],
+    ['/next/react/examples/button/forms/', 'form', 'block'],
+    ['/next/react/examples/button/sizes/', 'div', 'inline'],
+    ['/next/react/examples/typography/text/', 'div', 'block'],
+  ];
+  for (const [url, host, direction] of urls) {
+    await page.goto(url);
+    const layout = page.locator('#root > ' + host + '[data-vf-flow]');
+    await expect(layout).toHaveCount(1);
+    await expect(layout).toHaveAttribute('data-vf-flow-direction', direction);
+    await expect(layout).toHaveAttribute('data-vf-flow-gap', 'md');
+    expect(await layout.evaluate((element) => getComputedStyle(element).display)).toBe('flex');
+    await expect(layout).not.toHaveClass(/vf-example-stack/);
+  }
+});
+
 test('React Button guide SSR hydrates and uses public Button, AppShell, SideNav and live product example', async ({ page }) => {
   const errors = [];
   page.on('pageerror', (error) => errors.push(String(error)));
