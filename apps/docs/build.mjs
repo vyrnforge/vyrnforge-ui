@@ -562,7 +562,7 @@ function renderFoundation(page) {
     title: page.title,
     description: page.description,
     content: `${renderBreadcrumbs(page, pageDirectory(page.route), 'Foundations')}
-    <article class="vf-docs-article">
+    <article class="vf-docs-article" data-vf-flow data-vf-flow-gap="3xl">
       <header class="vf-docs-component-header">
         <p data-vf-text data-vf-text-variant="overline" class="vf-docs-eyebrow">Foundation</p>
         <h1>${escapeHtml(page.title)}</h1>
