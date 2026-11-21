@@ -452,7 +452,9 @@ function iconUsage(icon, links) {
   if (!icon?.sharedContent || !icon?.frameworkContent || !icon?.examples?.length) return null;
   const examples = [
     ...icon.examples.filter((example) => example.id === 'icon/basic'),
-    ...icon.examples.filter((example) => example.id !== 'icon/basic'),
+    ...icon.examples.filter((example) => example.id === 'icon/svg-wrapper'),
+    ...icon.examples.filter((example) =>
+      example.id !== 'icon/basic' && example.id !== 'icon/svg-wrapper'),
   ];
   const sections = [
     { id: 'react-icon-setup', heading: 'Get started' },
@@ -468,6 +470,7 @@ function iconUsage(icon, links) {
       guideHeader(icon.sharedContent, 'React · Media'),
       guidePart(sections[0], [
         ...guideBlocks(icon.frameworkContent, 'React setup'),
+        ...guideBlocks(icon.frameworkContent, 'Simple custom SVG'),
         h('p', { key: 'setup' }, 'See ', h('a', { href: links.home, 'data-vf-link': '' },
           'React overview'), ' for shared CSS and server-rendering setup.'),
       ]),
@@ -498,7 +501,8 @@ function iconApi(icon, links) {
   return h('article', { className: 'vf-docs-article', 'data-vf-docs-react-api': 'icon' },
     h('header', { className: 'vf-docs-component-header' },
       h('h1', null, 'Icon API'),
-      h('p', { className: 'vf-docs-lede' }, 'Public SVG props and types from the checked-in React Icon source.'),
+      h('p', { className: 'vf-docs-lede' },
+        'Public Icon and SvgIcon props and types from the checked-in React implementation.'),
       accessibilityEvidence(icon.standardReferences)),
     h('section', { 'aria-labelledby': 'react-icon-api-entrypoints' },
       h('h2', { id: 'react-icon-api-entrypoints' }, 'Public entrypoint'),
@@ -708,7 +712,7 @@ export function ReactReferencePage({ view, links, button, layout, typography, ic
     { title: 'Button API', href: links.api, keywords: 'button props reference public' },
     { title: 'Layout', href: links.layout, keywords: 'flow autogrid grid responsive spacing layout wrap inline block JSX' },
     { title: 'Layout API', href: links.layoutApi, keywords: 'flowprops autogridprops as minitemsize ref gap' },
-    { title: 'Icon', href: links.icon.guide, keywords: 'icon svg glyph bookmark outlined filled shape size custom accessible examples colors currentColor JSX tags inline svg' },
+    { title: 'Icon', href: links.icon.guide, keywords: 'icon svg glyph bookmark outlined filled shape size custom accessible examples colors currentColor JSX tags inline svg SvgIcon quick custom wrapper' },
     { title: 'Icon API', href: links.icon.api, keywords: 'iconprops SVGAttributes definition variant shape size label types' },
     { title: 'Image', href: links.image.guide, keywords: 'image img responsive alt decorative caption figure native JSX' },
     { title: 'Image API', href: links.image.api, keywords: 'imageprops img loading decoding srcset sizes ref types' },
