@@ -44,6 +44,33 @@ test('labeled Divider exposes native readable text and configured logical alignm
   }
 });
 
+test('vertical label direction is optional and native text stays accessible in all modes', () => {
+  for (const textDirection of ['horizontal', 'top-to-bottom', 'bottom-to-top']) {
+    const html = renderToStaticMarkup(createElement(Divider, {
+      orientation: 'vertical', textAlign: 'end', textDirection, children: 'OR',
+    }));
+    assert.match(html, new RegExp('data-vf-divider-text-direction="' + textDirection + '"'));
+    assert.match(html, /data-vf-divider-orientation="vertical"/);
+    assert.match(html, /data-vf-divider-align="end"/);
+    assert.match(html, /<span data-vf-divider-label="">OR<\/span>/);
+    assert.doesNotMatch(html, /aria-hidden=|role=|tabindex=|aria-orientation=/);
+  }
+  const existing = renderToStaticMarkup(createElement(Divider, {
+    orientation: 'vertical', children: 'Next',
+  }));
+  assert.doesNotMatch(existing, /data-vf-divider-text-direction/);
+
+  const horizontal = renderToStaticMarkup(createElement(Divider, {
+    orientation: 'horizontal', textDirection: 'bottom-to-top', children: 'OR',
+  }));
+  assert.doesNotMatch(horizontal, /data-vf-divider-text-direction/);
+  const plain = renderToStaticMarkup(createElement(Divider, {
+    orientation: 'vertical', textDirection: 'horizontal',
+  }));
+  assert.match(plain, /aria-hidden="true"/);
+  assert.doesNotMatch(plain, /data-vf-divider-text-direction/);
+});
+
 test('numeric zero is a meaningful text label; no child is not', () => {
   const zero = renderToStaticMarkup(createElement(RootDivider, { children: 0 }));
   assert.match(zero, /data-vf-divider-labeled=""/);

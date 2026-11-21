@@ -1,5 +1,5 @@
 export { Divider } from './components/divider/index.js';
-export type { DividerProps, DividerOrientation, DividerTextAlign } from './components/divider/index.js';
+export type { DividerProps, DividerOrientation, DividerTextAlign, DividerTextDirection } from './components/divider/index.js';
 export { Flow, AutoGrid } from './components/layout/index.js';
 export type { FlowProps, AutoGridProps, LayoutElement, LayoutGap, FlowDirection, FlowWrap, FlowAlign, FlowJustify } from './components/layout/index.js';
 export { Button } from './components/button/index.js';

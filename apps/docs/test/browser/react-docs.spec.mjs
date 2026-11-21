@@ -32,7 +32,7 @@ test('React pilot artifact is Product Graph-backed and SSR-rendered with public 
     frameworkSourcePath: 'product/components/composition-primitives/divider/react/docs/index.md',
   });
   expect(manifest.divider.examples.map((entry) => entry.id)).toEqual([
-    'divider/basic', 'divider/labeled-horizontal', 'divider/labeled-vertical', 'divider/vertical',
+    'divider/basic', 'divider/labeled-horizontal', 'divider/labeled-vertical', 'divider/text-direction', 'divider/vertical',
   ]);
   for (const example of manifest.divider.examples) {
     const slug = example.id.split('/')[1];
@@ -298,7 +298,7 @@ test('React Divider renders visible horizontal and vertical lines with no extra 
   await expect(page.locator('html')).toHaveAttribute('data-vf-react-hydrated', 'true');
   await expect(page.getByRole('heading', { level: 1, name: 'Divider' })).toBeVisible();
   const guide = page.locator('[data-vf-docs-react-divider]');
-  await expect(guide.getByRole('navigation', { name: 'Divider examples' }).getByRole('link')).toHaveCount(4);
+  await expect(guide.getByRole('navigation', { name: 'Divider examples' }).getByRole('link')).toHaveCount(5);
   await expect(guide.getByRole('heading', { name: 'Horizontal and vertical' })).toBeVisible();
   const basic = guide.locator('[data-vf-docs-react-divider-example="divider/basic"]');
   await basic.locator('iframe').scrollIntoViewIfNeeded();
@@ -374,6 +374,46 @@ test('React Divider supports readable labels aligned in either orientation', asy
   expect(errors).toEqual([]);
 });
 
+test('React Divider examples demonstrate configurable vertical text direction', async ({ page }) => {
+  await page.goto('/next/react/components/divider/');
+  const guide = page.locator('[data-vf-docs-react-divider]');
+  await expect(guide.getByRole('heading', { name: 'Vertical label direction' })).toBeVisible();
+  const example = guide.locator('[data-vf-docs-react-divider-example="divider/text-direction"]');
+  await example.locator('iframe').scrollIntoViewIfNeeded();
+  const frame = example.locator('iframe').contentFrame();
+  await expect(frame.locator('[data-vf-divider-labeled]')).toHaveCount(3);
+  for (const [index, text, direction, writingMode] of [
+    [0, 'OR', 'horizontal', 'horizontal-tb'],
+    [1, 'Next', null, 'vertical-rl'],
+    [2, 'Previous', 'bottom-to-top', 'vertical-rl'],
+  ]) {
+    const line = frame.locator('[data-vf-divider-labeled]').nth(index);
+    await expect(line).toHaveAttribute('data-vf-divider-orientation', 'vertical');
+    if (direction) {
+      await expect(line).toHaveAttribute('data-vf-divider-text-direction', direction);
+    } else {
+      await expect(line).not.toHaveAttribute('data-vf-divider-text-direction');
+    }
+    await expect(line).not.toHaveAttribute('aria-hidden');
+    const label = line.locator('[data-vf-divider-label]');
+    await expect(label).toHaveText(text);
+    await expect(label).toHaveCSS('writing-mode', writingMode);
+    await expect(label).toBeVisible();
+  }
+  await expect(frame.locator('[data-vf-divider-labeled]').nth(2)
+    .locator('[data-vf-divider-label]')).toHaveCSS('transform', 'matrix(-1, 0, 0, -1, 0, 0)');
+  await expect(frame.getByRole('separator')).toHaveCount(0);
+  await example.getByText('View React TSX source').click();
+  await expect(example.locator('pre code')).toContainText('textDirection="horizontal"');
+  await expect(example.locator('pre code')).toContainText('textDirection="bottom-to-top"');
+
+  await page.getByRole('navigation', { name: 'Documentation' })
+    .getByRole('link', { name: 'Divider API' }).click();
+  const source = page.locator('[data-vf-docs-react-api="divider"] section[aria-labelledby="react-divider-api-types"] pre code');
+  await expect(source).toContainText('export type DividerTextDirection');
+  await expect(source).toContainText('textDirection?: DividerTextDirection');
+});
+
 test('Divider works in dark theme, forced colors, narrow RTL layout and SSR without JS', async ({ page, browser }) => {
   await page.setViewportSize({ width: 320, height: 720 });
   await page.goto('/next/react/components/divider/');
@@ -397,7 +437,7 @@ test('Divider works in dark theme, forced colors, narrow RTL layout and SSR with
     const noJs = await context.newPage();
     await noJs.goto('/next/react/components/divider/');
     await expect(noJs.getByRole('heading', { level: 1, name: 'Divider' })).toBeVisible();
-    await expect(noJs.locator('[data-vf-docs-react-divider-example]')).toHaveCount(4);
+    await expect(noJs.locator('[data-vf-docs-react-divider-example]')).toHaveCount(5);
     await noJs.getByRole('navigation', { name: 'Documentation framework' })
       .getByRole('link', { name: 'Native Web' }).click();
     await expect(noJs).toHaveURL(/\/next\/native-web\/components\/divider\/$/);

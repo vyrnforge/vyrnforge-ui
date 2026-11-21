@@ -17,6 +17,7 @@ export const browserFixture = {
       '#vertical-container { display:flex; align-items:center; gap:1rem; min-block-size:3rem; }',
       '#labeled-horizontal { display:flex; flex-direction:column; gap:1rem; inline-size:min(100%,20rem); }',
       '#labeled-vertical { display:flex; align-items:center; gap:2rem; min-block-size:12rem; }',
+      '#text-directions { display:flex; align-items:center; gap:2rem; min-block-size:13rem; }',
     ].join('\n');
     await writeFile(path.join(output, 'divider.css'), tokens + '\n' + divider + '\n' + fixtureCss);
 
@@ -32,7 +33,12 @@ export const browserFixture = {
       '<section id="labeled-horizontal" aria-label="Horizontal labels">' +
       aligns.map(align => nativeLabel('horizontal', align)).join('') + '</section>' +
       '<section id="labeled-vertical" aria-label="Vertical labels">' +
-      aligns.map(align => nativeLabel('vertical', align)).join('') + '</section>';
+      aligns.map(align => nativeLabel('vertical', align)).join('') + '</section>' +
+      '<section id="text-directions" aria-label="Vertical label directions">' +
+      '<span id="text-direction-horizontal" data-vf-divider data-vf-divider-orientation="vertical" data-vf-divider-labeled data-vf-divider-align="center" data-vf-divider-text-direction="horizontal"><span data-vf-divider-label>OR</span></span>' +
+      '<span id="text-direction-top-to-bottom" data-vf-divider data-vf-divider-orientation="vertical" data-vf-divider-labeled data-vf-divider-align="center"><span data-vf-divider-label>Next</span></span>' +
+      '<span id="text-direction-bottom-to-top" data-vf-divider data-vf-divider-orientation="vertical" data-vf-divider-labeled data-vf-divider-align="center" data-vf-divider-text-direction="bottom-to-top"><span data-vf-divider-label>Previous</span></span>' +
+      '</section>';
 
     let body = '<main><h1>Visual divider fixture</h1>' + web + '</main>';
     if (port === 'react') {
@@ -53,7 +59,14 @@ export const browserFixture = {
         h('section', { id: 'labeled-vertical', 'aria-label': 'Vertical labels' },
           ...aligns.map(align => h(Divider, {
             id: 'vertical-label-' + align, key: align, orientation: 'vertical', textAlign: align,
-          }, labelText(align))))));
+          }, labelText(align)))),
+        h('section', { id: 'text-directions', 'aria-label': 'Vertical label directions' },
+          h(Divider, { id: 'text-direction-horizontal', orientation: 'vertical',
+            textDirection: 'horizontal' }, 'OR'),
+          h(Divider, { id: 'text-direction-top-to-bottom',
+            orientation: 'vertical' }, 'Next'),
+          h(Divider, { id: 'text-direction-bottom-to-top',
+            orientation: 'vertical', textDirection: 'bottom-to-top' }, 'Previous'))));
     }
     await writeFile(path.join(output, port + '.html'),
       '<!doctype html><html lang="en"><head><meta charset="utf-8">' +
