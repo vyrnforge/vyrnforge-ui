@@ -10,7 +10,7 @@ Use Divider to visually separate adjacent sections, content blocks or short meta
 
 The default horizontal Divider draws a 1px full-width rule. The vertical Divider draws a 1px line stretched to the available cross-axis height of its row/grid context. A parent must provide a measurable height; Divider does not impose application dimensions.
 
-When labeled, the line becomes two 1px CSS-painted segments flanking the readable text, not an extra accessible separator element. For vertical orientation, segments are above and below the text, which uses CSS `writing-mode: vertical-rl` and remains selectable text.
+When labeled, the line becomes two 1px CSS-painted segments flanking the readable text, not an extra accessible separator element. For vertical orientation, segments are above and below the text. Existing labels default to vertical top-to-bottom text (`writing-mode: vertical-rl`), but the same native CSS can display horizontal text or bottom-to-top vertical text when requested. In every mode, the text remains real selectable, accessible text.
 
 ## Text and alignment
 
@@ -27,6 +27,21 @@ The native HTML styling contract uses a parent `data-vf-divider-labeled` and a `
 <span data-vf-divider data-vf-divider-orientation="vertical"
       data-vf-divider-labeled data-vf-divider-align="end">
   <span data-vf-divider-label>Next</span>
+</span>
+```
+
+## Vertical label direction
+
+For a labeled **vertical** Divider only, the visible text can be `top-to-bottom` (default), `bottom-to-top`, or `horizontal`. The shared native hook is `data-vf-divider-text-direction` on the labeled vertical host; the React convenience prop is `textDirection`. Omit the option to retain the previous top-to-bottom default. Horizontal text stays upright between vertical segments; bottom-to-top rotates the native vertical text, without reversing DOM reading order. This is not the native `dir` or CSS bidi direction; writing direction and `textAlign` are independent.
+
+```html
+<span data-vf-divider data-vf-divider-orientation="vertical" data-vf-divider-labeled
+      data-vf-divider-align="center" data-vf-divider-text-direction="horizontal">
+  <span data-vf-divider-label>OR</span>
+</span>
+<span data-vf-divider data-vf-divider-orientation="vertical" data-vf-divider-labeled
+      data-vf-divider-align="center" data-vf-divider-text-direction="bottom-to-top">
+  <span data-vf-divider-label>Previous</span>
 </span>
 ```
 
