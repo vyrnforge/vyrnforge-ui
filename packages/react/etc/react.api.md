@@ -1616,6 +1616,18 @@ export const DisclosureTrigger: ForwardRefExoticComponent<DisclosureTriggerProps
 export type DisclosureTriggerProps = ButtonHTMLAttributes<HTMLButtonElement>;
 
 // @public (undocumented)
+export const Divider: ForwardRefExoticComponent<DividerProps & RefAttributes<HTMLSpanElement>>;
+
+// @public
+export type DividerOrientation = 'horizontal' | 'vertical';
+
+// @public
+export interface DividerProps extends Omit<ComponentPropsWithoutRef<'span'>, 'children' | 'role' | 'aria-hidden' | 'aria-label' | 'tabIndex'> {
+    // (undocumented)
+    orientation?: DividerOrientation;
+}
+
+// @public (undocumented)
 export const DrawerBody: typeof DialogBody;
 
 // @public (undocumented)
