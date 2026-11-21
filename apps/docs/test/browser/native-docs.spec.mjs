@@ -1392,7 +1392,7 @@ test('Layout guide is discoverable in the Layout & Structure submenu and renders
       .toHaveAttribute('href', `https://www.w3.org/WAI/WCAG22/Understanding/${slug}`);
   }
 
-  for (const id of ['basic', 'flow-block', 'flow-inline', 'flow-wrap', 'auto-grid', 'semantic-groups']) {
+  for (const id of ['basic', 'flow-block', 'flow-inline', 'flow-wrap', 'auto-grid', 'semantic-groups', 'dividers']) {
     const example = article.locator('[data-vf-docs-example="layout/' + id + '"]');
     await expect(example).toHaveCount(1);
     await expect(example.getByRole('button', { name: 'Copy HTML' })).toBeVisible();
@@ -1411,6 +1411,10 @@ test('Layout guide is discoverable in the Layout & Structure submenu and renders
   await fieldset.getByRole('radio', { name: 'Weekly' }).check();
   await expect(fieldset.getByRole('radio', { name: 'Weekly' })).toBeChecked();
   await expect(fieldset.getByRole('radio', { name: 'Daily' })).not.toBeChecked();
+  const nativeDividers = article.locator('[data-vf-docs-example="layout/dividers"] [data-vf-docs-preview]');
+  await expect(nativeDividers.getByRole('separator')).toHaveCount(1);
+  await expect(nativeDividers.locator('hr')).not.toHaveAttribute('tabindex');
+  await expect(nativeDividers.locator('hr')).toHaveCount(1);
   await expect(article.locator('[data-vf-stack], [data-vf-inline], [data-vf-cluster], [data-vf-container], [data-vf-control-group]')).toHaveCount(0);
 
   await expectDeploymentRelativeStyles(page);
