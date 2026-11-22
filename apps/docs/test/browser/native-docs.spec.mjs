@@ -1609,7 +1609,7 @@ test('Native Avatar guide demonstrates initials, native images and accessible id
   await gotoWithCleanDocsState(page, '/next/native-web/components/avatar/');
   const article = page.locator('article[data-vf-docs-component="avatar"]');
   await expect(article.getByRole('heading', { level: 1, name: 'Avatar' })).toBeVisible();
-  await expect(article.locator('[data-vf-docs-example]')).toHaveCount(4);
+  await expect(article.locator('[data-vf-docs-example]')).toHaveCount(10);
   const initials = article.locator('[data-vf-docs-example="avatar/initials"] [data-vf-docs-preview]');
   await expect(initials.locator('[data-vf-avatar]')).toHaveCount(4);
   await expect(initials.getByRole('img', { name: 'Ada Lovelace' })).toHaveCount(2);
@@ -1627,6 +1627,25 @@ test('Native Avatar guide demonstrates initials, native images and accessible id
   const decorative = article.locator('[data-vf-docs-example="avatar/decorative"] [data-vf-docs-preview]');
   await expect(decorative.locator('[data-vf-avatar]')).toHaveAttribute('aria-hidden', 'true');
   await expect(decorative.getByText('Ada Lovelace')).toBeVisible();
+
+  const icon = article.locator('[data-vf-docs-example="avatar/icon"] [data-vf-docs-preview]');
+  await expect(icon.locator('[data-vf-avatar-icon] svg').first()).toBeVisible();
+  await expect(icon.getByRole('img', { name: 'Anonymous member' })).toHaveCount(1);
+
+  const square = article.locator('[data-vf-docs-example="avatar/shapes"] [data-vf-docs-preview]');
+  await expect(square.locator('[data-vf-avatar-shape="square"]')).toHaveCount(2);
+
+  const members = article.locator('[data-vf-docs-example="avatar/group"] [data-vf-docs-preview]');
+  await expect(members.getByRole('list', { name: 'Project contributors' })
+    .locator('li')).toHaveCount(4);
+
+  const total = article.locator('[data-vf-docs-example="avatar/total"] [data-vf-docs-preview]');
+  await expect(total.getByRole('list', { name: 'Review team' })
+    .locator('li')).toHaveCount(4);
+  await expect(total.getByRole('img', { name: '9 more reviewers' })).toHaveText('+9');
+
+  const spacing = article.locator('[data-vf-docs-example="avatar/spacing"] [data-vf-docs-preview]');
+  await expect(spacing.locator('[data-vf-avatar-group]')).toHaveCount(3);
 
   await expectNoAccessibilityViolations(page);
   expect(errors).toEqual([]);
