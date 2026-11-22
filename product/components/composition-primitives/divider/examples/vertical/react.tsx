@@ -1,15 +1,16 @@
 import { createRoot } from 'react-dom/client';
 import { Flow } from '@vyrnforge/react/layout';
 import { Divider } from '@vyrnforge/react/divider';
+import { Text } from '@vyrnforge/react/text';
 import '@vyrnforge/web/styles/layout.css';
 import '@vyrnforge/web/styles/divider.css';
 
 function App() {
   return (
     <Flow direction="inline" gap="md">
-      <span>Draft</span>
+      <Text as="span">Draft</Text>
       <Divider orientation="vertical" />
-      <span>Updated today</span>
+      <Text as="span">Updated today</Text>
     </Flow>
   );
 }
