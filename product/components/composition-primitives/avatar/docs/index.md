@@ -1,6 +1,6 @@
 # Avatar
 
-Avatar presents one person or entity as a native image, short letters, or an icon. AvatarGroup shows multiple identities with optional truncation and a visible total count. Both use the same token-driven Native Web CSS and non-interactive semantics.
+Avatar represents one person or entity with an image, initials or icon. AvatarGroup collects multiple identities with an optional visible limit and overflow count. Both are noninteractive and use shared design tokens.
 
 ## When to use
 
