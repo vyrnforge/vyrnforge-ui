@@ -129,6 +129,7 @@ export const AvatarGroup = forwardRef<HTMLUListElement, AvatarGroupProps>(
     return createElement('ul', {
       ...ulProps,
       ref,
+      role: 'list',
       'aria-label': label,
       'data-vf-avatar-group': '',
       'data-vf-avatar-group-spacing': spacing,
