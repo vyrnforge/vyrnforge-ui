@@ -50,13 +50,13 @@ application owns delivering the resulting CSS and persisting user preferences.
 ## Extend without copying an entire theme
 
 ```ts
-const compact = createTheme({
-  name: 'ocean-compact',
+const rounded = createTheme({
+  name: 'ocean-rounded',
   base: oceanLight,
-  tokens: { '--vf-space-md': '0.75rem' },
+  tokens: { '--vf-control-radius': '0.75rem' },
 });
 
-const stylesheet = [oceanLight, compact].map(renderThemeCss).join('\n');
+const stylesheet = [oceanLight, rounded].map(renderThemeCss).join('\n');
 ```
 
 `base` inherits resolved semantic values, authoring palette families, and
