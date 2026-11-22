@@ -20,13 +20,13 @@ function renderInline(value) {
     return token;
   });
 }
-function renderBlocks(blocks = []) {
+function renderBlocks(blocks = [], paragraphVariant = 'body-md') {
   return blocks.map((block, i) => {
     if (block.type === 'list') return h('ul', { key: i },
       block.items.map((item, j) => h('li', { key: j }, ...renderInline(item))));
     if (block.type === 'code') return h('pre', { key: i, 'data-vf-code-block': '', tabIndex: 0 },
       h('code', null, block.text));
-    return h(Text, { as: 'p', key: i }, ...renderInline(block.text));
+    return h(Text, { as: 'p', variant: paragraphVariant, key: i }, ...renderInline(block.text));
   });
 }
 function accessibilityEvidence(references, headingTag = 'h2') {
@@ -294,7 +294,7 @@ function guideHeader(content, eyebrow) {
       'data-vf-text-variant': 'overline' }, eyebrow),
     h('h1', null, content.title),
     h('div', { className: 'vf-docs-lede', 'data-vf-text': '',
-      'data-vf-text-variant': 'body-lg' }, ...renderBlocks(content.intro)));
+      'data-vf-text-variant': 'body-lg' }, ...renderBlocks(content.intro, 'body-lg')));
 }
 function guidePart(section, children, extra = {}) {
   return h(Flow, { as: 'section', gap: 'md', key: section.id, 'aria-labelledby': section.id, ...extra },
