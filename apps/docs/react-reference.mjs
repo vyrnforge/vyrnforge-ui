@@ -824,10 +824,14 @@ function tokensGuide(links) {
   const brandExample = '[data-vf-theme="acme-light"] {\n' +
     '  color-scheme: light;\n' +
     '  --vf-color-accent-background: #1758c0;\n' +
+    '  --vf-color-accent-background-hover: #0f4cad;\n' +
+    '  --vf-color-accent-background-pressed: #0b3b85;\n' +
     '  --vf-color-accent-foreground: #fff;\n' +
     '}\n\n[data-vf-theme="acme-dark"] {\n' +
     '  color-scheme: dark;\n' +
     '  --vf-color-accent-background: #a6c8ff;\n' +
+    '  --vf-color-accent-background-hover: #c2d9ff;\n' +
+    '  --vf-color-accent-background-pressed: #80aef2;\n' +
     '  --vf-color-accent-foreground: #10284f;\n' +
     '}';
   const code = (value) => h('pre', { 'data-vf-code-block': '', tabIndex: 0 }, h('code', null, value));

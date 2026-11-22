@@ -66,6 +66,8 @@ Theme definitions belong in **application CSS** and reference public token names
 [data-vf-theme="acme-light"] {
   color-scheme: light;
   --vf-color-accent-background: #1758c0;
+  --vf-color-accent-background-hover: #0f4cad;
+  --vf-color-accent-background-pressed: #0b3b85;
   --vf-color-accent-foreground: #ffffff;
   --vf-color-danger-border: #b42318;
 }
@@ -73,6 +75,8 @@ Theme definitions belong in **application CSS** and reference public token names
 [data-vf-theme="acme-dark"] {
   color-scheme: dark;
   --vf-color-accent-background: #a6c8ff;
+  --vf-color-accent-background-hover: #c2d9ff;
+  --vf-color-accent-background-pressed: #80aef2;
   --vf-color-accent-foreground: #10284f;
   --vf-color-danger-border: #ff908e;
 }
