@@ -592,7 +592,7 @@ function badgeUsage(badge, links) {
       ]),
       guidePart(sections[2], [
         ...guideSubsections(badge.sharedContent, [
-          'When to use', 'Appearances', 'Tone, size and shape', 'Boundaries',
+          'When to use', 'Counts and visibility', 'Placement and overlap', 'Tones and sizing', 'Boundaries',
         ], 'react-badge-guidance'),
         ...guideSubsections(badge.frameworkContent, [
           'React state and server rendering',
@@ -612,7 +612,7 @@ function badgeApi(badge, links) {
     h('header', { className: 'vf-docs-component-header' },
       h('h1', null, 'Badge API'),
       h('p', { className: 'vf-docs-lede' },
-        'Source-backed React Badge types for noninteractive text and accessible dots.'),
+        'Source-backed React Badge types for anchored count and dot indicators.'),
       accessibilityEvidence(badge.standardReferences)),
     h('section', { 'aria-labelledby': 'react-badge-api-entrypoints' },
       h('h2', { id: 'react-badge-api-entrypoints' }, 'Public entrypoint'),

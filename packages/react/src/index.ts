@@ -1,7 +1,7 @@
 export { colors, tokens, toneStyle, ThemeScope } from './internal/theme.js';
 export type { ColorRole, TextTone, ThemeColorOverrides, ThemeElement, ThemeName, ThemeScopeProps } from './internal/theme.js';
 export { Badge } from './components/badge/index.js';
-export type { BadgeProps, BadgeTone, BadgeSize, BadgeShape, BadgeVariant } from './components/badge/index.js';
+export type { BadgeProps, BadgeTone, BadgeSize, BadgeVariant, BadgeOverlap, BadgeAnchorOrigin } from './components/badge/index.js';
 export { Avatar, AvatarGroup } from './components/avatar/index.js';
 export type { AvatarProps, AvatarSize, AvatarAppearance, AvatarShape,
   AvatarGroupProps, AvatarGroupSpacing } from './components/avatar/index.js';

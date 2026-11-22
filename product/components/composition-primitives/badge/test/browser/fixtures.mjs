@@ -12,30 +12,68 @@ export const browserFixture = {
     const badge = (await readFile(path.join(root, 'packages/web/dist/components/badge/badge.css'), 'utf8'))
       .replace(/^@import\s+["'][^"']+["'];\s*$/gm, '');
     await writeFile(path.join(target, 'badge.css'), tokens + '\n' + badge +
-      '\nmain{display:flex;flex-wrap:wrap;align-items:center;gap:var(--vf-space-xs);min-inline-size:0}' +
-      '\nmain>h1{flex-basis:100%;overflow-wrap:anywhere;min-inline-size:0}');
-    const web = [
-      '<span id="text" data-vf-badge data-vf-badge-appearance="text" data-vf-badge-tone="neutral" data-vf-badge-size="md" data-vf-badge-shape="pill" data-vf-badge-variant="subtle">Draft</span>',
-      '<span id="accent" data-vf-badge data-vf-badge-appearance="text" data-vf-badge-tone="accent" data-vf-badge-size="sm" data-vf-badge-shape="rounded" data-vf-badge-variant="subtle">New</span>',
-      '<span id="danger" data-vf-badge data-vf-badge-appearance="text" data-vf-badge-tone="danger" data-vf-badge-size="md" data-vf-badge-shape="pill" data-vf-badge-variant="outline">Blocked</span>',
-      '<span id="count" data-vf-badge data-vf-badge-appearance="text" data-vf-badge-tone="neutral" data-vf-badge-size="md" data-vf-badge-shape="pill" data-vf-badge-variant="subtle">0</span>',
-      '<span id="named-dot" data-vf-badge data-vf-badge-appearance="dot" data-vf-badge-tone="accent" data-vf-badge-size="md" data-vf-badge-shape="pill" data-vf-badge-variant="subtle" role="img" aria-label="Sync in progress"></span>',
-      '<span id="decorative-dot" data-vf-badge data-vf-badge-appearance="dot" data-vf-badge-tone="neutral" data-vf-badge-size="md" data-vf-badge-shape="pill" data-vf-badge-variant="subtle" aria-hidden="true"></span><span>Available</span>',
-    ].join('\n');
-    let body = '<main><h1>Badge presentation</h1>' + web + '</main>';
+      '\nmain{display:flex;flex-wrap:wrap;align-items:center;gap:1.5rem;padding:1rem;min-inline-size:0;box-sizing:border-box}' +
+      '\nmain>h1{flex-basis:100%;overflow-wrap:anywhere;min-inline-size:0}' +
+      '\nmain button{max-inline-size:100%;overflow-wrap:anywhere;white-space:normal}' +
+      '\nmain .circle{display:grid;place-items:center;border:1px solid currentColor;border-radius:50%;inline-size:3rem;block-size:3rem}');
+    const specimen = (id, options, child, value, visible = true) => {
+      const attributes = [
+        'id="' + id + '"', 'data-vf-badge',
+        'data-vf-badge-variant="' + (options.variant || 'standard') + '"',
+        'data-vf-badge-tone="' + (options.tone || 'neutral') + '"',
+        'data-vf-badge-size="' + (options.size || 'md') + '"',
+        'data-vf-badge-overlap="' + (options.overlap || 'rectangular') + '"',
+        'data-vf-badge-vertical="' + (options.vertical || 'top') + '"',
+        'data-vf-badge-horizontal="' + (options.horizontal || 'end') + '"',
+      ].join(' ');
+      return '<span ' + attributes + '>' + child +
+        '<span data-vf-badge-indicator aria-hidden="true"' + (visible ? '' : ' hidden') +
+        '>' + (value || '') + '</span></span>';
+    };
+    let body = '<main><h1>Badge indicators</h1>' + [
+      specimen('count', { tone: 'accent' },
+        '<button aria-label="Inbox, 4 unread messages">Inbox</button>', '4'),
+      specimen('max', { tone: 'danger' },
+        '<button aria-label="Mail, 120 unread messages">Mail</button>', '99+'),
+      specimen('dot', { variant: 'dot', tone: 'danger' },
+        '<button aria-label="Notifications, new items">Notifications</button>', ''),
+      specimen('zero', {}, '<button aria-label="Empty inbox">Empty</button>', '0', false),
+      specimen('show-zero', {}, '<button aria-label="Zero items">Zero</button>', '0'),
+      specimen('invisible', {}, '<button aria-label="Hidden, seven unread">Hidden</button>', '7', false),
+      specimen('start', { horizontal: 'start' },
+        '<button aria-label="Start, one update">Start</button>', '1'),
+      specimen('end-bottom', { vertical: 'bottom', horizontal: 'end' },
+        '<button aria-label="End, two updates">End</button>', '2'),
+      specimen('circle', { variant: 'dot', overlap: 'circular', tone: 'accent' },
+        '<span class="circle" role="img" aria-label="Profile, active">AB</span>', ''),
+    ].join('\n') + '</main>';
     if (port === 'react') {
       const { createElement: h } = await import('react');
       const { renderToString } = await import('react-dom/server');
       const { Badge } = await import('@vyrnforge/react/badge');
+      const button = (label, text) => h('button', { 'aria-label': label }, text);
       body = renderToString(h('main', null,
-        h('h1', null, 'Badge presentation'),
-        h(Badge, { id: 'text' }, 'Draft'),
-        h(Badge, { id: 'accent', tone: 'accent', size: 'sm', shape: 'rounded' }, 'New'),
-        h(Badge, { id: 'danger', tone: 'danger', variant: 'outline' }, 'Blocked'),
-        h(Badge, { id: 'count' }, 0),
-        h(Badge, { id: 'named-dot', appearance: 'dot', tone: 'accent', label: 'Sync in progress' }),
-        h(Badge, { id: 'decorative-dot', appearance: 'dot', decorative: true }),
-        h('span', null, 'Available')));
+        h('h1', null, 'Badge indicators'),
+        h(Badge, { id: 'count', badgeContent: 4, tone: 'accent' },
+          button('Inbox, 4 unread messages', 'Inbox')),
+        h(Badge, { id: 'max', badgeContent: 120, tone: 'danger' },
+          button('Mail, 120 unread messages', 'Mail')),
+        h(Badge, { id: 'dot', variant: 'dot', tone: 'danger' },
+          button('Notifications, new items', 'Notifications')),
+        h(Badge, { id: 'zero', badgeContent: 0 },
+          button('Empty inbox', 'Empty')),
+        h(Badge, { id: 'show-zero', badgeContent: 0, showZero: true },
+          button('Zero items', 'Zero')),
+        h(Badge, { id: 'invisible', badgeContent: 7, invisible: true },
+          button('Hidden, seven unread', 'Hidden')),
+        h(Badge, { id: 'start', badgeContent: 1,
+          anchorOrigin: { vertical: 'top', horizontal: 'start' } },
+          button('Start, one update', 'Start')),
+        h(Badge, { id: 'end-bottom', badgeContent: 2,
+          anchorOrigin: { vertical: 'bottom', horizontal: 'end' } },
+          button('End, two updates', 'End')),
+        h(Badge, { id: 'circle', variant: 'dot', overlap: 'circular', tone: 'accent' },
+          h('span', { className: 'circle', role: 'img', 'aria-label': 'Profile, active' }, 'AB'))));
     }
     await writeFile(path.join(target, port + '.html'),
       '<!doctype html><html lang="en"><head><meta charset="utf-8">' +

@@ -1,21 +1,36 @@
-# Badge — concise noninteractive label and indicator
+# Badge — anchored visual indicator
 
-Badge is one composition-owned, noninteractive text/count/dot capability. It does not duplicate Text, TagGroup, Toast, presence logic, numeric count policy or interactive chips. Consumers author localized meaning; neither color nor dot paint may carry meaning on its own.
+Badge attaches a compact **count/text or dot** indicator to a wrapped element. It is not a standalone Draft/New/Blocked label, Chip, TagGroup item, notification, status feed or action.
 
-React entrypoint: `@vyrnforge/react/badge`, with `Badge` and public types. Shared stylesheet: `@vyrnforge/web/styles/badge.css`. No controller or application state.
+React public entrypoint: `@vyrnforge/react/badge`; shared styling: `@vyrnforge/web/styles/badge.css`.
 
 ```tsx
 import { Badge } from '@vyrnforge/react/badge';
 import '@vyrnforge/web/styles/badge.css';
 
-<Badge>Draft</Badge>
-<Badge tone="accent" size="sm">New</Badge>
-<Badge tone="danger" variant="outline">Blocked</Badge>
-<Badge>12</Badge>
-<Badge appearance="dot" label="Sync in progress" tone="accent" />
-<Badge appearance="dot" decorative />
+<Badge badgeContent={4} tone="accent">
+  <button type="button" aria-label="Inbox, 4 unread messages">Inbox</button>
+</Badge>
+<Badge variant="dot" tone="danger">
+  <button type="button" aria-label="Notifications, new items">Notifications</button>
+</Badge>
+<Badge badgeContent={120} max={99} overlap="circular">
+  <Avatar name="Ada Lovelace" />
+</Badge>
 ```
 
-Only neutral, accent, and danger tones are supported by current semantic token roles. Status-specific success/warning colors are deferred until paired accessible palette tokens exist. Shape is rounded or pill; compact sizes are sm/md; variant is subtle or outline. Count formatting, escalation, action wrapping and overlays are consumer-owned. Avatar-with-Badge is a separate future decision.
+The last example demonstrates composition only; Badge never imports, inspects or modifies Avatar. The consumer must ensure the wrapped element's accessible name conveys any meaningful badge status. The indicator itself is always hidden from assistive technology to prevent duplicate readings and is not a live region. The consumer owns alert/notification policy, counting, localization and announcements.
 
-Status: source implementation proposal. Package build, exact-head CI, independent visual and assistive-technology review, and publication are separate gates.
+**Variants**: `standard` (count or short text) and `dot`. **Tones**: neutral/accent/danger using existing semantic tokens. **Sizes**: sm/md. **Position**: top/bottom × logical start/end (RTL-aware), rectangular/circular overlap. **Visibility**: `invisible`, numeric zero hidden by default or shown with `showZero`; `max` caps positive numeric display with `+` (default 99). No success/warning tones until accessible token pairs exist.
+
+## Breaking migration from Badge v1 (#1476)
+
+This is a deliberate rebuild breaking change: old `<Badge>Draft</Badge>` / `<Badge>12</Badge>` standalone pills are not anchored badges. Use normal `Text` for plain metadata, or design a separate **Chip** product later when independently scoped. Do **not** silently turn Badge into Chip.
+
+- `<Badge>12</Badge>` → `<Badge badgeContent={12}><YourTarget /></Badge>`
+- `<Badge appearance="dot" label="Online" />` → `<Badge variant="dot"><YourTarget aria-label="User, online" /></Badge>`
+- `appearance`, `shape`, `decorative`, `label` and subtle/outline `variant` are removed from Badge.
+- `BadgeShape` is removed; `BadgeOverlap` and `BadgeAnchorOrigin` describe the new positioning contract.
+- The indicator is visual-only: any accessible announcement belongs to the owning element or a dedicated notification mechanism, **not** `Badge`.
+
+Status: proposed implementation with package/API/browser evidence required before merge. Human visual/assistive-technology acceptance and publication are independent gates. Avatar-with-Badge API remains a separate later decision.

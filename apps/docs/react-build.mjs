@@ -132,26 +132,26 @@ if (createSvgIconSignatureEnd < 0) {
 }
 const publicIconTypes = iconPublicSource.slice(iconTypeStart, iconTypeEnd).trim() +
   '\n\n' + iconPublicSource.slice(createSvgIconStart, createSvgIconSignatureEnd + 1).trim() + ';';
-// Badge is noninteractive metadata, distinct from TagGroup and notifications.
+// Badge is an anchored indicator; Chip and TagGroup remain independent products.
 const badge = reactModel.componentCatalog.find((entry) => entry.id === 'badge');
 const badgeExamples = badge?.examples.slice().sort((a, b) => a.id.localeCompare(b.id)) ?? [];
 if (!badge?.showcaseAvailable || !badge.apiAvailable || !badge.sharedContent ||
-    !badge.frameworkContent || badgeExamples.length !== 3 ||
+    !badge.frameworkContent || badgeExamples.length !== 5 ||
     !badge.publicEntrypoints.includes('@vyrnforge/react/badge') ||
     !webModel.packageManifest.exports?.['./styles/badge.css'] ||
-    !['badge/basic', 'badge/dot', 'badge/variants']
+    !['badge/basic', 'badge/dot', 'badge/positioning', 'badge/variants', 'badge/visibility']
       .every((id) => badgeExamples.some((example) => example.id === id)) ||
     !badgeExamples.every((example) =>
       example.sourcePath.endsWith('/react.tsx') &&
       example.source.includes("'@vyrnforge/react/badge'") &&
       example.source.includes("'@vyrnforge/web/styles/badge.css'"))) {
-  throw new Error('React Badge requires three source-backed examples, shared CSS and a public entrypoint');
+  throw new Error('React Badge requires five source-backed examples, shared CSS and a public entrypoint');
 }
 const badgePublicSourcePath = path.join(root,
   path.dirname(path.dirname(badge.frameworkSourcePath)), 'index.ts');
 const badgePublicSource = await readFile(badgePublicSourcePath, 'utf8');
 const badgeTypeStart = badgePublicSource.indexOf('export type BadgeTone');
-const badgeTypeEnd = badgePublicSource.indexOf('/** Noninteractive native', badgeTypeStart);
+const badgeTypeEnd = badgePublicSource.indexOf('/** Anchored count/dot indicator', badgeTypeStart);
 if (badgeTypeStart < 0 || badgeTypeEnd < 0 ||
     !badgePublicSource.includes('forwardRef<HTMLSpanElement, BadgeProps>')) {
   throw new Error('React Badge public type contract changed; review the API');

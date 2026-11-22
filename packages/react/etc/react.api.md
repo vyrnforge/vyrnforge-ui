@@ -260,30 +260,31 @@ export type AvatarSize = 'sm' | 'md' | 'lg';
 export const Badge: ForwardRefExoticComponent<BadgeProps & RefAttributes<HTMLSpanElement>>;
 
 // @public
-export type BadgeProps = Omit<ComponentPropsWithoutRef<'span'>, 'children' | 'role' | 'aria-hidden' | 'aria-label' | 'tabIndex'> & {
-    tone?: BadgeTone;
-    size?: BadgeSize;
-    shape?: BadgeShape;
-    variant?: BadgeVariant;
-} & ({
-    appearance?: 'text';
-    children: string | number;
-    label?: never;
-    decorative?: never;
-} | {
-    appearance: 'dot';
-    label: string;
-    children?: never;
-    decorative?: false;
-} | {
-    appearance: 'dot';
-    decorative: true;
-    children?: never;
-    label?: never;
-});
+export type BadgeAnchorOrigin = {
+    vertical: 'top' | 'bottom';
+    horizontal: 'start' | 'end';
+};
 
 // @public (undocumented)
-export type BadgeShape = 'rounded' | 'pill';
+export type BadgeOverlap = 'rectangular' | 'circular';
+
+// @public
+export type BadgeProps = Omit<ComponentPropsWithoutRef<'span'>, 'children' | 'role' | 'aria-hidden' | 'aria-label' | 'tabIndex'> & {
+    children: ReactNode;
+    tone?: BadgeTone;
+    size?: BadgeSize;
+    overlap?: BadgeOverlap;
+    anchorOrigin?: BadgeAnchorOrigin;
+    max?: number;
+    showZero?: boolean;
+    invisible?: boolean;
+} & ({
+    variant?: 'standard';
+    badgeContent: string | number;
+} | {
+    variant: 'dot';
+    badgeContent?: never;
+});
 
 // @public (undocumented)
 export type BadgeSize = 'sm' | 'md';
@@ -291,8 +292,8 @@ export type BadgeSize = 'sm' | 'md';
 // @public
 export type BadgeTone = 'neutral' | 'accent' | 'danger';
 
-// @public (undocumented)
-export type BadgeVariant = 'subtle' | 'outline';
+// @public
+export type BadgeVariant = 'standard' | 'dot';
 
 // @public (undocumented)
 export const Button: ForwardRefExoticComponent<ButtonProps & RefAttributes<HTMLButtonElement>>;

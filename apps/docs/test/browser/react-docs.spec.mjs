@@ -64,7 +64,7 @@ test('React pilot artifact is Product Graph-backed and SSR-rendered with public 
     frameworkSourcePath: 'product/components/composition-primitives/badge/react/docs/index.md',
   });
   expect(manifest.badge.examples.map((example) => example.id)).toEqual([
-    'badge/basic', 'badge/dot', 'badge/variants',
+    'badge/basic', 'badge/dot', 'badge/positioning', 'badge/variants', 'badge/visibility',
   ]);
   for (const entry of manifest.badge.examples) {
     const slug = entry.id.slice('badge/'.length);
@@ -1509,20 +1509,28 @@ test('React Badge guide remains focused on React and uses source-backed examples
   await expect(setup).toHaveCount(1);
   await expect(setup).toContainText("from '@vyrnforge/react/badge'");
   await expect(setup).not.toContainText('<Badge');
-  await expect(guide.getByRole('navigation', { name: 'Badge examples' }).getByRole('link')).toHaveCount(3);
+  await expect(guide.getByRole('navigation', { name: 'Badge examples' }).getByRole('link')).toHaveCount(5);
   const basic = guide.locator('[data-vf-docs-react-badge-example="badge/basic"] iframe');
   await basic.scrollIntoViewIfNeeded();
-  await expect(basic.contentFrame().getByText('Draft')).toBeVisible();
+  await expect(basic.contentFrame().getByRole('button', { name: 'Inbox, 4 unread messages' })).toBeVisible();
+  await expect(basic.contentFrame().locator('[data-vf-badge-indicator]').first()).toHaveText('4');
   const dot = guide.locator('[data-vf-docs-react-badge-example="badge/dot"] iframe');
   await dot.scrollIntoViewIfNeeded();
-  await expect(dot.contentFrame().getByRole('img', { name: 'Sync in progress' })).toHaveCount(1);
-  await expect(dot.contentFrame().locator('[aria-hidden="true"][data-vf-badge]')).toHaveCount(1);
+  await expect(dot.contentFrame().getByRole('button', { name: 'Notifications, new items' })).toBeVisible();
+  await expect(dot.contentFrame().locator('[aria-hidden="true"][data-vf-badge-indicator]')).toHaveCount(2);
+  const positioning = guide.locator('[data-vf-docs-react-badge-example="badge/positioning"] iframe');
+  await positioning.scrollIntoViewIfNeeded();
+  await expect(positioning.contentFrame().locator('[data-vf-badge-overlap="circular"]')).toHaveCount(1);
+  const visibility = guide.locator('[data-vf-docs-react-badge-example="badge/visibility"] iframe');
+  await visibility.scrollIntoViewIfNeeded();
+  await expect(visibility.contentFrame().locator('[data-vf-badge-indicator][hidden]')).toHaveCount(2);
 
   await page.getByRole('navigation', { name: 'Documentation' }).getByRole('link', { name: 'Badge API' }).click();
   await expect(page).toHaveURL(/\/next\/react\/api\/components\/badge\/$/);
   const api = page.locator('[data-vf-docs-react-api="badge"]');
   await expect(api.locator('section[aria-labelledby="react-badge-api-types"] pre code')).toContainText('export type BadgeProps');
   await expect(api.locator('section[aria-labelledby="react-badge-api-types"] pre code')).toContainText('export type BadgeTone');
+  await expect(api.locator('section[aria-labelledby="react-badge-api-types"] pre code')).toContainText('export type BadgeAnchorOrigin');
   await expect(api.getByRole('heading', { name: 'Native Web markup' })).toHaveCount(0);
   expect(errors).toEqual([]);
 });

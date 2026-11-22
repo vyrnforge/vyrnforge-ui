@@ -1,7 +1,7 @@
 {
   "id": "badge/dot",
-  "title": "Named and decorative dots",
-  "description": "Accessible dot semantics are explicit; decorative dots are hidden beside visible text.",
+  "title": "Dot indicator",
+  "description": "A visual dot on a wrapped target, with the meaning conveyed by the target's name.",
   "defaultFramework": "react",
   "frameworks": {
     "native-web": {

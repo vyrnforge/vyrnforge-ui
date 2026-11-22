@@ -1,43 +1,66 @@
 import { createElement, forwardRef } from 'react';
-import type { ComponentPropsWithoutRef } from 'react';
+import type { ComponentPropsWithoutRef, ReactNode } from 'react';
 
-/** Existing token-backed palette roles; no unapproved status colors. */
+/** Existing semantic color roles; no unapproved success/warning colors. */
 export type BadgeTone = 'neutral' | 'accent' | 'danger';
 export type BadgeSize = 'sm' | 'md';
-export type BadgeShape = 'rounded' | 'pill';
-export type BadgeVariant = 'subtle' | 'outline';
+/** Display a count/text indicator or a purely visual dot. */
+export type BadgeVariant = 'standard' | 'dot';
+export type BadgeOverlap = 'rectangular' | 'circular';
+/** Logical horizontal positions automatically respect RTL. */
+export type BadgeAnchorOrigin = {
+  vertical: 'top' | 'bottom';
+  horizontal: 'start' | 'end';
+};
 
-/** Noninteractive visual treatments backed by the shared token system. */
+/**
+ * Badge augments a wrapped item with noninteractive visual information.
+ * The consumer includes its meaning in the wrapped item's accessible name.
+ */
 export type BadgeProps = Omit<ComponentPropsWithoutRef<'span'>,
   'children' | 'role' | 'aria-hidden' | 'aria-label' | 'tabIndex'> & {
+  children: ReactNode;
   tone?: BadgeTone;
   size?: BadgeSize;
-  shape?: BadgeShape;
-  variant?: BadgeVariant;
+  overlap?: BadgeOverlap;
+  anchorOrigin?: BadgeAnchorOrigin;
+  max?: number;
+  showZero?: boolean;
+  invisible?: boolean;
 } & (
-  | { appearance?: 'text'; children: string | number; label?: never; decorative?: never }
-  | { appearance: 'dot'; label: string; children?: never; decorative?: false }
-  | { appearance: 'dot'; decorative: true; children?: never; label?: never }
+  | { variant?: 'standard'; badgeContent: string | number }
+  | { variant: 'dot'; badgeContent?: never }
 );
 
-/** Noninteractive native text/count capsule or an explicitly named/decorative indicator. */
+/** Anchored count/dot indicator; the wrapped child retains its native semantics. */
 export const Badge = forwardRef<HTMLSpanElement, BadgeProps>(function Badge(
-  { appearance = 'text', tone = 'neutral', size = 'md', shape = 'pill',
-    variant = 'subtle', children, label, decorative, ...nativeProps },
+  { children, variant = 'standard', badgeContent, tone = 'neutral', size = 'md',
+    overlap = 'rectangular', anchorOrigin = { vertical: 'top', horizontal: 'end' },
+    max = 99, showZero = false, invisible = false, ...nativeProps },
   ref
 ) {
-  const dot = appearance === 'dot';
+  const dot = variant === 'dot';
+  const empty = badgeContent === '' || badgeContent === null || badgeContent === undefined;
+  const visible = !invisible && (dot || (!empty && (badgeContent !== 0 || showZero)));
+  const cap = Number.isFinite(max) ? Math.max(1, Math.trunc(max)) : 99;
+  const displayed = !dot && typeof badgeContent === 'number' &&
+    Number.isFinite(badgeContent) && badgeContent > cap ? String(cap) + '+' : badgeContent;
+
   return createElement('span', {
     ...nativeProps,
     ref,
-    role: dot && !decorative ? 'img' : undefined,
-    'aria-label': dot && !decorative ? label : undefined,
-    'aria-hidden': dot && decorative ? true : undefined,
     'data-vf-badge': '',
-    'data-vf-badge-appearance': dot ? 'dot' : 'text',
+    'data-vf-badge-variant': dot ? 'dot' : 'standard',
     'data-vf-badge-tone': tone,
     'data-vf-badge-size': size,
-    'data-vf-badge-shape': shape,
-    'data-vf-badge-variant': variant,
-  }, dot ? undefined : children);
+    'data-vf-badge-overlap': overlap,
+    'data-vf-badge-vertical': anchorOrigin.vertical,
+    'data-vf-badge-horizontal': anchorOrigin.horizontal,
+  },
+  children,
+  createElement('span', {
+    'data-vf-badge-indicator': '',
+    'aria-hidden': true,
+    hidden: !visible,
+  }, dot ? null : displayed));
 });
