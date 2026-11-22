@@ -129,10 +129,11 @@ export function ColorGuide({ links }) {
   const recipe = accentRecipes.find((entry) => entry.id === id) ?? accentRecipes[0];
   const levels = Object.keys(recipe.shades);
   const position = levels.indexOf(shade);
-  const hoverShade = levels[Math.max(0, Math.min(levels.length - 1,
-    position + (appearance === 'light' ? 1 : -1)))];
-  const pressedShade = levels[Math.max(0, Math.min(levels.length - 1,
-    position + (appearance === 'light' ? 2 : 1)))];
+  const direction = appearance === 'light' ? 1 : -1;
+  const offset = position + direction * 2 < 0 ||
+    position + direction * 2 >= levels.length ? -direction : direction;
+  const hoverShade = levels[position + offset];
+  const pressedShade = levels[position + 2 * offset];
   const foreground = readableOn(recipe.shades[shade]);
   const roleOverrides = {
     'accent-background': '{brand.' + shade + '}',
