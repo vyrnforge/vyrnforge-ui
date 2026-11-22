@@ -1,6 +1,7 @@
 import { test } from 'vitest';
 import assert from 'node:assert/strict';
-import { renderRuntimeTokens } from './render.mjs';
+import { readFileSync } from 'node:fs';
+import { renderRuntimeTokens, renderThemeAuthoringData } from './render.mjs';
 import { darkThemeOverrides, runtimeTokenCompilation, runtimeTokenDefaults } from './source.mjs';
 
 test('preserves current light, dark, and system runtime output semantics', () => {
@@ -29,4 +30,14 @@ test('runtime CSS aliases preserve a validated authoring relationship', () => {
   assert.equal(runtimeTokenCompilation.cssValues['--vf-font-family-display'], 'var(--vf-font-family-sans)');
   assert.equal(runtimeTokenCompilation.values['--vf-control-font-weight'], runtimeTokenCompilation.values['--vf-font-weight-semibold']);
   assert.equal(runtimeTokenCompilation.cssValues['--vf-control-font-weight'], 'var(--vf-font-weight-semibold)');
+});
+
+test('generated theme authoring defaults match the canonical token source', () => {
+  const generated = readFileSync(new URL('../../packages/web/src/theme/defaults.generated.ts', import.meta.url), 'utf8');
+  assert.equal(generated, renderThemeAuthoringData(), 'theme authoring defaults must not drift');
+  for (const token of Object.keys(darkThemeOverrides)) {
+    assert.ok(generated.includes(token));
+    assert.ok(generated.includes(runtimeTokenDefaults[token]));
+    assert.ok(generated.includes(darkThemeOverrides[token]));
+  }
 });

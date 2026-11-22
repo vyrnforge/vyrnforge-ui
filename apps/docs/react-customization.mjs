@@ -1,32 +1,60 @@
 import { createElement as h, useEffect, useState } from 'react';
 import { ThemeScope } from '@vyrnforge/react';
+import { createTheme, renderThemeCss, themeableColorRoles } from '@vyrnforge/web/theme';
 import { Button } from '@vyrnforge/react/button';
 import { Flow, AutoGrid } from '@vyrnforge/react/layout';
 import { Text } from '@vyrnforge/react/text';
 
-// These are documentation preview recipes, not an exported palette or theme runtime.
+// Palette scales are authoring inputs; public components still use semantic Web tokens.
 const accentRecipes = [
-  { id: 'blue', name: 'Blue', roles: {
-    primary: '#245edb', accentHover: '#1c4fb8', accentPressed: '#173f8f', onAccent: '#ffffff',
+  { id: 'blue', name: 'Blue', shades: {
+    50: '#eff6ff', 100: '#dbeafe', 200: '#bfdbfe', 300: '#93c5fd',
+    400: '#60a5fa', 500: '#3b82f6', 600: '#245edb', 700: '#1c4fb8',
+    800: '#173f8f', 900: '#0b1f4d', 950: '#07142e',
   } },
-  { id: 'teal', name: 'Teal', roles: {
-    primary: '#0f766e', accentHover: '#115e59', accentPressed: '#134e4a', onAccent: '#ffffff',
+  { id: 'teal', name: 'Teal', shades: {
+    50: '#f0fdfa', 100: '#ccfbf1', 200: '#99f6e4', 300: '#5eead4',
+    400: '#2dd4bf', 500: '#14b8a6', 600: '#0f766e', 700: '#115e59',
+    800: '#134e4a', 900: '#083c38', 950: '#042f2e',
   } },
-  { id: 'violet', name: 'Violet', roles: {
-    primary: '#6d28d9', accentHover: '#5b21b6', accentPressed: '#4c1d95', onAccent: '#ffffff',
+  { id: 'violet', name: 'Violet', shades: {
+    50: '#f5f3ff', 100: '#ede9fe', 200: '#ddd6fe', 300: '#c4b5fd',
+    400: '#a78bfa', 500: '#8b5cf6', 600: '#6d28d9', 700: '#5b21b6',
+    800: '#4c1d95', 900: '#2e1065', 950: '#1e0c43',
+  } },
+  { id: 'rose', name: 'Rose', shades: {
+    50: '#fff1f2', 100: '#ffe4e6', 200: '#fecdd3', 300: '#fda4af',
+    400: '#fb7185', 500: '#f43f5e', 600: '#be123c', 700: '#9f1239',
+    800: '#881337', 900: '#4c0519', 950: '#2b0310',
+  } },
+  { id: 'amber', name: 'Amber', shades: {
+    50: '#fffbeb', 100: '#fef3c7', 200: '#fde68a', 300: '#fcd34d',
+    400: '#fbbf24', 500: '#f59e0b', 600: '#b45309', 700: '#92400e',
+    800: '#78350f', 900: '#451a03', 950: '#301202',
   } },
 ];
 
-const semanticSwatches = [
-  { label: 'Accent', role: '--vf-color-accent-background' },
-  { label: 'On accent', role: '--vf-color-accent-foreground' },
-  { label: 'Surface', role: '--vf-color-surface' },
-  { label: 'Text', role: '--vf-color-text' },
-  { label: 'Muted text', role: '--vf-color-text-muted' },
-  { label: 'Border', role: '--vf-color-border' },
-  { label: 'Danger border', role: '--vf-color-danger-border' },
-  { label: 'Focus ring', role: '--vf-color-focus-ring' },
-];
+const semanticSwatches = themeableColorRoles.map((name) => ({
+  label: name.replaceAll('-', ' '), role: '--vf-color-' + name,
+}));
+
+function contrastRatio(foreground, background) {
+  const luminosity = (hex) => {
+    const parts = hex.slice(1).match(/.{2}/g) ?? ['00', '00', '00'];
+    const [r, g, b] = parts.map((part) => {
+      const value = parseInt(part, 16) / 255;
+      return value <= 0.04045 ? value / 12.92 : ((value + 0.055) / 1.055) ** 2.4;
+    });
+    return 0.2126 * r + 0.7152 * g + 0.0722 * b;
+  };
+  const first = luminosity(foreground);
+  const second = luminosity(background);
+  return (Math.max(first, second) + 0.05) / (Math.min(first, second) + 0.05);
+}
+function readableOn(color) {
+  return contrastRatio('#ffffff', color) >= contrastRatio('#0b1220', color)
+    ? '#ffffff' : '#0b1220';
+}
 
 function GuideLayout({ children, sections }) {
   return h('div', { className: 'vf-docs-content-grid vf-docs-usage-guide-layout' },
@@ -74,9 +102,9 @@ function CodeExample({ source, label = 'Example source' }) {
       copied ? 'Code copied to clipboard' : ''));
 }
 
-function Preview({ theme = 'light', customColors, label, children }) {
+function Preview({ theme = 'light', customColors, variables, label, children }) {
   return h(ThemeScope, { as: 'section', theme, colors: customColors,
-    className: 'vf-docs-customization-preview', 'aria-label': label },
+    style: variables, className: 'vf-docs-customization-preview', 'aria-label': label },
   h(Flow, { gap: 'md' }, children));
 }
 
@@ -96,52 +124,117 @@ function DemoContent({ heading, action = 'Save changes' }) {
 
 export function ColorGuide({ links }) {
   const [id, setId] = useState('blue');
+  const [appearance, setAppearance] = useState('light');
+  const [shade, setShade] = useState('600');
   const recipe = accentRecipes.find((entry) => entry.id === id) ?? accentRecipes[0];
-  const css = '[data-vf-theme="brand-light"] {\n' +
-    '  color-scheme: light;\n' +
-    '  --vf-color-accent-background: ' + recipe.roles.primary + ';\n' +
-    '  --vf-color-accent-background-hover: ' + recipe.roles.accentHover + ';\n' +
-    '  --vf-color-accent-background-pressed: ' + recipe.roles.accentPressed + ';\n' +
-    '  --vf-color-accent-foreground: ' + recipe.roles.onAccent + ';\n' +
-    '}';
-  return h(GuideLayout, { sections: [{"id":"vf-docs-color-picker","title":"Pick an accent recipe"},{"id":"vf-docs-color-roles","title":"Semantic color roles"},{"id":"vf-docs-color-guidance","title":"Accessibility"}] },
+  const levels = Object.keys(recipe.shades);
+  const position = levels.indexOf(shade);
+  const direction = appearance === 'light' ? 1 : -1;
+  const offset = position + direction * 2 < 0 ||
+    position + direction * 2 >= levels.length ? -direction : direction;
+  const hoverShade = levels[position + offset];
+  const pressedShade = levels[position + 2 * offset];
+  const foreground = readableOn(recipe.shades[shade]);
+  const roleOverrides = {
+    'accent-background': '{brand.' + shade + '}',
+    'accent-background-hover': '{brand.' + hoverShade + '}',
+    'accent-background-pressed': '{brand.' + pressedShade + '}',
+    'accent-foreground': foreground,
+    'accent-subtle': '{brand.' + (appearance === 'light' ? '50' : '900') + '}',
+    'accent-subtle-hover': '{brand.' + (appearance === 'light' ? '100' : '800') + '}',
+    'focus-ring': '{brand.' + (appearance === 'light' ? '600' : '300') + '}',
+  };
+  const definition = createTheme({
+    name: recipe.id + '-' + appearance + '-preview',
+    appearance,
+    palette: { brand: recipe.shades },
+    colors: roleOverrides,
+    tokens: { '--vf-radius-surface': '0.75rem' },
+  });
+  const sample = "import { createTheme, renderThemeCss } from '@vyrnforge/web/theme';\n\n" +
+    'const theme = createTheme({\n' +
+    '  name: "' + definition.name + '",\n' +
+    '  appearance: "' + appearance + '",\n' +
+    '  palette: { brand: ' + JSON.stringify(recipe.shades, null, 2).replaceAll('\n', '\n  ') + ' },\n' +
+    '  colors: ' + JSON.stringify(roleOverrides, null, 2).replaceAll('\n', '\n  ') + ',\n' +
+    '  tokens: { "--vf-radius-surface": "0.75rem" },\n' +
+    '});\n\nconst stylesheet = renderThemeCss(theme);';
+  const shades = Object.entries(recipe.shades);
+  const contrast = contrastRatio(foreground, recipe.shades[shade]).toFixed(2);
+  return h(GuideLayout, { sections: [
+    { id: 'vf-docs-color-picker', title: 'Palette families' },
+    { id: 'vf-docs-color-roles', title: 'Semantic roles' },
+    { id: 'vf-docs-color-function', title: 'Theme function' },
+    { id: 'vf-docs-color-guidance', title: 'Accessibility' },
+  ] },
     h(Flow, { as: 'article', gap: '2xl', className: 'vf-docs-article',
-    'data-vf-docs-react-color': '' },
-    h(GuideHeader, { title: 'Color', description:
-      'Use semantic color roles, compare palettes, and preview how a single change affects VyrnForge components.' }),
-    h(GuideSection, { id: 'vf-docs-color-picker', title: 'Pick an accent recipe' },
-      h(Text, { as: 'p' },
-        'Choose a complete accent family rather than changing only one shade. These demonstration presets include normal, hover, pressed and contrasting foreground roles.'),
-      h(Flow, { direction: 'inline', wrap: 'wrap', gap: 'sm',
-        role: 'group', 'aria-label': 'Accent color recipes', 'data-vf-docs-color-picker': '' },
-      ...accentRecipes.map((entry) => h(Button, {
-        key: entry.id, type: 'button', variant: entry.id === id ? 'primary' : 'secondary',
-        'aria-pressed': entry.id === id, onClick: () => setId(entry.id),
-      }, entry.name))),
-      h('div', { 'data-vf-docs-color-selected': recipe.id },
-        h(Preview, { theme: 'light', customColors: recipe.roles, label: recipe.name + ' color preview' },
-          h(DemoContent, { heading: recipe.name + ' accents' }))),
-      h(Text, { as: 'p' }, 'These presets illustrate usage; they are not a generated palette scale or a contrast guarantee for every possible composition.'),
-      h(CodeExample, { source: css, label: 'CSS for the selected accent family' })),
-    h(GuideSection, { id: 'vf-docs-color-roles', title: 'Explore semantic color roles' },
-      h(Text, { as: 'p' },
-        'Every swatch resolves from the real Web stylesheet. The same role changes with the selected light, dark or custom theme without per-component color maps.'),
-      h(AutoGrid, { as: 'ul', minItemSize: '11rem', gap: 'sm',
-        className: 'vf-docs-customization-swatches', 'data-vf-docs-color-roles': '' },
-        ...semanticSwatches.map((entry) => h('li', { key: entry.role },
-          h('span', { className: 'vf-docs-customization-swatch',
-            style: { backgroundColor: 'var(' + entry.role + ')' }, 'aria-hidden': 'true' }),
-          h(Text, { as: 'strong' }, entry.label),
-          h('code', { 'data-vf-code': '' }, entry.role)))),
-      h(Text, { as: 'p' },
-        'React exposes typed references through colors and tokens. The public CSS custom properties remain the shared contract for all frameworks.')),
-    h(GuideSection, { id: 'vf-docs-color-guidance', title: 'Contrast, states and accessibility' },
-      h(Text, { as: 'p' },
-        'Check text and icon contrast, hover and pressed differentiation, focus visibility, disabled states and forced colors against every brand palette. A danger text token alone is not a complete destructive-button style.'),
-      h(Text, { as: 'p' },
-        h(GuideLink, { href: links.tokens }, 'Design tokens'), ' · ',
-        h(GuideLink, { href: links.themes }, 'Theming'), ' · ',
-        h(GuideLink, { href: links.darkMode }, 'Dark mode')))));
+      'data-vf-docs-react-color': '' },
+      h(GuideHeader, { title: 'Color', description:
+        'Explore complete shade scales, configure light or dark accents, and compile semantic brand themes with a reusable function.' }),
+      h(GuideSection, { id: 'vf-docs-color-picker', title: 'Choose a color family and shade' },
+        h(Text, { as: 'p' },
+          'Select an authoring palette, shade and appearance. Only semantic roles reach components; numeric shades are inputs, not required public CSS variables.'),
+        h(Flow, { direction: 'inline', wrap: 'wrap', gap: 'sm', role: 'group',
+          'aria-label': 'Accent color recipes', 'data-vf-docs-color-picker': '' },
+          ...accentRecipes.map((entry) => h(Button, {
+            key: entry.id, type: 'button', variant: entry.id === id ? 'primary' : 'secondary',
+            'aria-pressed': entry.id === id, onClick: () => setId(entry.id),
+          }, entry.name))),
+        h(Flow, { as: 'div', direction: 'inline', wrap: 'wrap', gap: 'sm', role: 'group',
+          'aria-label': 'Palette appearance', 'data-vf-docs-color-appearance': '' },
+          ...['light', 'dark'].map((value) => h(Button, {
+            key: value, type: 'button', variant: appearance === value ? 'primary' : 'secondary',
+            'aria-pressed': appearance === value,
+            onClick: () => { setAppearance(value); setShade(value === 'dark' ? '300' : '600'); },
+          }, value === 'light' ? 'Light palette' : 'Dark palette'))),
+        h(AutoGrid, { as: 'div', minItemSize: '7.5rem', gap: 'sm',
+          'data-vf-docs-color-shades': '' },
+          ...shades.map(([level, value]) => h(Button, { key: level, type: 'button',
+            variant: level === shade ? 'primary' : 'secondary',
+            'aria-pressed': level === shade,
+            onClick: () => setShade(level),
+            'aria-label': 'Shade ' + level + ', ' + value,
+            className: 'vf-docs-palette-shade-option',
+          },
+          h('span', { className: 'vf-docs-palette-shade-chip',
+            style: { backgroundColor: value }, 'aria-hidden': 'true' }),
+          h('span', null, level + ' · ' + value)))),
+        h('div', { 'data-vf-docs-color-selected': recipe.id,
+          'data-vf-docs-color-shade': shade, 'data-vf-docs-color-scheme': appearance },
+          h(Preview, { theme: appearance, variables: definition.variables,
+            label: recipe.name + ' ' + appearance + ' color preview' },
+            h(DemoContent, { heading: recipe.name + ' / ' + shade + ' · ' + appearance }))),
+        h(Text, { as: 'p' },
+          'Chosen accent foreground: ', h('code', { 'data-vf-code': '' }, foreground),
+          '. Computed contrast against the selected accent: ', contrast, ':1. ' +
+          'This preview calculation does not replace accessibility testing of all states.')),
+      h(GuideSection, { id: 'vf-docs-color-roles', title: 'Semantic roles in this theme' },
+        h(Text, { as: 'p' },
+          'The generated theme starts with all canonical ' + themeableColorRoles.length +
+          ' semantic color roles for its appearance. Changing a family remaps accent and focus roles while preserving surface, text, border, danger and disabled defaults.'),
+        h(AutoGrid, { as: 'ul', minItemSize: '11rem', gap: 'sm',
+          className: 'vf-docs-customization-swatches', 'data-vf-docs-color-roles': '' },
+          ...semanticSwatches.map((entry) => h('li', { key: entry.role },
+            h('span', { className: 'vf-docs-customization-swatch',
+              style: { backgroundColor: definition.variables[entry.role] }, 'aria-hidden': 'true' }),
+            h(Text, { as: 'strong' }, entry.label),
+            h('code', { 'data-vf-code': '' }, entry.role),
+            h(Text, { as: 'small' }, definition.variables[entry.role]))))),
+      h(GuideSection, { id: 'vf-docs-color-function', title: 'Build your own theme with a function' },
+        h(Text, { as: 'p' },
+          'Use the framework-neutral @vyrnforge/web/theme authoring utility. It accepts your own shade scales, full semantic overrides and other public CSS tokens; output is an ordinary scoped stylesheet.'),
+        h(CodeExample, { source: sample, label: 'Function-based theme definition' }),
+        h(CodeExample, { source: renderThemeCss(definition),
+          label: 'Generated CSS for the selected palette' }),
+        h(Text, { as: 'p' },
+          'Save generated CSS during your application build and load it after the canonical Web styles. For this live preview, the exact generated variables are applied directly to a local ThemeScope. No theme registration or provider is used.')),
+      h(GuideSection, { id: 'vf-docs-color-guidance', title: 'Contrast, states and accessibility' },
+        h(Text, { as: 'p' },
+          'A valid accent family includes background, hover, pressed, contrasting foreground, subtle surfaces and focus. Check disabled states, focus visibility, forced-colors, light/dark contrast and composed components before production use.'),
+        h(Text, { as: 'p' },
+          h(GuideLink, { href: links.tokens }, 'Design tokens'), ' · ',
+          h(GuideLink, { href: links.themes }, 'Theming'), ' · ',
+          h(GuideLink, { href: links.darkMode }, 'Dark mode')))));
 }
 
 export function DarkModeGuide({ links }) {

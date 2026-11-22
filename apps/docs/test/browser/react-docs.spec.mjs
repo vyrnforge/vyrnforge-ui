@@ -185,9 +185,17 @@ test('Color playground previews a complete accent family and shows live semantic
   expect(await background()).not.toBe(blue);
   await selected.getByRole('button', { name: 'Save changes' }).click();
   await expect(selected.locator('[data-vf-docs-preview-feedback]')).toHaveText('Primary preview action activated');
-  await expect(page.getByRole('navigation', { name: 'On this page' }).getByRole('link')).toHaveCount(3);
-  await expect(guide.locator('[data-vf-docs-color-roles] li')).toHaveCount(8);
-  await expect(guide.locator('pre code').first()).toContainText('--vf-color-accent-background: #0f766e');
+  await expect(page.getByRole('navigation', { name: 'On this page' }).getByRole('link')).toHaveCount(4);
+  await expect(guide.locator('[data-vf-docs-color-roles] li')).toHaveCount(22);
+  await expect(guide.locator('[data-vf-docs-color-shades] button')).toHaveCount(11);
+  await expect(guide.locator('pre code').last()).toContainText('--vf-color-accent-background: #0f766e');
+  await guide.locator('[data-vf-docs-color-shades]').getByRole('button', { name: 'Shade 700, #115e59' }).click();
+  await expect(selected).toHaveAttribute('data-vf-docs-color-shade', '700');
+  await expect(guide.locator('pre code').last()).toContainText('--vf-color-accent-background: #115e59');
+  await guide.locator('[data-vf-docs-color-appearance]').getByRole('button', { name: 'Dark palette' }).click();
+  await expect(selected).toHaveAttribute('data-vf-docs-color-scheme', 'dark');
+  await expect(selected).toHaveAttribute('data-vf-docs-color-shade', '300');
+  await expect(selected.locator('[data-vf-theme="dark"]')).toHaveCSS('color-scheme', 'dark');
 });
 
 test('Dark-mode page previews light, dark and system from CSS under SSR and browser preferences', async ({ page, browser }) => {
