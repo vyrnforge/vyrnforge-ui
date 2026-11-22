@@ -17,7 +17,7 @@ test('React theme references are canonical Web tokens, not hardcoded light/dark 
   assert.equal(tokens.space.md, 'var(--vf-space-md)');
   assert.equal(tokens.radius.control, 'var(--vf-control-radius)');
   assert.equal(tokens.space['2xs'], 'var(--vf-space-2xs)');
-  assert.equal(tokens.fontSize['6xl'], 'var(--vf-font-size-6xl'));
+  assert.equal(tokens.fontSize['6xl'], 'var(--vf-font-size-6xl)');
   assert.equal(tokens.fontFamily.display, 'var(--vf-font-family-display)');
   assert.equal(colors.surfacePressed, 'var(--vf-color-surface-pressed)');
   assert.equal(colors.disabledBorder, 'var(--vf-color-disabled-border)');

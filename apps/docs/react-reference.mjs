@@ -817,10 +817,10 @@ function foundationCode(value) {
   return h('pre', { 'data-vf-code-block': '', tabIndex: 0 }, h('code', null, value));
 }
 function tokensGuide(links) {
-  const sample = "import { colors, tokens, Text, Flow } from '@vyrnforge/react';\\n\\n" +
-    '<Flow gap="md" style={{ padding: tokens.space.lg }}>\\n' +
-    '  <Text as="p" tone="secondary">Supporting information</Text>\\n' +
-    '  <Text as="p" style={{ color: colors.text }}>Readable text</Text>\\n' +
+  const sample = "import { colors, tokens, Text, Flow } from '@vyrnforge/react';\n\n" +
+    '<Flow gap="md" style={{ padding: tokens.space.lg }}>\n' +
+    '  <Text as="p" tone="secondary">Supporting information</Text>\n' +
+    '  <Text as="p" style={{ color: colors.text }}>Readable text</Text>\n' +
     '</Flow>';
   return h(Flow, { as: 'article', gap: '2xl', className: 'vf-docs-article',
     'data-vf-docs-react-tokens': '' },
@@ -837,11 +837,11 @@ function tokensGuide(links) {
     h(Flow, { as: 'section', gap: 'md', 'aria-labelledby': 'react-foundation-token-catalog' },
       h(Text, { as: 'h2', variant: 'heading-md', id: 'react-foundation-token-catalog' }, 'Token categories'),
       h(Text, { as: 'p' }, 'Public semantic colors cover accent, text, surface, border, danger, focus and disabled states. Public foundation values include spacing, typography, radius, shadows, control dimensions and motion.'),
-      foundationCode("colors.accent;        // var(--vf-color-accent-background)\\n" +
-        "colors.onAccent;      // var(--vf-color-accent-foreground)\\n" +
-        "colors.danger;        // var(--vf-color-danger-border)\\n" +
-        "tokens.space.md;      // var(--vf-space-md)\\n" +
-        "tokens.fontSize.lg;   // var(--vf-font-size-lg)\\n" +
+      foundationCode("colors.accent;        // var(--vf-color-accent-background)\n" +
+        "colors.onAccent;      // var(--vf-color-accent-foreground)\n" +
+        "colors.danger;        // var(--vf-color-danger-border)\n" +
+        "tokens.space.md;      // var(--vf-space-md)\n" +
+        "tokens.fontSize.lg;   // var(--vf-font-size-lg)\n" +
         "tokens.radius.control; // var(--vf-control-radius)"),
       h(Text, { as: 'p' },
         'Reference/primitive values and private --_vf-* component implementation variables are not public customization contracts. Breakpoints are static build-time inputs, not runtime CSS custom properties.')),
@@ -868,11 +868,11 @@ function stylingGuide(links) {
       h(Text, { as: 'h2', variant: 'heading-md', id: 'react-foundation-style-overrides' }, 'Application customization'),
       h(Text, { as: 'p' },
         'Prefer semantic tokens, documented component tokens, and public styling hooks. VyrnForge uses low-specificity namespaced cascade layers so ordinary consumer CSS can override its normal styles without !important.'),
-      foundationCode(".account-summary {\\n" +
-        "  background: var(--vf-color-surface);\\n" +
-        "  color: var(--vf-color-text);\\n" +
-        "  border: 1px solid var(--vf-color-border);\\n" +
-        "  padding: var(--vf-space-lg);\\n" +
+      foundationCode(".account-summary {\n" +
+        "  background: var(--vf-color-surface);\n" +
+        "  color: var(--vf-color-text);\n" +
+        "  border: 1px solid var(--vf-color-border);\n" +
+        "  padding: var(--vf-space-lg);\n" +
         "}"),
       h(Text, { as: 'p' },
         'Avoid internal --_vf-* variables, deeply nested DOM selectors or per-component hardcoded appearance maps. Custom brand colors must preserve contrast, focus visibility, disabled states, forced colors and reduced-motion behavior.')),
