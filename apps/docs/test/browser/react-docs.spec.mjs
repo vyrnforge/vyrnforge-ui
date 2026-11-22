@@ -62,7 +62,9 @@ test('React pilot artifact is Product Graph-backed and SSR-rendered with public 
     frameworkSourcePath: 'product/components/composition-primitives/avatar/react/docs/index.md',
   });
   expect(manifest.avatar.examples.map((entry) => entry.id)).toEqual([
-    'avatar/decorative', 'avatar/fallback', 'avatar/image', 'avatar/initials',
+    'avatar/decorative', 'avatar/fallback', 'avatar/group', 'avatar/icon',
+    'avatar/image', 'avatar/initials', 'avatar/shapes', 'avatar/sizing',
+    'avatar/spacing', 'avatar/total',
   ]);
   for (const example of manifest.avatar.examples) {
     const slug = example.id.split('/')[1];
@@ -1320,9 +1322,12 @@ test('React Avatar guide shows initials, native photo, failed-image fallback and
   await page.goto('/next/react/components/avatar/');
   const guide = page.locator('[data-vf-docs-react-avatar]');
   await expect(guide.getByRole('heading', { level: 1, name: 'Avatar' })).toBeVisible();
-  await expect(guide.getByRole('navigation', { name: 'Avatar examples' }).getByRole('link')).toHaveCount(4);
+  await expect(guide.getByRole('navigation', { name: 'Avatar examples' }).getByRole('link')).toHaveCount(10);
   await expect(guide.getByRole('heading', { name: 'Image and initials' })).toBeVisible();
   await expect(guide.getByRole('heading', { name: 'Sizes and appearance' })).toBeVisible();
+  await expect(guide.getByRole('heading', { name: 'Appearances and fallback' })).toBeVisible();
+  await expect(guide.getByRole('heading', { name: 'Grouped avatars and totals' })).toBeVisible();
+  await expect(guide.getByRole('heading', { name: 'Group spacing', exact: true })).toBeVisible();
   const initials = guide.locator('[data-vf-docs-react-avatar-example="avatar/initials"] iframe');
   await initials.scrollIntoViewIfNeeded();
   await expect(initials.contentFrame().locator('[data-vf-avatar-initials]').first()).toHaveText('AL');
@@ -1341,6 +1346,30 @@ test('React Avatar guide shows initials, native photo, failed-image fallback and
   await decorative.scrollIntoViewIfNeeded();
   await expect(decorative.contentFrame().locator('[data-vf-avatar]')).toHaveAttribute('aria-hidden', 'true');
   await expect(decorative.contentFrame().getByText('Ada Lovelace')).toBeVisible();
+  const icon = guide.locator('[data-vf-docs-react-avatar-example="avatar/icon"] iframe');
+  await icon.scrollIntoViewIfNeeded();
+  await expect(icon.contentFrame().locator('[data-vf-avatar-icon] svg').first()).toBeVisible();
+  await expect(icon.contentFrame().getByRole('img', { name: 'Anonymous member' })).toHaveCount(1);
+
+  const shapes = guide.locator('[data-vf-docs-react-avatar-example="avatar/shapes"] iframe');
+  await shapes.scrollIntoViewIfNeeded();
+  await expect(shapes.contentFrame().locator('[data-vf-avatar-shape="square"]')).toHaveCount(2);
+
+  const members = guide.locator('[data-vf-docs-react-avatar-example="avatar/group"] iframe');
+  await members.scrollIntoViewIfNeeded();
+  await expect(members.contentFrame().getByRole('list', { name: 'Project contributors' })
+    .locator('li')).toHaveCount(4);
+
+  const total = guide.locator('[data-vf-docs-react-avatar-example="avatar/total"] iframe');
+  await total.scrollIntoViewIfNeeded();
+  await expect(total.contentFrame().getByRole('list', { name: 'Review team' })
+    .locator('li')).toHaveCount(4);
+  await expect(total.contentFrame().getByRole('img', { name: '9 more reviewers' })).toHaveText('+9');
+
+  const spacing = guide.locator('[data-vf-docs-react-avatar-example="avatar/spacing"] iframe');
+  await spacing.scrollIntoViewIfNeeded();
+  await expect(spacing.contentFrame().locator('[data-vf-avatar-group]')).toHaveCount(3);
+
   await page.getByRole('searchbox', { name: 'Search React documentation' }).fill('avatar initials');
   await expect(page.locator('[data-vf-docs-react-results]').getByRole('link', { name: 'Avatar', exact: true })).toBeVisible();
   await page.getByRole('button', { name: 'Clear search' }).click();
@@ -1350,6 +1379,9 @@ test('React Avatar guide shows initials, native photo, failed-image fallback and
   await expect(api).toContainText('@vyrnforge/react/avatar');
   await expect(api.locator('section[aria-labelledby="react-avatar-api-types"] pre code')).toContainText('export interface AvatarProps');
   await expect(api.locator('section[aria-labelledby="react-avatar-api-types"] pre code')).toContainText('export type AvatarSize');
+  await expect(api.locator('section[aria-labelledby="react-avatar-api-types"] pre code')).toContainText('export interface AvatarGroupProps');
+  await expect(api.locator('section[aria-labelledby="react-avatar-api-types"] pre code')).toContainText('export type AvatarAppearance');
+  await expect(api.locator('section[aria-labelledby="react-avatar-api-types"] pre code')).toContainText('export type AvatarGroupSpacing');
   expect(errors).toEqual([]);
 });
 
@@ -1375,7 +1407,7 @@ test('Avatar documentation supports no-JS SSR and narrow RTL high-contrast layou
     const noJs = await context.newPage();
     await noJs.goto('/next/react/components/avatar/');
     await expect(noJs.getByRole('heading', { level: 1, name: 'Avatar' })).toBeVisible();
-    await expect(noJs.locator('[data-vf-docs-react-avatar-example]')).toHaveCount(4);
+    await expect(noJs.locator('[data-vf-docs-react-avatar-example]')).toHaveCount(10);
     await noJs.getByRole('navigation', { name: 'Documentation framework' })
       .getByRole('link', { name: 'Native Web' }).click();
     await expect(noJs).toHaveURL(/\/next\/native-web\/components\/avatar\/$/);

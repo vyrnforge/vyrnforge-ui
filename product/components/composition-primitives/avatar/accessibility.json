@@ -4,7 +4,7 @@
   "reviewStatus": "review-required",
   "nativeBaseline": {
     "kind": "native",
-    "reference": "span[role=img][aria-label] with native img[alt=''] or initials span; optional decorative aria-hidden"
+    "reference": "span[role=img][aria-label] (decorative native img or initials/icon content); ul[role=list][aria-label] with li Avatar peers and named +N overflow"
   },
   "wcag": {
     "target": "2.2 AA",
@@ -27,17 +27,19 @@
   },
   "ownership": {
     "library": [
-      "Render a single accessible image-like identity with an authored name and decorative descendant image",
-      "Provide visible fallback initials when no source or a native image load fails in React",
-      "Reuse canonical token-driven CSS for circle geometry, sizes and forced-colors presentation",
-      "Retain native img loading/decoding/source selection and expose noninteractive host ref"
+      "Render one accessible named identity for image/letter/icon appearances and preserve decorative native child semantics",
+      "Handle failed native img and changed source/srcSet candidates in React, with letter or supplied Icon fallback",
+      "Reuse canonical Web tokenized sizing, rounded/square shapes, RTL logical group spacing and forced-colors presentation",
+      "Present grouped identities as a labeled native list; render only visible peers with a named noninteractive +N total",
+      "Preserve native refs (HTMLSpanElement Avatar, HTMLUListElement AvatarGroup) and native img hints"
     ],
     "consumer": [
-      "Supply a non-empty accurate name; provide localized initials explicitly when automatic derivation is inappropriate",
-      "Mark decorative when a nearby visible name already labels the identity",
-      "Own image URLs, privacy, availability, fetch/authentication, uploads, and user data",
-      "Provide semantic grouping and interaction in an owning Button/Link if the avatar is clickable",
-      "Native Web consumers attach an image error listener when automatic fallback is desired"
+      "Author non-empty accurate identity names, localized initials and suitable Icon/SvgIcon artwork",
+      "Choose decorative when adjacent text names the same identity; own semantic Button/Link when interaction is intended",
+      "Supply a localized formatOverflow count label for non-English/accessible surplus meaning",
+      "Own image URLs, remote fetch/authentication, profile data, list membership, count policy and any hidden-member discovery",
+      "Native Web consumers own failed-image event handling and dynamic group truncation; shared CSS is a presentation recipe",
+      "Badge overlays and presence/status indicators remain deferred to the independent Badge contract"
     ]
   },
   "forms": {
@@ -54,16 +56,20 @@
     "assistiveTechnology": "review-required"
   },
   "profileVariability": [
-    "image fallback",
-    "size",
+    "image, letter and icon fallbacks",
+    "rounded/square shapes",
+    "small/medium/large token sizing",
+    "RTL logical group overlap and positive spacing",
+    "group total limit and localized surplus",
     "dark theme",
     "forced colors",
-    "RTL",
     "high zoom"
   ],
   "notes": [
-    "AvatarFallback is private; never introduce a standalone product or named public part.",
-    "Avatar image has alt empty because labeled outer host owns the name. Decorative host is aria-hidden.",
-    "Browser image-error handling is owned by React API, native Web consumers compose their own event handling."
+    "ImageAvatar, LetterAvatar, IconAvatar, AvatarFallback and TotalAvatar are appearance/ownership variants, not standalone public products.",
+    "Avatar host owns the sole accessible identity; native img alt empty, initials and icon decorative; group owns a labeled list and a noninteractive surplus image.",
+    "Native Web requires consumer-owned network error and dynamic count handling; React supplies local native error fallback and visible subset rendering.",
+    "Icon rendering must reuse public VyrnForge Icon semantics and glyph package, with no new icon registry or image service.",
+    "Badge overlay is deliberately excluded until the Badge component contract is established."
   ]
 }

@@ -55,11 +55,82 @@
     inset: 0;
   }
 
+  :where([data-vf-avatar][data-vf-avatar-shape="square"]) {
+    border-radius: 0;
+  }
+
+  :where([data-vf-avatar-icon]) {
+    align-items: center;
+    block-size: 100%;
+    display: grid;
+    grid-area: 1 / 1;
+    inline-size: 100%;
+    justify-items: center;
+    min-inline-size: 0;
+  }
+
+  /* The existing Icon renderer remains the only SVG semantics/artwork owner. */
+  [data-vf-avatar-icon] > svg {
+    block-size: 60%;
+    inline-size: 60%;
+    max-block-size: 100%;
+    max-inline-size: 100%;
+  }
+
+  :where([data-vf-avatar-group]) {
+    align-items: center;
+    display: inline-flex;
+    flex-direction: row;
+    gap: 0;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    vertical-align: middle;
+  }
+
+  :where([data-vf-avatar-group-item]) {
+    flex: none;
+    margin: 0;
+    padding: 0;
+    position: relative;
+  }
+
+  :where([data-vf-avatar-group][data-vf-avatar-group-spacing="overlap"]
+    > [data-vf-avatar-group-item] + [data-vf-avatar-group-item]) {
+    margin-inline-start: calc(-1 * var(--vf-space-sm));
+  }
+
+  :where([data-vf-avatar-group][data-vf-avatar-group-spacing="overlap"]
+    > [data-vf-avatar-group-item] [data-vf-avatar]) {
+    outline: var(--vf-space-2xs) solid var(--vf-color-surface);
+  }
+
+  :where([data-vf-avatar-group][data-vf-avatar-group-spacing="sm"]) {
+    gap: var(--vf-space-sm);
+  }
+
+  :where([data-vf-avatar-group][data-vf-avatar-group-spacing="md"]) {
+    gap: var(--vf-space-md);
+  }
+
+  :where([data-vf-avatar-group][data-vf-avatar-group-spacing="lg"]) {
+    gap: var(--vf-space-lg);
+  }
+
+  :where([data-vf-avatar-overflow]) {
+    font-size: var(--vf-font-size-xs);
+  }
+
   @media (forced-colors: active) {
     :where([data-vf-avatar]) {
       background: Canvas;
       border: 1px solid CanvasText;
       color: CanvasText;
+    }
+
+    :where([data-vf-avatar-group][data-vf-avatar-group-spacing="overlap"]
+      > [data-vf-avatar-group-item] [data-vf-avatar]) {
+      outline-color: Canvas;
     }
   }
 }

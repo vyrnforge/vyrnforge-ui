@@ -139,8 +139,9 @@ if (!avatar?.showcaseAvailable || !avatar.apiAvailable ||
     !avatar.sharedContent || !avatar.frameworkContent ||
     !avatar.publicEntrypoints.includes('@vyrnforge/react/avatar') ||
     !webModel.packageManifest.exports?.['./styles/avatar.css'] ||
-    avatarExamples.length !== 4 ||
-    !['avatar/initials', 'avatar/image', 'avatar/fallback', 'avatar/decorative']
+    avatarExamples.length !== 10 ||
+    !['avatar/initials', 'avatar/image', 'avatar/fallback', 'avatar/decorative',
+      'avatar/icon', 'avatar/shapes', 'avatar/sizing', 'avatar/group', 'avatar/total', 'avatar/spacing']
       .every((id) => avatarExamples.some((example) => example.id === id)) ||
     !avatarExamples.every((example) => example.sourcePath.endsWith('/react.tsx') &&
       example.source.includes("'@vyrnforge/react/avatar'") &&
@@ -151,9 +152,10 @@ const avatarPublicSourcePath = path.join(root,
   path.dirname(path.dirname(avatar.frameworkSourcePath)), 'index.ts');
 const avatarPublicSource = await readFile(avatarPublicSourcePath, 'utf8');
 const avatarTypeStart = avatarPublicSource.indexOf('export type AvatarSize');
-const avatarTypeEnd = avatarPublicSource.indexOf('/** Simple deterministic fallback;', avatarTypeStart);
+const avatarTypeEnd = avatarPublicSource.indexOf('/** Deterministic convenience,', avatarTypeStart);
 if (avatarTypeStart < 0 || avatarTypeEnd < 0 ||
     !avatarPublicSource.includes('forwardRef<HTMLSpanElement, AvatarProps>') ||
+    !avatarPublicSource.includes('forwardRef<HTMLUListElement, AvatarGroupProps>') ||
     !avatarPublicSource.includes('useState<string | undefined>')) {
   throw new Error('React Avatar source changed: review public API types and error fallback contract');
 }

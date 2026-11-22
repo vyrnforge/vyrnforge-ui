@@ -1,0 +1,18 @@
+{
+  "id": "avatar/total",
+  "title": "Limited group and total count",
+  "description": "Show a fixed number of members while the +N peer represents the remaining total.",
+  "defaultFramework": "react",
+  "frameworks": {
+    "native-web": {
+      "label": "Native Web",
+      "language": "html",
+      "source": "native-web.html"
+    },
+    "react": {
+      "label": "React",
+      "language": "tsx",
+      "source": "react.tsx"
+    }
+  }
+}

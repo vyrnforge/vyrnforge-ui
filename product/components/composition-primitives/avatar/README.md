@@ -1,21 +1,32 @@
-# Avatar — image and initials identity presentation
+# Avatar and AvatarGroup — reusable identity presentation
 
-Avatar is a single, non-interactive **composition primitive** for representing a person or entity using a circular image or short textual initials. It owns image-error fallback internally in React and shares one canonical Web stylesheet with native HTML. There is deliberately **no standalone AvatarFallback** elemental product.
+Avatar is one non-interactive composition capability with image, letter and icon appearances. AvatarGroup composes the same capability into a native labeled identity list with an optional visible limit and +N overflow indicator. These are two exports from **one composition product owner**, not independent ImageAvatar, LetterAvatar, IconAvatar, AvatarFallback or TotalAvatar products.
 
-React public entrypoint: `@vyrnforge/react/avatar`. Canonical CSS: `@vyrnforge/web/styles/avatar.css`.
+React entrypoint: `@vyrnforge/react/avatar` — exports `Avatar`, `AvatarGroup` and their public types.
+Canonical Web stylesheet: `@vyrnforge/web/styles/avatar.css`. Use `@vyrnforge/react/icon` plus `@vyrnforge/web/styles/icon.css` when supplying icon artwork; Avatar never embeds a competing SVG renderer or catalog.
 
 ```tsx
-import { Avatar } from '@vyrnforge/react/avatar';
+import { Avatar, AvatarGroup } from '@vyrnforge/react/avatar';
+import { Icon } from '@vyrnforge/react/icon';
+import { userIcon } from '@vyrnforge/icons/user';
 import '@vyrnforge/web/styles/avatar.css';
 
-<Avatar name="Ada Lovelace" />
-<Avatar name="Ada Lovelace" src="/images/ada.webp" />
-<Avatar name="Maria García" initials="MG" size="lg" />
-<Avatar name="Ada Lovelace" decorative />
+<Avatar name="Ada Lovelace" src="/images/ada.webp" shape="rounded" />;
+<Avatar name="Alex Chen" initials="AC" appearance="letter" shape="square" />;
+<Avatar name="Anonymous member" appearance="icon" icon={<Icon icon={userIcon} />} />;
+
+<AvatarGroup label="Review team" limit={2} total={7} spacing="overlap"
+  formatOverflow={(count) => count + ' more reviewers'}>
+  <Avatar name="Ada Lovelace" />
+  <Avatar name="Alex Chen" />
+  <Avatar name="Maria García" initials="MG" />
+</AvatarGroup>
 ```
 
-The required `name` is the authored accessible identity and the simple two-initial derivation source. `initials` overrides the derived abbreviation for localized names or chosen identity. When `src` fails to load, React removes the failed native image element and shows the already-present initials. Changing `src` retries the new source. SSR emits native accessible markup with a fallback under the image, and hydration retains it. The photo is `alt=""` because the labeled Avatar host already carries the accessible identity once. Mark decorative when a visible adjacent label already identifies the user and avatar description would be redundant.
+The earlier `Avatar name/src/initials/size/decorative` API remains valid. Omitted `appearance` continues to choose the image if a source exists and letters otherwise, except it chooses the supplied icon if there is no image. Explicit `appearance="letter"` ignores image sources; `appearance="icon"` requires an authored icon for visual icon content and safely falls back to letters if omitted. `fallback="icon"` can select a supplied icon on image failure, otherwise letters remain the default. Browser image errors do not change the host's single accessible identity label; changing source or responsive candidates retries.
 
-Native Web uses the same CSS hooks and native span/img elements; a native consumer owns its own `error` listener to hide/remove failed images because CSS cannot reliably detect network failure. This does **not** introduce a mandatory Web or Core avatar runtime.
+Rounded means circular; square means zero corner radius. Existing `sm/md/lg` sizes reuse canonical control-height tokens. Group `size` and `shape` supply defaults only for children that have not set their own. `limit` caps rendered child identities; `total` counts members known outside the provided list and is clamped to at least the child count. The non-interactive +N display represents `total - visibleCount`. `formatOverflow` allows a localized accessible description; without one the accessible name remains the visible literal +N without inventing English UI text. `spacing="overlap"` is default; `none/sm/md/lg` use zero or canonical positive gaps. Logical inline margins preserve RTL.
 
-Image still owns generic native-image presentation; Avatar alone owns its circular identity crop, initials presentation and fallback behavior. No account data, profile fetching, upload, editing, presence/status, grouping or interactive semantics are owned by Avatar.
+Native Web uses the same `data-vf-avatar`, `data-vf-avatar-icon`, `data-vf-avatar-group`, `data-vf-avatar-group-item`, and `data-vf-avatar-overflow` CSS hooks on native spans, SVG/img, `ul/li`; the consumer owns native image-error handling and any dynamic group truncation/counting. React supplies those conveniences without a mandatory Core or Web controller.
+
+**Boundaries:** no avatar-upload, remote asset loading, image preprocessing, identity verification, interactive selection, presence/status badges, or application user/account services. Do not add Badge styling or overlay positioning here yet; compose it later after Badge's own contract and component implementation are accepted. Human visual/AT acceptance and publication remain separate from CI.

@@ -1,42 +1,61 @@
 # Avatar
 
-A compact visual identity representation. Avatar can display a photograph or short text initials in the same circular shape. The initials provide a fallback when the image is unavailable, without becoming a second component.
+Avatar presents one person or entity as a native image, short letters, or an icon. AvatarGroup shows multiple identities with optional truncation and a visible total count. Both use the same token-driven Native Web CSS and non-interactive semantics.
 
 ## When to use
 
-Use Avatar for people, accounts, teams or other identities in profile summaries, lists and headers. An Avatar is only a representation, not an account-management, upload or profile-image editing control.
+Use Avatar for profile summaries, contributor lists, account headers and compact identity previews. Use AvatarGroup when multiple identities should read as one named collection with controlled density. Avatar and its group do not implement interaction, profile management, presence, or identity services.
 
 ## Image and initials
 
-Provide a human-authored **name** for a meaningful accessible identity and an optional image **src**. Without an image, the Avatar shows initials. With a source, a native `img` visually covers the fallback after successful loading. The fallback remains rendered beneath the image for continuity. React removes the failed image when its native `error` event fires, revealing the initials; changing the source retries a different URL.
+An authored **name** provides the Avatar's accessible identity. A provided **src** or **srcSet** selects a decorative native image within the labeled host. Without an image, the Avatar displays short initials. In React a native image error removes the failed image, leaving fallback content; a changed source or source candidates are retried. `initials` overrides default two-letter first/last-segment derivation, which is only a convenience, not a locale-aware naming policy.
 
-For convenience React derives two initials from the first and last whitespace-separated name segments, or one initial for a one-word name. This rule cannot represent every language or naming convention: author **initials** explicitly whenever a preferred or localized abbreviation differs. The library does not fetch avatars or decide image URL policies.
+## Appearances and fallback
+
+The React **appearance** values are `image`, `letter` and `icon`, or omit it for automatic image/icon/letter selection. All three share the same host identity, shapes and sizes. A letter Avatar displays authored or derived initials. An icon Avatar renders an authored decorative SVG through the reusable Icon contract, not a new avatar glyph system. The `icon` slot accepts a React Icon or SvgIcon. For unavailable image content, **fallback** selects `letter` (default) or `icon` (when an icon is supplied). Without artwork, initials remain a safe fallback. Native Web uses the matching static hooks and an application-owned native error event listener when automatic fallback is needed.
 
 ## Sizes and appearance
 
-Size options are `sm`, `md` (default), and `lg`, using existing control height tokens rather than new sizing constants. A circle clips the native image to `object-fit: cover`. Initials use current text and surface tokens and remain legible under light, dark, system and forced-colors modes. The host keeps a stable square footprint during image loading and errors.
+Size options remain `sm`, `md` (default) and `lg`, using existing control-height tokens rather than arbitrary pixel values. **shape** is `rounded` (a circle; default) or `square` (zero corner radius). Images crop using `object-fit: cover`, and icons stay centered with sizing from the Avatar footprint. Color and contrast use shared surface/text tokens. Size and shape are independent of appearance, and the host retains its dimensions while loading or failing.
+
+## Grouped avatars and totals
+
+AvatarGroup renders a labeled native `ul` containing individual `li` members; each Avatar retains its own accessible identity. React **limit** is the maximum number of supplied Avatar children shown, while **total** is the known membership count, including identities not supplied as children. If total exceeds visible count, a final non-interactive **+N** Avatar appears. For example, five children, `limit={3}` and `total={12}` show three members followed by +9. Without total, all supplied children count. Without limit, all supplied children show; +N still accounts for additional known members. Invalid or negative totals/limits cannot produce a negative remainder. Use a localized **formatOverflow** callback for a meaningful accessible name, such as `(count) => count + ' more reviewers'`; without one the +N literal is announced without hidden English assumptions. Do not use this truncated presentation to hide members who require interactive discovery or access.
+
+## Group spacing
+
+AvatarGroup **spacing** is `overlap` (default), `none`, `sm`, `md`, or `lg`. Overlap is a small logical inline overlap with a themed separating outline. None abuts peers without negative margins; sm, md and lg give progressively larger positive token gaps. Spacing follows logical inline direction, including RTL. Group `size` and `shape` supply defaults to children that have not authored their own and apply to +N; explicit child values win.
 
 ## Native Web markup
 
-The styling contract uses a native labeled span, decorative fallback text, and a native image. Import `@vyrnforge/web/styles/avatar.css`.
+Import `@vyrnforge/web/styles/avatar.css`. For icons also import `@vyrnforge/web/styles/icon.css` and use the canonical Icon SVG presentation hooks.
 
 ```html
-<span data-vf-avatar data-vf-avatar-size="md" role="img" aria-label="Ada Lovelace">
+<span data-vf-avatar data-vf-avatar-size="md" data-vf-avatar-shape="rounded" role="img" aria-label="Ada Lovelace">
   <span data-vf-avatar-initials aria-hidden="true">AL</span>
   <img data-vf-avatar-image src="/images/ada.webp" alt="" loading="lazy">
 </span>
+
+<ul data-vf-avatar-group data-vf-avatar-group-spacing="overlap" role="list" aria-label="Review team">
+  <li data-vf-avatar-group-item>
+    <span data-vf-avatar role="img" aria-label="Ada Lovelace"><span data-vf-avatar-initials aria-hidden="true">AL</span></span>
+  </li>
+  <li data-vf-avatar-group-item>
+    <span data-vf-avatar data-vf-avatar-overflow role="img" aria-label="9 more reviewers"><span data-vf-avatar-initials aria-hidden="true">+9</span></span>
+  </li>
+</ul>
 ```
 
-Native Web can use the same fallback by listening for the native `error` event and removing or hiding the failed image. The shared CSS cannot detect remote image failure on its own. The React component handles this event automatically without a new Web runtime.
+Native consumers author or update the member list, overflow total and failed-image removal themselves; CSS alone does not know population counts or network errors.
 
 ## Accessibility
 
-The containing span has `role="img"` and the authored `name` as its accessible label. Its native image has `alt=""`, and initials are hidden from assistive technology, avoiding duplicate announcements. If a visible adjacent label already names the person, choose `decorative` in React or `aria-hidden="true"` on the Native Web host. The component is never an interactive control, has no keyboard handling, does not manage focus and does not assert identity verification or status.
+Each Avatar host is `role="img"` with the authored name as its only accessible identity; its native `img alt=""`, visible initials and icon SVG are decorative. When adjacent visible name text already supplies identity, `decorative` removes the redundant image role and sets `aria-hidden` on the host. AvatarGroup is an authored-label list, preserving individual names and a localized surplus count without advertising a nonexistent expand button. Neither component owns tab stops, focus handling, selection, keyboard controls, or status semantics. Do not place interactive descendants within the decorative icon slot. Verify list semantics in Safari/VoiceOver, forced-colors, enlarged text, RTL, image failures and screen-reader name counts in a real consumer.
 
 ## When not to use
 
-Use the Image primitive for ordinary photographs and illustrations without an identity fallback. Use a Link or Button to own avatar-click interaction, and the Loading Pattern for skeleton placeholders. Avatar does not implement cropping, media selection, uploads, presence, group stacks, backend identity or asset caching. The old AvatarFallback elemental candidate remains retired as a separate product.
+Use Image for general-purpose illustrations/photos, Icon for standalone SVG meaning, and Link/Button for interactive identity actions. Avatar does not fetch identity data, upload or crop images, provide a menu, imply presence, or supply badge overlays. Badge and Avatar-with-Badge integration are deferred until the Badge contract is established; do not invent badge primitives inside Avatar.
 
 ## Framework consumption
 
-Native Web, Angular, Vue and Elements can use the shared styling hooks with native elements. React offers one typed component at `@vyrnforge/react/avatar`, using the same CSS and DOM semantics. Image-error fallback is part of the React convenience behavior; native consumers attach their own event handling.
+Native Web, React, Angular, Vue and Elements use shared concepts and canonical CSS, but only the actual React Avatar/AvatarGroup public component APIs are implemented here. Other framework surfaces can use the native CSS/HTML recipe without implying corresponding wrapper APIs exist. React exposes `@vyrnforge/react/avatar` with local image-error handling, visible limit/counting and typed native refs. No mandatory cross-framework runtime, new Core helper, or global state is required.
