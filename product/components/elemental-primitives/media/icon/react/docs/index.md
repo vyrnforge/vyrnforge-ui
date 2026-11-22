@@ -38,7 +38,17 @@ Pass an `IconDefinition` through `icon`; optional `variant`, `shape` and `size` 
 
 ## React color and theming
 
-`Icon` uses `currentColor`, so color comes from its owning element rather than an Icon-specific palette. Apply a public color token to a parent context; the same glyph will follow the light/dark theme. For example, wrap `<Icon icon={bookmarkIcon} />` in `<span style={{ color: 'var(--vf-color-accent-background)' }}>`. The CSS contract on `[data-vf-icon]` inherits this context, so setting an arbitrary `color` directly on Icon is not the preferred styling contract. Do not encode important meaning in color alone; pair state or status with text or an accessible name.
+Use `tone` on `Icon`, `SvgIcon`, or a component returned by `createSvgIcon` for a simple semantic, theme-aware SVG color. The shape should use `stroke="currentColor"` or `fill="currentColor"`. No manual CSS variable or wrapper is needed:
+
+```tsx
+<Icon icon={bookmarkIcon} tone="accent" />
+<Icon icon={bookmarkIcon} tone="danger" />
+<SparkleIcon size="lg" tone="primary" />
+```
+
+`primary` and `accent` resolve to the same canonical Web accent role; `secondary` and `muted` share the canonical muted-text role. The role is resolved through CSS inheritance for built-in light/dark/system modes and custom theme scopes, not hardcoded React palette values. For custom styling outside the `tone` API, import `colors` from `@vyrnforge/react` and use its token references. `ThemeScope` supports scoped semantic overrides without another styling runtime.
+
+Multicolor path markup may use explicit shape colors; `tone` only changes currentColor-based paths. Do not encode important meaning in color alone: pair status with text or a meaningful accessible name. See **React colors & themes** in the React foundation guide.
 
 ## Inline SVG tags
 
