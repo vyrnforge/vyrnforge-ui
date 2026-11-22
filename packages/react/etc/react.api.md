@@ -257,13 +257,13 @@ export type AvatarShape = 'rounded' | 'square';
 export type AvatarSize = 'sm' | 'md' | 'lg';
 
 // @public
+export const Badge: ForwardRefExoticComponent<BadgeProps & RefAttributes<HTMLSpanElement>>;
+
+// @public
 export type BadgeAnchorOrigin = {
     vertical: 'top' | 'bottom';
     horizontal: 'start' | 'end';
 };
-
-// @public
-export const Badge: ForwardRefExoticComponent<BadgeProps & RefAttributes<HTMLSpanElement>>;
 
 // @public (undocumented)
 export type BadgeOverlap = 'rectangular' | 'circular';
