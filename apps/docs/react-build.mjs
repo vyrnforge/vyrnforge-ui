@@ -272,6 +272,7 @@ await build({
 await build({
   entryPoints: [path.join(root, basicExample.sourcePath)],
   bundle: true, platform: 'browser', format: 'iife', target: 'es2022',
+  jsx: 'automatic',
   outfile: path.join(outRoot, 'assets/react-button-basic.js'), logLevel: 'silent',
 });
 await build({
