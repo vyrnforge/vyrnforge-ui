@@ -1,4 +1,4 @@
-import { Children, cloneElement, createElement, forwardRef, isValidElement, useState } from 'react';
+import { Children, cloneElement, createElement, forwardRef, isValidElement, useEffect, useRef, useState } from 'react';
 import type { ComponentPropsWithoutRef, ReactElement, ReactNode } from 'react';
 
 export type AvatarSize = 'sm' | 'md' | 'lg';
@@ -76,11 +76,21 @@ export const Avatar = forwardRef<HTMLSpanElement, AvatarProps>(function Avatar(
   // Include responsive candidates so a corrected srcSet can retry a previously failed src.
   const sourceKey = [src ?? '', srcSet ?? '', sizes ?? ''].join('\u001f');
   const [failedSource, setFailedSource] = useState<string | undefined>(undefined);
+  const imageRef = useRef<HTMLImageElement>(null);
   const mode = appearance ?? (src || srcSet ? 'image' : icon != null ? 'icon' : 'letter');
   const showImage = mode === 'image' && Boolean(src || srcSet) && failedSource !== sourceKey;
   const showIcon = icon != null && (mode === 'icon' ||
     (mode === 'image' && fallback === 'icon'));
   const content = showImage ? 'image' : showIcon ? 'icon' : 'letter';
+
+  // An SSR image may fail before hydration attaches React's error listener.
+  // Reconcile the native image state after mount so icon/letter fallback appears.
+  useEffect(() => {
+    const image = imageRef.current;
+    if (showImage && image?.complete && image.naturalWidth === 0) {
+      setFailedSource(sourceKey);
+    }
+  }, [showImage, sourceKey]);
 
   return createElement('span', {
     ...spanProps,
@@ -103,6 +113,7 @@ export const Avatar = forwardRef<HTMLSpanElement, AvatarProps>(function Avatar(
   }, icon) : null,
   showImage ? createElement('img', {
     'data-vf-avatar-image': '',
+    ref: imageRef,
     src, srcSet, sizes, loading, decoding, alt: '',
     onError: () => { setFailedSource(sourceKey); },
   }) : null);
