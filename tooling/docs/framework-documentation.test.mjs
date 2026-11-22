@@ -244,7 +244,7 @@ describe('React Text consumer-first guide examples', () => {
     expect(text.sharedContent.sections.map((section) => section.heading)).toContain('When to use');
     expect(text.sharedContent.sections.map((section) => section.heading)).toContain('When not to use');
     expect(text.frameworkContent.sections.map((section) => section.heading)).toEqual([
-      'React setup', 'Choosing a semantic host',
+      'React setup', 'Semantic colors and custom themes', 'Choosing a semantic host',
     ]);
     expect(text.frameworkContent.sections.find((section) => section.heading === 'React setup')?.blocks
       .some((block) => block.type === 'code' && block.language === 'tsx' &&

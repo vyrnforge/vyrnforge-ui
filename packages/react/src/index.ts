@@ -1,3 +1,5 @@
+export { colors, tokens, toneStyle, ThemeScope } from './internal/theme.js';
+export type { ColorRole, TextTone, ThemeColorOverrides, ThemeElement, ThemeName, ThemeScopeProps } from './internal/theme.js';
 export { Avatar, AvatarGroup } from './components/avatar/index.js';
 export type { AvatarProps, AvatarSize, AvatarAppearance, AvatarShape,
   AvatarGroupProps, AvatarGroupSpacing } from './components/avatar/index.js';

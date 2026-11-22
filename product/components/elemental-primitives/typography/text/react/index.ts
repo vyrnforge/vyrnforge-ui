@@ -1,8 +1,11 @@
 import { createElement, forwardRef } from 'react';
 import type { ComponentPropsWithoutRef, ComponentPropsWithRef, ReactElement } from 'react';
+import { toneStyle } from '../../internal/theme.js';
+import type { TextTone } from '../../internal/theme.js';
 import type { TextVariant } from '@vyrnforge/web/text';
 
 export type { TextVariant } from '@vyrnforge/web/text';
+export type { TextTone } from '../../internal/theme.js';
 
 export type TextElement =
   | 'span'
@@ -34,18 +37,21 @@ export type TextProps<Element extends TextElement = TextElement> =
     ? {
         as?: Element;
         variant?: TextVariant;
+        /** Token-backed text color: primary/secondary/accent/danger and readable text roles. */
+        tone?: TextTone;
       } & Omit<ComponentPropsWithoutRef<Element>, 'as'>
     : never;
 
 const createTextElement = createElement as (type: TextElement, props: object) => ReactElement;
 
 const TextImpl = forwardRef<HTMLElement, TextProps<TextElement>>(function Text(
-  { as = 'span', variant = 'body-md', ...nativeProps },
+  { as = 'span', variant = 'body-md', tone, style, ...nativeProps },
   ref
 ) {
   return createTextElement(as, {
     ...nativeProps,
     ref,
+    style: toneStyle(tone, style),
     'data-vf-text': '',
     'data-vf-text-variant': variant,
   });
