@@ -809,7 +809,7 @@ function dividerApi(divider, links) {
       'View Divider examples')));
 }
 function tokensGuide(links) {
-  const accentExample = "import { ThemeScope, Text, Flow, tokens } from '@vyrnforge/react';\n\n" +
+  const accentExample = "import { ThemeScope, Text, Flow, Button, tokens } from '@vyrnforge/react';\n\n" +
     '<ThemeScope theme="dark">\n' +
     '  <Text as="p" tone="primary">Primary / accent</Text>\n' +
     '  <Text as="p" tone="secondary">Secondary / muted</Text>\n' +
