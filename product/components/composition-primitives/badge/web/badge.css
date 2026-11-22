@@ -64,7 +64,7 @@
   :where([data-vf-badge][data-vf-badge-tone="danger"] [data-vf-badge-indicator]) {
     background: var(--vf-color-danger-background);
     border-color: var(--vf-color-danger-border);
-    color: var(--vf-color-danger-border);
+    color: var(--vf-color-text);
   }
 
   :where([data-vf-badge][data-vf-badge-variant="dot"] [data-vf-badge-indicator]) {
