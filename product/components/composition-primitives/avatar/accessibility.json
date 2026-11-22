@@ -1,0 +1,69 @@
+{
+  "schemaVersion": 1,
+  "component": "avatar",
+  "reviewStatus": "review-required",
+  "nativeBaseline": {
+    "kind": "native",
+    "reference": "span[role=img][aria-label] with native img[alt=''] or initials span; optional decorative aria-hidden"
+  },
+  "wcag": {
+    "target": "2.2 AA",
+    "status": "review-required",
+    "criteria": [
+      "1.1.1",
+      "1.3.1",
+      "1.4.3",
+      "1.4.11"
+    ]
+  },
+  "aria": {
+    "status": "review-required",
+    "apgPattern": null
+  },
+  "interaction": {
+    "keyboard": "not-applicable",
+    "focus": "not-applicable",
+    "directionality": "native"
+  },
+  "ownership": {
+    "library": [
+      "Render a single accessible image-like identity with an authored name and decorative descendant image",
+      "Provide visible fallback initials when no source or a native image load fails in React",
+      "Reuse canonical token-driven CSS for circle geometry, sizes and forced-colors presentation",
+      "Retain native img loading/decoding/source selection and expose noninteractive host ref"
+    ],
+    "consumer": [
+      "Supply a non-empty accurate name; provide localized initials explicitly when automatic derivation is inappropriate",
+      "Mark decorative when a nearby visible name already labels the identity",
+      "Own image URLs, privacy, availability, fetch/authentication, uploads, and user data",
+      "Provide semantic grouping and interaction in an owning Button/Link if the avatar is clickable",
+      "Native Web consumers attach an image error listener when automatic fallback is desired"
+    ]
+  },
+  "forms": {
+    "status": "not-applicable"
+  },
+  "visualAccessibility": {
+    "status": "component-specific"
+  },
+  "ssrHydration": {
+    "status": "native"
+  },
+  "evidence": {
+    "browser": "required",
+    "assistiveTechnology": "review-required"
+  },
+  "profileVariability": [
+    "image fallback",
+    "size",
+    "dark theme",
+    "forced colors",
+    "RTL",
+    "high zoom"
+  ],
+  "notes": [
+    "AvatarFallback is private; never introduce a standalone product or named public part.",
+    "Avatar image has alt empty because labeled outer host owns the name. Decorative host is aria-hidden.",
+    "Browser image-error handling is owned by React API, native Web consumers compose their own event handling."
+  ]
+}
