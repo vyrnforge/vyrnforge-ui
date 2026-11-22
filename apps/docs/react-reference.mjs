@@ -349,7 +349,7 @@ function typographyUsageGuide(unit, links) {
       guidePart(sections[2], [
         ...guideSubsections(unit.sharedContent, guidance, 'react-' + id + '-guidance'),
         ...guideSubsections(unit.frameworkContent,
-          id === 'text' ? ['Choosing a semantic host'] : id === 'code' ? ['Semantic authoring'] : [],
+          id === 'text' ? ['Semantic colors and custom themes', 'Choosing a semantic host'] : id === 'code' ? ['Semantic authoring'] : [],
           'react-' + id + '-authoring'),
       ]),
       guidePart(sections[3], [
