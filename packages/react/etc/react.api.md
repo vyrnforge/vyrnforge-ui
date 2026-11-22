@@ -288,7 +288,7 @@ export type BadgeShape = 'rounded' | 'pill';
 // @public (undocumented)
 export type BadgeSize = 'sm' | 'md';
 
-// @public (undocumented)
+// @public
 export type BadgeTone = 'neutral' | 'accent' | 'danger';
 
 // @public (undocumented)
