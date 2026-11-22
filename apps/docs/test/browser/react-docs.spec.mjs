@@ -9,7 +9,7 @@ test('React pilot artifact is Product Graph-backed and SSR-rendered with public 
   const manifest = JSON.parse(readFileSync(manifestPath, 'utf8'));
   const button = compileFrameworkDocumentation('react').componentCatalog.find((entry) => entry.id === 'button');
   expect(manifest.framework).toBe('react');
-  expect(manifest.status).toBe('button-layout-typography-icon-image-divider-pilot');
+  expect(manifest.status).toBe('button-layout-typography-icon-image-divider-avatar-pilot');
   expect(manifest.button.sharedSourcePath).toBe(button.sharedSourcePath);
   expect(manifest.button.frameworkSourcePath).toBe(button.frameworkSourcePath);
   expect(manifest.button.publicEntrypoints).toContain('@vyrnforge/react/button');
@@ -25,6 +25,7 @@ test('React pilot artifact is Product Graph-backed and SSR-rendered with public 
     ]),
     'components/icon/', 'api/components/icon/',
     'components/image/', 'api/components/image/',
+    'components/avatar/', 'api/components/avatar/',
   ]);
   expect(manifest.divider).toMatchObject({
     guideRoute: 'components/divider/', apiRoute: 'api/components/divider/',
@@ -54,6 +55,20 @@ test('React pilot artifact is Product Graph-backed and SSR-rendered with public 
     const frame = 'dist/docs/next/react/examples/icon/' + slug + '/index.html';
     expect(readFileSync(frame, 'utf8')).toContain('react-icon-' + slug + '.js');
     expect(readFileSync(frame, 'utf8')).toContain('react-icon-' + slug + '.css');
+  }
+  expect(manifest.avatar).toMatchObject({
+    guideRoute: 'components/avatar/', apiRoute: 'api/components/avatar/',
+    publicEntrypoints: ['@vyrnforge/react/avatar'],
+    frameworkSourcePath: 'product/components/composition-primitives/avatar/react/docs/index.md',
+  });
+  expect(manifest.avatar.examples.map((entry) => entry.id)).toEqual([
+    'avatar/decorative', 'avatar/fallback', 'avatar/image', 'avatar/initials',
+  ]);
+  for (const example of manifest.avatar.examples) {
+    const slug = example.id.split('/')[1];
+    const html = readFileSync('dist/docs/next/react/examples/avatar/' + slug + '/index.html', 'utf8');
+    expect(html).toContain('react-avatar-' + slug + '.js');
+    expect(html).toContain('react-avatar-' + slug + '.css');
   }
   expect(manifest.image).toMatchObject({
     guideRoute: 'components/image/', apiRoute: 'api/components/image/',
@@ -94,7 +109,7 @@ test('React pilot artifact is Product Graph-backed and SSR-rendered with public 
 });
 
 test('All React guide pages compose with canonical Flow and AutoGrid, not local layout algorithms', async ({ page }) => {
-  for (const id of ['button', 'layout', 'divider', 'text', 'code', 'kbd', 'icon', 'image']) {
+  for (const id of ['button', 'layout', 'divider', 'text', 'code', 'kbd', 'icon', 'image', 'avatar']) {
     await page.goto('/next/react/components/' + id + '/');
     const guide = page.locator('article.vf-docs-usage-guide');
     await expect(guide, id + ' guide must use the public Flow article').toHaveAttribute('data-vf-flow', '');
@@ -150,6 +165,7 @@ test('Owner-authored React guide examples use public components for text, layout
     ...manifest.divider.examples,
     ...manifest.icon.examples,
     ...manifest.image.examples,
+    ...manifest.avatar.examples,
     ...Object.values(manifest.typography).flatMap((unit) => unit.examples),
   ];
   expect(examples.length).toBeGreaterThan(30);
@@ -1194,6 +1210,85 @@ test('Text specimen examples retain semantics and reflow at narrow width with da
   await page.screenshot({
     path: testInfo.outputPath('react-text-guide-320-rtl-dark-forced-colors.png'), fullPage: false,
   });
+});
+
+test('Avatar framework switch preserves the Native Web and React topic', async ({ page }) => {
+  await page.goto('/next/native-web/components/avatar/');
+  await page.getByRole('combobox', { name: 'Framework' }).selectOption({ label: 'React (pilot)' });
+  await expect(page).toHaveURL(/\/next\/react\/components\/avatar\/$/);
+  await expect(page.locator('[data-vf-docs-react-avatar]')).toBeVisible();
+  await page.getByRole('combobox', { name: 'Framework' }).selectOption({ label: 'Native Web' });
+  await expect(page).toHaveURL(/\/next\/native-web\/components\/avatar\/$/);
+});
+
+test('React Avatar guide shows initials, native photo, failed-image fallback and API', async ({ page }) => {
+  const errors = [];
+  page.on('pageerror', error => errors.push(String(error)));
+  await page.goto('/next/react/components/avatar/');
+  const guide = page.locator('[data-vf-docs-react-avatar]');
+  await expect(guide.getByRole('heading', { level: 1, name: 'Avatar' })).toBeVisible();
+  await expect(guide.getByRole('navigation', { name: 'Avatar examples' }).getByRole('link')).toHaveCount(4);
+  await expect(guide.getByRole('heading', { name: 'Image and initials' })).toBeVisible();
+  await expect(guide.getByRole('heading', { name: 'Sizes and appearance' })).toBeVisible();
+  const initials = guide.locator('[data-vf-docs-react-avatar-example="avatar/initials"] iframe');
+  await initials.scrollIntoViewIfNeeded();
+  await expect(initials.contentFrame().locator('[data-vf-avatar-initials]').first()).toHaveText('AL');
+  await expect(initials.contentFrame().getByRole('img', { name: 'Ada Lovelace' })).toHaveCount(2);
+
+  const photo = guide.locator('[data-vf-docs-react-avatar-example="avatar/image"] iframe');
+  await photo.scrollIntoViewIfNeeded();
+  await expect(photo.contentFrame().locator('img[data-vf-avatar-image]')).toHaveAttribute('alt', '');
+  await expect(photo.contentFrame().getByRole('img', { name: 'Ada Lovelace' })).toHaveCount(1);
+  const failed = guide.locator('[data-vf-docs-react-avatar-example="avatar/fallback"] iframe');
+  await failed.scrollIntoViewIfNeeded();
+  await expect(failed.contentFrame().locator('img[data-vf-avatar-image]')).toHaveCount(0);
+  await expect(failed.contentFrame().locator('[data-vf-avatar-initials]')).toHaveText('AC');
+
+  const decorative = guide.locator('[data-vf-docs-react-avatar-example="avatar/decorative"] iframe');
+  await decorative.scrollIntoViewIfNeeded();
+  await expect(decorative.contentFrame().locator('[data-vf-avatar]')).toHaveAttribute('aria-hidden', 'true');
+  await expect(decorative.contentFrame().getByText('Ada Lovelace')).toBeVisible();
+  await page.getByRole('searchbox', { name: 'Search React documentation' }).fill('avatar initials');
+  await expect(page.locator('[data-vf-docs-react-results]').getByRole('link', { name: 'Avatar', exact: true })).toBeVisible();
+  await page.getByRole('button', { name: 'Clear search' }).click();
+  await page.getByRole('navigation', { name: 'Documentation' }).getByRole('link', { name: 'Avatar API' }).click();
+  await expect(page).toHaveURL(/\/next\/react\/api\/components\/avatar\/$/);
+  const api = page.locator('[data-vf-docs-react-api="avatar"]');
+  await expect(api).toContainText('@vyrnforge/react/avatar');
+  await expect(api.locator('section[aria-labelledby="react-avatar-api-types"] pre code')).toContainText('export interface AvatarProps');
+  await expect(api.locator('section[aria-labelledby="react-avatar-api-types"] pre code')).toContainText('export type AvatarSize');
+  expect(errors).toEqual([]);
+});
+
+test('Avatar documentation supports no-JS SSR and narrow RTL high-contrast layout', async ({ page, browser }) => {
+  await page.setViewportSize({ width: 320, height: 720 });
+  await page.goto('/next/react/components/avatar/');
+  await page.getByLabel('Theme').selectOption('dark');
+  await page.evaluate(() => { document.documentElement.dir = 'rtl'; });
+  await page.emulateMedia({ forcedColors: 'active' });
+  await expect(page.getByRole('heading', { level: 1, name: 'Avatar' })).toBeVisible();
+  const size = await page.evaluate(() => ({
+    scroll: document.documentElement.scrollWidth,
+    client: document.documentElement.clientWidth,
+  }));
+  expect(size.scroll).toBeLessThanOrEqual(size.client + 1);
+  await page.addScriptTag({ content: axeCore.source });
+  const a11y = await page.evaluate(async () => window.axe.run(document, {
+    runOnly: { type: 'tag', values: ['wcag2a', 'wcag2aa', 'wcag21a', 'wcag21aa', 'wcag22aa'] },
+  }));
+  expect(a11y.violations).toEqual([]);
+  const context = await browser.newContext({ javaScriptEnabled: false });
+  try {
+    const noJs = await context.newPage();
+    await noJs.goto('/next/react/components/avatar/');
+    await expect(noJs.getByRole('heading', { level: 1, name: 'Avatar' })).toBeVisible();
+    await expect(noJs.locator('[data-vf-docs-react-avatar-example]')).toHaveCount(4);
+    await noJs.getByRole('navigation', { name: 'Documentation framework' })
+      .getByRole('link', { name: 'Native Web' }).click();
+    await expect(noJs).toHaveURL(/\/next\/native-web\/components\/avatar\/$/);
+  } finally {
+    await context.close();
+  }
 });
 
 test('React Image guide uses shared native CSS, source-backed examples and a distinct API', async ({ page, browser }, testInfo) => {

@@ -1,0 +1,18 @@
+{
+  "id": "avatar/initials",
+  "title": "Initials avatar",
+  "description": "Native name-derived initials and an explicit localized abbreviation, without an image URL.",
+  "defaultFramework": "react",
+  "frameworks": {
+    "native-web": {
+      "label": "Native Web",
+      "language": "html",
+      "source": "native-web.html"
+    },
+    "react": {
+      "label": "React",
+      "language": "tsx",
+      "source": "react.tsx"
+    }
+  }
+}

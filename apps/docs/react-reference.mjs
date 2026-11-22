@@ -143,6 +143,7 @@ function navigation(view, links, topic) {
     { label: 'Media', items: [
       { id: 'icon', title: 'Icon', href: links.icon.guide },
       { id: 'image', title: 'Image', href: links.image.guide },
+      { id: 'avatar', title: 'Avatar', href: links.avatar.guide },
     ] },
     // API destinations remain working, but reference material is no longer
     // interleaved with consumer guides. A dedicated API catalog can follow.
@@ -152,6 +153,7 @@ function navigation(view, links, topic) {
       { id: 'divider-api', title: 'Divider API', href: links.divider.api },
       { id: 'icon-api', title: 'Icon API', href: links.icon.api },
       { id: 'image-api', title: 'Image API', href: links.image.api },
+      { id: 'avatar-api', title: 'Avatar API', href: links.avatar.api },
       ...['text', 'code', 'kbd'].map((id) => ({
         id: 'typography-api:' + id,
         title: id === 'kbd' ? 'Kbd API' : id[0].toUpperCase() + id.slice(1) + ' API',
@@ -534,6 +536,96 @@ function iconApi(icon, links) {
       h('code', { 'data-vf-code': '' }, '@vyrnforge/web/styles/icon.css')),
     h('p', null, h('a', { href: links.icon.guide, 'data-vf-link': '' }, 'View Icon examples')));
 }
+function avatarExample(example, links) {
+  const slug = example.id.slice('avatar/'.length);
+  return h('article', { key: example.id, id: 'react-avatar-example-' + slug,
+    className: 'vf-docs-example', 'data-vf-docs-react-avatar-example': example.id },
+    h(Flow, { as: 'header', direction: 'inline', wrap: 'wrap', gap: 'lg',
+      align: 'start', justify: 'space-between', className: 'vf-docs-example-header' },
+      h('div', null, h(Text, { as: 'h3', variant: 'heading-sm' }, example.title),
+        h(Text, { as: 'p' }, example.description))),
+    h('iframe', { className: 'vf-docs-react-example-frame',
+      title: 'React ' + example.title + ' avatar example',
+      src: links.avatar.exampleBase + slug + '/',
+      sandbox: 'allow-scripts', loading: slug === 'initials' ? 'eager' : 'lazy' }),
+    h('details', { className: 'vf-docs-source-disclosure' },
+      h('summary', null, 'View React TSX source'),
+      h('pre', { 'data-vf-code-block': '', tabIndex: 0 }, h('code', null, example.source))));
+}
+function avatarUsage(avatar, links) {
+  if (!avatar?.sharedContent || !avatar?.frameworkContent || !avatar?.examples?.length) return null;
+  const examples = [
+    ...avatar.examples.filter((example) => example.id === 'avatar/initials'),
+    ...avatar.examples.filter((example) => example.id !== 'avatar/initials'),
+  ];
+  const sections = [
+    { id: 'react-avatar-setup', heading: 'Get started' },
+    { id: 'react-avatar-examples', heading: 'Examples' },
+    { id: 'react-avatar-guidelines', heading: 'Usage guidelines' },
+    { id: 'react-avatar-accessibility', heading: 'Accessibility' },
+    { id: 'react-avatar-related', heading: 'Related components and API' },
+  ];
+  return h('div', { className: 'vf-docs-content-grid vf-docs-usage-guide-layout' },
+    guideToc(sections),
+    h(Flow, { as: 'article', gap: '2xl', className: 'vf-docs-article vf-docs-usage-guide',
+      'data-vf-docs-react-avatar': '' },
+      guideHeader(avatar.sharedContent, 'React · Media'),
+      guidePart(sections[0], [
+        ...guideBlocks(avatar.frameworkContent, 'React setup'),
+        h('p', { key: 'setup' }, 'See ', h('a', { href: links.home, 'data-vf-link': '' },
+          'React overview'), ' for shared setup and stylesheet delivery.'),
+      ]),
+      guidePart(sections[1], [
+        exampleJumpLinks('Avatar', examples,
+          (example) => 'react-avatar-example-' + example.id.slice('avatar/'.length)),
+        ...examples.map((example) => avatarExample(example, links)),
+      ]),
+      guidePart(sections[2], [
+        ...guideSubsections(avatar.sharedContent, [
+          'When to use', 'Image and initials', 'Sizes and appearance',
+          'Native Web markup', 'When not to use', 'Framework consumption',
+        ], 'react-avatar-guidance'),
+        ...guideSubsections(avatar.frameworkContent, [
+          'React authoring', 'React state and server rendering',
+        ], 'react-avatar-integration'),
+      ]),
+      guidePart(sections[3], [
+        ...guideBlocks(avatar.sharedContent, 'Accessibility'),
+        ...guideBlocks(avatar.frameworkContent, 'React accessibility'),
+        evidenceDisclosure(avatar.standardReferences),
+      ]),
+      guidePart(sections[4], [
+        h(Flow, { as: 'ul', gap: 'sm', className: 'vf-docs-related-links' },
+          h('li', null, h('a', { href: links.avatar.api, 'data-vf-link': '' },
+            'View Avatar public React API')),
+          h('li', null, h('a', { href: links.icon.guide, 'data-vf-link': '' }, 'Icon')),
+          h('li', null, h('a', { href: links.typography.text.guide, 'data-vf-link': '' }, 'Text'))),
+      ])));
+}
+function avatarApi(avatar, links) {
+  if (!avatar?.publicAvatarTypes || !avatar?.publicEntrypoints?.length) return null;
+  return h('article', { className: 'vf-docs-article', 'data-vf-docs-react-api': 'avatar' },
+    h('header', { className: 'vf-docs-component-header' },
+      h('h1', null, 'Avatar API'),
+      h('p', { className: 'vf-docs-lede' },
+        'One accessible image or initials Avatar, with native image fallback and three token sizes.'),
+      accessibilityEvidence(avatar.standardReferences)),
+    h('section', { 'aria-labelledby': 'react-avatar-api-entrypoints' },
+      h('h2', { id: 'react-avatar-api-entrypoints' }, 'Public entrypoint'),
+      h('ul', null, ...avatar.publicEntrypoints.map((entry) =>
+        h('li', { key: entry }, h('code', { 'data-vf-code': '' }, entry)))),
+      h('p', null, 'Load canonical Web styles from @vyrnforge/web/styles/avatar.css.')),
+    h('section', { 'aria-labelledby': 'react-avatar-api-types' },
+      h('h2', { id: 'react-avatar-api-types' }, 'Source-backed React types and props'),
+      h('pre', { 'data-vf-code-block': '', tabIndex: 0 },
+        h('code', null, avatar.publicAvatarTypes))),
+    h('section', { 'aria-labelledby': 'react-avatar-api-css' },
+      h('h2', { id: 'react-avatar-api-css' }, 'Shared CSS and native hooks'),
+      h('code', { 'data-vf-code': '' }, '@vyrnforge/web/styles/avatar.css'),
+      ...guideBlocks(avatar.sharedContent, 'Native Web markup')),
+    h('p', null, h('a', { href: links.avatar.guide, 'data-vf-link': '' },
+      'View Avatar examples')));
+}
 function imageExample(example, links) {
   const slug = example.id.slice('image/'.length);
   return h('article', { key: example.id, id: 'react-image-example-' + slug,
@@ -712,7 +804,7 @@ function dividerApi(divider, links) {
     h('p', null, h('a', { href: links.divider.guide, 'data-vf-link': '' },
       'View Divider examples')));
 }
-function body(view, links, button, layout, typography, icon, image, divider, message, setMessage, requestedTopic) {
+function body(view, links, button, layout, typography, icon, image, avatar, divider, message, setMessage, requestedTopic) {
   if (view === 'unavailable') {
     return h('article', { className: 'vf-docs-article', 'data-vf-docs-react-unavailable': '' },
       h('header', { className: 'vf-docs-component-header' },
@@ -729,7 +821,7 @@ function body(view, links, button, layout, typography, icon, image, divider, mes
       h('header', { className: 'vf-docs-component-header' },
         h('h1', null, 'VyrnForge React'),
         h('p', { className: 'vf-docs-lede', 'data-vf-text': '', 'data-vf-text-variant': 'body-lg' },
-          'Runnable React examples for Button, Layout, Divider, Text, Code, Kbd, Icon and Image. All use the shared VyrnForge Web design foundation.')),
+          'Runnable React examples for Button, Layout, Divider, Text, Code, Kbd, Icon, Image and Avatar. All use the shared VyrnForge Web design foundation.')),
       h('section', null, h('h2', null, 'Getting started'),
         h('p', null, 'Import React components from their public entrypoints. Supported CSS-aware browser builds automatically include canonical Web component styles; server-rendered apps must also deliver extracted client CSS.'),
         h('pre', { 'data-vf-code-block': '', tabIndex: 0 },
@@ -755,6 +847,8 @@ function body(view, links, button, layout, typography, icon, image, divider, mes
           h('li', null, h('a', { 'data-vf-link': '', href: links.icon.api }, 'React Icon API')),
           h('li', null, h('a', { 'data-vf-link': '', href: links.image.guide }, 'React Image')),
           h('li', null, h('a', { 'data-vf-link': '', href: links.image.api }, 'React Image API')),
+          h('li', null, h('a', { 'data-vf-link': '', href: links.avatar.guide }, 'React Avatar')),
+          h('li', null, h('a', { 'data-vf-link': '', href: links.avatar.api }, 'React Avatar API')),
           ...['text', 'code', 'kbd'].flatMap((id) => [
             h('li', { key: id + '-guide' }, h('a', { 'data-vf-link': '',
               href: links.typography[id].guide }, 'React ' + (id === 'kbd' ? 'Kbd' : id[0].toUpperCase() + id.slice(1)))),
@@ -766,6 +860,8 @@ function body(view, links, button, layout, typography, icon, image, divider, mes
   if (view === 'icon-api') return iconApi(icon, links);
   if (view === 'divider') return dividerUsage(divider, links);
   if (view === 'divider-api') return dividerApi(divider, links);
+  if (view === 'avatar') return avatarUsage(avatar, links);
+  if (view === 'avatar-api') return avatarApi(avatar, links);
   if (view === 'image') return imageUsage(image, links);
   if (view === 'image-api') return imageApi(image, links);
   if (view === 'typography') return typographyGuide(typography, links);
@@ -813,7 +909,7 @@ function body(view, links, button, layout, typography, icon, image, divider, mes
   }
   return buttonUsageGuide(button, links, message, setMessage);
 }
-export function ReactReferencePage({ view, links, button, layout, typography, icon, image, divider, requestedTopic }) {
+export function ReactReferencePage({ view, links, button, layout, typography, icon, image, avatar, divider, requestedTopic }) {
   const nav = useNavigation();
   const { theme, change } = useTheme();
   const [search, setSearch] = useState('');
@@ -831,6 +927,8 @@ export function ReactReferencePage({ view, links, button, layout, typography, ic
     { title: 'Icon API', href: links.icon.api, keywords: 'iconprops SVGAttributes definition variant shape size label types' },
     { title: 'Image', href: links.image.guide, keywords: 'image img responsive alt decorative caption figure native JSX' },
     { title: 'Image API', href: links.image.api, keywords: 'imageprops img loading decoding srcset sizes ref types' },
+    { title: 'Avatar', href: links.avatar.guide, keywords: 'avatar initials profile photo image user account fallback portrait accessible circle size' },
+    { title: 'Avatar API', href: links.avatar.api, keywords: 'avatarprops avatarsize src initials name decorative loading native image error ref' },
     ...['text', 'code', 'kbd'].flatMap((id) => [
       { title: (id === 'kbd' ? 'Kbd' : id[0].toUpperCase() + id.slice(1)),
         href: links.typography[id].guide,
@@ -908,7 +1006,7 @@ export function ReactReferencePage({ view, links, button, layout, typography, ic
           h('a', { 'data-vf-link': '', href: links.native }, 'Native Web'),
           h('span', { 'aria-hidden': 'true' }, ' / '),
           h('span', { 'aria-current': 'page' }, 'React')),
-        body(view, links, button, layout, typography, icon, image, divider, message, setMessage, requestedTopic))),
+        body(view, links, button, layout, typography, icon, image, avatar, divider, message, setMessage, requestedTopic))),
     h(AppShellFooter, { className: 'vf-docs-footer' },
       h('span', null, 'VyrnForge React documentation'),
       h('span', null, links.channel + ' channel'))));

@@ -1603,3 +1603,31 @@ test('Native Image guide renders source-backed meaningful, decorative and captio
 
   await expectNoAccessibilityViolations(page);
 });
+
+test('Native Avatar guide demonstrates initials, native images and accessible identity', async ({ page }) => {
+  const errors = collectPageErrors(page);
+  await gotoWithCleanDocsState(page, '/next/native-web/components/avatar/');
+  const article = page.locator('article[data-vf-docs-component="avatar"]');
+  await expect(article.getByRole('heading', { level: 1, name: 'Avatar' })).toBeVisible();
+  await expect(article.locator('[data-vf-docs-example]')).toHaveCount(4);
+  const initials = article.locator('[data-vf-docs-example="avatar/initials"] [data-vf-docs-preview]');
+  await expect(initials.locator('[data-vf-avatar]')).toHaveCount(4);
+  await expect(initials.getByRole('img', { name: 'Ada Lovelace' })).toHaveCount(2);
+  await expect(initials.locator('[data-vf-avatar-initials]').first()).toHaveText('AL');
+
+  const image = article.locator('[data-vf-docs-example="avatar/image"] [data-vf-docs-preview]');
+  await expect(image.locator('img[data-vf-avatar-image]')).toHaveAttribute('alt', '');
+  await expect(image.getByRole('img', { name: 'Ada Lovelace' })).toHaveCount(1);
+
+  const fallback = article.locator('[data-vf-docs-example="avatar/fallback"] [data-vf-docs-preview]');
+  await expect(fallback.locator('img')).toHaveCount(0);
+  await expect(fallback.getByRole('img', { name: 'Alex Chen' })).toBeVisible();
+  await expect(fallback.locator('[data-vf-avatar-initials]')).toHaveText('AC');
+
+  const decorative = article.locator('[data-vf-docs-example="avatar/decorative"] [data-vf-docs-preview]');
+  await expect(decorative.locator('[data-vf-avatar]')).toHaveAttribute('aria-hidden', 'true');
+  await expect(decorative.getByText('Ada Lovelace')).toBeVisible();
+
+  await expectNoAccessibilityViolations(page);
+  expect(errors).toEqual([]);
+});

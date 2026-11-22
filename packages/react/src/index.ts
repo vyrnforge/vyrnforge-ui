@@ -1,3 +1,5 @@
+export { Avatar } from './components/avatar/index.js';
+export type { AvatarProps, AvatarSize } from './components/avatar/index.js';
 export { Divider } from './components/divider/index.js';
 export type { DividerProps, DividerOrientation, DividerTextAlign, DividerTextDirection } from './components/divider/index.js';
 export { Flow, AutoGrid } from './components/layout/index.js';

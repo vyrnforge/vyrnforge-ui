@@ -1,0 +1,18 @@
+{
+  "id": "avatar/fallback",
+  "title": "Failed image fallback",
+  "description": "React removes a failed native image and keeps the identity label stable while initials are displayed.",
+  "defaultFramework": "react",
+  "frameworks": {
+    "native-web": {
+      "label": "Native Web",
+      "language": "html",
+      "source": "native-web.html"
+    },
+    "react": {
+      "label": "React",
+      "language": "tsx",
+      "source": "react.tsx"
+    }
+  }
+}

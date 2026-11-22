@@ -1,0 +1,65 @@
+@import "../../styles/tokens.css";
+
+@layer vyrnforge.components {
+  :where([data-vf-avatar]) {
+    align-items: center;
+    background-color: var(--vf-color-surface-pressed);
+    block-size: var(--vf-control-height-md);
+    border-radius: 50%;
+    box-sizing: border-box;
+    color: var(--vf-color-text);
+    display: inline-grid;
+    flex: none;
+    font-family: var(--vf-font-family-sans);
+    font-size: var(--vf-font-size-sm);
+    font-weight: var(--vf-font-weight-semibold);
+    inline-size: var(--vf-control-height-md);
+    isolation: isolate;
+    line-height: var(--vf-line-height-none);
+    overflow: hidden;
+    place-items: center;
+    position: relative;
+    vertical-align: middle;
+  }
+
+  :where([data-vf-avatar][data-vf-avatar-size="sm"]) {
+    block-size: var(--vf-control-height-sm);
+    font-size: var(--vf-font-size-xs);
+    inline-size: var(--vf-control-height-sm);
+  }
+
+  :where([data-vf-avatar][data-vf-avatar-size="lg"]) {
+    block-size: var(--vf-control-height-lg);
+    font-size: var(--vf-font-size-md);
+    inline-size: var(--vf-control-height-lg);
+  }
+
+  :where([data-vf-avatar-initials]) {
+    grid-area: 1 / 1;
+    max-inline-size: 100%;
+    overflow: hidden;
+    padding-inline: var(--vf-space-2xs);
+    text-align: center;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  :where([data-vf-avatar-image]) {
+    block-size: 100%;
+    border-radius: inherit;
+    grid-area: 1 / 1;
+    inline-size: 100%;
+    object-fit: cover;
+    pointer-events: none;
+    position: absolute;
+    inset: 0;
+  }
+
+  @media (forced-colors: active) {
+    :where([data-vf-avatar]) {
+      background: Canvas;
+      border: 1px solid CanvasText;
+      color: CanvasText;
+    }
+  }
+}

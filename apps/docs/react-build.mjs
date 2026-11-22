@@ -132,6 +132,33 @@ if (createSvgIconSignatureEnd < 0) {
 }
 const publicIconTypes = iconPublicSource.slice(iconTypeStart, iconTypeEnd).trim() +
   '\n\n' + iconPublicSource.slice(createSvgIconStart, createSvgIconSignatureEnd + 1).trim() + ';';
+// Avatar is a composition capability distinct from Image and AvatarFallback candidates.
+const avatar = reactModel.componentCatalog.find((entry) => entry.id === 'avatar');
+const avatarExamples = avatar?.examples.slice().sort((a, b) => a.id.localeCompare(b.id)) ?? [];
+if (!avatar?.showcaseAvailable || !avatar.apiAvailable ||
+    !avatar.sharedContent || !avatar.frameworkContent ||
+    !avatar.publicEntrypoints.includes('@vyrnforge/react/avatar') ||
+    !webModel.packageManifest.exports?.['./styles/avatar.css'] ||
+    avatarExamples.length !== 4 ||
+    !['avatar/initials', 'avatar/image', 'avatar/fallback', 'avatar/decorative']
+      .every((id) => avatarExamples.some((example) => example.id === id)) ||
+    !avatarExamples.every((example) => example.sourcePath.endsWith('/react.tsx') &&
+      example.source.includes("'@vyrnforge/react/avatar'") &&
+      example.source.includes("'@vyrnforge/web/styles/avatar.css'"))) {
+  throw new Error('React Avatar requires a public native-backed component, shared CSS and four runnable examples');
+}
+const avatarPublicSourcePath = path.join(root,
+  path.dirname(path.dirname(avatar.frameworkSourcePath)), 'index.ts');
+const avatarPublicSource = await readFile(avatarPublicSourcePath, 'utf8');
+const avatarTypeStart = avatarPublicSource.indexOf('export type AvatarSize');
+const avatarTypeEnd = avatarPublicSource.indexOf('/** Simple deterministic fallback;', avatarTypeStart);
+if (avatarTypeStart < 0 || avatarTypeEnd < 0 ||
+    !avatarPublicSource.includes('forwardRef<HTMLSpanElement, AvatarProps>') ||
+    !avatarPublicSource.includes('useState<string | undefined>')) {
+  throw new Error('React Avatar source changed: review public API types and error fallback contract');
+}
+const publicAvatarTypes = avatarPublicSource.slice(avatarTypeStart, avatarTypeEnd).trim();
+
 // Preserve Image's native HTML semantics and canonical Web CSS.
 const image = reactModel.componentCatalog.find((entry) => entry.id === 'image');
 const imageExamples = image?.examples.slice().sort((a, b) => a.id.localeCompare(b.id)) ?? [];
@@ -228,6 +255,11 @@ function linksFor(route) {
       guide: relative(dir, react + image.showcaseRoute, true),
       api: relative(dir, react + image.apiRoute, true),
       exampleBase: relative(dir, react + 'examples/image/', true),
+    },
+    avatar: {
+      guide: relative(dir, react + avatar.showcaseRoute, true),
+      api: relative(dir, react + avatar.apiRoute, true),
+      exampleBase: relative(dir, react + 'examples/avatar/', true),
     },
     divider: {
       guide: relative(dir, react + divider.showcaseRoute, true),
@@ -370,6 +402,32 @@ for (const example of imageExamples) {
     escapeHtml(relative(dir, 'assets/' + asset + '.js')) + '"></script></body></html>');
 }
 
+for (const example of avatarExamples) {
+  const slug = example.id.slice('avatar/'.length);
+  const asset = 'react-avatar-' + slug;
+  await build({
+    entryPoints: [path.join(root, example.sourcePath)],
+    bundle: true, platform: 'browser', format: 'iife', target: 'es2022',
+    jsx: 'automatic', logLevel: 'silent',
+    outfile: path.join(outRoot, 'assets', asset + '.js'),
+  });
+  if (!(await stat(path.join(outRoot, 'assets', asset + '.css')).catch(() => null))?.isFile()) {
+    throw new Error('React ' + example.id + ' must extract canonical browser CSS');
+  }
+  const route = 'examples/avatar/' + slug + '/';
+  const dir = directory(route);
+  const styles = shellStyles.map((file) =>
+    '<link rel="stylesheet" href="' + escapeHtml(relative(dir, file)) + '">').join('\n');
+  await writePage(route, '<!doctype html><html lang="en" data-vf-theme="light"><head>' +
+    '<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">' +
+    '<title>React ' + escapeHtml(example.title) + ' · VyrnForge</title>' +
+    styles + '<link rel="stylesheet" href="' +
+    escapeHtml(relative(dir, 'assets/' + asset + '.css')) + '">' +
+    '<style>body{margin:0;padding:1rem;min-width:0;overflow-wrap:anywhere}' +
+    '#root{min-width:0}</style></head><body><div id="root"></div><script src="' +
+    escapeHtml(relative(dir, 'assets/' + asset + '.js')) + '"></script></body></html>');
+}
+
 for (const example of dividerExamples) {
   const slug = example.id.slice('divider/'.length);
   const asset = 'react-divider-' + slug;
@@ -474,7 +532,10 @@ const pageViews = [
     description: 'Native image semantics and source-backed React examples' },
   { route: image.apiRoute, view: 'image-api', title: 'React Image API',
     description: 'Source-backed React Image props and public entrypoints' },
-];
+  { route: avatar.showcaseRoute, view: 'avatar', title: 'React Avatar',
+    description: 'Image and initials fallback in one native-backed React Avatar' },
+  { route: avatar.apiRoute, view: 'avatar-api', title: 'React Avatar API',
+    description: 'Source-backed React Avatar props and sizing' },];
 // All Native destinations have a React-context response, even when a React guide
 // has not been implemented. Never disguise an unavailable view as another port.
 const renderedRoutes = new Set(pageViews.map((page) => page.route));
@@ -528,6 +589,13 @@ const dividerData = {
   publicEntrypoints: divider.publicEntrypoints,
   publicDividerTypes, examples: dividerExamples,
 };
+const avatarData = {
+  id: avatar.id, title: avatar.title,
+  sharedContent: avatar.sharedContent, frameworkContent: avatar.frameworkContent,
+  standardReferences: avatar.standardReferences,
+  publicEntrypoints: avatar.publicEntrypoints,
+  publicAvatarTypes, examples: avatarExamples,
+};
 const imageData = {
   id: image.id, title: image.title,
   sharedContent: image.sharedContent, frameworkContent: image.frameworkContent,
@@ -542,6 +610,7 @@ for (const page of pageViews) {
     typography: page.topic ? typography[page.topic] : null,
     icon: page.view === 'icon' || page.view === 'icon-api' ? iconData : null,
     image: page.view === 'image' || page.view === 'image-api' ? imageData : null,
+    avatar: page.view === 'avatar' || page.view === 'avatar-api' ? avatarData : null,
     divider: page.view === 'divider' || page.view === 'divider-api' ? dividerData : null,
     requestedTopic: page.requestedTopic ?? null };
   const initialHtml = renderToString(createElement(ReactReferencePage, props));
@@ -566,7 +635,7 @@ for (const page of pageViews) {
   await writePage(page.route, pageHtml);
 }
 await writeFile(path.join(reactRoot, 'site-manifest.json'), JSON.stringify({
-  channel, framework: 'react', status: 'button-layout-typography-icon-image-divider-pilot',
+  channel, framework: 'react', status: 'button-layout-typography-icon-image-divider-avatar-pilot',
   source: 'Product Graph public React surface',
   routes: pageViews.map(({ route, view }) => ({ route, view })),
   layout: {
@@ -594,6 +663,15 @@ await writeFile(path.join(reactRoot, 'site-manifest.json'), JSON.stringify({
     frameworkSourcePath: divider.frameworkSourcePath,
     publicSourcePath: path.relative(root, dividerPublicSourcePath).replaceAll('\\', '/'),
     examples: dividerExamples.map((example) => ({ id: example.id,
+      sourcePath: example.sourcePath, title: example.title })),
+  },
+  avatar: {
+    guideRoute: avatar.showcaseRoute, apiRoute: avatar.apiRoute,
+    publicEntrypoints: avatar.publicEntrypoints,
+    sharedSourcePath: avatar.sharedSourcePath,
+    frameworkSourcePath: avatar.frameworkSourcePath,
+    publicSourcePath: path.relative(root, avatarPublicSourcePath).replaceAll('\\', '/'),
+    examples: avatarExamples.map((example) => ({ id: example.id,
       sourcePath: example.sourcePath, title: example.title })),
   },
   image: {

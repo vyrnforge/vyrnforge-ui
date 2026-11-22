@@ -209,6 +209,26 @@ export type AutoGridProps<Element extends LayoutElement = LayoutElement> = Eleme
     minItemSize?: string;
 } & Omit<ComponentPropsWithoutRef<Element>, 'as' | 'direction'> : never;
 
+// @public
+export const Avatar: ForwardRefExoticComponent<AvatarProps & RefAttributes<HTMLSpanElement>>;
+
+// @public
+export interface AvatarProps extends Omit<ComponentPropsWithoutRef<'span'>, 'children' | 'role' | 'aria-label' | 'aria-hidden'> {
+    decoding?: 'sync' | 'async' | 'auto';
+    decorative?: boolean;
+    initials?: string;
+    loading?: 'eager' | 'lazy';
+    name: string;
+    // (undocumented)
+    size?: AvatarSize;
+    sizes?: string;
+    src?: string;
+    srcSet?: string;
+}
+
+// @public (undocumented)
+export type AvatarSize = 'sm' | 'md' | 'lg';
+
 // @public (undocumented)
 export const Button: ForwardRefExoticComponent<ButtonProps & RefAttributes<HTMLButtonElement>>;
 
