@@ -109,6 +109,9 @@ test('All React guide pages compose with canonical Flow and AutoGrid, not local 
     await expect(related).toHaveCount(1);
     const headers = guide.locator('.vf-docs-example-header[data-vf-flow-direction="inline"]');
     expect(await headers.count(), id + ' examples must use Flow headers').toBeGreaterThan(0);
+    await expect(guide.locator('p[data-vf-text]').first()).toBeVisible();
+    expect(await guide.locator('.vf-docs-example-header h3[data-vf-text]').count(),
+      id + ' example titles must use public Text').toBeGreaterThan(0);
     expect(await guide.evaluate((element) => getComputedStyle(element).display)).toBe('flex');
     expect(await jumpLinks.evaluate((element) => getComputedStyle(element).display)).toBe('flex');
     const standards = guide.locator('.vf-docs-standards[data-vf-flow]');
