@@ -582,7 +582,8 @@ function avatarUsage(avatar, links) {
       ]),
       guidePart(sections[2], [
         ...guideSubsections(avatar.sharedContent, [
-          'When to use', 'Image and initials', 'Sizes and appearance',
+          'When to use', 'Image and initials', 'Appearances and fallback',
+          'Sizes and appearance', 'Grouped avatars and totals', 'Group spacing',
           'Native Web markup', 'When not to use', 'Framework consumption',
         ], 'react-avatar-guidance'),
         ...guideSubsections(avatar.frameworkContent, [
@@ -597,7 +598,7 @@ function avatarUsage(avatar, links) {
       guidePart(sections[4], [
         h(Flow, { as: 'ul', gap: 'sm', className: 'vf-docs-related-links' },
           h('li', null, h('a', { href: links.avatar.api, 'data-vf-link': '' },
-            'View Avatar public React API')),
+            'View Avatar and AvatarGroup public React API')),
           h('li', null, h('a', { href: links.icon.guide, 'data-vf-link': '' }, 'Icon')),
           h('li', null, h('a', { href: links.typography.text.guide, 'data-vf-link': '' }, 'Text'))),
       ])));
@@ -608,7 +609,7 @@ function avatarApi(avatar, links) {
     h('header', { className: 'vf-docs-component-header' },
       h('h1', null, 'Avatar API'),
       h('p', { className: 'vf-docs-lede' },
-        'One accessible image or initials Avatar, with native image fallback and three token sizes.'),
+        'One native-backed Avatar with image, letter and icon appearances, plus grouped totals and spacing.'),
       accessibilityEvidence(avatar.standardReferences)),
     h('section', { 'aria-labelledby': 'react-avatar-api-entrypoints' },
       h('h2', { id: 'react-avatar-api-entrypoints' }, 'Public entrypoint'),
@@ -624,7 +625,7 @@ function avatarApi(avatar, links) {
       h('code', { 'data-vf-code': '' }, '@vyrnforge/web/styles/avatar.css'),
       ...guideBlocks(avatar.sharedContent, 'Native Web markup')),
     h('p', null, h('a', { href: links.avatar.guide, 'data-vf-link': '' },
-      'View Avatar examples')));
+      'View Avatar and AvatarGroup examples')));
 }
 function imageExample(example, links) {
   const slug = example.id.slice('image/'.length);
