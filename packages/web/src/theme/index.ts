@@ -1,9 +1,10 @@
-import { themeDefaults, themeableColorRoles } from './defaults.generated.js';
+import { themeDefaults, themeableColorRoles, publicRuntimeTokens } from './defaults.generated.js';
 
 export { themeableColorRoles } from './defaults.generated.js';
 
 export type ThemeAppearance = 'light' | 'dark';
 export type ThemeColorRole = (typeof themeableColorRoles)[number];
+export type PublicRuntimeTokenName = (typeof publicRuntimeTokens)[number];
 export type ThemePalette = Readonly<Record<string, Readonly<Record<string, string>>>>;
 export type ThemeColorOverrides = Partial<Record<ThemeColorRole, string>>;
 
@@ -20,7 +21,7 @@ export interface CreateThemeOptions {
   /** Semantic role names map to existing --vf-color-* tokens. */
   colors?: ThemeColorOverrides;
   /** Optional public --vf-* token overrides, including spacing and typography. */
-  tokens?: Partial<Record<string, string>>;
+  tokens?: Partial<Record<PublicRuntimeTokenName, string>>;
 }
 
 export interface ThemeDefinition {
@@ -31,6 +32,7 @@ export interface ThemeDefinition {
 }
 
 const colorRoleSet = new Set<string>(themeableColorRoles);
+const publicTokenSet = new Set<string>(publicRuntimeTokens);
 const reservedNames = new Set(['light', 'dark', 'system']);
 const slugPattern = /^[a-z][a-z0-9-]*$/;
 const publicVariablePattern = /^--vf-[a-z0-9-]+$/;
@@ -102,7 +104,7 @@ export function createTheme(options: CreateThemeOptions): ThemeDefinition {
     if (value !== undefined) variables['--vf-color-' + role] = resolveColor(value, palette, role);
   }
   for (const [name, value] of Object.entries(options.tokens ?? {})) {
-    if (!publicVariablePattern.test(name)) throw new TypeError('Not a public CSS token: ' + name);
+    if (!publicVariablePattern.test(name) || !publicTokenSet.has(name)) throw new TypeError('Not a public CSS token: ' + name);
     if (value !== undefined) variables[name] = resolveColor(value, palette, name);
   }
 
@@ -123,7 +125,7 @@ export function renderThemeCss(theme: ThemeDefinition): string {
   const declarations = Object.entries(theme.variables)
     .sort(([a], [b]) => a.localeCompare(b))
     .map(([name, value]) => {
-      if (!publicVariablePattern.test(name)) throw new TypeError('Not a public CSS token: ' + name);
+      if (!publicVariablePattern.test(name) || !publicTokenSet.has(name)) throw new TypeError('Not a public CSS token: ' + name);
       return '    ' + name + ': ' + safeValue(value, name) + ';';
     }).join('\n');
   return '@layer vyrnforge.themes {\n' +

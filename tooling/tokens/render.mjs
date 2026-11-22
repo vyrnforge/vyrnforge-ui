@@ -25,5 +25,7 @@ export function renderThemeAuthoringData() {
 export const themeDefaults = ${JSON.stringify({ light, dark: darkThemeOverrides }, null, 2)} as const;
 
 export const themeableColorRoles = ${JSON.stringify(names, null, 2)} as const;
+
+export const publicRuntimeTokens = ${JSON.stringify(Object.keys(runtimeTokenDefaults), null, 2)} as const;
 `;
 }

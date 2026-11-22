@@ -14,3 +14,7 @@ void css;
 // @ts-expect-error undocumented role
 const unsupportedRole: ThemeColorRole = 'success-background';
 void unsupportedRole;
+
+// @ts-expect-error: invalid token names are not part of the generated contract
+const invalidOptions: CreateThemeOptions = { name: 'invalid', tokens: { '--vf-not-defined': 'red' } };
+void invalidOptions;

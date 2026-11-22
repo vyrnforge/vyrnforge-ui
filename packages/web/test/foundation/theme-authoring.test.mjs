@@ -70,6 +70,8 @@ test('rejects unsafe CSS, invalid names, unsupported colors and missing shades',
     /Unknown semantic color role/);
   assert.throws(() => createTheme({ name: 'brand', tokens: { '--_vf-private': 'red' } }),
     /Not a public CSS token/);
+  assert.throws(() => createTheme({ name: 'brand', tokens: { '--vf-not-defined': 'red' } }),
+    /Not a public CSS token/);
   assert.throws(() => createTheme({ name: 'brand', colors: { text: 'red; } html { color: green' } }),
     /safe CSS value/);
   assert.throws(() => createTheme({ name: 'brand', appearance: 'dark',
