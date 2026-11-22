@@ -125,6 +125,13 @@ test('React token guide uses semantic roles across built-in and custom nested th
   const customPrimary = await value(custom);
   expect(lightPrimary).not.toBe(darkPrimary);
   expect(customPrimary).not.toBe(darkPrimary);
+  const buttonBackground = async (scope) => scope.getByRole('button', { name: 'Primary action' })
+    .evaluate((el) => getComputedStyle(el).backgroundColor);
+  const lightButton = await buttonBackground(light);
+  const darkButton = await buttonBackground(dark);
+  const customButton = await buttonBackground(custom);
+  expect(lightButton).not.toBe(darkButton);
+  expect(customButton).not.toBe(darkButton);
   await expect(light).toContainText('Secondary text');
   await expect(dark).toContainText('Danger text');
   const semantics = await custom.locator('h3[data-vf-text]').evaluate(

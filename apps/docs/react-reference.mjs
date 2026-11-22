@@ -814,10 +814,12 @@ function tokensGuide(links) {
     '  <Text as="p" tone="primary">Primary / accent</Text>\n' +
     '  <Text as="p" tone="secondary">Secondary / muted</Text>\n' +
     '  <Text as="p" tone="danger">Danger</Text>\n' +
+    '  <Button type="button" variant="primary">Primary action</Button>\n' +
     '</ThemeScope>\n\n' +
     '<Flow style={{ padding: tokens.space.md }}>Token-aware spacing</Flow>';
   const localExample = '<ThemeScope theme="dark" colors={{\n' +
-    "  primary: '#a6c8ff', onAccent: '#10284f', danger: '#ff908e'\n" +
+    "  primary: '#a6c8ff', accentHover: '#c2d9ff', accentPressed: '#80aef2',\n" +
+    "  onAccent: '#10284f', danger: '#ff908e'\n" +
     '}}>\n  <Text as="p" tone="primary">Custom accent</Text>\n</ThemeScope>';
   const brandExample = '[data-vf-theme="acme-light"] {\n' +
     '  color-scheme: light;\n' +
@@ -845,7 +847,10 @@ function tokensGuide(links) {
         ...[
           { name: 'Light', theme: 'light' },
           { name: 'Dark', theme: 'dark' },
-          { name: 'Custom dark', theme: 'dark', colors: { primary: '#c6a4ff', danger: '#ff8f94' } },
+          { name: 'Custom dark', theme: 'dark', colors: {
+            primary: '#c6a4ff', accentHover: '#d6c0ff', accentPressed: '#aa84f2',
+            onAccent: '#18082f', danger: '#ff8f94',
+          } },
         ].map((item) => h(ThemeScope, {
           key: item.name, theme: item.theme, colors: item.colors, as: 'section',
           'aria-label': item.name + ' semantic colors',
@@ -856,12 +861,13 @@ function tokensGuide(links) {
           h(Text, { as: 'h3', variant: 'heading-sm' }, item.name),
           h(Text, { as: 'p', tone: 'primary' }, 'Primary accent'),
           h(Text, { as: 'p', tone: 'secondary' }, 'Secondary text'),
-          h(Text, { as: 'p', tone: 'danger' }, 'Danger text'))))),
+          h(Text, { as: 'p', tone: 'danger' }, 'Danger text'),
+          h(Button, { type: 'button', variant: 'primary' }, 'Primary action'))))),
       h(Text, { as: 'p' }, 'These regions inherit the normal CSS theme scopes. No React Context, theme registry, JavaScript color lookup or duplicate stylesheets.')),
     h(Flow, { as: 'section', gap: 'md', 'aria-labelledby': 'react-token-local' },
       h(Text, { as: 'h2', variant: 'heading-md', id: 'react-token-local' }, 'Custom colors in one scope'),
       code(localExample),
-      h(Text, { as: 'p' }, 'Pass only the roles you need. onAccent controls foreground contrast when an accent background changes. A normal style prop can explicitly override a token.')),
+      h(Text, { as: 'p' }, 'Pass only the roles you need. When changing primary/accent Button colors, also define accentHover, accentPressed and onAccent for coherent interactive states and contrast. A normal style prop can explicitly override a token.')),
     h(Flow, { as: 'section', gap: 'md', 'aria-labelledby': 'react-token-brand' },
       h(Text, { as: 'h2', variant: 'heading-md', id: 'react-token-brand' }, 'Custom themes for both appearances'),
       h(Text, { as: 'p' }, 'Define branded color mappings using canonical public CSS variables in your application stylesheet. Then use theme="acme-light" or theme="acme-dark". No registration is needed.'),

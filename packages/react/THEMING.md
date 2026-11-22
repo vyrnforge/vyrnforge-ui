@@ -45,6 +45,8 @@ import { ThemeScope, Text } from '@vyrnforge/react';
 ```tsx
 <ThemeScope theme="dark" colors={{
   primary: '#9ec4ff',
+  accentHover: '#bed6ff',
+  accentPressed: '#729fe8',
   onAccent: '#0b1f4d',
   danger: '#ff8a8a',
 }}>
@@ -53,7 +55,7 @@ import { ThemeScope, Text } from '@vyrnforge/react';
 </ThemeScope>
 ```
 
-Only override roles you need. Pair accent backgrounds with `onAccent` and check readable color contrast. `colors` uses **public semantic CSS properties** and applies to descendants via normal inheritance. Passing a normal React `style` prop may explicitly override the same CSS property.
+Only override roles you need. When changing primary/accent Button colors, override `accentHover`, `accentPressed` and `onAccent` together so hover/pressed treatments remain in the same brand family. Check readable color contrast in each state. `colors` uses **public semantic CSS properties** and applies to descendants via normal inheritance. Passing a normal React `style` prop may explicitly override the same CSS property.
 
 ## Durable custom themes for both appearances
 
