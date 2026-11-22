@@ -256,6 +256,44 @@ export type AvatarShape = 'rounded' | 'square';
 // @public (undocumented)
 export type AvatarSize = 'sm' | 'md' | 'lg';
 
+// @public
+export const Badge: ForwardRefExoticComponent<BadgeProps & RefAttributes<HTMLSpanElement>>;
+
+// @public
+export type BadgeProps = Omit<ComponentPropsWithoutRef<'span'>, 'children' | 'role' | 'aria-hidden' | 'aria-label' | 'tabIndex'> & {
+    tone?: BadgeTone;
+    size?: BadgeSize;
+    shape?: BadgeShape;
+    variant?: BadgeVariant;
+} & ({
+    appearance?: 'text';
+    children: string | number;
+    label?: never;
+    decorative?: never;
+} | {
+    appearance: 'dot';
+    label: string;
+    children?: never;
+    decorative?: false;
+} | {
+    appearance: 'dot';
+    decorative: true;
+    children?: never;
+    label?: never;
+});
+
+// @public (undocumented)
+export type BadgeShape = 'rounded' | 'pill';
+
+// @public (undocumented)
+export type BadgeSize = 'sm' | 'md';
+
+// @public
+export type BadgeTone = 'neutral' | 'accent' | 'danger';
+
+// @public (undocumented)
+export type BadgeVariant = 'subtle' | 'outline';
+
 // @public (undocumented)
 export const Button: ForwardRefExoticComponent<ButtonProps & RefAttributes<HTMLButtonElement>>;
 

@@ -1,0 +1,87 @@
+@import "../../styles/tokens.css";
+
+@layer vyrnforge.components {
+  :where([data-vf-badge]) {
+    align-items: center;
+    background: var(--vf-color-surface-subtle);
+    border: 1px solid transparent;
+    border-radius: 9999px;
+    box-sizing: border-box;
+    color: var(--vf-color-text);
+    display: inline-flex;
+    flex: none;
+    font-family: var(--vf-font-family-sans);
+    font-size: var(--vf-font-size-sm);
+    font-weight: var(--vf-font-weight-medium);
+    gap: var(--vf-space-2xs);
+    line-height: var(--vf-line-height-compact);
+    max-inline-size: 100%;
+    min-inline-size: 0;
+    overflow-wrap: anywhere;
+    padding-block: var(--vf-space-2xs);
+    padding-inline: var(--vf-space-sm);
+    vertical-align: middle;
+  }
+
+  :where([data-vf-badge][data-vf-badge-size="sm"]) {
+    font-size: var(--vf-font-size-xs);
+    padding-inline: var(--vf-space-xs);
+  }
+
+  :where([data-vf-badge][data-vf-badge-shape="rounded"]) {
+    border-radius: var(--vf-control-radius);
+  }
+
+  :where([data-vf-badge][data-vf-badge-tone="accent"]) {
+    background: var(--vf-color-accent-subtle);
+    color: var(--vf-color-accent-background);
+  }
+
+  :where([data-vf-badge][data-vf-badge-tone="danger"]) {
+    background: var(--vf-color-danger-background);
+    color: var(--vf-color-danger-border);
+  }
+
+  :where([data-vf-badge][data-vf-badge-variant="outline"]) {
+    background: transparent;
+    border-color: currentColor;
+  }
+
+  :where([data-vf-badge][data-vf-badge-appearance="dot"]) {
+    align-items: center;
+    background: transparent;
+    border: 0;
+    color: var(--vf-color-text);
+    justify-content: center;
+    padding: var(--vf-space-2xs);
+  }
+
+  :where([data-vf-badge][data-vf-badge-appearance="dot"]):before {
+    background: currentColor;
+    border-radius: 50%;
+    block-size: var(--vf-space-sm);
+    content: "";
+    display: block;
+    inline-size: var(--vf-space-sm);
+  }
+
+  :where([data-vf-badge][data-vf-badge-appearance="dot"][data-vf-badge-tone="accent"]) {
+    color: var(--vf-color-accent-background);
+  }
+
+  :where([data-vf-badge][data-vf-badge-appearance="dot"][data-vf-badge-tone="danger"]) {
+    color: var(--vf-color-danger-border);
+  }
+
+  @media (forced-colors: active) {
+    :where([data-vf-badge]) {
+      background: Canvas;
+      border-color: CanvasText;
+      color: CanvasText;
+    }
+
+    :where([data-vf-badge][data-vf-badge-appearance="dot"]) {
+      color: CanvasText;
+    }
+  }
+}

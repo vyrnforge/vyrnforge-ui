@@ -9,7 +9,7 @@ test('React pilot artifact is Product Graph-backed and SSR-rendered with public 
   const manifest = JSON.parse(readFileSync(manifestPath, 'utf8'));
   const button = compileFrameworkDocumentation('react').componentCatalog.find((entry) => entry.id === 'button');
   expect(manifest.framework).toBe('react');
-  expect(manifest.status).toBe('button-layout-typography-icon-image-divider-avatar-pilot');
+  expect(manifest.status).toBe('button-layout-typography-icon-image-divider-avatar-badge-pilot');
   expect(manifest.button.sharedSourcePath).toBe(button.sharedSourcePath);
   expect(manifest.button.frameworkSourcePath).toBe(button.frameworkSourcePath);
   expect(manifest.button.publicEntrypoints).toContain('@vyrnforge/react/button');
@@ -26,6 +26,7 @@ test('React pilot artifact is Product Graph-backed and SSR-rendered with public 
     ]),
     'components/icon/', 'api/components/icon/',
     'components/image/', 'api/components/image/',
+    'components/badge/', 'api/components/badge/',
     'components/avatar/', 'api/components/avatar/',
   ]);
   expect(manifest.divider).toMatchObject({
@@ -56,6 +57,20 @@ test('React pilot artifact is Product Graph-backed and SSR-rendered with public 
     const frame = 'dist/docs/next/react/examples/icon/' + slug + '/index.html';
     expect(readFileSync(frame, 'utf8')).toContain('react-icon-' + slug + '.js');
     expect(readFileSync(frame, 'utf8')).toContain('react-icon-' + slug + '.css');
+  }
+  expect(manifest.badge).toMatchObject({
+    guideRoute: 'components/badge/', apiRoute: 'api/components/badge/',
+    publicEntrypoints: ['@vyrnforge/react/badge'],
+    frameworkSourcePath: 'product/components/composition-primitives/badge/react/docs/index.md',
+  });
+  expect(manifest.badge.examples.map((example) => example.id)).toEqual([
+    'badge/basic', 'badge/dot', 'badge/variants',
+  ]);
+  for (const entry of manifest.badge.examples) {
+    const slug = entry.id.slice('badge/'.length);
+    const html = readFileSync('dist/docs/next/react/examples/badge/' + slug + '/index.html', 'utf8');
+    expect(html).toContain('react-badge-' + slug + '.js');
+    expect(html).toContain('react-badge-' + slug + '.css');
   }
   expect(manifest.avatar).toMatchObject({
     guideRoute: 'components/avatar/', apiRoute: 'api/components/avatar/',
@@ -1390,6 +1405,37 @@ test('Avatar framework switch preserves the Native Web and React topic', async (
   await expect(page.locator('[data-vf-docs-react-avatar]')).toBeVisible();
   await page.getByRole('combobox', { name: 'Framework' }).selectOption({ label: 'Native Web' });
   await expect(page).toHaveURL(/\/next\/native-web\/components\/avatar\/$/);
+});
+
+test('React Badge guide remains focused on React and uses source-backed examples', async ({ page }) => {
+  const errors = [];
+  page.on('pageerror', error => errors.push(String(error)));
+  await page.goto('/next/react/components/badge/');
+  const guide = page.locator('[data-vf-docs-react-badge]');
+  await expect(guide.getByRole('heading', { name: 'Badge', level: 1 })).toBeVisible();
+  await expect(guide.getByRole('heading', { name: 'Get started' })).toBeVisible();
+  await expect(guide.getByRole('heading', { name: 'Accessibility', exact: true })).toHaveCount(1);
+  await expect(guide.getByRole('heading', { name: 'Native Web markup' })).toHaveCount(0);
+  const setup = guide.locator('section[aria-labelledby="react-badge-setup"] pre code');
+  await expect(setup).toHaveCount(1);
+  await expect(setup).toContainText("from '@vyrnforge/react/badge'");
+  await expect(setup).not.toContainText('<Badge');
+  await expect(guide.getByRole('navigation', { name: 'Badge examples' }).getByRole('link')).toHaveCount(3);
+  const basic = guide.locator('[data-vf-docs-react-badge-example="badge/basic"] iframe');
+  await basic.scrollIntoViewIfNeeded();
+  await expect(basic.contentFrame().getByText('Draft')).toBeVisible();
+  const dot = guide.locator('[data-vf-docs-react-badge-example="badge/dot"] iframe');
+  await dot.scrollIntoViewIfNeeded();
+  await expect(dot.contentFrame().getByRole('img', { name: 'Sync in progress' })).toHaveCount(1);
+  await expect(dot.contentFrame().locator('[aria-hidden="true"][data-vf-badge]')).toHaveCount(1);
+
+  await page.getByRole('navigation', { name: 'Documentation' }).getByRole('link', { name: 'Badge API' }).click();
+  await expect(page).toHaveURL(/\/next\/react\/api\/components\/badge\/$/);
+  const api = page.locator('[data-vf-docs-react-api="badge"]');
+  await expect(api.locator('section[aria-labelledby="react-badge-api-types"] pre code')).toContainText('export type BadgeProps');
+  await expect(api.locator('section[aria-labelledby="react-badge-api-types"] pre code')).toContainText('export type BadgeTone');
+  await expect(api.getByRole('heading', { name: 'Native Web markup' })).toHaveCount(0);
+  expect(errors).toEqual([]);
 });
 
 test('React Avatar guide shows initials, native photo, failed-image fallback and API', async ({ page }) => {

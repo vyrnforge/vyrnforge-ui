@@ -1,0 +1,18 @@
+{
+  "id": "badge/basic",
+  "title": "Text and count badges",
+  "description": "Short contextual labels and consumer-formatted counts using the same Badge component.",
+  "defaultFramework": "react",
+  "frameworks": {
+    "native-web": {
+      "label": "Native Web",
+      "language": "html",
+      "source": "native-web.html"
+    },
+    "react": {
+      "label": "React",
+      "language": "tsx",
+      "source": "react.tsx"
+    }
+  }
+}

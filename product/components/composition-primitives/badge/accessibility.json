@@ -1,0 +1,65 @@
+{
+  "schemaVersion": 1,
+  "component": "badge",
+  "reviewStatus": "review-required",
+  "nativeBaseline": {
+    "kind": "native",
+    "reference": "span readable text/count, or span[role=img][aria-label] for named dot; decorative dot aria-hidden"
+  },
+  "wcag": {
+    "target": "2.2 AA",
+    "status": "review-required",
+    "criteria": [
+      "1.1.1",
+      "1.3.1",
+      "1.4.3",
+      "1.4.11"
+    ]
+  },
+  "aria": {
+    "status": "review-required",
+    "apgPattern": null
+  },
+  "interaction": {
+    "keyboard": "not-applicable",
+    "focus": "not-applicable",
+    "directionality": "native"
+  },
+  "ownership": {
+    "library": [
+      "Render concise readable text/count or one explicitly named/decorative dot",
+      "Reuse semantic theme variables for neutral/accent/danger with compact sizes/shapes",
+      "Keep noninteractive span semantics, stable SSR markup, and no focus target"
+    ],
+    "consumer": [
+      "Author localized concise text/count and status meaning",
+      "Give meaningful label to semantic dots or mark decorative beside equivalent text",
+      "Own notifications, count formatting, links/actions, interactive tags, and any Avatar overlay"
+    ]
+  },
+  "forms": {
+    "status": "not-applicable"
+  },
+  "visualAccessibility": {
+    "status": "component-specific"
+  },
+  "ssrHydration": {
+    "status": "native"
+  },
+  "evidence": {
+    "browser": "required",
+    "assistiveTechnology": "review-required"
+  },
+  "profileVariability": [
+    "text, count, named dot, decorative dot",
+    "neutral/accent/danger tones",
+    "subtle/outline variants",
+    "small/medium size",
+    "rounded/pill shape",
+    "RTL, zoom, dark, forced-colors"
+  ],
+  "notes": [
+    "No success/warning until accepted accessible token roles",
+    "Avatar overlay positioning remains separately deferred"
+  ]
+}
