@@ -26,8 +26,8 @@ test('React pilot artifact is Product Graph-backed and SSR-rendered with public 
     ]),
     'components/icon/', 'api/components/icon/',
     'components/image/', 'api/components/image/',
-    'components/avatar/', 'api/components/avatar/',
     'components/badge/', 'api/components/badge/',
+    'components/avatar/', 'api/components/avatar/',
   ]);
   expect(manifest.divider).toMatchObject({
     guideRoute: 'components/divider/', apiRoute: 'api/components/divider/',
