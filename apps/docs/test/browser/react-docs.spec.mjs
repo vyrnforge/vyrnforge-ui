@@ -18,7 +18,8 @@ test('React pilot artifact is Product Graph-backed and SSR-rendered with public 
   expect(manifest.layout.examples).toHaveLength(7);
   expect(manifest.layout.examples.map((example) => example.id)).toContain('layout/dividers');
   expect(manifest.routes.filter((entry) => entry.view !== 'unavailable').map((entry) => entry.route)).toEqual([
-    '', 'foundations/tokens/', 'foundations/themes/', 'foundations/styling/', 'components/button/', 'api/components/button/', 'components/layout/', 'api/components/layout/',
+    '', 'foundations/tokens/', 'foundations/themes/', 'foundations/color/', 'foundations/dark-mode/',
+    'foundations/right-to-left/', 'foundations/styling/', 'components/button/', 'api/components/button/', 'components/layout/', 'api/components/layout/',
     'components/divider/', 'api/components/divider/', 
     ...['text', 'code', 'kbd'].flatMap((id) => [
       'components/' + id + '/', 'api/components/' + id + '/',
@@ -115,7 +116,11 @@ test('Foundations is a separate discoverable catalog for tokens, themes and CSS'
   const nav = page.getByRole('navigation', { name: 'Documentation' });
   await expect(nav.getByText('Foundations', { exact: true })).toBeVisible();
   await expect(nav.getByRole('link', { name: 'Design tokens' })).toBeVisible();
-  await expect(nav.getByRole('link', { name: 'Colors & themes' })).toBeVisible();
+  await expect(nav.getByRole('link', { name: 'Theming' })).toBeVisible();
+  await expect(nav.getByText('Customization', { exact: true })).toBeVisible();
+  await expect(nav.getByRole('link', { name: 'Color', exact: true })).toBeVisible();
+  await expect(nav.getByRole('link', { name: 'Dark mode' })).toBeVisible();
+  await expect(nav.getByRole('link', { name: 'Right-to-left' })).toBeVisible();
   await expect(nav.getByRole('link', { name: 'Styling & CSS' })).toBeVisible();
   const tokens = page.locator('[data-vf-docs-react-tokens]');
   await expect(tokens.getByRole('heading', { name: 'Design tokens' })).toBeVisible();
@@ -125,7 +130,7 @@ test('Foundations is a separate discoverable catalog for tokens, themes and CSS'
   await expect(styling.getByRole('heading', { name: 'Styling & CSS' })).toBeVisible();
   await expect(styling).toContainText('CSS delivery');
   await expect(styling).toContainText('@vyrnforge/web/styles.css');
-  await nav.getByRole('link', { name: 'Colors & themes' }).click();
+  await nav.getByRole('link', { name: 'Theming' }).click();
   await expect(page.locator('[data-vf-docs-react-themes]')).toBeVisible();
   await page.getByRole('searchbox', { name: 'Search React documentation' }).fill('stylesheet');
   await expect(page.locator('[data-vf-docs-react-results]')).toContainText('Styling & CSS');
@@ -134,7 +139,7 @@ test('Foundations is a separate discoverable catalog for tokens, themes and CSS'
 test('React theme guide uses semantic roles across built-in and custom nested theme scopes', async ({ page }) => {
   await page.goto('/next/react/foundations/themes/');
   const guide = page.locator('[data-vf-docs-react-themes]');
-  await expect(guide.getByRole('heading', { name: 'Colors & themes' })).toBeVisible();
+  await expect(guide.getByRole('heading', { name: 'Theming' })).toBeVisible();
   await expect(guide).toContainText('Custom themes for both appearances');
   const previews = guide.locator('[data-vf-docs-react-theme-previews]');
   await expect(previews).toHaveAttribute('data-vf-auto-grid', '');
@@ -162,7 +167,67 @@ test('React theme guide uses semantic roles across built-in and custom nested th
   expect(semantics.tag).toBe('H3');
   expect(semantics.bg).not.toBe('rgba(0, 0, 0, 0)');
   await page.getByRole('searchbox', { name: 'Search React documentation' }).fill('semantic color');
-  await expect(page.locator('[data-vf-docs-react-results]')).toContainText('Colors & themes');
+  await expect(page.locator('[data-vf-docs-react-results]')).toContainText('Color');
+});
+
+test('Color playground previews a complete accent family and shows live semantic CSS swatches', async ({ page }) => {
+  await page.goto('/next/react/foundations/color/');
+  const guide = page.locator('[data-vf-docs-react-color]');
+  await expect(guide.getByRole('heading', { name: 'Color', level: 1 })).toBeVisible();
+  const selector = guide.locator('[data-vf-docs-color-picker]');
+  const selected = guide.locator('[data-vf-docs-color-selected]');
+  const background = () => selected.getByRole('button', { name: 'Save changes' })
+    .evaluate((node) => getComputedStyle(node).backgroundColor);
+  const blue = await background();
+  await selector.getByRole('button', { name: 'Teal' }).click();
+  await expect(selected).toHaveAttribute('data-vf-docs-color-selected', 'teal');
+  await expect(selector.getByRole('button', { name: 'Teal' })).toHaveAttribute('aria-pressed', 'true');
+  expect(await background()).not.toBe(blue);
+  await expect(guide.locator('[data-vf-docs-color-roles] li')).toHaveCount(8);
+  await expect(guide.locator('pre code').first()).toContainText('--vf-color-accent-background: #0f766e');
+});
+
+test('Dark-mode page previews light, dark and system from CSS under SSR and browser preferences', async ({ page, browser }) => {
+  await page.goto('/next/react/foundations/dark-mode/');
+  const guide = page.locator('[data-vf-docs-react-dark-mode]');
+  const controls = guide.locator('[data-vf-docs-dark-controls]');
+  const selected = guide.locator('[data-vf-docs-dark-selected]');
+  const preview = selected.locator('[data-vf-theme]');
+  await expect(preview).toHaveAttribute('data-vf-theme', 'light');
+  const light = await preview.evaluate((node) => getComputedStyle(node).backgroundColor);
+  await controls.getByRole('button', { name: 'Dark', exact: true }).click();
+  await expect(preview).toHaveAttribute('data-vf-theme', 'dark');
+  expect(await preview.evaluate((node) => getComputedStyle(node).backgroundColor)).not.toBe(light);
+  await page.emulateMedia({ colorScheme: 'dark' });
+  await controls.getByRole('button', { name: 'System' }).click();
+  await expect(preview).toHaveAttribute('data-vf-theme', 'system');
+  await expect.poll(async () => preview.evaluate((node) => getComputedStyle(node).colorScheme)).toBe('dark');
+  await page.emulateMedia({ colorScheme: 'light' });
+  await expect.poll(async () => preview.evaluate((node) => getComputedStyle(node).colorScheme)).toBe('light');
+  const noJsContext = await browser.newContext({ javaScriptEnabled: false });
+  try {
+    const noJs = await noJsContext.newPage();
+    await noJs.goto('/next/react/foundations/dark-mode/');
+    await expect(noJs.locator('[data-vf-docs-react-dark-mode]')).toBeVisible();
+    await expect(noJs.locator('[data-vf-docs-dark-selected]')).toHaveAttribute('data-vf-docs-dark-selected', 'light');
+  } finally { await noJsContext.close(); }
+});
+
+test('RTL page preserves native direction and mixed-direction identifiers while switching', async ({ page }) => {
+  await page.goto('/next/react/foundations/right-to-left/');
+  const guide = page.locator('[data-vf-docs-react-rtl]');
+  const preview = guide.locator('[data-vf-docs-rtl-preview]');
+  await expect(preview).toHaveAttribute('dir', 'rtl');
+  await expect(preview).toHaveAttribute('lang', 'ar');
+  await expect(preview.locator('bdi')).toHaveAttribute('dir', 'ltr');
+  await expect(preview.locator('bdi')).toHaveText('VF-2048');
+  await preview.getByRole('button', { name: 'حفظ' }).click();
+  await expect(guide.locator('[data-vf-docs-rtl-feedback]')).toHaveText('تم الحفظ');
+  await guide.locator('[data-vf-docs-rtl-controls]').getByRole('button', { name: 'Left-to-right' }).click();
+  await expect(preview).toHaveAttribute('dir', 'ltr');
+  await expect(preview).toHaveAttribute('lang', 'en');
+  await expect(preview.locator('bdi')).toHaveText('VF-2048');
+  await expect(guide.locator('[data-vf-docs-rtl-feedback]')).toBeEmpty();
 });
 
 test('Nested system themes remap canonical colors in both OS appearances', async ({ page }) => {
