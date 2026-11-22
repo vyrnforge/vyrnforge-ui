@@ -18,7 +18,7 @@ test('React pilot artifact is Product Graph-backed and SSR-rendered with public 
   expect(manifest.layout.examples).toHaveLength(7);
   expect(manifest.layout.examples.map((example) => example.id)).toContain('layout/dividers');
   expect(manifest.routes.filter((entry) => entry.view !== 'unavailable').map((entry) => entry.route)).toEqual([
-    '', 'components/button/', 'api/components/button/', 'components/layout/', 'api/components/layout/',
+    '', 'foundations/tokens/', 'components/button/', 'api/components/button/', 'components/layout/', 'api/components/layout/',
     'components/divider/', 'api/components/divider/', 
     ...['text', 'code', 'kbd'].flatMap((id) => [
       'components/' + id + '/', 'api/components/' + id + '/',
@@ -106,6 +106,33 @@ test('React pilot artifact is Product Graph-backed and SSR-rendered with public 
     expect(html).toContain('react-reference.js');
     expect(html).toContain('@vyrnforge/react/button');
   }
+});
+
+test('React token guide uses semantic roles across built-in and custom nested theme scopes', async ({ page }) => {
+  await page.goto('/next/react/foundations/tokens/');
+  const guide = page.locator('[data-vf-docs-react-tokens]');
+  await expect(guide.getByRole('heading', { name: 'React colors & themes' })).toBeVisible();
+  await expect(guide).toContainText('Custom themes for both appearances');
+  const previews = guide.locator('[data-vf-docs-react-theme-previews]');
+  await expect(previews).toHaveAttribute('data-vf-auto-grid', '');
+  const light = previews.locator('[data-vf-theme="light"]');
+  const dark = previews.locator('[data-vf-theme="dark"]').first();
+  const custom = previews.locator('[data-vf-theme="dark"]').last();
+  const value = async (scope, selector) => scope.locator(selector).evaluate(
+    (el) => getComputedStyle(el).color);
+  const lightPrimary = await value(light, 'p[data-vf-text][style]');
+  const darkPrimary = await value(dark, 'p[data-vf-text][style]');
+  const customPrimary = await value(custom, 'p[data-vf-text][style]');
+  expect(lightPrimary).not.toBe(darkPrimary);
+  expect(customPrimary).not.toBe(darkPrimary);
+  await expect(light).toContainText('Secondary text');
+  await expect(dark).toContainText('Danger text');
+  const semantics = await custom.locator('h3[data-vf-text]').evaluate(
+    (el) => ({ tag: el.tagName, bg: getComputedStyle(el.parentElement.parentElement).backgroundColor }));
+  expect(semantics.tag).toBe('H3');
+  expect(semantics.bg).not.toBe('rgba(0, 0, 0, 0)');
+  await page.getByRole('searchbox', { name: 'Search React documentation' }).fill('semantic color');
+  await expect(page.locator('[data-vf-docs-react-results]')).toContainText('Colors & themes');
 });
 
 test('All React guide pages compose with canonical Flow and AutoGrid, not local layout algorithms', async ({ page }) => {
