@@ -6,7 +6,7 @@ import { tmpdir } from 'node:os';
 import { join } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { assertGeneratedOutputCurrent } from './generation.mjs';
-import { renderRuntimeTokens } from './render.mjs';
+import { renderRuntimeTokens, renderThemeAuthoringData } from './render.mjs';
 
 test('accepts current deterministic generated output', () => {
   assert.doesNotThrow(() => assertGeneratedOutputCurrent('same', 'same'));
@@ -30,11 +30,14 @@ test('token CLI rejects drift without writes, writes deterministically, and reje
   const fixtureTooling = join(fixtureRoot, 'tooling', 'tokens');
   const fixtureStyles = join(fixtureRoot, 'packages', 'web', 'src', 'styles');
   const outputPath = join(fixtureStyles, 'tokens.css');
+  const fixtureTheme = join(fixtureRoot, 'packages', 'web', 'src', 'theme');
+  const themeOutputPath = join(fixtureTheme, 'defaults.generated.ts');
   const localTooling = fileURLToPath(new URL('.', import.meta.url));
 
   try {
     await mkdir(fixtureTooling, { recursive: true });
     await mkdir(fixtureStyles, { recursive: true });
+    await mkdir(fixtureTheme, { recursive: true });
     await Promise.all(
       ['generate.mjs', 'generation.mjs', 'render.mjs', 'source.mjs', 'model.mjs'].map((name) =>
         copyFile(join(localTooling, name), join(fixtureTooling, name)),
@@ -48,6 +51,7 @@ test('token CLI rejects drift without writes, writes deterministically, and reje
     const runRootCommand = (command) => spawnSync('pnpm', ['run', command], { cwd: fixtureRoot, encoding: 'utf8', timeout: 15000 });
     const stale = '/* intentionally stale token fixture */\n';
     await writeFile(outputPath, stale);
+    await writeFile(themeOutputPath, stale);
 
     const staleCheck = run('--check');
     assert.notEqual(staleCheck.status, 0, 'a stale output must fail verification');
@@ -67,20 +71,24 @@ test('token CLI rejects drift without writes, writes deterministically, and reje
     assert.ifError(generatedPnpm.error);
     assert.equal(generatedPnpm.status, 0, generatedPnpm.stderr);
     assert.equal(await readFile(outputPath, 'utf8'), renderRuntimeTokens());
+    assert.equal(await readFile(themeOutputPath, 'utf8'), renderThemeAuthoringData());
     const verifiedPnpm = runRootCommand('verify:tokens');
     assert.ifError(verifiedPnpm.error);
     assert.equal(verifiedPnpm.status, 0, verifiedPnpm.stderr);
 
     await writeFile(outputPath, stale);
+    await writeFile(themeOutputPath, stale);
     const generated = run('--write');
     assert.equal(generated.status, 0, generated.stderr);
     assert.match(generated.stdout, /runtime tokens generated/);
     const expected = renderRuntimeTokens();
     assert.equal(await readFile(outputPath, 'utf8'), expected);
+    assert.equal(await readFile(themeOutputPath, 'utf8'), renderThemeAuthoringData());
 
     const currentCheck = run('--check');
     assert.equal(currentCheck.status, 0, currentCheck.stderr);
     assert.match(currentCheck.stdout, /generated output is current/);
+    assert.equal(await readFile(themeOutputPath, 'utf8'), renderThemeAuthoringData());
 
     const repeatedWrite = run('--write');
     assert.equal(repeatedWrite.status, 0, repeatedWrite.stderr);
