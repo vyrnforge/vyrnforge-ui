@@ -1,4 +1,3 @@
-import * as React from 'react';
 import { createRoot } from 'react-dom/client';
 import { Image } from '@vyrnforge/react/image';
 import { Text } from '@vyrnforge/react/text';
