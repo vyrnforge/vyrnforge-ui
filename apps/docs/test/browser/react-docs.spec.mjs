@@ -1323,11 +1323,21 @@ test('React Avatar guide shows initials, native photo, failed-image fallback and
   const guide = page.locator('[data-vf-docs-react-avatar]');
   await expect(guide.getByRole('heading', { level: 1, name: 'Avatar' })).toBeVisible();
   await expect(guide.getByRole('navigation', { name: 'Avatar examples' }).getByRole('link')).toHaveCount(10);
-  await expect(guide.getByRole('heading', { name: 'Image and initials' })).toBeVisible();
-  await expect(guide.getByRole('heading', { name: 'Sizes and appearance' })).toBeVisible();
+  await expect(guide.getByRole('heading', { name: 'Behavior and usage' })).toBeVisible();
   await expect(guide.getByRole('heading', { name: 'Appearances and fallback' })).toBeVisible();
   await expect(guide.getByRole('heading', { name: 'Grouped avatars and totals' })).toBeVisible();
   await expect(guide.getByRole('heading', { name: 'Group spacing', exact: true })).toBeVisible();
+
+  // A React consumer sees one concise setup and one source-backed gallery.
+  const setupSource = guide.locator('#react-avatar-setup pre code');
+  await expect(setupSource).toHaveCount(1);
+  await expect(setupSource).toContainText("from '@vyrnforge/react/avatar'");
+  await expect(setupSource).not.toContainText('<Avatar');
+  await expect(guide.getByRole('heading', { name: 'Native Web markup' })).toHaveCount(0);
+  await expect(guide.getByRole('heading', { name: 'Framework consumption' })).toHaveCount(0);
+  await expect(guide.getByRole('heading', { name: 'React authoring' })).toHaveCount(0);
+  await expect(guide.getByRole('heading', { name: 'React accessibility' })).toHaveCount(0);
+  await expect(guide.getByRole('heading', { name: 'Accessibility', exact: true })).toHaveCount(1);
   const initials = guide.locator('[data-vf-docs-react-avatar-example="avatar/initials"] iframe');
   await initials.scrollIntoViewIfNeeded();
   await expect(initials.contentFrame().locator('[data-vf-avatar-initials]').first()).toHaveText('AL');
@@ -1382,6 +1392,9 @@ test('React Avatar guide shows initials, native photo, failed-image fallback and
   await expect(api.locator('section[aria-labelledby="react-avatar-api-types"] pre code')).toContainText('export interface AvatarGroupProps');
   await expect(api.locator('section[aria-labelledby="react-avatar-api-types"] pre code')).toContainText('export type AvatarAppearance');
   await expect(api.locator('section[aria-labelledby="react-avatar-api-types"] pre code')).toContainText('export type AvatarGroupSpacing');
+  await expect(api.locator('#react-avatar-api-css')).toHaveCount(0);
+  await expect(api.getByRole('heading', { name: 'Shared CSS and native hooks' })).toHaveCount(0);
+  await expect(api.getByText('Native Web markup')).toHaveCount(0);
   expect(errors).toEqual([]);
 });
 
