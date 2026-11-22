@@ -1,5 +1,5 @@
 import { createRoot } from 'react-dom/client';
-import { createSvgIcon } from '@vyrnforge/react/icon';
+import { createSvgIcon, Flow, Text } from '@vyrnforge/react';
 
 // Define once with one VyrnForge import; use with built-in size, color and naming.
 const SparkleIcon = createSvgIcon(
@@ -12,13 +12,13 @@ const SparkleIcon = createSvgIcon(
 
 function App() {
   return (
-    <div>
-      <p><SparkleIcon /> Default</p>
-      <p style={{ color: 'var(--vf-color-accent-background)' }}>
+    <Flow gap="sm">
+      <Text as="p"><SparkleIcon /> Default</Text>
+      <Text as="p" style={{ color: 'var(--vf-color-accent-background)' }}>
         <SparkleIcon size="lg" /> Accent
-      </p>
-      <p><SparkleIcon size="lg" label="Sparkle" /> Named</p>
-    </div>
+      </Text>
+      <Text as="p"><SparkleIcon size="lg" label="Sparkle" /> Named</Text>
+    </Flow>
   );
 }
 
