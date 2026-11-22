@@ -2,6 +2,7 @@ import * as React from 'react';
 import { createRoot } from 'react-dom/client';
 import { Flow } from '@vyrnforge/react/layout';
 import { Icon } from '@vyrnforge/react/icon';
+import { Text } from '@vyrnforge/react/text';
 import { bookmarkIcon } from '@vyrnforge/icons/bookmark';
 
 const treatments = [
@@ -17,7 +18,7 @@ function App() {
       {treatments.map(({ name, color }) => (
         <Flow key={name} gap="xs" align="center" style={{ color }}>
           <Icon icon={bookmarkIcon} variant="filled" size="lg" />
-          <span>{name}</span>
+          <Text as="span">{name}</Text>
         </Flow>
       ))}
     </Flow>
