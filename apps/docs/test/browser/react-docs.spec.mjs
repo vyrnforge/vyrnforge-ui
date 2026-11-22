@@ -183,6 +183,9 @@ test('Color playground previews a complete accent family and shows live semantic
   await expect(selected).toHaveAttribute('data-vf-docs-color-selected', 'teal');
   await expect(selector.getByRole('button', { name: 'Teal' })).toHaveAttribute('aria-pressed', 'true');
   expect(await background()).not.toBe(blue);
+  await selected.getByRole('button', { name: 'Save changes' }).click();
+  await expect(selected.locator('[data-vf-docs-preview-feedback]')).toHaveText('Primary preview action activated');
+  await expect(guide.getByRole('navigation', { name: 'On this page' }).getByRole('link')).toHaveCount(3);
   await expect(guide.locator('[data-vf-docs-color-roles] li')).toHaveCount(8);
   await expect(guide.locator('pre code').first()).toContainText('--vf-color-accent-background: #0f766e');
 });

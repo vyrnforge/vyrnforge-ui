@@ -1134,6 +1134,11 @@
     overflow-wrap: anywhere;
   }
 
+  .vf-docs-toc a:focus-visible {
+    outline: 2px solid var(--vf-color-focus-ring);
+    outline-offset: 2px;
+  }
+
   .vf-docs-customization-swatch {
     border: 1px solid var(--vf-color-border);
     border-radius: var(--vf-control-radius);
