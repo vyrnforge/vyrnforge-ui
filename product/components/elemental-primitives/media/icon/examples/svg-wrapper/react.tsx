@@ -14,9 +14,7 @@ function App() {
   return (
     <Flow gap="sm">
       <Text as="p"><SparkleIcon /> Default</Text>
-      <Text as="p" style={{ color: 'var(--vf-color-accent-background)' }}>
-        <SparkleIcon size="lg" /> Accent
-      </Text>
+      <Text as="p"><SparkleIcon size="lg" tone="accent" /> Accent</Text>
       <Text as="p"><SparkleIcon size="lg" label="Sparkle" /> Named</Text>
     </Flow>
   );
