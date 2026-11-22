@@ -1,7 +1,7 @@
 import { createElement, forwardRef } from 'react';
 import type { ForwardRefExoticComponent, ReactNode, RefAttributes, SVGAttributes } from 'react';
-import { toneStyle } from '../../foundation/theme.js';
-import type { TextTone } from '../../foundation/theme.js';
+import { toneStyle } from '../../internal/theme.js';
+import type { TextTone } from '../../internal/theme.js';
 import {
   resolveIconGlyph,
   type IconDefinition,
@@ -11,7 +11,7 @@ import {
 } from '@vyrnforge/web/icon';
 
 export type { IconDefinition, IconShape, IconSize, IconVariant } from '@vyrnforge/web/icon';
-export type { TextTone } from '../../foundation/theme.js';
+export type { TextTone } from '../../internal/theme.js';
 
 type OwnedSvgAttributes = 'children' | 'viewBox' | 'role' | 'aria-label' | 'aria-hidden' | 'focusable';
 
