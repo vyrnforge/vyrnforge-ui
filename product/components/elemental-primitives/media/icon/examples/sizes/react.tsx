@@ -2,6 +2,7 @@ import * as React from 'react';
 import { createRoot } from 'react-dom/client';
 import { Icon } from '@vyrnforge/react/icon';
 import { Flow } from '@vyrnforge/react/layout';
+import { Text } from '@vyrnforge/react/text';
 import { bookmarkIcon } from '@vyrnforge/icons/bookmark';
 
 function App() {
@@ -9,7 +10,7 @@ function App() {
     {(['sm', 'md', 'lg'] as const).map((size) =>
       <Flow key={size} gap="xs" align="center">
         <Icon icon={bookmarkIcon} size={size} />
-        <span>{size}</span>
+        <Text as="span">{size}</Text>
       </Flow>)}
   </Flow>;
 }
