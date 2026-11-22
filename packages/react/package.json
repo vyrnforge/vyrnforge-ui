@@ -26,6 +26,12 @@
       "import": "./dist/components/divider/index.js",
       "default": "./dist/components/divider/index.js"
     },
+    "./badge": {
+      "types": "./dist/components/badge/index.d.ts",
+      "browser": "./dist/components/badge/browser.js",
+      "import": "./dist/components/badge/index.js",
+      "default": "./dist/components/badge/index.js"
+    },
     "./avatar": {
       "types": "./dist/components/avatar/index.d.ts",
       "browser": "./dist/components/avatar/browser.js",

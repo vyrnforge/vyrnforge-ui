@@ -158,6 +158,7 @@ function navigation(view, links, topic) {
       { id: 'icon', title: 'Icon', href: links.icon.guide },
       { id: 'image', title: 'Image', href: links.image.guide },
       { id: 'avatar', title: 'Avatar', href: links.avatar.guide },
+      { id: 'badge', title: 'Badge', href: links.badge.guide },
     ] },
     // API destinations remain working, but reference material is no longer
     // interleaved with consumer guides. A dedicated API catalog can follow.
@@ -168,6 +169,7 @@ function navigation(view, links, topic) {
       { id: 'icon-api', title: 'Icon API', href: links.icon.api },
       { id: 'image-api', title: 'Image API', href: links.image.api },
       { id: 'avatar-api', title: 'Avatar API', href: links.avatar.api },
+      { id: 'badge-api', title: 'Badge API', href: links.badge.api },
       ...['text', 'code', 'kbd'].map((id) => ({
         id: 'typography-api:' + id,
         title: id === 'kbd' ? 'Kbd API' : id[0].toUpperCase() + id.slice(1) + ' API',
@@ -549,6 +551,78 @@ function iconApi(icon, links) {
       h('h2', { id: 'react-icon-api-css' }, 'Shared CSS'),
       h('code', { 'data-vf-code': '' }, '@vyrnforge/web/styles/icon.css')),
     h('p', null, h('a', { href: links.icon.guide, 'data-vf-link': '' }, 'View Icon examples')));
+}
+function badgeExample(example, links) {
+  const slug = example.id.slice('badge/'.length);
+  return h('article', { key: example.id, id: 'react-badge-example-' + slug,
+    className: 'vf-docs-example', 'data-vf-docs-react-badge-example': example.id },
+    h(Flow, { as: 'header', direction: 'inline', wrap: 'wrap', gap: 'lg',
+      align: 'start', justify: 'space-between', className: 'vf-docs-example-header' },
+      h('div', null, h(Text, { as: 'h3', variant: 'heading-sm' }, example.title),
+        h(Text, { as: 'p' }, example.description))),
+    h('iframe', { className: 'vf-docs-react-example-frame',
+      title: 'React ' + example.title + ' Badge example',
+      src: links.badge.exampleBase + slug + '/',
+      sandbox: 'allow-scripts', loading: slug === 'basic' ? 'eager' : 'lazy' }),
+    h('details', { className: 'vf-docs-source-disclosure' },
+      h('summary', null, 'View React TSX source'),
+      h('pre', { 'data-vf-code-block': '', tabIndex: 0 }, h('code', null, example.source))));
+}
+function badgeUsage(badge, links) {
+  if (!badge?.sharedContent || !badge?.frameworkContent || !badge.examples?.length) return null;
+  const sections = [
+    { id: 'react-badge-setup', heading: 'Get started' },
+    { id: 'react-badge-examples', heading: 'Examples' },
+    { id: 'react-badge-guidelines', heading: 'Behavior and usage' },
+    { id: 'react-badge-accessibility', heading: 'Accessibility' },
+    { id: 'react-badge-related', heading: 'Related components and API' },
+  ];
+  return h('div', { className: 'vf-docs-content-grid vf-docs-usage-guide-layout' },
+    guideToc(sections),
+    h(Flow, { as: 'article', gap: '2xl', className: 'vf-docs-article vf-docs-usage-guide',
+      'data-vf-docs-react-badge': '' },
+      guideHeader(badge.sharedContent, 'React · Metadata'),
+      guidePart(sections[0], [...guideBlocks(badge.frameworkContent, 'React setup')]),
+      guidePart(sections[1], [
+        exampleJumpLinks('Badge', badge.examples,
+          example => 'react-badge-example-' + example.id.slice('badge/'.length)),
+        ...badge.examples.map(example => badgeExample(example, links)),
+      ]),
+      guidePart(sections[2], [
+        ...guideSubsections(badge.sharedContent, [
+          'When to use', 'Appearances', 'Tone, size and shape', 'Boundaries',
+        ], 'react-badge-guidance'),
+        ...guideSubsections(badge.frameworkContent, [
+          'React state and server rendering',
+        ], 'react-badge-integration'),
+      ]),
+      guidePart(sections[3], [
+        ...guideBlocks(badge.sharedContent, 'Accessibility'),
+        evidenceDisclosure(badge.standardReferences),
+      ]),
+      guidePart(sections[4], [
+        h('a', { href: links.badge.api, 'data-vf-link': '' }, 'View Badge public React API'),
+      ])));
+}
+function badgeApi(badge, links) {
+  if (!badge?.publicBadgeTypes || !badge?.publicEntrypoints?.length) return null;
+  return h('article', { className: 'vf-docs-article', 'data-vf-docs-react-api': 'badge' },
+    h('header', { className: 'vf-docs-component-header' },
+      h('h1', null, 'Badge API'),
+      h('p', { className: 'vf-docs-lede' },
+        'Source-backed React Badge types for noninteractive text and accessible dots.'),
+      accessibilityEvidence(badge.standardReferences)),
+    h('section', { 'aria-labelledby': 'react-badge-api-entrypoints' },
+      h('h2', { id: 'react-badge-api-entrypoints' }, 'Public entrypoint'),
+      h('ul', null, ...badge.publicEntrypoints.map(name =>
+        h('li', { key: name }, h('code', { 'data-vf-code': '' }, name)))),
+      h('p', null, 'Load shared styles from @vyrnforge/web/styles/badge.css.')),
+    h('section', { 'aria-labelledby': 'react-badge-api-types' },
+      h('h2', { id: 'react-badge-api-types' }, 'Source-backed React types and props'),
+      h('pre', { 'data-vf-code-block': '', tabIndex: 0 },
+        h('code', null, badge.publicBadgeTypes))),
+    h('p', null, h('a', { href: links.badge.guide, 'data-vf-link': '' },
+      'View Badge examples')));
 }
 function avatarExample(example, links) {
   const slug = example.id.slice('avatar/'.length);
@@ -966,7 +1040,7 @@ function themesGuide(links) {
       h(Text, { as: 'p' }, h('a', { href: links.rtl, 'data-vf-link': '' }, 'Use right-to-left content'))));
 }
 
-function body(view, links, button, layout, typography, icon, image, avatar, divider, message, setMessage, requestedTopic) {
+function body(view, links, button, layout, typography, icon, image, avatar, divider, badge, message, setMessage, requestedTopic) {
   if (view === 'unavailable') {
     return h('article', { className: 'vf-docs-article', 'data-vf-docs-react-unavailable': '' },
       h('header', { className: 'vf-docs-component-header' },
@@ -1031,6 +1105,8 @@ function body(view, links, button, layout, typography, icon, image, avatar, divi
           h('li', null, h('a', { 'data-vf-link': '', href: links.icon.api }, 'React Icon API')),
           h('li', null, h('a', { 'data-vf-link': '', href: links.image.guide }, 'React Image')),
           h('li', null, h('a', { 'data-vf-link': '', href: links.image.api }, 'React Image API')),
+          h('li', null, h('a', { 'data-vf-link': '', href: links.badge.guide }, 'React Badge')),
+          h('li', null, h('a', { 'data-vf-link': '', href: links.badge.api }, 'React Badge API')),
           h('li', null, h('a', { 'data-vf-link': '', href: links.avatar.guide }, 'React Avatar')),
           h('li', null, h('a', { 'data-vf-link': '', href: links.avatar.api }, 'React Avatar API')),
           ...['text', 'code', 'kbd'].flatMap((id) => [
@@ -1044,6 +1120,8 @@ function body(view, links, button, layout, typography, icon, image, avatar, divi
   if (view === 'icon-api') return iconApi(icon, links);
   if (view === 'divider') return dividerUsage(divider, links);
   if (view === 'divider-api') return dividerApi(divider, links);
+  if (view === 'badge') return badgeUsage(badge, links);
+  if (view === 'badge-api') return badgeApi(badge, links);
   if (view === 'avatar') return avatarUsage(avatar, links);
   if (view === 'avatar-api') return avatarApi(avatar, links);
   if (view === 'image') return imageUsage(image, links);
@@ -1093,7 +1171,7 @@ function body(view, links, button, layout, typography, icon, image, avatar, divi
   }
   return buttonUsageGuide(button, links, message, setMessage);
 }
-export function ReactReferencePage({ view, links, button, layout, typography, icon, image, avatar, divider, requestedTopic }) {
+export function ReactReferencePage({ view, links, button, layout, typography, icon, image, avatar, divider, badge, requestedTopic }) {
   const nav = useNavigation();
   const { theme, change } = useTheme();
   const [search, setSearch] = useState('');
@@ -1123,6 +1201,9 @@ export function ReactReferencePage({ view, links, button, layout, typography, ic
     { title: 'Icon API', href: links.icon.api, keywords: 'iconprops SVGAttributes definition variant shape size label types' },
     { title: 'Image', href: links.image.guide, keywords: 'image img responsive alt decorative caption figure native JSX' },
     { title: 'Image API', href: links.image.api, keywords: 'imageprops img loading decoding srcset sizes ref types' },
+    { title: 'Badge', href: links.badge.guide,
+      keywords: 'badge label count dot status contextual visual tone shape pill neutral accent danger' },
+    { title: 'Badge API', href: links.badge.api, keywords: 'badgeprops badgeappearance badgetone badgedot' },
     { title: 'Avatar', href: links.avatar.guide, keywords: 'avatar initials profile photo image user account fallback portrait accessible circle size' },
     { title: 'Avatar API', href: links.avatar.api, keywords: 'avatarprops avatarsize src initials name decorative loading native image error ref' },
     ...['text', 'code', 'kbd'].flatMap((id) => [
@@ -1202,7 +1283,7 @@ export function ReactReferencePage({ view, links, button, layout, typography, ic
           h('a', { 'data-vf-link': '', href: links.native }, 'Native Web'),
           h('span', { 'aria-hidden': 'true' }, ' / '),
           h('span', { 'aria-current': 'page' }, 'React')),
-        body(view, links, button, layout, typography, icon, image, avatar, divider, message, setMessage, requestedTopic))),
+        body(view, links, button, layout, typography, icon, image, avatar, divider, badge, message, setMessage, requestedTopic))),
     h(AppShellFooter, { className: 'vf-docs-footer' },
       h('span', null, 'VyrnForge React documentation'),
       h('span', null, links.channel + ' channel'))));
