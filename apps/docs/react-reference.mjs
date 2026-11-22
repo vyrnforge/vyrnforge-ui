@@ -809,13 +809,13 @@ function dividerApi(divider, links) {
       'View Divider examples')));
 }
 function tokensGuide(links) {
-  const accentExample = "import { ThemeScope, Text, tokens } from '@vyrnforge/react';\n\n" +
+  const accentExample = "import { ThemeScope, Text, Flow, tokens } from '@vyrnforge/react';\n\n" +
     '<ThemeScope theme="dark">\n' +
     '  <Text as="p" tone="primary">Primary / accent</Text>\n' +
     '  <Text as="p" tone="secondary">Secondary / muted</Text>\n' +
     '  <Text as="p" tone="danger">Danger</Text>\n' +
     '</ThemeScope>\n\n' +
-    '<div style={{ padding: tokens.space.md }}>Token-aware spacing</div>';
+    '<Flow style={{ padding: tokens.space.md }}>Token-aware spacing</Flow>';
   const localExample = '<ThemeScope theme="dark" colors={{\n' +
     "  primary: '#a6c8ff', onAccent: '#10284f', danger: '#ff908e'\n" +
     '}}>\n  <Text as="p" tone="primary">Custom accent</Text>\n</ThemeScope>';
