@@ -31,7 +31,8 @@ test('Avatar shows accessible initials, native image and distinct sizes', async 
   await expect(photo).toHaveCSS('border-radius', '50%');
   await expect(page.locator('#native-fallback [data-vf-avatar-initials]')).toHaveText('MG');
   await expect(page.locator('#native-fallback')).toHaveAttribute('aria-label', 'Maria García');
-  await expect(page.getByRole('img', { name: 'Ada Lovelace' })).toHaveCount(1);
+  // Group specimens reuse identities; labels need not be globally unique.
+  await expect(page.getByRole('img', { name: 'Ada Lovelace' }).first()).toBeVisible();
   await expect(page.locator('#decorative')).toHaveAttribute('aria-hidden', 'true');
   await expect(page.locator('#decorative')).not.toHaveAttribute('role');
   await expect(page.locator('#decorative-line')).toContainText('Ada Lovelace');
