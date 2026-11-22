@@ -8,6 +8,7 @@ import { ThemeScope, colors, tokens } from '@vyrnforge/react';
 import { SearchFieldRoot, SearchFieldInput, SearchFieldClear } from '@vyrnforge/react/search-field';
 import { NativeSelect } from '@vyrnforge/react/native-select';
 import { ColorGuide, DarkModeGuide, RtlGuide } from './react-customization.mjs';
+import { ThemeBuilder } from './react-theme-builder.mjs';
 
 function slug(value) {
   return String(value).toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-+|-+$/g, '');
@@ -139,7 +140,8 @@ function navigation(view, links, topic) {
       { id: 'styling', title: 'Styling & CSS', href: links.styling },
     ] },
     { label: 'Customization', items: [
-      { id: 'color', title: 'Color', href: links.color },
+      { id: 'color', title: 'Color / Theme Studio', href: links.color },
+      { id: 'builder', title: 'Theme Builder', href: links.builder },
       { id: 'dark-mode', title: 'Dark mode', href: links.darkMode },
       { id: 'themes', title: 'Theming', href: links.themes },
       { id: 'rtl', title: 'Right-to-left', href: links.rtl },
@@ -1035,7 +1037,8 @@ function themesGuide(links) {
       h(Text, { as: 'h2', variant: 'heading-md', id: 'react-theme-links' }, 'Related foundations'),
       h(Text, { as: 'p' }, h('a', { href: links.tokens, 'data-vf-link': '' }, 'Explore design tokens')),
       h(Text, { as: 'p' }, h('a', { href: links.styling, 'data-vf-link': '' }, 'Learn CSS loading and customization')),
-      h(Text, { as: 'p' }, h('a', { href: links.color, 'data-vf-link': '' }, 'Customize color roles')),
+      h(Text, { as: 'p' }, h('a', { href: links.color, 'data-vf-link': '' }, 'Explore palette colors')),
+      h(Text, { as: 'p' }, h('a', { href: links.builder, 'data-vf-link': '' }, 'Build a custom theme')),
       h(Text, { as: 'p' }, h('a', { href: links.darkMode, 'data-vf-link': '' }, 'Configure dark mode')),
       h(Text, { as: 'p' }, h('a', { href: links.rtl, 'data-vf-link': '' }, 'Use right-to-left content'))));
 }
@@ -1054,6 +1057,7 @@ function body(view, links, button, layout, typography, icon, image, avatar, divi
   }
   if (view === 'tokens') return tokensGuide(links);
   if (view === 'color') return h(ColorGuide, { links });
+  if (view === 'builder') return h(ThemeBuilder, { links });
   if (view === 'dark-mode') return h(DarkModeGuide, { links });
   if (view === 'rtl') return h(RtlGuide, { links });
   if (view === 'themes') return themesGuide(links);
@@ -1183,8 +1187,10 @@ export function ReactReferencePage({ view, links, button, layout, typography, ic
       keywords: 'foundations tokens spacing typography colors semantic roles css variables radius motion shadows' },
     { title: 'Theming', href: links.themes,
       keywords: 'customization foundations branded themes scope nested local override css token semantic color' },
-    { title: 'Color', href: links.color,
-      keywords: 'customization colors semantic color roles palette picker swatches primary secondary accent foreground hover contrast' },
+    { title: 'Color / Theme Studio', href: links.color,
+      keywords: 'customization colors palette picker live component preview accent hover contrast swatches' },
+    { title: 'Theme Builder', href: links.builder,
+      keywords: 'customization create theme builder semantic token inspector override editor export css typescript light dark brand' },
     { title: 'Dark mode', href: links.darkMode,
       keywords: 'customization dark light system color scheme prefers-color-scheme ssr theme scope' },
     { title: 'Right-to-left', href: links.rtl,
