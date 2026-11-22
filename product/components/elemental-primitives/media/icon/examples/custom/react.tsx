@@ -1,6 +1,7 @@
 import * as React from 'react';
 import { createRoot } from 'react-dom/client';
 import { Icon } from '@vyrnforge/react/icon';
+import { Text } from '@vyrnforge/react/text';
 import { defineIcon } from '@vyrnforge/web/icon';
 
 const productMarkIcon = defineIcon({
@@ -16,7 +17,7 @@ const productMarkIcon = defineIcon({
 });
 
 function App() {
-  return <p><Icon icon={productMarkIcon} variant="filled" label="Product mark" /> Custom product artwork.</p>;
+  return <Text as="p"><Icon icon={productMarkIcon} variant="filled" label="Product mark" /> Custom product artwork.</Text>;
 }
 
 createRoot(document.querySelector('#root')!).render(<App />);
