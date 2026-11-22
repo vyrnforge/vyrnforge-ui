@@ -5,7 +5,7 @@ VyrnForge **does not have a separate React palette or theme runtime**. The canon
 ## Zero-configuration semantic colors
 
 ```tsx
-import { Text, SvgIcon, colors, tokens } from '@vyrnforge/react';
+import { Text, SvgIcon, Flow, colors, tokens } from '@vyrnforge/react';
 
 <Text as="p" tone="primary">Accent/primary emphasis</Text>
 <Text as="p" tone="secondary">Secondary text</Text>
@@ -16,7 +16,7 @@ import { Text, SvgIcon, colors, tokens } from '@vyrnforge/react';
 </SvgIcon>
 
 // For ordinary React style values:
-<div style={{ color: colors.danger, padding: tokens.space.md }}>Important</div>
+<Flow style={{ color: colors.danger, padding: tokens.space.md }}>Important</Flow>
 ```
 
 `tone` uses the canonical token values through CSS `var()`, so the exact same components follow light, dark, system, and custom theme scopes. The existing Button `variant="primary" | "secondary" | "ghost"` is a control treatment, **not the same thing as text tone**.
