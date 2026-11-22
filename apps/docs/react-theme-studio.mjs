@@ -5,6 +5,7 @@ import { Button } from '@vyrnforge/react/button';
 import { ColorPickerRoot, ColorPickerInput, ColorPickerTextInput, ColorPickerSwatch } from '@vyrnforge/react/color-picker';
 import { SegmentedControlRoot, SegmentedControlItem } from '@vyrnforge/react/segmented-control';
 import { Input } from '@vyrnforge/react/input';
+import { NativeSelect } from '@vyrnforge/react/native-select';
 import { Checkbox } from '@vyrnforge/react/checkbox';
 import { Slider } from '@vyrnforge/react/slider';
 import { Flow } from '@vyrnforge/react/layout';
@@ -286,7 +287,7 @@ export function ThemeStudio({ links }) {
           h('h2', null, '03 / Semantic role'),
           h('label', { htmlFor: 'vf-docs-studio-role', className: 'vf-docs-studio-field-label' },
             'Select a token to override'),
-          h('select', { id: 'vf-docs-studio-role', value: selectedRole,
+          h(NativeSelect, { id: 'vf-docs-studio-role', value: selectedRole,
             'data-vf-docs-studio-role': '',
             onChange: (e) => { setSelectedRole(e.target.value);
               setNotice(e.target.value + ' role selected'); } },
