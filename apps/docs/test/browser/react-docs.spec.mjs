@@ -1329,7 +1329,7 @@ test('React Avatar guide shows initials, native photo, failed-image fallback and
   await expect(guide.getByRole('heading', { name: 'Group spacing', exact: true })).toBeVisible();
 
   // A React consumer sees one concise setup and one source-backed gallery.
-  const setupSource = guide.locator('#react-avatar-setup pre code');
+  const setupSource = guide.locator('section[aria-labelledby="react-avatar-setup"] pre code');
   await expect(setupSource).toHaveCount(1);
   await expect(setupSource).toContainText("from '@vyrnforge/react/avatar'");
   await expect(setupSource).not.toContainText('<Avatar');
