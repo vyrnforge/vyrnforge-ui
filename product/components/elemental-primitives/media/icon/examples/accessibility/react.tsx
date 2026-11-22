@@ -3,6 +3,7 @@ import { createRoot } from 'react-dom/client';
 import { Button } from '@vyrnforge/react/button';
 import { Icon } from '@vyrnforge/react/icon';
 import { Flow } from '@vyrnforge/react/layout';
+import { Text } from '@vyrnforge/react/text';
 import { bookmarkIcon } from '@vyrnforge/icons/bookmark';
 
 function App() {
@@ -13,9 +14,9 @@ function App() {
         onClick={() => setSaved((value) => !value)}>
         <Icon icon={bookmarkIcon} variant={saved ? 'filled' : 'outlined'} />
       </Button>
-      <span role="status">{saved ? 'Saved' : 'Not saved'}</span>
+      <Text as="span" role="status">{saved ? 'Saved' : 'Not saved'}</Text>
     </Flow>
-    <p><Icon icon={bookmarkIcon} label="Bookmark status" /> A separately named status symbol.</p>
+    <Text as="p"><Icon icon={bookmarkIcon} label="Bookmark status" /> A separately named status symbol.</Text>
   </Flow>;
 }
 

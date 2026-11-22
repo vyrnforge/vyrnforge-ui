@@ -109,6 +109,9 @@ test('All React guide pages compose with canonical Flow and AutoGrid, not local 
     await expect(related).toHaveCount(1);
     const headers = guide.locator('.vf-docs-example-header[data-vf-flow-direction="inline"]');
     expect(await headers.count(), id + ' examples must use Flow headers').toBeGreaterThan(0);
+    await expect(guide.locator('p[data-vf-text]').first()).toBeVisible();
+    expect(await guide.locator('.vf-docs-example-header h3[data-vf-text]').count(),
+      id + ' example titles must use public Text').toBeGreaterThan(0);
     expect(await guide.evaluate((element) => getComputedStyle(element).display)).toBe('flex');
     expect(await jumpLinks.evaluate((element) => getComputedStyle(element).display)).toBe('flex');
     const standards = guide.locator('.vf-docs-standards[data-vf-flow]');
@@ -136,6 +139,47 @@ test('React Button and Text preview examples use public Flow, not a docs-only st
     await expect(layout).toHaveAttribute('data-vf-flow-gap', 'md');
     expect(await layout.evaluate((element) => getComputedStyle(element).display)).toBe('flex');
     await expect(layout).not.toHaveClass(/vf-example-stack/);
+  }
+});
+
+test('Owner-authored React guide examples use public components for text, layout and controls', () => {
+  const manifest = JSON.parse(readFileSync('dist/docs/next/react/site-manifest.json', 'utf8'));
+  const examples = [
+    ...manifest.button.examples,
+    ...manifest.layout.examples,
+    ...manifest.divider.examples,
+    ...manifest.icon.examples,
+    ...manifest.image.examples,
+    ...Object.values(manifest.typography).flatMap((unit) => unit.examples),
+  ];
+  expect(examples.length).toBeGreaterThan(30);
+  for (const example of examples) {
+    const source = readFileSync(example.sourcePath, 'utf8');
+    // Native section, article, main, fieldset, legend, label, list, figure, hr,
+    // and SVG artwork remain intentional: they convey semantics the library preserves.
+    // These guide examples use Text for styled text and real controls for input/action.
+    expect(source, example.id + ': use Text, Flow or an existing public control')
+      .not.toMatch(/<(?:p|div|span|button|input|h[1-6]|strong)\b/);
+  }
+});
+
+test('React guide examples render public typography, layout and controls on native hosts', async ({ page }) => {
+  const cases = [
+    ['/next/react/examples/divider/basic/', 'h3[data-vf-text]', 'h3'],
+    ['/next/react/examples/layout/basic/', 'button[data-vf-button]', 'button'],
+    ['/next/react/examples/layout/semantic-groups/', 'input[data-vf-radio]', 'input'],
+    ['/next/react/examples/icon/custom/', 'p[data-vf-text]', 'p'],
+    ['/next/react/examples/icon/svg-wrapper/', 'div[data-vf-flow] > p[data-vf-text]', 'p'],
+    ['/next/react/examples/image/captioned/', 'figure figcaption[data-vf-text]', 'figcaption'],
+    ['/next/react/examples/typography/code/', 'p[data-vf-text]', 'p'],
+    ['/next/react/examples/typography/kbd/', 'p[data-vf-text]', 'p'],
+    ['/next/react/examples/button/forms/', 'input[data-vf-input]', 'input'],
+  ];
+  for (const [url, selector, semanticTag] of cases) {
+    await page.goto(url);
+    const item = page.locator(selector).first();
+    await expect(item, url).toBeVisible();
+    expect(await item.evaluate((element) => element.tagName.toLowerCase())).toBe(semanticTag);
   }
 });
 
@@ -879,7 +923,7 @@ test('One-import createSvgIcon produces reusable JSX shapes with defaults and th
   await expect(named).toBeVisible();
   await expect(named).not.toHaveAttribute('aria-hidden', 'true');
   await sample.getByText('View React TSX source').click();
-  await expect(sample.locator('pre code')).toContainText("import { createSvgIcon } from '@vyrnforge/react/icon'");
+  await expect(sample.locator('pre code')).toContainText("import { createSvgIcon, Flow, Text } from '@vyrnforge/react'");
   await expect(sample.locator('pre code')).toContainText('const SparkleIcon = createSvgIcon(');
   await expect(sample.locator('pre code')).not.toContainText('@vyrnforge/react/layout');
   await guide.getByRole('link', { name: 'View Icon public React API' }).click();

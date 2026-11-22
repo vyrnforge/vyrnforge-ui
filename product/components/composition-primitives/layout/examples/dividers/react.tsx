@@ -1,19 +1,20 @@
 import { Flow } from '@vyrnforge/react/layout';
+import { Text } from '@vyrnforge/react/text';
 import '@vyrnforge/web/styles/layout.css';
 
 export function NativeDividersExample() {
   return (
     <Flow as="article" gap="md">
-      <section aria-labelledby="profile-title">
-        <h3 id="profile-title">Profile</h3>
-        <p>Contact details and account identity.</p>
-      </section>
+      <Flow as="section" gap="xs" aria-labelledby="profile-title">
+        <Text as="h3" variant="heading-sm" id="profile-title">Profile</Text>
+        <Text as="p">Contact details and account identity.</Text>
+      </Flow>
       {/* Native hr already conveys a thematic break; CSS is optional. */}
       <hr />
-      <section aria-labelledby="preferences-title">
-        <h3 id="preferences-title">Preferences</h3>
-        <p>Notifications and display settings.</p>
-      </section>
+      <Flow as="section" gap="xs" aria-labelledby="preferences-title">
+        <Text as="h3" variant="heading-sm" id="preferences-title">Preferences</Text>
+        <Text as="p">Notifications and display settings.</Text>
+      </Flow>
     </Flow>
   );
 }

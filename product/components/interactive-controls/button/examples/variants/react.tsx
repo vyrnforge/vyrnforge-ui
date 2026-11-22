@@ -1,4 +1,3 @@
-import * as React from 'react';
 import { createRoot } from 'react-dom/client';
 import { Flow } from '@vyrnforge/react/layout';
 import { Button } from '@vyrnforge/react/button';

@@ -106,7 +106,10 @@ if (!icon?.showcaseAvailable || !icon.apiAvailable ||
     !iconExamples.every((example) => example.sourcePath.endsWith('/react.tsx') &&
       (example.id === 'icon/inline-svg'
         ? example.source.includes("'@vyrnforge/web/styles/icon.css'")
-        : example.source.includes("'@vyrnforge/react/icon'")))) {
+        : example.id === 'icon/svg-wrapper'
+          ? example.source.includes("'@vyrnforge/react'") &&
+            example.source.includes('createSvgIcon')
+          : example.source.includes("'@vyrnforge/react/icon'")))) {
   throw new Error('React Icon documentation requires public renderer, shared CSS, adaptation and eight owned examples');
 }
 const iconPublicSourcePath = path.join(root,
@@ -269,6 +272,7 @@ await build({
 await build({
   entryPoints: [path.join(root, basicExample.sourcePath)],
   bundle: true, platform: 'browser', format: 'iife', target: 'es2022',
+  jsx: 'automatic',
   outfile: path.join(outRoot, 'assets/react-button-basic.js'), logLevel: 'silent',
 });
 await build({

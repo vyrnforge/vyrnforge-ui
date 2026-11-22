@@ -1,6 +1,6 @@
-import * as React from 'react';
 import { createRoot } from 'react-dom/client';
 import { Image } from '@vyrnforge/react/image';
+import { Text } from '@vyrnforge/react/text';
 import '@vyrnforge/web/styles/image.css';
 
 function App() {
@@ -12,7 +12,7 @@ function App() {
         width={320}
         height={160}
       />
-      <figcaption>Study of shape and contrast</figcaption>
+      <Text as="figcaption" variant="caption">Study of shape and contrast</Text>
     </figure>
   );
 }

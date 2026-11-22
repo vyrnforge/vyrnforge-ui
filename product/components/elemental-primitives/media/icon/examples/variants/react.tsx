@@ -1,7 +1,7 @@
-import * as React from 'react';
 import { createRoot } from 'react-dom/client';
 import { Icon } from '@vyrnforge/react/icon';
 import { Flow } from '@vyrnforge/react/layout';
+import { Text } from '@vyrnforge/react/text';
 import { bookmarkIcon } from '@vyrnforge/icons/bookmark';
 
 const treatments = [
@@ -16,7 +16,7 @@ function App() {
     {treatments.map(({ variant, shape, name }) =>
       <Flow key={name} gap="xs" align="center">
         <Icon icon={bookmarkIcon} variant={variant} shape={shape} />
-        <span>{name}</span>
+        <Text as="span">{name}</Text>
       </Flow>)}
   </Flow>;
 }

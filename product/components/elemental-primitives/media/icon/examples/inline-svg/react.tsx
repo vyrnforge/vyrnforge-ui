@@ -1,6 +1,6 @@
-import * as React from 'react';
 import { createRoot } from 'react-dom/client';
 import { Flow } from '@vyrnforge/react/layout';
+import { Text } from '@vyrnforge/react/text';
 import '@vyrnforge/web/styles/icon.css';
 
 // Native JSX SVG markup is not the VyrnForge <Icon icon={definition} /> API.
@@ -15,7 +15,7 @@ function App() {
             strokeLinejoin="round" />
           <circle cx="12" cy="12" r="2" fill="var(--vf-color-accent-background)" />
         </svg>
-        <span>Named SVG</span>
+        <Text as="span">Named SVG</Text>
       </Flow>
       <Flow direction="inline" gap="sm" align="center">
         <svg data-vf-icon="" data-vf-size="md" viewBox="0 0 24 24"
@@ -25,7 +25,7 @@ function App() {
           <path d="M8 12h8M12 8v8" stroke="currentColor" strokeWidth="2"
             strokeLinecap="round" />
         </svg>
-        <span>Decorative SVG</span>
+        <Text as="span">Decorative SVG</Text>
       </Flow>
     </Flow>
   );
