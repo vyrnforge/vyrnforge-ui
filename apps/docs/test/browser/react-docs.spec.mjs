@@ -18,7 +18,7 @@ test('React pilot artifact is Product Graph-backed and SSR-rendered with public 
   expect(manifest.layout.examples).toHaveLength(7);
   expect(manifest.layout.examples.map((example) => example.id)).toContain('layout/dividers');
   expect(manifest.routes.filter((entry) => entry.view !== 'unavailable').map((entry) => entry.route)).toEqual([
-    '', 'foundations/tokens/', 'components/button/', 'api/components/button/', 'components/layout/', 'api/components/layout/',
+    '', 'foundations/tokens/', 'foundations/themes/', 'foundations/styling/', 'components/button/', 'api/components/button/', 'components/layout/', 'api/components/layout/',
     'components/divider/', 'api/components/divider/', 
     ...['text', 'code', 'kbd'].flatMap((id) => [
       'components/' + id + '/', 'api/components/' + id + '/',
@@ -108,10 +108,31 @@ test('React pilot artifact is Product Graph-backed and SSR-rendered with public 
   }
 });
 
-test('React token guide uses semantic roles across built-in and custom nested theme scopes', async ({ page }) => {
+test('Foundations is a separate discoverable catalog for tokens, themes and CSS', async ({ page }) => {
   await page.goto('/next/react/foundations/tokens/');
-  const guide = page.locator('[data-vf-docs-react-tokens]');
-  await expect(guide.getByRole('heading', { name: 'React colors & themes' })).toBeVisible();
+  const nav = page.getByRole('navigation', { name: 'Documentation' });
+  await expect(nav.getByText('Foundations', { exact: true })).toBeVisible();
+  await expect(nav.getByRole('link', { name: 'Design tokens' })).toBeVisible();
+  await expect(nav.getByRole('link', { name: 'Colors & themes' })).toBeVisible();
+  await expect(nav.getByRole('link', { name: 'Styling & CSS' })).toBeVisible();
+  const tokens = page.locator('[data-vf-docs-react-tokens]');
+  await expect(tokens.getByRole('heading', { name: 'Design tokens' })).toBeVisible();
+  await expect(tokens).toContainText('Token categories');
+  await nav.getByRole('link', { name: 'Styling & CSS' }).click();
+  const styling = page.locator('[data-vf-docs-react-styling]');
+  await expect(styling.getByRole('heading', { name: 'Styling & CSS' })).toBeVisible();
+  await expect(styling).toContainText('CSS delivery');
+  await expect(styling).toContainText('@vyrnforge/web/styles.css');
+  await nav.getByRole('link', { name: 'Colors & themes' }).click();
+  await expect(page.locator('[data-vf-docs-react-themes]')).toBeVisible();
+  await page.getByRole('searchbox', { name: 'Search React documentation' }).fill('stylesheet');
+  await expect(page.locator('[data-vf-docs-react-results]')).toContainText('Styling & CSS');
+});
+
+test('React theme guide uses semantic roles across built-in and custom nested theme scopes', async ({ page }) => {
+  await page.goto('/next/react/foundations/themes/');
+  const guide = page.locator('[data-vf-docs-react-themes]');
+  await expect(guide.getByRole('heading', { name: 'Colors & themes' })).toBeVisible();
   await expect(guide).toContainText('Custom themes for both appearances');
   const previews = guide.locator('[data-vf-docs-react-theme-previews]');
   await expect(previews).toHaveAttribute('data-vf-auto-grid', '');
@@ -143,7 +164,7 @@ test('React token guide uses semantic roles across built-in and custom nested th
 });
 
 test('Nested system themes remap canonical colors in both OS appearances', async ({ page }) => {
-  await page.goto('/next/react/foundations/tokens/');
+  await page.goto('/next/react/foundations/themes/');
   await page.emulateMedia({ colorScheme: 'light' });
   const read = () => page.evaluate(() => {
     let outer = document.querySelector('[data-vf-test-system-parent]');

@@ -235,6 +235,8 @@ function linksFor(route) {
     channel,
     home: relative(dir, react, true),
     tokens: relative(dir, react + 'foundations/tokens/', true),
+    themes: relative(dir, react + 'foundations/themes/', true),
+    styling: relative(dir, react + 'foundations/styling/', true),
     self: relative(dir, react + route, true),
     guide: relative(dir, react + 'components/button/', true),
     api: relative(dir, react + 'api/components/button/', true),
@@ -511,8 +513,12 @@ for (const slug of layoutSlugs) {
 
 const pageViews = [
   { route: '', view: 'home', title: 'React overview', description: 'VyrnForge React documentation pilot' },
-  { route: 'foundations/tokens/', view: 'tokens', title: 'React colors and themes',
-    description: 'Semantic design tokens, built-in modes and local brand scopes in React' },
+  { route: 'foundations/tokens/', view: 'tokens', title: 'React design tokens',
+    description: 'Shared semantic tokens, color roles and foundation scales in React' },
+  { route: 'foundations/themes/', view: 'themes', title: 'React colors and themes',
+    description: 'Light, dark, system and custom branded theme scopes in React' },
+  { route: 'foundations/styling/', view: 'styling', title: 'React styling and CSS',
+    description: 'Shared stylesheet loading, overrides and CSS customization in React' },
   { route: button.showcaseRoute, view: 'guide', title: 'React Button', description: 'Shared Button semantics and React usage' },
   { route: button.apiRoute, view: 'api', title: 'React Button API', description: 'Verified public React Button API' },
   { route: layout.showcaseRoute, view: 'layout', title: 'React Layout', description: 'Flow and AutoGrid usage in React with shared Web CSS' },
