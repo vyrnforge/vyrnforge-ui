@@ -193,7 +193,7 @@ test('Theme Studio edits full palettes, semantic roles and a live VyrnForge prev
   await shades.getByRole('button', { name: 'Shade 700, #115e59' }).click();
   await expect(selected).toHaveAttribute('data-vf-docs-color-shade', '700');
   const picker = studio.locator('[data-vf-docs-studio-picker="shade"]');
-  const input = picker.getByRole('textbox', { name: 'Selected shade hex' });
+  const input = picker.getByRole('textbox', { name: 'Selected shade hex', exact: true });
   await input.fill('#bad');
   await expect(input).toHaveValue('#bad');
   await expect(selected).toHaveAttribute('data-vf-docs-color-shade', '700');
@@ -205,7 +205,7 @@ test('Theme Studio edits full palettes, semantic roles and a live VyrnForge prev
   await studio.getByRole('combobox', { name: 'Select a token to override' })
     .selectOption('surface');
   const rolePicker = studio.locator('[data-vf-docs-studio-picker="role"]');
-  await rolePicker.getByRole('textbox', { name: 'Semantic role hex' }).fill('#efefef');
+  await rolePicker.getByRole('textbox', { name: 'Semantic role hex', exact: true }).fill('#efefef');
   await expect.poll(async () => preview.evaluate((node) => getComputedStyle(node).backgroundColor))
     .toBe('rgb(239, 239, 239)');
   await expect(studio.locator('[data-vf-docs-studio-restore-role]')).toBeEnabled();
@@ -258,8 +258,8 @@ test('Theme Studio maintains narrow-screen reflow and native keyboard focus', as
   await page.goto('/next/react/foundations/color/');
   const studio = page.locator('[data-vf-docs-react-color]');
   const picker = studio.locator('[data-vf-docs-studio-picker="shade"]');
-  await picker.getByRole('textbox', { name: 'Selected shade hex' }).focus();
-  await expect(picker.getByRole('textbox', { name: 'Selected shade hex' })).toBeFocused();
+  await picker.getByRole('textbox', { name: 'Selected shade hex', exact: true }).focus();
+  await expect(picker.getByRole('textbox', { name: 'Selected shade hex', exact: true })).toBeFocused();
   await studio.getByRole('radiogroup', { name: 'Palette appearance' })
     .getByRole('radio', { name: 'Dark' }).focus();
   await studio.getByRole('radiogroup', { name: 'Palette appearance' })
