@@ -1,7 +1,7 @@
 {
   "id": "badge/basic",
-  "title": "Text and count badges",
-  "description": "Short contextual labels and consumer-formatted counts using the same Badge component.",
+  "title": "Count attached to a target",
+  "description": "A badge supplements a button; the button's accessible name contains the count meaning.",
   "defaultFramework": "react",
   "frameworks": {
     "native-web": {

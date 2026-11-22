@@ -257,33 +257,34 @@ export type AvatarShape = 'rounded' | 'square';
 export type AvatarSize = 'sm' | 'md' | 'lg';
 
 // @public
+export type BadgeAnchorOrigin = {
+    vertical: 'top' | 'bottom';
+    horizontal: 'start' | 'end';
+};
+
+// @public
 export const Badge: ForwardRefExoticComponent<BadgeProps & RefAttributes<HTMLSpanElement>>;
+
+// @public (undocumented)
+export type BadgeOverlap = 'rectangular' | 'circular';
 
 // @public
 export type BadgeProps = Omit<ComponentPropsWithoutRef<'span'>, 'children' | 'role' | 'aria-hidden' | 'aria-label' | 'tabIndex'> & {
+    children: ReactNode;
     tone?: BadgeTone;
     size?: BadgeSize;
-    shape?: BadgeShape;
-    variant?: BadgeVariant;
+    overlap?: BadgeOverlap;
+    anchorOrigin?: BadgeAnchorOrigin;
+    max?: number;
+    showZero?: boolean;
+    invisible?: boolean;
 } & ({
-    appearance?: 'text';
-    children: string | number;
-    label?: never;
-    decorative?: never;
+    variant?: 'standard';
+    badgeContent: string | number;
 } | {
-    appearance: 'dot';
-    label: string;
-    children?: never;
-    decorative?: false;
-} | {
-    appearance: 'dot';
-    decorative: true;
-    children?: never;
-    label?: never;
+    variant: 'dot';
+    badgeContent?: never;
 });
-
-// @public (undocumented)
-export type BadgeShape = 'rounded' | 'pill';
 
 // @public (undocumented)
 export type BadgeSize = 'sm' | 'md';
@@ -291,8 +292,8 @@ export type BadgeSize = 'sm' | 'md';
 // @public
 export type BadgeTone = 'neutral' | 'accent' | 'danger';
 
-// @public (undocumented)
-export type BadgeVariant = 'subtle' | 'outline';
+// @public
+export type BadgeVariant = 'standard' | 'dot';
 
 // @public (undocumented)
 export const Button: ForwardRefExoticComponent<ButtonProps & RefAttributes<HTMLButtonElement>>;

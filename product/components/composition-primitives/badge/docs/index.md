@@ -1,27 +1,31 @@
 # Badge
 
-Badge displays a short label, numeric count, or small indicator alongside other content. It is noninteractive and does not make notifications, selection, account status, or workflow claims.
+Badge is a small noninteractive **anchored indicator** on an existing element. Its indicator displays a count, short text or dot. The wrapped element keeps its native semantics and behavior. Badge is not a standalone capsule label; Chip is reserved as a separate future capability.
 
 ## When to use
 
-Use Badge for concise contextual metadata such as Draft, New, or a consumer-provided count. Use ordinary Text when no reusable capsule treatment is needed; use TagGroup for managed tags and Button/Link for actions.
+Use Badge to supplement an existing icon, button, Avatar, list item or other visual target with a compact numeric count or dot. For standalone metadata such as Draft, New or Blocked, use ordinary Text; do not borrow Badge as a Chip. TagGroup owns managed collections of interactive tags. Badge itself does not manage notifications, status sources, actions or focus.
 
-## Appearances
+## Counts and visibility
 
-Text and numeric counts remain normal readable content. A dot is a visual indicator, not an accessible message by itself: it needs a meaningful consumer-authored accessible name, or must be explicitly decorative next to equivalent text. No status meaning is inferred from colors.
+`standard` shows authored `badgeContent` (short text or number). Positive counts above `max` show the capped value followed by a plus sign; the default cap is 99. A numeric zero is visually hidden by default; `showZero` reveals it. `invisible` hides either standard or dot indicators without removing the wrapped child. Count meaning, pluralization, locale-specific formatting, and any announcement are consumer-owned. The visual `99+` is not used as an accessible name automatically.
 
-## Tone, size and shape
+## Placement and overlap
 
-Neutral, accent and danger reuse existing semantic color roles. Success/warning are not presented until corresponding semantic token pairs have been accepted. The compact sizes are sm and md; shapes rounded and pill; variants subtle and outline. No hard-coded status palette, numeric overflow policy, or consumer color override API is introduced.
+Positioning belongs to Badge rather than Avatar or any wrapped component. The default is top/end, with top/bottom and logical start/end corners and rectangular/circular overlap. Logical horizontal positioning respects RTL. Wrapping an existing interactive element does not make Badge itself interactive. Use an appropriate target size and spacing so the overhanging indicator is not clipped; application overflow containers may require their own layout decisions.
+
+## Tones and sizing
+
+Neutral/accent/danger use established semantic color roles. Sizes sm/md control the indicator only. Standard badges are pill-shaped; dot indicators are circles. Success/warning colors require separate token and contrast approval. No raw color, arbitrary size, dismiss control, action, selection state or presence detection is introduced.
 
 ## Accessibility
 
-Badges are not buttons, live regions, status messages, or focus targets. Text content is read normally. A named dot uses a single image-like accessible name while its painted dot is decorative; a decorative dot is hidden from assistive technologies and should accompany equivalent visible wording. Do not depend on color alone. Check contrast across light/dark/system themes, forced colors, high zoom, and RTL.
+The badge indicator is visual-only (`aria-hidden="true"`), nonfocusable, and never a status/live region. Place the badge meaning in the wrapped item's accessible name (for example, an Inbox button named “Inbox, 4 unread messages”), and keep that name accurate when the count or visibility changes. For a noninteractive visual target, provide equivalent nearby text. Do not rely on a dot's color alone. Badge must not override wrapped focus, role, keyboard handling or DOM semantics. Check RTL, forced colors, theme contrast, text scaling and narrow reflow.
 
 ## Boundaries
 
-Count clamping, localization, business status, notification delivery, links/actions, dismiss/removal, presence, and avatar badge overlays belong elsewhere. This component owns only its noninteractive presentation.
+Chip, TagGroup, status labels, notification queues, business counting, accessible alerts, activity streams and interactive dismiss/removal remain separate responsibilities. Avatar-with-Badge is a future composition decision, not an option baked into either component.
 
 ## Native Web markup
 
-The separate Native Web documentation surface owns the HTML recipe, using `@vyrnforge/web/styles/badge.css` and `data-vf-badge` hooks. React consumers should use the public component rather than duplicating markup.
+The Native Web documentation surface owns static HTML examples using `@vyrnforge/web/styles/badge.css` and the `data-vf-badge` hooks. React consumers use the public component.

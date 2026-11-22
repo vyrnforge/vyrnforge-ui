@@ -5,48 +5,66 @@ import { renderToStaticMarkup } from 'react-dom/server';
 import { Badge } from '@vyrnforge/react/badge';
 import { Badge as RootBadge } from '@vyrnforge/react';
 
-test('Badge SSR retains readable text and consumer native attributes', () => {
+const target = (name) => createElement('button', { type: 'button', 'aria-label': name }, 'Inbox');
+
+test('Badge SSR preserves wrapped native button and puts count only in visual indicator', () => {
   const html = renderToStaticMarkup(createElement(Badge, {
-    id: 'draft', className: 'metadata', tone: 'accent', shape: 'rounded', size: 'sm',
-  }, 'Draft'));
+    badgeContent: 4, tone: 'accent', size: 'sm', id: 'mail', className: 'metadata',
+  }, target('Inbox, 4 unread messages')));
   assert.match(html, /^<span\b/);
-  assert.match(html, /id="draft"/);
-  assert.match(html, /class="metadata"/);
   assert.match(html, /data-vf-badge-tone="accent"/);
   assert.match(html, /data-vf-badge-size="sm"/);
-  assert.match(html, /data-vf-badge-shape="rounded"/);
-  assert.match(html, />Draft<\/span>$/);
-  assert.doesNotMatch(html, /role=|aria-live=|tabindex=/i);
+  assert.match(html, /id="mail"/);
+  assert.match(html, /class="metadata"/);
+  assert.match(html, /<button type="button" aria-label="Inbox, 4 unread messages">Inbox<\/button>/);
+  assert.match(html, /data-vf-badge-indicator="" aria-hidden="true">4<\/span>/);
+  assert.doesNotMatch(html, /role="status"|aria-live=|tabindex=/i);
 });
 
-test('numeric zero is a label, not omitted or capped by Badge', () => {
-  const zero = renderToStaticMarkup(createElement(RootBadge, null, 0));
-  assert.match(zero, />0<\/span>$/);
-  const count = renderToStaticMarkup(createElement(Badge, null, 12345));
-  assert.match(count, />12345<\/span>$/);
+test('numeric maximum caps display; zero hides unless showZero; invisible hides only indicator', () => {
+  const cap = renderToStaticMarkup(createElement(RootBadge, {
+    badgeContent: 120, max: 99,
+  }, target('Inbox, 120 unread messages')));
+  assert.match(cap, /aria-hidden="true">99\+<\/span>/);
+  assert.match(cap, /aria-label="Inbox, 120 unread messages"/);
+  const zero = renderToStaticMarkup(createElement(Badge, {
+    badgeContent: 0,
+  }, target('Inbox, no unread messages')));
+  assert.match(zero, /data-vf-badge-indicator="" aria-hidden="true" hidden=""/);
+  const shown = renderToStaticMarkup(createElement(Badge, {
+    badgeContent: 0, showZero: true,
+  }, target('Inbox, zero unread messages')));
+  assert.match(shown, /aria-hidden="true">0<\/span>/);
+  const hidden = renderToStaticMarkup(createElement(Badge, {
+    badgeContent: 7, invisible: true,
+  }, target('Inbox, 7 unread messages')));
+  assert.match(hidden, /data-vf-badge-indicator="" aria-hidden="true" hidden=""/);
+  assert.match(hidden, /<button type="button"/);
 });
 
-test('named and decorative dots have distinct accessible semantics and no hidden text', () => {
-  const named = renderToStaticMarkup(createElement(Badge, {
-    appearance: 'dot', label: 'Sync in progress', tone: 'accent',
-  }));
-  assert.match(named, /role="img"/);
-  assert.match(named, /aria-label="Sync in progress"/);
-  assert.doesNotMatch(named, /aria-hidden|aria-live|tabindex/);
-  const decorative = renderToStaticMarkup(createElement(Badge, {
-    appearance: 'dot', decorative: true,
-  }));
-  assert.match(decorative, /aria-hidden="true"/);
-  assert.doesNotMatch(decorative, /role=|aria-label=/);
+test('dot has no accessible duplicate or implicit focus target', () => {
+  const html = renderToStaticMarkup(createElement(Badge, {
+    variant: 'dot', tone: 'danger', anchorOrigin: { vertical: 'bottom', horizontal: 'start' },
+    overlap: 'circular',
+  }, target('Notifications, new items')));
+  assert.match(html, /data-vf-badge-variant="dot"/);
+  assert.match(html, /data-vf-badge-vertical="bottom"/);
+  assert.match(html, /data-vf-badge-horizontal="start"/);
+  assert.match(html, /data-vf-badge-overlap="circular"/);
+  assert.match(html, /data-vf-badge-indicator="" aria-hidden="true"><\/span>/);
+  assert.doesNotMatch(html, /role="img"|role="status"|aria-live=|tabindex=/i);
 });
 
-test('Badge variants are deterministic and do not install interactive semantics', () => {
-  for (const variant of ['subtle', 'outline']) {
-    const html = renderToStaticMarkup(createElement(Badge, {
-      tone: 'danger', size: 'md', variant, shape: 'pill',
-    }, 'Blocked'));
-    assert.match(html, new RegExp('data-vf-badge-variant="' + variant + '"'));
-    assert.match(html, /data-vf-badge-tone="danger"/);
-    assert.doesNotMatch(html, /aria-live|role="status"|tabindex=|<button/i);
+test('logical positioning produces deterministic SSR output without browser globals', () => {
+  for (const vertical of ['top', 'bottom']) {
+    for (const horizontal of ['start', 'end']) {
+      const html = renderToStaticMarkup(createElement(Badge, {
+        badgeContent: 'NEW', anchorOrigin: { vertical, horizontal }, overlap: 'rectangular',
+      }, createElement('span', null, 'Item')));
+      assert.match(html, new RegExp('data-vf-badge-vertical="' + vertical + '"'));
+      assert.match(html, new RegExp('data-vf-badge-horizontal="' + horizontal + '"'));
+      assert.match(html, /data-vf-badge-overlap="rectangular"/);
+      assert.match(html, /aria-hidden="true">NEW<\/span>/);
+    }
   }
 });

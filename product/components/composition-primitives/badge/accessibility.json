@@ -4,7 +4,7 @@
   "reviewStatus": "review-required",
   "nativeBaseline": {
     "kind": "native",
-    "reference": "span readable text/count, or span[role=img][aria-label] for named dot; decorative dot aria-hidden"
+    "reference": "noninteractive span wrapper preserving original child, absolutely positioned aria-hidden visual count/dot indicator"
   },
   "wcag": {
     "target": "2.2 AA",
@@ -13,7 +13,10 @@
       "1.1.1",
       "1.3.1",
       "1.4.3",
-      "1.4.11"
+      "1.4.11",
+      "2.1.1",
+      "2.4.7",
+      "4.1.2"
     ]
   },
   "aria": {
@@ -21,20 +24,20 @@
     "apgPattern": null
   },
   "interaction": {
-    "keyboard": "not-applicable",
-    "focus": "not-applicable",
-    "directionality": "native"
+    "keyboard": "child-owned",
+    "focus": "child-owned",
+    "directionality": "logical RTL-aware start/end"
   },
   "ownership": {
     "library": [
-      "Render concise readable text/count or one explicitly named/decorative dot",
-      "Reuse semantic theme variables for neutral/accent/danger with compact sizes/shapes",
-      "Keep noninteractive span semantics, stable SSR markup, and no focus target"
+      "Wrap arbitrary authored target without changing its role, accessible name, or keyboard behavior",
+      "Render noninteractive visual indicator that is always aria-hidden",
+      "Apply deterministic count cap/visibility rules and logical token-backed placement"
     ],
     "consumer": [
-      "Author localized concise text/count and status meaning",
-      "Give meaningful label to semantic dots or mark decorative beside equivalent text",
-      "Own notifications, count formatting, links/actions, interactive tags, and any Avatar overlay"
+      "Include meaningful count/status in wrapped target's accessible name, keep it synchronized",
+      "Author localized target label and any announcements/notifications",
+      "Own count source, status meaning, clipping/spacing and any Chip or Avatar composition"
     ]
   },
   "forms": {
@@ -51,15 +54,16 @@
     "assistiveTechnology": "review-required"
   },
   "profileVariability": [
-    "text, count, named dot, decorative dot",
-    "neutral/accent/danger tones",
-    "subtle/outline variants",
-    "small/medium size",
-    "rounded/pill shape",
-    "RTL, zoom, dark, forced-colors"
+    "standard count/text and dot",
+    "zero/showZero/invisible/max",
+    "neutral/accent/danger; sm/md",
+    "4 logical corners, rectangular/circular overlap",
+    "RTL, zoom, light/dark, forced-colors and wrapped interactive child"
   ],
   "notes": [
-    "No success/warning until accepted accessible token roles",
-    "Avatar overlay positioning remains separately deferred"
+    "Breaking replacement of standalone Badge v1; do not treat Badge as Chip",
+    "No implicit status/live announcements or accessible duplication",
+    "No success/warning until accepted semantic tokens",
+    "Avatar-with-Badge composite remains separately deferred"
   ]
 }

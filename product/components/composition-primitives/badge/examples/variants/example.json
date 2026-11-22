@@ -1,7 +1,7 @@
 {
   "id": "badge/variants",
-  "title": "Badge variants and sizing",
-  "description": "Compare token-backed neutral, accent and danger palettes with rounded/pill outlines and compact sizes.",
+  "title": "Tones and maximum count",
+  "description": "Semantic token-backed tones, sizes, and deterministic numeric caps on anchored indicators.",
   "defaultFramework": "react",
   "frameworks": {
     "native-web": {
