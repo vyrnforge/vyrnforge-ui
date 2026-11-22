@@ -1073,7 +1073,7 @@
   .vf-docs-customization-preview {
     background: var(--vf-color-surface);
     border: 1px solid var(--vf-color-border);
-    border-radius: var(--vf-surface-radius);
+    border-radius: var(--vf-radius-surface);
     color: var(--vf-color-text);
     min-inline-size: 0;
     padding: var(--vf-space-xl);
@@ -1086,7 +1086,7 @@
   .vf-docs-customization-code {
     background: var(--vf-color-surface-subtle);
     border: 1px solid var(--vf-color-border);
-    border-radius: var(--vf-surface-radius);
+    border-radius: var(--vf-radius-surface);
     min-inline-size: 0;
     overflow: hidden;
     padding: var(--vf-space-sm);
@@ -1119,7 +1119,7 @@
 
   .vf-docs-customization-swatches > li {
     border: 1px solid var(--vf-color-border);
-    border-radius: var(--vf-surface-radius);
+    border-radius: var(--vf-radius-surface);
     display: flex;
     flex-direction: column;
     gap: var(--vf-space-xs);
