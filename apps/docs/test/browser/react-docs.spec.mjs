@@ -185,32 +185,108 @@ test('React theme guide uses semantic roles across built-in and custom nested th
   await expect(page.locator('[data-vf-docs-react-results]')).toContainText('Color');
 });
 
-test('Color playground previews a complete accent family and shows live semantic CSS swatches', async ({ page }) => {
+test('Theme Studio edits full palettes, semantic roles and a live VyrnForge preview', async ({ page }) => {
   await page.goto('/next/react/foundations/color/');
-  const guide = page.locator('[data-vf-docs-react-color]');
-  await expect(guide.getByRole('heading', { name: 'Color', level: 1 })).toBeVisible();
-  const selector = guide.locator('[data-vf-docs-color-picker]');
-  const selected = guide.locator('[data-vf-docs-color-selected]');
-  const background = () => selected.getByRole('button', { name: 'Save changes' })
+  const studio = page.locator('[data-vf-docs-react-color]');
+  await expect(studio.getByRole('heading', { name: 'Color', level: 1 })).toBeVisible();
+  await expect(studio.getByRole('heading', { name: 'Live preview' })).toBeVisible();
+  await expect(studio.getByRole('navigation', { name: 'Theme Studio sections' }).getByRole('link')).toHaveCount(4);
+  const families = studio.locator('[data-vf-docs-color-picker]');
+  const selected = studio.locator('[data-vf-docs-color-selected]');
+  const preview = studio.locator('[data-vf-docs-theme-preview="light"]');
+  const background = () => preview.getByRole('button', { name: 'Save changes' })
     .evaluate((node) => getComputedStyle(node).backgroundColor);
   const blue = await background();
-  await selector.getByRole('button', { name: 'Teal' }).click();
+  await families.getByRole('button', { name: 'Teal' }).click();
   await expect(selected).toHaveAttribute('data-vf-docs-color-selected', 'teal');
-  await expect(selector.getByRole('button', { name: 'Teal' })).toHaveAttribute('aria-pressed', 'true');
+  await expect(families.getByRole('button', { name: 'Teal' })).toHaveAttribute('aria-pressed', 'true');
   expect(await background()).not.toBe(blue);
-  await selected.getByRole('button', { name: 'Save changes' }).click();
-  await expect(selected.locator('[data-vf-docs-preview-feedback]')).toHaveText('Primary preview action activated');
-  await expect(page.getByRole('navigation', { name: 'On this page' }).getByRole('link')).toHaveCount(4);
-  await expect(guide.locator('[data-vf-docs-color-roles] li')).toHaveCount(22);
-  await expect(guide.locator('[data-vf-docs-color-shades] button')).toHaveCount(11);
-  await expect(guide.locator('pre code').last()).toContainText('--vf-color-accent-background: #0f766e');
-  await guide.locator('[data-vf-docs-color-shades]').getByRole('button', { name: 'Shade 700, #115e59' }).click();
+  await expect(studio.locator('[data-vf-docs-color-shades] button')).toHaveCount(11);
+  await expect(studio.locator('[data-vf-docs-color-roles] li')).toHaveCount(22);
+
+  const shades = studio.locator('[data-vf-docs-color-shades]');
+  await shades.getByRole('button', { name: 'Shade 700, #115e59' }).click();
   await expect(selected).toHaveAttribute('data-vf-docs-color-shade', '700');
-  await expect(guide.locator('pre code').last()).toContainText('--vf-color-accent-background: #115e59');
-  await guide.locator('[data-vf-docs-color-appearance]').getByRole('button', { name: 'Dark palette' }).click();
+  const picker = studio.locator('[data-vf-docs-studio-picker="shade"]');
+  const input = picker.getByRole('textbox', { name: 'Selected shade hex', exact: true });
+  await input.fill('#bad');
+  await expect(input).toHaveValue('#bad');
+  await expect(selected).toHaveAttribute('data-vf-docs-color-shade', '700');
+  await input.fill('#123456');
+  await expect(studio.locator('[data-vf-docs-studio-notice]')).toContainText('#123456');
+  await expect(shades.getByRole('button', { name: 'Shade 700, #123456' })).toHaveAttribute('aria-pressed', 'true');
+  await expect(studio.locator('[data-vf-docs-studio-code="function"] code')).toContainText('#123456');
+
+  await studio.getByRole('combobox', { name: 'Select a token to override' })
+    .selectOption('surface');
+  const rolePicker = studio.locator('[data-vf-docs-studio-picker="role"]');
+  await rolePicker.getByRole('textbox', { name: 'Semantic role hex', exact: true }).fill('#efefef');
+  await expect.poll(async () => preview.evaluate((node) => getComputedStyle(node).backgroundColor))
+    .toBe('rgb(239, 239, 239)');
+  await expect(studio.locator('[data-vf-docs-studio-restore-role]')).toBeEnabled();
+  await studio.locator('[data-vf-docs-studio-restore-role]').click();
+  await expect.poll(async () => preview.evaluate((node) => getComputedStyle(node).backgroundColor))
+    .toBe('rgb(255, 255, 255)');
+
+  await preview.getByRole('button', { name: 'Save changes' }).click();
+  await expect(preview.locator('[data-vf-docs-preview-feedback]'))
+    .toHaveText('Primary preview action activated');
+  await studio.getByRole('radiogroup', { name: 'Preview scene' })
+    .getByRole('radio', { name: 'Form' }).check();
+  await expect(preview.getByRole('textbox', { name: 'Contact email' })).toBeVisible();
+  await preview.getByRole('textbox', { name: 'Contact email' }).fill('theme@example.com');
+  await expect(preview.getByRole('textbox', { name: 'Contact email' }))
+    .toHaveValue('theme@example.com');
+});
+
+test('Theme Studio compares appearances, exports CSS and restores its initial state', async ({ page }) => {
+  await page.goto('/next/react/foundations/color/');
+  const studio = page.locator('[data-vf-docs-react-color]');
+  const selected = studio.locator('[data-vf-docs-color-selected]');
+  const compare = studio.locator('[data-vf-docs-studio-compare]');
+  await compare.check();
+  await expect(studio.locator('[data-vf-docs-theme-preview]')).toHaveCount(2);
+  await expect(studio.locator('[data-vf-docs-theme-preview="dark"]')).toHaveCSS('color-scheme', 'dark');
+  await studio.getByRole('radiogroup', { name: 'Palette appearance' })
+    .getByRole('radio', { name: 'Dark' }).check();
   await expect(selected).toHaveAttribute('data-vf-docs-color-scheme', 'dark');
   await expect(selected).toHaveAttribute('data-vf-docs-color-shade', '300');
-  await expect(selected.locator('[data-vf-theme="dark"]')).toHaveCSS('color-scheme', 'dark');
+  await studio.getByRole('radiogroup', { name: 'Export format' })
+    .getByRole('radio', { name: 'Generated CSS' }).check();
+  await expect(studio.locator('[data-vf-docs-studio-code="css"] code'))
+    .toContainText('[data-vf-theme="blue-dark-studio"]');
+  await studio.locator('[data-vf-docs-studio-copy]').click();
+  await expect(studio.locator('[data-vf-docs-studio-copy-status]'))
+    .toContainText(/copied|unavailable/);
+  await studio.locator('[data-vf-docs-studio-reset]').click();
+  await expect(selected).toHaveAttribute('data-vf-docs-color-selected', 'blue');
+  await expect(selected).toHaveAttribute('data-vf-docs-color-shade', '600');
+  await expect(selected).toHaveAttribute('data-vf-docs-color-scheme', 'light');
+  await expect(compare).not.toBeChecked();
+  await expect(studio.locator('[data-vf-docs-theme-preview]')).toHaveCount(1);
+  await expect(studio.locator('[data-vf-docs-studio-code="function"]'))
+    .toContainText('createTheme');
+});
+
+test('Theme Studio maintains narrow-screen reflow and native keyboard focus', async ({ page }, testInfo) => {
+  await page.setViewportSize({ width: 320, height: 720 });
+  await page.goto('/next/react/foundations/color/');
+  const studio = page.locator('[data-vf-docs-react-color]');
+  const picker = studio.locator('[data-vf-docs-studio-picker="shade"]');
+  await picker.getByRole('textbox', { name: 'Selected shade hex', exact: true }).focus();
+  await expect(picker.getByRole('textbox', { name: 'Selected shade hex', exact: true })).toBeFocused();
+  await studio.getByRole('radiogroup', { name: 'Palette appearance' })
+    .getByRole('radio', { name: 'Dark' }).focus();
+  await studio.getByRole('radiogroup', { name: 'Palette appearance' })
+    .getByRole('radio', { name: 'Dark' }).press('Space');
+  await expect(studio.locator('[data-vf-docs-color-selected]'))
+    .toHaveAttribute('data-vf-docs-color-scheme', 'dark');
+  const metrics = await page.evaluate(() => ({
+    content: document.documentElement.scrollWidth, viewport: document.documentElement.clientWidth,
+  }));
+  expect(metrics.content, 'Theme Studio must not introduce page-level horizontal scroll')
+    .toBeLessThanOrEqual(metrics.viewport + 1);
+  await page.screenshot({ path: testInfo.outputPath('theme-studio-320.png'), fullPage: false });
 });
 
 test('Dark-mode page previews light, dark and system from CSS under SSR and browser preferences', async ({ page, browser }) => {
