@@ -856,7 +856,7 @@ function tokensGuide(links) {
           h(Text, { as: 'h3', variant: 'heading-sm' }, item.name),
           h(Text, { as: 'p', tone: 'primary' }, 'Primary accent'),
           h(Text, { as: 'p', tone: 'secondary' }, 'Secondary text'),
-          h(Text, { as: 'p', tone: 'danger' }, 'Danger text')))))),
+          h(Text, { as: 'p', tone: 'danger' }, 'Danger text'))))),
       h(Text, { as: 'p' }, 'These regions inherit the normal CSS theme scopes. No React Context, theme registry, JavaScript color lookup or duplicate stylesheets.')),
     h(Flow, { as: 'section', gap: 'md', 'aria-labelledby': 'react-token-local' },
       h(Text, { as: 'h2', variant: 'heading-md', id: 'react-token-local' }, 'Custom colors in one scope'),
