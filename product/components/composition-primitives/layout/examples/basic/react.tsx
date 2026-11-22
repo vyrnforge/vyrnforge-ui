@@ -12,9 +12,9 @@ export function AccountOverview() {
           <Text as="p">Review workspace details and recent activity.</Text>
         </Flow>
         <AutoGrid gap="md">
-          <Text as="article">Profile settings</Text>
-          <Text as="article">Team access</Text>
-          <Text as="article">Recent activity</Text>
+          <article><Text as="p">Profile settings</Text></article>
+          <article><Text as="p">Team access</Text></article>
+          <article><Text as="p">Recent activity</Text></article>
         </AutoGrid>
         <Flow direction="inline" wrap="wrap" gap="sm" align="center">
           <Button type="button">Edit profile</Button>
