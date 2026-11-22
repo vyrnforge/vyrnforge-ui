@@ -183,7 +183,7 @@ test('React theme guide uses semantic roles across built-in and custom nested th
   expect(semantics.tag).toBe('H3');
   expect(semantics.bg).not.toBe('rgba(0, 0, 0, 0)');
   await page.getByRole('searchbox', { name: 'Search React documentation' }).fill('semantic color');
-  await expect(page.locator('[data-vf-docs-react-results]')).toContainText('Color');
+  await expect(page.locator('[data-vf-docs-react-results]')).toContainText('Theme Builder');
 });
 
 test('Theme Studio focuses on palettes and hands a customized draft into Theme Builder', async ({ page }) => {

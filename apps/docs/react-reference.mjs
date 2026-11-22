@@ -1190,7 +1190,7 @@ export function ReactReferencePage({ view, links, button, layout, typography, ic
     { title: 'Color / Theme Studio', href: links.color,
       keywords: 'customization colors palette picker live component preview accent hover contrast swatches' },
     { title: 'Theme Builder', href: links.builder,
-      keywords: 'customization create theme builder semantic token inspector override editor export css typescript light dark brand' },
+      keywords: 'customization create theme builder semantic color roles token inspector override editor export css typescript light dark brand' },
     { title: 'Dark mode', href: links.darkMode,
       keywords: 'customization dark light system color scheme prefers-color-scheme ssr theme scope' },
     { title: 'Right-to-left', href: links.rtl,
