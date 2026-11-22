@@ -1,11 +1,11 @@
 import { createElement, forwardRef } from 'react';
 import type { ComponentPropsWithoutRef, ComponentPropsWithRef, ReactElement } from 'react';
-import { toneStyle } from '../../foundation/theme.js';
-import type { TextTone } from '../../foundation/theme.js';
+import { toneStyle } from '../../internal/theme.js';
+import type { TextTone } from '../../internal/theme.js';
 import type { TextVariant } from '@vyrnforge/web/text';
 
 export type { TextVariant } from '@vyrnforge/web/text';
-export type { TextTone } from '../../foundation/theme.js';
+export type { TextTone } from '../../internal/theme.js';
 
 export type TextElement =
   | 'span'
