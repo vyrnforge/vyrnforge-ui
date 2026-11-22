@@ -28,6 +28,16 @@ const semanticSwatches = [
   { label: 'Focus ring', role: '--vf-color-focus-ring' },
 ];
 
+function GuideLayout({ children, sections }) {
+  return h('div', { className: 'vf-docs-content-grid vf-docs-usage-guide-layout' },
+    children,
+    h('aside', { className: 'vf-docs-toc-region' },
+      h('nav', { className: 'vf-docs-toc', 'aria-label': 'On this page' },
+        h('p', null, 'On this page'),
+        h('ol', null, ...sections.map((entry) => h('li', { key: entry.id },
+          h('a', { href: '#' + entry.id }, entry.title)))))));
+}
+
 function GuideHeader({ title, description }) {
   return h('header', { className: 'vf-docs-component-header' },
     h(Text, { as: 'p', className: 'vf-docs-eyebrow' }, 'Foundations / Customization'),
@@ -70,14 +80,18 @@ function Preview({ theme = 'light', customColors, label, children }) {
   h(Flow, { gap: 'md' }, children));
 }
 
-function DemoContent({ heading, action = 'Save changes', onClick }) {
+function DemoContent({ heading, action = 'Save changes' }) {
+  const [status, setStatus] = useState('');
   return h(Flow, { gap: 'sm' },
     h(Text, { as: 'h3', variant: 'heading-sm' }, heading),
     h(Text, { as: 'p' }, 'Readable text and interactive controls share the same semantic colors.'),
     h(Text, { as: 'p', tone: 'secondary' }, 'Secondary text uses the muted foreground role.'),
     h(Flow, { direction: 'inline', wrap: 'wrap', gap: 'sm' },
-      h(Button, { type: 'button', variant: 'primary', onClick }, action),
-      h(Button, { type: 'button', variant: 'secondary', onClick }, 'Secondary action')));
+      h(Button, { type: 'button', variant: 'primary',
+        onClick: () => setStatus('Primary preview action activated') }, action),
+      h(Button, { type: 'button', variant: 'secondary',
+        onClick: () => setStatus('Secondary preview action activated') }, 'Secondary action')),
+    h('p', { role: 'status', 'aria-live': 'polite', 'data-vf-docs-preview-feedback': '' }, status));
 }
 
 export function ColorGuide({ links }) {
@@ -90,7 +104,8 @@ export function ColorGuide({ links }) {
     '  --vf-color-accent-background-pressed: ' + recipe.roles.accentPressed + ';\n' +
     '  --vf-color-accent-foreground: ' + recipe.roles.onAccent + ';\n' +
     '}';
-  return h(Flow, { as: 'article', gap: '2xl', className: 'vf-docs-article',
+  return h(GuideLayout, { sections: [{"id":"vf-docs-color-picker","title":"Pick an accent recipe"},{"id":"vf-docs-color-roles","title":"Semantic color roles"},{"id":"vf-docs-color-guidance","title":"Accessibility"}] },
+    h(Flow, { as: 'article', gap: '2xl', className: 'vf-docs-article',
     'data-vf-docs-react-color': '' },
     h(GuideHeader, { title: 'Color', description:
       'Use semantic color roles, compare palettes, and preview how a single change affects VyrnForge components.' }),
@@ -126,7 +141,7 @@ export function ColorGuide({ links }) {
       h(Text, { as: 'p' },
         h(GuideLink, { href: links.tokens }, 'Design tokens'), ' · ',
         h(GuideLink, { href: links.themes }, 'Theming'), ' · ',
-        h(GuideLink, { href: links.darkMode }, 'Dark mode'))));
+        h(GuideLink, { href: links.darkMode }, 'Dark mode')))));
 }
 
 export function DarkModeGuide({ links }) {
@@ -136,7 +151,8 @@ export function DarkModeGuide({ links }) {
     '  <Text as="p">Theme-aware content</Text>\n' +
     '  <Button variant="primary">Continue</Button>\n' +
     '</ThemeScope>';
-  return h(Flow, { as: 'article', gap: '2xl', className: 'vf-docs-article',
+  return h(GuideLayout, { sections: [{"id":"vf-docs-dark-modes","title":"Built-in modes"},{"id":"vf-docs-dark-system","title":"System preference"},{"id":"vf-docs-dark-ssr","title":"Server rendering"}] },
+    h(Flow, { as: 'article', gap: '2xl', className: 'vf-docs-article',
     'data-vf-docs-react-dark-mode': '' },
     h(GuideHeader, { title: 'Dark mode', description:
       'Switch light, dark and system appearances without a JavaScript palette or mandatory theme provider.' }),
@@ -167,7 +183,7 @@ export function DarkModeGuide({ links }) {
         'Use color-scheme so native form controls follow the appearance. Test focus, contrast and forced-colors behavior for custom palettes.'),
       h(Text, { as: 'p' },
         h(GuideLink, { href: links.themes }, 'Theming and custom brand scopes'), ' · ',
-        h(GuideLink, { href: links.color }, 'Color roles'))));
+        h(GuideLink, { href: links.color }, 'Color roles')))));
 }
 
 export function RtlGuide({ links }) {
@@ -180,7 +196,8 @@ export function RtlGuide({ links }) {
     '  <Text as="p">ID: <bdi dir="ltr">VF-2048</bdi></Text>\n' +
     '  <Button type="button">' + (rtl ? 'حفظ' : 'Save') + '</Button>\n' +
     '</section>';
-  return h(Flow, { as: 'article', gap: '2xl', className: 'vf-docs-article',
+  return h(GuideLayout, { sections: [{"id":"vf-docs-rtl-preview-section","title":"Writing direction"},{"id":"vf-docs-rtl-integration","title":"Global and local direction"},{"id":"vf-docs-rtl-boundary","title":"Direction and themes"}] },
+    h(Flow, { as: 'article', gap: '2xl', className: 'vf-docs-article',
     'data-vf-docs-react-rtl': '' },
     h(GuideHeader, { title: 'Right-to-left', description:
       'Support Arabic, Hebrew and other RTL contexts through native lang and dir attributes and logical CSS.' }),
@@ -217,5 +234,6 @@ export function RtlGuide({ links }) {
         'Portals moved outside their original DOM ancestry need an explicit direction bridge. Native dialog top-layer behavior generally retains DOM ancestry. Applications own translated content and locale policy.'),
       h(Text, { as: 'p' },
         h(GuideLink, { href: links.styling }, 'Styling & CSS'), ' · ',
-        h(GuideLink, { href: links.themes }, 'Theming'))));
+        h(GuideLink, { href: links.themes }, 'Theming')))));
 }
+
