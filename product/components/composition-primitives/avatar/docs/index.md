@@ -1,6 +1,6 @@
 # Avatar
 
-Avatar presents one person or entity as a native image, short letters, or an icon. AvatarGroup shows multiple identities with optional truncation and a visible total count. Both use the same token-driven Native Web CSS and non-interactive semantics.
+Avatar represents one person or entity with an image, initials or icon. AvatarGroup collects multiple identities with an optional visible limit and overflow count. Both are noninteractive and use shared design tokens.
 
 ## When to use
 
@@ -12,7 +12,7 @@ An authored **name** provides the Avatar's accessible identity. A provided **src
 
 ## Appearances and fallback
 
-The React **appearance** values are `image`, `letter` and `icon`, or omit it for automatic image/icon/letter selection. All three share the same host identity, shapes and sizes. A letter Avatar displays authored or derived initials. An icon Avatar renders an authored decorative SVG through the reusable Icon contract, not a new avatar glyph system. The `icon` slot accepts a React Icon or SvgIcon. For unavailable image content, **fallback** selects `letter` (default) or `icon` (when an icon is supplied). Without artwork, initials remain a safe fallback. Native Web uses the matching static hooks and an application-owned native error event listener when automatic fallback is needed.
+Avatar presents image, letter or icon content with the same accessible identity, shapes and sizes. Letter content uses authored or derived initials; icon content reuses the existing Icon artwork rather than introducing a separate avatar glyph system. When an image is missing or fails, the representation falls back to letters or an authored icon. Without icon artwork, initials remain a safe fallback. Changing the visual fallback must not change the accessible identity.
 
 ## Sizes and appearance
 

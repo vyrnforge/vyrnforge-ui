@@ -575,7 +575,7 @@ function avatarUsage(avatar, links) {
   const sections = [
     { id: 'react-avatar-setup', heading: 'Get started' },
     { id: 'react-avatar-examples', heading: 'Examples' },
-    { id: 'react-avatar-guidelines', heading: 'Usage guidelines' },
+    { id: 'react-avatar-guidelines', heading: 'Behavior and usage' },
     { id: 'react-avatar-accessibility', heading: 'Accessibility' },
     { id: 'react-avatar-related', heading: 'Related components and API' },
   ];
@@ -596,17 +596,15 @@ function avatarUsage(avatar, links) {
       ]),
       guidePart(sections[2], [
         ...guideSubsections(avatar.sharedContent, [
-          'When to use', 'Image and initials', 'Appearances and fallback',
-          'Sizes and appearance', 'Grouped avatars and totals', 'Group spacing',
-          'Native Web markup', 'When not to use', 'Framework consumption',
+          'When to use', 'Appearances and fallback', 'Grouped avatars and totals',
+          'Group spacing', 'When not to use',
         ], 'react-avatar-guidance'),
         ...guideSubsections(avatar.frameworkContent, [
-          'React authoring', 'React state and server rendering',
+          'React state and server rendering',
         ], 'react-avatar-integration'),
       ]),
       guidePart(sections[3], [
         ...guideBlocks(avatar.sharedContent, 'Accessibility'),
-        ...guideBlocks(avatar.frameworkContent, 'React accessibility'),
         evidenceDisclosure(avatar.standardReferences),
       ]),
       guidePart(sections[4], [
@@ -623,21 +621,17 @@ function avatarApi(avatar, links) {
     h('header', { className: 'vf-docs-component-header' },
       h('h1', null, 'Avatar API'),
       h('p', { className: 'vf-docs-lede' },
-        'One native-backed Avatar with image, letter and icon appearances, plus grouped totals and spacing.'),
+        'Public React Avatar and AvatarGroup types for appearances, fallback, grouping and overflow.'),
       accessibilityEvidence(avatar.standardReferences)),
     h('section', { 'aria-labelledby': 'react-avatar-api-entrypoints' },
       h('h2', { id: 'react-avatar-api-entrypoints' }, 'Public entrypoint'),
       h('ul', null, ...avatar.publicEntrypoints.map((entry) =>
         h('li', { key: entry }, h('code', { 'data-vf-code': '' }, entry)))),
-      h('p', null, 'Load canonical Web styles from @vyrnforge/web/styles/avatar.css.')),
+      h('p', null, 'Load shared Avatar styles from @vyrnforge/web/styles/avatar.css.')),
     h('section', { 'aria-labelledby': 'react-avatar-api-types' },
       h('h2', { id: 'react-avatar-api-types' }, 'Source-backed React types and props'),
       h('pre', { 'data-vf-code-block': '', tabIndex: 0 },
         h('code', null, avatar.publicAvatarTypes))),
-    h('section', { 'aria-labelledby': 'react-avatar-api-css' },
-      h('h2', { id: 'react-avatar-api-css' }, 'Shared CSS and native hooks'),
-      h('code', { 'data-vf-code': '' }, '@vyrnforge/web/styles/avatar.css'),
-      ...guideBlocks(avatar.sharedContent, 'Native Web markup')),
     h('p', null, h('a', { href: links.avatar.guide, 'data-vf-link': '' },
       'View Avatar and AvatarGroup examples')));
 }
