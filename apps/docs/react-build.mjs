@@ -284,8 +284,8 @@ function linksFor(route) {
           (slug === 'basic' ? '/' : '/' + slug + '/'), true)];
       })),
     }])),
-    native: relative(dir, native + (['foundations/color/', 'foundations/dark-mode/',
-      'foundations/right-to-left/'].includes(route) ? '' : route), true),
+    native: relative(dir, native + (route.startsWith('foundations/') &&
+      !nativeModel.foundationPages.some((page) => page.route === route) ? '' : route), true),
   };
 }
 async function verifyStyles(dir) {
