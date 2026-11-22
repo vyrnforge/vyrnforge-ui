@@ -4,6 +4,7 @@ import { SideNav, SideNavGroup, SideNavGroupLabel, SideNavList, SideNavItem, Sid
 import { Button } from '@vyrnforge/react/button';
 import { Flow, AutoGrid } from '@vyrnforge/react/layout';
 import { Text } from '@vyrnforge/react/text';
+import { ThemeScope, colors, tokens } from '@vyrnforge/react';
 import { SearchFieldRoot, SearchFieldInput, SearchFieldClear } from '@vyrnforge/react/search-field';
 import { NativeSelect } from '@vyrnforge/react/native-select';
 
@@ -129,7 +130,10 @@ function useNavigation() {
 function navigation(view, links, topic) {
   const selected = topic ? view + ':' + topic : view;
   const groups = [
-    { label: 'React', items: [{ id: 'home', title: 'React overview', href: links.home }] },
+    { label: 'React', items: [
+      { id: 'home', title: 'React overview', href: links.home },
+      { id: 'tokens', title: 'Colors & themes', href: links.tokens },
+    ] },
     { label: 'Components', items: [{ id: 'guide', title: 'Button', href: links.guide }] },
     { label: 'Typography', items: ['text', 'code', 'kbd'].map((id) => ({
       id: 'typography:' + id,
@@ -804,6 +808,73 @@ function dividerApi(divider, links) {
     h('p', null, h('a', { href: links.divider.guide, 'data-vf-link': '' },
       'View Divider examples')));
 }
+function tokensGuide(links) {
+  const accentExample = "import { ThemeScope, Text, tokens } from '@vyrnforge/react';\n\n" +
+    '<ThemeScope theme="dark">\n' +
+    '  <Text as="p" tone="primary">Primary / accent</Text>\n' +
+    '  <Text as="p" tone="secondary">Secondary / muted</Text>\n' +
+    '  <Text as="p" tone="danger">Danger</Text>\n' +
+    '</ThemeScope>\n\n' +
+    '<div style={{ padding: tokens.space.md }}>Token-aware spacing</div>';
+  const localExample = '<ThemeScope theme="dark" colors={{\n' +
+    "  primary: '#a6c8ff', onAccent: '#10284f', danger: '#ff908e'\n" +
+    '}}>\n  <Text as="p" tone="primary">Custom accent</Text>\n</ThemeScope>';
+  const brandExample = '[data-vf-theme="acme-light"] {\n' +
+    '  color-scheme: light;\n' +
+    '  --vf-color-accent-background: #1758c0;\n' +
+    '  --vf-color-accent-foreground: #fff;\n' +
+    '}\n\n[data-vf-theme="acme-dark"] {\n' +
+    '  color-scheme: dark;\n' +
+    '  --vf-color-accent-background: #a6c8ff;\n' +
+    '  --vf-color-accent-foreground: #10284f;\n' +
+    '}';
+  const code = (value) => h('pre', { 'data-vf-code-block': '', tabIndex: 0 }, h('code', null, value));
+  return h(Flow, { as: 'article', gap: '2xl', className: 'vf-docs-article', 'data-vf-docs-react-tokens': '' },
+    h('header', { className: 'vf-docs-component-header' },
+      h(Text, { as: 'h1', variant: 'heading-lg' }, 'React colors & themes'),
+      h(Text, { as: 'p', variant: 'body-lg' },
+        'Semantic color roles, design tokens and nested themes from one canonical Web foundation.')),
+    h(Flow, { as: 'section', gap: 'md', 'aria-labelledby': 'react-token-quickstart' },
+      h(Text, { as: 'h2', variant: 'heading-md', id: 'react-token-quickstart' }, 'Use semantic colors'),
+      h(Text, { as: 'p' }, 'Text and SVG Icon accept tone="primary", "secondary", "accent" or "danger". The names resolve to CSS tokens, so light, dark and custom scopes change the colors automatically.'),
+      code(accentExample),
+      h(Text, { as: 'p' }, 'primary is the action accent; secondary means muted text. Button variants express control treatments and remain independent of text tone.')),
+    h(Flow, { as: 'section', gap: 'md', 'aria-labelledby': 'react-token-preview' },
+      h(Text, { as: 'h2', variant: 'heading-md', id: 'react-token-preview' }, 'Light, dark and local override previews'),
+      h(AutoGrid, { gap: 'md', minItemSize: '12rem', 'data-vf-docs-react-theme-previews': '' },
+        ...[
+          { name: 'Light', theme: 'light' },
+          { name: 'Dark', theme: 'dark' },
+          { name: 'Custom dark', theme: 'dark', colors: { primary: '#c6a4ff', danger: '#ff8f94' } },
+        ].map((item) => h(ThemeScope, {
+          key: item.name, theme: item.theme, colors: item.colors, as: 'section',
+          'aria-label': item.name + ' semantic colors',
+          style: { backgroundColor: colors.surface, color: colors.text,
+            border: '1px solid ' + colors.border, borderRadius: tokens.radius.surface, padding: tokens.space.md },
+        },
+        h(Flow, { gap: 'sm' },
+          h(Text, { as: 'h3', variant: 'heading-sm' }, item.name),
+          h(Text, { as: 'p', tone: 'primary' }, 'Primary accent'),
+          h(Text, { as: 'p', tone: 'secondary' }, 'Secondary text'),
+          h(Text, { as: 'p', tone: 'danger' }, 'Danger text')))))),
+      h(Text, { as: 'p' }, 'These regions inherit the normal CSS theme scopes. No React Context, theme registry, JavaScript color lookup or duplicate stylesheets.')),
+    h(Flow, { as: 'section', gap: 'md', 'aria-labelledby': 'react-token-local' },
+      h(Text, { as: 'h2', variant: 'heading-md', id: 'react-token-local' }, 'Custom colors in one scope'),
+      code(localExample),
+      h(Text, { as: 'p' }, 'Pass only the roles you need. onAccent controls foreground contrast when an accent background changes. A normal style prop can explicitly override a token.')),
+    h(Flow, { as: 'section', gap: 'md', 'aria-labelledby': 'react-token-brand' },
+      h(Text, { as: 'h2', variant: 'heading-md', id: 'react-token-brand' }, 'Custom themes for both appearances'),
+      h(Text, { as: 'p' }, 'Define branded color mappings using canonical public CSS variables in your application stylesheet. Then use theme="acme-light" or theme="acme-dark". No registration is needed.'),
+      code(brandExample),
+      h(Text, { as: 'p' }, 'Custom themes must set color-scheme correctly and be checked for contrast, focus and forced-colors behavior. system is a built-in opt-in appearance using prefers-color-scheme.')),
+    h(Flow, { as: 'section', gap: 'sm', 'aria-labelledby': 'react-token-delivery' },
+      h(Text, { as: 'h2', variant: 'heading-md', id: 'react-token-delivery' }, 'CSS delivery and boundaries'),
+      h(Text, { as: 'p' }, 'The Web token stylesheet is canonical. CSS-aware React browser builds can extract it automatically through public package exports. SSR consumers must deliver extracted styles or import the Web aggregate stylesheet before hydration.'),
+      code("import '@vyrnforge/web/styles.css';"),
+      h(Text, { as: 'p' }, 'Avoid private --_vf-* variables, hardcoded palette names and framework-only themes. Colored filled danger controls require separately designed foreground/hover/disabled states rather than reusing danger text color alone.'),
+      h(Text, { as: 'p' }, h('a', { href: links.home, 'data-vf-link': '' }, 'Back to React overview'))));
+}
+
 function body(view, links, button, layout, typography, icon, image, avatar, divider, message, setMessage, requestedTopic) {
   if (view === 'unavailable') {
     return h('article', { className: 'vf-docs-article', 'data-vf-docs-react-unavailable': '' },
@@ -816,6 +887,7 @@ function body(view, links, button, layout, typography, icon, image, avatar, divi
       h('p', null, h('a', { href: links.guide, 'data-vf-link': '' }, 'Browse React Button')),
       h('p', null, h('a', { href: links.layout, 'data-vf-link': '' }, 'Browse React Layout')));
   }
+  if (view === 'tokens') return tokensGuide(links);
   if (view === 'home') {
     return h('article', { className: 'vf-docs-article' },
       h('header', { className: 'vf-docs-component-header' },
@@ -833,6 +905,18 @@ function body(view, links, button, layout, typography, icon, image, avatar, divi
         h('pre', { 'data-vf-code-block': '', tabIndex: 0 },
           h('code', null, "import '@vyrnforge/web/styles.css';")),
         h('p', null, 'Node/SSR imports do not install client styles. Deliver the extracted or explicitly imported CSS alongside the server-rendered HTML before hydration. The optional Web reset is not loaded automatically.')),
+      h('section', null, h('h2', null, 'Semantic colors and themes'),
+        h(Text, { as: 'p' },
+          'Use public theme-aware color roles instead of repeating CSS variable names. ThemeScope is an optional native DOM scope, not a provider.'),
+        h('pre', { 'data-vf-code-block': '', tabIndex: 0 }, h('code', null,
+          'import { ThemeScope, Text } from \'@vyrnforge/react\';\n\n' +
+          '<ThemeScope theme="dark">\n' +
+          '  <Text as="p" tone="primary">Accent</Text>\n' +
+          '  <Text as="p" tone="secondary">Muted</Text>\n' +
+          '  <Text as="p" tone="danger">Danger</Text>\n' +
+          '</ThemeScope>')),
+        h(Text, { as: 'p' }, h('a', { href: links.tokens, 'data-vf-link': '' },
+          'Color tokens, custom brands and nested theme examples'))),
       h('section', null, h('h2', null, 'React state and native semantics'),
         h('p', null, 'React owns component state, event handlers, refs, effects and hydration. VyrnForge components preserve native HTML semantics and shared interaction contracts; consuming applications own data, actions, async feedback and routing. Avoid adding custom keyboard handlers for behavior native elements already provide.')),
       h('section', null, h('h2', null, 'Components and APIs'),
@@ -917,6 +1001,8 @@ export function ReactReferencePage({ view, links, button, layout, typography, ic
   useEffect(() => { document.documentElement.dataset.vfReactHydrated = 'true'; }, []);
   const pages = [
     { title: 'React overview', href: links.home, keywords: 'getting started setup' },
+    { title: 'Colors & themes', href: links.tokens,
+      keywords: 'design tokens palette primary secondary accent danger light dark system brand custom theme scope semantic color' },
     { title: 'Button', href: links.guide, keywords: 'button usage accessibility examples state' },
     { title: 'Button API', href: links.api, keywords: 'button props reference public' },
     { title: 'Layout', href: links.layout, keywords: 'flow autogrid grid responsive spacing layout wrap inline block JSX divider separator thematic hr css border' },
