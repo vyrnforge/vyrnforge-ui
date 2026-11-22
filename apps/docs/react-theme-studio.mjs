@@ -1,18 +1,17 @@
 import { createElement as h, useState } from 'react';
 import { ThemeScope } from '@vyrnforge/react';
-import { createTheme, renderThemeCss, themeableColorRoles } from '@vyrnforge/web/theme';
+import { createTheme } from '@vyrnforge/web/theme';
 import { Button } from '@vyrnforge/react/button';
 import { ColorPickerRoot, ColorPickerInput, ColorPickerTextInput, ColorPickerSwatch } from '@vyrnforge/react/color-picker';
 import { SegmentedControlRoot, SegmentedControlItem } from '@vyrnforge/react/segmented-control';
 import { Input } from '@vyrnforge/react/input';
-import { NativeSelect } from '@vyrnforge/react/native-select';
 import { Checkbox } from '@vyrnforge/react/checkbox';
 import { Slider } from '@vyrnforge/react/slider';
 import { Flow } from '@vyrnforge/react/layout';
 import { Text } from '@vyrnforge/react/text';
 
 // Documentation presets: palette shades are authoring inputs, never public UI tokens.
-const presets = [
+export const presets = [
   { id: 'blue', label: 'Blue', shades: {
     50: '#eff6ff', 100: '#dbeafe', 200: '#bfdbfe', 300: '#93c5fd',
     400: '#60a5fa', 500: '#3b82f6', 600: '#245edb', 700: '#1c4fb8',
@@ -47,7 +46,7 @@ function luminance(hex) {
   });
   return rgb[0] * 0.2126 + rgb[1] * 0.7152 + rgb[2] * 0.0722;
 }
-function contrast(a, b) {
+export function contrast(a, b) {
   const x = luminance(a), y = luminance(b);
   return (Math.max(x, y) + 0.05) / (Math.min(x, y) + 0.05);
 }
@@ -55,7 +54,7 @@ function readableOn(background) {
   return contrast('#ffffff', background) >= contrast('#0b1220', background)
     ? '#ffffff' : '#0b1220';
 }
-function buildTheme({ palette, shades, shade, appearance, roleEdits, radius }) {
+export function buildTheme({ palette, shades, shade, appearance, roleEdits, radius }) {
   const levels = Object.keys(shades);
   const at = levels.indexOf(shade);
   const direction = appearance === 'light' ? 1 : -1;
@@ -88,19 +87,19 @@ function buildTheme({ palette, shades, shade, appearance, roleEdits, radius }) {
   };
   return { options, theme: createTheme(options) };
 }
-function Segment({ label, value, onChange, items, testId }) {
+export function Segment({ label, value, onChange, items, testId }) {
   return h(SegmentedControlRoot, { 'aria-label': label, value, onValueChange: onChange,
     'data-vf-docs-studio-segment': testId },
     ...items.map(([id, title]) => h(SegmentedControlItem, { key: id, value: id }, title)));
 }
-function Picker({ value, onValueChange, label, testId }) {
+export function Picker({ value, onValueChange, label, testId }) {
   return h(ColorPickerRoot, { value, onValueChange, className: 'vf-docs-studio-picker',
     'data-vf-docs-studio-picker': testId },
     h(ColorPickerInput, { 'aria-label': 'Choose ' + label }),
     h(ColorPickerTextInput, { 'aria-label': label, spellCheck: false }),
     h(ColorPickerSwatch, null));
 }
-function PreviewScene({ theme, view }) {
+export function PreviewScene({ theme, view }) {
   const [feedback, setFeedback] = useState('');
   const [email, setEmail] = useState('hello@example.com');
   const [optedIn, setOptedIn] = useState(true);
@@ -163,65 +162,36 @@ export function ThemeStudio({ links }) {
   const [appearance, setAppearance] = useState('light');
   const [shade, setShade] = useState('600');
   const [customShades, setCustomShades] = useState({});
-  const [roleEdits, setRoleEdits] = useState({});
-  const [selectedRole, setSelectedRole] = useState('accent-background');
   const [radius, setRadius] = useState(12);
   const [compare, setCompare] = useState(false);
   const [view, setView] = useState('dashboard');
-  const [codeMode, setCodeMode] = useState('function');
   const [notice, setNotice] = useState('');
-  const [copyStatus, setCopyStatus] = useState('');
   const preset = presets.find((p) => p.id === palette) ?? presets[0];
   const shades = { ...preset.shades, ...(customShades[palette] ?? {}) };
-  const { theme: current, options } = buildTheme({
-    palette, shades, shade, appearance, roleEdits, radius,
+  const { theme: current } = buildTheme({
+    palette, shades, shade, appearance, roleEdits: {}, radius,
   });
+  const draft = encodeURIComponent(JSON.stringify({
+    palette, appearance, shade, radius, custom: customShades[palette] ?? {},
+  }));
+  const builderHref = links.builder + '?draft=' + draft;
   const opposite = appearance === 'light' ? 'dark' : 'light';
   const other = compare ? buildTheme({
     palette, shades, shade: opposite === 'dark' ? '300' : '600',
-    appearance: opposite, roleEdits, radius,
+    appearance: opposite, roleEdits: {}, radius,
   }).theme : null;
-  const roleKey = appearance + ':' + selectedRole;
-  const roleValue = current.variables['--vf-color-' + selectedRole];
-  const hasRoleOverride = Object.hasOwn(roleEdits, roleKey);
   const foreground = current.variables['--vf-color-accent-foreground'];
   const background = current.variables['--vf-color-accent-background'];
   const ratio = contrast(foreground, background);
-  const source = "import { createTheme, renderThemeCss } from '@vyrnforge/web/theme';\n\n" +
-    'const theme = createTheme(' + JSON.stringify(options, null, 2) + ');\n\n' +
-    'const stylesheet = renderThemeCss(theme);\n' +
-    '// Write stylesheet to your app CSS during your build.';
-  const activeCode = codeMode === 'function' ? source : renderThemeCss(current);
-
   const reset = () => {
     setPalette('blue'); setAppearance('light'); setShade('600');
-    setCustomShades({}); setRoleEdits({}); setSelectedRole('accent-background');
-    setRadius(12); setCompare(false); setView('dashboard'); setCodeMode('function');
+    setCustomShades({});
+    setRadius(12); setCompare(false); setView('dashboard');
     setNotice('Theme Studio restored to its initial palette and tokens');
   };
   const setShadeValue = (value) => {
     setCustomShades((all) => ({ ...all, [palette]: { ...(all[palette] ?? {}), [shade]: value } }));
     setNotice('Palette shade ' + shade + ' updated to ' + value);
-  };
-  const setRoleValue = (value) => {
-    setRoleEdits((all) => ({ ...all, [roleKey]: value }));
-    setNotice('Semantic role ' + selectedRole + ' updated');
-  };
-  const restoreRole = () => {
-    setRoleEdits((all) => {
-      const next = { ...all };
-      delete next[roleKey];
-      return next;
-    });
-    setNotice('Default mapping restored for ' + selectedRole);
-  };
-  const copy = async () => {
-    try {
-      await navigator.clipboard.writeText(activeCode);
-      setCopyStatus(codeMode === 'function' ? 'Theme function copied' : 'Generated CSS copied');
-    } catch {
-      setCopyStatus('Clipboard unavailable; select the code block to copy manually');
-    }
   };
   return h('article', { className: 'vf-docs-article vf-docs-theme-studio',
     'data-vf-docs-react-color': '' },
@@ -229,10 +199,10 @@ export function ThemeStudio({ links }) {
       h(Text, { as: 'p', className: 'vf-docs-eyebrow' }, 'Customization / Interactive playground'),
       h(Text, { as: 'h1', variant: 'heading-lg' }, 'Color'),
       h(Text, { as: 'p', variant: 'body-lg' },
-        'Create a theme in real time. Change a palette, edit hex values and semantic roles, compare appearances, and copy the resulting theme function or CSS.'),
+        'Try color families, edit shades and compare real components. When you are ready to define semantic tokens or export a custom theme, continue into Theme Builder.'),
       h('nav', { 'aria-label': 'Theme Studio sections', className: 'vf-docs-studio-jump' },
         ...[['vf-studio-editor', 'Editor'], ['vf-studio-preview', 'Live preview'],
-          ['vf-studio-roles', 'Tokens'], ['vf-studio-code', 'Export']].map(([target, name]) =>
+          ].map(([target, name]) =>
           h('a', { href: '#' + target, key: target }, name)))),
     h('div', { className: 'vf-docs-studio-bar' },
       h('div', { className: 'vf-docs-studio-bar-group' },
@@ -283,23 +253,6 @@ export function ThemeStudio({ links }) {
           h(Slider, { id: 'vf-docs-studio-radius', min: 0, max: 24, step: 2, value: radius,
             onChange: (e) => setRadius(Number(e.target.value)),
             'data-vf-docs-studio-radius': '' })),
-        h('div', { className: 'vf-docs-studio-editor-group' },
-          h('h2', null, '03 / Semantic role'),
-          h('label', { htmlFor: 'vf-docs-studio-role', className: 'vf-docs-studio-field-label' },
-            'Select a token to override'),
-          h(NativeSelect, { id: 'vf-docs-studio-role', value: selectedRole,
-            'data-vf-docs-studio-role': '',
-            onChange: (e) => { setSelectedRole(e.target.value);
-              setNotice(e.target.value + ' role selected'); } },
-            ...themeableColorRoles.map((name) => h('option', { key: name, value: name },
-              name.replaceAll('-', ' ')))),
-          h(Picker, { value: roleValue, onValueChange: setRoleValue,
-            label: 'Semantic role hex', testId: 'role' }),
-          h('div', { className: 'vf-docs-studio-role-actions' },
-            h('code', null, '--vf-color-' + selectedRole),
-            h(Button, { type: 'button', size: 'sm', variant: 'ghost',
-              disabled: !hasRoleOverride, onClick: restoreRole,
-              'data-vf-docs-studio-restore-role': '' }, 'Restore role'))),
         h('p', { className: 'vf-docs-studio-announcement', role: 'status',
           'aria-live': 'polite', 'data-vf-docs-studio-notice': '' }, notice)),
       h('section', { id: 'vf-studio-preview', className: 'vf-docs-studio-preview',
@@ -326,47 +279,17 @@ export function ThemeStudio({ links }) {
               : 'Below 4.5:1 for normal text; review these colors before use')),
           h('span', { className: 'vf-docs-studio-contrast-state' },
             ratio >= 4.5 ? 'AA ratio' : 'Review required')))),
-    h('section', { id: 'vf-studio-roles', className: 'vf-docs-studio-section',
-      'aria-labelledby': 'vf-docs-studio-roles-title' },
-      h('div', { className: 'vf-docs-studio-panel-head' },
-        h('div', null,
-          h('h2', { id: 'vf-docs-studio-roles-title' }, 'Semantic token inspector'),
-          h('p', null, 'Select any role to edit it above. All ' +
-            themeableColorRoles.length + ' Web color roles update with your theme.'))),
-      h('ul', { className: 'vf-docs-studio-token-grid',
-        'data-vf-docs-color-roles': '' },
-        ...themeableColorRoles.map((name) => h('li', { key: name },
-          h('button', { type: 'button', className: 'vf-docs-studio-token',
-            'aria-pressed': name === selectedRole,
-            onClick: () => { setSelectedRole(name); setNotice(name + ' role selected'); } },
-            h('span', { className: 'vf-docs-studio-token-swatch',
-              style: { backgroundColor: current.variables['--vf-color-' + name] },
-              'aria-hidden': 'true' }),
-            h('span', null,
-              h('strong', null, name.replaceAll('-', ' ')),
-              h('code', null, current.variables['--vf-color-' + name]))))))),
-    h('section', { id: 'vf-studio-code', className: 'vf-docs-studio-section',
-      'aria-labelledby': 'vf-docs-studio-code-title' },
-      h('div', { className: 'vf-docs-studio-panel-head' },
-        h('div', null,
-          h('h2', { id: 'vf-docs-studio-code-title' }, 'Export your theme'),
-          h('p', null, 'Author with a function or use the generated CSS in any framework.')),
-        h('div', { className: 'vf-docs-studio-inline-actions' },
-          h(Segment, { label: 'Export format', value: codeMode, onChange: (v) => {
-            setCodeMode(v); setCopyStatus(''); }, testId: 'code',
-            items: [['function', 'Theme function'], ['css', 'Generated CSS']] }),
-          h(Button, { type: 'button', variant: 'secondary', size: 'sm',
-            onClick: copy, 'data-vf-docs-studio-copy': '' }, 'Copy code'))),
-      h('div', { className: 'vf-docs-customization-code' },
-        h('pre', { tabIndex: 0, 'data-vf-code-block': '', 'data-vf-docs-studio-code': codeMode },
-          h('code', null, activeCode))),
-      h('p', { role: 'status', 'aria-live': 'polite',
-        'data-vf-docs-studio-copy-status': '' }, copyStatus),
-      h('p', null, 'Theme functions are optional build-time helpers. CSS remains the shared runtime contract; ' +
-        'do not assume generated palettes guarantee contrast across every control state.')),
+    h('section', { className: 'vf-docs-studio-next', 'aria-label': 'Continue theme creation' },
+      h('div', null,
+        h(Text, { as: 'h2', variant: 'heading-md' }, 'Ready to create your theme?'),
+        h(Text, { as: 'p' },
+          'Open Theme Builder to customize semantic roles, name light and dark themes, inspect overrides, and export reusable code. Your current palette is carried over.')),
+      h('a', { href: builderHref, className: 'vf-docs-studio-next-link',
+        'data-vf-docs-open-builder': '' }, 'Open Theme Builder')),
     h('footer', { className: 'vf-docs-studio-footer' },
       h('a', { href: links.tokens, 'data-vf-link': '' }, 'Design tokens'),
       h('a', { href: links.themes, 'data-vf-link': '' }, 'Theming'),
       h('a', { href: links.darkMode, 'data-vf-link': '' }, 'Dark mode'),
+      h('a', { href: links.builder, 'data-vf-link': '' }, 'Theme Builder'),
       h('a', { href: links.styling, 'data-vf-link': '' }, 'Styling & CSS')));
 }

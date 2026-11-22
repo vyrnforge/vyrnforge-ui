@@ -1424,4 +1424,132 @@
       background: Highlight; color: HighlightText; forced-color-adjust: auto;
     }
   }
+
+  /* Theme Builder: documentation presentation reuses public VyrnForge controls;
+     design values always resolve through the established semantic Web tokens. */
+  .vf-docs-studio-next {
+    align-items: center;
+    background: var(--vf-color-surface-subtle);
+    border: 1px solid var(--vf-color-border);
+    border-radius: var(--vf-radius-surface);
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--vf-space-lg);
+    justify-content: space-between;
+    padding: var(--vf-space-xl);
+  }
+  .vf-docs-studio-next > div {
+    display: grid;
+    flex: 1 1 18rem;
+    gap: var(--vf-space-sm);
+  }
+  .vf-docs-studio-next h2, .vf-docs-studio-next p { margin: 0; }
+  .vf-docs-studio-next-link {
+    background: var(--vf-color-accent-background);
+    border: 1px solid var(--vf-color-accent-background);
+    border-radius: var(--vf-control-radius);
+    color: var(--vf-color-accent-foreground);
+    display: inline-flex;
+    font-weight: var(--vf-font-weight-semibold);
+    min-block-size: var(--vf-control-height-md);
+    padding: var(--vf-space-sm) var(--vf-space-lg);
+    text-decoration: none;
+  }
+  .vf-docs-studio-next-link:hover {
+    background: var(--vf-color-accent-background-hover);
+  }
+  .vf-docs-studio-next-link:focus-visible {
+    outline: 2px solid var(--vf-color-focus-ring);
+    outline-offset: 2px;
+  }
+  .vf-docs-builder-workspace {
+    display: grid;
+    gap: var(--vf-space-lg);
+    grid-template-columns: minmax(14rem, 1fr) minmax(0, 1.65fr);
+    min-inline-size: 0;
+  }
+  .vf-docs-theme-builder .vf-docs-studio-section {
+    align-content: start;
+    min-inline-size: 0;
+  }
+  .vf-docs-theme-builder .vf-docs-studio-section h2,
+  .vf-docs-theme-builder .vf-docs-studio-section h3 {
+    margin: 0;
+  }
+  .vf-docs-builder-palette-preview {
+    display: flex;
+    gap: 0;
+    min-block-size: 2.75rem;
+    overflow: hidden;
+    border: 1px solid var(--vf-color-border);
+    border-radius: var(--vf-control-radius);
+  }
+  .vf-docs-builder-palette-preview > span { flex: 1 1 auto; min-inline-size: 0; }
+  .vf-docs-builder-filter-row {
+    display: grid;
+    gap: var(--vf-space-md);
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+  .vf-docs-builder-filter-row input, .vf-docs-builder-filter-row select {
+    inline-size: 100%;
+    min-inline-size: 0;
+  }
+  .vf-docs-builder-role-workspace {
+    display: grid;
+    gap: var(--vf-space-sm);
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+    min-inline-size: 0;
+  }
+  .vf-docs-builder-role-list {
+    display: grid;
+    align-content: start;
+    gap: var(--vf-space-xs);
+    min-inline-size: 0;
+    max-block-size: 23rem;
+    overflow: auto;
+    padding: var(--vf-space-2xs);
+  }
+  .vf-docs-builder-role-detail {
+    background: var(--vf-color-surface-subtle);
+    border: 1px solid var(--vf-color-border);
+    border-radius: var(--vf-radius-surface);
+    display: grid;
+    align-content: start;
+    gap: var(--vf-space-md);
+    min-inline-size: 0;
+    padding: var(--vf-space-md);
+  }
+  .vf-docs-builder-role-detail code {
+    color: var(--vf-color-text-muted);
+    font-size: var(--vf-font-size-xs);
+    overflow-wrap: anywhere;
+  }
+  .vf-docs-builder-role-detail p, .vf-docs-builder-empty {
+    color: var(--vf-color-text-muted);
+    font-size: var(--vf-font-size-sm);
+    margin: 0;
+  }
+  .vf-docs-builder-preview-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+  .vf-docs-builder-contrasts {
+    display: grid;
+    gap: var(--vf-space-md);
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+  .vf-docs-theme-builder .vf-docs-studio-section [role='status']:empty { display: none; }
+  @media (max-width: 78rem) {
+    .vf-docs-builder-workspace { grid-template-columns: minmax(0, 1fr); }
+  }
+  @media (max-width: 44rem) {
+    .vf-docs-builder-role-workspace,
+    .vf-docs-builder-filter-row,
+    .vf-docs-builder-preview-grid,
+    .vf-docs-builder-contrasts { grid-template-columns: minmax(0, 1fr); }
+    .vf-docs-studio-next { padding: var(--vf-space-md); }
+  }
+  @media (forced-colors: active) {
+    .vf-docs-studio-next, .vf-docs-builder-role-detail,
+    .vf-docs-builder-palette-preview { border-color: CanvasText; }
+  }
 }

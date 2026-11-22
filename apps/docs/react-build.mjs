@@ -274,6 +274,7 @@ function linksFor(route) {
     tokens: relative(dir, react + 'foundations/tokens/', true),
     themes: relative(dir, react + 'foundations/themes/', true),
     color: relative(dir, react + 'foundations/color/', true),
+    builder: relative(dir, react + 'foundations/theme-builder/', true),
     darkMode: relative(dir, react + 'foundations/dark-mode/', true),
     rtl: relative(dir, react + 'foundations/right-to-left/', true),
     styling: relative(dir, react + 'foundations/styling/', true),
@@ -590,8 +591,10 @@ const pageViews = [
     description: 'Shared semantic tokens, color roles and foundation scales in React' },
   { route: 'foundations/themes/', view: 'themes', title: 'React theming',
     description: 'Scoped themes and custom branded semantic tokens in React' },
-  { route: 'foundations/color/', view: 'color', title: 'React color customization',
-    description: 'Live semantic color roles, accent families and a CSS recipe' },
+  { route: 'foundations/color/', view: 'color', title: 'React Theme Studio',
+    description: 'Interactive color palette studio with real VyrnForge component previews' },
+  { route: 'foundations/theme-builder/', view: 'builder', title: 'React Theme Builder',
+    description: 'Build and export light/dark semantic themes with the public Web theme API' },
   { route: 'foundations/dark-mode/', view: 'dark-mode', title: 'React dark mode',
     description: 'Light, dark and system theme scopes with a live preview' },
   { route: 'foundations/right-to-left/', view: 'rtl', title: 'React right-to-left',
@@ -715,7 +718,7 @@ for (const page of pageViews) {
     requestedTopic: page.requestedTopic ?? null };
   const initialHtml = renderToString(createElement(ReactReferencePage, props));
   const serialized = JSON.stringify(props).replaceAll('<', '\\u003c');
-  const styles = [...shellStyles, ...(page.view === 'color' ? themeStudioStyles : [])]
+  const styles = [...shellStyles, ...(['color', 'builder'].includes(page.view) ? themeStudioStyles : [])]
     .map((asset) => '  <link rel="stylesheet" href="' +
       escapeHtml(relative(dir, asset)) + '">').join('\n');
   const pageHtml = '<!doctype html><html lang="en" data-vf-theme="light" data-vf-density="comfortable"><head>' +
