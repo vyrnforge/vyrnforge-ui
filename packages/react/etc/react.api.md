@@ -212,19 +212,46 @@ export type AutoGridProps<Element extends LayoutElement = LayoutElement> = Eleme
 // @public
 export const Avatar: ForwardRefExoticComponent<AvatarProps & RefAttributes<HTMLSpanElement>>;
 
+// @public (undocumented)
+export type AvatarAppearance = 'image' | 'letter' | 'icon';
+
+// @public
+export const AvatarGroup: ForwardRefExoticComponent<AvatarGroupProps & RefAttributes<HTMLUListElement>>;
+
+// @public
+export interface AvatarGroupProps extends Omit<ComponentPropsWithoutRef<'ul'>, 'children' | 'role' | 'aria-label'> {
+    children?: ReactNode;
+    formatOverflow?: (hiddenCount: number) => string;
+    label: string;
+    limit?: number;
+    shape?: AvatarShape;
+    size?: AvatarSize;
+    spacing?: AvatarGroupSpacing;
+    total?: number;
+}
+
+// @public (undocumented)
+export type AvatarGroupSpacing = 'overlap' | 'none' | 'sm' | 'md' | 'lg';
+
 // @public
 export interface AvatarProps extends Omit<ComponentPropsWithoutRef<'span'>, 'children' | 'role' | 'aria-label' | 'aria-hidden'> {
+    appearance?: AvatarAppearance;
     decoding?: 'sync' | 'async' | 'auto';
     decorative?: boolean;
+    fallback?: 'letter' | 'icon';
+    icon?: ReactNode;
     initials?: string;
     loading?: 'eager' | 'lazy';
     name: string;
-    // (undocumented)
+    shape?: AvatarShape;
     size?: AvatarSize;
     sizes?: string;
     src?: string;
     srcSet?: string;
 }
+
+// @public (undocumented)
+export type AvatarShape = 'rounded' | 'square';
 
 // @public (undocumented)
 export type AvatarSize = 'sm' | 'md' | 'lg';
