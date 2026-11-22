@@ -16,6 +16,22 @@ test('React theme references are canonical Web tokens, not hardcoded light/dark 
   assert.equal(tokens.color.danger, colors.danger);
   assert.equal(tokens.space.md, 'var(--vf-space-md)');
   assert.equal(tokens.radius.control, 'var(--vf-control-radius)');
+  assert.equal(tokens.space['2xs'], 'var(--vf-space-2xs)');
+  assert.equal(tokens.fontSize['6xl'], 'var(--vf-font-size-6xl'));
+  assert.equal(tokens.fontFamily.display, 'var(--vf-font-family-display)');
+  assert.equal(colors.surfacePressed, 'var(--vf-color-surface-pressed)');
+  assert.equal(colors.disabledBorder, 'var(--vf-color-disabled-border)');
+
+  // Every exposed React alias must resolve to an existing canonical Web runtime token.
+  const publicVariables = new Set([...css.matchAll(/^\s+(--vf-[a-z0-9-]+):/gm)]
+    .map((match) => match[1]));
+  for (const [category, roles] of Object.entries(tokens)) {
+    for (const [role, value] of Object.entries(roles)) {
+      assert.match(value, /^var\(--vf-[a-z0-9-]+\)$/);
+      assert.ok(publicVariables.has(value.slice(4, -1)),
+        'missing public Web token for ' + category + '.' + role);
+    }
+  }
   assert.deepEqual(toneStyle('danger', { fontWeight: 700 }),
     { color: 'var(--vf-color-danger-border)', fontWeight: 700 });
   assert.deepEqual(toneStyle('primary', { color: 'rebeccapurple' }), { color: 'rebeccapurple' });

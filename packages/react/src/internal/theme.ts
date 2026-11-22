@@ -16,6 +16,7 @@ const semanticColorVariables = {
   accentPressed: '--vf-color-accent-background-pressed',
   onAccent: '--vf-color-accent-foreground',
   accentSubtle: '--vf-color-accent-subtle',
+  accentSubtleHover: '--vf-color-accent-subtle-hover',
   danger: '--vf-color-danger-border',
   dangerBackground: '--vf-color-danger-background',
   text: '--vf-color-text',
@@ -25,11 +26,14 @@ const semanticColorVariables = {
   surface: '--vf-color-surface',
   surfaceSubtle: '--vf-color-surface-subtle',
   surfaceHover: '--vf-color-surface-hover',
+  surfacePressed: '--vf-color-surface-pressed',
   border: '--vf-color-border',
   borderStrong: '--vf-color-border-strong',
+  borderRequired: '--vf-color-border-required',
   focus: '--vf-color-focus-ring',
   disabledText: '--vf-color-disabled-foreground',
   disabledBackground: '--vf-color-disabled-background',
+  disabledBorder: '--vf-color-disabled-border',
 } as const;
 
 export type ColorRole = keyof typeof semanticColorVariables;
@@ -53,6 +57,7 @@ export const tokens = Object.freeze({
   color: colors,
   space: Object.freeze({
     none: reference('--vf-space-none'),
+    '2xs': reference('--vf-space-2xs'),
     xs: reference('--vf-space-xs'),
     sm: reference('--vf-space-sm'),
     md: reference('--vf-space-md'),
@@ -60,6 +65,12 @@ export const tokens = Object.freeze({
     xl: reference('--vf-space-xl'),
     '2xl': reference('--vf-space-2xl'),
     '3xl': reference('--vf-space-3xl'),
+  }),
+  fontFamily: Object.freeze({
+    sans: reference('--vf-font-family-sans'),
+    serif: reference('--vf-font-family-serif'),
+    mono: reference('--vf-font-family-mono'),
+    display: reference('--vf-font-family-display'),
   }),
   fontSize: Object.freeze({
     xs: reference('--vf-font-size-xs'),
@@ -69,6 +80,29 @@ export const tokens = Object.freeze({
     xl: reference('--vf-font-size-xl'),
     '2xl': reference('--vf-font-size-2xl'),
     '3xl': reference('--vf-font-size-3xl'),
+    '4xl': reference('--vf-font-size-4xl'),
+    '5xl': reference('--vf-font-size-5xl'),
+    '6xl': reference('--vf-font-size-6xl'),
+  }),
+  fontWeight: Object.freeze({
+    regular: reference('--vf-font-weight-regular'),
+    medium: reference('--vf-font-weight-medium'),
+    semibold: reference('--vf-font-weight-semibold'),
+    bold: reference('--vf-font-weight-bold'),
+  }),
+  lineHeight: Object.freeze({
+    none: reference('--vf-line-height-none'),
+    tight: reference('--vf-line-height-tight'),
+    compact: reference('--vf-line-height-compact'),
+    normal: reference('--vf-line-height-normal'),
+    relaxed: reference('--vf-line-height-relaxed'),
+  }),
+  letterSpacing: Object.freeze({
+    tighter: reference('--vf-letter-spacing-tighter'),
+    tight: reference('--vf-letter-spacing-tight'),
+    normal: reference('--vf-letter-spacing-normal'),
+    wide: reference('--vf-letter-spacing-wide'),
+    wider: reference('--vf-letter-spacing-wider'),
   }),
   radius: Object.freeze({
     surface: reference('--vf-radius-surface'),
@@ -78,6 +112,21 @@ export const tokens = Object.freeze({
     sm: reference('--vf-shadow-sm'),
     md: reference('--vf-shadow-md'),
     lg: reference('--vf-shadow-lg'),
+  }),
+  control: Object.freeze({
+    heightSm: reference('--vf-control-height-sm'),
+    heightMd: reference('--vf-control-height-md'),
+    heightLg: reference('--vf-control-height-lg'),
+    fontFamily: reference('--vf-control-font-family'),
+    fontSize: reference('--vf-control-font-size'),
+    fontWeight: reference('--vf-control-font-weight'),
+  }),
+  motion: Object.freeze({
+    controlDuration: reference('--vf-control-motion-duration'),
+    loadingSpinDuration: reference('--vf-motion-duration-loading-spin'),
+    loadingShimmerDuration: reference('--vf-motion-duration-loading-shimmer'),
+    loadingEasing: reference('--vf-motion-easing-loading'),
+    standardEasing: reference('--vf-motion-easing-standard'),
   }),
 });
 

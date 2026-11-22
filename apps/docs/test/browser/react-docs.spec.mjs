@@ -135,6 +135,39 @@ test('React token guide uses semantic roles across built-in and custom nested th
   await expect(page.locator('[data-vf-docs-react-results]')).toContainText('Colors & themes');
 });
 
+test('Nested system themes remap canonical colors in both OS appearances', async ({ page }) => {
+  await page.goto('/next/react/foundations/tokens/');
+  await page.emulateMedia({ colorScheme: 'light' });
+  const read = () => page.evaluate(() => {
+    let outer = document.querySelector('[data-vf-test-system-parent]');
+    if (!outer) {
+      outer = document.createElement('section');
+      outer.setAttribute('data-vf-test-system-parent', '');
+      outer.dataset.vfTheme = 'dark';
+      const inner = document.createElement('section');
+      inner.dataset.vfTheme = 'system';
+      outer.append(inner);
+      document.body.append(outer);
+    }
+    const inner = outer.firstElementChild;
+    const view = (element) => ({
+      accent: getComputedStyle(element).getPropertyValue('--vf-color-accent-background').trim(),
+      text: getComputedStyle(element).getPropertyValue('--vf-color-text').trim(),
+      scheme: getComputedStyle(element).colorScheme,
+    });
+    return { parent: view(outer), system: view(inner) };
+  });
+  const light = await read();
+  expect(light.system.accent).not.toBe(light.parent.accent);
+  expect(light.system.text).not.toBe(light.parent.text);
+  expect(light.system.scheme).toBe('light');
+  await page.emulateMedia({ colorScheme: 'dark' });
+  const dark = await read();
+  expect(dark.system.accent).toBe(dark.parent.accent);
+  expect(dark.system.text).toBe(dark.parent.text);
+  expect(dark.system.scheme).toBe('dark');
+});
+
 test('All React guide pages compose with canonical Flow and AutoGrid, not local layout algorithms', async ({ page }) => {
   for (const id of ['button', 'layout', 'divider', 'text', 'code', 'kbd', 'icon', 'image', 'avatar']) {
     await page.goto('/next/react/components/' + id + '/');

@@ -23,7 +23,7 @@ import { Text, SvgIcon, Flow, colors, tokens } from '@vyrnforge/react';
 
 `primary` is an ergonomic alias of the existing `accent` role, and `secondary` is an alias of existing `muted` text. Neither introduces a second token. `danger` uses the public danger-border color as an emphasis/foreground color. Do not assume it is sufficient for a destructive filled Button: that requires independently validated state, hover, foreground and contrast contracts.
 
-The `tokens` object forwards references for color, spacing, font-size, radius and shadow roles; values are CSS references, not snapshots of resolved theme values.
+The `tokens` object forwards public Web references for color, spacing, font families/sizes/weights, line height, letter spacing, radius, shadow, control and motion roles; values are CSS references, not snapshots of resolved theme values. For example, `tokens.space['2xs']`, `tokens.fontSize['6xl']`, and `tokens.fontWeight.semibold` remain CSS-controlled.
 
 ## Built-in themes and nested scopes
 
@@ -38,7 +38,7 @@ import { ThemeScope, Text } from '@vyrnforge/react';
 </ThemeScope>
 ```
 
-`theme="system"` opts into `prefers-color-scheme`. A `ThemeScope` without an explicit theme inherits its surrounding theme. It renders an ordinary semantic DOM host with `data-vf-theme`; it does **not** set up React Context, read the system theme from JavaScript, or install styles.
+`theme="system"` opts into `prefers-color-scheme`, even when nested inside another appearance scope: both OS preferences explicitly remap semantic colors. A `ThemeScope` without an explicit theme inherits its surrounding theme. It renders an ordinary semantic DOM host with `data-vf-theme`; it does **not** set up React Context, read the system theme from JavaScript, or install styles.
 
 ## Quick, local custom colors
 
