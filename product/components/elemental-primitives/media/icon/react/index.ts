@@ -1,5 +1,7 @@
 import { createElement, forwardRef } from 'react';
 import type { ForwardRefExoticComponent, ReactNode, RefAttributes, SVGAttributes } from 'react';
+import { toneStyle } from '../../internal/theme.js';
+import type { TextTone } from '../../internal/theme.js';
 import {
   resolveIconGlyph,
   type IconDefinition,
@@ -9,6 +11,7 @@ import {
 } from '@vyrnforge/web/icon';
 
 export type { IconDefinition, IconShape, IconSize, IconVariant } from '@vyrnforge/web/icon';
+export type { TextTone } from '../../internal/theme.js';
 
 type OwnedSvgAttributes = 'children' | 'viewBox' | 'role' | 'aria-label' | 'aria-hidden' | 'focusable';
 
@@ -18,6 +21,8 @@ export interface IconProps extends Omit<SVGAttributes<SVGSVGElement>, OwnedSvgAt
   shape?: IconShape;
   size?: IconSize;
   label?: string;
+  /** Semantic, theme-aware color for monochrome SVG paths using currentColor. */
+  tone?: TextTone;
 }
 
 /**
@@ -29,10 +34,12 @@ export interface SvgIconProps extends Omit<SVGAttributes<SVGSVGElement>,
   children?: ReactNode;
   size?: IconSize;
   label?: string;
+  /** Semantic, theme-aware color for monochrome SVG paths using currentColor. */
+  tone?: TextTone;
 }
 
 export const Icon = forwardRef<SVGSVGElement, IconProps>(function Icon(
-  { icon, variant = 'outlined', shape = 'rounded', size = 'md', label, ...nativeProps },
+  { icon, variant = 'outlined', shape = 'rounded', size = 'md', label, tone, style, ...nativeProps },
   ref
 ) {
   const glyph = resolveIconGlyph(icon, variant, shape);
@@ -41,6 +48,7 @@ export const Icon = forwardRef<SVGSVGElement, IconProps>(function Icon(
     {
       ...nativeProps,
       ref,
+      style: toneStyle(tone, style),
       viewBox: icon.viewBox,
       ...iconAccessibility(label),
       'data-vf-icon': '',
@@ -66,7 +74,7 @@ export const Icon = forwardRef<SVGSVGElement, IconProps>(function Icon(
  * Unlabeled artwork is decorative; named artwork has native image semantics.
  */
 export const SvgIcon = forwardRef<SVGSVGElement, SvgIconProps>(function SvgIcon(
-  { children, size = 'md', label, viewBox = '0 0 24 24', ...nativeProps },
+  { children, size = 'md', label, viewBox = '0 0 24 24', tone, style, ...nativeProps },
   ref
 ) {
   return createElement(
@@ -74,6 +82,7 @@ export const SvgIcon = forwardRef<SVGSVGElement, SvgIconProps>(function SvgIcon(
     {
       ...nativeProps,
       ref,
+      style: toneStyle(tone, style),
       viewBox,
       ...iconAccessibility(label),
       'data-vf-icon': '',

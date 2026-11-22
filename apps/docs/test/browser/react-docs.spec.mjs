@@ -18,7 +18,7 @@ test('React pilot artifact is Product Graph-backed and SSR-rendered with public 
   expect(manifest.layout.examples).toHaveLength(7);
   expect(manifest.layout.examples.map((example) => example.id)).toContain('layout/dividers');
   expect(manifest.routes.filter((entry) => entry.view !== 'unavailable').map((entry) => entry.route)).toEqual([
-    '', 'components/button/', 'api/components/button/', 'components/layout/', 'api/components/layout/',
+    '', 'foundations/tokens/', 'foundations/themes/', 'foundations/styling/', 'components/button/', 'api/components/button/', 'components/layout/', 'api/components/layout/',
     'components/divider/', 'api/components/divider/', 
     ...['text', 'code', 'kbd'].flatMap((id) => [
       'components/' + id + '/', 'api/components/' + id + '/',
@@ -106,6 +106,94 @@ test('React pilot artifact is Product Graph-backed and SSR-rendered with public 
     expect(html).toContain('react-reference.js');
     expect(html).toContain('@vyrnforge/react/button');
   }
+});
+
+test('Foundations is a separate discoverable catalog for tokens, themes and CSS', async ({ page }) => {
+  await page.goto('/next/react/foundations/tokens/');
+  const nav = page.getByRole('navigation', { name: 'Documentation' });
+  await expect(nav.getByText('Foundations', { exact: true })).toBeVisible();
+  await expect(nav.getByRole('link', { name: 'Design tokens' })).toBeVisible();
+  await expect(nav.getByRole('link', { name: 'Colors & themes' })).toBeVisible();
+  await expect(nav.getByRole('link', { name: 'Styling & CSS' })).toBeVisible();
+  const tokens = page.locator('[data-vf-docs-react-tokens]');
+  await expect(tokens.getByRole('heading', { name: 'Design tokens' })).toBeVisible();
+  await expect(tokens).toContainText('Token categories');
+  await nav.getByRole('link', { name: 'Styling & CSS' }).click();
+  const styling = page.locator('[data-vf-docs-react-styling]');
+  await expect(styling.getByRole('heading', { name: 'Styling & CSS' })).toBeVisible();
+  await expect(styling).toContainText('CSS delivery');
+  await expect(styling).toContainText('@vyrnforge/web/styles.css');
+  await nav.getByRole('link', { name: 'Colors & themes' }).click();
+  await expect(page.locator('[data-vf-docs-react-themes]')).toBeVisible();
+  await page.getByRole('searchbox', { name: 'Search React documentation' }).fill('stylesheet');
+  await expect(page.locator('[data-vf-docs-react-results]')).toContainText('Styling & CSS');
+});
+
+test('React theme guide uses semantic roles across built-in and custom nested theme scopes', async ({ page }) => {
+  await page.goto('/next/react/foundations/themes/');
+  const guide = page.locator('[data-vf-docs-react-themes]');
+  await expect(guide.getByRole('heading', { name: 'Colors & themes' })).toBeVisible();
+  await expect(guide).toContainText('Custom themes for both appearances');
+  const previews = guide.locator('[data-vf-docs-react-theme-previews]');
+  await expect(previews).toHaveAttribute('data-vf-auto-grid', '');
+  const light = previews.locator('[data-vf-theme="light"]');
+  const dark = previews.locator('[data-vf-theme="dark"]').first();
+  const custom = previews.locator('[data-vf-theme="dark"]').last();
+  const value = async (scope) => scope.getByText('Primary accent', { exact: true }).evaluate(
+    (el) => getComputedStyle(el).color);
+  const lightPrimary = await value(light);
+  const darkPrimary = await value(dark);
+  const customPrimary = await value(custom);
+  expect(lightPrimary).not.toBe(darkPrimary);
+  expect(customPrimary).not.toBe(darkPrimary);
+  const buttonBackground = async (scope) => scope.getByRole('button', { name: 'Primary action' })
+    .evaluate((el) => getComputedStyle(el).backgroundColor);
+  const lightButton = await buttonBackground(light);
+  const darkButton = await buttonBackground(dark);
+  const customButton = await buttonBackground(custom);
+  expect(lightButton).not.toBe(darkButton);
+  expect(customButton).not.toBe(darkButton);
+  await expect(light).toContainText('Secondary text');
+  await expect(dark).toContainText('Danger text');
+  const semantics = await custom.locator('h3[data-vf-text]').evaluate(
+    (el) => ({ tag: el.tagName, bg: getComputedStyle(el.parentElement.parentElement).backgroundColor }));
+  expect(semantics.tag).toBe('H3');
+  expect(semantics.bg).not.toBe('rgba(0, 0, 0, 0)');
+  await page.getByRole('searchbox', { name: 'Search React documentation' }).fill('semantic color');
+  await expect(page.locator('[data-vf-docs-react-results]')).toContainText('Colors & themes');
+});
+
+test('Nested system themes remap canonical colors in both OS appearances', async ({ page }) => {
+  await page.goto('/next/react/foundations/themes/');
+  await page.emulateMedia({ colorScheme: 'light' });
+  const read = () => page.evaluate(() => {
+    let outer = document.querySelector('[data-vf-test-system-parent]');
+    if (!outer) {
+      outer = document.createElement('section');
+      outer.setAttribute('data-vf-test-system-parent', '');
+      outer.dataset.vfTheme = 'dark';
+      const inner = document.createElement('section');
+      inner.dataset.vfTheme = 'system';
+      outer.append(inner);
+      document.body.append(outer);
+    }
+    const inner = outer.firstElementChild;
+    const view = (element) => ({
+      accent: getComputedStyle(element).getPropertyValue('--vf-color-accent-background').trim(),
+      text: getComputedStyle(element).getPropertyValue('--vf-color-text').trim(),
+      scheme: getComputedStyle(element).colorScheme,
+    });
+    return { parent: view(outer), system: view(inner) };
+  });
+  const light = await read();
+  expect(light.system.accent).not.toBe(light.parent.accent);
+  expect(light.system.text).not.toBe(light.parent.text);
+  expect(light.system.scheme).toBe('light');
+  await page.emulateMedia({ colorScheme: 'dark' });
+  const dark = await read();
+  expect(dark.system.accent).toBe(dark.parent.accent);
+  expect(dark.system.text).toBe(dark.parent.text);
+  expect(dark.system.scheme).toBe('dark');
 });
 
 test('All React guide pages compose with canonical Flow and AutoGrid, not local layout algorithms', async ({ page }) => {
@@ -253,7 +341,7 @@ test('React URL context and framework-scoped search/theme work without inventing
   await expect(page.getByRole('searchbox', { name: 'Search React documentation' })).toBeFocused();
   await expect(results).toBeHidden();
 
-  await page.getByLabel('Theme').selectOption('dark');
+  await page.getByLabel('Theme', { exact: true }).selectOption('dark');
   await expect(page.locator('html')).toHaveAttribute('data-vf-theme', 'dark');
   await page.getByRole('navigation', { name: 'Documentation' })
     .getByRole('link', { name: 'Button API' }).click();
@@ -523,7 +611,7 @@ test('React Divider examples demonstrate configurable vertical text direction', 
 test('Divider works in dark theme, forced colors, narrow RTL layout and SSR without JS', async ({ page, browser }) => {
   await page.setViewportSize({ width: 320, height: 720 });
   await page.goto('/next/react/components/divider/');
-  await page.getByLabel('Theme').selectOption('dark');
+  await page.getByLabel('Theme', { exact: true }).selectOption('dark');
   await page.evaluate(() => { document.documentElement.dir = 'rtl'; });
   await page.emulateMedia({ forcedColors: 'active' });
   await expect(page.getByRole('heading', { level: 1, name: 'Divider' })).toBeVisible();
@@ -622,7 +710,7 @@ test('React Layout at 320px / 200% text is readable in RTL, dark theme and force
   await page.setViewportSize({ width: 320, height: 720 });
   await page.goto('/next/react/components/layout/');
   await expect(page.locator('html')).toHaveAttribute('data-vf-react-hydrated', 'true');
-  await page.getByLabel('Theme').selectOption('dark');
+  await page.getByLabel('Theme', { exact: true }).selectOption('dark');
   await expect(page.locator('html')).toHaveAttribute('data-vf-theme', 'dark');
   await page.evaluate(() => { document.documentElement.style.fontSize = '200%'; document.documentElement.dir = 'rtl'; });
   await page.emulateMedia({ forcedColors: 'active' });
@@ -766,7 +854,7 @@ test('React Typography remains readable at 320px, 200 percent text, RTL and forc
   await page.setViewportSize({ width: 320, height: 720 });
   await page.goto('/next/react/components/text/');
   await expect(page.locator('html')).toHaveAttribute('data-vf-react-hydrated', 'true');
-  await page.getByLabel('Theme').selectOption('dark');
+  await page.getByLabel('Theme', { exact: true }).selectOption('dark');
   await page.evaluate(() => {
     document.documentElement.dir = 'rtl';
     document.documentElement.style.fontSize = '200%';
@@ -930,11 +1018,12 @@ test('One-import createSvgIcon produces reusable JSX shapes with defaults and th
   await expect(plain).not.toHaveAttribute('tabindex', '0');
   const custom = svgs.nth(1);
   await expect(custom).toHaveAttribute('data-vf-size', 'lg');
-  const color = await custom.evaluate((element) => ({
+  await expect(custom).toHaveAttribute('style', /color:\s*var\(--vf-color-accent-background\)/);
+  const customColors = await custom.evaluate((element) => ({
     own: getComputedStyle(element).color,
     parent: getComputedStyle(element.parentElement).color,
   }));
-  expect(color.own).toBe(color.parent);
+  expect(customColors.own).not.toBe(customColors.parent);
   const named = frame.getByRole('img', { name: 'Sparkle' });
   await expect(named).toBeVisible();
   await expect(named).not.toHaveAttribute('aria-hidden', 'true');
@@ -959,12 +1048,16 @@ test('React Icon colors use inherited semantic tokens and raw SVG JSX remains na
   await colorPreview.scrollIntoViewIfNeeded();
   const swatches = colorPreview.contentFrame().locator('svg[data-vf-icon]');
   await expect(swatches).toHaveCount(4);
-  for (const svg of await swatches.all()) {
+  const expectedTokens = ['text', 'accent-background', 'text-muted', 'danger-border'];
+  for (const [index, svg] of (await swatches.all()).entries()) {
+    const token = expectedTokens[index];
+    await expect(svg).toHaveAttribute('style', new RegExp('var\\(--vf-color-' + token + '\\)'));
     const actual = await svg.evaluate((element) => ({
-      color: getComputedStyle(element).color,
-      parentColor: getComputedStyle(element.parentElement).color,
+      icon: getComputedStyle(element).color,
+      label: getComputedStyle(element.parentElement.querySelector('[data-vf-text]')).color,
     }));
-    expect(actual.color).toBe(actual.parentColor);
+    expect(actual.icon).toBe(actual.label);
+    await expect(svg.locator('..').locator('[data-vf-text]')).toHaveText(['Default', 'Accent', 'Muted', 'Danger'][index]);
   }
   const accent = colorPreview.contentFrame().locator('svg[data-vf-icon]').nth(1);
   const light = await accent.evaluate((element) => getComputedStyle(element).color);
@@ -1001,7 +1094,7 @@ test('React setup has one shared home and component APIs do not reprint integrat
   await page.goto('/next/react/');
   await expect(page.getByRole('heading', { name: 'Styling, SSR and hydration' })).toBeVisible();
   await expect(page.getByRole('heading', { name: 'React state and native semantics' })).toBeVisible();
-  await expect(page.locator('main pre code').last()).toContainText("import '@vyrnforge/web/styles.css';");
+  await expect(page.locator('main pre code').filter({ hasText: "import '@vyrnforge/web/styles.css';" })).toHaveCount(1);
 
   for (const id of ['button', 'layout', 'text', 'code', 'kbd']) {
     await page.goto('/next/react/components/' + id + '/');
@@ -1184,7 +1277,7 @@ test('Text specimen examples retain semantics and reflow at narrow width with da
   await page.setViewportSize({ width: 320, height: 760 });
   await page.goto('/next/react/components/text/');
   await expect(page.locator('html')).toHaveAttribute('data-vf-react-hydrated', 'true');
-  await page.getByLabel('Theme').selectOption('dark');
+  await page.getByLabel('Theme', { exact: true }).selectOption('dark');
   await page.evaluate(() => {
     document.documentElement.dir = 'rtl';
     document.documentElement.style.fontSize = '200%';
@@ -1263,7 +1356,7 @@ test('React Avatar guide shows initials, native photo, failed-image fallback and
 test('Avatar documentation supports no-JS SSR and narrow RTL high-contrast layout', async ({ page, browser }) => {
   await page.setViewportSize({ width: 320, height: 720 });
   await page.goto('/next/react/components/avatar/');
-  await page.getByLabel('Theme').selectOption('dark');
+  await page.getByLabel('Theme', { exact: true }).selectOption('dark');
   await page.evaluate(() => { document.documentElement.dir = 'rtl'; });
   await page.emulateMedia({ forcedColors: 'active' });
   await expect(page.getByRole('heading', { level: 1, name: 'Avatar' })).toBeVisible();
