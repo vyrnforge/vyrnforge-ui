@@ -7,6 +7,7 @@ import { Text } from '@vyrnforge/react/text';
 import { ThemeScope, colors, tokens } from '@vyrnforge/react';
 import { SearchFieldRoot, SearchFieldInput, SearchFieldClear } from '@vyrnforge/react/search-field';
 import { NativeSelect } from '@vyrnforge/react/native-select';
+import { ColorGuide, DarkModeGuide, RtlGuide } from './react-customization.mjs';
 
 function slug(value) {
   return String(value).toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-+|-+$/g, '');
@@ -135,8 +136,13 @@ function navigation(view, links, topic) {
     ] },
     { label: 'Foundations', items: [
       { id: 'tokens', title: 'Design tokens', href: links.tokens },
-      { id: 'themes', title: 'Colors & themes', href: links.themes },
       { id: 'styling', title: 'Styling & CSS', href: links.styling },
+    ] },
+    { label: 'Customization', items: [
+      { id: 'color', title: 'Color', href: links.color },
+      { id: 'dark-mode', title: 'Dark mode', href: links.darkMode },
+      { id: 'themes', title: 'Theming', href: links.themes },
+      { id: 'rtl', title: 'Right-to-left', href: links.rtl },
     ] },
     { label: 'Components', items: [{ id: 'guide', title: 'Button', href: links.guide }] },
     { label: 'Typography', items: ['text', 'code', 'kbd'].map((id) => ({
@@ -910,7 +916,7 @@ function themesGuide(links) {
     '}';
   return h(Flow, { as: 'article', gap: '2xl', className: 'vf-docs-article', 'data-vf-docs-react-themes': '' },
     h('header', { className: 'vf-docs-component-header' },
-      h(Text, { as: 'h1', variant: 'heading-lg' }, 'Colors & themes'),
+      h(Text, { as: 'h1', variant: 'heading-lg' }, 'Theming'),
       h(Text, { as: 'p', variant: 'body-lg' },
         'Light, dark, system and branded appearances using shared semantic Web tokens.')),
     h(Flow, { as: 'section', gap: 'md', 'aria-labelledby': 'react-token-quickstart' },
@@ -953,7 +959,10 @@ function themesGuide(links) {
     h(Flow, { as: 'section', gap: 'sm', 'aria-labelledby': 'react-theme-links' },
       h(Text, { as: 'h2', variant: 'heading-md', id: 'react-theme-links' }, 'Related foundations'),
       h(Text, { as: 'p' }, h('a', { href: links.tokens, 'data-vf-link': '' }, 'Explore design tokens')),
-      h(Text, { as: 'p' }, h('a', { href: links.styling, 'data-vf-link': '' }, 'Learn CSS loading and customization'))));
+      h(Text, { as: 'p' }, h('a', { href: links.styling, 'data-vf-link': '' }, 'Learn CSS loading and customization')),
+      h(Text, { as: 'p' }, h('a', { href: links.color, 'data-vf-link': '' }, 'Customize color roles')),
+      h(Text, { as: 'p' }, h('a', { href: links.darkMode, 'data-vf-link': '' }, 'Configure dark mode')),
+      h(Text, { as: 'p' }, h('a', { href: links.rtl, 'data-vf-link': '' }, 'Use right-to-left content'))));
 }
 
 function body(view, links, button, layout, typography, icon, image, avatar, divider, message, setMessage, requestedTopic) {
@@ -969,6 +978,9 @@ function body(view, links, button, layout, typography, icon, image, avatar, divi
       h('p', null, h('a', { href: links.layout, 'data-vf-link': '' }, 'Browse React Layout')));
   }
   if (view === 'tokens') return tokensGuide(links);
+  if (view === 'color') return h(ColorGuide, { links });
+  if (view === 'dark-mode') return h(DarkModeGuide, { links });
+  if (view === 'rtl') return h(RtlGuide, { links });
   if (view === 'themes') return themesGuide(links);
   if (view === 'styling') return stylingGuide(links);
   if (view === 'home') {
@@ -999,7 +1011,10 @@ function body(view, links, button, layout, typography, icon, image, avatar, divi
           '  <Text as="p" tone="danger">Danger</Text>\n' +
           '</ThemeScope>')),
         h(Text, { as: 'p' }, h('a', { href: links.tokens, 'data-vf-link': '' }, 'Browse design tokens')),
-        h(Text, { as: 'p' }, h('a', { href: links.themes, 'data-vf-link': '' }, 'Explore colors and themes')),
+        h(Text, { as: 'p' }, h('a', { href: links.themes, 'data-vf-link': '' }, 'Explore theming')),
+        h(Text, { as: 'p' }, h('a', { href: links.color, 'data-vf-link': '' }, 'Try the color playground')),
+        h(Text, { as: 'p' }, h('a', { href: links.darkMode, 'data-vf-link': '' }, 'Preview light, dark and system')),
+        h(Text, { as: 'p' }, h('a', { href: links.rtl, 'data-vf-link': '' }, 'Preview right-to-left layout')),
         h(Text, { as: 'p' }, h('a', { href: links.styling, 'data-vf-link': '' }, 'Learn styling and CSS'))),
       h('section', null, h('h2', null, 'React state and native semantics'),
         h('p', null, 'React owns component state, event handlers, refs, effects and hydration. VyrnForge components preserve native HTML semantics and shared interaction contracts; consuming applications own data, actions, async feedback and routing. Avoid adding custom keyboard handlers for behavior native elements already provide.')),
@@ -1087,8 +1102,14 @@ export function ReactReferencePage({ view, links, button, layout, typography, ic
     { title: 'React overview', href: links.home, keywords: 'getting started setup' },
     { title: 'Design tokens', href: links.tokens,
       keywords: 'foundations tokens spacing typography colors semantic roles css variables radius motion shadows' },
-    { title: 'Colors & themes', href: links.themes,
-      keywords: 'foundations semantic color primary secondary accent danger light dark system brand custom theme scope' },
+    { title: 'Theming', href: links.themes,
+      keywords: 'customization foundations branded themes scope nested local override css token semantic color' },
+    { title: 'Color', href: links.color,
+      keywords: 'customization colors semantic color roles palette picker swatches primary secondary accent foreground hover contrast' },
+    { title: 'Dark mode', href: links.darkMode,
+      keywords: 'customization dark light system color scheme prefers-color-scheme ssr theme scope' },
+    { title: 'Right-to-left', href: links.rtl,
+      keywords: 'customization rtl right-to-left direction arabic hebrew lang dir bidi localization internationalization' },
     { title: 'Styling & CSS', href: links.styling,
       keywords: 'foundations styles stylesheet css customization cascade layers browser bundler ssr hydration override reset' },
     { title: 'Button', href: links.guide, keywords: 'button usage accessibility examples state' },
