@@ -13,7 +13,7 @@ test('Badge augments a target and preserves its accessible name, keyboard focus 
   await expect(page.locator('#zero [data-vf-badge-indicator]')).toBeHidden();
   await expect(page.locator('#show-zero [data-vf-badge-indicator]')).toHaveText('0');
   await expect(page.locator('#invisible [data-vf-badge-indicator]')).toBeHidden();
-  await expect(page.getByRole('button', { name: 'Seven unread' })).toBeVisible();
+  await expect(page.getByRole('button', { name: 'Hidden, seven unread' })).toBeVisible();
   for (const element of await page.locator('[data-vf-badge]').all()) {
     await expect(element).not.toHaveAttribute('tabindex');
     await expect(element).not.toHaveAttribute('role');
