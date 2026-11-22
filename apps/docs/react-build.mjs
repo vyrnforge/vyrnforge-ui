@@ -216,6 +216,15 @@ const publicDividerTypes = dividerPublicSource.slice(dividerTypeStart, dividerTy
 
 const shellStyles = documentationShellStyleSpecifiers.map((specifier) =>
   resolvePublicWebStyleAsset(webModel.packageManifest, specifier).assetPath);
+// The Color studio alone needs these public controls; other docs pages do not
+// pay for unrelated component styles or invent docs-specific component skins.
+const themeStudioStyles = [
+  '@vyrnforge/web/styles/color-picker.css',
+  '@vyrnforge/web/styles/segmented-control.css',
+  '@vyrnforge/web/styles/checkbox.css',
+  '@vyrnforge/web/styles/slider.css',
+].map((specifier) =>
+  resolvePublicWebStyleAsset(webModel.packageManifest, specifier).assetPath);
 
 function escapeHtml(value) {
   return String(value).replaceAll('&', '&amp;').replaceAll('<', '&lt;')
@@ -288,8 +297,8 @@ function linksFor(route) {
       !nativeModel.foundationPages.some((page) => page.route === route) ? '' : route), true),
   };
 }
-async function verifyStyles(dir) {
-  for (const name of [...shellStyles, '/assets/docs.css']) {
+async function verifyStyles(dir, extra = []) {
+  for (const name of [...shellStyles, ...extra, '/assets/docs.css']) {
     const target = path.resolve(outRoot, dir, relative(dir, name));
     const info = await stat(target).catch(() => null);
     if (!info?.isFile()) throw new Error('React documentation stylesheet missing: ' + name);
@@ -297,7 +306,7 @@ async function verifyStyles(dir) {
 }
 async function writePage(route, page) {
   const dir = directory(route);
-  await verifyStyles(dir);
+  await verifyStyles(dir, route === 'foundations/color/' ? themeStudioStyles : []);
   const pageRoot = path.join(outRoot, dir);
   await mkdir(pageRoot, { recursive: true });
   await writeFile(path.join(pageRoot, 'index.html'), page);
@@ -636,8 +645,9 @@ for (const page of pageViews) {
     requestedTopic: page.requestedTopic ?? null };
   const initialHtml = renderToString(createElement(ReactReferencePage, props));
   const serialized = JSON.stringify(props).replaceAll('<', '\\u003c');
-  const styles = shellStyles.map((asset) =>
-    '  <link rel="stylesheet" href="' + escapeHtml(relative(dir, asset)) + '">').join('\n');
+  const styles = [...shellStyles, ...(page.view === 'color' ? themeStudioStyles : [])]
+    .map((asset) => '  <link rel="stylesheet" href="' +
+      escapeHtml(relative(dir, asset)) + '">').join('\n');
   const pageHtml = '<!doctype html><html lang="en" data-vf-theme="light" data-vf-density="comfortable"><head>' +
     '<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">' +
     '<meta name="description" content="' + escapeHtml(page.description) + '">' +
