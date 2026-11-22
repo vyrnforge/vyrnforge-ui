@@ -238,6 +238,9 @@ function linksFor(route) {
     home: relative(dir, react, true),
     tokens: relative(dir, react + 'foundations/tokens/', true),
     themes: relative(dir, react + 'foundations/themes/', true),
+    color: relative(dir, react + 'foundations/color/', true),
+    darkMode: relative(dir, react + 'foundations/dark-mode/', true),
+    rtl: relative(dir, react + 'foundations/right-to-left/', true),
     styling: relative(dir, react + 'foundations/styling/', true),
     self: relative(dir, react + route, true),
     guide: relative(dir, react + 'components/button/', true),
@@ -281,7 +284,8 @@ function linksFor(route) {
           (slug === 'basic' ? '/' : '/' + slug + '/'), true)];
       })),
     }])),
-    native: relative(dir, native + (route === '' ? '' : route), true),
+    native: relative(dir, native + (['foundations/color/', 'foundations/dark-mode/',
+      'foundations/right-to-left/'].includes(route) ? '' : route), true),
   };
 }
 async function verifyStyles(dir) {
@@ -517,8 +521,14 @@ const pageViews = [
   { route: '', view: 'home', title: 'React overview', description: 'VyrnForge React documentation pilot' },
   { route: 'foundations/tokens/', view: 'tokens', title: 'React design tokens',
     description: 'Shared semantic tokens, color roles and foundation scales in React' },
-  { route: 'foundations/themes/', view: 'themes', title: 'React colors and themes',
-    description: 'Light, dark, system and custom branded theme scopes in React' },
+  { route: 'foundations/themes/', view: 'themes', title: 'React theming',
+    description: 'Scoped themes and custom branded semantic tokens in React' },
+  { route: 'foundations/color/', view: 'color', title: 'React color customization',
+    description: 'Live semantic color roles, accent families and a CSS recipe' },
+  { route: 'foundations/dark-mode/', view: 'dark-mode', title: 'React dark mode',
+    description: 'Light, dark and system theme scopes with a live preview' },
+  { route: 'foundations/right-to-left/', view: 'rtl', title: 'React right-to-left',
+    description: 'Native direction, mixed content and bidirectional component preview' },
   { route: 'foundations/styling/', view: 'styling', title: 'React styling and CSS',
     description: 'Shared stylesheet loading, overrides and CSS customization in React' },
   { route: button.showcaseRoute, view: 'guide', title: 'React Button', description: 'Shared Button semantics and React usage' },

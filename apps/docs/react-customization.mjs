@@ -1,5 +1,5 @@
 import { createElement as h, useEffect, useState } from 'react';
-import { ThemeScope, colors, tokens } from '@vyrnforge/react';
+import { ThemeScope } from '@vyrnforge/react';
 import { Button } from '@vyrnforge/react/button';
 import { Flow, AutoGrid } from '@vyrnforge/react/layout';
 import { Text } from '@vyrnforge/react/text';
