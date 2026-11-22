@@ -1,3 +1,5 @@
+export { colors, tokens, toneStyle, ThemeScope } from './foundation/theme.js';
+export type { ColorRole, TextTone, ThemeColorOverrides, ThemeElement, ThemeName, ThemeScopeProps } from './foundation/theme.js';
 export { Avatar } from './components/avatar/index.js';
 export type { AvatarProps, AvatarSize } from './components/avatar/index.js';
 export { Divider } from './components/divider/index.js';
