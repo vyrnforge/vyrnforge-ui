@@ -957,11 +957,12 @@ test('One-import createSvgIcon produces reusable JSX shapes with defaults and th
   await expect(plain).not.toHaveAttribute('tabindex', '0');
   const custom = svgs.nth(1);
   await expect(custom).toHaveAttribute('data-vf-size', 'lg');
-  const color = await custom.evaluate((element) => ({
+  await expect(custom).toHaveAttribute('style', /color:var\(--vf-color-accent-background\)/);
+  const customColors = await custom.evaluate((element) => ({
     own: getComputedStyle(element).color,
     parent: getComputedStyle(element.parentElement).color,
   }));
-  expect(color.own).toBe(color.parent);
+  expect(customColors.own).not.toBe(customColors.parent);
   const named = frame.getByRole('img', { name: 'Sparkle' });
   await expect(named).toBeVisible();
   await expect(named).not.toHaveAttribute('aria-hidden', 'true');
@@ -986,13 +987,19 @@ test('React Icon colors use inherited semantic tokens and raw SVG JSX remains na
   await colorPreview.scrollIntoViewIfNeeded();
   const swatches = colorPreview.contentFrame().locator('svg[data-vf-icon]');
   await expect(swatches).toHaveCount(4);
-  for (const svg of await swatches.all()) {
+  const roles = ['text', 'accent', 'muted', 'danger'];
+  const expectedTokens = ['text', 'accent-background', 'text-muted', 'danger-border'];
+  for (const [index, svg] of (await swatches.all()).entries()) {
+    const token = expectedTokens[index];
+    await expect(svg).toHaveAttribute('style', new RegExp('var\\(--vf-color-' + token + '\\)'));
     const actual = await svg.evaluate((element) => ({
-      color: getComputedStyle(element).color,
-      parentColor: getComputedStyle(element.parentElement).color,
+      icon: getComputedStyle(element).color,
+      label: getComputedStyle(element.parentElement.querySelector('[data-vf-text]')).color,
     }));
-    expect(actual.color).toBe(actual.parentColor);
+    expect(actual.icon).toBe(actual.label);
+    await expect(svg.locator('..').locator('[data-vf-text]')).toHaveText(['Default', 'Accent', 'Muted', 'Danger'][index]);
   }
+  expect(roles).toEqual(['text', 'accent', 'muted', 'danger']);
   const accent = colorPreview.contentFrame().locator('svg[data-vf-icon]').nth(1);
   const light = await accent.evaluate((element) => getComputedStyle(element).color);
   await colorPreview.contentFrame().locator('html').evaluate((element) => {
