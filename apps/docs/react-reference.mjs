@@ -3,6 +3,7 @@ import { AppShell, AppShellHeader, AppShellBody, AppShellNavigation, AppShellMai
 import { SideNav, SideNavGroup, SideNavGroupLabel, SideNavList, SideNavItem, SideNavLink } from '@vyrnforge/react/side-nav';
 import { Button } from '@vyrnforge/react/button';
 import { Flow, AutoGrid } from '@vyrnforge/react/layout';
+import { Text } from '@vyrnforge/react/text';
 import { SearchFieldRoot, SearchFieldInput, SearchFieldClear } from '@vyrnforge/react/search-field';
 import { NativeSelect } from '@vyrnforge/react/native-select';
 
@@ -25,7 +26,7 @@ function renderBlocks(blocks = []) {
       block.items.map((item, j) => h('li', { key: j }, ...renderInline(item))));
     if (block.type === 'code') return h('pre', { key: i, 'data-vf-code-block': '', tabIndex: 0 },
       h('code', null, block.text));
-    return h('p', { key: i }, ...renderInline(block.text));
+    return h(Text, { as: 'p', key: i }, ...renderInline(block.text));
   });
 }
 function accessibilityEvidence(references, headingTag = 'h2') {
@@ -172,7 +173,7 @@ function layoutExample(example, links) {
     'data-vf-docs-react-layout-example': example.id },
     h(Flow, { as: 'header', direction: 'inline', wrap: 'wrap', gap: 'lg',
       align: 'start', justify: 'space-between', className: 'vf-docs-example-header' },
-      h('div', null, h('h3', null, example.title), h('p', null, example.description))),
+      h('div', null, h(Text, { as: 'h3', variant: 'heading-sm' }, example.title), h(Text, { as: 'p' }, example.description))),
     h('iframe', { className: 'vf-docs-react-example-frame',
       title: 'React ' + example.title + ' example',
       src: links.layoutExampleBase + id + '/',
@@ -247,8 +248,8 @@ function typographyExample(unit, example, links) {
     h(Flow, { as: 'header', direction: 'inline', wrap: 'wrap', gap: 'lg',
       align: 'start', justify: 'space-between', className: 'vf-docs-example-header' },
       h('div', null,
-        h('h3', { id: headingId + '-heading' }, example.title),
-        h('p', null, example.description))),
+        h(Text, { as: 'h3', variant: 'heading-sm', id: headingId + '-heading' }, example.title),
+        h(Text, { as: 'p' }, example.description))),
     h('iframe', {
       title: slug === 'basic' ? 'React ' + unit.title + ' example' :
         'React ' + example.title + ' example',
@@ -392,7 +393,7 @@ function buttonExample(example, links) {
     className: 'vf-docs-example', 'data-vf-docs-react-button-example': example.id },
     h(Flow, { as: 'header', direction: 'inline', wrap: 'wrap', gap: 'lg',
       align: 'start', justify: 'space-between', className: 'vf-docs-example-header' },
-      h('div', null, h('h3', null, example.title), h('p', null, example.description))),
+      h('div', null, h(Text, { as: 'h3', variant: 'heading-sm' }, example.title), h(Text, { as: 'p' }, example.description))),
     h('iframe', { className: 'vf-docs-react-example-frame',
       title: id === 'basic' ? 'Checked-in React Button example' : 'React ' + example.title + ' example',
       src: links.buttonExamples[id], sandbox: 'allow-scripts',
@@ -456,7 +457,7 @@ function iconExample(example, links) {
     className: 'vf-docs-example', 'data-vf-docs-react-icon-example': example.id },
     h(Flow, { as: 'header', direction: 'inline', wrap: 'wrap', gap: 'lg',
       align: 'start', justify: 'space-between', className: 'vf-docs-example-header' },
-      h('div', null, h('h3', null, example.title), h('p', null, example.description))),
+      h('div', null, h(Text, { as: 'h3', variant: 'heading-sm' }, example.title), h(Text, { as: 'p' }, example.description))),
     h('iframe', { className: 'vf-docs-react-example-frame',
       title: 'React ' + example.title + ' example',
       src: links.icon.exampleBase + slug + '/',
@@ -539,7 +540,7 @@ function imageExample(example, links) {
     className: 'vf-docs-example', 'data-vf-docs-react-image-example': example.id },
     h(Flow, { as: 'header', direction: 'inline', wrap: 'wrap', gap: 'lg',
       align: 'start', justify: 'space-between', className: 'vf-docs-example-header' },
-      h('div', null, h('h3', null, example.title), h('p', null, example.description))),
+      h('div', null, h(Text, { as: 'h3', variant: 'heading-sm' }, example.title), h(Text, { as: 'p' }, example.description))),
     h('iframe', { className: 'vf-docs-react-example-frame',
       title: 'React ' + example.title + ' image example',
       src: links.image.exampleBase + slug + '/',
@@ -627,7 +628,7 @@ function dividerExample(example, links) {
     className: 'vf-docs-example', 'data-vf-docs-react-divider-example': example.id },
     h(Flow, { as: 'header', direction: 'inline', wrap: 'wrap', gap: 'lg',
       align: 'start', justify: 'space-between', className: 'vf-docs-example-header' },
-      h('div', null, h('h3', null, example.title), h('p', null, example.description))),
+      h('div', null, h(Text, { as: 'h3', variant: 'heading-sm' }, example.title), h(Text, { as: 'p' }, example.description))),
     h('iframe', { className: 'vf-docs-react-example-frame',
       title: 'React ' + example.title + ' example',
       src: links.divider.exampleBase + slug + '/',
