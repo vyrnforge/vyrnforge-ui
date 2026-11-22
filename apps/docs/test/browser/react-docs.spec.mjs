@@ -1234,7 +1234,7 @@ test('React Avatar guide shows initials, native photo, failed-image fallback and
   await expect(guide.getByRole('heading', { name: 'Sizes and appearance' })).toBeVisible();
   await expect(guide.getByRole('heading', { name: 'Appearances and fallback' })).toBeVisible();
   await expect(guide.getByRole('heading', { name: 'Grouped avatars and totals' })).toBeVisible();
-  await expect(guide.getByRole('heading', { name: 'Group spacing' })).toBeVisible();
+  await expect(guide.getByRole('heading', { name: 'Group spacing', exact: true })).toBeVisible();
   const initials = guide.locator('[data-vf-docs-react-avatar-example="avatar/initials"] iframe');
   await initials.scrollIntoViewIfNeeded();
   await expect(initials.contentFrame().locator('[data-vf-avatar-initials]').first()).toHaveText('AL');
