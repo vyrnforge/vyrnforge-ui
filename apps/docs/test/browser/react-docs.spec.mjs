@@ -118,11 +118,11 @@ test('React token guide uses semantic roles across built-in and custom nested th
   const light = previews.locator('[data-vf-theme="light"]');
   const dark = previews.locator('[data-vf-theme="dark"]').first();
   const custom = previews.locator('[data-vf-theme="dark"]').last();
-  const value = async (scope, selector) => scope.locator(selector).evaluate(
+  const value = async (scope) => scope.getByText('Primary accent', { exact: true }).evaluate(
     (el) => getComputedStyle(el).color);
-  const lightPrimary = await value(light, 'p[data-vf-text][style]');
-  const darkPrimary = await value(dark, 'p[data-vf-text][style]');
-  const customPrimary = await value(custom, 'p[data-vf-text][style]');
+  const lightPrimary = await value(light);
+  const darkPrimary = await value(dark);
+  const customPrimary = await value(custom);
   expect(lightPrimary).not.toBe(darkPrimary);
   expect(customPrimary).not.toBe(darkPrimary);
   await expect(light).toContainText('Secondary text');
@@ -1028,7 +1028,7 @@ test('React setup has one shared home and component APIs do not reprint integrat
   await page.goto('/next/react/');
   await expect(page.getByRole('heading', { name: 'Styling, SSR and hydration' })).toBeVisible();
   await expect(page.getByRole('heading', { name: 'React state and native semantics' })).toBeVisible();
-  await expect(page.locator('main pre code').last()).toContainText("import '@vyrnforge/web/styles.css';");
+  await expect(page.locator('main pre code').filter({ hasText: "import '@vyrnforge/web/styles.css';" })).toHaveCount(1);
 
   for (const id of ['button', 'layout', 'text', 'code', 'kbd']) {
     await page.goto('/next/react/components/' + id + '/');
