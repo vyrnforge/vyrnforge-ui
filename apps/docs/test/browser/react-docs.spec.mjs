@@ -280,7 +280,7 @@ test('React URL context and framework-scoped search/theme work without inventing
   await expect(page.getByRole('searchbox', { name: 'Search React documentation' })).toBeFocused();
   await expect(results).toBeHidden();
 
-  await page.getByLabel('Theme').selectOption('dark');
+  await page.getByLabel('Theme', { exact: true }).selectOption('dark');
   await expect(page.locator('html')).toHaveAttribute('data-vf-theme', 'dark');
   await page.getByRole('navigation', { name: 'Documentation' })
     .getByRole('link', { name: 'Button API' }).click();
@@ -550,7 +550,7 @@ test('React Divider examples demonstrate configurable vertical text direction', 
 test('Divider works in dark theme, forced colors, narrow RTL layout and SSR without JS', async ({ page, browser }) => {
   await page.setViewportSize({ width: 320, height: 720 });
   await page.goto('/next/react/components/divider/');
-  await page.getByLabel('Theme').selectOption('dark');
+  await page.getByLabel('Theme', { exact: true }).selectOption('dark');
   await page.evaluate(() => { document.documentElement.dir = 'rtl'; });
   await page.emulateMedia({ forcedColors: 'active' });
   await expect(page.getByRole('heading', { level: 1, name: 'Divider' })).toBeVisible();
@@ -649,7 +649,7 @@ test('React Layout at 320px / 200% text is readable in RTL, dark theme and force
   await page.setViewportSize({ width: 320, height: 720 });
   await page.goto('/next/react/components/layout/');
   await expect(page.locator('html')).toHaveAttribute('data-vf-react-hydrated', 'true');
-  await page.getByLabel('Theme').selectOption('dark');
+  await page.getByLabel('Theme', { exact: true }).selectOption('dark');
   await expect(page.locator('html')).toHaveAttribute('data-vf-theme', 'dark');
   await page.evaluate(() => { document.documentElement.style.fontSize = '200%'; document.documentElement.dir = 'rtl'; });
   await page.emulateMedia({ forcedColors: 'active' });
@@ -793,7 +793,7 @@ test('React Typography remains readable at 320px, 200 percent text, RTL and forc
   await page.setViewportSize({ width: 320, height: 720 });
   await page.goto('/next/react/components/text/');
   await expect(page.locator('html')).toHaveAttribute('data-vf-react-hydrated', 'true');
-  await page.getByLabel('Theme').selectOption('dark');
+  await page.getByLabel('Theme', { exact: true }).selectOption('dark');
   await page.evaluate(() => {
     document.documentElement.dir = 'rtl';
     document.documentElement.style.fontSize = '200%';
@@ -957,7 +957,7 @@ test('One-import createSvgIcon produces reusable JSX shapes with defaults and th
   await expect(plain).not.toHaveAttribute('tabindex', '0');
   const custom = svgs.nth(1);
   await expect(custom).toHaveAttribute('data-vf-size', 'lg');
-  await expect(custom).toHaveAttribute('style', /color:var\(--vf-color-accent-background\)/);
+  await expect(custom).toHaveAttribute('style', /color:\s*var\(--vf-color-accent-background\)/);
   const customColors = await custom.evaluate((element) => ({
     own: getComputedStyle(element).color,
     parent: getComputedStyle(element.parentElement).color,
@@ -1216,7 +1216,7 @@ test('Text specimen examples retain semantics and reflow at narrow width with da
   await page.setViewportSize({ width: 320, height: 760 });
   await page.goto('/next/react/components/text/');
   await expect(page.locator('html')).toHaveAttribute('data-vf-react-hydrated', 'true');
-  await page.getByLabel('Theme').selectOption('dark');
+  await page.getByLabel('Theme', { exact: true }).selectOption('dark');
   await page.evaluate(() => {
     document.documentElement.dir = 'rtl';
     document.documentElement.style.fontSize = '200%';
@@ -1295,7 +1295,7 @@ test('React Avatar guide shows initials, native photo, failed-image fallback and
 test('Avatar documentation supports no-JS SSR and narrow RTL high-contrast layout', async ({ page, browser }) => {
   await page.setViewportSize({ width: 320, height: 720 });
   await page.goto('/next/react/components/avatar/');
-  await page.getByLabel('Theme').selectOption('dark');
+  await page.getByLabel('Theme', { exact: true }).selectOption('dark');
   await page.evaluate(() => { document.documentElement.dir = 'rtl'; });
   await page.emulateMedia({ forcedColors: 'active' });
   await expect(page.getByRole('heading', { level: 1, name: 'Avatar' })).toBeVisible();
