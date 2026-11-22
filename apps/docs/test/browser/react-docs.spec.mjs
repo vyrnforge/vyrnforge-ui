@@ -987,7 +987,6 @@ test('React Icon colors use inherited semantic tokens and raw SVG JSX remains na
   await colorPreview.scrollIntoViewIfNeeded();
   const swatches = colorPreview.contentFrame().locator('svg[data-vf-icon]');
   await expect(swatches).toHaveCount(4);
-  const roles = ['text', 'accent', 'muted', 'danger'];
   const expectedTokens = ['text', 'accent-background', 'text-muted', 'danger-border'];
   for (const [index, svg] of (await swatches.all()).entries()) {
     const token = expectedTokens[index];
@@ -999,7 +998,6 @@ test('React Icon colors use inherited semantic tokens and raw SVG JSX remains na
     expect(actual.icon).toBe(actual.label);
     await expect(svg.locator('..').locator('[data-vf-text]')).toHaveText(['Default', 'Accent', 'Muted', 'Danger'][index]);
   }
-  expect(roles).toEqual(['text', 'accent', 'muted', 'danger']);
   const accent = colorPreview.contentFrame().locator('svg[data-vf-icon]').nth(1);
   const light = await accent.evaluate((element) => getComputedStyle(element).color);
   await colorPreview.contentFrame().locator('html').evaluate((element) => {
