@@ -212,9 +212,12 @@ describe('React Typography uses Native Web contracts for Text, Code and Kbd', ()
       expect(example.source).toContain(`from '@vyrnforge/react/${id}'`);
       for (const name of imports) expect(example.source).toContain(`<${name}`);
       expect(example.source).not.toContain("@vyrnforge/web/styles/");
+      expect(example.source).toContain("from '@vyrnforge/react/text'");
+      expect(example.source).toContain('<Text as="p">');
       if (id === 'code') {
         expect(example.source).not.toContain('<section>');
-        expect(example.source).toContain('<>');
+        expect(example.source).toContain("from '@vyrnforge/react/layout'");
+        expect(example.source).toContain('<Flow gap="sm">');
       }
       const transformed = await transform(example.source, { loader: 'tsx', format: 'esm', jsx: 'automatic', target: 'es2022' });
       expect(transformed.code).toContain(`@vyrnforge/react/${id}`);
