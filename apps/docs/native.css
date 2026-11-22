@@ -1067,4 +1067,89 @@
       outline: 1px solid CanvasText;
     }
   }
+
+  /* These classes style docs-only interactive previews, not public components.
+     Actual appearance is driven by shared --vf-* Web semantic tokens. */
+  .vf-docs-customization-preview {
+    background: var(--vf-color-surface);
+    border: 1px solid var(--vf-color-border);
+    border-radius: var(--vf-surface-radius);
+    color: var(--vf-color-text);
+    min-inline-size: 0;
+    padding: var(--vf-space-xl);
+  }
+
+  .vf-docs-customization-preview h3 {
+    color: var(--vf-color-text);
+  }
+
+  .vf-docs-customization-code {
+    background: var(--vf-color-surface-subtle);
+    border: 1px solid var(--vf-color-border);
+    border-radius: var(--vf-surface-radius);
+    min-inline-size: 0;
+    overflow: hidden;
+    padding: var(--vf-space-sm);
+  }
+
+  .vf-docs-customization-code > [data-vf-flow] {
+    padding-inline: var(--vf-space-sm);
+  }
+
+  .vf-docs-customization-code pre {
+    margin: var(--vf-space-sm) 0 0;
+  }
+
+  .vf-docs-customization-copy-status:empty {
+    display: none;
+  }
+
+  .vf-docs-customization-copy-status {
+    color: var(--vf-color-text-muted);
+    display: block;
+    font-size: var(--vf-font-size-xs);
+    padding: var(--vf-space-xs) var(--vf-space-sm);
+  }
+
+  .vf-docs-customization-swatches {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+
+  .vf-docs-customization-swatches > li {
+    border: 1px solid var(--vf-color-border);
+    border-radius: var(--vf-surface-radius);
+    display: flex;
+    flex-direction: column;
+    gap: var(--vf-space-xs);
+    min-inline-size: 0;
+    overflow-wrap: anywhere;
+    padding: var(--vf-space-sm);
+  }
+
+  .vf-docs-customization-swatches > li > code {
+    color: var(--vf-color-text-muted);
+    font-size: var(--vf-font-size-xs);
+    overflow-wrap: anywhere;
+  }
+
+  .vf-docs-customization-swatch {
+    border: 1px solid var(--vf-color-border);
+    border-radius: var(--vf-control-radius);
+    display: block;
+    min-block-size: 2.75rem;
+  }
+
+  @media (forced-colors: active) {
+    .vf-docs-customization-preview,
+    .vf-docs-customization-code,
+    .vf-docs-customization-swatches > li,
+    .vf-docs-customization-swatch {
+      border-color: CanvasText;
+    }
+    .vf-docs-customization-swatch {
+      forced-color-adjust: auto;
+    }
+  }
 }
