@@ -4700,9 +4700,10 @@ export type ToggleGroupType = 'single' | 'multiple';
 
 // @public (undocumented)
 export const tokens: Readonly<{
-    color: Readonly<Record<"primary" | "secondary" | "accent" | "danger" | "text" | "muted" | "subtle" | "onAccent" | "accentHover" | "accentPressed" | "accentSubtle" | "dangerBackground" | "background" | "surface" | "surfaceSubtle" | "surfaceHover" | "border" | "borderStrong" | "focus" | "disabledText" | "disabledBackground", `var(--vf-${string})`>>;
+    color: Readonly<Record<"primary" | "secondary" | "accent" | "danger" | "text" | "muted" | "subtle" | "onAccent" | "accentHover" | "accentPressed" | "accentSubtle" | "accentSubtleHover" | "dangerBackground" | "background" | "surface" | "surfaceSubtle" | "surfaceHover" | "surfacePressed" | "border" | "borderStrong" | "borderRequired" | "focus" | "disabledText" | "disabledBackground" | "disabledBorder", `var(--vf-${string})`>>;
     space: Readonly<{
         none: `var(--vf-${string})`;
+        '2xs': `var(--vf-${string})`;
         xs: `var(--vf-${string})`;
         sm: `var(--vf-${string})`;
         md: `var(--vf-${string})`;
@@ -4710,6 +4711,12 @@ export const tokens: Readonly<{
         xl: `var(--vf-${string})`;
         '2xl': `var(--vf-${string})`;
         '3xl': `var(--vf-${string})`;
+    }>;
+    fontFamily: Readonly<{
+        sans: `var(--vf-${string})`;
+        serif: `var(--vf-${string})`;
+        mono: `var(--vf-${string})`;
+        display: `var(--vf-${string})`;
     }>;
     fontSize: Readonly<{
         xs: `var(--vf-${string})`;
@@ -4719,6 +4726,29 @@ export const tokens: Readonly<{
         xl: `var(--vf-${string})`;
         '2xl': `var(--vf-${string})`;
         '3xl': `var(--vf-${string})`;
+        '4xl': `var(--vf-${string})`;
+        '5xl': `var(--vf-${string})`;
+        '6xl': `var(--vf-${string})`;
+    }>;
+    fontWeight: Readonly<{
+        regular: `var(--vf-${string})`;
+        medium: `var(--vf-${string})`;
+        semibold: `var(--vf-${string})`;
+        bold: `var(--vf-${string})`;
+    }>;
+    lineHeight: Readonly<{
+        none: `var(--vf-${string})`;
+        tight: `var(--vf-${string})`;
+        compact: `var(--vf-${string})`;
+        normal: `var(--vf-${string})`;
+        relaxed: `var(--vf-${string})`;
+    }>;
+    letterSpacing: Readonly<{
+        tighter: `var(--vf-${string})`;
+        tight: `var(--vf-${string})`;
+        normal: `var(--vf-${string})`;
+        wide: `var(--vf-${string})`;
+        wider: `var(--vf-${string})`;
     }>;
     radius: Readonly<{
         surface: `var(--vf-${string})`;
@@ -4728,6 +4758,21 @@ export const tokens: Readonly<{
         sm: `var(--vf-${string})`;
         md: `var(--vf-${string})`;
         lg: `var(--vf-${string})`;
+    }>;
+    control: Readonly<{
+        heightSm: `var(--vf-${string})`;
+        heightMd: `var(--vf-${string})`;
+        heightLg: `var(--vf-${string})`;
+        fontFamily: `var(--vf-${string})`;
+        fontSize: `var(--vf-${string})`;
+        fontWeight: `var(--vf-${string})`;
+    }>;
+    motion: Readonly<{
+        controlDuration: `var(--vf-${string})`;
+        loadingSpinDuration: `var(--vf-${string})`;
+        loadingShimmerDuration: `var(--vf-${string})`;
+        loadingEasing: `var(--vf-${string})`;
+        standardEasing: `var(--vf-${string})`;
     }>;
 }>;
 
