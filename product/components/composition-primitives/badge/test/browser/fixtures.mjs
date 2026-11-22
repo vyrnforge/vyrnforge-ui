@@ -13,7 +13,7 @@ export const browserFixture = {
       .replace(/^@import\s+["'][^"']+["'];\s*$/gm, '');
     await writeFile(path.join(target, 'badge.css'), tokens + '\n' + badge +
       '\nmain{display:flex;flex-wrap:wrap;align-items:center;gap:var(--vf-space-xs);min-inline-size:0}' +
-      '\nmain>h1{flex-basis:100%}');
+      '\nmain>h1{flex-basis:100%;overflow-wrap:anywhere;min-inline-size:0}');
     const web = [
       '<span id="text" data-vf-badge data-vf-badge-appearance="text" data-vf-badge-tone="neutral" data-vf-badge-size="md" data-vf-badge-shape="pill" data-vf-badge-variant="subtle">Draft</span>',
       '<span id="accent" data-vf-badge data-vf-badge-appearance="text" data-vf-badge-tone="accent" data-vf-badge-size="sm" data-vf-badge-shape="rounded" data-vf-badge-variant="subtle">New</span>',
