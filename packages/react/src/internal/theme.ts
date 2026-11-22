@@ -1,5 +1,5 @@
 import { createElement, forwardRef } from 'react';
-import type { ComponentPropsWithoutRef, ComponentPropsWithRef, CSSProperties, ReactElement } from 'react';
+import type { CSSProperties, HTMLAttributes, ReactElement } from 'react';
 
 /**
  * React-friendly names for the existing public Web semantic color variables.
@@ -94,11 +94,12 @@ export type ThemeName = 'light' | 'dark' | 'system' | (string & {});
 export type ThemeElement = 'div' | 'span' | 'section' | 'article' | 'main' |
   'aside' | 'header' | 'footer' | 'nav';
 
-export type ThemeScopeProps<Element extends ThemeElement = ThemeElement> =
-  Element extends ThemeElement
-    ? { as?: Element; theme?: ThemeName; colors?: ThemeColorOverrides } &
-      Omit<ComponentPropsWithoutRef<Element>, 'as' | 'color'>
-    : never;
+export interface ThemeScopeProps extends Omit<HTMLAttributes<HTMLElement>, 'color'> {
+  /** Native semantic host; styling remains completely external to this scope. */
+  as?: ThemeElement;
+  theme?: ThemeName;
+  colors?: ThemeColorOverrides;
+}
 
 const makeElement = createElement as (host: ThemeElement, props: object) => ReactElement;
 
@@ -106,7 +107,7 @@ const makeElement = createElement as (host: ThemeElement, props: object) => Reac
  * A native DOM theme scope, not a provider or theme runtime.
  * CSS (including custom [data-vf-theme] rules) remains the source of truth.
  */
-const ThemeScopeImpl = forwardRef<HTMLElement, ThemeScopeProps<ThemeElement>>(function ThemeScope(
+export const ThemeScope = forwardRef<HTMLElement, ThemeScopeProps>(function ThemeScope(
   { as = 'div', theme, colors: overrides, style, ...nativeProps },
   ref
 ) {
@@ -124,6 +125,3 @@ const ThemeScopeImpl = forwardRef<HTMLElement, ThemeScopeProps<ThemeElement>>(fu
   });
 });
 
-export const ThemeScope = ThemeScopeImpl as <Element extends ThemeElement = 'div'>(
-  props: ThemeScopeProps<Element> & { ref?: ComponentPropsWithRef<Element>['ref'] }
-) => ReactElement | null;
