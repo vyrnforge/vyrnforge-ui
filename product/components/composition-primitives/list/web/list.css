@@ -5,11 +5,13 @@
     --_vf-list-item-pad-block: calc(var(--_vf-density-layout-gap, var(--vf-space-md)) * 0.5);
     --_vf-list-item-pad-inline: var(--vf-space-md);
     --_vf-list-gap: 0;
+    --_vf-list-indent: 0px;
+    --_vf-list-marker-pad: 0px;
     box-sizing: border-box;
     list-style: none;
     margin-block: 0;
     min-inline-size: 0;
-    padding-inline-start: 0;
+    padding-inline-start: calc(var(--_vf-list-indent) + var(--_vf-list-marker-pad));
   }
 
   :where([data-vf-list][data-vf-list-size="sm"]) {
@@ -21,6 +23,15 @@
     --_vf-list-item-pad-block: calc(var(--_vf-density-layout-gap, var(--vf-space-md)) * 0.75);
     --_vf-list-item-pad-inline: var(--vf-space-lg);
   }
+
+  :where([data-vf-list][data-vf-list-gutter="none"]) { --_vf-list-item-pad-inline: 0px; }
+  :where([data-vf-list][data-vf-list-gutter="sm"]) { --_vf-list-item-pad-inline: var(--vf-space-sm); }
+  :where([data-vf-list][data-vf-list-gutter="md"]) { --_vf-list-item-pad-inline: var(--vf-space-md); }
+  :where([data-vf-list][data-vf-list-gutter="lg"]) { --_vf-list-item-pad-inline: var(--vf-space-lg); }
+
+  :where([data-vf-list][data-vf-list-indent="sm"]) { --_vf-list-indent: var(--vf-space-sm); }
+  :where([data-vf-list][data-vf-list-indent="md"]) { --_vf-list-indent: var(--vf-space-md); }
+  :where([data-vf-list][data-vf-list-indent="lg"]) { --_vf-list-indent: var(--vf-space-lg); }
 
   :where([data-vf-list][data-vf-list-spacing="sm"]) { --_vf-list-gap: var(--vf-space-sm); }
   :where([data-vf-list][data-vf-list-spacing="md"]) { --_vf-list-gap: var(--vf-space-md); }
@@ -42,7 +53,7 @@
   }
 
   :where([data-vf-list][data-vf-list-marker="auto"]) {
-    padding-inline-start: var(--vf-space-lg);
+    --_vf-list-marker-pad: var(--vf-space-lg);
   }
 
   :where(ul[data-vf-list][data-vf-list-marker="auto"]) { list-style-type: disc; }
@@ -50,6 +61,36 @@
 
   :where([data-vf-list][data-vf-list-marker="auto"] > [data-vf-list-item]) {
     display: list-item;
+  }
+
+  /* Inset rules use gutter, not an assumed leading-icon width. */
+  :where([data-vf-list][data-vf-list-divider-inset="gutter"][data-vf-list-variant="divided"] > [data-vf-list-item] + [data-vf-list-item],
+    [data-vf-list][data-vf-list-divider-inset="gutter"][data-vf-list-variant="bordered"] > [data-vf-list-item] + [data-vf-list-item]) {
+    border-block-start: 0;
+    position: relative;
+  }
+
+  :where([data-vf-list][data-vf-list-divider-inset="gutter"][data-vf-list-variant="divided"] > [data-vf-list-item] + [data-vf-list-item],
+    [data-vf-list][data-vf-list-divider-inset="gutter"][data-vf-list-variant="bordered"] > [data-vf-list-item] + [data-vf-list-item])::before {
+    border-block-start: 1px solid var(--vf-color-border);
+    content: '';
+    inset-block-start: 0;
+    inset-inline: var(--_vf-list-item-pad-inline);
+    pointer-events: none;
+    position: absolute;
+  }
+
+  /* Native headings stay outside ul/ol; sticky positioning is opt in. */
+  :where([data-vf-list-subheader]) {
+    background-color: var(--vf-color-surface);
+    color: var(--vf-color-text);
+    padding-block: var(--vf-space-sm);
+    padding-inline: var(--vf-space-md);
+  }
+  :where([data-vf-list-subheader][data-vf-list-subheader-sticky]) {
+    inset-block-start: var(--vf-list-sticky-offset, 0px);
+    position: sticky;
+    z-index: 1;
   }
 
   :where([data-vf-list-item]) {
@@ -79,6 +120,8 @@
   }
 
   @media (forced-colors: active) {
+    :where([data-vf-list][data-vf-list-divider-inset="gutter"] > [data-vf-list-item] + [data-vf-list-item])::before { border-color: CanvasText; }
+    :where([data-vf-list-subheader]) { background-color: Canvas; color: CanvasText; }
     :where([data-vf-list][data-vf-list-variant="bordered"],
       [data-vf-list][data-vf-list-variant="divided"] > [data-vf-list-item] + [data-vf-list-item],
       [data-vf-list][data-vf-list-variant="bordered"] > [data-vf-list-item] + [data-vf-list-item]) {

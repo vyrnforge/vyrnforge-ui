@@ -2229,6 +2229,15 @@ export interface ListItemProps extends Omit<ComponentPropsWithoutRef<'li'>, 'rol
 }
 
 // @public (undocumented)
+export type ListDividerInset = 'none' | 'gutter';
+
+// @public
+export type ListGutter = 'auto' | 'none' | 'sm' | 'md' | 'lg';
+
+// @public
+export type ListIndent = 'none' | 'sm' | 'md' | 'lg';
+
+// @public
 export type ListMarker = 'none' | 'auto';
 
 // @public
@@ -2237,6 +2246,12 @@ export interface ListProps extends Omit<ComponentPropsWithoutRef<'ol'>, 'role' |
     as?: ListElement;
     // (undocumented)
     children?: ReactNode;
+    // (undocumented)
+    dividerInset?: ListDividerInset;
+    // (undocumented)
+    gutter?: ListGutter;
+    // (undocumented)
+    indent?: ListIndent;
     // (undocumented)
     marker?: ListMarker;
     // (undocumented)

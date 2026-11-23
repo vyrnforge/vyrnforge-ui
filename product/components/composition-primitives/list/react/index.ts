@@ -7,6 +7,12 @@ export type ListVariant = 'plain' | 'divided' | 'bordered';
 export type ListSize = 'sm' | 'md' | 'lg';
 export type ListSpacing = 'none' | 'sm' | 'md' | 'lg';
 export type ListMarker = 'none' | 'auto';
+/** Inline row padding; auto follows row size. */
+export type ListGutter = 'auto' | 'none' | 'sm' | 'md' | 'lg';
+/** Logical inline-start indentation for nested lists. */
+export type ListIndent = 'none' | 'sm' | 'md' | 'lg';
+/** Where separators begin and end. */
+export type ListDividerInset = 'none' | 'gutter';
 
 /** Native list properties. The `start` attribute is meaningful only when `as="ol"`. */
 export interface ListProps extends Omit<ComponentPropsWithoutRef<'ol'>, 'role' | 'children'> {
@@ -15,6 +21,9 @@ export interface ListProps extends Omit<ComponentPropsWithoutRef<'ol'>, 'role' |
   size?: ListSize;
   spacing?: ListSpacing;
   marker?: ListMarker;
+  gutter?: ListGutter;
+  indent?: ListIndent;
+  dividerInset?: ListDividerInset;
   children?: ReactNode;
 }
 
@@ -28,7 +37,8 @@ export interface ListItemProps extends Omit<ComponentPropsWithoutRef<'li'>, 'rol
 /** React List: native structure, no local interaction state or focus controller. */
 export const List = forwardRef<HTMLUListElement | HTMLOListElement, ListProps>(
   function List({ as: Host = 'ul', variant = 'plain', size = 'md', spacing = 'none',
-    marker = 'none', children, ...nativeProps }, ref) {
+    marker = 'none', gutter = 'auto', indent = 'none', dividerInset = 'none',
+    children, ...nativeProps }, ref) {
     return createElement(Host, {
       ...nativeProps,
       ref,
@@ -38,6 +48,9 @@ export const List = forwardRef<HTMLUListElement | HTMLOListElement, ListProps>(
       'data-vf-list-size': size,
       'data-vf-list-spacing': spacing,
       'data-vf-list-marker': marker,
+      'data-vf-list-gutter': gutter,
+      'data-vf-list-indent': indent,
+      'data-vf-list-divider-inset': dividerInset,
     }, children);
   }
 );
