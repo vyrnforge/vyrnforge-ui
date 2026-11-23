@@ -2,7 +2,7 @@
   "schemaVersion": 3,
   "minimumRunsPerWorkflow": 0,
   "minimumSuccessfulRunsPerWorkflow": 0,
-  "maxDeletionsPerRun": 500,
+  "maxDeletionsPerRun": 200,
   "preserveSuccessfulCategories": [],
   "mergedPullRequest": {
     "preserveSuccessfulRunsPerWorkflow": 1,
