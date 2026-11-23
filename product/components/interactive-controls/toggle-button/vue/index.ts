@@ -16,6 +16,7 @@ export const ToggleButton = defineComponent({
     pressed: { type: Boolean as PropType<boolean | undefined>, default: undefined },
     defaultPressed: { type: Boolean, default: false },
     size: { type: String as PropType<'sm' | 'md' | 'lg'>, default: 'md' },
+    iconOnly: { type: Boolean, default: false },
   },
   emits: ['update:pressed', 'pressedChange'],
   setup(props, { attrs, emit, slots }) {
@@ -30,6 +31,7 @@ export const ToggleButton = defineComponent({
         'data-vf-button': '',
         'data-vf-toggle-button': '',
         'data-vf-size': props.size,
+        'data-vf-icon-only': props.iconOnly ? '' : undefined,
         onClick: (event: MouseEvent) => {
           callClickListener(onClick, event);
           if (event.defaultPrevented || (event.currentTarget as HTMLButtonElement).disabled) return;

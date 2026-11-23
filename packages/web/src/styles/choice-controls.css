@@ -1,6 +1,7 @@
 @layer vyrnforge.components {
   :where([data-vf-toggle-group-root], [data-vf-segmented-control-root]) {
     display: inline-flex;
+    max-inline-size: 100%;
     gap: 1px;
     padding: 2px;
     border: 1px solid var(--vf-color-border);
@@ -9,17 +10,53 @@
   }
 
   :where([data-vf-toggle-group-item], [data-vf-segmented-control-item]) {
-    min-block-size: 2.25rem;
+    --_vf-choice-item-size: var(--_vf-density-control-height-md, var(--vf-control-height-md));
+    align-items: center;
+    box-sizing: border-box;
+    display: inline-flex;
+    justify-content: center;
+    min-block-size: var(--_vf-choice-item-size);
     padding: 0 var(--vf-space-md);
     border: 0;
     border-radius: calc(var(--vf-control-radius) - 2px);
     background: transparent;
     color: inherit;
+    cursor: pointer;
+    font: inherit;
+    text-align: center;
+  }
+
+  /* The same square, density-derived target as Button, without duplicating
+     its native action semantics or creating an icon-specific widget. */
+  :where([data-vf-toggle-group-item][data-vf-icon-only], [data-vf-segmented-control-item][data-vf-icon-only]) {
+    --_vf-choice-icon-size: max(2rem, var(--_vf-choice-item-size));
+    block-size: var(--_vf-choice-icon-size);
+    flex: 0 0 auto;
+    inline-size: var(--_vf-choice-icon-size);
+    min-inline-size: var(--_vf-choice-icon-size);
+    padding: 0;
+  }
+
+  :where([data-vf-toggle-group-item]:hover:not(:disabled)) {
+    background: var(--vf-color-surface-hover);
   }
 
   :where([data-vf-toggle-group-item][aria-pressed='true'], [data-vf-segmented-control-item][aria-checked='true']) {
     background: var(--vf-color-surface);
     box-shadow: 0 0 0 1px var(--vf-color-border);
+  }
+
+  :where([data-vf-toggle-group-item][aria-pressed='true']:not(:disabled)) {
+    background: var(--vf-color-accent-subtle);
+    box-shadow: inset 0 0 0 1px var(--vf-color-accent-background);
+    color: var(--vf-color-accent-background-hover);
+  }
+
+  :where([data-vf-toggle-group-item]:disabled) {
+    background: var(--vf-color-disabled-background);
+    box-shadow: none;
+    color: var(--vf-color-disabled-foreground);
+    cursor: not-allowed;
   }
 
   :where([data-vf-toggle-group-item], [data-vf-segmented-control-item]):focus-visible {
@@ -28,6 +65,17 @@
   }
 
   @media (forced-colors: active) {
+    :where([data-vf-toggle-group-item][aria-pressed='true']:not(:disabled)) {
+      background: Highlight;
+      box-shadow: none;
+      color: HighlightText;
+      outline: 1px solid Highlight;
+      outline-offset: -1px;
+    }
+    :where([data-vf-toggle-group-item]:disabled) {
+      background: ButtonFace;
+      color: GrayText;
+    }
     :where([data-vf-toggle-group-item][aria-pressed='true'], [data-vf-segmented-control-item][aria-checked='true']) {
       outline: 1px solid Highlight;
       outline-offset: -1px;
