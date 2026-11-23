@@ -5,7 +5,7 @@ import { NativeSelect } from '@vyrnforge/react/native-select';
 import { Flow, AutoGrid } from '@vyrnforge/react/layout';
 import { Text } from '@vyrnforge/react/text';
 import { ThemeScope } from '@vyrnforge/react';
-import { UtilitySections } from './react-utility-content.mjs';
+import { UtilitySections, renderUtilityInline } from './react-utility-content.mjs';
 
 const durations = [['default', 'Default · 120ms'], ['fast', 'Custom · 80ms'], ['none', 'Custom · 0ms']];
 const easings = [['standard', 'Standard'], ['linear', 'Linear override']];
@@ -55,7 +55,7 @@ export function MotionUtility({ guide, links }) {
         h(Text, { as: 'h1', variant: 'heading-lg' }, guide.title),
         h(Text, { as: 'p', variant: 'body-lg' },
           'Shared CSS-first transitions, timing and reduced-motion behavior across components.'),
-        ...guide.intro.map((block, i) => h(Text, { as: 'p', key: i }, block.text))),
+        ...guide.intro.map((block, i) => h(Text, { as: 'p', key: i }, ...renderUtilityInline(block.text)))),
       h(Flow, { as: 'section', gap: 'md', 'aria-labelledby': 'motion-playground-title' },
         h(Text, { as: 'h2', variant: 'heading-md', id: 'motion-playground-title' },
           'Interactive motion playground'),
