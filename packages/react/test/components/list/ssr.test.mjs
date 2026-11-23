@@ -58,3 +58,20 @@ test('SSR rendering is deterministic with custom native attrs and no generated I
   expect(first).toContain('data-row-id="1"');
   expect(first).not.toMatch(/id=":|data-reactroot|useId/);
 });
+
+test('gutter, nested list indent and inset separator preserve native list semantics and SSR', () => {
+  const tree = h(List, { variant: 'divided', gutter: 'none', indent: 'lg',
+    dividerInset: 'gutter', 'aria-label': 'Deployment' },
+    h(ListItem, null, 'Root', h(List, { marker: 'auto',
+      indent: 'md', 'aria-label': 'Nested stages' }, h(ListItem, null, 'Stage 1'))),
+    h(ListItem, null, 'Finish'));
+  const first = renderToStaticMarkup(tree);
+  expect(first).toBe(renderToStaticMarkup(tree));
+  expect(first).toContain('data-vf-list-gutter="none"');
+  expect(first).toContain('data-vf-list-indent="lg"');
+  expect(first).toContain('data-vf-list-indent="md"');
+  expect(first).toContain('data-vf-list-divider-inset="gutter"');
+  expect((first.match(/<ul\b/g) ?? [])).toHaveLength(2);
+  expect((first.match(/<li\b/g) ?? [])).toHaveLength(3);
+  expect(first).not.toMatch(/role="(tree|listbox|option)"|aria-selected|tabindex=/i);
+});

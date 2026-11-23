@@ -1,0 +1,13 @@
+{
+  "id": "list/gutters",
+  "title": "Gutters, dividers and inset rules",
+  "description": "Size-aware inline gutters, edge-to-edge rows, inset separators and the existing Divider between separate lists",
+  "defaultFramework": "react",
+  "frameworks": {
+    "react": {
+      "label": "React",
+      "language": "tsx",
+      "source": "react.tsx"
+    }
+  }
+}

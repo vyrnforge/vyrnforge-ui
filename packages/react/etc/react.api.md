@@ -2213,7 +2213,16 @@ export type ListboxSelectionMode = 'single' | 'multiple';
 export type ListboxValue = string | string[];
 
 // @public
+export type ListDividerInset = 'none' | 'gutter';
+
+// @public
 export type ListElement = 'ul' | 'ol';
+
+// @public
+export type ListGutter = 'auto' | 'none' | 'sm' | 'md' | 'lg';
+
+// @public
+export type ListIndent = 'none' | 'sm' | 'md' | 'lg';
 
 // @public
 export const ListItem: ForwardRefExoticComponent<ListItemProps & RefAttributes<HTMLLIElement>>;
@@ -2237,6 +2246,12 @@ export interface ListProps extends Omit<ComponentPropsWithoutRef<'ol'>, 'role' |
     as?: ListElement;
     // (undocumented)
     children?: ReactNode;
+    // (undocumented)
+    dividerInset?: ListDividerInset;
+    // (undocumented)
+    gutter?: ListGutter;
+    // (undocumented)
+    indent?: ListIndent;
     // (undocumented)
     marker?: ListMarker;
     // (undocumented)

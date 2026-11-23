@@ -156,6 +156,8 @@ function navigation(view, links, topic) {
     { label: 'Layout & Structure', items: [
       { id: 'layout', title: 'Layout', href: links.layout },
       { id: 'divider', title: 'Divider', href: links.divider.guide },
+    ] },
+    { label: 'Collections', items: [
       { id: 'list', title: 'List', href: links.list.guide },
     ] },
     { label: 'Media', items: [
@@ -590,7 +592,9 @@ function listExample(example, links) {
     h('iframe', { className: 'vf-docs-react-example-frame',
       title: 'React ' + example.title + ' List example',
       src: links.list.exampleBase + slug + '/', sandbox: 'allow-scripts',
-      loading: slug === 'rich' ? 'eager' : 'lazy' }),
+      loading: slug === 'rich' ? 'eager' : 'lazy',
+      style: { minBlockSize: slug === 'density' ? '30rem' :
+        slug === 'grouped' ? '19rem' : slug === 'nested' || slug === 'interactive' ? '18rem' : '14rem' } }),
     h('details', { className: 'vf-docs-source-disclosure' },
       h('summary', null, 'View React TSX source'),
       h('pre', { 'data-vf-code-block': '', tabIndex: 0 },
@@ -619,10 +623,13 @@ function listUsage(list, links) {
       guidePart(sections[2], [
         ...guideSubsections(list.sharedContent,
           ['When to use', 'Anatomy and reuse', 'Variants, sizing and spacing',
-            'Responsive and design constraints'], 'react-list-guidance'),
+            'Responsive and design constraints',
+            'Gutters, inset dividers and nesting', 'Grouped lists and sticky section headings',
+            'Interactive rows and density'], 'react-list-guidance'),
         ...guideSubsections(list.frameworkContent,
           ['Composition with existing VyrnForge components',
-           'React state and server rendering'], 'react-list-integration'),
+           'React state and server rendering',
+           'Extended React List examples'], 'react-list-integration'),
       ]),
       guidePart(sections[3], [
         ...guideBlocks(list.sharedContent, 'Accessibility and states'),

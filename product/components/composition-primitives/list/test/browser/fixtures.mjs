@@ -19,6 +19,7 @@ export const browserFixture = {
     }
     css.push('body {padding:1rem;font-family:sans-serif; margin:0;}');
     css.push('.list-specimen{max-inline-size:24rem;}');
+    css.push('.list-test-scroller{max-block-size:8rem;overflow-y:auto;max-inline-size:24rem;}');
     await writeFile(path.join(out, 'list.css'), css.join('\n'));
 
     const row = (name, suffix) =>
@@ -35,9 +36,18 @@ export const browserFixture = {
       '<ol id="steps" role="list" aria-label="Release steps" start="3" data-vf-list' +
       ' data-vf-list-variant="plain" data-vf-list-size="sm" data-vf-list-spacing="none"' +
       ' data-vf-list-marker="auto"><li data-vf-list-item><div data-vf-list-item-layout>' +
-      '<div data-vf-list-item-content>Build</div></div></li></ol></main>';
+      '<div data-vf-list-item-content>Build</div></div></li></ol>';
 
-    let body = web;
+    let body = web + '<section id="extra" aria-label="Grouped list specimens" tabindex="0" class="list-test-scroller">' +
+      '<h2 id="group-a" data-vf-list-subheader data-vf-list-subheader-sticky>Group A</h2>' +
+      '<ul id="nested-parent" role="list" aria-labelledby="group-a" data-vf-list data-vf-list-variant="divided" data-vf-list-divider-inset="gutter" data-vf-list-gutter="none" data-vf-list-size="md" data-vf-list-spacing="none" data-vf-list-marker="none" data-vf-list-indent="none">' +
+      '<li data-vf-list-item><div data-vf-list-item-layout><div data-vf-list-item-content>Root' +
+      '<ul role="list" aria-label="Nested children" data-vf-list data-vf-list-indent="lg" data-vf-list-gutter="sm" data-vf-list-variant="plain" data-vf-list-size="sm" data-vf-list-spacing="none" data-vf-list-marker="auto">' +
+      '<li data-vf-list-item><div data-vf-list-item-layout><div data-vf-list-item-content>Nested A</div></div></li>' +
+      '</ul></div></div></li><li data-vf-list-item><div data-vf-list-item-layout><div data-vf-list-item-content>Root B</div></div></li></ul>' +
+      '<h2 id="group-b" data-vf-list-subheader data-vf-list-subheader-sticky>Group B</h2>' +
+      '<ul role="list" aria-labelledby="group-b" data-vf-list><li data-vf-list-item>Final</li></ul>' +
+      '</section></main>';
     if (port === 'react') {
       const { createElement: h } = await import('react');
       const { renderToStaticMarkup } = await import('react-dom/server');
@@ -53,7 +63,19 @@ export const browserFixture = {
           variant: 'divided' }, item('Alex Chen', 'AC'), item('Maria García', 'MG')),
         h(List, { as: 'ol', id: 'steps', start: 3, marker: 'auto',
           size: 'sm', 'aria-label': 'Release steps' },
-        h(ListItem, null, 'Build'))));
+        h(ListItem, null, 'Build')),
+        h('section', { id: 'extra', className: 'list-test-scroller',
+          'aria-label': 'Grouped list specimens', tabIndex: 0 },
+          h('h2', { id: 'group-a', 'data-vf-list-subheader': '',
+            'data-vf-list-subheader-sticky': '' }, 'Group A'),
+          h(List, { id: 'nested-parent', 'aria-labelledby': 'group-a',
+            variant: 'divided', dividerInset: 'gutter', gutter: 'none' },
+            h(ListItem, null, 'Root', h(List, { 'aria-label': 'Nested children',
+              indent: 'lg', gutter: 'sm', size: 'sm', marker: 'auto' },
+              h(ListItem, null, 'Nested A'))), h(ListItem, null, 'Root B')),
+          h('h2', { id: 'group-b', 'data-vf-list-subheader': '',
+            'data-vf-list-subheader-sticky': '' }, 'Group B'),
+          h(List, { 'aria-labelledby': 'group-b' }, h(ListItem, null, 'Final')))));
     }
     await writeFile(path.join(out, port + '.html'),
       '<!doctype html><html lang="en" data-vf-density="comfortable"><head>' +

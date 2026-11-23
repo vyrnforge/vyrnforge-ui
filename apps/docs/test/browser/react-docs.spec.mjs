@@ -36,7 +36,8 @@ test('React pilot artifact is Product Graph-backed and SSR-rendered with public 
     frameworkSourcePath: 'product/components/composition-primitives/list/react/docs/index.md',
   });
   expect(manifest.list.examples.map((example) => example.id)).toEqual([
-    'list/actions', 'list/markers', 'list/rich',
+    'list/actions', 'list/density', 'list/grouped', 'list/gutters',
+    'list/interactive', 'list/markers', 'list/nested', 'list/rich',
   ]);
   for (const example of manifest.list.examples) {
     const slug = example.id.slice('list/'.length);
@@ -1891,7 +1892,7 @@ test('React Image guide uses shared native CSS, source-backed examples and a dis
 test('React List guide exposes rich semantic examples and a separate source-backed API', async ({ page }) => {
   await page.goto('/next/react/components/list/');
   await expect(page.locator('[data-vf-docs-react-list]')).toBeVisible();
-  await expect(page.locator('[data-vf-docs-react-list-example]')).toHaveCount(3);
+  await expect(page.locator('[data-vf-docs-react-list-example]')).toHaveCount(8);
 
   const rich = page.frameLocator('iframe[title="React Rich team directory List example"]');
   const people = rich.getByRole('list', { name: 'Project team' });
@@ -1907,9 +1908,34 @@ test('React List guide exposes rich semantic examples and a separate source-back
   await expect(actions.getByRole('list', { name: 'Saved reports' })).toBeVisible();
   await expect(actions.getByRole('button', { name: 'Unavailable' })).toBeDisabled();
 
+  const gutters = page.frameLocator('iframe[title="React Gutters, dividers and inset rules List example"]');
+  await expect(gutters.getByRole('list', { name: 'Edge-to-edge reports' }))
+    .toHaveAttribute('data-vf-list-gutter', 'none');
+
+  const density = page.frameLocator('iframe[title="React Density and three row sizes List example"]');
+  await expect(density.getByRole('list', { name: 'sm tasks' })).toBeVisible();
+  await density.getByRole('combobox', { name: 'Density' }).selectOption('compact');
+  await expect(density.locator('[data-vf-density="compact"]')).toHaveCount(1);
+
+  const nested = page.frameLocator('iframe[title="React Nested and collapsible lists List example"]');
+  await expect(nested.getByRole('list', { name: 'Frontend files' })).toBeVisible();
+  await nested.getByRole('button', { name: 'Frontend areas' }).click();
+  await expect(nested.getByRole('list', { name: 'Frontend files' })).toBeHidden();
+
+  const grouped = page.frameLocator('iframe[title="React Grouped lists and sticky headings List example"]');
+  await expect(grouped.getByRole('list', { name: 'Today' })).toBeVisible();
+  await expect(grouped.getByRole('heading', { name: 'Today' })).toHaveCSS('position', 'sticky');
+
+  const interactive = page.frameLocator('iframe[title="React Interactive checkbox and action rows List example"]');
+  await interactive.getByRole('checkbox', { name: 'Select Monthly report' }).check();
+  await expect(interactive.getByText('1 of 3 selected')).toBeVisible();
+  await interactive.getByRole('button', { name: 'Details for Monthly report' }).click();
+  await expect(interactive.getByText('Details requested for Monthly report')).toBeVisible();
+
   await page.goto('/next/react/api/components/list/');
   await expect(page.locator('[data-vf-docs-react-api="list"]')).toBeVisible();
   await expect(page.locator('[data-vf-docs-react-api="list"]')).toContainText('ListItemProps');
+  await expect(page.locator('[data-vf-docs-react-api="list"]')).toContainText('ListGutter');
 
   await page.route('**/assets/react-reference.js', (route) => route.abort());
   await page.reload();

@@ -1,0 +1,13 @@
+{
+  "id": "list/density",
+  "title": "Density and three row sizes",
+  "description": "Toggle inherited comfortable/compact density while keeping small, normal and large row sizes independent",
+  "defaultFramework": "react",
+  "frameworks": {
+    "react": {
+      "label": "React",
+      "language": "tsx",
+      "source": "react.tsx"
+    }
+  }
+}

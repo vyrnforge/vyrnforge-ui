@@ -1,0 +1,13 @@
+{
+  "id": "list/interactive",
+  "title": "Interactive checkbox and action rows",
+  "description": "Compact native-checkbox rows with separate named actions and application-owned selection state",
+  "defaultFramework": "react",
+  "frameworks": {
+    "react": {
+      "label": "React",
+      "language": "tsx",
+      "source": "react.tsx"
+    }
+  }
+}

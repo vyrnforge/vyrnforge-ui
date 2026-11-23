@@ -25,3 +25,17 @@ Leading/body/trailing regions wrap at narrow widths without reordering the DOM. 
 ## Native semantic baseline
 
 The shared CSS works on authored `<ul data-vf-list data-vf-list-variant="divided" data-vf-list-size="md" data-vf-list-spacing="none" data-vf-list-marker="none" role="list">` containing `<li data-vf-list-item>` elements with `data-vf-list-item-layout`, `data-vf-list-item-leading`, `data-vf-list-item-content` and `data-vf-list-item-trailing`. This is a structural baseline for the shared framework-neutral contract, not an additional Native Web documentation rollout.
+
+## Gutters, inset dividers and nesting
+
+`gutter="auto"` keeps size-derived inline padding; `gutter="none"` gives edge-to-edge rows; `sm`, `md`, `lg` use shared tokens. `dividerInset="gutter"` draws divided/bordered row rules inside the current inline gutter, not behind an inferred avatar width. `indent="none|sm|md|lg"` adds logical inline-start padding to the List host, even with native ordered/unordered markers and RTL.
+
+Nested `ul`/`ol` belong inside the parent `li`. Use `List` inside `ListItem` to express hierarchy; provide a label when nesting context alone is insufficient. Nesting is **not** Tree navigation, automatic checkbox propagation or selection state. If expandable, reuse DisclosureTrigger/Panel and put the nested List in the panel.
+
+## Grouped lists and sticky section headings
+
+Author a semantic `section` with a real `h2`/`h3` **outside** its `ul`/`ol`, and associate the List with `aria-labelledby`. Shared Web CSS exposes `data-vf-list-subheader` to style native headings, and `data-vf-list-subheader-sticky` to opt into `position: sticky`. The public CSS offset `--vf-list-sticky-offset` defaults to `0px`; consumers set it for their own fixed headers. Stickiness is constrained by the scroll ancestor and section; clipping/overflow can disable it. Never emit a bare heading among direct ul/ol children or introduce artificial group roles.
+
+## Interactive rows and density
+
+Use existing Checkbox, Button, Link, and Disclosure controls inside ListItem. Each retains its own native naming, focus, keyboard activation and state. ListItem remains noninteractive and does not implement selection, roving focus or navigation. Inherited `data-vf-density="comfortable|compact"` affects block rhythm independently of `size="sm|md|lg"` and explicit gutters. Compact is not permission to shrink interactive targets below usable sizes. Verify at 320 CSS px, zoom, keyboard, RTL, dark/light and forced colors.

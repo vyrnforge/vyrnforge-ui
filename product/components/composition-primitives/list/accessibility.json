@@ -31,7 +31,7 @@
   "ownership": {
     "library": [
       "Preserve ul/ol and li semantics, order, and nested interactive controls",
-      "Provide token-backed plain/divided/bordered rich-row layout, sizing, spacing and inherited density",
+      "Provide token-backed list variants, inline gutters, logical indentation, inset separators, row sizing, spacing and inherited density",
       "Never imply selection, navigation or activation from visual row styling"
     ],
     "consumer": [
@@ -60,11 +60,13 @@
     "sm/md/lg sizes",
     "none/sm/md/lg explicit item spacing",
     "rich leading/body/trailing composition",
-    "inherited comfortable/compact, RTL, forced-colors, responsive wrapping"
+    "inherited comfortable/compact, RTL, forced-colors, responsive wrapping",
+    "gutter auto/none/sm/md/lg, indent none/sm/md/lg, dividerInset none/gutter, opt-in sticky native headings"
   ],
   "notes": [
     "List is not Listbox, Menu, Tree, navigation, or a selection/roving-focus widget.",
     "No row-level selected, disabled, active, loading, or clickable props. Reuse actual interactive components inside rows.",
-    "Use an empty authored list only when its visible empty state is supplied outside the list."
+    "Use an empty authored list only when its visible empty state is supplied outside the list.",
+    "Grouped lists use real headings outside ul/ol and named nested lists; sticky positioning depends on scroll scope and explicit offset."
   ]
 }
