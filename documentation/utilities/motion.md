@@ -21,7 +21,7 @@ These tokens are authored once in the Web token system and consumed by existing 
 
 ## Reusable entrance effects
 
-Load the optional public stylesheet `@vyrnforge/web/styles/motion.css` or the aggregate `@vyrnforge/web/styles.css`. These are opt-in CSS recipes, not automatic animations on every component. Attach `data-vf-motion` to an element or to a wrapper around existing components:
+Load the existing public foundation stylesheet `@vyrnforge/web/styles/foundation.css` (or aggregate `@vyrnforge/web/styles.css`). The effect recipes are privately factored into the shared Web foundation; there is no separate public `motion.css` package export. These are opt-in CSS recipes, not automatic animations on every component. Attach `data-vf-motion` to an element or to a wrapper around existing components:
 
 - `fade` — opacity into place without spatial motion.
 - `grow` — subtle scale from 94% to full size.
@@ -31,7 +31,7 @@ Load the optional public stylesheet `@vyrnforge/web/styles/motion.css` or the ag
 - `pop` — a restrained, one-shot overshoot before settling.
 
 ```html
-<link rel="stylesheet" href=".../@vyrnforge/web/styles/motion.css">
+<link rel="stylesheet" href=".../@vyrnforge/web/styles/foundation.css">
 <div data-vf-motion="fade">Content</div>
 <div data-vf-motion="slide" data-vf-motion-direction="inline-start">
   <button type="button">Action</button>
@@ -41,7 +41,7 @@ Load the optional public stylesheet `@vyrnforge/web/styles/motion.css` or the ag
 </div>
 ```
 
-These examples are illustrative HTML; application bundlers should resolve the public package entrypoint rather than use the placeholder URL shown above. For React or other framework ports, place the same attributes on a native wrapper and load canonical Web CSS. No React `Motion` component is required.
+These examples are illustrative HTML; application bundlers should import the public foundation stylesheet using the package entrypoint, not a literal placeholder URL. For React or other framework ports, place the same attributes on a native wrapper and load canonical Web CSS. No React `Motion` component is required.
 
 The optional `data-vf-motion-direction` applies to `slide` and `fade-slide`. Supported values are `block-start`, `block-end` (default), `inline-start`, and `inline-end`; inline directions automatically flip in RTL. Set `--vf-motion-distance` on the element or its parent to customize the slide distance (CSS length; default `--vf-space-sm`). Motion uses the existing public `--vf-control-motion-duration` and `--vf-motion-easing-standard` tokens, and stops completely under `prefers-reduced-motion: reduce` regardless of a consumer duration override.
 
