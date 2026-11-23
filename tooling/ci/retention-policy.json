@@ -43,5 +43,6 @@
       "successDays": 6,
       "nonSuccessDays": 6
     }
-  }
+  },
+  "maxBatchesPerExecution": 4
 }
