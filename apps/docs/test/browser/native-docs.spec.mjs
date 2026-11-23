@@ -105,12 +105,22 @@ test('Native Motion utility reuses public control timing and keeps reduced-motio
   });
   const html = readFileSync('dist/docs/next/native-web/utilities/motion/index.html', 'utf8');
   expect(html).toContain('components/switch/switch.css');
+  expect(html).toContain('/styles/motion.css');
   expect(html).toContain('data-vf-switch');
   await gotoWithCleanDocsState(page, '/next/native-web/utilities/motion/');
   const utility = page.locator('[data-vf-docs-native-motion-utility]');
   await expect(utility.getByRole('heading', { name: 'Motion utility' })).toBeVisible();
   await expect(page.getByRole('navigation', { name: 'Documentation' })
     .getByRole('link', { name: 'Motion' })).toHaveAttribute('aria-current', 'page');
+  const effects = utility.locator('[data-vf-docs-motion-native-effects] [data-vf-motion]');
+  await expect(effects).toHaveCount(6);
+  for (const [name, keyframes] of [
+    ['fade', 'vf-motion-enter-fade'], ['grow', 'vf-motion-enter-grow'],
+    ['slide', 'vf-motion-enter-slide'], ['zoom', 'vf-motion-enter-zoom'],
+    ['fade-slide', 'vf-motion-enter-fade-slide'], ['pop', 'vf-motion-enter-pop'],
+  ]) {
+    await expect(utility.locator('[data-vf-motion="' + name + '"]')).toHaveCSS('animation-name', keyframes);
+  }
   const normal = page.locator('#vf-motion-default-switch');
   const custom = page.locator('#vf-motion-custom-switch');
   const before = await page.evaluate(() => {
@@ -135,6 +145,7 @@ test('Native Motion utility reuses public control timing and keeps reduced-motio
     return [getComputedStyle(normal).transitionDuration, getComputedStyle(custom).transitionDuration];
   });
   expect(reduced).toEqual(['0s', '0s']);
+  await expect(utility.locator('[data-vf-motion="zoom"]')).toHaveCSS('animation-name', 'none');
   await normal.uncheck();
   await expect(normal).not.toBeChecked();
 });
