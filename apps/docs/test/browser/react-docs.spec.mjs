@@ -1199,12 +1199,16 @@ test('React Icon Explorer renders the actual catalog with keyboard-operable filt
   await expect(page.locator('[data-vf-docs-react-icon-example]')).toHaveCount(0);
   await expect(page.getByRole('link', { name: 'Icon usage guide' })).toHaveAttribute('href', '../components/icon/');
   const explorer = page.locator('[data-vf-docs-react-icon-explorer]');
+  await expect(explorer.locator('[data-vf-search-field-root]')).toHaveCount(1);
+  await expect(explorer.locator('[data-vf-search-field-input]')).toHaveCount(1);
+  await expect(explorer.locator('[data-vf-search-field-clear]')).toBeDisabled();
   await expect(explorer.locator('[data-vf-docs-icon-card]')).toHaveCount(93);
   await expect(explorer.locator('[data-vf-docs-icon-count]')).toHaveText('93 of 93 icons shown');
 
   // A native search input and a public VyrnForge Button provide ordinary
   // Tab/Space operation instead of an invented composite keyboard model.
   await explorer.getByLabel('Search icons').fill('bookmark');
+  await expect(explorer.getByRole('button', { name: 'Clear icon search' })).toBeEnabled();
   await expect(explorer.locator('[data-vf-docs-icon-card]')).toHaveCount(1);
   const bookmark = explorer.getByRole('button', { name: 'bookmark', exact: true });
   await bookmark.focus();
@@ -1216,13 +1220,24 @@ test('React Icon Explorer renders the actual catalog with keyboard-operable filt
   await explorer.getByLabel('Shape').selectOption('sharp');
   await explorer.getByLabel('Size').selectOption('lg');
   await explorer.getByLabel('Semantic color').selectOption('danger');
-  const preview = explorer.locator('[data-vf-docs-icon-inspector] svg[data-vf-icon]');
+  const preview = explorer.locator('[data-vf-docs-icon-inspector] .vf-docs-icon-preview svg[data-vf-icon]');
   await expect(preview).toHaveAttribute('data-vf-icon-name', 'bookmark');
   await expect(preview).toHaveAttribute('data-vf-variant', 'filled');
   await expect(preview).toHaveAttribute('data-vf-shape', 'sharp');
   await expect(preview).toHaveAttribute('data-vf-size', 'lg');
   await expect(preview).toHaveAttribute('role', 'img');
   await expect(preview).toHaveAttribute('aria-label', 'bookmark preview');
+  const comparison = explorer.locator('.vf-docs-icon-variant-grid svg[data-vf-icon]');
+  await expect(comparison).toHaveCount(4);
+  await expect(comparison.first()).toHaveAttribute('role', 'img');
+  for (const [index, pair] of ['outlined-rounded', 'outlined-sharp', 'filled-rounded', 'filled-sharp'].entries()) {
+    const [artVariant, artShape] = pair.split('-');
+    await expect(comparison.nth(index)).toHaveAttribute('data-vf-variant', artVariant);
+    await expect(comparison.nth(index)).toHaveAttribute('data-vf-shape', artShape);
+    await expect(comparison.nth(index)).toHaveAttribute('aria-label',
+      'bookmark, ' + (artVariant === 'outlined' ? 'Outlined' : 'Filled') + ', ' +
+      (artShape === 'rounded' ? 'Rounded' : 'Sharp'));
+  }
   await expect(explorer.locator('[data-vf-docs-icon-inspector] pre code'))
     .toContainText("from '@vyrnforge/icons/bookmark'");
   await expect(explorer.locator('[data-vf-docs-icon-inspector] pre code'))
@@ -1237,7 +1252,10 @@ test('React Icon Explorer renders the actual catalog with keyboard-operable filt
   await explorer.getByLabel('Category').selectOption('Files & data');
   await expect(explorer.locator('[data-vf-docs-icon-count]')).toHaveText('0 of 93 icons shown');
   await expect(explorer.getByText('No implemented icons match those filters.')).toBeVisible();
-  await explorer.getByLabel('Search icons').fill('');
+  await explorer.getByRole('button', { name: 'Clear icon search' }).click();
+  await expect(explorer.getByLabel('Search icons')).toHaveValue('');
+  await expect(explorer.getByLabel('Search icons')).toBeFocused();
+  await expect(explorer.getByRole('button', { name: 'Clear icon search' })).toBeDisabled();
   await expect(explorer.locator('[data-vf-docs-icon-card]')).toHaveCount(15);
   await expect(explorer.locator('[data-vf-docs-icon-count]')).toHaveText('15 of 93 icons shown');
 
@@ -1248,6 +1266,48 @@ test('React Icon Explorer renders the actual catalog with keyboard-operable filt
     await noJs.goto('/next/react/icons/');
     await expect(noJs.locator('[data-vf-docs-icon-card]')).toHaveCount(93);
   } finally { await context.close(); }
+});
+
+test('All catalog artwork variants have nonempty SVG geometry within the shared 24-unit icon viewBox', async ({ page }) => {
+  await page.goto('/next/react/icons/');
+  const explorer = page.locator('[data-vf-docs-react-icon-explorer]');
+  const elements = explorer.locator('.vf-docs-icon-grid svg[data-vf-icon]');
+  await expect(elements).toHaveCount(93);
+
+  for (const variant of ['outlined', 'filled']) {
+    await explorer.getByLabel('Variant').selectOption(variant);
+    for (const shape of ['rounded', 'sharp']) {
+      await explorer.getByLabel('Shape').selectOption(shape);
+      const failures = await elements.evaluateAll((nodes) => nodes.flatMap((node) => {
+        const box = node.getBBox();
+        const paths = [...node.querySelectorAll('path')];
+        const invalid = !paths.length || paths.some((path) => !path.getAttribute('d')?.trim()) ||
+          !Number.isFinite(box.x + box.y + box.width + box.height) ||
+          (box.width <= 0 && box.height <= 0) ||
+          box.x < -0.25 || box.y < -0.25 ||
+          box.x + box.width > 24.25 || box.y + box.height > 24.25;
+        return invalid ? [{ name: node.getAttribute('data-vf-icon-name'),
+          variant: node.getAttribute('data-vf-variant'),
+          shape: node.getAttribute('data-vf-shape'),
+          bbox: { x: box.x, y: box.y, width: box.width, height: box.height } }] : [];
+      }));
+      expect(failures).toEqual([]);
+    }
+  }
+
+  // Regression: these arrowheads previously started above/left of the viewBox
+  // because the SVG commands were relative to (0,0), not the arrow shaft.
+  await explorer.getByLabel('Variant').selectOption('outlined');
+  for (const [name, expected] of [
+    ['arrow-down', 'M6 13l6 6 6-6'],
+    ['arrow-left', 'M11 6l-6 6 6 6'],
+    ['arrow-right', 'M13 6l6 6-6 6'],
+  ]) {
+    await explorer.getByLabel('Search icons').fill(name);
+    const icon = explorer.locator('.vf-docs-icon-grid svg[data-vf-icon]');
+    await expect(icon).toHaveCount(1);
+    await expect(icon.locator('path').nth(1)).toHaveAttribute('d', expected);
+  }
 });
 
 test('One-import createSvgIcon produces reusable JSX shapes with defaults and themes', async ({ page }) => {
