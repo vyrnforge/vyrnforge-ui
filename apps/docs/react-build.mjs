@@ -136,16 +136,17 @@ const publicIconTypes = iconPublicSource.slice(iconTypeStart, iconTypeEnd).trim(
 const list = reactModel.componentCatalog.find((entry) => entry.id === 'list');
 const listExamples = list?.examples.slice().sort((a, b) => a.id.localeCompare(b.id)) ?? [];
 if (!list?.showcaseAvailable || !list.apiAvailable || !list.sharedContent ||
-    !list.frameworkContent || listExamples.length !== 3 ||
+    !list.frameworkContent || listExamples.length !== 8 ||
     !list.publicEntrypoints.includes('@vyrnforge/react/list') ||
     !webModel.packageManifest.exports?.['./styles/list.css'] ||
-    !['list/rich', 'list/markers', 'list/actions'].every((id) =>
+    !['list/rich', 'list/markers', 'list/actions', 'list/gutters', 'list/density',
+      'list/nested', 'list/grouped', 'list/interactive'].every((id) =>
       listExamples.some((example) => example.id === id)) ||
     !listExamples.every((example) =>
       example.sourcePath.endsWith('/react.tsx') &&
       example.source.includes("'@vyrnforge/react/list'") &&
       example.source.includes("'@vyrnforge/web/styles/list.css'"))) {
-  throw new Error('React List needs public source, canonical Web CSS, and three runnable examples');
+  throw new Error('React List needs public source, canonical Web CSS, and eight runnable examples');
 }
 const listPublicSourcePath = path.join(root,
   path.dirname(path.dirname(list.frameworkSourcePath)), 'index.ts');
