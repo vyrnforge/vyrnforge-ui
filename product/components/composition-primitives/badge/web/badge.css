@@ -45,7 +45,9 @@
     font-size: var(--_vf-badge-count-font-size);
     font-weight: var(--vf-font-weight-medium);
     justify-content: center;
+    text-align: center;
     line-height: var(--vf-line-height-none);
+    inline-size: max-content;
     min-block-size: var(--_vf-badge-count-size);
     min-inline-size: var(--_vf-badge-count-size);
     max-inline-size: min(20rem, 80vw);

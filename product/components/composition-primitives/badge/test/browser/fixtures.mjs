@@ -15,7 +15,8 @@ export const browserFixture = {
       '\nmain{display:flex;flex-wrap:wrap;align-items:center;gap:1.5rem;padding:1rem;min-inline-size:0;box-sizing:border-box}' +
       '\nmain>h1{flex-basis:100%;overflow-wrap:anywhere;min-inline-size:0}' +
       '\nmain button{max-inline-size:100%;overflow-wrap:anywhere;white-space:normal}' +
-      '\nmain .circle{display:grid;place-items:center;border:1px solid currentColor;border-radius:50%;inline-size:3rem;block-size:3rem}');
+      '\nmain .circle{display:grid;place-items:center;border:1px solid currentColor;border-radius:50%;inline-size:3rem;block-size:3rem}' +
+      '\n#wrapped-label [data-vf-badge-indicator]{max-inline-size:calc(var(--vf-space-3xl) + var(--vf-space-md))}');
     const specimen = (id, options, child, value, visible = true) => {
       const attributes = [
         'id="' + id + '"', 'data-vf-badge',
@@ -54,6 +55,10 @@ export const browserFixture = {
         '<button aria-label="End, two updates">End</button>', '2'),
       specimen('circle', { variant: 'dot', overlap: 'circular', tone: 'accent' },
         '<span class="circle" role="img" aria-label="Profile, active">AB</span>', ''),
+      specimen('new-label', {},
+        '<button aria-label="Files, new upload">Files</button>', 'NEW'),
+      specimen('wrapped-label', { tone: 'accent' },
+        '<button aria-label="Review, pending review">Review</button>', 'PENDING REVIEW'),
     ].join('\n') + '</main>';
     if (port === 'react') {
       const { createElement: h } = await import('react');
@@ -89,7 +94,11 @@ export const browserFixture = {
           anchorOrigin: { vertical: 'bottom', horizontal: 'end' } },
           button('End, two updates', 'End')),
         h(Badge, { id: 'circle', variant: 'dot', overlap: 'circular', tone: 'accent' },
-          h('span', { className: 'circle', role: 'img', 'aria-label': 'Profile, active' }, 'AB'))));
+          h('span', { className: 'circle', role: 'img', 'aria-label': 'Profile, active' }, 'AB')),
+        h(Badge, { id: 'new-label', badgeContent: 'NEW' },
+          button('Files, new upload', 'Files')),
+        h(Badge, { id: 'wrapped-label', badgeContent: 'PENDING REVIEW', tone: 'accent' },
+          button('Review, pending review', 'Review'))));
     }
     await writeFile(path.join(target, port + '.html'),
       '<!doctype html><html lang="en"><head><meta charset="utf-8">' +
