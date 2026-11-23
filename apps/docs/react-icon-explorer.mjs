@@ -11,7 +11,7 @@ import { AutoGrid, Flow } from '@vyrnforge/react/layout';
 const groups = {
   'Actions & editing': [
     'add', 'check', 'close', 'copy', 'download', 'edit', 'filter', 'minus',
-    'more-horizontal', 'more-vertical', 'print', 'redo', 'refresh', 'save',
+    'log-out', 'more-horizontal', 'more-vertical', 'print', 'redo', 'refresh', 'save',
     'search', 'send', 'share', 'trash', 'undo', 'upload',
   ],
   'Navigation & layout': [
@@ -158,7 +158,7 @@ export function IconExplorer() {
         h('div', { className: 'vf-docs-icon-inspector-heading' },
           h('h4', null, selected.name),
           h('p', null, selected.category)),
-        h('div', { className: 'vf-docs-icon-preview', 'aria-label': 'Selected icon preview' },
+        h('div', { className: 'vf-docs-icon-preview' },
           h(Icon, { icon: selected.definition, variant, shape, size, tone,
             label: selected.name + ' preview' })),
         h('dl', { className: 'vf-docs-icon-facts' },
