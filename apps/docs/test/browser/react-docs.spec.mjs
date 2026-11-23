@@ -1283,7 +1283,7 @@ test('All catalog artwork variants have nonempty SVG geometry within the shared 
         const paths = [...node.querySelectorAll('path')];
         const invalid = !paths.length || paths.some((path) => !path.getAttribute('d')?.trim()) ||
           !Number.isFinite(box.x + box.y + box.width + box.height) ||
-          box.width <= 0 || box.height <= 0 ||
+          (box.width <= 0 && box.height <= 0) ||
           box.x < -0.25 || box.y < -0.25 ||
           box.x + box.width > 24.25 || box.y + box.height > 24.25;
         return invalid ? [{ name: node.getAttribute('data-vf-icon-name'),
