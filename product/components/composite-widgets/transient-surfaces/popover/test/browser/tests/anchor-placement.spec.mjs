@@ -2,68 +2,20 @@ import { test, expect } from '@playwright/test';
 
 const port = process.env.VF_COMPONENT_PORT || 'web';
 const placements = [
-  {
-    "placement": "top",
-    "ltr": "top",
-    "rtl": "top"
-  },
-  {
-    "placement": "bottom",
-    "ltr": "bottom",
-    "rtl": "bottom"
-  },
-  {
-    "placement": "left",
-    "ltr": "left",
-    "rtl": "left"
-  },
-  {
-    "placement": "right",
-    "ltr": "right",
-    "rtl": "right"
-  },
-  {
-    "placement": "top-start",
-    "ltr": "top span-right",
-    "rtl": "top span-left"
-  },
-  {
-    "placement": "top-end",
-    "ltr": "top span-left",
-    "rtl": "top span-right"
-  },
-  {
-    "placement": "bottom-start",
-    "ltr": "bottom span-right",
-    "rtl": "bottom span-left"
-  },
-  {
-    "placement": "bottom-end",
-    "ltr": "bottom span-left",
-    "rtl": "bottom span-right"
-  },
-  {
-    "placement": "left-start",
-    "ltr": "left span-bottom",
-    "rtl": "left span-bottom"
-  },
-  {
-    "placement": "left-end",
-    "ltr": "left span-top",
-    "rtl": "left span-top"
-  },
-  {
-    "placement": "right-start",
-    "ltr": "right span-bottom",
-    "rtl": "right span-bottom"
-  },
-  {
-    "placement": "right-end",
-    "ltr": "right span-top",
-    "rtl": "right span-top"
-  }
+  { placement: 'top', ltr: 'top', rtl: 'top' },
+  { placement: 'bottom', ltr: 'bottom', rtl: 'bottom' },
+  { placement: 'left', ltr: 'left', rtl: 'left' },
+  { placement: 'right', ltr: 'right', rtl: 'right' },
+  { placement: 'top-start', ltr: 'top span-right', rtl: 'top span-left' },
+  { placement: 'top-end', ltr: 'top span-left', rtl: 'top span-right' },
+  { placement: 'bottom-start', ltr: 'bottom span-right', rtl: 'bottom span-left' },
+  { placement: 'bottom-end', ltr: 'bottom span-left', rtl: 'bottom span-right' },
+  { placement: 'left-start', ltr: 'left span-bottom', rtl: 'left span-bottom' },
+  { placement: 'left-end', ltr: 'left span-top', rtl: 'left span-top' },
+  { placement: 'right-start', ltr: 'right span-bottom', rtl: 'right span-bottom' },
+  { placement: 'right-end', ltr: 'right span-top', rtl: 'right span-top' },
 ];
-const normalize = (value) => value.trim().split(/\\s+/).sort().join(' ');
+const normalize = (value) => value.trim().split(/\s+/).sort().join(' ');
 
 test('popover native anchor placement preserves all public placements and RTL mappings', async ({ page }) => {
   test.skip(port !== 'web', 'Canonical anchor CSS is verified in the public Web stylesheet.');
