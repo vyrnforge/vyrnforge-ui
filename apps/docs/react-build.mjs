@@ -22,14 +22,35 @@ if (!button?.showcaseAvailable || !button.apiAvailable || !button.frameworkConte
 }
 const buttonExamples = button.examples.slice().sort((a, b) => a.id.localeCompare(b.id));
 const basicExample = buttonExamples.find((entry) => entry.id === 'button/basic');
-if (buttonExamples.length !== 5 ||
+if (buttonExamples.length !== 9 ||
     !buttonExamples.every((entry) => entry.sourcePath.endsWith('/react.tsx') &&
       entry.source.includes("'@vyrnforge/react/button'"))) {
-  throw new Error('React Button guide needs five real product-owned runnable examples');
+  throw new Error('React Button guide needs nine real product-owned runnable examples');
 }
 if (!basicExample?.sourcePath.endsWith('/react.tsx')) {
   throw new Error('React documentation requires the checked-in executable Button example');
 }
+const toggle = reactModel.componentCatalog.find((entry) => entry.id === 'toggle-button');
+const toggleExamples = toggle?.examples.slice().sort((a, b) => a.id.localeCompare(b.id)) ?? [];
+if (!toggle?.showcaseAvailable || !toggle.apiAvailable || !toggle.sharedContent ||
+    !toggle.frameworkContent || toggleExamples.length !== 1 ||
+    !toggle.publicEntrypoints.includes('@vyrnforge/react/toggle-button') ||
+    !webModel.packageManifest.exports?.['./styles/toggle-button.css'] ||
+    toggleExamples[0]?.id !== 'toggle-button/basic' ||
+    !toggleExamples[0]?.sourcePath.endsWith('/react.tsx') ||
+    !toggleExamples[0]?.source.includes("'@vyrnforge/react/toggle-button'"))
+  throw new Error('React ToggleButton needs public API, canonical CSS and runnable source');
+
+const togglePublicSourcePath = path.join(root,
+  path.dirname(path.dirname(toggle.frameworkSourcePath)), 'index.ts');
+const togglePublicSource = await readFile(togglePublicSourcePath, 'utf8');
+const toggleTypeStart = togglePublicSource.indexOf('export interface ToggleButtonProps');
+const toggleTypeEnd = togglePublicSource.indexOf('export const ToggleButton', toggleTypeStart);
+if (toggleTypeStart < 0 || toggleTypeEnd < 0 ||
+    !togglePublicSource.includes('forwardRef<HTMLButtonElement, ToggleButtonProps>'))
+  throw new Error('React ToggleButton public contract changed');
+const publicToggleTypes = togglePublicSource.slice(toggleTypeStart, toggleTypeEnd).trim();
+
 const layout = reactModel.componentCatalog.find((entry) => entry.id === 'layout');
 // Extend the existing bounded React pilot from real Product Graph owners.
 const typographyIds = ['text', 'code', 'kbd'];
@@ -315,6 +336,11 @@ function linksFor(route) {
     styling: relative(dir, react + 'foundations/styling/', true),
     self: relative(dir, react + route, true),
     guide: relative(dir, react + 'components/button/', true),
+    toggle: {
+      guide: relative(dir, react + toggle.showcaseRoute, true),
+      api: relative(dir, react + toggle.apiRoute, true),
+      example: relative(dir, react + 'examples/toggle-button/basic/', true),
+    },
     api: relative(dir, react + 'api/components/button/', true),
     example: relative(dir, react + 'examples/button-basic/', true),
     buttonExamples: Object.fromEntries(buttonExamples.map((entry) => {
@@ -675,6 +701,10 @@ const pageViews = [
     description: 'Shared stylesheet loading, overrides and CSS customization in React' },
   { route: button.showcaseRoute, view: 'guide', title: 'React Button', description: 'Shared Button semantics and React usage' },
   { route: button.apiRoute, view: 'api', title: 'React Button API', description: 'Verified public React Button API' },
+  { route: toggle.showcaseRoute, view: 'toggle', title: 'React ToggleButton',
+    description: 'Native pressed-state button and independently controlled state' },
+  { route: toggle.apiRoute, view: 'toggle-api', title: 'React ToggleButton API',
+    description: 'Source-backed ToggleButton types and pressed state' },
   { route: layout.showcaseRoute, view: 'layout', title: 'React Layout', description: 'Flow and AutoGrid usage in React with shared Web CSS' },
   { route: layout.apiRoute, view: 'layout-api', title: 'React Layout API', description: 'Public React Flow and AutoGrid props and stylesheet' },
   { route: divider.showcaseRoute, view: 'divider', title: 'React Divider', description: 'Horizontal and vertical visual-only lines in React' },
@@ -737,6 +767,13 @@ const pageData = {
   publicButtonTypes,
   examples: buttonExamples,
 };
+const toggleData = {
+  id: toggle.id, title: toggle.title,
+  sharedContent: toggle.sharedContent, frameworkContent: toggle.frameworkContent,
+  standardReferences: toggle.standardReferences,
+  publicEntrypoints: toggle.publicEntrypoints,
+  publicToggleTypes, examples: toggleExamples,
+};
 const layoutData = {
   id: layout.id,
   sharedContent: layout.sharedContent,
@@ -793,6 +830,7 @@ const imageData = {
 for (const page of pageViews) {
   const dir = directory(page.route);
   const props = { view: page.view, links: linksFor(page.route), button: pageData,
+    toggle: page.view === 'toggle' || page.view === 'toggle-api' ? toggleData : null,
     layout: (page.view === 'layout' || page.view === 'layout-api') ? layoutData : null,
     typography: page.topic ? typography[page.topic] : null,
     icon: page.view === 'icon' || page.view === 'icon-api' ? iconData : null,
@@ -906,6 +944,14 @@ await writeFile(path.join(reactRoot, 'site-manifest.json'), JSON.stringify({
       documentationSection: example.documentationSection, sourcePath: example.sourcePath,
     })),
   }])),
+  toggle: {
+    guideRoute: toggle.showcaseRoute, apiRoute: toggle.apiRoute,
+    publicEntrypoints: toggle.publicEntrypoints,
+    sharedSourcePath: toggle.sharedSourcePath,
+    frameworkSourcePath: toggle.frameworkSourcePath,
+    publicSourcePath: path.relative(root, togglePublicSourcePath).replaceAll('\\', '/'),
+    examples: toggleExamples.map(example => ({ id: example.id, sourcePath: example.sourcePath })),
+  },
   button: {
     publicEntrypoints: button.publicEntrypoints,
     sharedSourcePath: button.sharedSourcePath,
