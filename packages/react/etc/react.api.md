@@ -4917,6 +4917,7 @@ export const tokens: Readonly<{
     }>;
     motion: Readonly<{
         controlDuration: `var(--vf-${string})`;
+        entranceDuration: `var(--vf-${string})`;
         loadingSpinDuration: `var(--vf-${string})`;
         loadingShimmerDuration: `var(--vf-${string})`;
         loadingEasing: `var(--vf-${string})`;
