@@ -2199,9 +2199,9 @@ default: string;
 "onUpdate:pressed"?: (...args: any[]) => any;
 onPressedChange?: (...args: any[]) => any;
 }>, {
+size: "sm" | "md" | "lg";
 pressed: boolean | undefined;
 defaultPressed: boolean;
-size: "sm" | "md" | "lg";
 }, {}, {}, {}, string, ComponentProvideOptions, true, {}, any>;
 
 // @public (undocumented)

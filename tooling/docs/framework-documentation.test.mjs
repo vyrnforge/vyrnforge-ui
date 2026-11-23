@@ -50,7 +50,7 @@ describe('React documentation compiler preflight', () => {
     expect(button.frameworkSourcePath).toBe('product/components/interactive-controls/button/react/docs/index.md');
     expect(button.frameworkContent?.title).toBe('React Button');
     expect(button.frameworkContent?.sections.map((section) => section.heading))
-      .toEqual(['React setup']);
+      .toEqual(['React setup', 'Button family examples']);
     expect(JSON.stringify(button.frameworkContent)).toContain("@vyrnforge/react/button");
     expect(nativeButton.frameworkSourcePath).not.toBe(button.frameworkSourcePath);
   });
