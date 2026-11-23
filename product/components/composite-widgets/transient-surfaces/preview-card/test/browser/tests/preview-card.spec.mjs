@@ -176,9 +176,7 @@ test('public PreviewCard CSS uses canonical elevation without fixed stacking ord
   await surface.evaluate((element) => element.style.setProperty('--vf-shadow-md', '0 0 0 7px rgb(1 2 3)'));
   await expect(surface).toHaveCSS('box-shadow', 'rgb(1, 2, 3) 0px 0px 0px 7px');
 
-  await surface.evaluate((element) =>
-    element.style.setProperty('--vf-shadow-popover', '0 0 0 9px rgb(4 5 6)'),
-  );
+  await surface.evaluate((element) => element.style.setProperty('--vf-shadow-popover', '0 0 0 9px rgb(4 5 6)'));
   await expect(surface).toHaveCSS('box-shadow', 'rgb(4, 5, 6) 0px 0px 0px 9px');
 
   await page.emulateMedia({ forcedColors: 'active' });
