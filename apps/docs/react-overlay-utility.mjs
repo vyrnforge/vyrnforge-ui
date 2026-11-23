@@ -65,7 +65,7 @@ function Source({ kind, placement, theme, elevation, direction }) {
   };
   const example = {
     popover: '<PopoverRoot placement="' + placement + '">\n' +
-      '  <PopoverTrigger data-vf-button="" data-vf-variant="secondary">Open Popover</PopoverTrigger>\n' +
+      '  <PopoverTrigger aria-label="Open Popover" data-vf-button="" data-vf-variant="secondary">Open</PopoverTrigger>\n' +
       '  <PopoverContent aria-label="Details">Contextual content</PopoverContent>\n' +
       '</PopoverRoot>',
     tooltip: '<TooltipRoot placement="' + placement + '">\n' +
@@ -123,7 +123,7 @@ export function OverlayUtility({ guide, links }) {
   let example;
   if (kind === 'popover') {
     example = h(PopoverRoot, { placement },
-      h(PopoverTrigger, { 'data-vf-button': '', 'data-vf-variant': 'secondary' }, 'Open Popover'),
+      h(PopoverTrigger, { 'aria-label': 'Open Popover', 'data-vf-button': '', 'data-vf-variant': 'secondary' }, 'Open'),
       h(PopoverContent, { 'aria-label': 'Overlay utility details' },
         h(Flow, { gap: 'sm' },
           h(Text, { as: 'strong' }, 'Native anchored popover'),
