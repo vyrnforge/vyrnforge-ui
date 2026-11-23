@@ -373,8 +373,8 @@ function linksFor(route) {
       !nativeModel.foundationPages.some((page) => page.route === route))) ? '' : route), true),
   };
 }
-async function verifyStyles(dir, extra = []) {
-  for (const name of [...shellStyles, ...extra, '/assets/docs.css']) {
+async function verifyStyles(dir, extra = [], { docsChrome = true } = {}) {
+  for (const name of [...shellStyles, ...extra, ...(docsChrome ? ['/assets/docs.css'] : [])]) {
     const target = path.resolve(outRoot, dir, relative(dir, name));
     const info = await stat(target).catch(() => null);
     if (!info?.isFile()) throw new Error('React documentation stylesheet missing: ' + name);
@@ -382,8 +382,12 @@ async function verifyStyles(dir, extra = []) {
 }
 async function writePage(route, page) {
   const dir = directory(route);
-  await verifyStyles(dir, route === 'icons/' ? iconExplorerStyles :
-    route === 'foundations/color/' ? themeStudioStyles : []);
+  const docsChrome = !route.startsWith('examples/');
+  if (!docsChrome && /(?:^|[\\/])docs\\.css/.test(page)) {
+    throw new Error('Standalone React component examples must not depend on documentation CSS');
+  }
+  await verifyStyles(dir, docsChrome && route === 'icons/' ? iconExplorerStyles :
+    docsChrome && route === 'foundations/color/' ? themeStudioStyles : [], { docsChrome });
   const pageRoot = path.join(outRoot, dir);
   await mkdir(pageRoot, { recursive: true });
   await writeFile(path.join(pageRoot, 'index.html'), page);
