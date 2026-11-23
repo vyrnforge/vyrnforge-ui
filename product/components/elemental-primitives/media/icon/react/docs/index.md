@@ -32,6 +32,14 @@ For a one-off shape, import only `SvgIcon` and write `<SvgIcon><path d="..." fil
 
 For existing catalog glyphs or cross-framework reusable outlined/filled and rounded/sharp artwork, use `Icon` plus `defineIcon`. The React-only `createSvgIcon` does not generate those authored variants or introduce a second styling system.
 
+## Official Icon Explorer
+
+The React Icon guide includes an interactive Icon Explorer that reads the actual public `@vyrnforge/icons` exports. Search by official name, browse documentation-only categories, and preview the authored outlined/filled and rounded/sharp combinations. Select an icon to inspect its `IconDefinition` metadata, preview its semantic `tone` and named `size`, and copy its granular import and React usage. Categories organize discovery; they are not an additional public icon registry or package API.
+
+All official catalog entries implement all four variant/shape slots. Some sharp and rounded artwork intentionally shares paths; switching the shape does not guarantee a visually different glyph. Path stroke widths are authored artwork data, **not** a public `Icon` stroke-width prop. The public named sizes are `sm` (1rem), `md` (1.25rem), and `lg` (1.5rem); theme-aware color uses `currentColor`. The gallery's selection buttons provide keyboard interaction; the SVG Icon remains non-interactive and normally decorative.
+
+There is no officially implemented duotone or animated treatment, extra stroke-weight family, automatic RTL artwork mirroring, or remote SVG loading. For custom glyph variants use `defineIcon` from `@vyrnforge/web/icon`; for simple React-only artwork use `SvgIcon` or `createSvgIcon`, without claiming that these JSX helpers create additional authored variants.
+
 ## React authoring
 
 Pass an `IconDefinition` through `icon`; optional `variant`, `shape` and `size` change only the shared SVG visual treatment. Ordinary applicable SVG attributes and a ref may be passed to the SVG host, while the component owns its accessibility role, `aria-hidden`, `aria-label` and focusable state. For an icon-only action, place a decorative Icon inside a natively operable, explicitly named Button. The component itself never registers pointer or keyboard actions.

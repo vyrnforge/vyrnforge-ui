@@ -9,6 +9,7 @@ import { SearchFieldRoot, SearchFieldInput, SearchFieldClear } from '@vyrnforge/
 import { NativeSelect } from '@vyrnforge/react/native-select';
 import { ColorGuide, DarkModeGuide, RtlGuide } from './react-customization.mjs';
 import { ThemeBuilder } from './react-theme-builder.mjs';
+import { IconExplorer } from './react-icon-explorer.mjs';
 
 function slug(value) {
   return String(value).toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-+|-+$/g, '');
@@ -513,6 +514,7 @@ function iconUsage(icon, links) {
           'React overview'), ' for shared CSS and server-rendering setup.'),
       ]),
       guidePart(sections[1], [
+        h(IconExplorer),
         exampleJumpLinks('Icon', examples,
           (example) => 'react-icon-example-' + example.id.slice('icon/'.length)),
         ...examples.map((example) => iconExample(example, links)),
@@ -521,7 +523,7 @@ function iconUsage(icon, links) {
         ...guideBlocks(icon.sharedContent, 'Artwork contract'),
         ...guideBlocks(icon.frameworkContent, 'React authoring'),
         ...guideSubsections(icon.frameworkContent,
-          ['React color and theming', 'Inline SVG tags'], 'react-icon-authoring'),
+          ['Official Icon Explorer', 'React color and theming', 'Inline SVG tags'], 'react-icon-authoring'),
       ]),
       guidePart(sections[3], [
         ...guideBlocks(icon.sharedContent, 'Accessibility'),
@@ -1203,7 +1205,7 @@ export function ReactReferencePage({ view, links, button, layout, typography, ic
     { title: 'Layout API', href: links.layoutApi, keywords: 'flowprops autogridprops as minitemsize ref gap' },
     { title: 'Divider', href: links.divider.guide, keywords: 'divider separator straight horizontal divider vertical divider divider text alignment horizontal divider with text vertical divider with text line visual border label text content start center end align alignment horizontal text vertical-rl top-to-bottom bottom-to-top textDirection rotate' },
     { title: 'Divider API', href: links.divider.api, keywords: 'dividerprops dividerorientation span visual css ref' },
-    { title: 'Icon', href: links.icon.guide, keywords: 'icon svg glyph bookmark outlined filled shape size custom accessible examples colors currentColor JSX tags inline svg SvgIcon quick custom wrapper' },
+    { title: 'Icon', href: links.icon.guide, keywords: 'icon gallery explorer icon library search category filter copy usage svg glyph bookmark outlined filled shape size custom accessible examples colors currentColor JSX tags inline svg SvgIcon quick custom wrapper' },
     { title: 'Icon API', href: links.icon.api, keywords: 'iconprops SVGAttributes definition variant shape size label types' },
     { title: 'Image', href: links.image.guide, keywords: 'image img responsive alt decorative caption figure native JSX' },
     { title: 'Image API', href: links.image.api, keywords: 'imageprops img loading decoding srcset sizes ref types' },
