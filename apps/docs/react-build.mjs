@@ -29,8 +29,8 @@ for (const id of ['button', 'switch']) {
     throw new Error('Motion utility requires real public React component: ' + id);
   }
 }
-const motionStyles = ['switch', 'motion'].map((id) =>
-  resolvePublicWebStyleAsset(webModel.packageManifest, '@vyrnforge/web/styles/' + id + '.css').assetPath);
+const motionStyles = [resolvePublicWebStyleAsset(webModel.packageManifest,
+  '@vyrnforge/web/styles/switch.css').assetPath];
 const overlayComponentIds = ['popover', 'tooltip', 'preview-card', 'dialog', 'alert-dialog', 'drawer'];
 for (const id of overlayComponentIds) {
   if (!reactModel.componentCatalog.find((entry) => entry.id === id)?.apiAvailable ||
