@@ -2,7 +2,7 @@ import { test, expect } from '@playwright/test';
 
 const port = process.env.VF_COMPONENT_PORT || 'web';
 
-test('preview-card shadow comparison provides actual-size light/dark evidence for review', async ({ page }, testInfo) => {
+test('preview-card shadow light/dark visual evidence', async ({ page }, testInfo) => {
   test.skip(port !== 'web', 'Public Web visual acceptance evidence is reviewed on the canonical styling lane.');
 
   for (const viewport of [
