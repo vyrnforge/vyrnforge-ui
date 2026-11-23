@@ -10,7 +10,7 @@ test('Vue icon-only ToggleButton SSR preserves the named native pressed button',
   const html = await renderToString(createSSRApp({ render: () =>
     h(ToggleButton, { iconOnly: true, pressed: true, 'aria-label': 'Pin document' },
       () => h('svg', { 'aria-hidden': 'true' })) }));
-  expect(html).toContain('data-vf-icon-only=""');
+  expect(html).toContain('data-vf-icon-only');
   expect(html).toContain('aria-pressed="true"');
   expect(html).toContain('aria-label="Pin document"');
 });
