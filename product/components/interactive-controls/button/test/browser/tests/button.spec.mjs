@@ -173,6 +173,7 @@ test.describe('Button Group presentation (independent commands, native grouping)
 
   test('joined and vertical actions keep individual Tab stops, logical corners, focus and disabled state', async ({ page }) => {
     await page.goto('/components/button/web.html');
+    await page.locator('#grouped-specimens').evaluate(el => { el.hidden = false; });
     const joined = page.getByRole('group', { name: 'Document actions' });
     const buttons = joined.getByRole('button');
     await expect(buttons).toHaveCount(3);
