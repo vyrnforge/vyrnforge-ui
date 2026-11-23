@@ -350,7 +350,7 @@ function exampleJumpLinks(label, examples, getId) {
     h(Flow, { as: 'ul', direction: 'inline', wrap: 'wrap', gap: 'sm' },
       ...examples.map((example) =>
         h('li', { key: example.id },
-          h('a', { href: '#' + getId(example) }, example.title))));
+          h('a', { href: '#' + getId(example) }, example.title)))));
   // The page TOC already covers the major sections. Large example indexes are
   // available on demand instead of competing with the examples on first load.
   return examples.length > 4
