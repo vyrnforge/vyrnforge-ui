@@ -523,7 +523,7 @@ function iconUsage(icon, links) {
         ...guideBlocks(icon.sharedContent, 'Artwork contract'),
         ...guideBlocks(icon.frameworkContent, 'React authoring'),
         ...guideSubsections(icon.frameworkContent,
-          ['React color and theming', 'Inline SVG tags'], 'react-icon-authoring'),
+          ['Official Icon Explorer', 'React color and theming', 'Inline SVG tags'], 'react-icon-authoring'),
       ]),
       guidePart(sections[3], [
         ...guideBlocks(icon.sharedContent, 'Accessibility'),
