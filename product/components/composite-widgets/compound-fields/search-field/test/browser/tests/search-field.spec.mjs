@@ -212,3 +212,29 @@ test('controlled query rejection and reset preserve the consumer value', async (
   await expect(input).toHaveValue('latest');
   await expect(input).toBeFocused();
 });
+
+test('canonical SearchField clear states work without documentation CSS', async ({ page }) => {
+  test.skip(port !== 'react', 'Public React fixture verifies the canonical Web CSS contract.');
+  await page.goto('/components/search-field/react.html');
+
+  const clear = page.locator('#clear');
+  await expect(clear).toHaveCSS('cursor', 'pointer');
+  await clear.focus();
+  await expect(clear).toHaveCSS('outline-style', 'solid');
+
+  await clear.evaluate((element) => {
+    element.disabled = true;
+  });
+  await expect(clear).toHaveCSS('cursor', 'not-allowed');
+  const values = await clear.evaluate((element) => {
+    const style = getComputedStyle(element);
+    return { background: style.backgroundColor, foreground: style.color };
+  });
+  expect(values.background).not.toBe('');
+  expect(values.foreground).not.toBe('');
+
+  const loadedDocsCss = await page.locator('link[rel="stylesheet"]').evaluateAll((links) =>
+    links.some((link) => link.href.includes('/assets/docs.css')),
+  );
+  expect(loadedDocsCss).toBe(false);
+});
