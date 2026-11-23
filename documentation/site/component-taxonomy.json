@@ -104,6 +104,7 @@
       "label": "Collections & Browsing",
       "description": "Components for browsing or choosing within visual and selectable collections.",
       "components": [
+        "list",
         "listbox",
         "carousel"
       ]

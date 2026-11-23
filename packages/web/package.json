@@ -70,6 +70,7 @@
     "./styles/divider.css": "./dist/components/divider/divider.css",
     "./styles/badge.css": "./dist/components/badge/badge.css",
     "./styles/avatar.css": "./dist/components/avatar/avatar.css",
+    "./styles/list.css": "./dist/components/list/list.css",
     "./styles/tabs.css": "./dist/components/tabs/tabs.css",
     "./styles/text.css": "./dist/components/text/text.css",
     "./styles/disclosure.css": "./dist/components/disclosure/disclosure.css",

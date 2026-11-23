@@ -1,0 +1,70 @@
+{
+  "schemaVersion": 1,
+  "component": "list",
+  "reviewStatus": "review-required",
+  "nativeBaseline": {
+    "kind": "native",
+    "reference": "ul/ol containing li items; ordered lists retain sequence and native numbering; noninteractive list structure"
+  },
+  "wcag": {
+    "target": "2.2 AA",
+    "status": "review-required",
+    "criteria": [
+      "1.3.1",
+      "1.3.2",
+      "1.4.10",
+      "2.1.1",
+      "2.4.3",
+      "2.4.7",
+      "4.1.2"
+    ]
+  },
+  "aria": {
+    "status": "review-required",
+    "apgPattern": null
+  },
+  "interaction": {
+    "keyboard": "native controls only; no list-owned arrow-key or selection model",
+    "focus": "native DOM order, no List or ListItem focus management",
+    "directionality": "logical inline/block properties; RTL follows host direction"
+  },
+  "ownership": {
+    "library": [
+      "Preserve ul/ol and li semantics, order, and nested interactive controls",
+      "Provide token-backed plain/divided/bordered rich-row layout, sizing, spacing and inherited density",
+      "Never imply selection, navigation or activation from visual row styling"
+    ],
+    "consumer": [
+      "Author localized labels and meaningful row content",
+      "Provide actual Button/Link/Checkbox etc for actions, with their own semantic disabled/checked/busy states",
+      "Own filtering, loading, pagination, empty/error states, data operations, and destination routing"
+    ]
+  },
+  "forms": {
+    "status": "not-applicable"
+  },
+  "visualAccessibility": {
+    "status": "component-specific"
+  },
+  "ssrHydration": {
+    "status": "native"
+  },
+  "evidence": {
+    "browser": "required",
+    "assistiveTechnology": "review-required",
+    "visualAcceptance": "required before merge"
+  },
+  "profileVariability": [
+    "ul/ol with marker none/auto",
+    "plain/divided/bordered",
+    "sm/md/lg sizes",
+    "none/sm/md/lg explicit item spacing",
+    "rich leading/body/trailing composition",
+    "inherited comfortable/compact, RTL, forced-colors, responsive wrapping"
+  ],
+  "notes": [
+    "List is not Listbox, Menu, Tree, navigation, or a selection/roving-focus widget.",
+    "No row-level selected, disabled, active, loading, or clickable props. Reuse actual interactive components inside rows.",
+    "Use an empty authored list only when its visible empty state is supplied outside the list."
+  ]
+}
