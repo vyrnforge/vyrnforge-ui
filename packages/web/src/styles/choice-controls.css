@@ -22,7 +22,9 @@
     background: transparent;
     color: inherit;
     cursor: pointer;
-    font: inherit;
+    font-family: var(--vf-control-font-family);
+    font-size: var(--vf-control-font-size);
+    font-weight: var(--vf-control-font-weight);
     text-align: center;
   }
 

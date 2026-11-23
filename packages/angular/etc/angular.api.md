@@ -3434,6 +3434,8 @@ export class VfToggleButtonDirective {
     // (undocumented)
     handleClick(event: MouseEvent): void;
     // (undocumented)
+    readonly iconOnly: InputSignalWithTransform<boolean, unknown>;
+    // (undocumented)
     readonly pressed: ModelSignal<boolean>;
     // (undocumented)
     readonly size: InputSignal<"sm" | "md" | "lg">;
@@ -3453,6 +3455,11 @@ export class VfToggleButtonDirective {
         };
         "type": {
             "alias": "type";
+            "required": false;
+            "isSignal": true;
+        };
+        "iconOnly": {
+            "alias": "iconOnly";
             "required": false;
             "isSignal": true;
         };

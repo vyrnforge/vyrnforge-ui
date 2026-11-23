@@ -4792,6 +4792,7 @@ export const ToggleButton: ForwardRefExoticComponent<ToggleButtonProps & RefAttr
 export interface ToggleButtonProps extends Omit<ButtonHTMLAttributes<HTMLButtonElement>, 'aria-pressed'> {
     // (undocumented)
     defaultPressed?: boolean;
+    iconOnly?: boolean;
     // (undocumented)
     onPressedChange?: (pressed: boolean, event: MouseEvent_2<HTMLButtonElement>) => void;
     // (undocumented)
