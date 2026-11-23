@@ -657,7 +657,7 @@ function renderMotionUtility() {
     route: motionRoute,
     title: motionGuide.title,
     description: 'Shared VyrnForge motion tokens, transitions, loading and reduced-motion behavior.',
-    componentStyle: [motionStyleAsset, motionRecipeAsset],
+    componentStyle: motionStyleAsset,
     content: `<nav class="vf-docs-breadcrumbs" aria-label="Breadcrumb">
       <ol data-vf-flow data-vf-flow-direction="inline" data-vf-flow-gap="xs">
         <li><a data-vf-link href="${artifactHref(currentPageDirectory, nativeSitePath)}">Native Web</a></li>
