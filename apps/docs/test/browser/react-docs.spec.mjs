@@ -563,7 +563,7 @@ test('React Button-family guide shows joined groups, ToggleButton and density wi
   await expect(bold).toHaveAttribute('aria-pressed', 'true');
   await expect(toggle.getByRole('status')).toHaveText('Bold: on');
 
-  const icons = page.frameLocator('iframe[title="React Icon-only, icon-with-text and busy actions example"]');
+  const icons = page.frameLocator('iframe[title="React Icon-only Button sizes, emphasis and states example"]');
   await expect(icons.getByRole('button', { name: 'Save bookmark', exact: true })).toHaveCount(2);
   const iconOnly = icons.getByRole('button', { name: 'Save bookmark', exact: true }).first();
   await expect(iconOnly).toHaveAttribute('data-vf-icon-only', '');
