@@ -3,5 +3,16 @@
   "title": "Pressed-state button",
   "description": "A native button with aria-pressed and the Native Web state connector.",
   "defaultFramework": "native-web",
-  "frameworks": { "native-web": { "label": "Native Web", "language": "html", "source": "native-web.html" } }
+  "frameworks": {
+    "native-web": {
+      "label": "Native Web",
+      "language": "html",
+      "source": "native-web.html"
+    },
+    "react": {
+      "label": "React",
+      "language": "tsx",
+      "source": "react.tsx"
+    }
+  }
 }
