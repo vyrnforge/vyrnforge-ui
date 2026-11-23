@@ -63,7 +63,7 @@ export const browserFixture = {
           variant: 'divided' }, item('Alex Chen', 'AC'), item('Maria García', 'MG')),
         h(List, { as: 'ol', id: 'steps', start: 3, marker: 'auto',
           size: 'sm', 'aria-label': 'Release steps' },
-        h(ListItem, null, 'Build'),
+        h(ListItem, null, 'Build')),
         h('section', { id: 'extra', className: 'list-test-scroller' },
           h('h2', { id: 'group-a', 'data-vf-list-subheader': '',
             'data-vf-list-subheader-sticky': '' }, 'Group A'),
