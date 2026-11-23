@@ -147,6 +147,7 @@ export const publicRuntimeTokens = [
   "--vf-control-font-size",
   "--vf-control-font-weight",
   "--vf-control-motion-duration",
+  "--vf-motion-duration-enter",
   "--vf-motion-duration-loading-spin",
   "--vf-motion-duration-loading-shimmer",
   "--vf-motion-easing-loading",

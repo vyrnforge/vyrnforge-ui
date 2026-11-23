@@ -59,6 +59,7 @@ export const referenceTokens = Object.freeze({
   }),
   motion: Object.freeze({
     controlDuration: '120ms',
+    entranceDuration: '320ms',
     loadingSpinDuration: '700ms',
     loadingShimmerDuration: '1400ms',
     loadingEasing: 'linear',
@@ -78,6 +79,7 @@ export const referenceTokenTypes = Object.freeze({
   radius: 'dimension',
   shadow: 'shadow',
   'motion.controlDuration': 'duration',
+  'motion.entranceDuration': 'duration',
   'motion.loadingSpinDuration': 'duration',
   'motion.loadingShimmerDuration': 'duration',
   'motion.loadingEasing': 'easing',
@@ -132,6 +134,7 @@ export const runtimeTokenDefinitions = Object.freeze({
   '--vf-control-font-size': tokenLiteral('dimension', '0.9375rem'),
   '--vf-control-font-weight': runtimeRef('font-weight', '--vf-font-weight-semibold'),
   '--vf-control-motion-duration': ref('duration', 'motion.controlDuration'),
+  '--vf-motion-duration-enter': ref('duration', 'motion.entranceDuration'),
   '--vf-motion-duration-loading-spin': ref('duration', 'motion.loadingSpinDuration'),
   '--vf-motion-duration-loading-shimmer': ref('duration', 'motion.loadingShimmerDuration'),
   '--vf-motion-easing-loading': ref('easing', 'motion.loadingEasing'),

@@ -16,7 +16,7 @@ test('Motion effects extend the existing public foundation without a new compone
   for (const name of ['fade', 'grow', 'slide', 'zoom', 'fade-slide', 'pop']) {
     assert.ok(motion.includes('[data-vf-motion="' + name + '"]'), 'missing motion recipe ' + name);
   }
-  for (const variable of ['--vf-control-motion-duration', '--vf-motion-easing-standard', '--vf-motion-distance']) {
+  for (const variable of ['--vf-motion-duration-enter', '--vf-motion-easing-standard', '--vf-motion-distance']) {
     assert.ok(motion.includes(variable), 'missing shared or scoped token ' + variable);
   }
   for (const side of ['block-start', 'inline-start', 'inline-end']) {
