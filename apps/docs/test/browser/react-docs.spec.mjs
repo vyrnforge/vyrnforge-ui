@@ -1593,6 +1593,11 @@ test('React Badge guide remains focused on React and uses source-backed examples
   await expect(dot.contentFrame().getByRole('button', { name: 'Alerts, new notifications' })).toBeVisible();
   await expect(dot.contentFrame().locator('[data-vf-text]')).toHaveCount(1);
   await expect(dot.contentFrame().locator('[aria-hidden="true"][data-vf-badge-indicator]')).toHaveCount(2);
+  await expect(dot.contentFrame().locator('[data-vf-badge-size="sm"]')).toHaveCount(1);
+  await expect(dot.contentFrame().locator('[data-vf-badge-size="lg"]')).toHaveCount(1);
+  const variants = guide.locator('[data-vf-docs-react-badge-example="badge/variants"] iframe');
+  await variants.scrollIntoViewIfNeeded();
+  await expect(variants.contentFrame().locator('[data-vf-badge-size="lg"]')).toHaveCount(1);
   const positioning = guide.locator('[data-vf-docs-react-badge-example="badge/positioning"] iframe');
   await positioning.scrollIntoViewIfNeeded();
   await expect(positioning.contentFrame().locator('[data-vf-badge-overlap="circular"]')).toHaveCount(1);

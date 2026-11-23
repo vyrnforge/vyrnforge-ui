@@ -5,11 +5,28 @@
     --vf-badge-anchor-offset: 0%;
     --vf-badge-translate-x: 50%;
     --vf-badge-translate-y: -50%;
+    /* Private component dimensions derived from the shared spacing scale. */
+    --_vf-badge-count-size: calc(var(--vf-space-md) + var(--vf-space-xs));
+    --_vf-badge-count-font-size: var(--vf-font-size-xs);
+    --_vf-badge-count-padding: var(--vf-space-xs);
+    --_vf-badge-dot-size: var(--vf-space-sm);
     display: inline-flex;
     position: relative;
     vertical-align: middle;
     min-inline-size: 0;
     max-inline-size: 100%;
+  }
+
+  :where([data-vf-badge][data-vf-badge-size="sm"]) {
+    --_vf-badge-count-size: var(--vf-space-md);
+    --_vf-badge-count-padding: var(--vf-space-2xs);
+    --_vf-badge-dot-size: calc(var(--vf-space-xs) + var(--vf-space-2xs));
+  }
+
+  :where([data-vf-badge][data-vf-badge-size="lg"]) {
+    --_vf-badge-count-size: var(--vf-space-lg);
+    --_vf-badge-count-font-size: var(--vf-font-size-sm);
+    --_vf-badge-dot-size: calc(var(--vf-space-sm) + var(--vf-space-2xs));
   }
 
   :where([data-vf-badge][data-vf-badge-overlap="circular"]) {
@@ -19,22 +36,22 @@
   :where([data-vf-badge-indicator]) {
     align-items: center;
     background: var(--vf-color-surface-subtle);
-    border: 1px solid var(--vf-color-surface-subtle);
+    border: 1px solid var(--vf-color-border-required);
     border-radius: 9999px;
     box-sizing: border-box;
     color: var(--vf-color-text);
     display: inline-flex;
     font-family: var(--vf-font-family-sans);
-    font-size: var(--vf-font-size-xs);
+    font-size: var(--_vf-badge-count-font-size);
     font-weight: var(--vf-font-weight-medium);
     justify-content: center;
-    line-height: var(--vf-line-height-compact);
-    min-block-size: var(--vf-space-lg);
-    min-inline-size: var(--vf-space-lg);
+    line-height: var(--vf-line-height-none);
+    min-block-size: var(--_vf-badge-count-size);
+    min-inline-size: var(--_vf-badge-count-size);
     max-inline-size: min(20rem, 80vw);
     overflow-wrap: anywhere;
     padding-block: 0;
-    padding-inline: var(--vf-space-2xs);
+    padding-inline: var(--_vf-badge-count-padding);
     pointer-events: none;
     position: absolute;
     white-space: normal;
@@ -46,13 +63,6 @@
 
   :where([data-vf-badge-indicator][hidden]) {
     display: none;
-  }
-
-  :where([data-vf-badge][data-vf-badge-size="md"] [data-vf-badge-indicator]) {
-    font-size: var(--vf-font-size-sm);
-    min-block-size: var(--vf-space-xl);
-    min-inline-size: var(--vf-space-xl);
-    padding-inline: var(--vf-space-xs);
   }
 
   :where([data-vf-badge][data-vf-badge-tone="accent"] [data-vf-badge-indicator]) {
@@ -68,10 +78,10 @@
   }
 
   :where([data-vf-badge][data-vf-badge-variant="dot"] [data-vf-badge-indicator]) {
-    block-size: var(--vf-space-sm);
-    inline-size: var(--vf-space-sm);
-    min-block-size: var(--vf-space-sm);
-    min-inline-size: var(--vf-space-sm);
+    block-size: var(--_vf-badge-dot-size);
+    inline-size: var(--_vf-badge-dot-size);
+    min-block-size: var(--_vf-badge-dot-size);
+    min-inline-size: var(--_vf-badge-dot-size);
     padding: 0;
     background: currentColor;
     border-color: var(--vf-color-surface);

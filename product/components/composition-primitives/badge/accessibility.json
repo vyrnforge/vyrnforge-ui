@@ -56,7 +56,7 @@
   "profileVariability": [
     "standard count/text and dot",
     "zero/showZero/invisible/max",
-    "neutral/accent/danger; sm/md",
+    "neutral/accent/danger; sm/md/lg compact indicators",
     "4 logical corners, rectangular/circular overlap",
     "RTL, zoom, light/dark, forced-colors and wrapped interactive child"
   ],

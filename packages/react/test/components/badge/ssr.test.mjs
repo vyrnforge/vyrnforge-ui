@@ -55,6 +55,20 @@ test('dot has no accessible duplicate or implicit focus target', () => {
   assert.doesNotMatch(html, /role="img"|role="status"|aria-live=|tabindex=/i);
 });
 
+test('large indicator sizing is presentational and keeps the wrapped target intact', () => {
+  const count = renderToStaticMarkup(createElement(Badge, {
+    badgeContent: 42, size: 'lg',
+  }, target('Inbox, 42 unread messages')));
+  assert.match(count, /data-vf-badge-size="lg"/);
+  assert.match(count, /aria-label="Inbox, 42 unread messages"/);
+  const dot = renderToStaticMarkup(createElement(Badge, {
+    variant: 'dot', size: 'lg',
+  }, target('Notifications, new items')));
+  assert.match(dot, /data-vf-badge-variant="dot"/);
+  assert.match(dot, /data-vf-badge-size="lg"/);
+  assert.match(dot, /aria-hidden="true"/);
+});
+
 test('logical positioning produces deterministic SSR output without browser globals', () => {
   for (const vertical of ['top', 'bottom']) {
     for (const horizontal of ['start', 'end']) {

@@ -13,7 +13,9 @@ const zero: BadgeProps = { children: child, badgeContent: 0, showZero: true };
 const hidden: BadgeProps = { children: child, badgeContent: 3, invisible: true };
 const anchor: BadgeAnchorOrigin = { vertical: 'bottom', horizontal: 'start' };
 const tone: BadgeTone = 'neutral';
-const size: BadgeSize = 'sm';
+const size: BadgeSize = 'lg';
+const largeCount: BadgeProps = { children: child, badgeContent: 12, size: 'lg' };
+const largeDot: BadgeProps = { children: child, variant: 'dot', size: 'lg' };
 const variant: BadgeVariant = 'standard';
 const overlap: BadgeOverlap = 'rectangular';
 const ref: Ref<HTMLSpanElement> | undefined = undefined;
@@ -40,5 +42,5 @@ const statusRole: BadgeProps = { children: child, badgeContent: 4, role: 'status
 const invalidAnchor: BadgeAnchorOrigin = { vertical: 'middle', horizontal: 'right' };
 
 void [Badge, RootBadge, count, text, dot, zero, hidden, anchor, tone, size, variant,
-  overlap, ref, withoutTarget, withoutContent, oldAppearance, oldShape, outline,
+  overlap, ref, largeCount, largeDot, withoutTarget, withoutContent, oldAppearance, oldShape, outline,
   dotWithCount, unsupportedTone, focusable, statusRole, invalidAnchor];

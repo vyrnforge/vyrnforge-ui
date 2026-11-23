@@ -1,7 +1,7 @@
 {
   "id": "badge/variants",
-  "title": "Tones and maximum count",
-  "description": "Semantic token-backed tones, sizes, and deterministic numeric caps on anchored indicators.",
+  "title": "Compact count sizes and tones",
+  "description": "Small, medium, and large token-backed counts across neutral, accent, and danger tones, including capped values.",
   "defaultFramework": "react",
   "frameworks": {
     "native-web": {

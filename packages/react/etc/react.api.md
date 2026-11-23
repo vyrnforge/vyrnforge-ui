@@ -287,7 +287,7 @@ export type BadgeProps = Omit<ComponentPropsWithoutRef<'span'>, 'children' | 'ro
 });
 
 // @public (undocumented)
-export type BadgeSize = 'sm' | 'md';
+export type BadgeSize = 'sm' | 'md' | 'lg';
 
 // @public
 export type BadgeTone = 'neutral' | 'accent' | 'danger';

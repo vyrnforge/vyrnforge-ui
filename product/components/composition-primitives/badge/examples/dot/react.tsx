@@ -14,12 +14,12 @@ import '@vyrnforge/web/styles/text.css';
 function App() {
   return (
     <Flow direction="inline" wrap="wrap" gap="lg" align="center">
-      <Badge variant="dot" tone="danger">
+      <Badge variant="dot" size="sm" tone="danger">
         <Button type="button" variant="secondary" aria-label="Alerts, new notifications">
           <Icon icon={bellIcon} /> Alerts
         </Button>
       </Badge>
-      <Badge variant="dot" tone="accent">
+      <Badge variant="dot" size="lg" tone="accent">
         <Text as="span">Sync in progress</Text>
       </Badge>
     </Flow>

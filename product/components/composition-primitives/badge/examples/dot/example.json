@@ -1,7 +1,7 @@
 {
   "id": "badge/dot",
-  "title": "Dot indicator",
-  "description": "A visual dot on a wrapped target, with the meaning conveyed by the target's name.",
+  "title": "Scaled dot indicators",
+  "description": "Dot indicators in small and large sizes, attached to existing VyrnForge controls and text.",
   "defaultFramework": "react",
   "frameworks": {
     "native-web": {

@@ -16,7 +16,11 @@ Positioning belongs to Badge rather than Avatar or any wrapped component. The de
 
 ## Tones and sizing
 
-Neutral/accent/danger use established semantic color roles. Sizes sm/md control the indicator only. Standard badges are pill-shaped; dot indicators are circles. Success/warning colors require separate token and contrast approval. No raw color, arbitrary size, dismiss control, action, selection state or presence detection is introduced.
+Neutral, accent and danger are the established semantic color roles. The `standard` and `dot` variants describe **what the anchored indicator displays**, not a standalone Chip style. Count indicators are pill-shaped; dots are circular and must not convey meaning through color alone. Neutral counts use an existing strong border token; accent and danger reuse their established theme roles.
+
+Sizes `sm`, `md` (default) and `lg` affect only the indicator—not the Button, Avatar or other wrapped component. Token-derived minimum count dimensions are 16px, 20px and 24px at a 16px root; dots are 6px, 8px and 10px. All dimensions scale with root text size. The previous 24px/32px badges were disproportionately large for the attached controls. Use `sm` for dense notification indicators, `md` normally and `lg` where longer values need room. Text like `99+` may expand inline to avoid clipping.
+
+Additional success/warning colors or alternate fill styles are **not** introduced without approved semantic token pairs and contrast evidence. No arbitrary raw color, dismiss control, action, selection, or standalone Chip treatment belongs here.
 
 ## Accessibility
 

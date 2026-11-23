@@ -16,12 +16,12 @@ function App() {
           Inbox
         </Button>
       </Badge>
-      <Badge badgeContent={120} max={99} tone="accent">
+      <Badge badgeContent={120} max={99} size="md" tone="accent">
         <Button type="button" variant="secondary" aria-label="Mail, 120 unread messages">
           Mail
         </Button>
       </Badge>
-      <Badge badgeContent={1000} max={999} tone="danger">
+      <Badge badgeContent={1000} max={999} size="lg" tone="danger">
         <Button type="button" variant="secondary" aria-label="Priority, 1,000 unread messages">
           Priority
         </Button>
