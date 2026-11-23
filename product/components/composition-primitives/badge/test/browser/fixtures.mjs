@@ -31,6 +31,14 @@ export const browserFixture = {
         '>' + (value || '') + '</span></span>';
     };
     let body = '<main><h1>Badge indicators</h1>' + [
+      specimen('size-sm', { size: 'sm' },
+        '<button aria-label="Small, seven updates">Small</button>', '7'),
+      specimen('size-lg', { size: 'lg' },
+        '<button aria-label="Large, 42 updates">Large</button>', '42'),
+      specimen('dot-sm', { variant: 'dot', size: 'sm' },
+        '<button aria-label="Small dot, active">Small dot</button>', ''),
+      specimen('dot-lg', { variant: 'dot', size: 'lg' },
+        '<button aria-label="Large dot, active">Large dot</button>', ''),
       specimen('count', { tone: 'accent' },
         '<button aria-label="Inbox, 4 unread messages">Inbox</button>', '4'),
       specimen('max', { tone: 'danger' },
@@ -54,6 +62,14 @@ export const browserFixture = {
       const button = (label, text) => h('button', { 'aria-label': label }, text);
       body = renderToString(h('main', null,
         h('h1', null, 'Badge indicators'),
+        h(Badge, { id: 'size-sm', badgeContent: 7, size: 'sm' },
+          button('Small, seven updates', 'Small')),
+        h(Badge, { id: 'size-lg', badgeContent: 42, size: 'lg' },
+          button('Large, 42 updates', 'Large')),
+        h(Badge, { id: 'dot-sm', variant: 'dot', size: 'sm' },
+          button('Small dot, active', 'Small dot')),
+        h(Badge, { id: 'dot-lg', variant: 'dot', size: 'lg' },
+          button('Large dot, active', 'Large dot')),
         h(Badge, { id: 'count', badgeContent: 4, tone: 'accent' },
           button('Inbox, 4 unread messages', 'Inbox')),
         h(Badge, { id: 'max', badgeContent: 120, tone: 'danger' },

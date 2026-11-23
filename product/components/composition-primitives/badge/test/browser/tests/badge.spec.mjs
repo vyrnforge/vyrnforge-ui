@@ -28,6 +28,42 @@ test('Badge augments a target and preserves its accessible name, keyboard focus 
   expect(a11y.violations).toEqual([]);
 });
 
+test('Badge sizes remain compact and scale count and dot separately', async ({ page }) => {
+  await page.goto('/components/badge/' + port + '.html');
+  const dimensions = async (host) => page.locator(host + ' [data-vf-badge-indicator]')
+    .evaluate(el => {
+      const rect = el.getBoundingClientRect();
+      return { width: rect.width, height: rect.height };
+    });
+
+  const smallCount = await dimensions('#size-sm');
+  const mediumCount = await dimensions('#count');
+  const largeCount = await dimensions('#size-lg');
+  expect(smallCount.height).toBeCloseTo(16, 0);
+  expect(mediumCount.height).toBeCloseTo(20, 0);
+  expect(largeCount.height).toBeCloseTo(24, 0);
+  expect(smallCount.height).toBeLessThan(mediumCount.height);
+  expect(mediumCount.height).toBeLessThan(largeCount.height);
+
+  const smallDot = await dimensions('#dot-sm');
+  const mediumDot = await dimensions('#dot');
+  const largeDot = await dimensions('#dot-lg');
+  for (const [value, expected] of [
+    [smallDot, 6], [mediumDot, 8], [largeDot, 10],
+  ]) {
+    expect(value.width).toBeCloseTo(expected, 0);
+    expect(value.height).toBeCloseTo(expected, 0);
+  }
+
+  const neutral = await page.locator('#size-sm [data-vf-badge-indicator]')
+    .evaluate(el => {
+      const css = getComputedStyle(el);
+      return { border: css.borderColor, background: css.backgroundColor };
+    });
+  expect(neutral.border).not.toBe(neutral.background);
+  await expect(page.getByRole('button', { name: 'Large, 42 updates' })).toBeVisible();
+});
+
 test('Badge anchored placement responds to RTL and preserves narrow zoom and forced-color reflow', async ({ page }) => {
   await page.setViewportSize({ width: 320, height: 720 });
   await page.goto('/components/badge/' + port + '.html');

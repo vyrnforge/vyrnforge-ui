@@ -3,7 +3,7 @@ import type { ComponentPropsWithoutRef, ReactNode } from 'react';
 
 /** Existing semantic color roles; no unapproved success/warning colors. */
 export type BadgeTone = 'neutral' | 'accent' | 'danger';
-export type BadgeSize = 'sm' | 'md';
+export type BadgeSize = 'sm' | 'md' | 'lg';
 /** Display a count/text indicator or a purely visual dot. */
 export type BadgeVariant = 'standard' | 'dot';
 export type BadgeOverlap = 'rectangular' | 'circular';

@@ -37,7 +37,7 @@ import '@vyrnforge/web/styles/layout.css';
 
 The Avatar example is **generic composition**, not an Avatar-specific Badge integration API. Badge never imports, inspects or modifies Avatar. The consumer must ensure the wrapped element's accessible name conveys any meaningful badge status. The indicator itself is always hidden from assistive technology to prevent duplicate readings and is not a live region. The consumer owns alert/notification policy, counting, localization and announcements.
 
-**Variants**: `standard` (count or short text) and `dot`. **Tones**: neutral/accent/danger using existing semantic tokens. **Sizes**: sm/md. **Position**: top/bottom × logical start/end (RTL-aware), rectangular/circular overlap. **Visibility**: `invisible`, numeric zero hidden by default or shown with `showZero`; `max` caps positive numeric display with `+` (default 99). No success/warning tones until accessible token pairs exist.
+**Variants**: `standard` (count or short text) and `dot`. **Tones**: neutral/accent/danger using existing semantic tokens. **Sizes**: sm/md/lg, with token-derived compact count and scaled dot indicators; the wrapped target is never resized. **Position**: top/bottom × logical start/end (RTL-aware), rectangular/circular overlap. **Visibility**: `invisible`, numeric zero hidden by default or shown with `showZero`; `max` caps positive numeric display with `+` (default 99). No success/warning tones until accessible token pairs exist.
 
 ## Breaking migration from Badge v1 (#1476)
 
