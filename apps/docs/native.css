@@ -500,6 +500,9 @@
   .vf-docs-toc-region {
     grid-area: toc;
     inset-block-start: 6rem;
+    max-block-size: calc(100vh - 7rem);
+    overflow-y: auto;
+    overscroll-behavior: contain;
     position: sticky;
   }
 
@@ -725,155 +728,136 @@
     margin-block-end: 0;
   }
 
-  /* Keep the guide's headings scannable while letting readers choose the
-     amount of detailed guidance. Native details work without JavaScript. */
+  /* MUI-style documentation hierarchy: guidance stays readable in the
+     article. Disclosure is reserved for source code and evidence, not demos. */
   .vf-docs-guide-subsection {
-    border-block-start: 1px solid var(--vf-color-border);
-    padding-block: var(--vf-space-xs);
+    min-inline-size: 0;
+    padding-block-start: var(--vf-space-sm);
   }
 
   .vf-docs-guide-subsection + .vf-docs-guide-subsection {
-    padding-block-start: var(--vf-space-xs);
-  }
-
-  .vf-docs-guide-subsection > summary {
-    border-radius: var(--vf-control-radius);
-    color: var(--vf-color-text);
-    cursor: pointer;
-    padding: var(--vf-space-sm);
-  }
-
-  .vf-docs-guide-subsection > summary:hover,
-  .vf-docs-example-index > summary:hover,
-  .vf-docs-example-collapsible > summary:hover {
-    background: var(--vf-color-surface-hover);
+    margin-block-start: var(--vf-space-md);
   }
 
   .vf-docs-guide-subsection h3 {
-    color: inherit;
-    display: inline;
-    font-size: var(--vf-font-size-md);
-    font-weight: var(--vf-font-weight-semibold);
+    color: var(--vf-color-text);
+    font-size: var(--vf-font-size-lg);
     line-height: var(--vf-line-height-normal);
+    margin-block-end: var(--vf-space-sm);
   }
 
-  .vf-docs-guide-subsection-body {
-    min-inline-size: 0;
-    padding: var(--vf-space-sm) var(--vf-space-md) var(--vf-space-md);
+  /* Navigation moves to the secondary reading rail rather than competing with
+     the live examples as an extra row of full-width links. */
+  .vf-docs-toc-examples {
+    border-inline-start: 1px solid var(--vf-color-border);
+    margin-block-start: var(--vf-space-lg);
+    padding-inline-start: var(--vf-space-md);
   }
 
-  .vf-docs-guide-subsection-body > :first-child {
-    margin-block-start: 0;
-  }
-
-  .vf-docs-example-index {
-    border-block: 1px solid var(--vf-color-border);
-    padding-block: var(--vf-space-xs);
-  }
-
-  .vf-docs-example-index > summary {
-    border-radius: var(--vf-control-radius);
-    color: var(--vf-color-text-muted);
-    cursor: pointer;
+  .vf-docs-toc-examples > p {
+    color: var(--vf-color-text);
     font-size: var(--vf-font-size-sm);
-    padding: var(--vf-space-sm);
+    font-weight: var(--vf-font-weight-semibold);
+    margin: 0 0 var(--vf-space-sm);
   }
 
-  .vf-docs-example-index .vf-docs-example-links {
-    padding-block: var(--vf-space-sm);
-  }
-
-  .vf-docs-guide-subsection > summary:focus-visible,
-  .vf-docs-example-index > summary:focus-visible,
-  .vf-docs-example-collapsible > summary:focus-visible {
-    outline: 2px solid var(--vf-color-focus-ring);
-    outline-offset: 2px;
-  }
-
-  .vf-docs-example-links ul {
+  .vf-docs-toc-examples ol {
     list-style: none;
     margin: 0;
     padding: 0;
   }
 
-  .vf-docs-example-links li,
-  .vf-docs-main .vf-docs-example-links li + li {
+  .vf-docs-toc-examples li,
+  .vf-docs-main .vf-docs-toc-examples li + li {
     margin: 0;
   }
 
-  .vf-docs-example-links a {
+  .vf-docs-toc-examples a {
     border-radius: var(--vf-control-radius);
-    color: var(--vf-color-text);
-    display: inline-block;
+    color: var(--vf-color-text-muted);
+    display: block;
     font-size: var(--vf-font-size-sm);
-    padding: var(--vf-space-xs) 0;
-    text-decoration: underline;
-    text-underline-offset: 0.2em;
+    line-height: var(--vf-line-height-normal);
+    overflow-wrap: anywhere;
+    padding: var(--vf-space-xs);
+    text-decoration: none;
   }
 
-  .vf-docs-example-links a:focus-visible,
+  .vf-docs-toc-examples a:hover {
+    background: var(--vf-color-surface-hover);
+    color: var(--vf-color-text);
+  }
+
+  .vf-docs-toc-examples a:focus-visible,
   .vf-docs-reference-details summary:focus-visible {
     outline: 2px solid var(--vf-color-focus-ring);
     outline-offset: 2px;
   }
 
+  /* One editorial example section, one live surface, one unobtrusive source
+     viewer. Avoid stacking nine card shells or requiring a preview click. */
   .vf-docs-usage-guide .vf-docs-example {
-    border: 1px solid var(--vf-color-border);
-    border-radius: var(--vf-radius-surface);
+    border: 0;
+    border-radius: 0;
+    min-inline-size: 0;
+    overflow: visible;
+    scroll-margin-block-start: var(--vf-space-2xl);
+  }
+
+  .vf-docs-usage-guide .vf-docs-example + .vf-docs-example {
+    padding-block-start: var(--vf-space-xl);
   }
 
   .vf-docs-usage-guide .vf-docs-example-header {
-    padding: var(--vf-space-md);
-  }
-
-  .vf-docs-usage-guide .vf-docs-example-header p {
-    font-size: var(--vf-font-size-sm);
-  }
-
-  .vf-docs-usage-guide .vf-docs-preview {
-    min-block-size: 0;
-    padding: var(--vf-space-md);
-  }
-
-  /* A compact Button gallery shows one working example initially. The rest
-     remain named, keyboard-operable, source-backed native disclosures. */
-  .vf-docs-example-collapsible > summary {
-    cursor: pointer;
-  }
-
-  .vf-docs-example-collapsible > summary::after {
-    color: var(--vf-color-text-muted);
-    content: "Show preview";
-    font-size: var(--vf-font-size-sm);
-    font-weight: var(--vf-font-weight-regular);
-  }
-
-  .vf-docs-example-collapsible[open] > summary::after {
-    content: "Hide preview";
-  }
-
-  .vf-docs-example-collapsible[open] > summary {
-    border-block-end: 1px solid var(--vf-color-border);
-  }
-
-  .vf-docs-example-collapsible .vf-docs-example-description {
-    font-size: var(--vf-font-size-sm);
-    margin: 0;
-    padding: var(--vf-space-md) var(--vf-space-lg);
+    margin-block-end: var(--vf-space-md);
+    padding: 0;
   }
 
   .vf-docs-usage-guide .vf-docs-example-header h3 {
     color: var(--vf-color-text);
+    font-size: var(--vf-font-size-xl);
+    line-height: var(--vf-line-height-normal);
+    margin: 0;
+  }
+
+  .vf-docs-usage-guide .vf-docs-example-header p {
+    color: var(--vf-color-text-muted);
+    font-size: var(--vf-font-size-md);
+    line-height: var(--vf-line-height-relaxed);
+    margin-block: var(--vf-space-sm) 0;
+    max-inline-size: 68ch;
   }
 
   .vf-docs-usage-guide .vf-docs-react-example-frame {
-    border: 0;
-    border-block: 1px solid var(--vf-color-border);
-    border-radius: 0;
+    background: var(--vf-color-surface);
+    border: 1px solid var(--vf-color-border);
+    border-radius: var(--vf-radius-surface) var(--vf-radius-surface) 0 0;
+    box-sizing: border-box;
+    inline-size: 100%;
+    min-inline-size: 0;
   }
 
   .vf-docs-usage-guide .vf-docs-source-disclosure {
-    padding: var(--vf-space-md) var(--vf-space-lg);
+    background: var(--vf-color-surface-subtle);
+    border: 1px solid var(--vf-color-border);
+    border-block-start: 0;
+    border-radius: 0 0 var(--vf-radius-surface) var(--vf-radius-surface);
+    margin-block-start: -1px;
+    padding: var(--vf-space-sm) var(--vf-space-md);
+  }
+
+  .vf-docs-usage-guide .vf-docs-source-disclosure > summary {
+    border-radius: var(--vf-control-radius);
+    color: var(--vf-color-text-muted);
+    padding: var(--vf-space-xs);
+  }
+
+  .vf-docs-usage-guide .vf-docs-source-disclosure > summary:hover {
+    color: var(--vf-color-text);
+  }
+
+  .vf-docs-usage-guide .vf-docs-source-disclosure[open] > summary {
+    color: var(--vf-color-text);
   }
 
   .vf-docs-reference-details {
@@ -927,7 +911,15 @@
 
     .vf-docs-toc-region {
       inset-block-start: auto;
+      max-block-size: none;
+      overflow: visible;
       position: static;
+    }
+
+    /* Primary section links remain; the example headings themselves replace
+       the long secondary link rail when vertical space is constrained. */
+    .vf-docs-toc-examples {
+      display: none;
     }
 
     .vf-docs-toc {
