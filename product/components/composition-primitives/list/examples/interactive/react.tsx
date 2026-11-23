@@ -27,6 +27,7 @@ function App() {
                 setSelected(current => checked ? [...current, name] : current.filter(item => item !== name));
               }} />}
             trailing={<Button type="button" variant="secondary" size="sm"
+              aria-label={'Details for ' + name}
               onClick={() => setDetails(name)}>Details</Button>}>
             <Text as="span">{name}</Text>
           </ListItem>

@@ -9,7 +9,7 @@ const groups = [
 
 function App() {
   return (
-    <div aria-label="Activity history" tabIndex={0}
+    <div role="region" aria-label="Activity history" tabIndex={0}
       style={{ maxBlockSize: '16rem', overflowY: 'auto' }}>
       {groups.map(group => (
         <section key={group.id}>

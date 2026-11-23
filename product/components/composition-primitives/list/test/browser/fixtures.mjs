@@ -36,9 +36,9 @@ export const browserFixture = {
       '<ol id="steps" role="list" aria-label="Release steps" start="3" data-vf-list' +
       ' data-vf-list-variant="plain" data-vf-list-size="sm" data-vf-list-spacing="none"' +
       ' data-vf-list-marker="auto"><li data-vf-list-item><div data-vf-list-item-layout>' +
-      '<div data-vf-list-item-content>Build</div></div></li></ol></main>';
+      '<div data-vf-list-item-content>Build</div></div></li></ol>';
 
-    let body = web + '<section id="extra" class="list-test-scroller">' +
+    let body = web + '<section id="extra" aria-label="Grouped list specimens" tabindex="0" class="list-test-scroller">' +
       '<h2 id="group-a" data-vf-list-subheader data-vf-list-subheader-sticky>Group A</h2>' +
       '<ul id="nested-parent" role="list" aria-labelledby="group-a" data-vf-list data-vf-list-variant="divided" data-vf-list-divider-inset="gutter" data-vf-list-gutter="none" data-vf-list-size="md" data-vf-list-spacing="none" data-vf-list-marker="none" data-vf-list-indent="none">' +
       '<li data-vf-list-item><div data-vf-list-item-layout><div data-vf-list-item-content>Root' +
@@ -47,7 +47,7 @@ export const browserFixture = {
       '</ul></div></div></li><li data-vf-list-item><div data-vf-list-item-layout><div data-vf-list-item-content>Root B</div></div></li></ul>' +
       '<h2 id="group-b" data-vf-list-subheader data-vf-list-subheader-sticky>Group B</h2>' +
       '<ul role="list" aria-labelledby="group-b" data-vf-list><li data-vf-list-item>Final</li></ul>' +
-      '</section>';
+      '</section></main>';
     if (port === 'react') {
       const { createElement: h } = await import('react');
       const { renderToStaticMarkup } = await import('react-dom/server');
@@ -64,7 +64,8 @@ export const browserFixture = {
         h(List, { as: 'ol', id: 'steps', start: 3, marker: 'auto',
           size: 'sm', 'aria-label': 'Release steps' },
         h(ListItem, null, 'Build')),
-        h('section', { id: 'extra', className: 'list-test-scroller' },
+        h('section', { id: 'extra', className: 'list-test-scroller',
+          'aria-label': 'Grouped list specimens', tabIndex: 0 },
           h('h2', { id: 'group-a', 'data-vf-list-subheader': '',
             'data-vf-list-subheader-sticky': '' }, 'Group A'),
           h(List, { id: 'nested-parent', 'aria-labelledby': 'group-a',

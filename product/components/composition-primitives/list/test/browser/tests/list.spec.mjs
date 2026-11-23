@@ -76,6 +76,7 @@ test('gutterless rows, nested logical indentation, inset rules, and native stick
   });
   expect(line).toEqual({ border: 'solid', position: 'absolute' });
   await expect(page.locator('#group-a')).toHaveCSS('position', 'sticky');
+  await expect(page.locator('#extra')).toHaveAttribute('tabindex', '0');
   await expect(page.getByRole('list', { name: 'Group A' })).toBeVisible();
   await page.evaluate(() => { document.documentElement.dir = 'rtl'; });
   expect(await nested.evaluate(el => parseFloat(getComputedStyle(el).paddingInlineStart))).toBeGreaterThan(0);

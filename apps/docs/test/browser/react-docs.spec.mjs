@@ -1929,6 +1929,8 @@ test('React List guide exposes rich semantic examples and a separate source-back
   const interactive = page.frameLocator('iframe[title="React Interactive checkbox and action rows List example"]');
   await interactive.getByRole('checkbox', { name: 'Select Monthly report' }).check();
   await expect(interactive.getByText('1 of 3 selected')).toBeVisible();
+  await interactive.getByRole('button', { name: 'Details for Monthly report' }).click();
+  await expect(interactive.getByText('Details requested for Monthly report')).toBeVisible();
 
   await page.goto('/next/react/api/components/list/');
   await expect(page.locator('[data-vf-docs-react-api="list"]')).toBeVisible();
