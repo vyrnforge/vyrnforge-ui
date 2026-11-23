@@ -126,7 +126,7 @@ export function OverlayUtility({ guide, links }) {
       h(PopoverTrigger, { 'aria-label': 'Open Popover', 'data-vf-button': '', 'data-vf-variant': 'secondary' }, 'Open'),
       h(PopoverContent, { 'aria-label': 'Overlay utility details' },
         h(Flow, { gap: 'sm' },
-          h(Text, { as: 'strong' }, 'Native anchored popover'),
+          h(Text, { as: 'strong' }, 'Details'),
           h(Text, { as: 'p' }, 'Escape or click outside to dismiss.'),
           h(Button, { type: 'button', size: 'sm', variant: 'secondary',
             onClick: () => setFeedback('Popover action activated') }, 'Test action'))));
