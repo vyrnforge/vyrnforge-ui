@@ -101,6 +101,12 @@ test.describe('Button real-browser contract', () => {
     expect(await busy.evaluate((element) => getComputedStyle(element).transitionDuration)).toBe('0s');
     expect(await busy.evaluate((element) => getComputedStyle(element, '::before').animationName)).toBe('none');
 
+    await page.setViewportSize({ width: 320, height: 680 });
+    const iconMatrix = await page.locator('#icon-specimens').evaluate(el => ({
+      width: el.scrollWidth,
+      available: el.clientWidth,
+    }));
+    expect(iconMatrix.width).toBeLessThanOrEqual(iconMatrix.available + 1);
     await page.emulateMedia({ reducedMotion: 'reduce', forcedColors: 'active' });
     expect(await page.evaluate(() => matchMedia('(forced-colors: active)').matches)).toBe(true);
     await expect(busy).toBeVisible();
@@ -258,6 +264,13 @@ test.describe('Icon-only Button visual and native behavior', () => {
     expect(await page.locator('#icon-md').evaluate(el => getComputedStyle(el).outlineStyle)).not.toBe('none');
     const axeResults = await new AxeBuilder({ page }).analyze();
     expect(axeResults.violations).toEqual([]);
+    await page.locator('#icon-specimens').screenshot({
+      path: test.info().outputPath('button-icon-only-light.png'),
+    });
+    await page.evaluate(() => { document.documentElement.dataset.vfTheme = 'dark'; });
+    await page.locator('#icon-specimens').screenshot({
+      path: test.info().outputPath('button-icon-only-dark.png'),
+    });
   });
 
   test('icon-only remains square under compact density, RTL, forced colors and reduced motion', async ({ page }) => {
@@ -284,5 +297,8 @@ test.describe('Icon-only Button visual and native behavior', () => {
     await expect(page.locator('#icon-sm')).toBeVisible();
     const axeResults = await new AxeBuilder({ page }).analyze();
     expect(axeResults.violations).toEqual([]);
+    await page.locator('#icon-specimens').screenshot({
+      path: test.info().outputPath('button-icon-only-forced-colors-rtl.png'),
+    });
   });
 });

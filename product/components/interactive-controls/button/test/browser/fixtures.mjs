@@ -23,7 +23,7 @@ export const browserFixture = {
         <button type="button" id="vertical-b" data-vf-button data-vf-variant="secondary">Second</button>
       </div>
       </div>
-      <div id="icon-specimens" hidden>
+      <div id="icon-specimens" hidden style="display:flex;flex-wrap:wrap;align-items:center;gap:1rem;padding:1rem">
         <button type="button" data-vf-button data-vf-icon-only data-vf-variant="ghost" data-vf-size="sm" id="icon-sm" aria-label="Search"><svg width="16" height="16" aria-hidden="true"><circle cx="8" cy="8" r="6"/></svg></button>
         <button type="button" data-vf-button data-vf-icon-only data-vf-variant="secondary" data-vf-size="md" id="icon-md" aria-label="Bookmark"><svg width="20" height="20" aria-hidden="true"><circle cx="10" cy="10" r="6"/></svg></button>
         <button type="button" data-vf-button data-vf-icon-only data-vf-variant="primary" data-vf-size="lg" id="icon-lg" aria-label="Share"><svg width="24" height="24" aria-hidden="true"><circle cx="12" cy="12" r="8"/></svg></button>
