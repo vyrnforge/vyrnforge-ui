@@ -64,44 +64,44 @@ function Source({ kind, placement, theme, elevation, direction }) {
     drawer: 'DrawerRoot, DrawerTitle, DrawerBody, DrawerClose',
   };
   const example = {
-    popover: '<PopoverRoot placement="' + placement + '">\\n' +
-      '  <PopoverTrigger data-vf-button="" data-vf-variant="secondary">Open Popover</PopoverTrigger>\\n' +
-      '  <PopoverContent aria-label="Details">Contextual content</PopoverContent>\\n' +
+    popover: '<PopoverRoot placement="' + placement + '">\n' +
+      '  <PopoverTrigger data-vf-button="" data-vf-variant="secondary">Open Popover</PopoverTrigger>\n' +
+      '  <PopoverContent aria-label="Details">Contextual content</PopoverContent>\n' +
       '</PopoverRoot>',
-    tooltip: '<TooltipRoot placement="' + placement + '">\\n' +
-      '  <TooltipTrigger><Button type="button">Help</Button></TooltipTrigger>\\n' +
-      '  <TooltipContent>Short description</TooltipContent>\\n' +
+    tooltip: '<TooltipRoot placement="' + placement + '">\n' +
+      '  <TooltipTrigger><Button type="button">Help</Button></TooltipTrigger>\n' +
+      '  <TooltipContent>Short description</TooltipContent>\n' +
       '</TooltipRoot>',
-    'preview-card': '<PreviewCardRoot placement="' + placement + '">\\n' +
-      '  <PreviewCardTrigger><Button type="button">Profile</Button></PreviewCardTrigger>\\n' +
-      '  <PreviewCardContent role="region" aria-label="Profile preview">Preview</PreviewCardContent>\\n' +
+    'preview-card': '<PreviewCardRoot placement="' + placement + '">\n' +
+      '  <PreviewCardTrigger><Button type="button">Profile</Button></PreviewCardTrigger>\n' +
+      '  <PreviewCardContent role="region" aria-label="Profile preview">Preview</PreviewCardContent>\n' +
       '</PreviewCardRoot>',
-    dialog: '<Button type="button" onClick={() => setOpen(true)}>Open Dialog</Button>\\n' +
-      '<DialogRoot open={open} onOpenChange={setOpen}>\\n' +
-      '  <DialogTitle>Details</DialogTitle>\\n' +
-      '  <DialogBody>Modal content</DialogBody>\\n' +
-      '  <DialogClose>Close</DialogClose>\\n' +
+    dialog: '<Button type="button" onClick={() => setOpen(true)}>Open Dialog</Button>\n' +
+      '<DialogRoot open={open} onOpenChange={setOpen}>\n' +
+      '  <DialogTitle>Details</DialogTitle>\n' +
+      '  <DialogBody>Modal content</DialogBody>\n' +
+      '  <DialogClose>Close</DialogClose>\n' +
       '</DialogRoot>',
-    drawer: '<Button type="button" onClick={() => setOpen(true)}>Open Drawer</Button>\\n' +
-      '<DrawerRoot open={open} onOpenChange={setOpen} placement="end">\\n' +
-      '  <DrawerTitle>Settings</DrawerTitle>\\n' +
-      '  <DrawerBody>Modal side panel</DrawerBody>\\n' +
-      '  <DrawerClose>Close</DrawerClose>\\n' +
+    drawer: '<Button type="button" onClick={() => setOpen(true)}>Open Drawer</Button>\n' +
+      '<DrawerRoot open={open} onOpenChange={setOpen} placement="end">\n' +
+      '  <DrawerTitle>Settings</DrawerTitle>\n' +
+      '  <DrawerBody>Modal side panel</DrawerBody>\n' +
+      '  <DrawerClose>Close</DrawerClose>\n' +
       '</DrawerRoot>',
   };
-  const source = (modal ? "import { useState } from 'react';\\n" : '') +
-    "import { ThemeScope } from '@vyrnforge/react';\\n" +
-    (kind === 'popover' ? '' : "import { Button } from '@vyrnforge/react/button';\\n") +
-    'import { ' + names[kind] + " } from '@vyrnforge/react/" + kind + "';\\n" +
-    "import '@vyrnforge/web/styles/" + kind + ".css';\\n" +
-    "import '@vyrnforge/web/styles/button.css';\\n\\n" +
-    'export default function Example() {\\n' +
-    (modal ? '  const [open, setOpen] = useState(false);\\n' : '') +
-    '  return (\\n' +
-    '    <ThemeScope theme="' + theme + '" dir="' + direction + '"' + tokens + '>\\n' +
-    '      ' + example[kind].split('\\n').join('\\n      ') + '\\n' +
-    '    </ThemeScope>\\n' +
-    '  );\\n}';
+  const source = (modal ? "import { useState } from 'react';\n" : '') +
+    "import { ThemeScope } from '@vyrnforge/react';\n" +
+    (kind === 'popover' ? '' : "import { Button } from '@vyrnforge/react/button';\n") +
+    'import { ' + names[kind] + " } from '@vyrnforge/react/" + kind + "';\n" +
+    "import '@vyrnforge/web/styles/" + kind + ".css';\n" +
+    "import '@vyrnforge/web/styles/button.css';\n\n" +
+    'export default function Example() {\n' +
+    (modal ? '  const [open, setOpen] = useState(false);\n' : '') +
+    '  return (\n' +
+    '    <ThemeScope theme="' + theme + '" dir="' + direction + '"' + tokens + '>\n' +
+    '      ' + example[kind].split('\n').join('\n      ') + '\n' +
+    '    </ThemeScope>\n' +
+    '  );\n}';
   return h('details', { className: 'vf-docs-source-disclosure' },
     h('summary', null, 'View public React usage'),
     h('pre', { tabIndex: 0, 'data-vf-code-block': '' }, h('code', null, source)));
