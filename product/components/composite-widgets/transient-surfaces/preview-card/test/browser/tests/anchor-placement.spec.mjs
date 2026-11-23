@@ -54,3 +54,30 @@ test('preview-card native anchor placement preserves all public placements and R
     expect(normalize(actual.placements[index].rtl)).toBe(normalize(scenario.rtl));
   }
 });
+
+test('preview-card anchored CSS retains zero-specificity consumer override semantics', async ({ page }) => {
+  test.skip(port !== 'web', 'Public CSS cascade evidence is owned by the Web lane.');
+  await page.goto('/components/preview-card/web.html');
+
+  const { before, after } = await page.evaluate(() => {
+    const probe = document.createElement('div');
+    probe.setAttribute('data-vf-preview-card-content', '');
+    probe.setAttribute('popover', 'manual');
+    probe.setAttribute('data-vf-placement', 'top');
+    document.body.append(probe);
+    const read = () => getComputedStyle(probe).getPropertyValue('position-area').trim();
+    const before = read();
+
+    const consumerStyle = document.createElement('style');
+    consumerStyle.textContent =
+      "@layer vyrnforge.components { :where([data-vf-preview-card-content][popover][data-vf-placement='top']) { position-area: bottom; } }";
+    document.head.append(consumerStyle);
+    const after = read();
+    consumerStyle.remove();
+    probe.remove();
+    return { before, after };
+  });
+
+  expect(normalize(before)).toBe('top');
+  expect(normalize(after)).toBe('bottom');
+});
