@@ -1,0 +1,13 @@
+{
+  "id": "list/grouped",
+  "title": "Grouped lists and sticky headings",
+  "description": "Separate semantic sections with associated list names and opt-in sticky h3 headings inside an authored scroll region",
+  "defaultFramework": "react",
+  "frameworks": {
+    "react": {
+      "label": "React",
+      "language": "tsx",
+      "source": "react.tsx"
+    }
+  }
+}

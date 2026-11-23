@@ -1,0 +1,13 @@
+{
+  "id": "list/nested",
+  "title": "Nested and collapsible lists",
+  "description": "Native nested ul/li structure, logical indentation and existing accessible Disclosure keyboard behavior",
+  "defaultFramework": "react",
+  "frameworks": {
+    "react": {
+      "label": "React",
+      "language": "tsx",
+      "source": "react.tsx"
+    }
+  }
+}
