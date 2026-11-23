@@ -252,6 +252,9 @@ const themeStudioStyles = [
 ].map((specifier) =>
   resolvePublicWebStyleAsset(webModel.packageManifest, specifier).assetPath);
 
+const iconExplorerStyles = ['@vyrnforge/web/styles/icon.css'].map((specifier) =>
+  resolvePublicWebStyleAsset(webModel.packageManifest, specifier).assetPath);
+
 function escapeHtml(value) {
   return String(value).replaceAll('&', '&amp;').replaceAll('<', '&lt;')
     .replaceAll('>', '&gt;').replaceAll('"', '&quot;');
@@ -338,7 +341,8 @@ async function verifyStyles(dir, extra = []) {
 }
 async function writePage(route, page) {
   const dir = directory(route);
-  await verifyStyles(dir, route === 'foundations/color/' ? themeStudioStyles : []);
+  await verifyStyles(dir, route === icon.showcaseRoute ? iconExplorerStyles :
+    route === 'foundations/color/' ? themeStudioStyles : []);
   const pageRoot = path.join(outRoot, dir);
   await mkdir(pageRoot, { recursive: true });
   await writeFile(path.join(pageRoot, 'index.html'), page);
@@ -718,7 +722,8 @@ for (const page of pageViews) {
     requestedTopic: page.requestedTopic ?? null };
   const initialHtml = renderToString(createElement(ReactReferencePage, props));
   const serialized = JSON.stringify(props).replaceAll('<', '\\u003c');
-  const styles = [...shellStyles, ...(['color', 'builder'].includes(page.view) ? themeStudioStyles : [])]
+  const styles = [...shellStyles, ...(['color', 'builder'].includes(page.view) ? themeStudioStyles : []),
+    ...(page.view === 'icon' ? iconExplorerStyles : [])]
     .map((asset) => '  <link rel="stylesheet" href="' +
       escapeHtml(relative(dir, asset)) + '">').join('\n');
   const pageHtml = '<!doctype html><html lang="en" data-vf-theme="light" data-vf-density="comfortable"><head>' +
