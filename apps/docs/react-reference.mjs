@@ -644,7 +644,7 @@ function listApi(list, links) {
     h('section', { 'aria-labelledby': 'react-list-api-entrypoints' },
       h('h2', { id: 'react-list-api-entrypoints' }, 'Public entrypoint'),
       h('ul', null, ...list.publicEntrypoints.map(name =>
-        h('li', { key: name }, h('code', { 'data-vf-code': '' }, name))),
+        h('li', { key: name }, h('code', { 'data-vf-code': '' }, name)))),
       h('p', null, 'Shared styling: ', h('code', null,
         '@vyrnforge/web/styles/list.css'))),
     h('section', { 'aria-labelledby': 'react-list-api-types' },

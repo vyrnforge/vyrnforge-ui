@@ -2173,6 +2173,9 @@ export const Link: ForwardRefExoticComponent<LinkProps & RefAttributes<HTMLAncho
 // @public (undocumented)
 export type LinkProps = AnchorHTMLAttributes<HTMLAnchorElement>;
 
+// @public
+export const List: ForwardRefExoticComponent<ListProps & RefAttributes<HTMLOListElement | HTMLUListElement>>;
+
 // @public (undocumented)
 export const ListboxOption: ForwardRefExoticComponent<ListboxOptionProps & RefAttributes<HTMLDivElement>>;
 
@@ -2208,6 +2211,50 @@ export type ListboxSelectionMode = 'single' | 'multiple';
 
 // @public (undocumented)
 export type ListboxValue = string | string[];
+
+// @public
+export type ListElement = 'ul' | 'ol';
+
+// @public
+export const ListItem: ForwardRefExoticComponent<ListItemProps & RefAttributes<HTMLLIElement>>;
+
+// @public
+export interface ListItemProps extends Omit<ComponentPropsWithoutRef<'li'>, 'role' | 'children'> {
+    // (undocumented)
+    children?: ReactNode;
+    // (undocumented)
+    leading?: ReactNode;
+    // (undocumented)
+    trailing?: ReactNode;
+}
+
+// @public (undocumented)
+export type ListMarker = 'none' | 'auto';
+
+// @public
+export interface ListProps extends Omit<ComponentPropsWithoutRef<'ol'>, 'role' | 'children'> {
+    // (undocumented)
+    as?: ListElement;
+    // (undocumented)
+    children?: ReactNode;
+    // (undocumented)
+    marker?: ListMarker;
+    // (undocumented)
+    size?: ListSize;
+    // (undocumented)
+    spacing?: ListSpacing;
+    // (undocumented)
+    variant?: ListVariant;
+}
+
+// @public (undocumented)
+export type ListSize = 'sm' | 'md' | 'lg';
+
+// @public (undocumented)
+export type ListSpacing = 'none' | 'sm' | 'md' | 'lg';
+
+// @public (undocumented)
+export type ListVariant = 'plain' | 'divided' | 'bordered';
 
 // @public (undocumented)
 export const MenubarContent: ForwardRefExoticComponent<Omit<DetailedHTMLProps<HTMLAttributes<HTMLDivElement>, HTMLDivElement>, "ref"> & RefAttributes<HTMLDivElement>>;

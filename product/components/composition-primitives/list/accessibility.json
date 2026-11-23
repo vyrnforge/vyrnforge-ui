@@ -41,13 +41,13 @@
     ]
   },
   "forms": {
-    "status": "consumer-controls-only"
+    "status": "not-applicable"
   },
   "visualAccessibility": {
     "status": "component-specific"
   },
   "ssrHydration": {
-    "status": "native markup without effects or generated ids"
+    "status": "native"
   },
   "evidence": {
     "browser": "required",
