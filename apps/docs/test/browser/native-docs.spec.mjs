@@ -97,6 +97,48 @@ test('Native Web Utilities Overlay page loads the shared guide and actual popove
   await expectNoAccessibilityViolations(page);
 });
 
+
+test('Native Motion utility reuses public control timing and keeps reduced-motion functional', async ({ page }, testInfo) => {
+  expect(manifest.utilities).toContainEqual({
+    id: 'motion', slug: 'utilities/motion/', title: 'Motion utility',
+    source: 'documentation/utilities/motion.md',
+  });
+  const html = readFileSync('dist/docs/next/native-web/utilities/motion/index.html', 'utf8');
+  expect(html).toContain('components/switch/switch.css');
+  expect(html).toContain('data-vf-switch');
+  await gotoWithCleanDocsState(page, '/next/native-web/utilities/motion/');
+  const utility = page.locator('[data-vf-docs-native-motion-utility]');
+  await expect(utility.getByRole('heading', { name: 'Motion utility' })).toBeVisible();
+  await expect(page.getByRole('navigation', { name: 'Documentation' })
+    .getByRole('link', { name: 'Motion' })).toHaveAttribute('aria-current', 'page');
+  const normal = page.locator('#vf-motion-default-switch');
+  const custom = page.locator('#vf-motion-custom-switch');
+  const before = await page.evaluate(() => {
+    const normal = document.getElementById('vf-motion-default-switch');
+    const custom = document.getElementById('vf-motion-custom-switch');
+    return [getComputedStyle(normal).transitionDuration, getComputedStyle(custom).transitionDuration];
+  });
+  expect(before[0]).toContain('0.12s');
+  expect(before[1]).toContain('0.08s');
+  await normal.check();
+  await custom.check();
+  await expect(normal).toBeChecked();
+  await expect(custom).toBeChecked();
+  await expectDeploymentRelativeStyles(page);
+  await expectNoAccessibilityViolations(page);
+  await page.screenshot({ path: testInfo.outputPath('native-motion-utility-desktop.png') });
+
+  await page.emulateMedia({ reducedMotion: 'reduce' });
+  const reduced = await page.evaluate(() => {
+    const normal = document.getElementById('vf-motion-default-switch');
+    const custom = document.getElementById('vf-motion-custom-switch');
+    return [getComputedStyle(normal).transitionDuration, getComputedStyle(custom).transitionDuration];
+  });
+  expect(reduced).toEqual(['0s', '0s']);
+  await normal.uncheck();
+  await expect(normal).not.toBeChecked();
+});
+
 test('Every emitted Native Web guide uses canonical Flow and AutoGrid layout hooks', () => {
   expect(manifest.pages.length).toBeGreaterThan(0);
   for (const guide of manifest.pages) {
