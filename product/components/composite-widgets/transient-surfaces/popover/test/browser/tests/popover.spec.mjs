@@ -154,3 +154,23 @@ test('Popover constrains long content in a narrow viewport', async ({ page }) =>
   await page.keyboard.press('Escape');
   await expect(surface).toBeHidden();
 });
+
+test('public Popover CSS uses canonical elevation and native top-layer stacking', async ({ page }) => {
+  test.skip(port !== 'web', 'Public CSS resolution evidence is owned by the Web lane.');
+  await page.goto('/components/popover/web.html');
+  await page.locator('#t').click();
+  const surface = page.locator('#c');
+  await expect(surface).toBeVisible();
+  await expect(surface).toHaveCSS('z-index', 'auto');
+
+  await surface.evaluate((element) => element.style.setProperty('--vf-shadow-md', '0 0 0 7px rgb(1 2 3)'));
+  await expect(surface).toHaveCSS('box-shadow', 'rgb(1, 2, 3) 0px 0px 0px 7px');
+
+  await surface.evaluate((element) =>
+    element.style.setProperty('--vf-shadow-popover', '0 0 0 9px rgb(4 5 6)'),
+  );
+  await expect(surface).toHaveCSS('box-shadow', 'rgb(4, 5, 6) 0px 0px 0px 9px');
+
+  await page.emulateMedia({ forcedColors: 'active' });
+  await expect(surface).toHaveCSS('box-shadow', 'none');
+});
