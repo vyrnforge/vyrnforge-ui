@@ -237,7 +237,9 @@ function layoutGuide(layout, links) {
     { id: 'react-layout-reference', heading: 'Related components and API' },
   ];
   return h('div', { className: 'vf-docs-content-grid vf-docs-usage-guide-layout' },
-    guideToc(sections),
+    guideToc(sections, {
+      label: 'Layout', examples: examples, getId: (example) => 'react-layout-example-' + example.id.split('/')[1],
+    }),
     h(Flow, { as: 'article', gap: '2xl', className: 'vf-docs-article vf-docs-usage-guide',
       'data-vf-docs-react-layout': '' },
       guideHeader(content, 'React · Layout & Structure · Flow & AutoGrid'),
@@ -247,8 +249,6 @@ function layoutGuide(layout, links) {
           h('a', { href: links.home, 'data-vf-link': '' }, 'React overview'), '.'),
       ]),
       guidePart(sections[1], [
-        exampleJumpLinks('Layout', examples,
-          (example) => 'react-layout-example-' + example.id.split('/')[1]),
         ...examples.map((example) => layoutExample(example, links)),
       ]),
       guidePart(sections[2], [
@@ -310,22 +310,25 @@ function guideBlocks(content, heading) {
   return renderBlocks(guideSection(content, heading)?.blocks);
 }
 function guideSubsections(content, headings, prefix) {
-  const sections = headings.map((heading) => ({ heading, section: guideSection(content, heading) }))
-    .filter(({ section }) => section);
-  return sections.map(({ heading, section }, index) => {
+  // Usage guidance is part of the article, not an accordion. Keep native heading
+  // navigation and source-authored content readable without a disclosure action.
+  return headings.flatMap((heading) => {
+    const section = guideSection(content, heading);
+    if (!section) return [];
     const id = prefix + '-' + slug(heading);
-    return h('details', { key: id, className: 'vf-docs-guide-subsection',
-      'data-vf-docs-guide-detail': '', open: index === 0 },
-      h('summary', null, h('h3', { id }, heading)),
-      h('div', { className: 'vf-docs-guide-subsection-body' }, ...renderBlocks(section.blocks)));
+    return [h(Flow, { as: 'section', gap: 'sm', key: id,
+      className: 'vf-docs-guide-subsection', 'aria-labelledby': id },
+      h('h3', { id }, heading), ...renderBlocks(section.blocks))];
   });
 }
-function guideToc(sections) {
+function guideToc(sections, exampleIndex = null) {
   return h('aside', { className: 'vf-docs-toc-region' },
     h('nav', { className: 'vf-docs-toc', 'aria-label': 'On this page' },
       h('p', null, 'On this page'),
       h(Flow, { as: 'ol', gap: 'xs' }, ...sections.map(({ id, heading }) =>
-        h('li', { key: id }, h('a', { href: '#' + id }, heading))))));
+        h('li', { key: id }, h('a', { href: '#' + id }, heading))))),
+    exampleIndex ? exampleJumpLinks(exampleIndex.label,
+      exampleIndex.examples, exampleIndex.getId) : null);
 }
 function guideHeader(content, eyebrow) {
   return h('header', { className: 'vf-docs-component-header' },
@@ -345,19 +348,14 @@ function evidenceDisclosure(references) {
     accessibilityEvidence(references, 'h3'));
 }
 function exampleJumpLinks(label, examples, getId) {
-  const navigation = h('nav', { className: 'vf-docs-example-links',
+  // Section links belong in the quiet page sidebar; examples themselves are
+  // always visible with their own heading, live demo and optional source.
+  return h('nav', { className: 'vf-docs-example-links vf-docs-toc-examples',
     'aria-label': label + ' examples' },
-    h(Flow, { as: 'ul', direction: 'inline', wrap: 'wrap', gap: 'sm' },
-      ...examples.map((example) =>
-        h('li', { key: example.id },
-          h('a', { href: '#' + getId(example) }, example.title)))));
-  // The page TOC already covers the major sections. Large example indexes are
-  // available on demand instead of competing with the examples on first load.
-  return examples.length > 4
-    ? h('details', { key: 'jump-links', className: 'vf-docs-example-index' },
-        h('summary', null, 'Find an example (' + examples.length + ')'),
-        navigation)
-    : navigation;
+    h('p', null, 'Examples'),
+    h(Flow, { as: 'ol', gap: 'none' }, ...examples.map((example) =>
+      h('li', { key: example.id },
+        h('a', { href: '#' + getId(example) }, example.title)))));
 }
 function typographyUsageGuide(unit, links) {
   const id = unit.id;
@@ -372,7 +370,9 @@ function typographyUsageGuide(unit, links) {
     ? ['When to use', 'When not to use', 'Native baseline', 'Visual roles']
     : ['When to use', 'When not to use', 'Native baseline', 'Visual styling'];
   return h('div', { className: 'vf-docs-content-grid vf-docs-usage-guide-layout' },
-    guideToc(sections),
+    guideToc(sections, {
+      label: unit.title, examples: unit.examples, getId: (example) => 'react-typography-' + id + '-' + example.id.slice(id.length + 1),
+    }),
     h(Flow, { as: 'article', gap: '2xl', className: 'vf-docs-article vf-docs-usage-guide',
       'data-vf-docs-react-typography': id },
       guideHeader(unit.sharedContent, 'React · Typography'),
@@ -382,8 +382,6 @@ function typographyUsageGuide(unit, links) {
           h('a', { href: links.home, 'data-vf-link': '' }, 'React overview'), '.'),
       ]),
       guidePart(sections[1], [
-        exampleJumpLinks(unit.title, unit.examples, (example) =>
-          'react-typography-' + id + '-' + example.id.slice(id.length + 1)),
         ...unit.examples.map((example) => typographyExample(unit, example, links)),
       ], { 'data-vf-docs-react-usage-gallery': id }),
       guidePart(sections[2], [
@@ -435,27 +433,33 @@ function typographyApi(unit, links) {
 }
 function buttonExample(example, links) {
   const id = example.id.slice('button/'.length);
-  return h('details', { key: example.id, id: 'react-button-example-' + id,
-    className: 'vf-docs-example vf-docs-example-collapsible',
-    'data-vf-docs-react-button-example': example.id, open: id === 'basic' },
-    h(Flow, { as: 'summary', direction: 'inline', wrap: 'wrap', gap: 'sm',
-      align: 'center', justify: 'space-between', className: 'vf-docs-example-header' },
-      h(Text, { as: 'h3', variant: 'heading-sm' }, example.title)),
-    h('div', { className: 'vf-docs-example-detail' },
-      h(Text, { as: 'p', className: 'vf-docs-example-description' }, example.description),
-      h('iframe', { className: 'vf-docs-react-example-frame',
-        title: id === 'basic' ? 'Checked-in React Button example' : 'React ' + example.title + ' example',
-        src: links.buttonExamples[id], sandbox: 'allow-scripts',
-        loading: id === 'basic' ? 'eager' : 'lazy',
-        style: { minBlockSize: id === 'joined' ? '26rem' : id === 'toggle' ? '26rem' :
-          id === 'icons' ? '28rem' : id === 'density' ? '14rem' : '10rem' } }),
-      h('details', { className: 'vf-docs-source-disclosure' },
-        h('summary', null, id === 'basic' ? 'View checked-in React source' : 'View React TSX source'),
-        h('pre', { 'data-vf-code-block': '', tabIndex: 0 },
-          h('code', null, example.source)))));
+  return h('article', { key: example.id, id: 'react-button-example-' + id,
+    className: 'vf-docs-example', 'data-vf-docs-react-button-example': example.id },
+    h(Flow, { as: 'header', direction: 'inline', wrap: 'wrap', gap: 'sm',
+      align: 'start', justify: 'space-between', className: 'vf-docs-example-header' },
+      h('div', null, h(Text, { as: 'h3', variant: 'heading-sm' }, example.title),
+        h(Text, { as: 'p' }, example.description))),
+    h('iframe', { className: 'vf-docs-react-example-frame',
+      title: id === 'basic' ? 'Checked-in React Button example' : 'React ' + example.title + ' example',
+      src: links.buttonExamples[id], sandbox: 'allow-scripts',
+      loading: id === 'basic' ? 'eager' : 'lazy',
+      style: { minBlockSize: id === 'joined' ? '26rem' : id === 'toggle' ? '26rem' :
+        id === 'icons' ? '28rem' : id === 'density' ? '14rem' : '10rem' } }),
+    h('details', { className: 'vf-docs-source-disclosure' },
+      h('summary', null, id === 'basic' ? 'View checked-in React source' : 'View React TSX source'),
+      h('pre', { 'data-vf-code-block': '', tabIndex: 0 },
+        h('code', null, example.source))));
 }
-function buttonUsageGuide(button, links, message, setMessage) {
+function buttonUsageGuide(button, links) {
   if (!button?.sharedContent || !button?.frameworkContent) return null;
+  // The owner-authored examples stay discoverable through the Product Graph;
+  // only their reading order is curated for a first-time consumer.
+  const readingOrder = new Map([
+    'button/basic', 'button/variants', 'button/sizes', 'button/states',
+    'button/icons', 'button/joined', 'button/forms', 'button/density', 'button/toggle',
+  ].map((id, index) => [id, index]));
+  const examples = button.examples.slice().sort((a, b) =>
+    (readingOrder.get(a.id) ?? Infinity) - (readingOrder.get(b.id) ?? Infinity));
   const sections = [
     { id: 'react-setup', heading: 'Get started' },
     { id: 'react-usage', heading: 'Examples' },
@@ -464,7 +468,9 @@ function buttonUsageGuide(button, links, message, setMessage) {
     { id: 'react-reference', heading: 'Related components and API' },
   ];
   return h('div', { className: 'vf-docs-content-grid vf-docs-usage-guide-layout' },
-    guideToc(sections),
+    guideToc(sections, {
+      label: 'Button', examples, getId: (ex) => 'react-button-example-' + ex.id.slice('button/'.length),
+    }),
     h(Flow, { as: 'article', gap: '2xl', className: 'vf-docs-article vf-docs-usage-guide',
       'data-vf-docs-react-component': 'button' },
       guideHeader(button.sharedContent, 'React · Components · Actions'),
@@ -474,15 +480,7 @@ function buttonUsageGuide(button, links, message, setMessage) {
           h('a', { href: links.home, 'data-vf-link': '' }, 'React overview'), '.'),
       ]),
       guidePart(sections[1], [
-        h(Flow, { key: 'live', className: 'vf-docs-preview',
-          direction: 'inline', wrap: 'wrap', gap: 'md' },
-          h(Button, { type: 'button', onClick: () => setMessage('Save changes activated') },
-            'Save changes'),
-          h('span', { role: 'status', 'aria-live': 'polite',
-            'data-vf-docs-react-feedback': '' }, message)),
-        exampleJumpLinks('Button', button.examples, (ex) =>
-          'react-button-example-' + ex.id.slice('button/'.length)),
-        ...button.examples.map((ex) => buttonExample(ex, links)),
+        ...examples.map((ex) => buttonExample(ex, links)),
       ]),
       guidePart(sections[2], guideSubsections(button.sharedContent, [
         'When to use', 'Native baseline', 'Variants', 'Sizes',
@@ -606,7 +604,9 @@ function iconUsage(icon, links) {
     { id: 'react-icon-related', heading: 'Related components and API' },
   ];
   return h('div', { className: 'vf-docs-content-grid vf-docs-usage-guide-layout' },
-    guideToc(sections),
+    guideToc(sections, {
+      label: 'Icon', examples: examples, getId: (example) => 'react-icon-example-' + example.id.slice('icon/'.length),
+    }),
     h(Flow, { as: 'article', gap: '2xl', className: 'vf-docs-article vf-docs-usage-guide',
       'data-vf-docs-react-icon': '' },
       guideHeader(icon.sharedContent, 'React · Media'),
@@ -617,8 +617,6 @@ function iconUsage(icon, links) {
           'React overview'), ' for shared CSS and server-rendering setup.'),
       ]),
       guidePart(sections[1], [
-        exampleJumpLinks('Icon', examples,
-          (example) => 'react-icon-example-' + example.id.slice('icon/'.length)),
         ...examples.map((example) => iconExample(example, links)),
       ]),
       guidePart(sections[2], [
@@ -706,14 +704,14 @@ function listUsage(list, links) {
     { id: 'react-list-related', heading: 'API and related components' },
   ];
   return h('div', { className: 'vf-docs-content-grid vf-docs-usage-guide-layout' },
-    guideToc(sections),
+    guideToc(sections, {
+      label: 'List', examples: list.examples, getId: (example) => 'react-list-example-' + example.id.slice('list/'.length),
+    }),
     h(Flow, { as: 'article', gap: '2xl', className: 'vf-docs-article vf-docs-usage-guide',
       'data-vf-docs-react-list': '' },
       guideHeader(list.sharedContent, 'React · Collections'),
       guidePart(sections[0], [...guideBlocks(list.frameworkContent, 'React setup')]),
       guidePart(sections[1], [
-        exampleJumpLinks('List', list.examples,
-          example => 'react-list-example-' + example.id.slice('list/'.length)),
         ...list.examples.map(example => listExample(example, links)),
       ]),
       guidePart(sections[2], [
@@ -784,14 +782,14 @@ function badgeUsage(badge, links) {
     { id: 'react-badge-related', heading: 'Related components and API' },
   ];
   return h('div', { className: 'vf-docs-content-grid vf-docs-usage-guide-layout' },
-    guideToc(sections),
+    guideToc(sections, {
+      label: 'Badge', examples: badge.examples, getId: (example) => 'react-badge-example-' + example.id.slice('badge/'.length),
+    }),
     h(Flow, { as: 'article', gap: '2xl', className: 'vf-docs-article vf-docs-usage-guide',
       'data-vf-docs-react-badge': '' },
       guideHeader(badge.sharedContent, 'React · Metadata'),
       guidePart(sections[0], [...guideBlocks(badge.frameworkContent, 'React setup')]),
       guidePart(sections[1], [
-        exampleJumpLinks('Badge', badge.examples,
-          example => 'react-badge-example-' + example.id.slice('badge/'.length)),
         ...badge.examples.map(example => badgeExample(example, links)),
       ]),
       guidePart(sections[2], [
@@ -860,7 +858,9 @@ function avatarUsage(avatar, links) {
     { id: 'react-avatar-related', heading: 'Related components and API' },
   ];
   return h('div', { className: 'vf-docs-content-grid vf-docs-usage-guide-layout' },
-    guideToc(sections),
+    guideToc(sections, {
+      label: 'Avatar', examples: examples, getId: (example) => 'react-avatar-example-' + example.id.slice('avatar/'.length),
+    }),
     h(Flow, { as: 'article', gap: '2xl', className: 'vf-docs-article vf-docs-usage-guide',
       'data-vf-docs-react-avatar': '' },
       guideHeader(avatar.sharedContent, 'React · Media'),
@@ -870,8 +870,6 @@ function avatarUsage(avatar, links) {
           'React overview'), ' for shared setup and stylesheet delivery.'),
       ]),
       guidePart(sections[1], [
-        exampleJumpLinks('Avatar', examples,
-          (example) => 'react-avatar-example-' + example.id.slice('avatar/'.length)),
         ...examples.map((example) => avatarExample(example, links)),
       ]),
       guidePart(sections[2], [
@@ -944,7 +942,9 @@ function imageUsage(image, links) {
     { id: 'react-image-related', heading: 'Related components and API' },
   ];
   return h('div', { className: 'vf-docs-content-grid vf-docs-usage-guide-layout' },
-    guideToc(sections),
+    guideToc(sections, {
+      label: 'Image', examples: examples, getId: (example) => 'react-image-example-' + example.id.slice('image/'.length),
+    }),
     h(Flow, { as: 'article', gap: '2xl', className: 'vf-docs-article vf-docs-usage-guide',
       'data-vf-docs-react-image': '' },
       guideHeader(image.sharedContent, 'React · Media'),
@@ -954,8 +954,6 @@ function imageUsage(image, links) {
           'React overview'), ' for shared setup and stylesheet delivery.'),
       ]),
       guidePart(sections[1], [
-        exampleJumpLinks('Image', examples,
-          (example) => 'react-image-example-' + example.id.slice('image/'.length)),
         ...examples.map((example) => imageExample(example, links)),
       ]),
       guidePart(sections[2], [
@@ -1032,7 +1030,9 @@ function dividerUsage(divider, links) {
     { id: 'react-divider-related', heading: 'Related components and API' },
   ];
   return h('div', { className: 'vf-docs-content-grid vf-docs-usage-guide-layout' },
-    guideToc(sections),
+    guideToc(sections, {
+      label: 'Divider', examples: examples, getId: (example) => 'react-divider-example-' + example.id.slice('divider/'.length),
+    }),
     h(Flow, { as: 'article', gap: '2xl', className: 'vf-docs-article vf-docs-usage-guide',
       'data-vf-docs-react-divider': '' },
       guideHeader(divider.sharedContent, 'React · Layout & Structure'),
@@ -1042,8 +1042,6 @@ function dividerUsage(divider, links) {
           h('a', { href: links.home, 'data-vf-link': '' }, 'React overview'), '.'),
       ]),
       guidePart(sections[1], [
-        exampleJumpLinks('Divider', examples,
-          (example) => 'react-divider-example-' + example.id.slice('divider/'.length)),
         ...examples.map((example) => dividerExample(example, links)),
       ]),
       guidePart(sections[2], [
@@ -1247,7 +1245,7 @@ function themesGuide(links) {
       h(Text, { as: 'p' }, h('a', { href: links.rtl, 'data-vf-link': '' }, 'Use right-to-left content'))));
 }
 
-function body(view, links, button, toggle, layout, typography, icon, image, avatar, divider, badge, list, overlayGuide, motionGuide, message, setMessage, requestedTopic) {
+function body(view, links, button, toggle, layout, typography, icon, image, avatar, divider, badge, list, overlayGuide, motionGuide, requestedTopic) {
   if (view === 'unavailable') {
     return h('article', { className: 'vf-docs-article', 'data-vf-docs-react-unavailable': '' },
       h('header', { className: 'vf-docs-component-header' },
@@ -1389,13 +1387,12 @@ function body(view, links, button, toggle, layout, typography, icon, image, avat
           h('code', null, button.publicButtonTypes))),
       h('p', null, h('a', { 'data-vf-link': '', href: links.guide }, 'View Button examples')));
   }
-  return buttonUsageGuide(button, links, message, setMessage);
+  return buttonUsageGuide(button, links);
 }
 export function ReactReferencePage({ view, links, button, toggle, layout, typography, icon, image, avatar, divider, badge, list, overlayGuide, motionGuide, requestedTopic }) {
   const nav = useNavigation();
   const { theme, change } = useTheme();
   const [search, setSearch] = useState('');
-  const [message, setMessage] = useState('');
   useEffect(() => { document.documentElement.dataset.vfReactHydrated = 'true'; }, []);
   const pages = [
     { title: 'React overview', href: links.home, keywords: 'getting started setup' },
@@ -1514,7 +1511,7 @@ export function ReactReferencePage({ view, links, button, toggle, layout, typogr
           h('a', { 'data-vf-link': '', href: links.native }, 'Native Web'),
           h('span', { 'aria-hidden': 'true' }, ' / '),
           h('span', { 'aria-current': 'page' }, 'React')),
-        body(view, links, button, toggle, layout, typography, icon, image, avatar, divider, badge, list, overlayGuide, motionGuide, message, setMessage, requestedTopic))),
+        body(view, links, button, toggle, layout, typography, icon, image, avatar, divider, badge, list, overlayGuide, motionGuide, requestedTopic))),
     h(AppShellFooter, { className: 'vf-docs-footer' },
       h('span', null, 'VyrnForge React documentation'),
       h('span', null, links.channel + ' channel'))));

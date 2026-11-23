@@ -1,7 +1,7 @@
 {
   "id": "button/icons",
-  "title": "Icon-only Button sizes, emphasis and states",
-  "description": "A square icon-only mode on native Button with ghost, secondary, primary, loading and disabled states plus a labeled icon/text action.",
+  "title": "Icon buttons",
+  "description": "Square icon actions share Button sizing and require an accessible name.",
   "defaultFramework": "react",
   "frameworks": {
     "react": {

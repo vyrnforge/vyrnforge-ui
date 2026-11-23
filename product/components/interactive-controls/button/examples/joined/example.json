@@ -1,7 +1,7 @@
 {
   "id": "button/joined",
-  "title": "Independent and joined Button groups",
-  "description": "Separated commands, joined text and icon-only horizontal actions, and vertical actions with native group names and independent Tab stops",
+  "title": "Button groups",
+  "description": "Separate or visually join related commands while preserving individual Tab stops.",
   "defaultFramework": "react",
   "frameworks": {
     "react": {

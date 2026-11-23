@@ -1,7 +1,7 @@
 {
   "id": "button/variants",
-  "title": "Button variants",
-  "description": "Compare the shared Button emphasis variants across each implemented framework surface.",
+  "title": "Variants",
+  "description": "Choose emphasis appropriate to the action, not a different interaction model.",
   "defaultFramework": "native-web",
   "frameworks": {
     "native-web": {
