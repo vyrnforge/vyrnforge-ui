@@ -597,7 +597,7 @@ test('React Button-family guide shows joined groups, ToggleButton and density wi
 test('React Button guide keeps all demos visible, source optional and navigation available without JavaScript', async ({
   page,
   browser,
-}) => {
+}, testInfo) => {
   await page.goto('/next/react/components/button/');
   const guide = page.locator('[data-vf-docs-react-component="button"]');
   const examples = guide.locator('[data-vf-docs-react-button-example]');
@@ -624,6 +624,25 @@ test('React Button guide keeps all demos visible, source optional and navigation
   await expect(source).not.toHaveAttribute('open', '');
   await expect(guide.getByRole('heading', { name: 'Accessibility', level: 2 })).toBeVisible();
   await expect(guide.getByRole('heading', { name: 'Native baseline' })).toBeVisible();
+
+  await page.setViewportSize({ width: 1440, height: 900 });
+  await guide.locator('#react-button-example-variants').scrollIntoViewIfNeeded();
+  await page.screenshot({
+    path: testInfo.outputPath('react-button-guide-live-demo-desktop.png'),
+    fullPage: false,
+  });
+  await page.setViewportSize({ width: 375, height: 812 });
+  await expect(page.locator('.vf-docs-toc-examples')).toBeHidden();
+  await guide.locator('#react-button-example-icons').scrollIntoViewIfNeeded();
+  const bounds = await page.evaluate(() => ({
+    viewport: document.documentElement.clientWidth,
+    scroll: document.documentElement.scrollWidth,
+  }));
+  expect(bounds.scroll).toBeLessThanOrEqual(bounds.viewport + 1);
+  await page.screenshot({
+    path: testInfo.outputPath('react-button-guide-live-demo-mobile.png'),
+    fullPage: false,
+  });
 
   const noJsContext = await browser.newContext({ javaScriptEnabled: false });
   try {
