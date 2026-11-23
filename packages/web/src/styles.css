@@ -16,6 +16,7 @@
 @import "./components/textarea/textarea.css";
 @import "./components/toggle-button/toggle-button.css";
 @import "./components/layout/layout.css";
+@import "./components/list/list.css";
 @import "./components/tabs/tabs.css";
 @import "./components/text/text.css";
 @import "./components/disclosure/disclosure.css";

@@ -156,6 +156,7 @@ function navigation(view, links, topic) {
     { label: 'Layout & Structure', items: [
       { id: 'layout', title: 'Layout', href: links.layout },
       { id: 'divider', title: 'Divider', href: links.divider.guide },
+      { id: 'list', title: 'List', href: links.list.guide },
     ] },
     { label: 'Media', items: [
       { id: 'icon', title: 'Icon', href: links.icon.guide },
@@ -172,6 +173,7 @@ function navigation(view, links, topic) {
       { id: 'api', title: 'Button API', href: links.api },
       { id: 'layout-api', title: 'Layout API', href: links.layoutApi },
       { id: 'divider-api', title: 'Divider API', href: links.divider.api },
+      { id: 'list-api', title: 'List API', href: links.list.api },
       { id: 'icon-api', title: 'Icon API', href: links.icon.api },
       { id: 'image-api', title: 'Image API', href: links.image.api },
       { id: 'avatar-api', title: 'Avatar API', href: links.avatar.api },
@@ -577,6 +579,82 @@ function iconApi(icon, links) {
       h('code', { 'data-vf-code': '' }, '@vyrnforge/web/styles/icon.css')),
     h('p', null, h('a', { href: links.icon.guide, 'data-vf-link': '' }, 'View Icon examples')));
 }
+function listExample(example, links) {
+  const slug = example.id.slice('list/'.length);
+  return h('article', { key: example.id, className: 'vf-docs-example',
+    id: 'react-list-example-' + slug, 'data-vf-docs-react-list-example': example.id },
+    h(Flow, { as: 'header', direction: 'inline', wrap: 'wrap',
+      gap: 'lg', align: 'start', justify: 'space-between', className: 'vf-docs-example-header' },
+      h('div', null, h(Text, { as: 'h3', variant: 'heading-sm' }, example.title),
+        h(Text, { as: 'p' }, example.description))),
+    h('iframe', { className: 'vf-docs-react-example-frame',
+      title: 'React ' + example.title + ' List example',
+      src: links.list.exampleBase + slug + '/', sandbox: 'allow-scripts',
+      loading: slug === 'rich' ? 'eager' : 'lazy' }),
+    h('details', { className: 'vf-docs-source-disclosure' },
+      h('summary', null, 'View React TSX source'),
+      h('pre', { 'data-vf-code-block': '', tabIndex: 0 },
+        h('code', null, example.source))));
+}
+function listUsage(list, links) {
+  if (!list?.sharedContent || !list?.frameworkContent || !list.examples?.length) return null;
+  const sections = [
+    { id: 'react-list-setup', heading: 'Get started' },
+    { id: 'react-list-examples', heading: 'Rich List examples' },
+    { id: 'react-list-design', heading: 'Composition and variants' },
+    { id: 'react-list-accessibility', heading: 'Accessibility and boundaries' },
+    { id: 'react-list-related', heading: 'API and related components' },
+  ];
+  return h('div', { className: 'vf-docs-content-grid vf-docs-usage-guide-layout' },
+    guideToc(sections),
+    h(Flow, { as: 'article', gap: '2xl', className: 'vf-docs-article vf-docs-usage-guide',
+      'data-vf-docs-react-list': '' },
+      guideHeader(list.sharedContent, 'React · Collections'),
+      guidePart(sections[0], [...guideBlocks(list.frameworkContent, 'React setup')]),
+      guidePart(sections[1], [
+        exampleJumpLinks('List', list.examples,
+          example => 'react-list-example-' + example.id.slice('list/'.length)),
+        ...list.examples.map(example => listExample(example, links)),
+      ]),
+      guidePart(sections[2], [
+        ...guideSubsections(list.sharedContent,
+          ['When to use', 'Anatomy and reuse', 'Variants, sizing and spacing',
+            'Responsive and design constraints'], 'react-list-guidance'),
+        ...guideSubsections(list.frameworkContent,
+          ['Composition with existing VyrnForge components',
+           'React state and server rendering'], 'react-list-integration'),
+      ]),
+      guidePart(sections[3], [
+        ...guideBlocks(list.sharedContent, 'Accessibility and states'),
+        evidenceDisclosure(list.standardReferences),
+      ]),
+      guidePart(sections[4], [
+        h('a', { href: links.list.api, 'data-vf-link': '' },
+          'View List and ListItem public React API'),
+      ])));
+}
+function listApi(list, links) {
+  if (!list?.publicListTypes || !list?.publicEntrypoints?.length) return null;
+  return h('article', { className: 'vf-docs-article', 'data-vf-docs-react-api': 'list' },
+    h('header', { className: 'vf-docs-component-header' },
+      h('h1', null, 'List API'),
+      h('p', { className: 'vf-docs-lede' },
+        'Native ordered and unordered List hosts, rich ListItem composition, and documented presentation axes.'),
+      accessibilityEvidence(list.standardReferences)),
+    h('section', { 'aria-labelledby': 'react-list-api-entrypoints' },
+      h('h2', { id: 'react-list-api-entrypoints' }, 'Public entrypoint'),
+      h('ul', null, ...list.publicEntrypoints.map(name =>
+        h('li', { key: name }, h('code', { 'data-vf-code': '' }, name))),
+      h('p', null, 'Shared styling: ', h('code', null,
+        '@vyrnforge/web/styles/list.css'))),
+    h('section', { 'aria-labelledby': 'react-list-api-types' },
+      h('h2', { id: 'react-list-api-types' }, 'Source-backed React types and props'),
+      h('pre', { 'data-vf-code-block': '', tabIndex: 0 },
+        h('code', null, list.publicListTypes))),
+    h('p', null, h('a', { href: links.list.guide, 'data-vf-link': '' },
+      'View List composition examples')));
+}
+
 function badgeExample(example, links) {
   const slug = example.id.slice('badge/'.length);
   return h('article', { key: example.id, id: 'react-badge-example-' + slug,
@@ -1066,7 +1144,7 @@ function themesGuide(links) {
       h(Text, { as: 'p' }, h('a', { href: links.rtl, 'data-vf-link': '' }, 'Use right-to-left content'))));
 }
 
-function body(view, links, button, layout, typography, icon, image, avatar, divider, badge, message, setMessage, requestedTopic) {
+function body(view, links, button, layout, typography, icon, image, avatar, divider, badge, list, message, setMessage, requestedTopic) {
   if (view === 'unavailable') {
     return h('article', { className: 'vf-docs-article', 'data-vf-docs-react-unavailable': '' },
       h('header', { className: 'vf-docs-component-header' },
@@ -1090,7 +1168,7 @@ function body(view, links, button, layout, typography, icon, image, avatar, divi
       h('header', { className: 'vf-docs-component-header' },
         h('h1', null, 'VyrnForge React'),
         h('p', { className: 'vf-docs-lede', 'data-vf-text': '', 'data-vf-text-variant': 'body-lg' },
-          'Runnable React examples for Button, Layout, Divider, Text, Code, Kbd, Icon, Image and Avatar. All use the shared VyrnForge Web design foundation.')),
+          'Runnable React examples for Button, Layout, List, Divider, Text, Code, Kbd, Icon, Image and Avatar. All use the shared VyrnForge Web design foundation.')),
       h('section', null, h('h2', null, 'Getting started'),
         h('p', null, 'Import React components from their public entrypoints. Supported CSS-aware browser builds automatically include canonical Web component styles; server-rendered apps must also deliver extracted client CSS.'),
         h('pre', { 'data-vf-code-block': '', tabIndex: 0 },
@@ -1128,6 +1206,8 @@ function body(view, links, button, layout, typography, icon, image, avatar, divi
           h('li', null, h('a', { 'data-vf-link': '', href: links.layoutApi }, 'React Layout API')),
           h('li', null, h('a', { 'data-vf-link': '', href: links.divider.guide }, 'React Divider')),
           h('li', null, h('a', { 'data-vf-link': '', href: links.divider.api }, 'React Divider API')),
+          h('li', null, h('a', { 'data-vf-link': '', href: links.list.guide }, 'React List')),
+          h('li', null, h('a', { 'data-vf-link': '', href: links.list.api }, 'React List API')),
           h('li', null, h('a', { 'data-vf-link': '', href: links.icon.guide }, 'React Icon')),
           h('li', null, h('a', { 'data-vf-link': '', href: links.icon.library }, 'VyrnForge Icons library')),
           h('li', null, h('a', { 'data-vf-link': '', href: links.icon.api }, 'React Icon API')),
@@ -1149,6 +1229,8 @@ function body(view, links, button, layout, typography, icon, image, avatar, divi
   if (view === 'icon-api') return iconApi(icon, links);
   if (view === 'divider') return dividerUsage(divider, links);
   if (view === 'divider-api') return dividerApi(divider, links);
+  if (view === 'list') return listUsage(list, links);
+  if (view === 'list-api') return listApi(list, links);
   if (view === 'badge') return badgeUsage(badge, links);
   if (view === 'badge-api') return badgeApi(badge, links);
   if (view === 'avatar') return avatarUsage(avatar, links);
@@ -1200,7 +1282,7 @@ function body(view, links, button, layout, typography, icon, image, avatar, divi
   }
   return buttonUsageGuide(button, links, message, setMessage);
 }
-export function ReactReferencePage({ view, links, button, layout, typography, icon, image, avatar, divider, badge, requestedTopic }) {
+export function ReactReferencePage({ view, links, button, layout, typography, icon, image, avatar, divider, badge, list, requestedTopic }) {
   const nav = useNavigation();
   const { theme, change } = useTheme();
   const [search, setSearch] = useState('');
@@ -1227,6 +1309,8 @@ export function ReactReferencePage({ view, links, button, layout, typography, ic
     { title: 'Layout', href: links.layout, keywords: 'flow autogrid grid responsive spacing layout wrap inline block JSX divider separator thematic hr css border' },
     { title: 'Layout API', href: links.layoutApi, keywords: 'flowprops autogridprops as minitemsize ref gap' },
     { title: 'Divider', href: links.divider.guide, keywords: 'divider separator straight horizontal divider vertical divider divider text alignment horizontal divider with text vertical divider with text line visual border label text content start center end align alignment horizontal text vertical-rl top-to-bottom bottom-to-top textDirection rotate' },
+    { title: 'List', href: links.list.guide, keywords: 'rich semantic list rows ordered unordered native markers divided bordered avatar actions density spacing' },
+    { title: 'List API', href: links.list.api, keywords: 'listprops listitemprops listvariant listsize listspacing listmarker' },
     { title: 'Divider API', href: links.divider.api, keywords: 'dividerprops dividerorientation span visual css ref' },
     { title: 'Icon', href: links.icon.guide, keywords: 'icon usage svg custom icondefinition createSvgIcon accessibility outlined filled shape size colors currentColor JSX tags' },
     { title: 'VyrnForge Icons', href: links.icon.library, keywords: 'icon library explorer gallery catalog search category filter copy icon names outlined filled rounded sharp' },
@@ -1315,7 +1399,7 @@ export function ReactReferencePage({ view, links, button, layout, typography, ic
           h('a', { 'data-vf-link': '', href: links.native }, 'Native Web'),
           h('span', { 'aria-hidden': 'true' }, ' / '),
           h('span', { 'aria-current': 'page' }, 'React')),
-        body(view, links, button, layout, typography, icon, image, avatar, divider, badge, message, setMessage, requestedTopic))),
+        body(view, links, button, layout, typography, icon, image, avatar, divider, badge, list, message, setMessage, requestedTopic))),
     h(AppShellFooter, { className: 'vf-docs-footer' },
       h('span', null, 'VyrnForge React documentation'),
       h('span', null, links.channel + ' channel'))));

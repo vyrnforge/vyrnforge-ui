@@ -132,6 +132,32 @@ if (createSvgIconSignatureEnd < 0) {
 }
 const publicIconTypes = iconPublicSource.slice(iconTypeStart, iconTypeEnd).trim() +
   '\n\n' + iconPublicSource.slice(createSvgIconStart, createSvgIconSignatureEnd + 1).trim() + ';';
+// List owns rich semantic rows; Listbox owns collection selection.
+const list = reactModel.componentCatalog.find((entry) => entry.id === 'list');
+const listExamples = list?.examples.slice().sort((a, b) => a.id.localeCompare(b.id)) ?? [];
+if (!list?.showcaseAvailable || !list.apiAvailable || !list.sharedContent ||
+    !list.frameworkContent || listExamples.length !== 3 ||
+    !list.publicEntrypoints.includes('@vyrnforge/react/list') ||
+    !webModel.packageManifest.exports?.['./styles/list.css'] ||
+    !['list/rich', 'list/markers', 'list/actions'].every((id) =>
+      listExamples.some((example) => example.id === id)) ||
+    !listExamples.every((example) =>
+      example.sourcePath.endsWith('/react.tsx') &&
+      example.source.includes("'@vyrnforge/react/list'") &&
+      example.source.includes("'@vyrnforge/web/styles/list.css'"))) {
+  throw new Error('React List needs public source, canonical Web CSS, and three runnable examples');
+}
+const listPublicSourcePath = path.join(root,
+  path.dirname(path.dirname(list.frameworkSourcePath)), 'index.ts');
+const listPublicSource = await readFile(listPublicSourcePath, 'utf8');
+const listTypeStart = listPublicSource.indexOf('export type ListElement');
+const listTypeEnd = listPublicSource.indexOf('/** React List:', listTypeStart);
+if (listTypeStart < 0 || listTypeEnd < 0 ||
+    !listPublicSource.includes('forwardRef<HTMLLIElement, ListItemProps>')) {
+  throw new Error('React List public contract changed: review the API');
+}
+const publicListTypes = listPublicSource.slice(listTypeStart, listTypeEnd).trim();
+
 // Badge is an anchored indicator; Chip and TagGroup remain independent products.
 const badge = reactModel.componentCatalog.find((entry) => entry.id === 'badge');
 const badgeExamples = badge?.examples.slice().sort((a, b) => a.id.localeCompare(b.id)) ?? [];
@@ -309,6 +335,11 @@ function linksFor(route) {
       api: relative(dir, react + image.apiRoute, true),
       exampleBase: relative(dir, react + 'examples/image/', true),
     },
+    list: {
+      guide: relative(dir, react + list.showcaseRoute, true),
+      api: relative(dir, react + list.apiRoute, true),
+      exampleBase: relative(dir, react + 'examples/list/', true),
+    },
     badge: {
       guide: relative(dir, react + badge.showcaseRoute, true),
       api: relative(dir, react + badge.apiRoute, true),
@@ -464,6 +495,33 @@ for (const example of imageExamples) {
     '#root{min-width:0}</style></head><body><div id="root"></div><script src="' +
     escapeHtml(relative(dir, 'assets/' + asset + '.js')) + '"></script></body></html>');
 }
+
+for (const example of listExamples) {
+  const slug = example.id.slice('list/'.length);
+  const asset = 'react-list-' + slug;
+  await build({
+    entryPoints: [path.join(root, example.sourcePath)],
+    bundle: true, platform: 'browser', format: 'iife', target: 'es2022',
+    jsx: 'automatic', logLevel: 'silent',
+    outfile: path.join(outRoot, 'assets', asset + '.js'),
+  });
+  if (!(await stat(path.join(outRoot, 'assets', asset + '.css')).catch(() => null))?.isFile()) {
+    throw new Error('React ' + example.id + ' must extract canonical browser CSS');
+  }
+  const route = 'examples/list/' + slug + '/';
+  const dir = directory(route);
+  const styles = shellStyles.map((file) =>
+    '<link rel="stylesheet" href="' + escapeHtml(relative(dir, file)) + '">').join('\n');
+  await writePage(route, '<!doctype html><html lang="en" data-vf-theme="light"><head>' +
+    '<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">' +
+    '<title>React ' + escapeHtml(example.title) + ' · VyrnForge</title>' +
+    styles + '<link rel="stylesheet" href="' +
+    escapeHtml(relative(dir, 'assets/' + asset + '.css')) + '">' +
+    '<style>body{margin:0;padding:1rem;min-width:0;overflow-wrap:anywhere}' +
+    '#root{min-width:0}</style></head><body><div id="root"></div><script src="' +
+    escapeHtml(relative(dir, 'assets/' + asset + '.js')) + '"></script></body></html>');
+}
+
 
 for (const example of badgeExamples) {
   const slug = example.id.slice('badge/'.length);
@@ -638,6 +696,10 @@ const pageViews = [
     description: 'Native image semantics and source-backed React examples' },
   { route: image.apiRoute, view: 'image-api', title: 'React Image API',
     description: 'Source-backed React Image props and public entrypoints' },
+  { route: list.showcaseRoute, view: 'list', title: 'React List',
+    description: 'Rich semantic lists, native markers and composed actions' },
+  { route: list.apiRoute, view: 'list-api', title: 'React List API',
+    description: 'Source-backed React List and ListItem public props' },
   { route: badge.showcaseRoute, view: 'badge', title: 'React Badge',
     description: 'Noninteractive text, count and dot Badge examples' },
   { route: badge.apiRoute, view: 'badge-api', title: 'React Badge API',
@@ -699,6 +761,13 @@ const dividerData = {
   publicEntrypoints: divider.publicEntrypoints,
   publicDividerTypes, examples: dividerExamples,
 };
+const listData = {
+  id: list.id, title: list.title,
+  sharedContent: list.sharedContent, frameworkContent: list.frameworkContent,
+  standardReferences: list.standardReferences,
+  publicEntrypoints: list.publicEntrypoints,
+  publicListTypes, examples: listExamples,
+};
 const badgeData = {
   id: badge.id, title: badge.title,
   sharedContent: badge.sharedContent, frameworkContent: badge.frameworkContent,
@@ -728,6 +797,7 @@ for (const page of pageViews) {
     icon: page.view === 'icon' || page.view === 'icon-api' ? iconData : null,
     image: page.view === 'image' || page.view === 'image-api' ? imageData : null,
     avatar: page.view === 'avatar' || page.view === 'avatar-api' ? avatarData : null,
+    list: page.view === 'list' || page.view === 'list-api' ? listData : null,
     badge: page.view === 'badge' || page.view === 'badge-api' ? badgeData : null,
     divider: page.view === 'divider' || page.view === 'divider-api' ? dividerData : null,
     requestedTopic: page.requestedTopic ?? null };
@@ -755,7 +825,7 @@ for (const page of pageViews) {
   await writePage(page.route, pageHtml);
 }
 await writeFile(path.join(reactRoot, 'site-manifest.json'), JSON.stringify({
-  channel, framework: 'react', status: 'button-layout-typography-icon-image-divider-avatar-badge-pilot',
+  channel, framework: 'react', status: 'button-layout-typography-icon-image-divider-avatar-badge-list-pilot',
   source: 'Product Graph public React surface',
   routes: pageViews.map(({ route, view }) => ({ route, view })),
   layout: {
@@ -784,6 +854,16 @@ await writeFile(path.join(reactRoot, 'site-manifest.json'), JSON.stringify({
     publicSourcePath: path.relative(root, dividerPublicSourcePath).replaceAll('\\', '/'),
     examples: dividerExamples.map((example) => ({ id: example.id,
       sourcePath: example.sourcePath, title: example.title })),
+  },
+  list: {
+    guideRoute: list.showcaseRoute, apiRoute: list.apiRoute,
+    publicEntrypoints: list.publicEntrypoints,
+    sharedSourcePath: list.sharedSourcePath,
+    frameworkSourcePath: list.frameworkSourcePath,
+    publicSourcePath: path.relative(root, listPublicSourcePath).replaceAll('\\', '/'),
+    examples: listExamples.map((example) => ({
+      id: example.id, sourcePath: example.sourcePath, title: example.title,
+    })),
   },
   badge: {
     guideRoute: badge.showcaseRoute, apiRoute: badge.apiRoute,

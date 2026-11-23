@@ -32,6 +32,12 @@
       "import": "./dist/components/badge/index.js",
       "default": "./dist/components/badge/index.js"
     },
+    "./list": {
+      "types": "./dist/components/list/index.d.ts",
+      "browser": "./dist/components/list/browser.js",
+      "import": "./dist/components/list/index.js",
+      "default": "./dist/components/list/index.js"
+    },
     "./avatar": {
       "types": "./dist/components/avatar/index.d.ts",
       "browser": "./dist/components/avatar/browser.js",
