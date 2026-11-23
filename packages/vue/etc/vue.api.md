@@ -2176,6 +2176,10 @@ defaultPressed: {
 type: BooleanConstructor;
 default: boolean;
 };
+size: {
+type: PropType<ButtonSize>;
+default: string;
+};
 }>, () => VNode<RendererNode, RendererElement, {
 [key: string]: any;
 }>, {}, {}, {}, ComponentOptionsMixin, ComponentOptionsMixin, ("update:pressed" | "pressedChange")[], "update:pressed" | "pressedChange", PublicProps, Readonly<ExtractPropTypes<    {
@@ -2187,12 +2191,17 @@ defaultPressed: {
 type: BooleanConstructor;
 default: boolean;
 };
+size: {
+type: PropType<ButtonSize>;
+default: string;
+};
 }>> & Readonly<{
 "onUpdate:pressed"?: (...args: any[]) => any;
 onPressedChange?: (...args: any[]) => any;
 }>, {
 pressed: boolean | undefined;
 defaultPressed: boolean;
+size: ButtonSize;
 }, {}, {}, {}, string, ComponentProvideOptions, true, {}, any>;
 
 // @public (undocumented)

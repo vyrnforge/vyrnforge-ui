@@ -3429,11 +3429,18 @@ export class VfToggleButtonDirective {
     // (undocumented)
     readonly pressed: ModelSignal<boolean>;
     // (undocumented)
+    readonly size: InputSignal<ButtonSize>;
+    // (undocumented)
     readonly type: InputSignal<"button" | "submit" | "reset">;
     // (undocumented)
     static ɵdir: i0.ɵɵDirectiveDeclaration<VfToggleButtonDirective, "button[vfToggleButton]", never, {
         "pressed": {
             "alias": "pressed";
+            "required": false;
+            "isSignal": true;
+        };
+        "size": {
+            "alias": "size";
             "required": false;
             "isSignal": true;
         };
