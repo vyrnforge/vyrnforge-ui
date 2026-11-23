@@ -11,6 +11,17 @@ const durations = [['default', 'Default · 120ms'], ['fast', 'Custom · 80ms'], 
 const easings = [['standard', 'Standard'], ['linear', 'Linear override']];
 const themes = [['light', 'Light'], ['dark', 'Dark']];
 
+const effects = [
+  ['fade', 'Fade'], ['grow', 'Grow'], ['slide', 'Slide'],
+  ['zoom', 'Zoom'], ['fade-slide', 'Fade + slide'], ['pop', 'Pop'],
+];
+const origins = [
+  ['block-end', 'From bottom'], ['block-start', 'From top'],
+  ['inline-start', 'From inline start'], ['inline-end', 'From inline end'],
+];
+const targets = [['button', 'Button'], ['switch', 'Switch'], ['group', 'Composition']];
+const directions = [['ltr', 'Left to right'], ['rtl', 'Right to left']];
+
 function Setting({ id, label, value, options, onChange }) {
   return h(Flow, { gap: 'xs' },
     h('label', { htmlFor: id }, label),
@@ -33,6 +44,60 @@ function Source({ duration, easing }) {
     h('summary', null, 'View consumer CSS customization'),
     h('pre', { 'data-vf-code-block': '', tabIndex: 0 },
       h('code', null, snippet)));
+}
+
+function MotionEffectsPlayground({ theme, variables }) {
+  const [effect, setEffect] = useState('fade');
+  const [origin, setOrigin] = useState('block-end');
+  const [direction, setDirection] = useState('ltr');
+  const [target, setTarget] = useState('group');
+  const [replay, setReplay] = useState(0);
+  const [checked, setChecked] = useState(false);
+  const [actionCount, setActionCount] = useState(0);
+  const sampleButton = () => h(Button, { type: 'button', size: 'sm', variant: 'secondary',
+    onClick: () => setActionCount(value => value + 1), 'aria-label': 'Sample action' }, 'Action');
+  const sampleSwitch = () => h(Flow, { direction: 'inline', gap: 'sm', align: 'center' },
+    h(Switch, { id: 'motion-effect-switch', checked,
+      onChange: (event) => setChecked(event.currentTarget.checked) }),
+    h('label', { htmlFor: 'motion-effect-switch' }, 'Option'));
+  const code = "import '@vyrnforge/web/styles/motion.css';\n" +
+    '<div data-vf-motion="' + effect + '"' +
+    (['slide', 'fade-slide'].includes(effect) ? ' data-vf-motion-direction="' + origin + '"' : '') +
+    '>\n  {/* Your VyrnForge component(s) */}\n</div>\n' +
+    '// The element owns its presence; this CSS only decorates its entrance.';
+  return h(Flow, { as: 'section', gap: 'md', 'aria-labelledby': 'motion-effects-title',
+    'data-vf-docs-motion-effects': '' },
+    h(Text, { as: 'h2', variant: 'heading-md', id: 'motion-effects-title' }, 'Reusable entrance effects'),
+    h(Text, { as: 'p' }, 'Choose a CSS effect and apply it to different real components or a composition. Replay only restarts the visual demonstration; it does not create an animation runtime.'),
+    h(AutoGrid, { minItemSize: '9rem', gap: 'md' },
+      h(Setting, { id: 'motion-effect', label: 'Effect', value: effect, options: effects,
+        onChange: (next) => { setEffect(next); setReplay(value => value + 1); } }),
+      h(Setting, { id: 'motion-target', label: 'Target', value: target, options: targets,
+        onChange: (next) => { setTarget(next); setReplay(value => value + 1); } }),
+      h(Setting, { id: 'motion-origin', label: 'Slide origin', value: origin, options: origins,
+        onChange: (next) => { setOrigin(next); setReplay(value => value + 1); } }),
+      h(Setting, { id: 'motion-direction', label: 'Writing direction', value: direction, options: directions,
+        onChange: (next) => { setDirection(next); setReplay(value => value + 1); } })),
+    h(Button, { type: 'button', variant: 'secondary', onClick: () => setReplay(value => value + 1) },
+      'Replay effect'),
+    h(ThemeScope, { as: 'div', theme, dir: direction, style: variables,
+      className: 'vf-docs-motion-demo-stage', 'data-vf-docs-motion-demo-stage': '' },
+      h('div', { key: [effect, origin, direction, target, replay].join(':'),
+        'data-vf-motion': effect, 'data-vf-motion-direction': origin,
+        'data-vf-docs-motion-preview': '', 'data-vf-motion-sample': target },
+        h(Flow, { gap: 'sm', align: 'center' },
+          target === 'button' ? sampleButton() :
+          target === 'switch' ? sampleSwitch() :
+          h(Flow, { direction: 'inline', wrap: 'wrap', gap: 'md', align: 'center' },
+            sampleButton(), sampleSwitch()),
+          h(Text, { as: 'p', variant: 'body-sm' }, effect + ' · ' + target))),
+    h('p', { role: 'status', 'aria-live': 'polite', 'data-vf-docs-motion-sample-status': '' },
+      'Sample actions: ' + actionCount + '. Switch: ' + (checked ? 'on' : 'off') + '.'),
+    h('details', { className: 'vf-docs-source-disclosure' },
+      h('summary', null, 'View reusable CSS effect usage'),
+      h('pre', { tabIndex: 0, 'data-vf-code-block': '' }, h('code', null, code))),
+    h(Text, { as: 'p', variant: 'body-sm' },
+      'Entrance only. For exit, hidden/present state, dismissal, or focus management, follow the individual component contract. Reduced motion suppresses these effects automatically.'));
 }
 
 export function MotionUtility({ guide, links }) {
@@ -96,6 +161,7 @@ export function MotionUtility({ guide, links }) {
         h(Text, { as: 'p', variant: 'body-sm' },
           'The browser’s reduced-motion preference always takes priority in canonical component CSS. The custom 0ms option is a consumer-scoped demonstration, not a replacement for that preference.'),
         h(Source, { duration, easing })),
+      h(MotionEffectsPlayground, { theme, variables }),
       ...UtilitySections({ guide, prefix: 'motion-' }),
       h(Flow, { as: 'section', gap: 'sm', 'aria-labelledby': 'motion-related-links' },
         h(Text, { as: 'h2', variant: 'heading-md', id: 'motion-related-links' }, 'Related guidance'),
