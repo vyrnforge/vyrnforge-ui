@@ -1612,7 +1612,7 @@
     min-inline-size: 0;
     padding: var(--vf-space-md);
   }
-  .vf-docs-icon-inspector-heading h4 { margin: 0; }
+  .vf-docs-icon-inspector-heading h3 { margin: 0; }
   .vf-docs-icon-inspector-heading p { margin-block: var(--vf-space-xs) 0; }
   .vf-docs-icon-preview {
     display: grid;
