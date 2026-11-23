@@ -237,7 +237,9 @@ function layoutGuide(layout, links) {
     { id: 'react-layout-reference', heading: 'Related components and API' },
   ];
   return h('div', { className: 'vf-docs-content-grid vf-docs-usage-guide-layout' },
-    guideToc(sections, { label: Layout, examples: examples, getId: (example) => 'react-layout-example-' + example.id.split('/')[1] }),
+    guideToc(sections, {
+      label: 'Layout', examples: examples, getId: (example) => 'react-layout-example-' + example.id.split('/')[1],
+    }),
     h(Flow, { as: 'article', gap: '2xl', className: 'vf-docs-article vf-docs-usage-guide',
       'data-vf-docs-react-layout': '' },
       guideHeader(content, 'React · Layout & Structure · Flow & AutoGrid'),
@@ -353,7 +355,7 @@ function exampleJumpLinks(label, examples, getId) {
     h('p', null, 'Examples'),
     h(Flow, { as: 'ol', gap: 'none' }, ...examples.map((example) =>
       h('li', { key: example.id },
-        h('a', { href: '#' + getId(example) }, example.title))));
+        h('a', { href: '#' + getId(example) }, example.title)))));
 }
 function typographyUsageGuide(unit, links) {
   const id = unit.id;
@@ -368,7 +370,9 @@ function typographyUsageGuide(unit, links) {
     ? ['When to use', 'When not to use', 'Native baseline', 'Visual roles']
     : ['When to use', 'When not to use', 'Native baseline', 'Visual styling'];
   return h('div', { className: 'vf-docs-content-grid vf-docs-usage-guide-layout' },
-    guideToc(sections, { label: unit.title, examples: unit.examples, getId: (example) => 'react-typography-' + id + '-' + example.id.slice(id.length + 1) }),
+    guideToc(sections, {
+      label: unit.title, examples: unit.examples, getId: (example) => 'react-typography-' + id + '-' + example.id.slice(id.length + 1),
+    }),
     h(Flow, { as: 'article', gap: '2xl', className: 'vf-docs-article vf-docs-usage-guide',
       'data-vf-docs-react-typography': id },
       guideHeader(unit.sharedContent, 'React · Typography'),
@@ -456,7 +460,9 @@ function buttonUsageGuide(button, links) {
     { id: 'react-reference', heading: 'Related components and API' },
   ];
   return h('div', { className: 'vf-docs-content-grid vf-docs-usage-guide-layout' },
-    guideToc(sections, { label: 'Button', examples: button.examples, getId: (ex) => 'react-button-example-' + ex.id.slice('button/'.length) }),
+    guideToc(sections, {
+      label: 'Button', examples: button.examples, getId: (ex) => 'react-button-example-' + ex.id.slice('button/'.length),
+    }),
     h(Flow, { as: 'article', gap: '2xl', className: 'vf-docs-article vf-docs-usage-guide',
       'data-vf-docs-react-component': 'button' },
       guideHeader(button.sharedContent, 'React · Components · Actions'),
@@ -590,7 +596,9 @@ function iconUsage(icon, links) {
     { id: 'react-icon-related', heading: 'Related components and API' },
   ];
   return h('div', { className: 'vf-docs-content-grid vf-docs-usage-guide-layout' },
-    guideToc(sections, { label: 'Icon', examples: examples, getId: (example) => 'react-icon-example-' + example.id.slice('icon/'.length) }),
+    guideToc(sections, {
+      label: 'Icon', examples: examples, getId: (example) => 'react-icon-example-' + example.id.slice('icon/'.length),
+    }),
     h(Flow, { as: 'article', gap: '2xl', className: 'vf-docs-article vf-docs-usage-guide',
       'data-vf-docs-react-icon': '' },
       guideHeader(icon.sharedContent, 'React · Media'),
@@ -688,7 +696,9 @@ function listUsage(list, links) {
     { id: 'react-list-related', heading: 'API and related components' },
   ];
   return h('div', { className: 'vf-docs-content-grid vf-docs-usage-guide-layout' },
-    guideToc(sections, { label: 'List', examples: list.examples, getId: (example) => 'react-list-example-' + example.id.slice('list/'.length) }),
+    guideToc(sections, {
+      label: 'List', examples: list.examples, getId: (example) => 'react-list-example-' + example.id.slice('list/'.length),
+    }),
     h(Flow, { as: 'article', gap: '2xl', className: 'vf-docs-article vf-docs-usage-guide',
       'data-vf-docs-react-list': '' },
       guideHeader(list.sharedContent, 'React · Collections'),
@@ -764,7 +774,9 @@ function badgeUsage(badge, links) {
     { id: 'react-badge-related', heading: 'Related components and API' },
   ];
   return h('div', { className: 'vf-docs-content-grid vf-docs-usage-guide-layout' },
-    guideToc(sections, { label: 'Badge', examples: badge.examples, getId: (example) => 'react-badge-example-' + example.id.slice('badge/'.length) }),
+    guideToc(sections, {
+      label: 'Badge', examples: badge.examples, getId: (example) => 'react-badge-example-' + example.id.slice('badge/'.length),
+    }),
     h(Flow, { as: 'article', gap: '2xl', className: 'vf-docs-article vf-docs-usage-guide',
       'data-vf-docs-react-badge': '' },
       guideHeader(badge.sharedContent, 'React · Metadata'),
@@ -838,7 +850,9 @@ function avatarUsage(avatar, links) {
     { id: 'react-avatar-related', heading: 'Related components and API' },
   ];
   return h('div', { className: 'vf-docs-content-grid vf-docs-usage-guide-layout' },
-    guideToc(sections, { label: 'Avatar', examples: examples, getId: (example) => 'react-avatar-example-' + example.id.slice('avatar/'.length) }),
+    guideToc(sections, {
+      label: 'Avatar', examples: examples, getId: (example) => 'react-avatar-example-' + example.id.slice('avatar/'.length),
+    }),
     h(Flow, { as: 'article', gap: '2xl', className: 'vf-docs-article vf-docs-usage-guide',
       'data-vf-docs-react-avatar': '' },
       guideHeader(avatar.sharedContent, 'React · Media'),
@@ -920,7 +934,9 @@ function imageUsage(image, links) {
     { id: 'react-image-related', heading: 'Related components and API' },
   ];
   return h('div', { className: 'vf-docs-content-grid vf-docs-usage-guide-layout' },
-    guideToc(sections, { label: 'Image', examples: examples, getId: (example) => 'react-image-example-' + example.id.slice('image/'.length) }),
+    guideToc(sections, {
+      label: 'Image', examples: examples, getId: (example) => 'react-image-example-' + example.id.slice('image/'.length),
+    }),
     h(Flow, { as: 'article', gap: '2xl', className: 'vf-docs-article vf-docs-usage-guide',
       'data-vf-docs-react-image': '' },
       guideHeader(image.sharedContent, 'React · Media'),
@@ -1006,7 +1022,9 @@ function dividerUsage(divider, links) {
     { id: 'react-divider-related', heading: 'Related components and API' },
   ];
   return h('div', { className: 'vf-docs-content-grid vf-docs-usage-guide-layout' },
-    guideToc(sections, { label: 'Divider', examples: examples, getId: (example) => 'react-divider-example-' + example.id.slice('divider/'.length) }),
+    guideToc(sections, {
+      label: 'Divider', examples: examples, getId: (example) => 'react-divider-example-' + example.id.slice('divider/'.length),
+    }),
     h(Flow, { as: 'article', gap: '2xl', className: 'vf-docs-article vf-docs-usage-guide',
       'data-vf-docs-react-divider': '' },
       guideHeader(divider.sharedContent, 'React · Layout & Structure'),
