@@ -1,13 +1,13 @@
 # Motion utility
 
-Motion is the shared timing, easing, loading cadence, and reduced-motion foundation for VyrnForge. It is **not** a generic `Motion` component, a second animation framework, a page transition manager, or a global JavaScript controller. Use canonical `@vyrnforge/web` CSS tokens and the behavior already owned by each component, across Native Web, React, Angular, Vue, and Elements.
+Motion is the shared timing, easing, loading cadence, and reduced-motion foundation for VyrnForge. It is not a generic `Motion` component, a second animation framework, a page transition manager, or a global JavaScript controller. Use canonical `@vyrnforge/web` CSS tokens and the behavior already owned by each component, across Native Web, React, Angular, Vue, and Elements.
 
 ## What belongs in Motion
 
-- **Transitions:** short, functional feedback when a control changes hover, focus, selection, or pressed state. Existing VyrnForge controls share one default duration and easing instead of each framework inventing a new timing system.
-- **Continuous loading:** a different semantic task from ordinary control transitions. Shared spinner and shimmer cadences are already present in the Web foundation.
-- **Entry and exit:** Dialog, Popover, Drawer, Tooltip, and other surfaces own their state, dismissal, focus, and rendering contracts. Motion must not delay, invent, or intercept those transitions.
-- **Reduced motion:** an independent browser preference, never a brand/theme variant. Components remain usable when transitions or animations are suppressed.
+- Transitions: short, functional feedback when a control changes hover, focus, selection, or pressed state. Existing VyrnForge controls share one default duration and easing instead of each framework inventing a new timing system.
+- Continuous loading: a different semantic task from ordinary control transitions. Shared spinner and shimmer cadences are already present in the Web foundation.
+- Entry and exit: Dialog, Popover, Drawer, Tooltip, and other surfaces own their state, dismissal, focus, and rendering contracts. Motion must not delay, invent, or intercept those transitions.
+- Reduced motion: an independent browser preference, never a brand/theme variant. Components remain usable when transitions or animations are suppressed.
 
 ## Existing reusable tokens
 
@@ -37,7 +37,7 @@ Use the default tokens first. Where a real application experience needs it, scop
 }
 ```
 
-The live playground changes these values for public VyrnForge Button and Switch examples. The preview's custom settings demonstrate consumer overrides, **not** alternate VyrnForge defaults. A consumer override must never re-enable non-essential motion for someone requesting reduced motion. Specific components may also disable transitions or animations directly in their canonical CSS.
+The live playground changes these values for public VyrnForge Button and Switch examples. The preview's custom settings demonstrate consumer overrides, not alternate VyrnForge defaults. A consumer override must never re-enable non-essential motion for someone requesting reduced motion. Specific components may also disable transitions or animations directly in their canonical CSS.
 
 ## Motion and interaction contracts
 
@@ -51,6 +51,6 @@ Button's busy spinner and Loading's structured spinner/shimmer already share fou
 
 ## When a new recipe is justified
 
-Introduce a reusable fade, slide, scale, spring-like effect, or entry/exit recipe only after **multiple actual component consumers** need the same observable behavior. Document supported browser capabilities, direction/writing-mode policy, lifecycle and focus invariants, reduced-motion fallback, styling hooks, and cross-framework expectations before exposing a stable utility. Prefer native CSS; do not add Framer Motion, a global animation controller, or a JavaScript timing dependency for component styling.
+Introduce a reusable fade, slide, scale, spring-like effect, or entry/exit recipe only after multiple actual component consumers need the same observable behavior. Document supported browser capabilities, direction/writing-mode policy, lifecycle and focus invariants, reduced-motion fallback, styling hooks, and cross-framework expectations before exposing a stable utility. Prefer native CSS; do not add Framer Motion, a global animation controller, or a JavaScript timing dependency for component styling.
 
 This utility covers the shared motion system. Button, Switch, Loading, Dialog, Drawer, and other components retain their own state, anatomy, and accessibility contracts.
