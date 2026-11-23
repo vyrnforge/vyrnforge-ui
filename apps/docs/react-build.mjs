@@ -334,8 +334,11 @@ function linksFor(route) {
           (slug === 'basic' ? '/' : '/' + slug + '/'), true)];
       })),
     }])),
-    native: relative(dir, native + (route.startsWith('foundations/') &&
-      !nativeModel.foundationPages.some((page) => page.route === route) ? '' : route), true),
+    // The standalone React gallery has no Native Web gallery view. Route to
+    // the Native Web gateway instead of constructing a nonexistent page.
+    native: relative(dir, native + ((route === 'icons/' ||
+      (route.startsWith('foundations/') &&
+      !nativeModel.foundationPages.some((page) => page.route === route))) ? '' : route), true),
   };
 }
 async function verifyStyles(dir, extra = []) {
