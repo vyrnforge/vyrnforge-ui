@@ -1,0 +1,88 @@
+/*
+ * Opt-in, framework-neutral entrance recipes. The authored element/component
+ * owns presence, focus, state, dismissal and any eventual exit lifecycle.
+ * These recipes never keep hidden content in the DOM waiting for an animation event.
+ *
+ * Usage: <div data-vf-motion="fade">...</div>
+ *        <div data-vf-motion="slide" data-vf-motion-direction="inline-start">...</div>
+ * Customization: --vf-control-motion-duration, --vf-motion-easing-standard,
+ *                --vf-motion-distance (length; slide only).
+ */
+@layer vyrnforge.foundation {
+  :where([data-vf-motion="fade"], [data-vf-motion="grow"], [data-vf-motion="slide"],
+    [data-vf-motion="zoom"], [data-vf-motion="fade-slide"], [data-vf-motion="pop"]) {
+    animation-duration: var(--vf-control-motion-duration, 120ms);
+    animation-timing-function: var(--vf-motion-easing-standard, cubic-bezier(0.2, 0, 0, 1));
+    animation-fill-mode: both;
+    animation-iteration-count: 1;
+  }
+
+  :where([data-vf-motion="fade"]) { animation-name: vf-motion-enter-fade; }
+  :where([data-vf-motion="grow"]) { animation-name: vf-motion-enter-grow; }
+  :where([data-vf-motion="slide"]) { animation-name: vf-motion-enter-slide; }
+  :where([data-vf-motion="zoom"]) { animation-name: vf-motion-enter-zoom; }
+  :where([data-vf-motion="fade-slide"]) { animation-name: vf-motion-enter-fade-slide; }
+  :where([data-vf-motion="pop"]) { animation-name: vf-motion-enter-pop; }
+
+  /* Physical movement is resolved from logical direction, including RTL. */
+  :where([data-vf-motion="slide"], [data-vf-motion="fade-slide"]) {
+    --_vf-motion-slide-x: 0;
+    --_vf-motion-slide-y: var(--vf-motion-distance, var(--vf-space-sm, 0.5rem));
+  }
+
+  :where([data-vf-motion-direction="block-start"][data-vf-motion="slide"],
+    [data-vf-motion-direction="block-start"][data-vf-motion="fade-slide"]) {
+    --_vf-motion-slide-y: calc(-1 * var(--vf-motion-distance, var(--vf-space-sm, 0.5rem)));
+  }
+  :where([data-vf-motion-direction="inline-start"][data-vf-motion="slide"],
+    [data-vf-motion-direction="inline-start"][data-vf-motion="fade-slide"]) {
+    --_vf-motion-slide-x: calc(-1 * var(--vf-motion-distance, var(--vf-space-sm, 0.5rem)));
+    --_vf-motion-slide-y: 0;
+  }
+  :where([data-vf-motion-direction="inline-end"][data-vf-motion="slide"],
+    [data-vf-motion-direction="inline-end"][data-vf-motion="fade-slide"]) {
+    --_vf-motion-slide-x: var(--vf-motion-distance, var(--vf-space-sm, 0.5rem));
+    --_vf-motion-slide-y: 0;
+  }
+  :where([data-vf-motion-direction="inline-start"][data-vf-motion="slide"]:dir(rtl),
+    [data-vf-motion-direction="inline-start"][data-vf-motion="fade-slide"]:dir(rtl)) {
+    --_vf-motion-slide-x: var(--vf-motion-distance, var(--vf-space-sm, 0.5rem));
+  }
+  :where([data-vf-motion-direction="inline-end"][data-vf-motion="slide"]:dir(rtl),
+    [data-vf-motion-direction="inline-end"][data-vf-motion="fade-slide"]:dir(rtl)) {
+    --_vf-motion-slide-x: calc(-1 * var(--vf-motion-distance, var(--vf-space-sm, 0.5rem)));
+  }
+
+  @keyframes vf-motion-enter-fade {
+    from { opacity: 0; }
+    to { opacity: 1; }
+  }
+  @keyframes vf-motion-enter-grow {
+    from { scale: 0.94; }
+    to { scale: 1; }
+  }
+  @keyframes vf-motion-enter-slide {
+    from { translate: var(--_vf-motion-slide-x) var(--_vf-motion-slide-y); }
+    to { translate: 0 0; }
+  }
+  @keyframes vf-motion-enter-zoom {
+    from { opacity: 0.6; scale: 0.82; }
+    to { opacity: 1; scale: 1; }
+  }
+  @keyframes vf-motion-enter-fade-slide {
+    from { opacity: 0; translate: var(--_vf-motion-slide-x) var(--_vf-motion-slide-y); }
+    to { opacity: 1; translate: 0 0; }
+  }
+  @keyframes vf-motion-enter-pop {
+    0% { scale: 0.9; }
+    70% { scale: 1.03; }
+    100% { scale: 1; }
+  }
+
+  /* Reduced motion takes precedence over all consumer-set motion durations. */
+  @media (prefers-reduced-motion: reduce) {
+    :where([data-vf-motion]) {
+      animation: none;
+    }
+  }
+}

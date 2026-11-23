@@ -11,6 +11,7 @@ import { ColorGuide, DarkModeGuide, RtlGuide } from './react-customization.mjs';
 import { ThemeBuilder } from './react-theme-builder.mjs';
 import { IconExplorer } from './react-icon-explorer.mjs';
 import { OverlayUtility } from './react-overlay-utility.mjs';
+import { MotionUtility } from './react-motion-utility.mjs';
 
 function slug(value) {
   return String(value).toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-+|-+$/g, '');
@@ -150,6 +151,7 @@ function navigation(view, links, topic) {
     ] },
     { label: 'Utilities', items: [
       { id: 'overlay', title: 'Overlay', href: links.overlay },
+      { id: 'motion', title: 'Motion', href: links.motion },
     ] },
     { label: 'Components', items: [
       { id: 'guide', title: 'Button', href: links.guide },
@@ -1234,7 +1236,7 @@ function themesGuide(links) {
       h(Text, { as: 'p' }, h('a', { href: links.rtl, 'data-vf-link': '' }, 'Use right-to-left content'))));
 }
 
-function body(view, links, button, toggle, layout, typography, icon, image, avatar, divider, badge, list, overlayGuide, message, setMessage, requestedTopic) {
+function body(view, links, button, toggle, layout, typography, icon, image, avatar, divider, badge, list, overlayGuide, motionGuide, message, setMessage, requestedTopic) {
   if (view === 'unavailable') {
     return h('article', { className: 'vf-docs-article', 'data-vf-docs-react-unavailable': '' },
       h('header', { className: 'vf-docs-component-header' },
@@ -1254,6 +1256,7 @@ function body(view, links, button, toggle, layout, typography, icon, image, avat
   if (view === 'themes') return themesGuide(links);
   if (view === 'styling') return stylingGuide(links);
   if (view === 'overlay') return h(OverlayUtility, { guide: overlayGuide, links });
+  if (view === 'motion') return h(MotionUtility, { guide: motionGuide, links });
   if (view === 'home') {
     return h('article', { className: 'vf-docs-article' },
       h('header', { className: 'vf-docs-component-header' },
@@ -1377,7 +1380,7 @@ function body(view, links, button, toggle, layout, typography, icon, image, avat
   }
   return buttonUsageGuide(button, links, message, setMessage);
 }
-export function ReactReferencePage({ view, links, button, toggle, layout, typography, icon, image, avatar, divider, badge, list, overlayGuide, requestedTopic }) {
+export function ReactReferencePage({ view, links, button, toggle, layout, typography, icon, image, avatar, divider, badge, list, overlayGuide, motionGuide, requestedTopic }) {
   const nav = useNavigation();
   const { theme, change } = useTheme();
   const [search, setSearch] = useState('');
@@ -1401,6 +1404,8 @@ export function ReactReferencePage({ view, links, button, toggle, layout, typogr
       keywords: 'foundations styles stylesheet css customization cascade layers browser bundler ssr hydration override reset' },
     { title: 'Overlay utility', href: links.overlay,
       keywords: 'utilities overlay playground popover tooltip preview card dialog drawer theme placement elevation stacking backdrop RTL customization' },
+    { title: 'Motion utility', href: links.motion,
+      keywords: 'utilities motion transitions animation duration easing keyframes reduced-motion reduced motion accessibility loading spinner shimmer css tokens' },
     { title: 'Button', href: links.guide, keywords: 'button usage accessibility examples state' },
     { title: 'Button API', href: links.api, keywords: 'button props reference public' },
     { title: 'ToggleButton', href: links.toggle.guide, keywords: 'toggle button pressed state independent' },
@@ -1498,7 +1503,7 @@ export function ReactReferencePage({ view, links, button, toggle, layout, typogr
           h('a', { 'data-vf-link': '', href: links.native }, 'Native Web'),
           h('span', { 'aria-hidden': 'true' }, ' / '),
           h('span', { 'aria-current': 'page' }, 'React')),
-        body(view, links, button, toggle, layout, typography, icon, image, avatar, divider, badge, list, overlayGuide, message, setMessage, requestedTopic))),
+        body(view, links, button, toggle, layout, typography, icon, image, avatar, divider, badge, list, overlayGuide, motionGuide, message, setMessage, requestedTopic))),
     h(AppShellFooter, { className: 'vf-docs-footer' },
       h('span', null, 'VyrnForge React documentation'),
       h('span', null, links.channel + ' channel'))));

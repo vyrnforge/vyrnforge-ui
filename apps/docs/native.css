@@ -1693,4 +1693,34 @@
     color: var(--vf-color-text-muted);
     font-size: var(--vf-font-size-sm);
   }
+
+  /* Documentation stage only: preserve usable control room at enlarged text. */
+  @media (max-width: 34rem) {
+    .vf-docs-motion-stage {
+      padding: var(--vf-space-sm);
+    }
+  }
+
+  /* Docs-only effect preview geometry; all animations come from public Web CSS. */
+  .vf-docs-motion-demo-stage {
+    align-items: center;
+    background: var(--vf-color-surface-subtle);
+    border: 1px dashed var(--vf-color-border);
+    border-radius: var(--vf-radius-surface);
+    color: var(--vf-color-text);
+    display: grid;
+    justify-items: center;
+    min-block-size: 9rem;
+    min-inline-size: 0;
+    padding: var(--vf-space-md);
+  }
+
+  .vf-docs-motion-demo-stage > [data-vf-docs-motion-preview] {
+    max-inline-size: 100%;
+  }
+
+  .vf-docs-motion-demo-stage [data-vf-flow] {
+    max-inline-size: 100%;
+  }
+
 }

@@ -48,7 +48,7 @@ test('React pilot artifact is Product Graph-backed and SSR-rendered with public 
   expect(manifest.layout.examples.map((example) => example.id)).toContain('layout/dividers');
   expect(manifest.routes.filter((entry) => entry.view !== 'unavailable').map((entry) => entry.route)).toEqual([
     '', 'foundations/tokens/', 'foundations/themes/', 'foundations/color/', 'foundations/theme-builder/', 'foundations/dark-mode/',
-    'foundations/right-to-left/', 'utilities/overlay/', 'foundations/styling/', 'components/button/', 'api/components/button/',
+    'foundations/right-to-left/', 'utilities/overlay/', 'utilities/motion/', 'foundations/styling/',  'components/button/', 'api/components/button/',
     'components/toggle-button/', 'api/components/toggle-button/', 'components/layout/', 'api/components/layout/',
     'components/divider/', 'api/components/divider/',
     ...['text', 'code', 'kbd'].flatMap((id) => [
@@ -2038,11 +2038,11 @@ test('React List guide exposes rich semantic examples and a separate source-back
 
 test('Overlay utility uses one shared guide and real public React surface CSS', async ({ page }) => {
   const manifest = JSON.parse(readFileSync('dist/docs/next/react/site-manifest.json', 'utf8'));
-  expect(manifest.utilities).toEqual([{
+  expect(manifest.utilities).toContainEqual({
     id: 'overlay', route: 'utilities/overlay/',
     source: 'documentation/utilities/overlay.md',
     publicComponents: ['popover', 'tooltip', 'preview-card', 'dialog', 'alert-dialog', 'drawer'],
-  }]);
+  });
   const html = readFileSync('dist/docs/next/react/utilities/overlay/index.html', 'utf8');
   expect(html).toContain('assets/docs.css');
   for (const id of ['popover', 'tooltip', 'preview-card', 'dialog', 'drawer'])
@@ -2126,4 +2126,173 @@ test('Overlay workbench remains usable at 320px and 200% text', async ({ page },
   }));
   expect(width.page).toBeLessThanOrEqual(width.viewport + 1);
   await page.screenshot({ path: testInfo.outputPath('overlay-utility-320px-200pct-popover.png') });
+});
+
+test('Motion utility is shared, discoverable and binds real public Web tokens', async ({ page }) => {
+  const manifest = JSON.parse(readFileSync('dist/docs/next/react/site-manifest.json', 'utf8'));
+  expect(manifest.utilities).toContainEqual({
+    id: 'motion', route: 'utilities/motion/',
+    source: 'documentation/utilities/motion.md',
+    publicComponents: ['button', 'switch'],
+    tokens: ['--vf-control-motion-duration', '--vf-motion-easing-standard',
+      '--vf-motion-duration-loading-spin', '--vf-motion-duration-loading-shimmer',
+      '--vf-motion-easing-loading'],
+  });
+  const html = readFileSync('dist/docs/next/react/utilities/motion/index.html', 'utf8');
+  expect(html).toContain('assets/docs.css');
+  expect(html).toContain('components/switch/switch.css');
+  expect(html).toContain('/styles/foundation.css');
+  expect(html).toContain('data-vf-docs-react-motion-utility');
+  await page.goto('/next/react/utilities/motion/');
+  const utility = page.locator('[data-vf-docs-react-motion-utility]');
+  await expect(utility).toBeVisible();
+  await expect(utility.getByRole('heading', { name: 'Motion utility' })).toBeVisible();
+  await expect(page.getByRole('navigation', { name: 'Documentation' })
+    .getByRole('link', { name: 'Motion' })).toHaveAttribute('aria-current', 'page');
+  await expect(utility.locator('section[aria-labelledby="motion-existing-reusable-tokens"]')).toContainText('--vf-control-motion-duration');
+  await page.getByRole('searchbox', { name: 'Search React documentation' }).fill('reduced motion');
+  await expect(page.locator('[data-vf-docs-react-results]')).toContainText('Motion utility');
+});
+
+test('Motion tokens affect multiple real controls without changing their state contracts', async ({ page }, testInfo) => {
+  await page.goto('/next/react/utilities/motion/');
+  await expect(page.locator('html')).toHaveAttribute('data-vf-react-hydrated', 'true');
+  const stage = page.locator('[data-vf-docs-motion-stage]');
+  const button = stage.getByRole('button', { name: 'Run action' });
+  const toggle = stage.getByRole('switch', { name: 'Option' });
+  const durations = await stage.evaluate((node) => {
+    const button = node.querySelector('button[data-vf-button]');
+    const toggle = node.querySelector('input[data-vf-switch]');
+    return [getComputedStyle(button).transitionDuration, getComputedStyle(toggle).transitionDuration];
+  });
+  expect(durations[0]).toContain('0.12s');
+  expect(durations[1]).toContain('0.12s');
+  await page.locator('#motion-duration').selectOption('fast');
+  await page.locator('#motion-easing').selectOption('linear');
+  await expect(stage).toHaveCSS('--vf-control-motion-duration', '80ms');
+  await expect(stage).toHaveCSS('--vf-motion-easing-standard', 'linear');
+  const customized = await stage.evaluate((node) => {
+    const button = node.querySelector('button[data-vf-button]');
+    const toggle = node.querySelector('input[data-vf-switch]');
+    return [getComputedStyle(button).transitionDuration, getComputedStyle(toggle).transitionDuration];
+  });
+  expect(customized[0]).toContain('0.08s');
+  expect(customized[1]).toContain('0.08s');
+  await button.click();
+  await expect(stage.locator('[data-vf-docs-motion-feedback]')).toContainText('Actions: 1');
+  await toggle.check();
+  await expect(stage.locator('[data-vf-docs-motion-feedback]')).toContainText('Switch: on');
+  await page.locator('#motion-theme').selectOption('dark');
+  await expect(stage).toHaveAttribute('data-vf-theme', 'dark');
+  await stage.getByRole('button', { name: 'Start busy' }).click();
+  await expect(stage.getByRole('button', { name: 'Busy', exact: true })).toHaveAttribute('aria-busy', 'true');
+  const spinner = await stage.getByRole('button', { name: 'Busy', exact: true }).evaluate((node) => {
+    const css = getComputedStyle(node, '::before');
+    return { duration: css.animationDuration, name: css.animationName };
+  });
+  expect(spinner.name).toContain('vf-loading-spin');
+  expect(spinner.duration).toContain('0.7s');
+  await page.screenshot({ path: testInfo.outputPath('motion-react-dark-custom-controls.png') });
+  await stage.getByRole('button', { name: 'Stop busy' }).click();
+  await expect(stage.getByRole('button', { name: 'Ready' })).not.toHaveAttribute('aria-busy', 'true');
+});
+
+test('Motion reduced preference disables visual movement but leaves state and loading meaning intact', async ({ page }) => {
+  await page.emulateMedia({ reducedMotion: 'reduce' });
+  await page.goto('/next/react/utilities/motion/');
+  const stage = page.locator('[data-vf-docs-motion-stage]');
+  await page.locator('#motion-duration').selectOption('fast');
+  const controls = await stage.evaluate((node) => {
+    const button = node.querySelector('button[data-vf-button]');
+    const toggle = node.querySelector('input[data-vf-switch]');
+    return [getComputedStyle(button).transitionDuration, getComputedStyle(toggle).transitionDuration];
+  });
+  expect(controls).toEqual(['0s', '0s']);
+  await stage.getByRole('button', { name: 'Run action' }).click();
+  await stage.getByRole('switch', { name: 'Option' }).check();
+  await expect(stage.locator('[data-vf-docs-motion-feedback]')).toContainText('Actions: 1. Switch: on.');
+  await stage.getByRole('button', { name: 'Start busy' }).click();
+  const busy = stage.getByRole('button', { name: 'Busy', exact: true });
+  await expect(busy).toHaveAttribute('aria-busy', 'true');
+  const animation = await busy.evaluate((node) => getComputedStyle(node, '::before').animationName);
+  expect(animation).toBe('none');
+});
+
+test('Motion utility keeps its live controls usable at 320px and 200% text', async ({ page }, testInfo) => {
+  await page.setViewportSize({ width: 320, height: 480 });
+  await page.goto('/next/react/utilities/motion/');
+  await page.evaluate(() => { document.documentElement.style.fontSize = '200%'; });
+  const stage = page.locator('[data-vf-docs-motion-stage]');
+  await stage.scrollIntoViewIfNeeded();
+  await stage.getByRole('button', { name: 'Run action' }).click();
+  await expect(stage.locator('[data-vf-docs-motion-feedback]')).toContainText('Actions: 1');
+  const widths = await page.evaluate(() => [document.documentElement.scrollWidth, document.documentElement.clientWidth]);
+  expect(widths[0]).toBeLessThanOrEqual(widths[1] + 1);
+  await page.screenshot({ path: testInfo.outputPath('motion-react-320px-200pct.png') });
+});
+
+test('Motion effects expose six reusable real-Web CSS recipes on multiple React targets', async ({ page }, testInfo) => {
+  await page.goto('/next/react/utilities/motion/');
+  const area = page.locator('[data-vf-docs-motion-effects]');
+  await expect(area.getByRole('heading', { name: 'Reusable entrance effects' })).toBeVisible();
+  const sample = page.locator('[data-vf-docs-motion-preview]');
+  const list = [
+    ['fade', 'vf-motion-enter-fade'],
+    ['grow', 'vf-motion-enter-grow'],
+    ['slide', 'vf-motion-enter-slide'],
+    ['zoom', 'vf-motion-enter-zoom'],
+    ['fade-slide', 'vf-motion-enter-fade-slide'],
+    ['pop', 'vf-motion-enter-pop'],
+  ];
+  for (const [effect, animation] of list) {
+    await page.locator('#motion-effect').selectOption(effect);
+    await expect(sample).toHaveAttribute('data-vf-motion', effect);
+    await expect.poll(async () => sample.evaluate((node) => getComputedStyle(node).animationName))
+      .toBe(animation);
+  }
+  await page.locator('#motion-effect').selectOption('slide');
+  await page.locator('#motion-origin').selectOption('inline-start');
+  await page.locator('#motion-direction').selectOption('ltr');
+  const ltr = await sample.evaluate((node) => {
+    const animation = node.getAnimations()[0];
+    animation.pause();
+    animation.currentTime = 0;
+    return getComputedStyle(node).translate;
+  });
+  await page.locator('#motion-direction').selectOption('rtl');
+  const rtl = await sample.evaluate((node) => {
+    const animation = node.getAnimations()[0];
+    animation.pause();
+    animation.currentTime = 0;
+    return getComputedStyle(node).translate;
+  });
+  expect(ltr).not.toBe(rtl);
+  await page.locator('#motion-target').selectOption('button');
+  await expect(sample.getByRole('button', { name: 'Sample action' })).toBeVisible();
+  await sample.getByRole('button', { name: 'Sample action' }).click();
+  await expect(area.locator('[data-vf-docs-motion-sample-status]')).toContainText('Sample actions: 1');
+  await page.locator('#motion-target').selectOption('switch');
+  await sample.getByRole('switch', { name: 'Option' }).check();
+  await expect(area.locator('[data-vf-docs-motion-sample-status]')).toContainText('Switch: on.');
+  await page.locator('#motion-target').selectOption('group');
+  await expect(sample.getByRole('button', { name: 'Sample action' })).toBeVisible();
+  await expect(sample.getByRole('switch', { name: 'Option' })).toBeChecked();
+  await area.getByRole('button', { name: 'Replay effect' }).click();
+  await expect(sample).toHaveAttribute('data-vf-motion-sample', 'group');
+  await page.screenshot({ path: testInfo.outputPath('motion-reusable-effects-react.png') });
+});
+
+test('Motion effects respect reduced motion even with consumer timing overrides', async ({ page }) => {
+  await page.emulateMedia({ reducedMotion: 'reduce' });
+  await page.goto('/next/react/utilities/motion/');
+  await page.locator('#motion-duration').selectOption('fast');
+  await page.locator('#motion-effect').selectOption('zoom');
+  const sample = page.locator('[data-vf-docs-motion-preview]');
+  await expect(sample).toHaveCSS('animation-name', 'none');
+  await expect(sample.getByRole('button', { name: 'Sample action' })).toBeVisible();
+  await sample.getByRole('button', { name: 'Sample action' }).click();
+  await expect(page.locator('[data-vf-docs-motion-sample-status]')).toContainText('Sample actions: 1');
+  await page.locator('#motion-target').selectOption('switch');
+  await sample.getByRole('switch', { name: 'Option' }).check();
+  await expect(sample.getByRole('switch', { name: 'Option' })).toBeChecked();
 });
