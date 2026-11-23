@@ -5,7 +5,7 @@ import {
   planMergedPullRequestRunDeletions,
   planRunDeletions
 } from './retention.mjs';
-import { planBranchDeletions, protectedBranchNames } from './branch-retention.mjs';
+import { linkedIssueNumbersForBranch, planBranchDeletions, protectedBranchNames } from './branch-retention.mjs';
 import { mapLimited, requestWithBackoff } from './github-api.mjs';
 
 const policy = JSON.parse(await readFile('tooling/ci/retention-policy.json', 'utf8'));
@@ -101,57 +101,34 @@ function combinedPlan(mergedPlan, agePlan) {
 function encodeRef(name) { return name.split('/').map(encodeURIComponent).join('/'); }
 async function listOpenPullRequests() { return listPages('/pulls?state=open'); }
 
-async function aheadByDefault(defaultBranch, branchName) {
-  const response = await githubResponse(`/compare/${encodeURIComponent(defaultBranch)}...${encodeURIComponent(branchName)}`);
-  if (response.status === 404 || response.status === 422) return null;
-  if (!response.ok) throw new Error(`GitHub compare for ${branchName} failed: ${response.status} ${await response.text()}`);
-  const comparison = await response.json();
-  return Number.isInteger(comparison.ahead_by) ? comparison.ahead_by : null;
-}
-
-async function branchRecords(defaultBranch, closedPullRequests, openPullRequests) {
-  const exactMergedHeads = new Map();
-  const closedWithoutMerge = new Set();
-  for (const pullRequest of closedPullRequests) {
-    const head = pullRequest?.head;
-    if (head?.repo?.full_name !== repository || !head.ref) continue;
-    if (!pullRequest.merged_at) {
-      closedWithoutMerge.add(head.ref);
-    } else if (pullRequest?.base?.ref === defaultBranch && head.sha) {
-      if (!exactMergedHeads.has(head.ref)) exactMergedHeads.set(head.ref, new Set());
-      exactMergedHeads.get(head.ref).add(head.sha);
-    }
+async function branchRecords(defaultBranch, closedPullRequests, openPullRequests, issueEntries) {
+  if (!issueEntries.some((item) => Number.isInteger(item.number) && !item.pull_request)) {
+    throw new Error('GitHub Issue index is empty or incomplete; refusing branch deletion');
   }
-
+  const allPullRequests = [...closedPullRequests, ...openPullRequests];
   const protectedNames = protectedBranchNames(openPullRequests, { defaultBranch, repository });
   const protectedPrefixes = branchPolicy.protectedPrefixes || [];
   const explicitNames = new Set(branchPolicy.protectedBranches || []);
-  const staleBefore = Date.now() - branchPolicy.staleDays * DAY_MS;
   const branches = await listPages('/branches');
 
-  // The previous implementation fired two requests for EVERY branch at once,
-  // triggering GitHub's secondary rate limit and aborting branch cleanup.
   return mapLimited(branches, 2, async (branch) => {
     const metadata = {
       name: branch.name,
       sha: branch.commit.sha,
       protected: branch.protected === true,
-      commitDate: null,
-      aheadByDefault: null,
-      mergedPullRequest: exactMergedHeads.get(branch.name)?.has(branch.commit.sha) === true,
-      closedWithoutMerge: closedWithoutMerge.has(branch.name)
+      issueNumbers: linkedIssueNumbersForBranch(branch.name, issueEntries, allPullRequests, { repository }),
+      commitDate: null
     };
     if (metadata.protected || protectedNames.has(branch.name) || explicitNames.has(branch.name) ||
-        protectedPrefixes.some((prefix) => branch.name.startsWith(prefix)) || metadata.closedWithoutMerge) {
+        protectedPrefixes.some((prefix) => branch.name.startsWith(prefix)) || metadata.issueNumbers.length) {
       return metadata;
     }
 
     const commit = await githubJson(`/commits/${branch.commit.sha}`);
     metadata.commitDate = commit.commit?.committer?.date ?? commit.commit?.author?.date ?? null;
-    if (Date.parse(metadata.commitDate || '') <= staleBefore) {
-      metadata.aheadByDefault = await aheadByDefault(defaultBranch, branch.name);
-    }
-    // Small spacing between branch inspection requests, even on a healthy API.
+    metadata.issueNumbers = linkedIssueNumbersForBranch(branch.name, issueEntries, allPullRequests, {
+      repository, commitMessage: commit.commit?.message || ''
+    });
     await new Promise((resolve) => { setTimeout(resolve, 150); });
     return metadata;
   });
@@ -175,21 +152,36 @@ async function deleteBranch(name) {
 async function cleanupStaleBranches() {
   const repositoryInfo = await githubJson('');
   const defaultBranch = repositoryInfo.default_branch;
-  const [openPullRequests, closedPullRequests] = await Promise.all([listOpenPullRequests(), listClosedPullRequests()]);
-  const branches = await branchRecords(defaultBranch, closedPullRequests, openPullRequests);
+  const openPullRequests = await listOpenPullRequests();
+  const closedPullRequests = await listClosedPullRequests();
+  // GitHub's Issues endpoint includes PRs; the linker filters PR records out.
+  // Exhaust pagination; partial issue data must not be treated as "no issue".
+  const issueEntries = await listPages('/issues?state=all');
+  const branches = await branchRecords(defaultBranch, closedPullRequests, openPullRequests, issueEntries);
   const plan = planBranchDeletions(branches, openPullRequests, branchPolicy, { defaultBranch, repository });
   const results = [];
 
+  // Re-read Issues before mutation so new issue associations protect their heads.
+  const freshIssueEntries = plan.deletions.length ? await listPages('/issues?state=all') : issueEntries;
+  if (!freshIssueEntries.some((item) => Number.isInteger(item.number) && !item.pull_request)) {
+    throw new Error('Current GitHub Issue index is empty; refusing branch deletion');
+  }
   for (const candidate of plan.deletions) {
     const freshOpenPullRequests = await listOpenPullRequests();
     const protectedNames = protectedBranchNames(freshOpenPullRequests, { defaultBranch, repository });
     if (protectedNames.has(candidate.name)) { results.push({ name: candidate.name, status: 'skipped', reason: 'open-pr-created-during-run' }); continue; }
+
+    const issueNumbers = linkedIssueNumbersForBranch(
+      candidate.name, freshIssueEntries, [...closedPullRequests, ...freshOpenPullRequests], { repository }
+    );
+    if (issueNumbers.length) { results.push({ name: candidate.name, status: 'skipped', reason: 'new-issue-link', issueNumbers }); continue; }
 
     const ref = await branchRef(candidate.name);
     if (!ref) { results.push({ name: candidate.name, status: 'already-absent' }); continue; }
     if (ref.object?.sha !== candidate.sha) { results.push({ name: candidate.name, status: 'skipped', reason: 'branch-moved-during-run' }); continue; }
 
     results.push(await deleteBranch(candidate.name));
+    if (!dryRun) await new Promise((resolve) => { setTimeout(resolve, 400); });
   }
 
   return {
