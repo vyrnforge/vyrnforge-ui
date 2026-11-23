@@ -132,7 +132,7 @@ export function MotionUtility({ guide, links }) {
       h(Flow, { as: 'section', gap: 'md', 'aria-labelledby': 'motion-playground-title' },
         h(Text, { as: 'h2', variant: 'heading-md', id: 'motion-playground-title' },
           'Interactive motion playground'),
-        h(Text, { as: 'p' }, 'Adjust inherited tokens and interact with actual VyrnForge Button, Switch and loading states. The preview is not a separate Motion component.'),
+        h(Text, { as: 'p' }, 'Adjust inherited tokens and interact with actual VyrnForge Button, Switch and loading states. The effects preview uses the public React Motion wrapper, with shared Web CSS and no animation runtime.'),
         h(AutoGrid, { minItemSize: '11rem', gap: 'md', className: 'vf-docs-motion-controls' },
           h(Setting, { id: 'motion-duration', label: 'Control transition duration',
             value: duration, options: durations, onChange: setDuration }),
