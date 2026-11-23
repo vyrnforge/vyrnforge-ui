@@ -1645,4 +1645,52 @@
     }
   }
 
+  /* Documentation-only playground layout. All overlay surfaces use public Web CSS. */
+  .vf-docs-overlay-controls {
+    min-inline-size: 0;
+  }
+
+  .vf-docs-overlay-control {
+    display: grid;
+    gap: var(--vf-space-xs);
+    min-inline-size: 0;
+  }
+
+  .vf-docs-overlay-control label {
+    color: var(--vf-color-text);
+    font-size: var(--vf-font-size-sm);
+    font-weight: var(--vf-font-weight-semibold);
+  }
+
+  .vf-docs-overlay-control select {
+    inline-size: 100%;
+    min-inline-size: 0;
+  }
+
+  .vf-docs-overlay-stage {
+    align-items: center;
+    background: var(--vf-color-surface);
+    border: 1px dashed var(--vf-color-border-required);
+    border-radius: var(--vf-radius-surface);
+    color: var(--vf-color-text);
+    display: grid;
+    justify-items: center;
+    min-block-size: 15rem;
+    min-inline-size: 0;
+    padding: clamp(var(--vf-space-md), 4vw, var(--vf-space-2xl));
+  }
+
+  .vf-docs-overlay-stage > [data-vf-flow] {
+    max-inline-size: 100%;
+    text-align: center;
+  }
+
+  .vf-docs-overlay-stage [data-vf-docs-overlay-status]:empty {
+    display: none;
+  }
+
+  .vf-docs-overlay-stage [data-vf-docs-overlay-status] {
+    color: var(--vf-color-text-muted);
+    font-size: var(--vf-font-size-sm);
+  }
 }
