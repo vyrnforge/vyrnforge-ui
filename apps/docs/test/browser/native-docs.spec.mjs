@@ -61,6 +61,42 @@ function loadingPatternEntry() {
   return entry;
 }
 
+
+test('Native Web Utilities Overlay page loads the shared guide and actual popover style', async ({ page }, testInfo) => {
+  expect(manifest.utilities).toContainEqual({
+    id: 'overlay', slug: 'utilities/overlay/', title: 'Overlay utility',
+    source: 'documentation/utilities/overlay.md',
+  });
+  const html = readFileSync('dist/docs/next/native-web/utilities/overlay/index.html', 'utf8');
+  expect(html).toContain('components/popover/popover.css');
+  expect(html).toContain('data-vf-popover-content');
+  await gotoWithCleanDocsState(page, '/next/native-web/utilities/overlay/');
+  const utility = page.locator('[data-vf-docs-native-overlay-utility]');
+  await expect(utility.getByRole('heading', { name: 'Overlay utility' })).toBeVisible();
+  await expect(page.getByRole('navigation', { name: 'Documentation' })
+    .getByRole('link', { name: 'Overlay' })).toHaveAttribute('aria-current', 'page');
+
+  await utility.getByRole('button', { name: 'Open Popover' }).click();
+  const popover = page.locator('#vf-overlay-basic');
+  await expect(popover).toBeVisible();
+  expect(await popover.evaluate((element) => element.matches(':popover-open'))).toBe(true);
+  await popover.scrollIntoViewIfNeeded();
+  await page.screenshot({ path: testInfo.outputPath('native-overlay-utility-popover-desktop.png') });
+  await page.keyboard.press('Escape');
+  await expect(popover).not.toBeVisible();
+
+  await utility.getByRole('button', { name: 'Custom elevation' }).click();
+  const custom = page.locator('#vf-overlay-custom');
+  await expect(custom).toBeVisible();
+  const shadow = await custom.evaluate((element) => {
+    const css = getComputedStyle(element);
+    return [css.getPropertyValue('--vf-shadow-popover').trim(), css.getPropertyValue('--vf-shadow-lg').trim()];
+  });
+  expect(shadow[0]).toBe(shadow[1]);
+  await expectDeploymentRelativeStyles(page);
+  await expectNoAccessibilityViolations(page);
+});
+
 test('Every emitted Native Web guide uses canonical Flow and AutoGrid layout hooks', () => {
   expect(manifest.pages.length).toBeGreaterThan(0);
   for (const guide of manifest.pages) {
