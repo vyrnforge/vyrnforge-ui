@@ -4,7 +4,7 @@ The repository cleanup removes an old branch **when it has no traceable GitHub I
 
 ## Issue-link evidence
 
-Cleanup checks all GitHub Issues, including closed issues, without treating pull requests as issues. It preserves a branch when an existing issue is referenced in the branch name (for example `qa/...-1397`), in an issue title/body that includes the exact branch name, in a matching branch pull request's title/body, in the branch HEAD commit message, or when an issue explicitly references that pull request. Generic numeric text does not count unless its number resolves to a real GitHub Issue.
+Cleanup checks all GitHub Issues, including closed issues, without treating pull requests as issues. The workflow token explicitly requires `issues: read`; if GitHub returns no real Issues, deletion fails closed instead of assuming every branch is orphaned. It preserves a branch when an existing issue is referenced in the branch name (for example `qa/...-1397`), in an issue title/body that includes the exact branch name, in a matching branch pull request's title/body, in the branch HEAD commit message, or when an issue explicitly references that pull request. Generic numeric text does not count unless its number resolves to a real GitHub Issue.
 
 An incomplete issue index or unavailable commit metadata **never** authorizes deletion. The issue index is refreshed before executing deletions.
 
