@@ -1,7 +1,7 @@
 /*
  * Opt-in, framework-neutral entrance recipes. The authored element/component
  * owns presence, focus, state, dismissal and any eventual exit lifecycle.
- * These recipes never keep hidden content in the DOM waiting for animationend.
+ * These recipes never keep hidden content in the DOM waiting for an animation event.
  *
  * Usage: <div data-vf-motion="fade">...</div>
  *        <div data-vf-motion="slide" data-vf-motion-direction="inline-start">...</div>
