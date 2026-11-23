@@ -50,7 +50,7 @@ describe('@vyrnforge/icons catalog', () => {
     for (const shape of ['rounded', 'sharp']) {
       const path = microphoneOffIcon.variants.filled[shape].paths[0].d;
       expect(path).toContain('V21H17v2H7v-2h3.5');
-      expect(path).not.toContain('v2H7v-2h3.5');
+      expect(path).not.toContain('V22H17v2H7v-2h3.5');
     }
   });
 
