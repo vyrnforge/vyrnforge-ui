@@ -20,7 +20,7 @@ test('React pilot artifact is Product Graph-backed and SSR-rendered with public 
   expect(manifest.routes.filter((entry) => entry.view !== 'unavailable').map((entry) => entry.route)).toEqual([
     '', 'foundations/tokens/', 'foundations/themes/', 'foundations/color/', 'foundations/theme-builder/', 'foundations/dark-mode/',
     'foundations/right-to-left/', 'foundations/styling/', 'components/button/', 'api/components/button/', 'components/layout/', 'api/components/layout/',
-    'components/divider/', 'api/components/divider/', 
+    'components/divider/', 'api/components/divider/', 'components/list/', 'api/components/list/',
     ...['text', 'code', 'kbd'].flatMap((id) => [
       'components/' + id + '/', 'api/components/' + id + '/',
     ]),
@@ -29,6 +29,20 @@ test('React pilot artifact is Product Graph-backed and SSR-rendered with public 
     'components/badge/', 'api/components/badge/',
     'components/avatar/', 'api/components/avatar/',
   ]);
+  expect(manifest.list).toMatchObject({
+    guideRoute: 'components/list/', apiRoute: 'api/components/list/',
+    publicEntrypoints: ['@vyrnforge/react/list'],
+    frameworkSourcePath: 'product/components/composition-primitives/list/react/docs/index.md',
+  });
+  expect(manifest.list.examples.map((example) => example.id)).toEqual([
+    'list/actions', 'list/markers', 'list/rich',
+  ]);
+  for (const example of manifest.list.examples) {
+    const slug = example.id.slice('list/'.length);
+    const frame = 'dist/docs/next/react/examples/list/' + slug + '/index.html';
+    expect(readFileSync(frame, 'utf8')).toContain('react-list-' + slug + '.js');
+    expect(readFileSync(frame, 'utf8')).toContain('react-list-' + slug + '.css');
+  }
   expect(manifest.divider).toMatchObject({
     guideRoute: 'components/divider/', apiRoute: 'api/components/divider/',
     publicEntrypoints: ['@vyrnforge/react/divider'],
@@ -1870,4 +1884,33 @@ test('React Image guide uses shared native CSS, source-backed examples and a dis
   expect(report.violations).toEqual([]);
   await page.screenshot({ path: testInfo.outputPath('react-image-320-rtl-forced-colors.png'), fullPage: false });
   expect(errors).toEqual([]);
+});
+
+
+test('React List guide exposes rich semantic examples and a separate source-backed API', async ({ page }) => {
+  await page.goto('/next/react/components/list/');
+  await expect(page.locator('[data-vf-docs-react-list]')).toBeVisible();
+  await expect(page.locator('[data-vf-docs-react-list-example]')).toHaveCount(3);
+
+  const rich = page.frameLocator('iframe[title="React Rich team directory List example"]');
+  const people = rich.getByRole('list', { name: 'Project team' });
+  await expect(people).toBeVisible();
+  await expect(people.getByRole('listitem')).toHaveCount(3);
+  await expect(rich.getByRole('button', { name: 'View Alex Chen' })).toBeVisible();
+
+  const markers = page.frameLocator('iframe[title="React Ordered and unordered List example"]');
+  await expect(markers.getByRole('list', { name: 'Release steps' })).toHaveCount(1);
+  await expect(markers.getByRole('list', { name: 'Project notes' })).toHaveCount(1);
+
+  const actions = page.frameLocator('iframe[title="React Independent actions List example"]');
+  await expect(actions.getByRole('list', { name: 'Saved reports' })).toBeVisible();
+  await expect(actions.getByRole('button', { name: 'Unavailable' })).toBeDisabled();
+
+  await page.goto('/next/react/api/components/list/');
+  await expect(page.locator('[data-vf-docs-react-api="list"]')).toBeVisible();
+  await expect(page.locator('[data-vf-docs-react-api="list"]')).toContainText('ListItemProps');
+
+  await page.context().setJavaScriptEnabled(false);
+  await page.reload();
+  await expect(page.locator('[data-vf-docs-react-api="list"]')).toBeVisible();
 });
