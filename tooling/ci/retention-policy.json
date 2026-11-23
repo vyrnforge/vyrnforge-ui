@@ -1,14 +1,9 @@
 {
   "schemaVersion": 3,
-  "minimumRunsPerWorkflow": 5,
-  "minimumSuccessfulRunsPerWorkflow": 2,
+  "minimumRunsPerWorkflow": 0,
+  "minimumSuccessfulRunsPerWorkflow": 0,
   "maxDeletionsPerRun": 500,
-  "preserveSuccessfulCategories": [
-    "main",
-    "scheduled",
-    "release",
-    "docs"
-  ],
+  "preserveSuccessfulCategories": [],
   "mergedPullRequest": {
     "preserveSuccessfulRunsPerWorkflow": 1,
     "preserveWorkflowPaths": [
@@ -17,36 +12,36 @@
   },
   "categories": {
     "pr": {
-      "successDays": 30,
-      "nonSuccessDays": 7
+      "successDays": 6,
+      "nonSuccessDays": 6
     },
     "main": {
-      "successDays": 60,
-      "nonSuccessDays": 14
+      "successDays": 6,
+      "nonSuccessDays": 6
     },
     "scheduled": {
-      "successDays": 45,
-      "nonSuccessDays": 14
+      "successDays": 6,
+      "nonSuccessDays": 6
     },
     "docs": {
-      "successDays": 30,
-      "nonSuccessDays": 14
+      "successDays": 6,
+      "nonSuccessDays": 6
     },
     "retention": {
-      "successDays": 30,
-      "nonSuccessDays": 14
+      "successDays": 6,
+      "nonSuccessDays": 6
     },
     "release": {
-      "successDays": 365,
-      "nonSuccessDays": 90
+      "successDays": 6,
+      "nonSuccessDays": 6
     },
     "dynamic": {
-      "successDays": 14,
-      "nonSuccessDays": 7
+      "successDays": 6,
+      "nonSuccessDays": 6
     },
     "unknown": {
-      "successDays": 30,
-      "nonSuccessDays": 7
+      "successDays": 6,
+      "nonSuccessDays": 6
     }
   }
 }
