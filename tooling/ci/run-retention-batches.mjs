@@ -19,13 +19,17 @@ export async function sweepRunHistory({
   let remainingCandidates = null;
   let remainingAgeExpired = null;
   let initialCandidates = null;
+  let initialAgeExpired = null;
   let stoppedForFailure = false;
   let lastPlan = null;
 
   for (let index = 0; index < maxBatches; index += 1) {
     const runs = await listRuns();
     const currentPlan = plan(runs);
-    if (initialCandidates === null) initialCandidates = currentPlan.candidateCount;
+    if (initialCandidates === null) {
+      initialCandidates = currentPlan.candidateCount;
+      initialAgeExpired = currentPlan.ageBased?.candidateCount ?? null;
+    }
     lastPlan = currentPlan;
     const batch = {
       number: index + 1,
@@ -70,6 +74,7 @@ export async function sweepRunHistory({
 
   return {
     initialCandidates,
+    initialAgeExpired,
     remainingCandidates,
     remainingAgeExpired,
     incomplete: !dryRun && (stoppedForFailure || remainingCandidates > 0),
