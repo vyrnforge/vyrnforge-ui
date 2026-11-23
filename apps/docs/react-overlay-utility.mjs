@@ -51,7 +51,7 @@ function Source({ kind, placement, theme, elevation, direction }) {
   };
   const example = {
     popover: '<PopoverRoot placement="' + placement + '">\n' +
-      '  <PopoverTrigger aria-label="Open Popover">Open</PopoverTrigger>\n' +
+      '  <PopoverTrigger aria-label="Open Popover" data-vf-button="" data-vf-variant="secondary">Open</PopoverTrigger>\n' +
       '  <PopoverContent aria-label="Details">Contextual content</PopoverContent>\n' +
       '</PopoverRoot>',
     tooltip: '<TooltipRoot placement="' + placement + '">\n' +
@@ -80,7 +80,7 @@ function Source({ kind, placement, theme, elevation, direction }) {
     (kind === 'popover' ? '' : "import { Button } from '@vyrnforge/react/button';\n") +
     'import { ' + names[kind] + " } from '@vyrnforge/react/" + kind + "';\n" +
     "import '@vyrnforge/web/styles/" + kind + ".css';\n" +
-    (kind === 'popover' ? '\n' : "import '@vyrnforge/web/styles/button.css';\n\n") +
+    "import '@vyrnforge/web/styles/button.css';\n\n" +
     'export default function Example() {\n' +
     (modal ? '  const [open, setOpen] = useState(false);\n' : '') +
     '  return (\n' +
@@ -109,7 +109,7 @@ export function OverlayUtility({ guide, links }) {
   let example;
   if (kind === 'popover') {
     example = h(PopoverRoot, { placement },
-      h(PopoverTrigger, { 'aria-label': 'Open Popover' }, 'Open'),
+      h(PopoverTrigger, { 'aria-label': 'Open Popover', 'data-vf-button': '', 'data-vf-variant': 'secondary' }, 'Open'),
       h(PopoverContent, { 'aria-label': 'Overlay utility details' },
         h(Flow, { gap: 'sm' },
           h(Text, { as: 'strong' }, 'Details'),
@@ -136,7 +136,7 @@ export function OverlayUtility({ guide, links }) {
       h(DialogRoot, { open: dialogOpen, onOpenChange: setDialogOpen },
         h(DialogTitle, null, 'Modal dialog'),
         h(DialogBody, null, h(Text, { as: 'p' }, 'This uses native dialog top-layer and focus behavior.')),
-        h(DialogClose, null, 'Close Dialog')));
+        h(DialogClose, { 'data-vf-button': '', 'data-vf-variant': 'secondary' }, 'Close Dialog')));
   } else {
     example = h(Flow, { gap: 'sm', align: 'center' },
       h(Button, { type: 'button', variant: 'secondary',
@@ -144,7 +144,7 @@ export function OverlayUtility({ guide, links }) {
       h(DrawerRoot, { open: drawerOpen, onOpenChange: setDrawerOpen, placement: 'end' },
         h(DrawerTitle, null, 'Modal drawer'),
         h(DrawerBody, null, h(Text, { as: 'p' }, 'A modal surface at the logical end edge.')),
-        h(DrawerClose, null, 'Close Drawer')));
+        h(DrawerClose, { 'data-vf-button': '', 'data-vf-variant': 'secondary' }, 'Close Drawer')));
   }
 
   return h('div', { className: 'vf-docs-content-grid vf-docs-usage-guide-layout',
@@ -185,7 +185,7 @@ export function OverlayUtility({ guide, links }) {
           h('p', { role: 'status', 'aria-live': 'polite', 'data-vf-docs-overlay-status': '' }, feedback))),
       h(Source, { kind, placement, theme, elevation, direction }),
       h(Text, { as: 'p', variant: 'body-sm' },
-        'The local preview overrides only public semantic CSS custom properties. Modal backdrop, focus, and dismissal policies stay with the selected component.')),
+        'Trigger and close parts render their own native buttons. Their optional public Button styling hooks reuse VyrnForge’s shared Web presentation; do not nest a Button inside them. Modal backdrop, focus, and dismissal policies stay with the selected component.')),
     ...UtilitySections({ guide, prefix: 'overlay-' }),
     h(Flow, { as: 'section', gap: 'sm', 'aria-labelledby': 'overlay-component-links' },
       h(Text, { as: 'h2', variant: 'heading-md', id: 'overlay-component-links' }, 'React component sources'),
