@@ -2171,8 +2171,8 @@ test('Motion tokens affect multiple real controls without changing their state c
   await page.locator('#motion-theme').selectOption('dark');
   await expect(stage).toHaveAttribute('data-vf-theme', 'dark');
   await stage.getByRole('button', { name: 'Start busy' }).click();
-  await expect(stage.getByRole('button', { name: 'Busy' })).toHaveAttribute('aria-busy', 'true');
-  const spinner = await stage.getByRole('button', { name: 'Busy' }).evaluate((node) => {
+  await expect(stage.getByRole('button', { name: 'Busy', exact: true })).toHaveAttribute('aria-busy', 'true');
+  const spinner = await stage.getByRole('button', { name: 'Busy', exact: true }).evaluate((node) => {
     const css = getComputedStyle(node, '::before');
     return { duration: css.animationDuration, name: css.animationName };
   });
@@ -2198,7 +2198,7 @@ test('Motion reduced preference disables visual movement but leaves state and lo
   await stage.getByRole('switch', { name: 'Option' }).check();
   await expect(stage.locator('[data-vf-docs-motion-feedback]')).toContainText('Actions: 1. Switch: on.');
   await stage.getByRole('button', { name: 'Start busy' }).click();
-  const busy = stage.getByRole('button', { name: 'Busy' });
+  const busy = stage.getByRole('button', { name: 'Busy', exact: true });
   await expect(busy).toHaveAttribute('aria-busy', 'true');
   const animation = await busy.evaluate((node) => getComputedStyle(node, '::before').animationName);
   expect(animation).toBe('none');
