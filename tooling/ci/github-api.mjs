@@ -6,7 +6,7 @@ export async function requestWithBackoff(url, {
   method = 'GET',
   headers = {},
   fetchImpl = fetch,
-  wait = (milliseconds) => new Promise((resolve) => setTimeout(resolve, milliseconds)),
+  wait = (milliseconds) => new Promise((resolve) => { setTimeout(resolve, milliseconds); }),
   maxAttempts = 4
 } = {}) {
   if (!Number.isInteger(maxAttempts) || maxAttempts < 1) throw new Error('maxAttempts must be positive');
