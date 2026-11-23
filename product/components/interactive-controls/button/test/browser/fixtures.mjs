@@ -23,6 +23,13 @@ export const browserFixture = {
         <button type="button" id="vertical-b" data-vf-button data-vf-variant="secondary">Second</button>
       </div>
       </div>
+      <div id="icon-specimens" hidden>
+        <button type="button" data-vf-button data-vf-icon-only data-vf-variant="ghost" data-vf-size="sm" id="icon-sm" aria-label="Search"><svg width="16" height="16" aria-hidden="true"><circle cx="8" cy="8" r="6"/></svg></button>
+        <button type="button" data-vf-button data-vf-icon-only data-vf-variant="secondary" data-vf-size="md" id="icon-md" aria-label="Bookmark"><svg width="20" height="20" aria-hidden="true"><circle cx="10" cy="10" r="6"/></svg></button>
+        <button type="button" data-vf-button data-vf-icon-only data-vf-variant="primary" data-vf-size="lg" id="icon-lg" aria-label="Share"><svg width="24" height="24" aria-hidden="true"><circle cx="12" cy="12" r="8"/></svg></button>
+        <button type="button" data-vf-button data-vf-icon-only data-vf-variant="secondary" data-vf-size="md" data-vf-loading aria-busy="true" id="icon-busy" aria-label="Save"><svg width="20" height="20" aria-hidden="true"><circle cx="10" cy="10" r="6"/></svg></button>
+        <button type="button" data-vf-button data-vf-icon-only data-vf-variant="secondary" data-vf-size="md" disabled id="icon-disabled" aria-label="Unavailable"><svg width="20" height="20" aria-hidden="true"><circle cx="10" cy="10" r="6"/></svg></button>
+      </div>
       <form id="form"><label for="field">Field</label><input id="field" name="field" value="changed"><button id="submit" data-vf-button data-vf-variant="primary" data-vf-size="md" name="intent" value="submit">Submit</button><button id="reset" data-vf-button data-vf-variant="secondary" data-vf-size="md" type="reset">Reset</button><button id="plain" data-vf-button data-vf-variant="ghost" data-vf-size="md" type="button">Plain</button></form>
       <button id="external-submit" data-vf-button form="form" type="submit" name="intent" value="external">External submit</button>
       <button id="activation" data-vf-button data-vf-variant="primary" data-vf-size="md">Activate</button>
@@ -62,6 +69,11 @@ export async function createReactStory({ client }) {
       },
       'React disabled',
     ),
+    createElement(Button, {
+      id: 'react-icon-only', iconOnly: true, type: 'button', variant: 'ghost', size: 'md',
+      'aria-label': 'Search',
+      onClick: client ? () => { document.body.dataset.iconActivated = 'true'; } : undefined,
+    }, createElement('svg', { viewBox: '0 0 24 24', width: '20', height: '20', 'aria-hidden': true })),
     createElement(
       'form',
       {
@@ -105,6 +117,11 @@ export async function createVueStory({ client }) {
         },
         () => 'Vue disabled',
       ),
+      h(Button, {
+        id: 'vue-icon-only', iconOnly: true, type: 'button', variant: 'ghost', size: 'md',
+        'aria-label': 'Search',
+        onClick: client ? () => { document.body.dataset.iconActivated = 'true'; } : () => undefined,
+      }, () => h('svg', { viewBox: '0 0 24 24', width: '20', height: '20', 'aria-hidden': true })),
       h('form', {
         id: 'vue-form',
         onSubmit: (event) => {
@@ -136,6 +153,10 @@ export async function createAngularStory({ client }) {
       if (client) document.body.dataset.disabledActivated = 'true';
     }
 
+    iconActivated() {
+      if (client) document.body.dataset.iconActivated = 'true';
+    }
+
     formSubmitted(event) {
       event.preventDefault();
       if (client) document.body.dataset.formSubmitted = 'true';
@@ -146,7 +167,7 @@ export async function createAngularStory({ client }) {
     selector: 'vf-button-test',
     standalone: true,
     imports: [VfButtonDirective],
-    template: '<button vfButton loading aria-busy="false" id="angular-button" (click)="activated()">Angular action</button><button vfButton aria-busy="false" id="angular-consumer-busy">Angular status</button><button vfButton disabled id="angular-disabled" (click)="disabledActivated()">Angular disabled</button><form id="angular-form" (submit)="formSubmitted($event)"><label for="angular-field">Field</label><input id="angular-field" name="field" value="changed"><button vfButton id="angular-submit">Submit</button><button vfButton type="reset" id="angular-reset">Reset</button><button vfButton type="button" id="angular-plain">Plain</button></form>',
+    template: '<button vfButton loading aria-busy="false" id="angular-button" (click)="activated()">Angular action</button><button vfButton aria-busy="false" id="angular-consumer-busy">Angular status</button><button vfButton disabled id="angular-disabled" (click)="disabledActivated()">Angular disabled</button><button vfButton iconOnly variant="ghost" type="button" id="angular-icon-only" aria-label="Search" (click)="iconActivated()"><svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true"></svg></button><form id="angular-form" (submit)="formSubmitted($event)"><label for="angular-field">Field</label><input id="angular-field" name="field" value="changed"><button vfButton id="angular-submit">Submit</button><button vfButton type="reset" id="angular-reset">Reset</button><button vfButton type="button" id="angular-plain">Plain</button></form>',
   })(ButtonTestApp);
 
   return ButtonTestApp;

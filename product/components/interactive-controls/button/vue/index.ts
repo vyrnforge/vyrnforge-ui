@@ -10,7 +10,8 @@ export const Button = defineComponent({
   props: {
     variant: { type: String as PropType<ButtonVariant>, default: 'primary' },
     size: { type: String as PropType<ButtonSize>, default: 'md' },
-    loading: { type: Boolean, default: false }
+    loading: { type: Boolean, default: false },
+    iconOnly: { type: Boolean, default: false }
   },
   setup(props, { attrs, slots }) {
     return () => h('button', {
@@ -18,6 +19,7 @@ export const Button = defineComponent({
       'data-vf-button': '',
       'data-vf-variant': props.variant,
       'data-vf-size': props.size,
+      'data-vf-icon-only': props.iconOnly ? '' : undefined,
       'data-vf-loading': props.loading ? '' : undefined,
       'aria-busy': props.loading ? 'true' : attrs['aria-busy']
     }, slots.default?.());

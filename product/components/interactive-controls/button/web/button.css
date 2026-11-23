@@ -75,6 +75,33 @@
     --_vf-button-font-size: var(--vf-font-size-md);
   }
 
+  /* Icon-only is a visual mode on the same native Button, not a second
+     semantic control. Use a square target, never the text-button padding. */
+  :where([data-vf-button][data-vf-icon-only]) {
+    --_vf-button-padding-block: 0;
+    --_vf-button-padding-inline: 0;
+    --_vf-button-gap: 0;
+    --_vf-button-icon-control-size: max(2rem, var(--_vf-button-block-size));
+
+    block-size: var(--_vf-button-icon-control-size);
+    flex: none;
+    inline-size: var(--_vf-button-icon-control-size);
+  }
+
+  /* Busy icon-only actions display one centered indicator, not an icon and
+     spinner side-by-side. The authored accessible name remains on the button. */
+  :where([data-vf-button][data-vf-icon-only][data-vf-loading]) {
+    position: relative;
+  }
+  :where([data-vf-button][data-vf-icon-only][data-vf-loading])::before {
+    inset: 0;
+    margin: auto;
+    position: absolute;
+  }
+  :where([data-vf-button][data-vf-icon-only][data-vf-loading] > svg) {
+    visibility: hidden;
+  }
+
   :where([data-vf-button]:hover:not(:disabled)) {
     background: var(--_vf-button-background-hover);
     border-color: var(--_vf-button-background-hover);

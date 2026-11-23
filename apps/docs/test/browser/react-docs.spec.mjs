@@ -563,9 +563,19 @@ test('React Button-family guide shows joined groups, ToggleButton and density wi
   await expect(bold).toHaveAttribute('aria-pressed', 'true');
   await expect(toggle.getByRole('status')).toHaveText('Bold: on');
 
-  const icons = page.frameLocator('iframe[title="React Icon-only, icon-with-text and busy actions example"]');
+  const icons = page.frameLocator('iframe[title="React Icon-only Button sizes, emphasis and states example"]');
   await expect(icons.getByRole('button', { name: 'Save bookmark', exact: true })).toHaveCount(2);
-  await expect(icons.getByRole('button', { name: 'Loading' })).toHaveAttribute('aria-busy', 'true');
+  const iconOnly = icons.getByRole('button', { name: 'Save bookmark', exact: true }).first();
+  await expect(iconOnly).toHaveAttribute('data-vf-icon-only', '');
+  const dimensions = await iconOnly.evaluate(element => {
+    const box = element.getBoundingClientRect();
+    return { width: box.width, height: box.height };
+  });
+  expect(dimensions).toEqual({ width: 40, height: 40 });
+  await iconOnly.click();
+  await expect(icons.getByRole('status')).toHaveText('Last action: Save bookmark');
+  await expect(icons.getByRole('button', { name: 'Search' })).toHaveAttribute('data-vf-size', 'sm');
+  await expect(icons.getByRole('button', { name: 'Saving bookmark' })).toHaveAttribute('aria-busy', 'true');
 
   const density = page.frameLocator('iframe[title="React Button sizes and inherited density example"]');
   await density.getByRole('combobox', { name: 'Density' }).selectOption('compact');

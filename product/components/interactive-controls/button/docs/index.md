@@ -80,7 +80,13 @@ Joined buttons do not automatically wrap. For narrow layouts choose independent 
 
 ## Accessible icon actions
 
-Compose the existing Icon inside Button rather than inventing IconButton. Icon-only Buttons need an authored accessible name (for example `aria-label="Save bookmark"`); a decorative icon inside a named button stays hidden from assistive technology.
+Use the optional **icon-only presentation** on an ordinary native Button, not a second IconButton component. In React set `iconOnly`, in Angular bind `iconOnly` on `button[vfButton]`, in Vue set `iconOnly`, and in Native Web add `data-vf-icon-only` to `button[data-vf-button]`. This gives a centered **square** target using the same `sm|md|lg` sizing and inherited density, with a minimum 2rem square target even in compact mode. The visual control radius stays restrained rather than becoming a pill or circle.
+
+Keep just the icon as visual content and provide a stable, localized button name, for example `aria-label="Save bookmark"` or `aria-labelledby`. The Icon remains decorative; the Button owns the name, native type, focus, activation, disabled and busy state. No text is inferred from an icon definition. Prefer `variant="ghost"` for quiet toolbar actions, `secondary` for an outlined alternative, and `primary` only where icon-only emphasis is truly warranted. Omitting variant still preserves Button's regular primary default: the new mode does not secretly choose an emphasis role.
+
+Icon-only loading centers one visual spinner instead of showing spinner and icon side-by-side; the original icon is visually hidden while busy, `aria-busy` remains true, and loading still does **not** disable activation. Size and visual emphasis are independent; use `<Icon size="sm|md|lg">` with a matching Button size where desired. Regular icon-with-text Buttons still use ordinary text padding and need no `iconOnly`.
+
+The icon-only presentation mode is a deliberately scoped extension proposed after a consumer design review; the original canonical Button Contract excluded icon-specific options from its **baseline**. Before declaring the revised contract fully accepted, reconcile that baseline in Drive and obtain independent actual-size visual/AT approval. Do not treat the existence of code or a browser screenshot as that approval.
 
 ## ToggleButton and pressed state
 

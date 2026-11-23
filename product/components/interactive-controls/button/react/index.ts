@@ -8,6 +8,8 @@ export interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
   variant?: ButtonVariant;
   size?: ButtonSize;
   loading?: boolean;
+  /** Square, icon-only presentation; provide an accessible name on the button. */
+  iconOnly?: boolean;
 }
 
 export const Button = forwardRef<HTMLButtonElement, ButtonProps>(function Button(
@@ -15,6 +17,7 @@ export const Button = forwardRef<HTMLButtonElement, ButtonProps>(function Button
     variant = 'primary',
     size = 'md',
     loading = false,
+    iconOnly = false,
     children,
     'aria-busy': ariaBusy,
     ...nativeProps
@@ -29,6 +32,7 @@ export const Button = forwardRef<HTMLButtonElement, ButtonProps>(function Button
       'data-vf-button': '',
       'data-vf-variant': variant,
       'data-vf-size': size,
+      'data-vf-icon-only': iconOnly ? '' : undefined,
       'data-vf-loading': loading ? '' : undefined,
       'aria-busy': loading ? true : ariaBusy
     },

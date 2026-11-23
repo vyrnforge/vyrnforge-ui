@@ -437,6 +437,8 @@ export class VfButtonDirective {
     // (undocumented)
     readonly disabled: InputSignalWithTransform<boolean, unknown>;
     // (undocumented)
+    readonly iconOnly: InputSignalWithTransform<boolean, unknown>;
+    // (undocumented)
     readonly loading: InputSignalWithTransform<boolean, unknown>;
     // (undocumented)
     readonly size: InputSignal<ButtonSize>;
@@ -456,6 +458,11 @@ export class VfButtonDirective {
         };
         "loading": {
             "alias": "loading";
+            "required": false;
+            "isSignal": true;
+        };
+        "iconOnly": {
+            "alias": "iconOnly";
             "required": false;
             "isSignal": true;
         };

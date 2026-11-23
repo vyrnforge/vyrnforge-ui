@@ -209,6 +209,10 @@ loading: {
 type: BooleanConstructor;
 default: boolean;
 };
+iconOnly: {
+type: BooleanConstructor;
+default: boolean;
+};
 }>, () => VNode<RendererNode, RendererElement, {
 [key: string]: any;
 }>, {}, {}, {}, ComponentOptionsMixin, ComponentOptionsMixin, {}, string, PublicProps, Readonly<ExtractPropTypes<    {
@@ -224,10 +228,15 @@ loading: {
 type: BooleanConstructor;
 default: boolean;
 };
+iconOnly: {
+type: BooleanConstructor;
+default: boolean;
+};
 }>> & Readonly<{}>, {
 variant: ButtonVariant;
 size: ButtonSize;
 loading: boolean;
+iconOnly: boolean;
 }, {}, {}, {}, string, ComponentProvideOptions, true, {}, any>;
 
 // @public (undocumented)

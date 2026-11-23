@@ -300,6 +300,7 @@ export const Button: ForwardRefExoticComponent<ButtonProps & RefAttributes<HTMLB
 
 // @public (undocumented)
 export interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
+    iconOnly?: boolean;
     // (undocumented)
     loading?: boolean;
     // (undocumented)
