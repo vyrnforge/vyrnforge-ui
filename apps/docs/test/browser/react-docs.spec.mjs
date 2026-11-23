@@ -551,7 +551,7 @@ test('React Button-family guide shows joined groups, ToggleButton and density wi
   await page.goto('/next/react/components/button/');
   await expect(page.locator('[data-vf-docs-react-button-example]')).toHaveCount(9);
   const joined = page.frameLocator('iframe[title="React Independent and joined Button groups example"]');
-  await expect(joined.getByRole('group', { name: 'Document actions' })).toBeVisible();
+  await expect(joined.getByRole('group', { name: 'Document actions', exact: true })).toBeVisible();
   await joined.getByRole('button', { name: 'Copy' }).click();
   await expect(joined.getByRole('status')).toHaveText('Copied');
   await expect(joined.getByRole('button', { name: 'Archive' })).toBeDisabled();
