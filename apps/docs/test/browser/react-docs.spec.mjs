@@ -2128,7 +2128,7 @@ test('Motion utility is shared, discoverable and binds real public Web tokens', 
   const html = readFileSync('dist/docs/next/react/utilities/motion/index.html', 'utf8');
   expect(html).toContain('assets/docs.css');
   expect(html).toContain('components/switch/switch.css');
-  expect(html).toContain('/styles/motion.css');
+  expect(html).toContain('/styles/foundation.css');
   expect(html).toContain('data-vf-docs-react-motion-utility');
   await page.goto('/next/react/utilities/motion/');
   const utility = page.locator('[data-vf-docs-react-motion-utility]');
