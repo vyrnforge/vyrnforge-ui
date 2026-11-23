@@ -102,6 +102,8 @@ jobs:
         run: pnpm format:configs:check
       - name: Verify repository contracts without component behavior suites
         run: pnpm verify:structure && pnpm verify:testing-structure && pnpm verify:boundaries && pnpm verify:architecture && pnpm verify:impact && pnpm verify:package-contracts && pnpm verify:compatibility && pnpm verify:workflows && pnpm verify:validation
+      - name: Test repository retention and branch cleanup safeguards
+        run: pnpm exec vitest run --project repository-tooling tooling/ci/*.test.mjs
 
   components:
     name: components
