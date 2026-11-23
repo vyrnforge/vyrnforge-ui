@@ -147,7 +147,10 @@ function navigation(view, links, topic) {
       { id: 'themes', title: 'Theming', href: links.themes },
       { id: 'rtl', title: 'Right-to-left', href: links.rtl },
     ] },
-    { label: 'Components', items: [{ id: 'guide', title: 'Button', href: links.guide }] },
+    { label: 'Components', items: [
+      { id: 'guide', title: 'Button', href: links.guide },
+      { id: 'toggle', title: 'ToggleButton', href: links.toggle.guide },
+    ] },
     { label: 'Typography', items: ['text', 'code', 'kbd'].map((id) => ({
       id: 'typography:' + id,
       title: id === 'kbd' ? 'Kbd' : id[0].toUpperCase() + id.slice(1),
@@ -173,6 +176,7 @@ function navigation(view, links, topic) {
     // interleaved with consumer guides. A dedicated API catalog can follow.
     { label: 'API Reference', items: [
       { id: 'api', title: 'Button API', href: links.api },
+      { id: 'toggle-api', title: 'ToggleButton API', href: links.toggle.api },
       { id: 'layout-api', title: 'Layout API', href: links.layoutApi },
       { id: 'divider-api', title: 'Divider API', href: links.divider.api },
       { id: 'list-api', title: 'List API', href: links.list.api },
@@ -425,7 +429,9 @@ function buttonExample(example, links) {
     h('iframe', { className: 'vf-docs-react-example-frame',
       title: id === 'basic' ? 'Checked-in React Button example' : 'React ' + example.title + ' example',
       src: links.buttonExamples[id], sandbox: 'allow-scripts',
-      loading: id === 'basic' ? 'eager' : 'lazy' }),
+      loading: id === 'basic' ? 'eager' : 'lazy',
+      style: { minBlockSize: id === 'joined' ? '26rem' : id === 'toggle' ? '17rem' :
+        id === 'icons' || id === 'density' ? '14rem' : '10rem' } }),
     h('details', { className: 'vf-docs-source-disclosure' },
       h('summary', null, id === 'basic' ? 'View checked-in React source' : 'View React TSX source'),
       h('pre', { 'data-vf-code-block': '', tabIndex: 0 },
@@ -464,6 +470,8 @@ function buttonUsageGuide(button, links, message, setMessage) {
       guidePart(sections[2], guideSubsections(button.sharedContent, [
         'When to use', 'Native baseline', 'Variants', 'Sizes',
         'States and async work', 'Forms', 'Styling and adaptation',
+        'Button groups and joined actions', 'Accessible icon actions',
+        'ToggleButton and pressed state', 'Density and target sizing',
       ], 'react-button-guide')),
       guidePart(sections[3], [
         ...guideBlocks(button.sharedContent, 'Interaction and focus'),
@@ -475,7 +483,9 @@ function buttonUsageGuide(button, links, message, setMessage) {
           h('li', null, h('a', { 'data-vf-link': '', href: links.api },
             'View Button public React API')),
           h('li', null, h('a', { 'data-vf-link': '', href: links.layout },
-            'Layout'))),
+            'Layout')),
+          h('li', null, h('a', { href: links.toggle.guide, 'data-vf-link': '' },
+            'ToggleButton'))),
       ])));
 }
 
