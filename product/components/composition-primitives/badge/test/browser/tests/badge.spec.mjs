@@ -69,6 +69,57 @@ test('Badge sizes remain compact and scale count and dot separately', async ({ p
   await expect(page.getByRole('button', { name: 'Large, 42 updates' })).toBeVisible();
 });
 
+test('Badge text stays centered for one, two, capped and wrapped label values', async ({ page }) => {
+  await page.goto('/components/badge/' + port + '.html');
+
+  for (const selector of ['#size-sm', '#size-lg', '#max', '#new-label']) {
+    const result = await page.locator(selector + ' [data-vf-badge-indicator]').evaluate((el) => {
+      const box = el.getBoundingClientRect();
+      const selection = document.createRange();
+      selection.selectNodeContents(el);
+      const inkBox = selection.getBoundingClientRect();
+      return {
+        alignment: getComputedStyle(el).textAlign,
+        lineCount: selection.getClientRects().length,
+        horizontalDelta: Math.abs((inkBox.left + inkBox.width / 2) - (box.left + box.width / 2)),
+        verticalDelta: Math.abs((inkBox.top + inkBox.height / 2) - (box.top + box.height / 2)),
+      };
+    });
+    expect(result.alignment).toBe('center');
+    expect(result.lineCount).toBe(1);
+    expect(result.horizontalDelta).toBeLessThanOrEqual(2);
+    // Layout line boxes are centered; optical glyph centering varies by font.
+    expect(result.verticalDelta).toBeLessThanOrEqual(3);
+  }
+
+  const wrapped = await page.locator('#wrapped-label [data-vf-badge-indicator]')
+    .evaluate((el) => {
+      const box = el.getBoundingClientRect();
+      const node = el.firstChild;
+      const range = document.createRange();
+      range.selectNodeContents(node);
+      const lines = [...range.getClientRects()];
+      const words = [[0, 7], [8, 14]].map(([start, end]) => {
+        const wordRange = document.createRange();
+        wordRange.setStart(node, start);
+        wordRange.setEnd(node, end);
+        const wordBox = wordRange.getBoundingClientRect();
+        return {
+          horizontalDelta: Math.abs((wordBox.left + wordBox.width / 2) -
+            (box.left + box.width / 2)),
+          top: wordBox.top,
+        };
+      });
+      return { alignment: getComputedStyle(el).textAlign, lines: lines.length, words };
+    });
+  expect(wrapped.alignment).toBe('center');
+  expect(wrapped.lines).toBeGreaterThanOrEqual(2);
+  expect(wrapped.words[0].top).toBeLessThan(wrapped.words[1].top);
+  for (const word of wrapped.words) {
+    expect(word.horizontalDelta).toBeLessThanOrEqual(3);
+  }
+});
+
 test('Badge anchored placement responds to RTL and preserves narrow zoom and forced-color reflow', async ({ page }) => {
   await page.setViewportSize({ width: 320, height: 720 });
   await page.goto('/components/badge/' + port + '.html');
