@@ -489,6 +489,75 @@ function buttonUsageGuide(button, links, message, setMessage) {
       ])));
 }
 
+function toggleExample(toggle, links) {
+  const example = toggle.examples[0];
+  return h('article', { className: 'vf-docs-example', id: 'react-toggle-example',
+    'data-vf-docs-react-toggle-example': example.id },
+    h(Flow, { as: 'header', direction: 'inline', wrap: 'wrap', gap: 'lg',
+      align: 'start', justify: 'space-between', className: 'vf-docs-example-header' },
+      h('div', null, h(Text, { as: 'h3', variant: 'heading-sm' }, example.title),
+        h(Text, { as: 'p' }, example.description))),
+    h('iframe', { className: 'vf-docs-react-example-frame', title: 'React ToggleButton pressed-state example',
+      src: links.toggle.example, sandbox: 'allow-scripts', loading: 'eager',
+      style: { minBlockSize: '17rem' } }),
+    h('details', { className: 'vf-docs-source-disclosure' },
+      h('summary', null, 'View React TSX source'),
+      h('pre', { 'data-vf-code-block': '', tabIndex: 0 }, h('code', null, example.source))));
+}
+function toggleUsage(toggle, links) {
+  if (!toggle?.sharedContent || !toggle?.frameworkContent || !toggle.examples?.length) return null;
+  const sections = [
+    { id: 'react-toggle-setup', heading: 'Get started' },
+    { id: 'react-toggle-examples', heading: 'Live pressed-state example' },
+    { id: 'react-toggle-guidance', heading: 'State and composition' },
+    { id: 'react-toggle-a11y', heading: 'Accessibility' },
+    { id: 'react-toggle-reference', heading: 'Related components and API' },
+  ];
+  return h('div', { className: 'vf-docs-content-grid vf-docs-usage-guide-layout' },
+    guideToc(sections),
+    h(Flow, { as: 'article', gap: '2xl', className: 'vf-docs-article vf-docs-usage-guide',
+      'data-vf-docs-react-toggle': '' },
+      guideHeader(toggle.sharedContent, 'React · Components · Actions'),
+      guidePart(sections[0], guideBlocks(toggle.frameworkContent, 'React setup')),
+      guidePart(sections[1], [toggleExample(toggle, links)]),
+      guidePart(sections[2], [
+        ...guideSubsections(toggle.sharedContent,
+          ['Native semantics and behavior', 'Sizing and styling', 'Related controls and grouping'],
+          'react-toggle-guidance'),
+        ...guideSubsections(toggle.frameworkContent,
+          ['Controlled and uncontrolled state', 'Sizing and composition'],
+          'react-toggle-authoring'),
+      ]),
+      guidePart(sections[3], [
+        ...guideBlocks(toggle.sharedContent, 'Accessibility and evidence'),
+        evidenceDisclosure(toggle.standardReferences),
+      ]),
+      guidePart(sections[4], [
+        h('a', { href: links.toggle.api, 'data-vf-link': '' }, 'ToggleButton public React API'),
+        h('a', { href: links.guide, 'data-vf-link': '' }, 'Button and joined action groups'),
+      ])));
+}
+function toggleApi(toggle, links) {
+  if (!toggle?.publicToggleTypes || !toggle.publicEntrypoints?.length) return null;
+  return h('article', { className: 'vf-docs-article', 'data-vf-docs-react-api': 'toggle-button' },
+    h('header', { className: 'vf-docs-component-header' },
+      h('h1', null, 'ToggleButton API'),
+      h('p', { className: 'vf-docs-lede' },
+        'Native pressed button with controlled or uncontrolled state and shared Button sizes.'),
+      accessibilityEvidence(toggle.standardReferences)),
+    h('section', { 'aria-labelledby': 'react-toggle-api-entry' },
+      h('h2', { id: 'react-toggle-api-entry' }, 'Public entrypoint'),
+      h('ul', null, ...toggle.publicEntrypoints.map(name => h('li', { key: name },
+        h('code', { 'data-vf-code': '' }, name)))),
+      h('p', null, 'Canonical styling: ', h('code', null,
+        '@vyrnforge/web/styles/toggle-button.css'))),
+    h('section', { 'aria-labelledby': 'react-toggle-api-props' },
+      h('h2', { id: 'react-toggle-api-props' }, 'Source-backed React props'),
+      h('pre', { 'data-vf-code-block': '', tabIndex: 0 },
+        h('code', null, toggle.publicToggleTypes))),
+    h('a', { href: links.toggle.guide, 'data-vf-link': '' }, 'View ToggleButton examples'));
+}
+
 function iconExample(example, links) {
   const slug = example.id.slice('icon/'.length);
   return h('article', { key: example.id, id: 'react-icon-example-' + slug,
