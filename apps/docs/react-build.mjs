@@ -17,6 +17,20 @@ const reactModel = compileFrameworkDocumentation('react', root);
 const webModel = compileFrameworkDocumentation('native-web', root);
 const nativeModel = compileNativeDocumentation(root);
 const overlayGuide = parseMarkdownDocument(await readFile(path.join(root, 'documentation/utilities/overlay.md'), 'utf8'));
+const motionGuide = parseMarkdownDocument(await readFile(path.join(root, 'documentation/utilities/motion.md'), 'utf8'));
+const motionTokenNames = ['--vf-control-motion-duration', '--vf-motion-easing-standard',
+  '--vf-motion-duration-loading-spin', '--vf-motion-duration-loading-shimmer', '--vf-motion-easing-loading'];
+const motionTokenCSS = await readFile(path.join(root, 'packages/web/src/styles/tokens.css'), 'utf8');
+for (const name of motionTokenNames) {
+  if (!motionTokenCSS.includes(name + ':')) throw new Error('Motion utility references missing public runtime token: ' + name);
+}
+for (const id of ['button', 'switch']) {
+  if (!reactModel.componentCatalog.find((entry) => entry.id === id)?.apiAvailable) {
+    throw new Error('Motion utility requires real public React component: ' + id);
+  }
+}
+const motionStyles = [resolvePublicWebStyleAsset(webModel.packageManifest,
+  '@vyrnforge/web/styles/switch.css').assetPath];
 const overlayComponentIds = ['popover', 'tooltip', 'preview-card', 'dialog', 'alert-dialog', 'drawer'];
 for (const id of overlayComponentIds) {
   if (!reactModel.componentCatalog.find((entry) => entry.id === id)?.apiAvailable ||
@@ -345,6 +359,8 @@ function linksFor(route) {
     rtl: relative(dir, react + 'foundations/right-to-left/', true),
     styling: relative(dir, react + 'foundations/styling/', true),
     overlay: relative(dir, react + 'utilities/overlay/', true),
+    motion: relative(dir, react + 'utilities/motion/', true),
+    motionButton: relative(dir, react + 'components/button/', true),
     overlayComponentApi: Object.fromEntries(overlayComponentIds.map((id) =>
       [id, relative(dir, native + 'api/components/' + id + '/', true)])),
     self: relative(dir, react + route, true),
@@ -740,6 +756,8 @@ const pageViews = [
     description: 'Native direction, mixed content and bidirectional component preview' },
   { route: 'utilities/overlay/', view: 'overlay', title: 'Overlay utility',
     description: 'Shared overlay usage, customization and public React playground' },
+  { route: 'utilities/motion/', view: 'motion', title: 'Motion utility',
+    description: 'Shared motion, timing, easing, loading cadence and reduced-motion guidance' },
   { route: 'foundations/styling/', view: 'styling', title: 'React styling and CSS',
     description: 'Shared stylesheet loading, overrides and CSS customization in React' },
   { route: button.showcaseRoute, view: 'guide', title: 'React Button', description: 'Shared Button semantics and React usage' },
@@ -883,12 +901,14 @@ for (const page of pageViews) {
     badge: page.view === 'badge' || page.view === 'badge-api' ? badgeData : null,
     divider: page.view === 'divider' || page.view === 'divider-api' ? dividerData : null,
     overlayGuide: page.view === 'overlay' ? overlayGuide : null,
+    motionGuide: page.view === 'motion' ? motionGuide : null,
     requestedTopic: page.requestedTopic ?? null };
   const initialHtml = renderToString(createElement(ReactReferencePage, props));
   const serialized = JSON.stringify(props).replaceAll('<', '\\u003c');
   const styles = [...shellStyles, ...(['color', 'builder'].includes(page.view) ? themeStudioStyles : []),
     ...(page.view === 'icon-library' ? iconExplorerStyles : []),
-    ...(page.view === 'overlay' ? overlayStyles : [])]
+    ...(page.view === 'overlay' ? overlayStyles : []),
+    ...(page.view === 'motion' ? motionStyles : [])]
     .map((asset) => '  <link rel="stylesheet" href="' +
       escapeHtml(relative(dir, asset)) + '">').join('\n');
   const pageHtml = '<!doctype html><html lang="en" data-vf-theme="light" data-vf-density="comfortable"><head>' +
@@ -912,8 +932,13 @@ await writeFile(path.join(reactRoot, 'site-manifest.json'), JSON.stringify({
   channel, framework: 'react', status: 'button-layout-typography-icon-image-divider-avatar-badge-list-pilot',
   source: 'Product Graph public React surface',
   routes: pageViews.map(({ route, view }) => ({ route, view })),
-  utilities: [{ id: 'overlay', route: 'utilities/overlay/',
-    source: 'documentation/utilities/overlay.md', publicComponents: overlayComponentIds }],
+  utilities: [
+    { id: 'overlay', route: 'utilities/overlay/',
+      source: 'documentation/utilities/overlay.md', publicComponents: overlayComponentIds },
+    { id: 'motion', route: 'utilities/motion/',
+      source: 'documentation/utilities/motion.md', publicComponents: ['button', 'switch'],
+      tokens: motionTokenNames },
+  ],
   layout: {
     guideOnly: layout.guideOnly,
     api: layout.apiAvailable,
