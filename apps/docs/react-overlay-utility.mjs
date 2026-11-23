@@ -4,7 +4,7 @@ import { Text } from '@vyrnforge/react/text';
 import { Flow, AutoGrid } from '@vyrnforge/react/layout';
 import { NativeSelect } from '@vyrnforge/react/native-select';
 import { ThemeScope } from '@vyrnforge/react';
-import { UtilitySections } from './react-utility-content.mjs';
+import { UtilitySections, renderUtilityInline } from './react-utility-content.mjs';
 import { PopoverRoot, PopoverTrigger, PopoverContent } from '@vyrnforge/react/popover';
 import { TooltipRoot, TooltipTrigger, TooltipContent } from '@vyrnforge/react/tooltip';
 import { PreviewCardRoot, PreviewCardTrigger, PreviewCardContent } from '@vyrnforge/react/preview-card';
@@ -154,7 +154,7 @@ export function OverlayUtility({ guide, links }) {
       h(Text, { as: 'h1', variant: 'heading-lg' }, guide.title),
       h(Text, { as: 'p', variant: 'body-lg' },
         'Shared overlay usage and customization without a generic Overlay runtime.'),
-      ...guide.intro.map((block, i) => h(Text, { as: 'p', key: i }, block.text))),
+      ...guide.intro.map((block, i) => h(Text, { as: 'p', key: i }, ...renderUtilityInline(block.text)))),
     h(Flow, { as: 'section', gap: 'md', 'aria-labelledby': 'overlay-playground-title' },
       h(Text, { as: 'h2', variant: 'heading-md', id: 'overlay-playground-title' }, 'Interactive overlay playground'),
       h(Text, { as: 'p' }, 'Select a public component, placement, theme, writing direction, and shadow override. The surface below uses VyrnForge React components with canonical Web CSS.'),
