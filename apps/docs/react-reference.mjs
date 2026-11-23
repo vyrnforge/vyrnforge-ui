@@ -431,7 +431,7 @@ function buttonExample(example, links) {
       src: links.buttonExamples[id], sandbox: 'allow-scripts',
       loading: id === 'basic' ? 'eager' : 'lazy',
       style: { minBlockSize: id === 'joined' ? '26rem' : id === 'toggle' ? '17rem' :
-        id === 'icons' || id === 'density' ? '14rem' : '10rem' } }),
+        id === 'icons' ? '28rem' : id === 'density' ? '14rem' : '10rem' } }),
     h('details', { className: 'vf-docs-source-disclosure' },
       h('summary', null, id === 'basic' ? 'View checked-in React source' : 'View React TSX source'),
       h('pre', { 'data-vf-code-block': '', tabIndex: 0 },
