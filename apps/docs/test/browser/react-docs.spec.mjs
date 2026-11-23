@@ -2144,8 +2144,8 @@ test('Motion tokens affect multiple real controls without changing their state c
   await page.goto('/next/react/utilities/motion/');
   await expect(page.locator('html')).toHaveAttribute('data-vf-react-hydrated', 'true');
   const stage = page.locator('[data-vf-docs-motion-stage]');
-  const button = stage.getByRole('button', { name: 'Activate' });
-  const toggle = stage.getByRole('switch', { name: 'Enable option' });
+  const button = stage.getByRole('button', { name: 'Run action' });
+  const toggle = stage.getByRole('switch', { name: 'Option' });
   const durations = await stage.evaluate((node) => {
     const button = node.querySelector('button[data-vf-button]');
     const toggle = node.querySelector('input[data-vf-switch]');
@@ -2170,7 +2170,7 @@ test('Motion tokens affect multiple real controls without changing their state c
   await expect(stage.locator('[data-vf-docs-motion-feedback]')).toContainText('Switch: on');
   await page.locator('#motion-theme').selectOption('dark');
   await expect(stage).toHaveAttribute('data-vf-theme', 'dark');
-  await stage.getByRole('button', { name: 'Show busy state' }).click();
+  await stage.getByRole('button', { name: 'Start busy' }).click();
   await expect(stage.getByRole('button', { name: 'Busy' })).toHaveAttribute('aria-busy', 'true');
   const spinner = await stage.getByRole('button', { name: 'Busy' }).evaluate((node) => {
     const css = getComputedStyle(node, '::before');
@@ -2179,7 +2179,7 @@ test('Motion tokens affect multiple real controls without changing their state c
   expect(spinner.name).toContain('vf-loading-spin');
   expect(spinner.duration).toContain('0.7s');
   await page.screenshot({ path: testInfo.outputPath('motion-react-dark-custom-controls.png') });
-  await stage.getByRole('button', { name: 'Stop preview' }).click();
+  await stage.getByRole('button', { name: 'Stop busy' }).click();
   await expect(stage.getByRole('button', { name: 'Ready' })).not.toHaveAttribute('aria-busy', 'true');
 });
 
@@ -2194,10 +2194,10 @@ test('Motion reduced preference disables visual movement but leaves state and lo
     return [getComputedStyle(button).transitionDuration, getComputedStyle(toggle).transitionDuration];
   });
   expect(controls).toEqual(['0s', '0s']);
-  await stage.getByRole('button', { name: 'Activate' }).click();
-  await stage.getByRole('switch', { name: 'Enable option' }).check();
+  await stage.getByRole('button', { name: 'Run action' }).click();
+  await stage.getByRole('switch', { name: 'Option' }).check();
   await expect(stage.locator('[data-vf-docs-motion-feedback]')).toContainText('Actions: 1. Switch: on.');
-  await stage.getByRole('button', { name: 'Show busy state' }).click();
+  await stage.getByRole('button', { name: 'Start busy' }).click();
   const busy = stage.getByRole('button', { name: 'Busy' });
   await expect(busy).toHaveAttribute('aria-busy', 'true');
   const animation = await busy.evaluate((node) => getComputedStyle(node, '::before').animationName);
@@ -2210,7 +2210,7 @@ test('Motion utility keeps its live controls usable at 320px and 200% text', asy
   await page.evaluate(() => { document.documentElement.style.fontSize = '200%'; });
   const stage = page.locator('[data-vf-docs-motion-stage]');
   await stage.scrollIntoViewIfNeeded();
-  await stage.getByRole('button', { name: 'Activate' }).click();
+  await stage.getByRole('button', { name: 'Run action' }).click();
   await expect(stage.locator('[data-vf-docs-motion-feedback]')).toContainText('Actions: 1');
   const widths = await page.evaluate(() => [document.documentElement.scrollWidth, document.documentElement.clientWidth]);
   expect(widths[0]).toBeLessThanOrEqual(widths[1] + 1);
