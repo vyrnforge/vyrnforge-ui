@@ -5,11 +5,21 @@ const now = new Date('2026-10-29T00:00:00Z');
 const repository = 'vyrnforge/vyrnforge-ui';
 const policy = { staleDays: 7, maxDeletionsPerRun: 2, protectedBranches: [], protectedPrefixes: ['release/', 'hotfix/'] };
 
-function branch(name, { days = 10, protected: isProtected = false, sha = `${name}-sha` } = {}) {
+function branch(name, {
+  days = 10,
+  protected: isProtected = false,
+  sha = `${name}-sha`,
+  aheadByDefault = 0,
+  mergedPullRequest = false,
+  closedWithoutMerge = false
+} = {}) {
   return {
     name,
     sha,
     protected: isProtected,
+    aheadByDefault,
+    mergedPullRequest,
+    closedWithoutMerge,
     commitDate: new Date(now.getTime() - days * 86_400_000).toISOString()
   };
 }
@@ -24,17 +34,31 @@ describe('branch retention policy', () => {
     expect(new Set(names)).toEqual(new Set(['main', 'feature/child', 'feature/parent']));
   });
 
-  test('selects every stale non-protected branch regardless of merge state', () => {
+  test('only selects stale branches contained by main or tied to an exact merged PR head', () => {
     const result = planBranchDeletions([
       branch('main'),
-      branch('feature/merged'),
-      branch('feature/unmerged'),
+      branch('feature/contained'),
+      branch('feature/squash-merged', { aheadByDefault: 4, mergedPullRequest: true }),
+      branch('feature/unmerged', { aheadByDefault: 2 }),
       branch('feature/recent', { days: 3 })
     ], [], { ...policy, maxDeletionsPerRun: 10 }, { now, defaultBranch: 'main', repository });
 
-    expect(result.deletions.map((item) => item.name)).toEqual(['feature/merged', 'feature/unmerged']);
-    expect(result.deletions.every((item) => item.reason === 'stale')).toBe(true);
+    expect(result.deletions.map((item) => item.name)).toEqual(['feature/contained', 'feature/squash-merged']);
+    expect(result.deletions.map((item) => item.reason)).toEqual(['contained-in-default', 'verified-merged-pr-head']);
+    expect(result.skipped.some((item) => item.name === 'feature/unmerged' && item.reason === 'unique-commits')).toBe(true);
     expect(result.skipped.some((item) => item.name === 'feature/recent' && item.reason === 'not-stale')).toBe(true);
+  });
+
+  test('fails closed for unknown comparisons and closed-but-unmerged PR branches', () => {
+    const result = planBranchDeletions([
+      branch('feature/unknown', { aheadByDefault: null }),
+      branch('feature/abandoned', { aheadByDefault: 0, closedWithoutMerge: true }),
+      branch('feature/regular', { aheadByDefault: 0 })
+    ], [], policy, { now, defaultBranch: 'main', repository });
+
+    expect(result.deletions.map((item) => item.name)).toEqual(['feature/regular']);
+    expect(result.skipped.some((item) => item.name === 'feature/unknown' && item.reason === 'unknown-comparison')).toBe(true);
+    expect(result.skipped.some((item) => item.name === 'feature/abandoned' && item.reason === 'closed-unmerged-pr')).toBe(true);
   });
 
   test('protects stale branches used by open pull requests', () => {

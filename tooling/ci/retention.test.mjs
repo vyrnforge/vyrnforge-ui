@@ -1,5 +1,6 @@
 import { test } from 'vitest';
 import assert from 'node:assert/strict';
+import { readFileSync } from 'node:fs';
 import {
   categoryForRun,
   planMergedPullRequestHistoryDeletions,
@@ -276,4 +277,36 @@ test('age-based cleanup preserves the last successful validation for each merged
   });
   assert.ok(protectedAgePlan.deletions.every((item) => item.id !== 20 && item.id !== 30));
   assert.ok(protectedAgePlan.deletions.some((item) => item.id === 19));
+});
+
+test('production policy expires all completed run categories after six days', () => {
+  const productionPolicy = JSON.parse(readFileSync(new URL('./retention-policy.json', import.meta.url), 'utf8'));
+  assert.equal(productionPolicy.minimumRunsPerWorkflow, 0);
+  assert.equal(productionPolicy.minimumSuccessfulRunsPerWorkflow, 0);
+  assert.deepEqual(productionPolicy.preserveSuccessfulCategories, []);
+  for (const category of Object.values(productionPolicy.categories)) {
+    assert.equal(category.successDays, 6);
+    assert.equal(category.nonSuccessDays, 6);
+  }
+
+  const oldRuns = [
+    run(1, { days: 7, workflow: 1, path: '.github/workflows/ci.yml' }),
+    run(2, { days: 7, workflow: 2, path: '.github/workflows/main.yml' }),
+    run(3, { days: 7, workflow: 3, path: '.github/workflows/release.yml' }),
+    run(4, { days: 7, workflow: 4, path: '.github/workflows/docs-pages.yml' }),
+    run(5, { days: 6, workflow: 5, path: '.github/workflows/scheduled.yml', status: 'in_progress' }),
+    run(6, { days: 5, workflow: 6, path: '.github/workflows/ci.yml' })
+  ];
+  const result = planRunDeletions(oldRuns, productionPolicy, { now });
+  assert.deepEqual(new Set(result.deletions.map((item) => item.id)), new Set([1, 2, 3, 4]));
+});
+
+test('merged PR final evidence is eligible for age cleanup once expired', () => {
+  const productionPolicy = JSON.parse(readFileSync(new URL('./retention-policy.json', import.meta.url), 'utf8'));
+  const oldPr = pullRequest(999, 'fix/expired');
+  const runs = [run(10, { days: 9, pr: 999, branch: oldPr.head.ref })];
+  const mergedPlan = planMergedPullRequestHistoryDeletions(runs, productionPolicy, [oldPr]);
+  assert.deepEqual(mergedPlan.protectedRunIds, [10]);
+  const agePlan = planRunDeletions(runs, productionPolicy, { now });
+  assert.deepEqual(agePlan.deletions.map((item) => item.id), [10]);
 });

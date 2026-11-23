@@ -1,7 +1,9 @@
 # Branch retention
 
-Branch cleanup is repository maintenance automation. A branch becomes eligible when its head commit is at least 7 days old. Merge status, containment in the default branch, and unique commits do not affect eligibility: stale non-protected branches are removed.
+The daily repository cleanup is deliberately conservative. A branch is eligible for automatic removal only when its head commit is at least seven days old, it is not protected, and **either** its commits are contained in the default branch (`ahead_by === 0`) **or** the branch SHA exactly matches the head SHA of a merged pull request into the default branch. The latter supports squash merges without treating a mere PR branch-name match as evidence.
 
-The default branch, GitHub-protected branches, `release/*`, `hotfix/*`, and every same-repository branch currently used as either the head or base of an open pull request are protected. The executor refreshes open pull requests and rechecks the branch SHA immediately before removal so a newly opened PR or a branch that moved during the run is skipped.
+The default branch, GitHub-protected branches, `release/*`, `hotfix/*`, same-repository heads/bases of open pull requests, and branches associated with any closed **unmerged** pull request are excluded. Unknown comparisons, unavailable metadata, and unmerged unique commits are never eligible for automatic deletion; review them manually.
 
-The repository retention workflow runs daily and may also be dispatched manually. Each run handles at most 25 eligible branches and records branch results in the retention audit report. Repository rules remain an additional enforcement boundary.
+The executor uses bounded API concurrency and retries temporary GitHub rate limits. It refreshes open PRs and verifies the branch ref SHA immediately before deletion to avoid removing work that moved while the report was built. One execution deletes at most 25 branches.
+
+Use the workflow-dispatch `dry_run` input (default `true`) to produce a report without removing records. Scheduled cleanup and merged-PR cleanup execute normally; the report records the candidate reasons and outcomes. GitHub permissions and branch rules remain an additional boundary.
