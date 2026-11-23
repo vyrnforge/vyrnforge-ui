@@ -696,6 +696,10 @@ test('React Button guide keeps all demos visible, source optional and navigation
 test('React ToggleButton has an independent native pressed-state guide and source-backed API', async ({ page }) => {
   await page.goto('/next/react/components/toggle-button/');
   await expect(page.locator('[data-vf-docs-react-toggle]')).toBeVisible();
+  const pressed = page.locator('[data-vf-docs-react-toggle-topic="pressed"]');
+  await expect(pressed.getByRole('heading', { name: 'Pressed state', level: 2 })).toBeVisible();
+  await expect(pressed.getByRole('heading', { name: 'Controlled and uncontrolled state' })).toBeVisible();
+  await expect(pressed.locator('[data-vf-docs-react-toggle-example]')).toHaveCount(1);
   const frame = page.frameLocator('iframe[title="React ToggleButton pressed-state example"]');
   const bold = frame.getByRole('button', { name: 'Bold', exact: true });
   await expect(bold).toHaveAttribute('aria-pressed', 'false');

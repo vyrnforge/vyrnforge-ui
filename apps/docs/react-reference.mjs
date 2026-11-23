@@ -525,8 +525,8 @@ function toggleUsage(toggle, links) {
   if (!toggle?.sharedContent || !toggle?.frameworkContent || !toggle.examples?.length) return null;
   const sections = [
     { id: 'react-toggle-setup', heading: 'Get started' },
-    { id: 'react-toggle-examples', heading: 'Live pressed-state example' },
-    { id: 'react-toggle-guidance', heading: 'State and composition' },
+    { id: 'react-toggle-examples', heading: 'Pressed state' },
+    { id: 'react-toggle-guidance', heading: 'Sizing and grouping' },
     { id: 'react-toggle-a11y', heading: 'Accessibility' },
     { id: 'react-toggle-reference', heading: 'Related components and API' },
   ];
@@ -536,14 +536,18 @@ function toggleUsage(toggle, links) {
       'data-vf-docs-react-toggle': '' },
       guideHeader(toggle.sharedContent, 'React · Components · Actions'),
       guidePart(sections[0], guideBlocks(toggle.frameworkContent, 'React setup')),
-      guidePart(sections[1], [toggleExample(toggle, links)]),
+      guidePart(sections[1], [
+        ...guideSubsections(toggle.sharedContent,
+          ['Native semantics and behavior'], 'react-toggle-behavior'),
+        ...guideSubsections(toggle.frameworkContent,
+          ['Controlled and uncontrolled state'], 'react-toggle-state'),
+        toggleExample(toggle, links),
+      ], { 'data-vf-docs-react-toggle-topic': 'pressed' }),
       guidePart(sections[2], [
         ...guideSubsections(toggle.sharedContent,
-          ['Native semantics and behavior', 'Sizing and styling', 'Related controls and grouping'],
-          'react-toggle-guidance'),
+          ['Sizing and styling', 'Related controls and grouping'], 'react-toggle-guidance'),
         ...guideSubsections(toggle.frameworkContent,
-          ['Controlled and uncontrolled state', 'Sizing and composition'],
-          'react-toggle-authoring'),
+          ['Sizing and composition'], 'react-toggle-authoring'),
       ]),
       guidePart(sections[3], [
         ...guideBlocks(toggle.sharedContent, 'Accessibility and evidence'),
