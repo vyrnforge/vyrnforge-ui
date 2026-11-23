@@ -24,7 +24,7 @@ test('React pilot artifact is Product Graph-backed and SSR-rendered with public 
     ...['text', 'code', 'kbd'].flatMap((id) => [
       'components/' + id + '/', 'api/components/' + id + '/',
     ]),
-    'components/icon/', 'api/components/icon/',
+    'icons/', 'components/icon/', 'api/components/icon/',
     'components/image/', 'api/components/image/',
     'components/badge/', 'api/components/badge/',
     'components/avatar/', 'api/components/avatar/',
@@ -44,7 +44,7 @@ test('React pilot artifact is Product Graph-backed and SSR-rendered with public 
     expect(html).toContain('react-divider-' + slug + '.css');
   }
   expect(manifest.icon).toMatchObject({
-    guideRoute: 'components/icon/', apiRoute: 'api/components/icon/',
+    libraryRoute: 'icons/', guideRoute: 'components/icon/', apiRoute: 'api/components/icon/',
     publicEntrypoints: ['@vyrnforge/react/icon'],
     frameworkSourcePath: 'product/components/elemental-primitives/media/icon/react/docs/index.md',
   });
@@ -1105,6 +1105,9 @@ test('React Icon uses product-owned SVG examples and public source-backed API', 
   await expect(page.getByRole('navigation', { name: 'On this page' }).getByRole('link')).toHaveCount(5);
   await expect(guide.getByText('Standards and evidence mapping')).toBeVisible();
   await expect(guide.getByRole('navigation', { name: 'Icon examples' }).getByRole('link')).toHaveCount(8);
+  await expect(guide.locator('[data-vf-docs-react-icon-explorer]')).toHaveCount(0);
+  await expect(page.getByRole('navigation', { name: 'Documentation' })
+    .getByRole('link', { name: 'VyrnForge Icons' })).toHaveAttribute('href', '../../icons/');
 
   const basic = guide.locator('[data-vf-docs-react-icon-example="icon/basic"]');
   await expect(basic.locator('iframe').contentFrame().getByRole('img', { name: 'Bookmark' })).toBeVisible();
@@ -1187,8 +1190,14 @@ test('React Icon Explorer renders the actual catalog with keyboard-operable filt
       value: { writeText: async (value) => { window.__iconExplorerCopied = value; } },
     });
   });
-  await page.goto('/next/react/components/icon/');
+  await page.goto('/next/react/icons/');
   await expect(page.locator('html')).toHaveAttribute('data-vf-react-hydrated', 'true');
+  await expect(page.getByRole('heading', { level: 1, name: 'VyrnForge Icons' })).toBeVisible();
+  await expect(page.getByRole('navigation', { name: 'Documentation' })
+    .getByRole('link', { name: 'VyrnForge Icons' })).toHaveAttribute('aria-current', 'page');
+  await expect(page.locator('[data-vf-docs-react-icon]')).toHaveCount(0);
+  await expect(page.locator('[data-vf-docs-react-icon-example]')).toHaveCount(0);
+  await expect(page.getByRole('link', { name: 'Icon usage guide' })).toHaveAttribute('href', '../components/icon/');
   const explorer = page.locator('[data-vf-docs-react-icon-explorer]');
   await expect(explorer.locator('[data-vf-docs-icon-card]')).toHaveCount(93);
   await expect(explorer.locator('[data-vf-docs-icon-count]')).toHaveText('93 of 93 icons shown');
@@ -1201,7 +1210,7 @@ test('React Icon Explorer renders the actual catalog with keyboard-operable filt
   await bookmark.focus();
   await page.keyboard.press('Space');
   await expect(bookmark).toHaveAttribute('aria-pressed', 'true');
-  await expect(explorer.locator('[data-vf-docs-icon-inspector] h4')).toHaveText('bookmark');
+  await expect(explorer.locator('[data-vf-docs-icon-inspector] h3')).toHaveText('bookmark');
 
   await explorer.getByLabel('Variant').selectOption('filled');
   await explorer.getByLabel('Shape').selectOption('sharp');
@@ -1236,7 +1245,7 @@ test('React Icon Explorer renders the actual catalog with keyboard-operable filt
   const context = await browser.newContext({ javaScriptEnabled: false });
   try {
     const noJs = await context.newPage();
-    await noJs.goto('/next/react/components/icon/');
+    await noJs.goto('/next/react/icons/');
     await expect(noJs.locator('[data-vf-docs-icon-card]')).toHaveCount(93);
   } finally { await context.close(); }
 });

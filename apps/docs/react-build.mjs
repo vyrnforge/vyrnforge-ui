@@ -299,6 +299,7 @@ function linksFor(route) {
     layoutApi: relative(dir, react + layout.apiRoute, true),
     layoutExampleBase: relative(dir, react + 'examples/layout/', true),
     icon: {
+      library: relative(dir, react + 'icons/', true),
       guide: relative(dir, react + icon.showcaseRoute, true),
       api: relative(dir, react + icon.apiRoute, true),
       exampleBase: relative(dir, react + 'examples/icon/', true),
@@ -333,8 +334,11 @@ function linksFor(route) {
           (slug === 'basic' ? '/' : '/' + slug + '/'), true)];
       })),
     }])),
-    native: relative(dir, native + (route.startsWith('foundations/') &&
-      !nativeModel.foundationPages.some((page) => page.route === route) ? '' : route), true),
+    // The standalone React gallery has no Native Web gallery view. Route to
+    // the Native Web gateway instead of constructing a nonexistent page.
+    native: relative(dir, native + ((route === 'icons/' ||
+      (route.startsWith('foundations/') &&
+      !nativeModel.foundationPages.some((page) => page.route === route))) ? '' : route), true),
   };
 }
 async function verifyStyles(dir, extra = []) {
@@ -346,7 +350,7 @@ async function verifyStyles(dir, extra = []) {
 }
 async function writePage(route, page) {
   const dir = directory(route);
-  await verifyStyles(dir, route === icon.showcaseRoute ? iconExplorerStyles :
+  await verifyStyles(dir, route === 'icons/' ? iconExplorerStyles :
     route === 'foundations/color/' ? themeStudioStyles : []);
   const pageRoot = path.join(outRoot, dir);
   await mkdir(pageRoot, { recursive: true });
@@ -624,6 +628,8 @@ const pageViews = [
       title: 'React ' + typography[id].title + ' API',
       description: 'Source-backed React ' + typography[id].title + ' API reference' },
   ]),
+  { route: 'icons/', view: 'icon-library', title: 'VyrnForge Icons',
+    description: 'Explore all implemented VyrnForge SVG icons, artwork variants, sizes and colors' },
   { route: icon.showcaseRoute, view: 'icon', title: 'React Icon',
     description: 'React SVG icon examples and shared artwork semantics' },
   { route: icon.apiRoute, view: 'icon-api', title: 'React Icon API',
@@ -728,7 +734,7 @@ for (const page of pageViews) {
   const initialHtml = renderToString(createElement(ReactReferencePage, props));
   const serialized = JSON.stringify(props).replaceAll('<', '\\u003c');
   const styles = [...shellStyles, ...(['color', 'builder'].includes(page.view) ? themeStudioStyles : []),
-    ...(page.view === 'icon' ? iconExplorerStyles : [])]
+    ...(page.view === 'icon-library' ? iconExplorerStyles : [])]
     .map((asset) => '  <link rel="stylesheet" href="' +
       escapeHtml(relative(dir, asset)) + '">').join('\n');
   const pageHtml = '<!doctype html><html lang="en" data-vf-theme="light" data-vf-density="comfortable"><head>' +
@@ -762,7 +768,7 @@ await writeFile(path.join(reactRoot, 'site-manifest.json'), JSON.stringify({
     examples: layoutExamples.map((example) => ({ id: example.id, sourcePath: example.sourcePath })),
   },
   icon: {
-    guideRoute: icon.showcaseRoute, apiRoute: icon.apiRoute,
+    libraryRoute: 'icons/', guideRoute: icon.showcaseRoute, apiRoute: icon.apiRoute,
     publicEntrypoints: icon.publicEntrypoints,
     sharedSourcePath: icon.sharedSourcePath,
     frameworkSourcePath: icon.frameworkSourcePath,

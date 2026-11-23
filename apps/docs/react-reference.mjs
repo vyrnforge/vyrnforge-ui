@@ -163,6 +163,9 @@ function navigation(view, links, topic) {
       { id: 'avatar', title: 'Avatar', href: links.avatar.guide },
       { id: 'badge', title: 'Badge', href: links.badge.guide },
     ] },
+    { label: 'Libraries', items: [
+      { id: 'icon-library', title: 'VyrnForge Icons', href: links.icon.library },
+    ] },
     // API destinations remain working, but reference material is no longer
     // interleaved with consumer guides. A dedicated API catalog can follow.
     { label: 'API Reference', items: [
@@ -514,7 +517,6 @@ function iconUsage(icon, links) {
           'React overview'), ' for shared CSS and server-rendering setup.'),
       ]),
       guidePart(sections[1], [
-        h(IconExplorer),
         exampleJumpLinks('Icon', examples,
           (example) => 'react-icon-example-' + example.id.slice('icon/'.length)),
         ...examples.map((example) => iconExample(example, links)),
@@ -523,7 +525,7 @@ function iconUsage(icon, links) {
         ...guideBlocks(icon.sharedContent, 'Artwork contract'),
         ...guideBlocks(icon.frameworkContent, 'React authoring'),
         ...guideSubsections(icon.frameworkContent,
-          ['Official Icon Explorer', 'React color and theming', 'Inline SVG tags'], 'react-icon-authoring'),
+          ['React color and theming', 'Inline SVG tags'], 'react-icon-authoring'),
       ]),
       guidePart(sections[3], [
         ...guideBlocks(icon.sharedContent, 'Accessibility'),
@@ -532,10 +534,29 @@ function iconUsage(icon, links) {
       guidePart(sections[4], [
         h(Flow, { as: 'ul', gap: 'sm', className: 'vf-docs-related-links' },
           h('li', null, h('a', { href: links.icon.api, 'data-vf-link': '' }, 'View Icon public React API')),
+          h('li', null, h('a', { href: links.icon.library, 'data-vf-link': '' }, 'Browse VyrnForge Icons')),
           h('li', null, h('a', { href: links.guide, 'data-vf-link': '' }, 'Button')),
           h('li', null, h('a', { href: links.typography.text.guide, 'data-vf-link': '' }, 'Text'))),
       ])));
 }
+function iconLibrary(links) {
+  return h(Flow, { as: 'article', gap: 'lg', className: 'vf-docs-article vf-docs-icon-library',
+    'data-vf-docs-react-icon-library': '' },
+    h('header', { className: 'vf-docs-component-header' },
+      h('p', { className: 'vf-docs-eyebrow', 'data-vf-text': '', 'data-vf-text-variant': 'overline' },
+        'React · Icon Library'),
+      h('h1', null, 'VyrnForge Icons'),
+      h('p', { className: 'vf-docs-lede' },
+        'Explore every implemented first-party icon in the optional VyrnForge catalog, inspect its actual artwork variants, and copy reusable React code.')),
+    h(IconExplorer),
+    h(Flow, { as: 'section', gap: 'sm', 'aria-labelledby': 'react-icon-library-resources' },
+      h('h2', { id: 'react-icon-library-resources' }, 'Usage and public API'),
+      h('p', null, 'Icons render artwork and do not handle clicks, focus or keyboard actions. Use the Icon usage guide for custom SVG definitions, standalone accessible labels, and icon-only controls.'),
+      h('ul', null,
+        h('li', null, h('a', { href: links.icon.guide, 'data-vf-link': '' }, 'Icon usage guide')),
+        h('li', null, h('a', { href: links.icon.api, 'data-vf-link': '' }, 'Icon public React API')))));
+}
+
 function iconApi(icon, links) {
   if (!icon?.publicIconTypes || !icon?.publicEntrypoints?.length) return null;
   return h('article', { className: 'vf-docs-article', 'data-vf-docs-react-api': 'icon' },
@@ -1108,6 +1129,7 @@ function body(view, links, button, layout, typography, icon, image, avatar, divi
           h('li', null, h('a', { 'data-vf-link': '', href: links.divider.guide }, 'React Divider')),
           h('li', null, h('a', { 'data-vf-link': '', href: links.divider.api }, 'React Divider API')),
           h('li', null, h('a', { 'data-vf-link': '', href: links.icon.guide }, 'React Icon')),
+          h('li', null, h('a', { 'data-vf-link': '', href: links.icon.library }, 'VyrnForge Icons library')),
           h('li', null, h('a', { 'data-vf-link': '', href: links.icon.api }, 'React Icon API')),
           h('li', null, h('a', { 'data-vf-link': '', href: links.image.guide }, 'React Image')),
           h('li', null, h('a', { 'data-vf-link': '', href: links.image.api }, 'React Image API')),
@@ -1122,6 +1144,7 @@ function body(view, links, button, layout, typography, icon, image, avatar, divi
               href: links.typography[id].api }, 'React ' + id + ' API')),
           ]))));
   }
+  if (view === 'icon-library') return iconLibrary(links);
   if (view === 'icon') return iconUsage(icon, links);
   if (view === 'icon-api') return iconApi(icon, links);
   if (view === 'divider') return dividerUsage(divider, links);
@@ -1205,7 +1228,8 @@ export function ReactReferencePage({ view, links, button, layout, typography, ic
     { title: 'Layout API', href: links.layoutApi, keywords: 'flowprops autogridprops as minitemsize ref gap' },
     { title: 'Divider', href: links.divider.guide, keywords: 'divider separator straight horizontal divider vertical divider divider text alignment horizontal divider with text vertical divider with text line visual border label text content start center end align alignment horizontal text vertical-rl top-to-bottom bottom-to-top textDirection rotate' },
     { title: 'Divider API', href: links.divider.api, keywords: 'dividerprops dividerorientation span visual css ref' },
-    { title: 'Icon', href: links.icon.guide, keywords: 'icon gallery explorer icon library search category filter copy usage svg glyph bookmark outlined filled shape size custom accessible examples colors currentColor JSX tags inline svg SvgIcon quick custom wrapper' },
+    { title: 'Icon', href: links.icon.guide, keywords: 'icon usage svg custom icondefinition createSvgIcon accessibility outlined filled shape size colors currentColor JSX tags' },
+    { title: 'VyrnForge Icons', href: links.icon.library, keywords: 'icon library explorer gallery catalog search category filter copy icon names outlined filled rounded sharp' },
     { title: 'Icon API', href: links.icon.api, keywords: 'iconprops SVGAttributes definition variant shape size label types' },
     { title: 'Image', href: links.image.guide, keywords: 'image img responsive alt decorative caption figure native JSX' },
     { title: 'Image API', href: links.image.api, keywords: 'imageprops img loading decoding srcset sizes ref types' },
