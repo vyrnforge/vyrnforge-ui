@@ -15,7 +15,8 @@ export const browserFixture = {
       '\nmain{display:flex;flex-wrap:wrap;align-items:center;gap:1.5rem;padding:1rem;min-inline-size:0;box-sizing:border-box}' +
       '\nmain>h1{flex-basis:100%;overflow-wrap:anywhere;min-inline-size:0}' +
       '\nmain button{max-inline-size:100%;overflow-wrap:anywhere;white-space:normal}' +
-      '\nmain .circle{display:grid;place-items:center;border:1px solid currentColor;border-radius:50%;inline-size:3rem;block-size:3rem}');
+      '\nmain .circle{display:grid;place-items:center;border:1px solid currentColor;border-radius:50%;inline-size:3rem;block-size:3rem}' +
+      '\n#wrapped-label [data-vf-badge-indicator]{max-inline-size:calc(var(--vf-space-3xl) + var(--vf-space-md))}');
     const specimen = (id, options, child, value, visible = true) => {
       const attributes = [
         'id="' + id + '"', 'data-vf-badge',
