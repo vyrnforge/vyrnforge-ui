@@ -15,5 +15,32 @@
     border-inline-start: 0;
     border-start-end-radius: var(--vf-control-radius);
     border-end-end-radius: var(--vf-control-radius);
+    cursor: pointer;
+    font: inherit;
+    padding-inline: var(--vf-space-sm);
+  }
+
+  [data-vf-search-field-clear]:disabled {
+    background: var(--vf-color-disabled-background);
+    border-color: var(--vf-color-disabled-border);
+    color: var(--vf-color-disabled-foreground);
+    cursor: not-allowed;
+  }
+
+  :where([data-vf-search-field-clear]:focus-visible) {
+    outline: 2px solid var(--vf-color-focus-ring);
+    outline-offset: 2px;
+    position: relative;
+  }
+
+  @media (forced-colors: active) {
+    [data-vf-search-field-clear]:disabled {
+      border-color: GrayText;
+      color: GrayText;
+    }
+
+    :where([data-vf-search-field-clear]:focus-visible) {
+      outline-color: Highlight;
+    }
   }
 }
