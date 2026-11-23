@@ -90,7 +90,7 @@ function MotionEffectsPlayground({ theme, variables }) {
           target === 'switch' ? sampleSwitch() :
           h(Flow, { direction: 'inline', wrap: 'wrap', gap: 'md', align: 'center' },
             sampleButton(), sampleSwitch()),
-          h(Text, { as: 'p', variant: 'body-sm' }, effect + ' · ' + target))),
+          h(Text, { as: 'p', variant: 'body-sm' }, effect + ' · ' + target)))),
     h('p', { role: 'status', 'aria-live': 'polite', 'data-vf-docs-motion-sample-status': '' },
       'Sample actions: ' + actionCount + '. Switch: ' + (checked ? 'on' : 'off') + '.'),
     h('details', { className: 'vf-docs-source-disclosure' },
