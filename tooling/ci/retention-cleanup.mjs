@@ -152,7 +152,7 @@ async function branchRecords(defaultBranch, closedPullRequests, openPullRequests
       metadata.aheadByDefault = await aheadByDefault(defaultBranch, branch.name);
     }
     // Small spacing between branch inspection requests, even on a healthy API.
-    await new Promise((resolve) => setTimeout(resolve, 150));
+    await new Promise((resolve) => { setTimeout(resolve, 150); });
     return metadata;
   });
 }
@@ -235,7 +235,7 @@ try {
     report.results.push(await deleteWorkflowRun(deletion.id));
     // GitHub DELETE operations cost more API points than reads. Keep sustained
     // deletion traffic under the secondary-rate-limit budget.
-    if (!dryRun) await new Promise((resolve) => setTimeout(resolve, 400));
+    if (!dryRun) await new Promise((resolve) => { setTimeout(resolve, 400); });
   }
   if (eventName === 'schedule' || eventName === 'workflow_dispatch') report.branchCleanup = await cleanupStaleBranches();
 
