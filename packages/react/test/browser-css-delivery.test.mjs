@@ -29,7 +29,7 @@ function emittedCss(result) {
 function expectNoDocsCss(result) {
   const inputs = Object.keys(result.metafile.inputs);
   assert.ok(!inputs.some((file) => file.includes('/apps/docs/') || file.endsWith('/docs.css')));
-  assert.doesNotMatch(emittedCss(result), /\\.vf-docs-/);
+  assert.equal(emittedCss(result).includes('.vf-docs-'), false);
 }
 
 test('React granular Code auto-loads canonical Code + Text styles, but no unrelated component CSS', async () => {
