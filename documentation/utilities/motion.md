@@ -19,6 +19,34 @@ Motion is the shared timing, easing, loading cadence, and reduced-motion foundat
 
 These tokens are authored once in the Web token system and consumed by existing components. The public `@vyrnforge/web/styles/tokens.css` and `@vyrnforge/web/styles/foundation.css` entrypoints provide the shared values and preference behavior; component CSS handles any additional reduced-motion suppression it needs.
 
+## Reusable entrance effects
+
+Load the optional public stylesheet `@vyrnforge/web/styles/motion.css` or the aggregate `@vyrnforge/web/styles.css`. These are opt-in CSS recipes, not automatic animations on every component. Attach `data-vf-motion` to an element or to a wrapper around existing components:
+
+- `fade` — opacity into place without spatial motion.
+- `grow` — subtle scale from 94% to full size.
+- `slide` — translate into place from a logical side.
+- `zoom` — scale from 82% with a short fade.
+- `fade-slide` — opacity and translation together.
+- `pop` — a restrained, one-shot overshoot before settling.
+
+```html
+<link rel="stylesheet" href=".../@vyrnforge/web/styles/motion.css">
+<div data-vf-motion="fade">Content</div>
+<div data-vf-motion="slide" data-vf-motion-direction="inline-start">
+  <button type="button">Action</button>
+</div>
+<div data-vf-motion="zoom" style="--vf-control-motion-duration: 220ms">
+  <p>Contextual information</p>
+</div>
+```
+
+These examples are illustrative HTML; application bundlers should resolve the public package entrypoint rather than use the placeholder URL shown above. For React or other framework ports, place the same attributes on a native wrapper and load canonical Web CSS. No React `Motion` component is required.
+
+The optional `data-vf-motion-direction` applies to `slide` and `fade-slide`. Supported values are `block-start`, `block-end` (default), `inline-start`, and `inline-end`; inline directions automatically flip in RTL. Set `--vf-motion-distance` on the element or its parent to customize the slide distance (CSS length; default `--vf-space-sm`). Motion uses the existing public `--vf-control-motion-duration` and `--vf-motion-easing-standard` tokens, and stops completely under `prefers-reduced-motion: reduce` regardless of a consumer duration override.
+
+Each recipe runs once when the element's animation starts. An application may replay it by inserting the element again; replaying by remounting a focusable element can itself move focus, so preserve semantics and focus deliberately. These recipes do not animate *exit*, wait for animation completion, set `display`, or control an element's accessibility/presence state. Do not attach them to a component that already owns an animation on the same element (for example, a busy spinner); wrap that component instead.
+
 ## Consume and customize
 
 Use the default tokens first. Where a real application experience needs it, scope a semantic CSS variable to a region and allow its child components to inherit the override. This changes one shared timing value instead of rewriting Button, Switch, Input, or other component selectors.
@@ -51,6 +79,6 @@ Button's busy spinner and Loading's structured spinner/shimmer already share fou
 
 ## When a new recipe is justified
 
-Introduce a reusable fade, slide, scale, spring-like effect, or entry/exit recipe only after multiple actual component consumers need the same observable behavior. Document supported browser capabilities, direction/writing-mode policy, lifecycle and focus invariants, reduced-motion fallback, styling hooks, and cross-framework expectations before exposing a stable utility. Prefer native CSS; do not add Framer Motion, a global animation controller, or a JavaScript timing dependency for component styling.
+The small, opt-in entrance vocabulary above is reusable on real Button, Switch, and composition wrappers without adding component-specific motion engines. Treat any further effect, complex spring-like movement, and especially component exit/enter lifecycle orchestration as a separate decision once multiple actual component consumers need the same observable behavior. Document supported browser capabilities, direction/writing-mode policy, lifecycle and focus invariants, reduced-motion fallback, styling hooks, and cross-framework expectations before exposing a stable utility. Prefer native CSS; do not add Framer Motion, a global animation controller, or a JavaScript timing dependency for component styling.
 
 This utility covers the shared motion system. Button, Switch, Loading, Dialog, Drawer, and other components retain their own state, anatomy, and accessibility contracts.
