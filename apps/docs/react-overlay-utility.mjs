@@ -4,6 +4,7 @@ import { Text } from '@vyrnforge/react/text';
 import { Flow, AutoGrid } from '@vyrnforge/react/layout';
 import { NativeSelect } from '@vyrnforge/react/native-select';
 import { ThemeScope } from '@vyrnforge/react';
+import { UtilitySections } from './react-utility-content.mjs';
 import { PopoverRoot, PopoverTrigger, PopoverContent } from '@vyrnforge/react/popover';
 import { TooltipRoot, TooltipTrigger, TooltipContent } from '@vyrnforge/react/tooltip';
 import { PreviewCardRoot, PreviewCardTrigger, PreviewCardContent } from '@vyrnforge/react/preview-card';
@@ -33,22 +34,6 @@ function Field({ id, label, value, onChange, options, disabled = false }) {
     h('label', { htmlFor: id }, label),
     h(NativeSelect, { id, value, disabled, onChange: (event) => onChange(event.target.value) },
       ...options.map(([key, title]) => h('option', { key, value: key }, title))));
-}
-
-function SharedContent({ guide }) {
-  return guide.sections.map((section) => h(Flow, {
-    as: 'section', gap: 'sm', key: section.heading,
-    'aria-labelledby': 'overlay-' + section.heading.toLowerCase().replace(/[^a-z0-9]+/g, '-'),
-  },
-  h(Text, { as: 'h2', variant: 'heading-md',
-    id: 'overlay-' + section.heading.toLowerCase().replace(/[^a-z0-9]+/g, '-') }, section.heading),
-  ...section.blocks.map((block, index) => {
-    if (block.type === 'list') return h(Flow, { as: 'ul', gap: 'xs', key: index },
-      ...block.items.map((item, i) => h('li', { key: i }, item)));
-    if (block.type === 'code') return h('pre', { key: index, tabIndex: 0, 'data-vf-code-block': '' },
-      h('code', null, block.text));
-    return h(Text, { as: 'p', key: index }, block.text);
-  })));
 }
 
 function Source({ kind, placement, theme, elevation, direction }) {
@@ -200,7 +185,7 @@ export function OverlayUtility({ guide, links }) {
       h(Source, { kind, placement, theme, elevation, direction }),
       h(Text, { as: 'p', variant: 'body-sm' },
         'The local preview overrides only public semantic CSS custom properties. Modal backdrop, focus, and dismissal policies stay with the selected component.')),
-    ...SharedContent({ guide }),
+    ...UtilitySections({ guide, prefix: 'overlay-' }),
     h(Flow, { as: 'section', gap: 'sm', 'aria-labelledby': 'overlay-component-links' },
       h(Text, { as: 'h2', variant: 'heading-md', id: 'overlay-component-links' }, 'Individual component references'),
       h(Text, { as: 'p' },
