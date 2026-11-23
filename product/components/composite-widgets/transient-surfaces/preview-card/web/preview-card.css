@@ -1,4 +1,5 @@
 @import '../../styles/tokens.css';
+@import '../../styles/internal/anchored-placement.css';
 @layer vyrnforge.components {
   :where([data-vf-preview-card-content]) {
     background: var(--vf-color-surface-elevated, var(--vf-color-surface));
@@ -13,7 +14,6 @@
     position: fixed;
     inset: auto;
     margin: 0;
-    position-area: bottom span-right;
     position-try-fallbacks:
       flip-block,
       flip-inline,
@@ -27,56 +27,12 @@
     overflow: auto;
     max-inline-size: min(28rem, calc(100vw - 1rem));
   }
+  /* Placement-specific shared rules are imported before this local default. */
+  :where([data-vf-preview-card-content][popover]:not([data-vf-placement])) {
+    position-area: bottom span-right;
+  }
   :where([data-vf-preview-card-content][popover]:not([data-vf-placement]):dir(rtl)) {
     position-area: bottom span-left;
-  }
-  :where([data-vf-preview-card-content][popover][data-vf-placement='bottom']) {
-    position-area: bottom;
-  }
-  :where([data-vf-preview-card-content][popover][data-vf-placement='left']) {
-    position-area: left;
-  }
-  :where([data-vf-preview-card-content][popover][data-vf-placement='right']) {
-    position-area: right;
-  }
-  :where([data-vf-preview-card-content][popover][data-vf-placement='top-start']) {
-    position-area: top span-right;
-  }
-  :where([data-vf-preview-card-content][popover][data-vf-placement='top-end']) {
-    position-area: top span-left;
-  }
-  :where([data-vf-preview-card-content][popover][data-vf-placement='bottom-start']) {
-    position-area: bottom span-right;
-  }
-  :where([data-vf-preview-card-content][popover][data-vf-placement='bottom-end']) {
-    position-area: bottom span-left;
-  }
-  :where([data-vf-preview-card-content][popover][data-vf-placement='left-start']) {
-    position-area: left span-bottom;
-  }
-  :where([data-vf-preview-card-content][popover][data-vf-placement='left-end']) {
-    position-area: left span-top;
-  }
-  :where([data-vf-preview-card-content][popover][data-vf-placement='right-start']) {
-    position-area: right span-bottom;
-  }
-  :where([data-vf-preview-card-content][popover][data-vf-placement='right-end']) {
-    position-area: right span-top;
-  }
-  :where([data-vf-preview-card-content][popover][data-vf-placement='top-start']:dir(rtl)) {
-    position-area: top span-left;
-  }
-  :where([data-vf-preview-card-content][popover][data-vf-placement='top-end']:dir(rtl)) {
-    position-area: top span-right;
-  }
-  :where([data-vf-preview-card-content][popover][data-vf-placement='bottom-start']:dir(rtl)) {
-    position-area: bottom span-left;
-  }
-  :where([data-vf-preview-card-content][popover][data-vf-placement='bottom-end']:dir(rtl)) {
-    position-area: bottom span-right;
-  }
-  :where([data-vf-preview-card-content][popover][data-vf-placement='top']) {
-    position-area: top;
   }
   :where([data-vf-preview-card-content]:focus-within) {
     outline: 2px solid var(--vf-color-focus-ring);
