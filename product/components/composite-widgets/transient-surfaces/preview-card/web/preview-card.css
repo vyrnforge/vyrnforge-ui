@@ -15,7 +15,6 @@
     position: fixed;
     inset: auto;
     margin: 0;
-    position-area: bottom span-right;
     position-try-fallbacks:
       flip-block,
       flip-inline,
@@ -28,6 +27,10 @@
     max-block-size: calc(100dvh - 1rem);
     overflow: auto;
     max-inline-size: min(28rem, calc(100vw - 1rem));
+  }
+  /* Placement-specific shared rules are imported before this local default. */
+  :where([data-vf-preview-card-content][popover]:not([data-vf-placement])) {
+    position-area: bottom span-right;
   }
   :where([data-vf-preview-card-content][popover]:not([data-vf-placement]):dir(rtl)) {
     position-area: bottom span-left;
