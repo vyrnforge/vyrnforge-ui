@@ -55,6 +55,10 @@ export const browserFixture = {
         '<button aria-label="End, two updates">End</button>', '2'),
       specimen('circle', { variant: 'dot', overlap: 'circular', tone: 'accent' },
         '<span class="circle" role="img" aria-label="Profile, active">AB</span>', ''),
+      specimen('new-label', {},
+        '<button aria-label="Files, new upload">Files</button>', 'NEW'),
+      specimen('wrapped-label', { tone: 'accent' },
+        '<button aria-label="Review, pending review">Review</button>', 'PENDING REVIEW'),
     ].join('\n') + '</main>';
     if (port === 'react') {
       const { createElement: h } = await import('react');
