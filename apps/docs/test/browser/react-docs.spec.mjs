@@ -3,6 +3,21 @@ import { test, expect } from '@playwright/test';
 import axeCore from 'axe-core';
 import { compileFrameworkDocumentation } from '../../../../tooling/docs/framework-documentation.mjs';
 
+test('React example documents load canonical Web CSS without documentation chrome CSS', () => {
+  const app = readFileSync('dist/docs/next/react/components/button/index.html', 'utf8');
+  expect(app).toContain('assets/docs.css');
+
+  for (const route of [
+    'examples/button-basic/',
+    'examples/typography/text/',
+    'examples/list/rich/',
+  ]) {
+    const html = readFileSync('dist/docs/next/react/' + route + 'index.html', 'utf8');
+    expect(html).not.toContain('docs.css');
+    expect(html).toContain('vyrnforge-web/');
+  }
+});
+
 test('React pilot artifact is Product Graph-backed and SSR-rendered with public React components', () => {
   const manifestPath = 'dist/docs/next/react/site-manifest.json';
   expect(existsSync(manifestPath)).toBe(true);
