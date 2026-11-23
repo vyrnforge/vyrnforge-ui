@@ -11,6 +11,7 @@ export type ButtonSize = 'sm' | 'md' | 'lg';
     '[attr.data-vf-variant]': 'variant()',
     '[attr.data-vf-size]': 'size()',
     '[attr.data-vf-loading]': 'loading() ? "" : null',
+    '[attr.data-vf-icon-only]': 'iconOnly() ? "" : null',
     '[attr.aria-busy]': 'loading() ? "true" : ariaBusy()',
     '[disabled]': 'disabled()'
   }
@@ -19,6 +20,7 @@ export class VfButtonDirective {
   readonly variant = input<ButtonVariant>('primary');
   readonly size = input<ButtonSize>('md');
   readonly loading = input(false, { transform: booleanAttribute });
+  readonly iconOnly = input(false, { transform: booleanAttribute });
   readonly disabled = input(false, { transform: booleanAttribute });
   readonly ariaBusy = input<string | boolean | null>(null, { alias: 'aria-busy' });
 }
