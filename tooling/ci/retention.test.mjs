@@ -282,6 +282,7 @@ test('age-based cleanup preserves the last successful validation for each merged
 test('production policy expires all completed run categories after six days', () => {
   const productionPolicy = JSON.parse(readFileSync(new URL('./retention-policy.json', import.meta.url), 'utf8'));
   assert.equal(productionPolicy.minimumRunsPerWorkflow, 0);
+  assert.equal(productionPolicy.maxDeletionsPerRun, 200);
   assert.equal(productionPolicy.minimumSuccessfulRunsPerWorkflow, 0);
   assert.deepEqual(productionPolicy.preserveSuccessfulCategories, []);
   for (const category of Object.values(productionPolicy.categories)) {
