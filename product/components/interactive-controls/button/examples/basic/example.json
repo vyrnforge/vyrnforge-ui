@@ -1,7 +1,7 @@
 {
   "id": "button/basic",
-  "title": "Basic button",
-  "description": "The same Button contract rendered by each implemented framework surface.",
+  "title": "Basic buttons",
+  "description": "Primary, secondary, and ghost actions share native button semantics.",
   "defaultFramework": "native-web",
   "frameworks": {
     "native-web": {

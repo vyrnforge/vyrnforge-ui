@@ -1,7 +1,7 @@
 {
   "id": "button/forms",
-  "title": "Native form actions",
-  "description": "Native submit, reset, and non-submit buttons keep their form semantics. The Native Web docs preview demonstrates local-only feedback; applications own action handling and submission.",
+  "title": "Form actions",
+  "description": "Submit, reset, and non-submit buttons follow native form behavior.",
   "defaultFramework": "native-web",
   "frameworks": {
     "native-web": {

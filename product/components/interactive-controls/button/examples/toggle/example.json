@@ -1,7 +1,7 @@
 {
   "id": "button/toggle",
-  "title": "ToggleButton pressed-state controls",
-  "description": "Independent text and square icon-only pressed actions with native aria-pressed, accessible naming and controlled/uncontrolled React state",
+  "title": "Toggle actions",
+  "description": "Persistent pressed actions use ToggleButton and aria-pressed.",
   "defaultFramework": "react",
   "frameworks": {
     "react": {

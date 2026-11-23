@@ -452,6 +452,14 @@ function buttonExample(example, links) {
 }
 function buttonUsageGuide(button, links) {
   if (!button?.sharedContent || !button?.frameworkContent) return null;
+  // The owner-authored examples stay discoverable through the Product Graph;
+  // only their reading order is curated for a first-time consumer.
+  const readingOrder = new Map([
+    'button/basic', 'button/variants', 'button/sizes', 'button/states',
+    'button/icons', 'button/joined', 'button/forms', 'button/density', 'button/toggle',
+  ].map((id, index) => [id, index]));
+  const examples = button.examples.slice().sort((a, b) =>
+    (readingOrder.get(a.id) ?? Infinity) - (readingOrder.get(b.id) ?? Infinity));
   const sections = [
     { id: 'react-setup', heading: 'Get started' },
     { id: 'react-usage', heading: 'Examples' },
@@ -461,7 +469,7 @@ function buttonUsageGuide(button, links) {
   ];
   return h('div', { className: 'vf-docs-content-grid vf-docs-usage-guide-layout' },
     guideToc(sections, {
-      label: 'Button', examples: button.examples, getId: (ex) => 'react-button-example-' + ex.id.slice('button/'.length),
+      label: 'Button', examples, getId: (ex) => 'react-button-example-' + ex.id.slice('button/'.length),
     }),
     h(Flow, { as: 'article', gap: '2xl', className: 'vf-docs-article vf-docs-usage-guide',
       'data-vf-docs-react-component': 'button' },
@@ -472,7 +480,7 @@ function buttonUsageGuide(button, links) {
           h('a', { href: links.home, 'data-vf-link': '' }, 'React overview'), '.'),
       ]),
       guidePart(sections[1], [
-        ...button.examples.map((ex) => buttonExample(ex, links)),
+        ...examples.map((ex) => buttonExample(ex, links)),
       ]),
       guidePart(sections[2], guideSubsections(button.sharedContent, [
         'When to use', 'Native baseline', 'Variants', 'Sizes',

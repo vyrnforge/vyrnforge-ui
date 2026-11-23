@@ -1,7 +1,7 @@
 {
   "id": "button/density",
-  "title": "Button sizes and inherited density",
-  "description": "Compare small, normal and large Buttons across comfortable and compact density without inventing a third density mode",
+  "title": "Density",
+  "description": "Comfortable and compact density affect inherited sizing without changing semantics.",
   "defaultFramework": "react",
   "frameworks": {
     "react": {
