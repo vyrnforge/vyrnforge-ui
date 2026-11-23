@@ -113,7 +113,8 @@ test('Badge text stays centered for one, two, capped and wrapped label values', 
       return { alignment: getComputedStyle(el).textAlign, lines: lines.length, words };
     });
   expect(wrapped.alignment).toBe('center');
-  expect(wrapped.lines).toBeGreaterThanOrEqual(2);
+  // The two complete words should wrap, not fragment into three clipped lines.
+  expect(wrapped.lines).toBe(2);
   expect(wrapped.words[0].top).toBeLessThan(wrapped.words[1].top);
   for (const word of wrapped.words) {
     expect(word.horizontalDelta).toBeLessThanOrEqual(3);
