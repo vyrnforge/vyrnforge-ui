@@ -310,13 +310,14 @@ function guideBlocks(content, heading) {
   return renderBlocks(guideSection(content, heading)?.blocks);
 }
 function guideSubsections(content, headings, prefix) {
-  return headings.flatMap((heading) => {
-    const section = guideSection(content, heading);
-    if (!section) return [];
+  const sections = headings.map((heading) => ({ heading, section: guideSection(content, heading) }))
+    .filter(({ section }) => section);
+  return sections.map(({ heading, section }, index) => {
     const id = prefix + '-' + slug(heading);
-    return [h(Flow, { as: 'section', gap: 'sm', key: id,
-      className: 'vf-docs-guide-subsection', 'aria-labelledby': id },
-      h('h3', { id }, heading), ...renderBlocks(section.blocks))];
+    return h('details', { key: id, className: 'vf-docs-guide-subsection',
+      'data-vf-docs-guide-detail': '', open: index === 0 },
+      h('summary', null, h('h3', { id }, heading)),
+      h('div', { className: 'vf-docs-guide-subsection-body' }, ...renderBlocks(section.blocks)));
   });
 }
 function guideToc(sections) {
@@ -344,12 +345,19 @@ function evidenceDisclosure(references) {
     accessibilityEvidence(references, 'h3'));
 }
 function exampleJumpLinks(label, examples, getId) {
-  return h('nav', { key: 'jump-links', className: 'vf-docs-example-links',
+  const navigation = h('nav', { className: 'vf-docs-example-links',
     'aria-label': label + ' examples' },
     h(Flow, { as: 'ul', direction: 'inline', wrap: 'wrap', gap: 'sm' },
       ...examples.map((example) =>
-      h('li', { key: example.id },
-        h('a', { href: '#' + getId(example) }, example.title)))));
+        h('li', { key: example.id },
+          h('a', { href: '#' + getId(example) }, example.title))));
+  // The page TOC already covers the major sections. Large example indexes are
+  // available on demand instead of competing with the examples on first load.
+  return examples.length > 4
+    ? h('details', { key: 'jump-links', className: 'vf-docs-example-index' },
+        h('summary', null, 'Find an example (' + examples.length + ')'),
+        navigation)
+    : navigation;
 }
 function typographyUsageGuide(unit, links) {
   const id = unit.id;
@@ -427,21 +435,24 @@ function typographyApi(unit, links) {
 }
 function buttonExample(example, links) {
   const id = example.id.slice('button/'.length);
-  return h('article', { key: example.id, id: 'react-button-example-' + id,
-    className: 'vf-docs-example', 'data-vf-docs-react-button-example': example.id },
-    h(Flow, { as: 'header', direction: 'inline', wrap: 'wrap', gap: 'lg',
-      align: 'start', justify: 'space-between', className: 'vf-docs-example-header' },
-      h('div', null, h(Text, { as: 'h3', variant: 'heading-sm' }, example.title), h(Text, { as: 'p' }, example.description))),
-    h('iframe', { className: 'vf-docs-react-example-frame',
-      title: id === 'basic' ? 'Checked-in React Button example' : 'React ' + example.title + ' example',
-      src: links.buttonExamples[id], sandbox: 'allow-scripts',
-      loading: id === 'basic' ? 'eager' : 'lazy',
-      style: { minBlockSize: id === 'joined' ? '26rem' : id === 'toggle' ? '26rem' :
-        id === 'icons' ? '28rem' : id === 'density' ? '14rem' : '10rem' } }),
-    h('details', { className: 'vf-docs-source-disclosure' },
-      h('summary', null, id === 'basic' ? 'View checked-in React source' : 'View React TSX source'),
-      h('pre', { 'data-vf-code-block': '', tabIndex: 0 },
-        h('code', null, example.source))));
+  return h('details', { key: example.id, id: 'react-button-example-' + id,
+    className: 'vf-docs-example vf-docs-example-collapsible',
+    'data-vf-docs-react-button-example': example.id, open: id === 'basic' },
+    h(Flow, { as: 'summary', direction: 'inline', wrap: 'wrap', gap: 'sm',
+      align: 'center', justify: 'space-between', className: 'vf-docs-example-header' },
+      h(Text, { as: 'h3', variant: 'heading-sm' }, example.title)),
+    h('div', { className: 'vf-docs-example-detail' },
+      h(Text, { as: 'p', className: 'vf-docs-example-description' }, example.description),
+      h('iframe', { className: 'vf-docs-react-example-frame',
+        title: id === 'basic' ? 'Checked-in React Button example' : 'React ' + example.title + ' example',
+        src: links.buttonExamples[id], sandbox: 'allow-scripts',
+        loading: id === 'basic' ? 'eager' : 'lazy',
+        style: { minBlockSize: id === 'joined' ? '26rem' : id === 'toggle' ? '26rem' :
+          id === 'icons' ? '28rem' : id === 'density' ? '14rem' : '10rem' } }),
+      h('details', { className: 'vf-docs-source-disclosure' },
+        h('summary', null, id === 'basic' ? 'View checked-in React source' : 'View React TSX source'),
+        h('pre', { 'data-vf-code-block': '', tabIndex: 0 },
+          h('code', null, example.source)))));
 }
 function buttonUsageGuide(button, links, message, setMessage) {
   if (!button?.sharedContent || !button?.frameworkContent) return null;
