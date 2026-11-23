@@ -3,6 +3,7 @@ import {
   List, ListItem,
   type ListProps, type ListItemProps, type ListElement,
   type ListVariant, type ListSize, type ListSpacing, type ListMarker,
+  type ListGutter, type ListIndent, type ListDividerInset,
 } from '@vyrnforge/react/list';
 import { List as RootList, ListItem as RootListItem } from '@vyrnforge/react';
 
@@ -10,7 +11,11 @@ const semantic: ListProps = {
   'aria-label': 'People', children: createElement(ListItem, null, 'Alex Chen'),
 };
 const ordered: ListProps = { as: 'ol', start: 3, marker: 'auto', spacing: 'sm' };
-const bordered: ListProps = { variant: 'bordered', size: 'lg', spacing: 'lg' };
+const bordered: ListProps = { variant: 'bordered', size: 'lg', spacing: 'lg',
+  gutter: 'none', indent: 'md', dividerInset: 'gutter' };
+const gutter: ListGutter = 'auto';
+const indent: ListIndent = 'lg';
+const dividerInset: ListDividerInset = 'gutter';
 const row: ListItemProps = {
   children: 'Report', leading: createElement('span', null, 'Icon'),
   trailing: createElement('button', { type: 'button', disabled: true }, 'Open'),
@@ -38,13 +43,20 @@ const wrongSize: ListProps = { size: 'xl' };
 const wrongSpacing: ListProps = { spacing: 'tiny' };
 // @ts-expect-error unsupported marker mode
 const wrongMarker: ListProps = { marker: 'roman' };
+// @ts-expect-error invalid gutter choice
+const wrongGutter: ListProps = { gutter: 'wide' };
+// @ts-expect-error invalid indentation
+const wrongIndent: ListProps = { indent: '4rem' };
+// @ts-expect-error inset may only align to gutter
+const wrongInset: ListProps = { dividerInset: 'content' };
 // @ts-expect-error no List-owned selection state
 const wrongSelected: ListProps = { selected: true };
 // @ts-expect-error no synthetic ListItem loading state
 const wrongLoading: ListItemProps = { loading: true };
 
 void [List, ListItem, RootList, RootListItem, semantic, ordered, bordered, row,
-  kind, variant, size, spacing, marker, listRef, itemRef, wrongHost, wrongRole,
+  kind, variant, size, spacing, marker, gutter, indent, dividerInset,
+  listRef, itemRef, wrongHost, wrongRole,
   wrongItemRole, wrongVariant, wrongSize, wrongSpacing, wrongMarker,
-  wrongSelected, wrongLoading];
+  wrongGutter, wrongIndent, wrongInset, wrongSelected, wrongLoading];
 

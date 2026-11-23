@@ -56,3 +56,29 @@ test('RTL keeps semantic order and visible divider borders in forced colors', as
     expect(border).toBe('solid');
   }
 });
+
+test('gutterless rows, nested logical indentation, inset rules, and native sticky headings', async ({ page }) => {
+  await page.goto('/components/list/' + port + '.html');
+  const parent = page.locator('#nested-parent');
+  await expect(parent).toHaveAttribute('data-vf-list-gutter', 'none');
+  await expect(parent).toHaveAttribute('data-vf-list-divider-inset', 'gutter');
+  const padding = await parent.locator(':scope > li').first()
+    .evaluate(el => parseFloat(getComputedStyle(el).paddingInlineStart));
+  expect(padding).toBe(0);
+  const nested = page.getByRole('list', { name: 'Nested children' });
+  await expect(nested).toHaveCount(1);
+  await expect(nested.getByRole('listitem')).toHaveCount(1);
+  const nestedIndent = await nested.evaluate(el => parseFloat(getComputedStyle(el).paddingInlineStart));
+  expect(nestedIndent).toBeGreaterThan(0);
+  const line = await parent.locator(':scope > li').nth(1).evaluate(el => {
+    const rule = getComputedStyle(el, '::before');
+    return { border: rule.borderBlockStartStyle, position: rule.position };
+  });
+  expect(line).toEqual({ border: 'solid', position: 'absolute' });
+  await expect(page.locator('#group-a')).toHaveCSS('position', 'sticky');
+  await expect(page.getByRole('list', { name: 'Group A' })).toBeVisible();
+  await page.evaluate(() => { document.documentElement.dir = 'rtl'; });
+  expect(await nested.evaluate(el => parseFloat(getComputedStyle(el).paddingInlineStart))).toBeGreaterThan(0);
+  const a11y = await new AxeBuilder({ page }).analyze();
+  expect(a11y.violations).toEqual([]);
+});
