@@ -2128,6 +2128,7 @@ test('Motion utility is shared, discoverable and binds real public Web tokens', 
   const html = readFileSync('dist/docs/next/react/utilities/motion/index.html', 'utf8');
   expect(html).toContain('assets/docs.css');
   expect(html).toContain('components/switch/switch.css');
+  expect(html).toContain('/styles/motion.css');
   expect(html).toContain('data-vf-docs-react-motion-utility');
   await page.goto('/next/react/utilities/motion/');
   const utility = page.locator('[data-vf-docs-react-motion-utility]');
@@ -2215,4 +2216,70 @@ test('Motion utility keeps its live controls usable at 320px and 200% text', asy
   const widths = await page.evaluate(() => [document.documentElement.scrollWidth, document.documentElement.clientWidth]);
   expect(widths[0]).toBeLessThanOrEqual(widths[1] + 1);
   await page.screenshot({ path: testInfo.outputPath('motion-react-320px-200pct.png') });
+});
+
+test('Motion effects expose six reusable real-Web CSS recipes on multiple React targets', async ({ page }, testInfo) => {
+  await page.goto('/next/react/utilities/motion/');
+  const area = page.locator('[data-vf-docs-motion-effects]');
+  await expect(area.getByRole('heading', { name: 'Reusable entrance effects' })).toBeVisible();
+  const sample = page.locator('[data-vf-docs-motion-preview]');
+  const list = [
+    ['fade', 'vf-motion-enter-fade'],
+    ['grow', 'vf-motion-enter-grow'],
+    ['slide', 'vf-motion-enter-slide'],
+    ['zoom', 'vf-motion-enter-zoom'],
+    ['fade-slide', 'vf-motion-enter-fade-slide'],
+    ['pop', 'vf-motion-enter-pop'],
+  ];
+  for (const [effect, animation] of list) {
+    await page.locator('#motion-effect').selectOption(effect);
+    await expect(sample).toHaveAttribute('data-vf-motion', effect);
+    await expect.poll(async () => sample.evaluate((node) => getComputedStyle(node).animationName))
+      .toBe(animation);
+  }
+  await page.locator('#motion-effect').selectOption('slide');
+  await page.locator('#motion-origin').selectOption('inline-start');
+  await page.locator('#motion-direction').selectOption('ltr');
+  const ltr = await sample.evaluate((node) => {
+    const animation = node.getAnimations()[0];
+    animation.pause();
+    animation.currentTime = 0;
+    return getComputedStyle(node).translate;
+  });
+  await page.locator('#motion-direction').selectOption('rtl');
+  const rtl = await sample.evaluate((node) => {
+    const animation = node.getAnimations()[0];
+    animation.pause();
+    animation.currentTime = 0;
+    return getComputedStyle(node).translate;
+  });
+  expect(ltr).not.toBe(rtl);
+  await page.locator('#motion-target').selectOption('button');
+  await expect(sample.getByRole('button', { name: 'Sample action' })).toBeVisible();
+  await sample.getByRole('button', { name: 'Sample action' }).click();
+  await expect(area.locator('[data-vf-docs-motion-sample-status]')).toContainText('Sample actions: 1');
+  await page.locator('#motion-target').selectOption('switch');
+  await sample.getByRole('switch', { name: 'Option' }).check();
+  await expect(area.locator('[data-vf-docs-motion-sample-status]')).toContainText('Switch: on.');
+  await page.locator('#motion-target').selectOption('group');
+  await expect(sample.getByRole('button', { name: 'Sample action' })).toBeVisible();
+  await expect(sample.getByRole('switch', { name: 'Option' })).toBeChecked();
+  await area.getByRole('button', { name: 'Replay effect' }).click();
+  await expect(sample).toHaveAttribute('data-vf-motion-sample', 'group');
+  await page.screenshot({ path: testInfo.outputPath('motion-reusable-effects-react.png') });
+});
+
+test('Motion effects respect reduced motion even with consumer timing overrides', async ({ page }) => {
+  await page.emulateMedia({ reducedMotion: 'reduce' });
+  await page.goto('/next/react/utilities/motion/');
+  await page.locator('#motion-duration').selectOption('fast');
+  await page.locator('#motion-effect').selectOption('zoom');
+  const sample = page.locator('[data-vf-docs-motion-preview]');
+  await expect(sample).toHaveCSS('animation-name', 'none');
+  await expect(sample.getByRole('button', { name: 'Sample action' })).toBeVisible();
+  await sample.getByRole('button', { name: 'Sample action' }).click();
+  await expect(page.locator('[data-vf-docs-motion-sample-status]')).toContainText('Sample actions: 1');
+  await page.locator('#motion-target').selectOption('switch');
+  await sample.getByRole('switch', { name: 'Option' }).check();
+  await expect(sample.getByRole('switch', { name: 'Option' })).toBeChecked();
 });
