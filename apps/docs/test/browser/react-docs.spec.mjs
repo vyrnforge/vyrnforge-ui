@@ -636,7 +636,7 @@ test('React guides reveal one Button preview first and keep detailed guidance na
     await expect(advanced).not.toHaveAttribute('open', '');
     await advanced.locator(':scope > summary').click();
     await expect(advanced).toHaveAttribute('open', '');
-    await expect(advanced.locator('iframe')).toHaveAttribute('src', /examples\\/button/);
+    await expect(advanced.locator('iframe')).toHaveAttribute('src', /examples\/button/);
   } finally {
     await noJsContext.close();
   }
