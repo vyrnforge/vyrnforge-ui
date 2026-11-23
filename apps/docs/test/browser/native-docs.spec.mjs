@@ -105,7 +105,7 @@ test('Native Motion utility reuses public control timing and keeps reduced-motio
   });
   const html = readFileSync('dist/docs/next/native-web/utilities/motion/index.html', 'utf8');
   expect(html).toContain('components/switch/switch.css');
-  expect(html).toContain('/styles/motion.css');
+  expect(html).toContain('/styles/foundation.css');
   expect(html).toContain('data-vf-switch');
   await gotoWithCleanDocsState(page, '/next/native-web/utilities/motion/');
   const utility = page.locator('[data-vf-docs-native-motion-utility]');
