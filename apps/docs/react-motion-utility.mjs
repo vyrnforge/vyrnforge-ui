@@ -64,12 +64,12 @@ function MotionEffectsPlayground({ theme, variables }) {
       onChange: (event) => setChecked(event.currentTarget.checked) }),
     h('label', { htmlFor: 'motion-effect-switch' }, 'Option'));
   const selectedDuration = entranceDuration === 'slow' ? 480 : entranceDuration === 'fast' ? 200 : undefined;
-  const code = "import { Motion, Button } from '@vyrnforge/react';\\n" +
-    "import '@vyrnforge/web/styles/foundation.css';\\n\\n" +
+  const code = "import { Motion, Button } from '@vyrnforge/react';\n" +
+    "import '@vyrnforge/web/styles/foundation.css';\n\n" +
     '<Motion effect="' + effect + '"' +
     (['slide', 'fade-slide'].includes(effect) ? ' direction="' + origin + '"' : '') +
     (selectedDuration === undefined ? '' : ' duration={' + selectedDuration + '}') +
-    '>\\n  <Button>Continue</Button>\\n</Motion>\\n' +
+    '>\n  <Button>Continue</Button>\n</Motion>\n' +
     '// The application owns presence and exit; Motion decorates entrance.';
   return h(Flow, { as: 'section', gap: 'md', 'aria-labelledby': 'motion-effects-title',
     'data-vf-docs-motion-effects': '' },
