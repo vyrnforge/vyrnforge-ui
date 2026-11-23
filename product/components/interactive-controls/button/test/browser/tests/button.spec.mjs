@@ -209,6 +209,12 @@ test.describe('Button Group presentation (independent commands, native grouping)
       const box = await icon.evaluate(el => el.getBoundingClientRect());
       expect({ width: box.width, height: box.height }).toEqual({ width: 40, height: 40 });
     }
+    await joinedIcons.evaluate(el => { el.style.inlineSize = '60px'; });
+    for (const icon of await iconButtons.all()) {
+      const box = await icon.evaluate(el => el.getBoundingClientRect());
+      expect({ width: box.width, height: box.height }).toEqual({ width: 40, height: 40 });
+    }
+    await joinedIcons.evaluate(el => { el.style.removeProperty('inline-size'); });
     await iconButtons.first().hover();
     await expect(iconButtons.first()).toHaveCSS('z-index', '1');
     await iconButtons.last().focus();
