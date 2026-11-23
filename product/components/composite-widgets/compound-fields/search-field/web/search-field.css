@@ -20,7 +20,7 @@
     padding-inline: var(--vf-space-sm);
   }
 
-  :where([data-vf-search-field-clear]:disabled) {
+  [data-vf-search-field-clear]:disabled {
     background: var(--vf-color-disabled-background);
     border-color: var(--vf-color-disabled-border);
     color: var(--vf-color-disabled-foreground);
@@ -34,7 +34,7 @@
   }
 
   @media (forced-colors: active) {
-    :where([data-vf-search-field-clear]:disabled) {
+    [data-vf-search-field-clear]:disabled {
       border-color: GrayText;
       color: GrayText;
     }
