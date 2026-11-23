@@ -240,7 +240,7 @@ try {
     if (sweep.incomplete) {
       throw new Error(`Run-history cleanup incomplete: ${sweep.remainingAgeExpired} age-expired, ${sweep.remainingCandidates} total candidates remain after ${sweep.batches.length} bounded batch(es)`);
     }
-  } else {
+  } else if (scope === 'branches') {
     report.mode = 'stale-branches';
     report.branchCleanup = await cleanupStaleBranches();
     if (report.branchCleanup.failedBranches > 0) {
