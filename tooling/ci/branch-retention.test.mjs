@@ -1,4 +1,5 @@
 import { describe, expect, test } from 'vitest';
+import { readFileSync } from 'node:fs';
 import { linkedIssueNumbersForBranch, planBranchDeletions, protectedBranchNames } from './branch-retention.mjs';
 
 const now = new Date('2026-10-29T00:00:00Z');
@@ -116,4 +117,11 @@ describe('issue association evidence', () => {
     expect(() => linkedIssueNumbersForBranch('feature/x', null, [], { repository })).toThrow();
     expect(() => linkedIssueNumbersForBranch('feature/x', [], null, { repository })).toThrow();
   });
+});
+
+
+test('production branch cleanup batch is large enough to sweep the current backlog', () => {
+  const production = JSON.parse(readFileSync(new URL('./branch-retention-policy.json', import.meta.url), 'utf8'));
+  expect(production.maxDeletionsPerRun).toBe(100);
+  expect(production.staleDays).toBe(7);
 });

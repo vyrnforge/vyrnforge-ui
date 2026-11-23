@@ -4,7 +4,7 @@ The repository cleanup removes an old branch **when it has no traceable GitHub I
 
 ## Issue-link evidence
 
-Cleanup checks all GitHub Issues, including closed issues, without treating pull requests as issues. It preserves a branch when an existing issue is referenced in the branch name (for example `qa/...-1397`), in an issue title/body that includes the exact branch name, in a matching branch pull request's title/body, in the branch HEAD commit message, or when an issue explicitly references that pull request. Generic numeric text does not count unless its number resolves to a real GitHub Issue.
+Cleanup checks all GitHub Issues, including closed issues, without treating pull requests as issues. The workflow token explicitly requires `issues: read`; if GitHub returns no real Issues, deletion fails closed instead of assuming every branch is orphaned. It preserves a branch when an existing issue is referenced in the branch name (for example `qa/...-1397`), in an issue title/body that includes the exact branch name, in a matching branch pull request's title/body, in the branch HEAD commit message, or when an issue explicitly references that pull request. Generic numeric text does not count unless its number resolves to a real GitHub Issue.
 
 An incomplete issue index or unavailable commit metadata **never** authorizes deletion. The issue index is refreshed before executing deletions.
 
@@ -12,6 +12,6 @@ An incomplete issue index or unavailable commit metadata **never** authorizes de
 
 The default branch, GitHub-protected branches, `release/*`, `hotfix/*`, and same-repository heads/bases of open PRs remain protected. Open PRs and branch SHA are rechecked immediately before each removal. Deleted branch names and their precise HEAD SHAs are included in the cleanup JSON report for traceability; deleting a Git ref is not a guarantee that GitHub has purged all underlying objects, PR refs, logs, or commit history.
 
-The scheduled workflow runs daily and deletes at most 25 old untracked branches in one execution. GitHub repository rules remain an additional enforcement boundary.
+The scheduled workflow runs daily and deletes at most 100 old untracked branches in one execution. GitHub repository rules remain an additional enforcement boundary.
 
 A manual `workflow_dispatch` defaults to `dry_run: true`, emitting a deletion plan without removing records. Scheduled execution remains destructive for eligible branches. Merged-PR-triggered execution cleans run history only.
