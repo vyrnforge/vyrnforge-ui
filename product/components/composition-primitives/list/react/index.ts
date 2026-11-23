@@ -8,7 +8,7 @@ export type ListSize = 'sm' | 'md' | 'lg';
 export type ListSpacing = 'none' | 'sm' | 'md' | 'lg';
 export type ListMarker = 'none' | 'auto';
 
-/** Native list properties. The \`start\` attribute is meaningful only when \`as="ol"\`. */
+/** Native list properties. The `start` attribute is meaningful only when `as="ol"`. */
 export interface ListProps extends Omit<ComponentPropsWithoutRef<'ol'>, 'role' | 'children'> {
   as?: ListElement;
   variant?: ListVariant;
