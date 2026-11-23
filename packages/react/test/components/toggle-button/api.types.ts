@@ -1,4 +1,6 @@
 import { ToggleButton, type ToggleButtonProps } from '@vyrnforge/react/toggle-button';
-const props: ToggleButtonProps = { pressed: true, onPressedChange: () => undefined };
+const props: ToggleButtonProps = { pressed: true, size: 'lg', onPressedChange: () => undefined };
+// @ts-expect-error unsupported Button size
+const invalid: ToggleButtonProps = { size: 'xl' };
 const control: typeof ToggleButton = ToggleButton;
-void [props, control];
+void [props, control, invalid];
