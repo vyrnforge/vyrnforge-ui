@@ -14,8 +14,8 @@ Application code supplies the action handler; the Button itself remains a native
 
 ## Button family examples
 
-The React guide includes live patterns for Flow-separated actions, joined and vertically joined Button groups, independent ToggleButton states, named icon-only/icon-with-text Buttons, busy/disabled states, and comfortable/compact density. ButtonGroup is a native grouping **style recipe**, not a React runtime component. Use `<Flow role="group" aria-label="..." direction="inline" gap="none" data-vf-button-group="">` with direct Button children.
+Each example sits beside the shared concept it demonstrates. Use the checked-in React TSX source under that explanation rather than treating the examples as an unrelated gallery.
 
-For icon-only actions, pass `iconOnly` to the existing `Button`, compose `Icon` as its child, supply a stable `aria-label` or `aria-labelledby`, and explicitly choose the appropriate emphasis (usually `variant="ghost"`). The shared Button CSS renders a square target without introducing IconButton or a separate icon-slot API. Text-and-icon Buttons omit `iconOnly`.
+React handlers such as `onClick` and controlled `pressed` state belong to the consuming application. For a joined command set, compose public `Button` children in `Flow` and apply `data-vf-button-group` to that parent; no ButtonGroup runtime is exported. For icon-only actions, compose public `Icon` inside `Button iconOnly` and provide an authored button name.
 
-Import a standalone pressed ToggleButton from `@vyrnforge/react/toggle-button`. For coordinated choices use the distinct ToggleGroup composite widget.
+For persistent pressed commands import `ToggleButton` from `@vyrnforge/react/toggle-button`; use the separate ToggleGroup when choices must be coordinated.
