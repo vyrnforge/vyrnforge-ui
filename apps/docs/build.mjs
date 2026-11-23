@@ -20,6 +20,13 @@ if (registry.mode !== 'native-html-first' || registry.framework !== 'native-web'
 const model = compileNativeDocumentation(root);
 const overlayGuide = parseMarkdownDocument(await readFile(path.join(root, 'documentation/utilities/overlay.md'), 'utf8'));
 const overlayRoute = 'utilities/overlay/';
+const motionGuide = parseMarkdownDocument(await readFile(path.join(root, 'documentation/utilities/motion.md'), 'utf8'));
+const motionRoute = 'utilities/motion/';
+const motionStyleExport = model.packageManifest.exports?.['./styles/switch.css'];
+if (typeof motionStyleExport !== 'string' || !motionStyleExport.startsWith('./dist/')) {
+  throw new Error('Native Motion utility requires public @vyrnforge/web/styles/switch.css');
+}
+const motionStyleAsset = '/assets/vyrnforge-web/' + motionStyleExport.slice('./dist/'.length);
 const overlayStyleExport = model.packageManifest.exports?.['./styles/popover.css'];
 if (typeof overlayStyleExport !== 'string' || !overlayStyleExport.startsWith('./dist/')) {
   throw new Error('Native Overlay utility requires public @vyrnforge/web/styles/popover.css');
@@ -235,7 +242,10 @@ function navigationGroups() {
     },
     {
       label: 'Utilities',
-      items: [{ id: 'utility:overlay', title: 'Overlay', route: overlayRoute }],
+      items: [
+        { id: 'utility:overlay', title: 'Overlay', route: overlayRoute },
+        { id: 'utility:motion', title: 'Motion', route: motionRoute },
+      ],
     },
     {
       label: 'Components',
@@ -281,6 +291,8 @@ function searchablePages() {
     ...model.foundationPages.map((page) => ({ ...page, searchKind: 'Foundation' })),
     { id: 'overlay', title: 'Overlay utility', route: overlayRoute, searchKind: 'Utility',
       description: 'Shared native top layer, anchor positioning, elevation, theme and customization' },
+    { id: 'motion', title: 'Motion utility', route: motionRoute, searchKind: 'Utility',
+      description: 'Shared transitions, timing, easing, loading cadence and reduced-motion accessibility' },
     { id: 'components-index', title: 'Components', route: 'components/', searchKind: 'Components' },
     ...model.componentShowcasePages.map((page) => ({ ...page, searchKind: 'Component guide' })),
     ...(model.patternCatalog.length ? [{ id: 'patterns-index', title: 'Patterns', route: 'patterns/', searchKind: 'Patterns' }] : []),
@@ -589,6 +601,73 @@ function renderFoundation(page) {
       <section>
         <h2>Usage boundary</h2>
         ${extra}
+      </section>
+    </article>`,
+  });
+}
+
+function renderMotionUtility() {
+  const currentPageDirectory = pageDirectory(motionRoute);
+  const nativeExample = `<div data-vf-flow data-vf-flow-direction="inline" data-vf-flow-wrap="wrap" data-vf-flow-gap="2xl">
+    <div data-vf-flow data-vf-flow-gap="sm">
+      <strong>Default motion</strong>
+      <button type="button" data-vf-button data-vf-variant="secondary">Hover or focus</button>
+      <label data-vf-flow data-vf-flow-direction="inline" data-vf-flow-align="center" data-vf-flow-gap="sm">
+        <input id="vf-motion-default-switch" type="checkbox" role="switch" data-vf-switch> Enable option
+      </label>
+    </div>
+    <div data-vf-flow data-vf-flow-gap="sm" style="--vf-control-motion-duration: 80ms; --vf-motion-easing-standard: linear">
+      <strong>Scoped CSS override</strong>
+      <button type="button" data-vf-button data-vf-variant="secondary">Hover or focus</button>
+      <label data-vf-flow data-vf-flow-direction="inline" data-vf-flow-align="center" data-vf-flow-gap="sm">
+        <input id="vf-motion-custom-switch" type="checkbox" role="switch" data-vf-switch> Enable option
+      </label>
+    </div>
+  </div>`;
+  const sections = motionGuide.sections.map((section) => {
+    const id = 'motion-' + slugify(section.heading);
+    return `<section id="${id}" aria-labelledby="${id}-title">
+      <h2 id="${id}-title">${escapeHtml(section.heading)}</h2>
+      ${renderBlocks(section.blocks)}
+    </section>`;
+  }).join('\n');
+  return shell({
+    route: motionRoute,
+    title: motionGuide.title,
+    description: 'Shared VyrnForge motion tokens, transitions, loading and reduced-motion behavior.',
+    componentStyle: motionStyleAsset,
+    content: `<nav class="vf-docs-breadcrumbs" aria-label="Breadcrumb">
+      <ol data-vf-flow data-vf-flow-direction="inline" data-vf-flow-gap="xs">
+        <li><a data-vf-link href="${artifactHref(currentPageDirectory, nativeSitePath)}">Native Web</a></li>
+        <li><span aria-hidden="true">/</span> Utilities</li>
+        <li><span aria-hidden="true">/</span> <span aria-current="page">Motion</span></li>
+      </ol>
+    </nav>
+    <article class="vf-docs-article" data-vf-docs-native-motion-utility data-vf-flow data-vf-flow-gap="3xl">
+      <header class="vf-docs-component-header">
+        <p data-vf-text data-vf-text-variant="overline" class="vf-docs-eyebrow">Utilities</p>
+        <h1>${escapeHtml(motionGuide.title)}</h1>
+        ${renderBlocks(motionGuide.intro)}
+      </header>
+      <section aria-labelledby="motion-native-example-heading">
+        <h2 id="motion-native-example-heading">Native Web motion examples</h2>
+        <p>Actual public Button and Switch styles consume the same motion tokens. Try the controls with hover, keyboard focus, and reduced-motion preference.</p>
+        <div class="vf-docs-preview" data-vf-docs-motion-native-preview>${nativeExample}</div>
+        <details class="vf-docs-source-disclosure">
+          <summary>View example HTML</summary>
+          <pre data-vf-code-block tabindex="0"><code>${escapeHtml(nativeExample)}</code></pre>
+        </details>
+        <p><a data-vf-link href="${artifactHref(currentPageDirectory, channel + '/react/' + motionRoute)}">Open interactive React Motion playground</a></p>
+      </section>
+      ${sections}
+      <section aria-labelledby="motion-related-heading">
+        <h2 id="motion-related-heading">Related guidance</h2>
+        <ul>
+          <li><a data-vf-link href="${artifactHref(currentPageDirectory, routeTarget('foundations/tokens/'))}">Design tokens</a></li>
+          <li><a data-vf-link href="${artifactHref(currentPageDirectory, routeTarget('foundations/styling/'))}">Styling and CSS</a></li>
+          <li><a data-vf-link href="${artifactHref(currentPageDirectory, routeTarget(overlayRoute))}">Overlay utility</a></li>
+          <li><a data-vf-link href="${artifactHref(currentPageDirectory, routeTarget('api/components/button/'))}">Button API</a></li>
+        </ul>
       </section>
     </article>`,
   });
@@ -914,6 +993,7 @@ await cp(path.join(root, 'apps/docs/client.js'), path.join(outRoot, 'assets/docs
 await writePage('', renderHome());
 await writePage('components/', renderComponentsIndex());
 await writePage(overlayRoute, renderOverlayUtility());
+await writePage(motionRoute, renderMotionUtility());
 await writePage('patterns/', renderPatternsIndex());
 await writePage('api/components/', renderApiIndex());
 await writePage('api/patterns/', renderPatternApiIndex());
@@ -956,8 +1036,12 @@ const manifest = {
   api: model.componentApiPages.map((page) => ({ slug: page.route, title: page.title, publicEntrypoints: page.publicEntrypoints })),
   patternApi: model.patternApiPages.map((page) => ({ slug: page.route, title: page.title, publicEntrypoints: page.publicEntrypoints })),
   foundations: model.foundationPages.map((page) => ({ slug: page.route, title: page.title })),
-  utilities: [{ id: 'overlay', slug: overlayRoute, title: overlayGuide.title,
-    source: 'documentation/utilities/overlay.md' }],
+  utilities: [
+    { id: 'overlay', slug: overlayRoute, title: overlayGuide.title,
+      source: 'documentation/utilities/overlay.md' },
+    { id: 'motion', slug: motionRoute, title: motionGuide.title,
+      source: 'documentation/utilities/motion.md' },
+  ],
 };
 await writeFile(path.join(channelRoot, 'site-manifest.json'), `${JSON.stringify(manifest, null, 2)}\n`);
 await writeFile(path.join(channelRoot, 'index.html'), '<!doctype html><html lang="en"><head><meta charset="utf-8"><meta http-equiv="refresh" content="0;url=./native-web/"><title>VyrnForge documentation</title></head><body><a href="./native-web/">Open Native Web documentation</a></body></html>');
