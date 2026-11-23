@@ -92,9 +92,7 @@ test('public ToggleGroup CSS resolves canonical subtle surface and control radii
   await expect(group).toHaveCSS('border-top-width', '1px');
 });
 
-test('icon-only ToggleGroup options stay square and selected state is distinguishable', async ({
-  page,
-}) => {
+test('icon-only ToggleGroup options stay square and selected state is distinguishable', async ({ page }) => {
   test.skip(port !== 'web', 'Canonical Web choice styling contract');
   await page.goto('/components/toggle-group/web.html');
   const button = page.locator('#group').locator('#icon-choice');
