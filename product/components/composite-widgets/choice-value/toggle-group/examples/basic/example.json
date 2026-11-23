@@ -1,7 +1,7 @@
 {
   "id": "toggle-group/basic",
   "title": "Basic toggle group",
-  "description": "Toggle related formatting choices.",
+  "description": "Toggle formatting commands and square icon-only view choices with native aria-pressed.",
   "defaultFramework": "react",
   "frameworks": { "react": { "label": "React", "language": "tsx", "source": "react.tsx" } }
 }

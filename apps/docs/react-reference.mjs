@@ -434,7 +434,7 @@ function buttonExample(example, links) {
       title: id === 'basic' ? 'Checked-in React Button example' : 'React ' + example.title + ' example',
       src: links.buttonExamples[id], sandbox: 'allow-scripts',
       loading: id === 'basic' ? 'eager' : 'lazy',
-      style: { minBlockSize: id === 'joined' ? '26rem' : id === 'toggle' ? '17rem' :
+      style: { minBlockSize: id === 'joined' ? '26rem' : id === 'toggle' ? '26rem' :
         id === 'icons' ? '28rem' : id === 'density' ? '14rem' : '10rem' } }),
     h('details', { className: 'vf-docs-source-disclosure' },
       h('summary', null, id === 'basic' ? 'View checked-in React source' : 'View React TSX source'),

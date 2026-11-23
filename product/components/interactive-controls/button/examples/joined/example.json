@@ -1,7 +1,7 @@
 {
   "id": "button/joined",
   "title": "Independent and joined Button groups",
-  "description": "Separated actions with Flow and joined horizontal/vertical actions with a native named group; every Button remains separately focusable",
+  "description": "Separated commands, joined text and icon-only horizontal actions, and vertical actions with native group names and independent Tab stops",
   "defaultFramework": "react",
   "frameworks": {
     "react": {
