@@ -1752,7 +1752,7 @@ test('Text specimen examples retain semantics and reflow at narrow width with da
   const gallery = page.locator('[data-vf-docs-react-usage-gallery="text"]');
   await expect(gallery.locator('#react-typography-text-type-scale')).toBeVisible();
   // The secondary example rail is desktop-only; deep links still work at 320px.
-  await page.goto('/next/react/components/text/#react-typography-text-type-scale');
+  await page.evaluate(() => { window.location.hash = 'react-typography-text-type-scale'; });
   await expect(page).toHaveURL(/#react-typography-text-type-scale$/);
   const scale = page.locator('iframe[data-vf-docs-example-id="text/type-scale"]').contentFrame();
   await expect(scale.locator('[data-vf-docs-specimen]')).toHaveCount(18);
