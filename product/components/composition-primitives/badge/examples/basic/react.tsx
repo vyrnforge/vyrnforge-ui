@@ -1,15 +1,29 @@
 import { createRoot } from 'react-dom/client';
 import { Badge } from '@vyrnforge/react/badge';
+import { Button } from '@vyrnforge/react/button';
+import { Flow } from '@vyrnforge/react/layout';
+import { Icon } from '@vyrnforge/react/icon';
+import { mailIcon } from '@vyrnforge/icons/mail';
 import '@vyrnforge/web/styles/badge.css';
+import '@vyrnforge/web/styles/button.css';
+import '@vyrnforge/web/styles/layout.css';
+import '@vyrnforge/web/styles/icon.css';
 
 function App() {
-  return <div style={{ display: 'flex', gap: '1.5rem', padding: '1rem', alignItems: 'center', flexWrap: 'wrap' }}>
-    <Badge badgeContent={4} tone="accent">
-      <button type="button" aria-label="Inbox, 4 unread messages">Inbox</button>
-    </Badge>
-    <Badge badgeContent="NEW">
-      <button type="button" aria-label="Files, new upload available">Files</button>
-    </Badge>
-  </div>;
+  return (
+    <Flow direction="inline" wrap="wrap" gap="lg" align="center">
+      <Badge badgeContent={4} tone="accent">
+        <Button type="button" variant="secondary" aria-label="Inbox, 4 unread messages">
+          <Icon icon={mailIcon} /> Inbox
+        </Button>
+      </Badge>
+      <Badge badgeContent="NEW">
+        <Button type="button" variant="secondary" aria-label="Files, new upload available">
+          Files
+        </Button>
+      </Badge>
+    </Flow>
+  );
 }
+
 createRoot(document.querySelector('#root')!).render(<App />);

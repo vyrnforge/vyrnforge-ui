@@ -144,8 +144,13 @@ if (!badge?.showcaseAvailable || !badge.apiAvailable || !badge.sharedContent ||
     !badgeExamples.every((example) =>
       example.sourcePath.endsWith('/react.tsx') &&
       example.source.includes("'@vyrnforge/react/badge'") &&
-      example.source.includes("'@vyrnforge/web/styles/badge.css'"))) {
-  throw new Error('React Badge requires five source-backed examples, shared CSS and a public entrypoint');
+      example.source.includes("'@vyrnforge/web/styles/badge.css'") &&
+      example.source.includes("import { Button } from '@vyrnforge/react/button';") &&
+      example.source.includes("import { Flow } from '@vyrnforge/react/layout';") &&
+      example.source.includes("'@vyrnforge/web/styles/button.css'") &&
+      example.source.includes("'@vyrnforge/web/styles/layout.css'") &&
+      !/<(?:button|div|span)(?:\s|>)/u.test(example.source))) {
+  throw new Error('React Badge requires five public-component compositions (Badge, Button, Flow), shared CSS and source-backed examples');
 }
 const badgePublicSourcePath = path.join(root,
   path.dirname(path.dirname(badge.frameworkSourcePath)), 'index.ts');

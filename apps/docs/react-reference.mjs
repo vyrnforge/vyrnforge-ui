@@ -595,7 +595,7 @@ function badgeUsage(badge, links) {
           'When to use', 'Counts and visibility', 'Placement and overlap', 'Tones and sizing', 'Boundaries',
         ], 'react-badge-guidance'),
         ...guideSubsections(badge.frameworkContent, [
-          'React state and server rendering',
+          'Composition with existing VyrnForge components', 'React state and server rendering',
         ], 'react-badge-integration'),
       ]),
       guidePart(sections[3], [
