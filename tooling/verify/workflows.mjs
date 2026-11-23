@@ -173,16 +173,31 @@ forbidText(sources.docs, 'actions/checkout@', 'Documentation Pages promotion mus
 forbidText(sources.docs, 'pnpm install', 'Documentation Pages promotion must not reinstall the toolchain');
 forbidText(sources.docs, 'pnpm build:docs', 'Documentation Pages promotion must not rebuild validated docs');
 
-requireText(sources.retention, 'contents: write', 'Repository Retention needs repository contents write access to delete stale branch refs');
+const runHistory = sources.retention.split('\n  run-history:\n')[1]?.split('\n  stale-branches:\n')[0];
+const branchHistory = sources.retention.split('\n  stale-branches:\n')[1];
+if (!runHistory || !branchHistory) throw new Error('workflow contract: retention must have independent run-history and stale-branches jobs');
+
 requireText(sources.retention, 'pull_request_target:', 'Repository Retention must react to merged pull requests');
 requireText(sources.retention, 'schedule:', 'Repository Retention must have periodic cleanup');
 requireText(sources.retention, 'workflow_dispatch:', 'Repository Retention must support manual cleanup');
-requireText(sources.retention, 'actions: write', 'Repository Retention needs narrowly scoped Actions write access');
-requireText(sources.retention, 'pull-requests: read', 'Repository Retention needs pull-request read access to protect active branch heads and bases');
-requireText(sources.retention, 'issues: read', 'Repository Retention must read real GitHub Issues before deleting untracked branches');
-requireText(sources.retentionExecutor, "eventName === 'pull_request_target'", 'Repository Retention must sweep untracked branches after merged PRs');
-requireText(sources.retention, 'github.event.repository.default_branch', 'Repository Retention must execute trusted default-branch code');
-requireText(sources.retention, 'tooling/ci/retention-cleanup.mjs', 'Repository Retention must use the maintained cleanup implementation');
+requireText(runHistory, 'actions: write', 'Run-history cleanup requires Actions write access');
+requireText(runHistory, 'contents: read', 'Run-history cleanup must only read repository contents');
+forbidText(runHistory, 'contents: write', 'Run-history cleanup must not mutate repository branches');
+requireText(runHistory, 'pull-requests: read', 'Run-history cleanup must read merged PR history');
+forbidText(runHistory, 'issues: read', 'Run-history cleanup must not need issue-index privileges');
+requireText(runHistory, 'RETENTION_SCOPE: runs', 'Run-history job must request only run cleanup');
+requireText(runHistory, 'github.event.repository.default_branch', 'Run-history cleanup must use trusted default-branch code');
+requireText(runHistory, 'tooling/ci/retention-cleanup.mjs', 'Run-history job must use the maintained executor');
+requireText(branchHistory, 'contents: write', 'Branch cleanup requires repository ref write access');
+requireText(branchHistory, 'pull-requests: read', 'Branch cleanup must protect active pull requests');
+requireText(branchHistory, 'issues: read', 'Branch cleanup must check real GitHub Issues');
+forbidText(branchHistory, 'actions: write', 'Branch cleanup must not mutate workflow-run history');
+requireText(branchHistory, 'RETENTION_SCOPE: branches', 'Branch job must request only branch cleanup');
+requireText(branchHistory, 'github.event.repository.default_branch', 'Branch cleanup must use trusted default-branch code');
+requireText(branchHistory, 'tooling/ci/retention-cleanup.mjs', 'Branch job must use the maintained executor');
+requireText(sources.retentionExecutor, "scope === 'runs'", 'Run-history API calls must be gated by scope');
+requireText(sources.retentionExecutor, "scope === 'branches'", 'Stale-branch API calls must be gated by scope');
+requireText(sources.retentionExecutor, 'sweepRunHistory(', 'Run-history cleanup must refresh through the bounded sweeper');
 forbidText(sources.retention, 'pnpm install', 'Repository Retention must not install the product dependency graph');
 
 process.stdout.write('workflow contracts: immutable action refs, reusable targeted/browser validation, scoped evidence, measured prerequisite reuse, pnpm security, private rebuild posture, Nx ownership, broad safety nets, artifact lineage, and mutation boundaries ok\n');
