@@ -27,11 +27,6 @@ if (typeof motionStyleExport !== 'string' || !motionStyleExport.startsWith('./di
   throw new Error('Native Motion utility requires public @vyrnforge/web/styles/switch.css');
 }
 const motionStyleAsset = '/assets/vyrnforge-web/' + motionStyleExport.slice('./dist/'.length);
-const motionRecipeExport = model.packageManifest.exports?.['./styles/motion.css'];
-if (typeof motionRecipeExport !== 'string' || !motionRecipeExport.startsWith('./dist/')) {
-  throw new Error('Native Motion utility requires public @vyrnforge/web/styles/motion.css');
-}
-const motionRecipeAsset = '/assets/vyrnforge-web/' + motionRecipeExport.slice('./dist/'.length);
 const overlayStyleExport = model.packageManifest.exports?.['./styles/popover.css'];
 if (typeof overlayStyleExport !== 'string' || !overlayStyleExport.startsWith('./dist/')) {
   throw new Error('Native Overlay utility requires public @vyrnforge/web/styles/popover.css');
