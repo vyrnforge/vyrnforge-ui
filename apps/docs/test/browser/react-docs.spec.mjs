@@ -20,12 +20,13 @@ test('React pilot artifact is Product Graph-backed and SSR-rendered with public 
   expect(manifest.routes.filter((entry) => entry.view !== 'unavailable').map((entry) => entry.route)).toEqual([
     '', 'foundations/tokens/', 'foundations/themes/', 'foundations/color/', 'foundations/theme-builder/', 'foundations/dark-mode/',
     'foundations/right-to-left/', 'foundations/styling/', 'components/button/', 'api/components/button/', 'components/layout/', 'api/components/layout/',
-    'components/divider/', 'api/components/divider/', 'components/list/', 'api/components/list/',
+    'components/divider/', 'api/components/divider/',
     ...['text', 'code', 'kbd'].flatMap((id) => [
       'components/' + id + '/', 'api/components/' + id + '/',
     ]),
     'icons/', 'components/icon/', 'api/components/icon/',
     'components/image/', 'api/components/image/',
+    'components/list/', 'api/components/list/',
     'components/badge/', 'api/components/badge/',
     'components/avatar/', 'api/components/avatar/',
   ]);
