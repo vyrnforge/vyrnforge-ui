@@ -129,7 +129,7 @@ export function IconExplorer() {
       h('div', { className: 'vf-docs-icon-control' },
         h('label', { htmlFor: 'vf-icon-search' }, 'Search icons'),
         h(SearchFieldRoot, { className: 'vf-docs-icon-search-field',
-          value: query, onValueChange: setQuery },
+          'aria-label': 'Icon catalog search', value: query, onValueChange: setQuery },
           h(SearchFieldInput, { id: 'vf-icon-search', placeholder: 'Search by official name' }),
           h(SearchFieldClear, { 'aria-label': 'Clear icon search' }, 'Clear'))),
       chooser('vf-icon-category', 'Category', category, setCategory,
