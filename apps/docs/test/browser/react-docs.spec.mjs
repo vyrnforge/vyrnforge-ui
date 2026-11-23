@@ -13,13 +13,24 @@ test('React pilot artifact is Product Graph-backed and SSR-rendered with public 
   expect(manifest.button.sharedSourcePath).toBe(button.sharedSourcePath);
   expect(manifest.button.frameworkSourcePath).toBe(button.frameworkSourcePath);
   expect(manifest.button.publicEntrypoints).toContain('@vyrnforge/react/button');
+  expect(manifest.button.examples).toHaveLength(9);
+  expect(manifest.toggle).toMatchObject({
+    guideRoute: 'components/toggle-button/',
+    apiRoute: 'api/components/toggle-button/',
+    publicEntrypoints: ['@vyrnforge/react/toggle-button'],
+    frameworkSourcePath: 'product/components/interactive-controls/toggle-button/react/docs/index.md',
+  });
+  expect(manifest.toggle.examples.map(example => example.id)).toEqual(['toggle-button/basic']);
+  expect(readFileSync('dist/docs/next/react/examples/toggle-button/basic/index.html', 'utf8'))
+    .toContain('react-toggle-button-basic.js');
   expect(manifest.layout).toMatchObject({ guideOnly: false, api: true,
     publicEntrypoints: ['@vyrnforge/react/layout'], cssRecipeStyle: '@vyrnforge/web/styles/layout.css' });
   expect(manifest.layout.examples).toHaveLength(7);
   expect(manifest.layout.examples.map((example) => example.id)).toContain('layout/dividers');
   expect(manifest.routes.filter((entry) => entry.view !== 'unavailable').map((entry) => entry.route)).toEqual([
     '', 'foundations/tokens/', 'foundations/themes/', 'foundations/color/', 'foundations/theme-builder/', 'foundations/dark-mode/',
-    'foundations/right-to-left/', 'foundations/styling/', 'components/button/', 'api/components/button/', 'components/layout/', 'api/components/layout/',
+    'foundations/right-to-left/', 'foundations/styling/', 'components/button/', 'api/components/button/',
+    'components/toggle-button/', 'api/components/toggle-button/', 'components/layout/', 'api/components/layout/',
     'components/divider/', 'api/components/divider/',
     ...['text', 'code', 'kbd'].flatMap((id) => [
       'components/' + id + '/', 'api/components/' + id + '/',
@@ -515,6 +526,47 @@ test('React Button guide SSR hydrates and uses public Button, AppShell, SideNav 
   await expect(page.getByRole('navigation', { name: 'Documentation framework' })
     .getByRole('link', { name: 'Native Web' })).toHaveAttribute('href', '../../../native-web/components/button/');
   expect(errors).toEqual([]);
+});
+
+test('React Button-family guide shows joined groups, ToggleButton and density without overlapping choice semantics', async ({ page }) => {
+  await page.goto('/next/react/components/button/');
+  await expect(page.locator('[data-vf-docs-react-button-example]')).toHaveCount(9);
+  const joined = page.frameLocator('iframe[title="React Independent and joined Button groups example"]');
+  await expect(joined.getByRole('group', { name: 'Document actions' })).toBeVisible();
+  await joined.getByRole('button', { name: 'Copy' }).click();
+  await expect(joined.getByRole('status')).toHaveText('Copied');
+  await expect(joined.getByRole('button', { name: 'Archive' })).toBeDisabled();
+
+  const toggle = page.frameLocator('iframe[title="React ToggleButton pressed-state controls example"]');
+  const bold = toggle.getByRole('button', { name: 'Bold' });
+  await expect(bold).toHaveAttribute('aria-pressed', 'false');
+  await bold.click();
+  await expect(bold).toHaveAttribute('aria-pressed', 'true');
+  await expect(toggle.getByRole('status')).toHaveText('Bold: on');
+
+  const icons = page.frameLocator('iframe[title="React Icon-only, icon-with-text and busy actions example"]');
+  await expect(icons.getByRole('button', { name: 'Save bookmark', exact: true })).toHaveCount(2);
+  await expect(icons.getByRole('button', { name: 'Loading' })).toHaveAttribute('aria-busy', 'true');
+
+  const density = page.frameLocator('iframe[title="React Button sizes and inherited density example"]');
+  await density.getByRole('combobox', { name: 'Density' }).selectOption('compact');
+  await expect(density.locator('[data-vf-density="compact"]')).toHaveCount(1);
+});
+
+test('React ToggleButton has an independent native pressed-state guide and source-backed API', async ({ page }) => {
+  await page.goto('/next/react/components/toggle-button/');
+  await expect(page.locator('[data-vf-docs-react-toggle]')).toBeVisible();
+  const frame = page.frameLocator('iframe[title="React ToggleButton pressed-state example"]');
+  const bold = frame.getByRole('button', { name: 'Bold' });
+  await expect(bold).toHaveAttribute('aria-pressed', 'false');
+  await bold.click();
+  await expect(bold).toHaveAttribute('aria-pressed', 'true');
+  await expect(frame.getByRole('status')).toHaveText('Bold is on');
+  await frame.getByRole('button', { name: 'Reset Bold' }).click();
+  await expect(bold).toHaveAttribute('aria-pressed', 'false');
+  await page.goto('/next/react/api/components/toggle-button/');
+  await expect(page.locator('[data-vf-docs-react-api="toggle-button"]')).toContainText('ToggleButtonProps');
+  await expect(page.locator('[data-vf-docs-react-api="toggle-button"]')).toContainText('size?: ButtonSize');
 });
 
 test('React API reference renders public source-derived types and inline semantic code', async ({ page }) => {
