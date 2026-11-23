@@ -1,9 +1,17 @@
 # Branch retention
 
-The daily repository cleanup is deliberately conservative. A branch is eligible for automatic removal only when its head commit is at least seven days old, it is not protected, and **either** its commits are contained in the default branch (`ahead_by === 0`) **or** the branch SHA exactly matches the head SHA of a merged pull request into the default branch. The latter supports squash merges without treating a mere PR branch-name match as evidence.
+The repository cleanup removes an old branch **when it has no traceable GitHub Issue**. The stale threshold is seven days since the branch HEAD commit (not creation date). A closed pull request does **not** count as a GitHub Issue by itself. A stale branch without an issue can be deleted whether its commits were merged, squash-merged, unmerged, or ahead of the default branch. This is the explicit repository-maintenance policy adopted on 23 November 2026.
 
-The default branch, GitHub-protected branches, `release/*`, `hotfix/*`, same-repository heads/bases of open pull requests, and branches associated with any closed **unmerged** pull request are excluded. Unknown comparisons, unavailable metadata, and unmerged unique commits are never eligible for automatic deletion; review them manually.
+## Issue-link evidence
 
-The executor uses bounded API concurrency and retries temporary GitHub rate limits. It refreshes open PRs and verifies the branch ref SHA immediately before deletion to avoid removing work that moved while the report was built. One execution deletes at most 25 branches.
+Cleanup checks all GitHub Issues, including closed issues, without treating pull requests as issues. It preserves a branch when an existing issue is referenced in the branch name (for example `qa/...-1397`), in an issue title/body that includes the exact branch name, in a matching branch pull request's title/body, in the branch HEAD commit message, or when an issue explicitly references that pull request. Generic numeric text does not count unless its number resolves to a real GitHub Issue.
 
-Use the workflow-dispatch `dry_run` input (default `true`) to produce a report without removing records. Scheduled cleanup and merged-PR cleanup execute normally; the report records the candidate reasons and outcomes. GitHub permissions and branch rules remain an additional boundary.
+An incomplete issue index or unavailable commit metadata **never** authorizes deletion. The issue index is refreshed before executing deletions.
+
+## Non-negotiable protection
+
+The default branch, GitHub-protected branches, `release/*`, `hotfix/*`, and same-repository heads/bases of open PRs remain protected. Open PRs and branch SHA are rechecked immediately before each removal. Deleted branch names and their precise HEAD SHAs are included in the cleanup JSON report for traceability; deleting a Git ref is not a guarantee that GitHub has purged all underlying objects, PR refs, logs, or commit history.
+
+The scheduled workflow runs daily and deletes at most 25 old untracked branches in one execution. GitHub repository rules remain an additional enforcement boundary.
+
+A manual `workflow_dispatch` defaults to `dry_run: true`, emitting a deletion plan without removing records. Scheduled execution remains destructive for eligible branches. Merged-PR-triggered execution cleans run history only.
