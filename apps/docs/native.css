@@ -725,15 +725,69 @@
     margin-block-end: 0;
   }
 
-  .vf-docs-guide-subsection + .vf-docs-guide-subsection {
+  /* Keep the guide's headings scannable while letting readers choose the
+     amount of detailed guidance. Native details work without JavaScript. */
+  .vf-docs-guide-subsection {
     border-block-start: 1px solid var(--vf-color-border);
-    padding-block-start: var(--vf-space-lg);
+    padding-block: var(--vf-space-xs);
+  }
+
+  .vf-docs-guide-subsection + .vf-docs-guide-subsection {
+    padding-block-start: var(--vf-space-xs);
+  }
+
+  .vf-docs-guide-subsection > summary {
+    border-radius: var(--vf-control-radius);
+    color: var(--vf-color-text);
+    cursor: pointer;
+    padding: var(--vf-space-sm);
+  }
+
+  .vf-docs-guide-subsection > summary:hover,
+  .vf-docs-example-index > summary:hover,
+  .vf-docs-example-collapsible > summary:hover {
+    background: var(--vf-color-surface-hover);
   }
 
   .vf-docs-guide-subsection h3 {
-    color: var(--vf-color-text);
-    font-size: var(--vf-font-size-lg);
+    color: inherit;
+    display: inline;
+    font-size: var(--vf-font-size-md);
+    font-weight: var(--vf-font-weight-semibold);
     line-height: var(--vf-line-height-normal);
+  }
+
+  .vf-docs-guide-subsection-body {
+    min-inline-size: 0;
+    padding: var(--vf-space-sm) var(--vf-space-md) var(--vf-space-md);
+  }
+
+  .vf-docs-guide-subsection-body > :first-child {
+    margin-block-start: 0;
+  }
+
+  .vf-docs-example-index {
+    border-block: 1px solid var(--vf-color-border);
+    padding-block: var(--vf-space-xs);
+  }
+
+  .vf-docs-example-index > summary {
+    border-radius: var(--vf-control-radius);
+    color: var(--vf-color-text-muted);
+    cursor: pointer;
+    font-size: var(--vf-font-size-sm);
+    padding: var(--vf-space-sm);
+  }
+
+  .vf-docs-example-index .vf-docs-example-links {
+    padding-block: var(--vf-space-sm);
+  }
+
+  .vf-docs-guide-subsection > summary:focus-visible,
+  .vf-docs-example-index > summary:focus-visible,
+  .vf-docs-example-collapsible > summary:focus-visible {
+    outline: 2px solid var(--vf-color-focus-ring);
+    outline-offset: 2px;
   }
 
   .vf-docs-example-links ul {
@@ -769,7 +823,43 @@
   }
 
   .vf-docs-usage-guide .vf-docs-example-header {
-    padding: var(--vf-space-lg);
+    padding: var(--vf-space-md);
+  }
+
+  .vf-docs-usage-guide .vf-docs-example-header p {
+    font-size: var(--vf-font-size-sm);
+  }
+
+  .vf-docs-usage-guide .vf-docs-preview {
+    min-block-size: 0;
+    padding: var(--vf-space-md);
+  }
+
+  /* A compact Button gallery shows one working example initially. The rest
+     remain named, keyboard-operable, source-backed native disclosures. */
+  .vf-docs-example-collapsible > summary {
+    cursor: pointer;
+  }
+
+  .vf-docs-example-collapsible > summary::after {
+    color: var(--vf-color-text-muted);
+    content: "Show preview";
+    font-size: var(--vf-font-size-sm);
+    font-weight: var(--vf-font-weight-regular);
+  }
+
+  .vf-docs-example-collapsible[open] > summary::after {
+    content: "Hide preview";
+  }
+
+  .vf-docs-example-collapsible[open] > summary {
+    border-block-end: 1px solid var(--vf-color-border);
+  }
+
+  .vf-docs-example-collapsible .vf-docs-example-description {
+    font-size: var(--vf-font-size-sm);
+    margin: 0;
+    padding: var(--vf-space-md) var(--vf-space-lg);
   }
 
   .vf-docs-usage-guide .vf-docs-example-header h3 {
