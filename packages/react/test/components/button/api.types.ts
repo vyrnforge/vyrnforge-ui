@@ -4,6 +4,7 @@ const props: ButtonProps = {
   variant: 'secondary',
   size: 'lg',
   loading: true,
+  iconOnly: true,
   type: 'submit',
   disabled: false,
   name: 'save',
