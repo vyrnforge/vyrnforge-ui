@@ -1,7 +1,7 @@
 {
   "id": "button/icons",
-  "title": "Icon-only, icon-with-text and busy actions",
-  "description": "Compose the existing Icon inside Button; accessible names, busy and disabled states remain explicit",
+  "title": "Icon-only Button sizes, emphasis and states",
+  "description": "A square icon-only mode on native Button with ghost, secondary, primary, loading and disabled states plus a labeled icon/text action.",
   "defaultFramework": "react",
   "frameworks": {
     "react": {
