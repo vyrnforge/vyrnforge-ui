@@ -16,7 +16,7 @@ Anchored surfaces use browser-native CSS Anchor Positioning and a shared placeme
 
 ## Appearance and customization
 
-The canonical visual system lives in `@vyrnforge/web`, not documentation CSS or a framework-specific stylesheet. Load the public stylesheet for the chosen component. Configure themes and semantic tokens in your application scope; use CSS custom properties such as `--vf-shadow-popover` to override supported anchored-surface elevation. Choose shared `--vf-shadow-sm`, `--vf-shadow-md`, or `--vf-shadow-lg` values rather than hard-coded shadow colors. Do not rely on the unmerged proposal for Popover's default shadow as shipped behavior.
+The canonical visual system lives in `@vyrnforge/web`, not documentation CSS or a framework-specific stylesheet. Load the public stylesheet for the chosen component. Configure themes and semantic tokens in your application scope; use CSS custom properties such as `--vf-shadow-popover` to override supported anchored-surface elevation. Choose shared `--vf-shadow-sm`, `--vf-shadow-md`, or `--vf-shadow-lg` values rather than hard-coded shadow colors. Defaults vary by surface and theme; consult the current public component stylesheet instead of assuming one universal overlay shadow.
 
 ## Top layer, backdrop, and dismissal
 
