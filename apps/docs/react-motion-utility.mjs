@@ -4,12 +4,14 @@ import { Switch } from '@vyrnforge/react/switch';
 import { NativeSelect } from '@vyrnforge/react/native-select';
 import { Flow, AutoGrid } from '@vyrnforge/react/layout';
 import { Text } from '@vyrnforge/react/text';
-import { ThemeScope } from '@vyrnforge/react';
+import { Motion, ThemeScope } from '@vyrnforge/react';
 import { UtilitySections, renderUtilityInline } from './react-utility-content.mjs';
 
 const durations = [['default', 'Default · 120ms'], ['fast', 'Custom · 80ms'], ['none', 'Custom · 0ms']];
 const easings = [['standard', 'Standard'], ['linear', 'Linear override']];
 const themes = [['light', 'Light'], ['dark', 'Dark']];
+
+const entranceDurations = [['default', 'Default · 320ms'], ['fast', 'Fast · 200ms'], ['slow', 'Slow · 480ms']];
 
 const effects = [
   ['fade', 'Fade'], ['grow', 'Grow'], ['slide', 'Slide'],
@@ -48,6 +50,7 @@ function Source({ duration, easing }) {
 
 function MotionEffectsPlayground({ theme, variables }) {
   const [effect, setEffect] = useState('fade');
+  const [entranceDuration, setEntranceDuration] = useState('default');
   const [origin, setOrigin] = useState('block-end');
   const [direction, setDirection] = useState('ltr');
   const [target, setTarget] = useState('group');
@@ -60,18 +63,23 @@ function MotionEffectsPlayground({ theme, variables }) {
     h(Switch, { id: 'motion-effect-switch', checked,
       onChange: (event) => setChecked(event.currentTarget.checked) }),
     h('label', { htmlFor: 'motion-effect-switch' }, 'Option'));
-  const code = "import '@vyrnforge/web/styles/foundation.css';\n" +
-    '<div data-vf-motion="' + effect + '"' +
-    (['slide', 'fade-slide'].includes(effect) ? ' data-vf-motion-direction="' + origin + '"' : '') +
-    '>\n  {/* Your VyrnForge component(s) */}\n</div>\n' +
-    '// The element owns its presence; this CSS only decorates its entrance.';
+  const selectedDuration = entranceDuration === 'slow' ? 480 : entranceDuration === 'fast' ? 200 : undefined;
+  const code = "import { Motion, Button } from '@vyrnforge/react';\n" +
+    "import '@vyrnforge/web/styles/foundation.css';\n\n" +
+    '<Motion effect="' + effect + '"' +
+    (['slide', 'fade-slide'].includes(effect) ? ' direction="' + origin + '"' : '') +
+    (selectedDuration === undefined ? '' : ' duration={' + selectedDuration + '}') +
+    '>\n  <Button>Continue</Button>\n</Motion>\n' +
+    '// The application owns presence and exit; Motion decorates entrance.';
   return h(Flow, { as: 'section', gap: 'md', 'aria-labelledby': 'motion-effects-title',
     'data-vf-docs-motion-effects': '' },
     h(Text, { as: 'h2', variant: 'heading-md', id: 'motion-effects-title' }, 'Reusable entrance effects'),
-    h(Text, { as: 'p' }, 'Choose a CSS effect and apply it to different real components or a composition. Replay only restarts the visual demonstration; it does not create an animation runtime.'),
+    h(Text, { as: 'p' }, 'The public React Motion component wraps real components with shared Web CSS effects. Entrance timing defaults to 320ms; Button and Switch feedback remains at 120ms.'),
     h(AutoGrid, { minItemSize: '9rem', gap: 'md' },
       h(Setting, { id: 'motion-effect', label: 'Effect', value: effect, options: effects,
         onChange: (next) => { setEffect(next); setReplay(value => value + 1); } }),
+      h(Setting, { id: 'motion-entrance-duration', label: 'Entrance duration', value: entranceDuration,
+        options: entranceDurations, onChange: (next) => { setEntranceDuration(next); setReplay(value => value + 1); } }),
       h(Setting, { id: 'motion-target', label: 'Target', value: target, options: targets,
         onChange: (next) => { setTarget(next); setReplay(value => value + 1); } }),
       h(Setting, { id: 'motion-origin', label: 'Slide origin', value: origin, options: origins,
@@ -82,8 +90,8 @@ function MotionEffectsPlayground({ theme, variables }) {
       'Replay effect'),
     h(ThemeScope, { as: 'div', theme, dir: direction, style: variables,
       className: 'vf-docs-motion-demo-stage', 'data-vf-docs-motion-demo-stage': '' },
-      h('div', { key: [effect, origin, direction, target, replay].join(':'),
-        'data-vf-motion': effect, 'data-vf-motion-direction': origin,
+      h(Motion, { key: [effect, origin, direction, target, entranceDuration, replay].join(':'),
+        effect, direction: origin, duration: selectedDuration,
         'data-vf-docs-motion-preview': '', 'data-vf-motion-sample': target },
         h(Flow, { gap: 'sm', align: 'center' },
           target === 'button' ? sampleButton() :
@@ -97,7 +105,7 @@ function MotionEffectsPlayground({ theme, variables }) {
       h('summary', null, 'View reusable CSS effect usage'),
       h('pre', { tabIndex: 0, 'data-vf-code-block': '' }, h('code', null, code))),
     h(Text, { as: 'p', variant: 'body-sm' },
-      'Entrance only. For exit, hidden/present state, dismissal, or focus management, follow the individual component contract. Reduced motion suppresses these effects automatically.'));
+      'Entrance only. React Motion renders a native wrapper and accepts effect, direction and duration props. For exit, presence, dismissal and focus, follow the individual component contract; reduced motion suppresses these effects automatically.'));
 }
 
 export function MotionUtility({ guide, links }) {
@@ -124,7 +132,7 @@ export function MotionUtility({ guide, links }) {
       h(Flow, { as: 'section', gap: 'md', 'aria-labelledby': 'motion-playground-title' },
         h(Text, { as: 'h2', variant: 'heading-md', id: 'motion-playground-title' },
           'Interactive motion playground'),
-        h(Text, { as: 'p' }, 'Adjust inherited tokens and interact with actual VyrnForge Button, Switch and loading states. The preview is not a separate Motion component.'),
+        h(Text, { as: 'p' }, 'Adjust inherited tokens and interact with actual VyrnForge Button, Switch and loading states. The effects preview uses the public React Motion wrapper, with shared Web CSS and no animation runtime.'),
         h(AutoGrid, { minItemSize: '11rem', gap: 'md', className: 'vf-docs-motion-controls' },
           h(Setting, { id: 'motion-duration', label: 'Control transition duration',
             value: duration, options: durations, onChange: setDuration }),

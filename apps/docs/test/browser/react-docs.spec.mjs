@@ -2187,7 +2187,7 @@ test('Motion utility is shared, discoverable and binds real public Web tokens', 
     id: 'motion', route: 'utilities/motion/',
     source: 'documentation/utilities/motion.md',
     publicComponents: ['button', 'switch'],
-    tokens: ['--vf-control-motion-duration', '--vf-motion-easing-standard',
+    tokens: ['--vf-control-motion-duration', '--vf-motion-duration-enter', '--vf-motion-easing-standard',
       '--vf-motion-duration-loading-spin', '--vf-motion-duration-loading-shimmer',
       '--vf-motion-easing-loading'],
   });
@@ -2279,6 +2279,8 @@ test('Motion utility keeps its live controls usable at 320px and 200% text', asy
   await stage.scrollIntoViewIfNeeded();
   await stage.getByRole('button', { name: 'Run action' }).click();
   await expect(stage.locator('[data-vf-docs-motion-feedback]')).toContainText('Actions: 1');
+  await page.locator('#motion-entrance-duration').selectOption('slow');
+  await expect(page.locator('[data-vf-docs-motion-preview]')).toHaveCSS('animation-duration', '0.48s');
   const widths = await page.evaluate(() => [document.documentElement.scrollWidth, document.documentElement.clientWidth]);
   expect(widths[0]).toBeLessThanOrEqual(widths[1] + 1);
   await page.screenshot({ path: testInfo.outputPath('motion-react-320px-200pct.png') });
@@ -2297,6 +2299,10 @@ test('Motion effects expose six reusable real-Web CSS recipes on multiple React 
     ['fade-slide', 'vf-motion-enter-fade-slide'],
     ['pop', 'vf-motion-enter-pop'],
   ];
+  await expect(sample).toHaveCSS('animation-duration', '0.32s');
+  await page.locator('#motion-entrance-duration').selectOption('slow');
+  await expect(sample).toHaveCSS('animation-duration', '0.48s');
+  await page.locator('#motion-entrance-duration').selectOption('default');
   for (const [effect, animation] of list) {
     await page.locator('#motion-effect').selectOption(effect);
     await expect(sample).toHaveAttribute('data-vf-motion', effect);
@@ -2340,6 +2346,7 @@ test('Motion effects respect reduced motion even with consumer timing overrides'
   await page.goto('/next/react/utilities/motion/');
   await page.locator('#motion-duration').selectOption('fast');
   await page.locator('#motion-effect').selectOption('zoom');
+  await page.locator('#motion-entrance-duration').selectOption('slow');
   const sample = page.locator('[data-vf-docs-motion-preview]');
   await expect(sample).toHaveCSS('animation-name', 'none');
   await expect(sample.getByRole('button', { name: 'Sample action' })).toBeVisible();

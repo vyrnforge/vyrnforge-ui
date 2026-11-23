@@ -18,7 +18,7 @@ const webModel = compileFrameworkDocumentation('native-web', root);
 const nativeModel = compileNativeDocumentation(root);
 const overlayGuide = parseMarkdownDocument(await readFile(path.join(root, 'documentation/utilities/overlay.md'), 'utf8'));
 const motionGuide = parseMarkdownDocument(await readFile(path.join(root, 'documentation/utilities/motion.md'), 'utf8'));
-const motionTokenNames = ['--vf-control-motion-duration', '--vf-motion-easing-standard',
+const motionTokenNames = ['--vf-control-motion-duration', '--vf-motion-duration-enter', '--vf-motion-easing-standard',
   '--vf-motion-duration-loading-spin', '--vf-motion-duration-loading-shimmer', '--vf-motion-easing-loading'];
 const motionTokenCSS = await readFile(path.join(root, 'packages/web/src/styles/tokens.css'), 'utf8');
 for (const name of motionTokenNames) {

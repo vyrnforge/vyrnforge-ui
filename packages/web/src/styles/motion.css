@@ -5,13 +5,13 @@
  *
  * Usage: <div data-vf-motion="fade">...</div>
  *        <div data-vf-motion="slide" data-vf-motion-direction="inline-start">...</div>
- * Customization: --vf-control-motion-duration, --vf-motion-easing-standard,
+ * Customization: --vf-motion-duration-enter, --vf-motion-easing-standard,
  *                --vf-motion-distance (length; slide only).
  */
 @layer vyrnforge.foundation {
   :where([data-vf-motion="fade"], [data-vf-motion="grow"], [data-vf-motion="slide"],
     [data-vf-motion="zoom"], [data-vf-motion="fade-slide"], [data-vf-motion="pop"]) {
-    animation-duration: var(--vf-control-motion-duration, 120ms);
+    animation-duration: var(--vf-motion-duration-enter, 320ms);
     animation-timing-function: var(--vf-motion-easing-standard, cubic-bezier(0.2, 0, 0, 1));
     animation-fill-mode: both;
     animation-iteration-count: 1;

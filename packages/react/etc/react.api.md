@@ -2630,6 +2630,23 @@ export const MenuTrigger: ForwardRefExoticComponent<Omit<DetailedHTMLProps<Butto
 // @public (undocumented)
 export type MenuTriggerProps = ComponentPropsWithoutRef<'button'>;
 
+// @public
+export const Motion: ForwardRefExoticComponent<MotionProps & RefAttributes<HTMLElement>>;
+
+// @public (undocumented)
+export type MotionDirection = 'block-start' | 'block-end' | 'inline-start' | 'inline-end';
+
+// @public (undocumented)
+export type MotionEffect = 'fade' | 'grow' | 'slide' | 'zoom' | 'fade-slide' | 'pop';
+
+// @public (undocumented)
+export interface MotionProps extends Omit<HTMLAttributes<HTMLElement>, 'color'> {
+    as?: ThemeElement;
+    direction?: MotionDirection;
+    duration?: number;
+    effect?: MotionEffect;
+}
+
 // @public (undocumented)
 export const MultiSelectContent: ForwardRefExoticComponent<Omit<Omit<DetailedHTMLProps<HTMLAttributes<HTMLDivElement>, HTMLDivElement>, "ref">, "id"> & RefAttributes<HTMLDivElement>>;
 
@@ -4900,6 +4917,7 @@ export const tokens: Readonly<{
     }>;
     motion: Readonly<{
         controlDuration: `var(--vf-${string})`;
+        entranceDuration: `var(--vf-${string})`;
         loadingSpinDuration: `var(--vf-${string})`;
         loadingShimmerDuration: `var(--vf-${string})`;
         loadingEasing: `var(--vf-${string})`;

@@ -1,6 +1,6 @@
 # Motion utility
 
-Motion is the shared timing, easing, loading cadence, and reduced-motion foundation for VyrnForge. It is not a generic `Motion` component, a second animation framework, a page transition manager, or a global JavaScript controller. Use canonical `@vyrnforge/web` CSS tokens and the behavior already owned by each component, across Native Web, React, Angular, Vue, and Elements.
+Motion is the shared timing, easing, loading cadence, and reduced-motion foundation for VyrnForge. Canonical `@vyrnforge/web` CSS defines its effects across Native Web, React, Angular, Vue, and Elements. React additionally offers a typed functional `<Motion>` wrapper; it is not a second animation framework, a page transition manager, or a global JavaScript controller.
 
 ## What belongs in Motion
 
@@ -11,7 +11,8 @@ Motion is the shared timing, easing, loading cadence, and reduced-motion foundat
 
 ## Existing reusable tokens
 
-- `--vf-control-motion-duration` — default `120ms`; the foundation remaps it to `0ms` under `prefers-reduced-motion: reduce`.
+- `--vf-control-motion-duration` — default `120ms` for interactive control feedback; the foundation remaps it to `0ms` under `prefers-reduced-motion: reduce`.
+- `--vf-motion-duration-enter` — default `320ms` for one-shot entrance effects, independent of control feedback.
 - `--vf-motion-easing-standard` — default `cubic-bezier(0.2, 0, 0, 1)` for control transitions.
 - `--vf-motion-duration-loading-spin` — default `700ms` for the shared spinner.
 - `--vf-motion-duration-loading-shimmer` — default `1400ms` for a structured loading placeholder.
@@ -36,14 +37,25 @@ Load the existing public foundation stylesheet `@vyrnforge/web/styles/foundation
 <div data-vf-motion="slide" data-vf-motion-direction="inline-start">
   <button type="button">Action</button>
 </div>
-<div data-vf-motion="zoom" style="--vf-control-motion-duration: 220ms">
+<div data-vf-motion="zoom" style="--vf-motion-duration-enter: 420ms">
   <p>Contextual information</p>
 </div>
 ```
 
-These examples are illustrative HTML; application bundlers should import the public foundation stylesheet using the package entrypoint, not a literal placeholder URL. For React or other framework ports, place the same attributes on a native wrapper and load canonical Web CSS. No React `Motion` component is required.
+These examples are illustrative HTML; application bundlers should import the public foundation stylesheet using the package entrypoint, not a literal placeholder URL. For Native Web, Angular, Vue, and Elements, the same data attributes remain available on native wrappers. React consumers can instead use the typed public component:
 
-The optional `data-vf-motion-direction` applies to `slide` and `fade-slide`. Supported values are `block-start`, `block-end` (default), `inline-start`, and `inline-end`; inline directions automatically flip in RTL. Set `--vf-motion-distance` on the element or its parent to customize the slide distance (CSS length; default `--vf-space-sm`). Motion uses the existing public `--vf-control-motion-duration` and `--vf-motion-easing-standard` tokens, and stops completely under `prefers-reduced-motion: reduce` regardless of a consumer duration override.
+```tsx
+import { Motion, Button } from '@vyrnforge/react';
+import '@vyrnforge/web/styles/foundation.css';
+
+<Motion effect="fade-slide" direction="inline-start" duration={420}>
+  <Button>Continue</Button>
+</Motion>
+```
+
+`Motion` is a React functional component with a native semantic wrapper (`as` defaults to `div`), normal React children and native attributes, forwarded ref, and typed `effect`, `direction`, and optional numeric `duration` (milliseconds). Omit `duration` to inherit the shared entrance duration token of 320ms. It does not automatically install CSS or control exit/presence. The semantic effect vocabulary remains shared across frameworks.
+
+The optional `data-vf-motion-direction` applies to `slide` and `fade-slide`. Supported values are `block-start`, `block-end` (default), `inline-start`, and `inline-end`; inline directions automatically flip in RTL. Set `--vf-motion-distance` on the element or its parent to customize the slide distance (CSS length; default `--vf-space-sm`). Entrance uses the dedicated public `--vf-motion-duration-enter` and existing `--vf-motion-easing-standard` easing tokens, independent of control transitions, and stops completely under `prefers-reduced-motion: reduce` regardless of a consumer duration override.
 
 Each recipe runs once when the element's animation starts. An application may replay it by inserting the element again; replaying by remounting a focusable element can itself move focus, so preserve semantics and focus deliberately. These recipes do not animate *exit*, wait for animation completion, set `display`, or control an element's accessibility/presence state. Do not attach them to a component that already owns an animation on the same element (for example, a busy spinner); wrap that component instead.
 
