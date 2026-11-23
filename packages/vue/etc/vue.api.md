@@ -2177,7 +2177,7 @@ type: BooleanConstructor;
 default: boolean;
 };
 size: {
-type: PropType<ButtonSize>;
+type: PropType<"sm" | "md" | "lg">;
 default: string;
 };
 }>, () => VNode<RendererNode, RendererElement, {
@@ -2192,7 +2192,7 @@ type: BooleanConstructor;
 default: boolean;
 };
 size: {
-type: PropType<ButtonSize>;
+type: PropType<"sm" | "md" | "lg">;
 default: string;
 };
 }>> & Readonly<{
@@ -2201,7 +2201,7 @@ onPressedChange?: (...args: any[]) => any;
 }>, {
 pressed: boolean | undefined;
 defaultPressed: boolean;
-size: ButtonSize;
+size: "sm" | "md" | "lg";
 }, {}, {}, {}, string, ComponentProvideOptions, true, {}, any>;
 
 // @public (undocumented)

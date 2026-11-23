@@ -4796,7 +4796,7 @@ export interface ToggleButtonProps extends Omit<ButtonHTMLAttributes<HTMLButtonE
     // (undocumented)
     pressed?: boolean;
     // (undocumented)
-    size?: ButtonSize;
+    size?: 'sm' | 'md' | 'lg';
 }
 
 // @public (undocumented)

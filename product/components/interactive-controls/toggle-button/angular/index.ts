@@ -1,5 +1,4 @@
 import { Directive, ElementRef, HostListener, inject, input, model } from '@angular/core';
-import type { ButtonSize } from '../../button/angular/index.js';
 
 @Directive({
   selector: 'button[vfToggleButton]',
@@ -14,7 +13,7 @@ import type { ButtonSize } from '../../button/angular/index.js';
 })
 export class VfToggleButtonDirective {
   readonly pressed = model(false);
-  readonly size = input<ButtonSize>('md');
+  readonly size = input<'sm' | 'md' | 'lg'>('md');
   readonly type = input<'button' | 'submit' | 'reset'>('button');
   private readonly element = inject<ElementRef<HTMLButtonElement>>(ElementRef);
 

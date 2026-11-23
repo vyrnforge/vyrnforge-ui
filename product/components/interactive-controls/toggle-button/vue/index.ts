@@ -1,6 +1,5 @@
 import { defineComponent, h, ref } from 'vue';
 import type { PropType } from 'vue';
-import type { ButtonSize } from '../../button/vue/index.js';
 
 function callClickListener(listener: unknown, event: MouseEvent): void {
   if (Array.isArray(listener)) {
@@ -16,7 +15,7 @@ export const ToggleButton = defineComponent({
   props: {
     pressed: { type: Boolean as PropType<boolean | undefined>, default: undefined },
     defaultPressed: { type: Boolean, default: false },
-    size: { type: String as PropType<ButtonSize>, default: 'md' },
+    size: { type: String as PropType<'sm' | 'md' | 'lg'>, default: 'md' },
   },
   emits: ['update:pressed', 'pressedChange'],
   setup(props, { attrs, emit, slots }) {

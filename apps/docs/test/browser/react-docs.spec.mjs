@@ -566,7 +566,7 @@ test('React ToggleButton has an independent native pressed-state guide and sourc
   await expect(bold).toHaveAttribute('aria-pressed', 'false');
   await page.goto('/next/react/api/components/toggle-button/');
   await expect(page.locator('[data-vf-docs-react-api="toggle-button"]')).toContainText('ToggleButtonProps');
-  await expect(page.locator('[data-vf-docs-react-api="toggle-button"]')).toContainText('size?: ButtonSize');
+  await expect(page.locator('[data-vf-docs-react-api="toggle-button"]')).toContainText("size?: 'sm' | 'md' | 'lg'");
 });
 
 test('React API reference renders public source-derived types and inline semantic code', async ({ page }) => {

@@ -3429,7 +3429,7 @@ export class VfToggleButtonDirective {
     // (undocumented)
     readonly pressed: ModelSignal<boolean>;
     // (undocumented)
-    readonly size: InputSignal<ButtonSize>;
+    readonly size: InputSignal<"sm" | "md" | "lg">;
     // (undocumented)
     readonly type: InputSignal<"button" | "submit" | "reset">;
     // (undocumented)

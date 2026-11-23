@@ -1,12 +1,11 @@
 import { createElement, forwardRef, useState } from 'react';
 import type { ButtonHTMLAttributes, MouseEvent } from 'react';
-import type { ButtonSize } from '../../button/react/index.js';
 
 export interface ToggleButtonProps extends Omit<ButtonHTMLAttributes<HTMLButtonElement>, 'aria-pressed'> {
   pressed?: boolean;
   defaultPressed?: boolean;
   /** Shares the Button family size axis; does not change pressed semantics. */
-  size?: ButtonSize;
+  size?: 'sm' | 'md' | 'lg';
   onPressedChange?: (pressed: boolean, event: MouseEvent<HTMLButtonElement>) => void;
 }
 
