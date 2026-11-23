@@ -27,6 +27,11 @@ if (typeof motionStyleExport !== 'string' || !motionStyleExport.startsWith('./di
   throw new Error('Native Motion utility requires public @vyrnforge/web/styles/switch.css');
 }
 const motionStyleAsset = '/assets/vyrnforge-web/' + motionStyleExport.slice('./dist/'.length);
+const motionRecipeExport = model.packageManifest.exports?.['./styles/motion.css'];
+if (typeof motionRecipeExport !== 'string' || !motionRecipeExport.startsWith('./dist/')) {
+  throw new Error('Native Motion utility requires public @vyrnforge/web/styles/motion.css');
+}
+const motionRecipeAsset = '/assets/vyrnforge-web/' + motionRecipeExport.slice('./dist/'.length);
 const overlayStyleExport = model.packageManifest.exports?.['./styles/popover.css'];
 if (typeof overlayStyleExport !== 'string' || !overlayStyleExport.startsWith('./dist/')) {
   throw new Error('Native Overlay utility requires public @vyrnforge/web/styles/popover.css');
@@ -327,7 +332,9 @@ function searchMarkup(currentPageDirectory) {
 
 function styleLinks(currentPageDirectory, componentStyle = null) {
   const assets = [...model.shellStyles.map((entry) => entry.assetPath)];
-  if (componentStyle && !assets.includes(componentStyle)) assets.push(componentStyle);
+  for (const extra of (Array.isArray(componentStyle) ? componentStyle : componentStyle ? [componentStyle] : [])) {
+    if (!assets.includes(extra)) assets.push(extra);
+  }
   return assets.map((assetPath) => `  <link rel="stylesheet" href="${escapeHtml(artifactHref(currentPageDirectory, assetPath))}">`).join('\n');
 }
 
@@ -635,7 +642,7 @@ function renderMotionUtility() {
     route: motionRoute,
     title: motionGuide.title,
     description: 'Shared VyrnForge motion tokens, transitions, loading and reduced-motion behavior.',
-    componentStyle: motionStyleAsset,
+    componentStyle: [motionStyleAsset, motionRecipeAsset],
     content: `<nav class="vf-docs-breadcrumbs" aria-label="Breadcrumb">
       <ol data-vf-flow data-vf-flow-direction="inline" data-vf-flow-gap="xs">
         <li><a data-vf-link href="${artifactHref(currentPageDirectory, nativeSitePath)}">Native Web</a></li>
