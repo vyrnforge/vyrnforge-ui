@@ -123,6 +123,7 @@ export const tokens = Object.freeze({
   }),
   motion: Object.freeze({
     controlDuration: reference('--vf-control-motion-duration'),
+    entranceDuration: reference('--vf-motion-duration-enter'),
     loadingSpinDuration: reference('--vf-motion-duration-loading-spin'),
     loadingShimmerDuration: reference('--vf-motion-duration-loading-shimmer'),
     loadingEasing: reference('--vf-motion-easing-loading'),

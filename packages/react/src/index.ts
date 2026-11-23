@@ -1,4 +1,6 @@
 export { colors, tokens, toneStyle, ThemeScope } from './internal/theme.js';
+export { Motion } from './internal/motion.js';
+export type { MotionDirection, MotionEffect, MotionProps } from './internal/motion.js';
 export type { ColorRole, TextTone, ThemeColorOverrides, ThemeElement, ThemeName, ThemeScopeProps } from './internal/theme.js';
 export { Badge } from './components/badge/index.js';
 export type { BadgeProps, BadgeTone, BadgeSize, BadgeVariant, BadgeOverlap, BadgeAnchorOrigin } from './components/badge/index.js';
