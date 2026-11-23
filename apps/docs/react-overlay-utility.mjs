@@ -5,6 +5,7 @@ import { Flow, AutoGrid } from '@vyrnforge/react/layout';
 import { NativeSelect } from '@vyrnforge/react/native-select';
 import { ThemeScope } from '@vyrnforge/react';
 import { UtilitySections, renderUtilityInline } from './react-utility-content.mjs';
+import { reactConsumerSections } from './react-content-policy.mjs';
 import { PopoverRoot, PopoverTrigger, PopoverContent } from '@vyrnforge/react/popover';
 import { TooltipRoot, TooltipTrigger, TooltipContent } from '@vyrnforge/react/tooltip';
 import { PreviewCardRoot, PreviewCardTrigger, PreviewCardContent } from '@vyrnforge/react/preview-card';
@@ -50,7 +51,7 @@ function Source({ kind, placement, theme, elevation, direction }) {
   };
   const example = {
     popover: '<PopoverRoot placement="' + placement + '">\n' +
-      '  <PopoverTrigger aria-label="Open Popover" data-vf-button="" data-vf-variant="secondary">Open</PopoverTrigger>\n' +
+      '  <PopoverTrigger aria-label="Open Popover">Open</PopoverTrigger>\n' +
       '  <PopoverContent aria-label="Details">Contextual content</PopoverContent>\n' +
       '</PopoverRoot>',
     tooltip: '<TooltipRoot placement="' + placement + '">\n' +
@@ -79,7 +80,7 @@ function Source({ kind, placement, theme, elevation, direction }) {
     (kind === 'popover' ? '' : "import { Button } from '@vyrnforge/react/button';\n") +
     'import { ' + names[kind] + " } from '@vyrnforge/react/" + kind + "';\n" +
     "import '@vyrnforge/web/styles/" + kind + ".css';\n" +
-    "import '@vyrnforge/web/styles/button.css';\n\n" +
+    (kind === 'popover' ? '\n' : "import '@vyrnforge/web/styles/button.css';\n\n") +
     'export default function Example() {\n' +
     (modal ? '  const [open, setOpen] = useState(false);\n' : '') +
     '  return (\n' +
@@ -108,7 +109,7 @@ export function OverlayUtility({ guide, links }) {
   let example;
   if (kind === 'popover') {
     example = h(PopoverRoot, { placement },
-      h(PopoverTrigger, { 'aria-label': 'Open Popover', 'data-vf-button': '', 'data-vf-variant': 'secondary' }, 'Open'),
+      h(PopoverTrigger, { 'aria-label': 'Open Popover' }, 'Open'),
       h(PopoverContent, { 'aria-label': 'Overlay utility details' },
         h(Flow, { gap: 'sm' },
           h(Text, { as: 'strong' }, 'Details'),
@@ -135,7 +136,7 @@ export function OverlayUtility({ guide, links }) {
       h(DialogRoot, { open: dialogOpen, onOpenChange: setDialogOpen },
         h(DialogTitle, null, 'Modal dialog'),
         h(DialogBody, null, h(Text, { as: 'p' }, 'This uses native dialog top-layer and focus behavior.')),
-        h(DialogClose, { 'data-vf-button': '', 'data-vf-variant': 'secondary' }, 'Close Dialog')));
+        h(DialogClose, null, 'Close Dialog')));
   } else {
     example = h(Flow, { gap: 'sm', align: 'center' },
       h(Button, { type: 'button', variant: 'secondary',
@@ -143,7 +144,7 @@ export function OverlayUtility({ guide, links }) {
       h(DrawerRoot, { open: drawerOpen, onOpenChange: setDrawerOpen, placement: 'end' },
         h(DrawerTitle, null, 'Modal drawer'),
         h(DrawerBody, null, h(Text, { as: 'p' }, 'A modal surface at the logical end edge.')),
-        h(DrawerClose, { 'data-vf-button': '', 'data-vf-variant': 'secondary' }, 'Close Drawer')));
+        h(DrawerClose, null, 'Close Drawer')));
   }
 
   return h('div', { className: 'vf-docs-content-grid vf-docs-usage-guide-layout',
@@ -187,18 +188,18 @@ export function OverlayUtility({ guide, links }) {
         'The local preview overrides only public semantic CSS custom properties. Modal backdrop, focus, and dismissal policies stay with the selected component.')),
     ...UtilitySections({ guide, prefix: 'overlay-' }),
     h(Flow, { as: 'section', gap: 'sm', 'aria-labelledby': 'overlay-component-links' },
-      h(Text, { as: 'h2', variant: 'heading-md', id: 'overlay-component-links' }, 'Individual component references'),
+      h(Text, { as: 'h2', variant: 'heading-md', id: 'overlay-component-links' }, 'React component sources'),
       h(Text, { as: 'p' },
-        'Each surface has its own public contract and component reference. The links below open available Native Web API references while the full React guides are being built.'),
+        'Each surface has its own public React API, but dedicated React API guide pages are not yet available. These links open the real React implementation sources rather than silently switching to Native Web.'),
       h(Flow, { as: 'ul', gap: 'xs' },
         ...componentNames.map(([id, label]) => h('li', { key: id },
-          h('a', { href: links.overlayComponentApi[id], 'data-vf-link': '' }, label + ' API')))))),
+          h('a', { href: links.overlayComponentSource[id], 'data-vf-link': '' }, label + ' React source')))))),
   h('aside', { className: 'vf-docs-toc-region' },
     h('nav', { className: 'vf-docs-toc', 'aria-label': 'On this page' },
       h('p', null, 'On this page'),
       h('ol', null,
         h('li', null, h('a', { href: '#overlay-playground-title' }, 'Live playground')),
-        ...guide.sections.map((section) => h('li', { key: section.heading },
+        ...reactConsumerSections(guide).map((section) => h('li', { key: section.heading },
           h('a', { href: '#overlay-' + section.heading.toLowerCase().replace(/[^a-z0-9]+/g, '-') },
             section.heading))),
         h('li', null, h('a', { href: '#overlay-component-links' }, 'Component references'))))));

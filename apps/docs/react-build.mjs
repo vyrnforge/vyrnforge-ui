@@ -361,8 +361,13 @@ function linksFor(route) {
     overlay: relative(dir, react + 'utilities/overlay/', true),
     motion: relative(dir, react + 'utilities/motion/', true),
     motionButton: relative(dir, react + 'components/button/', true),
-    overlayComponentApi: Object.fromEntries(overlayComponentIds.map((id) =>
-      [id, relative(dir, native + 'api/components/' + id + '/', true)])),
+    overlayComponentSource: Object.fromEntries(overlayComponentIds.map((id) => {
+      const owner = reactModel.componentCatalog.find((entry) => entry.id === id);
+      if (!owner?.apiAvailable || !owner.frameworkSourcePath?.endsWith('/react/index.ts')) {
+        throw new Error('Missing public React overlay implementation for ' + id);
+      }
+      return [id, 'https://github.com/vyrnforge/vyrnforge-ui/blob/main/' + owner.frameworkSourcePath];
+    })),
     self: relative(dir, react + route, true),
     guide: relative(dir, react + 'components/button/', true),
     toggle: {
