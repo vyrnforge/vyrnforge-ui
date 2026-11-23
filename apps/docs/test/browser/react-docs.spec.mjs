@@ -2048,7 +2048,11 @@ test('Overlay utility exercises native popover, tooltip, preview, Dialog and Dra
   await page.locator('#overlay-direction').selectOption('rtl');
   await expect(stage).toHaveAttribute('dir', 'rtl');
   await expect(stage).toHaveAttribute('data-vf-theme', 'dark');
-  await expect(stage).toHaveCSS('--vf-shadow-popover', 'var(--vf-shadow-lg)');
+  const shadows = await stage.evaluate((element) => {
+    const css = getComputedStyle(element);
+    return [css.getPropertyValue('--vf-shadow-popover').trim(), css.getPropertyValue('--vf-shadow-lg').trim()];
+  });
+  expect(shadows[0]).toBe(shadows[1]);
   await stage.scrollIntoViewIfNeeded();
   await stage.getByRole('button', { name: 'Open Popover' }).click();
   const popover = page.locator('[data-vf-popover-content]');
@@ -2062,7 +2066,7 @@ test('Overlay utility exercises native popover, tooltip, preview, Dialog and Dra
   await kind.selectOption('tooltip');
   await stage.getByRole('button', { name: 'Explain this control' }).focus();
   await expect(page.locator('[data-vf-tooltip-content]')).toBeVisible();
-  await stage.getByRole('button', { name: 'Explain this control' }).blur();
+  await stage.getByRole('button', { name: 'Explain this control' }).evaluate((element) => element.blur());
   await kind.selectOption('preview-card');
   await stage.getByRole('button', { name: 'Preview profile' }).focus();
   await expect(page.locator('[data-vf-preview-card-content]')).toBeVisible();
