@@ -550,6 +550,9 @@ test('React Button guide SSR hydrates and uses public Button, AppShell, SideNav 
 test('React Button-family guide shows joined groups, ToggleButton and density without overlapping choice semantics', async ({ page }) => {
   await page.goto('/next/react/components/button/');
   await expect(page.locator('[data-vf-docs-react-button-example]')).toHaveCount(9);
+  for (const id of ['joined', 'toggle', 'icons', 'density']) {
+    await page.locator('[data-vf-docs-react-button-example="button/' + id + '"] > summary').click();
+  }
   const joined = page.frameLocator('iframe[title="React Independent and joined Button groups example"]');
   await expect(joined.getByRole('group', { name: 'Document actions', exact: true })).toBeVisible();
   await joined.getByRole('button', { name: 'Copy', exact: true }).click();
@@ -593,6 +596,50 @@ test('React Button-family guide shows joined groups, ToggleButton and density wi
   const density = page.frameLocator('iframe[title="React Button sizes and inherited density example"]');
   await density.getByRole('combobox', { name: 'Density' }).selectOption('compact');
   await expect(density.locator('[data-vf-density="compact"]')).toHaveCount(1);
+});
+
+test('React guides reveal one Button preview first and keep detailed guidance navigable without JavaScript', async ({
+  page,
+  browser,
+}) => {
+  await page.goto('/next/react/components/button/');
+  const guide = page.locator('[data-vf-docs-react-component="button"]');
+  const examples = guide.locator('[data-vf-docs-react-button-example]');
+  await expect(examples).toHaveCount(9);
+  await expect(examples.first()).toHaveAttribute('open', '');
+  for (const item of await examples.all()) {
+    if (await item.getAttribute('data-vf-docs-react-button-example') === 'button/basic') continue;
+    await expect(item).not.toHaveAttribute('open', '');
+  }
+  const detail = guide.locator('[data-vf-docs-react-button-example="button/icons"]');
+  const summary = detail.locator(':scope > summary');
+  await summary.focus();
+  await page.keyboard.press('Enter');
+  await expect(detail).toHaveAttribute('open', '');
+  await expect(detail.getByRole('heading', { name: 'Icon-only Button sizes, emphasis and states' })).toBeVisible();
+  await page.keyboard.press('Enter');
+  await expect(detail).not.toHaveAttribute('open', '');
+
+  const guidance = guide.locator('[data-vf-docs-guide-detail]');
+  expect(await guidance.count()).toBeGreaterThan(2);
+  await expect(guidance.first()).toHaveAttribute('open', '');
+  await expect(guidance.nth(1)).not.toHaveAttribute('open', '');
+  await guidance.nth(1).locator('summary').click();
+  await expect(guidance.nth(1)).toHaveAttribute('open', '');
+  await expect(guide.getByRole('heading', { name: 'Accessibility', level: 2 })).toBeVisible();
+
+  const noJsContext = await browser.newContext({ javaScriptEnabled: false });
+  try {
+    const noJs = await noJsContext.newPage();
+    await noJs.goto('/next/react/components/button/');
+    const advanced = noJs.locator('[data-vf-docs-react-button-example="button/joined"]');
+    await expect(advanced).not.toHaveAttribute('open', '');
+    await advanced.locator(':scope > summary').click();
+    await expect(advanced).toHaveAttribute('open', '');
+    await expect(advanced.locator('iframe')).toHaveAttribute('src', /examples\\/button/);
+  } finally {
+    await noJsContext.close();
+  }
 });
 
 test('React ToggleButton has an independent native pressed-state guide and source-backed API', async ({ page }) => {
@@ -784,6 +831,7 @@ test('React Divider renders visible horizontal and vertical lines with no extra 
   await expect(page.locator('html')).toHaveAttribute('data-vf-react-hydrated', 'true');
   await expect(page.getByRole('heading', { level: 1, name: 'Divider' })).toBeVisible();
   const guide = page.locator('[data-vf-docs-react-divider]');
+  await guide.locator('.vf-docs-example-index > summary').click();
   await expect(guide.getByRole('navigation', { name: 'Divider examples' }).getByRole('link')).toHaveCount(5);
   await expect(guide.getByRole('heading', { name: 'Horizontal and vertical' })).toBeVisible();
   const basic = guide.locator('[data-vf-docs-react-divider-example="divider/basic"]');
@@ -1214,6 +1262,7 @@ test('React Icon uses product-owned SVG examples and public source-backed API', 
   ]);
   await expect(page.getByRole('navigation', { name: 'On this page' }).getByRole('link')).toHaveCount(5);
   await expect(guide.getByText('Standards and evidence mapping')).toBeVisible();
+  await guide.locator('.vf-docs-example-index > summary').click();
   await expect(guide.getByRole('navigation', { name: 'Icon examples' }).getByRole('link')).toHaveCount(8);
   await expect(guide.locator('[data-vf-docs-react-icon-explorer]')).toHaveCount(0);
   await expect(page.getByRole('navigation', { name: 'Documentation' })
@@ -1571,10 +1620,12 @@ test('React Button guide renders all five source-backed variants and links the i
   const guide = page.locator('[data-vf-docs-react-component="button"]');
   const cards = guide.locator('[data-vf-docs-react-button-example]');
   await expect(cards).toHaveCount(9);
+  await guide.locator('.vf-docs-example-index > summary').click();
   await expect(guide.getByRole('navigation', { name: 'Button examples' }).getByRole('link')).toHaveCount(9);
   for (const id of ['basic', 'variants', 'sizes', 'states', 'forms']) {
     const card = guide.locator('[data-vf-docs-react-button-example="button/' + id + '"]');
     await expect(card).toHaveCount(1);
+    if (id !== 'basic') await card.locator(':scope > summary').click();
     await expect(card.locator('iframe')).toHaveAttribute('src', /examples\/button/);
     await card.locator('iframe').scrollIntoViewIfNeeded();
     await expect(card.locator('iframe').contentFrame().locator('#root button').first()).toBeVisible();
@@ -1749,6 +1800,7 @@ test('React Badge guide remains focused on React and uses source-backed examples
   await expect(setup).toHaveCount(1);
   await expect(setup).toContainText("from '@vyrnforge/react/badge'");
   await expect(setup).not.toContainText('<Badge');
+  await guide.locator('.vf-docs-example-index > summary').click();
   await expect(guide.getByRole('navigation', { name: 'Badge examples' }).getByRole('link')).toHaveCount(5);
   const basic = guide.locator('[data-vf-docs-react-badge-example="badge/basic"] iframe');
   await basic.scrollIntoViewIfNeeded();
@@ -1792,6 +1844,7 @@ test('React Avatar guide shows initials, native photo, failed-image fallback and
   await page.goto('/next/react/components/avatar/');
   const guide = page.locator('[data-vf-docs-react-avatar]');
   await expect(guide.getByRole('heading', { level: 1, name: 'Avatar' })).toBeVisible();
+  await guide.locator('.vf-docs-example-index > summary').click();
   await expect(guide.getByRole('navigation', { name: 'Avatar examples' }).getByRole('link')).toHaveCount(10);
   await expect(guide.getByRole('heading', { name: 'Behavior and usage' })).toBeVisible();
   await expect(guide.getByRole('heading', { name: 'Appearances and fallback' })).toBeVisible();
