@@ -1629,7 +1629,7 @@ test('React Button guide renders all five source-backed variants and links the i
     await expect(card.locator('iframe')).toHaveAttribute('src', /examples\/button/);
     await card.locator('iframe').scrollIntoViewIfNeeded();
     await expect(card.locator('iframe').contentFrame().locator('#root button').first()).toBeVisible();
-    await card.locator('summary').click();
+    await card.locator('.vf-docs-source-disclosure > summary').click();
     await expect(card.locator('pre code')).toContainText("from '@vyrnforge/react/button'");
   }
   await guide.getByRole('link', { name: 'View Button public React API' }).click();
