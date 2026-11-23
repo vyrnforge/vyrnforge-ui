@@ -327,9 +327,7 @@ function searchMarkup(currentPageDirectory) {
 
 function styleLinks(currentPageDirectory, componentStyle = null) {
   const assets = [...model.shellStyles.map((entry) => entry.assetPath)];
-  for (const extra of (Array.isArray(componentStyle) ? componentStyle : componentStyle ? [componentStyle] : [])) {
-    if (!assets.includes(extra)) assets.push(extra);
-  }
+  if (componentStyle && !assets.includes(componentStyle)) assets.push(componentStyle);
   return assets.map((assetPath) => `  <link rel="stylesheet" href="${escapeHtml(artifactHref(currentPageDirectory, assetPath))}">`).join('\n');
 }
 
