@@ -2135,7 +2135,7 @@ test('Motion utility is shared, discoverable and binds real public Web tokens', 
   await expect(utility.getByRole('heading', { name: 'Motion utility' })).toBeVisible();
   await expect(page.getByRole('navigation', { name: 'Documentation' })
     .getByRole('link', { name: 'Motion' })).toHaveAttribute('aria-current', 'page');
-  await expect(utility.locator('#motion-existing-reusable-tokens')).toContainText('--vf-control-motion-duration');
+  await expect(utility.locator('section[aria-labelledby="motion-existing-reusable-tokens"]')).toContainText('--vf-control-motion-duration');
   await page.getByRole('searchbox', { name: 'Search React documentation' }).fill('reduced motion');
   await expect(page.locator('[data-vf-docs-react-results]')).toContainText('Motion utility');
 });
