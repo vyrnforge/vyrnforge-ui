@@ -8,8 +8,6 @@
  * Customization: --vf-control-motion-duration, --vf-motion-easing-standard,
  *                --vf-motion-distance (length; slide only).
  */
-@import "./tokens.css";
-
 @layer vyrnforge.foundation {
   :where([data-vf-motion="fade"], [data-vf-motion="grow"], [data-vf-motion="slide"],
     [data-vf-motion="zoom"], [data-vf-motion="fade-slide"], [data-vf-motion="pop"]) {
