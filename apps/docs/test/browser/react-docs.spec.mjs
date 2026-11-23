@@ -2183,7 +2183,8 @@ test('Overlay utility uses one shared guide and real public React surface CSS', 
     /github\.com\/vyrnforge\/vyrnforge-ui\/blob\/main\/.*\/popover\/react\/index\.ts$/);
   const exampleSource = await utility.locator('.vf-docs-source-disclosure pre code').textContent();
   expect(exampleSource).toContain('<PopoverTrigger');
-  expect(exampleSource).not.toContain('data-vf-button');
+  expect(exampleSource).toContain('data-vf-button');
+  await expect(utility.locator('[data-vf-docs-overlay-stage] [data-vf-popover-trigger]')).toHaveAttribute('data-vf-button', '');
   await page.getByRole('searchbox', { name: 'Search React documentation' }).fill('overlay');
   await expect(page.locator('[data-vf-docs-react-results]')).toContainText('Overlay utility');
 });
