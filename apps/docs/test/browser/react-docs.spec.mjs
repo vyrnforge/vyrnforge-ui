@@ -575,7 +575,7 @@ test('React Button-family guide shows joined groups, ToggleButton and density wi
   await iconOnly.click();
   await expect(icons.getByRole('status')).toHaveText('Last action: Save bookmark');
   await expect(icons.getByRole('button', { name: 'Search' })).toHaveAttribute('data-vf-size', 'sm');
-  await expect(icons.getByRole('button', { name: 'Loading' })).toHaveAttribute('aria-busy', 'true');
+  await expect(icons.getByRole('button', { name: 'Saving bookmark' })).toHaveAttribute('aria-busy', 'true');
 
   const density = page.frameLocator('iframe[title="React Button sizes and inherited density example"]');
   await density.getByRole('combobox', { name: 'Density' }).selectOption('compact');
