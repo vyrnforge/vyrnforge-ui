@@ -1405,7 +1405,7 @@ export function ReactReferencePage({ view, links, button, toggle, layout, typogr
     { title: 'Overlay utility', href: links.overlay,
       keywords: 'utilities overlay playground popover tooltip preview card dialog drawer theme placement elevation stacking backdrop RTL customization' },
     { title: 'Motion utility', href: links.motion,
-      keywords: 'utilities motion transitions animation duration easing keyframes reduced-motion accessibility loading spinner shimmer css tokens' },
+      keywords: 'utilities motion transitions animation duration easing keyframes reduced-motion reduced motion accessibility loading spinner shimmer css tokens' },
     { title: 'Button', href: links.guide, keywords: 'button usage accessibility examples state' },
     { title: 'Button API', href: links.api, keywords: 'button props reference public' },
     { title: 'ToggleButton', href: links.toggle.guide, keywords: 'toggle button pressed state independent' },
