@@ -1910,7 +1910,7 @@ test('React List guide exposes rich semantic examples and a separate source-back
   await expect(page.locator('[data-vf-docs-react-api="list"]')).toBeVisible();
   await expect(page.locator('[data-vf-docs-react-api="list"]')).toContainText('ListItemProps');
 
-  await page.context().setJavaScriptEnabled(false);
+  await page.route('**/assets/react-reference.js', (route) => route.abort());
   await page.reload();
   await expect(page.locator('[data-vf-docs-react-api="list"]')).toBeVisible();
 });
