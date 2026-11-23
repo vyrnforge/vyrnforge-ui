@@ -2,7 +2,7 @@ import { readFile } from 'node:fs/promises';
 import assert from 'node:assert/strict';
 import { test } from 'vitest';
 
-test('Motion effects are one optional, public, framework-neutral Web stylesheet', async () => {
+test('Motion effects extend the existing public foundation without a new component export', async () => {
   const [manifestRaw, motion, foundation, aggregate] = await Promise.all([
     readFile(new URL('../../package.json', import.meta.url), 'utf8'),
     readFile(new URL('../../src/styles/motion.css', import.meta.url), 'utf8'),
@@ -10,9 +10,9 @@ test('Motion effects are one optional, public, framework-neutral Web stylesheet'
     readFile(new URL('../../src/styles.css', import.meta.url), 'utf8'),
   ]);
   const manifest = JSON.parse(manifestRaw);
-  assert.equal(manifest.exports['./styles/motion.css'], './dist/styles/motion.css');
-  assert.match(aggregate, /@import "\.\/styles\/motion\.css";/);
-  assert.doesNotMatch(foundation, /@import "\.\/motion\.css";/, 'the opt-in effect pack is not loaded by the minimal foundation');
+  assert.equal(manifest.exports['./styles/motion.css'], undefined);
+  assert.match(aggregate, /@import "\.\/styles\/foundation\.css";/);
+  assert.match(foundation, /@import "\.\/motion\.css";/, 'the shared foundation reuses its private effect recipes');
   for (const name of ['fade', 'grow', 'slide', 'zoom', 'fade-slide', 'pop']) {
     assert.ok(motion.includes('[data-vf-motion="' + name + '"]'), 'missing motion recipe ' + name);
   }
