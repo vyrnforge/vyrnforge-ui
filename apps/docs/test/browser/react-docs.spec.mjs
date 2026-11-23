@@ -2145,6 +2145,21 @@ test('React List guide exposes rich semantic examples and a separate source-back
   await expect(page.locator('[data-vf-docs-react-api="list"]')).toBeVisible();
 });
 
+test('React guides keep Native Web snippets out of consumer code examples', async ({ page }) => {
+  for (const [route, nativeSnippet] of [
+    ['components/divider/', '<span data-vf-divider'],
+    ['components/layout/', '<div data-vf-flow'],
+    ['utilities/motion/', '<div data-vf-motion='],
+  ]) {
+    await page.goto('/next/react/' + route);
+    const examples = await page.locator('article pre code').allTextContents();
+    expect(examples.join('\n'), route).not.toContain(nativeSnippet);
+  }
+  await page.goto('/next/react/components/divider/');
+  const jsx = await page.locator('article pre code').allTextContents();
+  expect(jsx.join('\n')).toContain('<Divider');
+});
+
 test('Overlay utility uses one shared guide and real public React surface CSS', async ({ page }) => {
   const manifest = JSON.parse(readFileSync('dist/docs/next/react/site-manifest.json', 'utf8'));
   expect(manifest.utilities).toContainEqual({
@@ -2163,7 +2178,13 @@ test('Overlay utility uses one shared guide and real public React surface CSS', 
   await expect(page.getByRole('navigation', { name: 'Documentation' })
     .getByRole('link', { name: 'Overlay' })).toHaveAttribute('aria-current', 'page');
   await expect(utility.getByText('not a public', { exact: false })).toBeVisible();
-  await expect(utility.getByRole('link', { name: 'Popover API' })).toBeVisible();
+  const sourceLink = utility.getByRole('link', { name: 'Popover React source' });
+  await expect(sourceLink).toHaveAttribute('href',
+    /github\.com\/vyrnforge\/vyrnforge-ui\/blob\/main\/.*\/popover\/react\/index\.ts$/);
+  const exampleSource = await utility.locator('.vf-docs-source-disclosure pre code').textContent();
+  expect(exampleSource).toContain('<PopoverTrigger');
+  expect(exampleSource).toContain('data-vf-button');
+  await expect(utility.locator('[data-vf-docs-overlay-stage] [data-vf-popover-trigger]')).toHaveAttribute('data-vf-button', '');
   await page.getByRole('searchbox', { name: 'Search React documentation' }).fill('overlay');
   await expect(page.locator('[data-vf-docs-react-results]')).toContainText('Overlay utility');
 });
@@ -2256,6 +2277,10 @@ test('Motion utility is shared, discoverable and binds real public Web tokens', 
   const utility = page.locator('[data-vf-docs-react-motion-utility]');
   await expect(utility).toBeVisible();
   await expect(utility.getByRole('heading', { name: 'Motion utility' })).toBeVisible();
+  await expect(utility.getByRole('heading', { name: 'Native Web usage' })).toHaveCount(0);
+  await expect(utility.locator('[data-vf-docs-motion-effects] pre')).toContainText('<Motion effect=');
+  const guideSources = await utility.locator('article pre code').allTextContents();
+  expect(guideSources.join('\n')).not.toContain('<div data-vf-motion=');
   await expect(page.getByRole('navigation', { name: 'Documentation' })
     .getByRole('link', { name: 'Motion' })).toHaveAttribute('aria-current', 'page');
   await expect(utility.locator('section[aria-labelledby="motion-existing-reusable-tokens"]')).toContainText('--vf-control-motion-duration');

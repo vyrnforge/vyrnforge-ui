@@ -5,6 +5,7 @@ import { build } from 'esbuild';
 import { createElement } from 'react';
 import { renderToString } from 'react-dom/server';
 import { compileFrameworkDocumentation, parseMarkdownDocument } from '../../tooling/docs/framework-documentation.mjs';
+import { discoverProductGraph } from '../../tooling/product/discover-product-graph.mjs';
 import { compileNativeDocumentation } from '../../tooling/docs/native-documentation.mjs';
 import { documentationShellStyleSpecifiers, resolvePublicWebStyleAsset } from '../../tooling/docs/public-shell-styles.mjs';
 import { ReactReferencePage } from './react-reference.mjs';
@@ -13,6 +14,7 @@ const root = path.resolve(fileURLToPath(new URL('../../', import.meta.url)));
 const outRoot = path.join(root, 'dist/docs');
 const channel = process.env.VYRNFORGE_DOCS_CHANNEL || 'next';
 const reactRoot = path.join(outRoot, channel, 'react');
+const productGraph = discoverProductGraph(root);
 const reactModel = compileFrameworkDocumentation('react', root);
 const webModel = compileFrameworkDocumentation('native-web', root);
 const nativeModel = compileNativeDocumentation(root);
@@ -361,8 +363,16 @@ function linksFor(route) {
     overlay: relative(dir, react + 'utilities/overlay/', true),
     motion: relative(dir, react + 'utilities/motion/', true),
     motionButton: relative(dir, react + 'components/button/', true),
-    overlayComponentApi: Object.fromEntries(overlayComponentIds.map((id) =>
-      [id, relative(dir, native + 'api/components/' + id + '/', true)])),
+    overlayComponentSource: Object.fromEntries(overlayComponentIds.map((id) => {
+      const documented = reactModel.componentCatalog.find((entry) => entry.id === id);
+      const owner = productGraph.components.find((entry) => entry.unitId === id);
+      const authoringRoot = owner?.surfaces?.react?.authoringPaths?.[0];
+      if (!documented?.apiAvailable || !authoringRoot) {
+        throw new Error('Missing public React overlay implementation for ' + id);
+      }
+      return [id, 'https://github.com/vyrnforge/vyrnforge-ui/blob/main/' +
+        path.posix.join(authoringRoot, 'index.ts')];
+    })),
     self: relative(dir, react + route, true),
     guide: relative(dir, react + 'components/button/', true),
     toggle: {

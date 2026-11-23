@@ -8,6 +8,7 @@ import { ThemeScope, colors, tokens } from '@vyrnforge/react';
 import { SearchFieldRoot, SearchFieldInput, SearchFieldClear } from '@vyrnforge/react/search-field';
 import { NativeSelect } from '@vyrnforge/react/native-select';
 import { ColorGuide, DarkModeGuide, RtlGuide } from './react-customization.mjs';
+import { reactConsumerBlocks } from './react-content-policy.mjs';
 import { ThemeBuilder } from './react-theme-builder.mjs';
 import { IconExplorer } from './react-icon-explorer.mjs';
 import { OverlayUtility } from './react-overlay-utility.mjs';
@@ -27,7 +28,7 @@ function renderInline(value) {
   });
 }
 function renderBlocks(blocks = [], paragraphVariant = 'body-md') {
-  return blocks.map((block, i) => {
+  return reactConsumerBlocks(blocks).map((block, i) => {
     if (block.type === 'list') return h('ul', { key: i },
       block.items.map((item, j) => h('li', { key: j }, ...renderInline(item))));
     if (block.type === 'code') return h('pre', { key: i, 'data-vf-code-block': '', tabIndex: 0 },

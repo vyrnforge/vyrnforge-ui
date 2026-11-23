@@ -5,6 +5,7 @@ import { Flow, AutoGrid } from '@vyrnforge/react/layout';
 import { NativeSelect } from '@vyrnforge/react/native-select';
 import { ThemeScope } from '@vyrnforge/react';
 import { UtilitySections, renderUtilityInline } from './react-utility-content.mjs';
+import { reactConsumerSections } from './react-content-policy.mjs';
 import { PopoverRoot, PopoverTrigger, PopoverContent } from '@vyrnforge/react/popover';
 import { TooltipRoot, TooltipTrigger, TooltipContent } from '@vyrnforge/react/tooltip';
 import { PreviewCardRoot, PreviewCardTrigger, PreviewCardContent } from '@vyrnforge/react/preview-card';
@@ -184,21 +185,21 @@ export function OverlayUtility({ guide, links }) {
           h('p', { role: 'status', 'aria-live': 'polite', 'data-vf-docs-overlay-status': '' }, feedback))),
       h(Source, { kind, placement, theme, elevation, direction }),
       h(Text, { as: 'p', variant: 'body-sm' },
-        'The local preview overrides only public semantic CSS custom properties. Modal backdrop, focus, and dismissal policies stay with the selected component.')),
+        'Trigger and close parts render their own native buttons. Their optional public Button styling hooks reuse VyrnForge’s shared Web presentation; do not nest a Button inside them. Modal backdrop, focus, and dismissal policies stay with the selected component.')),
     ...UtilitySections({ guide, prefix: 'overlay-' }),
     h(Flow, { as: 'section', gap: 'sm', 'aria-labelledby': 'overlay-component-links' },
-      h(Text, { as: 'h2', variant: 'heading-md', id: 'overlay-component-links' }, 'Individual component references'),
+      h(Text, { as: 'h2', variant: 'heading-md', id: 'overlay-component-links' }, 'React component sources'),
       h(Text, { as: 'p' },
-        'Each surface has its own public contract and component reference. The links below open available Native Web API references while the full React guides are being built.'),
+        'Each surface has its own public React API, but dedicated React API guide pages are not yet available. These links open the real React implementation sources rather than silently switching to Native Web.'),
       h(Flow, { as: 'ul', gap: 'xs' },
         ...componentNames.map(([id, label]) => h('li', { key: id },
-          h('a', { href: links.overlayComponentApi[id], 'data-vf-link': '' }, label + ' API')))))),
+          h('a', { href: links.overlayComponentSource[id], 'data-vf-link': '' }, label + ' React source')))))),
   h('aside', { className: 'vf-docs-toc-region' },
     h('nav', { className: 'vf-docs-toc', 'aria-label': 'On this page' },
       h('p', null, 'On this page'),
       h('ol', null,
         h('li', null, h('a', { href: '#overlay-playground-title' }, 'Live playground')),
-        ...guide.sections.map((section) => h('li', { key: section.heading },
+        ...reactConsumerSections(guide).map((section) => h('li', { key: section.heading },
           h('a', { href: '#overlay-' + section.heading.toLowerCase().replace(/[^a-z0-9]+/g, '-') },
             section.heading))),
         h('li', null, h('a', { href: '#overlay-component-links' }, 'Component references'))))));

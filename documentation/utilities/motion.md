@@ -22,7 +22,7 @@ These tokens are authored once in the Web token system and consumed by existing 
 
 ## Reusable entrance effects
 
-Load the existing public foundation stylesheet `@vyrnforge/web/styles/foundation.css` (or aggregate `@vyrnforge/web/styles.css`). The effect recipes are privately factored into the shared Web foundation; there is no separate public `motion.css` package export. These are opt-in CSS recipes, not automatic animations on every component. Attach `data-vf-motion` to an element or to a wrapper around existing components:
+Shared entrance effects use the canonical Web foundation. Their names and visual behavior remain consistent across supported framework ports. React consumes these effects through a typed `Motion` component; Native Web uses explicit data attributes. Neither introduces a second animation engine.
 
 - `fade` — opacity into place without spatial motion.
 - `grow` — subtle scale from 94% to full size.
@@ -31,8 +31,15 @@ Load the existing public foundation stylesheet `@vyrnforge/web/styles/foundation
 - `fade-slide` — opacity and translation together.
 - `pop` — a restrained, one-shot overshoot before settling.
 
+The optional logical entrance direction applies to `slide` and `fade-slide`: `block-start`, `block-end` (default), `inline-start` or `inline-end`. Inline directions adapt to RTL. Entrance effects use `--vf-motion-duration-enter` (default `320ms`), separate from 120ms control feedback, and stop for reduced-motion preference regardless of consumer timing overrides.
+
+Each effect runs once on entrance. Presence, exit, dismissal and focus restoration remain component/application responsibilities. Replaying by remounting a focusable child may disturb focus; do not await animation events to commit UI state.
+
+## Native Web usage
+
+For native markup, import `@vyrnforge/web/styles/foundation.css` (or aggregate `@vyrnforge/web/styles.css`) and select an opt-in effect with its public data attributes:
+
 ```html
-<link rel="stylesheet" href=".../@vyrnforge/web/styles/foundation.css">
 <div data-vf-motion="fade">Content</div>
 <div data-vf-motion="slide" data-vf-motion-direction="inline-start">
   <button type="button">Action</button>
@@ -42,22 +49,7 @@ Load the existing public foundation stylesheet `@vyrnforge/web/styles/foundation
 </div>
 ```
 
-These examples are illustrative HTML; application bundlers should import the public foundation stylesheet using the package entrypoint, not a literal placeholder URL. For Native Web, Angular, Vue, and Elements, the same data attributes remain available on native wrappers. React consumers can instead use the typed public component:
-
-```tsx
-import { Motion, Button } from '@vyrnforge/react';
-import '@vyrnforge/web/styles/foundation.css';
-
-<Motion effect="fade-slide" direction="inline-start" duration={420}>
-  <Button>Continue</Button>
-</Motion>
-```
-
-`Motion` is a React functional component with a native semantic wrapper (`as` defaults to `div`), normal React children and native attributes, forwarded ref, and typed `effect`, `direction`, and optional numeric `duration` (milliseconds). Omit `duration` to inherit the shared entrance duration token of 320ms. It does not automatically install CSS or control exit/presence. The semantic effect vocabulary remains shared across frameworks.
-
-The optional `data-vf-motion-direction` applies to `slide` and `fade-slide`. Supported values are `block-start`, `block-end` (default), `inline-start`, and `inline-end`; inline directions automatically flip in RTL. Set `--vf-motion-distance` on the element or its parent to customize the slide distance (CSS length; default `--vf-space-sm`). Entrance uses the dedicated public `--vf-motion-duration-enter` and existing `--vf-motion-easing-standard` easing tokens, independent of control transitions, and stops completely under `prefers-reduced-motion: reduce` regardless of a consumer duration override.
-
-Each recipe runs once when the element's animation starts. An application may replay it by inserting the element again; replaying by remounting a focusable element can itself move focus, so preserve semantics and focus deliberately. These recipes do not animate *exit*, wait for animation completion, set `display`, or control an element's accessibility/presence state. Do not attach them to a component that already owns an animation on the same element (for example, a busy spinner); wrap that component instead.
+Native Web attributes are low-level styling hooks; framework-specific consumer guides should show the active framework's public API. Avoid attaching a recipe to a component that already owns animation on that same element: use a wrapper instead.
 
 ## Consume and customize
 
