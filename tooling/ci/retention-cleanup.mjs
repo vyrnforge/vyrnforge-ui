@@ -5,6 +5,7 @@ import {
   planMergedPullRequestRunDeletions,
   planRunDeletions
 } from './retention.mjs';
+import { sweepRunHistory } from './run-retention-batches.mjs';
 import { linkedIssueNumbersForBranch, planBranchDeletions, protectedBranchNames } from './branch-retention.mjs';
 import { mapLimited, requestWithBackoff } from './github-api.mjs';
 
@@ -19,6 +20,8 @@ const requestedPullRequest = String(process.env.RETENTION_PR_NUMBER || '').trim(
 const outputPath = process.env.RETENTION_REPORT || 'test-results/actions-retention.json';
 const apiBase = process.env.GITHUB_API_URL || 'https://api.github.com';
 const dryRun = String(process.env.RETENTION_DRY_RUN || '').toLowerCase() === 'true';
+const scope = process.env.RETENTION_SCOPE;
+if (scope !== 'runs' && scope !== 'branches') throw new Error('RETENTION_SCOPE must be runs or branches');
 const DAY_MS = 86_400_000;
 
 if (!repository || !token) throw new Error('GITHUB_REPOSITORY and GITHUB_TOKEN are required');
@@ -92,8 +95,9 @@ async function deleteWorkflowRun(runId) {
 function combinedPlan(mergedPlan, agePlan) {
   const deletionCap = Number(policy.maxDeletionsPerRun || 0);
   const deletionsById = new Map();
-  for (const deletion of mergedPlan.deletions) deletionsById.set(deletion.id, deletion);
-  for (const deletion of agePlan.deletions) if (!deletionsById.has(deletion.id)) deletionsById.set(deletion.id, deletion);
+  // Enforce the six-day age limit before pruning more recent superseded PR runs.
+  for (const deletion of agePlan.deletions) deletionsById.set(deletion.id, deletion);
+  for (const deletion of mergedPlan.deletions) if (!deletionsById.has(deletion.id)) deletionsById.set(deletion.id, deletion);
   const candidates = [...deletionsById.values()];
   return { mergedHistory: mergedPlan, ageBased: agePlan, candidateCount: candidates.length, deletionCap, deletions: candidates.slice(0, deletionCap), deferredByCap: Math.max(0, candidates.length - deletionCap) };
 }
@@ -199,47 +203,53 @@ async function writeReport(report) {
   process.stdout.write(`${JSON.stringify(report, null, 2)}\n`);
 }
 
-const report = { generatedAt: new Date().toISOString(), repository, trigger: eventName, dryRun, mode: null, policy, plan: null, results: [], branchCleanup: null };
+const report = {
+  generatedAt: new Date().toISOString(),
+  repository,
+  trigger: eventName,
+  scope,
+  dryRun,
+  mode: null,
+  policy: scope === 'runs' ? policy : branchPolicy,
+  results: [],
+  branchCleanup: null
+};
 
 try {
-  const runs = await listWorkflowRuns();
-  const requested = await requestedMergedPullRequest();
-  if (requested) {
-    report.mode = 'merged-pull-request';
-    report.pullRequest = { number: requested.number, headBranch: requested.head?.ref || null, mergedAt: requested.merged_at || null };
-    report.plan = planMergedPullRequestRunDeletions(runs, policy, requested, { currentRunId });
-  } else {
-    const mergedPullRequests = await listMergedPullRequests();
-    const mergedPlan = planMergedPullRequestHistoryDeletions(runs, policy, mergedPullRequests, { currentRunId });
-    if (eventName === 'schedule' || eventName === 'workflow_dispatch') {
-      report.mode = 'merged-history-and-age-based';
-      // A merged PR's latest success remains useful until it exceeds the normal
-      // age limit; it must not be protected forever by the merged-history sweep.
+  if (scope === 'runs') {
+    const requested = await requestedMergedPullRequest();
+    const mergedPullRequests = requested ? [] : await listMergedPullRequests();
+    report.mode = requested ? 'merged-pull-request' : 'merged-history-and-age-based';
+
+    const plan = (runs) => {
+      if (requested) return planMergedPullRequestRunDeletions(runs, policy, requested, { currentRunId });
+      const mergedPlan = planMergedPullRequestHistoryDeletions(runs, policy, mergedPullRequests, { currentRunId });
       const agePlan = planRunDeletions(runs, policy, { currentRunId });
-      report.plan = combinedPlan(mergedPlan, agePlan);
-    } else {
-      report.mode = 'merged-pull-request-history';
-      report.plan = mergedPlan;
+      return combinedPlan(mergedPlan, agePlan);
+    };
+
+    const sweep = await sweepRunHistory({
+      listRuns: listWorkflowRuns,
+      plan,
+      deleteRun: deleteWorkflowRun,
+      dryRun,
+      maxBatches: Number(policy.maxBatchesPerExecution),
+    });
+    Object.assign(report, sweep);
+    if (sweep.failedRuns > 0) throw new Error(`${sweep.failedRuns} workflow-run deletion(s) failed`);
+    if (sweep.incomplete) {
+      throw new Error(`Run-history cleanup incomplete: ${sweep.remainingAgeExpired} age-expired, ${sweep.remainingCandidates} total candidates remain after ${sweep.batches.length} bounded batch(es)`);
+    }
+  } else {
+    report.mode = 'stale-branches';
+    report.branchCleanup = await cleanupStaleBranches();
+    if (report.branchCleanup.failedBranches > 0) {
+      throw new Error(`${report.branchCleanup.failedBranches} branch deletion(s) failed`);
     }
   }
 
-  for (const deletion of report.plan.deletions) {
-    report.results.push(await deleteWorkflowRun(deletion.id));
-    // GitHub DELETE operations cost more API points than reads. Keep sustained
-    // deletion traffic under the secondary-rate-limit budget.
-    if (!dryRun) await new Promise((resolve) => { setTimeout(resolve, 400); });
-  }
-  if (eventName === 'schedule' || eventName === 'workflow_dispatch' || eventName === 'pull_request_target') {
-    report.branchCleanup = await cleanupStaleBranches();
-  }
-
   report.completedAt = new Date().toISOString();
-  report.deletedRuns = report.results.filter((result) => result.status === 'deleted').length;
-  report.alreadyAbsentRuns = report.results.filter((result) => result.status === 'already-absent').length;
-  report.failedRuns = report.results.filter((result) => result.status === 'failed').length;
   await writeReport(report);
-  if (report.failedRuns > 0) throw new Error(`${report.failedRuns} workflow-run deletion(s) failed`);
-  if (report.branchCleanup?.failedBranches > 0) throw new Error(`${report.branchCleanup.failedBranches} branch deletion(s) failed`);
 } catch (error) {
   report.completedAt = new Date().toISOString();
   report.error = error instanceof Error ? error.message : String(error);
