@@ -452,9 +452,11 @@ test('Button showcase composes shared guidance, Native adaptation, examples, ref
   await expect(toc.getByRole('link', { name: 'More examples' })).toHaveCount(0);
   const sectionOrder = await page.locator('article[data-vf-docs-component="button"] > section[aria-labelledby]')
     .evaluateAll((sections) => sections.map((section) => section.getAttribute('aria-labelledby')));
-  expect(sectionOrder.slice(0, 8)).toEqual([
+  expect(sectionOrder.slice(0, 12)).toEqual([
     'native-web-setup', 'usage-preview', 'when-to-use', 'native-baseline',
-    'variants', 'sizes', 'states-and-async-work', 'forms',
+    'variants', 'sizes', 'states-and-async-work', 'accessible-icon-actions',
+    'button-groups-and-joined-actions', 'forms',
+    'density-and-target-sizing', 'togglebutton-and-pressed-state',
   ]);
   const featured = page.locator('article[data-vf-docs-component="button"] > section[aria-labelledby="usage-preview"] [data-vf-docs-example]');
   await expect(featured).toHaveAttribute('data-vf-docs-example', 'button/basic');

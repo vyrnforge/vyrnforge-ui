@@ -1281,10 +1281,17 @@ test('Button, Layout, Code and Kbd use one task-first guide hierarchy and separa
       : '[data-vf-docs-react-typography="' + id + '"]';
     const guide = page.locator(selector);
     await expect(guide).toHaveCount(1);
-    expect(await guide.locator(':scope > section > h2').allTextContents()).toEqual(expected);
+    const topics = id === 'button' ? [
+      'Get started', 'Basic buttons', 'Variants', 'Sizes', 'States and async work',
+      'Accessible icon actions', 'Button groups and joined actions', 'Forms',
+      'Density and target sizing', 'ToggleButton and pressed state',
+      'Accessibility', 'Related components and API',
+    ] : expected;
+    expect(await guide.locator(':scope > section > h2').allTextContents()).toEqual(topics);
     const toc = page.getByRole('navigation', { name: 'On this page' });
-    await expect(toc.getByRole('link')).toHaveCount(5);
-    await expect(toc.getByRole('link', { name: 'Examples' })).toBeVisible();
+    await expect(toc.getByRole('link')).toHaveCount(topics.length);
+    await expect(toc.getByRole('link', { name: id === 'button' ? 'Variants' : 'Examples' }))
+      .toBeVisible();
     await expect(guide.locator('header [data-vf-docs-accessibility]')).toHaveCount(0);
     await expect(guide.getByRole('heading', { name: /^Shared .* semantics$/ })).toHaveCount(0);
     await expect(guide.getByText('Standards and evidence mapping')).toBeVisible();
