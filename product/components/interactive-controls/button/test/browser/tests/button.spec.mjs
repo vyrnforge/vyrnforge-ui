@@ -131,6 +131,17 @@ test.describe('Button framework hydration', () => {
       await expect(consumerBusy).not.toHaveAttribute('data-vf-loading', '');
       await expect(consumerBusy).toBeEnabled();
 
+      const iconOnly = page.getByRole('button', { name: 'Search' });
+      await expect(iconOnly).toHaveAttribute('data-vf-icon-only', '');
+      await expect(iconOnly).toHaveAttribute('type', 'button');
+      const iconBounds = await iconOnly.evaluate((el) => {
+        const rect = el.getBoundingClientRect();
+        return { width: rect.width, height: rect.height };
+      });
+      expect(iconBounds).toEqual({ width: 40, height: 40 });
+      await iconOnly.click();
+      await expect(page.locator('body')).toHaveAttribute('data-icon-activated', 'true');
+
       const disabled = page.locator(`#${framework}-disabled`);
       await expect(disabled).toBeDisabled();
       await expect(disabled).not.toHaveAttribute('aria-disabled', 'true');
@@ -200,5 +211,78 @@ test.describe('Button Group presentation (independent commands, native grouping)
     await expect(page.locator('#joined-b')).toHaveCSS('z-index', '1');
     const results = await new AxeBuilder({ page }).analyze();
     expect(results.violations).toEqual([]);
+  });
+});
+
+
+test.describe('Icon-only Button visual and native behavior', () => {
+  test.skip(port !== 'web', 'Canonical Web style contract');
+
+  test('square token-sized hit areas, named icons, disabled and busy states', async ({ page }) => {
+    await page.goto('/components/button/web.html');
+    await page.locator('#icon-specimens').evaluate(element => { element.hidden = false; });
+    const expectedSizes = { 'icon-sm': 32, 'icon-md': 40, 'icon-lg': 48 };
+    for (const [id, size] of Object.entries(expectedSizes)) {
+      const button = page.locator('#' + id);
+      const dimensions = await button.evaluate(element => {
+        const rect = element.getBoundingClientRect();
+        const style = getComputedStyle(element);
+        return { width: rect.width, height: rect.height, paddingLeft: style.paddingInlineStart,
+          paddingRight: style.paddingInlineEnd };
+      });
+      expect(dimensions, id).toEqual({ width: size, height: size, paddingLeft: '0px', paddingRight: '0px' });
+      await expect(button).toHaveAttribute('data-vf-icon-only', '');
+    }
+    const busy = page.getByRole('button', { name: 'Save' });
+    await expect(busy).toHaveAttribute('aria-busy', 'true');
+    await expect(busy).toBeEnabled();
+    await expect(busy.locator('svg')).toHaveCSS('visibility', 'hidden');
+    const indicator = await busy.evaluate(element => {
+      const buttonRect = element.getBoundingClientRect();
+      const before = getComputedStyle(element, '::before');
+      return {
+        position: before.position,
+        visible: before.display !== 'none',
+        inset: before.inset,
+        size: parseFloat(before.width),
+        buttonSize: buttonRect.width,
+      };
+    });
+    expect(indicator.position).toBe('absolute');
+    expect(indicator.visible).toBe(true);
+    expect(indicator.size).toBeGreaterThan(0);
+    expect(indicator.buttonSize).toBe(40);
+    await expect(page.getByRole('button', { name: 'Unavailable' })).toBeDisabled();
+    await page.locator('#icon-md').focus();
+    await expect(page.locator('#icon-md')).toBeFocused();
+    expect(await page.locator('#icon-md').evaluate(el => getComputedStyle(el).outlineStyle)).not.toBe('none');
+    const axeResults = await new AxeBuilder({ page }).analyze();
+    expect(axeResults.violations).toEqual([]);
+  });
+
+  test('icon-only remains square under compact density, RTL, forced colors and reduced motion', async ({ page }) => {
+    await page.goto('/components/button/web.html');
+    await page.locator('#icon-specimens').evaluate(element => { element.hidden = false; });
+    await page.evaluate(() => {
+      document.documentElement.dataset.vfDensity = 'compact';
+      document.documentElement.dir = 'rtl';
+      document.documentElement.dataset.vfTheme = 'dark';
+    });
+    for (const id of ['icon-sm', 'icon-md', 'icon-lg']) {
+      const dims = await page.locator('#' + id).evaluate(element => {
+        const rect = element.getBoundingClientRect();
+        return { width: rect.width, height: rect.height };
+      });
+      expect(dims.width, id).toBe(dims.height);
+      expect(dims.width, id).toBeGreaterThanOrEqual(32);
+    }
+    await page.emulateMedia({ reducedMotion: 'reduce', forcedColors: 'active' });
+    const busy = page.locator('#icon-busy');
+    expect(await busy.evaluate(el => getComputedStyle(el, '::before').animationName)).toBe('none');
+    const disabled = page.locator('#icon-disabled');
+    await expect(disabled).toBeDisabled();
+    await expect(page.locator('#icon-sm')).toBeVisible();
+    const axeResults = await new AxeBuilder({ page }).analyze();
+    expect(axeResults.violations).toEqual([]);
   });
 });
