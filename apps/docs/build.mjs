@@ -1,7 +1,7 @@
 import { cp, mkdir, readFile, rm, stat, writeFile } from 'node:fs/promises';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
-import { compileNativeDocumentation } from '../../tooling/docs/native-documentation.mjs';
+import { compileNativeDocumentation, parseMarkdownDocument } from '../../tooling/docs/native-documentation.mjs';
 import { documentationFrameworks } from '../../tooling/docs/framework-documentation.mjs';
 
 const root = path.resolve(fileURLToPath(new URL('../../', import.meta.url)));
@@ -18,6 +18,13 @@ if (registry.mode !== 'native-html-first' || registry.framework !== 'native-web'
 }
 
 const model = compileNativeDocumentation(root);
+const overlayGuide = parseMarkdownDocument(await readFile(path.join(root, 'documentation/utilities/overlay.md'), 'utf8'));
+const overlayRoute = 'utilities/overlay/';
+const overlayStyleExport = model.packageManifest.exports?.['./styles/popover.css'];
+if (typeof overlayStyleExport !== 'string' || !overlayStyleExport.startsWith('./dist/')) {
+  throw new Error('Native Overlay utility requires public @vyrnforge/web/styles/popover.css');
+}
+const overlayStyleAsset = '/assets/vyrnforge-web/' + overlayStyleExport.slice('./dist/'.length);
 if (!model.componentCatalog.length) throw new Error('Native documentation build requires at least one public Native Web component in the Product Graph');
 
 function escapeHtml(value) {
@@ -227,6 +234,10 @@ function navigationGroups() {
       items: model.foundationPages.map((page) => ({ id: 'foundation:' + page.id, title: page.title, route: page.route })),
     },
     {
+      label: 'Utilities',
+      items: [{ id: 'utility:overlay', title: 'Overlay', route: overlayRoute }],
+    },
+    {
       label: 'Components',
       items: [{ id: 'components:index', title: 'Browse all', route: 'components/' }],
     },
@@ -268,6 +279,8 @@ function pageSearchText(page) {
 function searchablePages() {
   return [
     ...model.foundationPages.map((page) => ({ ...page, searchKind: 'Foundation' })),
+    { id: 'overlay', title: 'Overlay utility', route: overlayRoute, searchKind: 'Utility',
+      description: 'Shared native top layer, anchor positioning, elevation, theme and customization' },
     { id: 'components-index', title: 'Components', route: 'components/', searchKind: 'Components' },
     ...model.componentShowcasePages.map((page) => ({ ...page, searchKind: 'Component guide' })),
     ...(model.patternCatalog.length ? [{ id: 'patterns-index', title: 'Patterns', route: 'patterns/', searchKind: 'Patterns' }] : []),
@@ -581,6 +594,70 @@ function renderFoundation(page) {
   });
 }
 
+function renderOverlayUtility() {
+  const pageDirectory = pageDirectoryForOverlay();
+  const surfaceExample = `<div data-vf-flow data-vf-flow-direction="inline" data-vf-flow-wrap="wrap" data-vf-flow-gap="lg">
+    <div>
+      <button id="vf-overlay-basic-trigger" type="button" data-vf-button data-vf-variant="secondary" data-vf-popover-trigger popovertarget="vf-overlay-basic" aria-haspopup="dialog" aria-controls="vf-overlay-basic">Open Popover</button>
+      <div id="vf-overlay-basic" popover="auto" role="dialog" aria-label="Native contextual details" data-vf-popover-content data-vf-placement="bottom-start">
+        Native popover in the browser top layer.
+      </div>
+    </div>
+    <div style="--vf-shadow-popover: var(--vf-shadow-lg)">
+      <button id="vf-overlay-custom-trigger" type="button" data-vf-button data-vf-variant="secondary" data-vf-popover-trigger popovertarget="vf-overlay-custom" aria-haspopup="dialog" aria-controls="vf-overlay-custom">Custom elevation</button>
+      <div id="vf-overlay-custom" popover="auto" role="dialog" aria-label="Customized contextual details" data-vf-popover-content data-vf-placement="top-end">
+        Elevated popover using a consumer-scoped token.
+      </div>
+    </div>
+  </div>`;
+  const sections = overlayGuide.sections.map((section) => {
+    const id = 'overlay-' + slugify(section.heading);
+    return `<section id="${id}" aria-labelledby="${id}-title">
+      <h2 id="${id}-title">${escapeHtml(section.heading)}</h2>
+      ${renderBlocks(section.blocks)}
+    </section>`;
+  }).join('\n');
+  const components = ['popover', 'tooltip', 'preview-card', 'dialog', 'alert-dialog', 'drawer'];
+  const references = components.map((id) => `<li><a data-vf-link href="${artifactHref(pageDirectory, routeTarget('api/components/' + id + '/'))}">${escapeHtml(id)} API</a></li>`).join('');
+  return shell({
+    route: overlayRoute,
+    title: overlayGuide.title,
+    description: 'Shared overlay usage and customization with a public Native Web popover example.',
+    componentStyle: overlayStyleAsset,
+    content: `<nav class="vf-docs-breadcrumbs" aria-label="Breadcrumb"><ol data-vf-flow data-vf-flow-direction="inline" data-vf-flow-gap="xs">
+      <li><a data-vf-link href="${artifactHref(pageDirectory, nativeSitePath)}">Native Web</a></li>
+      <li><span aria-hidden="true">/</span> Utilities</li>
+      <li><span aria-hidden="true">/</span> <span aria-current="page">Overlay</span></li>
+    </ol></nav>
+    <article class="vf-docs-article" data-vf-docs-native-overlay-utility data-vf-flow data-vf-flow-gap="3xl">
+      <header class="vf-docs-component-header">
+        <p data-vf-text data-vf-text-variant="overline" class="vf-docs-eyebrow">Utilities</p>
+        <h1>${escapeHtml(overlayGuide.title)}</h1>
+        ${renderBlocks(overlayGuide.intro)}
+      </header>
+      <section aria-labelledby="overlay-native-example-heading">
+        <h2 id="overlay-native-example-heading">Native Web overlay examples</h2>
+        <p>These use the public Popover stylesheet, native popover controls and a semantic shadow token. Select a trigger to open its real browser top-layer surface.</p>
+        <div class="vf-docs-preview" data-vf-docs-overlay-native-preview>${surfaceExample}</div>
+        <details class="vf-docs-source-disclosure">
+          <summary>View example HTML</summary>
+          <pre data-vf-code-block tabindex="0"><code>${escapeHtml(surfaceExample)}</code></pre>
+        </details>
+        <p><a data-vf-link href="${artifactHref(pageDirectory, channel + '/react/' + overlayRoute)}">Open interactive React Overlay playground</a></p>
+      </section>
+      ${sections}
+      <section aria-labelledby="overlay-api-heading">
+        <h2 id="overlay-api-heading">Individual component references</h2>
+        <p>These are separate component contracts; the Overlay utility is not an additional public component.</p>
+        <ul>${references}</ul>
+      </section>
+    </article>`,
+  });
+}
+function pageDirectoryForOverlay() {
+  return pageDirectory(overlayRoute);
+}
+
 function renderExample(example) {
   return `<article class="vf-docs-example" data-vf-docs-example="${escapeHtml(example.id)}">
     <header class="vf-docs-example-header" data-vf-flow data-vf-flow-direction="inline" data-vf-flow-wrap="wrap" data-vf-flow-gap="lg" data-vf-flow-align="start" data-vf-flow-justify="space-between">
@@ -836,6 +913,7 @@ await cp(path.join(root, 'apps/docs/client.js'), path.join(outRoot, 'assets/docs
 
 await writePage('', renderHome());
 await writePage('components/', renderComponentsIndex());
+await writePage(overlayRoute, renderOverlayUtility());
 await writePage('patterns/', renderPatternsIndex());
 await writePage('api/components/', renderApiIndex());
 await writePage('api/patterns/', renderPatternApiIndex());
@@ -878,6 +956,8 @@ const manifest = {
   api: model.componentApiPages.map((page) => ({ slug: page.route, title: page.title, publicEntrypoints: page.publicEntrypoints })),
   patternApi: model.patternApiPages.map((page) => ({ slug: page.route, title: page.title, publicEntrypoints: page.publicEntrypoints })),
   foundations: model.foundationPages.map((page) => ({ slug: page.route, title: page.title })),
+  utilities: [{ id: 'overlay', slug: overlayRoute, title: overlayGuide.title,
+    source: 'documentation/utilities/overlay.md' }],
 };
 await writeFile(path.join(channelRoot, 'site-manifest.json'), `${JSON.stringify(manifest, null, 2)}\n`);
 await writeFile(path.join(channelRoot, 'index.html'), '<!doctype html><html lang="en"><head><meta charset="utf-8"><meta http-equiv="refresh" content="0;url=./native-web/"><title>VyrnForge documentation</title></head><body><a href="./native-web/">Open Native Web documentation</a></body></html>');
