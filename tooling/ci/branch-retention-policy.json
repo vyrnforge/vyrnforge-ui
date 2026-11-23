@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
   "staleDays": 7,
-  "maxDeletionsPerRun": 25,
+  "maxDeletionsPerRun": 100,
   "protectedBranches": [],
   "protectedPrefixes": [
     "release/",
