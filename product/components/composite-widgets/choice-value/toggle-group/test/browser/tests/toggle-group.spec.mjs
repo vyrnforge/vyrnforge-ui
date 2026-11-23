@@ -92,11 +92,13 @@ test('public ToggleGroup CSS resolves canonical subtle surface and control radii
   await expect(group).toHaveCSS('border-top-width', '1px');
 });
 
-test('icon-only ToggleGroup options stay square and selected state is distinguishable', async ({ page }) => {
+test('icon-only ToggleGroup options stay square and selected state is distinguishable', async ({
+  page,
+}) => {
   test.skip(port !== 'web', 'Canonical Web choice styling contract');
   await page.goto('/components/toggle-group/web.html');
   const button = page.locator('#group').locator('#icon-choice');
-  await page.locator('#group').evaluate(group => {
+  await page.locator('#group').evaluate((group) => {
     const icon = document.createElement('button');
     icon.type = 'button';
     icon.id = 'icon-choice';
@@ -111,7 +113,9 @@ test('icon-only ToggleGroup options stay square and selected state is distinguis
   await expect(button).toHaveCSS('height', '40px');
   await expect(button).toHaveCSS('padding-inline-start', '0px');
   await expect(button).toHaveCSS('background-color', 'rgb(243, 247, 255)');
-  await page.locator('html').evaluate(el => { el.dataset.vfTheme = 'dark'; });
+  await page.locator('html').evaluate((el) => {
+    el.dataset.vfTheme = 'dark';
+  });
   await expect(button).toHaveCSS('background-color', 'rgb(11, 31, 77)');
   await button.focus();
   await expect(button).toBeFocused();
