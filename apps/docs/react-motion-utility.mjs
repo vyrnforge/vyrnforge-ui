@@ -60,7 +60,7 @@ function MotionEffectsPlayground({ theme, variables }) {
     h(Switch, { id: 'motion-effect-switch', checked,
       onChange: (event) => setChecked(event.currentTarget.checked) }),
     h('label', { htmlFor: 'motion-effect-switch' }, 'Option'));
-  const code = "import '@vyrnforge/web/styles/motion.css';\n" +
+  const code = "import '@vyrnforge/web/styles/foundation.css';\n" +
     '<div data-vf-motion="' + effect + '"' +
     (['slide', 'fade-slide'].includes(effect) ? ' data-vf-motion-direction="' + origin + '"' : '') +
     '>\n  {/* Your VyrnForge component(s) */}\n</div>\n' +
