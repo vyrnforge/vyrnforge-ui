@@ -226,7 +226,12 @@ test.describe('Icon-only Button visual and native behavior', () => {
 
   test('square token-sized hit areas, named icons, disabled and busy states', async ({ page }) => {
     await page.goto('/components/button/web.html');
-    await page.locator('#icon-specimens').evaluate(element => { element.hidden = false; });
+    await page.locator('#icon-specimens').evaluate(element => {
+      element.hidden = false;
+      Object.assign(element.style, {
+        display: 'flex', flexWrap: 'wrap', alignItems: 'center', gap: '1rem', padding: '1rem',
+      });
+    });
     const expectedSizes = { 'icon-sm': 32, 'icon-md': 40, 'icon-lg': 48 };
     for (const [id, size] of Object.entries(expectedSizes)) {
       const button = page.locator('#' + id);
@@ -275,7 +280,12 @@ test.describe('Icon-only Button visual and native behavior', () => {
 
   test('icon-only remains square under compact density, RTL, forced colors and reduced motion', async ({ page }) => {
     await page.goto('/components/button/web.html');
-    await page.locator('#icon-specimens').evaluate(element => { element.hidden = false; });
+    await page.locator('#icon-specimens').evaluate(element => {
+      element.hidden = false;
+      Object.assign(element.style, {
+        display: 'flex', flexWrap: 'wrap', alignItems: 'center', gap: '1rem', padding: '1rem',
+      });
+    });
     await page.evaluate(() => {
       document.documentElement.dataset.vfDensity = 'compact';
       document.documentElement.dir = 'rtl';
