@@ -1,0 +1,13 @@
+{
+  "id": "button/icons",
+  "title": "Icon-only, icon-with-text and busy actions",
+  "description": "Compose the existing Icon inside Button; accessible names, busy and disabled states remain explicit",
+  "defaultFramework": "react",
+  "frameworks": {
+    "react": {
+      "label": "React",
+      "language": "tsx",
+      "source": "react.tsx"
+    }
+  }
+}
