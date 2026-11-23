@@ -627,6 +627,8 @@ test('React Button guide keeps all demos visible, source optional and navigation
 
   await page.setViewportSize({ width: 1440, height: 900 });
   await guide.locator('#react-button-example-variants').scrollIntoViewIfNeeded();
+  await expect(guide.locator('#react-button-example-variants iframe').contentFrame()
+    .getByRole('button').first()).toBeVisible();
   await page.screenshot({
     path: testInfo.outputPath('react-button-guide-live-demo-desktop.png'),
     fullPage: false,
@@ -634,6 +636,8 @@ test('React Button guide keeps all demos visible, source optional and navigation
   await page.setViewportSize({ width: 375, height: 812 });
   await expect(page.locator('.vf-docs-toc-examples')).toBeHidden();
   await guide.locator('#react-button-example-icons').scrollIntoViewIfNeeded();
+  await expect(guide.locator('#react-button-example-icons iframe').contentFrame()
+    .getByRole('button').first()).toBeVisible();
   const bounds = await page.evaluate(() => ({
     viewport: document.documentElement.clientWidth,
     scroll: document.documentElement.scrollWidth,
