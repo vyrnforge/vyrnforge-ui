@@ -383,7 +383,7 @@ async function verifyStyles(dir, extra = [], { docsChrome = true } = {}) {
 async function writePage(route, page) {
   const dir = directory(route);
   const docsChrome = !route.startsWith('examples/');
-  if (!docsChrome && /(?:^|[\\/])docs\\.css/.test(page)) {
+  if (!docsChrome && page.includes('docs.css')) {
     throw new Error('Standalone React component examples must not depend on documentation CSS');
   }
   await verifyStyles(dir, docsChrome && route === 'icons/' ? iconExplorerStyles :
