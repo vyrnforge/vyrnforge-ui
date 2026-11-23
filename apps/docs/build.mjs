@@ -631,6 +631,26 @@ function renderMotionUtility() {
       </label>
     </div>
   </div>`;
+  const effectExample = `<div data-vf-flow data-vf-flow-direction="inline" data-vf-flow-wrap="wrap" data-vf-flow-gap="lg">
+    <div data-vf-motion="fade">
+      <button type="button" data-vf-button data-vf-variant="secondary">Fade</button>
+    </div>
+    <div data-vf-motion="grow">
+      <button type="button" data-vf-button data-vf-variant="secondary">Grow</button>
+    </div>
+    <div data-vf-motion="slide" data-vf-motion-direction="inline-start">
+      <button type="button" data-vf-button data-vf-variant="secondary">Slide</button>
+    </div>
+    <div data-vf-motion="zoom">
+      <button type="button" data-vf-button data-vf-variant="secondary">Zoom</button>
+    </div>
+    <div data-vf-motion="fade-slide" data-vf-motion-direction="block-end">
+      <button type="button" data-vf-button data-vf-variant="secondary">Fade + slide</button>
+    </div>
+    <div data-vf-motion="pop">
+      <button type="button" data-vf-button data-vf-variant="secondary">Pop</button>
+    </div>
+  </div>`;
   const sections = motionGuide.sections.map((section) => {
     const id = 'motion-' + slugify(section.heading);
     return `<section id="${id}" aria-labelledby="${id}-title">
@@ -665,6 +685,15 @@ function renderMotionUtility() {
           <pre data-vf-code-block tabindex="0"><code>${escapeHtml(nativeExample)}</code></pre>
         </details>
         <p><a data-vf-link href="${artifactHref(currentPageDirectory, channel + '/react/' + motionRoute)}">Open interactive React Motion playground</a></p>
+      </section>
+      <section aria-labelledby="motion-native-effects-heading" data-vf-docs-motion-native-effects>
+        <h2 id="motion-native-effects-heading">Reusable CSS entrance effects</h2>
+        <p>Fade, grow, slide, zoom, fade-slide and pop are opt-in effects on ordinary elements. Here each effect wraps a real native Button; the same attributes work around a Switch or any other composition.</p>
+        <div class="vf-docs-preview" data-vf-docs-motion-effects-preview>${effectExample}</div>
+        <details class="vf-docs-source-disclosure">
+          <summary>View reusable effect HTML</summary>
+          <pre data-vf-code-block tabindex="0"><code>${escapeHtml(effectExample)}</code></pre>
+        </details>
       </section>
       ${sections}
       <section aria-labelledby="motion-related-heading">
