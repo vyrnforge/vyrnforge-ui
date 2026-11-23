@@ -9,6 +9,7 @@ const files = {
   release: '.github/workflows/release.yml',
   docs: '.github/workflows/docs-pages.yml',
   retention: '.github/workflows/actions-retention.yml',
+  retentionExecutor: 'tooling/ci/retention-cleanup.mjs',
   impact: 'tooling/impact/plan.mjs',
   impactClassify: 'tooling/impact/classify.mjs',
   impactHelpers: 'tooling/impact/helpers.mjs',
@@ -179,6 +180,7 @@ requireText(sources.retention, 'workflow_dispatch:', 'Repository Retention must 
 requireText(sources.retention, 'actions: write', 'Repository Retention needs narrowly scoped Actions write access');
 requireText(sources.retention, 'pull-requests: read', 'Repository Retention needs pull-request read access to protect active branch heads and bases');
 requireText(sources.retention, 'issues: read', 'Repository Retention must read real GitHub Issues before deleting untracked branches');
+requireText(sources.retentionExecutor, "eventName === 'pull_request_target'", 'Repository Retention must sweep untracked branches after merged PRs');
 requireText(sources.retention, 'github.event.repository.default_branch', 'Repository Retention must execute trusted default-branch code');
 requireText(sources.retention, 'tooling/ci/retention-cleanup.mjs', 'Repository Retention must use the maintained cleanup implementation');
 forbidText(sources.retention, 'pnpm install', 'Repository Retention must not install the product dependency graph');
