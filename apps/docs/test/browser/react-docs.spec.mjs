@@ -431,11 +431,13 @@ test('All React guide pages compose with canonical Flow and AutoGrid, not local 
     await expect(guide, id + ' guide must use the public Flow article').toHaveAttribute('data-vf-flow', '');
     await expect(guide).toHaveAttribute('data-vf-flow-gap', '2xl');
     const sections = guide.locator(':scope > section[data-vf-flow][data-vf-flow-gap="md"]');
-    await expect(sections, id + ' must preserve five semantic guide sections').toHaveCount(5);
+    await expect(sections, id + ' must preserve authored concept sections')
+      .toHaveCount(id === 'button' ? 12 : 5);
     const toc = page.locator('nav.vf-docs-toc ol[data-vf-flow]');
     await expect(toc).toHaveCount(1);
     const jumpLinks = page.locator('aside.vf-docs-toc-region nav.vf-docs-toc-examples ol[data-vf-flow]');
-    await expect(jumpLinks, id + ' example navigation belongs in the secondary rail').toHaveCount(1);
+    await expect(jumpLinks, id + ' redundant example navigation should only appear on other guides')
+      .toHaveCount(id === 'button' ? 0 : 1);
     const related = guide.locator('ul.vf-docs-related-links[data-vf-flow][data-vf-flow-gap="sm"]');
     await expect(related).toHaveCount(1);
     const headers = guide.locator('.vf-docs-example-header[data-vf-flow-direction="inline"]');
@@ -444,7 +446,9 @@ test('All React guide pages compose with canonical Flow and AutoGrid, not local 
     expect(await guide.locator('.vf-docs-example-header h3[data-vf-text]').count(),
       id + ' example titles must use public Text').toBeGreaterThan(0);
     expect(await guide.evaluate((element) => getComputedStyle(element).display)).toBe('flex');
-    expect(await jumpLinks.evaluate((element) => getComputedStyle(element).display)).toBe('flex');
+    if (id !== 'button') {
+      expect(await jumpLinks.evaluate((element) => getComputedStyle(element).display)).toBe('flex');
+    }
     const standards = guide.locator('.vf-docs-standards[data-vf-flow]');
     await expect(standards).toHaveCount(1);
     const mapped = standards.locator('ul[aria-label="Mapped WCAG criteria"]');
@@ -540,7 +544,8 @@ test('React Button guide SSR hydrates and uses public Button, AppShell, SideNav 
     .getByRole('button', { name: 'Save changes', exact: true })).toBeVisible();
   const source = page.getByText('View checked-in React source');
   await source.click();
-  await expect(page.locator('article[data-vf-docs-react-component] pre').last()).toContainText("from '@vyrnforge/react/button'");
+  await expect(page.locator('[data-vf-docs-react-button-example="button/basic"] pre'))
+    .toContainText("from '@vyrnforge/react/button'");
   await expect(page.getByRole('navigation', { name: 'Documentation framework' })
     .getByRole('link', { name: 'Native Web' })).toHaveAttribute('href', '../../../native-web/components/button/');
   expect(errors).toEqual([]);
@@ -611,10 +616,10 @@ test('React Button guide keeps all demos visible, source optional and navigation
     await expect(example.locator('.vf-docs-source-disclosure')).not.toHaveAttribute('open', '');
   }
 
-  const navigation = page.getByRole('navigation', { name: 'Button examples' });
-  await expect(navigation.getByRole('link')).toHaveCount(9);
-  await expect(navigation.getByRole('link', { name: 'Icon buttons' }))
-    .toHaveAttribute('href', '#react-button-example-icons');
+  const navigation = page.getByRole('navigation', { name: 'On this page' });
+  await expect(navigation.getByRole('link')).toHaveCount(12);
+  await expect(navigation.getByRole('link', { name: 'Accessible icon actions' }))
+    .toHaveAttribute('href', '#react-button-accessible-icon-actions');
   const source = examples.first().locator('.vf-docs-source-disclosure');
   await source.locator('summary').focus();
   await page.keyboard.press('Enter');
@@ -624,6 +629,31 @@ test('React Button guide keeps all demos visible, source optional and navigation
   await expect(source).not.toHaveAttribute('open', '');
   await expect(guide.getByRole('heading', { name: 'Accessibility', level: 2 })).toBeVisible();
   await expect(guide.getByRole('heading', { name: 'Native baseline' })).toBeVisible();
+
+  const placement = [
+    ['When to use', 'basic', 'Basic buttons'],
+    ['Variants', 'variants', 'Variants'],
+    ['Sizes', 'sizes', 'Sizes'],
+    ['States and async work', 'states', 'States and loading'],
+    ['Accessible icon actions', 'icons', 'Icon buttons'],
+    ['Button groups and joined actions', 'joined', 'Button groups'],
+    ['Forms', 'forms', 'Form actions'],
+    ['Density and target sizing', 'density', 'Density'],
+    ['ToggleButton and pressed state', 'toggle', 'Toggle actions'],
+  ];
+  for (const [topic, exampleId, exampleTitle] of placement) {
+    const section = guide.locator('[data-vf-docs-button-topic="' + topic + '"]');
+    await expect(section, topic + ' must have its own authored explanation').toHaveCount(1);
+    await expect(section.locator('[data-vf-docs-react-button-example]')).toHaveCount(1);
+    const demo = section.locator('[data-vf-docs-react-button-example="button/' + exampleId + '"]');
+    await expect(demo.getByRole('heading', { name: exampleTitle })).toBeVisible();
+  }
+  await expect(guide.locator('[data-vf-docs-button-topic="Variants"]'))
+    .toContainText('primary');
+  await expect(guide.locator('[data-vf-docs-button-topic="States and async work"]'))
+    .toContainText('Loading does not automatically prevent repeat activation.');
+  await expect(guide.locator('[data-vf-docs-button-topic="Accessible icon actions"]'))
+    .toContainText('accessible name');
 
   await page.setViewportSize({ width: 1440, height: 900 });
   await guide.locator('#react-button-example-variants').scrollIntoViewIfNeeded();
@@ -666,6 +696,10 @@ test('React Button guide keeps all demos visible, source optional and navigation
 test('React ToggleButton has an independent native pressed-state guide and source-backed API', async ({ page }) => {
   await page.goto('/next/react/components/toggle-button/');
   await expect(page.locator('[data-vf-docs-react-toggle]')).toBeVisible();
+  const pressed = page.locator('[data-vf-docs-react-toggle-topic="pressed"]');
+  await expect(pressed.getByRole('heading', { name: 'Pressed state', level: 2 })).toBeVisible();
+  await expect(pressed.getByRole('heading', { name: 'Controlled and uncontrolled state' })).toBeVisible();
+  await expect(pressed.locator('[data-vf-docs-react-toggle-example]')).toHaveCount(1);
   const frame = page.frameLocator('iframe[title="React ToggleButton pressed-state example"]');
   const bold = frame.getByRole('button', { name: 'Bold', exact: true });
   await expect(bold).toHaveAttribute('aria-pressed', 'false');
@@ -1251,10 +1285,17 @@ test('Button, Layout, Code and Kbd use one task-first guide hierarchy and separa
       : '[data-vf-docs-react-typography="' + id + '"]';
     const guide = page.locator(selector);
     await expect(guide).toHaveCount(1);
-    expect(await guide.locator(':scope > section > h2').allTextContents()).toEqual(expected);
+    const topics = id === 'button' ? [
+      'Get started', 'Basic buttons', 'Variants', 'Sizes', 'States and async work',
+      'Accessible icon actions', 'Button groups and joined actions', 'Forms',
+      'Density and target sizing', 'ToggleButton and pressed state',
+      'Accessibility', 'Related components and API',
+    ] : expected;
+    expect(await guide.locator(':scope > section > h2').allTextContents()).toEqual(topics);
     const toc = page.getByRole('navigation', { name: 'On this page' });
-    await expect(toc.getByRole('link')).toHaveCount(5);
-    await expect(toc.getByRole('link', { name: 'Examples' })).toBeVisible();
+    await expect(toc.getByRole('link')).toHaveCount(topics.length);
+    await expect(toc.getByRole('link', { name: id === 'button' ? 'Variants' : 'Examples' }))
+      .toBeVisible();
     await expect(guide.locator('header [data-vf-docs-accessibility]')).toHaveCount(0);
     await expect(guide.getByRole('heading', { name: /^Shared .* semantics$/ })).toHaveCount(0);
     await expect(guide.getByText('Standards and evidence mapping')).toBeVisible();
@@ -1639,7 +1680,7 @@ test('React Button guide renders all five source-backed variants and links the i
   const guide = page.locator('[data-vf-docs-react-component="button"]');
   const cards = guide.locator('[data-vf-docs-react-button-example]');
   await expect(cards).toHaveCount(9);
-  await expect(page.getByRole('navigation', { name: 'Button examples' }).getByRole('link')).toHaveCount(9);
+  await expect(page.getByRole('navigation', { name: 'On this page' }).getByRole('link')).toHaveCount(12);
   for (const id of ['basic', 'variants', 'sizes', 'states', 'forms']) {
     const card = guide.locator('[data-vf-docs-react-button-example="button/' + id + '"]');
     await expect(card).toHaveCount(1);

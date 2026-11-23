@@ -70,6 +70,30 @@ describe('React documentation compiler preflight', () => {
       expect(compiled.code).toContain('@vyrnforge/react/button');
     }
     expect(button.examples.every((example) => example.sourcePath.endsWith('/react.tsx'))).toBe(true);
+    const placements = new Map([
+      ['button/variants', 'Variants'],
+      ['button/sizes', 'Sizes'],
+      ['button/states', 'States and async work'],
+      ['button/icons', 'Accessible icon actions'],
+      ['button/joined', 'Button groups and joined actions'],
+      ['button/forms', 'Forms'],
+      ['button/density', 'Density and target sizing'],
+      ['button/toggle', 'ToggleButton and pressed state'],
+    ]);
+    const reactIds = new Set(button.examples.map((example) => example.id));
+    expect(reactIds).toEqual(new Set(['button/basic', ...placements.keys()]));
+    const headings = new Set(button.sharedContent.sections.map((section) => section.heading));
+    for (const example of button.examples) {
+      expect(example.documentationSection, example.id)
+        .toBe(example.id === 'button/basic' ? null : placements.get(example.id));
+      if (example.documentationSection) expect(headings.has(example.documentationSection)).toBe(true);
+    }
+    const nativeButton = compileFrameworkDocumentation('native-web').componentCatalog
+      .find((component) => component.id === 'button');
+    for (const example of nativeButton.examples) {
+      if (example.id === 'button/basic') expect(example.documentationSection).toBeNull();
+      else expect(example.documentationSection).toBe(placements.get(example.id));
+    }
   });
 
   it('does not invent an Elements Button API or guide for catalog symmetry', () => {

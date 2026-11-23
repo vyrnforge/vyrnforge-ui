@@ -9,5 +9,6 @@
       "language": "tsx",
       "source": "react.tsx"
     }
-  }
+  },
+  "documentationSection": "Button groups and joined actions"
 }

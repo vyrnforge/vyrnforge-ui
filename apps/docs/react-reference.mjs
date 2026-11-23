@@ -452,25 +452,24 @@ function buttonExample(example, links) {
 }
 function buttonUsageGuide(button, links) {
   if (!button?.sharedContent || !button?.frameworkContent) return null;
-  // The owner-authored examples stay discoverable through the Product Graph;
-  // only their reading order is curated for a first-time consumer.
-  const readingOrder = new Map([
-    'button/basic', 'button/variants', 'button/sizes', 'button/states',
-    'button/icons', 'button/joined', 'button/forms', 'button/density', 'button/toggle',
-  ].map((id, index) => [id, index]));
-  const examples = button.examples.slice().sort((a, b) =>
-    (readingOrder.get(a.id) ?? Infinity) - (readingOrder.get(b.id) ?? Infinity));
+  // Product-owned documentationSection metadata binds each executable example
+  // to the exact shared concept it teaches; React does not own a second list.
+  const examples = button.examples;
+  const mainExample = examples.filter((example) => !example.documentationSection);
+  const exampleSections = button.sharedContent.sections.filter((section) =>
+    section.heading === 'When to use' || examples.some((ex) => ex.documentationSection === section.heading));
   const sections = [
     { id: 'react-setup', heading: 'Get started' },
-    { id: 'react-usage', heading: 'Examples' },
-    { id: 'react-button-guidelines', heading: 'Usage guidelines' },
+    ...exampleSections.map(({ heading }) => ({
+      id: 'react-button-' + slug(heading),
+      heading: heading === 'When to use' ? 'Basic buttons' : heading,
+      sourceHeading: heading,
+    })),
     { id: 'react-button-accessibility', heading: 'Accessibility' },
     { id: 'react-reference', heading: 'Related components and API' },
   ];
   return h('div', { className: 'vf-docs-content-grid vf-docs-usage-guide-layout' },
-    guideToc(sections, {
-      label: 'Button', examples, getId: (ex) => 'react-button-example-' + ex.id.slice('button/'.length),
-    }),
+    guideToc(sections),
     h(Flow, { as: 'article', gap: '2xl', className: 'vf-docs-article vf-docs-usage-guide',
       'data-vf-docs-react-component': 'button' },
       guideHeader(button.sharedContent, 'React · Components · Actions'),
@@ -479,28 +478,31 @@ function buttonUsageGuide(button, links) {
         h('p', { key: 'shared-setup' }, 'For shared styling and server-rendering setup, see ',
           h('a', { href: links.home, 'data-vf-link': '' }, 'React overview'), '.'),
       ]),
-      guidePart(sections[1], [
-        ...examples.map((ex) => buttonExample(ex, links)),
-      ]),
-      guidePart(sections[2], guideSubsections(button.sharedContent, [
-        'When to use', 'Native baseline', 'Variants', 'Sizes',
-        'States and async work', 'Forms', 'Styling and adaptation',
-        'Button groups and joined actions', 'Accessible icon actions',
-        'ToggleButton and pressed state', 'Density and target sizing',
-      ], 'react-button-guide')),
-      guidePart(sections[3], [
-        ...guideBlocks(button.sharedContent, 'Interaction and focus'),
+      ...sections.slice(1, -2).map((section) => {
+        const heading = section.sourceHeading;
+        const demonstrations = heading === 'When to use' ? mainExample :
+          examples.filter((example) => example.documentationSection === heading);
+        return guidePart(section, [
+          ...guideBlocks(button.sharedContent, heading),
+          ...(heading === 'When to use' ? [
+            h('h3', { id: 'react-button-native-baseline' }, 'Native baseline'),
+            ...guideBlocks(button.sharedContent, 'Native baseline'),
+          ] : []),
+          ...demonstrations.map((example) => buttonExample(example, links)),
+        ], { 'data-vf-docs-button-topic': heading });
+      }),
+      guidePart(sections.at(-2), [
         ...guideBlocks(button.sharedContent, 'Accessibility'),
+        ...guideSubsections(button.sharedContent,
+          ['Interaction and focus', 'Styling and adaptation'], 'react-button-a11y'),
         evidenceDisclosure(button.standardReferences),
       ]),
-      guidePart(sections[4], [
+      guidePart(sections.at(-1), [
         h(Flow, { as: 'ul', gap: 'sm', key: 'related', className: 'vf-docs-related-links' },
           h('li', null, h('a', { 'data-vf-link': '', href: links.api },
             'View Button public React API')),
-          h('li', null, h('a', { 'data-vf-link': '', href: links.layout },
-            'Layout')),
-          h('li', null, h('a', { href: links.toggle.guide, 'data-vf-link': '' },
-            'ToggleButton'))),
+          h('li', null, h('a', { 'data-vf-link': '', href: links.layout }, 'Layout')),
+          h('li', null, h('a', { href: links.toggle.guide, 'data-vf-link': '' }, 'ToggleButton'))),
       ])));
 }
 
@@ -523,8 +525,8 @@ function toggleUsage(toggle, links) {
   if (!toggle?.sharedContent || !toggle?.frameworkContent || !toggle.examples?.length) return null;
   const sections = [
     { id: 'react-toggle-setup', heading: 'Get started' },
-    { id: 'react-toggle-examples', heading: 'Live pressed-state example' },
-    { id: 'react-toggle-guidance', heading: 'State and composition' },
+    { id: 'react-toggle-examples', heading: 'Pressed state' },
+    { id: 'react-toggle-guidance', heading: 'Sizing and grouping' },
     { id: 'react-toggle-a11y', heading: 'Accessibility' },
     { id: 'react-toggle-reference', heading: 'Related components and API' },
   ];
@@ -534,14 +536,18 @@ function toggleUsage(toggle, links) {
       'data-vf-docs-react-toggle': '' },
       guideHeader(toggle.sharedContent, 'React · Components · Actions'),
       guidePart(sections[0], guideBlocks(toggle.frameworkContent, 'React setup')),
-      guidePart(sections[1], [toggleExample(toggle, links)]),
+      guidePart(sections[1], [
+        ...guideSubsections(toggle.sharedContent,
+          ['Native semantics and behavior'], 'react-toggle-behavior'),
+        ...guideSubsections(toggle.frameworkContent,
+          ['Controlled and uncontrolled state'], 'react-toggle-state'),
+        toggleExample(toggle, links),
+      ], { 'data-vf-docs-react-toggle-topic': 'pressed' }),
       guidePart(sections[2], [
         ...guideSubsections(toggle.sharedContent,
-          ['Native semantics and behavior', 'Sizing and styling', 'Related controls and grouping'],
-          'react-toggle-guidance'),
+          ['Sizing and styling', 'Related controls and grouping'], 'react-toggle-guidance'),
         ...guideSubsections(toggle.frameworkContent,
-          ['Controlled and uncontrolled state', 'Sizing and composition'],
-          'react-toggle-authoring'),
+          ['Sizing and composition'], 'react-toggle-authoring'),
       ]),
       guidePart(sections[3], [
         ...guideBlocks(toggle.sharedContent, 'Accessibility and evidence'),
