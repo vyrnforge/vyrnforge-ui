@@ -2134,7 +2134,7 @@ test('Motion utility is shared, discoverable and binds real public Web tokens', 
     id: 'motion', route: 'utilities/motion/',
     source: 'documentation/utilities/motion.md',
     publicComponents: ['button', 'switch'],
-    tokens: ['--vf-control-motion-duration', '--vf-motion-easing-standard',
+    tokens: ['--vf-control-motion-duration', '--vf-motion-duration-enter', '--vf-motion-easing-standard',
       '--vf-motion-duration-loading-spin', '--vf-motion-duration-loading-shimmer',
       '--vf-motion-easing-loading'],
   });
@@ -2244,6 +2244,10 @@ test('Motion effects expose six reusable real-Web CSS recipes on multiple React 
     ['fade-slide', 'vf-motion-enter-fade-slide'],
     ['pop', 'vf-motion-enter-pop'],
   ];
+  await expect(sample).toHaveCSS('animation-duration', '0.32s');
+  await page.locator('#motion-entrance-duration').selectOption('slow');
+  await expect(sample).toHaveCSS('animation-duration', '0.48s');
+  await page.locator('#motion-entrance-duration').selectOption('default');
   for (const [effect, animation] of list) {
     await page.locator('#motion-effect').selectOption(effect);
     await expect(sample).toHaveAttribute('data-vf-motion', effect);
