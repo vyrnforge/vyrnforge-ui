@@ -12,6 +12,6 @@ An incomplete issue index or unavailable commit metadata **never** authorizes de
 
 The default branch, GitHub-protected branches, `release/*`, `hotfix/*`, and same-repository heads/bases of open PRs remain protected. Open PRs and branch SHA are rechecked immediately before each removal. Deleted branch names and their precise HEAD SHAs are included in the cleanup JSON report for traceability; deleting a Git ref is not a guarantee that GitHub has purged all underlying objects, PR refs, logs, or commit history.
 
-The scheduled workflow runs daily and deletes at most 100 old untracked branches in one execution. GitHub repository rules remain an additional enforcement boundary.
+The scheduled workflow runs daily, and successful pull-request merges also run the orphan-branch sweep. Each execution deletes at most 100 old untracked branches. GitHub repository rules remain an additional enforcement boundary.
 
-A manual `workflow_dispatch` defaults to `dry_run: true`, emitting a deletion plan without removing records. Scheduled execution remains destructive for eligible branches. Merged-PR-triggered execution cleans run history only.
+A manual `workflow_dispatch` defaults to `dry_run: true`, emitting a deletion plan without removing records. Scheduled and merged-PR-triggered execution both remove eligible orphan branches; merged PR history cleanup remains bounded separately.
