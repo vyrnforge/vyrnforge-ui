@@ -2639,7 +2639,7 @@ export type MotionDirection = 'block-start' | 'block-end' | 'inline-start' | 'in
 // @public (undocumented)
 export type MotionEffect = 'fade' | 'grow' | 'slide' | 'zoom' | 'fade-slide' | 'pop';
 
-// @public
+// @public (undocumented)
 export interface MotionProps extends Omit<HTMLAttributes<HTMLElement>, 'color'> {
     as?: ThemeElement;
     direction?: MotionDirection;
