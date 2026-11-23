@@ -51,40 +51,60 @@ function SharedContent({ guide }) {
   })));
 }
 
-function Source({ kind, placement, elevation, direction }) {
-  const style = elevation === 'default' ? '' :
+function Source({ kind, placement, theme, elevation, direction }) {
+  const modal = kind === 'dialog' || kind === 'drawer';
+  const tokens = elevation === 'default' || modal ? '' :
     " style={{ '--vf-shadow-popover': 'var(--vf-shadow-" +
       (elevation === 'subtle' ? 'sm' : 'lg') + ")' }}";
-  const content = {
-    popover: '<PopoverRoot placement="' + placement + '">\n' +
-      '  <PopoverTrigger>Open Popover</PopoverTrigger>\n' +
-      '  <PopoverContent aria-label="Details">Contextual content</PopoverContent>\n' +
+  const names = {
+    popover: 'PopoverRoot, PopoverTrigger, PopoverContent',
+    tooltip: 'TooltipRoot, TooltipTrigger, TooltipContent',
+    'preview-card': 'PreviewCardRoot, PreviewCardTrigger, PreviewCardContent',
+    dialog: 'DialogRoot, DialogTitle, DialogBody, DialogClose',
+    drawer: 'DrawerRoot, DrawerTitle, DrawerBody, DrawerClose',
+  };
+  const example = {
+    popover: '<PopoverRoot placement="' + placement + '">\\n' +
+      '  <PopoverTrigger data-vf-button="" data-vf-variant="secondary">Open Popover</PopoverTrigger>\\n' +
+      '  <PopoverContent aria-label="Details">Contextual content</PopoverContent>\\n' +
       '</PopoverRoot>',
-    tooltip: '<TooltipRoot placement="' + placement + '">\n' +
-      '  <TooltipTrigger><Button>Help</Button></TooltipTrigger>\n' +
-      '  <TooltipContent>Short description</TooltipContent>\n' +
+    tooltip: '<TooltipRoot placement="' + placement + '">\\n' +
+      '  <TooltipTrigger><Button type="button">Help</Button></TooltipTrigger>\\n' +
+      '  <TooltipContent>Short description</TooltipContent>\\n' +
       '</TooltipRoot>',
-    'preview-card': '<PreviewCardRoot placement="' + placement + '">\n' +
-      '  <PreviewCardTrigger><Button>Profile</Button></PreviewCardTrigger>\n' +
-      '  <PreviewCardContent role="region" aria-label="Profile preview">Preview</PreviewCardContent>\n' +
+    'preview-card': '<PreviewCardRoot placement="' + placement + '">\\n' +
+      '  <PreviewCardTrigger><Button type="button">Profile</Button></PreviewCardTrigger>\\n' +
+      '  <PreviewCardContent role="region" aria-label="Profile preview">Preview</PreviewCardContent>\\n' +
       '</PreviewCardRoot>',
-    dialog: '<DialogRoot open={open} onOpenChange={setOpen}>\n' +
-      '  <DialogTitle>Details</DialogTitle>\n' +
-      '  <DialogBody>Modal content</DialogBody>\n' +
-      '  <DialogClose>Close</DialogClose>\n' +
+    dialog: '<Button type="button" onClick={() => setOpen(true)}>Open Dialog</Button>\\n' +
+      '<DialogRoot open={open} onOpenChange={setOpen}>\\n' +
+      '  <DialogTitle>Details</DialogTitle>\\n' +
+      '  <DialogBody>Modal content</DialogBody>\\n' +
+      '  <DialogClose>Close</DialogClose>\\n' +
       '</DialogRoot>',
-    drawer: '<DrawerRoot open={open} onOpenChange={setOpen} placement="end">\n' +
-      '  <DrawerTitle>Settings</DrawerTitle>\n' +
-      '  <DrawerBody>Modal side panel</DrawerBody>\n' +
-      '  <DrawerClose>Close</DrawerClose>\n' +
+    drawer: '<Button type="button" onClick={() => setOpen(true)}>Open Drawer</Button>\\n' +
+      '<DrawerRoot open={open} onOpenChange={setOpen} placement="end">\\n' +
+      '  <DrawerTitle>Settings</DrawerTitle>\\n' +
+      '  <DrawerBody>Modal side panel</DrawerBody>\\n' +
+      '  <DrawerClose>Close</DrawerClose>\\n' +
       '</DrawerRoot>',
   };
+  const source = (modal ? "import { useState } from 'react';\\n" : '') +
+    "import { ThemeScope } from '@vyrnforge/react';\\n" +
+    (kind === 'popover' ? '' : "import { Button } from '@vyrnforge/react/button';\\n") +
+    'import { ' + names[kind] + " } from '@vyrnforge/react/" + kind + "';\\n" +
+    "import '@vyrnforge/web/styles/" + kind + ".css';\\n" +
+    "import '@vyrnforge/web/styles/button.css';\\n\\n" +
+    'export default function Example() {\\n' +
+    (modal ? '  const [open, setOpen] = useState(false);\\n' : '') +
+    '  return (\\n' +
+    '    <ThemeScope theme="' + theme + '" dir="' + direction + '"' + tokens + '>\\n' +
+    '      ' + example[kind].split('\\n').join('\\n      ') + '\\n' +
+    '    </ThemeScope>\\n' +
+    '  );\\n}';
   return h('details', { className: 'vf-docs-source-disclosure' },
     h('summary', null, 'View public React usage'),
-    h('pre', { tabIndex: 0, 'data-vf-code-block': '' },
-      h('code', null, '// Import the selected parts from @vyrnforge/react/' + kind + '\n' +
-        '<div dir="' + direction + '"' + style + '>\n  ' +
-        content[kind].split('\n').join('\n  ') + '\n</div>')));
+    h('pre', { tabIndex: 0, 'data-vf-code-block': '' }, h('code', null, source)));
 }
 
 export function OverlayUtility({ guide, links }) {
@@ -177,7 +197,7 @@ export function OverlayUtility({ guide, links }) {
             : 'Open a native modal surface; press Escape or use its close button.'),
           example,
           h('p', { role: 'status', 'aria-live': 'polite', 'data-vf-docs-overlay-status': '' }, feedback))),
-      h(Source, { kind, placement, elevation, direction }),
+      h(Source, { kind, placement, theme, elevation, direction }),
       h(Text, { as: 'p', variant: 'body-sm' },
         'The local preview overrides only public semantic CSS custom properties. Modal backdrop, focus, and dismissal policies stay with the selected component.')),
     ...SharedContent({ guide }),
