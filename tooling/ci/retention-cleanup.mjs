@@ -6,6 +6,7 @@ import {
   planRunDeletions
 } from './retention.mjs';
 import { planBranchDeletions, protectedBranchNames } from './branch-retention.mjs';
+import { mapLimited, requestWithBackoff } from './github-api.mjs';
 
 const policy = JSON.parse(await readFile('tooling/ci/retention-policy.json', 'utf8'));
 const branchPolicy = JSON.parse(await readFile('tooling/ci/branch-retention-policy.json', 'utf8'));
@@ -17,6 +18,8 @@ const eventPath = process.env.GITHUB_EVENT_PATH;
 const requestedPullRequest = String(process.env.RETENTION_PR_NUMBER || '').trim();
 const outputPath = process.env.RETENTION_REPORT || 'test-results/actions-retention.json';
 const apiBase = process.env.GITHUB_API_URL || 'https://api.github.com';
+const dryRun = String(process.env.RETENTION_DRY_RUN || '').toLowerCase() === 'true';
+const DAY_MS = 86_400_000;
 
 if (!repository || !token) throw new Error('GITHUB_REPOSITORY and GITHUB_TOKEN are required');
 
@@ -28,7 +31,7 @@ const headers = {
 };
 
 async function githubResponse(endpoint, { method = 'GET' } = {}) {
-  return fetch(`${apiBase}/repos/${repository}${endpoint}`, { method, headers });
+  return requestWithBackoff(`${apiBase}/repos/${repository}${endpoint}`, { method, headers });
 }
 
 async function githubJson(endpoint) {
@@ -37,16 +40,16 @@ async function githubJson(endpoint) {
   return response.json();
 }
 
-async function listPages(endpoint, key = null, maxPages = 20) {
+async function listPages(endpoint, key = null, maxPages = 50) {
   const values = [];
   for (let page = 1; page <= maxPages; page += 1) {
     const separator = endpoint.includes('?') ? '&' : '?';
     const data = await githubJson(`${endpoint}${separator}per_page=100&page=${page}`);
     const pageValues = key ? data[key] || [] : data;
     values.push(...pageValues);
-    if (pageValues.length < 100) break;
+    if (pageValues.length < 100) return values;
   }
-  return values;
+  throw new Error(`GitHub API pagination incomplete for ${endpoint}: exceeded ${maxPages} pages`);
 }
 
 async function listWorkflowRuns() { return listPages('/actions/runs', 'workflow_runs'); }
@@ -61,16 +64,24 @@ async function requestedMergedPullRequest() {
   return pullRequest;
 }
 
+let closedPullRequestsCache;
+async function listClosedPullRequests() {
+  if (!closedPullRequestsCache) {
+    closedPullRequestsCache = await listPages('/pulls?state=closed&sort=updated&direction=desc');
+  }
+  return closedPullRequestsCache;
+}
 async function listMergedPullRequests() {
   const merged = new Map();
   const payload = await readEventPayload();
   if ((eventName === 'pull_request' || eventName === 'pull_request_target') && payload.pull_request?.merged) merged.set(Number(payload.pull_request.number), payload.pull_request);
-  const pullRequests = await listPages('/pulls?state=closed&sort=updated&direction=desc');
+  const pullRequests = await listClosedPullRequests();
   for (const pullRequest of pullRequests) if (pullRequest.merged_at) merged.set(Number(pullRequest.number), pullRequest);
   return [...merged.values()];
 }
 
 async function deleteWorkflowRun(runId) {
+  if (dryRun) return { id: runId, status: 'would-delete' };
   const endpoint = `/actions/runs/${runId}`;
   const response = await githubResponse(endpoint, { method: 'DELETE' });
   if (response.status === 204) return { id: runId, status: 'deleted' };
@@ -92,32 +103,58 @@ async function listOpenPullRequests() { return listPages('/pulls?state=open'); }
 
 async function aheadByDefault(defaultBranch, branchName) {
   const response = await githubResponse(`/compare/${encodeURIComponent(defaultBranch)}...${encodeURIComponent(branchName)}`);
-  if (!response.ok) return null;
+  if (response.status === 404 || response.status === 422) return null;
+  if (!response.ok) throw new Error(`GitHub compare for ${branchName} failed: ${response.status} ${await response.text()}`);
   const comparison = await response.json();
   return Number.isInteger(comparison.ahead_by) ? comparison.ahead_by : null;
 }
 
-async function branchRecords(defaultBranch, mergedPullRequests) {
-  const mergedIntoDefault = new Set(
-    mergedPullRequests
-      .filter((pullRequest) => pullRequest?.base?.ref === defaultBranch && pullRequest?.head?.repo?.full_name === repository && pullRequest?.head?.ref)
-      .map((pullRequest) => pullRequest.head.ref)
-  );
+async function branchRecords(defaultBranch, closedPullRequests, openPullRequests) {
+  const exactMergedHeads = new Map();
+  const closedWithoutMerge = new Set();
+  for (const pullRequest of closedPullRequests) {
+    const head = pullRequest?.head;
+    if (head?.repo?.full_name !== repository || !head.ref) continue;
+    if (!pullRequest.merged_at) {
+      closedWithoutMerge.add(head.ref);
+    } else if (pullRequest?.base?.ref === defaultBranch && head.sha) {
+      if (!exactMergedHeads.has(head.ref)) exactMergedHeads.set(head.ref, new Set());
+      exactMergedHeads.get(head.ref).add(head.sha);
+    }
+  }
+
+  const protectedNames = protectedBranchNames(openPullRequests, { defaultBranch, repository });
+  const protectedPrefixes = branchPolicy.protectedPrefixes || [];
+  const explicitNames = new Set(branchPolicy.protectedBranches || []);
+  const staleBefore = Date.now() - branchPolicy.staleDays * DAY_MS;
   const branches = await listPages('/branches');
-  return Promise.all(branches.map(async (branch) => {
-    const [commit, ahead] = await Promise.all([
-      githubJson(`/commits/${branch.commit.sha}`),
-      aheadByDefault(defaultBranch, branch.name)
-    ]);
-    return {
+
+  // The previous implementation fired two requests for EVERY branch at once,
+  // triggering GitHub's secondary rate limit and aborting branch cleanup.
+  return mapLimited(branches, 2, async (branch) => {
+    const metadata = {
       name: branch.name,
       sha: branch.commit.sha,
       protected: branch.protected === true,
-      commitDate: commit.commit?.committer?.date ?? commit.commit?.author?.date ?? null,
-      aheadByDefault: ahead,
-      mergedPullRequest: mergedIntoDefault.has(branch.name)
+      commitDate: null,
+      aheadByDefault: null,
+      mergedPullRequest: exactMergedHeads.get(branch.name)?.has(branch.commit.sha) === true,
+      closedWithoutMerge: closedWithoutMerge.has(branch.name)
     };
-  }));
+    if (metadata.protected || protectedNames.has(branch.name) || explicitNames.has(branch.name) ||
+        protectedPrefixes.some((prefix) => branch.name.startsWith(prefix)) || metadata.closedWithoutMerge) {
+      return metadata;
+    }
+
+    const commit = await githubJson(`/commits/${branch.commit.sha}`);
+    metadata.commitDate = commit.commit?.committer?.date ?? commit.commit?.author?.date ?? null;
+    if (Date.parse(metadata.commitDate || '') <= staleBefore) {
+      metadata.aheadByDefault = await aheadByDefault(defaultBranch, branch.name);
+    }
+    // Small spacing between branch inspection requests, even on a healthy API.
+    await new Promise((resolve) => setTimeout(resolve, 150));
+    return metadata;
+  });
 }
 
 async function branchRef(name) {
@@ -128,6 +165,7 @@ async function branchRef(name) {
 }
 
 async function deleteBranch(name) {
+  if (dryRun) return { name, status: 'would-delete' };
   const response = await githubResponse(`/git/refs/heads/${encodeRef(name)}`, { method: 'DELETE' });
   if (response.status === 204) return { name, status: 'deleted' };
   if (response.status === 404) return { name, status: 'already-absent' };
@@ -137,8 +175,8 @@ async function deleteBranch(name) {
 async function cleanupStaleBranches() {
   const repositoryInfo = await githubJson('');
   const defaultBranch = repositoryInfo.default_branch;
-  const [openPullRequests, mergedPullRequests] = await Promise.all([listOpenPullRequests(), listMergedPullRequests()]);
-  const branches = await branchRecords(defaultBranch, mergedPullRequests);
+  const [openPullRequests, closedPullRequests] = await Promise.all([listOpenPullRequests(), listClosedPullRequests()]);
+  const branches = await branchRecords(defaultBranch, closedPullRequests, openPullRequests);
   const plan = planBranchDeletions(branches, openPullRequests, branchPolicy, { defaultBranch, repository });
   const results = [];
 
@@ -169,7 +207,7 @@ async function writeReport(report) {
   process.stdout.write(`${JSON.stringify(report, null, 2)}\n`);
 }
 
-const report = { generatedAt: new Date().toISOString(), repository, trigger: eventName, mode: null, policy, plan: null, results: [], branchCleanup: null };
+const report = { generatedAt: new Date().toISOString(), repository, trigger: eventName, dryRun, mode: null, policy, plan: null, results: [], branchCleanup: null };
 
 try {
   const runs = await listWorkflowRuns();
@@ -183,7 +221,9 @@ try {
     const mergedPlan = planMergedPullRequestHistoryDeletions(runs, policy, mergedPullRequests, { currentRunId });
     if (eventName === 'schedule' || eventName === 'workflow_dispatch') {
       report.mode = 'merged-history-and-age-based';
-      const agePlan = planRunDeletions(runs, policy, { currentRunId, protectedRunIds: mergedPlan.protectedRunIds });
+      // A merged PR's latest success remains useful until it exceeds the normal
+      // age limit; it must not be protected forever by the merged-history sweep.
+      const agePlan = planRunDeletions(runs, policy, { currentRunId });
       report.plan = combinedPlan(mergedPlan, agePlan);
     } else {
       report.mode = 'merged-pull-request-history';
@@ -191,7 +231,10 @@ try {
     }
   }
 
-  for (const deletion of report.plan.deletions) report.results.push(await deleteWorkflowRun(deletion.id));
+  for (const deletion of report.plan.deletions) {
+    report.results.push(await deleteWorkflowRun(deletion.id));
+    if (!dryRun) await new Promise((resolve) => setTimeout(resolve, 125));
+  }
   if (eventName === 'schedule' || eventName === 'workflow_dispatch') report.branchCleanup = await cleanupStaleBranches();
 
   report.completedAt = new Date().toISOString();
