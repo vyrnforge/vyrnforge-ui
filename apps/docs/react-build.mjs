@@ -4,7 +4,7 @@ import { fileURLToPath } from 'node:url';
 import { build } from 'esbuild';
 import { createElement } from 'react';
 import { renderToString } from 'react-dom/server';
-import { compileFrameworkDocumentation } from '../../tooling/docs/framework-documentation.mjs';
+import { compileFrameworkDocumentation, parseMarkdownDocument } from '../../tooling/docs/framework-documentation.mjs';
 import { compileNativeDocumentation } from '../../tooling/docs/native-documentation.mjs';
 import { documentationShellStyleSpecifiers, resolvePublicWebStyleAsset } from '../../tooling/docs/public-shell-styles.mjs';
 import { ReactReferencePage } from './react-reference.mjs';
@@ -16,6 +16,16 @@ const reactRoot = path.join(outRoot, channel, 'react');
 const reactModel = compileFrameworkDocumentation('react', root);
 const webModel = compileFrameworkDocumentation('native-web', root);
 const nativeModel = compileNativeDocumentation(root);
+const overlayGuide = parseMarkdownDocument(await readFile(path.join(root, 'documentation/utilities/overlay.md'), 'utf8'));
+const overlayComponentIds = ['popover', 'tooltip', 'preview-card', 'dialog', 'alert-dialog', 'drawer'];
+for (const id of overlayComponentIds) {
+  if (!reactModel.componentCatalog.find((entry) => entry.id === id)?.apiAvailable ||
+      !webModel.packageManifest.exports?.['./styles/' + id + '.css']) {
+    throw new Error('Overlay utility requires a real public React component and canonical Web CSS: ' + id);
+  }
+}
+const overlayStyles = ['popover', 'tooltip', 'preview-card', 'dialog', 'drawer'].map((id) =>
+  resolvePublicWebStyleAsset(webModel.packageManifest, '@vyrnforge/web/styles/' + id + '.css').assetPath);
 const button = reactModel.componentCatalog.find((entry) => entry.id === 'button');
 if (!button?.showcaseAvailable || !button.apiAvailable || !button.frameworkContent) {
   throw new Error('React documentation pilot requires real public Button API, shared and React-authored content');
@@ -334,6 +344,9 @@ function linksFor(route) {
     darkMode: relative(dir, react + 'foundations/dark-mode/', true),
     rtl: relative(dir, react + 'foundations/right-to-left/', true),
     styling: relative(dir, react + 'foundations/styling/', true),
+    overlay: relative(dir, react + 'utilities/overlay/', true),
+    overlayComponentApi: Object.fromEntries(overlayComponentIds.map((id) =>
+      [id, relative(dir, native + 'api/components/' + id + '/', true)])),
     self: relative(dir, react + route, true),
     guide: relative(dir, react + 'components/button/', true),
     toggle: {
@@ -725,6 +738,8 @@ const pageViews = [
     description: 'Light, dark and system theme scopes with a live preview' },
   { route: 'foundations/right-to-left/', view: 'rtl', title: 'React right-to-left',
     description: 'Native direction, mixed content and bidirectional component preview' },
+  { route: 'utilities/overlay/', view: 'overlay', title: 'Overlay utility',
+    description: 'Shared overlay usage, customization and public React playground' },
   { route: 'foundations/styling/', view: 'styling', title: 'React styling and CSS',
     description: 'Shared stylesheet loading, overrides and CSS customization in React' },
   { route: button.showcaseRoute, view: 'guide', title: 'React Button', description: 'Shared Button semantics and React usage' },
@@ -867,11 +882,13 @@ for (const page of pageViews) {
     list: page.view === 'list' || page.view === 'list-api' ? listData : null,
     badge: page.view === 'badge' || page.view === 'badge-api' ? badgeData : null,
     divider: page.view === 'divider' || page.view === 'divider-api' ? dividerData : null,
+    overlayGuide: page.view === 'overlay' ? overlayGuide : null,
     requestedTopic: page.requestedTopic ?? null };
   const initialHtml = renderToString(createElement(ReactReferencePage, props));
   const serialized = JSON.stringify(props).replaceAll('<', '\\u003c');
   const styles = [...shellStyles, ...(['color', 'builder'].includes(page.view) ? themeStudioStyles : []),
-    ...(page.view === 'icon-library' ? iconExplorerStyles : [])]
+    ...(page.view === 'icon-library' ? iconExplorerStyles : []),
+    ...(page.view === 'overlay' ? overlayStyles : [])]
     .map((asset) => '  <link rel="stylesheet" href="' +
       escapeHtml(relative(dir, asset)) + '">').join('\n');
   const pageHtml = '<!doctype html><html lang="en" data-vf-theme="light" data-vf-density="comfortable"><head>' +
@@ -895,6 +912,8 @@ await writeFile(path.join(reactRoot, 'site-manifest.json'), JSON.stringify({
   channel, framework: 'react', status: 'button-layout-typography-icon-image-divider-avatar-badge-list-pilot',
   source: 'Product Graph public React surface',
   routes: pageViews.map(({ route, view }) => ({ route, view })),
+  utilities: [{ id: 'overlay', route: 'utilities/overlay/',
+    source: 'documentation/utilities/overlay.md', publicComponents: overlayComponentIds }],
   layout: {
     guideOnly: layout.guideOnly,
     api: layout.apiAvailable,

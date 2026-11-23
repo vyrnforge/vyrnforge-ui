@@ -48,7 +48,7 @@ test('React pilot artifact is Product Graph-backed and SSR-rendered with public 
   expect(manifest.layout.examples.map((example) => example.id)).toContain('layout/dividers');
   expect(manifest.routes.filter((entry) => entry.view !== 'unavailable').map((entry) => entry.route)).toEqual([
     '', 'foundations/tokens/', 'foundations/themes/', 'foundations/color/', 'foundations/theme-builder/', 'foundations/dark-mode/',
-    'foundations/right-to-left/', 'foundations/styling/', 'components/button/', 'api/components/button/',
+    'foundations/right-to-left/', 'utilities/overlay/', 'foundations/styling/', 'components/button/', 'api/components/button/',
     'components/toggle-button/', 'api/components/toggle-button/', 'components/layout/', 'api/components/layout/',
     'components/divider/', 'api/components/divider/',
     ...['text', 'code', 'kbd'].flatMap((id) => [
@@ -2011,4 +2011,96 @@ test('React List guide exposes rich semantic examples and a separate source-back
   await page.route('**/assets/react-reference.js', (route) => route.abort());
   await page.reload();
   await expect(page.locator('[data-vf-docs-react-api="list"]')).toBeVisible();
+});
+
+test('Overlay utility uses one shared guide and real public React surface CSS', async ({ page }) => {
+  const manifest = JSON.parse(readFileSync('dist/docs/next/react/site-manifest.json', 'utf8'));
+  expect(manifest.utilities).toEqual([{
+    id: 'overlay', route: 'utilities/overlay/',
+    source: 'documentation/utilities/overlay.md',
+    publicComponents: ['popover', 'tooltip', 'preview-card', 'dialog', 'alert-dialog', 'drawer'],
+  }]);
+  const html = readFileSync('dist/docs/next/react/utilities/overlay/index.html', 'utf8');
+  expect(html).toContain('assets/docs.css');
+  for (const id of ['popover', 'tooltip', 'preview-card', 'dialog', 'drawer'])
+    expect(html).toContain('components/' + id + '/' + id + '.css');
+  await page.goto('/next/react/utilities/overlay/');
+  const utility = page.locator('[data-vf-docs-react-overlay-utility]');
+  await expect(utility).toBeVisible();
+  await expect(utility.getByRole('heading', { name: 'Overlay utility' })).toBeVisible();
+  await expect(page.getByRole('navigation', { name: 'Documentation' })
+    .getByRole('link', { name: 'Overlay' })).toHaveAttribute('aria-current', 'page');
+  await expect(utility.getByText('not a public', { exact: false })).toBeVisible();
+  await expect(utility.getByRole('link', { name: 'Popover API' })).toBeVisible();
+  await page.getByRole('searchbox', { name: 'Search React documentation' }).fill('overlay');
+  await expect(page.locator('[data-vf-docs-react-results]')).toContainText('Overlay utility');
+});
+
+test('Overlay utility exercises native popover, tooltip, preview, Dialog and Drawer', async ({ page }, testInfo) => {
+  await page.goto('/next/react/utilities/overlay/');
+  await expect(page.locator('html')).toHaveAttribute('data-vf-react-hydrated', 'true');
+  const stage = page.locator('[data-vf-docs-overlay-stage]');
+  const kind = page.locator('#overlay-kind');
+
+  await page.locator('#overlay-placement').selectOption('top-end');
+  await page.locator('#overlay-elevation').selectOption('strong');
+  await page.locator('#overlay-theme').selectOption('dark');
+  await page.locator('#overlay-direction').selectOption('rtl');
+  await expect(stage).toHaveAttribute('dir', 'rtl');
+  await expect(stage).toHaveAttribute('data-vf-theme', 'dark');
+  const shadows = await stage.evaluate((element) => {
+    const css = getComputedStyle(element);
+    return [css.getPropertyValue('--vf-shadow-popover').trim(), css.getPropertyValue('--vf-shadow-lg').trim()];
+  });
+  expect(shadows[0]).toBe(shadows[1]);
+  await stage.scrollIntoViewIfNeeded();
+  await stage.getByRole('button', { name: 'Open Popover' }).click();
+  const popover = page.locator('[data-vf-popover-content]');
+  await expect(popover).toBeVisible();
+  await expect(popover).toHaveAttribute('data-vf-placement', 'top-end');
+  expect(await popover.evaluate((element) => element.matches(':popover-open'))).toBe(true);
+  await page.screenshot({ path: testInfo.outputPath('overlay-utility-dark-rtl-popover-desktop.png') });
+  await page.keyboard.press('Escape');
+  await expect(popover).not.toBeVisible();
+
+  await kind.selectOption('tooltip');
+  await stage.getByRole('button', { name: 'Explain this control' }).focus();
+  await expect(page.locator('[data-vf-tooltip-content]')).toBeVisible();
+  await stage.getByRole('button', { name: 'Explain this control' }).evaluate((element) => element.blur());
+  await kind.selectOption('preview-card');
+  await stage.getByRole('button', { name: 'Preview profile' }).focus();
+  await expect(page.locator('[data-vf-preview-card-content]')).toBeVisible();
+
+  await kind.selectOption('dialog');
+  await expect(page.locator('#overlay-placement')).toBeDisabled();
+  await stage.getByRole('button', { name: 'Open Dialog' }).click();
+  const dialog = page.locator('dialog[data-vf-dialog-root]');
+  await expect(dialog).toBeVisible();
+  expect(await dialog.evaluate((element) => element.matches(':modal'))).toBe(true);
+  await dialog.getByRole('button', { name: 'Close Dialog' }).click();
+  await expect(dialog).not.toBeVisible();
+
+  await kind.selectOption('drawer');
+  await stage.getByRole('button', { name: 'Open Drawer' }).click();
+  const drawer = page.locator('dialog[data-vf-drawer-root]');
+  await expect(drawer).toBeVisible();
+  await expect(drawer).toHaveAttribute('data-vf-placement', 'end');
+  await drawer.getByRole('button', { name: 'Close Drawer' }).click();
+  await expect(drawer).not.toBeVisible();
+});
+
+test('Overlay workbench remains usable at 320px and 200% text', async ({ page }, testInfo) => {
+  await page.setViewportSize({ width: 320, height: 480 });
+  await page.goto('/next/react/utilities/overlay/');
+  await page.evaluate(() => { document.documentElement.style.fontSize = '200%'; });
+  const stage = page.locator('[data-vf-docs-overlay-stage]');
+  await stage.scrollIntoViewIfNeeded();
+  await stage.getByRole('button', { name: 'Open Popover' }).click();
+  await expect(page.locator('[data-vf-popover-content]')).toBeVisible();
+  const width = await page.evaluate(() => ({
+    viewport: document.documentElement.clientWidth,
+    page: document.documentElement.scrollWidth,
+  }));
+  expect(width.page).toBeLessThanOrEqual(width.viewport + 1);
+  await page.screenshot({ path: testInfo.outputPath('overlay-utility-320px-200pct-popover.png') });
 });
