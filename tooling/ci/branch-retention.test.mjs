@@ -44,7 +44,7 @@ describe('branch retention policy', () => {
     ], [], { ...policy, maxDeletionsPerRun: 10 }, { now, defaultBranch: 'main', repository });
 
     expect(result.deletions.map((item) => item.name)).toEqual(['feature/contained', 'feature/squash-merged']);
-    expect(result.deletions.map((item) => item.reason).toEqual(['contained-in-default', 'verified-merged-pr-head']);
+    expect(result.deletions.map((item) => item.reason)).toEqual(['contained-in-default', 'verified-merged-pr-head']);
     expect(result.skipped.some((item) => item.name === 'feature/unmerged' && item.reason === 'unique-commits')).toBe(true);
     expect(result.skipped.some((item) => item.name === 'feature/recent' && item.reason === 'not-stale')).toBe(true);
   });
