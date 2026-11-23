@@ -22,7 +22,12 @@ test('Badge augments a target and preserves its accessible name, keyboard focus 
   for (const element of await page.locator('[data-vf-badge-indicator]').all()) {
     await expect(element).toHaveAttribute('aria-hidden', 'true');
   }
+  // New sizing specimens precede the original count; check native tab order.
   await page.keyboard.press('Tab');
+  await expect(page.getByRole('button', { name: 'Small, seven updates' })).toBeFocused();
+  for (let index = 0; index < 4; index += 1) {
+    await page.keyboard.press('Tab');
+  }
   await expect(page.getByRole('button', { name: 'Inbox, 4 unread messages' })).toBeFocused();
   const a11y = await new AxeBuilder({ page }).analyze();
   expect(a11y.violations).toEqual([]);
