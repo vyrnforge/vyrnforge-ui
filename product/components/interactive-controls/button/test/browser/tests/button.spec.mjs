@@ -191,7 +191,7 @@ test.describe('Button Group presentation (independent commands, native grouping)
   test('joined and vertical actions keep individual Tab stops, logical corners, focus and disabled state', async ({ page }) => {
     await page.goto('/components/button/web.html');
     await page.locator('#grouped-specimens').evaluate(el => { el.hidden = false; });
-    const joined = page.getByRole('group', { name: 'Document actions' });
+    const joined = page.getByRole('group', { name: 'Document actions', exact: true });
     const buttons = joined.getByRole('button');
     await expect(buttons).toHaveCount(3);
     await expect(joined.getByRole('button', { name: 'Archive' })).toBeDisabled();
@@ -200,6 +200,25 @@ test.describe('Button Group presentation (independent commands, native grouping)
     await expect(page.locator('#joined-b')).toHaveCSS('border-start-start-radius', '0px');
     expect(await page.locator('#joined-b').evaluate(el =>
       getComputedStyle(el).marginInlineStart)).toBe('-1px');
+
+    const joinedIcons = page.getByRole('group', { name: 'Quick document actions' });
+    const iconButtons = joinedIcons.getByRole('button');
+    await expect(iconButtons).toHaveCount(2);
+    for (const icon of await iconButtons.all()) {
+      await expect(icon).toHaveAttribute('data-vf-icon-only', '');
+      const box = await icon.evaluate(el => el.getBoundingClientRect());
+      expect({ width: box.width, height: box.height }).toEqual({ width: 40, height: 40 });
+    }
+    await joinedIcons.evaluate(el => { el.style.inlineSize = '60px'; });
+    for (const icon of await iconButtons.all()) {
+      const box = await icon.evaluate(el => el.getBoundingClientRect());
+      expect({ width: box.width, height: box.height }).toEqual({ width: 40, height: 40 });
+    }
+    await joinedIcons.evaluate(el => { el.style.removeProperty('inline-size'); });
+    await iconButtons.first().hover();
+    await expect(iconButtons.first()).toHaveCSS('z-index', '1');
+    await iconButtons.last().focus();
+    await expect(iconButtons.last()).toHaveCSS('z-index', '2');
 
     const vertical = page.getByRole('group', { name: 'Vertical actions' });
     await expect(vertical.getByRole('button')).toHaveCount(2);
@@ -214,7 +233,7 @@ test.describe('Button Group presentation (independent commands, native grouping)
       getComputedStyle(el).borderStartStartRadius)).not.toBe('0px');
     await page.emulateMedia({ forcedColors: 'active' });
     await page.locator('#joined-b').focus();
-    await expect(page.locator('#joined-b')).toHaveCSS('z-index', '1');
+    await expect(page.locator('#joined-b')).toHaveCSS('z-index', '2');
     const results = await new AxeBuilder({ page }).analyze();
     expect(results.violations).toEqual([]);
   });

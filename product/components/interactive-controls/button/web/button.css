@@ -164,6 +164,11 @@
     position: relative;
   }
 
+  /* Joining must not shrink square icon targets into narrow rectangles. */
+  :where([data-vf-button-group] > [data-vf-button][data-vf-icon-only]) {
+    flex: none;
+  }
+
   :where([data-vf-button-group]:not([data-vf-button-group-orientation="vertical"]) > [data-vf-button]:first-child) {
     border-start-start-radius: var(--vf-control-radius);
     border-end-start-radius: var(--vf-control-radius);
@@ -190,8 +195,11 @@
   :where([data-vf-button-group][data-vf-button-group-orientation="vertical"] > [data-vf-button] + [data-vf-button]) {
     margin-block-start: -1px;
   }
-  :where([data-vf-button-group] > [data-vf-button]:focus-visible) {
+  :where([data-vf-button-group] > [data-vf-button]:hover:not(:disabled)) {
     z-index: 1;
+  }
+  :where([data-vf-button-group] > [data-vf-button]:focus-visible) {
+    z-index: 2;
   }
 
   @media (prefers-reduced-motion: reduce) {

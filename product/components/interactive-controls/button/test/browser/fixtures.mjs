@@ -22,6 +22,10 @@ export const browserFixture = {
         <button type="button" id="vertical-a" data-vf-button data-vf-variant="secondary">First</button>
         <button type="button" id="vertical-b" data-vf-button data-vf-variant="secondary">Second</button>
       </div>
+        <div role="group" aria-label="Quick document actions" data-vf-button-group id="joined-icon-actions">
+          <button type="button" data-vf-button data-vf-icon-only data-vf-size="md" data-vf-variant="secondary" id="joined-icon-edit" aria-label="Edit document"><svg width="20" height="20" aria-hidden="true"></svg></button>
+          <button type="button" data-vf-button data-vf-icon-only data-vf-size="md" data-vf-variant="secondary" id="joined-icon-copy" aria-label="Copy document"><svg width="20" height="20" aria-hidden="true"></svg></button>
+        </div>
       </div>
       <div id="icon-specimens" hidden>
         <button type="button" data-vf-button data-vf-icon-only data-vf-variant="ghost" data-vf-size="sm" id="icon-sm" aria-label="Search"><svg width="16" height="16" aria-hidden="true"><circle cx="8" cy="8" r="6"/></svg></button>

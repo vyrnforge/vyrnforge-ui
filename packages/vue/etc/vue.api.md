@@ -2189,6 +2189,10 @@ size: {
 type: PropType<"sm" | "md" | "lg">;
 default: string;
 };
+iconOnly: {
+type: BooleanConstructor;
+default: boolean;
+};
 }>, () => VNode<RendererNode, RendererElement, {
 [key: string]: any;
 }>, {}, {}, {}, ComponentOptionsMixin, ComponentOptionsMixin, ("update:pressed" | "pressedChange")[], "update:pressed" | "pressedChange", PublicProps, Readonly<ExtractPropTypes<    {
@@ -2204,11 +2208,16 @@ size: {
 type: PropType<"sm" | "md" | "lg">;
 default: string;
 };
+iconOnly: {
+type: BooleanConstructor;
+default: boolean;
+};
 }>> & Readonly<{
 "onUpdate:pressed"?: (...args: any[]) => any;
 onPressedChange?: (...args: any[]) => any;
 }>, {
 size: "sm" | "md" | "lg";
+iconOnly: boolean;
 pressed: boolean | undefined;
 defaultPressed: boolean;
 }, {}, {}, {}, string, ComponentProvideOptions, true, {}, any>;

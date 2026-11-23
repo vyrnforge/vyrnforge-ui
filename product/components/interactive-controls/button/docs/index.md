@@ -86,7 +86,15 @@ Keep just the icon as visual content and provide a stable, localized button name
 
 Icon-only loading centers one visual spinner instead of showing spinner and icon side-by-side; the original icon is visually hidden while busy, `aria-busy` remains true, and loading still does **not** disable activation. Size and visual emphasis are independent; use `<Icon size="sm|md|lg">` with a matching Button size where desired. Regular icon-with-text Buttons still use ordinary text padding and need no `iconOnly`.
 
-The icon-only presentation mode is a deliberately scoped extension proposed after a consumer design review; the original canonical Button Contract excluded icon-specific options from its **baseline**. Before declaring the revised contract fully accepted, reconcile that baseline in Drive and obtain independent actual-size visual/AT approval. Do not treat the existence of code or a browser screenshot as that approval.
+The canonical Button Contract records the icon-only extension, integrated in PR #1503. Its machine evidence does not establish actual-size visual approval, independent assistive-technology review or release readiness.
+
+### Consistent presentation across pressed and grouped controls
+
+`ToggleButton` also supports `iconOnly` in React/Vue/Angular and `data-vf-icon-only` in Native Web. Its `sm|md|lg` icon geometry reuses Button CSS, while its `aria-pressed` behavior remains independent. Use a stable accessible name, even when the icon and pressed state change.
+
+`ToggleGroupItem` and `SegmentedControlItem` accept the framework-neutral `data-vf-icon-only` presentation marker on their native host/label. It yields a square medium-control-size target, with a 2rem minimum in compact density. It does not add a selection policy or reinterpret a group as a toolbar. Every icon item needs an authored name on its actual interactive element.
+
+Joined icon commands continue to use the `data-vf-button-group` recipe and independent native activation. Name each icon Button and the parent group when meaningful; focus is layered above adjacent hover. Use the independent Flow/vertical alternatives at narrow widths rather than wrapping joined seams.
 
 ## ToggleButton and pressed state
 

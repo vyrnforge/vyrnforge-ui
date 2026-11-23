@@ -91,3 +91,35 @@ test('public ToggleGroup CSS resolves canonical subtle surface and control radii
   await page.emulateMedia({ forcedColors: 'active' });
   await expect(group).toHaveCSS('border-top-width', '1px');
 });
+
+test('icon-only ToggleGroup options stay square and selected state is distinguishable', async ({ page }) => {
+  test.skip(port !== 'web', 'Canonical Web choice styling contract');
+  await page.goto('/components/toggle-group/web.html');
+  const button = page.locator('#group').locator('#icon-choice');
+  await page.locator('#group').evaluate((group) => {
+    const icon = document.createElement('button');
+    icon.type = 'button';
+    icon.id = 'icon-choice';
+    icon.setAttribute('data-vf-toggle-group-item', '');
+    icon.setAttribute('data-vf-icon-only', '');
+    icon.setAttribute('aria-label', 'Grid view');
+    icon.setAttribute('aria-pressed', 'true');
+    icon.innerHTML = '<svg width="20" height="20" aria-hidden="true"></svg>';
+    group.append(icon);
+  });
+  await expect(button).toHaveCSS('width', '40px');
+  await expect(button).toHaveCSS('height', '40px');
+  await expect(button).toHaveCSS('padding-inline-start', '0px');
+  await expect(button).toHaveCSS('background-color', 'rgb(243, 247, 255)');
+  await page.locator('html').evaluate((el) => {
+    el.dataset.vfTheme = 'dark';
+  });
+  await expect(button).toHaveCSS('background-color', 'rgb(11, 31, 77)');
+  await button.focus();
+  await expect(button).toBeFocused();
+  await page.emulateMedia({ forcedColors: 'active' });
+  await expect(button).toHaveAttribute('aria-pressed', 'true');
+  await expect(button).toHaveCSS('outline-style', 'solid');
+  await expectNoAxeViolations(page);
+  await button.screenshot({ path: test.info().outputPath('toggle-group-icon-forced-colors.png') });
+});

@@ -1,7 +1,7 @@
 {
   "id": "button/toggle",
   "title": "ToggleButton pressed-state controls",
-  "description": "Independent pressed controls with native aria-pressed and small/medium/large sizing; controlled and uncontrolled React state",
+  "description": "Independent text and square icon-only pressed actions with native aria-pressed, accessible naming and controlled/uncontrolled React state",
   "defaultFramework": "react",
   "frameworks": {
     "react": {

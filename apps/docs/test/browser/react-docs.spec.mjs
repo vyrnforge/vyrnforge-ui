@@ -551,10 +551,13 @@ test('React Button-family guide shows joined groups, ToggleButton and density wi
   await page.goto('/next/react/components/button/');
   await expect(page.locator('[data-vf-docs-react-button-example]')).toHaveCount(9);
   const joined = page.frameLocator('iframe[title="React Independent and joined Button groups example"]');
-  await expect(joined.getByRole('group', { name: 'Document actions' })).toBeVisible();
-  await joined.getByRole('button', { name: 'Copy' }).click();
+  await expect(joined.getByRole('group', { name: 'Document actions', exact: true })).toBeVisible();
+  await joined.getByRole('button', { name: 'Copy', exact: true }).click();
   await expect(joined.getByRole('status')).toHaveText('Copied');
   await expect(joined.getByRole('button', { name: 'Archive' })).toBeDisabled();
+  const joinedIcons = page.frameLocator('iframe[title="React Independent and joined Button groups example"]')
+    .getByRole('group', { name: 'Quick document actions' });
+  await expect(joinedIcons.getByRole('button', { name: 'Copy document' })).toHaveAttribute('data-vf-icon-only', '');
 
   const toggle = page.frameLocator('iframe[title="React ToggleButton pressed-state controls example"]');
   const bold = toggle.getByRole('button', { name: 'Bold', exact: true });
@@ -562,6 +565,16 @@ test('React Button-family guide shows joined groups, ToggleButton and density wi
   await bold.click();
   await expect(bold).toHaveAttribute('aria-pressed', 'true');
   await expect(toggle.getByRole('status')).toHaveText('Bold: on');
+  const iconToggle = toggle.getByRole('button', { name: 'Pin document' });
+  await expect(iconToggle).toHaveAttribute('data-vf-icon-only', '');
+  await expect(iconToggle).toHaveAttribute('aria-pressed', 'false');
+  const iconToggleSize = await iconToggle.evaluate(el => {
+    const box = el.getBoundingClientRect();
+    return { width: box.width, height: box.height };
+  });
+  expect(iconToggleSize).toEqual({ width: 40, height: 40 });
+  await iconToggle.click();
+  await expect(iconToggle).toHaveAttribute('aria-pressed', 'true');
 
   const icons = page.frameLocator('iframe[title="React Icon-only Button sizes, emphasis and states example"]');
   await expect(icons.getByRole('button', { name: 'Save bookmark', exact: true })).toHaveCount(2);
