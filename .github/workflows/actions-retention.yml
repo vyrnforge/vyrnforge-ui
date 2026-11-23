@@ -11,6 +11,11 @@ on:
         description: Optional merged pull request number to clean immediately
         required: false
         type: string
+      dry_run:
+        description: Preview workflow-run and stale-branch deletions without removing anything
+        required: false
+        type: boolean
+        default: true
 
 permissions:
   contents: write
@@ -41,6 +46,7 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ github.token }}
           RETENTION_PR_NUMBER: ${{ inputs.pull_request || '' }}
+          RETENTION_DRY_RUN: ${{ github.event_name == 'workflow_dispatch' && inputs.dry_run }}
           RETENTION_REPORT: test-results/actions-retention.json
         run: node tooling/ci/retention-cleanup.mjs
 
@@ -51,4 +57,4 @@ jobs:
           name: actions-retention-report
           path: test-results/actions-retention.json
           if-no-files-found: error
-          retention-days: 14
+          retention-days: 5
