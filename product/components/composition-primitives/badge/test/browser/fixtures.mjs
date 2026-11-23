@@ -94,7 +94,11 @@ export const browserFixture = {
           anchorOrigin: { vertical: 'bottom', horizontal: 'end' } },
           button('End, two updates', 'End')),
         h(Badge, { id: 'circle', variant: 'dot', overlap: 'circular', tone: 'accent' },
-          h('span', { className: 'circle', role: 'img', 'aria-label': 'Profile, active' }, 'AB'))));
+          h('span', { className: 'circle', role: 'img', 'aria-label': 'Profile, active' }, 'AB')),
+        h(Badge, { id: 'new-label', badgeContent: 'NEW' },
+          button('Files, new upload', 'Files')),
+        h(Badge, { id: 'wrapped-label', badgeContent: 'PENDING REVIEW', tone: 'accent' },
+          button('Review, pending review', 'Review'))));
     }
     await writeFile(path.join(target, port + '.html'),
       '<!doctype html><html lang="en"><head><meta charset="utf-8">' +
