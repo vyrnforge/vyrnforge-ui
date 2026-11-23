@@ -233,7 +233,9 @@ try {
 
   for (const deletion of report.plan.deletions) {
     report.results.push(await deleteWorkflowRun(deletion.id));
-    if (!dryRun) await new Promise((resolve) => setTimeout(resolve, 125));
+    // GitHub DELETE operations cost more API points than reads. Keep sustained
+    // deletion traffic under the secondary-rate-limit budget.
+    if (!dryRun) await new Promise((resolve) => setTimeout(resolve, 400));
   }
   if (eventName === 'schedule' || eventName === 'workflow_dispatch') report.branchCleanup = await cleanupStaleBranches();
 
