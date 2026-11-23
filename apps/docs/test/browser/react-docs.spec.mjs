@@ -6,6 +6,10 @@ import { compileFrameworkDocumentation } from '../../../../tooling/docs/framewor
 test('React example documents load canonical Web CSS without documentation chrome CSS', () => {
   const app = readFileSync('dist/docs/next/react/components/button/index.html', 'utf8');
   expect(app).toContain('assets/docs.css');
+  const docsCss = readFileSync('dist/docs/assets/docs.css', 'utf8');
+  expect(docsCss).not.toContain('[data-vf-search-field-clear]');
+  expect(docsCss).not.toContain('.vf-docs-icon-grid [data-vf-button]');
+  expect(docsCss).toContain('[data-vf-docs-icon-card]');
 
   for (const route of [
     'examples/button-basic/',
