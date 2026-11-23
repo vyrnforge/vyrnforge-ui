@@ -300,6 +300,8 @@ export const Button: ForwardRefExoticComponent<ButtonProps & RefAttributes<HTMLB
 
 // @public (undocumented)
 export interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
+    /** Square, icon-only presentation; provide an accessible name on the button. */
+    iconOnly?: boolean;
     // (undocumented)
     loading?: boolean;
     // (undocumented)
