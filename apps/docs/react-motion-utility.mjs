@@ -6,6 +6,7 @@ import { Flow, AutoGrid } from '@vyrnforge/react/layout';
 import { Text } from '@vyrnforge/react/text';
 import { Motion, ThemeScope } from '@vyrnforge/react';
 import { UtilitySections, renderUtilityInline } from './react-utility-content.mjs';
+import { reactConsumerSections } from './react-content-policy.mjs';
 
 const durations = [['default', 'Default · 120ms'], ['fast', 'Custom · 80ms'], ['none', 'Custom · 0ms']];
 const easings = [['standard', 'Standard'], ['linear', 'Linear override']];
@@ -102,7 +103,7 @@ function MotionEffectsPlayground({ theme, variables }) {
     h('p', { role: 'status', 'aria-live': 'polite', 'data-vf-docs-motion-sample-status': '' },
       'Sample actions: ' + actionCount + '. Switch: ' + (checked ? 'on' : 'off') + '.'),
     h('details', { className: 'vf-docs-source-disclosure' },
-      h('summary', null, 'View reusable CSS effect usage'),
+      h('summary', null, 'View React Motion source'),
       h('pre', { tabIndex: 0, 'data-vf-code-block': '' }, h('code', null, code))),
     h(Text, { as: 'p', variant: 'body-sm' },
       'Entrance only. React Motion renders a native wrapper and accepts effect, direction and duration props. For exit, presence, dismissal and focus, follow the individual component contract; reduced motion suppresses these effects automatically.'));
@@ -127,8 +128,9 @@ export function MotionUtility({ guide, links }) {
         h(Text, { as: 'p', variant: 'overline', className: 'vf-docs-eyebrow' }, 'Utilities'),
         h(Text, { as: 'h1', variant: 'heading-lg' }, guide.title),
         h(Text, { as: 'p', variant: 'body-lg' },
-          'Shared CSS-first transitions, timing and reduced-motion behavior across components.'),
+          'React Motion effects, shared timing, and accessible visual feedback.'),
         ...guide.intro.map((block, i) => h(Text, { as: 'p', key: i }, ...renderUtilityInline(block.text)))),
+      h(MotionEffectsPlayground, { theme, variables }),
       h(Flow, { as: 'section', gap: 'md', 'aria-labelledby': 'motion-playground-title' },
         h(Text, { as: 'h2', variant: 'heading-md', id: 'motion-playground-title' },
           'Interactive motion playground'),
@@ -169,7 +171,6 @@ export function MotionUtility({ guide, links }) {
         h(Text, { as: 'p', variant: 'body-sm' },
           'The browser’s reduced-motion preference always takes priority in canonical component CSS. The custom 0ms option is a consumer-scoped demonstration, not a replacement for that preference.'),
         h(Source, { duration, easing })),
-      h(MotionEffectsPlayground, { theme, variables }),
       ...UtilitySections({ guide, prefix: 'motion-' }),
       h(Flow, { as: 'section', gap: 'sm', 'aria-labelledby': 'motion-related-links' },
         h(Text, { as: 'h2', variant: 'heading-md', id: 'motion-related-links' }, 'Related guidance'),
@@ -183,7 +184,7 @@ export function MotionUtility({ guide, links }) {
         h('p', null, 'On this page'),
         h('ol', null,
           h('li', null, h('a', { href: '#motion-playground-title' }, 'Live playground')),
-          ...guide.sections.map((section) => h('li', { key: section.heading },
+          ...reactConsumerSections(guide).map((section) => h('li', { key: section.heading },
             h('a', { href: '#motion-' + section.heading.toLowerCase().replace(/[^a-z0-9]+/g, '-') },
               section.heading))),
           h('li', null, h('a', { href: '#motion-related-links' }, 'Related guidance'))))));
