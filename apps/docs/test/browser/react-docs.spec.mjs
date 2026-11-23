@@ -549,16 +549,16 @@ test('React Button guide SSR hydrates and uses public Button, AppShell, SideNav 
 test('React Button-family guide shows joined groups, ToggleButton and density without overlapping choice semantics', async ({ page }) => {
   await page.goto('/next/react/components/button/');
   await expect(page.locator('[data-vf-docs-react-button-example]')).toHaveCount(9);
-  const joined = page.frameLocator('iframe[title="React Independent and joined Button groups example"]');
+  const joined = page.frameLocator('iframe[title="React Button groups example"]');
   await expect(joined.getByRole('group', { name: 'Document actions', exact: true })).toBeVisible();
   await joined.getByRole('button', { name: 'Copy', exact: true }).click();
   await expect(joined.getByRole('status')).toHaveText('Copied');
   await expect(joined.getByRole('button', { name: 'Archive' })).toBeDisabled();
-  const joinedIcons = page.frameLocator('iframe[title="React Independent and joined Button groups example"]')
+  const joinedIcons = page.frameLocator('iframe[title="React Button groups example"]')
     .getByRole('group', { name: 'Quick document actions' });
   await expect(joinedIcons.getByRole('button', { name: 'Copy document' })).toHaveAttribute('data-vf-icon-only', '');
 
-  const toggle = page.frameLocator('iframe[title="React ToggleButton pressed-state controls example"]');
+  const toggle = page.frameLocator('iframe[title="React Toggle actions example"]');
   const bold = toggle.getByRole('button', { name: 'Bold', exact: true });
   await expect(bold).toHaveAttribute('aria-pressed', 'false');
   await bold.click();
@@ -575,7 +575,7 @@ test('React Button-family guide shows joined groups, ToggleButton and density wi
   await iconToggle.click();
   await expect(iconToggle).toHaveAttribute('aria-pressed', 'true');
 
-  const icons = page.frameLocator('iframe[title="React Icon-only Button sizes, emphasis and states example"]');
+  const icons = page.frameLocator('iframe[title="React Icon buttons example"]');
   await expect(icons.getByRole('button', { name: 'Save bookmark', exact: true })).toHaveCount(2);
   const iconOnly = icons.getByRole('button', { name: 'Save bookmark', exact: true }).first();
   await expect(iconOnly).toHaveAttribute('data-vf-icon-only', '');
@@ -589,7 +589,7 @@ test('React Button-family guide shows joined groups, ToggleButton and density wi
   await expect(icons.getByRole('button', { name: 'Search' })).toHaveAttribute('data-vf-size', 'sm');
   await expect(icons.getByRole('button', { name: 'Saving bookmark' })).toHaveAttribute('aria-busy', 'true');
 
-  const density = page.frameLocator('iframe[title="React Button sizes and inherited density example"]');
+  const density = page.frameLocator('iframe[title="React Density example"]');
   await density.getByRole('combobox', { name: 'Density' }).selectOption('compact');
   await expect(density.locator('[data-vf-density="compact"]')).toHaveCount(1);
 });
@@ -613,7 +613,7 @@ test('React Button guide keeps all demos visible, source optional and navigation
 
   const navigation = page.getByRole('navigation', { name: 'Button examples' });
   await expect(navigation.getByRole('link')).toHaveCount(9);
-  await expect(navigation.getByRole('link', { name: 'Icon-only Button sizes, emphasis and states' }))
+  await expect(navigation.getByRole('link', { name: 'Icon buttons' }))
     .toHaveAttribute('href', '#react-button-example-icons');
   const source = examples.first().locator('.vf-docs-source-disclosure');
   await source.locator('summary').focus();
@@ -1259,7 +1259,6 @@ test('React Icon uses product-owned SVG examples and public source-backed API', 
   ]);
   await expect(page.getByRole('navigation', { name: 'On this page' }).getByRole('link')).toHaveCount(5);
   await expect(guide.getByText('Standards and evidence mapping')).toBeVisible();
-  await guide.locator('.vf-docs-example-index > summary').click();
   await expect(page.getByRole('navigation', { name: 'Icon examples' }).getByRole('link')).toHaveCount(8);
   await expect(guide.locator('[data-vf-docs-react-icon-explorer]')).toHaveCount(0);
   await expect(page.getByRole('navigation', { name: 'Documentation' })
@@ -1617,7 +1616,6 @@ test('React Button guide renders all five source-backed variants and links the i
   const guide = page.locator('[data-vf-docs-react-component="button"]');
   const cards = guide.locator('[data-vf-docs-react-button-example]');
   await expect(cards).toHaveCount(9);
-  await guide.locator('.vf-docs-example-index > summary').click();
   await expect(page.getByRole('navigation', { name: 'Button examples' }).getByRole('link')).toHaveCount(9);
   for (const id of ['basic', 'variants', 'sizes', 'states', 'forms']) {
     const card = guide.locator('[data-vf-docs-react-button-example="button/' + id + '"]');
@@ -1796,7 +1794,6 @@ test('React Badge guide remains focused on React and uses source-backed examples
   await expect(setup).toHaveCount(1);
   await expect(setup).toContainText("from '@vyrnforge/react/badge'");
   await expect(setup).not.toContainText('<Badge');
-  await guide.locator('.vf-docs-example-index > summary').click();
   await expect(page.getByRole('navigation', { name: 'Badge examples' }).getByRole('link')).toHaveCount(5);
   const basic = guide.locator('[data-vf-docs-react-badge-example="badge/basic"] iframe');
   await basic.scrollIntoViewIfNeeded();
@@ -1840,7 +1837,6 @@ test('React Avatar guide shows initials, native photo, failed-image fallback and
   await page.goto('/next/react/components/avatar/');
   const guide = page.locator('[data-vf-docs-react-avatar]');
   await expect(guide.getByRole('heading', { level: 1, name: 'Avatar' })).toBeVisible();
-  await guide.locator('.vf-docs-example-index > summary').click();
   await expect(page.getByRole('navigation', { name: 'Avatar examples' }).getByRole('link')).toHaveCount(10);
   await expect(guide.getByRole('heading', { name: 'Behavior and usage' })).toBeVisible();
   await expect(guide.getByRole('heading', { name: 'Appearances and fallback' })).toBeVisible();
