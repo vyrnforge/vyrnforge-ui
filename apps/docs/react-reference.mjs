@@ -147,7 +147,10 @@ function navigation(view, links, topic) {
       { id: 'themes', title: 'Theming', href: links.themes },
       { id: 'rtl', title: 'Right-to-left', href: links.rtl },
     ] },
-    { label: 'Components', items: [{ id: 'guide', title: 'Button', href: links.guide }] },
+    { label: 'Components', items: [
+      { id: 'guide', title: 'Button', href: links.guide },
+      { id: 'toggle', title: 'ToggleButton', href: links.toggle.guide },
+    ] },
     { label: 'Typography', items: ['text', 'code', 'kbd'].map((id) => ({
       id: 'typography:' + id,
       title: id === 'kbd' ? 'Kbd' : id[0].toUpperCase() + id.slice(1),
@@ -173,6 +176,7 @@ function navigation(view, links, topic) {
     // interleaved with consumer guides. A dedicated API catalog can follow.
     { label: 'API Reference', items: [
       { id: 'api', title: 'Button API', href: links.api },
+      { id: 'toggle-api', title: 'ToggleButton API', href: links.toggle.api },
       { id: 'layout-api', title: 'Layout API', href: links.layoutApi },
       { id: 'divider-api', title: 'Divider API', href: links.divider.api },
       { id: 'list-api', title: 'List API', href: links.list.api },
@@ -425,7 +429,9 @@ function buttonExample(example, links) {
     h('iframe', { className: 'vf-docs-react-example-frame',
       title: id === 'basic' ? 'Checked-in React Button example' : 'React ' + example.title + ' example',
       src: links.buttonExamples[id], sandbox: 'allow-scripts',
-      loading: id === 'basic' ? 'eager' : 'lazy' }),
+      loading: id === 'basic' ? 'eager' : 'lazy',
+      style: { minBlockSize: id === 'joined' ? '26rem' : id === 'toggle' ? '17rem' :
+        id === 'icons' || id === 'density' ? '14rem' : '10rem' } }),
     h('details', { className: 'vf-docs-source-disclosure' },
       h('summary', null, id === 'basic' ? 'View checked-in React source' : 'View React TSX source'),
       h('pre', { 'data-vf-code-block': '', tabIndex: 0 },
@@ -464,6 +470,8 @@ function buttonUsageGuide(button, links, message, setMessage) {
       guidePart(sections[2], guideSubsections(button.sharedContent, [
         'When to use', 'Native baseline', 'Variants', 'Sizes',
         'States and async work', 'Forms', 'Styling and adaptation',
+        'Button groups and joined actions', 'Accessible icon actions',
+        'ToggleButton and pressed state', 'Density and target sizing',
       ], 'react-button-guide')),
       guidePart(sections[3], [
         ...guideBlocks(button.sharedContent, 'Interaction and focus'),
@@ -475,8 +483,79 @@ function buttonUsageGuide(button, links, message, setMessage) {
           h('li', null, h('a', { 'data-vf-link': '', href: links.api },
             'View Button public React API')),
           h('li', null, h('a', { 'data-vf-link': '', href: links.layout },
-            'Layout'))),
+            'Layout')),
+          h('li', null, h('a', { href: links.toggle.guide, 'data-vf-link': '' },
+            'ToggleButton'))),
       ])));
+}
+
+function toggleExample(toggle, links) {
+  const example = toggle.examples[0];
+  return h('article', { className: 'vf-docs-example', id: 'react-toggle-example',
+    'data-vf-docs-react-toggle-example': example.id },
+    h(Flow, { as: 'header', direction: 'inline', wrap: 'wrap', gap: 'lg',
+      align: 'start', justify: 'space-between', className: 'vf-docs-example-header' },
+      h('div', null, h(Text, { as: 'h3', variant: 'heading-sm' }, example.title),
+        h(Text, { as: 'p' }, example.description))),
+    h('iframe', { className: 'vf-docs-react-example-frame', title: 'React ToggleButton pressed-state example',
+      src: links.toggle.example, sandbox: 'allow-scripts', loading: 'eager',
+      style: { minBlockSize: '17rem' } }),
+    h('details', { className: 'vf-docs-source-disclosure' },
+      h('summary', null, 'View React TSX source'),
+      h('pre', { 'data-vf-code-block': '', tabIndex: 0 }, h('code', null, example.source))));
+}
+function toggleUsage(toggle, links) {
+  if (!toggle?.sharedContent || !toggle?.frameworkContent || !toggle.examples?.length) return null;
+  const sections = [
+    { id: 'react-toggle-setup', heading: 'Get started' },
+    { id: 'react-toggle-examples', heading: 'Live pressed-state example' },
+    { id: 'react-toggle-guidance', heading: 'State and composition' },
+    { id: 'react-toggle-a11y', heading: 'Accessibility' },
+    { id: 'react-toggle-reference', heading: 'Related components and API' },
+  ];
+  return h('div', { className: 'vf-docs-content-grid vf-docs-usage-guide-layout' },
+    guideToc(sections),
+    h(Flow, { as: 'article', gap: '2xl', className: 'vf-docs-article vf-docs-usage-guide',
+      'data-vf-docs-react-toggle': '' },
+      guideHeader(toggle.sharedContent, 'React · Components · Actions'),
+      guidePart(sections[0], guideBlocks(toggle.frameworkContent, 'React setup')),
+      guidePart(sections[1], [toggleExample(toggle, links)]),
+      guidePart(sections[2], [
+        ...guideSubsections(toggle.sharedContent,
+          ['Native semantics and behavior', 'Sizing and styling', 'Related controls and grouping'],
+          'react-toggle-guidance'),
+        ...guideSubsections(toggle.frameworkContent,
+          ['Controlled and uncontrolled state', 'Sizing and composition'],
+          'react-toggle-authoring'),
+      ]),
+      guidePart(sections[3], [
+        ...guideBlocks(toggle.sharedContent, 'Accessibility and evidence'),
+        evidenceDisclosure(toggle.standardReferences),
+      ]),
+      guidePart(sections[4], [
+        h('a', { href: links.toggle.api, 'data-vf-link': '' }, 'ToggleButton public React API'),
+        h('a', { href: links.guide, 'data-vf-link': '' }, 'Button and joined action groups'),
+      ])));
+}
+function toggleApi(toggle, links) {
+  if (!toggle?.publicToggleTypes || !toggle.publicEntrypoints?.length) return null;
+  return h('article', { className: 'vf-docs-article', 'data-vf-docs-react-api': 'toggle-button' },
+    h('header', { className: 'vf-docs-component-header' },
+      h('h1', null, 'ToggleButton API'),
+      h('p', { className: 'vf-docs-lede' },
+        'Native pressed button with controlled or uncontrolled state and shared Button sizes.'),
+      accessibilityEvidence(toggle.standardReferences)),
+    h('section', { 'aria-labelledby': 'react-toggle-api-entry' },
+      h('h2', { id: 'react-toggle-api-entry' }, 'Public entrypoint'),
+      h('ul', null, ...toggle.publicEntrypoints.map(name => h('li', { key: name },
+        h('code', { 'data-vf-code': '' }, name)))),
+      h('p', null, 'Canonical styling: ', h('code', null,
+        '@vyrnforge/web/styles/toggle-button.css'))),
+    h('section', { 'aria-labelledby': 'react-toggle-api-props' },
+      h('h2', { id: 'react-toggle-api-props' }, 'Source-backed React props'),
+      h('pre', { 'data-vf-code-block': '', tabIndex: 0 },
+        h('code', null, toggle.publicToggleTypes))),
+    h('a', { href: links.toggle.guide, 'data-vf-link': '' }, 'View ToggleButton examples'));
 }
 
 function iconExample(example, links) {
@@ -1151,7 +1230,7 @@ function themesGuide(links) {
       h(Text, { as: 'p' }, h('a', { href: links.rtl, 'data-vf-link': '' }, 'Use right-to-left content'))));
 }
 
-function body(view, links, button, layout, typography, icon, image, avatar, divider, badge, list, message, setMessage, requestedTopic) {
+function body(view, links, button, toggle, layout, typography, icon, image, avatar, divider, badge, list, message, setMessage, requestedTopic) {
   if (view === 'unavailable') {
     return h('article', { className: 'vf-docs-article', 'data-vf-docs-react-unavailable': '' },
       h('header', { className: 'vf-docs-component-header' },
@@ -1175,7 +1254,7 @@ function body(view, links, button, layout, typography, icon, image, avatar, divi
       h('header', { className: 'vf-docs-component-header' },
         h('h1', null, 'VyrnForge React'),
         h('p', { className: 'vf-docs-lede', 'data-vf-text': '', 'data-vf-text-variant': 'body-lg' },
-          'Runnable React examples for Button, Layout, List, Divider, Text, Code, Kbd, Icon, Image and Avatar. All use the shared VyrnForge Web design foundation.')),
+          'Runnable React examples for Button, ToggleButton, Layout, List, Divider, Text, Code, Kbd, Icon, Image and Avatar. All use the shared VyrnForge Web design foundation.')),
       h('section', null, h('h2', null, 'Getting started'),
         h('p', null, 'Import React components from their public entrypoints. Supported CSS-aware browser builds automatically include canonical Web component styles; server-rendered apps must also deliver extracted client CSS.'),
         h('pre', { 'data-vf-code-block': '', tabIndex: 0 },
@@ -1209,6 +1288,8 @@ function body(view, links, button, layout, typography, icon, image, avatar, divi
         h('ul', null,
           h('li', null, h('a', { 'data-vf-link': '', href: links.guide }, 'React Button')),
           h('li', null, h('a', { 'data-vf-link': '', href: links.api }, 'React Button API')),
+          h('li', null, h('a', { 'data-vf-link': '', href: links.toggle.guide }, 'React ToggleButton')),
+          h('li', null, h('a', { 'data-vf-link': '', href: links.toggle.api }, 'React ToggleButton API')),
           h('li', null, h('a', { 'data-vf-link': '', href: links.layout }, 'React Layout')),
           h('li', null, h('a', { 'data-vf-link': '', href: links.layoutApi }, 'React Layout API')),
           h('li', null, h('a', { 'data-vf-link': '', href: links.divider.guide }, 'React Divider')),
@@ -1231,6 +1312,8 @@ function body(view, links, button, layout, typography, icon, image, avatar, divi
               href: links.typography[id].api }, 'React ' + id + ' API')),
           ]))));
   }
+  if (view === 'toggle') return toggleUsage(toggle, links);
+  if (view === 'toggle-api') return toggleApi(toggle, links);
   if (view === 'icon-library') return iconLibrary(links);
   if (view === 'icon') return iconUsage(icon, links);
   if (view === 'icon-api') return iconApi(icon, links);
@@ -1289,7 +1372,7 @@ function body(view, links, button, layout, typography, icon, image, avatar, divi
   }
   return buttonUsageGuide(button, links, message, setMessage);
 }
-export function ReactReferencePage({ view, links, button, layout, typography, icon, image, avatar, divider, badge, list, requestedTopic }) {
+export function ReactReferencePage({ view, links, button, toggle, layout, typography, icon, image, avatar, divider, badge, list, requestedTopic }) {
   const nav = useNavigation();
   const { theme, change } = useTheme();
   const [search, setSearch] = useState('');
@@ -1313,6 +1396,8 @@ export function ReactReferencePage({ view, links, button, layout, typography, ic
       keywords: 'foundations styles stylesheet css customization cascade layers browser bundler ssr hydration override reset' },
     { title: 'Button', href: links.guide, keywords: 'button usage accessibility examples state' },
     { title: 'Button API', href: links.api, keywords: 'button props reference public' },
+    { title: 'ToggleButton', href: links.toggle.guide, keywords: 'toggle button pressed state independent' },
+    { title: 'ToggleButton API', href: links.toggle.api, keywords: 'togglebutton props aria-pressed controlled size' },
     { title: 'Layout', href: links.layout, keywords: 'flow autogrid grid responsive spacing layout wrap inline block JSX divider separator thematic hr css border' },
     { title: 'Layout API', href: links.layoutApi, keywords: 'flowprops autogridprops as minitemsize ref gap' },
     { title: 'Divider', href: links.divider.guide, keywords: 'divider separator straight horizontal divider vertical divider divider text alignment horizontal divider with text vertical divider with text line visual border label text content start center end align alignment horizontal text vertical-rl top-to-bottom bottom-to-top textDirection rotate' },
@@ -1406,7 +1491,7 @@ export function ReactReferencePage({ view, links, button, layout, typography, ic
           h('a', { 'data-vf-link': '', href: links.native }, 'Native Web'),
           h('span', { 'aria-hidden': 'true' }, ' / '),
           h('span', { 'aria-current': 'page' }, 'React')),
-        body(view, links, button, layout, typography, icon, image, avatar, divider, badge, list, message, setMessage, requestedTopic))),
+        body(view, links, button, toggle, layout, typography, icon, image, avatar, divider, badge, list, message, setMessage, requestedTopic))),
     h(AppShellFooter, { className: 'vf-docs-footer' },
       h('span', null, 'VyrnForge React documentation'),
       h('span', null, links.channel + ' channel'))));

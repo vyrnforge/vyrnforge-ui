@@ -1,0 +1,13 @@
+{
+  "id": "button/joined",
+  "title": "Independent and joined Button groups",
+  "description": "Separated actions with Flow and joined horizontal/vertical actions with a native named group; every Button remains separately focusable",
+  "defaultFramework": "react",
+  "frameworks": {
+    "react": {
+      "label": "React",
+      "language": "tsx",
+      "source": "react.tsx"
+    }
+  }
+}

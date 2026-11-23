@@ -115,6 +115,58 @@
     inline-size: 0.9em;
   }
 
+  /* Joined Button actions are a visual recipe, not a selection/toolbar widget.
+     Consumers provide a native group name when the related actions need one.
+     All child buttons keep independent Tab stops and their own state. */
+  :where([data-vf-button-group]) {
+    align-items: stretch;
+    display: inline-flex;
+    max-inline-size: 100%;
+    min-inline-size: 0;
+    vertical-align: middle;
+  }
+
+  :where([data-vf-button-group][data-vf-button-group-orientation="vertical"]) {
+    flex-direction: column;
+  }
+
+  :where([data-vf-button-group] > [data-vf-button]) {
+    border-radius: 0;
+    flex: 0 1 auto;
+    min-inline-size: 0;
+    position: relative;
+  }
+
+  :where([data-vf-button-group]:not([data-vf-button-group-orientation="vertical"]) > [data-vf-button]:first-child) {
+    border-start-start-radius: var(--vf-control-radius);
+    border-end-start-radius: var(--vf-control-radius);
+  }
+  :where([data-vf-button-group]:not([data-vf-button-group-orientation="vertical"]) > [data-vf-button]:last-child) {
+    border-start-end-radius: var(--vf-control-radius);
+    border-end-end-radius: var(--vf-control-radius);
+  }
+  :where([data-vf-button-group]:not([data-vf-button-group-orientation="vertical"]) > [data-vf-button] + [data-vf-button]) {
+    margin-inline-start: -1px;
+  }
+
+  :where([data-vf-button-group][data-vf-button-group-orientation="vertical"] > [data-vf-button]) {
+    inline-size: 100%;
+  }
+  :where([data-vf-button-group][data-vf-button-group-orientation="vertical"] > [data-vf-button]:first-child) {
+    border-start-start-radius: var(--vf-control-radius);
+    border-start-end-radius: var(--vf-control-radius);
+  }
+  :where([data-vf-button-group][data-vf-button-group-orientation="vertical"] > [data-vf-button]:last-child) {
+    border-end-start-radius: var(--vf-control-radius);
+    border-end-end-radius: var(--vf-control-radius);
+  }
+  :where([data-vf-button-group][data-vf-button-group-orientation="vertical"] > [data-vf-button] + [data-vf-button]) {
+    margin-block-start: -1px;
+  }
+  :where([data-vf-button-group] > [data-vf-button]:focus-visible) {
+    z-index: 1;
+  }
+
   @media (prefers-reduced-motion: reduce) {
     :where([data-vf-button]) { transition: none; }
     :where([data-vf-button][data-vf-loading])::before { animation: none; }

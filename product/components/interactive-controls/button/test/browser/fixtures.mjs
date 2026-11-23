@@ -12,6 +12,17 @@ export const browserFixture = {
         <button data-vf-button data-vf-variant="primary" data-vf-size="md" data-vf-loading aria-busy="true">Loading</button>
         <button data-vf-button data-vf-variant="primary" data-vf-size="md" disabled>Disabled</button>
       </section>
+      <div id="grouped-specimens" hidden>
+      <div id="joined-actions" role="group" aria-label="Document actions" data-vf-button-group>
+        <button type="button" id="joined-a" data-vf-button data-vf-variant="secondary">Edit</button>
+        <button type="button" id="joined-b" data-vf-button data-vf-variant="secondary">Duplicate</button>
+        <button type="button" id="joined-c" data-vf-button data-vf-variant="secondary" disabled>Archive</button>
+      </div>
+      <div id="vertical-actions" role="group" aria-label="Vertical actions" data-vf-button-group data-vf-button-group-orientation="vertical">
+        <button type="button" id="vertical-a" data-vf-button data-vf-variant="secondary">First</button>
+        <button type="button" id="vertical-b" data-vf-button data-vf-variant="secondary">Second</button>
+      </div>
+      </div>
       <form id="form"><label for="field">Field</label><input id="field" name="field" value="changed"><button id="submit" data-vf-button data-vf-variant="primary" data-vf-size="md" name="intent" value="submit">Submit</button><button id="reset" data-vf-button data-vf-variant="secondary" data-vf-size="md" type="reset">Reset</button><button id="plain" data-vf-button data-vf-variant="ghost" data-vf-size="md" type="button">Plain</button></form>
       <button id="external-submit" data-vf-button form="form" type="submit" name="intent" value="external">External submit</button>
       <button id="activation" data-vf-button data-vf-variant="primary" data-vf-size="md">Activate</button>

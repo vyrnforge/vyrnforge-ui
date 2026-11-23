@@ -1,10 +1,11 @@
 export default {
   id: 'toggle-button', exportName: 'ToggleButton', angularName: 'VfToggleButtonDirective', hook: 'data-vf-toggle-button',
-  markup: '<button id="control" type="button" data-vf-button data-vf-toggle-button aria-pressed="false">Toggle</button>',
+  markup: '<button id="control" type="button" data-vf-button data-vf-toggle-button data-vf-size="md" aria-pressed="false">Toggle</button>',
   angular: '<button id="control" vfToggleButton>Toggle</button>', props: { defaultPressed: false }, content: 'Toggle', label: false,
   hydrate: true, webConnector: 'connectToggleButton', styleDependencies: ['button'], reducedMotion: true, semantics: { tag: 'BUTTON' },
   async assertBrowser({ control, expect }) {
     await expect(control).toHaveAttribute('aria-pressed', 'false');
+    await expect(control).toHaveAttribute('data-vf-size', 'md');
     await expect(control).toHaveCSS('border-color', 'rgb(113, 113, 122)');
     await expect(control).not.toHaveAttribute('data-vf-pressed');
     await control.click();

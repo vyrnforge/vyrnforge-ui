@@ -166,3 +166,39 @@ test.describe('Button framework hydration', () => {
     });
   }
 });
+
+
+test.describe('Button Group presentation (independent commands, native grouping)', () => {
+  test.skip(port !== 'web', 'Canonical native Web CSS contract');
+
+  test('joined and vertical actions keep individual Tab stops, logical corners, focus and disabled state', async ({ page }) => {
+    await page.goto('/components/button/web.html');
+    await page.locator('#grouped-specimens').evaluate(el => { el.hidden = false; });
+    const joined = page.getByRole('group', { name: 'Document actions' });
+    const buttons = joined.getByRole('button');
+    await expect(buttons).toHaveCount(3);
+    await expect(joined.getByRole('button', { name: 'Archive' })).toBeDisabled();
+    expect(await page.locator('#joined-a').evaluate(el =>
+      getComputedStyle(el).borderStartStartRadius)).not.toBe('0px');
+    await expect(page.locator('#joined-b')).toHaveCSS('border-start-start-radius', '0px');
+    expect(await page.locator('#joined-b').evaluate(el =>
+      getComputedStyle(el).marginInlineStart)).toBe('-1px');
+
+    const vertical = page.getByRole('group', { name: 'Vertical actions' });
+    await expect(vertical.getByRole('button')).toHaveCount(2);
+    await expect(page.locator('#vertical-b')).toHaveCSS('margin-block-start', '-1px');
+    await page.locator('#joined-a').focus();
+    await page.keyboard.press('Tab');
+    await expect(page.locator('#joined-b')).toBeFocused();
+    await page.keyboard.press('Tab');
+    await expect(page.locator('#vertical-a')).toBeFocused(); // disabled Archive skipped
+    await page.evaluate(() => { document.documentElement.dir = 'rtl'; });
+    expect(await page.locator('#joined-a').evaluate(el =>
+      getComputedStyle(el).borderStartStartRadius)).not.toBe('0px');
+    await page.emulateMedia({ forcedColors: 'active' });
+    await page.locator('#joined-b').focus();
+    await expect(page.locator('#joined-b')).toHaveCSS('z-index', '1');
+    const results = await new AxeBuilder({ page }).analyze();
+    expect(results.violations).toEqual([]);
+  });
+});

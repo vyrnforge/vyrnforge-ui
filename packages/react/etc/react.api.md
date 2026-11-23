@@ -4795,6 +4795,7 @@ export interface ToggleButtonProps extends Omit<ButtonHTMLAttributes<HTMLButtonE
     onPressedChange?: (pressed: boolean, event: MouseEvent_2<HTMLButtonElement>) => void;
     // (undocumented)
     pressed?: boolean;
+    size?: 'sm' | 'md' | 'lg';
 }
 
 // @public (undocumented)

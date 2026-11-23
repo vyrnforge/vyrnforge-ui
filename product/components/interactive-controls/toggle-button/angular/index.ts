@@ -6,12 +6,14 @@ import { Directive, ElementRef, HostListener, inject, input, model } from '@angu
   host: {
     'data-vf-button': '',
     'data-vf-toggle-button': '',
+    '[attr.data-vf-size]': 'size()',
     '[attr.aria-pressed]': 'pressed()',
     '[attr.type]': 'type()',
   },
 })
 export class VfToggleButtonDirective {
   readonly pressed = model(false);
+  readonly size = input<'sm' | 'md' | 'lg'>('md');
   readonly type = input<'button' | 'submit' | 'reset'>('button');
   private readonly element = inject<ElementRef<HTMLButtonElement>>(ElementRef);
 

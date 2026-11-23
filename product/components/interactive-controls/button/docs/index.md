@@ -69,3 +69,23 @@ Documentation completeness and rollout may differ across frameworks. An implemen
 ## Contract and evidence boundaries
 
 Button has no built-in asynchronous operation, busy-state controller, form submission handler, or programmatic focus manager. Consumer code owns these concerns. The component's keyboard, form, accessibility, visual, and runtime expectations are defined by the canonical Button Contract; automated browser checks and component evidence prove only their tested revision and surfaces, not universal assistive-technology or production readiness.
+
+## Button groups and joined actions
+
+ButtonGroup is **not** a standalone VyrnForge interactive control. Independent actions use Flow with an inline, wrapping gap. When related actions need a joined visual treatment, the existing Button stylesheet provides the optional native-element recipe `data-vf-button-group`. `data-vf-button-group-orientation="vertical"` stacks the same actions.
+
+Every direct child Button retains its own type, Tab stop, Enter/Space activation, disabled/loading state and focus-visible outline. Add `role="group"` and an authored `aria-label` or `aria-labelledby` when the relationship is meaningful. The recipe changes adjoining boundaries, not state or focus navigation. Toolbar owns a composite command keyboard model; ToggleGroup owns coordinated pressed choices; SegmentedControl owns an exclusive radio-like value; SplitButton owns a primary action and menu.
+
+Joined buttons do not automatically wrap. For narrow layouts choose independent Flow actions or the vertical orientation rather than clipping focus. The joined recipe uses logical corners, RTL, canonical Button tokens, theme and inherited density.
+
+## Accessible icon actions
+
+Compose the existing Icon inside Button rather than inventing IconButton. Icon-only Buttons need an authored accessible name (for example `aria-label="Save bookmark"`); a decorative icon inside a named button stays hidden from assistive technology.
+
+## ToggleButton and pressed state
+
+ToggleButton toggles **one** independent persistent pressed state on a native button with `aria-pressed`. Keep the accessible name stable across pressed states. React and Vue support controlled/uncontrolled state, Angular a pressed model, and Native Web a connector. ToggleButton shares Button's `sm|md|lg` size styling, but does not imply group selection or a loading state. Use ToggleGroup/SegmentedControl for coordinated choices.
+
+## Density and target sizing
+
+Inherited `comfortable|compact` density is distinct from component `sm|md|lg` size. Compact must preserve visible focus and usable target access. Review narrow and zoomed layouts, RTL, forced-colors and reduced motion. There is no `large` global density.
