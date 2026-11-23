@@ -683,6 +683,30 @@ for (const slug of layoutSlugs) {
     escapeHtml(relative(demoDir, 'assets/react-layout-examples.js')) + '"></script></body></html>');
 }
 
+// Render the checked-in ToggleButton React example with its canonical Web CSS.
+for (const entry of toggleExamples) {
+  const asset = 'react-toggle-button-basic';
+  await build({
+    entryPoints: [path.join(root, entry.sourcePath)],
+    bundle: true, platform: 'browser', format: 'iife', target: 'es2022',
+    jsx: 'automatic', logLevel: 'silent',
+    outfile: path.join(outRoot, 'assets', asset + '.js'),
+  });
+  if (!(await stat(path.join(outRoot, 'assets', asset + '.css')).catch(() => null))?.isFile())
+    throw new Error('React ToggleButton example must extract canonical Web CSS');
+  const route = 'examples/toggle-button/basic/';
+  const dir = directory(route);
+  const styles = shellStyles.map(file =>
+    '<link rel="stylesheet" href="' + escapeHtml(relative(dir, file)) + '">').join('');
+  await writePage(route, '<!doctype html><html lang="en" data-vf-theme="light"><head>' +
+    '<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">' +
+    '<title>React ToggleButton example · VyrnForge</title>' + styles +
+    '<link rel="stylesheet" href="' + escapeHtml(relative(dir, 'assets/' + asset + '.css')) + '">' +
+    '<style>body{margin:0;padding:1rem;min-width:0;overflow-wrap:anywhere}#root{min-width:0}</style>' +
+    '</head><body><div id="root"></div><script src="' +
+    escapeHtml(relative(dir, 'assets/' + asset + '.js')) + '"></script></body></html>');
+}
+
 const pageViews = [
   { route: '', view: 'home', title: 'React overview', description: 'VyrnForge React documentation pilot' },
   { route: 'foundations/tokens/', view: 'tokens', title: 'React design tokens',
