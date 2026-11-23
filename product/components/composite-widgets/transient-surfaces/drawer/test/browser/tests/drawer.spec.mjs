@@ -61,3 +61,71 @@ test('Drawer end placement follows logical direction and fits viewport', async (
   await page.locator('html').evaluate((el) => (el.dir = 'rtl'));
   await expect.poll(async () => Math.abs((await modal.boundingBox())?.x ?? Infinity)).toBeLessThan(3);
 });
+
+test('Drawer placement remains edge-attached, bounded and logical under RTL and enlarged text', async ({ page }) => {
+  await page.setViewportSize({ width: 320, height: 480 });
+  const { modal, trigger } = await openFixture(page);
+  await page.evaluate(() => {
+    document.documentElement.style.fontSize = '200%';
+  });
+
+  for (const dir of ['ltr', 'rtl']) {
+    await page.locator('html').evaluate((el, value) => el.setAttribute('dir', value), dir);
+    for (const placement of ['start', 'end', 'top', 'bottom']) {
+      await modal.evaluate((el, value) => el.setAttribute('data-vf-placement', value), placement);
+      await expect
+        .poll(() =>
+          modal.evaluate(
+            (el, context) => {
+              const rect = el.getBoundingClientRect();
+              const width = window.innerWidth;
+              const height = window.innerHeight;
+              const left = rect.left;
+              const right = width - rect.right;
+              const top = rect.top;
+              const bottom = height - rect.bottom;
+              const edge =
+                context.placement === 'start'
+                  ? context.dir === 'rtl'
+                    ? right
+                    : left
+                  : context.placement === 'end'
+                    ? context.dir === 'rtl'
+                      ? left
+                      : right
+                    : context.placement === 'top'
+                      ? top
+                      : bottom;
+              return {
+                attached: Math.abs(edge) < 3,
+                contained: left >= -2 && right >= -2 && top >= -2 && bottom >= -2,
+                modal: el.matches(':modal'),
+              };
+            },
+            { placement, dir },
+          ),
+        )
+        .toEqual({ attached: true, contained: true, modal: true });
+    }
+  }
+
+  await page.keyboard.press('Escape');
+  await expect(modal).not.toHaveAttribute('open', '');
+  await expect(trigger).toBeFocused();
+});
+
+test('Drawer opt-in backdrop dismissal remains distinct from clicking interior padding', async ({ page }) => {
+  test.skip(port === 'web', 'Native Web fixture does not author backdrop dismissal policy.');
+  const { modal, trigger } = await openFixture(page);
+  const box = await modal.boundingBox();
+  if (!box) throw new Error('Missing dialog geometry');
+
+  await page.mouse.click(box.x + 4, box.y + 4);
+  await expect(modal).toHaveAttribute('open', '');
+  await expect(page.locator('body')).not.toHaveAttribute('data-dismiss-reason', /.+/);
+
+  await page.mouse.click(5, 5);
+  await expect(modal).not.toHaveAttribute('open', '');
+  await expect(page.locator('body')).toHaveAttribute('data-dismiss-reason', 'backdrop');
+  await expect(trigger).toBeFocused();
+});
