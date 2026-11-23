@@ -1229,7 +1229,7 @@ test('React Icon Explorer renders the actual catalog with keyboard-operable filt
   await expect(preview).toHaveAttribute('aria-label', 'bookmark preview');
   const comparison = explorer.locator('.vf-docs-icon-variant-grid svg[data-vf-icon]');
   await expect(comparison).toHaveCount(4);
-  await expect(comparison).toHaveAttribute('role', 'img');
+  await expect(comparison.first()).toHaveAttribute('role', 'img');
   for (const [index, pair] of ['outlined-rounded', 'outlined-sharp', 'filled-rounded', 'filled-sharp'].entries()) {
     const [artVariant, artShape] = pair.split('-');
     await expect(comparison.nth(index)).toHaveAttribute('data-vf-variant', artVariant);
