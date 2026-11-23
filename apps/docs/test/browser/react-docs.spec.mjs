@@ -1180,6 +1180,67 @@ test('React Icon uses product-owned SVG examples and public source-backed API', 
   expect(errors).toEqual([]);
 });
 
+test('React Icon Explorer renders the actual catalog with keyboard-operable filters and source-backed inspection', async ({ page, browser }) => {
+  await page.addInitScript(() => {
+    Object.defineProperty(navigator, 'clipboard', {
+      configurable: true,
+      value: { writeText: async (value) => { window.__iconExplorerCopied = value; } },
+    });
+  });
+  await page.goto('/next/react/components/icon/');
+  await expect(page.locator('html')).toHaveAttribute('data-vf-react-hydrated', 'true');
+  const explorer = page.locator('[data-vf-docs-react-icon-explorer]');
+  await expect(explorer.locator('[data-vf-docs-icon-card]')).toHaveCount(93);
+  await expect(explorer.locator('[data-vf-docs-icon-count]')).toHaveText('93 of 93 icons shown');
+
+  // A native search input and a public VyrnForge Button provide ordinary
+  // Tab/Space operation instead of an invented composite keyboard model.
+  await explorer.getByLabel('Search icons').fill('bookmark');
+  await expect(explorer.locator('[data-vf-docs-icon-card]')).toHaveCount(1);
+  const bookmark = explorer.getByRole('button', { name: 'bookmark', exact: true });
+  await bookmark.focus();
+  await page.keyboard.press('Space');
+  await expect(bookmark).toHaveAttribute('aria-pressed', 'true');
+  await expect(explorer.locator('[data-vf-docs-icon-inspector] h4')).toHaveText('bookmark');
+
+  await explorer.getByLabel('Variant').selectOption('filled');
+  await explorer.getByLabel('Shape').selectOption('sharp');
+  await explorer.getByLabel('Size').selectOption('lg');
+  await explorer.getByLabel('Semantic color').selectOption('danger');
+  const preview = explorer.locator('[data-vf-docs-icon-inspector] svg[data-vf-icon]');
+  await expect(preview).toHaveAttribute('data-vf-icon-name', 'bookmark');
+  await expect(preview).toHaveAttribute('data-vf-variant', 'filled');
+  await expect(preview).toHaveAttribute('data-vf-shape', 'sharp');
+  await expect(preview).toHaveAttribute('data-vf-size', 'lg');
+  await expect(preview).toHaveAttribute('role', 'img');
+  await expect(preview).toHaveAttribute('aria-label', 'bookmark preview');
+  await expect(explorer.locator('[data-vf-docs-icon-inspector] pre code'))
+    .toContainText("from '@vyrnforge/icons/bookmark'");
+  await expect(explorer.locator('[data-vf-docs-icon-inspector] pre code'))
+    .toContainText('variant="filled" shape="sharp" size="lg" tone="danger"');
+
+  await explorer.getByRole('button', { name: 'Copy name' }).click();
+  await expect.poll(() => page.evaluate(() => window.__iconExplorerCopied)).toBe('bookmark');
+  await explorer.getByRole('button', { name: 'Copy usage' }).click();
+  await expect.poll(() => page.evaluate(() => window.__iconExplorerCopied))
+    .toContain("import { bookmarkIcon } from '@vyrnforge/icons/bookmark'");
+
+  await explorer.getByLabel('Category').selectOption('Files & data');
+  await expect(explorer.locator('[data-vf-docs-icon-count]')).toHaveText('0 of 93 icons shown');
+  await expect(explorer.getByText('No implemented icons match those filters.')).toBeVisible();
+  await explorer.getByLabel('Search icons').fill('');
+  await expect(explorer.locator('[data-vf-docs-icon-card]')).toHaveCount(15);
+  await expect(explorer.locator('[data-vf-docs-icon-count]')).toHaveText('15 of 93 icons shown');
+
+  // The full explorer is server rendered, not an interactive-only blank slot.
+  const context = await browser.newContext({ javaScriptEnabled: false });
+  try {
+    const noJs = await context.newPage();
+    await noJs.goto('/next/react/components/icon/');
+    await expect(noJs.locator('[data-vf-docs-icon-card]')).toHaveCount(93);
+  } finally { await context.close(); }
+});
+
 test('One-import createSvgIcon produces reusable JSX shapes with defaults and themes', async ({ page }) => {
   const errors = [];
   page.on('pageerror', (error) => errors.push(String(error)));
