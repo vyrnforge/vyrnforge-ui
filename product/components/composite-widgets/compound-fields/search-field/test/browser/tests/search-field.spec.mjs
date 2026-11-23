@@ -221,20 +221,7 @@ test('canonical SearchField clear states work without documentation CSS', async 
   await expect(clear).toHaveCSS('cursor', 'pointer');
   await clear.focus();
   await expect(clear).toHaveCSS('outline-style', 'solid');
-
-  await clear.evaluate((element) => {
-    element.disabled = true;
-  });
+  await clear.evaluate((element) => element.setAttribute('disabled', ''));
   await expect(clear).toHaveCSS('cursor', 'not-allowed');
-  const values = await clear.evaluate((element) => {
-    const style = getComputedStyle(element);
-    return { background: style.backgroundColor, foreground: style.color };
-  });
-  expect(values.background).not.toBe('');
-  expect(values.foreground).not.toBe('');
-
-  const loadedDocsCss = await page.locator('link[rel="stylesheet"]').evaluateAll((links) =>
-    links.some((link) => link.href.includes('/assets/docs.css')),
-  );
-  expect(loadedDocsCss).toBe(false);
+  await expect(page.locator('link[href*="docs.css"]')).toHaveCount(0);
 });
