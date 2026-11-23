@@ -1693,4 +1693,11 @@
     color: var(--vf-color-text-muted);
     font-size: var(--vf-font-size-sm);
   }
+
+  /* Documentation stage only: preserve usable control room at enlarged text. */
+  @media (max-width: 34rem) {
+    .vf-docs-motion-stage {
+      padding: var(--vf-space-sm);
+    }
+  }
 }
