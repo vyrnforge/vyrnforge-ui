@@ -171,3 +171,9 @@ test('Tooltip stays contained with enlarged text and narrow viewport', async ({ 
   await expect(surface).toBeHidden();
   await expect(trigger).toBeFocused();
 });
+
+test('public Tooltip CSS leaves stacking to the native top layer', async ({ page }) => {
+  test.skip(port !== 'web', 'Public CSS resolution evidence is owned by the Web lane.');
+  await page.goto('/components/tooltip/web.html');
+  await expect(page.getByRole('tooltip')).toHaveCSS('z-index', 'auto');
+});
