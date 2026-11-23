@@ -22,8 +22,10 @@ function App() {
           <ListItem key={name}
             leading={<Checkbox aria-label={'Select ' + name}
               checked={selected.includes(name)}
-              onChange={e => setSelected(current =>
-                e.currentTarget.checked ? [...current, name] : current.filter(item => item !== name))} />}
+              onChange={e => {
+                const checked = e.currentTarget.checked;
+                setSelected(current => checked ? [...current, name] : current.filter(item => item !== name));
+              }} />}
             trailing={<Button type="button" variant="secondary" size="sm"
               onClick={() => setDetails(name)}>Details</Button>}>
             <Text as="span">{name}</Text>

@@ -71,7 +71,7 @@ test('gutter, nested list indent and inset separator preserve native list semant
   expect(first).toContain('data-vf-list-indent="lg"');
   expect(first).toContain('data-vf-list-indent="md"');
   expect(first).toContain('data-vf-list-divider-inset="gutter"');
-  expect((first.match(/<ul\\b/g) ?? [])).toHaveLength(2);
-  expect((first.match(/<li\\b/g) ?? [])).toHaveLength(3);
+  expect((first.match(/<ul\b/g) ?? [])).toHaveLength(2);
+  expect((first.match(/<li\b/g) ?? [])).toHaveLength(3);
   expect(first).not.toMatch(/role="(tree|listbox|option)"|aria-selected|tabindex=/i);
 });

@@ -3,7 +3,7 @@ export type { ColorRole, TextTone, ThemeColorOverrides, ThemeElement, ThemeName,
 export { Badge } from './components/badge/index.js';
 export type { BadgeProps, BadgeTone, BadgeSize, BadgeVariant, BadgeOverlap, BadgeAnchorOrigin } from './components/badge/index.js';
 export { List, ListItem } from './components/list/index.js';
-export type { ListElement, ListVariant, ListSize, ListSpacing, ListMarker, ListProps, ListItemProps } from './components/list/index.js';
+export type { ListElement, ListVariant, ListSize, ListSpacing, ListMarker, ListGutter, ListIndent, ListDividerInset, ListProps, ListItemProps } from './components/list/index.js';
 export { Avatar, AvatarGroup } from './components/avatar/index.js';
 export type { AvatarProps, AvatarSize, AvatarAppearance, AvatarShape,
   AvatarGroupProps, AvatarGroupSpacing } from './components/avatar/index.js';

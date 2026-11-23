@@ -2228,7 +2228,7 @@ export interface ListItemProps extends Omit<ComponentPropsWithoutRef<'li'>, 'rol
     trailing?: ReactNode;
 }
 
-// @public (undocumented)
+// @public
 export type ListDividerInset = 'none' | 'gutter';
 
 // @public
@@ -2237,7 +2237,7 @@ export type ListGutter = 'auto' | 'none' | 'sm' | 'md' | 'lg';
 // @public
 export type ListIndent = 'none' | 'sm' | 'md' | 'lg';
 
-// @public
+// @public (undocumented)
 export type ListMarker = 'none' | 'auto';
 
 // @public
