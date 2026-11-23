@@ -26,8 +26,15 @@ function emittedCss(result) {
     .map((file) => file.text).join('\n');
 }
 
+function expectNoDocsCss(result) {
+  const inputs = Object.keys(result.metafile.inputs);
+  assert.ok(!inputs.some((file) => file.includes('/apps/docs/') || file.endsWith('/docs.css')));
+  assert.doesNotMatch(emittedCss(result), /\\.vf-docs-/);
+}
+
 test('React granular Code auto-loads canonical Code + Text styles, but no unrelated component CSS', async () => {
   const result = await compileBrowser("import { Code } from '@vyrnforge/react/code'; console.log(Code);");
+  expectNoDocsCss(result);
   const css = emittedCss(result);
   assert.match(css, /data-vf-code/);
   assert.match(css, /data-vf-text-variant/);
@@ -42,6 +49,7 @@ test('React granular Code auto-loads canonical Code + Text styles, but no unrela
 
 test('React granular Kbd auto-loads the canonical keycap style without unrelated Button', async () => {
   const result = await compileBrowser("import { Kbd } from '@vyrnforge/react/kbd'; console.log(Kbd);");
+  expectNoDocsCss(result);
   const css = emittedCss(result);
   assert.match(css, /data-vf-kbd/);
   assert.match(css, /data-vf-text-variant/);
@@ -50,6 +58,7 @@ test('React granular Kbd auto-loads the canonical keycap style without unrelated
 
 test('React root auto-loads canonical aggregate styles, preserving existing root import ergonomics', async () => {
   const result = await compileBrowser("import { Text, Code, Kbd } from '@vyrnforge/react'; console.log(Text, Code, Kbd);");
+  expectNoDocsCss(result);
   const css = emittedCss(result);
   assert.match(css, /data-vf-text/);
   assert.match(css, /data-vf-code/);
