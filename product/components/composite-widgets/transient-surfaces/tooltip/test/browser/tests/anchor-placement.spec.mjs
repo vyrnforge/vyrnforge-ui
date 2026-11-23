@@ -54,3 +54,30 @@ test('tooltip native anchor placement preserves all public placements and RTL ma
     expect(normalize(actual.placements[index].rtl)).toBe(normalize(scenario.rtl));
   }
 });
+
+test('tooltip anchored CSS retains zero-specificity consumer override semantics', async ({ page }) => {
+  test.skip(port !== 'web', 'Public CSS cascade evidence is owned by the Web lane.');
+  await page.goto('/components/tooltip/web.html');
+
+  const { before, after } = await page.evaluate(() => {
+    const probe = document.createElement('div');
+    probe.setAttribute('data-vf-tooltip-content', '');
+    probe.setAttribute('popover', 'manual');
+    probe.setAttribute('data-vf-placement', 'top');
+    document.body.append(probe);
+    const read = () => getComputedStyle(probe).getPropertyValue('position-area').trim();
+    const before = read();
+
+    const consumerStyle = document.createElement('style');
+    consumerStyle.textContent =
+      "@layer vyrnforge.components { :where([data-vf-tooltip-content][popover][data-vf-placement='top']) { position-area: bottom; } }";
+    document.head.append(consumerStyle);
+    const after = read();
+    consumerStyle.remove();
+    probe.remove();
+    return { before, after };
+  });
+
+  expect(normalize(before)).toBe('top');
+  expect(normalize(after)).toBe('bottom');
+});
