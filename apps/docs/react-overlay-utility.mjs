@@ -127,7 +127,7 @@ export function OverlayUtility({ guide, links }) {
       h(PopoverContent, { 'aria-label': 'Overlay utility details' },
         h(Flow, { gap: 'sm' },
           h(Text, { as: 'strong' }, 'Native anchored popover'),
-          h(Text, { as: 'p' }, 'Escape and outside click dismiss this nonmodal surface.'),
+          h(Text, { as: 'p' }, 'Escape or click outside to dismiss.'),
           h(Button, { type: 'button', size: 'sm', variant: 'secondary',
             onClick: () => setFeedback('Popover action activated') }, 'Test action'))));
   } else if (kind === 'tooltip') {
