@@ -229,7 +229,9 @@ try {
     // deletion traffic under the secondary-rate-limit budget.
     if (!dryRun) await new Promise((resolve) => { setTimeout(resolve, 400); });
   }
-  if (eventName === 'schedule' || eventName === 'workflow_dispatch') report.branchCleanup = await cleanupStaleBranches();
+  if (eventName === 'schedule' || eventName === 'workflow_dispatch' || eventName === 'pull_request_target') {
+    report.branchCleanup = await cleanupStaleBranches();
+  }
 
   report.completedAt = new Date().toISOString();
   report.deletedRuns = report.results.filter((result) => result.status === 'deleted').length;
