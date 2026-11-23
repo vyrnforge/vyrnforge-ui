@@ -18,7 +18,6 @@
     inset: auto;
     margin: 0;
     border: 0;
-    position-area: top;
     position-try-fallbacks:
       flip-block,
       flip-inline,
@@ -31,6 +30,10 @@
     max-block-size: calc(100dvh - 1rem);
     overflow: auto;
     max-inline-size: min(20rem, calc(100vw - 1rem));
+  }
+  /* Placement-specific shared rules are imported before this local default. */
+  :where([data-vf-tooltip-content][popover]:not([data-vf-placement])) {
+    position-area: top;
   }
   @position-try --vf-tooltip-fit {
     position-area: top span-all;
