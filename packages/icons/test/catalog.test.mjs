@@ -9,10 +9,19 @@ import { arrowRightIcon } from '@vyrnforge/icons/arrow-right';
 import { checkCircleIcon } from '@vyrnforge/icons/check-circle';
 import { microphoneOffIcon } from '@vyrnforge/icons/microphone-off';
 
+import { alignLeftIcon } from '@vyrnforge/icons/align-left';
+import { alignCenterIcon } from '@vyrnforge/icons/align-center';
+import { alignRightIcon } from '@vyrnforge/icons/align-right';
+import { boldIcon } from '@vyrnforge/icons/bold';
+import { italicIcon } from '@vyrnforge/icons/italic';
+import { underlineIcon } from '@vyrnforge/icons/underline';
+import { strikethroughIcon } from '@vyrnforge/icons/strikethrough';
+import { wrapTextIcon } from '@vyrnforge/icons/wrap-text';
+
 describe('@vyrnforge/icons catalog', () => {
   test('exports every catalog entry as a complete shared IconDefinition', () => {
     const definitions = Object.entries(catalog).filter(([name]) => name.endsWith('Icon'));
-    expect(definitions).toHaveLength(93);
+    expect(definitions).toHaveLength(101);
 
     for (const [exportName, icon] of definitions) {
       expect(icon.name, exportName).toBeTruthy();
@@ -58,5 +67,13 @@ describe('@vyrnforge/icons catalog', () => {
     expect(searchIcon.name).toBe('search');
     expect(chevronDownIcon.name).toBe('chevron-down');
     expect(cameraIcon.name).toBe('camera');
+    expect(alignLeftIcon).toBe(catalog.alignLeftIcon);
+    expect(alignCenterIcon).toBe(catalog.alignCenterIcon);
+    expect(alignRightIcon).toBe(catalog.alignRightIcon);
+    expect(boldIcon).toBe(catalog.boldIcon);
+    expect(italicIcon).toBe(catalog.italicIcon);
+    expect(underlineIcon).toBe(catalog.underlineIcon);
+    expect(strikethroughIcon).toBe(catalog.strikethroughIcon);
+    expect(wrapTextIcon).toBe(catalog.wrapTextIcon);
   });
 });

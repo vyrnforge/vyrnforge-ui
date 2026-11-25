@@ -60,7 +60,7 @@ if (!basicExample?.sourcePath.endsWith('/react.tsx')) {
 const toggle = reactModel.componentCatalog.find((entry) => entry.id === 'toggle-button');
 const toggleExamples = toggle?.examples.slice().sort((a, b) => a.id.localeCompare(b.id)) ?? [];
 if (!toggle?.showcaseAvailable || !toggle.apiAvailable || !toggle.sharedContent ||
-    !toggle.frameworkContent || toggleExamples.length !== 6 ||
+    !toggle.frameworkContent || toggleExamples.length !== 7 ||
     !toggle.publicEntrypoints.includes('@vyrnforge/react/toggle-button') ||
     !webModel.packageManifest.exports?.['./styles/toggle-button.css'] ||
     toggleExamples[0]?.id !== 'toggle-button/basic' ||

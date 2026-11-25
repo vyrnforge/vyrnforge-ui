@@ -1,0 +1,14 @@
+{
+  "id": "toggle-button/text-only",
+  "title": "Show formulas",
+  "description": "Switch a sample cell between its value and formula using a visible label.",
+  "defaultFramework": "react",
+  "frameworks": {
+    "react": {
+      "label": "React",
+      "language": "tsx",
+      "source": "react.tsx"
+    }
+  },
+  "documentationSection": "Text-only toggles"
+}

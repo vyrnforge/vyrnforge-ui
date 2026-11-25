@@ -1,7 +1,7 @@
 {
   "id": "toggle-button/controlled",
   "title": "Controlled and uncontrolled state",
-  "description": "Reset the controlled archived filter while the completed filter retains its own state.",
+  "description": "Choose a sample cell, change or reset its application-owned bold formatting, and compare an independent note.",
   "defaultFramework": "react",
   "frameworks": {
     "react": {

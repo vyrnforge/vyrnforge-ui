@@ -1,7 +1,7 @@
 {
   "id": "toggle-button/icons",
-  "title": "Icon-only toggles",
-  "description": "Named square pressed commands with controlled and uncontrolled state.",
+  "title": "Icon-only formatting",
+  "description": "Apply bold, italic, underline and strikethrough independently to the same text.",
   "defaultFramework": "react",
   "frameworks": {
     "react": {

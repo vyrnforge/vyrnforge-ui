@@ -1,7 +1,7 @@
 {
   "id": "toggle-group/icons",
-  "title": "Icon-only choices",
-  "description": "Switch between list and grid views with named icon items.",
+  "title": "Workbook views",
+  "description": "Switch between list and grid presentation of workbook sheets.",
   "defaultFramework": "react",
   "frameworks": {
     "react": {

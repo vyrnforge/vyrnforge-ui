@@ -21,6 +21,21 @@
       "import": "./dist/add/index.js",
       "default": "./dist/add/index.js"
     },
+    "./align-center": {
+      "types": "./dist/align-center/index.d.ts",
+      "import": "./dist/align-center/index.js",
+      "default": "./dist/align-center/index.js"
+    },
+    "./align-left": {
+      "types": "./dist/align-left/index.d.ts",
+      "import": "./dist/align-left/index.js",
+      "default": "./dist/align-left/index.js"
+    },
+    "./align-right": {
+      "types": "./dist/align-right/index.d.ts",
+      "import": "./dist/align-right/index.js",
+      "default": "./dist/align-right/index.js"
+    },
     "./arrow-down": {
       "types": "./dist/arrow-down/index.d.ts",
       "import": "./dist/arrow-down/index.js",
@@ -50,6 +65,11 @@
       "types": "./dist/bell/index.d.ts",
       "import": "./dist/bell/index.js",
       "default": "./dist/bell/index.js"
+    },
+    "./bold": {
+      "types": "./dist/bold/index.d.ts",
+      "import": "./dist/bold/index.js",
+      "default": "./dist/bold/index.js"
     },
     "./bookmark": {
       "types": "./dist/bookmark/index.d.ts",
@@ -236,6 +256,11 @@
       "import": "./dist/info/index.js",
       "default": "./dist/info/index.js"
     },
+    "./italic": {
+      "types": "./dist/italic/index.d.ts",
+      "import": "./dist/italic/index.js",
+      "default": "./dist/italic/index.js"
+    },
     "./key": {
       "types": "./dist/key/index.d.ts",
       "import": "./dist/key/index.js",
@@ -411,6 +436,11 @@
       "import": "./dist/stop/index.js",
       "default": "./dist/stop/index.js"
     },
+    "./strikethrough": {
+      "types": "./dist/strikethrough/index.d.ts",
+      "import": "./dist/strikethrough/index.js",
+      "default": "./dist/strikethrough/index.js"
+    },
     "./sun": {
       "types": "./dist/sun/index.d.ts",
       "import": "./dist/sun/index.js",
@@ -435,6 +465,11 @@
       "types": "./dist/trash/index.d.ts",
       "import": "./dist/trash/index.js",
       "default": "./dist/trash/index.js"
+    },
+    "./underline": {
+      "types": "./dist/underline/index.d.ts",
+      "import": "./dist/underline/index.js",
+      "default": "./dist/underline/index.js"
     },
     "./undo": {
       "types": "./dist/undo/index.d.ts",
@@ -480,6 +515,11 @@
       "types": "./dist/wifi/index.d.ts",
       "import": "./dist/wifi/index.js",
       "default": "./dist/wifi/index.js"
+    },
+    "./wrap-text": {
+      "types": "./dist/wrap-text/index.d.ts",
+      "import": "./dist/wrap-text/index.js",
+      "default": "./dist/wrap-text/index.js"
     }
   },
   "dependencies": {

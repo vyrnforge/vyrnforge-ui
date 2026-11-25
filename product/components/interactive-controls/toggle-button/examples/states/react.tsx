@@ -1,42 +1,49 @@
+import { useState } from 'react';
 import { createRoot } from 'react-dom/client';
 import { ToggleButton } from '@vyrnforge/react/toggle-button';
 import { Icon } from '@vyrnforge/react/icon';
-import { bookmarkIcon } from '@vyrnforge/icons/bookmark';
+import { boldIcon } from '@vyrnforge/icons/bold';
+import { italicIcon } from '@vyrnforge/icons/italic';
+import { underlineIcon } from '@vyrnforge/icons/underline';
+import { strikethroughIcon } from '@vyrnforge/icons/strikethrough';
 import { Flow } from '@vyrnforge/react/layout';
 import { Text } from '@vyrnforge/react/text';
+import { tokens } from '@vyrnforge/react';
 import '@vyrnforge/web/styles/toggle-button.css';
 import '@vyrnforge/web/styles/icon.css';
 import '@vyrnforge/web/styles/layout.css';
 import '@vyrnforge/web/styles/text.css';
 
 function App() {
+  const [bold, setBold] = useState(false);
+  const [italic, setItalic] = useState(true);
   return (
-    <Flow direction="inline" wrap="wrap" gap="md">
-      <Flow gap="xs" align="center">
-        <ToggleButton iconOnly aria-label="Bookmark report">
-          <Icon icon={bookmarkIcon} />
+    <Flow gap="md">
+      <Flow direction="inline" wrap="wrap" gap="xs" role="group" aria-label="Available formatting">
+        <ToggleButton iconOnly aria-label="Bold" title="Bold" onPressedChange={setBold}>
+          <Icon icon={boldIcon} />
         </ToggleButton>
-        <Text as="span">Report</Text>
-      </Flow>
-      <Flow gap="xs" align="center">
-        <ToggleButton iconOnly defaultPressed aria-label="Bookmark notes">
-          <Icon icon={bookmarkIcon} />
+        <ToggleButton iconOnly aria-label="Italic" title="Italic" defaultPressed onPressedChange={setItalic}>
+          <Icon icon={italicIcon} />
         </ToggleButton>
-        <Text as="span">Notes</Text>
-      </Flow>
-      <Flow gap="xs" align="center">
-        <ToggleButton iconOnly disabled aria-label="Bookmark invoice">
-          <Icon icon={bookmarkIcon} />
+        <ToggleButton iconOnly aria-label="Underline" title="Underline unavailable" disabled>
+          <Icon icon={underlineIcon} />
         </ToggleButton>
-        <Text as="span">Invoice</Text>
-      </Flow>
-      <Flow gap="xs" align="center">
-        <ToggleButton iconOnly defaultPressed disabled aria-label="Bookmark draft">
-          <Icon icon={bookmarkIcon} />
+        <ToggleButton iconOnly aria-label="Strikethrough" title="Strikethrough unavailable" disabled defaultPressed>
+          <Icon icon={strikethroughIcon} />
         </ToggleButton>
-        <Text as="span">Draft</Text>
       </Flow>
+      <Text as="p" data-example-preview="states" style={{
+        border: '1px solid ' + tokens.color.borderStrong, padding: tokens.space.sm, background: tokens.color.surface,
+        fontWeight: bold ? tokens.fontWeight.bold : tokens.fontWeight.regular,
+        fontStyle: italic ? 'italic' : 'normal',
+        textDecorationLine: 'line-through',
+      }}>
+        Archived forecast
+      </Text>
+      <Text as="p" tone="secondary">Underline and existing strikethrough formatting are locked.</Text>
     </Flow>
   );
 }
+
 createRoot(document.querySelector('#root')!).render(<App />);

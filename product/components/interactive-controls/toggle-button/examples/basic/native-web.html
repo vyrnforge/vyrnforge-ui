@@ -1,5 +1,14 @@
-<button id="toggle" type="button" data-vf-button data-vf-toggle-button data-vf-size="md" aria-pressed="false">Show archived</button>
+<button id="toggle" type="button" data-vf-button data-vf-toggle-button data-vf-size="md" data-vf-icon-only aria-label="Bold" title="Bold" aria-pressed="false">
+  <svg data-vf-icon data-vf-size="md" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+    <path d="M7 4v16h6a4 4 0 0 0 0-8H7M7 4h5a4 4 0 0 1 0 8" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"/>
+  </svg>
+</button>
+<p id="preview" data-vf-text data-vf-text-variant="body-md" style="border: 1px solid var(--vf-color-border-strong); padding: var(--vf-space-sm); font-weight: var(--vf-font-weight-regular);">Quarterly financial report</p>
 <script type="module">
   import { connectToggleButton } from '@vyrnforge/web/toggle-button';
-  connectToggleButton(document.querySelector('#toggle'));
+  connectToggleButton(document.querySelector('#toggle'), {
+    onPressedChange(pressed) {
+      document.querySelector('#preview').style.fontWeight = pressed ? 'var(--vf-font-weight-bold)' : 'var(--vf-font-weight-regular)';
+    }
+  });
 </script>

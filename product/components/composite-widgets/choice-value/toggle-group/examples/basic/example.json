@@ -1,7 +1,7 @@
 {
   "id": "toggle-group/basic",
-  "title": "Exclusive selection",
-  "description": "Choose a time range or clear it by pressing the selected item again.",
+  "title": "Exclusive alignment",
+  "description": "Apply one horizontal alignment or clear the selection to restore automatic alignment.",
   "defaultFramework": "react",
   "frameworks": {
     "react": {
