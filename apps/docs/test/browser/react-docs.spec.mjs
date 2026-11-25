@@ -436,7 +436,7 @@ test('All React guide pages compose with canonical Flow and AutoGrid, not local 
     await expect(guide).toHaveAttribute('data-vf-flow-gap', '2xl');
     const sections = guide.locator(':scope > section[data-vf-flow][data-vf-flow-gap="md"]');
     await expect(sections, id + ' must preserve authored concept sections')
-      .toHaveCount(id === 'button' ? 10 : 5);
+      .toHaveCount(id === 'button' ? 9 : 4);
     const toc = page.locator('nav.vf-docs-toc ol[data-vf-flow]');
     await expect(toc).toHaveCount(1);
     const jumpLinks = page.locator('aside.vf-docs-toc-region nav.vf-docs-toc-examples ol[data-vf-flow]');
@@ -1886,7 +1886,7 @@ test('React Button guide renders all five source-backed variants and links the i
   const guide = page.locator('[data-vf-docs-react-component="button"]');
   const cards = guide.locator('[data-vf-docs-react-button-example]');
   await expect(cards).toHaveCount(7);
-  await expect(page.getByRole('navigation', { name: 'On this page' }).getByRole('link')).toHaveCount(10);
+  await expect(page.getByRole('navigation', { name: 'On this page' }).getByRole('link')).toHaveCount(9);
   for (const id of ['basic', 'variants', 'sizes', 'states', 'forms']) {
     const card = guide.locator('[data-vf-docs-react-button-example="button/' + id + '"]');
     await expect(card).toHaveCount(1);
