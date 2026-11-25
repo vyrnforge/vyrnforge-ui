@@ -9,10 +9,13 @@ import '@vyrnforge/web/styles/layout.css';
 import '@vyrnforge/web/styles/text.css';
 
 const activity = [
-  { label: 'Design review', range: 'day' },
-  { label: 'Release planning', range: 'week' },
-  { label: 'Quarterly planning', range: 'month' },
+  { label: 'Design review', ageInDays: 0 },
+  { label: 'Release planning', ageInDays: 3 },
+  { label: 'Roadmap review', ageInDays: 18 },
+  { label: 'Quarterly planning', ageInDays: 65 },
 ];
+
+const rangeDays: Record<string, number> = { day: 1, week: 7, month: 30 };
 
 function App() {
   const [range, setRange] = useState('day');
@@ -40,10 +43,10 @@ function App() {
         style={{ listStyle: 'none', padding: 0, margin: 0 }}
       >
         {activity
-          .filter((item) => !range || item.range === range)
+          .filter((item) => !range || item.ageInDays < rangeDays[range])
           .map((item) => (
             <li key={item.label} style={{ border: '1px solid ' + tokens.color.border, padding: tokens.space.sm }}>
-              <Text>{item.label}</Text>
+              <Text>{item.label} · {item.ageInDays === 0 ? 'Today' : item.ageInDays + ' days ago'}</Text>
             </li>
           ))}
       </Flow>

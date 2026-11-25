@@ -826,19 +826,19 @@ test('React ToggleGroup guide teaches its actual independent-tab-stop selection 
   const week = single.getByRole('button', { name: 'Week', exact: true });
   await expect(day).toHaveAttribute('aria-pressed', 'true');
   await expect(day).not.toHaveAttribute('data-vf-icon-only', '');
-  await expect(single.getByText('Design review', { exact: true })).toBeVisible();
+  await expect(single.getByText('Design review · Today', { exact: true })).toBeVisible();
   await day.focus();
   await day.press('Tab');
   await expect(week).toBeFocused();
   await week.press('Space');
   await expect(week).toHaveAttribute('aria-pressed', 'true');
   await expect(day).toHaveAttribute('aria-pressed', 'false');
-  await expect(single.getByText('Release planning', { exact: true })).toBeVisible();
-  await expect(single.getByRole('listitem')).toHaveCount(1);
+  await expect(single.getByText('Release planning · 3 days ago', { exact: true })).toBeVisible();
+  await expect(single.getByRole('listitem')).toHaveCount(2);
   await week.click();
   await expect(week).toHaveAttribute('aria-pressed', 'false');
   await expect(single.getByRole('status')).toHaveText('All activity');
-  await expect(single.getByRole('listitem')).toHaveCount(3);
+  await expect(single.getByRole('listitem')).toHaveCount(4);
 
   const multiple = guide.locator('[data-vf-docs-react-toggle-group-example="toggle-group/multiple"]').frameLocator('iframe');
   for (const name of ['Bold', 'Italic', 'Underline', 'Strikethrough']) {
