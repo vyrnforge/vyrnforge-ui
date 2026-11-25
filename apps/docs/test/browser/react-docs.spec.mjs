@@ -53,7 +53,7 @@ test('React pilot artifact is Product Graph-backed and SSR-rendered with public 
   expect(manifest.routes.filter((entry) => entry.view !== 'unavailable').map((entry) => entry.route)).toEqual([
     '', 'foundations/tokens/', 'foundations/themes/', 'foundations/color/', 'foundations/theme-builder/', 'foundations/dark-mode/',
     'foundations/right-to-left/', 'utilities/overlay/', 'utilities/motion/', 'foundations/styling/',  'components/button/', 'api/components/button/',
-    'components/toggle-button/', 'api/components/toggle-button/', 'components/layout/', 'api/components/layout/',
+    'patterns/button-group/', 'components/toggle-button/', 'api/components/toggle-button/', 'components/layout/', 'api/components/layout/',
     'components/divider/', 'api/components/divider/',
     ...['text', 'code', 'kbd'].flatMap((id) => [
       'components/' + id + '/', 'api/components/' + id + '/',
@@ -563,7 +563,7 @@ test('React Button, Button Group and ToggleButton keep demonstrations on their r
   await expect(button.locator('[data-vf-docs-react-button-example]')).toHaveCount(7);
   await expect(button.locator('iframe[src*="button-group"], iframe[src*="toggle-button"]')).toHaveCount(0);
   await expect(button.getByRole('link', { name: 'Button Group', exact: true })).toHaveAttribute('href', /patterns\/button-group\//);
-  await expect(button.getByRole('link', { name: 'ToggleButton', exact: true })).toHaveAttribute('href', /components\/toggle-button\//);
+  await expect(button.getByRole('link', { name: 'ToggleButton', exact: true })).toHaveAttribute('href', '../toggle-button/');
 
   await button.getByRole('link', { name: 'Button Group', exact: true }).click();
   const group = page.locator('[data-vf-docs-react-button-group]');
