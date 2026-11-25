@@ -12,8 +12,14 @@ function App() {
   return (
     <Flow gap="sm">
       <Flow direction="inline" wrap="wrap">
-        <ToggleGroupRoot type="single" value={value} aria-label="Required view mode"
-          onValueChange={(next) => { if (typeof next === 'string' && next) setValue(next); }}>
+        <ToggleGroupRoot
+          type="single"
+          value={value}
+          aria-label="Required view mode"
+          onValueChange={(next) => {
+            if (typeof next === 'string' && next) setValue(next);
+          }}
+        >
           <ToggleGroupItem value="list">List</ToggleGroupItem>
           <ToggleGroupItem value="grid">Grid</ToggleGroupItem>
         </ToggleGroupRoot>
