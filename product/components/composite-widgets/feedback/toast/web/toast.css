@@ -1,3 +1,5 @@
+@import '../../styles/tokens.css';
+@import '../../styles/motion.css';
 @layer vyrnforge.components {
   [data-vf-toast-viewport] {
     position: fixed;
@@ -38,6 +40,12 @@
   @media (forced-colors: active) {
     [data-vf-toast-root] {
       box-shadow: none;
+    }
+  }
+
+  @media (prefers-reduced-motion: no-preference) and (forced-colors: none) {
+    :where([data-vf-toast-root]:not([hidden]):not([data-vf-motion])) {
+      animation: vf-motion-enter-reveal var(--vf-motion-duration-enter, 320ms) var(--vf-motion-easing-standard, cubic-bezier(0.2, 0, 0, 1));
     }
   }
 }

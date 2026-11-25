@@ -43,4 +43,12 @@
       outline-color: Highlight;
     }
   }
+
+  @media (prefers-reduced-motion: no-preference) and (forced-colors: none) {
+    :where([data-vf-pagination-item]) {
+      transition: color var(--vf-control-motion-duration, 120ms) var(--vf-motion-easing-standard, cubic-bezier(0.2, 0, 0, 1)),
+        background-color var(--vf-control-motion-duration, 120ms) var(--vf-motion-easing-standard, cubic-bezier(0.2, 0, 0, 1)),
+        border-color var(--vf-control-motion-duration, 120ms) var(--vf-motion-easing-standard, cubic-bezier(0.2, 0, 0, 1));
+    }
+  }
 }

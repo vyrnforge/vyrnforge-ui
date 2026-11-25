@@ -1,3 +1,4 @@
+@import '../../styles/tokens.css';
 @layer vyrnforge.components {
   [data-vf-menubar-root] {
     display: flex;
@@ -19,5 +20,12 @@
   [data-vf-menubar-trigger]:hover,
   [data-vf-menubar-trigger]:focus-visible {
     background: var(--vf-color-surface-hover);
+  }
+
+  @media (prefers-reduced-motion: no-preference) and (forced-colors: none) {
+    :where([data-vf-menubar-trigger]) {
+      transition: color var(--vf-control-motion-duration, 120ms) var(--vf-motion-easing-standard, cubic-bezier(0.2, 0, 0, 1)),
+        background-color var(--vf-control-motion-duration, 120ms) var(--vf-motion-easing-standard, cubic-bezier(0.2, 0, 0, 1));
+    }
   }
 }

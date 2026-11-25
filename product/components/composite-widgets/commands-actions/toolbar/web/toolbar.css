@@ -1,3 +1,4 @@
+@import '../../styles/tokens.css';
 @layer vyrnforge.components {
   [data-vf-toolbar-root] {
     display: flex;
@@ -30,5 +31,12 @@
     align-self: stretch;
     inline-size: 1px;
     background: var(--vf-color-border);
+  }
+
+  @media (prefers-reduced-motion: no-preference) and (forced-colors: none) {
+    :where([data-vf-toolbar-item]) {
+      transition: color var(--vf-control-motion-duration, 120ms) var(--vf-motion-easing-standard, cubic-bezier(0.2, 0, 0, 1)),
+        background-color var(--vf-control-motion-duration, 120ms) var(--vf-motion-easing-standard, cubic-bezier(0.2, 0, 0, 1));
+    }
   }
 }
