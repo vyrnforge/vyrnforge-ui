@@ -1,7 +1,7 @@
 {
   "id": "toggle-group/multiple",
   "title": "Multiple selection",
-  "description": "Combine formatting commands independently.",
+  "description": "Enable independent microphone and camera controls; the unavailable speaker control is disabled.",
   "defaultFramework": "react",
   "frameworks": {
     "react": {

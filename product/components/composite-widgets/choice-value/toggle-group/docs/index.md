@@ -4,11 +4,11 @@ Use ToggleGroup for a named group of related pressed commands, such as formattin
 
 ## Exclusive selection
 
-Use single selection when at most one command can be pressed. Pressing the selected item again clears the choice. This is a toggle group, not a radio group.
+Use single selection when at most one command can be pressed. Pressing the selected item again clears the choice. This is a toggle group, not a radio group. Use visible labels for choices such as Day, Week and Month; familiar view controls such as List and Grid can use named icons.
 
 ## Multiple selection
 
-Use multiple selection for independent formatting choices within one named group. Toggling an item changes only that item's membership in the selected values.
+Use multiple selection for independent choices within one named group, such as microphone and camera controls. Toggling an item changes only that item's membership in the selected values. Use recognizable icons for compact controls and visible text when the meaning depends on a label.
 
 ## Icon-only choices
 

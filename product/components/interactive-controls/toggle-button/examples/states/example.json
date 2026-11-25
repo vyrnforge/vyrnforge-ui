@@ -1,7 +1,7 @@
 {
   "id": "toggle-button/states",
   "title": "Pressed and disabled states",
-  "description": "Disabled controls remain inert whether pressed or unpressed.",
+  "description": "Compare four bookmark controls; disabled controls remain inert whether pressed or unpressed.",
   "defaultFramework": "react",
   "frameworks": {
     "react": {

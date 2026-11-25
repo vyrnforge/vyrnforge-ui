@@ -1,7 +1,7 @@
 {
   "id": "toggle-button/sizes",
   "title": "Sizes",
-  "description": "The same bookmark command shown at each supported size.",
+  "description": "Compare text-labelled filters and square bookmark commands at each supported size.",
   "defaultFramework": "react",
   "frameworks": {
     "react": {
