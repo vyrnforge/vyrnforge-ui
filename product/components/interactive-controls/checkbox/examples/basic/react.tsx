@@ -1,4 +1,4 @@
-import { useState, useId } from 'react';
+import { useState } from 'react';
 import { createRoot } from 'react-dom/client';
 import { Checkbox } from '@vyrnforge/react/checkbox';
 import { Flow } from '@vyrnforge/react/layout';
@@ -13,7 +13,7 @@ function App() {
     <Flow gap="sm">
       <Flow as="label" direction="inline" align="center" gap="sm">
         <Checkbox checked={include} onChange={event => setInclude(event.currentTarget.checked)} />
-        Include a gift receipt
+        <Text>Include a gift receipt</Text>
       </Flow>
       <Text as="p" role="status">{include ? 'Gift receipt will be included.' : 'Standard receipt only.'}</Text>
     </Flow>

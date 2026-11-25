@@ -20,15 +20,15 @@ function App() {
       <Flow gap="md">
         <Flow as="label" direction="inline" align="center" gap="sm">
           <Checkbox name="accept" value="yes" required aria-describedby={description} />
-          I accept the service terms
+          <Text>I accept the service terms</Text>
         </Flow>
         <Text as="p" id={description}>Required before continuing.</Text>
         <Flow as="label" direction="inline" align="center" gap="sm">
-          <Checkbox defaultChecked disabled /> Account verification complete
+          <Checkbox defaultChecked disabled /> <Text>Account verification complete</Text>
         </Flow>
         <Flow direction="inline" wrap="wrap" gap="sm">
           <Button type="submit">Continue</Button>
-          <Button type="reset">Reset</Button>
+          <Button type="reset" variant="secondary">Reset</Button>
         </Flow>
         <Text as="p" role="status">{result}</Text>
       </Flow>

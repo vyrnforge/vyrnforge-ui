@@ -19,14 +19,23 @@ function App() {
     }} onReset={() => setResult('No delivery confirmed.')}>
       <Flow gap="md">
         <fieldset>
-          <legend>Delivery method (required)</legend>
+          <legend><Text as="strong">Delivery method (required)</Text></legend>
           <Flow gap="sm">
-            <Flow as="label" direction="inline" align="center" gap="sm"><Radio name={name} value="Standard" required /> Standard — 3–5 days</Flow>
-            <Flow as="label" direction="inline" align="center" gap="sm"><Radio name={name} value="Express" /> Express — next day</Flow>
-            <Flow as="label" direction="inline" align="center" gap="sm"><Radio name={name} value="Pickup" disabled /> Pickup — unavailable</Flow>
+            <Flow as="label" direction="inline" align="center" gap="sm">
+              <Radio name={name} value="Standard" required />
+              <Text>Standard — 3–5 days</Text>
+            </Flow>
+            <Flow as="label" direction="inline" align="center" gap="sm">
+              <Radio name={name} value="Express" />
+              <Text>Express — next day</Text>
+            </Flow>
+            <Flow as="label" direction="inline" align="center" gap="sm">
+              <Radio name={name} value="Pickup" disabled />
+              <Text>Pickup — unavailable</Text>
+            </Flow>
           </Flow>
         </fieldset>
-        <Flow direction="inline" wrap="wrap" gap="sm"><Button type="submit">Confirm delivery</Button><Button type="reset">Reset</Button></Flow>
+        <Flow direction="inline" wrap="wrap" gap="sm"><Button type="submit">Confirm delivery</Button><Button type="reset" variant="secondary">Reset</Button></Flow>
         <Text as="p" role="status">{result}</Text>
       </Flow>
     </form>

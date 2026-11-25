@@ -12,13 +12,13 @@ function App() {
   const name = useId();
   return (
     <fieldset>
-      <legend>Receipt format</legend>
+      <legend><Text as="strong">Receipt format</Text></legend>
       <Flow gap="sm">
         <Flow as="label" direction="inline" align="center" gap="sm">
-          <Radio name={name} value="email" checked={method === 'email'} onChange={() => setMethod('email')} /> Email receipt
+          <Radio name={name} value="email" checked={method === 'email'} onChange={() => setMethod('email')} /> <Text>Email receipt</Text>
         </Flow>
         <Flow as="label" direction="inline" align="center" gap="sm">
-          <Radio name={name} value="paper" checked={method === 'paper'} onChange={() => setMethod('paper')} /> Printed receipt
+          <Radio name={name} value="paper" checked={method === 'paper'} onChange={() => setMethod('paper')} /> <Text>Printed receipt</Text>
         </Flow>
         <Text as="p" role="status">{method === 'email' ? 'A digital receipt will be sent.' : 'A receipt will be printed.'}</Text>
       </Flow>

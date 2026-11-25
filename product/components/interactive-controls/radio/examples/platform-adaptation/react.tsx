@@ -17,11 +17,20 @@ function App() {
     <form onSubmit={event => { event.preventDefault(); setConfirmed(selected); }}>
       <Flow gap="md">
         <fieldset>
-          <legend>Delivery speed</legend>
+          <legend><Text as="strong">Delivery speed</Text></legend>
           <Flow gap="sm">
-            <Flow as="label" direction="inline" align="center" gap="sm"><Radio name={name} value="standard" checked={selected === 'standard'} onChange={() => setSelected('standard')} /> Standard</Flow>
-            <Flow as="label" direction="inline" align="center" gap="sm"><Radio name={name} value="express" checked={selected === 'express'} onChange={() => setSelected('express')} /> Express</Flow>
-            <Flow as="label" direction="inline" align="center" gap="sm"><Radio name={name} value="same-day" disabled /> Same day — unavailable</Flow>
+            <Flow as="label" direction="inline" align="center" gap="sm">
+              <Radio name={name} value="standard" checked={selected === 'standard'} onChange={() => setSelected('standard')} />
+              <Text>Standard</Text>
+            </Flow>
+            <Flow as="label" direction="inline" align="center" gap="sm">
+              <Radio name={name} value="express" checked={selected === 'express'} onChange={() => setSelected('express')} />
+              <Text>Express</Text>
+            </Flow>
+            <Flow as="label" direction="inline" align="center" gap="sm">
+              <Radio name={name} value="same-day" disabled />
+              <Text>Same day — unavailable</Text>
+            </Flow>
           </Flow>
         </fieldset>
         <Button type="submit">Confirm delivery speed</Button>

@@ -18,18 +18,18 @@ function App() {
     <form onReset={() => setSelected('Team')}>
       <Flow gap="md">
         <fieldset>
-          <legend>Monthly subscription</legend>
+          <legend><Text as="strong">Monthly subscription</Text></legend>
           <Flow gap="sm">
             {plans.map(item => (
               <Flow key={item.value} as="label" direction="inline" align="center" gap="sm">
                 <Radio name={name} value={item.value} checked={selected === item.value} onChange={() => setSelected(item.value)} />
-                {item.value} — ${item.price}/month
+                <Text>{item.value} — ${item.price}/month</Text>
               </Flow>
             ))}
           </Flow>
         </fieldset>
         <Text as="p" role="status">{plan.value}: ${plan.price} per month.</Text>
-        <Button type="reset">Restore original plan</Button>
+        <Button type="reset" variant="secondary">Restore original plan</Button>
       </Flow>
     </form>
   );

@@ -1,4 +1,4 @@
-import { useState, useId } from 'react';
+import { useState } from 'react';
 import { createRoot } from 'react-dom/client';
 import { Checkbox } from '@vyrnforge/react/checkbox';
 import { Flow } from '@vyrnforge/react/layout';
@@ -14,21 +14,24 @@ function App() {
   const mixed = selected.length > 0 && !all;
   return (
     <fieldset>
-      <legend>Files to export</legend>
+      <legend><Text as="strong">Files to export</Text></legend>
       <Flow gap="sm">
         <Flow as="label" direction="inline" align="center" gap="sm">
           <Checkbox checked={all} indeterminate={mixed} onChange={() => setSelected(all ? [] : eligible)} />
-          Select all available files
+          <Text>Select all available files</Text>
         </Flow>
         {eligible.map(file => (
           <Flow key={file} as="label" direction="inline" align="center" gap="sm">
             <Checkbox checked={selected.includes(file)} onChange={event => {
               const checked = event.currentTarget.checked;
               setSelected(current => checked ? [...current, file] : current.filter(item => item !== file));
-            }} /> {file}
+            }} /> <Text>{file}</Text>
           </Flow>
         ))}
-        <Flow as="label" direction="inline" align="center" gap="sm"><Checkbox disabled /> Archive.zip — unavailable</Flow>
+        <Flow as="label" direction="inline" align="center" gap="sm">
+          <Checkbox disabled />
+          <Text>Archive.zip — unavailable</Text>
+        </Flow>
         <Text as="p" role="status">{selected.length} of {eligible.length} available files selected.</Text>
       </Flow>
     </fieldset>
