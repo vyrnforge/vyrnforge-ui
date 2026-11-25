@@ -1,7 +1,7 @@
 {
   "id": "toggle-group/basic",
-  "title": "Exclusive alignment",
-  "description": "Apply one horizontal alignment or clear the selection to restore automatic alignment.",
+  "title": "Activity range",
+  "description": "Choose one labelled activity range or clear the choice to show all activity.",
   "defaultFramework": "react",
   "frameworks": {
     "react": {

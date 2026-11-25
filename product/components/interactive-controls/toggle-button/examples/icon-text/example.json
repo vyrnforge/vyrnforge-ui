@@ -1,7 +1,7 @@
 {
   "id": "toggle-button/icon-text",
   "title": "Wrap text",
-  "description": "Toggle wrapping of a narrow cell preview.",
+  "description": "Toggle wrapping of a narrow text preview.",
   "defaultFramework": "react",
   "frameworks": {
     "react": {

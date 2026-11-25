@@ -4,7 +4,7 @@ Use ToggleGroup for a named group of related pressed commands, such as formattin
 
 ## Exclusive selection
 
-Use single selection when at most one command can be pressed. Pressing the selected item again clears the choice. This is a toggle group, not a radio group. Horizontal text alignment is a familiar icon-only choice. Clearing a choice may restore the application's default alignment. Use visible labels for options whose meaning is not obvious from an icon.
+Use single selection when at most one command can be pressed. Pressing the selected item again clears the choice. This is a toggle group, not a radio group. Use visible labels for choices such as Day, Week and Month. Clearing a choice may restore the application's unfiltered view. Familiar alignment and view commands can use named icons.
 
 ## Multiple selection
 

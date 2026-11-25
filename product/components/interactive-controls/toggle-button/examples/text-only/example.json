@@ -1,7 +1,7 @@
 {
   "id": "toggle-button/text-only",
-  "title": "Show formulas",
-  "description": "Switch a sample cell between its value and formula using a visible label.",
+  "title": "Show archived",
+  "description": "Show or hide archived projects using an explicit text label.",
   "defaultFramework": "react",
   "frameworks": {
     "react": {

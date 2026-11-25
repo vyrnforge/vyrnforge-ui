@@ -1,6 +1,6 @@
 # ToggleButton
 
-Use ToggleButton for a command that stays on or off, such as applying bold formatting, wrapping cell text or showing formulas. Its stable accessible name identifies the action while `aria-pressed` communicates its current state.
+Use ToggleButton for a command that stays on or off, such as applying bold formatting, bookmarking an article or showing archived projects. Its stable accessible name identifies the action while `aria-pressed` communicates its current state.
 
 ## Native semantics and behavior
 
@@ -8,7 +8,7 @@ A ToggleButton is a native button. Enter, Space, pointer activation, focus and d
 
 ## Icon-only toggles
 
-Use square icon-only controls for familiar commands where space is limited, such as bold, italic, underline and strikethrough in a formatting row. Independent ToggleButtons each own a pressed state; use ToggleGroup when a single selection model coordinates the choices. Use visible text for filters and other commands whose meaning is not apparent from an icon alone. Keep the accessible name stable with `aria-label` or `aria-labelledby`; decorative artwork does not provide the name. The `iconOnly` prop in React and Vue, the corresponding Angular input and the Native Web `data-vf-icon-only` marker share Button geometry.
+Use square icon-only controls for familiar commands where space is limited, such as bookmarking, favoriting or pinning an article. Independent ToggleButtons each own a pressed state; use ToggleGroup when a single selection model coordinates the choices. Use visible text for filters and other commands whose meaning is not apparent from an icon alone. Keep the accessible name stable with `aria-label` or `aria-labelledby`; decorative artwork does not provide the name. The `iconOnly` prop in React and Vue, the corresponding Angular input and the Native Web `data-vf-icon-only` marker share Button geometry.
 
 ## Icon with text
 
@@ -16,7 +16,7 @@ For commands such as Wrap text, where an icon alone may not be familiar, combine
 
 ## Text-only toggles
 
-Use a visible text label when no widely recognized icon communicates the command clearly, such as Show formulas. Keep the name unchanged as the preview changes between a cell value and its formula.
+Use a visible text label when no widely recognized icon communicates the command clearly, such as Show archived. Keep the name unchanged as the project list changes.
 
 ## Sizing and styling
 
@@ -24,7 +24,7 @@ Choose `sm`, `md` or `lg` (default `md`) independently of inherited density. The
 
 ## Pressed and disabled states
 
-Pressed describes the committed on/off state; disabled describes whether the command can be activated. A disabled toggle can remain pressed. Keep the same accessible name in both states, preserve native disabled behavior, and make the pressed state visible in normal and forced-colors modes. Locked formatting can remain applied even when the user cannot change it.
+Pressed describes the committed on/off state; disabled describes whether the command can be activated. A disabled toggle can remain pressed. Keep the same accessible name in both states, preserve native disabled behavior, and make the pressed state visible in normal and forced-colors modes. A read-only bookmark can remain saved even when the user cannot change it.
 
 ## Controlled and uncontrolled state
 

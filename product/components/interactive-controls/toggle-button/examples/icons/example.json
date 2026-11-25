@@ -1,7 +1,7 @@
 {
   "id": "toggle-button/icons",
-  "title": "Icon-only formatting",
-  "description": "Apply bold, italic, underline and strikethrough independently to the same text.",
+  "title": "Article actions",
+  "description": "Bookmark, favorite or pin an article independently using familiar icons.",
   "defaultFramework": "react",
   "frameworks": {
     "react": {

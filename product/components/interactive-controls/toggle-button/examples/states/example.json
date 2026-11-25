@@ -1,7 +1,7 @@
 {
   "id": "toggle-button/states",
   "title": "Pressed and disabled states",
-  "description": "Compare available and locked formatting commands on an archived forecast.",
+  "description": "Compare editable and read-only bookmarks with saved and unsaved states.",
   "defaultFramework": "react",
   "frameworks": {
     "react": {

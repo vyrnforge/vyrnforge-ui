@@ -550,7 +550,7 @@ function toggleOwnedExample(example, links, group = false) {
     [group ? 'data-vf-docs-react-toggle-group-example' : 'data-vf-docs-react-toggle-example']: example.id },
     h('iframe', { className: 'vf-docs-react-example-frame', title,
       src: links.examples[example.id], sandbox: 'allow-scripts', loading: basic ? 'eager' : 'lazy',
-      style: { minBlockSize: !group && id === 'sizes' ? '20rem' : id === 'controlled' ? '22rem' : id === 'states' ? '14rem' : id === 'icon-text' ? '14rem' : '12rem' } }),
+      style: { minBlockSize: !group && id === 'sizes' ? '14rem' : id === 'controlled' ? '22rem' : id === 'states' ? '19rem' : id === 'text-only' || (group && id === 'basic') ? '17rem' : id === 'icon-text' ? '14rem' : '12rem' } }),
     h('details', { className: 'vf-docs-source-disclosure' },
       h('summary', null, 'View React TSX source'),
       h(CodeBlock, { tabIndex: 0 }, example.source)));

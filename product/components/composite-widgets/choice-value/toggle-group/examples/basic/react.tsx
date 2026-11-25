@@ -1,57 +1,57 @@
 import { useState } from 'react';
 import { createRoot } from 'react-dom/client';
 import { ToggleGroupRoot, ToggleGroupItem } from '@vyrnforge/react/toggle-group';
-import { Icon } from '@vyrnforge/react/icon';
-import { alignLeftIcon } from '@vyrnforge/icons/align-left';
-import { alignCenterIcon } from '@vyrnforge/icons/align-center';
-import { alignRightIcon } from '@vyrnforge/icons/align-right';
 import { Flow } from '@vyrnforge/react/layout';
 import { Text } from '@vyrnforge/react/text';
 import { tokens } from '@vyrnforge/react';
 import '@vyrnforge/web/styles/toggle-group.css';
-import '@vyrnforge/web/styles/icon.css';
 import '@vyrnforge/web/styles/layout.css';
 import '@vyrnforge/web/styles/text.css';
 
+const activity = [
+  { label: 'Design review', ageInDays: 0 },
+  { label: 'Release planning', ageInDays: 3 },
+  { label: 'Roadmap review', ageInDays: 18 },
+  { label: 'Quarterly planning', ageInDays: 65 },
+];
+
+const rangeDays: Record<string, number> = { day: 1, week: 7, month: 30 };
+
 function App() {
-  const [alignment, setAlignment] = useState('left');
-  function acceptSelection(next: string | string[]) {
-    if (typeof next === 'string') setAlignment(next);
-  }
+  const [range, setRange] = useState('day');
   return (
     <Flow gap="md">
       <Flow direction="inline">
         <ToggleGroupRoot
           type="single"
-          defaultValue="left"
-          aria-label="Horizontal alignment"
-          onValueChange={acceptSelection}
+          defaultValue="day"
+          aria-label="Activity range"
+          onValueChange={(next) => {
+            if (typeof next === 'string') setRange(next);
+          }}
         >
-          <ToggleGroupItem value="left" data-vf-icon-only="" aria-label="Align left" title="Align left">
-            <Icon icon={alignLeftIcon} />
-          </ToggleGroupItem>
-          <ToggleGroupItem value="center" data-vf-icon-only="" aria-label="Align center" title="Align center">
-            <Icon icon={alignCenterIcon} />
-          </ToggleGroupItem>
-          <ToggleGroupItem value="right" data-vf-icon-only="" aria-label="Align right" title="Align right">
-            <Icon icon={alignRightIcon} />
-          </ToggleGroupItem>
+          <ToggleGroupItem value="day">Day</ToggleGroupItem>
+          <ToggleGroupItem value="week">Week</ToggleGroupItem>
+          <ToggleGroupItem value="month">Month</ToggleGroupItem>
         </ToggleGroupRoot>
       </Flow>
-      <Text
-        as="p"
-        data-example-preview="alignment"
-        style={{
-          border: '1px solid ' + tokens.color.borderStrong,
-          padding: tokens.space.sm,
-          background: tokens.color.surface,
-          textAlign: alignment === 'center' ? 'center' : alignment === 'right' ? 'right' : 'start',
-        }}
+      <Flow
+        as="ul"
+        gap="xs"
+        aria-label="Activity"
+        data-example-preview="activity"
+        style={{ listStyle: 'none', padding: 0, margin: 0 }}
       >
-        Revenue
-      </Text>
+        {activity
+          .filter((item) => !range || item.ageInDays < rangeDays[range])
+          .map((item) => (
+            <li key={item.label} style={{ border: '1px solid ' + tokens.color.border, padding: tokens.space.sm }}>
+              <Text>{item.label} · {item.ageInDays === 0 ? 'Today' : item.ageInDays + ' days ago'}</Text>
+            </li>
+          ))}
+      </Flow>
       <Text as="p" role="status" tone="secondary">
-        Alignment: {alignment || 'automatic'}
+        {range ? 'Range: ' + range : 'All activity'}
       </Text>
     </Flow>
   );
