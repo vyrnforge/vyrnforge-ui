@@ -1321,13 +1321,13 @@ function body(view, links, button, toggle, buttonGroup, layout, typography, icon
       h('section', null, h('h2', null, 'Semantic colors and themes'),
         h(Text, { as: 'p' },
           'Use public theme-aware color roles instead of repeating CSS variable names. ThemeScope is an optional native DOM scope, not a provider.'),
-        h('pre', { 'data-vf-code-block': '', tabIndex: 0 }, h('code', null,
+        h(CodeBlock, { tabIndex: 0 },
           'import { ThemeScope, Text } from \'@vyrnforge/react\';\n\n' +
           '<ThemeScope theme="dark">\n' +
           '  <Text as="p" tone="primary">Accent</Text>\n' +
           '  <Text as="p" tone="secondary">Muted</Text>\n' +
           '  <Text as="p" tone="danger">Danger</Text>\n' +
-          '</ThemeScope>')),
+          '</ThemeScope>'),
         h(Text, { as: 'p' }, h(Link, { href: links.tokens }, 'Browse design tokens')),
         h(Text, { as: 'p' }, h(Link, { href: links.themes }, 'Explore theming')),
         h(Text, { as: 'p' }, h(Link, { href: links.color }, 'Try the color playground')),

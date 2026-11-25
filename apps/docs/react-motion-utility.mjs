@@ -82,13 +82,24 @@ function MotionEffectsPlayground({ theme, motion }) {
       onChange: (event) => setChecked(event.currentTarget.checked) }),
     h('label', { htmlFor: 'motion-effect-switch' }, 'Option'));
   const selectedDuration = entranceDuration === 'slow' ? 480 : entranceDuration === 'fast' ? 200 : undefined;
-  const code = "import { Motion, Button } from '@vyrnforge/react';\n" +
+  const components = target === 'button' ? 'Motion, Button' : target === 'switch'
+    ? 'Motion, Switch, Flow' : 'Motion, Button, Switch, Flow';
+  const switchSource = '  <Flow direction="inline" gap="sm" align="center">\n' +
+    '    <Switch id="example-switch" />\n' +
+    '    <label htmlFor="example-switch">Option</label>\n' +
+    '  </Flow>';
+  const children = target === 'button' ? '  <Button>Continue</Button>' : target === 'switch'
+    ? switchSource : '  <Flow direction="inline" wrap="wrap" gap="md" align="center">\n' +
+      '    <Button>Continue</Button>\n' + switchSource.split('\n').map((line) => '  ' + line).join('\n') +
+      '\n  </Flow>';
+  const code = 'import { ' + components + " } from '@vyrnforge/react';\n" +
     "import '@vyrnforge/web/styles/foundation.css';\n" +
-    "import '@vyrnforge/web/styles/button.css';\n\n" +
-    '<Motion effect="' + effect + '"' +
+    (target !== 'switch' ? "import '@vyrnforge/web/styles/button.css';\n" : '') +
+    (target !== 'button' ? "import '@vyrnforge/web/styles/switch.css';\nimport '@vyrnforge/web/styles/layout.css';\n" : '') +
+    '\n<Motion effect="' + effect + '"' +
     (['slide', 'fade-slide'].includes(effect) ? ' direction="' + origin + '"' : '') +
     (selectedDuration === undefined ? '' : ' duration={' + selectedDuration + '}') +
-    '>\n  <Button>Continue</Button>\n</Motion>\n' +
+    '>\n' + children + '\n</Motion>\n' +
     '// The application owns presence and exit; Motion decorates entrance.';
   return h(Flow, { as: 'section', gap: 'md', 'aria-labelledby': 'motion-effects-title',
     'data-vf-docs-motion-effects': '' },

@@ -10,7 +10,7 @@ export function renderUtilityInline(value) {
       return h(Code, { key: index }, token.slice(1, -1));
     }
     if (token.startsWith('**') && token.endsWith('**')) {
-      return h(Text, { as: 'strong', key: index }, token.slice(2, -2));
+      return h('strong', { key: index }, token.slice(2, -2));
     }
     return token;
   });
