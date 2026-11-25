@@ -17,8 +17,14 @@ function App() {
   return (
     <Flow gap="md">
       <Flow direction="inline">
-        <ToggleGroupRoot type="single" defaultValue="list" aria-label="Workbook view"
-          onValueChange={(next) => { if (typeof next === 'string') setView(next); }}>
+        <ToggleGroupRoot
+          type="single"
+          defaultValue="list"
+          aria-label="Workbook view"
+          onValueChange={(next) => {
+            if (typeof next === 'string') setView(next);
+          }}
+        >
           <ToggleGroupItem value="list" data-vf-icon-only="" aria-label="List view" title="List view">
             <Icon icon={listIcon} />
           </ToggleGroupItem>
@@ -47,4 +53,6 @@ function App() {
     </Flow>
   );
 }
-createRoot(document.querySelector('#root')!).render(<App />);
+const root = document.querySelector('#root');
+if (!root) throw new Error('Missing example root');
+createRoot(root).render(<App />);

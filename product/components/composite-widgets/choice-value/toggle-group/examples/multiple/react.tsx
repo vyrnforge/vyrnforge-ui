@@ -19,8 +19,14 @@ function App() {
   return (
     <Flow gap="md">
       <Flow direction="inline">
-        <ToggleGroupRoot type="multiple" defaultValue={['bold']} aria-label="Text formatting"
-          onValueChange={(next) => { if (Array.isArray(next)) setFormats(next); }}>
+        <ToggleGroupRoot
+          type="multiple"
+          defaultValue={['bold']}
+          aria-label="Text formatting"
+          onValueChange={(next) => {
+            if (Array.isArray(next)) setFormats(next);
+          }}
+        >
           <ToggleGroupItem value="bold" data-vf-icon-only="" aria-label="Bold" title="Bold">
             <Icon icon={boldIcon} />
           </ToggleGroupItem>
@@ -35,21 +41,27 @@ function App() {
           </ToggleGroupItem>
         </ToggleGroupRoot>
       </Flow>
-      <Text as="p" data-example-preview="formatting" style={{
-        border: '1px solid ' + tokens.color.borderStrong,
-        padding: tokens.space.sm,
-        background: tokens.color.surface,
-        fontWeight: formats.includes('bold') ? tokens.fontWeight.bold : tokens.fontWeight.regular,
-        fontStyle: formats.includes('italic') ? 'italic' : 'normal',
-        textDecorationLine: [
-          formats.includes('underline') && 'underline',
-          formats.includes('strikethrough') && 'line-through',
-        ].filter(Boolean).join(' ') || 'none',
-      }}>
+      <Text
+        as="p"
+        data-example-preview="formatting"
+        style={{
+          border: '1px solid ' + tokens.color.borderStrong,
+          padding: tokens.space.sm,
+          background: tokens.color.surface,
+          fontWeight: formats.includes('bold') ? tokens.fontWeight.bold : tokens.fontWeight.regular,
+          fontStyle: formats.includes('italic') ? 'italic' : 'normal',
+          textDecorationLine:
+            [formats.includes('underline') && 'underline', formats.includes('strikethrough') && 'line-through']
+              .filter(Boolean)
+              .join(' ') || 'none',
+        }}
+      >
         Quarterly financial report
       </Text>
     </Flow>
   );
 }
 
-createRoot(document.querySelector('#root')!).render(<App />);
+const root = document.querySelector('#root');
+if (!root) throw new Error('Missing example root');
+createRoot(root).render(<App />);

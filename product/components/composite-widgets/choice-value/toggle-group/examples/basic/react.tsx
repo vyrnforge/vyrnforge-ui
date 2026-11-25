@@ -21,7 +21,12 @@ function App() {
   return (
     <Flow gap="md">
       <Flow direction="inline">
-        <ToggleGroupRoot type="single" defaultValue="left" aria-label="Horizontal alignment" onValueChange={acceptSelection}>
+        <ToggleGroupRoot
+          type="single"
+          defaultValue="left"
+          aria-label="Horizontal alignment"
+          onValueChange={acceptSelection}
+        >
           <ToggleGroupItem value="left" data-vf-icon-only="" aria-label="Align left" title="Align left">
             <Icon icon={alignLeftIcon} />
           </ToggleGroupItem>
@@ -33,17 +38,25 @@ function App() {
           </ToggleGroupItem>
         </ToggleGroupRoot>
       </Flow>
-      <Text as="p" data-example-preview="alignment" style={{
-        border: '1px solid ' + tokens.color.borderStrong,
-        padding: tokens.space.sm,
-        background: tokens.color.surface,
-        textAlign: alignment === 'center' ? 'center' : alignment === 'right' ? 'right' : 'start',
-      }}>
+      <Text
+        as="p"
+        data-example-preview="alignment"
+        style={{
+          border: '1px solid ' + tokens.color.borderStrong,
+          padding: tokens.space.sm,
+          background: tokens.color.surface,
+          textAlign: alignment === 'center' ? 'center' : alignment === 'right' ? 'right' : 'start',
+        }}
+      >
         Revenue
       </Text>
-      <Text as="p" role="status" tone="secondary">Alignment: {alignment || 'automatic'}</Text>
+      <Text as="p" role="status" tone="secondary">
+        Alignment: {alignment || 'automatic'}
+      </Text>
     </Flow>
   );
 }
 
-createRoot(document.querySelector('#root')!).render(<App />);
+const root = document.querySelector('#root');
+if (!root) throw new Error('Missing example root');
+createRoot(root).render(<App />);
