@@ -75,6 +75,10 @@
     color: var(--vf-color-surface);
   }
 
+  :where(input[data-vf-checkbox]:not(:disabled):user-invalid, input[data-vf-checkbox]:not(:disabled)[aria-invalid="true"]) {
+    border-color: var(--vf-color-danger-border);
+  }
+
   @media (prefers-reduced-motion: reduce) {
     :where(input[data-vf-checkbox]),
     :where(input[data-vf-checkbox])::before { transition: none; }

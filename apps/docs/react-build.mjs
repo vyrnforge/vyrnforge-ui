@@ -98,7 +98,9 @@ const selection = Object.fromEntries(await Promise.all(selectionIds.map(async (i
     throw new Error('Missing native selection documentation contract for ' + id);
   const publicSource = group ? null : await readFile(path.join(root,
     path.dirname(path.dirname(owner.frameworkSourcePath)), 'index.ts'), 'utf8');
-  return [id, { ...owner, publicSource }];
+  const publicTypes = group ? null : publicSource.match(/export (?:interface|type) (?:Checkbox|Radio)Props[\s\S]*?(?=\nexport const)/)?.[0].trim();
+  if (!group && !publicTypes) throw new Error('Missing public selection props for ' + id);
+  return [id, { ...owner, publicTypes }];
 })));
 
 const togglePublicSourcePath = path.join(root,

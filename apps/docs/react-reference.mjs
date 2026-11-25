@@ -438,7 +438,7 @@ function typographyApi(unit, links) {
     h('section', { 'aria-labelledby': 'react-typography-api-types' },
       h('h2', { id: 'react-typography-api-types' }, 'Source-backed React types and exports'),
       h('p', null, 'The following source comes from the component-owned React public implementation.'),
-      h(CodeBlock, { tabIndex: 0 }, unit.publicSource)),
+      h(CodeBlock, { tabIndex: 0 }, unit.publicTypes)),
     h(Link, { href: links.typography[unit.id].guide },
       'View ' + unit.title + ' examples'));
 }
@@ -629,7 +629,7 @@ function selectionGuide(unit, links) {
             h('details', { className: 'vf-docs-source-disclosure' },
               h('summary', null, 'View React TSX source'),
               h(CodeBlock, { tabIndex: 0 }, example.source)))),
-        ...(section.heading.startsWith('Accessibility') && unit.standardReferences?.length ? [evidenceDisclosure(unit.standardReferences)] : []),
+        ...(section.heading.startsWith('Accessibility') && !unit.guideOnly && unit.standardReferences ? [evidenceDisclosure(unit.standardReferences)] : []),
         ...(section.heading === 'Related controls' || section.heading === 'Accessibility and related controls' ? [
           h(Flow, { as: 'ul', gap: 'sm', className: 'vf-docs-related-links' },
             ...(routeLinks.api ? [h('li', { key: 'api' }, h(Link, { href: routeLinks.api }, unit.title + ' API'))] : []),
@@ -646,7 +646,7 @@ function selectionApi(unit, links) {
     h('section', null, h('h2', null, 'Public entrypoint'),
       h(Flow, { as: 'ul', gap: 'sm' }, ...unit.publicEntrypoints.map(name => h('li', { key: name }, h(Code, null, name)))),
       h(Text, { as: 'p' }, 'Canonical styling: ', h(Code, null, '@vyrnforge/web/styles/' + unit.id + '.css'))),
-    h('section', null, h('h2', null, 'Source-backed React props and implementation'),
+    h('section', null, h('h2', null, 'Source-backed React props'),
       h(CodeBlock, { tabIndex: 0 }, unit.publicSource)),
     h(Link, { href: links.selection[unit.id].guide }, 'View ' + unit.title + ' guide'));
 }

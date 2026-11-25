@@ -2722,6 +2722,7 @@ test('React native selection guides keep control APIs separate from group compos
 test('React checkbox select-all derives mixed state and native labels operate on mobile', async ({ page }) => {
   await page.setViewportSize({ width: 390, height: 844 });
   await page.goto('/next/react/patterns/checkbox-group/');
+  await page.locator('[data-vf-docs-react-selection-example="checkbox-group/select-all"] iframe').scrollIntoViewIfNeeded();
   const demo = page.frameLocator('[data-vf-docs-react-selection-example="checkbox-group/select-all"] iframe');
   const master = demo.getByRole('checkbox', { name: 'Select all available files' });
   await expect.poll(() => master.evaluate(el => el.indeterminate)).toBe(true);
@@ -2738,6 +2739,7 @@ test('React checkbox select-all derives mixed state and native labels operate on
 });
 test('React radio native group validates, selects via arrows, submits and resets', async ({ page }) => {
   await page.goto('/next/react/patterns/radio-group/');
+  await page.locator('[data-vf-docs-react-selection-example="radio-group/delivery"] iframe').scrollIntoViewIfNeeded();
   const demo = page.frameLocator('[data-vf-docs-react-selection-example="radio-group/delivery"] iframe');
   const standard = demo.getByRole('radio', { name: /Standard/ });
   const express = demo.getByRole('radio', { name: /Express/ });

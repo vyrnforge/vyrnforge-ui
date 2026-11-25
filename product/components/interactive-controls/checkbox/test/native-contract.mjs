@@ -3,9 +3,21 @@ export default {
   markup: '<label for="control">Choice</label><input id="control" name="control" type="checkbox" data-vf-checkbox>',
   angular: '<label for="control">Choice</label><input id="control" name="control" vfCheckbox [indeterminate]="true">',
   props: { name: 'control', indeterminate: true }, hydrate: true, webInlineScript: 'document.querySelector("#control").indeterminate=true;', semantics: { tag: 'INPUT', type: 'checkbox' },
+  reducedMotion: true,
   async assertBrowser({ control, expect }) {
     expect(await control.evaluate((element) => element.indeterminate)).toBe(true);
     await expect(control).not.toHaveAttribute('data-vf-indeterminate');
+    const danger = await control.evaluate((element) => {
+      const sample = document.createElement('span');
+      sample.style.color = 'var(--vf-color-danger-border)';
+      element.parentElement.append(sample);
+      const color = getComputedStyle(sample).color;
+      sample.remove();
+      element.setAttribute('aria-invalid', 'true');
+      return color;
+    });
+    await expect(control).toHaveCSS('border-top-color', danger);
+    await control.evaluate((element) => element.removeAttribute('aria-invalid'));
     const box = await control.boundingBox();
     expect(box?.width ?? 0).toBeGreaterThanOrEqual(24);
     expect(box?.height ?? 0).toBeGreaterThanOrEqual(24);

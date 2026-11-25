@@ -66,6 +66,10 @@
     color: var(--vf-color-surface);
   }
 
+  :where(input[data-vf-radio]:not(:disabled):user-invalid, input[data-vf-radio]:not(:disabled)[aria-invalid="true"]) {
+    border-color: var(--vf-color-danger-border);
+  }
+
   @media (prefers-reduced-motion: reduce) {
     :where(input[data-vf-radio]),
     :where(input[data-vf-radio])::before { transition: none; }
