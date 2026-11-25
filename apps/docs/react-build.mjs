@@ -26,13 +26,14 @@ const motionTokenCSS = await readFile(path.join(root, 'packages/web/src/styles/t
 for (const name of motionTokenNames) {
   if (!motionTokenCSS.includes(name + ':')) throw new Error('Motion utility references missing public runtime token: ' + name);
 }
-for (const id of ['button', 'switch']) {
+const motionComponentIds = ['button', 'switch', 'disclosure', 'tabs', 'toast'];
+for (const id of motionComponentIds) {
   if (!reactModel.componentCatalog.find((entry) => entry.id === id)?.apiAvailable) {
     throw new Error('Motion utility requires real public React component: ' + id);
   }
 }
-const motionStyles = [resolvePublicWebStyleAsset(webModel.packageManifest,
-  '@vyrnforge/web/styles/switch.css').assetPath];
+const motionStyles = motionComponentIds.filter((id) => id !== 'button').map((id) =>
+  resolvePublicWebStyleAsset(webModel.packageManifest, '@vyrnforge/web/styles/' + id + '.css').assetPath);
 const overlayComponentIds = ['popover', 'tooltip', 'preview-card', 'dialog', 'alert-dialog', 'drawer'];
 for (const id of overlayComponentIds) {
   if (!reactModel.componentCatalog.find((entry) => entry.id === id)?.apiAvailable ||
@@ -982,7 +983,7 @@ await writeFile(path.join(reactRoot, 'site-manifest.json'), JSON.stringify({
     { id: 'overlay', route: 'utilities/overlay/',
       source: 'documentation/utilities/overlay.md', publicComponents: overlayComponentIds },
     { id: 'motion', route: 'utilities/motion/',
-      source: 'documentation/utilities/motion.md', publicComponents: ['button', 'switch'],
+      source: 'documentation/utilities/motion.md', publicComponents: motionComponentIds,
       tokens: motionTokenNames },
   ],
   layout: {
