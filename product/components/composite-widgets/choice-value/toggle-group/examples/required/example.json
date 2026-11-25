@@ -1,7 +1,7 @@
 {
   "id": "toggle-group/required",
-  "title": "Required selection",
-  "description": "A controlled group rejects attempts to clear the committed selection.",
+  "title": "Required alignment",
+  "description": "Keep one horizontal alignment selected while rejecting attempts to clear it.",
   "defaultFramework": "react",
   "frameworks": {
     "react": {

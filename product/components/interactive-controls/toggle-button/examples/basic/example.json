@@ -1,7 +1,7 @@
 {
   "id": "toggle-button/basic",
-  "title": "Basic toggle",
-  "description": "An independent text-labelled filter retains its pressed state.",
+  "title": "Toggle bold formatting",
+  "description": "Toggle bold formatting on the sample report text.",
   "defaultFramework": "native-web",
   "frameworks": {
     "native-web": {

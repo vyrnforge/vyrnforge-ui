@@ -112,7 +112,7 @@ describe('React documentation compiler preflight', () => {
         expect(group.sharedContent.sections.some((section) => section.heading === example.documentationSection)).toBe(true);
       }
       if (framework === 'react') {
-        expect(toggle.examples.map((example) => example.id).sort()).toEqual(['toggle-button/basic', 'toggle-button/controlled', 'toggle-button/icon-text', 'toggle-button/icons', 'toggle-button/sizes', 'toggle-button/states']);
+        expect(toggle.examples.map((example) => example.id).sort()).toEqual(['toggle-button/basic', 'toggle-button/controlled', 'toggle-button/icon-text', 'toggle-button/icons', 'toggle-button/sizes', 'toggle-button/states', 'toggle-button/text-only']);
         expect(toggle.examples.find((example) => example.id === 'toggle-button/icons').documentationSection).toBe('Icon-only toggles');
         const toggleGroup = model.componentCatalog.find((owner) => owner.id === 'toggle-group');
         expect(toggleGroup.showcaseAvailable).toBe(true);

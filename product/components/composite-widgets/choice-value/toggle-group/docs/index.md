@@ -4,11 +4,11 @@ Use ToggleGroup for a named group of related pressed commands, such as formattin
 
 ## Exclusive selection
 
-Use single selection when at most one command can be pressed. Pressing the selected item again clears the choice. This is a toggle group, not a radio group. Use visible labels for choices such as Day, Week and Month; familiar view controls such as List and Grid can use named icons.
+Use single selection when at most one command can be pressed. Pressing the selected item again clears the choice. This is a toggle group, not a radio group. Horizontal text alignment is a familiar icon-only choice. Clearing a choice may restore the application's default alignment. Use visible labels for options whose meaning is not obvious from an icon.
 
 ## Multiple selection
 
-Use multiple selection for independent choices within one named group, such as microphone and camera controls. Toggling an item changes only that item's membership in the selected values. Use recognizable icons for compact controls and visible text when the meaning depends on a label.
+Use multiple selection for independent choices within one named group, such as bold, italic, underline and strikethrough applied to the same cell or text range. Toggling an item changes only that item's membership in the selected values. Use recognizable icons for compact controls and visible text when the meaning depends on a label.
 
 ## Icon-only choices
 
@@ -16,7 +16,7 @@ For familiar view commands, use square icon-only items and give each a stable ac
 
 ## Required selection
 
-Single selection normally permits an empty value. If the consumer task requires one selected command, keep the group controlled and reject an empty requested value. Use SegmentedControl instead when the task is a radio-like exclusive value rather than a collection of pressed commands.
+Single selection normally permits an empty value. If the consumer task requires one selected command, such as an explicit horizontal alignment, keep the group controlled and reject an empty requested value. Use SegmentedControl instead when the task is a radio-like exclusive value rather than a collection of pressed commands.
 
 ## Layout and styling
 

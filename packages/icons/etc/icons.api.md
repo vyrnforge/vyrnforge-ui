@@ -10,6 +10,15 @@ import { IconDefinition } from '@vyrnforge/web/icon';
 export const addIcon: IconDefinition;
 
 // @public (undocumented)
+export const alignCenterIcon: IconDefinition;
+
+// @public (undocumented)
+export const alignLeftIcon: IconDefinition;
+
+// @public (undocumented)
+export const alignRightIcon: IconDefinition;
+
+// @public (undocumented)
 export const arrowDownIcon: IconDefinition;
 
 // @public (undocumented)
@@ -26,6 +35,9 @@ export const attachmentIcon: IconDefinition;
 
 // @public (undocumented)
 export const bellIcon: IconDefinition;
+
+// @public (undocumented)
+export const boldIcon: IconDefinition;
 
 // @public (undocumented)
 export const bookmarkIcon: IconDefinition;
@@ -139,6 +151,9 @@ export const imageIcon: IconDefinition;
 export const infoIcon: IconDefinition;
 
 // @public (undocumented)
+export const italicIcon: IconDefinition;
+
+// @public (undocumented)
 export const keyIcon: IconDefinition;
 
 // @public (undocumented)
@@ -244,6 +259,9 @@ export const starIcon: IconDefinition;
 export const stopIcon: IconDefinition;
 
 // @public (undocumented)
+export const strikethroughIcon: IconDefinition;
+
+// @public (undocumented)
 export const sunIcon: IconDefinition;
 
 // @public (undocumented)
@@ -257,6 +275,9 @@ export const terminalIcon: IconDefinition;
 
 // @public (undocumented)
 export const trashIcon: IconDefinition;
+
+// @public (undocumented)
+export const underlineIcon: IconDefinition;
 
 // @public (undocumented)
 export const undoIcon: IconDefinition;
@@ -284,6 +305,9 @@ export const warningIcon: IconDefinition;
 
 // @public (undocumented)
 export const wifiIcon: IconDefinition;
+
+// @public (undocumented)
+export const wrapTextIcon: IconDefinition;
 
 // (No @packageDocumentation comment for this package)
 

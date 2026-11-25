@@ -43,7 +43,7 @@ test('React pilot artifact is Product Graph-backed and SSR-rendered with public 
     publicEntrypoints: ['@vyrnforge/react/toggle-button'],
     frameworkSourcePath: 'product/components/interactive-controls/toggle-button/react/docs/index.md',
   });
-  expect(manifest.toggle.examples.map(example => example.id)).toEqual(['toggle-button/basic', 'toggle-button/controlled', 'toggle-button/icon-text', 'toggle-button/icons', 'toggle-button/sizes', 'toggle-button/states']);
+  expect(manifest.toggle.examples.map(example => example.id)).toEqual(['toggle-button/basic', 'toggle-button/controlled', 'toggle-button/icon-text', 'toggle-button/icons', 'toggle-button/sizes', 'toggle-button/states', 'toggle-button/text-only']);
   expect(readFileSync('dist/docs/next/react/examples/toggle-button/basic/index.html', 'utf8'))
     .toContain('react-toggle-button-basic.js');
   expect(manifest.layout).toMatchObject({ guideOnly: false, api: true,
@@ -591,9 +591,9 @@ test('React Button, Button Group and ToggleButton keep demonstrations on their r
 
   await group.getByRole('link', { name: 'ToggleButton', exact: true }).click();
   const toggleGuide = page.locator('[data-vf-docs-react-toggle]');
-  await expect(toggleGuide.locator('[data-vf-docs-react-toggle-example]')).toHaveCount(6);
+  await expect(toggleGuide.locator('[data-vf-docs-react-toggle-example]')).toHaveCount(7);
   const toggle = toggleGuide.frameLocator('iframe[title="React ToggleButton icon-only example"]');
-  const iconToggle = toggle.getByRole('button', { name: 'Pin document' });
+  const iconToggle = toggle.getByRole('button', { name: 'Bold', exact: true });
   await expect(iconToggle).toHaveAttribute('data-vf-icon-only', '');
   await expect(iconToggle).toHaveAttribute('aria-pressed', 'false');
   const iconToggleSize = await iconToggle.evaluate(el => {
@@ -603,7 +603,10 @@ test('React Button, Button Group and ToggleButton keep demonstrations on their r
   expect(iconToggleSize).toEqual({ width: 40, height: 40 });
   await iconToggle.click();
   await expect(iconToggle).toHaveAttribute('aria-pressed', 'true');
-  await expect(toggle.getByRole('status')).toHaveText('Pin document: on');
+  await expect(toggle.locator('[data-example-preview="formatting"]')).toHaveCSS('font-weight', '700');
+  await toggle.getByRole('button', { name: 'Italic' }).click();
+  await expect(toggle.locator('[data-example-preview="formatting"]')).toHaveCSS('font-style', 'italic');
+  await expect(iconToggle).toHaveAttribute('aria-pressed', 'true');
 
   await page.goto('/next/react/components/button/');
   const icons = page.frameLocator('iframe[title="React Icon buttons example"]');
@@ -719,51 +722,83 @@ test('React Button guide keeps all demos visible, source optional and navigation
 
 test('React ToggleButton has an independent native pressed-state guide and source-backed API', async ({ page }) => {
   await page.goto('/next/react/components/toggle-button/');
-  await expect(page.locator('[data-vf-docs-react-toggle]')).toBeVisible();
-  const pressed = page.locator('[data-vf-docs-react-toggle-topic="pressed"]');
+  const guide = page.locator('[data-vf-docs-react-toggle]');
+  await expect(guide).toBeVisible();
+  const pressed = guide.locator('[data-vf-docs-react-toggle-topic="pressed"]');
   await expect(pressed.getByRole('heading', { name: 'Pressed state', level: 2 })).toBeVisible();
   await expect(pressed.locator('[data-vf-docs-react-toggle-example]')).toHaveCount(1);
   const frame = page.frameLocator('iframe[title="React ToggleButton pressed-state example"]');
-  const archived = frame.getByRole('button', { name: 'Show archived', exact: true });
-  await expect(archived).toHaveAttribute('aria-pressed', 'false');
-  await expect(archived).not.toHaveAttribute('data-vf-icon-only', '');
-  await expect(archived).toHaveText('Show archived');
-  await archived.click();
-  await expect(archived).toHaveAttribute('aria-pressed', 'true');
-  await archived.press('Space');
-  await expect(archived).toHaveAttribute('aria-pressed', 'false');
-  const guide = page.locator('[data-vf-docs-react-toggle]');
+  const bold = frame.getByRole('button', { name: 'Bold', exact: true });
+  const preview = frame.locator('[data-example-preview="bold"]');
+  await expect(bold).toHaveAttribute('aria-pressed', 'false');
+  await expect(bold).toHaveAttribute('data-vf-icon-only', '');
+  await expect(bold.locator('svg')).toHaveAttribute('data-vf-icon-name', 'bold');
+  await expect(preview).toHaveCSS('font-weight', '400');
+  await bold.click();
+  await expect(bold).toHaveAttribute('aria-pressed', 'true');
+  await expect(preview).toHaveCSS('font-weight', '700');
+  await bold.press('Space');
+  await expect(bold).toHaveAttribute('aria-pressed', 'false');
+  await expect(preview).toHaveCSS('font-weight', '400');
+
   const controlled = guide.locator('section[aria-labelledby="react-toggle-controlled-and-uncontrolled-state"]').frameLocator('iframe');
-  const controlledArchived = controlled.getByRole('button', { name: 'Show archived', exact: true });
-  await controlledArchived.click();
-  await expect(controlled.getByRole('status')).toHaveText('Archived items: on');
-  await controlled.getByRole('button', { name: 'Reset archived filter' }).click();
-  await expect(controlledArchived).toHaveAttribute('aria-pressed', 'false');
-  await expect(controlledArchived).not.toHaveAttribute('data-vf-icon-only', '');
-  await expect(controlled.getByRole('button', { name: 'Show completed' })).toHaveAttribute('aria-pressed', 'true');
+  const controlledBold = controlled.getByRole('button', { name: 'Bold', exact: true });
+  const cell = controlled.locator('[data-example-preview="cell"]');
+  await expect(controlledBold).toHaveAttribute('aria-pressed', 'true');
+  await expect(cell).toHaveCSS('font-weight', '700');
+  await controlled.getByRole('button', { name: 'Select A2' }).click();
+  await expect(controlledBold).toHaveAttribute('aria-pressed', 'false');
+  await expect(cell).toHaveText('A2: Expenses');
+  await controlledBold.click();
+  await expect(cell).toHaveCSS('font-weight', '700');
+  await controlled.getByRole('button', { name: 'Italic' }).click();
+  await controlled.getByRole('button', { name: 'Reset bold' }).click();
+  await expect(controlledBold).toHaveAttribute('aria-pressed', 'false');
+  await expect(cell).toHaveCSS('font-weight', '400');
+  await expect(controlled.locator('[data-example-preview="uncontrolled"]')).toHaveCSS('font-style', 'italic');
+  await controlled.getByRole('button', { name: 'Select A1' }).click();
+  await expect(controlledBold).toHaveAttribute('aria-pressed', 'true');
+  await expect(cell).toHaveCSS('font-weight', '700');
+
   const states = guide.locator('section[aria-labelledby="react-toggle-pressed-and-disabled-states"]').frameLocator('iframe');
   for (const [name, pressed, disabled] of [
-    ['Bookmark report', false, false], ['Bookmark notes', true, false],
-    ['Bookmark invoice', false, true], ['Bookmark draft', true, true],
+    ['Bold', false, false], ['Italic', true, false],
+    ['Underline', false, true], ['Strikethrough', true, true],
   ]) {
-    const button = states.getByRole('button', { name });
+    const button = states.getByRole('button', { name, exact: true });
     await expect(button).toHaveAttribute('data-vf-icon-only', '');
     await expect(button).toHaveAttribute('aria-pressed', String(pressed));
     if (disabled) await expect(button).toBeDisabled();
     else await expect(button).toBeEnabled();
   }
+  await expect(states.locator('[data-example-preview="states"]')).toHaveCSS('text-decoration-line', 'line-through');
   const sizes = guide.locator('section[aria-labelledby="react-toggle-sizing-and-styling"]').frameLocator('iframe');
   for (const size of ['sm', 'md', 'lg']) {
-    const icon = sizes.getByRole('button', { name: 'Bookmark (' + size + ')' });
-    const labelled = sizes.getByRole('button', { name: 'Show archived (' + size + ')' });
+    const icon = sizes.getByRole('button', { name: 'Bold (' + size + ')', exact: true });
+    const labelled = sizes.getByRole('button', { name: 'Show formulas (' + size + ')', exact: true });
     await expect(icon).toHaveAttribute('data-vf-size', size);
     await expect(icon).toHaveAttribute('data-vf-icon-only', '');
     await expect(labelled).toHaveAttribute('data-vf-size', size);
     await expect(labelled).not.toHaveAttribute('data-vf-icon-only', '');
-    await expect(labelled).toHaveText('Show archived');
+    await expect(labelled).toHaveText('Show formulas');
   }
-  await expect(guide.locator('section[aria-labelledby="react-toggle-icon-with-text"]').frameLocator('iframe')
-    .getByRole('button', { name: 'Pin document' })).not.toHaveAttribute('data-vf-icon-only', '');
+  await sizes.getByRole('button', { name: 'Bold (lg)', exact: true }).click();
+  await expect(sizes.locator('[data-example-preview="size"]')).toHaveCSS('font-weight', '700');
+  await sizes.getByRole('button', { name: 'Show formulas (sm)', exact: true }).click();
+  await expect(sizes.locator('[data-example-preview="size"]')).toHaveText('=SUM(B2:B4)');
+  const wrap = guide.locator('section[aria-labelledby="react-toggle-icon-with-text"]').frameLocator('iframe');
+  const wrapToggle = wrap.getByRole('button', { name: 'Wrap text' });
+  await expect(wrapToggle).not.toHaveAttribute('data-vf-icon-only', '');
+  await expect(wrapToggle.locator('svg')).toHaveAttribute('data-vf-icon-name', 'wrap-text');
+  await expect(wrap.locator('[data-example-preview="wrap"]')).toHaveCSS('white-space', 'nowrap');
+  await wrapToggle.click();
+  await expect(wrap.locator('[data-example-preview="wrap"]')).toHaveCSS('white-space', 'normal');
+  const formula = guide.locator('section[aria-labelledby="react-toggle-text-only-toggles"]').frameLocator('iframe');
+  const formulaToggle = formula.getByRole('button', { name: 'Show formulas' });
+  await expect(formulaToggle).not.toHaveAttribute('data-vf-icon-only', '');
+  await expect(formula.locator('[data-example-preview="formula"]')).toHaveText('23,800');
+  await formulaToggle.click();
+  await expect(formula.locator('[data-example-preview="formula"]')).toHaveText('=SUM(B2:B4)');
   await page.goto('/next/react/api/components/toggle-button/');
   await expect(page.locator('[data-vf-docs-react-api="toggle-button"]')).toContainText('ToggleButtonProps');
   await expect(page.locator('[data-vf-docs-react-api="toggle-button"]')).toContainText("size?: 'sm' | 'md' | 'lg'");
@@ -779,41 +814,57 @@ test('React ToggleGroup guide teaches its actual independent-tab-stop selection 
     await expect(guide.locator('section[aria-labelledby="react-toggle-group-' + heading + '"] [data-vf-docs-react-toggle-group-example="toggle-group/' + id + '"]')).toHaveCount(1);
   }
   const single = guide.locator('[data-vf-docs-react-toggle-group-example="toggle-group/basic"]').frameLocator('iframe');
-  const day = single.getByRole('button', { name: 'Day', exact: true });
-  const week = single.getByRole('button', { name: 'Week', exact: true });
-  await expect(week).toHaveAttribute('aria-pressed', 'true');
-  await expect(week).not.toHaveAttribute('data-vf-icon-only', '');
-  await expect(week).toHaveText('Week');
-  await day.focus();
-  await day.press('Space');
-  await expect(day).toHaveAttribute('aria-pressed', 'true');
-  await expect(week).toHaveAttribute('aria-pressed', 'false');
-  await day.press('Tab');
-  await expect(week).toBeFocused();
-  await day.click();
-  await expect(day).toHaveAttribute('aria-pressed', 'false');
+  const left = single.getByRole('button', { name: 'Align left', exact: true });
+  const center = single.getByRole('button', { name: 'Align center', exact: true });
+  const aligned = single.locator('[data-example-preview="alignment"]');
+  await expect(left).toHaveAttribute('aria-pressed', 'true');
+  await expect(left).toHaveAttribute('data-vf-icon-only', '');
+  await left.focus();
+  await left.press('Tab');
+  await expect(center).toBeFocused();
+  await center.press('Space');
+  await expect(center).toHaveAttribute('aria-pressed', 'true');
+  await expect(left).toHaveAttribute('aria-pressed', 'false');
+  await expect(aligned).toHaveCSS('text-align', 'center');
+  await center.click();
+  await expect(center).toHaveAttribute('aria-pressed', 'false');
+  await expect(single.getByRole('status')).toHaveText('Alignment: automatic');
+  await expect(aligned).toHaveCSS('text-align', 'start');
+
   const multiple = guide.locator('[data-vf-docs-react-toggle-group-example="toggle-group/multiple"]').frameLocator('iframe');
-  for (const name of ['Microphone', 'Camera', 'Speaker']) {
-    await expect(multiple.getByRole('button', { name })).toHaveAttribute('data-vf-icon-only', '');
+  for (const name of ['Bold', 'Italic', 'Underline', 'Strikethrough']) {
+    await expect(multiple.getByRole('button', { name, exact: true })).toHaveAttribute('data-vf-icon-only', '');
   }
-  await multiple.getByRole('button', { name: 'Camera' }).click();
-  await expect(multiple.getByRole('button', { name: 'Microphone' })).toHaveAttribute('aria-pressed', 'true');
-  await expect(multiple.getByRole('button', { name: 'Camera' })).toHaveAttribute('aria-pressed', 'true');
-  await expect(multiple.getByRole('button', { name: 'Speaker' })).toBeDisabled();
+  await multiple.getByRole('button', { name: 'Italic', exact: true }).click();
+  await multiple.getByRole('button', { name: 'Underline', exact: true }).click();
+  await expect(multiple.getByRole('button', { name: 'Bold', exact: true })).toHaveAttribute('aria-pressed', 'true');
+  await expect(multiple.getByRole('button', { name: 'Italic', exact: true })).toHaveAttribute('aria-pressed', 'true');
+  const formatted = multiple.locator('[data-example-preview="formatting"]');
+  await expect(formatted).toHaveCSS('font-weight', '700');
+  await expect(formatted).toHaveCSS('font-style', 'italic');
+  await expect(formatted).toHaveCSS('text-decoration-line', 'underline');
+  await multiple.getByRole('button', { name: 'Bold', exact: true }).click();
+  await expect(formatted).toHaveCSS('font-weight', '400');
+  await expect(formatted).toHaveCSS('font-style', 'italic');
+
   const icons = guide.locator('[data-vf-docs-react-toggle-group-example="toggle-group/icons"]').frameLocator('iframe');
+  await expect(icons.locator('[data-example-preview="view"]')).toHaveCSS('flex-direction', 'column');
   await icons.getByRole('button', { name: 'Grid view' }).click();
   await expect(icons.getByRole('button', { name: 'Grid view' })).toHaveAttribute('aria-pressed', 'true');
   await expect(icons.getByRole('button', { name: 'Grid view' })).toHaveAttribute('data-vf-icon-only', '');
+  await expect(icons.locator('[data-example-preview="view"]')).toHaveCSS('flex-direction', 'row');
   const required = guide.locator('[data-vf-docs-react-toggle-group-example="toggle-group/required"]').frameLocator('iframe');
-  const listView = required.getByRole('button', { name: 'List view', exact: true });
-  const gridView = required.getByRole('button', { name: 'Grid view', exact: true });
-  await expect(listView).toHaveAttribute('data-vf-icon-only', '');
-  await expect(gridView).toHaveAttribute('data-vf-icon-only', '');
-  await listView.click();
-  await expect(listView).toHaveAttribute('aria-pressed', 'true');
-  await gridView.click();
-  await expect(gridView).toHaveAttribute('aria-pressed', 'true');
-  await expect(required.getByRole('status')).toHaveText('Current view: grid');
+  const requiredLeft = required.getByRole('button', { name: 'Align left', exact: true });
+  const requiredRight = required.getByRole('button', { name: 'Align right', exact: true });
+  await expect(requiredLeft).toHaveAttribute('data-vf-icon-only', '');
+  await requiredLeft.click();
+  await expect(requiredLeft).toHaveAttribute('aria-pressed', 'true');
+  await requiredRight.click();
+  await expect(requiredRight).toHaveAttribute('aria-pressed', 'true');
+  await expect(required.locator('[data-example-preview="alignment"]')).toHaveCSS('text-align', 'right');
+  await requiredRight.click();
+  await expect(requiredRight).toHaveAttribute('aria-pressed', 'true');
+  await expect(required.getByRole('status')).toHaveText('Alignment: right');
   await guide.getByRole('link', { name: 'ToggleGroup public React API' }).click();
   await expect(page.locator('[data-vf-docs-react-api="toggle-group"]')).toContainText('ToggleGroupRootProps');
   await expect(page.locator('[data-vf-docs-react-api="toggle-group"]')).toContainText('ToggleGroupItemProps');
@@ -1526,8 +1577,8 @@ test('React Icon Explorer renders the actual catalog with keyboard-operable filt
   await expect(explorer.locator('[data-vf-search-field-root]')).toHaveCount(1);
   await expect(explorer.locator('[data-vf-search-field-input]')).toHaveCount(1);
   await expect(explorer.locator('[data-vf-search-field-clear]')).toBeDisabled();
-  await expect(explorer.locator('[data-vf-docs-icon-card]')).toHaveCount(93);
-  await expect(explorer.locator('[data-vf-docs-icon-count]')).toHaveText('93 of 93 icons shown');
+  await expect(explorer.locator('[data-vf-docs-icon-card]')).toHaveCount(101);
+  await expect(explorer.locator('[data-vf-docs-icon-count]')).toHaveText('101 of 101 icons shown');
 
   // A native search input and a public VyrnForge Button provide ordinary
   // Tab/Space operation instead of an invented composite keyboard model.
@@ -1574,21 +1625,21 @@ test('React Icon Explorer renders the actual catalog with keyboard-operable filt
     .toContain("import { bookmarkIcon } from '@vyrnforge/icons/bookmark'");
 
   await explorer.getByLabel('Category').selectOption('Files & data');
-  await expect(explorer.locator('[data-vf-docs-icon-count]')).toHaveText('0 of 93 icons shown');
+  await expect(explorer.locator('[data-vf-docs-icon-count]')).toHaveText('0 of 101 icons shown');
   await expect(explorer.getByText('No implemented icons match those filters.')).toBeVisible();
   await explorer.getByRole('button', { name: 'Clear icon search' }).click();
   await expect(explorer.getByLabel('Search icons')).toHaveValue('');
   await expect(explorer.getByLabel('Search icons')).toBeFocused();
   await expect(explorer.getByRole('button', { name: 'Clear icon search' })).toBeDisabled();
   await expect(explorer.locator('[data-vf-docs-icon-card]')).toHaveCount(15);
-  await expect(explorer.locator('[data-vf-docs-icon-count]')).toHaveText('15 of 93 icons shown');
+  await expect(explorer.locator('[data-vf-docs-icon-count]')).toHaveText('15 of 101 icons shown');
 
   // The full explorer is server rendered, not an interactive-only blank slot.
   const context = await browser.newContext({ javaScriptEnabled: false });
   try {
     const noJs = await context.newPage();
     await noJs.goto('/next/react/icons/');
-    await expect(noJs.locator('[data-vf-docs-icon-card]')).toHaveCount(93);
+    await expect(noJs.locator('[data-vf-docs-icon-card]')).toHaveCount(101);
   } finally { await context.close(); }
 });
 
@@ -1596,7 +1647,7 @@ test('All catalog artwork variants have nonempty SVG geometry within the shared 
   await page.goto('/next/react/icons/');
   const explorer = page.locator('[data-vf-docs-react-icon-explorer]');
   const elements = explorer.locator('.vf-docs-icon-grid svg[data-vf-icon]');
-  await expect(elements).toHaveCount(93);
+  await expect(elements).toHaveCount(101);
 
   for (const variant of ['outlined', 'filled']) {
     await explorer.getByLabel('Variant').selectOption(variant);

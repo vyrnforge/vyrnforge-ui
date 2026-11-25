@@ -11,6 +11,7 @@ import { AutoGrid, Flow } from '@vyrnforge/react/layout';
 // Documentation-only groupings, not an icon registry. Actual names, artwork and
 // supported treatment/shape combinations always come from public catalog exports.
 const groups = {
+  'Text formatting': ['bold', 'italic', 'underline', 'strikethrough', 'align-left', 'align-center', 'align-right', 'wrap-text'],
   'Actions & editing': [
     'add', 'check', 'close', 'copy', 'download', 'edit', 'filter', 'minus',
     'log-out', 'more-horizontal', 'more-vertical', 'print', 'redo', 'refresh', 'save',
