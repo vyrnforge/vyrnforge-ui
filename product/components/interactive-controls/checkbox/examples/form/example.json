@@ -1,0 +1,14 @@
+{
+  "id": "checkbox/form",
+  "title": "Required consent and reset",
+  "description": "A required independent checkbox gates a real native form and resets to its initial state.",
+  "defaultFramework": "react",
+  "frameworks": {
+    "react": {
+      "label": "React",
+      "language": "tsx",
+      "source": "react.tsx"
+    }
+  },
+  "documentationSection": "Required and disabled states"
+}

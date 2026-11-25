@@ -1,0 +1,14 @@
+{
+  "id": "radio-group/plans",
+  "title": "Choose a subscription plan",
+  "description": "A controlled exclusive plan updates a price summary and restores its original selection on reset.",
+  "defaultFramework": "react",
+  "frameworks": {
+    "react": {
+      "label": "React",
+      "language": "tsx",
+      "source": "react.tsx"
+    }
+  },
+  "documentationSection": "Controlled selection"
+}

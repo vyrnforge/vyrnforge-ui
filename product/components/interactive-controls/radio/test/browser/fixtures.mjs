@@ -24,6 +24,7 @@ export const browserFixture = {
         platform: 'browser',
         outdir: outDir,
         entryNames: `platform-${port}`,
+        ...(port === 'react' ? { jsx: 'automatic' } : {}),
         ...(port === 'angular' ? { tsconfigRaw: { compilerOptions: { experimentalDecorators: true } } } : {}),
       });
       const mount = port === 'angular' ? '<vf-example-root></vf-example-root>' : '<div id="root"></div>';

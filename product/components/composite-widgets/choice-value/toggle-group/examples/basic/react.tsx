@@ -44,11 +44,15 @@ function App() {
       >
         {activity
           .filter((item) => !range || item.ageInDays < rangeDays[range])
-          .map((item) => (
-            <li key={item.label} style={{ border: '1px solid ' + tokens.color.border, padding: tokens.space.sm }}>
-              <Text>{item.label} · {item.ageInDays === 0 ? 'Today' : item.ageInDays + ' days ago'}</Text>
-            </li>
-          ))}
+          .map((item) => {
+            const age = item.ageInDays === 0 ? 'Today' : item.ageInDays + ' days ago';
+            const style = { border: '1px solid ' + tokens.color.border, padding: tokens.space.sm };
+            return (
+              <li key={item.label} style={style}>
+                <Text>{item.label + ' · ' + age}</Text>
+              </li>
+            );
+          })}
       </Flow>
       <Text as="p" role="status" tone="secondary">
         {range ? 'Range: ' + range : 'All activity'}

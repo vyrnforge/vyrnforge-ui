@@ -70,6 +70,11 @@ function accessibilityEvidence(references, headingTag = 'h2') {
       references.reviewStatus === 'review-required' ? ' Accessibility review required.' : '',
       ' References and evidence mappings only; not a blanket compliance claim.'));
 }
+// Selection previews are sandboxed (opaque origin); only send a non-sensitive theme enum.
+function syncSelectionPreviewTheme(frame) {
+  frame.contentWindow?.postMessage({ type: 'vf-selection-preview-theme',
+    theme: document.documentElement.dataset.vfTheme }, '*');
+}
 function useTheme() {
   const [theme, setTheme] = useState('light');
   useEffect(() => {
@@ -83,6 +88,7 @@ function useTheme() {
     const apply = () => {
       document.documentElement.dataset.vfTheme = theme === 'system'
         ? (media?.matches ? 'dark' : 'light') : theme;
+      document.querySelectorAll('[data-vf-docs-react-selection-example] iframe').forEach(syncSelectionPreviewTheme);
     };
     apply();
     media?.addEventListener('change', apply);
@@ -159,9 +165,13 @@ function navigation(view, links, topic) {
       { id: 'guide', title: 'Button', href: links.guide },
       { id: 'toggle', title: 'ToggleButton', href: links.toggle.guide },
       { id: 'toggle-group', title: 'ToggleGroup', href: links.toggleGroup.guide },
+      { id: 'selection-checkbox', title: 'Checkbox', href: links.selection.checkbox.guide },
+      { id: 'selection-radio', title: 'Radio', href: links.selection.radio.guide },
     ] },
     { label: 'Patterns', items: [
       { id: 'button-group', title: 'Button Group', href: links.buttonGroup.guide },
+      { id: 'selection-checkbox-group', title: 'Checkbox Group', href: links.selection['checkbox-group'].guide },
+      { id: 'selection-radio-group', title: 'Radio Group', href: links.selection['radio-group'].guide },
     ] },
     { label: 'Typography', items: ['text', 'code', 'kbd'].map((id) => ({
       id: 'typography:' + id,
@@ -190,6 +200,8 @@ function navigation(view, links, topic) {
       { id: 'api', title: 'Button API', href: links.api },
       { id: 'toggle-api', title: 'ToggleButton API', href: links.toggle.api },
       { id: 'toggle-group-api', title: 'ToggleGroup API', href: links.toggleGroup.api },
+      { id: 'selection-checkbox-api', title: 'Checkbox API', href: links.selection.checkbox.api },
+      { id: 'selection-radio-api', title: 'Radio API', href: links.selection.radio.api },
       { id: 'layout-api', title: 'Layout API', href: links.layoutApi },
       { id: 'divider-api', title: 'Divider API', href: links.divider.api },
       { id: 'list-api', title: 'List API', href: links.list.api },
@@ -596,6 +608,54 @@ function toggleUsage(toggle, links, group = false) {
           ] : []),
         ], !group && heading === 'Native semantics and behavior' ? { 'data-vf-docs-react-toggle-topic': 'pressed' } : {});
       })));
+}
+function selectionGuide(unit, links) {
+  const prefix = 'react-' + unit.id + '-';
+  const routeLinks = links.selection[unit.id];
+  const topics = unit.sharedContent.sections.map(({ heading }) => ({ id: prefix + slug(heading), heading }));
+  const sections = [...(unit.frameworkContent ? [{ id: prefix + 'setup', heading: 'Get started' }] : []), ...topics];
+  return h('div', { className: 'vf-docs-content-grid vf-docs-usage-guide-layout' },
+    guideToc(sections),
+    h(Flow, { as: 'article', gap: '2xl', className: 'vf-docs-article vf-docs-usage-guide',
+      'data-vf-docs-react-selection': unit.id },
+      guideHeader(unit.sharedContent, unit.guideOnly ? 'React · Patterns · Forms' : 'React · Components · Forms'),
+      ...(unit.frameworkContent ? [guidePart(sections[0], guideBlocks(unit.frameworkContent, 'React setup'))] : []),
+      ...topics.map(section => guidePart(section, [
+        ...guideBlocks(unit.sharedContent, section.heading),
+        ...guideBlocks(unit.frameworkContent, section.heading),
+        ...unit.examples.filter(example => example.documentationSection === section.heading).map(example =>
+          h(Flow, { as: 'article', gap: 'sm', key: example.id, className: 'vf-docs-example',
+            'data-vf-docs-react-selection-example': example.id },
+            h(Text, { as: 'h3', variant: 'heading-sm' }, example.title),
+            h(Text, { as: 'p' }, example.description),
+            h('iframe', { className: 'vf-docs-react-example-frame',
+              'data-vf-docs-example-id': example.id, title: 'React ' + example.title + ' example',
+              src: routeLinks.examples[example.id], sandbox: 'allow-scripts allow-forms', loading: 'lazy',
+              onLoad: (event) => syncSelectionPreviewTheme(event.currentTarget),
+              style: { minBlockSize: example.id === 'checkbox/basic' ? '10rem' : example.id.endsWith('/basic') ? '12rem' : '19rem' } }),
+            h('details', { className: 'vf-docs-source-disclosure' },
+              h('summary', null, 'View React TSX source'),
+              h(CodeBlock, { tabIndex: 0 }, example.source)))),
+        ...(section.heading.startsWith('Accessibility') && !unit.guideOnly && unit.standardReferences ? [evidenceDisclosure(unit.standardReferences)] : []),
+        ...(section.heading === 'Related controls' || section.heading === 'Accessibility and related controls' ? [
+          h(Flow, { as: 'ul', gap: 'sm', className: 'vf-docs-related-links' },
+            ...(routeLinks.api ? [h('li', { key: 'api' }, h(Link, { href: routeLinks.api }, unit.title + ' API'))] : []),
+            ...['checkbox', 'radio', 'checkbox-group', 'radio-group'].filter(id => id !== unit.id).map(id =>
+              h('li', { key: id }, h(Link, { href: links.selection[id].guide },
+                id.split('-').map(part => part[0].toUpperCase() + part.slice(1)).join(' ')))))
+        ] : []),
+      ]))));
+}
+function selectionApi(unit, links) {
+  return h('article', { className: 'vf-docs-article', 'data-vf-docs-react-api': unit.id },
+    h('header', { className: 'vf-docs-component-header' }, h('h1', null, unit.title + ' API'),
+      h(Text, { as: 'p' }, 'Native input attributes and the forwarded HTMLInputElement ref.')),
+    h('section', null, h('h2', null, 'Public entrypoint'),
+      h(Flow, { as: 'ul', gap: 'sm' }, ...unit.publicEntrypoints.map(name => h('li', { key: name }, h(Code, null, name)))),
+      h(Text, { as: 'p' }, 'Canonical styling: ', h(Code, null, '@vyrnforge/web/styles/' + unit.id + '.css'))),
+    h('section', null, h('h2', null, 'Source-backed React props'),
+      h(CodeBlock, { tabIndex: 0 }, unit.publicTypes)),
+    h(Link, { href: links.selection[unit.id].guide }, 'View ' + unit.title + ' guide'));
 }
 function toggleGroupApi(group, links) {
   return h('article', { className: 'vf-docs-article', 'data-vf-docs-react-api': 'toggle-group' },
@@ -1296,7 +1356,8 @@ function themesGuide(links) {
       h(Text, { as: 'p' }, h(Link, { href: links.rtl }, 'Use right-to-left content'))));
 }
 
-function body(view, links, button, toggle, buttonGroup, toggleGroup, layout, typography, icon, image, avatar, divider, badge, list, overlayGuide, motionGuide, requestedTopic) {
+function body(view, links, button, toggle, buttonGroup, toggleGroup, layout, typography, icon, image, avatar, divider, badge, list, overlayGuide, motionGuide, requestedTopic, selection) {
+  if (selection) return view.endsWith('-api') ? selectionApi(selection, links) : selectionGuide(selection, links);
   if (view === 'unavailable') {
     return h('article', { className: 'vf-docs-article', 'data-vf-docs-react-unavailable': '' },
       h('header', { className: 'vf-docs-component-header' },
@@ -1438,7 +1499,7 @@ function body(view, links, button, toggle, buttonGroup, toggleGroup, layout, typ
   }
   return buttonUsageGuide(button, links);
 }
-export function ReactReferencePage({ view, links, button, toggle, buttonGroup, toggleGroup, layout, typography, icon, image, avatar, divider, badge, list, overlayGuide, motionGuide, requestedTopic }) {
+export function ReactReferencePage({ view, links, button, toggle, buttonGroup, toggleGroup, layout, typography, icon, image, avatar, divider, badge, list, overlayGuide, motionGuide, requestedTopic, selection }) {
   const nav = useNavigation();
   const { theme, change } = useTheme();
   const [search, setSearch] = useState('');
@@ -1469,6 +1530,11 @@ export function ReactReferencePage({ view, links, button, toggle, buttonGroup, t
     { title: 'ToggleButton', href: links.toggle.guide, keywords: 'toggle button pressed state independent' },
     { title: 'ToggleGroup', href: links.toggleGroup.guide, keywords: 'exclusive multiple selected pressed choices' },
     { title: 'ToggleGroup API', href: links.toggleGroup.api, keywords: 'root item type value onValueChange' },
+    ...Object.entries(links.selection).flatMap(([id, entry]) => {
+      const title = id.split('-').map(part => part[0].toUpperCase() + part.slice(1)).join(' ');
+      return [{ title, href: entry.guide, keywords: 'native selection form checked required reset' },
+        ...(entry.api ? [{ title: title + ' API', href: entry.api, keywords: 'React props native input ref' }] : [])];
+    }),
     { title: 'ToggleButton API', href: links.toggle.api, keywords: 'togglebutton props aria-pressed controlled size' },
     { title: 'Layout', href: links.layout, keywords: 'flow autogrid grid responsive spacing layout wrap inline block JSX divider separator thematic hr css border' },
     { title: 'Layout API', href: links.layoutApi, keywords: 'flowprops autogridprops as minitemsize ref gap' },
@@ -1563,7 +1629,7 @@ export function ReactReferencePage({ view, links, button, toggle, buttonGroup, t
           h(Link, { href: links.native }, 'Native Web'),
           h('span', { 'aria-hidden': 'true' }, ' / '),
           h('span', { 'aria-current': 'page' }, 'React')),
-        body(view, links, button, toggle, buttonGroup, toggleGroup, layout, typography, icon, image, avatar, divider, badge, list, overlayGuide, motionGuide, requestedTopic))),
+        body(view, links, button, toggle, buttonGroup, toggleGroup, layout, typography, icon, image, avatar, divider, badge, list, overlayGuide, motionGuide, requestedTopic, selection))),
     h(AppShellFooter, { className: 'vf-docs-footer' },
       h('span', null, 'VyrnForge React documentation'),
       h('span', null, links.channel + ' channel'))));

@@ -89,6 +89,20 @@ const buttonGroup = reactModel.patternCatalog.find((entry) => entry.id === 'butt
 if (!buttonGroup?.showcaseAvailable || !buttonGroup.guideOnly || buttonGroup.apiAvailable ||
     buttonGroup.examples.length !== 6) throw new Error('Button Group requires a guide-only pattern with six real examples');
 
+const selectionIds = ['checkbox', 'radio', 'checkbox-group', 'radio-group'];
+const selection = Object.fromEntries(await Promise.all(selectionIds.map(async (id) => {
+  const group = id.endsWith('-group');
+  const owner = (group ? reactModel.patternCatalog : reactModel.componentCatalog).find(entry => entry.id === id);
+  if (!owner?.showcaseAvailable || !owner.sharedContent || !owner.examples.length ||
+      (group ? !owner.guideOnly || owner.apiAvailable : !owner.apiAvailable || !owner.frameworkContent))
+    throw new Error('Missing native selection documentation contract for ' + id);
+  const publicSource = group ? null : await readFile(path.join(root,
+    path.dirname(path.dirname(owner.frameworkSourcePath)), 'index.ts'), 'utf8');
+  const publicTypes = group ? null : publicSource.match(/export (?:interface|type) (?:Checkbox|Radio)Props[\s\S]*?(?=\nexport const)/)?.[0].trim();
+  if (!group && !publicTypes) throw new Error('Missing public selection props for ' + id);
+  return [id, { ...owner, publicTypes }];
+})));
+
 const togglePublicSourcePath = path.join(root,
   path.dirname(path.dirname(toggle.frameworkSourcePath)), 'index.ts');
 const togglePublicSource = await readFile(togglePublicSourcePath, 'utf8');
@@ -408,6 +422,11 @@ function linksFor(route) {
       api: relative(dir, react + toggleGroup.apiRoute, true),
       examples: Object.fromEntries(toggleGroup.examples.map((entry) => [entry.id, relative(dir, react + 'examples/' + entry.id + '/', true)])),
     },
+    selection: Object.fromEntries(selectionIds.map(id => [id, {
+      guide: relative(dir, react + selection[id].showcaseRoute, true),
+      api: selection[id].apiRoute ? relative(dir, react + selection[id].apiRoute, true) : null,
+      examples: Object.fromEntries(selection[id].examples.map(entry => [entry.id, relative(dir, react + 'examples/' + entry.id + '/', true)])),
+    }])),
     buttonGroup: {
       guide: relative(dir, react + buttonGroup.showcaseRoute, true),
       examples: Object.fromEntries(buttonGroup.examples.map((entry) => [entry.id, relative(dir, react + 'examples/' + entry.id + '/', true)])),
@@ -759,7 +778,7 @@ for (const slug of layoutSlugs) {
 }
 
 // Render the checked-in ToggleButton React example with its canonical Web CSS.
-for (const entry of [...toggleExamples, ...toggleGroup.examples, ...buttonGroup.examples]) {
+for (const entry of [...toggleExamples, ...toggleGroup.examples, ...buttonGroup.examples, ...selectionIds.flatMap(id => selection[id].examples)]) {
   const asset = 'react-' + entry.id.replace('/', '-');
   await build({
     entryPoints: [path.join(root, entry.sourcePath)],
@@ -778,6 +797,9 @@ for (const entry of [...toggleExamples, ...toggleGroup.examples, ...buttonGroup.
     '<title>React ' + escapeHtml(entry.title) + ' example · VyrnForge</title>' + styles +
     '<link rel="stylesheet" href="' + escapeHtml(relative(dir, 'assets/' + asset + '.css')) + '">' +
     '<style>body{margin:0;padding:1rem;min-width:0;overflow-wrap:anywhere}#root{min-width:0}</style>' +
+    (selectionIds.includes(entry.id.split('/')[0])
+      ? '<script>window.addEventListener("message",event=>{if(event.source===window.parent&&event.data?.type==="vf-selection-preview-theme"&&["light","dark"].includes(event.data.theme))document.documentElement.dataset.vfTheme=event.data.theme})</script>'
+      : '') +
     '</head><body><div id="root"></div><script src="' +
     escapeHtml(relative(dir, 'assets/' + asset + '.js')) + '"></script></body></html>');
 }
@@ -811,6 +833,12 @@ const pageViews = [
     description: 'Source-backed ToggleButton types and pressed state' },
   { route: toggleGroup.showcaseRoute, view: 'toggle-group', title: 'React ToggleGroup', description: 'Exclusive and multiple pressed choices' },
   { route: toggleGroup.apiRoute, view: 'toggle-group-api', title: 'React ToggleGroup API', description: 'Source-backed ToggleGroup props' },
+  ...selectionIds.flatMap(id => [
+    { route: selection[id].showcaseRoute, view: 'selection-' + id, selectionTopic: id,
+      title: 'React ' + selection[id].title, description: 'Native selection and practical React composition' },
+    ...(selection[id].apiAvailable ? [{ route: selection[id].apiRoute, view: 'selection-' + id + '-api',
+      selectionTopic: id, title: 'React ' + selection[id].title + ' API', description: 'Source-backed native control API' }] : []),
+  ]),
   { route: layout.showcaseRoute, view: 'layout', title: 'React Layout', description: 'Flow and AutoGrid usage in React with shared Web CSS' },
   { route: layout.apiRoute, view: 'layout-api', title: 'React Layout API', description: 'Public React Flow and AutoGrid props and stylesheet' },
   { route: divider.showcaseRoute, view: 'divider', title: 'React Divider', description: 'Horizontal and vertical visual-only lines in React' },
@@ -938,6 +966,7 @@ for (const page of pageViews) {
   const props = { view: page.view, links: linksFor(page.route), button: pageData,
     toggle: page.view === 'toggle' || page.view === 'toggle-api' ? toggleData : null,
     buttonGroup: page.view === 'button-group' ? buttonGroup : null,
+    selection: page.selectionTopic ? selection[page.selectionTopic] : null,
     toggleGroup: ['toggle-group', 'toggle-group-api'].includes(page.view) ? { ...toggleGroup, publicTypes: toggleGroupTypes } : null,
     layout: (page.view === 'layout' || page.view === 'layout-api') ? layoutData : null,
     typography: page.topic ? typography[page.topic] : null,
@@ -1062,6 +1091,11 @@ await writeFile(path.join(reactRoot, 'site-manifest.json'), JSON.stringify({
       id: example.id, title: example.title, description: example.description,
       documentationSection: example.documentationSection, sourcePath: example.sourcePath,
     })),
+  }])),
+  selection: Object.fromEntries(selectionIds.map(id => [id, {
+    guideRoute: selection[id].showcaseRoute, apiRoute: selection[id].apiRoute, guideOnly: selection[id].guideOnly,
+    publicEntrypoints: selection[id].publicEntrypoints, sharedSourcePath: selection[id].sharedSourcePath,
+    examples: selection[id].examples.map(({ id, sourcePath, documentationSection }) => ({ id, sourcePath, documentationSection })),
   }])),
   buttonGroup: {
     guideRoute: buttonGroup.showcaseRoute, apiRoute: null, guideOnly: true,

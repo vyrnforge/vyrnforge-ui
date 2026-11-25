@@ -1,0 +1,14 @@
+{
+  "id": "checkbox-group/select-all",
+  "title": "Select files for export",
+  "description": "Select eligible files individually or all at once; the master reflects partial selection.",
+  "defaultFramework": "react",
+  "frameworks": {
+    "react": {
+      "label": "React",
+      "language": "tsx",
+      "source": "react.tsx"
+    }
+  },
+  "documentationSection": "Select all and partial selection"
+}
