@@ -55,6 +55,7 @@ test.describe('Select enhanced port behavior', () => {
       await page.keyboard.press('ArrowDown');
       await expect(trigger).toHaveAttribute('aria-expanded', 'true');
       await expect(listbox).toBeVisible();
+      if (framework === 'react') await expect(listbox).toHaveCSS('animation-name', 'vf-motion-enter-reveal');
       await expect(one).toBeFocused();
       await expect(one).toHaveAttribute('aria-selected', 'true');
       await expect(disabled).toBeDisabled();

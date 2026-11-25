@@ -26,6 +26,7 @@ test('combobox exposes the editable input/listbox relationship', async ({ page }
   expect(controls).toBeTruthy();
   await expect(page.locator(`#${controls}`)).toHaveAttribute('role', 'listbox');
   await expect(page.locator(`#${controls}`)).toBeVisible();
+  if (port === 'react') await expect(page.locator(`#${controls}`)).toHaveCSS('animation-name', 'vf-motion-enter-reveal');
   expect(
     await page.locator(`#${controls}`).evaluate((node) => node.matches(':popover-open') && !!node.closest('main')),
   ).toBe(true);
