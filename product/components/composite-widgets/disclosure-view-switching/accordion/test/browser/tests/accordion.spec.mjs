@@ -71,7 +71,10 @@ test('Accordion native activation, nested focus ownership, and disabled skipping
   await expect(third).toBeFocused();
   await third.press('Enter');
   await expect(third).toHaveAttribute('aria-expanded', 'true');
-  if (port === 'react') await expect(root.locator(`[id="${await third.getAttribute('aria-controls')}"]`)).toHaveCSS('animation-name', 'vf-motion-enter-reveal');
+  if (port === 'react') {
+    const motionSurface = root.locator(`[id="${await third.getAttribute('aria-controls')}"]`);
+    await expect(motionSurface).toHaveCSS('animation-name', 'vf-motion-enter-reveal');
+  }
   await expect(first).toHaveAttribute('aria-expanded', 'false');
   await expect(third).toBeFocused();
   await expectNoAxeViolations(page);

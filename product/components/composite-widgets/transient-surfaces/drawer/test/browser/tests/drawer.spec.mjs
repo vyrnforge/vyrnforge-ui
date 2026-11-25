@@ -138,11 +138,12 @@ test('React Drawer animates content without moving its modal shell and dismisses
   await expect(modal).toHaveCSS('animation-name', 'vf-motion-enter-reveal');
   await expect(title).toHaveCSS('animation-name', 'vf-motion-enter-slide');
   await expect(title).toHaveCSS('animation-duration', '0.32s');
-  const logicalOffset = await modal.evaluate((node) =>
-    getComputedStyle(node).getPropertyValue('--_vf-motion-slide-x').trim());
-  await page.locator('html').evaluate((node) => { node.dir = 'rtl'; });
-  expect(await modal.evaluate((node) =>
-    getComputedStyle(node).getPropertyValue('--_vf-motion-slide-x').trim())).not.toBe(logicalOffset);
+  const offset = (node) => getComputedStyle(node).getPropertyValue('--_vf-motion-slide-x').trim();
+  const logicalOffset = await modal.evaluate(offset);
+  await page.locator('html').evaluate((node) => {
+    node.dir = 'rtl';
+  });
+  expect(await modal.evaluate(offset)).not.toBe(logicalOffset);
   await expect(modal).toHaveCSS('translate', 'none');
   await page.keyboard.press('Escape');
   await expect(modal).not.toHaveAttribute('open', '');
