@@ -93,6 +93,7 @@ test('open menubar switches to adjacent menu in logical direction and restores i
   await expect(file).toHaveAttribute('tabindex', '0');
   await file.press('ArrowDown');
   await expect(page.locator('#file-command')).toBeFocused();
+  if (port === 'react') await expect(page.locator('[data-vf-menu-content]:popover-open')).toHaveCSS('animation-name', 'vf-motion-enter-reveal');
   await page.keyboard.press('ArrowRight');
   await expect(page.locator('#file-menu')).toBeHidden();
   await expect(page.locator('#edit-menu')).toBeVisible();

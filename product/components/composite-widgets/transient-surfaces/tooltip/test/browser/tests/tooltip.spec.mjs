@@ -59,6 +59,7 @@ test('Public Tooltip uses native top layer and persists across hover and focus u
   await trigger.hover();
   await expect(tooltip).toBeVisible();
   await expect(tooltip).toHaveAttribute('popover', 'manual');
+  if (port === 'react') await expect(tooltip).toHaveCSS('animation-name', 'vf-motion-enter-reveal');
   expect(await tooltip.evaluate((element) => element.matches(':popover-open'))).toBe(true);
   const anchorBox = await trigger.boundingBox();
   const surfaceBox = await tooltip.boundingBox();

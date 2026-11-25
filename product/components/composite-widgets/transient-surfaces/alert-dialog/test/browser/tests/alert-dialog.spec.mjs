@@ -18,6 +18,7 @@ async function openFixture(page) {
 
 test('alert-dialog public ports preserve native modality, naming, dismissal and focus', async ({ page }) => {
   const { modal, trigger } = await openFixture(page);
+  if (port === 'react') await expect(modal).toHaveCSS('animation-name', 'vf-motion-enter-reveal');
   expect(await modal.evaluate((el) => !!el.ownerDocument.getElementById(el.getAttribute('aria-describedby')))).toBe(
     true,
   );

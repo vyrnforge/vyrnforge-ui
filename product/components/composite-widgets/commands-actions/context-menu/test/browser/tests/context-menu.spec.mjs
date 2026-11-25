@@ -7,6 +7,7 @@ const item = (name) => `#${port}-${name}`;
 async function openContextMenu(page) {
   await page.locator('#target').click({ button: 'right' });
   await expect(page.locator('#menu')).toBeVisible();
+  if (port === 'react') await expect(page.locator('#menu')).toHaveCSS('animation-name', 'vf-motion-enter-reveal');
   await expect(page.locator(item('open'))).toBeFocused();
 }
 
