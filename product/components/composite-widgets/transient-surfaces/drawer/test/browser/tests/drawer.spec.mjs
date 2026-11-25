@@ -129,3 +129,28 @@ test('Drawer opt-in backdrop dismissal remains distinct from clicking interior p
   await expect(page.locator('body')).toHaveAttribute('data-dismiss-reason', 'backdrop');
   await expect(trigger).toBeFocused();
 });
+
+test('React Drawer animates content without moving its modal shell and dismisses during motion', async ({ page }) => {
+  test.skip(port !== 'react', 'React public component motion evidence.');
+  await page.emulateMedia({ reducedMotion: 'no-preference', forcedColors: 'none' });
+  const { modal, trigger } = await openFixture(page);
+  const title = modal.locator('[data-vf-dialog-title]');
+  await expect(modal).toHaveCSS('animation-name', 'vf-motion-enter-reveal');
+  await expect(title).toHaveCSS('animation-name', 'vf-motion-enter-slide');
+  await expect(title).toHaveCSS('animation-duration', '0.32s');
+  const logicalOffset = await modal.evaluate((node) =>
+    getComputedStyle(node).getPropertyValue('--_vf-motion-slide-x').trim());
+  await page.locator('html').evaluate((node) => { node.dir = 'rtl'; });
+  expect(await modal.evaluate((node) =>
+    getComputedStyle(node).getPropertyValue('--_vf-motion-slide-x').trim())).not.toBe(logicalOffset);
+  await expect(modal).toHaveCSS('translate', 'none');
+  await page.keyboard.press('Escape');
+  await expect(modal).not.toHaveAttribute('open', '');
+  await expect(trigger).toBeFocused();
+  await page.emulateMedia({ reducedMotion: 'reduce' });
+  await trigger.click();
+  await expect(modal).toHaveCSS('animation-name', 'none');
+  await expect(title).toHaveCSS('animation-name', 'none');
+  await page.keyboard.press('Escape');
+  await expect(trigger).toBeFocused();
+});

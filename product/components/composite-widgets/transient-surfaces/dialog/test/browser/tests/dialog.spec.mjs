@@ -150,3 +150,23 @@ test('modal interior padding is not backdrop and rejected dismissal retains the 
   await page.locator(`#${port}-close`).click();
   await expect(dialog).not.toHaveAttribute('open', '');
 });
+
+test('React Dialog enters using the shared recipe and never waits for an animation to close', async ({ page }) => {
+  test.skip(port !== 'react', 'React public component motion evidence.');
+  await page.emulateMedia({ reducedMotion: 'no-preference', forcedColors: 'none' });
+  await page.goto('/components/dialog/react.html');
+  const trigger = page.locator('#react-open');
+  const dialog = page.locator('#react-dialog');
+  await trigger.click();
+  await expect(dialog).toHaveCSS('animation-name', 'vf-motion-enter-reveal');
+  await expect(dialog).toHaveCSS('animation-duration', '0.32s');
+  await expect(page.locator('#react-initial')).toBeFocused();
+  await page.keyboard.press('Escape');
+  await expect(dialog).not.toHaveAttribute('open', '');
+  await expect(trigger).toBeFocused();
+  await page.emulateMedia({ reducedMotion: 'reduce' });
+  await trigger.click();
+  await expect(dialog).toHaveCSS('animation-name', 'none');
+  await page.keyboard.press('Escape');
+  await expect(trigger).toBeFocused();
+});
