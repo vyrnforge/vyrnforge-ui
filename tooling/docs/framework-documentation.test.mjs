@@ -50,7 +50,7 @@ describe('React documentation compiler preflight', () => {
     expect(button.frameworkSourcePath).toBe('product/components/interactive-controls/button/react/docs/index.md');
     expect(button.frameworkContent?.title).toBe('React Button');
     expect(button.frameworkContent?.sections.map((section) => section.heading))
-      .toEqual(['React setup', 'Button family examples']);
+      .toEqual(['React setup', 'Icon actions']);
     expect(JSON.stringify(button.frameworkContent)).toContain("@vyrnforge/react/button");
     expect(nativeButton.frameworkSourcePath).not.toBe(button.frameworkSourcePath);
   });
@@ -75,10 +75,8 @@ describe('React documentation compiler preflight', () => {
       ['button/sizes', 'Sizes'],
       ['button/states', 'States and async work'],
       ['button/icons', 'Accessible icon actions'],
-      ['button/joined', 'Button groups and joined actions'],
       ['button/forms', 'Forms'],
       ['button/density', 'Density and target sizing'],
-      ['button/toggle', 'ToggleButton and pressed state'],
     ]);
     const reactIds = new Set(button.examples.map((example) => example.id));
     expect(reactIds).toEqual(new Set(['button/basic', ...placements.keys()]));
@@ -93,6 +91,30 @@ describe('React documentation compiler preflight', () => {
     for (const example of nativeButton.examples) {
       if (example.id === 'button/basic') expect(example.documentationSection).toBeNull();
       else expect(example.documentationSection).toBe(placements.get(example.id));
+    }
+  });
+
+  it('separates action, pressed-state and composition example owners without inventing a Button Group API', () => {
+    for (const framework of ['react', 'native-web']) {
+      const model = compileFrameworkDocumentation(framework);
+      const button = model.componentCatalog.find((owner) => owner.id === 'button');
+      const toggle = model.componentCatalog.find((owner) => owner.id === 'toggle-button');
+      const group = model.patternCatalog.find((owner) => owner.id === 'button-group');
+      expect(button.examples.every((example) => !['button/joined', 'button/toggle'].includes(example.id))).toBe(true);
+      expect(group).toMatchObject({ guideOnly: true, showcaseAvailable: true, apiAvailable: false, apiRoute: null,
+        publicEntrypoints: [], showcaseRoute: 'patterns/button-group/' });
+      expect(model.componentCatalog.some((owner) => owner.id === 'button-group')).toBe(false);
+      expect(model.apiPages.some((owner) => owner.id === 'button-group')).toBe(false);
+      expect(group.examples.map((example) => example.id).sort()).toEqual([
+        'button-group/horizontal', 'button-group/icons', 'button-group/separate', 'button-group/vertical',
+      ]);
+      for (const example of group.examples) {
+        expect(group.sharedContent.sections.some((section) => section.heading === example.documentationSection)).toBe(true);
+      }
+      if (framework === 'react') {
+        expect(toggle.examples.map((example) => example.id).sort()).toEqual(['toggle-button/basic', 'toggle-button/icons']);
+        expect(toggle.examples.find((example) => example.id === 'toggle-button/icons').documentationSection).toBe('Icon-only toggles');
+      }
     }
   });
 

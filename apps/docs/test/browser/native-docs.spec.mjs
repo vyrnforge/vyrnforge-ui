@@ -372,6 +372,29 @@ test('settings navigation guide is discoverable without a synthetic public API',
   await expect(page.locator('[data-vf-docs-search-results]').getByRole('link', { name: /Settings navigation/ })).toBeVisible();
 });
 
+test('Native Button Group has a dedicated guide without a synthetic component API', async ({ page }) => {
+  const group = manifest.patternCatalog.find((entry) => entry.slug === 'button-group');
+  expect(group).toMatchObject({ showcase: true, api: false, publicEntrypoints: [], guideOnly: true });
+  expect(manifest.patternApi.some((entry) => entry.slug === 'api/patterns/button-group/')).toBe(false);
+  await page.goto('/next/native-web/components/button/');
+  await page.locator('[data-vf-docs-component="button"]').getByRole('link', { name: 'Button Group', exact: true }).click();
+  const guide = page.locator('[data-vf-docs-pattern="button-group"]');
+  await expect(guide.getByRole('heading', { name: 'Button Group', level: 1 })).toBeVisible();
+  await expect(guide.locator('[data-vf-docs-example]')).toHaveCount(4);
+  const joined = guide.locator('[data-vf-docs-example="button-group/horizontal"]');
+  const edit = joined.getByRole('button', { name: 'Edit', exact: true });
+  const copy = joined.getByRole('button', { name: 'Copy', exact: true });
+  await edit.focus();
+  await page.keyboard.press('Tab');
+  await expect(copy).toBeFocused();
+  await expect(joined.getByRole('button', { name: 'Archive' })).toBeDisabled();
+  const icons = guide.locator('[data-vf-docs-example="button-group/icons"]');
+  await expect(icons.getByRole('button', { name: 'Edit document' })).toHaveAttribute('data-vf-icon-only', '');
+  const vertical = guide.locator('[data-vf-docs-example="button-group/vertical"]');
+  await expect(vertical.getByRole('group', { name: 'View actions' })).toHaveAttribute('data-vf-button-group-orientation', 'vertical');
+  await expectNoAccessibilityViolations(page);
+});
+
 test('Loading is documented as a Pattern rather than a component while preserving its public Web stylesheet', async ({ page }) => {
   const errors = collectPageErrors(page);
   const loading = loadingPatternEntry();
@@ -452,12 +475,13 @@ test('Button showcase composes shared guidance, Native adaptation, examples, ref
   await expect(toc.getByRole('link', { name: 'More examples' })).toHaveCount(0);
   const sectionOrder = await page.locator('article[data-vf-docs-component="button"] > section[aria-labelledby]')
     .evaluateAll((sections) => sections.map((section) => section.getAttribute('aria-labelledby')));
-  expect(sectionOrder.slice(0, 12)).toEqual([
+  expect(sectionOrder.slice(0, 10)).toEqual([
     'native-web-setup', 'usage-preview', 'when-to-use', 'native-baseline',
     'variants', 'sizes', 'states-and-async-work', 'accessible-icon-actions',
-    'button-groups-and-joined-actions', 'forms',
-    'density-and-target-sizing', 'togglebutton-and-pressed-state',
+    'forms', 'density-and-target-sizing',
   ]);
+  expect(sectionOrder).not.toContain('button-groups-and-joined-actions');
+  expect(sectionOrder).not.toContain('togglebutton-and-pressed-state');
   const featured = page.locator('article[data-vf-docs-component="button"] > section[aria-labelledby="usage-preview"] [data-vf-docs-example]');
   await expect(featured).toHaveAttribute('data-vf-docs-example', 'button/basic');
   for (const [heading, sectionId, exampleId] of [

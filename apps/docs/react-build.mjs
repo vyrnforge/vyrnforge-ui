@@ -48,10 +48,10 @@ if (!button?.showcaseAvailable || !button.apiAvailable || !button.frameworkConte
 }
 const buttonExamples = button.examples.slice().sort((a, b) => a.id.localeCompare(b.id));
 const basicExample = buttonExamples.find((entry) => entry.id === 'button/basic');
-if (buttonExamples.length !== 9 ||
+if (buttonExamples.length !== 7 ||
     !buttonExamples.every((entry) => entry.sourcePath.endsWith('/react.tsx') &&
       entry.source.includes("'@vyrnforge/react/button'"))) {
-  throw new Error('React Button guide needs nine real product-owned runnable examples');
+  throw new Error('React Button guide needs seven standalone product-owned runnable examples');
 }
 if (!basicExample?.sourcePath.endsWith('/react.tsx')) {
   throw new Error('React documentation requires the checked-in executable Button example');
@@ -59,13 +59,17 @@ if (!basicExample?.sourcePath.endsWith('/react.tsx')) {
 const toggle = reactModel.componentCatalog.find((entry) => entry.id === 'toggle-button');
 const toggleExamples = toggle?.examples.slice().sort((a, b) => a.id.localeCompare(b.id)) ?? [];
 if (!toggle?.showcaseAvailable || !toggle.apiAvailable || !toggle.sharedContent ||
-    !toggle.frameworkContent || toggleExamples.length !== 1 ||
+    !toggle.frameworkContent || toggleExamples.length !== 2 ||
     !toggle.publicEntrypoints.includes('@vyrnforge/react/toggle-button') ||
     !webModel.packageManifest.exports?.['./styles/toggle-button.css'] ||
     toggleExamples[0]?.id !== 'toggle-button/basic' ||
-    !toggleExamples[0]?.sourcePath.endsWith('/react.tsx') ||
-    !toggleExamples[0]?.source.includes("'@vyrnforge/react/toggle-button'"))
+    !toggleExamples.every((entry) => entry.sourcePath.endsWith('/react.tsx') &&
+      entry.source.includes("'@vyrnforge/react/toggle-button'")))
   throw new Error('React ToggleButton needs public API, canonical CSS and runnable source');
+
+const buttonGroup = reactModel.patternCatalog.find((entry) => entry.id === 'button-group');
+if (!buttonGroup?.showcaseAvailable || !buttonGroup.guideOnly || buttonGroup.apiAvailable ||
+    buttonGroup.examples.length !== 4) throw new Error('Button Group requires a guide-only pattern with four real examples');
 
 const togglePublicSourcePath = path.join(root,
   path.dirname(path.dirname(toggle.frameworkSourcePath)), 'index.ts');
@@ -379,6 +383,11 @@ function linksFor(route) {
       guide: relative(dir, react + toggle.showcaseRoute, true),
       api: relative(dir, react + toggle.apiRoute, true),
       example: relative(dir, react + 'examples/toggle-button/basic/', true),
+      examples: Object.fromEntries(toggleExamples.map((entry) => [entry.id, relative(dir, react + 'examples/' + entry.id + '/', true)])),
+    },
+    buttonGroup: {
+      guide: relative(dir, react + buttonGroup.showcaseRoute, true),
+      examples: Object.fromEntries(buttonGroup.examples.map((entry) => [entry.id, relative(dir, react + 'examples/' + entry.id + '/', true)])),
     },
     api: relative(dir, react + 'api/components/button/', true),
     example: relative(dir, react + 'examples/button-basic/', true),
@@ -727,8 +736,8 @@ for (const slug of layoutSlugs) {
 }
 
 // Render the checked-in ToggleButton React example with its canonical Web CSS.
-for (const entry of toggleExamples) {
-  const asset = 'react-toggle-button-basic';
+for (const entry of [...toggleExamples, ...buttonGroup.examples]) {
+  const asset = 'react-' + entry.id.replace('/', '-');
   await build({
     entryPoints: [path.join(root, entry.sourcePath)],
     bundle: true, platform: 'browser', format: 'iife', target: 'es2022',
@@ -736,14 +745,14 @@ for (const entry of toggleExamples) {
     outfile: path.join(outRoot, 'assets', asset + '.js'),
   });
   if (!(await stat(path.join(outRoot, 'assets', asset + '.css')).catch(() => null))?.isFile())
-    throw new Error('React ToggleButton example must extract canonical Web CSS');
-  const route = 'examples/toggle-button/basic/';
+    throw new Error('React ' + entry.id + ' must extract canonical Web CSS');
+  const route = 'examples/' + entry.id + '/';
   const dir = directory(route);
   const styles = shellStyles.map(file =>
     '<link rel="stylesheet" href="' + escapeHtml(relative(dir, file)) + '">').join('');
   await writePage(route, '<!doctype html><html lang="en" data-vf-theme="light"><head>' +
     '<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">' +
-    '<title>React ToggleButton example · VyrnForge</title>' + styles +
+    '<title>React ' + escapeHtml(entry.title) + ' example · VyrnForge</title>' + styles +
     '<link rel="stylesheet" href="' + escapeHtml(relative(dir, 'assets/' + asset + '.css')) + '">' +
     '<style>body{margin:0;padding:1rem;min-width:0;overflow-wrap:anywhere}#root{min-width:0}</style>' +
     '</head><body><div id="root"></div><script src="' +
@@ -772,6 +781,7 @@ const pageViews = [
     description: 'Shared stylesheet loading, overrides and CSS customization in React' },
   { route: button.showcaseRoute, view: 'guide', title: 'React Button', description: 'Shared Button semantics and React usage' },
   { route: button.apiRoute, view: 'api', title: 'React Button API', description: 'Verified public React Button API' },
+  { route: buttonGroup.showcaseRoute, view: 'button-group', title: 'React Button Group', description: 'Compose independent related Button actions' },
   { route: toggle.showcaseRoute, view: 'toggle', title: 'React ToggleButton',
     description: 'Native pressed-state button and independently controlled state' },
   { route: toggle.apiRoute, view: 'toggle-api', title: 'React ToggleButton API',
@@ -902,6 +912,7 @@ for (const page of pageViews) {
   const dir = directory(page.route);
   const props = { view: page.view, links: linksFor(page.route), button: pageData,
     toggle: page.view === 'toggle' || page.view === 'toggle-api' ? toggleData : null,
+    buttonGroup: page.view === 'button-group' ? buttonGroup : null,
     layout: (page.view === 'layout' || page.view === 'layout-api') ? layoutData : null,
     typography: page.topic ? typography[page.topic] : null,
     icon: page.view === 'icon' || page.view === 'icon-api' ? iconData : null,
@@ -1026,6 +1037,11 @@ await writeFile(path.join(reactRoot, 'site-manifest.json'), JSON.stringify({
       documentationSection: example.documentationSection, sourcePath: example.sourcePath,
     })),
   }])),
+  buttonGroup: {
+    guideRoute: buttonGroup.showcaseRoute, apiRoute: null, guideOnly: true,
+    publicEntrypoints: buttonGroup.publicEntrypoints, sharedSourcePath: buttonGroup.sharedSourcePath,
+    examples: buttonGroup.examples.map(({ id, sourcePath }) => ({ id, sourcePath })),
+  },
   toggle: {
     guideRoute: toggle.showcaseRoute, apiRoute: toggle.apiRoute,
     publicEntrypoints: toggle.publicEntrypoints,

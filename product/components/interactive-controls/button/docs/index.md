@@ -6,7 +6,7 @@ Use Button for an immediate action or command. Use a link when the user intent i
 
 Use Button for an immediate action such as Save, Cancel, Submit or Retry. Prefer a link for navigation.
 
-Choose a short, specific, visible label. Use ToggleButton—not an action Button—when the control represents a persistent on/off choice.
+Choose a short, specific, visible label. See the separate Button Group guide to arrange related commands, or ToggleButton for a persistent on/off command.
 
 ## Native baseline
 
@@ -42,14 +42,6 @@ Give every icon-only action a stable, localized accessible name using `aria-labe
 
 An icon-only loading Button shows one centered busy indicator and keeps `aria-busy`; loading still does not disable activation. For an icon beside visible text, omit `iconOnly` and use normal Button padding.
 
-## Button groups and joined actions
-
-Use separate Buttons in a wrapping Flow when actions should remain independent. For related commands that should visually join, use the optional `data-vf-button-group` CSS recipe on their parent; `data-vf-button-group-orientation="vertical"` makes a vertical set.
-
-Each Button keeps its own Tab stop, name, type, focus, disabled and loading state. Give the parent `role="group"` and an accessible name when the relationship matters. Joined groups do not wrap automatically: use separate or vertical actions when horizontal space runs out.
-
-This is **presentation only**, not a ButtonGroup runtime, ToggleGroup, SegmentedControl, Toolbar or SplitButton.
-
 ## Forms
 
 Buttons retain native form participation. Inside a form, a Button without `type` defaults to **submit**. Prefer `type="submit"`, `type="reset"`, or `type="button"` explicitly to communicate intent; retain native `name`, `value` and `form` behavior.
@@ -61,12 +53,6 @@ The demonstration uses a labeled Input and local handlers to show submit, reset 
 Inherited `comfortable|compact` density affects medium control geometry, independently of `sm|md|lg` component size and theme. Compact must not compromise focus visibility, accessible names or target usability. There is no global `large` density.
 
 Check narrow layouts, 200% text, RTL, forced colors and reduced motion rather than treating a smaller target as automatically appropriate.
-
-## ToggleButton and pressed state
-
-For a persistent on/off command, use ToggleButton. It is a native button with `aria-pressed` and a stable accessible name; it also supports square icon-only presentation and Button sizes.
-
-An independent ToggleButton is different from a coordinated ToggleGroup, an exclusive radio-like SegmentedControl and a composite Toolbar. Use the control whose selection and keyboard semantics match the task.
 
 ## Interaction and focus
 

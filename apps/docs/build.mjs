@@ -920,6 +920,8 @@ function renderComponent(page) {
             <li><a data-vf-link href="${artifactHref(currentPageDirectory, routeTarget('foundations/styling/'))}">Styling foundation</a></li>
             <li><a data-vf-link href="${artifactHref(currentPageDirectory, routeTarget('foundations/tokens/'))}">Design tokens</a></li>
             ${page.id === 'button' ? `<li><a data-vf-link href="${artifactHref(currentPageDirectory, channel + '/react/components/button/')}">React Button documentation</a></li>` : ''}
+            ${['button', 'toggle-button'].includes(page.id) ? `<li><a data-vf-link href="${artifactHref(currentPageDirectory, routeTarget('patterns/button-group/'))}">Button Group</a></li>` : ''}
+            ${page.id === 'button' ? `<li><a data-vf-link href="${artifactHref(currentPageDirectory, routeTarget('components/toggle-button/'))}">ToggleButton</a></li>` : ''}
           </ul>
         </section>
       </article>
@@ -930,7 +932,7 @@ function renderComponent(page) {
 function renderPatternGuide(page) {
   const currentPageDirectory = pageDirectory(page.route);
   const sections = page.content.sections.map((section) =>
-    '<section><h2>' + escapeHtml(section.heading) + '</h2>' + renderBlocks(section.blocks) + '</section>').join('');
+    '<section><h2>' + escapeHtml(section.heading) + '</h2>' + renderBlocks(section.blocks) + page.examples.filter((example) => example.documentationSection === section.heading).map(renderExample).join('') + '</section>').join('');
   const examples = page.exampleReferences.flatMap((reference) => reference.frameworks.map((adaptation) =>
     '<li>' + escapeHtml(reference.title) + ' — ' + escapeHtml(documentationFrameworks[adaptation.framework].label) +
     ' example (repository source): <a data-vf-link href="https://github.com/vyrnforge/vyrnforge-ui/blob/main/' +
@@ -944,7 +946,8 @@ function renderPatternGuide(page) {
       '<header class="vf-docs-component-header"><h1>' + escapeHtml(page.content.title) + '</h1>' +
       '<div data-vf-text data-vf-text-variant="body-lg" class="vf-docs-lede">' + renderBlocks(page.content.intro) + '</div>' +
       renderAccessibilityStandards(page.standardReferences) + '</header>' + sections +
-      '<section><h2>Referenced examples</h2><p>Guide only. Referenced examples run in repository browser fixtures in the indicated framework; this Native Web page does not execute them or provide a pattern API.</p><ul>' + examples + '</ul></section></article>',
+      (examples ? '<section><h2>Referenced examples</h2><p>Guide only. Referenced examples run in repository browser fixtures in the indicated framework; this Native Web page does not execute them or provide a pattern API.</p><ul>' + examples + '</ul></section>' : '') +
+      (page.id === 'button-group' ? '<section><h2>Related guides</h2><ul><li><a data-vf-link href="' + artifactHref(currentPageDirectory, routeTarget('components/button/')) + '">Button</a></li><li><a data-vf-link href="' + artifactHref(currentPageDirectory, routeTarget('components/toggle-button/')) + '">ToggleButton</a></li></ul></section>' : '') + '</article>',
   });
 }
 

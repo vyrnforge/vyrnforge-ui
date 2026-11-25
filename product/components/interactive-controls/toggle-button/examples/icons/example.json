@@ -1,0 +1,14 @@
+{
+  "id": "toggle-button/icons",
+  "title": "Icon-only toggles",
+  "description": "Named square pressed commands with controlled and uncontrolled state.",
+  "defaultFramework": "react",
+  "frameworks": {
+    "react": {
+      "label": "React",
+      "language": "tsx",
+      "source": "react.tsx"
+    }
+  },
+  "documentationSection": "Icon-only toggles"
+}

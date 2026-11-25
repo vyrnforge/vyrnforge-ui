@@ -1,0 +1,19 @@
+{
+  "id": "button-group/icons",
+  "title": "Joined icon actions",
+  "description": "Named square icon commands remain independent.",
+  "defaultFramework": "native-web",
+  "frameworks": {
+    "native-web": {
+      "label": "Native Web",
+      "language": "html",
+      "source": "native-web.html"
+    },
+    "react": {
+      "label": "React",
+      "language": "tsx",
+      "source": "react.tsx"
+    }
+  },
+  "documentationSection": "Joined icon actions"
+}

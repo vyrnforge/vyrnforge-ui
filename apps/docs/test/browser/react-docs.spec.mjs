@@ -32,14 +32,18 @@ test('React pilot artifact is Product Graph-backed and SSR-rendered with public 
   expect(manifest.button.sharedSourcePath).toBe(button.sharedSourcePath);
   expect(manifest.button.frameworkSourcePath).toBe(button.frameworkSourcePath);
   expect(manifest.button.publicEntrypoints).toContain('@vyrnforge/react/button');
-  expect(manifest.button.examples).toHaveLength(9);
+  expect(manifest.button.examples).toHaveLength(7);
+  expect(manifest.buttonGroup).toMatchObject({ guideRoute: 'patterns/button-group/', apiRoute: null, guideOnly: true, publicEntrypoints: [] });
+  expect(manifest.buttonGroup.examples.map(example => example.id).sort()).toEqual([
+    'button-group/horizontal', 'button-group/icons', 'button-group/separate', 'button-group/vertical',
+  ]);
   expect(manifest.toggle).toMatchObject({
     guideRoute: 'components/toggle-button/',
     apiRoute: 'api/components/toggle-button/',
     publicEntrypoints: ['@vyrnforge/react/toggle-button'],
     frameworkSourcePath: 'product/components/interactive-controls/toggle-button/react/docs/index.md',
   });
-  expect(manifest.toggle.examples.map(example => example.id)).toEqual(['toggle-button/basic']);
+  expect(manifest.toggle.examples.map(example => example.id)).toEqual(['toggle-button/basic', 'toggle-button/icons']);
   expect(readFileSync('dist/docs/next/react/examples/toggle-button/basic/index.html', 'utf8'))
     .toContain('react-toggle-button-basic.js');
   expect(manifest.layout).toMatchObject({ guideOnly: false, api: true,
@@ -49,7 +53,7 @@ test('React pilot artifact is Product Graph-backed and SSR-rendered with public 
   expect(manifest.routes.filter((entry) => entry.view !== 'unavailable').map((entry) => entry.route)).toEqual([
     '', 'foundations/tokens/', 'foundations/themes/', 'foundations/color/', 'foundations/theme-builder/', 'foundations/dark-mode/',
     'foundations/right-to-left/', 'utilities/overlay/', 'utilities/motion/', 'foundations/styling/',  'components/button/', 'api/components/button/',
-    'components/toggle-button/', 'api/components/toggle-button/', 'components/layout/', 'api/components/layout/',
+    'patterns/button-group/', 'components/toggle-button/', 'api/components/toggle-button/', 'components/layout/', 'api/components/layout/',
     'components/divider/', 'api/components/divider/',
     ...['text', 'code', 'kbd'].flatMap((id) => [
       'components/' + id + '/', 'api/components/' + id + '/',
@@ -432,7 +436,7 @@ test('All React guide pages compose with canonical Flow and AutoGrid, not local 
     await expect(guide).toHaveAttribute('data-vf-flow-gap', '2xl');
     const sections = guide.locator(':scope > section[data-vf-flow][data-vf-flow-gap="md"]');
     await expect(sections, id + ' must preserve authored concept sections')
-      .toHaveCount(id === 'button' ? 12 : 5);
+      .toHaveCount(id === 'button' ? 10 : 5);
     const toc = page.locator('nav.vf-docs-toc ol[data-vf-flow]');
     await expect(toc).toHaveCount(1);
     const jumpLinks = page.locator('aside.vf-docs-toc-region nav.vf-docs-toc-examples ol[data-vf-flow]');
@@ -481,6 +485,8 @@ test('Owner-authored React guide examples use public components for text, layout
   const manifest = JSON.parse(readFileSync('dist/docs/next/react/site-manifest.json', 'utf8'));
   const examples = [
     ...manifest.button.examples,
+    ...manifest.buttonGroup.examples,
+    ...manifest.toggle.examples,
     ...manifest.layout.examples,
     ...manifest.divider.examples,
     ...manifest.icon.examples,
@@ -551,24 +557,41 @@ test('React Button guide SSR hydrates and uses public Button, AppShell, SideNav 
   expect(errors).toEqual([]);
 });
 
-test('React Button-family guide shows joined groups, ToggleButton and density without overlapping choice semantics', async ({ page }) => {
+test('React Button, Button Group and ToggleButton keep demonstrations on their respective guides', async ({ page }) => {
   await page.goto('/next/react/components/button/');
-  await expect(page.locator('[data-vf-docs-react-button-example]')).toHaveCount(9);
-  const joined = page.frameLocator('iframe[title="React Button groups example"]');
+  const button = page.locator('[data-vf-docs-react-component="button"]');
+  await expect(button.locator('[data-vf-docs-react-button-example]')).toHaveCount(7);
+  await expect(button.locator('iframe[src*="button-group"], iframe[src*="toggle-button"]')).toHaveCount(0);
+  await expect(button.getByRole('link', { name: 'Button Group', exact: true })).toHaveAttribute('href', /patterns\/button-group\//);
+  await expect(button.getByRole('link', { name: 'ToggleButton', exact: true })).toHaveAttribute('href', '../toggle-button/');
+
+  await button.getByRole('link', { name: 'Button Group', exact: true }).click();
+  const group = page.locator('[data-vf-docs-react-button-group]');
+  await expect(group.getByRole('heading', { level: 1, name: 'Button Group' })).toBeVisible();
+  await expect(group.locator('[data-vf-docs-react-button-group-example]')).toHaveCount(4);
+  for (const [topic, id] of [
+    ['separate-actions', 'separate'], ['horizontal-joined-actions', 'horizontal'],
+    ['joined-icon-actions', 'icons'], ['vertical-joined-actions', 'vertical'],
+  ]) {
+    const demo = group.locator('section[aria-labelledby="react-button-group-' + topic + '"]');
+    await expect(demo.locator('[data-vf-docs-react-button-group-example="button-group/' + id + '"]')).toHaveCount(1);
+  }
+  const joined = group.frameLocator('iframe[title="React Horizontal joined actions example"]');
   await expect(joined.getByRole('group', { name: 'Document actions', exact: true })).toBeVisible();
   await joined.getByRole('button', { name: 'Copy', exact: true }).click();
   await expect(joined.getByRole('status')).toHaveText('Copied');
   await expect(joined.getByRole('button', { name: 'Archive' })).toBeDisabled();
-  const joinedIcons = page.frameLocator('iframe[title="React Button groups example"]')
+  const joinedIcons = group.frameLocator('iframe[title="React Joined icon actions example"]')
     .getByRole('group', { name: 'Quick document actions' });
   await expect(joinedIcons.getByRole('button', { name: 'Copy document' })).toHaveAttribute('data-vf-icon-only', '');
+  const vertical = group.frameLocator('iframe[title="React Vertical joined actions example"]');
+  await expect(vertical.getByRole('group', { name: 'View actions' })).toHaveAttribute('data-vf-button-group-orientation', 'vertical');
+  await expect(group.getByRole('link', { name: /Button Group API/ })).toHaveCount(0);
 
-  const toggle = page.frameLocator('iframe[title="React Toggle actions example"]');
-  const bold = toggle.getByRole('button', { name: 'Bold', exact: true });
-  await expect(bold).toHaveAttribute('aria-pressed', 'false');
-  await bold.click();
-  await expect(bold).toHaveAttribute('aria-pressed', 'true');
-  await expect(toggle.getByRole('status')).toHaveText('Bold: on');
+  await group.getByRole('link', { name: 'ToggleButton', exact: true }).click();
+  const toggleGuide = page.locator('[data-vf-docs-react-toggle]');
+  await expect(toggleGuide.locator('[data-vf-docs-react-toggle-example]')).toHaveCount(2);
+  const toggle = toggleGuide.frameLocator('iframe[title="React ToggleButton icon-only example"]');
   const iconToggle = toggle.getByRole('button', { name: 'Pin document' });
   await expect(iconToggle).toHaveAttribute('data-vf-icon-only', '');
   await expect(iconToggle).toHaveAttribute('aria-pressed', 'false');
@@ -579,7 +602,9 @@ test('React Button-family guide shows joined groups, ToggleButton and density wi
   expect(iconToggleSize).toEqual({ width: 40, height: 40 });
   await iconToggle.click();
   await expect(iconToggle).toHaveAttribute('aria-pressed', 'true');
+  await expect(toggle.getByRole('status')).toHaveText('Pin document: on');
 
+  await page.goto('/next/react/components/button/');
   const icons = page.frameLocator('iframe[title="React Icon buttons example"]');
   await expect(icons.getByRole('button', { name: 'Save bookmark', exact: true })).toHaveCount(2);
   const iconOnly = icons.getByRole('button', { name: 'Save bookmark', exact: true }).first();
@@ -606,7 +631,7 @@ test('React Button guide keeps all demos visible, source optional and navigation
   await page.goto('/next/react/components/button/');
   const guide = page.locator('[data-vf-docs-react-component="button"]');
   const examples = guide.locator('[data-vf-docs-react-button-example]');
-  await expect(examples).toHaveCount(9);
+  await expect(examples).toHaveCount(7);
   await expect(guide.locator('.vf-docs-example-collapsible, .vf-docs-example-index')).toHaveCount(0);
   await expect(guide.locator('[data-vf-docs-guide-detail]')).toHaveCount(0);
   for (const example of await examples.all()) {
@@ -617,7 +642,7 @@ test('React Button guide keeps all demos visible, source optional and navigation
   }
 
   const navigation = page.getByRole('navigation', { name: 'On this page' });
-  await expect(navigation.getByRole('link')).toHaveCount(12);
+  await expect(navigation.getByRole('link')).toHaveCount(10);
   await expect(navigation.getByRole('link', { name: 'Accessible icon actions' }))
     .toHaveAttribute('href', '#react-button-accessible-icon-actions');
   const source = examples.first().locator('.vf-docs-source-disclosure');
@@ -636,10 +661,8 @@ test('React Button guide keeps all demos visible, source optional and navigation
     ['Sizes', 'sizes', 'Sizes'],
     ['States and async work', 'states', 'States and loading'],
     ['Accessible icon actions', 'icons', 'Icon buttons'],
-    ['Button groups and joined actions', 'joined', 'Button groups'],
     ['Forms', 'forms', 'Form actions'],
     ['Density and target sizing', 'density', 'Density'],
-    ['ToggleButton and pressed state', 'toggle', 'Toggle actions'],
   ];
   for (const [topic, exampleId, exampleTitle] of placement) {
     const section = guide.locator('[data-vf-docs-button-topic="' + topic + '"]');
@@ -682,7 +705,7 @@ test('React Button guide keeps all demos visible, source optional and navigation
   try {
     const noJs = await noJsContext.newPage();
     await noJs.goto('/next/react/components/button/');
-    const preview = noJs.locator('[data-vf-docs-react-button-example="button/joined"]');
+    const preview = noJs.locator('[data-vf-docs-react-button-example="button/icons"]');
     await expect(preview.locator('h3')).toBeVisible();
     await expect(preview.locator('iframe')).toHaveAttribute('src', /examples\/button/);
     const code = preview.locator('.vf-docs-source-disclosure');
@@ -1287,8 +1310,7 @@ test('Button, Layout, Code and Kbd use one task-first guide hierarchy and separa
     await expect(guide).toHaveCount(1);
     const topics = id === 'button' ? [
       'Get started', 'Basic buttons', 'Variants', 'Sizes', 'States and async work',
-      'Accessible icon actions', 'Button groups and joined actions', 'Forms',
-      'Density and target sizing', 'ToggleButton and pressed state',
+      'Accessible icon actions', 'Forms', 'Density and target sizing',
       'Accessibility', 'Related components and API',
     ] : expected;
     expect(await guide.locator(':scope > section > h2').allTextContents()).toEqual(topics);
@@ -1679,8 +1701,8 @@ test('React Button guide renders all five source-backed variants and links the i
   await page.goto('/next/react/components/button/');
   const guide = page.locator('[data-vf-docs-react-component="button"]');
   const cards = guide.locator('[data-vf-docs-react-button-example]');
-  await expect(cards).toHaveCount(9);
-  await expect(page.getByRole('navigation', { name: 'On this page' }).getByRole('link')).toHaveCount(12);
+  await expect(cards).toHaveCount(7);
+  await expect(page.getByRole('navigation', { name: 'On this page' }).getByRole('link')).toHaveCount(10);
   for (const id of ['basic', 'variants', 'sizes', 'states', 'forms']) {
     const card = guide.locator('[data-vf-docs-react-button-example="button/' + id + '"]');
     await expect(card).toHaveCount(1);
