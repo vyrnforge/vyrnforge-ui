@@ -54,3 +54,8 @@ test('Component state motion reuses canonical recipes and avoids layout or visib
   const motion = await readFile(new URL('../../src/styles/motion.css', import.meta.url), 'utf8');
   assert.match(motion, /@keyframes vf-motion-enter-reveal\s*\{\s*from\s*\{\s*opacity: 0\.85;/);
 });
+
+test('Menubar independently delivers the canonical Menu styling used by its composed surfaces', async () => {
+  const css = await readFile(new URL('../../../../product/components/composite-widgets/commands-actions/menubar/web/menubar.css', import.meta.url), 'utf8');
+  assert.match(css, /@import ['"]\.\.\/menu\/menu\.css['"];/);
+});

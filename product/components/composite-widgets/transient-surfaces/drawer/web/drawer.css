@@ -57,11 +57,9 @@
     :where([data-vf-drawer-root][open][data-vf-placement='bottom']:not([data-vf-motion])) {
       --_vf-motion-slide-y: var(--vf-space-sm);
     }
-    :where([data-vf-drawer-root][open]:not([data-vf-motion])) > :where(
-      [data-vf-dialog-title],
-      [data-vf-dialog-description],
-      [data-vf-dialog-body]
-    ):not([data-vf-motion]) {
+    :where([data-vf-drawer-root][open]:not([data-vf-motion]) > [data-vf-dialog-title]:not([data-vf-motion])),
+    :where([data-vf-drawer-root][open]:not([data-vf-motion]) > [data-vf-dialog-description]:not([data-vf-motion])),
+    :where([data-vf-drawer-root][open]:not([data-vf-motion]) > [data-vf-dialog-body]:not([data-vf-motion])) {
       animation: vf-motion-enter-slide var(--vf-motion-duration-enter) var(--vf-motion-easing-standard);
     }
   }
