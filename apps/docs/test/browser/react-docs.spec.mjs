@@ -35,7 +35,7 @@ test('React pilot artifact is Product Graph-backed and SSR-rendered with public 
   expect(manifest.button.examples).toHaveLength(7);
   expect(manifest.buttonGroup).toMatchObject({ guideRoute: 'patterns/button-group/', apiRoute: null, guideOnly: true, publicEntrypoints: [] });
   expect(manifest.buttonGroup.examples.map(example => example.id).sort()).toEqual([
-    'button-group/horizontal', 'button-group/icons', 'button-group/separate', 'button-group/vertical',
+    'button-group/horizontal', 'button-group/icons', 'button-group/mixed', 'button-group/separate', 'button-group/toggles', 'button-group/vertical',
   ]);
   expect(manifest.toggle).toMatchObject({
     guideRoute: 'components/toggle-button/',
@@ -569,10 +569,11 @@ test('React Button, Button Group and ToggleButton keep demonstrations on their r
   await button.getByRole('link', { name: 'Button Group', exact: true }).click();
   const group = page.locator('[data-vf-docs-react-button-group]');
   await expect(group.getByRole('heading', { level: 1, name: 'Button Group' })).toBeVisible();
-  await expect(group.locator('[data-vf-docs-react-button-group-example]')).toHaveCount(4);
+  await expect(group.locator('[data-vf-docs-react-button-group-example]')).toHaveCount(6);
   for (const [topic, id] of [
     ['separate-actions', 'separate'], ['horizontal-joined-actions', 'horizontal'],
     ['joined-icon-actions', 'icons'], ['vertical-joined-actions', 'vertical'],
+    ['joined-toggle-buttons', 'toggles'], ['mixed-button-types', 'mixed'],
   ]) {
     const demo = group.locator('section[aria-labelledby="react-button-group-' + topic + '"]');
     await expect(demo.locator('[data-vf-docs-react-button-group-example="button-group/' + id + '"]')).toHaveCount(1);
@@ -587,6 +588,43 @@ test('React Button, Button Group and ToggleButton keep demonstrations on their r
   await expect(joinedIcons.getByRole('button', { name: 'Copy document' })).toHaveAttribute('data-vf-icon-only', '');
   const vertical = group.frameLocator('iframe[title="React Vertical joined actions example"]');
   await expect(vertical.getByRole('group', { name: 'View actions' })).toHaveAttribute('data-vf-button-group-orientation', 'vertical');
+  const formatting = group.frameLocator('iframe[title="React Joined toggle buttons example"]');
+  const formatGroup = formatting.getByRole('group', { name: 'Text formatting' });
+  await expect(formatGroup).toHaveAttribute('data-vf-button-group', '');
+  await expect(formatGroup.locator('[data-vf-toggle-button]')).toHaveCount(4);
+  const boldFormat = formatGroup.getByRole('button', { name: 'Bold', exact: true });
+  const italicFormat = formatGroup.getByRole('button', { name: 'Italic', exact: true });
+  await expect(italicFormat).toHaveCSS('margin-inline-start', '-1px');
+  await expect(boldFormat).toHaveAttribute('aria-pressed', 'true');
+  await boldFormat.focus();
+  await boldFormat.press('Tab');
+  await expect(italicFormat).toBeFocused();
+  await italicFormat.press('Space');
+  await expect(boldFormat).toHaveAttribute('aria-pressed', 'true');
+  await expect(italicFormat).toHaveAttribute('aria-pressed', 'true');
+  const formatted = formatting.locator('[data-example-preview="formatting"]');
+  await expect(formatted).toHaveCSS('font-weight', '700');
+  await expect(formatted).toHaveCSS('font-style', 'italic');
+  await boldFormat.click();
+  await expect(formatted).toHaveCSS('font-weight', '400');
+  await expect(formatted).toHaveCSS('font-style', 'italic');
+
+  const mixed = group.frameLocator('iframe[title="React Mixed button types example"]');
+  const mixedGroup = mixed.getByRole('group', { name: 'Article actions' });
+  await expect(mixedGroup).toHaveAttribute('data-vf-button-group', '');
+  const savedArticle = mixedGroup.getByRole('button', { name: 'Bookmark article' });
+  const nextArticle = mixedGroup.getByRole('button', { name: 'Next article' });
+  await expect(savedArticle).toHaveAttribute('data-vf-toggle-button', '');
+  await expect(nextArticle).not.toHaveAttribute('aria-pressed');
+  await savedArticle.click();
+  await expect(mixed.getByRole('status')).toHaveText('Bookmarked');
+  await nextArticle.click();
+  await expect(mixed.locator('[data-example-preview="article"]')).toHaveText('Accessible interactions');
+  await expect(savedArticle).toHaveAttribute('aria-pressed', 'false');
+  await nextArticle.click();
+  await nextArticle.click();
+  await expect(mixed.locator('[data-example-preview="article"]')).toHaveText('Design tokens');
+  await expect(savedArticle).toHaveAttribute('aria-pressed', 'true');
   await expect(group.getByRole('link', { name: /Button Group API/ })).toHaveCount(0);
 
   await group.getByRole('link', { name: 'ToggleButton', exact: true }).click();
@@ -841,20 +879,22 @@ test('React ToggleGroup guide teaches its actual independent-tab-stop selection 
   await expect(single.getByRole('listitem')).toHaveCount(4);
 
   const multiple = guide.locator('[data-vf-docs-react-toggle-group-example="toggle-group/multiple"]').frameLocator('iframe');
-  for (const name of ['Bold', 'Italic', 'Underline', 'Strikethrough']) {
-    await expect(multiple.getByRole('button', { name, exact: true })).toHaveAttribute('data-vf-icon-only', '');
-  }
-  await multiple.getByRole('button', { name: 'Italic', exact: true }).click();
-  await multiple.getByRole('button', { name: 'Underline', exact: true }).click();
-  await expect(multiple.getByRole('button', { name: 'Bold', exact: true })).toHaveAttribute('aria-pressed', 'true');
-  await expect(multiple.getByRole('button', { name: 'Italic', exact: true })).toHaveAttribute('aria-pressed', 'true');
-  const formatted = multiple.locator('[data-example-preview="formatting"]');
-  await expect(formatted).toHaveCSS('font-weight', '700');
-  await expect(formatted).toHaveCSS('font-style', 'italic');
-  await expect(formatted).toHaveCSS('text-decoration-line', 'underline');
-  await multiple.getByRole('button', { name: 'Bold', exact: true }).click();
-  await expect(formatted).toHaveCSS('font-weight', '400');
-  await expect(formatted).toHaveCSS('font-style', 'italic');
+  const design = multiple.getByRole('button', { name: 'Design', exact: true });
+  const engineering = multiple.getByRole('button', { name: 'Engineering', exact: true });
+  await expect(design).toHaveAttribute('aria-pressed', 'true');
+  await expect(design).not.toHaveAttribute('data-vf-icon-only', '');
+  await expect(multiple.getByRole('listitem')).toHaveCount(1);
+  await engineering.click();
+  await expect(design).toHaveAttribute('aria-pressed', 'true');
+  await expect(engineering).toHaveAttribute('aria-pressed', 'true');
+  await expect(multiple.getByRole('listitem')).toHaveCount(2);
+  await expect(multiple.getByText('Fix keyboard navigation', { exact: true })).toBeVisible();
+  await design.click();
+  await expect(engineering).toHaveAttribute('aria-pressed', 'true');
+  await expect(multiple.getByRole('listitem')).toHaveCount(1);
+  await engineering.click();
+  await expect(multiple.getByRole('status')).toHaveText('All teams');
+  await expect(multiple.getByRole('listitem')).toHaveCount(3);
 
   const icons = guide.locator('[data-vf-docs-react-toggle-group-example="toggle-group/icons"]').frameLocator('iframe');
   await expect(icons.locator('[data-example-preview="view"]')).toHaveAttribute('data-vf-flow', '');

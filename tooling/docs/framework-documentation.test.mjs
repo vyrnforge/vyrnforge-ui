@@ -106,7 +106,9 @@ describe('React documentation compiler preflight', () => {
       expect(model.componentCatalog.some((owner) => owner.id === 'button-group')).toBe(false);
       expect(model.apiPages.some((owner) => owner.id === 'button-group')).toBe(false);
       expect(group.examples.map((example) => example.id).sort()).toEqual([
-        'button-group/horizontal', 'button-group/icons', 'button-group/separate', 'button-group/vertical',
+        'button-group/horizontal', 'button-group/icons',
+        ...(framework === 'react' ? ['button-group/mixed'] : []), 'button-group/separate',
+        ...(framework === 'react' ? ['button-group/toggles'] : []), 'button-group/vertical',
       ]);
       for (const example of group.examples) {
         expect(group.sharedContent.sections.some((section) => section.heading === example.documentationSection)).toBe(true);
