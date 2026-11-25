@@ -2,12 +2,12 @@
 
 ## React setup
 
-Import `ToggleButton` from `@vyrnforge/react/toggle-button`. Its host is a native `button` with `aria-pressed`; canonical CSS is `@vyrnforge/web/styles/toggle-button.css`.
+Import `ToggleButton` from `@vyrnforge/react/toggle-button` and load `@vyrnforge/web/styles/toggle-button.css` in the browser. The default `type` is `button`.
 
 ## Controlled and uncontrolled state
 
-Pass `pressed` and `onPressedChange` for controlled state or `defaultPressed` for uncontrolled initial state. A cancelled native click or disabled Button does not update pressed state. The default `type` is `button` so toggles do not submit forms inadvertently.
+Use `defaultPressed` for an initial uncontrolled value. Pass `pressed` and `onPressedChange` for controlled state; update the owner value to accept the requested transition. A cancelled native click or disabled button does not change state.
 
 ## Sizing and composition
 
-Use `size="sm|md|lg"` independently of inherited density. Compose public Icon content in `ToggleButton iconOnly` with an authored label for icon-only toggles. ToggleButton has no group-level selection or roving focus; use the existing ToggleGroup, SegmentedControl or Toolbar where their behavior is needed.
+Use public Icon content inside ToggleButton. Pass `iconOnly` only when there is no visible text. ToggleButton has no group-level selection or roving focus.

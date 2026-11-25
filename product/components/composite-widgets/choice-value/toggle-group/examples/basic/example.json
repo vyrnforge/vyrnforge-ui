@@ -1,7 +1,14 @@
 {
   "id": "toggle-group/basic",
-  "title": "Basic toggle group",
-  "description": "Toggle formatting commands and square icon-only view choices with native aria-pressed.",
+  "title": "Exclusive selection",
+  "description": "Choose a time range or clear it by pressing the selected item again.",
   "defaultFramework": "react",
-  "frameworks": { "react": { "label": "React", "language": "tsx", "source": "react.tsx" } }
+  "frameworks": {
+    "react": {
+      "label": "React",
+      "language": "tsx",
+      "source": "react.tsx"
+    }
+  },
+  "documentationSection": "Exclusive selection"
 }

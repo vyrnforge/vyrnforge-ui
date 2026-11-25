@@ -1,0 +1,14 @@
+{
+  "id": "toggle-group/multiple",
+  "title": "Multiple selection",
+  "description": "Combine formatting commands independently.",
+  "defaultFramework": "react",
+  "frameworks": {
+    "react": {
+      "label": "React",
+      "language": "tsx",
+      "source": "react.tsx"
+    }
+  },
+  "documentationSection": "Multiple selection"
+}

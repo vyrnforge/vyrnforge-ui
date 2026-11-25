@@ -1,0 +1,14 @@
+{
+  "id": "toggle-group/required",
+  "title": "Required selection",
+  "description": "A controlled group rejects attempts to clear the committed selection.",
+  "defaultFramework": "react",
+  "frameworks": {
+    "react": {
+      "label": "React",
+      "language": "tsx",
+      "source": "react.tsx"
+    }
+  },
+  "documentationSection": "Required selection"
+}

@@ -1,7 +1,7 @@
 {
   "id": "toggle-button/basic",
-  "title": "Pressed-state button",
-  "description": "A native button with aria-pressed and the Native Web state connector.",
+  "title": "Basic toggle",
+  "description": "An independent formatting command retains its pressed state.",
   "defaultFramework": "native-web",
   "frameworks": {
     "native-web": {

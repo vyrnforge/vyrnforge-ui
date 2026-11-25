@@ -1,0 +1,14 @@
+{
+  "id": "toggle-button/controlled",
+  "title": "Controlled and uncontrolled state",
+  "description": "Reset a controlled command while an uncontrolled command retains its own state.",
+  "defaultFramework": "react",
+  "frameworks": {
+    "react": {
+      "label": "React",
+      "language": "tsx",
+      "source": "react.tsx"
+    }
+  },
+  "documentationSection": "Controlled and uncontrolled state"
+}
