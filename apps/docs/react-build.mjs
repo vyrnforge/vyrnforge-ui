@@ -797,6 +797,9 @@ for (const entry of [...toggleExamples, ...toggleGroup.examples, ...buttonGroup.
     '<title>React ' + escapeHtml(entry.title) + ' example · VyrnForge</title>' + styles +
     '<link rel="stylesheet" href="' + escapeHtml(relative(dir, 'assets/' + asset + '.css')) + '">' +
     '<style>body{margin:0;padding:1rem;min-width:0;overflow-wrap:anywhere}#root{min-width:0}</style>' +
+    (selectionIds.includes(entry.id.split('/')[0])
+      ? '<script>window.addEventListener("message",event=>{if(event.source===window.parent&&event.data?.type==="vf-selection-preview-theme"&&["light","dark"].includes(event.data.theme))document.documentElement.dataset.vfTheme=event.data.theme})</script>'
+      : '') +
     '</head><body><div id="root"></div><script src="' +
     escapeHtml(relative(dir, 'assets/' + asset + '.js')) + '"></script></body></html>');
 }

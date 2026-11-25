@@ -70,6 +70,11 @@ function accessibilityEvidence(references, headingTag = 'h2') {
       references.reviewStatus === 'review-required' ? ' Accessibility review required.' : '',
       ' References and evidence mappings only; not a blanket compliance claim.'));
 }
+// Selection previews are sandboxed (opaque origin); only send a non-sensitive theme enum.
+function syncSelectionPreviewTheme(frame) {
+  frame.contentWindow?.postMessage({ type: 'vf-selection-preview-theme',
+    theme: document.documentElement.dataset.vfTheme }, '*');
+}
 function useTheme() {
   const [theme, setTheme] = useState('light');
   useEffect(() => {
@@ -83,6 +88,7 @@ function useTheme() {
     const apply = () => {
       document.documentElement.dataset.vfTheme = theme === 'system'
         ? (media?.matches ? 'dark' : 'light') : theme;
+      document.querySelectorAll('[data-vf-docs-react-selection-example] iframe').forEach(syncSelectionPreviewTheme);
     };
     apply();
     media?.addEventListener('change', apply);
@@ -438,7 +444,7 @@ function typographyApi(unit, links) {
     h('section', { 'aria-labelledby': 'react-typography-api-types' },
       h('h2', { id: 'react-typography-api-types' }, 'Source-backed React types and exports'),
       h('p', null, 'The following source comes from the component-owned React public implementation.'),
-      h(CodeBlock, { tabIndex: 0 }, unit.publicTypes)),
+      h(CodeBlock, { tabIndex: 0 }, unit.publicSource)),
     h(Link, { href: links.typography[unit.id].guide },
       'View ' + unit.title + ' examples'));
 }
@@ -624,7 +630,8 @@ function selectionGuide(unit, links) {
             h(Text, { as: 'p' }, example.description),
             h('iframe', { className: 'vf-docs-react-example-frame',
               'data-vf-docs-example-id': example.id, title: 'React ' + example.title + ' example',
-              src: routeLinks.examples[example.id], sandbox: 'allow-scripts', loading: 'lazy',
+              src: routeLinks.examples[example.id], sandbox: 'allow-scripts allow-forms', loading: 'lazy',
+              onLoad: (event) => syncSelectionPreviewTheme(event.currentTarget),
               style: { minBlockSize: example.id.endsWith('/basic') ? '13rem' : '26rem' } }),
             h('details', { className: 'vf-docs-source-disclosure' },
               h('summary', null, 'View React TSX source'),
@@ -647,7 +654,7 @@ function selectionApi(unit, links) {
       h(Flow, { as: 'ul', gap: 'sm' }, ...unit.publicEntrypoints.map(name => h('li', { key: name }, h(Code, null, name)))),
       h(Text, { as: 'p' }, 'Canonical styling: ', h(Code, null, '@vyrnforge/web/styles/' + unit.id + '.css'))),
     h('section', null, h('h2', null, 'Source-backed React props'),
-      h(CodeBlock, { tabIndex: 0 }, unit.publicSource)),
+      h(CodeBlock, { tabIndex: 0 }, unit.publicTypes)),
     h(Link, { href: links.selection[unit.id].guide }, 'View ' + unit.title + ' guide'));
 }
 function toggleGroupApi(group, links) {

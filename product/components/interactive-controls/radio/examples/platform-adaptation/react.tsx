@@ -1,4 +1,4 @@
-import { useState, useId } from 'react';
+import { useState } from 'react';
 import { createRoot } from 'react-dom/client';
 import { Radio } from '@vyrnforge/react/radio';
 import { Flow } from '@vyrnforge/react/layout';
@@ -12,7 +12,7 @@ import '@vyrnforge/web/styles/button.css';
 function App() {
   const [selected, setSelected] = useState('standard');
   const [confirmed, setConfirmed] = useState<string | null>(null);
-  const name = useId();
+  const name = 'deliverySpeed';
   return (
     <form onSubmit={event => { event.preventDefault(); setConfirmed(selected); }}>
       <Flow gap="md">

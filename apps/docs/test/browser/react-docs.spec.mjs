@@ -2755,3 +2755,41 @@ test('React radio native group validates, selects via arrows, submits and resets
   await expect(express).not.toBeChecked();
   await expect(demo.getByRole('status')).toHaveText('No delivery confirmed.');
 });
+
+test('React selection guides render responsive light and dark previews and preserve form behavior', async ({ page }, testInfo) => {
+  await page.goto('/next/react/patterns/checkbox-group/');
+  await expect(page.locator('html')).toHaveAttribute('data-vf-react-hydrated', 'true');
+  const preview = page.locator('[data-vf-docs-react-selection-example="checkbox-group/validation"] iframe');
+  await preview.scrollIntoViewIfNeeded();
+  const demo = preview.contentFrame();
+  await expect(demo.locator('html')).toHaveAttribute('data-vf-theme', 'light');
+  const submit = demo.getByRole('button', { name: 'Generate report' });
+  const overview = demo.getByRole('checkbox', { name: 'Overview' });
+  await submit.click();
+  await expect(demo.getByRole('alert')).toHaveText('Choose at least one section.');
+  await expect(overview).toHaveAttribute('aria-invalid', 'true');
+  await overview.check();
+  await expect(overview).not.toHaveAttribute('aria-invalid', 'true');
+  await submit.click();
+  await expect(demo.getByRole('status')).toHaveText('Report includes: Overview');
+  await page.screenshot({ path: testInfo.outputPath('selection-checkbox-group-desktop-light.png') });
+  await page.locator('#vf-react-theme').selectOption('dark');
+  await expect(demo.locator('html')).toHaveAttribute('data-vf-theme', 'dark');
+  await expect(demo.locator('html')).toHaveCSS('color-scheme', 'dark');
+  await page.setViewportSize({ width: 390, height: 844 });
+  await preview.scrollIntoViewIfNeeded();
+  expect(await demo.locator('html').evaluate(el => el.scrollWidth - el.clientWidth)).toBeLessThanOrEqual(1);
+  await page.screenshot({ path: testInfo.outputPath('selection-checkbox-group-mobile-dark.png') });
+
+  await page.goto('/next/react/patterns/radio-group/');
+  const plans = page.locator('[data-vf-docs-react-selection-example="radio-group/plans"] iframe');
+  await plans.scrollIntoViewIfNeeded();
+  const radio = plans.contentFrame();
+  await expect(radio.locator('html')).toHaveAttribute('data-vf-theme', 'dark');
+  await radio.getByRole('radio', { name: /Business/ }).check();
+  await expect(radio.getByRole('status')).toHaveText('Business: $59 per month.');
+  await radio.getByRole('button', { name: 'Restore original plan' }).click();
+  await expect(radio.getByRole('radio', { name: /Team/ })).toBeChecked();
+  expect(await radio.locator('html').evaluate(el => el.scrollWidth - el.clientWidth)).toBeLessThanOrEqual(1);
+  await page.screenshot({ path: testInfo.outputPath('selection-radio-group-mobile-dark.png') });
+});
