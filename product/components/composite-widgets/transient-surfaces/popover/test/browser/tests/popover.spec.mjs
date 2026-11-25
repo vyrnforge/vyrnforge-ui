@@ -154,3 +154,24 @@ test('Popover constrains long content in a narrow viewport', async ({ page }) =>
   await page.keyboard.press('Escape');
   await expect(surface).toBeHidden();
 });
+
+test('React Popover reveals only while natively open and suppresses reduced motion', async ({ page }) => {
+  test.skip(port !== 'react', 'React public component motion evidence.');
+  await page.emulateMedia({ reducedMotion: 'no-preference', forcedColors: 'none' });
+  await load(page);
+  const trigger = page.locator('#t');
+  const content = page.locator('#c');
+  await expect(content).toHaveCSS('animation-name', 'none');
+  await trigger.press('Enter');
+  await expect(content).toBeVisible();
+  await expect(content).toHaveCSS('animation-name', 'vf-motion-enter-reveal');
+  await page.keyboard.press('Escape');
+  await expect(content).toBeHidden();
+  await expect(trigger).toBeFocused();
+  await page.emulateMedia({ reducedMotion: 'reduce' });
+  await trigger.press('Enter');
+  await expect(content).toBeVisible();
+  await expect(content).toHaveCSS('animation-name', 'none');
+  await page.keyboard.press('Escape');
+  await expect(content).toBeHidden();
+});

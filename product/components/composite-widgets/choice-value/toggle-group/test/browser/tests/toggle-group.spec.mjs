@@ -26,6 +26,7 @@ test('single ToggleGroup is exclusive, permits empty state, and preserves native
   const italic = root.getByRole('button', { name: 'Italic', exact: true });
   await expect(root.getByRole('button', { name: 'Disabled' })).toBeDisabled();
   await italic.focus();
+  if (port === 'react') await expect(italic).toHaveCSS('transition-duration', '0.12s, 0.12s, 0.12s');
   await italic.press('Space');
   await expect(italic).toHaveAttribute('aria-pressed', 'true');
   await expect(bold).toHaveAttribute('aria-pressed', 'false');

@@ -1,3 +1,5 @@
+@import '../../styles/tokens.css';
+@import '../../styles/motion.css';
 @layer vyrnforge.components {
   [data-vf-carousel-root] {
     display: grid;
@@ -20,5 +22,11 @@
     border-radius: var(--vf-control-radius);
     background: var(--vf-color-surface);
     color: inherit;
+  }
+
+  @media (prefers-reduced-motion: no-preference) and (forced-colors: none) {
+    :where([data-vf-carousel-slide]:not([hidden]):not([data-vf-motion])) {
+      animation: vf-motion-enter-reveal var(--vf-motion-duration-enter) var(--vf-motion-easing-standard);
+    }
   }
 }

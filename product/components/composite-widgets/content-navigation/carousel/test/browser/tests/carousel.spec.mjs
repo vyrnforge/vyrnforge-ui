@@ -44,6 +44,10 @@ test('public carousel port preserves bounded native keyboard navigation and focu
   await next.press('Enter');
   await expect(root.getByText('First slide')).toBeHidden();
   await expect(root.getByText('Second slide')).toBeVisible();
+  if (port === 'react') {
+    const motionSurface = root.locator('[data-vf-carousel-slide]:not([hidden])');
+    await expect(motionSurface).toHaveCSS('animation-name', 'vf-motion-enter-reveal');
+  }
   await expect(root).toHaveAttribute('data-requested-index', '1');
   await expect(next).toHaveAttribute('aria-disabled', 'true');
   await expect(next).toBeFocused();

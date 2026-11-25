@@ -29,6 +29,7 @@ test('PreviewCard uses native anchored top layer and remains available across ho
   await trigger.hover();
   await expect(surface).toBeVisible();
   await expect(surface).toHaveAttribute('popover', 'manual');
+  if (port === 'react') await expect(surface).toHaveCSS('animation-name', 'vf-motion-enter-reveal');
   expect(await surface.evaluate((element) => element.matches(':popover-open'))).toBe(true);
   await surface.hover();
   await page.waitForTimeout(150);

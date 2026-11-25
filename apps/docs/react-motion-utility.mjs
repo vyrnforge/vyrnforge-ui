@@ -7,6 +7,9 @@ import { Text } from '@vyrnforge/react/text';
 import { Motion, ThemeScope, tokens } from '@vyrnforge/react';
 import { CodeBlock } from '@vyrnforge/react/code';
 import { Link } from '@vyrnforge/react/link';
+import { DisclosureRoot, DisclosureTrigger, DisclosurePanel } from '@vyrnforge/react/disclosure';
+import { TabsRoot, TabsList, TabsTab, TabsPanel } from '@vyrnforge/react/tabs';
+import { ToastRoot, ToastTitle, ToastDescription, ToastClose, ToastViewport } from '@vyrnforge/react/toast';
 import { UtilitySections, renderUtilityInline } from './react-utility-content.mjs';
 import { reactConsumerSections } from './react-content-policy.mjs';
 
@@ -68,6 +71,7 @@ function Source({ motion }) {
 
 function MotionEffectsPlayground({ theme, motion }) {
   const [effect, setEffect] = useState('fade');
+  const [active, setActive] = useState(true);
   const [entranceDuration, setEntranceDuration] = useState('default');
   const [origin, setOrigin] = useState('block-end');
   const [direction, setDirection] = useState('ltr');
@@ -99,6 +103,7 @@ function MotionEffectsPlayground({ theme, motion }) {
     '\n<Motion effect="' + effect + '"' +
     (['slide', 'fade-slide'].includes(effect) ? ' direction="' + origin + '"' : '') +
     (selectedDuration === undefined ? '' : ' duration={' + selectedDuration + '}') +
+    (active ? '' : ' active={false}') +
     '>\n' + children + '\n</Motion>\n' +
     '// The application owns presence and exit; Motion decorates entrance.';
   return h(Flow, { as: 'section', gap: 'md', 'aria-labelledby': 'motion-effects-title',
@@ -116,13 +121,18 @@ function MotionEffectsPlayground({ theme, motion }) {
         onChange: (next) => { setOrigin(next); setReplay(value => value + 1); } }),
       h(Setting, { id: 'motion-direction', label: 'Writing direction', value: direction, options: directions,
         onChange: (next) => { setDirection(next); setReplay(value => value + 1); } })),
-    h(Button, { type: 'button', variant: 'secondary', onClick: () => setReplay(value => value + 1) },
-      'Replay effect'),
+    h(Flow, { direction: 'inline', gap: 'md', wrap: 'wrap', align: 'center' },
+      h(Button, { type: 'button', variant: 'secondary', disabled: !active, onClick: () => setReplay(value => value + 1) },
+        'Replay effect'),
+      h(Flow, { direction: 'inline', gap: 'sm', align: 'center' },
+        h(Switch, { id: 'motion-effect-active', checked: active,
+          onChange: (event) => setActive(event.currentTarget.checked) }),
+        h('label', { htmlFor: 'motion-effect-active' }, 'Enable effect'))),
     h(ThemeScope, { as: 'div', theme, dir: direction, motion,
       className: 'vf-docs-customization-preview', 'data-vf-docs-motion-demo-stage': '' },
       h(Flow, { align: 'center', justify: 'center', style: { minBlockSize: '9rem' } },
         h(Motion, { key: [effect, origin, direction, target, entranceDuration, replay].join(':'),
-        effect, direction: origin, duration: selectedDuration,
+        effect, active, direction: origin, duration: selectedDuration,
         'data-vf-docs-motion-preview': '', 'data-vf-motion-sample': target },
         h(Flow, { gap: 'sm', align: 'center' },
           target === 'button' ? sampleButton() :
@@ -136,7 +146,50 @@ function MotionEffectsPlayground({ theme, motion }) {
       h('summary', null, 'View React Motion source'),
       h(CodeBlock, { tabIndex: 0 }, code)),
     h(Text, { as: 'p', variant: 'body-sm' },
-      'Entrance only. React Motion renders a native wrapper and accepts effect, direction and duration props. For exit, presence, dismissal and focus, follow the individual component contract; reduced motion suppresses these effects automatically.'));
+      'Entrance only. React Motion renders a native wrapper and accepts effect, active, direction and duration props. Set active to false to remove decoration without hiding or remounting its children. For exit, presence, dismissal and focus, follow the individual component contract; reduced motion suppresses these effects automatically.'));
+}
+
+// This example composes existing public components; no motion wrappers are needed.
+function AutomaticMotionExamples({ theme, links }) {
+  const [speed, setSpeed] = useState('default');
+  const [open, setOpen] = useState(false);
+  const motion = speed === 'slow' ? { entranceDuration: '480ms' } :
+    speed === 'none' ? { entranceDuration: '0ms' } : {};
+  const source = "import { ThemeScope, DisclosureRoot, DisclosureTrigger, DisclosurePanel } from '@vyrnforge/react';\n" +
+    "import '@vyrnforge/web/styles/disclosure.css';\n\n" +
+    '<ThemeScope' + (motion.entranceDuration ? ' motion={{ entranceDuration: "' + motion.entranceDuration + '" }}' : '') + '>\n' +
+    '  <DisclosureRoot>\n    <DisclosureTrigger>Details</DisclosureTrigger>\n' +
+    '    <DisclosurePanel>Content is revealed automatically.</DisclosurePanel>\n' +
+    '  </DisclosureRoot>\n</ThemeScope>';
+  return h(Flow, { as: 'section', gap: 'md', 'aria-labelledby': 'motion-component-examples-title',
+    'data-vf-docs-component-motion': '' },
+    h(Text, { as: 'h2', variant: 'heading-md', id: 'motion-component-examples-title' }, 'Built-in component motion'),
+    h(Text, { as: 'p' }, 'These public React components animate their own visible state by default. No manual Motion wrapper or native styling hook is required. Closing and selection still commit immediately.'),
+    h(Setting, { id: 'motion-component-duration', label: 'Component entrance duration', value: speed,
+      options: [['default', 'Default · 320ms'], ['slow', 'Slow · 480ms'], ['none', 'No animation · 0ms']],
+      onChange: setSpeed }),
+    h(ThemeScope, { theme, motion, className: 'vf-docs-customization-preview' },
+      h(Flow, { gap: 'lg' },
+        h(DisclosureRoot, null,
+          h(DisclosureTrigger, null, 'Show details'),
+          h(DisclosurePanel, null, h(Text, { as: 'p' }, 'The disclosure panel is revealed without delaying its open state.'))),
+        h(TabsRoot, { defaultValue: 'overview' },
+          h(TabsList, { 'aria-label': 'Motion example tabs' },
+            h(TabsTab, { value: 'overview' }, 'Overview'),
+            h(TabsTab, { value: 'details' }, 'Details')),
+          h(TabsPanel, { value: 'overview' }, h(Text, { as: 'p' }, 'Overview content')),
+          h(TabsPanel, { value: 'details' }, h(Text, { as: 'p' }, 'Details content'))),
+        h(Button, { type: 'button', variant: 'secondary', onClick: () => setOpen(true) }, 'Show notification'),
+        h(ToastViewport, null,
+          h(ToastRoot, { open, onOpenChange: setOpen, duration: 0 },
+            h(ToastTitle, null, 'Motion notification'),
+            h(ToastDescription, null, 'Status is announced immediately.'),
+            h(ToastClose, { 'aria-label': 'Dismiss motion notification' }, 'Close'))))),
+    h('details', { className: 'vf-docs-source-disclosure' },
+      h('summary', null, 'View React component usage'),
+      h(CodeBlock, { tabIndex: 0 }, source)),
+    h(Text, { as: 'p' }, 'Dialog, Drawer, Popover, Tooltip and PreviewCard use the same foundation. ',
+      h(Link, { href: links.overlay }, 'Try the actual Overlay components.')));
 }
 
 export function MotionUtility({ guide: sharedGuide, links }) {
@@ -162,6 +215,7 @@ export function MotionUtility({ guide: sharedGuide, links }) {
           'React Motion effects, shared timing, and accessible visual feedback.'),
         ...guide.intro.map((block, i) => h(Text, { as: 'p', key: i }, ...renderUtilityInline(block.text)))),
       h(MotionEffectsPlayground, { theme, motion }),
+      h(AutomaticMotionExamples, { theme, links }),
       h(Flow, { as: 'section', gap: 'md', 'aria-labelledby': 'motion-playground-title' },
         h(Text, { as: 'h2', variant: 'heading-md', id: 'motion-playground-title' },
           'Interactive motion playground'),
@@ -215,6 +269,7 @@ export function MotionUtility({ guide: sharedGuide, links }) {
         h('p', null, 'On this page'),
         h('ol', null,
           h('li', null, h('a', { href: '#motion-playground-title' }, 'Live playground')),
+          h('li', null, h('a', { href: '#motion-component-examples-title' }, 'Built-in component motion')),
           ...reactConsumerSections(guide).map((section) => h('li', { key: section.heading },
             h('a', { href: '#motion-' + section.heading.toLowerCase().replace(/[^a-z0-9]+/g, '-') },
               section.heading))),

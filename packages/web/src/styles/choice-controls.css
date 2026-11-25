@@ -1,3 +1,4 @@
+@import './tokens.css';
 @layer vyrnforge.components {
   :where([data-vf-toggle-group-root], [data-vf-segmented-control-root]) {
     display: inline-flex;
@@ -86,6 +87,15 @@
     :where([data-vf-toggle-group-item], [data-vf-segmented-control-item]):focus-visible {
       outline: 2px solid Highlight;
       outline-offset: 1px;
+    }
+  }
+
+  @media (prefers-reduced-motion: no-preference) and (forced-colors: none) {
+    :where([data-vf-toggle-group-item],
+      [data-vf-segmented-control-item]) {
+      transition: background-color var(--vf-control-motion-duration, 120ms) var(--vf-motion-easing-standard, cubic-bezier(0.2, 0, 0, 1)),
+        color var(--vf-control-motion-duration, 120ms) var(--vf-motion-easing-standard, cubic-bezier(0.2, 0, 0, 1)),
+        box-shadow var(--vf-control-motion-duration, 120ms) var(--vf-motion-easing-standard, cubic-bezier(0.2, 0, 0, 1));
     }
   }
 }

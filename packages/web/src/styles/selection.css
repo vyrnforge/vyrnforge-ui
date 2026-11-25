@@ -1,3 +1,5 @@
+@import './tokens.css';
+@import './motion.css';
 @layer vyrnforge.components {
   :where(
     [data-vf-listbox-root],
@@ -63,5 +65,20 @@
     border-radius: var(--vf-control-radius);
     background: var(--vf-color-surface);
     color: inherit;
+  }
+
+  @media (prefers-reduced-motion: no-preference) and (forced-colors: none) {
+    :where([data-vf-select-content]:popover-open:not([data-vf-motion]),
+      [data-vf-combobox-content]:popover-open:not([data-vf-motion]),
+      [data-vf-multi-select-content]:popover-open:not([data-vf-motion])) {
+      animation: vf-motion-enter-reveal var(--vf-motion-duration-enter, 320ms) var(--vf-motion-easing-standard, cubic-bezier(0.2, 0, 0, 1));
+    }
+    :where([data-vf-listbox-option],
+      [data-vf-select-option],
+      [data-vf-combobox-option],
+      [data-vf-multi-select-option]) {
+      transition: background-color var(--vf-control-motion-duration, 120ms) var(--vf-motion-easing-standard, cubic-bezier(0.2, 0, 0, 1)),
+        color var(--vf-control-motion-duration, 120ms) var(--vf-motion-easing-standard, cubic-bezier(0.2, 0, 0, 1));
+    }
   }
 }

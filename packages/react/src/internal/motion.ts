@@ -10,6 +10,8 @@ export interface MotionProps extends Omit<HTMLAttributes<HTMLElement>, 'color'> 
   as?: ThemeElement;
   /** One-shot entrance effect; component presence and exit are consumer-owned. */
   effect?: MotionEffect;
+  /** Toggle the entrance decoration without remounting or hiding children. */
+  active?: boolean;
   /** Logical slide origin; includes RTL adaptation. */
   direction?: MotionDirection;
   /** Optional per-instance timing in milliseconds; default is Web's 320ms token. */
@@ -20,7 +22,7 @@ const makeElement = createElement as (host: ThemeElement, props: object) => Reac
 
 /** SSR-safe React adapter over the shared Web CSS entrance effects. */
 export const Motion = forwardRef<HTMLElement, MotionProps>(function Motion(
-  { as = 'div', effect = 'fade', direction, duration, style, ...nativeProps },
+  { as = 'div', effect = 'fade', active = true, direction, duration, style, ...nativeProps },
   ref
 ) {
   if (duration !== undefined && (!Number.isFinite(duration) || duration < 0)) {
@@ -32,8 +34,8 @@ export const Motion = forwardRef<HTMLElement, MotionProps>(function Motion(
   return makeElement(as, {
     ...nativeProps,
     ref,
-    'data-vf-motion': effect,
-    'data-vf-motion-direction': direction,
+    'data-vf-motion': active ? effect : undefined,
+    'data-vf-motion-direction': active ? direction : undefined,
     style: resolvedStyle,
   });
 });

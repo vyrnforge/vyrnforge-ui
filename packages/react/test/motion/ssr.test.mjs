@@ -27,3 +27,12 @@ test('React Motion inherits the Web default and validates invalid timing', () =>
   assert.doesNotMatch(html, /--vf-motion-duration-enter/);
   assert.throws(() => renderToStaticMarkup(createElement(Motion, { duration: -1 }, 'Bad')), RangeError);
 });
+
+test('Motion active controls decoration without suppressing semantic content', () => {
+  const html = renderToStaticMarkup(createElement(Motion, {
+    active: false, effect: 'slide', direction: 'inline-start',
+  }, createElement(Button, { type: 'button' }, 'Still usable')));
+  assert.doesNotMatch(html, /data-vf-motion=|data-vf-motion-direction=| hidden|aria-hidden/);
+  assert.match(html, /<button/);
+  assert.match(html, /Still usable/);
+});

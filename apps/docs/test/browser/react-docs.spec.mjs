@@ -2368,7 +2368,7 @@ test('Motion utility is shared, discoverable and binds real public Web tokens', 
   expect(manifest.utilities).toContainEqual({
     id: 'motion', route: 'utilities/motion/',
     source: 'documentation/utilities/motion.md',
-    publicComponents: ['button', 'switch'],
+    publicComponents: ['button', 'switch', 'disclosure', 'tabs', 'toast'],
     tokens: ['--vf-control-motion-duration', '--vf-motion-duration-enter', '--vf-motion-easing-standard',
       '--vf-motion-duration-loading-spin', '--vf-motion-duration-loading-shimmer',
       '--vf-motion-easing-loading'],
@@ -2552,4 +2552,57 @@ test('Motion effects respect reduced motion even with consumer timing overrides'
   await page.locator('#motion-target').selectOption('switch');
   await sample.getByRole('switch', { name: 'Option' }).check();
   await expect(sample.getByRole('switch', { name: 'Option' })).toBeChecked();
+});
+
+test('React built-in component motion uses the scoped tokens and never delays state', async ({ page }, testInfo) => {
+  await page.goto('/next/react/utilities/motion/');
+  await expect(page.locator('html')).toHaveAttribute('data-vf-react-hydrated', 'true');
+  const area = page.locator('[data-vf-docs-component-motion]');
+  const trigger = area.getByRole('button', { name: 'Show details' });
+  const panel = area.locator('[data-vf-disclosure-panel]');
+  await trigger.click();
+  await expect(trigger).toHaveAttribute('aria-expanded', 'true');
+  await expect(panel).toHaveCSS('animation-name', 'vf-motion-enter-reveal');
+  await expect(panel).toHaveCSS('animation-duration', '0.32s');
+  await trigger.click();
+  await expect(panel).toBeHidden();
+  await page.locator('#motion-component-duration').selectOption('slow');
+  await trigger.click();
+  await expect(panel).toHaveCSS('animation-duration', '0.48s');
+  await area.getByRole('tab', { name: 'Details' }).click();
+  const tabPanel = area.getByRole('tabpanel', { name: 'Details' });
+  await expect(tabPanel).toHaveCSS('animation-name', 'vf-motion-enter-reveal');
+  await expect(tabPanel).toHaveCSS('animation-duration', '0.48s');
+  await area.getByRole('button', { name: 'Show notification' }).click();
+  const toast = area.locator('[data-vf-toast-root]');
+  await expect(toast).toHaveCSS('animation-name', 'vf-motion-enter-reveal');
+  await expect(toast).toHaveCSS('animation-duration', '0.48s');
+  await page.screenshot({ path: testInfo.outputPath('motion-built-in-react.png') });
+  await area.getByRole('button', { name: 'Dismiss motion notification' }).click();
+  await expect(toast).toHaveCount(0);
+  await page.emulateMedia({ reducedMotion: 'reduce' });
+  await expect(panel).toHaveCSS('animation-name', 'none');
+  await expect(tabPanel).toHaveCSS('animation-name', 'none');
+  await area.getByRole('button', { name: 'Show notification' }).click();
+  await expect(toast).toHaveCSS('animation-name', 'none');
+  await area.getByRole('button', { name: 'Dismiss motion notification' }).click();
+  await expect(toast).toHaveCount(0);
+  await trigger.click();
+  await expect(panel).toBeHidden();
+});
+
+test('React Motion active disables decoration while preserving the existing child state and node', async ({ page }) => {
+  await page.goto('/next/react/utilities/motion/');
+  const area = page.locator('[data-vf-docs-motion-effects]');
+  const sample = area.locator('[data-vf-docs-motion-preview]');
+  const child = sample.getByRole('switch', { name: 'Option' });
+  await child.check();
+  await child.evaluate((node) => { node.dataset.motionIdentity = 'preserved'; });
+  await area.getByRole('switch', { name: 'Enable effect' }).uncheck();
+  await expect(sample).toHaveCSS('animation-name', 'none');
+  await expect(child).toBeChecked();
+  await expect(child).toHaveAttribute('data-motion-identity', 'preserved');
+  await area.getByRole('switch', { name: 'Enable effect' }).check();
+  await expect(sample).toHaveCSS('animation-name', 'vf-motion-enter-fade');
+  await expect(child).toHaveAttribute('data-motion-identity', 'preserved');
 });

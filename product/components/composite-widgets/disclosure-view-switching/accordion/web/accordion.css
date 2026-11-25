@@ -1,4 +1,5 @@
 @import '../../styles/tokens.css';
+@import '../../styles/motion.css';
 @layer vyrnforge.components {
   :where([data-vf-accordion-root]) {
     border: 1px solid var(--vf-color-border);
@@ -49,6 +50,17 @@
     }
     :where([data-vf-accordion-trigger]:focus-visible) {
       outline-color: Highlight;
+    }
+  }
+
+  @media (prefers-reduced-motion: no-preference) and (forced-colors: none) {
+    :where([data-vf-accordion-panel]:not([hidden]):not([data-vf-motion])) {
+      animation: vf-motion-enter-reveal var(--vf-motion-duration-enter) var(--vf-motion-easing-standard);
+    }
+    :where([data-vf-accordion-trigger]) {
+      transition:
+        background-color var(--vf-control-motion-duration) var(--vf-motion-easing-standard),
+        color var(--vf-control-motion-duration) var(--vf-motion-easing-standard);
     }
   }
 }

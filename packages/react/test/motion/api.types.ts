@@ -4,7 +4,7 @@ import { Motion } from '@vyrnforge/react';
 const effect: MotionEffect = 'fade-slide';
 const direction: MotionDirection = 'inline-start';
 const props: MotionProps = {
-  effect, direction, duration: 420, as: 'section', dir: 'rtl', id: 'announcement',
+  effect, direction, active: false, duration: 420, as: 'section', dir: 'rtl', id: 'announcement',
   className: 'my-effect', 'aria-label': 'New content',
 };
 // @ts-expect-error Unsupported effects cannot enter the public API.

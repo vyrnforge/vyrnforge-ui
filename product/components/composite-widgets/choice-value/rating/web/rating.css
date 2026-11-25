@@ -1,3 +1,4 @@
+@import '../../styles/tokens.css';
 @layer vyrnforge.components {
   [data-vf-rating-root] {
     display: inline-flex;
@@ -44,6 +45,12 @@
     [data-vf-rating-root] > label:has(> input:disabled) {
       color: GrayText;
       opacity: 1;
+    }
+  }
+
+  @media (prefers-reduced-motion: no-preference) and (forced-colors: none) {
+    :where(label[data-vf-rating-item], label:has(> input[data-vf-rating-item])) {
+      transition: color var(--vf-control-motion-duration) var(--vf-motion-easing-standard);
     }
   }
 }

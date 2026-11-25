@@ -47,6 +47,7 @@ test('runtime split button keeps primary activation independent and inherits key
   await trigger.focus();
   await page.keyboard.press('ArrowDown');
   await expect(menu).toBeVisible();
+  if (port === 'react') await expect(menu).toHaveCSS('animation-name', 'vf-motion-enter-reveal');
   await expect(trigger).toHaveAttribute('aria-expanded', 'true');
   await expect(copy).toBeFocused();
   await expect(body).toHaveAttribute('data-primary-count', '2');

@@ -87,6 +87,7 @@ test.describe('enhanced menu interaction', () => {
     await trigger.focus();
     await page.keyboard.press('Enter');
     await expect(menu).toBeVisible();
+    if (port === 'react') await expect(menu).toHaveCSS('animation-name', 'vf-motion-enter-reveal');
     await expect(trigger).toHaveAttribute('aria-expanded', 'true');
     await expect(edit).toBeFocused();
     for (const item of [edit, locked, duplicate, archive]) await expect(item).toHaveAttribute('tabindex', '-1');

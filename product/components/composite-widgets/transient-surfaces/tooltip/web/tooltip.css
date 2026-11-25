@@ -1,5 +1,6 @@
 @import '../../styles/tokens.css';
 @import '../../styles/internal/anchored-placement.css';
+@import '../../styles/motion.css';
 @layer vyrnforge.components {
   :where([data-vf-tooltip-content]) {
     background: var(--vf-color-text);
@@ -45,6 +46,11 @@
       background: Canvas;
       border: 1px solid CanvasText;
       color: CanvasText;
+    }
+  }
+  @media (prefers-reduced-motion: no-preference) and (forced-colors: none) {
+    :where([data-vf-tooltip-content]:popover-open:not([data-vf-motion])) {
+      animation: vf-motion-enter-reveal var(--vf-motion-duration-enter) var(--vf-motion-easing-standard);
     }
   }
 }

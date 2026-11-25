@@ -35,6 +35,14 @@ The optional logical entrance direction applies to `slide` and `fade-slide`: `bl
 
 Each effect runs once on entrance. Presence, exit, dismissal and focus restoration remain component/application responsibilities. Replaying by remounting a focusable child may disturb focus; do not await animation events to commit UI state.
 
+## Automatic component motion
+
+The existing public components apply entrance motion to their committed visible state, without requiring consumer wrappers. Dialog and AlertDialog use a restrained reveal; Drawer reveals its edge-attached shell while its title, description and body slide slightly from the logical edge. Popover, Tooltip, PreviewCard, Menu, ContextMenu, Menubar and SplitButton (through Menu), Select, Combobox and MultiSelect reveal their opened surfaces. Accordion, Disclosure, Tabs and Carousel reveal their visible panel or slide; Toast reveals an actual notification. The reveal starts partially opaque rather than invisible and does not alter layout. Control feedback also uses shared timing for Listbox and selection options, ToggleGroup, SegmentedControl, Rating, Pagination, Menubar, Toolbar and accordion triggers.
+
+Control feedback stays at `--vf-control-motion-duration`; automatic entrances consume `--vf-motion-duration-enter` and `--vf-motion-easing-standard`. The React ThemeScope motion options configure those existing token roles locally. Setting entranceDuration to 0ms disables visible entrance movement; reduced-motion and forced-colors preferences suppress automatic nonessential animation regardless of overrides.
+
+The public React Motion wrapper also accepts an active boolean. Setting it false removes the effect without unmounting, hiding, or disabling children; a later true value can replay the entrance. Ordinary component usage requires no Motion wrapper. Native platform close, hidden state, focus and selection are immediate: no exit retention, delayed close, or animation-dependent state commitment is introduced. Direct manipulation such as dragging a range slider or split panel must remain immediate. Static text, layout, media and decorative primitives do not animate by default; compose Motion only when an actual experience benefits.
+
 ## Native Web usage
 
 For native markup, import `@vyrnforge/web/styles/foundation.css` (or aggregate `@vyrnforge/web/styles.css`) and select an opt-in effect with its public data attributes:
