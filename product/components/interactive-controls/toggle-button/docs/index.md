@@ -1,6 +1,6 @@
 # ToggleButton
 
-Use ToggleButton for a command that stays on or off, such as bold formatting, pinning or bookmarking. Its stable accessible name identifies the action while `aria-pressed` communicates its current state.
+Use ToggleButton for a command that stays on or off, such as showing archived items, pinning or bookmarking. Its stable accessible name identifies the action while `aria-pressed` communicates its current state.
 
 ## Native semantics and behavior
 
@@ -8,7 +8,7 @@ A ToggleButton is a native button. Enter, Space, pointer activation, focus and d
 
 ## Icon-only toggles
 
-Use square icon-only controls for familiar commands where space is limited. Keep the accessible name stable with `aria-label` or `aria-labelledby`; decorative artwork does not provide the name. The `iconOnly` prop in React and Vue, the corresponding Angular input and the Native Web `data-vf-icon-only` marker share Button geometry.
+Use square icon-only controls for familiar commands where space is limited, such as bookmarking an item. Use visible text for filters and other commands whose meaning is not apparent from an icon alone. Keep the accessible name stable with `aria-label` or `aria-labelledby`; decorative artwork does not provide the name. The `iconOnly` prop in React and Vue, the corresponding Angular input and the Native Web `data-vf-icon-only` marker share Button geometry.
 
 ## Icon with text
 

@@ -1,7 +1,7 @@
 {
   "id": "toggle-button/controlled",
   "title": "Controlled and uncontrolled state",
-  "description": "Reset a controlled command while an uncontrolled command retains its own state.",
+  "description": "Reset the controlled archived filter while the completed filter retains its own state.",
   "defaultFramework": "react",
   "frameworks": {
     "react": {

@@ -1,7 +1,7 @@
 {
   "id": "toggle-button/basic",
   "title": "Basic toggle",
-  "description": "An independent formatting command retains its pressed state.",
+  "description": "An independent text-labelled filter retains its pressed state.",
   "defaultFramework": "native-web",
   "frameworks": {
     "native-web": {
