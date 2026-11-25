@@ -53,7 +53,7 @@ test('React pilot artifact is Product Graph-backed and SSR-rendered with public 
   expect(manifest.routes.filter((entry) => entry.view !== 'unavailable').map((entry) => entry.route)).toEqual([
     '', 'foundations/tokens/', 'foundations/themes/', 'foundations/color/', 'foundations/theme-builder/', 'foundations/dark-mode/',
     'foundations/right-to-left/', 'utilities/overlay/', 'utilities/motion/', 'foundations/styling/',  'components/button/', 'api/components/button/',
-    'patterns/button-group/', 'components/toggle-button/', 'api/components/toggle-button/', 'components/toggle-group/', 'api/components/toggle-group/', 'components/layout/', 'api/components/layout/',
+    'patterns/button-group/', 'components/toggle-button/', 'api/components/toggle-button/', 'components/toggle-group/', 'api/components/toggle-group/', 'components/checkbox/', 'api/components/checkbox/', 'components/radio/', 'api/components/radio/', 'patterns/checkbox-group/', 'patterns/radio-group/', 'components/layout/', 'api/components/layout/',
     'components/divider/', 'api/components/divider/',
     ...['text', 'code', 'kbd'].flatMap((id) => [
       'components/' + id + '/', 'api/components/' + id + '/',
@@ -2706,4 +2706,50 @@ test('React Motion active disables decoration while preserving the existing chil
   await area.getByRole('switch', { name: 'Enable effect' }).check();
   await expect(sample).toHaveCSS('animation-name', 'vf-motion-enter-fade');
   await expect(child).toHaveAttribute('data-motion-identity', 'preserved');
+});
+
+test('React native selection guides keep control APIs separate from group composition', async ({ page }) => {
+  for (const [id, route] of [['checkbox', 'components/checkbox/'], ['radio', 'components/radio/'],
+    ['checkbox-group', 'patterns/checkbox-group/'], ['radio-group', 'patterns/radio-group/']]) {
+    await page.goto('/next/react/' + route);
+    const guide = page.locator('[data-vf-docs-react-selection="' + id + '"]');
+    await expect(guide).toBeVisible();
+    await expect(guide.locator('iframe').first()).toBeVisible();
+    await expect(guide.locator('iframe[src*="examples/' + id + '/"]').first()).toBeVisible();
+    if (id.endsWith('-group')) await expect(guide.getByRole('link', { name: id === 'radio-group' ? 'Radio Group API' : 'Checkbox Group API' })).toHaveCount(0);
+  }
+});
+test('React checkbox select-all derives mixed state and native labels operate on mobile', async ({ page }) => {
+  await page.setViewportSize({ width: 390, height: 844 });
+  await page.goto('/next/react/patterns/checkbox-group/');
+  const demo = page.frameLocator('[data-vf-docs-react-selection-example="checkbox-group/select-all"] iframe');
+  const master = demo.getByRole('checkbox', { name: 'Select all available files' });
+  await expect.poll(() => master.evaluate(el => el.indeterminate)).toBe(true);
+  await master.click();
+  await expect(master).toBeChecked();
+  await expect.poll(() => master.evaluate(el => el.indeterminate)).toBe(false);
+  await expect(demo.getByRole('checkbox', { name: 'Archive.zip — unavailable' })).toBeDisabled();
+  await demo.getByRole('checkbox', { name: 'Summary.csv' }).uncheck();
+  await expect.poll(() => master.evaluate(el => el.indeterminate)).toBe(true);
+  await expect(demo.getByRole('status')).toHaveText('2 of 3 available files selected.');
+  await master.focus();
+  await master.press('Space');
+  await expect(master).toBeChecked();
+});
+test('React radio native group validates, selects via arrows, submits and resets', async ({ page }) => {
+  await page.goto('/next/react/patterns/radio-group/');
+  const demo = page.frameLocator('[data-vf-docs-react-selection-example="radio-group/delivery"] iframe');
+  const standard = demo.getByRole('radio', { name: /Standard/ });
+  const express = demo.getByRole('radio', { name: /Express/ });
+  await demo.getByRole('button', { name: 'Confirm delivery' }).click();
+  await expect(demo.getByRole('status')).toHaveText('No delivery confirmed.');
+  await standard.check();
+  await standard.press('ArrowRight');
+  await expect(express).toBeChecked();
+  await expect(standard).not.toBeChecked();
+  await demo.getByRole('button', { name: 'Confirm delivery' }).click();
+  await expect(demo.getByRole('status')).toHaveText('Confirmed: Express');
+  await demo.getByRole('button', { name: 'Reset' }).click();
+  await expect(express).not.toBeChecked();
+  await expect(demo.getByRole('status')).toHaveText('No delivery confirmed.');
 });

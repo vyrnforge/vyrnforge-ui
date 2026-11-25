@@ -1,0 +1,13 @@
+# React Radio
+
+## React setup
+
+Import Radio from `@vyrnforge/react/radio` and load `@vyrnforge/web/styles/radio.css`. The ref points to the native HTMLInputElement.
+
+## Controlled and uncontrolled state
+
+Pass `defaultChecked` for an initial uncontrolled option. For controlled selection, pass `checked={selected === optionValue}` and update the shared selected value in `onChange`. Use a unique shared name for each group (React useId is useful when composing repeated groups).
+
+## Required and disabled states
+
+Use native required and disabled attributes. Uncontrolled form reset restores initial checked states; controlled values must be reset by their owner. Use a named fieldset and associate descriptions/errors with the appropriate native controls.
