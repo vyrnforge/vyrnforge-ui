@@ -1771,7 +1771,7 @@
 
 /* Header evidence is metadata, not another article section. Keep the closed
    disclosure compact; the existing token-backed evidence panel owns its contents. */
-@layer vf-docs {
+@layer vfdocs {
   .vf-docs-component-header > .vf-docs-reference-details {
     border-block-start: 0;
     margin-block: var(--vf-space-sm) var(--vf-space-md);

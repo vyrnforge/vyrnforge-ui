@@ -348,7 +348,7 @@ test('agreed Layer 1 Typography and Media members publish complete Native Web gu
 
     await gotoWithCleanDocsState(page, `/next/native-web/components/${id}/`);
     await expect(page.locator(`article[data-vf-docs-component="${id}"]`)).toHaveCount(1);
-    await expect(page.getByRole('heading', { level: 2, name: 'Accessibility evidence' })).toBeVisible();
+    await expect(page.locator('header h1 + [data-vf-docs-standards-disclosure] > summary')).toBeVisible();
     await expect(page.getByText(styleSpecifier, { exact: false }).first()).toBeVisible();
     await expectDeploymentRelativeStyles(page);
   }
@@ -467,9 +467,9 @@ test('Button showcase composes shared guidance, Native adaptation, examples, ref
   await expect(page.getByRole('heading', { level: 1, name: 'Button' })).toBeVisible();
   await expect(page.getByRole('navigation', { name: 'Breadcrumb' })).toContainText('Native Web');
   const toc = page.getByRole('navigation', { name: 'On this page' });
-  await expect(toc.getByRole('link').first()).toHaveText('Accessibility evidence');
-  await expect(toc.getByRole('link', { name: 'Accessibility evidence' })).toHaveAttribute('href', '#accessibility-evidence');
-  await expect(page.locator('article[data-vf-docs-component="button"] > header #accessibility-evidence')).toBeVisible();
+  await expect(toc.getByRole('link').first()).toHaveText('Native Web setup');
+  await expect(toc.getByRole('link', { name: /^Accessibility\b/ })).toHaveCount(0);
+  await expect(page.locator('article[data-vf-docs-component="button"] > header h1 + [data-vf-docs-standards-disclosure] > summary')).toBeVisible();
   await expect(toc.getByRole('link', { name: 'Native Web setup' })).toHaveAttribute('href', '#native-web-setup');
   await expect(toc.getByRole('link', { name: 'Usage preview' })).toHaveAttribute('href', '#usage-preview');
   await expect(toc.getByRole('link', { name: 'More examples' })).toHaveCount(0);
@@ -585,6 +585,9 @@ test('Button showcase composes shared guidance, Native adaptation, examples, ref
 
   const evidence = page.locator('article[data-vf-docs-component="button"] > header .vf-docs-standards');
   await expect(evidence).toHaveCount(1);
+  const headerDisclosure = page.locator('article[data-vf-docs-component="button"] > header [data-vf-docs-standards-disclosure]');
+  await expect(headerDisclosure).not.toHaveAttribute('open', '');
+  await headerDisclosure.locator(':scope > summary').click();
   await expect(evidence.getByRole('heading', { name: 'Accessibility evidence' })).toBeVisible();
   const standards = evidence.getByRole('list', { name: 'Standards', exact: true });
   for (const [name, source] of [
@@ -633,6 +636,11 @@ test('Button header holds all mapped accessibility standards and criterion links
       await page.evaluate((percent) => { document.documentElement.style.fontSize = `${percent}%`; }, textPercent);
 
       const header = page.locator('article[data-vf-docs-component="button"] > header');
+      const headerDisclosure = header.locator('[data-vf-docs-standards-disclosure]');
+      await expect(headerDisclosure).not.toHaveAttribute('open', '');
+      await headerDisclosure.locator(':scope > summary').focus();
+      await page.keyboard.press('Enter');
+      await expect(headerDisclosure).toHaveAttribute('open', '');
       const labels = header.locator('.vf-docs-standards');
       const standardsList = labels.getByRole('list', { name: 'Standards' });
       await expect(labels).toBeVisible();
@@ -1131,6 +1139,7 @@ test.describe('C1 without JavaScript', () => {
     const nav = page.locator('#vf-docs-navigation');
     await expect(nav).toBeVisible();
     await expect(nav.locator('a[aria-current="page"]')).toHaveText('Button');
+    await page.locator('article[data-vf-docs-component="button"] header [data-vf-docs-standards-disclosure] > summary').click();
     const standards = page.locator('article[data-vf-docs-component="button"] .vf-docs-standards');
     const criteria = standards.getByRole('list', { name: 'Mapped WCAG criteria' });
     const disclosure = standards.locator('details');
@@ -1152,7 +1161,7 @@ test('C1 failed script load leaves native navigation usable', async ({ page }) =
 });
 
 
-test('all metadata-backed guides and API references use one shared accessibility section', () => {
+test('all metadata-backed guides and API references use one title-adjacent standards disclosure', () => {
   const catalog = compileNativeDocumentation();
   const pages = [...catalog.showcasePages, ...catalog.apiPages];
   let backedPages = 0;
@@ -1166,8 +1175,10 @@ test('all metadata-backed guides and API references use one shared accessibility
 
     expect(count, `${productPage.route}: evidence block must follow product metadata`)
       .toBe(references ? 1 : 0);
+    expect([...markup.matchAll(/<h2[^>]*>([^<]+)<\/h2>/g)].map(match => match[1]).filter(heading => /^(?:(?:React|Native Web|Semantic layout and) )?accessibility(?:$|[ ,:])/i.test(heading) && heading !== 'Accessibility evidence')).toEqual([]);
     if (!references) continue;
     backedPages += 1;
+    expect(markup).toMatch(/<h1[^>]*>[^<]*<\/h1>\s*<details[^>]*data-vf-docs-standards-disclosure[^>]*><summary>Standards and evidence mapping<\/summary>/);
     expect(markup).toContain('not a blanket compliance claim');
     expect(markup).toContain('Mapping status: <strong>' + references.mappingStatus + '</strong>');
     if (references.criteria.length) {
@@ -1233,7 +1244,10 @@ test('non-Button API pages expose the same accessible standards disclosure', asy
   for (const id of cases) {
     await gotoWithCleanDocsState(page, `/next/native-web/api/components/${id}/`);
     const product = catalog.componentApiPages.find((item) => item.id === id);
-    const section = page.locator(`[data-vf-docs-api-component="${id}"] [data-vf-docs-accessibility]`);
+    const headerDisclosure = page.locator(`[data-vf-docs-api-component="${id}"] header h1 + [data-vf-docs-standards-disclosure]`);
+    await expect(headerDisclosure).not.toHaveAttribute('open', '');
+    await headerDisclosure.locator(':scope > summary').click();
+    const section = headerDisclosure.locator('[data-vf-docs-accessibility]');
     await expect(section).toHaveCount(1);
     await expect(section.getByRole('heading', { name: 'Accessibility evidence' })).toBeVisible();
     const details = section.locator('details');
@@ -1263,7 +1277,9 @@ test('shared standards remain readable on Native API pages at mobile and 400% te
       document.documentElement.style.fontSize = `${percent}%`;
     }, textPercent);
 
-    const section = page.locator(`[data-vf-docs-api-component="${id}"] [data-vf-docs-accessibility]`);
+    const headerDisclosure = page.locator(`[data-vf-docs-api-component="${id}"] header h1 + [data-vf-docs-standards-disclosure]`);
+    await headerDisclosure.locator(':scope > summary').click();
+    const section = headerDisclosure.locator('[data-vf-docs-accessibility]');
     await expect(section).toBeVisible();
     await expect(section.locator('details')).not.toHaveAttribute('open', '');
     await section.locator('summary').click();
@@ -1518,6 +1534,7 @@ test('Layout guide is discoverable in the Layout & Structure submenu and renders
   await expect(page.getByRole('heading', { level: 2, name: 'Flow: wrapping peers' })).toBeVisible();
   await expect(page.getByRole('heading', { level: 2, name: 'AutoGrid: intrinsic equal tracks' })).toBeVisible();
   await expect(page.getByRole('heading', { level: 2, name: 'Migration from older layout names' })).toBeVisible();
+  await article.locator('header [data-vf-docs-standards-disclosure] > summary').click();
   await expect(article.getByText('review required', { exact: false }).first()).toBeVisible();
 
   const accessibility = article.locator('[data-vf-docs-accessibility]');

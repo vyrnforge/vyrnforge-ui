@@ -686,7 +686,7 @@ test('React Button guide keeps all demos visible, source optional and navigation
   }
 
   const navigation = page.getByRole('navigation', { name: 'On this page' });
-  await expect(navigation.getByRole('link')).toHaveCount(10);
+  await expect(navigation.getByRole('link')).toHaveCount(9);
   await expect(navigation.getByRole('link', { name: 'Accessible icon actions' }))
     .toHaveAttribute('href', '#react-button-accessible-icon-actions');
   const source = examples.first().locator('.vf-docs-source-disclosure');
@@ -696,7 +696,7 @@ test('React Button guide keeps all demos visible, source optional and navigation
   await expect(source.locator('pre code')).toContainText("from '@vyrnforge/react/button'");
   await page.keyboard.press('Enter');
   await expect(source).not.toHaveAttribute('open', '');
-  await expect(guide.getByRole('heading', { name: 'Accessibility', level: 2 })).toBeVisible();
+  await expect(guide.getByRole('heading', { name: 'Accessibility', level: 2 })).toHaveCount(0);
   await expect(guide.getByRole('heading', { name: 'Native baseline' })).toBeVisible();
 
   const placement = [
@@ -948,7 +948,7 @@ test('React URL context and framework-scoped search/theme work without inventing
     .getByRole('link', { name: 'Button API', exact: true }).click();
   await expect(page).toHaveURL(/\/next\/react\/api\/components\/button\/$/);
   await expect(page.getByRole('heading', { level: 1, name: 'Button API' })).toBeVisible();
-  await expect(page.locator('[data-vf-docs-react-api="button"] [data-vf-docs-accessibility]')).toBeVisible();
+  await expect(page.locator('[data-vf-docs-react-api="button"] header h1 + [data-vf-docs-standards-disclosure] > summary')).toBeVisible();
   await expect(page.locator('html')).toHaveAttribute('data-vf-theme', 'dark');
   await page.getByRole('navigation', { name: 'Documentation framework' })
     .getByRole('link', { name: 'Native Web' }).click();
@@ -1483,7 +1483,7 @@ test('React Typography remains readable at 320px, 200 percent text, RTL and forc
 test('Button, Layout, Code and Kbd use one task-first guide hierarchy and separate API navigation', async ({ page }) => {
   const expected = [
     'Get started', 'Examples', 'Usage guidelines',
-    'Accessibility', 'Related components and API',
+    'Related components and API',
   ];
   for (const id of ['button', 'layout', 'code', 'kbd']) {
     await page.goto('/next/react/components/' + id + '/');
@@ -1495,14 +1495,14 @@ test('Button, Layout, Code and Kbd use one task-first guide hierarchy and separa
     const topics = id === 'button' ? [
       'Get started', 'Basic buttons', 'Variants', 'Sizes', 'States and async work',
       'Accessible icon actions', 'Forms', 'Density and target sizing',
-      'Accessibility', 'Related components and API',
+      'Related components and API',
     ] : expected;
     expect(await guide.locator(':scope > section > h2').allTextContents()).toEqual(topics);
     const toc = page.getByRole('navigation', { name: 'On this page' });
     await expect(toc.getByRole('link')).toHaveCount(topics.length);
     await expect(toc.getByRole('link', { name: id === 'button' ? 'Variants' : 'Examples' }))
       .toBeVisible();
-    await expect(guide.locator('header [data-vf-docs-accessibility]')).toHaveCount(0);
+    await expect(guide.locator('header h1 + [data-vf-docs-standards-disclosure] [data-vf-docs-accessibility]')).toHaveCount(1);
     await expect(guide.getByRole('heading', { name: /^Shared .* semantics$/ })).toHaveCount(0);
     await expect(guide.getByText('Standards and evidence mapping')).toBeVisible();
     await expect(guide.getByRole('link', { name: /public React API|React API/ })).toHaveAttribute(
@@ -1525,9 +1525,9 @@ test('React Icon uses product-owned SVG examples and public source-backed API', 
   await expect(page.getByRole('navigation', { name: 'Documentation' })
     .getByRole('link', { name: 'Icon', exact: true })).toHaveAttribute('aria-current', 'page');
   expect(await guide.locator(':scope > section > h2').allTextContents()).toEqual([
-    'Get started', 'Examples', 'Usage guidelines', 'Accessibility', 'Related components and API',
+    'Get started', 'Examples', 'Usage guidelines', 'Related components and API',
   ]);
-  await expect(page.getByRole('navigation', { name: 'On this page' }).getByRole('link')).toHaveCount(5);
+  await expect(page.getByRole('navigation', { name: 'On this page' }).getByRole('link')).toHaveCount(4);
   await expect(guide.getByText('Standards and evidence mapping')).toBeVisible();
   await expect(page.getByRole('navigation', { name: 'Icon examples' }).getByRole('link')).toHaveCount(8);
   await expect(guide.locator('[data-vf-docs-react-icon-explorer]')).toHaveCount(0);
@@ -1862,8 +1862,8 @@ test('Code and Kbd task-first guides preserve reflow, RTL, forced colors and bas
     });
     await page.emulateMedia({ forcedColors: 'active' });
     const guide = page.locator('[data-vf-docs-react-typography="' + id + '"]');
-    await expect(guide.getByRole('heading', { name: 'Accessibility', level: 2 })).toBeVisible();
-    await expect(page.getByRole('navigation', { name: 'On this page' }).getByRole('link')).toHaveCount(5);
+    await expect(guide.getByRole('heading', { name: 'Accessibility', level: 2 })).toHaveCount(0);
+    await expect(page.getByRole('navigation', { name: 'On this page' }).getByRole('link')).toHaveCount(4);
     const width = await page.evaluate(() => ({
       scroll: document.documentElement.scrollWidth,
       viewport: document.documentElement.clientWidth,
@@ -1911,18 +1911,18 @@ test('React Text guide teaches every public type role with real TSX previews and
   expect(searchWidth, 'Desktop docs search must remain readable alongside framework and theme controls')
     .toBeGreaterThan(150);
   expect(await guide.locator(':scope > section > h2').allTextContents()).toEqual([
-    'Get started', 'Examples', 'Usage guidelines', 'Accessibility',
+    'Get started', 'Examples', 'Usage guidelines',
     'Related components and API',
   ]);
   const toc = page.getByRole('navigation', { name: 'On this page' });
-  await expect(toc.getByRole('link')).toHaveCount(5);
+  await expect(toc.getByRole('link')).toHaveCount(4);
   await expect(toc.getByRole('link', { name: 'Usage guidelines' }))
     .toHaveAttribute('href', '#react-typography-guidelines');
   await expect(guide.getByRole('heading', { name: 'When to use' })).toHaveCount(1);
   await expect(guide.getByRole('heading', { name: 'When not to use' })).toHaveCount(1);
   await expect(guide.getByRole('heading', { name: 'Shared Text semantics' })).toHaveCount(0);
   await expect(guide.getByRole('heading', { name: 'React Text integration' })).toHaveCount(0);
-  await expect(guide.locator('header [data-vf-docs-accessibility]')).toHaveCount(0);
+  await expect(guide.locator('header h1 + [data-vf-docs-standards-disclosure] [data-vf-docs-accessibility]')).toHaveCount(1);
   const startCode = guide.locator('section[aria-labelledby="react-typography-setup"] pre code');
   await expect(startCode).toContainText("import { Text } from '@vyrnforge/react/text'");
   await expect(startCode).toContainText('<Text as="h2" variant="heading-md">');
@@ -2058,7 +2058,7 @@ test('React Badge guide remains focused on React and uses source-backed examples
   const guide = page.locator('[data-vf-docs-react-badge]');
   await expect(guide.getByRole('heading', { name: 'Badge', level: 1 })).toBeVisible();
   await expect(guide.getByRole('heading', { name: 'Get started' })).toBeVisible();
-  await expect(guide.getByRole('heading', { name: 'Accessibility', exact: true })).toHaveCount(1);
+  await expect(guide.getByRole('heading', { name: 'Accessibility', exact: true })).toHaveCount(0);
   await expect(guide.getByRole('heading', { name: 'Native Web markup' })).toHaveCount(0);
   const setup = guide.locator('section[aria-labelledby="react-badge-setup"] pre code');
   await expect(setup).toHaveCount(1);
@@ -2122,7 +2122,7 @@ test('React Avatar guide shows initials, native photo, failed-image fallback and
   await expect(guide.getByRole('heading', { name: 'Framework consumption' })).toHaveCount(0);
   await expect(guide.getByRole('heading', { name: 'React authoring' })).toHaveCount(0);
   await expect(guide.getByRole('heading', { name: 'React accessibility' })).toHaveCount(0);
-  await expect(guide.getByRole('heading', { name: 'Accessibility', exact: true })).toHaveCount(1);
+  await expect(guide.getByRole('heading', { name: 'Accessibility', exact: true })).toHaveCount(0);
   const initials = guide.locator('[data-vf-docs-react-avatar-example="avatar/initials"] iframe');
   await initials.scrollIntoViewIfNeeded();
   await expect(initials.contentFrame().locator('[data-vf-avatar-initials]').first()).toHaveText('AL');
@@ -2223,9 +2223,9 @@ test('React Image guide uses shared native CSS, source-backed examples and a dis
   await expect(page.getByRole('navigation', { name: 'Documentation' })
     .getByRole('link', { name: 'Image', exact: true })).toHaveAttribute('aria-current', 'page');
   expect(await guide.locator(':scope > section > h2').allTextContents()).toEqual([
-    'Get started', 'Examples', 'Usage guidelines', 'Accessibility', 'Related components and API',
+    'Get started', 'Examples', 'Usage guidelines', 'Related components and API',
   ]);
-  await expect(page.getByRole('navigation', { name: 'On this page' }).getByRole('link')).toHaveCount(5);
+  await expect(page.getByRole('navigation', { name: 'On this page' }).getByRole('link')).toHaveCount(4);
   await expect(page.getByRole('navigation', { name: 'Image examples' }).getByRole('link')).toHaveCount(4);
   await expect(guide.getByText('Standards and evidence mapping')).toBeVisible();
 
@@ -2792,4 +2792,46 @@ test('React selection guides render responsive light and dark previews and prese
   await expect(radio.getByRole('radio', { name: /Team/ })).toBeChecked();
   expect(await radio.locator('html').evaluate(el => el.scrollWidth - el.clientWidth)).toBeLessThanOrEqual(1);
   await page.screenshot({ path: testInfo.outputPath('selection-radio-group-mobile-dark.png') });
+});
+
+test('all React component guide and API titles own exactly one standards disclosure when mapped', async ({ page, browser }, testInfo) => {
+  const ids = ['button', 'toggle-button', 'toggle-group', 'checkbox', 'radio', 'layout', 'text', 'code', 'kbd', 'icon', 'divider', 'list', 'badge', 'avatar', 'image'];
+  for (const id of ids) {
+    for (const prefix of ['components', 'api/components']) {
+      await page.goto('/next/react/' + prefix + '/' + id + '/');
+      const header = page.locator('article > header.vf-docs-component-header').first();
+      const details = header.locator('h1 + [data-vf-docs-standards-disclosure]');
+      await expect(details, prefix + '/' + id).toHaveCount(1);
+      await expect(details).not.toHaveAttribute('open', '');
+      await expect(details.locator(':scope > summary')).toHaveText('Standards and evidence mapping');
+      await expect(page.locator('[data-vf-docs-accessibility]')).toHaveCount(1);
+      await expect(page.locator('article > section > h2').filter({ hasText: /^Accessibility(?:$|[ ,:])/ })).toHaveCount(0);
+      await expect(page.getByRole('navigation', { name: 'On this page' }).getByRole('link', { name: /^Accessibility(?:$|[ ,:])/ })).toHaveCount(0);
+    }
+  }
+  for (const id of ['button-group', 'checkbox-group', 'radio-group']) {
+    await page.goto('/next/react/patterns/' + id + '/');
+    const header = page.locator('article > header.vf-docs-component-header').first();
+    const count = await page.locator('[data-vf-docs-accessibility]').count();
+    expect(count).toBeLessThanOrEqual(1);
+    await expect(header.locator('h1 + [data-vf-docs-standards-disclosure]')).toHaveCount(count);
+    await expect(page.locator('article > section > h2').filter({ hasText: /^Accessibility(?:$|[ ,:])/ })).toHaveCount(0);
+  }
+  // The native disclosure must remain operable after SSR with no script.
+  const context = await browser.newContext({ javaScriptEnabled: false, viewport: { width: 320, height: 720 } });
+  const offline = await context.newPage();
+  await offline.goto('/next/react/components/button/');
+  const details = offline.locator('header h1 + [data-vf-docs-standards-disclosure]');
+  const summary = details.locator(':scope > summary');
+  await summary.focus();
+  await offline.keyboard.press('Enter');
+  await expect(details).toHaveAttribute('open', '');
+  await expect(details.getByRole('link', { name: 'WCAG 2.2 AA (target)' })).toBeVisible();
+  await offline.screenshot({ path: testInfo.outputPath('react-button-standards-mobile-open.png') });
+  await context.close();
+  await page.setViewportSize({ width: 1280, height: 720 });
+  await page.goto('/next/react/components/button/');
+  await page.screenshot({ path: testInfo.outputPath('react-button-standards-desktop-closed.png') });
+  await page.locator('header h1 + [data-vf-docs-standards-disclosure] > summary').click();
+  await page.screenshot({ path: testInfo.outputPath('react-button-standards-desktop-open.png') });
 });
