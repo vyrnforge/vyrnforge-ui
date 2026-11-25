@@ -17,4 +17,6 @@ function App() {
     </Flow>
   );
 }
-createRoot(document.querySelector('#root')!).render(<App />);
+const root = document.getElementById('root');
+if (!root) throw new Error('Missing example root');
+createRoot(root).render(<App />);

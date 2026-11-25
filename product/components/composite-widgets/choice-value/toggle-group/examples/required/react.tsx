@@ -9,23 +9,21 @@ import '@vyrnforge/web/styles/text.css';
 
 function App() {
   const [value, setValue] = useState('list');
+  function acceptSelection(next: string | string[]) {
+    if (typeof next === 'string' && next) setValue(next);
+  }
   return (
     <Flow gap="sm">
       <Flow direction="inline" wrap="wrap">
-        <ToggleGroupRoot
-          type="single"
-          value={value}
-          aria-label="Required view mode"
-          onValueChange={(next) => {
-            if (typeof next === 'string' && next) setValue(next);
-          }}
-        >
+        <ToggleGroupRoot type="single" value={value} aria-label="Required view mode" onValueChange={acceptSelection}>
           <ToggleGroupItem value="list">List</ToggleGroupItem>
           <ToggleGroupItem value="grid">Grid</ToggleGroupItem>
         </ToggleGroupRoot>
       </Flow>
-      <Text as="p" role="status">Current view: {value}</Text>
+      <Text as="p" role="status">{`Current view: ${value}`}</Text>
     </Flow>
   );
 }
-createRoot(document.querySelector('#root')!).render(<App />);
+const root = document.getElementById('root');
+if (!root) throw new Error('Missing example root');
+createRoot(root).render(<App />);
