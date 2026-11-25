@@ -2,10 +2,9 @@ import { useState } from 'react';
 import { createRoot } from 'react-dom/client';
 import { ToggleButton } from '@vyrnforge/react/toggle-button';
 import { Icon } from '@vyrnforge/react/icon';
-import { boldIcon } from '@vyrnforge/icons/bold';
-import { italicIcon } from '@vyrnforge/icons/italic';
-import { underlineIcon } from '@vyrnforge/icons/underline';
-import { strikethroughIcon } from '@vyrnforge/icons/strikethrough';
+import { bookmarkIcon } from '@vyrnforge/icons/bookmark';
+import { heartIcon } from '@vyrnforge/icons/heart';
+import { pinIcon } from '@vyrnforge/icons/pin';
 import { Flow } from '@vyrnforge/react/layout';
 import { Text } from '@vyrnforge/react/text';
 import { tokens } from '@vyrnforge/react';
@@ -15,36 +14,35 @@ import '@vyrnforge/web/styles/layout.css';
 import '@vyrnforge/web/styles/text.css';
 
 function App() {
-  const [bold, setBold] = useState(false);
-  const [italic, setItalic] = useState(false);
-  const [underline, setUnderline] = useState(false);
-  const [strike, setStrike] = useState(false);
+  const [bookmarked, setBookmarked] = useState(false);
+  const [favorite, setFavorite] = useState(false);
+  const [pinned, setPinned] = useState(false);
+
   return (
-    <Flow gap="md">
-      <Flow direction="inline" wrap="wrap" gap="xs" role="group" aria-label="Independent text formatting">
-        <ToggleButton iconOnly aria-label="Bold" title="Bold" onPressedChange={setBold}>
-          <Icon icon={boldIcon} />
+    <Flow gap="sm" style={{ border: '1px solid ' + tokens.color.border, padding: tokens.space.md }}>
+      <Text as="p" variant="title-md">Getting started with VyrnForge</Text>
+      <Flow direction="inline" gap="xs" align="center">
+        <ToggleButton iconOnly aria-label="Bookmark article" title="Bookmark article" onPressedChange={setBookmarked}>
+          <Icon icon={bookmarkIcon} variant={bookmarked ? 'filled' : 'outlined'} />
         </ToggleButton>
-        <ToggleButton iconOnly aria-label="Italic" title="Italic" onPressedChange={setItalic}>
-          <Icon icon={italicIcon} />
+        <ToggleButton iconOnly aria-label="Favorite article" title="Favorite article" onPressedChange={setFavorite}>
+          <Icon icon={heartIcon} variant={favorite ? 'filled' : 'outlined'} />
         </ToggleButton>
-        <ToggleButton iconOnly aria-label="Underline" title="Underline" onPressedChange={setUnderline}>
-          <Icon icon={underlineIcon} />
-        </ToggleButton>
-        <ToggleButton iconOnly aria-label="Strikethrough" title="Strikethrough" onPressedChange={setStrike}>
-          <Icon icon={strikethroughIcon} />
+        <ToggleButton iconOnly aria-label="Pin article" title="Pin article" onPressedChange={setPinned}>
+          <Icon icon={pinIcon} variant={pinned ? 'filled' : 'outlined'} />
         </ToggleButton>
       </Flow>
-      <Text as="p" data-example-preview="formatting" style={{
-        border: '1px solid ' + tokens.color.borderStrong, padding: tokens.space.sm, background: tokens.color.surface,
-        fontWeight: bold ? tokens.fontWeight.bold : tokens.fontWeight.regular,
-        fontStyle: italic ? 'italic' : 'normal',
-        textDecorationLine: [underline && 'underline', strike && 'line-through'].filter(Boolean).join(' ') || 'none',
-      }}>
-        Quarterly financial report
+      <Text as="p" role="status" tone="secondary">
+        {[
+          bookmarked && 'Bookmarked',
+          favorite && 'Favorited',
+          pinned && 'Pinned',
+        ].filter(Boolean).join(' · ') || 'No article actions selected'}
       </Text>
     </Flow>
   );
 }
 
-createRoot(document.querySelector('#root')!).render(<App />);
+const root = document.querySelector('#root');
+if (!root) throw new Error('Missing example root');
+createRoot(root).render(<App />);

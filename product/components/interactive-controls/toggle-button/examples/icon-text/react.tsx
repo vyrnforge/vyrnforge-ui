@@ -27,7 +27,7 @@ function App() {
         textOverflow: 'ellipsis',
         whiteSpace: wrapped ? 'normal' : 'nowrap',
       }}>
-        Quarterly financial report for all departments
+        Design system documentation for the entire product team
       </Text>
     </Flow>
   );

@@ -8,18 +8,31 @@ import '@vyrnforge/web/styles/toggle-button.css';
 import '@vyrnforge/web/styles/layout.css';
 import '@vyrnforge/web/styles/text.css';
 
+const projects = [
+  { name: 'Website redesign', archived: false },
+  { name: 'Mobile onboarding', archived: false },
+  { name: '2025 campaign', archived: true },
+];
+
 function App() {
-  const [showFormula, setShowFormula] = useState(false);
+  const [showArchived, setShowArchived] = useState(false);
   return (
     <Flow gap="md">
       <Flow direction="inline">
-        <ToggleButton onPressedChange={setShowFormula}>Show formulas</ToggleButton>
+        <ToggleButton onPressedChange={setShowArchived}>Show archived</ToggleButton>
       </Flow>
-      <Text as="p" data-example-preview="formula" style={{ border: '1px solid ' + tokens.color.borderStrong, padding: tokens.space.sm, background: tokens.color.surface }}>
-        {showFormula ? '=SUM(B2:B4)' : '23,800'}
-      </Text>
+      <Flow as="ul" gap="xs" aria-label="Projects" data-example-preview="projects"
+        style={{ listStyle: 'none', padding: 0, margin: 0 }}>
+        {projects.filter((project) => showArchived || !project.archived).map((project) => (
+          <li key={project.name} style={{ border: '1px solid ' + tokens.color.border, padding: tokens.space.sm }}>
+            <Text>{project.name}{project.archived ? ' (archived)' : ''}</Text>
+          </li>
+        ))}
+      </Flow>
     </Flow>
   );
 }
 
-createRoot(document.querySelector('#root')!).render(<App />);
+const root = document.querySelector('#root');
+if (!root) throw new Error('Missing example root');
+createRoot(root).render(<App />);

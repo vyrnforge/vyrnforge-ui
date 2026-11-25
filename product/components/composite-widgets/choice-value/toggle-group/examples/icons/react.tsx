@@ -20,7 +20,7 @@ function App() {
         <ToggleGroupRoot
           type="single"
           defaultValue="list"
-          aria-label="Workbook view"
+          aria-label="Project view"
           onValueChange={(next) => {
             if (typeof next === 'string') setView(next);
           }}
@@ -34,18 +34,18 @@ function App() {
         </ToggleGroupRoot>
       </Flow>
       {view === 'grid' ? (
-        <AutoGrid as="ul" minItemSize="7rem" gap="sm" data-example-preview="view" aria-label="Sample workbook sheets">
-          {['Revenue', 'Expenses', 'Summary'].map((sheet) => (
-            <li key={sheet} style={{ border: '1px solid ' + tokens.color.border, padding: tokens.space.sm }}>
-              <Text as="span">{sheet}</Text>
+        <AutoGrid as="ul" minItemSize="7rem" gap="sm" data-example-preview="view" aria-label="Sample projects">
+          {['Website', 'Mobile app', 'Design system'].map((project) => (
+            <li key={project} style={{ border: '1px solid ' + tokens.color.border, padding: tokens.space.sm }}>
+              <Text as="span">{project}</Text>
             </li>
           ))}
         </AutoGrid>
       ) : (
-        <Flow as="ul" gap="sm" data-example-preview="view" aria-label="Sample workbook sheets">
-          {['Revenue', 'Expenses', 'Summary'].map((sheet) => (
-            <li key={sheet} style={{ border: '1px solid ' + tokens.color.border, padding: tokens.space.sm }}>
-              <Text as="span">{sheet}</Text>
+        <Flow as="ul" gap="sm" data-example-preview="view" aria-label="Sample projects">
+          {['Website', 'Mobile app', 'Design system'].map((project) => (
+            <li key={project} style={{ border: '1px solid ' + tokens.color.border, padding: tokens.space.sm }}>
+              <Text as="span">{project}</Text>
             </li>
           ))}
         </Flow>

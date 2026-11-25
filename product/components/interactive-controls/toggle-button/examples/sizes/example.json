@@ -1,7 +1,7 @@
 {
   "id": "toggle-button/sizes",
   "title": "Sizes",
-  "description": "Compare recognizable Bold icons and labelled Show formulas controls at every supported size.",
+  "description": "Compare the same bookmark action in icon-only and labelled form at every supported size.",
   "defaultFramework": "react",
   "frameworks": {
     "react": {
