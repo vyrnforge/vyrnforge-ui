@@ -2641,6 +2641,7 @@ export type MotionEffect = 'fade' | 'grow' | 'slide' | 'zoom' | 'fade-slide' | '
 
 // @public (undocumented)
 export interface MotionProps extends Omit<HTMLAttributes<HTMLElement>, 'color'> {
+    active?: boolean;
     as?: ThemeElement;
     direction?: MotionDirection;
     duration?: number;

@@ -53,6 +53,13 @@
     --_vf-motion-slide-x: calc(-1 * var(--vf-motion-distance, var(--vf-space-sm, 0.5rem)));
   }
 
+  /* A restrained reveal for focusable surfaces: content never starts invisible.
+   * Component owners apply this only to their existing visible/open state. */
+  @keyframes vf-motion-enter-reveal {
+    from { opacity: 0.85; }
+    to { opacity: 1; }
+  }
+
   @keyframes vf-motion-enter-fade {
     from { opacity: 0; }
     to { opacity: 1; }
