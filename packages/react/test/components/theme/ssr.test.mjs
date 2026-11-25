@@ -75,3 +75,17 @@ test('Semantic tones preserve native Text and Icon behavior including explicit s
   assert.match(svg, /color:var\(--vf-color-danger-border\)/);
   assert.match(svg, /<path/);
 });
+
+test('ThemeScope maps React motion roles to canonical Web CSS without a new token catalog', () => {
+  const motion = {
+    controlDuration: '80ms', entranceDuration: '480ms', standardEasing: 'linear',
+    loadingSpinDuration: '900ms', loadingShimmerDuration: '1800ms', loadingEasing: 'ease',
+  };
+  const html = renderToStaticMarkup(createElement(ThemeScope, { motion }, 'Motion'));
+  for (const [role, value] of Object.entries(motion)) {
+    assert.ok(html.includes(tokens.motion[role].slice(4, -1) + ':' + value));
+  }
+  assert.doesNotMatch(html, / motion=|<style|<script/);
+  const empty = renderToStaticMarkup(createElement(ThemeScope, { motion: { unsupported: 'x' } }, 'Ignore'));
+  assert.doesNotMatch(empty, /unsupported|undefined|--vf-/);
+});

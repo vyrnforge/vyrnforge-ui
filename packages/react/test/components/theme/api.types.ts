@@ -1,4 +1,4 @@
-import type { ColorRole, TextTone, ThemeColorOverrides, ThemeName, ThemeScopeProps } from '@vyrnforge/react';
+import type { ColorRole, TextTone, ThemeColorOverrides, ThemeMotionOverrides, ThemeName, ThemeScopeProps } from '@vyrnforge/react';
 import { colors, tokens, ThemeScope } from '@vyrnforge/react';
 import type { TextProps } from '@vyrnforge/react/text';
 import type { IconProps, SvgIconProps } from '@vyrnforge/react/icon';
@@ -7,7 +7,11 @@ const role: ColorRole = 'primary';
 const tone: TextTone = 'danger';
 const brand: ThemeName = 'acme';
 const overrides: ThemeColorOverrides = { primary: '#123456', onAccent: '#fff', danger: 'tomato' };
-const props: ThemeScopeProps = { as: 'section', theme: brand, colors: overrides, 'aria-label': 'Brand section' };
+const motion: ThemeMotionOverrides = { controlDuration: '80ms', entranceDuration: '480ms', standardEasing: 'linear' };
+const props: ThemeScopeProps = { as: 'section', theme: brand, colors: overrides, motion, 'aria-label': 'Brand section' };
+// @ts-expect-error unknown motion token roles must be rejected
+const invalidMotion: ThemeMotionOverrides = { speed: 'slow' };
+void invalidMotion;
 const heading: TextProps<'h2'> = { as: 'h2', tone: 'secondary', variant: 'heading-md' };
 const icon: SvgIconProps = { tone: 'accent', size: 'lg' };
 const catalogIcon: IconProps = { icon: { name: 'a', viewBox: '0 0 24 24', variants: {} } as IconProps['icon'], tone: 'danger' };
