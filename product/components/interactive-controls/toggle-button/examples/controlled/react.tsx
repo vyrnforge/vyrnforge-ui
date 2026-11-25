@@ -7,6 +7,7 @@ import { italicIcon } from '@vyrnforge/icons/italic';
 import { Button } from '@vyrnforge/react/button';
 import { Flow } from '@vyrnforge/react/layout';
 import { Text } from '@vyrnforge/react/text';
+import { tokens } from '@vyrnforge/react';
 import '@vyrnforge/web/styles/toggle-button.css';
 import '@vyrnforge/web/styles/icon.css';
 import '@vyrnforge/web/styles/layout.css';
@@ -32,7 +33,10 @@ function App() {
           Reset bold
         </Button>
       </Flow>
-      <Text as="p" data-example-preview="cell" style={{ fontWeight: boldByCell[cell] ? 700 : 400 }}>
+      <Text as="p" data-example-preview="cell" style={{
+        border: '1px solid ' + tokens.color.borderStrong, padding: tokens.space.sm, background: tokens.color.surface,
+        fontWeight: boldByCell[cell] ? tokens.fontWeight.bold : tokens.fontWeight.regular,
+      }}>
         {cell}: {cell === 'A1' ? 'Revenue' : 'Expenses'}
       </Text>
       <Flow direction="inline" gap="sm" align="center">

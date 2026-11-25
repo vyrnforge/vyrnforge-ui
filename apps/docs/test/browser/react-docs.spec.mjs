@@ -848,11 +848,12 @@ test('React ToggleGroup guide teaches its actual independent-tab-stop selection 
   await expect(formatted).toHaveCSS('font-style', 'italic');
 
   const icons = guide.locator('[data-vf-docs-react-toggle-group-example="toggle-group/icons"]').frameLocator('iframe');
-  await expect(icons.locator('[data-example-preview="view"]')).toHaveCSS('flex-direction', 'column');
+  await expect(icons.locator('[data-example-preview="view"]')).toHaveAttribute('data-vf-flow', '');
   await icons.getByRole('button', { name: 'Grid view' }).click();
   await expect(icons.getByRole('button', { name: 'Grid view' })).toHaveAttribute('aria-pressed', 'true');
   await expect(icons.getByRole('button', { name: 'Grid view' })).toHaveAttribute('data-vf-icon-only', '');
-  await expect(icons.locator('[data-example-preview="view"]')).toHaveCSS('flex-direction', 'row');
+  await expect(icons.locator('[data-example-preview="view"]')).toHaveAttribute('data-vf-auto-grid', '');
+  await expect(icons.locator('[data-example-preview="view"]')).toHaveCSS('display', 'grid');
   const required = guide.locator('[data-vf-docs-react-toggle-group-example="toggle-group/required"]').frameLocator('iframe');
   const requiredLeft = required.getByRole('button', { name: 'Align left', exact: true });
   const requiredRight = required.getByRole('button', { name: 'Align right', exact: true });

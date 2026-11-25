@@ -8,6 +8,7 @@ import { underlineIcon } from '@vyrnforge/icons/underline';
 import { strikethroughIcon } from '@vyrnforge/icons/strikethrough';
 import { Flow } from '@vyrnforge/react/layout';
 import { Text } from '@vyrnforge/react/text';
+import { tokens } from '@vyrnforge/react';
 import '@vyrnforge/web/styles/toggle-group.css';
 import '@vyrnforge/web/styles/icon.css';
 import '@vyrnforge/web/styles/layout.css';
@@ -35,7 +36,10 @@ function App() {
         </ToggleGroupRoot>
       </Flow>
       <Text as="p" data-example-preview="formatting" style={{
-        fontWeight: formats.includes('bold') ? 700 : 400,
+        border: '1px solid ' + tokens.color.borderStrong,
+        padding: tokens.space.sm,
+        background: tokens.color.surface,
+        fontWeight: formats.includes('bold') ? tokens.fontWeight.bold : tokens.fontWeight.regular,
         fontStyle: formats.includes('italic') ? 'italic' : 'normal',
         textDecorationLine: [
           formats.includes('underline') && 'underline',

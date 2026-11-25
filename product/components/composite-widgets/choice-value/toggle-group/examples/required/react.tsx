@@ -7,6 +7,7 @@ import { alignCenterIcon } from '@vyrnforge/icons/align-center';
 import { alignRightIcon } from '@vyrnforge/icons/align-right';
 import { Flow } from '@vyrnforge/react/layout';
 import { Text } from '@vyrnforge/react/text';
+import { tokens } from '@vyrnforge/react';
 import '@vyrnforge/web/styles/toggle-group.css';
 import '@vyrnforge/web/styles/icon.css';
 import '@vyrnforge/web/styles/layout.css';
@@ -33,6 +34,9 @@ function App() {
         </ToggleGroupRoot>
       </Flow>
       <Text as="p" data-example-preview="alignment" style={{
+        border: '1px solid ' + tokens.color.borderStrong,
+        padding: tokens.space.sm,
+        background: tokens.color.surface,
         textAlign: alignment === 'center' ? 'center' : alignment === 'right' ? 'right' : 'start',
       }}>
         Revenue

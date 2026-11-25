@@ -5,6 +5,7 @@ import { Icon } from '@vyrnforge/react/icon';
 import { boldIcon } from '@vyrnforge/icons/bold';
 import { Flow } from '@vyrnforge/react/layout';
 import { Text } from '@vyrnforge/react/text';
+import { tokens } from '@vyrnforge/react';
 import '@vyrnforge/web/styles/toggle-button.css';
 import '@vyrnforge/web/styles/icon.css';
 import '@vyrnforge/web/styles/layout.css';
@@ -31,7 +32,10 @@ function App() {
           </ToggleButton>
         ))}
       </Flow>
-      <Text as="p" data-example-preview="size" style={{ fontWeight: bold ? 700 : 400 }}>
+      <Text as="p" data-example-preview="size" style={{
+        border: '1px solid ' + tokens.color.borderStrong, padding: tokens.space.sm, background: tokens.color.surface,
+        fontWeight: bold ? tokens.fontWeight.bold : tokens.fontWeight.regular,
+      }}>
         {showFormula ? '=SUM(B2:B4)' : '23,800'}
       </Text>
     </Flow>

@@ -4,8 +4,9 @@ import { ToggleGroupRoot, ToggleGroupItem } from '@vyrnforge/react/toggle-group'
 import { Icon } from '@vyrnforge/react/icon';
 import { listIcon } from '@vyrnforge/icons/list';
 import { gridIcon } from '@vyrnforge/icons/grid';
-import { Flow } from '@vyrnforge/react/layout';
+import { AutoGrid, Flow } from '@vyrnforge/react/layout';
 import { Text } from '@vyrnforge/react/text';
+import { tokens } from '@vyrnforge/react';
 import '@vyrnforge/web/styles/toggle-group.css';
 import '@vyrnforge/web/styles/icon.css';
 import '@vyrnforge/web/styles/layout.css';
@@ -26,12 +27,23 @@ function App() {
           </ToggleGroupItem>
         </ToggleGroupRoot>
       </Flow>
-      <Flow as="ul" direction={view === 'grid' ? 'inline' : 'block'} wrap="wrap" gap="sm"
-        data-example-preview="view" aria-label="Sample workbook sheets">
-        {['Revenue', 'Expenses', 'Summary'].map((sheet) => (
-          <li key={sheet}><Text as="span">{sheet}</Text></li>
-        ))}
-      </Flow>
+      {view === 'grid' ? (
+        <AutoGrid as="ul" minItemSize="7rem" gap="sm" data-example-preview="view" aria-label="Sample workbook sheets">
+          {['Revenue', 'Expenses', 'Summary'].map((sheet) => (
+            <li key={sheet} style={{ border: '1px solid ' + tokens.color.border, padding: tokens.space.sm }}>
+              <Text as="span">{sheet}</Text>
+            </li>
+          ))}
+        </AutoGrid>
+      ) : (
+        <Flow as="ul" gap="sm" data-example-preview="view" aria-label="Sample workbook sheets">
+          {['Revenue', 'Expenses', 'Summary'].map((sheet) => (
+            <li key={sheet} style={{ border: '1px solid ' + tokens.color.border, padding: tokens.space.sm }}>
+              <Text as="span">{sheet}</Text>
+            </li>
+          ))}
+        </Flow>
+      )}
     </Flow>
   );
 }
