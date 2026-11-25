@@ -1,0 +1,14 @@
+{
+  "id": "button-group/mixed",
+  "title": "Mixed button types",
+  "description": "Bookmark the current article or advance to the next using one joined group.",
+  "defaultFramework": "react",
+  "frameworks": {
+    "react": {
+      "label": "React",
+      "language": "tsx",
+      "source": "react.tsx"
+    }
+  },
+  "documentationSection": "Mixed button types"
+}

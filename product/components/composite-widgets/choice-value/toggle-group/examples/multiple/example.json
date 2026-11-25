@@ -1,7 +1,7 @@
 {
   "id": "toggle-group/multiple",
-  "title": "Multiple formatting",
-  "description": "Combine bold, italic, underline and strikethrough on sample text.",
+  "title": "Multiple team filters",
+  "description": "Coordinate an array of selected team filters; an empty selection shows every task.",
   "defaultFramework": "react",
   "frameworks": {
     "react": {

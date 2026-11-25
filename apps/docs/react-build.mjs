@@ -87,7 +87,7 @@ const toggleGroupTypes = toggleGroupSource.slice(groupRootStart, groupRootEnd).t
 
 const buttonGroup = reactModel.patternCatalog.find((entry) => entry.id === 'button-group');
 if (!buttonGroup?.showcaseAvailable || !buttonGroup.guideOnly || buttonGroup.apiAvailable ||
-    buttonGroup.examples.length !== 4) throw new Error('Button Group requires a guide-only pattern with four real examples');
+    buttonGroup.examples.length !== 6) throw new Error('Button Group requires a guide-only pattern with six real examples');
 
 const togglePublicSourcePath = path.join(root,
   path.dirname(path.dirname(toggle.frameworkSourcePath)), 'index.ts');

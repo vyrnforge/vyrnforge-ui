@@ -1,6 +1,6 @@
 # ToggleGroup
 
-Use ToggleGroup for a named group of related pressed commands, such as formatting options or alternative view modes. The group coordinates selection; every item remains a native button with `aria-pressed`.
+Use ToggleGroup for a named group of related pressed commands, such as coordinated filters or alternative view modes. The group coordinates selection; every item remains a native button with `aria-pressed`.
 
 ## Exclusive selection
 
@@ -8,7 +8,7 @@ Use single selection when at most one command can be pressed. Pressing the selec
 
 ## Multiple selection
 
-Use multiple selection for independent choices within one named group, such as bold, italic, underline and strikethrough applied to the same cell or text range. Toggling an item changes only that item's membership in the selected values. Use recognizable icons for compact controls and visible text when the meaning depends on a label.
+Use multiple selection for independent choices within one named group, such as a shared array of team filters. Toggling an item changes only that item's membership in the selected values. Use recognizable icons for compact controls and visible text when the meaning depends on a label. For independent formatting commands that only need visual grouping, compose ToggleButtons using the Button Group pattern instead.
 
 ## Icon-only choices
 

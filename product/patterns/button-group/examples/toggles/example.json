@@ -1,0 +1,14 @@
+{
+  "id": "button-group/toggles",
+  "title": "Joined toggle buttons",
+  "description": "Independent text formatting commands share joined Button Group styling.",
+  "defaultFramework": "react",
+  "frameworks": {
+    "react": {
+      "label": "React",
+      "language": "tsx",
+      "source": "react.tsx"
+    }
+  },
+  "documentationSection": "Joined toggle buttons"
+}
