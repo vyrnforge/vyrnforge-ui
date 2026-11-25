@@ -55,10 +55,9 @@ function reactMotionGuide(guide) {
 function Source({ motion }) {
   const properties = Object.entries(motion).map(([role, value]) =>
     role + ': ' + JSON.stringify(value)).join(', ');
-  const snippet = "import { ThemeScope, Button, tokens } from '@vyrnforge/react';\n" +
+  const snippet = "import { ThemeScope, Button } from '@vyrnforge/react';\n" +
     "import '@vyrnforge/web/styles/button.css';\n\n" +
-    '// Reference a semantic motion token in React-authored styles when needed.\n' +
-    'const entranceDuration = tokens.motion.entranceDuration;\n\n' +
+    '// The scope overrides existing tokens.motion roles for its descendants.\n' +
     '<ThemeScope' + (properties ? ' motion={{ ' + properties + ' }}' : '') + '>\n' +
     '  <Button>Continue</Button>\n</ThemeScope>\n\n' +
     '// The library respects reduced motion; component state is independent of timing.';
@@ -84,7 +83,8 @@ function MotionEffectsPlayground({ theme, motion }) {
     h('label', { htmlFor: 'motion-effect-switch' }, 'Option'));
   const selectedDuration = entranceDuration === 'slow' ? 480 : entranceDuration === 'fast' ? 200 : undefined;
   const code = "import { Motion, Button } from '@vyrnforge/react';\n" +
-    "import '@vyrnforge/web/styles/foundation.css';\n\n" +
+    "import '@vyrnforge/web/styles/foundation.css';\n" +
+    "import '@vyrnforge/web/styles/button.css';\n\n" +
     '<Motion effect="' + effect + '"' +
     (['slide', 'fade-slide'].includes(effect) ? ' direction="' + origin + '"' : '') +
     (selectedDuration === undefined ? '' : ' duration={' + selectedDuration + '}') +
@@ -110,7 +110,7 @@ function MotionEffectsPlayground({ theme, motion }) {
     h(ThemeScope, { as: 'div', theme, dir: direction, motion,
       className: 'vf-docs-customization-preview', 'data-vf-docs-motion-demo-stage': '' },
       h(Flow, { align: 'center', justify: 'center', style: { minBlockSize: '9rem' } },
-      h(Motion, { key: [effect, origin, direction, target, entranceDuration, replay].join(':'),
+        h(Motion, { key: [effect, origin, direction, target, entranceDuration, replay].join(':'),
         effect, direction: origin, duration: selectedDuration,
         'data-vf-docs-motion-preview': '', 'data-vf-motion-sample': target },
         h(Flow, { gap: 'sm', align: 'center' },
