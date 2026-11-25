@@ -195,7 +195,7 @@ function normalizeOwner(root, component, framework) {
   const adaptation = frameworkContent(root, component, surface);
   const examples = frameworkExamples(root, component, framework);
   const patternGuide = component.kind === 'pattern' && !Object.keys(component.surfaces).length &&
-    component.documentationAvailable && framework.id === 'native-web';
+    component.documentationAvailable && (framework.id === 'native-web' || examples.length > 0);
   const cssOnlyGuide = !apiAvailable && Boolean(cssRecipeStyle && shared.content && examples.length);
   const guideOnly = patternGuide || cssOnlyGuide;
   if (!apiAvailable && !guideOnly) return null;

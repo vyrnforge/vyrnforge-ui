@@ -10,4 +10,4 @@ Pass `pressed` and `onPressedChange` for controlled state or `defaultPressed` fo
 
 ## Sizing and composition
 
-Use `size="sm|md|lg"` independently of inherited density. Compose Icon content with an authored label for icon-only toggles. ToggleButton has no group-level selection or roving focus; use the existing ToggleGroup, SegmentedControl or Toolbar where their behavior is needed.
+Use `size="sm|md|lg"` independently of inherited density. Compose public Icon content in `ToggleButton iconOnly` with an authored label for icon-only toggles. ToggleButton has no group-level selection or roving focus; use the existing ToggleGroup, SegmentedControl or Toolbar where their behavior is needed.

@@ -1,0 +1,19 @@
+{
+  "id": "button-group/horizontal",
+  "title": "Horizontal joined actions",
+  "description": "Adjacent commands share borders but remain individually focusable.",
+  "defaultFramework": "native-web",
+  "frameworks": {
+    "native-web": {
+      "label": "Native Web",
+      "language": "html",
+      "source": "native-web.html"
+    },
+    "react": {
+      "label": "React",
+      "language": "tsx",
+      "source": "react.tsx"
+    }
+  },
+  "documentationSection": "Horizontal joined actions"
+}
