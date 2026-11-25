@@ -1,0 +1,13 @@
+{
+  "id": "chip/playground",
+  "title": "Interactive playground",
+  "description": "Change the public Chip options using existing React controls.",
+  "defaultFramework": "react",
+  "frameworks": {
+    "react": {
+      "label": "React",
+      "language": "tsx",
+      "source": "react.tsx"
+    }
+  }
+}

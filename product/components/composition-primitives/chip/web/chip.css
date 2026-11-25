@@ -1,0 +1,174 @@
+@layer vyrnforge.reset, vyrnforge.tokens, vyrnforge.themes, vyrnforge.foundation, vyrnforge.components;
+@import "../../styles/tokens.css";
+@import "../toggle-button/toggle-button.css";
+
+@layer vyrnforge.components {
+  :where([data-vf-chip]) {
+    --_vf-chip-height: calc(var(--vf-control-height-sm) + var(--vf-space-xs));
+    --_vf-chip-font: var(--vf-font-size-sm);
+    --_vf-chip-bg: var(--vf-color-surface-pressed);
+    --_vf-chip-border: var(--vf-color-border);
+    --_vf-chip-fg: var(--vf-color-text);
+    --_vf-chip-selected-bg: var(--vf-color-accent-subtle);
+    --_vf-chip-selected-border: var(--vf-color-accent-background);
+    display: inline-flex;
+    align-items: stretch;
+    vertical-align: middle;
+    min-inline-size: 0;
+    max-inline-size: 100%;
+    min-block-size: var(--_vf-chip-height);
+    box-sizing: border-box;
+    border: 1px solid var(--_vf-chip-border);
+    border-radius: var(--_vf-chip-height);
+    background: var(--_vf-chip-bg);
+    color: var(--_vf-chip-fg);
+    font-family: var(--vf-control-font-family);
+    font-size: var(--_vf-chip-font);
+    font-weight: var(--vf-control-font-weight);
+    line-height: var(--vf-line-height-tight);
+    transition: background-color var(--vf-control-motion-duration) var(--vf-motion-easing-standard),
+      border-color var(--vf-control-motion-duration) var(--vf-motion-easing-standard);
+  }
+  :where([data-vf-chip][data-vf-chip-size="sm"]) {
+    --_vf-chip-height: var(--vf-control-height-sm);
+    --_vf-chip-font: var(--vf-font-size-xs);
+  }
+  :where([data-vf-chip][data-vf-chip-size="lg"]) {
+    --_vf-chip-height: var(--vf-control-height-md);
+    --_vf-chip-font: var(--vf-font-size-md);
+  }
+  :where([data-vf-chip][data-vf-chip-tone="accent"]) {
+    --_vf-chip-bg: var(--vf-color-accent-subtle);
+    --_vf-chip-border: var(--vf-color-accent-background);
+  }
+  :where([data-vf-chip][data-vf-chip-tone="danger"]) {
+    --_vf-chip-bg: var(--vf-color-danger-background);
+    --_vf-chip-border: var(--vf-color-danger-border);
+    --_vf-chip-selected-bg: var(--vf-color-danger-background);
+    --_vf-chip-selected-border: var(--vf-color-danger-border);
+  }
+  :where([data-vf-chip][data-vf-chip-variant="outlined"]) {
+    --_vf-chip-bg: transparent;
+    --_vf-chip-border: var(--vf-color-border-required);
+  }
+  :where([data-vf-chip][data-vf-chip-variant="outlined"][data-vf-chip-tone="accent"]) {
+    --_vf-chip-border: var(--vf-color-accent-background);
+  }
+  :where([data-vf-chip][data-vf-chip-variant="outlined"][data-vf-chip-tone="danger"]) {
+    --_vf-chip-border: var(--vf-color-danger-border);
+  }
+  :where([data-vf-chip]:has(> [aria-pressed="true"])) {
+    --_vf-chip-bg: var(--_vf-chip-selected-bg);
+    --_vf-chip-border: var(--_vf-chip-selected-border);
+  }
+  :where([data-vf-chip][data-vf-chip-disabled]) {
+    --_vf-chip-bg: var(--vf-color-disabled-background);
+    --_vf-chip-border: var(--vf-color-disabled-border);
+    --_vf-chip-fg: var(--vf-color-disabled-foreground);
+  }
+
+  /* The existing Button/ToggleButton controls keep their semantics and native
+     activation. This compound's visual treatment overrides only their geometry. */
+  :where([data-vf-chip]) > [data-vf-chip-primary],
+  :where([data-vf-chip]) > [data-vf-chip-remove] {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    box-sizing: border-box;
+    background: transparent;
+    border: 0;
+    color: inherit;
+    font: inherit;
+    min-block-size: calc(var(--_vf-chip-height) - 2px);
+    min-inline-size: 0;
+    padding-block: var(--vf-space-2xs);
+    padding-inline: var(--vf-space-sm);
+    border-radius: inherit;
+    gap: var(--vf-space-xs);
+  }
+  :where([data-vf-chip]) > [data-vf-chip-primary] {
+    flex: 1 1 auto;
+    text-align: start;
+    justify-content: flex-start;
+  }
+  :where([data-vf-chip]:has(> [data-vf-chip-remove])) > [data-vf-chip-primary] {
+    border-start-end-radius: 0;
+    border-end-end-radius: 0;
+    padding-inline-end: var(--vf-space-2xs);
+  }
+  :where([data-vf-chip]) > [data-vf-chip-remove] {
+    flex: none;
+    inline-size: var(--vf-control-height-sm);
+    min-inline-size: var(--vf-control-height-sm);
+    border-start-start-radius: 0;
+    border-end-start-radius: 0;
+    font-size: var(--vf-font-size-lg);
+    line-height: var(--vf-line-height-none);
+  }
+  :where([data-vf-chip]) > button:is([data-vf-chip-primary], [data-vf-chip-remove]):hover:not(:disabled) {
+    background: var(--vf-color-surface-hover);
+  }
+  :where([data-vf-chip]) > button:is([data-vf-chip-primary], [data-vf-chip-remove]):active:not(:disabled) {
+    background: var(--vf-color-surface-pressed);
+  }
+  :where([data-vf-chip]) > button:is([data-vf-chip-primary], [data-vf-chip-remove]):focus-visible {
+    outline: 2px solid var(--vf-color-focus-ring);
+    outline-offset: 2px;
+    position: relative;
+    z-index: 1;
+  }
+  :where([data-vf-chip]) > button:disabled { cursor: not-allowed; }
+  :where([data-vf-chip-label]) {
+    min-inline-size: 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+  :where([data-vf-chip][data-vf-chip-wrap] [data-vf-chip-label]) {
+    white-space: normal;
+    overflow-wrap: anywhere;
+  }
+  :where([data-vf-chip-leading], [data-vf-chip-trailing], [data-vf-chip-selection]) {
+    display: inline-flex;
+    flex: none;
+    align-items: center;
+    justify-content: center;
+  }
+  :where([data-vf-chip-selection]) { display: none; }
+  :where([aria-pressed="true"] > [data-vf-chip-selection]) {
+    display: inline-flex;
+    font-weight: var(--vf-font-weight-semibold);
+  }
+  :where([data-vf-chip-leading]) > [data-vf-avatar] {
+    inline-size: calc(var(--_vf-chip-height) - var(--vf-space-sm));
+    block-size: calc(var(--_vf-chip-height) - var(--vf-space-sm));
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    :where([data-vf-chip]) { transition: none; }
+  }
+  @media (forced-colors: active) {
+    :where([data-vf-chip]) {
+      background: Canvas;
+      color: CanvasText;
+      border-color: CanvasText;
+    }
+    :where([data-vf-chip]:has(> [aria-pressed="true"]):not([data-vf-chip-disabled])) {
+      background: Highlight;
+      color: HighlightText;
+      border-color: Highlight;
+    }
+    :where([data-vf-chip][data-vf-chip-disabled]) {
+      background: Canvas;
+      color: GrayText;
+      border-color: GrayText;
+    }
+    :where([data-vf-chip]) > button:is([data-vf-chip-primary], [data-vf-chip-remove]):is(:hover,:active):not(:disabled) {
+      background: ButtonFace;
+      color: ButtonText;
+    }
+    :where([data-vf-chip]) > button:is([data-vf-chip-primary], [data-vf-chip-remove]):focus-visible {
+      outline-color: Highlight;
+    }
+  }
+}

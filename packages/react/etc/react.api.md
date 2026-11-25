@@ -357,6 +357,52 @@ export interface CheckboxProps extends Omit<InputHTMLAttributes<HTMLInputElement
     indeterminate?: boolean;
 }
 
+// @public
+export const Chip: ForwardRefExoticComponent<ChipProps & RefAttributes<HTMLSpanElement>>;
+
+// @public
+export type ChipProps = Omit<ComponentPropsWithoutRef<'span'>, 'children' | 'onClick' | 'role' | 'tabIndex' | 'aria-pressed' | 'aria-disabled' | 'aria-label' | 'aria-hidden'> & {
+    children: string;
+    tone?: ChipTone;
+    size?: ChipSize;
+    variant?: ChipVariant;
+    leading?: ReactNode;
+    trailing?: ReactNode;
+    wrap?: boolean;
+    disabled?: boolean;
+    actionRef?: Ref<HTMLButtonElement>;
+    onClick?: (event: MouseEvent_2<HTMLButtonElement>) => void;
+} & ({
+    selectable: true;
+    selected?: boolean;
+    defaultSelected?: boolean;
+    onSelectedChange?: (selected: boolean, event: MouseEvent_2<HTMLButtonElement>) => void;
+} | {
+    selectable?: false;
+    selected?: never;
+    defaultSelected?: never;
+    onSelectedChange?: never;
+}) & ({
+    onRemove: (event: MouseEvent_2<HTMLButtonElement>) => void;
+    removeLabel: string;
+    removeIcon?: ReactNode;
+    removeRef?: Ref<HTMLButtonElement>;
+} | {
+    onRemove?: never;
+    removeLabel?: never;
+    removeIcon?: never;
+    removeRef?: never;
+});
+
+// @public (undocumented)
+export type ChipSize = 'sm' | 'md' | 'lg';
+
+// @public (undocumented)
+export type ChipTone = 'neutral' | 'accent' | 'danger';
+
+// @public (undocumented)
+export type ChipVariant = 'filled' | 'outlined';
+
 // @public (undocumented)
 export const Code: ForwardRefExoticComponent<CodeProps & RefAttributes<HTMLElement>>;
 

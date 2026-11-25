@@ -1,0 +1,13 @@
+{
+  "id": "chip/artwork",
+  "title": "Icons and avatars",
+  "description": "Compose the existing Icon and Avatar rather than duplicating identity or artwork.",
+  "defaultFramework": "react",
+  "frameworks": {
+    "react": {
+      "label": "React",
+      "language": "tsx",
+      "source": "react.tsx"
+    }
+  }
+}

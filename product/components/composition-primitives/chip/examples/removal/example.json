@@ -1,0 +1,13 @@
+{
+  "id": "chip/removal",
+  "title": "Removable collection",
+  "description": "TagGroup preserves focus when the focused removal action disappears. Selection remains independent.",
+  "defaultFramework": "react",
+  "frameworks": {
+    "react": {
+      "label": "React",
+      "language": "tsx",
+      "source": "react.tsx"
+    }
+  }
+}

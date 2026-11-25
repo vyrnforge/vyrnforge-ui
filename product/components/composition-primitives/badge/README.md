@@ -41,7 +41,7 @@ The Avatar example is **generic composition**, not an Avatar-specific Badge inte
 
 ## Breaking migration from Badge v1 (#1476)
 
-This is a deliberate rebuild breaking change: old `<Badge>Draft</Badge>` / `<Badge>12</Badge>` standalone pills are not anchored badges. Use VyrnForge `Text` for plain metadata, or design a separate **Chip** product later when independently scoped. Do **not** silently turn Badge into Chip.
+This is a deliberate rebuild breaking change: old `<Badge>Draft</Badge>` / `<Badge>12</Badge>` standalone pills are not anchored badges. Use VyrnForge `Text` for plain metadata, or use the separate **Chip** product for compact standalone labels. Do **not** silently turn Badge into Chip.
 
 - Old `<Badge>12</Badge>` → `<Badge badgeContent={12}><Button type="button" aria-label="Inbox, 12 unread messages">Inbox</Button></Badge>`
 - Old `<Badge appearance="dot" label="Online" />` → `<Badge variant="dot"><Avatar name="User, online" /></Badge>`

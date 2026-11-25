@@ -1,0 +1,65 @@
+{
+  "schemaVersion": 1,
+  "component": "chip",
+  "reviewStatus": "review-required",
+  "nativeBaseline": {
+    "kind": "native",
+    "reference": "readable text or native action/pressed button with independent sibling native removal button"
+  },
+  "wcag": {
+    "target": "2.2 AA",
+    "status": "review-required",
+    "criteria": [
+      "1.3.1",
+      "1.4.3",
+      "1.4.11",
+      "2.1.1",
+      "2.4.3",
+      "2.4.7",
+      "2.5.8",
+      "4.1.2"
+    ]
+  },
+  "aria": {
+    "status": "review-required",
+    "apgPattern": null
+  },
+  "interaction": {
+    "keyboard": "native",
+    "focus": "native; managed removal through TagGroup or consuming collection",
+    "directionality": "logical RTL-aware"
+  },
+  "ownership": {
+    "library": [
+      "Expose native buttons and persistent aria-pressed through ToggleButton; keep removal a sibling action",
+      "Preserve full text under truncation, decorative artwork, focus indicators and disabled controls"
+    ],
+    "consumer": [
+      "Provide localized visible label and item-specific removal label",
+      "Commit removal, own external selection and collection focus/announcements when not using TagGroup",
+      "Supply only noninteractive decorative slot content"
+    ]
+  },
+  "forms": {
+    "status": "not-applicable"
+  },
+  "visualAccessibility": {
+    "status": "component-specific"
+  },
+  "ssrHydration": {
+    "status": "contract-required"
+  },
+  "evidence": {
+    "browser": "required",
+    "assistiveTechnology": "review-required"
+  },
+  "profileVariability": [
+    "static, actionable, selectable and removable",
+    "filled/outlined, neutral/accent/danger, sm/md/lg",
+    "RTL, dark, forced colors, reduced motion and reflow"
+  ],
+  "notes": [
+    "No ChipGroup or implicit live region; TagGroup owns managed removal focus.",
+    "No framework support implied beyond implemented surfaces."
+  ]
+}

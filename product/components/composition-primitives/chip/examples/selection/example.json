@@ -1,0 +1,13 @@
+{
+  "id": "chip/selection",
+  "title": "Actions and selection",
+  "description": "Activate, toggle uncontrolled state, or own independent filter state in React.",
+  "defaultFramework": "react",
+  "frameworks": {
+    "react": {
+      "label": "React",
+      "language": "tsx",
+      "source": "react.tsx"
+    }
+  }
+}

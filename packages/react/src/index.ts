@@ -2,6 +2,8 @@ export { colors, tokens, toneStyle, ThemeScope } from './internal/theme.js';
 export { Motion } from './internal/motion.js';
 export type { MotionDirection, MotionEffect, MotionProps } from './internal/motion.js';
 export type { ColorRole, TextTone, ThemeColorOverrides, ThemeElement, ThemeMotionOverrides, ThemeName, ThemeScopeProps } from './internal/theme.js';
+export { Chip } from './components/chip/index.js';
+export type { ChipProps, ChipTone, ChipSize, ChipVariant } from './components/chip/index.js';
 export { Badge } from './components/badge/index.js';
 export type { BadgeProps, BadgeTone, BadgeSize, BadgeVariant, BadgeOverlap, BadgeAnchorOrigin } from './components/badge/index.js';
 export { List, ListItem } from './components/list/index.js';

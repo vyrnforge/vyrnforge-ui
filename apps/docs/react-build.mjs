@@ -273,6 +273,22 @@ if (badgeTypeStart < 0 || badgeTypeEnd < 0 ||
 }
 const publicBadgeTypes = badgePublicSource.slice(badgeTypeStart, badgeTypeEnd).trim();
 
+const chip = reactModel.componentCatalog.find((entry) => entry.id === 'chip');
+const chipExamples = chip?.examples.slice().sort((a, b) => a.id.localeCompare(b.id)) ?? [];
+if (!chip?.showcaseAvailable || !chip.apiAvailable || !chip.sharedContent ||
+    !chip.frameworkContent || chipExamples.length !== 6 ||
+    !chip.publicEntrypoints.includes('@vyrnforge/react/chip') ||
+    !webModel.packageManifest.exports?.['./styles/chip.css']) {
+  throw new Error('React Chip requires its public product graph, canonical styling and six examples');
+}
+const chipPublicSourcePath = path.join(root,
+  path.dirname(path.dirname(chip.frameworkSourcePath)), 'index.ts');
+const chipPublicSource = await readFile(chipPublicSourcePath, 'utf8');
+const chipTypeStart = chipPublicSource.indexOf('export type ChipTone');
+const chipTypeEnd = chipPublicSource.indexOf('/** Chip composes', chipTypeStart);
+if (chipTypeStart < 0 || chipTypeEnd < 0) throw new Error('Review Chip public types');
+const publicChipTypes = chipPublicSource.slice(chipTypeStart, chipTypeEnd).trim();
+
 // Avatar is a composition capability distinct from Image and AvatarFallback candidates.
 const avatar = reactModel.componentCatalog.find((entry) => entry.id === 'avatar');
 const avatarExamples = avatar?.examples.slice().sort((a, b) => a.id.localeCompare(b.id)) ?? [];
@@ -456,6 +472,11 @@ function linksFor(route) {
       guide: relative(dir, react + list.showcaseRoute, true),
       api: relative(dir, react + list.apiRoute, true),
       exampleBase: relative(dir, react + 'examples/list/', true),
+    },
+    chip: {
+      guide: relative(dir, react + chip.showcaseRoute, true),
+      api: relative(dir, react + chip.apiRoute, true),
+      exampleBase: relative(dir, react + 'examples/chip/', true),
     },
     badge: {
       guide: relative(dir, react + badge.showcaseRoute, true),
@@ -644,9 +665,9 @@ for (const example of listExamples) {
 }
 
 
-for (const example of badgeExamples) {
-  const slug = example.id.slice('badge/'.length);
-  const asset = 'react-badge-' + slug;
+for (const example of [...badgeExamples, ...chipExamples]) {
+  const [component, slug] = example.id.split('/');
+  const asset = 'react-' + component + '-' + slug;
   await build({
     entryPoints: [path.join(root, example.sourcePath)],
     bundle: true, platform: 'browser', format: 'iife', target: 'es2022',
@@ -656,7 +677,7 @@ for (const example of badgeExamples) {
   if (!(await stat(path.join(outRoot, 'assets', asset + '.css')).catch(() => null))?.isFile()) {
     throw new Error('React ' + example.id + ' must extract canonical browser CSS');
   }
-  const route = 'examples/badge/' + slug + '/';
+  const route = 'examples/' + component + '/' + slug + '/';
   const dir = directory(route);
   const styles = shellStyles.map((file) =>
     '<link rel="stylesheet" href="' + escapeHtml(relative(dir, file)) + '">').join('\n');
@@ -669,7 +690,6 @@ for (const example of badgeExamples) {
     '#root{min-width:0}</style></head><body><div id="root"></div><script src="' +
     escapeHtml(relative(dir, 'assets/' + asset + '.js')) + '"></script></body></html>');
 }
-
 
 for (const example of avatarExamples) {
   const slug = example.id.slice('avatar/'.length);
@@ -865,6 +885,8 @@ const pageViews = [
     description: 'Rich semantic lists, native markers and composed actions' },
   { route: list.apiRoute, view: 'list-api', title: 'React List API',
     description: 'Source-backed React List and ListItem public props' },
+  { route: chip.showcaseRoute, view: 'chip', title: 'React Chip', description: 'Compact labels, actions, filters and removal' },
+  { route: chip.apiRoute, view: 'chip-api', title: 'React Chip API', description: 'Source-backed React Chip props' },
   { route: badge.showcaseRoute, view: 'badge', title: 'React Badge',
     description: 'Noninteractive text, count and dot Badge examples' },
   { route: badge.apiRoute, view: 'badge-api', title: 'React Badge API',
@@ -940,6 +962,12 @@ const listData = {
   publicEntrypoints: list.publicEntrypoints,
   publicListTypes, examples: listExamples,
 };
+const chipData = {
+  id: chip.id, title: chip.title,
+  sharedContent: chip.sharedContent, frameworkContent: chip.frameworkContent,
+  standardReferences: chip.standardReferences, publicEntrypoints: chip.publicEntrypoints,
+  publicChipTypes, examples: chipExamples,
+};
 const badgeData = {
   id: badge.id, title: badge.title,
   sharedContent: badge.sharedContent, frameworkContent: badge.frameworkContent,
@@ -974,6 +1002,7 @@ for (const page of pageViews) {
     image: page.view === 'image' || page.view === 'image-api' ? imageData : null,
     avatar: page.view === 'avatar' || page.view === 'avatar-api' ? avatarData : null,
     list: page.view === 'list' || page.view === 'list-api' ? listData : null,
+    chip: page.view === 'chip' || page.view === 'chip-api' ? chipData : null,
     badge: page.view === 'badge' || page.view === 'badge-api' ? badgeData : null,
     divider: page.view === 'divider' || page.view === 'divider-api' ? dividerData : null,
     overlayGuide: page.view === 'overlay' ? overlayGuide : null,
@@ -1051,6 +1080,13 @@ await writeFile(path.join(reactRoot, 'site-manifest.json'), JSON.stringify({
     examples: listExamples.map((example) => ({
       id: example.id, sourcePath: example.sourcePath, title: example.title,
     })),
+  },
+  chip: {
+    guideRoute: chip.showcaseRoute, apiRoute: chip.apiRoute,
+    publicEntrypoints: chip.publicEntrypoints,
+    sharedSourcePath: chip.sharedSourcePath, frameworkSourcePath: chip.frameworkSourcePath,
+    publicSourcePath: path.relative(root, chipPublicSourcePath).replaceAll('\\', '/'),
+    examples: chipExamples.map((example) => ({ id: example.id, sourcePath: example.sourcePath, title: example.title })),
   },
   badge: {
     guideRoute: badge.showcaseRoute, apiRoute: badge.apiRoute,

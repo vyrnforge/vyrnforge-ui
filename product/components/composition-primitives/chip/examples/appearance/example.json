@@ -1,0 +1,13 @@
+{
+  "id": "chip/appearance",
+  "title": "Sizes, variants and tones",
+  "description": "Compare compact sizes and semantic filled/outlined combinations.",
+  "defaultFramework": "react",
+  "frameworks": {
+    "react": {
+      "label": "React",
+      "language": "tsx",
+      "source": "react.tsx"
+    }
+  }
+}

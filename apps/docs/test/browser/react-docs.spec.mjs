@@ -2793,3 +2793,40 @@ test('React selection guides render responsive light and dark previews and prese
   expect(await radio.locator('html').evaluate(el => el.scrollWidth - el.clientWidth)).toBeLessThanOrEqual(1);
   await page.screenshot({ path: testInfo.outputPath('selection-radio-group-mobile-dark.png') });
 });
+
+test('React Chip guide uses public components and supports independent selection/removal', async ({ page }) => {
+  await page.goto('/next/react/components/chip/');
+  const guide = page.locator('[data-vf-docs-react-chip]');
+  await expect(guide.getByRole('heading', { name: 'Chip', level: 1 })).toBeVisible();
+  await expect(guide.locator('section[aria-labelledby="react-chip-setup"] pre code')).toContainText("@vyrnforge/react/chip");
+  const selection = guide.locator('[data-vf-docs-react-chip-example="chip/selection"] iframe').contentFrame();
+  const filter = selection.getByRole('button', { name: 'Assigned to me' });
+  await expect(filter).toHaveAttribute('aria-pressed', 'false');
+  await filter.focus();
+  await page.keyboard.press('Space');
+  await expect(filter).toHaveAttribute('aria-pressed', 'true');
+  await expect(selection.getByRole('button', { name: 'Unavailable' })).toBeDisabled();
+  const removal = guide.locator('[data-vf-docs-react-chip-example="chip/removal"] iframe').contentFrame();
+  const remove = removal.getByRole('button', { name: 'Remove Design' });
+  await remove.focus();
+  await page.keyboard.press('Enter');
+  await expect(remove).toHaveCount(0);
+  await expect(removal.getByRole('button', { name: 'Remove Build' })).toBeFocused();
+  await expect(removal.getByRole('button', { name: 'Build', exact: true })).toHaveAttribute('aria-pressed', 'true');
+  await page.getByRole('navigation', { name: 'Documentation' }).getByRole('link', { name: 'Chip API', exact: true }).click();
+  await expect(page.locator('[data-vf-docs-react-api="chip"]')).toContainText('export type ChipProps');
+});
+
+test('React Chip responsive and forced-colors examples retain readable labels and independent targets', async ({ page }) => {
+  await page.setViewportSize({ width: 390, height: 844 });
+  await page.emulateMedia({ forcedColors: 'active', reducedMotion: 'reduce' });
+  await page.goto('/next/react/examples/chip/removal/');
+  const chip = page.locator('[data-vf-chip]').first();
+  const remove = page.getByRole('button', { name: 'Remove Design' });
+  await expect(remove).toBeVisible();
+  expect(await remove.evaluate(el => el.getBoundingClientRect().width)).toBeGreaterThanOrEqual(24);
+  await expect(chip).toHaveCSS('transition-duration', '0s');
+  await page.locator('html').evaluate(el => { el.dir = 'rtl'; el.dataset.vfTheme = 'dark'; });
+  expect(await page.locator('body').evaluate(el => el.scrollWidth)).toBeLessThanOrEqual(390);
+  await page.screenshot({ path: test.info().outputPath('chip-rtl-forced-colors.png'), fullPage: true });
+});
