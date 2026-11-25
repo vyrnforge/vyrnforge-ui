@@ -55,11 +55,12 @@
 
   @media (prefers-reduced-motion: no-preference) and (forced-colors: none) {
     :where([data-vf-accordion-panel]:not([hidden]):not([data-vf-motion])) {
-      animation: vf-motion-enter-reveal var(--vf-motion-duration-enter, 320ms) var(--vf-motion-easing-standard, cubic-bezier(0.2, 0, 0, 1));
+      animation: vf-motion-enter-reveal var(--vf-motion-duration-enter) var(--vf-motion-easing-standard);
     }
     :where([data-vf-accordion-trigger]) {
-      transition: background-color var(--vf-control-motion-duration, 120ms) var(--vf-motion-easing-standard, cubic-bezier(0.2, 0, 0, 1)),
-        color var(--vf-control-motion-duration, 120ms) var(--vf-motion-easing-standard, cubic-bezier(0.2, 0, 0, 1));
+      transition:
+        background-color var(--vf-control-motion-duration) var(--vf-motion-easing-standard),
+        color var(--vf-control-motion-duration) var(--vf-motion-easing-standard);
     }
   }
 }
