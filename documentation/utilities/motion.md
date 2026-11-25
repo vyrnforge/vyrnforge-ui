@@ -53,7 +53,11 @@ Native Web attributes are low-level styling hooks; framework-specific consumer g
 
 ## Consume and customize
 
-Use the default tokens first. Where a real application experience needs it, scope a semantic CSS variable to a region and allow its child components to inherit the override. This changes one shared timing value instead of rewriting Button, Switch, Input, or other component selectors.
+Use the default tokens first. Where a real application experience needs it, scope a semantic motion token to a region through the selected framework's public API and allow its child components to inherit the override. This changes one shared timing value instead of rewriting Button, Switch, Input, or other component selectors.
+
+The live playground changes these values for public VyrnForge Button and Switch examples. The preview's custom settings demonstrate consumer overrides, not alternate VyrnForge defaults. A consumer override must never re-enable non-essential motion for someone requesting reduced motion. Specific components may also disable transitions or animations directly in their canonical CSS.
+
+## Native Web customization
 
 ```css
 /* Application CSS: optional scoped customization, not a new library API. */
@@ -68,8 +72,6 @@ Use the default tokens first. Where a real application experience needs it, scop
   }
 }
 ```
-
-The live playground changes these values for public VyrnForge Button and Switch examples. The preview's custom settings demonstrate consumer overrides, not alternate VyrnForge defaults. A consumer override must never re-enable non-essential motion for someone requesting reduced motion. Specific components may also disable transitions or animations directly in their canonical CSS.
 
 ## Motion and interaction contracts
 

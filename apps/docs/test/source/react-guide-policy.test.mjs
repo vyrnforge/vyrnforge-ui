@@ -16,6 +16,7 @@ describe('React framework-locked consumer guidance', () => {
     const guide = { sections: [
       { heading: 'Reusable entrance effects', blocks: [] },
       { heading: 'Native Web usage', blocks: [] },
+      { heading: 'Native Web customization', blocks: [] },
       { heading: 'Accessibility', blocks: [] },
     ] };
     expect(reactConsumerSections(guide).map(({ heading }) => heading))

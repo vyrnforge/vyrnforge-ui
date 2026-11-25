@@ -139,6 +139,9 @@ export function toneStyle(tone?: ColorRole, style?: CSSProperties): CSSPropertie
 /** Optional scoped overrides of public semantic tokens, never reference/private tokens. */
 export type ThemeColorOverrides = Partial<Record<ColorRole, string>>;
 
+/** Scoped overrides of the existing public React motion token roles. */
+export type ThemeMotionOverrides = Partial<Record<keyof typeof tokens.motion, string>>;
+
 export type ThemeName = 'light' | 'dark' | 'system' | (string & {});
 
 export type ThemeElement = 'div' | 'span' | 'section' | 'article' | 'main' |
@@ -149,6 +152,7 @@ export interface ThemeScopeProps extends Omit<HTMLAttributes<HTMLElement>, 'colo
   as?: ThemeElement;
   theme?: ThemeName;
   colors?: ThemeColorOverrides;
+  motion?: ThemeMotionOverrides;
 }
 
 const makeElement = createElement as (host: ThemeElement, props: object) => ReactElement;
@@ -158,13 +162,19 @@ const makeElement = createElement as (host: ThemeElement, props: object) => Reac
  * CSS (including custom [data-vf-theme] rules) remains the source of truth.
  */
 export const ThemeScope = forwardRef<HTMLElement, ThemeScopeProps>(function ThemeScope(
-  { as = 'div', theme, colors: overrides, style, ...nativeProps },
+  { as = 'div', theme, colors: overrides, motion, style, ...nativeProps },
   ref
 ) {
   const resolvedStyle: CSSProperties = {};
   for (const [role, value] of Object.entries(overrides ?? {})) {
     if (value !== undefined) {
       (resolvedStyle as Record<string, string>)[semanticColorVariables[role as ColorRole]] = value;
+    }
+  }
+  for (const [role, value] of Object.entries(motion ?? {})) {
+    const token = tokens.motion[role as keyof typeof tokens.motion];
+    if (value !== undefined && Object.hasOwn(tokens.motion, role)) {
+      (resolvedStyle as Record<string, string>)[token.slice(4, -1)] = value;
     }
   }
   return makeElement(as, {

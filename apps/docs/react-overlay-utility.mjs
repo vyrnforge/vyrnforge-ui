@@ -3,7 +3,9 @@ import { Button } from '@vyrnforge/react/button';
 import { Text } from '@vyrnforge/react/text';
 import { Flow, AutoGrid } from '@vyrnforge/react/layout';
 import { NativeSelect } from '@vyrnforge/react/native-select';
-import { ThemeScope } from '@vyrnforge/react';
+import { ThemeScope, tokens } from '@vyrnforge/react';
+import { CodeBlock } from '@vyrnforge/react/code';
+import { Link } from '@vyrnforge/react/link';
 import { UtilitySections, renderUtilityInline } from './react-utility-content.mjs';
 import { reactConsumerSections } from './react-content-policy.mjs';
 import { PopoverRoot, PopoverTrigger, PopoverContent } from '@vyrnforge/react/popover';
@@ -31,7 +33,7 @@ const componentNames = [
 ];
 
 function Field({ id, label, value, onChange, options, disabled = false }) {
-  return h('div', { className: 'vf-docs-overlay-control' },
+  return h(Flow, { gap: 'xs' },
     h('label', { htmlFor: id }, label),
     h(NativeSelect, { id, value, disabled, onChange: (event) => onChange(event.target.value) },
       ...options.map(([key, title]) => h('option', { key, value: key }, title))));
@@ -39,9 +41,9 @@ function Field({ id, label, value, onChange, options, disabled = false }) {
 
 function Source({ kind, placement, theme, elevation, direction }) {
   const modal = kind === 'dialog' || kind === 'drawer';
-  const tokens = elevation === 'default' || modal ? '' :
-    " style={{ '--vf-shadow-popover': 'var(--vf-shadow-" +
-      (elevation === 'subtle' ? 'sm' : 'lg') + ")' }}";
+  const elevationStyle = elevation === 'default' || modal ? '' :
+    " style={{ '--vf-shadow-popover': tokens.shadow." +
+      (elevation === 'subtle' ? 'sm' : 'lg') + " }}";
   const names = {
     popover: 'PopoverRoot, PopoverTrigger, PopoverContent',
     tooltip: 'TooltipRoot, TooltipTrigger, TooltipContent',
@@ -76,7 +78,7 @@ function Source({ kind, placement, theme, elevation, direction }) {
       '</DrawerRoot>',
   };
   const source = (modal ? "import { useState } from 'react';\n" : '') +
-    "import { ThemeScope } from '@vyrnforge/react';\n" +
+    "import { ThemeScope" + (elevationStyle ? ', tokens' : '') + " } from '@vyrnforge/react';\n" +
     (kind === 'popover' ? '' : "import { Button } from '@vyrnforge/react/button';\n") +
     'import { ' + names[kind] + " } from '@vyrnforge/react/" + kind + "';\n" +
     "import '@vyrnforge/web/styles/" + kind + ".css';\n" +
@@ -84,13 +86,13 @@ function Source({ kind, placement, theme, elevation, direction }) {
     'export default function Example() {\n' +
     (modal ? '  const [open, setOpen] = useState(false);\n' : '') +
     '  return (\n' +
-    '    <ThemeScope theme="' + theme + '" dir="' + direction + '"' + tokens + '>\n' +
+    '    <ThemeScope theme="' + theme + '" dir="' + direction + '"' + elevationStyle + '>\n' +
     '      ' + example[kind].split('\n').join('\n      ') + '\n' +
     '    </ThemeScope>\n' +
     '  );\n}';
   return h('details', { className: 'vf-docs-source-disclosure' },
     h('summary', null, 'View public React usage'),
-    h('pre', { tabIndex: 0, 'data-vf-code-block': '' }, h('code', null, source)));
+    h(CodeBlock, { tabIndex: 0 }, source));
 }
 
 export function OverlayUtility({ guide, links }) {
@@ -103,8 +105,8 @@ export function OverlayUtility({ guide, links }) {
   const [drawerOpen, setDrawerOpen] = useState(false);
   const [feedback, setFeedback] = useState('');
   const anchored = ['popover', 'tooltip', 'preview-card'].includes(kind);
-  const shadow = elevation === 'subtle' ? 'var(--vf-shadow-sm)' :
-    elevation === 'strong' ? 'var(--vf-shadow-lg)' : undefined;
+  const shadow = elevation === 'subtle' ? tokens.shadow.sm :
+    elevation === 'strong' ? tokens.shadow.lg : undefined;
 
   let example;
   if (kind === 'popover') {
@@ -182,7 +184,7 @@ export function OverlayUtility({ guide, links }) {
             ? 'Use keyboard focus, hover, or click as appropriate; press Escape to dismiss.'
             : 'Open a native modal surface; press Escape or use its close button.'),
           example,
-          h('p', { role: 'status', 'aria-live': 'polite', 'data-vf-docs-overlay-status': '' }, feedback))),
+          h(Text, { as: 'p', variant: 'body-sm', tone: 'secondary', role: 'status', 'aria-live': 'polite', 'data-vf-docs-overlay-status': '' }, feedback))),
       h(Source, { kind, placement, theme, elevation, direction }),
       h(Text, { as: 'p', variant: 'body-sm' },
         'Trigger and close parts render their own native buttons. Their optional public Button styling hooks reuse VyrnForge’s shared Web presentation; do not nest a Button inside them. Modal backdrop, focus, and dismissal policies stay with the selected component.')),
@@ -193,7 +195,7 @@ export function OverlayUtility({ guide, links }) {
         'Each surface has its own public React API, but dedicated React API guide pages are not yet available. These links open the real React implementation sources rather than silently switching to Native Web.'),
       h(Flow, { as: 'ul', gap: 'xs' },
         ...componentNames.map(([id, label]) => h('li', { key: id },
-          h('a', { href: links.overlayComponentSource[id], 'data-vf-link': '' }, label + ' React source')))))),
+          h(Link, { href: links.overlayComponentSource[id] }, label + ' React source')))))),
   h('aside', { className: 'vf-docs-toc-region' },
     h('nav', { className: 'vf-docs-toc', 'aria-label': 'On this page' },
       h('p', null, 'On this page'),
