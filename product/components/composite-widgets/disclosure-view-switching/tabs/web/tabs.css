@@ -1,4 +1,5 @@
 @import '../../styles/tokens.css';
+@import '../../styles/motion.css';
 
 @layer vyrnforge.components {
   :where([data-vf-tabs-root]) {
@@ -113,6 +114,12 @@
     :where([data-vf-tabs-tab]:focus-visible),
     :where([data-vf-tabs-panel]:focus-visible) {
       outline-color: Highlight;
+    }
+  }
+
+  @media (prefers-reduced-motion: no-preference) and (forced-colors: none) {
+    :where([data-vf-tabs-panel]:not([hidden]):not([data-vf-motion])) {
+      animation: vf-motion-enter-reveal var(--vf-motion-duration-enter, 320ms) var(--vf-motion-easing-standard, cubic-bezier(0.2, 0, 0, 1));
     }
   }
 }

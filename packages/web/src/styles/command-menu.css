@@ -1,3 +1,5 @@
+@import './tokens.css';
+@import './motion.css';
 @layer vyrnforge.components {
   :where([data-vf-menu-content], [data-vf-context-menu-content], [data-vf-split-button-content]) {
     min-inline-size: 10rem;
@@ -109,6 +111,19 @@
 
     :where([data-vf-menu-item], [data-vf-context-menu-item]):focus-visible {
       outline-color: Highlight;
+    }
+  }
+
+  @media (prefers-reduced-motion: no-preference) and (forced-colors: none) {
+    :where([data-vf-menu-content]:popover-open:not([data-vf-motion]),
+      [data-vf-context-menu-content]:popover-open:not([data-vf-motion]),
+      [data-vf-split-button-content]:popover-open:not([data-vf-motion])) {
+      animation: vf-motion-enter-reveal var(--vf-motion-duration-enter, 320ms) var(--vf-motion-easing-standard, cubic-bezier(0.2, 0, 0, 1));
+    }
+    :where([data-vf-menu-item],
+      [data-vf-context-menu-item]) {
+      transition: background-color var(--vf-control-motion-duration, 120ms) var(--vf-motion-easing-standard, cubic-bezier(0.2, 0, 0, 1)),
+        color var(--vf-control-motion-duration, 120ms) var(--vf-motion-easing-standard, cubic-bezier(0.2, 0, 0, 1));
     }
   }
 }
