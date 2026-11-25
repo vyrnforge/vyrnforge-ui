@@ -4,6 +4,8 @@ import { SideNav, SideNavGroup, SideNavGroupLabel, SideNavList, SideNavItem, Sid
 import { Button } from '@vyrnforge/react/button';
 import { Flow, AutoGrid } from '@vyrnforge/react/layout';
 import { Text } from '@vyrnforge/react/text';
+import { Code, CodeBlock } from '@vyrnforge/react/code';
+import { Link } from '@vyrnforge/react/link';
 import { ThemeScope, colors, tokens } from '@vyrnforge/react';
 import { SearchFieldRoot, SearchFieldInput, SearchFieldClear } from '@vyrnforge/react/search-field';
 import { NativeSelect } from '@vyrnforge/react/native-select';
@@ -21,7 +23,7 @@ function renderInline(value) {
   // The compiler owns authored content; React renders its inline semantics without injecting HTML.
   return String(value).split(/(`[^`]+`|\*\*[^*]+\*\*)/g).filter(Boolean).map((token, index) => {
     if (token.startsWith('`') && token.endsWith('`'))
-      return h('code', { key: index, 'data-vf-code': '' }, token.slice(1, -1));
+      return h(Code, { key: index }, token.slice(1, -1));
     if (token.startsWith('**') && token.endsWith('**'))
       return h('strong', { key: index }, token.slice(2, -2));
     return token;
@@ -31,8 +33,7 @@ function renderBlocks(blocks = [], paragraphVariant = 'body-md') {
   return reactConsumerBlocks(blocks).map((block, i) => {
     if (block.type === 'list') return h('ul', { key: i },
       block.items.map((item, j) => h('li', { key: j }, ...renderInline(item))));
-    if (block.type === 'code') return h('pre', { key: i, 'data-vf-code-block': '', tabIndex: 0 },
-      h('code', null, block.text));
+    if (block.type === 'code') return h(CodeBlock, { key: i, tabIndex: 0 }, block.text);
     return h(Text, { as: 'p', variant: paragraphVariant, key: i }, ...renderInline(block.text));
   });
 }
@@ -47,7 +48,7 @@ function accessibilityEvidence(references, headingTag = 'h2') {
       className: 'vf-docs-standards-primary', 'aria-label': 'Standards' },
       ...references.standards.map((standard, i) => h('li', { key: i },
         standard.url
-          ? h('a', { href: standard.url, 'data-vf-link': '' }, standard.label)
+          ? h(Link, { href: standard.url }, standard.label)
           : h('span', null, standard.label)))),
     (criteria.length || hasBaselineNote)
       ? h('details', { className: 'vf-docs-standards-details' },
@@ -58,8 +59,8 @@ function accessibilityEvidence(references, headingTag = 'h2') {
              'aria-label': 'Mapped WCAG criteria' },
             ...criteria.map((criterion, i) =>
               h('li', { key: i }, criterion.url
-                ? h('a', { href: criterion.url, 'data-vf-link': '' },
-                    h('code', { 'data-vf-code': '' }, criterion.id), ' ', criterion.label)
+                ? h(Link, { href: criterion.url },
+                    h(Code, null, criterion.id), ' ', criterion.label)
                 : h('span', null, criterion.id)))) : null,
           hasBaselineNote ? h('p', { className: 'vf-docs-standards-baseline' },
             'Semantic baseline: ' + references.nativeBaseline) : null)
@@ -224,7 +225,7 @@ function layoutExample(example, links) {
       sandbox: 'allow-scripts', loading: 'lazy', style: { minBlockSize: '15rem' } }),
     h('details', { className: 'vf-docs-source-disclosure' },
       h('summary', null, 'View React TSX source'),
-      h('pre', { 'data-vf-code-block': '', tabIndex: 0 }, h('code', null, example.source))));
+      h(CodeBlock, { tabIndex: 0 }, example.source)));
 }
 function layoutGuide(layout, links) {
   if (!layout?.sharedContent || !layout?.frameworkContent || !layout.examples?.length) return null;
@@ -252,7 +253,7 @@ function layoutGuide(layout, links) {
       guidePart(sections[0], [
         ...guideBlocks(layout.frameworkContent, 'React installation and first use'),
         h('p', { key: 'shared-setup' }, 'For shared styling and server-rendering setup, see ',
-          h('a', { href: links.home, 'data-vf-link': '' }, 'React overview'), '.'),
+          h(Link, { href: links.home }, 'React overview'), '.'),
       ]),
       guidePart(sections[1], [
         ...examples.map((example) => layoutExample(example, links)),
@@ -276,8 +277,8 @@ function layoutGuide(layout, links) {
       ]),
       guidePart(sections[4], [
         h(Flow, { as: 'ul', gap: 'sm', key: 'related', className: 'vf-docs-related-links' },
-          h('li', null, h('a', { href: links.layoutApi, 'data-vf-link': '' }, 'View Flow and AutoGrid React API')),
-          h('li', null, h('a', { href: links.guide, 'data-vf-link': '' }, 'Button'))),
+          h('li', null, h(Link, { href: links.layoutApi }, 'View Flow and AutoGrid React API')),
+          h('li', null, h(Link, { href: links.guide }, 'Button'))),
       ])));
 }
 // Reusable framework-native usage gallery: all examples and source snippets come
@@ -304,8 +305,7 @@ function typographyExample(unit, example, links) {
     }),
     h('details', { className: 'vf-docs-source-disclosure' },
       h('summary', null, 'View React TSX source'),
-      h('pre', { 'data-vf-code-block': '', tabIndex: 0 },
-        h('code', null, example.source))));
+      h(CodeBlock, { tabIndex: 0 }, example.source)));
 }
 // These presentation slots select existing Product Graph Markdown sections; they
 // never copy component guidance into a docs-owned registry or change its owner.
@@ -385,7 +385,7 @@ function typographyUsageGuide(unit, links) {
       guidePart(sections[0], [
         ...guideBlocks(unit.frameworkContent, 'React setup'),
         h('p', { key: 'shared-setup' }, 'For shared styling and server-rendering setup, see ',
-          h('a', { href: links.home, 'data-vf-link': '' }, 'React overview'), '.'),
+          h(Link, { href: links.home }, 'React overview'), '.'),
       ]),
       guidePart(sections[1], [
         ...unit.examples.map((example) => typographyExample(unit, example, links)),
@@ -402,11 +402,11 @@ function typographyUsageGuide(unit, links) {
       ]),
       guidePart(sections[4], [
         h(Flow, { as: 'ul', gap: 'sm', key: 'related', className: 'vf-docs-related-links' },
-          h('li', null, h('a', { 'data-vf-link': '', href: links.typography[id].api },
+          h('li', null, h(Link, { href: links.typography[id].api },
             'View ' + unit.title + ' public React API')),
           ...['text', 'code', 'kbd'].filter((other) => other !== id).map((other) =>
             h('li', { key: other },
-              h('a', { 'data-vf-link': '', href: links.typography[other].guide },
+              h(Link, { href: links.typography[other].guide },
                 (other === 'kbd' ? 'Kbd' : other[0].toUpperCase() + other.slice(1)))))),
       ])));
 }
@@ -426,15 +426,14 @@ function typographyApi(unit, links) {
     h('section', { 'aria-labelledby': 'react-typography-api-entrypoints' },
       h('h2', { id: 'react-typography-api-entrypoints' }, 'Public entrypoint'),
       h('ul', null, ...unit.publicEntrypoints.map((entry) =>
-        h('li', { key: entry }, h('code', { 'data-vf-code': '' }, entry)))),
-      h('p', null, 'See ', h('a', { href: links.home, 'data-vf-link': '' }, 'React overview'),
+        h('li', { key: entry }, h(Code, null, entry)))),
+      h('p', null, 'See ', h(Link, { href: links.home }, 'React overview'),
         ' for shared stylesheet and server-rendering setup.')),
     h('section', { 'aria-labelledby': 'react-typography-api-types' },
       h('h2', { id: 'react-typography-api-types' }, 'Source-backed React types and exports'),
       h('p', null, 'The following source comes from the component-owned React public implementation.'),
-      h('pre', { 'data-vf-code-block': '', tabIndex: 0 },
-        h('code', null, unit.publicSource))),
-    h('a', { href: links.typography[unit.id].guide, 'data-vf-link': '' },
+      h(CodeBlock, { tabIndex: 0 }, unit.publicSource)),
+    h(Link, { href: links.typography[unit.id].guide },
       'View ' + unit.title + ' examples'));
 }
 function buttonExample(example, links) {
@@ -452,8 +451,7 @@ function buttonExample(example, links) {
       style: { minBlockSize: id === 'icons' ? '28rem' : id === 'density' ? '14rem' : '10rem' } }),
     h('details', { className: 'vf-docs-source-disclosure' },
       h('summary', null, id === 'basic' ? 'View checked-in React source' : 'View React TSX source'),
-      h('pre', { 'data-vf-code-block': '', tabIndex: 0 },
-        h('code', null, example.source))));
+      h(CodeBlock, { tabIndex: 0 }, example.source)));
 }
 function buttonUsageGuide(button, links) {
   if (!button?.sharedContent || !button?.frameworkContent) return null;
@@ -481,7 +479,7 @@ function buttonUsageGuide(button, links) {
       guidePart(sections[0], [
         ...guideBlocks(button.frameworkContent, 'React setup'),
         h('p', { key: 'shared-setup' }, 'For shared styling and server-rendering setup, see ',
-          h('a', { href: links.home, 'data-vf-link': '' }, 'React overview'), '.'),
+          h(Link, { href: links.home }, 'React overview'), '.'),
       ]),
       ...sections.slice(1, -2).map((section) => {
         const heading = section.sourceHeading;
@@ -504,11 +502,11 @@ function buttonUsageGuide(button, links) {
       ]),
       guidePart(sections.at(-1), [
         h(Flow, { as: 'ul', gap: 'sm', key: 'related', className: 'vf-docs-related-links' },
-          h('li', null, h('a', { 'data-vf-link': '', href: links.api },
+          h('li', null, h(Link, { href: links.api },
             'View Button public React API')),
-          h('li', null, h('a', { 'data-vf-link': '', href: links.layout }, 'Layout')),
-          h('li', null, h('a', { href: links.toggle.guide, 'data-vf-link': '' }, 'ToggleButton')),
-          h('li', null, h('a', { href: links.buttonGroup.guide, 'data-vf-link': '' }, 'Button Group'))),
+          h('li', null, h(Link, { href: links.layout }, 'Layout')),
+          h('li', null, h(Link, { href: links.toggle.guide }, 'ToggleButton')),
+          h('li', null, h(Link, { href: links.buttonGroup.guide }, 'Button Group'))),
       ])));
 }
 
@@ -533,11 +531,11 @@ function buttonGroupUsage(group, links) {
               style: { minBlockSize: example.id.endsWith('/vertical') ? '12rem' : '10rem' } }),
             h('details', { className: 'vf-docs-source-disclosure' },
               h('summary', null, 'View React TSX source'),
-              h('pre', { 'data-vf-code-block': '', tabIndex: 0 }, h('code', null, example.source))))),
+              h(CodeBlock, { tabIndex: 0 }, example.source)))),
       ])),
       guidePart(related, [
-        h('a', { href: links.guide, 'data-vf-link': '' }, 'Button'),
-        h('a', { href: links.toggle.guide, 'data-vf-link': '' }, 'ToggleButton'),
+        h(Link, { href: links.guide }, 'Button'),
+        h(Link, { href: links.toggle.guide }, 'ToggleButton'),
       ])));
 }
 
@@ -555,7 +553,7 @@ function toggleOwnedExample(example, links, group = false) {
       style: { minBlockSize: id === 'controlled' ? '12rem' : id === 'states' ? '10rem' : '8rem' } }),
     h('details', { className: 'vf-docs-source-disclosure' },
       h('summary', null, 'View React TSX source'),
-      h('pre', { 'data-vf-code-block': '', tabIndex: 0 }, h('code', null, example.source))));
+      h(CodeBlock, { tabIndex: 0 }, example.source)));
 }
 function toggleUsage(toggle, links, group = false) {
   if (!toggle?.sharedContent || !toggle?.frameworkContent || !toggle.examples?.length) return null;
@@ -590,10 +588,10 @@ function toggleUsage(toggle, links, group = false) {
           ...(accessibility ? [evidenceDisclosure(toggle.standardReferences)] : []),
           ...(related || (group && accessibility) ? [
             h(Flow, { as: 'ul', gap: 'sm', className: 'vf-docs-related-links' },
-              h('li', null, h('a', { href: routeLinks.api, 'data-vf-link': '' }, group ? 'ToggleGroup public React API' : 'ToggleButton public React API')),
-              h('li', null, h('a', { href: group ? links.toggle.guide : links.toggleGroup.guide, 'data-vf-link': '' }, group ? 'ToggleButton' : 'ToggleGroup')),
-              h('li', null, h('a', { href: links.guide, 'data-vf-link': '' }, 'Button')),
-              h('li', null, h('a', { href: links.buttonGroup.guide, 'data-vf-link': '' }, 'Button Group'))),
+              h('li', null, h(Link, { href: routeLinks.api }, group ? 'ToggleGroup public React API' : 'ToggleButton public React API')),
+              h('li', null, h(Link, { href: group ? links.toggle.guide : links.toggleGroup.guide }, group ? 'ToggleButton' : 'ToggleGroup')),
+              h('li', null, h(Link, { href: links.guide }, 'Button')),
+              h('li', null, h(Link, { href: links.buttonGroup.guide }, 'Button Group'))),
           ] : []),
         ], !group && heading === 'Native semantics and behavior' ? { 'data-vf-docs-react-toggle-topic': 'pressed' } : {});
       })));
@@ -605,11 +603,11 @@ function toggleGroupApi(group, links) {
       h('p', { className: 'vf-docs-lede' }, 'Named groups of native pressed buttons with single or multiple selection.'),
       accessibilityEvidence(group.standardReferences)),
     h('section', null, h('h2', null, 'Public entrypoint'),
-      h('ul', null, ...group.publicEntrypoints.map((name) => h('li', { key: name }, h('code', null, name)))),
-      h('p', null, 'Canonical styling: ', h('code', null, '@vyrnforge/web/styles/toggle-group.css'))),
+      h('ul', null, ...group.publicEntrypoints.map((name) => h('li', { key: name }, h(Code, null, name)))),
+      h('p', null, 'Canonical styling: ', h(Code, null, '@vyrnforge/web/styles/toggle-group.css'))),
     h('section', null, h('h2', null, 'Source-backed React props'),
-      h('pre', { 'data-vf-code-block': '', tabIndex: 0 }, h('code', null, group.publicTypes))),
-    h('a', { href: links.toggleGroup.guide, 'data-vf-link': '' }, 'View ToggleGroup guide'));
+      h(CodeBlock, { tabIndex: 0 }, group.publicTypes)),
+    h(Link, { href: links.toggleGroup.guide }, 'View ToggleGroup guide'));
 }
 function toggleApi(toggle, links) {
   if (!toggle?.publicToggleTypes || !toggle.publicEntrypoints?.length) return null;
@@ -622,14 +620,13 @@ function toggleApi(toggle, links) {
     h('section', { 'aria-labelledby': 'react-toggle-api-entry' },
       h('h2', { id: 'react-toggle-api-entry' }, 'Public entrypoint'),
       h('ul', null, ...toggle.publicEntrypoints.map(name => h('li', { key: name },
-        h('code', { 'data-vf-code': '' }, name)))),
+        h(Code, null, name)))),
       h('p', null, 'Canonical styling: ', h('code', null,
         '@vyrnforge/web/styles/toggle-button.css'))),
     h('section', { 'aria-labelledby': 'react-toggle-api-props' },
       h('h2', { id: 'react-toggle-api-props' }, 'Source-backed React props'),
-      h('pre', { 'data-vf-code-block': '', tabIndex: 0 },
-        h('code', null, toggle.publicToggleTypes))),
-    h('a', { href: links.toggle.guide, 'data-vf-link': '' }, 'View ToggleButton examples'));
+      h(CodeBlock, { tabIndex: 0 }, toggle.publicToggleTypes)),
+    h(Link, { href: links.toggle.guide }, 'View ToggleButton examples'));
 }
 
 function iconExample(example, links) {
@@ -645,7 +642,7 @@ function iconExample(example, links) {
       sandbox: 'allow-scripts', loading: slug === 'basic' ? 'eager' : 'lazy' }),
     h('details', { className: 'vf-docs-source-disclosure' },
       h('summary', null, 'View React TSX source'),
-      h('pre', { 'data-vf-code-block': '', tabIndex: 0 }, h('code', null, example.source))));
+      h(CodeBlock, { tabIndex: 0 }, example.source)));
 }
 function iconUsage(icon, links) {
   if (!icon?.sharedContent || !icon?.frameworkContent || !icon?.examples?.length) return null;
@@ -672,7 +669,7 @@ function iconUsage(icon, links) {
       guidePart(sections[0], [
         ...guideBlocks(icon.frameworkContent, 'React setup'),
         ...guideBlocks(icon.frameworkContent, 'Simple custom SVG'),
-        h('p', { key: 'setup' }, 'See ', h('a', { href: links.home, 'data-vf-link': '' },
+        h('p', { key: 'setup' }, 'See ', h(Link, { href: links.home },
           'React overview'), ' for shared CSS and server-rendering setup.'),
       ]),
       guidePart(sections[1], [
@@ -690,10 +687,10 @@ function iconUsage(icon, links) {
       ]),
       guidePart(sections[4], [
         h(Flow, { as: 'ul', gap: 'sm', className: 'vf-docs-related-links' },
-          h('li', null, h('a', { href: links.icon.api, 'data-vf-link': '' }, 'View Icon public React API')),
-          h('li', null, h('a', { href: links.icon.library, 'data-vf-link': '' }, 'Browse VyrnForge Icons')),
-          h('li', null, h('a', { href: links.guide, 'data-vf-link': '' }, 'Button')),
-          h('li', null, h('a', { href: links.typography.text.guide, 'data-vf-link': '' }, 'Text'))),
+          h('li', null, h(Link, { href: links.icon.api }, 'View Icon public React API')),
+          h('li', null, h(Link, { href: links.icon.library }, 'Browse VyrnForge Icons')),
+          h('li', null, h(Link, { href: links.guide }, 'Button')),
+          h('li', null, h(Link, { href: links.typography.text.guide }, 'Text'))),
       ])));
 }
 function iconLibrary(links) {
@@ -710,8 +707,8 @@ function iconLibrary(links) {
       h('h2', { id: 'react-icon-library-resources' }, 'Usage and public API'),
       h('p', null, 'Icons render artwork and do not handle clicks, focus or keyboard actions. Use the Icon usage guide for custom SVG definitions, standalone accessible labels, and icon-only controls.'),
       h('ul', null,
-        h('li', null, h('a', { href: links.icon.guide, 'data-vf-link': '' }, 'Icon usage guide')),
-        h('li', null, h('a', { href: links.icon.api, 'data-vf-link': '' }, 'Icon public React API')))));
+        h('li', null, h(Link, { href: links.icon.guide }, 'Icon usage guide')),
+        h('li', null, h(Link, { href: links.icon.api }, 'Icon public React API')))));
 }
 
 function iconApi(icon, links) {
@@ -724,15 +721,15 @@ function iconApi(icon, links) {
     h('section', { 'aria-labelledby': 'react-icon-api-entrypoints' },
       h('h2', { id: 'react-icon-api-entrypoints' }, 'Public entrypoint'),
       h('ul', null, ...icon.publicEntrypoints.map((entry) =>
-        h('li', { key: entry }, h('code', { 'data-vf-code': '' }, entry)))),
+        h('li', { key: entry }, h(Code, null, entry)))),
       h('p', null, 'Load the canonical Web stylesheet through your consuming application build.')),
     h('section', { 'aria-labelledby': 'react-icon-api-types' },
       h('h2', { id: 'react-icon-api-types' }, 'Source-backed React types and props'),
-      h('pre', { 'data-vf-code-block': '', tabIndex: 0 }, h('code', null, icon.publicIconTypes))),
+      h(CodeBlock, { tabIndex: 0 }, icon.publicIconTypes)),
     h('section', { 'aria-labelledby': 'react-icon-api-css' },
       h('h2', { id: 'react-icon-api-css' }, 'Shared CSS'),
-      h('code', { 'data-vf-code': '' }, '@vyrnforge/web/styles/icon.css')),
-    h('p', null, h('a', { href: links.icon.guide, 'data-vf-link': '' }, 'View Icon examples')));
+      h(Code, null, '@vyrnforge/web/styles/icon.css')),
+    h('p', null, h(Link, { href: links.icon.guide }, 'View Icon examples')));
 }
 function listExample(example, links) {
   const slug = example.id.slice('list/'.length);
@@ -750,8 +747,7 @@ function listExample(example, links) {
         slug === 'grouped' ? '19rem' : slug === 'nested' || slug === 'interactive' ? '18rem' : '14rem' } }),
     h('details', { className: 'vf-docs-source-disclosure' },
       h('summary', null, 'View React TSX source'),
-      h('pre', { 'data-vf-code-block': '', tabIndex: 0 },
-        h('code', null, example.source))));
+      h(CodeBlock, { tabIndex: 0 }, example.source)));
 }
 function listUsage(list, links) {
   if (!list?.sharedContent || !list?.frameworkContent || !list.examples?.length) return null;
@@ -789,7 +785,7 @@ function listUsage(list, links) {
         evidenceDisclosure(list.standardReferences),
       ]),
       guidePart(sections[4], [
-        h('a', { href: links.list.api, 'data-vf-link': '' },
+        h(Link, { href: links.list.api },
           'View List and ListItem public React API'),
       ])));
 }
@@ -804,14 +800,13 @@ function listApi(list, links) {
     h('section', { 'aria-labelledby': 'react-list-api-entrypoints' },
       h('h2', { id: 'react-list-api-entrypoints' }, 'Public entrypoint'),
       h('ul', null, ...list.publicEntrypoints.map(name =>
-        h('li', { key: name }, h('code', { 'data-vf-code': '' }, name)))),
+        h('li', { key: name }, h(Code, null, name)))),
       h('p', null, 'Shared styling: ', h('code', null,
         '@vyrnforge/web/styles/list.css'))),
     h('section', { 'aria-labelledby': 'react-list-api-types' },
       h('h2', { id: 'react-list-api-types' }, 'Source-backed React types and props'),
-      h('pre', { 'data-vf-code-block': '', tabIndex: 0 },
-        h('code', null, list.publicListTypes))),
-    h('p', null, h('a', { href: links.list.guide, 'data-vf-link': '' },
+      h(CodeBlock, { tabIndex: 0 }, list.publicListTypes)),
+    h('p', null, h(Link, { href: links.list.guide },
       'View List composition examples')));
 }
 
@@ -829,7 +824,7 @@ function badgeExample(example, links) {
       sandbox: 'allow-scripts', loading: slug === 'basic' ? 'eager' : 'lazy' }),
     h('details', { className: 'vf-docs-source-disclosure' },
       h('summary', null, 'View React TSX source'),
-      h('pre', { 'data-vf-code-block': '', tabIndex: 0 }, h('code', null, example.source))));
+      h(CodeBlock, { tabIndex: 0 }, example.source)));
 }
 function badgeUsage(badge, links) {
   if (!badge?.sharedContent || !badge?.frameworkContent || !badge.examples?.length) return null;
@@ -864,7 +859,7 @@ function badgeUsage(badge, links) {
         evidenceDisclosure(badge.standardReferences),
       ]),
       guidePart(sections[4], [
-        h('a', { href: links.badge.api, 'data-vf-link': '' }, 'View Badge public React API'),
+        h(Link, { href: links.badge.api }, 'View Badge public React API'),
       ])));
 }
 function badgeApi(badge, links) {
@@ -878,13 +873,12 @@ function badgeApi(badge, links) {
     h('section', { 'aria-labelledby': 'react-badge-api-entrypoints' },
       h('h2', { id: 'react-badge-api-entrypoints' }, 'Public entrypoint'),
       h('ul', null, ...badge.publicEntrypoints.map(name =>
-        h('li', { key: name }, h('code', { 'data-vf-code': '' }, name)))),
+        h('li', { key: name }, h(Code, null, name)))),
       h('p', null, 'Load shared styles from @vyrnforge/web/styles/badge.css.')),
     h('section', { 'aria-labelledby': 'react-badge-api-types' },
       h('h2', { id: 'react-badge-api-types' }, 'Source-backed React types and props'),
-      h('pre', { 'data-vf-code-block': '', tabIndex: 0 },
-        h('code', null, badge.publicBadgeTypes))),
-    h('p', null, h('a', { href: links.badge.guide, 'data-vf-link': '' },
+      h(CodeBlock, { tabIndex: 0 }, badge.publicBadgeTypes)),
+    h('p', null, h(Link, { href: links.badge.guide },
       'View Badge examples')));
 }
 function avatarExample(example, links) {
@@ -901,7 +895,7 @@ function avatarExample(example, links) {
       sandbox: 'allow-scripts', loading: slug === 'initials' ? 'eager' : 'lazy' }),
     h('details', { className: 'vf-docs-source-disclosure' },
       h('summary', null, 'View React TSX source'),
-      h('pre', { 'data-vf-code-block': '', tabIndex: 0 }, h('code', null, example.source))));
+      h(CodeBlock, { tabIndex: 0 }, example.source)));
 }
 function avatarUsage(avatar, links) {
   if (!avatar?.sharedContent || !avatar?.frameworkContent || !avatar?.examples?.length) return null;
@@ -925,7 +919,7 @@ function avatarUsage(avatar, links) {
       guideHeader(avatar.sharedContent, 'React · Media'),
       guidePart(sections[0], [
         ...guideBlocks(avatar.frameworkContent, 'React setup'),
-        h('p', { key: 'setup' }, 'See ', h('a', { href: links.home, 'data-vf-link': '' },
+        h('p', { key: 'setup' }, 'See ', h(Link, { href: links.home },
           'React overview'), ' for shared setup and stylesheet delivery.'),
       ]),
       guidePart(sections[1], [
@@ -946,10 +940,10 @@ function avatarUsage(avatar, links) {
       ]),
       guidePart(sections[4], [
         h(Flow, { as: 'ul', gap: 'sm', className: 'vf-docs-related-links' },
-          h('li', null, h('a', { href: links.avatar.api, 'data-vf-link': '' },
+          h('li', null, h(Link, { href: links.avatar.api },
             'View Avatar and AvatarGroup public React API')),
-          h('li', null, h('a', { href: links.icon.guide, 'data-vf-link': '' }, 'Icon')),
-          h('li', null, h('a', { href: links.typography.text.guide, 'data-vf-link': '' }, 'Text'))),
+          h('li', null, h(Link, { href: links.icon.guide }, 'Icon')),
+          h('li', null, h(Link, { href: links.typography.text.guide }, 'Text'))),
       ])));
 }
 function avatarApi(avatar, links) {
@@ -963,13 +957,12 @@ function avatarApi(avatar, links) {
     h('section', { 'aria-labelledby': 'react-avatar-api-entrypoints' },
       h('h2', { id: 'react-avatar-api-entrypoints' }, 'Public entrypoint'),
       h('ul', null, ...avatar.publicEntrypoints.map((entry) =>
-        h('li', { key: entry }, h('code', { 'data-vf-code': '' }, entry)))),
+        h('li', { key: entry }, h(Code, null, entry)))),
       h('p', null, 'Load shared Avatar styles from @vyrnforge/web/styles/avatar.css.')),
     h('section', { 'aria-labelledby': 'react-avatar-api-types' },
       h('h2', { id: 'react-avatar-api-types' }, 'Source-backed React types and props'),
-      h('pre', { 'data-vf-code-block': '', tabIndex: 0 },
-        h('code', null, avatar.publicAvatarTypes))),
-    h('p', null, h('a', { href: links.avatar.guide, 'data-vf-link': '' },
+      h(CodeBlock, { tabIndex: 0 }, avatar.publicAvatarTypes)),
+    h('p', null, h(Link, { href: links.avatar.guide },
       'View Avatar and AvatarGroup examples')));
 }
 function imageExample(example, links) {
@@ -985,7 +978,7 @@ function imageExample(example, links) {
       sandbox: 'allow-scripts', loading: slug === 'basic' ? 'eager' : 'lazy' }),
     h('details', { className: 'vf-docs-source-disclosure' },
       h('summary', null, 'View React TSX source'),
-      h('pre', { 'data-vf-code-block': '', tabIndex: 0 }, h('code', null, example.source))));
+      h(CodeBlock, { tabIndex: 0 }, example.source)));
 }
 function imageUsage(image, links) {
   if (!image?.sharedContent || !image?.frameworkContent || !image?.examples?.length) return null;
@@ -1009,7 +1002,7 @@ function imageUsage(image, links) {
       guideHeader(image.sharedContent, 'React · Media'),
       guidePart(sections[0], [
         ...guideBlocks(image.frameworkContent, 'React setup'),
-        h('p', { key: 'setup' }, 'See ', h('a', { href: links.home, 'data-vf-link': '' },
+        h('p', { key: 'setup' }, 'See ', h(Link, { href: links.home },
           'React overview'), ' for shared setup and stylesheet delivery.'),
       ]),
       guidePart(sections[1], [
@@ -1030,10 +1023,10 @@ function imageUsage(image, links) {
       ]),
       guidePart(sections[4], [
         h(Flow, { as: 'ul', gap: 'sm', className: 'vf-docs-related-links' },
-          h('li', null, h('a', { href: links.image.api, 'data-vf-link': '' },
+          h('li', null, h(Link, { href: links.image.api },
             'View Image public React API')),
-          h('li', null, h('a', { href: links.icon.guide, 'data-vf-link': '' }, 'Icon')),
-          h('li', null, h('a', { href: links.typography.text.guide, 'data-vf-link': '' }, 'Text'))),
+          h('li', null, h(Link, { href: links.icon.guide }, 'Icon')),
+          h('li', null, h(Link, { href: links.typography.text.guide }, 'Text'))),
       ])));
 }
 function imageApi(image, links) {
@@ -1047,16 +1040,15 @@ function imageApi(image, links) {
     h('section', { 'aria-labelledby': 'react-image-api-entrypoints' },
       h('h2', { id: 'react-image-api-entrypoints' }, 'Public entrypoint'),
       h('ul', null, ...image.publicEntrypoints.map((entry) =>
-        h('li', { key: entry }, h('code', { 'data-vf-code': '' }, entry)))),
+        h('li', { key: entry }, h(Code, null, entry)))),
       h('p', null, 'Import the component and deliver canonical Web CSS through your app.')),
     h('section', { 'aria-labelledby': 'react-image-api-types' },
       h('h2', { id: 'react-image-api-types' }, 'Source-backed React types and props'),
-      h('pre', { 'data-vf-code-block': '', tabIndex: 0 },
-        h('code', null, image.publicImageTypes))),
+      h(CodeBlock, { tabIndex: 0 }, image.publicImageTypes)),
     h('section', { 'aria-labelledby': 'react-image-api-css' },
       h('h2', { id: 'react-image-api-css' }, 'Shared CSS'),
-      h('code', { 'data-vf-code': '' }, '@vyrnforge/web/styles/image.css')),
-    h('p', null, h('a', { href: links.image.guide, 'data-vf-link': '' },
+      h(Code, null, '@vyrnforge/web/styles/image.css')),
+    h('p', null, h(Link, { href: links.image.guide },
       'View Image examples')));
 }
 // A dedicated visual-line guide, sourced from the Divider product unit.
@@ -1073,7 +1065,7 @@ function dividerExample(example, links) {
       sandbox: 'allow-scripts', loading: slug === 'basic' ? 'eager' : 'lazy' }),
     h('details', { className: 'vf-docs-source-disclosure' },
       h('summary', null, 'View React TSX source'),
-      h('pre', { 'data-vf-code-block': '', tabIndex: 0 }, h('code', null, example.source))));
+      h(CodeBlock, { tabIndex: 0 }, example.source)));
 }
 function dividerUsage(divider, links) {
   if (!divider?.sharedContent || !divider?.frameworkContent || !divider?.examples?.length) return null;
@@ -1098,7 +1090,7 @@ function dividerUsage(divider, links) {
       guidePart(sections[0], [
         ...guideBlocks(divider.frameworkContent, 'React setup'),
         h('p', { key: 'setup' }, 'For shared styles and server rendering, see ',
-          h('a', { href: links.home, 'data-vf-link': '' }, 'React overview'), '.'),
+          h(Link, { href: links.home }, 'React overview'), '.'),
       ]),
       guidePart(sections[1], [
         ...examples.map((example) => dividerExample(example, links)),
@@ -1118,9 +1110,9 @@ function dividerUsage(divider, links) {
       ]),
       guidePart(sections[4], [
         h(Flow, { as: 'ul', gap: 'sm', className: 'vf-docs-related-links' },
-          h('li', null, h('a', { href: links.divider.api, 'data-vf-link': '' },
+          h('li', null, h(Link, { href: links.divider.api },
             'View Divider public React API')),
-          h('li', null, h('a', { href: links.layout, 'data-vf-link': '' }, 'Layout')),
+          h('li', null, h(Link, { href: links.layout }, 'Layout')),
         ),
       ])));
 }
@@ -1135,24 +1127,23 @@ function dividerApi(divider, links) {
     h('section', { 'aria-labelledby': 'react-divider-api-exports' },
       h('h2', { id: 'react-divider-api-exports' }, 'Public entrypoint'),
       h('ul', null, ...divider.publicEntrypoints.map((entry) =>
-        h('li', { key: entry }, h('code', { 'data-vf-code': '' }, entry)))),
+        h('li', { key: entry }, h(Code, null, entry)))),
     ),
     h('section', { 'aria-labelledby': 'react-divider-api-types' },
       h('h2', { id: 'react-divider-api-types' }, 'Source-backed React props'),
-      h('pre', { 'data-vf-code-block': '', tabIndex: 0 },
-        h('code', null, divider.publicDividerTypes))),
+      h(CodeBlock, { tabIndex: 0 }, divider.publicDividerTypes)),
     h('section', { 'aria-labelledby': 'react-divider-api-css' },
       h('h2', { id: 'react-divider-api-css' }, 'Shared CSS and hooks'),
-      h('code', { 'data-vf-code': '' }, '@vyrnforge/web/styles/divider.css'),
+      h(Code, null, '@vyrnforge/web/styles/divider.css'),
       ...guideBlocks(divider.sharedContent, 'Horizontal and vertical'),
       ...guideBlocks(divider.sharedContent, 'Text and alignment'),
       ...guideBlocks(divider.sharedContent, 'Vertical label direction')),
-    h('p', null, h('a', { href: links.divider.guide, 'data-vf-link': '' },
+    h('p', null, h(Link, { href: links.divider.guide },
       'View Divider examples')));
 }
 
 function foundationCode(value) {
-  return h('pre', { 'data-vf-code-block': '', tabIndex: 0 }, h('code', null, value));
+  return h(CodeBlock, { tabIndex: 0 }, value);
 }
 function tokensGuide(links) {
   const sample = "import { colors, tokens, Text, Flow } from '@vyrnforge/react';\n\n" +
@@ -1185,8 +1176,8 @@ function tokensGuide(links) {
         'Reference/primitive values and private --_vf-* component implementation variables are not public customization contracts. Breakpoints are static build-time inputs, not runtime CSS custom properties.')),
     h(Flow, { as: 'section', gap: 'sm', 'aria-labelledby': 'react-foundation-token-next' },
       h(Text, { as: 'h2', variant: 'heading-md', id: 'react-foundation-token-next' }, 'Continue'),
-      h(Text, { as: 'p' }, h('a', { href: links.themes, 'data-vf-link': '' }, 'Apply colors and themes')),
-      h(Text, { as: 'p' }, h('a', { href: links.styling, 'data-vf-link': '' }, 'Load and customize CSS'))));
+      h(Text, { as: 'p' }, h(Link, { href: links.themes }, 'Apply colors and themes')),
+      h(Text, { as: 'p' }, h(Link, { href: links.styling }, 'Load and customize CSS'))));
 }
 function stylingGuide(links) {
   return h(Flow, { as: 'article', gap: '2xl', className: 'vf-docs-article',
@@ -1216,8 +1207,8 @@ function stylingGuide(links) {
         'Avoid internal --_vf-* variables, deeply nested DOM selectors or per-component hardcoded appearance maps. Custom brand colors must preserve contrast, focus visibility, disabled states, forced colors and reduced-motion behavior.')),
     h(Flow, { as: 'section', gap: 'sm', 'aria-labelledby': 'react-foundation-style-next' },
       h(Text, { as: 'h2', variant: 'heading-md', id: 'react-foundation-style-next' }, 'Related foundations'),
-      h(Text, { as: 'p' }, h('a', { href: links.tokens, 'data-vf-link': '' }, 'Design token roles and references')),
-      h(Text, { as: 'p' }, h('a', { href: links.themes, 'data-vf-link': '' }, 'Light, dark and custom themes'))));
+      h(Text, { as: 'p' }, h(Link, { href: links.tokens }, 'Design token roles and references')),
+      h(Text, { as: 'p' }, h(Link, { href: links.themes }, 'Light, dark and custom themes'))));
 }
 function themesGuide(links) {
   const accentExample = "import { ThemeScope, Text, Flow, Button, tokens } from '@vyrnforge/react';\n\n" +
@@ -1296,12 +1287,12 @@ function themesGuide(links) {
       h(Text, { as: 'p' }, 'Custom themes must set color-scheme correctly and be checked for contrast, focus and forced-colors behavior. system is a built-in opt-in appearance using prefers-color-scheme.')),
     h(Flow, { as: 'section', gap: 'sm', 'aria-labelledby': 'react-theme-links' },
       h(Text, { as: 'h2', variant: 'heading-md', id: 'react-theme-links' }, 'Related foundations'),
-      h(Text, { as: 'p' }, h('a', { href: links.tokens, 'data-vf-link': '' }, 'Explore design tokens')),
-      h(Text, { as: 'p' }, h('a', { href: links.styling, 'data-vf-link': '' }, 'Learn CSS loading and customization')),
-      h(Text, { as: 'p' }, h('a', { href: links.color, 'data-vf-link': '' }, 'Explore palette colors')),
-      h(Text, { as: 'p' }, h('a', { href: links.builder, 'data-vf-link': '' }, 'Build a custom theme')),
-      h(Text, { as: 'p' }, h('a', { href: links.darkMode, 'data-vf-link': '' }, 'Configure dark mode')),
-      h(Text, { as: 'p' }, h('a', { href: links.rtl, 'data-vf-link': '' }, 'Use right-to-left content'))));
+      h(Text, { as: 'p' }, h(Link, { href: links.tokens }, 'Explore design tokens')),
+      h(Text, { as: 'p' }, h(Link, { href: links.styling }, 'Learn CSS loading and customization')),
+      h(Text, { as: 'p' }, h(Link, { href: links.color }, 'Explore palette colors')),
+      h(Text, { as: 'p' }, h(Link, { href: links.builder }, 'Build a custom theme')),
+      h(Text, { as: 'p' }, h(Link, { href: links.darkMode }, 'Configure dark mode')),
+      h(Text, { as: 'p' }, h(Link, { href: links.rtl }, 'Use right-to-left content'))));
 }
 
 function body(view, links, button, toggle, buttonGroup, toggleGroup, layout, typography, icon, image, avatar, divider, badge, list, overlayGuide, motionGuide, requestedTopic) {
@@ -1312,9 +1303,9 @@ function body(view, links, button, toggle, buttonGroup, toggleGroup, layout, typ
         h('p', { className: 'vf-docs-lede' },
           'The React documentation view for ', h('strong', null, requestedTopic ?? 'this topic'),
           ' is not part of the currently documented React routes. This does not claim the React package lacks that capability.')),
-      h('p', null, h('a', { href: links.native, 'data-vf-link': '' }, 'Return to Native Web topic')),
-      h('p', null, h('a', { href: links.guide, 'data-vf-link': '' }, 'Browse React Button')),
-      h('p', null, h('a', { href: links.layout, 'data-vf-link': '' }, 'Browse React Layout')));
+      h('p', null, h(Link, { href: links.native }, 'Return to Native Web topic')),
+      h('p', null, h(Link, { href: links.guide }, 'Browse React Button')),
+      h('p', null, h(Link, { href: links.layout }, 'Browse React Layout')));
   }
   if (view === 'tokens') return tokensGuide(links);
   if (view === 'color') return h(ColorGuide, { links });
@@ -1333,59 +1324,55 @@ function body(view, links, button, toggle, buttonGroup, toggleGroup, layout, typ
           'Runnable React examples for Button, ToggleButton, Layout, List, Divider, Text, Code, Kbd, Icon, Image and Avatar. All use the shared VyrnForge Web design foundation.')),
       h('section', null, h('h2', null, 'Getting started'),
         h('p', null, 'Import React components from their public entrypoints. Supported CSS-aware browser builds automatically include canonical Web component styles; server-rendered apps must also deliver extracted client CSS.'),
-        h('pre', { 'data-vf-code-block': '', tabIndex: 0 },
-          h('code', null, "import { Button } from '@vyrnforge/react/button';")),
+        h(CodeBlock, { tabIndex: 0 }, "import { Button } from '@vyrnforge/react/button';"),
         h('p', null, 'Use the public React components with meaningful native HTML elements.')),
       h('section', null, h('h2', null, 'Styling, SSR and hydration'),
         h('p', null, 'React components share the canonical Web tokens and styles; they do not have a separate React theme. CSS-aware browser builds that resolve supported browser entrypoints can extract component CSS. The consuming app must ensure those styles reach the client HTML.'),
         h('p', null, 'If your build does not extract component styles, load the public Web aggregate once at app startup:'),
-        h('pre', { 'data-vf-code-block': '', tabIndex: 0 },
-          h('code', null, "import '@vyrnforge/web/styles.css';")),
+        h(CodeBlock, { tabIndex: 0 }, "import '@vyrnforge/web/styles.css';"),
         h('p', null, 'Node/SSR imports do not install client styles. Deliver the extracted or explicitly imported CSS alongside the server-rendered HTML before hydration. The optional Web reset is not loaded automatically.')),
       h('section', null, h('h2', null, 'Semantic colors and themes'),
         h(Text, { as: 'p' },
           'Use public theme-aware color roles instead of repeating CSS variable names. ThemeScope is an optional native DOM scope, not a provider.'),
-        h('pre', { 'data-vf-code-block': '', tabIndex: 0 }, h('code', null,
+        h(CodeBlock, { tabIndex: 0 },
           'import { ThemeScope, Text } from \'@vyrnforge/react\';\n\n' +
           '<ThemeScope theme="dark">\n' +
           '  <Text as="p" tone="primary">Accent</Text>\n' +
           '  <Text as="p" tone="secondary">Muted</Text>\n' +
           '  <Text as="p" tone="danger">Danger</Text>\n' +
-          '</ThemeScope>')),
-        h(Text, { as: 'p' }, h('a', { href: links.tokens, 'data-vf-link': '' }, 'Browse design tokens')),
-        h(Text, { as: 'p' }, h('a', { href: links.themes, 'data-vf-link': '' }, 'Explore theming')),
-        h(Text, { as: 'p' }, h('a', { href: links.color, 'data-vf-link': '' }, 'Try the color playground')),
-        h(Text, { as: 'p' }, h('a', { href: links.darkMode, 'data-vf-link': '' }, 'Preview light, dark and system')),
-        h(Text, { as: 'p' }, h('a', { href: links.rtl, 'data-vf-link': '' }, 'Preview right-to-left layout')),
-        h(Text, { as: 'p' }, h('a', { href: links.styling, 'data-vf-link': '' }, 'Learn styling and CSS'))),
+          '</ThemeScope>'),
+        h(Text, { as: 'p' }, h(Link, { href: links.tokens }, 'Browse design tokens')),
+        h(Text, { as: 'p' }, h(Link, { href: links.themes }, 'Explore theming')),
+        h(Text, { as: 'p' }, h(Link, { href: links.color }, 'Try the color playground')),
+        h(Text, { as: 'p' }, h(Link, { href: links.darkMode }, 'Preview light, dark and system')),
+        h(Text, { as: 'p' }, h(Link, { href: links.rtl }, 'Preview right-to-left layout')),
+        h(Text, { as: 'p' }, h(Link, { href: links.styling }, 'Learn styling and CSS'))),
       h('section', null, h('h2', null, 'React state and native semantics'),
         h('p', null, 'React owns component state, event handlers, refs, effects and hydration. VyrnForge components preserve native HTML semantics and shared interaction contracts; consuming applications own data, actions, async feedback and routing. Avoid adding custom keyboard handlers for behavior native elements already provide.')),
       h('section', null, h('h2', null, 'Components and APIs'),
         h('ul', null,
-          h('li', null, h('a', { 'data-vf-link': '', href: links.guide }, 'React Button')),
-          h('li', null, h('a', { 'data-vf-link': '', href: links.api }, 'React Button API')),
-          h('li', null, h('a', { 'data-vf-link': '', href: links.toggle.guide }, 'React ToggleButton')),
-          h('li', null, h('a', { 'data-vf-link': '', href: links.toggle.api }, 'React ToggleButton API')),
-          h('li', null, h('a', { 'data-vf-link': '', href: links.layout }, 'React Layout')),
-          h('li', null, h('a', { 'data-vf-link': '', href: links.layoutApi }, 'React Layout API')),
-          h('li', null, h('a', { 'data-vf-link': '', href: links.divider.guide }, 'React Divider')),
-          h('li', null, h('a', { 'data-vf-link': '', href: links.divider.api }, 'React Divider API')),
-          h('li', null, h('a', { 'data-vf-link': '', href: links.list.guide }, 'React List')),
-          h('li', null, h('a', { 'data-vf-link': '', href: links.list.api }, 'React List API')),
-          h('li', null, h('a', { 'data-vf-link': '', href: links.icon.guide }, 'React Icon')),
-          h('li', null, h('a', { 'data-vf-link': '', href: links.icon.library }, 'VyrnForge Icons library')),
-          h('li', null, h('a', { 'data-vf-link': '', href: links.icon.api }, 'React Icon API')),
-          h('li', null, h('a', { 'data-vf-link': '', href: links.image.guide }, 'React Image')),
-          h('li', null, h('a', { 'data-vf-link': '', href: links.image.api }, 'React Image API')),
-          h('li', null, h('a', { 'data-vf-link': '', href: links.badge.guide }, 'React Badge')),
-          h('li', null, h('a', { 'data-vf-link': '', href: links.badge.api }, 'React Badge API')),
-          h('li', null, h('a', { 'data-vf-link': '', href: links.avatar.guide }, 'React Avatar')),
-          h('li', null, h('a', { 'data-vf-link': '', href: links.avatar.api }, 'React Avatar API')),
+          h('li', null, h(Link, { href: links.guide }, 'React Button')),
+          h('li', null, h(Link, { href: links.api }, 'React Button API')),
+          h('li', null, h(Link, { href: links.toggle.guide }, 'React ToggleButton')),
+          h('li', null, h(Link, { href: links.toggle.api }, 'React ToggleButton API')),
+          h('li', null, h(Link, { href: links.layout }, 'React Layout')),
+          h('li', null, h(Link, { href: links.layoutApi }, 'React Layout API')),
+          h('li', null, h(Link, { href: links.divider.guide }, 'React Divider')),
+          h('li', null, h(Link, { href: links.divider.api }, 'React Divider API')),
+          h('li', null, h(Link, { href: links.list.guide }, 'React List')),
+          h('li', null, h(Link, { href: links.list.api }, 'React List API')),
+          h('li', null, h(Link, { href: links.icon.guide }, 'React Icon')),
+          h('li', null, h(Link, { href: links.icon.library }, 'VyrnForge Icons library')),
+          h('li', null, h(Link, { href: links.icon.api }, 'React Icon API')),
+          h('li', null, h(Link, { href: links.image.guide }, 'React Image')),
+          h('li', null, h(Link, { href: links.image.api }, 'React Image API')),
+          h('li', null, h(Link, { href: links.badge.guide }, 'React Badge')),
+          h('li', null, h(Link, { href: links.badge.api }, 'React Badge API')),
+          h('li', null, h(Link, { href: links.avatar.guide }, 'React Avatar')),
+          h('li', null, h(Link, { href: links.avatar.api }, 'React Avatar API')),
           ...['text', 'code', 'kbd'].flatMap((id) => [
-            h('li', { key: id + '-guide' }, h('a', { 'data-vf-link': '',
-              href: links.typography[id].guide }, 'React ' + (id === 'kbd' ? 'Kbd' : id[0].toUpperCase() + id.slice(1)))),
-            h('li', { key: id + '-api' }, h('a', { 'data-vf-link': '',
-              href: links.typography[id].api }, 'React ' + id + ' API')),
+            h('li', { key: id + '-guide' }, h(Link, { href: links.typography[id].guide }, 'React ' + (id === 'kbd' ? 'Kbd' : id[0].toUpperCase() + id.slice(1)))),
+            h('li', { key: id + '-api' }, h(Link, { href: links.typography[id].api }, 'React ' + id + ' API')),
           ]))));
   }
   if (view === 'button-group') return buttonGroupUsage(buttonGroup, links);
@@ -1419,17 +1406,17 @@ function body(view, links, button, toggle, buttonGroup, toggleGroup, layout, typ
       h('section', { 'aria-labelledby': 'react-layout-api-exports' },
         h('h2', { id: 'react-layout-api-exports' }, 'Public entrypoint and CSS'),
         h('ul', null,
-          ...layout.publicEntrypoints.map((name) => h('li', { key: name }, h('code', { 'data-vf-code': '' }, name))),
-          h('li', null, h('code', { 'data-vf-code': '' }, layout.cssRecipeStyle)))),
+          ...layout.publicEntrypoints.map((name) => h('li', { key: name }, h(Code, null, name))),
+          h('li', null, h(Code, null, layout.cssRecipeStyle)))),
       h('section', { 'aria-labelledby': 'react-layout-api-types' },
         h('h2', { id: 'react-layout-api-types' }, 'Public TypeScript props'),
         h('p', null, 'These declarations are derived from the checked-in React Layout implementation. ',
           'Flow and AutoGrid accept as for native semantic HTML, ordinary attributes and host refs.'),
-        h('pre', { 'data-vf-code-block': '', tabIndex: 0 }, h('code', null, layout.publicLayoutTypes))),
+        h(CodeBlock, { tabIndex: 0 }, layout.publicLayoutTypes)),
       h('section', { 'aria-labelledby': 'react-layout-api-css' },
         h('h2', { id: 'react-layout-api-css' }, 'CSS attributes and spacing'),
         ...guideBlocks(layout.sharedContent, 'Attributes and spacing')),
-      h('p', null, h('a', { href: links.layout, 'data-vf-link': '' }, 'View Layout examples')));
+      h('p', null, h(Link, { href: links.layout }, 'View Layout examples')));
   }
   if (view === 'api') {
     return h('article', { className: 'vf-docs-article', 'data-vf-docs-react-api': 'button' },
@@ -1440,14 +1427,13 @@ function body(view, links, button, toggle, buttonGroup, toggleGroup, layout, typ
         accessibilityEvidence(button.standardReferences)),
       h('section', null, h('h2', null, 'Public entrypoints'),
         h('ul', null, ...button.publicEntrypoints.map((name) =>
-          h('li', { key: name }, h('code', { 'data-vf-code': '' }, name))))),
+          h('li', { key: name }, h(Code, null, name))))),
       h('section', { 'aria-labelledby': 'react-public-types' },
         h('h2', { id: 'react-public-types' }, 'Public TypeScript types'),
         h('p', null, 'The following declarations are read from the checked-in React Button source. ',
           'ButtonProps extends React native button attributes, and its ref targets HTMLButtonElement.'),
-        h('pre', { 'data-vf-code-block': '', tabIndex: 0 },
-          h('code', null, button.publicButtonTypes))),
-      h('p', null, h('a', { 'data-vf-link': '', href: links.guide }, 'View Button examples')));
+        h(CodeBlock, { tabIndex: 0 }, button.publicButtonTypes)),
+      h('p', null, h(Link, { href: links.guide }, 'View Button examples')));
   }
   return buttonUsageGuide(button, links);
 }
@@ -1573,7 +1559,7 @@ export function ReactReferencePage({ view, links, button, toggle, buttonGroup, t
         h('div', { className: 'vf-docs-navigation-scroll' }, navigation(view, links, typography?.id))),
       h(AppShellMain, { id: 'main', ref: nav.mainRef, tabIndex: -1, className: 'vf-docs-main' },
         h('nav', { className: 'vf-docs-breadcrumbs', 'aria-label': 'Documentation framework' },
-          h('a', { 'data-vf-link': '', href: links.native }, 'Native Web'),
+          h(Link, { href: links.native }, 'Native Web'),
           h('span', { 'aria-hidden': 'true' }, ' / '),
           h('span', { 'aria-current': 'page' }, 'React')),
         body(view, links, button, toggle, buttonGroup, toggleGroup, layout, typography, icon, image, avatar, divider, badge, list, overlayGuide, motionGuide, requestedTopic))),

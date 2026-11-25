@@ -8,5 +8,5 @@ export function reactConsumerBlocks(blocks = []) {
 }
 
 export function reactConsumerSections(guide) {
-  return guide.sections.filter((section) => !/^Native Web (?:usage|markup|example)/i.test(section.heading));
+  return guide.sections.filter((section) => !/^Native Web (?:usage|markup|example|customization)/i.test(section.heading));
 }

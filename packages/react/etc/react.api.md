@@ -4189,6 +4189,9 @@ export type ThemeColorOverrides = Partial<Record<ColorRole, string>>;
 // @public (undocumented)
 export type ThemeElement = 'div' | 'span' | 'section' | 'article' | 'main' | 'aside' | 'header' | 'footer' | 'nav';
 
+// @public
+export type ThemeMotionOverrides = Partial<Record<keyof typeof tokens.motion, string>>;
+
 // @public (undocumented)
 export type ThemeName = 'light' | 'dark' | 'system' | (string & {});
 
@@ -4200,6 +4203,8 @@ export interface ThemeScopeProps extends Omit<HTMLAttributes<HTMLElement>, 'colo
     as?: ThemeElement;
     // (undocumented)
     colors?: ThemeColorOverrides;
+    // (undocumented)
+    motion?: ThemeMotionOverrides;
     // (undocumented)
     theme?: ThemeName;
 }

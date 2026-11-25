@@ -2360,7 +2360,14 @@ test('Motion utility is shared, discoverable and binds real public Web tokens', 
   expect(guideSources.join('\n')).not.toContain('<div data-vf-motion=');
   await expect(page.getByRole('navigation', { name: 'Documentation' })
     .getByRole('link', { name: 'Motion' })).toHaveAttribute('aria-current', 'page');
-  await expect(utility.locator('section[aria-labelledby="motion-existing-reusable-tokens"]')).toContainText('--vf-control-motion-duration');
+  const tokenGuide = utility.locator('section[aria-labelledby="motion-existing-reusable-tokens"]');
+  for (const role of ['controlDuration', 'entranceDuration', 'standardEasing',
+    'loadingSpinDuration', 'loadingShimmerDuration', 'loadingEasing']) {
+    await expect(tokenGuide).toContainText('tokens.motion.' + role);
+  }
+  await expect(tokenGuide).not.toContainText('--vf-control-motion-duration');
+  await expect(utility.getByRole('heading', { name: 'Native Web customization' })).toHaveCount(0);
+  expect(guideSources.join('\n')).not.toContain('--vf-control-motion-duration:');
   await page.getByRole('searchbox', { name: 'Search React documentation' }).fill('reduced motion');
   await expect(page.locator('[data-vf-docs-react-results]')).toContainText('Motion utility');
 });
@@ -2382,6 +2389,9 @@ test('Motion tokens affect multiple real controls without changing their state c
   await page.locator('#motion-easing').selectOption('linear');
   await expect(stage).toHaveCSS('--vf-control-motion-duration', '80ms');
   await expect(stage).toHaveCSS('--vf-motion-easing-standard', 'linear');
+  const source = page.locator('[data-vf-docs-react-motion-utility] details').filter({ hasText: 'View React token customization' });
+  await expect(source.locator('pre')).toContainText('motion={{ controlDuration: "80ms", standardEasing: "linear" }}');
+  await expect(source.locator('pre')).not.toContainText('--vf-');
   const customized = await stage.evaluate((node) => {
     const button = node.querySelector('button[data-vf-button]');
     const toggle = node.querySelector('input[data-vf-switch]');
@@ -2489,6 +2499,7 @@ test('Motion effects expose six reusable real-Web CSS recipes on multiple React 
   await sample.getByRole('button', { name: 'Sample action' }).click();
   await expect(area.locator('[data-vf-docs-motion-sample-status]')).toContainText('Sample actions: 1');
   await page.locator('#motion-target').selectOption('switch');
+  await expect(area.locator('pre')).toContainText('<Switch id="example-switch"');
   await sample.getByRole('switch', { name: 'Option' }).check();
   await expect(area.locator('[data-vf-docs-motion-sample-status]')).toContainText('Switch: on.');
   await page.locator('#motion-target').selectOption('group');
