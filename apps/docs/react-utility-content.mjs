@@ -1,15 +1,16 @@
 import { createElement as h } from 'react';
 import { Flow } from '@vyrnforge/react/layout';
 import { Text } from '@vyrnforge/react/text';
+import { Code, CodeBlock } from '@vyrnforge/react/code';
 import { reactConsumerBlocks, reactConsumerSections } from './react-content-policy.mjs';
 
 export function renderUtilityInline(value) {
   return String(value).split(/(`[^`]+`|\*\*[^*]+\*\*)/g).filter(Boolean).map((token, index) => {
     if (token.startsWith('`') && token.endsWith('`')) {
-      return h('code', { key: index, 'data-vf-code': '' }, token.slice(1, -1));
+      return h(Code, { key: index }, token.slice(1, -1));
     }
     if (token.startsWith('**') && token.endsWith('**')) {
-      return h('strong', { key: index }, token.slice(2, -2));
+      return h(Text, { as: 'strong', key: index }, token.slice(2, -2));
     }
     return token;
   });
@@ -24,8 +25,7 @@ export function UtilitySections({ guide, prefix }) {
       ...reactConsumerBlocks(section.blocks).map((block, index) => {
         if (block.type === 'list') return h(Flow, { as: 'ul', gap: 'xs', key: index },
           ...block.items.map((item, i) => h('li', { key: i }, ...renderUtilityInline(item))));
-        if (block.type === 'code') return h('pre', { key: index, tabIndex: 0, 'data-vf-code-block': '' },
-          h('code', null, block.text));
+        if (block.type === 'code') return h(CodeBlock, { key: index, tabIndex: 0 }, block.text);
         return h(Text, { as: 'p', key: index }, ...renderUtilityInline(block.text));
       }));
   });

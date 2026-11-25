@@ -4,7 +4,9 @@ import { Switch } from '@vyrnforge/react/switch';
 import { NativeSelect } from '@vyrnforge/react/native-select';
 import { Flow, AutoGrid } from '@vyrnforge/react/layout';
 import { Text } from '@vyrnforge/react/text';
-import { Motion, ThemeScope } from '@vyrnforge/react';
+import { Motion, ThemeScope, tokens } from '@vyrnforge/react';
+import { CodeBlock } from '@vyrnforge/react/code';
+import { Link } from '@vyrnforge/react/link';
 import { UtilitySections, renderUtilityInline } from './react-utility-content.mjs';
 import { reactConsumerSections } from './react-content-policy.mjs';
 
@@ -32,24 +34,40 @@ function Setting({ id, label, value, options, onChange }) {
       ...options.map(([key, title]) => h('option', { key, value: key }, title))));
 }
 
-function Source({ duration, easing }) {
-  const override = duration === 'fast' ? '80ms' : duration === 'none' ? '0ms' : null;
-  const custom = [override ? '  --vf-control-motion-duration: ' + override + ';' : '',
-    easing === 'linear' ? '  --vf-motion-easing-standard: linear;' : ''].filter(Boolean);
-  const css = custom.length ? '.my-controls {\n' + custom.join('\n') + '\n}\n\n' : '';
-  const snippet = "/* Use canonical Web component styles and tokens. */\n" +
-    css +
-    '@media (prefers-reduced-motion: reduce) {\n' +
-    '  .my-controls { --vf-control-motion-duration: 0ms; }\n' +
-    '}\n\n' +
-    '/* Components own state, focus, and interaction independently of CSS. */';
-  return h('details', { className: 'vf-docs-source-disclosure' },
-    h('summary', null, 'View consumer CSS customization'),
-    h('pre', { 'data-vf-code-block': '', tabIndex: 0 },
-      h('code', null, snippet)));
+// Use the exported React aliases, not a separately maintained token-name catalog.
+function reactMotionGuide(guide) {
+  const aliases = Object.entries(tokens.motion).map(([role, reference]) =>
+    [reference.slice(4, -1), 'tokens.motion.' + role]);
+  const text = (value) => aliases.reduce((result, [name, alias]) =>
+    result.replaceAll('`' + name + '`', '`' + alias + '`'), value);
+  const block = (item) => item.type === 'list'
+    ? { ...item, items: item.items.map(text) }
+    : item.type === 'paragraph' ? { ...item, text: text(item.text) } : item;
+  return {
+    ...guide,
+    intro: guide.intro.map(block),
+    sections: guide.sections.map((section) => ({
+      ...section, blocks: section.blocks.map(block),
+    })),
+  };
 }
 
-function MotionEffectsPlayground({ theme, variables }) {
+function Source({ motion }) {
+  const properties = Object.entries(motion).map(([role, value]) =>
+    role + ': ' + JSON.stringify(value)).join(', ');
+  const snippet = "import { ThemeScope, Button, tokens } from '@vyrnforge/react';\n" +
+    "import '@vyrnforge/web/styles/button.css';\n\n" +
+    '// Reference a semantic motion token in React-authored styles when needed.\n' +
+    'const entranceDuration = tokens.motion.entranceDuration;\n\n' +
+    '<ThemeScope' + (properties ? ' motion={{ ' + properties + ' }}' : '') + '>\n' +
+    '  <Button>Continue</Button>\n</ThemeScope>\n\n' +
+    '// The library respects reduced motion; component state is independent of timing.';
+  return h('details', { className: 'vf-docs-source-disclosure' },
+    h('summary', null, 'View React token customization'),
+    h(CodeBlock, { tabIndex: 0 }, snippet));
+}
+
+function MotionEffectsPlayground({ theme, motion }) {
   const [effect, setEffect] = useState('fade');
   const [entranceDuration, setEntranceDuration] = useState('default');
   const [origin, setOrigin] = useState('block-end');
@@ -89,8 +107,9 @@ function MotionEffectsPlayground({ theme, variables }) {
         onChange: (next) => { setDirection(next); setReplay(value => value + 1); } })),
     h(Button, { type: 'button', variant: 'secondary', onClick: () => setReplay(value => value + 1) },
       'Replay effect'),
-    h(ThemeScope, { as: 'div', theme, dir: direction, style: variables,
-      className: 'vf-docs-motion-demo-stage', 'data-vf-docs-motion-demo-stage': '' },
+    h(ThemeScope, { as: 'div', theme, dir: direction, motion,
+      className: 'vf-docs-customization-preview', 'data-vf-docs-motion-demo-stage': '' },
+      h(Flow, { align: 'center', justify: 'center', style: { minBlockSize: '9rem' } },
       h(Motion, { key: [effect, origin, direction, target, entranceDuration, replay].join(':'),
         effect, direction: origin, duration: selectedDuration,
         'data-vf-docs-motion-preview': '', 'data-vf-motion-sample': target },
@@ -99,27 +118,28 @@ function MotionEffectsPlayground({ theme, variables }) {
           target === 'switch' ? sampleSwitch() :
           h(Flow, { direction: 'inline', wrap: 'wrap', gap: 'md', align: 'center' },
             sampleButton(), sampleSwitch()),
-          h(Text, { as: 'p', variant: 'body-sm' }, effect + ' · ' + target)))),
-    h('p', { role: 'status', 'aria-live': 'polite', 'data-vf-docs-motion-sample-status': '' },
+          h(Text, { as: 'p', variant: 'body-sm' }, effect + ' · ' + target))))),
+    h(Text, { as: 'p', variant: 'body-sm', role: 'status', 'aria-live': 'polite', 'data-vf-docs-motion-sample-status': '' },
       'Sample actions: ' + actionCount + '. Switch: ' + (checked ? 'on' : 'off') + '.'),
     h('details', { className: 'vf-docs-source-disclosure' },
       h('summary', null, 'View React Motion source'),
-      h('pre', { tabIndex: 0, 'data-vf-code-block': '' }, h('code', null, code))),
+      h(CodeBlock, { tabIndex: 0 }, code)),
     h(Text, { as: 'p', variant: 'body-sm' },
       'Entrance only. React Motion renders a native wrapper and accepts effect, direction and duration props. For exit, presence, dismissal and focus, follow the individual component contract; reduced motion suppresses these effects automatically.'));
 }
 
-export function MotionUtility({ guide, links }) {
+export function MotionUtility({ guide: sharedGuide, links }) {
+  const guide = reactMotionGuide(sharedGuide);
   const [duration, setDuration] = useState('default');
   const [easing, setEasing] = useState('standard');
   const [theme, setTheme] = useState('light');
   const [checked, setChecked] = useState(false);
   const [count, setCount] = useState(0);
   const [busy, setBusy] = useState(false);
-  const variables = {
-    ...(duration === 'fast' ? { '--vf-control-motion-duration': '80ms' } : {}),
-    ...(duration === 'none' ? { '--vf-control-motion-duration': '0ms' } : {}),
-    ...(easing === 'linear' ? { '--vf-motion-easing-standard': 'linear' } : {}),
+  const motion = {
+    ...(duration === 'fast' ? { controlDuration: '80ms' } : {}),
+    ...(duration === 'none' ? { controlDuration: '0ms' } : {}),
+    ...(easing === 'linear' ? { standardEasing: 'linear' } : {}),
   };
   return h('div', { className: 'vf-docs-content-grid vf-docs-usage-guide-layout',
     'data-vf-docs-react-motion-utility': '' },
@@ -130,7 +150,7 @@ export function MotionUtility({ guide, links }) {
         h(Text, { as: 'p', variant: 'body-lg' },
           'React Motion effects, shared timing, and accessible visual feedback.'),
         ...guide.intro.map((block, i) => h(Text, { as: 'p', key: i }, ...renderUtilityInline(block.text)))),
-      h(MotionEffectsPlayground, { theme, variables }),
+      h(MotionEffectsPlayground, { theme, motion }),
       h(Flow, { as: 'section', gap: 'md', 'aria-labelledby': 'motion-playground-title' },
         h(Text, { as: 'h2', variant: 'heading-md', id: 'motion-playground-title' },
           'Interactive motion playground'),
@@ -143,7 +163,7 @@ export function MotionUtility({ guide, links }) {
           h(Setting, { id: 'motion-theme', label: 'Theme',
             value: theme, options: themes, onChange: setTheme })),
         h(ThemeScope, { as: 'section', theme, className: 'vf-docs-customization-preview vf-docs-motion-stage',
-          'data-vf-docs-motion-stage': '', style: variables, 'aria-label': 'Motion preview' },
+          'data-vf-docs-motion-stage': '', motion, 'aria-label': 'Motion preview' },
           h(Flow, { gap: 'lg' },
             h(Flow, { gap: 'xs' },
               h(Text, { as: 'h3', variant: 'heading-sm' }, 'Control transitions'),
@@ -156,7 +176,7 @@ export function MotionUtility({ guide, links }) {
                 h(Switch, { id: 'motion-preview-switch', checked,
                   onChange: (event) => setChecked(event.currentTarget.checked) }),
                 h('label', { htmlFor: 'motion-preview-switch' }, 'Option'))),
-            h('p', { role: 'status', 'aria-live': 'polite',
+            h(Text, { as: 'p', variant: 'body-sm', role: 'status', 'aria-live': 'polite',
               'data-vf-docs-motion-feedback': '' },
               'Actions: ' + count + '. Switch: ' + (checked ? 'on' : 'off') + '.'),
             h(Flow, { gap: 'xs' },
@@ -170,15 +190,15 @@ export function MotionUtility({ guide, links }) {
                   busy ? 'Busy' : 'Ready'))))),
         h(Text, { as: 'p', variant: 'body-sm' },
           'The browser’s reduced-motion preference always takes priority in canonical component CSS. The custom 0ms option is a consumer-scoped demonstration, not a replacement for that preference.'),
-        h(Source, { duration, easing })),
+        h(Source, { motion })),
       ...UtilitySections({ guide, prefix: 'motion-' }),
       h(Flow, { as: 'section', gap: 'sm', 'aria-labelledby': 'motion-related-links' },
         h(Text, { as: 'h2', variant: 'heading-md', id: 'motion-related-links' }, 'Related guidance'),
         h(Flow, { as: 'ul', gap: 'xs' },
-          h('li', null, h('a', { href: links.tokens, 'data-vf-link': '' }, 'Design tokens')),
-          h('li', null, h('a', { href: links.styling, 'data-vf-link': '' }, 'Styling and CSS')),
-          h('li', null, h('a', { href: links.overlay, 'data-vf-link': '' }, 'Overlay utility')),
-          h('li', null, h('a', { href: links.motionButton, 'data-vf-link': '' }, 'Button component'))))),
+          h('li', null, h(Link, { href: links.tokens }, 'Design tokens')),
+          h('li', null, h(Link, { href: links.styling }, 'Styling and CSS')),
+          h('li', null, h(Link, { href: links.overlay }, 'Overlay utility')),
+          h('li', null, h(Link, { href: links.motionButton }, 'Button component'))))),
     h('aside', { className: 'vf-docs-toc-region' },
       h('nav', { className: 'vf-docs-toc', 'aria-label': 'On this page' },
         h('p', null, 'On this page'),
